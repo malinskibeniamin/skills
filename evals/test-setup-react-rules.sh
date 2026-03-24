@@ -172,6 +172,55 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: icon inside AlertTitle" "AlertTitle"
 
+# ── Check 11: Icon-only button a11y ──────────────────────────────
+
+echo '<Button onClick={handleClick}><SettingsIcon /></Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: icon-only button without aria-label" "aria-label"
+
+echo '<Button onClick={handleClick} aria-label="Settings"><SettingsIcon /></Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: icon button with aria-label"
+
+# ── Check 12: outline removal ────────────────────────────────────
+
+echo 'const style = { outline: none }' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: outline: none" "outline"
+
+echo '<div className="outline-none focus:ring">' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: outline-none CSS class" "outline"
+
+# ── Check 13: React Compiler — manual memoization ────────────────
+
+echo 'const val = useMemo(() => compute(), [dep])' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: useMemo (React Compiler handles it)" "useMemo"
+
+echo 'const cb = useCallback(() => {}, [])' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: useCallback (React Compiler handles it)" "useCallback"
+
+# Allow with 'use no memo' directive
+printf "'use no memo'\nconst val = useMemo(() => 1, [])\n" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: useMemo with 'use no memo' directive"
+
 rm -f "$tmpfile"
 
 # ── Hook script content checks ──────────────────────────────────
@@ -181,6 +230,9 @@ run_content_eval "$SCRIPT" "asChild" "hook suggests asChild for Link wrapping"
 run_content_eval "$SCRIPT" "AlertTitle" "hook checks AlertTitle icon"
 run_content_eval "$SCRIPT" "wrap.*create" "hook checks protobuf create()"
 run_content_eval "$SCRIPT" "bufbuild/protobuf" "hook checks protobuf v2 only"
+run_content_eval "$SCRIPT" "aria-label" "hook checks icon-only button a11y"
+run_content_eval "$SCRIPT" "outline" "hook bans outline removal"
+run_content_eval "$SCRIPT" "useMemo" "hook checks for manual memoization"
 
 # ── REFERENCE content ────────────────────────────────────────────
 

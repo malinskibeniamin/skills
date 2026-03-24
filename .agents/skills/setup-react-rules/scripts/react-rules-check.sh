@@ -167,4 +167,47 @@ if echo "$added_lines" | grep -qE '\.\.\.[a-zA-Z]+' && \
   fi
 fi
 
+# ── Check 11: Icon-only buttons need aria-label ──────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' && \
+       ! echo "$added_lines" | grep -qE '<Button[^>]*aria-label'; then
+      echo '{"suppressOutput":true,"systemMessage":"Icon-only buttons must have aria-label for screen readers:\n\n<Button aria-label=\"Settings\" variant=\"ghost\" size=\"icon\"><SettingsIcon /></Button>"}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 12: No outline removal (breaks keyboard navigation) ────
+
+if echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
+   echo "$added_lines" | grep -qE 'outline-none'; then
+  echo '{"suppressOutput":true,"systemMessage":"Do not remove focus outlines (outline: none / outline-none). This breaks keyboard navigation accessibility. Use focus-visible styles instead:\n\nfocus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"}' >&2
+  exit 2
+fi
+
+# ── Check 13: React Compiler — no manual memoization ────────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    has_no_memo=false
+    if head -5 "$file_path" | grep -qF "'use no memo'" || head -5 "$file_path" | grep -qF '"use no memo"'; then
+      has_no_memo=true
+    fi
+
+    if [ "$has_no_memo" = false ]; then
+      found_memo=""
+      if echo "$added_lines" | grep -qE '\buseMemo\b'; then found_memo="useMemo"; fi
+      if [ -z "$found_memo" ] && echo "$added_lines" | grep -qE '\buseCallback\b'; then found_memo="useCallback"; fi
+      if [ -z "$found_memo" ] && echo "$added_lines" | grep -qE '\bReact\.memo\b|\bmemo\('; then found_memo="React.memo"; fi
+
+      if [ -n "$found_memo" ]; then
+        echo "{\"suppressOutput\":true,\"systemMessage\":\"React Compiler is enabled — manual $found_memo is unnecessary. The compiler auto-memoizes. Remove $found_memo or add 'use no memo' directive at the file top if needed.\"}" >&2
+        exit 2
+      fi
+    fi
+    ;;
+esac
+
 exit 0
