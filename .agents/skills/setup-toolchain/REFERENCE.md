@@ -83,6 +83,12 @@ exit 0
 | `bun add lodash` | Yes | `bun add lodash --yarn` |
 | `bunx biome check` | Yes | `bun run lint` |
 | `bunx ultracite fix` | Yes | `bun run lint:fix` |
+| `eslint .` | Yes | `bun run lint` |
+| `prettier --write .` | Yes | `bun run lint:fix` |
+| `bunx eslint .` | Yes | `bun run lint` |
+| `bunx prettier .` | Yes | `bun run lint:fix` |
+| `bun add eslint` | Yes | Use Biome (already configured) |
+| `bun add prettier` | Yes | Use Biome (already configured) |
 | `bun add --yarn lodash` | No | Allowed |
 | `bun run build` | No | Allowed |
 | `bun test` | No | Allowed |

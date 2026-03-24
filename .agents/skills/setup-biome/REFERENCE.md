@@ -46,7 +46,8 @@
         }
       },
       "nursery": {
-        "noDeprecatedImports": "error"
+        "noDeprecatedImports": "error",
+        "noClassComponent": "error"
       }
     }
   },
@@ -134,6 +135,7 @@ Ultracite provides a strict baseline. We override these specific behaviors:
 | `noExplicitAny` in tests | off | error | No `any` escape hatch, even in tests |
 | `noDeprecatedImports` | off | error | Catch deprecated API usage |
 | `noRestrictedImports` | enabled, empty | configured | Ban moment, lodash, classnames, enzyme |
+| `noClassComponent` | off | error | Ban class components, enforce functional components |
 
 ## Import Deletion Loop Prevention
 

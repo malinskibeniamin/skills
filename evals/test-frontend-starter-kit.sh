@@ -17,7 +17,14 @@ run_content_eval "$SKILL_DIR/SKILL.md" "setup-quality-gate" "references setup-qu
 run_content_eval "$SKILL_DIR/SKILL.md" "setup-llm-optimization" "references setup-llm-optimization"
 run_content_eval "$SKILL_DIR/SKILL.md" "setup-react-compiler" "references setup-react-compiler"
 
-# ── All referenced skills exist ──────────────────────────────────
+# ── Matt Pocock community skills referenced ──────────────────────
+
+run_content_eval "$SKILL_DIR/SKILL.md" "tdd" "references tdd skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "triage-issue" "references triage-issue skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "improve-codebase-architecture" "references improve-codebase-architecture skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not npx) to install community skills"
+
+# ── All setup skill dependencies exist ───────────────────────────
 
 for dep_skill in setup-toolchain setup-biome setup-quality-gate setup-llm-optimization setup-react-compiler; do
   run_file_eval "$REPO_ROOT/.agents/skills/$dep_skill/SKILL.md" "dependency: $dep_skill exists"

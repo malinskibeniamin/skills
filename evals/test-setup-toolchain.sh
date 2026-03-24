@@ -117,6 +117,40 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx @tanstack/router-cli generate"}}' \
   2 "block: bunx @tanstack/router-cli" "package.json script"
 
+# ── eslint/prettier blocked ──────────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"eslint ."}}' \
+  2 "block: eslint" "eslint is banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"eslint --fix src/"}}' \
+  2 "block: eslint --fix" "eslint is banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"prettier --write ."}}' \
+  2 "block: prettier" "prettier is banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bunx eslint ."}}' \
+  2 "block: bunx eslint" "eslint is banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bunx prettier --write ."}}' \
+  2 "block: bunx prettier" "prettier is banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun add eslint --yarn"}}' \
+  2 "block: bun add eslint" "Do not install eslint"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun add prettier --yarn"}}' \
+  2 "block: bun add prettier" "Do not install"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun add -D eslint prettier --yarn"}}' \
+  2 "block: bun add eslint+prettier" "Do not install"
+
 # ── allowed commands ────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
