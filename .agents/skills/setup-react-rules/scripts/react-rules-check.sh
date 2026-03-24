@@ -106,4 +106,65 @@ if echo "$added_lines" | grep -qF '@ts-expect-error'; then
   exit 2
 fi
 
+# ── Check 5: Ban visual style overrides on registry components ────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' && \
+       echo "$added_lines" | grep -qE 'className=.*\b(bg-|text-|border-|shadow-|rounded-)'; then
+      echo '{"suppressOutput":true,"systemMessage":"Do not override visual styles (bg-*, text-*, border-*, shadow-*) on registry components. Use the component variant prop instead. Layout classes (mt-4, flex-1, w-full, gap-2) are fine."}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 6: Navigation — prefer Link over onClick+navigate ─────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE 'onClick.*navigate\('; then
+      echo '{"suppressOutput":true,"systemMessage":"Do not use onClick + navigate() for navigation. Use <Button asChild><Link to=\"/path\">...</Link></Button> instead.\nWhy: Better accessibility (right-click, screen readers), respects TanStack Router basePath."}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 7: Button must have handler or purpose ────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE '<Button[[:space:]>]' && \
+       ! echo "$added_lines" | grep -qE '<Button[^>]*(onClick|asChild|type="submit"|disabled)'; then
+      echo '{"suppressOutput":true,"systemMessage":"Button appears to have no handler. Buttons must have onClick, asChild (for Link wrapping), type=\"submit\" (in forms), or disabled. A button with no handler is likely a bug."}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 8: Alert — no icon inside AlertTitle ──────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE '<AlertTitle>.*<.*Icon' || \
+       echo "$added_lines" | grep -qE '<AlertTitle>.*<svg'; then
+      echo '{"suppressOutput":true,"systemMessage":"Do not add icons inside <AlertTitle>. The <Alert> component already renders an icon. Use the icon prop on <Alert> to customize it:\n<Alert icon={<CustomIcon />}>"}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 9: Protobuf — wrap spreads with create() (v2 only) ────
+
+if echo "$added_lines" | grep -qE '\.\.\.[a-zA-Z]+' && \
+   echo "$added_lines" | grep -qE 'Schema|Message|Request|Response' && \
+   ! echo "$added_lines" | grep -qE 'create\('; then
+  if [ -f "package.json" ] && grep -q '"@bufbuild/protobuf"' package.json 2>/dev/null; then
+    proto_version=$(grep -oE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null || true)
+    if [ -n "$proto_version" ]; then
+      echo '{"suppressOutput":true,"systemMessage":"When spreading protobuf messages, wrap with create() to preserve $typeName:\n\n// Wrong\nconst msg = { ...existingMessage, field: newValue }\n\n// Correct\nconst msg = create(MyMessageSchema, { ...existingMessage, field: newValue })\n\nRequired for @bufbuild/protobuf v2."}' >&2
+      exit 2
+    fi
+  fi
+fi
+
 exit 0

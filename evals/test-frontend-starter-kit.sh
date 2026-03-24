@@ -22,6 +22,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "setup-react-compiler" "references setup-
 run_content_eval "$SKILL_DIR/SKILL.md" "tdd" "references tdd skill"
 run_content_eval "$SKILL_DIR/SKILL.md" "triage-issue" "references triage-issue skill"
 run_content_eval "$SKILL_DIR/SKILL.md" "improve-codebase-architecture" "references improve-codebase-architecture skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "request-refactor-plan" "references request-refactor-plan skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "design-an-interface" "references design-an-interface skill"
 run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not npx) to install community skills"
 
 # ── All setup skill dependencies exist ───────────────────────────

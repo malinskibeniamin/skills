@@ -141,7 +141,46 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: clean TypeScript code"
 
+# ── Check 5: Visual style overrides on registry components ───────
+
+echo '<Button className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: visual style override on Button" "variant"
+
+# Allow layout-only classes on components (with handler)
+echo '<Button onClick={handleClick} className="mt-4 flex-1 w-full">Click</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: layout classes on Button"
+
+# ── Check 6: onClick+navigate instead of Link ───────────────────
+
+echo '<Button onClick={() => navigate("/settings")}>Settings</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: onClick+navigate pattern" "navigate"
+
+# ── Check 8: Alert double icon ──────────────────────────────────
+
+echo '<AlertTitle><InfoIcon /> Warning</AlertTitle>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: icon inside AlertTitle" "AlertTitle"
+
 rm -f "$tmpfile"
+
+# ── Hook script content checks ──────────────────────────────────
+
+run_content_eval "$SCRIPT" "variant" "hook suggests using variant prop"
+run_content_eval "$SCRIPT" "asChild" "hook suggests asChild for Link wrapping"
+run_content_eval "$SCRIPT" "AlertTitle" "hook checks AlertTitle icon"
+run_content_eval "$SCRIPT" "wrap.*create" "hook checks protobuf create()"
+run_content_eval "$SCRIPT" "bufbuild/protobuf" "hook checks protobuf v2 only"
 
 # ── REFERENCE content ────────────────────────────────────────────
 

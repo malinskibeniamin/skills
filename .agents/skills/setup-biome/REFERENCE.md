@@ -40,14 +40,18 @@
               "moment": "Use date-fns instead of moment.",
               "lodash": "Use native JS methods or specific lodash subpackages (e.g., lodash/get).",
               "classnames": "Use clsx or the cn utility instead.",
-              "enzyme": "Use @testing-library/react instead of enzyme."
+              "mobx": "Use zustand for state management instead of MobX.",
+              "mobx-react": "Use zustand for state management instead of MobX.",
+              "mobx-react-lite": "Use zustand for state management instead of MobX.",
+              "yup": "Use zod for schema validation instead of yup."
             }
           }
         }
       },
       "nursery": {
         "noDeprecatedImports": "error",
-        "noClassComponent": "error"
+        "noClassComponent": "error",
+        "useExhaustiveSwitchCases": "error"
       }
     }
   },
@@ -101,13 +105,13 @@ fi
 # deleting imports Claude hasn't used yet (caught later at quality:gate)
 fix_output=""
 fix_exit=0
-fix_output=$(biome check --write --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
+fix_output=$(bun run lint:fix -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
 
 # Check if there are remaining unfixable errors
 if [ $fix_exit -ne 0 ]; then
   # Run check-only to get remaining errors
   remaining=""
-  remaining=$(biome check --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
+  remaining=$(bun run lint -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
 
   if [ -n "$remaining" ]; then
     # Truncate to avoid flooding context
@@ -134,8 +138,9 @@ Ultracite provides a strict baseline. We override these specific behaviors:
 | `noExcessiveCognitiveComplexity` | threshold 20 | threshold 15 | Stricter complexity limit |
 | `noExplicitAny` in tests | off | error | No `any` escape hatch, even in tests |
 | `noDeprecatedImports` | off | error | Catch deprecated API usage |
-| `noRestrictedImports` | enabled, empty | configured | Ban moment, lodash, classnames, enzyme |
+| `noRestrictedImports` | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup |
 | `noClassComponent` | off | error | Ban class components, enforce functional components |
+| `useExhaustiveSwitchCases` | off | error | Require exhaustive switch/case for type safety |
 
 ## Import Deletion Loop Prevention
 

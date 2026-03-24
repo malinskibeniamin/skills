@@ -30,7 +30,10 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "noDeprecatedImports" "REFERENCE has 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "moment" "REFERENCE restricts moment"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "lodash" "REFERENCE restricts lodash"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "classnames" "REFERENCE restricts classnames"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "enzyme" "REFERENCE restricts enzyme"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "mobx" "REFERENCE restricts mobx"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "yup" "REFERENCE restricts yup"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useExhaustiveSwitchCases" "REFERENCE has exhaustive switch cases"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "noClassComponent" "REFERENCE has noClassComponent"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "noExplicitAny.*error" "REFERENCE re-enables noExplicitAny in tests"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useIgnoreFile" "REFERENCE has VCS ignore file"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "noRestrictedImports" "REFERENCE has restricted imports rule"
@@ -104,5 +107,5 @@ done
 
 run_content_eval "$SCRIPT" "noUnusedImports" "hook skips noUnusedImports"
 run_content_eval "$SCRIPT" "suppressOutput" "hook uses suppressOutput"
-run_content_eval "$SCRIPT" "biome check --write" "hook runs biome check --write"
+run_content_eval "$SCRIPT" "bun run lint:fix" "hook runs bun run lint:fix"
 run_content_eval "$SCRIPT" "head -20" "hook truncates error output"

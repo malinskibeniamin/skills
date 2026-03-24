@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Meta-skill that runs all generic frontend setup skills in order — toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler — and installs community workflow skills (TDD, triage, architecture). Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Meta-skill that runs all generic frontend setup skills in order — toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler — and installs community workflow skills (TDD, triage, architecture, refactoring, design). Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -20,6 +20,8 @@ description: Meta-skill that runs all generic frontend setup skills in order —
 6. **tdd** — Test-driven development with red-green-refactor loop
 7. **triage-issue** — Bug investigation and root cause analysis
 8. **improve-codebase-architecture** — Architectural improvements and deep module analysis
+9. **request-refactor-plan** — Create detailed refactor plans with tiny commits, filed as GitHub issues
+10. **design-an-interface** — Generate multiple radically different interface designs using parallel sub-agents
 
 ## Steps
 
@@ -33,6 +35,8 @@ Execute skills 1–5 sequentially. Each skill is idempotent — if already confi
 bunx skills@latest add mattpocock/skills/tdd -y
 bunx skills@latest add mattpocock/skills/triage-issue -y
 bunx skills@latest add mattpocock/skills/improve-codebase-architecture -y
+bunx skills@latest add mattpocock/skills/request-refactor-plan -y
+bunx skills@latest add mattpocock/skills/design-an-interface -y
 ```
 
 ### 3. Final verification
@@ -45,7 +49,7 @@ After all skills complete:
 - [ ] Package.json has all scripts: `lint`, `lint:fix`, `typecheck`, `test`, `quality:gate`
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] All hook scripts in `.claude/hooks/` are executable
-- [ ] `tdd`, `triage-issue`, `improve-codebase-architecture` skills are installed
+- [ ] All community skills installed: `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`
 
 ### 4. Commit
 

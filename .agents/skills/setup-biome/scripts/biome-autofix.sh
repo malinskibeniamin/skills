@@ -26,17 +26,17 @@ if [ ! -f "$file_path" ]; then
   exit 0
 fi
 
-# Run biome fix on just this file, skipping noUnusedImports to avoid
-# deleting imports Claude hasn't used yet (caught later at quality:gate)
+# Run lint:fix via package.json script on just this file, skipping noUnusedImports
+# to avoid deleting imports Claude hasn't used yet (caught later at quality:gate)
 fix_output=""
 fix_exit=0
-fix_output=$(biome check --write --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
+fix_output=$(bun run lint:fix -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
 
 # Check if there are remaining unfixable errors
 if [ $fix_exit -ne 0 ]; then
   # Run check-only to get remaining errors
   remaining=""
-  remaining=$(biome check --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
+  remaining=$(bun run lint -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
 
   if [ -n "$remaining" ]; then
     # Truncate to avoid flooding context
