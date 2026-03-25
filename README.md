@@ -2,6 +2,45 @@
 
 A collection of agent skills and Claude Code hooks that enforce frontend best practices, automate quality checks, and reduce wasted tokens in AI-assisted development.
 
+## TLDR — Full Setup for a New Repo
+
+All commands target Claude Code only via `--agent claude-code -y`.
+
+```bash
+# Hooks — toolchain, linting, quality, optimization, React Compiler, zustand
+bunx skills@latest add malinskibeniamin/skills/setup-toolchain --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-zustand --agent claude-code -y
+
+# Redpanda-specific hooks (skip if not a Redpanda project)
+bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent claude-code -y
+
+# Diagnostics
+bunx skills@latest add malinskibeniamin/skills/test-guardian --agent claude-code -y
+
+# Workflow skills (community — from mattpocock/skills)
+bunx skills@latest add mattpocock/skills/tdd --agent claude-code -y
+bunx skills@latest add mattpocock/skills/triage-issue --agent claude-code -y
+bunx skills@latest add mattpocock/skills/improve-codebase-architecture --agent claude-code -y
+bunx skills@latest add mattpocock/skills/request-refactor-plan --agent claude-code -y
+bunx skills@latest add mattpocock/skills/design-an-interface --agent claude-code -y
+
+# Planning & project management (community — from mattpocock/skills)
+bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y
+bunx skills@latest add mattpocock/skills/prd-to-plan --agent claude-code -y
+bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y
+bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
+```
+
+---
+
 ## Starter Kits
 
 Meta-skills that install everything you need in one go.

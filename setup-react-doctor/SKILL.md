@@ -40,7 +40,7 @@ bun add -D react-doctor --yarn
       "react/no-nested-component"
     ],
     "files": [
-      "redpanda-ui/**"
+      "**/redpanda-ui/**"
     ]
   }
 }

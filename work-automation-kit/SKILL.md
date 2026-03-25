@@ -20,12 +20,14 @@ Installs community workflow skills for project planning, management, and skill a
 ### 1. Install community workflow skills
 
 ```bash
-bunx skills@latest add mattpocock/skills/write-a-prd -y
-bunx skills@latest add mattpocock/skills/prd-to-plan -y
-bunx skills@latest add mattpocock/skills/prd-to-issues -y
-bunx skills@latest add mattpocock/skills/triage-issue -y
-bunx skills@latest add mattpocock/skills/write-a-skill -y
+bunx skills@latest add mattpocock/skills/write-a-prd
+bunx skills@latest add mattpocock/skills/prd-to-plan
+bunx skills@latest add mattpocock/skills/prd-to-issues
+bunx skills@latest add mattpocock/skills/triage-issue
+bunx skills@latest add mattpocock/skills/write-a-skill
 ```
+
+Let the user choose the installation scope for each skill interactively — do not pass `-y`.
 
 ### 2. Verify
 

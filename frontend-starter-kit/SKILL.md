@@ -33,12 +33,14 @@ Execute skills 1–6 sequentially. Each skill is idempotent — if already confi
 ### 2. Install community workflow skills
 
 ```bash
-bunx skills@latest add mattpocock/skills/tdd -y
-bunx skills@latest add mattpocock/skills/triage-issue -y
-bunx skills@latest add mattpocock/skills/improve-codebase-architecture -y
-bunx skills@latest add mattpocock/skills/request-refactor-plan -y
-bunx skills@latest add mattpocock/skills/design-an-interface -y
+bunx skills@latest add mattpocock/skills/tdd
+bunx skills@latest add mattpocock/skills/triage-issue
+bunx skills@latest add mattpocock/skills/improve-codebase-architecture
+bunx skills@latest add mattpocock/skills/request-refactor-plan
+bunx skills@latest add mattpocock/skills/design-an-interface
 ```
+
+Let the user choose the installation scope for each skill interactively — do not pass `-y`.
 
 ### 3. Final verification
 
