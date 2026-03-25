@@ -48,19 +48,19 @@ Meta-skills that install everything you need in one go.
 - **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler, zustand, plus community workflow skills (TDD, triage, architecture, refactoring, design).
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit
+  bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
   ```
 
 - **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: useEffect ban, raw HTML enforcement, Chakra migration, TanStack Router (with anti-pattern checks), Connect Query + Protobuf enforcement, and react-doctor.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit
+  bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
   ```
 
 - **work-automation-kit** — Project planning and management workflow skills: PRD creation, implementation planning, issue breakdown, and bug triage.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/work-automation-kit
+  bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claude-code -y
   ```
 
 ## Toolchain Enforcement
@@ -70,7 +70,7 @@ Claude Code hooks that enforce tooling standards via `PreToolUse` and `SessionSt
 - **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun as package manager with `--yarn` flag, tsgo as TypeScript compiler, and block global installs. Sets `PKG_MANAGER`, `LINTER`, `TEST_RUNNER` env vars.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-toolchain
+  bunx skills@latest add malinskibeniamin/skills/setup-toolchain --agent claude-code -y
   ```
 
 ## Code Quality
@@ -80,13 +80,13 @@ Linting, formatting, and quality gate automation.
 - **setup-biome** — Install Biome + Ultracite, create `biome.jsonc` with strict overrides (noConsole, cognitive complexity 15, noClassComponent, useExhaustiveSwitchCases, restricted imports for moment/lodash/classnames/mobx/yup). Stop hook auto-fixes all changed JS/TS files before Claude finishes.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-biome
+  bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
   ```
 
 - **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), and Stop hook for tsgo type checking.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-quality-gate
+  bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
   ```
 
 ## React Rules
@@ -108,13 +108,13 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
   - React Compiler: ban manual `useMemo`/`useCallback`/`React.memo`
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-react-rules
+  bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
   ```
 
 - **setup-react-compiler** — Install `babel-plugin-react-compiler` with rsbuild config. `'use no memo'` directive for escape hatch. redpanda-ui directory excluded from compiler.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-react-compiler
+  bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
   ```
 
 ## Health & Diagnostics
@@ -124,13 +124,13 @@ Stop hooks and manual diagnostic skills.
 - **setup-react-doctor** — Install react-doctor, add `doctor` package.json script, Stop hook running health check on changed files. Fails on score regression.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-react-doctor
+  bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
   ```
 
 - **test-guardian** — Manual diagnostic skill for test health across frameworks (Vitest, Jest, Bun, Rstest). Detect async leaks, profile performance, find slow/flaky tests. Not a hook — invoke when debugging test issues.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/test-guardian
+  bunx skills@latest add malinskibeniamin/skills/test-guardian --agent claude-code -y
   ```
 
 ## LLM Optimization
@@ -140,7 +140,7 @@ Reduce token usage and context waste.
 - **setup-llm-optimization** — SessionStart sets `AI_AGENT=1` and `CLAUDECODE=1` for LLM-friendly test output. PreToolUse blocks `--verbose` on test runners. PostToolUse truncates bash output >200 lines.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization
+  bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
   ```
 
 ## State Management
@@ -148,7 +148,7 @@ Reduce token usage and context waste.
 - **setup-zustand** — PostToolUse hook enforcing zustand best practices: ban single-parens `create<T>()` (must be `create<T>()()`), ban inline object selectors (suggest `useShallow`), ban direct localStorage in stores (suggest persist middleware).
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-zustand
+  bunx skills@latest add malinskibeniamin/skills/setup-zustand --agent claude-code -y
   ```
 
 ## Routing & Registry
@@ -156,13 +156,13 @@ Reduce token usage and context waste.
 - **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), and require `validateSearch` when using `useSearch` in route files. Warns on `window.location.reload()` and `window.location` reads.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router
+  bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
   ```
 
 - **setup-registry-workflow** — Stop hook that reminds about `registry.json` rebuild and changelog update when redpanda-ui components are modified.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow
+  bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent claude-code -y
   ```
 
 ## Data Fetching
@@ -170,7 +170,7 @@ Reduce token usage and context waste.
 - **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` from `@tanstack/react-query` when ConnectRPC is available, ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2 projects also get: ban `new Message()` construction (use `create(Schema)`), ban `PlainMessage`/`PartialMessage` (use `MessageShape`/`MessageInitShape`). Version detected at install time.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-connect-query
+  bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
   ```
 
 ## Evals
