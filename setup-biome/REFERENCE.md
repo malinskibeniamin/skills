@@ -18,13 +18,18 @@
     "indentWidth": 2,
     "lineWidth": 100
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "rules": {
       "suspicious": {
-        "noConsole": "error"
+        "noConsole": "error",
+        "noReactForwardRef": "off"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": {
@@ -49,10 +54,10 @@
         }
       },
       "nursery": {
-        "noDeprecatedImports": "error",
-        "noClassComponent": "error",
-        "useExhaustiveSwitchCases": "error",
-        "noReactForwardRef": "off"
+        "useExhaustiveSwitchCases": "error"
+      },
+      "project": {
+        "noDeprecatedImports": "error"
       }
     }
   },
@@ -133,16 +138,18 @@ exit 0
 
 Ultracite provides a strict baseline. We override these specific behaviors:
 
-| Rule | Ultracite default | Our override | Why |
-|------|-------------------|-------------|-----|
-| `noConsole` | off | error | Ban console.log in production code |
-| `noExcessiveCognitiveComplexity` | threshold 20 | threshold 15 | Stricter complexity limit |
-| `noExplicitAny` in tests | off | error | No `any` escape hatch, even in tests |
-| `noDeprecatedImports` | off | error | Catch deprecated API usage |
-| `noRestrictedImports` | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup |
-| `noClassComponent` | off | error | Ban class components, enforce functional components |
-| `useExhaustiveSwitchCases` | off | error | Require exhaustive switch/case for type safety |
-| `noReactForwardRef` | nursery | off | Keep off for React 18 — forwardRef is still required |
+| Rule | Group | Ultracite default | Our override | Why |
+|------|-------|-------------------|-------------|-----|
+| `noConsole` | suspicious | off | error | Ban console.log in production code |
+| `noReactForwardRef` | suspicious | on | off | Keep off for React 18 — forwardRef is still required |
+| `noExcessiveCognitiveComplexity` | complexity | threshold 20 | threshold 15 | Stricter complexity limit |
+| `noExplicitAny` in tests | suspicious | off | error | No `any` escape hatch, even in tests |
+| `noDeprecatedImports` | project | off | error | Catch deprecated API usage (requires Biome Scanner) |
+| `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup |
+| `useExhaustiveSwitchCases` | nursery | off | error | Require exhaustive switch/case for type safety |
+| `organizeImports` | assist | — | on | Auto-sort imports via `assist.actions.source` |
+
+**Note:** `noClassComponent` was removed from Biome 2.x. Class components are discouraged by convention instead. The React Compiler skill enforces functional patterns via the memoization check.
 
 ## Import Deletion Loop Prevention
 
