@@ -15,7 +15,7 @@ run_file_eval "$REPO_ROOT/.claude/skills/setup-quality-gate" "symlink exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-quality-gate" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "quality:gate" "SKILL.md mentions quality:gate script"
-run_content_eval "$SKILL_DIR/SKILL.md" "tsgo" "SKILL.md mentions tsgo"
+run_content_eval "$SKILL_DIR/SKILL.md" "type:check" "SKILL.md mentions type:check"
 run_content_eval "$SKILL_DIR/SKILL.md" "GitHub Actions" "SKILL.md mentions CI"
 
 # ── REFERENCE.md content ────────────────────────────────────────
@@ -23,7 +23,6 @@ run_content_eval "$SKILL_DIR/SKILL.md" "GitHub Actions" "SKILL.md mentions CI"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "quality-gate.yml" "REFERENCE has workflow filename"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "git diff --exit-code" "REFERENCE has formatting integrity check"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "bun run type:check" "REFERENCE has type:check command"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "bun run type:check" "REFERENCE has typecheck step"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "related" "REFERENCE mentions related tests"
 
 # ── Hook script content ─────────────────────────────────────────

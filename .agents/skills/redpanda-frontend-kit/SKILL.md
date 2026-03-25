@@ -37,7 +37,7 @@ Execute setup-react-rules, setup-react-doctor, setup-tanstack-router in order.
 - [ ] `.claude/settings.json` has all hooks
 - [ ] `biome.jsonc` exists
 - [ ] `react-doctor.config.json` exists
-- [ ] All package.json scripts present: `lint`, `lint:fix`, `typecheck`, `test`, `quality:gate`, `doctor`, `generate:routes`
+- [ ] All package.json scripts present: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`, `doctor`, `generate:routes`
 
 ### 4. Commit
 

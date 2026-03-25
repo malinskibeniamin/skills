@@ -22,7 +22,7 @@ fi
 
 # Block tsc commands
 if echo "$command" | grep -qE '(^|\s|&&|\|\||;)tsc(\s|$)'; then
-  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"tsc is banned. Use tsgo instead for type checking.\n- tsc → tsgo\n- tsc --noEmit → tsgo --noEmit\n- npm run typecheck should use tsgo in package.json"}' >&2
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"tsc is banned. Use tsgo instead for type checking.\n- tsc → tsgo\n- tsc --noEmit → tsgo --noEmit\n- bun run type:check should use tsgo in package.json"}' >&2
   exit 2
 fi
 

@@ -76,7 +76,7 @@ jobs:
 | `type:check` | `tsgo` | ~2s |
 | `test` | `vitest --run` | varies |
 | `test:related` | `vitest --run --related` | ~1-3s |
-| `quality:gate` | lint + typecheck + related tests | <5s target |
+| `quality:gate` | lint + type:check + related tests | <5s target |
 
 ## CI Integrity Check
 

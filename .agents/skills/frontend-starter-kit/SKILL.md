@@ -46,7 +46,7 @@ After all skills complete:
 - [ ] `.claude/settings.json` has all hooks configured
 - [ ] `biome.jsonc` exists
 - [ ] `rsbuild.config.ts` has React Compiler plugin
-- [ ] Package.json has all scripts: `lint`, `lint:fix`, `typecheck`, `test`, `quality:gate`
+- [ ] Package.json has all scripts: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] All hook scripts in `.claude/hooks/` are executable
 - [ ] All community skills installed: `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`
