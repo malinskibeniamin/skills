@@ -1,11 +1,10 @@
 # Evals for frontend-starter-kit meta-skill
 
-SKILL_DIR="$REPO_ROOT/.agents/skills/frontend-starter-kit"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$REPO_ROOT/.claude/skills/frontend-starter-kit" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
@@ -29,5 +28,5 @@ run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not 
 # ── All setup skill dependencies exist ───────────────────────────
 
 for dep_skill in setup-toolchain setup-biome setup-quality-gate setup-llm-optimization setup-react-compiler; do
-  run_file_eval "$REPO_ROOT/.agents/skills/$dep_skill/SKILL.md" "dependency: $dep_skill exists"
+  run_file_eval "$REPO_ROOT/$dep_skill/SKILL.md" "dependency: $dep_skill exists"
 done

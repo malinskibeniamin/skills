@@ -1,9 +1,9 @@
 # Evals for setup-toolchain skill
 # Tests hook scripts, file structure, and SKILL.md correctness
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-toolchain/scripts/enforce-toolchain.sh"
-SESSION_SCRIPT="$REPO_ROOT/.agents/skills/setup-toolchain/scripts/session-env.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-toolchain"
+SCRIPT="$REPO_ROOT/setup-toolchain/scripts/enforce-toolchain.sh"
+SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
+SKILL_DIR="$REPO_ROOT/setup-toolchain"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -11,7 +11,6 @@ run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "enforce-toolchain.sh is executable"
 run_executable_eval "$SESSION_SCRIPT" "session-env.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-toolchain" "symlink in .claude/skills exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

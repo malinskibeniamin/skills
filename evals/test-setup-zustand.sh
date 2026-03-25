@@ -1,14 +1,13 @@
 # Evals for setup-zustand skill
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-zustand/scripts/zustand-check.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-zustand"
+SCRIPT="$REPO_ROOT/setup-zustand/scripts/zustand-check.sh"
+SKILL_DIR="$REPO_ROOT/setup-zustand"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "zustand-check.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-zustand" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

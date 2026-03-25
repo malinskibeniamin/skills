@@ -1,14 +1,13 @@
 # Evals for setup-registry-workflow skill
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-registry-workflow/scripts/registry-check.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-registry-workflow"
+SCRIPT="$REPO_ROOT/setup-registry-workflow/scripts/registry-check.sh"
+SKILL_DIR="$REPO_ROOT/setup-registry-workflow"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "registry-check.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-registry-workflow" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

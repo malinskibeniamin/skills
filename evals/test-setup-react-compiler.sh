@@ -1,14 +1,13 @@
 # Evals for setup-react-compiler skill
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-react-compiler/scripts/react-compiler-check.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-react-compiler"
+SCRIPT="$REPO_ROOT/setup-react-compiler/scripts/react-compiler-check.sh"
+SKILL_DIR="$REPO_ROOT/setup-react-compiler"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-compiler-check.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-react-compiler" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

@@ -1,8 +1,8 @@
 # Evals for setup-tanstack-router skill
 
-GEN_SCRIPT="$REPO_ROOT/.agents/skills/setup-tanstack-router/scripts/tanstack-router-gen.sh"
-CHECK_SCRIPT="$REPO_ROOT/.agents/skills/setup-tanstack-router/scripts/tanstack-router-check.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-tanstack-router"
+GEN_SCRIPT="$REPO_ROOT/setup-tanstack-router/scripts/tanstack-router-gen.sh"
+CHECK_SCRIPT="$REPO_ROOT/setup-tanstack-router/scripts/tanstack-router-check.sh"
+SKILL_DIR="$REPO_ROOT/setup-tanstack-router"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -10,7 +10,6 @@ run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$GEN_SCRIPT" "tanstack-router-gen.sh is executable"
 run_executable_eval "$CHECK_SCRIPT" "tanstack-router-check.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-tanstack-router" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

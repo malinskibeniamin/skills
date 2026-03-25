@@ -1,12 +1,11 @@
 # Evals for test-guardian skill
 
-SKILL_DIR="$REPO_ROOT/.agents/skills/test-guardian"
+SKILL_DIR="$REPO_ROOT/test-guardian"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
-run_file_eval "$REPO_ROOT/.claude/skills/test-guardian" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

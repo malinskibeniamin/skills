@@ -1,15 +1,14 @@
 # Evals for setup-biome skill
 # Tests file structure, SKILL.md, REFERENCE.md, and hook script content
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-biome/scripts/biome-autofix.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-biome"
+SCRIPT="$REPO_ROOT/setup-biome/scripts/biome-autofix.sh"
+SKILL_DIR="$REPO_ROOT/setup-biome"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "biome-autofix.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-biome" "symlink in .claude/skills exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

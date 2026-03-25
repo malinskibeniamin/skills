@@ -1,14 +1,13 @@
 # Evals for setup-react-rules skill
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-react-rules/scripts/react-rules-check.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-react-rules"
+SCRIPT="$REPO_ROOT/setup-react-rules/scripts/react-rules-check.sh"
+SKILL_DIR="$REPO_ROOT/setup-react-rules"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-rules-check.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-react-rules" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

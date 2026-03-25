@@ -1,11 +1,10 @@
 # Evals for redpanda-frontend-kit meta-skill
 
-SKILL_DIR="$REPO_ROOT/.agents/skills/redpanda-frontend-kit"
+SKILL_DIR="$REPO_ROOT/redpanda-frontend-kit"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$REPO_ROOT/.claude/skills/redpanda-frontend-kit" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
@@ -19,5 +18,5 @@ run_content_eval "$SKILL_DIR/SKILL.md" "setup-tanstack-router" "references setup
 # ── All referenced skills exist ──────────────────────────────────
 
 for dep_skill in frontend-starter-kit setup-react-rules setup-react-doctor setup-tanstack-router; do
-  run_file_eval "$REPO_ROOT/.agents/skills/$dep_skill/SKILL.md" "dependency: $dep_skill exists"
+  run_file_eval "$REPO_ROOT/$dep_skill/SKILL.md" "dependency: $dep_skill exists"
 done

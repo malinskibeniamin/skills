@@ -1,11 +1,10 @@
 # Evals for work-automation-kit meta-skill
 
-SKILL_DIR="$REPO_ROOT/.agents/skills/work-automation-kit"
+SKILL_DIR="$REPO_ROOT/work-automation-kit"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$REPO_ROOT/.claude/skills/work-automation-kit" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

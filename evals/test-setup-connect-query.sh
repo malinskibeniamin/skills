@@ -1,14 +1,13 @@
 # Evals for setup-connect-query skill
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-connect-query/scripts/connect-query-check.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-connect-query"
+SCRIPT="$REPO_ROOT/setup-connect-query/scripts/connect-query-check.sh"
+SKILL_DIR="$REPO_ROOT/setup-connect-query"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "connect-query-check.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-connect-query" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

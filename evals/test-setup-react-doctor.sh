@@ -1,14 +1,13 @@
 # Evals for setup-react-doctor skill
 
-SCRIPT="$REPO_ROOT/.agents/skills/setup-react-doctor/scripts/react-doctor-stop.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-react-doctor"
+SCRIPT="$REPO_ROOT/setup-react-doctor/scripts/react-doctor-stop.sh"
+SKILL_DIR="$REPO_ROOT/setup-react-doctor"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-doctor-stop.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-react-doctor" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

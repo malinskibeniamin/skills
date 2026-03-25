@@ -1,9 +1,9 @@
 # Evals for setup-llm-optimization skill
 
-ENV_SCRIPT="$REPO_ROOT/.agents/skills/setup-llm-optimization/scripts/llm-env.sh"
-FLAGS_SCRIPT="$REPO_ROOT/.agents/skills/setup-llm-optimization/scripts/llm-test-flags.sh"
-TRUNCATE_SCRIPT="$REPO_ROOT/.agents/skills/setup-llm-optimization/scripts/llm-truncate.sh"
-SKILL_DIR="$REPO_ROOT/.agents/skills/setup-llm-optimization"
+ENV_SCRIPT="$REPO_ROOT/setup-llm-optimization/scripts/llm-env.sh"
+FLAGS_SCRIPT="$REPO_ROOT/setup-llm-optimization/scripts/llm-test-flags.sh"
+TRUNCATE_SCRIPT="$REPO_ROOT/setup-llm-optimization/scripts/llm-truncate.sh"
+SKILL_DIR="$REPO_ROOT/setup-llm-optimization"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -12,7 +12,6 @@ run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$ENV_SCRIPT" "llm-env.sh is executable"
 run_executable_eval "$FLAGS_SCRIPT" "llm-test-flags.sh is executable"
 run_executable_eval "$TRUNCATE_SCRIPT" "llm-truncate.sh is executable"
-run_file_eval "$REPO_ROOT/.claude/skills/setup-llm-optimization" "symlink exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
