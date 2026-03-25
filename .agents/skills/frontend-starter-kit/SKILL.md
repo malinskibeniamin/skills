@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Meta-skill that runs all generic frontend setup skills in order — toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler — and installs community workflow skills (TDD, triage, architecture, refactoring, design). Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Meta-skill that runs all generic frontend setup skills in order — toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler, zustand — and installs community workflow skills (TDD, triage, architecture, refactoring, design). Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -14,6 +14,7 @@ description: Meta-skill that runs all generic frontend setup skills in order —
 3. **setup-quality-gate** — quality:gate script, CI workflow, Stop hook for tsgo
 4. **setup-llm-optimization** — AI_AGENT=1, CLAUDECODE=1, output truncation
 5. **setup-react-compiler** — React Compiler with rsbuild, memoization check
+6. **setup-zustand** — Zustand best practices: double-parens create, useShallow, persist middleware
 
 ### Community workflow skills (installed from mattpocock/skills)
 
@@ -27,7 +28,7 @@ description: Meta-skill that runs all generic frontend setup skills in order —
 
 ### 1. Run each setup skill in order
 
-Execute skills 1–5 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
+Execute skills 1–6 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
 
 ### 2. Install community workflow skills
 
@@ -49,6 +50,7 @@ After all skills complete:
 - [ ] Package.json has all scripts: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] All hook scripts in `.claude/hooks/` are executable
+- [ ] zustand-check.sh catches single-parens create and inline object selectors
 - [ ] All community skills installed: `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`
 
 ### 4. Commit

@@ -6,13 +6,13 @@ A collection of agent skills and Claude Code hooks that enforce frontend best pr
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler, plus community workflow skills (TDD, triage, architecture, refactoring, design).
+- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler, zustand, plus community workflow skills (TDD, triage, architecture, refactoring, design).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit
   ```
 
-- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: useEffect ban, raw HTML enforcement, Chakra migration, TanStack Router, and react-doctor.
+- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: useEffect ban, raw HTML enforcement, Chakra migration, TanStack Router (with anti-pattern checks), Connect Query + Protobuf enforcement, and react-doctor.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit
@@ -104,9 +104,17 @@ Reduce token usage and context waste.
   bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization
   ```
 
+## State Management
+
+- **setup-zustand** — PostToolUse hook enforcing zustand best practices: ban single-parens `create<T>()` (must be `create<T>()()`), ban inline object selectors (suggest `useShallow`), ban direct localStorage in stores (suggest persist middleware).
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-zustand
+  ```
+
 ## Routing & Registry
 
-- **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when files in the routes directory change. PostToolUse hook with `suppressOutput`.
+- **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), and require `validateSearch` when using `useSearch` in route files. Warns on `window.location.reload()` and `window.location` reads.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router
@@ -116,6 +124,14 @@ Reduce token usage and context waste.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow
+  ```
+
+## Data Fetching
+
+- **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` from `@tanstack/react-query` when ConnectRPC is available, ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2 projects also get: ban `new Message()` construction (use `create(Schema)`), ban `PlainMessage`/`PartialMessage` (use `MessageShape`/`MessageInitShape`). Version detected at install time.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-connect-query
   ```
 
 ## Evals
@@ -146,7 +162,10 @@ PreToolUse (Bash)
 └── llm-test-flags.sh    — block --verbose on test runners
 
 PostToolUse (Edit|Write)
-└── react-rules-check.sh — 13 React/TS/a11y checks (~50ms, skips non-JS/TS)
+├── react-rules-check.sh      — 13 React/TS/a11y checks (~50ms, skips non-JS/TS)
+├── zustand-check.sh           — zustand anti-patterns (skips non-zustand files)
+├── tanstack-router-check.sh   — routing anti-patterns (skips non-router files)
+└── connect-query-check.sh     — ConnectRPC/protobuf patterns (skips non-connect files)
 
 PostToolUse (Bash)
 └── llm-truncate.sh      — truncate output >200 lines

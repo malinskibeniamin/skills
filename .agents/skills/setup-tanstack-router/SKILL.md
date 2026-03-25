@@ -1,6 +1,6 @@
 ---
 name: setup-tanstack-router
-description: Configure TanStack Router route tree auto-generation via Claude Code PostToolUse hook. Regenerates routeTree when route files change. Use when setting up TanStack Router, file-based routing, or route generation hooks.
+description: Configure TanStack Router route tree auto-generation and anti-pattern enforcement via Claude Code PostToolUse hooks. Regenerates routeTree when route files change. Bans react-router-dom, window.location navigation, strict:false, untyped hooks, URLSearchParams. Use when setting up TanStack Router, file-based routing, route generation hooks, or enforcing router type safety.
 ---
 
 # Setup TanStack Router
@@ -8,7 +8,15 @@ description: Configure TanStack Router route tree auto-generation via Claude Cod
 ## What This Sets Up
 
 - `generate:routes` package.json script
-- **PostToolUse hook** on Write/Edit that regenerates route tree when files in the routes directory change
+- **PostToolUse hook** (Write/Edit) that regenerates route tree when route files change
+- **PostToolUse hook** (Write/Edit) that catches routing anti-patterns:
+  - Ban `react-router-dom` imports
+  - Ban `window.location` for navigation (block) and reads (warn)
+  - Warn on `window.location.reload()` — suggest `router.invalidate()`
+  - Ban `strict: false` in router hooks
+  - Ban untyped `useParams()`, `useSearch()`, `useLoaderData()`, `useRouteContext()` without `{ from }`
+  - Ban `URLSearchParams` — suggest nuqs
+  - Require `validateSearch` when `useSearch` is used in route files
 
 ## Steps
 
@@ -22,13 +30,16 @@ description: Configure TanStack Router route tree auto-generation via Claude Cod
 }
 ```
 
-### 2. Create hook script
+### 2. Create hook scripts
 
-Write `tanstack-router-gen.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Write scripts from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`:
 
-During setup, ask the user for their routes directory path (default: `src/routes/`).
+- `tanstack-router-gen.sh` — route tree regeneration
+- `tanstack-router-check.sh` — anti-pattern enforcement
 
-### 3. Configure hook in `.claude/settings.json`
+Make both executable. During setup, ask the user for their routes directory path (default: `src/routes/`).
+
+### 3. Configure hooks in `.claude/settings.json`
 
 ```json
 {
@@ -37,7 +48,8 @@ During setup, ask the user for their routes directory path (default: `src/routes
       {
         "matcher": "Edit|Write",
         "hooks": [
-          { "type": "command", "command": ".claude/hooks/tanstack-router-gen.sh" }
+          { "type": "command", "command": ".claude/hooks/tanstack-router-gen.sh" },
+          { "type": "command", "command": ".claude/hooks/tanstack-router-check.sh" }
         ]
       }
     ]
@@ -45,10 +57,19 @@ During setup, ask the user for their routes directory path (default: `src/routes
 }
 ```
 
-### 4. Verify & Commit
+### 4. Verify
 
 - [ ] `bun run generate:routes` works
-- [ ] Hook is executable
 - [ ] Creating a new route file triggers regeneration
+- [ ] Hook blocks `react-router-dom` imports
+- [ ] Hook blocks `window.location.href = ...`
+- [ ] Hook warns on `window.location.reload()`
+- [ ] Hook blocks `strict: false`
+- [ ] Hook blocks `useParams()` without `{ from }`
+- [ ] Hook allows `Route.useParams()`
+- [ ] Hook blocks `new URLSearchParams`
+- [ ] Hook blocks `useSearch` without `validateSearch` in route files
 
-Commit: `Add TanStack Router auto-generation hook`
+### 5. Commit
+
+Stage and commit: `Add TanStack Router auto-generation and anti-pattern hooks`
