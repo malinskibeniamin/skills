@@ -1,0 +1,75 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/session-env.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/llm-env.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/enforce-toolchain.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/llm-test-flags.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/react-rules-check.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/llm-truncate.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/biome-autofix.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/typecheck-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/react-doctor-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/registry-check.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
