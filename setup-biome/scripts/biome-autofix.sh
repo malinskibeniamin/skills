@@ -4,8 +4,13 @@ set -euo pipefail
 # Stop hook: run biome lint:fix on all changed JS/TS files before Claude finishes.
 # Only runs if JS/TS files were actually changed.
 
-# Check if any JS/TS files were changed
-changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
+# Check if any JS/TS files were changed.
+# git diff returns paths relative to repo root; strip the prefix so they're
+# relative to cwd (where bun run lint:fix executes).
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
+cwd=$(pwd)
+prefix="${cwd#"$repo_root"/}/"
+changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | sed "s|^${prefix}||" || true)
 
 if [ -z "$changed_files" ]; then
   exit 0
