@@ -8,7 +8,7 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 ## What This Sets Up
 
 - `quality:gate` package.json script — runs lint, type check, and related tests in <5 seconds
-- Additional package.json scripts: `lint`, `lint:fix`, `typecheck`, `test`
+- Additional package.json scripts: `lint`, `lint:fix`, `type:check`, `test`
 - **GitHub Actions workflow** with formatting integrity check (`git diff --exit-code`)
 - **Stop hook** running `tsgo` before Claude finishes
 
@@ -23,7 +23,7 @@ Merge into existing `scripts` (don't overwrite):
   "scripts": {
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "typecheck": "tsgo",
+    "type:check": "tsgo",
     "test": "vitest --run",
     "test:related": "vitest --run --related",
     "quality:gate": "biome check . && tsgo && vitest --run --related $(git diff --name-only HEAD)"
@@ -38,7 +38,7 @@ Merge into existing `scripts` (don't overwrite):
 Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Key features:
 - Runs on PR and push to main
 - Formatting integrity: `bun run lint:fix && git diff --exit-code` (fails if code wasn't formatted)
-- Type checking: `bun run typecheck`
+- Type checking: `bun run type:check`
 - Tests: `bun test --run`
 
 ### 3. Create Stop hook script
@@ -67,7 +67,7 @@ Write `typecheck-stop.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/
 ### 5. Verify
 
 - [ ] `bun run lint` works
-- [ ] `bun run typecheck` works
+- [ ] `bun run type:check` works
 - [ ] `bun run quality:gate` works
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] Stop hook script is executable

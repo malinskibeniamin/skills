@@ -6,13 +6,21 @@
 #!/bin/bash
 set -euo pipefail
 
-# Run tsgo type checking before Claude finishes responding
+# Stop hook: run type checking before Claude finishes responding.
+# Only runs if JS/TS files were actually changed.
+
+changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
+if [ -z "$changed_files" ]; then
+  exit 0
+fi
+
+# Use package.json script for consistency with CI
 output=""
 exit_code=0
-output=$(tsgo --noEmit 2>&1) || exit_code=$?
+output=$(bun run type:check 2>&1) || exit_code=$?
 
 if [ $exit_code -ne 0 ]; then
-  # Truncate to keep context manageable
   truncated=$(echo "$output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":\"Type errors found. Fix before finishing:\\n\"$escaped\"\"}" >&2
@@ -53,7 +61,7 @@ jobs:
           }
 
       - name: Type check
-        run: bun run typecheck
+        run: bun run type:check
 
       - name: Run tests
         run: bun test --run
@@ -65,7 +73,7 @@ jobs:
 |--------|-------------|---------------|
 | `lint` | `biome check .` | ~1s |
 | `lint:fix` | `biome check --write .` | ~1s |
-| `typecheck` | `tsgo` | ~2s |
+| `type:check` | `tsgo` | ~2s |
 | `test` | `vitest --run` | varies |
 | `test:related` | `vitest --run --related` | ~1-3s |
 | `quality:gate` | lint + typecheck + related tests | <5s target |

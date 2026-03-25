@@ -153,7 +153,7 @@ PostToolUse (Bash)
 
 Stop
 ├── biome-autofix.sh     — lint:fix all changed JS/TS files
-├── typecheck-stop.sh    — tsgo --noEmit
+├── typecheck-stop.sh    — bun run type:check (skips if no JS/TS changes)
 ├── react-doctor-stop.sh — health check on changed files
 └── registry-check.sh    — remind about registry.json rebuild
 ```

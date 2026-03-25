@@ -22,12 +22,13 @@ run_content_eval "$SKILL_DIR/SKILL.md" "GitHub Actions" "SKILL.md mentions CI"
 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "quality-gate.yml" "REFERENCE has workflow filename"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "git diff --exit-code" "REFERENCE has formatting integrity check"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "tsgo --noEmit" "REFERENCE has tsgo command"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "bun run typecheck" "REFERENCE has typecheck step"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "bun run type:check" "REFERENCE has type:check command"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "bun run type:check" "REFERENCE has typecheck step"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "related" "REFERENCE mentions related tests"
 
 # ── Hook script content ─────────────────────────────────────────
 
-run_content_eval "$SCRIPT" "tsgo" "hook runs tsgo"
+run_content_eval "$SCRIPT" "bun run type:check" "hook uses bun run type:check"
+run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed JS/TS files"
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks on failure"
 run_content_eval "$SCRIPT" "head -30" "hook truncates output"
