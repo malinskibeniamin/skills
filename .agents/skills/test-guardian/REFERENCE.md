@@ -92,16 +92,14 @@ Projects use two vitest configs for different environments:
 | Config | Script | Environment | Speed |
 |--------|--------|-------------|-------|
 | `vitest.config.unit.mts` | `bun run test:unit` | node | Fast, no DOM overhead |
-| `vitest.config.integration.mts` | `bun run test:integration` | happy-dom | Component rendering with fast DOM |
+| `vitest.config.integration.mts` | `bun run test:integration` | happy-dom/jsdom | Component rendering with DOM |
 
 ### File Naming Conventions
 
 | Suffix | Environment | Use for |
 |--------|-------------|---------|
 | `*.unit.ts` | node | Pure logic: utilities, hooks, store tests, transformers |
-| `*.unit.tsx` | node | Simple component snapshot tests |
-| `*.integration.tsx` | happy-dom | Full component rendering, user interactions, API mocking |
-| `*.integration.ts` | happy-dom | Component integration with services, testcontainers |
+| `*.integration.tsx` | happy-dom/jsdom | Component rendering, user interactions, API mocking |
 
 ### Common Misclassifications
 

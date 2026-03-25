@@ -39,16 +39,16 @@ grep -rn 'getByRole\|getAllByRole\|findByRole\|queryByRole' --include='*.integra
 
 ### Audit Test File Classification
 
-Projects use split vitest configs: `vitest.config.unit.mts` (node) and `vitest.config.integration.mts` (happy-dom). Misclassified tests waste time or give wrong results.
+Projects use split vitest configs: `vitest.config.unit.mts` (node) and `vitest.config.integration.mts` (happy-dom or jsdom). Misclassified tests waste time or give wrong results.
 
 **Find misclassified tests:**
 
 ```bash
 # .unit.ts files that render components (should be .integration.tsx)
-grep -rlE 'render\(|screen\.' --include='*.unit.ts' --include='*.unit.tsx'
+grep -rlE 'render\(|screen\.' --include='*.unit.ts'
 
 # .integration.tsx files with no rendering (could be .unit.ts)
-grep -rLE 'render\(|screen\.|userEvent\.' --include='*.integration.ts' --include='*.integration.tsx'
+grep -rLE 'render\(|screen\.|userEvent\.' --include='*.integration.tsx'
 
 # .test.ts/.test.tsx without unit/integration suffix (ambiguous)
 find src -name '*.test.ts' -o -name '*.test.tsx' | grep -v '\.unit\.\|\.integration\.'
@@ -59,9 +59,7 @@ find src -name '*.test.ts' -o -name '*.test.tsx' | grep -v '\.unit\.\|\.integrat
 | Suffix | Environment | Use for |
 |--------|-------------|---------|
 | `.unit.ts` | node | Pure logic, hooks, utilities, store tests — no DOM needed |
-| `.unit.tsx` | node | Simple component snapshot tests |
-| `.integration.tsx` | happy-dom | Full component rendering, user interactions, API mocking |
-| `.integration.ts` | happy-dom | Component integration with services, testcontainers |
+| `.integration.tsx` | happy-dom/jsdom | Component rendering, user interactions, API mocking |
 
 ### Find Slow Tests / Identify Flaky Tests / Profile Performance
 
