@@ -51,7 +51,8 @@
       "nursery": {
         "noDeprecatedImports": "error",
         "noClassComponent": "error",
-        "useExhaustiveSwitchCases": "error"
+        "useExhaustiveSwitchCases": "error",
+        "noReactForwardRef": "off"
       }
     }
   },
@@ -141,6 +142,7 @@ Ultracite provides a strict baseline. We override these specific behaviors:
 | `noRestrictedImports` | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup |
 | `noClassComponent` | off | error | Ban class components, enforce functional components |
 | `useExhaustiveSwitchCases` | off | error | Require exhaustive switch/case for type safety |
+| `noReactForwardRef` | nursery | off | Keep off for React 18 — forwardRef is still required |
 
 ## Import Deletion Loop Prevention
 
