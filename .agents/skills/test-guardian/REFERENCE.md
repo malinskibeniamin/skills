@@ -99,7 +99,7 @@ Projects use two vitest configs for different environments:
 | Suffix | Environment | Use for |
 |--------|-------------|---------|
 | `*.unit.ts` | node | Pure logic: utilities, hooks, store tests, transformers |
-| `*.integration.tsx` | happy-dom/jsdom | Component rendering, user interactions, API mocking |
+| `*.integration.tsx` | happy-dom (preferred) or jsdom | Component rendering, user interactions, API mocking |
 
 ### Common Misclassifications
 
@@ -128,12 +128,12 @@ Projects use two vitest configs for different environments:
 | `window is not defined` | Unit test accessing browser APIs — should be integration |
 | Test passes locally, fails in CI | Environment mismatch between configs |
 | Integration test is very slow | Might be pure logic that could be a unit test |
-| `happy-dom` rendering errors | Complex component needs jsdom — check happy-dom compatibility |
+| `happy-dom` rendering errors | Fall back to jsdom for that test file — happy-dom is preferred but jsdom is acceptable |
 
 ## Performance Optimization
 
 ### Vitest
-- Use `happy-dom` instead of `jsdom` (2-3x faster)
+- Prefer `happy-dom` over `jsdom` (2-3x faster) — only fall back to jsdom if happy-dom has compatibility issues
 - Avoid barrel imports (use specific entry points)
 - Enable dependency optimizer for heavy packages
 - Use `--pool=threads` for CPU-bound tests
