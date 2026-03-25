@@ -21,20 +21,7 @@ Write `zustand-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`
 
 ### 2. Configure hook in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/zustand-check.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/zustand-check.sh`
 
 ### 3. Verify
 

@@ -26,20 +26,7 @@ Make executable.
 
 ### 2. Configure hook in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/react-rules-check.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/react-rules-check.sh`
 
 ### 3. Verify
 

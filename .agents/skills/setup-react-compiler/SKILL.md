@@ -47,20 +47,7 @@ Write `react-compiler-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/
 
 ### 5. Configure hook in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/react-compiler-check.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/react-compiler-check.sh`
 
 ### 6. Verify & Commit
 

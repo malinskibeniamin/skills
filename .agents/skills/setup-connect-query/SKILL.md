@@ -32,20 +32,7 @@ Write the appropriate `connect-query-check.sh` variant from [REFERENCE.md](REFER
 
 ### 3. Configure hook in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/connect-query-check.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/connect-query-check.sh`
 
 ### 4. Verify
 

@@ -45,24 +45,9 @@ Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Ke
 
 Write `typecheck-stop.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
 
-### 4. Configure Stop hook in `.claude/settings.json`
+### 4. Configure hook in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/typecheck-stop.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **Stop**: `.claude/hooks/typecheck-stop.sh`
 
 ### 5. Verify
 

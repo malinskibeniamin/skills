@@ -25,37 +25,10 @@ Make all executable.
 
 ### 2. Configure hooks in `.claude/settings.json`
 
-Merge these entries (preserve existing):
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/llm-env.sh" }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/llm-test-flags.sh" }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/llm-truncate.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config (merge with existing):
+- **SessionStart**: `.claude/hooks/llm-env.sh`
+- **PreToolUse** (matcher: `Bash`): `.claude/hooks/llm-test-flags.sh`
+- **PostToolUse** (matcher: `Bash`): `.claude/hooks/llm-truncate.sh`
 
 ### 3. Verify
 

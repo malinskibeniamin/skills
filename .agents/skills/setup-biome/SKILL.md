@@ -9,7 +9,7 @@ description: Install Biome linter with Ultracite preset, create biome.jsonc conf
 
 - **Biome** linter/formatter with **Ultracite** opinionated preset
 - `biome.jsonc` extending `ultracite/biome/core` + `ultracite/biome/react`
-- **Stop hook** that auto-fixes lint/format on all changed JS/TS files before Claude finishes
+- **Stop hook** that auto-fixes lint/format on all changed JS/TS files (skips `noUnusedImports` to avoid import deletion loops)
 - Strict overrides: `noConsole`, cognitive complexity 15, `noDeprecatedImports`, restricted imports
 
 ## Steps
@@ -44,33 +44,9 @@ Use the config from [REFERENCE.md](REFERENCE.md). Key points:
 
 Write `biome-autofix.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
 
-This hook:
-- Runs on **Stop** (before Claude finishes responding)
-- Checks `git diff` for changed JS/TS files — skips entirely if none changed
-- Runs `bun run lint:fix` on changed files only
-- Skips `noUnusedImports` to avoid deleting imports mid-edit
-- Blocks Claude from finishing if unfixable errors remain
-
 ### 5. Configure hook in `.claude/settings.json`
 
-Merge into existing settings:
-
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/biome-autofix.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **Stop**: `.claude/hooks/biome-autofix.sh`
 
 ### 6. Verify
 

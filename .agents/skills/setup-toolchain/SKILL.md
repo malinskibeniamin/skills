@@ -22,37 +22,11 @@ Write the scripts from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`:
 
 Make both executable: `chmod +x .claude/hooks/*.sh`
 
-### 2. Configure hooks in settings
+### 2. Configure hooks in `.claude/settings.json`
 
-Read `.claude/settings.json`. Merge these hook entries (preserve existing settings):
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/enforce-toolchain.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-env.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config (merge with existing):
+- **PreToolUse** (matcher: `Bash`): `.claude/hooks/enforce-toolchain.sh`
+- **SessionStart**: `.claude/hooks/session-env.sh`
 
 ### 3. Verify
 

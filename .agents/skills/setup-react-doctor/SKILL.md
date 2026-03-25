@@ -50,21 +50,9 @@ bun add -D react-doctor --yarn
 
 Write `react-doctor-stop.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
 
-### 5. Configure Stop hook in `.claude/settings.json`
+### 5. Configure hook in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/react-doctor-stop.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **Stop**: `.claude/hooks/react-doctor-stop.sh`
 
 ### 6. Verify & Commit
 

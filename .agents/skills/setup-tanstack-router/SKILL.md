@@ -41,21 +41,9 @@ Make both executable. During setup, ask the user for their routes directory path
 
 ### 3. Configure hooks in `.claude/settings.json`
 
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": ".claude/hooks/tanstack-router-gen.sh" },
-          { "type": "command", "command": ".claude/hooks/tanstack-router-check.sh" }
-        ]
-      }
-    ]
-  }
-}
-```
+Add to hooks config: **PostToolUse** (matcher: `Edit|Write`):
+- `.claude/hooks/tanstack-router-gen.sh`
+- `.claude/hooks/tanstack-router-check.sh`
 
 ### 4. Verify
 
