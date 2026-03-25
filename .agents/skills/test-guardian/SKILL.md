@@ -60,8 +60,8 @@ find src -name '*.test.ts' -o -name '*.test.tsx' | grep -v '\.unit\.\|\.integrat
 |--------|-------------|---------|
 | `.unit.ts` | node | Pure logic, hooks, utilities, store tests — no DOM needed |
 | `.integration.tsx` | happy-dom/jsdom | Component rendering, user interactions, API mocking |
-| `.test.ts` | depends on config | Accepted — runs in whichever config matches. Consider adding suffix if project uses split configs. |
-| `.test.tsx` | depends on config | Accepted — same as above. Typically implies component rendering. |
+| `.test.ts` | depends on config | Accepted — consider adding `.unit`/`.integration` suffix for split configs |
+| `.test.tsx` | depends on config | Accepted — typically implies component rendering |
 
 ### Find Slow Tests / Identify Flaky Tests / Profile Performance
 
