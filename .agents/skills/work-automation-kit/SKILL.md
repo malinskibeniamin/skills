@@ -7,12 +7,13 @@ description: Meta-skill that installs planning and project management workflow s
 
 ## What This Sets Up
 
-Installs community workflow skills for project planning and management:
+Installs community workflow skills for project planning, management, and skill authoring:
 
 1. **write-a-prd** — Create PRDs through interactive interview, codebase exploration, and module design
 2. **prd-to-plan** — Convert PRDs into multi-phase implementation plans with vertical slices
 3. **prd-to-issues** — Break PRDs into independently-grabbable GitHub Issues
 4. **triage-issue** — Investigate bugs, identify root causes, and file GitHub Issues with TDD-based fix plans
+5. **write-a-skill** — Create new agent skills with proper structure, progressive disclosure, and bundled resources
 
 ## Steps
 
@@ -23,6 +24,7 @@ bunx skills@latest add mattpocock/skills/write-a-prd -y
 bunx skills@latest add mattpocock/skills/prd-to-plan -y
 bunx skills@latest add mattpocock/skills/prd-to-issues -y
 bunx skills@latest add mattpocock/skills/triage-issue -y
+bunx skills@latest add mattpocock/skills/write-a-skill -y
 ```
 
 ### 2. Verify
@@ -31,8 +33,10 @@ bunx skills@latest add mattpocock/skills/triage-issue -y
 - [ ] `prd-to-plan` skill is installed
 - [ ] `prd-to-issues` skill is installed
 - [ ] `triage-issue` skill is installed
+- [ ] `write-a-skill` skill is installed
 
 ### 3. Usage
 
 - Start a new feature: `/write-a-prd` → `/prd-to-plan` → `/prd-to-issues`
 - Investigate a bug: `/triage-issue`
+- Create a new skill: `/write-a-skill`

@@ -1,6 +1,6 @@
 ---
 name: test-guardian
-description: Diagnose test health across frameworks (Vitest, Jest, Bun, Rstest) — detect async leaks, profile performance, find slow tests, identify flaky tests. Use when tests are slow, flaky, leaking memory, or need performance profiling. Manual invocation skill, not a hook.
+description: Diagnose test health across frameworks (Vitest, Jest, Bun, Rstest) — detect async leaks, profile performance, find slow queries (getByRole), identify flaky tests, audit test file classification (unit vs integration). Use when tests are slow, flaky, leaking memory, misclassified, or need performance profiling. Manual invocation skill, not a hook.
 ---
 
 # Test Guardian
@@ -13,64 +13,60 @@ Manual diagnostic skill for test health. Not an always-on hook — invoke when d
 
 ### Detect Async Leaks
 
-**Vitest:**
 ```bash
-bunx vitest --run --detectAsyncLeaks
+bunx vitest --run --detectAsyncLeaks  # Vitest
+bunx jest --detectOpenHandles --forceExit  # Jest
 ```
 
-**Jest:**
+Common causes: unclosed timers, unresolved promises, open DB connections, WebSocket subscriptions.
+
+### Find Slow Queries
+
+`getByRole` traverses the accessibility tree and is significantly slower than `getByTestId` in large DOMs. Audit integration tests for excessive usage:
+
 ```bash
-bunx jest --detectOpenHandles --forceExit
+grep -rn 'getByRole\|getAllByRole\|findByRole\|queryByRole' --include='*.integration.*' --include='*.test.tsx' | wc -l
 ```
 
-Common causes: unclosed timers, unresolved promises, open database connections, WebSocket subscriptions.
+**When to replace with `getByTestId`:**
+- Integration tests with large DOM trees (tables, lists, complex layouts)
+- Tests that assert presence/absence, not accessibility semantics
+- Tests taking >500ms per query
 
-### Profile Test Performance
+**When `getByRole` is fine:**
+- Unit tests with small DOM (fast regardless)
+- Tests that specifically verify accessibility (e.g., button is actually `role="button"`)
 
-**Vitest** — enable import duration analysis:
-```ts
-// vitest.config.ts (temporary)
-export default defineConfig({
-  test: {
-    experimental: { importDurations: true }
-  }
-})
-```
+### Audit Test File Classification
 
-Then run and check output for slowest imports.
+Projects use split vitest configs: `vitest.config.unit.mts` (node) and `vitest.config.integration.mts` (happy-dom). Misclassified tests waste time or give wrong results.
 
-**CPU profiling:**
+**Find misclassified tests:**
+
 ```bash
-node --cpu-prof ./node_modules/vitest/vitest.mjs --run
+# .unit.ts files that render components (should be .integration.tsx)
+grep -rlE 'render\(|screen\.' --include='*.unit.ts' --include='*.unit.tsx'
+
+# .integration.tsx files with no rendering (could be .unit.ts)
+grep -rLE 'render\(|screen\.|userEvent\.' --include='*.integration.ts' --include='*.integration.tsx'
+
+# .test.ts/.test.tsx without unit/integration suffix (ambiguous)
+find src -name '*.test.ts' -o -name '*.test.tsx' | grep -v '\.unit\.\|\.integration\.'
 ```
 
-Open `.cpuprofile` in Chrome DevTools or Speedscope.
+**Classification rules:**
 
-### Find Slow Tests
+| Suffix | Environment | Use for |
+|--------|-------------|---------|
+| `.unit.ts` | node | Pure logic, hooks, utilities, store tests — no DOM needed |
+| `.unit.tsx` | node | Simple component snapshot tests |
+| `.integration.tsx` | happy-dom | Full component rendering, user interactions, API mocking |
+| `.integration.ts` | happy-dom | Component integration with services, testcontainers |
 
-Run with timing and sort:
-```bash
-bunx vitest --run --reporter=verbose 2>&1 | grep -E '✓|×' | sort -t'(' -k2 -rn | head -20
-```
+### Find Slow Tests / Identify Flaky Tests / Profile Performance
 
-### Identify Flaky Tests
-
-Run tests multiple times and look for inconsistencies:
-```bash
-for i in $(seq 1 5); do
-  echo "--- Run $i ---"
-  bunx vitest --run 2>&1 | tail -3
-done
-```
-
-### Optimize Test Configuration
-
-See [REFERENCE.md](REFERENCE.md) for per-framework optimization tips.
+See [REFERENCE.md](REFERENCE.md) for commands and per-framework optimization tips.
 
 ## Framework Detection
 
-Check `package.json` for:
-- `vitest` → use vitest commands
-- `jest` → use jest commands
-- `rstest` / `@rstest/core` → use rstest commands
-- `bun test` (default) → use bun test commands
+Check `package.json` for: `vitest` → vitest, `jest` → jest, `rstest` → rstest, `bun test` → bun
