@@ -53,7 +53,9 @@ fi
 # ── Check 1: Ban raw useQuery/useMutation from @tanstack/react-query ─
 
 if [ "$uses_connect" = true ]; then
-  if echo "$added_lines" | grep -qE "import\s+\{[^}]*(useQuery|useMutation)[^}]*\}\s+from\s+['\"]@tanstack/react-query['\"]"; then
+  # Allow useQueryClient, useTransport, etc. — only ban useQuery and useMutation exactly
+  tanstack_imports=$(echo "$added_lines" | grep -E "from\s+['\"]@tanstack/react-query['\"]" || true)
+  if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | sed -E 's/useQueryClient//g; s/useTransport//g' | grep -qE '\buseQuery\b|\buseMutation\b'; then
     echo '{"suppressOutput":true,"systemMessage":"Do not import useQuery/useMutation from @tanstack/react-query in files using ConnectRPC. Use Connect Query instead:\n\n// BAD\nimport { useQuery } from '\''@tanstack/react-query'\''\n\n// GOOD\nimport { useQuery } from '\''@connectrpc/connect-query'\''\n\nConnect Query provides type-safe hooks that understand your protobuf service definitions."}' >&2
     exit 2
   fi
