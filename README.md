@@ -95,7 +95,7 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
 
 - **setup-react-rules** — 13 checks in a single hook script:
   - Ban `useEffect`/`useLayoutEffect`/`useInsertionEffect` (suggest React Query, zustand, event handlers)
-  - Ban raw HTML elements (`<button>`, `<input>`, `<form>`, etc.) — suggest redpanda-ui components
+  - Ban raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) — suggest redpanda-ui components (`<form>` allowed)
   - Ban `@chakra-ui/react` and `@redpanda-data/ui` imports (legacy)
   - Ban `as any`, `@ts-ignore`, `@ts-expect-error`
   - Ban visual style overrides on registry components (use variant prop)

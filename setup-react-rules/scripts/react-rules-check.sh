@@ -68,7 +68,6 @@ case "$file_path" in
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<dialog[[:space:]>]'; then raw_element="<dialog> → <Dialog> from @/redpanda-ui/dialog"; fi
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<table[[:space:]>]'; then raw_element="<table> → <Table> from @/redpanda-ui/table"; fi
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<label[[:space:]>]'; then raw_element="<label> → <Label> from @/redpanda-ui/label"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<form[[:space:]>]'; then raw_element="<form> → <AutoForm> from @/redpanda-ui/auto-form (see https://redpanda-ui-registry.netlify.app/docs/auto-form)"; fi
 
     if [ -n "$raw_element" ]; then
       echo "{\"suppressOutput\":true,\"systemMessage\":\"Do not use raw HTML elements. Use redpanda-ui components instead:\\n$raw_element\\n\\nRegistry: https://redpanda-ui-registry.netlify.app/\"}" >&2
