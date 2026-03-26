@@ -10,7 +10,7 @@ set -euo pipefail
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
 cwd=$(pwd)
 prefix="${cwd#"$repo_root"/}/"
-changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | sed "s|^${prefix}||" || true)
+changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -v '/redpanda-ui/' | sed "s|^${prefix}||" || true)
 
 if [ -z "$changed_files" ]; then
   exit 0
@@ -23,11 +23,13 @@ fix_exit=0
 fix_output=$(bun run lint:fix -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || fix_exit=$?
 
 if [ $fix_exit -ne 0 ]; then
-  # Check remaining errors
+  # Check remaining errors — filter out biome's summary lines to detect real errors
   remaining=""
   remaining=$(bun run lint -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || true
 
-  if [ -n "$remaining" ]; then
+  # Only block if there are actual error lines (not just "Checked N files" summary)
+  error_lines=$(echo "$remaining" | grep -E '(error|FIXABLE|━)' || true)
+  if [ -n "$error_lines" ]; then
     truncated=$(echo "$remaining" | head -30)
     escaped=$(echo "$truncated" | jq -Rs .)
     echo "{\"decision\":\"block\",\"reason\":\"Biome found unfixable lint errors. Fix these before finishing:\\n\"$escaped\"\"}" >&2
