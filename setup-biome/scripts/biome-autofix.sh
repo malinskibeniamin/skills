@@ -27,10 +27,11 @@ if [ $fix_exit -ne 0 ]; then
   remaining=""
   remaining=$(bun run lint -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || true
 
-  # Only block if there are actual error lines (not just "Checked N files" summary)
-  error_lines=$(echo "$remaining" | grep -E '(error|FIXABLE|━)' || true)
-  if [ -n "$error_lines" ]; then
-    truncated=$(echo "$remaining" | head -30)
+  # Only block if error file paths reference non-registry files
+  # Biome error lines look like: src/file.tsx:10:5 lint/rule  FIXABLE
+  error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -v 'redpanda-ui/' || true)
+  if [ -n "$error_files" ]; then
+    truncated=$(echo "$remaining" | grep -v 'redpanda-ui/' | head -30)
     escaped=$(echo "$truncated" | jq -Rs .)
     echo "{\"decision\":\"block\",\"reason\":\"Biome found unfixable lint errors. Fix these before finishing:\\n\"$escaped\"\"}" >&2
     exit 2
