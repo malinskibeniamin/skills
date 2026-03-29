@@ -238,6 +238,8 @@ bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y   
 bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y     # Create new skills
 bunx skills@latest add mattpocock/skills/grill-me --agent claude-code -y          # Stress-test your design
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
+bunx skills@latest add mattpocock/skills/qa --agent claude-code -y                # Interactive QA → auto-file GitHub issues
+bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y  # Domain glossary (DDD)
 ```
 
 **Note:** `setup-pre-commit` (husky/lint-staged) is intentionally omitted. Claude Code hooks already enforce linting, formatting, and type checking deterministically on every edit — pre-commit hooks are redundant and add friction for human developers who may prefer different workflows.
