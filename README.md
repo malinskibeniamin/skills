@@ -27,6 +27,11 @@ bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent c
 # Accessibility
 bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
 
+# Environment, logging, commit format
+bunx skills@latest add malinskibeniamin/skills/setup-env-validation --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-logging --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-conventional-commits --agent claude-code -y
+
 # Diagnostics
 bunx skills@latest add malinskibeniamin/skills/test-guardian --agent claude-code -y
 
@@ -50,7 +55,7 @@ bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite, quality gate, LLM optimization, React Compiler, zustand, plus community workflow skills (TDD, triage, architecture, refactoring, design).
+- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite (kebab-case), quality gate (tsgo + related tests), LLM optimization, React Compiler, zustand, accessibility, React rules (19 checks + Tailwind), env validation (t3-env), structured logging (Pino), conventional commits, plus community workflow skills.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -191,6 +196,30 @@ Reduce token usage and context waste.
   bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
   ```
 
+## Environment & Configuration
+
+- **setup-env-validation** — PostToolUse hook banning raw `process.env.X` access. Enforces t3-env with zod validation — all env vars must be declared in `src/env.ts` and imported as a validated object. Skips env files and test files.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-env-validation --agent claude-code -y
+  ```
+
+## Logging
+
+- **setup-logging** — PostToolUse hook enforcing structured logging patterns. Bans `console.error()`, `console.warn()`, `console.debug()` in production code — suggests Pino structured logger with object arguments. Flags string concatenation in logger calls. Skips test files.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-logging --agent claude-code -y
+  ```
+
+## Commit Format
+
+- **setup-conventional-commits** — PreToolUse hook enforcing `type(scope): description` format on `git commit` commands. Replaces commitlint + husky with zero dependencies. Validates type, scope (required), lowercase description, no trailing period, 5-72 character length.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-conventional-commits --agent claude-code -y
+  ```
+
 ## Community Skills (Optional)
 
 ### mattpocock/skills — Workflow automation
@@ -234,7 +263,7 @@ Note: TanStack Query, Table, Form, Virtual do not have published skills yet.
 
 Two layers of testing to prevent regressions:
 
-**Script-level evals** — 466 tests that verify hook scripts, file structure, and content. Run locally in <5 seconds:
+**Script-level evals** — 571 tests that verify hook scripts, file structure, and content. Run locally in <5 seconds:
 
 ```
 ./evals/run.sh
@@ -254,24 +283,28 @@ SessionStart
 └── llm-env.sh          — AI_AGENT=1, CLAUDECODE=1
 
 PreToolUse (Bash)
-├── enforce-toolchain.sh — block npm/npx/tsc/eslint/prettier, enforce --yarn, guard destructive commands
-└── llm-test-flags.sh    — block --verbose on test runners
+├── enforce-toolchain.sh            — block npm/npx/tsc/eslint/prettier, enforce --yarn, guard destructive commands
+├── llm-test-flags.sh               — block --verbose on test runners
+└── conventional-commits-check.sh   — enforce type(scope): description format
 
-PostToolUse (Edit|Write)
-├── react-rules-check.sh      — 16 React/TS/security checks (~250ms, skips non-JS/TS)
-├── accessibility-check.sh     — ARIA/WCAG enforcement (~100ms, skips non-TSX/JSX)
-├── zustand-check.sh           — zustand anti-patterns (~75ms, skips non-zustand files)
-├── tanstack-router-check.sh   — routing anti-patterns (skips non-router files)
+PostToolUse (Edit|Write)                          All use shared/hook-lib.sh
+├── react-rules-check.sh      — 19 React/TS/security/Tailwind checks (~50ms, skips non-JS/TS)
+├── accessibility-check.sh     — ARIA/WCAG enforcement (~30ms, skips non-TSX/JSX)
+├── zustand-check.sh           — zustand anti-patterns (~20ms, skips non-zustand files)
+├── tanstack-router-check.sh   — 9 routing anti-patterns (skips non-router files)
 ├── connect-query-check.sh     — ConnectRPC/protobuf patterns (skips non-connect files)
-└── bundle-guard.sh            — heavy dependency warnings (~30ms, skips non-package.json)
+├── react-compiler-check.sh    — ban manual memoization (skips 'use no memo' files)
+├── env-validation-check.sh    — ban raw process.env (skips env.ts, test files)
+├── logging-check.sh           — ban console.error/warn/debug, enforce structured logger
+└── bundle-guard.sh            — heavy dependency warnings (~10ms, skips non-package.json)
 
 PostToolUse (Bash)
 └── llm-truncate.sh      — truncate output >200 lines
 
 Stop
 ├── biome-autofix.sh     — lint:fix all changed JS/TS files
-├── typecheck-stop.sh    — bun run type:check (skips if no JS/TS changes)
-├── react-doctor-stop.sh — health check on changed files
+├── typecheck-stop.sh    — tsgo type check + related tests (vitest/jest/bun auto-detect)
+├── react-doctor-stop.sh — health check on changed files (--diff mode)
 └── registry-check.sh    — remind about registry.json rebuild
 ```
 
@@ -279,7 +312,7 @@ Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hook
 
 ## Codex Compatibility (Experimental)
 
-> OpenAI Codex hooks launched 2026-03-27. This is an early workaround — Codex currently only supports `Bash` tool matcher for PostToolUse, not `Edit|Write`. When Codex adds Edit/Write matchers, this workaround becomes unnecessary.
+> Codex supports only the `Bash` matcher for PostToolUse — not `Edit|Write`. This skill bridges that gap by wrapping Edit|Write hooks into a Stop-based batch checker.
 
 - **codex-compat** — Generates `.codex/hooks.json` and `AGENTS.md` from existing Claude Code hooks. Translates PostToolUse Edit|Write hooks into a Stop-based batch checker. PreToolUse, SessionStart, and Stop hooks work identically on both platforms.
 
