@@ -14,7 +14,7 @@ run_executable_eval "$SCRIPT" "react-rules-check.sh is executable"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-rules" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "useEffect" "SKILL.md mentions useEffect ban"
-run_content_eval "$SKILL_DIR/SKILL.md" "redpanda-ui" "SKILL.md mentions redpanda-ui"
+run_content_eval "$SKILL_DIR/SKILL.md" "components/ui" "SKILL.md mentions components/ui"
 run_content_eval "$SKILL_DIR/SKILL.md" "as any" "SKILL.md mentions as any ban"
 
 # ── Hook: skip non-Edit/Write ───────────────────────────────────
@@ -23,9 +23,16 @@ run_hook_eval "$SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"echo"}}' \
   0 "skip: Bash tool"
 
-# ── Hook: skip redpanda-ui directory ─────────────────────────────
+# ── Hook: skip component library directories ─────────────────────
 
 tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/components/ui"
+echo "useEffect(() => {}, [])" > "$tmpdir/components/ui/Component.tsx"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/components/ui/Component.tsx\"}}" \
+  0 "skip: components/ui directory"
+
 mkdir -p "$tmpdir/redpanda-ui"
 echo "useEffect(() => {}, [])" > "$tmpdir/redpanda-ui/Component.tsx"
 
@@ -41,10 +48,13 @@ run_hook_eval "$SCRIPT" \
   '{"tool_name":"Edit","tool_input":{"file_path":"README.md"}}' \
   0 "skip: markdown file"
 
+# Create a temp dir for all file-based tests (macOS mktemp doesn't support suffixes)
+_rr_tmpdir=$(mktemp -d /tmp/react-rules-evals-XXXXXX)
+
 # ── Check 1: useEffect ban ──────────────────────────────────────
 
 # Block useEffect
-tmpfile=$(mktemp /tmp/react-rules-XXXX.tsx)
+tmpfile="$_rr_tmpdir/test.tsx"
 echo "import { useEffect } from 'react'; useEffect(() => {}, [])" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
@@ -78,19 +88,20 @@ echo '<button onClick={handleClick}>Click</button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <button>" "redpanda-ui"
+  2 "block: raw <button>" "component"
 
 echo '<input type="text" />' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <input>" "redpanda-ui"
+  2 "block: raw <input>" "component"
 
+# Allow <form> (not banned — raw <form> is acceptable)
 echo '<form onSubmit={handle}>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <form>" "AutoForm"
+  0 "allow: raw <form> (not banned)"
 
 # Allow <a> tag (not banned)
 echo '<a href="/about">About</a>' > "$tmpfile"
@@ -106,12 +117,6 @@ echo "import { Box } from '@chakra-ui/react'" > "$tmpfile"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: @chakra-ui/react import" "chakra"
-
-echo "import { Button } from '@redpanda-data/ui'" > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: @redpanda-data/ui import" "legacy"
 
 # ── Check 4: TypeScript escape hatches ──────────────────────────
 
@@ -220,7 +225,107 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: useMemo with 'use no memo' directive"
 
-rm -f "$tmpfile"
+# ── Protobuf: no false positive on Schema imports ────────────────
+
+# Importing Schema types without spreading should NOT trigger
+tmpfile="$_rr_tmpdir/test-proto.tsx"
+printf "import { AWSSQSMCPConfigSchema } from 'proto/frontend/mcps/aws_sqs/v1/aws_sqs_config_pb';\nimport { AWSBedrockMCPConfigSchema } from 'proto/frontend/mcps/aws_bedrock/v1/config_pb';\nconst registry = { sqs: AWSSQSMCPConfigSchema };\n" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: importing Schema types without spreading (no false positive)"
+
+# tmpfile reused in tmpdir
+
+# ── Check 14: dangerouslySetInnerHTML (TSX/JSX only) ─────────────
+
+# Block dangerouslySetInnerHTML in TSX
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div dangerouslySetInnerHTML={{ __html: content }} />' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: dangerouslySetInnerHTML in TSX" "XSS"
+
+# Allow dangerouslySetInnerHTML with escape hatch
+printf "// allow-dangerouslySetInnerHTML: sanitized upstream\n<div dangerouslySetInnerHTML={{ __html: content }} />\n" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: dangerouslySetInnerHTML with escape hatch"
+
+# tmpfile reused in tmpdir
+
+# Skip dangerouslySetInnerHTML in .ts file (TSX/JSX only)
+tmpfile="$_rr_tmpdir/test.ts"
+echo '<div dangerouslySetInnerHTML={{ __html: content }} />' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "skip: dangerouslySetInnerHTML in .ts file"
+
+# tmpfile reused in tmpdir
+
+# ── Check 15: eval() and new Function() ──────────────────────────
+
+# Block eval() in TS
+tmpfile="$_rr_tmpdir/test.ts"
+echo 'eval(userInput)' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: eval() in TS" "injection"
+
+# tmpfile reused in tmpdir
+
+# Block new Function() in TSX
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "new Function('return ' + code)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: new Function() in TSX"
+
+# tmpfile reused in tmpdir
+
+# Allow JSON.parse (not flagged)
+tmpfile="$_rr_tmpdir/test.ts"
+echo 'JSON.parse(data)' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: JSON.parse (not eval)"
+
+# tmpfile reused in tmpdir
+
+# ── Check 16: .innerHTML assignment (TSX/JSX only) ───────────────
+
+# Block innerHTML assignment in TSX
+tmpfile="$_rr_tmpdir/test.tsx"
+echo 'element.innerHTML = userContent' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: innerHTML assignment in TSX" "innerHTML"
+
+# Allow textContent (safe alternative)
+echo 'element.textContent = userContent' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: textContent assignment in TSX"
+
+# tmpfile reused in tmpdir
+
+# Skip innerHTML in .ts file (TSX/JSX only)
+tmpfile="$_rr_tmpdir/test.ts"
+echo 'element.innerHTML = userContent' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "skip: innerHTML in .ts file"
+
+# tmpfile reused in tmpdir
 
 # ── Hook script content checks ──────────────────────────────────
 
@@ -232,9 +337,15 @@ run_content_eval "$SCRIPT" "bufbuild/protobuf" "hook checks protobuf v2 only"
 run_content_eval "$SCRIPT" "aria-label" "hook checks icon-only button a11y"
 run_content_eval "$SCRIPT" "outline" "hook bans outline removal"
 run_content_eval "$SCRIPT" "useMemo" "hook checks for manual memoization"
+run_content_eval "$SCRIPT" "dangerouslySetInnerHTML" "hook checks dangerouslySetInnerHTML"
+run_content_eval "$SCRIPT" "eval\(" "hook checks eval()"
+run_content_eval "$SCRIPT" "innerHTML" "hook checks innerHTML"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "allow-useEffect" "REFERENCE documents escape hatch"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "AutoForm" "REFERENCE maps <form> to AutoForm"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "redpanda-ui-registry.netlify.app" "REFERENCE has registry URL"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "components/ui" "REFERENCE has component library mapping"
+
+# ── Cleanup ─────────────────────────────────────────────────────
+
+rm -rf "$_rr_tmpdir"

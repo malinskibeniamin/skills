@@ -7,6 +7,20 @@
 **Pre-compiler era:** manual control over re-renders, defensive memoization, referential equality as priority.
 **Post-compiler era:** compiler auto-inserts memoization, renders are cheap, code organized around clarity and correctness.
 
+## Post-React Compiler Coding Rules
+
+These rules should be followed whenever React Compiler is enabled:
+
+1. **Write components as pure functions** — derive UI from props, state, and context. No hidden mutable state, no side effects during render.
+2. **Prefer plain JavaScript** — `const total = items.reduce(...)` not `useMemo(() => items.reduce(...), [items])`. The compiler memoizes automatically.
+3. **Inline callbacks are fine** — `<Dialog onClose={() => setOpen(false)} />` is correct. Do not extract to `useCallback`.
+4. **Derive, don't store** — never `useState` + `useEffect` to compute derived values. Compute inline during render.
+5. **Hooks are for semantics, not performance** — `useState` for true UI state, `useEffect` only for syncing with external systems, `useRef` for imperative handles.
+6. **Do not use `useRef` as a memoization cache** — the compiler owns caching.
+7. **Treat `useMemo`/`useCallback`/`React.memo` as escape hatches** — only use when integrating with non-React systems, or when referential stability is required for correctness (not performance). Document why.
+8. **Respect `'use no memo'`** — never remove it. Use it as a last-resort opt-out, not a default.
+9. **Follow naming conventions** — PascalCase for components (aids compiler inference), `use*` prefix for hooks.
+
 ## react-compiler-check.sh
 
 ```bash
@@ -32,8 +46,8 @@ case "$file_path" in
   *) exit 0 ;;
 esac
 
-# Skip redpanda-ui directory (uses 'use no memo')
-if echo "$file_path" | grep -qF '/redpanda-ui/'; then
+# Skip component library directories (uses 'use no memo')
+if echo "$file_path" | grep -qE '/(components/ui|redpanda-ui)/'; then
   exit 0
 fi
 
@@ -117,9 +131,9 @@ Rules for directives:
 - Use `'use no memo'` only as last-resort escape hatch
 - Document why the opt-out exists
 
-## redpanda-ui Directory
+## Component Library Directory
 
-All files in `redpanda-ui/` should have `'use no memo'` because:
+All files in your component library directory (`components/ui/` or `redpanda-ui/`) should have `'use no memo'` because:
 - Registry/distribution components need explicit control over memoization
 - The compiler may interfere with component API contracts
 - Consumers of these components may have different compiler settings

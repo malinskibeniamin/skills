@@ -36,9 +36,16 @@ run_hook_eval "$SCRIPT" \
   '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/test.css"}}' \
   0 "skip: .css file"
 
-# ── Hook: skip redpanda-ui directory ────────────────────────────
+# ── Hook: skip component library directories ────────────────────
 
 tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/components/ui"
+echo "const x = useMemo(() => 1, [])" > "$tmpdir/components/ui/Button.tsx"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/components/ui/Button.tsx\"}}" \
+  0 "skip: components/ui directory"
+
 mkdir -p "$tmpdir/redpanda-ui"
 echo "const x = useMemo(() => 1, [])" > "$tmpdir/redpanda-ui/Button.tsx"
 
@@ -50,14 +57,15 @@ rm -rf "$tmpdir"
 
 # ── Hook: skip files with 'use no memo' ────────────────────────
 
-tmpfile=$(mktemp /tmp/compiler-eval-XXXX.tsx)
+_rc_tmpdir=$(mktemp -d /tmp/compiler-evals-XXXXXX)
+tmpfile="$_rc_tmpdir/test.tsx"
 printf "'use no memo'\nconst x = useMemo(() => 1, [])\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "skip: file with 'use no memo' directive"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Hook: skip nonexistent file ─────────────────────────────────
 
@@ -76,6 +84,8 @@ run_hook_eval "$SCRIPT" \
 run_content_eval "$SCRIPT" "useMemo" "hook checks for useMemo"
 run_content_eval "$SCRIPT" "useCallback" "hook checks for useCallback"
 run_content_eval "$SCRIPT" "React.memo" "hook checks for React.memo"
-run_content_eval "$SCRIPT" "redpanda-ui" "hook skips redpanda-ui"
+run_content_eval "$SCRIPT" "components/ui" "hook skips component library directories"
 run_content_eval "$SCRIPT" "use no memo" "hook respects 'use no memo'"
 run_content_eval "$SCRIPT" "suppressOutput" "hook uses suppressOutput"
+
+rm -rf "$_rc_tmpdir"

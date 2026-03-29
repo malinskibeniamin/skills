@@ -9,7 +9,7 @@ description: Install react-doctor for React codebase health scoring (performance
 
 - **react-doctor** package for codebase health scoring (0-100)
 - `doctor` package.json script
-- `react-doctor.config.json` excluding redpanda-ui and disabling biome-overlapping rules
+- `react-doctor.config.json` disabling biome-overlapping rules
 - **Stop hook** running doctor on changed files, failing on score drop
 
 ## Steps
@@ -38,9 +38,6 @@ bun add -D react-doctor --yarn
     "rules": [
       "react-hooks/exhaustive-deps",
       "react/no-nested-component"
-    ],
-    "files": [
-      "**/redpanda-ui/**"
     ]
   }
 }
@@ -54,7 +51,11 @@ Write `react-doctor-stop.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hoo
 
 Add to hooks config: **Stop**: `.claude/hooks/react-doctor-stop.sh`
 
-### 6. Verify & Commit
+### 6. Codex compatibility (optional)
+
+If the project also uses OpenAI Codex, run `codex-compat` to generate `.codex/hooks.json` from the Claude Code config.
+
+### 7. Verify & Commit
 
 - [ ] `bun run doctor` works
 - [ ] `react-doctor.config.json` exists

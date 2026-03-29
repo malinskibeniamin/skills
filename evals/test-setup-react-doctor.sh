@@ -14,7 +14,7 @@ run_executable_eval "$SCRIPT" "react-doctor-stop.sh is executable"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-doctor" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "react-doctor" "SKILL.md mentions react-doctor"
-run_content_eval "$SKILL_DIR/SKILL.md" "redpanda-ui" "SKILL.md mentions redpanda-ui exclusion"
+run_content_eval "$SKILL_DIR/SKILL.md" "biome-overlapping" "SKILL.md mentions biome-overlapping rules"
 run_content_eval "$SKILL_DIR/SKILL.md" "react-doctor.config.json" "SKILL.md mentions config file"
 
 # ── REFERENCE content ────────────────────────────────────────────

@@ -20,8 +20,8 @@ case "$file_path" in
   *) exit 0 ;;
 esac
 
-# Skip redpanda-ui directory (uses 'use no memo')
-if echo "$file_path" | grep -qF '/redpanda-ui/'; then
+# Skip component library directories (uses 'use no memo')
+if echo "$file_path" | grep -qE '/(components/ui|redpanda-ui)/'; then
   exit 0
 fi
 

@@ -14,8 +14,8 @@ if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
   exit 0
 fi
 
-# Skip redpanda-ui directory
-if echo "$file_path" | grep -qF '/redpanda-ui/'; then
+# Skip component library directories (shadcn/ui or redpanda-ui)
+if echo "$file_path" | grep -qE '/(components/ui|redpanda-ui)/'; then
   exit 0
 fi
 
@@ -61,16 +61,16 @@ fi
 case "$file_path" in
   *.tsx|*.jsx)
     raw_element=""
-    if echo "$added_lines" | grep -qE '<button[[:space:]>]'; then raw_element="<button> → <Button> from @/redpanda-ui/button"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<input[[:space:]/>]'; then raw_element="<input> → <Input> from @/redpanda-ui/input"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<select[[:space:]>]'; then raw_element="<select> → <Select> from @/redpanda-ui/select"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<textarea[[:space:]>]'; then raw_element="<textarea> → <Textarea> from @/redpanda-ui/textarea"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<dialog[[:space:]>]'; then raw_element="<dialog> → <Dialog> from @/redpanda-ui/dialog"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<table[[:space:]>]'; then raw_element="<table> → <Table> from @/redpanda-ui/table"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<label[[:space:]>]'; then raw_element="<label> → <Label> from @/redpanda-ui/label"; fi
+    if echo "$added_lines" | grep -qE '<button[[:space:]>]'; then raw_element="<button> → <Button> from @/components/ui/button"; fi
+    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<input[[:space:]/>]'; then raw_element="<input> → <Input> from @/components/ui/input"; fi
+    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<select[[:space:]>]'; then raw_element="<select> → <Select> from @/components/ui/select"; fi
+    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<textarea[[:space:]>]'; then raw_element="<textarea> → <Textarea> from @/components/ui/textarea"; fi
+    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<dialog[[:space:]>]'; then raw_element="<dialog> → <Dialog> from @/components/ui/dialog"; fi
+    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<table[[:space:]>]'; then raw_element="<table> → <Table> from @/components/ui/table"; fi
+    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<label[[:space:]>]'; then raw_element="<label> → <Label> from @/components/ui/label"; fi
 
     if [ -n "$raw_element" ]; then
-      echo "{\"suppressOutput\":true,\"systemMessage\":\"Do not use raw HTML elements. Use redpanda-ui components instead:\\n$raw_element\\n\\nRegistry: https://redpanda-ui-registry.netlify.app/\"}" >&2
+      echo "{\"suppressOutput\":true,\"systemMessage\":\"Do not use raw HTML elements. Use your component library instead:\\n$raw_element\"}" >&2
       exit 2
     fi
     ;;
@@ -79,12 +79,7 @@ esac
 # ── Check 3: Ban Chakra UI / legacy imports ─────────────────────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]@chakra-ui/"; then
-  echo '{"suppressOutput":true,"systemMessage":"@chakra-ui/react is banned. Use redpanda-ui components instead (Tailwind + shadcn based).\nRegistry: https://redpanda-ui-registry.netlify.app/"}' >&2
-  exit 2
-fi
-
-if echo "$added_lines" | grep -qE "from\s+['\"]@redpanda-data/ui['\"/]"; then
-  echo '{"suppressOutput":true,"systemMessage":"@redpanda-data/ui is legacy (Chakra-based). Use the new redpanda-ui registry components instead (Tailwind + shadcn).\nRegistry: https://redpanda-ui-registry.netlify.app/"}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"@chakra-ui/react is banned. Use shadcn/ui components from @/components/ui/ instead (Tailwind-based)."}' >&2
   exit 2
 fi
 
@@ -154,9 +149,10 @@ esac
 
 # ── Check 9: Protobuf — wrap spreads with create() (v2 only) ────
 
-if echo "$added_lines" | grep -qE '\.\.\.[a-zA-Z]+' && \
-   echo "$added_lines" | grep -qE 'Schema|Message|Request|Response' && \
-   ! echo "$added_lines" | grep -qE 'create\('; then
+# Only flag lines that BOTH spread AND reference a protobuf type on the same line.
+# Importing schemas (e.g. import { FooSchema } from '...') is not spreading.
+if echo "$added_lines" | grep -E '\.\.\.[a-zA-Z]+' | grep -qE '(Message|Request|Response)\b' && \
+   ! echo "$added_lines" | grep -E '\.\.\.[a-zA-Z]+' | grep -qE 'create\('; then
   if [ -f "package.json" ] && grep -q '"@bufbuild/protobuf"' package.json 2>/dev/null; then
     proto_version=$(grep -oE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null || true)
     if [ -n "$proto_version" ]; then
@@ -205,6 +201,44 @@ case "$file_path" in
         echo "{\"suppressOutput\":true,\"systemMessage\":\"React Compiler is enabled — manual $found_memo is unnecessary. The compiler auto-memoizes. Remove $found_memo or add 'use no memo' directive at the file top if needed.\"}" >&2
         exit 2
       fi
+    fi
+    ;;
+esac
+
+# ── Check 14: Ban dangerouslySetInnerHTML (TSX/JSX only) ──────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qF 'dangerouslySetInnerHTML'; then
+      has_escape=false
+      if [ -f "$file_path" ]; then
+        if grep -qE '//\s*allow-dangerouslySetInnerHTML:' "$file_path"; then
+          has_escape=true
+        fi
+      fi
+
+      if [ "$has_escape" = false ]; then
+        echo '{"suppressOutput":true,"systemMessage":"dangerouslySetInnerHTML is banned — XSS risk. Sanitize with DOMPurify or use a safe rendering approach.\n\n// BAD\n<div dangerouslySetInnerHTML={{ __html: userContent }} />\n\n// GOOD — sanitize first\nimport DOMPurify from '\''dompurify'\''\n<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userContent) }} />\n\nIf absolutely necessary, add: // allow-dangerouslySetInnerHTML: [explain why]\n\nWCAG/OWASP: Unsanitized HTML injection is a top-10 vulnerability."}' >&2
+        exit 2
+      fi
+    fi
+    ;;
+esac
+
+# ── Check 15: Ban eval() and new Function() ──────────────────
+
+if echo "$added_lines" | grep -qE '\beval\(|\bnew Function\('; then
+  echo '{"suppressOutput":true,"systemMessage":"eval() and new Function() are banned — code injection risk. Use JSON.parse() for data, or a safe alternative.\n\nOWASP A03: Injection"}' >&2
+  exit 2
+fi
+
+# ── Check 16: Ban .innerHTML assignment (TSX/JSX only) ────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE '\.innerHTML\s*='; then
+      echo '{"suppressOutput":true,"systemMessage":"Direct .innerHTML assignment is banned — XSS risk. Use React'\''s rendering or DOMPurify.\n\n// BAD\nelement.innerHTML = userContent\n\n// GOOD\nelement.textContent = userContent"}' >&2
+      exit 2
     fi
     ;;
 esac

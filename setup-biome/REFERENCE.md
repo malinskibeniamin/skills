@@ -38,6 +38,13 @@
         }
       },
       "style": {
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": true,
+            "filenameCases": ["kebab-case"]
+          }
+        },
         "noRestrictedImports": {
           "level": "error",
           "options": {
@@ -111,13 +118,13 @@ fi
 # deleting imports Claude hasn't used yet (caught later at quality:gate)
 fix_output=""
 fix_exit=0
-fix_output=$(bun run lint:fix -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
+fix_output=$(bun run lint:fix:file -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
 
 # Check if there are remaining unfixable errors
 if [ $fix_exit -ne 0 ]; then
   # Run check-only to get remaining errors
   remaining=""
-  remaining=$(bun run lint -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
+  remaining=$(bun run lint:file -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
 
   if [ -n "$remaining" ]; then
     # Truncate to avoid flooding context
@@ -145,6 +152,7 @@ Ultracite provides a strict baseline. We override these specific behaviors:
 | `noExcessiveCognitiveComplexity` | complexity | threshold 20 | threshold 15 | Stricter complexity limit |
 | `noExplicitAny` in tests | suspicious | off | error | No `any` escape hatch, even in tests |
 | `noDeprecatedImports` | project | off | error | Catch deprecated API usage (requires Biome Scanner) |
+| `useFilenamingConvention` | style | off | kebab-case, strict | Enforce kebab-case filenames (`my-component.tsx`, not `MyComponent.tsx`) |
 | `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup |
 | `useExhaustiveSwitchCases` | nursery | off | error | Require exhaustive switch/case for type safety |
 | `organizeImports` | assist | — | on | Auto-sort imports via `assist.actions.source` |
@@ -155,7 +163,7 @@ Ultracite provides a strict baseline. We override these specific behaviors:
 
 The PostToolUse hook skips `noUnusedImports` using `--skip=lint/correctness/noUnusedImports`. This prevents:
 
-1. Claude adds `import { Button } from '@/redpanda-ui/button'`
+1. Claude adds `import { Button } from '@/components/ui/button'`
 2. Biome deletes it (unused — Claude hasn't written JSX yet)
 3. Claude re-adds it
 4. Infinite loop
