@@ -21,6 +21,7 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 ### Opt-in rules
 
 - **Ban useEffect** (and useLayoutEffect, useInsertionEffect) — enable with `REACT_RULES_BAN_USEEFFECT=1`. Best for greenfield projects using TanStack Query + zustand. Escape hatch: `// allow-useEffect: [reason]`
+- **Ban type assertions** (`as X`) — enable with `REACT_RULES_BAN_TYPE_ASSERTIONS=1`. Allows `as const` and `as const satisfies`. Forces type guards, generics, or schema validation instead. Escape hatch: `// allow-type-assertion: [reason]`
 
 ## Steps
 

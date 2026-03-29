@@ -157,6 +157,55 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: clean TypeScript code"
 
+# ── Check 4: Ban type assertions (opt-in) ────────────────────────
+
+# Allowed by default (opt-in disabled)
+tmpfile="$_rr_tmpdir/test.ts"
+echo "const user = response as User" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: type assertion when opt-in not set"
+
+# Block with opt-in enabled
+echo "const user = response as User" > "$tmpfile"
+
+REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: type assertion with opt-in" "type guard"
+
+# Block 'as unknown as X' double assertion
+echo "const x = value as unknown as Record<string, unknown>" > "$tmpfile"
+
+REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: double type assertion with opt-in"
+
+# Allow 'as const'
+tmpfile="$_rr_tmpdir/test.ts"
+echo "const ROUTES = ['/home', '/about'] as const" > "$tmpfile"
+
+REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: as const with opt-in"
+
+# Allow 'as const satisfies'
+echo "const config = { port: 3000 } as const satisfies Config" > "$tmpfile"
+
+REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: as const satisfies with opt-in"
+
+# Allow with escape hatch
+printf "// allow-type-assertion: third-party lib types are wrong\nconst x = lib.result as MyType\n" > "$tmpfile"
+
+REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: type assertion with escape hatch"
+
+# Reset tmpfile to .tsx for remaining TSX-specific checks
+tmpfile="$_rr_tmpdir/test.tsx"
+
 # ── Check 5: Visual style overrides on registry components ───────
 
 echo '<Button className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"

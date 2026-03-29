@@ -49,18 +49,36 @@ esac
 # ── Check 3: Ban TypeScript escape hatches ──────────────────────
 
 if echo "$added_lines" | grep -qE '\bas\s+any\b'; then
-  echo '{"suppressOutput":true,"systemMessage":"\"as any\" is banned. Fix the type properly instead of casting to any. This applies everywhere, including tests."}' >&2
-  exit 2
+  hook_block "\\\"as any\\\" is banned. Fix the type properly instead of casting to any. This applies everywhere, including tests."
 fi
 
 if echo "$added_lines" | grep -qF '@ts-ignore'; then
-  echo '{"suppressOutput":true,"systemMessage":"@ts-ignore is banned. Fix the type error instead of suppressing it."}' >&2
-  exit 2
+  hook_block "@ts-ignore is banned. Fix the type error instead of suppressing it."
 fi
 
 if echo "$added_lines" | grep -qF '@ts-expect-error'; then
-  echo '{"suppressOutput":true,"systemMessage":"@ts-expect-error is banned. Fix the type error instead of suppressing it. We want fully type-safe code with no escape hatches."}' >&2
-  exit 2
+  hook_block "@ts-expect-error is banned. Fix the type error instead of suppressing it. We want fully type-safe code with no escape hatches."
+fi
+
+# ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
+# Enable via: export REACT_RULES_BAN_TYPE_ASSERTIONS=1
+
+if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
+  # Match TypeScript type assertions: `value as Type` or `value as unknown`
+  # Exclude: `as const`, `as const satisfies`, `import X as Y`, `} as {`
+  # Pattern: word/paren/bracket followed by `as` followed by PascalCase type or `unknown`/`never`/`any`
+  if echo "$added_lines" | grep -qE '\)\s+as\s+[A-Z]|\b\w+\s+as\s+[A-Z]|\bas\s+unknown\b|\bas\s+never\b' && \
+     ! echo "$added_lines" | grep -qE '\bas\s+const\b'; then
+    # Check for escape hatch
+    has_escape=false
+    if grep -qE '//\s*allow-type-assertion:' "$file_path" 2>/dev/null; then
+      has_escape=true
+    fi
+
+    if [ "$has_escape" = false ]; then
+      hook_block "Type assertions (\`as X\`) are banned. Use type guards, generics, or schema validation instead:\n\n// BAD\nconst user = response as User\nconst id = value as string\n\n// GOOD — type guard\nif (isUser(response)) { ... }\n\n// GOOD — schema validation\nconst user = userSchema.parse(response)\n\n// GOOD — generic\nfunction getItem<T>(key: string): T { ... }\n\nAllowed: \`as const\`, \`as const satisfies\`\nEscape hatch: // allow-type-assertion: [reason]"
+    fi
+  fi
 fi
 
 # ── Check 5: Ban visual style overrides on registry components ────
