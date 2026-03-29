@@ -55,7 +55,7 @@ bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite (kebab-case), quality gate (tsgo + related tests), LLM optimization, React Compiler, zustand, accessibility, React rules (19 checks + Tailwind), env validation (t3-env), structured logging (Pino), conventional commits, plus community workflow skills.
+- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite (kebab-case), quality gate (tsgo + related tests), LLM optimization, React Compiler, zustand, accessibility, React rules (React/TS/security/Tailwind checks + Tailwind), env validation (t3-env), structured logging (Pino), conventional commits, plus community workflow skills.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -103,7 +103,7 @@ Linting, formatting, and quality gate automation.
 
 PostToolUse hooks that enforce React patterns on every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) and auto-detect component library directories (`components/ui/`, `redpanda-ui/`, `src/ui/`, `packages/ui/` — configurable via `UI_LIB_DIRS`).
 
-- **setup-react-rules** — 19 checks in a single hook script:
+- **setup-react-rules** — React/TS/security/Tailwind checks in a single hook script:
   - Ban raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) — suggest shadcn/ui components (`<form>` allowed)
   - Ban `as any`, `@ts-ignore`, `@ts-expect-error`
   - Ban visual style overrides on registry components (use variant prop)
@@ -263,7 +263,7 @@ Note: TanStack Query, Table, Form, Virtual do not have published skills yet.
 
 Two layers of testing to prevent regressions:
 
-**Script-level evals** — 571 tests that verify hook scripts, file structure, and content. Run locally in <5 seconds:
+**Script-level evals** — verify hook scripts, file structure, and content. Run locally in <5 seconds:
 
 ```
 ./evals/run.sh
@@ -288,7 +288,8 @@ PreToolUse (Bash)
 └── conventional-commits-check.sh   — enforce type(scope): description format
 
 PostToolUse (Edit|Write)                          All use shared/hook-lib.sh
-├── react-rules-check.sh      — 19 React/TS/security/Tailwind checks (~50ms, skips non-JS/TS)
+├── react-rules-check.sh      — React/TS/security checks (skips non-JS/TS)
+├── tailwind-check.sh          — !important + raw hex ban (CSS/SCSS/TSX/JSX)
 ├── accessibility-check.sh     — ARIA/WCAG enforcement (~30ms, skips non-TSX/JSX)
 ├── zustand-check.sh           — zustand anti-patterns (~20ms, skips non-zustand files)
 ├── tanstack-router-check.sh   — 9 routing anti-patterns (skips non-router files)

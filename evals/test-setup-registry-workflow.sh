@@ -6,7 +6,6 @@ SKILL_DIR="$REPO_ROOT/setup-registry-workflow"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "registry-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
