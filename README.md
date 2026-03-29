@@ -4,50 +4,26 @@ A collection of agent skills and Claude Code hooks that enforce frontend best pr
 
 ## TLDR — Full Setup for a New Repo
 
-All commands target Claude Code only via `--agent claude-code -y`.
+One command to install everything (14 setup skills + diagnostics + 13 community workflow skills):
 
 ```bash
-# Hooks — toolchain, linting, quality, optimization, React Compiler, zustand
-bunx skills@latest add malinskibeniamin/skills/setup-toolchain --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-zustand --agent claude-code -y
-
-# React enforcement hooks (generic — works in any React project)
-bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
-
-# Redpanda-specific (skip if not a Redpanda project)
-bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent claude-code -y
-
-# Accessibility
-bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
-
-# Environment, logging, commit format
-bunx skills@latest add malinskibeniamin/skills/setup-env-validation --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-logging --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-conventional-commits --agent claude-code -y
-
-# Diagnostics
-bunx skills@latest add malinskibeniamin/skills/test-guardian --agent claude-code -y
-
-# Workflow skills (community — from mattpocock/skills)
-bunx skills@latest add mattpocock/skills/tdd --agent claude-code -y
-bunx skills@latest add mattpocock/skills/triage-issue --agent claude-code -y
-bunx skills@latest add mattpocock/skills/improve-codebase-architecture --agent claude-code -y
-bunx skills@latest add mattpocock/skills/request-refactor-plan --agent claude-code -y
-bunx skills@latest add mattpocock/skills/design-an-interface --agent claude-code -y
-
-# Planning & project management (community — from mattpocock/skills)
-bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y
-bunx skills@latest add mattpocock/skills/prd-to-plan --agent claude-code -y
-bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y
-bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
 ```
+
+**Optional extras:**
+
+```bash
+# TanStack official reference skills (28 soft-guidance skills from docs)
+npx @tanstack/intent@latest install
+
+# Codex compatibility (if team uses both Claude Code and Codex)
+bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
+
+# Redpanda-specific (Chakra/legacy bans, registry workflow)
+bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
+```
+
+Or install individual skills if you don't want the full kit — see sections below.
 
 ---
 
@@ -55,7 +31,7 @@ bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Set up all generic frontend skills: toolchain enforcement, Biome + Ultracite (kebab-case), quality gate (tsgo + related tests), LLM optimization, React Compiler, zustand, accessibility, React rules (React/TS/security/Tailwind checks + Tailwind), env validation (t3-env), structured logging (Pino), conventional commits, plus community workflow skills.
+- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, logging, conventional commits, react-doctor, TanStack Router, Connect Query) + test-guardian diagnostics + 13 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
