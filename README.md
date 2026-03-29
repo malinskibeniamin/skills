@@ -61,7 +61,7 @@ Meta-skills that install everything you need in one go.
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
   ```
 
-- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: useEffect ban (opt-in), Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, and registry workflow.
+- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, and registry workflow.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y

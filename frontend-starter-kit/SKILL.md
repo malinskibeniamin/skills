@@ -35,6 +35,12 @@ description: Meta-skill that runs all generic frontend setup skills in order —
 
 Execute skills 1–11 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
 
+Set `REACT_RULES_BAN_USEEFFECT=1` in the SessionStart hook (`.claude/hooks/session-env.sh`):
+
+```bash
+echo "export REACT_RULES_BAN_USEEFFECT=1" >> "$CLAUDE_ENV_FILE"
+```
+
 ### 2. Install community workflow skills
 
 ```bash

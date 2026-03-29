@@ -19,7 +19,7 @@ Runs the generic **frontend-starter-kit** first, then adds additional React enfo
 7. **setup-accessibility** — ARIA enforcement, Playwright AXE, WCAG 2.1 AA
 
 ### Additional React skills (generic — usable in any project)
-8. **setup-react-rules** — Ban useEffect, raw HTML, Chakra, TS escape hatches, XSS vectors
+8. **setup-react-rules** — Ban raw HTML, TS escape hatches, XSS vectors (useEffect ban via starter kit)
 9. **setup-react-doctor** — Health scoring with Stop hook
 10. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
 11. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
@@ -44,9 +44,10 @@ For setup-connect-query, detect the protobuf version from `package.json` and ins
 Set in the SessionStart hook (`.claude/hooks/session-env.sh`):
 
 ```bash
-echo "export REACT_RULES_BAN_USEEFFECT=1" >> "$CLAUDE_ENV_FILE"
 echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
 ```
+
+Note: `REACT_RULES_BAN_USEEFFECT=1` is already set by the frontend-starter-kit.
 
 Add a Chakra UI / legacy import ban to `.claude/hooks/react-rules-check.sh` (after the TypeScript escape hatches check):
 
