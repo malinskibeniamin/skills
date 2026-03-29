@@ -308,7 +308,44 @@ Stop
 └── registry-check.sh    — remind about registry.json rebuild
 ```
 
-Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hooks exit immediately on non-matching file extensions. PostToolUse hooks run concurrently — wall-clock overhead is ~190ms per edit (dominated by process spawning, not logic). This is ~4-8% of a typical LLM tool call.
+Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hooks exit immediately on non-matching file extensions.
+
+## Performance
+
+PostToolUse hooks run **concurrently** — wall-clock time is the slowest hook, not the sum.
+
+### Per Edit/Write (PostToolUse)
+
+| Scenario | Wall-clock | What happens |
+|----------|-----------|--------------|
+| Edit a `.go` / `.md` / `.css` file | **~80ms** | All 10 hooks exit immediately on extension check |
+| Edit a `.tsx` file (clean code) | **~293ms** | Slowest hook (react-rules) runs full diff + 19 grep checks |
+| Edit a `package.json` | **~80ms** | Only bundle-guard runs, rest exit |
+
+The ~80ms floor is bash process spawn + `jq` parse — fixed cost regardless of hook count. Adding more hooks doesn't increase wall-clock time since they run in parallel.
+
+### Per Bash Command (PreToolUse)
+
+| Hook | Time | Notes |
+|------|------|-------|
+| enforce-toolchain.sh | ~166ms | Grep chain on command string |
+| conventional-commits-check.sh | ~91ms | Only does real work on `git commit -m` |
+| **Total** | **~257ms** | Sequential, runs before every Bash call |
+
+### Per Turn (Stop)
+
+| Hook | Time | Notes |
+|------|------|-------|
+| biome-autofix.sh | 1-3s | Only changed files, skips UI library dirs |
+| typecheck-stop.sh | 2-5s | tsgo (incremental) + related tests only |
+| react-doctor-stop.sh | 1-2s | `--diff` mode, changed files only |
+| **Total** | **~4-10s** | Runs once when Claude finishes, not per edit |
+
+### Context
+
+A typical Claude Code tool call takes 3-8 seconds (network + LLM inference). PostToolUse overhead of ~293ms is **3-8%** of that — imperceptible. The Stop hooks at 4-10s replace what you'd run manually (lint, type check, tests) and only target changed/related files.
+
+The ~80ms per-hook floor is dominated by process spawning and `jq`. This is the cost of using bash — a compiled hook runner would cut it to <5ms, but bash is portable, readable, and easy to customize.
 
 ## Codex Compatibility (Experimental)
 
