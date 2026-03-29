@@ -16,6 +16,7 @@ description: Configure TanStack Router route tree auto-generation and anti-patte
   - Ban `strict: false` in router hooks
   - Ban untyped `useParams()`, `useSearch()`, `useLoaderData()`, `useRouteContext()` without `{ from }`
   - Ban `URLSearchParams` — suggest nuqs
+  - Warn on exported components from route files (breaks code splitting)
   - Require `validateSearch` when `useSearch` is used in route files
 
 ## Steps
@@ -56,8 +57,19 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`):
 - [ ] Hook blocks `useParams()` without `{ from }`
 - [ ] Hook allows `Route.useParams()`
 - [ ] Hook blocks `new URLSearchParams`
+- [ ] Hook warns on exported components from route files
 - [ ] Hook blocks `useSearch` without `validateSearch` in route files
 
-### 5. Commit
+### 5. TanStack official skills (optional)
+
+For additional soft guidance (search params, data loading, auth guards, error handling, type safety), install the official TanStack Router skills:
+
+```bash
+npx @tanstack/intent@latest install
+```
+
+This adds 28 reference skills from the TanStack Router docs. They complement the hooks above with patterns and examples that are too context-dependent to enforce deterministically.
+
+### 6. Commit
 
 Stage and commit: `Add TanStack Router auto-generation and anti-pattern hooks`

@@ -94,124 +94,151 @@ run_hook_eval "$CHECK_SCRIPT" \
 
 # ── Check 1: Ban react-router-dom imports ─────────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+_rt_tmpdir=$(mktemp -d /tmp/router-evals-XXXXXX)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "import { useNavigate } from 'react-router-dom'\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: react-router-dom import" "banned"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 2: Ban window.location navigation ──────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "window.location.href = '/dashboard'\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: window.location.href assignment" "full page reload"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "window.location.assign('/dashboard')\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: window.location.assign()"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 3: Warn on window.location.reload() ────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "window.location.reload()\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: window.location.reload() (exit 0)" "blank screen"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 4: Warn on window.location reads ───────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "const path = window.location.pathname\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: window.location.pathname (exit 0)" "nuqs"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 5: Ban strict: false ────────────────────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "import { useParams } from '@tanstack/react-router'\nconst params = useParams({ strict: false })\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: strict: false" "type safety"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 5: Allow strict: false in non-router files ─────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.ts)
+tmpfile="$_rt_tmpdir/test.ts"
 printf "const config = { strict: false }\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: strict: false in non-router file"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 6: Ban empty-args useParams() ───────────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "import { useParams } from '@tanstack/react-router'\nconst params = useParams()\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: useParams() without args" "from"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 6: Allow Route.useParams() ─────────────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "import { useParams } from '@tanstack/react-router'\nconst params = Route.useParams()\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: Route.useParams()"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 6: Ban empty-args useSearch() ───────────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "import { useSearch } from '@tanstack/react-router'\nconst search = useSearch()\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: useSearch() without args"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 7: Ban URLSearchParams ──────────────────────────────────
 
-tmpfile=$(mktemp /tmp/router-eval-XXXX.tsx)
+tmpfile="$_rt_tmpdir/test.tsx"
 printf "const params = new URLSearchParams(window.location.search)\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: new URLSearchParams" "nuqs"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
-# ── Check 8: Missing validateSearch with useSearch in route ───────
+# ── Check 8: Warn on exported components from route files ────────
+
+tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/src/routes"
+tmpfile="$tmpdir/src/routes/users.tsx"
+printf "export function UserCard() { return <div /> }\nexport const Route = createFileRoute('/users/')({})\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: exported component from route file (exit 0)" "code splitting"
+
+rm -rf "$tmpdir"
+
+# ── Check 8: Allow export const Route only ───────────────────────
+
+tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/src/routes"
+tmpfile="$tmpdir/src/routes/users.tsx"
+printf "export const Route = createFileRoute('/users/')({})\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: only Route export from route file"
+
+rm -rf "$tmpdir"
+
+# ── Check 9: Missing validateSearch with useSearch in route ───────
 
 tmpdir=$(mktemp -d)
 mkdir -p "$tmpdir/src/routes"
@@ -245,5 +272,8 @@ run_content_eval "$CHECK_SCRIPT" "strict.*false" "check: catches strict: false"
 run_content_eval "$CHECK_SCRIPT" "useParams" "check: catches empty useParams"
 run_content_eval "$CHECK_SCRIPT" "URLSearchParams" "check: bans URLSearchParams"
 run_content_eval "$CHECK_SCRIPT" "validateSearch" "check: requires validateSearch"
+run_content_eval "$CHECK_SCRIPT" "code splitting" "check: warns on route file exports"
 run_content_eval "$CHECK_SCRIPT" "nuqs" "check: suggests nuqs"
 run_content_eval "$CHECK_SCRIPT" "suppressOutput" "check: uses suppressOutput"
+
+rm -rf "$_rt_tmpdir"

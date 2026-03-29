@@ -15,12 +15,17 @@ bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent cl
 bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/setup-zustand --agent claude-code -y
 
-# Redpanda-specific hooks (skip if not a Redpanda project)
+# React enforcement hooks (generic — works in any React project)
 bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
+
+# Redpanda-specific (skip if not a Redpanda project)
 bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent claude-code -y
+
+# Accessibility
+bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
 
 # Diagnostics
 bunx skills@latest add malinskibeniamin/skills/test-guardian --agent claude-code -y
@@ -51,7 +56,7 @@ Meta-skills that install everything you need in one go.
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
   ```
 
-- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: useEffect ban, raw HTML enforcement, Chakra migration, TanStack Router (with anti-pattern checks), Connect Query + Protobuf enforcement, and react-doctor.
+- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: useEffect ban (opt-in), Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, and registry workflow.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
@@ -67,7 +72,7 @@ Meta-skills that install everything you need in one go.
 
 Claude Code hooks that enforce tooling standards via `PreToolUse` and `SessionStart` hooks.
 
-- **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun as package manager with `--yarn` flag, tsgo as TypeScript compiler, and block global installs. Sets `PKG_MANAGER`, `LINTER`, `TEST_RUNNER` env vars.
+- **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun as package manager with `--yarn` flag, tsgo as TypeScript compiler, block global installs, and guard against destructive commands (`rm -rf`, `git push --force`, `git reset --hard`, `git checkout .`). Sets `PKG_MANAGER`, `LINTER`, `TEST_RUNNER` env vars.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-toolchain --agent claude-code -y
@@ -83,7 +88,7 @@ Linting, formatting, and quality gate automation.
   bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
   ```
 
-- **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), and Stop hook for tsgo type checking.
+- **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), Stop hook for tsgo type checking, and bundle guard PostToolUse hook that warns on heavy dependencies (moment, lodash, jquery, core-js, classnames).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
@@ -91,12 +96,10 @@ Linting, formatting, and quality gate automation.
 
 ## React Rules
 
-PostToolUse hooks that enforce React patterns on every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) and exclude `redpanda-ui/` directory.
+PostToolUse hooks that enforce React patterns on every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) and auto-detect component library directories (`components/ui/`, `redpanda-ui/`, `src/ui/`, `packages/ui/` — configurable via `UI_LIB_DIRS`).
 
-- **setup-react-rules** — 13 checks in a single hook script:
-  - Ban `useEffect`/`useLayoutEffect`/`useInsertionEffect` (suggest React Query, zustand, event handlers)
-  - Ban raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) — suggest redpanda-ui components (`<form>` allowed)
-  - Ban `@chakra-ui/react` and `@redpanda-data/ui` imports (legacy)
+- **setup-react-rules** — 19 checks in a single hook script:
+  - Ban raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) — suggest shadcn/ui components (`<form>` allowed)
   - Ban `as any`, `@ts-ignore`, `@ts-expect-error`
   - Ban visual style overrides on registry components (use variant prop)
   - Ban `onClick + navigate()` (use `<Button asChild><Link>`)
@@ -106,12 +109,19 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
   - Icon-only buttons must have `aria-label`
   - Ban `outline: none` (breaks keyboard navigation)
   - React Compiler: ban manual `useMemo`/`useCallback`/`React.memo`
+  - Ban `dangerouslySetInnerHTML` (XSS — escape hatch: `// allow-dangerouslySetInnerHTML: [reason]`)
+  - Ban `eval()` / `new Function()` (code injection)
+  - Ban `.innerHTML =` assignment (XSS)
+  - Ban inline `style={{}}` — use Tailwind utility classes
+  - Ban raw hex/rgb in className — use design tokens
+  - Ban `!important` — breaks Tailwind cascade
+  - Opt-in: ban `useEffect` via `REACT_RULES_BAN_USEEFFECT=1` (best for greenfield with TanStack Query + zustand)
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
   ```
 
-- **setup-react-compiler** — Install `babel-plugin-react-compiler` with rsbuild config. `'use no memo'` directive for escape hatch. redpanda-ui directory excluded from compiler.
+- **setup-react-compiler** — Install `babel-plugin-react-compiler` with rsbuild config. `'use no memo'` directive for escape hatch. Component library directories auto-excluded from compiler.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
@@ -143,6 +153,14 @@ Reduce token usage and context waste.
   bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
   ```
 
+## Accessibility
+
+- **setup-accessibility** — PostToolUse hook enforcing ARIA accessibility patterns: ban `<img>` without `alt`, ban mouse-only `onClick` on `<div>`/`<span>` (require `role` + `tabIndex` + keyboard handler), enforce required ARIA attributes on `role="combobox"` / `role="tablist"` / `role="dialog"`. Includes Playwright AXE test helper for WCAG 2.1 AA scanning and ARIA patterns reference (combobox, tabs, dialog, accordion, alert, listbox, switch, slider, radio group). Escape hatch: `// allow-a11y-skip: [reason]`.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
+  ```
+
 ## State Management
 
 - **setup-zustand** — PostToolUse hook enforcing zustand best practices: ban single-parens `create<T>()` (must be `create<T>()()`), ban inline object selectors (suggest `useShallow`), ban direct localStorage in stores (suggest persist middleware).
@@ -153,7 +171,7 @@ Reduce token usage and context waste.
 
 ## Routing & Registry
 
-- **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), and require `validateSearch` when using `useSearch` in route files. Warns on `window.location.reload()` and `window.location` reads.
+- **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), warn on exported components from route files (code splitting), and require `validateSearch` when using `useSearch`. Warns on `window.location.reload()` and `window.location` reads. Optional: install TanStack's 28 official reference skills via `npx @tanstack/intent@latest install`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
@@ -173,11 +191,50 @@ Reduce token usage and context waste.
   bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
   ```
 
+## Community Skills (Optional)
+
+### mattpocock/skills — Workflow automation
+
+Already included in the starter kits. Install individually if needed:
+
+```bash
+bunx skills@latest add mattpocock/skills/tdd --agent claude-code -y              # TDD red-green-refactor
+bunx skills@latest add mattpocock/skills/triage-issue --agent claude-code -y      # Bug investigation → GitHub issue
+bunx skills@latest add mattpocock/skills/improve-codebase-architecture --agent claude-code -y  # Architecture improvements
+bunx skills@latest add mattpocock/skills/request-refactor-plan --agent claude-code -y  # Refactor plans as GitHub issues
+bunx skills@latest add mattpocock/skills/design-an-interface --agent claude-code -y    # Multiple interface designs
+bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y       # PRD via interview
+bunx skills@latest add mattpocock/skills/prd-to-plan --agent claude-code -y       # PRD → implementation plan
+bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y     # PRD → GitHub issues
+bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y     # Create new skills
+bunx skills@latest add mattpocock/skills/grill-me --agent claude-code -y          # Stress-test your design
+bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
+```
+
+**Note:** `setup-pre-commit` (husky/lint-staged) is intentionally omitted. Claude Code hooks already enforce linting, formatting, and type checking deterministically on every edit — pre-commit hooks are redundant and add friction for human developers who may prefer different workflows.
+
+### TanStack Official Skills — Framework reference (optional)
+
+TanStack packages ship their own reference skills via `@tanstack/intent`. These are soft guidance (patterns, examples, API docs) — no hooks, no enforcement. Install only if you want Claude to have deep TanStack knowledge in context:
+
+```bash
+# Install all TanStack skills from your node_modules (Router, DB, DevTools, etc.)
+npx @tanstack/intent@latest install
+```
+
+**Available packages with skills:**
+- **TanStack Router** — 28 skills: search params, data loading, auth guards, error handling, code splitting, type safety, navigation, SSR
+- **TanStack DB** — 14 skills: collections, live queries, optimistic mutations, persistence, offline transactions
+- **TanStack DevTools** — 9 skills: plugin panels, production devtools, instrumentation
+- **TanStack CLI** — 5 skills: scaffolding, addons, ecosystem integrations
+
+Note: TanStack Query, Table, Form, Virtual do not have published skills yet.
+
 ## Evals
 
 Two layers of testing to prevent regressions:
 
-**Script-level evals** — 292 tests that verify hook scripts, file structure, and content. Run locally in <5 seconds:
+**Script-level evals** — 466 tests that verify hook scripts, file structure, and content. Run locally in <5 seconds:
 
 ```
 ./evals/run.sh
@@ -197,14 +254,16 @@ SessionStart
 └── llm-env.sh          — AI_AGENT=1, CLAUDECODE=1
 
 PreToolUse (Bash)
-├── enforce-toolchain.sh — block npm/npx/tsc/eslint/prettier, enforce --yarn
+├── enforce-toolchain.sh — block npm/npx/tsc/eslint/prettier, enforce --yarn, guard destructive commands
 └── llm-test-flags.sh    — block --verbose on test runners
 
 PostToolUse (Edit|Write)
-├── react-rules-check.sh      — 13 React/TS/a11y checks (~50ms, skips non-JS/TS)
-├── zustand-check.sh           — zustand anti-patterns (skips non-zustand files)
+├── react-rules-check.sh      — 16 React/TS/security checks (~250ms, skips non-JS/TS)
+├── accessibility-check.sh     — ARIA/WCAG enforcement (~100ms, skips non-TSX/JSX)
+├── zustand-check.sh           — zustand anti-patterns (~75ms, skips non-zustand files)
 ├── tanstack-router-check.sh   — routing anti-patterns (skips non-router files)
-└── connect-query-check.sh     — ConnectRPC/protobuf patterns (skips non-connect files)
+├── connect-query-check.sh     — ConnectRPC/protobuf patterns (skips non-connect files)
+└── bundle-guard.sh            — heavy dependency warnings (~30ms, skips non-package.json)
 
 PostToolUse (Bash)
 └── llm-truncate.sh      — truncate output >200 lines
@@ -216,4 +275,16 @@ Stop
 └── registry-check.sh    — remind about registry.json rebuild
 ```
 
-Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hooks exit immediately on non-matching file extensions.
+Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hooks exit immediately on non-matching file extensions. PostToolUse hooks run concurrently — wall-clock overhead is ~190ms per edit (dominated by process spawning, not logic). This is ~4-8% of a typical LLM tool call.
+
+## Codex Compatibility (Experimental)
+
+> OpenAI Codex hooks launched 2026-03-27. This is an early workaround — Codex currently only supports `Bash` tool matcher for PostToolUse, not `Edit|Write`. When Codex adds Edit/Write matchers, this workaround becomes unnecessary.
+
+- **codex-compat** — Generates `.codex/hooks.json` and `AGENTS.md` from existing Claude Code hooks. Translates PostToolUse Edit|Write hooks into a Stop-based batch checker. PreToolUse, SessionStart, and Stop hooks work identically on both platforms.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
+  ```
+
+  **Not included in starter kits.** Install separately for repos where Codex users need hook enforcement.

@@ -97,7 +97,19 @@ if echo "$added_lines" | grep -qE '\b(useParams|useSearch|useLoaderData|useRoute
   fi
 fi
 
-# ── Check 8: Missing validateSearch when useSearch is used ────────────
+# ── Check 8: Warn on exported components from route files (breaks code splitting) ──
+
+if echo "$file_path" | grep -qE '/routes/'; then
+  # Check if any PascalCase export exists that ISN'T 'Route'
+  non_route_exports=$(echo "$added_lines" | grep -E 'export\s+(function|const)\s+[A-Z]' | grep -v 'export\s*const\s*Route\b' || true)
+  if [ -n "$non_route_exports" ]; then
+    echo '{"suppressOutput":true,"systemMessage":"Do not export components from route files — it breaks automatic code splitting.\n\nRoute files should only export the Route config. Move helper components to separate files.\n\n// BAD — exported component prevents tree-shaking\nexport function UserCard() { ... }\n\n// GOOD — only export Route\nexport const Route = createFileRoute(...)({\n  component: UserCard,\n})"}' >&2
+    # Warn only — some projects don't use autoCodeSplitting
+    exit 0
+  fi
+fi
+
+# ── Check 9: Missing validateSearch when useSearch is used ────────────
 
 if echo "$added_lines" | grep -qE '\buseSearch\b'; then
   # Check if this is a route file

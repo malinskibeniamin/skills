@@ -339,6 +339,56 @@ run_hook_eval "$SCRIPT" \
 
 # tmpfile reused in tmpdir
 
+# ── Check 17: Ban inline style={{}} ──────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div style={{ marginTop: 16 }}>content</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: inline style={{}}" "Tailwind"
+
+# Allow style in .ts files (not TSX)
+tmpfile="$_rr_tmpdir/test.ts"
+echo 'const style = { marginTop: 16 }' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: style object in .ts file"
+
+# ── Check 18: Ban raw hex/rgb in className ───────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="text-[#ff0000] mt-4">red</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw hex in className" "design token"
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-[rgb(0,0,0)]">dark</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw rgb in className" "design token"
+
+# Allow normal Tailwind classes
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="text-destructive bg-background mt-4">ok</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Tailwind design token classes"
+
+# ── Check 19: Ban !important ─────────────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="mt-4 !important">forced</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: !important in className"
+
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"

@@ -14,6 +14,9 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 - **Ban dangerouslySetInnerHTML** — XSS risk, escape hatch: `// allow-dangerouslySetInnerHTML: [reason]`
 - **Ban eval() and new Function()** — code injection risk (OWASP A03)
 - **Ban .innerHTML assignment** — XSS risk, use textContent or React rendering
+- **Ban inline `style={{}}`** — use Tailwind utility classes
+- **Ban raw hex/rgb in className** — use design tokens (`text-destructive`, not `text-[#ff0000]`)
+- **Ban `!important`** — breaks Tailwind cascade, fix specificity instead
 
 ### Opt-in rules
 

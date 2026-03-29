@@ -149,6 +149,36 @@ case "$file_path" in
     ;;
 esac
 
+# ── Check 17: Ban inline style={{}} in TSX/JSX (use Tailwind) ────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE 'style=\{\{'; then
+      echo '{"suppressOutput":true,"systemMessage":"Inline style={{}} is banned. Use Tailwind CSS utility classes instead.\n\n// BAD\n<div style={{ marginTop: 16, color: \"red\" }}>\n\n// GOOD\n<div className=\"mt-4 text-red-500\">"}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 18: Ban raw hex/rgb colors in className (use design tokens) ──
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE 'className=.*\[#[0-9a-fA-F]' || \
+       echo "$added_lines" | grep -qE 'className=.*\[rgb'; then
+      echo '{"suppressOutput":true,"systemMessage":"Do not use raw hex/rgb colors in className. Use Tailwind design tokens or CSS variables instead.\n\n// BAD\n<div className=\"text-[#ff0000] bg-[rgb(0,0,0)]\">\n\n// GOOD\n<div className=\"text-destructive bg-background\">"}' >&2
+      exit 2
+    fi
+    ;;
+esac
+
+# ── Check 19: Ban !important in styles ───────────────────────────
+
+if echo "$added_lines" | grep -qE '!important'; then
+  echo '{"suppressOutput":true,"systemMessage":"!important is banned — it breaks the Tailwind cascade and makes styles unmaintainable. Fix specificity issues instead."}' >&2
+  exit 2
+fi
+
 exit 0
 ```
 
