@@ -25,6 +25,75 @@ bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent cla
 
 Or install individual skills if you don't want the full kit — see sections below.
 
+## Migrating an Existing Codebase
+
+After installing, paste this prompt into a new Claude Code session to migrate existing code to comply with the new hooks:
+
+<details>
+<summary>Migration prompt (click to expand)</summary>
+
+```
+I just installed the frontend-starter-kit skills. Run all setup skills now, then migrate existing code to comply with the new hooks.
+
+## Phase 1: Run setup skills
+
+Execute the frontend-starter-kit skill. This will:
+- Install all 14 setup skills (toolchain, biome, quality-gate, etc.)
+- Create all hook scripts in .claude/hooks/
+- Set up src/env.ts, src/lib/logger.ts, biome.jsonc, .github/workflows/quality-gate.yml
+- Install community workflow skills
+- Set REACT_RULES_BAN_USEEFFECT=1 in session env
+
+## Phase 2: Migrate existing code
+
+After hooks are installed, fix all existing violations. Work through these in order:
+
+### 2a. Lint + format
+Run bun run lint:fix to auto-fix everything Biome can handle.
+
+### 2b. Type checking
+Run bun run type:check and fix all errors.
+
+### 2c. Filename convention
+Rename any non-kebab-case files to kebab-case. Use git mv to preserve history.
+
+### 2d. Environment variables
+Find all process.env. usage outside of src/env.ts and move each env var into src/env.ts with a zod schema. Replace process.env.X with import { env } from "@/env".
+
+### 2e. Console statements
+Find all console.error, console.warn, console.debug in non-test files. Replace with import { logger } from "@/lib/logger" and structured calls like logger.error({ message: "failed", error: err }).
+
+### 2f. React patterns
+Fix these in order (each may affect many files):
+
+1. Class components → functional components
+2. useEffect for data fetching → TanStack Query / route loaders
+3. Raw HTML elements (<button>, <input>, etc.) → @/components/ui/ components
+4. as any, @ts-ignore, @ts-expect-error → proper types, type guards, or zod validation
+5. dangerouslySetInnerHTML → DOMPurify or safe rendering
+6. Inline style={{}} → Tailwind utility classes
+7. Raw hex/rgb in className → design tokens
+8. !important → fix specificity
+9. useMemo/useCallback/React.memo → remove (React Compiler handles it)
+10. outline: none → focus-visible:outline-2
+
+### 2g. Zustand stores
+Fix create<T>() → create<T>()(), inline selectors → useShallow, direct localStorage → persist.
+
+### 2h. Routing
+Fix window.location navigation → TanStack Router, react-router-dom → @tanstack/react-router, URLSearchParams → nuqs, untyped hooks → { from } param.
+
+## Phase 3: Verify
+
+Run bun run quality:gate — should pass with zero errors.
+Run bun run doctor — score should be 80+.
+Commit everything as: refactor(webui): migrate to frontend-starter-kit patterns
+```
+
+</details>
+
+The migration is ordered from least disruptive (auto-fixable lint) to most disruptive (React pattern rewrites) — commit incrementally after each phase.
+
 ---
 
 ## Starter Kits
