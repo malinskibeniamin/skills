@@ -65,10 +65,12 @@ fi
 
 if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
   # Match TypeScript type assertions: `value as Type` or `value as unknown`
-  # Exclude: `as const`, `as const satisfies`, `import X as Y`, `} as {`
-  # Pattern: word/paren/bracket followed by `as` followed by PascalCase type or `unknown`/`never`/`any`
-  if echo "$added_lines" | grep -qE '\)\s+as\s+[A-Z]|\b\w+\s+as\s+[A-Z]|\bas\s+unknown\b|\bas\s+never\b' && \
-     ! echo "$added_lines" | grep -qE '\bas\s+const\b'; then
+  # Exclude: `as const`, `as const satisfies`, `import X as Y`
+  # Only match non-import lines with type assertion patterns
+  _non_import_lines=$(echo "$added_lines" | grep -v '^\+\?import ' || true)
+  if [ -n "$_non_import_lines" ] && \
+     echo "$_non_import_lines" | grep -qE '\)\s+as\s+[A-Z]|\b\w+\s+as\s+[A-Z]|\bas\s+unknown\b|\bas\s+never\b' && \
+     ! echo "$_non_import_lines" | grep -qE '\bas\s+const\b'; then
     # Check for escape hatch
     has_escape=false
     if grep -qE '//\s*allow-type-assertion:' "$file_path" 2>/dev/null; then
