@@ -87,7 +87,7 @@ Claude Code hooks that enforce tooling standards via `PreToolUse` and `SessionSt
 
 Linting, formatting, and quality gate automation.
 
-- **setup-biome** — Install Biome + Ultracite, create `biome.jsonc` with strict overrides (noConsole, cognitive complexity 15, noClassComponent, useExhaustiveSwitchCases, restricted imports for moment/lodash/classnames/mobx/yup). Stop hook auto-fixes all changed JS/TS files before Claude finishes.
+- **setup-biome** — Install Biome + Ultracite, create `biome.jsonc` with strict overrides (noConsole, cognitive complexity 15, kebab-case filenames, useExhaustiveSwitchCases, restricted imports for moment/lodash/classnames/mobx/yup). Stop hook auto-fixes all changed JS/TS files before Claude finishes.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y

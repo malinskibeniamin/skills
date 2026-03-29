@@ -457,6 +457,28 @@ run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "skip: .ts file in tailwind check"
 
+# ── Check 18: Ban class components ────────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo 'class MyComponent extends React.Component { render() { return <div /> } }' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: class component (React.Component)" "functional"
+
+echo 'class MyComponent extends PureComponent { render() { return <div /> } }' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: class component (PureComponent)" "functional"
+
+# Allow functional components
+echo 'function MyComponent() { return <div /> }' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: functional component"
+
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"

@@ -237,7 +237,12 @@ case "$file_path" in
     ;;
 esac
 
-# ── Checks 18-19 (raw hex/rgb, !important) moved to tailwind-check.sh ──
-# tailwind-check.sh covers CSS/SCSS/SASS/LESS + TSX/JSX files
+# ── Check 18: Ban class components ───────────────────────────────
+
+if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)\b'; then
+  hook_block "Class components are banned. Use functional components instead.\n\n// BAD\nclass MyComponent extends React.Component { ... }\n\n// GOOD\nfunction MyComponent() { ... }\n\nReact Compiler requires functional components. Class components cannot be auto-memoized."
+fi
+
+# ── Checks 19-20 (raw hex/rgb, !important) moved to tailwind-check.sh ──
 
 exit 0
