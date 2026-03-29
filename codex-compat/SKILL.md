@@ -10,7 +10,7 @@ description: Generate Codex-compatible hooks config and AGENTS.md from existing 
 ## What This Sets Up
 
 - **`.codex/hooks.json`** — Codex hook config that maps compatible hooks directly and wraps PostToolUse Edit|Write hooks in a Stop-based batch checker
-- **`.codex/hooks/codex-batch-check.sh`** — Stop hook that runs all PostToolUse checks on changed files at end of turn
+- **`.codex/hooks/codex-batch-check.sh`** — Stop hook that runs all PostToolUse checks on changed files (JS/TS, CSS/SCSS, package.json) at end of turn
 - **`AGENTS.md`** — Codex instructions file with soft guidance for all enforced rules
 
 ## Steps

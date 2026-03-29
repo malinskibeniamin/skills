@@ -37,3 +37,16 @@ run_content_eval "$SCRIPT" "bundle-guard" "hook runs bundle-guard on package.jso
 run_content_eval "$SCRIPT" "tool_name.*Write" "hook simulates Write tool input"
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks on failures"
 run_content_eval "$SCRIPT" "systemMessage" "hook reads systemMessage from output"
+run_content_eval "$SCRIPT" "changed_css" "hook finds changed CSS/SCSS files"
+run_content_eval "$SCRIPT" "tailwind-check" "hook runs tailwind-check on CSS files"
+
+# ── AGENTS.md template content ────────────────────────────────────
+
+run_content_eval "$SKILL_DIR/REFERENCE.md" "class component" "AGENTS.md bans class components"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "process.env" "AGENTS.md covers env validation"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "console.error" "AGENTS.md covers logging"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "type.scope" "AGENTS.md covers commit format"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "!important" "AGENTS.md covers Tailwind rules"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "kebab-case" "AGENTS.md covers filename convention"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "conventional-commits" "hooks.json includes conventional-commits"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "_hook-lib.sh" "REFERENCE mentions _hook-lib.sh requirement"
