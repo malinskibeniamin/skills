@@ -30,7 +30,7 @@ type(scope): description
 feat(webui): add user profile avatar upload
 fix(api): handle null response from auth endpoint
 refactor(backend): extract validation into shared utility
-chore(deps): bump tanstack-query to v5.62
+chore(deps): bump tanstack-query to latest
 ```
 
 ## Steps

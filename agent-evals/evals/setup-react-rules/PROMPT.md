@@ -3,7 +3,7 @@
 This project enforces strict React rules. Read each one carefully.
 
 ## Data fetching
-- **NEVER use `useEffect` for data fetching or any other purpose.** Also banned: `useLayoutEffect`, `useInsertionEffect`.
+- **useEffect is discouraged.** Prefer `useQuery` from `@tanstack/react-query` for data fetching. Also discouraged: `useLayoutEffect`, `useInsertionEffect`. If you must use useEffect, add a `// allow-useEffect: [reason]` comment.
 - For data fetching, use `useQuery` from `@tanstack/react-query`. Example:
   ```tsx
   const { data, isLoading } = useQuery({
@@ -17,10 +17,15 @@ This project enforces strict React rules. Read each one carefully.
 
 ## UI components
 - **NEVER use raw HTML elements** like `<button>`, `<input>`, `<form>`, `<select>`, `<textarea>`, `<table>`, `<label>`.
-- Use redpanda-ui components instead:
-  - `<Button>` from `@/redpanda-ui/button`
-  - `<Input>` from `@/redpanda-ui/input`
-  - `<AutoForm>` from `@/redpanda-ui/auto-form`
+- Use shadcn/ui components instead:
+  - `<Button>` from `@/components/ui/button`
+  - `<Input>` from `@/components/ui/input`
+  - `<Form>` from `@/components/ui/form`
+
+## Tailwind CSS
+- **NEVER use inline `style={{}}`** — use Tailwind utility classes instead.
+- **NEVER use raw hex/rgb values in className** — use design tokens (e.g., `text-destructive` not `text-[#ff0000]`).
+- **NEVER use `!important`** — it breaks the Tailwind cascade. Fix specificity instead.
 
 ## TypeScript
 - **NEVER use `as any`** — fix types properly.
@@ -28,7 +33,6 @@ This project enforces strict React rules. Read each one carefully.
 
 ## Package manager
 - Use bun with `--yarn` flag.
-- Never import from `@chakra-ui/react` or `@redpanda-data/ui` (legacy).
 
 # Task
 
@@ -36,6 +40,7 @@ Create a React component at `src/UserProfile.tsx` that:
 1. Fetches user data from `/api/users/:id` using `useQuery` from `@tanstack/react-query` (NOT useEffect)
 2. Shows a loading state using `isLoading` from the query result
 3. Displays the user's name and email
-4. Has a form to update the user's email using `<AutoForm>` from `@/redpanda-ui/auto-form`
-5. Has a submit button using `<Button>` from `@/redpanda-ui/button`
+4. Has a form to update the user's email using `<Form>` from `@/components/ui/form`
+5. Has a submit button using `<Button>` from `@/components/ui/button`
 6. Uses a zustand store for the current user ID
+7. Uses Tailwind utility classes for styling (no inline style={{}}, no raw hex colors, no !important)

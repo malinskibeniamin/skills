@@ -44,7 +44,7 @@ export default {
 
 ### 3. Add `'use no memo'` to component library files
 
-Add `'use no memo'` directive at the top of all `.tsx` files in the component library directory (`components/ui/` or `redpanda-ui/`). The compiler should not auto-memoize distribution/registry components.
+Add `'use no memo'` directive at the top of all `.tsx` files in the component library directory (auto-detected, or set `UI_LIB_DIRS`). The compiler should not auto-memoize distribution/registry components.
 
 ### 4. Create hook script
 

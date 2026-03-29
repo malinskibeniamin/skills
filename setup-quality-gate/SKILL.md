@@ -10,7 +10,8 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 - `quality:gate` package.json script — runs lint, type check, and related tests in <5 seconds
 - Additional package.json scripts: `lint`, `lint:fix`, `type:check`, `test`
 - **GitHub Actions workflow** with formatting integrity check (`git diff --exit-code`)
-- **Stop hook** running `tsgo` before Claude finishes
+- **Stop hook** running `tsgo` + related tests before Claude finishes (auto-detects Vitest/Jest/Bun test runner)
+- **Bundle guard hook** (PostToolUse) that warns when known-heavy dependencies (moment, lodash, jquery, core-js, classnames) are added to package.json
 
 ## Steps
 
@@ -45,18 +46,25 @@ Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Ke
 
 Write `typecheck-stop.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
 
-### 4. Configure hook in `.claude/settings.json`
+### 4. Create Bundle guard hook script
 
-Add to hooks config: **Stop**: `.claude/hooks/typecheck-stop.sh`
+Write `bundle-guard.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
 
-### 5. Verify
+### 5. Configure hooks in `.claude/settings.json`
+
+Add to hooks config:
+- **Stop**: `.claude/hooks/typecheck-stop.sh`
+- **PostToolUse**: `.claude/hooks/bundle-guard.sh`
+
+### 6. Verify
 
 - [ ] `bun run lint` works
 - [ ] `bun run type:check` works
 - [ ] `bun run quality:gate` works
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] Stop hook script is executable
+- [ ] Bundle guard hook script is executable
 
-### 6. Commit
+### 7. Commit
 
 Stage all files and commit: `Add quality gate scripts and CI workflow`

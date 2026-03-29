@@ -5,7 +5,7 @@ description: Generate Codex-compatible hooks config and AGENTS.md from existing 
 
 # Codex Compatibility Layer
 
-> **Workaround:** Codex currently only supports `Bash` matcher for PostToolUse — not `Edit|Write`. This skill translates PostToolUse hooks into a Stop-based batch checker. When Codex adds Edit/Write matchers, this skill becomes unnecessary.
+> Codex supports only the `Bash` matcher for PostToolUse — not `Edit|Write`. This skill bridges that gap by wrapping Edit|Write hooks into a Stop-based batch checker.
 
 ## What This Sets Up
 
