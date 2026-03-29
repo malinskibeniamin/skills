@@ -25,8 +25,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" ".codex/hooks.json" "REFERENCE has ho
 run_content_eval "$SKILL_DIR/REFERENCE.md" "AGENTS.md" "REFERENCE has AGENTS.md template"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "PreToolUse" "REFERENCE maps PreToolUse hooks"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "SessionStart" "REFERENCE maps SessionStart hooks"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "git diff --name-only" "REFERENCE uses git diff for changed files"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "tool_name.*Write" "REFERENCE simulates Write tool JSON"
+run_content_eval "$SCRIPT" "git diff --name-only" "script uses git diff for changed files"
+run_content_eval "$SCRIPT" "tool_name.*Write" "script simulates Write tool JSON"
 
 # ── Hook script content checks ──────────────────────────────────
 

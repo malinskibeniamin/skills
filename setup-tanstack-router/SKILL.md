@@ -33,12 +33,9 @@ description: Configure TanStack Router route tree auto-generation and anti-patte
 
 ### 2. Create hook scripts
 
-Write scripts from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`:
+Copy [`scripts/tanstack-router-gen.sh`](scripts/tanstack-router-gen.sh), [`scripts/tanstack-router-check.sh`](scripts/tanstack-router-check.sh), and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make all executable.
 
-- `tanstack-router-gen.sh` — route tree regeneration
-- `tanstack-router-check.sh` — anti-pattern enforcement
-
-Make both executable. During setup, ask the user for their routes directory path (default: `src/routes/`).
+During setup, ask the user for their routes directory path (default: `src/routes/`).
 
 ### 3. Configure hooks in `.claude/settings.json`
 

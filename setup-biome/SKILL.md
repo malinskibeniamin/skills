@@ -35,14 +35,18 @@ Use the config from [REFERENCE.md](REFERENCE.md). Key points:
 {
   "scripts": {
     "lint": "biome check .",
-    "lint:fix": "biome check --write ."
+    "lint:fix": "biome check --write .",
+    "lint:file": "biome check",
+    "lint:fix:file": "biome check --write"
   }
 }
 ```
 
+`lint`/`lint:fix` scan the whole project (`.` hardcoded). `lint:file`/`lint:fix:file` have no hardcoded path — hooks pass specific files via `-- file1 file2`.
+
 ### 4. Create hook script
 
-Write `biome-autofix.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/biome-autofix.sh`](scripts/biome-autofix.sh) into `.claude/hooks/`. Make executable.
 
 ### 5. Configure hook in `.claude/settings.json`
 

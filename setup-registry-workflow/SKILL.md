@@ -14,7 +14,7 @@ description: Configure Claude Code Stop hook to remind about registry.json rebui
 
 ### 1. Create hook script
 
-Write `registry-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/registry-check.sh`](scripts/registry-check.sh) into `.claude/hooks/`. Make executable.
 
 ### 2. Configure Stop hook in `.claude/settings.json`
 

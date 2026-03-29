@@ -28,7 +28,7 @@ Check `package.json` for `@bufbuild/protobuf` version:
 
 ### 2. Create hook script
 
-Write the appropriate `connect-query-check.sh` variant from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/connect-query-check.sh`](scripts/connect-query-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 3. Configure hook in `.claude/settings.json`
 

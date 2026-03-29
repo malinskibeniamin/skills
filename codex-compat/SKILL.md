@@ -17,7 +17,7 @@ description: Generate Codex-compatible hooks config and AGENTS.md from existing 
 
 ### 1. Create the batch checker script
 
-Write `codex-batch-check.sh` from [REFERENCE.md](REFERENCE.md) into `.codex/hooks/`. Make executable.
+Copy [`scripts/codex-batch-check.sh`](scripts/codex-batch-check.sh) into `.codex/hooks/`. Make executable.
 
 ### 2. Create `.codex/hooks.json`
 

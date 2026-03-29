@@ -17,7 +17,7 @@ PostToolUse hook on Edit/Write catching zustand anti-patterns:
 
 ### 1. Create hook script
 
-Write `zustand-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/zustand-check.sh`](scripts/zustand-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 2. Configure hook in `.claude/settings.json`
 

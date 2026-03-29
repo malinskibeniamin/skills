@@ -8,6 +8,7 @@ description: Configure Claude Code hooks to enforce bun as package manager and t
 ## What This Sets Up
 
 - **PreToolUse hooks** blocking banned CLI commands with actionable suggestions
+- **Destructive command guards** preventing `rm -rf` (except safe targets like node_modules/.next/dist/build), `git push --force`, `git reset --hard`, and `git checkout .` / `git restore .`
 - **SessionStart hook** setting environment variables for LLM-friendly defaults
 - All hooks written to `.claude/settings.json` (project-level, committed to git)
 
@@ -15,12 +16,7 @@ description: Configure Claude Code hooks to enforce bun as package manager and t
 
 ### 1. Create hook scripts
 
-Write the scripts from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`:
-
-- `enforce-toolchain.sh` — PreToolUse: blocks npm/npx/tsc/global installs, ensures --yarn flag, blocks direct bunx for scripted tools
-- `session-env.sh` — SessionStart: sets PKG_MANAGER, LINTER, TEST_RUNNER, AI_AGENT, CLAUDECODE
-
-Make both executable: `chmod +x .claude/hooks/*.sh`
+Copy [`scripts/enforce-toolchain.sh`](scripts/enforce-toolchain.sh) and [`scripts/session-env.sh`](scripts/session-env.sh) into `.claude/hooks/`. Make both executable: `chmod +x .claude/hooks/*.sh`
 
 ### 2. Configure hooks in `.claude/settings.json`
 

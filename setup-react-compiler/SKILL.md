@@ -48,7 +48,7 @@ Add `'use no memo'` directive at the top of all `.tsx` files in the component li
 
 ### 4. Create hook script
 
-Write `react-compiler-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/react-compiler-check.sh`](scripts/react-compiler-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 5. Configure hook in `.claude/settings.json`
 

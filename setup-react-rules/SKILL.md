@@ -27,11 +27,7 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 
 ### 1. Create hook scripts
 
-Write scripts from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`:
-
-- `react-rules-check.sh` — single script handling all rules
-
-Make executable.
+Copy [`scripts/react-rules-check.sh`](scripts/react-rules-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 2. Configure hook in `.claude/settings.json`
 

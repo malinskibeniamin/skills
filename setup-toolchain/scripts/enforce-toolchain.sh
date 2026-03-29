@@ -65,4 +65,56 @@ if echo "$command" | grep -qE '(^|\s|&&|\|\||;)bun\s+(install|add)(\s|$)'; then
   fi
 fi
 
+# Block destructive rm -rf / rm -r / rm --recursive (allow safe targets)
+if echo "$command" | grep -qE '(^|\s|&&|\|\||;)rm\s+(-[a-zA-Z]*r[a-zA-Z]*|--recursive)(\s|$)'; then
+  safe_targets="node_modules .next dist build .cache .turbo coverage __pycache__"
+  # Extract the rm subcommand, strip "rm" and all flags (words starting with -)
+  rm_part=$(echo "$command" | grep -oE 'rm\s+.*' | head -1)
+  targets=""
+  for word in $rm_part; do
+    case "$word" in
+      rm) ;; # skip rm itself
+      -*) ;; # skip flags
+      *)  targets="$targets $word" ;; # path argument
+    esac
+  done
+  all_safe=true
+  for t in $targets; do
+    t=$(basename "$t")
+    found=false
+    for s in $safe_targets; do
+      if [ "$t" = "$s" ]; then
+        found=true
+        break
+      fi
+    done
+    if [ "$found" = false ]; then
+      all_safe=false
+      break
+    fi
+  done
+  if [ "$all_safe" = false ]; then
+    echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"Destructive rm -rf is blocked. Only these targets are allowed: node_modules, .next, dist, build, .cache, .turbo, coverage, __pycache__. Remove files individually or use a more targeted command."}' >&2
+    exit 2
+  fi
+fi
+
+# Block git push --force / -f (but allow --force-with-lease)
+if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+push\s' && echo "$command" | grep -qE '\s(--force|-f)(\s|$)' && ! echo "$command" | grep -qF -- '--force-with-lease'; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"git push --force is blocked. Use --force-with-lease instead for safer force pushes."}' >&2
+  exit 2
+fi
+
+# Block git reset --hard
+if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+reset\s+--hard'; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"git reset --hard is blocked. This discards all uncommitted changes. Use git stash or git reset --soft instead."}' >&2
+  exit 2
+fi
+
+# Block git checkout . / git restore . (discards all uncommitted changes)
+if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+(checkout|restore)\s+\.\s*($|;|&&|\|\|)'; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"git checkout . / git restore . is blocked. This discards all uncommitted changes. Restore specific files instead: git checkout -- <file> or git restore <file>."}' >&2
+  exit 2
+fi
+
 exit 0

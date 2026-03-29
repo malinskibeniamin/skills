@@ -31,7 +31,7 @@ Create `src/lib/logger.ts` from [REFERENCE.md](REFERENCE.md). Key points:
 
 ### 3. Create hook script
 
-Write `logging-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/logging-check.sh`](scripts/logging-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 4. Configure hook
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-source "$(dirname "$0")/../../shared/hook-lib.sh"
+source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
 hook_skip_ui_dirs

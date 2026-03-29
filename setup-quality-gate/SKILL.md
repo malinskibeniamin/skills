@@ -44,11 +44,11 @@ Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Ke
 
 ### 3. Create Stop hook script
 
-Write `typecheck-stop.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/typecheck-stop.sh`](scripts/typecheck-stop.sh) into `.claude/hooks/`. Make executable.
 
 ### 4. Create Bundle guard hook script
 
-Write `bundle-guard.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/bundle-guard.sh`](scripts/bundle-guard.sh) into `.claude/hooks/`. Make executable.
 
 ### 5. Configure hooks in `.claude/settings.json`
 

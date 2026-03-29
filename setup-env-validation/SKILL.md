@@ -51,7 +51,7 @@ const url = env.PUBLIC_API_URL; // type-safe, validated at startup
 
 ### 3. Create hook script
 
-Write `env-validation-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable.
+Copy [`scripts/env-validation-check.sh`](scripts/env-validation-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 4. Configure hook in `.claude/settings.json`
 

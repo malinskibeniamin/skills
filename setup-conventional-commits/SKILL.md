@@ -37,7 +37,7 @@ chore(deps): bump tanstack-query to latest
 
 ### 1. Create hook script
 
-Write `conventional-commits-check.sh` from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`. Make executable:
+Copy [`scripts/conventional-commits-check.sh`](scripts/conventional-commits-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable:
 
 ```bash
 chmod +x .claude/hooks/conventional-commits-check.sh

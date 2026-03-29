@@ -1,0 +1,53 @@
+---
+name: setup-accessibility
+description: Configure Claude Code PostToolUse hook enforcing ARIA accessibility patterns — ban missing labels on interactive elements, ban mouse-only handlers without keyboard equivalents, enforce ARIA attributes on custom widgets, and set up Playwright AXE for automated accessibility testing. Use when setting up accessibility enforcement, ARIA compliance, WCAG conformance, or a11y testing.
+---
+
+# Setup Accessibility
+
+## What This Sets Up
+
+PostToolUse hook on Edit/Write catching accessibility anti-patterns in TSX/JSX:
+
+- **Ban interactive elements without accessible names** — `<button>`, `<input>`, `<select>`, `<textarea>` must have `aria-label`, `aria-labelledby`, or visible label text
+- **Ban mouse-only event handlers** — `onClick` on non-interactive elements (`<div>`, `<span>`) requires `role`, `tabIndex`, and `onKeyDown`/`onKeyUp`
+- **Ban missing ARIA attributes on widget roles** — `role="combobox"` needs `aria-expanded` + `aria-controls`, `role="tablist"` needs `aria-orientation`, etc.
+- **Ban `<img>` without `alt`** — images must have `alt` text (use `alt=""` for decorative images)
+
+Also includes:
+- **Playwright AXE** test setup for automated WCAG 2.1 AA scanning
+- **ARIA Patterns Reference** — correct markup for combobox, tabs, dialog, accordion, and more
+
+## Steps
+
+### 1. Install Playwright AXE
+
+```bash
+bun add -D @axe-core/playwright --yarn
+```
+
+### 2. Create hook script
+
+Copy [`scripts/accessibility-check.sh`](scripts/accessibility-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
+
+### 3. Configure hook in `.claude/settings.json`
+
+Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/accessibility-check.sh`
+
+### 4. Create accessibility test helper
+
+Write the test fixture from [REFERENCE.md](REFERENCE.md) into your test utilities.
+
+### 5. Verify
+
+- [ ] Hook blocks `<button>` without accessible name
+- [ ] Hook blocks `<div onClick>` without `role` + `tabIndex` + keyboard handler
+- [ ] Hook blocks `<img>` without `alt`
+- [ ] Hook blocks `role="combobox"` without `aria-expanded`
+- [ ] Hook skips non-TSX/JSX files
+- [ ] `@axe-core/playwright` is installed
+- [ ] Accessibility test helper runs against a sample page
+
+### 6. Commit
+
+Stage all files and commit: `Add accessibility enforcement hook + Playwright AXE setup`

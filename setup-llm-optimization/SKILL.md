@@ -15,13 +15,7 @@ description: Configure Claude Code hooks for token-efficient AI agent workflows.
 
 ### 1. Create hook scripts
 
-Write scripts from [REFERENCE.md](REFERENCE.md) into `.claude/hooks/`:
-
-- `llm-env.sh` — SessionStart: sets AI_AGENT, CLAUDECODE env vars
-- `llm-test-flags.sh` — PreToolUse on Bash: blocks `--verbose` flag on test runners
-- `llm-truncate.sh` — PostToolUse on Bash: truncates output >200 lines
-
-Make all executable.
+Copy [`scripts/llm-env.sh`](scripts/llm-env.sh), [`scripts/llm-test-flags.sh`](scripts/llm-test-flags.sh), and [`scripts/llm-truncate.sh`](scripts/llm-truncate.sh) into `.claude/hooks/`. Make all executable.
 
 ### 2. Configure hooks in `.claude/settings.json`
 
