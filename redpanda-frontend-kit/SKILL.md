@@ -39,11 +39,34 @@ Execute setup-react-rules, setup-react-doctor, setup-tanstack-router, setup-conn
 
 For setup-connect-query, detect the protobuf version from `package.json` and install the appropriate variant (v1 or v2).
 
-### 3. Run Redpanda-specific skills
+### 3. Configure Redpanda-specific environment
+
+Set in the SessionStart hook (`.claude/hooks/session-env.sh`):
+
+```bash
+echo "export REACT_RULES_BAN_USEEFFECT=1" >> "$CLAUDE_ENV_FILE"
+echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
+```
+
+Add a Chakra UI / legacy import ban to `.claude/hooks/react-rules-check.sh` (after the TypeScript escape hatches check):
+
+```bash
+# ── Redpanda: Ban Chakra UI / legacy imports ────────────────────
+if echo "$added_lines" | grep -qE "from\s+['\"]@chakra-ui/"; then
+  echo '{"suppressOutput":true,"systemMessage":"@chakra-ui/react is banned. Use shadcn/ui components from @/components/ui/ instead."}' >&2
+  exit 2
+fi
+if echo "$added_lines" | grep -qE "from\s+['\"]@redpanda-data/ui['\"/]"; then
+  echo '{"suppressOutput":true,"systemMessage":"@redpanda-data/ui is legacy (Chakra-based). Use redpanda-ui registry components instead."}' >&2
+  exit 2
+fi
+```
+
+### 4. Run Redpanda-specific skills
 
 Execute setup-registry-workflow for Redpanda UI registry component workflow.
 
-### 4. Final verification
+### 5. Final verification
 
 - [ ] All `.claude/hooks/` scripts are executable
 - [ ] `.claude/settings.json` has all hooks (including zustand-check, tanstack-router-check, connect-query-check)
@@ -52,6 +75,6 @@ Execute setup-registry-workflow for Redpanda UI registry component workflow.
 - [ ] All package.json scripts present: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`, `doctor`, `generate:routes`
 - [ ] connect-query-check.sh matches the detected protobuf version (v1 or v2)
 
-### 5. Commit
+### 6. Commit
 
 Stage everything and commit: `Bootstrap Redpanda frontend kit`

@@ -85,59 +85,70 @@
 
 ## biome-autofix.sh
 
+Stop hook that auto-fixes lint/format on all changed JS/TS files before Claude finishes.
+
 ```bash
 #!/bin/bash
 set -euo pipefail
 
-input=$(cat)
-tool_name=$(echo "$input" | jq -r '.tool_name // empty')
+# Stop hook: run biome lint:fix on all changed JS/TS files before Claude finishes.
+# Only runs if JS/TS files were actually changed.
 
-# Only run for Edit and Write tools
-if [ "$tool_name" != "Edit" ] && [ "$tool_name" != "Write" ]; then
+# Check if any JS/TS files were changed.
+# git diff returns paths relative to repo root; strip the prefix so they're
+# relative to cwd (where bun run lint:fix:file executes).
+# In monorepos, files outside the current package appear in diff but don't exist
+# relative to cwd — filter them out to avoid "file not found" errors.
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
+cwd=$(pwd)
+prefix="${cwd#"$repo_root"/}/"
+# Skip component library directories
+# Auto-detect: check common conventions, override with UI_LIB_DIRS env var (pipe-separated)
+if [ -z "${UI_LIB_DIRS:-}" ]; then
+  _ui_dirs="components/ui"
+  [ -d "$repo_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
+  [ -d "$repo_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
+  [ -d "$repo_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
+else
+  _ui_dirs="$UI_LIB_DIRS"
+fi
+all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
+
+# Filter to files that actually exist (excludes monorepo siblings)
+changed_files=""
+for f in $all_changed; do
+  if [ -f "$f" ]; then
+    changed_files="$changed_files $f"
+  fi
+done
+changed_files=$(echo "$changed_files" | xargs)
+
+if [ -z "$changed_files" ]; then
   exit 0
 fi
 
-file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
-
-if [ -z "$file_path" ]; then
-  exit 0
-fi
-
-# Only lint JS/TS/JSX/TSX files
-case "$file_path" in
-  *.js|*.jsx|*.ts|*.tsx|*.mjs|*.mts|*.cjs|*.cts) ;;
-  *) exit 0 ;;
-esac
-
-# Skip if file doesn't exist (was deleted)
-if [ ! -f "$file_path" ]; then
-  exit 0
-fi
-
-# Run biome fix on just this file, skipping noUnusedImports to avoid
-# deleting imports Claude hasn't used yet (caught later at quality:gate)
+# Run lint:fix on changed files only. Uses lint:fix:file / lint:file which
+# do NOT hardcode "." — so biome only scans the listed files, not everything.
+# Skip noUnusedImports to avoid deleting imports used elsewhere in the file.
 fix_output=""
 fix_exit=0
-fix_output=$(bun run lint:fix:file -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || fix_exit=$?
+fix_output=$(bun run lint:fix:file -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || fix_exit=$?
 
-# Check if there are remaining unfixable errors
 if [ $fix_exit -ne 0 ]; then
-  # Run check-only to get remaining errors
+  # Check remaining errors — filter out biome's summary lines to detect real errors
   remaining=""
-  remaining=$(bun run lint:file -- --skip=lint/correctness/noUnusedImports "$file_path" 2>&1) || true
+  remaining=$(bun run lint:file -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || true
 
-  if [ -n "$remaining" ]; then
-    # Truncate to avoid flooding context
-    truncated=$(echo "$remaining" | head -20)
-    # Escape for JSON
+  # Only block if error file paths reference non-library files
+  error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -vE "/($_ui_dirs)/" | grep -v 'internalError/io' || true)
+  if [ -n "$error_files" ]; then
+    truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -30)
     escaped=$(echo "$truncated" | jq -Rs .)
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"Biome found unfixable errors in $file_path:\\n\"$escaped\"\"}"
-    exit 0
+    echo "{\"decision\":\"block\",\"reason\":\"Biome found unfixable lint errors. Fix these before finishing:\\n\"$escaped\"\"}" >&2
+    exit 2
   fi
 fi
 
-# Auto-fix succeeded silently — suppress all output
-echo '{"suppressOutput":true}'
 exit 0
 ```
 

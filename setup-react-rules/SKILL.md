@@ -1,21 +1,23 @@
 ---
 name: setup-react-rules
-description: Configure Claude Code hooks enforcing React best practices — ban useEffect, ban raw HTML elements (use shadcn/ui components), ban Chakra UI imports, ban TypeScript escape hatches (as any, ts-ignore, ts-expect-error), ban dangerouslySetInnerHTML, ban eval/new Function, ban .innerHTML assignment. Use when enforcing React patterns, banning useEffect, or setting up component library enforcement. Works with Claude Code and Codex.
+description: Configure Claude Code hooks enforcing React best practices — ban raw HTML elements (use shadcn/ui components), ban TypeScript escape hatches (as any, ts-ignore, ts-expect-error), ban dangerouslySetInnerHTML, ban eval/new Function, ban .innerHTML assignment. Optional useEffect ban (opt-in). Auto-detects component library directory. Use when enforcing React patterns or setting up component library enforcement. Works with Claude Code and Codex.
 ---
 
 # Setup React Rules
 
 ## What This Sets Up
 
-PostToolUse hooks on Edit/Write (all exclude `components/ui/` and `redpanda-ui/` directories):
+PostToolUse hooks on Edit/Write (auto-detects and excludes component library directories):
 
-- **Ban useEffect** (and useLayoutEffect, useInsertionEffect) — escape hatch: `// allow-useEffect: [reason]`
 - **Ban raw HTML elements** — suggest shadcn/ui components from `@/components/ui/`
-- **Ban Chakra UI imports** — block `@chakra-ui/react`
 - **Ban TypeScript escape hatches** — block `as any`, `@ts-ignore`, `@ts-expect-error`
 - **Ban dangerouslySetInnerHTML** — XSS risk, escape hatch: `// allow-dangerouslySetInnerHTML: [reason]`
 - **Ban eval() and new Function()** — code injection risk (OWASP A03)
 - **Ban .innerHTML assignment** — XSS risk, use textContent or React rendering
+
+### Opt-in rules
+
+- **Ban useEffect** (and useLayoutEffect, useInsertionEffect) — enable with `REACT_RULES_BAN_USEEFFECT=1`. Best for greenfield projects using TanStack Query + zustand. Escape hatch: `// allow-useEffect: [reason]`
 
 ## Steps
 
@@ -33,12 +35,11 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/rea
 
 ### 3. Verify
 
-- [ ] Hook blocks new `useEffect` in diff
-- [ ] Hook allows `useEffect` with `// allow-useEffect:` comment
 - [ ] Hook blocks `<button>`, `<input>`, etc. in TSX files
-- [ ] Hook blocks `@chakra-ui/react` imports
 - [ ] Hook blocks `as any`, `@ts-ignore`, `@ts-expect-error`
-- [ ] Hook skips `components/ui/` and `redpanda-ui/` directories
+- [ ] Hook auto-detects and skips component library directories
+- [ ] (If `REACT_RULES_BAN_USEEFFECT=1`) Hook blocks new `useEffect` in diff
+- [ ] (If `REACT_RULES_BAN_USEEFFECT=1`) Hook allows `useEffect` with `// allow-useEffect:` comment
 
 ### 4. Codex compatibility (optional)
 

@@ -13,7 +13,7 @@ run_executable_eval "$SCRIPT" "react-rules-check.sh is executable"
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-rules" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "useEffect" "SKILL.md mentions useEffect ban"
+run_content_eval "$SKILL_DIR/SKILL.md" "REACT_RULES_BAN_USEEFFECT" "SKILL.md documents useEffect opt-in env var"
 run_content_eval "$SKILL_DIR/SKILL.md" "components/ui" "SKILL.md mentions components/ui"
 run_content_eval "$SKILL_DIR/SKILL.md" "as any" "SKILL.md mentions as any ban"
 
@@ -36,9 +36,9 @@ run_hook_eval "$SCRIPT" \
 mkdir -p "$tmpdir/redpanda-ui"
 echo "useEffect(() => {}, [])" > "$tmpdir/redpanda-ui/Component.tsx"
 
-run_hook_eval "$SCRIPT" \
+UI_LIB_DIRS="components/ui|redpanda-ui" REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/redpanda-ui/Component.tsx\"}}" \
-  0 "skip: redpanda-ui directory"
+  0 "skip: redpanda-ui via UI_LIB_DIRS override"
 
 rm -rf "$tmpdir"
 
@@ -51,34 +51,42 @@ run_hook_eval "$SCRIPT" \
 # Create a temp dir for all file-based tests (macOS mktemp doesn't support suffixes)
 _rr_tmpdir=$(mktemp -d /tmp/react-rules-evals-XXXXXX)
 
-# ── Check 1: useEffect ban ──────────────────────────────────────
+# ── Check 1: useEffect ban (opt-in via env var) ────────────────
 
-# Block useEffect
 tmpfile="$_rr_tmpdir/test.tsx"
+
+# useEffect allowed by default (opt-in disabled)
 echo "import { useEffect } from 'react'; useEffect(() => {}, [])" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useEffect" "useEffect"
+  0 "allow: useEffect when REACT_RULES_BAN_USEEFFECT not set"
 
-# Block useLayoutEffect
+# Block useEffect when opt-in enabled
+echo "import { useEffect } from 'react'; useEffect(() => {}, [])" > "$tmpfile"
+
+REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: useEffect with REACT_RULES_BAN_USEEFFECT=1" "useEffect"
+
+# Block useLayoutEffect when opt-in enabled
 echo "import { useLayoutEffect } from 'react'; useLayoutEffect(() => {}, [])" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useLayoutEffect" "useEffect"
+  2 "block: useLayoutEffect with opt-in" "useEffect"
 
-# Block useInsertionEffect
+# Block useInsertionEffect when opt-in enabled
 echo "import { useInsertionEffect } from 'react'; useInsertionEffect(() => {})" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useInsertionEffect" "useEffect"
+  2 "block: useInsertionEffect with opt-in" "useEffect"
 
-# Allow useEffect with escape hatch
+# Allow useEffect with escape hatch (even when opt-in enabled)
 printf "// allow-useEffect: websocket cleanup\nimport { useEffect } from 'react';\nuseEffect(() => {}, [])\n" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: useEffect with escape hatch"
 
@@ -110,15 +118,19 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: <a> tag (not banned)"
 
-# ── Check 3: Chakra/legacy imports ──────────────────────────────
+# ── UI_LIB_DIRS override ─────────────────────────────────────────
 
-echo "import { Box } from '@chakra-ui/react'" > "$tmpfile"
+tmpdir2=$(mktemp -d)
+mkdir -p "$tmpdir2/custom-lib"
+echo "useEffect(() => {}, [])" > "$tmpdir2/custom-lib/Widget.tsx"
 
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: @chakra-ui/react import" "chakra"
+UI_LIB_DIRS="custom-lib" REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir2/custom-lib/Widget.tsx\"}}" \
+  0 "skip: custom UI_LIB_DIRS override"
 
-# ── Check 4: TypeScript escape hatches ──────────────────────────
+rm -rf "$tmpdir2"
+
+# ── Check 3: TypeScript escape hatches ──────────────────────────
 
 echo "const x = foo as any" > "$tmpfile"
 
@@ -329,6 +341,8 @@ run_hook_eval "$SCRIPT" \
 
 # ── Hook script content checks ──────────────────────────────────
 
+run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
+run_content_eval "$SCRIPT" "REACT_RULES_BAN_USEEFFECT" "hook checks REACT_RULES_BAN_USEEFFECT env var"
 run_content_eval "$SCRIPT" "variant" "hook suggests using variant prop"
 run_content_eval "$SCRIPT" "asChild" "hook suggests asChild for Link wrapping"
 run_content_eval "$SCRIPT" "AlertTitle" "hook checks AlertTitle icon"

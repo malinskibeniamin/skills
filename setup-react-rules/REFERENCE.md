@@ -19,8 +19,18 @@ if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
   exit 0
 fi
 
-# Skip component library directories (shadcn/ui or redpanda-ui)
-if echo "$file_path" | grep -qE '/(components/ui|redpanda-ui)/'; then
+# Skip component library directories
+# Auto-detect: check common conventions, override with UI_LIB_DIRS env var (pipe-separated)
+if [ -z "${UI_LIB_DIRS:-}" ]; then
+  _ui_dirs="components/ui"
+  _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  [ -d "$_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
+  [ -d "$_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
+  [ -d "$_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
+else
+  _ui_dirs="$UI_LIB_DIRS"
+fi
+if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
   exit 0
 fi
 
@@ -44,20 +54,23 @@ if [ -z "$added_lines" ]; then
   exit 0
 fi
 
-# ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect ──
+# ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
+# Enable via: export REACT_RULES_BAN_USEEFFECT=1
 
-if echo "$added_lines" | grep -qE '\b(useEffect|useLayoutEffect|useInsertionEffect)\b'; then
-  # Check for escape hatch: // allow-useEffect: [reason]
-  has_escape=false
-  if [ -f "$file_path" ]; then
-    if grep -qE '//\s*allow-useEffect:' "$file_path"; then
-      has_escape=true
+if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
+  if echo "$added_lines" | grep -qE '\b(useEffect|useLayoutEffect|useInsertionEffect)\b'; then
+    # Check for escape hatch: // allow-useEffect: [reason]
+    has_escape=false
+    if [ -f "$file_path" ]; then
+      if grep -qE '//\s*allow-useEffect:' "$file_path"; then
+        has_escape=true
+      fi
     fi
-  fi
 
-  if [ "$has_escape" = false ]; then
-    echo '{"suppressOutput":true,"systemMessage":"useEffect (and useLayoutEffect/useInsertionEffect) is banned. Use alternatives:\n- React Query / TanStack Query for data fetching\n- zustand for global state management\n- Event handlers (onClick, onSubmit) for user interactions\n- useRef + event-based patterns\n- useTransition / useDeferredValue for concurrent features\n\nIf absolutely necessary, add: // allow-useEffect: [explain why]"}' >&2
-    exit 2
+    if [ "$has_escape" = false ]; then
+      echo '{"suppressOutput":true,"systemMessage":"useEffect (and useLayoutEffect/useInsertionEffect) is banned. Use alternatives:\n- React Query / TanStack Query for data fetching\n- zustand for global state management\n- Event handlers (onClick, onSubmit) for user interactions\n- useRef + event-based patterns\n- useTransition / useDeferredValue for concurrent features\n\nIf absolutely necessary, add: // allow-useEffect: [explain why]"}' >&2
+      exit 2
+    fi
   fi
 fi
 
@@ -81,14 +94,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 3: Ban Chakra UI / legacy imports ─────────────────────
-
-if echo "$added_lines" | grep -qE "from\s+['\"]@chakra-ui/"; then
-  echo '{"suppressOutput":true,"systemMessage":"@chakra-ui/react is banned. Use shadcn/ui components from @/components/ui/ instead (Tailwind-based)."}' >&2
-  exit 2
-fi
-
-# ── Check 4: Ban TypeScript escape hatches ──────────────────────
+# ── Check 3: Ban TypeScript escape hatches ──────────────────────
 
 if echo "$added_lines" | grep -qE '\bas\s+any\b'; then
   echo '{"suppressOutput":true,"systemMessage":"\"as any\" is banned. Fix the type properly instead of casting to any. This applies everywhere, including tests."}' >&2

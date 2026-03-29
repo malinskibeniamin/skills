@@ -12,7 +12,17 @@ set -euo pipefail
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
 cwd=$(pwd)
 prefix="${cwd#"$repo_root"/}/"
-all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -vE '/(components/ui|redpanda-ui)/' | sed "s|^${prefix}||" || true)
+# Skip component library directories
+# Auto-detect: check common conventions, override with UI_LIB_DIRS env var (pipe-separated)
+if [ -z "${UI_LIB_DIRS:-}" ]; then
+  _ui_dirs="components/ui"
+  [ -d "$repo_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
+  [ -d "$repo_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
+  [ -d "$repo_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
+else
+  _ui_dirs="$UI_LIB_DIRS"
+fi
+all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
 
 # Filter to files that actually exist (excludes monorepo siblings)
 changed_files=""
@@ -41,9 +51,9 @@ if [ $fix_exit -ne 0 ]; then
 
   # Only block if error file paths reference non-registry files
   # Biome error lines look like: src/file.tsx:10:5 lint/rule  FIXABLE
-  error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -vE '(components/ui|redpanda-ui)/' | grep -v 'internalError/io' || true)
+  error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -vE "/($_ui_dirs)/" | grep -v 'internalError/io' || true)
   if [ -n "$error_files" ]; then
-    truncated=$(echo "$remaining" | grep -vE '(components/ui|redpanda-ui)/' | head -30)
+    truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -30)
     escaped=$(echo "$truncated" | jq -Rs .)
     echo "{\"decision\":\"block\",\"reason\":\"Biome found unfixable lint errors. Fix these before finishing:\\n\"$escaped\"\"}" >&2
     exit 2

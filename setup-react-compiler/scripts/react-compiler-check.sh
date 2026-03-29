@@ -20,8 +20,18 @@ case "$file_path" in
   *) exit 0 ;;
 esac
 
-# Skip component library directories (uses 'use no memo')
-if echo "$file_path" | grep -qE '/(components/ui|redpanda-ui)/'; then
+# Skip component library directories
+# Auto-detect: check common conventions, override with UI_LIB_DIRS env var (pipe-separated)
+if [ -z "${UI_LIB_DIRS:-}" ]; then
+  _ui_dirs="components/ui"
+  _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  [ -d "$_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
+  [ -d "$_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
+  [ -d "$_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
+else
+  _ui_dirs="$UI_LIB_DIRS"
+fi
+if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
   exit 0
 fi
 

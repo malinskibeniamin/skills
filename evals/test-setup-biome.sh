@@ -39,10 +39,21 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "noReactForwardRef" "REFERENCE has no
 run_content_eval "$SKILL_DIR/REFERENCE.md" "noExplicitAny.*error" "REFERENCE re-enables noExplicitAny in tests"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useIgnoreFile" "REFERENCE has VCS ignore file"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "noRestrictedImports" "REFERENCE has restricted imports rule"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useFilenamingConvention" "REFERENCE has filename convention rule"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "kebab-case" "REFERENCE enforces kebab-case filenames"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "strictCase" "REFERENCE uses strictCase for filenames"
 
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "noUnusedImports" "hook skips noUnusedImports"
-run_content_eval "$SCRIPT" "bun run lint:fix" "hook runs bun run lint:fix"
+run_content_eval "$SCRIPT" "bun run lint:fix:file" "hook runs bun run lint:fix:file (not lint:fix which hardcodes .)"
+run_content_eval "$SCRIPT" "bun run lint:file" "hook runs bun run lint:file for error checking"
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed JS/TS files"
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks on unfixable errors"
+run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
+run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
+
+# ── SKILL.md has file-targeted scripts ─────────────────────────
+
+run_content_eval "$SKILL_DIR/SKILL.md" "lint:file" "SKILL.md documents lint:file script"
+run_content_eval "$SKILL_DIR/SKILL.md" "lint:fix:file" "SKILL.md documents lint:fix:file script"

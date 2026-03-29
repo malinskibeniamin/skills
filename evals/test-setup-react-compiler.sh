@@ -46,12 +46,13 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/components/ui/Button.tsx\"}}" \
   0 "skip: components/ui directory"
 
+# Test UI_LIB_DIRS override for custom directories
 mkdir -p "$tmpdir/redpanda-ui"
 echo "const x = useMemo(() => 1, [])" > "$tmpdir/redpanda-ui/Button.tsx"
 
-run_hook_eval "$SCRIPT" \
+UI_LIB_DIRS="components/ui|redpanda-ui" run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/redpanda-ui/Button.tsx\"}}" \
-  0 "skip: redpanda-ui directory"
+  0 "skip: redpanda-ui via UI_LIB_DIRS override"
 
 rm -rf "$tmpdir"
 
@@ -84,7 +85,8 @@ run_hook_eval "$SCRIPT" \
 run_content_eval "$SCRIPT" "useMemo" "hook checks for useMemo"
 run_content_eval "$SCRIPT" "useCallback" "hook checks for useCallback"
 run_content_eval "$SCRIPT" "React.memo" "hook checks for React.memo"
-run_content_eval "$SCRIPT" "components/ui" "hook skips component library directories"
+run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
+run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
 run_content_eval "$SCRIPT" "use no memo" "hook respects 'use no memo'"
 run_content_eval "$SCRIPT" "suppressOutput" "hook uses suppressOutput"
 
