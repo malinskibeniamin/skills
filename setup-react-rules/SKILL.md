@@ -15,8 +15,8 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 - **Ban eval() and new Function()** — code injection risk (OWASP A03)
 - **Ban .innerHTML assignment** — XSS risk, use textContent or React rendering
 - **Ban inline `style={{}}`** — use Tailwind utility classes
-- **Ban raw hex/rgb in className** — use design tokens (`text-destructive`, not `text-[#ff0000]`)
-- **Ban `!important`** — breaks Tailwind cascade, fix specificity instead
+- **Ban raw hex/rgb in className and CSS** — use design tokens (`text-destructive`, not `text-[#ff0000]`)
+- **Ban `!important`** in TSX/JSX/CSS/SCSS/SASS/LESS — breaks Tailwind cascade
 
 ### Opt-in rules
 
@@ -27,7 +27,7 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 
 ### 1. Create hook scripts
 
-Copy [`scripts/react-rules-check.sh`](scripts/react-rules-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
+Copy [`scripts/react-rules-check.sh`](scripts/react-rules-check.sh), [`scripts/tailwind-check.sh`](scripts/tailwind-check.sh), and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 2. Configure hook in `.claude/settings.json`
 

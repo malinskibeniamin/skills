@@ -237,23 +237,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 18: Ban raw hex/rgb colors in className (use design tokens) ──
-
-case "$file_path" in
-  *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE 'className=.*\[#[0-9a-fA-F]' || \
-       echo "$added_lines" | grep -qE 'className=.*\[rgb'; then
-      echo '{"suppressOutput":true,"systemMessage":"Do not use raw hex/rgb colors in className. Use Tailwind design tokens or CSS variables instead.\n\n// BAD\n<div className=\"text-[#ff0000] bg-[rgb(0,0,0)]\">\n\n// GOOD\n<div className=\"text-destructive bg-background\">"}' >&2
-      exit 2
-    fi
-    ;;
-esac
-
-# ── Check 19: Ban !important in styles ───────────────────────────
-
-if echo "$added_lines" | grep -qE '!important'; then
-  echo '{"suppressOutput":true,"systemMessage":"!important is banned — it breaks the Tailwind cascade and makes styles unmaintainable. Fix specificity issues instead."}' >&2
-  exit 2
-fi
+# ── Checks 18-19 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# tailwind-check.sh covers CSS/SCSS/SASS/LESS + TSX/JSX files
 
 exit 0

@@ -405,38 +405,57 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: style object in .ts file"
 
-# ── Check 18: Ban raw hex/rgb in className ───────────────────────
+# ── Tailwind checks (via tailwind-check.sh) ──────────────────────
 
-tmpfile="$_rr_tmpdir/test.tsx"
-echo '<div className="text-[#ff0000] mt-4">red</div>' > "$tmpfile"
+TW_SCRIPT="$REPO_ROOT/setup-react-rules/scripts/tailwind-check.sh"
 
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw hex in className" "design token"
-
-tmpfile="$_rr_tmpdir/test.tsx"
-echo '<div className="bg-[rgb(0,0,0)]">dark</div>' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw rgb in className" "design token"
-
-# Allow normal Tailwind classes
-tmpfile="$_rr_tmpdir/test.tsx"
-echo '<div className="text-destructive bg-background mt-4">ok</div>' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: Tailwind design token classes"
-
-# ── Check 19: Ban !important ─────────────────────────────────────
-
+# Ban !important in TSX
 tmpfile="$_rr_tmpdir/test.tsx"
 echo '<div className="mt-4 !important">forced</div>' > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: !important in className"
+  2 "block: !important in TSX"
+
+# Ban !important in CSS
+tmpfile="$_rr_tmpdir/test.css"
+echo '.card { margin-top: 16px !important; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: !important in CSS"
+
+# Ban !important in SCSS
+tmpfile="$_rr_tmpdir/test.scss"
+echo '.card { color: red !important; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: !important in SCSS"
+
+# Ban raw hex in CSS
+tmpfile="$_rr_tmpdir/test.css"
+echo '.card { color: #ff0000; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw hex in CSS" "design token"
+
+# Allow CSS variables (not raw hex)
+tmpfile="$_rr_tmpdir/test.css"
+echo '.card { color: var(--destructive); }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: CSS variables"
+
+# Skip .ts files (not CSS or TSX)
+tmpfile="$_rr_tmpdir/test.ts"
+echo 'const x = "!important"' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "skip: .ts file in tailwind check"
 
 # ── Hook script content checks ──────────────────────────────────
 
