@@ -204,6 +204,81 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx some-other-tool"}}' \
   0 "allow: bunx for non-scripted tools"
 
+# ── rm -rf guards ─────────────────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf /var/data"}}' \
+  2 "block: rm -rf /var/data" "Destructive"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -r src/"}}' \
+  2 "block: rm -r src/"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf node_modules"}}' \
+  0 "allow: rm -rf node_modules"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf dist .next"}}' \
+  0 "allow: rm -rf dist .next"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf node_modules/.cache"}}' \
+  0 "allow: rm -rf node_modules/.cache"
+
+# ── git push --force ──────────────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git push --force"}}' \
+  2 "block: git push --force" "force"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git push origin main -f"}}' \
+  2 "block: git push origin main -f"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git push --force-with-lease"}}' \
+  0 "allow: git push --force-with-lease"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git push origin main"}}' \
+  0 "allow: git push origin main"
+
+# ── git reset --hard ──────────────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git reset --hard"}}' \
+  2 "block: git reset --hard" "reset"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git reset --soft HEAD~1"}}' \
+  0 "allow: git reset --soft HEAD~1"
+
+# ── git checkout . / git restore . ────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git checkout ."}}' \
+  2 "block: git checkout ." "checkout"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git restore ."}}' \
+  2 "block: git restore ."
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git checkout -- src/file.tsx"}}' \
+  0 "allow: git checkout -- src/file.tsx"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git restore src/file.tsx"}}' \
+  0 "allow: git restore src/file.tsx"
+
+# ── destructive command content checks ────────────────────────
+
+run_content_eval "$SCRIPT" "rm.*recursive" "hook blocks rm -rf"
+run_content_eval "$SCRIPT" "git push.*force" "hook blocks git push --force"
+run_content_eval "$SCRIPT" "git reset.*hard" "hook blocks git reset --hard"
+run_content_eval "$SCRIPT" "git.*checkout.*restore" "hook blocks git checkout/restore ."
+
 # ── session-env.sh ──────────────────────────────────────────────
 
 # Test that session-env.sh writes expected env vars

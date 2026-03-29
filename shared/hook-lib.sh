@@ -1,0 +1,144 @@
+#!/bin/bash
+# Shared library for Claude Code hook scripts.
+# Source this at the top of PostToolUse and PreToolUse hooks.
+#
+# Usage in PostToolUse (Edit|Write) hooks:
+#   source "$(dirname "$0")/../../shared/hook-lib.sh"
+#   hook_parse_edit_write        # sets: file_path
+#   hook_filter_extensions "ts|tsx|js|jsx"
+#   hook_get_added_lines         # sets: added_lines
+#   ... your checks ...
+#   hook_block "Error message"
+#
+# Usage in PreToolUse (Bash) hooks:
+#   source "$(dirname "$0")/../../shared/hook-lib.sh"
+#   hook_parse_bash              # sets: command
+#   ... your checks ...
+#   hook_deny "Error message"
+
+# ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
+
+hook_parse_edit_write() {
+  _hook_input=$(cat)
+  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty')
+
+  if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ]; then
+    exit 0
+  fi
+
+  file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty')
+
+  if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
+    exit 0
+  fi
+}
+
+# ── Filter by file extensions (pipe-separated, e.g. "ts|tsx|js|jsx") ──
+
+hook_filter_extensions() {
+  local exts="$1"
+  local match=false
+  local IFS='|'
+  for ext in $exts; do
+    case "$file_path" in
+      *."$ext") match=true; break ;;
+    esac
+  done
+  if [ "$match" = false ]; then
+    exit 0
+  fi
+}
+
+# ── Skip test files ──────────────────────────────────────────────
+
+hook_skip_tests() {
+  case "$file_path" in
+    *.test.*|*.spec.*) exit 0 ;;
+  esac
+  if echo "$file_path" | grep -qE '/__tests__/'; then
+    exit 0
+  fi
+}
+
+# ── Skip component library directories (auto-detect + UI_LIB_DIRS) ──
+
+hook_skip_ui_dirs() {
+  if [ -z "${UI_LIB_DIRS:-}" ]; then
+    _ui_dirs="components/ui"
+    _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    [ -d "$_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
+    [ -d "$_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
+    [ -d "$_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
+  else
+    _ui_dirs="$UI_LIB_DIRS"
+  fi
+  if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
+    exit 0
+  fi
+}
+
+# ── Get added lines from git diff (sets global: added_lines) ────
+
+hook_get_added_lines() {
+  local diff_output=""
+  diff_output=$(git diff HEAD -- "$file_path" 2>/dev/null) || true
+
+  if [ -z "$diff_output" ]; then
+    added_lines=$(cat "$file_path")
+  else
+    added_lines=$(echo "$diff_output" | grep '^+' | grep -v '^+++' || true)
+  fi
+
+  if [ -z "$added_lines" ]; then
+    exit 0
+  fi
+}
+
+# ── PostToolUse: Block with systemMessage (exit 2) ──────────────
+
+hook_block() {
+  local msg="$1"
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+  exit 2
+}
+
+# ── PostToolUse: Warn with systemMessage (exit 0) ───────────────
+
+hook_warn() {
+  local msg="$1"
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+  exit 0
+}
+
+# ── PreToolUse (Bash): Parse stdin, extract command ──────────────
+
+hook_parse_bash() {
+  _hook_input=$(cat)
+  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty')
+
+  if [ "$_hook_tool_name" != "Bash" ]; then
+    exit 0
+  fi
+
+  command=$(echo "$_hook_input" | jq -r '.tool_input.command // empty')
+
+  if [ -z "$command" ]; then
+    exit 0
+  fi
+}
+
+# ── PreToolUse: Deny with permissionDecision (exit 2) ────────────
+
+hook_deny() {
+  local msg="$1"
+  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"$msg\"}" >&2
+  exit 2
+}
+
+# ── Stop hook: Block with decision (exit 2) ──────────────────────
+
+hook_stop_block() {
+  local msg="$1"
+  echo "{\"decision\":\"block\",\"reason\":\"$msg\"}" >&2
+  exit 2
+}

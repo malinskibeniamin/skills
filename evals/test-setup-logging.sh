@@ -106,6 +106,6 @@ run_content_eval "$SCRIPT" "console\.error" "hook checks console.error"
 run_content_eval "$SCRIPT" "console\.warn" "hook checks console.warn"
 run_content_eval "$SCRIPT" "console\.debug" "hook checks console.debug"
 run_content_eval "$SCRIPT" "logger\." "hook checks logger concatenation"
-run_content_eval "$SCRIPT" "__tests__" "hook skips __tests__ directory"
+run_content_eval "$SCRIPT" "hook_skip_tests" "hook uses shared test skip"
 
 rm -rf "$_lg_tmpdir"

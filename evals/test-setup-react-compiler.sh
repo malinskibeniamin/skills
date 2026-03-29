@@ -85,9 +85,8 @@ run_hook_eval "$SCRIPT" \
 run_content_eval "$SCRIPT" "useMemo" "hook checks for useMemo"
 run_content_eval "$SCRIPT" "useCallback" "hook checks for useCallback"
 run_content_eval "$SCRIPT" "React.memo" "hook checks for React.memo"
-run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
-run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
+run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
 run_content_eval "$SCRIPT" "use no memo" "hook respects 'use no memo'"
-run_content_eval "$SCRIPT" "suppressOutput" "hook uses suppressOutput"
+run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
 
 rm -rf "$_rc_tmpdir"

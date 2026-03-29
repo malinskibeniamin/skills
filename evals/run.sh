@@ -144,7 +144,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 if [ $FAIL -gt 0 ]; then
   echo ""
   echo "Failures:"
-  echo -e "$ERRORS"
+  printf '%b\n' "$ERRORS"
   echo ""
   exit 1
 fi

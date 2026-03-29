@@ -1,53 +1,11 @@
 #!/bin/bash
 set -euo pipefail
+source "$(dirname "$0")/../../shared/hook-lib.sh"
 
-input=$(cat)
-tool_name=$(echo "$input" | jq -r '.tool_name // empty')
-
-if [ "$tool_name" != "Edit" ] && [ "$tool_name" != "Write" ]; then
-  exit 0
-fi
-
-file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
-
-if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
-  exit 0
-fi
-
-# Skip component library directories
-# Auto-detect: check common conventions, override with UI_LIB_DIRS env var (pipe-separated)
-if [ -z "${UI_LIB_DIRS:-}" ]; then
-  _ui_dirs="components/ui"
-  _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-  [ -d "$_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
-  [ -d "$_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
-  [ -d "$_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
-else
-  _ui_dirs="$UI_LIB_DIRS"
-fi
-if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
-  exit 0
-fi
-
-# Only check TS/TSX/JS/JSX files
-case "$file_path" in
-  *.ts|*.tsx|*.js|*.jsx) ;;
-  *) exit 0 ;;
-esac
-
-# Get added lines from diff
-diff_output=""
-diff_output=$(git diff HEAD -- "$file_path" 2>/dev/null) || true
-
-if [ -z "$diff_output" ]; then
-  added_lines=$(cat "$file_path")
-else
-  added_lines=$(echo "$diff_output" | grep '^+' | grep -v '^+++' || true)
-fi
-
-if [ -z "$added_lines" ]; then
-  exit 0
-fi
+hook_parse_edit_write
+hook_skip_ui_dirs
+hook_filter_extensions "ts|tsx|js|jsx"
+hook_get_added_lines
 
 # ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
 # Enable via: export REACT_RULES_BAN_USEEFFECT=1
@@ -63,8 +21,7 @@ if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
     fi
 
     if [ "$has_escape" = false ]; then
-      echo '{"suppressOutput":true,"systemMessage":"useEffect (and useLayoutEffect/useInsertionEffect) is banned. Use alternatives:\n- React Query / TanStack Query for data fetching\n- zustand for global state management\n- Event handlers (onClick, onSubmit) for user interactions\n- useRef + event-based patterns\n- useTransition / useDeferredValue for concurrent features\n\nIf absolutely necessary, add: // allow-useEffect: [explain why]"}' >&2
-      exit 2
+      hook_block "useEffect (and useLayoutEffect/useInsertionEffect) is banned. Use alternatives:\n- React Query / TanStack Query for data fetching\n- zustand for global state management\n- Event handlers (onClick, onSubmit) for user interactions\n- useRef + event-based patterns\n- useTransition / useDeferredValue for concurrent features\n\nIf absolutely necessary, add: // allow-useEffect: [explain why]"
     fi
   fi
 fi

@@ -274,6 +274,6 @@ run_content_eval "$CHECK_SCRIPT" "URLSearchParams" "check: bans URLSearchParams"
 run_content_eval "$CHECK_SCRIPT" "validateSearch" "check: requires validateSearch"
 run_content_eval "$CHECK_SCRIPT" "code splitting" "check: warns on route file exports"
 run_content_eval "$CHECK_SCRIPT" "nuqs" "check: suggests nuqs"
-run_content_eval "$CHECK_SCRIPT" "suppressOutput" "check: uses suppressOutput"
+run_content_eval "$CHECK_SCRIPT" "hook_block|hook_warn" "check: uses shared output functions"
 
 rm -rf "$_rt_tmpdir"

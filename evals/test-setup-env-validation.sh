@@ -91,6 +91,6 @@ run_hook_eval "$SCRIPT" \
 
 run_content_eval "$SCRIPT" "process" "hook checks for process.env"
 run_content_eval "$SCRIPT" "env.ts" "hook skips env.ts"
-run_content_eval "$SCRIPT" "test\.\*" "hook skips test files"
+run_content_eval "$SCRIPT" "hook_skip_tests" "hook uses shared test skip"
 
 rm -rf "$_ev_tmpdir"

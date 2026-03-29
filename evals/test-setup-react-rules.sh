@@ -391,8 +391,8 @@ run_hook_eval "$SCRIPT" \
 
 # ── Hook script content checks ──────────────────────────────────
 
-run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
-run_content_eval "$SCRIPT" "REACT_RULES_BAN_USEEFFECT" "hook checks REACT_RULES_BAN_USEEFFECT env var"
+run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
+run_content_eval "$SCRIPT" "REACT_RULES_BAN_USEEFFECT" "hook checks useEffect opt-in env var"
 run_content_eval "$SCRIPT" "variant" "hook suggests using variant prop"
 run_content_eval "$SCRIPT" "asChild" "hook suggests asChild for Link wrapping"
 run_content_eval "$SCRIPT" "AlertTitle" "hook checks AlertTitle icon"

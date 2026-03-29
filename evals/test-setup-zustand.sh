@@ -54,80 +54,81 @@ run_hook_eval "$SCRIPT" \
 
 # ── Check 1: Ban single-parens create<T>() ───────────────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.ts)
+_zs_tmpdir=$(mktemp -d /tmp/zustand-evals-XXXXXX)
+tmpfile="$_zs_tmpdir/test.ts"
 printf "import { create } from 'zustand'\nconst useStore = create<State>((set) => ({}))\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: single-parens create<State>()" "middleware type inference"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 1: Allow double-parens create<T>()() ──────────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.ts)
+tmpfile="$_zs_tmpdir/test.ts"
 printf "import { create } from 'zustand'\nconst useStore = create<State>()((set) => ({}))\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: double-parens create<State>()()"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 1: Skip create check in non-zustand files ─────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.ts)
+tmpfile="$_zs_tmpdir/test.ts"
 printf "import { create } from 'other-lib'\nconst x = create<Foo>((a) => ({}))\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "skip: create<T>() in non-zustand file"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 2: Ban inline object selectors ─────────────────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.tsx)
+tmpfile="$_zs_tmpdir/test.tsx"
 printf "const { a, b } = useAppStore((s) => ({ a: s.a, b: s.b }))\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: inline object selector" "useShallow"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 2: Allow single-value selectors ────────────────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.tsx)
+tmpfile="$_zs_tmpdir/test.tsx"
 printf "const count = useAppStore((s) => s.count)\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: single-value selector"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 3: Ban localStorage in zustand store files ─────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.ts)
+tmpfile="$_zs_tmpdir/test.ts"
 printf "import { create } from 'zustand'\nconst data = localStorage.getItem('key')\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: localStorage in zustand file" "persist middleware"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Check 3: Allow localStorage in non-zustand files ─────────────
 
-tmpfile=$(mktemp /tmp/zustand-eval-XXXX.ts)
+tmpfile="$_zs_tmpdir/test.ts"
 printf "const data = localStorage.getItem('key')\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: localStorage in non-zustand file"
 
-rm -f "$tmpfile"
+# tmpfile reused in tmpdir
 
 # ── Hook script content ──────────────────────────────────────────
 
@@ -135,4 +136,6 @@ run_content_eval "$SCRIPT" "create<" "hook checks for create pattern"
 run_content_eval "$SCRIPT" "useShallow" "hook suggests useShallow"
 run_content_eval "$SCRIPT" "localStorage" "hook checks for localStorage"
 run_content_eval "$SCRIPT" "persist" "hook suggests persist middleware"
-run_content_eval "$SCRIPT" "suppressOutput" "hook uses suppressOutput"
+run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
+
+rm -rf "$_zs_tmpdir"
