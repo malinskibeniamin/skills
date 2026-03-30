@@ -156,5 +156,37 @@ run_content_eval "$SCRIPT" "axios" "hook checks for axios"
 run_content_eval "$SCRIPT" "PlainMessage" "hook checks for PlainMessage"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
 run_content_eval "$SCRIPT" "allow-direct-query" "hook respects escape hatch"
+run_content_eval "$SCRIPT" "typeName" "hook checks for \$typeName object literals"
+run_content_eval "$SCRIPT" "uses_connect_transport" "hook allows useTransport/callUnaryMethod pattern"
+
+# ── REFERENCE content ────────────────────────────────────────────
+
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useTransport" "REFERENCE documents useTransport pattern"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "protovalidate" "REFERENCE documents Standard Schema + protovalidate"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "toBinary" "REFERENCE documents schema-first serialization"
+
+# ── Check 1: Allow useQuery with @connectrpc/connect (useTransport pattern) ─
+
+tmpfile="$_cq_tmpdir/test.tsx"
+printf "import { useTransport, callUnaryMethod } from '@connectrpc/connect'\nimport { useQuery } from '@tanstack/react-query'\nimport { SomeService } from '@buf/gen'\n" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: useQuery with @connectrpc/connect import (useTransport pattern)"
+
+# ── Check 7: (v2) Ban $typeName object literals ─────────────────
+
+tmpfile="$_cq_tmpdir/test.ts"
+# Create a fake package.json with protobuf v2 for detection
+mkdir -p "$_cq_tmpdir"
+echo '{"dependencies":{"@bufbuild/protobuf":"^2.0.0"}}' > "$_cq_tmpdir/package.json"
+printf "const msg = { \\\$typeName: 'foo.Bar', field: 'value' }\n" > "$tmpfile"
+
+# Run from the tmpdir so package.json is found
+cd "$_cq_tmpdir"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: manual \$typeName object literal (v2)" "create()"
+cd "$REPO_ROOT"
 
 rm -rf "$_cq_tmpdir"

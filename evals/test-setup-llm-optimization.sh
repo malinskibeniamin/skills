@@ -19,6 +19,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-llm-optimization" "SKILL.md
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "AI_AGENT" "SKILL.md mentions AI_AGENT"
 run_content_eval "$SKILL_DIR/SKILL.md" "CLAUDECODE" "SKILL.md mentions CLAUDECODE"
+run_content_eval "$SKILL_DIR/SKILL.md" "NODE_OPTIONS" "SKILL.md mentions NODE_OPTIONS"
+run_content_eval "$SKILL_DIR/SKILL.md" "pool=forks" "SKILL.md mentions pool=forks"
 
 # ── llm-env.sh ──────────────────────────────────────────────────
 
@@ -42,33 +44,51 @@ unset CLAUDE_ENV_FILE
 
 # ── llm-test-flags.sh ──────────────────────────────────────────
 
-run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":"vitest --verbose"}}' \
-  2 "block: vitest --verbose" "--verbose"
+# ── Rewrite: strip --verbose via updatedInput (exit 0, not 2) ──
 
 run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":"bun test --verbose"}}' \
-  2 "block: bun test --verbose" "--verbose"
+  '{"tool_name":"Bash","tool_input":{"command":"vitest --verbose"}}' \
+  0 "rewrite: vitest --verbose → strip verbose" "updatedInput"
 
 run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":"jest --verbose"}}' \
-  2 "block: jest --verbose" "--verbose"
+  '{"tool_name":"Bash","tool_input":{"command":"bun test --verbose"}}' \
+  0 "rewrite: bun test --verbose → strip verbose" "updatedInput"
 
 run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":"vitest --run"}}' \
-  0 "allow: vitest --run (no verbose)"
+  '{"tool_name":"Bash","tool_input":{"command":"jest --verbose"}}' \
+  0 "rewrite: jest --verbose → strip verbose" "updatedInput"
+
+# ── Suggestions: vitest without flags gets additionalContext ────
 
 run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":"bun test"}}' \
-  0 "allow: bun test (no verbose)"
+  '{"tool_name":"Bash","tool_input":{"command":"vitest --run"}}' \
+  0 "suggest: vitest --run (no verbose)" "pool=forks"
 
 run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":"echo hello"}}' \
-  0 "allow: unrelated command"
+  '{"tool_name":"Bash","tool_input":{"command":"bun test"}}' \
+  0 "suggest: bun test" "bail"
+
+# ── No modification: flags already present ──────────────────────
 
 run_hook_eval "$FLAGS_SCRIPT" \
-  '{"tool_input":{"command":""}}' \
-  0 "allow: empty command"
+  '{"tool_name":"Bash","tool_input":{"command":"vitest --pool=threads --bail=5 --teardownTimeout=10000"}}' \
+  0 "skip: all flags already present"
+
+# ── No modification: unrelated commands ─────────────────────────
+
+run_hook_eval "$FLAGS_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"echo hello"}}' \
+  0 "skip: unrelated command"
+
+run_hook_eval "$FLAGS_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":""}}' \
+  0 "skip: empty command"
+
+# ── Skip: non-Bash tool ────────────────────────────────────────
+
+run_hook_eval "$FLAGS_SCRIPT" \
+  '{"tool_name":"Read","tool_input":{"file_path":"foo.ts"}}' \
+  0 "skip: non-Bash tool"
 
 # ── llm-truncate.sh ────────────────────────────────────────────
 

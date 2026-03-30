@@ -88,5 +88,13 @@ run_content_eval "$SCRIPT" "React.memo" "hook checks for React.memo"
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
 run_content_eval "$SCRIPT" "use no memo" "hook respects 'use no memo'"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
+run_content_eval "$SCRIPT" "Naming test\|naming test" "hook includes naming-test heuristic"
+
+# ── REFERENCE content ────────────────────────────────────────────
+
+run_content_eval "$SKILL_DIR/REFERENCE.md" "infer" "REFERENCE documents infer mode"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "annotation" "REFERENCE documents annotation mode"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Inline callbacks" "REFERENCE has inline callbacks guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Derive.*don.*store\|derive.*inline" "REFERENCE has derive-don't-store rule"
 
 rm -rf "$_rc_tmpdir"
