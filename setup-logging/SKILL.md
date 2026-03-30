@@ -1,6 +1,6 @@
 ---
 name: setup-logging
-description: Enforce structured logging patterns via PostToolUse hook — ban console.error/warn/debug in production code, require structured logger with object arguments. Use when setting up logging, enforcing structured logs, configuring Pino, or banning console.error/warn.
+description: Enforce structured logging patterns via PostToolUse hook — ban console.error/warn/debug in production code, require structured logger with object arguments. Use when setting up logging, enforcing structured logs, or banning console.error/warn.
 ---
 
 # Setup Logging
@@ -12,22 +12,26 @@ description: Enforce structured logging patterns via PostToolUse hook — ban co
 - **Flags string concatenation** in log calls — enforces structured objects
 - Skips test files (`*.test.*`, `*.spec.*`, `__tests__/`)
 - Complements Biome's `noConsole` rule (which bans `console.log`) by extending to error/warn/debug and enforcing structured format
+- **Library-agnostic** — works with any structured logger (Pino, Winston, Bunyan, etc.)
 
 ## Steps
 
-### 1. Install
+### 1. Install a structured logger
 
-```bash
-bun add pino
-bun add -D pino-pretty
-```
+Pick one — the hook doesn't care which, only that you use `logger.X({...})` instead of `console.X(...)`:
+
+| Logger | Install | Notes |
+|--------|---------|-------|
+| **Pino** | `bun add pino` | Fastest, JSON-native, recommended |
+| **Winston** | `bun add winston` | Most popular, flexible transports |
+| **Bunyan** | `bun add bunyan` | JSON-native, mature |
 
 ### 2. Create logger
 
-Create `src/lib/logger.ts` from [REFERENCE.md](REFERENCE.md). Key points:
-- Pino for structured JSON output — works with Axiom, Datadog, any log aggregator
+Create `src/lib/logger.ts` — see [REFERENCE.md](REFERENCE.md) for a Pino example. Adapt for your chosen library. Key requirements:
+- Structured JSON output (not string messages)
 - Pretty-print in development, JSON in production
-- Context-aware child loggers via `logger.child({ module: "auth" })`
+- Context-aware child loggers (e.g. `logger.child({ module: "auth" })`)
 
 ### 3. Create hook script
 

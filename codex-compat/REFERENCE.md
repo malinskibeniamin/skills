@@ -126,7 +126,7 @@ All commits must follow: `type(scope): description`
 ## Logging
 
 - Do not use `console.error()`, `console.warn()`, or `console.debug()` in production code
-- Use the structured logger: `import { logger } from "@/lib/logger"`
+- Use a structured logger: `import { logger } from "@/lib/logger"`
 - Pass objects to logger, not string concatenation: `logger.error({ message: "failed", error: err })`
 
 ## Accessibility

@@ -62,29 +62,27 @@ Production (JSON):
 {"level":50,"time":1234567891,"message":"Request failed","requestId":"abc-123","path":"/api/users","error":{"message":"Connection refused","stack":"..."}}
 ```
 
-## Why Pino
+## Logger Comparison
 
-| Feature | Pino | Winston | console.* |
-|---------|------|---------|-----------|
-| Structured JSON | Yes | Yes | No |
-| Performance | Fastest (low overhead) | Slower | N/A |
-| Log levels | Yes | Yes | Limited |
-| Child loggers | Yes | Yes | No |
-| Bundle size | ~30KB | ~200KB | 0 |
-| Browser support | Via pino-pretty | No | Yes |
+| Feature | Pino | Winston | Bunyan | console.* |
+|---------|------|---------|--------|-----------|
+| Structured JSON | Yes | Yes | Yes | No |
+| Performance | Fastest | Slower | Medium | N/A |
+| Log levels | Yes | Yes | Yes | Limited |
+| Child loggers | Yes | Yes | Yes | No |
+| Bundle size | ~30KB | ~200KB | ~50KB | 0 |
 
-## Hook Configuration
+The hook is **library-agnostic** — it checks for `logger.X(...)` calls and string concatenation patterns. Any logger that uses `logger.error({...})` syntax will work.
 
-`.claude/settings.json`:
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "command": ".claude/hooks/logging-check.sh"
-      }
-    ]
-  }
-}
-```
+## Complementary Tools
+
+Structured logging and error tracking are different concerns:
+
+| Concern | What it does | Examples |
+|---------|-------------|----------|
+| **Structured logger** | Formats log lines as JSON, writes to stdout/transport | Pino, Winston, Bunyan |
+| **Log aggregation** | Stores, indexes, and queries log lines | Axiom, Grafana Loki, Datadog, BetterStack |
+| **Error tracking** | Captures unhandled exceptions with stack traces and context | Sentry, PostHog, GlitchTip |
+| **Feature flags** | Toggle features without deploys | PostHog, Flagsmith, Unleash |
+
+A typical production stack combines one from each category. This skill only enforces the **logging pattern** — pick your own tools for the rest.
