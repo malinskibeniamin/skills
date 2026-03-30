@@ -14,18 +14,22 @@ Runs the generic **frontend-starter-kit** first, then adds additional React enfo
 2. **setup-biome** — Biome + Ultracite with auto-fix hook
 3. **setup-quality-gate** — quality:gate script, CI workflow, tsgo Stop hook, bundle guard
 4. **setup-llm-optimization** — AI_AGENT=1, output truncation
-5. **setup-react-compiler** — React Compiler + memoization check
+5. **setup-react-compiler** — React Compiler + memoization check, compiler modes, derived-state detection
 6. **setup-zustand** — Zustand best practices enforcement
 7. **setup-accessibility** — ARIA enforcement, Playwright AXE, WCAG 2.1 AA
+8. **setup-react-rules** — Ban raw HTML, TS escape hatches, XSS vectors, barrel imports, passive listeners, heavy dep warnings (useEffect ban via starter kit)
+9. **setup-env-validation** — t3-env + zod, ban raw process.env access
+10. **setup-conventional-commits** — Enforce type(scope): description commit format
+11. **setup-react-doctor** — Health scoring with Stop hook
+12. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
+13. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement, Standard Schema + protovalidate
+14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core accessibility testing
 
-### Additional React skills (generic — usable in any project)
-8. **setup-react-rules** — Ban raw HTML, TS escape hatches, XSS vectors (useEffect ban via starter kit)
-9. **setup-react-doctor** — Health scoring with Stop hook
-10. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
-11. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
+### Diagnostics
+15. **test-guardian** — Test health across frameworks, async leak detection
 
 ### Redpanda-specific
-12. **setup-registry-workflow** — Redpanda UI registry component workflow
+16. **setup-registry-workflow** — Redpanda UI registry component workflow
 
 ## Steps
 

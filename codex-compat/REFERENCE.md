@@ -104,12 +104,16 @@ All commits must follow: `type(scope): description`
 - Do not use `dangerouslySetInnerHTML` without DOMPurify
 - Do not use `eval()` or `new Function()`
 - Do not assign `.innerHTML` directly
-- Do not use `as any`, `@ts-ignore`, or `@ts-expect-error`
+- Do not use `as any`, `as Record<string, any>`, `as Record<string, unknown>`, `@ts-ignore`, or `@ts-expect-error`
 - Do not remove focus outlines (`outline: none`)
 - Do not use manual `useMemo` / `useCallback` / `React.memo` (React Compiler handles this)
 - Icon-only buttons must have `aria-label`
 - Buttons must have onClick, asChild, type="submit", or disabled
 - Prefer `<Link>` over `onClick + navigate()`
+- Do not use barrel imports (re-exports from index files) — import directly from source files
+- Use `{ passive: true }` on `addEventListener('scroll'|'touchstart'|'wheel')`
+- Use dynamic `import()` or `React.lazy()` for heavy deps (`chart.js`, `d3`, `three.js`, `pdf-lib`)
+- When writing `useEffect`, use named function expressions: `useEffect(function syncDocumentTitle() { ... }, [title])`
 
 ## Tailwind CSS
 
@@ -140,5 +144,7 @@ All commits must follow: `type(scope): description`
 ## State & Data
 
 - Use zustand for client state, TanStack Query for server state
-- Do not use raw `useQuery` / `useMutation` when ConnectRPC is available
+- Do not use raw `useQuery` / `useMutation` when ConnectRPC is available (exception: `useTransport`/`callUnaryMethod` pattern with `@connectrpc/connect` imports)
+- Protobuf v2: use `create(Schema, { ... })` — do not construct messages as object literals with `$typeName`
+- Protobuf v2: use Standard Schema + protovalidate as react-hook-form resolver instead of duplicating validation in Zod
 ```

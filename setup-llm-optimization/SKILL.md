@@ -8,7 +8,7 @@ description: Configure Claude Code hooks for token-efficient AI agent workflows.
 ## What This Sets Up
 
 - **SessionStart hook** setting `AI_AGENT=1` and `CLAUDECODE=1` for LLM-friendly test output
-- **PreToolUse hook** auto-injecting agent reporter flags on test commands
+- **PreToolUse hook** silently stripping `--verbose` from test commands via `updatedInput` rewrite
 - **PostToolUse hook** truncating verbose bash output to reduce context bloat
 
 ## Steps
@@ -28,7 +28,7 @@ Add to hooks config (merge with existing):
 
 - [ ] All hook scripts are executable
 - [ ] `AI_AGENT` and `CLAUDECODE` are set after session start
-- [ ] `bun test --verbose` is blocked
+- [ ] `bun test --verbose` is silently rewritten to `bun test`
 - [ ] Long output is truncated
 
 ### 4. Commit

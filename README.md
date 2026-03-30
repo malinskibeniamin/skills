@@ -38,7 +38,7 @@ I just installed the frontend-starter-kit skills. Run all setup skills now, then
 ## Phase 1: Run setup skills
 
 Execute the frontend-starter-kit skill. This will:
-- Install all 14 setup skills (toolchain, biome, quality-gate, etc.)
+- Install all 15 setup skills (toolchain, biome, quality-gate, etc.)
 - Create all hook scripts in .claude/hooks/
 - Set up src/env.ts, biome.jsonc, .github/workflows/quality-gate.yml
 - Install community workflow skills
@@ -97,7 +97,7 @@ The migration is ordered from least disruptive (auto-fixable lint) to most disru
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Complete frontend stack in one command: 13 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query) + test-guardian diagnostics + 13 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary). `console.*` is fully covered by Biome's `noConsole`.
+- **frontend-starter-kit** — Complete frontend stack in one command: 15 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + test-guardian diagnostics + 13 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary). `console.*` is fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
