@@ -7,8 +7,14 @@ description: Configure Claude Code hooks for token-efficient AI agent workflows.
 
 ## What This Sets Up
 
-- **SessionStart hook** setting `AI_AGENT=1` and `CLAUDECODE=1` for LLM-friendly test output
-- **PreToolUse hook** silently stripping `--verbose` from test commands via `updatedInput` rewrite
+- **SessionStart hook** setting `AI_AGENT=1`, `CLAUDECODE=1`, and `NODE_OPTIONS=--max-old-space-size=8192`
+- **PreToolUse hook** optimizing test commands via `updatedInput` rewrite:
+  - Strip `--verbose` (wastes tokens)
+  - Inject `--pool=forks` (prevents zombie processes)
+  - Inject `--bail=1` (fail fast, save tokens)
+  - Inject `--teardownTimeout=5000` (prevent hanging teardown)
+  - Inject `--reporter=github` in CI
+  - Jest: inject `--bail --forceExit`
 - **PostToolUse hook** truncating verbose bash output to reduce context bloat
 
 ## Steps
@@ -28,8 +34,11 @@ Add to hooks config (merge with existing):
 
 - [ ] All hook scripts are executable
 - [ ] `AI_AGENT` and `CLAUDECODE` are set after session start
-- [ ] `bun test --verbose` is silently rewritten to `bun test`
+- [ ] `bun test --verbose` is silently rewritten to `bun test --pool=forks --bail=1 --teardownTimeout=5000`
+- [ ] `NODE_OPTIONS=--max-old-space-size=8192` is set after session start
 - [ ] Long output is truncated
+
+See [REFERENCE.md](REFERENCE.md) for vitest config optimizations and test runner tuning.
 
 ### 4. Commit
 
