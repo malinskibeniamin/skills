@@ -1,6 +1,6 @@
 ---
 name: work-automation-kit
-description: Meta-skill that installs planning and project management workflow skills — PRD creation, implementation planning, issue breakdown, and bug triage. Use when setting up project planning workflows, creating PRDs, breaking work into issues, or bootstrapping project management automation.
+description: Install planning and project management skills — PRD creation, implementation planning, issue breakdown, bug triage. Use when setting up project planning workflows or creating PRDs.
 ---
 
 # Work Automation Kit

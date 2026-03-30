@@ -1,6 +1,6 @@
 ---
 name: setup-react-compiler
-description: Install React Compiler (babel-plugin-react-compiler) with rsbuild config and Claude Code hook to enforce compiler-friendly patterns. Flags manual memoization, derived-state-via-useEffect, and useRef-as-cache. Use when setting up React Compiler or adopting post-compiler coding patterns.
+description: Install React Compiler with rsbuild and enforce compiler-friendly patterns via PostToolUse hooks. Flags manual memoization, derived state, useRef cache. Use when setting up React Compiler or post-compiler patterns.
 ---
 
 # Setup React Compiler

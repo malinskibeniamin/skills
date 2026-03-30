@@ -1,6 +1,6 @@
 ---
 name: setup-react-rules
-description: Configure Claude Code hooks enforcing React best practices — ban raw HTML elements (use shadcn/ui components), ban TypeScript escape hatches (as any, as Record<string, any/unknown>, ts-ignore, ts-expect-error), ban dangerouslySetInnerHTML/eval/.innerHTML, ban barrel imports, require passive event listeners, warn on heavy static imports, enforce named useEffect. Optional useEffect ban (opt-in). Auto-detects component library directory. Use when enforcing React patterns or setting up component library enforcement.
+description: Enforce React/TS/security rules via PostToolUse hooks — bans raw HTML, TS escape hatches, XSS vectors, barrel imports, missing passive listeners. Use when enforcing React patterns or component library standards.
 ---
 
 # Setup React Rules

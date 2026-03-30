@@ -1,6 +1,6 @@
 ---
 name: setup-e2e-testing
-description: Configure Playwright for end-to-end testing with Testcontainers for infrastructure, axe-core for accessibility audits, and test patterns for forms, tables, and multi-step workflows. Use when setting up e2e tests, writing Playwright tests, or adding accessibility testing to a frontend project.
+description: Set up Playwright + Testcontainers + axe-core for e2e and accessibility testing. Includes patterns for forms, tables, workflows. Use when setting up e2e tests or writing Playwright tests.
 ---
 
 # Setup E2E Testing

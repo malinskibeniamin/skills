@@ -1,6 +1,6 @@
 ---
 name: setup-toolchain
-description: Configure Claude Code hooks to enforce bun as package manager and tsgo as TypeScript compiler. Blocks npm, npx, tsc, global installs, and direct bunx for scripted tools. Use when setting up frontend toolchain enforcement, banning npm, or configuring package manager hooks.
+description: Enforce bun + tsgo as toolchain via PreToolUse hooks. Blocks npm, npx, tsc, global installs. Use when setting up toolchain enforcement or banning npm.
 ---
 
 # Setup Toolchain Enforcement

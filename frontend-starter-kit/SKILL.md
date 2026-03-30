@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Meta-skill that sets up a complete frontend stack — 14 setup skills (toolchain, Biome, quality gate, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) plus 13 community workflow skills. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Complete frontend stack — 15 setup skills + 13 community workflow skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit

@@ -1,6 +1,6 @@
 ---
 name: setup-llm-optimization
-description: Configure Claude Code hooks for token-efficient AI agent workflows. Sets LLM-friendly env vars, injects agent reporter flags on test commands, and truncates verbose output. Use when optimizing Claude Code for fewer tokens, reducing context waste, or configuring AI-friendly test output.
+description: Token-efficient AI agent hooks — env vars, test flag optimization, output truncation, NODE_OPTIONS. Use when optimizing Claude Code for fewer tokens or reducing context waste.
 ---
 
 # Setup LLM Optimization

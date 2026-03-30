@@ -1,6 +1,6 @@
 ---
 name: setup-connect-query
-description: Configure Claude Code PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices — ban raw useQuery/useMutation when Connect Query is available (allows useTransport/callUnaryMethod pattern), ban empty invalidateQueries(), warn on axios/fetch, enforce protobuf v2 patterns (create(), $typeName, MessageShape), promote Standard Schema + protovalidate for form validation. Use when setting up data fetching enforcement, ConnectRPC patterns, or protobuf type safety.
+description: Enforce ConnectRPC + Connect Query + Protobuf v2 patterns via PostToolUse hooks. Bans raw useQuery, empty invalidateQueries, $typeName literals. Use when setting up ConnectRPC, protobuf type safety, or data fetching enforcement.
 ---
 
 # Setup Connect Query

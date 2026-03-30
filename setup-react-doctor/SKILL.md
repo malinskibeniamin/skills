@@ -1,6 +1,6 @@
 ---
 name: setup-react-doctor
-description: Install react-doctor for React codebase health scoring (performance, security, accessibility, dead code). Adds doctor script and Stop hook to fail on score regression. Use when setting up react-doctor, checking React health score, or preventing UI regressions.
+description: React health scoring via react-doctor with Stop hook to fail on score regression. Use when setting up react-doctor or preventing UI quality regressions.
 ---
 
 # Setup React Doctor

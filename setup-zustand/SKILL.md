@@ -1,6 +1,6 @@
 ---
 name: setup-zustand
-description: Configure Claude Code PostToolUse hook enforcing zustand best practices — ban single-parens create(), ban inline object selectors (suggest useShallow), ban direct localStorage in stores (suggest persist middleware). Use when setting up zustand enforcement, preventing infinite re-renders, or enforcing zustand type safety.
+description: Enforce zustand best practices via PostToolUse hooks — double-parens create, useShallow selectors, persist middleware. Use when setting up zustand enforcement or preventing re-render issues.
 ---
 
 # Setup Zustand

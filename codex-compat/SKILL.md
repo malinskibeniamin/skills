@@ -1,6 +1,6 @@
 ---
 name: codex-compat
-description: Generate Codex-compatible hooks config and AGENTS.md from existing Claude Code hooks. Translates PostToolUse Edit|Write hooks into a Stop-based batch checker since Codex only supports Bash tool matcher. Use when setting up Codex compatibility, dual-agent support, or onboarding Codex users to a repo with Claude Code hooks.
+description: Generate Codex hooks.json and AGENTS.md from Claude Code hooks. Wraps Edit|Write checks into Stop batch checker. Use when setting up Codex compatibility or dual-agent support.
 ---
 
 # Codex Compatibility Layer

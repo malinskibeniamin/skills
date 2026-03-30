@@ -1,6 +1,6 @@
 ---
 name: setup-accessibility
-description: Configure Claude Code PostToolUse hook enforcing ARIA accessibility patterns — ban missing labels on interactive elements, ban mouse-only handlers without keyboard equivalents, enforce ARIA attributes on custom widgets, and set up Playwright AXE for automated accessibility testing. Use when setting up accessibility enforcement, ARIA compliance, WCAG conformance, or a11y testing.
+description: Enforce ARIA accessibility via PostToolUse hooks — labels, keyboard handlers, widget attributes, Playwright AXE setup. Use when setting up a11y enforcement, WCAG 2.1 AA compliance, or accessibility testing.
 ---
 
 # Setup Accessibility

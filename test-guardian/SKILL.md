@@ -1,6 +1,6 @@
 ---
 name: test-guardian
-description: Diagnose test health across frameworks (Vitest, Jest, Bun, Rstest) — detect async leaks, profile performance, find slow queries (getByRole), identify flaky tests, audit test file classification (unit vs integration). Use when tests are slow, flaky, leaking memory, misclassified, or need performance profiling. Manual invocation skill, not a hook.
+description: Diagnose test health across Vitest/Jest/Bun/Rstest — async leaks, slow queries, flaky tests, file classification. Manual invocation, not a hook. Use when tests are slow, flaky, or leaking memory.
 ---
 
 # Test Guardian

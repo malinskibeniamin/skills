@@ -1,6 +1,6 @@
 ---
 name: setup-tanstack-router
-description: Configure TanStack Router route tree auto-generation and anti-pattern enforcement via Claude Code PostToolUse hooks. Regenerates routeTree when route files change. Bans react-router-dom, window.location navigation, strict:false, untyped hooks, URLSearchParams. Use when setting up TanStack Router, file-based routing, route generation hooks, or enforcing router type safety.
+description: Auto-generate TanStack Router route tree and enforce router patterns via PostToolUse hooks. Bans react-router-dom, window.location, untyped hooks. Use when setting up TanStack Router or file-based routing.
 ---
 
 # Setup TanStack Router

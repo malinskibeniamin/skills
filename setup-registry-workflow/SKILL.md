@@ -1,6 +1,6 @@
 ---
 name: setup-registry-workflow
-description: Configure Claude Code Stop hook to remind about registry.json rebuild and changelog update when redpanda-ui components are modified. Use when maintaining a shadcn component registry, updating design system components, or enforcing registry build discipline.
+description: Stop hook reminding to rebuild registry.json and update changelog when UI components change. Use when maintaining a shadcn component registry or design system.
 ---
 
 # Setup Registry Workflow
