@@ -8,7 +8,15 @@
 
 > Script: [`scripts/llm-test-flags.sh`](scripts/llm-test-flags.sh)
 
-### Flags injected automatically
+### Hard enforcement (rewrite via `updatedInput`)
+
+| Action | Runner | Why |
+|--------|--------|-----|
+| Strip `--verbose` | Vitest, Jest | Wastes tokens — agent reporters already show only failures |
+
+### Soft suggestions (via `additionalContext`)
+
+These are suggested to Claude but not forced. Claude may choose to include them:
 
 | Flag | Runner | Why |
 |------|--------|-----|
@@ -19,7 +27,7 @@
 | `--bail` | Jest | Fail fast |
 | `--forceExit` | Jest | Force exit after tests complete — prevents hanging from open handles |
 
-All flags are only injected if not already present in the command. Explicit flags always win.
+Suggestions only appear when the flag is not already present in the command.
 
 ## llm-truncate.sh (PostToolUse on Bash)
 

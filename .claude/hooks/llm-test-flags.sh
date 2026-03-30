@@ -14,42 +14,39 @@ if [ -z "$command" ]; then
   exit 0
 fi
 
-modified=false
+suggestions=""
 rewritten="$command"
+must_rewrite=false
 
 # ── Vitest / bun test optimization ──────────────────────────────
 
 if echo "$rewritten" | grep -qE '(vitest|bun (test|run test\S*))'; then
 
-  # Strip --verbose (wastes tokens)
+  # Strip --verbose (hard enforcement — wastes tokens)
   if echo "$rewritten" | grep -qE '\-\-verbose'; then
     rewritten=$(echo "$rewritten" | sed -E 's/[[:space:]]+--verbose//g; s/--verbose[[:space:]]+//g; s/--verbose$//g')
-    modified=true
+    must_rewrite=true
   fi
 
-  # Inject --pool=forks if no --pool specified (prevents zombie processes)
+  # Suggest --pool=forks if no --pool specified
   if ! echo "$rewritten" | grep -qE '\-\-pool[= ]'; then
-    rewritten="$rewritten --pool=forks"
-    modified=true
+    suggestions="$suggestions\n- Add --pool=forks to prevent zombie processes (each test file gets its own process)"
   fi
 
-  # Inject --bail=1 if no --bail specified (fail fast, save tokens)
+  # Suggest --bail=1 if no --bail specified
   if ! echo "$rewritten" | grep -qE '\-\-bail[= ]'; then
-    rewritten="$rewritten --bail=1"
-    modified=true
+    suggestions="$suggestions\n- Add --bail=1 to fail fast and save tokens"
   fi
 
-  # Inject --teardownTimeout if not specified (prevent hanging teardown → zombies)
+  # Suggest --teardownTimeout if not specified
   if ! echo "$rewritten" | grep -qE '\-\-teardownTimeout[= ]'; then
-    rewritten="$rewritten --teardownTimeout=5000"
-    modified=true
+    suggestions="$suggestions\n- Add --teardownTimeout=5000 to prevent hanging teardown (zombie source)"
   fi
 
-  # Inject reporter: github in CI, leave default otherwise
+  # Suggest reporter in CI
   if ! echo "$rewritten" | grep -qE '\-\-reporter[= ]'; then
     if [ "${CI:-}" = "true" ]; then
-      rewritten="$rewritten --reporter=github"
-      modified=true
+      suggestions="$suggestions\n- Add --reporter=github for inline PR annotations"
     fi
   fi
 fi
@@ -58,30 +55,39 @@ fi
 
 if echo "$rewritten" | grep -qE '\bjest\b'; then
 
-  # Strip --verbose
+  # Strip --verbose (hard enforcement)
   if echo "$rewritten" | grep -qE '\-\-verbose'; then
     rewritten=$(echo "$rewritten" | sed -E 's/[[:space:]]+--verbose//g; s/--verbose[[:space:]]+//g; s/--verbose$//g')
-    modified=true
+    must_rewrite=true
   fi
 
-  # Inject --bail if not specified
+  # Suggest --bail if not specified
   if ! echo "$rewritten" | grep -qE '\-\-bail'; then
-    rewritten="$rewritten --bail"
-    modified=true
+    suggestions="$suggestions\n- Add --bail to fail fast"
   fi
 
-  # Inject --forceExit to prevent zombie processes
+  # Suggest --forceExit if not specified
   if ! echo "$rewritten" | grep -qE '\-\-forceExit'; then
-    rewritten="$rewritten --forceExit"
-    modified=true
+    suggestions="$suggestions\n- Add --forceExit to prevent zombie processes from open handles"
   fi
 fi
 
-# ── Apply rewrite via updatedInput ──────────────────────────────
+# ── Apply ────────────────────────────────────────────────────────
 
-if [ "$modified" = true ]; then
+# If --verbose was stripped, rewrite the command
+if [ "$must_rewrite" = true ]; then
   updated_input=$(echo "$input" | jq --arg cmd "$rewritten" '.tool_input | .command = $cmd')
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input}}" >&2
+  if [ -n "$suggestions" ]; then
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input,\"additionalContext\":\"Test runner suggestions (optional):$suggestions\"}}" >&2
+  else
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input}}" >&2
+  fi
+  exit 0
+fi
+
+# If only suggestions (no rewrite needed), pass them as context
+if [ -n "$suggestions" ]; then
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"Test runner suggestions (optional):$suggestions\"}}" >&2
   exit 0
 fi
 
