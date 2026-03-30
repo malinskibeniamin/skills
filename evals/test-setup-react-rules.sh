@@ -497,14 +497,14 @@ run_content_eval "$SCRIPT" "innerHTML" "hook checks innerHTML"
 run_content_eval "$SCRIPT" "Record<string" "hook checks as Record<string, any/unknown>"
 run_content_eval "$SCRIPT" "barrel" "hook checks barrel imports"
 run_content_eval "$SCRIPT" "passive" "hook checks passive event listeners"
-run_content_eval "$SCRIPT" "chart\.js\|d3\|three\|pdf-lib" "hook checks heavy deps"
+run_content_eval "$SCRIPT" "chart\.js|d3|three|pdf-lib" "hook checks heavy deps"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "allow-useEffect" "REFERENCE documents escape hatch"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "components/ui" "REFERENCE has component library mapping"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "useEffect(function" "REFERENCE has named useEffect guidance"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket\|subscribeToGeolocation" "REFERENCE has effect naming conventions"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useEffect\(function" "REFERENCE has named useEffect guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket|disconnectWebSocket" "REFERENCE has effect naming conventions"
 
 # ── Cleanup ─────────────────────────────────────────────────────
 

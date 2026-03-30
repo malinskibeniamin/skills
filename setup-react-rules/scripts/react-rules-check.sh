@@ -40,8 +40,7 @@ case "$file_path" in
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<label[[:space:]>]'; then raw_element="<label> → <Label> from @/components/ui/label"; fi
 
     if [ -n "$raw_element" ]; then
-      echo "{\"suppressOutput\":true,\"systemMessage\":\"Do not use raw HTML elements. Use your component library instead:\\n$raw_element\"}" >&2
-      exit 2
+      hook_block "Do not use raw HTML elements. Use your component library instead:\\n$raw_element"
     fi
     ;;
 esac
@@ -93,8 +92,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' && \
        echo "$added_lines" | grep -qE 'className=.*\b(bg-|text-|border-|shadow-|rounded-)'; then
-      echo '{"suppressOutput":true,"systemMessage":"Do not override visual styles (bg-*, text-*, border-*, shadow-*) on registry components. Use the component variant prop instead. Layout classes (mt-4, flex-1, w-full, gap-2) are fine."}' >&2
-      exit 2
+      hook_block "Do not override visual styles (bg-*, text-*, border-*, shadow-*) on registry components. Use the component variant prop instead. Layout classes (mt-4, flex-1, w-full, gap-2) are fine."
     fi
     ;;
 esac
@@ -104,8 +102,7 @@ esac
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'onClick.*navigate\('; then
-      echo '{"suppressOutput":true,"systemMessage":"Do not use onClick + navigate() for navigation. Use <Button asChild><Link to=\"/path\">...</Link></Button> instead.\nWhy: Better accessibility (right-click, screen readers), respects TanStack Router basePath."}' >&2
-      exit 2
+      hook_block "Do not use onClick + navigate() for navigation. Use <Button asChild><Link to=\\\"/path\\\">...</Link></Button> instead.\\nWhy: Better accessibility (right-click, screen readers), respects TanStack Router basePath."
     fi
     ;;
 esac
@@ -116,8 +113,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<Button[[:space:]>]' && \
        ! echo "$added_lines" | grep -qE '<Button[^>]*(onClick|asChild|type="submit"|disabled)'; then
-      echo '{"suppressOutput":true,"systemMessage":"Button appears to have no handler. Buttons must have onClick, asChild (for Link wrapping), type=\"submit\" (in forms), or disabled. A button with no handler is likely a bug."}' >&2
-      exit 2
+      hook_block "Button appears to have no handler. Buttons must have onClick, asChild (for Link wrapping), type=\\\"submit\\\" (in forms), or disabled. A button with no handler is likely a bug."
     fi
     ;;
 esac
@@ -128,8 +124,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<AlertTitle>.*<.*Icon' || \
        echo "$added_lines" | grep -qE '<AlertTitle>.*<svg'; then
-      echo '{"suppressOutput":true,"systemMessage":"Do not add icons inside <AlertTitle>. The <Alert> component already renders an icon. Use the icon prop on <Alert> to customize it:\n<Alert icon={<CustomIcon />}>"}' >&2
-      exit 2
+      hook_block "Do not add icons inside <AlertTitle>. The <Alert> component already renders an icon. Use the icon prop on <Alert> to customize it:\\n<Alert icon={<CustomIcon />}>"
     fi
     ;;
 esac
@@ -143,8 +138,7 @@ if echo "$added_lines" | grep -E '\.\.\.[a-zA-Z]+' | grep -qE '(Message|Request|
   if [ -f "package.json" ] && grep -q '"@bufbuild/protobuf"' package.json 2>/dev/null; then
     proto_version=$(grep -oE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null || true)
     if [ -n "$proto_version" ]; then
-      echo '{"suppressOutput":true,"systemMessage":"When spreading protobuf messages, wrap with create() to preserve $typeName:\n\n// Wrong\nconst msg = { ...existingMessage, field: newValue }\n\n// Correct\nconst msg = create(MyMessageSchema, { ...existingMessage, field: newValue })\n\nRequired for @bufbuild/protobuf v2."}' >&2
-      exit 2
+      hook_block "When spreading protobuf messages, wrap with create() to preserve \$typeName:\\n\\n// Wrong\\nconst msg = { ...existingMessage, field: newValue }\\n\\n// Correct\\nconst msg = create(MyMessageSchema, { ...existingMessage, field: newValue })\\n\\nRequired for @bufbuild/protobuf v2."
     fi
   fi
 fi
@@ -155,8 +149,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' && \
        ! echo "$added_lines" | grep -qE '<Button[^>]*aria-label'; then
-      echo '{"suppressOutput":true,"systemMessage":"Icon-only buttons must have aria-label for screen readers:\n\n<Button aria-label=\"Settings\" variant=\"ghost\" size=\"icon\"><SettingsIcon /></Button>"}' >&2
-      exit 2
+      hook_block "Icon-only buttons must have aria-label for screen readers:\\n\\n<Button aria-label=\\\"Settings\\\" variant=\\\"ghost\\\" size=\\\"icon\\\"><SettingsIcon /></Button>"
     fi
     ;;
 esac
@@ -165,8 +158,7 @@ esac
 
 if echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
    echo "$added_lines" | grep -qE 'outline-none'; then
-  echo '{"suppressOutput":true,"systemMessage":"Do not remove focus outlines (outline: none / outline-none). This breaks keyboard navigation accessibility. Use focus-visible styles instead:\n\nfocus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"}' >&2
-  exit 2
+  hook_block "Do not remove focus outlines (outline: none / outline-none). This breaks keyboard navigation accessibility. Use focus-visible styles instead:\\n\\nfocus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 fi
 
 # ── Check 13: React Compiler — no manual memoization ────────────
@@ -185,8 +177,7 @@ case "$file_path" in
       if [ -z "$found_memo" ] && echo "$added_lines" | grep -qE '\bReact\.memo\b|\bmemo\('; then found_memo="React.memo"; fi
 
       if [ -n "$found_memo" ]; then
-        echo "{\"suppressOutput\":true,\"systemMessage\":\"React Compiler is enabled — manual $found_memo is unnecessary. The compiler auto-memoizes. Remove $found_memo or add 'use no memo' directive at the file top if needed.\"}" >&2
-        exit 2
+        hook_block "React Compiler is enabled — manual $found_memo is unnecessary. The compiler auto-memoizes. Remove $found_memo or add 'use no memo' directive at the file top if needed."
       fi
     fi
     ;;
@@ -205,8 +196,7 @@ case "$file_path" in
       fi
 
       if [ "$has_escape" = false ]; then
-        echo '{"suppressOutput":true,"systemMessage":"dangerouslySetInnerHTML is banned — XSS risk. Sanitize with DOMPurify or use a safe rendering approach.\n\n// BAD\n<div dangerouslySetInnerHTML={{ __html: userContent }} />\n\n// GOOD — sanitize first\nimport DOMPurify from '\''dompurify'\''\n<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userContent) }} />\n\nIf absolutely necessary, add: // allow-dangerouslySetInnerHTML: [explain why]\n\nWCAG/OWASP: Unsanitized HTML injection is a top-10 vulnerability."}' >&2
-        exit 2
+        hook_block "dangerouslySetInnerHTML is banned — XSS risk. Sanitize with DOMPurify or use a safe rendering approach.\\n\\nIf absolutely necessary, add: // allow-dangerouslySetInnerHTML: [explain why]"
       fi
     fi
     ;;
@@ -215,8 +205,7 @@ esac
 # ── Check 15: Ban eval() and new Function() ──────────────────
 
 if echo "$added_lines" | grep -qE '\beval\(|\bnew Function\('; then
-  echo '{"suppressOutput":true,"systemMessage":"eval() and new Function() are banned — code injection risk. Use JSON.parse() for data, or a safe alternative.\n\nOWASP A03: Injection"}' >&2
-  exit 2
+  hook_block "eval() and new Function() are banned — code injection risk. Use JSON.parse() for data, or a safe alternative.\\n\\nOWASP A03: Injection"
 fi
 
 # ── Check 16: Ban .innerHTML assignment (TSX/JSX only) ────────
@@ -224,8 +213,7 @@ fi
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '\.innerHTML\s*='; then
-      echo '{"suppressOutput":true,"systemMessage":"Direct .innerHTML assignment is banned — XSS risk. Use React'\''s rendering or DOMPurify.\n\n// BAD\nelement.innerHTML = userContent\n\n// GOOD\nelement.textContent = userContent"}' >&2
-      exit 2
+      hook_block "Direct .innerHTML assignment is banned — XSS risk. Use React rendering or DOMPurify.\\n\\n// BAD\\nelement.innerHTML = userContent\\n\\n// GOOD\\nelement.textContent = userContent"
     fi
     ;;
 esac
@@ -235,8 +223,7 @@ esac
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'style=\{\{'; then
-      echo '{"suppressOutput":true,"systemMessage":"Inline style={{}} is banned. Use Tailwind CSS utility classes instead.\n\n// BAD\n<div style={{ marginTop: 16, color: \"red\" }}>\n\n// GOOD\n<div className=\"mt-4 text-red-500\">"}' >&2
-      exit 2
+      hook_block "Inline style={{}} is banned. Use Tailwind CSS utility classes instead.\\n\\n// BAD\\n<div style={{ marginTop: 16 }}>\\n\\n// GOOD\\n<div className=\\\"mt-4 text-red-500\\\">"
     fi
     ;;
 esac

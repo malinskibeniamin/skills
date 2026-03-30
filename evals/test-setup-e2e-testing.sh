@@ -21,8 +21,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "data-testid" "REFERENCE.md has test 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "getByRole" "REFERENCE.md has selector priority"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "GenericContainer" "REFERENCE.md has Testcontainers setup"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "AxeBuilder" "REFERENCE.md has axe-core patterns"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "wcag2aa" "REFERENCE.md has WCAG tags"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "hanging-process\|zombie\|teardown" "REFERENCE.md mentions debugging"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "color-contrast" "REFERENCE.md has WCAG tags"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Debugging Failed Tests|show-trace|Debug mode" "REFERENCE.md mentions debugging"
 
 # ── Description length ──────────────────────────────────────────
 
