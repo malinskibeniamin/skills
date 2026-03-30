@@ -63,6 +63,46 @@ Rules:
 - Never introduce `"use memo"` or `"use no memo"` directives automatically
 - Respect existing directives — directives define compiler trust boundaries, not performance hints
 
+### Annotation Mode for Legacy Codebases
+
+For large legacy codebases, `annotation` mode lets you opt in file-by-file instead of compiling everything at once.
+
+**Setup:**
+
+```ts
+// rsbuild.config.ts (or babel config)
+plugins: [
+  pluginBabel({
+    babelLoaderOptions: {
+      plugins: [['babel-plugin-react-compiler', { compilationMode: 'annotation' }]],
+    },
+  }),
+],
+```
+
+**Environment variable:**
+
+Set `REACT_COMPILER_MODE=annotation` in your SessionStart hook so the memoization checks adapt:
+
+```bash
+echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
+```
+
+**Migration workflow:**
+
+1. Install compiler with `annotation` mode — nothing changes, no files are compiled
+2. Add `"use memo"` to files as you migrate them — the compiler activates per-file
+3. In annotated files, remove manual `useMemo`/`useCallback`/`React.memo`
+4. In non-annotated files, manual memoization remains correct and hooks won't flag it
+5. Once all files are annotated, switch to `infer` mode and remove the `"use memo"` directives
+
+**Hook behavior by mode:**
+
+| Mode | File has `"use memo"` | File has `"use no memo"` | No directive | Manual memo flagged? |
+|------|----------------------|-------------------------|--------------|---------------------|
+| `infer` | N/A (not needed) | Skip — compiler opted out | Compiled | Yes |
+| `annotation` | Compiled | Skip — compiler opted out | Not compiled | No |
+
 ## Component Library Directory
 
 All files in your component library directory (`components/ui/` or `redpanda-ui/`) should have `'use no memo'` because:

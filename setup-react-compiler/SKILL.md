@@ -13,6 +13,7 @@ description: Install React Compiler with rsbuild and enforce compiler-friendly p
   - Flags derived-state-via-useEffect (`useState` + `useEffect` to compute derived values)
   - Flags `useRef` used as memoization cache
 - `'use no memo'` directive for escape hatch and component library directories
+- **Annotation mode support** for legacy codebases: set `REACT_COMPILER_MODE=annotation` to only flag memoization in files with `"use memo"` directive
 
 See [REFERENCE.md](REFERENCE.md) for post-compiler coding rules and pattern reference.
 

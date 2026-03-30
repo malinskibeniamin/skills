@@ -11,6 +11,14 @@ if head -5 "$file_path" | grep -qF "'use no memo'" || head -5 "$file_path" | gre
   exit 0
 fi
 
+# In annotation mode, only check files with 'use memo' directive
+# (other files aren't compiled, so manual memoization is correct)
+if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
+  if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
+    exit 0
+  fi
+fi
+
 hook_get_added_lines
 
 # ── Check 1: Ban manual memoization ─────────────────────────────

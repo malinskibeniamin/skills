@@ -170,6 +170,13 @@ case "$file_path" in
       has_no_memo=true
     fi
 
+    # In annotation mode, skip files without 'use memo' (compiler isn't active for them)
+    if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
+      if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
+        has_no_memo=true
+      fi
+    fi
+
     if [ "$has_no_memo" = false ]; then
       found_memo=""
       if echo "$added_lines" | grep -qE '\buseMemo\b'; then found_memo="useMemo"; fi
