@@ -44,7 +44,6 @@ run_content_eval "$SCRIPT" "tailwind-check" "hook runs tailwind-check on CSS fil
 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "class component" "AGENTS.md bans class components"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "process.env" "AGENTS.md covers env validation"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "console.error" "AGENTS.md covers logging"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "type.scope" "AGENTS.md covers commit format"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "!important" "AGENTS.md covers Tailwind rules"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "kebab-case" "AGENTS.md covers filename convention"

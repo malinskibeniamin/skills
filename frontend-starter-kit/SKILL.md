@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Meta-skill that sets up a complete frontend stack — 14 setup skills (toolchain, Biome, quality gate, React Compiler, zustand, accessibility, React rules, env validation, logging, conventional commits, react-doctor, TanStack Router, Connect Query) plus 13 community workflow skills. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Meta-skill that sets up a complete frontend stack — 13 setup skills (toolchain, Biome, quality gate, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query) plus 13 community workflow skills. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -18,15 +18,14 @@ description: Meta-skill that sets up a complete frontend stack — 14 setup skil
 7. **setup-accessibility** — ARIA enforcement, Playwright AXE setup, WCAG 2.1 AA compliance
 8. **setup-react-rules** — Ban raw HTML, TS escape hatches, XSS vectors, Tailwind enforcement, class components
 9. **setup-env-validation** — t3-env + zod, ban raw process.env access
-10. **setup-logging** — Structured Pino logger, ban console.error/warn/debug
-11. **setup-conventional-commits** — Enforce type(scope): description commit format
-12. **setup-react-doctor** — Health scoring with Stop hook, warnings surfaced
-13. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
-14. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
+10. **setup-conventional-commits** — Enforce type(scope): description commit format
+11. **setup-react-doctor** — Health scoring with Stop hook, warnings surfaced
+12. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
+13. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
 
 ### Diagnostics
 
-15. **test-guardian** — Test health across frameworks (Vitest, Jest, Bun), async leak detection, performance profiling
+14. **test-guardian** — Test health across frameworks (Vitest, Jest, Bun), async leak detection, performance profiling
 
 ### Community workflow skills (installed from mattpocock/skills)
 
@@ -48,7 +47,7 @@ description: Meta-skill that sets up a complete frontend stack — 14 setup skil
 
 ### 1. Run each setup skill in order
 
-Execute skills 1–14 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
+Execute skills 1–13 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
 
 Set `REACT_RULES_BAN_USEEFFECT=1` in the SessionStart hook (`.claude/hooks/session-env.sh`):
 
@@ -83,7 +82,6 @@ bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent clau
 - [ ] `rsbuild.config.ts` has React Compiler plugin
 - [ ] `react-doctor.config.json` exists
 - [ ] `src/env.ts` exists with t3-env zod schema
-- [ ] `src/lib/logger.ts` exists with Pino config
 - [ ] Package.json scripts: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`, `doctor`, `generate:routes`
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] All hook scripts in `.claude/hooks/` are executable

@@ -123,12 +123,6 @@ All commits must follow: `type(scope): description`
 - Do not access `process.env.X` directly — import from `@/env` (validated with t3-env + zod)
 - All env vars must be declared in `src/env.ts`
 
-## Logging
-
-- Do not use `console.error()`, `console.warn()`, or `console.debug()` in production code
-- Use a structured logger: `import { logger } from "@/lib/logger"`
-- Pass objects to logger, not string concatenation: `logger.error({ message: "failed", error: err })`
-
 ## Accessibility
 
 - All `<img>` must have `alt` attribute

@@ -40,7 +40,7 @@ I just installed the frontend-starter-kit skills. Run all setup skills now, then
 Execute the frontend-starter-kit skill. This will:
 - Install all 14 setup skills (toolchain, biome, quality-gate, etc.)
 - Create all hook scripts in .claude/hooks/
-- Set up src/env.ts, src/lib/logger.ts, biome.jsonc, .github/workflows/quality-gate.yml
+- Set up src/env.ts, biome.jsonc, .github/workflows/quality-gate.yml
 - Install community workflow skills
 - Set REACT_RULES_BAN_USEEFFECT=1 in session env
 
@@ -60,10 +60,7 @@ Rename any non-kebab-case files to kebab-case. Use git mv to preserve history.
 ### 2d. Environment variables
 Find all process.env. usage outside of src/env.ts and move each env var into src/env.ts with a zod schema. Replace process.env.X with import { env } from "@/env".
 
-### 2e. Console statements
-Find all console.error, console.warn, console.debug in non-test files. Replace with import { logger } from "@/lib/logger" and structured calls like logger.error({ message: "failed", error: err }).
-
-### 2f. React patterns
+### 2e. React patterns
 Fix these in order (each may affect many files):
 
 1. Class components → functional components
@@ -77,10 +74,10 @@ Fix these in order (each may affect many files):
 9. useMemo/useCallback/React.memo → remove (React Compiler handles it)
 10. outline: none → focus-visible:outline-2
 
-### 2g. Zustand stores
+### 2f. Zustand stores
 Fix create<T>() → create<T>()(), inline selectors → useShallow, direct localStorage → persist.
 
-### 2h. Routing
+### 2g. Routing
 Fix window.location navigation → TanStack Router, react-router-dom → @tanstack/react-router, URLSearchParams → nuqs, untyped hooks → { from } param.
 
 ## Phase 3: Verify
@@ -100,7 +97,7 @@ The migration is ordered from least disruptive (auto-fixable lint) to most disru
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, logging, conventional commits, react-doctor, TanStack Router, Connect Query) + test-guardian diagnostics + 13 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary).
+- **frontend-starter-kit** — Complete frontend stack in one command: 13 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query) + test-guardian diagnostics + 13 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary). `console.*` is fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -249,14 +246,6 @@ Reduce token usage and context waste.
   bunx skills@latest add malinskibeniamin/skills/setup-env-validation --agent claude-code -y
   ```
 
-## Logging
-
-- **setup-logging** — PostToolUse hook enforcing structured logging patterns. Bans `console.error()`, `console.warn()`, `console.debug()` in production code — suggests Pino structured logger with object arguments. Flags string concatenation in logger calls. Skips test files.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-logging --agent claude-code -y
-  ```
-
 ## Commit Format
 
 - **setup-conventional-commits** — PreToolUse hook enforcing `type(scope): description` format on `git commit` commands. Replaces commitlint + husky with zero dependencies. Validates type, scope (required), lowercase description, no trailing period, 5-72 character length.
@@ -343,7 +332,6 @@ PostToolUse (Edit|Write)                          All use shared/hook-lib.sh
 ├── connect-query-check.sh     — ConnectRPC/protobuf patterns (skips non-connect files)
 ├── react-compiler-check.sh    — ban manual memoization (skips 'use no memo' files)
 ├── env-validation-check.sh    — ban raw process.env (skips env.ts, test files)
-├── logging-check.sh           — ban console.error/warn/debug, enforce structured logger
 └── bundle-guard.sh            — heavy dependency warnings (~10ms, skips non-package.json)
 
 PostToolUse (Bash)
