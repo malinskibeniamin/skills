@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Meta-skill that sets up a complete frontend stack — 13 setup skills (toolchain, Biome, quality gate, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query) plus 13 community workflow skills. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Meta-skill that sets up a complete frontend stack — 14 setup skills (toolchain, Biome, quality gate, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) plus 13 community workflow skills. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -22,10 +22,11 @@ description: Meta-skill that sets up a complete frontend stack — 13 setup skil
 11. **setup-react-doctor** — Health scoring with Stop hook, warnings surfaced
 12. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
 13. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
+14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core accessibility testing
 
 ### Diagnostics
 
-14. **test-guardian** — Test health across frameworks (Vitest, Jest, Bun), async leak detection, performance profiling
+15. **test-guardian** — Test health across frameworks (Vitest, Jest, Bun), async leak detection, performance profiling
 
 ### Community workflow skills (installed from mattpocock/skills)
 
@@ -47,7 +48,7 @@ description: Meta-skill that sets up a complete frontend stack — 13 setup skil
 
 ### 1. Run each setup skill in order
 
-Execute skills 1–13 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
+Execute skills 1–14 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
 
 Set `REACT_RULES_BAN_USEEFFECT=1` in the SessionStart hook (`.claude/hooks/session-env.sh`):
 

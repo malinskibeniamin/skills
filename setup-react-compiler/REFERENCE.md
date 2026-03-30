@@ -45,6 +45,24 @@ Rules for directives:
 - Use `'use no memo'` only as last-resort escape hatch
 - Document why the opt-out exists
 
+## Compiler Modes
+
+The React Compiler supports four compilation modes:
+
+| Mode | Behavior | When to use |
+|------|----------|-------------|
+| `infer` (default) | Heuristically detects components (PascalCase + JSX) and hooks (`use*` prefix) | Most projects — works out of the box |
+| `annotation` | Only compiles functions annotated with `"use memo"` | Incremental adoption, safety-critical code |
+| `syntax` | Relies on Flow-specific component syntax | Rare — Flow codebases only |
+| `all` | Attempts to compile all top-level functions | Generally discouraged — unpredictable |
+
+Rules:
+- Assume `infer` mode unless explicitly configured otherwise
+- Never rely on compilation for correctness — code must work without the compiler
+- Follow naming conventions (PascalCase components, `use*` hooks) to aid inference
+- Never introduce `"use memo"` or `"use no memo"` directives automatically
+- Respect existing directives — directives define compiler trust boundaries, not performance hints
+
 ## Component Library Directory
 
 All files in your component library directory (`components/ui/` or `redpanda-ui/`) should have `'use no memo'` because:

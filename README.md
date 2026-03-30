@@ -4,7 +4,7 @@ A collection of agent skills and Claude Code hooks that enforce frontend best pr
 
 ## TLDR — Full Setup for a New Repo
 
-One command to install everything (14 setup skills + diagnostics + 13 community workflow skills):
+One command to install everything (15 setup skills + diagnostics + 13 community workflow skills):
 
 ```bash
 bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -147,7 +147,7 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
 
 - **setup-react-rules** — React/TS/security/Tailwind checks in a single hook script:
   - Ban raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) — suggest shadcn/ui components (`<form>` allowed)
-  - Ban `as any`, `@ts-ignore`, `@ts-expect-error`
+  - Ban `as any`, `as Record<string, any>`, `as Record<string, unknown>`, `@ts-ignore`, `@ts-expect-error`
   - Ban visual style overrides on registry components (use variant prop)
   - Ban `onClick + navigate()` (use `<Button asChild><Link>`)
   - Require handler on buttons (onClick, asChild, type=submit, disabled)
@@ -162,6 +162,9 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
   - Ban inline `style={{}}` — use Tailwind utility classes
   - Ban raw hex/rgb in className — use design tokens
   - Ban `!important` — breaks Tailwind cascade
+  - Ban barrel imports (re-exports from index files) — suggest direct path imports
+  - Ban `addEventListener('scroll'|'touchstart'|'wheel')` without `{ passive: true }`
+  - Warn on static imports of heavy deps (`chart.js`, `d3`, `three.js`, `pdf-lib`) — suggest dynamic import
   - Opt-in: ban `useEffect` via `REACT_RULES_BAN_USEEFFECT=1` (best for greenfield with TanStack Query + zustand)
 
   ```
@@ -232,10 +235,18 @@ Reduce token usage and context waste.
 
 ## Data Fetching
 
-- **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` from `@tanstack/react-query` when ConnectRPC is available, ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2 projects also get: ban `new Message()` construction (use `create(Schema)`), ban `PlainMessage`/`PartialMessage` (use `MessageShape`/`MessageInitShape`). Version detected at install time.
+- **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` from `@tanstack/react-query` when ConnectRPC is available (allows `useTransport`/`callUnaryMethod` pattern), ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2 projects also get: ban `new Message()` construction (use `create(Schema)`), ban `PlainMessage`/`PartialMessage` (use `MessageShape`/`MessageInitShape`), ban manual `$typeName` object literals. Promotes Standard Schema + protovalidate for form validation. Version detected at install time.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
+  ```
+
+## E2E Testing
+
+- **setup-e2e-testing** — Playwright for end-to-end testing with Testcontainers for backend infrastructure, axe-core for automated WCAG 2.1 AA accessibility audits. Includes test patterns for forms, tables, multi-step workflows, and debugging strategies.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-e2e-testing --agent claude-code -y
   ```
 
 ## Environment & Configuration

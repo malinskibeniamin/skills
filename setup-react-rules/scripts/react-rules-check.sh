@@ -52,6 +52,10 @@ if echo "$added_lines" | grep -qE '\bas\s+any\b'; then
   hook_block "\\\"as any\\\" is banned. Fix the type properly instead of casting to any. This applies everywhere, including tests."
 fi
 
+if echo "$added_lines" | grep -qE '\bas\s+Record<string,\s*(any|unknown)>'; then
+  hook_block "\\\"as Record<string, any/unknown>\\\" is banned — it erases type structure. Use a concrete interface or type guard instead."
+fi
+
 if echo "$added_lines" | grep -qF '@ts-ignore'; then
   hook_block "@ts-ignore is banned. Fix the type error instead of suppressing it."
 fi
@@ -243,6 +247,38 @@ if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)
   hook_block "Class components are banned. Use functional components instead.\n\n// BAD\nclass MyComponent extends React.Component { ... }\n\n// GOOD\nfunction MyComponent() { ... }\n\nReact Compiler requires functional components. Class components cannot be auto-memoized."
 fi
 
-# ── Checks 19-20 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# ── Check 19: Ban barrel imports (re-exports from index files) ────
+
+if echo "$added_lines" | grep -qE "from\s+['\"]\.\.?/[^'\"]*['\"]" && \
+   echo "$added_lines" | grep -qE "from\s+['\"]\.\.?/[^'\"]*(/index)?['\"]"; then
+  # Check if the import path resolves to a directory (barrel re-export)
+  import_paths=$(echo "$added_lines" | grep -oE "from\s+['\"](\.\./[^'\"]+|\.\/[^'\"]+)['\"]" | grep -oE "['\"][^'\"]+['\"]" | tr -d "'" | tr -d '"' || true)
+  if [ -n "$import_paths" ]; then
+    dir=$(dirname "$file_path")
+    for imp in $import_paths; do
+      resolved="$dir/$imp"
+      if [ -d "$resolved" ] || [ -f "$resolved/index.ts" ] || [ -f "$resolved/index.tsx" ] || [ -f "$resolved/index.js" ]; then
+        hook_warn "Barrel import detected: \`$imp\`. Import directly from the source file instead of re-exporting through an index file. Barrel imports increase bundle size and slow down builds."
+        break
+      fi
+    done
+  fi
+fi
+
+# ── Check 20: Ban addEventListener without passive for scroll/touch/wheel ──
+
+if echo "$added_lines" | grep -qE "addEventListener\s*\(\s*['\"](scroll|touchstart|touchmove|wheel)['\"]" && \
+   ! echo "$added_lines" | grep -qE "passive\s*:\s*true"; then
+  hook_block "addEventListener for scroll/touchstart/touchmove/wheel events must use { passive: true } to prevent jank:\n\nelement.addEventListener('scroll', handler, { passive: true })"
+fi
+
+# ── Check 21: Ban static imports of heavy deps (suggest dynamic import) ──
+
+if echo "$added_lines" | grep -qE "^[+]?import\s.*from\s+['\"]" | grep -qE "(chart\.js|d3|three|pdf-lib)['\"/]" 2>/dev/null || \
+   echo "$added_lines" | grep -qE "from\s+['\"](chart\.js|d3|three|pdf-lib)['\"/]"; then
+  hook_warn "Heavy dependency imported statically. Consider dynamic import() or React.lazy() to reduce initial bundle size:\n\n// Instead of:\nimport { Chart } from 'chart.js'\n\n// Use:\nconst Chart = React.lazy(() => import('chart.js'))\n// or\nconst { Chart } = await import('chart.js')"
+fi
+
+# ── Checks 22-23 (raw hex/rgb, !important) moved to tailwind-check.sh ──
 
 exit 0

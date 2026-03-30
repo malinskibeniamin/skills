@@ -10,7 +10,10 @@ description: Configure Claude Code hooks enforcing React best practices — ban 
 PostToolUse hooks on Edit/Write (auto-detects and excludes component library directories):
 
 - **Ban raw HTML elements** — suggest shadcn/ui components from `@/components/ui/`
-- **Ban TypeScript escape hatches** — block `as any`, `@ts-ignore`, `@ts-expect-error`
+- **Ban TypeScript escape hatches** — block `as any`, `as Record<string, any>`, `as Record<string, unknown>`, `@ts-ignore`, `@ts-expect-error`
+- **Ban barrel imports** — flag re-exports from index files, suggest direct path imports
+- **Ban missing passive event listeners** — flag `addEventListener('scroll'|'touchstart'|'wheel')` without `{ passive: true }`
+- **Ban static imports of heavy deps** — flag top-level imports of `chart.js`, `d3`, `three.js`, `pdf-lib` (suggest dynamic `import()` or `React.lazy()`)
 - **Ban dangerouslySetInnerHTML** — XSS risk, escape hatch: `// allow-dangerouslySetInnerHTML: [reason]`
 - **Ban eval() and new Function()** — code injection risk (OWASP A03)
 - **Ban .innerHTML assignment** — XSS risk, use textContent or React rendering
@@ -22,6 +25,10 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 
 - **Ban useEffect** (and useLayoutEffect, useInsertionEffect) — enable with `REACT_RULES_BAN_USEEFFECT=1`. Best for greenfield projects using TanStack Query + zustand. Escape hatch: `// allow-useEffect: [reason]`
 - **Ban type assertions** (`as X`) — enable with `REACT_RULES_BAN_TYPE_ASSERTIONS=1`. Allows `as const` and `as const satisfies`. Forces type guards, generics, or schema validation instead. Escape hatch: `// allow-type-assertion: [reason]`
+
+### Soft guidance (enforced by Claude, not hooks)
+
+- **Named useEffect functions** — when writing `useEffect`, always use a named function expression that describes the effect's purpose. Name cleanup functions symmetrically. If you can't name the effect without "and" or "also", split it. If the name starts with "sync" or "update" followed by state, it's probably derived state — compute inline instead.
 
 ## Steps
 

@@ -32,3 +32,40 @@ The hook checks for `// allow-useEffect:` anywhere in the file. A reason is requ
 | `<form>` | `<AutoForm>` | `@/components/ui/auto-form` |
 
 Note: `<a>` is allowed (TanStack Router Link can't always be used).
+
+## Named useEffect Functions
+
+When writing `useEffect`, always use a named function expression instead of an anonymous arrow:
+
+```tsx
+// BAD — anonymous arrow
+useEffect(() => {
+  const ws = new WebSocket(url)
+  return () => ws.close()
+}, [url])
+
+// GOOD — named function with symmetrical cleanup
+useEffect(function connectToWebSocket() {
+  const ws = new WebSocket(url)
+  return function disconnectWebSocket() {
+    ws.close()
+  }
+}, [url])
+```
+
+### Why
+
+- Named functions appear in stack traces and React DevTools (instead of `(anonymous)`)
+- Forces you to articulate what the effect does — reveals split opportunities
+- If you can't name it without "and" or "also", the effect does too much — split it
+- If the name starts with "sync" or "update" followed by state, it's probably derived state — compute inline during render instead
+
+### Naming conventions
+
+| Verb | Use for |
+|------|---------|
+| `subscribe`/`listen` | Event-based effects |
+| `connect`/`disconnect` | WebSocket, SSE, external services |
+| `synchronize`/`apply` | Syncing React state with external systems |
+| `initialize` | One-time setup |
+| `poll` | Interval-based data fetching |

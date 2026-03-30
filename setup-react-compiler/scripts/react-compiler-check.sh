@@ -32,7 +32,7 @@ if echo "$added_lines" | grep -qE '\buseEffect\b'; then
   file_content=$(cat "$file_path")
   if echo "$file_content" | grep -qE 'const \[.*,\s*set\w+\]\s*=\s*useState' && \
      echo "$added_lines" | grep -qE 'useEffect\(\(\)\s*=>\s*\{?\s*set'; then
-    hook_block "Derived-state-via-useEffect detected. Do not useState + useEffect to compute derived values — compute inline during render instead.\n\n// Bad: derived state via effect\nconst [filtered, setFiltered] = useState([])\nuseEffect(() => { setFiltered(items.filter(i => i.visible)) }, [items])\n\n// Good: derive inline\nconst filtered = items.filter(i => i.visible)"
+    hook_block "Derived-state-via-useEffect detected. Do not useState + useEffect to compute derived values — compute inline during render instead.\n\nNaming test: if you can't name this effect without 'sync' or 'update' followed by state, it's derived state.\n\n// Bad: derived state via effect\nconst [filtered, setFiltered] = useState([])\nuseEffect(() => { setFiltered(items.filter(i => i.visible)) }, [items])\n\n// Good: derive inline\nconst filtered = items.filter(i => i.visible)"
   fi
 fi
 
