@@ -38,6 +38,28 @@ bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent cla
 
 Or install individual skills if you don't want the full kit — see sections below.
 
+## How It Works
+
+Hooks run automatically — you don't invoke them. When Claude writes code:
+
+1. **PostToolUse hooks** fire on every Edit/Write — catch violations in ~293ms
+2. Claude sees the error as a `systemMessage` and fixes it immediately
+3. The hook re-checks the fix — cycle repeats until clean
+4. **Stop hooks** fire once when Claude finishes — biome autofix, type check, health score
+
+You never see the hook output directly. Claude just writes better code because violations are caught and corrected in real-time. If you run `bun run quality:gate` after Claude finishes, it should pass with zero errors.
+
+## Greenfield vs Brownfield
+
+**New project:** Use `infer` mode (default). All hooks enforce maximum strictness.
+
+**Existing codebase:** Set `REACT_COMPILER_MODE=annotation` in your session env. This lets you migrate file-by-file — add `"use memo"` to files as you adopt the compiler, and hooks only enforce compiler patterns in opted-in files.
+
+```bash
+# In .claude/hooks/session-env.sh, add:
+echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
+```
+
 ## Example Prompts
 
 After installing, try these prompts to see the skills in action:
@@ -119,6 +141,36 @@ Or stress-test a design:
 
 </details>
 
+<details>
+<summary>Daily workflow (start of session)</summary>
+
+```
+Check git status. Run bun run quality:gate to verify the codebase is clean. Then let's work on [your task].
+```
+
+Before creating a PR:
+
+```
+Run quality:gate. If it passes, create a PR. After creating, comment @claude review on it.
+```
+
+</details>
+
+<details>
+<summary>Bug triage</summary>
+
+```
+/triage-issue — investigate why [describe the bug]. Check logs, reproduce, identify root cause, and file a GitHub issue with a fix plan.
+```
+
+If using Jira:
+
+```
+/triage-issue — investigate [bug]. File findings as a Jira work item via acli.
+```
+
+</details>
+
 ## Migrating an Existing Codebase
 
 After installing, paste this prompt into a new Claude Code session to migrate existing code to comply with the new hooks:
@@ -160,13 +212,27 @@ Fix these in order (each may affect many files):
 1. Class components → functional components
 2. useEffect for data fetching → TanStack Query / route loaders
 3. Raw HTML elements (<button>, <input>, etc.) → @/components/ui/ components
-4. as any, @ts-ignore, @ts-expect-error → proper types, type guards, or zod validation
+4. as any, as Record<string, any>, @ts-ignore, @ts-expect-error → proper types, type guards, or zod validation
 5. dangerouslySetInnerHTML → DOMPurify or safe rendering
 6. Inline style={{}} → Tailwind utility classes
 7. Raw hex/rgb in className → design tokens
 8. !important → fix specificity
-9. useMemo/useCallback/React.memo → remove (React Compiler handles it)
+9. useMemo/useCallback/React.memo → remove (React Compiler handles it, or add "use memo" in annotation mode)
 10. outline: none → focus-visible:outline-2
+11. Barrel imports (import from index files) → direct path imports
+12. addEventListener('scroll') → add { passive: true }
+13. Static imports of chart.js/d3/three → dynamic import() or React.lazy()
+
+### 2e-2. Protobuf v2 patterns (if applicable)
+1. new Message() → create(MessageSchema, { ... })
+2. PlainMessage/PartialMessage → MessageShape/MessageInitShape
+3. Manual $typeName object literals → create()
+4. Protobuf spreads without create() wrapper → wrap with create(Schema, { ...msg })
+
+### 2e-3. Connect Query patterns (if applicable)
+1. Raw useQuery/useMutation with ConnectRPC → use Connect Query hooks
+2. invalidateQueries() with no args → specify query key
+3. Duplicate Zod schemas for protobuf messages → Standard Schema + protovalidate
 
 ### 2f. Zustand stores
 Fix create<T>() → create<T>()(), inline selectors → useShallow, direct localStorage → persist.
