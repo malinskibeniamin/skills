@@ -12,6 +12,8 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 - **GitHub Actions workflow** with formatting integrity check (`git diff --exit-code`)
 - **Stop hook** running `tsgo` + related tests before Claude finishes (auto-detects Vitest/Jest/Bun test runner)
 - **Bundle guard hook** (PostToolUse) that warns when known-heavy dependencies (moment, lodash, jquery, core-js, classnames) are added to package.json
+- **CI status check** — verify `gh run list` passes before declaring work complete
+- **`@claude` review trigger** — after creating a PR, comment `@claude review` to trigger automated Claude review
 
 ## Steps
 
