@@ -37,7 +37,11 @@ Merge into existing `scripts` (don't overwrite):
 
 **Note**: `quality:gate` uses `--related` with `git diff` to only run tests affected by changed files. Target: <5 seconds.
 
-### 2. Create GitHub Actions workflow
+### 2. Create asset type declarations
+
+Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) — tsgo can't resolve `.svg`, `.css`, `.png` imports without it. These are bundler-handled at build time.
+
+### 3. Create GitHub Actions workflow
 
 Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Key features:
 - Runs on PR and push to main
@@ -45,29 +49,30 @@ Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Ke
 - Type checking: `bun run type:check`
 - Tests: `bun test --run`
 
-### 3. Create Stop hook script
+### 4. Create Stop hook script
 
 Copy [`scripts/typecheck-stop.sh`](scripts/typecheck-stop.sh) into `.claude/hooks/`. Make executable.
 
-### 4. Create Bundle guard hook script
+### 5. Create Bundle guard hook script
 
 Copy [`scripts/bundle-guard.sh`](scripts/bundle-guard.sh) into `.claude/hooks/`. Make executable.
 
-### 5. Configure hooks in `.claude/settings.json`
+### 6. Configure hooks in `.claude/settings.json`
 
 Add to hooks config:
 - **Stop**: `.claude/hooks/typecheck-stop.sh`
 - **PostToolUse**: `.claude/hooks/bundle-guard.sh`
 
-### 6. Verify
+### 7. Verify
 
 - [ ] `bun run lint` works
-- [ ] `bun run type:check` works
+- [ ] `bun run type:check` works (no errors on .svg/.css imports)
 - [ ] `bun run quality:gate` works
 - [ ] `.github/workflows/quality-gate.yml` exists
+- [ ] `src/types/assets.d.ts` exists
 - [ ] Stop hook script is executable
 - [ ] Bundle guard hook script is executable
 
-### 7. Commit
+### 8. Commit
 
 Stage all files and commit: `Add quality gate scripts and CI workflow`

@@ -106,6 +106,64 @@ This ensures:
 - Server and client validate identically
 - Schema changes propagate automatically — no Zod drift
 
+## Protobuf Type Registry for google.protobuf.Any
+
+When using `google.protobuf.Any` (e.g., for polymorphic config fields), you must provide a type registry so protobuf knows how to serialize/deserialize the packed message types. Without it, `toJson`/`fromJson` fails with:
+
+```
+cannot encode message google.protobuf.Any to JSON:
+"type.googleapis.com/your.package.MessageType" is not in the type registry
+```
+
+### Create a registry
+
+```ts
+import { createRegistry } from '@bufbuild/protobuf'
+import { AWSBedrockMCPConfigSchema } from './gen/aws_bedrock_config_pb'
+import { AWSSNSMCPConfigSchema } from './gen/aws_sns_config_pb'
+import { AWSSQSMCPConfigSchema } from './gen/aws_sqs_config_pb'
+// ... import all schemas that can be packed into Any
+
+export const typeRegistry = createRegistry(
+  AWSBedrockMCPConfigSchema,
+  AWSSNSMCPConfigSchema,
+  AWSSQSMCPConfigSchema,
+  // Add every message type that gets packed into google.protobuf.Any
+)
+```
+
+### Use the registry with toJson/fromJson
+
+```ts
+import { toJson, fromJson } from '@bufbuild/protobuf'
+import { MyMessageSchema } from './gen/my_pb'
+import { typeRegistry } from './registry'
+
+// Serialize — registry resolves Any.typeUrl to the correct schema
+const json = toJson(MyMessageSchema, msg, { typeRegistry })
+
+// Deserialize
+const restored = fromJson(MyMessageSchema, jsonData, { typeRegistry })
+```
+
+### Use with ConnectRPC transport
+
+Pass the registry to the transport so all RPC calls can handle Any fields:
+
+```ts
+import { createConnectTransport } from '@connectrpc/connect-web'
+import { typeRegistry } from './registry'
+
+const transport = createConnectTransport({
+  baseUrl: '/api',
+  jsonOptions: { typeRegistry },
+})
+```
+
+### Common mistake
+
+Forgetting to add a new message schema to the registry when adding a new config type. If you add a new `*MCPConfig` proto, you must also add its schema to the registry — otherwise Any serialization fails at runtime.
+
 ## Transport Setup
 
 ```tsx

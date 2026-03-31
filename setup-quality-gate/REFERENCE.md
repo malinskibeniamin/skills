@@ -66,6 +66,43 @@ The `git diff --exit-code` pattern catches cases where someone bypassed pre-comm
 
 This ensures the committed code is always the same as what the formatter would produce.
 
+## Asset Type Declarations
+
+tsgo can't resolve `.svg`, `.css`, `.png`, etc. — these are asset imports handled by the bundler (rsbuild/vite/webpack) at build time. Without type declarations, `tsgo` fails with "cannot find module" errors.
+
+Create `src/types/assets.d.ts`:
+
+```ts
+declare module '*.svg' {
+  const content: string
+  export default content
+}
+declare module '*.css' {
+  const content: Record<string, string>
+  export default content
+}
+declare module '*.png' {
+  const content: string
+  export default content
+}
+declare module '*.jpg' {
+  const content: string
+  export default content
+}
+declare module '*.webp' {
+  const content: string
+  export default content
+}
+declare module '*.woff2' {
+  const content: string
+  export default content
+}
+```
+
+Ensure `tsconfig.json` includes the `src/types` directory (automatic if `include` covers `src/**/*`).
+
+For rsbuild projects, also check if `@rsbuild/core/types` is referenced in `tsconfig.json` — it provides built-in asset type declarations that may make this file unnecessary.
+
 ## CI Status Check via gh CLI
 
 After pushing changes or creating a PR, verify CI passes before declaring work complete:

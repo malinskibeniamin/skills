@@ -91,4 +91,14 @@ if echo "$added_lines" | grep -qE '\$typeName'; then
   fi
 fi
 
+# ── Check 8: Warn on toJson/fromJson of Any without typeRegistry ──────
+
+if echo "$added_lines" | grep -qE 'toJson|fromJson'; then
+  if echo "$file_content" | grep -qE 'google.protobuf.Any|AnySchema|anyPack|anyUnpack'; then
+    if ! echo "$file_content" | grep -qE 'typeRegistry|type_registry|createRegistry'; then
+      hook_warn "This file uses google.protobuf.Any with toJson/fromJson but no typeRegistry is visible. Without a registry, Any serialization fails at runtime:\\n\\ncannot encode message google.protobuf.Any to JSON: type not in registry\\n\\nPass { typeRegistry } to toJson/fromJson, or ensure the transport is configured with jsonOptions: { typeRegistry }.\\n\\nSee setup-connect-query REFERENCE.md for the createRegistry pattern."
+    fi
+  fi
+fi
+
 exit 0
