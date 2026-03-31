@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Complete frontend stack — 15 setup skills + 13 community workflow skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Complete frontend stack — 14 setup skills + diagnostics + 13 community workflow skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit

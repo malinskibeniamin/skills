@@ -35,7 +35,7 @@ Runs the generic **frontend-starter-kit** first, then adds additional React enfo
 
 ### 1. Run frontend-starter-kit
 
-This executes all 5 generic skills.
+This executes all 14 setup skills + diagnostics + community workflow skills from the generic starter kit.
 
 ### 2. Run additional React skills
 
