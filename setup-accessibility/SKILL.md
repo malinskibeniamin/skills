@@ -9,10 +9,9 @@ description: Enforce ARIA accessibility via PostToolUse hooks — labels, keyboa
 
 PostToolUse hook on Edit/Write catching accessibility anti-patterns in TSX/JSX:
 
-- **Ban interactive elements without accessible names** — `<button>`, `<input>`, `<select>`, `<textarea>` must have `aria-label`, `aria-labelledby`, or visible label text
-- **Ban mouse-only event handlers** — `onClick` on non-interactive elements (`<div>`, `<span>`) requires `role`, `tabIndex`, and `onKeyDown`/`onKeyUp`
-- **Ban missing ARIA attributes on widget roles** — `role="combobox"` needs `aria-expanded` + `aria-controls`, `role="tablist"` needs `aria-orientation`, etc.
 - **Ban `<img>` without `alt`** — images must have `alt` text (use `alt=""` for decorative images)
+- **Ban mouse-only event handlers** — `onClick` on non-interactive elements (`<div>`, `<span>`) requires `role`, `tabIndex`, and `onKeyDown`/`onKeyUp`
+- **Ban missing ARIA attributes on widget roles** — `role="combobox"` needs `aria-expanded` + `aria-controls`, `role="dialog"` needs `aria-label`/`aria-labelledby`, `role="tablist"` needs child `role="tab"` elements
 
 Also includes:
 - **Playwright AXE** test setup for automated WCAG 2.1 AA scanning
@@ -40,7 +39,6 @@ Write the test fixture from [REFERENCE.md](REFERENCE.md) into your test utilitie
 
 ### 5. Verify
 
-- [ ] Hook blocks `<button>` without accessible name
 - [ ] Hook blocks `<div onClick>` without `role` + `tabIndex` + keyboard handler
 - [ ] Hook blocks `<img>` without `alt`
 - [ ] Hook blocks `role="combobox"` without `aria-expanded`

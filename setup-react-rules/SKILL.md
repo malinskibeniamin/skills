@@ -20,6 +20,15 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 - **Ban inline `style={{}}`** — use Tailwind utility classes
 - **Ban raw hex/rgb in className and CSS** — use design tokens (`text-destructive`, not `text-[#ff0000]`)
 - **Ban `!important`** in TSX/JSX/CSS/SCSS/SASS/LESS — breaks Tailwind cascade
+- **Ban visual style overrides** on registry components (use variant prop, layout classes are fine)
+- **Ban `onClick + navigate()`** — use `<Button asChild><Link>` instead
+- **Require handler on buttons** — onClick, asChild, type="submit", or disabled
+- **Ban icon inside AlertTitle** — use the icon prop on `<Alert>`
+- **Enforce `create()` wrapper** for protobuf message spreads (v2 only)
+- **Require `aria-label`** on icon-only buttons
+- **Ban `outline: none`** — breaks keyboard navigation, use focus-visible
+- **React Compiler** — ban manual `useMemo`/`useCallback`/`React.memo` (respects annotation mode)
+- **Ban class components** — use functional components (required for React Compiler)
 
 ### Opt-in rules
 
