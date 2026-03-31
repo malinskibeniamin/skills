@@ -265,6 +265,14 @@ Reduce token usage and context waste.
   bunx skills@latest add malinskibeniamin/skills/setup-conventional-commits --agent claude-code -y
   ```
 
+## Atlassian / Jira (Optional)
+
+- **setup-atlassian-workflow** — Opt-in Jira integration via `acli` (Atlassian CLI). Mirrors gh-based workflow skills for Jira users — create work items, transition status, comment, link PRs. Works alongside `gh` (`ISSUE_TRACKER=both`) or standalone (`ISSUE_TRACKER=acli`). Requires `acli` installed and authenticated.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
+  ```
+
 ## Community Skills (Optional)
 
 ### mattpocock/skills — Workflow automation

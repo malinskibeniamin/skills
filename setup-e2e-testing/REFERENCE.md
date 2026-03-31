@@ -164,6 +164,85 @@ await expect(page.getByRole('table')).toBeVisible({ timeout: 10_000 })
 3. **UI mode**: `bun run test:e2e:ui` — step through tests visually
 4. **Debug mode**: `bun run test:e2e:debug` — pause on each action with inspector
 
+## Agent-Browser (Optional)
+
+[agent-browser](https://github.com/vercel-labs/agent-browser) is a headless Rust CLI for AI-driven browser automation. It complements Playwright — use Playwright for test execution, agent-browser for test scaffolding and visual verification.
+
+### Installation
+
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+
+### Test Scaffolding
+
+Use agent-browser to inspect a page and generate Playwright test selectors from the accessibility tree:
+
+```bash
+# Open page and get accessibility snapshot with element refs
+agent-browser open http://localhost:3000/topics
+agent-browser snapshot
+
+# Output includes refs like @e1, @e2, @e3...
+# Use these to understand the page structure and generate selectors
+```
+
+The `snapshot` output maps directly to Playwright's `getByRole` selectors — use it to identify the correct roles, names, and hierarchy before writing tests.
+
+### Visual Verification
+
+After deploying or making changes, verify the page rendered correctly:
+
+```bash
+# Take annotated screenshot with numbered element labels
+agent-browser open http://localhost:3000/topics
+agent-browser screenshot --annotate topics-annotated.png
+
+# Full-page screenshot for visual comparison
+agent-browser screenshot --full-page topics-full.png
+
+# Close when done
+agent-browser close
+```
+
+### Smoke Testing Flow
+
+```bash
+# Open page, interact, verify
+agent-browser open http://localhost:3000/login
+agent-browser fill @e2 "test@example.com"
+agent-browser fill @e3 "password123"
+agent-browser press Enter
+agent-browser wait --text "Dashboard"
+agent-browser screenshot post-login.png
+agent-browser close
+```
+
+### Batch Operations
+
+For multi-step verification, use batch mode:
+
+```bash
+echo '[
+  ["open", "http://localhost:3000/topics"],
+  ["wait", "--load-state", "networkidle"],
+  ["snapshot"],
+  ["screenshot", "--annotate", "topics.png"]
+]' | agent-browser batch --json
+```
+
+### When to Use Agent-Browser vs Playwright
+
+| Task | Use |
+|------|-----|
+| Running test suites | Playwright (`bun run test:e2e`) |
+| Generating test selectors | agent-browser `snapshot` |
+| Visual smoke test after deploy | agent-browser `screenshot` |
+| Interactive test debugging | Playwright UI mode |
+| CI test execution | Playwright |
+| AI-driven page inspection | agent-browser |
+
 ## CI Configuration
 
 ```yaml

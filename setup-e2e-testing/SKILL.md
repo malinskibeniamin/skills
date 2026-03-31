@@ -10,6 +10,7 @@ description: Set up Playwright + Testcontainers + axe-core for e2e and accessibi
 - **Playwright** for browser-based end-to-end testing
 - **Testcontainers** for spinning up backend services (databases, APIs) in Docker during tests
 - **@axe-core/playwright** for automated WCAG 2.1 AA accessibility audits in every test
+- **agent-browser** (optional) — headless Rust CLI for AI-driven test scaffolding and visual verification
 - Test patterns and naming conventions
 
 See [REFERENCE.md](REFERENCE.md) for detailed patterns, Testcontainers setup, and accessibility testing.
