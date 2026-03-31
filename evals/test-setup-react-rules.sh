@@ -479,6 +479,84 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: functional component"
 
+# ── Check 19: Ban barrel imports ──────────────────────────────────
+
+# Set up a directory with an index.ts barrel export
+_barrel_tmpdir=$(mktemp -d /tmp/barrel-evals-XXXXXX)
+mkdir -p "$_barrel_tmpdir/components"
+echo "export { Button } from './button'" > "$_barrel_tmpdir/components/index.ts"
+echo "export function Button() {}" > "$_barrel_tmpdir/components/button.tsx"
+
+tmpfile="$_barrel_tmpdir/page.tsx"
+echo "import { Button } from './components'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: barrel import from directory with index.ts" "Barrel import"
+
+rm -rf "$_barrel_tmpdir"
+
+# ── Check 20: Ban addEventListener without passive ────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "element.addEventListener('scroll', handler)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: addEventListener scroll without passive" "passive"
+
+echo "element.addEventListener('touchstart', handler)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: addEventListener touchstart without passive"
+
+echo "element.addEventListener('scroll', handler, { passive: true })" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: addEventListener with passive: true"
+
+# ── Check 21: Warn on heavy static imports ─────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "import { Chart } from 'chart.js'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: static import of chart.js" "Heavy dependency"
+
+echo "import * as d3 from 'd3'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: static import of d3"
+
+# Allow non-heavy imports
+echo "import { useState } from 'react'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: normal import (not heavy)"
+
+# ── Check 3b: Ban as Record<string, any> (default mode) ──────────
+
+tmpfile="$_rr_tmpdir/test.ts"
+echo "const data = response as Record<string, any>" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: as Record<string, any>" "Record"
+
+echo "const data = response as Record<string, unknown>" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: as Record<string, unknown>" "Record"
+
+# Reset to tsx for remaining checks
+tmpfile="$_rr_tmpdir/test.tsx"
+
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"

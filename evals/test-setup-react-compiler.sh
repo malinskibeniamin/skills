@@ -80,6 +80,30 @@ run_hook_eval "$SCRIPT" \
   '{"tool_name":"Edit","tool_input":{"file_path":""}}' \
   0 "skip: empty file_path"
 
+# ── Hook: annotation mode — skip files without 'use memo' ──────
+
+# In annotation mode, useMemo is allowed in files without "use memo"
+tmpfile="$_rc_tmpdir/test.tsx"
+echo "const val = useMemo(() => compute(), [dep])" > "$tmpfile"
+
+REACT_COMPILER_MODE=annotation run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "annotation mode: allow useMemo without 'use memo' directive"
+
+# In annotation mode, useMemo is blocked in files WITH "use memo"
+printf "'use memo'\nconst val = useMemo(() => compute(), [dep])\n" > "$tmpfile"
+
+REACT_COMPILER_MODE=annotation run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "annotation mode: block useMemo in file with 'use memo'" "useMemo"
+
+# In default (infer) mode, useMemo is always blocked
+echo "const val = useMemo(() => compute(), [dep])" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "infer mode: block useMemo (default)" "useMemo"
+
 # ── Hook script content ─────────────────────────────────────────
 
 run_content_eval "$SCRIPT" "useMemo" "hook checks for useMemo"
