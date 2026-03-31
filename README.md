@@ -10,6 +10,12 @@ One command to install everything (15 setup skills + diagnostics + 13 community 
 bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
 ```
 
+**Project management + workflow skills:**
+
+```bash
+bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claude-code -y
+```
+
 **Optional extras:**
 
 ```bash
@@ -19,11 +25,99 @@ npx @tanstack/intent@latest install
 # Codex compatibility (if team uses both Claude Code and Codex)
 bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
 
+# Atlassian/Jira integration (requires acli installed)
+bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
+
+# Codex cross-model review plugin (requires OpenAI API key)
+# /plugin marketplace add openai/codex-plugin-cc
+# /plugin install codex@openai-codex
+
 # Redpanda-specific (Chakra/legacy bans, registry workflow)
 bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
 ```
 
 Or install individual skills if you don't want the full kit — see sections below.
+
+## Example Prompts
+
+After installing, try these prompts to see the skills in action:
+
+<details>
+<summary>Feature development workflow</summary>
+
+```
+/write-a-prd for a new user settings page with theme, language, and notification preferences.
+```
+
+Then:
+
+```
+/prd-to-plan
+```
+
+Then:
+
+```
+/prd-to-issues
+```
+
+If using Jira: the issues will also be created as Jira work items when `ISSUE_TRACKER=both`.
+
+</details>
+
+<details>
+<summary>Code review workflow</summary>
+
+```
+Create a PR for these changes. After creating it, comment @claude review on the PR for an automated review.
+```
+
+Or for a local second opinion:
+
+```
+/codex:review
+```
+
+For design challenges:
+
+```
+/codex:adversarial-review
+```
+
+</details>
+
+<details>
+<summary>Test health check</summary>
+
+```
+Run test-guardian diagnostics on this project. Identify flaky tests, async leaks, and slow queries.
+```
+
+</details>
+
+<details>
+<summary>E2E test scaffolding</summary>
+
+```
+Use agent-browser to inspect http://localhost:3000/topics and generate Playwright e2e tests from the accessibility tree.
+```
+
+</details>
+
+<details>
+<summary>Architecture review</summary>
+
+```
+/improve-codebase-architecture — focus on module boundaries and testability
+```
+
+Or stress-test a design:
+
+```
+/grill-me on the data fetching strategy for the new dashboard feature
+```
+
+</details>
 
 ## Migrating an Existing Codebase
 
@@ -109,7 +203,7 @@ Meta-skills that install everything you need in one go.
   bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
   ```
 
-- **work-automation-kit** — Project planning and management workflow skills: PRD creation, implementation planning, issue breakdown, and bug triage.
+- **work-automation-kit** — Project planning and management workflow skills: PRD creation, implementation planning, issue breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claude-code -y
@@ -135,7 +229,7 @@ Linting, formatting, and quality gate automation.
   bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
   ```
 
-- **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), Stop hook for tsgo type checking, and bundle guard PostToolUse hook that warns on heavy dependencies (moment, lodash, jquery, core-js, classnames).
+- **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), Stop hook for tsgo type checking, bundle guard PostToolUse hook, `gh` CLI CI status checks, `@claude review` trigger pattern, and optional Codex cross-model review.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
@@ -171,7 +265,7 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
   bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
   ```
 
-- **setup-react-compiler** — Install `babel-plugin-react-compiler` with rsbuild config. `'use no memo'` directive for escape hatch. Component library directories auto-excluded from compiler.
+- **setup-react-compiler** — Install `babel-plugin-react-compiler` with rsbuild config. Default `annotation` mode for brownfield codebases (opt-in per file with `"use memo"`), `infer` for greenfield. `'use no memo'` for escape hatch. Compiler modes reference, derived-state detection, named useEffect heuristic. Component library directories auto-excluded.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
@@ -197,7 +291,7 @@ Stop hooks and manual diagnostic skills.
 
 Reduce token usage and context waste.
 
-- **setup-llm-optimization** — SessionStart sets `AI_AGENT=1` and `CLAUDECODE=1` for LLM-friendly test output. PreToolUse blocks `--verbose` on test runners. PostToolUse truncates bash output >200 lines.
+- **setup-llm-optimization** — SessionStart sets `AI_AGENT=1`, `CLAUDECODE=1`, and `NODE_OPTIONS=--max-old-space-size=8192`. PreToolUse strips `--verbose` from test runners via `updatedInput` rewrite and suggests `--pool=forks` (zombie prevention), `--bail=1` (fail fast), `--teardownTimeout=5000`. PostToolUse truncates bash output >200 lines.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
@@ -243,7 +337,7 @@ Reduce token usage and context waste.
 
 ## E2E Testing
 
-- **setup-e2e-testing** — Playwright for end-to-end testing with Testcontainers for backend infrastructure, axe-core for automated WCAG 2.1 AA accessibility audits. Includes test patterns for forms, tables, multi-step workflows, and debugging strategies.
+- **setup-e2e-testing** — Playwright for end-to-end testing with Testcontainers for backend infrastructure, axe-core for automated WCAG 2.1 AA accessibility audits. Optional agent-browser integration for AI-driven test scaffolding and visual verification. Includes test patterns for forms, tables, multi-step workflows, and debugging strategies.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-e2e-testing --agent claude-code -y
@@ -324,7 +418,7 @@ Two layers of testing to prevent regressions:
 ./evals/run.sh
 ```
 
-**Agent-level evals** — 9 behavioral tests using [@vercel/agent-eval](https://github.com/vercel-labs/agent-eval) that verify Claude Code actually follows the rules when given adversarial prompts. Runs in Docker sandbox:
+**Agent-level evals** — 14 behavioral tests using [@vercel/agent-eval](https://github.com/vercel-labs/agent-eval) that verify Claude Code actually follows the rules when given adversarial prompts. Runs in Docker sandbox:
 
 ```
 cd agent-evals && bun install --yarn && npx @vercel/agent-eval
@@ -334,12 +428,12 @@ cd agent-evals && bun install --yarn && npx @vercel/agent-eval
 
 ```
 SessionStart
-├── session-env.sh      — PKG_MANAGER=bun, LINTER=biome, TEST_RUNNER=vitest
+├── session-env.sh      — PKG_MANAGER=bun, LINTER=biome, TEST_RUNNER=vitest, NODE_OPTIONS=8GB
 └── llm-env.sh          — AI_AGENT=1, CLAUDECODE=1
 
 PreToolUse (Bash)
 ├── enforce-toolchain.sh            — block npm/npx/tsc/eslint/prettier, enforce --yarn, guard destructive commands
-├── llm-test-flags.sh               — block --verbose on test runners
+├── llm-test-flags.sh               — strip --verbose (updatedInput rewrite), suggest --pool=forks/--bail
 └── conventional-commits-check.sh   — enforce type(scope): description format
 
 PostToolUse (Edit|Write)                          All use shared/hook-lib.sh
