@@ -530,6 +530,21 @@ run_hook_eval "$SCRIPT" \
 
 rm -rf "$_barrel_tmpdir"
 
+# ── Check 22: handleSubmit must have error callback ──────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "onSubmit={handleSubmit(onSubmit)}" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: handleSubmit without error callback" "error callback"
+
+echo "onSubmit={handleSubmit(onSubmit, onError)}" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: handleSubmit with error callback"
+
 # ── Check 20: Ban addEventListener without passive ────────────────
 
 tmpfile="$_rr_tmpdir/test.tsx"

@@ -277,6 +277,19 @@ if echo "$added_lines" | grep -qE "^[+]?import\s.*from\s+['\"]" | grep -qE "(cha
   hook_warn "Use dynamic import for heavy dependency.\nStatic imports of large libraries bloat the initial bundle.\nUse React.lazy() or dynamic import() instead."
 fi
 
-# ── Checks 22-23 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# ── Check 22: handleSubmit must have error callback ────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    # Match handleSubmit(onSubmit) without a second arg — no comma after first arg
+    # Good: handleSubmit(onSubmit, onError) — has comma = has error callback
+    if echo "$added_lines" | grep -qE 'handleSubmit\([a-zA-Z_]+\)' && \
+       ! echo "$added_lines" | grep -qE 'handleSubmit\([a-zA-Z_]+,'; then
+      hook_warn "Add error callback to handleSubmit.\nWithout it, form submission errors are silently swallowed.\nUse handleSubmit(onSubmit, onError) — always handle the error case."
+    fi
+    ;;
+esac
+
+# ── Checks 23-24 (raw hex/rgb, !important) moved to tailwind-check.sh ──
 
 exit 0
