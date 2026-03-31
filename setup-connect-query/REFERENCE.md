@@ -8,6 +8,18 @@
 
 For projects using `@bufbuild/protobuf` ^1.x, use the same script but **remove checks 5 and 6** (the `new Message()` and `PlainMessage`/`PartialMessage` checks). In v1, these patterns are correct.
 
+## TanStack Query Hooks That Don't Trigger False Positives
+
+The hook uses `\buseQuery\b` word boundaries, so these TanStack Query hooks are **safe to import from `@tanstack/react-query`** and will NOT be flagged:
+
+- `useQueryClient` — stripped before matching
+- `useQueries` — word boundary prevents match
+- `useSuspenseQuery` — word boundary prevents match
+- `useInfiniteQuery` — word boundary prevents match
+- `useMutationState` — word boundary prevents match
+
+You do **NOT** need to create barrel re-exports or wrapper modules to avoid false positives. If you have existing workarounds for this, they can be safely removed.
+
 ## Cache Invalidation Patterns
 
 ### Invalidate by Service Type Name

@@ -2,9 +2,10 @@
 set -euo pipefail
 
 # Skill Eval Runner
-# Usage: ./evals/run.sh [skill-name]
+# Usage: ./evals/run.sh [skill-name] [--json]
 # Run all evals: ./evals/run.sh
 # Run one skill: ./evals/run.sh setup-toolchain
+# JSON output:   ./evals/run.sh --json
 
 EVALS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$EVALS_DIR/.." && pwd)"
@@ -12,6 +13,17 @@ PASS=0
 FAIL=0
 SKIP=0
 ERRORS=""
+JSON_MODE=false
+FAILURES_JSON="[]"
+
+# Parse args
+target_skill=""
+for arg in "$@"; do
+  case "$arg" in
+    --json) JSON_MODE=true ;;
+    *) target_skill="$arg" ;;
+  esac
+done
 
 run_hook_eval() {
   local script="$1"
@@ -116,12 +128,13 @@ run_content_eval() {
 }
 
 # Discover and run eval files
-target_skill="${1:-}"
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Skill Evals"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
+if [ "$JSON_MODE" = false ]; then
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  Skill Evals"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+fi
 
 for eval_file in "$EVALS_DIR"/test-*.sh; do
   [ -f "$eval_file" ] || continue
@@ -132,10 +145,26 @@ for eval_file in "$EVALS_DIR"/test-*.sh; do
     continue
   fi
 
-  echo "[$skill_name]"
-  source "$eval_file"
-  echo ""
+  if [ "$JSON_MODE" = true ]; then
+    source "$eval_file" > /dev/null
+  else
+    echo "[$skill_name]"
+    source "$eval_file"
+    echo ""
+  fi
 done
+
+if [ "$JSON_MODE" = true ]; then
+  # Build failures array
+  failures_json="[]"
+  if [ -n "$ERRORS" ]; then
+    failures_json=$(printf '%b' "$ERRORS" | grep -E '^\s*FAIL:' | sed 's/^\s*FAIL: //' | jq -R . | jq -s .)
+  fi
+  total=$((PASS + FAIL + SKIP))
+  echo "{\"total\":$total,\"passed\":$PASS,\"failed\":$FAIL,\"skipped\":$SKIP,\"failures\":$failures_json}"
+  [ $FAIL -gt 0 ] && exit 1
+  exit 0
+fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Results: $PASS passed, $FAIL failed, $SKIP skipped"
