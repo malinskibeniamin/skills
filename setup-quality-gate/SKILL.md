@@ -14,6 +14,7 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 - **Bundle guard hook** (PostToolUse) that warns when known-heavy dependencies (moment, lodash, jquery, core-js, classnames) are added to package.json
 - **CI status check** — verify `gh run list` passes before declaring work complete
 - **`@claude` review trigger** — after creating a PR, comment `@claude review` to trigger automated Claude review
+- **Codex second opinion** (optional) — `/codex:review` for cross-model review via [codex-plugin-cc](https://github.com/openai/codex-plugin-cc)
 
 ## Steps
 

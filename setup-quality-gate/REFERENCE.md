@@ -104,6 +104,51 @@ gh pr checks --watch
 gh run list --workflow quality-gate.yml --branch "$(git branch --show-current)" --limit 1 --json status,conclusion
 ```
 
+## Codex Second Opinion (Optional)
+
+Install [codex-plugin-cc](https://github.com/openai/codex-plugin-cc) for cross-model code review inside Claude Code:
+
+```
+/plugin marketplace add openai/codex-plugin-cc
+/plugin install codex@openai-codex
+/reload-plugins
+/codex:setup
+```
+
+### Review commands
+
+| Command | Purpose |
+|---------|---------|
+| `/codex:review` | Standard read-only review — same quality as running Codex directly |
+| `/codex:adversarial-review` | Challenge review — questions design decisions and tradeoffs |
+| `/codex:rescue <task>` | Delegate bug investigation or continuation to Codex |
+| `/codex:status` | Check running/completed background jobs |
+| `/codex:result` | Retrieve final output from background job |
+
+### Recommended workflow
+
+Run `/codex:review` before creating a PR for a second opinion from a different model:
+
+```
+1. Finish coding → our hooks catch pattern violations automatically
+2. /codex:review → Codex reviews for architectural/logic issues
+3. Fix any findings
+4. gh pr create → @claude review for remote review on full diff
+5. Merge
+```
+
+For contentious design decisions, use `/codex:adversarial-review` — it specifically challenges tradeoffs rather than just checking correctness.
+
+### Review gate (use with caution)
+
+`/codex:setup --enable-review-gate` auto-reviews every Claude response and blocks completion if issues found. This creates extended loops that drain usage limits — only enable for critical code paths.
+
+### Requirements
+
+- ChatGPT subscription or OpenAI API key
+- Node.js 18.18+
+- `npm install -g @openai/codex` (or let the plugin auto-install)
+
 ## @claude Review on PRs
 
 After creating a PR, trigger an automated Claude review by commenting `@claude review` on the PR. This provides an additional review layer beyond the local hooks.
@@ -141,20 +186,3 @@ gh pr comment "$PR_URL" --body "@claude review security"
 gh pr comment "$PR_URL" --body "@claude review - focus on the auth middleware changes and whether the token refresh is race-safe"
 ```
 
-### CI workflow integration
-
-Add to `.github/workflows/quality-gate.yml` to auto-trigger on every PR:
-
-```yaml
-  claude-review:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Trigger Claude review
-        run: gh pr comment "${{ github.event.pull_request.number }}" --body "@claude review"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```

@@ -27,7 +27,7 @@ bun add -D babel-plugin-react-compiler @rsbuild/plugin-babel --yarn
 
 ### 2. Configure rsbuild
 
-Add to `rsbuild.config.ts` (merge with existing config):
+Add to `rsbuild.config.ts` (merge with existing config). **Use `annotation` mode for existing/brownfield codebases** (opt-in per file), `infer` for greenfield:
 
 ```ts
 import { pluginBabel } from '@rsbuild/plugin-babel';
@@ -36,11 +36,24 @@ export default {
   plugins: [
     pluginBabel({
       babelLoaderOptions: {
-        plugins: ['babel-plugin-react-compiler'],
+        plugins: [
+          ['babel-plugin-react-compiler', {
+            // 'annotation' for brownfield (default) — only compiles files with "use memo"
+            // 'infer' for greenfield — compiles all components/hooks automatically
+            compilationMode: 'annotation',
+          }],
+        ],
       },
     }),
   ],
 };
+```
+
+For brownfield codebases, set the env var so hooks adapt:
+
+```bash
+# In .claude/hooks/session-env.sh
+echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 ```
 
 ### 3. Add `'use no memo'` to component library files

@@ -18,6 +18,7 @@ Installs community workflow skills for project planning, management, and skill a
 ### Optional integrations
 
 6. **setup-atlassian-workflow** — Jira integration via `acli` CLI. Mirrors gh-based workflow skills for Jira users. Opt-in: only activates if `acli` is installed and authenticated. Works alongside `gh` (set `ISSUE_TRACKER=both`) or standalone (`ISSUE_TRACKER=acli`).
+7. **codex-plugin-cc** — Cross-model review via Codex inside Claude Code. `/codex:review` for second-opinion reviews, `/codex:adversarial-review` for design challenge. Requires ChatGPT subscription or OpenAI API key.
 
 ## Steps
 
