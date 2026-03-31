@@ -4,16 +4,12 @@ set -euo pipefail
 # Stop hook: run biome lint:fix on all changed JS/TS files before Claude finishes.
 # Only runs if JS/TS files were actually changed.
 
-# Check if any JS/TS files were changed.
 # git diff returns paths relative to repo root; strip the prefix so they're
 # relative to cwd (where bun run lint:fix:file executes).
-# In monorepos, files outside the current package appear in diff but don't exist
-# relative to cwd — filter them out to avoid "file not found" errors.
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
 cwd=$(pwd)
 prefix="${cwd#"$repo_root"/}/"
-# Skip component library directories
-# Auto-detect: check common conventions, override with UI_LIB_DIRS env var (pipe-separated)
+# Skip component library directories (same pattern as shared/hook-lib.sh hook_skip_ui_dirs)
 if [ -z "${UI_LIB_DIRS:-}" ]; then
   _ui_dirs="components/ui"
   [ -d "$repo_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
