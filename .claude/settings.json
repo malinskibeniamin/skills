@@ -103,6 +103,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/registry-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/violation-summary-stop.sh"
           }
         ]
       }

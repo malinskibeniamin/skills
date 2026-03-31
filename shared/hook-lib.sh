@@ -15,6 +15,27 @@
 #   hook_parse_bash              # sets: command
 #   ... your checks ...
 #   hook_deny "Error message"
+#
+# Environment variables:
+#   HOOKS_FAIL_CLOSED=1  — treat hook errors (exit 1) as blocks (exit 2)
+#                          instead of silently passing. Catches misconfiguration.
+
+# ── Fail-closed mode (inspired by Claude Code iron_gate_closed) ──
+
+if [ "${HOOKS_FAIL_CLOSED:-}" = "1" ]; then
+  trap '_fc_msg="Hook script error in $(basename "$0"). Check hook configuration (missing _hook-lib.sh? jq not installed?)."; echo "{\"suppressOutput\":true,\"systemMessage\":\"$_fc_msg\"}" >&2; exit 2' ERR
+fi
+
+# ── Violation tracking ───────────────────────────────────────────
+# Tracks violations per session for aggregation in Stop hooks.
+# File: /tmp/claude-hook-violations-<session>
+
+_hook_violations_file="/tmp/claude-hook-violations-${CLAUDE_SESSION_ID:-$$}"
+
+_hook_track_violation() {
+  local label="$1"
+  echo "$label" >> "$_hook_violations_file" 2>/dev/null || true
+}
 
 # ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
 
@@ -112,6 +133,8 @@ hook_get_added_lines() {
 
 hook_block() {
   local msg="$1"
+  local label="${2:-$(basename "$0" .sh)}"
+  _hook_track_violation "$label"
   echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
   exit 2
 }
@@ -120,6 +143,8 @@ hook_block() {
 
 hook_warn() {
   local msg="$1"
+  local label="${2:-$(basename "$0" .sh)}"
+  _hook_track_violation "$label"
   echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
   exit 0
 }
@@ -145,6 +170,8 @@ hook_parse_bash() {
 
 hook_deny() {
   local msg="$1"
+  local label="${2:-$(basename "$0" .sh)}"
+  _hook_track_violation "$label"
   echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"$msg\"}" >&2
   exit 2
 }
