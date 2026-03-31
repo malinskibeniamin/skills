@@ -91,9 +91,12 @@ fi
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' && \
-       echo "$added_lines" | grep -qE 'className=.*\b(bg-|text-|border-|shadow-|rounded-)'; then
-      hook_block "Do not override visual styles on registry components.\nVariant props exist for this purpose; raw Tailwind breaks design consistency.\nUse the component's variant prop. Layout classes (mt-4, flex-1, w-full, gap-2) are fine."
+    # Only flag when a registry component AND a visual override class are on the SAME line.
+    # Catches: bg-*, border-*, shadow-*, rounded-* (visual overrides).
+    # Excludes text-* entirely — too many false positives (text-center, text-sm, text-wrap).
+    # Text color overrides (text-red-500) are caught by the tailwind hex/token checks instead.
+    if echo "$added_lines" | grep -E '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
+      hook_block "Do not override visual styles on registry components.\nVariant props exist for this purpose; raw Tailwind breaks design consistency.\nUse the component's variant prop. Layout classes (mt-4, flex-1, w-full, gap-2, text-center, text-sm) are fine."
     fi
     ;;
 esac
