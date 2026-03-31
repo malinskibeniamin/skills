@@ -25,6 +25,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/llm-test-flags.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/conventional-commits-check.sh"
           }
         ]
       }
@@ -36,6 +40,47 @@
           {
             "type": "command",
             "command": ".claude/hooks/react-rules-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/tailwind-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/accessibility-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/zustand-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/tanstack-router-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/connect-query-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/react-compiler-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/env-validation-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/bundle-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/llm-truncate.sh"
           }
         ]
       }
