@@ -112,7 +112,7 @@ run_content_eval "$SCRIPT" "React.memo" "hook checks for React.memo"
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
 run_content_eval "$SCRIPT" "use no memo" "hook respects 'use no memo'"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
-run_content_eval "$SCRIPT" "Naming test|naming test" "hook includes naming-test heuristic"
+run_content_eval "$SCRIPT" "useRef.*memoization|memoization cache" "hook includes anti-caching heuristic"
 
 # ── REFERENCE content ────────────────────────────────────────────
 

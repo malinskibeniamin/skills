@@ -43,31 +43,31 @@ deps_block=$(jq -r '.dependencies // {} | keys[]' "$file_path" 2>/dev/null || tr
 
 # ── Check: moment ──
 if echo "$added_lines" | grep -qE '"moment"' && echo "$deps_block" | grep -qx 'moment'; then
-  echo '{"suppressOutput":true,"systemMessage":"Bundle guard: moment is 330KB. Use date-fns (22KB) instead."}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"Do not add moment (330KB).\nUse date-fns (22KB) instead."}' >&2
   exit 2
 fi
 
 # ── Check: lodash (but not lodash-es or lodash/) ──
 if echo "$added_lines" | grep -qE '"lodash"' && ! echo "$added_lines" | grep -qE '"lodash-es"|"lodash/' && echo "$deps_block" | grep -qx 'lodash'; then
-  echo '{"suppressOutput":true,"systemMessage":"Bundle guard: Full lodash is 530KB. Use lodash-es or per-function imports (e.g., lodash/get)."}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"Do not add full lodash (530KB).\nUse lodash-es or per-function imports (e.g., lodash/get)."}' >&2
   exit 2
 fi
 
 # ── Check: jquery ──
 if echo "$added_lines" | grep -qE '"jquery"' && echo "$deps_block" | grep -qx 'jquery'; then
-  echo '{"suppressOutput":true,"systemMessage":"Bundle guard: jQuery is unnecessary in React projects. Use native DOM APIs or React refs."}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"Do not add jQuery in a React project.\nUse native DOM APIs or React refs."}' >&2
   exit 2
 fi
 
 # ── Check: core-js ──
 if echo "$added_lines" | grep -qE '"core-js"' && echo "$deps_block" | grep -qx 'core-js'; then
-  echo '{"suppressOutput":true,"systemMessage":"Bundle guard: Full core-js polyfill is 250KB+. Use specific polyfills or @babel/preset-env with useBuiltIns: '\''usage'\''."}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"Do not add full core-js (250KB+).\nUse specific polyfills or @babel/preset-env with useBuiltIns: '\''usage'\''."}' >&2
   exit 2
 fi
 
 # ── Check: classnames ──
 if echo "$added_lines" | grep -qE '"classnames"' && echo "$deps_block" | grep -qx 'classnames'; then
-  echo '{"suppressOutput":true,"systemMessage":"Bundle guard: Use clsx (330B) instead of classnames (1.8KB)."}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"Do not add classnames (1.8KB).\nUse clsx (330B) instead."}' >&2
   exit 2
 fi
 

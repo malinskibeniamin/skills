@@ -15,7 +15,7 @@ hook_get_added_lines
 
 # Check for raw process.env access
 if echo "$added_lines" | grep -qE 'process\.env\.'; then
-  hook_block "Do not use raw process.env access. Import the validated env object instead:\n\nimport { env } from \\\"@/env\\\";\n\nconst url = env.PUBLIC_API_URL;\n\nAll environment variables must be declared in src/env.ts with zod validation (t3-env). This ensures type safety and runtime validation at startup."
+  hook_block "Do not use raw process.env access.\nImport the validated env object: import { env } from \\\"@/env\\\".\n\nAll variables must be declared in src/env.ts with t3-env zod validation."
 fi
 
 exit 0

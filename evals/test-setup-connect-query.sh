@@ -67,7 +67,7 @@ printf "import { useQuery } from '@tanstack/react-query'\nimport { listTopics } 
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useQuery from @tanstack/react-query with ConnectRPC" "Connect Query"
+  2 "block: useQuery from @tanstack/react-query with ConnectRPC" "connect-query"
 
 # tmpfile reused in tmpdir
 
@@ -133,7 +133,7 @@ printf "import { ListTopicsRequest } from '@buf/redpandadata_cloud.bufbuild_es'\
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: new Message() construction (v2)" "create()"
+  2 "block: new Message() construction (v2)" "create(Schema"
 
 # tmpfile reused in tmpdir
 
@@ -186,7 +186,7 @@ printf "const msg = { \\\$typeName: 'foo.Bar', field: 'value' }\n" > "$tmpfile"
 cd "$_cq_tmpdir"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: manual \$typeName object literal (v2)" "create()"
+  2 "block: manual \$typeName object literal (v2)" "create(Schema"
 cd "$REPO_ROOT"
 
 rm -rf "$_cq_tmpdir"

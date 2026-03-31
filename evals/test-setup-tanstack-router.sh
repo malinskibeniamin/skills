@@ -131,7 +131,7 @@ printf "window.location.reload()\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: window.location.reload() (exit 0)" "blank screen"
+  0 "warn: window.location.reload() (exit 0)" "blank flash"
 
 # tmpfile reused in tmpdir
 

@@ -208,7 +208,7 @@ run_hook_eval "$SCRIPT" \
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -rf /var/data"}}' \
-  2 "block: rm -rf /var/data" "Destructive"
+  2 "block: rm -rf /var/data" "Recursive rm"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -r src/"}}' \
