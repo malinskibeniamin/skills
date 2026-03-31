@@ -4,6 +4,7 @@ source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
 hook_skip_ui_dirs
+hook_skip_generated
 hook_filter_extensions "ts|tsx|js|jsx"
 hook_get_added_lines
 

@@ -5,6 +5,7 @@ source "$(dirname "$0")/_hook-lib.sh"
 hook_parse_edit_write
 hook_filter_extensions "tsx|jsx"
 hook_skip_ui_dirs
+hook_skip_generated
 
 # Skip files with 'use no memo' directive
 if head -5 "$file_path" | grep -qF "'use no memo'" || head -5 "$file_path" | grep -qF '"use no memo"'; then

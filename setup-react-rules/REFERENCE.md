@@ -29,9 +29,19 @@ The hook checks for `// allow-useEffect:` anywhere in the file. A reason is requ
 | `<dialog>` | `<Dialog>` | `@/components/ui/dialog` |
 | `<table>` | `<Table>` | `@/components/ui/table` |
 | `<label>` | `<Label>` | `@/components/ui/label` |
-| `<form>` | `<AutoForm>` | `@/components/ui/auto-form` |
 
-Note: `<a>` is allowed (TanStack Router Link can't always be used).
+Note: `<form>` and `<a>` are allowed — `<form>` has no standard registry replacement, `<a>` can't always be replaced with TanStack Router Link.
+
+## Auto-Generated Files
+
+The following files are automatically skipped by all hooks:
+
+| Pattern | Source |
+|---------|--------|
+| `*.gen.ts` / `*.gen.tsx` | TanStack Router (`routeTree.gen.ts`) |
+| `*_pb.ts` / `*_pb.js` | Protobuf codegen |
+| `*_connectquery.ts` | Connect Query codegen |
+| Files with `@generated` / `auto-generated` / `DO NOT EDIT` in first 5 lines | Any codegen tool |
 
 ## Named useEffect Functions
 

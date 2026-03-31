@@ -4,6 +4,7 @@ source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
 hook_filter_extensions "ts|tsx|js|jsx"
+hook_skip_generated
 
 # Check for escape hatch
 if grep -qE '//\s*allow-direct-query:' "$file_path"; then

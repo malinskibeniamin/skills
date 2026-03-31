@@ -60,6 +60,20 @@ hook_skip_tests() {
   fi
 }
 
+# ── Skip auto-generated files ────────────────────────────────────
+
+hook_skip_generated() {
+  case "$file_path" in
+    *.gen.ts|*.gen.tsx|*.gen.js) exit 0 ;;  # TanStack Router routeTree.gen.ts
+    *_pb.ts|*_pb.js) exit 0 ;;              # Protobuf generated
+    *_connectquery.ts) exit 0 ;;            # Connect Query generated
+  esac
+  # Skip files with @generated marker
+  if head -5 "$file_path" 2>/dev/null | grep -qE '(@generated|auto-generated|DO NOT EDIT)'; then
+    exit 0
+  fi
+}
+
 # ── Skip component library directories (auto-detect + UI_LIB_DIRS) ──
 
 hook_skip_ui_dirs() {
