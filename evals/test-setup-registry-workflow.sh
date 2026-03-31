@@ -22,3 +22,23 @@ run_content_eval "$SCRIPT" "redpanda-ui/" "hook checks for redpanda-ui changes"
 run_content_eval "$SCRIPT" "registry.json" "hook checks for registry.json update"
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks when registry not rebuilt"
 run_content_eval "$SCRIPT" "CHANGELOG" "hook reminds about changelog"
+
+# ── Stop hook behavioral test ───────────────────────────────────
+
+# registry-check.sh should exit 0 when no files changed
+_reg_tmpdir=$(mktemp -d /tmp/registry-eval-XXXXXX)
+cd "$_reg_tmpdir"
+git init -q && git commit --allow-empty -m "init" -q
+actual_exit=0
+"$SCRIPT" > /dev/null 2>&1 || actual_exit=$?
+cd "$REPO_ROOT"
+rm -rf "$_reg_tmpdir"
+
+if [ "$actual_exit" -eq 0 ]; then
+  echo "  PASS  registry-check exits 0 on clean repo (no changes)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  registry-check exits $actual_exit on clean repo (expected 0)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: registry-check exits $actual_exit on clean repo"
+fi

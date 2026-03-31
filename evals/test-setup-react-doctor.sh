@@ -29,3 +29,23 @@ run_content_eval "$SCRIPT" "decision.*block" "script blocks on failure"
 run_content_eval "$SCRIPT" "bun run doctor" "hook uses package.json script (not bunx)"
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed files"
 run_content_eval "$SCRIPT" "tsx|jsx" "hook filters React files"
+
+# ── Stop hook behavioral test ───────────────────────────────────
+
+# react-doctor-stop.sh should exit 0 when no React files changed
+_rd_tmpdir=$(mktemp -d /tmp/react-doctor-eval-XXXXXX)
+cd "$_rd_tmpdir"
+git init -q && git commit --allow-empty -m "init" -q
+actual_exit=0
+"$SCRIPT" > /dev/null 2>&1 || actual_exit=$?
+cd "$REPO_ROOT"
+rm -rf "$_rd_tmpdir"
+
+if [ "$actual_exit" -eq 0 ]; then
+  echo "  PASS  react-doctor-stop exits 0 on clean repo (no changed React files)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  react-doctor-stop exits $actual_exit on clean repo (expected 0)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: react-doctor-stop exits $actual_exit on clean repo"
+fi

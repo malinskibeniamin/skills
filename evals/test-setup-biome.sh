@@ -53,6 +53,27 @@ run_content_eval "$SCRIPT" "decision.*block" "hook blocks on unfixable errors"
 run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
 run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
 
+# ── Stop hook behavioral tests ──────────────────────────────────
+
+# biome-autofix.sh should exit 0 when no JS/TS files changed (clean repo)
+# We test this by running in a tmpdir with no git changes
+_biome_tmpdir=$(mktemp -d /tmp/biome-eval-XXXXXX)
+cd "$_biome_tmpdir"
+git init -q && git commit --allow-empty -m "init" -q
+actual_exit=0
+"$SCRIPT" > /dev/null 2>&1 || actual_exit=$?
+cd "$REPO_ROOT"
+rm -rf "$_biome_tmpdir"
+
+if [ "$actual_exit" -eq 0 ]; then
+  echo "  PASS  biome-autofix exits 0 on clean repo (no changed files)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  biome-autofix exits $actual_exit on clean repo (expected 0)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: biome-autofix exits $actual_exit on clean repo"
+fi
+
 # ── SKILL.md has file-targeted scripts ─────────────────────────
 
 run_content_eval "$SKILL_DIR/SKILL.md" "lint:file" "SKILL.md documents lint:file script"
