@@ -1,6 +1,8 @@
 ---
 name: setup-accessibility
 description: Enforce ARIA accessibility via PostToolUse hooks — labels, keyboard handlers, widget attributes, Playwright AXE setup. Use when setting up a11y enforcement, WCAG 2.1 AA compliance, or accessibility testing.
+paths:
+  - "src/components/**/*.tsx"
 ---
 
 # Setup Accessibility

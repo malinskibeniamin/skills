@@ -1,0 +1,66 @@
+#!/bin/bash
+set -euo pipefail
+
+# UserPromptSubmit hook: detect intent from prompt keywords and inject
+# workflow directives as additionalContext. Runs alongside user-prompt-context.sh.
+# Target: <30ms (keyword grep cascade).
+
+input=$(cat)
+hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
+
+if [ "$hook_event" != "UserPromptSubmit" ]; then
+  exit 0
+fi
+
+prompt=$(echo "$input" | jq -r '.prompt // empty' | tr '[:upper:]' '[:lower:]')
+
+if [ -z "$prompt" ]; then
+  exit 0
+fi
+
+directives=""
+
+# ── Test writing ─────────────────────────────────────────────────
+
+if echo "$prompt" | grep -qiE 'write.*test|add.*test|create.*test|test for|spec for|\btdd\b|red.green'; then
+  directives="$directives\n[TDD] Write failing test first, then implement, then refactor. After test passes, run async leak detection. Classify: .test.ts (unit, no DOM), .test.tsx (integration, renders components), e2e/*.spec.ts (Playwright). Use userEvent.setup(), prefer getByRole."
+fi
+
+# ── Component/UI creation ────────────────────────────────────────
+
+if echo "$prompt" | grep -qiE 'create.*component|new.*component|build.*form|add.*page|add.*dialog|add.*modal|add.*view'; then
+  directives="$directives\n[COMPONENT] Use @/components/ui/ (never raw HTML). Verify: keyboard navigable, aria-labels on icon buttons, aria-labelledby on dialogs. Co-locate a test file. Use design tokens (Tailwind), never inline styles or raw hex."
+fi
+
+# ── Bug fix / debugging ─────────────────────────────────────────
+
+if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash|triage|investigate|regression'; then
+  directives="$directives\n[TRIAGE] Reproduce with a failing test first (TDD red step). Narrow scope to root cause. Fix, verify test goes green. Run related tests to check for regressions. If fix touches shared code, run full test suite."
+fi
+
+# ── PR/review ────────────────────────────────────────────────────
+
+if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push.*branch|submit.*review'; then
+  directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. After creating: comment @claude review on the PR. Use conventional commit format: type(scope): description."
+fi
+
+# ── Refactoring ──────────────────────────────────────────────────
+
+if echo "$prompt" | grep -qiE '\brefactor\b|extract.*into|move.*to|split.*into|consolidate|clean.?up'; then
+  directives="$directives\n[REFACTOR] Run tests BEFORE changing code (establish baseline). Make small steps, test after each. No barrel imports. Verify type:check + tests pass after refactoring."
+fi
+
+# ── E2E testing ──────────────────────────────────────────────────
+
+if echo "$prompt" | grep -qiE '\be2e\b|playwright|end.to.end|browser test|user workflow|acceptance test'; then
+  directives="$directives\n[E2E] Use base fixture from e2e/fixtures/base.ts (includes axe-core). Include accessibility audit: makeAxeBuilder().analyze(). Use data-testid for selectors. Add explicit waits (waitForSelector, toBeVisible), never hard delays."
+fi
+
+# ── Output ───────────────────────────────────────────────────────
+
+if [ -n "$directives" ]; then
+  escaped=$(printf '%s' "$directives" | jq -Rs .)
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2
+fi
+
+exit 0

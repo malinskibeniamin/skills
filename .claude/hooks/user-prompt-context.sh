@@ -25,7 +25,7 @@ context=""
 branch=$(git branch --show-current 2>/dev/null || echo "detached")
 dirty=$(git diff --stat HEAD 2>/dev/null | tail -1 || echo "clean")
 last_commit=$(git log --oneline -1 2>/dev/null || echo "no commits")
-ahead_behind=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null | awk '{print "ahead:"$1" behind:"$2}' || echo "")
+ahead_behind=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null | awk '{if(NF>=2) print "ahead:"$1" behind:"$2}' 2>/dev/null || echo "")
 
 context="Branch: $branch"
 [ -n "$dirty" ] && context="$context | $dirty"

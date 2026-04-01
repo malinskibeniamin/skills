@@ -1,6 +1,10 @@
 ---
 name: setup-connect-query
 description: Enforce ConnectRPC + Connect Query + Protobuf v2 patterns via PostToolUse hooks. Bans raw useQuery, empty invalidateQueries, $typeName literals. Use when setting up ConnectRPC, protobuf type safety, or data fetching enforcement.
+paths:
+  - "**/*_connectquery*"
+  - "**/*_pb*"
+  - "**/gen/**"
 ---
 
 # Setup Connect Query

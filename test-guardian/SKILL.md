@@ -1,6 +1,11 @@
 ---
 name: test-guardian
 description: Diagnose test health across Vitest/Jest/Bun/Rstest — async leaks, slow queries, flaky tests, file classification. Manual invocation, not a hook. Use when tests are slow, flaky, or leaking memory.
+paths:
+  - "**/*.test.{ts,tsx}"
+  - "**/*.spec.{ts,tsx}"
+  - "**/*.integration.{ts,tsx}"
+  - "**/*.unit.{ts,tsx}"
 ---
 
 # Test Guardian

@@ -1,6 +1,9 @@
 ---
 name: setup-e2e-testing
 description: Set up Playwright + Testcontainers + axe-core for e2e and accessibility testing. Includes patterns for forms, tables, workflows. Use when setting up e2e tests or writing Playwright tests.
+paths:
+  - "e2e/**/*.spec.ts"
+  - "playwright.config.ts"
 ---
 
 # Setup E2E Testing
@@ -88,13 +91,8 @@ export const test = base.extend<{ makeAxeBuilder: () => AxeBuilder }>({
 export { expect } from '@playwright/test'
 ```
 
-### 6. Verify
+### 6. Verify & Commit
 
 - [ ] `bunx playwright test --list` shows discovered tests
-- [ ] Testcontainers can start Docker containers in CI
-- [ ] axe-core fixture is available in all tests
-- [ ] `e2e/` directory structure exists
-
-### 7. Commit
-
-Stage and commit: `Add Playwright e2e testing with Testcontainers and axe-core`
+- [ ] axe-core fixture available, `e2e/` directory exists
+- Commit: `Add Playwright e2e testing with Testcontainers and axe-core`

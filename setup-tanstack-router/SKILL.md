@@ -1,6 +1,9 @@
 ---
 name: setup-tanstack-router
 description: Auto-generate TanStack Router route tree and enforce router patterns via PostToolUse hooks. Bans react-router-dom, window.location, untyped hooks. Use when setting up TanStack Router or file-based routing.
+paths:
+  - "**/routes/**/*.tsx"
+  - "**/routes/**/*.ts"
 ---
 
 # Setup TanStack Router

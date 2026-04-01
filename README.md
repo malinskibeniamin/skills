@@ -498,7 +498,8 @@ SessionStart
 └── llm-env.sh          — AI_AGENT=1, CLAUDECODE=1
 
 UserPromptSubmit
-└── user-prompt-context.sh — inject git state, scripts, violations, config into every prompt
+├── user-prompt-context.sh — inject git state, scripts, violations, rules, config (3 levels)
+└── intent-detect.sh       — detect TDD/component/bug/PR/refactor/e2e intent, inject directives
 
 PreToolUse (Bash)
 ├── enforce-toolchain.sh            — block npm/npx/tsc/eslint/prettier, enforce --yarn, guard destructive commands
@@ -514,7 +515,8 @@ PostToolUse (Edit|Write)                          All use shared/hook-lib.sh
 ├── connect-query-check.sh     — ConnectRPC/protobuf patterns (skips non-connect files)
 ├── react-compiler-check.sh    — ban manual memoization (skips 'use no memo' files)
 ├── env-validation-check.sh    — ban raw process.env (skips env.ts, test files)
-└── bundle-guard.sh            — heavy dependency warnings (~10ms, skips non-package.json)
+├── bundle-guard.sh            — heavy dependency warnings (~10ms, skips non-package.json)
+└── orchestration-guidance.sh  — file-aware guidance (test patterns, a11y, security) + category tracking
 
 PostToolUse (Bash)
 └── llm-truncate.sh      — truncate output >200 lines
@@ -523,7 +525,9 @@ Stop
 ├── biome-autofix.sh     — lint:fix all changed JS/TS files
 ├── typecheck-stop.sh    — tsgo type check + related tests (vitest/jest/bun auto-detect)
 ├── react-doctor-stop.sh — health check on changed files (--diff mode)
-└── registry-check.sh    — remind about registry.json rebuild
+├── registry-check.sh        — remind about registry.json rebuild (skips if no redpanda-ui dir)
+├── orchestration-stop.sh    — quality gate: missing tests, async leaks, security, co-located tests
+└── violation-summary-stop.sh — session violation aggregator
 ```
 
 Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hooks exit immediately on non-matching file extensions.

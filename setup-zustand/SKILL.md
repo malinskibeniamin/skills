@@ -1,6 +1,9 @@
 ---
 name: setup-zustand
 description: Enforce zustand best practices via PostToolUse hooks — double-parens create, useShallow selectors, persist middleware. Use when setting up zustand enforcement or preventing re-render issues.
+paths:
+  - "**/*store*.ts"
+  - "**/*store*.tsx"
 ---
 
 # Setup Zustand
