@@ -130,7 +130,7 @@ echo '<button onClick={handleClick}>Click</button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <button>" "component"
+  0 "warn: raw <button> (suggest Button)" "Button"
 
 echo '<input type="text" />' > "$tmpfile"
 

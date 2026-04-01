@@ -497,6 +497,9 @@ SessionStart
 ├── session-env.sh      — PKG_MANAGER=bun, LINTER=biome, TEST_RUNNER=vitest, NODE_OPTIONS=8GB
 └── llm-env.sh          — AI_AGENT=1, CLAUDECODE=1
 
+UserPromptSubmit
+└── user-prompt-context.sh — inject git state, scripts, violations, config into every prompt
+
 PreToolUse (Bash)
 ├── enforce-toolchain.sh            — block npm/npx/tsc/eslint/prettier, enforce --yarn, guard destructive commands
 ├── llm-test-flags.sh               — strip --verbose (updatedInput rewrite), suggest --pool=forks/--bail

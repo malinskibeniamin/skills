@@ -32,8 +32,11 @@ fi
 case "$file_path" in
   *.tsx|*.jsx)
     raw_element=""
-    if echo "$added_lines" | grep -qE '<button[[:space:]>]'; then raw_element="<button> → <Button> from @/components/ui/button"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<input[[:space:]/>]'; then raw_element="<input> → <Input> from @/components/ui/input"; fi
+    # <button> is a warn (not block) — sometimes needed as a wrapper for clickable cards
+    if echo "$added_lines" | grep -qE '<button[[:space:]>]'; then
+      hook_warn "Prefer <Button> from @/components/ui/button over raw <button>.\\nIf wrapping a card for click handling, use <Card asChild> or <div role=\\\"button\\\"> with keyboard handler."
+    fi
+    if echo "$added_lines" | grep -qE '<input[[:space:]/>]'; then raw_element="<input> → <Input> from @/components/ui/input"; fi
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<select[[:space:]>]'; then raw_element="<select> → <Select> from @/components/ui/select"; fi
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<textarea[[:space:]>]'; then raw_element="<textarea> → <Textarea> from @/components/ui/textarea"; fi
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<dialog[[:space:]>]'; then raw_element="<dialog> → <Dialog> from @/components/ui/dialog"; fi

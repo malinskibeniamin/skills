@@ -8,6 +8,7 @@ description: Token-efficient AI agent hooks — env vars, test flag optimization
 ## What This Sets Up
 
 - **SessionStart hook** setting `AI_AGENT=1`, `CLAUDECODE=1`, and `NODE_OPTIONS=--max-old-space-size=8192`
+- **UserPromptSubmit hook** injecting project state (git branch, dirty files, last commit, available scripts, session violations, active config) into every prompt as `additionalContext` — Claude starts each response knowing the project state without wasting tool calls
 - **PreToolUse hook** optimizing test commands:
   - Strip `--verbose` (hard enforcement via `updatedInput` rewrite — wastes tokens)
   - Suggest `--pool=forks` (prevents zombie processes)

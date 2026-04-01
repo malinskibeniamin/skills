@@ -1,6 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+# Skip entirely if no redpanda-ui directory exists in the repo
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+if [ ! -d "$repo_root/redpanda-ui" ] && [ ! -d "$repo_root/src/redpanda-ui" ]; then
+  exit 0
+fi
+
 # Check if any redpanda-ui component files were changed
 changed=$(git diff --name-only HEAD 2>/dev/null || true)
 
