@@ -101,4 +101,27 @@ if echo "$added_lines" | grep -qE 'toJson|fromJson'; then
   fi
 fi
 
+# ── Check 9: Warn on Any construction without @type/typeUrl ───────
+
+if echo "$added_lines" | grep -qE 'AnySchema|google\.protobuf\.Any'; then
+  if echo "$added_lines" | grep -qE 'create\(.*Any' && ! echo "$added_lines" | grep -qE 'typeUrl|type_url|@type|anyPack'; then
+    hook_warn "Any message constructed without typeUrl.\nWithout @type, JSON serialization fails: '\"@type\" is empty'.\nUse anyPack() or set typeUrl: 'type.googleapis.com/' + Schema.typeName.\n\nSee setup-connect-query REFERENCE.md."
+  fi
+fi
+
+# ── Check 10: Warn on Timestamp as plain object ──────────────────
+
+if echo "$added_lines" | grep -qE 'Timestamp|timestamp'; then
+  # Detect manual { seconds, nanos } construction
+  if echo "$added_lines" | grep -qE '\{\s*seconds\s*:|nanos\s*:' && echo "$file_content" | grep -qE 'Timestamp|timestamp_pb'; then
+    hook_warn "Do not construct Timestamp as { seconds, nanos } object.\nJSON decode fails: 'cannot decode Timestamp from JSON: object'.\nUse timestampFromDate(new Date()) or timestampDate(ts) from @bufbuild/protobuf/wkt.\n\nSee setup-connect-query REFERENCE.md."
+  fi
+  # Detect raw Date passed to Timestamp field without conversion
+  if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qiE 'timestamp'; then
+    if ! echo "$added_lines" | grep -qE 'timestampFromDate|timestampDate|Timestamp\.fromDate|toTimestamp'; then
+      hook_warn "Do not pass raw Date to a Timestamp field.\nUse timestampFromDate(date) from @bufbuild/protobuf/wkt to convert.\n\nSee setup-connect-query REFERENCE.md."
+    fi
+  fi
+fi
+
 exit 0

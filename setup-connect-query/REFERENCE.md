@@ -176,6 +176,55 @@ const transport = createConnectTransport({
 
 Forgetting to add a new message schema to the registry when adding a new config type. If you add a new `*MCPConfig` proto, you must also add its schema to the registry — otherwise Any serialization fails at runtime.
 
+## Well-Known Types (Timestamp, Duration, Any)
+
+Protobuf well-known types have special JSON serialization rules. Do NOT construct them as plain objects.
+
+### Timestamp
+
+```ts
+// BAD — fails: "cannot decode Timestamp from JSON: object"
+const msg = create(MySchema, {
+  createdAt: { seconds: BigInt(Date.now() / 1000), nanos: 0 },
+})
+
+// BAD — raw Date object, not a Timestamp
+const msg = create(MySchema, { createdAt: new Date() })
+
+// GOOD — use @bufbuild/protobuf/wkt helpers
+import { timestampFromDate, timestampDate } from '@bufbuild/protobuf/wkt'
+
+const msg = create(MySchema, {
+  createdAt: timestampFromDate(new Date()),
+})
+
+// Read back as Date
+const date = timestampDate(msg.createdAt)
+```
+
+### Duration
+
+```ts
+import { durationFromJson } from '@bufbuild/protobuf/wkt'
+
+const msg = create(MySchema, {
+  timeout: durationFromJson('30s'),
+})
+```
+
+### Any (with @type)
+
+```ts
+// BAD — fails: "@type" is empty
+const anyMsg = create(AnySchema, { value: toBinary(ConfigSchema, config) })
+
+// GOOD — use anyPack which sets @type automatically
+import { anyPack, anyUnpack } from '@bufbuild/protobuf/wkt'
+
+const anyMsg = anyPack(ConfigSchema, config)
+const unpacked = anyUnpack(anyMsg, typeRegistry)
+```
+
 ## Transport Setup
 
 ```tsx

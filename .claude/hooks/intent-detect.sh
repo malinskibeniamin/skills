@@ -41,7 +41,14 @@ fi
 # ── PR/review ────────────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push.*branch|submit.*review'; then
-  directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. After creating: comment @claude review on the PR. Use conventional commit format: type(scope): description."
+  # Only suggest @claude review if we haven't already this session
+  review_marker="/tmp/claude-review-requested-${CLAUDE_SESSION_ID:-$$}"
+  if [ -f "$review_marker" ]; then
+    directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. Use conventional commit format: type(scope): description. (Review already requested this session.)"
+  else
+    directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. After creating: comment @claude review on the PR. Use conventional commit format: type(scope): description."
+    touch "$review_marker" 2>/dev/null || true
+  fi
 fi
 
 # ── Refactoring ──────────────────────────────────────────────────

@@ -3,6 +3,13 @@ set -euo pipefail
 
 # Stop hook: comprehensive quality gate. Reads file categories tracked by
 # orchestration-guidance.sh and runs targeted checks. Blocks until truly done.
+#
+# Set ORCHESTRATION_STRICT=0 to disable blocking (e.g., during prototyping).
+# Default: on (blocks on missing tests, security issues, async leaks).
+
+if [ "${ORCHESTRATION_STRICT:-1}" = "0" ]; then
+  exit 0
+fi
 
 session_files="/tmp/claude-session-files-${CLAUDE_SESSION_ID:-$$}"
 changed=$(git diff --name-only HEAD 2>/dev/null || true)
