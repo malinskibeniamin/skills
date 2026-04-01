@@ -40,14 +40,26 @@ Or install individual skills if you don't want the full kit — see sections bel
 
 ## How It Works
 
-Hooks run automatically — you don't invoke them. When Claude writes code:
+Three layers of automation run without any manual invocation:
 
-1. **PostToolUse hooks** fire on every Edit/Write — catch violations in ~293ms
-2. Claude sees the error as a `systemMessage` and fixes it immediately
-3. The hook re-checks the fix — cycle repeats until clean
-4. **Stop hooks** fire once when Claude finishes — biome autofix, type check, health score
+**Layer 1 — Intent Detection** (every prompt, ~30ms): Detects what you're doing from your prompt keywords and injects workflow directives. "Write a test" → TDD workflow. "Fix a bug" → triage pattern. "Create component" → accessibility + design system checklist. "Create PR" → CI verify + review.
 
-You never see the hook output directly. Claude just writes better code because violations are caught and corrected in real-time. If you run `bun run quality:gate` after Claude finishes, it should pass with zero errors.
+**Layer 2 — Pattern Enforcement** (every Edit/Write, ~293ms): 10 PostToolUse hooks catch violations in real-time. Claude sees the error, fixes it, hook re-checks — cycle repeats until clean. Plus file-aware guidance: writing a test file → async leak tips, writing a component → accessibility checklist.
+
+**Layer 3 — Quality Gate** (when Claude finishes, <10s): 6 Stop hooks verify the work is production-ready. Type check, lint autofix, health score, PLUS the orchestration gate that blocks on missing tests, async leaks, and security issues. Claude doesn't stop until the PR is ready to merge.
+
+**Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude works on matching files. Write a test → test-guardian patterns load. Edit a route → TanStack Router patterns load. No `/skill-name` invocation needed.
+
+You never see hook output directly. Claude just produces better code, with tests, accessible, secure, and type-safe — without you asking for each thing individually.
+
+### Configuration
+
+| Env var | Default | What it does |
+|---------|---------|--------------|
+| `PROMPT_CONTEXT_LEVEL` | `standard` | How much state to inject per prompt (`minimal`, `standard`, `full`) |
+| `ORCHESTRATION_STRICT` | `1` | Set to `0` during prototyping to disable "must have tests" gate |
+| `REACT_COMPILER_MODE` | `infer` | Set to `annotation` for brownfield codebases |
+| `HOOKS_FAIL_CLOSED` | `0` | Set to `1` to block on hook script errors (catches misconfiguration) |
 
 ## Greenfield vs Brownfield
 
@@ -357,7 +369,7 @@ Stop hooks and manual diagnostic skills.
 
 Reduce token usage and context waste.
 
-- **setup-llm-optimization** — SessionStart sets `AI_AGENT=1`, `CLAUDECODE=1`, and `NODE_OPTIONS=--max-old-space-size=8192`. PreToolUse strips `--verbose` from test runners via `updatedInput` rewrite and suggests `--pool=forks` (zombie prevention), `--bail=1` (fail fast), `--teardownTimeout=5000`. PostToolUse truncates bash output >200 lines.
+- **setup-llm-optimization** — SessionStart sets `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`. UserPromptSubmit injects project state (3 context levels) + condensed rules line + intent detection (TDD/component/bug/PR/refactor/e2e). PreToolUse strips `--verbose`, suggests `--pool=forks`/`--bail=1`. PostToolUse truncates output >200 lines + file-aware orchestration guidance. Stop: violation summary + comprehensive quality gate.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
@@ -395,7 +407,7 @@ Reduce token usage and context waste.
 
 ## Data Fetching
 
-- **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` from `@tanstack/react-query` when ConnectRPC is available (allows `useTransport`/`callUnaryMethod` pattern), ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2 projects also get: ban `new Message()` construction (use `create(Schema)`), ban `PlainMessage`/`PartialMessage` (use `MessageShape`/`MessageInitShape`), ban manual `$typeName` object literals. Promotes Standard Schema + protovalidate for form validation. Version detected at install time.
+- **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` when ConnectRPC is available (allows `useTransport`/`callUnaryMethod`), ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2: ban `new Message()`, `PlainMessage`/`PartialMessage`, manual `$typeName` literals. Well-known types: warn on `Any` without `@type`, `Timestamp` as plain object (use `timestampFromDate`/`anyPack` from `@bufbuild/protobuf/wkt`). Promotes Standard Schema + protovalidate. Auto-loads on `*_pb*`/`*_connectquery*` files via `paths:`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
