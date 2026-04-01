@@ -4,6 +4,57 @@
 
 > Script: [`scripts/llm-env.sh`](scripts/llm-env.sh)
 
+## user-prompt-context.sh (UserPromptSubmit)
+
+> Script: [`../shared/user-prompt-context.sh`](../shared/user-prompt-context.sh)
+
+Injects project state into every prompt as `additionalContext`. Claude starts each response knowing the project state without wasting tool calls.
+
+### Context Levels
+
+Set `PROMPT_CONTEXT_LEVEL` in your SessionStart hook:
+
+```bash
+echo "export PROMPT_CONTEXT_LEVEL=standard" >> "$CLAUDE_ENV_FILE"
+```
+
+| Level | What's injected | Latency | Tokens |
+|-------|----------------|---------|--------|
+| `minimal` | Git branch, dirty state, last commit, ahead/behind | ~80ms | ~50 |
+| `standard` (default) | Minimal + scripts + violations + condensed rules + config | ~120ms | ~200 |
+| `full` | Standard + tsconfig paths + UI component inventory + route tree + proto version + last stop outcome | ~170ms | ~350 |
+
+### The Rules Line
+
+The most valuable injection. Compresses 300+ lines of PostToolUse enforcement into one line that Claude applies *before* writing code:
+
+```
+Rules: bun biome vitest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} no-useEffect | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery)
+```
+
+Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct code on the first try (1 tool call). Estimated savings: **3000-8000 tokens per session**.
+
+### Full Level — What It Adds
+
+```
+Paths: @/*=src/* @/ui/*=src/components/ui/*
+UI: button,input,select,dialog,table,label,textarea,badge,card,alert
+Routes: index.tsx,users/$userId.tsx,settings.tsx
+Proto: v2
+Last stop: typecheck PASS, tests PASS
+```
+
+This prevents 2-3 Glob/Read calls Claude makes to discover import paths, available components, and route parameters.
+
+### Codex Compatibility
+
+Codex doesn't have `UserPromptSubmit`. Approximate via:
+- **SessionStart**: one-time context snapshot (stale but available)
+- **AGENTS.md**: static rules and scripts baked in at generation time
+- **Stop → `.codex/session-state.md`**: violations and git state written per-turn
+
+See `codex-compat` REFERENCE.md for the approximation strategy.
+
 ## llm-test-flags.sh (PreToolUse on Bash)
 
 > Script: [`scripts/llm-test-flags.sh`](scripts/llm-test-flags.sh)

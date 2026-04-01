@@ -4,6 +4,11 @@ set -euo pipefail
 # UserPromptSubmit hook: inject project state into every prompt.
 # Target: <200ms total. Claude starts each response knowing the project state
 # without wasting tool calls on git status, file reads, or config checks.
+#
+# Levels (PROMPT_CONTEXT_LEVEL env var):
+#   minimal  — git state only (~80ms)
+#   standard — git + scripts + violations + config + rules (~120ms, default)
+#   full     — standard + paths + UI inventory + route tree + proto version (~170ms)
 
 input=$(cat)
 hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
@@ -12,9 +17,10 @@ if [ "$hook_event" != "UserPromptSubmit" ]; then
   exit 0
 fi
 
+level="${PROMPT_CONTEXT_LEVEL:-standard}"
 context=""
 
-# ── Git state (~80ms) ────────────────────────────────────────────
+# ── Git state (~80ms) — all levels ──────────────────────────────
 
 branch=$(git branch --show-current 2>/dev/null || echo "detached")
 dirty=$(git diff --stat HEAD 2>/dev/null | tail -1 || echo "clean")
@@ -26,35 +32,106 @@ context="Branch: $branch"
 [ -n "$ahead_behind" ] && context="$context | $ahead_behind"
 context="$context\nLast commit: $last_commit"
 
-# ── Package.json scripts (~30ms) ─────────────────────────────────
+# ── Standard+ sections ──────────────────────────────────────────
 
-if [ -f "package.json" ]; then
-  scripts=$(jq -r '.scripts // {} | keys[]' package.json 2>/dev/null | paste -sd ", " - || echo "")
-  [ -n "$scripts" ] && context="$context\nAvailable scripts: $scripts"
+if [ "$level" = "standard" ] || [ "$level" = "full" ]; then
+
+  # ── Package.json scripts (~30ms) ───────────────────────────────
+
+  if [ -f "package.json" ]; then
+    scripts=$(jq -r '.scripts // {} | keys[]' package.json 2>/dev/null | paste -sd ", " - || echo "")
+    [ -n "$scripts" ] && context="$context\nScripts: $scripts"
+  fi
+
+  # ── Session violations (~5ms) ──────────────────────────────────
+
+  vfile="/tmp/claude-hook-violations-${CLAUDE_SESSION_ID:-$$}"
+  if [ -f "$vfile" ] && [ -s "$vfile" ]; then
+    total=$(wc -l < "$vfile" | tr -d ' ')
+    summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
+    context="$context\nViolations ($total): $summary"
+  fi
+
+  # ── Condensed rules line (~3ms) ────────────────────────────────
+  # Compresses 300+ lines of PostToolUse enforcement into one line.
+  # Prevents first-violation costs (estimated 3000-8000 tokens/session saved).
+
+  rules=""
+  [ "${PKG_MANAGER:-}" ] && rules="$rules ${PKG_MANAGER}"
+  [ "${LINTER:-}" ] && rules="$rules ${LINTER}"
+  [ "${TEST_RUNNER:-}" ] && rules="$rules ${TEST_RUNNER}"
+  rules="$rules | no-memo(compiler) no-as-any no-ts-ignore no-style={{}}"
+  [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ] && rules="$rules no-useEffect"
+  rules="$rules | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>)"
+  rules="$rules | zustand:create<T>()() useShallow | env:@/env(no process.env)"
+
+  # Conditional rules based on installed hooks
+  [ -f ".claude/hooks/tanstack-router-check.sh" ] && rules="$rules | TanStack-Router(no react-router-dom)"
+  [ -f ".claude/hooks/connect-query-check.sh" ] && rules="$rules | connect-query(no raw useQuery)"
+
+  context="$context\nRules:$rules"
+
+  # ── Active config (~5ms) ───────────────────────────────────────
+
+  config=""
+  [ "${REACT_COMPILER_MODE:-}" ] && config="$config compiler=$REACT_COMPILER_MODE"
+  [ "${ISSUE_TRACKER:-}" ] && config="$config tracker=$ISSUE_TRACKER"
+  [ "${HOOKS_FAIL_CLOSED:-}" = "1" ] && config="$config fail-closed=on"
+  [ -n "$config" ] && context="$context\nConfig:$config"
 fi
 
-# ── Session violations (~5ms) ────────────────────────────────────
+# ── Full level sections ─────────────────────────────────────────
 
-vfile="/tmp/claude-hook-violations-${CLAUDE_SESSION_ID:-$$}"
-if [ -f "$vfile" ] && [ -s "$vfile" ]; then
-  total=$(wc -l < "$vfile" | tr -d ' ')
-  summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
-  context="$context\nSession violations ($total total): $summary"
+if [ "$level" = "full" ]; then
+
+  # ── tsconfig path aliases (~8ms) ───────────────────────────────
+
+  if [ -f "tsconfig.json" ]; then
+    paths=$(jq -r '.compilerOptions.paths // {} | to_entries[] | "\(.key)=\(.value[0])"' tsconfig.json 2>/dev/null | paste -sd " " - || echo "")
+    [ -n "$paths" ] && context="$context\nPaths: $paths"
+  fi
+
+  # ── UI component inventory (~5ms) ──────────────────────────────
+
+  ui_dir=""
+  [ -d "src/components/ui" ] && ui_dir="src/components/ui"
+  [ -d "components/ui" ] && ui_dir="components/ui"
+
+  if [ -n "$ui_dir" ]; then
+    components=$(ls "$ui_dir"/*.tsx 2>/dev/null | xargs -I{} basename {} .tsx | paste -sd "," - || echo "")
+    [ -n "$components" ] && context="$context\nUI: $components"
+  fi
+
+  # ── Route tree (~10ms) ─────────────────────────────────────────
+
+  routes_dir=""
+  [ -d "src/routes" ] && routes_dir="src/routes"
+  [ -d "app/routes" ] && routes_dir="app/routes"
+
+  if [ -n "$routes_dir" ]; then
+    routes=$(find "$routes_dir" -name '*.tsx' -o -name '*.ts' 2>/dev/null | sed "s|$routes_dir/||" | grep -v '__' | sort | head -15 | paste -sd "," - || echo "")
+    [ -n "$routes" ] && context="$context\nRoutes: $routes"
+  fi
+
+  # ── Protobuf version (~3ms) ────────────────────────────────────
+
+  if [ -f "package.json" ]; then
+    proto_v=$(grep -oE '"@bufbuild/protobuf":\s*"[\^~]?([0-9]+)' package.json 2>/dev/null | grep -oE '[0-9]+$' || echo "")
+    [ -n "$proto_v" ] && context="$context\nProto: v$proto_v"
+  fi
+
+  # ── Last Stop hook outcome (~2ms) ──────────────────────────────
+
+  stop_file="/tmp/claude-last-stop-${CLAUDE_SESSION_ID:-$$}"
+  if [ -f "$stop_file" ]; then
+    stop_result=$(cat "$stop_file" 2>/dev/null | head -1)
+    [ -n "$stop_result" ] && context="$context\nLast stop: $stop_result"
+  fi
 fi
-
-# ── Active configuration (~5ms) ──────────────────────────────────
-
-config=""
-[ "${REACT_COMPILER_MODE:-}" ] && config="$config compiler=$REACT_COMPILER_MODE"
-[ "${ISSUE_TRACKER:-}" ] && config="$config tracker=$ISSUE_TRACKER"
-[ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ] && config="$config useEffect=banned"
-[ "${HOOKS_FAIL_CLOSED:-}" = "1" ] && config="$config fail-closed=on"
-[ -n "$config" ] && context="$context\nConfig:$config"
 
 # ── Output ───────────────────────────────────────────────────────
 
 if [ -n "$context" ]; then
-  # Escape for JSON
   escaped=$(printf '%s' "$context" | jq -Rs .)
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2
 fi
