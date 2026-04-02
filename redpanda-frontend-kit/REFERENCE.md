@@ -34,3 +34,63 @@ echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 ## Component Import Paths
 
 Redpanda UI Registry components import from `@/components/redpanda-ui/<name>` or `src/components/redpanda-ui/<name>`, not from `@chakra-ui` or `@redpanda-data/ui`.
+
+## UI Registry Documentation Injection
+
+When `REDPANDA_KIT=1`, the orchestration-guidance hook can surface registry component documentation. For each component used, Claude should reference:
+
+- **Registry docs**: `https://redpanda-ui-registry.netlify.app/docs/<component>`
+- **Available patterns**: key-value, proto-form, form-footer, dialog, data-table
+- **Component props/variants**: check the registry playground for correct usage
+
+### Key Registry Patterns
+
+| Pattern | When to use | Registry URL |
+|---|---|---|
+| `useProtoForm` | Forms backed by ConnectRPC/protobuf schemas | `/docs/use-proto-form` |
+| `KeyValueField` + `BadgeGroup` | Editable labels, tags, env vars, HTTP headers | `/docs/patterns/key-value` |
+| `Heading` / `Text` | All text — never raw `<h1>`-`<h6>` or `<p>` | `/docs/components/heading` |
+| `DataTable` | Sortable, filterable tabular data | `/docs/components/data-table` |
+| `FormFooter` | Consistent submit/cancel button layout | `/docs/components/form-footer` |
+
+## Cross-Repo Visibility (Module Federation)
+
+For projects using Module Federation (cloud-ui hosting console + gateway as remotes), set up symlinks so Claude can read all frontend source transparently:
+
+```bash
+mkdir -p linked-repos && echo "linked-repos/" >> .gitignore
+ln -s /path/to/console/frontend/src linked-repos/console
+ln -s /path/to/ai-gateway/frontend/src linked-repos/gateway
+```
+
+Claude follows symlinks transparently — it reads `linked-repos/console/routes/...` as if it were a local directory. Add to your project's `CLAUDE.md`:
+
+```markdown
+linked-repos/ contains symlinks to federated remotes:
+- linked-repos/console/ → Console UI source
+- linked-repos/gateway/ → AI Gateway UI source
+When working on federated routes, read both host and remote source.
+```
+
+## Package Source Code (opensrc)
+
+For understanding third-party package internals (not your team's code), use [opensrc](https://github.com/vercel-labs/opensrc):
+
+```bash
+npx opensrc zustand          # fetches source matching your lockfile version
+npx opensrc @tanstack/react-query
+opensrc list                  # show fetched packages
+```
+
+Creates `opensrc/<package>/` with full source. Useful when Claude needs to understand framework internals during debugging.
+
+## Dependency Change Awareness
+
+When Claude updates packages in `package.json`, it should:
+
+1. **Check the changelog** — `gh release view <version> --repo <owner/repo>` or npm changelog
+2. **Check for breaking changes** — especially major version bumps
+3. **Check for security advisories** — `npm audit` or Snyk
+4. **Read migration guides** — for major framework upgrades (React 18→19, Zustand 4→5, etc.)
+
+This is enforced by the `bundle-guard.sh` hook for known-heavy deps, and by `orchestration-guidance.sh` which nudges on package.json changes.

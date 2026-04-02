@@ -7,6 +7,15 @@ source "$(dirname "$0")/_hook-lib.sh"
 # Target: <10ms (file path matching + 1 line append).
 
 hook_parse_edit_write
+
+# ── package.json change detection (before extension filter) ──────
+
+if [ "$(basename "$file_path")" = "package.json" ]; then
+  guidance="[DEPS] Package dependencies changed. Before finishing: check changelogs for breaking changes, run npm audit, verify compatibility. For major version bumps, read the migration guide."
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"$guidance\"}" >&2
+  exit 0
+fi
+
 hook_filter_extensions "ts|tsx|js|jsx"
 hook_skip_generated
 
