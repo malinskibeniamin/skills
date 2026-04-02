@@ -86,16 +86,7 @@ bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent clau
 
 ### 3. Final verification
 
-- [ ] `.claude/settings.json` has all hooks configured
-- [ ] `biome.jsonc` exists
-- [ ] `rsbuild.config.ts` has React Compiler plugin
-- [ ] `react-doctor.config.json` exists
-- [ ] `src/env.ts` exists with t3-env zod schema
-- [ ] Package.json scripts: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`, `doctor`, `generate:routes`
-- [ ] `.github/workflows/quality-gate.yml` exists
-- [ ] All hook scripts in `.claude/hooks/` are executable
-- [ ] All community skills installed
-
-### 4. Commit
-
-Stage everything and commit: `Bootstrap frontend starter kit`
+- [ ] `.claude/settings.json` has all hooks, `biome.jsonc` exists, `src/env.ts` exists
+- [ ] Package.json scripts: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`
+- [ ] `.github/workflows/quality-gate.yml` exists, all hooks executable
+- Commit: `Bootstrap frontend starter kit`
