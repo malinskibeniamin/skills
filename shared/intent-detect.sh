@@ -23,7 +23,7 @@ directives=""
 # ── Test writing ─────────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'write.*test|add.*test|create.*test|test for|spec for|\btdd\b|red.green'; then
-  directives="$directives\n[TDD] Iron law: no production code without failing test first. RED (failing test) → GREEN (minimal code) → REFACTOR (clean up). Use condition-based waiting, never setTimeout. Run --detectAsyncLeaks after. See /test-driven-development skill."
+  directives="$directives\n[TDD] Iron law: no production code without failing test first. RED (failing test) → GREEN (minimal code) → REFACTOR (clean up). Use condition-based waiting, never setTimeout. Run --detectAsyncLeaks after."
 fi
 
 # ── Component/UI creation ────────────────────────────────────────
@@ -35,7 +35,7 @@ fi
 # ── Bug fix / debugging ─────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash|triage|investigate|regression'; then
-  directives="$directives\n[TRIAGE] 4 phases: reproduce (failing test) → analyze (find working examples) → hypothesize (one theory at a time) → fix at ROOT CAUSE (not symptom). Add defense-in-depth validation. See /systematic-debugging skill."
+  directives="$directives\n[TRIAGE] 4 phases: reproduce (failing test) → analyze (find working examples) → hypothesize (one theory at a time) → fix at ROOT CAUSE (not symptom). Add defense-in-depth validation."
 fi
 
 # ── PR/review ────────────────────────────────────────────────────

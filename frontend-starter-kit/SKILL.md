@@ -24,25 +24,26 @@ description: Complete frontend stack — 14 setup skills + diagnostics + 13 comm
 13. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
 14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core accessibility testing
 
-### Diagnostics
+### Owned workflow skills (hook-integrated, auto-load via paths:)
 
-15. **test-guardian** — Test health across frameworks (Vitest, Jest, Bun), async leak detection, performance profiling
+15. **test-driven-development** — TDD iron law + test-guardian diagnostics + condition-based waiting (replaces tdd + test-guardian)
+16. **systematic-debugging** — 4-phase root cause analysis + defense-in-depth (replaces triage-issue)
+17. **writing-plans** — "Junior engineer" detail level plans (replaces prd-to-plan)
+18. **requesting-code-review** — Two-stage review: spec compliance → code quality + codex adversarial
+19. **brainstorming** — Design exploration + challenge mode (complementary to grill-me)
 
 ### Community workflow skills (installed from mattpocock/skills)
 
-16. **tdd** — Test-driven development with red-green-refactor loop
-17. **triage-issue** — Bug investigation and root cause analysis
-18. **improve-codebase-architecture** — Architectural improvements and deep module analysis
-19. **request-refactor-plan** — Create detailed refactor plans with tiny commits, filed as GitHub issues
-20. **design-an-interface** — Generate multiple radically different interface designs using parallel sub-agents
-21. **write-a-prd** — PRD creation via interactive interview
-22. **prd-to-plan** — Turn PRD into implementation plan
-23. **prd-to-issues** — Break PRD into GitHub issues
-24. **write-a-skill** — Create new agent skills
-25. **grill-me** — Stress-test your design decisions
-26. **qa** — Interactive QA sessions, auto-file GitHub issues
-27. **ubiquitous-language** — Domain glossary with canonical terms (DDD)
-28. **git-guardrails-claude-code** — Branch protection guardrails
+20. **improve-codebase-architecture** — Architectural improvements and deep module analysis
+21. **request-refactor-plan** — Create detailed refactor plans with tiny commits, filed as GitHub issues
+22. **design-an-interface** — Generate multiple radically different interface designs using parallel sub-agents
+23. **write-a-prd** — PRD creation via interactive interview
+24. **prd-to-issues** — Break PRD into GitHub issues
+25. **write-a-skill** — Create new agent skills
+26. **grill-me** — Stress-test your design decisions
+27. **qa** — Interactive QA sessions, auto-file GitHub issues
+28. **ubiquitous-language** — Domain glossary with canonical terms (DDD)
+29. **git-guardrails-claude-code** — Branch protection guardrails
 
 ## Steps
 
@@ -58,16 +59,23 @@ echo "export REACT_RULES_BAN_USEEFFECT=1" >> "$CLAUDE_ENV_FILE"
 
 For setup-connect-query, detect the protobuf version from `package.json` and install the appropriate variant (v1 or v2).
 
-### 2. Install community workflow skills
+### 2. Install owned workflow skills
 
 ```bash
-bunx skills@latest add mattpocock/skills/tdd --agent claude-code -y
-bunx skills@latest add mattpocock/skills/triage-issue --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/test-driven-development --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/systematic-debugging --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/writing-plans --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/requesting-code-review --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
+```
+
+### 3. Install community workflow skills
+
+```bash
 bunx skills@latest add mattpocock/skills/improve-codebase-architecture --agent claude-code -y
 bunx skills@latest add mattpocock/skills/request-refactor-plan --agent claude-code -y
 bunx skills@latest add mattpocock/skills/design-an-interface --agent claude-code -y
 bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y
-bunx skills@latest add mattpocock/skills/prd-to-plan --agent claude-code -y
 bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y
 bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 bunx skills@latest add mattpocock/skills/grill-me --agent claude-code -y
