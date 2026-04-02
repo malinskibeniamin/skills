@@ -63,6 +63,18 @@ if echo "$prompt" | grep -qiE '\be2e\b|playwright|end.to.end|browser test|user w
   directives="$directives\n[E2E] Use base fixture from e2e/fixtures/base.ts (includes axe-core). Include accessibility audit: makeAxeBuilder().analyze(). Use data-testid for selectors. Add explicit waits (waitForSelector, toBeVisible), never hard delays."
 fi
 
+# ── Verification / testing in browser ────────────────────────────
+
+if echo "$prompt" | grep -qiE 'test.*browser|check.*browser|verify.*works|test the flow|test.*ui|check.*page|verify.*page|does it work|try it|smoke test'; then
+  directives="$directives\n[VERIFY] Do NOT ask the user to test manually. Use browser tools to verify yourself:\n- agent-browser: open URL → snapshot → verify elements → screenshot\n- claude-in-chrome MCP: for authenticated pages\n- Playwright: for automated e2e assertions\nVerify the fix works BEFORE reporting success."
+fi
+
+# ── General: never delegate verification to user ─────────────────
+
+if echo "$prompt" | grep -qiE 'fix|bug|broken|not working|blank|error|crash'; then
+  directives="$directives\n[SELF-VERIFY] After fixing: verify the fix works yourself using browser tools or tests. Do NOT ask the user to check — confirm it works before declaring done."
+fi
+
 # ── Output ───────────────────────────────────────────────────────
 
 if [ -n "$directives" ]; then

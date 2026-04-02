@@ -84,6 +84,9 @@ gh pr comment <URL> --body "@claude review"
 | "I'll add tests later" | No. RED phase first. Always. |
 | "This is too simple to plan" | Simple things become complex. Plan it. |
 | "Review slows me down" | Review catches bugs that slow you down 10x more. |
+| "Please test this manually" | NO. Verify it yourself with agent-browser, playwright, or tests. Never delegate verification to the user. |
+| "Restart your dev server and check" | Open the page yourself with browser tools. Confirm it works before reporting. |
+| "I can't access the browser" | You have agent-browser (headless) and claude-in-chrome MCP. Use them. |
 
 ## Skill Mapping
 

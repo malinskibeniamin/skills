@@ -33,7 +33,16 @@ You don't need to remember skill names. This skill detects what phase you're in 
 - No `setTimeout` hacks — use condition-based waiting.
 - Run `--detectAsyncLeaks` on test files.
 
-### 4. Review — before creating PR
+### 4. Verify — confirm it actually works
+
+- **Never ask the user to verify.** Use browser tools yourself:
+  - `agent-browser`: open the page, snapshot, verify elements, screenshot
+  - `claude-in-chrome` MCP: for authenticated pages
+  - Playwright tests: for automated assertions
+- If it's a UI fix: open the page, verify the fix renders correctly
+- If it's a logic fix: run the test, confirm green
+
+### 5. Review — before creating PR
 
 - Stage 1: Does it match the requirements? (spec compliance)
 - Stage 2: Is it well-built? (code quality, a11y, security, types)
@@ -42,13 +51,13 @@ You don't need to remember skill names. This skill detects what phase you're in 
 
 ## When to Use Each Phase
 
-| User says | Phase |
+| User says | Phases |
 |---|---|
-| "Build a new feature" | 1 → 2 → 3 → 4 |
-| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 |
-| "Refactor this module" | 1 (explore) → 2 (plan) → 3 → 4 |
+| "Build a new feature" | 1 → 2 → 3 → 4 → 5 |
+| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify in browser) → 5 |
+| "Refactor this module" | 1 (explore) → 2 (plan) → 3 → 4 → 5 |
 | "Write tests for X" | 3 (TDD only) |
-| "Create a PR" | 4 (review only) |
+| "Create a PR" | 5 (review only) |
 | "Quick question" | Just answer — no lifecycle needed |
 
 See [REFERENCE.md](REFERENCE.md) for detailed checklists per phase.
