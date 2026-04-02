@@ -1,13 +1,46 @@
 # Agent Skills
 
-A collection of agent skills and Claude Code hooks that enforce frontend best practices, automate quality checks, and reduce wasted tokens in AI-assisted development.
+Zero-babysit frontend development. Claude writes production-ready code — with tests, accessible, secure, type-safe — without you asking for each thing individually.
+
+## Why This Exists
+
+| Problem | Without this repo | With this repo |
+|---|---|---|
+| Claude writes `as any` | Ships to PR → human catches → feedback loop | Hook blocks immediately → 50 tokens → fixed |
+| Claude skips tests | Ships → human requests → another round | Stop gate blocks → tests added automatically |
+| Claude uses wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
+| You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
+| You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
+
+**How it works**: 24 hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
+
+**vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
+
+## Skills You Need to Know
+
+You only need to remember **one skill**: `/development-lifecycle`. It covers the full flow.
+
+| What you're doing | What to invoke | What happens |
+|---|---|---|
+| Building a feature | Just describe it | Hooks detect → understand → plan → TDD → review |
+| Fixing a bug | Describe the bug | Hooks detect → reproduce → root cause → TDD fix → review |
+| Writing tests | Just write them | Hooks enforce TDD patterns, detect async leaks |
+| Creating a PR | "Create a PR" | Hooks verify CI, suggest review, conventional commits |
+| Any code change | Just code | 24 hooks enforce patterns in real-time |
+
+**Advanced** (optional, for specific needs):
+- `/brainstorming` — deep design exploration with challenge mode
+- `/grill-me` — stress-test a specific decision
+
+Everything else happens automatically via hooks. You don't need to invoke skills.
 
 ## TLDR — Full Setup for a New Repo
 
-One command to install everything (14 setup skills + diagnostics + 13 community workflow skills):
+One command to install everything (14 setup skills + lifecycle + 15 workflow skills):
 
 ```bash
 bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y
 ```
 
 **Project management + workflow skills:**
