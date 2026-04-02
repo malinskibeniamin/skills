@@ -131,15 +131,15 @@ cannot encode message google.protobuf.Any to JSON:
 
 ```ts
 import { createRegistry } from '@bufbuild/protobuf'
-import { AWSBedrockMCPConfigSchema } from './gen/aws_bedrock_config_pb'
-import { AWSSNSMCPConfigSchema } from './gen/aws_sns_config_pb'
-import { AWSSQSMCPConfigSchema } from './gen/aws_sqs_config_pb'
+import { PluginConfigASchema } from './gen/plugin_a_config_pb'
+import { PluginConfigBSchema } from './gen/plugin_b_config_pb'
+import { PluginConfigCSchema } from './gen/plugin_c_config_pb'
 // ... import all schemas that can be packed into Any
 
 export const typeRegistry = createRegistry(
-  AWSBedrockMCPConfigSchema,
-  AWSSNSMCPConfigSchema,
-  AWSSQSMCPConfigSchema,
+  PluginConfigASchema,
+  PluginConfigBSchema,
+  PluginConfigCSchema,
   // Add every message type that gets packed into google.protobuf.Any
 )
 ```
@@ -174,7 +174,7 @@ const transport = createConnectTransport({
 
 ### Common mistake
 
-Forgetting to add a new message schema to the registry when adding a new config type. If you add a new `*MCPConfig` proto, you must also add its schema to the registry — otherwise Any serialization fails at runtime.
+Forgetting to add a new message schema to the registry when adding a new config type. If you add a new proto message, you must also add its schema to the registry — otherwise Any serialization fails at runtime.
 
 ## Well-Known Types (Timestamp, Duration, Any)
 

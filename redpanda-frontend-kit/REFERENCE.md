@@ -55,20 +55,20 @@ When `REDPANDA_KIT=1`, the orchestration-guidance hook can surface registry comp
 
 ## Cross-Repo Visibility (Module Federation)
 
-For projects using Module Federation (cloud-ui hosting console + gateway as remotes), set up symlinks so Claude can read all frontend source transparently:
+For projects using Module Federation (host app loading federated remotes), set up symlinks so Claude can read all frontend source transparently:
 
 ```bash
 mkdir -p linked-repos && echo "linked-repos/" >> .gitignore
-ln -s /path/to/console/frontend/src linked-repos/console
-ln -s /path/to/ai-gateway/frontend/src linked-repos/gateway
+ln -s /path/to/remote-app-1/src linked-repos/remote-1
+ln -s /path/to/remote-app-2/src linked-repos/remote-2
 ```
 
-Claude follows symlinks transparently — it reads `linked-repos/console/routes/...` as if it were a local directory. Add to your project's `CLAUDE.md`:
+Claude follows symlinks transparently — it reads `linked-repos/remote-1/routes/...` as if it were a local directory. Add to your project's `CLAUDE.md`:
 
 ```markdown
 linked-repos/ contains symlinks to federated remotes:
-- linked-repos/console/ → Console UI source
-- linked-repos/gateway/ → AI Gateway UI source
+- linked-repos/remote-1/ → First remote app source
+- linked-repos/remote-2/ → Second remote app source
 When working on federated routes, read both host and remote source.
 ```
 
