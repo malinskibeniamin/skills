@@ -49,7 +49,10 @@ Set in the SessionStart hook (`.claude/hooks/session-env.sh`):
 
 ```bash
 echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
+echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 ```
+
+`REDPANDA_KIT=1` enables registry pattern nudges (useProtoForm, Typography, KeyValueField, registry sync).
 
 Note: `REACT_RULES_BAN_USEEFFECT=1` is already set by the frontend-starter-kit.
 

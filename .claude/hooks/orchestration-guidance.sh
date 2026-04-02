@@ -149,6 +149,14 @@ if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
   if echo "$file_content" | grep -qiE 'key.*value.*pair|labels|tags|metadata.*form'; then
     guidance="$guidance Consider KeyValueField + BadgeGroup for key-value metadata editing."
   fi
+
+  # UI Registry sync nudge — when editing a registry component, also update upstream
+  if echo "$file_path" | grep -qE 'redpanda-ui/|components/redpanda-ui/'; then
+    if [ -d "linked-repos/ui-registry" ]; then
+      component_name=$(basename "$file_path" .tsx)
+      guidance="$guidance [REGISTRY SYNC] You're editing a registry component. Also update the source in linked-repos/ui-registry/ to keep in sync, then open a PR against the ui-registry repo."
+    fi
+  fi
 fi
 
 # ── Output guidance (warn, not block) ───────────────────────────

@@ -72,6 +72,25 @@ linked-repos/ contains symlinks to federated remotes:
 When working on federated routes, read both host and remote source.
 ```
 
+## UI Registry Symlink (Component Synchronization)
+
+Symlink the UI registry repo so Claude can modify registry components alongside consumer changes:
+
+```bash
+ln -s /path/to/ui-registry linked-repos/ui-registry
+```
+
+Add to `CLAUDE.md`:
+
+```markdown
+linked-repos/ui-registry/ → UI Registry source (symlinked)
+When modifying a component from @/components/redpanda-ui/, also update
+the source in linked-repos/ui-registry/ to keep both in sync.
+After changes, open a PR against the ui-registry repo.
+```
+
+When `REDPANDA_KIT=1`, the orchestration-guidance hook nudges on registry component edits to also update the upstream registry source and open a PR.
+
 ## Package Source Code (opensrc)
 
 For understanding third-party package internals (not your team's code), use [opensrc](https://github.com/vercel-labs/opensrc):
