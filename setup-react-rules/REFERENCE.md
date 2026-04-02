@@ -79,3 +79,14 @@ useEffect(function connectToWebSocket() {
 | `synchronize`/`apply` | Syncing React state with external systems |
 | `initialize` | One-time setup |
 | `poll` | Interval-based data fetching |
+
+## Common Agent Excuses
+
+| Excuse | Counter |
+|---|---|
+| "`as any` is fine just here" | It's never just here. Type erasure spreads. Fix the type. |
+| "Temporary @ts-expect-error" | Temporary becomes permanent. Fix the type error now. |
+| "`style={{}}` is simpler" | Tailwind classes are composable and cacheable. Inline styles aren't. |
+| "Raw `<button>` is fine for this case" | Use `<Button>` — consistent styling, variant props, a11y baked in. |
+| "I'll add accessibility later" | Later never comes. Add aria-label and keyboard handlers now. |
+| "`eval()` is needed for dynamic code" | Use `JSON.parse()` for data, `new Function` is also banned. |

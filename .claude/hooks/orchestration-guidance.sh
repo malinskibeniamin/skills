@@ -77,6 +77,42 @@ case "$file_path" in
     ;;
 esac
 
+# ── Anti-pattern warnings for test files ─────────────────────────
+
+case "$file_path" in
+  *.test.*|*.spec.*|*.integration.*|*.unit.*)
+    # Warn on setTimeout/waitForTimeout in tests (causes flaky tests)
+    if [ -f "$file_path" ]; then
+      file_content=$(cat "$file_path" 2>/dev/null || true)
+      if echo "$file_content" | grep -qE 'setTimeout|waitForTimeout|sleep\(' 2>/dev/null; then
+        guidance="$guidance Avoid setTimeout/waitForTimeout in tests — causes flaky results. Use condition-based waiting: await waitFor(() => expect(...).toBeVisible())."
+      fi
+    fi
+    ;;
+esac
+
+# ── Redpanda registry nudges (only if REDPANDA_KIT=1) ───────────
+
+if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
+  file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+
+  # useProtoForm nudge — only for ConnectRPC projects, not REST/Zod
+  if echo "$file_content" | grep -qE 'useForm|react-hook-form' && \
+     echo "$file_content" | grep -qE '@connectrpc|@buf/|_pb'; then
+    guidance="$guidance Consider useProtoForm for proto-backed forms — auto-validates from .proto annotations."
+  fi
+
+  # Typography nudge — raw h1-h6 and p tags
+  if echo "$file_content" | grep -qE '<h[1-6][[:space:]>]|<p[[:space:]>]'; then
+    guidance="$guidance Use Heading/Text components from registry instead of raw HTML headings/paragraphs."
+  fi
+
+  # Key-value pattern nudge
+  if echo "$file_content" | grep -qiE 'key.*value.*pair|labels|tags|metadata.*form'; then
+    guidance="$guidance Consider KeyValueField + BadgeGroup for key-value metadata editing."
+  fi
+fi
+
 # ── Output guidance (warn, not block) ───────────────────────────
 
 if [ -n "$guidance" ]; then

@@ -61,6 +61,27 @@ You never see hook output directly. Claude just produces better code, with tests
 | `REACT_COMPILER_MODE` | `infer` | Set to `annotation` for brownfield codebases |
 | `HOOKS_FAIL_CLOSED` | `0` | Set to `1` to block on hook script errors (catches misconfiguration) |
 
+## Why Hooks > Skills > Manual
+
+| Approach | Reliability | Token cost | Latency | Human effort |
+|----------|-------------|------------|---------|--------------|
+| Manual prompting | 0% (forgotten) | 0 extra | 0 | High (remember every rule) |
+| Skills on-demand | ~70% (Claude may skip) | ~500 tokens/skill | ~0ms | Low |
+| Skills with `paths:` | ~90% (auto-load on file match) | ~500 tokens/skill | ~0ms | None |
+| PostToolUse hooks | 100% (always fires) | 0 (bash scripts) | ~293ms | None |
+| UserPromptSubmit hooks | 100% (every prompt) | 0 (bash) + context | ~120ms | None |
+| Stop hooks | 100% (every turn end) | 0 (bash) + test run | ~4-10s | None |
+
+### Token Impact
+
+| Without hooks/skills | With hooks+skills |
+|---|---|
+| `as any` → ships → human catches → feedback loop (3000+ tokens) | Hook blocks → 50 tokens → fixed |
+| No tests → ships → human requests → another round (5000+ tokens) | Stop gate blocks → 100 tokens → tests added |
+| Wrong import → review → fix (2000+ tokens) | Rules line prevents → 0 extra tokens |
+| **3-5 human review cycles per PR** | **0-1 human review cycles per PR** |
+| **~15,000-30,000 tokens wasted on violations** | **~500-2,000 tokens in hook messages** |
+
 ## Greenfield vs Brownfield
 
 **New project:** Use `infer` mode (default). All hooks enforce maximum strictness.

@@ -15,8 +15,17 @@ session_files="/tmp/claude-session-files-${CLAUDE_SESSION_ID:-$$}"
 changed=$(git diff --name-only HEAD 2>/dev/null || true)
 issues=""
 
+# Pre-flight checks
+if [ ! -d ".git" ]; then exit 0; fi
 if [ -z "$changed" ] && [ ! -f "$session_files" ]; then
   exit 0
+fi
+
+# Check if typecheck-stop already ran related tests (avoid double-running)
+stop_outcome_file="/tmp/claude-last-stop-${CLAUDE_SESSION_ID:-$$}"
+typecheck_ran_tests=false
+if [ -f "$stop_outcome_file" ] && grep -q "tests PASS\|tests FAIL" "$stop_outcome_file" 2>/dev/null; then
+  typecheck_ran_tests=true
 fi
 
 # ── Gate 1: Test files changed → check for async leaks ──────────
@@ -31,6 +40,20 @@ if [ -f "$session_files" ] && grep -q "^test:" "$session_files" 2>/dev/null; the
     leak_output=$(bun run test -- --run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
     if [ $leak_exit -ne 0 ] && echo "$leak_output" | grep -qiE 'leak|open handle|did not exit'; then
       issues="$issues\n- ASYNC LEAK in test files. Run: bun test --run --detectAsyncLeaks to diagnose."
+    fi
+  fi
+fi
+
+# ── Gate 1b: Run related tests (Bazel-style — only affected tests) ────
+
+if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
+  changed_source=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.)' || true)
+  if [ -n "$changed_source" ] && ([ -f "node_modules/.bin/vitest" ] || command -v vitest &>/dev/null); then
+    test_exit=0
+    test_output=$(bun test --run --related $changed_source 2>&1) || test_exit=$?
+    if [ $test_exit -ne 0 ]; then
+      truncated=$(echo "$test_output" | tail -10)
+      issues="$issues\n- TESTS FAILING: Related tests do not pass. Fix before finishing.\n  $truncated"
     fi
   fi
 fi
