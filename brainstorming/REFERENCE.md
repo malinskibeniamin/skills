@@ -17,6 +17,48 @@
 4. [ ] Found edge cases the designer missed
 5. [ ] Reached consensus with all concerns addressed
 
+## Visual Mockups with agent-browser
+
+**Install** (one-time): `npm install -g agent-browser && agent-browser install`
+
+No auth needed — renders local HTML files headlessly. Works in CI.
+
+For inspecting live authenticated pages (logged-in dashboards), use `claude-in-chrome` MCP instead.
+
+When the design involves UI, generate an HTML mockup and show it to the user:
+
+```bash
+# 1. Write a self-contained HTML mockup
+cat > /tmp/mockup.html << 'HTML'
+<!DOCTYPE html>
+<html>
+<head><style>/* Tailwind-like styles */</style></head>
+<body>
+  <!-- Your mockup here -->
+</body>
+</html>
+HTML
+
+# 2. Open in agent-browser and take annotated screenshot
+agent-browser open file:///tmp/mockup.html
+agent-browser screenshot --annotate /tmp/mockup-v1.png
+
+# 3. Show to user, iterate based on feedback
+# Update the HTML, re-screenshot for comparison
+agent-browser open file:///tmp/mockup-v2.html
+agent-browser screenshot --annotate /tmp/mockup-v2.png
+```
+
+**When to use mockups:**
+- New page layouts or component arrangements
+- Comparing Option A vs Option B visually
+- Responsive design decisions
+- Before/after refactor visualization
+
+**When NOT to use mockups:**
+- API design, data modeling, architecture decisions (use text/diagrams)
+- Simple changes where a description suffices
+
 ## Spec Document Template
 
 ```markdown

@@ -18,8 +18,9 @@ For exploring approaches before implementation:
 1. **Explore context** — read relevant files, docs, recent commits
 2. **Ask clarifying questions** — one at a time, not a list
 3. **Propose 2-3 approaches** — with trade-offs for each
-4. **Present design** — get user approval on the chosen approach
-5. **Write spec document** — if needed, capture decisions for the implementation plan
+4. **Visual mockup** (optional) — generate HTML mockup, open with `agent-browser`, take annotated screenshot for review
+5. **Present design** — get user approval on the chosen approach
+6. **Write spec document** — if needed, capture decisions for the implementation plan
 
 ### Challenge Mode
 

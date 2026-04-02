@@ -6,8 +6,9 @@
 1. Read relevant code, docs, recent git history
 2. Ask clarifying questions — one at a time, not a list
 3. Propose 2-3 approaches with trade-offs
-4. Challenge the chosen approach (edge cases, failure modes)
-5. Get user approval before proceeding
+4. For UI work: generate HTML mockup → `agent-browser screenshot --annotate` → iterate
+5. Challenge the chosen approach (edge cases, failure modes)
+6. Get user approval before proceeding
 
 ### Bug Fix
 1. Read the full error message carefully
