@@ -7,6 +7,21 @@ hook_filter_extensions "tsx|jsx"
 hook_skip_ui_dirs
 hook_skip_generated
 
+# Skip entirely if React Compiler is not installed in this project
+# Check package.json for the babel plugin, or rsbuild/vite config for the plugin reference
+_has_compiler=false
+if [ -f "package.json" ] && grep -q 'babel-plugin-react-compiler' package.json 2>/dev/null; then
+  _has_compiler=true
+elif ls rsbuild.config.* vite.config.* babel.config.* .babelrc* 2>/dev/null | head -1 | while read cfg; do
+  grep -q 'react-compiler' "$cfg" 2>/dev/null && echo "found"
+done | grep -q "found" 2>/dev/null; then
+  _has_compiler=true
+fi
+
+if [ "$_has_compiler" = false ]; then
+  exit 0
+fi
+
 # Skip files with 'use no memo' directive
 if head -5 "$file_path" | grep -qF "'use no memo'" || head -5 "$file_path" | grep -qF '"use no memo"'; then
   exit 0

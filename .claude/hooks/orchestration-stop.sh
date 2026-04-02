@@ -33,8 +33,8 @@ fi
 if [ -f "$session_files" ] && grep -q "^test:" "$session_files" 2>/dev/null; then
   test_files=$(grep "^test:" "$session_files" | cut -d: -f2- | sort -u | tr '\n' ' ')
 
-  # Check for async leaks if vitest available
-  if [ -f "node_modules/.bin/vitest" ] && [ -n "$test_files" ]; then
+  # Check for async leaks if vitest + bun available
+  if [ -f "node_modules/.bin/vitest" ] && [ -n "$test_files" ] && command -v bun &>/dev/null; then
     leak_output=""
     leak_exit=0
     leak_output=$(bun run test -- --run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
@@ -48,7 +48,7 @@ fi
 
 if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
   changed_source=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.)' || true)
-  if [ -n "$changed_source" ] && ([ -f "node_modules/.bin/vitest" ] || command -v vitest &>/dev/null); then
+  if [ -n "$changed_source" ] && [ -f "node_modules/.bin/vitest" ] && command -v bun &>/dev/null; then
     test_exit=0
     test_output=$(bun test --run --related $changed_source 2>&1) || test_exit=$?
     if [ $test_exit -ne 0 ]; then

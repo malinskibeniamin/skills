@@ -18,7 +18,7 @@ session_files="/tmp/claude-session-files-${CLAUDE_SESSION_ID:-$$}"
 case "$file_path" in
   *.test.tsx|*.test.ts|*.integration.tsx|*.integration.ts|*.unit.ts)
     echo "test:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[TEST] Use userEvent.setup() (not fireEvent). Prefer getByRole for a11y, getByTestId for presence in large DOMs. Check for async leaks: no dangling timers or unresolved promises. Wrap async: await waitFor(() => expect(...))."
+    guidance="[TEST] userEvent.setup(), getByRole for a11y, no setTimeout hacks, await waitFor() for async."
     ;;
 esac
 

@@ -169,7 +169,14 @@ if echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || 
 fi
 
 # ── Check 13: React Compiler — no manual memoization ────────────
+# Only runs if React Compiler is actually installed in this project
 
+_has_react_compiler=false
+if [ -f "package.json" ] && grep -q 'babel-plugin-react-compiler' package.json 2>/dev/null; then
+  _has_react_compiler=true
+fi
+
+if [ "$_has_react_compiler" = true ]; then
 case "$file_path" in
   *.tsx|*.jsx)
     has_no_memo=false
@@ -196,6 +203,7 @@ case "$file_path" in
     fi
     ;;
 esac
+fi  # end _has_react_compiler
 
 # ── Check 14: Ban dangerouslySetInnerHTML (TSX/JSX only) ──────
 

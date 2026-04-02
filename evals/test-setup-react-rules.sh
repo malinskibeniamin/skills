@@ -300,25 +300,33 @@ run_hook_eval "$SCRIPT" \
   2 "block: outline-none CSS class" "outline"
 
 # ── Check 13: React Compiler — manual memoization ────────────────
+# Needs mock package.json with react-compiler so the check activates
+_memo_tmpdir=$(mktemp -d /tmp/memo-evals-XXXXXX)
+echo '{"devDependencies":{"babel-plugin-react-compiler":"*"}}' > "$_memo_tmpdir/package.json"
+_memo_file="$_memo_tmpdir/test.tsx"
 
-echo 'const val = useMemo(() => compute(), [dep])' > "$tmpfile"
+echo 'const val = useMemo(() => compute(), [dep])' > "$_memo_file"
+cd "$_memo_tmpdir"
 
 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: useMemo (React Compiler handles it)" "useMemo"
 
-echo 'const cb = useCallback(() => {}, [])' > "$tmpfile"
+echo 'const cb = useCallback(() => {}, [])' > "$_memo_file"
 
 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: useCallback (React Compiler handles it)" "useCallback"
 
 # Allow with 'use no memo' directive
-printf "'use no memo'\nconst val = useMemo(() => 1, [])\n" > "$tmpfile"
+printf "'use no memo'\nconst val = useMemo(() => 1, [])\n" > "$_memo_file"
 
 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   0 "allow: useMemo with 'use no memo' directive"
+
+cd "$REPO_ROOT"
+rm -rf "$_memo_tmpdir"
 
 # ── Protobuf: no false positive on Schema imports ────────────────
 

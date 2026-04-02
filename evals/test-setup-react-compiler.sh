@@ -59,6 +59,8 @@ rm -rf "$tmpdir"
 # ── Hook: skip files with 'use no memo' ────────────────────────
 
 _rc_tmpdir=$(mktemp -d /tmp/compiler-evals-XXXXXX)
+# Mock package.json with react-compiler so the hook activates
+echo '{"devDependencies":{"babel-plugin-react-compiler":"*"}}' > "$_rc_tmpdir/package.json"
 tmpfile="$_rc_tmpdir/test.tsx"
 printf "'use no memo'\nconst x = useMemo(() => 1, [])\n" > "$tmpfile"
 
@@ -86,6 +88,9 @@ run_hook_eval "$SCRIPT" \
 tmpfile="$_rc_tmpdir/test.tsx"
 echo "const val = useMemo(() => compute(), [dep])" > "$tmpfile"
 
+# Run from tmpdir so hook finds mock package.json with react-compiler
+cd "$_rc_tmpdir"
+
 REACT_COMPILER_MODE=annotation run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "annotation mode: allow useMemo without 'use memo' directive"
@@ -103,6 +108,8 @@ echo "const val = useMemo(() => compute(), [dep])" > "$tmpfile"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "infer mode: block useMemo (default)" "useMemo"
+
+cd "$REPO_ROOT"
 
 # ── Hook script content ─────────────────────────────────────────
 
