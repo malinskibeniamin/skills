@@ -100,6 +100,35 @@ case "$file_path" in
     ;;
 esac
 
+# ── Error boundary / Suspense nudges (source TSX only) ───────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if ! echo "$file_path" | grep -qE '(\.test\.|\.spec\.|\.unit\.|\.integration\.)'; then
+      file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+
+      # Route files with data fetching but no errorComponent
+      if echo "$file_path" | grep -qE '/routes/' && \
+         echo "$file_content" | grep -qE 'loader|useQuery|useSuspenseQuery' && \
+         ! echo "$file_content" | grep -qE 'errorComponent|ErrorBoundary|ErrorComponent'; then
+        guidance="$guidance [RESILIENCE] Route fetches data but has no errorComponent. Add one to prevent white-screen crashes."
+      fi
+
+      # React.lazy without Suspense
+      if echo "$file_content" | grep -qE 'React\.lazy\(|lazy\(' && \
+         ! echo "$file_content" | grep -qE '<Suspense|Suspense>'; then
+        guidance="$guidance [RESILIENCE] React.lazy() used without <Suspense> boundary. Wrap lazy components in <Suspense fallback={...}>."
+      fi
+
+      # Query hooks without loading/error/empty state handling
+      if echo "$file_content" | grep -qE 'useQuery|useSuspenseQuery|useMutation' && \
+         ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|error\b|fallback|Skeleton|Spinner|EmptyState|empty'; then
+        guidance="$guidance [COMPLETENESS] Query hook used — verify loading, error, and empty states are handled."
+      fi
+    fi
+    ;;
+esac
+
 # ── Redpanda registry nudges (only if REDPANDA_KIT=1) ───────────
 
 if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
