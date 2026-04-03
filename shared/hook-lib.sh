@@ -26,11 +26,15 @@ if [ "${HOOKS_FAIL_CLOSED:-}" = "1" ]; then
   trap '_fc_msg="Hook script error in $(basename "$0"). Check hook configuration (missing _hook-lib.sh? jq not installed?)."; echo "{\"suppressOutput\":true,\"systemMessage\":\"$_fc_msg\"}" >&2; exit 2' ERR
 fi
 
-# ── Violation tracking ───────────────────────────────────────────
-# Tracks violations per session for aggregation in Stop hooks.
-# File: /tmp/claude-hook-violations-<session>
+# ── Session state directory ───────────────────────────────────────
+# All session temp files in one directory for clean management.
+# Cleanup happens in SessionStart (session-env.sh).
 
-_hook_violations_file="/tmp/claude-hook-violations-${CLAUDE_SESSION_ID:-$$}"
+_hook_session_dir="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}"
+mkdir -p "$_hook_session_dir" 2>/dev/null || true
+
+# Violation tracking
+_hook_violations_file="$_hook_session_dir/violations"
 
 _hook_track_violation() {
   local label="$1"

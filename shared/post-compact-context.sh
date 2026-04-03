@@ -37,7 +37,7 @@ config=""
 [ -n "$config" ] && context="$context\nConfig:$config"
 
 # Re-inject last stop outcome if available
-stop_file="/tmp/claude-last-stop-${CLAUDE_SESSION_ID:-$$}"
+stop_file="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/last-stop"
 if [ -f "$stop_file" ]; then
   context="$context\nLast stop: $(cat "$stop_file" | head -1)"
 fi

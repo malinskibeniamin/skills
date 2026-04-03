@@ -20,7 +20,9 @@ hook_filter_extensions "ts|tsx|js|jsx"
 hook_skip_generated
 
 guidance=""
-session_files="/tmp/claude-session-files-${CLAUDE_SESSION_ID:-$$}"
+_session_dir="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}"
+mkdir -p "$_session_dir" 2>/dev/null || true
+session_files="$_session_dir/files"
 
 # ── Test file written ────────────────────────────────────────────
 
@@ -61,7 +63,8 @@ fi
 # ── Store file written ──────────────────────────────────────────
 
 if [ -z "$guidance" ]; then
-  if echo "$file_path" | grep -qiE 'store'; then
+  # Match store files precisely: /stores/ dir, *Store.ts, *-store.ts — not "restore", "StoreLocator"
+  if echo "$file_path" | grep -qE '/stores/|Store\.(ts|tsx)$|-store\.(ts|tsx)$'; then
     echo "store:$file_path" >> "$session_files" 2>/dev/null || true
     guidance="[STORE] Use create<T>()() double-parens. useShallow for multi-field selectors. persist middleware (not raw localStorage)."
   fi

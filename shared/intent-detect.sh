@@ -42,7 +42,7 @@ fi
 
 if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push.*branch|submit.*review'; then
   # Only suggest @claude review if we haven't already this session
-  review_marker="/tmp/claude-review-requested-${CLAUDE_SESSION_ID:-$$}"
+  review_marker="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/review-requested"
   if [ -f "$review_marker" ]; then
     directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. Use conventional commit format: type(scope): description. (Review already requested this session.)"
   else
