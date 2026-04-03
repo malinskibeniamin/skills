@@ -1,1 +1,1 @@
-../../setup-llm-optimization/scripts/llm-truncate.sh
+../../setup-agent-config/scripts/llm-truncate.sh

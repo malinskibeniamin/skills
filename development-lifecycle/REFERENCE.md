@@ -10,12 +10,16 @@
 5. Challenge the chosen approach (edge cases, failure modes)
 6. Get user approval before proceeding
 
-### Bug Fix
-1. Read the full error message carefully
-2. Write a failing test that reproduces the bug
-3. Trace data flow to find root cause (not just crash site)
-4. Form hypothesis: "X is the root cause because Y"
-5. Verify hypothesis before fixing
+### Bug Fix (4-Phase Root Cause Analysis)
+
+**Iron law: no fixes without root cause investigation first.**
+
+1. **Reproduce** — read the FULL error message, write a failing test
+2. **Analyze** — find working examples in the codebase, trace data flow upstream to where invalid data ORIGINATES
+3. **Hypothesize** — "I think X is the root cause because Y." Test ONE hypothesis at a time.
+4. **Fix at source** — fix where the data originates, not where it crashes. Add defense-in-depth validation at entry point, business logic, environment guards, and debug instrumentation.
+
+Common excuse: "Quick fix is fine" → No. Fix the root cause. Quick fixes become permanent.
 
 ## Phase 2: Plan
 
@@ -24,6 +28,13 @@ Write for "an enthusiastic junior engineer with poor taste":
 - [ ] No TBD, no "similar to Task N", no "add error handling"
 - [ ] Bite-sized (2-5 minutes per task)
 - [ ] Test step alongside every implementation step
+
+### Plan Self-Review
+- [ ] **Spec coverage**: point to a task for each requirement
+- [ ] **Placeholder scan**: search for TBD, TODO, "similar to", "add later"
+- [ ] **Type consistency**: method names and signatures match across tasks
+
+Common excuse: "They'll figure it out" → Show the exact code. Don't assume context.
 
 ## Phase 3: Implement (TDD)
 
@@ -50,17 +61,27 @@ Write for "an enthusiastic junior engineer with poor taste":
 
 ## Phase 4: Review
 
-### Stage 1: Spec Compliance
-- All requirements addressed?
-- No scope creep?
-- Edge cases from the spec handled?
+Dispatch `code-reviewer` agent for fresh-eyes review. Two stages:
 
-### Stage 2: Code Quality
-- Clean separation of concerns?
-- Error handling covers failure modes?
-- Type safety (no `as any`)?
-- Tests verify behavior, not implementation?
-- Accessible (keyboard nav, aria-labels)?
+### Stage 1: Spec Compliance
+- [ ] All requirements from the issue/PRD addressed
+- [ ] No scope creep (nothing beyond what was asked)
+- [ ] Breaking changes documented
+- [ ] Edge cases handled
+
+### Stage 2: Code Quality (priority order)
+1. **Security** — no eval, no innerHTML, no hardcoded secrets
+2. **Type safety** — no `as any`, no `@ts-ignore`
+3. **Error handling** — async operations have error paths
+4. **Accessibility** — keyboard nav, aria-labels, semantic HTML
+5. **Testing** — tests verify behavior, edge cases covered
+6. **DRY** — no duplicated logic
+7. **Performance** — no unnecessary re-renders, heavy deps lazy-loaded
+
+### Review Status Codes
+- **APPROVED** — all checks pass, ready to merge
+- **CONCERNS** — minor issues, address then proceed
+- **NEEDS_CHANGES** — significant issues, fix and re-review
 
 ### Cross-Model Review (Optional)
 ```
@@ -156,13 +177,15 @@ Use: Agent tool with isolation: "worktree"
 | `code-reviewer` | Fresh-eyes spec compliance + quality review | Phase 5 (Review) |
 | `verifier` | Run tests + visual verification via browser | Phase 4 (Verify) |
 
-## Skill Mapping
+## What's Inline vs Separate
 
-This lifecycle skill incorporates patterns from:
-- `brainstorming` (Phase 1 design mode)
-- `writing-plans` (Phase 2)
-- `test-driven-development` (Phase 3)
-- `systematic-debugging` (Phase 1 bug fix mode)
-- `requesting-code-review` (Phase 4)
+| Phase | Content | Where |
+|---|---|---|
+| Phase 1 (design) | `/brainstorming` skill | Separate skill (advanced) |
+| Phase 1 (bug fix) | 4-phase root cause analysis | Inline above |
+| Phase 2 (plan) | "Junior engineer" detail + self-review | Inline above |
+| Phase 3 (TDD) | `/test-driven-development` skill | Separate skill (auto-loads on test files) |
+| Phase 4 (verify) | `verifier` agent | Inline + agent file |
+| Phase 5 (review) | `code-reviewer` agent + status codes | Inline above |
 
-You don't need to invoke those skills separately. This skill covers the full flow.
+Users only need to know `/development-lifecycle`. Everything else is referenced or auto-loaded.

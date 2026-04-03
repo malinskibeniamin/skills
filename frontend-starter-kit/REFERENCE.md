@@ -9,7 +9,7 @@
 | 1 | setup-toolchain | PreToolUse, SessionStart | bun, tsgo, no npm/npx/tsc |
 | 2 | setup-biome | Stop | Biome + Ultracite lint/format |
 | 3 | setup-quality-gate | Stop, PostToolUse | tsgo, related tests, bundle guard |
-| 4 | setup-llm-optimization | SessionStart, PreToolUse, PostToolUse, UserPromptSubmit | AI_AGENT, output truncation, context injection |
+| 4 | setup-agent-config | SessionStart, PreToolUse, PostToolUse, UserPromptSubmit | AI_AGENT, output truncation, context injection |
 | 5 | setup-react-compiler | PostToolUse | Ban manual memoization (if compiler installed) |
 | 6 | setup-zustand | PostToolUse | Double-parens, useShallow, persist |
 | 7 | setup-accessibility | PostToolUse | ARIA, keyboard nav, alt text |

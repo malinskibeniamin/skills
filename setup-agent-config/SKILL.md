@@ -1,5 +1,5 @@
 ---
-name: setup-llm-optimization
+name: setup-agent-config
 description: Token-efficient AI agent hooks — env vars, test flag optimization, output truncation, NODE_OPTIONS. Use when optimizing Claude Code for fewer tokens or reducing context waste.
 ---
 

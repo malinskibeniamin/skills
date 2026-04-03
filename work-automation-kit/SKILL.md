@@ -9,9 +9,6 @@ description: Install planning and project management skills — PRD creation, im
 
 ### Owned workflow skills (hook-integrated)
 
-1. **writing-plans** — Convert PRDs into detailed implementation plans ("junior engineer" clarity)
-2. **systematic-debugging** — 4-phase root cause analysis (replaces triage-issue)
-3. **requesting-code-review** — Two-stage review: spec compliance → code quality + codex adversarial
 4. **brainstorming** — Design exploration + challenge mode
 
 ### Community workflow skills
@@ -31,9 +28,6 @@ description: Install planning and project management skills — PRD creation, im
 ### 1. Install owned workflow skills
 
 ```bash
-bunx skills@latest add malinskibeniamin/skills/writing-plans --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/systematic-debugging --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/requesting-code-review --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 ```
 
@@ -48,9 +42,6 @@ bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 
 ### 3. Usage
 
-- Start a new feature: `/write-a-prd` → `/writing-plans` → `/prd-to-issues`
-- Investigate a bug: `/systematic-debugging`
-- Review before merge: `/requesting-code-review`
 - Explore designs: `/brainstorming`
 
 ### 4. Optional: Atlassian/Jira integration

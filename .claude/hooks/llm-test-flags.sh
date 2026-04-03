@@ -1,1 +1,1 @@
-../../setup-llm-optimization/scripts/llm-test-flags.sh
+../../setup-agent-config/scripts/llm-test-flags.sh

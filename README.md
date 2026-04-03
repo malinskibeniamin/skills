@@ -467,10 +467,10 @@ Stop hooks and manual diagnostic skills.
 
 Reduce token usage and context waste.
 
-- **setup-llm-optimization** — SessionStart sets `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`. UserPromptSubmit injects project state (3 context levels) + condensed rules line + intent detection (TDD/component/bug/PR/refactor/e2e). PreToolUse strips `--verbose`, suggests `--pool=forks`/`--bail=1`. PostToolUse truncates output >200 lines + file-aware orchestration guidance. Stop: violation summary + comprehensive quality gate.
+- **setup-agent-config** — SessionStart sets `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`. UserPromptSubmit injects project state (3 context levels) + condensed rules line + intent detection (TDD/component/bug/PR/refactor/e2e). PreToolUse strips `--verbose`, suggests `--pool=forks`/`--bail=1`. PostToolUse truncates output >200 lines + file-aware orchestration guidance. Stop: violation summary + comprehensive quality gate.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/setup-llm-optimization --agent claude-code -y
+  bunx skills@latest add malinskibeniamin/skills/setup-agent-config --agent claude-code -y
   ```
 
 ## Accessibility

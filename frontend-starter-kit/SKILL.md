@@ -12,7 +12,7 @@ description: Complete frontend stack — 14 setup skills + diagnostics + 13 comm
 1. **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun + tsgo, block destructive commands
 2. **setup-biome** — Biome + Ultracite linting/formatting with auto-fix hook, kebab-case filenames
 3. **setup-quality-gate** — quality:gate script, CI workflow, Stop hook for tsgo + related tests, bundle guard
-4. **setup-llm-optimization** — AI_AGENT=1, CLAUDECODE=1, output truncation
+4. **setup-agent-config** — AI_AGENT=1, CLAUDECODE=1, output truncation
 5. **setup-react-compiler** — React Compiler with rsbuild, memoization check
 6. **setup-zustand** — Zustand best practices: double-parens create, useShallow, persist middleware
 7. **setup-accessibility** — ARIA enforcement, Playwright AXE setup, WCAG 2.1 AA compliance
@@ -26,10 +26,6 @@ description: Complete frontend stack — 14 setup skills + diagnostics + 13 comm
 
 ### Owned workflow skills (hook-integrated, auto-load via paths:)
 
-15. **test-driven-development** — TDD iron law + test-guardian diagnostics + condition-based waiting (replaces tdd + test-guardian)
-16. **systematic-debugging** — 4-phase root cause analysis + defense-in-depth (replaces triage-issue)
-17. **writing-plans** — "Junior engineer" detail level plans (replaces prd-to-plan)
-18. **requesting-code-review** — Two-stage review: spec compliance → code quality + codex adversarial
 19. **brainstorming** — Design exploration + challenge mode (complementary to grill-me)
 
 ### Community workflow skills (installed from mattpocock/skills)
@@ -63,9 +59,6 @@ For setup-connect-query, detect the protobuf version from `package.json` and ins
 
 ```bash
 bunx skills@latest add malinskibeniamin/skills/test-driven-development --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/systematic-debugging --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/writing-plans --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/requesting-code-review --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 ```
 

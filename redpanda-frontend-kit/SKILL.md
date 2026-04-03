@@ -26,7 +26,6 @@ Runs the generic **frontend-starter-kit** first, then adds additional React enfo
 14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core accessibility testing
 
 ### Diagnostics
-15. **test-guardian** — Test health across frameworks, async leak detection
 
 ### Redpanda-specific
 16. **setup-registry-workflow** — Redpanda UI registry component workflow

@@ -1,9 +1,9 @@
-# Evals for setup-llm-optimization skill
+# Evals for setup-agent-config skill
 
-ENV_SCRIPT="$REPO_ROOT/setup-llm-optimization/scripts/llm-env.sh"
-FLAGS_SCRIPT="$REPO_ROOT/setup-llm-optimization/scripts/llm-test-flags.sh"
-TRUNCATE_SCRIPT="$REPO_ROOT/setup-llm-optimization/scripts/llm-truncate.sh"
-SKILL_DIR="$REPO_ROOT/setup-llm-optimization"
+ENV_SCRIPT="$REPO_ROOT/setup-agent-config/scripts/llm-env.sh"
+FLAGS_SCRIPT="$REPO_ROOT/setup-agent-config/scripts/llm-test-flags.sh"
+TRUNCATE_SCRIPT="$REPO_ROOT/setup-agent-config/scripts/llm-truncate.sh"
+SKILL_DIR="$REPO_ROOT/setup-agent-config"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -15,7 +15,7 @@ run_executable_eval "$TRUNCATE_SCRIPT" "llm-truncate.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-llm-optimization" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-agent-config" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "AI_AGENT" "SKILL.md mentions AI_AGENT"
 run_content_eval "$SKILL_DIR/SKILL.md" "CLAUDECODE" "SKILL.md mentions CLAUDECODE"

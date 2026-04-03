@@ -1,1 +1,1 @@
-../../setup-llm-optimization/scripts/llm-env.sh
+../../setup-agent-config/scripts/llm-env.sh
