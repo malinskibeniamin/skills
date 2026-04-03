@@ -70,8 +70,9 @@ if echo "$prompt" | grep -qiE 'test.*browser|check.*browser|verify.*works|test t
 fi
 
 # ── General: never delegate verification to user ─────────────────
+# Only fire on substantive bug fixes, not trivial ("fix indentation", "fix typo")
 
-if echo "$prompt" | grep -qiE 'fix|bug|broken|not working|blank|error|crash'; then
+if echo "$prompt" | grep -qiE 'fix.*bug|broken|not working|blank.*screen|error.*page|crash|regression'; then
   directives="$directives\n[SELF-VERIFY] After fixing: verify the fix works yourself using browser tools or tests. Do NOT ask the user to check — confirm it works before declaring done."
 fi
 

@@ -77,7 +77,8 @@ if [ -f "$session_files" ] && grep -q "^jsx:" "$session_files" 2>/dev/null; then
     done
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
-      issues="$issues\n- MISSING TEST: $short_name has no co-located test. Add a test file before finishing."
+      # Warn, not block — prototyping often creates files before tests
+      warnings="${warnings:-}\n- MISSING TEST: $short_name has no co-located test."
     fi
   done
 fi
@@ -97,7 +98,7 @@ if [ -n "$new_files" ]; then
     done
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
-      issues="$issues\n- NEW FILE WITHOUT TEST: $short_name — add a test before finishing."
+      warnings="${warnings:-}\n- NEW FILE WITHOUT TEST: $short_name — consider adding a test."
     fi
   done
 fi
@@ -124,10 +125,17 @@ fi
 
 # ── Decision ─────────────────────────────────────────────────────
 
+# Hard issues (async leaks, security, failing tests) → block
 if [ -n "$issues" ]; then
   escaped=$(printf '%b' "$issues" | head -20 | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":\"Quality gate: fix before finishing:\\n\"$escaped\"\"}" >&2
   exit 2
+fi
+
+# Soft warnings (missing tests) → inform but don't block
+if [ -n "${warnings:-}" ]; then
+  escaped=$(printf '%b' "$warnings" | head -10 | jq -Rs .)
+  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"Quality suggestions (non-blocking):\\n\"$escaped\"\"}}" >&2
 fi
 
 # Clean up session tracking

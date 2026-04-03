@@ -124,27 +124,20 @@ case "$file_path" in
       fi
 
       # Query hooks without loading/error/empty state handling
-      if echo "$file_content" | grep -qE 'useQuery|useSuspenseQuery|useMutation' && \
-         ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|error\b|fallback|Skeleton|Spinner|EmptyState|empty'; then
-        guidance="$guidance [COMPLETENESS] Query hook used — verify loading, error, and empty states are handled."
+      # Only fire in component files (*.tsx with JSX return), not in custom hooks (use*.ts)
+      if ! echo "$file_path" | grep -qE '/hooks/|/use[A-Z]'; then
+        if echo "$file_content" | grep -qE 'useQuery|useSuspenseQuery' && \
+           echo "$file_content" | grep -qE 'return.*<' && \
+           ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|fallback|Skeleton|Spinner|EmptyState'; then
+          guidance="$guidance [COMPLETENESS] Query hook in component — verify loading, error, and empty states are handled."
+        fi
       fi
     fi
     ;;
 esac
 
-# ── Observability identifiers nudge (generic, all projects) ──────
-
-case "$file_path" in
-  *.tsx|*.jsx)
-    if ! echo "$file_path" | grep -qE '(\.test\.|\.spec\.)'; then
-      file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
-      # Check for interactive elements without tracking attributes
-      if echo "$file_content" | grep -qE '<Button|<Link|onSubmit|onClick' && \
-         ! echo "$file_content" | grep -qE 'data-track|data-analytics|data-testid|aria-label'; then
-        guidance="$guidance [OBSERVABILITY] Interactive elements should have semantic identifiers (data-track, aria-label, or name) for future analytics/monitoring integration."
-      fi
-    fi
-    ;;
+# Observability nudge removed — too broad, fired on nearly every component.
+# aria-label is already enforced by accessibility-check.sh for icon buttons.
 esac
 
 # ── Redpanda registry nudges (only if REDPANDA_KIT=1) ───────────
