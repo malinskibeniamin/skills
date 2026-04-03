@@ -129,6 +129,21 @@ case "$file_path" in
     ;;
 esac
 
+# ── Observability identifiers nudge (generic, all projects) ──────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if ! echo "$file_path" | grep -qE '(\.test\.|\.spec\.)'; then
+      file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+      # Check for interactive elements without tracking attributes
+      if echo "$file_content" | grep -qE '<Button|<Link|onSubmit|onClick' && \
+         ! echo "$file_content" | grep -qE 'data-track|data-analytics|data-testid|aria-label'; then
+        guidance="$guidance [OBSERVABILITY] Interactive elements should have semantic identifiers (data-track, aria-label, or name) for future analytics/monitoring integration."
+      fi
+    fi
+    ;;
+esac
+
 # ── Redpanda registry nudges (only if REDPANDA_KIT=1) ───────────
 
 if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then

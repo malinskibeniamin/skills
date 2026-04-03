@@ -88,6 +88,33 @@ gh pr comment <URL> --body "@claude review"
 | "Restart your dev server and check" | Open the page yourself with browser tools. Confirm it works before reporting. |
 | "I can't access the browser" | You have agent-browser (headless) and claude-in-chrome MCP. Use them. |
 
+## Phase 6: Compound
+
+After non-trivial tasks, codify lessons as path-scoped rules:
+
+```markdown
+<!-- .claude/rules/protobuf-v2-timestamp.md -->
+---
+paths:
+  - "**/*_pb*"
+  - "**/gen/**"
+---
+Protobuf v2 Timestamp fields: use timestampFromDate() from @bufbuild/protobuf/wkt.
+Never construct as { seconds, nanos } — causes JSON serialization failure.
+```
+
+Rules auto-load ONLY when Claude works on matching files. CLAUDE.md stays clean.
+
+**When to compound:**
+- Bug fix that revealed a non-obvious pattern
+- Migration gotcha that will recur
+- API contract or convention the team agreed on
+
+**When NOT to compound:**
+- One-off fix unlikely to recur
+- Pattern already covered by a hook
+- Generic knowledge Claude already has
+
 ## Skill Mapping
 
 This lifecycle skill incorporates patterns from:

@@ -49,12 +49,20 @@ You don't need to remember skill names. This skill detects what phase you're in 
 - Optional: `/codex:adversarial-review` for cross-model challenge.
 - Then: `gh pr create` → `@claude review`.
 
+### 6. Compound — codify what we learned
+
+After every non-trivial task, ask: "Did we learn something worth preserving?"
+
+- If yes: write a rule to `.claude/rules/<topic>.md` with a `paths:` glob
+- Rules auto-load only when matching files are touched (no CLAUDE.md bloat)
+- Examples: "protobuf v2 migration gotcha", "form validation pattern", "route auth guard"
+
 ## When to Use Each Phase
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1 → 2 → 3 → 4 → 5 |
-| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify in browser) → 5 |
+| "Build a new feature" | 1 → 2 → 3 → 4 → 5 → 6 |
+| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify) → 5 → 6 |
 | "Refactor this module" | 1 (explore) → 2 (plan) → 3 → 4 → 5 |
 | "Write tests for X" | 3 (TDD only) |
 | "Create a PR" | 5 (review only) |

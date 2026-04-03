@@ -290,6 +290,13 @@ Fix these in order (each may affect many files):
 11. Barrel imports (import from index files) → direct path imports
 12. addEventListener('scroll') → add { passive: true }
 13. Static imports of chart.js/d3/three → dynamic import() or React.lazy()
+14. React.FC / React.FunctionComponent → plain function declarations
+15. cloneElement → Context-based composition
+16. biome-ignore comments → fix the lint issue instead
+17. import * as Foo → import { specific } (tree-shaking)
+18. export * from → export specific items (tree-shaking)
+19. handleSubmit(onSubmit) → handleSubmit(onSubmit, onError)
+20. navigate(-1) / history.back() → explicit route path
 
 ### 2e-2. Protobuf v2 patterns (if applicable)
 1. new Message() → create(MessageSchema, { ... })
@@ -301,6 +308,16 @@ Fix these in order (each may affect many files):
 1. Raw useQuery/useMutation with ConnectRPC → use Connect Query hooks
 2. invalidateQueries() with no args → specify query key
 3. Duplicate Zod schemas for protobuf messages → Standard Schema + protovalidate
+
+### 2e-4. Accessibility patterns
+1. All `<img>` must have `alt` attribute
+2. Clickable `<div>`/`<span>` must have role + tabIndex + keyboard handler
+3. Icon-only buttons → add `aria-label`
+4. Interactive elements → add `data-track` or semantic identifiers for observability
+
+### 2e-5. Protobuf well-known types (if applicable)
+1. Timestamp as { seconds, nanos } → timestampFromDate() from @bufbuild/protobuf/wkt
+2. Any without typeUrl → anyPack() from @bufbuild/protobuf/wkt
 
 ### 2f. Zustand stores
 Fix create<T>() → create<T>()(), inline selectors → useShallow, direct localStorage → persist.

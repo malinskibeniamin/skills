@@ -315,6 +315,22 @@ if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
   hook_warn "Avoid cloneElement — fragile for compound components.\nUse Context-based composition or render props instead."
 fi
 
-# ── Checks 25-26 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# ── Check 25: Warn on biome-ignore (sudo pattern) ─────────────────
+
+if echo "$added_lines" | grep -qE '//\s*biome-ignore|/\*\s*biome-ignore'; then
+  hook_warn "biome-ignore detected — I hope you know what you are doing.\nThe linter exists for a reason. If this is truly necessary, proceed with caution."
+fi
+
+# ── Check 26: Warn on tree-shaking killers ────────────────────────
+
+if echo "$added_lines" | grep -qE 'import \* as \w+ from'; then
+  hook_warn "Namespace import (import * as) prevents tree-shaking.\nImport specific exports instead: import { foo, bar } from 'package'."
+fi
+
+if echo "$added_lines" | grep -qE "export \* from ['\"]"; then
+  hook_warn "Re-exporting entire modules (export * from) prevents tree-shaking.\nExport specific items instead."
+fi
+
+# ── Checks 27-28 (raw hex/rgb, !important) moved to tailwind-check.sh ──
 
 exit 0
