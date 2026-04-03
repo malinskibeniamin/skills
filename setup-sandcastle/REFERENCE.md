@@ -25,10 +25,15 @@ const results = await Promise.all(
       branch: `agent/fix-${issue.number}`,
       hooks: {
         onSandboxReady: [
-          { command: "bun install --frozen-lockfile --yarn" },
-          // Install our skills + hooks inside the container
+          // Install project deps first (without --yarn for speed)
+          { command: "bun install --frozen-lockfile" },
+          // Then install our skills + hooks via plugin
+          { command: "bun install --yarn" },
+          // Plugin installs all skills + hooks + agents in one step
           { command: "bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y" },
           { command: "bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y" },
+          // Optional: start backend + frontend for full-stack verification
+          // { command: "bun run dev &" },
         ],
       },
       maxIterations: 3,
