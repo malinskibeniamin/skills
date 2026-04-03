@@ -2,7 +2,32 @@
 
 **Tell Claude what to build. Get a PR that's ready to merge.**
 
-24 hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
+25 hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
+
+## How It All Connects
+
+```
+You: "Build feature X" or "Fix these 5 issues overnight"
+  │
+  ├── Interactive ──→ Claude Code + /development-lifecycle
+  │                    └── understand → plan → TDD → verify → review → compound
+  │
+  └── AFK batch ───→ Sandcastle (.sandcastle/main.ts)
+                      └── picks issues → spawns N agents in Docker
+                          └── each agent runs development-lifecycle
+                              └── hooks enforce 69+ checks per edit
+                                  └── code-reviewer agent reviews
+                                      └── PRs ready to merge
+```
+
+**Four layers, one outcome:**
+
+| Layer | What | How | Reliability |
+|---|---|---|---|
+| **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
+| **Hooks** | Enforce quality | 25 hooks, 69+ checks, every edit | 100% automatic |
+| **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
+| **Sandcastle** | Delegate | N parallel agents in Docker worktrees | AFK batch mode |
 
 ## Why This Exists
 
