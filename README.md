@@ -278,7 +278,8 @@ I just installed the frontend-starter-kit skills. Run all setup skills now, then
 
 Execute the frontend-starter-kit skill. This will:
 - Install all 14 setup skills (toolchain, biome, quality-gate, etc.)
-- Create all hook scripts in .claude/hooks/
+- Install development-lifecycle skill (the one skill for the full workflow)
+- Create all hook scripts in .claude/hooks/ (25 hooks, 69+ checks)
 - Set up src/env.ts, biome.jsonc, .github/workflows/quality-gate.yml
 - Install community workflow skills
 - Set REACT_RULES_BAN_USEEFFECT=1 in session env
@@ -322,6 +323,9 @@ Fix these in order (each may affect many files):
 18. export * from → export specific items (tree-shaking)
 19. handleSubmit(onSubmit) → handleSubmit(onSubmit, onError)
 20. navigate(-1) / history.back() → explicit route path
+21. react-beautiful-dnd → @dnd-kit/core (archived by Atlassian)
+22. framer-motion → motion (renamed package)
+23. plotly.js / recharts → lazy load (heavy bundles)
 
 ### 2e-2. Protobuf v2 patterns (if applicable)
 1. new Message() → create(MessageSchema, { ... })
