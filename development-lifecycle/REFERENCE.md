@@ -210,3 +210,64 @@ Use: Agent tool with isolation: "worktree"
 | Phase 5 (review) | `code-reviewer` agent + status codes | Inline above |
 
 Users only need to know `/development-lifecycle`. Everything else is referenced or auto-loaded.
+
+## Parallelization Guide
+
+### When to parallelize
+
+| Task | Parallelize? | How | Sweet spot |
+|---|---|---|---|
+| Codebase-wide migration | Yes | `/batch` (built-in) | 5-30 agents, one per file/module |
+| Security scan | Yes | `/batch` or Sandcastle | 3-5 agents, each scans a directory |
+| Multiple UI design options | Yes | Spawn 3 agents with different constraints | 3 agents max |
+| Independent feature tasks | Yes | Sandcastle (AFK) | 3-5 agents, one per issue |
+| Test generation across modules | Yes | Sandcastle or `/batch` | One agent per module |
+| Bug fix | No | Sequential reasoning needed | 1 agent |
+| Code review | 2 agents | spec + quality (our code-reviewer) + Codex | 2-3 reviewers |
+
+### How to parallelize
+
+**For codebase-wide work (interactive):**
+```
+/batch migrate all files in src/components/ from Chakra UI to shadcn/ui
+```
+Claude Code's built-in `/batch` skill handles the decomposition, worktree isolation, and parallel execution.
+
+**For AFK batch work:**
+```typescript
+// .sandcastle/main.ts — see setup-sandcastle REFERENCE.md
+```
+
+**For design competition:**
+Spawn 3 agents with different design constraints:
+- Agent 1: "Minimize the interface — fewest components"
+- Agent 2: "Maximize flexibility — handle all edge cases"
+- Agent 3: "Optimize for the most common use case"
+Then synthesize the best elements from each.
+
+**For cross-model validation:**
+```
+/codex:rescue "Review this plan and add your concerns"
+```
+
+### Model selection for cost efficiency
+
+| Task complexity | Model | Cost |
+|---|---|---|
+| Simple (rename, move file) | `claude-haiku-4-5` | Cheapest |
+| Standard (implement feature) | `claude-sonnet-4-6` | Balanced |
+| Complex (architecture, review) | `claude-opus-4-6` | Most capable |
+
+In Sandcastle: `claudeCode("claude-haiku-4-5")` per agent.
+
+### Consolidating results
+
+**Independent files**: merge branches (no conflicts if files don't overlap).
+**Competing designs**: synthesizer agent reads all options, picks the best.
+**Reviews**: aggregate findings, address highest-severity first.
+
+### Anti-patterns
+
+- **>5 agents on overlapping files**: merge conflicts, wasted work
+- **Parallelizing sequential work**: debugging, hypothesis testing need one thread
+- **Cheap model for complex review**: Haiku misses architectural issues Opus catches

@@ -585,7 +585,7 @@ npx @tanstack/intent@latest install
 ```
 
 **Available packages with skills:**
-- **TanStack Router** — 28 skills: search params, data loading, auth guards, error handling, code splitting, type safety, navigation, SSR
+- **TanStack Router** — 25 skills: search params, data loading, auth guards, error handling, code splitting, type safety, navigation, SSR
 - **TanStack DB** — 14 skills: collections, live queries, optimistic mutations, persistence, offline transactions
 - **TanStack DevTools** — 9 skills: plugin panels, production devtools, instrumentation
 - **TanStack CLI** — 5 skills: scaffolding, addons, ecosystem integrations
