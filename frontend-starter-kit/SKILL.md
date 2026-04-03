@@ -24,9 +24,12 @@ description: Complete frontend stack — 14 setup skills + diagnostics + 13 comm
 13. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
 14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core accessibility testing
 
-### Owned workflow skills (hook-integrated, auto-load via paths:)
+### Owned workflow skills (hook-integrated)
 
-19. **brainstorming** — Design exploration + challenge mode (complementary to grill-me)
+15. **development-lifecycle** — One skill for the full loop: understand → plan → TDD → verify → review → compound
+16. **test-driven-development** — TDD iron law + async leak detection (auto-loads on test files via paths:)
+17. **brainstorming** — Design exploration + challenge mode
+18. **setup-ci-pipeline** — GitHub Actions CI: coverage, visual regression, dependabot, bundle budgets
 
 ### Community workflow skills (installed from mattpocock/skills)
 
@@ -58,8 +61,10 @@ For setup-connect-query, detect the protobuf version from `package.json` and ins
 ### 2. Install owned workflow skills
 
 ```bash
+bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/test-driven-development --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/setup-ci-pipeline --agent claude-code -y
 ```
 
 ### 3. Install community workflow skills
