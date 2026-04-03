@@ -39,7 +39,7 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 | You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
 | You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
 
-**How it works**: 24 hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
+**How it works**: 25 hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
 
 **vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
 
@@ -53,7 +53,7 @@ You only need to remember **one skill**: `/development-lifecycle`. It covers the
 | Fixing a bug | Describe the bug | Hooks detect → reproduce → root cause → TDD fix → review |
 | Writing tests | Just write them | Hooks enforce TDD patterns, detect async leaks |
 | Creating a PR | "Create a PR" | Hooks verify CI, suggest review, conventional commits |
-| Any code change | Just code | 24 hooks enforce patterns in real-time |
+| Any code change | Just code | 25 hooks enforce patterns in real-time |
 
 **Advanced** (optional, for specific needs):
 - `/brainstorming` — deep design exploration with challenge mode
@@ -108,7 +108,7 @@ Three layers of automation run without any manual invocation:
 
 **Layer 3 — Quality Gate** (when Claude finishes, <10s): 6 Stop hooks verify the work is production-ready. Type check, lint autofix, health score, PLUS the orchestration gate that blocks on missing tests, async leaks, and security issues. Claude doesn't stop until the PR is ready to merge.
 
-**Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude works on matching files. Write a test → test-guardian patterns load. Edit a route → TanStack Router patterns load. No `/skill-name` invocation needed.
+**Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude works on matching files. Write a test → TDD patterns load. Edit a route → TanStack Router patterns load. No `/skill-name` invocation needed.
 
 You never see hook output directly. Claude just produces better code, with tests, accessible, secure, and type-safe — without you asking for each thing individually.
 
@@ -205,7 +205,7 @@ For design challenges:
 <summary>Test health check</summary>
 
 ```
-Run test-guardian diagnostics on this project. Identify flaky tests, async leaks, and slow queries.
+Run test health diagnostics on this project. Identify flaky tests, async leaks, and slow queries.
 ```
 
 </details>
@@ -371,7 +371,7 @@ The migration is ordered from least disruptive (auto-fixable lint) to most disru
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + test-guardian diagnostics + 13 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary). `console.*` is fully covered by Biome's `noConsole`.
+- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + test-driven-development (TDD + diagnostics) + 10 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary). `console.*` is fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -461,11 +461,7 @@ Stop hooks and manual diagnostic skills.
   bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
   ```
 
-- **test-guardian** — Manual diagnostic skill for test health across frameworks (Vitest, Jest, Bun, Rstest). Detect async leaks, profile performance, find slow/flaky tests. Not a hook — invoke when debugging test issues.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/test-guardian --agent claude-code -y
-  ```
+Test health diagnostics (async leaks, slow queries, flaky tests) are now part of `/test-driven-development` and the `orchestration-stop` quality gate.
 
 ## LLM Optimization
 
