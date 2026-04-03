@@ -223,3 +223,97 @@ gh pr comment "$PR_URL" --body "@claude review security"
 gh pr comment "$PR_URL" --body "@claude review - focus on the auth middleware changes and whether the token refresh is race-safe"
 ```
 
+## CI Pipeline Recommendations
+
+These are not enforced by hooks (they're GitHub Actions / CI concerns) but should be configured for every frontend project:
+
+### Coverage Gates
+
+```yaml
+# In quality-gate.yml, add after tests:
+- name: Check coverage
+  run: bun test --run --coverage --coverage.thresholds.lines=80
+```
+
+Post coverage diff as PR comment via `coverage-diff-action` or similar. Enforce minimum thresholds — don't let coverage drop.
+
+### Dependency Automation
+
+Configure Dependabot or Renovate for frontend packages:
+
+```yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      minor-patch:
+        update-types: ["minor", "patch"]
+```
+
+Auto-merge minor/patch. Manually review major versions.
+
+### Error Monitoring
+
+Set up source map upload in the build pipeline for your error monitoring stack:
+
+```yaml
+- name: Upload source maps
+  run: bun run build && npx @sentry/cli sourcemaps upload ./dist
+  # or equivalent for your monitoring provider (Datadog, Rollbar, etc.)
+```
+
+Configure alert thresholds per SPA. Clean slate on setup — delete stale alerts.
+
+### Changesets (Versioning & Changelogs)
+
+```bash
+bun add -D @changesets/cli --yarn
+bunx changeset init
+```
+
+Before every PR that changes user-facing behavior, run `bunx changeset` to create a changelog entry. CI validates changeset exists for non-trivial PRs.
+
+### Feature Flags
+
+For breaking changes or risky rollouts, wrap new features in feature flags:
+
+```tsx
+// Generic pattern — works with any flag provider (LaunchDarkly, Unleash, env vars)
+const isNewFeatureEnabled = useFeatureFlag('new-dashboard-layout')
+
+if (isNewFeatureEnabled) {
+  return <NewDashboard />
+}
+return <LegacyDashboard />
+```
+
+Flag new routes, new shared components, and API contract changes. Remove flags within 2 sprints of full rollout.
+
+### Visual Regression
+
+```ts
+// In Playwright e2e tests:
+test('dashboard renders correctly', async ({ page }) => {
+  await page.goto('/dashboard')
+  await expect(page).toHaveScreenshot('dashboard.png', {
+    maxDiffPixelRatio: 0.01,
+  })
+})
+```
+
+Run across Chromium + Firefox. Store baselines in the repo. Review screenshot diffs in Playwright report.
+
+### Bundle Size Budget
+
+```bash
+# In quality-gate script, add:
+bun run build 2>&1 | grep -E 'Total size|gzip' | tail -5
+```
+
+Set alerts if total bundle size exceeds a budget (e.g., 500KB gzip for main chunk). Use Rsdoctor or `@rsdoctor/rspack-plugin` for detailed analysis.
+
