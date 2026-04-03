@@ -9,16 +9,26 @@ if ! echo "$command" | grep -qE 'git\s+commit\b.*\s+-m\s'; then
   exit 0
 fi
 
-# Extract the commit message from -m "..." or -m '...'
+# Extract the commit message from various formats:
+# 1. -m "simple message"
+# 2. -m 'simple message'
+# 3. -m "$(cat <<'EOF'\nmulti-line\nEOF\n)"  (heredoc pattern)
 msg=""
+
+# Try simple quoted extraction first
 msg=$(echo "$command" | sed -n 's/.*-m[[:space:]]*"\([^"]*\)".*/\1/p')
 if [ -z "$msg" ]; then
   msg=$(echo "$command" | sed -n "s/.*-m[[:space:]]*'\\([^']*\\)'.*/\\1/p")
 fi
 
+# Try heredoc/multi-line: scan the full command for a conventional commit line
 if [ -z "$msg" ]; then
-  # Could not extract message — allow through (might be -m with variable, heredoc, etc.)
-  exit 0
+  conventional_line=$(echo "$command" | grep -E '^\s*(feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert)\(' | head -1 | sed 's/^[[:space:]]*//')
+  if [ -n "$conventional_line" ]; then
+    msg="$conventional_line"
+  else
+    exit 0
+  fi
 fi
 
 # Split into subject line (first line)
