@@ -94,12 +94,15 @@ fi
 
 case "$file_path" in
   *.tsx|*.jsx)
-    # Only flag when a registry component AND a visual override class are on the SAME line.
-    # Catches: bg-*, border-*, shadow-*, rounded-* (visual overrides).
-    # Excludes text-* entirely — too many false positives (text-center, text-sm, text-wrap).
-    # Text color overrides (text-red-500) are caught by the tailwind hex/token checks instead.
-    if echo "$added_lines" | grep -E '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
-      hook_warn "Visual style override on registry component detected — I hope you know what you are doing.\nIf this is intentional theming (bg-sidebar, border-input), proceed. If overriding with raw colors (bg-red-500), use the variant prop instead."
+    # Only flag when a registry component AND a visual override class are on the SAME LINE.
+    # Must be actual diff lines (starting with +), not the whole file scan.
+    # Skip this check entirely when scanning full file (no diff available) — too many false positives.
+    _has_diff=$(git diff HEAD -- "$file_path" 2>/dev/null || true)
+    if [ -n "$_has_diff" ]; then
+      _diff_added=$(echo "$_has_diff" | grep '^+' | grep -v '^+++' || true)
+      if echo "$_diff_added" | grep -E '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
+        hook_warn "Visual style override on registry component detected — I hope you know what you are doing.\nIf this is intentional theming (bg-sidebar, border-input), proceed. If overriding with raw colors (bg-red-500), use the variant prop instead."
+      fi
     fi
     ;;
 esac

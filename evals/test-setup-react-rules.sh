@@ -242,11 +242,13 @@ tmpfile="$_rr_tmpdir/test.tsx"
 
 # ── Check 5: Visual style overrides on registry components ───────
 
-echo '<Button className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"
+# Visual style override check only fires on actual git diff lines (not full file scans)
+# In test context (no git repo), the check is skipped entirely to avoid false positives
+echo '<Button onClick={handleClick} className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: visual style override on Button (sudo)" "I hope you know"
+  0 "skip: visual style override (no git diff in test context)"
 
 # Allow layout-only classes on components (with handler)
 echo '<Button onClick={handleClick} className="mt-4 flex-1 w-full">Click</Button>' > "$tmpfile"
