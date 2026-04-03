@@ -309,3 +309,10 @@ done
 
 rm -f "$CLAUDE_ENV_FILE"
 unset CLAUDE_ENV_FILE
+
+# ── session-env.sh content checks ──────────────────────────────
+
+run_content_eval "$SESSION_SCRIPT" "package.json" "session-env checks for package.json"
+run_content_eval "$SESSION_SCRIPT" "react" "session-env checks for React dependency"
+run_content_eval "$SESSION_SCRIPT" "WARNING" "session-env warns on non-frontend projects"
+run_content_eval "$SESSION_SCRIPT" "NODE_OPTIONS" "session-env sets NODE_OPTIONS"
