@@ -18,6 +18,12 @@ if echo "$added_lines" | grep -qE 'window\.location\.(href|assign|replace)\s*[=(
   hook_block "Do not use window.location for navigation (causes full page reload).\nUse navigate({ to: '/path' }) or <Link> from @tanstack/react-router."
 fi
 
+# ── Check 2b: Ban navigate(-1) / history.back() ─────────────────────
+
+if echo "$added_lines" | grep -qE 'navigate\(\s*-1\s*\)|history\.back\(\)|history\.go\(\s*-'; then
+  hook_warn "navigate(-1) can exit the app if no browser history exists.\nUse an explicit route path instead: navigate({ to: '/previous-page' })."
+fi
+
 # ── Check 3: Ban URLSearchParams in client code (not server) ──────────
 # Only flag files that import from @tanstack/react-router or are in routes/components dirs
 # Server-side code (API handlers, middleware) legitimately uses URLSearchParams

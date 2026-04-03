@@ -303,6 +303,18 @@ case "$file_path" in
     ;;
 esac
 
-# ── Checks 23-24 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# ── Check 23: Ban React.FC / React.FunctionComponent ──────────────
+
+if echo "$added_lines" | grep -qE '\bReact\.FC\b|\bReact\.FunctionComponent\b|:\s*FC[<\s>]'; then
+  hook_warn "Prefer plain function declarations over React.FC.\nReact.FC adds implicit children and doesn't support generics cleanly.\nUse: function MyComponent(props: Props) { ... }"
+fi
+
+# ── Check 24: Ban cloneElement ────────────────────────────────────
+
+if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
+  hook_warn "Avoid cloneElement — fragile for compound components.\nUse Context-based composition or render props instead."
+fi
+
+# ── Checks 25-26 (raw hex/rgb, !important) moved to tailwind-check.sh ──
 
 exit 0

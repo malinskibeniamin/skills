@@ -55,7 +55,9 @@
               "mobx": "Use zustand for state management instead of MobX.",
               "mobx-react": "Use zustand for state management instead of MobX.",
               "mobx-react-lite": "Use zustand for state management instead of MobX.",
-              "yup": "Use zod for schema validation instead of yup."
+              "yup": "Use zod for schema validation instead of yup.",
+              "recoil": "Recoil is archived by Meta. Use zustand instead.",
+              "react-scripts": "Create React App is deprecated. Use rsbuild or vite."
             }
           }
         }

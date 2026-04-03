@@ -91,6 +91,11 @@ case "$file_path" in
       if echo "$file_content" | grep -qE 'setTimeout|waitForTimeout|sleep\(' 2>/dev/null; then
         guidance="$guidance Avoid setTimeout/waitForTimeout in tests — causes flaky results. Use condition-based waiting: await waitFor(() => expect(...).toBeVisible())."
       fi
+      # Flag data-testid overuse
+      testid_count=$(grep -c 'data-testid\|getByTestId' "$file_path" 2>/dev/null || echo "0")
+      if [ "$testid_count" -gt 5 ]; then
+        guidance="$guidance High data-testid usage ($testid_count). Prefer getByRole/getByLabelText — test IDs are an a11y smell."
+      fi
     fi
     ;;
 esac
