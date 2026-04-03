@@ -57,7 +57,9 @@
               "mobx-react-lite": "Use zustand for state management instead of MobX.",
               "yup": "Use zod for schema validation instead of yup.",
               "recoil": "Recoil is archived by Meta. Use zustand instead.",
-              "react-scripts": "Create React App is deprecated. Use rsbuild or vite."
+              "react-scripts": "Create React App is deprecated. Use rsbuild or vite.",
+              "react-beautiful-dnd": "Archived by Atlassian. Use @dnd-kit/core instead.",
+              "framer-motion": "Renamed to 'motion'. Use the motion package instead."
             }
           }
         }

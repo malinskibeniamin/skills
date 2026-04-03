@@ -237,7 +237,7 @@ fi
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '\.innerHTML\s*='; then
-      hook_block "Direct .innerHTML assignment is banned — XSS risk.\nUnsanitized DOM writes allow script injection.\nUse React rendering or element.textContent for plain text."
+      hook_block "Direct .innerHTML assignment is banned — XSS risk.\nUse React rendering, element.textContent, or the Sanitizer API (setHTML) for safe HTML insertion."
     fi
     ;;
 esac
@@ -285,8 +285,8 @@ fi
 
 # ── Check 21: Ban static imports of heavy deps (suggest dynamic import) ──
 
-if echo "$added_lines" | grep -qE "^[+]?import\s.*from\s+['\"]" | grep -qE "(chart\.js|d3|three|pdf-lib)['\"/]" 2>/dev/null || \
-   echo "$added_lines" | grep -qE "from\s+['\"](chart\.js|d3|three|pdf-lib)['\"/]"; then
+if echo "$added_lines" | grep -qE "^[+]?import\s.*from\s+['\"]" | grep -qE "(chart\.js|d3|three|pdf-lib|plotly\.js|recharts)['\"/]" 2>/dev/null || \
+   echo "$added_lines" | grep -qE "from\s+['\"](chart\.js|d3|three|pdf-lib|plotly\.js|recharts)['\"/]"; then
   hook_warn "Use dynamic import for heavy dependency.\nStatic imports of large libraries bloat the initial bundle.\nUse React.lazy() or dynamic import() instead."
 fi
 
@@ -331,6 +331,16 @@ if echo "$added_lines" | grep -qE "export \* from ['\"]"; then
   hook_warn "Re-exporting entire modules (export * from) prevents tree-shaking.\nExport specific items instead."
 fi
 
-# ── Checks 27-28 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# ── Check 27: Warn on deprecated package imports ─────────────────
+
+if echo "$added_lines" | grep -qE "from\s+['\"]react-beautiful-dnd['\"/]"; then
+  hook_warn "react-beautiful-dnd is archived by Atlassian.\nUse @dnd-kit/core or react-aria drag instead."
+fi
+
+if echo "$added_lines" | grep -qE "from\s+['\"]framer-motion['\"/]"; then
+  hook_warn "framer-motion has been renamed to 'motion'.\nUse: import { motion } from 'motion'"
+fi
+
+# ── Checks 28-29 (raw hex/rgb, !important) moved to tailwind-check.sh ──
 
 exit 0

@@ -24,6 +24,7 @@ You don't need to remember skill names. This skill detects what phase you're in 
 - Every step: exact file paths, exact code, expected output.
 - No placeholders. No "add error handling later."
 - Bite-sized tasks (2-5 minutes each).
+- **Cross-model check**: if `/codex:rescue` is available, auto-dispatch the plan to Codex for a second opinion. Read its feedback, address concerns, finalize the stronger plan. If Codex isn't installed, skip.
 
 ### 3. Implement — TDD for every change
 
@@ -44,10 +45,10 @@ You don't need to remember skill names. This skill detects what phase you're in 
 
 ### 5. Review — before creating PR
 
-- Stage 1: Does it match the requirements? (spec compliance)
-- Stage 2: Is it well-built? (code quality, a11y, security, types)
-- Optional: `/codex:adversarial-review` for cross-model challenge.
-- Then: `gh pr create` → `@claude review`.
+- Dispatch `code-reviewer` agent for fresh-eyes review (spec compliance + code quality)
+- Optional: `/codex:adversarial-review` for cross-model challenge
+- For large refactors: run `/simplify` to clean up the result
+- Then: `gh pr create` → `@claude review`
 
 ### 6. Compound — codify what we learned
 

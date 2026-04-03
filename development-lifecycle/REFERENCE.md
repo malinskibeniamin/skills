@@ -115,6 +115,47 @@ Rules auto-load ONLY when Claude works on matching files. CLAUDE.md stays clean.
 - Pattern already covered by a hook
 - Generic knowledge Claude already has
 
+## Cross-Model Adversarial Planning
+
+When `/codex:rescue` is available (Codex plugin installed), automatically cross-check plans with a different model for a stronger result.
+
+### Automatic (Phase 2)
+
+After writing a plan, dispatch to Codex:
+```
+/codex:rescue "Review the plan I just wrote. Add concerns, edge cases I missed, and alternative approaches. Write your review as ## Codex Review at the end of the plan file."
+```
+
+Claude Code then reads Codex's review and synthesizes the final plan.
+
+### Via GitHub Issue (Bug Triage)
+
+For bug investigation, use the issue as a communication channel:
+```bash
+# Claude Code posts hypothesis
+gh issue comment 123 --body "## Claude Analysis\n[hypothesis + evidence]"
+
+# Codex reviews
+# /codex:rescue "Read issue #123 and comment with your analysis"
+
+# Claude Code reads both, synthesizes fix approach
+```
+
+### Parallel Worktrees (Large Plans)
+
+For plans with independent tasks, parallelize with git worktrees:
+```
+Each subagent works in isolation: worktree → no conflicts
+Use: Agent tool with isolation: "worktree"
+```
+
+## Subagents
+
+| Agent | Role | When dispatched |
+|---|---|---|
+| `code-reviewer` | Fresh-eyes spec compliance + quality review | Phase 5 (Review) |
+| `verifier` | Run tests + visual verification via browser | Phase 4 (Verify) |
+
 ## Skill Mapping
 
 This lifecycle skill incorporates patterns from:

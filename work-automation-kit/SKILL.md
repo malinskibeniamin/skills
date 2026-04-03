@@ -19,6 +19,7 @@ description: Install planning and project management skills — PRD creation, im
 5. **write-a-prd** — Create PRDs through interactive interview
 6. **prd-to-issues** — Break PRDs into GitHub Issues
 7. **write-a-skill** — Create new agent skills
+8. **github-triage** — Label-based issue management state machine, agent briefs, out-of-scope tracking
 
 ### Optional integrations
 
@@ -41,6 +42,7 @@ bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code
 ```bash
 bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y
 bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y
+bunx skills@latest add mattpocock/skills/github-triage --agent claude-code -y
 bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 ```
 

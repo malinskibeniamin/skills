@@ -35,7 +35,7 @@ fi
 # ── Bug fix / debugging ─────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash|triage|investigate|regression'; then
-  directives="$directives\n[TRIAGE] 4 phases: reproduce (failing test) → analyze (find working examples) → hypothesize (one theory at a time) → fix at ROOT CAUSE (not symptom). Add defense-in-depth validation."
+  directives="$directives\n[TRIAGE] 4 phases: reproduce (failing test) → analyze (find working examples) → hypothesize (one theory at a time) → fix at ROOT CAUSE (not symptom). Add defense-in-depth validation. If /codex:rescue available, cross-check hypothesis with Codex before implementing."
 fi
 
 # ── PR/review ────────────────────────────────────────────────────
