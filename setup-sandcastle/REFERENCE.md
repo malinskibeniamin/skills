@@ -24,7 +24,12 @@ const results = await Promise.all(
       },
       branch: `agent/fix-${issue.number}`,
       hooks: {
-        onSandboxReady: [{ command: "bun install --frozen-lockfile --yarn" }],
+        onSandboxReady: [
+          { command: "bun install --frozen-lockfile --yarn" },
+          // Install our skills + hooks inside the container
+          { command: "bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y" },
+          { command: "bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y" },
+        ],
       },
       maxIterations: 3,
     })
@@ -56,14 +61,36 @@ Issue: #{{ISSUE_NUMBER}}
 ## Requirements
 {{ISSUE_BODY}}
 
+## Your Environment
+
+You have the following skills and hooks pre-installed:
+
+**Skills loaded:**
+- /development-lifecycle — follow phases: understand → plan → TDD → verify → review
+- /test-driven-development — iron law: failing test FIRST
+- /systematic-debugging — if this is a bug fix: reproduce → analyze → hypothesize → fix at root cause
+
+**Hooks active (fire automatically):**
+- react-rules-check (25 checks): raw HTML, as any, ts-ignore, eval, XSS, barrel imports
+- accessibility-check (5 checks): img alt, keyboard handlers, ARIA widgets
+- tanstack-router-check (9 checks): route patterns, typed hooks
+- connect-query-check (11 checks): protobuf v2, Connect Query
+- orchestration-stop: blocks on missing tests, runs related tests
+- typecheck-stop: runs tsgo before completion
+- biome-autofix: auto-formats on completion
+
+**Agents available:**
+- code-reviewer — dispatch for fresh-eyes review before final commit
+- verifier — dispatch to verify UI changes via browser
+
 ## Instructions
 
-Follow the development lifecycle:
-1. Understand the requirements — read relevant code
-2. Plan — break into exact steps
-3. Implement with TDD — failing test first
-4. Verify — run tests, check types
+1. Read the issue requirements carefully
+2. Follow /development-lifecycle: understand → plan → TDD → verify
+3. The hooks will enforce patterns — follow their guidance when they fire
+4. Dispatch code-reviewer agent before final commit
 5. Commit with conventional format: fix(scope): description. Closes #{{ISSUE_NUMBER}}
+6. Run bun run quality:gate as final check
 
 When done, emit: <promise>COMPLETE</promise>
 ```
@@ -73,17 +100,46 @@ When done, emit: <promise>COMPLETE</promise>
 ```markdown
 # Code Review: {{SOURCE_BRANCH}}
 
-Review the changes on this branch against the original issue requirements.
+You are the code-reviewer agent. Review with fresh eyes — you have NOT seen the implementation.
 
-## Checklist
-- [ ] All requirements addressed
-- [ ] Tests pass (`bun test --run`)
-- [ ] Types clean (`bun run type:check`)
-- [ ] No as any, @ts-ignore, or escape hatches
-- [ ] Accessibility: keyboard nav, aria-labels
-- [ ] No barrel imports, no heavy static imports
+## Pre-checks (run these first)
 
-Report: APPROVED or NEEDS_CHANGES with specific file:line references.
+```bash
+bun test --run --related $(git diff --name-only {{SOURCE_BRANCH}}..main)
+bun run type:check
+bun run lint
+```
+
+## Review Checklist (matches our hook enforcement)
+
+**Spec compliance:**
+- [ ] All requirements from the issue addressed
+- [ ] No scope creep
+- [ ] Edge cases handled
+
+**React/TS rules (25 checks our hooks enforce):**
+- [ ] No raw HTML (`<button>` → `<Button>`)
+- [ ] No `as any`, `@ts-ignore`, `@ts-expect-error`
+- [ ] No `dangerouslySetInnerHTML`, `eval()`, `.innerHTML`
+- [ ] No barrel imports, no `import * as`
+- [ ] React Compiler: no manual useMemo/useCallback (if compiler installed)
+
+**Accessibility (5 checks):**
+- [ ] `<img>` has `alt`, icon buttons have `aria-label`
+- [ ] Clickable divs have keyboard handlers
+- [ ] ARIA widget roles complete
+
+**Testing:**
+- [ ] Tests exist for new code (TDD)
+- [ ] Tests verify behavior, not implementation
+- [ ] No setTimeout/waitForTimeout in tests
+
+**Data layer (if applicable):**
+- [ ] Connect Query (not raw useQuery) with ConnectRPC
+- [ ] Protobuf v2: create(), not new Message()
+- [ ] Timestamp: timestampFromDate(), not { seconds, nanos }
+
+Report: APPROVED or NEEDS_CHANGES with file:line references.
 
 When done, emit: <promise>COMPLETE</promise>
 ```
