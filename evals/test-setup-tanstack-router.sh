@@ -203,12 +203,16 @@ run_hook_eval "$CHECK_SCRIPT" \
 
 # ── Check 7: Ban URLSearchParams ──────────────────────────────────
 
-tmpfile="$_rt_tmpdir/test.tsx"
-printf "const params = new URLSearchParams(window.location.search)\n" > "$tmpfile"
+# Put in a routes-like path so the client-side detection works
+_rt_routes_dir="$_rt_tmpdir/routes"
+mkdir -p "$_rt_routes_dir"
+tmpfile="$_rt_routes_dir/test.tsx"
+printf "import { useSearch } from '@tanstack/react-router'\nconst params = new URLSearchParams(window.location.search)\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: new URLSearchParams" "nuqs"
+  2 "block: new URLSearchParams in client code" "URLSearchParams"
+tmpfile="$_rt_tmpdir/test.tsx"
 
 # tmpfile reused in tmpdir
 

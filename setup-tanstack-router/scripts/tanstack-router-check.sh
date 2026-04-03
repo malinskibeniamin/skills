@@ -18,10 +18,22 @@ if echo "$added_lines" | grep -qE 'window\.location\.(href|assign|replace)\s*[=(
   hook_block "Do not use window.location for navigation (causes full page reload).\nUse navigate({ to: '/path' }) or <Link> from @tanstack/react-router."
 fi
 
-# ── Check 3: Ban URLSearchParams globally ─────────────────────────────
+# ── Check 3: Ban URLSearchParams in client code (not server) ──────────
+# Only flag files that import from @tanstack/react-router or are in routes/components dirs
+# Server-side code (API handlers, middleware) legitimately uses URLSearchParams
 
 if echo "$added_lines" | grep -qE '\bnew URLSearchParams\b|searchParams\.(get|set|append)\b'; then
-  hook_block "URLSearchParams is banned. Use TanStack Router search params.\nDefine validateSearch with zod on the route, or use nuqs for URL query state.\n\n// GOOD -- route definition\nvalidateSearch: z.object({ page: z.number().default(1) })\n\n// GOOD -- component with nuqs\nconst [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))"
+  _is_client_file=false
+  if echo "$file_path" | grep -qE '/(routes|components|pages|hooks|stores)/'; then
+    _is_client_file=true
+  fi
+  file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+  if echo "$file_content" | grep -qE "@tanstack/react-router|from ['\"]react"; then
+    _is_client_file=true
+  fi
+  if [ "$_is_client_file" = true ]; then
+    hook_block "URLSearchParams is banned in client code. Use TanStack Router search params.\nDefine validateSearch with zod on the route, or use nuqs for URL query state."
+  fi
 fi
 
 # ── Check 4: Warn on window.location.reload() ────────────────────────

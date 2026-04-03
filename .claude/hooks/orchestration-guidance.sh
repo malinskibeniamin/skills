@@ -67,14 +67,9 @@ if [ -z "$guidance" ]; then
   fi
 fi
 
-# ── Security-sensitive file ─────────────────────────────────────
-
-if echo "$file_path" | grep -qiE 'auth|token|secret|password|credential|session|crypto'; then
-  echo "security:$file_path" >> "$session_files" 2>/dev/null || true
-  if [ -z "$guidance" ]; then
-    guidance="[SECURITY] No secrets in source code (use @/env). No eval/innerHTML/dangerouslySetInnerHTML. Validate all user inputs. Prefer HttpOnly cookies over localStorage for tokens."
-  fi
-fi
+# Security detection removed — too many false positives on common filenames
+# (useSession.ts, TokenInput.tsx, etc.). Security checks are handled by
+# react-rules-check.sh (eval, innerHTML, dangerouslySetInnerHTML bans).
 
 # ── Track all JSX/TSX source files for co-located test check ────
 

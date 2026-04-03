@@ -64,7 +64,7 @@ if [ -f "$session_files" ] && grep -q "^jsx:" "$session_files" 2>/dev/null; then
   jsx_files=$(grep "^jsx:" "$session_files" | cut -d: -f2- | sort -u)
   for f in $jsx_files; do
     # Skip files that don't need tests
-    if echo "$f" | grep -qE '(index\.|layout\.|middleware\.|types/|\.d\.ts|__root|\.gen\.)'; then
+    if echo "$f" | grep -qE '(index\.|layout\.|middleware\.|types/|\.d\.ts|__root|\.gen\.|providers?\.|constants?\.|theme\.|context\.|config\.)'; then
       continue
     fi
     base="${f%.*}"

@@ -111,13 +111,14 @@ fi
 
 # ── Check 10: Warn on Timestamp as plain object ──────────────────
 
-if echo "$added_lines" | grep -qE 'Timestamp|timestamp'; then
+# Only trigger on protobuf Timestamp type (capitalized) or timestamp_pb imports, not generic "timestamp" variables
+if echo "$added_lines" | grep -qE '\bTimestamp\b' || echo "$file_content" | grep -qE 'timestamp_pb'; then
   # Detect manual { seconds, nanos } construction
-  if echo "$added_lines" | grep -qE '\{\s*seconds\s*:|nanos\s*:' && echo "$file_content" | grep -qE 'Timestamp|timestamp_pb'; then
+  if echo "$added_lines" | grep -qE '\{\s*seconds\s*:|nanos\s*:' && echo "$file_content" | grep -qE '\bTimestamp\b|timestamp_pb'; then
     hook_warn "Do not construct Timestamp as { seconds, nanos } object.\nJSON decode fails: 'cannot decode Timestamp from JSON: object'.\nUse timestampFromDate(new Date()) or timestampDate(ts) from @bufbuild/protobuf/wkt.\n\nSee setup-connect-query REFERENCE.md."
   fi
   # Detect raw Date passed to Timestamp field without conversion
-  if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qiE 'timestamp'; then
+  if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qE '\bTimestamp\b'; then
     if ! echo "$added_lines" | grep -qE 'timestampFromDate|timestampDate|Timestamp\.fromDate|toTimestamp'; then
       hook_warn "Do not pass raw Date to a Timestamp field.\nUse timestampFromDate(date) from @bufbuild/protobuf/wkt to convert.\n\nSee setup-connect-query REFERENCE.md."
     fi

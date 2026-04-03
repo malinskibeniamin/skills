@@ -163,8 +163,10 @@ esac
 
 # ── Check 12: No outline removal (breaks keyboard navigation) ────
 
-if echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
-   echo "$added_lines" | grep -qE 'outline-none'; then
+# Allow outline-none when used alongside focus-visible:outline (standard Tailwind reset pattern)
+if (echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
+    echo "$added_lines" | grep -qE 'outline-none') && \
+   ! echo "$added_lines" | grep -qE 'focus-visible:outline'; then
   hook_block "Do not remove focus outlines.\nRemoving outlines breaks keyboard navigation accessibility.\nUse focus-visible styles: focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 fi
 
@@ -245,7 +247,7 @@ esac
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'style=\{\{'; then
-      hook_block "Inline style={{}} is banned.\nInline styles bypass Tailwind and break design consistency.\nUse Tailwind CSS utility classes instead."
+      hook_warn "Inline style={{}} detected — I hope you know what you are doing.\nInline styles bypass Tailwind and break design consistency.\nUse Tailwind CSS utility classes instead. If truly necessary (dynamic positioning from JS), proceed with caution."
     fi
     ;;
 esac

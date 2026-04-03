@@ -437,7 +437,7 @@ echo '<div style={{ marginTop: 16 }}>content</div>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: inline style={{}}" "Tailwind"
+  0 "warn: inline style={{}} (sudo warning)" "I hope you know"
 
 # Allow style in .ts files (not TSX)
 tmpfile="$_rr_tmpdir/test.ts"
