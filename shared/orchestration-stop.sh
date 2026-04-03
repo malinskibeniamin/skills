@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # Stop hook: comprehensive quality gate. Reads file categories tracked by
 # orchestration-guidance.sh and runs targeted checks. Blocks until truly done.

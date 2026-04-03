@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # Only run in repos that ARE the UI registry (have registry.json at root)
 # Consumer repos that USE registry components don't need this check —

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # Stop hook: run biome lint:fix on all changed JS/TS files before Claude finishes.
 # Only runs if JS/TS files were actually changed.

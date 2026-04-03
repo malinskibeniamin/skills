@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # Stop hook: run type checking and related tests before Claude finishes.
 # Only runs if JS/TS files were actually changed.

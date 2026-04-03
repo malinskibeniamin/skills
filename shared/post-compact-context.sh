@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # PostCompact hook: re-inject critical context after context compression.
 # When Claude's context gets compacted, the rules line and config from

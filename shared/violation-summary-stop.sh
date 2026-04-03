@@ -1,8 +1,9 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # Stop hook: report aggregated violation summary from the session.
 # Reads violations tracked by hook_block/hook_warn/hook_deny in hook-lib.sh.
+# Note: set -u removed — CLAUDE_SESSION_ID may be unset in some contexts.
 
 violations_file="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/violations"
 
