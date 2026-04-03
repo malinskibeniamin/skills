@@ -63,7 +63,15 @@ Everything else happens automatically via hooks. You don't need to invoke skills
 
 ## TLDR — Full Setup for a New Repo
 
-One command to install everything (14 setup skills + lifecycle + 15 workflow skills):
+**Option A: Plugin (recommended — installs everything in one command):**
+
+```
+/plugin install git@github.com:malinskibeniamin/skills.git
+```
+
+This installs all skills + hooks + agents. Done.
+
+**Option B: Individual skills (if you prefer granular control):**
 
 ```bash
 bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
