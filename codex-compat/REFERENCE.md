@@ -73,6 +73,10 @@ Generate this at the repo root. It provides soft guidance for rules that Codex c
 ```markdown
 # Project Rules
 
+## Quick Reference (read on every turn)
+
+Rules: bun(--yarn) tsgo biome vitest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery) | TDD: failing test first, always
+
 ## Toolchain
 
 - Use `bun` as package manager (not npm/npx)

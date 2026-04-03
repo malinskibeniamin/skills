@@ -95,6 +95,32 @@ if [ -n "$changed_pkg" ] && [ -x "$hooks_dir/bundle-guard.sh" ]; then
   done
 fi
 
+# ── Orchestration gates (same as orchestration-stop.sh) ──────────
+
+# Gate: New source files without co-located tests
+new_files=$(git diff --name-only --diff-filter=A HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.|index\.|layout\.|middleware\.|types/|__root|providers?\.|constants?\.|theme\.|context\.|config\.)' || true)
+if [ -n "$new_files" ]; then
+  for f in $new_files; do
+    base="${f%.*}"
+    has_test=false
+    for suffix in test.tsx test.ts integration.tsx unit.ts spec.ts; do
+      [ -f "$repo_root/${base}.${suffix}" ] && has_test=true && break
+    done
+    if [ "$has_test" = false ]; then
+      errors="$errors\n[orchestration] NEW FILE WITHOUT TEST: $(basename "$f")"
+    fi
+  done
+fi
+
+# Gate: Run related tests if vitest available
+if [ -n "$changed_js" ] && [ -f "$repo_root/node_modules/.bin/vitest" ] && command -v bun &>/dev/null; then
+  test_exit=0
+  test_output=$(cd "$repo_root" && bun test --run --related $changed_js 2>&1) || test_exit=$?
+  if [ $test_exit -ne 0 ]; then
+    errors="$errors\n[orchestration] TESTS FAILING: $(echo "$test_output" | tail -5)"
+  fi
+fi
+
 if [ -n "$errors" ]; then
   truncated=$(printf '%b' "$errors" | head -30)
   escaped=$(printf '%s' "$truncated" | jq -Rs .)
