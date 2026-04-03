@@ -1,0 +1,23 @@
+{
+  "name": "frontend-skills",
+  "description": "React/TypeScript frontend skills, hooks, and agents. 25 hooks enforce patterns in real-time. One skill for the full development lifecycle.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Beniamin Malinski"
+  },
+  "homepage": "https://github.com/malinskibeniamin/skills",
+  "repository": "https://github.com/malinskibeniamin/skills",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "typescript",
+    "frontend",
+    "tdd",
+    "accessibility",
+    "hooks",
+    "skills",
+    "agents",
+    "quality-gate",
+    "sandcastle"
+  ]
+}

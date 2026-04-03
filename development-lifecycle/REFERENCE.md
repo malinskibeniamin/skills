@@ -109,6 +109,27 @@ gh pr comment <URL> --body "@claude review"
 | "Restart your dev server and check" | Open the page yourself with browser tools. Confirm it works before reporting. |
 | "I can't access the browser" | You have agent-browser (headless) and claude-in-chrome MCP. Use them. |
 
+## Commit Discipline
+
+**Commit when green.** Every passing state deserves a snapshot in git history.
+
+### When to commit
+- Tests pass after implementing a feature → commit
+- Bug fix verified → commit
+- Refactor step complete (tests still green) → commit
+- GitHub issue closed / Jira ticket resolved → commit
+
+### Commit quality
+- **One concern per commit.** Don't mix a bug fix with a refactor.
+- **Subject line**: `type(scope): what changed` (conventional format, enforced by hook)
+- **Body**: why the change was made, not what files changed. Future readers should understand the motivation.
+- **Reference issues**: `Closes #42` or `Fixes PROJ-123` in the body.
+
+### Anti-patterns
+- Accumulating 500 lines across 3 features in one commit → split into 3
+- "WIP" or "misc fixes" commit messages → be specific
+- Committing broken state (tests failing) → get green first
+
 ## Phase 6: Compound
 
 After non-trivial tasks, codify lessons as path-scoped rules:

@@ -42,6 +42,7 @@ You don't need to remember skill names. This skill detects what phase you're in 
   - Playwright tests: for automated assertions
 - If it's a UI fix: open the page, verify the fix renders correctly
 - If it's a logic fix: run the test, confirm green
+- **When green: commit immediately.** Every passing state deserves a snapshot. Don't accumulate changes across multiple features in one commit.
 
 ### 5. Review — before creating PR
 
