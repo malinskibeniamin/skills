@@ -68,5 +68,7 @@ After every non-trivial task, ask: "Did we learn something worth preserving?"
 | "Write tests for X" | 3 (TDD only) |
 | "Create a PR" | 5 (review only) |
 | "Quick question" | Just answer — no lifecycle needed |
+| "Batch these 5 issues" | **Sandcastle** — parallel agents, one per issue |
+| "Work on this overnight" | **Sandcastle** — AFK delegation |
 
-See [REFERENCE.md](REFERENCE.md) for detailed checklists per phase.
+See [REFERENCE.md](REFERENCE.md) for detailed checklists per phase and Sandcastle integration.
