@@ -1,6 +1,8 @@
 # Agent Skills
 
-Zero-babysit frontend development. Claude writes production-ready code — with tests, accessible, secure, type-safe — without you asking for each thing individually.
+**Tell Claude what to build. Get a PR that's ready to merge.**
+
+24 hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
 
 ## Why This Exists
 
