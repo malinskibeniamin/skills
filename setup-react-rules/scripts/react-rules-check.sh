@@ -323,7 +323,9 @@ fi
 
 # ── Check 26: Warn on tree-shaking killers ────────────────────────
 
-if echo "$added_lines" | grep -qE 'import \* as \w+ from'; then
+# Allow import * as React (legitimate) but warn on other namespace imports
+if echo "$added_lines" | grep -qE 'import \* as \w+ from' && \
+   ! echo "$added_lines" | grep -qE 'import \* as React from'; then
   hook_warn "Namespace import (import * as) prevents tree-shaking.\nImport specific exports instead: import { foo, bar } from 'package'."
 fi
 
