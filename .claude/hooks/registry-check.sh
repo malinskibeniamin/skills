@@ -28,4 +28,12 @@ if [ -z "$registry_changed" ]; then
   exit 2
 fi
 
+# Check if CHANGELOG.md was also updated
+changelog_changed=$(echo "$changed" | grep -iE 'CHANGELOG' || true)
+
+if [ -z "$changelog_changed" ]; then
+  echo '{"decision":"block","reason":"You modified redpanda-ui components and rebuilt registry.json, but CHANGELOG.md was not updated.\n\nAdd a changelog entry describing what changed in the component(s)."}' >&2
+  exit 2
+fi
+
 exit 0
