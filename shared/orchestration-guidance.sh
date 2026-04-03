@@ -145,6 +145,65 @@ if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
     guidance="$guidance Consider KeyValueField + BadgeGroup for key-value metadata editing."
   fi
 
+  # Loading/empty state component nudges
+  if echo "$file_content" | grep -qE 'Loading\.\.\.|loading\.\.\.|isLoading' && \
+     ! echo "$file_content" | grep -qE 'Skeleton|Spinner'; then
+    guidance="$guidance Use Skeleton or Spinner from registry for loading states."
+  fi
+
+  if echo "$file_content" | grep -qiE 'no data|no results|nothing.*found|empty.*state' && \
+     ! echo "$file_content" | grep -qE 'Empty'; then
+    guidance="$guidance Use Empty component from registry for empty states."
+  fi
+
+  # Toast/notification nudge
+  if echo "$file_content" | grep -qE 'toast\(|notification\(|alert\(' && \
+     ! echo "$file_content" | grep -qE 'sonner|Sonner'; then
+    guidance="$guidance Use Sonner from registry for toast notifications."
+  fi
+
+  # JSON display nudge
+  if echo "$file_content" | grep -qE 'JSON\.stringify.*<pre|<pre.*JSON|formatJSON' && \
+     ! echo "$file_content" | grep -qE 'JSONViewer|JsonViewer'; then
+    guidance="$guidance Use JSONViewer from registry instead of JSON.stringify + pre."
+  fi
+
+  # Code display nudge
+  if echo "$file_content" | grep -qE '<pre><code|<pre.*className.*code|highlight\.js|prism' && \
+     ! echo "$file_content" | grep -qE 'CodeBlock|CodeEditor|CodeTabs'; then
+    guidance="$guidance Use CodeBlock from registry for code display."
+  fi
+
+  # Confirm dialog nudge
+  if echo "$file_content" | grep -qE 'window\.confirm\(|confirm\(' && \
+     ! echo "$file_content" | grep -qE 'AlertDialog'; then
+    guidance="$guidance Use AlertDialog from registry instead of window.confirm()."
+  fi
+
+  # Copy button nudge
+  if echo "$file_content" | grep -qE 'navigator\.clipboard|writeText\(|copyToClipboard' && \
+     ! echo "$file_content" | grep -qE 'CopyButton'; then
+    guidance="$guidance Use CopyButton from registry for copy-to-clipboard."
+  fi
+
+  # File upload nudge
+  if echo "$file_content" | grep -qE 'type="file"|<input.*file|FileReader|ondrop.*file' && \
+     ! echo "$file_content" | grep -qE 'Dropzone'; then
+    guidance="$guidance Use Dropzone from registry for file uploads."
+  fi
+
+  # Status indicator nudge
+  if echo "$file_content" | grep -qiE 'status.*dot|status.*badge|health.*indicator|state.*icon' && \
+     ! echo "$file_content" | grep -qE 'StatusBadge|StatusDot'; then
+    guidance="$guidance Use StatusBadge or StatusDot from registry for status indicators."
+  fi
+
+  # Stepper/wizard nudge
+  if echo "$file_content" | grep -qiE 'step.*wizard|multi.?step|step.*form|currentStep|activeStep' && \
+     ! echo "$file_content" | grep -qE 'Stepper'; then
+    guidance="$guidance Use Stepper from registry for multi-step wizards."
+  fi
+
   # UI Registry sync nudge — when editing a registry component, also update upstream
   if echo "$file_path" | grep -qE 'redpanda-ui/|components/redpanda-ui/'; then
     if [ -d "linked-repos/ui-registry" ]; then
