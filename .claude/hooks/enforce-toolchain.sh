@@ -111,6 +111,14 @@ if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+reset\s+--hard'; then
   exit 2
 fi
 
+# Block --no-verify on git commands (skips pre-commit hooks)
+# Strip quoted strings first to avoid matching --no-verify inside commit messages
+_cmd_no_quotes=$(echo "$command" | sed 's/"[^"]*"//g; s/'"'"'[^'"'"']*'"'"'//g')
+if echo "$_cmd_no_quotes" | grep -qE '(^|\s|&&|\|\||;)git\s' && echo "$_cmd_no_quotes" | grep -qE '\s--no-verify(\s|$)'; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"--no-verify is blocked.\nPre-commit hooks exist for a reason. Fix the issue that the hook is catching instead of skipping it."}' >&2
+  exit 2
+fi
+
 # Block git checkout . / git restore . (discards all uncommitted changes)
 if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+(checkout|restore)\s+\.\s*($|;|&&|\|\|)'; then
   echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"git checkout/restore . is blocked (discards all uncommitted changes).\nRestore specific files: git checkout -- <file> or git restore <file>."}' >&2
