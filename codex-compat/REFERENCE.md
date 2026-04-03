@@ -151,4 +151,56 @@ All commits must follow: `type(scope): description`
 - Do not use raw `useQuery` / `useMutation` when ConnectRPC is available (exception: `useTransport`/`callUnaryMethod` pattern with `@connectrpc/connect` imports)
 - Protobuf v2: use `create(Schema, { ... })` — do not construct messages as object literals with `$typeName`
 - Protobuf v2: use Standard Schema + protovalidate as react-hook-form resolver instead of duplicating validation in Zod
+- Protobuf v2: use `timestampFromDate()` for Timestamp fields — never `{ seconds, nanos }` objects
+- Protobuf v2: use `anyPack()` for Any fields — never construct without `typeUrl`/@type
+- `handleSubmit(onSubmit)` must have error callback: `handleSubmit(onSubmit, onError)`
+
+## Development Lifecycle
+
+Follow this order for every task. Do not skip phases.
+
+1. **Understand** — explore context, ask clarifying questions one at a time, propose approaches
+2. **Plan** — write exact file paths, exact code, expected output. No TBD or placeholders
+3. **Implement (TDD)** — write failing test FIRST, then minimal code to pass, then refactor
+4. **Verify** — confirm the fix works yourself. Do NOT ask the user to test manually. Use test runner or browser tools
+5. **Review** — check spec compliance, then code quality. Create PR with conventional commit format
+
+## Test Quality
+
+- Write failing test FIRST — no production code without a failing test
+- Use `userEvent.setup()` (not `fireEvent`)
+- Prefer `getByRole` for accessibility assertions
+- Never use `setTimeout` or `waitForTimeout` in tests — use `await waitFor(() => expect(...))`
+- Run `--detectAsyncLeaks` to check for async leaks
+- Classify: `.test.ts` (unit, no DOM), `.test.tsx` (integration, renders), `e2e/*.spec.ts` (Playwright)
+- Every new source file must have a co-located test file
+
+## Error Handling & Resilience
+
+- Route files with data fetching (`loader`, `useQuery`) should have `errorComponent`
+- `React.lazy()` must be wrapped in `<Suspense fallback={...}>`
+- Query hooks: always handle loading, error, AND empty states — never assume data exists
+- Async event handlers (`onClick={async ...}`) should have error handling
+
+## Auto-Generated Files
+
+Skip these files — do not modify or flag patterns in them:
+- `*.gen.ts` / `*.gen.tsx` (TanStack Router routeTree)
+- `*_pb.ts` / `*_pb.js` (protobuf generated)
+- `*_connectquery.ts` (Connect Query generated)
+- Files with `@generated` or `DO NOT EDIT` in first 5 lines
+
+## Config Files
+
+`process.env` is correct in these files (do not flag):
+- `rsbuild.config.*`, `vite.config.*`, `webpack.config.*`
+- `vitest.config.*`, `jest.config.*`, `playwright.config.*`
+- `tailwind.config.*`, `next.config.*`
+
+## Two-Stage Code Review
+
+Before creating a PR:
+1. **Spec compliance** — does it match requirements? No scope creep?
+2. **Code quality** — clean, tested, accessible, type-safe, DRY?
+Then: create PR with conventional commit, suggest review
 ```
