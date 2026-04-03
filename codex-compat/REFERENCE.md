@@ -162,7 +162,7 @@ Follow this order for every task. Do not skip phases.
 1. **Understand** — explore context, ask clarifying questions one at a time, propose approaches
 2. **Plan** — write exact file paths, exact code, expected output. No TBD or placeholders
 3. **Implement (TDD)** — write failing test FIRST, then minimal code to pass, then refactor
-4. **Verify** — confirm the fix works yourself. Do NOT ask the user to test manually. Use test runner or browser tools
+4. **Verify** — confirm the fix works yourself. Do NOT ask the user to test manually. Use `agent-browser` for UI verification (headless, fast, low tokens) or test runner for logic. Playwright MCP and chrome extensions are NOT available in Codex — use agent-browser instead: `agent-browser open <url> && agent-browser snapshot && agent-browser screenshot`
 5. **Review** — check spec compliance, then code quality. Create PR with conventional commit format
 
 ## Test Quality

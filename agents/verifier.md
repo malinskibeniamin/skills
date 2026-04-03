@@ -28,16 +28,19 @@ If type errors exist in changed files, report FAIL.
 
 ### 3. Visual Verification (if UI changes)
 
-If the changes involve UI (`.tsx` files with JSX):
+If the changes involve UI (`.tsx` files with JSX), use **agent-browser** (preferred — headless, fast, works in Codex and CI):
 
 ```bash
-# Use agent-browser if available
 agent-browser open http://localhost:3000/<relevant-path>
-agent-browser snapshot
-agent-browser screenshot --annotate verification.png
+agent-browser snapshot          # accessibility tree — verify elements exist
+agent-browser screenshot --annotate verification.png  # visual proof
+agent-browser close
 ```
 
-Verify the page renders without errors. Check for blank screens, missing data, layout issues.
+Do NOT use Playwright MCP (too many tokens, too slow for verification loops).
+Do NOT ask the user to check manually.
+
+Verify: page renders, no blank screens, no missing data, no layout issues.
 
 ### 4. Lint Check
 
