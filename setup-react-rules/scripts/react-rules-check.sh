@@ -99,7 +99,7 @@ case "$file_path" in
     # Excludes text-* entirely — too many false positives (text-center, text-sm, text-wrap).
     # Text color overrides (text-red-500) are caught by the tailwind hex/token checks instead.
     if echo "$added_lines" | grep -E '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
-      hook_block "Do not override visual styles on registry components.\nVariant props exist for this purpose; raw Tailwind breaks design consistency.\nUse the component's variant prop. Layout classes (mt-4, flex-1, w-full, gap-2, text-center, text-sm) are fine."
+      hook_warn "Visual style override on registry component detected — I hope you know what you are doing.\nIf this is intentional theming (bg-sidebar, border-input), proceed. If overriding with raw colors (bg-red-500), use the variant prop instead."
     fi
     ;;
 esac
@@ -163,10 +163,10 @@ esac
 
 # ── Check 12: No outline removal (breaks keyboard navigation) ────
 
-# Allow outline-none when used alongside focus-visible:outline (standard Tailwind reset pattern)
+# Allow outline-none when paired with focus-visible replacement (ring-*, outline-*)
 if (echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
     echo "$added_lines" | grep -qE 'outline-none') && \
-   ! echo "$added_lines" | grep -qE 'focus-visible:outline'; then
+   ! echo "$added_lines" | grep -qE 'focus-visible:(outline|ring)'; then
   hook_block "Do not remove focus outlines.\nRemoving outlines breaks keyboard navigation accessibility.\nUse focus-visible styles: focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 fi
 

@@ -246,7 +246,7 @@ echo '<Button className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: visual style override on Button" "variant"
+  0 "warn: visual style override on Button (sudo)" "I hope you know"
 
 # Allow layout-only classes on components (with handler)
 echo '<Button onClick={handleClick} className="mt-4 flex-1 w-full">Click</Button>' > "$tmpfile"
