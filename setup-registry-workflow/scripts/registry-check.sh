@@ -1,9 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# Skip entirely if no redpanda-ui directory exists in the repo
+# Only run in repos that ARE the UI registry (have registry.json at root)
+# Consumer repos that USE registry components don't need this check —
+# the orchestration-guidance.sh registry sync nudge handles consumers
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-if [ ! -d "$repo_root/redpanda-ui" ] && [ ! -d "$repo_root/src/redpanda-ui" ]; then
+if [ ! -f "$repo_root/registry.json" ]; then
   exit 0
 fi
 
