@@ -28,7 +28,7 @@ const results = await Promise.all(
           // Install project deps first (without --yarn for speed)
           { command: "bun install --frozen-lockfile" },
           // Then install our skills + hooks via plugin
-          { command: "bun install --yarn" },
+          // Removed --yarn step (yarn.lock no longer required)
           // Plugin installs all skills + hooks + agents in one step
           { command: "bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y" },
           { command: "bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y" },

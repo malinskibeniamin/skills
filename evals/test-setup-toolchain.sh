@@ -72,27 +72,27 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun install --global prettier"}}' \
   2 "block: bun install --global" "Global package installs are banned"
 
-# ── --yarn enforcement ──────────────────────────────────────────
+# ── bun install/add (--yarn no longer required) ─────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun install"}}' \
-  2 "block: bun install (no --yarn)" "--yarn"
+  0 "allow: bun install (no --yarn required)"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add lodash"}}' \
-  2 "block: bun add (no --yarn)" "--yarn"
+  0 "allow: bun add (no --yarn required)"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun install --yarn"}}' \
-  0 "allow: bun install --yarn"
+  0 "allow: bun install --yarn (still works)"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add --yarn lodash"}}' \
-  0 "allow: bun add --yarn"
+  0 "allow: bun add --yarn (still works)"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add lodash --yarn"}}' \
-  0 "allow: bun add <pkg> --yarn (flag at end)"
+  0 "allow: bun add <pkg> --yarn (still works)"
 
 # ── bunx for scripted tools blocked ─────────────────────────────
 
