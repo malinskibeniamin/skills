@@ -106,6 +106,41 @@ bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent cla
 
 Or install individual skills if you don't want the full kit — see sections below.
 
+**Verify installation health across repos:**
+
+```bash
+bash scripts/verify-install.sh              # check current repo
+bash scripts/verify-install.sh --remote     # also check for updates
+bash scripts/verify-install.sh --json       # machine-readable output
+```
+
+## Quick Start
+
+New to AI-assisted development? Start here.
+
+**Day 1 (30 min):**
+1. Install the plugin: `/plugin install git@github.com:malinskibeniamin/skills.git`
+2. Run `bash scripts/verify-install.sh` to confirm everything is wired
+3. Pick a real ticket from your backlog — not a toy problem
+
+**Your first prompt:**
+```
+Read [relevant files]. I want to [goal from your ticket].
+Before writing any code, produce a plan with what you'll do, files you'll change,
+edge cases, and how you'll verify. Wait for my approval before starting.
+```
+
+**What happens automatically:** 25 hooks enforce patterns on every edit. Intent detection injects workflow guidance. Stop hooks run type checking, linting, and related tests before Claude finishes. You don't need to ask for any of this.
+
+**Day 2+:** Work real tickets. Let the hooks catch mistakes. Focus on **clarifying the problem** and **reviewing the output** — not writing code yourself. Post wins and failures to your team channel.
+
+**Tips that matter:**
+- Plan before you execute (`/plan`). Engineers who skip this spend the day untangling misdirected work
+- Use `/clear` between unrelated tasks. Long sessions degrade output quality
+- If Claude starts deleting tests to make CI green — stop immediately. That's a red flag
+- Use `HOOK_VERBOSITY=terse` for long sessions to reduce token overhead
+- Run `bash scripts/verify-install.sh --remote` weekly to check for updates
+
 ## How It Works
 
 Three layers of automation run without any manual invocation:
