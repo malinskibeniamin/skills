@@ -127,6 +127,7 @@ You never see hook output directly. Claude just produces better code, with tests
 | `PROMPT_CONTEXT_LEVEL` | `standard` | How much state to inject per prompt (`minimal`, `standard`, `full`) |
 | `ORCHESTRATION_STRICT` | `1` | Set to `0` during prototyping to disable "must have tests" gate |
 | `REACT_COMPILER_MODE` | `infer` | Set to `annotation` for brownfield codebases |
+| `HOOK_VERBOSITY` | `normal` | `terse` = blocks only (suppresses warns), `quiet` = all output suppressed |
 | `HOOKS_FAIL_CLOSED` | `0` | Set to `1` to block on hook script errors (catches misconfiguration) |
 
 ## Why Hooks > Skills > Manual
@@ -427,27 +428,15 @@ Linting, formatting, and quality gate automation.
 
 PostToolUse hooks that enforce React patterns on every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) and auto-detect component library directories (`components/ui/`, `redpanda-ui/`, `src/ui/`, `packages/ui/` — configurable via `UI_LIB_DIRS`).
 
-- **setup-react-rules** — React/TS/security/Tailwind checks in a single hook script:
-  - Ban raw HTML elements (`<button>`, `<input>`, `<select>`, etc.) — suggest shadcn/ui components (`<form>` allowed)
-  - Ban `as any`, `as Record<string, any>`, `as Record<string, unknown>`, `@ts-ignore`, `@ts-expect-error`
-  - Ban visual style overrides on registry components (use variant prop)
-  - Ban `onClick + navigate()` (use `<Button asChild><Link>`)
-  - Require handler on buttons (onClick, asChild, type=submit, disabled)
-  - Ban icon inside AlertTitle (use icon prop)
-  - Enforce `create()` wrapper for protobuf spreads (v2 only)
-  - Icon-only buttons must have `aria-label`
-  - Ban `outline: none` (breaks keyboard navigation)
+- **setup-react-rules** — 34 React/TS/security/a11y checks in two hook scripts (`react-rules-check.sh` + `tailwind-check.sh`). All messages are compressed for token efficiency — keeps the fix, drops the explanation. Key checks:
+  - Ban raw HTML elements, `as any`, `@ts-ignore`, `@ts-expect-error`, class components
+  - Ban `dangerouslySetInnerHTML`, `eval()`, `.innerHTML`, `setTimeout("string")`, `=== NaN`
+  - Ban `onClick + navigate()`, barrel imports, `!important`, `outline: none`
+  - Suggest `structuredClone()` over JSON roundtrip, `.requestSubmit()` over `.submit()`
+  - Suggest `100dvh` over `100vh`, `100%` over `100vw`, block `user-scalable=no`
+  - Use `<Button>` over `<div role="button">`, `Number()` over unradixed `parseInt()`
   - React Compiler: ban manual `useMemo`/`useCallback`/`React.memo`
-  - Ban `dangerouslySetInnerHTML` (XSS — escape hatch: `// allow-dangerouslySetInnerHTML: [reason]`)
-  - Ban `eval()` / `new Function()` (code injection)
-  - Ban `.innerHTML =` assignment (XSS)
-  - Ban inline `style={{}}` — use Tailwind utility classes
-  - Ban raw hex/rgb in className — use design tokens
-  - Ban `!important` — breaks Tailwind cascade
-  - Ban barrel imports (re-exports from index files) — suggest direct path imports
-  - Ban `addEventListener('scroll'|'touchstart'|'wheel')` without `{ passive: true }`
-  - Warn on static imports of heavy deps (`chart.js`, `d3`, `three.js`, `pdf-lib`) — suggest dynamic import
-  - Opt-in: ban `useEffect` via `REACT_RULES_BAN_USEEFFECT=1` (best for greenfield with TanStack Query + zustand)
+  - Opt-in: ban `useEffect` via `REACT_RULES_BAN_USEEFFECT=1`
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
@@ -681,20 +670,31 @@ The ~80ms floor is bash process spawn + `jq` parse — fixed cost regardless of 
 | react-doctor-stop.sh | 1-2s | `--diff` mode, changed files only |
 | **Total** | **~4-10s** | Runs once when Claude finishes, not per edit |
 
+### Token Efficiency
+
+Hook messages are compressed (inspired by [Caveman](https://github.com/JuliusBrussee/caveman) and [arxiv:2604.00025](https://arxiv.org/abs/2604.00025)). The LLM already knows the rules from SKILL.md — hooks are reminders, not tutorials.
+
+| Optimization | Savings |
+|---|---|
+| Compressed systemMessage strings | ~40% fewer tokens per violation |
+| Guidance deduplication (once per category per session) | ~50-70% fewer orchestration tokens |
+| `HOOK_VERBOSITY=terse` (blocks only) | Suppresses all warns |
+| REFERENCE.md trimmed to essentials | -21% input tokens on skill loads |
+
+Combined: **~6,700 fewer tokens per session** vs. unoptimized hooks. For long sessions or multi-agent (Sandcastle), use `HOOK_VERBOSITY=terse` and `PROMPT_CONTEXT_LEVEL=minimal` to minimize overhead.
+
 ### Context
 
 A typical Claude Code tool call takes 3-8 seconds (network + LLM inference). PostToolUse overhead of ~293ms is **3-8%** of that — imperceptible. The Stop hooks at 4-10s replace what you'd run manually (lint, type check, tests) and only target changed/related files.
 
-The ~80ms per-hook floor is dominated by process spawning and `jq`. This is the cost of using bash — a compiled hook runner would cut it to <5ms, but bash is portable, readable, and easy to customize.
+## Codex Compatibility
 
-## Codex Compatibility (Experimental)
+Codex is a first-class harness. 15 of 25 hooks port directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop). The 10 Edit|Write PostToolUse hooks are consolidated into a single Stop-phase batch checker. `AGENTS.md` at repo root replaces PostCompact context re-injection.
 
-> Codex supports only the `Bash` matcher for PostToolUse — not `Edit|Write`. This skill bridges that gap by wrapping Edit|Write hooks into a Stop-based batch checker.
+All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works from any CWD, silently skips in repos without hooks installed.
 
-- **codex-compat** — Generates `.codex/hooks.json` and `AGENTS.md` from existing Claude Code hooks. Translates PostToolUse Edit|Write hooks into a Stop-based batch checker. PreToolUse, SessionStart, and Stop hooks work identically on both platforms.
+- **codex-compat** — Installs `.codex/hooks.json`, batch checker, and `AGENTS.md`. Session state is harness-agnostic (`CLAUDE_SESSION_ID` or `CODEX_SESSION_ID`).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
   ```
-
-  **Not included in starter kits.** Install separately for repos where Codex users need hook enforcement.
