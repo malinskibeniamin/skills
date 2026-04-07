@@ -8,28 +8,43 @@ source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
 
+_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+mkdir -p "$_session_dir" 2>/dev/null || true
+session_files="$_session_dir/files"
+_seen_file="$_session_dir/guidance-seen"
+guidance=""
+
 # ── package.json change detection (before extension filter) ──────
 
 if [ "$(basename "$file_path")" = "package.json" ]; then
-  guidance="[DEPS] Deps changed. Check changelogs, run npm audit, verify compat."
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"$guidance\"}" >&2
+  if ! grep -qF "deps" "$_seen_file" 2>/dev/null; then
+    echo "deps" >> "$_seen_file" 2>/dev/null || true
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[DEPS] Deps changed. Check changelogs, run npm audit, verify compat.\"}" >&2
+  fi
   exit 0
 fi
 
 hook_filter_extensions "ts|tsx|js|jsx"
 hook_skip_generated
 
-guidance=""
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
-mkdir -p "$_session_dir" 2>/dev/null || true
-session_files="$_session_dir/files"
+# Emit guidance for a category only once per session.
+# File tracking (for orchestration-stop) always happens regardless.
+_guidance_once() {
+  local category="$1"
+  local msg="$2"
+  if grep -qF "$category" "$_seen_file" 2>/dev/null; then
+    return  # already emitted this category
+  fi
+  echo "$category" >> "$_seen_file" 2>/dev/null || true
+  guidance="$msg"
+}
 
 # ── Test file written ────────────────────────────────────────────
 
 case "$file_path" in
   *.test.tsx|*.test.ts|*.integration.tsx|*.integration.ts|*.unit.ts)
     echo "test:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[TEST] userEvent.setup(), getByRole, no setTimeout, await waitFor() for async."
+    _guidance_once "test" "[TEST] userEvent.setup(), getByRole, no setTimeout, await waitFor() for async."
     ;;
 esac
 
@@ -37,7 +52,7 @@ esac
 
 if echo "$file_path" | grep -qE 'e2e/.*\.spec\.ts$'; then
   echo "spec:$file_path" >> "$session_files" 2>/dev/null || true
-  guidance="[E2E] Import from ./fixtures/base (axe-core). data-testid selectors. No page.waitForTimeout."
+  _guidance_once "e2e" "[E2E] Import from ./fixtures/base (axe-core). data-testid selectors. No page.waitForTimeout."
 fi
 
 # ── New component created (TSX in components dir, Write tool) ────
@@ -46,7 +61,7 @@ if [ -z "$guidance" ]; then
   case "$file_path" in
     */components/*.tsx|*/components/*.jsx)
       echo "component:$file_path" >> "$session_files" 2>/dev/null || true
-      guidance="[COMPONENT] Design system components, keyboard navigable, aria-label on icons, co-located test."
+      _guidance_once "component" "[COMPONENT] Design system components, keyboard navigable, aria-label on icons, co-located test."
       ;;
   esac
 fi
@@ -56,7 +71,7 @@ fi
 if [ -z "$guidance" ]; then
   if echo "$file_path" | grep -qE '/routes/.*\.tsx$'; then
     echo "route:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[ROUTE] Only export Route config (code splitting). validateSearch+zod for search params."
+    _guidance_once "route" "[ROUTE] Only export Route config (code splitting). validateSearch+zod for search params."
   fi
 fi
 
@@ -66,7 +81,7 @@ if [ -z "$guidance" ]; then
   # Match store files precisely: /stores/ dir, *Store.ts, *-store.ts — not "restore", "StoreLocator"
   if echo "$file_path" | grep -qE '/stores/|Store\.(ts|tsx)$|-store\.(ts|tsx)$'; then
     echo "store:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[STORE] create<T>()() double-parens, useShallow for selectors, persist middleware."
+    _guidance_once "store" "[STORE] create<T>()() double-parens, useShallow for selectors, persist middleware."
   fi
 fi
 
