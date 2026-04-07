@@ -14,7 +14,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "TDD" "SKILL.md references TDD"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Iron Law" "REFERENCE has TDD iron law"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Spec Compliance" "REFERENCE has spec compliance review"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "codex" "REFERENCE has codex review instructions"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Common Agent Excuses" "REFERENCE has rationalization table"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Hard Rules" "REFERENCE has hard rules"
 
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')
 desc_len=${#desc}

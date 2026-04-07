@@ -4,17 +4,7 @@
 
 > Script: [`scripts/accessibility-check.sh`](scripts/accessibility-check.sh)
 
-## Playwright AXE Setup
-
-### Installation
-
-```bash
-bun add -D @axe-core/playwright --yarn
-```
-
-### Test Fixture
-
-Create a reusable accessibility test helper:
+## Playwright AXE Test Fixture
 
 ```typescript
 // tests/helpers/a11y.ts
@@ -74,8 +64,6 @@ export async function checkA11y(
 }
 ```
 
-### Usage in Tests
-
 ```typescript
 import { test, expect } from '@playwright/test';
 import { checkA11y } from './helpers/a11y';
@@ -121,11 +109,7 @@ test.describe('Accessibility', () => {
 
 ## ARIA Patterns Quick Reference
 
-### Combobox (Autocomplete "Both")
-
-Based on [W3C APG Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-both/).
-
-**HTML Structure:**
+### Combobox
 
 ```tsx
 <label htmlFor="state-input">State</label>
@@ -170,42 +154,7 @@ Based on [W3C APG Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/com
 </ul>
 ```
 
-**Required ARIA attributes:**
-
-| Element | Attribute | Value |
-|---------|-----------|-------|
-| input | `role` | `"combobox"` |
-| input | `aria-autocomplete` | `"both"` (list + inline), `"list"`, `"none"` |
-| input | `aria-expanded` | `"true"` / `"false"` |
-| input | `aria-controls` | ID of the listbox |
-| input | `aria-activedescendant` | ID of the focused option |
-| ul | `role` | `"listbox"` |
-| ul | `aria-label` | Accessible name for the list |
-| li | `role` | `"option"` |
-| li | `aria-selected` | `"true"` on the active option |
-| button | `tabIndex` | `-1` (not in tab sequence) |
-| button | `aria-label` | Accessible name |
-| button | `aria-expanded` | Mirrors input state |
-| button | `aria-controls` | Same as input |
-
-**Keyboard interactions:**
-
-| Key | Textbox focused | Listbox option focused |
-|-----|----------------|----------------------|
-| Down Arrow | Open listbox, highlight first/next | Next option (wraps) |
-| Up Arrow | Open listbox, highlight last/prev | Previous option (wraps) |
-| Alt + Down | Open without moving selection | — |
-| Enter | Select focused option, close | Select focused option, close |
-| Escape | Close listbox (2nd press clears) | Close listbox |
-| Home | — | Move to textbox, cursor start |
-| End | — | Move to textbox, cursor end |
-| Printable char | Filter list, inline complete | Move to textbox, type char |
-
-**Autocomplete "both" behavior:**
-- As user types, first matching option is highlighted in the list
-- The completed portion of the match appears inline after the cursor (selected text)
-- DOM focus always stays on the textbox — visual focus moves via `aria-activedescendant`
-- Must scroll the `aria-activedescendant` option into view with JavaScript
+**Keyboard:** Down/Up arrows navigate options, Enter selects, Escape closes, Home/End to textbox.
 
 ---
 
@@ -253,11 +202,7 @@ Based on [W3C APG Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/com
 
 **Keyboard:** Arrow Left/Right between tabs, Tab into panel, Home/End to first/last tab.
 
-**Key rules:**
-- Only the active tab has `tabIndex={0}`, all others `tabIndex={-1}`
-- `aria-selected="true"` only on the active tab
-- Each tab has `aria-controls` pointing to its panel
-- Each panel has `aria-labelledby` pointing to its tab
+Active tab: `tabIndex={0}`, `aria-selected="true"`. Others: `tabIndex={-1}`.
 
 ---
 
@@ -277,12 +222,7 @@ Based on [W3C APG Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/com
 </div>
 ```
 
-**Requirements:**
-- `aria-modal="true"` — tells assistive tech that content behind is inert
-- Focus must move into dialog on open (typically to first focusable element or the dialog itself)
-- Focus must be trapped — Tab/Shift+Tab cycle within dialog only
-- Escape closes the dialog
-- On close, focus returns to the element that triggered the dialog
+Focus trapped inside, Escape closes, focus returns to trigger on close.
 
 ---
 
@@ -322,9 +262,7 @@ Based on [W3C APG Combobox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/com
 </div>
 ```
 
-- `role="alert"` is equivalent to `aria-live="assertive"` + `aria-atomic="true"`
-- Content announced immediately when inserted into DOM
-- Do not use for non-urgent information — use `role="status"` (`aria-live="polite"`) instead
+`role="alert"` = assertive live region. For non-urgent info use `role="status"` (polite).
 
 ---
 
