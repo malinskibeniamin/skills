@@ -346,6 +346,52 @@ if echo "$added_lines" | grep -qE "from\s+['\"]framer-motion['\"/]"; then
   hook_warn "framer-motion has been renamed to 'motion'.\nUse: import { motion } from 'motion'"
 fi
 
-# ── Checks 28-29 (raw hex/rgb, !important) moved to tailwind-check.sh ──
+# ── Check 28: Suggest structuredClone over JSON roundtrip ────────
+
+if echo "$added_lines" | grep -qF 'JSON.parse(JSON.stringify('; then
+  hook_warn "Use structuredClone() instead of JSON.parse(JSON.stringify(...)).\nJSON roundtrip drops Date, Map, Set, RegExp, and ArrayBuffer.\nstructuredClone() handles all of these correctly."
+fi
+
+# ── Check 29: Suggest .requestSubmit() over .submit() ───────────
+
+if echo "$added_lines" | grep -qE '\.submit\(\)' && \
+   ! echo "$added_lines" | grep -qE '\.requestSubmit\(\)'; then
+  hook_warn "Use .requestSubmit() instead of .submit().\n.submit() bypasses HTML validation and skips the submit event.\n.requestSubmit() triggers constraint validation and fires the submit event."
+fi
+
+# ── Check 30: Ban delete on arrays (creates sparse holes) ───────
+
+if echo "$added_lines" | grep -qE 'delete\s+\w+\['; then
+  hook_warn "Avoid delete on arrays — it creates sparse holes (undefined at index).\nUse .filter() to remove elements or Array.with() for immutable replacement."
+fi
+
+# ── Check 31: parseInt without radix — suggest Number() ─────────
+
+if echo "$added_lines" | grep -qE 'parseInt\([^,)]+\)' && \
+   ! echo "$added_lines" | grep -qE 'parseInt\([^)]*,'; then
+  hook_warn "parseInt() without explicit radix can surprise.\nUse Number() for decimal conversion, or add explicit radix: parseInt(str, 10)."
+fi
+
+# ── Check 32: div role="button" → use <Button> component ────────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE '<div[^>]*role=["'"'"']button["'"'"']'; then
+      hook_warn "Use <Button> from @/components/ui/button instead of <div role=\"button\">.\nNative button elements provide keyboard handling, focus management, and accessibility for free."
+    fi
+    ;;
+esac
+
+# ── Check 33: setTimeout with string argument (eval-like) ───────
+
+if echo "$added_lines" | grep -qE 'setTimeout\s*\(\s*['"'"'"`]'; then
+  hook_block "Do not pass strings to setTimeout — it uses eval() internally.\nPass a function instead: setTimeout(() => { ... }, delay)"
+fi
+
+# ── Check 34: === NaN is always false ────────────────────────────
+
+if echo "$added_lines" | grep -qE '===?\s*NaN\b'; then
+  hook_block "Comparing with === NaN is always false (NaN !== NaN by spec).\nUse Number.isNaN(value) instead."
+fi
 
 exit 0

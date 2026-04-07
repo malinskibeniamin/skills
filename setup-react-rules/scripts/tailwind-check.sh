@@ -23,4 +23,30 @@ case "$file_path" in
     ;;
 esac
 
+# ── Ban 100vh (use 100dvh for mobile) ────────────────────────────
+
+case "$file_path" in
+  *.css|*.scss|*.sass|*.less)
+    if echo "$added_lines" | grep -qE '\b100vh\b'; then
+      hook_warn "Use 100dvh instead of 100vh.\n100vh does not account for mobile browser chrome (address bar), causing overflow.\n100dvh adapts to the dynamic viewport height."
+    fi
+    ;;
+esac
+
+# ── Ban width: 100vw (causes horizontal scrollbar) ───────────────
+
+case "$file_path" in
+  *.css|*.scss|*.sass|*.less)
+    if echo "$added_lines" | grep -qE 'width:\s*100vw'; then
+      hook_warn "Use width: 100% instead of 100vw.\n100vw includes scrollbar width and causes horizontal overflow when the page has a vertical scrollbar."
+    fi
+    ;;
+esac
+
+# ── Ban user-scalable=no (WCAG zoom violation) ──────────────────
+
+if echo "$added_lines" | grep -qE 'user-scalable\s*=\s*no'; then
+  hook_block "Do not disable pinch-to-zoom (user-scalable=no).\nThis is a WCAG 1.4.4 violation — users must be able to zoom.\nRemove user-scalable=no from the viewport meta tag."
+fi
+
 exit 0

@@ -501,6 +501,68 @@ run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "skip: .ts file in tailwind check"
 
+# ── Tailwind: 100vh → 100dvh ────────────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.css"
+echo '.container { height: 100vh; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: 100vh → 100dvh" "100dvh"
+
+# Allow 100dvh
+echo '.container { height: 100dvh; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: 100dvh (correct usage)"
+
+# Skip 100vh in .tsx (CSS-only check)
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="h-[100vh]">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "skip: 100vh in TSX (CSS-only check)"
+
+# ── Tailwind: 100vw → 100% ──────────────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.css"
+echo '.full { width: 100vw; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: width 100vw → 100%" "100%"
+
+# Allow width: 100%
+echo '.full { width: 100%; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: width 100% (correct usage)"
+
+# ── Tailwind: user-scalable=no (WCAG) ───────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: user-scalable=no (WCAG violation)" "zoom"
+
+# Allow normal viewport meta
+echo '<meta name="viewport" content="width=device-width, initial-scale=1" />' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: viewport meta without user-scalable=no"
+
+# ── Tailwind content checks ─────────────────────────────────────
+
+run_content_eval "$TW_SCRIPT" "100dvh" "tailwind-check suggests 100dvh"
+run_content_eval "$TW_SCRIPT" "100vw" "tailwind-check warns about 100vw"
+run_content_eval "$TW_SCRIPT" "user-scalable" "tailwind-check blocks user-scalable=no"
+
 # ── Check 18: Ban class components ────────────────────────────────
 
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -616,6 +678,141 @@ run_hook_eval "$SCRIPT" \
 # Reset to tsx for remaining checks
 tmpfile="$_rr_tmpdir/test.tsx"
 
+# ── Check 28: structuredClone over JSON roundtrip ────────────────
+
+tmpfile="$_rr_tmpdir/test.ts"
+echo "const copy = JSON.parse(JSON.stringify(obj))" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: JSON.parse(JSON.stringify()) → structuredClone" "structuredClone"
+
+# Allow standalone JSON.parse (no JSON.stringify wrapping)
+echo "const data = JSON.parse(response)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: standalone JSON.parse (not roundtrip)"
+
+# ── Check 29: .requestSubmit() over .submit() ───────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "formRef.current.submit()" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: .submit() → .requestSubmit()" "requestSubmit"
+
+# Allow .requestSubmit()
+echo "formRef.current.requestSubmit()" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: .requestSubmit() (correct usage)"
+
+# ── Check 30: delete on arrays ───────────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.ts"
+echo "delete items[2]" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: delete on array → use filter()" "sparse"
+
+# Allow delete on object property (not array)
+echo "delete obj.key" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: delete on object property"
+
+# ── Check 31: parseInt without radix ─────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.ts"
+echo "const n = parseInt(str)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: parseInt without radix → Number()" "radix"
+
+# Allow parseInt with radix
+echo "const n = parseInt(str, 10)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: parseInt with explicit radix"
+
+# Allow Number()
+echo "const n = Number(str)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Number() (safe alternative)"
+
+# ── Check 32: div role="button" → Button component ──────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div role="button" onClick={handleClick}>Click me</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: div role=button → Button component" "Button"
+
+# Allow actual Button component
+echo '<Button onClick={handleClick}>Click me</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Button component (correct usage)"
+
+# ── Check 33: setTimeout with string argument ────────────────────
+
+tmpfile="$_rr_tmpdir/test.ts"
+echo "setTimeout('doSomething()', 1000)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: setTimeout with string argument" "eval"
+
+# Allow setTimeout with function
+echo "setTimeout(() => doSomething(), 1000)" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: setTimeout with arrow function"
+
+# ── Check 34: === NaN is always false ────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.ts"
+echo "if (value === NaN) {}" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: === NaN comparison" "NaN"
+
+echo "if (value == NaN) {}" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: == NaN comparison" "NaN"
+
+# Allow Number.isNaN
+echo "if (Number.isNaN(value)) {}" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Number.isNaN (correct usage)"
+
+# Allow isNaN (global — biome handles this separately)
+echo "if (isNaN(value)) {}" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: isNaN() (not blocked by this hook)"
+
+# Reset to tsx
+tmpfile="$_rr_tmpdir/test.tsx"
+
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
@@ -635,6 +832,13 @@ run_content_eval "$SCRIPT" "Record<string" "hook checks as Record<string, any/un
 run_content_eval "$SCRIPT" "barrel" "hook checks barrel imports"
 run_content_eval "$SCRIPT" "passive" "hook checks passive event listeners"
 run_content_eval "$SCRIPT" "chart\.js|d3|three|pdf-lib" "hook checks heavy deps"
+run_content_eval "$SCRIPT" "structuredClone" "hook suggests structuredClone over JSON roundtrip"
+run_content_eval "$SCRIPT" "requestSubmit" "hook suggests requestSubmit over submit"
+run_content_eval "$SCRIPT" "sparse" "hook warns about delete on arrays"
+run_content_eval "$SCRIPT" "parseInt" "hook checks parseInt without radix"
+run_content_eval "$SCRIPT" "role.*button" "hook checks div role=button"
+run_content_eval "$SCRIPT" "setTimeout" "hook checks setTimeout with string"
+run_content_eval "$SCRIPT" "NaN" "hook checks === NaN comparison"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
