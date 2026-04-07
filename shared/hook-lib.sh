@@ -137,13 +137,23 @@ hook_get_added_lines() {
   fi
 }
 
+# ── HOOK_VERBOSITY ────────────────────────────────────────────────
+# Controls hook output level:
+#   normal (default) — all blocks and warns emitted
+#   terse            — blocks only, warns suppressed
+#   quiet            — all output suppressed (violations still tracked)
+
+_hook_verbosity="${HOOK_VERBOSITY:-normal}"
+
 # ── PostToolUse: Block with systemMessage (exit 2) ──────────────
 
 hook_block() {
   local msg="$1"
   local label="${2:-$(basename "$0" .sh)}"
   _hook_track_violation "$label"
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+  if [ "$_hook_verbosity" != "quiet" ]; then
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+  fi
   exit 2
 }
 
@@ -153,7 +163,9 @@ hook_warn() {
   local msg="$1"
   local label="${2:-$(basename "$0" .sh)}"
   _hook_track_violation "$label"
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+  if [ "$_hook_verbosity" = "normal" ]; then
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+  fi
   exit 0
 }
 
