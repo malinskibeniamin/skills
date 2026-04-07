@@ -195,16 +195,4 @@ await Promise.all(
 
 ## Cross-Model with Sandcastle
 
-Run Claude Code for implementation + Codex for review:
-
-```typescript
-// Implement with Claude
-const result = await run({
-  agent: claudeCode("claude-opus-4-6"),
-  promptFile: ".sandcastle/implement.md",
-  branch: "agent/feature-42",
-});
-
-// Review with Codex (when codex agent is supported)
-// For now: manual codex review or /codex:adversarial-review in Claude Code
-```
+Implement with Claude, review with `/codex:adversarial-review`. Codex agent provider for Sandcastle is not yet available — use manual review for now.

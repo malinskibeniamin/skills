@@ -22,7 +22,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "getByRole" "REFERENCE.md has selecto
 run_content_eval "$SKILL_DIR/REFERENCE.md" "GenericContainer" "REFERENCE.md has Testcontainers setup"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "AxeBuilder" "REFERENCE.md has axe-core patterns"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "color-contrast" "REFERENCE.md has WCAG tags"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Debugging Failed Tests|show-trace|Debug mode" "REFERENCE.md mentions debugging"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "agent-browser|Playwright" "REFERENCE.md mentions test tools"
 
 # ── Description length ──────────────────────────────────────────
 

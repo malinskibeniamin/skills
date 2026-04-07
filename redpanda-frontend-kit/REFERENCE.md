@@ -103,13 +103,6 @@ opensrc list                  # show fetched packages
 
 Creates `opensrc/<package>/` with full source. Useful when Claude needs to understand framework internals during debugging.
 
-## Dependency Change Awareness
+## Dependency Changes
 
-When Claude updates packages in `package.json`, it should:
-
-1. **Check the changelog** — `gh release view <version> --repo <owner/repo>` or npm changelog
-2. **Check for breaking changes** — especially major version bumps
-3. **Check for security advisories** — `npm audit` or Snyk
-4. **Read migration guides** — for major framework upgrades (React 18→19, Zustand 4→5, etc.)
-
-This is enforced by the `bundle-guard.sh` hook for known-heavy deps, and by `orchestration-guidance.sh` which nudges on package.json changes.
+Handled by `bundle-guard.sh` (heavy deps) and `orchestration-guidance.sh` (package.json change nudge).

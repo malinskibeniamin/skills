@@ -74,11 +74,7 @@ function MyComponent() {
 }
 ```
 
-The hook allows this because the file imports from `@connectrpc/connect`, indicating intentional use of the transport layer.
-
 ## Protobuf v2 Message Construction
-
-Always use `create()` with a schema for type-safe message construction:
 
 ```tsx
 import { create, toBinary, fromBinary, fromJson, toJson } from '@bufbuild/protobuf'
@@ -94,11 +90,11 @@ const json = toJson(MyMessageSchema, msg)
 const fromJ = fromJson(MyMessageSchema, jsonData)
 ```
 
-Do not construct messages as manual object literals with `$typeName` — `create()` breaks at compile time when the schema changes, object literals silently pass stale fields.
+Never construct messages as object literals with `$typeName` — use `create()` for compile-time safety.
 
 ## Standard Schema + Protovalidate
 
-When protobuf messages have validation rules via `protovalidate`, use the Standard Schema adapter as your react-hook-form resolver instead of duplicating validation in Zod:
+Use protobuf schema as form validation — no duplicate Zod schema needed:
 
 ```tsx
 import { createStandardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -113,21 +109,9 @@ const form = useForm({
 })
 ```
 
-This ensures:
-- Single source of truth for validation (protobuf schema)
-- Server and client validate identically
-- Schema changes propagate automatically — no Zod drift
-
 ## Protobuf Type Registry for google.protobuf.Any
 
-When using `google.protobuf.Any` (e.g., for polymorphic config fields), you must provide a type registry so protobuf knows how to serialize/deserialize the packed message types. Without it, `toJson`/`fromJson` fails with:
-
-```
-cannot encode message google.protobuf.Any to JSON:
-"type.googleapis.com/your.package.MessageType" is not in the type registry
-```
-
-### Create a registry
+Required for `toJson`/`fromJson` when using `Any` fields — without it: `"is not in the type registry"` error.
 
 ```ts
 import { createRegistry } from '@bufbuild/protobuf'
@@ -172,13 +156,9 @@ const transport = createConnectTransport({
 })
 ```
 
-### Common mistake
-
-Forgetting to add a new message schema to the registry when adding a new config type. If you add a new proto message, you must also add its schema to the registry — otherwise Any serialization fails at runtime.
+When adding new proto messages, always add their schema to the registry.
 
 ## Well-Known Types (Timestamp, Duration, Any)
-
-Protobuf well-known types have special JSON serialization rules. Do NOT construct them as plain objects.
 
 ### Timestamp
 
