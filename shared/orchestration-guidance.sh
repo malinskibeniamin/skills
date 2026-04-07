@@ -20,7 +20,7 @@ hook_filter_extensions "ts|tsx|js|jsx"
 hook_skip_generated
 
 guidance=""
-_session_dir="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}"
+_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
 mkdir -p "$_session_dir" 2>/dev/null || true
 session_files="$_session_dir/files"
 

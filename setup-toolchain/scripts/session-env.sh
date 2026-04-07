@@ -22,6 +22,7 @@ echo "export TEST_RUNNER=vitest" >> "$CLAUDE_ENV_FILE"
 echo "export NODE_OPTIONS=--max-old-space-size=8192" >> "$CLAUDE_ENV_FILE"
 
 # Clean up stale session directories from previous sessions (safe: /tmp/ only, specific prefix)
-find /tmp -maxdepth 1 -name "claude-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
+# Clean up stale session directories from both harnesses
+find /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
 
 exit 0

@@ -11,7 +11,7 @@ if [ "${ORCHESTRATION_STRICT:-1}" = "0" ]; then
   exit 0
 fi
 
-session_files="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/files"
+session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
 changed=$(git diff --name-only HEAD 2>/dev/null || true)
 issues=""
 
@@ -22,7 +22,7 @@ if [ -z "$changed" ] && [ ! -f "$session_files" ]; then
 fi
 
 # Check if typecheck-stop already ran related tests (avoid double-running)
-stop_outcome_file="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/last-stop"
+stop_outcome_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop"
 typecheck_ran_tests=false
 if [ -f "$stop_outcome_file" ] && grep -q "tests PASS\|tests FAIL" "$stop_outcome_file" 2>/dev/null; then
   typecheck_ran_tests=true

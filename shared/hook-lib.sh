@@ -1,6 +1,7 @@
 #!/bin/bash
-# Shared library for Claude Code hook scripts.
+# Shared library for Claude Code and Codex hook scripts.
 # Source this at the top of PostToolUse and PreToolUse hooks.
+# Works with both harnesses — auto-detects protocol differences.
 #
 # Usage in PostToolUse (Edit|Write) hooks:
 #   source "$(dirname "$0")/../../shared/hook-lib.sh"
@@ -29,8 +30,11 @@ fi
 # ── Session state directory ───────────────────────────────────────
 # All session temp files in one directory for clean management.
 # Cleanup happens in SessionStart (session-env.sh).
+# Works with both Claude Code (CLAUDE_SESSION_ID env var) and
+# Codex (session_id in stdin JSON, extracted after first parse).
 
-_hook_session_dir="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}"
+_hook_session_id="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+_hook_session_dir="/tmp/hook-session-${_hook_session_id}"
 mkdir -p "$_hook_session_dir" 2>/dev/null || true
 
 # Violation tracking

@@ -5,7 +5,7 @@ set -eo pipefail
 # Reads violations tracked by hook_block/hook_warn/hook_deny in hook-lib.sh.
 # Note: set -u removed — CLAUDE_SESSION_ID may be unset in some contexts.
 
-violations_file="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/violations"
+violations_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/violations"
 
 if [ ! -f "$violations_file" ] || [ ! -s "$violations_file" ]; then
   exit 0

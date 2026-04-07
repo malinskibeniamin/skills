@@ -45,7 +45,7 @@ if [ "$level" = "standard" ] || [ "$level" = "full" ]; then
 
   # ── Session violations (~5ms) ──────────────────────────────────
 
-  vfile="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/violations"
+  vfile="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/violations"
   if [ -f "$vfile" ] && [ -s "$vfile" ]; then
     total=$(wc -l < "$vfile" | tr -d ' ')
     summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
@@ -122,7 +122,7 @@ if [ "$level" = "full" ]; then
 
   # ── Last Stop hook outcome (~2ms) ──────────────────────────────
 
-  stop_file="/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/last-stop"
+  stop_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop"
   if [ -f "$stop_file" ]; then
     stop_result=$(cat "$stop_file" 2>/dev/null | head -1)
     [ -n "$stop_result" ] && context="$context\nLast stop: $stop_result"

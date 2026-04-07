@@ -21,7 +21,7 @@ if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":\"Type errors found. Fix before finishing:\\n\"$escaped\"\"}" >&2
-  echo "typecheck FAIL" > "/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/last-stop" 2>/dev/null || true
+  echo "typecheck FAIL" > "/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop" 2>/dev/null || true
   exit 2
 fi
 
@@ -63,11 +63,11 @@ if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
   escaped=$(echo "$truncated" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":\"Related tests failed. Fix before finishing:\\n\"$escaped\"\"}" >&2
   # Write outcome for UserPromptSubmit full-level context
-  echo "typecheck PASS, tests FAIL" > "/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/last-stop" 2>/dev/null || true
+  echo "typecheck PASS, tests FAIL" > "/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop" 2>/dev/null || true
   exit 2
 fi
 
 # Write success outcome for UserPromptSubmit full-level context
-echo "typecheck PASS, tests PASS" > "/tmp/claude-session-${CLAUDE_SESSION_ID:-$$}/last-stop" 2>/dev/null || true
+echo "typecheck PASS, tests PASS" > "/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop" 2>/dev/null || true
 
 exit 0
