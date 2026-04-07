@@ -645,7 +645,7 @@ echo "import { Chart } from 'chart.js'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: static import of chart.js" "heavy dependency"
+  0 "warn: static import of chart.js" "Heavy dependency"
 
 echo "import * as d3 from 'd3'" > "$tmpfile"
 

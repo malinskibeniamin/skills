@@ -22,7 +22,7 @@ if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
     fi
 
     if [ "$has_escape" = false ]; then
-      hook_block "Remove useEffect.\nReact Query, zustand, event handlers, or useTransition cover all valid use cases.\nReplace with the appropriate alternative.\n\nIf absolutely necessary, add: // allow-useEffect: [explain why]\nSee setup-react-rules REFERENCE.md"
+      hook_block "Remove useEffect. Use React Query, zustand, event handlers, or useTransition.\nEscape hatch: // allow-useEffect: [reason]"
     fi
   fi
 fi
@@ -34,7 +34,7 @@ case "$file_path" in
     raw_element=""
     # <button> is a warn (not block) — sometimes needed as a wrapper for clickable cards
     if echo "$added_lines" | grep -qE '<button[[:space:]>]'; then
-      hook_warn "Prefer <Button> from @/components/ui/button over raw <button>.\\nIf wrapping a card for click handling, use <Card asChild> or <div role=\\\"button\\\"> with keyboard handler."
+      hook_warn "Prefer <Button> over raw <button>. For card wrappers use <Card asChild>."
     fi
     if echo "$added_lines" | grep -qE '<input[[:space:]/>]'; then raw_element="<input> → <Input> from @/components/ui/input"; fi
     if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<select[[:space:]>]'; then raw_element="<select> → <Select> from @/components/ui/select"; fi
@@ -52,11 +52,11 @@ esac
 # ── Check 3: Ban TypeScript escape hatches ──────────────────────
 
 if echo "$added_lines" | grep -qE '\bas\s+any\b'; then
-  hook_block "Remove \`as any\` cast.\nType erasure hides bugs and breaks refactoring.\nFix the type properly — this applies everywhere, including tests."
+  hook_block "Remove \`as any\`. Fix the type properly — applies everywhere, including tests."
 fi
 
 if echo "$added_lines" | grep -qE '\bas\s+Record<string,\s*(any|unknown)>'; then
-  hook_block "Remove \`as Record<string, any/unknown>\` cast.\nIt erases type structure just like \`as any\`.\nUse a concrete interface or type guard instead."
+  hook_block "Remove \`as Record<string, any/unknown>\`. Use a concrete interface or type guard."
 fi
 
 if echo "$added_lines" | grep -qF '@ts-ignore'; then
@@ -64,7 +64,7 @@ if echo "$added_lines" | grep -qF '@ts-ignore'; then
 fi
 
 if echo "$added_lines" | grep -qF '@ts-expect-error'; then
-  hook_block "@ts-expect-error is banned.\nWe require fully type-safe code with no escape hatches.\nFix the underlying type error."
+  hook_block "@ts-expect-error is banned. Fix the underlying type error."
 fi
 
 # ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
@@ -85,7 +85,7 @@ if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
     fi
 
     if [ "$has_escape" = false ]; then
-      hook_block "Remove type assertion (\`as X\`).\nAssertions bypass the type system and hide bugs.\nUse type guards, generics, or schema validation.\n\nAllowed: \`as const\`, \`as const satisfies\`\nEscape hatch: // allow-type-assertion: [reason]\nSee setup-react-rules REFERENCE.md"
+      hook_block "Remove type assertion (\`as X\`). Use type guards, generics, or schema validation.\nAllowed: \`as const\`, \`as const satisfies\`. Escape hatch: // allow-type-assertion: [reason]"
     fi
   fi
 fi
@@ -101,7 +101,7 @@ case "$file_path" in
     if [ -n "$_has_diff" ]; then
       _diff_added=$(echo "$_has_diff" | grep '^+' | grep -v '^+++' || true)
       if echo "$_diff_added" | grep -E '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
-        hook_warn "Visual style override on registry component detected — I hope you know what you are doing.\nIf this is intentional theming (bg-sidebar, border-input), proceed. If overriding with raw colors (bg-red-500), use the variant prop instead."
+        hook_warn "Visual style override on registry component — I hope you know what you are doing. Use variant prop instead of raw colors."
       fi
     fi
     ;;
@@ -112,7 +112,7 @@ esac
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'onClick.*navigate\('; then
-      hook_block "Use Link instead of onClick + navigate().\nBreaks accessibility (right-click, screen readers) and TanStack Router basePath.\nUse <Button asChild><Link to=\\\"/path\\\">...</Link></Button>."
+      hook_block "Use Link instead of onClick + navigate(). Breaks a11y and basePath.\nUse <Button asChild><Link to=\\\"/path\\\">...</Link></Button>."
     fi
     ;;
 esac
@@ -123,7 +123,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<Button[[:space:]>]' && \
        ! echo "$added_lines" | grep -qE '<Button[^>]*(onClick|asChild|type="submit"|disabled)'; then
-      hook_block "Button has no handler.\nA button without an action is likely a bug.\nAdd onClick, asChild, type=\\\"submit\\\", or disabled."
+      hook_block "Button has no handler. Add onClick, asChild, type=\\\"submit\\\", or disabled."
     fi
     ;;
 esac
@@ -134,7 +134,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<AlertTitle>.*<.*Icon' || \
        echo "$added_lines" | grep -qE '<AlertTitle>.*<svg'; then
-      hook_block "Do not add icons inside <AlertTitle>.\nThe <Alert> component already renders an icon automatically.\nUse the icon prop on <Alert> to customize: <Alert icon={<CustomIcon />}>."
+      hook_block "No icons inside <AlertTitle>. <Alert> renders icons automatically. Use icon prop to customize."
     fi
     ;;
 esac
@@ -148,7 +148,7 @@ if echo "$added_lines" | grep -E '\.\.\.[a-zA-Z]+' | grep -qE '(Message|Request|
   if [ -f "package.json" ] && grep -q '"@bufbuild/protobuf"' package.json 2>/dev/null; then
     proto_version=$(grep -oE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null || true)
     if [ -n "$proto_version" ]; then
-      hook_block "Wrap protobuf spread with create().\nSpreading without create() drops \$typeName, breaking serialization in @bufbuild/protobuf v2.\nUse: create(MyMessageSchema, { ...existingMessage, field: newValue })"
+      hook_block "Wrap protobuf spread with create(). Spreading without create() drops \$typeName.\nUse: create(MyMessageSchema, { ...existing, field: newValue })"
     fi
   fi
 fi
@@ -159,7 +159,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' && \
        ! echo "$added_lines" | grep -qE '<Button[^>]*aria-label'; then
-      hook_block "Add aria-label to icon-only button.\nScreen readers cannot derive meaning from an icon alone.\nAdd aria-label: <Button aria-label=\\\"Settings\\\" variant=\\\"ghost\\\" size=\\\"icon\\\"><SettingsIcon /></Button>"
+      hook_block "Add aria-label to icon-only button. Screen readers need it.\nExample: <Button aria-label=\\\"Settings\\\" size=\\\"icon\\\"><SettingsIcon /></Button>"
     fi
     ;;
 esac
@@ -170,7 +170,7 @@ esac
 if (echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
     echo "$added_lines" | grep -qE 'outline-none') && \
    ! echo "$added_lines" | grep -qE 'focus-visible:(outline|ring)'; then
-  hook_block "Do not remove focus outlines.\nRemoving outlines breaks keyboard navigation accessibility.\nUse focus-visible styles: focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+  hook_block "Do not remove focus outlines. Use focus-visible:ring-* replacement instead."
 fi
 
 # ── Check 13: React Compiler — no manual memoization ────────────
@@ -203,7 +203,7 @@ case "$file_path" in
       if [ -z "$found_memo" ] && echo "$added_lines" | grep -qE '\bReact\.memo\b|\bmemo\('; then found_memo="React.memo"; fi
 
       if [ -n "$found_memo" ]; then
-        hook_block "Remove manual $found_memo.\nReact Compiler auto-memoizes; manual memoization is redundant.\nDelete the $found_memo call, or add 'use no memo' directive at file top."
+        hook_block "Remove $found_memo. React Compiler handles memoization.\nDelete it, or add 'use no memo' directive at file top."
       fi
     fi
     ;;
@@ -223,7 +223,7 @@ case "$file_path" in
       fi
 
       if [ "$has_escape" = false ]; then
-        hook_block "dangerouslySetInnerHTML is banned — XSS risk.\nUnsanitized HTML injection is a top-tier vulnerability.\nSanitize with DOMPurify or use a safe rendering approach.\n\nIf absolutely necessary, add: // allow-dangerouslySetInnerHTML: [explain why]"
+        hook_block "dangerouslySetInnerHTML is banned — XSS risk. Sanitize with DOMPurify.\nEscape hatch: // allow-dangerouslySetInnerHTML: [reason]"
       fi
     fi
     ;;
@@ -232,7 +232,7 @@ esac
 # ── Check 15: Ban eval() and new Function() ──────────────────
 
 if echo "$added_lines" | grep -qE '\beval\(|\bnew Function\('; then
-  hook_block "eval() and new Function() are banned — code injection risk.\nOWASP A03: Injection.\nUse JSON.parse() for data, or a safe alternative."
+  hook_block "eval() and new Function() are banned — injection risk. Use JSON.parse() for data."
 fi
 
 # ── Check 16: Ban .innerHTML assignment (TSX/JSX only) ────────
@@ -240,7 +240,7 @@ fi
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '\.innerHTML\s*='; then
-      hook_block "Direct .innerHTML assignment is banned — XSS risk.\nUse React rendering, element.textContent, or the Sanitizer API (setHTML) for safe HTML insertion."
+      hook_block ".innerHTML is banned — XSS risk. Use textContent or the Sanitizer API (setHTML)."
     fi
     ;;
 esac
@@ -250,7 +250,7 @@ esac
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'style=\{\{'; then
-      hook_warn "Inline style={{}} detected — I hope you know what you are doing.\nInline styles bypass Tailwind and break design consistency.\nUse Tailwind CSS utility classes instead. If truly necessary (dynamic positioning from JS), proceed with caution."
+      hook_warn "Inline style={{}} detected — I hope you know what you are doing. Use Tailwind classes instead."
     fi
     ;;
 esac
@@ -258,7 +258,7 @@ esac
 # ── Check 18: Ban class components ───────────────────────────────
 
 if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)\b'; then
-  hook_block "Use functional components instead of class components.\nReact Compiler requires functional components for auto-memoization.\nConvert to a function component."
+  hook_block "Use functional components. Class components are incompatible with React Compiler."
 fi
 
 # ── Check 19: Ban barrel imports (re-exports from index files) ────
@@ -272,7 +272,7 @@ if echo "$added_lines" | grep -qE "from\s+['\"]\.\.?/[^'\"]*['\"]" && \
     for imp in $import_paths; do
       resolved="$dir/$imp"
       if [ -d "$resolved" ] || [ -f "$resolved/index.ts" ] || [ -f "$resolved/index.tsx" ] || [ -f "$resolved/index.js" ]; then
-        hook_warn "Barrel import detected: \`$imp\`.\nBarrel re-exports increase bundle size and slow builds.\nImport directly from the source file."
+        hook_warn "Barrel import: \`$imp\`. Import directly from source file instead."
         break
       fi
     done
@@ -283,14 +283,14 @@ fi
 
 if echo "$added_lines" | grep -qE "addEventListener\s*\(\s*['\"](scroll|touchstart|touchmove|wheel)['\"]" && \
    ! echo "$added_lines" | grep -qE "passive\s*:\s*true"; then
-  hook_block "Add { passive: true } to scroll/touch/wheel event listener.\nNon-passive listeners block the main thread and cause scroll jank.\nPass { passive: true } as the third argument to addEventListener."
+  hook_block "Add { passive: true } to scroll/touch/wheel listener. Non-passive blocks main thread."
 fi
 
 # ── Check 21: Ban static imports of heavy deps (suggest dynamic import) ──
 
 if echo "$added_lines" | grep -qE "^[+]?import\s.*from\s+['\"]" | grep -qE "(chart\.js|d3|three|pdf-lib|plotly\.js|recharts)['\"/]" 2>/dev/null || \
    echo "$added_lines" | grep -qE "from\s+['\"](chart\.js|d3|three|pdf-lib|plotly\.js|recharts)['\"/]"; then
-  hook_warn "Use dynamic import for heavy dependency.\nStatic imports of large libraries bloat the initial bundle.\nUse React.lazy() or dynamic import() instead."
+  hook_warn "Heavy dependency — use React.lazy() or dynamic import() to avoid bundle bloat."
 fi
 
 # ── Check 22: handleSubmit must have error callback ────────────────
@@ -301,7 +301,7 @@ case "$file_path" in
     # Good: handleSubmit(onSubmit, onError) — has comma = has error callback
     if echo "$added_lines" | grep -qE 'handleSubmit\([a-zA-Z_]+\)' && \
        ! echo "$added_lines" | grep -qE 'handleSubmit\([a-zA-Z_]+,'; then
-      hook_warn "Add error callback to handleSubmit.\nWithout it, form submission errors are silently swallowed.\nUse handleSubmit(onSubmit, onError) — always handle the error case."
+      hook_warn "Add error callback: handleSubmit(onSubmit, onError). Errors are silently swallowed without it."
     fi
     ;;
 esac
@@ -309,13 +309,13 @@ esac
 # ── Check 23: Ban React.FC / React.FunctionComponent ──────────────
 
 if echo "$added_lines" | grep -qE '\bReact\.FC\b|\bReact\.FunctionComponent\b|:\s*FC[<\s>]'; then
-  hook_warn "Prefer plain function declarations over React.FC.\nReact.FC adds implicit children and doesn't support generics cleanly.\nUse: function MyComponent(props: Props) { ... }"
+  hook_warn "Prefer function MyComponent(props: Props) over React.FC. Better generics support."
 fi
 
 # ── Check 24: Ban cloneElement ────────────────────────────────────
 
 if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
-  hook_warn "Avoid cloneElement — fragile for compound components.\nUse Context-based composition or render props instead."
+  hook_warn "Avoid cloneElement. Use Context or render props for compound components."
 fi
 
 # ── Check 25: Warn on biome-ignore (sudo pattern) ─────────────────
@@ -329,11 +329,11 @@ fi
 # Allow import * as React (legitimate) but warn on other namespace imports
 if echo "$added_lines" | grep -qE 'import \* as \w+ from' && \
    ! echo "$added_lines" | grep -qE 'import \* as React from'; then
-  hook_warn "Namespace import (import * as) prevents tree-shaking.\nImport specific exports instead: import { foo, bar } from 'package'."
+  hook_warn "Namespace import (import * as) prevents tree-shaking. Import specific exports."
 fi
 
 if echo "$added_lines" | grep -qE "export \* from ['\"]"; then
-  hook_warn "Re-exporting entire modules (export * from) prevents tree-shaking.\nExport specific items instead."
+  hook_warn "export * from prevents tree-shaking. Export specific items."
 fi
 
 # ── Check 27: Warn on deprecated package imports ─────────────────
@@ -349,27 +349,27 @@ fi
 # ── Check 28: Suggest structuredClone over JSON roundtrip ────────
 
 if echo "$added_lines" | grep -qF 'JSON.parse(JSON.stringify('; then
-  hook_warn "Use structuredClone() instead of JSON.parse(JSON.stringify(...)).\nJSON roundtrip drops Date, Map, Set, RegExp, and ArrayBuffer.\nstructuredClone() handles all of these correctly."
+  hook_warn "Use structuredClone() instead of JSON.parse(JSON.stringify()). Handles Date, Map, Set correctly."
 fi
 
 # ── Check 29: Suggest .requestSubmit() over .submit() ───────────
 
 if echo "$added_lines" | grep -qE '\.submit\(\)' && \
    ! echo "$added_lines" | grep -qE '\.requestSubmit\(\)'; then
-  hook_warn "Use .requestSubmit() instead of .submit().\n.submit() bypasses HTML validation and skips the submit event.\n.requestSubmit() triggers constraint validation and fires the submit event."
+  hook_warn "Use .requestSubmit() instead of .submit(). submit() bypasses validation."
 fi
 
 # ── Check 30: Ban delete on arrays (creates sparse holes) ───────
 
 if echo "$added_lines" | grep -qE 'delete\s+\w+\['; then
-  hook_warn "Avoid delete on arrays — it creates sparse holes (undefined at index).\nUse .filter() to remove elements or Array.with() for immutable replacement."
+  hook_warn "Avoid delete on arrays — creates sparse holes. Use .filter() or Array.with()."
 fi
 
 # ── Check 31: parseInt without radix — suggest Number() ─────────
 
 if echo "$added_lines" | grep -qE 'parseInt\([^,)]+\)' && \
    ! echo "$added_lines" | grep -qE 'parseInt\([^)]*,'; then
-  hook_warn "parseInt() without explicit radix can surprise.\nUse Number() for decimal conversion, or add explicit radix: parseInt(str, 10)."
+  hook_warn "parseInt() without radix. Use Number() or parseInt(str, 10)."
 fi
 
 # ── Check 32: div role="button" → use <Button> component ────────
@@ -377,7 +377,7 @@ fi
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<div[^>]*role=["'"'"']button["'"'"']'; then
-      hook_warn "Use <Button> from @/components/ui/button instead of <div role=\"button\">.\nNative button elements provide keyboard handling, focus management, and accessibility for free."
+      hook_warn "Use <Button> instead of <div role=\"button\">. Native keyboard, focus, and a11y built in."
     fi
     ;;
 esac
@@ -385,13 +385,13 @@ esac
 # ── Check 33: setTimeout with string argument (eval-like) ───────
 
 if echo "$added_lines" | grep -qE 'setTimeout\s*\(\s*['"'"'"`]'; then
-  hook_block "Do not pass strings to setTimeout — it uses eval() internally.\nPass a function instead: setTimeout(() => { ... }, delay)"
+  hook_block "No strings in setTimeout — uses eval. Pass a function: setTimeout(() => { ... }, delay)"
 fi
 
 # ── Check 34: === NaN is always false ────────────────────────────
 
 if echo "$added_lines" | grep -qE '===?\s*NaN\b'; then
-  hook_block "Comparing with === NaN is always false (NaN !== NaN by spec).\nUse Number.isNaN(value) instead."
+  hook_block "=== NaN is always false. Use Number.isNaN(value)."
 fi
 
 exit 0

@@ -11,7 +11,7 @@ hook_parse_edit_write
 # ── package.json change detection (before extension filter) ──────
 
 if [ "$(basename "$file_path")" = "package.json" ]; then
-  guidance="[DEPS] Package dependencies changed. Before finishing: check changelogs for breaking changes, run npm audit, verify compatibility. For major version bumps, read the migration guide."
+  guidance="[DEPS] Deps changed. Check changelogs, run npm audit, verify compat."
   echo "{\"suppressOutput\":true,\"systemMessage\":\"$guidance\"}" >&2
   exit 0
 fi
@@ -29,7 +29,7 @@ session_files="$_session_dir/files"
 case "$file_path" in
   *.test.tsx|*.test.ts|*.integration.tsx|*.integration.ts|*.unit.ts)
     echo "test:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[TEST] userEvent.setup(), getByRole for a11y, no setTimeout hacks, await waitFor() for async."
+    guidance="[TEST] userEvent.setup(), getByRole, no setTimeout, await waitFor() for async."
     ;;
 esac
 
@@ -37,7 +37,7 @@ esac
 
 if echo "$file_path" | grep -qE 'e2e/.*\.spec\.ts$'; then
   echo "spec:$file_path" >> "$session_files" 2>/dev/null || true
-  guidance="[E2E] Import { test, expect } from ./fixtures/base (includes axe-core). Add axe audit on page navigations. Use data-testid for selectors. Avoid page.waitForTimeout — use assertion-based waits."
+  guidance="[E2E] Import from ./fixtures/base (axe-core). data-testid selectors. No page.waitForTimeout."
 fi
 
 # ── New component created (TSX in components dir, Write tool) ────
@@ -46,7 +46,7 @@ if [ -z "$guidance" ]; then
   case "$file_path" in
     */components/*.tsx|*/components/*.jsx)
       echo "component:$file_path" >> "$session_files" 2>/dev/null || true
-      guidance="[COMPONENT] Checklist: design system components (not raw HTML), keyboard navigable, aria-label on icon buttons, co-located test file."
+      guidance="[COMPONENT] Design system components, keyboard navigable, aria-label on icons, co-located test."
       ;;
   esac
 fi
@@ -56,7 +56,7 @@ fi
 if [ -z "$guidance" ]; then
   if echo "$file_path" | grep -qE '/routes/.*\.tsx$'; then
     echo "route:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[ROUTE] Only export Route config from route files (other exports break code splitting). Use validateSearch with zod for search params. Use Route.useParams()/Route.useSearch()."
+    guidance="[ROUTE] Only export Route config (code splitting). validateSearch+zod for search params."
   fi
 fi
 
@@ -66,7 +66,7 @@ if [ -z "$guidance" ]; then
   # Match store files precisely: /stores/ dir, *Store.ts, *-store.ts — not "restore", "StoreLocator"
   if echo "$file_path" | grep -qE '/stores/|Store\.(ts|tsx)$|-store\.(ts|tsx)$'; then
     echo "store:$file_path" >> "$session_files" 2>/dev/null || true
-    guidance="[STORE] Use create<T>()() double-parens. useShallow for multi-field selectors. persist middleware (not raw localStorage)."
+    guidance="[STORE] create<T>()() double-parens, useShallow for selectors, persist middleware."
   fi
 fi
 
@@ -92,12 +92,12 @@ case "$file_path" in
     if [ -f "$file_path" ]; then
       file_content=$(cat "$file_path" 2>/dev/null || true)
       if echo "$file_content" | grep -qE 'setTimeout|waitForTimeout|sleep\(' 2>/dev/null; then
-        guidance="$guidance Avoid setTimeout/waitForTimeout in tests — causes flaky results. Use condition-based waiting: await waitFor(() => expect(...).toBeVisible())."
+        guidance="$guidance No setTimeout in tests. Use await waitFor(() => expect(...))."
       fi
       # Flag data-testid overuse
       testid_count=$(grep -c 'data-testid\|getByTestId' "$file_path" 2>/dev/null || echo "0")
       if [ "$testid_count" -gt 5 ]; then
-        guidance="$guidance High data-testid usage ($testid_count). Prefer getByRole/getByLabelText — test IDs are an a11y smell."
+        guidance="$guidance High data-testid usage ($testid_count). Prefer getByRole/getByLabelText."
       fi
     fi
     ;;
@@ -114,13 +114,13 @@ case "$file_path" in
       if echo "$file_path" | grep -qE '/routes/' && \
          echo "$file_content" | grep -qE 'loader|useQuery|useSuspenseQuery' && \
          ! echo "$file_content" | grep -qE 'errorComponent|ErrorBoundary|ErrorComponent'; then
-        guidance="$guidance [RESILIENCE] Route fetches data but has no errorComponent. Add one to prevent white-screen crashes."
+        guidance="$guidance [RESILIENCE] Route fetches data but has no errorComponent."
       fi
 
       # React.lazy without Suspense
       if echo "$file_content" | grep -qE 'React\.lazy\(|lazy\(' && \
          ! echo "$file_content" | grep -qE '<Suspense|Suspense>'; then
-        guidance="$guidance [RESILIENCE] React.lazy() used without <Suspense> boundary. Wrap lazy components in <Suspense fallback={...}>."
+        guidance="$guidance [RESILIENCE] React.lazy() without <Suspense>. Add fallback."
       fi
 
       # Query hooks without loading/error/empty state handling
@@ -129,7 +129,7 @@ case "$file_path" in
         if echo "$file_content" | grep -qE 'useQuery|useSuspenseQuery' && \
            echo "$file_content" | grep -qE 'return.*<' && \
            ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|fallback|Skeleton|Spinner|EmptyState'; then
-          guidance="$guidance [COMPLETENESS] Query hook in component — verify loading, error, and empty states are handled."
+          guidance="$guidance [COMPLETENESS] Query hook — handle loading, error, and empty states."
         fi
       fi
     fi
