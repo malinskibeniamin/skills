@@ -21,12 +21,12 @@ Generate this from the existing `.claude/settings.json`. Copy PreToolUse Bash, S
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/enforce-toolchain.sh",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/enforce-toolchain.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0",
             "statusMessage": "Checking toolchain..."
           },
           {
             "type": "command",
-            "command": ".claude/hooks/conventional-commits-check.sh",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/conventional-commits-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0",
             "statusMessage": "Validating commit format..."
           }
         ]
@@ -38,7 +38,7 @@ Generate this from the existing `.claude/settings.json`. Copy PreToolUse Bash, S
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/session-env.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/session-env.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

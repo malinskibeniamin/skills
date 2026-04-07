@@ -24,7 +24,7 @@ Copy [`scripts/registry-check.sh`](scripts/registry-check.sh) into `.claude/hook
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": ".claude/hooks/registry-check.sh" }
+          { "type": "command", "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/registry-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0" }
         ]
       }
     ]

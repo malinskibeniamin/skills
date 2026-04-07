@@ -5,11 +5,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/session-env.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/session-env.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/llm-env.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/llm-env.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/post-compact-context.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/post-compact-context.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -29,11 +29,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/user-prompt-context.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/user-prompt-context.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/intent-detect.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/intent-detect.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -44,15 +44,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/enforce-toolchain.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/enforce-toolchain.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/llm-test-flags.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/llm-test-flags.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/conventional-commits-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/conventional-commits-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -63,43 +63,43 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/react-rules-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/react-rules-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/tailwind-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/tailwind-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/accessibility-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/accessibility-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/zustand-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/zustand-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/tanstack-router-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/tanstack-router-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/connect-query-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/connect-query-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/react-compiler-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/react-compiler-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/env-validation-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/env-validation-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/bundle-guard.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/bundle-guard.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/orchestration-guidance.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/orchestration-guidance.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
@@ -108,7 +108,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/llm-truncate.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/llm-truncate.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -118,27 +118,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/biome-autofix.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/biome-autofix.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/typecheck-stop.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/typecheck-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/react-doctor-stop.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/react-doctor-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/registry-check.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/registry-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/orchestration-stop.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/orchestration-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
-            "command": ".claude/hooks/violation-summary-stop.sh"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/violation-summary-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
