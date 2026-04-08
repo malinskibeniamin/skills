@@ -1,0 +1,17 @@
+{
+  "name": "skills",
+  "owner": {
+    "name": "Beniamin Malinski"
+  },
+  "metadata": {
+    "description": "React/TypeScript frontend skills, hooks, and agents for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "frontend-skills",
+      "description": "React/TypeScript frontend skills, hooks, and agents. 25 hooks enforce patterns in real-time. One skill for the full development lifecycle.",
+      "version": "1.0.0",
+      "source": ".."
+    }
+  ]
+}
