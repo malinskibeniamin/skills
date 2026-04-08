@@ -110,7 +110,8 @@ case "$file_path" in
         guidance="$guidance No setTimeout in tests. Use await waitFor(() => expect(...))."
       fi
       # Flag data-testid overuse
-      testid_count=$(grep -c 'data-testid\|getByTestId' "$file_path" 2>/dev/null || echo "0")
+      testid_count=$(grep -c 'data-testid\|getByTestId' "$file_path" 2>/dev/null | head -1 || echo "0")
+      testid_count="${testid_count:-0}"
       if [ "$testid_count" -gt 5 ]; then
         guidance="$guidance High data-testid usage ($testid_count). Prefer getByRole/getByLabelText."
       fi
@@ -153,7 +154,6 @@ esac
 
 # Observability nudge removed — too broad, fired on nearly every component.
 # aria-label is already enforced by accessibility-check.sh for icon buttons.
-esac
 
 # ── Redpanda registry nudges (only if REDPANDA_KIT=1) ───────────
 

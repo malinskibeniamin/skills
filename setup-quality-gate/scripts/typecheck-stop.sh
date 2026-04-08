@@ -4,6 +4,10 @@ set -eo pipefail
 # Stop hook: run type checking and related tests before Claude finishes.
 # Only runs if JS/TS files were actually changed.
 
+# Ensure session directory exists for state tracking
+_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+mkdir -p "$_session_dir" 2>/dev/null || true
+
 changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
 
 if [ -z "$changed_files" ]; then
