@@ -30,6 +30,10 @@ run_content_eval "$SCRIPT" "bun run type:check" "hook uses bun run type:check"
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed JS/TS files"
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks on failure"
 run_content_eval "$SCRIPT" "head -30" "hook truncates output"
+run_content_eval "$SCRIPT" "scripts.*type:check" "hook skips when type:check script missing"
+run_content_eval "$SCRIPT" "fail-count" "hook tracks consecutive typecheck failures"
+run_content_eval "$SCRIPT" "test-fail-count" "hook tracks consecutive test failures"
+run_content_eval "$SCRIPT" "decision.*allow.*attempts" "hook downgrades to allow after repeated failures"
 
 # ── bundle-guard.sh: File structure ───────────────────────────────
 

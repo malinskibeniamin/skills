@@ -29,6 +29,9 @@ run_content_eval "$SCRIPT" "decision.*block" "script blocks on failure"
 run_content_eval "$SCRIPT" "bun run doctor" "hook uses package.json script (not bunx)"
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed files"
 run_content_eval "$SCRIPT" "tsx|jsx" "hook filters React files"
+run_content_eval "$SCRIPT" "scripts.*doctor" "hook skips when doctor script missing"
+run_content_eval "$SCRIPT" "doctor-fail-count" "hook tracks consecutive doctor failures"
+run_content_eval "$SCRIPT" "decision.*allow.*attempts" "hook downgrades to allow after repeated failures"
 
 # ── Stop hook behavioral test ───────────────────────────────────
 

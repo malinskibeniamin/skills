@@ -52,6 +52,9 @@ run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed JS/TS
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks on unfixable errors"
 run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
 run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
+run_content_eval "$SCRIPT" "scripts.*lint:file" "hook skips when lint:file script missing"
+run_content_eval "$SCRIPT" "biome-fail-count" "hook tracks consecutive biome failures"
+run_content_eval "$SCRIPT" "decision.*allow.*attempts" "hook downgrades to allow after repeated failures"
 
 # ── Stop hook behavioral tests ──────────────────────────────────
 
