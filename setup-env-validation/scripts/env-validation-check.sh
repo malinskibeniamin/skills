@@ -24,9 +24,9 @@ fi
 hook_skip_tests
 hook_get_added_lines
 
-# Check for raw process.env access
-if echo "$added_lines" | grep -qE 'process\.env\.'; then
-  hook_block "Do not use raw process.env access.\nImport the validated env object: import { env } from \\\"@/env\\\".\n\nAll variables must be declared in src/env.ts with t3-env zod validation."
+# Check for raw process.env access (exclude build-time constants injected by bundlers)
+if echo "$added_lines" | grep -vE 'process\.env\.(NODE_ENV|DEV|PROD|SSR|TEST)' | grep -qE 'process\.env\.'; then
+  hook_block "Do not use raw process.env access.\nImport the validated env object: import { env } from \\\"@/env\\\".\n\nAll variables must be declared in src/env.ts with t3-env zod validation.\n\nExceptions: process.env.NODE_ENV is allowed (build-time constant)."
 fi
 
 exit 0
