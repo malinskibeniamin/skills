@@ -116,6 +116,15 @@ hook_skip_ui_dirs() {
     _ui_dirs="$UI_LIB_DIRS"
   fi
   if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
+    _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    if [ -f "$_repo_root/registry.json" ]; then
+      # Registry repo — remind to rebuild registry
+      echo '{"suppressOutput":true,"systemMessage":"You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."}' >&2
+    elif [ -f "$_repo_root/components.json" ] || [ -f "$_repo_root/cli.json" ]; then
+      # Consumer repo — warn that this is a registry-sourced component
+      _component=$(basename "$file_path")
+      echo "{\"suppressOutput\":true,\"systemMessage\":\"WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead.\"}" >&2
+    fi
     exit 0
   fi
 }

@@ -23,6 +23,13 @@ run_content_eval "$SCRIPT" "registry.json" "hook checks for registry.json update
 run_content_eval "$SCRIPT" "decision.*block" "hook blocks when registry not rebuilt"
 run_content_eval "$SCRIPT" "CHANGELOG" "hook reminds about changelog"
 
+# ── hook-lib.sh: consumer repo upstream warning ──────────────────
+
+HOOKLIB="$REPO_ROOT/shared/hook-lib.sh"
+run_content_eval "$HOOKLIB" "components.json.*cli.json" "hook-lib detects consumer repos"
+run_content_eval "$HOOKLIB" "UI registry" "hook-lib warns about upstream PR for consumer edits"
+run_content_eval "$HOOKLIB" "registry.json" "hook-lib detects registry repo for rebuild reminder"
+
 # ── Stop hook behavioral test ───────────────────────────────────
 
 # registry-check.sh should exit 0 when no files changed
