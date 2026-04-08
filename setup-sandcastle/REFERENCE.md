@@ -72,8 +72,8 @@ You have the following skills and hooks pre-installed:
 
 **Skills loaded:**
 - /development-lifecycle — follow phases: understand → plan → TDD → verify → review
-- /test-driven-development — iron law: failing test FIRST
-- /systematic-debugging — if this is a bug fix: reproduce → analyze → hypothesize → fix at root cause
+- /tdd — iron law: failing test FIRST
+- /triage-issue — if this is a bug fix: explore → root cause → TDD fix plan
 
 **Hooks active (fire automatically):**
 - react-rules-check (25 checks): raw HTML, as any, ts-ignore, eval, XSS, barrel imports

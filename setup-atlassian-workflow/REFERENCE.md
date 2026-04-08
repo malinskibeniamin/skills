@@ -145,9 +145,9 @@ acli jira workitem create \
   --label accessibility
 ```
 
-### Test Guardian → Work Items
+### TDD → Work Items
 
-After running test-guardian diagnostics:
+After running TDD diagnostics (async leak detection, flaky test analysis):
 
 ```bash
 # File work item for flaky test

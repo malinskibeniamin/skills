@@ -1,7 +1,7 @@
-SKILL_DIR="$REPO_ROOT/test-driven-development"
+SKILL_DIR="$REPO_ROOT/tdd"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: test-driven-development" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: tdd" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')

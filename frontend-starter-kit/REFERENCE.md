@@ -25,11 +25,9 @@
 
 | Skill | Replaces | Key feature |
 |---|---|---|
-| test-driven-development | mattpocock/tdd + test-guardian | TDD iron law + async leak detection |
-| systematic-debugging | mattpocock/triage-issue | 4-phase root cause analysis |
-| writing-plans | mattpocock/prd-to-plan | "Junior engineer" detail level |
-| requesting-code-review | — (new) | Two-stage review + codex adversarial |
-| brainstorming | — (new) | Design + challenge modes |
+| tdd | mattpocock/tdd (incorporated) | TDD iron law + async leak detection + deep modules |
+| triage-issue | mattpocock/triage-issue (vendored) | Bug root cause → TDD fix plan |
+| brainstorming | — (owned) | Design + challenge modes |
 
 ### Community Workflow Skills (10) — from mattpocock/skills
 

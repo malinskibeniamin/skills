@@ -9,7 +9,7 @@ description: Opt-in Atlassian/Jira integration via acli — create work items, t
 
 Opt-in Jira integration via `acli` (Atlassian CLI) that mirrors the GitHub workflow skills. Works alongside `gh` — not a replacement.
 
-- **Create work items** from PRDs, test-guardian findings, or QA sessions
+- **Create work items** from PRDs, TDD findings, or QA sessions
 - **Transition work items** through statuses (To Do → In Progress → Done)
 - **Comment on work items** with investigation results, test findings
 - **Link PRs to work items** for traceability
