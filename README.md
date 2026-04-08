@@ -122,8 +122,8 @@ You only need to remember **one skill**: `/development-lifecycle`. It covers the
 
 **`/development-lifecycle`** — the default for all dev work:
 ```
-I need to add a user settings page with theme, language, and notification preferences.
-Read src/routes/ to understand the routing structure first.
+/development-lifecycle — I need to add a user settings page with theme, language,
+and notification preferences. Read src/routes/ to understand the routing structure first.
 ```
 
 **`/brainstorming`** — exploring options before committing:
