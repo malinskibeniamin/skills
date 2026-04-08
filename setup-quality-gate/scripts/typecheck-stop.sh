@@ -19,15 +19,6 @@ if [ ! -f "package.json" ] || ! jq -e '.scripts["type:check"]' package.json >/de
   exit 0
 fi
 
-# ── Consecutive failure tracking ─────────────────────────────────
-# After 2 consecutive blocks, downgrade to warn so the agent isn't stuck
-# in a loop (e.g., pre-existing errors, errors from another LLM session).
-_fail_counter="$_session_dir/typecheck-fail-count"
-_fail_count=0
-if [ -f "$_fail_counter" ]; then
-  _fail_count=$(cat "$_fail_counter" 2>/dev/null || echo "0")
-fi
-
 # ── Type check (incremental for speed) ──────────────────────────
 # tsgo/tsc cannot target single files — they need the full project graph.
 # --incremental reuses .tsbuildinfo to skip unchanged modules.
@@ -36,13 +27,44 @@ exit_code=0
 output=$(bun run type:check 2>&1) || exit_code=$?
 
 if [ $exit_code -ne 0 ]; then
+  # ── Baseline comparison ──────────────────────────────────────────
+  # session-env.sh captures pre-existing errors at SessionStart.
+  # Only block on NEW errors this session introduced.
+  _baseline="$_session_dir/typecheck-baseline"
+  if [ -f "$_baseline" ]; then
+    # Extract error lines (same format as baseline), sort, and diff
+    _current_errors=$(echo "$output" | grep -E '^.+\.(ts|tsx)\([0-9]+,' | sort)
+    _new_errors=$(echo "$_current_errors" | comm -23 - "$_baseline" 2>/dev/null || echo "$_current_errors")
+
+    if [ -z "$_new_errors" ]; then
+      # All errors existed before this session — allow through
+      _error_count=$(echo "$_current_errors" | wc -l | tr -d ' ')
+      echo "{\"decision\":\"allow\",\"reason\":\"$_error_count pre-existing type error(s) — not introduced by this session. Allowing finish.\"}" >&2
+      echo "typecheck FAIL (pre-existing only)" > "$_session_dir/last-stop" 2>/dev/null || true
+      exit 0
+    fi
+
+    # Only show new errors in the block message
+    truncated=$(echo "$_new_errors" | head -30)
+    escaped=$(echo "$truncated" | jq -Rs .)
+    _new_count=$(echo "$_new_errors" | wc -l | tr -d ' ')
+    echo "{\"decision\":\"block\",\"reason\":\"$_new_count new type error(s) introduced by this session. Fix before finishing:\\n\"$escaped\"\"}" >&2
+    echo "typecheck FAIL (new errors)" > "$_session_dir/last-stop" 2>/dev/null || true
+    exit 2
+  fi
+
+  # ── Fallback: no baseline — use consecutive failure counter ──────
+  _fail_counter="$_session_dir/typecheck-fail-count"
+  _fail_count=0
+  if [ -f "$_fail_counter" ]; then
+    _fail_count=$(cat "$_fail_counter" 2>/dev/null || echo "0")
+  fi
   _fail_count=$((_fail_count + 1))
   echo "$_fail_count" > "$_fail_counter"
   truncated=$(echo "$output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
 
   if [ "$_fail_count" -ge 3 ]; then
-    # Downgrade: errors persisted across 3 attempts — likely pre-existing or from another session
     echo "{\"decision\":\"allow\",\"reason\":\"Type errors still present after $_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
     echo "typecheck FAIL (allowed after $_fail_count attempts)" > "$_session_dir/last-stop" 2>/dev/null || true
     exit 0
@@ -54,7 +76,7 @@ if [ $exit_code -ne 0 ]; then
 fi
 
 # Reset counter on success
-echo "0" > "$_fail_counter" 2>/dev/null || true
+echo "0" > "$_session_dir/typecheck-fail-count" 2>/dev/null || true
 
 # ── Related tests (only tests affected by changed files) ────────
 # Detect test runner: vitest (--related), jest (--findRelatedTests), bun test (file-only)

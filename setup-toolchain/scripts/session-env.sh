@@ -25,4 +25,14 @@ echo "export NODE_OPTIONS=--max-old-space-size=8192" >> "$CLAUDE_ENV_FILE"
 # Clean up stale session directories from both harnesses
 find /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
 
+# ── Capture typecheck baseline (background, no latency) ──────────
+# Used by typecheck-stop.sh to distinguish pre-existing errors from
+# errors introduced by this session. Runs in background so SessionStart
+# returns immediately.
+_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+mkdir -p "$_session_dir" 2>/dev/null || true
+if [ -f "package.json" ] && jq -e '.scripts["type:check"]' package.json >/dev/null 2>&1; then
+  (bun run type:check 2>&1 | grep -E '^.+\.(ts|tsx)\([0-9]+,' | sort > "$_session_dir/typecheck-baseline" 2>/dev/null || touch "$_session_dir/typecheck-baseline") &
+fi
+
 exit 0

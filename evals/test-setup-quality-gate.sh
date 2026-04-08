@@ -34,6 +34,16 @@ run_content_eval "$SCRIPT" "scripts.*type:check" "hook skips when type:check scr
 run_content_eval "$SCRIPT" "fail-count" "hook tracks consecutive typecheck failures"
 run_content_eval "$SCRIPT" "test-fail-count" "hook tracks consecutive test failures"
 run_content_eval "$SCRIPT" "decision.*allow.*attempts" "hook downgrades to allow after repeated failures"
+run_content_eval "$SCRIPT" "typecheck-baseline" "hook compares against session baseline"
+run_content_eval "$SCRIPT" "pre-existing" "hook identifies pre-existing errors"
+run_content_eval "$SCRIPT" "comm -23" "hook diffs current errors against baseline"
+run_content_eval "$SCRIPT" "new type error" "hook reports only new errors"
+
+# ── session-env.sh: baseline capture ──────────────────────────────
+
+SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
+run_content_eval "$SESSION_SCRIPT" "typecheck-baseline" "session-env captures typecheck baseline"
+run_content_eval "$SESSION_SCRIPT" "bun run type:check" "session-env runs type:check for baseline"
 
 # ── bundle-guard.sh: File structure ───────────────────────────────
 
