@@ -40,10 +40,11 @@ done
 test_output=""
 test_exit=0
 
-if [ -f "$repo_root/node_modules/.bin/vitest" ]; then
+if [ -f "node_modules/.bin/vitest" ] || [ -f "$repo_root/node_modules/.bin/vitest" ]; then
   # Vitest: --related finds tests that transitively import changed files
+  # Check cwd first (monorepo app), then repo root
   test_output=$(bun run test:related -- $abs_changed 2>&1) || test_exit=$?
-elif [ -f "$repo_root/node_modules/.bin/jest" ]; then
+elif [ -f "node_modules/.bin/jest" ] || [ -f "$repo_root/node_modules/.bin/jest" ]; then
   # Jest: --findRelatedTests does the same
   test_output=$(npx jest --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
 else
