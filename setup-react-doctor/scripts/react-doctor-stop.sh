@@ -18,10 +18,27 @@ output=""
 exit_code=0
 output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 
+# Track consecutive failures — downgrade to warn after 3 to avoid infinite loops
+_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+mkdir -p "$_session_dir" 2>/dev/null || true
+_doctor_fail_counter="$_session_dir/doctor-fail-count"
+_doctor_fail_count=0
+if [ -f "$_doctor_fail_counter" ]; then
+  _doctor_fail_count=$(cat "$_doctor_fail_counter" 2>/dev/null || echo "0")
+fi
+
 # Block on errors (non-zero exit)
 if [ $exit_code -ne 0 ]; then
+  _doctor_fail_count=$((_doctor_fail_count + 1))
+  echo "$_doctor_fail_count" > "$_doctor_fail_counter"
   truncated=$(echo "$output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
+
+  if [ "$_doctor_fail_count" -ge 3 ]; then
+    echo "{\"decision\":\"allow\",\"reason\":\"React Doctor errors still present after $_doctor_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
+    exit 0
+  fi
+
   echo "{\"decision\":\"block\",\"reason\":\"React Doctor found errors in changed files:\\n\"$escaped\"\"}" >&2
   exit 2
 fi
@@ -31,9 +48,20 @@ score=$(echo "$output" | grep -oE '[0-9]+' | tail -1 || echo "")
 
 # Block on critical score
 if [ -n "$score" ] && [ "$score" -lt 50 ]; then
+  _doctor_fail_count=$((_doctor_fail_count + 1))
+  echo "$_doctor_fail_count" > "$_doctor_fail_counter"
+
+  if [ "$_doctor_fail_count" -ge 3 ]; then
+    echo "{\"decision\":\"allow\",\"reason\":\"React Doctor score $score/100 after $_doctor_fail_count attempts (may be pre-existing). Allowing finish.\"}" >&2
+    exit 0
+  fi
+
   echo "{\"decision\":\"block\",\"reason\":\"React Doctor health score is $score/100 (critical). Fix issues before finishing.\"}" >&2
   exit 2
 fi
+
+# Reset counter on success
+echo "0" > "$_doctor_fail_counter" 2>/dev/null || true
 
 # Warn on low score (surface warnings without blocking)
 if [ -n "$score" ] && [ "$score" -lt 80 ]; then
