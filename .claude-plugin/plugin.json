@@ -47,6 +47,5 @@
     "./setup-toolchain/",
     "./setup-zustand/"
   ],
-  "agents": ["./agents/code-reviewer.md", "./agents/verifier.md"],
-  "hooks": "./hooks/hooks.json"
+  "agents": ["./agents/code-reviewer.md", "./agents/verifier.md"]
 }
