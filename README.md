@@ -112,7 +112,7 @@ Or install individual skills if you don't want the full kit — see sections bel
 
 ```bash
 # If installed via plugin marketplace:
-bash ~/.claude/plugins/cache/frontend-skills/scripts/verify-install.sh
+bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh
 
 # If installed via bunx skills:
 bash scripts/verify-install.sh
@@ -130,7 +130,7 @@ New to AI-assisted development? Start here.
 1. Add the marketplace: `/plugin marketplace add malinskibeniamin/skills`
 2. Install the plugin: `/plugin install frontend-skills@skills`
 3. Activate: `/reload-plugins`
-4. Run `bash ~/.claude/plugins/cache/frontend-skills/scripts/verify-install.sh` to confirm everything is wired
+4. Run `bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh` to confirm everything is wired
 3. Pick a real ticket from your backlog — not a toy problem
 
 **Your first prompt:**
