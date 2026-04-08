@@ -68,9 +68,10 @@ Everything else happens automatically via hooks. You don't need to invoke skills
 ```
 /plugin marketplace add malinskibeniamin/skills
 /plugin install frontend-skills@skills
+/reload-plugins
 ```
 
-This registers the marketplace and installs all skills + hooks + agents. Done.
+Three commands: register the marketplace, install everything, activate in current session.
 
 **Option B: Individual skills (if you prefer granular control):**
 
@@ -128,7 +129,8 @@ New to AI-assisted development? Start here.
 **Day 1 (30 min):**
 1. Add the marketplace: `/plugin marketplace add malinskibeniamin/skills`
 2. Install the plugin: `/plugin install frontend-skills@skills`
-3. Run `bash ~/.claude/plugins/cache/frontend-skills/scripts/verify-install.sh` to confirm everything is wired
+3. Activate: `/reload-plugins`
+4. Run `bash ~/.claude/plugins/cache/frontend-skills/scripts/verify-install.sh` to confirm everything is wired
 3. Pick a real ticket from your backlog — not a toy problem
 
 **Your first prompt:**
