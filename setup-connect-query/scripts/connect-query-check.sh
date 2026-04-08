@@ -25,10 +25,10 @@ fi
 # ── Check 1: Ban raw useQuery/useMutation from @tanstack/react-query ─
 
 if [ "$uses_connect" = true ]; then
-  # Allow raw useQuery/useMutation when file imports from @connectrpc/connect directly
-  # (useTransport/callUnaryMethod pattern is legitimate)
+  # Allow raw useQuery/useMutation when file uses callUnaryMethod or imports transport directly
+  # (multiple transports / dataplane pattern is legitimate)
   uses_connect_transport=false
-  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/connect['\"]"; then
+  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/connect['\"]|from\s+['\"]@connectrpc/connect-web['\"]|callUnaryMethod|callServerStreamMethod|createGrpcWebTransport|createConnectTransport"; then
     uses_connect_transport=true
   fi
 
