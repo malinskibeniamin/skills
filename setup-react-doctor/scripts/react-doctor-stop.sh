@@ -8,6 +8,11 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
+# Skip if project doesn't have a doctor script
+if [ ! -f "package.json" ] || ! jq -e '.scripts["doctor"]' package.json >/dev/null 2>&1; then
+  exit 0
+fi
+
 # Run react-doctor in diff mode
 output=""
 exit_code=0

@@ -14,6 +14,11 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
+# Skip if project doesn't have a type:check script
+if [ ! -f "package.json" ] || ! jq -e '.scripts["type:check"]' package.json >/dev/null 2>&1; then
+  exit 0
+fi
+
 # ── Type check (incremental for speed) ──────────────────────────
 # tsgo/tsc cannot target single files — they need the full project graph.
 # --incremental reuses .tsbuildinfo to skip unchanged modules.

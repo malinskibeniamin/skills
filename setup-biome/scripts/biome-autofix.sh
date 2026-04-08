@@ -33,6 +33,11 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
+# Skip if project doesn't have biome lint scripts
+if [ ! -f "package.json" ] || ! jq -e '.scripts["lint:file"]' package.json >/dev/null 2>&1; then
+  exit 0
+fi
+
 # Run lint:fix on changed files only. Uses lint:fix:file / lint:file which
 # do NOT hardcode "." — so biome only scans the listed files, not everything.
 # Skip noUnusedImports to avoid deleting imports used elsewhere in the file.
