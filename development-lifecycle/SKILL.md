@@ -51,6 +51,23 @@ You don't need to remember skill names. This skill detects what phase you're in 
 - For large refactors: run `/simplify` to clean up the result
 - Then: `gh pr create` → `@claude review`
 
+### 5b. Iterate — close the loop until merged
+
+After the PR is created, the work isn't done. Keep iterating:
+
+1. **Check CI**: `gh pr checks <pr-number> --watch` — wait for all checks to complete
+2. **Read reviews**: `gh api repos/{owner}/{repo}/pulls/{number}/reviews` and `gh pr view <number> --comments`
+3. **Apply feedback**: fix review comments, push changes
+4. **Re-check CI**: confirm fixes didn't break anything
+5. **Repeat** until CI is green and reviews are approved
+
+**This loop is mandatory.** Do not stop after creating the PR. A PR with failing CI or unresolved reviews is not done.
+
+- If CI fails: read the failure, fix it, commit, push, re-check
+- If a reviewer requests changes: apply them, push, re-check CI
+- If tests need updating after review feedback: TDD loop (Phase 3) then push
+- **Only stop when**: all CI checks pass AND no outstanding review requests
+
 ### 6. Compound — codify what we learned
 
 After every non-trivial task, ask: "Did we learn something worth preserving?"
@@ -63,9 +80,9 @@ After every non-trivial task, ask: "Did we learn something worth preserving?"
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1 → 2 → 3 → 4 → 5 → 6 |
-| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify) → 5 → 6 |
-| "Refactor this module" | 1 (explore) → 2 (plan) → 3 → 4 → 5 |
+| "Build a new feature" | 1 → 2 → 3 → 4 → 5 → 5b → 6 |
+| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify) → 5 → 5b → 6 |
+| "Refactor this module" | 1 (explore) → 2 (plan) → 3 → 4 → 5 → 5b |
 | "Write tests for X" | 3 (TDD only) |
 | "Create a PR" | 5 (review only) |
 | "Quick question" | Just answer — no lifecycle needed |
