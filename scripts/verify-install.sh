@@ -232,9 +232,15 @@ fi
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Codex Compatibility ---"
 
-if [ -f ".codex/hooks.json" ]; then
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  CODEX_ROOT="$PLUGIN_ROOT"
+else
+  CODEX_ROOT="."
+fi
+
+if [ -f "${CODEX_ROOT}/.codex/hooks.json" ]; then
   _pass ".codex/hooks.json exists"
-  if [ -f ".codex/hooks/codex-batch-check.sh" ] || [ -L ".codex/hooks/codex-batch-check.sh" ]; then
+  if [ -f "${CODEX_ROOT}/.codex/hooks/codex-batch-check.sh" ] || [ -L "${CODEX_ROOT}/.codex/hooks/codex-batch-check.sh" ]; then
     _pass "codex-batch-check.sh installed"
   else
     _warn "codex-batch-check.sh missing — Codex Stop hook won't run Edit|Write checks"
@@ -243,7 +249,7 @@ else
   _warn ".codex/hooks.json not found — Codex hooks not configured (install codex-compat skill)"
 fi
 
-if [ -f "AGENTS.md" ]; then
+if [ -f "${CODEX_ROOT}/AGENTS.md" ]; then
   _pass "AGENTS.md exists"
 else
   _warn "AGENTS.md not found — Codex soft guidance not configured"
