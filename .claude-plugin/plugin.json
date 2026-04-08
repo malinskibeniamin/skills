@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
   "description": "React/TypeScript frontend skills, hooks, and agents. 25 hooks enforce patterns in real-time. One skill for the full development lifecycle.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -23,7 +23,13 @@
   "skills": [
     "./brainstorming/",
     "./development-lifecycle/",
-    "./test-driven-development/",
+    "./tdd/",
+    "./design-an-interface/",
+    "./grill-me/",
+    "./improve-codebase-architecture/",
+    "./triage-issue/",
+    "./request-refactor-plan/",
+    "./write-a-skill/",
     "./frontend-starter-kit/",
     "./redpanda-frontend-kit/",
     "./work-automation-kit/",
