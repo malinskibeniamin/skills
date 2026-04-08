@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
   "description": "React/TypeScript frontend skills, hooks, and agents. 25 hooks enforce patterns in real-time. One skill for the full development lifecycle.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -19,5 +19,34 @@
     "agents",
     "quality-gate",
     "sandcastle"
-  ]
+  ],
+  "skills": [
+    "./brainstorming/",
+    "./development-lifecycle/",
+    "./test-driven-development/",
+    "./frontend-starter-kit/",
+    "./redpanda-frontend-kit/",
+    "./work-automation-kit/",
+    "./codex-compat/",
+    "./setup-accessibility/",
+    "./setup-agent-config/",
+    "./setup-atlassian-workflow/",
+    "./setup-biome/",
+    "./setup-ci-pipeline/",
+    "./setup-connect-query/",
+    "./setup-conventional-commits/",
+    "./setup-e2e-testing/",
+    "./setup-env-validation/",
+    "./setup-quality-gate/",
+    "./setup-react-compiler/",
+    "./setup-react-doctor/",
+    "./setup-react-rules/",
+    "./setup-registry-workflow/",
+    "./setup-sandcastle/",
+    "./setup-tanstack-router/",
+    "./setup-toolchain/",
+    "./setup-zustand/"
+  ],
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json"
 }
