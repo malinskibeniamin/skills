@@ -45,15 +45,25 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 
 ## Install
 
-```
+Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start one with `claude` in your terminal):
+
+```bash
 /plugin marketplace add malinskibeniamin/skills
+```
+```bash
 /plugin install frontend-skills@skills
+```
+```bash
 /reload-plugins
 ```
 
 Three commands. All 31 skills, 25 hooks, and 2 agents activate immediately. Done.
 
-**Verify:** `bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh`
+**Verify:**
+
+```bash
+bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh
+```
 
 <details>
 <summary>Alternative: install individual skills via skills.sh (granular control)</summary>
