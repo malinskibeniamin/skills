@@ -117,10 +117,10 @@ You only need to remember **one skill**: `/development-lifecycle`. It covers the
 
 | Skill | When to use |
 |---|---|
-| **`/development-lifecycle`** | Building features, fixing bugs, any development work. Guides through understand → plan → TDD → verify → review. |
+| **`/development-lifecycle`** | Building features, fixing bugs, any development work. Guides through understand → plan → **grill** → TDD → verify → review. |
 | **`/brainstorming`** | Not sure what approach to take yet. Explores 2-3 design options with trade-offs. |
 | **`/tdd`** | Writing tests or want strict red-green-refactor enforcement. |
-| **`/grill-me`** | Have a plan, want someone to poke holes in it. Stress-tests decisions. |
+| **`/grill-me`** | Stress-tests decisions. Auto-invoked as Phase 2b of the lifecycle; also usable standalone. |
 | **`/design-an-interface`** | Designing an API or module. Spawns 3+ agents to generate radically different designs. |
 | **`/triage-issue`** | Investigating a bug. Explores codebase, finds root cause, files a GitHub issue with TDD fix plan. |
 | **`/request-refactor-plan`** | Planning a refactor. Interviews you, breaks it into tiny safe commits, files RFC issue. |

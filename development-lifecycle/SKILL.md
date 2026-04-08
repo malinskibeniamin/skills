@@ -1,6 +1,6 @@
 ---
 name: development-lifecycle
-description: "Use when doing any development work. Automatically guides through the right phase: brainstorm → plan → implement (TDD) → review. One skill for the full lifecycle — no need to invoke other skills manually."
+description: "Use when doing any development work. Automatically guides through the right phase: brainstorm → plan → grill → implement (TDD) → review. One skill for the full lifecycle — no need to invoke other skills manually."
 ---
 
 # Development Lifecycle
@@ -25,6 +25,14 @@ You don't need to remember skill names. This skill detects what phase you're in 
 - No placeholders. No "add error handling later."
 - Bite-sized tasks (2-5 minutes each).
 - **Cross-model check**: if `/codex:rescue` is available, auto-dispatch the plan to Codex for a second opinion. Read its feedback, address concerns, finalize the stronger plan. If Codex isn't installed, skip.
+
+### 2b. Grill — stress-test the plan before any code is written
+
+**Hard gate: do NOT proceed to implementation until the plan survives grilling.**
+
+- Auto-invoke `/grill-me` on the plan. Grill until every branch is resolved.
+- Update the plan with any decisions that changed. Get explicit user confirmation to proceed.
+- **Skip only if**: trivial bug fix AND < 3 tasks AND no architectural decisions. See [REFERENCE.md](REFERENCE.md) for details.
 
 ### 3. Implement — TDD for every change
 
@@ -100,9 +108,9 @@ After every non-trivial task, ask: "Did we learn something worth preserving?"
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1 → 2 → 3 → 4 → 5 → 5b → 6 |
+| "Build a new feature" | 1 → 2 → **2b (grill)** → 3 → 4 → 5 → 5b → 6 |
 | "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify) → 5 → 5b → 6 |
-| "Refactor this module" | 1 (explore) → 2 (plan) → 3 → 4 → 5 → 5b |
+| "Refactor this module" | 1 (explore) → 2 (plan) → **2b (grill)** → 3 → 4 → 5 → 5b |
 | "Write tests for X" | 3 (TDD only) |
 | "Create a PR" | 5 (review only) |
 | "Quick question" | Just answer — no lifecycle needed |

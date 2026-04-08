@@ -6,6 +6,7 @@
 Feature idea
   → /write-a-prd (community) — interactive PRD creation
   → /development-lifecycle — plan phase
+  → /grill-me — mandatory stress-test of the plan (auto-invoked)
   → /prd-to-issues (community) — break into GitHub/Jira issues
   → implement (use /tdd skill)
   → code review (development-lifecycle review phase)
@@ -20,9 +21,10 @@ Bug report
 Design decision
   → /brainstorming — explore approaches + challenge decisions
   → /development-lifecycle — plan the chosen approach
+  → /grill-me — stress-test the plan (auto-invoked)
   → implement
 
-Quick question
+Quick question (on a specific decision)
   → /grill-me — stress-test the decision
 ```
 

@@ -31,6 +31,17 @@ Stop when:
 - The user says "I'm done" or "that's enough"
 - You've circled back to the same answers — shared understanding is reached
 
+## Auto-Invocation from Development Lifecycle
+
+This skill is **automatically invoked as Phase 2b** of the development lifecycle, between Plan and Implement. When auto-invoked:
+
+- The plan is the artifact being grilled
+- Focus on: "Can the user defend every decision in this plan?"
+- After grilling, update the plan with any changes
+- The user must explicitly confirm the plan is solid before implementation begins
+
+This gate exists because code is the byproduct — understanding is the product. If the plan can't survive grilling, the resulting code becomes cognitive debt.
+
 ## Output
 
 After grilling, provide a brief summary of:

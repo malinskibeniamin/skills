@@ -27,6 +27,31 @@
 - [ ] Test step alongside every implementation step
 - [ ] Self-review: spec coverage, placeholder scan, type consistency
 
+## Phase 2b: Grill
+
+**Mandatory gate between planning and implementation.**
+
+After the plan is written, automatically initiate `/grill-me` on it:
+
+1. Present the plan summary to the user
+2. Grill the plan — challenge assumptions, surface trade-offs, find gaps
+3. Resolve every decision branch before proceeding
+4. Update the plan with any decisions that changed during grilling
+5. Get explicit user confirmation: "Plan is solid, proceed"
+
+### Why This Phase Exists
+
+Code is the byproduct of understanding. If the user can't defend every decision in the plan under pressure, the resulting code becomes cognitive debt — technically correct but owned by nobody. The grill phase ensures the human builds the mental model *before* the LLM writes the code, so the team can extend, debug, and evolve the system long after it ships.
+
+### Skip Conditions
+
+Grill is mandatory unless ALL of these are true:
+- [ ] Bug fix with a single, already-identified root cause
+- [ ] Plan has fewer than 3 tasks
+- [ ] No architectural decisions involved
+
+If skipping, note in the plan: "Grill skipped — trivial bug fix, no architectural decisions."
+
 ## Phase 3: Implement (TDD)
 
 ### Iron Law
