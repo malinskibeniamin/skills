@@ -78,7 +78,7 @@ if [ -f "$session_files" ] && grep -q "^jsx:" "$session_files" 2>/dev/null; then
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
       # Warn, not block — prototyping often creates files before tests
-      warnings="${warnings:-}\n- MISSING TEST: $short_name has no co-located test."
+      warnings="${warnings:-}\n- MISSING TEST: $short_name has no co-located test. Use /tdd to add one."
     fi
   done
 fi
@@ -98,7 +98,7 @@ if [ -n "$new_files" ]; then
     done
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
-      warnings="${warnings:-}\n- NEW FILE WITHOUT TEST: $short_name — consider adding a test."
+      warnings="${warnings:-}\n- NEW FILE WITHOUT TEST: $short_name — use /tdd to add a test."
     fi
   done
 fi
@@ -130,6 +130,13 @@ if [ -n "$issues" ]; then
   escaped=$(printf '%b' "$issues" | head -20 | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":\"Quality gate: fix before finishing:\\n\"$escaped\"\"}" >&2
   exit 2
+fi
+
+# Check if source changed but no test files were touched
+changed_source_count=$(echo "$changed" | grep -cE '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null || echo "0")
+changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null || echo "0")
+if [ "${changed_source_count:-0}" -gt 0 ] && [ "${changed_test_count:-0}" -eq 0 ]; then
+  warnings="${warnings:-}\n- No test files were modified. Were all tests considered? Use /tdd to add coverage."
 fi
 
 # Soft warnings (missing tests) → inform but don't block
