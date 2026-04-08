@@ -33,9 +33,9 @@ if [ "$uses_connect" = true ]; then
   fi
 
   if [ "$uses_connect_transport" = false ]; then
-    # Allow useQueryClient, useTransport, etc. — only ban useQuery and useMutation exactly
+    # Only ban useQuery and useMutation exactly — not useQueryClient, useMutationState, etc.
     tanstack_imports=$(echo "$added_lines" | grep -E "from\s+['\"]@tanstack/react-query['\"]" || true)
-    if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | sed -E 's/useQueryClient//g; s/useTransport//g' | grep -qE '\buseQuery\b|\buseMutation\b'; then
+    if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | grep -qE '\buseQuery\b[^C]|\buseQuery\b\s*[,}]|\buseMutation\b[^S]|\buseMutation\b\s*[,}]'; then
       hook_block "Import useQuery/useMutation from @connectrpc/connect-query.\nDo not import from @tanstack/react-query in ConnectRPC files.\n\n// BAD\nimport { useQuery } from '@tanstack/react-query'\n\n// GOOD\nimport { useQuery } from '@connectrpc/connect-query'\n\nEscape hatch: // allow-direct-query: [reason]"
     fi
   fi
