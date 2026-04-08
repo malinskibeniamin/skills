@@ -36,31 +36,80 @@ _fail() { FAIL=$((FAIL + 1)); ISSUES="$ISSUES\n  FAIL  $1"; $JSON_MODE || echo "
 $JSON_MODE || echo "=== Skills & Hooks Installation Verification ==="
 $JSON_MODE || echo ""
 
+# ── Detect installation mode ────────────────────────────────────
+# Plugin install: hooks live in plugin cache, wired via hooks.json
+# Manual install: hooks copied to consumer .claude/hooks/
+
+PLUGIN_ROOT=""
+INSTALL_MODE="manual"
+
+# Check if installed as a plugin
+for dir in "$HOME/.claude/plugins/cache/skills/frontend-skills"/*/; do
+  if [ -f "${dir}hooks/hooks.json" ]; then
+    PLUGIN_ROOT="$dir"
+    INSTALL_MODE="plugin"
+    break
+  fi
+done
+
+$JSON_MODE || echo "--- Install Mode: $INSTALL_MODE ---"
+
 # ── 1. Basic structure ──────────────────────────────────────────
 
+$JSON_MODE || echo ""
 $JSON_MODE || echo "--- Structure ---"
 
-if [ -d ".claude/hooks" ]; then
-  _pass ".claude/hooks/ directory exists"
-else
-  _fail ".claude/hooks/ directory missing"
-fi
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  _pass "Plugin installed at $PLUGIN_ROOT"
 
-if [ -f ".claude/settings.json" ]; then
-  _pass ".claude/settings.json exists"
-else
-  _fail ".claude/settings.json missing — no hooks configured"
-fi
-
-if [ -f ".claude/hooks/_hook-lib.sh" ]; then
-  _pass "_hook-lib.sh shared library present"
-  if [ -x ".claude/hooks/_hook-lib.sh" ] || [ -L ".claude/hooks/_hook-lib.sh" ]; then
-    _pass "_hook-lib.sh is executable or symlinked"
+  if [ -f "${PLUGIN_ROOT}hooks/hooks.json" ]; then
+    _pass "hooks/hooks.json exists (plugin hook wiring)"
   else
-    _fail "_hook-lib.sh exists but is not executable"
+    _fail "hooks/hooks.json missing — plugin hooks not wired"
+  fi
+
+  if [ -d "${PLUGIN_ROOT}.claude/hooks" ]; then
+    _pass "Plugin .claude/hooks/ directory exists"
+  else
+    _fail "Plugin .claude/hooks/ directory missing"
+  fi
+
+  hook_lib="${PLUGIN_ROOT}.claude/hooks/_hook-lib.sh"
+  if [ -f "$hook_lib" ] || [ -L "$hook_lib" ]; then
+    _pass "_hook-lib.sh present in plugin"
+  else
+    _fail "_hook-lib.sh missing in plugin — all hooks will fail"
+  fi
+
+  shared_lib="${PLUGIN_ROOT}shared/hook-lib.sh"
+  if [ -f "$shared_lib" ]; then
+    _pass "shared/hook-lib.sh present in plugin"
+  else
+    _fail "shared/hook-lib.sh missing in plugin — all hooks will fail"
   fi
 else
-  _fail "_hook-lib.sh missing — all hooks will fail"
+  if [ -d ".claude/hooks" ]; then
+    _pass ".claude/hooks/ directory exists"
+  else
+    _fail ".claude/hooks/ directory missing"
+  fi
+
+  if [ -f ".claude/settings.json" ]; then
+    _pass ".claude/settings.json exists"
+  else
+    _fail ".claude/settings.json missing — no hooks configured"
+  fi
+
+  if [ -f ".claude/hooks/_hook-lib.sh" ]; then
+    _pass "_hook-lib.sh shared library present"
+    if [ -x ".claude/hooks/_hook-lib.sh" ] || [ -L ".claude/hooks/_hook-lib.sh" ]; then
+      _pass "_hook-lib.sh is executable or symlinked"
+    else
+      _fail "_hook-lib.sh exists but is not executable"
+    fi
+  else
+    _fail "_hook-lib.sh missing — all hooks will fail"
+  fi
 fi
 
 # ── 2. Hook scripts ────────────────────────────────────────────
@@ -94,11 +143,18 @@ EXPECTED_HOOKS=(
   "post-compact-context.sh"
 )
 
+# Determine where to look for hook scripts
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  HOOKS_DIR="${PLUGIN_ROOT}.claude/hooks"
+else
+  HOOKS_DIR=".claude/hooks"
+fi
+
 installed=0
 missing=0
 for hook in "${EXPECTED_HOOKS[@]}"; do
-  if [ -f ".claude/hooks/$hook" ] || [ -L ".claude/hooks/$hook" ]; then
-    if [ -x ".claude/hooks/$hook" ] || [ -L ".claude/hooks/$hook" ]; then
+  if [ -f "$HOOKS_DIR/$hook" ] || [ -L "$HOOKS_DIR/$hook" ]; then
+    if [ -x "$HOOKS_DIR/$hook" ] || [ -L "$HOOKS_DIR/$hook" ]; then
       installed=$((installed + 1))
     else
       _fail "$hook exists but is not executable"
@@ -116,35 +172,59 @@ else
   _warn "$installed of ${#EXPECTED_HOOKS[@]} hooks installed ($missing missing)"
 fi
 
-# ── 3. Settings.json hook wiring ────────────────────────────────
+# ── 3. Hook wiring ─────────────────────────────────────────────
 
 $JSON_MODE || echo ""
-$JSON_MODE || echo "--- Settings Wiring ---"
+$JSON_MODE || echo "--- Hook Wiring ---"
 
-if [ -f ".claude/settings.json" ]; then
-  # Check for git root resolution pattern
-  if grep -q 'git rev-parse --show-toplevel' ".claude/settings.json" 2>/dev/null; then
-    _pass "Hook paths use git root resolution (portable)"
-  elif grep -q '\.claude/hooks/' ".claude/settings.json" 2>/dev/null; then
-    _warn "Hook paths use relative paths — may break from subdirectories. Update to git root resolution pattern."
-  fi
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  # Plugin mode: check hooks/hooks.json
+  hooks_file="${PLUGIN_ROOT}hooks/hooks.json"
 
-  # Count configured hooks
-  hook_count=$(grep -c '"command"' ".claude/settings.json" 2>/dev/null || echo "0")
-  if [ "$hook_count" -gt 0 ]; then
-    _pass "$hook_count hooks configured in settings.json"
+  if grep -q 'CLAUDE_PLUGIN_ROOT' "$hooks_file" 2>/dev/null; then
+    _pass "Hook paths use \${CLAUDE_PLUGIN_ROOT} (plugin-portable)"
   else
-    _fail "No hooks configured in settings.json"
+    _warn "Hook paths don't use \${CLAUDE_PLUGIN_ROOT} — may not resolve correctly"
   fi
 
-  # Check for key lifecycle events
+  hook_count=$(grep -c '"command"' "$hooks_file" 2>/dev/null || echo "0")
+  if [ "$hook_count" -gt 0 ]; then
+    _pass "$hook_count hooks configured in hooks.json"
+  else
+    _fail "No hooks configured in hooks.json"
+  fi
+
   for event in "SessionStart" "UserPromptSubmit" "PreToolUse" "PostToolUse" "Stop"; do
-    if grep -q "\"$event\"" ".claude/settings.json" 2>/dev/null; then
+    if grep -q "\"$event\"" "$hooks_file" 2>/dev/null; then
       _pass "$event event configured"
     else
       _warn "$event event not configured"
     fi
   done
+else
+  # Manual mode: check .claude/settings.json
+  if [ -f ".claude/settings.json" ]; then
+    if grep -q 'git rev-parse --show-toplevel' ".claude/settings.json" 2>/dev/null; then
+      _pass "Hook paths use git root resolution (portable)"
+    elif grep -q '\.claude/hooks/' ".claude/settings.json" 2>/dev/null; then
+      _warn "Hook paths use relative paths — may break from subdirectories. Update to git root resolution pattern."
+    fi
+
+    hook_count=$(grep -c '"command"' ".claude/settings.json" 2>/dev/null || echo "0")
+    if [ "$hook_count" -gt 0 ]; then
+      _pass "$hook_count hooks configured in settings.json"
+    else
+      _fail "No hooks configured in settings.json"
+    fi
+
+    for event in "SessionStart" "UserPromptSubmit" "PreToolUse" "PostToolUse" "Stop"; do
+      if grep -q "\"$event\"" ".claude/settings.json" 2>/dev/null; then
+        _pass "$event event configured"
+      else
+        _warn "$event event not configured"
+      fi
+    done
+  fi
 fi
 
 # ── 4. Codex compatibility (optional) ──────────────────────────
