@@ -63,13 +63,14 @@ Everything else happens automatically via hooks. You don't need to invoke skills
 
 ## TLDR — Full Setup for a New Repo
 
-**Option A: Plugin (recommended — installs everything in one command):**
+**Option A: Plugin marketplace (recommended — installs everything in one command):**
 
 ```
-/plugin install git@github.com:malinskibeniamin/skills.git
+/plugin marketplace add malinskibeniamin/skills
+/plugin install frontend-skills@skills
 ```
 
-This installs all skills + hooks + agents. Done.
+This registers the marketplace and installs all skills + hooks + agents. Done.
 
 **Option B: Individual skills (if you prefer granular control):**
 
@@ -106,10 +107,16 @@ bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent cla
 
 Or install individual skills if you don't want the full kit — see sections below.
 
-**Verify installation health across repos:**
+**Verify installation health:**
 
 ```bash
-bash scripts/verify-install.sh              # check current repo
+# If installed via plugin marketplace:
+bash ~/.claude/plugins/cache/frontend-skills/scripts/verify-install.sh
+
+# If installed via bunx skills:
+bash scripts/verify-install.sh
+
+# Options:
 bash scripts/verify-install.sh --remote     # also check for updates
 bash scripts/verify-install.sh --json       # machine-readable output
 ```
@@ -119,8 +126,9 @@ bash scripts/verify-install.sh --json       # machine-readable output
 New to AI-assisted development? Start here.
 
 **Day 1 (30 min):**
-1. Install the plugin: `/plugin install git@github.com:malinskibeniamin/skills.git`
-2. Run `bash scripts/verify-install.sh` to confirm everything is wired
+1. Add the marketplace: `/plugin marketplace add malinskibeniamin/skills`
+2. Install the plugin: `/plugin install frontend-skills@skills`
+3. Run `bash ~/.claude/plugins/cache/frontend-skills/scripts/verify-install.sh` to confirm everything is wired
 3. Pick a real ticket from your backlog — not a toy problem
 
 **Your first prompt:**
@@ -139,7 +147,7 @@ edge cases, and how you'll verify. Wait for my approval before starting.
 - Use `/clear` between unrelated tasks. Long sessions degrade output quality
 - If Claude starts deleting tests to make CI green — stop immediately. That's a red flag
 - Use `HOOK_VERBOSITY=terse` for long sessions to reduce token overhead
-- Run `bash scripts/verify-install.sh --remote` weekly to check for updates
+- Run `verify-install.sh --remote` weekly to check for updates (see Verify section above for path)
 
 ## How It Works
 
