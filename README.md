@@ -124,6 +124,7 @@ You only need to remember **one skill**: `/development-lifecycle`. It covers the
 | **`/design-an-interface`** | Designing an API or module. Spawns 3+ agents to generate radically different designs. |
 | **`/triage-issue`** | Investigating a bug. Explores codebase, finds root cause, files a GitHub issue with TDD fix plan. |
 | **`/request-refactor-plan`** | Planning a refactor. Interviews you, breaks it into tiny safe commits, files RFC issue. |
+| **`/resolve-pr-feedback`** | Addressing PR reviews. Fetches unresolved threads, triages, fixes, replies, resolves. Used by Phase 5b. |
 | **`/improve-codebase-architecture`** | Finding architectural improvements. Identifies shallow modules and proposes deep-module refactors. |
 | **`/write-a-skill`** | Creating a new agent skill with proper structure and progressive disclosure. |
 
@@ -165,6 +166,12 @@ Must support email, Slack, and in-app channels with retry and rate limiting.
 /triage-issue — users report the sidebar flickers on navigation.
 It started after the last release. Check rendering and route transitions.
 ```
+
+**`/resolve-pr-feedback`** — addressing review comments:
+```
+/resolve-pr-feedback 123
+```
+or just `/resolve-pr-feedback` to auto-detect the PR from the current branch.
 
 **`/request-refactor-plan`** — planning a safe refactor:
 ```
