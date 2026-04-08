@@ -394,4 +394,23 @@ if echo "$added_lines" | grep -qE '===?\s*NaN\b'; then
   hook_block "=== NaN is always false. Use Number.isNaN(value)."
 fi
 
+# ── Check 35: useEffect to reset state on prop change → use key prop ────
+
+case "$file_path" in
+  *.tsx|*.jsx)
+    if echo "$added_lines" | grep -qE 'useEffect\(' && \
+       echo "$added_lines" | grep -qE "set[A-Z][a-zA-Z]*\((''|\"\"|\[\]|\{\}|null|undefined|false|0)\)"; then
+      # Check for escape hatch
+      has_escape=false
+      if grep -qE '//\s*allow-useEffect:' "$file_path" 2>/dev/null; then
+        has_escape=true
+      fi
+
+      if [ "$has_escape" = false ]; then
+        hook_warn "Resetting state in useEffect? Use the key prop instead:\n<Component key={id} /> — React unmounts and remounts, resetting all state.\nEscape hatch: // allow-useEffect: [reason]"
+      fi
+    fi
+    ;;
+esac
+
 exit 0

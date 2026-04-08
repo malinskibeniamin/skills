@@ -38,6 +38,8 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 ### Soft guidance (enforced by Claude, not hooks)
 
 - **Named useEffect functions** — when writing `useEffect`, always use a named function expression that describes the effect's purpose. Name cleanup functions symmetrically. If you can't name the effect without "and" or "also", split it. If the name starts with "sync" or "update" followed by state, it's probably derived state — compute inline instead.
+- **`useSyncExternalStore` for subscriptions** — when subscribing to browser APIs (`navigator.onLine`, `matchMedia`, scroll position) or external stores without React bindings, prefer `useSyncExternalStore` over manual `useEffect` + `addEventListener`. Concurrent-mode safe and eliminates boilerplate.
+- **Form-level `validate`** — for cross-field validation with react-hook-form (v7.72+), use `useForm({ validate })` instead of custom logic in `onSubmit`. Errors integrate with `formState.errors` automatically.
 
 ## Steps
 

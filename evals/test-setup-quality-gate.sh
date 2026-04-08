@@ -115,9 +115,21 @@ run_hook_eval "$BUNDLE_SCRIPT" \
 
 rm -rf "$tmpdir"
 
+# ── bundle-guard.sh: block core-js ───────────────────────────────
+
+tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
+printf '{"dependencies":{"core-js":"^3.37.0"}}' > "$tmpdir/package.json"
+
+run_hook_eval "$BUNDLE_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
+  2 "block: core-js in dependencies" "core-js"
+
+rm -rf "$tmpdir"
+
 # ── bundle-guard.sh: script content ──────────────────────────────
 
 run_content_eval "$BUNDLE_SCRIPT" "moment" "bundle-guard checks moment"
 run_content_eval "$BUNDLE_SCRIPT" "lodash" "bundle-guard checks lodash"
 run_content_eval "$BUNDLE_SCRIPT" "jquery" "bundle-guard checks jquery"
 run_content_eval "$BUNDLE_SCRIPT" "classnames" "bundle-guard checks classnames"
+run_content_eval "$BUNDLE_SCRIPT" "core-js" "bundle-guard checks core-js"

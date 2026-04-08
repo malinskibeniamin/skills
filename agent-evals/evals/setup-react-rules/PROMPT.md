@@ -12,15 +12,42 @@ This project enforces strict React rules. Read each one carefully.
   })
   ```
 
+## State reset on prop change
+- **NEVER use useEffect to reset state when a prop changes.** Use the `key` prop instead:
+  ```tsx
+  // BAD: useEffect(() => { setComment('') }, [userId])
+  // GOOD: <UserProfile key={userId} />
+  ```
+
+## Browser API subscriptions
+- **Prefer `useSyncExternalStore`** over manual useEffect + addEventListener for subscribing to browser APIs (navigator.onLine, matchMedia, etc.)
+
 ## Global state
 - Use `zustand` for global state. Create a store with `create()` from `zustand`. Do NOT use React Context + useEffect.
 
+## Forms
+- Use `react-hook-form` for form management.
+- For cross-field validation (e.g., confirm email must match email), use **form-level `validate`** in `useForm()`:
+  ```tsx
+  const form = useForm({
+    validate: async ({ formValues }) => {
+      if (formValues.email !== formValues.confirmEmail) {
+        return { confirmEmail: { type: 'formError', message: 'Emails must match' } }
+      }
+    },
+  })
+  ```
+- Always pass an error callback to `handleSubmit`: `handleSubmit(onSubmit, onError)`
+
 ## UI components
-- **NEVER use raw HTML elements** like `<button>`, `<input>`, `<form>`, `<select>`, `<textarea>`, `<table>`, `<label>`.
+- **NEVER use raw HTML elements** like `<button>`, `<input>`, `<select>`, `<textarea>`, `<table>`, `<label>`.
 - Use shadcn/ui components instead:
   - `<Button>` from `@/components/ui/button`
   - `<Input>` from `@/components/ui/input`
   - `<Form>` from `@/components/ui/form`
+- Every `<Button>` must have a purpose: `onClick`, `asChild`, `type="submit"`, or `disabled`.
+- Icon-only buttons must have `aria-label`.
+- Use `<Button asChild><Link>` instead of `onClick + navigate()`.
 
 ## Tailwind CSS
 - **NEVER use inline `style={{}}`** — use Tailwind utility classes instead.
@@ -30,17 +57,37 @@ This project enforces strict React rules. Read each one carefully.
 ## TypeScript
 - **NEVER use `as any`** — fix types properly.
 - **NEVER use `@ts-ignore` or `@ts-expect-error`** — fix the type error instead.
+- **NEVER use `React.FC`** — use `function MyComponent(props: Props)` instead.
+
+## Components
+- **NEVER use class components** — use functional components only.
+- **NEVER use `cloneElement`** — use Context or render props instead.
 
 ## Package manager
 - Use bun with `--yarn` flag.
 
 # Task
 
-Create a React component at `src/UserProfile.tsx` that:
-1. Fetches user data from `/api/users/:id` using `useQuery` from `@tanstack/react-query` (NOT useEffect)
-2. Shows a loading state using `isLoading` from the query result
-3. Displays the user's name and email
-4. Has a form to update the user's email using `<Form>` from `@/components/ui/form`
-5. Has a submit button using `<Button>` from `@/components/ui/button`
-6. Uses a zustand store for the current user ID
-7. Uses Tailwind utility classes for styling (no inline style={{}}, no raw hex colors, no !important)
+Create the following files:
+
+## 1. `src/UserProfile.tsx`
+A component that:
+1. Accepts a `userId` prop
+2. Fetches user data from `/api/users/:id` using `useQuery` (NOT useEffect)
+3. Shows a loading spinner using `isLoading`
+4. Displays the user's name and email
+5. Has a form to update email with a "confirm email" field — use `react-hook-form` with form-level `validate` for cross-field validation (confirm email must match email)
+6. Always passes an error callback to `handleSubmit`
+7. Uses `<Button>`, `<Input>` from shadcn/ui (NOT raw HTML elements)
+8. Uses Tailwind utility classes (no inline styles)
+
+## 2. `src/UserProfilePage.tsx`
+A page component that:
+1. Gets the current userId from a zustand store
+2. Renders `<UserProfile>` with the `key` prop set to userId (so state resets when user changes — do NOT use useEffect to reset state)
+
+## 3. `src/components/OnlineStatus.tsx`
+A component that:
+1. Shows whether the user is online or offline
+2. Uses `useSyncExternalStore` to subscribe to `navigator.onLine` (NOT useEffect + addEventListener)
+3. Shows a green dot for online, red for offline using Tailwind classes

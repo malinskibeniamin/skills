@@ -80,6 +80,93 @@ useEffect(function connectToWebSocket() {
 | `initialize` | One-time setup |
 | `poll` | Interval-based data fetching |
 
+## Form-Level Validation (react-hook-form v7.72+)
+
+For cross-field validation (e.g., "confirm password must match password", "end date must be after start date"), use the `validate` option on `useForm` instead of custom logic inside `onSubmit`:
+
+```tsx
+// BAD — validation logic buried in submit handler, errors not surfaced to UI
+const onSubmit = (data) => {
+  if (data.password !== data.confirmPassword) {
+    setError('confirmPassword', { message: 'Passwords must match' })
+    return
+  }
+  // ...
+}
+
+// GOOD — form-level validate, errors integrate with formState.errors
+const form = useForm({
+  validate: async ({ formValues }) => {
+    if (formValues.password !== formValues.confirmPassword) {
+      return {
+        confirmPassword: { type: 'formError', message: 'Passwords must match' },
+      }
+    }
+  },
+})
+```
+
+This runs alongside field-level resolvers (zod, protovalidate) and surfaces errors through the standard `formState.errors` API.
+
+## Resetting State on Prop Change — Use `key`
+
+When you need to reset component state when a prop changes, don't use `useEffect`:
+
+```tsx
+// BAD — extra render pass, intermediate stale state visible
+useEffect(() => {
+  setComment('')
+  setDraft(null)
+}, [userId])
+
+// GOOD — React unmounts and remounts, all state resets automatically
+<UserProfile key={userId} />
+```
+
+The `key` prop works on any component, not just lists. When the key changes, React destroys the old instance and creates a new one with fresh state.
+
+## Subscriptions — Prefer `useSyncExternalStore`
+
+When subscribing to browser APIs (online status, media queries, scroll position, external stores), prefer `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
+
+```tsx
+// BAD — verbose, prone to tearing in concurrent mode
+const [isOnline, setIsOnline] = useState(navigator.onLine)
+useEffect(function subscribeToOnlineStatus() {
+  const handle = () => setIsOnline(navigator.onLine)
+  window.addEventListener('online', handle)
+  window.addEventListener('offline', handle)
+  return () => {
+    window.removeEventListener('online', handle)
+    window.removeEventListener('offline', handle)
+  }
+}, [])
+
+// GOOD — concurrent-mode safe, no boilerplate
+const isOnline = useSyncExternalStore(
+  (cb) => {
+    window.addEventListener('online', cb)
+    window.addEventListener('offline', cb)
+    return () => {
+      window.removeEventListener('online', cb)
+      window.removeEventListener('offline', cb)
+    }
+  },
+  () => navigator.onLine,
+  () => true // server snapshot
+)
+```
+
+### When to use `useSyncExternalStore`
+
+| Use case | Example |
+|----------|---------|
+| Browser APIs | `navigator.onLine`, `matchMedia`, `document.visibilityState` |
+| External stores | Redux, MobX, vanilla stores without React bindings |
+| DOM state | scroll position, element dimensions (with `ResizeObserver`) |
+
+Don't use it for: React state, zustand (already uses it internally), TanStack Query.
+
 ## Common Agent Excuses
 
 | Excuse | Counter |

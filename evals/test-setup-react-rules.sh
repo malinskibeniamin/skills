@@ -265,6 +265,42 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: onClick+navigate pattern" "navigate"
 
+# ── Check 7: Button must have handler ───────────────────────────
+
+echo '<Button>Click me</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: Button without handler" "handler"
+
+# Allow: Button with onClick
+echo '<Button onClick={handleClick}>Click me</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Button with onClick"
+
+# Allow: Button with asChild
+echo '<Button asChild><Link to="/path">Click</Link></Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Button with asChild"
+
+# Allow: Button type="submit"
+echo '<Button type="submit">Submit</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Button type=submit"
+
+# Allow: Button disabled
+echo '<Button disabled>Noop</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: Button disabled"
+
 # ── Check 8: Alert double icon ──────────────────────────────────
 
 echo '<AlertTitle><InfoIcon /> Warning</AlertTitle>' > "$tmpfile"
@@ -301,6 +337,13 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: outline-none CSS class" "outline"
 
+# Allow outline-none when paired with focus-visible:ring replacement
+echo '<div className="outline-none focus-visible:ring-2">' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: outline-none with focus-visible:ring replacement"
+
 # ── Check 13: React Compiler — manual memoization ────────────────
 # Needs mock package.json with react-compiler so the check activates
 _memo_tmpdir=$(mktemp -d /tmp/memo-evals-XXXXXX)
@@ -319,6 +362,18 @@ echo 'const cb = useCallback(() => {}, [])' > "$_memo_file"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: useCallback (React Compiler handles it)" "useCallback"
+
+echo 'const Wrapped = React.memo(MyComponent)' > "$_memo_file"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
+  2 "block: React.memo (React Compiler handles it)" "React.memo"
+
+echo 'const Wrapped = memo(MyComponent)' > "$_memo_file"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
+  2 "block: memo() (React Compiler handles it)" "memo"
 
 # Allow with 'use no memo' directive
 printf "'use no memo'\nconst val = useMemo(() => 1, [])\n" > "$_memo_file"
@@ -617,6 +672,109 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: handleSubmit with error callback"
 
+# ── Check 23: Ban React.FC / React.FunctionComponent ─────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "const App: React.FC<Props> = (props) => <div />" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: React.FC usage" "React.FC"
+
+echo "const App: React.FunctionComponent<Props> = (props) => <div />" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: React.FunctionComponent usage" "React.FC"
+
+# Allow: function component declaration (correct pattern)
+echo "function App(props: Props) { return <div /> }" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: function declaration component"
+
+# ── Check 24: Ban cloneElement ───────────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "const enhanced = cloneElement(child, { className: 'extra' })" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: cloneElement usage" "cloneElement"
+
+echo "const enhanced = React.cloneElement(child, { className: 'extra' })" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: React.cloneElement usage" "cloneElement"
+
+# ── Check 25: Warn on biome-ignore ───────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "// biome-ignore lint/a11y/noAriaUnsupportedElements: legacy" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: biome-ignore comment" "biome-ignore"
+
+echo "/* biome-ignore lint/suspicious/noExplicitAny: third-party */" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: biome-ignore block comment" "biome-ignore"
+
+# ── Check 26: Tree-shaking killers ───────────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "import * as Utils from './utils'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: namespace import (import *)" "tree-shaking"
+
+# Allow: import * as React (legitimate exception)
+echo "import * as React from 'react'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: import * as React"
+
+echo "export * from './components'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: export * prevents tree-shaking" "tree-shaking"
+
+# Allow: named export (correct pattern)
+echo "export { Button } from './button'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: named export"
+
+# ── Check 27: Deprecated package imports ─────────────────────────
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "import { DragDropContext } from 'react-beautiful-dnd'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: react-beautiful-dnd (archived)" "archived"
+
+echo "import { motion } from 'framer-motion'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: framer-motion (renamed to motion)" "renamed"
+
+# Allow: correct package name
+echo "import { motion } from 'motion'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: motion (correct package name)"
+
 # ── Check 20: Ban addEventListener without passive ────────────────
 
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -813,6 +971,42 @@ run_hook_eval "$SCRIPT" \
 # Reset to tsx
 tmpfile="$_rr_tmpdir/test.tsx"
 
+# ── Check 35: useEffect to reset state → key prop ────────────────
+
+# Trigger: setState with empty/default value inside useEffect (tsx)
+cat > "$tmpfile" <<'TSXEOF'
+useEffect(() => {
+  setComment('')
+}, [userId])
+TSXEOF
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: useEffect state reset → key prop" "key prop"
+
+# Allow: useEffect with escape hatch
+cat > "$tmpfile" <<'TSXEOF'
+// allow-useEffect: clearing form on user switch
+useEffect(() => {
+  setComment('')
+}, [userId])
+TSXEOF
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: useEffect state reset with escape hatch"
+
+# Allow: setState with non-empty value (not a reset pattern)
+cat > "$tmpfile" <<'TSXEOF'
+useEffect(() => {
+  setComment(fetchedData.comment)
+}, [fetchedData])
+TSXEOF
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: useEffect setState with real value (not reset)"
+
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
@@ -839,6 +1033,13 @@ run_content_eval "$SCRIPT" "parseInt" "hook checks parseInt without radix"
 run_content_eval "$SCRIPT" "role.*button" "hook checks div role=button"
 run_content_eval "$SCRIPT" "setTimeout" "hook checks setTimeout with string"
 run_content_eval "$SCRIPT" "NaN" "hook checks === NaN comparison"
+run_content_eval "$SCRIPT" "React.FC" "hook checks React.FC ban"
+run_content_eval "$SCRIPT" "cloneElement" "hook checks cloneElement ban"
+run_content_eval "$SCRIPT" "biome-ignore" "hook checks biome-ignore warning"
+run_content_eval "$SCRIPT" "tree-shaking" "hook checks tree-shaking killers"
+run_content_eval "$SCRIPT" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
+run_content_eval "$SCRIPT" "framer-motion" "hook checks deprecated framer-motion"
+run_content_eval "$SCRIPT" "Button.*handler|handler.*Button" "hook checks Button handler requirement"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
@@ -846,6 +1047,10 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "allow-useEffect" "REFERENCE document
 run_content_eval "$SKILL_DIR/REFERENCE.md" "components/ui" "REFERENCE has component library mapping"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useEffect\(function" "REFERENCE has named useEffect guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket|disconnectWebSocket" "REFERENCE has effect naming conventions"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useSyncExternalStore" "REFERENCE has useSyncExternalStore guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Resetting State on Prop Change" "REFERENCE has key-prop state reset pattern"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "formValues" "REFERENCE has react-hook-form form-level validate"
+run_content_eval "$SCRIPT" "key prop" "hook suggests key prop for state reset"
 
 # ── Cleanup ─────────────────────────────────────────────────────
 

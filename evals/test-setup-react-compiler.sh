@@ -111,6 +111,66 @@ run_hook_eval "$SCRIPT" \
 
 cd "$REPO_ROOT"
 
+# ── Check 2: Derived state via useState + useEffect anti-pattern ─
+
+_ds_tmpdir=$(mktemp -d /tmp/derived-state-evals-XXXXXX)
+echo '{"devDependencies":{"babel-plugin-react-compiler":"*"}}' > "$_ds_tmpdir/package.json"
+_ds_file="$_ds_tmpdir/test.tsx"
+
+# Block: useState + useEffect that sets state (derived state)
+cat > "$_ds_file" <<'TSXEOF'
+const [filtered, setFiltered] = useState([])
+useEffect(() => { setFiltered(items.filter(i => i.visible)) }, [items])
+TSXEOF
+
+cd "$_ds_tmpdir"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ds_file\"}}" \
+  2 "block: derived state via useState + useEffect" "derive"
+
+# Allow: useEffect that does NOT set state (genuine side effect)
+cat > "$_ds_file" <<'TSXEOF'
+const [data, setData] = useState(null)
+useEffect(() => { document.title = data?.name ?? 'App' }, [data])
+TSXEOF
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ds_file\"}}" \
+  0 "allow: useEffect without setState (genuine side effect)"
+
+cd "$REPO_ROOT"
+rm -rf "$_ds_tmpdir"
+
+# ── Check 3: useRef as memoization cache ─────────────────────────
+
+_ref_tmpdir=$(mktemp -d /tmp/ref-cache-evals-XXXXXX)
+echo '{"devDependencies":{"babel-plugin-react-compiler":"*"}}' > "$_ref_tmpdir/package.json"
+_ref_file="$_ref_tmpdir/test.tsx"
+
+# Block: useRef with ??= assignment (memoization cache pattern)
+cat > "$_ref_file" <<'TSXEOF'
+const cache = useRef(null)
+if (cache.current === null) { cache.current = expensiveCompute() }
+TSXEOF
+
+cd "$_ref_tmpdir"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ref_file\"}}" \
+  2 "block: useRef as memoization cache" "cach"
+
+# Allow: useRef for DOM reference (legitimate)
+cat > "$_ref_file" <<'TSXEOF'
+const inputRef = useRef(null)
+return <input ref={inputRef} />
+TSXEOF
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ref_file\"}}" \
+  0 "allow: useRef for DOM reference"
+
+cd "$REPO_ROOT"
+rm -rf "$_ref_tmpdir"
+
 # ── Hook script content ─────────────────────────────────────────
 
 run_content_eval "$SCRIPT" "useMemo" "hook checks for useMemo"

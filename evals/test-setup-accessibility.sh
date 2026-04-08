@@ -158,6 +158,22 @@ run_hook_eval "$SCRIPT" \
 
 # tmpfile reused in tmpdir
 
+# ── Check 4: Ban role="tablist" without role="tab" children ──────
+
+tmpfile="$_a11y_tmpdir/test.tsx"
+printf '<div role="tablist"><button>Tab 1</button></div>\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: role=tablist without role=tab children" "role"
+
+# Allow role="tablist" with role="tab" children
+printf '<div role="tablist"><button role="tab">Tab 1</button></div>\n<div role="tabpanel">Content</div>\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: role=tablist with role=tab children"
+
 # ── Check 5: Ban role="dialog" without aria-label ───────────────
 
 tmpfile="$_a11y_tmpdir/test.tsx"
