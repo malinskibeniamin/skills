@@ -62,7 +62,7 @@ Three commands. All 31 skills, 25 hooks, and 2 agents activate immediately. Done
 **Verify:**
 
 ```bash
-bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh
+bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"
 ```
 
 <details>
@@ -232,7 +232,7 @@ New to AI-assisted development? Start here.
 
 **Day 1 (30 min):**
 1. Install (see [Install](#install) above)
-2. Run `bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh` to confirm everything is wired
+2. Run `bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"` to confirm everything is wired
 3. Pick a real ticket from your backlog — not a toy problem
 
 **Your first prompt:**
