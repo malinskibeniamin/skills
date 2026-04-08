@@ -43,27 +43,7 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 
 **vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
 
-## Skills You Need to Know
-
-You only need to remember **one skill**: `/development-lifecycle`. It covers the full flow.
-
-| What you're doing | What to invoke | What happens |
-|---|---|---|
-| Building a feature | Just describe it | Hooks detect → understand → plan → TDD → review |
-| Fixing a bug | Describe the bug | Hooks detect → reproduce → root cause → TDD fix → review |
-| Writing tests | Just write them | Hooks enforce TDD patterns, detect async leaks |
-| Creating a PR | "Create a PR" | Hooks verify CI, suggest review, conventional commits |
-| Any code change | Just code | 25 hooks enforce patterns in real-time |
-
-**Advanced** (optional, for specific needs):
-- `/brainstorming` — deep design exploration with challenge mode
-- `/grill-me` — stress-test a specific decision
-
-Everything else happens automatically via hooks. You don't need to invoke skills.
-
-## TLDR — Full Setup for a New Repo
-
-**Option A: Plugin marketplace (recommended — installs everything in one command):**
+## Install
 
 ```
 /plugin marketplace add malinskibeniamin/skills
@@ -71,19 +51,35 @@ Everything else happens automatically via hooks. You don't need to invoke skills
 /reload-plugins
 ```
 
-Three commands: register the marketplace, install everything, activate in current session.
+Three commands. All 31 skills, 25 hooks, and 2 agents activate immediately. Done.
 
-**Option B: Individual skills (if you prefer granular control):**
+**Verify:** `bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh`
+
+<details>
+<summary>Alternative: install individual skills via skills.sh (granular control)</summary>
+
+Use this if you only want specific skills instead of the full plugin.
 
 ```bash
+# Core workflow + all setup skills
 bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
+
+# Just the development lifecycle (no setup hooks)
 bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y
-```
 
-**Project management + workflow skills:**
-
-```bash
+# Project management + planning skills
 bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claude-code -y
+
+# Individual skills — pick what you need:
+bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/triage-issue --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
 ```
 
 **Optional extras:**
@@ -92,45 +88,141 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 # TanStack official reference skills (28 soft-guidance skills from docs)
 npx @tanstack/intent@latest install
 
-# Codex compatibility (if team uses both Claude Code and Codex)
-bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
-
 # Atlassian/Jira integration (requires acli installed)
 bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
-
-# Codex cross-model review plugin (requires OpenAI API key)
-# /plugin marketplace add openai/codex-plugin-cc
-# /plugin install codex@openai-codex
 
 # Redpanda-specific (Chakra/legacy bans, registry workflow)
 bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
 ```
 
-Or install individual skills if you don't want the full kit — see sections below.
+**Verify:** `bash scripts/verify-install.sh`
 
-**Verify installation health:**
+</details>
 
-```bash
-# If installed via plugin marketplace:
-bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh
+## Skills Catalog
 
-# If installed via bunx skills:
-bash scripts/verify-install.sh
+You only need to remember **one skill**: `/development-lifecycle`. It covers the full flow. Everything else is optional — use when you need a specific capability.
 
-# Options:
-bash scripts/verify-install.sh --remote     # also check for updates
-bash scripts/verify-install.sh --json       # machine-readable output
+### Workflow Skills
+
+| Skill | When to use |
+|---|---|
+| **`/development-lifecycle`** | Building features, fixing bugs, any development work. Guides through understand → plan → TDD → verify → review. |
+| **`/brainstorming`** | Not sure what approach to take yet. Explores 2-3 design options with trade-offs. |
+| **`/tdd`** | Writing tests or want strict red-green-refactor enforcement. |
+| **`/grill-me`** | Have a plan, want someone to poke holes in it. Stress-tests decisions. |
+| **`/design-an-interface`** | Designing an API or module. Spawns 3+ agents to generate radically different designs. |
+| **`/triage-issue`** | Investigating a bug. Explores codebase, finds root cause, files a GitHub issue with TDD fix plan. |
+| **`/request-refactor-plan`** | Planning a refactor. Interviews you, breaks it into tiny safe commits, files RFC issue. |
+| **`/improve-codebase-architecture`** | Finding architectural improvements. Identifies shallow modules and proposes deep-module refactors. |
+| **`/write-a-skill`** | Creating a new agent skill with proper structure and progressive disclosure. |
+
+<details>
+<summary>Prompt examples for each workflow skill</summary>
+
+**`/development-lifecycle`** — the default for all dev work:
 ```
+I need to add a user settings page with theme, language, and notification preferences.
+Read src/routes/ to understand the routing structure first.
+```
+
+**`/brainstorming`** — exploring options before committing:
+```
+/brainstorming design — I need to add real-time collaboration to our editor.
+Compare WebSocket, SSE, and CRDT approaches. Focus on latency and offline support.
+```
+
+**`/tdd`** — strict test-first development:
+```
+/tdd — add input validation to the signup form. Email format, password strength,
+and matching confirm password. Start with the failing tests.
+```
+
+**`/grill-me`** — stress-testing a decision:
+```
+/grill-me on the data fetching strategy for the new dashboard feature.
+We're planning to use TanStack Query with a 5-minute stale time.
+```
+
+**`/design-an-interface`** — comparing API shapes:
+```
+/design-an-interface for a notification system module.
+Must support email, Slack, and in-app channels with retry and rate limiting.
+```
+
+**`/triage-issue`** — investigating a bug:
+```
+/triage-issue — users report the sidebar flickers on navigation.
+It started after the last release. Check rendering and route transitions.
+```
+
+**`/request-refactor-plan`** — planning a safe refactor:
+```
+/request-refactor-plan — extract the auth logic from the monolithic UserService
+into a standalone AuthService. Must be backwards-compatible during migration.
+```
+
+**`/improve-codebase-architecture`** — finding opportunities:
+```
+/improve-codebase-architecture — focus on module boundaries and testability
+in src/features/. Look for tightly coupled modules that should be split.
+```
+
+**`/write-a-skill`** — creating a new skill:
+```
+/write-a-skill for enforcing our internal design system tokens.
+It should check that components use --color-* CSS variables instead of raw hex values.
+```
+
+</details>
+
+### Kit Skills (bundles)
+
+| Skill | What it bundles |
+|---|---|
+| **`/frontend-starter-kit`** | All 17 setup skills + workflow skills. Full bootstrap for a new project. |
+| **`/work-automation-kit`** | Planning skills — PRD creation, issue breakdown, project management. |
+| **`/redpanda-frontend-kit`** | frontend-starter-kit + Redpanda-specific registry workflow. |
+| **`/codex-compat`** | Generates `.codex/hooks.json` and `AGENTS.md` for OpenAI Codex compatibility. |
+
+### Setup Skills (automatic via hooks — no invocation needed)
+
+These are installed by `/frontend-starter-kit` and run automatically. You never invoke them directly.
+
+| Skill | What it enforces |
+|---|---|
+| `setup-toolchain` | Blocks npm/npx, enforces bun + tsgo |
+| `setup-biome` | Biome + Ultracite linting, auto-fix on Stop |
+| `setup-quality-gate` | Type check + lint + related tests gate, bundle guard |
+| `setup-react-rules` | Bans `as any`, raw HTML, XSS vectors, barrel imports |
+| `setup-react-compiler` | Flags manual memoization, enforces compiler-friendly patterns |
+| `setup-zustand` | Double-parens create, useShallow selectors, persist middleware |
+| `setup-accessibility` | ARIA labels, keyboard handlers, axe-core testing |
+| `setup-tanstack-router` | Route tree generation, bans react-router-dom/window.location |
+| `setup-connect-query` | ConnectRPC + Protobuf v2 patterns, bans raw useQuery |
+| `setup-env-validation` | Type-safe env vars via t3-env + zod, bans raw process.env |
+| `setup-conventional-commits` | Validates commit format `type(scope): description` |
+| `setup-react-doctor` | Health scoring (0-100), fails on score regression |
+| `setup-e2e-testing` | Playwright + Testcontainers + axe-core setup |
+| `setup-ci-pipeline` | GitHub Actions quality gate, coverage gates, bundle budgets |
+| `setup-agent-config` | Token-efficient env vars, test flag optimization, output truncation |
+| `setup-registry-workflow` | Reminds to rebuild registry.json when UI components change |
+| `setup-sandcastle` | AFK agent delegation — parallel agents in Docker worktrees |
+
+### Agents
+
+| Agent | Role |
+|---|---|
+| **code-reviewer** | Reviews PRs for correctness, patterns, and test coverage |
+| **verifier** | Read-only agent that independently verifies implementation via tests, types, lint, and browser inspection |
 
 ## Quick Start
 
 New to AI-assisted development? Start here.
 
 **Day 1 (30 min):**
-1. Add the marketplace: `/plugin marketplace add malinskibeniamin/skills`
-2. Install the plugin: `/plugin install frontend-skills@skills`
-3. Activate: `/reload-plugins`
-4. Run `bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh` to confirm everything is wired
+1. Install (see [Install](#install) above)
+2. Run `bash ~/.claude/plugins/cache/skills/frontend-skills/*/scripts/verify-install.sh` to confirm everything is wired
 3. Pick a real ticket from your backlog — not a toy problem
 
 **Your first prompt:**
@@ -207,116 +299,6 @@ You never see hook output directly. Claude just produces better code, with tests
 echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 ```
 
-## Example Prompts
-
-After installing, try these prompts to see the skills in action:
-
-<details>
-<summary>Feature development workflow</summary>
-
-```
-/write-a-prd for a new user settings page with theme, language, and notification preferences.
-```
-
-Then:
-
-```
-/prd-to-plan
-```
-
-Then:
-
-```
-/prd-to-issues
-```
-
-If using Jira: the issues will also be created as Jira work items when `ISSUE_TRACKER=both`.
-
-</details>
-
-<details>
-<summary>Code review workflow</summary>
-
-```
-Create a PR for these changes. After creating it, comment @claude review on the PR for an automated review.
-```
-
-Or for a local second opinion:
-
-```
-/codex:review
-```
-
-For design challenges:
-
-```
-/codex:adversarial-review
-```
-
-</details>
-
-<details>
-<summary>Test health check</summary>
-
-```
-Run test health diagnostics on this project. Identify flaky tests, async leaks, and slow queries.
-```
-
-</details>
-
-<details>
-<summary>E2E test scaffolding</summary>
-
-```
-Use agent-browser to inspect http://localhost:3000/topics and generate Playwright e2e tests from the accessibility tree.
-```
-
-</details>
-
-<details>
-<summary>Architecture review</summary>
-
-```
-/improve-codebase-architecture — focus on module boundaries and testability
-```
-
-Or stress-test a design:
-
-```
-/grill-me on the data fetching strategy for the new dashboard feature
-```
-
-</details>
-
-<details>
-<summary>Daily workflow (start of session)</summary>
-
-```
-Check git status. Run bun run quality:gate to verify the codebase is clean. Then let's work on [your task].
-```
-
-Before creating a PR:
-
-```
-Run quality:gate. If it passes, create a PR. After creating, comment @claude review on it.
-```
-
-</details>
-
-<details>
-<summary>Bug triage</summary>
-
-```
-/triage-issue — investigate why [describe the bug]. Check logs, reproduce, identify root cause, and file a GitHub issue with a fix plan.
-```
-
-If using Jira:
-
-```
-/triage-issue — investigate [bug]. File findings as a Jira work item via acli.
-```
-
-</details>
 
 ## Migrating an Existing Codebase
 
@@ -425,7 +407,7 @@ The migration is ordered from least disruptive (auto-fixable lint) to most disru
 
 Meta-skills that install everything you need in one go.
 
-- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + test-driven-development (TDD + diagnostics) + 10 community workflow skills (TDD, triage, architecture, refactoring, design, PRD, QA, DDD glossary). `console.*` is fully covered by Biome's `noConsole`.
+- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + 10 owned workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + 5 optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` is fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -503,7 +485,7 @@ Stop hooks and manual diagnostic skills.
   bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
   ```
 
-Test health diagnostics (async leaks, slow queries, flaky tests) are now part of `/test-driven-development` and the `orchestration-stop` quality gate.
+Test health diagnostics (async leaks, slow queries, flaky tests) are now part of `/tdd` and the `orchestration-stop` quality gate.
 
 ## LLM Optimization
 
@@ -587,25 +569,20 @@ Reduce token usage and context waste.
 
 ## Community Skills (Optional)
 
-### mattpocock/skills — Workflow automation
+### mattpocock/skills — Additional workflow skills
 
-Already included in the starter kits. Install individually if needed:
+These skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement the vendored ones. Install individually if needed:
 
 ```bash
-bunx skills@latest add mattpocock/skills/tdd --agent claude-code -y              # TDD red-green-refactor
-bunx skills@latest add mattpocock/skills/triage-issue --agent claude-code -y      # Bug investigation → GitHub issue
-bunx skills@latest add mattpocock/skills/improve-codebase-architecture --agent claude-code -y  # Architecture improvements
-bunx skills@latest add mattpocock/skills/request-refactor-plan --agent claude-code -y  # Refactor plans as GitHub issues
-bunx skills@latest add mattpocock/skills/design-an-interface --agent claude-code -y    # Multiple interface designs
 bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y       # PRD via interview
 bunx skills@latest add mattpocock/skills/prd-to-plan --agent claude-code -y       # PRD → implementation plan
 bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y     # PRD → GitHub issues
-bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y     # Create new skills
-bunx skills@latest add mattpocock/skills/grill-me --agent claude-code -y          # Stress-test your design
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 bunx skills@latest add mattpocock/skills/qa --agent claude-code -y                # Interactive QA → auto-file GitHub issues
 bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y  # Domain glossary (DDD)
 ```
+
+**Already vendored** (no need to install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`. Our versions incorporate Pocock's best patterns plus hook enforcement, async leak detection, and accessibility-first testing.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) is intentionally omitted. Claude Code hooks already enforce linting, formatting, and type checking deterministically on every edit — pre-commit hooks are redundant and add friction for human developers who may prefer different workflows.
 
