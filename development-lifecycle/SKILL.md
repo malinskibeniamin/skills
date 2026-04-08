@@ -51,22 +51,42 @@ You don't need to remember skill names. This skill detects what phase you're in 
 - For large refactors: run `/simplify` to clean up the result
 - Then: `gh pr create` → `@claude review`
 
-### 5b. Iterate — close the loop until merged
+### 5b. Iterate — close the loop until ready for human review
 
-After the PR is created, the work isn't done. Keep iterating:
+After the PR is created, the work isn't done. Keep iterating until the PR is ready for a human to approve.
 
-1. **Check CI**: `gh pr checks <pr-number> --watch` — wait for all checks to complete
-2. **Read reviews**: `gh api repos/{owner}/{repo}/pulls/{number}/reviews` and `gh pr view <number> --comments`
-3. **Apply feedback**: fix review comments, push changes
-4. **Re-check CI**: confirm fixes didn't break anything
-5. **Repeat** until CI is green and reviews are approved
+**Step 1 — Get CI green:**
 
-**This loop is mandatory.** Do not stop after creating the PR. A PR with failing CI or unresolved reviews is not done.
+1. `gh pr checks <pr-number> --watch` — wait for all checks to complete
+2. If CI fails: read the failure, fix it, commit, push, re-check
+3. Repeat until all checks pass
 
-- If CI fails: read the failure, fix it, commit, push, re-check
-- If a reviewer requests changes: apply them, push, re-check CI
-- If tests need updating after review feedback: TDD loop (Phase 3) then push
-- **Only stop when**: all CI checks pass AND no outstanding review requests
+**Step 2 — Get automated review approval:**
+
+1. Dispatch `code-reviewer` agent for a fresh-eyes review
+2. If it finds issues: fix them, push, re-run CI, re-review
+3. Repeat until the code-reviewer agent approves
+
+**Step 3 — Hand off to human reviewer:**
+
+Once CI is green AND the code-reviewer agent approves:
+
+1. Post a PR comment summarizing: what changed, why, what was tested, what the automated review found and how it was addressed
+2. Request review from the appropriate team member: `gh pr edit <number> --add-reviewer <username>`
+3. **Stop.** Do not poll for human approval. The work is done until the human responds.
+
+**If the human requests changes later** (new session):
+
+1. Read their review comments: `gh pr view <number> --comments`
+2. Apply feedback, push, re-run CI
+3. Re-run code-reviewer agent
+4. Post a comment addressing each review point
+5. Re-request review
+
+**Exit conditions:**
+- **Normal exit**: CI green + code-reviewer approves + human reviewer requested → stop
+- **Re-entry**: human requests changes → new session picks up from their feedback
+- **Never**: poll in a loop waiting for human approval
 
 ### 6. Compound — codify what we learned
 
