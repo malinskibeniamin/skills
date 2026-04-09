@@ -43,6 +43,8 @@ description: Complete frontend stack — 14 setup skills + 10 owned workflow ski
 
 Execute skills 1–14 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
 
+**Important**: setup skills have been split for context efficiency. During bootstrap, read each skill's `SETUP.md` (not just `SKILL.md`) for install steps, config, and verification checklists.
+
 Set `REACT_RULES_BAN_USEEFFECT=1` in the SessionStart hook (`.claude/hooks/session-env.sh`):
 
 ```bash

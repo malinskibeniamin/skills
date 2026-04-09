@@ -662,6 +662,7 @@ PostToolUse (Edit|Write)                          All use shared/hook-lib.sh
 ├── react-compiler-check.sh    — ban manual memoization (skips 'use no memo' files)
 ├── env-validation-check.sh    — ban raw process.env (skips env.ts, test files)
 ├── bundle-guard.sh            — heavy dependency warnings (~10ms, skips non-package.json)
+├── test-perf-check.sh         — detect test perf anti-patterns (dynamic imports, missing pool/isolate)
 └── orchestration-guidance.sh  — file-aware guidance (test patterns, a11y, security) + category tracking
 
 PostToolUse (Bash)
@@ -673,6 +674,7 @@ Stop
 ├── react-doctor-stop.sh — health check on changed files (--diff mode)
 ├── registry-check.sh        — remind about registry.json rebuild (skips if no redpanda-ui dir)
 ├── orchestration-stop.sh    — quality gate: missing tests, async leaks, security, co-located tests
+├── test-perf-stop.sh        — test performance audit (before/after timing comparison)
 └── violation-summary-stop.sh — session violation aggregator
 ```
 
@@ -706,8 +708,9 @@ The ~80ms floor is bash process spawn + `jq` parse — fixed cost regardless of 
 |------|------|-------|
 | biome-autofix.sh | 1-3s | Only changed files, skips UI library dirs |
 | typecheck-stop.sh | 2-5s | tsgo (incremental) + related tests only |
+| test-perf-stop.sh | 1-3s | Compares timings against session-start baseline |
 | react-doctor-stop.sh | 1-2s | `--diff` mode, changed files only |
-| **Total** | **~4-10s** | Runs once when Claude finishes, not per edit |
+| **Total** | **~5-13s** | Runs once when Claude finishes, not per edit |
 
 ### Token Efficiency
 

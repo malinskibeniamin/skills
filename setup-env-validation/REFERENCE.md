@@ -40,11 +40,3 @@ const url = env.PUBLIC_API_URL;   // string (validated URL)
 const secret = env.API_SECRET;     // string (min length 1)
 ```
 
-## Why t3-env
-
-| Problem | Solution |
-|---------|----------|
-| `process.env.X` is always `string \| undefined` | t3-env returns typed values via zod |
-| Missing env vars crash at runtime in production | t3-env validates at startup — fails fast |
-| No single source of truth for required vars | `src/env.ts` declares everything in one place |
-| Easy to typo env var names | TypeScript autocomplete from the env object |

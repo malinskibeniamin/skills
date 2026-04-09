@@ -7,13 +7,8 @@ run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-ci-pipeline" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Blacksmith" "REFERENCE mentions Blacksmith"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "toHaveScreenshot" "REFERENCE has visual regression"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Chromatic" "REFERENCE mentions Chromatic"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "dependabot" "REFERENCE has dependabot config"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "thresholds" "REFERENCE has coverage gates"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "changeset" "REFERENCE has changesets"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Feature Flag" "REFERENCE has feature flags"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "retention" "REFERENCE mentions artifact retention"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "thresholds|Coverage" "REFERENCE has coverage gates"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "300KB|bundle" "REFERENCE has bundle size budget"
 
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')
 desc_len=${#desc}

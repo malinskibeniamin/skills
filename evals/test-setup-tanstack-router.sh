@@ -7,7 +7,7 @@ SKILL_DIR="$REPO_ROOT/setup-tanstack-router"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
+run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 run_executable_eval "$GEN_SCRIPT" "tanstack-router-gen.sh is executable"
 run_executable_eval "$CHECK_SCRIPT" "tanstack-router-check.sh is executable"
 
@@ -15,7 +15,6 @@ run_executable_eval "$CHECK_SCRIPT" "tanstack-router-check.sh is executable"
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-tanstack-router" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "generate:routes" "SKILL.md mentions generate:routes"
 run_content_eval "$SKILL_DIR/SKILL.md" "react-router-dom" "SKILL.md mentions react-router-dom ban"
 run_content_eval "$SKILL_DIR/SKILL.md" "validateSearch" "SKILL.md mentions validateSearch"
 run_content_eval "$SKILL_DIR/SKILL.md" "nuqs" "SKILL.md mentions nuqs"

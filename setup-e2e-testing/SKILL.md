@@ -6,93 +6,43 @@ paths:
   - "playwright.config.ts"
 ---
 
-# Setup E2E Testing
+# E2E Testing
 
-## What This Sets Up
+## Conventions
 
-- **Playwright** for browser-based end-to-end testing
-- **Testcontainers** for spinning up backend services (databases, APIs) in Docker during tests
-- **@axe-core/playwright** for automated WCAG 2.1 AA accessibility audits in every test
-- **agent-browser** (optional) — headless Rust CLI for AI-driven test scaffolding and visual verification
-- Test patterns and naming conventions
+- `e2e/*.spec.ts` — all e2e tests use `.spec.ts` extension
+- Name files by feature/workflow: `login.spec.ts`, `create-topic.spec.ts`
+- Selector priority: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS selectors
 
-See [REFERENCE.md](REFERENCE.md) for detailed patterns, Testcontainers setup, and accessibility testing.
+### Test ID Pattern
 
-## Steps
+| Pattern | Example |
+|---------|---------|
+| `{feature}-{element}` | `data-testid="login-submit-button"` |
+| `{feature}-{element}-{index}` | `data-testid="topic-row-0"` |
+| `{feature}-{state}` | `data-testid="login-error-message"` |
 
-### 1. Install dependencies
-
-```bash
-bun add -D @playwright/test @testcontainers/playwright @axe-core/playwright --yarn
-bunx playwright install --with-deps chromium
-```
-
-### 2. Configure Playwright
-
-Create `playwright.config.ts`:
+## Accessibility — Run axe on every new page
 
 ```ts
-import { defineConfig, devices } from '@playwright/test'
+import { test, expect } from '../fixtures/base'
 
-export default defineConfig({
-  testDir: './e2e',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: process.env.CI ? 'github' : 'html',
-  use: {
-    baseURL: process.env.BASE_URL ?? 'http://localhost:3000',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-  },
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-  ],
+test('page is accessible', async ({ page, makeAxeBuilder }) => {
+  await page.goto('/topics/create')
+  const results = await makeAxeBuilder().analyze()
+  expect(results.violations).toEqual([])
 })
 ```
 
-### 3. Add package.json scripts
+## Agent-Browser vs Playwright
 
-```json
-{
-  "scripts": {
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:debug": "playwright test --debug"
-  }
-}
-```
+| Task | Use |
+|------|-----|
+| Running test suites | Playwright (`bun run test:e2e`) |
+| Generating test selectors | `agent-browser snapshot` (a11y tree → getByRole) |
+| Visual smoke test | `agent-browser screenshot --annotate` |
+| Interactive debugging | Playwright UI mode (`bun run test:e2e:ui`) |
+| CI execution | Playwright |
+| AI-driven page inspection | agent-browser |
 
-### 4. Create test directory structure
-
-```
-e2e/
-├── fixtures/          # Shared test fixtures and page objects
-│   └── base.ts        # Extended test with axe-core
-├── helpers/           # Testcontainers setup, utilities
-└── *.spec.ts          # Test files
-```
-
-### 5. Set up axe-core base fixture
-
-Create `e2e/fixtures/base.ts`:
-
-```ts
-import { test as base } from '@playwright/test'
-import AxeBuilder from '@axe-core/playwright'
-
-export const test = base.extend<{ makeAxeBuilder: () => AxeBuilder }>({
-  makeAxeBuilder: async ({ page }, use) => {
-    await use(() => new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']))
-  },
-})
-
-export { expect } from '@playwright/test'
-```
-
-### 6. Verify & Commit
-
-- [ ] `bunx playwright test --list` shows discovered tests
-- [ ] axe-core fixture available, `e2e/` directory exists
-- Commit: `Add Playwright e2e testing with Testcontainers and axe-core`
+For initial setup (install, config, fixtures, Testcontainers): see [SETUP.md](SETUP.md).

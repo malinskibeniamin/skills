@@ -162,8 +162,14 @@ run_content_eval "$SCRIPT" "uses_connect_transport" "hook allows useTransport/ca
 # ── REFERENCE content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useTransport" "REFERENCE documents useTransport pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "protovalidate" "REFERENCE documents Standard Schema + protovalidate"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "toBinary" "REFERENCE documents schema-first serialization"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "timestampFromDate" "REFERENCE documents Timestamp gotcha"
+
+# ── SETUP.md content (one-time setup) ───────────────────────────
+
+run_content_eval "$SKILL_DIR/SETUP.md" "protovalidate" "SETUP documents Standard Schema + protovalidate"
+run_content_eval "$SKILL_DIR/SETUP.md" "createRegistry" "SETUP documents type registry"
+run_content_eval "$SKILL_DIR/SETUP.md" "TransportProvider" "SETUP documents transport setup"
 
 # ── Check 1: Allow useQuery with @connectrpc/connect (useTransport pattern) ─
 

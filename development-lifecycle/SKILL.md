@@ -68,40 +68,7 @@ You don't need to remember skill names. This skill detects what phase you're in 
 
 ### 5b. Iterate — two review rounds, then hand off
 
-After the PR is created, run exactly two automated review rounds before handing off to a human.
-
-**Round 1 — Initial review:**
-
-1. Get CI green: `gh pr checks <pr-number> --watch`. If CI fails, fix and push until green.
-2. Dispatch `code-reviewer` agent for first review.
-3. Run `/resolve-pr-feedback` to triage findings, fix, reply on threads, and push.
-4. Get CI green again.
-
-**Round 2 — Verification review:**
-
-1. Dispatch `code-reviewer` agent for second review (verifies Round 1 fixes are correct and didn't introduce new issues).
-2. Run `/resolve-pr-feedback` to address any remaining findings.
-3. If new issues found: fix them, push, get CI green. Do NOT trigger a third review round.
-
-**Hand off to human:**
-
-After Round 2 completes:
-
-1. Post a final PR comment summarizing: what changed, what both reviews found, how it was addressed, and test coverage.
-2. Request review from the appropriate team member: `gh pr edit <number> --add-reviewer <username>`
-3. **Stop.** Do not poll for human approval.
-
-**If the human requests changes later** (new session):
-
-1. Run `/resolve-pr-feedback` — it fetches comments, triages, fixes, replies, and pushes
-2. Get CI green
-3. Run one more code-reviewer round + `/resolve-pr-feedback` for any new findings
-4. Re-request human review, then stop
-
-**Exit conditions:**
-- **Normal exit**: CI green + 2 automated review rounds complete + human reviewer requested → stop
-- **Re-entry**: human requests changes → new session, one review round, then stop
-- **Never**: poll waiting for human approval or run more than 2 review rounds per session
+Run exactly two automated review rounds (CI green → code-reviewer → `/resolve-pr-feedback` → repeat), then post summary and request human review. **Stop.** Never poll for approval or run >2 rounds per session. See [REFERENCE.md](REFERENCE.md) for the full round-by-round protocol and exit conditions.
 
 ### 6. Compound — codify what we learned
 

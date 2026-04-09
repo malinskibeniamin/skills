@@ -6,34 +6,18 @@ paths:
   - "**/*store*.tsx"
 ---
 
-# Setup Zustand
+# Zustand Enforcement
 
-## What This Sets Up
-
-PostToolUse hook on Edit/Write catching zustand anti-patterns:
+## What This Catches
 
 - **Ban single-parens `create<T>()`** — must be `create<T>()()` for middleware type inference
-- **Ban inline object selectors** — `(s) => ({ a: s.a })` causes infinite re-renders, suggest `useShallow`
-- **Ban localStorage/sessionStorage in store files** — use zustand `persist` middleware instead
+- **Ban inline object selectors** — `(s) => ({ a: s.a })` causes infinite re-renders, use `useShallow`
+- **Ban localStorage/sessionStorage in store files** — use zustand `persist` middleware
 
-## Steps
+## Stack Decisions
 
-### 1. Create hook script
+- **Zustand for client state only**: theme, sidebar, selected tab, draft form data. Server data → TanStack Query / Connect Query.
+- **`useShallow` required** for multi-value selectors (hook enforces this).
+- **Callback form required** for `set()` (hook enforces this).
 
-Copy [`scripts/zustand-check.sh`](scripts/zustand-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
-
-### 2. Configure hook in `.claude/settings.json`
-
-Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/zustand-check.sh`
-
-### 3. Verify
-
-- [ ] Hook blocks `create<State>()` single-parens in files importing zustand
-- [ ] Hook blocks `(s) => ({ ... })` inline object selectors
-- [ ] Hook blocks `localStorage` in zustand store files
-- [ ] Hook skips non-TS/TSX files
-- [ ] Hook skips files that don't import zustand (for checks 1 and 3)
-
-### 4. Commit
-
-Stage and commit: `Add zustand best practices enforcement hook`
+For initial setup (install, config, verify): see [SETUP.md](SETUP.md).

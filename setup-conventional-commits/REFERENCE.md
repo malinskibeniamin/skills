@@ -6,22 +6,6 @@ PreToolUse hook (Bash matcher) that intercepts `git commit` commands and validat
 
 > Script: [`scripts/conventional-commits-check.sh`](scripts/conventional-commits-check.sh)
 
-## Allowed Commit Types
-
-| Type | Purpose |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `refactor` | Code restructuring (no behavior change) |
-| `style` | Formatting, whitespace (no logic change) |
-| `test` | Adding or updating tests |
-| `docs` | Documentation only |
-| `chore` | Build, tooling, dependency updates |
-| `perf` | Performance improvement |
-| `ci` | CI/CD configuration |
-| `build` | Build system changes |
-| `revert` | Reverting a previous commit |
-
 ## Validation Rules
 
 1. **Type** must be one of the allowed types above

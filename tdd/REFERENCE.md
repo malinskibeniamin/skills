@@ -20,93 +20,6 @@ await waitForEvent(manager, threadId, 'DONE')
 
 Result: 60% → 100% pass rate, 40% faster execution.
 
-## Deep Modules
-
-From "A Philosophy of Software Design": prefer **deep modules** (small interface + lots of hidden implementation) over **shallow modules** (large interface + thin passthrough).
-
-    Deep (good):                    Shallow (avoid):
-    +-------------------+           +-------------------------------+
-    |  Small Interface  |           |       Large Interface         |
-    +-------------------+           +-------------------------------+
-    |                   |           |  Thin Implementation          |
-    |  Deep Impl        |           +-------------------------------+
-    |                   |
-    +-------------------+
-
-When designing: Can I reduce methods? Simplify params? Hide more complexity inside?
-
-## Interface Design for Testability
-
-1. **Accept dependencies, don't create them** — inject, don't construct internally
-2. **Return results, don't produce side effects** — `calculateDiscount(cart): Discount` not `applyDiscount(cart): void`
-3. **Small surface area** — fewer methods = fewer tests needed, fewer params = simpler setup
-
-## Good vs Bad Tests
-
-```ts
-// GOOD: Tests observable behavior through public interface
-test("user can checkout with valid cart", async () => {
-  const cart = createCart();
-  cart.add(product);
-  const result = await checkout(cart, paymentMethod);
-  expect(result.status).toBe("confirmed");
-});
-
-// BAD: Tests implementation details via mocks
-test("checkout calls paymentService.process", async () => {
-  const mockPayment = jest.mock(paymentService);
-  await checkout(cart, payment);
-  expect(mockPayment.process).toHaveBeenCalledWith(cart.total);
-});
-
-// BAD: Bypasses interface to verify
-test("createUser saves to database", async () => {
-  await createUser({ name: "Alice" });
-  const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
-  expect(row).toBeDefined();
-});
-
-// GOOD: Verifies through interface
-test("createUser makes user retrievable", async () => {
-  const user = await createUser({ name: "Alice" });
-  const retrieved = await getUser(user.id);
-  expect(retrieved.name).toBe("Alice");
-});
-```
-
-Red flags: mocking internal collaborators, testing private methods, asserting on call counts/order, test name describes HOW not WHAT.
-
-## When to Mock
-
-Mock at **system boundaries** only: external APIs, databases (prefer test DB), time/randomness, file system.
-
-**Don't mock**: your own classes/modules, internal collaborators, anything you control.
-
-Design for mockability at boundaries:
-- Use dependency injection — pass external deps in, don't create them internally
-- Prefer SDK-style interfaces (each function independently mockable) over generic fetchers
-
-## Refactor Candidates
-
-After TDD cycle, look for:
-- **Duplication** → extract function/class
-- **Long methods** → break into private helpers (keep tests on public interface)
-- **Shallow modules** → combine or deepen
-- **Feature envy** → move logic to where data lives
-- **Primitive obsession** → introduce value objects
-- **Existing code** the new code reveals as problematic
-
-## Testing Anti-Patterns
-
-| Anti-pattern | Why it's wrong | Fix |
-|---|---|---|
-| Testing mock behavior | Tests pass but real code breaks | Use real implementations, mock only I/O boundaries |
-| `setTimeout` in tests | Flaky on slow machines / CI | Condition-based waiting |
-| Test-only methods in production | Couples tests to implementation | Test via public API only |
-| Incomplete mocks (missing fields) | Real API has fields mock doesn't | Use real types, verify with schema |
-| Integration tests as afterthought | Bugs hide in seams between units | Write integration tests alongside units |
-| `getByTestId` for everything | Misses accessibility issues | `getByRole` verifies both behavior and a11y |
-
 ## Diagnostic Commands
 
 ```bash
@@ -122,6 +35,58 @@ bun test --run --reporter=verbose --pool=forks
 # Find slow selectors in integration tests
 grep -rn 'getByRole' --include='*.integration.*' | wc -l
 ```
+
+## Vitest Config Optimization
+
+Tune `vitest.config.*` for faster test runs. These settings compound — apply all that fit.
+
+### pool: 'threads'
+
+Worker threads have less spawn overhead than forked processes (the default). Import times drop ~30%.
+
+```ts
+// vitest.config.mts
+export default defineConfig({
+  test: {
+    pool: 'threads',
+  },
+})
+```
+
+Use for **both** unit and integration configs. Safe everywhere.
+
+### isolate: false (unit tests only)
+
+Pure-logic tests (`.test.ts`, node env) share a single thread context instead of re-isolating per file. Saves per-file startup cost.
+
+```ts
+// vitest.config.mts (unit tests)
+export default defineConfig({
+  test: {
+    pool: 'threads',
+    isolate: false,  // safe: no DOM, no global side effects
+  },
+})
+```
+
+**Do NOT disable isolation for integration tests** — happy-dom/jsdom tests can leak DOM state between files.
+
+### What NOT to change (and why)
+
+| Setting | Why skip |
+|---|---|
+| `isolate: false` for integration | DOM state leaks between test files |
+| `experimental.fsModuleCache` | Still experimental — stale cache issues in CI |
+| Sharding | Overkill for suites under 30s |
+
+### Benchmarks (real project, 23 unit + 12 integration files)
+
+| Category | Metric | Before | After |
+|---|---|---|---|
+| Unit | Duration | 650ms | 350ms (46% faster) |
+| Unit | Import time | 3.0s | 2.2s (27% faster) |
+| Integration | Duration | 2.59s | 2.04s (21% faster) |
+| Integration | Import time | 7.9s | 5.5s (30% faster) |
 
 ## Framework Detection
 

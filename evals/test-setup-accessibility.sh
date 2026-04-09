@@ -7,7 +7,7 @@ SKILL_DIR="$REPO_ROOT/setup-accessibility"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
+run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 run_executable_eval "$SCRIPT" "accessibility-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
@@ -16,21 +16,14 @@ run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-accessibility" "SKILL.md ha
 run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "ARIA" "SKILL.md mentions ARIA"
-run_content_eval "$SKILL_DIR/SKILL.md" "PostToolUse" "SKILL.md mentions PostToolUse hook"
-run_content_eval "$SKILL_DIR/SKILL.md" "axe-core" "SKILL.md mentions Playwright AXE"
+run_content_eval "$SKILL_DIR/SKILL.md" "alt" "SKILL.md documents img alt rule"
+run_content_eval "$SKILL_DIR/SKILL.md" "allow-a11y-skip" "SKILL.md documents escape hatch"
 
-# ── REFERENCE.md content ────────────────────────────────────────
+# ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
-run_content_eval "$SKILL_DIR/REFERENCE.md" "axe-core/playwright" "REFERENCE has Playwright AXE setup"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "role.*combobox" "REFERENCE has combobox pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "role.*tablist" "REFERENCE has tabs pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "role.*dialog" "REFERENCE has dialog pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "aria-expanded" "REFERENCE documents aria-expanded"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "aria-activedescendant" "REFERENCE documents aria-activedescendant"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "aria-controls" "REFERENCE documents aria-controls"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "WCAG" "REFERENCE covers WCAG rules"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "wcag2a.*wcag2aa" "REFERENCE has WCAG tag configuration"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "checkA11y" "REFERENCE has test helper function"
+run_content_eval "$SKILL_DIR/SETUP.md" "axe-core/playwright" "SETUP has Playwright AXE install"
+run_content_eval "$SKILL_DIR/SETUP.md" "wcag2a.*wcag2aa" "SETUP has WCAG tag configuration"
+run_content_eval "$SKILL_DIR/SETUP.md" "checkA11y" "SETUP has test helper function"
 
 _a11y_tmpdir=$(mktemp -d /tmp/a11y-evals-XXXXXX)
 

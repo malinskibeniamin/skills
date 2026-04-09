@@ -5,24 +5,21 @@ SKILL_DIR="$REPO_ROOT/setup-e2e-testing"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
+run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 
-# ── SKILL.md content ────────────────────────────────────────────
+# ── SKILL.md content (auto-loaded, edit-time guidance) ──────────
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-e2e-testing" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "playwright" "SKILL.md mentions Playwright"
-run_content_eval "$SKILL_DIR/SKILL.md" "axe-core" "SKILL.md mentions axe-core"
-run_content_eval "$SKILL_DIR/SKILL.md" "Testcontainers" "SKILL.md mentions Testcontainers"
+run_content_eval "$SKILL_DIR/SKILL.md" "data-testid" "SKILL.md has test ID conventions"
+run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priority"
+run_content_eval "$SKILL_DIR/SKILL.md" "agent-browser|Playwright" "SKILL.md mentions test tools"
 
-# ── REFERENCE.md content ───────────────────────────────────────
+# ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
-run_content_eval "$SKILL_DIR/REFERENCE.md" "data-testid" "REFERENCE.md has test ID conventions"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "getByRole" "REFERENCE.md has selector priority"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "GenericContainer" "REFERENCE.md has Testcontainers setup"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "AxeBuilder" "REFERENCE.md has axe-core patterns"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "color-contrast" "REFERENCE.md has WCAG tags"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "agent-browser|Playwright" "REFERENCE.md mentions test tools"
+run_content_eval "$SKILL_DIR/SETUP.md" "playwright/test" "SETUP has Playwright install"
+run_content_eval "$SKILL_DIR/SETUP.md" "GenericContainer" "SETUP has Testcontainers setup"
+run_content_eval "$SKILL_DIR/SETUP.md" "AxeBuilder" "SETUP has axe-core fixture"
 
 # ── Description length ──────────────────────────────────────────
 

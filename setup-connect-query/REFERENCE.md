@@ -18,22 +18,16 @@ The hook uses `\buseQuery\b` word boundaries, so these TanStack Query hooks are 
 - `useInfiniteQuery` — word boundary prevents match
 - `useMutationState` — word boundary prevents match
 
-You do **NOT** need to create barrel re-exports or wrapper modules to avoid false positives. If you have existing workarounds for this, they can be safely removed.
+You do **NOT** need to create barrel re-exports or wrapper modules to avoid false positives.
 
 ## Cache Invalidation Patterns
 
 ### Invalidate by Service Type Name
 
 ```tsx
-// Invalidate all queries for a specific service
 await queryClient.invalidateQueries({
   queryKey: [listTopics.service.typeName],
   exact: false,
-})
-
-// Invalidate a specific RPC method
-await queryClient.invalidateQueries({
-  queryKey: createConnectQueryKey(listTopics, { filter: 'active' }),
 })
 ```
 
@@ -58,12 +52,11 @@ function CreateTopicButton() {
 
 ## TanStack Query + useTransport/callUnaryMethod Pattern
 
-When using `useTransport` and `callUnaryMethod` from `@connectrpc/connect` directly, raw TanStack Query hooks are allowed. This is a legitimate pattern for cases where Connect Query's generated hooks don't fit:
+When using `useTransport` and `callUnaryMethod` from `@connectrpc/connect` directly, raw TanStack Query hooks are allowed:
 
 ```tsx
 import { useTransport, callUnaryMethod } from '@connectrpc/connect'
 import { useQuery } from '@tanstack/react-query'
-import { SomeService } from './gen/some_pb'
 
 function MyComponent() {
   const transport = useTransport()
@@ -80,83 +73,12 @@ function MyComponent() {
 import { create, toBinary, fromBinary, fromJson, toJson } from '@bufbuild/protobuf'
 import { MyMessageSchema } from './gen/my_pb'
 
-// Construction
 const msg = create(MyMessageSchema, { field: 'value' })
-
-// Serialization (schema-first functions)
 const bytes = toBinary(MyMessageSchema, msg)
 const restored = fromBinary(MyMessageSchema, bytes)
-const json = toJson(MyMessageSchema, msg)
-const fromJ = fromJson(MyMessageSchema, jsonData)
 ```
 
 Never construct messages as object literals with `$typeName` — use `create()` for compile-time safety.
-
-## Standard Schema + Protovalidate
-
-Use protobuf schema as form validation — no duplicate Zod schema needed:
-
-```tsx
-import { createStandardSchemaResolver } from '@hookform/resolvers/standard-schema'
-import { createValidator } from '@bufbuild/protovalidate'
-import { CreateTopicRequestSchema } from './gen/topics_pb'
-
-const validator = createValidator()
-
-// The protobuf schema IS your form validation — no duplicate Zod schema needed
-const form = useForm({
-  resolver: createStandardSchemaResolver(validator.standardSchema(CreateTopicRequestSchema)),
-})
-```
-
-## Protobuf Type Registry for google.protobuf.Any
-
-Required for `toJson`/`fromJson` when using `Any` fields — without it: `"is not in the type registry"` error.
-
-```ts
-import { createRegistry } from '@bufbuild/protobuf'
-import { PluginConfigASchema } from './gen/plugin_a_config_pb'
-import { PluginConfigBSchema } from './gen/plugin_b_config_pb'
-import { PluginConfigCSchema } from './gen/plugin_c_config_pb'
-// ... import all schemas that can be packed into Any
-
-export const typeRegistry = createRegistry(
-  PluginConfigASchema,
-  PluginConfigBSchema,
-  PluginConfigCSchema,
-  // Add every message type that gets packed into google.protobuf.Any
-)
-```
-
-### Use the registry with toJson/fromJson
-
-```ts
-import { toJson, fromJson } from '@bufbuild/protobuf'
-import { MyMessageSchema } from './gen/my_pb'
-import { typeRegistry } from './registry'
-
-// Serialize — registry resolves Any.typeUrl to the correct schema
-const json = toJson(MyMessageSchema, msg, { typeRegistry })
-
-// Deserialize
-const restored = fromJson(MyMessageSchema, jsonData, { typeRegistry })
-```
-
-### Use with ConnectRPC transport
-
-Pass the registry to the transport so all RPC calls can handle Any fields:
-
-```ts
-import { createConnectTransport } from '@connectrpc/connect-web'
-import { typeRegistry } from './registry'
-
-const transport = createConnectTransport({
-  baseUrl: '/api',
-  jsonOptions: { typeRegistry },
-})
-```
-
-When adding new proto messages, always add their schema to the registry.
 
 ## Well-Known Types (Timestamp, Duration, Any)
 
@@ -203,25 +125,4 @@ import { anyPack, anyUnpack } from '@bufbuild/protobuf/wkt'
 
 const anyMsg = anyPack(ConfigSchema, config)
 const unpacked = anyUnpack(anyMsg, typeRegistry)
-```
-
-## Transport Setup
-
-```tsx
-import { TransportProvider } from '@connectrpc/connect-query'
-import { createConnectTransport } from '@connectrpc/connect-web'
-
-const transport = createConnectTransport({
-  baseUrl: '/api',
-})
-
-function App() {
-  return (
-    <TransportProvider transport={transport}>
-      <QueryClientProvider client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    </TransportProvider>
-  )
-}
 ```

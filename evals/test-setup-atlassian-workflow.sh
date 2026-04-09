@@ -19,10 +19,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "opt-in|Opt-in" "SKILL.md indicates opt-i
 # ── REFERENCE.md content ───────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "workitem create" "REFERENCE has create work item pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "workitem transition" "REFERENCE has transition pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "comment-create" "REFERENCE has comment pattern"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "workitem link" "REFERENCE has link pattern"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "workitem search" "REFERENCE has search pattern"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "ISSUE_TRACKER=both" "REFERENCE documents dual tracker mode"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "prd-to-issues|PRD" "REFERENCE has PRD workflow"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "triage|Bug" "REFERENCE has bug triage workflow"

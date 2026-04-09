@@ -6,7 +6,7 @@ SKILL_DIR="$REPO_ROOT/setup-zustand"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
+run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 run_executable_eval "$SCRIPT" "zustand-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
