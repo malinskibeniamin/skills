@@ -1,0 +1,1 @@
+../../setup-ux-copy/scripts/ux-copy-check.sh
