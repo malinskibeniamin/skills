@@ -10,6 +10,25 @@
 5. Challenge the chosen approach (edge cases, failure modes)
 6. Get user approval before proceeding
 
+### Parallel Research Agents
+
+While discussing the approach with the user, spawn background agents to:
+- Investigate alternative libraries or patterns for the problem domain
+- Scan the codebase for prior art and existing conventions
+- Surface edge cases and failure modes from similar implementations
+- Check for open issues or known gotchas in relevant dependencies
+
+This runs concurrently with user discussion — results feed back into approach selection.
+
+### Refactor-First Gate
+
+Before adding features to an area with mixed patterns, check:
+- [ ] Does the area use more than one pattern for the same concern? (e.g., two state management approaches, mixed CSS strategies)
+- [ ] Is there an incomplete migration? (e.g., some files use old API, some use new)
+- [ ] Would an AI agent need conflicting instructions to work here?
+
+If any are true: refactor to a single pattern first, as a separate PR. Then build the feature on a clean foundation. Mixed codebases produce lower-quality AI output and confuse future maintainers.
+
 ### Bug Fix (4-Phase Root Cause Analysis)
 
 **Iron law: no fixes without root cause investigation first.**
@@ -26,6 +45,29 @@
 - [ ] Bite-sized (2-5 minutes per task)
 - [ ] Test step alongside every implementation step
 - [ ] Self-review: spec coverage, placeholder scan, type consistency
+
+### Rapid Prototyping (UI/Interactive Work)
+
+For features with a visual or interactive component, replace upfront spec writing with competitive prototyping:
+
+1. Define 2-3 constraint sets (e.g., "minimal DOM, CSS-only animations" vs "component library, framer-motion" vs "canvas-based")
+2. Spawn one agent per constraint set in parallel (use `claude-sonnet-4-6`)
+3. Each agent produces a working prototype — not a spec, not a mockup
+4. Review all prototypes with the user: `agent-browser screenshot` each one
+5. Select the winner and write the detailed plan from the chosen prototype
+
+**When to use**: any feature where the right approach is unclear until you see it running. Skip for pure logic, API, or data-layer work.
+
+### Stacked PRs for Large Features
+
+For plans with 5+ tasks, break into stacked PRs:
+
+1. Group tasks by logical boundary (e.g., data layer → business logic → UI → tests)
+2. Each group becomes one PR in the stack
+3. First PR targets the base branch; subsequent PRs target the previous PR's branch
+4. Review and merge bottom-up
+
+**Why**: smaller PRs get reviewed 2-3x faster with higher-quality feedback. A 500-line PR gets thorough review; a 2000-line PR gets skimmed.
 
 ## Phase 2b: Grill
 
@@ -60,13 +102,22 @@ If skipping, note in the plan: "Grill skipped — trivial bug fix, no architectu
 ### Cycle
 1. RED — write one minimal failing test, verify it fails correctly
 2. GREEN — write minimal code to make it pass
-3. REFACTOR — clean up while staying green
+3. **TEST INTEGRITY CHECK** — verify test count and assertion count haven't decreased from the RED step. If they dropped, the agent deleted or weakened tests to pass — reject and redo from RED.
+4. REFACTOR — clean up while staying green
 
 ### Test Quality
 - `userEvent.setup()` not `fireEvent`
 - `getByRole` for accessibility assertions
 - No `setTimeout`/`waitForTimeout` — use `await waitFor(() => expect(...))`
 - Run `--detectAsyncLeaks` after
+
+### Test Deletion Guard
+
+AI agents sometimes delete or simplify tests to make them pass — Kent Beck calls this the "unpredictable genie" effect. Defenses:
+
+1. **Count check**: before GREEN, note the number of `it()`/`test()` blocks and `expect()` calls. After GREEN, verify counts are equal or higher.
+2. **Diff review**: if any test file has deletions in the GREEN step, flag for manual review.
+3. **Pre-commit hook** (optional): reject commits that reduce assertion count in test files without an explicit `// intentional: [reason]` comment.
 
 ### Classification
 | Suffix | Purpose |
@@ -75,7 +126,37 @@ If skipping, note in the plan: "Grill skipped — trivial bug fix, no architectu
 | `.test.tsx` | Integration — renders components |
 | `e2e/*.spec.ts` | E2E — Playwright browser |
 
+## Phase 3b: Edge-Case Hardening (Optional)
+
+After verification passes, optionally dispatch an agent to generate additional tests:
+
+1. Identify functions/components changed in this PR
+2. Generate tests for: boundary values, empty/null inputs, concurrent access, error paths, large inputs
+3. Run the generated tests — keep those that pass, investigate those that fail (they may reveal real bugs)
+4. Add passing edge-case tests to the committed test suite
+
+**When to use**: new public APIs, security-sensitive code, functions with complex branching logic. Skip for trivial changes.
+
 ## Phase 4: Review
+
+### Security Gate
+
+**Hard gate: run before PR creation.** AI-generated code is statistically more likely to contain security issues.
+
+Run SAST/SCA tooling on changed files:
+- [ ] No new critical or high findings from static analysis
+- [ ] No dependencies with known CVEs introduced
+- [ ] No `eval()`, `innerHTML`, `dangerouslySetInnerHTML` without sanitization
+- [ ] No hardcoded secrets, tokens, or API keys
+- [ ] No SQL/command injection vectors in new code
+
+**Tooling options** (use what the project has; add one if it has none):
+- `eslint-plugin-security` — catches common JS/TS security anti-patterns
+- `semgrep` — fast, rule-based SAST for multiple languages
+- `npm audit` / `pnpm audit` — dependency vulnerability scan
+- `trivy fs .` — filesystem-level vulnerability and secret scanning
+
+**Block PR creation** if new critical/high findings appear. Fix first, then proceed to code review.
 
 Dispatch `code-reviewer` agent for fresh-eyes review. Two stages:
 
@@ -149,6 +230,17 @@ Rules auto-load ONLY when Claude works on matching files. CLAUDE.md stays clean.
 - One-off fix unlikely to recur
 - Pattern already covered by a hook
 - Generic knowledge Claude already has
+
+### Regression Evals for AI-Caused Bugs
+
+When a bug is traced to AI-generated code, go beyond fixing it:
+
+1. **Classify the failure**: what category? (e.g., wrong null handling, missed edge case, incorrect API usage, security gap)
+2. **Create a regression test**: add a test that catches this exact failure class — not just the specific instance
+3. **Add to CI**: ensure it runs on every commit so the same class of error is caught early
+4. **Track patterns**: if the same failure class recurs 3+ times, create a `.claude/rules/` entry to prevent the AI from generating it in the first place
+
+This builds a project-specific quality signal that improves over time. Generic linting catches generic issues; regression evals catch *your project's* specific AI failure modes.
 
 ## Cross-Model Review
 
