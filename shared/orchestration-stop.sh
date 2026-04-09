@@ -96,7 +96,7 @@ fi
 
 # Session-scoped: only consider new files this session created
 _all_new=$(git diff --name-only --diff-filter=A HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.|index\.|layout\.|middleware\.|types/|__root)' || true)
-if [ "${_hook_session_tracking_active:-false}" = true ] && [ -n "$_all_new" ]; then
+if hook_has_session_tracking 2>/dev/null && [ -n "$_all_new" ]; then
   # Intersect new files with session-touched files
   _touched="$_hook_session_dir/session-touched-files"
   if [ -f "$_touched" ]; then

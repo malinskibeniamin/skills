@@ -325,4 +325,4 @@ run_content_eval "$HOOKLIB" "session-touched-files" "hook-lib records touched fi
 run_content_eval "$HOOKLIB" "hook_session_changed_files" "hook-lib provides session-scoped file helper"
 run_content_eval "$HOOKLIB" "hook_filter_errors_to_session" "hook-lib provides error filtering helper"
 run_content_eval "$HOOKLIB" "dirty-files-baseline" "hook-lib reads dirty-files baseline"
-run_content_eval "$HOOKLIB" "_hook_session_tracking_active" "hook-lib signals tracking mode to callers"
+run_content_eval "$HOOKLIB" "hook_has_session_tracking" "hook-lib provides tracking check function"

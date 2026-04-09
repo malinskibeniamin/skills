@@ -34,7 +34,7 @@ if [ $exit_code -ne 0 ]; then
   # ── Filter errors to session-owned files ──────────────────────────
   # tsgo runs project-wide, so filter output to only errors in files
   # this session touched. Errors in sibling-session files pass through.
-  if [ "${_hook_session_tracking_active:-false}" = true ] && [ -n "$changed_files" ]; then
+  if [ "$(hook_has_session_tracking 2>/dev/null && echo true || echo false)" = true ] && [ -n "$changed_files" ]; then
     _session_errors=$(hook_filter_errors_to_session "$output" "$changed_files")
     if [ -z "$_session_errors" ]; then
       # All errors are in files OTHER sessions touched — allow through
@@ -55,7 +55,7 @@ if [ $exit_code -ne 0 ]; then
     _new_errors=$(echo "$_current_errors" | comm -23 - "$_baseline" 2>/dev/null || echo "$_current_errors")
 
     # Apply session-file filter to new errors too
-    if [ "${_hook_session_tracking_active:-false}" = true ] && [ -n "$changed_files" ]; then
+    if [ "$(hook_has_session_tracking 2>/dev/null && echo true || echo false)" = true ] && [ -n "$changed_files" ]; then
       _new_errors=$(hook_filter_errors_to_session "$_new_errors" "$changed_files")
     fi
 

@@ -157,8 +157,7 @@ hook_get_added_lines() {
 # Usage in Stop hooks:
 #   source "path/to/hook-lib.sh"
 #   session_changed=$(hook_session_changed_files "ts|tsx|js|jsx")
-#
-# Sets global: _hook_session_tracking_active (true/false)
+#   if hook_has_session_tracking; then ... fi
 
 hook_session_changed_files() {
   local ext_filter="${1:-}"
@@ -168,7 +167,6 @@ hook_session_changed_files() {
   current_diff=$(git diff --name-only HEAD 2>/dev/null || true)
 
   if [ -z "$current_diff" ]; then
-    _hook_session_tracking_active=false
     return
   fi
 
@@ -178,7 +176,6 @@ hook_session_changed_files() {
   fi
 
   if [ -z "$current_diff" ]; then
-    _hook_session_tracking_active=false
     return
   fi
 
@@ -188,7 +185,6 @@ hook_session_changed_files() {
   # Mode 1: Both touched-files and baseline exist (Claude Code normal)
   # Formula: (current_diff ∩ touched) - baseline
   if [ -f "$touched_file" ]; then
-    _hook_session_tracking_active=true
     local repo_root
     repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     local touched_normalized
@@ -208,14 +204,17 @@ hook_session_changed_files() {
   # Mode 2: Only baseline exists (Codex, or Bash-only session)
   # Formula: current_diff - baseline
   if [ -f "$baseline_file" ] && [ -s "$baseline_file" ]; then
-    _hook_session_tracking_active=true
     comm -23 <(echo "$current_diff" | sort) <(sort "$baseline_file") 2>/dev/null || echo "$current_diff"
     return
   fi
 
   # Mode 3: No tracking data (legacy) — return full diff
-  _hook_session_tracking_active=false
   echo "$current_diff"
+}
+
+# Check if session tracking data exists (safe to call outside subshell)
+hook_has_session_tracking() {
+  [ -f "$_hook_session_dir/session-touched-files" ] || [ -f "$_hook_session_dir/dirty-files-baseline" ]
 }
 
 # ── Filter error output to session-owned files ───────────────────
