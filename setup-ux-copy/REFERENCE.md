@@ -117,6 +117,58 @@ Use only to acknowledge errors or interactions that are particularly inconvenien
 - sorry
 - thank you
 
+## Inclusive Terminology
+
+| Banned | Use Instead |
+|--------|-------------|
+| whitelist | allowlist |
+| blacklist | denylist |
+| master | leader, primary |
+| slave | follower, secondary |
+
+## Directional Language
+
+Don't reference physical position in the UI or page — layouts change.
+
+| Bad | Good |
+|-----|------|
+| "See above" | "See the Prerequisites section" |
+| "Click the button on the right" | "Click Save" |
+| "In the example below" | "In the following example" |
+
+## Sentence Structure
+
+- **No "There is/are" starters** — put the subject first: "3 options are available" not "There are 3 options"
+- **Conditional phrases first** — "If using Kubernetes, configure..." not "Configure... if using Kubernetes"
+- **No future tense** — use present tense: "The cluster restarts" not "The cluster will restart"
+- **No "and/or"** — use "and", "or", or "A, B, or both"
+
+## Words to Avoid in UI Text
+
+| Avoid | Use Instead |
+|-------|-------------|
+| etc. | List specific items, or "such as X and Y" |
+| e.g. | for example |
+| i.e. | that is |
+| via | through, using, with |
+| please | (omit, or use only for significant inconvenience) |
+| config | configuration |
+| foo, bar, baz | Contextual meaningful names |
+
+## Placeholder Format
+
+When showing placeholder values in UI, use descriptive lowercase-with-dashes in angle brackets:
+
+| Good | Bad |
+|------|-----|
+| `<topic-name>` | `<value>` |
+| `<cluster-id>` | `<my-cluster>` |
+| `<broker-address>` | `<replace-with-address>` |
+
+## Em Dashes
+
+Don't use em dashes. Use parentheses, commas, or break into separate sentences.
+
 ## Common Agent Excuses
 
 | Excuse | Counter |

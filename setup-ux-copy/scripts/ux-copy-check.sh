@@ -103,4 +103,46 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b(one|two|three|four|five|six|
   fi
 fi
 
+# ── Check 12: Ban "and/or" ────────────────────────────────────────
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\band/or\b[^'\"]*\1"; then
+  hook_warn "Avoid 'and/or'. Use 'and', 'or', or 'A, B, or both' instead."
+fi
+
+# ── Check 13: Ban "etc." in UI text ──────────────────────────────
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\betc\.[^'\"]*\1"; then
+  hook_warn "Avoid 'etc.' in UI text. List specific items or use 'such as' with concrete examples."
+fi
+
+# ── Check 14: Ban "e.g." / "i.e." — suggest plain English ────────
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b(e\.g\.|i\.e\.)[^'\"]*\1"; then
+  hook_warn "Avoid Latin abbreviations in UI text.\n\nBAD:  'e.g.' / 'i.e.'\nGOOD: 'for example' / 'that is'"
+fi
+
+# ── Check 15: Ban "please" in UI strings ─────────────────────────
+
+if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\bplease\b[^'\"]*\1"; then
+  hook_warn "Avoid 'please' in UI text — it implies the action is optional.\nUse direct language: 'Enter your email' not 'Please enter your email'.\n\nUse sparingly, only when acknowledging errors or significant inconvenience."
+fi
+
+# ── Check 16: Ban non-inclusive terminology ───────────────────────
+
+if echo "$added_lines" | grep -qiE '\b(whitelist|blacklist|master|slave)\b'; then
+  hook_block "Use inclusive terminology.\n\nBAD:  whitelist/blacklist, master/slave\nGOOD: allowlist/denylist, leader/follower, primary/secondary"
+fi
+
+# ── Check 17: Warn on "There is" / "There are" starters ─────────
+
+if echo "$added_lines" | grep -qE "(['\"])(There is |There are )[^'\"]*\1"; then
+  hook_warn "Avoid starting with 'There is/are'. Put the subject first.\n\nBAD:  'There are 3 configuration options'\nGOOD: '3 configuration options are available'"
+fi
+
+# ── Check 18: Warn on "via" in UI text ───────────────────────────
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\bvia\b[^'\"]*\1"; then
+  hook_warn "Avoid 'via' in UI text. Use 'through', 'using', or 'with' instead."
+fi
+
 exit 0

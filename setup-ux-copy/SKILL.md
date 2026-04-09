@@ -19,6 +19,13 @@ PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 - **Warn on ALL CAPS** for emphasis (not acronyms)
 - **Warn on Title Case** (3+ consecutive capitalized words in strings)
 - **Warn on spelled-out numbers** (1-9 as numerals in UI)
+- **Warn on "and/or"** (use "and", "or", or "A, B, or both")
+- **Warn on "etc."** (list specific items instead)
+- **Warn on "e.g." / "i.e."** (use "for example" / "that is")
+- **Warn on "please"** (implies optional; use direct language)
+- **Ban non-inclusive terms** (whitelist/blacklist -> allowlist/denylist, master/slave -> leader/follower)
+- **Warn on "There is/are"** starters (put subject first)
+- **Warn on "via"** (use "through", "using", or "with")
 
 ### Redpanda-specific (REDPANDA_KIT=1)
 

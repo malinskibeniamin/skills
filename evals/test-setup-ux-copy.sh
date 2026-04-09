@@ -277,6 +277,141 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: one of (excluded phrase)"
 
+# ── Check 12: "and/or" ───────────────────────────────────────────
+
+tmpfile="$_ux_tmpdir/logic.ts"
+echo "const msg = 'Enable and/or disable the feature'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: and/or in string" "and/or"
+
+echo "const msg = 'Enable or disable the feature'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: or without and/or"
+
+# ── Check 13: "etc." ────────────────────────────────────────────
+
+tmpfile="$_ux_tmpdir/list.ts"
+echo "const msg = 'Topics, schemas, etc.'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: etc. in string" "etc."
+
+echo "const msg = 'Topics, schemas, and connectors'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: specific list without etc."
+
+# ── Check 14: "e.g." / "i.e." ───────────────────────────────────
+
+tmpfile="$_ux_tmpdir/latin.ts"
+echo "const msg = 'Use a valid format, e.g. JSON'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: e.g. in string" "Latin"
+
+echo "const msg = 'Use a valid format, i.e. JSON'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: i.e. in string" "Latin"
+
+echo "const msg = 'Use a valid format, for example JSON'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: for example (plain English)"
+
+# ── Check 15: "please" ──────────────────────────────────────────
+
+tmpfile="$_ux_tmpdir/polite.ts"
+echo "const msg = 'Please enter your email'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: please in string" "please"
+
+echo "const msg = 'Enter your email'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: direct language without please"
+
+# ── Check 16: Non-inclusive terminology ──────────────────────────
+
+tmpfile="$_ux_tmpdir/terms.ts"
+echo "const list = whitelist" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: whitelist (non-inclusive)" "inclusive"
+
+echo "const list = blacklist" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: blacklist (non-inclusive)" "inclusive"
+
+echo "const role = master" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: master (non-inclusive)" "inclusive"
+
+echo "const list = allowlist" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: allowlist (inclusive term)"
+
+echo "const role = leader" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: leader (inclusive term)"
+
+# ── Check 17: "There is" / "There are" ──────────────────────────
+
+tmpfile="$_ux_tmpdir/there.ts"
+echo "const msg = 'There are 3 configuration options'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: There are starter" "subject first"
+
+echo "const msg = 'There is no data available'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: There is starter" "subject first"
+
+echo "const msg = '3 configuration options are available'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: subject-first sentence"
+
+# ── Check 18: "via" ─────────────────────────────────────────────
+
+tmpfile="$_ux_tmpdir/via.ts"
+echo "const msg = 'Connect via VPC peering'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: via in string" "via"
+
+echo "const msg = 'Connect through VPC peering'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: through instead of via"
+
 # ── Escape hatch ────────────────────────────────────────────────
 
 tmpfile="$_ux_tmpdir/legacy.ts"
@@ -297,6 +432,13 @@ run_content_eval "$SCRIPT" "Admin API" "hook checks Redpanda product names"
 run_content_eval "$SCRIPT" "Title Case" "hook detects Title Case"
 run_content_eval "$SCRIPT" "numeral" "hook checks for spelled-out numbers"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
+run_content_eval "$SCRIPT" "and/or" "hook checks for and/or"
+run_content_eval "$SCRIPT" "etc\." "hook checks for etc."
+run_content_eval "$SCRIPT" "e\.g\." "hook checks for e.g."
+run_content_eval "$SCRIPT" "please" "hook checks for please"
+run_content_eval "$SCRIPT" "whitelist|blacklist" "hook checks non-inclusive terms"
+run_content_eval "$SCRIPT" "There is|There are" "hook checks There is/are starters"
+run_content_eval "$SCRIPT" "via" "hook checks for via"
 
 # ── REFERENCE content ───────────────────────────────────────────
 
@@ -305,6 +447,10 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Toast" "REFERENCE has toast message 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Error" "REFERENCE has error message rules"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Button" "REFERENCE has button label rules"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Learn more" "REFERENCE has link placement rules"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "allowlist" "REFERENCE has inclusive terminology table"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Directional" "REFERENCE has directional language guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "placeholder" "REFERENCE has placeholder format guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "em dash" "REFERENCE has em dash guidance"
 
 # ── GLOSSARY content ────────────────────────────────────────────
 
