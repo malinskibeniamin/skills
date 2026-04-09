@@ -413,7 +413,17 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 36: Ban user.type() in integration tests (too slow) ────
+# ── Check 36: Ban node:assert in test files (use vitest assert) ───
+
+case "$file_path" in
+  *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)
+    if echo "$added_lines" | grep -qE "from\s+['\"]node:assert"; then
+      hook_block "Use vitest's assert instead of node:assert.\n\nimport { assert } from 'vitest'\n\nVitest's assert type-narrows and throws on falsy — same behavior, no Node built-in."
+    fi
+    ;;
+esac
+
+# ── Check 37: Ban user.type() in integration tests (too slow) ────
 
 case "$file_path" in
   *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)

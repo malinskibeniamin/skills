@@ -1007,7 +1007,40 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: useEffect setState with real value (not reset)"
 
-# ── Check 36: Ban user.type() in integration tests ──────────────
+# ── Check 36: Ban node:assert in test files ─────────────────────
+
+tmpfile="$_rr_tmpdir/widget.test.ts"
+echo "import assert from 'node:assert/strict'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: node:assert in test file" "vitest"
+
+echo "import assert from 'node:assert'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: node:assert (no /strict) in test file" "vitest"
+
+# Allow: vitest assert
+echo "import { assert } from 'vitest'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: vitest assert import"
+
+# Allow: node:assert in non-test file (e.g., build script)
+tmpfile="$_rr_tmpdir/build-helper.ts"
+echo "import assert from 'node:assert'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: node:assert in non-test file"
+
+# Reset
+tmpfile="$_rr_tmpdir/widget.test.tsx"
+
+# ── Check 37: Ban user.type() in integration tests ──────────────
 
 # Trigger: user.type() in a test file
 tmpfile="$_rr_tmpdir/widget.test.tsx"
@@ -1076,6 +1109,7 @@ run_content_eval "$SCRIPT" "react-beautiful-dnd" "hook checks deprecated react-b
 run_content_eval "$SCRIPT" "framer-motion" "hook checks deprecated framer-motion"
 run_content_eval "$SCRIPT" "Button.*handler|handler.*Button" "hook checks Button handler requirement"
 run_content_eval "$SCRIPT" "user.type.*slow|slow.*user.type" "hook warns about slow user.type() in tests"
+run_content_eval "$SCRIPT" "node:assert" "hook bans node:assert in test files"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
