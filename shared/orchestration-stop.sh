@@ -14,7 +14,9 @@ fi
 session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
 
 # Source hook-lib for session-scoped file tracking
-source "$(dirname "$0")/hook-lib.sh" 2>/dev/null || true
+# Try _hook-lib.sh (symlink name in .claude/hooks/) then hook-lib.sh (direct)
+source "$(dirname "$0")/_hook-lib.sh" 2>/dev/null ||
+  source "$(dirname "$0")/hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
@@ -156,7 +158,7 @@ if [ -n "$issues" ]; then
 fi
 
 # Check if source changed but no test files were touched
-changed_source_count=$(echo "$changed" | grep -cE '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null || echo "0")
+changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null || echo "0")
 changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null || echo "0")
 if [ "${changed_source_count:-0}" -gt 0 ] && [ "${changed_test_count:-0}" -eq 0 ]; then
   warnings="${warnings:-}\n- No test files were modified. Were all tests considered? Use /tdd to add coverage."
