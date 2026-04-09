@@ -1007,6 +1007,41 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: useEffect setState with real value (not reset)"
 
+# ── Check 36: Ban user.type() in integration tests ──────────────
+
+# Trigger: user.type() in a test file
+tmpfile="$_rr_tmpdir/widget.test.tsx"
+echo "await user.type(input, 'hello world')" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: user.type() in test file" "user.type"
+
+# Trigger: userEvent.type() variant
+echo "await userEvent.type(input, 'DELETE')" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: userEvent.type() in test file" "user.type"
+
+# Allow: user.clear() + user.paste() (correct pattern)
+echo "await user.clear(input); await user.paste('hello')" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: user.clear + user.paste (correct pattern)"
+
+# Allow: user.type() in non-test file (production code, unlikely but safe)
+tmpfile="$_rr_tmpdir/test.tsx"
+echo "await user.type(input, 'hello')" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: user.type() in non-test tsx file"
+
+# Reset tmpfile
+tmpfile="$_rr_tmpdir/test.tsx"
+
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
@@ -1040,6 +1075,7 @@ run_content_eval "$SCRIPT" "tree-shaking" "hook checks tree-shaking killers"
 run_content_eval "$SCRIPT" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
 run_content_eval "$SCRIPT" "framer-motion" "hook checks deprecated framer-motion"
 run_content_eval "$SCRIPT" "Button.*handler|handler.*Button" "hook checks Button handler requirement"
+run_content_eval "$SCRIPT" "user.type.*slow|slow.*user.type" "hook warns about slow user.type() in tests"
 
 # ── REFERENCE content ────────────────────────────────────────────
 

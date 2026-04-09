@@ -413,4 +413,14 @@ case "$file_path" in
     ;;
 esac
 
+# ── Check 36: Ban user.type() in integration tests (too slow) ────
+
+case "$file_path" in
+  *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)
+    if echo "$added_lines" | grep -qE '(user|userEvent)\.type\('; then
+      hook_warn "user.type() is slow — fires keydown/keypress/keyup per character.\nUse: await user.clear(input); await user.paste('value')\nOr:  fireEvent.change(input, { target: { value: 'value' } })"
+    fi
+    ;;
+esac
+
 exit 0
