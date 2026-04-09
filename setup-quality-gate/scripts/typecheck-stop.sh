@@ -84,13 +84,7 @@ if [ $exit_code -ne 0 ]; then
   echo "$_fail_count" > "$_fail_counter"
   escaped=$(echo "$truncated" | jq -Rs .)
 
-  if [ "$_fail_count" -ge 3 ]; then
-    echo "{\"decision\":\"allow\",\"reason\":\"Type errors still present after $_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
-    echo "typecheck FAIL (allowed after $_fail_count attempts)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
-    exit 0
-  fi
-
-  echo "{\"decision\":\"block\",\"reason\":\"Type errors found. Fix before finishing:\\n\"$escaped\"\"}" >&2
+  echo "{\"decision\":\"block\",\"reason\":\"Type errors found (attempt $_fail_count). Fix before finishing:\\n\"$escaped\"\"}" >&2
   echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi
@@ -138,13 +132,7 @@ if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
   truncated=$(echo "$test_output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
 
-  if [ "$_test_fail_count" -ge 3 ]; then
-    echo "{\"decision\":\"allow\",\"reason\":\"Tests still failing after $_test_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
-    echo "typecheck PASS, tests FAIL (allowed after $_test_fail_count attempts)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
-    exit 0
-  fi
-
-  echo "{\"decision\":\"block\",\"reason\":\"Related tests failed. Fix before finishing:\\n\"$escaped\"\"}" >&2
+  echo "{\"decision\":\"block\",\"reason\":\"Related tests failed (attempt $_test_fail_count). Fix before finishing:\\n\"$escaped\"\"}" >&2
   echo "typecheck PASS, tests FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi

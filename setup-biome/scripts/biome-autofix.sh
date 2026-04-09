@@ -77,12 +77,7 @@ if [ $fix_exit -ne 0 ]; then
     truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -30)
     escaped=$(echo "$truncated" | jq -Rs .)
 
-    if [ "$_biome_fail_count" -ge 3 ]; then
-      echo "{\"decision\":\"allow\",\"reason\":\"Biome errors still present after $_biome_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
-      exit 0
-    fi
-
-    echo "{\"decision\":\"block\",\"reason\":\"Biome found unfixable lint errors. Fix these before finishing:\\n\"$escaped\"\"}" >&2
+    echo "{\"decision\":\"block\",\"reason\":\"Biome lint errors remain (attempt $_biome_fail_count). Fix before finishing:\\n\"$escaped\"\"}" >&2
     exit 2
   fi
 fi
