@@ -1,0 +1,1 @@
+../../setup-quality-gate/scripts/test-perf-check.sh

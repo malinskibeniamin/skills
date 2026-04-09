@@ -12,6 +12,7 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 - **GitHub Actions workflow** with formatting integrity check (`git diff --exit-code`)
 - **Stop hook** running `tsgo` + related tests before Claude finishes (auto-detects Vitest/Jest/Bun test runner)
 - **Bundle guard hook** (PostToolUse) that warns when known-heavy dependencies (moment, lodash, jquery, core-js, classnames) are added to package.json
+- **Test performance audit hook** (Stop) that compares per-test durations against session-start baseline and surfaces improvements/regressions as an audit table
 - **CI status check** — verify `gh run list` passes before declaring work complete
 - **`@claude` review trigger** — after creating a PR, comment `@claude review` to trigger automated Claude review
 - **Codex second opinion** (optional) — `/codex:review` for cross-model review via [codex-plugin-cc](https://github.com/openai/codex-plugin-cc)
@@ -57,22 +58,26 @@ Copy [`scripts/typecheck-stop.sh`](scripts/typecheck-stop.sh) into `.claude/hook
 
 Copy [`scripts/bundle-guard.sh`](scripts/bundle-guard.sh) into `.claude/hooks/`. Make executable.
 
-### 6. Configure hooks in `.claude/settings.json`
+### 6. Create Test performance audit hook script
+
+Copy [`scripts/test-perf-stop.sh`](scripts/test-perf-stop.sh) into `.claude/hooks/`. Make executable.
+
+### 7. Configure hooks in `.claude/settings.json`
 
 Add to hooks config:
-- **Stop**: `.claude/hooks/typecheck-stop.sh`
+- **Stop**: `.claude/hooks/typecheck-stop.sh`, `.claude/hooks/test-perf-stop.sh`
 - **PostToolUse**: `.claude/hooks/bundle-guard.sh`
 
-### 7. Verify
+### 8. Verify
 
 - [ ] `bun run lint` works
 - [ ] `bun run type:check` works (no errors on .svg/.css imports)
 - [ ] `bun run quality:gate` works
 - [ ] `.github/workflows/quality-gate.yml` exists
 - [ ] `src/types/assets.d.ts` exists
-- [ ] Stop hook script is executable
+- [ ] Stop hook scripts are executable (typecheck + test-perf)
 - [ ] Bundle guard hook script is executable
 
-### 8. Commit
+### 9. Commit
 
 Stage all files and commit: `Add quality gate scripts and CI workflow`

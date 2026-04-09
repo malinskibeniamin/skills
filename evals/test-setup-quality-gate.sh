@@ -48,6 +48,52 @@ SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
 run_content_eval "$SESSION_SCRIPT" "typecheck-baseline" "session-env captures typecheck baseline"
 run_content_eval "$SESSION_SCRIPT" "bun run type:check" "session-env runs type:check for baseline"
 run_content_eval "$SESSION_SCRIPT" "dirty-files-baseline" "session-env captures dirty-files baseline"
+run_content_eval "$SESSION_SCRIPT" "test-timing-baseline" "session-env captures test timing baseline"
+run_content_eval "$SESSION_SCRIPT" "vitest.config" "session-env discovers vitest configs for baseline"
+run_content_eval "$SESSION_SCRIPT" "reporter=json" "session-env uses JSON reporter for timing extraction"
+
+# ── test-perf-stop.sh: File structure ────────────────────────────
+
+PERF_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/test-perf-stop.sh"
+run_file_eval "$PERF_SCRIPT" "test-perf-stop.sh exists"
+run_executable_eval "$PERF_SCRIPT" "test-perf-stop.sh is executable"
+
+# ── test-perf-stop.sh: symlink wiring ───────────────────────────
+
+PERF_SYMLINK="$REPO_ROOT/.claude/hooks/test-perf-stop.sh"
+if [ -L "$PERF_SYMLINK" ]; then
+  echo "  PASS  test-perf-stop.sh symlinked in .claude/hooks/"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  test-perf-stop.sh not symlinked in .claude/hooks/"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: test-perf-stop.sh not symlinked"
+fi
+
+# ── test-perf-stop.sh: wired in all hook configs ────────────────
+
+for config_file in "$REPO_ROOT/.claude/settings.json" "$REPO_ROOT/hooks/hooks.json" "$REPO_ROOT/.codex/hooks.json"; do
+  config_name=$(basename "$(dirname "$config_file")")/$(basename "$config_file")
+  if grep -q "test-perf-stop" "$config_file" 2>/dev/null; then
+    echo "  PASS  test-perf-stop.sh wired in $config_name"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  test-perf-stop.sh missing from $config_name"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: test-perf-stop.sh missing from $config_name"
+  fi
+done
+
+# ── test-perf-stop.sh: script content ───────────────────────────
+
+run_content_eval "$PERF_SCRIPT" "test-timing-baseline" "perf hook reads session baseline"
+run_content_eval "$PERF_SCRIPT" "test-timing-current" "perf hook captures current timings"
+run_content_eval "$PERF_SCRIPT" "hook_session_changed_files" "perf hook uses session-scoped file detection"
+run_content_eval "$PERF_SCRIPT" "vitest.config" "perf hook discovers vitest configs"
+run_content_eval "$PERF_SCRIPT" "reporter=json" "perf hook uses JSON reporter"
+run_content_eval "$PERF_SCRIPT" "additionalContext" "perf hook outputs as informational context (non-blocking)"
+run_content_eval "$PERF_SCRIPT" "pct > 30" "perf hook uses 30% threshold for significant changes"
+run_content_eval "$PERF_SCRIPT" "before > 10" "perf hook filters noise from tests under 10ms"
 
 # ── bundle-guard.sh: File structure ───────────────────────────────
 
@@ -151,3 +197,163 @@ run_content_eval "$BUNDLE_SCRIPT" "lodash" "bundle-guard checks lodash"
 run_content_eval "$BUNDLE_SCRIPT" "jquery" "bundle-guard checks jquery"
 run_content_eval "$BUNDLE_SCRIPT" "classnames" "bundle-guard checks classnames"
 run_content_eval "$BUNDLE_SCRIPT" "core-js" "bundle-guard checks core-js"
+
+# ── test-perf-check.sh: File structure ───────────────────────────
+
+PERF_CHECK_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/test-perf-check.sh"
+run_file_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh exists"
+run_executable_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh is executable"
+
+PERF_CHECK_SYMLINK="$REPO_ROOT/.claude/hooks/test-perf-check.sh"
+if [ -L "$PERF_CHECK_SYMLINK" ]; then
+  echo "  PASS  test-perf-check.sh symlinked in .claude/hooks/"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  test-perf-check.sh not symlinked in .claude/hooks/"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: test-perf-check.sh not symlinked"
+fi
+
+# ── test-perf-check.sh: wired in hook configs ───────────────────
+
+for config_file in "$REPO_ROOT/.claude/settings.json" "$REPO_ROOT/hooks/hooks.json"; do
+  config_name=$(basename "$(dirname "$config_file")")/$(basename "$config_file")
+  if grep -q "test-perf-check" "$config_file" 2>/dev/null; then
+    echo "  PASS  test-perf-check.sh wired in $config_name"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  test-perf-check.sh missing from $config_name"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: test-perf-check.sh missing from $config_name"
+  fi
+done
+
+# ── test-perf-check.sh: script content ──────────────────────────
+
+run_content_eval "$PERF_CHECK_SCRIPT" "await.*import" "perf-check detects dynamic imports"
+run_content_eval "$PERF_CHECK_SCRIPT" "pool.*threads" "perf-check detects missing pool: threads"
+run_content_eval "$PERF_CHECK_SCRIPT" "isolate.*false" "perf-check detects missing isolate: false"
+run_content_eval "$PERF_CHECK_SCRIPT" "vi\\.importActual" "perf-check excludes vi.importActual from dynamic import check"
+run_content_eval "$PERF_CHECK_SCRIPT" "happy-dom.*jsdom" "perf-check skips isolate check for browser-env configs"
+
+# ── test-perf-check.sh: skip non-test, non-config files ─────────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'const x = await import("./foo");\n' > "$tmpdir/utils.ts"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/utils.ts\"}}" \
+  0 "skip: non-test non-config file"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: warn on await import() in test file ─────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'const mod = await import("./helpers");\n' > "$tmpdir/foo.test.ts"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init" && printf '+const mod = await import("./helpers");\n' > "$tmpdir/foo.test.ts") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/foo.test.ts\"}}" \
+  0 "warn: await import() in test file" "~100ms"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: allow vi.importActual ───────────────────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'const actual = await vi.importActual("./helpers");\n' > "$tmpdir/bar.test.ts"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init" && printf '+const actual = await vi.importActual("./helpers");\n' > "$tmpdir/bar.test.ts") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/bar.test.ts\"}}" \
+  0 "allow: vi.importActual in test file"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: warn on vitest config missing pool ──────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+cat > "$tmpdir/vitest.config.mts" << 'VEOF'
+import { defineConfig } from 'vitest/config';
+export default defineConfig({
+  test: {
+    globals: true,
+  },
+});
+VEOF
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/vitest.config.mts\"}}" \
+  0 "warn: vitest config missing pool: threads" "pool"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: allow vitest config with pool: threads ──
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+cat > "$tmpdir/vitest.config.mts" << 'VEOF'
+import { defineConfig } from 'vitest/config';
+export default defineConfig({
+  test: {
+    globals: true,
+    pool: 'threads',
+  },
+});
+VEOF
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/vitest.config.mts\"}}" \
+  0 "allow: vitest config with pool: threads"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: warn on unit config missing isolate ─────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+cat > "$tmpdir/vitest.config.mts" << 'VEOF'
+import { defineConfig } from 'vitest/config';
+export default defineConfig({
+  test: {
+    globals: true,
+    pool: 'threads',
+  },
+});
+VEOF
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/vitest.config.mts\"}}" \
+  0 "warn: unit vitest config missing isolate: false" "isolate: false"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: skip isolate warn for integration config ─
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+cat > "$tmpdir/vitest.config.integration.mts" << 'VEOF'
+import { defineConfig } from 'vitest/config';
+export default defineConfig({
+  test: {
+    globals: true,
+    pool: 'threads',
+    environment: 'happy-dom',
+  },
+});
+VEOF
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/vitest.config.integration.mts\"}}" \
+  0 "skip: no isolate warn for happy-dom config"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: skip non-Edit/Write tool ────────────────
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"vitest --run"}}' \
+  0 "skip: non-Edit/Write tool"

@@ -41,4 +41,20 @@ if [ -f "package.json" ] && jq -e '.scripts["type:check"]' package.json >/dev/nu
   (bun run type:check 2>&1 | grep -E '^.+\.(ts|tsx)\([0-9]+,' | sort > "$_session_dir/typecheck-baseline" 2>/dev/null || touch "$_session_dir/typecheck-baseline") &
 fi
 
+# ── Capture test timing baseline (background, no latency) ────────
+# Used by test-perf-stop.sh to detect test performance changes.
+# Runs each vitest config found at project root, extracts per-test
+# fullName and duration (ms) via JSON reporter.
+_vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
+if [ -n "$_vitest_configs" ] && command -v jq >/dev/null 2>&1; then
+  (
+    : > "$_session_dir/test-timing-baseline.tsv"
+    for cfg in $_vitest_configs; do
+      bun vitest --run --reporter=json --config "$cfg" 2>/dev/null \
+        | jq -r '.testResults[]?.assertionResults[]? | [.fullName, (.duration // 0 | tostring)] | @tsv' \
+        >> "$_session_dir/test-timing-baseline.tsv" 2>/dev/null || true
+    done
+  ) &
+fi
+
 exit 0

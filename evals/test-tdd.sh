@@ -31,3 +31,6 @@ run_content_eval "$SKILL_DIR/SKILL.md" "paths:" "SKILL.md has paths: for auto-lo
 run_content_eval "$SKILL_DIR/REFERENCE.md" "setTimeout|waitForTimeout" "REFERENCE has condition-based waiting"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Common Agent Excuses" "REFERENCE has rationalization table"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "detectAsyncLeaks" "REFERENCE has async leak detection"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "pool.*threads" "REFERENCE has pool: threads optimization"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "isolate.*false" "REFERENCE has isolate: false optimization"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Do NOT disable isolation for integration" "REFERENCE warns against integration isolate: false"

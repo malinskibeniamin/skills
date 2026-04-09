@@ -83,4 +83,4 @@ For each remaining behavior: RED → GREEN → REFACTOR. One test at a time. Don
 - [ ] Prefer `getByRole` over `getByTestId` for accessibility assertions
 - [ ] Tests verify behavior, not implementation
 
-See [REFERENCE.md](REFERENCE.md) for diagnostic commands, anti-patterns, and condition-based waiting patterns.
+See [REFERENCE.md](REFERENCE.md) for diagnostic commands, Vitest config optimization, anti-patterns, and condition-based waiting patterns.
