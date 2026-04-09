@@ -4,6 +4,9 @@ set -eo pipefail
 # Stop hook: run biome lint:fix on all changed JS/TS files before Claude finishes.
 # Only runs if JS/TS files were actually changed.
 
+# Source hook-lib for session-scoped file tracking
+source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+
 # git diff returns paths relative to repo root; strip the prefix so they're
 # relative to cwd (where bun run lint:fix:file executes).
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -18,7 +21,13 @@ if [ -z "${UI_LIB_DIRS:-}" ]; then
 else
   _ui_dirs="$UI_LIB_DIRS"
 fi
-all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
+
+# Session-scoped: only check files THIS session touched
+if type hook_session_changed_files &>/dev/null; then
+  all_changed=$(hook_session_changed_files "js|jsx|ts|tsx|mjs|mts|cjs|cts" | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
+else
+  all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
+fi
 
 # Filter to files that actually exist (excludes monorepo siblings)
 changed_files=""

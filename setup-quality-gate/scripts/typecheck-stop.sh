@@ -2,13 +2,17 @@
 set -eo pipefail
 
 # Stop hook: run type checking and related tests before Claude finishes.
-# Only runs if JS/TS files were actually changed.
+# Only runs if JS/TS files were actually changed BY THIS SESSION.
 
-# Ensure session directory exists for state tracking
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
-mkdir -p "$_session_dir" 2>/dev/null || true
+# Source hook-lib for session-scoped file tracking
+source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
 
-changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
+# Session-scoped: only check files this session touched
+if type hook_session_changed_files &>/dev/null; then
+  changed_files=$(hook_session_changed_files "ts|tsx|js|jsx")
+else
+  changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
+fi
 
 if [ -z "$changed_files" ]; then
   exit 0
@@ -27,59 +31,74 @@ exit_code=0
 output=$(bun run type:check 2>&1) || exit_code=$?
 
 if [ $exit_code -ne 0 ]; then
-  # ── Baseline comparison ──────────────────────────────────────────
-  # session-env.sh captures pre-existing errors at SessionStart.
-  # Only block on NEW errors this session introduced.
-  _baseline="$_session_dir/typecheck-baseline"
+  # ── Filter errors to session-owned files ──────────────────────────
+  # tsgo runs project-wide, so filter output to only errors in files
+  # this session touched. Errors in sibling-session files pass through.
+  if [ "${_hook_session_tracking_active:-false}" = true ] && [ -n "$changed_files" ]; then
+    _session_errors=$(hook_filter_errors_to_session "$output" "$changed_files")
+    if [ -z "$_session_errors" ]; then
+      # All errors are in files OTHER sessions touched — allow through
+      echo "{\"decision\":\"allow\",\"reason\":\"Type errors exist but none in files this session modified. Allowing finish.\"}" >&2
+      echo "typecheck FAIL (other session)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
+      exit 0
+    fi
+    # Show only this session's errors
+    truncated=$(echo "$_session_errors" | head -30)
+  else
+    truncated=$(echo "$output" | head -30)
+  fi
+
+  # ── Baseline comparison (second filter layer) ────────────────────
+  _baseline="$_hook_session_dir/typecheck-baseline"
   if [ -f "$_baseline" ]; then
-    # Extract error lines (same format as baseline), sort, and diff
     _current_errors=$(echo "$output" | grep -E '^.+\.(ts|tsx)\([0-9]+,' | sort)
     _new_errors=$(echo "$_current_errors" | comm -23 - "$_baseline" 2>/dev/null || echo "$_current_errors")
 
+    # Apply session-file filter to new errors too
+    if [ "${_hook_session_tracking_active:-false}" = true ] && [ -n "$changed_files" ]; then
+      _new_errors=$(hook_filter_errors_to_session "$_new_errors" "$changed_files")
+    fi
+
     if [ -z "$_new_errors" ]; then
-      # All errors existed before this session — allow through
       _error_count=$(echo "$_current_errors" | wc -l | tr -d ' ')
       echo "{\"decision\":\"allow\",\"reason\":\"$_error_count pre-existing type error(s) — not introduced by this session. Allowing finish.\"}" >&2
-      echo "typecheck FAIL (pre-existing only)" > "$_session_dir/last-stop" 2>/dev/null || true
+      echo "typecheck FAIL (pre-existing only)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
       exit 0
     fi
 
-    # Only show new errors in the block message
     truncated=$(echo "$_new_errors" | head -30)
-    escaped=$(echo "$truncated" | jq -Rs .)
     _new_count=$(echo "$_new_errors" | wc -l | tr -d ' ')
+    escaped=$(echo "$truncated" | jq -Rs .)
     echo "{\"decision\":\"block\",\"reason\":\"$_new_count new type error(s) introduced by this session. Fix before finishing:\\n\"$escaped\"\"}" >&2
-    echo "typecheck FAIL (new errors)" > "$_session_dir/last-stop" 2>/dev/null || true
+    echo "typecheck FAIL (new errors)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
     exit 2
   fi
 
   # ── Fallback: no baseline — use consecutive failure counter ──────
-  _fail_counter="$_session_dir/typecheck-fail-count"
+  _fail_counter="$_hook_session_dir/typecheck-fail-count"
   _fail_count=0
   if [ -f "$_fail_counter" ]; then
     _fail_count=$(cat "$_fail_counter" 2>/dev/null || echo "0")
   fi
   _fail_count=$((_fail_count + 1))
   echo "$_fail_count" > "$_fail_counter"
-  truncated=$(echo "$output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
 
   if [ "$_fail_count" -ge 3 ]; then
     echo "{\"decision\":\"allow\",\"reason\":\"Type errors still present after $_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
-    echo "typecheck FAIL (allowed after $_fail_count attempts)" > "$_session_dir/last-stop" 2>/dev/null || true
+    echo "typecheck FAIL (allowed after $_fail_count attempts)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
     exit 0
   fi
 
   echo "{\"decision\":\"block\",\"reason\":\"Type errors found. Fix before finishing:\\n\"$escaped\"\"}" >&2
-  echo "typecheck FAIL" > "$_session_dir/last-stop" 2>/dev/null || true
+  echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi
 
 # Reset counter on success
-echo "0" > "$_session_dir/typecheck-fail-count" 2>/dev/null || true
+echo "0" > "$_hook_session_dir/typecheck-fail-count" 2>/dev/null || true
 
-# ── Related tests (only tests affected by changed files) ────────
-# Detect test runner: vitest (--related), jest (--findRelatedTests), bun test (file-only)
+# ── Related tests (only tests affected by session's changed files) ──
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 abs_changed=""
 for f in $changed_files; do
@@ -90,14 +109,10 @@ test_output=""
 test_exit=0
 
 if [ -f "node_modules/.bin/vitest" ] || [ -f "$repo_root/node_modules/.bin/vitest" ]; then
-  # Vitest: --related finds tests that transitively import changed files
-  # Check cwd first (monorepo app), then repo root
   test_output=$(bun run test:related -- $abs_changed 2>&1) || test_exit=$?
 elif [ -f "node_modules/.bin/jest" ] || [ -f "$repo_root/node_modules/.bin/jest" ]; then
-  # Jest: --findRelatedTests does the same
   test_output=$(npx jest --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
 else
-  # Bun test or unknown: find co-located test files for changed source files
   test_files=""
   for f in $changed_files; do
     base="${f%.*}"
@@ -113,7 +128,7 @@ else
 fi
 
 if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
-  _test_fail_counter="$_session_dir/test-fail-count"
+  _test_fail_counter="$_hook_session_dir/test-fail-count"
   _test_fail_count=0
   if [ -f "$_test_fail_counter" ]; then
     _test_fail_count=$(cat "$_test_fail_counter" 2>/dev/null || echo "0")
@@ -125,19 +140,18 @@ if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
 
   if [ "$_test_fail_count" -ge 3 ]; then
     echo "{\"decision\":\"allow\",\"reason\":\"Tests still failing after $_test_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
-    echo "typecheck PASS, tests FAIL (allowed after $_test_fail_count attempts)" > "$_session_dir/last-stop" 2>/dev/null || true
+    echo "typecheck PASS, tests FAIL (allowed after $_test_fail_count attempts)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
     exit 0
   fi
 
   echo "{\"decision\":\"block\",\"reason\":\"Related tests failed. Fix before finishing:\\n\"$escaped\"\"}" >&2
-  echo "typecheck PASS, tests FAIL" > "$_session_dir/last-stop" 2>/dev/null || true
+  echo "typecheck PASS, tests FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi
 
 # Reset counters on full success
-echo "0" > "$_session_dir/test-fail-count" 2>/dev/null || true
+echo "0" > "$_hook_session_dir/test-fail-count" 2>/dev/null || true
 
-# Write success outcome for UserPromptSubmit full-level context
-echo "typecheck PASS, tests PASS" > "$_session_dir/last-stop" 2>/dev/null || true
+echo "typecheck PASS, tests PASS" > "$_hook_session_dir/last-stop" 2>/dev/null || true
 
 exit 0

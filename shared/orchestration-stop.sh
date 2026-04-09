@@ -12,7 +12,16 @@ if [ "${ORCHESTRATION_STRICT:-1}" = "0" ]; then
 fi
 
 session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
-changed=$(git diff --name-only HEAD 2>/dev/null || true)
+
+# Source hook-lib for session-scoped file tracking
+source "$(dirname "$0")/hook-lib.sh" 2>/dev/null || true
+
+# Session-scoped: only check files this session touched
+if type hook_session_changed_files &>/dev/null; then
+  changed=$(hook_session_changed_files)
+else
+  changed=$(git diff --name-only HEAD 2>/dev/null || true)
+fi
 issues=""
 
 # Pre-flight checks
@@ -85,7 +94,21 @@ fi
 
 # ── Gate 3: New source files → verify they have tests ────────────
 
-new_files=$(git diff --name-only --diff-filter=A HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.|index\.|layout\.|middleware\.|types/|__root)' || true)
+# Session-scoped: only consider new files this session created
+_all_new=$(git diff --name-only --diff-filter=A HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.|index\.|layout\.|middleware\.|types/|__root)' || true)
+if [ "${_hook_session_tracking_active:-false}" = true ] && [ -n "$_all_new" ]; then
+  # Intersect new files with session-touched files
+  _touched="$_hook_session_dir/session-touched-files"
+  if [ -f "$_touched" ]; then
+    _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    _touched_norm=$(sed "s|^${_repo_root}/||" "$_touched" | sort -u)
+    new_files=$(comm -12 <(echo "$_all_new" | sort) <(echo "$_touched_norm") 2>/dev/null || echo "$_all_new")
+  else
+    new_files="$_all_new"
+  fi
+else
+  new_files="$_all_new"
+fi
 if [ -n "$new_files" ]; then
   for f in $new_files; do
     base="${f%.*}"

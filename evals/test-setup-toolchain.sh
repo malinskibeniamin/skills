@@ -316,3 +316,13 @@ run_content_eval "$SESSION_SCRIPT" "package.json" "session-env checks for packag
 run_content_eval "$SESSION_SCRIPT" "react" "session-env checks for React dependency"
 run_content_eval "$SESSION_SCRIPT" "WARNING" "session-env warns on non-frontend projects"
 run_content_eval "$SESSION_SCRIPT" "NODE_OPTIONS" "session-env sets NODE_OPTIONS"
+run_content_eval "$SESSION_SCRIPT" "dirty-files-baseline" "session-env captures dirty-files baseline"
+
+# ── hook-lib.sh: session-scoped file tracking ──────────────────
+
+HOOKLIB="$REPO_ROOT/shared/hook-lib.sh"
+run_content_eval "$HOOKLIB" "session-touched-files" "hook-lib records touched files per session"
+run_content_eval "$HOOKLIB" "hook_session_changed_files" "hook-lib provides session-scoped file helper"
+run_content_eval "$HOOKLIB" "hook_filter_errors_to_session" "hook-lib provides error filtering helper"
+run_content_eval "$HOOKLIB" "dirty-files-baseline" "hook-lib reads dirty-files baseline"
+run_content_eval "$HOOKLIB" "_hook_session_tracking_active" "hook-lib signals tracking mode to callers"

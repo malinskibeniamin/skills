@@ -38,12 +38,16 @@ run_content_eval "$SCRIPT" "typecheck-baseline" "hook compares against session b
 run_content_eval "$SCRIPT" "pre-existing" "hook identifies pre-existing errors"
 run_content_eval "$SCRIPT" "comm -23" "hook diffs current errors against baseline"
 run_content_eval "$SCRIPT" "new type error" "hook reports only new errors"
+run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"
+run_content_eval "$SCRIPT" "hook_filter_errors_to_session" "hook filters errors to session files"
+run_content_eval "$SCRIPT" "other session" "hook allows errors from other sessions"
 
 # ── session-env.sh: baseline capture ──────────────────────────────
 
 SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
 run_content_eval "$SESSION_SCRIPT" "typecheck-baseline" "session-env captures typecheck baseline"
 run_content_eval "$SESSION_SCRIPT" "bun run type:check" "session-env runs type:check for baseline"
+run_content_eval "$SESSION_SCRIPT" "dirty-files-baseline" "session-env captures dirty-files baseline"
 
 # ── bundle-guard.sh: File structure ───────────────────────────────
 

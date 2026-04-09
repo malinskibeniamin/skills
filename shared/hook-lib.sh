@@ -60,6 +60,9 @@ hook_parse_edit_write() {
   if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
     exit 0
   fi
+
+  # Track which files this session touches (for session-scoped Stop hooks)
+  echo "$file_path" >> "$_hook_session_dir/session-touched-files" 2>/dev/null || true
 }
 
 # ── Filter by file extensions (pipe-separated, e.g. "ts|tsx|js|jsx") ──
@@ -144,6 +147,94 @@ hook_get_added_lines() {
   if [ -z "$added_lines" ]; then
     exit 0
   fi
+}
+
+# ── Session-scoped changed files (for Stop hooks) ────────────────
+# Returns files that: (a) are in current git diff, (b) were touched
+# by this session via Edit/Write, and (c) were NOT dirty at session
+# start. Falls back to full git diff if tracking data unavailable.
+#
+# Usage in Stop hooks:
+#   source "path/to/hook-lib.sh"
+#   session_changed=$(hook_session_changed_files "ts|tsx|js|jsx")
+#
+# Sets global: _hook_session_tracking_active (true/false)
+
+hook_session_changed_files() {
+  local ext_filter="${1:-}"
+
+  # Get current git diff
+  local current_diff
+  current_diff=$(git diff --name-only HEAD 2>/dev/null || true)
+
+  if [ -z "$current_diff" ]; then
+    _hook_session_tracking_active=false
+    return
+  fi
+
+  # Apply extension filter if provided
+  if [ -n "$ext_filter" ]; then
+    current_diff=$(echo "$current_diff" | grep -E "\\.(${ext_filter})$" || true)
+  fi
+
+  if [ -z "$current_diff" ]; then
+    _hook_session_tracking_active=false
+    return
+  fi
+
+  local touched_file="$_hook_session_dir/session-touched-files"
+  local baseline_file="$_hook_session_dir/dirty-files-baseline"
+
+  # Mode 1: Both touched-files and baseline exist (Claude Code normal)
+  # Formula: (current_diff ∩ touched) - baseline
+  if [ -f "$touched_file" ]; then
+    _hook_session_tracking_active=true
+    local repo_root
+    repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    local touched_normalized
+    touched_normalized=$(sed "s|^${repo_root}/||" "$touched_file" | sort -u)
+
+    local intersected
+    intersected=$(comm -12 <(echo "$current_diff" | sort) <(echo "$touched_normalized") 2>/dev/null || true)
+
+    if [ -f "$baseline_file" ] && [ -s "$baseline_file" ]; then
+      intersected=$(comm -23 <(echo "$intersected" | sort) <(sort "$baseline_file") 2>/dev/null || echo "$intersected")
+    fi
+
+    echo "$intersected"
+    return
+  fi
+
+  # Mode 2: Only baseline exists (Codex, or Bash-only session)
+  # Formula: current_diff - baseline
+  if [ -f "$baseline_file" ] && [ -s "$baseline_file" ]; then
+    _hook_session_tracking_active=true
+    comm -23 <(echo "$current_diff" | sort) <(sort "$baseline_file") 2>/dev/null || echo "$current_diff"
+    return
+  fi
+
+  # Mode 3: No tracking data (legacy) — return full diff
+  _hook_session_tracking_active=false
+  echo "$current_diff"
+}
+
+# ── Filter error output to session-owned files ───────────────────
+# For project-wide tools (tsgo, doctor) that cannot target files,
+# filters error lines to only those mentioning session-owned files.
+
+hook_filter_errors_to_session() {
+  local output="$1"
+  local session_files="$2"
+
+  if [ -z "$session_files" ] || [ -z "$output" ]; then
+    return
+  fi
+
+  # Build grep pattern from file list
+  local pattern
+  pattern=$(echo "$session_files" | sed 's/[.[\*^$()+?{|]/\\&/g' | paste -sd '|' -)
+
+  echo "$output" | grep -E "$pattern" || true
 }
 
 # ── HOOK_VERBOSITY ────────────────────────────────────────────────

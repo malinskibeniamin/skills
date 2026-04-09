@@ -6,10 +6,21 @@ set -euo pipefail
 
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 
-# Find changed files by type
-changed_js=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
-changed_css=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(css|scss|sass|less)$' || true)
-changed_pkg=$(git diff --name-only HEAD 2>/dev/null | grep -E 'package\.json$' || true)
+# Source hook-lib for session-scoped file tracking (baseline-only for Codex)
+source "$repo_root/.claude/hooks/_hook-lib.sh" 2>/dev/null || \
+  source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+
+# Session-scoped: only check files this session touched
+if type hook_session_changed_files &>/dev/null; then
+  _all_session=$(hook_session_changed_files)
+  changed_js=$(echo "$_all_session" | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
+  changed_css=$(echo "$_all_session" | grep -E '\.(css|scss|sass|less)$' || true)
+  changed_pkg=$(echo "$_all_session" | grep -E 'package\.json$' || true)
+else
+  changed_js=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
+  changed_css=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(css|scss|sass|less)$' || true)
+  changed_pkg=$(git diff --name-only HEAD 2>/dev/null | grep -E 'package\.json$' || true)
+fi
 
 if [ -z "$changed_js" ] && [ -z "$changed_css" ] && [ -z "$changed_pkg" ]; then
   exit 0

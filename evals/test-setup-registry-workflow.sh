@@ -29,6 +29,7 @@ HOOKLIB="$REPO_ROOT/shared/hook-lib.sh"
 run_content_eval "$HOOKLIB" "components.json.*cli.json" "hook-lib detects consumer repos"
 run_content_eval "$HOOKLIB" "UI registry" "hook-lib warns about upstream PR for consumer edits"
 run_content_eval "$HOOKLIB" "registry.json" "hook-lib detects registry repo for rebuild reminder"
+run_content_eval "$SCRIPT" "hook_session_changed_files" "registry-check uses session-scoped file detection"
 
 # ── Stop hook behavioral test ───────────────────────────────────
 

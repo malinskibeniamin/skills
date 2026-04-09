@@ -55,6 +55,7 @@ run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
 run_content_eval "$SCRIPT" "scripts.*lint:file" "hook skips when lint:file script missing"
 run_content_eval "$SCRIPT" "biome-fail-count" "hook tracks consecutive biome failures"
 run_content_eval "$SCRIPT" "decision.*allow.*attempts" "hook downgrades to allow after repeated failures"
+run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"
 
 # ── Stop hook behavioral tests ──────────────────────────────────
 

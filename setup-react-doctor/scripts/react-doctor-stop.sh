@@ -1,8 +1,15 @@
 #!/bin/bash
 set -eo pipefail
 
-# Check if any React files were changed
-changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(tsx|jsx)$' || true)
+# Source hook-lib for session-scoped file tracking
+source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+
+# Session-scoped: only check files this session touched
+if type hook_session_changed_files &>/dev/null; then
+  changed_files=$(hook_session_changed_files "tsx|jsx")
+else
+  changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(tsx|jsx)$' || true)
+fi
 
 if [ -z "$changed_files" ]; then
   exit 0
@@ -19,9 +26,7 @@ exit_code=0
 output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 
 # Track consecutive failures — downgrade to warn after 3 to avoid infinite loops
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
-mkdir -p "$_session_dir" 2>/dev/null || true
-_doctor_fail_counter="$_session_dir/doctor-fail-count"
+_doctor_fail_counter="$_hook_session_dir/doctor-fail-count"
 _doctor_fail_count=0
 if [ -f "$_doctor_fail_counter" ]; then
   _doctor_fail_count=$(cat "$_doctor_fail_counter" 2>/dev/null || echo "0")

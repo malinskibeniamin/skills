@@ -9,8 +9,15 @@ if [ ! -f "$repo_root/registry.json" ]; then
   exit 0
 fi
 
-# Check if any redpanda-ui component files were changed
-changed=$(git diff --name-only HEAD 2>/dev/null || true)
+# Source hook-lib for session-scoped file tracking
+source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+
+# Session-scoped: only check files this session touched
+if type hook_session_changed_files &>/dev/null; then
+  changed=$(hook_session_changed_files)
+else
+  changed=$(git diff --name-only HEAD 2>/dev/null || true)
+fi
 
 if [ -z "$changed" ]; then
   exit 0
