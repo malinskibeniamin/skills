@@ -326,3 +326,77 @@ run_content_eval "$HOOKLIB" "hook_session_changed_files" "hook-lib provides sess
 run_content_eval "$HOOKLIB" "hook_filter_errors_to_session" "hook-lib provides error filtering helper"
 run_content_eval "$HOOKLIB" "dirty-files-baseline" "hook-lib reads dirty-files baseline"
 run_content_eval "$HOOKLIB" "hook_has_session_tracking" "hook-lib provides tracking check function"
+
+# ── hook-lib.sh: session-scoping behavioral tests ──────────────
+
+_scope_tmpdir=$(mktemp -d /tmp/session-scope-XXXXXX)
+cd "$_scope_tmpdir"
+git init -q && git commit --allow-empty -m "init" -q
+
+# Create files that simulate two sessions on same branch
+echo "const a = 1" > fileA.ts
+echo "const b = 2" > fileB.ts
+git add . && git commit -q -m "base"
+
+# Simulate changes: both files modified (dirty working tree)
+echo "const a = 2" > fileA.ts
+echo "const b = 3" > fileB.ts
+
+# Simulate session state: session only touched fileA.ts, fileB.ts was dirty at start
+_test_session="$_scope_tmpdir/.session"
+mkdir -p "$_test_session"
+echo "$_scope_tmpdir/fileA.ts" > "$_test_session/session-touched-files"
+echo "fileB.ts" > "$_test_session/dirty-files-baseline"
+
+# Source hook-lib and override session dir
+(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  _hook_session_dir="$_test_session"
+
+  result=$(hook_session_changed_files "ts")
+
+  # fileA.ts should be included (this session touched it, not in baseline)
+  if echo "$result" | grep -q "fileA.ts"; then
+    echo "  PASS  session-scoping includes session-touched file"
+    # Write to a temp file so the parent can read it
+    echo "PASS" > "$_test_session/test1"
+  else
+    echo "  FAIL  session-scoping should include fileA.ts but got: $result"
+    echo "FAIL" > "$_test_session/test1"
+  fi
+
+  # fileB.ts should be excluded (was in dirty baseline)
+  if echo "$result" | grep -q "fileB.ts"; then
+    echo "  FAIL  session-scoping should exclude fileB.ts (dirty baseline) but included it"
+    echo "FAIL" > "$_test_session/test2"
+  else
+    echo "  PASS  session-scoping excludes dirty-baseline file"
+    echo "PASS" > "$_test_session/test2"
+  fi
+
+  # hook_has_session_tracking should be active
+  if hook_has_session_tracking; then
+    echo "  PASS  hook_has_session_tracking returns true with tracking data"
+    echo "PASS" > "$_test_session/test3"
+  else
+    echo "  FAIL  hook_has_session_tracking should be true"
+    echo "FAIL" > "$_test_session/test3"
+  fi
+) 2>/dev/null
+
+# Collect results
+for i in 1 2 3; do
+  _r=$(cat "$_test_session/test$i" 2>/dev/null || echo "FAIL")
+  if [ "$_r" = "PASS" ]; then
+    PASS=$((PASS + 1))
+  else
+    FAIL=$((FAIL + 1))
+    case $i in
+      1) ERRORS="$ERRORS\n  FAIL: session-scoping includes session-touched file" ;;
+      2) ERRORS="$ERRORS\n  FAIL: session-scoping excludes dirty-baseline file" ;;
+      3) ERRORS="$ERRORS\n  FAIL: hook_has_session_tracking returns true" ;;
+    esac
+  fi
+done
+
+cd "$REPO_ROOT"

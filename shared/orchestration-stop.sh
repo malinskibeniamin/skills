@@ -14,9 +14,7 @@ fi
 session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
 
 # Source hook-lib for session-scoped file tracking
-# Try _hook-lib.sh (symlink name in .claude/hooks/) then hook-lib.sh (direct)
-source "$(dirname "$0")/_hook-lib.sh" 2>/dev/null ||
-  source "$(dirname "$0")/hook-lib.sh" 2>/dev/null || true
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then

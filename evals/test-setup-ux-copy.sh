@@ -63,7 +63,7 @@ echo 'const msg = "Something went wrong!"' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: exclamation point in string" "exclamation"
+  2 "block: exclamation at end of string" "exclamation"
 
 # Allow: no exclamation
 echo 'const msg = "Something went wrong"' > "$tmpfile"
@@ -77,7 +77,14 @@ echo 'if (value !== null) { return }' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: !== operator (not exclamation in text)"
+  0 "allow: !== operator"
+
+# Allow: exclamation in middle of string (not end — likely code/template)
+echo 'const tpl = "Use !important only when needed"' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: exclamation in middle of string (not end)"
 
 # ── Check 2: "successfully" ─────────────────────────────────────
 
@@ -335,13 +342,21 @@ echo "const msg = 'Please enter your email'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: please in string" "please"
+  0 "warn: Please imperative pattern" "Please"
 
+# Allow: direct language
 echo "const msg = 'Enter your email'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: direct language without please"
+  0 "allow: direct language without Please"
+
+# Allow: "please" mid-sentence (acceptable in error acknowledgments)
+echo "const msg = 'If the problem persists, please contact support'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: please mid-sentence (not imperative)"
 
 # ── Check 16: Non-inclusive terminology ──────────────────────────
 

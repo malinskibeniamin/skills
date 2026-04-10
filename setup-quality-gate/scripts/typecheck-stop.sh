@@ -5,7 +5,7 @@ set -eo pipefail
 # Only runs if JS/TS files were actually changed BY THIS SESSION.
 
 # Source hook-lib for session-scoped file tracking
-source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
@@ -74,23 +74,12 @@ if [ $exit_code -ne 0 ]; then
     exit 2
   fi
 
-  # ── Fallback: no baseline — use consecutive failure counter ──────
-  _fail_counter="$_hook_session_dir/typecheck-fail-count"
-  _fail_count=0
-  if [ -f "$_fail_counter" ]; then
-    _fail_count=$(cat "$_fail_counter" 2>/dev/null || echo "0")
-  fi
-  _fail_count=$((_fail_count + 1))
-  echo "$_fail_count" > "$_fail_counter"
+  # ── Fallback: no baseline available ──────────────────────────────
   escaped=$(echo "$truncated" | jq -Rs .)
-
-  echo "{\"decision\":\"block\",\"reason\":\"Type errors found (attempt $_fail_count). Fix before finishing:\\n\"$escaped\"\"}" >&2
+  echo "{\"decision\":\"block\",\"reason\":\"Type errors found. Fix before finishing:\\n\"$escaped\"\"}" >&2
   echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi
-
-# Reset counter on success
-echo "0" > "$_hook_session_dir/typecheck-fail-count" 2>/dev/null || true
 
 # ── Related tests (only tests affected by session's changed files) ──
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -122,23 +111,12 @@ else
 fi
 
 if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
-  _test_fail_counter="$_hook_session_dir/test-fail-count"
-  _test_fail_count=0
-  if [ -f "$_test_fail_counter" ]; then
-    _test_fail_count=$(cat "$_test_fail_counter" 2>/dev/null || echo "0")
-  fi
-  _test_fail_count=$((_test_fail_count + 1))
-  echo "$_test_fail_count" > "$_test_fail_counter"
   truncated=$(echo "$test_output" | head -30)
   escaped=$(echo "$truncated" | jq -Rs .)
-
-  echo "{\"decision\":\"block\",\"reason\":\"Related tests failed (attempt $_test_fail_count). Fix before finishing:\\n\"$escaped\"\"}" >&2
+  echo "{\"decision\":\"block\",\"reason\":\"Related tests failed. Fix before finishing:\\n\"$escaped\"\"}" >&2
   echo "typecheck PASS, tests FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi
-
-# Reset counters on full success
-echo "0" > "$_hook_session_dir/test-fail-count" 2>/dev/null || true
 
 echo "typecheck PASS, tests PASS" > "$_hook_session_dir/last-stop" 2>/dev/null || true
 

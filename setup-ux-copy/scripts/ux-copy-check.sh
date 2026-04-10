@@ -12,11 +12,15 @@ if grep -qE '//\s*allow-ux-copy:' "$file_path" 2>/dev/null; then
   exit 0
 fi
 
-# ── Check 1: Ban exclamation points in string literals ────────────
+# ── Check 1: Ban exclamation points at end of string literals ─────
+# Only match strings that END with ! (the actual anti-pattern).
+# Avoids false positives from template literals, regex, negation operators.
 
-if echo "$added_lines" | grep -qE "'[^']*![^']*'|\"[^\"]*![^\"]*\"" && \
-   ! echo "$added_lines" | grep -qE 'http|!=|!==|!important|\.not\.|\.to'; then
-  hook_block "No exclamation points in UI text. Remove the '!'.\n\nExclamation points convey unnecessary excitement or alarm in product interfaces."
+if echo "$added_lines" | grep -qE "!['\"]|!\\\\n|!\s*['\"]"; then
+  # Exclude operators and code patterns
+  if ! echo "$added_lines" | grep -E '!["\x27]' | grep -qE '!==|!=|!important|http'; then
+    hook_block "No exclamation points in UI text. Remove the '!'.\n\nExclamation points convey unnecessary excitement or alarm in product interfaces."
+  fi
 fi
 
 # ── Check 2: Ban "successfully" in UI text ────────────────────────
@@ -121,10 +125,12 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b(e\.g\.|i\.e\.)[^'\"]*\1"; th
   hook_warn "Avoid Latin abbreviations in UI text.\n\nBAD:  'e.g.' / 'i.e.'\nGOOD: 'for example' / 'that is'"
 fi
 
-# ── Check 15: Ban "please" in UI strings ─────────────────────────
+# ── Check 15: Ban "Please ..." imperative pattern in UI strings ───
+# Only fires on strings starting with "Please" (the imperative anti-pattern).
+# "please" mid-sentence in error acknowledgments is acceptable.
 
-if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\bplease\b[^'\"]*\1"; then
-  hook_warn "Avoid 'please' in UI text — it implies the action is optional.\nUse direct language: 'Enter your email' not 'Please enter your email'.\n\nUse sparingly, only when acknowledging errors or significant inconvenience."
+if echo "$added_lines" | grep -qE "(['\"])Please [^'\"]*\1"; then
+  hook_warn "Avoid starting UI text with 'Please' — it implies the action is optional.\nUse direct language: 'Enter your email' not 'Please enter your email'."
 fi
 
 # ── Check 16: Ban non-inclusive terminology ───────────────────────

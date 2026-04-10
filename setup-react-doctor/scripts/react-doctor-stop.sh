@@ -2,7 +2,7 @@
 set -eo pipefail
 
 # Source hook-lib for session-scoped file tracking
-source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then

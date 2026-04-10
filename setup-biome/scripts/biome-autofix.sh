@@ -5,7 +5,7 @@ set -eo pipefail
 # Only runs if JS/TS files were actually changed.
 
 # Source hook-lib for session-scoped file tracking
-source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # git diff returns paths relative to repo root; strip the prefix so they're
 # relative to cwd (where bun run lint:fix:file executes).
@@ -63,21 +63,9 @@ if [ $fix_exit -ne 0 ]; then
   # Biome error lines look like: src/file.tsx:10:5 lint/rule  FIXABLE
   error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -vE "/($_ui_dirs)/" | grep -v 'internalError/io' || true)
   if [ -n "$error_files" ]; then
-    # Track consecutive failures — downgrade to warn after 3 to avoid infinite loops
-    _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
-    mkdir -p "$_session_dir" 2>/dev/null || true
-    _biome_fail_counter="$_session_dir/biome-fail-count"
-    _biome_fail_count=0
-    if [ -f "$_biome_fail_counter" ]; then
-      _biome_fail_count=$(cat "$_biome_fail_counter" 2>/dev/null || echo "0")
-    fi
-    _biome_fail_count=$((_biome_fail_count + 1))
-    echo "$_biome_fail_count" > "$_biome_fail_counter"
-
     truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -30)
     escaped=$(echo "$truncated" | jq -Rs .)
-
-    echo "{\"decision\":\"block\",\"reason\":\"Biome lint errors remain (attempt $_biome_fail_count). Fix before finishing:\\n\"$escaped\"\"}" >&2
+    echo "{\"decision\":\"block\",\"reason\":\"Biome found unfixable lint errors. Fix before finishing:\\n\"$escaped\"\"}" >&2
     exit 2
   fi
 fi

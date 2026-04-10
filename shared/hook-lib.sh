@@ -186,9 +186,13 @@ hook_session_changed_files() {
   # Formula: (current_diff ∩ touched) - baseline
   if [ -f "$touched_file" ]; then
     local repo_root
-    repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    repo_root=$(cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && pwd -P)
     local touched_normalized
-    touched_normalized=$(sed "s|^${repo_root}/||" "$touched_file" | sort -u)
+    # Resolve symlinks (macOS /var → /private/var) then strip repo root
+    touched_normalized=$(while IFS= read -r f; do
+      _real=$(cd "$(dirname "$f")" 2>/dev/null && echo "$(pwd -P)/$(basename "$f")" || echo "$f")
+      echo "${_real#"$repo_root"/}"
+    done < "$touched_file" | sort -u)
 
     local intersected
     intersected=$(comm -12 <(echo "$current_diff" | sort) <(echo "$touched_normalized") 2>/dev/null || true)
