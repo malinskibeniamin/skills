@@ -68,9 +68,14 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 <details>
 <summary>Codex (OpenAI) — install as Codex plugin</summary>
 
-This repo also ships a Codex-native plugin manifest (`.codex-plugin/plugin.json`). Skills load natively in Codex; hooks are a separate runtime feature wired via `.codex/hooks.json`.
+This repo ships a Codex-native plugin manifest (`.codex-plugin/plugin.json`). Codex plugins require **vendoring** — the plugin must exist as a local directory in your repo.
 
-**Option A: repo marketplace** — add to your project's `.agents/plugins/marketplace.json`:
+**1. Vendor into your repo** (subtree recommended over submodules):
+```bash
+git subtree add --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash
+```
+
+**2. Add repo marketplace** at `.agents/plugins/marketplace.json`:
 ```json
 {
   "name": "skills",
@@ -78,15 +83,24 @@ This repo also ships a Codex-native plugin manifest (`.codex-plugin/plugin.json`
   "plugins": [{
     "name": "frontend-skills",
     "source": { "source": "local", "path": "./plugins/frontend-skills" },
-    "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+    "policy": { "installation": "INSTALLED_BY_DEFAULT", "authentication": "ON_INSTALL" },
     "category": "Development"
   }]
 }
 ```
 
-**Option B: personal install** — clone to `~/plugins/frontend-skills` and add the same entry to `~/.agents/plugins/marketplace.json`.
+Use `INSTALLED_BY_DEFAULT` for zero-click installs (everyone on the repo gets it). Use `AVAILABLE` if you want opt-in.
 
-**Hooks (separate from plugin):** Run the `codex-compat` skill to generate `.codex/hooks.json` and the batch checker. Codex hooks are experimental and discovered from config, not bundled in plugins.
+**3. Enable hooks** (separate from plugin — hooks are an experimental runtime feature, not a plugin payload):
+```toml
+# .codex/config.toml
+[features]
+codex_hooks = true
+```
+
+Wire `.codex/hooks.json` to point at the vendored plugin scripts (`plugins/frontend-skills/.claude/hooks/...`). Run the `codex-compat` skill to generate the hooks config and batch checker.
+
+**To update:** `git subtree pull --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash`
 
 </details>
 
