@@ -34,11 +34,21 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 })
 ```
 
+## Monitor for Long-Running E2E
+
+E2E suites can take minutes. Use the **Monitor** tool to stream test output in the background:
+
+```
+Monitor: bun run test:e2e
+```
+
+React to failures as they stream in — start diagnosing the first failing test before the full suite finishes. Also useful for watching container startup logs during Testcontainers setup.
+
 ## Agent-Browser vs Playwright
 
 | Task | Use |
 |------|-----|
-| Running test suites | Playwright (`bun run test:e2e`) |
+| Running test suites | Playwright via Monitor (`Monitor: bun run test:e2e`) |
 | Generating test selectors | `agent-browser snapshot` (a11y tree → getByRole) |
 | Visual smoke test | `agent-browser screenshot --annotate` |
 | Interactive debugging | Playwright UI mode (`bun run test:e2e:ui`) |

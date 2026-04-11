@@ -91,7 +91,7 @@ For rsbuild: `@rsbuild/core/types` in tsconfig may make this unnecessary.
 
 ## CI Status Check
 
-After push: `gh pr checks` or `gh run watch`. Before merge: `gh pr checks --watch`.
+After push: use the **Monitor** tool to watch CI in the background (`Monitor: gh pr checks <number> --watch`) — continue working while it runs. Before merge: confirm CI is green via Monitor or `gh pr checks`.
 
 ## Cross-Model Review (Optional)
 

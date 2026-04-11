@@ -95,7 +95,7 @@ Follow this order for every task:
 3. **Implement (TDD)** — write failing test FIRST, then minimal code to pass, then refactor
 4. **Verify** — confirm it works yourself using agent-browser or test runner
 5. **Review** — check spec compliance, then code quality. Create PR with conventional commit format
-6. **Complete the lifecycle** — push changes, create PR, wait for CI green (`gh pr checks --watch`), fix failures, request review. Do not stop until the lifecycle is complete.
+6. **Complete the lifecycle** — push changes, create PR, monitor CI (`Monitor` tool on `gh pr checks <number> --watch`), fix failures, request review. Do not stop until the lifecycle is complete.
 
 ## UX Copy
 

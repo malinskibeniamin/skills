@@ -132,14 +132,19 @@ gh api graphql -f query='
 
 For top-level PR comments, reply with a regular comment addressing the feedback.
 
-### 7. Push and Verify
+### 7. Push and Monitor CI
 
 ```bash
 git push
-gh pr checks $pr_number --watch
 ```
 
-If CI fails after the fixes, diagnose and fix. Do not leave the PR with failing CI after addressing reviews.
+Use the **Monitor** tool to watch CI in the background instead of blocking:
+
+```
+Monitor: gh pr checks $pr_number --watch
+```
+
+Continue preparing the summary comment (Step 8) while CI runs. If the Monitor reports CI failure, diagnose and fix before posting the summary. Do not leave the PR with failing CI after addressing reviews.
 
 ### 8. Summary
 

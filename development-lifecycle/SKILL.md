@@ -53,7 +53,7 @@ You don't need to remember skill names. This skill detects what phase you're in 
   - `agent-browser`: open the page, snapshot, verify elements, screenshot
   - `claude-in-chrome` MCP: for authenticated pages
   - Playwright tests: for automated assertions
-- If it's a UI fix: open the page, verify the fix renders correctly
+- If it's a UI fix: use Monitor to start the dev server (`Monitor: bun run dev`), wait for "ready", then open and verify
 - If it's a logic fix: run the test, confirm green
 - **Edge-case hardening** (optional): dispatch an agent to generate additional edge-case tests for the changed code. Prioritize boundary conditions, error paths, and concurrency scenarios.
 - **When green: commit immediately.** Every passing state deserves a snapshot. Don't accumulate changes across multiple features in one commit.
@@ -68,7 +68,9 @@ You don't need to remember skill names. This skill detects what phase you're in 
 
 ### 5b. Iterate — two review rounds, then hand off
 
-Run exactly two automated review rounds (CI green → code-reviewer → `/resolve-pr-feedback` → repeat), then post summary and request human review. **Stop.** Never poll for approval or run >2 rounds per session. See [REFERENCE.md](REFERENCE.md) for the full round-by-round protocol and exit conditions.
+Run exactly two automated review rounds (CI green → code-reviewer → `/resolve-pr-feedback` → repeat), then post summary and request human review. **Stop.** Never poll for approval or run >2 rounds per session.
+
+**Use the Monitor tool** to watch CI in the background after every push (`Monitor: gh pr checks <number> --watch`). This lets you continue working while CI runs instead of blocking. See [REFERENCE.md](REFERENCE.md) for the full round-by-round protocol and exit conditions.
 
 ### 6. Compound — codify what we learned
 

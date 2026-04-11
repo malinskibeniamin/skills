@@ -20,6 +20,19 @@ While discussing the approach with the user, spawn background agents to:
 
 This runs concurrently with user discussion — results feed back into approach selection.
 
+### Monitor Tool for Background Observation
+
+Use the **Monitor** tool whenever you need to observe a long-running process without blocking. Monitor streams output in real-time and lets you react immediately instead of sleeping and checking later.
+
+**When to use Monitor:**
+- **CI checks**: `Monitor: gh pr checks <number> --watch` — continue working while CI runs
+- **Dev server startup**: `Monitor: bun run dev` — watch for "ready" or error messages, then proceed to verification
+- **Test runner in watch mode**: `Monitor: bun test --watch` — react to red/green transitions during TDD
+- **Container logs**: `Monitor: docker logs -f <container>` — observe runtime behavior while debugging
+- **Build processes**: `Monitor: bun run build` — catch build errors as they stream
+
+**Pattern**: start a Monitor, continue with other productive work, react when the Monitor reports something actionable. Never block waiting for a process when you can Monitor it.
+
 ### Refactor-First Gate
 
 Before adding features to an area with mixed patterns, check:
@@ -195,18 +208,28 @@ gh pr comment <URL> --body "@claude review"
 
 ## Phase 5b: Iterate
 
+### Monitor CI Instead of Blocking
+
+Use the **Monitor** tool to watch CI in the background instead of blocking on `gh pr checks --watch`. This lets you continue working (fixing lint, writing docs, addressing other feedback) while CI runs, and react immediately when it fails or passes.
+
+```
+Monitor: gh pr checks <pr-number> --watch
+```
+
+When the Monitor reports CI failure, diagnose and fix immediately. When it reports success, proceed to the next step. Do the same after every `git push` — start a Monitor and continue working.
+
 **Round 1 — Initial review:**
 
-1. Get CI green: `gh pr checks <pr-number> --watch`. If CI fails, fix and push until green.
-2. Dispatch `code-reviewer` agent for first review.
+1. Push and start monitoring CI: `Monitor: gh pr checks <pr-number> --watch`. Continue with other work while CI runs.
+2. When CI is green, dispatch `code-reviewer` agent for first review.
 3. Run `/resolve-pr-feedback` to triage findings, fix, reply on threads, and push.
-4. Get CI green again.
+4. Monitor CI again after push.
 
 **Round 2 — Verification review:**
 
 1. Dispatch `code-reviewer` agent for second review (verifies Round 1 fixes are correct and didn't introduce new issues).
 2. Run `/resolve-pr-feedback` to address any remaining findings.
-3. If new issues found: fix them, push, get CI green. Do NOT trigger a third review round.
+3. If new issues found: fix them, push, monitor CI. Do NOT trigger a third review round.
 
 **Hand off to human:**
 
@@ -219,7 +242,7 @@ After Round 2 completes:
 **If the human requests changes later** (new session):
 
 1. Run `/resolve-pr-feedback` — it fetches comments, triages, fixes, replies, and pushes
-2. Get CI green
+2. Monitor CI after push
 3. Run one more code-reviewer round + `/resolve-pr-feedback` for any new findings
 4. Re-request human review, then stop
 

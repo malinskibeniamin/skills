@@ -88,12 +88,12 @@ ci_states=$(echo "$pr_data" | jq -r '.statusCheckRollup[]?.state // empty' 2>/de
 
 if [ -n "$ci_states" ]; then
   if echo "$ci_states" | grep -qi "FAILURE\|ERROR"; then
-    hook_stop_block "CI checks are failing on PR #$pr_number. Fix the failures, push, and verify: gh pr checks $pr_number --watch"
+    hook_stop_block "CI checks are failing on PR #$pr_number. Fix the failures, push, and monitor CI: Monitor gh pr checks $pr_number --watch"
   fi
 
   if echo "$ci_states" | grep -qi "PENDING\|EXPECTED\|QUEUED\|IN_PROGRESS"; then
     if ! echo "$ci_states" | grep -qi "SUCCESS"; then
-      hook_stop_block "CI checks are still running on PR #$pr_number. Wait for completion: gh pr checks $pr_number --watch"
+      hook_stop_block "CI checks are still running on PR #$pr_number. Use Monitor to watch in the background: Monitor gh pr checks $pr_number --watch"
     fi
   fi
 fi

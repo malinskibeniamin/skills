@@ -42,11 +42,13 @@ const results = await Promise.all(
 );
 
 // Review pass — dispatch code-reviewer on each branch
+// Tip: use the Monitor tool inside each agent to watch CI/test output
+// in the background instead of blocking on long-running commands.
 for (const result of results) {
   if (result.commits.length > 0) {
     await run({
       agent: claudeCode("claude-sonnet-4-6"),
-      prompt: `Review the changes on branch ${result.branch}. Run tests, check types, verify quality. Report APPROVED or NEEDS_CHANGES.`,
+      prompt: `Review the changes on branch ${result.branch}. Run tests, check types, verify quality. Use Monitor to watch CI in the background after pushing. Report APPROVED or NEEDS_CHANGES.`,
       branch: result.branch,
       worktreeMode: { mode: "none" }, // read-only review
     });
@@ -180,6 +182,7 @@ await Promise.all(
 | code-reviewer agent | Dispatched as a review pass after implementation |
 | verifier agent | Can verify UI changes via agent-browser inside container |
 | orchestration-stop | Blocks agent from completing without tests + type check |
+| Monitor tool | Agents use Monitor to watch CI, test output, and dev servers in the background instead of blocking |
 | intent-detect | Not used (agents get explicit prompts, not user prompts) |
 
 ## When to Use Sandcastle vs Claude Code
