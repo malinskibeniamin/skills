@@ -22,7 +22,6 @@
     "sandcastle"
   ],
   "skills": "./",
-  "hooks": "./.codex/hooks.json",
   "interface": {
     "displayName": "Frontend Skills",
     "shortDescription": "React/TypeScript skills, hooks, and agents for Claude Code and Codex",
