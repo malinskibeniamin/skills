@@ -1,0 +1,40 @@
+{
+  "name": "frontend-skills",
+  "version": "1.8.0",
+  "description": "React/TypeScript frontend skills, hooks, and agents. 30 hooks enforce patterns in real-time. One skill for the full development lifecycle.",
+  "author": {
+    "name": "Beniamin Malinski",
+    "url": "https://github.com/malinskibeniamin"
+  },
+  "homepage": "https://github.com/malinskibeniamin/skills",
+  "repository": "https://github.com/malinskibeniamin/skills",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "typescript",
+    "frontend",
+    "tdd",
+    "accessibility",
+    "hooks",
+    "skills",
+    "agents",
+    "quality-gate",
+    "sandcastle"
+  ],
+  "skills": "./",
+  "hooks": "./.codex/hooks.json",
+  "interface": {
+    "displayName": "Frontend Skills",
+    "shortDescription": "React/TypeScript skills, hooks, and agents for Claude Code and Codex",
+    "longDescription": "30 hooks enforce patterns in real-time (accessibility, Tailwind, React Compiler, Zustand, TanStack Router, connect-query, and more). Skills guide the full development lifecycle from TDD through CI-green PR. Includes code-reviewer and verifier agents for automated review rounds.",
+    "developerName": "Beniamin Malinski",
+    "category": "Development",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://github.com/malinskibeniamin/skills",
+    "defaultPrompt": [
+      "Set up the frontend development lifecycle",
+      "Run the full quality gate on my changes",
+      "Review this PR and fix all findings"
+    ]
+  }
+}
