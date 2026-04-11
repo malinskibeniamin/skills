@@ -37,14 +37,15 @@ if [ $exit_code -ne 0 ]; then
   _doctor_fail_count=$((_doctor_fail_count + 1))
   echo "$_doctor_fail_count" > "$_doctor_fail_counter"
   truncated=$(echo "$output" | head -30)
-  escaped=$(echo "$truncated" | jq -Rs .)
 
   if [ "$_doctor_fail_count" -ge 3 ]; then
-    echo "{\"decision\":\"allow\",\"reason\":\"React Doctor errors still present after $_doctor_fail_count attempts (may be pre-existing). Allowing finish:\\n\"$escaped\"\"}" >&2
+    reason=$(printf "React Doctor errors still present after %s attempts (may be pre-existing). Allowing finish:\n%s" "$_doctor_fail_count" "$truncated" | jq -Rs .)
+    echo "{\"decision\":\"allow\",\"reason\":$reason}" >&2
     exit 0
   fi
 
-  echo "{\"decision\":\"block\",\"reason\":\"React Doctor found errors in changed files:\\n\"$escaped\"\"}" >&2
+  reason=$(printf "React Doctor found errors in changed files:\n%s" "$truncated" | jq -Rs .)
+  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
 fi
 

@@ -68,15 +68,15 @@ if [ $exit_code -ne 0 ]; then
 
     truncated=$(echo "$_new_errors" | head -30)
     _new_count=$(echo "$_new_errors" | wc -l | tr -d ' ')
-    escaped=$(echo "$truncated" | jq -Rs .)
-    echo "{\"decision\":\"block\",\"reason\":\"$_new_count new type error(s) introduced by this session. Fix before finishing:\\n\"$escaped\"\"}" >&2
+    reason=$(printf "%s new type error(s) introduced by this session. Fix before finishing:\n%s" "$_new_count" "$truncated" | jq -Rs .)
+    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
     echo "typecheck FAIL (new errors)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
     exit 2
   fi
 
   # ── Fallback: no baseline available ──────────────────────────────
-  escaped=$(echo "$truncated" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":\"Type errors found. Fix before finishing:\\n\"$escaped\"\"}" >&2
+  reason=$(printf "Type errors found. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi
@@ -112,8 +112,8 @@ fi
 
 if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
   truncated=$(echo "$test_output" | head -30)
-  escaped=$(echo "$truncated" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":\"Related tests failed. Fix before finishing:\\n\"$escaped\"\"}" >&2
+  reason=$(printf "Related tests failed. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   echo "typecheck PASS, tests FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
 fi

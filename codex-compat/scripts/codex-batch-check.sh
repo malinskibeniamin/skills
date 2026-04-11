@@ -134,8 +134,8 @@ fi
 
 if [ -n "$errors" ]; then
   truncated=$(printf '%b' "$errors" | head -30)
-  escaped=$(printf '%s' "$truncated" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":\"Code quality checks found issues. Fix these before finishing:\\n\"$escaped\"\"}" >&2
+  reason=$(printf "Code quality checks found issues. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
 fi
 

@@ -150,8 +150,8 @@ fi
 
 # Hard issues (async leaks, security, failing tests) → block
 if [ -n "$issues" ]; then
-  escaped=$(printf '%b' "$issues" | head -20 | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":\"Quality gate: fix before finishing:\\n\"$escaped\"\"}" >&2
+  reason=$(printf "Quality gate: fix before finishing:\n%s" "$(printf '%b' "$issues" | head -20)" | jq -Rs .)
+  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
 fi
 
@@ -164,8 +164,8 @@ fi
 
 # Soft warnings (missing tests) → inform but don't block
 if [ -n "${warnings:-}" ]; then
-  escaped=$(printf '%b' "$warnings" | head -10 | jq -Rs .)
-  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"Quality suggestions (non-blocking):\\n\"$escaped\"\"}}" >&2
+  context=$(printf "Quality suggestions (non-blocking):\n%s" "$(printf '%b' "$warnings" | head -10)" | jq -Rs .)
+  echo "{\"hookSpecificOutput\":{\"additionalContext\":$context}}" >&2
 fi
 
 # Clean up session tracking
