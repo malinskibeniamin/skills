@@ -66,6 +66,31 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 ```
 
 <details>
+<summary>Codex (OpenAI) — install as Codex plugin</summary>
+
+This repo also ships a Codex-native plugin manifest (`.codex-plugin/plugin.json`). Skills load natively in Codex; hooks are a separate runtime feature wired via `.codex/hooks.json`.
+
+**Option A: repo marketplace** — add to your project's `.agents/plugins/marketplace.json`:
+```json
+{
+  "name": "skills",
+  "interface": { "displayName": "Frontend Skills" },
+  "plugins": [{
+    "name": "frontend-skills",
+    "source": { "source": "local", "path": "./plugins/frontend-skills" },
+    "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+    "category": "Development"
+  }]
+}
+```
+
+**Option B: personal install** — clone to `~/plugins/frontend-skills` and add the same entry to `~/.agents/plugins/marketplace.json`.
+
+**Hooks (separate from plugin):** Run the `codex-compat` skill to generate `.codex/hooks.json` and the batch checker. Codex hooks are experimental and discovered from config, not bundled in plugins.
+
+</details>
+
+<details>
 <summary>Alternative: install individual skills via skills.sh (granular control)</summary>
 
 Use this if you only want specific skills instead of the full plugin.
