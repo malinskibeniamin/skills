@@ -226,6 +226,36 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -rf node_modules/.cache"}}' \
   0 "allow: rm -rf node_modules/.cache"
 
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf .claude/skills"}}' \
+  0 "allow: rm -rf .claude/skills (skill infrastructure)"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf .claude/hooks"}}' \
+  0 "allow: rm -rf .claude/hooks (skill infrastructure)"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf .claude/skills .claude/hooks"}}' \
+  0 "allow: rm -rf both skill dirs"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -r skills-lock.json"}}' \
+  0 "allow: rm -r skills-lock.json"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf frontend/.claude/skills frontend/.claude/hooks"}}' \
+  0 "allow: rm -rf nested skill dirs"
+
+# ── git rm (version-controlled, always allowed) ──────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git rm -r .claude/skills/"}}' \
+  0 "allow: git rm -r (version-controlled)"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git rm -r frontend/.claude/hooks/ .claude/skills/ skills-lock.json"}}' \
+  0 "allow: git rm -r multiple paths"
+
 # ── git push --force ──────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \

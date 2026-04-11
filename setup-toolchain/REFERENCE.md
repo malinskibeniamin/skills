@@ -31,6 +31,10 @@
 | `rm -rf /` | Yes | Remove specific safe targets only |
 | `rm -rf node_modules` | No | Allowed (safe target) |
 | `rm -rf .next dist` | No | Allowed (safe targets) |
+| `rm -rf .claude/skills` | No | Allowed (skill infrastructure cleanup) |
+| `rm -rf .claude/hooks` | No | Allowed (skill infrastructure cleanup) |
+| `rm -r skills-lock.json` | No | Allowed (skill infrastructure cleanup) |
+| `git rm -r .claude/skills` | No | Allowed (git rm is version-controlled) |
 | `rm -rf src` | Yes | Remove files individually |
 | `git push --force` | Yes | `git push --force-with-lease` |
 | `git push -f` | Yes | `git push --force-with-lease` |

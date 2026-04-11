@@ -67,8 +67,10 @@ fi
 # --yarn flag enforcement removed — yarn.lock no longer required
 
 # Block destructive rm -rf / rm -r / rm --recursive (allow safe targets)
-if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)rm\s+(-[a-zA-Z]*r[a-zA-Z]*|--recursive)(\s|$)'; then
-  safe_targets="node_modules .next dist build .cache .turbo coverage __pycache__"
+# Skip git rm — it's version-controlled and reversible
+if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)rm\s+(-[a-zA-Z]*r[a-zA-Z]*|--recursive)(\s|$)' \
+   && ! echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)git\s+rm\s'; then
+  safe_targets="node_modules .next dist build .cache .turbo coverage __pycache__ .claude/skills .claude/hooks skills-lock.json"
   rm_part=$(echo "$command" | grep -oE 'rm\s+.*' | head -1)
   targets=""
   for word in $rm_part; do
@@ -84,7 +86,7 @@ if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)rm\s+(-[a-zA-Z]*r[a-zA-Z]*|
     base=$(basename "$t")
     is_safe=false
     for s in $safe_targets; do
-      if [ "$base" = "$s" ] || echo "$t" | grep -qF "$s/"; then
+      if [ "$base" = "$s" ] || echo "$t" | grep -qF "$s/" || [ "$t" = "$s" ] || echo "/$t" | grep -qF "/$s"; then
         is_safe=true
         break
       fi
