@@ -1,0 +1,1 @@
+../../setup-registry-workflow/scripts/ui-registry-warn.sh
