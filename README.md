@@ -2,7 +2,7 @@
 
 **Tell Claude what to build. Get a PR that's ready to merge.**
 
-25 hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
+30 hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
 
 ## How It All Connects
 
@@ -25,7 +25,7 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 | Layer | What | How | Reliability |
 |---|---|---|---|
 | **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
-| **Hooks** | Enforce quality | 25 hooks, 69+ checks, every edit | 100% automatic |
+| **Hooks** | Enforce quality | 30 hooks, 69+ checks, every edit | 100% automatic |
 | **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
 | **Sandcastle** | Delegate | N parallel agents in Docker worktrees | AFK batch mode |
 
@@ -39,7 +39,7 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 | You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
 | You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
 
-**How it works**: 25 hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
+**How it works**: 30 hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
 
 **vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
 
@@ -57,7 +57,7 @@ Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 /reload-plugins
 ```
 
-Three commands. All 31 skills, 25 hooks, and 2 agents activate immediately. Done.
+Three commands. All 31 skills, 30 hooks, and 2 agents activate immediately. Done.
 
 **Verify:**
 
@@ -249,7 +249,7 @@ Before writing any code, produce a plan with what you'll do, files you'll change
 edge cases, and how you'll verify. Wait for my approval before starting.
 ```
 
-**What happens automatically:** 25 hooks enforce patterns on every edit. Intent detection injects workflow guidance. Stop hooks run type checking, linting, and related tests before Claude finishes. You don't need to ask for any of this.
+**What happens automatically:** 30 hooks enforce patterns on every edit. Intent detection injects workflow guidance. Stop hooks run type checking, linting, and related tests before Claude finishes. You don't need to ask for any of this.
 
 **Day 2+:** Work real tickets. Let the hooks catch mistakes. Focus on **clarifying the problem** and **reviewing the output** — not writing code yourself. Post wins and failures to your team channel.
 
@@ -332,7 +332,7 @@ I just installed the frontend-starter-kit skills. Run all setup skills now, then
 Execute the frontend-starter-kit skill. This will:
 - Install all 14 setup skills (toolchain, biome, quality-gate, etc.)
 - Install development-lifecycle skill (the one skill for the full workflow)
-- Create all hook scripts in .claude/hooks/ (25 hooks, 69+ checks)
+- Create all hook scripts in .claude/hooks/ (30 hooks, 69+ checks)
 - Set up src/env.ts, biome.jsonc, .github/workflows/quality-gate.yml
 - Install community workflow skills
 - Set REACT_RULES_BAN_USEEFFECT=1 in session env
@@ -731,7 +731,7 @@ A typical Claude Code tool call takes 3-8 seconds (network + LLM inference). Pos
 
 ## Codex Compatibility
 
-Codex is a first-class harness. 15 of 25 hooks port directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop). The 10 Edit|Write PostToolUse hooks are consolidated into a single Stop-phase batch checker. `AGENTS.md` at repo root replaces PostCompact context re-injection.
+Codex is a first-class harness. 15 of 30 hooks port directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop). The 10 Edit|Write PostToolUse hooks are consolidated into a single Stop-phase batch checker. `AGENTS.md` at repo root replaces PostCompact context re-injection.
 
 All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works from any CWD, silently skips in repos without hooks installed.
 

@@ -63,6 +63,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/ui-registry-warn.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/react-rules-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
