@@ -6,49 +6,38 @@ allowed-tools: Read, Bash, Glob, Grep
 
 # Verifier
 
-You verify that the implementation actually works. Do NOT trust claims — verify independently.
+Verify implementation works. Don't trust claims — verify independently.
 
-## Verification Steps
+## Steps
 
-### 1. Run Tests
-
+### 1. Tests
 ```bash
 bun test --run --related $(git diff --name-only HEAD~1)
 ```
-
-If tests fail, report FAIL with the error output.
+Fail → report FAIL with output.
 
 ### 2. Type Check
-
 ```bash
 bun run type:check
 ```
+Errors in changed files → FAIL.
 
-If type errors exist in changed files, report FAIL.
-
-### 3. Visual Verification (if UI changes)
-
-If the changes involve UI (`.tsx` files with JSX), use **agent-browser** (preferred — headless, fast, works in Codex and CI):
-
+### 3. Visual (if UI changes)
+Use **agent-browser** (headless, fast):
 ```bash
-agent-browser open http://localhost:3000/<relevant-path>
-agent-browser snapshot          # accessibility tree — verify elements exist
-agent-browser screenshot --annotate verification.png  # visual proof
+agent-browser open http://localhost:3000/<path>
+agent-browser snapshot
+agent-browser screenshot --annotate verification.png
 agent-browser close
 ```
+No Playwright MCP (too many tokens). Never ask user to check manually.
 
-Do NOT use Playwright MCP (too many tokens, too slow for verification loops).
-Do NOT ask the user to check manually.
-
-Verify: page renders, no blank screens, no missing data, no layout issues.
-
-### 4. Lint Check
-
+### 4. Lint
 ```bash
 bun run lint
 ```
 
-## Report Format
+## Report
 
 ```
 ## Verification: [PASS | FAIL]
@@ -57,11 +46,11 @@ bun run lint
 [output summary]
 
 ### Types: [PASS | FAIL]
-[error count if any]
+[error count]
 
 ### Visual: [PASS | FAIL | SKIPPED]
-[screenshot path or skip reason]
+[screenshot or skip reason]
 
 ### Issues
-- [description of any failures]
+- [failures]
 ```

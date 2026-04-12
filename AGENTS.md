@@ -1,127 +1,70 @@
 # Project Rules
 
-## Quick Reference (read on every turn)
+## Quick Reference
 
 Rules: bun tsgo biome vitest | React Compiler handles memoization | fix types properly (type guards, generics) | UI from @/components/ui/ | <Button> for all buttons | zustand:create<T>()() useShallow | env from @/env | TanStack Router for routing | connect-query for data fetching | TDD: failing test first, always
 
 ## Toolchain
 
-- Use `bun` as package manager
-- Use `tsgo` for type checking
-- Use Biome for linting and formatting
-- Use `--force-with-lease` for force pushes
-- Safe `rm -rf` targets: node_modules, dist, .next, build, .cache, .turbo, coverage
+bun (pkg mgr) | tsgo (type check) | Biome (lint/format) | --force-with-lease for force pushes
+Safe rm -rf: node_modules, dist, .next, build, .cache, .turbo, coverage
 
-## Commit Format
+## Commits
 
-All commits: `type(scope): description`
-- **Types**: feat, fix, refactor, style, test, docs, chore, perf, ci, build, revert
-- **Scope** required: e.g. `feat(webui):`, `fix(backend):`
-- Lowercase first letter, 5-72 chars
+`type(scope): description` — feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars.
 
 ## Code Quality
 
-- Run `bun run lint:fix` before finishing
-- Run `bun run type:check` before finishing
-- Prefer lightweight deps: date-fns over moment, lodash-es over lodash, clsx over classnames
+Run `bun run lint:fix` + `bun run type:check` before finishing. Prefer: date-fns>moment, lodash-es>lodash, clsx>classnames.
 
-## React Rules
+## React
 
-- Use functional components (React Compiler requires them)
-- Use components from `@/components/ui/` for all form elements and interactive UI
-- Use DOMPurify when rendering user-provided HTML
-- Use JSON.parse() for data parsing, textContent for text insertion, Sanitizer API (setHTML) for safe HTML
-- Fix types properly — use type guards, generics, or schema validation
-- Replace focus outlines with `focus-visible:ring-*` styles
-- React Compiler handles memoization — remove manual useMemo/useCallback/React.memo
-- Add `aria-label` to icon-only buttons
-- Every `<Button>` needs a purpose: onClick, asChild, type="submit", or disabled
-- Use `<Link>` for navigation (accessible, supports basePath)
-- Import directly from source files (tree-shaking friendly)
-- Use `{ passive: true }` on scroll/touch/wheel listeners
-- Use `React.lazy()` or dynamic `import()` for heavy deps (chart.js, d3, three.js, pdf-lib)
-- Use `structuredClone()` for deep cloning
-- Use `.requestSubmit()` for form submission (triggers validation)
-- Use `.filter()` or `Array.with()` for array element removal
-- Use `Number()` or `parseInt(str, 10)` with explicit radix
-- Use `<Button>` for clickable elements (native keyboard/focus/a11y)
-- Pass functions to `setTimeout`, use `Number.isNaN()` for NaN checks
-- Name useEffect callbacks: `useEffect(function syncDocumentTitle() { ... }, [title])`
+- Functional components only (React Compiler requires)
+- `@/components/ui/` for all form/interactive UI
+- DOMPurify for user HTML. JSON.parse() for data, textContent for text, setHTML for safe HTML
+- Type guards/generics/schema validation — no `as any`, no `@ts-ignore`
+- `focus-visible:ring-*` not outline. React Compiler handles memo — remove useMemo/useCallback/React.memo
+- `aria-label` on icon buttons. `<Button>` needs: onClick|asChild|type="submit"|disabled
+- `<Link>` for navigation. Direct source imports (tree-shaking). `{ passive: true }` on scroll/touch/wheel
+- `React.lazy()` for heavy deps. `structuredClone()` for cloning. `.requestSubmit()` for forms
+- `Number()` or `parseInt(s,10)`. `Number.isNaN()`. Named useEffect callbacks.
 
-## Tailwind CSS
+## Tailwind
 
-- Use Tailwind utility classes for styling
-- Use design tokens for colors: `var(--destructive)`, `bg-primary`
-- Fix specificity issues at the source (cascade layers, selector ordering)
-- Use variant prop on registry components for visual changes
-- Use `100dvh` for full viewport height (mobile-safe)
-- Use `width: 100%` for full-width containers
-- Respect zoom: keep user-scalable enabled (WCAG 1.4.4)
+Utility classes. Design tokens (`bg-primary`). Fix specificity at source. variant prop on registry components. `100dvh` for viewport. `width:100%` for containers. Keep user-scalable enabled.
 
-## Environment Variables
+## Env
 
-- Import from `@/env` (validated with t3-env + zod)
-- Declare all env vars in `src/env.ts`
-- Exception: `process.env` is correct in build/test config files (rsbuild.config, vitest.config, etc.)
+`import { env } from "@/env"` (t3-env+zod). All vars in `src/env.ts`. Exception: `process.env` in build/test configs.
 
 ## Accessibility
 
-- Every `<img>` needs an `alt` attribute
-- Clickable `<div>` / `<span>` need `role`, `tabIndex`, and keyboard handler
-- `role="combobox"` needs `aria-expanded` and `aria-controls`
-- `role="dialog"` needs `aria-label` or `aria-labelledby`
-- `role="tablist"` needs child `role="tab"` elements
+`<img>` needs alt. Clickable div/span needs role+tabIndex+keyboard handler. combobox→aria-expanded+aria-controls. dialog→aria-label/labelledby. tablist→child role="tab".
 
 ## Zustand
 
-- Use `create<T>()()` double-parens pattern
-- Use `useShallow` for multi-value selectors
-- Use `persist` middleware for local storage
+`create<T>()()` double-parens. `useShallow` for multi-value selectors. `persist` for localStorage.
 
 ## State & Data
 
-- zustand for client state, TanStack Query for server state
-- Use connect-query hooks for ConnectRPC services (exception: `useTransport`/`callUnaryMethod` with `@connectrpc/connect`)
-- Protobuf v2: use `create(Schema, { ... })` with schema-first functions
-- Protobuf v2: use `timestampFromDate()` for Timestamp, `anyPack()` for Any with `typeRegistry`
-- Include error callback: `handleSubmit(onSubmit, onError)`
+zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: useTransport/callUnaryMethod). Proto v2: `create(Schema,{})`, `timestampFromDate()`, `anyPack()` with typeRegistry. `handleSubmit(onSubmit, onError)`.
 
-## Development Lifecycle
+## Lifecycle
 
-Follow this order for every task:
-
-1. **Understand** — explore context, ask clarifying questions one at a time, propose approaches
-2. **Plan** — write exact file paths, exact code, expected output
-3. **Implement (TDD)** — write failing test FIRST, then minimal code to pass, then refactor
-4. **Verify** — confirm it works yourself using agent-browser or test runner
-5. **Review** — check spec compliance, then code quality. Create PR with conventional commit format
-6. **Complete the lifecycle** — push changes, create PR, monitor CI (`Monitor` tool on `gh pr checks <number> --watch`), fix failures, request review. Do not stop until the lifecycle is complete.
+1. Understand (explore, clarify, propose) → 2. Plan (exact paths/code/output) → 3. TDD (RED→GREEN→REFACTOR) → 4. Verify (self-verify, never ask user) → 5. Review (PR, conventional commit) → 6. Complete (push, PR, monitor CI, fix, request review)
 
 ## UX Copy
 
-- Use sentence case for headings and labels (not Title Case)
-- Replace Latin abbreviations: e.g. → for example, i.e. → that is, etc. → and so on, via → through
-- Avoid ableist language: use "check" not "sanity check", "placeholder" not "dummy"
-- Use gender-neutral language: they/them, not he/she
+Sentence case. No Latin abbreviations (for example, that is, and so on, through). No ableist language. Gender-neutral.
 
-## Test Quality
+## Tests
 
-- Write failing test FIRST — then make it pass
-- Use `userEvent.setup()` and `getByRole` for accessibility assertions
-- Use `await waitFor(() => expect(...))` for async assertions
-- Classify: `.test.ts` (unit), `.test.tsx` (integration), `e2e/*.spec.ts` (Playwright)
-- Co-locate test files with source files
+Failing test FIRST. `userEvent.setup()` + `getByRole`. `waitFor()` for async. .test.ts=unit, .test.tsx=integration, e2e/*.spec.ts=Playwright. Co-locate with source.
 
-## Error Handling & Resilience
+## Resilience
 
-- Route files with data fetching need `errorComponent`
-- Wrap `React.lazy()` in `<Suspense fallback={...}>`
-- Handle loading, error, AND empty states for query hooks
-- Add error handling to async event handlers
+Route data fetching→errorComponent. React.lazy()→`<Suspense fallback>`. Query hooks→loading/error/empty states. Async handlers→error handling.
 
-## Auto-Generated Files (skip these)
+## Auto-Generated (skip)
 
-- `*.gen.ts` / `*.gen.tsx` (TanStack Router routeTree)
-- `*_pb.ts` / `*_pb.js` (protobuf generated)
-- `*_connectquery.ts` (Connect Query generated)
-- Files with `@generated` or `DO NOT EDIT` in first 5 lines
+*.gen.ts/tsx, *_pb.ts/js, *_connectquery.ts, files with @generated/DO NOT EDIT in first 5 lines.
