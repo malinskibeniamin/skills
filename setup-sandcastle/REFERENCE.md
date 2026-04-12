@@ -4,17 +4,19 @@
 
 ```typescript
 // .sandcastle/main.ts
-import { run, createSandbox, claudeCode } from "@ai-hero/sandcastle";
+import { run, claudeCode } from "@ai-hero/sandcastle";
+import { docker } from "@ai-hero/sandcastle/sandboxes/docker";
 
 // Pick tasks from GitHub issues
 const issues = JSON.parse(
   execSync('gh issue list --state open --label "ready" --json number,title,body --limit 5').toString()
 );
 
-// Run agents in parallel — each gets its own worktree + container
+// Run agents in parallel — each gets its own branch + container
 const results = await Promise.all(
   issues.map((issue) =>
     run({
+      sandbox: docker(),
       agent: claudeCode("claude-opus-4-6"),
       promptFile: ".sandcastle/implement.md",
       promptArgs: {
@@ -23,6 +25,7 @@ const results = await Promise.all(
         ISSUE_BODY: issue.body,
       },
       branch: `agent/fix-${issue.number}`,
+      branchStrategy: { type: "merge-to-head" },
       hooks: {
         onSandboxReady: [
           // Install project deps first (without --yarn for speed)
@@ -47,10 +50,11 @@ const results = await Promise.all(
 for (const result of results) {
   if (result.commits.length > 0) {
     await run({
+      sandbox: docker(),
       agent: claudeCode("claude-sonnet-4-6"),
       prompt: `Review the changes on branch ${result.branch}. Run tests, check types, verify quality. Use Monitor to watch CI in the background after pushing. Report APPROVED or NEEDS_CHANGES.`,
       branch: result.branch,
-      worktreeMode: { mode: "none" }, // read-only review
+      branchStrategy: { type: "head" }, // review on existing branch
     });
   }
 }
@@ -156,7 +160,7 @@ When done, emit: <promise>COMPLETE</promise>
 Use Sandcastle to work on our own skills repo:
 
 ```typescript
-// .sandcastle/dogfood.ts
+// .sandcastle/dogfood.ts — uses same imports as main template above
 const issues = JSON.parse(
   execSync('gh issue list --repo malinskibeniamin/skills --state open --json number,title,body').toString()
 );
@@ -164,10 +168,12 @@ const issues = JSON.parse(
 await Promise.all(
   issues.map((issue) =>
     run({
+      sandbox: docker(),
       agent: claudeCode("claude-opus-4-6"),
       promptFile: ".sandcastle/implement.md",
       promptArgs: { ISSUE_NUMBER: String(issue.number), ISSUE_TITLE: issue.title, ISSUE_BODY: issue.body },
       branch: `agent/issue-${issue.number}`,
+      branchStrategy: { type: "merge-to-head" },
     })
   )
 );
@@ -198,4 +204,4 @@ await Promise.all(
 
 ## Cross-Model with Sandcastle
 
-Implement with Claude, review with `/codex:adversarial-review`. Codex agent provider for Sandcastle is not yet available — use manual review for now.
+Implement with Claude, review with Codex. Agent providers available: `claudeCode()`, `codex()`, `piAgent()`, `openCode()`. Mix models per stage — for example, Claude for implementation, Codex for adversarial review.

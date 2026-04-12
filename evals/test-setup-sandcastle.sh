@@ -7,7 +7,7 @@ run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-sandcastle" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "sandcastle" "SKILL.md mentions sandcastle"
-run_content_eval "$SKILL_DIR/SKILL.md" "worktree" "SKILL.md mentions worktrees"
+run_content_eval "$SKILL_DIR/SKILL.md" "sandbox" "SKILL.md mentions sandboxes"
 run_content_eval "$SKILL_DIR/SKILL.md" "Docker" "SKILL.md mentions Docker"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "main.ts" "REFERENCE has orchestration template"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "implement.md" "REFERENCE has implementation prompt"
@@ -15,6 +15,19 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "review.md" "REFERENCE has review pro
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Dogfooding" "REFERENCE has dogfooding section"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "COMPLETE" "REFERENCE has completion signal"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "code-reviewer" "REFERENCE references code-reviewer agent"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "sandbox: docker()" "REFERENCE has required sandbox option"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "branchStrategy" "REFERENCE has branchStrategy config"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "@ai-hero/sandcastle/sandboxes/docker" "REFERENCE imports docker from correct subpath"
+
+# Verify removed APIs are not referenced
+if grep -qE "worktreeMode|WorktreeMode" "$SKILL_DIR/REFERENCE.md"; then
+  echo "  FAIL  REFERENCE.md still references removed worktreeMode API"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: REFERENCE.md still references removed worktreeMode API"
+else
+  echo "  PASS  REFERENCE.md does not reference removed worktreeMode API"
+  PASS=$((PASS + 1))
+fi
 
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')
 desc_len=${#desc}

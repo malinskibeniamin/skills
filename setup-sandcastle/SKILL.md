@@ -1,14 +1,14 @@
 ---
 name: setup-sandcastle
-description: "Configure Sandcastle for AFK agent delegation — pick tasks from GitHub issues, run agents in parallel worktrees, merge results. Use when delegating work to autonomous agents, parallelizing implementation, or running AFK coding sessions."
+description: "Configure Sandcastle for AFK agent delegation — pick tasks from GitHub issues, run agents in parallel sandboxes, merge results. Use when delegating work to autonomous agents, parallelizing implementation, or running AFK coding sessions."
 ---
 
 # Setup Sandcastle
 
-[Sandcastle](https://github.com/mattpocock/sandcastle) runs agents in isolated Docker containers with git worktrees. Each agent gets own branch, implements task via development-lifecycle, commits independently.
+[Sandcastle](https://github.com/mattpocock/sandcastle) runs agents in isolated Docker sandboxes with branch strategies. Each agent gets own branch, implements task via development-lifecycle, commits independently.
 
 - Task picking: GitHub issues → one agent per issue
-- Parallel: N agents in isolated worktrees
+- Parallel: N agents in isolated sandboxes
 - Quality: our hooks run inside each container
 - Review: code-reviewer agent per branch
 - Merge: fast-forward completed branches
@@ -24,11 +24,11 @@ sequenceDiagram
     GH->>Main: Fetch labeled issues
 
     par Parallel execution in Docker
-        Main->>A1: Issue #1 (isolated worktree)
+        Main->>A1: Issue #1 (isolated sandbox)
         A1->>A1: development-lifecycle (6 phases)
         A1->>A1: hooks enforce 69+ checks
     and
-        Main->>An: Issue #N (isolated worktree)
+        Main->>An: Issue #N (isolated sandbox)
         An->>An: development-lifecycle (6 phases)
         An->>An: hooks enforce 69+ checks
     end
@@ -43,7 +43,7 @@ sequenceDiagram
 
 ### 1. Install
 ```bash
-bun add -D @ai-hero/sandcastle --yarn && npx sandcastle init
+bun add -D @ai-hero/sandcastle && bunx sandcastle init
 ```
 
 ### 2. Configure `.sandcastle/.env`

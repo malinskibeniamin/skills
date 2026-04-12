@@ -58,7 +58,7 @@ graph TD
 | **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
 | **Hooks** | Enforce quality | 30 hooks, 69+ checks, every edit | 100% automatic |
 | **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
-| **Sandcastle** | Delegate | N parallel agents in Docker worktrees | AFK batch mode |
+| **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
 
 ## Why This Exists
 
@@ -294,7 +294,7 @@ These are installed by `/frontend-starter-kit` and run automatically. You never 
 | `setup-ci-pipeline` | GitHub Actions quality gate, coverage gates, bundle budgets |
 | `setup-agent-config` | Token-efficient env vars, test flag optimization, output truncation |
 | `setup-registry-workflow` | Reminds to rebuild registry.json when UI components change |
-| `setup-sandcastle` | AFK agent delegation — parallel agents in Docker worktrees |
+| `setup-sandcastle` | AFK agent delegation — parallel agents in Docker sandboxes |
 
 ### Agents
 
