@@ -20,6 +20,37 @@ You: "Build feature X" or "Fix these 5 issues overnight"
                                       └── PRs ready to merge
 ```
 
+### Development Lifecycle
+
+The 6-phase workflow that drives every task, from feature to fix. Phases can be skipped depending on task type — bug fixes jump straight to TDD, test requests go directly to Phase 3.
+
+```mermaid
+graph TD
+    Start([User prompt]) --> Understand
+
+    Understand["1. Understand\nExplore codebase, clarify requirements"]
+    Plan["2. Plan\nExact file paths, code, expected output"]
+    Grill["2b. Grill\nAuto /grill-me, stress-test plan\n--- GATE: user confirms ---"]
+    Implement["3. Implement — TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
+    Verify["4. Verify\nSelf-verify via browser tools"]
+    Review["5. Review\nSecurity gate, code-reviewer agent, create PR"]
+    Iterate["5b. Iterate\n2 automated CI + review rounds\nthen request human review"]
+    Compound["6. Compound\nWrite .claude/rules/ rule"]
+    Done([PR ready to merge])
+
+    Understand --> Plan --> Grill --> Implement
+    Implement --> Verify --> Review --> Iterate --> Compound --> Done
+
+    Start -. "Fix bug" .-> Understand
+    Understand -. "skip plan" .-> Implement
+    Start -. "Write tests" .-> Implement
+    Start -. "Create PR" .-> Review
+
+    style Grill fill:#f9e,stroke:#333
+    style Implement fill:#bfb,stroke:#333
+    style Review fill:#bbf,stroke:#333
+```
+
 **Four layers, one outcome:**
 
 | Layer | What | How | Reliability |
@@ -461,7 +492,43 @@ The migration is ordered from least disruptive (auto-fixable lint) to most disru
 
 ## Starter Kits
 
-Meta-skills that install everything you need in one go.
+Meta-skills that install everything you need in one go. The diagram below shows how the starter kit, setup skills, workflow skills, and agents compose into the full ecosystem.
+
+```mermaid
+graph TD
+    FSK["frontend-starter-kit"]
+    Setup["14 Setup Skills\ntoolchain, biome, quality-gate,\nreact-compiler, accessibility, and so on"]
+    SC[setup-sandcastle]
+
+    subgraph Workflow["Workflow Skills"]
+        DL["development-lifecycle"]
+        TDD[tdd]
+        GM[grill-me]
+        DAI[design-an-interface]
+        RPF[resolve-pr-feedback]
+    end
+
+    subgraph Agents
+        CR[code-reviewer]
+        VER[verifier]
+    end
+
+    FSK --> Setup
+    FSK --> Workflow
+
+    DL -- "Phase 2b" --> GM
+    DL -- "Phase 3" --> TDD
+    DL -- "Phase 2 UI" --> DAI
+    DL -- "Phase 5b" --> RPF
+    DL -- "Phase 5" --> CR
+
+    SC -- "N parallel agents" --> DL
+    SC --> CR
+
+    style DL fill:#f96,stroke:#333,color:#000
+    style FSK fill:#69f,stroke:#333,color:#fff
+    style SC fill:#9c6,stroke:#333,color:#000
+```
 
 - **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + 10 owned workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + 5 optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` is fully covered by Biome's `noConsole`.
 
@@ -677,6 +744,43 @@ cd agent-evals && bun install --yarn && npx @vercel/agent-eval
 
 ## Hook Architecture
 
+Hooks fire automatically at each stage of a Claude Code session. PostToolUse hooks run concurrently for speed; Stop hooks run sequentially as a final quality gate.
+
+```mermaid
+graph TD
+    SS["SessionStart\nsession-env.sh, llm-env.sh"]
+    UP["UserPromptSubmit\nuser-prompt-context.sh\nintent-detect.sh"]
+    PRE["PreToolUse — Bash\nenforce-toolchain.sh\nllm-test-flags.sh\nconventional-commits-check.sh"]
+
+    subgraph POST ["PostToolUse — Edit|Write (~293ms, concurrent)"]
+        direction LR
+        P1["react-rules\ntailwind\naccessibility"]
+        P2["zustand\ntanstack-router\nconnect-query"]
+        P3["react-compiler\nenv-validation\nbundle-guard"]
+        P4["test-perf\nux-copy\norchestration-guidance"]
+    end
+
+    PB["PostToolUse — Bash\nllm-truncate.sh"]
+
+    subgraph STOP ["Stop (~5-13s, sequential)"]
+        direction TB
+        ST1["biome-autofix.sh\nlint:fix changed files"]
+        ST2["typecheck-stop.sh\ntsgo + related tests"]
+        ST3["react-doctor-stop.sh\nhealth score"]
+        ST4["orchestration-stop.sh\nasync leaks, missing tests, security"]
+        ST5["violation-summary-stop.sh\naggregate session violations"]
+        ST1 --> ST2 --> ST3 --> ST4 --> ST5
+    end
+
+    SS --> UP --> PRE --> POST --> PB --> STOP
+
+    style POST fill:#ffe,stroke:#cc0
+    style STOP fill:#fee,stroke:#c00
+```
+
+<details>
+<summary>Detailed hook reference (text)</summary>
+
 ```
 SessionStart
 ├── session-env.sh      — PKG_MANAGER=bun, LINTER=biome, TEST_RUNNER=vitest, NODE_OPTIONS=8GB
@@ -716,6 +820,8 @@ Stop
 ├── test-perf-stop.sh        — test performance audit (before/after timing comparison)
 └── violation-summary-stop.sh — session violation aggregator
 ```
+
+</details>
 
 Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hooks exit immediately on non-matching file extensions.
 

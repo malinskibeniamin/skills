@@ -25,6 +25,19 @@ No exceptions. Not for "simple" changes. Not for "obvious" fixes. Not under time
     WRONG:  RED: test1,test2,test3  →  GREEN: impl1,impl2,impl3
     RIGHT:  RED→GREEN: test1→impl1  →  RED→GREEN: test2→impl2
 
+```mermaid
+graph LR
+    P["0. PLAN\nConfirm behaviors"] --> R["1. RED\nFailing test"]
+    R --> G["2. GREEN\nMinimal code"]
+    G --> RF["3. REFACTOR\nClean up while green"]
+    RF -->|"Next behavior"| R
+
+    style R fill:#f66,stroke:#333,color:#fff
+    style G fill:#6b6,stroke:#333,color:#fff
+    style RF fill:#66f,stroke:#333,color:#fff
+    style P fill:#888,stroke:#333,color:#fff
+```
+
 ## Workflow
 
 ### 0. PLAN — Confirm what to test

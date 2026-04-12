@@ -13,6 +13,32 @@ description: "Configure Sandcastle for AFK agent delegation — pick tasks from 
 - Review: code-reviewer agent per branch
 - Merge: fast-forward completed branches
 
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Issues
+    participant Main as main.ts
+    participant A1 as Agent 1
+    participant An as Agent N
+    participant Rev as code-reviewer
+
+    GH->>Main: Fetch labeled issues
+
+    par Parallel execution in Docker
+        Main->>A1: Issue #1 (isolated worktree)
+        A1->>A1: development-lifecycle (6 phases)
+        A1->>A1: hooks enforce 69+ checks
+    and
+        Main->>An: Issue #N (isolated worktree)
+        An->>An: development-lifecycle (6 phases)
+        An->>An: hooks enforce 69+ checks
+    end
+
+    A1->>Rev: Branch for review
+    Rev->>Main: Approved — fast-forward merge
+    An->>Rev: Branch for review
+    Rev->>Main: Approved — fast-forward merge
+```
+
 ## Steps
 
 ### 1. Install
