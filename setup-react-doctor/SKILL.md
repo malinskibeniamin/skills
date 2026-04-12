@@ -5,60 +5,30 @@ description: React health scoring via react-doctor with Stop hook to fail on sco
 
 # Setup React Doctor
 
-## What This Sets Up
-
-- **react-doctor** package for codebase health scoring (0-100)
-- `doctor` package.json script
-- `react-doctor.config.json` disabling biome-overlapping rules
-- **Stop hook** running doctor on changed files, failing on score drop
+- **react-doctor** for codebase health scoring (0-100)
+- Stop hook runs doctor on changed files, fails on score drop
+- Config disables biome-overlapping rules
 
 ## Steps
 
 ### 1. Install
-
 ```bash
 bun add -D react-doctor --yarn
 ```
 
-### 2. Add package.json script
-
+### 2. Package.json
 ```json
-{
-  "scripts": {
-    "doctor": "react-doctor ."
-  }
-}
+{ "scripts": { "doctor": "react-doctor ." } }
 ```
 
-### 3. Create `react-doctor.config.json`
-
+### 3. Config (`react-doctor.config.json`)
 ```json
-{
-  "ignore": {
-    "rules": [
-      "react-hooks/exhaustive-deps",
-      "react/no-nested-component"
-    ]
-  }
-}
+{ "ignore": { "rules": ["react-hooks/exhaustive-deps", "react/no-nested-component"] } }
 ```
 
-### 4. Create Stop hook script
+### 4. Hook
+Copy `scripts/react-doctor-stop.sh` → `.claude/hooks/`. `chmod +x`. Add to Stop.
 
-Copy [`scripts/react-doctor-stop.sh`](scripts/react-doctor-stop.sh) into `.claude/hooks/`. Make executable.
-
-### 5. Configure hook in `.claude/settings.json`
-
-Add to hooks config: **Stop**: `.claude/hooks/react-doctor-stop.sh`
-
-### 6. Codex compatibility (optional)
-
-If the project also uses OpenAI Codex, run `codex-compat` to generate `.codex/hooks.json` from the Claude Code config.
-
-### 7. Verify & Commit
-
+### 5. Verify
 - [ ] `bun run doctor` works
-- [ ] `react-doctor.config.json` exists
-- [ ] Stop hook is executable
-
-Commit: `Add react-doctor health scoring with Stop hook`
+- [ ] Stop hook executable

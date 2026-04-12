@@ -5,56 +5,33 @@ description: Complete frontend stack — 14 setup skills + 10 owned workflow ski
 
 # Frontend Starter Kit
 
-## What This Sets Up
+## Setup Skills (1-14, sequential, idempotent)
 
-### Setup skills (configures hooks + packages)
+1. **setup-toolchain** — bun + tsgo enforcement, destructive command guards
+2. **setup-biome** — Biome + Ultracite, auto-fix hook
+3. **setup-quality-gate** — quality:gate script, CI workflow, Stop hook, bundle guard
+4. **setup-agent-config** — AI_AGENT=1, output truncation
+5. **setup-react-compiler** — React Compiler + memoization check
+6. **setup-zustand** — double-parens create, useShallow, persist
+7. **setup-accessibility** — ARIA enforcement, Playwright AXE, WCAG 2.1 AA
+8. **setup-react-rules** — ban raw HTML, TS escapes, XSS, barrel imports
+9. **setup-env-validation** — t3-env + zod, ban process.env
+10. **setup-conventional-commits** — type(scope): description
+11. **setup-react-doctor** — health scoring + Stop hook
+12. **setup-tanstack-router** — route tree auto-gen + enforcement
+13. **setup-connect-query** — ConnectRPC + Protobuf enforcement
+14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core
 
-1. **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun + tsgo, block destructive commands
-2. **setup-biome** — Biome + Ultracite linting/formatting with auto-fix hook, kebab-case filenames
-3. **setup-quality-gate** — quality:gate script, CI workflow, Stop hook for tsgo + related tests, bundle guard
-4. **setup-agent-config** — AI_AGENT=1, CLAUDECODE=1, output truncation
-5. **setup-react-compiler** — React Compiler with rsbuild, memoization check
-6. **setup-zustand** — Zustand best practices: double-parens create, useShallow, persist middleware
-7. **setup-accessibility** — ARIA enforcement, Playwright AXE setup, WCAG 2.1 AA compliance
-8. **setup-react-rules** — Ban raw HTML, TS escape hatches, XSS vectors, Tailwind enforcement, class components
-9. **setup-env-validation** — t3-env + zod, ban raw process.env access
-10. **setup-conventional-commits** — Enforce type(scope): description commit format
-11. **setup-react-doctor** — Health scoring with Stop hook, warnings surfaced
-12. **setup-tanstack-router** — Route tree auto-generation + anti-pattern enforcement
-13. **setup-connect-query** — ConnectRPC + Connect Query + Protobuf enforcement
-14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core accessibility testing
+## Workflow Skills (15-24)
 
-### Owned workflow skills (hook-integrated)
-
-15. **development-lifecycle** — One skill for the full loop: understand → plan → TDD → verify → review → compound
-16. **tdd** — TDD iron law + async leak detection (auto-loads on test files via paths:)
-17. **brainstorming** — Design exploration + challenge mode
-18. **setup-ci-pipeline** — GitHub Actions CI: coverage, visual regression, dependabot, bundle budgets
-19. **improve-codebase-architecture** — Architectural improvements and deep module analysis
-20. **request-refactor-plan** — Create detailed refactor plans with tiny commits, filed as GitHub issues
-21. **design-an-interface** — Generate multiple radically different interface designs using parallel sub-agents
-22. **grill-me** — Stress-test your design decisions
-23. **triage-issue** — Triage bugs: explore codebase, find root cause, file TDD fix plan as GitHub issue
-24. **write-a-skill** — Create new agent skills
+development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, grill-me, triage-issue, write-a-skill
 
 ## Steps
 
-### 1. Run each setup skill in order
+### 1. Run setup skills 1-14 sequentially
+Each skill's `SETUP.md` has install steps. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh.
 
-Execute skills 1–14 sequentially. Each skill is idempotent — if already configured, it will verify and skip.
-
-**Important**: setup skills have been split for context efficiency. During bootstrap, read each skill's `SETUP.md` (not just `SKILL.md`) for install steps, config, and verification checklists.
-
-Set `REACT_RULES_BAN_USEEFFECT=1` in the SessionStart hook (`.claude/hooks/session-env.sh`):
-
-```bash
-echo "export REACT_RULES_BAN_USEEFFECT=1" >> "$CLAUDE_ENV_FILE"
-```
-
-For setup-connect-query, detect the protobuf version from `package.json` and install the appropriate variant (v1 or v2).
-
-### 2. Install owned workflow skills
-
+### 2. Install workflow skills
 ```bash
 bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
@@ -68,8 +45,7 @@ bunx skills@latest add malinskibeniamin/skills/triage-issue --agent claude-code 
 bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code -y
 ```
 
-### 3. Install community workflow skills (optional)
-
+### 3. Community skills (optional)
 ```bash
 bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y
 bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y
@@ -78,9 +54,7 @@ bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y
 ```
 
-### 3. Final verification
-
-- [ ] `.claude/settings.json` has all hooks, `biome.jsonc` exists, `src/env.ts` exists
-- [ ] Package.json scripts: `lint`, `lint:fix`, `type:check`, `test`, `quality:gate`
+### 4. Verify
+- [ ] `.claude/settings.json` has all hooks, `biome.jsonc` + `src/env.ts` exist
+- [ ] Scripts: lint, lint:fix, type:check, test, quality:gate
 - [ ] `.github/workflows/quality-gate.yml` exists, all hooks executable
-- Commit: `Bootstrap frontend starter kit`

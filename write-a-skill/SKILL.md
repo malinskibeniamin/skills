@@ -5,52 +5,34 @@ description: Create new agent skills with proper structure, progressive disclosu
 
 # Write a Skill
 
-## Process
+## 1. Gather Requirements
+Ask: domain/task? Primary use cases? Scripts needed? Reference materials?
 
-### 1. Gather requirements
-
-Ask the user:
-- What task or domain does this skill cover?
-- What are the primary use cases?
-- Are any scripts or automation needed?
-- Any reference materials to bundle?
-
-### 2. Draft the skill
-
-Create the skill directory with appropriate files:
+## 2. Draft Structure
 
     skill-name/
-    ├── SKILL.md           # Main instructions (required, under 100 lines)
+    ├── SKILL.md           # Main instructions (required, <100 lines)
     ├── REFERENCE.md       # Detailed docs (if SKILL.md would exceed 100 lines)
     ├── EXAMPLES.md        # Usage examples (if needed)
     └── scripts/           # Utility scripts (if needed)
 
-### 3. Description requirements
+## 3. Description
+Max 1024 chars, third person. First sentence: what it does. Second: "Use when [triggers]."
 
-- Max 1024 characters, third person
-- First sentence: what it does
-- Second sentence: "Use when [specific triggers]"
-
-### 4. When to add scripts
-
-Add bundled scripts when:
-- The operation is deterministic (same code every time)
-- The same code would be generated repeatedly without a script
+## 4. Add Scripts When
+- Operation is deterministic (same code every time)
+- Same code generated repeatedly without script
 - Errors need explicit handling
 
-### 5. When to split files
-
-Split beyond SKILL.md when:
+## 5. Split Files When
 - SKILL.md exceeds 100 lines
-- Content has distinct domains (e.g., reference tables vs workflow)
-- Advanced features are rarely needed (progressive disclosure)
+- Distinct domains (reference tables vs workflow)
+- Advanced features rarely needed (progressive disclosure)
 
-### 6. Review with user
-
-Run through the checklist:
+## 6. Review Checklist
 - [ ] Description includes trigger phrases
 - [ ] SKILL.md under 100 lines
-- [ ] No time-sensitive info (dates, versions that will go stale)
-- [ ] Consistent terminology throughout
+- [ ] No time-sensitive info (dates, versions)
+- [ ] Consistent terminology
 - [ ] Concrete examples included
-- [ ] References are one level deep (SKILL → REFERENCE, not SKILL → REF1 → REF2)
+- [ ] References one level deep (SKILL→REFERENCE, not SKILL→REF1→REF2)

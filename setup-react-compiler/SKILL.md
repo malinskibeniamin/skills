@@ -7,71 +7,45 @@ description: Install React Compiler with rsbuild and enforce compiler-friendly p
 
 ## What This Sets Up
 
-- **babel-plugin-react-compiler** with rsbuild integration
-- **PostToolUse hook** enforcing compiler-friendly React patterns:
-  - Flags `useMemo`, `useCallback`, `React.memo` (compiler handles memoization)
-  - Flags derived-state-via-useEffect (`useState` + `useEffect` to compute derived values)
-  - Flags `useRef` used as memoization cache
-- `'use no memo'` directive for escape hatch and component library directories
-- **Annotation mode support** for legacy codebases: set `REACT_COMPILER_MODE=annotation` to only flag memoization in files with `"use memo"` directive
+- **babel-plugin-react-compiler** with rsbuild
+- PostToolUse hook flags: `useMemo`/`useCallback`/`React.memo` (compiler handles it), derived-state-via-useEffect, `useRef` as memo cache
+- `'use no memo'` escape hatch + auto-skip component library dirs
+- Annotation mode (`REACT_COMPILER_MODE=annotation`) for brownfield: only flags in files with `"use memo"`
 
-See [REFERENCE.md](REFERENCE.md) for post-compiler coding rules and pattern reference.
+See [REFERENCE.md](REFERENCE.md) for post-compiler coding rules.
 
 ## Steps
 
-### 1. Install dependencies
-
+### 1. Install
 ```bash
 bun add -D babel-plugin-react-compiler @rsbuild/plugin-babel --yarn
 ```
 
 ### 2. Configure rsbuild
-
-Add to `rsbuild.config.ts` (merge with existing config). **Use `annotation` mode for existing/brownfield codebases** (opt-in per file), `infer` for greenfield:
-
 ```ts
 import { pluginBabel } from '@rsbuild/plugin-babel';
-
 export default {
   plugins: [
     pluginBabel({
       babelLoaderOptions: {
-        plugins: [
-          ['babel-plugin-react-compiler', {
-            // 'annotation' for brownfield (default) — only compiles files with "use memo"
-            // 'infer' for greenfield — compiles all components/hooks automatically
-            compilationMode: 'annotation',
-          }],
-        ],
+        plugins: [['babel-plugin-react-compiler', {
+          compilationMode: 'annotation', // 'infer' for greenfield
+        }]],
       },
     }),
   ],
 };
 ```
 
-For brownfield codebases, set the env var so hooks adapt:
+Brownfield: set `REACT_COMPILER_MODE=annotation` in session-env.sh.
 
-```bash
-# In .claude/hooks/session-env.sh
-echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
-```
+### 3. Component library
+Add `'use no memo'` to all `.tsx` in component library dir.
 
-### 3. Add `'use no memo'` to component library files
+### 4. Hook
+Copy `scripts/react-compiler-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
 
-Add `'use no memo'` directive at the top of all `.tsx` files in the component library directory (auto-detected, or set `UI_LIB_DIRS`). The compiler should not auto-memoize distribution/registry components.
-
-### 4. Create hook script
-
-Copy [`scripts/react-compiler-check.sh`](scripts/react-compiler-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
-
-### 5. Configure hook in `.claude/settings.json`
-
-Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/react-compiler-check.sh`
-
-### 6. Verify & Commit
-
+### 5. Verify
 - [ ] rsbuild config includes babel plugin
-- [ ] Hook script is executable
-- [ ] Component library `.tsx` files have `'use no memo'`
-
-Commit: `Add React Compiler with rsbuild and compiler-friendly pattern enforcement`
+- [ ] Hook executable and configured
+- [ ] Component library files have `'use no memo'`

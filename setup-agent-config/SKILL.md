@@ -7,41 +7,22 @@ description: Token-efficient AI agent hooks — env vars, test flag optimization
 
 ## What This Sets Up
 
-- **SessionStart hook** setting `AI_AGENT=1`, `CLAUDECODE=1`, and `NODE_OPTIONS=--max-old-space-size=8192`
-- **UserPromptSubmit hook** injecting project state (git branch, dirty files, last commit, available scripts, session violations, active config) into every prompt as `additionalContext` — Claude starts each response knowing the project state without wasting tool calls
-- **PreToolUse hook** optimizing test commands:
-  - Strip `--verbose` (hard enforcement via `updatedInput` rewrite — wastes tokens)
-  - Suggest `--pool=forks` (prevents zombie processes)
-  - Suggest `--bail=1` (fail fast, save tokens)
-  - Suggest `--teardownTimeout=5000` (prevent hanging teardown)
-  - Suggest `--reporter=github` in CI
-  - Jest: suggest `--bail --forceExit`
-- **PostToolUse hook** truncating verbose bash output to reduce context bloat
+- **SessionStart**: `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`
+- **UserPromptSubmit**: injects project state (git branch, dirty files, scripts, violations, config) → Claude knows state without tool calls
+- **PreToolUse (Bash)**: optimizes test commands — strips `--verbose`, suggests `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`. Jest: `--bail --forceExit`
+- **PostToolUse (Bash)**: truncates verbose output to reduce context bloat
 
 ## Steps
 
-### 1. Create hook scripts
+1. Copy `scripts/llm-env.sh`, `scripts/llm-test-flags.sh`, `scripts/llm-truncate.sh` → `.claude/hooks/`. `chmod +x`.
+2. Configure in `.claude/settings.json`:
+   - SessionStart: `llm-env.sh`
+   - PreToolUse (Bash): `llm-test-flags.sh`
+   - PostToolUse (Bash): `llm-truncate.sh`
 
-Copy [`scripts/llm-env.sh`](scripts/llm-env.sh), [`scripts/llm-test-flags.sh`](scripts/llm-test-flags.sh), and [`scripts/llm-truncate.sh`](scripts/llm-truncate.sh) into `.claude/hooks/`. Make all executable.
+## Verify
+- [ ] `AI_AGENT`/`CLAUDECODE` set after session start
+- [ ] `bun test --verbose` rewritten to `bun test`
+- [ ] Long output truncated
 
-### 2. Configure hooks in `.claude/settings.json`
-
-Add to hooks config (merge with existing):
-- **SessionStart**: `.claude/hooks/llm-env.sh`
-- **PreToolUse** (matcher: `Bash`): `.claude/hooks/llm-test-flags.sh`
-- **PostToolUse** (matcher: `Bash`): `.claude/hooks/llm-truncate.sh`
-
-### 3. Verify
-
-- [ ] All hook scripts are executable
-- [ ] `AI_AGENT` and `CLAUDECODE` are set after session start
-- [ ] `bun test --verbose` is silently rewritten to `bun test` (verbose stripped)
-- [ ] `bun test` triggers suggestions for `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`
-- [ ] `NODE_OPTIONS=--max-old-space-size=8192` is set after session start
-- [ ] Long output is truncated
-
-See [REFERENCE.md](REFERENCE.md) for vitest config optimizations and test runner tuning.
-
-### 4. Commit
-
-Stage and commit: `Add LLM optimization hooks (env vars, test flags, output truncation)`
+See [REFERENCE.md](REFERENCE.md) for vitest config optimizations.

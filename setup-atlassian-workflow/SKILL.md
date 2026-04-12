@@ -5,53 +5,30 @@ description: Opt-in Atlassian/Jira integration via acli — create work items, t
 
 # Setup Atlassian Workflow
 
-## What This Sets Up
+Opt-in Jira integration via `acli` (Atlassian CLI). Works alongside `gh`. If `acli` unavailable, all Jira ops skipped silently.
 
-Opt-in Jira integration via `acli` (Atlassian CLI) that mirrors the GitHub workflow skills. Works alongside `gh` — not a replacement.
+Capabilities: create/transition/comment work items, link PRs, search/view for context.
 
-- **Create work items** from PRDs, TDD findings, or QA sessions
-- **Transition work items** through statuses (To Do → In Progress → Done)
-- **Comment on work items** with investigation results, test findings
-- **Link PRs to work items** for traceability
-- **Search and view** work items for context
-
-Requires `acli` to be installed and authenticated. If `acli` is not available, all Jira operations are skipped silently.
-
-See [REFERENCE.md](REFERENCE.md) for acli command patterns and workflow examples.
+See [REFERENCE.md](REFERENCE.md) for acli command patterns.
 
 ## Steps
 
-### 1. Install acli
-
-Follow [Atlassian CLI installation guide](https://developer.atlassian.com/cloud/acli/guides/installation/).
-
-### 2. Authenticate
-
+### 1. Install + Authenticate
 ```bash
+# Install: https://developer.atlassian.com/cloud/acli/guides/installation/
 acli jira auth login
 acli jira auth status  # verify
 ```
 
-### 3. Configure project in SessionStart hook
-
-Add to `.claude/hooks/session-env.sh`:
-
+### 2. Configure session-env.sh
 ```bash
-# Atlassian/Jira integration (opt-in)
 if command -v acli &>/dev/null; then
   echo "export JIRA_PROJECT=YOUR_PROJECT_KEY" >> "$CLAUDE_ENV_FILE"
   echo "export ISSUE_TRACKER=acli" >> "$CLAUDE_ENV_FILE"
 fi
 ```
+Set `ISSUE_TRACKER=both` for parallel gh + acli.
 
-Set `ISSUE_TRACKER=both` to use both `gh` and `acli` in parallel.
-
-### 4. Verify
-
-- [ ] `acli jira auth status` shows authenticated
-- [ ] `acli jira project list` returns your projects
-- [ ] `JIRA_PROJECT` is set in session env
-
-### 5. Commit
-
-Stage and commit: `Add Atlassian/Jira workflow integration via acli`
+### 3. Verify
+- [ ] `acli jira auth status` authenticated
+- [ ] `JIRA_PROJECT` set in session env

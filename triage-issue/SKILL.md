@@ -5,53 +5,34 @@ description: Triage a bug or issue by exploring the codebase to find root cause,
 
 # Triage Issue
 
-## Process
+## 1. Capture
+One question max: "What's the problem?" If already described, skip to explore.
 
-### 1. Capture the problem
+## 2. Explore + Diagnose
+Agent(subagent_type=Explore): Where (modules/behaviors), What (symptoms), Why (root cause), Related (interacting code).
 
-Ask ONE question max: "What's the problem you're seeing?"
+## 3. Fix Approach
+Minimal change (surgical > rewrite). Affected interfaces/contracts. Behaviors to verify → become tests.
 
-If the user already described it, skip straight to exploration.
+## 4. TDD Fix Plan
+Ordered RED-GREEN cycles. Vertical slices (one test → one fix). Describe behaviors, not impl steps. Durable language (module names, contracts), not file paths.
 
-### 2. Explore and diagnose
+## 5. Create GitHub Issue
 
-Use Agent tool with subagent_type=Explore to investigate:
-- **Where**: which modules/behaviors are affected
-- **What**: the observable symptoms
-- **Why**: root cause analysis
-- **Related**: code that interacts with the affected area
-
-### 3. Identify fix approach
-
-Determine:
-- Minimal change needed (prefer surgical fixes over rewrites)
-- Affected interfaces and contracts
-- Behaviors to verify (these become tests)
-
-### 4. Design TDD fix plan
-
-Create an ordered list of RED-GREEN cycles:
-- Each cycle is a vertical slice (one test → one fix)
-- Describe behaviors, not implementation steps
-- Use durable language (module names, contracts) not file paths or line numbers
-
-### 5. Create GitHub issue
-
-Use `gh issue create` with:
+`gh issue create` with:
 
     ## Problem
-    What's broken and the observable symptoms.
+    Observable symptoms.
 
     ## Root Cause Analysis
-    Why it's broken — the underlying mechanism.
+    Why — underlying mechanism.
 
     ## TDD Fix Plan
-    Ordered RED-GREEN cycles:
-    1. RED: test that [behavior] → GREEN: fix [root cause]
-    2. RED: test that [edge case] → GREEN: handle [condition]
+    1. RED: test [behavior] → GREEN: fix [root cause]
+    2. RED: test [edge case] → GREEN: handle [condition]
 
     ## Acceptance Criteria
     - [ ] Testable criterion 1
     - [ ] Testable criterion 2
 
-Do NOT include file paths or line numbers — the issue should remain useful after refactors.
+No file paths or line numbers — issue must survive refactors.

@@ -7,57 +7,43 @@ description: Create a detailed refactor plan with tiny commits via user intervie
 
 ## Process
 
-### 1. Understand the problem
+### 1. Understand
+Ask problem description + solution ideas. What wrong? What "better" look like?
 
-Ask the user for a detailed problem description and their solution ideas. What's wrong with the current code? What would "better" look like?
+### 2. Verify
+Agent(subagent_type=Explore) verify claims about codebase. Check actual state.
 
-### 2. Verify assertions
+### 3. Alternatives
+Ask other approaches + trade-offs.
 
-Use Agent tool with subagent_type=Explore to verify the user's claims about the codebase. Check the actual state — don't take assumptions at face value.
+### 4. Drill Into Details
+Exact scope, interface contracts (before/after), data migrations, backwards compat, incremental path.
 
-### 3. Explore alternatives
+### 5. Test Coverage
+Assess existing coverage. Insufficient → ask testing plan before proceeding.
 
-Ask the user about alternative approaches. Are there other ways to solve this? What are the trade-offs?
+### 6. Tiny Commits
+Each step: independently deployable, tests green, changes one thing.
 
-### 4. Interview in extreme detail
+### 7. GitHub Issue
 
-Drill into implementation specifics:
-- Exact scope: what changes, what doesn't
-- Interface contracts: what callers expect before and after
-- Data migrations: any schema or state changes needed
-- Backwards compatibility: can this be done incrementally?
-
-### 5. Check test coverage
-
-Assess existing test coverage for the affected code. If insufficient, ask the user about their testing plan before proceeding.
-
-### 6. Break into tiny commits
-
-Follow Martin Fowler's principle: **make each refactoring step as small as possible.** Each commit should:
-- Be independently deployable
-- Leave tests green
-- Change one thing
-
-### 7. Create GitHub issue
-
-Use `gh issue create` with:
+`gh issue create`:
 
     ## Problem Statement
-    What's wrong and why it matters.
+    What wrong and why.
 
     ## Solution
-    The chosen approach and why.
+    Chosen approach and rationale.
 
     ## Commits
-    Ordered list of tiny, independently-deployable steps:
-    1. [commit description] — what changes, tests stay green
-    2. [commit description] — what changes, tests stay green
+    1. [description] — what changes, tests green
+    2. [description] — what changes, tests green
 
-    ## Decision Document
-    Key decisions made during the interview and their rationale.
+    ## Decisions
+    Key decisions + rationale from interview.
 
-    ## Testing Decisions
-    What new tests are needed, what existing tests change.
+    ## Testing
+    New tests needed, existing tests changed.
 
     ## Out of Scope
-    What explicitly will NOT be touched in this refactor.
+    What NOT touched.

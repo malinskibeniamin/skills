@@ -5,32 +5,21 @@ description: Install Biome linter with Ultracite preset, create biome.jsonc conf
 
 # Setup Biome + Ultracite
 
-## What This Sets Up
-
 - **Biome** linter/formatter with **Ultracite** opinionated preset
-- `biome.jsonc` extending `ultracite/biome/core` + `ultracite/biome/react`
-- **Stop hook** that auto-fixes lint/format on all changed JS/TS files (skips `noUnusedImports` to avoid import deletion loops)
-- Strict overrides: `noConsole`, cognitive complexity 15, `noDeprecatedImports`, restricted imports
+- Stop hook auto-fixes lint/format on changed JS/TS files (skips `noUnusedImports` to avoid deletion loops)
+- Strict: `noConsole`, cognitive complexity 15, `noDeprecatedImports`, restricted imports (moment/lodash/classnames/mobx/yup)
 
 ## Steps
 
-### 1. Install dependencies
-
+### 1. Install
 ```bash
 bun add -D @biomejs/biome ultracite --yarn
 ```
 
 ### 2. Create `biome.jsonc`
+From [REFERENCE.md](REFERENCE.md). Extends `ultracite/biome/core` + `ultracite/biome/react`. VCS git enabled. Test files re-enable `noExplicitAny`.
 
-Use the config from [REFERENCE.md](REFERENCE.md). Key points:
-- Extends `ultracite/biome/core` and `ultracite/biome/react`
-- VCS enabled with git, `useIgnoreFile: true`
-- Overrides: `noConsole: error`, cognitive complexity max 15, `noDeprecatedImports: error`
-- Restricted imports: `moment`, `lodash`, `classnames`, `mobx`, `yup`
-- Test files still enforce `noExplicitAny` (ultracite disables it in tests — we re-enable)
-
-### 3. Add package.json scripts
-
+### 3. Package.json scripts
 ```json
 {
   "scripts": {
@@ -42,24 +31,9 @@ Use the config from [REFERENCE.md](REFERENCE.md). Key points:
 }
 ```
 
-`lint`/`lint:fix` scan the whole project (`.` hardcoded). `lint:file`/`lint:fix:file` have no hardcoded path — hooks pass specific files via `-- file1 file2`.
+### 4. Hook
+Copy `scripts/biome-autofix.sh` → `.claude/hooks/`. `chmod +x`. Add to Stop.
 
-### 4. Create hook script
-
-Copy [`scripts/biome-autofix.sh`](scripts/biome-autofix.sh) into `.claude/hooks/`. Make executable.
-
-### 5. Configure hook in `.claude/settings.json`
-
-Add to hooks config: **Stop**: `.claude/hooks/biome-autofix.sh`
-
-### 6. Verify
-
-- [ ] `biome.jsonc` exists with correct extends
-- [ ] `bun run lint` works
-- [ ] `bun run lint:fix` works
-- [ ] `.claude/hooks/biome-autofix.sh` is executable
-- [ ] Hook configured in `.claude/settings.json`
-
-### 7. Commit
-
-Stage all files and commit: `Add Biome + Ultracite with auto-fix Stop hook`
+### 5. Verify
+- [ ] `bun run lint` + `bun run lint:fix` work
+- [ ] Hook executable and configured

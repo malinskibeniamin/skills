@@ -34,7 +34,7 @@ PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 
 ### Escape hatch
 
-`// allow: ux-copy [reason]` anywhere in the file skips all checks.
+`// allow: ux-copy [reason]` anywhere in file skips all checks.
 
 ## Steps
 
@@ -48,7 +48,7 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/ux-
 
 ### 3. Copy glossary (optional, for DDD)
 
-Copy [`GLOSSARY.md`](GLOSSARY.md) to your project root or `docs/`. Pairs with the `ubiquitous-language` community skill for project-wide term enforcement.
+Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pairs with `ubiquitous-language` community skill for project-wide term enforcement.
 
 ### 4. Verify
 

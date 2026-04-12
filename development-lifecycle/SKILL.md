@@ -5,93 +5,79 @@ description: "Use when doing frontend, React, TypeScript, or UI development work
 
 # Development Lifecycle
 
-## How It Works
-
-You don't need to remember skill names. This skill detects what phase you're in and guides you through the right process automatically.
+Auto-detects phase, guides through correct process. No need remember skill names.
 
 ## Phases
 
-### 1. Understand — before writing any code
+### 1. Understand
 
-- Explore the problem space. Ask clarifying questions one at a time.
-- If building something new: propose 2-3 approaches with trade-offs. Get approval.
-- If fixing a bug: reproduce it with a failing test first. Trace to root cause.
-- **Parallel research**: spawn background agents to investigate alternatives, prior art, and edge cases while discussing the approach with the user.
-- **Refactor-first gate**: if the area has mixed patterns or incomplete migrations, refactor to a single pattern before adding new features. Mixed codebases confuse both humans and AI models.
-- **Hard gate: do NOT write implementation code until the approach is agreed upon.**
+- Explore. Clarify one-at-a-time. New→2-3 approaches+tradeoffs. Bug→failing test→root cause.
+- Spawn background agents: investigate alternatives, prior art, edge cases in parallel.
+- Mixed patterns in area? Refactor to single pattern FIRST before adding features.
+- **GATE: no impl code until approach approved.**
 
-### 2. Plan — break work into steps
+### 2. Plan
 
-- Write a plan so detailed that anyone can execute it correctly.
-- Every step: exact file paths, exact code, expected output.
-- No placeholders. No "add error handling later."
-- Bite-sized tasks (2-5 minutes each).
-- **For UI/interactive work**: spawn 2-3 parallel prototype agents with different constraints. Review results with the user and select the best approach before writing the full plan. See [REFERENCE.md](REFERENCE.md) for prototyping workflow.
-- **For 5+ task features**: plan as stacked PRs (one per logical group of tasks) rather than a single monolithic PR. Smaller PRs get faster, higher-quality reviews.
-- **Cross-model check**: if `/codex:rescue` is available, auto-dispatch the plan to Codex for a second opinion. Read its feedback, address concerns, finalize the stronger plan. If Codex isn't installed, skip.
+- Every step: exact file paths, exact code, expected output. No placeholders.
+- Bite-sized tasks (2-5 min each).
+- UI work: spawn 2-3 parallel prototype agents, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
+- 5+ tasks: plan as stacked PRs (one per logical group).
+- If `/codex:rescue` available: auto-dispatch plan for second opinion.
 
-### 2b. Grill — stress-test the plan before any code is written
+### 2b. Grill
 
-**Hard gate: do NOT proceed to implementation until the plan survives grilling.**
+**GATE: no impl until plan survives grilling.**
 
-- Auto-invoke `/grill-me` on the plan. Grill until every branch is resolved.
-- Update the plan with any decisions that changed. Get explicit user confirmation to proceed.
-- **Skip only if**: trivial bug fix AND < 3 tasks AND no architectural decisions. See [REFERENCE.md](REFERENCE.md) for details.
+- Auto-invoke `/grill-me`. Grill until every branch resolved.
+- Update plan with changes. Get explicit user confirmation.
+- Skip only if: trivial bug fix AND <3 tasks AND no architectural decisions.
 
-### 3. Implement — TDD for every change
+### 3. Implement (TDD)
 
-- Write a failing test FIRST (RED).
-- Write minimal code to pass (GREEN).
-- **Test deletion guard**: after GREEN, verify test count and assertion count haven't decreased. AI agents may delete or weaken tests to make them pass. If count dropped, reject and redo.
-- Refactor while green (REFACTOR).
-- No `setTimeout` hacks — use condition-based waiting.
-- Run `--detectAsyncLeaks` on test files.
+- RED: failing test first. GREEN: minimal code to pass.
+- **Test deletion guard**: verify test+assertion count didn't decrease after GREEN. AI may weaken tests. If dropped, reject and redo.
+- REFACTOR while green. No `setTimeout` hacks. Run `--detectAsyncLeaks`.
 
-### 4. Verify — confirm it actually works
+### 4. Verify
 
-- **Never ask the user to verify.** Use browser tools yourself:
-  - `agent-browser`: open the page, snapshot, verify elements, screenshot
-  - `claude-in-chrome` MCP: for authenticated pages
-  - Playwright tests: for automated assertions
-- If it's a UI fix: use Monitor to start the dev server (`Monitor: bun run dev`), wait for "ready", then open and verify
-- If it's a logic fix: run the test, confirm green
-- **Edge-case hardening** (optional): dispatch an agent to generate additional edge-case tests for the changed code. Prioritize boundary conditions, error paths, and concurrency scenarios.
-- **When green: commit immediately.** Every passing state deserves a snapshot. Don't accumulate changes across multiple features in one commit.
+- **Never ask user to verify.** Use tools yourself:
+  - `agent-browser`: open page → snapshot → verify → screenshot
+  - `claude-in-chrome` MCP: authenticated pages
+  - Playwright: automated assertions
+- UI fix: `Monitor: bun run dev`, wait ready, open and verify.
+- Optional: dispatch agent for edge-case test generation.
+- **When green: commit immediately.** One commit per passing state.
 
-### 5. Review — before creating PR
+### 5. Review
 
-- **Security gate**: run SAST/SCA scan on changed files. Block PR creation on new critical/high findings. See [REFERENCE.md](REFERENCE.md) for tooling.
-- Dispatch `code-reviewer` agent for fresh-eyes review (spec compliance + code quality)
-- Optional: `/codex:adversarial-review` for cross-model challenge
-- For large refactors: run `/simplify` to clean up the result
+- Security gate: SAST/SCA on changed files. Block on critical/high. See [REFERENCE.md](REFERENCE.md).
+- Dispatch `code-reviewer` agent (fresh-eyes review).
+- Optional: `/codex:adversarial-review`, `/simplify` for large refactors.
 - Then: `gh pr create` → `@claude review`
 
-### 5b. Iterate — two review rounds, then hand off
+### 5b. Iterate
 
-Run exactly two automated review rounds (CI green → code-reviewer → `/resolve-pr-feedback` → repeat), then post summary and request human review. **Stop.** Never poll for approval or run >2 rounds per session.
+Exactly two automated rounds (CI green → code-reviewer → `/resolve-pr-feedback` → repeat), then request human review. **Stop.** Never >2 rounds per session.
 
-**Use the Monitor tool** to watch CI in the background after every push (`Monitor: gh pr checks <number> --watch`). This lets you continue working while CI runs instead of blocking. See [REFERENCE.md](REFERENCE.md) for the full round-by-round protocol and exit conditions.
+Use `Monitor: gh pr checks <number> --watch` after every push. See [REFERENCE.md](REFERENCE.md) for protocol.
 
-### 6. Compound — codify what we learned
+### 6. Compound
 
-After every non-trivial task, ask: "Did we learn something worth preserving?"
+After non-trivial tasks: "Did we learn something worth preserving?"
+- Write rule to `.claude/rules/<topic>.md` with `paths:` glob. Auto-loads on match.
+- Bug from AI code? Create eval/test fixture catching same error class in CI.
 
-- If yes: write a rule to `.claude/rules/<topic>.md` with a `paths:` glob
-- Rules auto-load only when matching files are touched (no CLAUDE.md bloat)
-- Examples: "protobuf v2 migration gotcha", "form validation pattern", "route auth guard"
-- **Regression eval**: if a bug was traced to AI-generated code, create a code-based eval or test fixture that catches the same class of error in CI. Build the project's quality signal over time, not just per-PR.
-
-## When to Use Each Phase
+## Phase Selection
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1 → 2 → **2b (grill)** → 3 → 4 → 5 → 5b → 6 |
-| "Fix this bug" | 1 (reproduce) → 3 (TDD fix) → 4 (verify) → 5 → 5b → 6 |
-| "Refactor this module" | 1 (explore) → 2 (plan) → **2b (grill)** → 3 → 4 → 5 → 5b |
-| "Write tests for X" | 3 (TDD only) |
-| "Create a PR" | 5 (review only) |
-| "Quick question" | Just answer — no lifecycle needed |
-| "Batch these 5 issues" | **Sandcastle** — parallel agents, one per issue |
+| "Build a new feature" | 1→2→**2b**→3→4→5→5b→6 |
+| "Fix this bug" | 1(reproduce)→3(TDD)→4→5→5b→6 |
+| "Refactor this module" | 1→2→**2b**→3→4→5→5b |
+| "Write tests for X" | 3 only |
+| "Create a PR" | 5 only |
+| "Quick question" | Just answer |
+| "Batch these 5 issues" | **Sandcastle** — parallel agents |
 | "Work on this overnight" | **Sandcastle** — AFK delegation |
 
-See [REFERENCE.md](REFERENCE.md) for detailed checklists per phase and Sandcastle integration.
+See [REFERENCE.md](REFERENCE.md) for detailed checklists and Sandcastle integration.

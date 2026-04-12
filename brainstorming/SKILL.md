@@ -5,39 +5,29 @@ description: "Use when exploring design options, starting new features, or needi
 
 # Brainstorming
 
-## Hard Gate
+**GATE: no code, no files, no impl until design presented and approved.**
 
-**Do NOT write any code, create any files, or take any implementation action until the design is presented and approved by the user.**
+## Design Mode (default)
 
-## Two Modes
+1. Explore context — read files, docs, recent commits
+2. Clarify — one question at a time, not a list
+3. Propose 2-3 approaches with trade-offs
+4. Optional: HTML mockup → `agent-browser` → annotated screenshot
+5. Present design → get approval
+6. Write spec document if needed
 
-### Design Mode (default)
+## Challenge Mode
 
-For exploring approaches before implementation:
+1. Question every assumption — "Why this? What breaks if X changes?"
+2. Present alternatives
+3. Push back on weak reasoning
+4. Find edge cases — "Empty list? 10,000 items?"
+5. Reach consensus only when all concerns addressed
 
-1. **Explore context** — read relevant files, docs, recent commits
-2. **Ask clarifying questions** — one at a time, not a list
-3. **Propose 2-3 approaches** — with trade-offs for each
-4. **Visual mockup** (optional) — generate HTML mockup, open with `agent-browser`, take annotated screenshot for review
-5. **Present design** — get user approval on the chosen approach
-6. **Write spec document** — if needed, capture decisions for the implementation plan
-
-### Challenge Mode
-
-For stress-testing a specific decision (like `/grill-me`):
-
-1. **Question every assumption** — "Why this approach? What breaks if X changes?"
-2. **Present alternatives** — "Have you considered Y instead?"
-3. **Push back on weak reasoning** — "That sounds like premature optimization"
-4. **Find edge cases** — "What happens when the list is empty? When there are 10,000 items?"
-5. **Reach consensus** — agree on the approach only when all concerns are addressed
-
-## When to Use Each
+## When to Use
 
 | Situation | Mode |
 |---|---|
-| Starting a new feature | Design |
-| Choosing between architectures | Design |
-| Reviewing a proposed approach | Challenge |
-| Before a risky refactor | Challenge |
-| "Should we use X or Y?" | Design first, then Challenge the winner |
+| New feature / architecture choice | Design |
+| Reviewing proposed approach / risky refactor | Challenge |
+| "Should we use X or Y?" | Design → Challenge the winner |

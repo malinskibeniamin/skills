@@ -10,23 +10,15 @@ paths:
 
 ## Conventions
 
-- `e2e/*.spec.ts` — all e2e tests use `.spec.ts` extension
-- Name files by feature/workflow: `login.spec.ts`, `create-topic.spec.ts`
-- Selector priority: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS selectors
+- `e2e/*.spec.ts` — all e2e tests use `.spec.ts`
+- Name by feature: `login.spec.ts`, `create-topic.spec.ts`
+- Selectors: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS
+- Test IDs: `{feature}-{element}`, `{feature}-{element}-{index}`, `{feature}-{state}`
 
-### Test ID Pattern
-
-| Pattern | Example |
-|---------|---------|
-| `{feature}-{element}` | `data-testid="login-submit-button"` |
-| `{feature}-{element}-{index}` | `data-testid="topic-row-0"` |
-| `{feature}-{state}` | `data-testid="login-error-message"` |
-
-## Accessibility — Run axe on every new page
+## Accessibility — axe on every page
 
 ```ts
 import { test, expect } from '../fixtures/base'
-
 test('page is accessible', async ({ page, makeAxeBuilder }) => {
   await page.goto('/topics/create')
   const results = await makeAxeBuilder().analyze()
@@ -34,25 +26,18 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 })
 ```
 
-## Monitor for Long-Running E2E
-
-E2E suites can take minutes. Use the **Monitor** tool to stream test output in the background:
-
-```
-Monitor: bun run test:e2e
-```
-
-React to failures as they stream in — start diagnosing the first failing test before the full suite finishes. Also useful for watching container startup logs during Testcontainers setup.
+## Monitor for E2E
+`Monitor: bun run test:e2e` — stream results, react to failures before suite finishes.
 
 ## Agent-Browser vs Playwright
 
-| Task | Use |
-|------|-----|
-| Running test suites | Playwright via Monitor (`Monitor: bun run test:e2e`) |
-| Generating test selectors | `agent-browser snapshot` (a11y tree → getByRole) |
+| Task | Tool |
+|------|------|
+| Test suites | Playwright via `Monitor: bun run test:e2e` |
+| Generate selectors | `agent-browser snapshot` (a11y tree) |
 | Visual smoke test | `agent-browser screenshot --annotate` |
-| Interactive debugging | Playwright UI mode (`bun run test:e2e:ui`) |
-| CI execution | Playwright |
-| AI-driven page inspection | agent-browser |
+| Interactive debug | Playwright UI mode |
+| CI | Playwright |
+| AI page inspection | agent-browser |
 
-For initial setup (install, config, fixtures, Testcontainers): see [SETUP.md](SETUP.md).
+For setup (install, config, fixtures, Testcontainers): see [SETUP.md](SETUP.md).
