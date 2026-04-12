@@ -12,103 +12,76 @@ paths:
 
 ## Iron Law
 
-**No production code without a failing test first.**
-
-No exceptions. Not for "simple" changes. Not for "obvious" fixes. Not under time pressure.
+**No production code without a failing test first.** No exceptions.
 
 ## Anti-Pattern: Horizontal Slices
 
-**DO NOT write all tests first, then all implementation.** This produces crap tests — tests written in bulk test *imagined* behavior, not *actual* behavior. You end up testing shapes (data structures, function signatures) rather than user-facing behavior.
+**DO NOT write all tests first, then all implementation.** Bulk tests test *imagined* behavior, not *actual* behavior.
 
-**Correct approach**: Vertical slices. One test → one implementation → repeat. Each test responds to what you learned from the previous cycle.
+**Correct**: Vertical slices. One test → one implementation → repeat.
 
     WRONG:  RED: test1,test2,test3  →  GREEN: impl1,impl2,impl3
     RIGHT:  RED→GREEN: test1→impl1  →  RED→GREEN: test2→impl2
-
-```mermaid
-graph LR
-    P["0. PLAN\nConfirm behaviors"] --> R["1. RED\nFailing test"]
-    R --> G["2. GREEN\nMinimal code"]
-    G --> RF["3. REFACTOR\nClean up while green"]
-    RF -->|"Next behavior"| R
-
-    style R fill:#f66,stroke:#333,color:#fff
-    style G fill:#6b6,stroke:#333,color:#fff
-    style RF fill:#66f,stroke:#333,color:#fff
-    style P fill:#888,stroke:#333,color:#fff
-```
 
 ## Workflow
 
 ### 0. PLAN — Confirm what to test
 
-Before writing any code:
-- Confirm with user which behaviors to test (prioritize — **you can't test everything**)
-- Identify opportunities for deep modules (small interface, deep implementation)
-- Design interfaces for testability (accept deps, return results, small surface)
+- Confirm behaviors with user (prioritize — can't test everything)
+- Identify deep module opportunities (small interface, deep impl)
+- Design interfaces for testability
 
-### 1. RED — Write a failing test (tracer bullet)
+### 1. RED — Failing test (tracer bullet)
 
-Start with ONE test that confirms ONE behavior — your tracer bullet proving the path works end-to-end.
+- ONE test, ONE behavior, clear name
+- Real code, not mocks (unless unavoidable)
+- Verify it fails for RIGHT reason
 
-- One minimal test with a clear name
-- Use real code, not mocks (unless unavoidable)
-- Watch it fail. Verify it fails for the RIGHT reason.
+### 2. GREEN — Minimal code to pass
 
-### 2. GREEN — Write minimal code to pass
-
-- Only enough code to make the test pass
-- No premature optimization or extra features
-- Run the test. See green.
+- Only enough to pass. No premature optimization.
+- Run test. See green.
 
 ### 3. REFACTOR — Clean up while green
 
 - Remove duplication, improve naming, deepen modules
-- Run tests after every change — stay green
+- Tests after every change — stay green
 - **Never refactor while RED.** Get to GREEN first.
 - Commit when clean
 
 ### Reactive TDD with Monitor
 
-For faster iteration, use the **Monitor** tool to run the test runner in watch mode:
+`Monitor: bun test --watch` — streams pass/fail as you edit. Edit → fail → fix → pass → refactor → repeat.
 
-```
-Monitor: bun test --watch
-```
-
-This streams pass/fail results as you edit code. Instead of manually running tests after each change, Monitor reports red/green instantly. The cycle becomes continuous: edit → Monitor reports fail → fix → Monitor reports pass → refactor → repeat.
-
-Works with any runner that has watch mode:
-- **Vitest**: `Monitor: bun test --watch` (or `Monitor: npx vitest --watch`)
-- **Jest**: `Monitor: npx jest --watch`
+Works with: `Monitor: bun test --watch`, `Monitor: npx vitest --watch`, `Monitor: npx jest --watch`
 
 ### 4. REPEAT — Next behavior
 
-For each remaining behavior: RED → GREEN → REFACTOR. One test at a time. Don't anticipate future tests.
+RED → GREEN → REFACTOR per remaining behavior. One at a time.
 
 ### Per-Cycle Checklist
 
 - [ ] Test describes behavior, not implementation
 - [ ] Test uses public interface only
-- [ ] Test would survive internal refactor
-- [ ] Code is minimal for this test
-- [ ] No speculative features added
+- [ ] Test survives internal refactor
+- [ ] Code minimal for this test
+- [ ] No speculative features
 
 ## Test Classification
 
-| Suffix | Purpose | DOM? | Example |
-|--------|---------|------|---------|
-| `.test.ts` | Unit — pure logic | No | `parse-config.test.ts` |
-| `.test.tsx` / `.integration.tsx` | Integration — renders components | Yes | `UserTable.test.tsx` |
-| `e2e/*.spec.ts` | E2E — Playwright browser tests | Browser | `login.spec.ts` |
+| Suffix | Purpose | DOM? |
+|--------|---------|------|
+| `.test.ts` | Unit — pure logic | No |
+| `.test.tsx` / `.integration.tsx` | Integration — renders components | Yes |
+| `e2e/*.spec.ts` | E2E — Playwright browser | Browser |
 
-## When Done Checklist
+## When Done
 
-- [ ] All tests pass (`bun test --run`)
+- [ ] All pass (`bun test --run`)
 - [ ] No async leaks (`bun test --run --detectAsyncLeaks`)
-- [ ] No `setTimeout`/`waitForTimeout` hacks — use condition-based waiting
-- [ ] Prefer `getByRole` over `getByTestId` for accessibility assertions
+- [ ] No setTimeout hacks — condition-based waiting
+- [ ] Prefer `getByRole` over `getByTestId`
 - [ ] Tests verify behavior, not implementation
-- [ ] Consider `expect.soft()` for multi-assertion complex state tests
+- [ ] Consider `expect.soft()` for multi-assertion state tests
 
-See [REFERENCE.md](REFERENCE.md) for diagnostic commands, Vitest config optimization, anti-patterns, and condition-based waiting patterns.
+See [REFERENCE.md](REFERENCE.md) for diagnostics, Vitest config, anti-patterns, condition-based waiting.
