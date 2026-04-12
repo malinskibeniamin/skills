@@ -1,6 +1,6 @@
 ---
 name: development-lifecycle
-description: "Use when doing any development work. Automatically guides through the right phase: brainstorm → plan → grill → implement (TDD) → review. One skill for the full lifecycle — no need to invoke other skills manually."
+description: "Use when doing frontend, React, TypeScript, or UI development work. Automatically guides through the right phase: brainstorm → plan → grill → implement (TDD) → review. One skill for the full lifecycle — no need to invoke other skills manually."
 ---
 
 # Development Lifecycle
