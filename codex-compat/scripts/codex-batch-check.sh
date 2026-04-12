@@ -10,16 +10,20 @@ repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 source "$repo_root/.claude/hooks/_hook-lib.sh" 2>/dev/null || \
   source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
 
+# Paths to exclude from stop-hook checks (vendor, generated, build artifacts)
+_exclude_pattern='(opensrc/|dist/|coverage/|playwright-report/|test-results/|node_modules/|\.gen\.(ts|tsx)$|_pb\.(ts|js)$|_connectquery\.ts$|/protogen/)'
+
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
-  _all_session=$(hook_session_changed_files)
+  _all_session=$(hook_session_changed_files | grep -vE "$_exclude_pattern" || true)
   changed_js=$(echo "$_all_session" | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
   changed_css=$(echo "$_all_session" | grep -E '\.(css|scss|sass|less)$' || true)
   changed_pkg=$(echo "$_all_session" | grep -E 'package\.json$' || true)
 else
-  changed_js=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
-  changed_css=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(css|scss|sass|less)$' || true)
-  changed_pkg=$(git diff --name-only HEAD 2>/dev/null | grep -E 'package\.json$' || true)
+  _all_diff=$(git diff --name-only HEAD 2>/dev/null | grep -vE "$_exclude_pattern" || true)
+  changed_js=$(echo "$_all_diff" | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' || true)
+  changed_css=$(echo "$_all_diff" | grep -E '\.(css|scss|sass|less)$' || true)
+  changed_pkg=$(echo "$_all_diff" | grep -E 'package\.json$' || true)
 fi
 
 if [ -z "$changed_js" ] && [ -z "$changed_css" ] && [ -z "$changed_pkg" ]; then
@@ -109,7 +113,7 @@ fi
 # ── Orchestration gates (same as orchestration-stop.sh) ──────────
 
 # Gate: New source files without co-located tests
-new_files=$(git diff --name-only --diff-filter=A HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.|index\.|layout\.|middleware\.|types/|__root|providers?\.|constants?\.|theme\.|context\.|config\.)' || true)
+new_files=$(git diff --name-only --diff-filter=A HEAD 2>/dev/null | grep -vE "$_exclude_pattern" | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.|index\.|layout\.|middleware\.|types/|__root|providers?\.|constants?\.|theme\.|context\.|config\.)' || true)
 if [ -n "$new_files" ]; then
   for f in $new_files; do
     base="${f%.*}"

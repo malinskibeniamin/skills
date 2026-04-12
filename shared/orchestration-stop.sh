@@ -48,7 +48,7 @@ if [ -f "$session_files" ] && grep -q "^test:" "$session_files" 2>/dev/null; the
     leak_exit=0
     leak_output=$(bun run test -- --run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
     if [ $leak_exit -ne 0 ] && echo "$leak_output" | grep -qiE 'leak|open handle|did not exit'; then
-      issues="$issues\n- ASYNC LEAK in test files. Run: bun test --run --detectAsyncLeaks to diagnose."
+      issues="$issues\n- ASYNC LEAK. Run: bun test --run --detectAsyncLeaks"
     fi
   fi
 fi
@@ -62,7 +62,7 @@ if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
     test_output=$(bun test --run --related $changed_source 2>&1) || test_exit=$?
     if [ $test_exit -ne 0 ]; then
       truncated=$(echo "$test_output" | tail -10)
-      issues="$issues\n- TESTS FAILING: Related tests do not pass. Fix before finishing.\n  $truncated"
+      issues="$issues\n- TESTS FAILING. Fix before finishing.\n  $truncated"
     fi
   fi
 fi
@@ -87,7 +87,7 @@ if [ -f "$session_files" ] && grep -q "^jsx:" "$session_files" 2>/dev/null; then
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
       # Warn, not block — prototyping often creates files before tests
-      warnings="${warnings:-}\n- MISSING TEST: $short_name has no co-located test. Use /tdd to add one."
+      warnings="${warnings:-}\n- MISSING TEST: $short_name. Use /tdd."
     fi
   done
 fi
@@ -121,7 +121,7 @@ if [ -n "$new_files" ]; then
     done
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
-      warnings="${warnings:-}\n- NEW FILE WITHOUT TEST: $short_name — use /tdd to add a test."
+      warnings="${warnings:-}\n- NEW FILE: $short_name — no test. Use /tdd."
     fi
   done
 fi
@@ -135,12 +135,12 @@ if [ -f "$session_files" ] && grep -q "^security:" "$session_files" 2>/dev/null;
       if grep -qE '(eval\(|new Function\(|dangerouslySetInnerHTML|\.innerHTML\s*=)' "$f" 2>/dev/null; then
         if ! grep -qE '(allow-dangerouslySetInnerHTML|allow:\s*dangerouslySetInnerHTML|allow-eval|allow:\s*eval)' "$f" 2>/dev/null; then
           short_name=$(basename "$f")
-          issues="$issues\n- SECURITY: $short_name contains dangerous patterns (eval/innerHTML). Add escape hatch comment or fix."
+          issues="$issues\n- SECURITY: $short_name — eval/innerHTML. Add escape hatch or fix."
         fi
       fi
       if grep -qE "(password|secret|api.?key)\s*[:=]\s*['\"][^'\"]{3,}" "$f" 2>/dev/null; then
         short_name=$(basename "$f")
-        issues="$issues\n- SECURITY: $short_name may contain hardcoded secrets. Use env validation (@/env) instead."
+        issues="$issues\n- SECURITY: $short_name — hardcoded secrets. Use @/env."
       fi
     fi
   done
@@ -159,7 +159,7 @@ fi
 changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null || echo "0")
 changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null || echo "0")
 if [ "${changed_source_count:-0}" -gt 0 ] && [ "${changed_test_count:-0}" -eq 0 ]; then
-  warnings="${warnings:-}\n- No test files were modified. Were all tests considered? Use /tdd to add coverage."
+  warnings="${warnings:-}\n- No test files modified. Use /tdd to add coverage."
 fi
 
 # Soft warnings (missing tests) → inform but don't block

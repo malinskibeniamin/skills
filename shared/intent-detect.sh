@@ -23,19 +23,19 @@ directives=""
 # ── Test writing ─────────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'write.*test|add.*test|create.*test|test for|spec for|\btdd\b|red.green'; then
-  directives="$directives\n[TDD] Iron law: no production code without failing test first. RED (failing test) → GREEN (minimal code) → REFACTOR (clean up). Use condition-based waiting, never setTimeout. Run --detectAsyncLeaks after."
+  directives="$directives\n[TDD] RED→GREEN→REFACTOR. No prod w/o failing test. Condition waits, no setTimeout. --detectAsyncLeaks."
 fi
 
 # ── Component/UI creation ────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'create.*component|new.*component|build.*form|add.*page|add.*dialog|add.*modal|add.*view'; then
-  directives="$directives\n[COMPONENT] Use @/components/ui/ (never raw HTML). Verify: keyboard navigable, aria-labels on icon buttons, aria-labelledby on dialogs. Co-locate a test file. Use design tokens (Tailwind), never inline styles or raw hex."
+  directives="$directives\n[COMPONENT] @/components/ui/ only. kbd-nav, aria-labels, test co-located. DS tokens, no inline."
 fi
 
 # ── Bug fix / debugging ─────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash|triage|investigate|regression'; then
-  directives="$directives\n[TRIAGE] 4 phases: reproduce (failing test) → analyze (find working examples) → hypothesize (one theory at a time) → fix at ROOT CAUSE (not symptom). Add defense-in-depth validation. If /codex:rescue available, cross-check hypothesis with Codex before implementing."
+  directives="$directives\n[TRIAGE] reproduce(test)→analyze→hypothesize(one)→fix ROOT CAUSE. /codex:rescue if available."
 fi
 
 # ── PR/review ────────────────────────────────────────────────────
@@ -44,9 +44,9 @@ if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push.*branch|sub
   # Only suggest @claude review if we haven't already this session
   review_marker="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/review-requested"
   if [ -f "$review_marker" ]; then
-    directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. Use conventional commit format: type(scope): description. (Review already requested this session.)"
+    directives="$directives\n[PR] quality:gate + type:check first. Conventional commits. (Review already requested.)"
   else
-    directives="$directives\n[PR] Before creating: run quality:gate, verify type:check passes. After creating: comment @claude review on the PR. Use conventional commit format: type(scope): description."
+    directives="$directives\n[PR] quality:gate + type:check first. After: @claude review. Conventional commits."
     touch "$review_marker" 2>/dev/null || true
   fi
 fi
@@ -54,26 +54,26 @@ fi
 # ── Refactoring ──────────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE '\brefactor\b|extract.*into|move.*to|split.*into|consolidate|clean.?up'; then
-  directives="$directives\n[REFACTOR] Run tests BEFORE changing code (establish baseline). Make small steps, test after each. No barrel imports. Verify type:check + tests pass after refactoring."
+  directives="$directives\n[REFACTOR] Tests BEFORE (baseline). Small steps, test each. No barrel imports. type:check+tests after."
 fi
 
 # ── E2E testing ──────────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE '\be2e\b|playwright|end.to.end|browser test|user workflow|acceptance test'; then
-  directives="$directives\n[E2E] Use base fixture from e2e/fixtures/base.ts (includes axe-core). Include accessibility audit: makeAxeBuilder().analyze(). Use data-testid for selectors. Add explicit waits (waitForSelector, toBeVisible), never hard delays."
+  directives="$directives\n[E2E] Base fixture (axe-core). makeAxeBuilder(). data-testid. Explicit waits, no hard delays."
 fi
 
 # ── Verification / testing in browser ────────────────────────────
 
 if echo "$prompt" | grep -qiE 'test.*browser|check.*browser|verify.*works|test the flow|test.*ui|check.*page|verify.*page|does it work|try it|smoke test'; then
-  directives="$directives\n[VERIFY] Do NOT ask the user to test manually. Use browser tools to verify yourself:\n- agent-browser: open URL → snapshot → verify elements → screenshot\n- claude-in-chrome MCP: for authenticated pages\n- Playwright: for automated e2e assertions\nVerify the fix works BEFORE reporting success."
+  directives="$directives\n[VERIFY] Self-verify (browser tools/Playwright). Never ask user to test. Confirm BEFORE reporting."
 fi
 
 # ── General: never delegate verification to user ─────────────────
 # Only fire on substantive bug fixes, not trivial ("fix indentation", "fix typo")
 
 if echo "$prompt" | grep -qiE 'fix.*bug|broken|not working|blank.*screen|error.*page|crash|regression'; then
-  directives="$directives\n[SELF-VERIFY] After fixing: verify the fix works yourself using browser tools or tests. Do NOT ask the user to check — confirm it works before declaring done."
+  directives="$directives\n[SELF-VERIFY] Verify fix yourself. Never ask user to check."
 fi
 
 # ── Output ───────────────────────────────────────────────────────

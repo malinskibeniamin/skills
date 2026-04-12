@@ -25,6 +25,12 @@ output=""
 exit_code=0
 output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 
+# Known doctor-tool internal bugs — treat as warn-only, not a code quality issue
+if echo "$output" | grep -qE 'is not iterable|Cannot read propert|TypeError:|ReferenceError:'; then
+  echo "{\"decision\":\"allow\",\"reason\":\"React Doctor encountered a tool-internal error (not a code issue). Run 'bun run doctor' manually to investigate.\"}" >&2
+  exit 0
+fi
+
 # Track consecutive failures — downgrade to warn after 3 to avoid infinite loops
 _doctor_fail_counter="$_hook_session_dir/doctor-fail-count"
 _doctor_fail_count=0
