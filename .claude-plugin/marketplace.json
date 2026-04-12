@@ -10,7 +10,7 @@
     {
       "name": "frontend-skills",
       "description": "React/TypeScript frontend skills, hooks, and agents. 30 hooks enforce patterns in real-time. One skill for the full development lifecycle.",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
