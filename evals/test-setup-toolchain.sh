@@ -22,35 +22,35 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md description has trig
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npm install lodash"}}' \
-  2 "block: npm install" "npm is banned"
+  2 "block: npm install" "npm banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npm run build"}}' \
-  2 "block: npm run" "npm is banned"
+  2 "block: npm run" "npm banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npm test"}}' \
-  2 "block: npm test" "npm is banned"
+  2 "block: npm test" "npm banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npm ci"}}' \
-  2 "block: npm ci" "npm is banned"
+  2 "block: npm ci" "npm banned"
 
 # ── npx blocked ─────────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npx create-react-app myapp"}}' \
-  2 "block: npx" "npx is banned"
+  2 "block: npx" "npx banned"
 
 # ── tsc blocked ─────────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc"}}' \
-  2 "block: tsc (bare)" "tsc is banned"
+  2 "block: tsc (bare)" "tsc banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc --noEmit"}}' \
-  2 "block: tsc --noEmit" "tsc is banned"
+  2 "block: tsc --noEmit" "tsc banned"
 
 # ── tsgo allowed ────────────────────────────────────────────────
 
@@ -66,11 +66,11 @@ run_hook_eval "$SCRIPT" \
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add -g typescript"}}' \
-  2 "block: bun add -g" "Global package installs are banned"
+  2 "block: bun add -g" "Global installs banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun install --global prettier"}}' \
-  2 "block: bun install --global" "Global package installs are banned"
+  2 "block: bun install --global" "Global installs banned"
 
 # ── bun install/add (--yarn no longer required) ─────────────────
 
@@ -98,57 +98,57 @@ run_hook_eval "$SCRIPT" \
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx biome check ."}}' \
-  2 "block: bunx biome" "package.json script"
+  2 "block: bunx biome" "via bunx banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx ultracite fix"}}' \
-  2 "block: bunx ultracite" "package.json script"
+  2 "block: bunx ultracite" "via bunx banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx react-doctor ."}}' \
-  2 "block: bunx react-doctor" "package.json script"
+  2 "block: bunx react-doctor" "via bunx banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx tsr generate"}}' \
-  2 "block: bunx tsr" "package.json script"
+  2 "block: bunx tsr" "via bunx banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx @tanstack/router-cli generate"}}' \
-  2 "block: bunx @tanstack/router-cli" "package.json script"
+  2 "block: bunx @tanstack/router-cli" "via bunx banned"
 
 # ── eslint/prettier blocked ──────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"eslint ."}}' \
-  2 "block: eslint" "eslint is banned"
+  2 "block: eslint" "eslint banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"eslint --fix src/"}}' \
-  2 "block: eslint --fix" "eslint is banned"
+  2 "block: eslint --fix" "eslint banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"prettier --write ."}}' \
-  2 "block: prettier" "prettier is banned"
+  2 "block: prettier" "prettier banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx eslint ."}}' \
-  2 "block: bunx eslint" "eslint is banned"
+  2 "block: bunx eslint" "eslint banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx prettier --write ."}}' \
-  2 "block: bunx prettier" "prettier is banned"
+  2 "block: bunx prettier" "prettier banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add eslint --yarn"}}' \
-  2 "block: bun add eslint" "Do not install eslint"
+  2 "block: bun add eslint" "eslint/prettier banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add prettier --yarn"}}' \
-  2 "block: bun add prettier" "Do not install"
+  2 "block: bun add prettier" "eslint/prettier banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun add -D eslint prettier --yarn"}}' \
-  2 "block: bun add eslint+prettier" "Do not install"
+  2 "block: bun add eslint+prettier" "eslint/prettier banned"
 
 # ── allowed commands ────────────────────────────────────────────
 
@@ -180,15 +180,15 @@ run_hook_eval "$SCRIPT" \
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"echo hello && npm run test"}}' \
-  2 "block: npm in chained command" "npm is banned"
+  2 "block: npm in chained command" "npm banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"ls; npx something"}}' \
-  2 "block: npx after semicolon" "npx is banned"
+  2 "block: npx after semicolon" "npx banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"cat file || tsc --noEmit"}}' \
-  2 "block: tsc after ||" "tsc is banned"
+  2 "block: tsc after ||" "tsc banned"
 
 # ── edge cases ──────────────────────────────────────────────────
 
@@ -208,7 +208,7 @@ run_hook_eval "$SCRIPT" \
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -rf /var/data"}}' \
-  2 "block: rm -rf /var/data" "Recursive rm"
+  2 "block: rm -rf /var/data" "rm -r blocked"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -r src/"}}' \
