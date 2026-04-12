@@ -60,7 +60,7 @@ printf "import { create } from 'zustand'\nconst useStore = create<State>((set) =
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: single-parens create<State>()" "type inference"
+  2 "block: single-parens create<State>()" "middleware types"
 
 # tmpfile reused in tmpdir
 

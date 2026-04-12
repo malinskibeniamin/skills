@@ -86,5 +86,5 @@ run_hook_eval "$SCRIPT" \
 run_content_eval "$SCRIPT" "feat|fix|refactor" "hook validates commit types"
 run_content_eval "$SCRIPT" "scope" "hook validates scope"
 run_content_eval "$SCRIPT" "hook_deny" "hook uses shared deny function"
-run_content_eval "$SCRIPT" "minimum 5" "hook validates min description length"
-run_content_eval "$SCRIPT" "maximum 72" "hook validates max description length"
+run_content_eval "$SCRIPT" "min 5" "hook validates min description length"
+run_content_eval "$SCRIPT" "max 72" "hook validates max description length"

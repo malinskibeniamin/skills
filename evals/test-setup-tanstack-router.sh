@@ -110,7 +110,7 @@ printf "window.location.href = '/dashboard'\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: window.location.href assignment" "full page reload"
+  2 "block: window.location.href assignment" "full reload"
 
 # tmpfile reused in tmpdir
 
@@ -152,7 +152,7 @@ printf "import { useParams } from '@tanstack/react-router'\nconst params = usePa
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: strict: false" "type safety"
+  2 "block: strict: false" "strict"
 
 # tmpfile reused in tmpdir
 

@@ -11,7 +11,7 @@ run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-e2e-testing" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "data-testid" "SKILL.md has test ID conventions"
+run_content_eval "$SKILL_DIR/SKILL.md" "Test IDs|getByTestId" "SKILL.md has test ID conventions"
 run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priority"
 run_content_eval "$SKILL_DIR/SKILL.md" "agent-browser|Playwright" "SKILL.md mentions test tools"
 

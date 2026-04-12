@@ -42,7 +42,7 @@ run_content_eval "$SCRIPT" "tailwind-check" "hook runs tailwind-check on CSS fil
 
 # ── AGENTS.md content (at repo root) ────────────────────────────
 
-run_content_eval "$REPO_ROOT/AGENTS.md" "functional component" "AGENTS.md requires functional components"
+run_content_eval "$REPO_ROOT/AGENTS.md" "Functional component" "AGENTS.md requires functional components"
 run_content_eval "$REPO_ROOT/AGENTS.md" "process.env" "AGENTS.md covers env validation"
 run_content_eval "$REPO_ROOT/AGENTS.md" "type.scope" "AGENTS.md covers commit format"
 run_content_eval "$REPO_ROOT/AGENTS.md" "specificity" "AGENTS.md covers Tailwind rules"

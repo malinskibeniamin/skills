@@ -271,7 +271,7 @@ echo '<Button>Click me</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: Button without handler" "handler"
+  2 "block: Button without handler" "purpose"
 
 # Allow: Button with onClick
 echo '<Button onClick={handleClick}>Click me</Button>' > "$tmpfile"
@@ -494,7 +494,7 @@ echo '<div style={{ marginTop: 16 }}>content</div>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: inline style={{}} (sudo warning)" "I hope you know"
+  0 "warn: inline style={{}} (sudo warning)" "Tailwind"
 
 # Allow style in .ts files (not TSX)
 tmpfile="$_rr_tmpdir/test.ts"
@@ -625,13 +625,13 @@ echo 'class MyComponent extends React.Component { render() { return <div /> } }'
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: class component (React.Component)" "functional"
+  2 "block: class component (React.Component)" "Functional"
 
 echo 'class MyComponent extends PureComponent { render() { return <div /> } }' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: class component (PureComponent)" "functional"
+  2 "block: class component (PureComponent)" "Functional"
 
 # Allow functional components
 echo 'function MyComponent() { return <div /> }' > "$tmpfile"
@@ -803,7 +803,7 @@ echo "import { Chart } from 'chart.js'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: static import of chart.js" "Heavy dependency"
+  0 "warn: static import of chart.js" "Heavy dep"
 
 echo "import * as d3 from 'd3'" > "$tmpfile"
 

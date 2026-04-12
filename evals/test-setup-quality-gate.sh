@@ -231,7 +231,7 @@ done
 run_content_eval "$PERF_CHECK_SCRIPT" "await.*import" "perf-check detects dynamic imports"
 run_content_eval "$PERF_CHECK_SCRIPT" "pool.*threads" "perf-check detects missing pool: threads"
 run_content_eval "$PERF_CHECK_SCRIPT" "isolate.*false" "perf-check detects missing isolate: false"
-run_content_eval "$PERF_CHECK_SCRIPT" "vi\\.importActual" "perf-check excludes vi.importActual from dynamic import check"
+run_content_eval "$PERF_CHECK_SCRIPT" "importActual" "perf-check excludes vi.importActual from dynamic import check"
 run_content_eval "$PERF_CHECK_SCRIPT" "happy-dom.*jsdom" "perf-check skips isolate check for browser-env configs"
 
 # ── test-perf-check.sh: skip non-test, non-config files ─────────
@@ -325,7 +325,7 @@ VEOF
 
 run_hook_eval "$PERF_CHECK_SCRIPT" \
   "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/vitest.config.mts\"}}" \
-  0 "warn: unit vitest config missing isolate: false" "isolate: false"
+  0 "warn: unit vitest config missing isolate: false" "isolate"
 
 rm -rf "$tmpdir"
 

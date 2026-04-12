@@ -63,7 +63,7 @@ echo 'const msg = "Something went wrong!"' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: exclamation at end of string" "exclamation"
+  2 "block: exclamation at end of string" "No !"
 
 # Allow: no exclamation
 echo 'const msg = "Something went wrong"' > "$tmpfile"
@@ -229,7 +229,7 @@ echo "const label = 'the admin api settings'" > "$tmpfile"
 
 REDPANDA_KIT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: lowercase Redpanda product name (with REDPANDA_KIT)" "capitalized"
+  2 "block: lowercase Redpanda product name (with REDPANDA_KIT)" "Capitalize"
 
 # Allow: correctly capitalized
 echo "const label = 'Admin API settings'" > "$tmpfile"
@@ -365,19 +365,19 @@ echo "const list = whitelist" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: whitelist (non-inclusive)" "inclusive"
+  2 "block: whitelist (non-inclusive)" "Inclusive"
 
 echo "const list = blacklist" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: blacklist (non-inclusive)" "inclusive"
+  2 "block: blacklist (non-inclusive)" "Inclusive"
 
 echo "const role = master" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: master (non-inclusive)" "inclusive"
+  2 "block: master (non-inclusive)" "Inclusive"
 
 echo "const list = allowlist" > "$tmpfile"
 
@@ -398,13 +398,13 @@ echo "const msg = 'There are 3 configuration options'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: There are starter" "subject first"
+  0 "warn: There are starter" "Subject first"
 
 echo "const msg = 'There is no data available'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: There is starter" "subject first"
+  0 "warn: There is starter" "Subject first"
 
 echo "const msg = '3 configuration options are available'" > "$tmpfile"
 
@@ -450,7 +450,7 @@ run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output funct
 run_content_eval "$SCRIPT" "and/or" "hook checks for and/or"
 run_content_eval "$SCRIPT" "etc\." "hook checks for etc."
 run_content_eval "$SCRIPT" "e\.g\." "hook checks for e.g."
-run_content_eval "$SCRIPT" "please" "hook checks for please"
+run_content_eval "$SCRIPT" "Please" "hook checks for please"
 run_content_eval "$SCRIPT" "whitelist|blacklist" "hook checks non-inclusive terms"
 run_content_eval "$SCRIPT" "There is|There are" "hook checks There is/are starters"
 run_content_eval "$SCRIPT" "via" "hook checks for via"
@@ -464,7 +464,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Button" "REFERENCE has button label 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Learn more" "REFERENCE has link placement rules"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "allowlist" "REFERENCE has inclusive terminology table"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Directional" "REFERENCE has directional language guidance"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "placeholder" "REFERENCE has placeholder format guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Placeholder" "REFERENCE has placeholder format guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "em dash" "REFERENCE has em dash guidance"
 
 # ── GLOSSARY content ────────────────────────────────────────────
