@@ -8,9 +8,16 @@ if [ -z "$command" ]; then
   exit 0
 fi
 
+# For git commit/tag commands, strip the message to avoid false positives
+_cmd_for_check="$command"
+if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+(commit|tag)\s'; then
+  # Get everything before -m/-F flag (first line only, discard rest)
+  _cmd_for_check=$(printf '%s\n' "$command" | head -1 | sed 's/[[:space:]]-[mF][[:space:]].*//')
+fi
+
 # Strip quoted strings and heredoc content to avoid matching banned words
-_cmd_stripped=$(echo "$command" | sed 's/"[^"]*"//g' | sed "s/'[^']*'//g")
-if echo "$command" | grep -qE 'cat <<'; then
+_cmd_stripped=$(echo "$_cmd_for_check" | sed 's/"[^"]*"//g' | sed "s/'[^']*'//g")
+if echo "$_cmd_for_check" | grep -qE 'cat <<'; then
   _cmd_stripped=$(echo "$_cmd_stripped" | sed '/<<.*EOF/,/^[[:space:]]*EOF/d')
 fi
 
