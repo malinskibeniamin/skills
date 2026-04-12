@@ -22,6 +22,7 @@ Auto-detects phase, guides through correct process. No need remember skill names
 - Bite-sized tasks (2-5 min each).
 - UI work: spawn 2-3 parallel prototype agents, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
 - 5+ tasks: plan as stacked PRs (one per logical group).
+- Complex plan (5+ tasks, multi-stakeholder)? Consider `/ultraplan` — richer review surface, inline comments, frees terminal.
 - If `/codex:rescue` available: auto-dispatch plan for second opinion.
 
 ### 2b. Grill
