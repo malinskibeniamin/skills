@@ -9,11 +9,10 @@ source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
 
 baseline="$_hook_session_dir/test-timing-baseline.tsv"
 
-# Wait briefly if baseline is still being captured (background in session-env.sh)
-for _i in 1 2 3 4 5; do
-  [ -s "$baseline" ] && break
-  sleep 1
-done
+# Baseline is captured in background at SessionStart (session-env.sh).
+# By the time Stop hooks fire, the session has been running for minutes —
+# the baseline is ready. If not, skip gracefully rather than sleeping.
+
 
 if [ ! -f "$baseline" ] || [ ! -s "$baseline" ]; then
   exit 0

@@ -251,6 +251,16 @@ After Round 2 completes:
 - **Re-entry**: human requests changes → new session, one review round, then stop
 - **Never**: poll waiting for human approval or run more than 2 review rounds per session
 
+### Deploy Pipeline Monitoring (Post-Merge)
+
+After a PR is merged, use the **Monitor** tool to watch the deploy pipeline:
+
+```
+Monitor: gh run watch
+```
+
+This lets Claude detect deploy failures immediately after merge instead of requiring the user to check manually. If the deploy fails, diagnose the issue and open a follow-up PR with the fix.
+
 ## Hard Rules
 
 - Never ask the user to test manually. Use agent-browser, playwright, or test runner.

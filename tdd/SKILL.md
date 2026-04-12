@@ -55,6 +55,20 @@ Start with ONE test that confirms ONE behavior — your tracer bullet proving th
 - **Never refactor while RED.** Get to GREEN first.
 - Commit when clean
 
+### Reactive TDD with Monitor
+
+For faster iteration, use the **Monitor** tool to run the test runner in watch mode:
+
+```
+Monitor: bun test --watch
+```
+
+This streams pass/fail results as you edit code. Instead of manually running tests after each change, Monitor reports red/green instantly. The cycle becomes continuous: edit → Monitor reports fail → fix → Monitor reports pass → refactor → repeat.
+
+Works with any runner that has watch mode:
+- **Vitest**: `Monitor: bun test --watch` (or `Monitor: npx vitest --watch`)
+- **Jest**: `Monitor: npx jest --watch`
+
 ### 4. REPEAT — Next behavior
 
 For each remaining behavior: RED → GREEN → REFACTOR. One test at a time. Don't anticipate future tests.

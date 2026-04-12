@@ -20,6 +20,41 @@ await waitForEvent(manager, threadId, 'DONE')
 
 Result: 60% → 100% pass rate, 40% faster execution.
 
+## Reactive TDD with Monitor
+
+Use the **Monitor** tool to run the test runner in watch mode during implementation. This turns the RED→GREEN→REFACTOR cycle from discrete steps into a continuous feedback loop.
+
+```
+Monitor: bun test --watch
+```
+
+**How it works:**
+1. Start Monitor on your test runner's watch mode
+2. Write a failing test (RED) — Monitor immediately reports the failure
+3. Write minimal code — Monitor reports pass (GREEN) as soon as you save
+4. Refactor — Monitor confirms you stay green after each change
+
+**Runner-specific watch commands:**
+
+| Runner | Watch command |
+|--------|-------------|
+| Vitest | `bun test --watch` or `npx vitest --watch` |
+| Jest | `npx jest --watch` |
+
+**When to use**: during Phase 3 (Implement) for rapid iteration. Especially valuable when making multiple small changes — you see red/green transitions without running tests manually each time.
+
+## Async Leak Detection with Monitor
+
+Use Monitor to stream async leak detection so you can react to the first leak immediately:
+
+```
+Monitor: bun test --run --detectAsyncLeaks
+```
+
+For Jest: `Monitor: npx jest --detectOpenHandles --forceExit`
+
+This surfaces open handles as they're detected, rather than buffering the entire test output and checking the exit code afterward.
+
 ## Diagnostic Commands
 
 ```bash
