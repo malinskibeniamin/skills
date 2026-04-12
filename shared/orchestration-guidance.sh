@@ -19,7 +19,7 @@ guidance=""
 if [ "$(basename "$file_path")" = "package.json" ]; then
   if ! grep -qF "deps" "$_seen_file" 2>/dev/null; then
     echo "deps" >> "$_seen_file" 2>/dev/null || true
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"[DEPS] Changelogs, npm audit, compat.\"}" >&2
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[DEPS] Changelogs, bun audit, compat.\"}" >&2
   fi
   exit 0
 fi

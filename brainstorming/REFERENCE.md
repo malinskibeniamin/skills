@@ -19,7 +19,7 @@
 
 ## Visual Mockups with agent-browser
 
-**Install** (one-time): `npm install -g agent-browser && agent-browser install`
+**Install** (one-time): `bun install -g agent-browser && agent-browser install`
 
 No auth needed. Renders local HTML headlessly. Works in CI.
 

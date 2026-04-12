@@ -226,7 +226,7 @@ Run SAST/SCA tooling on changed files:
 **Tooling options** (use what project has; add one if none):
 - `eslint-plugin-security` — catches common JS/TS security anti-patterns
 - `semgrep` — fast, rule-based SAST for multiple languages
-- `npm audit` / `pnpm audit` — dependency vulnerability scan
+- `bun audit` — dependency vulnerability scan
 - `trivy fs .` — filesystem-level vulnerability and secret scanning
 
 **Block PR creation** if new critical/high findings appear. Fix first, then proceed to code review.
@@ -257,7 +257,7 @@ Dispatch `code-reviewer` agent for fresh-eyes review. Two stages:
 ```
 /codex:adversarial-review
 ```
-Requires: `npm install -g @openai/codex` and OpenAI API key.
+Requires: `bun install -g @openai/codex` and OpenAI API key.
 Install plugin: `/plugin marketplace add openai/codex-plugin-cc` → `/plugin install codex@openai-codex` → `/codex:setup`
 
 ### Ship
