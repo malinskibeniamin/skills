@@ -16,6 +16,20 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Spec Compliance" "REFERENCE has spec
 run_content_eval "$SKILL_DIR/REFERENCE.md" "codex" "REFERENCE has codex review instructions"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Hard Rules" "REFERENCE has hard rules"
 
+# ── Phase 4b (Refine) ───────────────────────────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "4b.*Refine" "SKILL.md has Phase 4b (Refine)"
+run_content_eval "$SKILL_DIR/SKILL.md" "self-reviewer" "SKILL.md references self-reviewer agent"
+run_content_eval "$SKILL_DIR/SKILL.md" "adversarial-reviewer" "SKILL.md references adversarial-reviewer agent"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Phase 4b.*Refine" "REFERENCE has Phase 4b section"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "self-reviewer" "REFERENCE references self-reviewer"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "adversarial-reviewer" "REFERENCE references adversarial-reviewer"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "findings-schema" "REFERENCE references findings-schema"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "SubagentStart" "REFERENCE documents SubagentStart hook"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "SubagentStop" "REFERENCE documents SubagentStop hook"
+
+# ── Routing table includes 4b ────────────────────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "4b.*5" "SKILL.md routing table flows 4b→5"
+
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')
 desc_len=${#desc}
 if [ $desc_len -le 250 ]; then
