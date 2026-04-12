@@ -6,7 +6,7 @@
 
 ## Escape Hatch for useEffect
 
-When useEffect is genuinely needed (e.g., WebSocket cleanup, third-party library integration), add a comment on the line before:
+When useEffect genuinely needed (WebSocket cleanup, third-party lib integration), add comment on line before:
 
 ```tsx
 // allow: useEffect — WebSocket subscription cleanup required
@@ -16,7 +16,7 @@ useEffect(() => {
 }, [url])
 ```
 
-The hook checks for `// allow: useEffect` anywhere in the file. A reason is required for code review. Legacy format `// allow-useEffect:` also works.
+Hook checks for `// allow: useEffect` anywhere in file. Reason required for code review. Legacy format `// allow-useEffect:` also works.
 
 ## Raw HTML → Component Library Mapping
 
@@ -30,11 +30,11 @@ The hook checks for `// allow: useEffect` anywhere in the file. A reason is requ
 | `<table>` | `<Table>` | `@/components/ui/table` |
 | `<label>` | `<Label>` | `@/components/ui/label` |
 
-Note: `<form>` and `<a>` are allowed — `<form>` has no standard registry replacement, `<a>` can't always be replaced with TanStack Router Link.
+`<form>` and `<a>` allowed — `<form>` has no standard registry replacement, `<a>` can't always swap with TanStack Router Link.
 
 ## Auto-Generated Files
 
-The following files are automatically skipped by all hooks:
+Following files auto-skipped by all hooks:
 
 | Pattern | Source |
 |---------|--------|
@@ -45,7 +45,7 @@ The following files are automatically skipped by all hooks:
 
 ## Named useEffect Functions
 
-When writing `useEffect`, always use a named function expression instead of an anonymous arrow:
+Always use named function expression in `useEffect`, not anonymous arrow:
 
 ```tsx
 // BAD — anonymous arrow
@@ -65,10 +65,10 @@ useEffect(function connectToWebSocket() {
 
 ### Why
 
-- Named functions appear in stack traces and React DevTools (instead of `(anonymous)`)
-- Forces you to articulate what the effect does — reveals split opportunities
-- If you can't name it without "and" or "also", the effect does too much — split it
-- If the name starts with "sync" or "update" followed by state, it's probably derived state — compute inline during render instead
+- Named functions show in stack traces and React DevTools (not `(anonymous)`)
+- Forces articulating what effect does — reveals split opportunities
+- Can't name without "and"/"also" → effect does too much — split it
+- Name starts with "sync"/"update" + state → probably derived state — compute inline during render
 
 ### Naming conventions
 
@@ -82,7 +82,7 @@ useEffect(function connectToWebSocket() {
 
 ## Form-Level Validation (react-hook-form v7.72+)
 
-For cross-field validation (e.g., "confirm password must match password", "end date must be after start date"), use the `validate` option on `useForm` instead of custom logic inside `onSubmit`:
+For cross-field validation (e.g., "confirm password must match password", "end date after start date"), use `validate` option on `useForm` instead of custom logic inside `onSubmit`:
 
 ```tsx
 // BAD — validation logic buried in submit handler, errors not surfaced to UI
@@ -106,11 +106,11 @@ const form = useForm({
 })
 ```
 
-This runs alongside field-level resolvers (zod, protovalidate) and surfaces errors through the standard `formState.errors` API.
+Runs alongside field-level resolvers (zod, protovalidate), surfaces errors through standard `formState.errors` API.
 
 ## Resetting State on Prop Change — Use `key`
 
-When you need to reset component state when a prop changes, don't use `useEffect`:
+Need reset component state when prop changes? Don't use `useEffect`:
 
 ```tsx
 // BAD — extra render pass, intermediate stale state visible
@@ -123,11 +123,11 @@ useEffect(() => {
 <UserProfile key={userId} />
 ```
 
-The `key` prop works on any component, not just lists. When the key changes, React destroys the old instance and creates a new one with fresh state.
+`key` prop works on any component, not just lists. Key changes → React destroys old instance, creates new one with fresh state.
 
 ## Subscriptions — Prefer `useSyncExternalStore`
 
-When subscribing to browser APIs (online status, media queries, scroll position, external stores), prefer `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
+Subscribing to browser APIs (online status, media queries, scroll position, external stores)? Prefer `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
 
 ```tsx
 // BAD — verbose, prone to tearing in concurrent mode
@@ -165,15 +165,15 @@ const isOnline = useSyncExternalStore(
 | External stores | Redux, MobX, vanilla stores without React bindings |
 | DOM state | scroll position, element dimensions (with `ResizeObserver`) |
 
-Don't use it for: React state, zustand (already uses it internally), TanStack Query.
+Don't use for: React state, zustand (already uses internally), TanStack Query.
 
 ## Common Agent Excuses
 
 | Excuse | Counter |
 |---|---|
-| "`as any` is fine just here" | It's never just here. Type erasure spreads. Fix the type. |
-| "Temporary @ts-expect-error" | Temporary becomes permanent. Fix the type error now. |
-| "`style={{}}` is simpler" | Tailwind classes are composable and cacheable. Inline styles aren't. |
+| "`as any` is fine just here" | Never just here. Type erasure spreads. Fix type. |
+| "Temporary @ts-expect-error" | Temporary becomes permanent. Fix type error now. |
+| "`style={{}}` is simpler" | Tailwind classes composable and cacheable. Inline styles aren't. |
 | "Raw `<button>` is fine for this case" | Use `<Button>` — consistent styling, variant props, a11y baked in. |
 | "I'll add accessibility later" | Later never comes. Add aria-label and keyboard handlers now. |
-| "`eval()` is needed for dynamic code" | Use `JSON.parse()` for data, `new Function` is also banned. |
+| "`eval()` is needed for dynamic code" | Use `JSON.parse()` for data, `new Function` also banned. |

@@ -11,11 +11,11 @@
 const message = "Operation completed successfully!"
 ```
 
-The hook checks for `// allow: ux-copy` anywhere in the file. A reason is required for code review. Legacy format `// allow-ux-copy:` also works.
+Hook checks for `// allow: ux-copy` anywhere in file. Reason required for code review. Legacy format `// allow-ux-copy:` also works.
 
 ## Capitalization
 
-Use sentence-style capitalization for all UI text: titles, headings, buttons, menu items, fields, tooltips. Capitalize only the first word.
+Sentence-style caps for all UI text: titles, headings, buttons, menu items, fields, tooltips. Capitalize first word only.
 
 | Good | Bad |
 |------|-----|
@@ -26,11 +26,11 @@ Use sentence-style capitalization for all UI text: titles, headings, buttons, me
 Exceptions:
 - Redpanda product names: Admin API, Redpanda Console, Schema Registry, HTTP Proxy, Dedicated Cloud, BYOC
 - Acronyms: ID, TLS, mTLS, SASL, OIDC, VPC, CIDR
-- Navigation items in the side pane use heading-style capitalization
+- Side pane navigation items use heading-style caps
 
 ## Toast Messages
 
-Completed tasks: subject + verb in past tense.
+Completed tasks: subject + past tense verb.
 Long-running tasks: gerund (verb + ing).
 
 | Good | Bad |
@@ -42,7 +42,7 @@ Long-running tasks: gerund (verb + ing).
 
 ## Error Messages
 
-State the problem clearly. Provide a solution. No blame.
+State problem clearly. Provide solution. No blame.
 
 | Good | Bad |
 |------|-----|
@@ -52,8 +52,8 @@ State the problem clearly. Provide a solution. No blame.
 
 ## Button Labels
 
-- 1-4 words maximum
-- Start with a verb if more than one word
+- 1-4 words max
+- Start with verb if more than one word
 - No "Yes"/"No" — use clear action verbs
 - No articles (a, an, the)
 
@@ -65,20 +65,20 @@ State the problem clearly. Provide a solution. No blame.
 
 ## Empty States
 
-Explain why the page is empty and what the user can do next. Include a button or link to the next step when appropriate.
+Explain why page empty and what user can do next. Include button or link to next step when appropriate.
 
-For running tasks: use gerund ("Creating cluster" not "Cluster creation in progress").
+Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress").
 
 ## Tooltips
 
-- Brief — lengthy content is not a tip
+- Brief — lengthy content not a tip
 - Period for full sentences, no period for short phrases
 - No interactive elements (links, buttons)
-- No redundant text ("Click to..." on a button)
+- No redundant text ("Click to..." on button)
 
 ## Numbers and Measurements
 
-- Always use numerals, including 0-9 ("3 topics" not "three topics")
+- Always numerals, including 0-9 ("3 topics" not "three topics")
 - Thousands: K, millions: M, billions: B, no space (33K)
 - Measurements: abbreviations with space (10 MB, 75 MBps)
 - Time: 12-hour clock, AM/PM in caps (2:30 PM)
@@ -88,12 +88,12 @@ For running tasks: use gerund ("Creating cluster" not "Cluster creation in progr
 - Descriptive text — never "click here" or bare "here"
 - "Learn more" always after descriptive text, never inline
 - Capitalize first word only: "Learn more" (not "Learn More")
-- External link icon for links leaving the product
-- One link per sentence maximum
+- External link icon for links leaving product
+- One link per sentence max
 
 ## Possessive Pronouns
 
-Avoid "my" and "your" in page names, menu names, and titles. OK in instructional text.
+Avoid "my" and "your" in page names, menu names, titles. OK in instructional text.
 
 | Good | Bad |
 |------|-----|
@@ -128,7 +128,7 @@ Use only to acknowledge errors or interactions that are particularly inconvenien
 
 ## Directional Language
 
-Don't reference physical position in the UI or page — layouts change.
+Don't reference physical position in UI or page — layouts change.
 
 | Bad | Good |
 |-----|------|
@@ -138,9 +138,9 @@ Don't reference physical position in the UI or page — layouts change.
 
 ## Sentence Structure
 
-- **No "There is/are" starters** — put the subject first: "3 options are available" not "There are 3 options"
+- **No "There is/are" starters** — subject first: "3 options are available" not "There are 3 options"
 - **Conditional phrases first** — "If using Kubernetes, configure..." not "Configure... if using Kubernetes"
-- **No future tense** — use present tense: "The cluster restarts" not "The cluster will restart"
+- **No future tense** — present tense: "The cluster restarts" not "The cluster will restart"
 - **No "and/or"** — use "and", "or", or "A, B, or both"
 
 ## Words to Avoid in UI Text
@@ -157,7 +157,7 @@ Don't reference physical position in the UI or page — layouts change.
 
 ## Placeholder Format
 
-When showing placeholder values in UI, use descriptive lowercase-with-dashes in angle brackets:
+Placeholder values in UI: descriptive lowercase-with-dashes in angle brackets:
 
 | Good | Bad |
 |------|-----|
@@ -173,9 +173,9 @@ Don't use em dashes. Use parentheses, commas, or break into separate sentences.
 
 | Excuse | Counter |
 |---|---|
-| "The exclamation adds energy" | It adds noise. Product UI should be calm and informative. |
-| "'successfully' confirms the action" | The toast itself confirms it. "Topic created" is sufficient. |
-| "'click here' is clear" | It's meaningless without context. Describe the destination. |
-| "'Oops' is friendly" | It's patronizing. State the problem and solution directly. |
-| "Title Case looks professional" | It's inconsistent and harder to scan. Sentence case is the standard. |
-| "'My Settings' is user-centric" | It's ambiguous in multi-user contexts. Just "Settings". |
+| "The exclamation adds energy" | Adds noise. Product UI should be calm and informative. |
+| "'successfully' confirms the action" | Toast itself confirms it. "Topic created" sufficient. |
+| "'click here' is clear" | Meaningless without context. Describe destination. |
+| "'Oops' is friendly" | Patronizing. State problem and solution directly. |
+| "Title Case looks professional" | Inconsistent and harder to scan. Sentence case is standard. |
+| "'My Settings' is user-centric" | Ambiguous in multi-user contexts. Just "Settings". |

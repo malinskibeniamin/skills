@@ -5,20 +5,20 @@
 > "Write React as if every render is free and memoization is automatic."
 
 **Pre-compiler era:** manual control over re-renders, defensive memoization, referential equality as priority.
-**Post-compiler era:** compiler auto-inserts memoization, renders are cheap, code organized around clarity and correctness.
+**Post-compiler era:** compiler auto-inserts memoization, renders cheap, code organized around clarity and correctness.
 
 ## Post-React Compiler Coding Rules
 
-These rules should be followed whenever React Compiler is enabled:
+Follow when React Compiler enabled:
 
-1. **Write components as pure functions** — derive UI from props, state, and context. No hidden mutable state, no side effects during render.
-2. **Prefer plain JavaScript** — `const total = items.reduce(...)` not `useMemo(() => items.reduce(...), [items])`. The compiler memoizes automatically.
-3. **Inline callbacks are fine** — `<Dialog onClose={() => setOpen(false)} />` is correct. Do not extract to `useCallback`.
-4. **Derive, don't store** — never `useState` + `useEffect` to compute derived values. Compute inline during render.
-5. **Hooks are for semantics, not performance** — `useState` for true UI state, `useEffect` only for syncing with external systems, `useRef` for imperative handles.
-6. **Do not use `useRef` as a memoization cache** — the compiler owns caching.
-7. **Treat `useMemo`/`useCallback`/`React.memo` as escape hatches** — only use when integrating with non-React systems, or when referential stability is required for correctness (not performance). Document why.
-8. **Respect `'use no memo'`** — never remove it. Use it as a last-resort opt-out, not a default.
+1. **Write components as pure functions** — derive UI from props, state, context. No hidden mutable state, no side effects during render.
+2. **Prefer plain JavaScript** — `const total = items.reduce(...)` not `useMemo(() => items.reduce(...), [items])`. Compiler memoizes automatically.
+3. **Inline callbacks fine** — `<Dialog onClose={() => setOpen(false)} />` correct. Don't extract to `useCallback`.
+4. **Derive, don't store** — never `useState` + `useEffect` for derived values. Compute inline during render.
+5. **Hooks for semantics, not performance** — `useState` for true UI state, `useEffect` only for syncing with external systems, `useRef` for imperative handles.
+6. **Don't use `useRef` as memoization cache** — compiler owns caching.
+7. **Treat `useMemo`/`useCallback`/`React.memo` as escape hatches** — only use when integrating with non-React systems, or referential stability required for correctness (not performance). Document why.
+8. **Respect `'use no memo'`** — never remove it. Last-resort opt-out, not default.
 9. **Follow naming conventions** — PascalCase for components (aids compiler inference), `use*` prefix for hooks.
 
 ## react-compiler-check.sh
@@ -27,7 +27,7 @@ These rules should be followed whenever React Compiler is enabled:
 
 ## Escape Hatch: 'use no memo'
 
-When the React Compiler causes issues with a specific component, add the directive at the file top:
+When React Compiler causes issues with specific component, add directive at file top:
 
 ```tsx
 'use no memo'
@@ -43,11 +43,11 @@ Rules for directives:
 - Never introduce directives automatically
 - Respect existing directives — never remove `'use no memo'`
 - Use `'use no memo'` only as last-resort escape hatch
-- Document why the opt-out exists
+- Document why opt-out exists
 
 ## Compiler Modes
 
-The React Compiler supports four compilation modes:
+React Compiler supports four compilation modes:
 
 | Mode | Behavior | When to use |
 |------|----------|-------------|
@@ -58,7 +58,7 @@ The React Compiler supports four compilation modes:
 
 Rules:
 - Assume `infer` mode unless explicitly configured otherwise
-- Never rely on compilation for correctness — code must work without the compiler
+- Never rely on compilation for correctness — code must work without compiler
 - Follow naming conventions (PascalCase components, `use*` hooks) to aid inference
 - Never introduce `"use memo"` or `"use no memo"` directives automatically
 - Respect existing directives — directives define compiler trust boundaries, not performance hints
@@ -82,7 +82,7 @@ plugins: [
 
 **Environment variable:**
 
-Set `REACT_COMPILER_MODE=annotation` in your SessionStart hook so the memoization checks adapt:
+Set `REACT_COMPILER_MODE=annotation` in SessionStart hook so memoization checks adapt:
 
 ```bash
 echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
@@ -90,11 +90,11 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 
 **Migration workflow:**
 
-1. Install compiler with `annotation` mode — nothing changes, no files are compiled
-2. Add `"use memo"` to files as you migrate them — the compiler activates per-file
+1. Install compiler with `annotation` mode — nothing changes, no files compiled
+2. Add `"use memo"` to files as you migrate — compiler activates per-file
 3. In annotated files, remove manual `useMemo`/`useCallback`/`React.memo`
 4. In non-annotated files, manual memoization remains correct and hooks won't flag it
-5. Once all files are annotated, switch to `infer` mode and remove the `"use memo"` directives
+5. Once all files annotated, switch to `infer` mode and remove `"use memo"` directives
 
 **Hook behavior by mode:**
 
@@ -105,10 +105,10 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 
 ## Component Library Directory
 
-All files in your component library directory (`components/ui/` or `redpanda-ui/`) should have `'use no memo'` because:
+All files in component library directory (`components/ui/` or `redpanda-ui/`) should have `'use no memo'` because:
 - Registry/distribution components need explicit control over memoization
-- The compiler may interfere with component API contracts
-- Consumers of these components may have different compiler settings
+- Compiler may interfere with component API contracts
+- Consumers may have different compiler settings
 
 ## Post-Compiler Pattern Reference
 

@@ -18,7 +18,7 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/acc
 
 ### 4. Create accessibility test helper
 
-Write this test fixture into your test utilities:
+Write test fixture into test utilities:
 
 ```typescript
 // tests/helpers/a11y.ts
@@ -125,9 +125,9 @@ test.describe('Accessibility', () => {
 - [ ] Hook blocks `<img>` without `alt`
 - [ ] Hook blocks `role="combobox"` without `aria-expanded`
 - [ ] Hook skips non-TSX/JSX files
-- [ ] `@axe-core/playwright` is installed
-- [ ] Accessibility test helper runs against a sample page
+- [ ] `@axe-core/playwright` installed
+- [ ] A11y test helper runs against sample page
 
 ### 6. Commit
 
-Stage all files and commit: `Add accessibility enforcement hook + Playwright AXE setup`
+Stage all files, commit: `Add accessibility enforcement hook + Playwright AXE setup`

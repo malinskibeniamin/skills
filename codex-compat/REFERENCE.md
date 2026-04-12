@@ -2,15 +2,15 @@
 
 ## codex-batch-check.sh
 
-Stop hook wrapper that runs all PostToolUse Edit|Write checks on changed files.
-Reuses the existing `.claude/hooks/` scripts — no duplication.
-Handles JS/TS, CSS/SCSS (for tailwind-check), and package.json (for bundle-guard).
+Stop hook wrapper — runs all PostToolUse Edit|Write checks on changed files.
+Reuses existing `.claude/hooks/` scripts — no duplication.
+Handles JS/TS, CSS/SCSS (tailwind-check), package.json (bundle-guard).
 
 > Script: [`scripts/codex-batch-check.sh`](scripts/codex-batch-check.sh)
 
 ## .codex/hooks.json template
 
-Generate this from the existing `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, and Stop hooks directly. Add the batch checker as a Stop hook.
+Generate from existing `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, Stop hooks directly. Add batch checker as Stop hook.
 
 ```json
 {
@@ -121,11 +121,11 @@ Generate this from the existing `.claude/settings.json`. Copy PreToolUse Bash, S
 ```
 
 **Notes:**
-- SessionStart, UserPromptSubmit, PreToolUse Bash hooks work identically on Codex
-- Stop hooks work identically on Codex (`decision: "block"` continues the turn)
-- PostToolUse Edit|Write hooks are NOT in `.codex/hooks.json` — the `codex-batch-check.sh` auto-discovers all `*-check.sh` scripts and runs them at Stop time
+- SessionStart, UserPromptSubmit, PreToolUse Bash hooks work identical on Codex
+- Stop hooks work identical on Codex (`decision: "block"` continues turn)
+- PostToolUse Edit|Write hooks NOT in `.codex/hooks.json` — `codex-batch-check.sh` auto-discovers all `*-check.sh` scripts, runs at Stop time
 - PostToolUse Bash (llm-truncate) works on Codex
-- `_hook-lib.sh` must be in `.claude/hooks/` alongside the check scripts
+- `_hook-lib.sh` must be in `.claude/hooks/` alongside check scripts
 - `shared/hook-lib.sh` must be accessible (symlinked or copied) for Stop hooks that source it
 
 ## AGENTS.md

@@ -8,11 +8,11 @@
 
 > Script: [`../shared/user-prompt-context.sh`](../shared/user-prompt-context.sh)
 
-Injects project state into every prompt as `additionalContext`. Claude starts each response knowing the project state without wasting tool calls.
+Injects project state into every prompt as `additionalContext`. Claude starts each response knowing project state without wasting tool calls.
 
 ### Context Levels
 
-Set `PROMPT_CONTEXT_LEVEL` in your SessionStart hook:
+Set `PROMPT_CONTEXT_LEVEL` in SessionStart hook:
 
 ```bash
 echo "export PROMPT_CONTEXT_LEVEL=standard" >> "$CLAUDE_ENV_FILE"
@@ -26,13 +26,13 @@ echo "export PROMPT_CONTEXT_LEVEL=standard" >> "$CLAUDE_ENV_FILE"
 
 ### The Rules Line
 
-The most valuable injection. Compresses 300+ lines of PostToolUse enforcement into one line that Claude applies *before* writing code:
+Most valuable injection. Compresses 300+ lines PostToolUse enforcement into one line Claude applies *before* writing code:
 
 ```
 Rules: bun biome vitest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} no-useEffect | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery)
 ```
 
-Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct code on the first try (1 tool call). Estimated savings: **3000-8000 tokens per session**.
+Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct code first try (1 tool call). Estimated savings: **3000-8000 tokens per session**.
 
 ### Full Level — What It Adds
 
@@ -44,16 +44,16 @@ Proto: v2
 Last stop: typecheck PASS, tests PASS
 ```
 
-This prevents 2-3 Glob/Read calls Claude makes to discover import paths, available components, and route parameters.
+Prevents 2-3 Glob/Read calls Claude makes discovering import paths, available components, route parameters.
 
 ### Codex Compatibility
 
-Codex doesn't have `UserPromptSubmit`. Approximate via:
+Codex lacks `UserPromptSubmit`. Approximate via:
 - **SessionStart**: one-time context snapshot (stale but available)
 - **AGENTS.md**: static rules and scripts baked in at generation time
 - **Stop → `.codex/session-state.md`**: violations and git state written per-turn
 
-See `codex-compat` REFERENCE.md for the approximation strategy.
+See `codex-compat` REFERENCE.md for approximation strategy.
 
 ## llm-test-flags.sh (PreToolUse on Bash)
 
@@ -67,18 +67,18 @@ See `codex-compat` REFERENCE.md for the approximation strategy.
 
 ### Soft suggestions (via `additionalContext`)
 
-These are suggested to Claude but not forced. Claude may choose to include them:
+Suggested to Claude but not forced. Claude may choose to include:
 
 | Flag | Runner | Why |
 |------|--------|-----|
-| `--pool=forks` | Vitest | Each test file gets its own process — OS cleans up zombies even if vitest crashes |
-| `--bail=1` | Vitest | Fail fast on first failure — don't waste tokens on cascading failures |
+| `--pool=forks` | Vitest | Each test file own process — OS cleans up zombies even if vitest crashes |
+| `--bail=1` | Vitest | Fail fast on first failure — no wasted tokens on cascading failures |
 | `--teardownTimeout=5000` | Vitest | Kill hanging teardown after 5s — prevents zombie processes from stalled cleanup |
 | `--reporter=github` | Vitest (CI only) | GitHub Actions annotations inline in PR diffs |
 | `--bail` | Jest | Fail fast |
 | `--forceExit` | Jest | Force exit after tests complete — prevents hanging from open handles |
 
-Suggestions only appear when the flag is not already present in the command.
+Suggestions only appear when flag not already present in command.
 
 ## llm-truncate.sh (PostToolUse on Bash)
 
@@ -86,7 +86,7 @@ Suggestions only appear when the flag is not already present in the command.
 
 ## NODE_OPTIONS
 
-`NODE_OPTIONS=--max-old-space-size=8192` is set in the SessionStart hook (`session-env.sh`). This gives Node.js 8GB heap, preventing OOM on:
+`NODE_OPTIONS=--max-old-space-size=8192` set in SessionStart hook (`session-env.sh`). Gives Node.js 8GB heap, preventing OOM on:
 - Large test suites with many imports
 - TypeScript compilation (`tsgo` / `tsc`)
 - Bundler builds (rsbuild, webpack, vite)
@@ -94,7 +94,7 @@ Suggestions only appear when the flag is not already present in the command.
 
 ## Vitest Config Optimizations
 
-These are recommended `vitest.config.ts` settings. The hook handles CLI flags; these handle config-level tuning.
+Recommended `vitest.config.ts` settings. Hook handles CLI flags; these handle config-level tuning.
 
 ### Dependency optimization (faster startup)
 
@@ -154,7 +154,7 @@ export default defineConfig({
 })
 ```
 
-The `hanging-process` reporter logs which async operations prevent vitest from exiting. Remove once zombies are resolved — it adds overhead.
+`hanging-process` reporter logs which async operations prevent vitest from exiting. Remove once zombies resolved — adds overhead.
 
 ## Token Savings Breakdown
 
