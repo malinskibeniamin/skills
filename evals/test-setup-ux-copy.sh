@@ -14,7 +14,7 @@ run_executable_eval "$SCRIPT" "ux-copy-check.sh is executable"
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-ux-copy" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "allow-ux-copy" "SKILL.md documents escape hatch"
+run_content_eval "$SKILL_DIR/SKILL.md" "allow.*ux-copy" "SKILL.md documents escape hatch"
 run_content_eval "$SKILL_DIR/SKILL.md" "capitalization" "SKILL.md mentions capitalization rules"
 run_content_eval "$SKILL_DIR/SKILL.md" "REDPANDA_KIT" "SKILL.md documents Redpanda opt-in"
 

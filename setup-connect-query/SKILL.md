@@ -16,6 +16,6 @@ paths:
 - **Warn on `axios`/`fetch()`** — prefer ConnectRPC transport
 - **Protobuf v2**: Ban `new Message()` → use `create(Schema)`. Ban `PlainMessage`/`PartialMessage` → use `MessageShape`/`MessageInitShape`. Ban manual `$typeName` literals.
 
-Escape hatch: `// allow-direct-query: [reason]`
+Escape hatch: `// allow: direct-query [reason]`
 
 See [REFERENCE.md](REFERENCE.md) for protobuf gotchas (Timestamp, Duration, Any, cache patterns). For initial setup: see [SETUP.md](SETUP.md).

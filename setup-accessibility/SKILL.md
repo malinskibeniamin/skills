@@ -13,7 +13,7 @@ paths:
 - **Mouse-only `onClick` on `<div>`/`<span>`** — requires `role` + `tabIndex` + `onKeyDown`/`onKeyUp`
 - **Missing ARIA on widget roles** — `role="combobox"` needs `aria-expanded` + `aria-controls`, `role="dialog"` needs `aria-label`/`aria-labelledby`, `role="tablist"` needs child `role="tab"`
 
-Escape hatch: `// allow-a11y-skip: [reason]`
+Escape hatch: `// allow: a11y-skip [reason]`
 
 ## Visual Checklist
 

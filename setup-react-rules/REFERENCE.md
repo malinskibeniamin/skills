@@ -9,14 +9,14 @@
 When useEffect is genuinely needed (e.g., WebSocket cleanup, third-party library integration), add a comment on the line before:
 
 ```tsx
-// allow-useEffect: WebSocket subscription cleanup required
+// allow: useEffect — WebSocket subscription cleanup required
 useEffect(() => {
   const ws = new WebSocket(url)
   return () => ws.close()
 }, [url])
 ```
 
-The hook checks for `// allow-useEffect:` anywhere in the file. A reason is required for code review.
+The hook checks for `// allow: useEffect` anywhere in the file. A reason is required for code review. Legacy format `// allow-useEffect:` also works.
 
 ## Raw HTML → Component Library Mapping
 

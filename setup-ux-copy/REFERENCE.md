@@ -7,11 +7,11 @@
 ## Escape Hatch
 
 ```tsx
-// allow-ux-copy: legacy string from external API
+// allow: ux-copy — legacy string from external API
 const message = "Operation completed successfully!"
 ```
 
-The hook checks for `// allow-ux-copy:` anywhere in the file. A reason is required for code review.
+The hook checks for `// allow: ux-copy` anywhere in the file. A reason is required for code review. Legacy format `// allow-ux-copy:` also works.
 
 ## Capitalization
 

@@ -17,7 +17,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "ARIA" "SKILL.md mentions ARIA"
 run_content_eval "$SKILL_DIR/SKILL.md" "alt" "SKILL.md documents img alt rule"
-run_content_eval "$SKILL_DIR/SKILL.md" "allow-a11y-skip" "SKILL.md documents escape hatch"
+run_content_eval "$SKILL_DIR/SKILL.md" "allow.*a11y-skip" "SKILL.md documents escape hatch"
 
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 

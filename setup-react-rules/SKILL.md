@@ -14,7 +14,7 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 - **Ban barrel imports** — flag re-exports from index files, suggest direct path imports
 - **Ban missing passive event listeners** — flag `addEventListener('scroll'|'touchstart'|'wheel')` without `{ passive: true }`
 - **Ban static imports of heavy deps** — flag top-level imports of `chart.js`, `d3`, `three.js`, `pdf-lib` (suggest dynamic `import()` or `React.lazy()`)
-- **Ban dangerouslySetInnerHTML** — XSS risk, escape hatch: `// allow-dangerouslySetInnerHTML: [reason]`
+- **Ban dangerouslySetInnerHTML** — XSS risk, escape hatch: `// allow: dangerouslySetInnerHTML [reason]`
 - **Ban eval() and new Function()** — code injection risk (OWASP A03)
 - **Ban .innerHTML assignment** — XSS risk, use textContent or React rendering
 - **Ban inline `style={{}}`** — use Tailwind utility classes
@@ -32,8 +32,8 @@ PostToolUse hooks on Edit/Write (auto-detects and excludes component library dir
 
 ### Opt-in rules
 
-- **Ban useEffect** (and useLayoutEffect, useInsertionEffect) — enable with `REACT_RULES_BAN_USEEFFECT=1`. Best for greenfield projects using TanStack Query + zustand. Escape hatch: `// allow-useEffect: [reason]`
-- **Ban type assertions** (`as X`) — enable with `REACT_RULES_BAN_TYPE_ASSERTIONS=1`. Allows `as const` and `as const satisfies`. Forces type guards, generics, or schema validation instead. Escape hatch: `// allow-type-assertion: [reason]`
+- **Ban useEffect** (and useLayoutEffect, useInsertionEffect) — enable with `REACT_RULES_BAN_USEEFFECT=1`. Best for greenfield projects using TanStack Query + zustand. Escape hatch: `// allow: useEffect [reason]`
+- **Ban type assertions** (`as X`) — enable with `REACT_RULES_BAN_TYPE_ASSERTIONS=1`. Allows `as const` and `as const satisfies`. Forces type guards, generics, or schema validation instead. Escape hatch: `// allow: type-assertion [reason]`
 
 ### Soft guidance (enforced by Claude, not hooks)
 
@@ -57,7 +57,7 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/rea
 - [ ] Hook blocks `as any`, `@ts-ignore`, `@ts-expect-error`
 - [ ] Hook auto-detects and skips component library directories
 - [ ] (If `REACT_RULES_BAN_USEEFFECT=1`) Hook blocks new `useEffect` in diff
-- [ ] (If `REACT_RULES_BAN_USEEFFECT=1`) Hook allows `useEffect` with `// allow-useEffect:` comment
+- [ ] (If `REACT_RULES_BAN_USEEFFECT=1`) Hook allows `useEffect` with `// allow: useEffect` comment
 
 ### 4. Codex compatibility (optional)
 

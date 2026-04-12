@@ -34,7 +34,7 @@ PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 
 ### Escape hatch
 
-`// allow-ux-copy: [reason]` anywhere in the file skips all checks.
+`// allow: ux-copy [reason]` anywhere in the file skips all checks.
 
 ## Steps
 

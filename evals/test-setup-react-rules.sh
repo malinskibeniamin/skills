@@ -1113,7 +1113,7 @@ run_content_eval "$SCRIPT" "node:assert" "hook bans node:assert in test files"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/REFERENCE.md" "allow-useEffect" "REFERENCE documents escape hatch"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "allow.*useEffect" "REFERENCE documents escape hatch"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "components/ui" "REFERENCE has component library mapping"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useEffect\(function" "REFERENCE has named useEffect guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket|disconnectWebSocket" "REFERENCE has effect naming conventions"

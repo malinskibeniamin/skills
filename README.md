@@ -555,7 +555,7 @@ Reduce token usage and context waste.
 
 ## Accessibility
 
-- **setup-accessibility** — PostToolUse hook enforcing ARIA accessibility patterns: ban `<img>` without `alt`, ban mouse-only `onClick` on `<div>`/`<span>` (require `role` + `tabIndex` + keyboard handler), enforce required ARIA attributes on `role="combobox"` / `role="tablist"` / `role="dialog"`. Includes Playwright AXE test helper for WCAG 2.1 AA scanning and ARIA patterns reference (combobox, tabs, dialog, accordion, alert, listbox, switch, slider, radio group). Escape hatch: `// allow-a11y-skip: [reason]`.
+- **setup-accessibility** — PostToolUse hook enforcing ARIA accessibility patterns: ban `<img>` without `alt`, ban mouse-only `onClick` on `<div>`/`<span>` (require `role` + `tabIndex` + keyboard handler), enforce required ARIA attributes on `role="combobox"` / `role="tablist"` / `role="dialog"`. Includes Playwright AXE test helper for WCAG 2.1 AA scanning and ARIA patterns reference (combobox, tabs, dialog, accordion, alert, listbox, switch, slider, radio group). Escape hatch: `// allow: a11y-skip [reason]`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
