@@ -33,7 +33,7 @@ fi
 registry_changed=$(echo "$changed" | grep -F 'registry.json' || true)
 
 if [ -z "$registry_changed" ]; then
-  echo '{"decision":"block","reason":"You modified redpanda-ui components but did not rebuild registry.json.\n\n1. Run the registry build command (e.g., bun run build:registry)\n2. Update CHANGELOG.md with the changes\n3. Then finish your response."}' >&2
+  echo '{"decision":"block","reason":"redpanda-ui modified, registry.json not rebuilt. bun run build:registry + update CHANGELOG.md."}' >&2
   exit 2
 fi
 
@@ -41,7 +41,7 @@ fi
 changelog_changed=$(echo "$changed" | grep -iE 'CHANGELOG' || true)
 
 if [ -z "$changelog_changed" ]; then
-  echo '{"decision":"block","reason":"You modified redpanda-ui components and rebuilt registry.json, but CHANGELOG.md was not updated.\n\nAdd a changelog entry describing what changed in the component(s)."}' >&2
+  echo '{"decision":"block","reason":"registry.json rebuilt but CHANGELOG.md not updated. Add entry."}' >&2
   exit 2
 fi
 

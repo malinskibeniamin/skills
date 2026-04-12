@@ -6,11 +6,11 @@ set -euo pipefail
 # Warn if installed in the wrong directory (backend, Go, root of monorepo).
 
 if [ ! -f "package.json" ]; then
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json found. These skills are designed for frontend projects with React + TypeScript. If this is a monorepo, install in the frontend app directory (e.g., apps/web-ui/)."}}' >&2
+  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."}}' >&2
 fi
 
 if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React dependency in package.json. These skills are optimized for React/TypeScript projects. Some hooks may not be relevant here."}}' >&2
+  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React in package.json. Some hooks may not apply."}}' >&2
 fi
 
 # Set environment variables for LLM-friendly defaults

@@ -27,7 +27,7 @@ output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 
 # Known doctor-tool internal bugs — treat as warn-only, not a code quality issue
 if echo "$output" | grep -qE 'is not iterable|Cannot read propert|TypeError:|ReferenceError:'; then
-  echo "{\"decision\":\"allow\",\"reason\":\"React Doctor encountered a tool-internal error (not a code issue). Run 'bun run doctor' manually to investigate.\"}" >&2
+  echo "{\"decision\":\"allow\",\"reason\":\"React Doctor internal error (not code). Run 'bun run doctor' manually.\"}" >&2
   exit 0
 fi
 
@@ -45,12 +45,12 @@ if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -30)
 
   if [ "$_doctor_fail_count" -ge 3 ]; then
-    reason=$(printf "React Doctor errors still present after %s attempts (may be pre-existing). Allowing finish:\n%s" "$_doctor_fail_count" "$truncated" | jq -Rs .)
+    reason=$(printf "Doctor errors after %s attempts (pre-existing?). Allow:\n%s" "$_doctor_fail_count" "$truncated" | jq -Rs .)
     echo "{\"decision\":\"allow\",\"reason\":$reason}" >&2
     exit 0
   fi
 
-  reason=$(printf "React Doctor found errors in changed files:\n%s" "$truncated" | jq -Rs .)
+  reason=$(printf "Doctor errors:\n%s" "$truncated" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
 fi
@@ -64,11 +64,11 @@ if [ -n "$score" ] && [ "$score" -lt 50 ]; then
   echo "$_doctor_fail_count" > "$_doctor_fail_counter"
 
   if [ "$_doctor_fail_count" -ge 3 ]; then
-    echo "{\"decision\":\"allow\",\"reason\":\"React Doctor score $score/100 after $_doctor_fail_count attempts (may be pre-existing). Allowing finish.\"}" >&2
+    echo "{\"decision\":\"allow\",\"reason\":\"Doctor score $score/100 after $_doctor_fail_count attempts (pre-existing?). Allow.\"}" >&2
     exit 0
   fi
 
-  echo "{\"decision\":\"block\",\"reason\":\"React Doctor health score is $score/100 (critical). Fix issues before finishing.\"}" >&2
+  echo "{\"decision\":\"block\",\"reason\":\"Doctor score $score/100 (critical). Fix.\"}" >&2
   exit 2
 fi
 
@@ -77,14 +77,14 @@ echo "0" > "$_doctor_fail_counter" 2>/dev/null || true
 
 # Warn on low score (surface warnings without blocking)
 if [ -n "$score" ] && [ "$score" -lt 80 ]; then
-  echo "{\"decision\":\"allow\",\"reason\":\"React Doctor health score is $score/100. Consider fixing warnings to improve code health.\"}" >&2
+  echo "{\"decision\":\"allow\",\"reason\":\"Doctor score $score/100. Fix warnings.\"}" >&2
   exit 0
 fi
 
 # Surface any warnings in output even if score is OK
 if echo "$output" | grep -qiE 'warn|warning'; then
   warning_count=$(echo "$output" | grep -ciE 'warn|warning' || echo "0")
-  echo "{\"decision\":\"allow\",\"reason\":\"React Doctor passed (score: ${score:-N/A}/100) but found $warning_count warning(s). Run 'bun run doctor' for details.\"}" >&2
+  echo "{\"decision\":\"allow\",\"reason\":\"Doctor ${score:-N/A}/100, $warning_count warning(s). bun run doctor.\"}" >&2
 fi
 
 exit 0

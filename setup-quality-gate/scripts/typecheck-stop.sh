@@ -38,7 +38,7 @@ if [ $exit_code -ne 0 ]; then
     _session_errors=$(hook_filter_errors_to_session "$output" "$changed_files")
     if [ -z "$_session_errors" ]; then
       # All errors are in files OTHER sessions touched — allow through
-      echo "{\"decision\":\"allow\",\"reason\":\"Type errors exist but none in files this session modified. Allowing finish.\"}" >&2
+      echo "{\"decision\":\"allow\",\"reason\":\"Type errors exist but none in session files. Allow.\"}" >&2
       echo "typecheck FAIL (other session)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
       exit 0
     fi
@@ -61,21 +61,21 @@ if [ $exit_code -ne 0 ]; then
 
     if [ -z "$_new_errors" ]; then
       _error_count=$(echo "$_current_errors" | wc -l | tr -d ' ')
-      echo "{\"decision\":\"allow\",\"reason\":\"$_error_count pre-existing type error(s) — not introduced by this session. Allowing finish.\"}" >&2
+      echo "{\"decision\":\"allow\",\"reason\":\"$_error_count pre-existing type error(s). Allow.\"}" >&2
       echo "typecheck FAIL (pre-existing only)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
       exit 0
     fi
 
     truncated=$(echo "$_new_errors" | head -30)
     _new_count=$(echo "$_new_errors" | wc -l | tr -d ' ')
-    reason=$(printf "%s new type error(s) introduced by this session. Fix before finishing:\n%s" "$_new_count" "$truncated" | jq -Rs .)
+    reason=$(printf "%s new type error(s). Fix:\n%s" "$_new_count" "$truncated" | jq -Rs .)
     echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
     echo "typecheck FAIL (new errors)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
     exit 2
   fi
 
   # ── Fallback: no baseline available ──────────────────────────────
-  reason=$(printf "Type errors found. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+  reason=$(printf "Type errors. Fix:\n%s" "$truncated" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2
@@ -112,7 +112,7 @@ fi
 
 if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
   truncated=$(echo "$test_output" | head -30)
-  reason=$(printf "Related tests failed. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+  reason=$(printf "Related tests fail. Fix:\n%s" "$truncated" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   echo "typecheck PASS, tests FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
   exit 2

@@ -70,7 +70,7 @@ fi
 
 if [ -n "$unpushed" ]; then
   _count=$(echo "$unpushed" | wc -l | tr -d ' ')
-  hook_stop_block "$_count unpushed commit(s) on '$branch'. Push: git push -u origin $branch"
+  hook_stop_block "$_count unpushed on '$branch'. git push -u origin $branch"
 fi
 
 # ── Step 2: No PR → create one ──────────────────────────────────
@@ -78,7 +78,7 @@ fi
 pr_number=$(gh pr list --head "$branch" --json number --jq '.[0].number' 2>/dev/null || true)
 
 if [ -z "$pr_number" ]; then
-  hook_stop_block "No PR for '$branch'. Create: gh pr create --fill"
+  hook_stop_block "No PR for '$branch'. gh pr create --fill"
 fi
 
 # ── Step 3 & 4: CI status ───────────────────────────────────────
@@ -88,12 +88,12 @@ ci_states=$(echo "$pr_data" | jq -r '.statusCheckRollup[]?.state // empty' 2>/de
 
 if [ -n "$ci_states" ]; then
   if echo "$ci_states" | grep -qi "FAILURE\|ERROR"; then
-    hook_stop_block "CI failing on PR #$pr_number. Fix, push, monitor: Monitor gh pr checks $pr_number --watch"
+    hook_stop_block "CI failing PR #$pr_number. Fix+push. Monitor: gh pr checks $pr_number --watch"
   fi
 
   if echo "$ci_states" | grep -qi "PENDING\|EXPECTED\|QUEUED\|IN_PROGRESS"; then
     if ! echo "$ci_states" | grep -qi "SUCCESS"; then
-      hook_stop_block "CI running on PR #$pr_number. Monitor: gh pr checks $pr_number --watch"
+      hook_stop_block "CI running PR #$pr_number. Monitor: gh pr checks $pr_number --watch"
     fi
   fi
 fi
@@ -103,7 +103,7 @@ fi
 reviewer_count=$(echo "$pr_data" | jq -r '.reviewRequests | length' 2>/dev/null || echo "0")
 
 if [ "$reviewer_count" = "0" ] || [ -z "$reviewer_count" ]; then
-  hook_stop_block "CI green, no reviewer on PR #$pr_number. Add: gh pr edit $pr_number --add-reviewer <username>"
+  hook_stop_block "CI green, no reviewer PR #$pr_number. gh pr edit $pr_number --add-reviewer <user>"
 fi
 
 # ── Lifecycle complete ───────────────────────────────────────────

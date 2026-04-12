@@ -64,7 +64,7 @@ if [ $fix_exit -ne 0 ]; then
   error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -vE "/($_ui_dirs)/" | grep -v 'internalError/io' || true)
   if [ -n "$error_files" ]; then
     truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -30)
-    reason=$(printf "Biome found unfixable lint errors. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+    reason=$(printf "Biome unfixable errors. Fix:\n%s" "$truncated" | jq -Rs .)
     echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
     exit 2
   fi

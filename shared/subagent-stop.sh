@@ -28,7 +28,7 @@ if [ -z "$json_block" ]; then
 fi
 
 if [ -z "$json_block" ]; then
-  echo '{"hookSpecificOutput":{"hookEventName":"SubagentStop"},"systemMessage":"Your output must contain a single ```json``` code block with structured findings per findings-schema.md. Re-read agents/findings-schema.md and output the correct format."}' >&2
+  echo '{"hookSpecificOutput":{"hookEventName":"SubagentStop"},"systemMessage":"Output must contain ```json``` block per findings-schema.md. Re-read and output correct format."}' >&2
   exit 2
 fi
 
@@ -44,7 +44,7 @@ if [ -z "$has_reviewer" ] || [ -z "$has_status" ] || [ -z "$has_findings" ]; the
   [ -z "$has_status" ] && missing="${missing} status,"
   [ -z "$has_findings" ] && missing="${missing} findings[],"
   missing="${missing%,}"
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Findings JSON is missing required fields:${missing}. Re-read agents/findings-schema.md and output the correct format.\"}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Missing fields:${missing}. Re-read findings-schema.md.\"}" >&2
   exit 2
 fi
 
@@ -53,7 +53,7 @@ status=$(echo "$json_block" | jq -r '.status')
 case "$status" in
   APPROVED|CONCERNS|NEEDS_CHANGES) ;;
   *)
-    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Invalid status '${status}'. Must be APPROVED, CONCERNS, or NEEDS_CHANGES.\"}" >&2
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Invalid status '${status}'. Use APPROVED|CONCERNS|NEEDS_CHANGES.\"}" >&2
     exit 2
     ;;
 esac
@@ -63,7 +63,7 @@ finding_count=$(echo "$json_block" | jq '.findings | length')
 if [ "$finding_count" -gt 0 ]; then
   invalid_findings=$(echo "$json_block" | jq '[.findings[] | select(.title == null or .severity == null or .file == null or .category == null or .autofix_class == null)] | length')
   if [ "$invalid_findings" -gt 0 ]; then
-    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"${invalid_findings} finding(s) missing required fields (title, severity, file, category, autofix_class). Fix and re-output.\"}" >&2
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"${invalid_findings} finding(s) missing fields (title/severity/file/category/autofix_class). Fix.\"}" >&2
     exit 2
   fi
 fi

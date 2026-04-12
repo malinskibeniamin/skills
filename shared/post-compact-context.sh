@@ -42,6 +42,9 @@ if [ -f "$stop_file" ]; then
   context="$context\nLast stop: $(cat "$stop_file" | head -1)"
 fi
 
+# Post-compaction brevity: context is tight, maximize token efficiency (arxiv:2604.00025)
+context="$context\n[BREVITY:ultra] Max compression. Code>prose. No preamble/recap/summary. Exception: full clarity for security, irreversible ops, destructive commands."
+
 if [ -n "$context" ]; then
   escaped=$(printf '%s' "$context" | jq -Rs .)
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}" >&2

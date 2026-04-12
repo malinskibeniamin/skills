@@ -48,7 +48,7 @@ if [ -f "$session_files" ] && grep -q "^test:" "$session_files" 2>/dev/null; the
     leak_exit=0
     leak_output=$(bun run test -- --run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
     if [ $leak_exit -ne 0 ] && echo "$leak_output" | grep -qiE 'leak|open handle|did not exit'; then
-      issues="$issues\n- ASYNC LEAK. Run: bun test --run --detectAsyncLeaks"
+      issues="$issues\n- ASYNC LEAK. bun test --run --detectAsyncLeaks"
     fi
   fi
 fi
@@ -62,7 +62,7 @@ if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
     test_output=$(bun test --run --related $changed_source 2>&1) || test_exit=$?
     if [ $test_exit -ne 0 ]; then
       truncated=$(echo "$test_output" | tail -10)
-      issues="$issues\n- TESTS FAILING. Fix before finishing.\n  $truncated"
+      issues="$issues\n- TESTS FAIL. Fix:\n  $truncated"
     fi
   fi
 fi
@@ -87,7 +87,7 @@ if [ -f "$session_files" ] && grep -q "^jsx:" "$session_files" 2>/dev/null; then
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
       # Warn, not block — prototyping often creates files before tests
-      warnings="${warnings:-}\n- MISSING TEST: $short_name. Use /tdd."
+      warnings="${warnings:-}\n- NO TEST: $short_name. /tdd"
     fi
   done
 fi
@@ -121,7 +121,7 @@ if [ -n "$new_files" ]; then
     done
     if [ "$has_test" = false ]; then
       short_name=$(basename "$f")
-      warnings="${warnings:-}\n- NEW FILE: $short_name — no test. Use /tdd."
+      warnings="${warnings:-}\n- NEW: $short_name — no test. /tdd"
     fi
   done
 fi
@@ -135,12 +135,12 @@ if [ -f "$session_files" ] && grep -q "^security:" "$session_files" 2>/dev/null;
       if grep -qE '(eval\(|new Function\(|dangerouslySetInnerHTML|\.innerHTML\s*=)' "$f" 2>/dev/null; then
         if ! grep -qE '(allow-dangerouslySetInnerHTML|allow:\s*dangerouslySetInnerHTML|allow-eval|allow:\s*eval)' "$f" 2>/dev/null; then
           short_name=$(basename "$f")
-          issues="$issues\n- SECURITY: $short_name — eval/innerHTML. Add escape hatch or fix."
+          issues="$issues\n- SECURITY: $short_name — eval/innerHTML. Fix or escape hatch."
         fi
       fi
       if grep -qE "(password|secret|api.?key)\s*[:=]\s*['\"][^'\"]{3,}" "$f" 2>/dev/null; then
         short_name=$(basename "$f")
-        issues="$issues\n- SECURITY: $short_name — hardcoded secrets. Use @/env."
+        issues="$issues\n- SECURITY: $short_name — hardcoded secrets. @/env."
       fi
     fi
   done
@@ -150,7 +150,7 @@ fi
 
 # Hard issues (async leaks, security, failing tests) → block
 if [ -n "$issues" ]; then
-  reason=$(printf "Quality gate: fix before finishing:\n%s" "$(printf '%b' "$issues" | head -20)" | jq -Rs .)
+  reason=$(printf "Quality gate:\n%s" "$(printf '%b' "$issues" | head -20)" | jq -Rs .)
   echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
 fi
@@ -159,12 +159,12 @@ fi
 changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null || echo "0")
 changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null || echo "0")
 if [ "${changed_source_count:-0}" -gt 0 ] && [ "${changed_test_count:-0}" -eq 0 ]; then
-  warnings="${warnings:-}\n- No test files modified. Use /tdd to add coverage."
+  warnings="${warnings:-}\n- No tests modified. /tdd"
 fi
 
 # Soft warnings (missing tests) → inform but don't block
 if [ -n "${warnings:-}" ]; then
-  context=$(printf "Quality suggestions (non-blocking):\n%s" "$(printf '%b' "$warnings" | head -10)" | jq -Rs .)
+  context=$(printf "Suggestions:\n%s" "$(printf '%b' "$warnings" | head -10)" | jq -Rs .)
   echo "{\"hookSpecificOutput\":{\"additionalContext\":$context}}" >&2
 fi
 
