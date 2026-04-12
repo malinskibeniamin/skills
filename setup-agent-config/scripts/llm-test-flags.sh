@@ -28,25 +28,21 @@ if echo "$rewritten" | grep -qE '(vitest|bun (test|run test\S*))'; then
     must_rewrite=true
   fi
 
-  # Suggest --pool=forks if no --pool specified
   if ! echo "$rewritten" | grep -qE '\-\-pool[= ]'; then
-    suggestions="$suggestions\n- Add --pool=forks to prevent zombie processes (each test file gets its own process)"
+    suggestions="$suggestions\n- --pool=forks prevents zombie processes"
   fi
 
-  # Suggest --bail=1 if no --bail specified
   if ! echo "$rewritten" | grep -qE '\-\-bail[= ]'; then
-    suggestions="$suggestions\n- Add --bail=1 to fail fast and save tokens"
+    suggestions="$suggestions\n- --bail=1 fails fast, saves tokens"
   fi
 
-  # Suggest --teardownTimeout if not specified
   if ! echo "$rewritten" | grep -qE '\-\-teardownTimeout[= ]'; then
-    suggestions="$suggestions\n- Add --teardownTimeout=5000 to prevent hanging teardown (zombie source)"
+    suggestions="$suggestions\n- --teardownTimeout=5000 prevents hanging teardown"
   fi
 
-  # Suggest reporter in CI
   if ! echo "$rewritten" | grep -qE '\-\-reporter[= ]'; then
     if [ "${CI:-}" = "true" ]; then
-      suggestions="$suggestions\n- Add --reporter=github for inline PR annotations"
+      suggestions="$suggestions\n- --reporter=github for inline PR annotations"
     fi
   fi
 fi
@@ -55,39 +51,34 @@ fi
 
 if echo "$rewritten" | grep -qE '\bjest\b'; then
 
-  # Strip --verbose (hard enforcement)
   if echo "$rewritten" | grep -qE '\-\-verbose'; then
     rewritten=$(echo "$rewritten" | sed -E 's/[[:space:]]+--verbose//g; s/--verbose[[:space:]]+//g; s/--verbose$//g')
     must_rewrite=true
   fi
 
-  # Suggest --bail if not specified
   if ! echo "$rewritten" | grep -qE '\-\-bail'; then
-    suggestions="$suggestions\n- Add --bail to fail fast"
+    suggestions="$suggestions\n- --bail fails fast"
   fi
 
-  # Suggest --forceExit if not specified
   if ! echo "$rewritten" | grep -qE '\-\-forceExit'; then
-    suggestions="$suggestions\n- Add --forceExit to prevent zombie processes from open handles"
+    suggestions="$suggestions\n- --forceExit prevents zombie processes"
   fi
 fi
 
 # ── Apply ────────────────────────────────────────────────────────
 
-# If --verbose was stripped, rewrite the command
 if [ "$must_rewrite" = true ]; then
   updated_input=$(echo "$input" | jq --arg cmd "$rewritten" '.tool_input | .command = $cmd')
   if [ -n "$suggestions" ]; then
-    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input,\"additionalContext\":\"Test runner suggestions (optional):$suggestions\"}}" >&2
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input,\"additionalContext\":\"Test suggestions:$suggestions\"}}" >&2
   else
     echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input}}" >&2
   fi
   exit 0
 fi
 
-# If only suggestions (no rewrite needed), pass them as context
 if [ -n "$suggestions" ]; then
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"Test runner suggestions (optional):$suggestions\"}}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"Test suggestions:$suggestions\"}}" >&2
   exit 0
 fi
 
