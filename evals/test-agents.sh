@@ -32,12 +32,12 @@ for reviewer in self-reviewer adversarial-reviewer code-reviewer; do
 done
 
 # ── self-reviewer has test/lint/type-check tools ─────────────────
-run_content_eval "$AGENTS_DIR/self-reviewer.md" "bun test" "self-reviewer has test runner tool"
+run_content_eval "$AGENTS_DIR/self-reviewer.md" "vitest" "self-reviewer has test runner tool"
 run_content_eval "$AGENTS_DIR/self-reviewer.md" "bun run lint" "self-reviewer has lint tool"
 run_content_eval "$AGENTS_DIR/self-reviewer.md" "bun run type:check" "self-reviewer has type-check tool"
 
 # ── adversarial-reviewer is read-only (no test/lint tools) ───────
-if grep -qE "Bash\(bun test|Bash\(bun run lint|Bash\(bun run type" "$AGENTS_DIR/adversarial-reviewer.md"; then
+if grep -qE "Bash\(vitest|Bash\(bun run lint|Bash\(bun run type" "$AGENTS_DIR/adversarial-reviewer.md"; then
   echo "  FAIL  adversarial-reviewer should not have test/lint tools (read-only agent)"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: adversarial-reviewer should not have test/lint tools"

@@ -178,7 +178,7 @@ Soft assertions still fail the test. They just don't short-circuit. Use for comp
 Use **Monitor** tool — run test runner in watch mode during implementation. Turns RED→GREEN→REFACTOR from discrete steps into continuous feedback loop.
 
 ```
-Monitor: bun test --watch
+Monitor: vitest --watch
 ```
 
 **How it works:**
@@ -187,13 +187,6 @@ Monitor: bun test --watch
 3. Write minimal code — Monitor reports pass (GREEN) on save
 4. Refactor — Monitor confirms green after each change
 
-**Runner-specific watch commands:**
-
-| Runner | Watch command |
-|--------|-------------|
-| Vitest | `bun test --watch` or `npx vitest --watch` |
-| Jest | `npx jest --watch` |
-
 **When to use**: Phase 3 (Implement) for rapid iteration. Valuable when making multiple small changes — see red/green transitions without running tests manually.
 
 ## Async Leak Detection with Monitor
@@ -201,24 +194,19 @@ Monitor: bun test --watch
 Monitor streams async leak detection — react to first leak immediately:
 
 ```
-Monitor: bun test --run --detectAsyncLeaks
+Monitor: vitest run --detectAsyncLeaks
 ```
-
-For Jest: `Monitor: npx jest --detectOpenHandles --forceExit`
 
 Surfaces open handles as detected, not buffered until exit.
 
 ## Diagnostic Commands
 
 ```bash
-# Detect async leaks (Vitest)
-bun test --run --detectAsyncLeaks
+# Detect async leaks
+vitest run --detectAsyncLeaks
 
-# Detect open handles (Jest)
-npx jest --detectOpenHandles --forceExit
-
-# Profile slow tests (Vitest)
-bun test --run --reporter=verbose --pool=forks
+# Profile slow tests
+vitest run --reporter=verbose --pool=forks
 
 # Find slow selectors in integration tests
 grep -rn 'getByRole' --include='*.integration.*' | wc -l
@@ -316,9 +304,7 @@ Safety requirements:
 
 | Runner | Detect | Related tests |
 |--------|--------|---------------|
-| Vitest | `node_modules/.bin/vitest` | `vitest --run --related <files>` |
-| Jest | `node_modules/.bin/jest` | `jest --findRelatedTests <files>` |
-| Bun | `bun test --help` | `bun test <co-located files>` |
+| Vitest | `node_modules/.bin/vitest` | `vitest run --related <files>` |
 
 ## Common Agent Excuses
 

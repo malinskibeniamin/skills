@@ -42,13 +42,13 @@ fi
 if [ -f "$session_files" ] && grep -q "^test:" "$session_files" 2>/dev/null; then
   test_files=$(grep "^test:" "$session_files" | cut -d: -f2- | sort -u | tr '\n' ' ')
 
-  # Check for async leaks if vitest + bun available
-  if [ -f "node_modules/.bin/vitest" ] && [ -n "$test_files" ] && command -v bun &>/dev/null; then
+  # Check for async leaks if vitest available
+  if [ -f "node_modules/.bin/vitest" ] && [ -n "$test_files" ]; then
     leak_output=""
     leak_exit=0
-    leak_output=$(bun run test -- --run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
+    leak_output=$(vitest run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
     if [ $leak_exit -ne 0 ] && echo "$leak_output" | grep -qiE 'leak|open handle|did not exit'; then
-      issues="$issues\n- ASYNC LEAK. bun test --run --detectAsyncLeaks"
+      issues="$issues\n- ASYNC LEAK. vitest run --detectAsyncLeaks"
     fi
   fi
 fi
@@ -57,9 +57,9 @@ fi
 
 if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
   changed_source=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.)' || true)
-  if [ -n "$changed_source" ] && [ -f "node_modules/.bin/vitest" ] && command -v bun &>/dev/null; then
+  if [ -n "$changed_source" ] && [ -f "node_modules/.bin/vitest" ]; then
     test_exit=0
-    test_output=$(bun test --run --related $changed_source 2>&1) || test_exit=$?
+    test_output=$(vitest run --related $changed_source 2>&1) || test_exit=$?
     if [ $test_exit -ne 0 ]; then
       truncated=$(echo "$test_output" | tail -10)
       issues="$issues\n- TESTS FAIL. Fix:\n  $truncated"

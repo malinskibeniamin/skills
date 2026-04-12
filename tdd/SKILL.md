@@ -51,9 +51,7 @@ paths:
 
 ### Reactive TDD with Monitor
 
-`Monitor: bun test --watch` — streams pass/fail as you edit. Edit → fail → fix → pass → refactor → repeat.
-
-Works with: `Monitor: bun test --watch`, `Monitor: npx vitest --watch`, `Monitor: npx jest --watch`
+`Monitor: vitest --watch` — streams pass/fail as you edit. Edit → fail → fix → pass → refactor → repeat.
 
 ### 4. REPEAT — Next behavior
 
@@ -77,8 +75,8 @@ RED → GREEN → REFACTOR per remaining behavior. One at a time.
 
 ## When Done
 
-- [ ] All pass (`bun test --run`)
-- [ ] No async leaks (`bun test --run --detectAsyncLeaks`)
+- [ ] All pass (`vitest run`)
+- [ ] No async leaks (`vitest run --detectAsyncLeaks`)
 - [ ] No setTimeout hacks — condition-based waiting
 - [ ] Prefer `getByRole` over `getByTestId`
 - [ ] Tests verify behavior, not implementation

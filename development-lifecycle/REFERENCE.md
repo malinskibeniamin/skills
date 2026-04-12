@@ -27,7 +27,7 @@ Use **Monitor** tool when need to observe long-running process without blocking.
 **When to use Monitor:**
 - **CI checks**: `Monitor: gh pr checks <number> --watch` — continue working while CI runs
 - **Dev server startup**: `Monitor: bun run dev` — watch for "ready" or error messages, then proceed to verification
-- **Test runner in watch mode**: `Monitor: bun test --watch` — react to red/green transitions during TDD
+- **Test runner in watch mode**: `Monitor: vitest --watch` — react to red/green transitions during TDD
 - **Container logs**: `Monitor: docker logs -f <container>` — observe runtime behavior while debugging
 - **Build processes**: `Monitor: bun run build` — catch build errors as they stream
 

@@ -44,4 +44,4 @@
 | `git restore .` | Yes | `git restore <file>` |
 | `bun add --yarn lodash` | No | Allowed |
 | `bun run build` | No | Allowed |
-| `bun test` | No | Allowed |
+| `vitest` | No | Allowed |

@@ -92,7 +92,7 @@ test_output=""
 test_exit=0
 
 if [ -f "node_modules/.bin/vitest" ] || [ -f "$repo_root/node_modules/.bin/vitest" ]; then
-  test_output=$(bun run test:related -- $abs_changed 2>&1) || test_exit=$?
+  test_output=$(vitest run --related $abs_changed 2>&1) || test_exit=$?
 elif [ -f "node_modules/.bin/jest" ] || [ -f "$repo_root/node_modules/.bin/jest" ]; then
   test_output=$(npx jest --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
 else

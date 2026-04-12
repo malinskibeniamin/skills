@@ -157,8 +157,8 @@ run_hook_eval "$SCRIPT" \
   0 "allow: bun run build"
 
 run_hook_eval "$SCRIPT" \
-  '{"tool_input":{"command":"bun test"}}' \
-  0 "allow: bun test"
+  '{"tool_input":{"command":"vitest run"}}' \
+  0 "allow: vitest run"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun run lint"}}' \

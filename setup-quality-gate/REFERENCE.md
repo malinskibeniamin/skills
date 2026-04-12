@@ -42,7 +42,7 @@ jobs:
         run: bun run type:check
 
       - name: Run tests
-        run: bun test --run
+        run: vitest run
 ```
 
 ## Script Breakdown

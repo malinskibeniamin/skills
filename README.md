@@ -813,7 +813,7 @@ PostToolUse (Bash)
 
 Stop
 ├── biome-autofix.sh     — lint:fix all changed JS/TS files
-├── typecheck-stop.sh    — tsgo type check + related tests (vitest/jest/bun auto-detect)
+├── typecheck-stop.sh    — tsgo type check + related tests (vitest, jest/bun fallback)
 ├── react-doctor-stop.sh — health check on changed files (--diff mode)
 ├── registry-check.sh        — remind about registry.json rebuild (skips if no redpanda-ui dir)
 ├── orchestration-stop.sh    — quality gate: missing tests, async leaks, security, co-located tests

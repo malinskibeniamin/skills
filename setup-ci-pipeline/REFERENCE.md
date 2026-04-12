@@ -34,7 +34,7 @@ jobs:
         run: bun run type:check
 
       - name: Unit + integration tests
-        run: bun test --run --coverage --coverage.thresholds.lines=80
+        run: vitest run --coverage --coverage.thresholds.lines=80
 
       - name: Coverage report
         if: github.event_name == 'pull_request'
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile --yarn
-      - run: bun test --run --shard=${{ matrix.shard }} --reporter=blob
+      - run: vitest run --shard=${{ matrix.shard }} --reporter=blob
       - uses: actions/upload-artifact@v4
         with:
           name: blob-report-${{ strategy.job-index }}

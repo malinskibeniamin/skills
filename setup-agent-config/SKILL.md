@@ -9,7 +9,7 @@ description: Token-efficient AI agent hooks — env vars, test flag optimization
 
 - **SessionStart**: `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`
 - **UserPromptSubmit**: injects project state (git branch, dirty files, scripts, violations, config) → Claude knows state without tool calls
-- **PreToolUse (Bash)**: optimizes test commands — strips `--verbose`, suggests `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`. Jest: `--bail --forceExit`
+- **PreToolUse (Bash)**: optimizes vitest commands — strips `--verbose`, suggests `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`. Also handles jest/bun test (backward compat)
 - **PostToolUse (Bash)**: truncates verbose output to reduce context bloat
 
 ## Steps
@@ -22,7 +22,7 @@ description: Token-efficient AI agent hooks — env vars, test flag optimization
 
 ## Verify
 - [ ] `AI_AGENT`/`CLAUDECODE` set after session start
-- [ ] `bun test --verbose` rewritten to `bun test`
+- [ ] `vitest --verbose` rewritten to `vitest`
 - [ ] Long output truncated
 
 See [REFERENCE.md](REFERENCE.md) for vitest config optimizations.

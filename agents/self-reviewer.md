@@ -2,7 +2,7 @@
 name: self-reviewer
 description: Reviews own session changes for quality gaps, missing tests, and simplification opportunities. Dispatched in phase 4b (Refine) before external review. Outputs structured JSON findings per findings-schema.md.
 model: sonnet
-allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(bun test *), Bash(bun run lint *), Bash(bun run type:check *)
+allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(vitest *), Bash(bun run lint *), Bash(bun run type:check *)
 ---
 
 # Self-Reviewer
@@ -22,7 +22,7 @@ You receive session context via SubagentStart hook:
 - Are all new code paths covered by tests?
 - Are error/edge cases tested? (empty arrays, null responses, network failures)
 - Do tests verify behavior, not implementation?
-- Run `bun test --run --related $(git diff --name-only HEAD~1)` — any failures?
+- Run `vitest run --related $(git diff --name-only HEAD~1)` — any failures?
 
 ### 2. Simplification
 - Can any new code be simplified while keeping tests green?
