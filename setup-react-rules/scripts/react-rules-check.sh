@@ -9,10 +9,9 @@ hook_filter_extensions "ts|tsx|js|jsx"
 hook_get_added_lines
 
 # ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
-# Enable via: .skills.json { "react-rules": { "banUseEffect": true } }
-# Legacy env: REACT_RULES_BAN_USEEFFECT=1
+# Enable via: export REACT_RULES_BAN_USEEFFECT=1
 
-if hook_config_enabled "react-rules.banUseEffect"; then
+if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
   if echo "$added_lines" | grep -qE '\b(useEffect|useLayoutEffect|useInsertionEffect)\b'; then
     if ! hook_has_escape "useEffect"; then
       hook_block "Remove useEffect. Use React Query, zustand, event handlers, or useTransition.\nEscape hatch: // allow: useEffect [reason]"
@@ -61,10 +60,9 @@ if echo "$added_lines" | grep -qF '@ts-expect-error'; then
 fi
 
 # ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
-# Enable via: .skills.json { "react-rules": { "banTypeAssertions": true } }
-# Legacy env: REACT_RULES_BAN_TYPE_ASSERTIONS=1
+# Enable via: export REACT_RULES_BAN_TYPE_ASSERTIONS=1
 
-if hook_config_enabled "react-rules.banTypeAssertions"; then
+if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
   # Match TypeScript type assertions: `value as Type` or `value as unknown`
   # Exclude: `as const`, `as const satisfies`, `import X as Y`
   # Only match non-import lines with type assertion patterns
@@ -178,8 +176,7 @@ case "$file_path" in
     fi
 
     # In annotation mode, skip files without 'use memo' (compiler isn't active for them)
-    _rc_mode=$(hook_config "react-compiler.mode" 2>/dev/null || true)
-    if [ "${_rc_mode:-infer}" = "annotation" ]; then
+    if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
       if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
         has_no_memo=true
       fi

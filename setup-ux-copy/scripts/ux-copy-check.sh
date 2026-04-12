@@ -78,7 +78,7 @@ fi
 
 # ── Check 9: Redpanda term capitalization (REDPANDA_KIT=1) ───────
 
-if hook_config_enabled "general.redpandaKit"; then
+if [ "${REDPANDA_KIT:-}" = "1" ]; then
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(admin api|schema registry|http proxy|redpanda console)\b[^'\"]*\1" && \
      ! echo "$added_lines" | grep -qE "(Admin API|Schema Registry|HTTP Proxy|Redpanda Console)"; then
     hook_block "Redpanda product names must be capitalized correctly.\n\nAdmin API, Schema Registry, HTTP Proxy, Redpanda Console, Dedicated Cloud, BYOC."

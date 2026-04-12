@@ -4,18 +4,17 @@ set -eo pipefail
 # Stop hook: comprehensive quality gate. Reads file categories tracked by
 # orchestration-guidance.sh and runs targeted checks. Blocks until truly done.
 #
-# Disable via: .skills.json { "orchestration": { "strict": false } }
-# Legacy env: ORCHESTRATION_STRICT=0
+# Set ORCHESTRATION_STRICT=0 to disable blocking (e.g., during prototyping).
 # Default: on (blocks on missing tests, security issues, async leaks).
 
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
-
-_orch_strict=$(hook_config "orchestration.strict" 2>/dev/null || true)
-case "$_orch_strict" in
-  0|false|no) exit 0 ;;
-esac
+if [ "${ORCHESTRATION_STRICT:-1}" = "0" ]; then
+  exit 0
+fi
 
 session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
+
+# Source hook-lib for session-scoped file tracking
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
