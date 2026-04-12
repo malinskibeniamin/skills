@@ -51,16 +51,16 @@ gh api repos/{owner}/{repo}/actions/runs --jq '.workflow_runs[:10] | .[] | "\(.n
 ```
 
 Optimization checklist:
-- **Caching**: `bun install` is often faster than restoring cache. Check: if cache restore + install takes > bare install, remove caching. Measure with `time bun install --frozen-lockfile`.
-- **Parallelization**: Split lint, type-check, tests into parallel jobs. Each is independent.
-- **Artifact retention**: Default 90 days is excessive for most artifacts. Set `retention-days: 7` for coverage reports, `30` for screenshots.
-- **Cache artifact size**: bun's `node_modules` can be large. Consider `actions/cache` only if install consistently takes >30s.
+- **Caching**: `bun install` often faster than cache restore. Measure: `time bun install --frozen-lockfile`.
+- **Parallelization**: Split lint, type-check, tests into parallel jobs.
+- **Artifact retention**: Set `retention-days: 7` (coverage), `30` (screenshots). Default 90 days excessive.
+- **Cache artifact size**: `actions/cache` only if install >30s consistently.
 
 ## Test Sharding
 
-Split large suites across parallel CI runners. Vitest handles even distribution.
+Split large suites across parallel runners.
 
-**When to shard**: Total suite >60s. Don't shard suites under 30s — overhead exceeds savings.
+**When to shard**: Suite >60s. Don't shard <30s — overhead exceeds savings.
 
 ```yaml
 jobs:
@@ -91,12 +91,12 @@ jobs:
       - run: bunx vitest --merge-reports --coverage
 ```
 
-Key: `--reporter=blob` writes shard-aware report chunks. `--merge-reports` aggregates them into unified coverage and test results. Coverage thresholds apply to merged report, not individual shards.
+`--reporter=blob` writes shard-aware chunks. `--merge-reports` aggregates into unified coverage+results. Thresholds apply to merged report.
 
 ## Coverage Gates
 
-80% lines / 80% functions / 70% branches is our practical floor. Don't chase 100% — focus on critical paths.
+80% lines / 80% functions / 70% branches floor. Don't chase 100%.
 
 ## Bundle Size Budget
 
-Main chunk <300KB gzip, total app <1MB gzip. Use Rsdoctor (`@rsdoctor/rspack-plugin`) for detailed analysis.
+Main chunk <300KB gzip, total <1MB gzip. Rsdoctor (`@rsdoctor/rspack-plugin`) for analysis.

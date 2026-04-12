@@ -59,7 +59,7 @@ acli jira workitem create \
 
 ### TDD → Work Items
 
-After running TDD diagnostics (async leak detection, flaky test analysis):
+After TDD diagnostics:
 
 ```bash
 # File work item for flaky test
@@ -73,12 +73,12 @@ acli jira workitem create \
 
 ## Dual Tracker Support
 
-When `ISSUE_TRACKER=both`, Claude should:
+When `ISSUE_TRACKER=both`:
 
-1. Create issues in **both** GitHub and Jira
-2. Link the Jira work item to the GitHub issue URL
-3. Use `gh` for PR-related operations (PRs live in GitHub)
-4. Use `acli` for sprint/board operations (sprints live in Jira)
+1. Create in **both** GitHub and Jira
+2. Link Jira to GitHub issue URL
+3. `gh` for PR ops (PRs in GitHub)
+4. `acli` for sprint/board ops (Jira)
 
 ```bash
 # Create in both
@@ -98,7 +98,7 @@ acli jira workitem link PROJ-150 --url "https://github.com/org/repo/issues/42"
 
 ## Detection
 
-Skills should check for acli availability before using it:
+Check acli availability:
 
 ```bash
 if command -v acli &>/dev/null && [ -n "${JIRA_PROJECT:-}" ]; then

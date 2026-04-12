@@ -89,13 +89,13 @@
 
 ## biome-autofix.sh
 
-Stop hook that auto-fixes lint/format on all changed JS/TS files before Claude finishes.
+Stop hook: auto-fix lint/format on changed JS/TS files.
 
 > Script: [`scripts/biome-autofix.sh`](scripts/biome-autofix.sh)
 
 ## Ultracite Overrides Explained
 
-Ultracite provides a strict baseline. We override these specific behaviors:
+Ultracite strict baseline. Overrides:
 
 | Rule | Group | Ultracite default | Our override | Why |
 |------|-------|-------------------|-------------|-----|
@@ -109,15 +109,15 @@ Ultracite provides a strict baseline. We override these specific behaviors:
 | `useExhaustiveSwitchCases` | nursery | off | error | Require exhaustive switch/case for type safety |
 | `organizeImports` | assist | — | on | Auto-sort imports via `assist.actions.source` |
 
-**Note:** `noClassComponent` was removed from Biome 2.x. Class components are discouraged by convention instead. The React Compiler skill enforces functional patterns via the memoization check.
+**Note:** `noClassComponent` removed in Biome 2.x. React Compiler skill enforces functional patterns via memoization check.
 
 ## Import Deletion Loop Prevention
 
-The PostToolUse hook skips `noUnusedImports` using `--skip=lint/correctness/noUnusedImports`. This prevents:
+PostToolUse hook skips `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Prevents:
 
 1. Claude adds `import { Button } from '@/components/ui/button'`
 2. Biome deletes it (unused — Claude hasn't written JSX yet)
 3. Claude re-adds it
 4. Infinite loop
 
-Unused imports are caught at the Stop hook / `quality:gate` when Claude is done editing.
+Caught at Stop hook / `quality:gate` when done editing.

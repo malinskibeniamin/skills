@@ -21,11 +21,11 @@
 
 **Install** (one-time): `npm install -g agent-browser && agent-browser install`
 
-No auth needed — renders local HTML files headlessly. Works in CI.
+No auth needed. Renders local HTML headlessly. Works in CI.
 
-For inspecting live authenticated pages (logged-in dashboards), use `claude-in-chrome` MCP instead.
+For authenticated pages, use `claude-in-chrome` MCP.
 
-When the design involves UI, generate an HTML mockup and show it to the user:
+For UI designs, generate HTML mockup:
 
 ```bash
 # 1. Write a self-contained HTML mockup

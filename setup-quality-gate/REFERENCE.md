@@ -58,17 +58,17 @@ jobs:
 
 ## Test Performance Profiling
 
-When `test-perf-stop.sh` detects regressions and you need to pinpoint the cause, use `vitest-profiler` for per-test timing instrumentation:
+When `test-perf-stop.sh` detects regressions, use `vitest-profiler`:
 
 ```bash
 bunx vitest-profiler --run
 ```
 
-Outputs flamegraph-compatible timing data showing exactly which tests and setup/teardown phases are slow. Use as diagnostic follow-up to regression detection, not as routine CI step.
+Outputs flamegraph timing data. Diagnostic follow-up, not routine CI.
 
 ## Asset Type Declarations
 
-tsgo needs declarations for asset imports (`.svg`, `.css`, `.png`). Create `src/types/assets.d.ts`:
+tsgo needs asset import declarations. Create `src/types/assets.d.ts`:
 
 ```ts
 declare module '*.svg' {
@@ -97,11 +97,11 @@ declare module '*.woff2' {
 }
 ```
 
-For rsbuild: `@rsbuild/core/types` in tsconfig may make this unnecessary.
+rsbuild: `@rsbuild/core/types` in tsconfig may suffice.
 
 ## CI Status Check
 
-After push: use the **Monitor** tool to watch CI in the background (`Monitor: gh pr checks <number> --watch`) — continue working while it runs. Before merge: confirm CI is green via Monitor or `gh pr checks`.
+After push: `Monitor: gh pr checks <number> --watch` — continue working. Before merge: confirm green.
 
 ## Cross-Model Review (Optional)
 

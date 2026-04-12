@@ -12,7 +12,7 @@
 
 ## Registry Pattern Nudges (REDPANDA_KIT=1)
 
-When `REDPANDA_KIT=1` is set, the orchestration-guidance hook adds soft nudges:
+When `REDPANDA_KIT=1`, orchestration-guidance adds nudges:
 
 | Detected pattern | Nudge |
 |---|---|
@@ -20,7 +20,7 @@ When `REDPANDA_KIT=1` is set, the orchestration-guidance hook adds soft nudges:
 | `<h1>`–`<h6>`, `<p>` raw HTML | Use `Heading`/`Text` from registry |
 | Key-value / labels / tags patterns | Consider `KeyValueField` + `BadgeGroup` |
 
-These are warnings, not blocks. They surface registry components Claude wouldn't otherwise know about.
+Warnings, not blocks. Surface registry components Claude wouldn't know.
 
 ## Redpanda-Specific Environment
 
@@ -33,11 +33,11 @@ echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 
 ## Component Import Paths
 
-Redpanda UI Registry components import from `@/components/redpanda-ui/<name>` or `src/components/redpanda-ui/<name>`, not from `@chakra-ui` or `@redpanda-data/ui`.
+Import from `@/components/redpanda-ui/<name>`, not `@chakra-ui` or `@redpanda-data/ui`.
 
 ## UI Registry Documentation Injection
 
-When `REDPANDA_KIT=1`, the orchestration-guidance hook can surface registry component documentation. For each component used, Claude should reference:
+When `REDPANDA_KIT=1`, reference for each component:
 
 - **Registry docs**: `https://redpanda-ui-registry.netlify.app/docs/<component>`
 - **Available patterns**: key-value, proto-form, form-footer, dialog, data-table
@@ -55,7 +55,7 @@ When `REDPANDA_KIT=1`, the orchestration-guidance hook can surface registry comp
 
 ## Cross-Repo Visibility (Module Federation)
 
-For projects using Module Federation (host app loading federated remotes), set up symlinks so Claude can read all frontend source transparently:
+For Module Federation, symlink remotes for Claude visibility:
 
 ```bash
 mkdir -p linked-repos && echo "linked-repos/" >> .gitignore
@@ -63,7 +63,7 @@ ln -s /path/to/remote-app-1/src linked-repos/remote-1
 ln -s /path/to/remote-app-2/src linked-repos/remote-2
 ```
 
-Claude follows symlinks transparently — it reads `linked-repos/remote-1/routes/...` as if it were a local directory. Add to your project's `CLAUDE.md`:
+Claude follows symlinks transparently. Add to `CLAUDE.md`:
 
 ```markdown
 linked-repos/ contains symlinks to federated remotes:
@@ -74,7 +74,7 @@ When working on federated routes, read both host and remote source.
 
 ## UI Registry Symlink (Component Synchronization)
 
-Symlink the UI registry repo so Claude can modify registry components alongside consumer changes:
+Symlink UI registry for cross-repo edits:
 
 ```bash
 ln -s /path/to/ui-registry linked-repos/ui-registry
@@ -89,11 +89,11 @@ the source in linked-repos/ui-registry/ to keep both in sync.
 After changes, open a PR against the ui-registry repo.
 ```
 
-When `REDPANDA_KIT=1`, the orchestration-guidance hook nudges on registry component edits to also update the upstream registry source and open a PR.
+When `REDPANDA_KIT=1`, orchestration-guidance nudges to update upstream registry + PR.
 
 ## Package Source Code (opensrc)
 
-For understanding third-party package internals (not your team's code), use [opensrc](https://github.com/vercel-labs/opensrc):
+For third-party package source, use [opensrc](https://github.com/vercel-labs/opensrc):
 
 ```bash
 npx opensrc zustand          # fetches source matching your lockfile version
@@ -101,8 +101,8 @@ npx opensrc @tanstack/react-query
 opensrc list                  # show fetched packages
 ```
 
-Creates `opensrc/<package>/` with full source. Useful when Claude needs to understand framework internals during debugging.
+Creates `opensrc/<package>/` with full source for debugging framework internals.
 
 ## Dependency Changes
 
-Handled by `bundle-guard.sh` (heavy deps) and `orchestration-guidance.sh` (package.json change nudge).
+Handled by `bundle-guard.sh` (heavy deps) + `orchestration-guidance.sh` (package.json nudge).

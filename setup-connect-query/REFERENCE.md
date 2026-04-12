@@ -6,11 +6,11 @@
 
 ## Protobuf v1 Variant
 
-For projects using `@bufbuild/protobuf` ^1.x, use the same script but **remove checks 5 and 6** (the `new Message()` and `PlainMessage`/`PartialMessage` checks). In v1, these patterns are correct.
+For `@bufbuild/protobuf` ^1.x, remove checks 5-6 (`new Message()` and `PlainMessage`/`PartialMessage`). In v1 these are correct.
 
 ## TanStack Query Hooks That Don't Trigger False Positives
 
-The hook uses `\buseQuery\b` word boundaries, so these TanStack Query hooks are **safe to import from `@tanstack/react-query`** and will NOT be flagged:
+Hook uses `\buseQuery\b` word boundaries. These TanStack Query hooks are **safe** from `@tanstack/react-query` (NOT flagged):
 
 - `useQueryClient` — stripped before matching
 - `useQueries` — word boundary prevents match
@@ -18,7 +18,7 @@ The hook uses `\buseQuery\b` word boundaries, so these TanStack Query hooks are 
 - `useInfiniteQuery` — word boundary prevents match
 - `useMutationState` — word boundary prevents match
 
-You do **NOT** need to create barrel re-exports or wrapper modules to avoid false positives.
+No barrel re-exports or wrappers needed.
 
 ## Cache Invalidation Patterns
 
@@ -52,7 +52,7 @@ function CreateTopicButton() {
 
 ## TanStack Query + useTransport/callUnaryMethod Pattern
 
-When using `useTransport` and `callUnaryMethod` from `@connectrpc/connect` directly, raw TanStack Query hooks are allowed:
+When using `useTransport`/`callUnaryMethod` from `@connectrpc/connect`, raw TanStack Query hooks allowed:
 
 ```tsx
 import { useTransport, callUnaryMethod } from '@connectrpc/connect'
@@ -78,7 +78,7 @@ const bytes = toBinary(MyMessageSchema, msg)
 const restored = fromBinary(MyMessageSchema, bytes)
 ```
 
-Never construct messages as object literals with `$typeName` — use `create()` for compile-time safety.
+Never construct with `$typeName` literals — use `create()`.
 
 ## Well-Known Types (Timestamp, Duration, Any)
 

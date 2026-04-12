@@ -157,7 +157,7 @@ When done, emit: <promise>COMPLETE</promise>
 
 ## Dogfooding (Running on This Repo)
 
-Use Sandcastle to work on our own skills repo:
+Run on this repo:
 
 ```typescript
 // .sandcastle/dogfood.ts — uses same imports as main template above
@@ -204,20 +204,20 @@ await Promise.all(
 
 ## Cross-Model with Sandcastle
 
-Implement with Claude, review with Codex. Agent providers available: `claudeCode()`, `codex()`, `piAgent()`, `openCode()`. Mix models per stage — for example, Claude for implementation, Codex for adversarial review.
+Implement with Claude, review with Codex. Providers: `claudeCode()`, `codex()`, `piAgent()`, `openCode()`. Mix per stage.
 
 ## Prompt Caching Tips
 
-Claude Code uses [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) to reuse computation across turns — cached input tokens cost 10% of uncached. At scale (N agents × M iterations), cache hits vs misses dominate cost. The template above is already cache-friendly; here's why and what to preserve:
+Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuses computation — cached tokens cost 10% of uncached. At scale, cache hits dominate cost. Template above is cache-friendly:
 
 | Pattern | Why it works | What breaks it |
 |---|---|---|
-| `promptFile` with `promptArgs` | Static prompt prefix stays identical across iterations — prefix match = cache hit | Generating dynamic prompt strings per-issue instead of using template variables |
-| Separate `run()` per stage (implement → review) | Each stage has its own session and cache. No mid-session model switch | Switching `agent:` model inside a single `run()` call with `maxIterations > 1` |
-| Same `onSandboxReady` hooks for every agent | Tool definitions stay identical — shared prefix across agents | Conditionally installing different skills per issue |
+| `promptFile` with `promptArgs` | Static prefix stays identical → cache hit | Dynamic prompt strings per-issue instead of template vars |
+| Separate `run()` per stage (implement → review) | Each stage owns its session+cache | Switching model inside single `run()` with `maxIterations > 1` |
+| Same `onSandboxReady` hooks for every agent | Tool defs stay identical — shared prefix | Conditional skill installs per issue |
 | `maxIterations: 3` | Claude Code preserves prefix between iterations automatically | N/A — just works |
 
 **Key rules:**
-1. **Static first, dynamic last** — prompt caching is prefix-matched. Keep system prompt, tools, and skill definitions stable. Issue-specific context goes in `promptArgs` (injected at end of prompt).
-2. **One model per `run()`** — model switch = full cache rebuild. The template correctly uses opus for implement, sonnet for review as separate calls.
-3. **Don't change tools between iterations** — `onSandboxReady` runs once per sandbox. If you add conditional tool installation, every agent gets a different prefix = zero cross-agent cache reuse.
+1. **Static first, dynamic last** — caching is prefix-matched. Keep system prompt, tools, skills stable. Issue context in `promptArgs` (end of prompt).
+2. **One model per `run()`** — switch = full cache rebuild. Template uses opus for implement, sonnet for review as separate calls.
+3. **Don't change tools between iterations** — `onSandboxReady` runs once. Conditional tool install = different prefix = zero cross-agent cache reuse.
