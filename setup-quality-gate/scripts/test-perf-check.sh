@@ -33,6 +33,27 @@ case "$file_path" in
         hook_warn "PERF: await import() in test file adds ~100ms per call. Use static imports unless you need lazy/conditional loading. Found: $sample" "test-perf-dynamic-import"
       fi
     fi
+
+    # ── Check: it.concurrent + isolate: false is unsafe ───────────
+    # Concurrent tests sharing a single thread context will race on
+    # mutable state. Warn when both are detected together.
+    concurrent_usage=$(echo "$added_lines" | grep -E '\.concurrent' || true)
+
+    if [ -n "$concurrent_usage" ]; then
+      # Find nearest vitest config (same dir or parent dirs)
+      config_dir=$(dirname "$file_path")
+      vitest_config=""
+      while [ "$config_dir" != "/" ]; do
+        for cfg in "$config_dir"/vitest.config.*; do
+          [ -f "$cfg" ] && vitest_config="$cfg" && break 2
+        done
+        config_dir=$(dirname "$config_dir")
+      done
+
+      if [ -n "$vitest_config" ] && grep -qE "isolate.*false" "$vitest_config" 2>/dev/null; then
+        hook_warn "PERF: it.concurrent + isolate: false is unsafe. Concurrent tests sharing a single thread context will race on mutable state. Remove isolate: false or drop .concurrent." "test-perf-concurrent-isolate"
+      fi
+    fi
     ;;
 
   */vitest.config.*|vitest.config.*)

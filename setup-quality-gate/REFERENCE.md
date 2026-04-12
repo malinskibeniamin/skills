@@ -56,6 +56,16 @@ jobs:
 | `test:related` | `vitest --run --related` | ~1-3s |
 | `quality:gate` | lint + type:check + related tests | <5s target |
 
+## Test Performance Profiling
+
+When `test-perf-stop.sh` detects regressions and you need to pinpoint the cause, use `vitest-profiler` for per-test timing instrumentation:
+
+```bash
+bunx vitest-profiler --run
+```
+
+Outputs flamegraph-compatible timing data showing exactly which tests and setup/teardown phases are slow. Use as diagnostic follow-up to regression detection, not as routine CI step.
+
 ## Asset Type Declarations
 
 tsgo needs declarations for asset imports (`.svg`, `.css`, `.png`). Create `src/types/assets.d.ts`:

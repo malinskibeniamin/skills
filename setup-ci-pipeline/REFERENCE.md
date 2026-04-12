@@ -53,9 +53,45 @@ gh api repos/{owner}/{repo}/actions/runs --jq '.workflow_runs[:10] | .[] | "\(.n
 Optimization checklist:
 - **Caching**: `bun install` is often faster than restoring cache. Check: if cache restore + install takes > bare install, remove caching. Measure with `time bun install --frozen-lockfile`.
 - **Parallelization**: Split lint, type-check, tests into parallel jobs. Each is independent.
-- **Sharding**: For large test suites, use `--shard=1/3` across 3 runners.
 - **Artifact retention**: Default 90 days is excessive for most artifacts. Set `retention-days: 7` for coverage reports, `30` for screenshots.
 - **Cache artifact size**: bun's `node_modules` can be large. Consider `actions/cache` only if install consistently takes >30s.
+
+## Test Sharding
+
+Split large suites across parallel CI runners. Vitest handles even distribution.
+
+**When to shard**: Total suite >60s. Don't shard suites under 30s — overhead exceeds savings.
+
+```yaml
+jobs:
+  test:
+    strategy:
+      matrix:
+        shard: [1/3, 2/3, 3/3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile --yarn
+      - run: bun test --run --shard=${{ matrix.shard }} --reporter=blob
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ strategy.job-index }}
+          path: .vitest-reports/
+
+  merge-reports:
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: blob-report-*
+          merge-multiple: true
+          path: .vitest-reports
+      - run: bunx vitest --merge-reports --coverage
+```
+
+Key: `--reporter=blob` writes shard-aware report chunks. `--merge-reports` aggregates them into unified coverage and test results. Coverage thresholds apply to merged report, not individual shards.
 
 ## Coverage Gates
 
