@@ -205,3 +205,19 @@ await Promise.all(
 ## Cross-Model with Sandcastle
 
 Implement with Claude, review with Codex. Agent providers available: `claudeCode()`, `codex()`, `piAgent()`, `openCode()`. Mix models per stage — for example, Claude for implementation, Codex for adversarial review.
+
+## Prompt Caching Tips
+
+Claude Code uses [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) to reuse computation across turns — cached input tokens cost 10% of uncached. At scale (N agents × M iterations), cache hits vs misses dominate cost. The template above is already cache-friendly; here's why and what to preserve:
+
+| Pattern | Why it works | What breaks it |
+|---|---|---|
+| `promptFile` with `promptArgs` | Static prompt prefix stays identical across iterations — prefix match = cache hit | Generating dynamic prompt strings per-issue instead of using template variables |
+| Separate `run()` per stage (implement → review) | Each stage has its own session and cache. No mid-session model switch | Switching `agent:` model inside a single `run()` call with `maxIterations > 1` |
+| Same `onSandboxReady` hooks for every agent | Tool definitions stay identical — shared prefix across agents | Conditionally installing different skills per issue |
+| `maxIterations: 3` | Claude Code preserves prefix between iterations automatically | N/A — just works |
+
+**Key rules:**
+1. **Static first, dynamic last** — prompt caching is prefix-matched. Keep system prompt, tools, and skill definitions stable. Issue-specific context goes in `promptArgs` (injected at end of prompt).
+2. **One model per `run()`** — model switch = full cache rebuild. The template correctly uses opus for implement, sonnet for review as separate calls.
+3. **Don't change tools between iterations** — `onSandboxReady` runs once per sandbox. If you add conditional tool installation, every agent gets a different prefix = zero cross-agent cache reuse.
