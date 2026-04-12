@@ -48,6 +48,20 @@ Auto-detects phase, guides through correct process. No need remember skill names
 - Optional: dispatch agent for edge-case test generation.
 - **When green: commit immediately.** One commit per passing state.
 
+### 4b. Refine (Self-Review Loop)
+
+**After verify commits, before external review.** Catches quality gaps while context is fresh.
+
+1. Dispatch `self-reviewer` agent on session diff.
+2. If diff >50 lines OR touches auth/security paths: also dispatch `adversarial-reviewer` in parallel.
+3. Process findings by priority — see [REFERENCE.md](REFERENCE.md) for protocol.
+4. Fix P0/P1 immediately, apply P2 `safe_auto`, show P2 `gated_auto` to user.
+5. Commit fixes, re-verify (tests + types + lint).
+6. **Max 2 refinement rounds.** Then proceed to Review.
+7. P3/advisory findings logged for Phase 6 (Compound).
+
+**Skip if**: trivial change (<10 lines, no logic), test-only, or docs-only.
+
 ### 5. Review
 
 - Security gate: SAST/SCA on changed files. Block on critical/high. See [REFERENCE.md](REFERENCE.md).
@@ -71,9 +85,9 @@ After non-trivial tasks: "Did we learn something worth preserving?"
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1→2→**2b**→3→4→5→5b→6 |
-| "Fix this bug" | 1(reproduce)→3(TDD)→4→5→5b→6 |
-| "Refactor this module" | 1→2→**2b**→3→4→5→5b |
+| "Build a new feature" | 1→2→**2b**→3→4→**4b**→5→5b→6 |
+| "Fix this bug" | 1(reproduce)→3(TDD)→4→**4b**→5→5b→6 |
+| "Refactor this module" | 1→2→**2b**→3→4→**4b**→5→5b |
 | "Write tests for X" | 3 only |
 | "Create a PR" | 5 only |
 | "Quick question" | Just answer |

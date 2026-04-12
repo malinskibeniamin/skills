@@ -150,6 +150,66 @@ After verification passes, optionally dispatch agent to generate additional test
 
 **When to use**: new public APIs, security-sensitive code, functions with complex branching logic. Skip for trivial changes.
 
+## Phase 4b: Refine (Self-Review Loop)
+
+**Goal**: catch quality gaps, missing tests, and simplification opportunities while context is fresh — before external review.
+
+### When to Run
+
+- **Always** for features and bug fixes (unless skip conditions met)
+- **Skip if**: trivial change (<10 lines, no logic), pure test-only change, documentation-only change
+
+### Process
+
+1. **Dispatch self-reviewer**: `self-reviewer` agent on session diff
+2. **Conditional adversarial review**: if diff >50 lines OR touches auth/security paths, also dispatch `adversarial-reviewer` in parallel
+3. **Collect findings**: SubagentStop hook validates JSON output, writes to session dir
+4. **Process by priority**:
+
+| Priority | Action |
+|----------|--------|
+| P0 (blocks merge) | Fix immediately, re-run tests |
+| P1 (should fix) | Fix, re-run tests |
+| P2 `safe_auto` | Apply automatically (missing imports, typos) |
+| P2 `gated_auto` | Show to user, apply on confirmation |
+| P2 `manual` | Report, let user decide |
+| P3 / `advisory` | Skip — log for Phase 6 (Compound) |
+
+5. **After fixes**: commit with `refactor(scope): self-review fixes`, re-verify (tests + types + lint)
+6. **Max 2 refinement rounds** — if P0/P1 findings persist after 2 rounds, proceed to Review anyway and flag them
+
+### Structured Findings Format
+
+All reviewers output JSON per `agents/findings-schema.md`. Key fields:
+- `severity`: P0–P3
+- `autofix_class`: `safe_auto | gated_auto | manual | advisory`
+- `pre_existing`: `true` if issue was in dirty baseline (never blocks merge)
+- `confidence`: 0.0–1.0 (low confidence = advisory only)
+
+### SubagentStart Context
+
+The SubagentStart hook automatically injects into all subagents:
+- Session-touched files (what this session modified)
+- Dirty baseline (pre-existing changes to filter)
+- Branch and PR context
+- Pointer to findings-schema.md for reviewer agents
+
+### SubagentStop Validation
+
+The SubagentStop hook (matcher: `self-reviewer|code-reviewer|adversarial-reviewer`):
+- Validates output contains valid JSON matching findings schema
+- Blocks and forces retry if output is malformed
+- Writes valid findings to `/tmp/hook-session-$SESSION_ID/review-findings.json`
+- Logs summary to `review-summary.log`
+
+### Agents
+
+| Agent | Focus | When |
+|-------|-------|------|
+| `self-reviewer` | Testing gaps, simplification, CI readiness, maintainability | Always in 4b |
+| `adversarial-reviewer` | Failure scenarios, boundary conditions, race conditions | Diff >50 lines or auth/security |
+| `code-reviewer` | Spec compliance, code quality (fresh-eyes) | Phase 5 (Review) |
+
 ## Phase 4: Review
 
 ### Security Gate
@@ -318,6 +378,8 @@ If `/codex:rescue` available: auto-dispatch plan for second opinion. For bug tri
 
 | Agent | Role | When dispatched |
 |---|---|---|
+| `self-reviewer` | Testing gaps, simplification, CI readiness, maintainability | Phase 4b (Refine) |
+| `adversarial-reviewer` | Failure scenarios, boundary conditions, race conditions | Phase 4b (Refine, conditional) |
 | `code-reviewer` | Fresh-eyes spec compliance + quality review | Phase 5 (Review) |
 | `verifier` | Run tests + visual verification via browser | Phase 4 (Verify) |
 

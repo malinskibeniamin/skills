@@ -128,6 +128,18 @@ Generate from existing `.claude/settings.json`. Copy PreToolUse Bash, SessionSta
 - `_hook-lib.sh` must be in `.claude/hooks/` alongside check scripts
 - `shared/hook-lib.sh` must be accessible (symlinked or copied) for Stop hooks that source it
 
+## Codex Limitations: SubagentStart/SubagentStop
+
+Codex does **not** support `SubagentStart` or `SubagentStop` hooks. These are Claude Code only.
+
+**Impact**: The self-review loop (phase 4b) relies on:
+- `SubagentStart` to inject session context (touched files, dirty baseline) into reviewer agents
+- `SubagentStop` to validate structured findings output and log results
+
+**Codex workaround**: Include self-review instructions directly in AGENTS.md as soft guidance. The structured findings schema (`agents/findings-schema.md`) works anywhere — it's just a document. Codex agents can follow it voluntarily even without hook enforcement.
+
+**Agents not affected**: Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) are markdown files. Codex can read them. The difference is: on Claude Code, output format is enforced by SubagentStop hook; on Codex, it's best-effort guidance.
+
 ## AGENTS.md
 
 Generated at repo root: [`AGENTS.md`](../AGENTS.md). Contains all enforced rules as soft guidance for Codex (replaces PostCompact context re-injection). Customize based on installed skills.
