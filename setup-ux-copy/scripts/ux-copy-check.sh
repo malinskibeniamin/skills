@@ -7,8 +7,8 @@ hook_skip_generated
 hook_filter_extensions "ts|tsx"
 hook_get_added_lines
 
-# Escape hatch: // allow-ux-copy: [reason]
-if grep -qE '//\s*allow-ux-copy:' "$file_path" 2>/dev/null; then
+# Escape hatch: // allow: ux-copy [reason]
+if hook_has_escape "ux-copy"; then
   exit 0
 fi
 
@@ -78,7 +78,7 @@ fi
 
 # ── Check 9: Redpanda term capitalization (REDPANDA_KIT=1) ───────
 
-if [ "${REDPANDA_KIT:-}" = "1" ]; then
+if hook_config_enabled "general.redpandaKit"; then
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(admin api|schema registry|http proxy|redpanda console)\b[^'\"]*\1" && \
      ! echo "$added_lines" | grep -qE "(Admin API|Schema Registry|HTTP Proxy|Redpanda Console)"; then
     hook_block "Redpanda product names must be capitalized correctly.\n\nAdmin API, Schema Registry, HTTP Proxy, Redpanda Console, Dedicated Cloud, BYOC."

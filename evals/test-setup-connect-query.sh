@@ -155,7 +155,7 @@ run_content_eval "$SCRIPT" "invalidateQueries" "hook checks for invalidateQuerie
 run_content_eval "$SCRIPT" "axios" "hook checks for axios"
 run_content_eval "$SCRIPT" "PlainMessage" "hook checks for PlainMessage"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
-run_content_eval "$SCRIPT" "allow-direct-query" "hook respects escape hatch"
+run_content_eval "$SCRIPT" "hook_has_escape" "hook respects escape hatch"
 run_content_eval "$SCRIPT" "typeName" "hook checks for \$typeName object literals"
 run_content_eval "$SCRIPT" "uses_connect_transport" "hook allows useTransport/callUnaryMethod pattern"
 

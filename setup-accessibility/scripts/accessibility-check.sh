@@ -9,8 +9,8 @@ hook_get_added_lines
 # Read full file for context
 file_content=$(cat "$file_path")
 
-# Allow escape hatch: // allow-a11y-skip: [reason]
-if echo "$file_content" | grep -qE '//\s*allow-a11y-skip:'; then
+# Allow escape hatch: // allow: a11y-skip [reason]
+if hook_has_escape "a11y-skip"; then
   exit 0
 fi
 

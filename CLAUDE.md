@@ -112,6 +112,14 @@ Follow this order for every task:
 - Classify: `.test.ts` (unit), `.test.tsx` (integration), `e2e/*.spec.ts` (Playwright)
 - Co-locate test files with source files
 
+## Logging
+
+- Use structured logging (JSON format) with consistent field names
+- Include requestId or traceId in all log entries for distributed tracing
+- Log at decision points (if/else branches), not just errors
+- Use named log levels (debug/info/warn/error) controllable per module
+- Never log secrets, tokens, or PII
+
 ## Error Handling & Resilience
 
 - Route files with data fetching need `errorComponent`

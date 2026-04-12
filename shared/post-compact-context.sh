@@ -31,9 +31,15 @@ context="[POST-COMPACTION] Context was compressed. Key rules re-injected:\nRules
 
 # Re-inject active config
 config=""
-[ "${REACT_COMPILER_MODE:-}" ] && config="$config compiler=$REACT_COMPILER_MODE"
+_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+_skills_cfg="$_root/.skills.json"
+_rc_mode="${REACT_COMPILER_MODE:-}"
+[ -z "$_rc_mode" ] && [ -f "$_skills_cfg" ] && _rc_mode=$(jq -r '.["react-compiler"].mode // empty' "$_skills_cfg" 2>/dev/null || true)
+[ -n "$_rc_mode" ] && config="$config compiler=$_rc_mode"
 [ "${ISSUE_TRACKER:-}" ] && config="$config tracker=$ISSUE_TRACKER"
-[ "${REDPANDA_KIT:-}" = "1" ] && config="$config redpanda-kit=on"
+_rp_kit="${REDPANDA_KIT:-}"
+[ -z "$_rp_kit" ] && [ -f "$_skills_cfg" ] && _rp_kit=$(jq -r '.general.redpandaKit // empty' "$_skills_cfg" 2>/dev/null || true)
+case "$_rp_kit" in 1|true|yes) config="$config redpanda-kit=on" ;; esac
 [ -n "$config" ] && context="$context\nConfig:$config"
 
 # Re-inject last stop outcome if available

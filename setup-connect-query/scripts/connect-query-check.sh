@@ -7,7 +7,7 @@ hook_filter_extensions "ts|tsx|js|jsx"
 hook_skip_generated
 
 # Check for escape hatch
-if grep -qE '//\s*allow-direct-query:' "$file_path"; then
+if hook_has_escape "direct-query"; then
   exit 0
 fi
 
@@ -36,7 +36,7 @@ if [ "$uses_connect" = true ]; then
     # Only ban useQuery and useMutation exactly — not useQueryClient, useMutationState, etc.
     tanstack_imports=$(echo "$added_lines" | grep -E "from\s+['\"]@tanstack/react-query['\"]" || true)
     if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | grep -qE '\buseQuery\b[^C]|\buseQuery\b\s*[,}]|\buseMutation\b[^S]|\buseMutation\b\s*[,}]'; then
-      hook_block "Import useQuery/useMutation from @connectrpc/connect-query.\nDo not import from @tanstack/react-query in ConnectRPC files.\n\n// BAD\nimport { useQuery } from '@tanstack/react-query'\n\n// GOOD\nimport { useQuery } from '@connectrpc/connect-query'\n\nEscape hatch: // allow-direct-query: [reason]"
+      hook_block "Import useQuery/useMutation from @connectrpc/connect-query.\nDo not import from @tanstack/react-query in ConnectRPC files.\n\n// BAD\nimport { useQuery } from '@tanstack/react-query'\n\n// GOOD\nimport { useQuery } from '@connectrpc/connect-query'\n\nEscape hatch: // allow: direct-query [reason]"
     fi
   fi
 fi
@@ -50,14 +50,14 @@ fi
 # ── Check 3: Warn on axios imports ────────────────────────────────────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]axios['\"]|require\(['\"]axios['\"]\)"; then
-  hook_warn "Prefer ConnectRPC transport over axios for API calls.\naxios bypasses protobuf type safety. Escape hatch: // allow-direct-query: REST endpoint for [service]"
+  hook_warn "Prefer ConnectRPC transport over axios for API calls.\naxios bypasses protobuf type safety. Escape hatch: // allow: direct-query REST endpoint for [service]"
 fi
 
 # ── Check 4: Warn on fetch() calls ───────────────────────────────────
 
 if echo "$added_lines" | grep -qE '\bfetch\s*\('; then
   if [ "$uses_connect" = true ]; then
-    hook_warn "Prefer ConnectRPC transport over raw fetch() in ConnectRPC files.\nEscape hatch: // allow-direct-query: [reason]"
+    hook_warn "Prefer ConnectRPC transport over raw fetch() in ConnectRPC files.\nEscape hatch: // allow: direct-query [reason]"
   fi
 fi
 

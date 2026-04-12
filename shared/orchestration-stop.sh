@@ -4,17 +4,18 @@ set -eo pipefail
 # Stop hook: comprehensive quality gate. Reads file categories tracked by
 # orchestration-guidance.sh and runs targeted checks. Blocks until truly done.
 #
-# Set ORCHESTRATION_STRICT=0 to disable blocking (e.g., during prototyping).
+# Disable via: .skills.json { "orchestration": { "strict": false } }
+# Legacy env: ORCHESTRATION_STRICT=0
 # Default: on (blocks on missing tests, security issues, async leaks).
 
-if [ "${ORCHESTRATION_STRICT:-1}" = "0" ]; then
-  exit 0
-fi
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+
+_orch_strict=$(hook_config "orchestration.strict" 2>/dev/null || true)
+case "$_orch_strict" in
+  0|false|no) exit 0 ;;
+esac
 
 session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
-
-# Source hook-lib for session-scoped file tracking
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
@@ -133,7 +134,7 @@ if [ -f "$session_files" ] && grep -q "^security:" "$session_files" 2>/dev/null;
   for f in $security_files; do
     if [ -f "$f" ]; then
       if grep -qE '(eval\(|new Function\(|dangerouslySetInnerHTML|\.innerHTML\s*=)' "$f" 2>/dev/null; then
-        if ! grep -qE '(allow-dangerouslySetInnerHTML|allow-eval)' "$f" 2>/dev/null; then
+        if ! grep -qE '(allow-dangerouslySetInnerHTML|allow:\s*dangerouslySetInnerHTML|allow-eval|allow:\s*eval)' "$f" 2>/dev/null; then
           short_name=$(basename "$f")
           issues="$issues\n- SECURITY: $short_name contains dangerous patterns (eval/innerHTML). Add escape hatch comment or fix."
         fi

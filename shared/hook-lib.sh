@@ -21,6 +21,19 @@
 #   HOOKS_FAIL_CLOSED=1  — treat hook errors (exit 1) as blocks (exit 2)
 #                          instead of silently passing. Catches misconfiguration.
 
+# ── Debug mode ───────────────────────────────────────────────────
+# Set HOOK_DEBUG=1 to log every decision point to session temp dir.
+# Useful for diagnosing hook misfires.
+#   tail -f /tmp/hook-session-*/debug.log
+
+_hook_debug_enabled="${HOOK_DEBUG:-}"
+
+_hook_debug() {
+  if [ -n "$_hook_debug_enabled" ]; then
+    echo "[$(date +%H:%M:%S)] $(basename "$0"): $*" >> "$_hook_session_dir/debug.log" 2>/dev/null || true
+  fi
+}
+
 # ── Fail-closed mode (inspired by Claude Code iron_gate_closed) ──
 
 if [ "${HOOKS_FAIL_CLOSED:-}" = "1" ]; then
@@ -58,8 +71,11 @@ hook_parse_edit_write() {
   file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty')
 
   if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
+    _hook_debug "skip: file_path empty or missing ($file_path)"
     exit 0
   fi
+
+  _hook_debug "parse: $file_path"
 
   # Track which files this session touches (for session-scoped Stop hooks)
   echo "$file_path" >> "$_hook_session_dir/session-touched-files" 2>/dev/null || true
@@ -77,6 +93,7 @@ hook_filter_extensions() {
     esac
   done
   if [ "$match" = false ]; then
+    _hook_debug "skip: extension mismatch (wanted $exts, got ${file_path##*.})"
     exit 0
   fi
 }
@@ -85,9 +102,10 @@ hook_filter_extensions() {
 
 hook_skip_tests() {
   case "$file_path" in
-    *.test.*|*.spec.*) exit 0 ;;
+    *.test.*|*.spec.*) _hook_debug "skip: test file"; exit 0 ;;
   esac
   if echo "$file_path" | grep -qE '/__tests__/'; then
+    _hook_debug "skip: __tests__ directory"
     exit 0
   fi
 }
@@ -96,12 +114,13 @@ hook_skip_tests() {
 
 hook_skip_generated() {
   case "$file_path" in
-    *.gen.ts|*.gen.tsx|*.gen.js) exit 0 ;;  # TanStack Router routeTree.gen.ts
-    *_pb.ts|*_pb.js) exit 0 ;;              # Protobuf generated
-    *_connectquery.ts) exit 0 ;;            # Connect Query generated
+    *.gen.ts|*.gen.tsx|*.gen.js) _hook_debug "skip: generated (.gen)"; exit 0 ;;
+    *_pb.ts|*_pb.js) _hook_debug "skip: generated (_pb)"; exit 0 ;;
+    *_connectquery.ts) _hook_debug "skip: generated (_connectquery)"; exit 0 ;;
   esac
   # Skip files with @generated marker
   if head -5 "$file_path" 2>/dev/null | grep -qE '(@generated|auto-generated|DO NOT EDIT)'; then
+    _hook_debug "skip: generated (@generated marker)"
     exit 0
   fi
 }
@@ -109,14 +128,13 @@ hook_skip_generated() {
 # ── Skip component library directories (auto-detect + UI_LIB_DIRS) ──
 
 hook_skip_ui_dirs() {
-  if [ -z "${UI_LIB_DIRS:-}" ]; then
+  _ui_dirs=$(hook_config "general.uiLibDirs" 2>/dev/null || true)
+  if [ -z "$_ui_dirs" ]; then
     _ui_dirs="components/ui"
     _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     [ -d "$_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
     [ -d "$_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
     [ -d "$_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
-  else
-    _ui_dirs="$UI_LIB_DIRS"
   fi
   if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
     _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -240,6 +258,91 @@ hook_filter_errors_to_session() {
   echo "$output" | grep -E "$pattern" || true
 }
 
+# ── Project config: .skills.json ─────────────────────────────────
+# Reads per-project hook config from .skills.json at repo root.
+# Env var override: REACT_RULES_BAN_USEEFFECT=1 still wins.
+# Works on both Claude Code and Codex (just a file read + jq).
+#
+# Usage:
+#   hook_config "react-rules.banUseEffect"    → "true" or ""
+#   hook_config "general.uiLibDirs"           → "components/ui|redpanda-ui"
+#
+# .skills.json format:
+#   { "react-rules": { "banUseEffect": true }, "general": { "redpandaKit": true } }
+
+_hook_skills_json=""
+_hook_skills_json_loaded=false
+
+_hook_load_skills_json() {
+  if [ "$_hook_skills_json_loaded" = true ]; then return; fi
+  _hook_skills_json_loaded=true
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  local cfg="$root/.skills.json"
+  if [ -f "$cfg" ] && command -v jq >/dev/null 2>&1; then
+    _hook_skills_json=$(cat "$cfg" 2>/dev/null || true)
+  fi
+}
+
+hook_config() {
+  local key="$1"
+  local section="${key%%.*}"
+  local field="${key#*.}"
+
+  # Map config keys to legacy env vars (env var wins if set)
+  case "$key" in
+    react-rules.banUseEffect)      [ -n "${REACT_RULES_BAN_USEEFFECT:-}" ] && echo "$REACT_RULES_BAN_USEEFFECT" && return ;;
+    react-rules.banTypeAssertions) [ -n "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" ] && echo "$REACT_RULES_BAN_TYPE_ASSERTIONS" && return ;;
+    react-compiler.mode)           [ -n "${REACT_COMPILER_MODE:-}" ] && echo "$REACT_COMPILER_MODE" && return ;;
+    orchestration.strict)          [ -n "${ORCHESTRATION_STRICT:-}" ] && echo "$ORCHESTRATION_STRICT" && return ;;
+    general.uiLibDirs)             [ -n "${UI_LIB_DIRS:-}" ] && echo "$UI_LIB_DIRS" && return ;;
+    general.redpandaKit)           [ -n "${REDPANDA_KIT:-}" ] && echo "$REDPANDA_KIT" && return ;;
+  esac
+
+  # Fall back to .skills.json
+  _hook_load_skills_json
+  if [ -n "$_hook_skills_json" ]; then
+    local val
+    val=$(echo "$_hook_skills_json" | jq -r ".[\"$section\"][\"$field\"] // empty" 2>/dev/null || true)
+    if [ -n "$val" ] && [ "$val" != "null" ]; then
+      echo "$val"
+      return
+    fi
+  fi
+}
+
+# Convenience: check if a config flag is truthy (1, true, yes)
+hook_config_enabled() {
+  local val
+  val=$(hook_config "$1")
+  case "$val" in
+    1|true|yes) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# ── Escape hatch: unified // allow: rule-name ────────────────────
+# Checks for both new format: // allow: rule-name [reason]
+# and legacy format: // allow-rule-name: [reason]
+# Usage:  hook_has_escape "useEffect" && exit 0
+
+hook_has_escape() {
+  local rule="$1"
+  local target="${2:-$file_path}"
+  [ -f "$target" ] || return 1
+  # New unified format: // allow: rule-name
+  if grep -qE "//\s*allow:\s*$rule\b" "$target" 2>/dev/null; then
+    _hook_debug "escape hatch found: allow: $rule"
+    return 0
+  fi
+  # Legacy format: // allow-rule-name:
+  if grep -qE "//\s*allow-$rule:" "$target" 2>/dev/null; then
+    _hook_debug "escape hatch found (legacy): allow-$rule"
+    return 0
+  fi
+  return 1
+}
+
 # ── HOOK_VERBOSITY ────────────────────────────────────────────────
 # Controls hook output level:
 #   normal (default) — all blocks and warns emitted
@@ -253,6 +356,7 @@ _hook_verbosity="${HOOK_VERBOSITY:-normal}"
 hook_block() {
   local msg="$1"
   local label="${2:-$(basename "$0" .sh)}"
+  _hook_debug "BLOCK [$label]: $msg"
   _hook_track_violation "$label"
   if [ "$_hook_verbosity" != "quiet" ]; then
     echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
@@ -265,6 +369,7 @@ hook_block() {
 hook_warn() {
   local msg="$1"
   local label="${2:-$(basename "$0" .sh)}"
+  _hook_debug "WARN [$label]: $msg"
   _hook_track_violation "$label"
   if [ "$_hook_verbosity" = "normal" ]; then
     echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
@@ -294,6 +399,7 @@ hook_parse_bash() {
 hook_deny() {
   local msg="$1"
   local label="${2:-$(basename "$0" .sh)}"
+  _hook_debug "DENY [$label]: $msg"
   _hook_track_violation "$label"
   echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"$msg\"}" >&2
   exit 2

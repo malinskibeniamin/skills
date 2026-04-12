@@ -9,20 +9,13 @@ hook_filter_extensions "ts|tsx|js|jsx"
 hook_get_added_lines
 
 # ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
-# Enable via: export REACT_RULES_BAN_USEEFFECT=1
+# Enable via: .skills.json { "react-rules": { "banUseEffect": true } }
+# Legacy env: REACT_RULES_BAN_USEEFFECT=1
 
-if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
+if hook_config_enabled "react-rules.banUseEffect"; then
   if echo "$added_lines" | grep -qE '\b(useEffect|useLayoutEffect|useInsertionEffect)\b'; then
-    # Check for escape hatch: // allow-useEffect: [reason]
-    has_escape=false
-    if [ -f "$file_path" ]; then
-      if grep -qE '//\s*allow-useEffect:' "$file_path"; then
-        has_escape=true
-      fi
-    fi
-
-    if [ "$has_escape" = false ]; then
-      hook_block "Remove useEffect. Use React Query, zustand, event handlers, or useTransition.\nEscape hatch: // allow-useEffect: [reason]"
+    if ! hook_has_escape "useEffect"; then
+      hook_block "Remove useEffect. Use React Query, zustand, event handlers, or useTransition.\nEscape hatch: // allow: useEffect [reason]"
     fi
   fi
 fi
@@ -68,9 +61,10 @@ if echo "$added_lines" | grep -qF '@ts-expect-error'; then
 fi
 
 # ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
-# Enable via: export REACT_RULES_BAN_TYPE_ASSERTIONS=1
+# Enable via: .skills.json { "react-rules": { "banTypeAssertions": true } }
+# Legacy env: REACT_RULES_BAN_TYPE_ASSERTIONS=1
 
-if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
+if hook_config_enabled "react-rules.banTypeAssertions"; then
   # Match TypeScript type assertions: `value as Type` or `value as unknown`
   # Exclude: `as const`, `as const satisfies`, `import X as Y`
   # Only match non-import lines with type assertion patterns
@@ -78,14 +72,8 @@ if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
   if [ -n "$_non_import_lines" ] && \
      echo "$_non_import_lines" | grep -qE '\)\s+as\s+[A-Z]|\b\w+\s+as\s+[A-Z]|\bas\s+unknown\b|\bas\s+never\b' && \
      ! echo "$_non_import_lines" | grep -qE '\bas\s+const\b'; then
-    # Check for escape hatch
-    has_escape=false
-    if grep -qE '//\s*allow-type-assertion:' "$file_path" 2>/dev/null; then
-      has_escape=true
-    fi
-
-    if [ "$has_escape" = false ]; then
-      hook_block "Remove type assertion (\`as X\`). Use type guards, generics, or schema validation.\nAllowed: \`as const\`, \`as const satisfies\`. Escape hatch: // allow-type-assertion: [reason]"
+    if ! hook_has_escape "type-assertion"; then
+      hook_block "Remove type assertion (\`as X\`). Use type guards, generics, or schema validation.\nAllowed: \`as const\`, \`as const satisfies\`. Escape hatch: // allow: type-assertion [reason]"
     fi
   fi
 fi
@@ -190,7 +178,8 @@ case "$file_path" in
     fi
 
     # In annotation mode, skip files without 'use memo' (compiler isn't active for them)
-    if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
+    _rc_mode=$(hook_config "react-compiler.mode" 2>/dev/null || true)
+    if [ "${_rc_mode:-infer}" = "annotation" ]; then
       if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
         has_no_memo=true
       fi
@@ -215,15 +204,8 @@ fi  # end _has_react_compiler
 case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qF 'dangerouslySetInnerHTML'; then
-      has_escape=false
-      if [ -f "$file_path" ]; then
-        if grep -qE '//\s*allow-dangerouslySetInnerHTML:' "$file_path"; then
-          has_escape=true
-        fi
-      fi
-
-      if [ "$has_escape" = false ]; then
-        hook_block "dangerouslySetInnerHTML is banned — XSS risk. Sanitize with DOMPurify.\nEscape hatch: // allow-dangerouslySetInnerHTML: [reason]"
+      if ! hook_has_escape "dangerouslySetInnerHTML"; then
+        hook_block "dangerouslySetInnerHTML is banned — XSS risk. Sanitize with DOMPurify.\nEscape hatch: // allow: dangerouslySetInnerHTML [reason]"
       fi
     fi
     ;;
@@ -400,14 +382,8 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'useEffect\(' && \
        echo "$added_lines" | grep -qE "set[A-Z][a-zA-Z]*\((''|\"\"|\[\]|\{\}|null|undefined|false|0)\)"; then
-      # Check for escape hatch
-      has_escape=false
-      if grep -qE '//\s*allow-useEffect:' "$file_path" 2>/dev/null; then
-        has_escape=true
-      fi
-
-      if [ "$has_escape" = false ]; then
-        hook_warn "Resetting state in useEffect? Use the key prop instead:\n<Component key={id} /> — React unmounts and remounts, resetting all state.\nEscape hatch: // allow-useEffect: [reason]"
+      if ! hook_has_escape "useEffect"; then
+        hook_warn "Resetting state in useEffect? Use the key prop instead:\n<Component key={id} /> — React unmounts and remounts, resetting all state.\nEscape hatch: // allow: useEffect [reason]"
       fi
     fi
     ;;

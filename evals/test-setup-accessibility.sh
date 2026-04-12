@@ -207,7 +207,7 @@ run_content_eval "$SCRIPT" "aria-controls" "hook checks for aria-controls"
 run_content_eval "$SCRIPT" "tabIndex" "hook checks for tabIndex"
 run_content_eval "$SCRIPT" "onKeyDown" "hook checks for keyboard handlers"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
-run_content_eval "$SCRIPT" "allow-a11y-skip" "hook supports escape hatch"
+run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "WCAG" "hook references WCAG guidelines"
 
 rm -rf "$_a11y_tmpdir"

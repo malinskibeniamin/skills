@@ -438,7 +438,7 @@ run_hook_eval "$SCRIPT" \
 
 # ── Hook script content checks ──────────────────────────────────
 
-run_content_eval "$SCRIPT" "allow-ux-copy" "hook supports escape hatch"
+run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "successfully" "hook checks for successfully"
 run_content_eval "$SCRIPT" "click here" "hook checks for click here"
 run_content_eval "$SCRIPT" "oops" "hook checks for blame language"

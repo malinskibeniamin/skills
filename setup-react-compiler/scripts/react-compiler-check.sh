@@ -29,7 +29,10 @@ fi
 
 # In annotation mode, only check files with 'use memo' directive
 # (other files aren't compiled, so manual memoization is correct)
-if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
+# Config via: .skills.json { "react-compiler": { "mode": "annotation" } }
+# Legacy env: REACT_COMPILER_MODE=annotation
+_compiler_mode=$(hook_config "react-compiler.mode")
+if [ "${_compiler_mode:-infer}" = "annotation" ]; then
   if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
     exit 0
   fi
