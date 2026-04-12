@@ -40,4 +40,4 @@ touch "$_seen_file" 2>/dev/null || true
 component_name=$(basename "$file_path")
 dir_matched=$(echo "$file_path" | grep -oE "($_ui_dirs)" | head -1)
 
-hook_warn "[UI REGISTRY] You are modifying '$component_name' in the UI component directory ($dir_matched/).\\nThese components are registry-sourced. Local-only changes WILL be overwritten on the next registry pull.\\n\\nTo keep the upstream source of truth in sync:\\n1. Make the same change in the upstream UI registry repo\\n2. Open a PR against the UI registry\\n3. After merge, pull updated components into consumer repos" "ui-registry-warn"
+hook_warn "[UI REGISTRY] Modifying '$component_name' ($dir_matched/). Registry-sourced — local changes overwritten on next pull. PR upstream instead." "ui-registry-warn"

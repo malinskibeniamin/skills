@@ -7,13 +7,13 @@ hook_filter_extensions "ts|tsx|js|jsx"
 
 # Skip files where process.env is correct (build config, env definitions, scripts)
 case "$(basename "$file_path")" in
-  env.ts|env.mts|env.mjs|env.js) exit 0 ;;                         # env definition
-  rsbuild.config.*|vite.config.*|webpack.config.*) exit 0 ;;        # bundler config
-  next.config.*|nuxt.config.*|astro.config.*) exit 0 ;;             # framework config
-  vitest.config.*|jest.config.*|playwright.config.*) exit 0 ;;      # test runner config
-  tailwind.config.*|postcss.config.*|biome.jsonc) exit 0 ;;         # tooling config
-  tsconfig.*|.eslintrc.*|.prettierrc.*) exit 0 ;;                   # ts/lint config
-  Dockerfile|docker-compose.*) exit 0 ;;                            # container config
+  env.ts|env.mts|env.mjs|env.js) exit 0 ;;
+  rsbuild.config.*|vite.config.*|webpack.config.*) exit 0 ;;
+  next.config.*|nuxt.config.*|astro.config.*) exit 0 ;;
+  vitest.config.*|jest.config.*|playwright.config.*) exit 0 ;;
+  tailwind.config.*|postcss.config.*|biome.jsonc) exit 0 ;;
+  tsconfig.*|.eslintrc.*|.prettierrc.*) exit 0 ;;
+  Dockerfile|docker-compose.*) exit 0 ;;
 esac
 
 # Skip config directories
@@ -24,9 +24,9 @@ fi
 hook_skip_tests
 hook_get_added_lines
 
-# Check for raw process.env access (exclude build-time constants injected by bundlers)
+# Check for raw process.env access (exclude build-time constants)
 if echo "$added_lines" | grep -vE 'process\.env\.(NODE_ENV|DEV|PROD|SSR|TEST)' | grep -qE 'process\.env\.'; then
-  hook_block "Do not use raw process.env access.\nImport the validated env object: import { env } from \\\"@/env\\\".\n\nAll variables must be declared in src/env.ts with t3-env zod validation.\n\nExceptions: process.env.NODE_ENV is allowed (build-time constant)."
+  hook_block "No raw process.env. Import from @/env. Declare vars in src/env.ts with t3-env+zod. Exception: NODE_ENV."
 fi
 
 exit 0

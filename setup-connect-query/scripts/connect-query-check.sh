@@ -25,18 +25,15 @@ fi
 # ── Check 1: Ban raw useQuery/useMutation from @tanstack/react-query ─
 
 if [ "$uses_connect" = true ]; then
-  # Allow raw useQuery/useMutation when file uses callUnaryMethod or imports transport directly
-  # (multiple transports / dataplane pattern is legitimate)
   uses_connect_transport=false
   if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/connect['\"]|from\s+['\"]@connectrpc/connect-web['\"]|callUnaryMethod|callServerStreamMethod|createGrpcWebTransport|createConnectTransport|useTransport"; then
     uses_connect_transport=true
   fi
 
   if [ "$uses_connect_transport" = false ]; then
-    # Only ban useQuery and useMutation exactly — not useQueryClient, useMutationState, etc.
     tanstack_imports=$(echo "$added_lines" | grep -E "from\s+['\"]@tanstack/react-query['\"]" || true)
     if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | grep -qE '\buseQuery\b[^C]|\buseQuery\b\s*[,}]|\buseMutation\b[^S]|\buseMutation\b\s*[,}]'; then
-      hook_block "Import useQuery/useMutation from @connectrpc/connect-query.\nDo not import from @tanstack/react-query in ConnectRPC files.\n\n// BAD\nimport { useQuery } from '@tanstack/react-query'\n\n// GOOD\nimport { useQuery } from '@connectrpc/connect-query'\n\nEscape hatch: // allow: direct-query [reason]"
+      hook_block "useQuery/useMutation → import from @connectrpc/connect-query, not @tanstack/react-query. Escape: // allow: direct-query [reason]"
     fi
   fi
 fi
@@ -44,50 +41,49 @@ fi
 # ── Check 2: Ban invalidateQueries() with no args ────────────────────
 
 if echo "$added_lines" | grep -qE 'invalidateQueries\(\s*\)'; then
-  hook_block "Do not call invalidateQueries() with no args (invalidates ALL queries).\nScope to a service type name: queryKey: [yourRpcMethod.service.typeName]."
+  hook_block "No invalidateQueries() with empty args (invalidates ALL). Scope: queryKey: [rpcMethod.service.typeName]."
 fi
 
 # ── Check 3: Warn on axios imports ────────────────────────────────────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]axios['\"]|require\(['\"]axios['\"]\)"; then
-  hook_warn "Prefer ConnectRPC transport over axios for API calls.\naxios bypasses protobuf type safety. Escape hatch: // allow: direct-query REST endpoint for [service]"
+  hook_warn "Prefer ConnectRPC transport over axios. Bypass protobuf type safety. Escape: // allow: direct-query [reason]"
 fi
 
 # ── Check 4: Warn on fetch() calls ───────────────────────────────────
 
 if echo "$added_lines" | grep -qE '\bfetch\s*\('; then
   if [ "$uses_connect" = true ]; then
-    hook_warn "Prefer ConnectRPC transport over raw fetch() in ConnectRPC files.\nEscape hatch: // allow: direct-query [reason]"
+    hook_warn "Prefer ConnectRPC transport over raw fetch() in ConnectRPC files. Escape: // allow: direct-query [reason]"
   fi
 fi
 
-# ── Check 5: (v2 only) Ban new Message() construction ────────────────
+# ── Check 5: (v2) Ban new Message() construction ────────────────────
 
 if echo "$added_lines" | grep -qE '\bnew\s+[A-Z][a-zA-Z]*(Request|Response|Message)\s*\('; then
   if echo "$file_content" | grep -qE "from\s+['\"]@buf/"; then
-    hook_block "Protobuf v2: Do not use new Message() constructor.\nUse create(Schema, { ... }) from @bufbuild/protobuf instead.\n\n// BAD\nconst req = new ListTopicsRequest({ filter: 'active' })\n\n// GOOD\nconst req = create(ListTopicsRequestSchema, { filter: 'active' })"
+    hook_block "Proto v2: no new Message(). Use create(Schema, { ... }) from @bufbuild/protobuf."
   fi
 fi
 
-# ── Check 6: (v2 only) Ban PlainMessage/PartialMessage ───────────────
+# ── Check 6: (v2) Ban PlainMessage/PartialMessage ───────────────────
 
 if echo "$added_lines" | grep -qE '\b(PlainMessage|PartialMessage)\b'; then
   if echo "$file_content" | grep -qE "from\s+['\"]@bufbuild/protobuf['\"]"; then
-    hook_block "Protobuf v2: PlainMessage/PartialMessage are v1 types.\nUse MessageShape<typeof Schema> or MessageInitShape<typeof Schema> instead."
+    hook_block "Proto v2: PlainMessage/PartialMessage are v1. Use MessageShape<typeof Schema> or MessageInitShape<typeof Schema>."
   fi
 fi
 
-# ── Check 7: (v2 only) Ban manual object literals with $typeName ─────
+# ── Check 7: (v2) Ban manual $typeName literals ─────────────────────
 
 if echo "$added_lines" | grep -qE '\$typeName'; then
-  # Only flag for protobuf v2+
   is_proto_v2=false
   if [ -f "package.json" ] && grep -qE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null; then
     is_proto_v2=true
   fi
 
   if [ "$is_proto_v2" = true ]; then
-    hook_block "Protobuf v2: Do not construct messages with manual \$typeName literals.\nUse create(Schema, { ... }) for type-safe construction.\n\n// BAD\nconst msg = { \$typeName: 'foo.Bar', field: 'value' }\n\n// GOOD\nconst msg = create(BarSchema, { field: 'value' })"
+    hook_block "Proto v2: no manual \$typeName. Use create(Schema, { ... }) for type-safe construction."
   fi
 fi
 
@@ -96,7 +92,7 @@ fi
 if echo "$added_lines" | grep -qE 'toJson|fromJson'; then
   if echo "$file_content" | grep -qE 'google.protobuf.Any|AnySchema|anyPack|anyUnpack'; then
     if ! echo "$file_content" | grep -qE 'typeRegistry|type_registry|createRegistry'; then
-      hook_warn "toJson/fromJson with google.protobuf.Any requires a typeRegistry.\nPass { typeRegistry } to toJson/fromJson or configure it on the transport.\n\nSee setup-connect-query REFERENCE.md for the createRegistry pattern."
+      hook_warn "toJson/fromJson with Any requires typeRegistry. Pass { typeRegistry } or configure on transport."
     fi
   fi
 fi
@@ -105,22 +101,19 @@ fi
 
 if echo "$added_lines" | grep -qE 'AnySchema|google\.protobuf\.Any'; then
   if echo "$added_lines" | grep -qE 'create\(.*Any' && ! echo "$added_lines" | grep -qE 'typeUrl|type_url|@type|anyPack'; then
-    hook_warn "Any message constructed without typeUrl.\nWithout @type, JSON serialization fails: '\"@type\" is empty'.\nUse anyPack() or set typeUrl: 'type.googleapis.com/' + Schema.typeName.\n\nSee setup-connect-query REFERENCE.md."
+    hook_warn "Any without typeUrl → JSON fails. Use anyPack() or set typeUrl."
   fi
 fi
 
 # ── Check 10: Warn on Timestamp as plain object ──────────────────
 
-# Only trigger on protobuf Timestamp type (capitalized) or timestamp_pb imports, not generic "timestamp" variables
 if echo "$added_lines" | grep -qE '\bTimestamp\b' || echo "$file_content" | grep -qE 'timestamp_pb'; then
-  # Detect manual { seconds, nanos } construction
   if echo "$added_lines" | grep -qE '\{\s*seconds\s*:|nanos\s*:' && echo "$file_content" | grep -qE '\bTimestamp\b|timestamp_pb'; then
-    hook_warn "Do not construct Timestamp as { seconds, nanos } object.\nJSON decode fails: 'cannot decode Timestamp from JSON: object'.\nUse timestampFromDate(new Date()) or timestampDate(ts) from @bufbuild/protobuf/wkt.\n\nSee setup-connect-query REFERENCE.md."
+    hook_warn "No manual { seconds, nanos } for Timestamp. Use timestampFromDate(new Date()) from @bufbuild/protobuf/wkt."
   fi
-  # Detect raw Date passed to Timestamp field without conversion
   if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qE '\bTimestamp\b'; then
     if ! echo "$added_lines" | grep -qE 'timestampFromDate|timestampDate|Timestamp\.fromDate|toTimestamp'; then
-      hook_warn "Do not pass raw Date to a Timestamp field.\nUse timestampFromDate(date) from @bufbuild/protobuf/wkt to convert.\n\nSee setup-connect-query REFERENCE.md."
+      hook_warn "No raw Date to Timestamp field. Use timestampFromDate(date) from @bufbuild/protobuf/wkt."
     fi
   fi
 fi

@@ -17,7 +17,7 @@ fi
 # ── Check 1: Ban <img> without alt ──────────────────────────────────
 
 if echo "$added_lines" | grep -qE '<img\b' && ! echo "$added_lines" | grep -qE '<img\b[^>]*\balt\s*='; then
-  hook_block "Add alt attribute to <img> elements.\nUse a descriptive string, or alt=\\\"\\\" for decorative images.\n\nWCAG 1.1.1: All non-text content must have a text alternative."
+  hook_block "<img> needs alt. Descriptive string or alt=\\\"\\\" for decorative. WCAG 1.1.1."
 fi
 
 # ── Check 2: Ban clickable div/span without keyboard support ────────
@@ -38,11 +38,11 @@ if echo "$added_lines" | grep -qE '<(div|span)\b[^>]*\bonClick\b'; then
   fi
 
   if [ "$has_keyboard" = false ] || [ "$has_role" = false ] || [ "$has_tabindex" = false ]; then
-    hook_block "Clickable <div>/<span> needs role, tabIndex, and onKeyDown.\nAdd all three, or prefer <button> instead.\n\nWCAG 2.1.1: All functionality must be keyboard-operable."
+    hook_block "Clickable <div>/<span> needs role+tabIndex+onKeyDown. Or use <button>. WCAG 2.1.1."
   fi
 fi
 
-# ── Check 3: Ban role="combobox" without required ARIA attributes ──
+# ── Check 3: Ban role="combobox" without required ARIA ────────────
 
 if echo "$added_lines" | grep -qE 'role\s*=\s*["{]combobox'; then
   missing=""
@@ -53,7 +53,7 @@ if echo "$added_lines" | grep -qE 'role\s*=\s*["{]combobox'; then
     missing="$missing${missing:+, }aria-controls"
   fi
   if [ -n "$missing" ]; then
-    hook_block "role=\\\"combobox\\\" is missing required ARIA: $missing.\nAdd aria-expanded and aria-controls at minimum.\n\nSee REFERENCE.md for the complete combobox ARIA pattern."
+    hook_block "role=\\\"combobox\\\" missing: $missing."
   fi
 fi
 
@@ -61,7 +61,7 @@ fi
 
 if echo "$added_lines" | grep -qE 'role\s*=\s*["{]tablist'; then
   if ! echo "$file_content" | grep -qE 'role\s*=\s*["{]tab[^l]'; then
-    hook_block "role=\\\"tablist\\\" requires children with role=\\\"tab\\\".\nAdd role=\\\"tab\\\" to each tab and role=\\\"tabpanel\\\" to each panel.\n\nSee REFERENCE.md for the complete tabs ARIA pattern."
+    hook_block "role=\\\"tablist\\\" needs children with role=\\\"tab\\\" + role=\\\"tabpanel\\\"."
   fi
 fi
 
@@ -69,7 +69,7 @@ fi
 
 if echo "$added_lines" | grep -qE 'role\s*=\s*["{]dialog'; then
   if ! echo "$added_lines" | grep -qE 'aria-label(ledby)?\s*=' && ! echo "$file_content" | grep -qE 'role=.*dialog.*aria-label|aria-label.*role=.*dialog'; then
-    hook_block "role=\\\"dialog\\\" must have aria-label or aria-labelledby.\nAdd aria-labelledby pointing to the dialog's heading element.\n\nWCAG 2.4.3: Focus order must be meaningful."
+    hook_block "role=\\\"dialog\\\" needs aria-label or aria-labelledby."
   fi
 fi
 

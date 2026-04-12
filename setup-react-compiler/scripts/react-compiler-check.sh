@@ -7,8 +7,7 @@ hook_filter_extensions "tsx|jsx"
 hook_skip_ui_dirs
 hook_skip_generated
 
-# Skip entirely if React Compiler is not installed in this project
-# Check package.json for the babel plugin, or rsbuild/vite config for the plugin reference
+# Skip if React Compiler not installed
 _has_compiler=false
 if [ -f "package.json" ] && grep -q 'babel-plugin-react-compiler' package.json 2>/dev/null; then
   _has_compiler=true
@@ -22,13 +21,12 @@ if [ "$_has_compiler" = false ]; then
   exit 0
 fi
 
-# Skip files with 'use no memo' directive
+# Skip 'use no memo' files
 if head -5 "$file_path" | grep -qF "'use no memo'" || head -5 "$file_path" | grep -qF '"use no memo"'; then
   exit 0
 fi
 
-# In annotation mode, only check files with 'use memo' directive
-# (other files aren't compiled, so manual memoization is correct)
+# Annotation mode: only check 'use memo' files
 if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
   if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
     exit 0
@@ -48,7 +46,7 @@ elif echo "$added_lines" | grep -qE '\bReact\.memo\b|\bmemo\('; then
 fi
 
 if [ -n "$found" ]; then
-  hook_block "Remove manual $found -- React Compiler auto-memoizes.\nWrite plain JS expressions and inline callbacks instead.\n\nEscape hatch: add 'use no memo' directive with a comment explaining why."
+  hook_block "Remove $found — Compiler auto-memoizes. Or add 'use no memo' at file top."
 fi
 
 # ── Check 2: Derived state via useEffect anti-pattern ────────────
@@ -56,14 +54,14 @@ if echo "$added_lines" | grep -qE '\buseEffect\b'; then
   file_content=$(cat "$file_path")
   if echo "$file_content" | grep -qE 'const \[.*,\s*set\w+\]\s*=\s*useState' && \
      echo "$added_lines" | grep -qE 'useEffect\(\(\)\s*=>\s*\{?\s*set'; then
-    hook_block "Do not derive state via useState + useEffect.\nCompute the value inline during render instead.\n\n// BAD\nconst [filtered, setFiltered] = useState([])\nuseEffect(() => { setFiltered(items.filter(i => i.visible)) }, [items])\n\n// GOOD\nconst filtered = items.filter(i => i.visible)"
+    hook_block "No useState+useEffect for derived state. Compute inline during render."
   fi
 fi
 
 # ── Check 3: useRef as memoization cache ─────────────────────────
 if echo "$added_lines" | grep -qE 'useRef\(' && \
    echo "$added_lines" | grep -qE '\.current\s*=.*\?\?=|\.current\s*\?\?=|if.*\.current.*===.*null'; then
-  hook_block "Do not use useRef as a memoization cache.\nWrite plain derived values -- React Compiler owns caching."
+  hook_block "No useRef as memo cache. Compiler owns caching — write plain derived values."
 fi
 
 exit 0

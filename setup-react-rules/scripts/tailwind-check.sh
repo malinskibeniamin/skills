@@ -6,10 +6,10 @@ hook_parse_edit_write
 hook_filter_extensions "css|scss|sass|less|tsx|jsx"
 hook_get_added_lines
 
-# ── Ban !important (breaks Tailwind cascade) ─────────────────────
+# ── Ban !important ─────────────────────────────────────────────────
 
 if echo "$added_lines" | grep -qE '!important'; then
-  hook_block "No !important — breaks Tailwind cascade. Fix specificity instead."
+  hook_block "No !important — breaks Tailwind cascade. Fix specificity."
 fi
 
 # ── Ban raw hex/rgb in CSS files ──────────────────────────────────
@@ -28,7 +28,7 @@ esac
 case "$file_path" in
   *.css|*.scss|*.sass|*.less)
     if echo "$added_lines" | grep -qE '\b100vh\b'; then
-      hook_warn "Use 100dvh instead of 100vh. 100vh doesn't account for mobile address bar."
+      hook_warn "Use 100dvh not 100vh. 100vh ignores mobile address bar."
     fi
     ;;
 esac
@@ -38,7 +38,7 @@ esac
 case "$file_path" in
   *.css|*.scss|*.sass|*.less)
     if echo "$added_lines" | grep -qE 'width:\s*100vw'; then
-      hook_warn "Use width: 100% instead of 100vw. 100vw includes scrollbar width, causes overflow."
+      hook_warn "Use width:100% not 100vw. 100vw includes scrollbar, causes overflow."
     fi
     ;;
 esac
@@ -46,7 +46,7 @@ esac
 # ── Ban user-scalable=no (WCAG zoom violation) ──────────────────
 
 if echo "$added_lines" | grep -qE 'user-scalable\s*=\s*no'; then
-  hook_block "user-scalable=no is a WCAG 1.4.4 violation. Remove it — users must be able to zoom."
+  hook_block "user-scalable=no is WCAG 1.4.4 violation. Users must zoom."
 fi
 
 exit 0

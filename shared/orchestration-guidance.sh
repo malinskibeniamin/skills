@@ -19,7 +19,7 @@ guidance=""
 if [ "$(basename "$file_path")" = "package.json" ]; then
   if ! grep -qF "deps" "$_seen_file" 2>/dev/null; then
     echo "deps" >> "$_seen_file" 2>/dev/null || true
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"[DEPS] Check changelogs, npm audit, verify compat.\"}" >&2
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[DEPS] Changelogs, npm audit, compat.\"}" >&2
   fi
   exit 0
 fi
@@ -44,7 +44,7 @@ _guidance_once() {
 case "$file_path" in
   *.test.tsx|*.test.ts|*.integration.tsx|*.integration.ts|*.unit.ts)
     echo "test:$file_path" >> "$session_files" 2>/dev/null || true
-    _guidance_once "test" "[TEST] userEvent.setup(), getByRole, no setTimeout, waitFor() for async."
+    _guidance_once "test" "[TEST] userEvent.setup(), getByRole, no setTimeout, waitFor() async."
     ;;
 esac
 
@@ -61,7 +61,7 @@ if [ -z "$guidance" ]; then
   case "$file_path" in
     */components/*.tsx|*/components/*.jsx)
       echo "component:$file_path" >> "$session_files" 2>/dev/null || true
-      _guidance_once "component" "[COMPONENT] DS components, kbd-nav, aria-labels, test co-located."
+      _guidance_once "component" "[COMPONENT] DS components, kbd, aria, co-located test."
       ;;
   esac
 fi
@@ -71,7 +71,7 @@ fi
 if [ -z "$guidance" ]; then
   if echo "$file_path" | grep -qE '/routes/.*\.tsx$'; then
     echo "route:$file_path" >> "$session_files" 2>/dev/null || true
-    _guidance_once "route" "[ROUTE] Export Route config only (code splitting). validateSearch+zod."
+    _guidance_once "route" "[ROUTE] Route config export only (splitting). validateSearch+zod."
   fi
 fi
 
@@ -107,13 +107,13 @@ case "$file_path" in
     if [ -f "$file_path" ]; then
       file_content=$(cat "$file_path" 2>/dev/null || true)
       if echo "$file_content" | grep -qE 'setTimeout|waitForTimeout|sleep\(' 2>/dev/null; then
-        guidance="$guidance No setTimeout — use waitFor(() => expect(...))."
+        guidance="$guidance No setTimeout. waitFor(()=>expect(...))."
       fi
       # Flag data-testid overuse
       testid_count=$(grep -c 'data-testid\|getByTestId' "$file_path" 2>/dev/null | head -1 || echo "0")
       testid_count="${testid_count:-0}"
       if [ "$testid_count" -gt 5 ]; then
-        guidance="$guidance High testid ($testid_count). Prefer getByRole/getByLabelText."
+        guidance="$guidance High testid ($testid_count). getByRole/getByLabelText."
       fi
     fi
     ;;
@@ -130,13 +130,13 @@ case "$file_path" in
       if echo "$file_path" | grep -qE '/routes/' && \
          echo "$file_content" | grep -qE 'loader|useQuery|useSuspenseQuery' && \
          ! echo "$file_content" | grep -qE 'errorComponent|ErrorBoundary|ErrorComponent'; then
-        guidance="$guidance [RESILIENCE] Route fetches data, no errorComponent."
+        guidance="$guidance [RESILIENCE] Route fetches, no errorComponent."
       fi
 
       # React.lazy without Suspense
       if echo "$file_content" | grep -qE 'React\.lazy\(|lazy\(' && \
          ! echo "$file_content" | grep -qE '<Suspense|Suspense>'; then
-        guidance="$guidance [RESILIENCE] React.lazy() needs <Suspense fallback>."
+        guidance="$guidance [RESILIENCE] React.lazy() needs <Suspense>."
       fi
 
       # Query hooks without loading/error/empty state handling
@@ -145,7 +145,7 @@ case "$file_path" in
         if echo "$file_content" | grep -qE 'useQuery|useSuspenseQuery' && \
            echo "$file_content" | grep -qE 'return.*<' && \
            ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|fallback|Skeleton|Spinner|EmptyState'; then
-          guidance="$guidance [COMPLETENESS] Query hook: handle loading/error/empty states."
+          guidance="$guidance [COMPLETENESS] Query: handle loading/error/empty."
         fi
       fi
     fi
@@ -163,83 +163,83 @@ if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
   # useProtoForm nudge — only for ConnectRPC projects, not REST/Zod
   if echo "$file_content" | grep -qE 'useForm|react-hook-form' && \
      echo "$file_content" | grep -qE '@connectrpc|@buf/|_pb'; then
-    guidance="$guidance useProtoForm for proto forms (auto-validates)."
+    guidance="$guidance useProtoForm for proto forms."
   fi
 
   # Typography nudge — raw h1-h6 and p tags
   if echo "$file_content" | grep -qE '<h[1-6][[:space:]>]|<p[[:space:]>]'; then
-    guidance="$guidance Heading/Text from registry, not raw h1-h6/p."
+    guidance="$guidance Heading/Text from registry, no raw h1-h6/p."
   fi
 
   # Key-value pattern nudge
   if echo "$file_content" | grep -qiE 'key.*value.*pair|labels|tags|metadata.*form'; then
-    guidance="$guidance KeyValueField+BadgeGroup for key-value metadata."
+    guidance="$guidance KeyValueField+BadgeGroup for kv metadata."
   fi
 
   # Loading/empty state component nudges
   if echo "$file_content" | grep -qE 'Loading\.\.\.|loading\.\.\.|isLoading' && \
      ! echo "$file_content" | grep -qE 'Skeleton|Spinner'; then
-    guidance="$guidance Use Skeleton/Spinner from registry."
+    guidance="$guidance Skeleton/Spinner from registry."
   fi
 
   if echo "$file_content" | grep -qiE 'no data|no results|nothing.*found|empty.*state' && \
      ! echo "$file_content" | grep -qE 'Empty'; then
-    guidance="$guidance Use Empty from registry."
+    guidance="$guidance Empty from registry."
   fi
 
   # Toast/notification nudge
   if echo "$file_content" | grep -qE 'toast\(|notification\(|alert\(' && \
      ! echo "$file_content" | grep -qE 'sonner|Sonner'; then
-    guidance="$guidance Use Sonner for toasts."
+    guidance="$guidance Sonner for toasts."
   fi
 
   # JSON display nudge
   if echo "$file_content" | grep -qE 'JSON\.stringify.*<pre|<pre.*JSON|formatJSON' && \
      ! echo "$file_content" | grep -qE 'JSONViewer|JsonViewer'; then
-    guidance="$guidance Use JSONViewer, not JSON.stringify+pre."
+    guidance="$guidance JSONViewer, no JSON.stringify+pre."
   fi
 
   # Code display nudge
   if echo "$file_content" | grep -qE '<pre><code|<pre.*className.*code|highlight\.js|prism' && \
      ! echo "$file_content" | grep -qE 'CodeBlock|CodeEditor|CodeTabs'; then
-    guidance="$guidance Use CodeBlock for code display."
+    guidance="$guidance CodeBlock for code display."
   fi
 
   # Confirm dialog nudge
   if echo "$file_content" | grep -qE 'window\.confirm\(|confirm\(' && \
      ! echo "$file_content" | grep -qE 'AlertDialog'; then
-    guidance="$guidance Use AlertDialog, not window.confirm()."
+    guidance="$guidance AlertDialog, no window.confirm()."
   fi
 
   # Copy button nudge
   if echo "$file_content" | grep -qE 'navigator\.clipboard|writeText\(|copyToClipboard' && \
      ! echo "$file_content" | grep -qE 'CopyButton'; then
-    guidance="$guidance Use CopyButton for clipboard."
+    guidance="$guidance CopyButton for clipboard."
   fi
 
   # File upload nudge
   if echo "$file_content" | grep -qE 'type="file"|<input.*file|FileReader|ondrop.*file' && \
      ! echo "$file_content" | grep -qE 'Dropzone'; then
-    guidance="$guidance Use Dropzone for uploads."
+    guidance="$guidance Dropzone for uploads."
   fi
 
   # Status indicator nudge
   if echo "$file_content" | grep -qiE 'status.*dot|status.*badge|health.*indicator|state.*icon' && \
      ! echo "$file_content" | grep -qE 'StatusBadge|StatusDot'; then
-    guidance="$guidance Use StatusBadge/StatusDot."
+    guidance="$guidance StatusBadge/StatusDot."
   fi
 
   # Stepper/wizard nudge
   if echo "$file_content" | grep -qiE 'step.*wizard|multi.?step|step.*form|currentStep|activeStep' && \
      ! echo "$file_content" | grep -qE 'Stepper'; then
-    guidance="$guidance Use Stepper for wizards."
+    guidance="$guidance Stepper for wizards."
   fi
 
   # UI Registry sync nudge — when editing a registry component, also update upstream
   if echo "$file_path" | grep -qE 'redpanda-ui/|components/redpanda-ui/'; then
     if [ -d "linked-repos/ui-registry" ]; then
       component_name=$(basename "$file_path" .tsx)
-      guidance="$guidance [REGISTRY SYNC] Update linked-repos/ui-registry/ too, PR upstream."
+      guidance="$guidance [REGISTRY] Update linked-repos/ui-registry/ too, PR upstream."
     fi
   fi
 fi
