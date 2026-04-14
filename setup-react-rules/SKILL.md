@@ -34,9 +34,20 @@ PostToolUse hooks on Edit/Write (auto-skips component library dirs):
 - `useSyncExternalStore` for browser API subscriptions (navigator.onLine, matchMedia, scroll)
 - Form-level `validate` for cross-field validation (react-hook-form v7.72+)
 
+### Functional Programming (Claude-enforced)
+- Pure render — no side effects in component body
+- Immutable state — spread/filter/map, never mutate
+- Derive don't sync — `useMemo` not `useState`+`useEffect`
+- `useReducer` for 3+ interrelated `useState`
+- Extract data transforms into named pure functions
+- Discriminated unions for variant prop types
+- Generic `<T>` for reusable typed components
+
+See [REFERENCE.md](REFERENCE.md) for patterns + examples.
+
 ## Steps
 
-1. Copy `scripts/react-rules-check.sh` + `scripts/tailwind-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`.
+1. Copy `scripts/react-rules-check.sh` + `scripts/fp-check.sh` + `scripts/tailwind-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`.
 2. Add to PostToolUse (Edit|Write) in `.claude/settings.json`.
 3. Optional: `codex-compat` for `.codex/hooks.json`.
 

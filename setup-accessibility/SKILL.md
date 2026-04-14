@@ -15,6 +15,41 @@ paths:
 
 Escape hatch: `// allow: a11y-skip [reason]`
 
+## No Nested Pressables
+
+Interactive components follow ONE pattern — never both:
+
+**Pattern A: Container is clickable** — no interactive children.
+```tsx
+<ListCard onClick={handleSelect}>
+  <Avatar src={user.avatar} />
+  <Text>{user.name}</Text>
+  <ChevronRightIcon /> {/* visual indicator only, not a button */}
+</ListCard>
+```
+
+**Pattern B: Children are interactive** — container is not clickable.
+```tsx
+<ListCard>
+  <Avatar src={user.avatar} />
+  <Text>{user.name}</Text>
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" size="icon"><MoreVerticalIcon /></Button>
+    </DropdownMenuTrigger>
+  </DropdownMenu>
+</ListCard>
+```
+
+**Never:**
+```tsx
+<ListCard onClick={handleCardClick}>
+  <Button onClick={handleEdit}>Edit</Button>  {/* nested pressable! */}
+</ListCard>
+```
+
+Why: ambiguous click targets, event bubbling bugs, screen readers can't convey interaction model, touch targets overlap on mobile.
+
 ## Visual Checklist
 
 - [ ] Focus rings visible on all interactive elements (min 2px, contrasting color)

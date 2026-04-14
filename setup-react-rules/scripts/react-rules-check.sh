@@ -282,8 +282,14 @@ fi
 
 # ── Check 25: Warn on biome-ignore ─────────────────────────────
 
+if echo "$added_lines" | grep -qE '//\s*biome-ignore\s+lint/suspicious/noExplicitAny|/\*\s*biome-ignore\s+lint/suspicious/noExplicitAny'; then
+  hook_block "No biome-ignore for noExplicitAny. Fix type properly — type guards, generics, schema validation. Escape: // allow: biome-ignore [reason]"
+fi
+
 if echo "$added_lines" | grep -qE '//\s*biome-ignore|/\*\s*biome-ignore'; then
-  hook_warn "biome-ignore detected. Proceed with caution."
+  if ! echo "$added_lines" | grep -qE 'biome-ignore\s+lint/suspicious/noExplicitAny'; then
+    hook_warn "biome-ignore detected. Proceed with caution."
+  fi
 fi
 
 # ── Check 26: Warn on tree-shaking killers ────────────────────────

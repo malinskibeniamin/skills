@@ -54,7 +54,7 @@ fi
 
 if echo "$added_lines" | grep -qE '\bfetch\s*\('; then
   if [ "$uses_connect" = true ]; then
-    hook_warn "Prefer ConnectRPC transport over raw fetch() in ConnectRPC files. Escape: // allow: direct-query [reason]"
+    hook_block "No raw fetch() in ConnectRPC files. Use ConnectRPC transport. Escape: // allow: direct-query [reason]"
   fi
 fi
 

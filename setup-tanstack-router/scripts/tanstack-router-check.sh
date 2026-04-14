@@ -48,8 +48,8 @@ fi
 
 # ── Check 5: Warn on window.location reads ────────────────────────────
 
-if echo "$added_lines" | grep -qE 'window\.location\.(search|pathname|hash)\b'; then
-  hook_warn "No window.location reads. Use useParams({from}) or useSearch({from}) for type-safe access. nuqs for URL query state."
+if echo "$added_lines" | grep -qE 'window\.location\.(search|pathname|hash|origin)\b'; then
+  hook_warn "No window.location reads. Use useParams({from}) or useSearch({from}) for type-safe access. For origin, use router basePath or env config."
 fi
 
 # ── Check 6: Ban strict: false in router hook calls ───────────────────

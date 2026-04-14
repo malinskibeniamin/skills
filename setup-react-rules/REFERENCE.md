@@ -167,6 +167,88 @@ const isOnline = useSyncExternalStore(
 
 Don't use for: React state, zustand (already uses internally), TanStack Query.
 
+## Functional Programming
+
+Components = pure render functions. Props in, JSX out. Side effects in hooks only.
+
+### Rules
+
+| # | Rule | Violation | Fix |
+|---|------|-----------|-----|
+| 1 | Pure render — no side effects in component body | `localStorage.setItem()` in render | Move to `useEffect` or custom hook |
+| 2 | Side effects in hooks only | Timer in render body | `useEffect`/`useCallback`/custom hook |
+| 3 | Immutable state updates | `arr.push(x)`, `delete obj[k]`, `state.x = y` | `[...arr, x]`, `{ ...obj }`, spread |
+| 4 | Derive, don't sync | `useState` + `useEffect` to mirror prop | `useMemo(() => compute(prop), [prop])` |
+| 5 | `useReducer` for 3+ interrelated `useState` | 3+ `useState` where updating one reads another | Single `useReducer` with pure reducer fn |
+| 6 | Extract data transforms | Inline `.filter().sort().map()` chains in JSX | Named pure function + `useMemo` |
+| 7 | Stable refs for memoized children | Inline callback to `React.memo` child | `useCallback` (only when child is memoized) |
+
+### Derive vs Sync — Key Pattern
+
+```tsx
+// BAD — extra render, race conditions
+const [active, setActive] = useState<Item[]>([])
+useEffect(() => { setActive(items.filter(i => i.active)) }, [items])
+
+// GOOD — computed inline, no extra state
+const active = useMemo(() => items.filter(i => i.active), [items])
+```
+
+### useReducer Consolidation
+
+When 3+ `useState` interact (updating one requires reading another):
+
+```tsx
+// Pure reducer — defined OUTSIDE component
+type State = { open: boolean; query: string; highlighted: number }
+type Action = { type: 'open' } | { type: 'close' } | { type: 'search'; value: string }
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'open': return { ...state, open: true, highlighted: 0 }
+    case 'close': return { ...state, open: false, query: '' }
+    case 'search': return { ...state, query: action.value, highlighted: 0 }
+  }
+}
+```
+
+## Type Safety Patterns
+
+### Discriminated Unions
+
+Enforce valid prop combinations at type level:
+
+```tsx
+type AlertProps =
+  | { variant: 'info'; icon?: never }
+  | { variant: 'warning'; icon: ReactNode }
+  | { variant: 'error'; icon: ReactNode; onRetry?: () => void }
+```
+
+### Generic Components
+
+Type-safe reusable components:
+
+```tsx
+interface SelectProps<T> {
+  value: T
+  onChange: (value: T) => void
+  options: { value: T; label: string }[]
+}
+
+function Select<T>({ value, onChange, options }: SelectProps<T>) { /* ... */ }
+```
+
+### ComponentProps Extension
+
+Extend native elements properly:
+
+```tsx
+export interface InputProps extends React.ComponentProps<'input'> {
+  error?: boolean
+}
+```
+
 ## Common Agent Excuses
 
 | Excuse | Counter |
@@ -177,3 +259,6 @@ Don't use for: React state, zustand (already uses internally), TanStack Query.
 | "Raw `<button>` is fine for this case" | Use `<Button>` — consistent styling, variant props, a11y baked in. |
 | "I'll add accessibility later" | Later never comes. Add aria-label and keyboard handlers now. |
 | "`eval()` is needed for dynamic code" | Use `JSON.parse()` for data, `new Function` also banned. |
+| "useState + useEffect is fine here" | If computed from props/state, use useMemo. No sync state. |
+| "Mutation is faster" | Immutable updates prevent bugs. Spread/filter/map. |
+| "Don't need useReducer yet" | 3+ interrelated useState = useReducer. Don't wait for bugs. |
