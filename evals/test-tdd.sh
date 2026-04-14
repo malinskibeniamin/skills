@@ -32,5 +32,11 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "setTimeout|waitForTimeout" "REFERENC
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Common Agent Excuses" "REFERENCE has rationalization table"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "detectAsyncLeaks" "REFERENCE has async leak detection"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "pool.*threads" "REFERENCE has pool: threads optimization"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "isolate.*false" "REFERENCE has isolate: false optimization"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Do NOT disable isolation for integration" "REFERENCE warns against integration isolate: false"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "isolate.*false.*Incompatible" "REFERENCE bans isolate: false with reason"
+
+# ── Coverage gap analysis ────────────────────────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "coverage" "SKILL.md references coverage in PLAN phase"
+run_content_eval "$SKILL_DIR/SKILL.md" "Coverage gaps closed" "SKILL.md has coverage verification in When Done"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Coverage Gap Analysis" "REFERENCE has coverage gap analysis section"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Uncovered Line" "REFERENCE explains uncovered line numbers"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Priority Order" "REFERENCE has coverage priority order"
