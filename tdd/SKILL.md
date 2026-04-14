@@ -25,9 +25,11 @@ paths:
 
 ## Workflow
 
-### 0. PLAN — Confirm what to test
+### 0. PLAN — Coverage gap analysis, then confirm what to test
 
-- Confirm behaviors with user (prioritize — can't test everything)
+- Run `vitest run --coverage.enabled --coverage.reporter=text` to get current coverage
+- Identify uncovered lines/branches/functions in changed files — these are your test targets
+- Confirm behaviors with user (prioritize gaps over already-covered code)
 - Identify deep module opportunities (small interface, deep impl)
 - Design interfaces for testability
 
@@ -78,8 +80,10 @@ RED → GREEN → REFACTOR per remaining behavior. One at a time.
 - [ ] All pass (`vitest run`)
 - [ ] No async leaks (`vitest run --detectAsyncLeaks`)
 - [ ] No setTimeout hacks — condition-based waiting
-- [ ] Prefer `getByRole` over `getByTestId`
+- [ ] Coverage gaps closed — re-run `vitest run --coverage.enabled --coverage.reporter=text` and verify changed files have adequate line + branch coverage
+- [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
+- [ ] Portal tests: `defaultOpen` for content tests, `waitFor` for close assertions
 - [ ] Tests verify behavior, not implementation
 - [ ] Consider `expect.soft()` for multi-assertion state tests
 
-See [REFERENCE.md](REFERENCE.md) for diagnostics, Vitest config, anti-patterns, condition-based waiting.
+See [REFERENCE.md](REFERENCE.md) for element selectors, portal testing, mock patterns, diagnostics, Vitest config.

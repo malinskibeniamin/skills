@@ -199,6 +199,47 @@ Monitor: vitest run --detectAsyncLeaks
 
 Surfaces open handles as detected, not buffered until exit.
 
+## Coverage Gap Analysis
+
+Run coverage to find what's untested, then write tests targeting those gaps.
+
+```bash
+# Text report — quick overview of uncovered lines
+vitest run --coverage.enabled --coverage.reporter=text
+
+# JSON report — parseable for automation
+vitest run --coverage.enabled --coverage.reporter=json
+
+# Related files only — faster, scoped to what changed
+vitest run --coverage.enabled --coverage.reporter=text --related src/features/auth/
+```
+
+### Reading Coverage Output
+
+```
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------|---------|----------|---------|---------|-------------------
+useAuth.ts      |   72.5  |    50.0  |   80.0  |   72.5  | 34-41,67-72
+AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
+```
+
+**Uncovered Line #s** = exact targets for new tests. Read those lines, understand what behavior they represent, write tests for that behavior.
+
+### Priority Order for Coverage Gaps
+
+1. **Uncovered branches** (if/else, switch, error paths) — highest bug risk
+2. **Uncovered functions** — entire untested behaviors
+3. **Uncovered lines in covered functions** — edge cases within tested code
+
+### Don't Chase 100%
+
+Coverage is a tool for finding gaps, not a goal. Accept lower coverage for:
+- Type stubs, barrel exports, re-exports
+- Framework glue (route config, provider wrappers)
+- Generated code (even if not auto-skipped)
+
+Target: **80% lines, 70% branches** for feature code. Focus on behavior-critical paths.
+
 ## Diagnostic Commands
 
 ```bash
@@ -230,22 +271,6 @@ export default defineConfig({
 ```
 
 Use for **both** unit and integration configs. Safe everywhere.
-
-### isolate: false (unit tests only)
-
-Pure-logic tests (`.test.ts`, node env) share single thread context instead of re-isolating per file. Saves per-file startup cost.
-
-```ts
-// vitest.config.mts (unit tests)
-export default defineConfig({
-  test: {
-    pool: 'threads',
-    isolate: false,  // safe: no DOM, no global side effects
-  },
-})
-```
-
-**Do NOT disable isolation for integration tests** — happy-dom/jsdom tests leak DOM state between files.
 
 ### Multi-Workspace Configuration
 
@@ -280,25 +305,144 @@ it.concurrent('fast independent test', async ({ expect }) => { /* ... */ })
 Safety requirements:
 - Tests must not share mutable state
 - Each test sets up own fixtures (or use `test.extend()` — fixtures isolate by default)
-- **Do NOT combine with `isolate: false`** — concurrent tests sharing single thread context will race on mutable state
 
 ### What NOT to change (and why)
 
 | Setting | Why skip |
 |---|---|
-| `isolate: false` for integration | DOM state leaks between test files |
+| `isolate: false` | Incompatible with per-file `vi.mock()` — passes locally, fails CI due to file execution order. Moving all mocks to global setup doesn't scale. |
 | `experimental.fsModuleCache` | Still experimental — stale cache issues in CI |
-| `isolate: false` + `it.concurrent` | Race conditions — concurrent tests need isolation |
 | Sharding | See [CI Pipeline REFERENCE](../setup-ci-pipeline/REFERENCE.md) — useful for suites >60s |
 
-### Benchmarks (real project, 23 unit + 12 integration files)
+### Benchmarks (`pool: 'threads'`, real project, 23 unit + 12 integration files)
 
 | Category | Metric | Before | After |
 |---|---|---|---|
-| Unit | Duration | 650ms | 350ms (46% faster) |
 | Unit | Import time | 3.0s | 2.2s (27% faster) |
 | Integration | Duration | 2.59s | 2.04s (21% faster) |
 | Integration | Import time | 7.9s | 5.5s (30% faster) |
+
+## Element Selectors — Priority Order
+
+1. **`getByRole` with `{ name }`** — always first. Buttons, links, textboxes, comboboxes, options.
+2. **`getByText`** — non-interactive text only (headings, descriptions, labels).
+3. **`getByTestId`** — when component has `testId` prop and role queries fail.
+4. **`document.querySelector('[data-slot="..."]')`** — last resort for elements without accessible roles.
+
+### Query Type Rules
+
+| Query | When |
+|-------|------|
+| `getBy` | Element MUST exist. Throws if not found. |
+| `queryBy` | ONLY for "not visible" assertions: `expect(queryByText('X')).not.toBeInTheDocument()` |
+| `findBy` | Async elements. Returns Promise. |
+| `getAllBy` | Multiple elements match and that's expected. |
+
+### Selector Gotchas
+
+- **Always include `{ name }` with `getByRole`** when multiple elements share same role
+- Password inputs have no `textbox` role — use `document.querySelector('input[data-slot="input"]')`
+- Number inputs use `spinbutton` role, not `textbox`
+- Create helper functions for repeated ambiguous queries at `describe` level
+
+```ts
+const getTrigger = () => screen.getByRole('button', { name: 'Select option' })
+```
+
+### Common Role Mappings
+
+| Element | Role |
+|---------|------|
+| `<button>` | `button` |
+| `<a href>` | `link` |
+| `<input type="text">` | `textbox` |
+| `<input type="number">` | `spinbutton` |
+| `<input type="password">` | (none — use data-slot) |
+| `<select>` / Combobox | `combobox` |
+| Dropdown option | `option` |
+
+## Portal Component Testing
+
+Portal components (Dialog, AlertDialog, DropdownMenu, Popover, Sheet, Combobox, MultiSelect) render outside normal DOM hierarchy.
+
+### Required Tests
+
+1. Trigger opens content
+2. Content not visible initially (`queryByText` before opening)
+3. Action callbacks fire with correct arguments
+4. Close callbacks fire (`onOpenChange(false)`)
+5. Close mechanisms: Escape key, click outside, cancel button
+6. Disabled state — trigger does nothing
+
+### Key Patterns
+
+**Use `defaultOpen` for content-only tests.** Skip trigger interaction when testing buttons/callbacks inside portal. Faster, avoids animation timing.
+
+**Use `waitFor` for ALL close assertions.** Portal content animates out async:
+
+```ts
+await waitFor(() => {
+  expect(screen.queryByText('Content')).not.toBeInTheDocument()
+})
+```
+
+**Click-outside — render sibling button:**
+
+```ts
+render(
+  <div>
+    <Combobox {...props} />
+    <button type="button">Outside</button>
+  </div>
+)
+await user.click(screen.getByText('Outside'))
+```
+
+**Escape key:** `await user.keyboard('{Escape}')` after opening portal.
+
+**Portal content queryable via `screen`** — no special container needed. Renders at document body level.
+
+## Test Mock Patterns
+
+Common browser API mocks for jsdom. Configure in `vitest.setup.ts`, not per-test.
+
+| API | Components | Mock |
+|-----|-----------|------|
+| `navigator.clipboard` | CopyButton | `writeText`/`readText` as `vi.fn()` |
+| `ResizeObserver` | Tags, responsive | No-op observe/unobserve/disconnect |
+| `Element.scrollIntoView` | Command (cmdk) | `vi.fn()` stub |
+| `window.matchMedia` | Responsive hooks | Returns `matches: false` default |
+
+### Rules
+
+- Don't re-mock in test files — global setup applies
+- Don't test actual browser behavior — mocks are stubs. Test component callbacks/state.
+- ResizeObserver callbacks never fire in tests — test behavior via props/interaction
+- Add new mocks to `vitest.setup.ts`, not individual test files
+
+### Missing Mock Error Guide
+
+| Error | Missing Mock |
+|-------|------------|
+| `TypeError: navigator.clipboard is not defined` | Clipboard API |
+| `ReferenceError: ResizeObserver is not defined` | ResizeObserver |
+| `TypeError: element.scrollIntoView is not a function` | scrollIntoView |
+| `TypeError: window.matchMedia is not a function` | matchMedia |
+
+### matchMedia Per-Test Override
+
+```ts
+vi.mocked(window.matchMedia).mockImplementation((query) => ({
+  matches: query === '(max-width: 768px)',
+  media: query,
+  onchange: null,
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn(),
+}))
+```
 
 ## Framework Detection
 
