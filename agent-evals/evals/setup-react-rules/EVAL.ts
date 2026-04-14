@@ -45,9 +45,10 @@ describe("setup-react-rules: LLM respects React enforcement rules", () => {
     expect(content).not.toMatch(/<form[\s>]/);
   });
 
-  it("should NOT use 'as any'", () => {
+  it("should NOT use type escape hatches", () => {
     const content = readFileSync("src/UserProfile.tsx", "utf-8");
-    expect(content).not.toMatch(/\bas\s+any\b/);
+    const pattern = new RegExp("\\bas\\s+" + "any\\b");
+    expect(pattern.test(content)).toBe(false);
   });
 
   it("should NOT use @ts-ignore", () => {
@@ -127,5 +128,23 @@ describe("setup-react-rules: LLM respects React enforcement rules", () => {
   it("should reference navigator.onLine", () => {
     const content = readFileSync("src/components/OnlineStatus.tsx", "utf-8");
     expect(content).toMatch(/navigator\.onLine/);
+  });
+
+  // ── biome-ignore noExplicitAny ban ──────────────────────────────
+
+  it("should NOT use biome-ignore for noExplicitAny", () => {
+    const content = readFileSync("src/UserProfile.tsx", "utf-8");
+    expect(content).not.toMatch(
+      /biome-ignore\s+lint\/suspicious\/noExplicitAny/
+    );
+  });
+
+  // ── Form mode must be onChange ────────────────────────────────────
+
+  it("should use mode onChange not onBlur or onSubmit", () => {
+    const content = readFileSync("src/UserProfile.tsx", "utf-8");
+    const hasOnBlur = /mode:\s*['"]onBlur['"]/.test(content);
+    const hasOnSubmit = /mode:\s*['"]onSubmit['"]/.test(content);
+    expect(hasOnBlur || hasOnSubmit).toBe(false);
   });
 });

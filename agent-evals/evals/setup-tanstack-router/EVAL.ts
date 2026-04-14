@@ -20,4 +20,18 @@ describe("setup-tanstack-router: LLM creates route correctly", () => {
     );
     expect(directTsr).toHaveLength(0);
   });
+
+  it("should NOT use window.location reads", () => {
+    const content = readFileSync("src/routes/settings.tsx", "utf-8");
+    expect(content).not.toMatch(
+      /window\.location\.(search|pathname|hash|origin)\b/
+    );
+  });
+
+  it("should NOT use window.location.href for navigation", () => {
+    const content = readFileSync("src/routes/settings.tsx", "utf-8");
+    expect(content).not.toMatch(
+      /window\.location\.(href|assign|replace)\s*[=(]/
+    );
+  });
 });

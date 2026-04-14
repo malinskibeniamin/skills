@@ -27,6 +27,7 @@ This project enforces strict React rules. Read each one carefully.
 
 ## Forms
 - Use `react-hook-form` for form management.
+- **Form validation mode must be `onChange`** for immediate feedback. Never use `onBlur` or `onSubmit`.
 - For cross-field validation (e.g., confirm email must match email), use **form-level `validate`** in `useForm()`:
   ```tsx
   const form = useForm({

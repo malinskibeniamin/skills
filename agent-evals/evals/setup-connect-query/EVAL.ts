@@ -43,4 +43,21 @@ describe("setup-connect-query: LLM respects ConnectRPC patterns", () => {
     const content = readFileSync("src/TopicList.tsx", "utf-8");
     expect(content).not.toMatch(/from\s+['"]axios['"]/);
   });
+
+  it("should NOT use raw fetch() in ConnectRPC file", () => {
+    const content = readFileSync("src/TopicList.tsx", "utf-8");
+    const hasFetch = /\bfetch\s*\(/.test(content);
+    const hasEscape = /\/\/\s*allow:\s*direct-query/.test(content);
+    expect(hasFetch && !hasEscape).toBe(false);
+  });
+
+  it("should use ConnectError.from() not throw new Error() for error handling", () => {
+    const content = readFileSync("src/TopicList.tsx", "utf-8");
+    const hasThrowNewError = /throw\s+new\s+Error\(/.test(content);
+    const hasEscape = /\/\/\s*allow:\s*connect-error/.test(content);
+    // If it throws errors in a ConnectRPC context, should use ConnectError
+    if (hasThrowNewError && !hasEscape) {
+      expect(content).toMatch(/ConnectError/);
+    }
+  });
 });
