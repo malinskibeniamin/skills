@@ -76,6 +76,34 @@ if echo "$prompt" | grep -qiE 'fix.*bug|broken|not working|blank.*screen|error.*
   directives="$directives\n[SELF-VERIFY] Verify fix yourself. Never ask user to check."
 fi
 
+# ── Implementation work → full lifecycle mandate ─────────────────
+# Detect: build/implement/add/create feature work (not just tests/reviews)
+# Inject the full lifecycle sequence so Claude auto-follows every step.
+
+if echo "$prompt" | grep -qiE 'build.*feature|implement|add.*support|create.*endpoint|add.*page|add.*route|add.*hook|add.*component|new.*feature|wire.*up|integrate|set.*up'; then
+  directives="$directives\n[LIFECYCLE] MANDATORY sequence: (1) Plan approach (2) /tdd for every new file — failing test first (3) Implement minimal code to pass (4) /simplify changed code (5) Self-verify with browser/tests (6) /commit-push → PR → Monitor CI → fix failures → request review. Hooks enforce this — do NOT skip steps."
+fi
+
+# ── Risk tier (informs auto mode confidence) ────────────────────
+# low: tests, components, refactoring — fully guarded by hooks
+# medium: bug fixes, debugging — may need exploratory actions
+# high: PRs, deploys, infra — touches shared/external systems
+
+risk=""
+
+if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|crash|triage|investigate|regression'; then
+  risk="medium"
+fi
+
+if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push|deploy|migration|drop|delete.*branch|force'; then
+  risk="high"
+fi
+
+# Only emit risk tier for medium/high — low is default, no need to announce
+if [ -n "$risk" ]; then
+  directives="$directives\n[RISK:$risk]"
+fi
+
 # ── Output ───────────────────────────────────────────────────────
 
 if [ -n "$directives" ]; then
