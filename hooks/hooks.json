@@ -112,6 +112,38 @@
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/orchestration-guidance.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/form-mode-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/file-size-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/hook-location-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/mutation-side-effect-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/connect-error-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/tdd-prompt-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/error-boundary-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/field-mask-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
@@ -128,6 +160,10 @@
     "Stop": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/architecture-review-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/biome-autofix.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"

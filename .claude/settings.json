@@ -40,6 +40,15 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/violation-nudge.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -112,6 +121,38 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/orchestration-guidance.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/form-mode-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-size-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/hook-location-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/mutation-side-effect-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/connect-error-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/tdd-prompt-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/error-boundary-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/field-mask-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
@@ -149,6 +190,10 @@
     "Stop": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/architecture-review-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/biome-autofix.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
