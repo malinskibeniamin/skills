@@ -95,16 +95,16 @@ All commits: `type(scope): description`
 - FieldMask: compute `paths` from dirty fields (`Object.keys(dirtyFields)`) instead of hardcoding
 - New route/component/hook files must have corresponding test files — run `/tdd`
 
-## Development Lifecycle
+## Development Lifecycle (MANDATORY — enforced by hooks)
 
-Follow this order every task:
+You MUST follow this order for every implementation task. Hooks will block you if you skip steps.
 
-1. **Understand** — explore context, ask clarifying questions one at time, propose approaches
+1. **Understand** — explore context, ask one clarifying question at a time, propose approaches
 2. **Plan** — write exact file paths, exact code, expected output
-3. **Implement (TDD)** — write failing test FIRST, then minimal code to pass, then refactor
-4. **Verify** — confirm works yourself using agent-browser or test runner
-5. **Review** — check spec compliance, then code quality. Create PR with conventional commit format
-6. **Complete lifecycle** — push changes, create PR, monitor CI (`Monitor` tool on `gh pr checks <number> --watch`), fix failures, request review. Do not stop until lifecycle complete.
+3. **Implement (TDD)** — run `/tdd` for every new source file. Write failing test FIRST, then minimal code to pass, then refactor. Hook blocks new files without tests.
+4. **Simplify** — run `/simplify` on changed code before committing. Review for reuse, quality, efficiency.
+5. **Verify** — confirm works yourself using agent-browser or test runner. Never delegate verification to user.
+6. **Ship** — run `/commit-push`, create PR, use `Monitor` tool on `gh pr checks <number> --watch` to stream CI, fix failures, request review. Do not stop until lifecycle complete. All gates enforced by stop hooks.
 
 ### Streaming observation with Monitor
 
