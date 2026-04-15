@@ -65,6 +65,18 @@ Failing test FIRST. `userEvent.setup()` + `getByRole`. `waitFor()` for async. .t
 
 Route data fetching→errorComponent. React.lazy()→`<Suspense fallback>`. Query hooks→loading/error/empty states. Async handlers→error handling.
 
+### Unhappy Paths (enforced by hook)
+
+- **Catch blocks**: set error state, re-throw, or call error handler — never swallow silently
+- **Error + form**: early return with error UI when deserialization/parse fails — don't render form below broken Alert
+- **Validation depth**: check format (URL regex, enum values, UPPER_SNAKE pattern), not just presence/truthiness
+- **Exhaustive switch**: `default: never` or `satisfies never` — new union variants must fail loudly
+- **Async validation**: onChange + async validator needs AbortController or debounce — no stale race conditions
+- **All errors visible**: `errors.map()` not `errors[0]` — user sees every validation failure
+- **Oneof/union fields**: clear previous branch values on switch — ghost data causes silent bugs
+- **Form inputs**: URL fields use `type="url"`, secret-ref fields use `type="text"` (user verifies format)
+- **aria-invalid** on error inputs, not just data-invalid — screen readers need ARIA
+
 ## Auto-Generated (skip)
 
 *.gen.ts/tsx, *_pb.ts/js, *_connectquery.ts, files with @generated/DO NOT EDIT in first 5 lines.

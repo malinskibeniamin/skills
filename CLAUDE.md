@@ -37,7 +37,7 @@ All commits: `type(scope): description`
 - `aria-label` on icon-only buttons
 - Every `<Button>` needs purpose: `onClick`, `asChild`, `type="submit"`, or `disabled`
 - `<Link>` for navigation (accessible, supports basePath)
-- Import directly from source files (tree-shaking friendly)
+- Import direct from source files (tree-shaking friendly)
 - `{ passive: true }` on scroll/touch/wheel listeners
 - `React.lazy()` or dynamic `import()` for heavy deps (chart.js, d3, three.js, pdf-lib)
 - `structuredClone()` for deep cloning
@@ -164,10 +164,49 @@ Pattern: start process in background with `Bash(run_in_background)`, then `Monit
 
 ## Error Handling & Resilience
 
+### Route & Component Boundaries
+
 - Route files with `loader` MUST have `errorComponent` (enforced by hook)
 - Wrap `React.lazy()` in `<Suspense fallback={...}>`
 - Handle loading, error, AND empty states for query hooks
 - Add error handling to async event handlers
+
+### Catch Blocks — Never Swallow Errors
+
+- Every `catch` block must either: set error state, re-throw, or call error handler
+- No silent fallbacks: `catch { onChange(e.target.value) }` hides broken state from user
+- No catch-and-log-only in UI code — user must see feedback (toast, inline error, error boundary)
+- Deserialization/parse errors: early return with error UI, don't render form below broken state
+- Pattern: `if (parseError) return <ErrorState error={parseError} />`  — not `<Alert>` then `<form>` below
+
+### Validation Depth
+
+- Validate **format**, not just **presence** — URL fields need URL regex, enum fields need allowed-values check
+- UPPER_SNAKE_CASE fields: validate pattern, don't just check truthy
+- New variants/types in discriminated unions: must be explicitly handled or fail loudly — never silently pass through
+- Exhaustive switch: use `default: never` or `satisfies never` to catch unhandled cases at compile time
+- Validation error types must match resolver contract — inconsistent shapes (`'validate'` vs `'validation'`) cause silent failures
+
+### Async Error Patterns
+
+- Async validation in `onChange` mode: use `AbortController` to cancel stale requests on rapid edits
+- `mutate()`/`mutateAsync()` must include `onError` callback (enforced by hook)
+- `Promise.all` for independent async ops, `Promise.allSettled` when partial failure acceptable — never fire-and-forget
+
+### Form Error UX
+
+- Show **all** validation errors, not just first — `errors.map()` not `errors[0]`
+- Inputs with errors need `aria-invalid` + `aria-describedby` pointing to error message (enforced by hook)
+- `data-invalid` not substitute for `aria-invalid` — screen readers need ARIA
+- Disabled submit button must have `<Tooltip>` explaining why (enforced by hook)
+- URL inputs: use `type="url"` for browser-level validation hints
+- Secret reference fields: use `type="text"` not `type="password"` when user needs to verify format while typing
+
+### State Consistency
+
+- Oneof/discriminated union form fields: clear previous branch values when switching — ghost data causes silent submission bugs
+- Auth/config state separate from form state: keep single source of truth or sync explicitly — state drift = data loss
+- FieldMask `paths`: compute from `Object.keys(dirtyFields)`, never hardcode — brittle on proto field renames (enforced by hook)
 
 ## Auto Mode (team setup)
 
@@ -175,7 +214,7 @@ Pattern: start process in background with `Bash(run_in_background)`, then `Monit
 - `bunx skills:*` allow rule may get dropped by classifier — test when adopting auto mode
 - Admin: configure `autoMode.environment` in managed settings to whitelist trusted repos/services
 - Run `claude auto-mode defaults` to see full classifier rule schema
-- Plan → auto workflow: plan mode (step 2) → approve → auto mode (steps 3-6) is natural fit
+- Plan → auto workflow: plan mode (step 2) → approve → auto mode (steps 3-6) natural fit
 
 ## Auto-Generated Files (skip these)
 

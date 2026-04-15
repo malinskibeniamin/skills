@@ -81,6 +81,16 @@ if echo "$added_lines" | grep -qE 'aria-invalid'; then
   fi
 fi
 
+# ── Check: data-invalid without aria-invalid ─────────────────────
+# data-invalid is a styling hook, not an ARIA attribute.
+# Screen readers need aria-invalid to announce error state.
+
+if echo "$added_lines" | grep -qE 'data-invalid'; then
+  if ! echo "$file_content" | grep -qE 'aria-invalid'; then
+    hook_warn "data-invalid used without aria-invalid. data-invalid is CSS-only — add aria-invalid for screen reader support. WCAG 3.3.1." "a11y-data-invalid"
+  fi
+fi
+
 # ── Check: nested interactive elements ───────────────────────────
 # Button inside TooltipTrigger, Link inside Button, etc.
 

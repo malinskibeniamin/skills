@@ -223,7 +223,7 @@ useAuth.ts      |   72.5  |    50.0  |   80.0  |   72.5  | 34-41,67-72
 AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
 ```
 
-**Uncovered Line #s** = exact targets for new tests. Read lines, understand behavior, write tests for it.
+**Uncovered Line #s** = exact targets for new tests. Read lines, understand behavior, write tests.
 
 ### Priority Order for Coverage Gaps
 
@@ -287,7 +287,7 @@ export default defineConfig({
 })
 ```
 
-Use for **both** unit and integration configs. Safe everywhere.
+Use for unit and integration configs. Safe everywhere.
 
 ### Multi-Workspace Configuration
 
@@ -466,6 +466,140 @@ vi.mocked(window.matchMedia).mockImplementation((query) => ({
 | Runner | Detect | Related tests |
 |--------|--------|---------------|
 | Vitest | `node_modules/.bin/vitest` | `vitest run --related <files>` |
+
+## Unhappy Path Testing Checklist
+
+Every form, validator, and async operation needs unhappy path tests. LLMs default to happy path — this checklist counteracts that bias.
+
+### Validation Exhaustiveness
+
+Feed **every** constraint type through your validation/humanization layer. Assert none leak raw internal messages.
+
+```ts
+test('humanizes all proto constraint types', () => {
+  const constraints = [
+    { type: 'REQUIRED', raw: 'field is required' },
+    { type: 'MIN_LENGTH', raw: 'value length must be at least 3' },
+    { type: 'MAX_LENGTH', raw: 'value length must be at most 255' },
+    { type: 'PATTERN', raw: 'value must match pattern ^[A-Z_]+$' },
+    { type: 'GT', raw: 'value must be greater than 0' },
+    { type: 'LT', raw: 'value must be less than 100' },
+    { type: 'MAX_ITEMS', raw: 'repeated field must have at most 10 items' },
+  ]
+
+  for (const { type, raw } of constraints) {
+    const result = humanizeValidationError(raw)
+    expect(result, `unhandled constraint: ${type}`).not.toBe(raw)
+  }
+})
+```
+
+### Catch Block Behavior
+
+Test that errors surface to user, never swallowed:
+
+```ts
+test('shows error toast on JSON parse failure', async () => {
+  const user = userEvent.setup()
+  render(<JsonEditor onChange={vi.fn()} />)
+
+  await user.clear(screen.getByRole('textbox'))
+  await fireEvent.change(screen.getByRole('textbox'), {
+    target: { value: '{invalid json' },
+  })
+
+  // Error must be visible — not silently passed as raw string
+  await waitFor(() => {
+    expect(screen.getByText(/invalid json/i)).toBeVisible()
+  })
+})
+```
+
+### Error Guard / Early Return
+
+When deserialization fails, form must NOT render:
+
+```ts
+test('renders error state instead of form on deserialize failure', () => {
+  render(<EditForm data={corruptedProtoBytes} />)
+
+  expect(screen.getByRole('alert')).toBeVisible()
+  expect(screen.queryByRole('form')).not.toBeInTheDocument()
+})
+```
+
+### Oneof / Discriminated Union Switching
+
+Previous branch values must be cleared:
+
+```ts
+test('clears OAuth fields when switching to SAML', async () => {
+  const user = userEvent.setup()
+  render(<AuthConfigForm />)
+
+  // Fill OAuth fields
+  await fillOAuthFields(user)
+
+  // Switch to SAML
+  await user.click(screen.getByRole('combobox', { name: /auth type/i }))
+  await user.click(screen.getByRole('option', { name: /saml/i }))
+
+  // OAuth fields must be cleared from form state
+  const formValues = getFormValues()
+  expect(formValues.oauth).toBeUndefined()
+})
+```
+
+### Async Validation Race Condition
+
+Rapid edits must not show stale validation results:
+
+```ts
+test('cancels stale async validation on rapid input', async () => {
+  const user = userEvent.setup()
+  const validateFn = vi.fn()
+    .mockResolvedValueOnce({ valid: false, error: 'stale' }) // slow first
+    .mockResolvedValueOnce({ valid: true })                   // fast second
+
+  render(<ValidatedInput validate={validateFn} />)
+
+  // Rapid edits — second should win
+  await fireEvent.change(input, { target: { value: 'a' } })
+  await fireEvent.change(input, { target: { value: 'ab' } })
+
+  await waitFor(() => {
+    expect(screen.queryByText('stale')).not.toBeInTheDocument()
+  })
+})
+```
+
+### All Errors Visible
+
+Toast/alert must show all errors, not just first:
+
+```ts
+test('displays all validation errors not just first', async () => {
+  const user = userEvent.setup()
+  render(<ConfigForm />)
+
+  await user.click(screen.getByRole('button', { name: /save/i }))
+
+  await waitFor(() => {
+    expect(screen.getByText(/name is required/i)).toBeVisible()
+    expect(screen.getByText(/url must be valid/i)).toBeVisible()
+    // Not just the first error
+  })
+})
+```
+
+### Error Path Priority
+
+When writing tests for a feature, cover these paths in order:
+1. **Invalid input** — empty, wrong format, too long/short, special characters
+2. **Network failure** — fetch rejects, timeout, 4xx/5xx responses
+3. **Parse failure** — malformed JSON, corrupt proto, missing required fields
+4. **State transition errors** — switching types clears old data, concurrent edits
+5. **Partial failure** — batch operation where some items fail (Promise.allSettled)
 
 ## Common Agent Excuses
 
