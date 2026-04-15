@@ -12,12 +12,14 @@ You: "Build feature X" or "Fix these 5 issues overnight"
   ├── Interactive ──→ Claude Code + /development-lifecycle
   │                    └── understand → plan → TDD → verify → review → compound
   │
-  └── AFK batch ───→ Sandcastle (.sandcastle/main.ts)
-                      └── picks issues → spawns N agents in Docker
-                          └── each agent runs development-lifecycle
-                              └── hooks enforce checks per edit
-                                  └── code-reviewer agent reviews
-                                      └── PRs ready to merge
+  ├── AFK batch ───→ Sandcastle (.sandcastle/main.ts)
+  │                    └── picks issues → spawns N agents in Docker
+  │                        └── each agent runs development-lifecycle
+  │
+  └── Automated ───→ Routines (claude.ai/code/routines)
+                      └── schedule, GitHub webhook, or API trigger
+                          └── cloud session with hooks + CLAUDE.md active
+                              └── PR review, triage, health checks, docs drift
 ```
 
 ### Development Lifecycle
@@ -59,6 +61,7 @@ graph TD
 | **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
 | **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
 | **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
+| **Routines** | Automate | Cloud-hosted sessions on schedule/webhook/API | Unattended, 24/7 |
 
 ## Why This Exists
 
@@ -295,6 +298,7 @@ These are installed by `/frontend-starter-kit` and run automatically. You never 
 | `setup-agent-config` | Token-efficient env vars, test flag optimization, output truncation |
 | `setup-registry-workflow` | Reminds to rebuild registry.json when UI components change |
 | `setup-sandcastle` | AFK agent delegation — parallel agents in Docker sandboxes |
+| `setup-routines` | Cloud-hosted automation — PR review, health checks, triage, docs drift |
 
 ### Agents
 
@@ -499,6 +503,7 @@ graph TD
     FSK["frontend-starter-kit"]
     Setup["14 Setup Skills\ntoolchain, biome, quality-gate,\nreact-compiler, accessibility, and so on"]
     SC[setup-sandcastle]
+    RT[setup-routines]
 
     subgraph Workflow["Workflow Skills"]
         DL["development-lifecycle"]
@@ -525,9 +530,13 @@ graph TD
     SC -- "N parallel agents" --> DL
     SC --> CR
 
+    RT -- "cloud sessions" --> RPF
+    RT -- "cloud sessions" --> CR
+
     style DL fill:#f96,stroke:#333,color:#000
     style FSK fill:#69f,stroke:#333,color:#fff
     style SC fill:#9c6,stroke:#333,color:#000
+    style RT fill:#c9f,stroke:#333,color:#000
 ```
 
 - **frontend-starter-kit** — Complete frontend stack in one command: all setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing, UX copy) + workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` is fully covered by Biome's `noConsole`.
@@ -688,6 +697,20 @@ Reduce token usage and context waste.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
+  ```
+
+## Cloud Automation (Optional)
+
+- **setup-routines** — Configure [Claude Code routines](https://claude.ai/code/routines) for unattended automation. Ships 5 prompt templates: PR review (GitHub trigger), PR feedback resolution (GitHub trigger), issue triage (GitHub trigger), weekly codebase health (schedule), and docs drift detection (schedule). Routines run as full Claude Code cloud sessions — all hooks, CLAUDE.md rules, and agents enforce automatically. Stack-agnostic templates with built-in noise controls (silent approval, delta-based reporting, skip-what-hooks-catch).
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-routines --agent claude-code -y
+  ```
+
+- **setup-sandcastle** — AFK agent delegation via [Sandcastle](https://github.com/mattpocock/sandcastle). N parallel agents in Docker sandboxes, each following development-lifecycle with hooks enforced. For batch work on multiple issues simultaneously.
+
+  ```
+  bunx skills@latest add malinskibeniamin/skills/setup-sandcastle --agent claude-code -y
   ```
 
 ## Community Skills (Optional)
