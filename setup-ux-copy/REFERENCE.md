@@ -11,11 +11,11 @@
 const message = "Operation completed successfully!"
 ```
 
-Hook checks for `// allow: ux-copy` anywhere in file. Reason required for code review. Legacy format `// allow-ux-copy:` also works.
+Hook checks `// allow: ux-copy` anywhere in file. Reason required for code review. Legacy format `// allow-ux-copy:` also works.
 
 ## Capitalization
 
-Sentence-style caps for all UI text: titles, headings, buttons, menu items, fields, tooltips. Capitalize first word only.
+Sentence-style caps all UI text: titles, headings, buttons, menu items, fields, tooltips. Capitalize first word only.
 
 | Good | Bad |
 |------|-----|
@@ -26,7 +26,7 @@ Sentence-style caps for all UI text: titles, headings, buttons, menu items, fiel
 Exceptions:
 - Redpanda product names: Admin API, Redpanda Console, Schema Registry, HTTP Proxy, Dedicated Cloud, BYOC
 - Acronyms: ID, TLS, mTLS, SASL, OIDC, VPC, CIDR
-- Side pane navigation items use heading-style caps
+- Side pane nav items use heading-style caps
 
 ## Toast Messages
 
@@ -65,13 +65,13 @@ State problem clearly. Provide solution. No blame.
 
 ## Empty States
 
-Explain why page empty and what user can do next. Include button or link to next step when appropriate.
+Explain why page empty, what user can do next. Include button or link to next step when appropriate.
 
 Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress").
 
 ## Tooltips
 
-- Brief — lengthy content not a tip
+- Brief — lengthy content not tip
 - Period for full sentences, no period for short phrases
 - No interactive elements (links, buttons)
 - No redundant text ("Click to..." on button)
@@ -81,7 +81,7 @@ Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress"
 - Always numerals, including 0-9 ("3 topics" not "three topics")
 - Thousands: K, millions: M, billions: B, no space (33K)
 - Measurements: abbreviations with space (10 MB, 75 MBps)
-- Time: 12-hour clock, AM/PM in caps (2:30 PM)
+- Time: 12-hour clock, AM/PM caps (2:30 PM)
 
 ## Links
 
@@ -112,7 +112,7 @@ Avoid "my" and "your" in page names, menu names, titles. OK in instructional tex
 
 ## Terms to Use Sparingly
 
-Use only to acknowledge errors or interactions that are particularly inconvenient:
+Use only to acknowledge errors or interactions particularly inconvenient:
 - please
 - sorry
 - thank you
@@ -167,15 +167,15 @@ Placeholder values in UI: descriptive lowercase-with-dashes in angle brackets:
 
 ## Em Dashes
 
-Don't use em dashes. Use parentheses, commas, or break into separate sentences.
+Don't use em dashes. Use parentheses, commas, or separate sentences.
 
 ## Common Agent Excuses
 
 | Excuse | Counter |
 |---|---|
 | "The exclamation adds energy" | Adds noise. Product UI should be calm and informative. |
-| "'successfully' confirms the action" | Toast itself confirms it. "Topic created" sufficient. |
+| "'successfully' confirms the action" | Toast itself confirms. "Topic created" sufficient. |
 | "'click here' is clear" | Meaningless without context. Describe destination. |
 | "'Oops' is friendly" | Patronizing. State problem and solution directly. |
-| "Title Case looks professional" | Inconsistent and harder to scan. Sentence case is standard. |
+| "Title Case looks professional" | Inconsistent, harder to scan. Sentence case standard. |
 | "'My Settings' is user-centric" | Ambiguous in multi-user contexts. Just "Settings". |
