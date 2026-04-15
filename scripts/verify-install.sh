@@ -116,37 +116,44 @@ fi
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Hook Scripts ---"
 
-EXPECTED_HOOKS=(
-  "react-rules-check.sh"
-  "tailwind-check.sh"
-  "accessibility-check.sh"
-  "zustand-check.sh"
-  "tanstack-router-check.sh"
-  "connect-query-check.sh"
-  "react-compiler-check.sh"
-  "env-validation-check.sh"
-  "bundle-guard.sh"
-  "test-perf-check.sh"
-  "ux-copy-check.sh"
-  "orchestration-guidance.sh"
-  "enforce-toolchain.sh"
-  "llm-test-flags.sh"
-  "conventional-commits-check.sh"
-  "llm-truncate.sh"
-  "biome-autofix.sh"
-  "typecheck-stop.sh"
-  "test-perf-stop.sh"
-  "react-doctor-stop.sh"
-  "registry-check.sh"
-  "orchestration-stop.sh"
-  "lifecycle-stop.sh"
-  "violation-summary-stop.sh"
-  "session-env.sh"
-  "llm-env.sh"
-  "user-prompt-context.sh"
-  "intent-detect.sh"
-  "post-compact-context.sh"
-)
+# Auto-discover expected hooks from hooks.json instead of hardcoding
+# This prevents the list from going stale when hooks are added/removed
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  _hooks_json="${PLUGIN_ROOT}hooks/hooks.json"
+else
+  _hooks_json=".claude/hooks.json"
+  [ -f "$_hooks_json" ] || _hooks_json="hooks/hooks.json"
+fi
+
+EXPECTED_HOOKS=()
+if [ -f "$_hooks_json" ] && command -v jq &>/dev/null; then
+  while IFS= read -r hook; do
+    EXPECTED_HOOKS+=("$hook")
+  done < <(jq -r '.. | .command? // empty' "$_hooks_json" | grep -oE '[^/]+\.sh' | sort -u)
+fi
+
+# Fallback if hooks.json not found or jq missing
+if [ ${#EXPECTED_HOOKS[@]} -eq 0 ]; then
+  EXPECTED_HOOKS=(
+    "react-rules-check.sh"
+    "tailwind-check.sh"
+    "accessibility-check.sh"
+    "zustand-check.sh"
+    "tanstack-router-check.sh"
+    "connect-query-check.sh"
+    "react-compiler-check.sh"
+    "env-validation-check.sh"
+    "bundle-guard.sh"
+    "test-perf-check.sh"
+    "ux-copy-check.sh"
+    "enforce-toolchain.sh"
+    "biome-autofix.sh"
+    "typecheck-stop.sh"
+    "lifecycle-stop.sh"
+    "session-env.sh"
+    "intent-detect.sh"
+  )
+fi
 
 # Determine where to look for hook scripts
 if [ "$INSTALL_MODE" = "plugin" ]; then

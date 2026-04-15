@@ -2,7 +2,7 @@
 
 **Tell Claude what to build. Get a PR that's ready to merge.**
 
-30 hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
+Hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
 
 ## How It All Connects
 
@@ -15,7 +15,7 @@ You: "Build feature X" or "Fix these 5 issues overnight"
   └── AFK batch ───→ Sandcastle (.sandcastle/main.ts)
                       └── picks issues → spawns N agents in Docker
                           └── each agent runs development-lifecycle
-                              └── hooks enforce 69+ checks per edit
+                              └── hooks enforce checks per edit
                                   └── code-reviewer agent reviews
                                       └── PRs ready to merge
 ```
@@ -56,7 +56,7 @@ graph TD
 | Layer | What | How | Reliability |
 |---|---|---|---|
 | **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
-| **Hooks** | Enforce quality | 30 hooks, 69+ checks, every edit | 100% automatic |
+| **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
 | **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
 | **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
 
@@ -70,7 +70,7 @@ graph TD
 | You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
 | You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
 
-**How it works**: 30 hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
+**How it works**: Hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
 
 **vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
 
@@ -88,7 +88,7 @@ Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 /reload-plugins
 ```
 
-Three commands. All 31 skills, 30 hooks, and 2 agents activate immediately. Done.
+Three commands. All skills, hooks, and agents activate immediately. Done.
 
 **Verify:**
 
@@ -267,7 +267,7 @@ It should check that components use --color-* CSS variables instead of raw hex v
 
 | Skill | What it bundles |
 |---|---|
-| **`/frontend-starter-kit`** | All 17 setup skills + workflow skills. Full bootstrap for a new project. |
+| **`/frontend-starter-kit`** | All setup skills + workflow skills. Full bootstrap for a new project. |
 | **`/work-automation-kit`** | Planning skills — PRD creation, issue breakdown, project management. |
 | **`/redpanda-frontend-kit`** | frontend-starter-kit + Redpanda-specific registry workflow. |
 | **`/codex-compat`** | Generates `.codex/hooks.json` and `AGENTS.md` for OpenAI Codex compatibility. |
@@ -319,7 +319,7 @@ Before writing any code, produce a plan with what you'll do, files you'll change
 edge cases, and how you'll verify. Wait for my approval before starting.
 ```
 
-**What happens automatically:** 30 hooks enforce patterns on every edit. Intent detection injects workflow guidance. Stop hooks run type checking, linting, and related tests before Claude finishes. You don't need to ask for any of this.
+**What happens automatically:** Hooks enforce patterns on every edit. Intent detection injects workflow guidance. Stop hooks run type checking, linting, and related tests before Claude finishes. You don't need to ask for any of this.
 
 **Day 2+:** Work real tickets. Let the hooks catch mistakes. Focus on **clarifying the problem** and **reviewing the output** — not writing code yourself. Post wins and failures to your team channel.
 
@@ -336,9 +336,9 @@ Three layers of automation run without any manual invocation:
 
 **Layer 1 — Intent Detection** (every prompt, ~30ms): Detects what you're doing from your prompt keywords and injects workflow directives. "Write a test" → TDD workflow. "Fix a bug" → triage pattern. "Create component" → accessibility + design system checklist. "Create PR" → CI verify + review.
 
-**Layer 2 — Pattern Enforcement** (every Edit/Write, ~293ms): 10 PostToolUse hooks catch violations in real-time. Claude sees the error, fixes it, hook re-checks — cycle repeats until clean. Plus file-aware guidance: writing a test file → async leak tips, writing a component → accessibility checklist.
+**Layer 2 — Pattern Enforcement** (every Edit/Write, ~293ms): PostToolUse hooks catch violations in real-time. Claude sees the error, fixes it, hook re-checks — cycle repeats until clean. Plus file-aware guidance: writing a test file → async leak tips, writing a component → accessibility checklist.
 
-**Layer 3 — Quality Gate** (when Claude finishes, <10s): 6 Stop hooks verify the work is production-ready. Type check, lint autofix, health score, PLUS the orchestration gate that blocks on missing tests, async leaks, and security issues. Claude doesn't stop until the PR is ready to merge.
+**Layer 3 — Quality Gate** (when Claude finishes, <10s): Stop hooks verify the work is production-ready. Type check, lint autofix, health score, PLUS the orchestration gate that blocks on missing tests, async leaks, and security issues. Claude doesn't stop until the PR is ready to merge.
 
 **Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude works on matching files. Write a test → TDD patterns load. Edit a route → TanStack Router patterns load. No `/skill-name` invocation needed.
 
@@ -400,9 +400,9 @@ I just installed the frontend-starter-kit skills. Run all setup skills now, then
 ## Phase 1: Run setup skills
 
 Execute the frontend-starter-kit skill. This will:
-- Install all 14 setup skills (toolchain, biome, quality-gate, etc.)
+- Install all setup skills (toolchain, biome, quality-gate, etc.)
 - Install development-lifecycle skill (the one skill for the full workflow)
-- Create all hook scripts in .claude/hooks/ (30 hooks, 69+ checks)
+- Create all hook scripts in .claude/hooks/
 - Set up src/env.ts, biome.jsonc, .github/workflows/quality-gate.yml
 - Install community workflow skills
 - Set REACT_RULES_BAN_USEEFFECT=1 in session env
@@ -530,7 +530,7 @@ graph TD
     style SC fill:#9c6,stroke:#333,color:#000
 ```
 
-- **frontend-starter-kit** — Complete frontend stack in one command: 14 setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing) + 10 owned workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + 5 optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` is fully covered by Biome's `noConsole`.
+- **frontend-starter-kit** — Complete frontend stack in one command: all setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing, UX copy) + workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` is fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -833,7 +833,7 @@ PostToolUse hooks run **concurrently** — wall-clock time is the slowest hook, 
 
 | Scenario | Wall-clock | What happens |
 |----------|-----------|--------------|
-| Edit a `.go` / `.md` / `.css` file | **~80ms** | All 10 hooks exit immediately on extension check |
+| Edit a `.go` / `.md` / `.css` file | **~80ms** | All hooks exit immediately on extension check |
 | Edit a `.tsx` file (clean code) | **~293ms** | Slowest hook (react-rules) runs full diff + 19 grep checks |
 | Edit a `package.json` | **~80ms** | Only bundle-guard runs, rest exit |
 
@@ -876,7 +876,7 @@ A typical Claude Code tool call takes 3-8 seconds (network + LLM inference). Pos
 
 ## Codex Compatibility
 
-Codex is a first-class harness. 15 of 30 hooks port directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop). The 10 Edit|Write PostToolUse hooks are consolidated into a single Stop-phase batch checker. `AGENTS.md` at repo root replaces PostCompact context re-injection.
+Codex is a first-class harness. Hooks that map directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop) are ported as-is. All Edit|Write PostToolUse hooks are consolidated into a single Stop-phase batch checker. `AGENTS.md` at repo root replaces PostCompact context re-injection.
 
 All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works from any CWD, silently skips in repos without hooks installed.
 
