@@ -18,6 +18,7 @@
     "skills",
     "agents",
     "quality-gate",
+    "routines",
     "sandcastle"
   ],
   "skills": [
@@ -49,6 +50,7 @@
     "./setup-react-doctor/",
     "./setup-react-rules/",
     "./setup-registry-workflow/",
+    "./setup-routines/",
     "./setup-sandcastle/",
     "./setup-tanstack-router/",
     "./setup-toolchain/",
