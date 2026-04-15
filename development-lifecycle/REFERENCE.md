@@ -363,6 +363,50 @@ Monitor: gh run watch
 
 Detect deploy failures immediately after merge. If deploy fails, diagnose and open follow-up PR with fix.
 
+## Lifecycle Stop Gates
+
+`lifecycle-stop.sh` enforces this cascade. Each gate blocks until satisfied — prescribes exact command to run.
+
+```mermaid
+flowchart TD
+    Stop([Stop hook fires]) --> Tests{Tests pass?}
+    Tests -->|No| RunTests["vitest run --related"]
+    RunTests --> Tests
+    Tests -->|Yes| Types{Types pass?}
+
+    Types -->|No| RunTypes["bun run type:check"]
+    RunTypes --> Types
+    Types -->|Yes| Coverage{Coverage ≥ 60%?}
+
+    Coverage -->|No| TDD["Block: Run /tdd"]
+    Coverage -->|Yes| Committed{Changes<br/>committed?}
+
+    Committed -->|No| Commit["Block: Run /commit-push"]
+    Committed -->|Yes| Pushed{Commits<br/>pushed?}
+
+    Pushed -->|No| Push["Block: git push -u origin branch"]
+    Pushed -->|Yes| PR{PR exists?}
+
+    PR -->|No| CreatePR["Block: gh pr create --fill"]
+    PR -->|Yes| CI{CI status?}
+
+    CI -->|Failing| FixCI["Block: Read failures, fix, push"]
+    CI -->|Pending| Monitor["Block: Monitor gh pr checks --watch"]
+    CI -->|Passing| Reviewer{Has reviewer?}
+
+    Reviewer -->|No| RequestReview["Block: gh pr edit --add-reviewer"]
+    Reviewer -->|Yes| Done([All gates pass ✓])
+
+    style TDD fill:#f96,stroke:#333
+    style Commit fill:#f96,stroke:#333
+    style Push fill:#f96,stroke:#333
+    style CreatePR fill:#f96,stroke:#333
+    style FixCI fill:#f96,stroke:#333
+    style Monitor fill:#ff9,stroke:#333
+    style RequestReview fill:#f96,stroke:#333
+    style Done fill:#9c6,stroke:#333
+```
+
 ## Hard Rules
 
 - Never ask user to test manually. Use agent-browser, playwright, or test runner.

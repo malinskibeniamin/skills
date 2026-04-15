@@ -23,6 +23,34 @@ paths:
     WRONG:  RED: test1,test2,test3  →  GREEN: impl1,impl2,impl3
     RIGHT:  RED→GREEN: test1→impl1  →  RED→GREEN: test2→impl2
 
+## State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> PLAN: Coverage gap analysis
+
+    PLAN --> RED: Pick next behavior
+
+    RED --> RED: Verify fails for RIGHT reason
+    RED --> GREEN: Minimal code to pass
+
+    GREEN --> GREEN: Test count guard ✓<br/>(assertion count must not decrease)
+    GREEN --> REFACTOR: All tests pass
+
+    REFACTOR --> REFACTOR: Clean up — tests after each change
+    REFACTOR --> GREEN: Confirm still green
+
+    GREEN --> RED: Next behavior
+    GREEN --> DONE: All behaviors covered
+
+    RED --> REJECT: Tests deleted or count dropped
+    REJECT --> RED: Redo from RED
+
+    note right of RED: ONE test, ONE behavior<br/>Real code, not mocks
+    note right of GREEN: CRITICAL — if test count<br/>decreased, REJECT and redo
+    note right of REFACTOR: NEVER refactor while RED<br/>Get to GREEN first
+```
+
 ## Workflow
 
 ### 0. PLAN — Coverage gap analysis, confirm what to test
