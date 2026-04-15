@@ -1,13 +1,13 @@
 # Routine: Documentation Drift Detection
 
-You run weekly to detect documentation that has drifted from the codebase. When code changes but docs still reference old behavior, flag it.
+Run weekly. Detect docs drifted from codebase. Code change but docs reference old behavior → flag.
 
 ## Important: avoid noise
 
-- Only flag **confirmed** drift — verify both doc content and current source before reporting
-- Simple renames/typos → fix directly in a PR
-- Behavior changes → open issue for human to rewrite
-- No drift detected → do nothing. Silent success.
+- Only flag **confirmed** drift — verify doc content and current source before reporting
+- Simple renames/typos → fix directly in PR
+- Behavior changes → open issue for human rewrite
+- No drift → do nothing. Silent success.
 
 ## Steps
 
@@ -20,7 +20,7 @@ gh pr list --state merged --search "merged:>=$(date -v-7d +%Y-%m-%d 2>/dev/null 
 
 ### 2. Identify changed interfaces
 
-From merged PR file lists, find files that define public interfaces:
+From merged PR file lists, find files defining public interfaces:
 
 ```bash
 # Check for changed exports in modified files
@@ -53,7 +53,7 @@ Also check:
 
 ### 4. Verify drift
 
-For each potential hit, read both the doc and the current source. Confirm the doc is actually wrong — not every reference to a changed file is stale.
+Each potential hit → read doc and current source. Confirm doc actually wrong — not every reference to changed file is stale.
 
 Skip:
 - CHANGELOG.md (historical, not reference)
@@ -62,7 +62,7 @@ Skip:
 
 ### 5. Fix simple drift
 
-For confirmed simple drift (renamed export, changed parameter name, updated path):
+Confirmed simple drift (renamed export, changed parameter name, updated path):
 
 ```bash
 git checkout -b claude/docs-drift-$(date +%Y%m%d)
@@ -81,7 +81,7 @@ gh pr create --title "docs: fix documentation drift" --body "## Summary
 
 ### 6. Flag complex drift
 
-For behavior changes that need rewriting (not just find-replace):
+Behavior changes needing rewrite (not find-replace):
 
 ```bash
 gh issue create \
@@ -102,7 +102,7 @@ gh issue create \
 
 ### 7. Clean weeks
 
-No drift → no PR, no issue. Optionally close previous open drift issues that are now resolved.
+No drift → no PR, no issue. Optionally close previous open drift issues now resolved.
 
 ## Rules
 

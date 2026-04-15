@@ -76,7 +76,7 @@ acli jira workitem create \
 When `ISSUE_TRACKER=both`:
 
 1. Create in **both** GitHub and Jira
-2. Link Jira to GitHub issue URL
+2. Link Jira → GitHub issue URL
 3. `gh` for PR ops (PRs in GitHub)
 4. `acli` for sprint/board ops (Jira)
 
@@ -94,7 +94,7 @@ acli jira workitem link PROJ-150 --url "https://github.com/org/repo/issues/42"
 | Variable | Purpose | Example |
 |----------|---------|---------|
 | `JIRA_PROJECT` | Default project key for work item creation | `CLOUD` |
-| `ISSUE_TRACKER` | Which tracker to use: `gh`, `acli`, or `both` | `acli` |
+| `ISSUE_TRACKER` | Which tracker: `gh`, `acli`, or `both` | `acli` |
 
 ## Detection
 

@@ -51,7 +51,7 @@ const form = useForm({
 
 ## Protobuf Type Registry for google.protobuf.Any
 
-Required for `toJson`/`fromJson` with `Any` fields. Without it: `"is not in the type registry"` error.
+Required for `toJson`/`fromJson` with `Any` fields. Without registry: `"is not in the type registry"` error.
 
 ```ts
 import { createRegistry } from '@bufbuild/protobuf'

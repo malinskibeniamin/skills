@@ -45,7 +45,7 @@ For CI/CD integration (deploy verification, post-merge checks):
 
 1. Create routine with desired prompt
 2. Edit routine → Add trigger → API
-3. Copy URL and generate token
+3. Copy URL, generate token
 4. Store token in CI secrets
 
 ```bash
@@ -92,7 +92,7 @@ using the Slack connector. Include PR title, verdict, and link.
 
 ### Team-specific label taxonomy
 
-Replace the label table in issue-triage template:
+Replace label table in issue-triage template:
 
 ```
 | Type | Labels |
@@ -115,9 +115,9 @@ Add to PR review trigger filters:
 
 ## Noise reduction checklist
 
-Before enabling a routine, verify:
+Before enabling routine, verify:
 
-- [ ] **PR review**: confirms hooks handle style/pattern enforcement — routine prompt says "skip what hooks catch"
+- [ ] **PR review**: hooks handle style/pattern enforcement — prompt says "skip what hooks catch"
 - [ ] **PR feedback resolve**: has "skip ambiguous" and "max 2 CI attempts" guardrails
 - [ ] **Issue triage**: labels-only for feature requests, investigation-only for bugs
 - [ ] **Weekly health**: delta-based reporting, silent when stable
@@ -166,7 +166,7 @@ Before enabling a routine, verify:
 | Max | 15 |
 | Team/Enterprise | 25 |
 
-Extra runs consume subscription usage when overage is enabled.
+Extra runs consume subscription usage when overage enabled.
 
 ## Routines vs. other automation
 
@@ -183,16 +183,16 @@ Extra runs consume subscription usage when overage is enabled.
 ## Troubleshooting
 
 **Routine runs but hooks don't fire**
-Hooks load from `.claude/settings.json` in the cloned repo. Verify the file exists and hooks are wired. Run `bash scripts/verify-install.sh` locally.
+Hooks load from `.claude/settings.json` in cloned repo. Verify file exists and hooks wired. Run `bash scripts/verify-install.sh` locally.
 
 **Routine creates noisy comments**
-Tighten the prompt: add explicit "skip nitpicks", "only P0/P1", "silent approval". Review session transcript to see where Claude wandered.
+Tighten prompt: add "skip nitpicks", "only P0/P1", "silent approval". Review session transcript to find where Claude wandered.
 
 **Routine hits daily limit**
-Reduce trigger frequency. For PR review: filter to non-draft, non-fork PRs only. For schedules: weekly instead of daily.
+Reduce trigger frequency. PR review: filter to non-draft, non-fork PRs only. Schedules: weekly instead of daily.
 
 **Routine can't push branches**
-By default, routines can only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in routine config if needed.
+Default: routines only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in routine config if needed.
 
 **GitHub trigger not firing**
-Claude GitHub App must be installed on the repository. The trigger setup prompts installation. Running `/web-setup` alone is not sufficient — it grants clone access but not webhook delivery.
+Claude GitHub App must be installed on repo. Trigger setup prompts installation. `/web-setup` alone not sufficient — grants clone access but not webhook delivery.

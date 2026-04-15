@@ -6,13 +6,13 @@
 
 ## How It Works
 
-Stop hook runs when Claude finishes turn. Checks:
+Stop hook runs when Claude finish turn. Checks:
 
 1. Files in `redpanda-ui/` or `src/redpanda-ui/` modified? (`git diff --name-only HEAD`)
 2. If yes — `registry.json` also modified in same diff?
 3. If `registry.json` NOT updated → **blocks** with reminder
 
-If no `redpanda-ui/` directory exists in repo, hook exits immediately (zero overhead).
+No `redpanda-ui/` directory in repo → hook exits immediately (zero overhead).
 
 ## When It Triggers
 
@@ -33,7 +33,7 @@ When blocked:
 
 ## Skipping in Non-Registry Repos
 
-Hook auto-detects: if neither `redpanda-ui/` nor `src/redpanda-ui/` exists at repo root, exits 0 immediately. No config needed to disable in non-registry projects.
+Hook auto-detects: neither `redpanda-ui/` nor `src/redpanda-ui/` at repo root → exits 0. No config needed.
 
 ## Component Taxonomy — Detailed Classification
 
@@ -62,7 +62,7 @@ export function CopyButton({ text }: { text: string }) {
 }
 ```
 
-Test checklist (5-8 tests): atom tests + composition renders, internal state transitions, edge cases (empty text, rapid clicks).
+Test checklist (5-8 tests): atom tests + composition renders, state transitions, edge cases (empty text, rapid clicks).
 
 ### Organism Examples
 
@@ -108,7 +108,7 @@ find .upstreaming/diffs -empty -delete
 
 Also ignore: `'use client'` directive changes, biome-ignore comments, trailing whitespace.
 
-If ONLY these differences exist → **Skip-Import-Only**.
+ONLY these differences → **Skip-Import-Only**.
 
 ### Staleness Detection
 
@@ -132,4 +132,4 @@ if (userRole === 'admin') { /* ... */ }
 if (pathname.includes('/dashboard')) { /* ... */ }
 ```
 
-When business logic mixed with legitimate fixes: classify as **Skip-Business-Logic**. Re-implement fix cleanly in registry.
+Business logic mixed with legit fixes → **Skip-Business-Logic**. Re-implement fix cleanly in registry.

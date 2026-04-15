@@ -5,7 +5,7 @@ description: "Configure Claude Code routines for automated PR review, codebase h
 
 # Setup Routines
 
-Configure [Claude Code routines](https://claude.ai/code/routines) — cloud-hosted automated sessions triggered by schedule, GitHub events, or API calls. Routines clone your repo and run as full Claude Code sessions, so all hooks and CLAUDE.md rules from this harness enforce automatically.
+Configure [Claude Code routines](https://claude.ai/code/routines) — cloud-hosted automated sessions triggered by schedule, GitHub events, or API calls. Routines clone repo, run as full Claude Code sessions. All hooks and CLAUDE.md rules enforce automatically.
 
 ## How it works
 
@@ -15,7 +15,7 @@ Routine fires → clones repo → SessionStart hooks → CLAUDE.md loads
 → Stop hooks run quality gates → session ends
 ```
 
-Your hooks are the enforcement layer. Routine prompts are the task layer. Separation means standards evolve in the repo (hooks + CLAUDE.md) while routine prompts stay stable.
+Hooks = enforcement layer. Routine prompts = task layer. Standards evolve in repo (hooks + CLAUDE.md), routine prompts stay stable.
 
 ## Available templates
 
@@ -50,12 +50,12 @@ Match routines to installed skills:
 ### 3. Create via web (recommended)
 
 1. Go to [claude.ai/code/routines](https://claude.ai/code/routines) → **New routine**
-2. Name it (for example, "PR Review — [repo name]")
-3. Paste the template prompt from `routines/*.md` — customize the `OWNER`/`REPO` placeholders
-4. Select your repository
+2. Name it (e.g. "PR Review — [repo name]")
+3. Paste template prompt from `routines/*.md` — customize `OWNER`/`REPO` placeholders
+4. Select repository
 5. Select environment (Default works, or custom with env vars)
 6. Add trigger (GitHub event, schedule, or API)
-7. Review connectors — remove any the routine doesn't need
+7. Review connectors — remove any routine doesn't need
 8. Create
 
 ### 4. Create via CLI
@@ -64,14 +64,14 @@ Match routines to installed skills:
 /schedule daily codebase health check at 9am
 ```
 
-CLI creates scheduled routines only. For GitHub triggers or API triggers, use the web UI.
+CLI creates scheduled routines only. GitHub triggers or API triggers → use web UI.
 
 ### 5. Customize prompts
 
-Templates are starting points. Customize for your project:
+Templates = starting points. Customize for project:
 
-- **Add project-specific checks**: reference patterns your hooks enforce
-- **Adjust labels**: match your issue label taxonomy
+- **Add project-specific checks**: reference patterns hooks enforce
+- **Adjust labels**: match issue label taxonomy
 - **Set scope boundaries**: "only review files in `src/`" or "skip generated files"
 - **Add connector actions**: "post summary to #engineering Slack channel"
 
@@ -83,7 +83,7 @@ Run once manually before relying on triggers:
 
 1. Web: click **Run now** on routine detail page
 2. CLI: `/schedule run`
-3. Watch the session live at the returned URL
+3. Watch session live at returned URL
 4. Review what Claude did — adjust prompt if it wandered
 
 ## Routine vs. Sandcastle vs. interactive
@@ -99,12 +99,12 @@ Run once manually before relying on triggers:
 
 ## Enforcement model
 
-Routines don't bypass your harness — they run inside it:
+Routines don't bypass harness — run inside it:
 
-- **Hooks**: fire on every Edit/Write/Bash inside the routine session. All installed checks.
+- **Hooks**: fire on every Edit/Write/Bash inside routine session. All installed checks.
 - **CLAUDE.md**: loads from repo root. All rules active.
 - **Skills**: available via `/skill-name` in routine prompt. Skills committed to repo work.
 - **Agents**: reviewer agents (code-reviewer, self-reviewer, adversarial-reviewer) all dispatchable.
-- **Stop hooks**: quality gates (lint, typecheck, and so on) fire before session ends.
+- **Stop hooks**: quality gates (lint, typecheck, etc.) fire before session ends.
 
-Update a hook → every future routine run picks it up (next clone). No routine prompt changes needed.
+Update hook → every future routine run picks it up (next clone). No routine prompt changes needed.

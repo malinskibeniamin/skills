@@ -12,11 +12,11 @@ paths:
 
 ## Iron Law
 
-**No production code without a failing test first.** No exceptions.
+**No production code without failing test first.** No exceptions.
 
 ## Anti-Pattern: Horizontal Slices
 
-**DO NOT write all tests first, then all implementation.** Bulk tests test *imagined* behavior, not *actual* behavior.
+**DO NOT write all tests first, then all implementation.** Bulk tests test *imagined* behavior, not *actual*.
 
 **Correct**: Vertical slices. One test → one implementation → repeat.
 
@@ -25,19 +25,19 @@ paths:
 
 ## Workflow
 
-### 0. PLAN — Coverage gap analysis, then confirm what to test
+### 0. PLAN — Coverage gap analysis, confirm what to test
 
-- Run `vitest run --coverage.enabled --coverage.reporter=text` to get current coverage
-- Identify uncovered lines/branches/functions in changed files — these are your test targets
+- Run `vitest run --coverage.enabled --coverage.reporter=text` for current coverage
+- Find uncovered lines/branches/functions in changed files — these are test targets
 - Confirm behaviors with user (prioritize gaps over already-covered code)
-- Identify deep module opportunities (small interface, deep impl)
+- Find deep module opportunities (small interface, deep impl)
 - Design interfaces for testability
 
 ### 1. RED — Failing test (tracer bullet)
 
 - ONE test, ONE behavior, clear name
 - Real code, not mocks (unless unavoidable)
-- Verify it fails for RIGHT reason
+- Verify fails for RIGHT reason
 
 ### 2. GREEN — Minimal code to pass
 
@@ -50,7 +50,7 @@ paths:
 - Tests after every change — stay green
 - **Never refactor while RED.** Get to GREEN first.
 - Check test execution time — flag unit tests >500ms, integration >2s
-- Avoid per-keystroke simulation in tests (slow, flaky). Prefer bulk input methods.
+- Avoid per-keystroke simulation in tests (slow, flaky). Prefer bulk input.
 - Commit when clean
 
 ### Reactive TDD with Monitor
@@ -86,7 +86,7 @@ New TanStack Router routes need `*.browser.test.tsx` sibling — only if project
 - [ ] All pass (`vitest run`)
 - [ ] No async leaks (`vitest run --detectAsyncLeaks`) — Stop hook runs this automatically
 - [ ] No setTimeout hacks — condition-based waiting
-- [ ] Coverage gaps closed — re-run `vitest run --coverage.enabled --coverage.reporter=text` and verify changed files have adequate line + branch coverage
+- [ ] Coverage gaps closed — re-run `vitest run --coverage.enabled --coverage.reporter=text`, verify changed files have adequate line + branch coverage
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
 - [ ] Portal tests: `defaultOpen` for content tests, `waitFor` for close assertions
 - [ ] Tests verify behavior, not implementation

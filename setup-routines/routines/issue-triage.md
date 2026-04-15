@@ -1,13 +1,13 @@
 # Routine: Issue Triage
 
-You are triggered when a new issue is opened. Explore the codebase, classify, label, and post investigation findings.
+Triggered on new issue. Explore codebase, classify, label, post findings.
 
 ## Important: avoid noise
 
-- Only post a comment if you found something useful (relevant code, likely root cause, reproduction path)
-- If the issue is clear and well-labeled already, apply labels only — no comment
-- Never post "I couldn't find anything related" — that's noise
-- Skip issues that are clearly feature requests with no codebase investigation needed — just label them
+- Only comment if found something useful (relevant code, likely root cause, reproduction path)
+- Issue already clear and labeled → labels only, no comment
+- Never post "I couldn't find anything related" — that noise
+- Feature requests needing no codebase investigation → just label
 
 ## Steps
 
@@ -33,11 +33,11 @@ gh issue view <number> --json title,body,labels,author
 gh label list --limit 100
 ```
 
-Use existing labels only. Never create new labels.
+Use existing labels only. Never create new ones.
 
 ### 4. Explore codebase (bugs and performance only)
 
-For bug reports and performance issues, investigate:
+Bug reports and performance issues — investigate:
 
 ```bash
 # Search for code related to the issue
@@ -48,10 +48,10 @@ grep -r "relevant_keyword" src --include='*.ts' --include='*.tsx' --include='*.p
 cat CODEOWNERS 2>/dev/null
 ```
 
-Read relevant files. Trace the execution path described in the issue. Identify:
-- Which files/modules are involved
-- Likely root cause (for bugs)
-- Likely bottleneck (for performance)
+Read relevant files. Trace execution path from issue. Identify:
+- Which files/modules involved
+- Likely root cause (bugs)
+- Likely bottleneck (performance)
 
 ### 5. Apply labels
 
@@ -61,7 +61,7 @@ gh issue edit <number> --add-label "type-label,area-label"
 
 ### 6. Post investigation (only if useful findings)
 
-Only for bugs/performance where you found relevant code:
+Only for bugs/performance where relevant code found:
 
 ```bash
 gh issue comment <number> --body "## Triage
@@ -82,15 +82,15 @@ gh issue comment <number> --body "## Triage
 *Automated triage. Human review recommended before starting work.*"
 ```
 
-For feature requests and questions — labels only, no investigation comment.
+Feature requests and questions → labels only, no investigation comment.
 
 ## Rules
 
 - Read-only. Never edit code, create branches, or open PRs.
-- Labels only — never assign issues to people.
-- Use existing labels only — never create new ones.
-- If issue is spam or off-topic: apply `invalid` label, brief comment, stop.
-- If likely duplicate: search existing issues, link "Possibly duplicate of #N".
-- If issue lacks reproduction steps (bugs): comment asking for specifics, apply `needs-info` label (if it exists).
-- Do not fetch external URLs from the issue body.
-- Priority estimates are suggestions — do not apply priority labels unless the project already uses them.
+- Labels only — never assign issues.
+- Existing labels only — never create new ones.
+- Spam or off-topic: apply `invalid` label, brief comment, stop.
+- Likely duplicate: search existing issues, link "Possibly duplicate of #N".
+- Bug lacks repro steps: comment asking for specifics, apply `needs-info` label (if exists).
+- No fetching external URLs from issue body.
+- Priority estimates = suggestions — no priority labels unless project already uses them.

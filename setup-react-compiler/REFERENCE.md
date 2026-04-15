@@ -5,7 +5,7 @@
 > "Write React as if every render is free and memoization is automatic."
 
 **Pre-compiler era:** manual control over re-renders, defensive memoization, referential equality as priority.
-**Post-compiler era:** compiler auto-inserts memoization, renders cheap, code organized around clarity and correctness.
+**Post-compiler era:** compiler auto-inserts memoization, renders cheap, code organized around clarity + correctness.
 
 ## Post-React Compiler Coding Rules
 
@@ -65,7 +65,7 @@ Rules:
 
 ### Annotation Mode for Legacy Codebases
 
-For large legacy codebases, `annotation` mode lets you opt in file-by-file instead of compiling everything at once.
+For large legacy codebases, `annotation` mode = opt in file-by-file instead of compiling everything at once.
 
 **Setup:**
 
@@ -105,7 +105,7 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 
 ## Component Library Directory
 
-All files in component library directory (`components/ui/` or `redpanda-ui/`) need `'use no memo'` because:
+All files in component library dir (`components/ui/` or `redpanda-ui/`) need `'use no memo'` because:
 - Registry/distribution components need explicit memoization control
 - Compiler may interfere with component API contracts
 - Consumers may have different compiler settings

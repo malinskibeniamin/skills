@@ -3,14 +3,14 @@
 ## codex-batch-check.sh
 
 Stop hook wrapper — runs all PostToolUse Edit|Write checks on changed files.
-Reuses existing `.claude/hooks/` scripts — no duplication.
+Reuses `.claude/hooks/` scripts — no duplication.
 Handles JS/TS, CSS/SCSS (tailwind-check), package.json (bundle-guard).
 
 > Script: [`scripts/codex-batch-check.sh`](scripts/codex-batch-check.sh)
 
 ## .codex/hooks.json template
 
-Generate from existing `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, Stop hooks direct. Add batch checker as Stop hook.
+Generate from `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, Stop hooks direct. Add batch checker as Stop hook.
 
 ```json
 {
@@ -136,7 +136,7 @@ Codex **not** support `SubagentStart` or `SubagentStop` hooks. Claude Code only.
 - `SubagentStart` injects session context (touched files, dirty baseline) into reviewer agents
 - `SubagentStop` validates structured findings output, logs results
 
-**Codex workaround**: Include self-review instructions direct in AGENTS.md as soft guidance. Structured findings schema (`agents/findings-schema.md`) works anywhere — just markdown. Codex agents follow it voluntarily without hook enforcement.
+**Codex workaround**: Include self-review instructions direct in AGENTS.md as soft guidance. Structured findings schema (`agents/findings-schema.md`) works anywhere — just markdown. Codex agents follow voluntarily without hook enforcement.
 
 **Agents not affected**: Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) are markdown files. Codex can read them. Difference: on Claude Code, output format enforced by SubagentStop hook; on Codex, best-effort guidance.
 

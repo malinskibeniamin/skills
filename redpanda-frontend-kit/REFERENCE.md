@@ -101,7 +101,7 @@ npx opensrc @tanstack/react-query
 opensrc list                  # show fetched packages
 ```
 
-Creates `opensrc/<package>/` with full source for debugging framework internals.
+Creates `opensrc/<package>/` with full source. Debug framework internals.
 
 ## Dependency Changes
 

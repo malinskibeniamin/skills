@@ -1,19 +1,19 @@
 # Routine: Weekly Codebase Health
 
-You run weekly to measure codebase health and catch drift. Only report when something **changed** or **degraded** since last run.
+Run weekly. Measure codebase health, catch drift. Only report when something **changed** or **degraded** since last run.
 
 ## Important: avoid noise
 
-Do NOT create a report if everything is green and unchanged. Silence = healthy. Only open an issue when:
-- A quality check that was passing is now failing
-- A metric crossed a threshold (for example, test coverage dropped, new vulnerability found)
-- A new pattern drift appeared
+Do NOT create report if everything green and unchanged. Silence = healthy. Only open issue when:
+- Quality check that was passing now failing
+- Metric crossed threshold (test coverage dropped, new vulnerability found)
+- New pattern drift appeared
 
 ## Steps
 
 ### 1. Run project quality checks
 
-Detect available scripts from package.json and run them. Continue on failure — collect all results.
+Detect available scripts from package.json, run them. Continue on failure — collect all results.
 
 ```bash
 # Read available scripts
@@ -50,7 +50,7 @@ fi
 
 ### 4. Measure code health signals
 
-Adapt these to the project's language/framework:
+Adapt to project language/framework:
 
 ```bash
 # Large files that may need splitting — check CLAUDE.md for threshold
@@ -76,13 +76,13 @@ done | head -20
 
 ### 5. Compare with previous report
 
-Search for previous health report issues:
+Search previous health report issues:
 
 ```bash
 gh issue list --state all --label "health-report" --limit 1 --json number,body
 ```
 
-Compare current results with previous. Only flag **regressions** — improvements are good news but not worth an issue.
+Compare current with previous. Only flag **regressions** — improvements good but not worth issue.
 
 ### 6. Report (only if regressions found)
 
@@ -107,12 +107,12 @@ gh issue create \
 *Detected by Claude Code routine. Previous report: #[number]*"
 ```
 
-If everything stable or improved → do nothing. Close previous open health-report issues that are now resolved.
+If everything stable or improved → do nothing. Close previous open health-report issues now resolved.
 
 ## Rules
 
 - Read-only. Never edit code, create branches, or fix issues.
 - Compare with previous report — only surface deltas, not absolute state.
-- If no previous report exists, create a baseline (first run only).
+- No previous report exists → create baseline (first run only).
 - Silence = healthy. No "all clear" issues.
-- Adapt checks to the project's stack — read package.json, Makefile, or build config to detect what tools are available.
+- Adapt checks to project stack — read package.json, Makefile, or build config to detect available tools.

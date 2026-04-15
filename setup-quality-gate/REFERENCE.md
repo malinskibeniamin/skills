@@ -68,7 +68,7 @@ Output flamegraph timing data. Diagnostic follow-up, not routine CI.
 
 ## Asset Type Declarations
 
-tsgo need asset import declarations. Create `src/types/assets.d.ts`:
+`tsgo` need asset import declarations. Create `src/types/assets.d.ts`:
 
 ```ts
 declare module '*.svg' {

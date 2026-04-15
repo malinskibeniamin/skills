@@ -11,11 +11,11 @@
 const message = "Operation completed successfully!"
 ```
 
-Hook checks `// allow: ux-copy` anywhere in file. Reason required for code review. Legacy format `// allow-ux-copy:` also works.
+Hook checks `// allow: ux-copy` anywhere in file. Reason required for review. Legacy format `// allow-ux-copy:` also works.
 
 ## Capitalization
 
-Sentence-style caps all UI text: titles, headings, buttons, menu items, fields, tooltips. Capitalize first word only.
+Sentence-style caps all UI text: titles, headings, buttons, menus, fields, tooltips. Capitalize first word only.
 
 | Good | Bad |
 |------|-----|
@@ -53,7 +53,7 @@ State problem clearly. Provide solution. No blame.
 ## Button Labels
 
 - 1-4 words max
-- Start with verb if more than one word
+- Start with verb if >1 word
 - No "Yes"/"No" — use clear action verbs
 - No articles (a, an, the)
 
@@ -93,7 +93,7 @@ Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress"
 
 ## Possessive Pronouns
 
-Avoid "my" and "your" in page names, menu names, titles. OK in instructional text.
+Avoid "my" and "your" in page names, menus, titles. OK in instructional text.
 
 | Good | Bad |
 |------|-----|
@@ -112,7 +112,7 @@ Avoid "my" and "your" in page names, menu names, titles. OK in instructional tex
 
 ## Terms to Use Sparingly
 
-Use only to acknowledge errors or interactions particularly inconvenient:
+Use only to acknowledge errors or particularly inconvenient interactions:
 - please
 - sorry
 - thank you
@@ -128,7 +128,7 @@ Use only to acknowledge errors or interactions particularly inconvenient:
 
 ## Directional Language
 
-Don't reference physical position in UI or page — layouts change.
+Don't reference physical position in UI — layouts change.
 
 | Bad | Good |
 |-----|------|
@@ -167,7 +167,7 @@ Placeholder values in UI: descriptive lowercase-with-dashes in angle brackets:
 
 ## Em Dashes
 
-Don't use em dashes. Use parentheses, commas, or separate sentences.
+Don't use. Use parentheses, commas, or separate sentences.
 
 ## Common Agent Excuses
 

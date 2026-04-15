@@ -8,7 +8,7 @@
 
 > Script: [`../shared/user-prompt-context.sh`](../shared/user-prompt-context.sh)
 
-Injects project state into every prompt as `additionalContext`. Claude starts each response knowing state without wasting tool calls.
+Injects project state into every prompt as `additionalContext`. Claude knows state without wasting tool calls.
 
 ### Context Levels
 
@@ -50,7 +50,7 @@ Prevents 2-3 Glob/Read calls Claude makes discovering import paths, available co
 
 Codex lacks `UserPromptSubmit`. Approximate via:
 - **SessionStart**: one-time context snapshot (stale but available)
-- **AGENTS.md**: static rules and scripts baked in at generation time
+- **AGENTS.md**: static rules and scripts baked at generation time
 - **Stop → `.codex/session-state.md`**: violations and git state written per-turn
 
 See `codex-compat` REFERENCE.md for approximation strategy.
@@ -67,7 +67,7 @@ See `codex-compat` REFERENCE.md for approximation strategy.
 
 ### Soft suggestions (via `additionalContext`)
 
-Suggested but not forced. Claude may choose to include:
+Suggested not forced. Claude may include:
 
 | Flag | Runner | Why |
 |------|--------|-----|
@@ -154,7 +154,7 @@ export default defineConfig({
 })
 ```
 
-`hanging-process` reporter logs which async ops prevent vitest from exiting. Remove once zombies resolved — adds overhead.
+`hanging-process` reporter logs which async ops prevent vitest exit. Remove once zombies resolved — adds overhead.
 
 ## Token Savings Breakdown
 

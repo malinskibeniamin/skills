@@ -187,8 +187,8 @@ await Promise.all(
 | Hooks (25 total) | Run inside each container — react-rules, accessibility, etc. |
 | code-reviewer agent | Dispatched as review pass after implementation |
 | verifier agent | Verifies UI changes via agent-browser inside container |
-| orchestration-stop | Blocks agent from completing without tests + type check |
-| Monitor tool | Agents use Monitor to watch CI, test output, dev servers in background instead of blocking |
+| orchestration-stop | Blocks agent completing without tests + type check |
+| Monitor tool | Agents watch CI, test output, dev servers in background — no blocking |
 | intent-detect | Not used (agents get explicit prompts, not user prompts) |
 
 ## When to Use Sandcastle vs Claude Code

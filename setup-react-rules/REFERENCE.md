@@ -6,7 +6,7 @@
 
 ## Escape Hatch for useEffect
 
-When useEffect genuinely needed (WebSocket cleanup, third-party lib integration), add comment on line before:
+When `useEffect` genuinely needed (WebSocket cleanup, third-party lib integration), add comment on line before:
 
 ```tsx
 // allow: useEffect — WebSocket subscription cleanup required
@@ -30,7 +30,7 @@ Hook checks for `// allow: useEffect` anywhere in file. Reason required for code
 | `<table>` | `<Table>` | `@/components/ui/table` |
 | `<label>` | `<Label>` | `@/components/ui/label` |
 
-`<form>` and `<a>` allowed — `<form>` has no standard registry replacement, `<a>` can't always swap with TanStack Router Link.
+`<form>` and `<a>` allowed — `<form>` no standard registry replacement, `<a>` can't always swap with TanStack Router Link.
 
 ## Auto-Generated Files
 
@@ -216,7 +216,7 @@ const reducer = (state: State, action: Action): State => {
 
 ### Discriminated Unions
 
-Enforce valid prop combinations at type level:
+Enforce valid prop combos at type level:
 
 ```tsx
 type AlertProps =

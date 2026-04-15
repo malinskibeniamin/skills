@@ -120,12 +120,12 @@ Ultracite strict baseline. Overrides:
 | Rule | Group | Ultracite default | Our override | Why |
 |------|-------|-------------------|-------------|-----|
 | `noConsole` | suspicious | off | error | Ban console.log in prod |
-| `noReactForwardRef` | suspicious | on | off | Keep off for React 18 — forwardRef still required |
-| `noExcessiveCognitiveComplexity` | complexity | threshold 20 | threshold 15 | Stricter complexity limit |
+| `noReactForwardRef` | suspicious | on | off | Keep off for React 18 — forwardRef still needed |
+| `noExcessiveCognitiveComplexity` | complexity | threshold 20 | threshold 15 | Stricter complexity cap |
 | `noExplicitAny` in tests | suspicious | off | error | No `any` escape, even in tests |
 | `noDeprecatedImports` | project | off | error | Catch deprecated API usage (needs Biome Scanner) |
 | `useFilenamingConvention` | style | off | kebab-case, strict | Enforce kebab-case filenames (`my-component.tsx`, not `MyComponent.tsx`) |
-| `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup, @redpanda-data/ui, lucide-react |
+| `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup, `@redpanda-data/ui`, lucide-react |
 | `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>` — use registry |
 | `useExhaustiveSwitchCases` | nursery | off | error | Require exhaustive switch/case for type safety |
 | `useConsistentTestIt` | nursery | off | test only | Enforce `test()` over `it()` |
@@ -139,8 +139,8 @@ Ultracite strict baseline. Overrides:
 PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Prevent:
 
 1. Claude add `import { Button } from '@/components/ui/button'`
-2. Biome delete it (unused — Claude hasn't written JSX yet)
-3. Claude re-add it
+2. Biome delete it (unused — Claude not written JSX yet)
+3. Claude re-add
 4. Infinite loop
 
 Caught at Stop hook / `quality:gate` when done editing.

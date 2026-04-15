@@ -81,7 +81,7 @@ export { expect } from '@playwright/test'
 
 ## Testcontainers Setup
 
-Spin up real backend services for integration-level e2e tests:
+Spin up real backend services for integration-level e2e:
 
 ```ts
 import { GenericContainer, Wait } from 'testcontainers'
