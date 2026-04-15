@@ -1,6 +1,19 @@
 # Sandcastle Reference
 
-## Orchestration Template
+## Launch Modes
+
+Two ways to run agents:
+
+| | `run()` | `interactive()` |
+|---|---|---|
+| Mode | Headless (`--print`) | Full TUI (stdin/stdout/stderr) |
+| Human interaction | None — stream-JSON parsed | Direct — human watches and can intervene |
+| Use case | CI, batch, parallel, overnight | HITL review, pair-review, local dev |
+| Sandbox default | Required (`docker()`, etc.) | `noSandbox()` (just git worktrees) |
+| Iterations | `maxIterations` supported | Single session |
+| Completion signal | `<promise>COMPLETE</promise>` | Session exit (Ctrl+C or `/exit`) |
+
+## Headless Batch Template (run)
 
 ```typescript
 // .sandcastle/main.ts
@@ -28,15 +41,9 @@ const results = await Promise.all(
       branchStrategy: { type: "merge-to-head" },
       hooks: {
         onSandboxReady: [
-          // Install project deps first (without --yarn for speed)
           { command: "bun install --frozen-lockfile" },
-          // Then install our skills + hooks via plugin
-          // Removed --yarn step (yarn.lock no longer required)
-          // Plugin installs all skills + hooks + agents in one step
           { command: "bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y" },
           { command: "bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y" },
-          // Optional: start backend + frontend for full-stack verification
-          // { command: "bun run dev &" },
         ],
       },
       maxIterations: 3,
@@ -45,8 +52,6 @@ const results = await Promise.all(
 );
 
 // Review pass — dispatch code-reviewer on each branch
-// Tip: use the Monitor tool inside each agent to watch CI/test output
-// in the background instead of blocking on long-running commands.
 for (const result of results) {
   if (result.commits.length > 0) {
     await run({
@@ -54,10 +59,91 @@ for (const result of results) {
       agent: claudeCode("claude-sonnet-4-6"),
       prompt: `Review the changes on branch ${result.branch}. Run tests, check types, verify quality. Use Monitor to watch CI in the background after pushing. Report APPROVED or NEEDS_CHANGES.`,
       branch: result.branch,
-      branchStrategy: { type: "head" }, // review on existing branch
+      branchStrategy: { type: "head" },
     });
   }
 }
+```
+
+## HITL Review Template (interactive)
+
+```typescript
+// .sandcastle/review-interactive.ts
+import { interactive, claudeCode } from "@ai-hero/sandcastle";
+import { noSandbox } from "@ai-hero/sandcastle/sandboxes/no-sandbox";
+
+// Develop locally, then spawn interactive reviewer
+// Human watches full TUI — can Ctrl+C if reviewer goes sideways
+const { commits, branch } = await interactive({
+  agent: claudeCode("claude-sonnet-4-6"),
+  promptFile: ".sandcastle/review.md",
+  branchStrategy: { type: "merge-to-head" }, // auto-merge back
+  // noSandbox() is default — no Docker needed for local review
+});
+
+console.log(`Review complete: ${commits.length} commits on ${branch}`);
+```
+
+## Mixed Pipeline: Headless Implement → Interactive Review
+
+```typescript
+// .sandcastle/implement-then-review.ts
+import { run, interactive, claudeCode } from "@ai-hero/sandcastle";
+import { docker } from "@ai-hero/sandcastle/sandboxes/docker";
+
+// Step 1: Headless implementation in Docker
+const implResult = await run({
+  sandbox: docker(),
+  agent: claudeCode("claude-opus-4-6"),
+  promptFile: ".sandcastle/implement.md",
+  promptArgs: { ISSUE_NUMBER: "42", ISSUE_TITLE: "Add dark mode" },
+  branchStrategy: { type: "branch", branch: "agent/dark-mode" },
+  hooks: {
+    onSandboxReady: [
+      { command: "bun install --frozen-lockfile" },
+      { command: "bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y" },
+    ],
+  },
+  maxIterations: 3,
+});
+
+// Step 2: Interactive review — human watches reviewer with full TUI
+if (implResult.commits.length > 0) {
+  await interactive({
+    agent: claudeCode("claude-sonnet-4-6"),
+    prompt: `Review changes on ${implResult.branch}. Run tests, check types, fix issues.`,
+    branchStrategy: { type: "branch", branch: implResult.branch },
+  });
+}
+```
+
+## createSandbox: Multi-Run on Same Container
+
+```typescript
+// .sandcastle/multi-run.ts
+import { createSandbox, claudeCode } from "@ai-hero/sandcastle";
+import { docker } from "@ai-hero/sandcastle/sandboxes/docker";
+
+// Single container, multiple runs — deps persist between runs
+await using sandbox = await createSandbox({
+  branch: "agent/fix-42",
+  sandbox: docker(),
+  hooks: { onSandboxReady: [{ command: "bun install" }] },
+});
+
+// Run 1: Implement
+await sandbox.run({
+  agent: claudeCode("claude-opus-4-6"),
+  promptFile: ".sandcastle/implement.md",
+  maxIterations: 5,
+});
+
+// Run 2: Interactive review on same branch/container
+await sandbox.interactive({
+  agent: claudeCode("claude-sonnet-4-6"),
+  prompt: "Review changes and fix issues",
+});
+// Container auto-cleaned via `await using`
 ```
 
 ## Prompt Templates
@@ -183,28 +269,32 @@ await Promise.all(
 
 | Our layer | How Sandcastle uses it |
 |---|---|
-| development-lifecycle | Each agent follows 6-phase lifecycle |
-| Hooks (25 total) | Run inside each container — react-rules, accessibility, etc. |
-| code-reviewer agent | Dispatched as review pass after implementation |
+| development-lifecycle | Each agent follows 6-phase lifecycle — both `run()` and `interactive()` |
+| Hooks (25 total) | Fire inside each session — same enforcement in headless and interactive |
+| code-reviewer agent | Headless via `run()`, or HITL via `interactive()` with full TUI |
 | verifier agent | Verifies UI changes via agent-browser inside container |
 | orchestration-stop | Blocks agent completing without tests + type check |
 | Monitor tool | Agents watch CI, test output, dev servers in background — no blocking |
 | intent-detect | Not used (agents get explicit prompts, not user prompts) |
 
-## When to Use Sandcastle vs Claude Code
+Hooks and skills are agent-launch-method agnostic — they fire on PostToolUse/PreToolUse inside the session regardless of whether launched by `run()`, `interactive()`, or `claude` directly.
+
+## When to Use What
 
 | Scenario | Use |
 |---|---|
 | Single feature, interactive | Claude Code directly |
 | Bug fix needing human input | Claude Code directly |
-| 5+ independent issues | Sandcastle — parallelize |
-| Large plan with independent tasks | Sandcastle — one agent per task |
-| Overnight batch work | Sandcastle — AFK |
-| PR review pass | Sandcastle — code-reviewer on each branch |
+| Local dev → quick review pass | `interactive()` + `noSandbox()` |
+| Pair-review with human watching | `interactive()` + `docker()` or `noSandbox()` |
+| 5+ independent issues | `run()` — parallelize in Docker |
+| Large plan with independent tasks | `run()` — one agent per task |
+| Overnight batch work | `run()` — AFK |
+| Headless implement → human review | Mixed: `run()` then `interactive()` |
 
 ## Cross-Model with Sandcastle
 
-Implement with Claude, review with Codex. Providers: `claudeCode()`, `codex()`, `piAgent()`, `openCode()`. Mix per stage.
+Implement with Claude, review with Codex. Providers: `claudeCode()`, `codex()`, `pi()`, `opencode()`. Mix per stage. All providers support both `run()` and `interactive()` via `buildPrintCommand` and `buildInteractiveArgs`.
 
 ## Prompt Caching Tips
 
