@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Guard: CLAUDE_ENV_FILE may not exist during /clear-triggered SessionStart
+CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-}"
+
 # ── Frontend project detection ───────────────────────────────────
 # These skills are for React/TypeScript frontend projects.
 # Warn if installed in the wrong directory (backend, Go, root of monorepo).
@@ -14,12 +17,14 @@ if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev
 fi
 
 # Set environment variables for LLM-friendly defaults
-echo "export PKG_MANAGER=bun" >> "$CLAUDE_ENV_FILE"
-echo "export LINTER=biome" >> "$CLAUDE_ENV_FILE"
-echo "export TEST_RUNNER=vitest" >> "$CLAUDE_ENV_FILE"
+if [ -n "$CLAUDE_ENV_FILE" ]; then
+  echo "export PKG_MANAGER=bun" >> "$CLAUDE_ENV_FILE"
+  echo "export LINTER=biome" >> "$CLAUDE_ENV_FILE"
+  echo "export TEST_RUNNER=vitest" >> "$CLAUDE_ENV_FILE"
 
-# Prevent OOM on large test suites, builds, and type checks
-echo "export NODE_OPTIONS=--max-old-space-size=8192" >> "$CLAUDE_ENV_FILE"
+  # Prevent OOM on large test suites, builds, and type checks
+  echo "export NODE_OPTIONS=--max-old-space-size=8192" >> "$CLAUDE_ENV_FILE"
+fi
 
 # Clean up stale session directories from previous sessions (safe: /tmp/ only, specific prefix)
 # Clean up stale session directories from both harnesses
