@@ -58,6 +58,25 @@ _hook_track_violation() {
   echo "$label" >> "$_hook_violations_file" 2>/dev/null || true
 }
 
+# ── Structured session log (JSONL) ──────────────────────────────
+# Append one JSON line per hook decision. Used by metrics-summary-stop.sh
+# and /hook-audit skill. Fails silently — never blocks a hook.
+_hook_log_file="$_hook_session_dir/structured.jsonl"
+
+_hook_log_entry() {
+  local decision="$1" rule="$2" hook="${3:-$(basename "$0" .sh)}"
+  local target="${file_path:-}"
+  # Strip repo root for privacy — store relative path only
+  if [ -n "$target" ]; then
+    local root
+    root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    target="${target#"$root"/}"
+  fi
+  printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s"}\n' \
+    "$(date +%s)" "$hook" "$rule" "$decision" "$target" \
+    >> "$_hook_log_file" 2>/dev/null || true
+}
+
 # ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
 
 hook_parse_edit_write() {
@@ -297,6 +316,7 @@ hook_block() {
   local label="${2:-$(basename "$0" .sh)}"
   _hook_debug "BLOCK [$label]: $msg"
   _hook_track_violation "$label"
+  _hook_log_entry "block" "$label"
   if [ "$_hook_verbosity" != "quiet" ]; then
     echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
   fi
@@ -310,6 +330,7 @@ hook_warn() {
   local label="${2:-$(basename "$0" .sh)}"
   _hook_debug "WARN [$label]: $msg"
   _hook_track_violation "$label"
+  _hook_log_entry "warn" "$label"
   if [ "$_hook_verbosity" = "normal" ]; then
     echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
   fi
@@ -340,6 +361,7 @@ hook_deny() {
   local label="${2:-$(basename "$0" .sh)}"
   _hook_debug "DENY [$label]: $msg"
   _hook_track_violation "$label"
+  _hook_log_entry "deny" "$label"
   echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"$msg\"}" >&2
   exit 2
 }
