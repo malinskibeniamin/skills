@@ -3,6 +3,7 @@
 
 SCRIPT="$REPO_ROOT/setup-toolchain/scripts/enforce-toolchain.sh"
 SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
+LEGACY_LINTER="$REPO_ROOT/.claude/hooks/legacy-linter-check.sh"
 SKILL_DIR="$REPO_ROOT/setup-toolchain"
 
 # ── File structure ──────────────────────────────────────────────
@@ -308,6 +309,99 @@ run_content_eval "$SCRIPT" "rm.*recursive" "hook blocks rm -rf"
 run_content_eval "$SCRIPT" "git push.*force" "hook blocks git push --force"
 run_content_eval "$SCRIPT" "git reset.*hard" "hook blocks git reset --hard"
 run_content_eval "$SCRIPT" "git.*checkout.*restore" "hook blocks git checkout/restore ."
+
+# ══════════════════════════════════════════════════════════════════
+# legacy-linter-check.sh (PostToolUse: Edit|Write)
+# ══════════════════════════════════════════════════════════════════
+
+run_executable_eval "$LEGACY_LINTER" "legacy-linter-check.sh is executable"
+
+# ── Skip non-Edit/Write ──────────────────────────────────────────
+
+run_hook_eval "$LEGACY_LINTER" \
+  '{"tool_name":"Bash","tool_input":{"command":"echo"}}' \
+  0 "legacy-linter: skip Bash tool"
+
+run_hook_eval "$LEGACY_LINTER" \
+  '{"tool_name":"Read","tool_input":{"file_path":"foo.ts"}}' \
+  0 "legacy-linter: skip Read tool"
+
+# ── Skip non-matching extensions ────────────────────────────────
+
+run_hook_eval "$LEGACY_LINTER" \
+  '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/test.go"}}' \
+  0 "legacy-linter: skip .go file"
+
+# ── Block eslint-disable comments ────────────────────────────────
+
+_ll_tmpdir=$(mktemp -d /tmp/legacy-linter-evals-XXXXXX)
+
+printf '// eslint-disable-next-line @typescript-eslint/no-explicit-any\ntype AnyProtoForm = any;\n' > "$_ll_tmpdir/test1.ts"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test1.ts\"}}" \
+  2 "block: eslint-disable-next-line comment" "Biome"
+
+printf '/* eslint-disable no-console */\nconsole.log("hi");\n' > "$_ll_tmpdir/test2.ts"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test2.ts\"}}" \
+  2 "block: eslint-disable block comment" "Biome"
+
+printf '// eslint-disable no-unused-vars\nconst x = 1;\n' > "$_ll_tmpdir/test3.ts"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test3.ts\"}}" \
+  2 "block: eslint-disable line comment" "Biome"
+
+# ── Block eslint-enable comments ─────────────────────────────────
+
+printf '/* eslint-enable */\nconst x = 1;\n' > "$_ll_tmpdir/test4.ts"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test4.ts\"}}" \
+  2 "block: eslint-enable comment" "Biome"
+
+# ── Block prettier-ignore comments ───────────────────────────────
+
+printf '// prettier-ignore\nconst x = {a:1, b:2};\n' > "$_ll_tmpdir/test5.ts"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test5.ts\"}}" \
+  2 "block: prettier-ignore comment" "Biome"
+
+printf '/* prettier-ignore */\nconst x = 1;\n' > "$_ll_tmpdir/test6.tsx"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test6.tsx\"}}" \
+  2 "block: prettier-ignore block comment" "Biome"
+
+# ── Block eslint/prettier config files ───────────────────────────
+
+printf '{}\n' > "$_ll_tmpdir/.eslintrc.json"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/.eslintrc.json\"}}" \
+  2 "block: .eslintrc.json creation" "Biome"
+
+printf '{}\n' > "$_ll_tmpdir/.prettierrc.json"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/.prettierrc.json\"}}" \
+  2 "block: .prettierrc.json creation" "Biome"
+
+# ── Block eslint/prettier deps in package.json ───────────────────
+
+printf '{"devDependencies":{"eslint":"^8.0.0"}}\n' > "$_ll_tmpdir/package.json"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/package.json\"}}" \
+  2 "block: eslint dep in package.json" "Biome"
+
+# ── Allow clean files ────────────────────────────────────────────
+
+printf 'const x = 1;\n// biome-ignore lint/suspicious/noExplicitAny: reason\ntype Y = any;\n' > "$_ll_tmpdir/clean.ts"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/clean.ts\"}}" \
+  0 "allow: clean file with biome-ignore"
+
+printf '{"devDependencies":{"vitest":"^1.0.0"}}\n' > "$_ll_tmpdir/clean-pkg.json"
+run_hook_eval "$LEGACY_LINTER" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/clean-pkg.json\"}}" \
+  0 "allow: clean package.json"
+
+rm -rf "$_ll_tmpdir"
 
 # ── session-env.sh ──────────────────────────────────────────────
 
