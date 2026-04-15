@@ -120,37 +120,7 @@ run_content_eval "$HOOKS_DIR/connect-error-format-check.sh" "ConnectError.from" 
 run_content_eval "$HOOKS_DIR/connect-error-format-check.sh" "formatToastErrorMessageGRPC" "connect-error-format prescribes formatToastErrorMessageGRPC"
 run_content_eval "$HOOKS_DIR/connect-error-format-check.sh" "onError" "connect-error-format checks for onError"
 
-# ══════════════════════════════════════════════════════════════════
-# console-log-check.sh
-# ══════════════════════════════════════════════════════════════════
-
-run_file_eval "$HOOKS_DIR/console-log-check.sh" "console-log-check.sh exists"
-run_executable_eval "$HOOKS_DIR/console-log-check.sh" "console-log-check.sh is executable"
-
-run_content_eval "$HOOKS_DIR/console-log-check.sh" "console.*log.*error.*warn" "console-log detects console methods"
-run_content_eval "$HOOKS_DIR/console-log-check.sh" "hook_has_escape" "console-log respects escape hatch"
-
-# ── Warn: console.log in source ──────────────────────────────────
-
-_cl_tmpdir=$(mktemp -d /tmp/console-log-evals-XXXXXX)
-tmpfile="$_cl_tmpdir/service.ts"
-printf "console.log('debug info')\n" > "$tmpfile"
-(cd "$_cl_tmpdir" && git init -q && git commit -q --allow-empty -m "init") 2>/dev/null
-
-run_hook_eval "$HOOKS_DIR/console-log-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: console.log in source file" "console"
-
-# ── Skip: test file ─────────────────────────────────────────────
-
-tmpfile="$_cl_tmpdir/service.test.ts"
-printf "console.log('test debug')\n" > "$tmpfile"
-
-run_hook_eval "$HOOKS_DIR/console-log-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: console.log in test file"
-
-(cd /tmp && rm -r "$_cl_tmpdir" 2>/dev/null) || true
+# console-log-check.sh REMOVED — covered by Biome noConsole rule
 
 # ══════════════════════════════════════════════════════════════════
 # form-watch-check.sh
@@ -232,7 +202,7 @@ run_content_eval "$HOOKS_DIR/magic-number-check.sh" "proto" "magic-number checks
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "legacy-import-check" "hooks.json has legacy-import-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "test-convention-check" "hooks.json has test-convention-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "connect-error-format-check" "hooks.json has connect-error-format-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "console-log-check" "hooks.json has console-log-check"
+# console-log-check removed — Biome noConsole handles it
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "form-watch-check" "hooks.json has form-watch-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "as-cast-check" "hooks.json has as-cast-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "mutation-naming-check" "hooks.json has mutation-naming-check"

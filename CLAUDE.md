@@ -55,7 +55,6 @@ All commits: `type(scope): description`
 - No `throw new Error()` in ConnectRPC files — use `ConnectError.from()` for gRPC status codes
 - No `biome-ignore lint/suspicious/noExplicitAny` — fix types properly instead of suppressing
 - No `as any` / `as never` casts — use type guards, generics, discriminated unions
-- No `console.log` in source files — remove or gate behind `NODE_ENV`
 - Use proto enums, not magic numbers, for proto-derived values
 - `useWatch()` for form field values, not `form.watch()` (React Compiler compat)
 - Spread `...field` into react-hook-form controlled components
