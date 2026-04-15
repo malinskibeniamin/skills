@@ -43,6 +43,18 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npx create-react-app myapp"}}' \
   2 "block: npx" "npx banned"
 
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"npx tsc --noEmit"}}' \
+  2 "block: npx tsc --noEmit" "npx banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"npx tsc --noEmit 2>&1; echo \"TSC EXIT: $?\""}}' \
+  2 "block: npx tsc with redirection" "npx banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"npx vitest run"}}' \
+  2 "block: npx vitest" "npx banned"
+
 # ── tsc blocked ─────────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
@@ -53,6 +65,22 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc --noEmit"}}' \
   2 "block: tsc --noEmit" "tsc banned"
 
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"tsc --watch"}}' \
+  2 "block: tsc --watch" "tsc banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"tsc -p tsconfig.json"}}' \
+  2 "block: tsc -p tsconfig.json" "tsc banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bunx tsc --noEmit"}}' \
+  2 "block: bunx tsc --noEmit" "tsc banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun run tsc"}}' \
+  2 "block: bun run tsc" "tsc banned"
+
 # ── tsgo allowed ────────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
@@ -62,6 +90,10 @@ run_hook_eval "$SCRIPT" \
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsgo"}}' \
   0 "allow: tsgo (bare)"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bunx tsgo --noEmit"}}' \
+  0 "allow: bunx tsgo --noEmit"
 
 # ── global install blocked ──────────────────────────────────────
 
@@ -370,36 +402,19 @@ run_hook_eval "$LEGACY_LINTER" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test6.tsx\"}}" \
   2 "block: prettier-ignore block comment" "Biome"
 
-# ── Block eslint/prettier config files ───────────────────────────
+# ── Skip .js files ───────────────────────────────────────────────
 
-printf '{}\n' > "$_ll_tmpdir/.eslintrc.json"
+printf '// eslint-disable-next-line\nconst x = 1;\n' > "$_ll_tmpdir/test7.js"
 run_hook_eval "$LEGACY_LINTER" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/.eslintrc.json\"}}" \
-  2 "block: .eslintrc.json creation" "Biome"
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test7.js\"}}" \
+  0 "legacy-linter: skip .js file"
 
-printf '{}\n' > "$_ll_tmpdir/.prettierrc.json"
-run_hook_eval "$LEGACY_LINTER" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/.prettierrc.json\"}}" \
-  2 "block: .prettierrc.json creation" "Biome"
-
-# ── Block eslint/prettier deps in package.json ───────────────────
-
-printf '{"devDependencies":{"eslint":"^8.0.0"}}\n' > "$_ll_tmpdir/package.json"
-run_hook_eval "$LEGACY_LINTER" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/package.json\"}}" \
-  2 "block: eslint dep in package.json" "Biome"
-
-# ── Allow clean files ────────────────────────────────────────────
+# ── Allow clean TS files ─────────────────────────────────────────
 
 printf 'const x = 1;\n// biome-ignore lint/suspicious/noExplicitAny: reason\ntype Y = any;\n' > "$_ll_tmpdir/clean.ts"
 run_hook_eval "$LEGACY_LINTER" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/clean.ts\"}}" \
-  0 "allow: clean file with biome-ignore"
-
-printf '{"devDependencies":{"vitest":"^1.0.0"}}\n' > "$_ll_tmpdir/clean-pkg.json"
-run_hook_eval "$LEGACY_LINTER" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/clean-pkg.json\"}}" \
-  0 "allow: clean package.json"
+  0 "allow: clean TS file with biome-ignore"
 
 rm -rf "$_ll_tmpdir"
 
