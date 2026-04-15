@@ -58,17 +58,17 @@ jobs:
 
 ## Test Performance Profiling
 
-When `test-perf-stop.sh` detects regressions, use `vitest-profiler`:
+When `test-perf-stop.sh` detect regressions, use `vitest-profiler`:
 
 ```bash
 bunx vitest-profiler --run
 ```
 
-Outputs flamegraph timing data. Diagnostic follow-up, not routine CI.
+Output flamegraph timing data. Diagnostic follow-up, not routine CI.
 
 ## Asset Type Declarations
 
-tsgo needs asset import declarations. Create `src/types/assets.d.ts`:
+tsgo need asset import declarations. Create `src/types/assets.d.ts`:
 
 ```ts
 declare module '*.svg' {
@@ -101,7 +101,7 @@ rsbuild: `@rsbuild/core/types` in tsconfig may suffice.
 
 ## CI Status Check
 
-After push: `Monitor: gh pr checks <number> --watch` — continue working. Before merge: confirm green.
+After push: `Monitor: gh pr checks <number> --watch` — keep working. Before merge: confirm green.
 
 ## Cross-Model Review (Optional)
 
@@ -110,6 +110,4 @@ After push: `Monitor: gh pr checks <number> --watch` — continue working. Befor
 | `/codex:review` | Standard review from different model |
 | `/codex:adversarial-review` | Challenge design decisions |
 | `/codex:rescue <task>` | Delegate to Codex |
-| `@claude review` | PR comment triggers remote Claude review |
-
-
+| `@claude review` | PR comment trigger remote Claude review |

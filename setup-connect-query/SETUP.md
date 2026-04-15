@@ -5,8 +5,8 @@
 ### 1. Detect protobuf version
 
 Check `package.json` for `@bufbuild/protobuf` version:
-- `^1.x` → install **v1 variant** (skips protobuf v2 checks)
-- `^2.x` → install **v2 variant** (includes protobuf v2 checks)
+- `^1.x` → install **v1 variant** (skip protobuf v2 checks)
+- `^2.x` → install **v2 variant** (include protobuf v2 checks)
 
 ### 2. Create hook script
 
@@ -18,15 +18,15 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/con
 
 ### 4. Verify
 
-- [ ] Hook blocks `useQuery` from `@tanstack/react-query` in files with ConnectRPC imports
-- [ ] Hook allows `useQuery` from `@tanstack/react-query` in files without ConnectRPC imports
-- [ ] Hook blocks `invalidateQueries()` with no args
-- [ ] Hook warns on `axios` imports
-- [ ] Hook respects `// allow-direct-query:` escape hatch
-- [ ] (v2 only) Hook blocks `new MessageRequest()` protobuf construction
-- [ ] (v2 only) Hook blocks `PlainMessage<T>` usage
-- [ ] (v2 only) Hook blocks manual object literals with `$typeName`
-- [ ] Hook allows raw `useQuery`/`useMutation` when file imports from `@connectrpc/connect`
+- [ ] Hook block `useQuery` from `@tanstack/react-query` in files with ConnectRPC imports
+- [ ] Hook allow `useQuery` from `@tanstack/react-query` in files without ConnectRPC imports
+- [ ] Hook block `invalidateQueries()` with no args
+- [ ] Hook warn on `axios` imports
+- [ ] Hook respect `// allow-direct-query:` escape hatch
+- [ ] (v2 only) Hook block `new MessageRequest()` protobuf construction
+- [ ] (v2 only) Hook block `PlainMessage<T>` usage
+- [ ] (v2 only) Hook block manual object literals with `$typeName`
+- [ ] Hook allow raw `useQuery`/`useMutation` when file imports from `@connectrpc/connect`
 
 ### 5. Commit
 
@@ -34,7 +34,7 @@ Stage and commit: `Add Connect Query and protobuf enforcement hook`
 
 ## Standard Schema + Protovalidate
 
-Use protobuf schema as form validation — no duplicate Zod schema needed:
+Protobuf schema = form validation. No duplicate Zod schema needed:
 
 ```tsx
 import { createStandardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -51,7 +51,7 @@ const form = useForm({
 
 ## Protobuf Type Registry for google.protobuf.Any
 
-Required for `toJson`/`fromJson` when using `Any` fields — without it: `"is not in the type registry"` error.
+Required for `toJson`/`fromJson` with `Any` fields. Without it: `"is not in the type registry"` error.
 
 ```ts
 import { createRegistry } from '@bufbuild/protobuf'
@@ -90,7 +90,7 @@ const transport = createConnectTransport({
 })
 ```
 
-When adding new proto messages, always add their schema to the registry.
+New proto messages → always add schema to registry.
 
 ## Transport Setup
 

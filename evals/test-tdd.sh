@@ -40,3 +40,11 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Coverage gaps closed" "SKILL.md has cove
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Coverage Gap Analysis" "REFERENCE has coverage gap analysis section"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Uncovered Line" "REFERENCE explains uncovered line numbers"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Priority Order" "REFERENCE has coverage priority order"
+
+# ── Visual regression test section ──────────────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "Visual Regression|browser.test" "SKILL.md has visual regression test section"
+run_content_eval "$SKILL_DIR/SKILL.md" "@vitest/browser" "SKILL.md mentions vitest browser mode detection"
+
+# ── Performance optimization in REFACTOR step ────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "500ms|execution time" "SKILL.md has perf optimization in REFACTOR"
+run_content_eval "$SKILL_DIR/SKILL.md" "per-keystroke|bulk input" "SKILL.md warns about slow input simulation"

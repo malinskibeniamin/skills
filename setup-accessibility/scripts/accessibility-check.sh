@@ -73,4 +73,19 @@ if echo "$added_lines" | grep -qE 'role\s*=\s*["{]dialog'; then
   fi
 fi
 
+# ── Check: aria-invalid without aria-describedby ─────────────────
+
+if echo "$added_lines" | grep -qE 'aria-invalid'; then
+  if ! echo "$file_content" | grep -qE 'aria-describedby'; then
+    hook_warn "aria-invalid without aria-describedby. Add error description reference for screen readers." "a11y-describedby"
+  fi
+fi
+
+# ── Check: nested interactive elements ───────────────────────────
+# Button inside TooltipTrigger, Link inside Button, etc.
+
+if echo "$added_lines" | grep -qE '<(Button|button)[^>]*>.*<(Button|button|a |Link )'; then
+  hook_warn "Possible nested interactive elements. Buttons/links inside buttons break a11y." "a11y-nested-interactive"
+fi
+
 exit 0

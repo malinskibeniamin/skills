@@ -4,7 +4,7 @@
 
 ### PRD → Work Items (mirrors prd-to-issues)
 
-After `/prd-to-plan` generates a plan:
+After `/prd-to-plan` generates plan:
 
 ```bash
 # Create epic
@@ -29,7 +29,7 @@ acli jira workitem create \
 
 ### Bug Triage (mirrors triage-issue)
 
-After investigating a bug:
+After investigating bug:
 
 ```bash
 # Create bug with investigation findings
@@ -98,7 +98,7 @@ acli jira workitem link PROJ-150 --url "https://github.com/org/repo/issues/42"
 
 ## Detection
 
-Check acli availability:
+Check `acli` availability:
 
 ```bash
 if command -v acli &>/dev/null && [ -n "${JIRA_PROJECT:-}" ]; then

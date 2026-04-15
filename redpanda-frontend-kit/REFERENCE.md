@@ -33,15 +33,15 @@ echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 
 ## Component Import Paths
 
-Import from `@/components/redpanda-ui/<name>`, not `@chakra-ui` or `@redpanda-data/ui`.
+Import from `@/components/redpanda-ui/<name>`. Never `@chakra-ui` or `@redpanda-data/ui`.
 
 ## UI Registry Documentation Injection
 
-When `REDPANDA_KIT=1`, reference for each component:
+When `REDPANDA_KIT=1`, reference per component:
 
 - **Registry docs**: `https://redpanda-ui-registry.netlify.app/docs/<component>`
 - **Available patterns**: key-value, proto-form, form-footer, dialog, data-table
-- **Component props/variants**: check the registry playground for correct usage
+- **Component props/variants**: check registry playground for correct usage
 
 ### Key Registry Patterns
 
@@ -89,7 +89,7 @@ the source in linked-repos/ui-registry/ to keep both in sync.
 After changes, open a PR against the ui-registry repo.
 ```
 
-When `REDPANDA_KIT=1`, orchestration-guidance nudges to update upstream registry + PR.
+When `REDPANDA_KIT=1`, orchestration-guidance nudges upstream registry update + PR.
 
 ## Package Source Code (opensrc)
 

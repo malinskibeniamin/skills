@@ -22,7 +22,7 @@ Result: 60% → 100% pass rate, 40% faster execution.
 
 ## Custom Fixtures (test.extend())
 
-Encapsulate reusable setup into declarative fixtures. Tests become assertion-only sequences.
+Encapsulate reusable setup into declarative fixtures. Tests become assertion-only.
 
 ```ts
 import { test as base } from 'vitest'
@@ -51,7 +51,7 @@ test('user has default role', async ({ user }) => {
 })
 ```
 
-**Auto-fixtures**: Set `{ auto: true }` for fixtures that run for every test without explicit reference (mock API servers, database seeding):
+**Auto-fixtures**: Set `{ auto: true }` for fixtures running every test without explicit reference (mock API servers, database seeding):
 
 ```ts
 const test = base.extend<{ mockApi: void }>({
@@ -63,13 +63,13 @@ const test = base.extend<{ mockApi: void }>({
 })
 ```
 
-Same API as Playwright's `test.extend()` — patterns transfer between unit and E2E tests.
+Same API as Playwright `test.extend()` — patterns transfer between unit and E2E.
 
 ## Advanced Assertions
 
 ### Custom Matchers (expect.extend())
 
-Domain-specific assertions improve readability and centralize validation logic.
+Domain-specific assertions improve readability, centralize validation.
 
 ```ts
 // vitest.setup.ts (add to setupFiles in vitest config)
@@ -111,7 +111,7 @@ declare module 'vitest' {
 
 ### Asymmetric Matchers
 
-Custom matchers from `expect.extend()` work in asymmetric position — mix literal values with pattern matchers in nested structures:
+Custom matchers from `expect.extend()` work asymmetric — mix literal values with pattern matchers in nested structures:
 
 ```ts
 expect(response).toEqual({
@@ -123,7 +123,7 @@ expect(response).toEqual({
 
 ### Custom Equality Testers
 
-Teach Vitest that semantically equivalent objects are equal (Money types, units of measure, date representations):
+Teach Vitest semantically equivalent objects equal (Money types, units, date representations):
 
 ```ts
 // vitest.setup.ts
@@ -139,11 +139,11 @@ function measurementTester(a: unknown, b: unknown): boolean | undefined {
 expect.addEqualityTesters([measurementTester])
 ```
 
-Register in `setupFiles`. Expensive testers slow all deep equality checks — keep logic fast.
+Register in `setupFiles`. Expensive testers slow all deep equality checks — keep fast.
 
 ### Retryable Assertions (expect.poll())
 
-`expect.poll()` retries callback until assertion passes. Cleaner than `waitFor` when async source isn't Promise-based (polling APIs, DOM side effects, event-driven state):
+`expect.poll()` retries callback until assertion passes. Cleaner than `waitFor` when async source not Promise-based (polling APIs, DOM side effects, event-driven state):
 
 ```ts
 // Polls fetchStatus() every 50ms until it returns 'ready' (or timeout)
@@ -156,11 +156,11 @@ await expect.poll(() => document.querySelectorAll('.item').length, {
 }).toBeGreaterThan(3)
 ```
 
-Use `expect.poll()` for eventual assertions. Use `waitFor()` when you need to await a Promise chain.
+Use `expect.poll()` for eventual assertions. Use `waitFor()` when awaiting Promise chain.
 
 ### Soft Assertions (expect.soft())
 
-Run all assertions even when one fails. Surfaces every broken expectation in one pass instead of stopping at first failure:
+Run all assertions even when one fails. Surfaces every broken expectation in one pass instead of stopping at first:
 
 ```ts
 test('user profile has all required fields', () => {
@@ -171,11 +171,11 @@ test('user profile has all required fields', () => {
 })
 ```
 
-Soft assertions still fail the test. They just don't short-circuit. Use for complex state validation where you need the full picture to debug efficiently.
+Soft assertions still fail test. No short-circuit. Use for complex state validation where full picture needed to debug.
 
 ## Reactive TDD with Monitor
 
-Use **Monitor** tool — run test runner in watch mode during implementation. Turns RED→GREEN→REFACTOR from discrete steps into continuous feedback loop.
+Use **Monitor** tool — run test runner watch mode during implementation. Turns RED→GREEN→REFACTOR from discrete steps into continuous feedback.
 
 ```
 Monitor: vitest --watch
@@ -187,7 +187,7 @@ Monitor: vitest --watch
 3. Write minimal code — Monitor reports pass (GREEN) on save
 4. Refactor — Monitor confirms green after each change
 
-**When to use**: Phase 3 (Implement) for rapid iteration. Valuable when making multiple small changes — see red/green transitions without running tests manually.
+**When to use**: Phase 3 (Implement) for rapid iteration. Valuable when making multiple small changes — see red/green transitions without manual test runs.
 
 ## Async Leak Detection with Monitor
 
@@ -201,7 +201,7 @@ Surfaces open handles as detected, not buffered until exit.
 
 ## Coverage Gap Analysis
 
-Run coverage to find what's untested, then write tests targeting those gaps.
+Run coverage to find untested code, write tests targeting gaps.
 
 ```bash
 # Text report — quick overview of uncovered lines
@@ -223,7 +223,7 @@ useAuth.ts      |   72.5  |    50.0  |   80.0  |   72.5  | 34-41,67-72
 AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
 ```
 
-**Uncovered Line #s** = exact targets for new tests. Read those lines, understand what behavior they represent, write tests for that behavior.
+**Uncovered Line #s** = exact targets for new tests. Read lines, understand behavior, write tests for it.
 
 ### Priority Order for Coverage Gaps
 
@@ -233,12 +233,29 @@ AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
 
 ### Don't Chase 100%
 
-Coverage is a tool for finding gaps, not a goal. Accept lower coverage for:
+Coverage = tool for finding gaps, not goal. Accept lower coverage for:
 - Type stubs, barrel exports, re-exports
 - Framework glue (route config, provider wrappers)
 - Generated code (even if not auto-skipped)
 
 Target: **80% lines, 70% branches** for feature code. Focus on behavior-critical paths.
+
+## Visual Regression Tests (Route Files)
+
+Add `*.browser.test.tsx` for new route files when project uses `@vitest/browser`:
+
+```ts
+// routes/oauth-providers/index.browser.test.tsx
+import { test, expect } from 'vitest'
+
+test('oauth providers list renders', async ({ page }) => {
+  await page.goto('/oauth-providers')
+  await expect(page.getByRole('heading', { name: /oauth providers/i })).toBeVisible()
+  await expect(page).toMatchSnapshot()
+})
+```
+
+Detection: existing `*.browser.test.*` files or `@vitest/browser` in package.json.
 
 ## Diagnostic Commands
 
@@ -259,7 +276,7 @@ Tune `vitest.config.*` for faster runs. Settings compound — apply all that fit
 
 ### pool: 'threads'
 
-Worker threads less spawn overhead than forked processes (default). Import times drop ~30%.
+Worker threads = less spawn overhead than forked processes (default). Import times drop ~30%.
 
 ```ts
 // vitest.config.mts
@@ -285,11 +302,11 @@ export default [
 ]
 ```
 
-Each workspace gets its own pool, environment, and isolation settings. Use for multi-runtime monorepos — not for splitting unit/integration in single-runtime projects (use `include`/`exclude` globs for that).
+Each workspace gets own pool, environment, isolation settings. Use for multi-runtime monorepos — not for splitting unit/integration in single-runtime projects (use `include`/`exclude` globs).
 
 ### Concurrent Tests (it.concurrent)
 
-Run independent tests within a single file concurrently. Distinct from `pool:'threads'` which parallelizes across files.
+Run independent tests within single file concurrently. Distinct from `pool:'threads'` which parallelizes across files.
 
 ```ts
 describe.concurrent('independent API calls', () => {
@@ -310,7 +327,7 @@ Safety requirements:
 
 | Setting | Why skip |
 |---|---|
-| `isolate: false` | Incompatible with per-file `vi.mock()` — passes locally, fails CI due to file execution order. Moving all mocks to global setup doesn't scale. |
+| `isolate: false` | Incompatible with per-file `vi.mock()` — passes locally, fails CI due to file execution order. Moving all mocks to global setup no scale. |
 | `experimental.fsModuleCache` | Still experimental — stale cache issues in CI |
 | Sharding | See [CI Pipeline REFERENCE](../setup-ci-pipeline/REFERENCE.md) — useful for suites >60s |
 
@@ -336,7 +353,7 @@ Safety requirements:
 | `getBy` | Element MUST exist. Throws if not found. |
 | `queryBy` | ONLY for "not visible" assertions: `expect(queryByText('X')).not.toBeInTheDocument()` |
 | `findBy` | Async elements. Returns Promise. |
-| `getAllBy` | Multiple elements match and that's expected. |
+| `getAllBy` | Multiple elements match and expected. |
 
 ### Selector Gotchas
 
@@ -415,8 +432,8 @@ Common browser API mocks for jsdom. Configure in `vitest.setup.ts`, not per-test
 
 ### Rules
 
-- Don't re-mock in test files — global setup applies
-- Don't test actual browser behavior — mocks are stubs. Test component callbacks/state.
+- No re-mock in test files — global setup applies
+- No test actual browser behavior — mocks are stubs. Test component callbacks/state.
 - ResizeObserver callbacks never fire in tests — test behavior via props/interaction
 - Add new mocks to `vitest.setup.ts`, not individual test files
 

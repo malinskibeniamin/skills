@@ -49,6 +49,8 @@ paths:
 - Remove duplication, improve naming, deepen modules
 - Tests after every change — stay green
 - **Never refactor while RED.** Get to GREEN first.
+- Check test execution time — flag unit tests >500ms, integration >2s
+- Avoid per-keystroke simulation in tests (slow, flaky). Prefer bulk input methods.
 - Commit when clean
 
 ### Reactive TDD with Monitor
@@ -75,10 +77,14 @@ RED → GREEN → REFACTOR per remaining behavior. One at a time.
 | `.test.tsx` / `.integration.tsx` | Integration — renders components | Yes |
 | `e2e/*.spec.ts` | E2E — Playwright browser | Browser |
 
+## Visual Regression Tests (Route Files)
+
+New TanStack Router routes need `*.browser.test.tsx` sibling — only if project uses vitest browser mode (existing `*.browser.test.*` files or `@vitest/browser` dep). Skip for layout/redirect-only routes. See [REFERENCE.md](REFERENCE.md) for example.
+
 ## When Done
 
 - [ ] All pass (`vitest run`)
-- [ ] No async leaks (`vitest run --detectAsyncLeaks`)
+- [ ] No async leaks (`vitest run --detectAsyncLeaks`) — Stop hook runs this automatically
 - [ ] No setTimeout hacks — condition-based waiting
 - [ ] Coverage gaps closed — re-run `vitest run --coverage.enabled --coverage.reporter=text` and verify changed files have adequate line + branch coverage
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`

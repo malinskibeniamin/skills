@@ -17,8 +17,8 @@ Follow when React Compiler enabled:
 4. **Derive, don't store** — never `useState` + `useEffect` for derived values. Compute inline during render.
 5. **Hooks for semantics, not performance** — `useState` for true UI state, `useEffect` only for syncing with external systems, `useRef` for imperative handles.
 6. **Don't use `useRef` as memoization cache** — compiler owns caching.
-7. **Treat `useMemo`/`useCallback`/`React.memo` as escape hatches** — only use when integrating with non-React systems, or referential stability required for correctness (not performance). Document why.
-8. **Respect `'use no memo'`** — never remove it. Last-resort opt-out, not default.
+7. **Treat `useMemo`/`useCallback`/`React.memo` as escape hatches** — only when integrating with non-React systems, or referential stability needed for correctness (not performance). Document why.
+8. **Respect `'use no memo'`** — never remove. Last-resort opt-out, not default.
 9. **Follow naming conventions** — PascalCase for components (aids compiler inference), `use*` prefix for hooks.
 
 ## react-compiler-check.sh
@@ -41,8 +41,8 @@ export function ProblematicComponent() {
 
 Rules for directives:
 - Never introduce directives automatically
-- Respect existing directives — never remove `'use no memo'`
-- Use `'use no memo'` only as last-resort escape hatch
+- Respect existing — never remove `'use no memo'`
+- `'use no memo'` only as last-resort escape hatch
 - Document why opt-out exists
 
 ## Compiler Modes
@@ -51,7 +51,7 @@ React Compiler supports four compilation modes:
 
 | Mode | Behavior | When to use |
 |------|----------|-------------|
-| `infer` (default) | Heuristically detects components (PascalCase + JSX) and hooks (`use*` prefix) | Most projects — works out of the box |
+| `infer` (default) | Heuristically detects components (PascalCase + JSX) and hooks (`use*` prefix) | Most projects — works out of box |
 | `annotation` | Only compiles functions annotated with `"use memo"` | Incremental adoption, safety-critical code |
 | `syntax` | Relies on Flow-specific component syntax | Rare — Flow codebases only |
 | `all` | Attempts to compile all top-level functions | Generally discouraged — unpredictable |
@@ -61,7 +61,7 @@ Rules:
 - Never rely on compilation for correctness — code must work without compiler
 - Follow naming conventions (PascalCase components, `use*` hooks) to aid inference
 - Never introduce `"use memo"` or `"use no memo"` directives automatically
-- Respect existing directives — directives define compiler trust boundaries, not performance hints
+- Respect existing directives — define compiler trust boundaries, not performance hints
 
 ### Annotation Mode for Legacy Codebases
 
@@ -93,8 +93,8 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 1. Install compiler with `annotation` mode — nothing changes, no files compiled
 2. Add `"use memo"` to files as you migrate — compiler activates per-file
 3. In annotated files, remove manual `useMemo`/`useCallback`/`React.memo`
-4. In non-annotated files, manual memoization remains correct and hooks won't flag it
-5. Once all files annotated, switch to `infer` mode and remove `"use memo"` directives
+4. In non-annotated files, manual memoization stays correct, hooks won't flag it
+5. Once all files annotated, switch to `infer` mode, remove `"use memo"` directives
 
 **Hook behavior by mode:**
 
@@ -105,8 +105,8 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 
 ## Component Library Directory
 
-All files in component library directory (`components/ui/` or `redpanda-ui/`) should have `'use no memo'` because:
-- Registry/distribution components need explicit control over memoization
+All files in component library directory (`components/ui/` or `redpanda-ui/`) need `'use no memo'` because:
+- Registry/distribution components need explicit memoization control
 - Compiler may interfere with component API contracts
 - Consumers may have different compiler settings
 
@@ -127,7 +127,7 @@ All files in component library directory (`components/ui/` or `redpanda-ui/`) sh
 Only when:
 1. Profiling reveals real bottleneck **after** compilation
 2. Interfacing with non-React or legacy systems
-3. Referential stability required for **correctness** (not performance)
+3. Referential stability needed for **correctness** (not performance)
 4. Precise effect re-execution control beyond compiler inference
 
 In these cases: add `'use no memo'` and document why.

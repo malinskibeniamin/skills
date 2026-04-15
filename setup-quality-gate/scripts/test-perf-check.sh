@@ -26,6 +26,14 @@ case "$file_path" in
       fi
     fi
 
+    # ── Check: userEvent.type() is slow in integration tests ──────
+    type_usage=$(echo "$added_lines" | grep -E 'user(Event)?\.type\(' || true)
+
+    if [ -n "$type_usage" ]; then
+      sample=$(echo "$type_usage" | head -2 | sed 's/^+//' | tr '\n' ' ')
+      hook_warn "PERF: userEvent.type() fires per-keystroke (~50ms/char). Use user.clear()+user.paste() or fireEvent.change(). Found: $sample" "test-perf-user-type"
+    fi
+
     # ── Check: it.concurrent + isolate: false is unsafe ───────────
     concurrent_usage=$(echo "$added_lines" | grep -E '\.concurrent' || true)
 

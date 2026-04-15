@@ -75,8 +75,8 @@ export { expect } from '@playwright/test'
 
 ### 6. Verify & Commit
 
-- [ ] `bunx playwright test --list` shows discovered tests
-- [ ] axe-core fixture available, `e2e/` directory exists
+- [ ] `bunx playwright test --list` show discovered tests
+- [ ] axe-core fixture available, `e2e/` dir exists
 - Commit: `Add Playwright e2e testing with Testcontainers and axe-core`
 
 ## Testcontainers Setup

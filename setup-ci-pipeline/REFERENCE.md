@@ -43,7 +43,7 @@ jobs:
 
 ## Blacksmith Worker Optimization
 
-Use [Blacksmith MCP](https://github.com/grahamnotgrant/blacksmith-mcp) to analyze CI stats:
+Use [Blacksmith MCP](https://github.com/grahamnotgrant/blacksmith-mcp) for CI stats analysis:
 
 ```bash
 # Fetch CI run history to find bottlenecks
@@ -53,14 +53,14 @@ gh api repos/{owner}/{repo}/actions/runs --jq '.workflow_runs[:10] | .[] | "\(.n
 Optimization checklist:
 - **Caching**: `bun install` often faster than cache restore. Measure: `time bun install --frozen-lockfile`.
 - **Parallelization**: Split lint, type-check, tests into parallel jobs.
-- **Artifact retention**: Set `retention-days: 7` (coverage), `30` (screenshots). Default 90 days excessive.
+- **Artifact retention**: Set `retention-days: 7` (coverage), `30` (screenshots). Default 90 days too much.
 - **Cache artifact size**: `actions/cache` only if install >30s consistently.
 
 ## Test Sharding
 
-Split large suites across parallel runners.
+Split big suites across parallel runners.
 
-**When to shard**: Suite >60s. Don't shard <30s — overhead exceeds savings.
+**When to shard**: Suite >60s. Skip if <30s — overhead exceeds savings.
 
 ```yaml
 jobs:
@@ -95,8 +95,8 @@ jobs:
 
 ## Coverage Gates
 
-80% lines / 80% functions / 70% branches floor. Don't chase 100%.
+80% lines / 80% functions / 70% branches floor. Skip chasing 100%.
 
 ## Bundle Size Budget
 
-Main chunk <300KB gzip, total <1MB gzip. Rsdoctor (`@rsdoctor/rspack-plugin`) for analysis.
+Main chunk <300KB gzip, total <1MB gzip. `@rsdoctor/rspack-plugin` for analysis.

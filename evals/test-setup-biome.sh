@@ -81,3 +81,11 @@ fi
 
 run_content_eval "$SKILL_DIR/SKILL.md" "lint:file" "SKILL.md documents lint:file script"
 run_content_eval "$SKILL_DIR/SKILL.md" "lint:fix:file" "SKILL.md documents lint:fix:file script"
+
+# ── New rules from PR audit (2025-2026) ─────────────────────────
+
+run_content_eval "$SKILL_DIR/REFERENCE.md" "@redpanda-data/ui" "REFERENCE restricts @redpanda-data/ui imports"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "lucide-react" "REFERENCE restricts lucide-react imports"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "noRestrictedElements" "REFERENCE has noRestrictedElements for raw HTML"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useConsistentTestIt" "REFERENCE has useConsistentTestIt (nursery)"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "noPlaywrightWaitForTimeout" "REFERENCE has noPlaywrightWaitForTimeout"

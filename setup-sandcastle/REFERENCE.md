@@ -183,12 +183,12 @@ await Promise.all(
 
 | Our layer | How Sandcastle uses it |
 |---|---|
-| development-lifecycle | Each agent follows the 6-phase lifecycle |
+| development-lifecycle | Each agent follows 6-phase lifecycle |
 | Hooks (25 total) | Run inside each container — react-rules, accessibility, etc. |
-| code-reviewer agent | Dispatched as a review pass after implementation |
-| verifier agent | Can verify UI changes via agent-browser inside container |
+| code-reviewer agent | Dispatched as review pass after implementation |
+| verifier agent | Verifies UI changes via agent-browser inside container |
 | orchestration-stop | Blocks agent from completing without tests + type check |
-| Monitor tool | Agents use Monitor to watch CI, test output, and dev servers in the background instead of blocking |
+| Monitor tool | Agents use Monitor to watch CI, test output, dev servers in background instead of blocking |
 | intent-detect | Not used (agents get explicit prompts, not user prompts) |
 
 ## When to Use Sandcastle vs Claude Code
@@ -208,7 +208,7 @@ Implement with Claude, review with Codex. Providers: `claudeCode()`, `codex()`, 
 
 ## Prompt Caching Tips
 
-Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuses computation — cached tokens cost 10% of uncached. At scale, cache hits dominate cost. Template above is cache-friendly:
+Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuses computation — cached tokens cost 10% of uncached. At scale, cache hits dominate cost. Template above cache-friendly:
 
 | Pattern | Why it works | What breaks it |
 |---|---|---|
@@ -218,6 +218,6 @@ Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claud
 | `maxIterations: 3` | Claude Code preserves prefix between iterations automatically | N/A — just works |
 
 **Key rules:**
-1. **Static first, dynamic last** — caching is prefix-matched. Keep system prompt, tools, skills stable. Issue context in `promptArgs` (end of prompt).
+1. **Static first, dynamic last** — caching prefix-matched. Keep system prompt, tools, skills stable. Issue context in `promptArgs` (end of prompt).
 2. **One model per `run()`** — switch = full cache rebuild. Template uses opus for implement, sonnet for review as separate calls.
 3. **Don't change tools between iterations** — `onSandboxReady` runs once. Conditional tool install = different prefix = zero cross-agent cache reuse.

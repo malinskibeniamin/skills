@@ -146,4 +146,20 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\bvia\b[^'\"]*\1"; then
   hook_warn "No 'via' in UI. Use 'through'/'using'/'with'."
 fi
 
+# ── Check 19: Redundant phrasing in UI strings ───────────────────
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*configuration and settings[^'\"]*\1"; then
+  hook_warn "Redundant: 'configuration and settings'. Pick one term."
+fi
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*manage and configure[^'\"]*\1"; then
+  hook_warn "Redundant: 'manage and configure'. Pick one verb."
+fi
+
+# ── Check 20: Inconsistent terminology (glossary) ────────────────
+
+if echo "$added_lines" | grep -qE "(['\"])[^'\"]*routing rules[^'\"]*\1"; then
+  hook_warn "Use 'routing policies' not 'routing rules' (matches docs)." "ux-copy-glossary"
+fi
+
 exit 0

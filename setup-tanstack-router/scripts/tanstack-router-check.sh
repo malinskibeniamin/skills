@@ -52,6 +52,19 @@ if echo "$added_lines" | grep -qE 'window\.location\.(search|pathname|hash|origi
   hook_warn "No window.location reads. Use useParams({from}) or useSearch({from}) for type-safe access. For origin, use router basePath or env config."
 fi
 
+# ── Check 5b: Catch bare location.href (without window. prefix) ──────
+
+bare_location=$(echo "$added_lines" | grep -E '\blocation\.(href|assign|replace|reload)\b' | grep -vE 'window\.location' || true)
+if [ -n "$bare_location" ]; then
+  hook_warn "Bare location.href detected. Use TanStack Router navigate({to}) or <Link>. For external redirects, use window.open() sparingly with user confirmation."
+fi
+
+# ── Check 5c: Warn on window.open() for OAuth/redirect flows ─────────
+
+if echo "$added_lines" | grep -qE 'window\.open\('; then
+  hook_warn "window.open() detected. For OAuth redirects, prefer server-side redirect or TanStack Router navigate. If needed, document why in comment."
+fi
+
 # ── Check 6: Ban strict: false in router hook calls ───────────────────
 
 if echo "$added_lines" | grep -qE 'strict:\s*false'; then

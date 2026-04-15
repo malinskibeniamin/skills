@@ -141,7 +141,7 @@ printf "const path = window.location.pathname\n" > "$tmpfile"
 
 run_hook_eval "$CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: window.location.pathname (exit 0)" "nuqs"
+  0 "warn: window.location.pathname (exit 0)" "window.location"
 
 # tmpfile reused in tmpdir
 
@@ -278,5 +278,32 @@ run_content_eval "$CHECK_SCRIPT" "validateSearch" "check: requires validateSearc
 run_content_eval "$CHECK_SCRIPT" "code splitting" "check: warns on route file exports"
 run_content_eval "$CHECK_SCRIPT" "nuqs" "check: suggests nuqs"
 run_content_eval "$CHECK_SCRIPT" "hook_block|hook_warn" "check: uses shared output functions"
+
+# ── Check 5b: Warn on bare location.href (no window. prefix) ────
+
+tmpfile="$_rt_tmpdir/test.tsx"
+printf "location.href = '/dashboard'\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: bare location.href (exit 0)" "location"
+
+# tmpfile reused in tmpdir
+
+# ── Check 5c: Warn on window.open() ─────────────────────────────
+
+tmpfile="$_rt_tmpdir/test.tsx"
+printf "window.open(authUrl, '_blank')\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: window.open() detected (exit 0)" "window.open"
+
+# tmpfile reused in tmpdir
+
+# ── Check script content (new patterns) ──────────────────────────
+
+run_content_eval "$CHECK_SCRIPT" "Bare location" "check: catches bare location.href"
+run_content_eval "$CHECK_SCRIPT" "window\.open" "check: catches window.open"
 
 rm -rf "$_rt_tmpdir"

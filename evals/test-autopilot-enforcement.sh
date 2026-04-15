@@ -82,7 +82,7 @@ rm -f "$_eval_stderr"
 # ── CLAUDE.md: imperative lifecycle language ────────────────────
 
 run_content_eval "$REPO_ROOT/CLAUDE.md" "MANDATORY.*enforced by hooks" "CLAUDE.md lifecycle section is marked MANDATORY"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "You MUST follow" "CLAUDE.md uses imperative MUST language"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "MUST follow" "CLAUDE.md uses imperative MUST language"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/tdd.*every new" "CLAUDE.md mandates /tdd for new files"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/simplify" "CLAUDE.md mandates /simplify before commit"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/commit-push" "CLAUDE.md mandates /commit-push in ship phase"

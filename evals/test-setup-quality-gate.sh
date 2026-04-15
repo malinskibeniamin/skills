@@ -355,3 +355,33 @@ rm -rf "$tmpdir"
 run_hook_eval "$PERF_CHECK_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"vitest --run"}}' \
   0 "skip: non-Edit/Write tool"
+
+# ── test-perf-check.sh: warn on userEvent.type() ────────────────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'await user.type(input, "hello world");\n' > "$tmpdir/login.test.tsx"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init" && printf '+await user.type(input, "hello world");\n' > "$tmpdir/login.test.tsx") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/login.test.tsx\"}}" \
+  0 "warn: userEvent.type() in test file" "per-keystroke"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: allow user.paste() ──────────────────────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'await user.clear(input);\nawait user.paste("hello world");\n' > "$tmpdir/login.test.tsx"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init" && printf '+await user.clear(input);\n+await user.paste("hello world");\n' > "$tmpdir/login.test.tsx") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/login.test.tsx\"}}" \
+  0 "allow: user.paste() in test file (no type warning)"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-stop.sh: script content (new features) ────────────
+
+run_content_eval "$PERF_SCRIPT" "detectAsyncLeaks" "perf-stop runs async leak detection"
+run_content_eval "$PERF_SCRIPT" "Slow tests detected" "perf-stop flags slow tests"
+run_content_eval "$PERF_SCRIPT" "500" "perf-stop has 500ms unit threshold"

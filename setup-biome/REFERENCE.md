@@ -59,13 +59,33 @@
               "recoil": "Recoil is archived by Meta. Use zustand instead.",
               "react-scripts": "Create React App is deprecated. Use rsbuild or vite.",
               "react-beautiful-dnd": "Archived by Atlassian. Use @dnd-kit/core instead.",
-              "framer-motion": "Renamed to 'motion'. Use the motion package instead."
+              "framer-motion": "Renamed to 'motion'. Use the motion package instead.",
+              "@redpanda-data/ui": "Legacy Chakra library. Use redpanda-ui registry components instead.",
+              "lucide-react": "Use components/icons barrel for consistent icon usage."
+            }
+          }
+        }
+      },
+      "correctness": {
+        "noRestrictedElements": {
+          "level": "error",
+          "options": {
+            "elements": {
+              "button": "Use <Button> from @/components/ui/ instead.",
+              "input": "Use <Input> from @/components/ui/ instead.",
+              "select": "Use <Select> from @/components/ui/ instead.",
+              "textarea": "Use <Textarea> from @/components/ui/ instead."
             }
           }
         }
       },
       "nursery": {
-        "useExhaustiveSwitchCases": "error"
+        "useExhaustiveSwitchCases": "error",
+        "useConsistentTestIt": {
+          "level": "error",
+          "options": { "function": "test", "withinDescribe": "test" }
+        },
+        "noPlaywrightWaitForTimeout": "error"
       },
       "project": {
         "noDeprecatedImports": "error"
@@ -99,25 +119,28 @@ Ultracite strict baseline. Overrides:
 
 | Rule | Group | Ultracite default | Our override | Why |
 |------|-------|-------------------|-------------|-----|
-| `noConsole` | suspicious | off | error | Ban console.log in production code |
-| `noReactForwardRef` | suspicious | on | off | Keep off for React 18 — forwardRef is still required |
+| `noConsole` | suspicious | off | error | Ban console.log in prod |
+| `noReactForwardRef` | suspicious | on | off | Keep off for React 18 — forwardRef still required |
 | `noExcessiveCognitiveComplexity` | complexity | threshold 20 | threshold 15 | Stricter complexity limit |
-| `noExplicitAny` in tests | suspicious | off | error | No `any` escape hatch, even in tests |
-| `noDeprecatedImports` | project | off | error | Catch deprecated API usage (requires Biome Scanner) |
+| `noExplicitAny` in tests | suspicious | off | error | No `any` escape, even in tests |
+| `noDeprecatedImports` | project | off | error | Catch deprecated API usage (needs Biome Scanner) |
 | `useFilenamingConvention` | style | off | kebab-case, strict | Enforce kebab-case filenames (`my-component.tsx`, not `MyComponent.tsx`) |
-| `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup |
+| `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup, @redpanda-data/ui, lucide-react |
+| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>` — use registry |
 | `useExhaustiveSwitchCases` | nursery | off | error | Require exhaustive switch/case for type safety |
+| `useConsistentTestIt` | nursery | off | test only | Enforce `test()` over `it()` |
+| `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` in Playwright tests |
 | `organizeImports` | assist | — | on | Auto-sort imports via `assist.actions.source` |
 
-**Note:** `noClassComponent` removed in Biome 2.x. React Compiler skill enforces functional patterns via memoization check.
+**Note:** `noClassComponent` removed in Biome 2.x. React Compiler skill enforce functional patterns via memoization check.
 
 ## Import Deletion Loop Prevention
 
-PostToolUse hook skips `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Prevents:
+PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Prevent:
 
-1. Claude adds `import { Button } from '@/components/ui/button'`
-2. Biome deletes it (unused — Claude hasn't written JSX yet)
-3. Claude re-adds it
+1. Claude add `import { Button } from '@/components/ui/button'`
+2. Biome delete it (unused — Claude hasn't written JSX yet)
+3. Claude re-add it
 4. Infinite loop
 
 Caught at Stop hook / `quality:gate` when done editing.

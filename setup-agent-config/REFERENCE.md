@@ -8,7 +8,7 @@
 
 > Script: [`../shared/user-prompt-context.sh`](../shared/user-prompt-context.sh)
 
-Injects project state into every prompt as `additionalContext`. Claude starts each response knowing project state without wasting tool calls.
+Injects project state into every prompt as `additionalContext`. Claude starts each response knowing state without wasting tool calls.
 
 ### Context Levels
 
@@ -32,7 +32,7 @@ Most valuable injection. Compresses 300+ lines PostToolUse enforcement into one 
 Rules: bun biome vitest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} no-useEffect | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery)
 ```
 
-Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct code first try (1 tool call). Estimated savings: **3000-8000 tokens per session**.
+Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct first try (1 tool call). Estimated savings: **3000-8000 tokens per session**.
 
 ### Full Level — What It Adds
 
@@ -44,7 +44,7 @@ Proto: v2
 Last stop: typecheck PASS, tests PASS
 ```
 
-Prevents 2-3 Glob/Read calls Claude makes discovering import paths, available components, route parameters.
+Prevents 2-3 Glob/Read calls Claude makes discovering import paths, available components, route params.
 
 ### Codex Compatibility
 
@@ -67,7 +67,7 @@ See `codex-compat` REFERENCE.md for approximation strategy.
 
 ### Soft suggestions (via `additionalContext`)
 
-Suggested to Claude but not forced. Claude may choose to include:
+Suggested but not forced. Claude may choose to include:
 
 | Flag | Runner | Why |
 |------|--------|-----|
@@ -76,9 +76,9 @@ Suggested to Claude but not forced. Claude may choose to include:
 | `--teardownTimeout=5000` | Vitest | Kill hanging teardown after 5s — prevents zombie processes from stalled cleanup |
 | `--reporter=github` | Vitest (CI only) | GitHub Actions annotations inline in PR diffs |
 | `--bail` | Jest | Fail fast |
-| `--forceExit` | Jest | Force exit after tests complete — prevents hanging from open handles |
+| `--forceExit` | Jest | Force exit after tests — prevents hanging from open handles |
 
-Suggestions only appear when flag not already present in command.
+Suggestions only appear when flag not already present.
 
 ## llm-truncate.sh (PostToolUse on Bash)
 
@@ -154,7 +154,7 @@ export default defineConfig({
 })
 ```
 
-`hanging-process` reporter logs which async operations prevent vitest from exiting. Remove once zombies resolved — adds overhead.
+`hanging-process` reporter logs which async ops prevent vitest from exiting. Remove once zombies resolved — adds overhead.
 
 ## Token Savings Breakdown
 

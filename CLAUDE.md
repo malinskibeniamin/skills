@@ -6,9 +6,9 @@ Rules: bun tsgo biome vitest | React Compiler handles memoization | fix types pr
 
 ## Toolchain
 
-- `bun` as package manager
-- `tsgo` for type checking
-- Biome for linting/formatting
+- `bun` — package manager
+- `tsgo` — type checking
+- Biome — linting/formatting
 - `--force-with-lease` for force pushes
 - Safe `rm -rf` targets: node_modules, dist, .next, build, .cache, .turbo, coverage
 
@@ -54,6 +54,17 @@ All commits: `type(scope): description`
 - Side-effect fetches (DELETE/POST/PUT/PATCH) must use `useMutation`, not raw fetch in handlers
 - No `throw new Error()` in ConnectRPC files — use `ConnectError.from()` for gRPC status codes
 - No `biome-ignore lint/suspicious/noExplicitAny` — fix types properly instead of suppressing
+- No `as any` / `as never` casts — use type guards, generics, discriminated unions
+- No `console.log` in source files — remove or gate behind `NODE_ENV`
+- Use proto enums, not magic numbers, for proto-derived values
+- `useWatch()` for form field values, not `form.watch()` (React Compiler compat)
+- Spread `...field` into react-hook-form controlled components
+- `mutate()`/`mutateAsync()` must include `onError` callback
+- Use `ConnectError.from(error)` + `formatToastErrorMessageGRPC()` for mutation errors
+- `useMutation` results: name with `*Mutation` suffix (e.g. `deleteMutation`)
+- No `@redpanda-data/ui` imports in new features — use redpanda-ui registry
+- No direct `lucide-react` imports — use `components/icons` barrel
+- No inline `staleTime`/`gcTime` numbers — use named constants from query client config
 
 ## Tailwind CSS
 
@@ -78,6 +89,9 @@ All commits: `type(scope): description`
 - `role="combobox"` needs `aria-expanded` + `aria-controls`
 - `role="dialog"` needs `aria-label` or `aria-labelledby`
 - `role="tablist"` needs child `role="tab"` elements
+- Disabled `<Button>` must have wrapping `<Tooltip>` explaining why
+- `aria-invalid` requires `aria-describedby` for error description
+- No nested interactive elements (button inside tooltip trigger)
 
 ## Zustand
 
@@ -93,13 +107,14 @@ All commits: `type(scope): description`
 - Protobuf v2: `timestampFromDate()` for Timestamp, `anyPack()` for Any with `typeRegistry`
 - Include error callback: `handleSubmit(onSubmit, onError)`
 - FieldMask: compute `paths` from dirty fields (`Object.keys(dirtyFields)`) instead of hardcoding
+- `invalidateQueries` over `refetchQueries` — always `await` invalidation promises
 - New route/component/hook files must have corresponding test files — run `/tdd`
 
 ## Development Lifecycle (MANDATORY — enforced by hooks)
 
-You MUST follow this order for every implementation task. Hooks will block you if you skip steps.
+MUST follow this order every task. Hooks block if steps skipped.
 
-1. **Understand** — explore context, ask one clarifying question at a time, propose approaches
+1. **Understand** — explore context, ask one clarifying question at time, propose approaches
 2. **Plan** — write exact file paths, exact code, expected output
 3. **Implement (TDD)** — run `/tdd` for every new source file. Write failing test FIRST, then minimal code to pass, then refactor. Hook blocks new files without tests.
 4. **Simplify** — run `/simplify` on changed code before committing. Review for reuse, quality, efficiency.
@@ -129,8 +144,16 @@ Pattern: start process in background with `Bash(run_in_background)`, then `Monit
 - Write failing test FIRST — then make pass
 - `userEvent.setup()` + `getByRole` for accessibility assertions
 - `await waitFor(() => expect(...))` for async assertions
-- Classify: `.test.ts` (unit), `.test.tsx` (integration), `e2e/*.spec.ts` (Playwright)
+- Classify: `.test.ts` (unit), `.test.tsx` (integration), `.browser.test.tsx` (visual regression), `e2e/*.spec.ts` (Playwright)
 - Co-locate test files with source files
+- Use `test()` not `it()` for test declarations
+- Use `vi.fn()` / `vi.mock()` / `vi.spyOn()` — not Jest equivalents
+- Prefer `.toBeVisible()` over `.toBeInTheDocument()` for visible elements
+- No `waitForTimeout` in tests — use `waitFor`, `waitForURL`, proper assertions
+- No `test.skip` in E2E — hard fail if env missing, use `test.fixme()` for known bugs
+- Use `createRouterTransport` for ConnectRPC test mocks
+- Add `data-testid` on interactive elements for stable test selectors
+- Use `test.step()` in Playwright for clear failure reports
 
 ## Logging
 

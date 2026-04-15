@@ -115,4 +115,42 @@ fi
 msg=$(printf '%s' "$table" | jq -Rs .)
 echo "{\"hookSpecificOutput\":{\"additionalContext\":$msg}}" >&2
 
+# ── Slow test detection ──────────────────────────────────────────
+# Flag individual tests exceeding thresholds: unit >500ms, integration >2s.
+# Uses current run data (not comparison).
+
+slow_tests=""
+while IFS=$'\t' read -r name duration; do
+  dur_int=${duration%.*}
+  [ -z "$dur_int" ] && continue
+  if [ "$dur_int" -gt 2000 ]; then
+    slow_tests="${slow_tests}\n  ${name}: ${dur_int}ms (>2s)"
+  elif [ "$dur_int" -gt 500 ]; then
+    # Only flag as slow for unit tests (no DOM env)
+    slow_tests="${slow_tests}\n  ${name}: ${dur_int}ms (>500ms)"
+  fi
+done < <(awk -F'\t' '{print $1 "\t" $2}' "$baseline" 2>/dev/null || true)
+
+if [ -n "$slow_tests" ]; then
+  slow_msg=$(printf "Slow tests detected:%b\nConsider: smaller scope, fewer re-renders, mock heavy deps, or .concurrent for independent tests." "$slow_tests" | jq -Rs .)
+  echo "{\"hookSpecificOutput\":{\"additionalContext\":$slow_msg}}" >&2
+fi
+
+# ── Async leak detection ─────────────────────────────────────────
+# Auto-run --detectAsyncLeaks on session-touched test files.
+
+_vitest_bin="vitest"
+[ -x "./node_modules/.bin/vitest" ] && _vitest_bin="./node_modules/.bin/vitest"
+
+if command -v "$_vitest_bin" &>/dev/null || [ -x "$_vitest_bin" ]; then
+  leak_output=$($_vitest_bin run --detectAsyncLeaks --related $abs_changed 2>&1 || true)
+  leak_warnings=$(echo "$leak_output" | grep -iE 'async.*leak|open handle|did not close' || true)
+
+  if [ -n "$leak_warnings" ]; then
+    leak_sample=$(echo "$leak_warnings" | head -5 | tr '\n' ' ')
+    leak_msg=$(printf "Async leak detected: %s\nFix open handles (timers, connections, listeners) before finishing." "$leak_sample" | jq -Rs .)
+    echo "{\"hookSpecificOutput\":{\"additionalContext\":$leak_msg}}" >&2
+  fi
+fi
+
 exit 0

@@ -6,13 +6,13 @@
 
 ## How It Works
 
-The Stop hook runs when Claude finishes a turn. It checks:
+Stop hook runs when Claude finishes turn. Checks:
 
-1. Were any files in `redpanda-ui/` or `src/redpanda-ui/` modified? (`git diff --name-only HEAD`)
-2. If yes — was `registry.json` also modified in the same diff?
-3. If `registry.json` was NOT updated → **blocks** with a reminder
+1. Files in `redpanda-ui/` or `src/redpanda-ui/` modified? (`git diff --name-only HEAD`)
+2. If yes — `registry.json` also modified in same diff?
+3. If `registry.json` NOT updated → **blocks** with reminder
 
-If no `redpanda-ui/` directory exists in the repo, the hook exits immediately (zero overhead).
+If no `redpanda-ui/` directory exists in repo, hook exits immediately (zero overhead).
 
 ## When It Triggers
 
@@ -20,20 +20,20 @@ If no `redpanda-ui/` directory exists in the repo, the hook exits immediately (z
 |---|---|---|
 | `redpanda-ui/button.tsx` | Yes | Pass |
 | `redpanda-ui/button.tsx` | No | **Block** — rebuild registry |
-| `src/components/UserTable.tsx` | N/A | Pass (not a registry file) |
+| `src/components/UserTable.tsx` | N/A | Pass (not registry file) |
 | No files changed | N/A | Pass |
 
 ## Registry Rebuild Steps
 
 When blocked:
 
-1. Run the registry build command: `bun run build:registry`
-2. Update `CHANGELOG.md` with the component changes
-3. Let Claude finish the turn — the hook will re-check
+1. Run registry build: `bun run build:registry`
+2. Update `CHANGELOG.md` with component changes
+3. Let Claude finish turn — hook re-checks
 
 ## Skipping in Non-Registry Repos
 
-The hook auto-detects: if neither `redpanda-ui/` nor `src/redpanda-ui/` exists at the repo root, it exits 0 immediately. No configuration needed to disable it in non-registry projects.
+Hook auto-detects: if neither `redpanda-ui/` nor `src/redpanda-ui/` exists at repo root, exits 0 immediately. No config needed to disable in non-registry projects.
 
 ## Component Taxonomy — Detailed Classification
 

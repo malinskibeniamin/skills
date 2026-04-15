@@ -14,13 +14,28 @@ hook_get_added_lines
 
 file_content=$(cat "$file_path")
 
+# Gate: file uses connectrpc OR is in a project that does (sibling files import it)
+_uses_connect=false
 if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/"; then
+  _uses_connect=true
+elif echo "$file_path" | grep -qE '/(routes|hooks|components)/'; then
+  # Check if project uses connectrpc (nearest package.json or sibling imports)
+  _dir=$(dirname "$file_path")
+  while [ "$_dir" != "/" ]; do
+    if [ -f "$_dir/package.json" ] && grep -q '@connectrpc' "$_dir/package.json" 2>/dev/null; then
+      _uses_connect=true
+      break
+    fi
+    _dir=$(dirname "$_dir")
+  done
+fi
+
+if [ "$_uses_connect" = true ]; then
   if echo "$added_lines" | grep -qE 'throw\s+new\s+Error\('; then
-    # Only flag if near fetch/RPC context, not form validation or assertions
-    # Check if the throw is inside a queryFn, mutationFn, loader, or fetch handler
+    # Flag if near fetch/RPC context — queryFn, mutationFn, loader, fetch handler
     if echo "$file_content" | grep -qE 'queryFn|mutationFn|loader|\.fetch\(|callUnaryMethod'; then
       if ! hook_has_escape "connect-error"; then
-        hook_warn "Use ConnectError.from() not throw new Error() in ConnectRPC data-fetching code. Preserves gRPC status codes. Escape: // allow: connect-error [reason]"
+        hook_warn "Use ConnectError.from() not throw new Error() in data-fetching code. Preserves gRPC status codes for consistent error handling. Escape: // allow: connect-error [reason]"
       fi
     fi
   fi

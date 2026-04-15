@@ -23,11 +23,21 @@ elif echo "$file_content" | grep -qE "from\s+['\"]react['\"]|from\s+['\"]@tansta
 fi
 
 if [ "$is_react_file" = true ]; then
-  if echo "$added_lines" | grep -qE "method:\s*['\"]?(DELETE|POST|PUT|PATCH)['\"]?"; then
-    # Skip if file already uses useMutation for this pattern
-    if ! echo "$file_content" | grep -qE 'mutationFn|useMutation|createConnectQueryKey.*mutation'; then
+  # Check added lines for side-effect fetch calls
+  side_effect_fetches=$(echo "$added_lines" | grep -E "method:\s*['\"]?(DELETE|POST|PUT|PATCH)['\"]?" || true)
+
+  if [ -n "$side_effect_fetches" ]; then
+    # Count side-effect methods in new code vs mutationFn wrappers in new code.
+    # File-level useMutation check is too broad — a file can have one mutation
+    # but add new raw fetches that bypass it.
+    new_fetch_count=$(echo "$side_effect_fetches" | wc -l | tr -d '[:space:]')
+    new_mutation_count=$(echo "$added_lines" | grep -cE 'mutationFn|useMutation' 2>/dev/null || true)
+    new_mutation_count=${new_mutation_count:-0}
+    new_mutation_count=$(echo "$new_mutation_count" | tr -d '[:space:]')
+
+    if [ "$new_fetch_count" -gt "$new_mutation_count" ]; then
       if ! hook_has_escape "inline-mutation"; then
-        hook_warn "Side-effect fetch (DELETE/POST/PUT/PATCH) without useMutation. Wrap in useMutation hook for loading/error state. Escape: // allow: inline-mutation [reason]"
+        hook_warn "Side-effect fetch (DELETE/POST/PUT/PATCH) without useMutation. ${new_fetch_count} fetch(es) but only ${new_mutation_count} mutation wrapper(s) in new code. Wrap in useMutation hook. Escape: // allow: inline-mutation [reason]"
       fi
     fi
   fi

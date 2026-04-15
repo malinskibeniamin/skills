@@ -722,7 +722,7 @@ echo "/* biome-ignore lint/suspicious/noExplicitAny: third-party */" > "$tmpfile
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: biome-ignore block comment" "biome-ignore"
+  2 "block: biome-ignore noExplicitAny block comment" "noExplicitAny"
 
 # ── Check 26: Tree-shaking killers ───────────────────────────────
 

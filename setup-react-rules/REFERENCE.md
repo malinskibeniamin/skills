@@ -82,7 +82,7 @@ useEffect(function connectToWebSocket() {
 
 ## Form-Level Validation (react-hook-form v7.72+)
 
-For cross-field validation (e.g., "confirm password must match password", "end date after start date"), use `validate` option on `useForm` instead of custom logic inside `onSubmit`:
+Cross-field validation (confirm password, end date after start date) — use `validate` on `useForm`, not custom logic in `onSubmit`:
 
 ```tsx
 // BAD — validation logic buried in submit handler, errors not surfaced to UI
@@ -123,11 +123,11 @@ useEffect(() => {
 <UserProfile key={userId} />
 ```
 
-`key` prop works on any component, not just lists. Key changes → React destroys old instance, creates new one with fresh state.
+`key` prop works on any component, not just lists. Key change → React destroys old instance, creates new one with fresh state.
 
 ## Subscriptions — Prefer `useSyncExternalStore`
 
-Subscribing to browser APIs (online status, media queries, scroll position, external stores)? Prefer `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
+Subscribing to browser APIs (online status, media queries, scroll position, external stores)? Use `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
 
 ```tsx
 // BAD — verbose, prone to tearing in concurrent mode
