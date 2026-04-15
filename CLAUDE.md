@@ -47,7 +47,9 @@ All commits: `type(scope): description`
 - `<Button>` for clickable elements (native keyboard/focus/a11y)
 - Pass functions to `setTimeout`, `Number.isNaN()` for NaN checks
 - Name useEffect callbacks: `useEffect(function syncDocumentTitle() { ... }, [title])`
-- Form validation mode must be `onChange` (immediate feedback), never `onBlur`/`onSubmit`
+- Form validation mode must be `onChange` (immediate feedback), never `onBlur`/`onSubmit` (enforced by hook)
+- Forms must have field validation: `register('field', { validate, required, pattern })` or resolver (enforced by hook)
+- Forms must surface errors inline next to fields via FormMessage/FieldError/Field component (enforced by hook)
 - Custom hooks (`function use*`) must live in `/hooks/` directory, not inline in route files
 - Route files over 300 LOC → split — use `/request-refactor-plan`
 - No `window.location` reads (including `.origin`) — use router utilities or env config
@@ -199,7 +201,7 @@ Pattern: start process in background with `Bash(run_in_background)`, then `Monit
 - Inputs with errors need `aria-invalid` + `aria-describedby` pointing to error message (enforced by hook)
 - `data-invalid` not substitute for `aria-invalid` — screen readers need ARIA
 - Disabled submit button must have `<Tooltip>` explaining why (enforced by hook)
-- URL inputs: use `type="url"` for browser-level validation hints
+- URL inputs: use `type="url"` for browser-level validation hints (enforced by hook)
 - Secret reference fields: use `type="text"` not `type="password"` when user needs to verify format while typing
 
 ### State Consistency

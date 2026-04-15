@@ -91,9 +91,23 @@ fi
 
 # ── Check 5: URL-named fields without type="url" ────────────────
 # Inputs for URL fields should use type="url" for browser validation hints.
+# Detect via: register/name with url/endpoint/callback/redirect/webhook/origin
+# keywords, OR placeholder containing http:// / https://.
 
-if echo "$added_lines" | grep -qiE '(url|endpoint|callback|redirect)\s*(Uri|Url|URL)?\s*["\x27]?\s*/>|name\s*=\s*["\x27][^"]*[Uu]rl[^"]*["\x27]'; then
-  if echo "$added_lines" | grep -qE '<Input\b|<input\b'; then
+if echo "$added_lines" | grep -qE '<Input\b|<input\b'; then
+  _is_url_field=false
+
+  # Signal 1: register() or name= with URL-related keywords
+  if echo "$added_lines" | grep -qiE "register\(['\"][^'\"]*([Uu]rl|[Ee]ndpoint|[Cc]allback|[Rr]edirect|[Ww]ebhook|[Oo]rigin)[^'\"]*['\"]|name\s*=\s*['\"][^'\"]*([Uu]rl|[Ee]ndpoint|[Cc]allback|[Rr]edirect|[Ww]ebhook|[Oo]rigin)[^'\"]*['\"]"; then
+    _is_url_field=true
+  fi
+
+  # Signal 2: placeholder containing a URL
+  if echo "$added_lines" | grep -qE 'placeholder.*https?://|https?://.*placeholder'; then
+    _is_url_field=true
+  fi
+
+  if [ "$_is_url_field" = true ]; then
     if ! echo "$added_lines" | grep -qE 'type\s*=\s*["\x27]url["\x27]'; then
       if ! hook_has_escape "input-type-url"; then
         hook_warn "URL field without type=\"url\". Add type=\"url\" for browser-level validation hints. Escape: // allow: input-type-url [reason]" "unhappy-path-input-type"

@@ -132,6 +132,7 @@ hook_skip_ui_dirs() {
     _ui_dirs="components/ui"
     _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     [ -d "$_root/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
+    [ -d "$_root/src/components/redpanda-ui" ] && _ui_dirs="$_ui_dirs|redpanda-ui"
     [ -d "$_root/src/ui" ] && _ui_dirs="$_ui_dirs|src/ui"
     [ -d "$_root/packages/ui" ] && _ui_dirs="$_ui_dirs|packages/ui"
   else
