@@ -169,6 +169,14 @@ Pattern: start process in background with `Bash(run_in_background)`, then `Monit
 - Handle loading, error, AND empty states for query hooks
 - Add error handling to async event handlers
 
+## Auto Mode (team setup)
+
+- Deny rules in `settings.json` mirror `enforce-toolchain.sh` — fast rejection before hooks run
+- `bunx skills:*` allow rule may get dropped by classifier — test when adopting auto mode
+- Admin: configure `autoMode.environment` in managed settings to whitelist trusted repos/services
+- Run `claude auto-mode defaults` to see full classifier rule schema
+- Plan → auto workflow: plan mode (step 2) → approve → auto mode (steps 3-6) is natural fit
+
 ## Auto-Generated Files (skip these)
 
 - `*.gen.ts` / `*.gen.tsx` (TanStack Router routeTree)
