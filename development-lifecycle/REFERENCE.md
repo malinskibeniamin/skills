@@ -4,7 +4,7 @@
 
 ### New Feature
 1. Read relevant code, docs, recent git history
-2. Ask clarifying questions — one at a time, not list
+2. Ask clarifying questions — one at time, not list
 3. Propose 2-3 approaches with trade-offs
 4. UI work: generate HTML mockup → `agent-browser screenshot --annotate` → iterate
 5. Challenge chosen approach (edge cases, failure modes)
@@ -48,10 +48,52 @@ If any true: refactor to single pattern first, separate PR. Then build feature o
 
 1. **Reproduce** — read FULL error message, write failing test
 2. **Analyze** — find working examples in codebase, trace data flow upstream to where invalid data ORIGINATES
-3. **Hypothesize** — "I think X is root cause because Y." Test ONE hypothesis at a time.
+3. **Hypothesize** — "I think X is root cause because Y." Test ONE hypothesis at time.
 4. **Fix at source** — fix where data originates, not where it crashes. Add defense-in-depth validation at entry point, business logic, environment guards, debug instrumentation.
 
 ## Phase 2: Plan
+
+### Scope Clarity (before designing)
+
+When scope is ambiguous or requirements conflict:
+
+1. **Surface assumptions explicitly:**
+   ```
+   ASSUMPTIONS:
+   1. [assumption]
+   2. [assumption]
+   → Correct me now or I proceed with these.
+   ```
+2. **Stop on confusion.** Name the conflict, present tradeoff, wait for resolution. Never silently pick an interpretation.
+3. **Reframe to success criteria.** "Goal is [measurable outcome]. Correct?" — not a list of steps.
+4. **Flag uncertainty.** `[CONFIDENCE: LOW — reason]` when guessing.
+
+### Naive-First Design
+
+Start with the dumbest solution that works. Then justify every addition:
+
+1. **Problem** — one paragraph. What and why now.
+2. **Constraints** — hard boundaries (time, team, compat).
+3. **Non-goals** — explicitly excluded.
+4. **Simplest viable design** — most boring solution. No optimization, no future-proofing.
+5. **Where naive falls short** — specific, demonstrated gaps only. Not hypothetical.
+6. **For each addition beyond naive** — what gap it addresses, what complexity it adds, why simpler version insufficient.
+
+### Self-Adversarial Review (before grill)
+
+Before presenting plan to user, review it yourself:
+
+| Dimension | Question |
+|---|---|
+| Simplicity | Fewer moving parts? Would senior dev say "why didn't you just..."? |
+| Bundle/perf | Impact on bundle size, render perf, initial load? |
+| Accessibility | Keyboard nav, screen readers, WCAG? |
+| Maintainability | Can team extend in 6 months without original author? |
+| DX | API intuitive? Will consumers misuse it? |
+| Scope creep | Anything unsolicited? |
+| Alternatives | One simpler rejected design and why. |
+
+### Plan Checklist
 
 - [ ] Every task: exact file paths, exact code, expected output
 - [ ] No TBD, no "similar to Task N", no "add error handling"
@@ -141,7 +183,7 @@ AI agents sometimes delete/simplify tests to pass — Kent Beck's "unpredictable
 
 ## Phase 3b: Edge-Case Hardening (Optional)
 
-After verification passes, optionally dispatch agent for additional tests:
+After verification passes, optionally dispatch agent for more tests:
 
 1. Identify functions/components changed in PR
 2. Generate tests for: boundary values, empty/null inputs, concurrent access, error paths, large inputs
@@ -189,10 +231,10 @@ All reviewers output JSON per `agents/findings-schema.md`. Key fields:
 ### SubagentStart Context
 
 SubagentStart hook auto-injects into all subagents:
-- Session-touched files (what this session modified)
+- Session-touched files (what session modified)
 - Dirty baseline (pre-existing changes to filter)
 - Branch and PR context
-- Pointer to findings-schema.md for reviewer agents
+- Pointer to `agents/findings-schema.md` for reviewer agents
 
 ### SubagentStop Validation
 
@@ -303,7 +345,7 @@ After Round 2:
 
 1. Run `/resolve-pr-feedback` — fetches comments, triages, fixes, replies, pushes
 2. Monitor CI after push
-3. One more code-reviewer round + `/resolve-pr-feedback` for new findings
+3. One more `code-reviewer` round + `/resolve-pr-feedback` for new findings
 4. Re-request human review, then stop
 
 **Exit conditions:**
