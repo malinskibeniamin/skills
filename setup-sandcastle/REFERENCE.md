@@ -2,14 +2,12 @@
 
 ## Launch Modes
 
-Two ways to run agents:
-
 | | `run()` | `interactive()` |
 |---|---|---|
 | Mode | Headless (`--print`) | Full TUI (stdin/stdout/stderr) |
-| Human interaction | None — stream-JSON parsed | Direct — human watches and can intervene |
-| Use case | CI, batch, parallel, overnight | HITL review, pair-review, local dev |
-| Sandbox default | Required (`docker()`, etc.) | `noSandbox()` (just git worktrees) |
+| Human interaction | None — stream-JSON parsed | Direct — human can intervene |
+| Use case | CI · batch · parallel · overnight | HITL review · pair-review · local dev |
+| Sandbox default | Required (`docker()`) | `noSandbox()` (git worktrees) |
 | Iterations | `maxIterations` supported | Single session |
 | Completion signal | `<promise>COMPLETE</promise>` | Session exit (Ctrl+C or `/exit`) |
 
@@ -25,7 +23,7 @@ const issues = JSON.parse(
   execSync('gh issue list --state open --label "ready" --json number,title,body --limit 5').toString()
 );
 
-// Run agents in parallel — each gets its own branch + container
+// Run agents in parallel — each gets own branch + container
 const results = await Promise.all(
   issues.map((issue) =>
     run({
@@ -72,7 +70,6 @@ for (const result of results) {
 import { interactive, claudeCode } from "@ai-hero/sandcastle";
 import { noSandbox } from "@ai-hero/sandcastle/sandboxes/no-sandbox";
 
-// Develop locally, then spawn interactive reviewer
 // Human watches full TUI — can Ctrl+C if reviewer goes sideways
 const { commits, branch } = await interactive({
   agent: claudeCode("claude-sonnet-4-6"),
@@ -107,7 +104,7 @@ const implResult = await run({
   maxIterations: 3,
 });
 
-// Step 2: Interactive review — human watches reviewer with full TUI
+// Step 2: Interactive review — human watches with full TUI
 if (implResult.commits.length > 0) {
   await interactive({
     agent: claudeCode("claude-sonnet-4-6"),
@@ -160,33 +157,31 @@ Issue: #{{ISSUE_NUMBER}}
 
 ## Your Environment
 
-You have the following skills and hooks pre-installed:
-
 **Skills loaded:**
-- /development-lifecycle — follow phases: understand → plan → TDD → verify → review
+- /development-lifecycle — phases: understand → plan → TDD → verify → review
 - /tdd — iron law: failing test FIRST
-- /triage-issue — if this is a bug fix: explore → root cause → TDD fix plan
+- /triage-issue — bug fix: explore → root cause → TDD fix plan
 
 **Hooks active (fire automatically):**
-- react-rules-check (25 checks): raw HTML, as any, ts-ignore, eval, XSS, barrel imports
-- accessibility-check (5 checks): img alt, keyboard handlers, ARIA widgets
-- tanstack-router-check (9 checks): route patterns, typed hooks
-- connect-query-check (11 checks): protobuf v2, Connect Query
+- react-rules-check (25): raw HTML · as any · ts-ignore · eval · XSS · barrel imports
+- accessibility-check (5): img alt · keyboard handlers · ARIA widgets
+- tanstack-router-check (9): route patterns · typed hooks
+- connect-query-check (11): protobuf v2 · Connect Query
 - orchestration-stop: blocks on missing tests, runs related tests
 - typecheck-stop: runs tsgo before completion
 - biome-autofix: auto-formats on completion
 
 **Agents available:**
-- code-reviewer — dispatch for fresh-eyes review before final commit
-- verifier — dispatch to verify UI changes via browser
+- code-reviewer — fresh-eyes review before final commit
+- verifier — verify UI changes via browser
 
 ## Instructions
 
-1. Read the issue requirements carefully
+1. Read issue requirements carefully
 2. Follow /development-lifecycle: understand → plan → TDD → verify
-3. The hooks will enforce patterns — follow their guidance when they fire
-4. Dispatch code-reviewer agent before final commit
-5. Commit with conventional format: fix(scope): description. Closes #{{ISSUE_NUMBER}}
+3. Hooks enforce patterns — follow their guidance when they fire
+4. Dispatch code-reviewer before final commit
+5. Commit: fix(scope): description. Closes #{{ISSUE_NUMBER}}
 6. Run bun run quality:gate as final check
 
 When done, emit: <promise>COMPLETE</promise>
@@ -197,9 +192,9 @@ When done, emit: <promise>COMPLETE</promise>
 ```markdown
 # Code Review: {{SOURCE_BRANCH}}
 
-You are the code-reviewer agent. Review with fresh eyes — you have NOT seen the implementation.
+You are code-reviewer agent. Review with fresh eyes — you have NOT seen implementation.
 
-## Pre-checks (run these first)
+## Pre-checks (run first)
 
 ```bash
 bun test --run --related $(git diff --name-only {{SOURCE_BRANCH}}..main)
@@ -207,34 +202,27 @@ bun run type:check
 bun run lint
 ```
 
-## Review Checklist (matches our hook enforcement)
+## Review Checklist
 
 **Spec compliance:**
-- [ ] All requirements from the issue addressed
-- [ ] No scope creep
-- [ ] Edge cases handled
+- [ ] All requirements addressed | No scope creep | Edge cases handled
 
-**React/TS rules (25 checks our hooks enforce):**
-- [ ] No raw HTML (`<button>` → `<Button>`)
-- [ ] No `as any`, `@ts-ignore`, `@ts-expect-error`
-- [ ] No `dangerouslySetInnerHTML`, `eval()`, `.innerHTML`
-- [ ] No barrel imports, no `import * as`
-- [ ] React Compiler: no manual useMemo/useCallback (if compiler installed)
+**React/TS rules (25 hook checks):**
+- [ ] No raw HTML (`<button>` → `<Button>`) | No `as any` · `@ts-ignore` · `@ts-expect-error`
+- [ ] No `dangerouslySetInnerHTML` · `eval()` · `.innerHTML`
+- [ ] No barrel imports · `import * as`
+- [ ] React Compiler: no manual useMemo/useCallback
 
 **Accessibility (5 checks):**
-- [ ] `<img>` has `alt`, icon buttons have `aria-label`
-- [ ] Clickable divs have keyboard handlers
-- [ ] ARIA widget roles complete
+- [ ] `<img>` has `alt` · icon buttons have `aria-label`
+- [ ] Clickable divs have keyboard handlers | ARIA widget roles complete
 
 **Testing:**
-- [ ] Tests exist for new code (TDD)
-- [ ] Tests verify behavior, not implementation
+- [ ] Tests exist for new code (TDD) | Verify behavior, not implementation
 - [ ] No setTimeout/waitForTimeout in tests
 
 **Data layer (if applicable):**
-- [ ] Connect Query (not raw useQuery) with ConnectRPC
-- [ ] Protobuf v2: create(), not new Message()
-- [ ] Timestamp: timestampFromDate(), not { seconds, nanos }
+- [ ] Connect Query with ConnectRPC | Protobuf v2: `create()` | Timestamp: `timestampFromDate()`
 
 Report: APPROVED or NEEDS_CHANGES with file:line references.
 
@@ -243,10 +231,8 @@ When done, emit: <promise>COMPLETE</promise>
 
 ## Dogfooding (Running on This Repo)
 
-Run on this repo:
-
 ```typescript
-// .sandcastle/dogfood.ts — uses same imports as main template above
+// .sandcastle/dogfood.ts
 const issues = JSON.parse(
   execSync('gh issue list --repo malinskibeniamin/skills --state open --json number,title,body').toString()
 );
@@ -270,14 +256,14 @@ await Promise.all(
 | Our layer | How Sandcastle uses it |
 |---|---|
 | development-lifecycle | Each agent follows 6-phase lifecycle — both `run()` and `interactive()` |
-| Hooks (25 total) | Fire inside each session — same enforcement in headless and interactive |
-| code-reviewer agent | Headless via `run()`, or HITL via `interactive()` with full TUI |
-| verifier agent | Verifies UI changes via agent-browser inside container |
-| orchestration-stop | Blocks agent completing without tests + type check |
-| Monitor tool | Agents watch CI, test output, dev servers in background — no blocking |
-| intent-detect | Not used (agents get explicit prompts, not user prompts) |
+| Hooks (25 total) | Fire inside each session — same enforcement headless and interactive |
+| code-reviewer agent | Headless via `run()` or HITL via `interactive()` with full TUI |
+| verifier agent | Verifies UI via agent-browser inside container |
+| orchestration-stop | Blocks completing without tests + type check |
+| Monitor tool | Agents watch CI · test output · dev servers in background |
+| intent-detect | Not used (agents get explicit prompts) |
 
-Hooks and skills are agent-launch-method agnostic — they fire on PostToolUse/PreToolUse inside the session regardless of whether launched by `run()`, `interactive()`, or `claude` directly.
+Hooks/skills are launch-method agnostic — fire on PostToolUse/PreToolUse regardless of `run()` · `interactive()` · `claude` directly.
 
 ## When to Use What
 
@@ -285,29 +271,29 @@ Hooks and skills are agent-launch-method agnostic — they fire on PostToolUse/P
 |---|---|
 | Single feature, interactive | Claude Code directly |
 | Bug fix needing human input | Claude Code directly |
-| Local dev → quick review pass | `interactive()` + `noSandbox()` |
-| Pair-review with human watching | `interactive()` + `docker()` or `noSandbox()` |
+| Local dev → quick review | `interactive()` + `noSandbox()` |
+| Pair-review with human watching | `interactive()` |
 | 5+ independent issues | `run()` — parallelize in Docker |
-| Large plan with independent tasks | `run()` — one agent per task |
-| Overnight batch work | `run()` — AFK |
+| Large plan, independent tasks | `run()` — one agent per task |
+| Overnight batch | `run()` — AFK |
 | Headless implement → human review | Mixed: `run()` then `interactive()` |
 
 ## Cross-Model with Sandcastle
 
-Implement with Claude, review with Codex. Providers: `claudeCode()`, `codex()`, `pi()`, `opencode()`. Mix per stage. All providers support both `run()` and `interactive()` via `buildPrintCommand` and `buildInteractiveArgs`.
+Implement with Claude, review with Codex. Providers: `claudeCode()` · `codex()` · `pi()` · `opencode()`. Mix per stage. All support both `run()` and `interactive()` via `buildPrintCommand` and `buildInteractiveArgs`.
 
 ## Prompt Caching Tips
 
-Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuses computation — cached tokens cost 10% of uncached. At scale, cache hits dominate cost. Template above cache-friendly:
+Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuses computation — cached tokens cost 10% of uncached.
 
 | Pattern | Why it works | What breaks it |
 |---|---|---|
-| `promptFile` with `promptArgs` | Static prefix stays identical → cache hit | Dynamic prompt strings per-issue instead of template vars |
-| Separate `run()` per stage (implement → review) | Each stage owns its session+cache | Switching model inside single `run()` with `maxIterations > 1` |
-| Same `onSandboxReady` hooks for every agent | Tool defs stay identical — shared prefix | Conditional skill installs per issue |
-| `maxIterations: 3` | Claude Code preserves prefix between iterations automatically | N/A — just works |
+| `promptFile` with `promptArgs` | Static prefix stays identical → cache hit | Dynamic prompt strings per-issue |
+| Separate `run()` per stage | Each stage owns session+cache | Switching model inside single `run()` |
+| Same `onSandboxReady` hooks | Tool defs stay identical — shared prefix | Conditional skill installs per issue |
+| `maxIterations: 3` | Prefix preserved between iterations | N/A |
 
 **Key rules:**
-1. **Static first, dynamic last** — caching prefix-matched. Keep system prompt, tools, skills stable. Issue context in `promptArgs` (end of prompt).
-2. **One model per `run()`** — switch = full cache rebuild. Template uses opus for implement, sonnet for review as separate calls.
-3. **Don't change tools between iterations** — `onSandboxReady` runs once. Conditional tool install = different prefix = zero cross-agent cache reuse.
+1. **Static first, dynamic last** — caching prefix-matched. Keep system prompt · tools · skills stable. Issue context in `promptArgs` (end of prompt).
+2. **One model per `run()`** — switch = full cache rebuild.
+3. **Don't change tools between iterations** — `onSandboxReady` runs once. Conditional install = different prefix = zero cross-agent cache reuse.

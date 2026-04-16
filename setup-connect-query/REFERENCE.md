@@ -8,17 +8,9 @@
 
 For `@bufbuild/protobuf` ^1.x, remove checks 5-6 (`new Message()` and `PlainMessage`/`PartialMessage`). In v1 these correct.
 
-## TanStack Query Hooks That Don't Trigger False Positives
+## TanStack Query Hooks — No False Positives
 
-Hook uses `\buseQuery\b` word boundaries. These TanStack Query hooks **safe** from `@tanstack/react-query` (NOT flagged):
-
-- `useQueryClient` — stripped before matching
-- `useQueries` — word boundary prevents match
-- `useSuspenseQuery` — word boundary prevents match
-- `useInfiniteQuery` — word boundary prevents match
-- `useMutationState` — word boundary prevents match
-
-No barrel re-exports or wrappers needed.
+Hook uses `\buseQuery\b` word boundaries. `useQueryClient` (stripped before matching), `useQueries`, `useSuspenseQuery`, `useInfiniteQuery`, `useMutationState` all safe — not flagged.
 
 ## Cache Invalidation Patterns
 

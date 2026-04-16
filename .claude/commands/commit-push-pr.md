@@ -14,65 +14,65 @@ description: Analyze changes, create categorized conventional commits, push, and
 
 ## Prerequisites
 
-1. Verify `gh --version` exists — if missing, stop and ask the user to install it
-2. Verify `gh auth status` — if not authenticated, ask the user to run `gh auth login` and stop
-3. Verify you are inside a git repository
+1. Verify `gh --version` exists — if missing, stop and ask user to install
+2. Verify `gh auth status` — if not authenticated, ask user to run `gh auth login` and stop
+3. Verify inside git repository
 
 ## Your task
 
-Based on the above changes, execute the full commit-push-PR workflow below in a single response. Use only the tools listed in `allowed-tools`.
+Execute full commit-push-PR workflow below in single response using only `allowed-tools`.
 
 ### Phase 0: Pre-flight — verify review skill ran
 
-1. Check if any review skill was invoked in this session (search conversation history):
-   - `/simplify` — lightweight review for small fixes/tweaks
-   - `/request-refactor-plan` — for planning and executing refactors
-   - `/improve-codebase-architecture` — for cleaning up messy code (oversized files, shallow modules, tangled deps)
-   - `/design-an-interface` — for redesigning a module or exploring a different layout/approach
-2. If NONE ran: warn the user — "Lifecycle requires a review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
-3. Only proceed past this gate if a review skill ran or user explicitly confirms skip
+1. Check if any review skill was invoked this session:
+   - `/simplify` — small fixes/tweaks
+   - `/request-refactor-plan` — refactors
+   - `/improve-codebase-architecture` — cleanup (oversized files, shallow modules, tangled deps)
+   - `/design-an-interface` — redesigning module or layout
+2. If NONE ran: warn — "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
+3. Only proceed if review skill ran or user explicitly confirms skip
 
 ### Phase 1: Scope confirmation
 
-1. Inspect the status and diff above
-2. If a PR already exists on this branch (from context above), inform user — new commits will update existing PR. Skip to Phase 3.
-3. If the worktree contains changes that look unrelated to each other, **ask the user** which files belong in this publish flow — do NOT default to `git add -A`
-4. Present the file list grouped by detected category for user confirmation before proceeding
+1. Inspect status and diff above
+2. If PR already exists on this branch (from context), inform user — new commits update existing PR. Skip to Phase 3.
+3. If worktree contains unrelated changes, **ask user** which files belong — do NOT default to `git add -A`
+4. Present file list grouped by category for confirmation before proceeding
 
 ### Phase 2: Branch strategy
 
-1. If on the default branch (detected above) → create a new branch named `type/description` (for example `feat/add-commit-push-command`) and switch to it
-2. Otherwise stay on the current branch
+1. If on default branch → create new branch named `type/description` (e.g. `feat/add-commit-push-command`) and switch
+2. Otherwise stay on current branch
 
 ### Phase 3: Categorized commits
 
-Analyze every changed file and group by change purpose into conventional commit types:
+Analyze changed files, group by purpose into conventional commit types:
 
 | Type | Matches |
 |------|---------|
 | `docs` | *.md, SKILL.md, REFERENCE.md, comments-only changes |
 | `test` | *.test.ts, *.test.tsx, *.spec.ts, EVAL.ts, agent-evals/ |
-| `refactor` | code restructuring without behavior change |
+| `refactor` | restructuring without behavior change |
 | `style` | formatting, whitespace, lint-only fixes |
 | `fix` | bug fixes, error corrections |
-| `feat` | new features, new components, new endpoints |
-| `chore` | config files, dependencies, build scripts, tooling |
+| `feat` | new features, components, endpoints |
+| `chore` | config, dependencies, build scripts, tooling |
 | `perf` | performance improvements |
 | `ci` | CI/CD pipeline changes |
 | `build` | build system changes |
 
-**For each category that has files:**
+**For each category with files:**
 
-1. Stage only the relevant files with explicit paths: `git add <file1> <file2> ...` — never use `git add -A` or `git add .`
-2. Commit with message format: `type(scope): terse description`
-   - Infer scope from the directory or module the files belong to
-   - Lowercase first letter, 5-72 characters, no trailing period
-   - Include a `Co-Authored-By` trailer
-3. Move to the next category
+1. Stage only relevant files with explicit paths: `git add <file1> <file2> ...` — never `git add -A` or `git add .`
+2. Commit: `type(scope): terse description`
+   - Infer scope from directory/module
+   - Lowercase first letter, 5-72 chars, no trailing period
+   - Include `Co-Authored-By` trailer
+3. Move to next category
 
 Record which commit types were created — used for auto-labeling in Phase 5.
 
-If a file could fit multiple categories, assign it to the most specific one.
+If file fits multiple categories, assign most specific one.
 
 ### Phase 4: Push
 
@@ -82,14 +82,14 @@ If a file could fit multiple categories, assign it to the most specific one.
 
 ### Phase 5: Open pull request
 
-**If PR already exists** (detected in context), skip to Phase 6 — push already updated it.
+**If PR already exists** (from context), skip to Phase 6 — push already updated it.
 
-1. Determine base branch from context above
-2. Build `gh pr create` command with these flags:
+1. Determine base branch from context
+2. Build `gh pr create` with:
    - `--base <default-branch>`
-   - `--fill-verbose` — seed title and body from commit messages
-   - `--assignee @me` — self-assign
-   - **Auto-label from commit types** — map commit types to GitHub labels:
+   - `--fill-verbose` — seed title/body from commits
+   - `--assignee @me`
+   - **Auto-label from commit types:**
 
      | Commit type | Label |
      |-------------|-------|
@@ -100,10 +100,10 @@ If a file could fit multiple categories, assign it to the most specific one.
      | `ci` | `ci` |
      | `test` | `testing` |
 
-     Before adding `--label`, verify the label exists: `gh label list --search "<name>" --json name --jq '.[0].name'` — only add labels that exist in the repo
-   - **Draft mode**: if user's changes look work-in-progress (TODO comments, incomplete implementations, test stubs), add `--draft`
+     Before adding `--label`, verify label exists: `gh label list --search "<name>" --json name --jq '.[0].name'` — only add existing labels
+   - **Draft mode**: if changes look WIP (TODO comments, incomplete implementations, test stubs), add `--draft`
 
-3. Override the auto-filled body with a structured template:
+3. Override auto-filled body with structured template:
 
 ```
 gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
@@ -114,36 +114,36 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 <list each commit: hash + message>
 
 ## Test plan
-<checklist of how to verify — infer from the changes>
+<checklist of how to verify — infer from changes>
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 EOF
 )"
 ```
 
-Note: `--fill-verbose` sets the title from commits. Override title with `--title` only if the auto-generated title is poor (too long, unclear, or just a hash).
+Note: `--fill-verbose` sets title from commits. Override with `--title` only if auto-generated title is poor.
 
-4. Add labels if they exist: append `--label <label1> --label <label2>` for each verified label
-5. Print the PR URL
+4. Append `--label <label1> --label <label2>` for each verified label
+5. Print PR URL
 
 ### Phase 6: Watch CI (MANDATORY)
 
-1. **Always** stream CI checks: `gh pr checks <PR_NUMBER> --watch` using the Monitor tool for real-time output
-2. Do NOT use `sleep` + `gh pr checks` polling — use `--watch` flag which streams updates
-3. Do NOT skip this step — CI failures caught here save user time
-4. If checks fail: read failure logs, diagnose root cause, fix, commit, push, and re-watch
+1. **Always** stream CI checks: `gh pr checks <PR_NUMBER> --watch` using Monitor tool
+2. Do NOT use `sleep` + polling — use `--watch` flag
+3. Do NOT skip — CI failures caught here save time
+4. If checks fail: read logs, diagnose, fix, commit, push, re-watch
 5. If no CI configured, note it and proceed
 
 ### Phase 7: Verify and summarize
 
-1. Run `git status` and `git diff` to confirm the working tree is clean
-2. If anything remains uncommitted, warn the user
-3. Summarize: branch name, list of commits, PR URL (or existing PR URL), CI status, and anything the user still needs to do
+1. Run `git status` and `git diff` to confirm clean worktree
+2. If anything remains uncommitted, warn user
+3. Summarize: branch name, commits, PR URL (or existing PR URL), CI status, remaining user actions
 
 ### Safety
 
 - Never stage unrelated changes silently
-- Never push without confirming scope when the worktree contains mixed changes
+- Never push without confirming scope when worktree has mixed changes
 - Never force push — `--force-with-lease` acceptable when needed (after rebase)
-- If no accessible git remote exists, stop and explain the blocker
+- If no accessible git remote, stop and explain blocker
 - If `gh pr create` fails, show error and suggest `--recover` flag for retry

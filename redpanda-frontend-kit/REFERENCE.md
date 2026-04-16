@@ -17,7 +17,7 @@ When `REDPANDA_KIT=1`, orchestration-guidance adds nudges:
 | Detected pattern | Nudge |
 |---|---|
 | `useForm` + ConnectRPC imports | Consider `useProtoForm` for proto-backed forms |
-| `<h1>`–`<h6>`, `<p>` raw HTML | Use `Heading`/`Text` from registry |
+| `<h1>`--`<h6>`, `<p>` raw HTML | Use `Heading`/`Text` from registry |
 | Key-value / labels / tags patterns | Consider `KeyValueField` + `BadgeGroup` |
 
 Warnings, not blocks. Surface registry components Claude wouldn't know.
@@ -35,15 +35,11 @@ echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 
 Import from `@/components/redpanda-ui/<name>`. Never `@chakra-ui` or `@redpanda-data/ui`.
 
-## UI Registry Documentation Injection
+## UI Registry Docs
 
-When `REDPANDA_KIT=1`, reference per component:
+Registry docs: `https://redpanda-ui-registry.netlify.app/docs/<component>`
 
-- **Registry docs**: `https://redpanda-ui-registry.netlify.app/docs/<component>`
-- **Available patterns**: key-value, proto-form, form-footer, dialog, data-table
-- **Component props/variants**: check registry playground for correct usage
-
-### Key Registry Patterns
+### Key Patterns
 
 | Pattern | When to use | Registry URL |
 |---|---|---|
@@ -55,53 +51,31 @@ When `REDPANDA_KIT=1`, reference per component:
 
 ## Cross-Repo Visibility (Module Federation)
 
-For Module Federation, symlink remotes for Claude visibility:
+Symlink remotes so Claude can read them:
 
 ```bash
 mkdir -p linked-repos && echo "linked-repos/" >> .gitignore
 ln -s /path/to/remote-app-1/src linked-repos/remote-1
-ln -s /path/to/remote-app-2/src linked-repos/remote-2
 ```
 
-Claude follows symlinks transparently. Add to `CLAUDE.md`:
+Document in `CLAUDE.md`. Claude follows symlinks transparently.
 
-```markdown
-linked-repos/ contains symlinks to federated remotes:
-- linked-repos/remote-1/ → First remote app source
-- linked-repos/remote-2/ → Second remote app source
-When working on federated routes, read both host and remote source.
-```
-
-## UI Registry Symlink (Component Synchronization)
-
-Symlink UI registry for cross-repo edits:
+## UI Registry Symlink
 
 ```bash
 ln -s /path/to/ui-registry linked-repos/ui-registry
 ```
 
-Add to `CLAUDE.md`:
-
-```markdown
-linked-repos/ui-registry/ → UI Registry source (symlinked)
-When modifying a component from @/components/redpanda-ui/, also update
-the source in linked-repos/ui-registry/ to keep both in sync.
-After changes, open a PR against the ui-registry repo.
-```
-
-When `REDPANDA_KIT=1`, orchestration-guidance nudges upstream registry update + PR.
+When modifying `@/components/redpanda-ui/`, also update `linked-repos/ui-registry/`. With `REDPANDA_KIT=1`, orchestration nudges upstream PR.
 
 ## Package Source Code (opensrc)
 
-For third-party package source, use [opensrc](https://github.com/vercel-labs/opensrc):
+[opensrc](https://github.com/vercel-labs/opensrc) fetches third-party source matching lockfile version:
 
 ```bash
-npx opensrc zustand          # fetches source matching your lockfile version
-npx opensrc @tanstack/react-query
-opensrc list                  # show fetched packages
+npx opensrc zustand
+opensrc list
 ```
-
-Creates `opensrc/<package>/` with full source. Debug framework internals.
 
 ## Dependency Changes
 

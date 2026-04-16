@@ -8,7 +8,7 @@
 |---|---|
 | Event | Pull request |
 | Action | opened, synchronize |
-| Filter (optional) | is draft = false, from fork = false |
+| Filter | is draft = false, from fork = false |
 
 ### GitHub trigger: PR feedback resolve
 
@@ -16,7 +16,7 @@
 |---|---|
 | Event | Pull request |
 | Action | review_submitted |
-| Filter (optional) | is draft = false |
+| Filter | is draft = false |
 
 ### GitHub trigger: issue triage
 
@@ -30,14 +30,14 @@
 | Field | Value |
 |---|---|
 | Frequency | Weekly (or weekdays) |
-| Suggested time | Monday 9:00 AM local |
+| Time | Monday 9:00 AM local |
 
 ### Schedule trigger: docs drift
 
 | Field | Value |
 |---|---|
 | Frequency | Weekly |
-| Suggested time | Monday 10:00 AM local (offset from health check) |
+| Time | Monday 10:00 AM local (offset from health check) |
 
 ## API trigger setup
 
@@ -86,8 +86,8 @@ Skip: node_modules/, dist/, *.gen.ts, *_pb.ts, coverage/.
 ### Add connector actions
 
 ```
-After posting the review, send a summary to the #code-reviews Slack channel
-using the Slack connector. Include PR title, verdict, and link.
+After posting review, send summary to #code-reviews Slack channel
+via Slack connector. Include PR title, verdict, link.
 ```
 
 ### Team-specific label taxonomy
@@ -115,12 +115,12 @@ Add to PR review trigger filters:
 
 ## Noise reduction checklist
 
-Before enabling routine, verify:
+Before enabling, verify:
 
 - [ ] **PR review**: hooks handle style/pattern enforcement — prompt says "skip what hooks catch"
-- [ ] **PR feedback resolve**: has "skip ambiguous" and "max 2 CI attempts" guardrails
-- [ ] **Issue triage**: labels-only for feature requests, investigation-only for bugs
-- [ ] **Weekly health**: delta-based reporting, silent when stable
+- [ ] **PR feedback resolve**: has "skip ambiguous" + "max 2 CI attempts" guardrails
+- [ ] **Issue triage**: labels-only for features, investigation-only for bugs
+- [ ] **Weekly health**: delta-based, silent when stable
 - [ ] **Docs drift**: verified drift only, no false positives
 - [ ] **All templates**: tested with "Run now" before enabling triggers
 
@@ -140,7 +140,7 @@ Before enabling routine, verify:
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ Execute      │  routine prompt drives the session
+│ Execute      │  routine prompt drives session
 │ prompt       │  ┌──────────────────────────┐
 │              │  │ Every Edit/Write:        │
 │              │  │  → PostToolUse hooks fire │
@@ -154,7 +154,7 @@ Before enabling routine, verify:
 └──────┬──────┘
        ▼
 ┌─────────────┐
-│ Session ends │  results visible at claude.ai session URL
+│ Session ends │  results at claude.ai session URL
 └─────────────┘
 ```
 
@@ -173,26 +173,21 @@ Extra runs consume subscription usage when overage enabled.
 | Feature | Routines | Sandcastle | GitHub Actions | `/loop` |
 |---|---|---|---|---|
 | Runs on | Anthropic cloud | Local Docker | GitHub runners | Local CLI |
-| Triggers | Schedule, GitHub, API | Manual / script | GitHub events | Timer / manual |
-| Repo access | Clone per run | Mount / clone | Checkout | Current worktree |
-| Hooks active | Yes (from clone) | Yes (installed in container) | No (unless configured) | Yes (local) |
-| Parallel agents | No (1 session per trigger) | Yes (N containers) | Yes (matrix) | No |
-| Cost | Subscription usage | API keys + compute | GitHub minutes | API keys |
-| Best for | Recurring single-repo tasks | Batch parallel work | CI/CD pipelines | In-session polling |
+| Triggers | Schedule, GitHub, API | Manual/script | GitHub events | Timer/manual |
+| Repo access | Clone per run | Mount/clone | Checkout | Current worktree |
+| Hooks active | Yes (from clone) | Yes (in container) | No (unless configured) | Yes (local) |
+| Parallel agents | No (1 per trigger) | Yes (N containers) | Yes (matrix) | No |
+| Cost | Subscription | API keys + compute | GitHub minutes | API keys |
+| Best for | Recurring single-repo | Batch parallel | CI/CD pipelines | In-session polling |
 
 ## Troubleshooting
 
-**Routine runs but hooks don't fire**
-Hooks load from `.claude/settings.json` in cloned repo. Verify file exists and hooks wired. Run `bash scripts/verify-install.sh` locally.
+**Hooks don't fire** — Hooks load from `.claude/settings.json` in cloned repo. Verify file exists. Run `bash scripts/verify-install.sh` locally.
 
-**Routine creates noisy comments**
-Tighten prompt: add "skip nitpicks", "only P0/P1", "silent approval". Review session transcript to find where Claude wandered.
+**Noisy comments** — Tighten prompt: add "skip nitpicks", "only P0/P1", "silent approval". Review transcript for where Claude wandered.
 
-**Routine hits daily limit**
-Reduce trigger frequency. PR review: filter to non-draft, non-fork PRs only. Schedules: weekly instead of daily.
+**Hits daily limit** — Reduce trigger frequency. PR review: filter non-draft, non-fork only. Schedules: weekly not daily.
 
-**Routine can't push branches**
-Default: routines only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in routine config if needed.
+**Can't push branches** — Default: routines only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in config if needed.
 
-**GitHub trigger not firing**
-Claude GitHub App must be installed on repo. Trigger setup prompts installation. `/web-setup` alone not sufficient — grants clone access but not webhook delivery.
+**GitHub trigger not firing** — Claude GitHub App must be installed on repo. Trigger setup prompts installation. `/web-setup` alone not sufficient — grants clone access but not webhook delivery.

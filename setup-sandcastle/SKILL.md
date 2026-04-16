@@ -5,20 +5,14 @@ description: "Configure Sandcastle for agent delegation — headless batch via r
 
 # Setup Sandcastle
 
-[Sandcastle](https://github.com/mattpocock/sandcastle) orchestrates agents in sandboxes with branch strategies. Two launch modes:
+[Sandcastle](https://github.com/mattpocock/sandcastle) orchestrates agents in sandboxes with branch strategies. Two modes:
 
 - **`run()`** — headless (`--print`), stream-JSON parsed. For CI, batch, overnight.
-- **`interactive()`** — full TUI passthrough (stdin/stdout/stderr). Human watches, can intervene. For HITL review, pair-review, local dev.
+- **`interactive()`** — full TUI passthrough (stdin/stdout/stderr). Human watches + intervenes. For HITL review, pair-review, local dev.
 
-Both modes: our hooks fire inside each session. Development lifecycle enforced regardless of launch method.
+Both modes: hooks fire inside each session. Development lifecycle enforced regardless of launch method.
 
-**Capabilities:**
-- Task picking: GitHub issues → one agent per issue
-- Parallel: N agents in isolated sandboxes (`run()`)
-- HITL review: interactive reviewer with full TUI (`interactive()`)
-- `noSandbox()`: run without Docker — just git worktrees
-- Quality: our hooks run inside each session
-- Merge: branch strategies (head, merge-to-head, branch)
+**Capabilities:** task picking (GitHub issues → one agent per issue), parallel N agents in isolated sandboxes, HITL review with full TUI, `noSandbox()` for git worktrees only, hooks in each session, branch strategies (head, merge-to-head, branch).
 
 ```mermaid
 sequenceDiagram
@@ -61,8 +55,8 @@ ANTHROPIC_API_KEY=sk-ant-...
 |---|---|---|
 | CI/batch/overnight | `run()` | `docker()` |
 | Parallel 5+ issues | `run()` | `docker()` |
-| Local dev → quick review | `interactive()` | `noSandbox()` |
-| Pair-review with human watching | `interactive()` | `docker()` or `noSandbox()` |
+| Local dev quick review | `interactive()` | `noSandbox()` |
+| Pair-review with human | `interactive()` | `docker()` or `noSandbox()` |
 | Single interactive session | `interactive()` | `noSandbox()` |
 
 ### 4. Orchestration Script
@@ -73,6 +67,6 @@ See [REFERENCE.md](REFERENCE.md) for templates: headless batch, HITL review, mix
 bunx tsx .sandcastle/main.ts
 ```
 
-Each agent: reads issue → development-lifecycle → hooks enforce patterns → commits to branch → review → merge.
+Each agent: reads issue → development-lifecycle → hooks enforce patterns → commits → review → merge.
 
 See [REFERENCE.md](REFERENCE.md) for templates and prompt patterns.

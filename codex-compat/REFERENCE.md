@@ -121,25 +121,16 @@ Generate from `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, Stop 
 ```
 
 **Notes:**
-- SessionStart, UserPromptSubmit, PreToolUse Bash hooks work identical on Codex
-- Stop hooks work identical on Codex (`decision: "block"` continues turn)
-- PostToolUse Edit|Write hooks NOT in `.codex/hooks.json` — `codex-batch-check.sh` auto-discovers all `*-check.sh` scripts, runs at Stop time
-- PostToolUse Bash (`llm-truncate`) works on Codex
-- `_hook-lib.sh` must be in `.claude/hooks/` alongside check scripts
-- `shared/hook-lib.sh` must be accessible (symlinked or copied) for Stop hooks that source it
+- SessionStart, UserPromptSubmit, PreToolUse Bash, PostToolUse Bash, Stop hooks all work identical on Codex
+- PostToolUse Edit|Write NOT in `.codex/hooks.json` — `codex-batch-check.sh` auto-discovers `*-check.sh` scripts at Stop time
+- `_hook-lib.sh` and `shared/hook-lib.sh` must be accessible alongside check scripts
 
 ## Codex Limitations: SubagentStart/SubagentStop
 
-Codex **not** support `SubagentStart` or `SubagentStop` hooks. Claude Code only.
+Codex does **not** support `SubagentStart`/`SubagentStop`. Claude Code only.
 
-**Impact**: Self-review loop (phase 4b) relies on:
-- `SubagentStart` injects session context (touched files, dirty baseline) into reviewer agents
-- `SubagentStop` validates structured findings output, logs results
-
-**Codex workaround**: Include self-review instructions direct in AGENTS.md as soft guidance. Structured findings schema (`agents/findings-schema.md`) works anywhere — just markdown. Codex agents follow voluntarily without hook enforcement.
-
-**Agents not affected**: Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) are markdown files. Codex can read them. Difference: on Claude Code, output format enforced by SubagentStop hook; on Codex, best-effort guidance.
+Self-review loop (phase 4b) needs these for session context injection + structured findings validation. **Workaround**: soft guidance in AGENTS.md. Findings schema (`agents/findings-schema.md`) is markdown — works anywhere. Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) readable by Codex; output format best-effort without SubagentStop enforcement.
 
 ## AGENTS.md
 
-Generated at repo root: [`AGENTS.md`](../AGENTS.md). Contains all enforced rules as soft guidance for Codex (replaces PostCompact context re-injection). Customize based on installed skills.
+Generated at repo root: [`AGENTS.md`](../AGENTS.md). Enforced rules as soft guidance for Codex. Customize per installed skills.

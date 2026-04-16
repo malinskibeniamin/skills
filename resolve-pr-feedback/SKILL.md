@@ -34,10 +34,10 @@ Filter aggressively. Zero new items → comment "All feedback addressed" → sto
 Group feedback pointing to same underlying issue. Each cluster = one unit of work.
 
 ### 5. Fix Each Cluster
-Read code → understand ask → fix → run related tests → commit: `fix: address review feedback — [summary]`. Sequential. One commit per cluster.
+Read code → understand ask → fix → run related tests → commit: `fix: address review feedback — [summary]`. Sequential, one commit per cluster.
 
 ### 6. Reply and Resolve
-Reply on each thread explaining fix. Resolve thread via GraphQL. See [REFERENCE.md](REFERENCE.md) for mutations.
+Reply on each thread explaining fix. Resolve via GraphQL. See [REFERENCE.md](REFERENCE.md) for mutations.
 
 ### 7. Push + Monitor CI
 `git push` then `Monitor: gh pr checks $pr_number --watch`. Fix CI failures before posting summary.

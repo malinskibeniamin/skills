@@ -15,7 +15,7 @@ PostToolUse hooks on Edit/Write (auto-skips component library dirs):
 
 **Security**: ban `dangerouslySetInnerHTML`, `eval()`, `new Function()`, `.innerHTML =` (XSS/OWASP A03)
 
-**Performance**: ban barrel imports (use direct paths), ban missing `{ passive: true }` on scroll/touch/wheel, ban static import of heavy deps (chart.js/d3/three.js/pdf-lib → use `React.lazy()`)
+**Performance**: ban barrel imports (use direct paths), ban missing `{ passive: true }` on scroll/touch/wheel, ban static import of heavy deps (chart.js/d3/three.js/pdf-lib — use `React.lazy()`)
 
 **Styling**: ban raw hex/rgb in className (use design tokens), ban `!important`, ban `outline: none` (use focus-visible), ban visual overrides on registry components (use variant prop)
 

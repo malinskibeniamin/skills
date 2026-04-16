@@ -6,13 +6,7 @@
 
 ## How It Works
 
-Stop hook runs when Claude finish turn. Checks:
-
-1. Files in `redpanda-ui/` or `src/redpanda-ui/` modified? (`git diff --name-only HEAD`)
-2. If yes — `registry.json` also modified in same diff?
-3. If `registry.json` NOT updated → **blocks** with reminder
-
-No `redpanda-ui/` directory in repo → hook exits immediately (zero overhead).
+Stop hook checks `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` changes. If modified but `registry.json` not updated → **blocks**. No `redpanda-ui/` dir → exits immediately.
 
 ## When It Triggers
 
@@ -22,64 +16,48 @@ No `redpanda-ui/` directory in repo → hook exits immediately (zero overhead).
 | `redpanda-ui/button.tsx` | Yes | No | **Block** — add changeset |
 | `redpanda-ui/button.tsx` | No | N/A | **Block** — rebuild registry |
 | `src/components/UserTable.tsx` | N/A | N/A | Pass (not registry file) |
-| No files changed | N/A | N/A | Pass |
 
 ## Registry Rebuild Steps
 
 When blocked:
 
-1. Run registry build: `bun run build:registry`
-2. Add changeset: `bunx changeset` (select affected packages, bump type, summary)
+1. Run `bun run build:registry`
+2. Add changeset: `bunx changeset` (select packages, bump type, summary)
 3. Let Claude finish turn — hook re-checks
 
 ## Skipping in Non-Registry Repos
 
-Hook auto-detects: neither `redpanda-ui/` nor `src/redpanda-ui/` at repo root → exits 0. No config needed.
+Auto-detects: no `redpanda-ui/` or `src/redpanda-ui/` at repo root → exits 0. No config needed.
 
-## Component Taxonomy — Detailed Classification
+## Component Taxonomy
 
-### Atom Examples
-
-Single-responsibility. One semantic element. No composition from registry.
+**Atom** — single element, no composition. Tests (3-4): callbacks, disabled, `data-testid`, `asChild`.
 
 ```tsx
-// Button — atom. One element, variant props, no internal state.
 export const Button = ({ variant = 'default', size = 'md', ...props }: ButtonProps) => (
   <button className={cn(buttonVariants({ variant, size }))} {...props} />
 )
 ```
 
-Test checklist (3-4 tests): callbacks fire, disabled state, `data-testid` pass-through, `asChild` renders custom element.
-
-### Molecule Examples
-
-Combines 2-3 atoms. Limited state.
+**Molecule** — 2-3 atoms, limited state. Tests (5-8): atom tests + composition, state transitions, edge cases.
 
 ```tsx
-// CopyButton — molecule. Composes Button + uses clipboard state.
 export function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false)
   // ...
 }
 ```
 
-Test checklist (5-8 tests): atom tests + composition renders, state transitions, edge cases (empty text, rapid clicks).
-
-### Organism Examples
-
-Multiple molecules+atoms. Significant state. Keyboard nav. Portals.
+**Organism** — multiple molecules+atoms, significant state, keyboard nav, portals. Tests (8-15): molecule tests + keyboard nav, portal open/close, async filtering, controlled/uncontrolled.
 
 ```tsx
-// Combobox — organism. useReducer, keyboard nav, portal.
 export function Combobox<T>({ options, onChange }: ComboboxProps<T>) {
   const [state, dispatch] = useReducer(comboboxReducer, initialState)
   // keyboard handler, portal rendering, filtering...
 }
 ```
 
-Test checklist (8-15 tests): molecule tests + keyboard nav (arrow keys, Escape, Enter), portal open/close, async filtering, controlled/uncontrolled modes.
-
-## Consumer Drift Analysis — Workflow
+## Consumer Drift Analysis
 
 ### Running Drift Analysis
 
@@ -99,37 +77,22 @@ done
 find .upstreaming/diffs -empty -delete
 ```
 
-### Import Normalization — What to Ignore
+### Import Normalization
 
-| Registry (source) | Consumer (installed) |
-|---|---|
-| `@/components/button` | `../components/button` or `./button` |
-| `@/lib/utils` | `../lib/utils` |
-| `@/hooks/use-toast` | `../hooks/use-toast` |
-
-Also ignore: `'use client'` directive changes, biome-ignore comments, trailing whitespace.
-
-ONLY these differences → **Skip-Import-Only**.
+Ignore: path alias differences (`@/components/button` vs `../components/button`), `'use client'` directives, biome-ignore comments, whitespace. ONLY these diffs → **Skip-Import-Only**.
 
 ### Staleness Detection
 
-Before upstreaming, check changesets and version history for recent registry updates:
+Registry version > consumer's pinned → **Skip-Outdated** (sync FROM registry). Same or older → proceed.
 
-| Registry newer? | Action |
-|---|---|
-| Yes (published version > consumer's pinned version) | **Skip-Outdated** — sync FROM registry |
-| No or same version | Proceed with analysis |
-
-### Business Logic Detection — Safe vs Unsafe
+### Business Logic Detection
 
 ```tsx
 // SAFE — prop-based (component API)
 if (variant === 'destructive') { /* ... */ }
-if (size === 'lg') { /* ... */ }
 
 // UNSAFE — business data (app-specific)
 if (status === 'premium') { /* ... */ }
-if (userRole === 'admin') { /* ... */ }
 if (pathname.includes('/dashboard')) { /* ... */ }
 ```
 

@@ -41,23 +41,16 @@ Interactive components follow ONE pattern — never both:
 </ListCard>
 ```
 
-**Never:**
-```tsx
-<ListCard onClick={handleCardClick}>
-  <Button onClick={handleEdit}>Edit</Button>  {/* nested pressable! */}
-</ListCard>
-```
-
 Why: ambiguous click targets, event bubbling bugs, screen readers can't convey interaction model, touch targets overlap on mobile.
 
 ## Visual Checklist
 
 - [ ] Focus rings visible on all interactive elements (min 2px, contrasting color)
 - [ ] Hover and focus styles match (no mouse-only affordances)
-- [ ] Color is not the only means of conveying information
+- [ ] Color not sole means of conveying information
 - [ ] Touch targets at least 44x44 CSS pixels
 - [ ] `prefers-reduced-motion` respected for animations
 - [ ] `forced-colors` / high-contrast mode: use `currentcolor` for SVG fills
-- [ ] Text resizable to 200% without loss of content
+- [ ] Text resizable to 200% without content loss
 
 For initial setup (install, AXE fixture, hook config): see [SETUP.md](SETUP.md).

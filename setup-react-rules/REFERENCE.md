@@ -6,7 +6,7 @@
 
 ## Escape Hatch for useEffect
 
-When `useEffect` genuinely needed (WebSocket cleanup, third-party lib integration), add comment on line before:
+When `useEffect` genuinely needed (WebSocket cleanup, third-party lib), add comment before:
 
 ```tsx
 // allow: useEffect — WebSocket subscription cleanup required
@@ -16,7 +16,7 @@ useEffect(() => {
 }, [url])
 ```
 
-Hook checks for `// allow: useEffect` anywhere in file. Reason required for code review. Legacy format `// allow-useEffect:` also works.
+Hook checks for `// allow: useEffect` anywhere in file · reason required · legacy `// allow-useEffect:` also works.
 
 ## Raw HTML → Component Library Mapping
 
@@ -30,31 +30,31 @@ Hook checks for `// allow: useEffect` anywhere in file. Reason required for code
 | `<table>` | `<Table>` | `@/components/ui/table` |
 | `<label>` | `<Label>` | `@/components/ui/label` |
 
-`<form>` and `<a>` allowed — `<form>` no standard registry replacement, `<a>` can't always swap with TanStack Router Link.
+`<form>` and `<a>` allowed — no registry replacement for `<form>`, `<a>` can't always swap with TanStack Router Link.
 
 ## Auto-Generated Files
 
-Following files auto-skipped by all hooks:
+All hooks auto-skip:
 
 | Pattern | Source |
 |---------|--------|
-| `*.gen.ts` / `*.gen.tsx` | TanStack Router (`routeTree.gen.ts`) |
+| `*.gen.ts` / `*.gen.tsx` | TanStack Router |
 | `*_pb.ts` / `*_pb.js` | Protobuf codegen |
 | `*_connectquery.ts` | Connect Query codegen |
-| Files with `@generated` / `auto-generated` / `DO NOT EDIT` in first 5 lines | Any codegen tool |
+| `@generated` / `auto-generated` / `DO NOT EDIT` in first 5 lines | Any codegen |
 
 ## Named useEffect Functions
 
-Always use named function expression in `useEffect`, not anonymous arrow:
+Use named function expression, not anonymous arrow:
 
 ```tsx
-// BAD — anonymous arrow
+// BAD
 useEffect(() => {
   const ws = new WebSocket(url)
   return () => ws.close()
 }, [url])
 
-// GOOD — named function with symmetrical cleanup
+// GOOD
 useEffect(function connectToWebSocket() {
   const ws = new WebSocket(url)
   return function disconnectWebSocket() {
@@ -65,10 +65,10 @@ useEffect(function connectToWebSocket() {
 
 ### Why
 
-- Named functions show in stack traces and React DevTools (not `(anonymous)`)
-- Forces articulating what effect does — reveals split opportunities
-- Can't name without "and"/"also" → effect does too much — split it
-- Name starts with "sync"/"update" + state → probably derived state — compute inline during render
+- Named functions show in stack traces and React DevTools
+- Forces articulating what effect does → reveals split opportunities
+- Can't name without "and" → effect does too much → split
+- Name starts with "sync"/"update" + state → probably derived state → compute inline
 
 ### Naming conventions
 
@@ -76,25 +76,24 @@ useEffect(function connectToWebSocket() {
 |------|---------|
 | `subscribe`/`listen` | Event-based effects |
 | `connect`/`disconnect` | WebSocket, SSE, external services |
-| `synchronize`/`apply` | Syncing React state with external systems |
+| `synchronize`/`apply` | Syncing state with external systems |
 | `initialize` | One-time setup |
-| `poll` | Interval-based data fetching |
+| `poll` | Interval-based fetching |
 
 ## Form-Level Validation (react-hook-form v7.72+)
 
-Cross-field validation (confirm password, end date after start date) — use `validate` on `useForm`, not custom logic in `onSubmit`:
+Cross-field validation (confirm password, end date > start date) — use `validate` on `useForm`, not custom logic in `onSubmit`:
 
 ```tsx
-// BAD — validation logic buried in submit handler, errors not surfaced to UI
+// BAD — validation buried in submit handler
 const onSubmit = (data) => {
   if (data.password !== data.confirmPassword) {
     setError('confirmPassword', { message: 'Passwords must match' })
     return
   }
-  // ...
 }
 
-// GOOD — form-level validate, errors integrate with formState.errors
+// GOOD — form-level validate, integrates with formState.errors
 const form = useForm({
   validate: async ({ formValues }) => {
     if (formValues.password !== formValues.confirmPassword) {
@@ -106,31 +105,29 @@ const form = useForm({
 })
 ```
 
-Runs alongside field-level resolvers (zod, protovalidate), surfaces errors through standard `formState.errors` API.
+Runs alongside field-level resolvers (zod, protovalidate) · surfaces errors through `formState.errors`.
 
 ## Resetting State on Prop Change — Use `key`
 
-Need reset component state when prop changes? Don't use `useEffect`:
-
 ```tsx
-// BAD — extra render pass, intermediate stale state visible
+// BAD — extra render, stale state visible
 useEffect(() => {
   setComment('')
   setDraft(null)
 }, [userId])
 
-// GOOD — React unmounts and remounts, all state resets automatically
+// GOOD — unmount/remount, all state resets
 <UserProfile key={userId} />
 ```
 
-`key` prop works on any component, not just lists. Key change → React destroys old instance, creates new one with fresh state.
+`key` works on any component · key change → React destroys old instance, creates new with fresh state.
 
 ## Subscriptions — Prefer `useSyncExternalStore`
 
-Subscribing to browser APIs (online status, media queries, scroll position, external stores)? Use `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
+Browser APIs (online status, media queries, scroll position, external stores) → `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
 
 ```tsx
-// BAD — verbose, prone to tearing in concurrent mode
+// BAD — verbose, tearing in concurrent mode
 const [isOnline, setIsOnline] = useState(navigator.onLine)
 useEffect(function subscribeToOnlineStatus() {
   const handle = () => setIsOnline(navigator.onLine)
@@ -142,7 +139,7 @@ useEffect(function subscribeToOnlineStatus() {
   }
 }, [])
 
-// GOOD — concurrent-mode safe, no boilerplate
+// GOOD — concurrent-safe, no boilerplate
 const isOnline = useSyncExternalStore(
   (cb) => {
     window.addEventListener('online', cb)
@@ -163,43 +160,42 @@ const isOnline = useSyncExternalStore(
 |----------|---------|
 | Browser APIs | `navigator.onLine`, `matchMedia`, `document.visibilityState` |
 | External stores | Redux, MobX, vanilla stores without React bindings |
-| DOM state | scroll position, element dimensions (with `ResizeObserver`) |
+| DOM state | scroll position, element dimensions (`ResizeObserver`) |
 
-Don't use for: React state, zustand (already uses internally), TanStack Query.
+Skip for: React state, zustand (uses internally), TanStack Query.
 
 ## Functional Programming
 
-Components = pure render functions. Props in, JSX out. Side effects in hooks only.
+Components = pure render functions · props in, JSX out · side effects in hooks only.
 
 ### Rules
 
 | # | Rule | Violation | Fix |
 |---|------|-----------|-----|
-| 1 | Pure render — no side effects in component body | `localStorage.setItem()` in render | Move to `useEffect` or custom hook |
+| 1 | Pure render | `localStorage.setItem()` in render | `useEffect` or custom hook |
 | 2 | Side effects in hooks only | Timer in render body | `useEffect`/`useCallback`/custom hook |
-| 3 | Immutable state updates | `arr.push(x)`, `delete obj[k]`, `state.x = y` | `[...arr, x]`, `{ ...obj }`, spread |
+| 3 | Immutable state updates | `arr.push(x)`, `state.x = y` | `[...arr, x]`, spread |
 | 4 | Derive, don't sync | `useState` + `useEffect` to mirror prop | `useMemo(() => compute(prop), [prop])` |
-| 5 | `useReducer` for 3+ interrelated `useState` | 3+ `useState` where updating one reads another | Single `useReducer` with pure reducer fn |
-| 6 | Extract data transforms | Inline `.filter().sort().map()` chains in JSX | Named pure function + `useMemo` |
-| 7 | Stable refs for memoized children | Inline callback to `React.memo` child | `useCallback` (only when child is memoized) |
+| 5 | `useReducer` for 3+ interrelated `useState` | 3+ `useState` reading each other | Single `useReducer` with pure reducer |
+| 6 | Extract data transforms | Inline `.filter().sort().map()` in JSX | Named pure function + `useMemo` |
+| 7 | Stable refs for memoized children | Inline callback to `React.memo` child | `useCallback` (only if child memoized) |
 
-### Derive vs Sync — Key Pattern
+### Derive vs Sync
 
 ```tsx
 // BAD — extra render, race conditions
 const [active, setActive] = useState<Item[]>([])
 useEffect(() => { setActive(items.filter(i => i.active)) }, [items])
 
-// GOOD — computed inline, no extra state
+// GOOD — computed inline
 const active = useMemo(() => items.filter(i => i.active), [items])
 ```
 
 ### useReducer Consolidation
 
-When 3+ `useState` interact (updating one requires reading another):
+3+ interrelated `useState` → single `useReducer`:
 
 ```tsx
-// Pure reducer — defined OUTSIDE component
 type State = { open: boolean; query: string; highlighted: number }
 type Action = { type: 'open' } | { type: 'close' } | { type: 'search'; value: string }
 
@@ -227,8 +223,6 @@ type AlertProps =
 
 ### Generic Components
 
-Type-safe reusable components:
-
 ```tsx
 interface SelectProps<T> {
   value: T
@@ -241,8 +235,6 @@ function Select<T>({ value, onChange, options }: SelectProps<T>) { /* ... */ }
 
 ### ComponentProps Extension
 
-Extend native elements properly:
-
 ```tsx
 export interface InputProps extends React.ComponentProps<'input'> {
   error?: boolean
@@ -253,12 +245,12 @@ export interface InputProps extends React.ComponentProps<'input'> {
 
 | Excuse | Counter |
 |---|---|
-| "`as any` is fine just here" | Never just here. Type erasure spreads. Fix type. |
-| "Temporary @ts-expect-error" | Temporary becomes permanent. Fix type error now. |
-| "`style={{}}` is simpler" | Tailwind classes composable and cacheable. Inline styles aren't. |
-| "Raw `<button>` is fine for this case" | Use `<Button>` — consistent styling, variant props, a11y baked in. |
-| "I'll add accessibility later" | Later never comes. Add aria-label and keyboard handlers now. |
-| "`eval()` is needed for dynamic code" | Use `JSON.parse()` for data, `new Function` also banned. |
-| "useState + useEffect is fine here" | If computed from props/state, use useMemo. No sync state. |
-| "Mutation is faster" | Immutable updates prevent bugs. Spread/filter/map. |
+| "`as any` is fine just here" | Type erasure spreads. Fix type. |
+| "Temporary @ts-expect-error" | Temporary → permanent. Fix now. |
+| "`style={{}}` is simpler" | Tailwind composable + cacheable. Inline styles aren't. |
+| "Raw `<button>` is fine" | `<Button>` — consistent styling, variants, a11y baked in. |
+| "Add accessibility later" | Later never comes. Add now. |
+| "`eval()` needed for dynamic code" | `JSON.parse()` for data. `new Function` also banned. |
+| "useState + useEffect fine here" | Computed from props/state → `useMemo`. No sync state. |
+| "Mutation is faster" | Immutable prevents bugs. Spread/filter/map. |
 | "Don't need useReducer yet" | 3+ interrelated useState = useReducer. Don't wait for bugs. |

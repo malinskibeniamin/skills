@@ -120,27 +120,20 @@ Ultracite strict baseline. Overrides:
 | Rule | Group | Ultracite default | Our override | Why |
 |------|-------|-------------------|-------------|-----|
 | `noConsole` | suspicious | off | error | Ban console.log in prod |
-| `noReactForwardRef` | suspicious | on | off | Keep off for React 18 — forwardRef still needed |
-| `noExcessiveCognitiveComplexity` | complexity | threshold 20 | threshold 15 | Stricter complexity cap |
-| `noExplicitAny` in tests | suspicious | off | error | No `any` escape, even in tests |
-| `noDeprecatedImports` | project | off | error | Catch deprecated API usage (needs Biome Scanner) |
-| `useFilenamingConvention` | style | off | kebab-case, strict | Enforce kebab-case filenames (`my-component.tsx`, not `MyComponent.tsx`) |
-| `noRestrictedImports` | style | enabled, empty | configured | Ban moment, lodash, classnames, mobx, yup, `@redpanda-data/ui`, lucide-react |
-| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>` — use registry |
-| `useExhaustiveSwitchCases` | nursery | off | error | Require exhaustive switch/case for type safety |
-| `useConsistentTestIt` | nursery | off | test only | Enforce `test()` over `it()` |
-| `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` in Playwright tests |
-| `organizeImports` | assist | — | on | Auto-sort imports via `assist.actions.source` |
+| `noReactForwardRef` | suspicious | on | off | forwardRef still needed in React 18 |
+| `noExcessiveCognitiveComplexity` | complexity | 20 | 15 | Stricter complexity cap |
+| `noExplicitAny` in tests | suspicious | off | error | No `any` even in tests |
+| `noDeprecatedImports` | project | off | error | Needs Biome Scanner |
+| `useFilenamingConvention` | style | off | kebab-case strict | `my-component.tsx` not `MyComponent.tsx` |
+| `noRestrictedImports` | style | empty | configured | Ban moment, lodash, classnames, mobx, yup, `@redpanda-data/ui`, lucide-react |
+| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>` |
+| `useExhaustiveSwitchCases` | nursery | off | error | Type-safe switch/case |
+| `useConsistentTestIt` | nursery | off | test only | `test()` over `it()` |
+| `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` |
+| `organizeImports` | assist | — | on | Auto-sort imports |
 
-**Note:** `noClassComponent` removed in Biome 2.x. React Compiler skill enforce functional patterns via memoization check.
+`noClassComponent` removed in Biome 2.x — React Compiler skill enforces functional patterns.
 
 ## Import Deletion Loop Prevention
 
-PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Prevent:
-
-1. Claude add `import { Button } from '@/components/ui/button'`
-2. Biome delete it (unused — Claude not written JSX yet)
-3. Claude re-add
-4. Infinite loop
-
-Caught at Stop hook / `quality:gate` when done editing.
+PostToolUse hook skips `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without this, Claude adds import → Biome deletes (unused, JSX not written yet) → Claude re-adds → infinite loop. Caught at Stop hook when done editing.

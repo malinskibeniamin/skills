@@ -18,7 +18,7 @@ paths:
 
 **DO NOT write all tests first, then all implementation.** Bulk tests test *imagined* behavior, not *actual*.
 
-**Correct**: Vertical slices. One test → one implementation → repeat.
+**Correct**: Vertical slices — one test → one implementation → repeat.
 
     WRONG:  RED: test1,test2,test3  →  GREEN: impl1,impl2,impl3
     RIGHT:  RED→GREEN: test1→impl1  →  RED→GREEN: test2→impl2
@@ -53,13 +53,12 @@ stateDiagram-v2
 
 ## Workflow
 
-### 0. PLAN — Coverage gap analysis, confirm what to test
+### 0. PLAN — Coverage gap analysis
 
-- Run `vitest run --coverage.enabled --coverage.reporter=text` for current coverage
-- Find uncovered lines/branches/functions in changed files — these are test targets
+- Run `vitest run --coverage.enabled --coverage.reporter=text`
+- Find uncovered lines/branches/functions in changed files → test targets
 - Confirm behaviors with user (prioritize gaps over already-covered code)
 - Find deep module opportunities (small interface, deep impl)
-- Design interfaces for testability
 
 ### 1. RED — Failing test (tracer bullet)
 
@@ -69,25 +68,25 @@ stateDiagram-v2
 
 ### 2. GREEN — Minimal code to pass
 
-- Only enough to pass. No premature optimization.
-- Run test. See green.
+- Only enough to pass · no premature optimization
+- Run test · see green
 
 ### 3. REFACTOR — Clean up while green
 
-- Remove duplication, improve naming, deepen modules
+- Remove duplication · improve naming · deepen modules
 - Tests after every change — stay green
 - **Never refactor while RED.** Get to GREEN first.
-- Check test execution time — flag unit tests >500ms, integration >2s
-- Avoid per-keystroke simulation in tests (slow, flaky). Prefer bulk input.
+- Flag unit tests >500ms, integration >2s
+- Avoid per-keystroke simulation (slow, flaky) → bulk input
 - Commit when clean
 
 ### Reactive TDD with Monitor
 
-`Monitor: vitest --watch` — streams pass/fail as you edit. Edit → fail → fix → pass → refactor → repeat.
+`Monitor: vitest --watch` — streams pass/fail as you edit. Edit→fail→fix→pass→refactor→repeat.
 
 ### 4. REPEAT — Next behavior
 
-RED → GREEN → REFACTOR per remaining behavior. One at a time.
+RED→GREEN→REFACTOR per remaining behavior. One at a time.
 
 ### Per-Cycle Checklist
 
@@ -107,16 +106,16 @@ RED → GREEN → REFACTOR per remaining behavior. One at a time.
 
 ## Visual Regression Tests (Route Files)
 
-New TanStack Router routes need `*.browser.test.tsx` sibling — only if project uses vitest browser mode (existing `*.browser.test.*` files or `@vitest/browser` dep). Skip for layout/redirect-only routes. See [REFERENCE.md](REFERENCE.md) for example.
+New TanStack Router routes need `*.browser.test.tsx` sibling — only if project uses vitest browser mode (existing `*.browser.test.*` files or `@vitest/browser` dep). Skip for layout/redirect-only routes. See [REFERENCE.md](REFERENCE.md).
 
 ## When Done
 
 - [ ] All pass (`vitest run`)
 - [ ] No async leaks (`vitest run --detectAsyncLeaks`) — Stop hook runs this automatically
-- [ ] No setTimeout hacks — condition-based waiting
-- [ ] Coverage gaps closed — re-run `vitest run --coverage.enabled --coverage.reporter=text`, verify changed files have adequate line + branch coverage
+- [ ] No `setTimeout` hacks — condition-based waiting
+- [ ] Coverage gaps closed — re-run coverage, verify changed files
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
-- [ ] Portal tests: `defaultOpen` for content tests, `waitFor` for close assertions
+- [ ] Portal tests: `defaultOpen` for content tests · `waitFor` for close assertions
 - [ ] Tests verify behavior, not implementation
 - [ ] Consider `expect.soft()` for multi-assertion state tests
 

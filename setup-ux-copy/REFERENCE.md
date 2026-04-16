@@ -11,34 +11,28 @@
 const message = "Operation completed successfully!"
 ```
 
-Hook checks `// allow: ux-copy` anywhere in file. Reason required for review. Legacy format `// allow-ux-copy:` also works.
+Checks `// allow: ux-copy` anywhere in file. Reason required. Legacy format `// allow-ux-copy:` also works.
 
 ## Capitalization
 
-Sentence-style caps all UI text: titles, headings, buttons, menus, fields, tooltips. Capitalize first word only.
+Sentence case all UI text. Capitalize first word only.
 
 | Good | Bad |
 |------|-----|
 | Maximum number of topics | Maximum Number of Topics |
-| How to connect | How To Connect |
 | Enable mTLS for Schema Registry | Enable mTLS for Schema registry |
 
-Exceptions:
-- Redpanda product names: Admin API, Redpanda Console, Schema Registry, HTTP Proxy, Dedicated Cloud, BYOC
-- Acronyms: ID, TLS, mTLS, SASL, OIDC, VPC, CIDR
-- Side pane nav items use heading-style caps
+Exceptions: product names (Admin API, Schema Registry, HTTP Proxy, Dedicated Cloud, BYOC), acronyms (ID, TLS, mTLS, SASL, OIDC, VPC, CIDR), side pane nav items.
 
 ## Toast Messages
 
-Completed tasks: subject + past tense verb.
-Long-running tasks: gerund (verb + ing).
+Completed tasks: subject + past tense verb. Long-running tasks: gerund.
 
 | Good | Bad |
 |------|-----|
 | Topic created | Topic has been created |
 | Client deleted | Client deleted successfully |
 | Creating cluster | Cluster setup in progress |
-| Reconciling the organization | Triggered reconciliation |
 
 ## Error Messages
 
@@ -47,15 +41,11 @@ State problem clearly. Provide solution. No blame.
 | Good | Bad |
 |------|-----|
 | Choose a password with at least 8 characters. | Oops! That password is too short. |
-| No results found. | Couldn't return any results. |
 | Could not save changes. Check your connection. | Something went wrong! |
 
 ## Button Labels
 
-- 1-4 words max
-- Start with verb if >1 word
-- No "Yes"/"No" — use clear action verbs
-- No articles (a, an, the)
+1-4 words max. Start with verb if >1 word. No "Yes"/"No" — use action verbs. No articles.
 
 | Good | Bad |
 |------|-----|
@@ -65,16 +55,11 @@ State problem clearly. Provide solution. No blame.
 
 ## Empty States
 
-Explain why page empty, what user can do next. Include button or link to next step when appropriate.
-
-Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress").
+Explain why page empty, what user can do next. Include button/link to next step. Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress").
 
 ## Tooltips
 
-- Brief — lengthy content not tip
-- Period for full sentences, no period for short phrases
-- No interactive elements (links, buttons)
-- No redundant text ("Click to..." on button)
+Brief. Period for full sentences, none for short phrases. No interactive elements. No redundant text ("Click to..." on button).
 
 ## Numbers and Measurements
 
@@ -85,85 +70,46 @@ Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress"
 
 ## Links
 
-- Descriptive text — never "click here" or bare "here"
-- "Learn more" always after descriptive text, never inline
-- Capitalize first word only: "Learn more" (not "Learn More")
-- External link icon for links leaving product
-- One link per sentence max
+Descriptive text — never "click here". "Learn more" after descriptive text only. External link icon for links leaving product. One link per sentence.
 
 ## Possessive Pronouns
 
-Avoid "my" and "your" in page names, menus, titles. OK in instructional text.
-
-| Good | Bad |
-|------|-----|
-| Settings | My Settings |
-| Workspaces | Your Workspaces |
-| Enter the ID token from your identity provider. | (OK in help text) |
+Avoid "my"/"your" in page names, menus, titles. OK in instructional text. "Settings" not "My Settings".
 
 ## Language
 
-- American English (behavior not behaviour)
-- Present tense, active voice
-- Natural contractions (don't, can't, it's)
-- Serial commas (Mo, Ivana, and Michele)
-- No exclamation points
-- No idioms (text should translate easily)
-
-## Terms to Use Sparingly
-
-Use only to acknowledge errors or particularly inconvenient interactions:
-- please
-- sorry
-- thank you
+American English. Present tense, active voice. Natural contractions. Serial commas. No exclamation points. No idioms.
 
 ## Inclusive Terminology
 
 | Banned | Use Instead |
 |--------|-------------|
-| whitelist | allowlist |
-| blacklist | denylist |
-| master | leader, primary |
-| slave | follower, secondary |
+| whitelist/blacklist | allowlist/denylist |
+| master/slave | leader/follower, primary/secondary |
 
 ## Directional Language
 
-Don't reference physical position in UI — layouts change.
-
-| Bad | Good |
-|-----|------|
-| "See above" | "See the Prerequisites section" |
-| "Click the button on the right" | "Click Save" |
-| "In the example below" | "In the following example" |
+Don't reference physical position — layouts change. "See the Prerequisites section" not "See above".
 
 ## Sentence Structure
 
-- **No "There is/are" starters** — subject first: "3 options are available" not "There are 3 options"
-- **Conditional phrases first** — "If using Kubernetes, configure..." not "Configure... if using Kubernetes"
-- **No future tense** — present tense: "The cluster restarts" not "The cluster will restart"
+- **Subject first** — "3 options are available" not "There are 3 options"
+- **Conditional phrases first** — "If using Kubernetes, configure..."
+- **Present tense** — "The cluster restarts" not "will restart"
 - **No "and/or"** — use "and", "or", or "A, B, or both"
 
-## Words to Avoid in UI Text
+## Words to Avoid
 
 | Avoid | Use Instead |
 |-------|-------------|
-| etc. | List specific items, or "such as X and Y" |
-| e.g. | for example |
-| i.e. | that is |
-| via | through, using, with |
-| please | (omit, or use only for significant inconvenience) |
+| etc., e.g., i.e., via | specific items, for example, that is, through/using |
+| please | omit (use only for significant inconvenience) |
 | config | configuration |
-| foo, bar, baz | Contextual meaningful names |
+| foo, bar, baz | contextual meaningful names |
 
-## Placeholder Format
+## Placeholders
 
-Placeholder values in UI: descriptive lowercase-with-dashes in angle brackets:
-
-| Good | Bad |
-|------|-----|
-| `<topic-name>` | `<value>` |
-| `<cluster-id>` | `<my-cluster>` |
-| `<broker-address>` | `<replace-with-address>` |
+Descriptive lowercase-with-dashes in angle brackets: `<topic-name>`, `<cluster-id>`. Not `<value>`, `<my-cluster>`.
 
 ## Em Dashes
 
@@ -173,7 +119,7 @@ Don't use. Use parentheses, commas, or separate sentences.
 
 | Excuse | Counter |
 |---|---|
-| "The exclamation adds energy" | Adds noise. Product UI should be calm and informative. |
+| "The exclamation adds energy" | Adds noise. Product UI should be calm. |
 | "'successfully' confirms the action" | Toast itself confirms. "Topic created" sufficient. |
 | "'click here' is clear" | Meaningless without context. Describe destination. |
 | "'Oops' is friendly" | Patronizing. State problem and solution directly. |

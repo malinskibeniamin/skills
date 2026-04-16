@@ -2,23 +2,23 @@
 
 ## Condition-Based Waiting
 
-Replace arbitrary timeouts with condition polling. Flaky tests almost always timing assumptions.
+Replace arbitrary timeouts with condition polling. Flaky tests = timing assumptions.
 
 ```ts
-// BAD — arbitrary delay, passes on fast machines, fails on CI
+// BAD — arbitrary delay
 await new Promise(r => setTimeout(r, 500))
 await page.waitForTimeout(1000)
 
-// GOOD — wait for actual condition (retries until true or timeout)
+// GOOD — wait for actual condition
 await waitFor(() => expect(element).toBeVisible())
 await expect.poll(() => fetchStatus()).toBe('ready')
 await page.waitForSelector('[data-testid="loaded"]')
 
-// GOOD — event-based waiting
+// GOOD — event-based
 await waitForEvent(manager, threadId, 'DONE')
 ```
 
-Result: 60% → 100% pass rate, 40% faster execution.
+Result: 60% → 100% pass rate, 40% faster.
 
 ## Custom Fixtures (test.extend())
 
@@ -36,7 +36,7 @@ const test = base.extend<{ db: TestDatabase }>({
   },
 })
 
-// Compose fixtures — fixture can depend on another fixture
+// Compose — fixture depends on another
 const test = base.extend<{ db: TestDatabase; user: User }>({
   db: async ({}, use) => { /* ... */ await use(db) },
   user: async ({ db }, use) => {
@@ -45,13 +45,13 @@ const test = base.extend<{ db: TestDatabase; user: User }>({
   },
 })
 
-// Tests are pure assertions
+// Tests = pure assertions
 test('user has default role', async ({ user }) => {
   expect(user.role).toBe('viewer')
 })
 ```
 
-**Auto-fixtures**: Set `{ auto: true }` for fixtures running every test without explicit reference (mock API servers, database seeding):
+**Auto-fixtures**: `{ auto: true }` for fixtures running every test without explicit reference:
 
 ```ts
 const test = base.extend<{ mockApi: void }>({
@@ -69,10 +69,10 @@ Same API as Playwright `test.extend()` — patterns transfer between unit and E2
 
 ### Custom Matchers (expect.extend())
 
-Domain-specific assertions improve readability, centralize validation.
+Domain-specific assertions improve readability · centralize validation.
 
 ```ts
-// vitest.setup.ts (add to setupFiles in vitest config)
+// vitest.setup.ts
 import { expect } from 'vitest'
 import { z } from 'zod'
 
@@ -94,7 +94,7 @@ test('API response matches schema', () => {
 })
 ```
 
-Type declaration (add to `vitest.d.ts` or setup file):
+Type declaration (`vitest.d.ts` or setup file):
 
 ```ts
 import type { Assertion, AsymmetricMatchersContaining } from 'vitest'
@@ -111,7 +111,7 @@ declare module 'vitest' {
 
 ### Asymmetric Matchers
 
-Custom matchers from `expect.extend()` work asymmetric — mix literal values with pattern matchers in nested structures:
+Custom matchers from `expect.extend()` work asymmetric — mix literal values with pattern matchers:
 
 ```ts
 expect(response).toEqual({
@@ -123,7 +123,7 @@ expect(response).toEqual({
 
 ### Custom Equality Testers
 
-Teach Vitest semantically equivalent objects equal (Money types, units, date representations):
+Teach Vitest semantically equivalent objects equal (Money · units · dates):
 
 ```ts
 // vitest.setup.ts
@@ -133,65 +133,61 @@ function measurementTester(a: unknown, b: unknown): boolean | undefined {
   if (a instanceof Measurement && b instanceof Measurement) {
     return a.toBaseUnit() === b.toBaseUnit()
   }
-  return undefined  // not our types — defer to default equality
+  return undefined  // not our types — defer to default
 }
 
 expect.addEqualityTesters([measurementTester])
 ```
 
-Register in `setupFiles`. Expensive testers slow all deep equality checks — keep fast.
+Register in `setupFiles`. Expensive testers slow all deep equality — keep fast.
 
 ### Retryable Assertions (expect.poll())
 
-`expect.poll()` retries callback until assertion passes. Cleaner than `waitFor` when async source not Promise-based (polling APIs, DOM side effects, event-driven state):
+Retries callback until assertion passes. Cleaner than `waitFor` for non-Promise async (polling APIs · DOM side effects · event-driven state):
 
 ```ts
-// Polls fetchStatus() every 50ms until it returns 'ready' (or timeout)
 await expect.poll(() => fetchStatus()).toBe('ready')
 
 // Custom interval and timeout
 await expect.poll(() => document.querySelectorAll('.item').length, {
-  interval: 100,  // check every 100ms (default: 50ms)
-  timeout: 5000,  // give up after 5s (default: 1000ms)
+  interval: 100,  // default: 50ms
+  timeout: 5000,  // default: 1000ms
 }).toBeGreaterThan(3)
 ```
 
-Use `expect.poll()` for eventual assertions. Use `waitFor()` when awaiting Promise chain.
+`expect.poll()` for eventual assertions | `waitFor()` for Promise chains.
 
 ### Soft Assertions (expect.soft())
 
-Run all assertions even when one fails. Surfaces every broken expectation in one pass instead of stopping at first:
+Run all assertions even when one fails. Full picture in one pass:
 
 ```ts
 test('user profile has all required fields', () => {
   expect.soft(profile.name).toBe('Alice')
   expect.soft(profile.email).toContain('@')
   expect.soft(profile.role).toBe('admin')
-  // All three report on failure — not just the first
+  // All three report on failure — not just first
 })
 ```
 
-Soft assertions still fail test. No short-circuit. Use for complex state validation where full picture needed to debug.
+Still fails test. No short-circuit. Use for complex state validation needing full debug picture.
 
 ## Reactive TDD with Monitor
 
-Use **Monitor** tool — run test runner watch mode during implementation. Turns RED→GREEN→REFACTOR from discrete steps into continuous feedback.
+**Monitor** streams test runner watch mode during implementation. RED→GREEN→REFACTOR becomes continuous feedback.
 
 ```
 Monitor: vitest --watch
 ```
 
-**How it works:**
-1. Start Monitor on test runner watch mode
+1. Start Monitor on watch mode
 2. Write failing test (RED) — Monitor reports failure immediately
 3. Write minimal code — Monitor reports pass (GREEN) on save
 4. Refactor — Monitor confirms green after each change
 
-**When to use**: Phase 3 (Implement) for rapid iteration. Valuable when making multiple small changes — see red/green transitions without manual test runs.
+**When**: Phase 3 rapid iteration with multiple small changes.
 
 ## Async Leak Detection with Monitor
-
-Monitor streams async leak detection — react to first leak immediately:
 
 ```
 Monitor: vitest run --detectAsyncLeaks
@@ -201,16 +197,14 @@ Surfaces open handles as detected, not buffered until exit.
 
 ## Coverage Gap Analysis
 
-Run coverage to find untested code, write tests targeting gaps.
-
 ```bash
-# Text report — quick overview of uncovered lines
+# Text report — quick overview
 vitest run --coverage.enabled --coverage.reporter=text
 
-# JSON report — parseable for automation
+# JSON report — parseable
 vitest run --coverage.enabled --coverage.reporter=json
 
-# Related files only — faster, scoped to what changed
+# Related files only — faster, scoped
 vitest run --coverage.enabled --coverage.reporter=text --related src/features/auth/
 ```
 
@@ -223,20 +217,20 @@ useAuth.ts      |   72.5  |    50.0  |   80.0  |   72.5  | 34-41,67-72
 AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
 ```
 
-**Uncovered Line #s** = exact targets for new tests. Read lines, understand behavior, write tests.
+**Uncovered Line #s** = exact targets for new tests.
 
 ### Priority Order for Coverage Gaps
 
-1. **Uncovered branches** (if/else, switch, error paths) — highest bug risk
+1. **Uncovered branches** (if/else · switch · error paths) — highest bug risk
 2. **Uncovered functions** — entire untested behaviors
-3. **Uncovered lines in covered functions** — edge cases within tested code
+3. **Uncovered lines in covered functions** — edge cases
 
 ### Don't Chase 100%
 
-Coverage = tool for finding gaps, not goal. Accept lower coverage for:
-- Type stubs, barrel exports, re-exports
-- Framework glue (route config, provider wrappers)
-- Generated code (even if not auto-skipped)
+Coverage = tool for finding gaps, not goal. Accept lower for:
+- Type stubs · barrel exports · re-exports
+- Framework glue (route config · provider wrappers)
+- Generated code
 
 Target: **80% lines, 70% branches** for feature code. Focus on behavior-critical paths.
 
@@ -260,23 +254,18 @@ Detection: existing `*.browser.test.*` files or `@vitest/browser` in package.jso
 ## Diagnostic Commands
 
 ```bash
-# Detect async leaks
-vitest run --detectAsyncLeaks
-
-# Profile slow tests
-vitest run --reporter=verbose --pool=forks
-
-# Find slow selectors in integration tests
-grep -rn 'getByRole' --include='*.integration.*' | wc -l
+vitest run --detectAsyncLeaks          # async leaks
+vitest run --reporter=verbose --pool=forks  # profile slow tests
+grep -rn 'getByRole' --include='*.integration.*' | wc -l  # slow selectors
 ```
 
 ## Vitest Config Optimization
 
-Tune `vitest.config.*` for faster runs. Settings compound — apply all that fit.
+Tune `vitest.config.*` for faster runs. Settings compound.
 
 ### pool: 'threads'
 
-Worker threads = less spawn overhead than forked processes (default). Import times drop ~30%.
+Worker threads = less spawn overhead than forks. Import times drop ~30%.
 
 ```ts
 // vitest.config.mts
@@ -287,11 +276,11 @@ export default defineConfig({
 })
 ```
 
-Use for unit and integration configs. Safe everywhere.
+Safe everywhere for unit and integration.
 
 ### Multi-Workspace Configuration
 
-Monorepos with different runtimes (Node, edge, browser) need separate Vitest configs sharing one root:
+Monorepos with different runtimes need separate configs sharing one root:
 
 ```ts
 // vitest.workspace.ts
@@ -302,11 +291,11 @@ export default [
 ]
 ```
 
-Each workspace gets own pool, environment, isolation settings. Use for multi-runtime monorepos — not for splitting unit/integration in single-runtime projects (use `include`/`exclude` globs).
+Each workspace gets own pool · environment · isolation. Use for multi-runtime monorepos only.
 
 ### Concurrent Tests (it.concurrent)
 
-Run independent tests within single file concurrently. Distinct from `pool:'threads'` which parallelizes across files.
+Run independent tests within single file concurrently. Distinct from `pool:'threads'` (across files).
 
 ```ts
 describe.concurrent('independent API calls', () => {
@@ -314,24 +303,19 @@ describe.concurrent('independent API calls', () => {
   it('fetches roles', async ({ expect }) => { /* ... */ })
   it('fetches permissions', async ({ expect }) => { /* ... */ })
 })
-
-// Or per-test:
-it.concurrent('fast independent test', async ({ expect }) => { /* ... */ })
 ```
 
-Safety requirements:
-- Tests must not share mutable state
-- Each test sets up own fixtures (or use `test.extend()` — fixtures isolate by default)
+Safety: tests must not share mutable state · each sets up own fixtures.
 
-### What NOT to change (and why)
+### What NOT to change
 
 | Setting | Why skip |
 |---|---|
-| `isolate: false` | Incompatible with per-file `vi.mock()` — passes locally, fails CI due to file execution order. Moving all mocks to global setup no scale. |
-| `experimental.fsModuleCache` | Still experimental — stale cache issues in CI |
+| `isolate: false` | Incompatible with per-file `vi.mock()` — passes locally, fails CI |
+| `experimental.fsModuleCache` | Experimental — stale cache issues in CI |
 | Sharding | See [CI Pipeline REFERENCE](../setup-ci-pipeline/REFERENCE.md) — useful for suites >60s |
 
-### Benchmarks (`pool: 'threads'`, real project, 23 unit + 12 integration files)
+### Benchmarks (`pool: 'threads'`, 23 unit + 12 integration files)
 
 | Category | Metric | Before | After |
 |---|---|---|---|
@@ -341,26 +325,26 @@ Safety requirements:
 
 ## Element Selectors — Priority Order
 
-1. **`getByRole` with `{ name }`** — always first. Buttons, links, textboxes, comboboxes, options.
-2. **`getByText`** — non-interactive text only (headings, descriptions, labels).
-3. **`getByTestId`** — when component has `testId` prop and role queries fail.
-4. **`document.querySelector('[data-slot="..."]')`** — last resort for elements without accessible roles.
+1. **`getByRole` with `{ name }`** — always first
+2. **`getByText`** — non-interactive text only
+3. **`getByTestId`** — when role queries fail
+4. **`document.querySelector('[data-slot="..."]')`** — last resort
 
 ### Query Type Rules
 
 | Query | When |
 |-------|------|
-| `getBy` | Element MUST exist. Throws if not found. |
-| `queryBy` | ONLY for "not visible" assertions: `expect(queryByText('X')).not.toBeInTheDocument()` |
+| `getBy` | Element MUST exist. Throws if missing. |
+| `queryBy` | ONLY for "not visible" assertions |
 | `findBy` | Async elements. Returns Promise. |
-| `getAllBy` | Multiple elements match and expected. |
+| `getAllBy` | Multiple elements expected. |
 
 ### Selector Gotchas
 
-- **Always include `{ name }` with `getByRole`** when multiple elements share same role
-- Password inputs have no `textbox` role — use `document.querySelector('input[data-slot="input"]')`
-- Number inputs use `spinbutton` role, not `textbox`
-- Create helper functions for repeated ambiguous queries at `describe` level
+- Always include `{ name }` with `getByRole` when multiple elements share same role
+- Password inputs have no `textbox` role → use `document.querySelector('input[data-slot="input"]')`
+- Number inputs use `spinbutton` role
+- Create helpers for repeated ambiguous queries at `describe` level
 
 ```ts
 const getTrigger = () => screen.getByRole('button', { name: 'Select option' })
@@ -380,22 +364,22 @@ const getTrigger = () => screen.getByRole('button', { name: 'Select option' })
 
 ## Portal Component Testing
 
-Portal components (Dialog, AlertDialog, DropdownMenu, Popover, Sheet, Combobox, MultiSelect) render outside normal DOM hierarchy.
+Portal components (Dialog · AlertDialog · DropdownMenu · Popover · Sheet · Combobox · MultiSelect) render outside normal DOM hierarchy.
 
 ### Required Tests
 
 1. Trigger opens content
 2. Content not visible initially (`queryByText` before opening)
-3. Action callbacks fire with correct arguments
+3. Action callbacks fire with correct args
 4. Close callbacks fire (`onOpenChange(false)`)
-5. Close mechanisms: Escape key, click outside, cancel button
+5. Close mechanisms: Escape · click outside · cancel button
 6. Disabled state — trigger does nothing
 
 ### Key Patterns
 
-**Use `defaultOpen` for content-only tests.** Skip trigger interaction when testing buttons/callbacks inside portal. Faster, avoids animation timing.
+**`defaultOpen` for content-only tests.** Skip trigger interaction when testing buttons/callbacks inside portal. Faster, avoids animation timing.
 
-**Use `waitFor` for ALL close assertions.** Portal content animates out async:
+**`waitFor` for ALL close assertions.** Portal content animates out async:
 
 ```ts
 await waitFor(() => {
@@ -417,7 +401,7 @@ await user.click(screen.getByText('Outside'))
 
 **Escape key:** `await user.keyboard('{Escape}')` after opening portal.
 
-**Portal content queryable via `screen`** — no special container needed. Renders at document body level.
+**Portal content queryable via `screen`** — no special container needed.
 
 ## Test Mock Patterns
 
@@ -433,9 +417,9 @@ Common browser API mocks for jsdom. Configure in `vitest.setup.ts`, not per-test
 ### Rules
 
 - No re-mock in test files — global setup applies
-- No test actual browser behavior — mocks are stubs. Test component callbacks/state.
-- ResizeObserver callbacks never fire in tests — test behavior via props/interaction
-- Add new mocks to `vitest.setup.ts`, not individual test files
+- No test actual browser behavior — mocks are stubs
+- ResizeObserver callbacks never fire — test behavior via props/interaction
+- Add new mocks to `vitest.setup.ts` only
 
 ### Missing Mock Error Guide
 
@@ -469,11 +453,11 @@ vi.mocked(window.matchMedia).mockImplementation((query) => ({
 
 ## Unhappy Path Testing Checklist
 
-Every form, validator, and async operation needs unhappy path tests. LLMs default to happy path — this checklist counteracts that bias.
+Every form · validator · async operation needs unhappy path tests. LLMs default to happy path — counteract.
 
 ### Validation Exhaustiveness
 
-Feed **every** constraint type through your validation/humanization layer. Assert none leak raw internal messages.
+Feed **every** constraint type through validation/humanization layer. Assert none leak raw messages.
 
 ```ts
 test('humanizes all proto constraint types', () => {
@@ -496,7 +480,7 @@ test('humanizes all proto constraint types', () => {
 
 ### Catch Block Behavior
 
-Test that errors surface to user, never swallowed:
+Test errors surface to user, never swallowed:
 
 ```ts
 test('shows error toast on JSON parse failure', async () => {
@@ -508,7 +492,6 @@ test('shows error toast on JSON parse failure', async () => {
     target: { value: '{invalid json' },
   })
 
-  // Error must be visible — not silently passed as raw string
   await waitFor(() => {
     expect(screen.getByText(/invalid json/i)).toBeVisible()
   })
@@ -530,21 +513,18 @@ test('renders error state instead of form on deserialize failure', () => {
 
 ### Oneof / Discriminated Union Switching
 
-Previous branch values must be cleared:
+Previous branch values must clear:
 
 ```ts
 test('clears OAuth fields when switching to SAML', async () => {
   const user = userEvent.setup()
   render(<AuthConfigForm />)
 
-  // Fill OAuth fields
   await fillOAuthFields(user)
 
-  // Switch to SAML
   await user.click(screen.getByRole('combobox', { name: /auth type/i }))
   await user.click(screen.getByRole('option', { name: /saml/i }))
 
-  // OAuth fields must be cleared from form state
   const formValues = getFormValues()
   expect(formValues.oauth).toBeUndefined()
 })
@@ -552,7 +532,7 @@ test('clears OAuth fields when switching to SAML', async () => {
 
 ### Async Validation Race Condition
 
-Rapid edits must not show stale validation results:
+Rapid edits must not show stale validation:
 
 ```ts
 test('cancels stale async validation on rapid input', async () => {
@@ -563,7 +543,6 @@ test('cancels stale async validation on rapid input', async () => {
 
   render(<ValidatedInput validate={validateFn} />)
 
-  // Rapid edits — second should win
   await fireEvent.change(input, { target: { value: 'a' } })
   await fireEvent.change(input, { target: { value: 'ab' } })
 
@@ -575,7 +554,7 @@ test('cancels stale async validation on rapid input', async () => {
 
 ### All Errors Visible
 
-Toast/alert must show all errors, not just first:
+Show all errors, not just first:
 
 ```ts
 test('displays all validation errors not just first', async () => {
@@ -587,27 +566,26 @@ test('displays all validation errors not just first', async () => {
   await waitFor(() => {
     expect(screen.getByText(/name is required/i)).toBeVisible()
     expect(screen.getByText(/url must be valid/i)).toBeVisible()
-    // Not just the first error
   })
 })
 ```
 
 ### Error Path Priority
 
-When writing tests for a feature, cover these paths in order:
-1. **Invalid input** — empty, wrong format, too long/short, special characters
-2. **Network failure** — fetch rejects, timeout, 4xx/5xx responses
-3. **Parse failure** — malformed JSON, corrupt proto, missing required fields
-4. **State transition errors** — switching types clears old data, concurrent edits
-5. **Partial failure** — batch operation where some items fail (Promise.allSettled)
+Cover these paths in order:
+1. **Invalid input** — empty · wrong format · too long/short · special chars
+2. **Network failure** — fetch rejects · timeout · 4xx/5xx
+3. **Parse failure** — malformed JSON · corrupt proto · missing required fields
+4. **State transition errors** — switching types clears old data · concurrent edits
+5. **Partial failure** — batch where some items fail (Promise.allSettled)
 
 ## Common Agent Excuses
 
 | Excuse | Counter |
 |---|---|
-| "I'll add the test later" | No. Write failing test FIRST (RED phase). |
-| "This is too simple to test" | Simple things become complex. Test now. |
-| "The test would just duplicate the implementation" | Test behavior, not implementation. |
-| "I can't test this without mocking everything" | Redesign for testability. Heavy mocking = design problem. |
-| "Tests slow down development" | Tests catch bugs that slow development 10x more. |
-| "I'll just verify it manually" | Manual verification no prevent regressions. |
+| "I'll add test later" | No. Failing test FIRST (RED). |
+| "Too simple to test" | Simple things become complex. Test now. |
+| "Test duplicates implementation" | Test behavior, not implementation. |
+| "Can't test without mocking everything" | Redesign for testability. Heavy mocking = design problem. |
+| "Tests slow development" | Tests catch bugs that slow dev 10x more. |
+| "I'll verify manually" | Manual verification no prevent regressions. |

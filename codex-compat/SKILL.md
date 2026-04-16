@@ -5,7 +5,7 @@ description: Generate Codex hooks.json and AGENTS.md from Claude Code hooks. Wra
 
 # Codex Compatibility Layer
 
-Codex supports only `Bash` matcher for PostToolUse — no Edit|Write. This bridges the gap.
+Codex supports only `Bash` matcher for PostToolUse — no Edit|Write. This bridges that gap.
 
 ## What This Creates
 

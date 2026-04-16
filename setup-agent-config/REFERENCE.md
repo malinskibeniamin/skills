@@ -8,31 +8,31 @@
 
 > Script: [`../shared/user-prompt-context.sh`](../shared/user-prompt-context.sh)
 
-Injects project state into every prompt as `additionalContext`. Claude knows state without wasting tool calls.
+Injects project state into every prompt as `additionalContext` · Claude knows state without wasting tool calls.
 
 ### Context Levels
 
-Set `PROMPT_CONTEXT_LEVEL` in SessionStart hook:
+Set `PROMPT_CONTEXT_LEVEL` in SessionStart:
 
 ```bash
 echo "export PROMPT_CONTEXT_LEVEL=standard" >> "$CLAUDE_ENV_FILE"
 ```
 
-| Level | What's injected | Latency | Tokens |
-|-------|----------------|---------|--------|
+| Level | Injected | Latency | Tokens |
+|-------|----------|---------|--------|
 | `minimal` | Git branch, dirty state, last commit, ahead/behind | ~80ms | ~50 |
 | `standard` (default) | Minimal + scripts + violations + condensed rules + config | ~120ms | ~200 |
-| `full` | Standard + tsconfig paths + UI component inventory + route tree + proto version + last stop outcome | ~170ms | ~350 |
+| `full` | Standard + tsconfig paths + UI inventory + route tree + proto version + last stop outcome | ~170ms | ~350 |
 
-### The Rules Line
+### Rules Line
 
-Most valuable injection. Compresses 300+ lines PostToolUse enforcement into one line Claude applies *before* writing code:
+Most valuable injection · compresses 300+ lines PostToolUse enforcement into one line Claude applies *before* writing code:
 
 ```
 Rules: bun biome vitest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} no-useEffect | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery)
 ```
 
-Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct first try (1 tool call). Estimated savings: **3000-8000 tokens per session**.
+Instead of write→block→fix (3 tool calls, ~1500 tokens), Claude writes correct first try (1 call). Estimated savings: **3000-8000 tokens/session**.
 
 ### Full Level — What It Adds
 
@@ -50,8 +50,8 @@ Prevents 2-3 Glob/Read calls Claude makes discovering import paths, available co
 
 Codex lacks `UserPromptSubmit`. Approximate via:
 - **SessionStart**: one-time context snapshot (stale but available)
-- **AGENTS.md**: static rules and scripts baked at generation time
-- **Stop → `.codex/session-state.md`**: violations and git state written per-turn
+- **AGENTS.md**: static rules + scripts baked at generation time
+- **Stop → `.codex/session-state.md`**: violations + git state written per-turn
 
 See `codex-compat` REFERENCE.md for approximation strategy.
 
@@ -59,26 +59,24 @@ See `codex-compat` REFERENCE.md for approximation strategy.
 
 > Script: [`scripts/llm-test-flags.sh`](scripts/llm-test-flags.sh)
 
-### Hard enforcement (rewrite via `updatedInput`)
+### Hard enforcement (`updatedInput` rewrite)
 
 | Action | Runner | Why |
 |--------|--------|-----|
-| Strip `--verbose` | Vitest, Jest | Wastes tokens — agent reporters already show only failures |
+| Strip `--verbose` | Vitest, Jest | Wastes tokens — agent reporters show only failures |
 
-### Soft suggestions (via `additionalContext`)
+### Soft suggestions (`additionalContext`)
 
-Suggested not forced. Claude may include:
+Suggested not forced · only appear when flag absent:
 
 | Flag | Runner | Why |
 |------|--------|-----|
-| `--pool=forks` | Vitest | Each test file own process — OS cleans up zombies even if vitest crashes |
-| `--bail=1` | Vitest | Fail fast on first failure — no wasted tokens on cascading failures |
-| `--teardownTimeout=5000` | Vitest | Kill hanging teardown after 5s — prevents zombie processes from stalled cleanup |
-| `--reporter=github` | Vitest (CI only) | GitHub Actions annotations inline in PR diffs |
+| `--pool=forks` | Vitest | Own process per file — OS cleans zombies if vitest crashes |
+| `--bail=1` | Vitest | Fail fast — no wasted tokens on cascading failures |
+| `--teardownTimeout=5000` | Vitest | Kill hanging teardown after 5s |
+| `--reporter=github` | Vitest (CI) | GitHub Actions annotations inline in PR diffs |
 | `--bail` | Jest | Fail fast |
-| `--forceExit` | Jest | Force exit after tests — prevents hanging from open handles |
-
-Suggestions only appear when flag not already present.
+| `--forceExit` | Jest | Force exit — prevents hanging from open handles |
 
 ## llm-truncate.sh (PostToolUse on Bash)
 
@@ -86,15 +84,12 @@ Suggestions only appear when flag not already present.
 
 ## NODE_OPTIONS
 
-`NODE_OPTIONS=--max-old-space-size=8192` set in SessionStart hook (`session-env.sh`). Gives Node.js 8GB heap, preventing OOM on:
-- Large test suites with many imports
-- TypeScript compilation (`tsgo` / `tsc`)
-- Bundler builds (rsbuild, webpack, vite)
-- Protobuf code generation
+`NODE_OPTIONS=--max-old-space-size=8192` set in SessionStart (`session-env.sh`) · 8GB heap prevents OOM on:
+- Large test suites | TypeScript compilation (`tsgo`/`tsc`) | Bundler builds | Protobuf codegen
 
 ## Vitest Config Optimizations
 
-Recommended `vitest.config.ts` settings. Hook handles CLI flags; these handle config-level tuning.
+Hook handles CLI flags · these handle config-level tuning.
 
 ### Dependency optimization (faster startup)
 
@@ -104,14 +99,14 @@ export default defineConfig({
     deps: {
       optimizer: {
         web: {
-          // Pre-bundle heavy deps so vitest doesn't re-transform them per test file
+          // Pre-bundle heavy deps so vitest doesn't re-transform per test file
           include: ['@bufbuild/protobuf', '@connectrpc/connect', 'zod'],
         },
       },
     },
     server: {
       deps: {
-        // Inline ESM-only packages that cause resolution issues
+        // Inline ESM-only packages causing resolution issues
         inline: ['@bufbuild/protobuf'],
       },
     },
@@ -127,14 +122,11 @@ export default defineConfig({
     pool: 'forks',
     poolOptions: {
       forks: {
-        // Limit concurrent workers to prevent resource exhaustion
         maxForks: 4,
         minForks: 1,
       },
     },
-    // Kill test if it takes longer than 10s
     testTimeout: 10000,
-    // Kill teardown if it takes longer than 5s
     teardownTimeout: 5000,
   },
 })
@@ -142,7 +134,7 @@ export default defineConfig({
 
 ### Hanging process detection
 
-Add to `vitest.config.ts` for debugging zombie issues:
+For debugging zombie issues:
 
 ```ts
 export default defineConfig({
@@ -154,23 +146,23 @@ export default defineConfig({
 })
 ```
 
-`hanging-process` reporter logs which async ops prevent vitest exit. Remove once zombies resolved — adds overhead.
+`hanging-process` reporter logs which async ops prevent exit · remove once resolved — adds overhead.
 
 ## Token Savings Breakdown
 
-| Optimization | Mechanism | Estimated savings |
-|-------------|-----------|------------------|
-| AI_AGENT=1 | Vitest agent reporter: only shows failures | ~60-80% on test output |
-| CLAUDECODE=1 | Bun test: hides passing tests | ~60-80% on test output |
-| Strip --verbose | Prevents verbose mode (via `updatedInput` rewrite) | variable |
-| --bail=1 | Stops after first failure instead of running entire suite | ~1,000-50,000 tokens |
-| Truncate >200 lines | Caps output from `bun install`, stack traces, etc. | ~80% on large outputs |
-| --pool=forks | Reliability (zombie prevention), not token savings | 0 |
+| Optimization | Mechanism | Savings |
+|-------------|-----------|---------|
+| AI_AGENT=1 | Vitest agent reporter: failures only | ~60-80% test output |
+| CLAUDECODE=1 | Bun test: hides passing tests | ~60-80% test output |
+| Strip --verbose | Prevents verbose mode (`updatedInput` rewrite) | variable |
+| --bail=1 | Stops after first failure | ~1,000-50,000 tokens |
+| Truncate >200 lines | Caps `bun install`, stack traces, and so on | ~80% large outputs |
+| --pool=forks | Reliability (zombie prevention), not savings | 0 |
 
 ## Environment Variable Reference
 
-| Var | Effect on Vitest | Effect on Bun | Effect on Rstest |
-|-----|-----------------|---------------|-----------------|
-| `AI_AGENT=1` | Enables agent reporter (failures only) | No effect | Defaults to md reporter |
-| `CLAUDECODE=1` | No effect | Shows only failures + summary | No effect |
-| `NODE_OPTIONS=--max-old-space-size=8192` | 8GB heap for worker processes | 8GB heap | N/A (Rust) |
+| Var | Vitest | Bun | Rstest |
+|-----|--------|-----|--------|
+| `AI_AGENT=1` | Agent reporter (failures only) | No effect | Defaults to md reporter |
+| `CLAUDECODE=1` | No effect | Failures + summary only | No effect |
+| `NODE_OPTIONS=--max-old-space-size=8192` | 8GB heap for workers | 8GB heap | N/A (Rust) |

@@ -5,32 +5,26 @@ description: Enforce UX text style guide via PostToolUse hooks — bans exclamat
 
 # Setup UX Copy
 
-## What This Sets Up
-
 PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 
-- **Ban exclamation points** in UI string values
-- **Ban "successfully"** in UI text (use past-tense verb: "Topic created")
-- **Ban "click here"** and bare "here" link text
-- **Ban blame language** ("Oops", "Uh oh", "Whoops")
-- **Ban "Yes"/"No" button labels** (use clear action verbs)
-- **Warn on possessive pronouns** in titles/nav ("My Settings" -> "Settings")
-- **Warn on bold/italic/monospace** formatting in string literals
-- **Warn on ALL CAPS** for emphasis (not acronyms)
-- **Warn on Title Case** (3+ consecutive capitalized words in strings)
-- **Warn on spelled-out numbers** (1-9 as numerals in UI)
-- **Warn on "and/or"** (use "and", "or", or "A, B, or both")
-- **Warn on "etc."** (list specific items instead)
-- **Warn on "e.g." / "i.e."** (use "for example" / "that is")
-- **Warn on "please"** (implies optional; use direct language)
-- **Ban non-inclusive terms** (whitelist/blacklist -> allowlist/denylist, master/slave -> leader/follower)
-- **Warn on "There is/are"** starters (put subject first)
-- **Warn on "via"** (use "through", "using", or "with")
+- **Ban** exclamation points in UI strings
+- **Ban** "successfully" (use past-tense verb: "Topic created")
+- **Ban** "click here" and bare "here" link text
+- **Ban** blame language ("Oops", "Uh oh", "Whoops")
+- **Ban** "Yes"/"No" button labels (use action verbs)
+- **Ban** non-inclusive terms (whitelist/blacklist → allowlist/denylist, master/slave → leader/follower)
+- **Warn** possessive pronouns in titles/nav ("My Settings" → "Settings")
+- **Warn** bold/italic/monospace in string literals
+- **Warn** ALL CAPS for emphasis (not acronyms)
+- **Warn** Title Case (3+ consecutive capitalized words)
+- **Warn** spelled-out numbers (1-9 as numerals in UI)
+- **Warn** "and/or" (use "and", "or", or "A, B, or both")
+- **Warn** "etc.", "e.g.", "i.e.", "please", "via", "There is/are" starters
 
 ### Redpanda-specific (REDPANDA_KIT=1)
 
-- **Enforce product name capitalization** (Admin API, Schema Registry, HTTP Proxy, Redpanda Console)
-- **Warn on "the console"** (use "Redpanda Console")
+- Enforce product name capitalization (Admin API, Schema Registry, HTTP Proxy, Redpanda Console)
+- Warn on "the console" (use "Redpanda Console")
 
 ### Escape hatch
 
@@ -39,19 +33,15 @@ PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 ## Steps
 
 ### 1. Create hook script
-
 Copy [`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
 
 ### 2. Configure hook
-
 Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/ux-copy-check.sh`
 
 ### 3. Copy glossary (optional, for DDD)
-
-Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pairs with `ubiquitous-language` community skill for project-wide term enforcement.
+Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pairs with `ubiquitous-language` community skill.
 
 ### 4. Verify
-
 - [ ] Hook blocks `"Something!"` in string literals
 - [ ] Hook blocks `"successfully"` in UI strings
 - [ ] Hook blocks `<Button>Yes</Button>` in TSX
