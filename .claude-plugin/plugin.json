@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows.",
-  "version": "2.1.0",
+  "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
+  "version": "2.2.2",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -39,6 +39,7 @@
     "./work-automation-kit/",
     "./write-a-skill/",
     "./codex-compat/",
+    "./extend-harness/",
     "./setup-accessibility/",
     "./setup-agent-config/",
     "./setup-atlassian-workflow/",
@@ -64,7 +65,8 @@
   "commands": [
     "./.claude/commands/commit-push.md",
     "./.claude/commands/commit-push-pr.md",
-    "./.claude/commands/hook-audit.md"
+    "./.claude/commands/hook-audit.md",
+    "./.claude/commands/frontend-skills-stats.md"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",
@@ -75,18 +77,23 @@
   ],
   "x-updatedAt": "2026-04-16",
   "x-includes": {
-    "skills": 34,
-    "hooks": 68,
-    "commands": 3,
+    "skills": 35,
+    "hooks": 62,
+    "hookScripts": 69,
+    "commands": 4,
     "routines": 5,
     "agents": 5,
     "sharedUtilities": 11,
     "references": 25,
     "evals": 1,
     "instructions": ["CLAUDE.md", "AGENTS.md"],
-    "settings": "settings.json"
+    "settings": "settings.json",
+    "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "2.2.2": "2026-04-16 — Manifest codegen: single-source skill-manifest.json generates .claude/settings.json + hooks/hooks.json via scripts/generate-hook-configs.sh. Lefthook pre-push drift check. New tiers in _hook-lib.sh: hook_info (silent JSONL), hook_nudge (soft warn), hook_block_strict (no escape), hook_emit_diagnostic (LSP-style with range+fix). Portable ms-timing (bash 5+ EPOCHREALTIME, graceful fallback to SECONDS on macOS bash 3.2). metrics-summary-stop schema v2: perf_ms p50/p95 per hook, nudge/info/diagnostic counts. New /frontend-skills-stats command (analytics dashboard). New /extend-harness skill (maintainer guard rail). POSIX-friendly (no date +%s%N, portable timeout detection).",
+    "2.2.1": "2026-04-16 — P0 bugfix: dereferenced 35 symlinks in .claude/hooks/*.sh to real files. Plugin packager was resolving relative symlinks (../../shared/hook-lib.sh) to absolute paths at package time, creating dangling links in install cache. All PostToolUse hooks were failing silently at `source _hook-lib.sh` (line 3). Plugin users on <=2.2.0 must reinstall via /plugin install.",
+    "2.2.0": "2026-04-16 — Opus 4.7 tuning: reconciled plugin hooks.json ↔ settings.json (was drift: 7 plugin-only + 12 settings-only). Both now 61 wired hooks. Wired orphan tanstack-router-gen. Bumped model refs claude-opus-4-6 → claude-opus-4-7. First-turn context optimization in user-prompt-context.sh (saves ~3k tok/session). Intent-detect scope qualifiers for 4.7 literal interpretation. Baselines opt-in-able (CAPTURE_TYPECHECK_BASELINE, CAPTURE_TEST_BASELINE). edit-loop-check thresholds raised 8→12, 15→20 (4.7 self-recovers). Playwright fullPage: true (2576px vision). xhigh effort-per-phase in CLAUDE.md. New scripts/memory-prune.sh.",
     "2.1.0": "2026-04-16 — Updated verify-install.sh: version display, asset counts (skills/commands/agents/routines/shared/references), 8 hook events, expanded fallback list (57 hooks), JSON output with version metadata. Aligned plugin schemas with official docs (x-prefix, $schema).",
     "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Added quality-gate aggregator, JSONL session logging, intent-detect directives, 5 routines, Phase 0 pre-ship gate, 42-case test suite. 74% token reduction via caveman compression. Hook count 30→68, agents 2→5.",
     "1.10.0": "2026-04-13 — Added 16 hooks from PR audit, autopilot enforcement, coverage-based TDD gate, Monitor streaming patterns."

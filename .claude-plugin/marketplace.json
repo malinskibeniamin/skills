@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover TDD through CI-green PR. 5 agents for automated review. 5 routines for recurring workflows. TypeScript-scoped, caveman-compressed.",
-      "version": "2.1.0",
+      "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 34 skills cover TDD through CI-green PR. 5 agents for automated review. 5 routines for recurring workflows. TypeScript-scoped, caveman-compressed. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "2.2.2",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
@@ -30,6 +30,9 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "2.2.2": "2026-04-16 — Single-source manifest codegen. New hook tiers (info/nudge/block-strict/diagnostic). Portable ms-timing. Analytics dashboard /frontend-skills-stats. New /extend-harness maintainer skill. POSIX-friendly.",
+        "2.2.1": "2026-04-16 — P0 bugfix: dereferenced symlinks in .claude/hooks/ — plugin packager was creating dangling links. Reinstall required.",
+        "2.2.0": "2026-04-16 — Opus 4.7 tuning: reconciled plugin/settings drift. First-turn context optimization. Scope qualifiers for 4.7 literal interpretation. edit-loop thresholds raised. xhigh effort-per-phase.",
         "2.1.0": "2026-04-16 — verify-install.sh v2: version display, asset counts, 8 hook events, schema alignment.",
         "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Quality-gate aggregator, JSONL session logging, intent-detect, 5 routines, Phase 0 pre-ship gate. 74% token reduction. Hooks 30→68, agents 2→5.",
         "1.10.0": "2026-04-13 — 16 hooks from PR audit, autopilot enforcement, coverage TDD gate, Monitor streaming."

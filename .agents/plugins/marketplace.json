@@ -6,8 +6,8 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "2.1.0",
-      "description": "React/TypeScript frontend enforcement harness. 68 hooks, 34 skills, 5 agents, 5 routines, 3 commands. TypeScript-scoped, caveman-compressed.",
+      "version": "2.2.2",
+      "description": "React/TypeScript frontend enforcement harness. 62 wired hooks, 69 scripts, 34 skills, 5 agents, 5 routines, 4 commands. TypeScript-scoped, caveman-compressed. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
         "path": "./"
@@ -30,6 +30,9 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "2.2.2": "2026-04-16 — Single-source manifest codegen. New hook tiers. Portable ms-timing. /frontend-skills-stats. /extend-harness.",
+        "2.2.1": "2026-04-16 — P0 bugfix: dereferenced symlinks.",
+        "2.2.0": "2026-04-16 — Opus 4.7 tuning; plugin/settings drift reconciled.",
         "2.1.0": "2026-04-16 — verify-install.sh v2: version display, asset counts, 8 hook events, schema alignment.",
         "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Quality-gate aggregator, JSONL session logging, intent-detect, routines, Phase 0 pre-ship gate. Hooks 30→68, agents 2→5.",
         "1.10.0": "2026-04-13 — 16 hooks from PR audit, autopilot enforcement, coverage TDD gate."
