@@ -1,7 +1,8 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend skills, hooks, and agents. 30 hooks enforce patterns in real-time. One skill for the full frontend development lifecycle.",
-  "version": "1.10.0",
+  "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows.",
+  "version": "2.0.0",
+  "updatedAt": "2026-04-16",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -19,7 +20,10 @@
     "agents",
     "quality-gate",
     "routines",
-    "sandcastle"
+    "sandcastle",
+    "session-logging",
+    "intent-detect",
+    "caveman"
   ],
   "skills": [
     "./brainstorming/",
@@ -57,5 +61,35 @@
     "./setup-ux-copy/",
     "./setup-zustand/"
   ],
-  "agents": ["./agents/code-reviewer.md", "./agents/verifier.md"]
+  "hooks": "./.claude/hooks/",
+  "commands": [
+    "./.claude/commands/commit-push.md",
+    "./.claude/commands/commit-push-pr.md",
+    "./.claude/commands/hook-audit.md"
+  ],
+  "routines": [
+    "./setup-routines/routines/docs-drift.md",
+    "./setup-routines/routines/issue-triage.md",
+    "./setup-routines/routines/pr-feedback-resolve.md",
+    "./setup-routines/routines/pr-review.md",
+    "./setup-routines/routines/weekly-health.md"
+  ],
+  "agents": [
+    "./agents/adversarial-reviewer.md",
+    "./agents/code-reviewer.md",
+    "./agents/findings-schema.md",
+    "./agents/self-reviewer.md",
+    "./agents/verifier.md"
+  ],
+  "shared": "./shared/",
+  "settings": "./.claude/settings.json",
+  "instructions": [
+    "./CLAUDE.md",
+    "./AGENTS.md"
+  ],
+  "evals": "./agent-evals/",
+  "changelog": {
+    "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Added quality-gate aggregator, JSONL session logging, intent-detect directives, 5 routines, Phase 0 pre-ship gate, 42-case test suite. 74% token reduction via caveman compression. Hook count 30→68, agents 2→5.",
+    "1.10.0": "2026-04-13 — Added 16 hooks from PR audit, autopilot enforcement, coverage-based TDD gate, Monitor streaming patterns."
+  }
 }
