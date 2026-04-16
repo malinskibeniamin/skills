@@ -21,13 +21,10 @@ fi
 # ── Check 2: invalidateQueries without await ─────────────────────
 # Cache invalidation is async — must be awaited or UI shows stale data.
 
-if echo "$added_lines" | grep -qE 'invalidateQueries\(' | grep -vqE 'await.*invalidateQueries' 2>/dev/null; then
-  # More precise: check if the line has invalidateQueries but no await
-  no_await=$(echo "$added_lines" | grep -E 'invalidateQueries\(' | grep -vE 'await' || true)
-  if [ -n "$no_await" ]; then
-    if ! hook_has_escape "await-invalidate"; then
-      hook_warn "Always await invalidateQueries() — without await, subsequent code may see stale cache. Escape: // allow: await-invalidate [reason]" "query-pattern-await"
-    fi
+no_await=$(echo "$added_lines" | grep -E 'invalidateQueries\(' | grep -vE 'await' || true)
+if [ -n "$no_await" ]; then
+  if ! hook_has_escape "await-invalidate"; then
+    hook_warn "Always await invalidateQueries() — without await, subsequent code may see stale cache. Escape: // allow: await-invalidate [reason]" "query-pattern-await"
   fi
 fi
 

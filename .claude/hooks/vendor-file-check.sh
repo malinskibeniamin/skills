@@ -5,13 +5,13 @@ source "$(dirname "$0")/_hook-lib.sh"
 # Extract file path directly — don't use hook_parse_edit_write which
 # exits on non-existent files. Vendor paths need checking even for Write (new files).
 _hook_input=$(cat)
-_hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty')
+_hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
 if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ]; then
   exit 0
 fi
 
-file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty')
+file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
 if [ -z "$file_path" ]; then
   exit 0
 fi

@@ -104,13 +104,13 @@ _safe_json_escape() {
 
 hook_parse_edit_write() {
   _hook_input=$(cat)
-  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty')
+  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
   if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ]; then
     exit 0
   fi
 
-  file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty')
+  file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
 
   if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
     _hook_debug "skip: file_path empty or missing ($file_path)"
@@ -364,13 +364,13 @@ hook_warn() {
 
 hook_parse_bash() {
   _hook_input=$(cat)
-  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty')
+  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
   if [ "$_hook_tool_name" != "Bash" ]; then
     exit 0
   fi
 
-  command=$(echo "$_hook_input" | jq -r '.tool_input.command // empty')
+  command=$(echo "$_hook_input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
   if [ -z "$command" ]; then
     exit 0

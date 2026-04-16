@@ -13,7 +13,7 @@ hook_get_added_lines
 # Pattern: useState with naming that suggests pagination, sort, or filter.
 
 if echo "$file_path" | grep -qE '/routes/'; then
-  url_state_candidates=$(echo "$added_lines" | grep -E 'useState.*\b(page|pageIndex|pageSize|sort|sortBy|sortOrder|filter|search|tab|activeTab|selectedTab|query)\b' || true)
+  url_state_candidates=$(echo "$added_lines" | grep -E '\b(page|pageIndex|pageSize|sort|sortBy|sortOrder|filter|search|tab|activeTab|selectedTab|query)\b' | grep -E 'useState' || true)
 
   if [ -n "$url_state_candidates" ]; then
     sample=$(echo "$url_state_candidates" | head -2 | sed 's/^+//' | tr '\n' ' ')

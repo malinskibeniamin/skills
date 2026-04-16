@@ -2,13 +2,13 @@
 set -euo pipefail
 
 input=$(cat)
-tool_name=$(echo "$input" | jq -r '.tool_name // empty')
+tool_name=$(echo "$input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
 if [ "$tool_name" != "Bash" ]; then
   exit 0
 fi
 
-command=$(echo "$input" | jq -r '.tool_input.command // empty')
+command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
 if [ -z "$command" ]; then
   exit 0

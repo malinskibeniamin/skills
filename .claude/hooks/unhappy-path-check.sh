@@ -23,7 +23,7 @@ fi
 if echo "$added_lines" | grep -qE 'catch\s*(\([^)]*\))?\s*\{'; then
   # Look for catch blocks in added lines that don't set error state,
   # re-throw, or call error handlers
-  _catch_context=$(echo "$added_lines" | grep -A5 'catch\s*(\([^)]*\))?\s*{' || true)
+  _catch_context=$(echo "$added_lines" | grep -EA5 'catch\s*(\([^)]*\))?\s*\{' || true)
 
   if [ -n "$_catch_context" ]; then
     # Check if catch block has error handling

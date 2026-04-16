@@ -8,13 +8,13 @@ source "$(dirname "$0")/_hook-lib.sh"
 
 # Read stdin directly — hook_parse_bash not used because we also need exit_code
 input=$(cat)
-tool_name=$(echo "$input" | jq -r '.tool_name // empty')
+tool_name=$(echo "$input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
 if [ "$tool_name" != "Bash" ]; then
   exit 0
 fi
 
-exit_code=$(echo "$input" | jq -r '.tool_result.exit_code // "0"')
+exit_code=$(echo "$input" | jq -r '.tool_result.exit_code // "0"' 2>/dev/null || echo "0")
 
 # Short-circuit: most Bash calls succeed — skip classification entirely
 if [ "$exit_code" = "0" ]; then
@@ -23,7 +23,7 @@ if [ "$exit_code" = "0" ]; then
   exit 0
 fi
 
-command=$(echo "$input" | jq -r '.tool_input.command // empty')
+command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
 # Classify command type with single combined regex
 _cmd_type=$(echo "$command" | grep -oE 'lint|biome|ultracite|type:check|typecheck|tsgo|tsc|vitest|jest|bun test|build|rsbuild|webpack|vite build' | head -1 || true)

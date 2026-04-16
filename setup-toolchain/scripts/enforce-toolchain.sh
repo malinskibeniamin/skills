@@ -2,7 +2,7 @@
 set -euo pipefail
 
 input=$(cat)
-command=$(echo "$input" | jq -r '.tool_input.command // empty')
+command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
 if [ -z "$command" ]; then
   exit 0
