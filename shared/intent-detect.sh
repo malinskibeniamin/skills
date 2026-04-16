@@ -30,13 +30,13 @@ fi
 # ── Component/UI creation ────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'create.*component|new.*component|build.*form|add.*page|add.*dialog|add.*modal|add.*view'; then
-  directives="$directives\n[COMPONENT] @/components/ui/ only. kbd-nav, aria-labels, test co-located. DS tokens, no inline."
+  directives="$directives\n[COMPONENT] Prod UI: use @/components/ui/ (tests/stories/docs exempt). kbd-nav, aria-labels, test co-located. DS tokens, no inline."
 fi
 
 # ── Bug fix / debugging ─────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash|triage|investigate|regression'; then
-  directives="$directives\n[TRIAGE] reproduce(test)→analyze→hypothesize(one)→fix ROOT CAUSE. /codex:rescue if available. Max 2 approach attempts — if second fails, stop and present both with analysis. Don't burn session on unresolvable constraints. Prefer terminal verification (vitest, biome, tsgo) over browser tools."
+  directives="$directives\n[TRIAGE] reproduce(test)→analyze→hypothesize(one at a time)→fix ROOT CAUSE. /codex:rescue if available. Max 2 approach attempts — if second fails, stop and present both with analysis. Don't burn session on unresolvable constraints. Prefer terminal verification (vitest, biome, tsgo) over browser tools."
 fi
 
 # ── PR/review ────────────────────────────────────────────────────
@@ -67,7 +67,7 @@ fi
 # ── Verification / testing in browser ────────────────────────────
 
 if echo "$prompt" | grep -qiE 'test.*browser|check.*browser|verify.*works|test the flow|test.*ui|check.*page|verify.*page|does it work|try it|smoke test'; then
-  directives="$directives\n[VERIFY] Self-verify. Never ask user to test. Confirm BEFORE reporting. Preference: Playwright CLI assertions > terminal checks > agent-browser > MCP browser (last resort only)."
+  directives="$directives\n[VERIFY] Self-verify when automatable. Don't delegate CI/browser/test checks to user. Escalate only when sandbox lacks credentials/access. Confirm BEFORE reporting. Preference: Playwright CLI assertions > terminal checks > agent-browser > MCP browser (last resort)."
 fi
 
 # ── CI fix workflow ──────────────────────────────────────────────
@@ -80,7 +80,7 @@ fi
 # Only fire on substantive bug fixes, not trivial ("fix indentation", "fix typo")
 
 if echo "$prompt" | grep -qiE 'fix.*bug|broken|not working|blank.*screen|error.*page|crash|regression'; then
-  directives="$directives\n[SELF-VERIFY] Verify fix yourself. Never ask user to check."
+  directives="$directives\n[SELF-VERIFY] Verify fix yourself when automatable. Escalate to user only if sandbox lacks access (prod creds, external service)."
 fi
 
 # ── Implementation work → full lifecycle mandate ─────────────────

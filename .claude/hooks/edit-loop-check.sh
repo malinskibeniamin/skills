@@ -24,10 +24,10 @@ _current=$(echo "$_current" | tr -d '[:space:]')
 _new_count=$((_current + 1))
 echo "$_new_count" > "$_counter_file"
 
-if [ "$_new_count" -eq 8 ]; then
-  hook_warn "You've edited $(basename "$file_path") 8 times this session. Step back: re-read the full file, identify ALL remaining issues, fix them in one pass."
-elif [ "$_new_count" -eq 15 ]; then
-  hook_warn "15 edits to $(basename "$file_path"). Something is wrong with the approach. Re-read the file and consider a different strategy."
+if [ "$_new_count" -eq 12 ]; then
+  hook_warn "You've edited $(basename "$file_path") 12 times this session. Step back: re-read the full file, identify ALL remaining issues, fix them in one pass."
+elif [ "$_new_count" -eq 20 ]; then
+  hook_warn "20 edits to $(basename "$file_path"). Approach is wrong. Re-read file and consider a different strategy (different abstraction, split file, or revert and restart)."
 fi
 
 exit 0

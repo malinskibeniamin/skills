@@ -52,28 +52,33 @@ if [ -f "$_settings" ] && command -v jq >/dev/null 2>&1; then
   echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[GUARDRAILS] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active. Auto mode safe.\"}}" >&2
 fi
 
-# ── Capture typecheck baseline (background, no latency) ──────────
+# ── Capture typecheck baseline (opt-out, background, no latency) ─
 # Used by typecheck-stop.sh to distinguish pre-existing errors from
 # errors introduced by this session. Runs in background so SessionStart
-# returns immediately.
-if [ -f "package.json" ] && jq -e '.scripts["type:check"]' package.json >/dev/null 2>&1; then
+# returns immediately. Opt out with CAPTURE_TYPECHECK_BASELINE=0 on
+# battery or for question-only sessions.
+if [ "${CAPTURE_TYPECHECK_BASELINE:-1}" != "0" ] \
+  && [ -f "package.json" ] \
+  && jq -e '.scripts["type:check"]' package.json >/dev/null 2>&1; then
   (bun run type:check 2>&1 | grep -E '^.+\.(ts|tsx)\([0-9]+,' | sort > "$_session_dir/typecheck-baseline" 2>/dev/null || touch "$_session_dir/typecheck-baseline") &
 fi
 
-# ── Capture test timing baseline (background, no latency) ────────
+# ── Capture test timing baseline (opt-in; expensive) ─────────────
 # Used by test-perf-stop.sh to detect test performance changes.
-# Runs each vitest config found at project root, extracts per-test
-# fullName and duration (ms) via JSON reporter.
-_vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
-if [ -n "$_vitest_configs" ] && command -v jq >/dev/null 2>&1; then
-  (
-    : > "$_session_dir/test-timing-baseline.tsv"
-    for cfg in $_vitest_configs; do
-      bun vitest --run --reporter=json --config "$cfg" 2>/dev/null \
-        | jq -r '.testResults[]?.assertionResults[]? | [.fullName, (.duration // 0 | tostring)] | @tsv' \
-        >> "$_session_dir/test-timing-baseline.tsv" 2>/dev/null || true
-    done
-  ) &
+# Full vitest run is heavy (10s–2min depending on suite) — default OFF.
+# Opt in with CAPTURE_TEST_BASELINE=1 for sessions that will edit tests.
+if [ "${CAPTURE_TEST_BASELINE:-0}" = "1" ]; then
+  _vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
+  if [ -n "$_vitest_configs" ] && command -v jq >/dev/null 2>&1; then
+    (
+      : > "$_session_dir/test-timing-baseline.tsv"
+      for cfg in $_vitest_configs; do
+        bun vitest --run --reporter=json --config "$cfg" 2>/dev/null \
+          | jq -r '.testResults[]?.assertionResults[]? | [.fullName, (.duration // 0 | tostring)] | @tsv' \
+          >> "$_session_dir/test-timing-baseline.tsv" 2>/dev/null || true
+      done
+    ) &
+  fi
 fi
 
 exit 0

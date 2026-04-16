@@ -28,7 +28,7 @@ const results = await Promise.all(
   issues.map((issue) =>
     run({
       sandbox: docker(),
-      agent: claudeCode("claude-opus-4-6"),
+      agent: claudeCode("claude-opus-4-7"),
       promptFile: ".sandcastle/implement.md",
       promptArgs: {
         ISSUE_NUMBER: String(issue.number),
@@ -91,7 +91,7 @@ import { docker } from "@ai-hero/sandcastle/sandboxes/docker";
 // Step 1: Headless implementation in Docker
 const implResult = await run({
   sandbox: docker(),
-  agent: claudeCode("claude-opus-4-6"),
+  agent: claudeCode("claude-opus-4-7"),
   promptFile: ".sandcastle/implement.md",
   promptArgs: { ISSUE_NUMBER: "42", ISSUE_TITLE: "Add dark mode" },
   branchStrategy: { type: "branch", branch: "agent/dark-mode" },
@@ -130,7 +130,7 @@ await using sandbox = await createSandbox({
 
 // Run 1: Implement
 await sandbox.run({
-  agent: claudeCode("claude-opus-4-6"),
+  agent: claudeCode("claude-opus-4-7"),
   promptFile: ".sandcastle/implement.md",
   maxIterations: 5,
 });
@@ -241,7 +241,7 @@ await Promise.all(
   issues.map((issue) =>
     run({
       sandbox: docker(),
-      agent: claudeCode("claude-opus-4-6"),
+      agent: claudeCode("claude-opus-4-7"),
       promptFile: ".sandcastle/implement.md",
       promptArgs: { ISSUE_NUMBER: String(issue.number), ISSUE_TITLE: issue.title, ISSUE_BODY: issue.body },
       branch: `agent/issue-${issue.number}`,

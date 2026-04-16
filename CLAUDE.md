@@ -64,8 +64,19 @@ Order every task. Hooks block skipped steps.
 2. **Plan** — exact paths, code, expected output
 3. **Implement** — `/tdd` every file. Fail first → pass → refactor
 4. **Simplify** — `/simplify` before commit
-5. **Verify** — confirm yourself (browser/tests). Never delegate
+5. **Verify** — confirm yourself (browser/tests) when automatable. Escalate only if sandbox blocked
 6. **Ship** — `/commit-push` → PR → `Monitor` `gh pr checks <n> --watch` → fix → review. Don't stop til done
+
+### Effort per phase (Opus 4.7 `xhigh` tier)
+
+| Phase | Effort | Reason |
+|---|---|---|
+| 1 Understand | `medium` | Exploration, no synthesis |
+| 2 Plan / Grill | `high` | Trade-off judgment |
+| 3 Implement (TDD) | `xhigh` | Type-safety + correctness |
+| 4 Simplify | `high` | Pattern recognition |
+| 5 Verify | `medium` | Mechanical checks |
+| 5 Review (security/arch) | `max` | Final gate |
 
 ### Monitor (not sleep)
 

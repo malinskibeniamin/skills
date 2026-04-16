@@ -6,6 +6,12 @@ trap 'exit 0' ERR
 # Target: <200ms total. Claude starts each response knowing the project state
 # without wasting tool calls on git status, file reads, or config checks.
 #
+# Turn-aware output (Opus 4.7 caching optimization):
+#   First turn of session:  full context (rules + config + paths + state)
+#   Subsequent turns:       delta only (git state + new violations)
+#   Rationale: stable rules/config in CLAUDE.md already; re-injecting per-turn
+#   wastes ~150 tok/turn. First-turn injection + CLAUDE.md covers cache-miss path.
+#
 # Levels (PROMPT_CONTEXT_LEVEL env var):
 #   minimal  — git state only (~80ms)
 #   standard — git + scripts + violations + config + rules (~120ms, default)
@@ -21,7 +27,21 @@ fi
 level="${PROMPT_CONTEXT_LEVEL:-standard}"
 context=""
 
-# ── Git state (~80ms) — all levels ──────────────────────────────
+# ── First-turn marker ────────────────────────────────────────────
+# On first UserPromptSubmit of session: emit full context (rules+config).
+# Subsequent turns: emit only dynamic state (git, violations).
+# Saves ~150 tok/turn × N turns. CLAUDE.md + CLAUDE_PLUGIN rules cover steady-state.
+
+_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+mkdir -p "$_session_dir" 2>/dev/null || true
+_first_turn_marker="$_session_dir/first-turn-done"
+_is_first_turn=0
+if [ ! -f "$_first_turn_marker" ]; then
+  _is_first_turn=1
+  touch "$_first_turn_marker" 2>/dev/null || true
+fi
+
+# ── Git state (~80ms) — every turn ──────────────────────────────
 
 branch=$(git branch --show-current 2>/dev/null || echo "detached")
 dirty=$(git diff --stat HEAD 2>/dev/null | tail -1 || echo "clean")
@@ -33,24 +53,24 @@ context="Branch: $branch"
 [ -n "$ahead_behind" ] && context="$context | $ahead_behind"
 context="$context\nLast commit: $last_commit"
 
-# ── Standard+ sections ──────────────────────────────────────────
+# ── Session violations (~5ms) — every turn, only if present ──────
 
-if [ "$level" = "standard" ] || [ "$level" = "full" ]; then
+vfile="$_session_dir/violations"
+if [ -f "$vfile" ] && [ -s "$vfile" ]; then
+  total=$(wc -l < "$vfile" | tr -d ' ')
+  summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
+  context="$context\nViolations ($total): $summary"
+fi
+
+# ── Standard+ sections — FIRST TURN ONLY ────────────────────────
+
+if [ "$_is_first_turn" = "1" ] && { [ "$level" = "standard" ] || [ "$level" = "full" ]; }; then
 
   # ── Package.json scripts (~30ms) ───────────────────────────────
 
   if [ -f "package.json" ]; then
     scripts=$(jq -r '.scripts // {} | keys[]' package.json 2>/dev/null | paste -sd ", " - || echo "")
     [ -n "$scripts" ] && context="$context\nScripts: $scripts"
-  fi
-
-  # ── Session violations (~5ms) ──────────────────────────────────
-
-  vfile="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/violations"
-  if [ -f "$vfile" ] && [ -s "$vfile" ]; then
-    total=$(wc -l < "$vfile" | tr -d ' ')
-    summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
-    context="$context\nViolations ($total): $summary"
   fi
 
   # ── Condensed rules line (~3ms) ────────────────────────────────
@@ -81,9 +101,9 @@ if [ "$level" = "standard" ] || [ "$level" = "full" ]; then
   [ -n "$config" ] && context="$context\nConfig:$config"
 fi
 
-# ── Full level sections ─────────────────────────────────────────
+# ── Full level sections — FIRST TURN ONLY ───────────────────────
 
-if [ "$level" = "full" ]; then
+if [ "$_is_first_turn" = "1" ] && [ "$level" = "full" ]; then
 
   # ── tsconfig path aliases (~8ms) ───────────────────────────────
 
@@ -123,7 +143,7 @@ if [ "$level" = "full" ]; then
 
   # ── Last Stop hook outcome (~2ms) ──────────────────────────────
 
-  stop_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop"
+  stop_file="$_session_dir/last-stop"
   if [ -f "$stop_file" ]; then
     stop_result=$(cat "$stop_file" 2>/dev/null | head -1)
     [ -n "$stop_result" ] && context="$context\nLast stop: $stop_result"
