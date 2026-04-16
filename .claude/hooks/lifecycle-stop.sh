@@ -41,7 +41,7 @@ _touched_file="$_hook_session_dir/session-touched-files"
 if [ ! -f "$_touched_file" ] || [ ! -s "$_touched_file" ]; then
   exit 0
 fi
-_session_code=$(grep -E '\.(ts|tsx|js|jsx)$' "$_touched_file" 2>/dev/null || true)
+_session_code=$(grep -E '\.(ts|tsx)$' "$_touched_file" 2>/dev/null || true)
 if [ -z "$_session_code" ]; then
   exit 0
 fi

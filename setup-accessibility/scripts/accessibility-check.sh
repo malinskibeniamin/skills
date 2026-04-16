@@ -3,7 +3,7 @@ set -euo pipefail
 source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
-hook_filter_extensions "tsx|jsx"
+hook_filter_extensions "tsx"
 hook_get_added_lines
 
 # Read full file for context

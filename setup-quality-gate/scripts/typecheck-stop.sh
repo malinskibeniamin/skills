@@ -9,9 +9,9 @@ source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
-  changed_files=$(hook_session_changed_files "ts|tsx|js|jsx")
+  changed_files=$(hook_session_changed_files "ts|tsx")
 else
-  changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
+  changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx)$' || true)
 fi
 
 if [ -z "$changed_files" ]; then

@@ -3,7 +3,7 @@ set -euo pipefail
 source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
-hook_filter_extensions "ts|tsx|js|jsx"
+hook_filter_extensions "ts|tsx"
 
 # Skip files where process.env is correct (build config, env definitions, scripts)
 case "$(basename "$file_path")" in

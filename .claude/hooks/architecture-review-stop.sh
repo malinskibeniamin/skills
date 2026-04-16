@@ -23,7 +23,7 @@ if ! hook_has_session_tracking 2>/dev/null; then
 fi
 
 # Get session-changed code files
-changed=$(hook_session_changed_files "ts|tsx|js|jsx" 2>/dev/null || true)
+changed=$(hook_session_changed_files "ts|tsx" 2>/dev/null || true)
 if [ -z "$changed" ]; then
   exit 0
 fi

@@ -6,7 +6,7 @@
 # Usage in PostToolUse (Edit|Write) hooks:
 #   source "$(dirname "$0")/../../shared/hook-lib.sh"
 #   hook_parse_edit_write        # sets: file_path
-#   hook_filter_extensions "ts|tsx|js|jsx"
+#   hook_filter_extensions "ts|tsx"
 #   hook_get_added_lines         # sets: added_lines
 #   ... your checks ...
 #   hook_block "Error message"

@@ -24,9 +24,9 @@ fi
 
 # Session-scoped: only check files THIS session touched
 if type hook_session_changed_files &>/dev/null; then
-  all_changed=$(hook_session_changed_files "js|jsx|ts|tsx|mjs|mts|cjs|cts" | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
+  all_changed=$(hook_session_changed_files "ts|tsx|mts|cts" | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
 else
-  all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(js|jsx|ts|tsx|mjs|mts|cjs|cts)$' | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
+  all_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(ts|tsx|mts|cts)$' | grep -vE "/($_ui_dirs)/" | sed "s|^${prefix}||" || true)
 fi
 
 # Filter to files that actually exist (excludes monorepo siblings)

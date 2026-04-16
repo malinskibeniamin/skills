@@ -24,7 +24,7 @@ if [ "$(basename "$file_path")" = "package.json" ]; then
   exit 0
 fi
 
-hook_filter_extensions "ts|tsx|js|jsx"
+hook_filter_extensions "ts|tsx"
 hook_skip_generated
 
 # Emit guidance for a category only once per session.

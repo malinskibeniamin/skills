@@ -1,5 +1,3 @@
-Problem clear. COMPRESSED file has content duplicated — first uncompressed copy, commentary paragraph, then actual compressed copy. Total = 50 headings instead of 25. Fix: remove first copy + commentary, keep only compressed version.
-
 # Project Rules
 
 ## Quick Reference (read on every turn)

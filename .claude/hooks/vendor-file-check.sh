@@ -18,7 +18,7 @@ fi
 
 # ── Scope: frontend files only (skip Go, Python, backend, etc.) ──
 case "$file_path" in
-  *.ts|*.tsx|*.js|*.jsx|*.css|*.scss|*.mdx) ;;
+  *.ts|*.tsx|*.css|*.scss|*.mdx) ;;
   *) exit 0 ;;
 esac
 

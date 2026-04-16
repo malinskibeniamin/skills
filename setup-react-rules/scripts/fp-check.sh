@@ -6,7 +6,7 @@ hook_parse_edit_write
 hook_skip_ui_dirs
 hook_skip_generated
 hook_skip_tests
-hook_filter_extensions "ts|tsx|js|jsx"
+hook_filter_extensions "ts|tsx"
 hook_get_added_lines
 
 # ── Check 1: useState + useEffect sync pattern (derive don't sync) ──

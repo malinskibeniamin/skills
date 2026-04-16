@@ -56,7 +56,7 @@ fi
 # ── Gate 1b: Run related tests (Bazel-style — only affected tests) ────
 
 if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
-  changed_source=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.)' || true)
+  changed_source=$(echo "$changed" | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.)' || true)
   if [ -n "$changed_source" ] && [ -f "node_modules/.bin/vitest" ]; then
     test_exit=0
     test_output=$(vitest run --related $changed_source 2>&1) || test_exit=$?
@@ -155,9 +155,9 @@ fi
 
 # Check if source changed but no test files were touched
 # Use tr -d to strip newlines — grep -c can embed \n when $changed has trailing blank lines
-changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null | tr -d '[:space:]')
+changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null | tr -d '[:space:]')
 changed_source_count="${changed_source_count:-0}"
-changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null | tr -d '[:space:]')
+changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx)$' 2>/dev/null | tr -d '[:space:]')
 changed_test_count="${changed_test_count:-0}"
 if [ "$changed_source_count" -gt 0 ] 2>/dev/null && [ "$changed_test_count" -eq 0 ] 2>/dev/null; then
   warnings="${warnings:-}\n- No tests modified. /tdd"

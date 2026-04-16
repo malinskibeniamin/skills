@@ -3,7 +3,7 @@ set -euo pipefail
 source "$(dirname "$0")/_hook-lib.sh"
 
 hook_parse_edit_write
-hook_filter_extensions "css|scss|sass|less|tsx|jsx"
+hook_filter_extensions "css|scss|sass|less|tsx"
 hook_get_added_lines
 
 # ── Ban !important ─────────────────────────────────────────────────
