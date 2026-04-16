@@ -4,6 +4,7 @@
 # Cannot block subagent creation (SubagentStart limitation) — context injection only.
 
 set -euo pipefail
+trap 'exit 0' ERR
 
 # ── Parse stdin ──────────────────────────────────────────────────
 input=$(cat)
@@ -53,7 +54,7 @@ esac
 if [ ${#context_parts[@]} -gt 0 ]; then
   combined=$(printf '%b\n\n' "${context_parts[@]}")
   # Escape for JSON
-  escaped=$(echo "$combined" | jq -Rs .)
+  escaped=$(echo "$combined" | jq -Rs . 2>/dev/null) || exit 0
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStart\",\"additionalContext\":${escaped}}}" >&2
 fi
 

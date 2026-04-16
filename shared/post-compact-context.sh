@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eo pipefail
+trap 'exit 0' ERR
 
 # PostCompact hook: re-inject critical context after context compression.
 # When Claude's context gets compacted, the rules line and config from
@@ -46,7 +47,7 @@ fi
 context="$context\n[BREVITY:ultra] Max compression. Code>prose. No preamble/recap/summary. Exception: full clarity for security, irreversible ops, destructive commands."
 
 if [ -n "$context" ]; then
-  escaped=$(printf '%s' "$context" | jq -Rs .)
+  escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}" >&2
 fi
 

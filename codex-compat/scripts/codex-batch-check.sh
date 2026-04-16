@@ -138,7 +138,7 @@ fi
 
 if [ -n "$errors" ]; then
   truncated=$(printf '%b' "$errors" | head -30)
-  reason=$(printf "Code quality checks found issues. Fix before finishing:\n%s" "$truncated" | jq -Rs .)
+  reason=$(_safe_json_escape "$(printf "Code quality checks found issues. Fix before finishing:\n%s" "$truncated")")
   echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
 fi

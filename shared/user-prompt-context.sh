@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+trap 'exit 0' ERR
 
 # UserPromptSubmit hook: inject project state into every prompt.
 # Target: <200ms total. Claude starts each response knowing the project state
@@ -132,7 +133,7 @@ fi
 # ── Output ───────────────────────────────────────────────────────
 
 if [ -n "$context" ]; then
-  escaped=$(printf '%s' "$context" | jq -Rs .)
+  escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2
 fi
 

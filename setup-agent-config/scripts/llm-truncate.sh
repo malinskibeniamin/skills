@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+trap 'exit 0' ERR
 
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.tool_name // empty')
@@ -23,7 +24,7 @@ if [ "$line_count" -gt 200 ]; then
   truncated_count=$((line_count - 50))
 
   summary=$(printf "%s\n\n... (%d lines truncated) ...\n\n%s" "$head_lines" "$truncated_count" "$tail_lines")
-  escaped=$(echo "$summary" | jq -Rs .)
+  escaped=$(echo "$summary" | jq -Rs . 2>/dev/null) || exit 0
   echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
   exit 0
 fi

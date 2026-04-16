@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+trap 'exit 0' ERR
 
 # UserPromptSubmit hook: detect intent from prompt keywords and inject
 # workflow directives as additionalContext. Runs alongside user-prompt-context.sh.
@@ -144,7 +145,7 @@ fi
 # ── Output ───────────────────────────────────────────────────────
 
 if [ -n "$directives" ]; then
-  escaped=$(printf '%s' "$directives" | jq -Rs .)
+  escaped=$(printf '%s' "$directives" | jq -Rs . 2>/dev/null) || exit 0
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2
 fi
 
