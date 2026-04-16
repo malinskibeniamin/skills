@@ -8,7 +8,7 @@ description: Registry hooks + component taxonomy + consumer drift analysis. Use 
 ## Hooks
 
 - **PostToolUse** (`ui-registry-warn.sh`): warns once/session when editing UI component dirs, prompts upstream PR
-- **Stop** (`registry-check.sh`): blocks if redpanda-ui modified without updating `registry.json` + `CHANGELOG.md`
+- **Stop** (`registry-check.sh`): blocks if redpanda-ui modified without updating `registry.json` + adding a changeset
 
 ## Component Taxonomy (Atomic Design)
 
@@ -85,3 +85,4 @@ Safe: prop-based logic (`variant === 'destructive'`, `size === 'lg'`).
 - [ ] Both hooks executable
 - [ ] Editing `components/ui/` or `redpanda-ui/` triggers warning
 - [ ] Modifying `redpanda-ui/` without `registry.json` update → Stop block
+- [ ] Modifying `redpanda-ui/` with `registry.json` but no changeset → Stop block

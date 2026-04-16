@@ -16,19 +16,20 @@ No `redpanda-ui/` directory in repo → hook exits immediately (zero overhead).
 
 ## When It Triggers
 
-| Changed files | registry.json updated? | Result |
-|---|---|---|
-| `redpanda-ui/button.tsx` | Yes | Pass |
-| `redpanda-ui/button.tsx` | No | **Block** — rebuild registry |
-| `src/components/UserTable.tsx` | N/A | Pass (not registry file) |
-| No files changed | N/A | Pass |
+| Changed files | registry.json updated? | Changeset added? | Result |
+|---|---|---|---|
+| `redpanda-ui/button.tsx` | Yes | Yes | Pass |
+| `redpanda-ui/button.tsx` | Yes | No | **Block** — add changeset |
+| `redpanda-ui/button.tsx` | No | N/A | **Block** — rebuild registry |
+| `src/components/UserTable.tsx` | N/A | N/A | Pass (not registry file) |
+| No files changed | N/A | N/A | Pass |
 
 ## Registry Rebuild Steps
 
 When blocked:
 
 1. Run registry build: `bun run build:registry`
-2. Update `CHANGELOG.md` with component changes
+2. Add changeset: `bunx changeset` (select affected packages, bump type, summary)
 3. Let Claude finish turn — hook re-checks
 
 ## Skipping in Non-Registry Repos
@@ -112,12 +113,12 @@ ONLY these differences → **Skip-Import-Only**.
 
 ### Staleness Detection
 
-Before upstreaming, check `CHANGELOG.md` for recent registry updates:
+Before upstreaming, check changesets and version history for recent registry updates:
 
 | Registry newer? | Action |
 |---|---|
-| Yes (changelog > consumer file date) | **Skip-Outdated** — sync FROM registry |
-| No or no changelog entry | Proceed with analysis |
+| Yes (published version > consumer's pinned version) | **Skip-Outdated** — sync FROM registry |
+| No or same version | Proceed with analysis |
 
 ### Business Logic Detection — Safe vs Unsafe
 
