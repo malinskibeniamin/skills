@@ -41,16 +41,9 @@ run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: other biome-ignore (exit 0, not block)" "lint suppression"
 
-# ── Warn: @ts-ignore ─────────────────────────────────────────────
-
-tmpfile="$_bi_tmpdir/test3.ts"
-printf '// @ts-ignore\nconst x = foo.bar\n' > "$tmpfile"
-(cd "$_bi_tmpdir" && git add . && git commit -q -m "init3" && \
-  printf '+// @ts-ignore\n+const x = foo.bar\n' > "$tmpfile") 2>/dev/null
-
-run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: @ts-ignore (exit 0)" "lint suppression"
+# Note: @ts-ignore/@ts-expect-error handling moved to as-cast-check.sh (block, exit 2)
+# in 2.2.x. See evals/test-setup-react-rules.sh for the block test. biome-ignore-check.sh
+# intentionally skips @ts-ignore to avoid duplicate enforcement.
 
 # ── Allow: clean code ────────────────────────────────────────────
 

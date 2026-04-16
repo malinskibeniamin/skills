@@ -9,23 +9,37 @@ run_executable_eval "$SHARED_DIR/subagent-start.sh" "subagent-start.sh is execut
 run_file_eval "$SHARED_DIR/subagent-stop.sh" "subagent-stop.sh exists"
 run_executable_eval "$SHARED_DIR/subagent-stop.sh" "subagent-stop.sh is executable"
 
-# ── Symlinks exist in .claude/hooks ──────────────────────────────
-if [ -L "$HOOKS_DIR/subagent-start.sh" ]; then
-  echo "  PASS  .claude/hooks/subagent-start.sh is a symlink"
+# ── Real files in .claude/hooks (no symlinks — 2.2.1 dereferenced) ──
+# Plugin packager resolves relative symlinks to absolute paths at
+# package time, creating dangling links in install cache. Enforce
+# real files to prevent regression.
+if [ -f "$HOOKS_DIR/subagent-start.sh" ] && [ ! -L "$HOOKS_DIR/subagent-start.sh" ]; then
+  echo "  PASS  .claude/hooks/subagent-start.sh is a real file (no symlink)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  .claude/hooks/subagent-start.sh is not a symlink"
+  echo "  FAIL  .claude/hooks/subagent-start.sh missing or is symlink (plugin will break)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: .claude/hooks/subagent-start.sh is not a symlink"
+  ERRORS="$ERRORS\n  FAIL: .claude/hooks/subagent-start.sh not a real file"
 fi
 
-if [ -L "$HOOKS_DIR/subagent-stop.sh" ]; then
-  echo "  PASS  .claude/hooks/subagent-stop.sh is a symlink"
+if [ -f "$HOOKS_DIR/subagent-stop.sh" ] && [ ! -L "$HOOKS_DIR/subagent-stop.sh" ]; then
+  echo "  PASS  .claude/hooks/subagent-stop.sh is a real file (no symlink)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  .claude/hooks/subagent-stop.sh is not a symlink"
+  echo "  FAIL  .claude/hooks/subagent-stop.sh missing or is symlink (plugin will break)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: .claude/hooks/subagent-stop.sh is not a symlink"
+  ERRORS="$ERRORS\n  FAIL: .claude/hooks/subagent-stop.sh not a real file"
+fi
+
+# ── Sentinel: no dangling symlinks anywhere in .claude/hooks/ ───
+_symlink_count=$(find "$HOOKS_DIR" -maxdepth 1 -type l 2>/dev/null | wc -l | tr -d ' ')
+if [ "$_symlink_count" = "0" ]; then
+  echo "  PASS  .claude/hooks/ has 0 symlinks (plugin-packager safe)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  .claude/hooks/ has $_symlink_count symlinks — plugin packager will break"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: $_symlink_count symlinks in .claude/hooks/"
 fi
 
 # ── settings.json has SubagentStart and SubagentStop entries ─────

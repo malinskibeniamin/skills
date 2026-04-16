@@ -21,3 +21,6 @@ pre-push:
     lint:
       glob: "*.{ts,tsx,js,jsx,mjs,mts}"
       run: bun run lint:file -- {push_files}
+    manifest-sync:
+      glob: "{skill-manifest.json,.claude/settings.json,hooks/hooks.json}"
+      run: bash scripts/generate-hook-configs.sh --check

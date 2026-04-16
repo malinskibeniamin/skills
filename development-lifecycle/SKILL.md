@@ -84,54 +84,7 @@ After non-trivial tasks: "Did we learn something worth preserving?"
 
 ## Phase Selection
 
-```mermaid
-flowchart TD
-    Start([User prompt]) --> Detect{Task type?}
-
-    Detect -->|"build/create/add"| Feature[Feature]
-    Detect -->|"fix/bug/crash"| Bug[Bug fix]
-    Detect -->|"refactor"| Refactor[Refactor]
-    Detect -->|"test/cover"| TestOnly[Tests only]
-    Detect -->|"create PR"| PROnly[PR only]
-    Detect -->|"batch/overnight"| Sandbox[Sandcastle]
-
-    Feature --> P1[1. Understand]
-    Bug --> P1_RCA[1. Understand — RCA<br/>reproduce → analyze → hypothesize]
-    Refactor --> P1
-
-    P1 --> P2[2. Plan]
-    P1_RCA --> P3
-
-    P2 --> Trivial{Trivial?<br/>< 3 tasks,<br/>no arch decisions}
-    Trivial -->|No| Grill[2b. Grill<br/>/grill-me]
-    Trivial -->|Yes| P3
-    Grill --> P3
-
-    TestOnly --> P3
-    P3[3. Implement — TDD<br/>RED → GREEN → REFACTOR]
-
-    P3 --> P4[4. Verify<br/>tests + types + visual]
-    P4 --> SmallDiff{Trivial?<br/>< 10 lines}
-    SmallDiff -->|No| P4b[4b. Refine<br/>self-reviewer + adversarial]
-    SmallDiff -->|Yes| P5
-    P4b --> P5
-
-    PROnly --> P5
-    Refactor --> P1
-
-    P5[5. Review<br/>security gate + code-reviewer]
-    P5 --> P5b[5b. Iterate<br/>2 rounds max]
-    P5b --> Learn{Non-trivial<br/>learning?}
-    Learn -->|Yes| P6[6. Compound<br/>.claude/rules/]
-    Learn -->|No| Done([Hand off to human])
-    P6 --> Done
-
-    Sandbox --> Parallel[N parallel agents<br/>each runs 1→...→5b]
-
-    style P3 fill:#f96,stroke:#333
-    style Grill fill:#f9f,stroke:#333
-    style P5 fill:#69f,stroke:#333
-```
+Full flowchart in [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 
 | User says | Phases |
 |---|---|
