@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Single-source manifest codegen (skill-manifest.json). Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -55,6 +55,7 @@
     "settings": "settings.json"
   },
   "x-changelog": {
+    "2.2.3": "2026-04-16 — Plugin load fix: removed redundant hooks ref (Claude Code auto-loads hooks/hooks.json).",
     "2.2.2": "2026-04-16 — Single-source manifest codegen. New hook tiers (info/nudge/block-strict/diagnostic). Portable ms-timing. /frontend-skills-stats analytics. /extend-harness maintainer skill.",
     "2.2.1": "2026-04-16 — P0 bugfix: dereferenced symlinks; plugin packager dangling-link fix.",
     "2.2.0": "2026-04-16 — Opus 4.7 tuning; plugin/settings drift reconciled.",

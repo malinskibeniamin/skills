@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
   "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -61,7 +61,6 @@
     "./setup-ux-copy/",
     "./setup-zustand/"
   ],
-  "hooks": "./hooks/hooks.json",
   "commands": [
     "./.claude/commands/commit-push.md",
     "./.claude/commands/commit-push-pr.md",
@@ -91,6 +90,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "2.2.3": "2026-04-16 — Plugin load fix: removed explicit `hooks: ./hooks/hooks.json` from plugin.json. Standard path is auto-loaded by Claude Code, and the explicit reference caused a duplicate-load error in v2.2.2. No functional change; users on 2.2.2 should reinstall.",
     "2.2.2": "2026-04-16 — Manifest codegen: single-source skill-manifest.json generates .claude/settings.json + hooks/hooks.json via scripts/generate-hook-configs.sh. Lefthook pre-push drift check. New tiers in _hook-lib.sh: hook_info (silent JSONL), hook_nudge (soft warn), hook_block_strict (no escape), hook_emit_diagnostic (LSP-style with range+fix). Portable ms-timing (bash 5+ EPOCHREALTIME, graceful fallback to SECONDS on macOS bash 3.2). metrics-summary-stop schema v2: perf_ms p50/p95 per hook, nudge/info/diagnostic counts. New /frontend-skills-stats command (analytics dashboard). New /extend-harness skill (maintainer guard rail). POSIX-friendly (no date +%s%N, portable timeout detection).",
     "2.2.1": "2026-04-16 — P0 bugfix: dereferenced 35 symlinks in .claude/hooks/*.sh to real files. Plugin packager was resolving relative symlinks (../../shared/hook-lib.sh) to absolute paths at package time, creating dangling links in install cache. All PostToolUse hooks were failing silently at `source _hook-lib.sh` (line 3). Plugin users on <=2.2.0 must reinstall via /plugin install.",
     "2.2.0": "2026-04-16 — Opus 4.7 tuning: reconciled plugin hooks.json ↔ settings.json (was drift: 7 plugin-only + 12 settings-only). Both now 61 wired hooks. Wired orphan tanstack-router-gen. Bumped model refs claude-opus-4-6 → claude-opus-4-7. First-turn context optimization in user-prompt-context.sh (saves ~3k tok/session). Intent-detect scope qualifiers for 4.7 literal interpretation. Baselines opt-in-able (CAPTURE_TYPECHECK_BASELINE, CAPTURE_TEST_BASELINE). edit-loop-check thresholds raised 8→12, 15→20 (4.7 self-recovers). Playwright fullPage: true (2576px vision). xhigh effort-per-phase in CLAUDE.md. New scripts/memory-prune.sh.",
