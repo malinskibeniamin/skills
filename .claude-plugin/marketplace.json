@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "skills",
   "owner": {
     "name": "Beniamin Malinski"
@@ -6,18 +7,17 @@
   "metadata": {
     "description": "React/TypeScript frontend enforcement harness for Claude Code — 68 hooks, 34 skills, 5 agents, 5 routines, 3 commands"
   },
-  "updatedAt": "2026-04-16",
   "plugins": [
     {
       "name": "frontend-skills",
       "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover TDD through CI-green PR. 5 agents for automated review. 5 routines for recurring workflows. TypeScript-scoped, caveman-compressed.",
       "version": "2.0.0",
-      "updatedAt": "2026-04-16",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
       },
-      "includes": {
+      "x-updatedAt": "2026-04-16",
+      "x-includes": {
         "skills": 34,
         "hooks": 68,
         "commands": 3,
@@ -29,7 +29,7 @@
         "instructions": ["CLAUDE.md", "AGENTS.md"],
         "settings": "settings.json"
       },
-      "changelog": {
+      "x-changelog": {
         "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Quality-gate aggregator, JSONL session logging, intent-detect, 5 routines, Phase 0 pre-ship gate. 74% token reduction. Hooks 30→68, agents 2→5.",
         "1.10.0": "2026-04-13 — 16 hooks from PR audit, autopilot enforcement, coverage TDD gate, Monitor streaming."
       }

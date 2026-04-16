@@ -2,7 +2,6 @@
   "name": "frontend-skills",
   "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows.",
   "version": "2.0.0",
-  "updatedAt": "2026-04-16",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -61,18 +60,11 @@
     "./setup-ux-copy/",
     "./setup-zustand/"
   ],
-  "hooks": "./.claude/hooks/",
+  "hooks": "./hooks/hooks.json",
   "commands": [
     "./.claude/commands/commit-push.md",
     "./.claude/commands/commit-push-pr.md",
     "./.claude/commands/hook-audit.md"
-  ],
-  "routines": [
-    "./setup-routines/routines/docs-drift.md",
-    "./setup-routines/routines/issue-triage.md",
-    "./setup-routines/routines/pr-feedback-resolve.md",
-    "./setup-routines/routines/pr-review.md",
-    "./setup-routines/routines/weekly-health.md"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",
@@ -81,14 +73,20 @@
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
-  "shared": "./shared/",
-  "settings": "./.claude/settings.json",
-  "instructions": [
-    "./CLAUDE.md",
-    "./AGENTS.md"
-  ],
-  "evals": "./agent-evals/",
-  "changelog": {
+  "x-updatedAt": "2026-04-16",
+  "x-includes": {
+    "skills": 34,
+    "hooks": 68,
+    "commands": 3,
+    "routines": 5,
+    "agents": 5,
+    "sharedUtilities": 11,
+    "references": 25,
+    "evals": 1,
+    "instructions": ["CLAUDE.md", "AGENTS.md"],
+    "settings": "settings.json"
+  },
+  "x-changelog": {
     "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Added quality-gate aggregator, JSONL session logging, intent-detect directives, 5 routines, Phase 0 pre-ship gate, 42-case test suite. 74% token reduction via caveman compression. Hook count 30→68, agents 2→5.",
     "1.10.0": "2026-04-13 — Added 16 hooks from PR audit, autopilot enforcement, coverage-based TDD gate, Monitor streaming patterns."
   }

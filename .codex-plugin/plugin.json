@@ -1,7 +1,6 @@
 {
   "name": "frontend-skills",
   "version": "2.0.0",
-  "updatedAt": "2026-04-16",
   "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows.",
   "author": {
     "name": "Beniamin Malinski",
@@ -27,33 +26,7 @@
     "caveman"
   ],
   "skills": "./",
-  "hooks": "./.claude/hooks/",
-  "commands": [
-    "./.claude/commands/commit-push.md",
-    "./.claude/commands/commit-push-pr.md",
-    "./.claude/commands/hook-audit.md"
-  ],
-  "routines": [
-    "./setup-routines/routines/docs-drift.md",
-    "./setup-routines/routines/issue-triage.md",
-    "./setup-routines/routines/pr-feedback-resolve.md",
-    "./setup-routines/routines/pr-review.md",
-    "./setup-routines/routines/weekly-health.md"
-  ],
-  "agents": [
-    "./agents/adversarial-reviewer.md",
-    "./agents/code-reviewer.md",
-    "./agents/findings-schema.md",
-    "./agents/self-reviewer.md",
-    "./agents/verifier.md"
-  ],
-  "shared": "./shared/",
-  "settings": "./.claude/settings.json",
-  "instructions": [
-    "./CLAUDE.md",
-    "./AGENTS.md"
-  ],
-  "evals": "./agent-evals/",
+  "hooks": "./.codex/hooks.json",
   "interface": {
     "displayName": "Frontend Skills",
     "shortDescription": "React/TypeScript enforcement harness — 68 hooks, 34 skills, 5 agents, 5 routines",
@@ -68,7 +41,8 @@
       "Review this PR and fix all findings"
     ]
   },
-  "includes": {
+  "x-updatedAt": "2026-04-16",
+  "x-includes": {
     "skills": 34,
     "hooks": 68,
     "commands": 3,
@@ -80,7 +54,7 @@
     "instructions": ["CLAUDE.md", "AGENTS.md"],
     "settings": "settings.json"
   },
-  "changelog": {
+  "x-changelog": {
     "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Quality-gate aggregator, JSONL session logging, intent-detect, 5 routines, Phase 0 pre-ship gate, 42-case test suite. 74% token reduction. Hooks 30→68, agents 2→5.",
     "1.10.0": "2026-04-13 — 16 hooks from PR audit, autopilot enforcement, coverage TDD gate, Monitor streaming."
   }
