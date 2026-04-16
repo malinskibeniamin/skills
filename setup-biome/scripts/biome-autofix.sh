@@ -63,10 +63,10 @@ if [ $fix_exit -ne 0 ]; then
   # Biome error lines look like: src/file.tsx:10:5 lint/rule  FIXABLE
   error_files=$(echo "$remaining" | grep -E '^\S+\.(tsx?|jsx?):\d+:\d+' | grep -vE "/($_ui_dirs)/" | grep -v 'internalError/io' || true)
   if [ -n "$error_files" ]; then
-    truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -30)
-    reason=$(printf "Biome unfixable errors. Fix:\n%s" "$truncated" | jq -Rs .)
-    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
-    exit 2
+    truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -20)
+    # Write to shared findings — quality-gate-stop.sh aggregates
+    _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+    printf "Biome unfixable errors:\n%s\n" "$truncated" >> "$_session_dir/stop-findings" 2>/dev/null
   fi
 fi
 

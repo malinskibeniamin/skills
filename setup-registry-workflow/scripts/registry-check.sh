@@ -33,16 +33,19 @@ fi
 registry_changed=$(echo "$changed" | grep -F 'registry.json' || true)
 
 if [ -z "$registry_changed" ]; then
-  echo '{"decision":"block","reason":"redpanda-ui modified, registry.json not rebuilt. bun run build:registry + update CHANGELOG.md."}' >&2
-  exit 2
+  # Write to shared findings — quality-gate-stop.sh aggregates
+  _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+  echo "redpanda-ui modified, registry.json not rebuilt. Run: bun run build:registry && bunx changeset" >> "$_session_dir/stop-findings" 2>/dev/null
+  exit 0
 fi
 
-# Check if CHANGELOG.md was also updated
-changelog_changed=$(echo "$changed" | grep -iE 'CHANGELOG' || true)
+# Check if a changeset was added (.changeset/*.md, excluding config.json)
+changeset_added=$(echo "$changed" | grep -E '^\.changeset/.*\.md$' || true)
 
-if [ -z "$changelog_changed" ]; then
-  echo '{"decision":"block","reason":"registry.json rebuilt but CHANGELOG.md not updated. Add entry."}' >&2
-  exit 2
+if [ -z "$changeset_added" ]; then
+  _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+  echo "registry.json rebuilt but no changeset added. Run: bunx changeset" >> "$_session_dir/stop-findings" 2>/dev/null
+  exit 0
 fi
 
 exit 0

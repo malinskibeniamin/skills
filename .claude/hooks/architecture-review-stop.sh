@@ -118,9 +118,7 @@ while IFS= read -r file; do
 done <<< "$changed"
 
 if [ "$issue_count" -gt 0 ]; then
-  msg="Pre-PR architecture review found ${issue_count} issue(s):$(echo -e "$issues") — Fix before creating PR, or run /request-refactor-plan for a guided cleanup."
-  echo "{\"decision\":\"block\",\"reason\":\"$msg\"}" >&2
-  exit 2
+  hook_stop_finding "$(printf "Architecture: %s issue(s):%b" "$issue_count" "$issues")"
 fi
 
 exit 0

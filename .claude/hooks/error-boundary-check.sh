@@ -46,7 +46,7 @@ if [ "$has_loader" = true ]; then
 
     if [ "$has_parent_boundary" = false ]; then
       if ! hook_has_escape "error-boundary"; then
-        hook_warn "Route with loader has no errorComponent. Add one, or verify parent route provides error boundary. Escape: // allow: error-boundary [reason]"
+        hook_block "Route with loader has no errorComponent. Add errorComponent to handle fetch failures gracefully. Escape: // allow: error-boundary [reason]"
       fi
     fi
   fi

@@ -19,6 +19,18 @@ if echo "$added_lines" | grep -qE '\bas\s+any\b'; then
   hook_block "No 'as any' casts. Fix types properly — type guards, generics, schema validation."
 fi
 
+if echo "$added_lines" | grep -qE '\bas\s+Record<string,\s*(any|unknown)>'; then
+  hook_block "No 'as Record<string, any/unknown>'. Use concrete interface or type guard."
+fi
+
+if echo "$added_lines" | grep -qF '@ts-ignore'; then
+  hook_block "@ts-ignore banned. Fix type error directly."
+fi
+
+if echo "$added_lines" | grep -qF '@ts-expect-error'; then
+  hook_block "@ts-expect-error banned. Fix underlying type error."
+fi
+
 # ── Check 2: Warn on `as TypeName` casts in .tsx ─────────────────
 # Prefer type guards (isServerlessCluster(x)) over casts (x as Cluster).
 # Allow: 'as const', 'as string', 'as number', 'as boolean' (primitives).

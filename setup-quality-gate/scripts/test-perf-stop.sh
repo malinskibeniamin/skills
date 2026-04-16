@@ -112,7 +112,7 @@ if [ "$regressions" -gt 0 ]; then
   table="$table\\n\\nWARNING: Test regressions detected. Consider investigating before finishing."
 fi
 
-msg=$(printf '%s' "$table" | jq -Rs .)
+msg=$(_safe_json_escape "$table")
 echo "{\"hookSpecificOutput\":{\"additionalContext\":$msg}}" >&2
 
 # ── Slow test detection ──────────────────────────────────────────
@@ -132,7 +132,7 @@ while IFS=$'\t' read -r name duration; do
 done < <(awk -F'\t' '{print $1 "\t" $2}' "$baseline" 2>/dev/null || true)
 
 if [ -n "$slow_tests" ]; then
-  slow_msg=$(printf "Slow tests detected:%b\nConsider: smaller scope, fewer re-renders, mock heavy deps, or .concurrent for independent tests." "$slow_tests" | jq -Rs .)
+  slow_msg=$(_safe_json_escape "$(printf "Slow tests detected:%b\nConsider: smaller scope, fewer re-renders, mock heavy deps, or .concurrent for independent tests." "$slow_tests")")
   echo "{\"hookSpecificOutput\":{\"additionalContext\":$slow_msg}}" >&2
 fi
 
@@ -148,7 +148,7 @@ if command -v "$_vitest_bin" &>/dev/null || [ -x "$_vitest_bin" ]; then
 
   if [ -n "$leak_warnings" ]; then
     leak_sample=$(echo "$leak_warnings" | head -5 | tr '\n' ' ')
-    leak_msg=$(printf "Async leak detected: %s\nFix open handles (timers, connections, listeners) before finishing." "$leak_sample" | jq -Rs .)
+    leak_msg=$(_safe_json_escape "$(printf "Async leak detected: %s\nFix open handles (timers, connections, listeners) before finishing." "$leak_sample")")
     echo "{\"hookSpecificOutput\":{\"additionalContext\":$leak_msg}}" >&2
   fi
 fi

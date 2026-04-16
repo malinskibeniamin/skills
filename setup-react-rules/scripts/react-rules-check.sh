@@ -39,23 +39,21 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 3: Ban TypeScript escape hatches ──────────────────────
+# ── Check 2b: Name useEffect callbacks ──────────────────────────
+# useEffect(function syncDocumentTitle() { ... }, [title]) not useEffect(() => {
 
-if echo "$added_lines" | grep -qE '\bas\s+any\b'; then
-  hook_block "Remove \`as any\`. Fix type properly — type guards, generics, schema validation."
-fi
+case "$file_path" in
+  *.tsx|*.jsx|*.ts)
+    if echo "$added_lines" | grep -qE 'useEffect\(\s*\(\)\s*=>' && \
+       ! echo "$added_lines" | grep -qE 'useEffect\(\s*function\s+\w+'; then
+      if ! hook_has_escape "named-effect"; then
+        hook_warn "Name useEffect callback: useEffect(function syncX() { ... }, [deps]). Aids debugging. Escape: // allow: named-effect [reason]"
+      fi
+    fi
+    ;;
+esac
 
-if echo "$added_lines" | grep -qE '\bas\s+Record<string,\s*(any|unknown)>'; then
-  hook_block "Remove \`as Record<string, any/unknown>\`. Use concrete interface or type guard."
-fi
-
-if echo "$added_lines" | grep -qF '@ts-ignore'; then
-  hook_block "@ts-ignore banned. Fix type error."
-fi
-
-if echo "$added_lines" | grep -qF '@ts-expect-error'; then
-  hook_block "@ts-expect-error banned. Fix underlying type error."
-fi
+# ── Check 3: (moved to as-cast-check.sh — as any, @ts-ignore, @ts-expect-error) ──
 
 # ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
 
@@ -147,40 +145,7 @@ if (echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' ||
   hook_block "No outline removal. Use focus-visible:ring-* replacement."
 fi
 
-# ── Check 13: React Compiler — no manual memoization ────────────
-
-_has_react_compiler=false
-if [ -f "package.json" ] && grep -q 'babel-plugin-react-compiler' package.json 2>/dev/null; then
-  _has_react_compiler=true
-fi
-
-if [ "$_has_react_compiler" = true ]; then
-case "$file_path" in
-  *.tsx|*.jsx)
-    has_no_memo=false
-    if head -5 "$file_path" | grep -qF "'use no memo'" || head -5 "$file_path" | grep -qF '"use no memo"'; then
-      has_no_memo=true
-    fi
-
-    if [ "${REACT_COMPILER_MODE:-infer}" = "annotation" ]; then
-      if ! head -5 "$file_path" | grep -qF "'use memo'" && ! head -5 "$file_path" | grep -qF '"use memo"'; then
-        has_no_memo=true
-      fi
-    fi
-
-    if [ "$has_no_memo" = false ]; then
-      found_memo=""
-      if echo "$added_lines" | grep -qE '\buseMemo\b'; then found_memo="useMemo"; fi
-      if [ -z "$found_memo" ] && echo "$added_lines" | grep -qE '\buseCallback\b'; then found_memo="useCallback"; fi
-      if [ -z "$found_memo" ] && echo "$added_lines" | grep -qE '\bReact\.memo\b|\bmemo\('; then found_memo="React.memo"; fi
-
-      if [ -n "$found_memo" ]; then
-        hook_block "Remove $found_memo. Compiler handles memoization. Or add 'use no memo' at file top."
-      fi
-    fi
-    ;;
-esac
-fi
+# ── Check 13: (moved to react-compiler-check.sh — memoization) ──
 
 # ── Check 14: Ban dangerouslySetInnerHTML (TSX/JSX only) ──────
 
@@ -280,17 +245,7 @@ if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
   hook_warn "Avoid cloneElement. Use Context or render props."
 fi
 
-# ── Check 25: Warn on biome-ignore ─────────────────────────────
-
-if echo "$added_lines" | grep -qE '//\s*biome-ignore\s+lint/suspicious/noExplicitAny|/\*\s*biome-ignore\s+lint/suspicious/noExplicitAny'; then
-  hook_block "No biome-ignore for noExplicitAny. Fix type properly — type guards, generics, schema validation. Escape: // allow: biome-ignore [reason]"
-fi
-
-if echo "$added_lines" | grep -qE '//\s*biome-ignore|/\*\s*biome-ignore'; then
-  if ! echo "$added_lines" | grep -qE 'biome-ignore\s+lint/suspicious/noExplicitAny'; then
-    hook_warn "biome-ignore detected. Proceed with caution."
-  fi
-fi
+# ── Check 25: (moved to biome-ignore-check.sh — biome-ignore) ──
 
 # ── Check 26: Warn on tree-shaking killers ────────────────────────
 
@@ -384,14 +339,6 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 37: Ban user.type() in integration tests ────────────────
-
-case "$file_path" in
-  *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)
-    if echo "$added_lines" | grep -qE '(user|userEvent)\.type\('; then
-      hook_warn "user.type() slow. Use: user.clear()+user.paste() or fireEvent.change()."
-    fi
-    ;;
-esac
+# ── Check 37: (moved to test-perf-check.sh — user.type()) ──
 
 exit 0

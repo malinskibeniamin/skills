@@ -21,21 +21,24 @@ if echo "$_cmd_for_check" | grep -qE 'cat <<'; then
   _cmd_stripped=$(echo "$_cmd_stripped" | sed '/<<.*EOF/,/^[[:space:]]*EOF/d')
 fi
 
-# Block npm commands
+# Block npm commands — include exact replacement
 if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)npm\s'; then
-  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"npm banned. Use bun."}' >&2
+  _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]])npm[[:space:]]/\1bun /g')
+  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"npm banned. Rerun with bun: ${_rewritten}\"}" >&2
   exit 2
 fi
 
-# Block npx commands
+# Block npx commands — include exact replacement
 if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)npx\s'; then
-  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"npx banned. Use bunx or bun run."}' >&2
+  _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]])npx[[:space:]]/\1bunx /g')
+  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"npx banned. Rerun with bunx: ${_rewritten}\"}" >&2
   exit 2
 fi
 
-# Block tsc commands
+# Block tsc commands — include exact replacement
 if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)tsc(\s|$)'; then
-  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"tsc banned. Use tsgo --noEmit."}' >&2
+  _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]]|&&|\|\||;)tsc([[:space:]]|$)/\1tsgo\2/g')
+  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"tsc banned. Rerun with tsgo: ${_rewritten}\"}" >&2
   exit 2
 fi
 
@@ -104,6 +107,12 @@ if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)rm\s+(-[a-zA-Z]*r[a-zA-Z]*|
     echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"rm -r blocked. Safe: node_modules .next dist build .cache .turbo coverage."}' >&2
     exit 2
   fi
+fi
+
+# Block all sleep commands — always a sign of polling instead of proper waiting
+if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)sleep\s'; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"sleep banned. Use: Monitor tool (stream output), Bash(run_in_background=true) (async wait), gh pr checks --watch (CI). Never poll with sleep."}' >&2
+  exit 2
 fi
 
 # Block git push --force (allow --force-with-lease)

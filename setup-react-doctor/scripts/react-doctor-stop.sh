@@ -45,20 +45,18 @@ if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -30)
 
   if [ "$_doctor_fail_count" -ge 3 ]; then
-    reason=$(printf "Doctor errors after %s attempts (pre-existing?). Allow:\n%s" "$_doctor_fail_count" "$truncated" | jq -Rs .)
+    reason=$(_safe_json_escape "$(printf "Doctor errors after %s attempts (pre-existing?). Allow:\n%s" "$_doctor_fail_count" "$truncated")")
     echo "{\"decision\":\"allow\",\"reason\":$reason}" >&2
     exit 0
   fi
 
-  reason=$(printf "Doctor errors:\n%s" "$truncated" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
-  exit 2
+  hook_stop_finding "$(printf "Doctor errors:\n%s" "$truncated")"
 fi
 
 # Extract score
 score=$(echo "$output" | grep -oE '[0-9]+' | tail -1 || echo "")
 
-# Block on critical score
+# Finding on critical score
 if [ -n "$score" ] && [ "$score" -lt 50 ]; then
   _doctor_fail_count=$((_doctor_fail_count + 1))
   echo "$_doctor_fail_count" > "$_doctor_fail_counter"
@@ -68,8 +66,7 @@ if [ -n "$score" ] && [ "$score" -lt 50 ]; then
     exit 0
   fi
 
-  echo "{\"decision\":\"block\",\"reason\":\"Doctor score $score/100 (critical). Fix.\"}" >&2
-  exit 2
+  hook_stop_finding "Doctor score $score/100 (critical). Fix."
 fi
 
 # Reset counter on success

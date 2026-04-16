@@ -17,7 +17,8 @@ fi
 # ── Check 2: Warn on any new biome-ignore or @ts-ignore ──────────
 # Every suppression becomes a pattern LLMs copy. Resist adding them.
 
-ignore_lines=$(echo "$added_lines" | grep -E 'biome-ignore|@ts-ignore|@ts-expect-error' | grep -vE 'noExplicitAny' || true)
+# @ts-ignore/@ts-expect-error now owned by as-cast-check.sh
+ignore_lines=$(echo "$added_lines" | grep -E 'biome-ignore' | grep -vE 'noExplicitAny' || true)
 
 if [ -n "$ignore_lines" ]; then
   sample=$(echo "$ignore_lines" | head -2 | sed 's/^+//' | tr '\n' ' ')
