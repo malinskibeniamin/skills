@@ -93,9 +93,10 @@ _safe_json_escape() {
   if command -v jq &>/dev/null; then
     printf '%s' "$input" | jq -Rs . 2>/dev/null && return 0
   fi
-  # Fallback: manual escape with sed (covers critical chars)
+  # Fallback: manual escape with sed + awk (covers critical chars + newlines)
+  # Works on macOS sed (BSD), GNU sed, and Git Bash/WSL
   local escaped
-  escaped=$(printf '%s' "$input" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/\\t/g' | tr '\n' ' ')
+  escaped=$(printf '%s' "$input" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/\\t/g' -e $'s/\r/\\\\r/g' | awk '{if(NR>1) printf "\\n"; printf "%s",$0}')
   printf '"%s"' "$escaped"
 }
 
