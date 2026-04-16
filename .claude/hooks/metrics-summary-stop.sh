@@ -54,9 +54,41 @@ done | sed 's/,$//')
 # Count unique hooks that fired
 hooks_fired=$(jq -r '.hook' "$log_file" | sort -u | wc -l | tr -d ' ')
 
+# Aggregate nudge/info/diagnostic/block-strict (new tiers in 2.2.2)
+nudges=$(jq -r 'select(.decision=="nudge") | .rule' "$log_file" | sort | uniq -c | sort -rn | head -10 | while read -r count rule; do
+  printf '"%s":%d,' "$rule" "$count"
+done | sed 's/,$//')
+
+infos=$(jq -r 'select(.decision=="info") | .rule' "$log_file" | sort | uniq -c | sort -rn | head -10 | while read -r count rule; do
+  printf '"%s":%d,' "$rule" "$count"
+done | sed 's/,$//')
+
+diagnostics=$(jq -r 'select(.decision=="diagnostic") | .rule' "$log_file" | sort | uniq -c | sort -rn | head -10 | while read -r count rule; do
+  printf '"%s":%d,' "$rule" "$count"
+done | sed 's/,$//')
+
+# Latency aggregation per hook (P50 + P95 + count) — requires ms field (added 2.2.2)
+perf_ms=$(jq -r 'select(.ms != null) | [.hook, .ms] | @tsv' "$log_file" 2>/dev/null \
+  | sort -k1,1 \
+  | awk -F'\t' '
+      { hook=$1; ms=$2+0; times[hook] = (times[hook] ? times[hook] "," ms : ms); count[hook]++ }
+      END {
+        for (h in times) {
+          n = split(times[h], arr, ",")
+          # sort asc
+          for (i=1; i<=n; i++) for (j=i+1; j<=n; j++) if (arr[j]<arr[i]) { t=arr[i]; arr[i]=arr[j]; arr[j]=t }
+          p50 = arr[int(n/2)+1]
+          p95 = arr[int(n*0.95)+1]
+          if (p95 == "") p95 = arr[n]
+          printf "\"%s\":{\"p50\":%d,\"p95\":%d,\"n\":%d},", h, p50, p95, n
+        }
+      }
+    ' | sed 's/,$//')
+
 # Build summary JSON
 cat > "$metrics_dir/${session_date}-${session_id:0:8}.json" <<EOF
 {
+  "schema_version": 2,
   "date": "$session_date",
   "session_id": "${session_id:0:8}",
   "duration_minutes": $duration_minutes,
@@ -65,7 +97,11 @@ cat > "$metrics_dir/${session_date}-${session_id:0:8}.json" <<EOF
   "hooks_fired": $hooks_fired,
   "blocks": {${blocks}},
   "warns": {${warns}},
-  "denies": {${denies}}
+  "denies": {${denies}},
+  "nudges": {${nudges}},
+  "infos": {${infos}},
+  "diagnostics": {${diagnostics}},
+  "perf_ms": {${perf_ms}}
 }
 EOF
 
