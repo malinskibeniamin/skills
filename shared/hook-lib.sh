@@ -34,10 +34,15 @@ _hook_debug() {
   fi
 }
 
-# ── Fail-closed mode (inspired by Claude Code iron_gate_closed) ──
+# ── Default ERR trap: crash → exit 0, never non-zero without stderr ──
+# Hooks must either block cleanly (exit 2 + JSON stderr) or pass (exit 0).
+# An unhandled error must NOT produce a mysterious non-zero exit.
+# HOOKS_FAIL_CLOSED=1 overrides: crashes become blocks instead of silent passes.
 
 if [ "${HOOKS_FAIL_CLOSED:-}" = "1" ]; then
   trap '_fc_msg="Hook script error in $(basename "$0"). Check hook configuration (missing _hook-lib.sh? jq not installed?)."; echo "{\"suppressOutput\":true,\"systemMessage\":\"$_fc_msg\"}" >&2; exit 2' ERR
+else
+  trap '_hook_debug "ERR trap fired (line $LINENO, exit $?) — exiting 0 to avoid crash"; exit 0' ERR
 fi
 
 # ── Session state directory ───────────────────────────────────────
@@ -75,6 +80,23 @@ _hook_log_entry() {
   printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s"}\n' \
     "$(date +%s)" "$hook" "$rule" "$decision" "$target" \
     >> "$_hook_log_file" 2>/dev/null || true
+}
+
+# ── Safe JSON string escape ──────────────────────────────────────
+# Escapes text for embedding in JSON strings. Uses jq if available,
+# falls back to sed. Never fails — returns escaped string or empty.
+# Usage: escaped=$(_safe_json_escape "text with \"quotes\" and\nnewlines")
+
+_safe_json_escape() {
+  local input="$1"
+  # Try jq first (produces a quoted JSON string like "foo\nbar")
+  if command -v jq &>/dev/null; then
+    printf '%s' "$input" | jq -Rs . 2>/dev/null && return 0
+  fi
+  # Fallback: manual escape with sed (covers critical chars)
+  local escaped
+  escaped=$(printf '%s' "$input" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/\\t/g' | tr '\n' ' ')
+  printf '"%s"' "$escaped"
 }
 
 # ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
@@ -370,6 +392,36 @@ hook_deny() {
 
 hook_stop_block() {
   local msg="$1"
-  echo "{\"decision\":\"block\",\"reason\":\"$msg\"}" >&2
+  local reason
+  reason=$(_safe_json_escape "$msg")
+  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
+}
+
+# ── Stop hook: Append finding to shared file (no block) ──────────
+# Quality-gate pattern: each Stop hook reports findings, then
+# quality-gate-stop.sh aggregates and blocks ONCE with all issues.
+# This avoids serial blocking where each hook blocks independently.
+
+hook_stop_finding() {
+  local msg="$1"
+  # Delimiter separates findings so quality-gate-stop.sh can count issues (not lines)
+  printf '%s\n---\n' "$msg" >> "$_hook_session_dir/stop-findings" 2>/dev/null || true
+}
+
+# ── Stop hook: Save test results for sharing across hooks ────────
+# typecheck-stop.sh saves vitest output here so orchestration-stop
+# and test-perf-stop can read it instead of re-running vitest.
+
+hook_stop_save_test_results() {
+  local status="$1"  # PASS or FAIL
+  local output="$2"  # full vitest output (optional)
+  echo "$status" > "$_hook_session_dir/shared-test-status" 2>/dev/null || true
+  if [ -n "$output" ]; then
+    echo "$output" > "$_hook_session_dir/shared-test-output" 2>/dev/null || true
+  fi
+}
+
+hook_stop_get_test_status() {
+  cat "$_hook_session_dir/shared-test-status" 2>/dev/null || echo ""
 }
