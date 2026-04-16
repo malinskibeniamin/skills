@@ -18,9 +18,9 @@ if [ -z "$msg" ]; then
   msg=$(echo "$command" | sed -n "s/.*-m[[:space:]]*'\\([^']*\\)'.*/\\1/p")
 fi
 
-# Try heredoc/multi-line
+# Try heredoc/multi-line — match both type(scope): and type: patterns
 if [ -z "$msg" ]; then
-  conventional_line=$(echo "$command" | grep -E '^\s*(feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert)\(' | head -1 | sed 's/^[[:space:]]*//')
+  conventional_line=$(echo "$command" | grep -E '^\s*(feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert)(\(|:)' | head -1 | sed 's/^[[:space:]]*//')
   if [ -n "$conventional_line" ]; then
     msg="$conventional_line"
   else

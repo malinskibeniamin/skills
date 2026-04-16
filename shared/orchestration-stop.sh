@@ -148,23 +148,24 @@ fi
 
 # ── Decision ─────────────────────────────────────────────────────
 
-# Hard issues (async leaks, security, failing tests) → block
+# Hard issues (async leaks, security, failing tests) → write to shared findings
 if [ -n "$issues" ]; then
-  reason=$(printf "Quality gate:\n%s" "$(printf '%b' "$issues" | head -20)" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
-  exit 2
+  hook_stop_finding "$(printf "Orchestration:%b" "$issues")"
 fi
 
 # Check if source changed but no test files were touched
-changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null || echo "0")
-changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null || echo "0")
-if [ "${changed_source_count:-0}" -gt 0 ] && [ "${changed_test_count:-0}" -eq 0 ]; then
+# Use tr -d to strip newlines — grep -c can embed \n when $changed has trailing blank lines
+changed_source_count=$(echo "$changed" | grep -E '\.(ts|tsx|js|jsx)$' | grep -vcE '(\.test\.|\.spec\.)' 2>/dev/null | tr -d '[:space:]')
+changed_source_count="${changed_source_count:-0}"
+changed_test_count=$(echo "$changed" | grep -cE '\.(test|spec)\.(ts|tsx|js|jsx)$' 2>/dev/null | tr -d '[:space:]')
+changed_test_count="${changed_test_count:-0}"
+if [ "$changed_source_count" -gt 0 ] 2>/dev/null && [ "$changed_test_count" -eq 0 ] 2>/dev/null; then
   warnings="${warnings:-}\n- No tests modified. /tdd"
 fi
 
 # Soft warnings (missing tests) → inform but don't block
 if [ -n "${warnings:-}" ]; then
-  context=$(printf "Suggestions:\n%s" "$(printf '%b' "$warnings" | head -10)" | jq -Rs .)
+  context=$(_safe_json_escape "$(printf "Suggestions:\n%s" "$(printf '%b' "$warnings" | head -10)")")
   echo "{\"hookSpecificOutput\":{\"additionalContext\":$context}}" >&2
 fi
 

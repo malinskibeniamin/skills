@@ -66,19 +66,18 @@ if [ $exit_code -ne 0 ]; then
       exit 0
     fi
 
-    truncated=$(echo "$_new_errors" | head -30)
+    truncated=$(echo "$_new_errors" | head -20)
     _new_count=$(echo "$_new_errors" | wc -l | tr -d ' ')
-    reason=$(printf "%s new type error(s). Fix:\n%s" "$_new_count" "$truncated" | jq -Rs .)
-    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
+    hook_stop_finding "$(printf "Type errors (%s new):\n%s" "$_new_count" "$truncated")"
     echo "typecheck FAIL (new errors)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
-    exit 2
   fi
 
   # ── Fallback: no baseline available ──────────────────────────────
-  reason=$(printf "Type errors. Fix:\n%s" "$truncated" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
-  echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
-  exit 2
+  if [ -z "${_new_errors+x}" ]; then
+    # Only report if we didn't already handle via baseline comparison
+    hook_stop_finding "$(printf "Type errors:\n%s" "$truncated")"
+    echo "typecheck FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
+  fi
 fi
 
 # ── Related tests (only tests affected by session's changed files) ──
@@ -111,13 +110,13 @@ else
 fi
 
 if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
-  truncated=$(echo "$test_output" | head -30)
-  reason=$(printf "Related tests fail. Fix:\n%s" "$truncated" | jq -Rs .)
-  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
+  truncated=$(echo "$test_output" | tail -20)
+  hook_stop_finding "$(printf "Related tests fail:\n%s" "$truncated")"
   echo "typecheck PASS, tests FAIL" > "$_hook_session_dir/last-stop" 2>/dev/null || true
-  exit 2
+  hook_stop_save_test_results "FAIL" "$test_output"
+else
+  echo "typecheck PASS, tests PASS" > "$_hook_session_dir/last-stop" 2>/dev/null || true
+  hook_stop_save_test_results "PASS" "$test_output"
 fi
-
-echo "typecheck PASS, tests PASS" > "$_hook_session_dir/last-stop" 2>/dev/null || true
 
 exit 0

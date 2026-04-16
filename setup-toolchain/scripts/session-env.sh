@@ -8,7 +8,9 @@ CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-}"
 # These skills are for React/TypeScript frontend projects.
 # Warn if installed in the wrong directory (backend, Go, root of monorepo).
 
-if [ ! -f "package.json" ]; then
+# Skip warning in the skills repo itself (hook authoring project, not a frontend app)
+_repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || true)
+if [ ! -f "package.json" ] && [ "$_repo_name" != "skills" ]; then
   echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."}}' >&2
 fi
 
