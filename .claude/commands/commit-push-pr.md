@@ -22,6 +22,16 @@ description: Analyze changes, create categorized conventional commits, push, and
 
 Based on the above changes, execute the full commit-push-PR workflow below in a single response. Use only the tools listed in `allowed-tools`.
 
+### Phase 0: Pre-flight — verify review skill ran
+
+1. Check if any review skill was invoked in this session (search conversation history):
+   - `/simplify` — lightweight review for small fixes/tweaks
+   - `/request-refactor-plan` — for planning and executing refactors
+   - `/improve-codebase-architecture` — for cleaning up messy code (oversized files, shallow modules, tangled deps)
+   - `/design-an-interface` — for redesigning a module or exploring a different layout/approach
+2. If NONE ran: warn the user — "Lifecycle requires a review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
+3. Only proceed past this gate if a review skill ran or user explicitly confirms skip
+
 ### Phase 1: Scope confirmation
 
 1. Inspect the status and diff above
@@ -116,11 +126,13 @@ Note: `--fill-verbose` sets the title from commits. Override title with `--title
 4. Add labels if they exist: append `--label <label1> --label <label2>` for each verified label
 5. Print the PR URL
 
-### Phase 6: Watch CI
+### Phase 6: Watch CI (MANDATORY)
 
-1. Stream CI checks: `gh pr checks --watch` (use Monitor tool for real-time output)
-2. If checks fail, report which checks failed and suggest fixes
-3. If no CI configured, skip and note it
+1. **Always** stream CI checks: `gh pr checks <PR_NUMBER> --watch` using the Monitor tool for real-time output
+2. Do NOT use `sleep` + `gh pr checks` polling — use `--watch` flag which streams updates
+3. Do NOT skip this step — CI failures caught here save user time
+4. If checks fail: read failure logs, diagnose root cause, fix, commit, push, and re-watch
+5. If no CI configured, note it and proceed
 
 ### Phase 7: Verify and summarize
 

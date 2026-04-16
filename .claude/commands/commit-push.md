@@ -20,6 +20,16 @@ description: Analyze changes, create categorized conventional commits, and push
 
 Based on the above changes, execute the full commit-and-push workflow below in a single response. Use only the tools listed in `allowed-tools`.
 
+### Phase 0: Pre-flight — verify review skill ran
+
+1. Check if any review skill was invoked in this session (search conversation history):
+   - `/simplify` — lightweight review for small fixes/tweaks
+   - `/request-refactor-plan` — for planning and executing refactors
+   - `/improve-codebase-architecture` — for cleaning up messy code (oversized files, shallow modules, tangled deps)
+   - `/design-an-interface` — for redesigning a module or exploring a different layout/approach
+2. If NONE ran: warn the user — "Lifecycle requires a review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
+3. Only proceed past this gate if a review skill ran or user explicitly confirms skip
+
 ### Phase 1: Scope confirmation
 
 1. Inspect the status and diff above
