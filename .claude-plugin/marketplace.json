@@ -11,7 +11,7 @@
     {
       "name": "frontend-skills",
       "description": "React/TypeScript frontend enforcement harness. 68 hooks enforce patterns on every edit. 34 skills cover TDD through CI-green PR. 5 agents for automated review. 5 routines for recurring workflows. TypeScript-scoped, caveman-compressed.",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
@@ -30,6 +30,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "2.1.0": "2026-04-16 — verify-install.sh v2: version display, asset counts, 8 hook events, schema alignment.",
         "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Quality-gate aggregator, JSONL session logging, intent-detect, 5 routines, Phase 0 pre-ship gate. 74% token reduction. Hooks 30→68, agents 2→5.",
         "1.10.0": "2026-04-13 — 16 hooks from PR audit, autopilot enforcement, coverage TDD gate, Monitor streaming."
       }

@@ -53,7 +53,26 @@ done
 
 $JSON_MODE || echo "--- Install Mode: $INSTALL_MODE ---"
 
-# ── 1. Basic structure ──────────────────────────────────────────
+# ── 1. Version info ───────────────────────────────────────────
+
+$JSON_MODE || echo ""
+$JSON_MODE || echo "--- Version ---"
+
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  PLUGIN_JSON="${PLUGIN_ROOT}.claude-plugin/plugin.json"
+else
+  PLUGIN_JSON=".claude-plugin/plugin.json"
+fi
+
+if [ -f "$PLUGIN_JSON" ] && command -v jq &>/dev/null; then
+  _version=$(jq -r '.version // "unknown"' "$PLUGIN_JSON")
+  _updated=$(jq -r '.["x-updatedAt"] // "unknown"' "$PLUGIN_JSON")
+  _pass "Version: ${_version} (updated: ${_updated})"
+else
+  _warn "Could not read plugin version — plugin.json missing or jq unavailable"
+fi
+
+# ── 2. Basic structure ──────────────────────────────────────────
 
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Structure ---"
@@ -111,7 +130,7 @@ else
   fi
 fi
 
-# ── 2. Hook scripts ────────────────────────────────────────────
+# ── 3. Hook scripts ────────────────────────────────────────────
 
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Hook Scripts ---"
@@ -132,8 +151,9 @@ if [ -f "$_hooks_json" ] && command -v jq &>/dev/null; then
   done < <(jq -r '.. | .command? // empty' "$_hooks_json" | grep -oE '[^/]+\.sh' | sort -u)
 fi
 
-# Fallback if hooks.json not found or jq missing
+# Fallback if hooks.json not found or jq missing — keep in sync with hooks/hooks.json
 if [ ${#EXPECTED_HOOKS[@]} -eq 0 ]; then
+  _warn "Could not auto-discover hooks from hooks.json — using hardcoded fallback (may be stale)"
   EXPECTED_HOOKS=(
     "react-rules-check.sh"
     "tailwind-check.sh"
@@ -152,6 +172,47 @@ if [ ${#EXPECTED_HOOKS[@]} -eq 0 ]; then
     "lifecycle-stop.sh"
     "session-env.sh"
     "intent-detect.sh"
+    "vendor-file-check.sh"
+    "ui-registry-warn.sh"
+    "form-mode-check.sh"
+    "file-size-check.sh"
+    "hook-location-check.sh"
+    "mutation-side-effect-check.sh"
+    "connect-error-check.sh"
+    "unhappy-path-check.sh"
+    "tdd-prompt-check.sh"
+    "error-boundary-check.sh"
+    "field-mask-check.sh"
+    "legacy-linter-check.sh"
+    "form-watch-check.sh"
+    "biome-ignore-check.sh"
+    "as-cast-check.sh"
+    "mutation-naming-check.sh"
+    "disabled-button-tooltip-check.sh"
+    "test-convention-check.sh"
+    "mutation-onerror-check.sh"
+    "legacy-import-check.sh"
+    "edit-loop-check.sh"
+    "query-pattern-check.sh"
+    "consecutive-failure-check.sh"
+    "orchestration-guidance.sh"
+    "orchestration-stop.sh"
+    "quality-gate-stop.sh"
+    "metrics-summary-stop.sh"
+    "violation-summary-stop.sh"
+    "violation-nudge.sh"
+    "architecture-review-stop.sh"
+    "react-doctor-stop.sh"
+    "registry-check.sh"
+    "test-perf-stop.sh"
+    "llm-truncate.sh"
+    "llm-test-flags.sh"
+    "conventional-commits-check.sh"
+    "user-prompt-context.sh"
+    "post-compact-context.sh"
+    "subagent-start.sh"
+    "subagent-stop.sh"
+    "llm-env.sh"
   )
 fi
 
@@ -184,10 +245,13 @@ else
   _warn "$installed of ${#EXPECTED_HOOKS[@]} hooks installed ($missing missing)"
 fi
 
-# ── 3. Hook wiring ─────────────────────────────────────────────
+# ── 4. Hook wiring ─────────────────────────────────────────────
 
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Hook Wiring ---"
+
+# All 8 hook events used by the harness
+HOOK_EVENTS=("SessionStart" "PostCompact" "UserPromptSubmit" "PreToolUse" "PostToolUse" "SubagentStart" "SubagentStop" "Stop")
 
 if [ "$INSTALL_MODE" = "plugin" ]; then
   # Plugin mode: check hooks/hooks.json
@@ -206,7 +270,7 @@ if [ "$INSTALL_MODE" = "plugin" ]; then
     _fail "No hooks configured in hooks.json"
   fi
 
-  for event in "SessionStart" "UserPromptSubmit" "PreToolUse" "PostToolUse" "Stop"; do
+  for event in "${HOOK_EVENTS[@]}"; do
     if grep -q "\"$event\"" "$hooks_file" 2>/dev/null; then
       _pass "$event event configured"
     else
@@ -229,7 +293,7 @@ else
       _fail "No hooks configured in settings.json"
     fi
 
-    for event in "SessionStart" "UserPromptSubmit" "PreToolUse" "PostToolUse" "Stop"; do
+    for event in "${HOOK_EVENTS[@]}"; do
       if grep -q "\"$event\"" ".claude/settings.json" 2>/dev/null; then
         _pass "$event event configured"
       else
@@ -239,7 +303,91 @@ else
   fi
 fi
 
-# ── 4. Codex compatibility (optional) ──────────────────────────
+# ── 5. Assets ──────────────────────────────────────────────────
+
+$JSON_MODE || echo ""
+$JSON_MODE || echo "--- Assets ---"
+
+if [ "$INSTALL_MODE" = "plugin" ]; then
+  ASSETS_ROOT="$PLUGIN_ROOT"
+else
+  ASSETS_ROOT="."
+fi
+
+# Skills (count directories with SKILL.md)
+skill_count=$(find "${ASSETS_ROOT}" -maxdepth 2 -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$skill_count" -gt 0 ]; then
+  _pass "$skill_count skills installed"
+else
+  _fail "No skills found (no SKILL.md files)"
+fi
+
+# Commands
+cmd_count=0
+for cmd_dir in "${ASSETS_ROOT}/.claude/commands" "${ASSETS_ROOT}/commands"; do
+  if [ -d "$cmd_dir" ]; then
+    cmd_count=$(find "$cmd_dir" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+    break
+  fi
+done
+if [ "$cmd_count" -gt 0 ]; then
+  _pass "$cmd_count slash commands installed"
+else
+  _warn "No slash commands found"
+fi
+
+# Agents
+agent_count=0
+if [ -d "${ASSETS_ROOT}/agents" ]; then
+  agent_count=$(find "${ASSETS_ROOT}/agents" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+fi
+if [ "$agent_count" -gt 0 ]; then
+  _pass "$agent_count agent definitions installed"
+else
+  _warn "No agent definitions found"
+fi
+
+# Routines
+routine_count=0
+routine_dir="${ASSETS_ROOT}/setup-routines/routines"
+if [ -d "$routine_dir" ]; then
+  routine_count=$(find "$routine_dir" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+fi
+if [ "$routine_count" -gt 0 ]; then
+  _pass "$routine_count routine templates installed"
+else
+  _warn "No routine templates found"
+fi
+
+# Shared utilities
+shared_count=0
+if [ -d "${ASSETS_ROOT}/shared" ]; then
+  shared_count=$(find "${ASSETS_ROOT}/shared" -name "*.sh" 2>/dev/null | wc -l | tr -d ' ')
+fi
+if [ "$shared_count" -gt 0 ]; then
+  _pass "$shared_count shared utilities installed"
+else
+  _warn "No shared utilities found"
+fi
+
+# Reference docs
+ref_count=$(find "${ASSETS_ROOT}" -maxdepth 2 -name "REFERENCE.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$ref_count" -gt 0 ]; then
+  _pass "$ref_count reference docs installed"
+else
+  _warn "No reference docs found"
+fi
+
+# Instructions
+for instr in "CLAUDE.md" "AGENTS.md"; do
+  if [ -f "${ASSETS_ROOT}/${instr}" ]; then
+    _pass "$instr present"
+  else
+    _warn "$instr not found"
+  fi
+done
+
+# ── 6. Codex compatibility (optional) ──────────────────────────
 
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Codex Compatibility ---"
@@ -267,7 +415,13 @@ else
   _warn "AGENTS.md not found — Codex soft guidance not configured"
 fi
 
-# ── 5. Dependencies ─────────────────────────────────────────────
+if [ -f "${CODEX_ROOT}/.codex-plugin/plugin.json" ]; then
+  _pass ".codex-plugin/plugin.json exists"
+else
+  _warn ".codex-plugin/plugin.json not found"
+fi
+
+# ── 7. Dependencies ─────────────────────────────────────────────
 
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Dependencies ---"
@@ -295,7 +449,7 @@ else
   _warn "No package.json — hooks are designed for frontend projects"
 fi
 
-# ── 6. Version check (optional, with --remote) ─────────────────
+# ── 8. Version check (optional, with --remote) ─────────────────
 
 if [ -n "$REMOTE" ]; then
   $JSON_MODE || echo ""
@@ -337,7 +491,7 @@ fi
 $JSON_MODE || echo ""
 
 if $JSON_MODE; then
-  echo "{\"pass\":$PASS,\"warn\":$WARN,\"fail\":$FAIL}"
+  echo "{\"pass\":$PASS,\"warn\":$WARN,\"fail\":$FAIL,\"version\":\"${_version:-unknown}\",\"updatedAt\":\"${_updated:-unknown}\"}"
 else
   echo "=== Summary: $PASS passed, $WARN warnings, $FAIL failures ==="
   if [ $FAIL -gt 0 ]; then
