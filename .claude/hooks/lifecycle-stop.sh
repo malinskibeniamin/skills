@@ -42,6 +42,22 @@ if [ ! -f "$_touched_file" ] || [ ! -s "$_touched_file" ]; then
   exit 0
 fi
 _session_code=$(grep -E '\.(ts|tsx)$' "$_touched_file" 2>/dev/null || true)
+# Defense-in-depth: drop any path that points at a secondary worktree
+# (subagent scope) or no longer exists. _hook-lib.sh already filters at
+# write time, but guard here too so stale entries from prior sessions or
+# untracked edge cases never block the main lifecycle.
+if [ -n "$_session_code" ] && type _hook_in_secondary_worktree &>/dev/null; then
+  _filtered=""
+  while IFS= read -r _p; do
+    [ -z "$_p" ] && continue
+    [ -e "$_p" ] || continue
+    if _hook_in_secondary_worktree "$_p"; then
+      continue
+    fi
+    _filtered="${_filtered}${_p}"$'\n'
+  done <<< "$_session_code"
+  _session_code="${_filtered%$'\n'}"
+fi
 if [ -z "$_session_code" ]; then
   exit 0
 fi
