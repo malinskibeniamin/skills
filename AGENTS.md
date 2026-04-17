@@ -51,7 +51,7 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 ## Lifecycle
 
-1. Understand → 2. Plan → 3. TDD (RED→GREEN→REFACTOR) → 4-6. `/go` (verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → fix → done)
+1. Understand → 2. Plan → 2b. `/domain-model` (DDD-light grill + CONTEXT.md/ADR updates) → 3. TDD (RED→GREEN→REFACTOR) → 4-6. `/go` (verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → fix → done)
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 
