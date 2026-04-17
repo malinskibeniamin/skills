@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Single-source manifest codegen (skill-manifest.json). Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -55,6 +55,7 @@
     "settings": "settings.json"
   },
   "x-changelog": {
+    "2.4.0": "2026-04-17 — /write-a-skill audit fixes: /go removed broken /ship alias; /go and /work switched to 'Use when' trigger phrase.",
     "2.3.0": "2026-04-17 — Defensive _hook-lib.sh source in 43 hooks: broken cache now warns once + no-ops instead of N×error loop. New /go and /work skills. Eval sentinel blocks regression.",
     "2.2.4": "2026-04-17 — 9 new hook events. Metrics moved to SessionEnd. Evals 1321/0. Note: Codex hooks.json regen needed for new events (run /codex-compat).",
     "2.2.3": "2026-04-16 — Plugin load fix: removed redundant hooks ref (Claude Code auto-loads hooks/hooks.json).",

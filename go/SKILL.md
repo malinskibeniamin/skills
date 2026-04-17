@@ -1,6 +1,6 @@
 ---
 name: go
-description: "Ship what built. Run verify → self-review → simplify → commit-push-pr → monitor CI → fix → done. Use after implementation done. Alias: /ship."
+description: "Ship what built. Run verify → self-review → simplify → commit-push-pr → monitor CI → fix → done. Use when implementation done, ready to launch."
 ---
 
 # Go — Ship What You Built

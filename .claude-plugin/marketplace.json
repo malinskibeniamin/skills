@@ -11,7 +11,7 @@
     {
       "name": "frontend-skills",
       "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 34 skills cover TDD through CI-green PR. 5 agents for automated review. 5 routines for recurring workflows. TypeScript-scoped, caveman-compressed. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "2.3.0",
+      "version": "2.4.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
@@ -30,6 +30,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "2.4.0": "2026-04-17 — /write-a-skill audit fixes: /go removed broken /ship alias, /go and /work switched to 'Use when' trigger phrase per skill rules.",
         "2.3.0": "2026-04-17 — Defensive _hook-lib.sh source in 43 hooks prevents N×error loop when plugin cache corrupts (dangling symlink → one warn + no-op for session). New /go (phases 4-6 ship tail) and /work (= /development-lifecycle) skills. Eval sentinel blocks regression to plain source.",
         "2.2.4": "2026-04-17 — 9 new hook events (SessionEnd, PreCompact, PostToolUseFailure, FileChanged x5, WorktreeCreate). Metrics moved from Stop to SessionEnd. Eval suite 1321/0 after fixing 44 stale tests.",
         "2.2.3": "2026-04-16 — Plugin load fix: removed redundant hooks ref from plugin.json (duplicate-load error).",
