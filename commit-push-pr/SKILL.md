@@ -1,16 +1,20 @@
 ---
-allowed-tools: Bash(git *), Bash(gh *)
-description: Analyze changes, create categorized conventional commits, push, and open a PR
+name: commit-push-pr
+description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when user asks to open a PR, invokes `/commit-push-pr`, or requests a full commit → push → PR flow with CI monitoring.
 ---
 
-## Context
+# Commit, push, and open PR
 
-- Current git status: !`git status -sb`
-- Current diff (staged and unstaged): !`git diff HEAD`
-- Current branch: !`git branch --show-current`
-- Default branch: !`gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'`
-- Recent commits for style reference: !`git log --oneline -5`
-- Existing PR on branch: !`gh pr list --head $(git branch --show-current) --json number,url,title --jq '.[0] // empty'`
+## Step 0: Gather context
+
+Run these Bash commands before proceeding:
+
+- `git status -sb` — current working-tree state
+- `git diff HEAD` — staged + unstaged changes
+- `git branch --show-current` — current branch
+- `gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'` — default branch
+- `git log --oneline -5` — recent commits for style reference
+- `gh pr list --head $(git branch --show-current) --json number,url,title --jq '.[0] // empty'` — existing PR on branch
 
 ## Prerequisites
 
@@ -20,7 +24,7 @@ description: Analyze changes, create categorized conventional commits, push, and
 
 ## Your task
 
-Execute full commit-push-PR workflow below in single response using only `allowed-tools`.
+Execute full commit-push-PR workflow below in single response.
 
 ### Phase 0: Pre-flight — verify review skill ran
 

@@ -1,15 +1,21 @@
 ---
-allowed-tools: Bash(ls *), Bash(cat *), Bash(jq *), Bash(wc *), Bash(sort *), Bash(head *), Bash(tail *), Bash(find *), Bash(awk *)
-description: Analytics dashboard for the frontend-skills hook harness. Latency percentiles, top-violated rules, zero-fire hooks, session trends.
+name: frontend-skills-stats
+description: Analytics dashboard for the frontend-skills hook harness. Latency percentiles, top-violated rules, zero-fire hooks, session trends. Use when user asks for hook harness stats, invokes `/frontend-skills-stats`, or wants latency profiling and manifest drift checks.
 ---
 
-## Context
+# Frontend skills stats
 
-- Metrics dir: `~/.claude/hook-metrics/`
-- Hook scripts: !`ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l | tr -d ' '` scripts
-- Wired hooks: !`jq '[.hooks[]?[]?.hooks[]?] | length' "$(git rev-parse --show-toplevel 2>/dev/null)/skill-manifest.json" 2>/dev/null`
-- Session summaries: !`ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l | tr -d ' '`
-- Date range: !`ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {} 2>/dev/null` to !`ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {} 2>/dev/null`
+## Step 0: Gather context
+
+Run these Bash commands before proceeding:
+
+- `ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l` — installed hook scripts
+- `jq '[.hooks[]?[]?.hooks[]?] | length' "$(git rev-parse --show-toplevel 2>/dev/null)/skill-manifest.json"` — wired hooks
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l` — session summaries
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {}` — earliest date
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {}` — latest date
+
+Metrics dir: `~/.claude/hook-metrics/`
 
 ## Your task
 

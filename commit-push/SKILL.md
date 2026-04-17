@@ -1,15 +1,19 @@
 ---
-allowed-tools: Bash(git *), Bash(gh *)
-description: Analyze changes, create categorized conventional commits, and push
+name: commit-push
+description: Analyze changes, create categorized conventional commits, and push. Use when user asks to commit and push, invokes `/commit-push`, or requests conventional commits without a PR.
 ---
 
-## Context
+# Commit and push
 
-- Current git status: !`git status -sb`
-- Current diff (staged and unstaged): !`git diff HEAD`
-- Current branch: !`git branch --show-current`
-- Default branch: !`gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'`
-- Recent commits for style reference: !`git log --oneline -5`
+## Step 0: Gather context
+
+Run these Bash commands before proceeding:
+
+- `git status -sb` — current working-tree state
+- `git diff HEAD` — staged + unstaged changes
+- `git branch --show-current` — current branch
+- `gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'` — default branch
+- `git log --oneline -5` — recent commits for style reference
 
 ## Prerequisites
 
@@ -18,7 +22,7 @@ description: Analyze changes, create categorized conventional commits, and push
 
 ## Your task
 
-Execute full commit-and-push workflow below in single response using only `allowed-tools`.
+Execute full commit-and-push workflow below in single response.
 
 ### Phase 0: Pre-flight — verify review skill ran
 
