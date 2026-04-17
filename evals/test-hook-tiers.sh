@@ -67,8 +67,9 @@ hook_block_strict "sec issue" "test-rule"
 EOF
 chmod +x "$_test_script"
 
-_out=$(echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' | "$_test_script" 2>&1)
-_rc=$?
+_out=$(echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' | "$_test_script" 2>&1 || true)
+_rc=0
+echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' | "$_test_script" >/dev/null 2>&1 || _rc=$?
 if [ "$_rc" = "2" ] && echo "$_out" | grep -q '\[STRICT\]'; then
   echo "  PASS  hook_block_strict exits 2 with [STRICT] prefix"
   PASS=$((PASS + 1))
@@ -98,12 +99,12 @@ else
 fi
 rm -f "$_test_script"
 
-# ── metrics-summary-stop includes perf_ms field ─────────────────
-if grep -q 'perf_ms' "$REPO_ROOT/.claude/hooks/metrics-summary-stop.sh"; then
-  echo "  PASS  metrics-summary-stop.sh emits perf_ms field (schema v2)"
+# ── session-end.sh includes perf_ms field (moved from metrics-summary-stop in 2.2.4) ─
+if grep -q 'perf_ms' "$REPO_ROOT/.claude/hooks/session-end.sh"; then
+  echo "  PASS  session-end.sh emits perf_ms field (schema v2)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  metrics-summary-stop.sh missing perf_ms emission"
+  echo "  FAIL  session-end.sh missing perf_ms emission"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: metrics schema v2 not wired"
+  ERRORS="$ERRORS\n  FAIL: metrics schema v2 not wired in session-end"
 fi

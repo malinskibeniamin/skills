@@ -465,7 +465,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Learn more" "REFERENCE has link plac
 run_content_eval "$SKILL_DIR/REFERENCE.md" "allowlist" "REFERENCE has inclusive terminology table"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Directional" "REFERENCE has directional language guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Placeholder" "REFERENCE has placeholder format guidance"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "em dash" "REFERENCE has em dash guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "[Ee]m [Dd]ash" "REFERENCE has em dash guidance"
 
 # ── GLOSSARY content ────────────────────────────────────────────
 

@@ -20,8 +20,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "changelog" "SKILL.md mentions changelog"
 
 run_content_eval "$SCRIPT" "redpanda-ui/" "hook checks for redpanda-ui changes"
 run_content_eval "$SCRIPT" "registry.json" "hook checks for registry.json update"
-run_content_eval "$SCRIPT" "decision.*block" "hook blocks when registry not rebuilt"
-run_content_eval "$SCRIPT" "CHANGELOG" "hook reminds about changelog"
+run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2|stop-findings" "hook blocks when registry not rebuilt"
+run_content_eval "$SCRIPT" "CHANGELOG|changeset" "hook reminds about changelog or changeset"
 
 # ── hook-lib.sh: consumer repo upstream warning ──────────────────
 

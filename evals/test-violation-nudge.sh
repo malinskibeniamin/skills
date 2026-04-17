@@ -6,15 +6,15 @@ NUDGE_SCRIPT="$SHARED_DIR/violation-nudge.sh"
 run_file_eval "$NUDGE_SCRIPT" "violation-nudge.sh exists"
 run_executable_eval "$NUDGE_SCRIPT" "violation-nudge.sh is executable"
 
-# ── Symlink exists in .claude/hooks ──────────────────────────────
+# ── Real file in .claude/hooks (2.2.1 dereferenced symlinks) ─────
 
-if [ -L "$REPO_ROOT/.claude/hooks/violation-nudge.sh" ]; then
-  echo "  PASS  .claude/hooks/violation-nudge.sh is a symlink"
+if [ -f "$REPO_ROOT/.claude/hooks/violation-nudge.sh" ] && [ ! -L "$REPO_ROOT/.claude/hooks/violation-nudge.sh" ]; then
+  echo "  PASS  .claude/hooks/violation-nudge.sh is a real file"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  .claude/hooks/violation-nudge.sh is not a symlink"
+  echo "  FAIL  .claude/hooks/violation-nudge.sh missing or is symlink"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: .claude/hooks/violation-nudge.sh is not a symlink"
+  ERRORS="$ERRORS\n  FAIL: .claude/hooks/violation-nudge.sh"
 fi
 
 # ── settings.json has PreToolUse entry for violation-nudge ───────

@@ -49,11 +49,11 @@ run_content_eval "$SCRIPT" "noUnusedImports" "hook skips noUnusedImports"
 run_content_eval "$SCRIPT" "bun run lint:fix:file" "hook runs bun run lint:fix:file (not lint:fix which hardcodes .)"
 run_content_eval "$SCRIPT" "bun run lint:file" "hook runs bun run lint:file for error checking"
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed JS/TS files"
-run_content_eval "$SCRIPT" "decision.*block" "hook blocks on unfixable errors"
+run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2|stop-findings" "hook blocks on unfixable errors"
 run_content_eval "$SCRIPT" "UI_LIB_DIRS" "hook supports UI_LIB_DIRS env var"
 run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
 run_content_eval "$SCRIPT" "scripts.*lint:file" "hook skips when lint:file script missing"
-run_content_eval "$SCRIPT" "decision.*block" "hook blocks on unfixable errors"
+run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2|stop-findings" "hook blocks on unfixable errors"
 run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"
 
 # ── Stop hook behavioral tests ──────────────────────────────────

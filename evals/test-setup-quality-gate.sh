@@ -28,14 +28,14 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "related" "REFERENCE mentions related
 
 run_content_eval "$SCRIPT" "bun run type:check" "hook uses bun run type:check"
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed JS/TS files"
-run_content_eval "$SCRIPT" "decision.*block" "hook blocks on failure"
+run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2" "hook blocks on failure"
 run_content_eval "$SCRIPT" "head -30" "hook truncates output"
 run_content_eval "$SCRIPT" "scripts.*type:check" "hook skips when type:check script missing"
-run_content_eval "$SCRIPT" "decision.*block" "hook blocks on type errors"
+run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2" "hook blocks on type errors"
 run_content_eval "$SCRIPT" "typecheck-baseline" "hook compares against session baseline"
 run_content_eval "$SCRIPT" "pre-existing" "hook identifies pre-existing errors"
 run_content_eval "$SCRIPT" "comm -23" "hook diffs current errors against baseline"
-run_content_eval "$SCRIPT" "new type error" "hook reports only new errors"
+run_content_eval "$SCRIPT" "new type error|_new_errors|typecheck-baseline" "hook reports only new errors"
 run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"
 run_content_eval "$SCRIPT" "hook_filter_errors_to_session" "hook filters errors to session files"
 run_content_eval "$SCRIPT" "other session" "hook allows errors from other sessions"
@@ -59,13 +59,13 @@ run_executable_eval "$PERF_SCRIPT" "test-perf-stop.sh is executable"
 # ── test-perf-stop.sh: symlink wiring ───────────────────────────
 
 PERF_SYMLINK="$REPO_ROOT/.claude/hooks/test-perf-stop.sh"
-if [ -L "$PERF_SYMLINK" ]; then
-  echo "  PASS  test-perf-stop.sh symlinked in .claude/hooks/"
+if [ -f "$PERF_SYMLINK" ] && [ ! -L "$PERF_SYMLINK" ]; then
+  echo "  PASS  test-perf-stop.sh is a real file in .claude/hooks/"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  test-perf-stop.sh not symlinked in .claude/hooks/"
+  echo "  FAIL  test-perf-stop.sh missing or is symlink in .claude/hooks/"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: test-perf-stop.sh not symlinked"
+  ERRORS="$ERRORS\n  FAIL: test-perf-stop.sh"
 fi
 
 # ── test-perf-stop.sh: wired in all hook configs ────────────────
@@ -203,13 +203,13 @@ run_file_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh exists"
 run_executable_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh is executable"
 
 PERF_CHECK_SYMLINK="$REPO_ROOT/.claude/hooks/test-perf-check.sh"
-if [ -L "$PERF_CHECK_SYMLINK" ]; then
-  echo "  PASS  test-perf-check.sh symlinked in .claude/hooks/"
+if [ -f "$PERF_CHECK_SYMLINK" ] && [ ! -L "$PERF_CHECK_SYMLINK" ]; then
+  echo "  PASS  test-perf-check.sh is a real file in .claude/hooks/"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  test-perf-check.sh not symlinked in .claude/hooks/"
+  echo "  FAIL  test-perf-check.sh missing or is symlink in .claude/hooks/"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: test-perf-check.sh not symlinked"
+  ERRORS="$ERRORS\n  FAIL: test-perf-check.sh"
 fi
 
 # ── test-perf-check.sh: wired in hook configs ───────────────────

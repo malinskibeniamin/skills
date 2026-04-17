@@ -3,6 +3,12 @@
 SCRIPT="$REPO_ROOT/setup-react-rules/scripts/react-rules-check.sh"
 SKILL_DIR="$REPO_ROOT/setup-react-rules"
 
+# Specialized hooks for rules that moved out of react-rules-check.sh:
+AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/as-cast-check.sh"
+COMPILER_SCRIPT="$REPO_ROOT/.claude/hooks/react-compiler-check.sh"
+BIOME_IGNORE_SCRIPT="$REPO_ROOT/.claude/hooks/biome-ignore-check.sh"
+PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-perf-check.sh"
+
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
@@ -164,23 +170,23 @@ UI_LIB_DIRS="custom-lib" REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
 
 rm -rf "$tmpdir2"
 
-# ── Check 3: TypeScript escape hatches ──────────────────────────
+# ── Check 3: TypeScript escape hatches (moved to as-cast-check.sh in 2.2.x) ──
 
 echo "const x = foo as any" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$AS_CAST_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: as any" "as any"
 
 echo "// @ts-ignore" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$AS_CAST_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: @ts-ignore" "ts-ignore"
 
 echo "// @ts-expect-error" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$AS_CAST_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: @ts-expect-error" "ts-expect-error"
 
@@ -353,25 +359,25 @@ _memo_file="$_memo_tmpdir/test.tsx"
 echo 'const val = useMemo(() => compute(), [dep])' > "$_memo_file"
 cd "$_memo_tmpdir"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$COMPILER_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: useMemo (React Compiler handles it)" "useMemo"
 
 echo 'const cb = useCallback(() => {}, [])' > "$_memo_file"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$COMPILER_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: useCallback (React Compiler handles it)" "useCallback"
 
 echo 'const Wrapped = React.memo(MyComponent)' > "$_memo_file"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$COMPILER_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: React.memo (React Compiler handles it)" "React.memo"
 
 echo 'const Wrapped = memo(MyComponent)' > "$_memo_file"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$COMPILER_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
   2 "block: memo() (React Compiler handles it)" "memo"
 
@@ -709,18 +715,20 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: React.cloneElement usage" "cloneElement"
 
-# ── Check 25: Warn on biome-ignore ───────────────────────────────
+# ── Check 25: Warn on biome-ignore (moved to biome-ignore-check.sh) ─
 
 tmpfile="$_rr_tmpdir/test.tsx"
+# Need git-tracked file for added_lines detection
+(cd "$_rr_tmpdir" && git init -q 2>/dev/null && git add . 2>/dev/null && git commit -q -m "init" 2>/dev/null) || true
 echo "// biome-ignore lint/a11y/noAriaUnsupportedElements: legacy" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$BIOME_IGNORE_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: biome-ignore comment" "biome-ignore"
 
 echo "/* biome-ignore lint/suspicious/noExplicitAny: third-party */" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$BIOME_IGNORE_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: biome-ignore noExplicitAny block comment" "noExplicitAny"
 
@@ -818,18 +826,18 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: normal import (not heavy)"
 
-# ── Check 3b: Ban as Record<string, any> (default mode) ──────────
+# ── Check 3b: Ban as Record<string, any> (moved to as-cast-check.sh) ──
 
 tmpfile="$_rr_tmpdir/test.ts"
 echo "const data = response as Record<string, any>" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$AS_CAST_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: as Record<string, any>" "Record"
 
 echo "const data = response as Record<string, unknown>" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$AS_CAST_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: as Record<string, unknown>" "Record"
 
@@ -974,8 +982,9 @@ tmpfile="$_rr_tmpdir/test.tsx"
 # ── Check 35: useEffect to reset state → key prop ────────────────
 
 # Trigger: setState with empty/default value inside useEffect (tsx)
+# Named callback to avoid collision with unnamed-useEffect check
 cat > "$tmpfile" <<'TSXEOF'
-useEffect(() => {
+useEffect(function resetComment() {
   setComment('')
 }, [userId])
 TSXEOF
@@ -1042,25 +1051,25 @@ tmpfile="$_rr_tmpdir/widget.test.tsx"
 
 # ── Check 37: Ban user.type() in integration tests ──────────────
 
-# Trigger: user.type() in a test file
+# Trigger: user.type() in a test file (moved to test-perf-check.sh)
 tmpfile="$_rr_tmpdir/widget.test.tsx"
 echo "await user.type(input, 'hello world')" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$PERF_CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: user.type() in test file" "user.type"
+  0 "warn: user.type() in test file" "per-keystroke"
 
 # Trigger: userEvent.type() variant
 echo "await userEvent.type(input, 'DELETE')" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$PERF_CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: userEvent.type() in test file" "user.type"
+  0 "warn: userEvent.type() in test file" "per-keystroke"
 
 # Allow: user.clear() + user.paste() (correct pattern)
 echo "await user.clear(input); await user.paste('hello')" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$PERF_CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: user.clear + user.paste (correct pattern)"
 
@@ -1068,7 +1077,7 @@ run_hook_eval "$SCRIPT" \
 tmpfile="$_rr_tmpdir/test.tsx"
 echo "await user.type(input, 'hello')" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
+run_hook_eval "$PERF_CHECK_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: user.type() in non-test tsx file"
 
@@ -1086,11 +1095,11 @@ run_content_eval "$SCRIPT" "wrap.*create" "hook checks protobuf create()"
 run_content_eval "$SCRIPT" "bufbuild/protobuf" "hook checks protobuf v2 only"
 run_content_eval "$SCRIPT" "aria-label" "hook checks icon-only button a11y"
 run_content_eval "$SCRIPT" "outline" "hook bans outline removal"
-run_content_eval "$SCRIPT" "useMemo" "hook checks for manual memoization"
+run_content_eval "$COMPILER_SCRIPT" "useMemo" "hook checks for manual memoization"
 run_content_eval "$SCRIPT" "dangerouslySetInnerHTML" "hook checks dangerouslySetInnerHTML"
 run_content_eval "$SCRIPT" "eval\(" "hook checks eval()"
 run_content_eval "$SCRIPT" "innerHTML" "hook checks innerHTML"
-run_content_eval "$SCRIPT" "Record<string" "hook checks as Record<string, any/unknown>"
+run_content_eval "$AS_CAST_SCRIPT" "Record<string" "hook checks as Record<string, any/unknown>"
 run_content_eval "$SCRIPT" "barrel" "hook checks barrel imports"
 run_content_eval "$SCRIPT" "passive" "hook checks passive event listeners"
 run_content_eval "$SCRIPT" "chart\.js|d3|three|pdf-lib" "hook checks heavy deps"
@@ -1108,7 +1117,7 @@ run_content_eval "$SCRIPT" "tree-shaking" "hook checks tree-shaking killers"
 run_content_eval "$SCRIPT" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
 run_content_eval "$SCRIPT" "framer-motion" "hook checks deprecated framer-motion"
 run_content_eval "$SCRIPT" "Button.*handler|handler.*Button" "hook checks Button handler requirement"
-run_content_eval "$SCRIPT" "user.type.*slow|slow.*user.type" "hook warns about slow user.type() in tests"
+run_content_eval "$PERF_CHECK_SCRIPT" "user(Event)?\.type.*slow|slow.*user(Event)?\.type|per-keystroke|test-perf-user-type" "hook warns about slow user.type() in tests"
 run_content_eval "$SCRIPT" "node:assert" "hook bans node:assert in test files"
 
 # ── REFERENCE content ────────────────────────────────────────────

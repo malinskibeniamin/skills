@@ -1,6 +1,6 @@
 ---
 name: setup-sandcastle
-description: "Configure Sandcastle for agent delegation — headless batch via run(), HITL review via interactive(), parallel sandboxes, branch strategies. Use when delegating work to autonomous agents, parallelizing implementation, or running interactive review sessions."
+description: "Configure Sandcastle for agent delegation — headless run(), HITL interactive(), parallel sandboxes, branches. Use when delegating to autonomous agents, parallelizing implementation, or running interactive reviews."
 ---
 
 # Setup Sandcastle

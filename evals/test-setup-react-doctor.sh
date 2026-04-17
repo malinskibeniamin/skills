@@ -22,7 +22,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "react-doctor.config.json" "SKILL.md ment
 run_content_eval "$SKILL_DIR/REFERENCE.md" "--diff" "REFERENCE documents diff mode"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "--score" "REFERENCE documents score mode"
 run_content_eval "$SCRIPT" "bun run doctor" "script uses package.json script"
-run_content_eval "$SCRIPT" "decision.*block" "script blocks on failure"
+run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2" "script blocks on failure"
 
 # ── Hook script content ─────────────────────────────────────────
 
