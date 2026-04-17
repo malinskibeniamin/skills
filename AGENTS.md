@@ -51,7 +51,11 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 ## Lifecycle
 
-1. Understand (explore, clarify, propose) → 2. Plan (exact paths/code/output) → 3. TDD (RED→GREEN→REFACTOR) → 4. Verify (self-verify, never ask user) → 5. Review (PR, conventional commit) → 6. Complete (push, PR, monitor CI, fix, request review)
+1. Understand → 2. Plan → 3. TDD (RED→GREEN→REFACTOR) → 4-6. `/go` (verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → fix → done)
+
+Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
+
+Effort: xhigh (Understand) → xhigh (Plan) → max (TDD) → xhigh (Simplify) → xhigh (Verify) → max (Review)
 
 ## UX Copy
 
