@@ -4,79 +4,6 @@
 
 Hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
 
-## How It All Connects
-
-```
-You: "Build feature X" or "Fix these 5 issues overnight"
-  │
-  ├── Interactive ──→ Claude Code + /development-lifecycle
-  │                    └── understand → plan → TDD → verify → review → compound
-  │
-  ├── AFK batch ───→ Sandcastle (.sandcastle/main.ts)
-  │                    └── picks issues → spawns N agents in Docker
-  │                        └── each agent runs development-lifecycle
-  │
-  └── Automated ───→ Routines (claude.ai/code/routines)
-                      └── schedule, GitHub webhook, or API trigger
-                          └── cloud session with hooks + CLAUDE.md active
-                              └── PR review, triage, health checks, docs drift
-```
-
-### Development Lifecycle
-
-The 6-phase workflow that drives every task, from feature to fix. Phases can be skipped depending on task type — bug fixes jump straight to TDD, test requests go directly to Phase 3.
-
-```mermaid
-graph TD
-    Start([User prompt]) --> Understand
-
-    Understand["1. Understand\nExplore codebase, clarify requirements"]
-    Plan["2. Plan\nExact file paths, code, expected output"]
-    Grill["2b. Grill\nAuto /grill-me, stress-test plan\n--- GATE: user confirms ---"]
-    Implement["3. Implement — TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
-    Verify["4. Verify\nSelf-verify via browser tools"]
-    Review["5. Review\nSecurity gate, code-reviewer agent, create PR"]
-    Iterate["5b. Iterate\n2 automated CI + review rounds\nthen request human review"]
-    Compound["6. Compound\nWrite .claude/rules/ rule"]
-    Done([PR ready to merge])
-
-    Understand --> Plan --> Grill --> Implement
-    Implement --> Verify --> Review --> Iterate --> Compound --> Done
-
-    Start -. "Fix bug" .-> Understand
-    Understand -. "skip plan" .-> Implement
-    Start -. "Write tests" .-> Implement
-    Start -. "Create PR" .-> Review
-
-    style Grill fill:#f9e,stroke:#333
-    style Implement fill:#bfb,stroke:#333
-    style Review fill:#bbf,stroke:#333
-```
-
-**Four layers, one outcome:**
-
-| Layer | What | How | Reliability |
-|---|---|---|---|
-| **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
-| **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
-| **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
-| **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
-| **Routines** | Automate | Cloud-hosted sessions on schedule/webhook/API | Unattended, 24/7 |
-
-## Why This Exists
-
-| Problem | Without this repo | With this repo |
-|---|---|---|
-| Claude writes `as any` | Ships to PR → human catches → feedback loop | Hook blocks immediately → 50 tokens → fixed |
-| Claude skips tests | Ships → human requests → another round | Stop gate blocks → tests added automatically |
-| Claude uses wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
-| You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
-| You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
-
-**How it works**: Hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
-
-**vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
-
 ## Install
 
 Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start one with `claude` in your terminal):
@@ -92,6 +19,14 @@ Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 ```
 
 Three commands. All skills, hooks, and agents activate immediately. Done.
+
+**Update** (pull the latest version):
+
+```bash
+/plugin install frontend-skills --force
+```
+
+Then restart your Claude Code session so hooks reload from the new cache.
 
 **Verify:**
 
@@ -182,15 +117,90 @@ bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent cla
 
 </details>
 
+## How It All Connects
+
+```
+You: "Build feature X" or "Fix these 5 issues overnight"
+  │
+  ├── Interactive ──→ Claude Code + /development-lifecycle
+  │                    └── understand → plan → TDD → verify → review → compound
+  │
+  ├── AFK batch ───→ Sandcastle (.sandcastle/main.ts)
+  │                    └── picks issues → spawns N agents in Docker
+  │                        └── each agent runs development-lifecycle
+  │
+  └── Automated ───→ Routines (claude.ai/code/routines)
+                      └── schedule, GitHub webhook, or API trigger
+                          └── cloud session with hooks + CLAUDE.md active
+                              └── PR review, triage, health checks, docs drift
+```
+
+### Development Lifecycle
+
+The 6-phase workflow that drives every task, from feature to fix. Phases can be skipped depending on task type — bug fixes jump straight to TDD, test requests go directly to Phase 3.
+
+```mermaid
+graph TD
+    Start([User prompt]) --> Understand
+
+    Understand["1. Understand\nExplore codebase, clarify requirements"]
+    Plan["2. Plan\nExact file paths, code, expected output"]
+    Grill["2b. Grill\nAuto /grill-me, stress-test plan\n--- GATE: user confirms ---"]
+    Implement["3. Implement — TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
+    Verify["4. Verify\nSelf-verify via browser tools"]
+    Review["5. Review\nSecurity gate, code-reviewer agent, create PR"]
+    Iterate["5b. Iterate\n2 automated CI + review rounds\nthen request human review"]
+    Compound["6. Compound\nWrite .claude/rules/ rule"]
+    Done([PR ready to merge])
+
+    Understand --> Plan --> Grill --> Implement
+    Implement --> Verify --> Review --> Iterate --> Compound --> Done
+
+    Start -. "Fix bug" .-> Understand
+    Understand -. "skip plan" .-> Implement
+    Start -. "Write tests" .-> Implement
+    Start -. "Create PR" .-> Review
+
+    style Grill fill:#f9e,stroke:#333
+    style Implement fill:#bfb,stroke:#333
+    style Review fill:#bbf,stroke:#333
+```
+
+**Four layers, one outcome:**
+
+| Layer | What | How | Reliability |
+|---|---|---|---|
+| **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
+| **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
+| **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
+| **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
+| **Routines** | Automate | Cloud-hosted sessions on schedule/webhook/API | Unattended, 24/7 |
+
+## Why This Exists
+
+| Problem | Without this repo | With this repo |
+|---|---|---|
+| Claude writes `as any` | Ships to PR → human catches → feedback loop | Hook blocks immediately → 50 tokens → fixed |
+| Claude skips tests | Ships → human requests → another round | Stop gate blocks → tests added automatically |
+| Claude uses wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
+| You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
+| You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
+
+**How it works**: Hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
+
+**vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
+
 ## Skills Catalog
 
-You only need to remember **one skill**: `/development-lifecycle`. It covers the full flow. Everything else is optional — use when you need a specific capability.
+You only need to remember **one skill**: `/development-lifecycle` (or its alias `/work`). It covers the full flow. Everything else is optional — use when you need a specific capability.
 
 ### Workflow Skills
 
 | Skill | When to use |
 |---|---|
-| **`/development-lifecycle`** | Building features, fixing bugs, any development work. Guides through understand → plan → **grill** → TDD → verify → review. |
+| **`/development-lifecycle`** | Building features, fixing bugs, any development work. Guides through understand → plan → **grill** → TDD → `/go` (verify → ship). |
+| **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter to type. |
+| **`/go`** | Ship what you built. Phases 4–6 only: verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → `/resolve-pr-feedback`. Use when implementation + tests are done. |
 | **`/brainstorming`** | Not sure what approach to take yet. Explores 2-3 design options with trade-offs. |
 | **`/tdd`** | Writing tests or want strict red-green-refactor enforcement. |
 | **`/grill-me`** | Stress-tests decisions. Auto-invoked as Phase 2b of the lifecycle; also usable standalone. |
