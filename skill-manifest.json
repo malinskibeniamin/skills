@@ -11,6 +11,25 @@
     "PostCompact": {
       "": ["post-compact-context.sh"]
     },
+    "PreCompact": {
+      "": ["pre-compact.sh"]
+    },
+    "PostToolUseFailure": {
+      "Bash": ["post-tool-failure.sh"]
+    },
+    "FileChanged": {
+      "package.json|bun.lockb|package-lock.json": ["file-changed-deps.sh"],
+      "*.proto|*.graphql|*.graphqls": ["file-changed-schema.sh"],
+      "biome.jsonc|biome.json|tsconfig.json|tsconfig.*.json|vitest.config.*": ["file-changed-config.sh"],
+      "src/env.ts": ["file-changed-env.sh"],
+      "skill-manifest.json": ["file-changed-manifest.sh"]
+    },
+    "WorktreeCreate": {
+      "": ["worktree-create.sh"]
+    },
+    "SessionEnd": {
+      "": ["session-end.sh"]
+    },
     "PreToolUse": {
       "Edit|Write|Bash": ["violation-nudge.sh"],
       "Bash": [
@@ -83,7 +102,6 @@
         "test-perf-stop.sh",
         "quality-gate-stop.sh",
         "lifecycle-stop.sh",
-        "metrics-summary-stop.sh",
         "violation-summary-stop.sh"
       ]
     }

@@ -52,6 +52,94 @@
         ]
       }
     ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/pre-compact.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/post-tool-failure.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "FileChanged": [
+      {
+        "matcher": "package.json|bun.lockb|package-lock.json",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-changed-deps.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "*.proto|*.graphql|*.graphqls",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-changed-schema.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "biome.jsonc|biome.json|tsconfig.json|tsconfig.*.json|vitest.config.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-changed-config.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "src/env.ts",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-changed-env.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "skill-manifest.json",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-changed-manifest.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/worktree-create.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/session-end.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write|Bash",
@@ -327,10 +415,6 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/lifecycle-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/metrics-summary-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
