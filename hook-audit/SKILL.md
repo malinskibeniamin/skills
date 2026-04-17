@@ -7,50 +7,50 @@ description: Analyze hook effectiveness from collected session metrics. Use when
 
 ## Step 0: Gather context
 
-Run these Bash commands before proceeding:
+Run Bash commands before proceed:
 
 - `ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l` — installed hook scripts
 - `ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l` — session summaries collected
 - `ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {}` — earliest date
 - `ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {}` — latest date
 
-Metrics directory: `~/.claude/hook-metrics/`
+Metrics dir: `~/.claude/hook-metrics/`
 
 ## Your task
 
-Analyze hook effectiveness across all collected session metrics. Read every JSON file in `~/.claude/hook-metrics/` and produce a report covering:
+Analyze hook effectiveness across all collected session metrics. Read every JSON in `~/.claude/hook-metrics/`. Produce report:
 
 ### 1. Hook activity
 
-For each hook that fired at least once across all sessions:
-- Total blocks, warns, and denies
-- Average fires per session
-- Trend: increasing or decreasing over time?
+Each hook fired ≥1 across sessions:
+- Total blocks, warns, denies
+- Avg fires per session
+- Trend: up or down over time?
 
 ### 2. Silent hooks
 
-List all hook scripts installed in `.claude/hooks/` that have **zero entries** in any metrics file. These are prune candidates — they either never trigger or aren't wired into the logging.
+List hook scripts in `.claude/hooks/` with **zero entries** in any metrics file. Prune candidates — never trigger or not wired to logging.
 
 ### 3. Over-aggressive hooks
 
-Hooks with high block counts that may be hurting productivity:
-- Blocks-per-session ratio > 3 → flag as potentially too strict
-- If a hook blocks the same rule repeatedly in one session → agent is retrying and failing
+High block counts hurt productivity:
+- Blocks-per-session ratio > 3 → flag too strict
+- Same rule blocked repeat in one session → agent retry and fail
 
 ### 4. Enforcement gaps
 
-Cross-reference CLAUDE.md rules against hook activity:
-- Rules that have corresponding hooks but zero fires → either perfectly followed or not tested
-- Rules with no corresponding hook at all → advisory-only, no enforcement
+Cross-ref CLAUDE.md rules vs hook activity:
+- Rules with hook but zero fires → followed perfect or untested
+- Rules with no hook → advisory, no enforce
 
 ### 5. Recommendations
 
-Based on the data:
-- **Prune**: hooks that never fire (remove or merge)
-- **Soften**: hooks that block too aggressively (demote to warn)
-- **Harden**: warns that fire frequently (promote to block)
-- **Add**: CLAUDE.md rules with no hook enforcement
+From data:
+- **Prune**: hooks never fire (remove or merge)
+- **Soften**: hooks block too much (demote to warn)
+- **Harden**: warns fire often (promote to block)
+- **Add**: CLAUDE.md rules with no hook enforce
 
 ### Output format
 
-Present as a structured report. Use tables where data supports it. End with a prioritized action list (max 5 items). If fewer than 5 session files exist, note that data is limited and recommendations are preliminary.
+Structured report. Tables where data fit. End with prioritized action list (max 5). If <5 session files, note data limited, recs preliminary.

@@ -1,13 +1,13 @@
 ---
 name: frontend-skills-stats
-description: Analytics dashboard for frontend-skills hook harness. Latency percentiles, top-violated rules, zero-fire hooks, session trends. Use when user ask for hook harness stats, invoke `/frontend-skills-stats`, or want latency profiling and manifest drift checks.
+description: Analytics dashboard for the frontend-skills hook harness. Latency percentiles, top-violated rules, zero-fire hooks, session trends. Use when user asks for hook harness stats, invokes `/frontend-skills-stats`, or wants latency profiling and manifest drift checks.
 ---
 
 # Frontend skills stats
 
 ## Step 0: Gather context
 
-Run these Bash commands before proceed:
+Run these Bash commands before proceeding:
 
 - `ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l` — installed hook scripts
 - `jq '[.hooks[]?[]?.hooks[]?] | length' "$(git rev-parse --show-toplevel 2>/dev/null)/skill-manifest.json"` — wired hooks
@@ -19,11 +19,11 @@ Metrics dir: `~/.claude/hook-metrics/`
 
 ## Your task
 
-Analyze frontend-skills harness across all collected session metrics. Read every JSON file in `~/.claude/hook-metrics/`. Produce prioritized report.
+Analyze the frontend-skills harness across all collected session metrics. Read every JSON file in `~/.claude/hook-metrics/` and produce a prioritized report.
 
 ### 1. Latency profile
 
-Parse `perf_ms` field from each session summary (added 2.2.2). Each hook:
+Parse `perf_ms` field from each session summary (added in 2.2.2). For each hook:
 
 | Hook | P50 (ms) | P95 (ms) | Invocations | Total wall-clock |
 |---|---|---|---|---|
@@ -35,7 +35,7 @@ Flag hooks with:
 
 ### 2. Rule activity
 
-Each rule fired at least once:
+For each rule that fired at least once:
 
 | Rule | Blocks | Warns | Nudges | Info | Diagnostic |
 |---|---|---|---|---|---|
@@ -44,11 +44,11 @@ Detect new tier usage (nudge, info, diagnostic — added 2.2.2). Report adoption
 
 ### 3. Silent hooks (zero fires)
 
-List wired hooks with zero fires across ALL sessions. Prune candidates.
+List wired hooks with zero fires across ALL sessions. These are prune candidates.
 
 ### 4. Over-aggressive hooks
 
-- Blocks-per-session ratio > 3 → too strict, demote to warn
+- Blocks-per-session ratio > 3 → too strict, consider demoting to warn
 - Same rule blocked ≥ 2× in one session → Claude retrying, hook message unclear
 - block-strict with no escape-hatch adoption → rule too harsh
 
@@ -73,10 +73,10 @@ Compare `skill-manifest.json` to `.claude/settings.json` and `hooks/hooks.json`:
 bash scripts/generate-hook-configs.sh --check
 ```
 
-Drift detected: RED FLAG — drift bug regression. Run `--apply` to fix.
+If drift detected: RED FLAG — drift bug regression. Run `--apply` to fix.
 
 ### Output format
 
-Structured report. Tables for numeric data. End with prioritized action list (max 5 items). If <5 session files exist, mark recommendations preliminary.
+Structured report. Tables for numeric data. End with prioritized action list (max 5 items). If <5 session files exist, mark recommendations as preliminary.
 
-Plain markdown. No emojis.
+Use plain markdown. No emojis.
