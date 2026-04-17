@@ -135,6 +135,27 @@ _safe_json_escape() {
   printf '"%s"' "$escaped"
 }
 
+# ── Secondary-worktree detection ─────────────────────────────────
+# Returns 0 (true) if $1 lives inside a secondary git worktree — i.e.,
+# the worktree's --git-dir (e.g. .git/worktrees/<name>) differs from the
+# shared --git-common-dir (main .git). Returns 1 otherwise (primary
+# worktree, non-git path, or git unavailable).
+#
+# Why: subagents spawned via `Agent(isolation: "worktree")` inherit the
+# parent's CLAUDE_SESSION_ID, so their PostToolUse hooks write to the
+# parent's session_dir. Without this check, subagent file writes land
+# in the parent's session-touched-files and trip lifecycle-stop hooks.
+_hook_in_secondary_worktree() {
+  local f="$1" dir gd gc
+  dir=$(dirname "$f" 2>/dev/null) || return 1
+  [ -d "$dir" ] || return 1
+  gd=$(git -C "$dir" rev-parse --git-dir 2>/dev/null) || return 1
+  gc=$(git -C "$dir" rev-parse --git-common-dir 2>/dev/null) || return 1
+  gd=$(cd "$dir" 2>/dev/null && cd "$gd" 2>/dev/null && pwd -P 2>/dev/null) || return 1
+  gc=$(cd "$dir" 2>/dev/null && cd "$gc" 2>/dev/null && pwd -P 2>/dev/null) || return 1
+  [ -n "$gd" ] && [ -n "$gc" ] && [ "$gd" != "$gc" ]
+}
+
 # ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
 
 hook_parse_edit_write() {
@@ -154,8 +175,14 @@ hook_parse_edit_write() {
 
   _hook_debug "parse: $file_path"
 
-  # Track which files this session touches (for session-scoped Stop hooks)
-  echo "$file_path" >> "$_hook_session_dir/session-touched-files" 2>/dev/null || true
+  # Track which files this session touches (for session-scoped Stop hooks).
+  # Skip files in secondary worktrees — they belong to a subagent scope,
+  # not the main session. Otherwise the main Stop hook sees phantom writes.
+  if _hook_in_secondary_worktree "$file_path"; then
+    _hook_debug "skip session-touched-files: secondary worktree ($file_path)"
+  else
+    echo "$file_path" >> "$_hook_session_dir/session-touched-files" 2>/dev/null || true
+  fi
 }
 
 # ── Filter by file extensions (pipe-separated, e.g. "ts|tsx|js|jsx") ──

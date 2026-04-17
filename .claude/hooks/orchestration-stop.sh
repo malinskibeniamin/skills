@@ -101,7 +101,17 @@ if hook_has_session_tracking 2>/dev/null && [ -n "$_all_new" ]; then
   _touched="$_hook_session_dir/session-touched-files"
   if [ -f "$_touched" ]; then
     _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-    _touched_norm=$(sed "s|^${_repo_root}/||" "$_touched" | sort -u)
+    # Defense-in-depth: skip secondary-worktree paths before normalizing.
+    # _hook-lib.sh filters at write time; guard here for stale entries.
+    _touched_norm=$(
+      while IFS= read -r _p; do
+        [ -z "$_p" ] && continue
+        if type _hook_in_secondary_worktree &>/dev/null && _hook_in_secondary_worktree "$_p"; then
+          continue
+        fi
+        echo "${_p#"${_repo_root}"/}"
+      done < "$_touched" | sort -u
+    )
     new_files=$(comm -12 <(echo "$_all_new" | sort) <(echo "$_touched_norm") 2>/dev/null || echo "$_all_new")
   else
     new_files="$_all_new"

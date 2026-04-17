@@ -77,6 +77,57 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
+echo "━━━ worktree isolation: secondary-worktree files not tracked ━━━"
+# Agent(isolation: "worktree") subagents share CLAUDE_SESSION_ID with parent.
+# Their PostToolUse hooks must NOT append to the main session-touched-files,
+# or the parent's lifecycle-stop falsely blocks on "new source, no tests".
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_wt_repo=$(mktemp -d "/tmp/hook-test-wt-repo-$$.XXXXXX")
+_wt_secondary=$(mktemp -d -u "/tmp/hook-test-wt-secondary-$$.XXXXXX")
+
+(
+  cd "$_wt_repo"
+  git init -q -b main
+  git config user.email t@t
+  git config user.name t
+  echo "seed" > seed.txt
+  git add seed.txt
+  git commit -q -m seed
+  git worktree add -q -b wt-branch "$_wt_secondary" >/dev/null 2>&1
+) || true
+
+if [ -d "$_wt_secondary/.git" ] || [ -f "$_wt_secondary/.git" ]; then
+  echo "  primary-worktree file tracked:"
+  _f_primary="$_wt_repo/primary.tsx"
+  echo 'const X = () => null;' > "$_f_primary"
+  _run_hook "as-cast-check.sh" "$(_edit_json "$_f_primary")"
+  _assert_exit 0 "primary file hook exits 0"
+  _assert_file_contains "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" "primary.tsx" "primary file tracked"
+
+  echo "  secondary-worktree file NOT tracked:"
+  _f_secondary="$_wt_secondary/subagent.tsx"
+  echo 'const Y = () => null;' > "$_f_secondary"
+  _run_hook "as-cast-check.sh" "$(_edit_json "$_f_secondary")"
+  _assert_exit 0 "secondary file hook exits 0"
+  if grep -q "subagent.tsx" "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" 2>/dev/null; then
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} secondary-worktree file leaked into main session tracker"
+  else
+    PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} secondary-worktree file excluded from main tracker"
+  fi
+
+  (cd "$_wt_repo" && git worktree remove -f "$_wt_secondary" >/dev/null 2>&1) || true
+else
+  _skip "worktree isolation" "git worktree add failed"
+fi
+
+rm -rf "$_wt_repo" "$_wt_secondary" 2>/dev/null || true
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
 echo "━━━ violation tracking → violation-summary-stop ━━━"
 # hook_block/hook_warn write violations → summary reads
 # ═══════════════════════════════════════════════════════════════
