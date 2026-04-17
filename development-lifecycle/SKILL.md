@@ -46,7 +46,7 @@ Implementation done → run `/go` to ship. Handles everything from here:
 - **4. Verify** — types + lint + tests + browser smoke
 - **4b. Review / Refine** — self-reviewer + adversarial-reviewer agents (4b→5)
 - **5. Ship** — `/simplify` → `/commit-push-pr` → code-reviewer agent
-- **5b. Iterate** — monitor CI → `/resolve-pr-feedback` → max 2 rounds
+- **5b. Iterate** — monitor CI → `/resolve-pr-feedback` → AI self-review: up to 3 rounds with early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** — codify lessons as `.claude/rules/`
 
 See `/go` skill for full details. See [REFERENCE.md](REFERENCE.md) for phase-specific checklists.

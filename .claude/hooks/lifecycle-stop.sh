@@ -86,6 +86,33 @@ while IFS= read -r _src_file; do
   fi
 done <<< "$_session_code"
 
+# Adjacent-test fallback: if every new source file has a committed
+# or adjacent test on disk (prior-session work, parallel worktree,
+# or tests in __tests__/), treat the session as tested. Prevents the
+# "no test files written this session" false-flag on worktree /
+# multi-session flows where the session may only touch source.
+_adjacent_tests_for_all=true
+for _sf in $_source_files; do
+  _sf=${_sf# }
+  [ -z "$_sf" ] && continue
+  _sf_base=${_sf%.*}
+  _sf_ext=${_sf##*.}
+  _sf_dir=$(dirname "$_sf")
+  _sf_name=$(basename "$_sf" ".$_sf_ext")
+  if [ -f "${_sf_base}.test.${_sf_ext}" ] || \
+     [ -f "${_sf_base}.spec.${_sf_ext}" ] || \
+     [ -f "${_sf_base}.browser.test.${_sf_ext}" ] || \
+     [ -f "${_sf_dir}/__tests__/${_sf_name}.test.${_sf_ext}" ] || \
+     [ -f "${_sf_dir}/__tests__/${_sf_name}.spec.${_sf_ext}" ]; then
+    continue
+  fi
+  _adjacent_tests_for_all=false
+  break
+done
+if [ "$_adjacent_tests_for_all" = true ] && [ -n "$_source_files" ]; then
+  _has_tests=true
+fi
+
 # Skip if no new source files in testable dirs
 if [ "$_new_source" = false ]; then
   : # no enforcement needed

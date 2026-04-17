@@ -47,7 +47,7 @@ fi
 # every PostToolUse hook fires and spams an error per Edit. Defensive
 # preamble warns once + no-ops for the session. Block regression to
 # plain `source` that would reintroduce the N×error loop.
-_plain_source_count=$(grep -lE '^source "\$\(dirname "\$0"\)/_hook-lib\.sh"$' "$HOOKS_DIR"/*.sh 2>/dev/null | wc -l | tr -d ' ')
+_plain_source_count=$({ grep -lE '^source "\$\(dirname "\$0"\)/_hook-lib\.sh"$' "$HOOKS_DIR"/*.sh 2>/dev/null || true; } | wc -l | tr -d ' ')
 if [ "$_plain_source_count" = "0" ]; then
   echo "  PASS  all hooks use defensive _hook-lib.sh source (no N×error loop risk)"
   PASS=$((PASS + 1))
@@ -106,3 +106,11 @@ run_hook_eval "$SHARED_DIR/subagent-start.sh" \
   0 \
   "subagent-start exits 0 for code-reviewer" \
   "Branch Context"
+
+# ── lifecycle-stop.sh has adjacent-test fallback (no false-flag on
+#    worktree / multi-session flows where tests exist on disk but
+#    were not edited this session) ─────────────────────────────────
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "_adjacent_tests_for_all" \
+  "lifecycle-stop has adjacent-test fallback"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "__tests__" \
+  "lifecycle-stop adjacent fallback checks __tests__ dir"
