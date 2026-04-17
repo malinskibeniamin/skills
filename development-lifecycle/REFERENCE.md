@@ -21,7 +21,7 @@ flowchart TD
     P1_RCA --> P3
 
     P2 --> Trivial{Trivial?<br/>< 3 tasks,<br/>no arch decisions}
-    Trivial -->|No| Grill[2b. Grill<br/>/grill-me]
+    Trivial -->|No| Grill[2b. Grill<br/>/domain-model]
     Trivial -->|Yes| P3
     Grill --> P3
 
@@ -178,17 +178,20 @@ Smaller PRs get 2-3x faster review with higher-quality feedback.
 
 **Mandatory gate between planning and implementation.**
 
-After plan written, auto-initiate `/grill-me`:
+After plan written, auto-initiate `/domain-model`:
 
 1. Present plan summary
-2. Challenge assumptions, surface trade-offs, find gaps
-3. Resolve every decision branch
-4. Update plan with decisions changed
-5. Get explicit confirmation: "Plan is solid, proceed"
+2. Challenge against existing domain model (CONTEXT.md, ADRs)
+3. Sharpen terminology — resolve ambiguous/overloaded terms
+4. Challenge assumptions, surface trade-offs, find gaps
+5. Resolve every decision branch
+6. Update CONTEXT.md + create ADRs inline as decisions crystallize
+7. Update plan with decisions changed
+8. Get explicit confirmation: "Plan is solid, proceed"
 
 ### Why This Phase Exists
 
-Code is byproduct of understanding. If user can't defend every decision under pressure → cognitive debt. Grill ensures human builds mental model *before* LLM writes code.
+Code is byproduct of understanding. If user can't defend every decision under pressure → cognitive debt. Domain model grilling ensures human builds mental model *before* LLM writes code. Inline CONTEXT.md/ADR updates capture decisions as institutional memory.
 
 ### Skip Conditions
 

@@ -34,12 +34,13 @@ Full state diagram in [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 - Run `vitest run --coverage.enabled --coverage.reporter=text`
 - Find uncovered lines/branches/functions in changed files → test targets
 - Confirm behaviors with user (prioritize gaps over already-covered code)
-- Find deep module opportunities (small interface, deep impl)
+- Find [deep module](deep-modules.md) opportunities (small interface, deep impl)
+- Design interfaces for [testability](interface-design.md)
 
 ### 1. RED — Failing test (tracer bullet)
 
 - ONE test, ONE behavior, clear name
-- Real code, not mocks (unless unavoidable)
+- Real code, not mocks (unless unavoidable — see [mocking.md](mocking.md))
 - Verify fails for RIGHT reason
 
 ### 2. GREEN — Minimal code to pass

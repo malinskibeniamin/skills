@@ -95,7 +95,11 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 # Individual skills — pick what you need:
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/github-triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage-issue --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
@@ -149,7 +153,7 @@ graph TD
 
     Understand["1. Understand\nExplore codebase, clarify requirements"]
     Plan["2. Plan\nExact file paths, code, expected output"]
-    Grill["2b. Grill\nAuto /grill-me, stress-test plan\n--- GATE: user confirms ---"]
+    Grill["2b. Grill\nAuto /domain-model, stress-test plan\nUpdate CONTEXT.md + ADRs inline\n--- GATE: user confirms ---"]
     Implement["3. Implement — TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
     Verify["4. Verify\nSelf-verify via browser tools"]
     Review["5. Review\nSecurity gate, code-reviewer agent, create PR"]
@@ -207,7 +211,11 @@ You only need to remember **one skill**: `/development-lifecycle` (or its alias 
 | **`/go`** | Ship what you built. Phases 4–6 only: verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → `/resolve-pr-feedback`. Use when implementation + tests are done. |
 | **`/brainstorming`** | Not sure what approach to take yet. Explores 2-3 design options with trade-offs. |
 | **`/tdd`** | Writing tests or want strict red-green-refactor enforcement. |
-| **`/grill-me`** | Stress-tests decisions. Auto-invoked as Phase 2b of the lifecycle; also usable standalone. |
+| **`/domain-model`** | DDD-light grilling: challenges plans against domain model, sharpens terminology, updates CONTEXT.md + ADRs inline. Auto-invoked as Phase 2b; also usable standalone. |
+| **`/grill-me`** | Lightweight stress-test of decisions. Standalone alternative to `/domain-model` when you don't need DDD docs. |
+| **`/github-triage`** | Triage GitHub issues via label-based state machine. Grilling sessions, agent briefs, out-of-scope knowledge base. |
+| **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explores codebase in background and auto-files GitHub issues. |
+| **`/zoom-out`** | Go up a layer of abstraction. Maps relevant modules and callers when you're unfamiliar with a code area. |
 | **`/design-an-interface`** | Designing an API or module. Spawns 3+ agents to generate radically different designs. |
 | **`/triage-issue`** | Investigating a bug. Explores codebase, finds root cause, files a GitHub issue with TDD fix plan. |
 | **`/request-refactor-plan`** | Planning a refactor. Interviews you, breaks it into tiny safe commits, files RFC issue. |
@@ -236,10 +244,30 @@ Compare WebSocket, SSE, and CRDT approaches. Focus on latency and offline suppor
 and matching confirm password. Start with the failing tests.
 ```
 
-**`/grill-me`** — stress-testing a decision:
+**`/domain-model`** — DDD-light grilling with inline doc updates:
+```
+/domain-model — stress-test the data fetching strategy for the new dashboard feature.
+We're planning to use TanStack Query with a 5-minute stale time.
+```
+
+**`/github-triage`** — triaging incoming issues:
+```
+/github-triage — show me anything that needs my attention
+```
+
+**`/qa`** — interactive bug reporting session:
+```
+/qa — I've been testing the settings page and found a few issues. Let me walk you through them.
+```
+
+**`/zoom-out`** — understanding unfamiliar code:
+```
+/zoom-out on the auth middleware. I need to understand how it connects to the rest of the system.
+```
+
+**`/grill-me`** — lightweight stress-testing (no DDD docs):
 ```
 /grill-me on the data fetching strategy for the new dashboard feature.
-We're planning to use TanStack Query with a 5-minute stale time.
 ```
 
 **`/design-an-interface`** — comparing API shapes:
@@ -522,8 +550,11 @@ graph TD
     subgraph Workflow["Workflow Skills"]
         DL["development-lifecycle"]
         TDD[tdd]
+        DM[domain-model]
         GM[grill-me]
         DAI[design-an-interface]
+        GT[github-triage]
+        QA[qa]
         RPF[resolve-pr-feedback]
     end
 
@@ -535,7 +566,7 @@ graph TD
     FSK --> Setup
     FSK --> Workflow
 
-    DL -- "Phase 2b" --> GM
+    DL -- "Phase 2b" --> DM
     DL -- "Phase 3" --> TDD
     DL -- "Phase 2 UI" --> DAI
     DL -- "Phase 5b" --> RPF
@@ -734,15 +765,13 @@ Reduce token usage and context waste.
 These skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement the vendored ones. Install individually if needed:
 
 ```bash
-bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y       # PRD via interview
-bunx skills@latest add mattpocock/skills/prd-to-plan --agent claude-code -y       # PRD → implementation plan
-bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y     # PRD → GitHub issues
+bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y            # PRD via interview
+bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y         # PRD → GitHub issues with blocking
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
-bunx skills@latest add mattpocock/skills/qa --agent claude-code -y                # Interactive QA → auto-file GitHub issues
 bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y  # Domain glossary (DDD)
 ```
 
-**Already vendored** (no need to install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`. Our versions incorporate Pocock's best patterns plus hook enforcement, async leak detection, and accessibility-first testing.
+**Already vendored** (no need to install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `github-triage`, `qa`, `zoom-out`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, and accessibility-first testing.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) is intentionally omitted. Claude Code hooks already enforce linting, formatting, and type checking deterministically on every edit — pre-commit hooks are redundant and add friction for human developers who may prefer different workflows.
 

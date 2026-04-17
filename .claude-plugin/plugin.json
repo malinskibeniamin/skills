@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 36 skills cover the full development lifecycle from TDD through CI-green PR. /go ships phases 4-6, /work aliases /development-lifecycle. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
-  "version": "2.5.0",
+  "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 40 skills cover the full development lifecycle from TDD through CI-green PR. /domain-model replaces /grill-me in lifecycle. /github-triage adds label state machine. /qa auto-files issues. /go ships phases 4-6, /work aliases /development-lifecycle. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
+  "version": "3.0.0",
   "author": {
     "name": "Beniamin Malinski"
   },

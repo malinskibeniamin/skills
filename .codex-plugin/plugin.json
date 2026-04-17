@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "version": "2.5.0",
-  "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 41 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Single-source manifest codegen (skill-manifest.json). Opus 4.7 tuned. POSIX-friendly.",
+  "version": "3.0.0",
+  "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 45 skills cover the full development lifecycle from TDD through CI-green PR. /domain-model replaces /grill-me in lifecycle. /github-triage adds label state machine. /qa auto-files issues. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Single-source manifest codegen (skill-manifest.json). Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
     "url": "https://github.com/malinskibeniamin"
