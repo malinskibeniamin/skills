@@ -63,3 +63,24 @@ gh pr view $pr_number --json reviews -q '.reviews[]'
 
 All review threads resolved. CI is green.
 ```
+
+## Completeness Verification
+
+Stop hook `pr-feedback-completeness-stop.sh` re-fetches threads + reviews and blocks session exit if any of these are true:
+
+- Any `reviewThread` with `isResolved=false` AND `isOutdated!=true` AND at least one non-`[bot]` comment.
+- Any reviewer's latest `review` is in state `CHANGES_REQUESTED` (no later `APPROVED`/`DISMISSED` from same author).
+
+Escape hatches (use sparingly, document why):
+
+- `PR_FEEDBACK_ENFORCEMENT=off` — disable entirely (incident response only).
+- Reply on thread explaining "not actionable — [reason]" and resolve the thread. Hook counts resolved threads as done.
+
+Self-check command (run before declaring done):
+
+```bash
+bash scripts/pr-unresolved-count.sh            # prints integer (0 = clean)
+bash scripts/pr-unresolved-count.sh --verbose  # lists threads on stderr
+```
+
+Why not plain `gh pr view`: GitHub REST exposes review comments but NOT thread-level `isResolved`. `reviewThreads` with `isResolved`/`isOutdated` exists only in the GraphQL API. The wrapper script isolates that detail.

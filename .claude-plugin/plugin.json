@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 40 skills cover the full development lifecycle from TDD through CI-green PR. /domain-model replaces /grill-me in lifecycle. /github-triage adds label state machine. /qa auto-files issues. /go ships phases 4-6, /work aliases /development-lifecycle. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
-  "version": "3.0.0",
+  "description": "React/TypeScript frontend enforcement harness. 77 wired hooks across 80 scripts enforce patterns on every edit. 41 skills cover the full development lifecycle from TDD through CI-green PR. Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches (any/Record<T,any>/type=unknown/double-cast) blocked at Edit time. tsconfig strictness weakening blocked. 5 agents, 5 routines. Opus 4.7 tuned. POSIX-friendly.",
+  "version": "3.1.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -77,8 +77,8 @@
   "x-updatedAt": "2026-04-17",
   "x-includes": {
     "skills": 41,
-    "hooks": 62,
-    "hookScripts": 69,
+    "hooks": 77,
+    "hookScripts": 80,
     "commands": 0,
     "routines": 5,
     "agents": 5,
@@ -90,6 +90,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "3.1.0": "2026-04-17 — PR feedback completeness enforcement + TypeScript strictness hardening. New `pr-feedback-completeness-stop.sh` Stop hook blocks session exit while any non-bot, non-outdated review thread is unresolved or any reviewer's latest state is CHANGES_REQUESTED — no stones unturned before handing back to human. GraphQL isolated in `scripts/pr-unresolved-count.sh` wrapper (GitHub REST has no thread-level isResolved). New `ts-no-escape-hatches-check.sh` PostToolUse hook blocks `: any`, `any[]`, `Array<any>`, `Promise<any>`, `Record<string,any|unknown>`, `Record<any,...>`, `type X = any|unknown|never|{}`, `as unknown as T` double-cast, with `// allow: ts-escape` escape hatch. New `tsconfig-strict-check.sh` blocks weakening of `strict`, `noImplicitAny`, `strictNullChecks`, `noUncheckedIndexedAccess`, `noImplicitOverride`, `strictFunctionTypes`. Lifecycle-stop gains adjacent-test fallback — tests on disk (prior session, worktree, __tests__/) now satisfy the coverage gate, fixing the worktree/multi-session false-flag. AI self-review cap bumped 2 → 3 rounds with explicit early-exit on APPROVED/empty-findings. Two new eval files (test-pr-feedback-enforcement 29/29, test-ts-strictness 34/34). Eval suite 1387/1387 green. test-hooks.sh set -e pipefail bug fixed.",
     "2.5.0": "2026-04-17 — Consistency fix: converted 4 plugin commands (/commit-push, /commit-push-pr, /hook-audit, /frontend-skills-stats) to skills. Plugin commands show prefixed in slash autocomplete (/frontend-skills:commit-push) while skills show unprefixed (/tdd). Converting all user-facing entrypoints to skills gives uniform unprefixed display. `!`bash`` pre-context now runs as explicit Step 0 inside each skill. No behavior change for users — same slash name, same workflow.",
     "2.4.0": "2026-04-17 — /write-a-skill audit: /go and /work skill descriptions corrected. /go removed broken 'Alias: /ship' (no /ship skill exists) and switched 'Use after' → 'Use when' per write-a-skill trigger rule. /work switched 'Use for' → 'Use when'. No functional change; audit compliance only.",
     "2.3.0": "2026-04-17 — P0 resilience: defensive `_hook-lib.sh` source in all 43 PostToolUse hooks. If plugin cache corrupts (dangling symlink, missing file, bad install), hooks now warn ONCE per session via marker file and no-op cleanly instead of spamming N errors per Edit (one error per hook × every edit = unusable session). Eval sentinel (evals/test-hooks.sh) blocks regression to plain source pattern. New /go skill: composition for phases 4-6 (verify → self-review → simplify → commit-push-pr → monitor CI → fix → done). Chains self-reviewer, adversarial-reviewer, code-reviewer agents, /simplify, /commit-push-pr, /resolve-pr-feedback. New /work alias for /development-lifecycle. Development-lifecycle phases 4-6 now delegate to /go. Effort levels bumped to xhigh→xhigh→max→xhigh→xhigh→max for Opus 4.7 adaptive reasoning.",
