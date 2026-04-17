@@ -67,16 +67,19 @@ Order every task. Hooks block skipped steps.
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 
-### Effort per phase (Opus 4.7 `max` tier)
+### Effort per phase (Opus 4.7 `xhigh` tier)
+
+Downsized one level from prior xhigh/max mix. 4.7 hits diminishing returns
+at max for most phases — keep max/xhigh reserved for the final gates.
 
 | Phase | Effort | Reason |
 |---|---|---|
-| 1 Understand | `xhigh` | Exploration needs real synthesis |
-| 2 Plan / Grill | `xhigh` | Trade-off judgment |
-| 3 Implement (TDD) | `max` | Type-safety + correctness — highest stakes |
-| 4 Simplify | `xhigh` | Pattern recognition |
-| 5 Verify | `xhigh` | Judgment on edge-case coverage |
-| 5 Review (security/arch) | `max` | Final gate |
+| 1 Understand | `high` | Exploration needs real synthesis |
+| 2 Plan / Grill | `high` | Trade-off judgment |
+| 3 Implement (TDD) | `xhigh` | Type-safety + correctness — highest stakes |
+| 4 Simplify | `high` | Pattern recognition |
+| 5 Verify | `high` | Judgment on edge-case coverage |
+| 5 Review (security/arch) | `xhigh` | Final gate |
 
 ### Monitor (not sleep)
 
