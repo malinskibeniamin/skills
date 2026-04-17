@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Complete frontend stack — 14 setup skills + 10 owned workflow skills + 5 optional community skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Complete frontend stack — 14 setup skills + 14 owned workflow skills + 4 optional community skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -22,9 +22,9 @@ description: Complete frontend stack — 14 setup skills + 10 owned workflow ski
 13. **setup-connect-query** — ConnectRPC + Protobuf enforcement
 14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core
 
-## Workflow Skills (15-24)
+## Workflow Skills (15-28)
 
-development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, grill-me, triage-issue, write-a-skill
+development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, domain-model, grill-me, github-triage, qa, zoom-out, triage-issue, write-a-skill
 
 ## Steps
 
@@ -40,16 +40,19 @@ bunx skills@latest add malinskibeniamin/skills/setup-ci-pipeline --agent claude-
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/github-triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage-issue --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code -y
 ```
 
 ### 3. Community skills (optional)
 ```bash
-bunx skills@latest add mattpocock/skills/write-a-prd --agent claude-code -y
-bunx skills@latest add mattpocock/skills/prd-to-issues --agent claude-code -y
-bunx skills@latest add mattpocock/skills/qa --agent claude-code -y
+bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y
+bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y
 bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y
 ```

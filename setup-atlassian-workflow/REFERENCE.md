@@ -2,9 +2,9 @@
 
 ## Workflow Patterns
 
-### PRD → Work Items (mirrors prd-to-issues)
+### PRD → Work Items (mirrors to-issues)
 
-After `/prd-to-plan` generates plan:
+After `/to-prd` generates plan:
 
 ```bash
 # Create epic

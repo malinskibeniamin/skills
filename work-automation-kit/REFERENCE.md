@@ -4,10 +4,10 @@
 
 ```
 Feature idea
-  → /write-a-prd (community) — interactive PRD creation
+  → /to-prd (community) — interactive PRD creation
   → /development-lifecycle — plan phase
-  → /grill-me — mandatory stress-test of the plan (auto-invoked)
-  → /prd-to-issues (community) — break into GitHub/Jira issues
+  → /domain-model — stress-test plan + update CONTEXT.md/ADRs (auto-invoked)
+  → /to-issues (community) — break into GitHub/Jira issues
   → implement (use /tdd skill)
   → code review (development-lifecycle review phase)
   → merge
@@ -18,14 +18,19 @@ Bug report
   → code review (development-lifecycle review phase)
   → merge
 
+Issue management
+  → /github-triage — triage via label state machine
+  → /qa — interactive QA session → auto-file issues
+
 Design decision
   → /brainstorming — explore approaches + challenge decisions
   → /development-lifecycle — plan the chosen approach
-  → /grill-me — stress-test the plan (auto-invoked)
+  → /domain-model — stress-test the plan + sharpen terminology (auto-invoked)
   → implement
 
 Quick question (on a specific decision)
-  → /grill-me — stress-test the decision
+  → /domain-model — stress-test against domain model
+  → /grill-me — lightweight stress-test (no DDD docs)
 ```
 
 ## Owned vs Community Skills
@@ -34,11 +39,13 @@ Quick question (on a specific decision)
 |---|---|---|
 | Testing | tdd | — |
 | Debugging | triage-issue | — |
-| Planning | development-lifecycle (plan phase) | write-a-prd, prd-to-issues |
+| Triage | github-triage, qa | — |
+| Planning | development-lifecycle (plan phase) | to-prd, to-issues |
 | Review | development-lifecycle (review phase) | — |
 | Design | brainstorming, design-an-interface | — |
 | Architecture | improve-codebase-architecture, request-refactor-plan | — |
-| Meta | write-a-skill, grill-me | ubiquitous-language, qa, git-guardrails |
+| DDD | domain-model | ubiquitous-language |
+| Meta | write-a-skill, grill-me, zoom-out | git-guardrails |
 
 Owned skills ship with this repo. Skills marked "community" are installed from mattpocock/skills.
 

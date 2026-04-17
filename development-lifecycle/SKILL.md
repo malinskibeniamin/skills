@@ -29,7 +29,7 @@ Auto-detects phase, guides through correct process.
 
 **GATE: no impl until plan survives grilling.**
 
-- Auto-invoke `/grill-me` · grill until every branch resolved
+- Auto-invoke `/domain-model` · grill until every branch resolved · update CONTEXT.md + ADRs inline
 - Update plan with changes · get explicit user confirmation
 - Skip only if: trivial bug fix AND <3 tasks AND no architectural decisions
 
