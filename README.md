@@ -4,6 +4,10 @@
 
 Hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
 
+<p align="center">
+  <img src="docs/screenshots/plugin-card.png" alt="Frontend Skills plugin card — React/TypeScript skills, hooks, and agents for Claude Code and Codex" width="720">
+</p>
+
 ## Install
 
 Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start one with `claude` in your terminal):
