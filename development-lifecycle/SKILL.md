@@ -1,6 +1,6 @@
 ---
 name: development-lifecycle
-description: "Use when doing frontend, React, TypeScript, or UI development work. Automatically guides through the right phase: brainstorm → plan → grill → implement (TDD) → review. One skill for the full lifecycle — no need to invoke other skills manually."
+description: "Use when doing frontend/React/TypeScript/UI work. Auto-guides phase: understand → plan → grill → implement (TDD) → /go (4→4b review→5→5b→6). One skill, full lifecycle. Alias: /work."
 ---
 
 # Development Lifecycle
@@ -39,48 +39,17 @@ Auto-detects phase, guides through correct process.
 - **Test deletion guard**: verify test+assertion count didn't decrease after GREEN. AI may weaken tests → reject and redo.
 - REFACTOR while green · no `setTimeout` hacks · run `--detectAsyncLeaks`
 
-### 4. Verify
+### 4-6. Ship — `/go`
 
-- **Never ask user to verify.** Use tools yourself:
-  - `agent-browser`: open→snapshot→verify→screenshot
-  - `claude-in-chrome` MCP: authenticated pages
-  - Playwright: automated assertions
-- UI fix: `Monitor: bun run dev`, wait ready, open and verify
-- Optional: dispatch agent for edge-case test generation
-- **When green: commit immediately.** One commit per passing state.
+Implementation done → run `/go` to ship. Handles everything from here:
 
-### 4b. Refine (Self-Review Loop)
+- **4. Verify** — types + lint + tests + browser smoke
+- **4b. Review / Refine** — self-reviewer + adversarial-reviewer agents (4b→5)
+- **5. Ship** — `/simplify` → `/commit-push-pr` → code-reviewer agent
+- **5b. Iterate** — monitor CI → `/resolve-pr-feedback` → max 2 rounds
+- **6. Compound** — codify lessons as `.claude/rules/`
 
-**After verify commits, before external review.** Catches quality gaps while context fresh.
-
-1. Dispatch `self-reviewer` agent on session diff
-2. Diff >50 lines OR touches auth/security → also dispatch `adversarial-reviewer` in parallel
-3. Process findings by priority — see [REFERENCE.md](REFERENCE.md)
-4. Fix P0/P1 immediately · apply P2 `safe_auto` · show P2 `gated_auto` to user
-5. Commit fixes, re-verify (tests + types + lint)
-6. **Max 2 refinement rounds.** Then proceed to Review.
-7. P3/advisory → logged for Phase 6 (Compound)
-
-**Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only
-
-### 5. Review
-
-- Security gate: SAST/SCA on changed files · block on critical/high. See [REFERENCE.md](REFERENCE.md).
-- Dispatch `code-reviewer` agent (fresh-eyes review)
-- Optional: `/codex:adversarial-review`, `/simplify` for large refactors
-- Then: `gh pr create` → `@claude review`
-
-### 5b. Iterate
-
-Two automated rounds (CI green → code-reviewer → `/resolve-pr-feedback` → repeat), then request human review. **Stop.** Never >2 rounds per session.
-
-`Monitor: gh pr checks <number> --watch` after every push. See [REFERENCE.md](REFERENCE.md).
-
-### 6. Compound
-
-After non-trivial tasks: "Did we learn something worth preserving?"
-- Write rule to `.claude/rules/<topic>.md` with `paths:` glob · auto-loads on match
-- Bug from AI code? Create eval/test fixture catching same error class in CI
+See `/go` skill for full details. See [REFERENCE.md](REFERENCE.md) for phase-specific checklists.
 
 ## Phase Selection
 
@@ -88,11 +57,11 @@ Full flowchart in [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1→2→**2b**→3→4→**4b**→5→5b→6 |
-| "Fix this bug" | 1(reproduce)→3(TDD)→4→**4b**→5→5b→6 |
-| "Refactor this module" | 1→2→**2b**→3→4→**4b**→5→5b |
+| "Build a new feature" | 1→2→**2b**→3→**`/go`** |
+| "Fix this bug" | 1(reproduce)→3(TDD)→**`/go`** |
+| "Refactor this module" | 1→2→**2b**→3→**`/go`** |
 | "Write tests for X" | 3 only |
-| "Create a PR" | 5 only |
+| "Ship it" / "Create a PR" | **`/go`** only |
 | "Quick question" | Just answer |
 | "Batch these 5 issues" | **Sandcastle** — parallel agents |
 | "Work on this overnight" | **Sandcastle** — AFK delegation |

@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 34 skills cover the full development lifecycle from TDD through CI-green PR. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
-  "version": "2.2.4",
+  "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 36 skills cover the full development lifecycle from TDD through CI-green PR. /go ships phases 4-6, /work aliases /development-lifecycle. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
+  "version": "2.3.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -29,6 +29,7 @@
     "./design-an-interface/",
     "./development-lifecycle/",
     "./frontend-starter-kit/",
+    "./go/",
     "./grill-me/",
     "./improve-codebase-architecture/",
     "./redpanda-frontend-kit/",
@@ -37,6 +38,7 @@
     "./tdd/",
     "./triage-issue/",
     "./work-automation-kit/",
+    "./work/",
     "./write-a-skill/",
     "./codex-compat/",
     "./extend-harness/",
@@ -74,9 +76,9 @@
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
-  "x-updatedAt": "2026-04-16",
+  "x-updatedAt": "2026-04-17",
   "x-includes": {
-    "skills": 35,
+    "skills": 37,
     "hooks": 62,
     "hookScripts": 69,
     "commands": 4,
@@ -90,6 +92,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "2.3.0": "2026-04-17 — P0 resilience: defensive `_hook-lib.sh` source in all 43 PostToolUse hooks. If plugin cache corrupts (dangling symlink, missing file, bad install), hooks now warn ONCE per session via marker file and no-op cleanly instead of spamming N errors per Edit (one error per hook × every edit = unusable session). Eval sentinel (evals/test-hooks.sh) blocks regression to plain source pattern. New /go skill: composition for phases 4-6 (verify → self-review → simplify → commit-push-pr → monitor CI → fix → done). Chains self-reviewer, adversarial-reviewer, code-reviewer agents, /simplify, /commit-push-pr, /resolve-pr-feedback. New /work alias for /development-lifecycle. Development-lifecycle phases 4-6 now delegate to /go. Effort levels bumped to xhigh→xhigh→max→xhigh→xhigh→max for Opus 4.7 adaptive reasoning.",
     "2.2.4": "2026-04-17 — 9 new hook events wired: SessionEnd (metrics aggregation moved from Stop — now runs once per session), PreCompact (snapshot state before compaction), PostToolUseFailure (categorized failure remediation), FileChanged (5 matchers: package.json/lockfiles, proto/graphql, biome/tsconfig/vitest configs, src/env.ts, skill-manifest.json auto-regen), WorktreeCreate (logs + spawn count warning for isolated-worktree agents). Eval overhaul: fixed set -e early-abort bug that hid 60 pre-existing failures; reconciled 44 stale tests to match refactored hook ownership (as-cast, react-compiler, biome-ignore, test-perf). 1321/1321 green. Extensions remain TypeScript-only (ts/tsx/mts/cts).",
     "2.2.3": "2026-04-16 — Plugin load fix: removed explicit `hooks: ./hooks/hooks.json` from plugin.json. Standard path is auto-loaded by Claude Code, and the explicit reference caused a duplicate-load error in v2.2.2. No functional change; users on 2.2.2 should reinstall.",
     "2.2.2": "2026-04-16 — Manifest codegen: single-source skill-manifest.json generates .claude/settings.json + hooks/hooks.json via scripts/generate-hook-configs.sh. Lefthook pre-push drift check. New tiers in _hook-lib.sh: hook_info (silent JSONL), hook_nudge (soft warn), hook_block_strict (no escape), hook_emit_diagnostic (LSP-style with range+fix). Portable ms-timing (bash 5+ EPOCHREALTIME, graceful fallback to SECONDS on macOS bash 3.2). metrics-summary-stop schema v2: perf_ms p50/p95 per hook, nudge/info/diagnostic counts. New /frontend-skills-stats command (analytics dashboard). New /extend-harness skill (maintainer guard rail). POSIX-friendly (no date +%s%N, portable timeout detection).",

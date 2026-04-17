@@ -42,6 +42,21 @@ else
   ERRORS="$ERRORS\n  FAIL: $_symlink_count symlinks in .claude/hooks/"
 fi
 
+# ── Defensive _hook-lib.sh source pattern (prevents N×error loop) ─
+# If cache install corrupts _hook-lib.sh (dangling symlink, missing file),
+# every PostToolUse hook fires and spams an error per Edit. Defensive
+# preamble warns once + no-ops for the session. Block regression to
+# plain `source` that would reintroduce the N×error loop.
+_plain_source_count=$(grep -lE '^source "\$\(dirname "\$0"\)/_hook-lib\.sh"$' "$HOOKS_DIR"/*.sh 2>/dev/null | wc -l | tr -d ' ')
+if [ "$_plain_source_count" = "0" ]; then
+  echo "  PASS  all hooks use defensive _hook-lib.sh source (no N×error loop risk)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  $_plain_source_count hooks use plain 'source _hook-lib.sh' — broken cache will spam N×errors"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: $_plain_source_count hooks missing defensive source preamble"
+fi
+
 # ── settings.json has SubagentStart and SubagentStop entries ─────
 run_content_eval "$REPO_ROOT/.claude/settings.json" "SubagentStart" "settings.json has SubagentStart hook"
 run_content_eval "$REPO_ROOT/.claude/settings.json" "SubagentStop" "settings.json has SubagentStop hook"
