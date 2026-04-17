@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
   "description": "React/TypeScript frontend enforcement harness. 61 wired hooks enforce patterns on every edit (42 PostToolUse Edit|Write, 4 PreToolUse, 2 PostToolUse Bash, 11 Stop, 1 SubagentStart, 1 SubagentStop). 36 skills cover the full development lifecycle from TDD through CI-green PR. /go ships phases 4-6, /work aliases /development-lifecycle. 5 agents run automated review rounds. 5 routines automate recurring team workflows. Opus 4.7 tuned.",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -26,11 +26,15 @@
   ],
   "skills": [
     "./brainstorming/",
+    "./commit-push/",
+    "./commit-push-pr/",
     "./design-an-interface/",
     "./development-lifecycle/",
+    "./frontend-skills-stats/",
     "./frontend-starter-kit/",
     "./go/",
     "./grill-me/",
+    "./hook-audit/",
     "./improve-codebase-architecture/",
     "./redpanda-frontend-kit/",
     "./request-refactor-plan/",
@@ -63,12 +67,6 @@
     "./setup-ux-copy/",
     "./setup-zustand/"
   ],
-  "commands": [
-    "./.claude/commands/commit-push.md",
-    "./.claude/commands/commit-push-pr.md",
-    "./.claude/commands/hook-audit.md",
-    "./.claude/commands/frontend-skills-stats.md"
-  ],
   "agents": [
     "./agents/adversarial-reviewer.md",
     "./agents/code-reviewer.md",
@@ -78,10 +76,10 @@
   ],
   "x-updatedAt": "2026-04-17",
   "x-includes": {
-    "skills": 37,
+    "skills": 41,
     "hooks": 62,
     "hookScripts": 69,
-    "commands": 4,
+    "commands": 0,
     "routines": 5,
     "agents": 5,
     "sharedUtilities": 11,
@@ -92,6 +90,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "2.5.0": "2026-04-17 — Consistency fix: converted 4 plugin commands (/commit-push, /commit-push-pr, /hook-audit, /frontend-skills-stats) to skills. Plugin commands show prefixed in slash autocomplete (/frontend-skills:commit-push) while skills show unprefixed (/tdd). Converting all user-facing entrypoints to skills gives uniform unprefixed display. `!`bash`` pre-context now runs as explicit Step 0 inside each skill. No behavior change for users — same slash name, same workflow.",
     "2.4.0": "2026-04-17 — /write-a-skill audit: /go and /work skill descriptions corrected. /go removed broken 'Alias: /ship' (no /ship skill exists) and switched 'Use after' → 'Use when' per write-a-skill trigger rule. /work switched 'Use for' → 'Use when'. No functional change; audit compliance only.",
     "2.3.0": "2026-04-17 — P0 resilience: defensive `_hook-lib.sh` source in all 43 PostToolUse hooks. If plugin cache corrupts (dangling symlink, missing file, bad install), hooks now warn ONCE per session via marker file and no-op cleanly instead of spamming N errors per Edit (one error per hook × every edit = unusable session). Eval sentinel (evals/test-hooks.sh) blocks regression to plain source pattern. New /go skill: composition for phases 4-6 (verify → self-review → simplify → commit-push-pr → monitor CI → fix → done). Chains self-reviewer, adversarial-reviewer, code-reviewer agents, /simplify, /commit-push-pr, /resolve-pr-feedback. New /work alias for /development-lifecycle. Development-lifecycle phases 4-6 now delegate to /go. Effort levels bumped to xhigh→xhigh→max→xhigh→xhigh→max for Opus 4.7 adaptive reasoning.",
     "2.2.4": "2026-04-17 — 9 new hook events wired: SessionEnd (metrics aggregation moved from Stop — now runs once per session), PreCompact (snapshot state before compaction), PostToolUseFailure (categorized failure remediation), FileChanged (5 matchers: package.json/lockfiles, proto/graphql, biome/tsconfig/vitest configs, src/env.ts, skill-manifest.json auto-regen), WorktreeCreate (logs + spawn count warning for isolated-worktree agents). Eval overhaul: fixed set -e early-abort bug that hid 60 pre-existing failures; reconciled 44 stale tests to match refactored hook ownership (as-cast, react-compiler, biome-ignore, test-perf). 1321/1321 green. Extensions remain TypeScript-only (ts/tsx/mts/cts).",

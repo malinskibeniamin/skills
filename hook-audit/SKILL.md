@@ -1,14 +1,20 @@
 ---
-allowed-tools: Bash(ls *), Bash(cat *), Bash(jq *), Bash(wc *), Bash(sort *), Bash(head *), Bash(find *)
-description: Analyze hook effectiveness from collected session metrics
+name: hook-audit
+description: Analyze hook effectiveness from collected session metrics. Use when user asks to audit hooks, invokes `/hook-audit`, or wants to identify silent, over-aggressive, or under-enforced hooks across sessions.
 ---
 
-## Context
+# Hook audit
 
-- Metrics directory: `~/.claude/hook-metrics/`
-- Hook scripts: !`ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l | tr -d ' '` hook scripts installed
-- Metrics files: !`ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l | tr -d ' '` session summaries collected
-- Date range: !`ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {} 2>/dev/null` to !`ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {} 2>/dev/null`
+## Step 0: Gather context
+
+Run these Bash commands before proceeding:
+
+- `ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l` — installed hook scripts
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l` — session summaries collected
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {}` — earliest date
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {}` — latest date
+
+Metrics directory: `~/.claude/hook-metrics/`
 
 ## Your task
 
