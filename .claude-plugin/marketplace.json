@@ -11,7 +11,7 @@
     {
       "name": "frontend-skills",
       "description": "React/TypeScript frontend enforcement harness. 62 wired hooks (69 scripts) enforce patterns on every edit. 34 skills cover TDD through CI-green PR. 5 agents for automated review. 5 routines for recurring workflows. TypeScript-scoped, caveman-compressed. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "2.2.3",
+      "version": "2.2.4",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
@@ -30,6 +30,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "2.2.4": "2026-04-17 — 9 new hook events (SessionEnd, PreCompact, PostToolUseFailure, FileChanged x5, WorktreeCreate). Metrics moved from Stop to SessionEnd. Eval suite 1321/0 after fixing 44 stale tests.",
         "2.2.3": "2026-04-16 — Plugin load fix: removed redundant hooks ref from plugin.json (duplicate-load error).",
         "2.2.2": "2026-04-16 — Single-source manifest codegen. New hook tiers (info/nudge/block-strict/diagnostic). Portable ms-timing. Analytics dashboard /frontend-skills-stats. New /extend-harness maintainer skill. POSIX-friendly.",
         "2.2.1": "2026-04-16 — P0 bugfix: dereferenced symlinks in .claude/hooks/ — plugin packager was creating dangling links. Reinstall required.",
