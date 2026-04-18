@@ -51,7 +51,21 @@ fi
 # Works with both Claude Code (CLAUDE_SESSION_ID env var) and
 # Codex (session_id in stdin JSON, extracted after first parse).
 
-_hook_session_id="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+if [ -n "${CLAUDE_SESSION_ID:-}" ]; then
+  _hook_session_id="$CLAUDE_SESSION_ID"
+elif [ -n "${CODEX_SESSION_ID:-}" ]; then
+  _hook_session_id="$CODEX_SESSION_ID"
+else
+  _hook_wt_fallback=$(git rev-parse --show-toplevel 2>/dev/null || echo "/tmp")
+  if command -v md5 >/dev/null 2>&1; then
+    _hook_wt_hash=$(printf '%s' "$_hook_wt_fallback" | md5 2>/dev/null || echo "nohash")
+  elif command -v md5sum >/dev/null 2>&1; then
+    _hook_wt_hash=$(printf '%s' "$_hook_wt_fallback" | md5sum 2>/dev/null | cut -d' ' -f1 || echo "nohash")
+  else
+    _hook_wt_hash="nohash"
+  fi
+  _hook_session_id="wt-${_hook_wt_hash}-$$"
+fi
 _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
 mkdir -p "$_hook_session_dir" 2>/dev/null || true
 
@@ -135,16 +149,27 @@ _safe_json_escape() {
   printf '"%s"' "$escaped"
 }
 
-# ── Secondary-worktree detection ─────────────────────────────────
-# Returns 0 (true) if $1 lives inside a secondary git worktree — i.e.,
-# the worktree's --git-dir (e.g. .git/worktrees/<name>) differs from the
-# shared --git-common-dir (main .git). Returns 1 otherwise (primary
-# worktree, non-git path, or git unavailable).
-#
-# Why: subagents spawned via `Agent(isolation: "worktree")` inherit the
-# parent's CLAUDE_SESSION_ID, so their PostToolUse hooks write to the
-# parent's session_dir. Without this check, subagent file writes land
-# in the parent's session-touched-files and trip lifecycle-stop hooks.
+# ── Worktree detection helpers ───────────────────────────────────
+# See shared/hook-lib.sh for full commentary.
+#   _hook_in_secondary_worktree         — legacy: primary vs secondary
+#   _hook_current_worktree_root         — cached cwd toplevel
+#   _hook_file_outside_current_worktree — NEW: catches sibling worktrees
+#   _hook_assert_bound_worktree         — NEW: exits 0 on drift
+
+_hook_wt_root_cache=""
+_hook_current_worktree_root() {
+  if [ -z "$_hook_wt_root_cache" ]; then
+    local r
+    r=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+    if [ -n "$r" ]; then
+      r=$(cd "$r" 2>/dev/null && pwd -P 2>/dev/null || echo "$r")
+    fi
+    _hook_wt_root_cache="${r:-NONE}"
+  fi
+  [ "$_hook_wt_root_cache" = "NONE" ] && return 1
+  printf '%s' "$_hook_wt_root_cache"
+}
+
 _hook_in_secondary_worktree() {
   local f="$1" dir gd gc
   dir=$(dirname "$f" 2>/dev/null) || return 1
@@ -156,9 +181,34 @@ _hook_in_secondary_worktree() {
   [ -n "$gd" ] && [ -n "$gc" ] && [ "$gd" != "$gc" ]
 }
 
+_hook_file_outside_current_worktree() {
+  local f="$1"
+  local current_root file_root dir
+  current_root=$(_hook_current_worktree_root) || return 1
+  dir=$(dirname "$f" 2>/dev/null) || return 1
+  [ -d "$dir" ] || return 1
+  file_root=$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null) || return 1
+  file_root=$(cd "$file_root" 2>/dev/null && pwd -P 2>/dev/null || echo "")
+  [ -n "$file_root" ] && [ "$file_root" != "$current_root" ]
+}
+
+_hook_assert_bound_worktree() {
+  local bound="$_hook_session_dir/bound-worktree"
+  [ -f "$bound" ] || return 0
+  local expected current
+  expected=$(cat "$bound" 2>/dev/null)
+  current=$(_hook_current_worktree_root) || return 0
+  [ -z "$expected" ] && return 0
+  if [ "$current" != "$expected" ]; then
+    _hook_debug "assert_bound_worktree: drift (cwd=$current expected=$expected) — no-op exit"
+    exit 0
+  fi
+}
+
 # ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
 
 hook_parse_edit_write() {
+  _hook_assert_bound_worktree
   _hook_input=$(cat)
   _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
@@ -175,11 +225,11 @@ hook_parse_edit_write() {
 
   _hook_debug "parse: $file_path"
 
-  # Track which files this session touches (for session-scoped Stop hooks).
-  # Skip files in secondary worktrees — they belong to a subagent scope,
-  # not the main session. Otherwise the main Stop hook sees phantom writes.
-  if _hook_in_secondary_worktree "$file_path"; then
-    _hook_debug "skip session-touched-files: secondary worktree ($file_path)"
+  # Track files THIS session touches. Gate: file must live inside the
+  # CURRENT terminal's worktree. Catches (a) subagent secondary worktrees
+  # and (b) sibling worktrees in multi-session flows.
+  if _hook_file_outside_current_worktree "$file_path"; then
+    _hook_debug "skip session-touched-files: outside current worktree ($file_path)"
   else
     echo "$file_path" >> "$_hook_session_dir/session-touched-files" 2>/dev/null || true
   fi
@@ -507,6 +557,7 @@ hook_emit_diagnostic() {
 # ── PreToolUse (Bash): Parse stdin, extract command ──────────────
 
 hook_parse_bash() {
+  _hook_assert_bound_worktree
   _hook_input=$(cat)
   _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 

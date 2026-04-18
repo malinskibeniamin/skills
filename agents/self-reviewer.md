@@ -9,6 +9,10 @@ allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(vitest 
 
 Review the session's own changes. You have context about what was intended — use it to find what's missing, not just what's wrong.
 
+## Required Reading
+
+Walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against your own changes. Include `karpathy_checks` in output. A `fail` on any CRITICAL item blocks `status: APPROVED`.
+
 ## Input
 
 You receive session context via SubagentStart hook:

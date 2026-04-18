@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "3.1.1",
+      "version": "3.2.0",
       "description": "React/TypeScript frontend enforcement harness. 77 wired hooks, 80 scripts, 41 skills, 5 agents, 5 routines. PR feedback completeness + TypeScript strictness enforced at harness level. Caveman-compressed. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
@@ -19,8 +19,8 @@
       "category": "Development",
       "x-updatedAt": "2026-04-17",
       "x-includes": {
-        "skills": 41,
-        "hooks": 77,
+        "skills": 45,
+        "hooks": 78,
         "commands": 0,
         "routines": 5,
         "agents": 5,
@@ -30,6 +30,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "3.2.0": "2026-04-18 — Worktree isolation + branch safety + Codex review + Karpathy checklist + gated adversarial-reviewer + /cso, /canary, /benchmark, /mux + ETHOS.md + browser daemon RFC. Evals 1464/1464.",
         "3.1.1": "2026-04-18 — Opus 4.7 effort tiers downsized one level (xhigh→high, max→xhigh). Final gates keep xhigh.",
         "3.1.0": "2026-04-17 — PR feedback completeness + TypeScript strictness hardening. Session exit blocked while review threads remain unresolved. `any`/escape-hatch patterns + tsconfig strict weakening blocked at Edit. Lifecycle-stop adjacent-test fallback. Self-review cap 2→3 with early-exit. Evals 1387/1387.",
         "2.4.0": "2026-04-17 — /write-a-skill audit fixes: /go removed broken /ship alias; /go and /work switched to 'Use when' trigger.",
