@@ -30,6 +30,20 @@ Kick off Agent(subagent_type=Explore, run_in_background=true) to understand rele
 
 Goal = write better issue. Issue itself should NOT reference file paths or internals.
 
+### 2b. Browser Capture (optional)
+
+If the bug is visible in the running app, capture current state via
+`scripts/skills-browser.sh` (Vercel agent-browser wrapper). Use refs
+not screenshots — cheaper tokens, cookies preserved across runs.
+
+    scripts/skills-browser.sh navigate <url>
+    scripts/skills-browser.sh read          # returns @eN ref tree
+    scripts/skills-browser.sh screenshot --out /tmp/qa.png
+
+Do NOT use for test code — Playwright test files keep using
+`@playwright/test` directly. skills-browser is for AI-visible browser
+state (QA, /go phase 4 smoke, /design-review). [docs/rfc/browser-daemon.md]
+
 ### 3. Single Issue or Breakdown?
 
 **Break down** when: fix spans independent areas, separable concerns, multiple distinct failure modes.
