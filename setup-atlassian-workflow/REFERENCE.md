@@ -29,7 +29,7 @@ acli jira workitem create \
 
 ### Bug Triage (mirrors triage-issue)
 
-After investigating bug:
+After bug investigation:
 
 ```bash
 # Create bug with investigation findings
@@ -94,11 +94,11 @@ acli jira workitem link PROJ-150 --url "https://github.com/org/repo/issues/42"
 | Variable | Purpose | Example |
 |----------|---------|---------|
 | `JIRA_PROJECT` | Default project key for work item creation | `CLOUD` |
-| `ISSUE_TRACKER` | Which tracker: `gh`, `acli`, or `both` | `acli` |
+| `ISSUE_TRACKER` | Tracker: `gh`, `acli`, or `both` | `acli` |
 
 ## Detection
 
-Check `acli` availability:
+Check `acli` available:
 
 ```bash
 if command -v acli &>/dev/null && [ -n "${JIRA_PROJECT:-}" ]; then

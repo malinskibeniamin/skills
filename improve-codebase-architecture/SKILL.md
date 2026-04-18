@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Explore a codebase to find opportunities for architectural improvement, focusing on making the codebase more testable by deepening shallow modules. Use when user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more AI-navigable.
+description: Explore codebase for architectural improvement. Focus testability via deepening shallow modules. Use when user want improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make codebase more AI-navigable.
 ---
 
 # Improve Codebase Architecture
@@ -13,10 +13,10 @@ Surface architectural friction, improve testability via module-deepening refacto
 
 ### 1. Explore
 Use Agent(subagent_type=Explore). Look for:
-- Understanding one concept requires bouncing between many files?
-- Interface nearly as complex as implementation (shallow)?
-- Pure functions extracted for testability, but real bugs in how they're called?
-- Tightly-coupled modules creating integration risk?
+- One concept require bouncing between many files?
+- Interface near as complex as implementation (shallow)?
+- Pure functions extracted for testability, but real bugs in how called?
+- Tightly-coupled modules create integration risk?
 - Untested or hard-to-test areas?
 
 ### 2. Present Candidates
@@ -28,7 +28,7 @@ Numbered list: cluster of related modules, why coupled, dependency category, tes
 Constraints any new interface must satisfy. Rough illustrative code sketch.
 
 ### 5. Design Interfaces
-Spawn 3+ parallel sub-agents, different constraints each. Outputs: signature, usage, what it hides, dependency strategy, trade-offs. Give own recommendation.
+Spawn 3+ parallel sub-agents, different constraints each. Outputs: signature, usage, what hides, dependency strategy, trade-offs. Give own recommendation.
 
 ### 6. User Picks
 

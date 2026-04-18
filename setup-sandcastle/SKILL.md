@@ -5,12 +5,12 @@ description: "Configure Sandcastle for agent delegation -- headless run(), HITL 
 
 # Setup Sandcastle
 
-[Sandcastle](https://github.com/mattpocock/sandcastle) orchestrates agents in sandboxes with branch strategies. Two modes:
+[Sandcastle](https://github.com/mattpocock/sandcastle) orchestrate agents in sandboxes with branch strategies. Two modes:
 
-- **`run()`** -- headless (`--print`), stream-JSON parsed. For CI, batch, overnight.
-- **`interactive()`** -- full TUI passthrough (stdin/stdout/stderr). Human watches + intervenes. For HITL review, pair-review, local dev.
+- **`run()`** -- headless (`--print`), stream-JSON parsed. CI, batch, overnight.
+- **`interactive()`** -- full TUI passthrough (stdin/stdout/stderr). Human watch + intervene. HITL review, pair-review, local dev.
 
-Both modes: hooks fire inside each session. Development lifecycle enforced regardless of launch method.
+Both modes: hooks fire inside each session. Dev lifecycle enforced regardless of launch method.
 
 **Capabilities:** task picking (GitHub issues -> one agent per issue), parallel N agents in isolated sandboxes, HITL review with full TUI, `noSandbox()` for git worktrees only, hooks in each session, branch strategies (head, merge-to-head, branch).
 
@@ -67,6 +67,6 @@ See [REFERENCE.md](REFERENCE.md) for templates: headless batch, HITL review, mix
 bunx tsx .sandcastle/main.ts
 ```
 
-Each agent: reads issue -> development-lifecycle -> hooks enforce patterns -> commits -> review -> merge.
+Each agent: read issue -> development-lifecycle -> hooks enforce patterns -> commit -> review -> merge.
 
-See [REFERENCE.md](REFERENCE.md) for templates and prompt patterns.
+See [REFERENCE.md](REFERENCE.md) for templates + prompt patterns.

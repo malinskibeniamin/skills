@@ -5,7 +5,7 @@ description: Opt-in Atlassian/Jira integration via acli -- create work items, tr
 
 # Setup Atlassian Workflow
 
-Opt-in Jira integration via `acli` (Atlassian CLI). Works alongside `gh`. If `acli` unavailable, all Jira ops skipped silently.
+Opt-in Jira integration via `acli` (Atlassian CLI). Work alongside `gh`. If `acli` missing, all Jira ops skip silent.
 
 Capabilities: create/transition/comment work items, link PRs, search/view for context.
 

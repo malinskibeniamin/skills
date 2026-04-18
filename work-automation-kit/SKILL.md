@@ -1,6 +1,6 @@
 ---
 name: work-automation-kit
-description: Install planning and project management skills -- PRD creation, implementation planning, issue breakdown, bug triage, code review. Use when setting up project planning workflows or creating PRDs.
+description: Install planning/project management skills -- PRD creation, implementation planning, issue breakdown, bug triage, code review. Use when setup project planning workflows or creating PRDs.
 ---
 
 # Work Automation Kit
@@ -32,4 +32,4 @@ bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 ```
 
 ## Optional: Atlassian/Jira
-Run `setup-atlassian-workflow` if team uses Jira.
+Run `setup-atlassian-workflow` if team use Jira.

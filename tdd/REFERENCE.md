@@ -51,7 +51,7 @@ test('user has default role', async ({ user }) => {
 })
 ```
 
-**Auto-fixtures**: `{ auto: true }` for fixtures running every test without explicit reference:
+**Auto-fixtures**: `{ auto: true }` for fixtures run every test, no explicit reference:
 
 ```ts
 const test = base.extend<{ mockApi: void }>({
@@ -63,13 +63,13 @@ const test = base.extend<{ mockApi: void }>({
 })
 ```
 
-Same API as Playwright `test.extend()` — patterns transfer between unit and E2E.
+Same API as Playwright `test.extend()` — patterns transfer unit ↔ E2E.
 
 ## Advanced Assertions
 
 ### Custom Matchers (expect.extend())
 
-Domain-specific assertions improve readability · centralize validation.
+Domain-specific assertions = better readability · central validation.
 
 ```ts
 // vitest.setup.ts
@@ -111,7 +111,7 @@ declare module 'vitest' {
 
 ### Asymmetric Matchers
 
-Custom matchers from `expect.extend()` work asymmetric — mix literal values with pattern matchers:
+Custom matchers from `expect.extend()` work asymmetric — mix literals with pattern matchers:
 
 ```ts
 expect(response).toEqual({
@@ -123,7 +123,7 @@ expect(response).toEqual({
 
 ### Custom Equality Testers
 
-Teach Vitest semantically equivalent objects equal (Money · units · dates):
+Teach Vitest equivalent objects equal (Money · units · dates):
 
 ```ts
 // vitest.setup.ts
@@ -143,7 +143,7 @@ Register in `setupFiles`. Expensive testers slow all deep equality — keep fast
 
 ### Retryable Assertions (expect.poll())
 
-Retries callback until assertion passes. Cleaner than `waitFor` for non-Promise async (polling APIs · DOM side effects · event-driven state):
+Retry callback til assertion pass. Cleaner than `waitFor` for non-Promise async (polling APIs · DOM side effects · event-driven state):
 
 ```ts
 await expect.poll(() => fetchStatus()).toBe('ready')
@@ -159,7 +159,7 @@ await expect.poll(() => document.querySelectorAll('.item').length, {
 
 ### Soft Assertions (expect.soft())
 
-Run all assertions even when one fails. Full picture in one pass:
+Run all assertions even when one fails. Full picture one pass:
 
 ```ts
 test('user profile has all required fields', () => {
@@ -170,22 +170,22 @@ test('user profile has all required fields', () => {
 })
 ```
 
-Still fails test. No short-circuit. Use for complex state validation needing full debug picture.
+Still fail test. No short-circuit. Use for complex state validation need full debug picture.
 
 ## Reactive TDD with Monitor
 
-**Monitor** streams test runner watch mode during implementation. RED→GREEN→REFACTOR becomes continuous feedback.
+**Monitor** streams test runner watch mode during implementation. RED→GREEN→REFACTOR = continuous feedback.
 
 ```
 Monitor: vitest --watch
 ```
 
 1. Start Monitor on watch mode
-2. Write failing test (RED) — Monitor reports failure immediately
-3. Write minimal code — Monitor reports pass (GREEN) on save
-4. Refactor — Monitor confirms green after each change
+2. Write failing test (RED) — Monitor report failure immediate
+3. Write minimal code — Monitor report pass (GREEN) on save
+4. Refactor — Monitor confirm green after each change
 
-**When**: Phase 3 rapid iteration with multiple small changes.
+**When**: Phase 3 rapid iteration with many small changes.
 
 ## Async Leak Detection with Monitor
 
@@ -193,7 +193,7 @@ Monitor: vitest --watch
 Monitor: vitest run --detectAsyncLeaks
 ```
 
-Surfaces open handles as detected, not buffered until exit.
+Surface open handles as detected, not buffered til exit.
 
 ## Coverage Gap Analysis
 
@@ -232,11 +232,11 @@ Coverage = tool for finding gaps, not goal. Accept lower for:
 - Framework glue (route config · provider wrappers)
 - Generated code
 
-Target: **80% lines, 70% branches** for feature code. Focus on behavior-critical paths.
+Target: **80% lines, 70% branches** for feature code. Focus behavior-critical paths.
 
 ## Visual Regression Tests (Route Files)
 
-Add `*.browser.test.tsx` for new route files when project uses `@vitest/browser`:
+Add `*.browser.test.tsx` for new route files when project use `@vitest/browser`:
 
 ```ts
 // routes/oauth-providers/index.browser.test.tsx
@@ -265,7 +265,7 @@ Tune `vitest.config.*` for faster runs. Settings compound.
 
 ### pool: 'threads'
 
-Worker threads = less spawn overhead than forks. Import times drop ~30%.
+Worker threads = less spawn overhead than forks. Import time drop ~30%.
 
 ```ts
 // vitest.config.mts
@@ -280,7 +280,7 @@ Safe everywhere for unit and integration.
 
 ### Multi-Workspace Configuration
 
-Monorepos with different runtimes need separate configs sharing one root:
+Monorepos with different runtimes need separate configs share one root:
 
 ```ts
 // vitest.workspace.ts
@@ -291,11 +291,11 @@ export default [
 ]
 ```
 
-Each workspace gets own pool · environment · isolation. Use for multi-runtime monorepos only.
+Each workspace get own pool · environment · isolation. Use for multi-runtime monorepos only.
 
 ### Concurrent Tests (it.concurrent)
 
-Run independent tests within single file concurrently. Distinct from `pool:'threads'` (across files).
+Run independent tests within single file concurrent. Different from `pool:'threads'` (across files).
 
 ```ts
 describe.concurrent('independent API calls', () => {
@@ -305,7 +305,7 @@ describe.concurrent('independent API calls', () => {
 })
 ```
 
-Safety: tests must not share mutable state · each sets up own fixtures.
+Safety: tests must not share mutable state · each set up own fixtures.
 
 ### What NOT to change
 
@@ -341,10 +341,10 @@ Safety: tests must not share mutable state · each sets up own fixtures.
 
 ### Selector Gotchas
 
-- Always include `{ name }` with `getByRole` when multiple elements share same role
-- Password inputs have no `textbox` role → use `document.querySelector('input[data-slot="input"]')`
+- Always include `{ name }` with `getByRole` when many elements share same role
+- Password inputs no `textbox` role → use `document.querySelector('input[data-slot="input"]')`
 - Number inputs use `spinbutton` role
-- Create helpers for repeated ambiguous queries at `describe` level
+- Make helpers for repeated ambiguous queries at `describe` level
 
 ```ts
 const getTrigger = () => screen.getByRole('button', { name: 'Select option' })
@@ -377,9 +377,9 @@ Portal components (Dialog · AlertDialog · DropdownMenu · Popover · Sheet · 
 
 ### Key Patterns
 
-**`defaultOpen` for content-only tests.** Skip trigger interaction when testing buttons/callbacks inside portal. Faster, avoids animation timing.
+**`defaultOpen` for content-only tests.** Skip trigger interaction when testing buttons/callbacks inside portal. Faster, avoid animation timing.
 
-**`waitFor` for ALL close assertions.** Portal content animates out async:
+**`waitFor` for ALL close assertions.** Portal content animate out async:
 
 ```ts
 await waitFor(() => {
@@ -417,7 +417,7 @@ Common browser API mocks for jsdom. Configure in `vitest.setup.ts`, not per-test
 ### Rules
 
 - No re-mock in test files — global setup applies
-- No test actual browser behavior — mocks are stubs
+- No test actual browser behavior — mocks = stubs
 - ResizeObserver callbacks never fire — test behavior via props/interaction
 - Add new mocks to `vitest.setup.ts` only
 
@@ -453,7 +453,7 @@ vi.mocked(window.matchMedia).mockImplementation((query) => ({
 
 ## Unhappy Path Testing Checklist
 
-Every form · validator · async operation needs unhappy path tests. LLMs default to happy path — counteract.
+Every form · validator · async op need unhappy path tests. LLMs default happy path — counteract.
 
 ### Validation Exhaustiveness
 
@@ -576,7 +576,7 @@ Cover these paths in order:
 1. **Invalid input** — empty · wrong format · too long/short · special chars
 2. **Network failure** — fetch rejects · timeout · 4xx/5xx
 3. **Parse failure** — malformed JSON · corrupt proto · missing required fields
-4. **State transition errors** — switching types clears old data · concurrent edits
+4. **State transition errors** — switch types clear old data · concurrent edits
 5. **Partial failure** — batch where some items fail (Promise.allSettled)
 
 ## Common Agent Excuses

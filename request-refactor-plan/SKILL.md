@@ -8,22 +8,22 @@ description: Create a detailed refactor plan with tiny commits via user intervie
 ## Process
 
 ### 1. Understand
-Ask problem description + solution ideas. What wrong? What "better" look like?
+Ask problem + solution ideas. What wrong? What "better" mean?
 
 ### 2. Verify
-Agent(subagent_type=Explore) verify claims about codebase. Check actual state.
+Agent(subagent_type=Explore) verify claims vs codebase. Check real state.
 
 ### 3. Alternatives
 Ask other approaches + trade-offs.
 
 ### 4. Drill Into Details
-Exact scope, interface contracts (before/after), data migrations, backwards compat, incremental path.
+Scope, interface contracts (before/after), data migrations, backcompat, incremental path.
 
 ### 5. Test Coverage
-Assess existing coverage. Insufficient -> ask testing plan before proceeding.
+Assess coverage. Insufficient -> ask test plan first.
 
 ### 6. Tiny Commits
-Each step: independently deployable, tests green, changes one thing.
+Each step: deployable alone, tests green, one change.
 
 ### 7. GitHub Issue
 

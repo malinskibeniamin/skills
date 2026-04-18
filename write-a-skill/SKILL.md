@@ -17,10 +17,10 @@ Ask: domain/task? Primary use cases? Scripts needed? Reference materials?
     └── scripts/           # Utility scripts (if needed)
 
 ## 3. Description
-Max 1024 chars, third person. First sentence: what it does. Second: "Use when [triggers]."
+Max 1024 chars, third person. First sentence: what does. Second: "Use when [triggers]."
 
 ## 4. Add Scripts When
-- Operation is deterministic (same code every time)
+- Operation deterministic (same code every time)
 - Same code generated repeatedly without script
 - Errors need explicit handling
 

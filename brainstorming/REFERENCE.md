@@ -3,9 +3,9 @@
 ## Design Mode Checklist
 
 1. [ ] Explored project context (relevant files, docs, recent commits)
-2. [ ] Asked clarifying questions one at a time (not a list)
+2. [ ] Asked clarifying questions one at time (not list)
 3. [ ] Proposed 2-3 approaches with trade-offs
-4. [ ] User approved a design direction
+4. [ ] User approved design direction
 5. [ ] Wrote spec document (if needed)
 6. [ ] Self-reviewed spec: no TBD, no contradictions, clear scope
 
@@ -14,18 +14,18 @@
 1. [ ] Questioned every assumption ("Why not X instead?")
 2. [ ] Presented concrete alternatives
 3. [ ] Pushed back on weak reasoning
-4. [ ] Found edge cases the designer missed
-5. [ ] Reached consensus with all concerns addressed
+4. [ ] Found edge cases designer missed
+5. [ ] Reached consensus, all concerns addressed
 
 ## Visual Mockups with agent-browser
 
 **Install** (one-time): `bun install -g agent-browser && agent-browser install`
 
-No auth needed. Renders local HTML headlessly. Works in CI.
+No auth. Render local HTML headless. Work in CI.
 
-For authenticated pages, use `claude-in-chrome` MCP.
+Auth pages → use `claude-in-chrome` MCP.
 
-For UI designs, generate HTML mockup:
+UI designs → generate HTML mockup:
 
 ```bash
 # 1. Write a self-contained HTML mockup
@@ -51,13 +51,13 @@ agent-browser screenshot --annotate /tmp/mockup-v2.png
 
 **When to use mockups:**
 - New page layouts or component arrangements
-- Comparing Option A vs Option B visually
+- Compare Option A vs Option B visually
 - Responsive design decisions
 - Before/after refactor visualization
 
 **When NOT to use mockups:**
 - API design, data modeling, architecture decisions (use text/diagrams)
-- Simple changes where a description suffices
+- Simple changes where description enough
 
 ## Spec Document Template
 

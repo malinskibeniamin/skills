@@ -6,7 +6,7 @@
 
 ## Escape Hatch for useEffect
 
-When `useEffect` genuinely needed (WebSocket cleanup, third-party lib), add comment before:
+When `useEffect` truly needed (WebSocket cleanup, third-party lib), add comment before:
 
 ```tsx
 // allow: useEffect — WebSocket subscription cleanup required
@@ -16,7 +16,7 @@ useEffect(() => {
 }, [url])
 ```
 
-Hook checks for `// allow: useEffect` anywhere in file · reason required · legacy `// allow-useEffect:` also works.
+Hook check `// allow: useEffect` anywhere in file · reason required · legacy `// allow-useEffect:` also work.
 
 ## Raw HTML → Component Library Mapping
 
@@ -65,10 +65,10 @@ useEffect(function connectToWebSocket() {
 
 ### Why
 
-- Named functions show in stack traces and React DevTools
-- Forces articulating what effect does → reveals split opportunities
-- Can't name without "and" → effect does too much → split
-- Name starts with "sync"/"update" + state → probably derived state → compute inline
+- Named functions show in stack traces + React DevTools
+- Force articulate what effect do → reveal split chance
+- Can't name without "and" → effect do too much → split
+- Name start with "sync"/"update" + state → likely derived state → compute inline
 
 ### Naming conventions
 
@@ -76,7 +76,7 @@ useEffect(function connectToWebSocket() {
 |------|---------|
 | `subscribe`/`listen` | Event-based effects |
 | `connect`/`disconnect` | WebSocket, SSE, external services |
-| `synchronize`/`apply` | Syncing state with external systems |
+| `synchronize`/`apply` | Sync state with external systems |
 | `initialize` | One-time setup |
 | `poll` | Interval-based fetching |
 
@@ -105,7 +105,7 @@ const form = useForm({
 })
 ```
 
-Runs alongside field-level resolvers (zod, protovalidate) · surfaces errors through `formState.errors`.
+Run alongside field-level resolvers (zod, protovalidate) · surface errors via `formState.errors`.
 
 ## Resetting State on Prop Change — Use `key`
 
@@ -120,7 +120,7 @@ useEffect(() => {
 <UserProfile key={userId} />
 ```
 
-`key` works on any component · key change → React destroys old instance, creates new with fresh state.
+`key` work on any component · key change → React destroy old instance, create new with fresh state.
 
 ## Subscriptions — Prefer `useSyncExternalStore`
 
@@ -162,7 +162,7 @@ const isOnline = useSyncExternalStore(
 | External stores | Redux, MobX, vanilla stores without React bindings |
 | DOM state | scroll position, element dimensions (`ResizeObserver`) |
 
-Skip for: React state, zustand (uses internally), TanStack Query.
+Skip for: React state, zustand (use internally), TanStack Query.
 
 ## Functional Programming
 
@@ -245,12 +245,12 @@ export interface InputProps extends React.ComponentProps<'input'> {
 
 | Excuse | Counter |
 |---|---|
-| "`as any` is fine just here" | Type erasure spreads. Fix type. |
+| "`as any` is fine just here" | Type erasure spread. Fix type. |
 | "Temporary @ts-expect-error" | Temporary → permanent. Fix now. |
-| "`style={{}}` is simpler" | Tailwind composable + cacheable. Inline styles aren't. |
+| "`style={{}}` is simpler" | Tailwind composable + cacheable. Inline style no. |
 | "Raw `<button>` is fine" | `<Button>` — consistent styling, variants, a11y baked in. |
-| "Add accessibility later" | Later never comes. Add now. |
+| "Add accessibility later" | Later never come. Add now. |
 | "`eval()` needed for dynamic code" | `JSON.parse()` for data. `new Function` also banned. |
 | "useState + useEffect fine here" | Computed from props/state → `useMemo`. No sync state. |
-| "Mutation is faster" | Immutable prevents bugs. Spread/filter/map. |
+| "Mutation is faster" | Immutable prevent bugs. Spread/filter/map. |
 | "Don't need useReducer yet" | 3+ interrelated useState = useReducer. Don't wait for bugs. |

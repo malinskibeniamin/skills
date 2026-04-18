@@ -119,10 +119,10 @@ Ultracite strict baseline. Overrides:
 
 | Rule | Group | Ultracite default | Our override | Why |
 |------|-------|-------------------|-------------|-----|
-| `noConsole` | suspicious | off | error | Ban console.log in prod |
-| `noReactForwardRef` | suspicious | on | off | forwardRef still needed in React 18 |
+| `noConsole` | suspicious | off | error | Ban console.log prod |
+| `noReactForwardRef` | suspicious | on | off | forwardRef still needed React 18 |
 | `noExcessiveCognitiveComplexity` | complexity | 20 | 15 | Stricter complexity cap |
-| `noExplicitAny` in tests | suspicious | off | error | No `any` even in tests |
+| `noExplicitAny` in tests | suspicious | off | error | No `any` even tests |
 | `noDeprecatedImports` | project | off | error | Needs Biome Scanner |
 | `useFilenamingConvention` | style | off | kebab-case strict | `my-component.tsx` not `MyComponent.tsx` |
 | `noRestrictedImports` | style | empty | configured | Ban moment, lodash, classnames, mobx, yup, `@redpanda-data/ui`, lucide-react |
@@ -132,8 +132,8 @@ Ultracite strict baseline. Overrides:
 | `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` |
 | `organizeImports` | assist | — | on | Auto-sort imports |
 
-`noClassComponent` removed in Biome 2.x — React Compiler skill enforces functional patterns.
+`noClassComponent` removed Biome 2.x — React Compiler skill enforce functional patterns.
 
 ## Import Deletion Loop Prevention
 
-PostToolUse hook skips `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without this, Claude adds import → Biome deletes (unused, JSX not written yet) → Claude re-adds → infinite loop. Caught at Stop hook when done editing.
+PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without this: Claude add import → Biome delete (unused, JSX not written yet) → Claude re-add → infinite loop. Caught at Stop hook when done editing.

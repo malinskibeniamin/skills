@@ -1,8 +1,8 @@
 # Agent Skills
 
-**Tell Claude what to build. Get a PR that's ready to merge.**
+**Tell Claude what build. Get PR ready merge.**
 
-Hooks enforce patterns in real-time, skills guide the workflow, and the orchestration layer ensures nothing ships without tests, accessibility, type safety, and code review — zero babysitting required.
+Hooks enforce patterns real-time, skills guide workflow, orchestration layer ensure nothing ships without tests, accessibility, type safety, code review — zero babysit.
 
 <p align="center">
   <img src="docs/screenshots/plugin-card.png" alt="Frontend Skills plugin card — React/TypeScript skills, hooks, and agents for Claude Code and Codex" width="720">
@@ -10,7 +10,7 @@ Hooks enforce patterns in real-time, skills guide the workflow, and the orchestr
 
 ## Install
 
-Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start one with `claude` in your terminal):
+Run inside [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start with `claude` in terminal):
 
 ```bash
 /plugin marketplace add malinskibeniamin/skills
@@ -22,15 +22,15 @@ Run these inside a [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 /reload-plugins
 ```
 
-Three commands. All skills, hooks, and agents activate immediately. Done.
+Three commands. Skills, hooks, agents activate immediately. Done.
 
-**Update** (pull the latest version):
+**Update** (pull latest):
 
 ```bash
 /plugin install frontend-skills --force
 ```
 
-Then restart your Claude Code session so hooks reload from the new cache.
+Restart Claude Code session so hooks reload from new cache.
 
 **Verify:**
 
@@ -41,9 +41,9 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 <details>
 <summary>Codex (OpenAI) — install as Codex plugin</summary>
 
-This repo ships a Codex-native plugin manifest (`.codex-plugin/plugin.json`). Codex plugins require **vendoring** — the plugin must exist as a local directory in your repo.
+Repo ships Codex-native plugin manifest (`.codex-plugin/plugin.json`). Codex plugins require **vendoring** — plugin must exist as local directory in repo.
 
-**1. Vendor into your repo** (subtree recommended over submodules):
+**1. Vendor into repo** (subtree preferred over submodules):
 ```bash
 git subtree add --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash
 ```
@@ -62,25 +62,25 @@ git subtree add --prefix=plugins/frontend-skills https://github.com/malinskibeni
 }
 ```
 
-Use `INSTALLED_BY_DEFAULT` for zero-click installs (everyone on the repo gets it). Use `AVAILABLE` if you want opt-in.
+Use `INSTALLED_BY_DEFAULT` for zero-click install (everyone on repo get it). Use `AVAILABLE` for opt-in.
 
-**3. Enable hooks** (separate from plugin — hooks are an experimental runtime feature, not a plugin payload):
+**3. Enable hooks** (separate from plugin — hooks experimental runtime feature, not plugin payload):
 ```toml
 # .codex/config.toml
 [features]
 codex_hooks = true
 ```
 
-Wire `.codex/hooks.json` to point at the vendored plugin scripts (`plugins/frontend-skills/.claude/hooks/...`). Run the `codex-compat` skill to generate the hooks config and batch checker.
+Wire `.codex/hooks.json` at vendored plugin scripts (`plugins/frontend-skills/.claude/hooks/...`). Run `codex-compat` skill to generate hooks config + batch checker.
 
-**To update:** `git subtree pull --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash`
+**Update:** `git subtree pull --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash`
 
 </details>
 
 <details>
 <summary>Alternative: install individual skills via skills.sh (granular control)</summary>
 
-Use this if you only want specific skills instead of the full plugin.
+Use if want specific skills instead of full plugin.
 
 ```bash
 # Core workflow + all setup skills
@@ -145,7 +145,7 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 
 ### Development Lifecycle
 
-The 6-phase workflow that drives every task, from feature to fix. Phases can be skipped depending on task type — bug fixes jump straight to TDD, test requests go directly to Phase 3.
+6-phase workflow drive every task, feature to fix. Phases skippable by task type — bug fix jump straight to TDD, test request go direct Phase 3.
 
 ```mermaid
 graph TD
@@ -178,7 +178,7 @@ graph TD
 
 | Layer | What | How | Reliability |
 |---|---|---|---|
-| **Skills** | What to do | development-lifecycle (6 phases) | Loaded on demand |
+| **Skills** | What do | development-lifecycle (6 phases) | Loaded on demand |
 | **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
 | **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
 | **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
@@ -186,121 +186,121 @@ graph TD
 
 ## Why This Exists
 
-| Problem | Without this repo | With this repo |
+| Problem | Without repo | With repo |
 |---|---|---|
-| Claude writes `as any` | Ships to PR → human catches → feedback loop | Hook blocks immediately → 50 tokens → fixed |
-| Claude skips tests | Ships → human requests → another round | Stop gate blocks → tests added automatically |
-| Claude uses wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
-| You forget to ask for accessibility | No a11y until manual audit | Every component checked automatically |
-| You have to babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
+| Claude write `as any` | Ships to PR → human catches → feedback loop | Hook blocks immediately → 50 tokens → fixed |
+| Claude skip tests | Ships → human requests → another round | Stop gate blocks → tests added automatically |
+| Claude use wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
+| Forget ask accessibility | No a11y until manual audit | Every component checked automatically |
+| Must babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
 
-**How it works**: Hooks fire automatically with 100% reliability and zero LLM tokens. Skills add workflow guidance when needed. The combination eliminates 80-90% of human review cycles.
+**How works**: Hooks fire automatically, 100% reliable, zero LLM tokens. Skills add workflow guidance when need. Combo eliminate 80-90% human review cycles.
 
-**vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers provides excellent workflow skills (TDD, debugging, planning). We incorporate their best patterns AND add what they don't have: **mechanical enforcement via hooks**. Superpowers teaches Claude what to do. We teach AND enforce — if Claude forgets, the hook catches it.
+**vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers give great workflow skills (TDD, debug, plan). We take their best patterns AND add what they lack: **mechanical enforcement via hooks**. Superpowers teach Claude what do. We teach AND enforce — if Claude forget, hook catch.
 
 ## Skills Catalog
 
-You only need to remember **one skill**: `/development-lifecycle` (or its alias `/work`). It covers the full flow. Everything else is optional — use when you need a specific capability.
+Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers full flow. Everything else optional — use when need specific capability.
 
 ### Workflow Skills
 
-| Skill | When to use |
+| Skill | When use |
 |---|---|
-| **`/development-lifecycle`** | Building features, fixing bugs, any development work. Guides through understand → plan → **grill** → TDD → `/go` (verify → ship). |
-| **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter to type. |
-| **`/go`** | Ship what you built. Phases 4–6 only: verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → `/resolve-pr-feedback`. Use when implementation + tests are done. |
-| **`/brainstorming`** | Not sure what approach to take yet. Explores 2-3 design options with trade-offs. |
-| **`/tdd`** | Writing tests or want strict red-green-refactor enforcement. |
-| **`/domain-model`** | DDD-light grilling: challenges plans against domain model, sharpens terminology, updates CONTEXT.md + ADRs inline. Auto-invoked as Phase 2b; also usable standalone. |
-| **`/grill-me`** | Lightweight stress-test of decisions. Standalone alternative to `/domain-model` when you don't need DDD docs. |
-| **`/github-triage`** | Triage GitHub issues via label-based state machine. Grilling sessions, agent briefs, out-of-scope knowledge base. |
-| **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explores codebase in background and auto-files GitHub issues. |
-| **`/zoom-out`** | Go up a layer of abstraction. Maps relevant modules and callers when you're unfamiliar with a code area. |
-| **`/design-an-interface`** | Designing an API or module. Spawns 3+ agents to generate radically different designs. |
-| **`/triage-issue`** | Investigating a bug. Explores codebase, finds root cause, files a GitHub issue with TDD fix plan. |
-| **`/request-refactor-plan`** | Planning a refactor. Interviews you, breaks it into tiny safe commits, files RFC issue. |
-| **`/resolve-pr-feedback`** | Addressing PR reviews. Fetches unresolved threads, triages, fixes, replies, resolves. Used by Phase 5b. |
-| **`/improve-codebase-architecture`** | Finding architectural improvements. Identifies shallow modules and proposes deep-module refactors. |
-| **`/write-a-skill`** | Creating a new agent skill with proper structure and progressive disclosure. |
+| **`/development-lifecycle`** | Build features, fix bugs, any dev work. Guide understand → plan → **grill** → TDD → `/go` (verify → ship). |
+| **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter type. |
+| **`/go`** | Ship what built. Phases 4–6 only: verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → `/resolve-pr-feedback`. Use when implementation + tests done. |
+| **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
+| **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
+| **`/domain-model`** | DDD-light grill: challenge plans against domain model, sharpen terminology, update CONTEXT.md + ADRs inline. Auto-invoked as Phase 2b; also standalone. |
+| **`/grill-me`** | Light stress-test of decisions. Standalone alt to `/domain-model` when no need DDD docs. |
+| **`/github-triage`** | Triage GitHub issues via label-based state machine. Grill sessions, agent briefs, out-of-scope KB. |
+| **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explore codebase in background, auto-file GitHub issues. |
+| **`/zoom-out`** | Go up layer of abstraction. Map relevant modules + callers when unfamiliar with code area. |
+| **`/design-an-interface`** | Design API or module. Spawn 3+ agents generate radically different designs. |
+| **`/triage-issue`** | Investigate bug. Explore codebase, find root cause, file GitHub issue with TDD fix plan. |
+| **`/request-refactor-plan`** | Plan refactor. Interview you, break into tiny safe commits, file RFC issue. |
+| **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
+| **`/improve-codebase-architecture`** | Find architectural improvements. Identify shallow modules, propose deep-module refactors. |
+| **`/write-a-skill`** | Create new agent skill with proper structure + progressive disclosure. |
 
 <details>
 <summary>Prompt examples for each workflow skill</summary>
 
-**`/development-lifecycle`** — the default for all dev work:
+**`/development-lifecycle`** — default for all dev work:
 ```
 /development-lifecycle — I need to add a user settings page with theme, language,
 and notification preferences. Read src/routes/ to understand the routing structure first.
 ```
 
-**`/brainstorming`** — exploring options before committing:
+**`/brainstorming`** — explore options before commit:
 ```
 /brainstorming design — I need to add real-time collaboration to our editor.
 Compare WebSocket, SSE, and CRDT approaches. Focus on latency and offline support.
 ```
 
-**`/tdd`** — strict test-first development:
+**`/tdd`** — strict test-first:
 ```
 /tdd — add input validation to the signup form. Email format, password strength,
 and matching confirm password. Start with the failing tests.
 ```
 
-**`/domain-model`** — DDD-light grilling with inline doc updates:
+**`/domain-model`** — DDD-light grill with inline doc updates:
 ```
 /domain-model — stress-test the data fetching strategy for the new dashboard feature.
 We're planning to use TanStack Query with a 5-minute stale time.
 ```
 
-**`/github-triage`** — triaging incoming issues:
+**`/github-triage`** — triage incoming issues:
 ```
 /github-triage — show me anything that needs my attention
 ```
 
-**`/qa`** — interactive bug reporting session:
+**`/qa`** — interactive bug report session:
 ```
 /qa — I've been testing the settings page and found a few issues. Let me walk you through them.
 ```
 
-**`/zoom-out`** — understanding unfamiliar code:
+**`/zoom-out`** — understand unfamiliar code:
 ```
 /zoom-out on the auth middleware. I need to understand how it connects to the rest of the system.
 ```
 
-**`/grill-me`** — lightweight stress-testing (no DDD docs):
+**`/grill-me`** — light stress-test (no DDD docs):
 ```
 /grill-me on the data fetching strategy for the new dashboard feature.
 ```
 
-**`/design-an-interface`** — comparing API shapes:
+**`/design-an-interface`** — compare API shapes:
 ```
 /design-an-interface for a notification system module.
 Must support email, Slack, and in-app channels with retry and rate limiting.
 ```
 
-**`/triage-issue`** — investigating a bug:
+**`/triage-issue`** — investigate bug:
 ```
 /triage-issue — users report the sidebar flickers on navigation.
 It started after the last release. Check rendering and route transitions.
 ```
 
-**`/resolve-pr-feedback`** — addressing review comments:
+**`/resolve-pr-feedback`** — address review comments:
 ```
 /resolve-pr-feedback 123
 ```
-or just `/resolve-pr-feedback` to auto-detect the PR from the current branch.
+or just `/resolve-pr-feedback` to auto-detect PR from current branch.
 
-**`/request-refactor-plan`** — planning a safe refactor:
+**`/request-refactor-plan`** — plan safe refactor:
 ```
 /request-refactor-plan — extract the auth logic from the monolithic UserService
 into a standalone AuthService. Must be backwards-compatible during migration.
 ```
 
-**`/improve-codebase-architecture`** — finding opportunities:
+**`/improve-codebase-architecture`** — find opportunities:
 ```
 /improve-codebase-architecture — focus on module boundaries and testability
 in src/features/. Look for tightly coupled modules that should be split.
 ```
 
-**`/write-a-skill`** — creating a new skill:
+**`/write-a-skill`** — create new skill:
 ```
 /write-a-skill for enforcing our internal design system tokens.
 It should check that components use --color-* CSS variables instead of raw hex values.
@@ -310,35 +310,35 @@ It should check that components use --color-* CSS variables instead of raw hex v
 
 ### Kit Skills (bundles)
 
-| Skill | What it bundles |
+| Skill | What bundles |
 |---|---|
-| **`/frontend-starter-kit`** | All setup skills + workflow skills. Full bootstrap for a new project. |
+| **`/frontend-starter-kit`** | All setup skills + workflow skills. Full bootstrap new project. |
 | **`/work-automation-kit`** | Planning skills — PRD creation, issue breakdown, project management. |
 | **`/redpanda-frontend-kit`** | frontend-starter-kit + Redpanda-specific registry workflow. |
-| **`/codex-compat`** | Generates `.codex/hooks.json` and `AGENTS.md` for OpenAI Codex compatibility. |
+| **`/codex-compat`** | Generate `.codex/hooks.json` + `AGENTS.md` for OpenAI Codex compatibility. |
 
 ### Setup Skills (automatic via hooks — no invocation needed)
 
-These are installed by `/frontend-starter-kit` and run automatically. You never invoke them directly.
+Installed by `/frontend-starter-kit`, run automatic. Never invoke directly.
 
-| Skill | What it enforces |
+| Skill | What enforces |
 |---|---|
-| `setup-toolchain` | Blocks npm/npx, enforces bun + tsgo |
+| `setup-toolchain` | Blocks npm/npx, enforce bun + tsgo |
 | `setup-biome` | Biome + Ultracite linting, auto-fix on Stop |
 | `setup-quality-gate` | Type check + lint + related tests gate, bundle guard |
-| `setup-react-rules` | Bans `as any`, raw HTML, XSS vectors, barrel imports |
-| `setup-react-compiler` | Flags manual memoization, enforces compiler-friendly patterns |
+| `setup-react-rules` | Ban `as any`, raw HTML, XSS vectors, barrel imports |
+| `setup-react-compiler` | Flag manual memoization, enforce compiler-friendly patterns |
 | `setup-zustand` | Double-parens create, useShallow selectors, persist middleware |
 | `setup-accessibility` | ARIA labels, keyboard handlers, axe-core testing |
-| `setup-tanstack-router` | Route tree generation, bans react-router-dom/window.location |
-| `setup-connect-query` | ConnectRPC + Protobuf v2 patterns, bans raw useQuery |
-| `setup-env-validation` | Type-safe env vars via t3-env + zod, bans raw process.env |
-| `setup-conventional-commits` | Validates commit format `type(scope): description` |
+| `setup-tanstack-router` | Route tree generation, ban react-router-dom/window.location |
+| `setup-connect-query` | ConnectRPC + Protobuf v2 patterns, ban raw useQuery |
+| `setup-env-validation` | Type-safe env vars via t3-env + zod, ban raw process.env |
+| `setup-conventional-commits` | Validate commit format `type(scope): description` |
 | `setup-react-doctor` | Health scoring (0-100), fails on score regression |
 | `setup-e2e-testing` | Playwright + Testcontainers + axe-core setup |
 | `setup-ci-pipeline` | GitHub Actions quality gate, coverage gates, bundle budgets |
 | `setup-agent-config` | Token-efficient env vars, test flag optimization, output truncation |
-| `setup-registry-workflow` | Reminds to rebuild registry.json when UI components change |
+| `setup-registry-workflow` | Remind rebuild registry.json when UI components change |
 | `setup-sandcastle` | AFK agent delegation — parallel agents in Docker sandboxes |
 | `setup-routines` | Cloud-hosted automation — PR review, health checks, triage, docs drift |
 
@@ -346,59 +346,59 @@ These are installed by `/frontend-starter-kit` and run automatically. You never 
 
 | Agent | Role |
 |---|---|
-| **code-reviewer** | Reviews PRs for correctness, patterns, and test coverage |
-| **verifier** | Read-only agent that independently verifies implementation via tests, types, lint, and browser inspection |
+| **code-reviewer** | Review PRs for correctness, patterns, test coverage |
+| **verifier** | Read-only agent independently verify implementation via tests, types, lint, browser inspection |
 
 ## Quick Start
 
-New to AI-assisted development? Start here.
+New to AI-assisted dev? Start here.
 
 **Day 1 (30 min):**
 1. Install (see [Install](#install) above)
-2. Run `bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"` to confirm everything is wired
-3. Pick a real ticket from your backlog — not a toy problem
+2. Run `bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"` confirm all wired
+3. Pick real ticket from backlog — not toy problem
 
-**Your first prompt:**
+**First prompt:**
 ```
 Read [relevant files]. I want to [goal from your ticket].
 Before writing any code, produce a plan with what you'll do, files you'll change,
 edge cases, and how you'll verify. Wait for my approval before starting.
 ```
 
-**What happens automatically:** Hooks enforce patterns on every edit. Intent detection injects workflow guidance. Stop hooks run type checking, linting, and related tests before Claude finishes. You don't need to ask for any of this.
+**What happens automatic:** Hooks enforce patterns every edit. Intent detection inject workflow guidance. Stop hooks run type checking, linting, related tests before Claude finish. No need ask.
 
-**Day 2+:** Work real tickets. Let the hooks catch mistakes. Focus on **clarifying the problem** and **reviewing the output** — not writing code yourself. Post wins and failures to your team channel.
+**Day 2+:** Work real tickets. Let hooks catch mistakes. Focus on **clarifying problem** + **reviewing output** — not writing code yourself. Post wins + failures to team channel.
 
 **Tips that matter:**
-- Plan before you execute (`/plan`). Engineers who skip this spend the day untangling misdirected work
+- Plan before execute (`/plan`). Engineers who skip spend day untangling misdirected work
 - Use `/clear` between unrelated tasks. Long sessions degrade output quality
-- If Claude starts deleting tests to make CI green — stop immediately. That's a red flag
+- If Claude start deleting tests to make CI green — stop immediately. Red flag
 - Use `HOOK_VERBOSITY=terse` for long sessions to reduce token overhead
-- Run `verify-install.sh --remote` weekly to check for updates (see Verify section above for path)
+- Run `verify-install.sh --remote` weekly to check updates (see Verify section above for path)
 
 ## How It Works
 
-Three layers of automation run without any manual invocation:
+Three layers automation run without manual invocation:
 
-**Layer 1 — Intent Detection** (every prompt, ~30ms): Detects what you're doing from your prompt keywords and injects workflow directives. "Write a test" → TDD workflow. "Fix a bug" → triage pattern. "Create component" → accessibility + design system checklist. "Create PR" → CI verify + review.
+**Layer 1 — Intent Detection** (every prompt, ~30ms): Detect what doing from prompt keywords, inject workflow directives. "Write test" → TDD workflow. "Fix bug" → triage pattern. "Create component" → accessibility + design system checklist. "Create PR" → CI verify + review.
 
-**Layer 2 — Pattern Enforcement** (every Edit/Write, ~293ms): PostToolUse hooks catch violations in real-time. Claude sees the error, fixes it, hook re-checks — cycle repeats until clean. Plus file-aware guidance: writing a test file → async leak tips, writing a component → accessibility checklist.
+**Layer 2 — Pattern Enforcement** (every Edit/Write, ~293ms): PostToolUse hooks catch violations real-time. Claude see error, fix, hook re-check — cycle repeat until clean. Plus file-aware guidance: write test file → async leak tips, write component → accessibility checklist.
 
-**Layer 3 — Quality Gate** (when Claude finishes, <10s): Stop hooks verify the work is production-ready. Type check, lint autofix, health score, PLUS the orchestration gate that blocks on missing tests, async leaks, and security issues. Claude doesn't stop until the PR is ready to merge.
+**Layer 3 — Quality Gate** (when Claude finish, <10s): Stop hooks verify work production-ready. Type check, lint autofix, health score, PLUS orchestration gate blocks on missing tests, async leaks, security issues. Claude no stop until PR ready merge.
 
-**Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude works on matching files. Write a test → TDD patterns load. Edit a route → TanStack Router patterns load. No `/skill-name` invocation needed.
+**Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude work on matching files. Write test → TDD patterns load. Edit route → TanStack Router patterns load. No `/skill-name` invocation needed.
 
-You never see hook output directly. Claude just produces better code, with tests, accessible, secure, and type-safe — without you asking for each thing individually.
+Never see hook output directly. Claude just produce better code, with tests, accessible, secure, type-safe — without asking each thing individually.
 
 ### Configuration
 
-| Env var | Default | What it does |
+| Env var | Default | What does |
 |---------|---------|--------------|
-| `PROMPT_CONTEXT_LEVEL` | `standard` | How much state to inject per prompt (`minimal`, `standard`, `full`) |
-| `ORCHESTRATION_STRICT` | `1` | Set to `0` during prototyping to disable "must have tests" gate |
-| `REACT_COMPILER_MODE` | `infer` | Set to `annotation` for brownfield codebases |
-| `HOOK_VERBOSITY` | `normal` | `terse` = blocks only (suppresses warns), `quiet` = all output suppressed |
-| `HOOKS_FAIL_CLOSED` | `0` | Set to `1` to block on hook script errors (catches misconfiguration) |
+| `PROMPT_CONTEXT_LEVEL` | `standard` | How much state inject per prompt (`minimal`, `standard`, `full`) |
+| `ORCHESTRATION_STRICT` | `1` | Set `0` during prototyping to disable "must have tests" gate |
+| `REACT_COMPILER_MODE` | `infer` | Set `annotation` for brownfield codebases |
+| `HOOK_VERBOSITY` | `normal` | `terse` = blocks only (suppress warns), `quiet` = all output suppressed |
+| `HOOKS_FAIL_CLOSED` | `0` | Set `1` to block on hook script errors (catch misconfiguration) |
 
 ## Why Hooks > Skills > Manual
 
@@ -423,9 +423,9 @@ You never see hook output directly. Claude just produces better code, with tests
 
 ## Greenfield vs Brownfield
 
-**New project:** Use `infer` mode (default). All hooks enforce maximum strictness.
+**New project:** Use `infer` mode (default). All hooks enforce max strictness.
 
-**Existing codebase:** Set `REACT_COMPILER_MODE=annotation` in your session env. This lets you migrate file-by-file — add `"use memo"` to files as you adopt the compiler, and hooks only enforce compiler patterns in opted-in files.
+**Existing codebase:** Set `REACT_COMPILER_MODE=annotation` in session env. Lets migrate file-by-file — add `"use memo"` to files as adopt compiler, hooks only enforce compiler patterns in opted-in files.
 
 ```bash
 # In .claude/hooks/session-env.sh, add:
@@ -435,7 +435,7 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 
 ## Migrating an Existing Codebase
 
-After installing, paste this prompt into a new Claude Code session to migrate existing code to comply with the new hooks:
+After install, paste prompt into new Claude Code session to migrate existing code comply with new hooks:
 
 <details>
 <summary>Migration prompt (click to expand)</summary>
@@ -532,13 +532,13 @@ Commit everything as: refactor(webui): migrate to frontend-starter-kit patterns
 
 </details>
 
-The migration is ordered from least disruptive (auto-fixable lint) to most disruptive (React pattern rewrites) — commit incrementally after each phase.
+Migration ordered from least disruptive (auto-fixable lint) to most disruptive (React pattern rewrites) — commit incrementally after each phase.
 
 ---
 
 ## Starter Kits
 
-Meta-skills that install everything you need in one go. The diagram below shows how the starter kit, setup skills, workflow skills, and agents compose into the full ecosystem.
+Meta-skills install everything need in one go. Diagram below show how starter kit, setup skills, workflow skills, agents compose into full ecosystem.
 
 ```mermaid
 graph TD
@@ -584,19 +584,19 @@ graph TD
     style RT fill:#c9f,stroke:#333,color:#000
 ```
 
-- **frontend-starter-kit** — Complete frontend stack in one command: all setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing, UX copy) + workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` is fully covered by Biome's `noConsole`.
+- **frontend-starter-kit** — Complete frontend stack in one command: all setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing, UX copy) + workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
   ```
 
-- **redpanda-frontend-kit** — Everything in the frontend starter kit, plus Redpanda-specific rules: Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, and registry workflow.
+- **redpanda-frontend-kit** — Everything in frontend starter kit, plus Redpanda-specific rules: Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, registry workflow.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
   ```
 
-- **work-automation-kit** — Project planning and management workflow skills: PRD creation, implementation planning, issue breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.
+- **work-automation-kit** — Project planning + management workflow skills: PRD creation, implementation planning, issue breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claude-code -y
@@ -604,9 +604,9 @@ graph TD
 
 ## Toolchain Enforcement
 
-Claude Code hooks that enforce tooling standards via `PreToolUse` and `SessionStart` hooks.
+Claude Code hooks enforce tooling standards via `PreToolUse` + `SessionStart` hooks.
 
-- **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun as package manager with `--yarn` flag, tsgo as TypeScript compiler, block global installs, and guard against destructive commands (`rm -rf`, `git push --force`, `git reset --hard`, `git checkout .`). Sets `PKG_MANAGER`, `LINTER`, `TEST_RUNNER` env vars.
+- **setup-toolchain** — Ban npm/npx/tsc/eslint/prettier, enforce bun as package manager with `--yarn` flag, tsgo as TypeScript compiler, block global installs, guard against destructive commands (`rm -rf`, `git push --force`, `git reset --hard`, `git checkout .`). Set `PKG_MANAGER`, `LINTER`, `TEST_RUNNER` env vars.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-toolchain --agent claude-code -y
@@ -614,15 +614,15 @@ Claude Code hooks that enforce tooling standards via `PreToolUse` and `SessionSt
 
 ## Code Quality
 
-Linting, formatting, and quality gate automation.
+Lint, format, quality gate automation.
 
-- **setup-biome** — Install Biome + Ultracite, create `biome.jsonc` with strict overrides (noConsole, cognitive complexity 15, kebab-case filenames, useExhaustiveSwitchCases, restricted imports for moment/lodash/classnames/mobx/yup). Stop hook auto-fixes all changed JS/TS files before Claude finishes.
+- **setup-biome** — Install Biome + Ultracite, create `biome.jsonc` with strict overrides (noConsole, cognitive complexity 15, kebab-case filenames, useExhaustiveSwitchCases, restricted imports for moment/lodash/classnames/mobx/yup). Stop hook auto-fix all changed JS/TS files before Claude finish.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
   ```
 
-- **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), Stop hook for tsgo type checking, bundle guard PostToolUse hook, `gh` CLI CI status checks, `@claude review` trigger pattern, and optional Codex cross-model review.
+- **setup-quality-gate** — Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), Stop hook for tsgo type checking, bundle guard PostToolUse hook, `gh` CLI CI status checks, `@claude review` trigger pattern, optional Codex cross-model review.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
@@ -630,9 +630,9 @@ Linting, formatting, and quality gate automation.
 
 ## React Rules
 
-PostToolUse hooks that enforce React patterns on every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) and auto-detect component library directories (`components/ui/`, `redpanda-ui/`, `src/ui/`, `packages/ui/` — configurable via `UI_LIB_DIRS`).
+PostToolUse hooks enforce React patterns every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) + auto-detect component library directories (`components/ui/`, `redpanda-ui/`, `src/ui/`, `packages/ui/` — configurable via `UI_LIB_DIRS`).
 
-- **setup-react-rules** — 34 React/TS/security/a11y checks in two hook scripts (`react-rules-check.sh` + `tailwind-check.sh`). All messages are compressed for token efficiency — keeps the fix, drops the explanation. Key checks:
+- **setup-react-rules** — 34 React/TS/security/a11y checks in two hook scripts (`react-rules-check.sh` + `tailwind-check.sh`). All messages compressed for token efficiency — keep fix, drop explanation. Key checks:
   - Ban raw HTML elements, `as any`, `@ts-ignore`, `@ts-expect-error`, class components
   - Ban `dangerouslySetInnerHTML`, `eval()`, `.innerHTML`, `setTimeout("string")`, `=== NaN`
   - Ban `onClick + navigate()`, barrel imports, `!important`, `outline: none`
@@ -654,21 +654,21 @@ PostToolUse hooks that enforce React patterns on every Edit/Write. All checks sk
 
 ## Health & Diagnostics
 
-Stop hooks and manual diagnostic skills.
+Stop hooks + manual diagnostic skills.
 
-- **setup-react-doctor** — Install react-doctor, add `doctor` package.json script, Stop hook running health check on changed files. Fails on score regression.
+- **setup-react-doctor** — Install react-doctor, add `doctor` package.json script, Stop hook run health check on changed files. Fails on score regression.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
   ```
 
-Test health diagnostics (async leaks, slow queries, flaky tests) are now part of `/tdd` and the `orchestration-stop` quality gate.
+Test health diagnostics (async leaks, slow queries, flaky tests) now part of `/tdd` + `orchestration-stop` quality gate.
 
 ## LLM Optimization
 
-Reduce token usage and context waste.
+Reduce token usage + context waste.
 
-- **setup-agent-config** — SessionStart sets `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`. UserPromptSubmit injects project state (3 context levels) + condensed rules line + intent detection (TDD/component/bug/PR/refactor/e2e). PreToolUse strips `--verbose`, suggests `--pool=forks`/`--bail=1`. PostToolUse truncates output >200 lines + file-aware orchestration guidance. Stop: violation summary + comprehensive quality gate.
+- **setup-agent-config** — SessionStart set `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`. UserPromptSubmit inject project state (3 context levels) + condensed rules line + intent detection (TDD/component/bug/PR/refactor/e2e). PreToolUse strip `--verbose`, suggest `--pool=forks`/`--bail=1`. PostToolUse truncate output >200 lines + file-aware orchestration guidance. Stop: violation summary + comprehensive quality gate.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-agent-config --agent claude-code -y
@@ -676,7 +676,7 @@ Reduce token usage and context waste.
 
 ## Accessibility
 
-- **setup-accessibility** — PostToolUse hook enforcing ARIA accessibility patterns: ban `<img>` without `alt`, ban mouse-only `onClick` on `<div>`/`<span>` (require `role` + `tabIndex` + keyboard handler), enforce required ARIA attributes on `role="combobox"` / `role="tablist"` / `role="dialog"`. Includes Playwright AXE test helper for WCAG 2.1 AA scanning and ARIA patterns reference (combobox, tabs, dialog, accordion, alert, listbox, switch, slider, radio group). Escape hatch: `// allow: a11y-skip [reason]`.
+- **setup-accessibility** — PostToolUse hook enforce ARIA accessibility patterns: ban `<img>` without `alt`, ban mouse-only `onClick` on `<div>`/`<span>` (require `role` + `tabIndex` + keyboard handler), enforce required ARIA attributes on `role="combobox"` / `role="tablist"` / `role="dialog"`. Include Playwright AXE test helper for WCAG 2.1 AA scanning + ARIA patterns reference (combobox, tabs, dialog, accordion, alert, listbox, switch, slider, radio group). Escape hatch: `// allow: a11y-skip [reason]`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
@@ -684,7 +684,7 @@ Reduce token usage and context waste.
 
 ## State Management
 
-- **setup-zustand** — PostToolUse hook enforcing zustand best practices: ban single-parens `create<T>()` (must be `create<T>()()`), ban inline object selectors (suggest `useShallow`), ban direct localStorage in stores (suggest persist middleware).
+- **setup-zustand** — PostToolUse hook enforce zustand best practices: ban single-parens `create<T>()` (must be `create<T>()()`), ban inline object selectors (suggest `useShallow`), ban direct localStorage in stores (suggest persist middleware).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-zustand --agent claude-code -y
@@ -692,13 +692,13 @@ Reduce token usage and context waste.
 
 ## Routing & Registry
 
-- **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), warn on exported components from route files (code splitting), and require `validateSearch` when using `useSearch`. Warns on `window.location.reload()` and `window.location` reads. Optional: install TanStack's 28 official reference skills via `npx @tanstack/intent@latest install`.
+- **setup-tanstack-router** — Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), warn on exported components from route files (code splitting), require `validateSearch` when using `useSearch`. Warn on `window.location.reload()` + `window.location` reads. Optional: install TanStack's 28 official reference skills via `npx @tanstack/intent@latest install`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
   ```
 
-- **setup-registry-workflow** — Stop hook that reminds about `registry.json` rebuild and changelog update when redpanda-ui components are modified.
+- **setup-registry-workflow** — Stop hook remind about `registry.json` rebuild + changelog update when redpanda-ui components modified.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent claude-code -y
@@ -706,7 +706,7 @@ Reduce token usage and context waste.
 
 ## Data Fetching
 
-- **setup-connect-query** — PostToolUse hook enforcing ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` when ConnectRPC is available (allows `useTransport`/`callUnaryMethod`), ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2: ban `new Message()`, `PlainMessage`/`PartialMessage`, manual `$typeName` literals. Well-known types: warn on `Any` without `@type`, `Timestamp` as plain object (use `timestampFromDate`/`anyPack` from `@bufbuild/protobuf/wkt`). Promotes Standard Schema + protovalidate. Auto-loads on `*_pb*`/`*_connectquery*` files via `paths:`.
+- **setup-connect-query** — PostToolUse hook enforce ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` when ConnectRPC available (allow `useTransport`/`callUnaryMethod`), ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2: ban `new Message()`, `PlainMessage`/`PartialMessage`, manual `$typeName` literals. Well-known types: warn on `Any` without `@type`, `Timestamp` as plain object (use `timestampFromDate`/`anyPack` from `@bufbuild/protobuf/wkt`). Promote Standard Schema + protovalidate. Auto-loads on `*_pb*`/`*_connectquery*` files via `paths:`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
@@ -714,7 +714,7 @@ Reduce token usage and context waste.
 
 ## E2E Testing
 
-- **setup-e2e-testing** — Playwright for end-to-end testing with Testcontainers for backend infrastructure, axe-core for automated WCAG 2.1 AA accessibility audits. Optional agent-browser integration for AI-driven test scaffolding and visual verification. Includes test patterns for forms, tables, multi-step workflows, and debugging strategies.
+- **setup-e2e-testing** — Playwright for end-to-end testing with Testcontainers for backend infra, axe-core for automated WCAG 2.1 AA accessibility audits. Optional agent-browser integration for AI-driven test scaffolding + visual verification. Include test patterns for forms, tables, multi-step workflows, debugging strategies.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-e2e-testing --agent claude-code -y
@@ -722,7 +722,7 @@ Reduce token usage and context waste.
 
 ## Environment & Configuration
 
-- **setup-env-validation** — PostToolUse hook banning raw `process.env.X` access. Enforces t3-env with zod validation — all env vars must be declared in `src/env.ts` and imported as a validated object. Skips env files and test files.
+- **setup-env-validation** — PostToolUse hook ban raw `process.env.X` access. Enforce t3-env with zod validation — all env vars must be declared in `src/env.ts` + imported as validated object. Skip env files + test files.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-env-validation --agent claude-code -y
@@ -730,7 +730,7 @@ Reduce token usage and context waste.
 
 ## Commit Format
 
-- **setup-conventional-commits** — PreToolUse hook enforcing `type(scope): description` format on `git commit` commands. Replaces commitlint + husky with zero dependencies. Validates type, scope (required), lowercase description, no trailing period, 5-72 character length.
+- **setup-conventional-commits** — PreToolUse hook enforce `type(scope): description` format on `git commit` commands. Replace commitlint + husky with zero dependencies. Validate type, scope (required), lowercase description, no trailing period, 5-72 character length.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-conventional-commits --agent claude-code -y
@@ -738,7 +738,7 @@ Reduce token usage and context waste.
 
 ## Atlassian / Jira (Optional)
 
-- **setup-atlassian-workflow** — Opt-in Jira integration via `acli` (Atlassian CLI). Mirrors gh-based workflow skills for Jira users — create work items, transition status, comment, link PRs. Works alongside `gh` (`ISSUE_TRACKER=both`) or standalone (`ISSUE_TRACKER=acli`). Requires `acli` installed and authenticated.
+- **setup-atlassian-workflow** — Opt-in Jira integration via `acli` (Atlassian CLI). Mirror gh-based workflow skills for Jira users — create work items, transition status, comment, link PRs. Works alongside `gh` (`ISSUE_TRACKER=both`) or standalone (`ISSUE_TRACKER=acli`). Require `acli` installed + authenticated.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
@@ -746,13 +746,13 @@ Reduce token usage and context waste.
 
 ## Cloud Automation (Optional)
 
-- **setup-routines** — Configure [Claude Code routines](https://claude.ai/code/routines) for unattended automation. Ships 5 prompt templates: PR review (GitHub trigger), PR feedback resolution (GitHub trigger), issue triage (GitHub trigger), weekly codebase health (schedule), and docs drift detection (schedule). Routines run as full Claude Code cloud sessions — all hooks, CLAUDE.md rules, and agents enforce automatically. Stack-agnostic templates with built-in noise controls (silent approval, delta-based reporting, skip-what-hooks-catch).
+- **setup-routines** — Configure [Claude Code routines](https://claude.ai/code/routines) for unattended automation. Ships 5 prompt templates: PR review (GitHub trigger), PR feedback resolution (GitHub trigger), issue triage (GitHub trigger), weekly codebase health (schedule), docs drift detection (schedule). Routines run as full Claude Code cloud sessions — all hooks, CLAUDE.md rules, agents enforce automatically. Stack-agnostic templates with built-in noise controls (silent approval, delta-based reporting, skip-what-hooks-catch).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-routines --agent claude-code -y
   ```
 
-- **setup-sandcastle** — AFK agent delegation via [Sandcastle](https://github.com/mattpocock/sandcastle). N parallel agents in Docker sandboxes, each following development-lifecycle with hooks enforced. For batch work on multiple issues simultaneously.
+- **setup-sandcastle** — AFK agent delegation via [Sandcastle](https://github.com/mattpocock/sandcastle). N parallel agents in Docker sandboxes, each follow development-lifecycle with hooks enforced. For batch work on multiple issues simultaneously.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/setup-sandcastle --agent claude-code -y
@@ -762,7 +762,7 @@ Reduce token usage and context waste.
 
 ### mattpocock/skills — Additional workflow skills
 
-These skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement the vendored ones. Install individually if needed:
+Skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement vendored ones. Install individually if need:
 
 ```bash
 bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y            # PRD via interview
@@ -771,13 +771,13 @@ bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent clau
 bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y  # Domain glossary (DDD)
 ```
 
-**Already vendored** (no need to install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `github-triage`, `qa`, `zoom-out`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, and accessibility-first testing.
+**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `github-triage`, `qa`, `zoom-out`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
 
-**Note:** `setup-pre-commit` (husky/lint-staged) is intentionally omitted. Claude Code hooks already enforce linting, formatting, and type checking deterministically on every edit — pre-commit hooks are redundant and add friction for human developers who may prefer different workflows.
+**Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit — pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 
 ### TanStack Official Skills — Framework reference (optional)
 
-TanStack packages ship their own reference skills via `@tanstack/intent`. These are soft guidance (patterns, examples, API docs) — no hooks, no enforcement. Install only if you want Claude to have deep TanStack knowledge in context:
+TanStack packages ship own reference skills via `@tanstack/intent`. Soft guidance (patterns, examples, API docs) — no hooks, no enforcement. Install only if want Claude have deep TanStack knowledge in context:
 
 ```bash
 # Install all TanStack skills from your node_modules (Router, DB, DevTools, etc.)
@@ -790,19 +790,19 @@ npx @tanstack/intent@latest install
 - **TanStack DevTools** — 9 skills: plugin panels, production devtools, instrumentation
 - **TanStack CLI** — 5 skills: scaffolding, addons, ecosystem integrations
 
-Note: TanStack Query, Table, Form, Virtual do not have published skills yet.
+Note: TanStack Query, Table, Form, Virtual have no published skills yet.
 
 ## Evals
 
-Two layers of testing to prevent regressions:
+Two layers testing prevent regressions:
 
-**Script-level evals** — verify hook scripts, file structure, and content. Run locally in <5 seconds:
+**Script-level evals** — verify hook scripts, file structure, content. Run locally in <5 seconds:
 
 ```
 ./evals/run.sh
 ```
 
-**Agent-level evals** — 14 behavioral tests using [@vercel/agent-eval](https://github.com/vercel-labs/agent-eval) that verify Claude Code actually follows the rules when given adversarial prompts. Runs in Docker sandbox:
+**Agent-level evals** — 14 behavioral tests using [@vercel/agent-eval](https://github.com/vercel-labs/agent-eval) verify Claude Code actually follow rules when given adversarial prompts. Runs in Docker sandbox:
 
 ```
 cd agent-evals && bun install --yarn && npx @vercel/agent-eval
@@ -810,7 +810,7 @@ cd agent-evals && bun install --yarn && npx @vercel/agent-eval
 
 ## Hook Architecture
 
-Hooks fire automatically at each stage of a Claude Code session. PostToolUse hooks run concurrently for speed; Stop hooks run sequentially as a final quality gate.
+Hooks fire automatic at each stage of Claude Code session. PostToolUse hooks run concurrent for speed; Stop hooks run sequential as final quality gate.
 
 ```mermaid
 graph TD
@@ -893,17 +893,17 @@ Non-JS/TS file edits (Go, Python, Markdown, etc.) get zero overhead — all hook
 
 ## Performance
 
-PostToolUse hooks run **concurrently** — wall-clock time is the slowest hook, not the sum.
+PostToolUse hooks run **concurrently** — wall-clock time is slowest hook, not sum.
 
 ### Per Edit/Write (PostToolUse)
 
 | Scenario | Wall-clock | What happens |
 |----------|-----------|--------------|
-| Edit a `.go` / `.md` / `.css` file | **~80ms** | All hooks exit immediately on extension check |
-| Edit a `.tsx` file (clean code) | **~293ms** | Slowest hook (react-rules) runs full diff + 19 grep checks |
-| Edit a `package.json` | **~80ms** | Only bundle-guard runs, rest exit |
+| Edit `.go` / `.md` / `.css` file | **~80ms** | All hooks exit immediately on extension check |
+| Edit `.tsx` file (clean code) | **~293ms** | Slowest hook (react-rules) runs full diff + 19 grep checks |
+| Edit `package.json` | **~80ms** | Only bundle-guard runs, rest exit |
 
-The ~80ms floor is bash process spawn + `jq` parse — fixed cost regardless of hook count. Adding more hooks doesn't increase wall-clock time since they run in parallel.
+~80ms floor = bash process spawn + `jq` parse — fixed cost regardless of hook count. More hooks don't increase wall-clock since run parallel.
 
 ### Per Bash Command (PreToolUse)
 
@@ -919,34 +919,34 @@ The ~80ms floor is bash process spawn + `jq` parse — fixed cost regardless of 
 |------|------|-------|
 | biome-autofix.sh | 1-3s | Only changed files, skips UI library dirs |
 | typecheck-stop.sh | 2-5s | tsgo (incremental) + related tests only |
-| test-perf-stop.sh | 1-3s | Compares timings against session-start baseline |
+| test-perf-stop.sh | 1-3s | Compare timings against session-start baseline |
 | react-doctor-stop.sh | 1-2s | `--diff` mode, changed files only |
 | **Total** | **~5-13s** | Runs once when Claude finishes, not per edit |
 
 ### Token Efficiency
 
-Hook messages are compressed (inspired by [Caveman](https://github.com/JuliusBrussee/caveman) and [arxiv:2604.00025](https://arxiv.org/abs/2604.00025)). The LLM already knows the rules from SKILL.md — hooks are reminders, not tutorials.
+Hook messages compressed (inspired by [Caveman](https://github.com/JuliusBrussee/caveman) + [arxiv:2604.00025](https://arxiv.org/abs/2604.00025)). LLM already know rules from SKILL.md — hooks reminders, not tutorials.
 
 | Optimization | Savings |
 |---|---|
 | Compressed systemMessage strings | ~40% fewer tokens per violation |
 | Guidance deduplication (once per category per session) | ~50-70% fewer orchestration tokens |
-| `HOOK_VERBOSITY=terse` (blocks only) | Suppresses all warns |
+| `HOOK_VERBOSITY=terse` (blocks only) | Suppress all warns |
 | REFERENCE.md trimmed to essentials | -21% input tokens on skill loads |
 
-Combined: **~6,700 fewer tokens per session** vs. unoptimized hooks. For long sessions or multi-agent (Sandcastle), use `HOOK_VERBOSITY=terse` and `PROMPT_CONTEXT_LEVEL=minimal` to minimize overhead.
+Combined: **~6,700 fewer tokens per session** vs unoptimized hooks. For long sessions or multi-agent (Sandcastle), use `HOOK_VERBOSITY=terse` + `PROMPT_CONTEXT_LEVEL=minimal` to minimize overhead.
 
 ### Context
 
-A typical Claude Code tool call takes 3-8 seconds (network + LLM inference). PostToolUse overhead of ~293ms is **3-8%** of that — imperceptible. The Stop hooks at 4-10s replace what you'd run manually (lint, type check, tests) and only target changed/related files.
+Typical Claude Code tool call takes 3-8 seconds (network + LLM inference). PostToolUse overhead ~293ms = **3-8%** — imperceptible. Stop hooks at 4-10s replace what'd run manually (lint, type check, tests) + only target changed/related files.
 
 ## Codex Compatibility
 
-Codex is a first-class harness. Hooks that map directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop) are ported as-is. All Edit|Write PostToolUse hooks are consolidated into a single Stop-phase batch checker. `AGENTS.md` at repo root replaces PostCompact context re-injection.
+Codex = first-class harness. Hooks that map directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop) ported as-is. All Edit|Write PostToolUse hooks consolidated into single Stop-phase batch checker. `AGENTS.md` at repo root replace PostCompact context re-injection.
 
-All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works from any CWD, silently skips in repos without hooks installed.
+All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works from any CWD, silently skip in repos without hooks installed.
 
-- **codex-compat** — Installs `.codex/hooks.json`, batch checker, and `AGENTS.md`. Session state is harness-agnostic (`CLAUDE_SESSION_ID` or `CODEX_SESSION_ID`).
+- **codex-compat** — Install `.codex/hooks.json`, batch checker, `AGENTS.md`. Session state harness-agnostic (`CLAUDE_SESSION_ID` or `CODEX_SESSION_ID`).
 
   ```
   bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
@@ -954,7 +954,7 @@ All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works f
 
 ## LLM-Optimized Test Reporters
 
-In-house, zero-deps, Node + TypeScript. Ship as part of `shared/reporters/`. Scaffold into consumer repos via the starter kit.
+In-house, zero-deps, Node + TypeScript. Ship as part of `shared/reporters/`. Scaffold into consumer repos via starter kit.
 
 **Vitest:** `shared/reporters/vitest-llm-reporter.ts` -- silent-pass `ok N` trailer (~10 bytes); fail-case single-line JSON capped at `VITEST_LLM_MAX_FAILURES` (default 20). Wire:
 
@@ -971,18 +971,18 @@ export default defineConfig({
 });
 ```
 
-Both reporters follow the same pattern: minimal-signal (not silent) on pass to defeat silent-glob-typo bugs, structured JSON on fail capped to prevent runaway output. Typical savings vs default reporters: 10-100x on stdout, which is what Claude reads back as tokens.
+Both reporters follow same pattern: minimal-signal (not silent) on pass to defeat silent-glob-typo bugs, structured JSON on fail capped to prevent runaway output. Typical savings vs default reporters: 10-100x on stdout, which Claude reads back as tokens.
 
 ### Disabling browser MCPs
 
-Figma + Chrome MCP servers are claude.ai account-level connectors, not project config. To disable (recommended for token savings if you prefer subagent-browser patterns):
+Figma + Chrome MCP servers = claude.ai account-level connectors, not project config. To disable (recommended for token savings if prefer subagent-browser patterns):
 
 1. `/mcp` inside Claude Code to list currently connected servers
-2. https://claude.ai/settings/connectors -- disconnect `Figma` and `Chrome Browser` if you want to free the ~4KB of system-prompt instructions they consume per turn
+2. https://claude.ai/settings/connectors -- disconnect `Figma` + `Chrome Browser` if want free ~4KB of system-prompt instructions they consume per turn
 
 ## Further Reading
 
-Prior art, techniques, and related work that informed design decisions in this harness:
+Prior art, techniques, related work that informed design decisions in this harness:
 
 ### Test reporters (LLM-optimized)
 - [vitest-llm-reporter (hansjm10)](https://github.com/hansjm10/vitest-llm-reporter) -- JSON schema + token-budget pattern inspiration

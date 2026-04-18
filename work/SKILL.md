@@ -5,6 +5,6 @@ description: "Alias for /development-lifecycle. Full frontend workflow: understa
 
 # Work
 
-Alias for `/development-lifecycle`. See [development-lifecycle/SKILL.md](../development-lifecycle/SKILL.md) for full details.
+Alias for `/development-lifecycle`. See [development-lifecycle/SKILL.md](../development-lifecycle/SKILL.md) for details.
 
 Run `/development-lifecycle` now.

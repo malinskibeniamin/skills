@@ -69,11 +69,11 @@ Spawn background agents to:
 - Surface edge cases · failure modes
 - Check open issues · known gotchas in deps
 
-Runs concurrently with user discussion — feeds into approach selection.
+Run concurrent with user discussion — feed into approach selection.
 
 ### Monitor Tool for Background Observation
 
-**Monitor** streams long-running process output real-time. React immediately, never block.
+**Monitor** stream long-running process output realtime. React immediate, never block.
 
 - **CI**: `Monitor: gh pr checks <number> --watch`
 - **Dev server**: `Monitor: bun run dev` — watch for ready/error
@@ -120,11 +120,11 @@ When scope ambiguous or requirements conflict:
 
 ### Naive-First Design
 
-Start with dumbest solution that works. Justify every addition:
+Start with dumbest solution that work. Justify every addition:
 
 1. **Problem** — one paragraph. What and why now.
 2. **Constraints** — hard boundaries (time, team, compat).
-3. **Non-goals** — explicitly excluded.
+3. **Non-goals** — explicit excluded.
 4. **Simplest viable design** — most boring solution.
 5. **Where naive falls short** — specific demonstrated gaps only.
 6. **For each addition beyond naive** — what gap, what complexity, why simpler insufficient.
@@ -172,7 +172,7 @@ For plans with 5+ tasks:
 3. First PR targets base branch · subsequent target previous PR's branch
 4. Review and merge bottom-up
 
-Smaller PRs get 2-3x faster review with higher-quality feedback.
+Small PRs get 2-3x faster review, higher-quality feedback.
 
 ## Phase 2b: Grill
 
@@ -191,7 +191,7 @@ After plan written, auto-initiate `/domain-model`:
 
 ### Why This Phase Exists
 
-Code is byproduct of understanding. If user can't defend every decision under pressure → cognitive debt. Domain model grilling ensures human builds mental model *before* LLM writes code. Inline CONTEXT.md/ADR updates capture decisions as institutional memory.
+Code = byproduct of understanding. If user can't defend every decision under pressure → cognitive debt. Domain model grilling ensure human build mental model *before* LLM write code. Inline CONTEXT.md/ADR updates capture decisions as institutional memory.
 
 ### Skip Conditions
 
@@ -210,7 +210,7 @@ If skipping: "Grill skipped — trivial bug fix, no architectural decisions."
 ### Cycle
 1. RED — write one minimal failing test, verify it fails correctly
 2. GREEN — write minimal code to pass
-3. **TEST INTEGRITY CHECK** — verify test/assertion count hasn't decreased. If dropped → agent deleted/weakened tests. Reject, redo from RED.
+3. **TEST INTEGRITY CHECK** — verify test/assertion count not decreased. If dropped → agent deleted/weakened tests. Reject, redo from RED.
 4. REFACTOR — clean up while staying green
 
 ### Test Quality
@@ -236,7 +236,7 @@ AI agents sometimes delete/simplify tests to pass — "unpredictable genie" effe
 
 ## Phase 3b: Edge-Case Hardening (Optional)
 
-After verification passes, dispatch agent for more tests:
+After verification pass, dispatch agent for more tests:
 
 1. Identify functions/components changed
 2. Generate tests: boundary values · empty/null · concurrent access · error paths · large inputs
@@ -286,8 +286,8 @@ Hook auto-injects: session-touched files · dirty baseline · branch/PR context 
 ### SubagentStop Validation
 
 Hook (matcher: `self-reviewer|code-reviewer|adversarial-reviewer`):
-- Validates JSON matching findings schema · blocks/retries if malformed
-- Writes to `/tmp/hook-session-$SESSION_ID/review-findings.json` · logs to `review-summary.log`
+- Validate JSON matching findings schema · block/retry if malformed
+- Write to `/tmp/hook-session-$SESSION_ID/review-findings.json` · log to `review-summary.log`
 
 ### Agents
 
@@ -335,7 +335,7 @@ Dispatch `code-reviewer` for fresh-eyes review:
 ```
 /codex:adversarial-review
 ```
-Requires: `bun install -g @openai/codex` and OpenAI API key.
+Require: `bun install -g @openai/codex` and OpenAI API key.
 Install: `/plugin marketplace add openai/codex-plugin-cc` → `/plugin install codex@openai-codex` → `/codex:setup`
 
 ### Ship
@@ -348,7 +348,7 @@ gh pr comment <URL> --body "@claude review"
 
 ### Monitor CI Instead of Blocking
 
-**Monitor** watches CI in background. Continue working, react immediately on fail/pass.
+**Monitor** watch CI in background. Continue working, react immediate on fail/pass.
 
 ```
 Monitor: gh pr checks <pr-number> --watch
@@ -371,7 +371,7 @@ Monitor: gh pr checks <pr-number> --watch
 3. **Stop.** Do not poll for human approval.
 
 **If human requests changes later** (new session):
-1. `/resolve-pr-feedback` — fetches · triages · fixes · replies · pushes
+1. `/resolve-pr-feedback` — fetch · triage · fix · reply · push
 2. Monitor CI after push
 3. One more `code-reviewer` round + `/resolve-pr-feedback`
 4. Re-request human review, stop
@@ -387,11 +387,11 @@ Monitor: gh pr checks <pr-number> --watch
 Monitor: gh run watch
 ```
 
-Detect deploy failures immediately. If fails → diagnose, open follow-up PR.
+Detect deploy failures immediate. If fail → diagnose, open follow-up PR.
 
 ## Lifecycle Stop Gates
 
-`lifecycle-stop.sh` enforces cascade. Each gate blocks until satisfied.
+`lifecycle-stop.sh` enforce cascade. Each gate block until satisfied.
 
 ```mermaid
 flowchart TD
@@ -480,7 +480,7 @@ When bug traced to AI-generated code:
 3. **Add to CI**: runs every commit
 4. **Track patterns**: same class recurs 3+ times → create `.claude/rules/` entry
 
-Builds project-specific quality signal. Generic linting catches generic issues; regression evals catch *your project's* AI failure modes.
+Build project-specific quality signal. Generic linting catch generic issues; regression evals catch *your project's* AI failure modes.
 
 ## Cross-Model Review
 

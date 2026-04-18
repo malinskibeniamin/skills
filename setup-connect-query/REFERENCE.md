@@ -6,11 +6,11 @@
 
 ## Protobuf v1 Variant
 
-For `@bufbuild/protobuf` ^1.x, remove checks 5-6 (`new Message()` and `PlainMessage`/`PartialMessage`). In v1 these correct.
+`@bufbuild/protobuf` ^1.x: remove checks 5-6 (`new Message()` and `PlainMessage`/`PartialMessage`). Correct in v1.
 
 ## TanStack Query Hooks — No False Positives
 
-Hook uses `\buseQuery\b` word boundaries. `useQueryClient` (stripped before matching), `useQueries`, `useSuspenseQuery`, `useInfiniteQuery`, `useMutationState` all safe — not flagged.
+Hook use `\buseQuery\b` word boundaries. `useQueryClient` (stripped before match), `useQueries`, `useSuspenseQuery`, `useInfiniteQuery`, `useMutationState` safe. Not flagged.
 
 ## Cache Invalidation Patterns
 
@@ -44,7 +44,7 @@ function CreateTopicButton() {
 
 ## TanStack Query + useTransport/callUnaryMethod Pattern
 
-When using `useTransport`/`callUnaryMethod` from `@connectrpc/connect`, raw TanStack Query hooks allowed:
+With `useTransport`/`callUnaryMethod` from `@connectrpc/connect`, raw TanStack Query hooks OK:
 
 ```tsx
 import { useTransport, callUnaryMethod } from '@connectrpc/connect'
@@ -70,7 +70,7 @@ const bytes = toBinary(MyMessageSchema, msg)
 const restored = fromBinary(MyMessageSchema, bytes)
 ```
 
-Never construct with `$typeName` literals — use `create()`.
+Never construct with `$typeName` literals. Use `create()`.
 
 ## Well-Known Types (Timestamp, Duration, Any)
 

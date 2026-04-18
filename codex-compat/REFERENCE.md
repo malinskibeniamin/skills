@@ -2,8 +2,8 @@
 
 ## codex-batch-check.sh
 
-Stop hook wrapper — runs all PostToolUse Edit|Write checks on changed files.
-Reuses `.claude/hooks/` scripts — no duplication.
+Stop hook wrapper. Runs all PostToolUse Edit|Write checks on changed files.
+Reuses `.claude/hooks/` scripts. No duplication.
 Handles JS/TS, CSS/SCSS (tailwind-check), package.json (bundle-guard).
 
 > Script: [`scripts/codex-batch-check.sh`](scripts/codex-batch-check.sh)
@@ -121,15 +121,15 @@ Generate from `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, Stop 
 ```
 
 **Notes:**
-- SessionStart, UserPromptSubmit, PreToolUse Bash, PostToolUse Bash, Stop hooks all work identical on Codex
-- PostToolUse Edit|Write NOT in `.codex/hooks.json` — `codex-batch-check.sh` auto-discovers `*-check.sh` scripts at Stop time
+- SessionStart, UserPromptSubmit, PreToolUse Bash, PostToolUse Bash, Stop hooks work identical on Codex
+- PostToolUse Edit|Write NOT in `.codex/hooks.json`. `codex-batch-check.sh` auto-discovers `*-check.sh` scripts at Stop time
 - `_hook-lib.sh` and `shared/hook-lib.sh` must be accessible alongside check scripts
 
 ## Codex Limitations: SubagentStart/SubagentStop
 
-Codex does **not** support `SubagentStart`/`SubagentStop`. Claude Code only.
+Codex **not** support `SubagentStart`/`SubagentStop`. Claude Code only.
 
-Self-review loop (phase 4b) needs these for session context injection + structured findings validation. **Workaround**: soft guidance in AGENTS.md. Findings schema (`agents/findings-schema.md`) is markdown — works anywhere. Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) readable by Codex; output format best-effort without SubagentStop enforcement.
+Self-review loop (phase 4b) needs these for session context injection + structured findings validation. **Workaround**: soft guidance in AGENTS.md. Findings schema (`agents/findings-schema.md`) is markdown — works anywhere. Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) readable by Codex. Output format best-effort without SubagentStop enforcement.
 
 ## AGENTS.md
 

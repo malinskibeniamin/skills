@@ -5,7 +5,7 @@
 | | `run()` | `interactive()` |
 |---|---|---|
 | Mode | Headless (`--print`) | Full TUI (stdin/stdout/stderr) |
-| Human interaction | None — stream-JSON parsed | Direct — human can intervene |
+| Human interaction | None — stream-JSON parsed | Direct — human intervene |
 | Use case | CI · batch · parallel · overnight | HITL review · pair-review · local dev |
 | Sandbox default | Required (`docker()`) | `noSandbox()` (git worktrees) |
 | Iterations | `maxIterations` supported | Single session |
@@ -255,15 +255,15 @@ await Promise.all(
 
 | Our layer | How Sandcastle uses it |
 |---|---|
-| development-lifecycle | Each agent follows 6-phase lifecycle — both `run()` and `interactive()` |
+| development-lifecycle | Each agent follow 6-phase lifecycle — both `run()` and `interactive()` |
 | Hooks (25 total) | Fire inside each session — same enforcement headless and interactive |
 | code-reviewer agent | Headless via `run()` or HITL via `interactive()` with full TUI |
-| verifier agent | Verifies UI via agent-browser inside container |
-| orchestration-stop | Blocks completing without tests + type check |
+| verifier agent | Verify UI via agent-browser inside container |
+| orchestration-stop | Block completion without tests + type check |
 | Monitor tool | Agents watch CI · test output · dev servers in background |
 | intent-detect | Not used (agents get explicit prompts) |
 
-Hooks/skills are launch-method agnostic — fire on PostToolUse/PreToolUse regardless of `run()` · `interactive()` · `claude` directly.
+Hooks/skills launch-method agnostic — fire on PostToolUse/PreToolUse regardless of `run()` · `interactive()` · `claude` direct.
 
 ## When to Use What
 
@@ -284,16 +284,16 @@ Implement with Claude, review with Codex. Providers: `claudeCode()` · `codex()`
 
 ## Prompt Caching Tips
 
-Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuses computation — cached tokens cost 10% of uncached.
+Claude Code [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) reuse computation — cached tokens cost 10% of uncached.
 
 | Pattern | Why it works | What breaks it |
 |---|---|---|
-| `promptFile` with `promptArgs` | Static prefix stays identical → cache hit | Dynamic prompt strings per-issue |
-| Separate `run()` per stage | Each stage owns session+cache | Switching model inside single `run()` |
+| `promptFile` with `promptArgs` | Static prefix stay identical → cache hit | Dynamic prompt strings per-issue |
+| Separate `run()` per stage | Each stage own session+cache | Switching model inside single `run()` |
 | Same `onSandboxReady` hooks | Tool defs stay identical — shared prefix | Conditional skill installs per issue |
 | `maxIterations: 3` | Prefix preserved between iterations | N/A |
 
 **Key rules:**
 1. **Static first, dynamic last** — caching prefix-matched. Keep system prompt · tools · skills stable. Issue context in `promptArgs` (end of prompt).
 2. **One model per `run()`** — switch = full cache rebuild.
-3. **Don't change tools between iterations** — `onSandboxReady` runs once. Conditional install = different prefix = zero cross-agent cache reuse.
+3. **Don't change tools between iterations** — `onSandboxReady` run once. Conditional install = different prefix = zero cross-agent cache reuse.

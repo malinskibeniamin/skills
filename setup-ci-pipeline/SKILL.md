@@ -5,16 +5,16 @@ description: "Configure GitHub Actions CI for React/TypeScript frontend projects
 
 # Setup CI Pipeline
 
-GitHub Actions optimized for React/TypeScript:
+GitHub Actions tuned for React/TypeScript:
 
 - Quality gate -- lint, type-check, tests in <5 min
 - Coverage gates -- enforce thresholds, post diff on PRs
-- Visual regression -- Playwright screenshot comparison
+- Visual regression -- Playwright screenshot compare
 - Dependency automation -- dependabot minor/patch
 - Bundle budget -- alert on size regressions
 - Smart bun caching
 
-See [REFERENCE.md](REFERENCE.md) for workflow templates and Blacksmith optimization.
+See [REFERENCE.md](REFERENCE.md) for workflow templates + Blacksmith tuning.
 
 ## Steps
 
@@ -26,4 +26,4 @@ See [REFERENCE.md](REFERENCE.md) for workflow templates and Blacksmith optimizat
 ## Verify
 - [ ] `gh workflow run quality-gate.yml` runs
 - [ ] Coverage report on PRs
-- [ ] Dependabot creates first PR
+- [ ] Dependabot make first PR

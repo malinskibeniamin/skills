@@ -5,7 +5,7 @@ description: Meta-skill that runs the generic frontend-starter-kit plus addition
 
 # Redpanda Frontend Kit
 
-Runs **frontend-starter-kit** (14 setup + workflow skills) then adds Redpanda-specific tooling.
+Run **frontend-starter-kit** (14 setup + workflow skills), then add Redpanda tooling.
 
 ## Additional Setup
 
@@ -17,7 +17,7 @@ Runs **frontend-starter-kit** (14 setup + workflow skills) then adds Redpanda-sp
 echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
 echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 ```
-`REDPANDA_KIT=1` enables registry nudges (useProtoForm, Typography, KeyValueField, registry sync).
+`REDPANDA_KIT=1` enable registry nudges (useProtoForm, Typography, KeyValueField, registry sync).
 
 ### Chakra UI ban (add to react-rules-check.sh)
 ```bash
@@ -33,11 +33,11 @@ fi
 
 ## Steps
 1. Run frontend-starter-kit (all 14 setup + workflow + community skills)
-2. Configure Redpanda environment vars
+2. Configure Redpanda env vars
 3. Add Chakra ban to react-rules-check.sh
 4. Run setup-registry-workflow
 
 ## Verify
 - [ ] All hooks executable, settings.json complete
 - [ ] `REDPANDA_KIT=1` in session env
-- [ ] connect-query-check.sh matches detected protobuf version
+- [ ] connect-query-check.sh match detected protobuf version

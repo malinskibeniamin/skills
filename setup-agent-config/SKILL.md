@@ -8,9 +8,9 @@ description: Token-efficient AI agent hooks -- env vars, test flag optimization,
 ## What This Sets Up
 
 - **SessionStart**: `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`
-- **UserPromptSubmit**: injects project state (git branch, dirty files, scripts, violations, config) -> Claude knows state without tool calls
-- **PreToolUse (Bash)**: optimizes vitest commands -- strips `--verbose`, suggests `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`. Also handles jest/bun test (backward compat)
-- **PostToolUse (Bash)**: truncates verbose output to reduce context bloat
+- **UserPromptSubmit**: inject project state (git branch, dirty files, scripts, violations, config) -> Claude know state, no tool calls
+- **PreToolUse (Bash)**: optimize vitest commands -- strip `--verbose`, suggest `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`. Also handle jest/bun test (backward compat)
+- **PostToolUse (Bash)**: truncate verbose output, cut context bloat
 
 ## Steps
 

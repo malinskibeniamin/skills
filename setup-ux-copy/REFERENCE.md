@@ -26,7 +26,7 @@ Exceptions: product names (Admin API, Schema Registry, HTTP Proxy, Dedicated Clo
 
 ## Toast Messages
 
-Completed tasks: subject + past tense verb. Long-running tasks: gerund.
+Completed tasks: subject + past tense verb. Long-running: gerund.
 
 | Good | Bad |
 |------|-----|
@@ -36,7 +36,7 @@ Completed tasks: subject + past tense verb. Long-running tasks: gerund.
 
 ## Error Messages
 
-State problem clearly. Provide solution. No blame.
+State problem. Give solution. No blame.
 
 | Good | Bad |
 |------|-----|
@@ -55,7 +55,7 @@ State problem clearly. Provide solution. No blame.
 
 ## Empty States
 
-Explain why page empty, what user can do next. Include button/link to next step. Running tasks: use gerund ("Creating cluster" not "Cluster creation in progress").
+Explain why empty, what user do next. Include button/link to next step. Running tasks: gerund ("Creating cluster" not "Cluster creation in progress").
 
 ## Tooltips
 
@@ -63,7 +63,7 @@ Brief. Period for full sentences, none for short phrases. No interactive element
 
 ## Numbers and Measurements
 
-- Always numerals, including 0-9 ("3 topics" not "three topics")
+- Numerals always, incl 0-9 ("3 topics" not "three topics")
 - Thousands: K, millions: M, billions: B, no space (33K)
 - Measurements: abbreviations with space (10 MB, 75 MBps)
 - Time: 12-hour clock, AM/PM caps (2:30 PM)
@@ -89,7 +89,7 @@ American English. Present tense, active voice. Natural contractions. Serial comm
 
 ## Directional Language
 
-Don't reference physical position — layouts change. "See the Prerequisites section" not "See above".
+No physical position — layouts change. "See the Prerequisites section" not "See above".
 
 ## Sentence Structure
 
@@ -113,15 +113,15 @@ Descriptive lowercase-with-dashes in angle brackets: `<topic-name>`, `<cluster-i
 
 ## Em Dashes
 
-Don't use. Use parentheses, commas, or separate sentences.
+No use. Use parentheses, commas, or separate sentences.
 
 ## Common Agent Excuses
 
 | Excuse | Counter |
 |---|---|
-| "The exclamation adds energy" | Adds noise. Product UI should be calm. |
-| "'successfully' confirms the action" | Toast itself confirms. "Topic created" sufficient. |
+| "The exclamation adds energy" | Adds noise. Product UI stay calm. |
+| "'successfully' confirms the action" | Toast confirms. "Topic created" enough. |
 | "'click here' is clear" | Meaningless without context. Describe destination. |
-| "'Oops' is friendly" | Patronizing. State problem and solution directly. |
-| "Title Case looks professional" | Inconsistent, harder to scan. Sentence case standard. |
+| "'Oops' is friendly" | Patronizing. State problem + solution direct. |
+| "Title Case looks professional" | Inconsistent, harder scan. Sentence case standard. |
 | "'My Settings' is user-centric" | Ambiguous in multi-user contexts. Just "Settings". |

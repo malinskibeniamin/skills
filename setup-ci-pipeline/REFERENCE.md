@@ -60,7 +60,7 @@ Optimization checklist:
 
 Split big suites across parallel runners.
 
-**When to shard**: Suite >60s. Skip if <30s — overhead exceeds savings.
+**When to shard**: Suite >60s. Skip if <30s — overhead exceed savings.
 
 ```yaml
 jobs:
@@ -91,11 +91,11 @@ jobs:
       - run: bunx vitest --merge-reports --coverage
 ```
 
-`--reporter=blob` writes shard-aware chunks. `--merge-reports` aggregates into unified coverage+results. Thresholds apply to merged report.
+`--reporter=blob` write shard-aware chunks. `--merge-reports` aggregate into unified coverage+results. Thresholds apply to merged report.
 
 ## Coverage Gates
 
-80% lines / 80% functions / 70% branches floor. Skip chasing 100%.
+80% lines / 80% functions / 70% branches floor. Skip 100% chase.
 
 ## Bundle Size Budget
 

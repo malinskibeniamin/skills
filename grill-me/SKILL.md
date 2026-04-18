@@ -5,33 +5,33 @@ description: Interview the user relentlessly about a plan or design until reachi
 
 # Grill Me
 
-Phase 2b gate. No implementation until the plan survives grilling.
+Phase 2b gate. No implementation until plan survive grilling.
 
 ## Step 1: Interview
 
-Walk every branch of the decision tree. Resolve dependencies one-by-one. For each question, provide your recommended answer. One at a time.
+Walk every branch of decision tree. Resolve dependencies one-by-one. For each question, give recommended answer. One at time.
 
-If a question can be answered by exploring the codebase, explore first.
+If question answerable by exploring codebase, explore first.
 
 ## Step 2: Three-Hat Fan-Out (parallel)
 
-Once the user has presented a coherent plan, spawn three reviewers **in parallel** (single message, multiple Agent tool calls):
+Once user present coherent plan, spawn three reviewers **in parallel** (single message, multiple Agent tool calls):
 
 - **`plan-product-hat`**: persona, pain, success metric, scope, reversibility, TTV
 - **`plan-engineering-hat`**: architecture, error paths, perf, security, test strategy, rollback
 - **`plan-design-hat`**: flow, a11y, copy, visual consistency, states (empty/loading/error)
 
-Each emits `{reviewer, status, findings[], must_answer[]}` per findings-schema.md.
+Each emit `{reviewer, status, findings[], must_answer[]}` per findings-schema.md.
 
 ## Step 3: Merge
 
-Consolidate all `must_answer` questions into a single list, deduplicated. Surface to user. User answers each. Plan updated inline.
+Consolidate all `must_answer` questions into single list, deduplicated. Surface to user. User answer each. Plan updated inline.
 
-Any reviewer returns `status: BLOCKED` → plan does not advance until the blocking finding is addressed or explicitly overridden by user.
+Any reviewer return `status: BLOCKED` → plan no advance until blocking finding addressed or explicitly overridden by user.
 
 ## Step 4: Approve
 
-All hats return `APPROVED` or user overrides specific findings → plan approved → Phase 3 (Implement).
+All hats return `APPROVED` or user override specific findings → plan approved → Phase 3 (Implement).
 
 ## Skip Gate
 
@@ -40,4 +40,4 @@ Skip three-hat fan-out only if:
 - <3 tasks in plan, AND
 - No architectural / product / UX decisions
 
-Otherwise, fan-out is mandatory. [ETHOS: Grill Before Build]
+Else, fan-out mandatory. [ETHOS: Grill Before Build]

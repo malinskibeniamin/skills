@@ -1,11 +1,11 @@
 ---
 name: setup-react-rules
-description: Enforce React/TS/security rules via PostToolUse hooks -- bans raw HTML, TS escape hatches, XSS vectors, barrel imports, missing passive listeners. Use when enforcing React patterns or component library standards.
+description: Enforce React/TS/security rules via PostToolUse hooks -- ban raw HTML, TS escape hatches, XSS vectors, barrel imports, missing passive listeners. Use when enforcing React patterns or component library standards.
 ---
 
 # Setup React Rules
 
-PostToolUse hooks on Edit/Write (auto-skips component library dirs):
+PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 
 ## Enforced Rules
 
@@ -27,10 +27,10 @@ PostToolUse hooks on Edit/Write (auto-skips component library dirs):
 
 ### Opt-in Rules
 - `REACT_RULES_BAN_USEEFFECT=1`: ban useEffect/useLayoutEffect/useInsertionEffect. Escape: `// allow: useEffect [reason]`
-- `REACT_RULES_BAN_TYPE_ASSERTIONS=1`: ban `as X` (allows `as const`). Forces type guards/generics/schema validation.
+- `REACT_RULES_BAN_TYPE_ASSERTIONS=1`: ban `as X` (allow `as const`). Force type guards/generics/schema validation.
 
 ### Soft Guidance (Claude-enforced, not hooks)
-- Named useEffect functions describing purpose. Can't name without "and"? Split it.
+- Named useEffect functions describe purpose. No name without "and"? Split.
 - `useSyncExternalStore` for browser API subscriptions (navigator.onLine, matchMedia, scroll)
 - Form-level `validate` for cross-field validation (react-hook-form v7.72+)
 
@@ -39,7 +39,7 @@ PostToolUse hooks on Edit/Write (auto-skips component library dirs):
 - Immutable state -- spread/filter/map, never mutate
 - Derive don't sync -- `useMemo` not `useState`+`useEffect`
 - `useReducer` for 3+ interrelated `useState`
-- Extract data transforms into named pure functions
+- Extract data transforms to named pure functions
 - Discriminated unions for variant prop types
 - Generic `<T>` for reusable typed components
 
@@ -52,6 +52,6 @@ See [REFERENCE.md](REFERENCE.md) for patterns + examples.
 3. Optional: `codex-compat` for `.codex/hooks.json`.
 
 ## Verify
-- [ ] Blocks raw HTML, `as any`, `@ts-ignore` in TSX
-- [ ] Auto-skips component library dirs
+- [ ] Block raw HTML, `as any`, `@ts-ignore` in TSX
+- [ ] Auto-skip component library dirs
 - [ ] Opt-in rules work when env vars set
