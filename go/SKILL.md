@@ -66,7 +66,7 @@ After non-trivial tasks: "Learn something worth preserve?"
 Before start, check work to ship:
 
 - No uncommitted changes AND no unpushed commits -> nothing do, stop
-- On default branch with no feature branch -> warn, suggest branching first
+- On default branch with no feature branch -> **auto-spawn via `scripts/mux-worktree.sh <type>/<name>`** before proceeding. Never ship from main. [ETHOS: Worktree Isolation]
 
 ## Skills Composed
 
