@@ -71,6 +71,9 @@
     "./agents/adversarial-reviewer.md",
     "./agents/code-reviewer.md",
     "./agents/findings-schema.md",
+    "./agents/plan-design-hat.md",
+    "./agents/plan-engineering-hat.md",
+    "./agents/plan-product-hat.md",
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
