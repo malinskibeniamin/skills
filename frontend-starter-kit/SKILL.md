@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Complete frontend stack -- 14 setup skills + 14 owned workflow skills + 4 optional community skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Complete frontend stack -- 14 setup skills + 14 owned workflow skills + 4 optional community skills in one command. Use when starting new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -29,7 +29,7 @@ development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-a
 ## Steps
 
 ### 1. Run setup skills 1-14 sequentially
-Each skill's `SETUP.md` has install steps. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh.
+Each skill `SETUP.md` has install steps. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh.
 
 ### 2. Install workflow skills
 ```bash

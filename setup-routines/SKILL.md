@@ -48,11 +48,11 @@ Hooks = enforcement layer | routine prompts = task layer. Standards evolve in re
 ### 3. Create via web (recommended)
 
 1. [claude.ai/code/routines](https://claude.ai/code/routines) -> **New routine**
-2. Name it (for example "PR Review -- [repo name]")
+2. Name (example "PR Review -- [repo name]")
 3. Paste template from `routines/*.md` -- customize `OWNER`/`REPO` placeholders
-4. Select repository + environment
+4. Pick repo + environment
 5. Add trigger (GitHub event | schedule | API)
-6. Review connectors -- remove unneeded
+6. Check connectors -- drop unneeded
 7. Create
 
 ### 4. Create via CLI
@@ -61,11 +61,11 @@ Hooks = enforcement layer | routine prompts = task layer. Standards evolve in re
 /schedule daily codebase health check at 9am
 ```
 
-CLI creates scheduled routines only. GitHub/API triggers -> use web UI.
+CLI makes scheduled routines only. GitHub/API triggers -> use web UI.
 
 ### 5. Customize prompts
 
-Templates = starting points. Customize:
+Templates = start point. Customize:
 
 - **Project-specific checks**: reference patterns hooks enforce
 - **Labels**: match issue label taxonomy
@@ -76,12 +76,12 @@ See [REFERENCE.md](REFERENCE.md) for customization examples and API trigger setu
 
 ### 6. Test
 
-Run once manually before relying on triggers:
+Run once by hand before trust triggers:
 
 1. Web: **Run now** on routine detail page
 2. CLI: `/schedule run`
 3. Watch session live at returned URL
-4. Review output -- adjust prompt if it wandered
+4. Check output -- tweak prompt if wandered
 
 ## Routine vs. Sandcastle vs. interactive
 
@@ -104,4 +104,4 @@ Routines run inside harness -- no bypass:
 - **Agents**: reviewer agents (code-reviewer, self-reviewer, adversarial-reviewer) dispatchable
 - **Stop hooks**: quality gates (lint, typecheck) fire before session ends
 
-Update hook -> every future routine run picks it up (next clone). No prompt changes needed.
+Update hook -> every future routine run picks up (next clone). No prompt changes needed.

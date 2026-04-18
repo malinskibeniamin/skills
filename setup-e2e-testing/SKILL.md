@@ -27,7 +27,7 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 ```
 
 ## Monitor for E2E
-`Monitor: bun run test:e2e` -- stream results, react to failures before suite finishes.
+`Monitor: bun run test:e2e` -- stream results, react to failures before suite finish.
 
 ## Agent-Browser vs Playwright
 
@@ -40,4 +40,4 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 | CI | Playwright |
 | AI page inspection | agent-browser |
 
-For setup (install, config, fixtures, Testcontainers): see [SETUP.md](SETUP.md).
+Setup (install, config, fixtures, Testcontainers): see [SETUP.md](SETUP.md).

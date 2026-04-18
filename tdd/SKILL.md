@@ -12,20 +12,20 @@ paths:
 
 ## Iron Law
 
-**No production code without failing test first.** No exceptions.
+**No prod code without failing test first.** No exceptions.
 
 ## Anti-Pattern: Horizontal Slices
 
-**DO NOT write all tests first, then all implementation.** Bulk tests test *imagined* behavior, not *actual*.
+**DO NOT write all tests first, then all impl.** Bulk tests test *imagined* behavior, not *actual*.
 
-**Correct**: Vertical slices -- one test -> one implementation -> repeat.
+**Correct**: Vertical slices -- one test -> one impl -> repeat.
 
     WRONG:  RED: test1,test2,test3  ->  GREEN: impl1,impl2,impl3
     RIGHT:  RED->GREEN: test1->impl1  ->  RED->GREEN: test2->impl2
 
 ## State Machine
 
-Full state diagram in [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
+Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ## Workflow
 
@@ -33,14 +33,14 @@ Full state diagram in [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 - Run `vitest run --coverage.enabled --coverage.reporter=text`
 - Find uncovered lines/branches/functions in changed files -> test targets
-- Confirm behaviors with user (prioritize gaps over already-covered code)
-- Find [deep module](deep-modules.md) opportunities (small interface, deep impl)
+- Confirm behaviors w/ user (prioritize gaps over covered code)
+- Find [deep module](deep-modules.md) chance (small interface, deep impl)
 - Design interfaces for [testability](interface-design.md)
 
 ### 1. RED -- Failing test (tracer bullet)
 
 - ONE test, ONE behavior, clear name
-- Real code, not mocks (unless unavoidable -- see [mocking.md](mocking.md))
+- Real code, no mocks (unless unavoidable -- see [mocking.md](mocking.md))
 - Verify fails for RIGHT reason
 
 ### 2. GREEN -- Minimal code to pass
@@ -50,11 +50,11 @@ Full state diagram in [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ### 3. REFACTOR -- Clean up while green
 
-- Remove duplication | improve naming | deepen modules
+- Kill duplication | fix naming | deepen modules
 - Tests after every change -- stay green
-- **Never refactor while RED.** Get to GREEN first.
+- **Never refactor while RED.** Get GREEN first.
 - Flag unit tests >500ms, integration >2s
-- Avoid per-keystroke simulation (slow, flaky) -> bulk input
+- Avoid per-keystroke sim (slow, flaky) -> bulk input
 - Commit when clean
 
 ### Reactive TDD with Monitor
@@ -63,11 +63,11 @@ Full state diagram in [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ### 4. REPEAT -- Next behavior
 
-RED->GREEN->REFACTOR per remaining behavior. One at a time.
+RED->GREEN->REFACTOR per behavior. One at a time.
 
 ### Per-Cycle Checklist
 
-- [ ] Test describes behavior, not implementation
+- [ ] Test describes behavior, not impl
 - [ ] Test uses public interface only
 - [ ] Test survives internal refactor
 - [ ] Code minimal for this test
@@ -83,17 +83,17 @@ RED->GREEN->REFACTOR per remaining behavior. One at a time.
 
 ## Visual Regression Tests (Route Files)
 
-New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project uses vitest browser mode (existing `*.browser.test.*` files or `@vitest/browser` dep). Skip for layout/redirect-only routes. See [REFERENCE.md](REFERENCE.md).
+New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project use vitest browser mode (existing `*.browser.test.*` files or `@vitest/browser` dep). Skip layout/redirect-only routes. See [REFERENCE.md](REFERENCE.md).
 
 ## When Done
 
 - [ ] All pass (`vitest run`)
-- [ ] No async leaks (`vitest run --detectAsyncLeaks`) -- Stop hook runs this automatically
-- [ ] No `setTimeout` hacks -- condition-based waiting
+- [ ] No async leaks (`vitest run --detectAsyncLeaks`) -- Stop hook runs auto
+- [ ] No `setTimeout` hacks -- condition-based wait
 - [ ] Coverage gaps closed -- re-run coverage, verify changed files
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
 - [ ] Portal tests: `defaultOpen` for content tests | `waitFor` for close assertions
-- [ ] Tests verify behavior, not implementation
+- [ ] Tests verify behavior, not impl
 - [ ] Consider `expect.soft()` for multi-assertion state tests
 
 See [REFERENCE.md](REFERENCE.md) for element selectors, portal testing, mock patterns, diagnostics, Vitest config.

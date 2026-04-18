@@ -5,7 +5,7 @@ description: Enforce UX text style guide via PostToolUse hooks -- bans exclamati
 
 # Setup UX Copy
 
-PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
+PostToolUse hook on Edit/Write check `.ts` and `.tsx` files:
 
 - **Ban** exclamation points in UI strings
 - **Ban** "successfully" (use past-tense verb: "Topic created")
@@ -28,7 +28,7 @@ PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 
 ### Escape hatch
 
-`// allow: ux-copy [reason]` anywhere in file skips all checks.
+`// allow: ux-copy [reason]` anywhere in file skip all checks.
 
 ## Steps
 
@@ -39,7 +39,7 @@ Copy [`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh) and [`scripts/_hook-
 Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/ux-copy-check.sh`
 
 ### 3. Copy glossary (optional, for DDD)
-Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pairs with `ubiquitous-language` community skill.
+Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pair with `ubiquitous-language` community skill.
 
 ### 4. Verify
 - [ ] Hook blocks `"Something!"` in string literals

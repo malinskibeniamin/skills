@@ -2,7 +2,7 @@
 
 ## env-validation-check.sh
 
-PostToolUse hook that blocks raw `process.env.` access outside dedicated env files.
+PostToolUse hook. Block raw `process.env.` access outside dedicated env files.
 
 > Script: [`scripts/env-validation-check.sh`](scripts/env-validation-check.sh)
 
@@ -39,4 +39,3 @@ import { env } from "@/env";
 const url = env.PUBLIC_API_URL;   // string (validated URL)
 const secret = env.API_SECRET;     // string (min length 1)
 ```
-

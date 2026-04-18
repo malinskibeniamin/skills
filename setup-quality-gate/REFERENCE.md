@@ -58,13 +58,13 @@ jobs:
 
 ## Test Performance Profiling
 
-When `test-perf-stop.sh` detect regressions, use `vitest-profiler`:
+`test-perf-stop.sh` detect regression → use `vitest-profiler`:
 
 ```bash
 bunx vitest-profiler --run
 ```
 
-Output flamegraph timing data. Diagnostic follow-up, not routine CI.
+Flamegraph timing output. Diagnostic, not routine CI.
 
 ## Asset Type Declarations
 
@@ -101,7 +101,7 @@ rsbuild: `@rsbuild/core/types` in tsconfig may suffice.
 
 ## CI Status Check
 
-After push: `Monitor: gh pr checks <number> --watch` — keep working. Before merge: confirm green.
+Post-push: `Monitor: gh pr checks <number> --watch` — keep working. Pre-merge: confirm green.
 
 ## Cross-Model Review (Optional)
 

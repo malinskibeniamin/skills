@@ -10,10 +10,10 @@
 
 1. **Pure function components** — derive UI from props/state/context. No side effects during render.
 2. **Plain JavaScript over hooks** — `const total = items.reduce(...)` not `useMemo(...)`. Compiler memoizes.
-3. **Inline callbacks fine** — `<Dialog onClose={() => setOpen(false)} />`. Don't extract to `useCallback`.
+3. **Inline callbacks fine** — `<Dialog onClose={() => setOpen(false)} />`. No extract to `useCallback`.
 4. **Derive, don't store** — never `useState` + `useEffect` for derived values.
 5. **Hooks for semantics** — `useState` for UI state, `useEffect` for external sync, `useRef` for imperative handles.
-6. **No `useRef` as memo cache** — compiler owns caching.
+6. **No `useRef` as memo cache** — compiler own caching.
 7. **`useMemo`/`useCallback`/`React.memo` = escape hatches** — only for non-React integration or correctness-critical referential stability. Document why.
 8. **Never remove `'use no memo'`** — last-resort opt-out.
 9. **Naming** — PascalCase components, `use*` hooks (aids compiler inference).
@@ -24,7 +24,7 @@
 
 ## Escape Hatch: 'use no memo'
 
-When React Compiler causes issues with specific component, add directive at file top:
+Compiler break specific component → add directive at file top:
 
 ```tsx
 'use no memo'
@@ -36,22 +36,22 @@ export function ProblematicComponent() {
 }
 ```
 
-Never introduce or remove directives automatically. Document why when adding `'use no memo'`.
+Never add/remove directives automatic. Document why when adding `'use no memo'`.
 
 ## Compiler Modes
 
 | Mode | Behavior | When to use |
 |------|----------|-------------|
-| `infer` (default) | Heuristically detects components (PascalCase + JSX) and hooks (`use*`) | Most projects |
-| `annotation` | Only compiles `"use memo"` annotated functions | Incremental adoption |
+| `infer` (default) | Heuristic detect components (PascalCase + JSX) and hooks (`use*`) | Most projects |
+| `annotation` | Only compile `"use memo"` annotated functions | Incremental adoption |
 | `syntax` | Flow-specific component syntax | Rare — Flow only |
-| `all` | Compiles all top-level functions | Discouraged |
+| `all` | Compile all top-level functions | Discouraged |
 
 Assume `infer` unless configured otherwise. Code must work without compiler. Respect existing directives — trust boundaries, not performance hints.
 
 ### Annotation Mode for Legacy Codebases
 
-Opt in file-by-file instead of compiling everything.
+Opt in file-by-file, no compile everything.
 
 **Setup:**
 
@@ -74,7 +74,7 @@ Set `REACT_COMPILER_MODE=annotation` in SessionStart hook so memoization checks 
 echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 ```
 
-**Migration:** Install with `annotation` → add `"use memo"` per-file as you migrate → remove manual memo in annotated files → once all annotated, switch to `infer`, remove directives.
+**Migration:** Install with `annotation` → add `"use memo"` per-file while migrate → remove manual memo in annotated files → once all annotated, switch to `infer`, remove directives.
 
 **Hook behavior by mode:**
 
@@ -85,7 +85,7 @@ echo "export REACT_COMPILER_MODE=annotation" >> "$CLAUDE_ENV_FILE"
 
 ## Component Library Directory
 
-All files in `components/ui/` or `redpanda-ui/` need `'use no memo'` — registry components need explicit memoization control, and consumers may have different compiler settings.
+All files in `components/ui/` or `redpanda-ui/` need `'use no memo'` — registry components need explicit memoization control, consumers may have different compiler settings.
 
 ## Post-Compiler Pattern Reference
 
@@ -101,4 +101,4 @@ All files in `components/ui/` or `redpanda-ui/` need `'use no memo'` — registr
 
 ## When Manual Optimization IS Allowed
 
-Only when: profiling reveals real bottleneck **after** compilation, interfacing with non-React/legacy systems, referential stability for **correctness** (not performance), or precise effect re-execution control beyond compiler inference. Add `'use no memo'` and document why.
+Only when: profiling reveal real bottleneck **after** compilation, interfacing with non-React/legacy systems, referential stability for **correctness** (not performance), or precise effect re-execution control beyond compiler inference. Add `'use no memo'` and document why.

@@ -5,9 +5,9 @@ description: "Grilling session that challenges plans against the project's domai
 
 # Domain Model
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Interview relentlessly about every aspect of plan until shared understanding reached. Walk each branch of design tree, resolve dependencies one-by-one. Each question, give recommended answer.
 
-Ask questions one at a time. If answerable by exploring codebase, explore instead.
+Ask one at a time. If answerable by codebase exploration, explore instead.
 
 ## Light DDD -- Document, Don't Prescribe
 
@@ -18,7 +18,7 @@ Goal = "just enough docs" to make codebase navigable. Language into software, no
 
 ## Domain Awareness
 
-During codebase exploration, look for existing documentation:
+During codebase exploration, look for existing docs:
 
 ### Single context (most repos)
 
@@ -46,14 +46,14 @@ Create files lazily -- only when first term resolved or first ADR needed.
 
 ## During Session
 
-**Challenge glossary**: Term conflicts with CONTEXT.md? Call out immediately.
+**Challenge glossary**: Term conflicts with CONTEXT.md? Call out now.
 
-**Sharpen language**: Vague or overloaded term? Propose precise canonical term. "You're saying 'account' -- Customer or User? Different things."
+**Sharpen language**: Vague or overloaded term? Propose precise canonical term. "You say 'account' -- Customer or User? Different things."
 
 **Concrete scenarios**: Stress-test relationships with edge cases. Force precision on boundaries.
 
 **Cross-reference code**: User states how something works -> verify code agrees. Surface contradictions.
 
-**Update CONTEXT.md inline**: Term resolved -> update immediately. Don't batch. See [CONTEXT-FORMAT.md](CONTEXT-FORMAT.md).
+**Update CONTEXT.md inline**: Term resolved -> update now. No batch. See [CONTEXT-FORMAT.md](CONTEXT-FORMAT.md).
 
 **Offer ADRs sparingly**: Only when ALL three true: hard to reverse, surprising without context, result of real trade-off. See [ADR-FORMAT.md](ADR-FORMAT.md).

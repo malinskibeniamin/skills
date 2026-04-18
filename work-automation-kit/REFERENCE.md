@@ -47,7 +47,7 @@ Quick question (on a specific decision)
 | DDD | domain-model | ubiquitous-language |
 | Meta | write-a-skill, grill-me, zoom-out | git-guardrails |
 
-Owned skills ship with this repo. Skills marked "community" are installed from mattpocock/skills.
+Owned skills ship with repo. "Community" skills install from mattpocock/skills.
 
 ## Optional Integrations
 

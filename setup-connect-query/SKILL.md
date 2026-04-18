@@ -11,11 +11,11 @@ paths:
 
 ## What This Catches
 
-- **Ban raw `useQuery`/`useMutation`** from `@tanstack/react-query` when file uses ConnectRPC -- use Connect Query (exception: `useTransport`/`callUnaryMethod` pattern)
-- **Ban `invalidateQueries()`** with no args -- must specify query key
+- **Ban raw `useQuery`/`useMutation`** from `@tanstack/react-query` when file use ConnectRPC -- use Connect Query (exception: `useTransport`/`callUnaryMethod` pattern)
+- **Ban `invalidateQueries()`** no args -- must specify query key
 - **Warn on `axios`/`fetch()`** -- prefer ConnectRPC transport
 - **Protobuf v2**: Ban `new Message()` -> use `create(Schema)`. Ban `PlainMessage`/`PartialMessage` -> use `MessageShape`/`MessageInitShape`. Ban manual `$typeName` literals.
 
 Escape hatch: `// allow: direct-query [reason]`
 
-See [REFERENCE.md](REFERENCE.md) for protobuf gotchas (Timestamp, Duration, Any, cache patterns). For initial setup: see [SETUP.md](SETUP.md).
+See [REFERENCE.md](REFERENCE.md) for protobuf gotchas (Timestamp, Duration, Any, cache patterns). Initial setup: see [SETUP.md](SETUP.md).

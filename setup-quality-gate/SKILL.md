@@ -8,12 +8,12 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 ## What This Sets Up
 
 - `quality:gate` script -- lint + type check + related tests in <5s
-- GitHub Actions workflow with formatting integrity (`git diff --exit-code`)
+- GitHub Actions workflow w/ formatting integrity (`git diff --exit-code`)
 - Stop hook: tsgo + related tests before finish
-- Bundle guard hook: warns on heavy deps (moment, lodash, jquery, core-js, classnames)
-- Test perf audit hook: surfaces duration regressions >30%
+- Bundle guard hook: warn on heavy deps (moment, lodash, jquery, core-js, classnames)
+- Test perf audit hook: surface duration regressions >30%
 - CI status check + `@claude review` trigger
-- Optional: `/codex:review` for cross-model review
+- Optional: `/codex:review` cross-model review
 
 ## Steps
 
@@ -32,10 +32,10 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 ```
 
 ### 2. Asset type declarations
-Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) -- tsgo needs it for .svg/.css/.png imports.
+Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) -- tsgo need for .svg/.css/.png imports.
 
 ### 3. GitHub Actions
-Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Runs on PR + push to main.
+Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Run on PR + push to main.
 
 ### 4. Hook scripts
 Copy into `.claude/hooks/`, `chmod +x`:
@@ -44,7 +44,7 @@ Copy into `.claude/hooks/`, `chmod +x`:
 - `scripts/test-perf-stop.sh` -> Stop
 
 ### 5. Verify
-- [ ] `bun run quality:gate` works
-- [ ] `.github/workflows/quality-gate.yml` exists
-- [ ] `src/types/assets.d.ts` exists
-- [ ] All hook scripts executable and configured
+- [ ] `bun run quality:gate` work
+- [ ] `.github/workflows/quality-gate.yml` exist
+- [ ] `src/types/assets.d.ts` exist
+- [ ] All hook scripts executable + configured

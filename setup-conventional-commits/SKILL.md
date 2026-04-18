@@ -5,7 +5,7 @@ description: Enforce conventional commit format via a PreToolUse hook on Bash th
 
 # Setup Conventional Commits
 
-PreToolUse hook (Bash) intercepts `git commit -m` -> validates format. Replaces commitlint + husky (zero deps).
+PreToolUse hook (Bash) intercept `git commit -m` -> validate format. Replace commitlint + husky (zero deps).
 
 ## Format
 
@@ -16,7 +16,7 @@ type(scope): description
 - **type**: feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert
 - **scope**: required, lowercase in parens -- `feat(webui):`, `fix(backend):`
 - **description**: lowercase first letter, no trailing period, 5-72 chars
-- **body**: optional, encouraged for feat/fix
+- **body**: optional, encourage for feat/fix
 
 ## Steps
 
@@ -25,6 +25,6 @@ type(scope): description
 3. Optional: `codex-compat` for Codex `.codex/hooks.json`
 
 ## Verify
-- [ ] Blocks: `git commit -m "bad message"`, `git commit -m "feat: missing scope"`, `git commit -m "feat(ui): A"` (uppercase)
-- [ ] Allows: `git commit -m "feat(ui): add button component"`
-- [ ] Ignores non-commit Bash commands
+- [ ] Block: `git commit -m "bad message"`, `git commit -m "feat: missing scope"`, `git commit -m "feat(ui): A"` (uppercase)
+- [ ] Allow: `git commit -m "feat(ui): add button component"`
+- [ ] Ignore non-commit Bash commands

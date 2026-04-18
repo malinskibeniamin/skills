@@ -1,18 +1,18 @@
 ---
 name: setup-registry-workflow
-description: Registry hooks + component taxonomy + consumer drift analysis. Use when maintaining a shadcn component registry, design system, or analyzing drift between consumer repos and registry.
+description: Registry hooks + component taxonomy + consumer drift analysis. Use when maintain shadcn component registry, design system, or analyze drift between consumer repos + registry.
 ---
 
 # Setup Registry Workflow
 
 ## Hooks
 
-- **PostToolUse** (`ui-registry-warn.sh`): warns once/session when editing UI component dirs | prompts upstream PR
-- **Stop** (`registry-check.sh`): blocks if redpanda-ui modified without updating `registry.json` + adding changeset
+- **PostToolUse** (`ui-registry-warn.sh`): warn once/session when edit UI component dirs | prompt upstream PR
+- **Stop** (`registry-check.sh`): block if redpanda-ui modified without update `registry.json` + add changeset
 
 ## Component Taxonomy (Atomic Design)
 
-Classify every registry component into one level. Drives test depth.
+Classify every registry component into one level. Drive test depth.
 
 | Level | useState | Registry imports | Custom kbd handlers | Portal | Test count |
 |-------|----------|-----------------|-------------------|--------|------------|
@@ -20,22 +20,22 @@ Classify every registry component into one level. Drives test depth.
 | **Molecule** | 2 | 1-2 | 1-10 lines | Maybe | 5-8 |
 | **Organism** | 3+ | 3+ | 10+ lines | Often | 8-15 |
 
-Tiebreaker: highest-scoring signal wins. Radix-provided kbd nav doesn't count.
+Tiebreaker: highest-scoring signal win. Radix-provided kbd nav no count.
 
 **Atom**: Single-responsibility primitives | one semantic HTML element/Radix primitive | zero or one controlled/uncontrolled toggle.
 Examples: Button, Badge, Input, Label, Separator, Spinner, Skeleton, Checkbox, Switch
 
-**Molecule**: Combines 2-3 atoms | limited local state (open/closed, selected index) | simple portals.
+**Molecule**: Combine 2-3 atoms | limited local state (open/closed, selected index) | simple portals.
 Examples: CopyButton, InputGroup, ButtonGroup, Field, Accordion, Breadcrumb, Card, Tabs
 
 **Organism**: Multiple molecules+atoms | significant state (3+ vars or useReducer) | custom kbd nav | portal rendering.
 Examples: Combobox, MultiSelect, DataTable, Dialog, DropdownMenu, Sheet, Sidebar, AutoForm
 
-Component evolves between levels -> verify heuristics | expand tests to new minimum | review FP compliance.
+Component evolve between levels -> verify heuristics | expand tests to new minimum | review FP compliance.
 
 ## Consumer Drift Analysis
 
-Compare consumer repo components against registry source. Run when upstream syncing.
+Compare consumer repo components against registry source. Run when upstream sync.
 
 ### Process
 
@@ -83,6 +83,6 @@ Safe: prop-based logic (`variant === 'destructive'`, `size === 'lg'`).
 
 ## Verify
 - [ ] Both hooks executable
-- [ ] Editing `components/ui/` or `redpanda-ui/` triggers warning
-- [ ] Modifying `redpanda-ui/` without `registry.json` update -> Stop block
-- [ ] Modifying `redpanda-ui/` with `registry.json` but no changeset -> Stop block
+- [ ] Edit `components/ui/` or `redpanda-ui/` trigger warning
+- [ ] Modify `redpanda-ui/` without `registry.json` update -> Stop block
+- [ ] Modify `redpanda-ui/` with `registry.json` but no changeset -> Stop block

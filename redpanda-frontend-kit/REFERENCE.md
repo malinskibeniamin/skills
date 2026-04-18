@@ -4,15 +4,15 @@
 
 | Addition | What it does |
 |---|---|
-| Chakra UI ban | Blocks `@chakra-ui/react` imports |
-| Legacy import ban | Blocks `@redpanda-data/ui` imports |
-| `UI_LIB_DIRS` | Sets `components/ui\|redpanda-ui` for hook exclusion |
-| `REDPANDA_KIT=1` | Enables registry pattern nudges |
+| Chakra UI ban | Block `@chakra-ui/react` imports |
+| Legacy import ban | Block `@redpanda-data/ui` imports |
+| `UI_LIB_DIRS` | Set `components/ui\|redpanda-ui` for hook exclusion |
+| `REDPANDA_KIT=1` | Enable registry pattern nudges |
 | setup-registry-workflow | Stop hook for registry.json rebuild reminders |
 
 ## Registry Pattern Nudges (REDPANDA_KIT=1)
 
-When `REDPANDA_KIT=1`, orchestration-guidance adds nudges:
+`REDPANDA_KIT=1` → orchestration-guidance add nudges:
 
 | Detected pattern | Nudge |
 |---|---|
@@ -20,7 +20,7 @@ When `REDPANDA_KIT=1`, orchestration-guidance adds nudges:
 | `<h1>`--`<h6>`, `<p>` raw HTML | Use `Heading`/`Text` from registry |
 | Key-value / labels / tags patterns | Consider `KeyValueField` + `BadgeGroup` |
 
-Warnings, not blocks. Surface registry components Claude wouldn't know.
+Warnings, not blocks. Surface registry components Claude no know.
 
 ## Redpanda-Specific Environment
 
@@ -51,14 +51,14 @@ Registry docs: `https://redpanda-ui-registry.netlify.app/docs/<component>`
 
 ## Cross-Repo Visibility (Module Federation)
 
-Symlink remotes so Claude can read them:
+Symlink remotes so Claude can read:
 
 ```bash
 mkdir -p linked-repos && echo "linked-repos/" >> .gitignore
 ln -s /path/to/remote-app-1/src linked-repos/remote-1
 ```
 
-Document in `CLAUDE.md`. Claude follows symlinks transparently.
+Document in `CLAUDE.md`. Claude follow symlinks transparent.
 
 ## UI Registry Symlink
 
@@ -66,11 +66,11 @@ Document in `CLAUDE.md`. Claude follows symlinks transparently.
 ln -s /path/to/ui-registry linked-repos/ui-registry
 ```
 
-When modifying `@/components/redpanda-ui/`, also update `linked-repos/ui-registry/`. With `REDPANDA_KIT=1`, orchestration nudges upstream PR.
+Modify `@/components/redpanda-ui/` → also update `linked-repos/ui-registry/`. With `REDPANDA_KIT=1`, orchestration nudge upstream PR.
 
 ## Package Source Code (opensrc)
 
-[opensrc](https://github.com/vercel-labs/opensrc) fetches third-party source matching lockfile version:
+[opensrc](https://github.com/vercel-labs/opensrc) fetch third-party source matching lockfile version:
 
 ```bash
 npx opensrc zustand

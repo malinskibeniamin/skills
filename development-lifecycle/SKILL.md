@@ -5,25 +5,23 @@ description: "Use when doing frontend/React/TypeScript/UI work. Auto-guides phas
 
 # Development Lifecycle
 
-Auto-detects phase, guides through correct process.
+Auto-detect phase, guide correct process.
 
 ## Phases
 
 ### 0. Worktree (automatic, silent if already isolated)
 
-On a feature branch already? Skip. On main/master/develop? Spawn a
-worktree before typing code. [ETHOS: Worktree Isolation]
+On feature branch? Skip. On main/master/develop? Spawn worktree before code. [ETHOS: Worktree Isolation]
 
     scripts/mux-worktree.sh <type>/<branch-name>
 
-Claude invokes this silently when phase 1 starts on a default branch.
-User never has to run it.
+Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 1. Understand
 
 - Explore | clarify one-at-a-time | new->2-3 approaches+tradeoffs | bug->failing test->root cause
-- Spawn background agents: alternatives, prior art, edge cases in parallel
-- Mixed patterns in area? Refactor to single pattern FIRST before adding features
+- Spawn background agents: alternatives, prior art, edge cases parallel
+- Mixed patterns area? Refactor to single pattern FIRST before add features
 - **GATE: no impl code until approach approved.**
 
 ### 2. Plan
@@ -33,11 +31,11 @@ User never has to run it.
 - UI work: spawn 2-3 parallel prototype agents, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
 - 5+ tasks -> plan as stacked PRs (one per logical group)
 - Complex plan (5+ tasks, multi-stakeholder)? Consider `/ultraplan`
-- If `/codex:rescue` available -> auto-dispatch for second opinion
+- If `/codex:rescue` available -> auto-dispatch second opinion
 
 ### 2b. Grill
 
-**GATE: no impl until plan survives grilling.**
+**GATE: no impl until plan survive grilling.**
 
 - Auto-invoke `/domain-model` | grill until every branch resolved | update CONTEXT.md + ADRs inline
 - Update plan with changes | get explicit user confirmation
@@ -46,12 +44,12 @@ User never has to run it.
 ### 3. Implement (TDD)
 
 - RED: failing test first | GREEN: minimal code to pass
-- **Test deletion guard**: verify test+assertion count didn't decrease after GREEN. AI may weaken tests -> reject and redo.
+- **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
 
 ### 4-6. Ship -- `/go`
 
-Implementation done -> run `/go` to ship. Handles everything from here:
+Impl done -> run `/go` to ship. Handle everything:
 
 - **4. Verify** -- types + lint + tests + browser smoke
 - **4b. Review / Refine** -- self-reviewer + adversarial-reviewer agents (4b->5)
@@ -59,11 +57,11 @@ Implementation done -> run `/go` to ship. Handles everything from here:
 - **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds with early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** -- codify lessons as `.claude/rules/`
 
-See `/go` skill for full details. See [REFERENCE.md](REFERENCE.md) for phase-specific checklists.
+See `/go` skill full details. See [REFERENCE.md](REFERENCE.md) phase-specific checklists.
 
 ## Phase Selection
 
-Full flowchart in [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
+Full flowchart [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 
 | User says | Phases |
 |---|---|
@@ -76,4 +74,4 @@ Full flowchart in [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 | "Batch these 5 issues" | **Sandcastle** -- parallel agents |
 | "Work on this overnight" | **Sandcastle** -- AFK delegation |
 
-See [REFERENCE.md](REFERENCE.md) for detailed checklists and Sandcastle integration.
+See [REFERENCE.md](REFERENCE.md) detailed checklists + Sandcastle integration.

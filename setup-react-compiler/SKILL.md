@@ -8,11 +8,11 @@ description: Install React Compiler with rsbuild and enforce compiler-friendly p
 ## What This Sets Up
 
 - **babel-plugin-react-compiler** with rsbuild
-- PostToolUse hook flags: `useMemo`/`useCallback`/`React.memo` (compiler handles it), derived-state-via-useEffect, `useRef` as memo cache
+- PostToolUse hook flags: `useMemo`/`useCallback`/`React.memo` (compiler handle), derived-state-via-useEffect, `useRef` as memo cache
 - `'use no memo'` escape hatch + auto-skip component library dirs
-- Annotation mode (`REACT_COMPILER_MODE=annotation`) for brownfield: only flags in files with `"use memo"`
+- Annotation mode (`REACT_COMPILER_MODE=annotation`) for brownfield: flag only files with `"use memo"`
 
-See [REFERENCE.md](REFERENCE.md) for post-compiler coding rules.
+See [REFERENCE.md](REFERENCE.md) for post-compiler rules.
 
 ## Steps
 
@@ -46,6 +46,6 @@ Add `'use no memo'` to all `.tsx` in component library dir.
 Copy `scripts/react-compiler-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
 
 ### 5. Verify
-- [ ] rsbuild config includes babel plugin
-- [ ] Hook executable and configured
+- [ ] rsbuild config has babel plugin
+- [ ] Hook executable + configured
 - [ ] Component library files have `'use no memo'`

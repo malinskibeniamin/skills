@@ -9,17 +9,17 @@ paths:
 
 ## What This Catches
 
-- **`<img>` without `alt`** -- use `alt=""` for decorative images
-- **Mouse-only `onClick` on `<div>`/`<span>`** -- requires `role` + `tabIndex` + `onKeyDown`/`onKeyUp`
+- **`<img>` without `alt`** -- use `alt=""` for decorative img
+- **Mouse-only `onClick` on `<div>`/`<span>`** -- needs `role` + `tabIndex` + `onKeyDown`/`onKeyUp`
 - **Missing ARIA on widget roles** -- `role="combobox"` needs `aria-expanded` + `aria-controls`, `role="dialog"` needs `aria-label`/`aria-labelledby`, `role="tablist"` needs child `role="tab"`
 
 Escape hatch: `// allow: a11y-skip [reason]`
 
 ## No Nested Pressables
 
-Interactive components follow ONE pattern -- never both:
+Interactive components ONE pattern -- never both:
 
-**Pattern A: Container is clickable** -- no interactive children.
+**Pattern A: Container clickable** -- no interactive children.
 ```tsx
 <ListCard onClick={handleSelect}>
   <Avatar src={user.avatar} />
@@ -28,7 +28,7 @@ Interactive components follow ONE pattern -- never both:
 </ListCard>
 ```
 
-**Pattern B: Children are interactive** -- container is not clickable.
+**Pattern B: Children interactive** -- container not clickable.
 ```tsx
 <ListCard>
   <Avatar src={user.avatar} />
@@ -47,10 +47,10 @@ Why: ambiguous click targets, event bubbling bugs, screen readers can't convey i
 
 - [ ] Focus rings visible on all interactive elements (min 2px, contrasting color)
 - [ ] Hover and focus styles match (no mouse-only affordances)
-- [ ] Color not sole means of conveying information
-- [ ] Touch targets at least 44x44 CSS pixels
+- [ ] Color not sole means of conveying info
+- [ ] Touch targets min 44x44 CSS pixels
 - [ ] `prefers-reduced-motion` respected for animations
 - [ ] `forced-colors` / high-contrast mode: use `currentcolor` for SVG fills
 - [ ] Text resizable to 200% without content loss
 
-For initial setup (install, AXE fixture, hook config): see [SETUP.md](SETUP.md).
+Initial setup (install, AXE fixture, hook config): see [SETUP.md](SETUP.md).

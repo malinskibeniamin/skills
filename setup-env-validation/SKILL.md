@@ -5,7 +5,7 @@ description: Enforce type-safe environment variable access using t3-env with zod
 
 # Setup Env Validation
 
-t3-env + zod for type-safe env vars. Single `src/env.ts` as source of truth. PostToolUse hook blocks raw `process.env.` in TS/TSX/JS/JSX (skips env files + tests).
+t3-env + zod for type-safe env vars. Single `src/env.ts` source of truth. PostToolUse hook block raw `process.env.` in TS/TSX/JS/JSX (skip env files + tests).
 
 ## Steps
 
@@ -39,6 +39,6 @@ Copy `scripts/env-validation-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hook
 
 ### 4. Verify
 - [ ] `import { env } from "@/env"` works
-- [ ] Hook blocks `process.env.X` in regular files
-- [ ] Hook allows `process.env` in env.ts/env.mts/env.mjs/env.js
-- [ ] Hook skips test files
+- [ ] Hook block `process.env.X` in regular files
+- [ ] Hook allow `process.env` in env.ts/env.mts/env.mjs/env.js
+- [ ] Hook skip test files

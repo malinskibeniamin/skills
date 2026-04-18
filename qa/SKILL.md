@@ -5,7 +5,7 @@ description: "Interactive QA session where user reports bugs conversationally an
 
 # QA Session
 
-User describes problems. You clarify, explore codebase for context, file GitHub issues using project domain language.
+User describe problems. You clarify, explore codebase for context, file GitHub issues using project domain language.
 
 ## AI Disclaimer
 
@@ -19,20 +19,20 @@ Every issue filed during QA **must** include at top of body:
 
 ### 1. Listen + Lightly Clarify
 
-At most 2-3 short questions: expected vs actual, steps to reproduce, consistent or intermittent. If clear enough -> move on. Don't over-interview.
+Max 2-3 short questions: expected vs actual, steps to reproduce, consistent or intermittent. If clear -> move on. No over-interview.
 
 ### 2. Background Codebase Exploration
 
-Kick off Agent(subagent_type=Explore, run_in_background=true) to understand relevant area:
+Kick off Agent(subagent_type=Explore, run_in_background=true) to understand area:
 - Domain language (check CONTEXT.md if exists)
-- What feature is supposed to do
+- What feature supposed do
 - User-facing behavior boundary
 
-Goal = write better issue. Issue itself should NOT reference file paths or internals.
+Goal = write better issue. Issue itself NOT reference file paths or internals.
 
 ### 2b. Browser Capture (optional)
 
-If the bug is visible in the running app, capture current state via
+Bug visible in running app? Capture state via
 `scripts/skills-browser.sh` (Vercel agent-browser wrapper). Use refs
 not screenshots — cheaper tokens, cookies preserved across runs.
 
@@ -40,8 +40,8 @@ not screenshots — cheaper tokens, cookies preserved across runs.
     scripts/skills-browser.sh read          # returns @eN ref tree
     scripts/skills-browser.sh screenshot --out /tmp/qa.png
 
-Do NOT use for test code — Playwright test files keep using
-`@playwright/test` directly. skills-browser is for AI-visible browser
+No use for test code — Playwright test files keep using
+`@playwright/test` directly. skills-browser for AI-visible browser
 state (QA, /go phase 4 smoke, /design-review). [docs/rfc/browser-daemon.md]
 
 ### 3. Single Issue or Breakdown?
@@ -52,7 +52,7 @@ state (QA, /go phase 4 smoke, /design-review). [docs/rfc/browser-daemon.md]
 
 ### 4. File GitHub Issue(s)
 
-`gh issue create`. Don't ask to review -- file and share URL.
+`gh issue create`. No ask review -- file and share URL.
 
 #### Single Issue
 
@@ -85,7 +85,7 @@ Create in dependency order (blockers first) so real issue numbers available.
     ## Blocked By
     - #<issue> or "None -- can start immediately"
 
-**Rules**: Many thin issues > few thick. Mark blocking honestly. Maximize parallelism.
+**Rules**: Many thin issues > few thick. Mark blocking honest. Maximize parallelism.
 
 #### All Issues
 
@@ -97,4 +97,4 @@ Create in dependency order (blockers first) so real issue numbers available.
 
 ### 5. Continue
 
-Print issue URLs. Ask: "Next issue, or done?" Each issue independent -- don't batch.
+Print issue URLs. Ask: "Next issue, or done?" Each issue independent -- no batch.

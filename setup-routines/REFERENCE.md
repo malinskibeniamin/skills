@@ -41,9 +41,9 @@
 
 ## API trigger setup
 
-For CI/CD integration (deploy verification, post-merge checks):
+For CI/CD integration (deploy verify, post-merge checks):
 
-1. Create routine with desired prompt
+1. Create routine with prompt
 2. Edit routine → Add trigger → API
 3. Copy URL, generate token
 4. Store token in CI secrets
@@ -76,7 +76,7 @@ GitHub Actions step:
 
 ### Scope to specific directories
 
-Add to any template prompt:
+Add to template prompt:
 
 ```
 Only review files under src/features/ and src/components/.
@@ -117,12 +117,12 @@ Add to PR review trigger filters:
 
 Before enabling, verify:
 
-- [ ] **PR review**: hooks handle style/pattern enforcement — prompt says "skip what hooks catch"
+- [ ] **PR review**: hooks handle style/pattern enforcement — prompt say "skip what hooks catch"
 - [ ] **PR feedback resolve**: has "skip ambiguous" + "max 2 CI attempts" guardrails
 - [ ] **Issue triage**: labels-only for features, investigation-only for bugs
 - [ ] **Weekly health**: delta-based, silent when stable
 - [ ] **Docs drift**: verified drift only, no false positives
-- [ ] **All templates**: tested with "Run now" before enabling triggers
+- [ ] **All templates**: test with "Run now" before enabling triggers
 
 ## Enforcement flow diagram
 
@@ -190,4 +190,4 @@ Extra runs consume subscription usage when overage enabled.
 
 **Can't push branches** — Default: routines only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in config if needed.
 
-**GitHub trigger not firing** — Claude GitHub App must be installed on repo. Trigger setup prompts installation. `/web-setup` alone not sufficient — grants clone access but not webhook delivery.
+**GitHub trigger not firing** — Claude GitHub App must install on repo. Trigger setup prompts install. `/web-setup` alone not enough — grants clone access but not webhook delivery.

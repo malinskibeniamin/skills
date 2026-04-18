@@ -39,7 +39,7 @@ improve-codebase-architecture, request-refactor-plan, design-an-interface, to-pr
 2. Owned workflow skills (5 installs)
 3. Community skills (10 installs)
 4. Set `REACT_RULES_BAN_USEEFFECT=1` in session env
-5. Run `bun run quality:gate` to verify
+5. Run `bun run quality:gate` verify
 
 ## Hook Architecture
 
@@ -51,4 +51,4 @@ PostToolUse (11)     → 10 Edit|Write checks + 1 Bash truncation
 Stop (6)             → biome, typecheck, react-doctor, registry, orchestration, violations
 ```
 
-Total: 24 hooks. PostToolUse runs in parallel (~80ms wall clock).
+Total: 24 hooks. PostToolUse parallel (~80ms wall clock).

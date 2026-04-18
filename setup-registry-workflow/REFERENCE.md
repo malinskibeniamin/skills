@@ -6,7 +6,7 @@
 
 ## How It Works
 
-Stop hook checks `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` changes. If modified but `registry.json` not updated → **blocks**. No `redpanda-ui/` dir → exits immediately.
+Stop hook check `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` change. Modified but `registry.json` not updated → **blocks**. No `redpanda-ui/` dir → exit immediately.
 
 ## When It Triggers
 
@@ -23,11 +23,11 @@ When blocked:
 
 1. Run `bun run build:registry`
 2. Add changeset: `bunx changeset` (select packages, bump type, summary)
-3. Let Claude finish turn — hook re-checks
+3. Let Claude finish turn — hook re-check
 
 ## Skipping in Non-Registry Repos
 
-Auto-detects: no `redpanda-ui/` or `src/redpanda-ui/` at repo root → exits 0. No config needed.
+Auto-detect: no `redpanda-ui/` or `src/redpanda-ui/` at repo root → exit 0. No config needed.
 
 ## Component Taxonomy
 
@@ -48,7 +48,7 @@ export function CopyButton({ text }: { text: string }) {
 }
 ```
 
-**Organism** — multiple molecules+atoms, significant state, keyboard nav, portals. Tests (8-15): molecule tests + keyboard nav, portal open/close, async filtering, controlled/uncontrolled.
+**Organism** — multiple molecules+atoms, big state, keyboard nav, portals. Tests (8-15): molecule tests + keyboard nav, portal open/close, async filtering, controlled/uncontrolled.
 
 ```tsx
 export function Combobox<T>({ options, onChange }: ComboboxProps<T>) {
@@ -79,11 +79,11 @@ find .upstreaming/diffs -empty -delete
 
 ### Import Normalization
 
-Ignore: path alias differences (`@/components/button` vs `../components/button`), `'use client'` directives, biome-ignore comments, whitespace. ONLY these diffs → **Skip-Import-Only**.
+Ignore: path alias diff (`@/components/button` vs `../components/button`), `'use client'` directives, biome-ignore comments, whitespace. ONLY these diffs → **Skip-Import-Only**.
 
 ### Staleness Detection
 
-Registry version > consumer's pinned → **Skip-Outdated** (sync FROM registry). Same or older → proceed.
+Registry version > consumer pinned → **Skip-Outdated** (sync FROM registry). Same or older → proceed.
 
 ### Business Logic Detection
 
@@ -96,4 +96,4 @@ if (status === 'premium') { /* ... */ }
 if (pathname.includes('/dashboard')) { /* ... */ }
 ```
 
-Business logic mixed with legit fixes → **Skip-Business-Logic**. Re-implement fix cleanly in registry.
+Business logic mixed with legit fix → **Skip-Business-Logic**. Re-implement fix clean in registry.

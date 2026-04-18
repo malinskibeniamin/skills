@@ -5,7 +5,7 @@ description: "Triage GitHub issues through a label-based state machine with gril
 
 # GitHub Issue Triage
 
-Triage issues in current repo using label-based state machine. Infer repo from `git remote`. Use `gh` for all GitHub ops.
+Triage issues in current repo via label-based state machine. Infer repo from `git remote`. Use `gh` for all GitHub ops.
 
 ## AI Disclaimer
 
@@ -21,11 +21,11 @@ Every comment posted to GitHub during triage **must** start with:
 |---|---|---|
 | `bug` | Category | Something broken |
 | `enhancement` | Category | New feature or improvement |
-| `needs-triage` | State | Maintainer needs to evaluate |
+| `needs-triage` | State | Maintainer needs evaluate |
 | `needs-info` | State | Waiting on reporter |
 | `ready-for-agent` | State | Fully specified, ready for AFK agent |
-| `ready-for-human` | State | Requires human implementation |
-| `wontfix` | State | Will not be actioned |
+| `ready-for-human` | State | Needs human implementation |
+| `wontfix` | State | Will not action |
 
 One state label + one category label per issue. Conflicting states -> flag + ask.
 
@@ -37,8 +37,8 @@ One state label + one category label per issue. Conflicting states -> flag + ask
 | unlabeled | ready-for-agent | Maintainer | Write agent brief, apply label |
 | unlabeled | wontfix | Maintainer | Close with comment (+ `.out-of-scope/` for enhancements) |
 | needs-triage | needs-info | Maintainer | Post triage notes + questions for reporter |
-| needs-triage | ready-for-agent | Maintainer | Grilling complete -> agent brief |
-| needs-triage | ready-for-human | Maintainer | Grilling complete -> summary comment |
+| needs-triage | ready-for-agent | Maintainer | Grilling done -> agent brief |
+| needs-triage | ready-for-human | Maintainer | Grilling done -> summary comment |
 | needs-triage | wontfix | Maintainer | Close with comment |
 | needs-info | needs-triage | Skill | Reporter replied -> re-evaluate |
 
@@ -48,6 +48,6 @@ One state label + one category label per issue. Conflicting states -> flag + ask
 
 **Triage specific issue**: See [REFERENCE.md](REFERENCE.md) for full workflow (gather context -> recommend -> reproduce bugs -> grill -> apply outcome).
 
-**Quick state override**: Maintainer says "move #42 to X" -> trust, confirm labels, apply.
+**Quick state override**: Maintainer say "move #42 to X" -> trust, confirm labels, apply.
 
-**Resume previous**: Parse prior triage notes -> continue from where stopped.
+**Resume previous**: Parse prior triage notes -> continue from stop point.
