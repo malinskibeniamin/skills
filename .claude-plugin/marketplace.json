@@ -5,13 +5,13 @@
     "name": "Beniamin Malinski"
   },
   "metadata": {
-    "description": "React/TypeScript frontend enforcement harness for Claude Code — 77 hooks, 41 skills, 5 agents, 5 routines"
+    "description": "React/TypeScript frontend enforcement harness for Claude Code -- 82 hooks, 41 skills, 8 agents, 5 routines"
   },
   "plugins": [
     {
       "name": "frontend-skills",
-      "description": "React/TypeScript frontend enforcement harness. 77 wired hooks (80 scripts) enforce patterns on every edit. 41 skills cover TDD through CI-green PR. Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches (any/Record<T,any>/type=unknown/double-cast) blocked at Edit time. tsconfig strictness weakening blocked. 5 agents for automated review. 5 routines. Caveman-compressed. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "3.2.0",
+      "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 7 Karpathy LLM failure modes enforced. OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. Worktree isolation + branch safety. Agent-browser integration (~91% token reduction). 8 agents (3-hat plan review), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.0.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
@@ -19,7 +19,7 @@
       "x-updatedAt": "2026-04-17",
       "x-includes": {
         "skills": 41,
-        "hooks": 78,
+        "hooks": 82,
         "commands": 0,
         "routines": 5,
         "agents": 5,
@@ -30,6 +30,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.0.0": "2026-04-18 -- Major gstack-inspired consolidation. 5 new hooks (branch-safety, llm-failure-mode [7 Karpathy patterns], perf-regression [Core Web Vitals], security-audit [OWASP+STRIDE+snyk/bun], bash-verbose-guard). Helpers: scripts/mux-worktree + scripts/skills-browser (agent-browser wrap). 3-hat plan review in /grill-me phase 2b. ETHOS 8 principles mapped to enforcing hooks. /hook-audit --retro mode. LLM-optimized vitest + playwright reporters. v3.2.0 /cso /canary /benchmark /mux skills removed -- native hooks + helpers replace them. 1608/1608 evals.",
         "3.2.0": "2026-04-18 — gstack-inspired hardening. Worktree isolation (sibling-worktree leakage fix + branch-safety-check.sh). Codex cross-model review wired. Karpathy failure-modes checklist. Adversarial-reviewer trigger-gated. New /cso (OWASP+STRIDE), /canary (post-deploy watch), /benchmark (Core Web Vitals), /mux (worktree spawn). ETHOS.md. Browser daemon v4.0 RFC. Evals 1464/1464.",
         "3.1.1": "2026-04-18 — Opus 4.7 effort tiers downsized one level (xhigh→high, max→xhigh). Final gates keep xhigh.",
         "3.1.0": "2026-04-17 — PR feedback completeness + TypeScript strictness hardening. Session exit blocked while review threads remain unresolved (pr-feedback-completeness-stop.sh). `any`/Record-with-any/type-alias-escape-hatches/double-casts blocked at Edit time (ts-no-escape-hatches-check.sh). tsconfig strictness weakening blocked (tsconfig-strict-check.sh). Lifecycle-stop adjacent-test fallback fixes worktree false-flags. AI self-review cap 2 → 3 rounds with early-exit. Two new eval files, 1387/1387 green.",
