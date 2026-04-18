@@ -19,7 +19,7 @@ Every issue filed during QA **must** include at top of body:
 
 ### 1. Listen + Lightly Clarify
 
-At most 2-3 short questions: expected vs actual, steps to reproduce, consistent or intermittent. If clear enough → move on. Don't over-interview.
+At most 2-3 short questions: expected vs actual, steps to reproduce, consistent or intermittent. If clear enough -> move on. Don't over-interview.
 
 ### 2. Background Codebase Exploration
 
@@ -38,7 +38,7 @@ Goal = write better issue. Issue itself should NOT reference file paths or inter
 
 ### 4. File GitHub Issue(s)
 
-`gh issue create`. Don't ask to review — file and share URL.
+`gh issue create`. Don't ask to review -- file and share URL.
 
 #### Single Issue
 
@@ -53,7 +53,7 @@ Goal = write better issue. Issue itself should NOT reference file paths or inter
     2. [Domain terms, not module names]
 
     ## Additional Context
-    [Observations from exploration — domain language, no file paths]
+    [Observations from exploration -- domain language, no file paths]
 
 #### Breakdown (Multiple Issues)
 
@@ -69,7 +69,7 @@ Create in dependency order (blockers first) so real issue numbers available.
     1. [Steps for THIS issue]
 
     ## Blocked By
-    - #<issue> or "None — can start immediately"
+    - #<issue> or "None -- can start immediately"
 
 **Rules**: Many thin issues > few thick. Mark blocking honestly. Maximize parallelism.
 
@@ -79,8 +79,8 @@ Create in dependency order (blockers first) so real issue numbers available.
 - Project domain language (check CONTEXT.md)
 - Describe behaviors, not code
 - Reproduction steps mandatory
-- Concise — readable in 30 seconds
+- Concise -- readable in 30 seconds
 
 ### 5. Continue
 
-Print issue URLs. Ask: "Next issue, or done?" Each issue independent — don't batch.
+Print issue URLs. Ask: "Next issue, or done?" Each issue independent -- don't batch.

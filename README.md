@@ -951,3 +951,55 @@ All hook paths use `$(git rev-parse --show-toplevel)` for resolution — works f
   ```
   bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
   ```
+
+## LLM-Optimized Test Reporters
+
+In-house, zero-deps, Node + TypeScript. Ship as part of `shared/reporters/`. Scaffold into consumer repos via the starter kit.
+
+**Vitest:** `shared/reporters/vitest-llm-reporter.ts` -- silent-pass `ok N` trailer (~10 bytes); fail-case single-line JSON capped at `VITEST_LLM_MAX_FAILURES` (default 20). Wire:
+
+```ts
+import LlmReporter from './shared/reporters/vitest-llm-reporter';
+export default defineConfig({ test: { reporters: [new LlmReporter()] } });
+```
+
+**Playwright:** `shared/reporters/playwright-llm-reporter.ts` -- silent-pass `ok N` trailer with optional `skip`/`flaky` counts; fail-case single-line JSON capped at `PW_LLM_MAX_FAILURES` (default 15). Wire:
+
+```ts
+export default defineConfig({
+  reporter: [['./shared/reporters/playwright-llm-reporter.ts']],
+});
+```
+
+Both reporters follow the same pattern: minimal-signal (not silent) on pass to defeat silent-glob-typo bugs, structured JSON on fail capped to prevent runaway output. Typical savings vs default reporters: 10-100x on stdout, which is what Claude reads back as tokens.
+
+### Disabling browser MCPs
+
+Figma + Chrome MCP servers are claude.ai account-level connectors, not project config. To disable (recommended for token savings if you prefer subagent-browser patterns):
+
+1. `/mcp` inside Claude Code to list currently connected servers
+2. https://claude.ai/settings/connectors -- disconnect `Figma` and `Chrome Browser` if you want to free the ~4KB of system-prompt instructions they consume per turn
+
+## Further Reading
+
+Prior art, techniques, and related work that informed design decisions in this harness:
+
+### Test reporters (LLM-optimized)
+- [vitest-llm-reporter (hansjm10)](https://github.com/hansjm10/vitest-llm-reporter) -- JSON schema + token-budget pattern inspiration
+- [@zenai/playwright-coding-agent-reporter](https://github.com/getzenai/playwright-coding-agent-reporter) -- consolidated all-failures pattern (community, MIT)
+- [Playwright Reporter API](https://playwright.dev/docs/api/class-reporter) -- official interface docs
+- [Vitest Reporter interface](https://vitest.dev/advanced/reporters) -- official interface docs
+- [Playwright Test Agents](https://playwright.dev/docs/test-agents) -- official AI ecosystem (Planner/Generator/Healer)
+- [@playwright/mcp](https://www.npmjs.com/package/@playwright/mcp) -- official Playwright MCP server
+
+### Token-efficient data formats
+- [TOON (Token-Oriented Object Notation)](https://github.com/toon-format/toon) -- schema-aware JSON alternative for LLM prompts
+- [CTON (Compact Token-Oriented Notation)](https://github.com/davidesantangelo/cton) -- JSON-compatible wire format
+
+### Compression + caveman mode
+- [Caveman plugin (JuliusBrussee)](https://github.com/JuliusBrussee/caveman) -- per-turn style reinforcement, multi-intensity modes
+- [arxiv:2604.00025](https://arxiv.org/abs/2604.00025) -- prompt compression research
+
+### State of the art
+- [State of Playwright AI Ecosystem 2026](https://currents.dev/posts/state-of-playwright-ai-ecosystem-in-2026)
+- [Agent Browser vs Puppeteer & Playwright (Webfuse)](https://www.webfuse.com/blog/agent-browser-vs-puppeteer-and-playwright)

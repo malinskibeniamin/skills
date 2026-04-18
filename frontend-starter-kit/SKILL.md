@@ -1,26 +1,26 @@
 ---
 name: frontend-starter-kit
-description: Complete frontend stack — 14 setup skills + 14 owned workflow skills + 4 optional community skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
+description: Complete frontend stack -- 14 setup skills + 14 owned workflow skills + 4 optional community skills in one command. Use when starting a new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
 
 ## Setup Skills (1-14, sequential, idempotent)
 
-1. **setup-toolchain** — bun + tsgo enforcement, destructive command guards
-2. **setup-biome** — Biome + Ultracite, auto-fix hook
-3. **setup-quality-gate** — quality:gate script, CI workflow, Stop hook, bundle guard
-4. **setup-agent-config** — AI_AGENT=1, output truncation
-5. **setup-react-compiler** — React Compiler + memoization check
-6. **setup-zustand** — double-parens create, useShallow, persist
-7. **setup-accessibility** — ARIA enforcement, Playwright AXE, WCAG 2.1 AA
-8. **setup-react-rules** — ban raw HTML, TS escapes, XSS, barrel imports
-9. **setup-env-validation** — t3-env + zod, ban process.env
-10. **setup-conventional-commits** — type(scope): description
-11. **setup-react-doctor** — health scoring + Stop hook
-12. **setup-tanstack-router** — route tree auto-gen + enforcement
-13. **setup-connect-query** — ConnectRPC + Protobuf enforcement
-14. **setup-e2e-testing** — Playwright + Testcontainers + axe-core
+1. **setup-toolchain** -- bun + tsgo enforcement, destructive command guards
+2. **setup-biome** -- Biome + Ultracite, auto-fix hook
+3. **setup-quality-gate** -- quality:gate script, CI workflow, Stop hook, bundle guard
+4. **setup-agent-config** -- AI_AGENT=1, output truncation
+5. **setup-react-compiler** -- React Compiler + memoization check
+6. **setup-zustand** -- double-parens create, useShallow, persist
+7. **setup-accessibility** -- ARIA enforcement, Playwright AXE, WCAG 2.1 AA
+8. **setup-react-rules** -- ban raw HTML, TS escapes, XSS, barrel imports
+9. **setup-env-validation** -- t3-env + zod, ban process.env
+10. **setup-conventional-commits** -- type(scope): description
+11. **setup-react-doctor** -- health scoring + Stop hook
+12. **setup-tanstack-router** -- route tree auto-gen + enforcement
+13. **setup-connect-query** -- ConnectRPC + Protobuf enforcement
+14. **setup-e2e-testing** -- Playwright + Testcontainers + axe-core
 
 ## Workflow Skills (15-28)
 

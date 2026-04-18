@@ -29,8 +29,8 @@ Add to hooks config (merge with existing):
 - [ ] `.claude/hooks/enforce-toolchain.sh` exists and is executable
 - [ ] `.claude/hooks/session-env.sh` exists and is executable
 - [ ] `.claude/settings.json` contains both hook entries
-- [ ] Test: run `npm install` in Claude — should be blocked
-- [ ] Test: run `bun add lodash` in Claude — should be blocked (missing --yarn)
+- [ ] Test: run `npm install` in Claude -- should be blocked
+- [ ] Test: run `bun add lodash` in Claude -- should be blocked (missing --yarn)
 
 ### 4. Commit
 

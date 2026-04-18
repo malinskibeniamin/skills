@@ -9,10 +9,10 @@ description: Analyze hook effectiveness from collected session metrics. Use when
 
 Run Bash commands before proceed:
 
-- `ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l` — installed hook scripts
-- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l` — session summaries collected
-- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {}` — earliest date
-- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {}` — latest date
+- `ls "$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/"*.sh 2>/dev/null | wc -l` -- installed hook scripts
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | wc -l` -- session summaries collected
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | head -1 | xargs -I{} jq -r '.date' {}` -- earliest date
+- `ls ~/.claude/hook-metrics/*.json 2>/dev/null | tail -1 | xargs -I{} jq -r '.date' {}` -- latest date
 
 Metrics dir: `~/.claude/hook-metrics/`
 
@@ -22,26 +22,26 @@ Analyze hook effectiveness across all collected session metrics. Read every JSON
 
 ### 1. Hook activity
 
-Each hook fired ≥1 across sessions:
+Each hook fired >=1 across sessions:
 - Total blocks, warns, denies
 - Avg fires per session
 - Trend: up or down over time?
 
 ### 2. Silent hooks
 
-List hook scripts in `.claude/hooks/` with **zero entries** in any metrics file. Prune candidates — never trigger or not wired to logging.
+List hook scripts in `.claude/hooks/` with **zero entries** in any metrics file. Prune candidates -- never trigger or not wired to logging.
 
 ### 3. Over-aggressive hooks
 
 High block counts hurt productivity:
-- Blocks-per-session ratio > 3 → flag too strict
-- Same rule blocked repeat in one session → agent retry and fail
+- Blocks-per-session ratio > 3 -> flag too strict
+- Same rule blocked repeat in one session -> agent retry and fail
 
 ### 4. Enforcement gaps
 
 Cross-ref CLAUDE.md rules vs hook activity:
-- Rules with hook but zero fires → followed perfect or untested
-- Rules with no hook → advisory, no enforce
+- Rules with hook but zero fires -> followed perfect or untested
+- Rules with no hook -> advisory, no enforce
 
 ### 5. Recommendations
 

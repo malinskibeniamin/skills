@@ -38,7 +38,7 @@ Discuss in prose, not tables. Highlight divergence points.
 Best design often combines insights. Ask: "Which fits your case? Any elements from others worth incorporating?"
 
 ## Anti-Patterns
-- Similar designs waste exercise — enforce radical difference
-- Always compare — value in contrast
-- Interface shape only — no implement
+- Similar designs waste exercise -- enforce radical difference
+- Always compare -- value in contrast
+- Interface shape only -- no implement
 - Ignore implementation effort in evaluation

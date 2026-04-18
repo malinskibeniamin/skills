@@ -43,7 +43,37 @@ if echo "$rewritten" | grep -qE '(vitest|bun (test|run test\S*))'; then
   if ! echo "$rewritten" | grep -qE '\-\-reporter[= ]'; then
     if [ "${CI:-}" = "true" ]; then
       suggestions="$suggestions\n- --reporter=github for inline PR annotations"
+    else
+      # Prefer in-house LLM reporter if wired in consumer's vitest.config.
+      # We do not rewrite the command because we cannot be certain the reporter
+      # is registered; we only nudge. Consumer wires it in config.
+      suggestions="$suggestions\n- Wire shared/reporters/vitest-llm-reporter.ts as default reporter to cut stdout 10-100x"
     fi
+  fi
+fi
+
+# -- Playwright optimization --------------------------------------
+
+if echo "$rewritten" | grep -qE '\bplaywright (test|show-report)\b'; then
+
+  # Strip --reporter=html or --reporter=list during iteration (too noisy)
+  if echo "$rewritten" | grep -qE '\-\-reporter=(html|list)'; then
+    rewritten=$(echo "$rewritten" | sed -E 's/--reporter=(html|list)/--reporter=dot/g')
+    must_rewrite=true
+    suggestions="$suggestions\n- Swapped --reporter=html/list -> --reporter=dot for token efficiency"
+  fi
+
+  if ! echo "$rewritten" | grep -qE '\-\-reporter[= ]'; then
+    if [ "${CI:-}" = "true" ]; then
+      suggestions="$suggestions\n- CI: prefer --reporter=github or --reporter=junit"
+    else
+      suggestions="$suggestions\n- Wire shared/reporters/playwright-llm-reporter.ts in playwright.config.ts"
+    fi
+  fi
+
+  # Iteration speed helpers
+  if ! echo "$rewritten" | grep -qE '\-\-max-failures'; then
+    suggestions="$suggestions\n- --max-failures=3 fails fast on broken iteration"
   fi
 fi
 

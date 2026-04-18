@@ -10,12 +10,12 @@ paths:
 
 ## Conventions
 
-- `e2e/*.spec.ts` — all e2e tests use `.spec.ts`
+- `e2e/*.spec.ts` -- all e2e tests use `.spec.ts`
 - Name by feature: `login.spec.ts`, `create-topic.spec.ts`
 - Selectors: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS
 - Test IDs: `{feature}-{element}`, `{feature}-{element}-{index}`, `{feature}-{state}`
 
-## Accessibility — axe on every page
+## Accessibility -- axe on every page
 
 ```ts
 import { test, expect } from '../fixtures/base'
@@ -27,7 +27,7 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 ```
 
 ## Monitor for E2E
-`Monitor: bun run test:e2e` — stream results, react to failures before suite finishes.
+`Monitor: bun run test:e2e` -- stream results, react to failures before suite finishes.
 
 ## Agent-Browser vs Playwright
 

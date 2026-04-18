@@ -5,7 +5,7 @@ description: Enforce conventional commit format via a PreToolUse hook on Bash th
 
 # Setup Conventional Commits
 
-PreToolUse hook (Bash) intercepts `git commit -m` → validates format. Replaces commitlint + husky (zero deps).
+PreToolUse hook (Bash) intercepts `git commit -m` -> validates format. Replaces commitlint + husky (zero deps).
 
 ## Format
 
@@ -14,13 +14,13 @@ type(scope): description
 ```
 
 - **type**: feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert
-- **scope**: required, lowercase in parens — `feat(webui):`, `fix(backend):`
+- **scope**: required, lowercase in parens -- `feat(webui):`, `fix(backend):`
 - **description**: lowercase first letter, no trailing period, 5-72 chars
 - **body**: optional, encouraged for feat/fix
 
 ## Steps
 
-1. Copy `scripts/conventional-commits-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`.
+1. Copy `scripts/conventional-commits-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hooks/`. `chmod +x`.
 2. Add to `.claude/settings.json`: PreToolUse (Bash): `.claude/hooks/conventional-commits-check.sh`
 3. Optional: `codex-compat` for Codex `.codex/hooks.json`
 

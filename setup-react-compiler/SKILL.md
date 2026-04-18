@@ -43,7 +43,7 @@ Brownfield: set `REACT_COMPILER_MODE=annotation` in session-env.sh.
 Add `'use no memo'` to all `.tsx` in component library dir.
 
 ### 4. Hook
-Copy `scripts/react-compiler-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
+Copy `scripts/react-compiler-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
 
 ### 5. Verify
 - [ ] rsbuild config includes babel plugin

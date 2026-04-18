@@ -1,6 +1,6 @@
 ---
 name: setup-ux-copy
-description: Enforce UX text style guide via PostToolUse hooks — bans exclamation points, "successfully", "click here", blame language, Title Case, Yes/No buttons. Redpanda term capitalization with REDPANDA_KIT=1. Use when enforcing UI copywriting standards or UX text consistency.
+description: Enforce UX text style guide via PostToolUse hooks -- bans exclamation points, "successfully", "click here", blame language, Title Case, Yes/No buttons. Redpanda term capitalization with REDPANDA_KIT=1. Use when enforcing UI copywriting standards or UX text consistency.
 ---
 
 # Setup UX Copy
@@ -12,8 +12,8 @@ PostToolUse hook on Edit/Write checking `.ts` and `.tsx` files:
 - **Ban** "click here" and bare "here" link text
 - **Ban** blame language ("Oops", "Uh oh", "Whoops")
 - **Ban** "Yes"/"No" button labels (use action verbs)
-- **Ban** non-inclusive terms (whitelist/blacklist → allowlist/denylist, master/slave → leader/follower)
-- **Warn** possessive pronouns in titles/nav ("My Settings" → "Settings")
+- **Ban** non-inclusive terms (whitelist/blacklist -> allowlist/denylist, master/slave -> leader/follower)
+- **Warn** possessive pronouns in titles/nav ("My Settings" -> "Settings")
 - **Warn** bold/italic/monospace in string literals
 - **Warn** ALL CAPS for emphasis (not acronyms)
 - **Warn** Title Case (3+ consecutive capitalized words)

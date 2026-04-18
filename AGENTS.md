@@ -11,7 +11,7 @@ Safe rm -rf: node_modules, dist, .next, build, .cache, .turbo, coverage
 
 ## Commits
 
-`type(scope): description` — feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars.
+`type(scope): description` -- feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars.
 
 ## Code Quality
 
@@ -22,8 +22,8 @@ Run `bun run lint:fix` + `bun run type:check` before finishing. Prefer: date-fns
 - Functional components only (React Compiler requires)
 - `@/components/ui/` for all form/interactive UI
 - DOMPurify for user HTML. JSON.parse() for data, textContent for text, setHTML for safe HTML
-- Type guards/generics/schema validation — no `as any`, no `@ts-ignore`
-- `focus-visible:ring-*` not outline. React Compiler handles memo — remove useMemo/useCallback/React.memo
+- Type guards/generics/schema validation -- no `as any`, no `@ts-ignore`
+- `focus-visible:ring-*` not outline. React Compiler handles memo -- remove useMemo/useCallback/React.memo
 - `aria-label` on icon buttons. `<Button>` needs: onClick|asChild|type="submit"|disabled
 - `<Link>` for navigation. Direct source imports (tree-shaking). `{ passive: true }` on scroll/touch/wheel
 - `React.lazy()` for heavy deps. `structuredClone()` for cloning. `.requestSubmit()` for forms
@@ -39,7 +39,7 @@ Utility classes. Design tokens (`bg-primary`). Fix specificity at source. varian
 
 ## Accessibility
 
-`<img>` needs alt. Clickable div/span needs role+tabIndex+keyboard handler. combobox→aria-expanded+aria-controls. dialog→aria-label/labelledby. tablist→child role="tab".
+`<img>` needs alt. Clickable div/span needs role+tabIndex+keyboard handler. combobox->aria-expanded+aria-controls. dialog->aria-label/labelledby. tablist->child role="tab".
 
 ## Zustand
 
@@ -51,11 +51,11 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 ## Lifecycle
 
-1. Understand → 2. Plan → 2b. `/domain-model` (DDD-light grill + CONTEXT.md/ADR updates) → 3. TDD (RED→GREEN→REFACTOR) → 4-6. `/go` (verify → self-review → `/simplify` → `/commit-push-pr` → monitor CI → fix → done)
+1. Understand -> 2. Plan -> 2b. `/domain-model` (DDD-light grill + CONTEXT.md/ADR updates) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/commit-push-pr` -> monitor CI -> fix -> done)
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 
-Effort: xhigh (Understand) → xhigh (Plan) → max (TDD) → xhigh (Simplify) → xhigh (Verify) → max (Review)
+Effort: xhigh (Understand) -> xhigh (Plan) -> max (TDD) -> xhigh (Simplify) -> xhigh (Verify) -> max (Review)
 
 ## UX Copy
 
@@ -67,19 +67,19 @@ Failing test FIRST. `userEvent.setup()` + `getByRole`. `waitFor()` for async. .t
 
 ## Resilience
 
-Route data fetching→errorComponent. React.lazy()→`<Suspense fallback>`. Query hooks→loading/error/empty states. Async handlers→error handling.
+Route data fetching->errorComponent. React.lazy()->`<Suspense fallback>`. Query hooks->loading/error/empty states. Async handlers->error handling.
 
 ### Unhappy Paths (enforced by hook)
 
-- **Catch blocks**: set error state, re-throw, or call error handler — never swallow silently
-- **Error + form**: early return with error UI when deserialization/parse fails — don't render form below broken Alert
+- **Catch blocks**: set error state, re-throw, or call error handler -- never swallow silently
+- **Error + form**: early return with error UI when deserialization/parse fails -- don't render form below broken Alert
 - **Validation depth**: check format (URL regex, enum values, UPPER_SNAKE pattern), not just presence/truthiness
-- **Exhaustive switch**: `default: never` or `satisfies never` — new union variants must fail loudly
-- **Async validation**: onChange + async validator needs AbortController or debounce — no stale race conditions
-- **All errors visible**: `errors.map()` not `errors[0]` — user sees every validation failure
-- **Oneof/union fields**: clear previous branch values on switch — ghost data causes silent bugs
+- **Exhaustive switch**: `default: never` or `satisfies never` -- new union variants must fail loudly
+- **Async validation**: onChange + async validator needs AbortController or debounce -- no stale race conditions
+- **All errors visible**: `errors.map()` not `errors[0]` -- user sees every validation failure
+- **Oneof/union fields**: clear previous branch values on switch -- ghost data causes silent bugs
 - **Form inputs**: URL fields use `type="url"`, secret-ref fields use `type="text"` (user verifies format)
-- **aria-invalid** on error inputs, not just data-invalid — screen readers need ARIA
+- **aria-invalid** on error inputs, not just data-invalid -- screen readers need ARIA
 
 ## Auto-Generated (skip)
 

@@ -7,7 +7,7 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 
 ## What This Sets Up
 
-- `quality:gate` script — lint + type check + related tests in <5s
+- `quality:gate` script -- lint + type check + related tests in <5s
 - GitHub Actions workflow with formatting integrity (`git diff --exit-code`)
 - Stop hook: tsgo + related tests before finish
 - Bundle guard hook: warns on heavy deps (moment, lodash, jquery, core-js, classnames)
@@ -32,16 +32,16 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 ```
 
 ### 2. Asset type declarations
-Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) — tsgo needs it for .svg/.css/.png imports.
+Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) -- tsgo needs it for .svg/.css/.png imports.
 
 ### 3. GitHub Actions
 Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Runs on PR + push to main.
 
 ### 4. Hook scripts
 Copy into `.claude/hooks/`, `chmod +x`:
-- `scripts/typecheck-stop.sh` → Stop
-- `scripts/bundle-guard.sh` → PostToolUse (Edit|Write)
-- `scripts/test-perf-stop.sh` → Stop
+- `scripts/typecheck-stop.sh` -> Stop
+- `scripts/bundle-guard.sh` -> PostToolUse (Edit|Write)
+- `scripts/test-perf-stop.sh` -> Stop
 
 ### 5. Verify
 - [ ] `bun run quality:gate` works

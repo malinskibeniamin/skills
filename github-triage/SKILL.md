@@ -27,7 +27,7 @@ Every comment posted to GitHub during triage **must** start with:
 | `ready-for-human` | State | Requires human implementation |
 | `wontfix` | State | Will not be actioned |
 
-One state label + one category label per issue. Conflicting states → flag + ask.
+One state label + one category label per issue. Conflicting states -> flag + ask.
 
 ## State Machine
 
@@ -37,17 +37,17 @@ One state label + one category label per issue. Conflicting states → flag + as
 | unlabeled | ready-for-agent | Maintainer | Write agent brief, apply label |
 | unlabeled | wontfix | Maintainer | Close with comment (+ `.out-of-scope/` for enhancements) |
 | needs-triage | needs-info | Maintainer | Post triage notes + questions for reporter |
-| needs-triage | ready-for-agent | Maintainer | Grilling complete → agent brief |
-| needs-triage | ready-for-human | Maintainer | Grilling complete → summary comment |
+| needs-triage | ready-for-agent | Maintainer | Grilling complete -> agent brief |
+| needs-triage | ready-for-human | Maintainer | Grilling complete -> summary comment |
 | needs-triage | wontfix | Maintainer | Close with comment |
-| needs-info | needs-triage | Skill | Reporter replied → re-evaluate |
+| needs-info | needs-triage | Skill | Reporter replied -> re-evaluate |
 
 ## Workflows
 
-**Overview**: Query GH → group: unlabeled, needs-triage, needs-info with activity. Oldest first.
+**Overview**: Query GH -> group: unlabeled, needs-triage, needs-info with activity. Oldest first.
 
-**Triage specific issue**: See [REFERENCE.md](REFERENCE.md) for full workflow (gather context → recommend → reproduce bugs → grill → apply outcome).
+**Triage specific issue**: See [REFERENCE.md](REFERENCE.md) for full workflow (gather context -> recommend -> reproduce bugs -> grill -> apply outcome).
 
-**Quick state override**: Maintainer says "move #42 to X" → trust, confirm labels, apply.
+**Quick state override**: Maintainer says "move #42 to X" -> trust, confirm labels, apply.
 
-**Resume previous**: Parse prior triage notes → continue from where stopped.
+**Resume previous**: Parse prior triage notes -> continue from where stopped.

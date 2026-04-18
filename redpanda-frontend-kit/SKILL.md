@@ -10,7 +10,7 @@ Runs **frontend-starter-kit** (14 setup + workflow skills) then adds Redpanda-sp
 ## Additional Setup
 
 ### Redpanda-specific
-- **setup-registry-workflow** — UI registry component workflow
+- **setup-registry-workflow** -- UI registry component workflow
 
 ### Redpanda environment (session-env.sh)
 ```bash

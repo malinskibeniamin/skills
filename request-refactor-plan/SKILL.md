@@ -20,7 +20,7 @@ Ask other approaches + trade-offs.
 Exact scope, interface contracts (before/after), data migrations, backwards compat, incremental path.
 
 ### 5. Test Coverage
-Assess existing coverage. Insufficient → ask testing plan before proceeding.
+Assess existing coverage. Insufficient -> ask testing plan before proceeding.
 
 ### 6. Tiny Commits
 Each step: independently deployable, tests green, changes one thing.
@@ -36,8 +36,8 @@ Each step: independently deployable, tests green, changes one thing.
     Chosen approach and rationale.
 
     ## Commits
-    1. [description] — what changes, tests green
-    2. [description] — what changes, tests green
+    1. [description] -- what changes, tests green
+    2. [description] -- what changes, tests green
 
     ## Decisions
     Key decisions + rationale from interview.
