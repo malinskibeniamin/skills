@@ -76,6 +76,7 @@
         "ts-no-escape-hatches-check.sh",
         "tsconfig-strict-check.sh",
         "llm-failure-mode-check.sh",
+        "security-audit-check.sh",
         "mutation-naming-check.sh",
         "magic-number-check.sh",
         "disabled-button-tooltip-check.sh",
