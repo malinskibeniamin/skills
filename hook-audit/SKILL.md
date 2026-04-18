@@ -1,6 +1,6 @@
 ---
 name: hook-audit
-description: Analyze hook effectiveness from collected session metrics. Use when user asks to audit hooks, invokes `/hook-audit`, or wants to identify silent, over-aggressive, or under-enforced hooks across sessions.
+description: Analyze hook effectiveness + session retro from collected metrics. Use when user asks to audit hooks, invokes `/hook-audit`, wants to identify silent/over-aggressive/under-enforced hooks, or asks for a retro / team analytics across recent sessions.
 ---
 
 # Hook audit
@@ -50,6 +50,27 @@ From data:
 - **Soften**: hooks block too much (demote to warn)
 - **Harden**: warns fire often (promote to block)
 - **Add**: CLAUDE.md rules with no hook enforce
+
+### 6. Retro analytics (session flow)
+
+Broader than hook-level. Pull from session JSONL + git log for the
+same window as the metrics.
+
+- **Sessions → PR lag**: median time from first edit to PR open. High lag = planning thrash.
+- **CI first-try pass rate**: PRs green on first CI run / total PRs. Low = hooks missed pre-commit catches.
+- **Phases skipped in `/development-lifecycle`**: sessions that wrote code without a prior grill step (infer from session-touched-files + absence of grill markers). High skip = gate ineffective.
+- **Review-round distribution**: how often did we hit 0/1/2/3 AI self-review rounds? Bulk at 3 = reviewer too picky or code quality trending down.
+- **Human-review resolution latency**: time from human review comment → resolved thread. High = bottleneck.
+- **Worktree sprawl**: count of active worktrees per repo. >4 sustained → investigate with `/mux --list` candidates for prune.
+
+Output per-metric: current value, 7-day trend (up/down/flat), actionable next step.
+
+### Mode flags
+
+`$ARGUMENTS`:
+- empty / `--hooks` → run sections 1-5 only (default).
+- `--retro` → run sections 1-6 with emphasis on section 6.
+- `--all` → all sections, no emphasis.
 
 ### Output format
 
