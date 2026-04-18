@@ -38,40 +38,10 @@ run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "codex_status" \
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "karpathy-failure-modes" \
   "self-reviewer references karpathy"
 
-for skill in cso canary benchmark mux; do
-  run_file_eval "$REPO_ROOT/$skill/SKILL.md" "$skill SKILL.md exists"
-  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^name: $skill" "$skill has correct name frontmatter"
-  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "Use when" "$skill uses 'Use when' trigger"
-done
-
-run_file_eval "$REPO_ROOT/mux/REFERENCE.md" "mux REFERENCE.md exists"
-run_content_eval "$REPO_ROOT/mux/REFERENCE.md" "session-hint" "mux REFERENCE documents session-hint"
-
-# CSO specific
-run_content_eval "$REPO_ROOT/cso/SKILL.md" "OWASP" "cso covers OWASP"
-run_content_eval "$REPO_ROOT/cso/SKILL.md" "STRIDE" "cso covers STRIDE"
-run_content_eval "$REPO_ROOT/cso/SKILL.md" "CRITICAL" "cso blocks on CRITICAL"
-
-# Canary specific
-run_content_eval "$REPO_ROOT/canary/SKILL.md" "15 min" "canary watches 15 min"
-run_content_eval "$REPO_ROOT/canary/SKILL.md" "rollback" "canary files rollback issue"
-
-# Benchmark specific
-run_content_eval "$REPO_ROOT/benchmark/SKILL.md" "LCP" "benchmark captures LCP"
-run_content_eval "$REPO_ROOT/benchmark/SKILL.md" "CLS" "benchmark captures CLS"
-run_content_eval "$REPO_ROOT/benchmark/SKILL.md" "baseline" "benchmark stores baseline"
-
-# Mux specific
-run_content_eval "$REPO_ROOT/mux/SKILL.md" "git worktree add" "mux wraps git worktree add"
-run_content_eval "$REPO_ROOT/mux/SKILL.md" "session-hint" "mux writes session-hint"
-run_content_eval "$REPO_ROOT/mux/SKILL.md" "\\-\\-list" "mux supports --list"
-run_content_eval "$REPO_ROOT/mux/SKILL.md" "clean" "mux supports clean"
-
-# Skills registered in plugin manifest
-for s in cso canary benchmark mux; do
-  run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"./$s/\"" \
-    "plugin.json registers $s"
-done
+# (Skills /cso, /canary, /benchmark, /mux removed in v4.0 —
+# replaced by native-form hooks (perf-regression-stop) and helper
+# scripts (mux-worktree.sh invoked by /go + lifecycle). See
+# docs/rfc/browser-daemon.md and v4.0 changelog entry.)
 
 # Browser daemon RFC
 run_file_eval "$REPO_ROOT/docs/rfc/browser-daemon.md" "browser-daemon RFC exists"
