@@ -17,7 +17,7 @@ Run all checks. Fix failures before proceed.
 2. `bun run lint:fix` (biome)
 3. `bun vitest run --related` (changed files)
 4. Route touched -> `bun vitest run *.browser.test.tsx`
-5. Dev server running + `claude-in-chrome` available -> browser smoke test
+5. Dev server running -> browser smoke via `scripts/skills-browser.sh` (Vercel agent-browser). Skip gracefully if not installed.
 6. **When green: commit immediately.** One commit per passing state.
 
 ## Phase 4b: Refine (Self-Review Loop)
