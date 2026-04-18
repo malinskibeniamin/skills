@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "React/TypeScript frontend enforcement harness. 77 wired hooks (80 scripts) enforce patterns on every edit. 41 skills cover the full development lifecycle from TDD through CI-green PR. Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches (any/Record<T,any>/type=unknown/double-cast) blocked at Edit time. tsconfig strictness weakening blocked. 5 agents, 5 routines. Single-source manifest codegen. Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -43,8 +43,8 @@
   },
   "x-updatedAt": "2026-04-17",
   "x-includes": {
-    "skills": 41,
-    "hooks": 77,
+    "skills": 45,
+    "hooks": 78,
     "commands": 0,
     "routines": 5,
     "agents": 5,
@@ -55,6 +55,7 @@
     "settings": "settings.json"
   },
   "x-changelog": {
+    "3.2.0": "2026-04-18 — Worktree isolation (sibling-worktree leakage fix, bound-worktree assertion, md5 session-id fallback). New `branch-safety-check.sh` PreToolUse(Bash) blocks wrong-branch git ops. Codex cross-model review wired into code-reviewer. Karpathy failure-modes checklist. Adversarial-reviewer trigger-gated. New /cso, /canary, /benchmark, /mux skills. ETHOS.md. Browser daemon RFC. Evals 1464/1464.",
     "3.1.1": "2026-04-18 — Opus 4.7 effort tiers downsized one level (xhigh→high, max→xhigh). Final gates (TDD, security review) keep xhigh.",
     "3.1.0": "2026-04-17 — PR feedback completeness enforcement + TypeScript strictness hardening. Session exit blocked while review threads remain unresolved (pr-feedback-completeness-stop.sh). `any`/Record-with-any/type-aliased-escape-hatches/double-casts blocked at Edit time (ts-no-escape-hatches-check.sh). tsconfig strictness weakening blocked (tsconfig-strict-check.sh). Lifecycle-stop adjacent-test fallback fixes worktree false-flags. AI self-review cap 2 → 3 rounds with early-exit. Evals 1387/1387.",
     "2.5.0": "2026-04-17 — Consistency fix: 4 plugin commands (/commit-push, /commit-push-pr, /hook-audit, /frontend-skills-stats) converted to skills. Plugin commands show prefixed (/frontend-skills:cmd) in slash autocomplete; skills show unprefixed. All entrypoints now uniform.",

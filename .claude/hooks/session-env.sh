@@ -33,8 +33,47 @@ fi
 find /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
 
 # ── Session directory for state tracking ──────────────────────────
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+# Deterministic fallback when CLAUDE_SESSION_ID/CODEX_SESSION_ID unset:
+# hash the worktree root + PID. Prevents two terminals on sibling
+# worktrees from pooling into one /tmp dir after PID wrap.
+if [ -n "${CLAUDE_SESSION_ID:-}" ]; then
+  _session_id="$CLAUDE_SESSION_ID"
+elif [ -n "${CODEX_SESSION_ID:-}" ]; then
+  _session_id="$CODEX_SESSION_ID"
+else
+  _wt_fallback=$(git rev-parse --show-toplevel 2>/dev/null || echo "/tmp")
+  if command -v md5 >/dev/null 2>&1; then
+    _wt_hash=$(printf '%s' "$_wt_fallback" | md5 2>/dev/null || echo "nohash")
+  elif command -v md5sum >/dev/null 2>&1; then
+    _wt_hash=$(printf '%s' "$_wt_fallback" | md5sum 2>/dev/null | cut -d' ' -f1 || echo "nohash")
+  else
+    _wt_hash="nohash"
+  fi
+  _session_id="wt-${_wt_hash}-$$"
+fi
+_session_dir="/tmp/hook-session-${_session_id}"
 mkdir -p "$_session_dir" 2>/dev/null || true
+
+# ── Bind session to current worktree + branch ─────────────────────
+# Every hook asserts against this binding to prevent cross-worktree leakage
+# when two Claude Code terminals share a CLAUDE_SESSION_ID by accident.
+_current_root=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+if [ -n "$_current_root" ]; then
+  _current_root=$(cd "$_current_root" 2>/dev/null && pwd -P 2>/dev/null || echo "$_current_root")
+  echo "$_current_root" > "$_session_dir/bound-worktree" 2>/dev/null || true
+  git branch --show-current > "$_session_dir/bound-branch" 2>/dev/null || true
+fi
+
+# ── /mux session-hint: pre-bind for worktrees spawned via /mux ────
+# /mux writes .claude/session-hint with key=value lines. Read +
+# export as MUX_* env vars; leave the file in place as breadcrumb.
+if [ -f ".claude/session-hint" ]; then
+  while IFS='=' read -r _k _v; do
+    case "$_k" in
+      worktree|branch|base|spawned_at) export "MUX_$(printf '%s' "$_k" | tr '[:lower:]' '[:upper:]')=$_v" ;;
+    esac
+  done < .claude/session-hint
+fi
 
 # ── Capture dirty-files baseline (which files are already uncommitted) ──
 # Used by Stop hooks to exclude files dirty before this session started.
