@@ -35,4 +35,4 @@ Max 1024 chars, third person. First sentence: what it does. Second: "Use when [t
 - [ ] No time-sensitive info (dates, versions)
 - [ ] Consistent terminology
 - [ ] Concrete examples included
-- [ ] References one level deep (SKILL→REFERENCE, not SKILL→REF1→REF2)
+- [ ] References one level deep (SKILL->REFERENCE, not SKILL->REF1->REF2)

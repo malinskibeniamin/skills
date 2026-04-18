@@ -1,18 +1,18 @@
 ---
 name: setup-sandcastle
-description: "Configure Sandcastle for agent delegation — headless run(), HITL interactive(), parallel sandboxes, branches. Use when delegating to autonomous agents, parallelizing implementation, or running interactive reviews."
+description: "Configure Sandcastle for agent delegation -- headless run(), HITL interactive(), parallel sandboxes, branches. Use when delegating to autonomous agents, parallelizing implementation, or running interactive reviews."
 ---
 
 # Setup Sandcastle
 
 [Sandcastle](https://github.com/mattpocock/sandcastle) orchestrates agents in sandboxes with branch strategies. Two modes:
 
-- **`run()`** — headless (`--print`), stream-JSON parsed. For CI, batch, overnight.
-- **`interactive()`** — full TUI passthrough (stdin/stdout/stderr). Human watches + intervenes. For HITL review, pair-review, local dev.
+- **`run()`** -- headless (`--print`), stream-JSON parsed. For CI, batch, overnight.
+- **`interactive()`** -- full TUI passthrough (stdin/stdout/stderr). Human watches + intervenes. For HITL review, pair-review, local dev.
 
 Both modes: hooks fire inside each session. Development lifecycle enforced regardless of launch method.
 
-**Capabilities:** task picking (GitHub issues → one agent per issue), parallel N agents in isolated sandboxes, HITL review with full TUI, `noSandbox()` for git worktrees only, hooks in each session, branch strategies (head, merge-to-head, branch).
+**Capabilities:** task picking (GitHub issues -> one agent per issue), parallel N agents in isolated sandboxes, HITL review with full TUI, `noSandbox()` for git worktrees only, hooks in each session, branch strategies (head, merge-to-head, branch).
 
 ```mermaid
 sequenceDiagram
@@ -34,7 +34,7 @@ sequenceDiagram
 
     A1->>Rev: Branch for HITL review
     Note over Rev: Human watches TUI, can intervene
-    Rev->>Main: Approved — merge to head
+    Rev->>Main: Approved -- merge to head
 ```
 
 ## Steps
@@ -67,6 +67,6 @@ See [REFERENCE.md](REFERENCE.md) for templates: headless batch, HITL review, mix
 bunx tsx .sandcastle/main.ts
 ```
 
-Each agent: reads issue → development-lifecycle → hooks enforce patterns → commits → review → merge.
+Each agent: reads issue -> development-lifecycle -> hooks enforce patterns -> commits -> review -> merge.
 
 See [REFERENCE.md](REFERENCE.md) for templates and prompt patterns.

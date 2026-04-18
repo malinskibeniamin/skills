@@ -7,11 +7,11 @@ description: "Configure GitHub Actions CI for React/TypeScript frontend projects
 
 GitHub Actions optimized for React/TypeScript:
 
-- Quality gate — lint, type-check, tests in <5 min
-- Coverage gates — enforce thresholds, post diff on PRs
-- Visual regression — Playwright screenshot comparison
-- Dependency automation — dependabot minor/patch
-- Bundle budget — alert on size regressions
+- Quality gate -- lint, type-check, tests in <5 min
+- Coverage gates -- enforce thresholds, post diff on PRs
+- Visual regression -- Playwright screenshot comparison
+- Dependency automation -- dependabot minor/patch
+- Bundle budget -- alert on size regressions
 - Smart bun caching
 
 See [REFERENCE.md](REFERENCE.md) for workflow templates and Blacksmith optimization.
@@ -19,7 +19,7 @@ See [REFERENCE.md](REFERENCE.md) for workflow templates and Blacksmith optimizat
 ## Steps
 
 1. Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md)
-2. Write `.github/dependabot.yml` — auto minor/patch, manual major
+2. Write `.github/dependabot.yml` -- auto minor/patch, manual major
 3. Add `toHaveScreenshot()` to Playwright tests
 4. Add `--coverage --coverage.thresholds.lines=80` to test scripts
 

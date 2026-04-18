@@ -12,10 +12,10 @@ One question max: "What's the problem?" If already described, skip to explore.
 Agent(subagent_type=Explore): Where (modules/behaviors), What (symptoms), Why (root cause), Related (interacting code).
 
 ## 3. Fix Approach
-Minimal change (surgical > rewrite). Affected interfaces/contracts. Behaviors to verify → become tests.
+Minimal change (surgical > rewrite). Affected interfaces/contracts. Behaviors to verify -> become tests.
 
 ## 4. TDD Fix Plan
-Ordered RED-GREEN cycles. Vertical slices (one test → one fix). Describe behaviors, not impl steps. Durable language (module names, contracts), not file paths.
+Ordered RED-GREEN cycles. Vertical slices (one test -> one fix). Describe behaviors, not impl steps. Durable language (module names, contracts), not file paths.
 
 ## 5. Create GitHub Issue
 
@@ -25,14 +25,14 @@ Ordered RED-GREEN cycles. Vertical slices (one test → one fix). Describe behav
     Observable symptoms.
 
     ## Root Cause Analysis
-    Why — underlying mechanism.
+    Why -- underlying mechanism.
 
     ## TDD Fix Plan
-    1. RED: test [behavior] → GREEN: fix [root cause]
-    2. RED: test [edge case] → GREEN: handle [condition]
+    1. RED: test [behavior] -> GREEN: fix [root cause]
+    2. RED: test [edge case] -> GREEN: handle [condition]
 
     ## Acceptance Criteria
     - [ ] Testable criterion 1
     - [ ] Testable criterion 2
 
-No file paths or line numbers — issue must survive refactors.
+No file paths or line numbers -- issue must survive refactors.

@@ -5,7 +5,7 @@ description: Explore a codebase to find opportunities for architectural improvem
 
 # Improve Codebase Architecture
 
-Surface architectural friction, improve testability via module-deepening refactors → GitHub issue RFCs.
+Surface architectural friction, improve testability via module-deepening refactors -> GitHub issue RFCs.
 
 **Deep module** = small interface, large implementation. More testable, more AI-navigable, test at boundary not inside.
 

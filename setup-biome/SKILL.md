@@ -32,7 +32,7 @@ From [REFERENCE.md](REFERENCE.md). Extends `ultracite/biome/core` + `ultracite/b
 ```
 
 ### 4. Hook
-Copy `scripts/biome-autofix.sh` → `.claude/hooks/`. `chmod +x`. Add to Stop.
+Copy `scripts/biome-autofix.sh` -> `.claude/hooks/`. `chmod +x`. Add to Stop.
 
 ### 5. Verify
 - [ ] `bun run lint` + `bun run lint:fix` work

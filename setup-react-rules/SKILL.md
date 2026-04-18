@@ -1,6 +1,6 @@
 ---
 name: setup-react-rules
-description: Enforce React/TS/security rules via PostToolUse hooks — bans raw HTML, TS escape hatches, XSS vectors, barrel imports, missing passive listeners. Use when enforcing React patterns or component library standards.
+description: Enforce React/TS/security rules via PostToolUse hooks -- bans raw HTML, TS escape hatches, XSS vectors, barrel imports, missing passive listeners. Use when enforcing React patterns or component library standards.
 ---
 
 # Setup React Rules
@@ -15,7 +15,7 @@ PostToolUse hooks on Edit/Write (auto-skips component library dirs):
 
 **Security**: ban `dangerouslySetInnerHTML`, `eval()`, `new Function()`, `.innerHTML =` (XSS/OWASP A03)
 
-**Performance**: ban barrel imports (use direct paths), ban missing `{ passive: true }` on scroll/touch/wheel, ban static import of heavy deps (chart.js/d3/three.js/pdf-lib — use `React.lazy()`)
+**Performance**: ban barrel imports (use direct paths), ban missing `{ passive: true }` on scroll/touch/wheel, ban static import of heavy deps (chart.js/d3/three.js/pdf-lib -- use `React.lazy()`)
 
 **Styling**: ban raw hex/rgb in className (use design tokens), ban `!important`, ban `outline: none` (use focus-visible), ban visual overrides on registry components (use variant prop)
 
@@ -35,9 +35,9 @@ PostToolUse hooks on Edit/Write (auto-skips component library dirs):
 - Form-level `validate` for cross-field validation (react-hook-form v7.72+)
 
 ### Functional Programming (Claude-enforced)
-- Pure render — no side effects in component body
-- Immutable state — spread/filter/map, never mutate
-- Derive don't sync — `useMemo` not `useState`+`useEffect`
+- Pure render -- no side effects in component body
+- Immutable state -- spread/filter/map, never mutate
+- Derive don't sync -- `useMemo` not `useState`+`useEffect`
 - `useReducer` for 3+ interrelated `useState`
 - Extract data transforms into named pure functions
 - Discriminated unions for variant prop types
@@ -47,7 +47,7 @@ See [REFERENCE.md](REFERENCE.md) for patterns + examples.
 
 ## Steps
 
-1. Copy `scripts/react-rules-check.sh` + `scripts/fp-check.sh` + `scripts/tailwind-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`.
+1. Copy `scripts/react-rules-check.sh` + `scripts/fp-check.sh` + `scripts/tailwind-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hooks/`. `chmod +x`.
 2. Add to PostToolUse (Edit|Write) in `.claude/settings.json`.
 3. Optional: `codex-compat` for `.codex/hooks.json`.
 

@@ -35,7 +35,7 @@ export const env = createEnv({
 Use `import { env } from "@/env"` everywhere instead of `process.env`.
 
 ### 3. Hook
-Copy `scripts/env-validation-check.sh` + `scripts/_hook-lib.sh` → `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
+Copy `scripts/env-validation-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
 
 ### 4. Verify
 - [ ] `import { env } from "@/env"` works

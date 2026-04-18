@@ -26,7 +26,7 @@ Understand beats assume. Every spec has gaps. Ask the one question that blocks p
 
 Fail first. Pass second. Refactor third. Tests that never failed prove nothing. Mocked-only tests prove less.
 
-**How to apply**: Write the test. Run it. See red. Then write code. Run again. See green. New files need tests — `/tdd` enforced. Mock at seams, not in the middle.
+**How to apply**: Write the test. Run it. See red. Then write code. Run again. See green. New files need tests -- `/tdd` enforced. Mock at seams, not in the middle.
 
 ---
 
@@ -40,7 +40,7 @@ Read the repo first. Reinvention is theft from future-you. The pattern exists. F
 
 ## 5. No Type Escape Hatches
 
-`any`, `unknown`, `never`, `Record<string, any>`, double-cast — all blocked at Edit. Fix the type. Add the guard. Refine the generic. The compiler is your adversarial reviewer for free.
+`any`, `unknown`, `never`, `Record<string, any>`, double-cast -- all blocked at Edit. Fix the type. Add the guard. Refine the generic. The compiler is your adversarial reviewer for free.
 
 **How to apply**: When tsgo complains, do not silence it. Narrow with type guards, constrain the generic, or reshape the data. `as unknown as T` is a confession of defeat.
 

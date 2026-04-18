@@ -12,10 +12,10 @@ paths:
 
 - Ban `react-router-dom` imports
 - Ban `window.location` for navigation (block) and reads (warn)
-- Warn on `window.location.reload()` — suggest `router.invalidate()`
+- Warn on `window.location.reload()` -- suggest `router.invalidate()`
 - Ban `strict: false` in router hooks
 - Ban untyped `useParams()`/`useSearch()`/`useLoaderData()`/`useRouteContext()` without `{ from }`
-- Ban `URLSearchParams` — suggest nuqs
+- Ban `URLSearchParams` -- suggest nuqs
 - Warn on exported components from route files (breaks code splitting)
 - Require `validateSearch` when `useSearch` is used in route files
 

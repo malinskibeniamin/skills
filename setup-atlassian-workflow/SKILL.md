@@ -1,6 +1,6 @@
 ---
 name: setup-atlassian-workflow
-description: Opt-in Atlassian/Jira integration via acli — create work items, transition status, comment, link PRs. Mirrors gh-based workflow skills for Jira users. Use when working with Jira, Atlassian, or acli.
+description: Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. Mirrors gh-based workflow skills for Jira users. Use when working with Jira, Atlassian, or acli.
 ---
 
 # Setup Atlassian Workflow

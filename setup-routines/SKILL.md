@@ -5,17 +5,17 @@ description: "Configure Claude Code routines for automated PR review, codebase h
 
 # Setup Routines
 
-Configure [Claude Code routines](https://claude.ai/code/routines) — cloud-hosted automated sessions triggered by schedule, GitHub events, or API. Routines clone repo, run as full Claude Code sessions. Hooks and CLAUDE.md rules enforce automatically.
+Configure [Claude Code routines](https://claude.ai/code/routines) -- cloud-hosted automated sessions triggered by schedule, GitHub events, or API. Routines clone repo, run as full Claude Code sessions. Hooks and CLAUDE.md rules enforce automatically.
 
 ## How it works
 
 ```
-Routine fires → clones repo → SessionStart hooks → CLAUDE.md loads
-→ routine prompt executes → PostToolUse hooks enforce on every edit
-→ Stop hooks run quality gates → session ends
+Routine fires -> clones repo -> SessionStart hooks -> CLAUDE.md loads
+-> routine prompt executes -> PostToolUse hooks enforce on every edit
+-> Stop hooks run quality gates -> session ends
 ```
 
-Hooks = enforcement layer · routine prompts = task layer. Standards evolve in repo (hooks + CLAUDE.md), routine prompts stay stable.
+Hooks = enforcement layer | routine prompts = task layer. Standards evolve in repo (hooks + CLAUDE.md), routine prompts stay stable.
 
 ## Available templates
 
@@ -47,12 +47,12 @@ Hooks = enforcement layer · routine prompts = task layer. Standards evolve in r
 
 ### 3. Create via web (recommended)
 
-1. [claude.ai/code/routines](https://claude.ai/code/routines) → **New routine**
-2. Name it (for example "PR Review — [repo name]")
-3. Paste template from `routines/*.md` — customize `OWNER`/`REPO` placeholders
+1. [claude.ai/code/routines](https://claude.ai/code/routines) -> **New routine**
+2. Name it (for example "PR Review -- [repo name]")
+3. Paste template from `routines/*.md` -- customize `OWNER`/`REPO` placeholders
 4. Select repository + environment
 5. Add trigger (GitHub event | schedule | API)
-6. Review connectors — remove unneeded
+6. Review connectors -- remove unneeded
 7. Create
 
 ### 4. Create via CLI
@@ -61,7 +61,7 @@ Hooks = enforcement layer · routine prompts = task layer. Standards evolve in r
 /schedule daily codebase health check at 9am
 ```
 
-CLI creates scheduled routines only. GitHub/API triggers → use web UI.
+CLI creates scheduled routines only. GitHub/API triggers -> use web UI.
 
 ### 5. Customize prompts
 
@@ -81,27 +81,27 @@ Run once manually before relying on triggers:
 1. Web: **Run now** on routine detail page
 2. CLI: `/schedule run`
 3. Watch session live at returned URL
-4. Review output — adjust prompt if it wandered
+4. Review output -- adjust prompt if it wandered
 
 ## Routine vs. Sandcastle vs. interactive
 
 | Scenario | Use |
 |---|---|
-| Automated on every PR | **Routine** — GitHub trigger, cloud-hosted |
-| Scheduled health checks | **Routine** — schedule trigger |
-| 5+ independent issues in parallel | **Sandcastle** — parallel Docker agents |
-| Overnight batch | **Sandcastle** — AFK, local or CI |
-| Interactive feature work | **Claude Code** — direct session with human |
-| CD pipeline integration | **Routine** — API trigger from deploy script |
+| Automated on every PR | **Routine** -- GitHub trigger, cloud-hosted |
+| Scheduled health checks | **Routine** -- schedule trigger |
+| 5+ independent issues in parallel | **Sandcastle** -- parallel Docker agents |
+| Overnight batch | **Sandcastle** -- AFK, local or CI |
+| Interactive feature work | **Claude Code** -- direct session with human |
+| CD pipeline integration | **Routine** -- API trigger from deploy script |
 
 ## Enforcement model
 
-Routines run inside harness — no bypass:
+Routines run inside harness -- no bypass:
 
 - **Hooks**: fire on every Edit/Write/Bash inside routine session
-- **CLAUDE.md**: loads from repo root · all rules active
+- **CLAUDE.md**: loads from repo root | all rules active
 - **Skills**: available via `/skill-name` in routine prompt
 - **Agents**: reviewer agents (code-reviewer, self-reviewer, adversarial-reviewer) dispatchable
 - **Stop hooks**: quality gates (lint, typecheck) fire before session ends
 
-Update hook → every future routine run picks it up (next clone). No prompt changes needed.
+Update hook -> every future routine run picks it up (next clone). No prompt changes needed.

@@ -27,7 +27,7 @@ bun add -D react-doctor --yarn
 ```
 
 ### 4. Hook
-Copy `scripts/react-doctor-stop.sh` → `.claude/hooks/`. `chmod +x`. Add to Stop.
+Copy `scripts/react-doctor-stop.sh` -> `.claude/hooks/`. `chmod +x`. Add to Stop.
 
 ### 5. Verify
 - [ ] `bun run doctor` works

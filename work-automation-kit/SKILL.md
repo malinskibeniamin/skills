@@ -1,6 +1,6 @@
 ---
 name: work-automation-kit
-description: Install planning and project management skills — PRD creation, implementation planning, issue breakdown, bug triage, code review. Use when setting up project planning workflows or creating PRDs.
+description: Install planning and project management skills -- PRD creation, implementation planning, issue breakdown, bug triage, code review. Use when setting up project planning workflows or creating PRDs.
 ---
 
 # Work Automation Kit
