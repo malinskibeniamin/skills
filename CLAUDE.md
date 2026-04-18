@@ -8,6 +8,10 @@ bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/co
 
 `bun` pkg mgr | `tsgo` typecheck | Biome lint/fmt | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
 
+## Bash Discipline
+
+`find` -> `-maxdepth N` or `| head` | `git log` -> `-n 30` or `--oneline` | `grep -r` -> Grep tool | `cat` >200 lines -> Read | `llm-truncate` caps 4KB | `bash-verbose-guard` nudges pre-exec
+
 ## Commits
 
 `type(scope): description` -- feat fix refactor style test docs chore perf ci build revert -- scope required -- lowercase, 5-72 chars
