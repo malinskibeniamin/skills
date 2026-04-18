@@ -107,6 +107,7 @@
         "quality-gate-stop.sh",
         "lifecycle-stop.sh",
         "pr-feedback-completeness-stop.sh",
+        "perf-regression-stop.sh",
         "violation-summary-stop.sh"
       ]
     }
