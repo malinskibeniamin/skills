@@ -43,16 +43,44 @@ if [ ! -f "$_touched_file" ] || [ ! -s "$_touched_file" ]; then
 fi
 _session_code=$(grep -E '\.(ts|tsx)$' "$_touched_file" 2>/dev/null || true)
 # Defense-in-depth: drop any path that points at a secondary worktree
-# (subagent scope) or no longer exists. _hook-lib.sh already filters at
-# write time, but guard here too so stale entries from prior sessions or
-# untracked edge cases never block the main lifecycle.
+# (subagent scope), lives outside the current worktree (sibling
+# worktree / session-id collision), no longer exists, or is not part
+# of the current branch diff (stale tracker entry from a prior session,
+# rolled-back edit, or subagent that never landed). Prevents false
+# "untested source" blocks on sessions that did no real editing.
 if [ -n "$_session_code" ] && type _hook_in_secondary_worktree &>/dev/null; then
+  # Branch-local change set: files currently dirty OR committed since
+  # branch-off. If a tracked entry isn't in this set, it's stale.
+  _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+  _branch_changes=""
+  for _base in origin/main origin/master main master; do
+    if git rev-parse --verify "$_base" &>/dev/null; then
+      _branch_changes=$(
+        { git diff --name-only "$_base...HEAD" 2>/dev/null
+          git diff --name-only HEAD 2>/dev/null
+          git ls-files --others --exclude-standard 2>/dev/null; } | sort -u
+      )
+      break
+    fi
+  done
   _filtered=""
   while IFS= read -r _p; do
     [ -z "$_p" ] && continue
     [ -e "$_p" ] || continue
     if _hook_in_secondary_worktree "$_p"; then
       continue
+    fi
+    if type _hook_file_outside_current_worktree &>/dev/null \
+      && _hook_file_outside_current_worktree "$_p"; then
+      continue
+    fi
+    if [ -n "$_branch_changes" ] && [ -n "$_repo_root" ]; then
+      # Resolve symlinks before stripping (macOS /var → /private/var)
+      _p_real=$(cd "$(dirname "$_p")" 2>/dev/null && echo "$(pwd -P)/$(basename "$_p")" || echo "$_p")
+      _rel="${_p_real#"$_repo_root"/}"
+      if ! grep -Fxq -- "$_rel" <<< "$_branch_changes"; then
+        continue
+      fi
     fi
     _filtered="${_filtered}${_p}"$'\n'
   done <<< "$_session_code"
