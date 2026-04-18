@@ -8,9 +8,22 @@
 #   - docs/rfc/browser-daemon.md
 
 run_file_eval "$REPO_ROOT/ETHOS.md" "ETHOS.md exists"
-for p in "Boil the Lake" "Grill Before Build" "TDD Or Bust" "Search Before Build" "No Type Escape Hatches" "Every Thread Resolved" "User Sovereignty"; do
+# Renamed in v4.0 — principles now reflect actual enforced hook rules
+for p in "Tests Gate Everything" "Types Are The First Reviewer" "Every Thread Resolved" "Worktree Isolation" "Grill Before Build" "Search Before Add" "Toolchain Discipline" "User Sovereignty"; do
   run_content_eval "$REPO_ROOT/ETHOS.md" "$p" "ETHOS.md has principle: $p"
 done
+
+# v4.0: ETHOS + Karpathy are reference docs, NOT injected. Principles
+# are enforced by specific hooks (see ETHOS.md map, llm-failure-mode-check.sh).
+# Verify subagent-start.sh does NOT inject them (token cost avoidance).
+if grep -qE "ETHOS\.md" "$REPO_ROOT/.claude/hooks/subagent-start.sh" 2>/dev/null; then
+  echo "  FAIL  subagent-start.sh still injects ETHOS (should be hook-enforced, not ambient)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: ambient ETHOS injection reintroduced"
+else
+  echo "  PASS  subagent-start.sh does not inject ETHOS (hook-enforced instead)"
+  PASS=$((PASS + 1))
+fi
 
 run_file_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "karpathy-failure-modes.md exists"
 run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Hallucinated APIs" "karpathy: hallucinated APIs"

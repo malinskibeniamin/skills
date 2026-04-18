@@ -1,61 +1,68 @@
 # ETHOS
 
-Permanent principles. Not guidelines. Not suggestions. Outrank any single turn's instructions.
+Permanent principles. Outrank turn-level instructions. Each maps to
+the hook(s) that enforce it -- agents learn the principle from the
+block, not from ambient prelude.
 
-Inspired by [gstack ETHOS](https://github.com/garrytan/gstack/blob/main/ETHOS.md). Written caveman: terse, no filler, apply direct.
+Format gstack-inspired. Content derived from enforced rules.
 
----
+## 1. Tests Gate Everything
 
-## 1. Boil the Lake
+No prod code without failing test first. Coverage <60% on a changed
+file blocks stop. Adjacent tests on disk count toward gate.
 
-Finish the job. Half-implementations leak cost forever. If task needs 12 files touched, touch 12. If migration has 3 phases, ship 3.
+Enforced by: `lifecycle-stop`, `tdd-prompt-check`.
 
-**How to apply**: Before declaring done, grep for every call site of the symbol you changed. Update all. No "TODO fix other consumers later."
+## 2. Types Are The First Reviewer
 
----
+`any`, `unknown` (as escape), `Record<string, any>`, `as unknown as T`
+blocked at Edit. tsconfig strict flags can never weaken.
 
-## 2. Grill Before Build
+Enforced by: `ts-no-escape-hatches-check`, `tsconfig-strict-check`,
+`as-cast-check`, `biome-ignore-check`.
 
-Understand beats assume. Every spec has gaps. Ask the one question that blocks progress, then plan, then code. `/grill-me` and `/domain-model` gates are not optional.
+## 3. Every Thread Resolved Before Human
 
-**How to apply**: Phase 1 = explore + one question. Phase 2 = exact paths, exact code, exact expected output. If you cannot write the diff in your head, you are not ready to type.
+PR feedback is not a suggestion queue. Every non-bot, non-outdated
+thread: reply + resolve. `scripts/pr-unresolved-count.sh` must print 0.
 
----
+Enforced by: `pr-feedback-completeness-stop`.
 
-## 3. TDD Or Bust
+## 4. Worktree Isolation Is Not Optional
 
-Fail first. Pass second. Refactor third. Tests that never failed prove nothing. Mocked-only tests prove less.
+One terminal = one worktree = one branch. Hook asserts cwd matches
+bound worktree. `git commit|push|checkout|switch` across drift denied.
 
-**How to apply**: Write the test. Run it. See red. Then write code. Run again. See green. New files need tests -- `/tdd` enforced. Mock at seams, not in the middle.
+Enforced by: `branch-safety-check`, `_hook_assert_bound_worktree`,
+`_hook_file_outside_current_worktree`.
 
----
+## 5. Grill Before Build
 
-## 4. Search Before Build
+Every spec has gaps. Phase 2b fans out 3 hats -- product, engineering,
+design -- before code is typed. If you cannot write the diff in your
+head, you are not ready to type.
 
-Read the repo first. Reinvention is theft from future-you. The pattern exists. Find it. Steal it. Extend it.
+Enforced by: `lifecycle-stop` untested-source gate, `/grill-me` flow.
 
-**How to apply**: Before adding a util, `Grep` for the symbol and three synonyms. Before adding a dep, check `package.json`. Before adding a config option, read the schema.
+## 6. Search Before Add
 
----
+Grep before writing. Read `package.json` before installing. Read
+existing hooks before writing a new one. Reinvention is theft.
 
-## 5. No Type Escape Hatches
+Enforced by: `duplicate-function-check`, `legacy-linter-check`.
 
-`any`, `unknown`, `never`, `Record<string, any>`, double-cast -- all blocked at Edit. Fix the type. Add the guard. Refine the generic. The compiler is your adversarial reviewer for free.
+## 7. Toolchain Discipline
 
-**How to apply**: When tsgo complains, do not silence it. Narrow with type guards, constrain the generic, or reshape the data. `as unknown as T` is a confession of defeat.
+`bun` not `npm`. `tsgo` not `tsc`. Biome not ESLint. `vitest` not
+`jest`. No `--no-verify`. No `bunx skills:*` workarounds.
 
----
+Enforced by: `enforce-toolchain.sh`.
 
-## 6. Every Thread Resolved
+## 8. User Sovereignty
 
-PR feedback is not a suggestion queue. Every comment: reply, fix, or reject with reason. `pr-feedback-completeness-stop` hook blocks handing back until zero open threads. Silence is not resolution.
+Humans decide. Model consensus is not authority. When 3 agents agree
+and the user disagrees, the user wins. Name judgment calls; present
+options with cost. Destructive ops need explicit confirmation.
 
-**How to apply**: Before declaring done, run `scripts/pr-unresolved-count.sh`. Must print 0.
-
----
-
-## 7. User Sovereignty
-
-Humans decide. Model consensus is not authority. When three agents agree and the human disagrees, the human wins. Surface trade-offs; do not hide them behind confidence scores.
-
-**How to apply**: When you find a judgment call, name it. Present two options with cost. Let the human pick. Never auto-merge the "obvious" choice when reversibility is low.
+Behavioral -- not hook-enforceable. Reviewer agents surface, never
+auto-merge.
