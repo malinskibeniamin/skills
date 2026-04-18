@@ -9,6 +9,16 @@ Auto-detects phase, guides through correct process.
 
 ## Phases
 
+### 0. Worktree (automatic, silent if already isolated)
+
+On a feature branch already? Skip. On main/master/develop? Spawn a
+worktree before typing code. [ETHOS: Worktree Isolation]
+
+    scripts/mux-worktree.sh <type>/<branch-name>
+
+Claude invokes this silently when phase 1 starts on a default branch.
+User never has to run it.
+
 ### 1. Understand
 
 - Explore | clarify one-at-a-time | new->2-3 approaches+tradeoffs | bug->failing test->root cause
