@@ -33,6 +33,29 @@ run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "SSRF" "karpathy:
 run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Silent Fallbacks" "karpathy: silent fallbacks"
 run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "karpathy_checks" "karpathy: machine-readable checks"
 
+# v4.1: MAST multi-agent failure taxonomy (Cemri et al. NeurIPS 2025)
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "MAST" "MAST taxonomy section present"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Multi-Agent System Failure Taxonomy" "MAST full name"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "FC1 -- System Design Issues" "MAST category FC1"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "FC2 -- Inter-Agent Misalignment" "MAST category FC2"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "FC3 -- Task Verification" "MAST category FC3"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Disobey Task Specification" "MAST FM-1.1"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Step Repetition" "MAST FM-1.3"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Reasoning-Action Mismatch" "MAST FM-2.6"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "Premature Termination" "MAST FM-3.1"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "mast_checks" "MAST reviewer output field"
+run_content_eval "$REPO_ROOT/agents/karpathy-failure-modes.md" "arXiv:2503.13657" "MAST citation"
+
+# v4.1 distribution fix: karpathy-failure-modes.md must be registered in plugin agents[]
+if grep -q '"./agents/karpathy-failure-modes.md"' "$REPO_ROOT/.claude-plugin/plugin.json"; then
+  echo "  PASS  karpathy-failure-modes.md registered in .claude-plugin/plugin.json agents[]"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  karpathy-failure-modes.md MISSING from .claude-plugin/plugin.json agents[] (reviewer agents reference it via relative link)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: karpathy-failure-modes.md not in claude plugin agents[]"
+fi
+
 run_content_eval "$REPO_ROOT/agents/adversarial-reviewer.md" "Trigger Gate" \
   "adversarial-reviewer has trigger gate"
 run_content_eval "$REPO_ROOT/agents/adversarial-reviewer.md" "diff_lines > 200" \

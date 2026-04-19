@@ -10,19 +10,19 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 7 Karpathy LLM failure modes enforced. OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. Worktree isolation + branch safety. Agent-browser integration (~91% token reduction). 8 agents (3-hat plan review), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "4.0.0",
+      "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 21 LLM failure modes enforced (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. Worktree isolation + branch safety. Agent-browser integration (~91% token reduction). 9 agents (3-hat plan review + karpathy reference), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.1.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
       },
-      "x-updatedAt": "2026-04-17",
+      "x-updatedAt": "2026-04-19",
       "x-includes": {
         "skills": 41,
         "hooks": 82,
         "commands": 0,
         "routines": 5,
-        "agents": 5,
+        "agents": 9,
         "sharedUtilities": 11,
         "references": 25,
         "evals": 1,
@@ -30,6 +30,8 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.1.0": "2026-04-19 -- Ship-fix: agents/karpathy-failure-modes.md registered in plugin.json agents[] (previously orphaned -- reviewer agents referenced it but the file was never installed). Extended with MAST multi-agent failure taxonomy (Cemri et al. NeurIPS 2025, arXiv:2503.13657, 285 citations) -- 14 new failure modes across System Design / Inter-Agent Misalignment / Task Verification. Reviewer agents now emit mast_checks JSON alongside karpathy_checks. x-includes.agents 5 -> 9 (corrects prior staleness from 4.0.0 plan-hat additions).",
+        "4.0.1": "2026-04-19 -- caveman-compress pass on 65 ambient docs. Tighter phrasing per session. .original.md gitignored.",
         "4.0.0": "2026-04-18 -- Major gstack-inspired consolidation. 5 new hooks (branch-safety, llm-failure-mode [7 Karpathy patterns], perf-regression [Core Web Vitals], security-audit [OWASP+STRIDE+snyk/bun], bash-verbose-guard). Helpers: scripts/mux-worktree + scripts/skills-browser (agent-browser wrap). 3-hat plan review in /grill-me phase 2b. ETHOS 8 principles mapped to enforcing hooks. /hook-audit --retro mode. LLM-optimized vitest + playwright reporters. v3.2.0 /cso /canary /benchmark /mux skills removed -- native hooks + helpers replace them. 1608/1608 evals.",
         "3.2.0": "2026-04-18 — gstack-inspired hardening. Worktree isolation (sibling-worktree leakage fix + branch-safety-check.sh). Codex cross-model review wired. Karpathy failure-modes checklist. Adversarial-reviewer trigger-gated. New /cso (OWASP+STRIDE), /canary (post-deploy watch), /benchmark (Core Web Vitals), /mux (worktree spawn). ETHOS.md. Browser daemon v4.0 RFC. Evals 1464/1464.",
         "3.1.1": "2026-04-18 — Opus 4.7 effort tiers downsized one level (xhigh→high, max→xhigh). Final gates keep xhigh.",
