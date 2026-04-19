@@ -5,7 +5,7 @@ description: Analyze changes, create categorized conventional commits, push, and
 
 # Commit, push, and open PR
 
-See [REFERENCE.md](REFERENCE.md) for commit-type table, auto-label map, and PR body template.
+See [REFERENCE.md](REFERENCE.md) for commit-type table, auto-label map, PR body template.
 
 ## Step 0: Gather context
 
@@ -35,18 +35,18 @@ Check REFERENCE.md for review skill list. If NONE ran this session, warn and blo
 ### Phase 1: Scope confirmation
 
 1. Inspect status and diff above
-2. If PR exists on branch (from context), inform user -- new commits update existing PR. Skip to Phase 3.
-3. If worktree has unrelated changes, **ask user** which files belong -- do NOT default to `git add -A`
-4. Present file list grouped by category for confirmation before proceeding
+2. PR exists on branch (from context) -> inform user, new commits update existing PR. Skip to Phase 3.
+3. Worktree has unrelated changes -> **ask user** which files belong. Never default `git add -A`
+4. Present file list grouped by category for confirmation before proceed
 
 ### Phase 2: Branch strategy
 
-1. If on default branch -> create new branch `type/description` (e.g. `feat/add-commit-push-command`) and switch
+1. On default branch -> create new branch `type/description` (e.g. `feat/add-commit-push-command`) and switch
 2. Else stay on current branch
 
 ### Phase 3: Categorized commits
 
-Group changed files by conventional commit type (see REFERENCE.md for type table).
+Group changed files by conventional commit type (see REFERENCE.md type table).
 
 **For each category with files:**
 
@@ -57,17 +57,17 @@ Group changed files by conventional commit type (see REFERENCE.md for type table
    - Include `Co-Authored-By` trailer
 3. Next category
 
-Record commit types created -- used for auto-labeling in Phase 5.
+Record commit types created -- used for auto-labeling Phase 5.
 
 ### Phase 4: Push
 
-1. Show what will push: `git log --oneline origin/<branch>..HEAD 2>/dev/null || git log --oneline -5`
+1. Show what push: `git log --oneline origin/<branch>..HEAD 2>/dev/null || git log --oneline -5`
 2. Push with tracking: `git push -u origin $(git branch --show-current)`
 3. Never force push -- `--force-with-lease` OK when needed (after rebase)
 
 ### Phase 5: Open pull request
 
-**If PR exists** (from context), skip to Phase 6 -- push updated it already.
+**PR exists** (from context) -> skip to Phase 6, push updated it already.
 
 1. Determine base branch from context
 2. Build `gh pr create` with `--base`, `--fill-verbose`, `--assignee @me`
@@ -78,10 +78,10 @@ Record commit types created -- used for auto-labeling in Phase 5.
 ### Phase 6: Watch CI (MANDATORY)
 
 1. **Always** stream CI checks: `gh pr checks <PR_NUMBER> --watch` via Monitor tool
-2. Do NOT use `sleep` + polling -- use `--watch` flag
-3. Do NOT skip -- CI failures caught here save time
+2. Never use `sleep` + polling -- use `--watch` flag
+3. Never skip -- CI failures caught here save time
 4. Checks fail -> read logs, diagnose, fix, commit, push, re-watch
-5. No CI configured -> note it and proceed
+5. No CI configured -> note and proceed
 
 ### Phase 7: Verify and summarize
 
@@ -92,7 +92,7 @@ Record commit types created -- used for auto-labeling in Phase 5.
 ### Safety
 
 - Never stage unrelated changes silently
-- Never push without confirming scope when worktree has mixed changes
+- Never push without confirming scope when worktree mixed
 - Never force push -- `--force-with-lease` OK when needed (after rebase)
 - No accessible git remote -> stop, explain blocker
 - `gh pr create` fails -> show error, suggest `--recover` flag for retry

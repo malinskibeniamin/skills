@@ -5,9 +5,9 @@ Triggered on new issue. Explore codebase, classify, label, post findings.
 ## Important: avoid noise
 
 - Only comment if found something useful (relevant code, likely root cause, reproduction path)
-- Issue already clear and labeled → labels only, no comment
-- Never post "I couldn't find anything related" — that noise
-- Feature requests needing no codebase investigation → just label
+- Issue already clear and labeled -> labels only, no comment
+- Never post "I couldn't find anything related" -- that noise
+- Feature requests needing no codebase investigation -> just label
 
 ## Steps
 
@@ -37,7 +37,7 @@ Use existing labels only. Never create new ones.
 
 ### 4. Explore codebase (bugs and performance only)
 
-Bug reports and performance issues — investigate:
+Bug reports and performance issues -- investigate:
 
 ```bash
 # Search for code related to the issue
@@ -73,24 +73,24 @@ gh issue comment <number> --body "## Triage
 [What was found. Relevant code paths. Likely root cause or bottleneck.]
 
 ### Relevant code
-- \`src/path/to/file.ts\` — [why relevant]
+- \`src/path/to/file.ts\` -- [why relevant]
 
 ### Suggested approach
-[Brief fix direction — not a full plan]
+[Brief fix direction -- not a full plan]
 
 ---
 *Automated triage. Human review recommended before starting work.*"
 ```
 
-Feature requests and questions → labels only, no investigation comment.
+Feature requests and questions -> labels only, no investigation comment.
 
 ## Rules
 
 - Read-only. Never edit code, create branches, or open PRs.
-- Labels only — never assign issues.
-- Existing labels only — never create new ones.
+- Labels only -- never assign issues.
+- Existing labels only -- never create new ones.
 - Spam or off-topic: apply `invalid` label, brief comment, stop.
 - Likely duplicate: search existing issues, link "Possibly duplicate of #N".
 - Bug lacks repro steps: comment asking for specifics, apply `needs-info` label (if exists).
 - No fetching external URLs from issue body.
-- Priority estimates = suggestions — no priority labels unless project already uses them.
+- Priority estimates = suggestions -- no priority labels unless project already uses them.

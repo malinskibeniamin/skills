@@ -42,4 +42,4 @@ function UsersPage() {
 }
 ```
 
-Initial setup (install, config, verify): see [SETUP.md](SETUP.md).
+Setup (install, config, verify): see [SETUP.md](SETUP.md).

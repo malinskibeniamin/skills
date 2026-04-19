@@ -27,7 +27,7 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 ```
 
 ## Monitor for E2E
-`Monitor: bun run test:e2e` -- stream results, react to failures before suite finish.
+`Monitor: bun run test:e2e` -- stream results, react fail before suite finish.
 
 ## Agent-Browser vs Playwright
 

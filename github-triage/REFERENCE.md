@@ -8,13 +8,13 @@ Before present anything:
 - Read full issue: body, comments, labels, reporter, age
 - Parse prior triage notes from previous sessions
 - Explore codebase for relevant domain context
-- Read `.out-of-scope/*.md` — check if match prior rejection
+- Read `.out-of-scope/*.md` -- check match prior rejection
 
 ### Step 2: Present Recommendation
 
-Tell maintainer: category (bug/enhancement) + reasoning, state recommendation + reasoning. If match prior out-of-scope: "Similar to `.out-of-scope/concept.md` — rejected before because X. Still feel the same?"
+Tell maintainer: category (bug/enhancement) + reasoning, state recommendation + reasoning. If match prior out-of-scope: "Similar to `.out-of-scope/concept.md` -- rejected before because X. Still feel the same?"
 
-Wait for direction.
+Wait direction.
 
 ### Step 3: Bug Reproduction (bugs only)
 
@@ -23,7 +23,7 @@ Attempt reproduce before grilling:
 - Explore relevant code paths
 - Run tests or trace logic
 - Report success/failure to maintainer
-- Lack of detail → strong signal for `needs-info`
+- Lack of detail -> strong signal for `needs-info`
 
 ### Step 4: Grilling Session (if needed)
 
@@ -36,20 +36,20 @@ Flesh out issue to complete spec. Interview maintainer.
 | ready-for-agent | Post agent brief comment (see below) |
 | ready-for-human | Post summary + why can't delegate |
 | needs-info | Post triage notes + questions |
-| wontfix (bug) | Comment explain why → close |
-| wontfix (enhancement) | Write `.out-of-scope/` → comment → close |
+| wontfix (bug) | Comment explain why -> close |
+| wontfix (enhancement) | Write `.out-of-scope/` -> comment -> close |
 
 ---
 
 ## Agent Brief Format
 
-Durable spec AFK agent works from. Original issue = context; brief = contract.
+Durable spec AFK agent work from. Original issue = context; brief = contract.
 
 ### Principles
 
 **Durability over precision**: Describe interfaces/types/contracts. NO file paths, NO line numbers.
 
-**Behavioral, not procedural**: WHAT system do, not HOW to implement.
+**Behavioral, not procedural**: WHAT system do, not HOW implement.
 
 **Complete acceptance criteria**: Each independently verifiable.
 
@@ -70,8 +70,8 @@ What happens now.
 What should happen. Be specific about edge cases.
 
 **Key interfaces:**
-- `TypeName` — what changes and why
-- `functionName()` — current vs expected return
+- `TypeName` -- what changes and why
+- `functionName()` -- current vs expected return
 
 **Acceptance criteria:**
 - [ ] Specific, testable criterion 1
@@ -108,24 +108,24 @@ This project does not support dark mode or user-facing theming.
 
 ## Why This Is Out of Scope
 
-[Substantive reason — not "we don't want this" but WHY. Reference project scope, technical constraints, or strategic decisions. Must be durable — no "too busy right now".]
+[Substantive reason -- not "we don't want this" but WHY. Reference project scope, technical constraints, or strategic decisions. Must be durable -- no "too busy right now".]
 
 ## Prior Requests
 
-- #42 — "Add dark mode support"
-- #87 — "Night theme for accessibility"
+- #42 -- "Add dark mode support"
+- #87 -- "Night theme for accessibility"
 ```
 
 ### When to Check
 
-During triage Step 1. Match by concept similarity, not keyword — "night theme" match `dark-mode.md`.
+During triage Step 1. Match by concept similarity, not keyword -- "night theme" match `dark-mode.md`.
 
 ### When to Write
 
 Only when **enhancement** (not bug) rejected as `wontfix`:
 1. Check if matching file exists
-2. Exists → append to "Prior Requests"
-3. Not exists → create new file
+2. Exists -> append to "Prior Requests"
+3. Not exists -> create new file
 4. Comment on issue link to file
 5. Close with `wontfix`
 
@@ -145,4 +145,4 @@ Only when **enhancement** (not bug) rejected as `wontfix`:
 - specific question 2
 ```
 
-Capture ALL grilling progress in "established" — don't lose work. Questions must be specific + actionable.
+Capture ALL grilling progress in "established" -- no lose work. Questions must be specific + actionable.

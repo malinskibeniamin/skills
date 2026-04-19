@@ -33,7 +33,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 - Run `vitest run --coverage.enabled --coverage.reporter=text`
 - Find uncovered lines/branches/functions in changed files -> test targets
-- Confirm behaviors w/ user (prioritize gaps over covered code)
+- Confirm behaviors w/ user (prioritize gaps over covered)
 - Find [deep module](deep-modules.md) chance (small interface, deep impl)
 - Design interfaces for [testability](interface-design.md)
 
@@ -59,7 +59,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ### Reactive TDD with Monitor
 
-`Monitor: vitest --watch` -- streams pass/fail as you edit. Edit->fail->fix->pass->refactor->repeat.
+`Monitor: vitest --watch` -- stream pass/fail as edit. Edit->fail->fix->pass->refactor->repeat.
 
 ### 4. REPEAT -- Next behavior
 
@@ -67,9 +67,9 @@ RED->GREEN->REFACTOR per behavior. One at a time.
 
 ### Per-Cycle Checklist
 
-- [ ] Test describes behavior, not impl
-- [ ] Test uses public interface only
-- [ ] Test survives internal refactor
+- [ ] Test describe behavior, not impl
+- [ ] Test use public interface only
+- [ ] Test survive internal refactor
 - [ ] Code minimal for this test
 - [ ] No speculative features
 
@@ -78,7 +78,7 @@ RED->GREEN->REFACTOR per behavior. One at a time.
 | Suffix | Purpose | DOM? |
 |--------|---------|------|
 | `.test.ts` | Unit -- pure logic | No |
-| `.test.tsx` / `.integration.tsx` | Integration -- renders components | Yes |
+| `.test.tsx` / `.integration.tsx` | Integration -- render components | Yes |
 | `e2e/*.spec.ts` | E2E -- Playwright browser | Browser |
 
 ## Visual Regression Tests (Route Files)
@@ -88,7 +88,7 @@ New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project 
 ## When Done
 
 - [ ] All pass (`vitest run`)
-- [ ] No async leaks (`vitest run --detectAsyncLeaks`) -- Stop hook runs auto
+- [ ] No async leaks (`vitest run --detectAsyncLeaks`) -- Stop hook run auto
 - [ ] No `setTimeout` hacks -- condition-based wait
 - [ ] Coverage gaps closed -- re-run coverage, verify changed files
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`

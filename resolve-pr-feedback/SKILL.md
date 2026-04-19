@@ -31,7 +31,7 @@ Three sources: inline review threads (GraphQL reviewThreads), top-level comments
 Filter hard. Zero new items -> comment "All feedback addressed" -> stop.
 
 ### 4. Cluster
-Group feedback hitting same issue. Each cluster = one unit work.
+Group feedback hit same issue. Each cluster = one unit work.
 
 ### 5. Fix Each Cluster
 Read code -> understand ask -> fix -> run related tests -> commit: `fix: address review feedback -- [summary]`. Sequential, one commit per cluster.

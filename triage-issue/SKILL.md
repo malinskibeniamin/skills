@@ -12,7 +12,7 @@ One question max: "What's the problem?" If described, skip to explore.
 Agent(subagent_type=Explore): Where (modules/behaviors), What (symptoms), Why (root cause), Related (interacting code).
 
 ## 3. Fix Approach
-Minimal change (surgical > rewrite). Affected interfaces/contracts. Behaviors to verify -> tests.
+Minimal change (surgical > rewrite). Affected interfaces/contracts. Behaviors verify -> tests.
 
 ## 4. TDD Fix Plan
 Ordered RED-GREEN cycles. Vertical slices (one test -> one fix). Describe behaviors, not impl steps. Durable language (module names, contracts), not file paths.

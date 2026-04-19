@@ -10,11 +10,11 @@ description: Generate multiple radically different interface designs for a modul
 ## Workflow
 
 ### 1. Gather Requirements
-- What problem? Who call? Key operations? Constraints? What hide vs expose?
+- Problem? Callers? Key ops? Constraints? Hide vs expose?
 - Ask: "What does this module need to do? Who will use it?"
 
 ### 2. Generate Designs (Parallel Sub-Agents)
-Spawn 3+ agents simultaneous. Each **radical different** approach, different constraint:
+Spawn 3+ agents parallel. Each **radical different** approach, different constraint:
 - Agent 1: min method count (1-3 max)
 - Agent 2: max flexibility
 - Agent 3: optimize common case

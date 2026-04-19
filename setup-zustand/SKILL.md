@@ -16,7 +16,7 @@ paths:
 
 ## Stack Decisions
 
-- **Zustand for client state only**: theme, sidebar, selected tab, draft form data. Server data -> TanStack Query / Connect Query.
+- **Zustand client state only**: theme, sidebar, selected tab, draft form data. Server data -> TanStack Query / Connect Query.
 - **`useShallow` required** for multi-value selectors (hook enforce).
 - **Callback form required** for `set()` (hook enforce).
 

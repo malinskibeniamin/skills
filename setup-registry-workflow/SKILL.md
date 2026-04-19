@@ -12,7 +12,7 @@ description: Registry hooks + component taxonomy + consumer drift analysis. Use 
 
 ## Component Taxonomy (Atomic Design)
 
-Classify every registry component into one level. Drive test depth.
+Classify every registry component one level. Drive test depth.
 
 | Level | useState | Registry imports | Custom kbd handlers | Portal | Test count |
 |-------|----------|-----------------|-------------------|--------|------------|
@@ -31,25 +31,25 @@ Examples: CopyButton, InputGroup, ButtonGroup, Field, Accordion, Breadcrumb, Car
 **Organism**: Multiple molecules+atoms | significant state (3+ vars or useReducer) | custom kbd nav | portal rendering.
 Examples: Combobox, MultiSelect, DataTable, Dialog, DropdownMenu, Sheet, Sidebar, AutoForm
 
-Component evolve between levels -> verify heuristics | expand tests to new minimum | review FP compliance.
+Component evolve between levels -> verify heuristics | expand tests new minimum | review FP compliance.
 
 ## Consumer Drift Analysis
 
-Compare consumer repo components against registry source. Run when upstream sync.
+Compare consumer repo components against registry source. Run on upstream sync.
 
 ### Process
 
 1. **Discovery** -- scan `packages/registry/src/components/` | match against consumer dirs
 2. **Comparison** -- `git diff --no-index --ignore-all-space` per component | skip empty diffs
-3. **Filtering** -- apply rules below to each non-empty diff
-4. **Categorization** -- assign exactly one status per component
+3. **Filtering** -- apply rules below each non-empty diff
+4. **Categorization** -- assign one status per component
 
 ### Filter Rules
 
 | Rule | Detect | Action |
 |------|--------|--------|
 | **Import noise** | Only `@/`->`../` path changes, `'use client'` directives, biome comments | **Skip-Import-Only** |
-| **Staleness** | Registry changelog newer than consumer file | **Skip-Outdated** -- consumer should sync FROM registry |
+| **Staleness** | Registry changelog newer than consumer file | **Skip-Outdated** -- consumer sync FROM registry |
 | **Business logic** | String equality (`=== 'admin'`), feature flags, API endpoints, route logic, analytics, env checks | **Skip-Business-Logic** -- never upstream app-specific code |
 
 ### Business Logic Red Flags
@@ -69,15 +69,15 @@ Safe: prop-based logic (`variant === 'destructive'`, `size === 'lg'`).
 
 | Status | Meaning |
 |--------|---------|
-| **Upstream** | Real functional diff, safe to merge into registry |
+| **Upstream** | Real functional diff, safe merge into registry |
 | **Skip-Import-Only** | Only import path/directive noise |
-| **Skip-Outdated** | Registry newer -- consumer should pull, not push |
+| **Skip-Outdated** | Registry newer -- consumer pull, not push |
 | **Skip-Business-Logic** | App-specific logic -- re-implement cleanly if needed |
 
 ## Steps
 
 1. Copy `scripts/ui-registry-warn.sh` + `scripts/registry-check.sh` -> `.claude/hooks/` | `chmod +x`
-2. Configure in `.claude/settings.json`:
+2. Configure `.claude/settings.json`:
    - PostToolUse (Edit|Write): `ui-registry-warn.sh`
    - Stop: `registry-check.sh`
 

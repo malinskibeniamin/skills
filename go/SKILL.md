@@ -17,8 +17,8 @@ Run all checks. Fix failures before proceed.
 2. `bun run lint:fix` (biome)
 3. `bun vitest run --related` (changed files)
 4. Route touched -> `bun vitest run *.browser.test.tsx`
-5. Dev server running -> browser smoke via `scripts/skills-browser.sh` (Vercel agent-browser). Skip gracefully if not installed.
-6. **When green: commit immediately.** One commit per passing state.
+5. Dev server running -> browser smoke via `scripts/skills-browser.sh` (Vercel agent-browser). Skip if not installed.
+6. **When green: commit now.** One commit per passing state.
 
 ## Phase 4b: Refine (Self-Review Loop)
 
@@ -30,7 +30,7 @@ Run all checks. Fix failures before proceed.
 4. Fix P0/P1 now, apply P2 `safe_auto`, show P2 `gated_auto` to user
 5. Commit fixes: `refactor(scope): self-review fixes`
 6. Re-verify (tests + types + lint)
-7. **Max 2 refinement rounds.** Then proceed.
+7. **Max 2 refine rounds.** Then proceed.
 
 ## Phase 5: Simplify + Ship
 
@@ -44,15 +44,15 @@ Run all checks. Fix failures before proceed.
 1. `Monitor: gh pr checks <number> --watch` -- stream CI background
 2. CI fail -> diagnose, fix, push, re-monitor
 3. `code-reviewer` agent findings -> `/resolve-pr-feedback` triage, fix, reply, push
-4. **AI self-review cap**: up to 3 automated `code-reviewer` rounds. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on a clean round N. After 3 rounds still noisy -> hand off to human.
-5. **Human review (including cloud/Copilot)**: NO cap. Address EVERY thread. `pr-feedback-completeness-stop` hook blocks session exit until `bash scripts/pr-unresolved-count.sh` returns 0 and no CHANGES_REQUESTED reviews remain.
+4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
+5. **Human review (incl cloud/Copilot)**: NO cap. Address EVERY thread. `pr-feedback-completeness-stop` hook blocks session exit until `bash scripts/pr-unresolved-count.sh` returns 0 and no CHANGES_REQUESTED reviews remain.
 
 ## Phase 6: Compound
 
 After non-trivial tasks: "Learn something worth preserve?"
 
 - Write rule to `.claude/rules/<topic>.md` with `paths:` glob
-- AI bug -> create eval/test fixture catching same error class
+- AI bug -> create eval/test fixture catch same error class
 
 ## Done
 
@@ -66,7 +66,7 @@ After non-trivial tasks: "Learn something worth preserve?"
 Before start, check work to ship:
 
 - No uncommitted changes AND no unpushed commits -> nothing do, stop
-- On default branch with no feature branch -> **auto-spawn via `scripts/mux-worktree.sh <type>/<name>`** before proceeding. Never ship from main. [ETHOS: Worktree Isolation]
+- On default branch, no feature branch -> **auto-spawn via `scripts/mux-worktree.sh <type>/<name>`** before proceed. Never ship from main. [ETHOS: Worktree Isolation]
 
 ## Skills Composed
 

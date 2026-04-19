@@ -1,7 +1,7 @@
 # Claude Code Best Practice Repo Evaluation
 
 **Date:** 2026-04-12
-**Status:** Analysed — no action needed, selective ideas noted
+**Status:** Analysed -- no action needed, selective ideas noted
 **Repository:** https://github.com/shanraisshan/claude-code-best-practice
 
 ## What Is It?
@@ -11,15 +11,15 @@ A reference encyclopedia by a Claude Community Ambassador cataloging Claude Code
 - **Author:** shanraisshan (Claude Certified Architect)
 - **Stars:** ~148K (as of 2026-04-12)
 - **Last Updated:** 2026-04-11 (Claude Code v2.1.101)
-- **Nature:** Documentation/reference — not an enforcement engine
+- **Nature:** Documentation/reference -- not an enforcement engine
 
 ## Key Strengths
 
-- **Comprehensive settings reference** — documents the full configuration hierarchy (Managed > CLI args > settings.local.json > settings.json > ~/.claude/settings.json)
-- **MCP server recommendations** — Context7 for library docs, DeepWiki for repo docs, Playwright for browser testing
-- **Advanced feature coverage** — Programmatic Tool Calling, Dynamic Filtering, Tool Search optimization
-- **Monorepo skill discovery** — documents `SLASH_COMMAND_TOOL_CHAR_BUDGET` and skill loading behavior
-- **Newer frontmatter fields** — `paths` (auto-activation), `effort` (per-skill override), `shell`, `color`, `initialPrompt`
+- **Comprehensive settings reference** -- documents the full configuration hierarchy (Managed > CLI args > settings.local.json > settings.json > ~/.claude/settings.json)
+- **MCP server recommendations** -- Context7 for library docs, DeepWiki for repo docs, Playwright for browser testing
+- **Advanced feature coverage** -- Programmatic Tool Calling, Dynamic Filtering, Tool Search optimization
+- **Monorepo skill discovery** -- documents `SLASH_COMMAND_TOOL_CHAR_BUDGET` and skill loading behavior
+- **Newer frontmatter fields** -- `paths` (auto-activation), `effort` (per-skill override), `shell`, `color`, `initialPrompt`
 
 ## Why No Action Needed
 
@@ -38,7 +38,7 @@ Their repo documents what's possible. Ours makes things happen. We already excee
 
 ### Nothing structurally missing
 
-Every major concept they document — hooks, skills, subagents, memory, MCP, settings — we already use. The gap is cosmetic features (spinner verbs, agent colors) or reference documentation we don't need to duplicate.
+Every major concept they document -- hooks, skills, subagents, memory, MCP, settings -- we already use. The gap is cosmetic features (spinner verbs, agent colors) or reference documentation we don't need to duplicate.
 
 ## Ideas Worth Noting (Low Priority)
 
@@ -55,7 +55,7 @@ Every major concept they document — hooks, skills, subagents, memory, MCP, set
 
 ## When to Revisit
 
-- Context hallucination becomes a recurring problem → adopt Context7 MCP
-- Context window blowout observed → tune `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`
-- Skill count exceeds ~40 → check `SLASH_COMMAND_TOOL_CHAR_BUDGET`
-- Monorepo adoption → review their monorepo skill discovery patterns
+- Context hallucination becomes a recurring problem -> adopt Context7 MCP
+- Context window blowout observed -> tune `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`
+- Skill count exceeds ~40 -> check `SLASH_COMMAND_TOOL_CHAR_BUDGET`
+- Monorepo adoption -> review their monorepo skill discovery patterns

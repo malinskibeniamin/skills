@@ -5,8 +5,8 @@
 ### 1. Detect protobuf version
 
 Check `package.json` for `@bufbuild/protobuf` version:
-- `^1.x` → install **v1 variant** (skip protobuf v2 checks)
-- `^2.x` → install **v2 variant** (include protobuf v2 checks)
+- `^1.x` -> install **v1 variant** (skip protobuf v2 checks)
+- `^2.x` -> install **v2 variant** (include protobuf v2 checks)
 
 ### 2. Create hook script
 
@@ -43,7 +43,7 @@ import { CreateTopicRequestSchema } from './gen/topics_pb'
 
 const validator = createValidator()
 
-// The protobuf schema IS your form validation — no duplicate Zod schema needed
+// The protobuf schema IS your form validation -- no duplicate Zod schema needed
 const form = useForm({
   resolver: createStandardSchemaResolver(validator.standardSchema(CreateTopicRequestSchema)),
 })
@@ -90,7 +90,7 @@ const transport = createConnectTransport({
 })
 ```
 
-New proto messages → always add schema to registry.
+New proto messages -> always add schema to registry.
 
 ## Transport Setup
 

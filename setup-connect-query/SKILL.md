@@ -18,4 +18,4 @@ paths:
 
 Escape hatch: `// allow: direct-query [reason]`
 
-See [REFERENCE.md](REFERENCE.md) for protobuf gotchas (Timestamp, Duration, Any, cache patterns). Initial setup: see [SETUP.md](SETUP.md).
+Protobuf gotchas (Timestamp, Duration, Any, cache patterns): [REFERENCE.md](REFERENCE.md). Setup: [SETUP.md](SETUP.md).

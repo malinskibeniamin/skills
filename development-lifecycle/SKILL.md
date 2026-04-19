@@ -5,13 +5,13 @@ description: "Use when doing frontend/React/TypeScript/UI work. Auto-guides phas
 
 # Development Lifecycle
 
-Auto-detect phase, guide correct process.
+Auto-detect phase, guide process.
 
 ## Phases
 
 ### 0. Worktree (automatic, silent if already isolated)
 
-On feature branch? Skip. On main/master/develop? Spawn worktree before code. [ETHOS: Worktree Isolation]
+Feature branch? Skip. On main/master/develop? Spawn worktree before code. [ETHOS: Worktree Isolation]
 
     scripts/mux-worktree.sh <type>/<branch-name>
 
@@ -29,9 +29,9 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Every step: exact file paths, exact code, expected output. No placeholders.
 - Bite-sized tasks (2-5 min each)
 - UI work: spawn 2-3 parallel prototype agents, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
-- 5+ tasks -> plan as stacked PRs (one per logical group)
+- 5+ tasks -> stacked PRs (one per logical group)
 - Complex plan (5+ tasks, multi-stakeholder)? Consider `/ultraplan`
-- If `/codex:rescue` available -> auto-dispatch second opinion
+- `/codex:rescue` available -> auto-dispatch second opinion
 
 ### 2b. Grill
 
@@ -49,12 +49,12 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 4-6. Ship -- `/go`
 
-Impl done -> run `/go` to ship. Handle everything:
+Impl done -> run `/go` to ship. Handle all:
 
 - **4. Verify** -- types + lint + tests + browser smoke
 - **4b. Review / Refine** -- self-reviewer + adversarial-reviewer agents (4b->5)
 - **5. Ship** -- `/simplify` -> `/commit-push-pr` -> code-reviewer agent
-- **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds with early-exit on clean; human review: address ALL (hook-enforced)
+- **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds, early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** -- codify lessons as `.claude/rules/`
 
 See `/go` skill full details. See [REFERENCE.md](REFERENCE.md) phase-specific checklists.

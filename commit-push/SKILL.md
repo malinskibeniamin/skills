@@ -63,16 +63,16 @@ Analyze changed files, group by purpose into conventional commit types:
 | `ci` | CI/CD pipeline changes |
 | `build` | build system changes |
 
-**For each category with files:**
+**Each category with files:**
 
-1. Stage only relevant files with explicit paths: `git add <file1> <file2> ...` -- never `git add -A` or `git add .`
+1. Stage only relevant files explicit paths: `git add <file1> <file2> ...` -- never `git add -A` or `git add .`
 2. Commit: `type(scope): terse description`
    - Infer scope from dir/module
    - Lowercase first letter, 5-72 chars, no trailing period
    - Include `Co-Authored-By` trailer
 3. Next category
 
-If file fit multiple categories, pick most specific.
+File fit multiple categories -> pick most specific.
 
 ### Phase 4: Pre-push review
 
@@ -95,4 +95,4 @@ If file fit multiple categories, pick most specific.
 - Never stage unrelated changes silent
 - Never push without confirm scope when worktree mixed
 - Never force push -- `--force-with-lease` OK when needed (after rebase)
-- If no git remote reachable, stop + explain blocker
+- No git remote reachable -> stop + explain blocker

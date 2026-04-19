@@ -58,13 +58,13 @@ jobs:
 
 ## Test Performance Profiling
 
-`test-perf-stop.sh` detect regression → use `vitest-profiler`:
+`test-perf-stop.sh` detect regression -> use `vitest-profiler`:
 
 ```bash
 bunx vitest-profiler --run
 ```
 
-Flamegraph timing output. Diagnostic, not routine CI.
+Flamegraph timing. Diagnostic, not routine CI.
 
 ## Asset Type Declarations
 
@@ -101,13 +101,13 @@ rsbuild: `@rsbuild/core/types` in tsconfig may suffice.
 
 ## CI Status Check
 
-Post-push: `Monitor: gh pr checks <number> --watch` — keep working. Pre-merge: confirm green.
+Post-push: `Monitor: gh pr checks <number> --watch` -- keep working. Pre-merge: confirm green.
 
 ## Cross-Model Review (Optional)
 
 | Command | Purpose |
 |---------|---------|
-| `/codex:review` | Standard review from different model |
+| `/codex:review` | Standard review, different model |
 | `/codex:adversarial-review` | Challenge design decisions |
 | `/codex:rescue <task>` | Delegate to Codex |
 | `@claude review` | PR comment trigger remote Claude review |

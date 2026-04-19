@@ -1,4 +1,4 @@
-# Go — Reference
+# Go -- Reference
 
 ## Flowchart
 
@@ -24,7 +24,7 @@ flowchart TD
     FixFindings -->|Round = 2| P5
     Findings -->|No| P5
 
-    P5[5. /simplify → /commit-push-pr<br/>+ code-reviewer] --> P5b
+    P5[5. /simplify -> /commit-push-pr<br/>+ code-reviewer] --> P5b
 
     P5b[5b. Iterate<br/>Monitor CI] --> CI{CI status?}
     CI -->|Failing| FixCI[Diagnose + fix + push]
@@ -50,7 +50,7 @@ flowchart TD
     style Done fill:#9c6,stroke:#333
 ```
 
-## Phase 4: Verify — Checklist
+## Phase 4: Verify -- Checklist
 
 ### Automated Checks
 
@@ -75,17 +75,17 @@ bun vitest run *.browser.test.tsx
 
 **Never ask user verify.** Use tools:
 
-- `claude-in-chrome` MCP: open dev server URL, verify visually, screenshot
-- Playwright: automated assertions for E2E
-- `Monitor: bun run dev` — watch for ready, then verify
+- `claude-in-chrome` MCP: open dev server URL, verify visual, screenshot
+- Playwright: automated E2E asserts
+- `Monitor: bun run dev` -- watch ready, verify
 
 **When**: UI changes, route changes, visual regressions. **Skip**: pure logic, API, data-layer.
 
 ### Commit on Green
 
-Each passing verification state = one commit. Format: `type(scope): what changed`.
+Each passing verify state = one commit. Format: `type(scope): what changed`.
 
-## Phase 4b: Refine — Findings Triage
+## Phase 4b: Refine -- Findings Triage
 
 ### Dispatch Rules
 
@@ -105,32 +105,32 @@ Each passing verification state = one commit. Format: `type(scope): what changed
 | P2 `safe_auto` | Apply auto |
 | P2 `gated_auto` | Show user, apply on confirm |
 | P2 `manual` | Report, user decide |
-| P3 / `advisory` | Skip — log for Phase 6 |
+| P3 / `advisory` | Skip -- log for Phase 6 |
 
 ### Refinement Rounds
 
 - Max 2 rounds. After each: commit fixes, re-verify (tests + types + lint)
-- P0/P1 persist after round 2 → go Phase 5, flag in PR description
+- P0/P1 persist after round 2 -> go Phase 5, flag in PR description
 
 ## Phase 5: Simplify + Ship
 
 ### Sequence
 
-1. **`/simplify`** — review changed code for:
+1. **`/simplify`** -- review changed code for:
    - Reuse chances (existing components/utilities)
    - Code quality (DRY, naming, structure)
    - Efficiency (needless re-renders, bundle impact)
 
 2. **Fix issues** from `/simplify`, commit
 
-3. **`/commit-push-pr`** — handle:
+3. **`/commit-push-pr`** -- handle:
    - Categorized conventional commits
    - Branch strategy
    - Push with tracking
    - PR creation with structured body
-   - CI monitoring
+   - CI monitor
 
-4. **`code-reviewer` agent** — dispatch on PR for fresh-eyes review
+4. **`code-reviewer` agent** -- dispatch on PR for fresh-eyes review
 
 ### Security Gate
 
@@ -142,18 +142,18 @@ Before PR creation, verify:
 
 ## Phase 5b: Iterate
 
-### Round 1 — Initial
+### Round 1 -- Initial
 
 1. Push + `Monitor: gh pr checks <pr-number> --watch`
-2. CI green → dispatch `code-reviewer`
+2. CI green -> dispatch `code-reviewer`
 3. `/resolve-pr-feedback` to triage, fix, reply, push
 4. Monitor CI again
 
-### Round 2 — Verification
+### Round 2 -- Verification
 
 1. `code-reviewer` (verify Round 1 fixes)
-2. `/resolve-pr-feedback` for remaining findings
-3. New issues → fix, push, monitor CI
+2. `/resolve-pr-feedback` for remain findings
+3. New issues -> fix, push, monitor CI
 4. **NO third round**
 
 ### Hand Off
@@ -164,8 +164,8 @@ Before PR creation, verify:
 
 ### Re-entry (New Session)
 
-If human request changes later:
-1. `/resolve-pr-feedback` — fetch, triage, fix, reply, push
+If human request change later:
+1. `/resolve-pr-feedback` -- fetch, triage, fix, reply, push
 2. Monitor CI after push
 3. One more `code-reviewer` round + `/resolve-pr-feedback`
 4. Re-request human review, stop
@@ -197,14 +197,14 @@ Rule description. Auto-loads when Claude works on matching files.
 
 ### Regression Evals
 
-AI-caused bug → classify failure → make regression test → add to CI → track patterns (3+ recurrences → `.claude/rules/` entry).
+AI-caused bug -> classify failure -> make regression test -> add to CI -> track patterns (3+ recurrences -> `.claude/rules/` entry).
 
 ## Lifecycle Integration
 
 `/go` = phases 4-6 of `/development-lifecycle`. Lifecycle Phase 3 (Implement/TDD) hands off to `/go` when implementation done.
 
 ```
-/development-lifecycle phases 1-3 → /go phases 4-6
+/development-lifecycle phases 1-3 -> /go phases 4-6
 ```
 
 `lifecycle-stop.sh` gates still fire at session end. `/go` front-run them so no surprise blocks.

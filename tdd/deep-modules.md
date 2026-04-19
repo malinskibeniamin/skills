@@ -6,11 +6,11 @@ From "A Philosophy of Software Design" (John Ousterhout):
 
 ```
 ┌─────────────────────┐
-│   Small Interface   │  ← Few methods, simple params
+│   Small Interface   │  <- Few methods, simple params
 ├─────────────────────┤
 │                     │
 │                     │
-│  Deep Implementation│  ← Complex logic hidden
+│  Deep Implementation│  <- Complex logic hidden
 │                     │
 │                     │
 └─────────────────────┘
@@ -20,9 +20,9 @@ From "A Philosophy of Software Design" (John Ousterhout):
 
 ```
 ┌─────────────────────────────────┐
-│       Large Interface           │  ← Many methods, complex params
+│       Large Interface           │  <- Many methods, complex params
 ├─────────────────────────────────┤
-│  Thin Implementation            │  ← Just passes through
+│  Thin Implementation            │  <- Just passes through
 └─────────────────────────────────┘
 ```
 

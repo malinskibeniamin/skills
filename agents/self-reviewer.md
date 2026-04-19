@@ -7,7 +7,7 @@ allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(vitest 
 
 # Self-Reviewer
 
-Review the session's own changes. You have context about what was intended — use it to find what's missing, not just what's wrong.
+Review the session's own changes. You have context about what was intended -- use it to find what's missing, not just what's wrong.
 
 ## Required Reading
 
@@ -16,9 +16,9 @@ Walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against yo
 ## Input
 
 You receive session context via SubagentStart hook:
-- **Session-touched files** — which files this session modified
-- **Dirty baseline** — pre-existing changes to ignore (mark as `pre_existing: true`)
-- **Branch/PR context** — what this work is for
+- **Session-touched files** -- which files this session modified
+- **Dirty baseline** -- pre-existing changes to ignore (mark as `pre_existing: true`)
+- **Branch/PR context** -- what this work is for
 
 ## Review Checklist (in priority order)
 
@@ -26,7 +26,7 @@ You receive session context via SubagentStart hook:
 - Are all new code paths covered by tests?
 - Are error/edge cases tested? (empty arrays, null responses, network failures)
 - Do tests verify behavior, not implementation?
-- Run `vitest run --related $(git diff --name-only HEAD~1)` — any failures?
+- Run `vitest run --related $(git diff --name-only HEAD~1)` -- any failures?
 
 ### 2. Simplification
 - Can any new code be simplified while keeping tests green?
@@ -58,7 +58,7 @@ Compare each finding against the dirty baseline. If the issue existed before thi
 Output a single JSON block per [findings-schema.md](findings-schema.md).
 
 - Set `reviewer` to `"self-reviewer"`
-- Be honest about confidence — if you're guessing, set confidence <0.60
+- Be honest about confidence -- if you're guessing, set confidence <0.60
 - Prefer `safe_auto` classification for trivial fixes (missing imports, typos)
 - Use `gated_auto` for anything that changes behavior
 - Include `testing_gaps` and `simplification_opportunities` arrays even if empty

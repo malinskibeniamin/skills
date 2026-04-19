@@ -130,10 +130,10 @@ Ultracite strict baseline. Overrides:
 | `useExhaustiveSwitchCases` | nursery | off | error | Type-safe switch/case |
 | `useConsistentTestIt` | nursery | off | test only | `test()` over `it()` |
 | `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` |
-| `organizeImports` | assist | — | on | Auto-sort imports |
+| `organizeImports` | assist | -- | on | Auto-sort imports |
 
-`noClassComponent` removed Biome 2.x — React Compiler skill enforce functional patterns.
+`noClassComponent` removed Biome 2.x -- React Compiler skill enforce functional patterns.
 
 ## Import Deletion Loop Prevention
 
-PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without this: Claude add import → Biome delete (unused, JSX not written yet) → Claude re-add → infinite loop. Caught at Stop hook when done editing.
+PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without: Claude add import → Biome delete (unused, JSX not written yet) → Claude re-add → infinite loop. Stop hook catch when edit done.

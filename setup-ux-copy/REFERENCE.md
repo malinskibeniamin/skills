@@ -7,11 +7,11 @@
 ## Escape Hatch
 
 ```tsx
-// allow: ux-copy — legacy string from external API
+// allow: ux-copy -- legacy string from external API
 const message = "Operation completed successfully!"
 ```
 
-Checks `// allow: ux-copy` anywhere in file. Reason required. Legacy format `// allow-ux-copy:` also works.
+Check `// allow: ux-copy` anywhere in file. Reason required. Legacy format `// allow-ux-copy:` work too.
 
 ## Capitalization
 
@@ -45,7 +45,7 @@ State problem. Give solution. No blame.
 
 ## Button Labels
 
-1-4 words max. Start with verb if >1 word. No "Yes"/"No" — use action verbs. No articles.
+1-4 words max. Start with verb if >1 word. No "Yes"/"No" -- use action verbs. No articles.
 
 | Good | Bad |
 |------|-----|
@@ -70,7 +70,7 @@ Brief. Period for full sentences, none for short phrases. No interactive element
 
 ## Links
 
-Descriptive text — never "click here". "Learn more" after descriptive text only. External link icon for links leaving product. One link per sentence.
+Descriptive text -- never "click here". "Learn more" after descriptive text only. External link icon for links leaving product. One link per sentence.
 
 ## Possessive Pronouns
 
@@ -89,14 +89,14 @@ American English. Present tense, active voice. Natural contractions. Serial comm
 
 ## Directional Language
 
-No physical position — layouts change. "See the Prerequisites section" not "See above".
+No physical position -- layouts change. "See the Prerequisites section" not "See above".
 
 ## Sentence Structure
 
-- **Subject first** — "3 options are available" not "There are 3 options"
-- **Conditional phrases first** — "If using Kubernetes, configure..."
-- **Present tense** — "The cluster restarts" not "will restart"
-- **No "and/or"** — use "and", "or", or "A, B, or both"
+- **Subject first** -- "3 options are available" not "There are 3 options"
+- **Conditional phrases first** -- "If using Kubernetes, configure..."
+- **Present tense** -- "The cluster restarts" not "will restart"
+- **No "and/or"** -- use "and", "or", or "A, B, or both"
 
 ## Words to Avoid
 

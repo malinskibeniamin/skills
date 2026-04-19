@@ -1,7 +1,7 @@
 # CocoIndex Code Evaluation
 
 **Date:** 2026-04-12
-**Status:** Declined — revisit at v1.0+ or for large monorepo scenarios
+**Status:** Declined -- revisit at v1.0+ or for large monorepo scenarios
 **Repository:** https://github.com/cocoindex-io/cocoindex-code
 
 ## What is CocoIndex Code?
@@ -17,11 +17,11 @@ A lightweight semantic code search CLI built on tree-sitter AST parsing and vect
 
 ## Key Strengths
 
-- **Semantic search** — finds conceptually related code even without keyword matches
-- **AST-aware chunking** — language-aware segmentation across 28+ file types
-- **Incremental indexing** — only re-indexes changed files
-- **Self-contained** — no external infrastructure (unlike Sourcegraph)
-- **Multiple integration paths** — skill, MCP server, CLI
+- **Semantic search** -- finds conceptually related code even without keyword matches
+- **AST-aware chunking** -- language-aware segmentation across 28+ file types
+- **Incremental indexing** -- only re-indexes changed files
+- **Self-contained** -- no external infrastructure (unlike Sourcegraph)
+- **Multiple integration paths** -- skill, MCP server, CLI
 
 ## Why We Declined
 
@@ -31,12 +31,12 @@ Our ecosystem is enforcement-first. CocoIndex Code solves a discovery problem.
 
 | Our need | Current solution | CocoIndex helps? |
 |---|---|---|
-| Hook enforcement (37+ checks) | `grep` on `git diff` lines | No — needs exact pattern match |
-| Code exploration | Grep/Glob/Explore agents | Marginal — ripgrep already fast |
-| Find similar patterns | Grep with regex | Maybe — semantic finds non-obvious matches |
+| Hook enforcement (37+ checks) | `grep` on `git diff` lines | No -- needs exact pattern match |
+| Code exploration | Grep/Glob/Explore agents | Marginal -- ripgrep already fast |
+| Find similar patterns | Grep with regex | Maybe -- semantic finds non-obvious matches |
 | Token reduction | Hooks are bash, zero LLM tokens | No savings path |
 
-Our 33 hooks use `grep` on `git diff` output for deterministic, zero-false-negative pattern matching. Semantic search adds nothing to enforcement — you can't fuzzy-match `as any` or `useCallback`.
+Our 33 hooks use `grep` on `git diff` output for deterministic, zero-false-negative pattern matching. Semantic search adds nothing to enforcement -- you can't fuzzy-match `as any` or `useCallback`.
 
 ### Heavy dependency chain
 
@@ -48,28 +48,28 @@ Our 33 hooks use `grep` on `git diff` output for deterministic, zero-false-negat
 
 ### Existing search is sufficient
 
-Our Explore agents + ripgrep + Glob handle code discovery well for our codebase sizes. Semantic search shines on large, unfamiliar codebases — not the enforcement workflow where we already know what patterns to match.
+Our Explore agents + ripgrep + Glob handle code discovery well for our codebase sizes. Semantic search shines on large, unfamiliar codebases -- not the enforcement workflow where we already know what patterns to match.
 
 ### Alpha maturity
 
-Engine version `1.0.0a24+` — not yet stable. API and configuration surface may change.
+Engine version `1.0.0a24+` -- not yet stable. API and configuration surface may change.
 
 ## Where It Could Add Value (Future)
 
-- **`/triage-issue`** — finding related code to a bug description via natural language
-- **Sandcastle agents** — initial context gathering on unfamiliar codebases
-- **Large monorepo scenarios** — where ripgrep regex isn't enough to find relevant code
+- **`/triage-issue`** -- finding related code to a bug description via natural language
+- **Sandcastle agents** -- initial context gathering on unfamiliar codebases
+- **Large monorepo scenarios** -- where ripgrep regex isn't enough to find relevant code
 
-If adopted, MCP server integration is cleanest path — Claude Code picks it up natively, no custom skill needed.
+If adopted, MCP server integration is cleanest path -- Claude Code picks it up natively, no custom skill needed.
 
 ## Comparison to Alternatives
 
 | Tool | Approach | Our use |
 |---|---|---|
-| ripgrep | Regex text search | Primary — hooks + Explore agents |
-| ast-grep | Syntactic AST pattern matching | Not adopted — grep sufficient |
+| ripgrep | Regex text search | Primary -- hooks + Explore agents |
+| ast-grep | Syntactic AST pattern matching | Not adopted -- grep sufficient |
 | Sourcegraph | Full code intelligence platform | Too heavy for our scale |
-| CocoIndex Code | Semantic vector search | Declined — enforcement needs exact match |
+| CocoIndex Code | Semantic vector search | Declined -- enforcement needs exact match |
 
 ## When to Revisit
 

@@ -121,15 +121,15 @@ Generate from `.claude/settings.json`. Copy PreToolUse Bash, SessionStart, Stop 
 ```
 
 **Notes:**
-- SessionStart, UserPromptSubmit, PreToolUse Bash, PostToolUse Bash, Stop hooks work identical on Codex
+- SessionStart, UserPromptSubmit, PreToolUse Bash, PostToolUse Bash, Stop hooks identical on Codex
 - PostToolUse Edit|Write NOT in `.codex/hooks.json`. `codex-batch-check.sh` auto-discovers `*-check.sh` scripts at Stop time
 - `_hook-lib.sh` and `shared/hook-lib.sh` must be accessible alongside check scripts
 
 ## Codex Limitations: SubagentStart/SubagentStop
 
-Codex **not** support `SubagentStart`/`SubagentStop`. Claude Code only.
+Codex **no** support `SubagentStart`/`SubagentStop`. Claude Code only.
 
-Self-review loop (phase 4b) needs these for session context injection + structured findings validation. **Workaround**: soft guidance in AGENTS.md. Findings schema (`agents/findings-schema.md`) is markdown — works anywhere. Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) readable by Codex. Output format best-effort without SubagentStop enforcement.
+Self-review loop (phase 4b) needs these for session context injection + structured findings validation. **Workaround**: soft guidance in AGENTS.md. Findings schema (`agents/findings-schema.md`) markdown -- works anywhere. Agent definitions (`self-reviewer.md`, `adversarial-reviewer.md`, `code-reviewer.md`) readable by Codex. Output format best-effort without SubagentStop enforcement.
 
 ## AGENTS.md
 
