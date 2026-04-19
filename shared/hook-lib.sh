@@ -102,6 +102,37 @@ _hook_log_entry() {
     >> "$_hook_log_file" 2>/dev/null || true
 }
 
+# ── Bash token-drain log (persistent, cross-session) ────────────
+# One JSONL line per drain event: nudges fired by bash-verbose-guard
+# and cap-hits recorded by llm-truncate. Used by scripts/bash-drain-report.sh
+# to measure hook ROI against the 2026-04-19 baseline.
+#
+# Fields:
+#   ts              unix seconds
+#   session_id      hook session id (scrubbed)
+#   drain_type      nudge-git-commit | nudge-gh-jq | nudge-repeat-cmd
+#                   | nudge-find | nudge-git-log | nudge-cat-artifact
+#                   | nudge-grep-root | cap_hit
+#   cmd_snippet     first 120 chars of the command (ANSI-stripped)
+#   bytes           cap_hit: actual bytes truncated; nudges: 0 (fire count proxy)
+_hook_drain_log="${HOME}/.claude/hook-metrics/bash-drains.jsonl"
+
+_hook_log_bash_drain() {
+  local drain_type="$1" cmd_snippet="$2" bytes="${3:-0}"
+  mkdir -p "$(dirname "$_hook_drain_log")" 2>/dev/null || true
+  # Trim + escape cmd_snippet for JSON. Cap length to keep log compact.
+  cmd_snippet="${cmd_snippet:0:120}"
+  local escaped_cmd
+  if command -v jq >/dev/null 2>&1; then
+    escaped_cmd=$(printf '%s' "$cmd_snippet" | jq -Rs . 2>/dev/null) || escaped_cmd='""'
+  else
+    escaped_cmd='"'${cmd_snippet//\"/\\\"}'"'
+  fi
+  printf '{"ts":%d,"session_id":"%s","drain_type":"%s","cmd_snippet":%s,"bytes":%d}\n' \
+    "$(date +%s)" "$_hook_session_id" "$drain_type" "$escaped_cmd" "$bytes" \
+    >> "$_hook_drain_log" 2>/dev/null || true
+}
+
 # ── Safe JSON string escape ──────────────────────────────────────
 # Escapes text for embedding in JSON strings. Uses jq if available,
 # falls back to sed. Never fails — returns escaped string or empty.
