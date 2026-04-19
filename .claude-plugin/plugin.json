@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend enforcement harness. 82 wired hooks across 85 scripts enforce patterns on every edit. 41 skills from TDD through CI-green PR. Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. 7 Karpathy LLM failure modes enforced (hallucinated imports, unvalidated shapes, SSRF, silent fallbacks, stale memory, mock-only tests). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 8 agents (adds plan hats), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
-  "version": "4.0.0",
+  "description": "React/TypeScript frontend enforcement harness. 82 wired hooks across 85 scripts enforce patterns on every edit. 41 skills from TDD through CI-green PR. Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. 21 LLM failure modes enforced: 7 Karpathy single-agent (hallucinated imports, unvalidated shapes, SSRF, silent fallbacks, stale memory, mock-only tests, confident wrong types) + 14 MAST multi-agent (Cemri et al. NeurIPS 2025 -- disobey task/role, step repetition, history loss, termination unaware, conversation reset, no clarification, task derailment, info withholding, ignored peer, reasoning-action mismatch, premature termination, no/incorrect verification). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
+  "version": "4.1.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -71,20 +71,21 @@
     "./agents/adversarial-reviewer.md",
     "./agents/code-reviewer.md",
     "./agents/findings-schema.md",
+    "./agents/karpathy-failure-modes.md",
     "./agents/plan-design-hat.md",
     "./agents/plan-engineering-hat.md",
     "./agents/plan-product-hat.md",
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
-  "x-updatedAt": "2026-04-17",
+  "x-updatedAt": "2026-04-19",
   "x-includes": {
     "skills": 41,
     "hooks": 82,
     "hookScripts": 85,
     "commands": 0,
     "routines": 5,
-    "agents": 5,
+    "agents": 9,
     "sharedUtilities": 11,
     "references": 25,
     "evals": 1,
@@ -93,6 +94,8 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "4.1.0": "2026-04-19 -- Ship-fix + failure-mode tier-2. agents/karpathy-failure-modes.md registered in agents[] array (was orphaned -- reviewer agents referenced it via relative link but the file was never installed with the plugin). Extended with MAST taxonomy (Multi-Agent System Failure Taxonomy, Cemri et al. NeurIPS 2025, arXiv:2503.13657, 285 citations). 14 new failure modes across 3 categories (System Design, Inter-Agent Misalignment, Task Verification). Reviewer agents (code-reviewer, adversarial-reviewer, self-reviewer) now emit mast_checks JSON block alongside karpathy_checks. Machine-readable checklist extended with scope field (single-agent vs multi-agent) per check. x-includes.agents 5 -> 9 (also corrects pre-existing staleness: 3 plan-review hats added in 4.0.0 were never counted). Description refreshed to reflect 7+14=21 enforced failure modes. No hook changes. Distribution bug fix applies to Claude plugin only; Codex plugin (ships root) was unaffected.",
+    "4.0.1": "2026-04-19 -- caveman-compress pass over 65 SKILL.md + REFERENCE.md files. Tighter phrasing on every ambient-loaded doc. Biggest single-file shrink: commit-push-pr/SKILL.md 153->98 lines. Net repo -749 lines incl. tracked .original.md cleanup. .original.md now gitignored so per-user compress runs do not churn the repo. 1608/1608 evals.",
     "4.0.0": "2026-04-18 -- Major: gstack-inspired consolidation. Native-form hooks replace v3.2.0 skill overreach (/cso, /canary, /benchmark, /mux removed). New hooks: branch-safety-check (PreToolUse Bash); llm-failure-mode-check (7 Karpathy patterns: hallucinated imports, unvalidated LLM shapes, SSRF, stale memory, mock!=prod, plus delegation to existing hooks for types + silent-fallbacks); perf-regression-stop (auto-spin dev server + Lighthouse + baseline compare); security-audit-check (OWASP A02/A03/A05/A08 + STRIDE-I + snyk/bun audit -- npm tools intentionally excluded); bash-verbose-guard (PreToolUse nudge on find/git-log/grep-r cost patterns). Helpers: scripts/mux-worktree.sh (invoked silently by /go + /development-lifecycle phase 0), scripts/skills-browser.sh (agent-browser wrapper for AI visual inspection; Playwright unchanged for test code). Agents: 3 plan-review hats (plan-product-hat, plan-engineering-hat, plan-design-hat) fan out in parallel inside /grill-me phase 2b -- no new skill. Adversarial-reviewer now trigger-gated (>200 lines OR CRITICAL finding OR auth paths). Code-reviewer wires Codex second opinion on >100-line diffs. ETHOS.md rewritten with 8 principles mapped to enforcing hooks; not ambient-injected (deeper integration via hook error messages instead). /hook-audit extended with retro / session-flow analytics scope (--retro mode) -- no new /retro skill. shared/reporters/vitest-llm-reporter + playwright-llm-reporter (94 + 99 LOC) for LLM-optimized test output. New test-token-budget eval suite guards doc/hook/reporter savings baseline. CLAUDE.md gains Bash Discipline quick-ref. Codex compat unchanged (shared hook-lib). 1608/1608 evals green (+1 env-dependent skip).",
     "3.2.0": "2026-04-18 — gstack-inspired hardening. (1) Worktree isolation: new `_hook_file_outside_current_worktree` helper catches sibling-worktree leakage (the old `_hook_in_secondary_worktree` only handled parent-vs-subagent). Session binds to worktree + branch on start; every hook asserts and no-ops on drift. Deterministic md5-based session-id fallback when CLAUDE_SESSION_ID unset. (2) New `branch-safety-check.sh` PreToolUse(Bash) blocks git commit/push/checkout/switch when HEAD drifts from bound branch; `CLAUDE_BRANCH_REBIND=1` escape hatch. (3) Codex cross-model review wired into `code-reviewer` agent — triggers on diff >100 lines or auth/security paths, graceful skip when `codex` CLI absent. (4) Karpathy failure-modes checklist at `agents/karpathy-failure-modes.md` — required reading for all reviewer agents. Each must emit `karpathy_checks` in findings. (5) `adversarial-reviewer` now gated: runs only on diff >200 lines OR prior CRITICAL finding OR auth paths. Emits SKIPPED block otherwise. (6) New skills: `/cso` (OWASP+STRIDE pre-ship audit), `/canary` (15-min post-deploy regression watch), `/benchmark` (Core Web Vitals gate), `/mux` (atomic worktree+branch+session spawn). (7) `ETHOS.md` — 7 permanent principles injected harness-wide. (8) Browser daemon v4.0 RFC at `docs/rfc/browser-daemon.md`. Evals 1464/1464 green (57 new).",
     "3.1.1": "2026-04-18 — Opus 4.7 effort downsized one tier in CLAUDE.md. Understand/Plan/Simplify/Verify: xhigh → high. Implement (TDD) + Review: max → xhigh. No `max` left in the table — 4.7 hits diminishing returns at max for most phases; xhigh reserved for the final gates.",
