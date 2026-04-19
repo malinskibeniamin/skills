@@ -12,6 +12,10 @@ bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/co
 
 `find` -> `-maxdepth N` or `| head` | `git log` -> `-n 30` or `--oneline` | `grep -r` -> Grep tool | `cat` >200 lines -> Read | `llm-truncate` caps 4KB | `bash-verbose-guard` nudges pre-exec
 
+## External Services (MCP banned -> CLI)
+
+Jira `acli` | Gmail `gws` (not format:full) | Browser `agent-browser` | CI `gh` (Blacksmith runs surface in GH Actions) | Calendar/Drive `gws` | Buildkite `bk` | Box `box` | M365 `m365`. `mcp-ban.sh` denies + shows syntax. MCP 10-25k chars, CLI 100-500.
+
 ## Commits
 
 `type(scope): description` -- feat fix refactor style test docs chore perf ci build revert -- scope required -- lowercase, 5-72 chars

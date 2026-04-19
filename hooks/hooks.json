@@ -160,6 +160,42 @@
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/bash-verbose-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "mcp__claude_ai_Atlassian__.*|mcp__claude_ai_Gmail__.*|mcp__claude-in-chrome__.*|mcp__chrome-devtools__.*|mcp__playwright__.*|mcp__blacksmith__.*|mcp__claude_ai_Google_Calendar__.*|mcp__claude_ai_Google_Drive__.*|mcp__claude_ai_Buildkite.*|mcp__buildkite__.*|mcp__claude_ai_Box__.*|mcp__box__.*|mcp__claude_ai_Microsoft_365__.*|mcp__microsoft365__.*|mcp__m365__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/mcp-ban.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/read-size-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/webfetch-dedup.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/subagent-length-cap.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -390,6 +426,10 @@
     "Stop": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/cache-telemetry-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/architecture-review-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
