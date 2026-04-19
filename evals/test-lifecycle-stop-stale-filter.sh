@@ -120,7 +120,29 @@ _ls_run_case \
   "lifecycle-stop skips when adjacent test exists" \
   0 "" _case_real_with_adjacent_test
 
-# ── Case 5: path outside current worktree → exit 0 ────────────────
+# ── Case 5: edit to pre-existing main-branch file → exit 0 ────────
+# Rebase/conflict-resolution Edits against files that predate the
+# feature branch must not block with "untested new source" — the
+# files may have tests already and no new code was authored.
+_case_edited_preexisting() {
+  local repo="$1" session_dir="$2"
+  # Seed preexisting file on main BEFORE feature branches off.
+  (cd "$repo" && git checkout -q main)
+  mkdir -p "$repo/src/routes"
+  printf 'export const OLD = 1\n' > "$repo/src/routes/preexisting.tsx"
+  (cd "$repo" && git add -A && git commit -q -m "seed"
+   git branch -q -D feature/test 2>/dev/null || true
+   git checkout -q -b feature/test)
+  # Feature branch edits the preexisting file (no new test)
+  printf 'export const OLD = 2\n' > "$repo/src/routes/preexisting.tsx"
+  (cd "$repo" && git add -A && git commit -q -m "tweak")
+  printf '%s\n' "$repo/src/routes/preexisting.tsx" > "$session_dir/session-touched-files"
+}
+_ls_run_case \
+  "lifecycle-stop skips edit to pre-existing main-branch file" \
+  0 "" _case_edited_preexisting
+
+# ── Case 6: path outside current worktree → exit 0 ────────────────
 # Simulates sibling-worktree leakage / session-id collision by
 # pointing session-touched-files at another repo entirely.
 _case_outside_worktree() {
