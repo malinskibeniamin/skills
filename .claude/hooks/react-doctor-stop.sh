@@ -25,6 +25,13 @@ output=""
 exit_code=0
 output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 
+# Known incomplete dead-code failure — warn-only with tail context
+if echo "$output" | grep -qE 'issues\.files is not iterable|dead code detection failed \(non-fatal, skipping\)|results are incomplete'; then
+  reason=$(_safe_json_escape "$(printf "React Doctor hit known incomplete dead-code failure (warn-only):\n%s" "$(echo "$output" | tail -20)")")
+  echo "{\"decision\":\"allow\",\"reason\":$reason}" >&2
+  exit 0
+fi
+
 # Known doctor-tool internal bugs — treat as warn-only, not a code quality issue
 if echo "$output" | grep -qE 'is not iterable|Cannot read propert|TypeError:|ReferenceError:'; then
   echo "{\"decision\":\"allow\",\"reason\":\"React Doctor internal error (not code). Run 'bun run doctor' manually.\"}" >&2

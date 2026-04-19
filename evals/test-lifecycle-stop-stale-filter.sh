@@ -158,3 +158,33 @@ _case_outside_worktree() {
 _ls_run_case \
   "lifecycle-stop skips path outside current worktree" \
   0 "" _case_outside_worktree
+
+# ── Case 7: cross-ext adjacent test (.tsx src + .ts test) → exit 0 ──
+# Hooks/utils pattern: component is .tsx but its test is .ts (or vice
+# versa). Adjacent check must treat ts/tsx as interchangeable.
+_case_cross_ext_adjacent() {
+  local repo="$1" session_dir="$2"
+  mkdir -p "$repo/src/hooks"
+  printf 'export const useX = () => 1\n' > "$repo/src/hooks/useX.tsx"
+  printf 'test("x", () => {})\n' > "$repo/src/hooks/useX.test.ts"
+  (cd "$repo" && git add -A && git commit -q -m "hook")
+  printf '%s\n' "$repo/src/hooks/useX.tsx" > "$session_dir/session-touched-files"
+}
+_ls_run_case \
+  "lifecycle-stop skips when cross-ext adjacent test exists" \
+  0 "" _case_cross_ext_adjacent
+
+# ── Case 8: non-adjacent test same basename → exit 0 ────────────────
+# Prior-session test committed in src/__tests__/ or test/ root. Global
+# branch scan must find it by basename match.
+_case_non_adjacent_test() {
+  local repo="$1" session_dir="$2"
+  mkdir -p "$repo/src/routes" "$repo/src/__tests__"
+  printf 'export const R = 1\n' > "$repo/src/routes/remote.tsx"
+  printf 'test("r", () => {})\n' > "$repo/src/__tests__/remote.test.tsx"
+  (cd "$repo" && git add -A && git commit -q -m "route+remote test")
+  printf '%s\n' "$repo/src/routes/remote.tsx" > "$session_dir/session-touched-files"
+}
+_ls_run_case \
+  "lifecycle-stop skips when non-adjacent test with matching basename exists" \
+  0 "" _case_non_adjacent_test

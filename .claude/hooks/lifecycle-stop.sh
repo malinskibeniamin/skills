@@ -153,11 +153,31 @@ for _sf in $_source_files; do
   _sf_ext=${_sf##*.}
   _sf_dir=$(dirname "$_sf")
   _sf_name=$(basename "$_sf" ".$_sf_ext")
-  if [ -f "${_sf_base}.test.${_sf_ext}" ] || \
-     [ -f "${_sf_base}.spec.${_sf_ext}" ] || \
-     [ -f "${_sf_base}.browser.test.${_sf_ext}" ] || \
-     [ -f "${_sf_dir}/__tests__/${_sf_name}.test.${_sf_ext}" ] || \
-     [ -f "${_sf_dir}/__tests__/${_sf_name}.spec.${_sf_ext}" ]; then
+  # Co-located / __tests__ adjacent, any ts/tsx ext (cross-ext OK:
+  # Foo.tsx + Foo.test.ts is a valid pattern for hooks/utils).
+  _found_adjacent=false
+  for _alt_ext in ts tsx; do
+    if [ -f "${_sf_base}.test.${_alt_ext}" ] || \
+       [ -f "${_sf_base}.spec.${_alt_ext}" ] || \
+       [ -f "${_sf_base}.browser.test.${_alt_ext}" ] || \
+       [ -f "${_sf_dir}/__tests__/${_sf_name}.test.${_alt_ext}" ] || \
+       [ -f "${_sf_dir}/__tests__/${_sf_name}.spec.${_alt_ext}" ] || \
+       [ -f "${_sf_dir}/__tests__/${_sf_name}.browser.test.${_alt_ext}" ]; then
+      _found_adjacent=true
+      break
+    fi
+  done
+  if [ "$_found_adjacent" = true ]; then
+    continue
+  fi
+  # Global branch scan: any tracked test file anywhere with matching
+  # basename. Covers prior-session tests that live in src/__tests__,
+  # test/, or other non-adjacent locations.
+  if git ls-files -- \
+       "**/${_sf_name}.test.ts" "**/${_sf_name}.test.tsx" \
+       "**/${_sf_name}.spec.ts" "**/${_sf_name}.spec.tsx" \
+       "**/${_sf_name}.browser.test.ts" "**/${_sf_name}.browser.test.tsx" \
+       2>/dev/null | grep -q .; then
     continue
   fi
   _adjacent_tests_for_all=false
