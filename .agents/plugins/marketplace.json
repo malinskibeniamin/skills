@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "4.2.1",
+      "version": "4.3.0",
       "description": "React/TypeScript frontend enforcement harness. 82 wired hooks, 85 scripts, 41 skills, 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
@@ -30,6 +30,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.3.0": "2026-04-19 -- /commit-push-pr nudges before/after Screenshots table into PR body when diff touches frontend files. Section omitted on backend-only PRs. No hook changes.",
         "4.1.0": "2026-04-19 -- Ship-fix: agents/karpathy-failure-modes.md registered in Claude plugin agents[] (was orphaned). Extended with MAST multi-agent failure taxonomy (Cemri et al. NeurIPS 2025, arXiv:2503.13657, 285 citations) -- 14 modes across System Design / Inter-Agent Misalignment / Task Verification. Reviewer agents emit mast_checks JSON alongside karpathy_checks. x-includes.agents 5 -> 9.",
         "4.0.1": "2026-04-19 -- caveman-compress pass on 65 docs. Tighter ambient-load phrasing.",
         "4.0.0": "2026-04-18 -- gstack consolidation. 5 new hooks, mux + skills-browser helpers, 3-hat grill review, ETHOS->hooks map, retro analytics, LLM reporters. v3.2.0 skill overreach (/cso /canary /benchmark /mux) removed. 1608/1608 evals.",

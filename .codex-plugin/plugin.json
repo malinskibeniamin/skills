@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025), OWASP + STRIDE, Core Web Vitals gate, worktree isolation + branch safety, agent-browser integration (~91% token reduction). 9 agents (3 plan-review hats + karpathy reference), 5 routines. Single-source manifest codegen. Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -55,6 +55,7 @@
     "settings": "settings.json"
   },
   "x-changelog": {
+    "4.3.0": "2026-04-19 -- /commit-push-pr nudges LLM to attach a before/after Screenshots table to PR body when diff touches frontend files (*.tsx, *.jsx, *.css, tailwind/postcss, src/components/, src/routes/, src/pages/, src/app/, registry UI). Reuses /qa captures if present, else scripts/skills-browser.sh screenshot. Section omitted on backend-only PRs. No hook changes.",
     "4.1.0": "2026-04-19 -- Failure-mode tier-2: MAST multi-agent taxonomy (Cemri et al. NeurIPS 2025, arXiv:2503.13657) added to agents/karpathy-failure-modes.md. 14 new modes across System Design / Inter-Agent Misalignment / Task Verification. Reviewer agents emit mast_checks JSON alongside karpathy_checks. x-includes.agents 5 -> 9 (corrects prior staleness). Codex plugin ships root so karpathy file already included; version-bumped for description refresh and changelog parity with Claude plugin.",
     "4.0.1": "2026-04-19 -- caveman-compress pass on 65 docs. Tighter phrasing on every ambient-loaded SKILL.md/REFERENCE.md. .original.md gitignored.",
     "4.0.0": "2026-04-18 -- gstack-inspired consolidation. 5 new hooks (branch-safety, llm-failure-mode, perf-regression, security-audit, bash-verbose-guard). Helpers: mux-worktree, skills-browser (agent-browser wrapper). 3 plan-review hats in /grill-me phase 2b. ETHOS 8 principles mapped to hooks. /hook-audit --retro. LLM-optimized test reporters. v3.2.0 /cso /canary /benchmark /mux skills removed -- all replaced by native hooks + helpers. Evals 1608/1608.",
