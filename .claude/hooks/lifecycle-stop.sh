@@ -98,6 +98,24 @@ fi
 _new_source=false
 _has_tests=false
 _source_files=""
+: "${_repo_root:=$(git rev-parse --show-toplevel 2>/dev/null || echo "")}"
+
+# Newly-added on this branch = diff-filter=A vs default base + untracked.
+# Edits to pre-existing files do NOT count as "new source" — those files
+# may already have committed tests, and conflict-resolution Edits during
+# rebase would otherwise trip a false "untested source" block.
+_added_on_branch=""
+_added_base_found=false
+for _base in origin/main origin/master main master; do
+  if git rev-parse --verify "$_base" &>/dev/null; then
+    _added_base_found=true
+    _added_on_branch=$(
+      { git diff --name-only --diff-filter=A "$_base...HEAD" 2>/dev/null
+        git ls-files --others --exclude-standard 2>/dev/null; } | sort -u
+    )
+    break
+  fi
+done
 
 while IFS= read -r _src_file; do
   [ -z "$_src_file" ] && continue
@@ -109,6 +127,14 @@ while IFS= read -r _src_file; do
       continue ;;
   esac
   if echo "$_src_file" | grep -qE '/(routes|components|hooks|features|modules|pages|views)/'; then
+    # Only flag as new-source if file was ADDED on this branch
+    # (not merely edited). Falls back to flagging only when base lookup
+    # failed entirely — an empty added-set means "nothing new", skip.
+    if [ "$_added_base_found" = true ] && [ -n "$_repo_root" ]; then
+      _sf_real=$(cd "$(dirname "$_src_file")" 2>/dev/null && echo "$(pwd -P)/$(basename "$_src_file")" || echo "$_src_file")
+      _sf_rel="${_sf_real#"$_repo_root"/}"
+      grep -Fxq -- "$_sf_rel" <<< "$_added_on_branch" || continue
+    fi
     _new_source=true
     _source_files="${_source_files} ${_src_file}"
   fi
