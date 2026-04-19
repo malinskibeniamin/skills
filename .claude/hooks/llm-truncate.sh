@@ -10,6 +10,9 @@
 set -euo pipefail
 trap 'exit 0' ERR
 
+# Source hook-lib for _hook_log_bash_drain. Optional — silently skip if missing.
+source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.tool_name // empty')
 
@@ -31,6 +34,13 @@ result_bytes=${#result}
 
 if [ "$result_bytes" -le "$cap_bytes" ]; then
   exit 0
+fi
+
+# Record cap-hit for drain measurement. Command snippet helps attribution.
+cmd_for_log=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
+bytes_truncated=$((result_bytes - cap_bytes))
+if command -v _hook_log_bash_drain >/dev/null 2>&1; then
+  _hook_log_bash_drain "cap_hit" "$cmd_for_log" "$bytes_truncated"
 fi
 
 # Stash full output so Claude can re-read if needed
