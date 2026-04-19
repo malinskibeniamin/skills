@@ -6,10 +6,10 @@
 
 ## Escape Hatch for useEffect
 
-When `useEffect` truly needed (WebSocket cleanup, third-party lib), add comment before:
+`useEffect` truly needed (WebSocket cleanup, third-party lib) → add comment before:
 
 ```tsx
-// allow: useEffect — WebSocket subscription cleanup required
+// allow: useEffect -- WebSocket subscription cleanup required
 useEffect(() => {
   const ws = new WebSocket(url)
   return () => ws.close()
@@ -18,7 +18,7 @@ useEffect(() => {
 
 Hook check `// allow: useEffect` anywhere in file · reason required · legacy `// allow-useEffect:` also work.
 
-## Raw HTML → Component Library Mapping
+## Raw HTML -> Component Library Mapping
 
 | Banned | Replacement | Import (shadcn/ui convention) |
 |--------|-------------|-------------------------------|
@@ -30,7 +30,7 @@ Hook check `// allow: useEffect` anywhere in file · reason required · legacy `
 | `<table>` | `<Table>` | `@/components/ui/table` |
 | `<label>` | `<Label>` | `@/components/ui/label` |
 
-`<form>` and `<a>` allowed — no registry replacement for `<form>`, `<a>` can't always swap with TanStack Router Link.
+`<form>` + `<a>` allowed — no registry replacement for `<form>`, `<a>` can't always swap with TanStack Router Link.
 
 ## Auto-Generated Files
 
@@ -82,10 +82,10 @@ useEffect(function connectToWebSocket() {
 
 ## Form-Level Validation (react-hook-form v7.72+)
 
-Cross-field validation (confirm password, end date > start date) — use `validate` on `useForm`, not custom logic in `onSubmit`:
+Cross-field validation (confirm password, end date > start date) → use `validate` on `useForm`, not custom logic in `onSubmit`:
 
 ```tsx
-// BAD — validation buried in submit handler
+// BAD -- validation buried in submit handler
 const onSubmit = (data) => {
   if (data.password !== data.confirmPassword) {
     setError('confirmPassword', { message: 'Passwords must match' })
@@ -93,7 +93,7 @@ const onSubmit = (data) => {
   }
 }
 
-// GOOD — form-level validate, integrates with formState.errors
+// GOOD -- form-level validate, integrates with formState.errors
 const form = useForm({
   validate: async ({ formValues }) => {
     if (formValues.password !== formValues.confirmPassword) {
@@ -107,27 +107,27 @@ const form = useForm({
 
 Run alongside field-level resolvers (zod, protovalidate) · surface errors via `formState.errors`.
 
-## Resetting State on Prop Change — Use `key`
+## Resetting State on Prop Change -- Use `key`
 
 ```tsx
-// BAD — extra render, stale state visible
+// BAD -- extra render, stale state visible
 useEffect(() => {
   setComment('')
   setDraft(null)
 }, [userId])
 
-// GOOD — unmount/remount, all state resets
+// GOOD -- unmount/remount, all state resets
 <UserProfile key={userId} />
 ```
 
 `key` work on any component · key change → React destroy old instance, create new with fresh state.
 
-## Subscriptions — Prefer `useSyncExternalStore`
+## Subscriptions -- Prefer `useSyncExternalStore`
 
 Browser APIs (online status, media queries, scroll position, external stores) → `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
 
 ```tsx
-// BAD — verbose, tearing in concurrent mode
+// BAD -- verbose, tearing in concurrent mode
 const [isOnline, setIsOnline] = useState(navigator.onLine)
 useEffect(function subscribeToOnlineStatus() {
   const handle = () => setIsOnline(navigator.onLine)
@@ -139,7 +139,7 @@ useEffect(function subscribeToOnlineStatus() {
   }
 }, [])
 
-// GOOD — concurrent-safe, no boilerplate
+// GOOD -- concurrent-safe, no boilerplate
 const isOnline = useSyncExternalStore(
   (cb) => {
     window.addEventListener('online', cb)
@@ -183,11 +183,11 @@ Components = pure render functions · props in, JSX out · side effects in hooks
 ### Derive vs Sync
 
 ```tsx
-// BAD — extra render, race conditions
+// BAD -- extra render, race conditions
 const [active, setActive] = useState<Item[]>([])
 useEffect(() => { setActive(items.filter(i => i.active)) }, [items])
 
-// GOOD — computed inline
+// GOOD -- computed inline
 const active = useMemo(() => items.filter(i => i.active), [items])
 ```
 

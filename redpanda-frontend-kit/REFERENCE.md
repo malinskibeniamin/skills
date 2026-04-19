@@ -12,7 +12,7 @@
 
 ## Registry Pattern Nudges (REDPANDA_KIT=1)
 
-`REDPANDA_KIT=1` → orchestration-guidance add nudges:
+`REDPANDA_KIT=1` -> orchestration-guidance add nudges:
 
 | Detected pattern | Nudge |
 |---|---|
@@ -20,7 +20,7 @@
 | `<h1>`--`<h6>`, `<p>` raw HTML | Use `Heading`/`Text` from registry |
 | Key-value / labels / tags patterns | Consider `KeyValueField` + `BadgeGroup` |
 
-Warnings, not blocks. Surface registry components Claude no know.
+Warn, no block. Surface registry components Claude no know.
 
 ## Redpanda-Specific Environment
 
@@ -45,7 +45,7 @@ Registry docs: `https://redpanda-ui-registry.netlify.app/docs/<component>`
 |---|---|---|
 | `useProtoForm` | Forms backed by ConnectRPC/protobuf schemas | `/docs/use-proto-form` |
 | `KeyValueField` + `BadgeGroup` | Editable labels, tags, env vars, HTTP headers | `/docs/patterns/key-value` |
-| `Heading` / `Text` | All text — never raw `<h1>`-`<h6>` or `<p>` | `/docs/components/heading` |
+| `Heading` / `Text` | All text -- never raw `<h1>`-`<h6>` or `<p>` | `/docs/components/heading` |
 | `DataTable` | Sortable, filterable tabular data | `/docs/components/data-table` |
 | `FormFooter` | Consistent submit/cancel button layout | `/docs/components/form-footer` |
 
@@ -66,7 +66,7 @@ Document in `CLAUDE.md`. Claude follow symlinks transparent.
 ln -s /path/to/ui-registry linked-repos/ui-registry
 ```
 
-Modify `@/components/redpanda-ui/` → also update `linked-repos/ui-registry/`. With `REDPANDA_KIT=1`, orchestration nudge upstream PR.
+Modify `@/components/redpanda-ui/` -> also update `linked-repos/ui-registry/`. With `REDPANDA_KIT=1`, orchestration nudge upstream PR.
 
 ## Package Source Code (opensrc)
 

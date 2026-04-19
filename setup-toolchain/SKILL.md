@@ -10,7 +10,7 @@ description: Enforce bun + tsgo as toolchain via PreToolUse hooks. Blocks npm, n
 - **PreToolUse hooks** block banned CLI commands, give actionable suggestions
 - **Destructive command guards** prevent `rm -rf` (except safe targets like node_modules/.next/dist/build), `git push --force`, `git reset --hard`, `git checkout .` / `git restore .`
 - **SessionStart hook** set env vars for LLM-friendly defaults
-- All hooks in `.claude/settings.json` (project-level, committed to git)
+- Hooks in `.claude/settings.json` (project-level, committed to git)
 
 ## Steps
 
@@ -20,7 +20,7 @@ Copy [`scripts/enforce-toolchain.sh`](scripts/enforce-toolchain.sh) and [`script
 
 ### 2. Configure hooks in `.claude/settings.json`
 
-Add to hooks config (merge with existing):
+Add to hooks config (merge existing):
 - **PreToolUse** (matcher: `Bash`): `.claude/hooks/enforce-toolchain.sh`
 - **SessionStart**: `.claude/hooks/session-env.sh`
 
@@ -34,4 +34,4 @@ Add to hooks config (merge with existing):
 
 ### 4. Commit
 
-Stage `.claude/hooks/` and `.claude/settings.json`. Commit with: `Add toolchain enforcement hooks (bun + tsgo)`
+Stage `.claude/hooks/` and `.claude/settings.json`. Commit: `Add toolchain enforcement hooks (bun + tsgo)`

@@ -1,13 +1,13 @@
 # Routine: Documentation Drift Detection
 
-Run weekly. Detect docs drifted from codebase. Code change but docs reference old behavior → flag.
+Run weekly. Detect docs drifted from codebase. Code change but docs reference old behavior -> flag.
 
 ## Important: avoid noise
 
-- Only flag **confirmed** drift — verify doc content and current source before reporting
-- Simple renames/typos → fix directly in PR
-- Behavior changes → open issue for human rewrite
-- No drift → do nothing. Silent success.
+- Only flag **confirmed** drift -- verify doc content and current source before reporting
+- Simple renames/typos -> fix directly in PR
+- Behavior changes -> open issue for human rewrite
+- No drift -> do nothing. Silent success.
 
 ## Steps
 
@@ -53,7 +53,7 @@ Also check:
 
 ### 4. Verify drift
 
-Each potential hit → read doc and current source. Confirm doc actually wrong — not every reference to changed file is stale.
+Each potential hit -> read doc and current source. Confirm doc actually wrong -- not every reference to changed file is stale.
 
 Skip:
 - CHANGELOG.md (historical, not reference)
@@ -85,7 +85,7 @@ Behavior changes needing rewrite (not find-replace):
 
 ```bash
 gh issue create \
-  --title "docs: documentation drift detected — $(date +%Y-%m-%d)" \
+  --title "docs: documentation drift detected -- $(date +%Y-%m-%d)" \
   --label "docs,automated" \
   --body "## Documentation drift
 
@@ -102,12 +102,12 @@ gh issue create \
 
 ### 7. Clean weeks
 
-No drift → no PR, no issue. Optionally close previous open drift issues now resolved.
+No drift -> no PR, no issue. Optionally close previous open drift issues now resolved.
 
 ## Rules
 
 - Only modify documentation files, never source code
-- Verify before flagging — false positives are noise
+- Verify before flagging -- false positives are noise
 - Bundle simple fixes into one PR per run
 - Max one PR + one issue per run
 - Skip auto-generated files

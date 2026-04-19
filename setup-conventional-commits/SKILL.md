@@ -16,7 +16,7 @@ type(scope): description
 - **type**: feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert
 - **scope**: required, lowercase in parens -- `feat(webui):`, `fix(backend):`
 - **description**: lowercase first letter, no trailing period, 5-72 chars
-- **body**: optional, encourage for feat/fix
+- **body**: optional, encourage feat/fix
 
 ## Steps
 

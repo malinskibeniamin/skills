@@ -4,12 +4,12 @@
 
 Before `/commit-push-pr`, one review skill must run in session:
 
-- `/simplify` — small fixes/tweaks
-- `/request-refactor-plan` — refactors
-- `/improve-codebase-architecture` — cleanup (oversized files, shallow modules, tangled deps)
-- `/design-an-interface` — redesign module or layout
+- `/simplify` -- small fixes/tweaks
+- `/request-refactor-plan` -- refactors
+- `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
+- `/design-an-interface` -- redesign module or layout
 
-None ran → warn: "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
+None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
 
 ## Conventional commit types (Phase 3)
 
@@ -28,11 +28,11 @@ Group changed files by purpose:
 | `ci` | CI/CD pipeline changes |
 | `build` | build system changes |
 
-File fit multiple → pick most specific.
+File fit multiple -> pick most specific.
 
 ## Auto-label map (Phase 5)
 
-Map commit types to GitHub labels. Verify label exist first: `gh label list --search "<name>" --json name --jq '.[0].name'` — only add existing labels.
+Map commit types to GitHub labels. Verify label exist first: `gh label list --search "<name>" --json name --jq '.[0].name'` -- only add existing labels.
 
 | Commit type | Label |
 |-------------|-------|
@@ -54,7 +54,7 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 <list each commit: hash + message>
 
 ## Test plan
-<checklist of how to verify — infer from changes>
+<checklist of how to verify -- infer from changes>
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 EOF
@@ -65,4 +65,4 @@ Note: `--fill-verbose` set title from commits. Override with `--title` only if a
 
 Append `--label <label1> --label <label2>` per verified label.
 
-**Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) → add `--draft`.
+**Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.

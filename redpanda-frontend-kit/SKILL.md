@@ -17,7 +17,7 @@ Run **frontend-starter-kit** (14 setup + workflow skills), then add Redpanda too
 echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
 echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
 ```
-`REDPANDA_KIT=1` enable registry nudges (useProtoForm, Typography, KeyValueField, registry sync).
+`REDPANDA_KIT=1` enables registry nudges (useProtoForm, Typography, KeyValueField, registry sync).
 
 ### Chakra UI ban (add to react-rules-check.sh)
 ```bash

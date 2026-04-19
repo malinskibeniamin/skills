@@ -25,17 +25,17 @@ _Avoid_: Bill, payment request
 ## Example Dialogue
 
 > **Dev:** "When a **Customer** places an **Order**, do we create the **Invoice** immediately?"
-> **Domain expert:** "No — an **Invoice** is only generated once a **Fulfillment** is confirmed."
+> **Domain expert:** "No -- an **Invoice** is only generated once a **Fulfillment** is confirmed."
 
 ## Flagged Ambiguities
 
-- "account" was used to mean both **Customer** and **User** — resolved: distinct concepts.
+- "account" was used to mean both **Customer** and **User** -- resolved: distinct concepts.
 ```
 
 ## Rules
 
-- **Opinionated.** Multiple words for same concept → pick best one, list others as _Avoid_.
-- **Flag conflicts.** Ambiguous term → "Flagged Ambiguities" with clear resolution.
+- **Opinionated.** Multiple words for same concept -> pick best one, list others as _Avoid_.
+- **Flag conflicts.** Ambiguous term -> "Flagged Ambiguities" with clear resolution.
 - **Tight definitions.** One sentence max. Define what it IS, not what it does.
 - **Show relationships.** Bold term names, express cardinality where obvious.
 - **Project-specific terms only.** No general programming concepts (timeouts, error types).
@@ -53,13 +53,13 @@ _Avoid_: Bill, payment request
 
 ## Contexts
 
-- [Ordering](./src/ordering/CONTEXT.md) — receives and tracks customer orders
-- [Billing](./src/billing/CONTEXT.md) — generates invoices and processes payments
+- [Ordering](./src/ordering/CONTEXT.md) -- receives and tracks customer orders
+- [Billing](./src/billing/CONTEXT.md) -- generates invoices and processes payments
 
 ## Relationships
 
-- **Ordering → Billing**: Ordering emits `OrderPlaced` events; Billing consumes them
+- **Ordering -> Billing**: Ordering emits `OrderPlaced` events; Billing consumes them
 - **Ordering ↔ Billing**: Shared types for `CustomerId` and `Money`
 ```
 
-Skill infers which structure applies. Neither exists → create root `CONTEXT.md` lazily.
+Skill infers which structure applies. Neither exists -> create root `CONTEXT.md` lazily.

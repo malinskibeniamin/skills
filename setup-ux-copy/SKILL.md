@@ -33,7 +33,7 @@ PostToolUse hook on Edit/Write check `.ts` and `.tsx` files:
 ## Steps
 
 ### 1. Create hook script
-Copy [`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
+Copy [`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) to `.claude/hooks/`. Make executable.
 
 ### 2. Configure hook
 Add to hooks config: **PostToolUse** (matcher: `Edit|Write`): `.claude/hooks/ux-copy-check.sh`

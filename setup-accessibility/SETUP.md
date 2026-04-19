@@ -109,7 +109,7 @@ test.describe('Accessibility', () => {
     expect(results.violations).toEqual([]);
   });
 
-  test('component scan — combobox', async ({ page }, testInfo) => {
+  test('component scan -- combobox', async ({ page }, testInfo) => {
     await page.goto('/components/combobox');
     const results = await checkA11y(page, testInfo, {
       include: ['[role="combobox"]', '[role="listbox"]'],

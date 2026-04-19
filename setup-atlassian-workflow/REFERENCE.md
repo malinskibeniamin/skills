@@ -2,9 +2,9 @@
 
 ## Workflow Patterns
 
-### PRD → Work Items (mirrors to-issues)
+### PRD -> Work Items (mirrors to-issues)
 
-After `/to-prd` generates plan:
+After `/to-prd` generate plan:
 
 ```bash
 # Create epic
@@ -57,7 +57,7 @@ acli jira workitem create \
   --label accessibility
 ```
 
-### TDD → Work Items
+### TDD -> Work Items
 
 After TDD diagnostics:
 
@@ -76,7 +76,7 @@ acli jira workitem create \
 When `ISSUE_TRACKER=both`:
 
 1. Create in **both** GitHub and Jira
-2. Link Jira → GitHub issue URL
+2. Link Jira -> GitHub issue URL
 3. `gh` for PR ops (PRs in GitHub)
 4. `acli` for sprint/board ops (Jira)
 

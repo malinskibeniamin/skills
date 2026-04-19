@@ -21,9 +21,9 @@
 
 | Flag | Purpose |
 |------|---------|
-| `--diff` | Only scan changed files |
+| `--diff` | Scan changed files only |
 | `--verbose` | Show file-level details |
-| `--score` | Output just the numeric score |
-| `--no-lint` | Skip linting (keep dead code) |
-| `--no-dead-code` | Skip dead code (keep linting) |
+| `--score` | Output numeric score only |
+| `--no-lint` | Skip lint (keep dead code) |
+| `--no-dead-code` | Skip dead code (keep lint) |
 | `--fix` | Auto-fix with AI |

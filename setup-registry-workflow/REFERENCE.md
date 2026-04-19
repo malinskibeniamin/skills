@@ -6,15 +6,15 @@
 
 ## How It Works
 
-Stop hook check `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` change. Modified but `registry.json` not updated → **blocks**. No `redpanda-ui/` dir → exit immediately.
+Stop hook checks `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` changes. Modified but `registry.json` not updated → **blocks**. No `redpanda-ui/` dir → exit immediately.
 
 ## When It Triggers
 
 | Changed files | registry.json updated? | Changeset added? | Result |
 |---|---|---|---|
 | `redpanda-ui/button.tsx` | Yes | Yes | Pass |
-| `redpanda-ui/button.tsx` | Yes | No | **Block** — add changeset |
-| `redpanda-ui/button.tsx` | No | N/A | **Block** — rebuild registry |
+| `redpanda-ui/button.tsx` | Yes | No | **Block** -- add changeset |
+| `redpanda-ui/button.tsx` | No | N/A | **Block** -- rebuild registry |
 | `src/components/UserTable.tsx` | N/A | N/A | Pass (not registry file) |
 
 ## Registry Rebuild Steps
@@ -22,8 +22,8 @@ Stop hook check `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-
 When blocked:
 
 1. Run `bun run build:registry`
-2. Add changeset: `bunx changeset` (select packages, bump type, summary)
-3. Let Claude finish turn — hook re-check
+2. Add changeset: `bunx changeset` (pick packages, bump type, summary)
+3. Let Claude finish turn -- hook re-checks
 
 ## Skipping in Non-Registry Repos
 
@@ -31,7 +31,7 @@ Auto-detect: no `redpanda-ui/` or `src/redpanda-ui/` at repo root → exit 0. No
 
 ## Component Taxonomy
 
-**Atom** — single element, no composition. Tests (3-4): callbacks, disabled, `data-testid`, `asChild`.
+**Atom** -- single element, no composition. Tests (3-4): callbacks, disabled, `data-testid`, `asChild`.
 
 ```tsx
 export const Button = ({ variant = 'default', size = 'md', ...props }: ButtonProps) => (
@@ -39,7 +39,7 @@ export const Button = ({ variant = 'default', size = 'md', ...props }: ButtonPro
 )
 ```
 
-**Molecule** — 2-3 atoms, limited state. Tests (5-8): atom tests + composition, state transitions, edge cases.
+**Molecule** -- 2-3 atoms, limited state. Tests (5-8): atom tests + composition, state transitions, edge cases.
 
 ```tsx
 export function CopyButton({ text }: { text: string }) {
@@ -48,7 +48,7 @@ export function CopyButton({ text }: { text: string }) {
 }
 ```
 
-**Organism** — multiple molecules+atoms, big state, keyboard nav, portals. Tests (8-15): molecule tests + keyboard nav, portal open/close, async filtering, controlled/uncontrolled.
+**Organism** -- many molecules+atoms, big state, keyboard nav, portals. Tests (8-15): molecule tests + keyboard nav, portal open/close, async filter, controlled/uncontrolled.
 
 ```tsx
 export function Combobox<T>({ options, onChange }: ComboboxProps<T>) {
@@ -88,10 +88,10 @@ Registry version > consumer pinned → **Skip-Outdated** (sync FROM registry). S
 ### Business Logic Detection
 
 ```tsx
-// SAFE — prop-based (component API)
+// SAFE -- prop-based (component API)
 if (variant === 'destructive') { /* ... */ }
 
-// UNSAFE — business data (app-specific)
+// UNSAFE -- business data (app-specific)
 if (status === 'premium') { /* ... */ }
 if (pathname.includes('/dashboard')) { /* ... */ }
 ```

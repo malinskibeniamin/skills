@@ -2,9 +2,9 @@
 
 ## Full Skill Inventory
 
-### Setup Skills (14) — configures hooks + packages
+### Setup Skills (14) -- configure hooks + packages
 
-| # | Skill | Hook type | What it enforces |
+| # | Skill | Hook type | What enforce |
 |---|---|---|---|
 | 1 | setup-toolchain | PreToolUse, SessionStart | bun, tsgo, no npm/npx/tsc |
 | 2 | setup-biome | Stop | Biome + Ultracite lint/format |
@@ -19,23 +19,23 @@
 | 11 | setup-react-doctor | Stop | Health score regression |
 | 12 | setup-tanstack-router | PostToolUse | Route tree, anti-patterns |
 | 13 | setup-connect-query | PostToolUse | ConnectRPC, protobuf v2 |
-| 14 | setup-e2e-testing | — | Playwright, Testcontainers, axe-core |
+| 14 | setup-e2e-testing | -- | Playwright, Testcontainers, axe-core |
 
-### Owned Workflow Skills (5) — hook-integrated, auto-load via paths:
+### Owned Workflow Skills (5) -- hook-integrated, auto-load via paths:
 
 | Skill | Replaces | Key feature |
 |---|---|---|
 | tdd | mattpocock/tdd (incorporated) | TDD iron law + async leak detection + deep modules |
-| triage-issue | mattpocock/triage-issue (vendored) | Bug root cause → TDD fix plan |
-| brainstorming | — (owned) | Design + challenge modes |
+| triage-issue | mattpocock/triage-issue (vendored) | Bug root cause -> TDD fix plan |
+| brainstorming | -- (owned) | Design + challenge modes |
 
-### Community Workflow Skills (10) — from mattpocock/skills
+### Community Workflow Skills (10) -- from mattpocock/skills
 
 improve-codebase-architecture, request-refactor-plan, design-an-interface, to-prd, to-issues, write-a-skill, ubiquitous-language, git-guardrails-claude-code
 
 ## Install Order
 
-1. Setup skills 1–14 (sequential, idempotent)
+1. Setup skills 1-14 (sequential, idempotent)
 2. Owned workflow skills (5 installs)
 3. Community skills (10 installs)
 4. Set `REACT_RULES_BAN_USEEFFECT=1` in session env
@@ -44,11 +44,11 @@ improve-codebase-architecture, request-refactor-plan, design-an-interface, to-pr
 ## Hook Architecture
 
 ```
-SessionStart (2)     → env vars, /tmp cleanup
-UserPromptSubmit (2) → project state + intent detection
-PreToolUse (3)       → toolchain, test flags, commits
-PostToolUse (11)     → 10 Edit|Write checks + 1 Bash truncation
-Stop (6)             → biome, typecheck, react-doctor, registry, orchestration, violations
+SessionStart (2)     -> env vars, /tmp cleanup
+UserPromptSubmit (2) -> project state + intent detection
+PreToolUse (3)       -> toolchain, test flags, commits
+PostToolUse (11)     -> 10 Edit|Write checks + 1 Bash truncation
+Stop (6)             -> biome, typecheck, react-doctor, registry, orchestration, violations
 ```
 
 Total: 24 hooks. PostToolUse parallel (~80ms wall clock).

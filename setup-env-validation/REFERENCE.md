@@ -30,11 +30,11 @@ export const env = createEnv({
 ## Usage Pattern
 
 ```ts
-// BAD — raw access, no validation, no type safety
+// BAD -- raw access, no validation, no type safety
 const url = process.env.PUBLIC_API_URL;
 const secret = process.env.API_SECRET;
 
-// GOOD — validated, typed, fails fast on missing vars
+// GOOD -- validated, typed, fails fast on missing vars
 import { env } from "@/env";
 const url = env.PUBLIC_API_URL;   // string (validated URL)
 const secret = env.API_SECRET;     // string (min length 1)

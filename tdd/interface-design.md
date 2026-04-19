@@ -40,7 +40,7 @@ const api = {
   createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
 };
 
-// Mocking requires conditional logic — avoid
+// Mocking requires conditional logic -- avoid
 const api = {
   fetch: (endpoint, options) => fetch(endpoint, options),
 };

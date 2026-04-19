@@ -29,5 +29,5 @@ description: "Use when exploring design options, starting new features, or needi
 | Situation | Mode |
 |---|---|
 | New feature / architecture choice | Design |
-| Reviewing proposed approach / risky refactor | Challenge |
+| Review proposed approach / risky refactor | Challenge |
 | "Should we use X or Y?" | Design -> Challenge winner |

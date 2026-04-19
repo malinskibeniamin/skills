@@ -1,4 +1,4 @@
-# Resolve PR Feedback — Reference
+# Resolve PR Feedback -- Reference
 
 ## GraphQL: Fetch Inline Review Threads
 
@@ -33,7 +33,7 @@ gh api graphql -f query='
       body:$body
     }) { comment { id } }
   }
-' -f threadId=THREAD_ID -f body="Fixed — [brief explanation]"
+' -f threadId=THREAD_ID -f body="Fixed -- [brief explanation]"
 
 # Resolve
 gh api graphql -f query='
@@ -69,12 +69,12 @@ All review threads resolved. CI is green.
 Stop hook `pr-feedback-completeness-stop.sh` re-fetch threads + reviews. Block session exit if any true:
 
 - Any `reviewThread` with `isResolved=false` AND `isOutdated!=true` AND ≥1 non-`[bot]` comment.
-- Any reviewer latest `review` state `CHANGES_REQUESTED` (no later `APPROVED`/`DISMISSED` from same author).
+- Any reviewer latest `review` state `CHANGES_REQUESTED` (no later `APPROVED`/`DISMISSED` same author).
 
 Escape hatches (use sparingly, document why):
 
-- `PR_FEEDBACK_ENFORCEMENT=off` — disable entirely (incident response only).
-- Reply on thread "not actionable — [reason]" + resolve. Hook count resolved as done.
+- `PR_FEEDBACK_ENFORCEMENT=off` -- disable entirely (incident response only).
+- Reply on thread "not actionable -- [reason]" + resolve. Hook count resolved as done.
 
 Self-check command (run before declaring done):
 

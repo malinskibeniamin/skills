@@ -18,7 +18,7 @@ Metrics dir: `~/.claude/hook-metrics/`
 
 ## Your task
 
-Analyze hook effectiveness across all collected session metrics. Read every JSON in `~/.claude/hook-metrics/`. Produce report:
+Analyze hook effectiveness across all session metrics. Read every JSON in `~/.claude/hook-metrics/`. Produce report:
 
 ### 1. Hook activity
 
@@ -53,24 +53,23 @@ From data:
 
 ### 6. Retro analytics (session flow)
 
-Broader than hook-level. Pull from session JSONL + git log for the
-same window as the metrics.
+Broader than hook-level. Pull from session JSONL + git log same window as metrics.
 
-- **Sessions → PR lag**: median time from first edit to PR open. High lag = planning thrash.
+- **Sessions -> PR lag**: median time from first edit to PR open. High lag = planning thrash.
 - **CI first-try pass rate**: PRs green on first CI run / total PRs. Low = hooks missed pre-commit catches.
-- **Phases skipped in `/development-lifecycle`**: sessions that wrote code without a prior grill step (infer from session-touched-files + absence of grill markers). High skip = gate ineffective.
-- **Review-round distribution**: how often did we hit 0/1/2/3 AI self-review rounds? Bulk at 3 = reviewer too picky or code quality trending down.
-- **Human-review resolution latency**: time from human review comment → resolved thread. High = bottleneck.
-- **Worktree sprawl**: count of active worktrees per repo. >4 sustained → investigate with `/mux --list` candidates for prune.
+- **Phases skipped in `/development-lifecycle`**: sessions wrote code without prior grill step (infer from session-touched-files + absence of grill markers). High skip = gate ineffective.
+- **Review-round distribution**: how often hit 0/1/2/3 AI self-review rounds? Bulk at 3 = reviewer too picky or code quality trending down.
+- **Human-review resolution latency**: time from human review comment -> resolved thread. High = bottleneck.
+- **Worktree sprawl**: count active worktrees per repo. >4 sustained -> investigate with `/mux --list` candidates for prune.
 
 Output per-metric: current value, 7-day trend (up/down/flat), actionable next step.
 
 ### Mode flags
 
 `$ARGUMENTS`:
-- empty / `--hooks` → run sections 1-5 only (default).
-- `--retro` → run sections 1-6 with emphasis on section 6.
-- `--all` → all sections, no emphasis.
+- empty / `--hooks` -> run sections 1-5 only (default).
+- `--retro` -> run sections 1-6 with emphasis on section 6.
+- `--all` -> all sections, no emphasis.
 
 ### Output format
 

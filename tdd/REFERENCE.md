@@ -5,20 +5,20 @@
 Replace arbitrary timeouts with condition polling. Flaky tests = timing assumptions.
 
 ```ts
-// BAD — arbitrary delay
+// BAD -- arbitrary delay
 await new Promise(r => setTimeout(r, 500))
 await page.waitForTimeout(1000)
 
-// GOOD — wait for actual condition
+// GOOD -- wait for actual condition
 await waitFor(() => expect(element).toBeVisible())
 await expect.poll(() => fetchStatus()).toBe('ready')
 await page.waitForSelector('[data-testid="loaded"]')
 
-// GOOD — event-based
+// GOOD -- event-based
 await waitForEvent(manager, threadId, 'DONE')
 ```
 
-Result: 60% → 100% pass rate, 40% faster.
+Result: 60% -> 100% pass rate, 40% faster.
 
 ## Custom Fixtures (test.extend())
 
@@ -36,7 +36,7 @@ const test = base.extend<{ db: TestDatabase }>({
   },
 })
 
-// Compose — fixture depends on another
+// Compose -- fixture depends on another
 const test = base.extend<{ db: TestDatabase; user: User }>({
   db: async ({}, use) => { /* ... */ await use(db) },
   user: async ({ db }, use) => {
@@ -51,7 +51,7 @@ test('user has default role', async ({ user }) => {
 })
 ```
 
-**Auto-fixtures**: `{ auto: true }` for fixtures run every test, no explicit reference:
+**Auto-fixtures**: `{ auto: true }` runs every test, no explicit reference:
 
 ```ts
 const test = base.extend<{ mockApi: void }>({
@@ -63,7 +63,7 @@ const test = base.extend<{ mockApi: void }>({
 })
 ```
 
-Same API as Playwright `test.extend()` — patterns transfer unit ↔ E2E.
+Same API as Playwright `test.extend()` -- patterns transfer unit ↔ E2E.
 
 ## Advanced Assertions
 
@@ -111,7 +111,7 @@ declare module 'vitest' {
 
 ### Asymmetric Matchers
 
-Custom matchers from `expect.extend()` work asymmetric — mix literals with pattern matchers:
+Custom matchers from `expect.extend()` work asymmetric -- mix literals with pattern matchers:
 
 ```ts
 expect(response).toEqual({
@@ -133,17 +133,17 @@ function measurementTester(a: unknown, b: unknown): boolean | undefined {
   if (a instanceof Measurement && b instanceof Measurement) {
     return a.toBaseUnit() === b.toBaseUnit()
   }
-  return undefined  // not our types — defer to default
+  return undefined  // not our types -- defer to default
 }
 
 expect.addEqualityTesters([measurementTester])
 ```
 
-Register in `setupFiles`. Expensive testers slow all deep equality — keep fast.
+Register in `setupFiles`. Expensive testers slow all deep equality -- keep fast.
 
 ### Retryable Assertions (expect.poll())
 
-Retry callback til assertion pass. Cleaner than `waitFor` for non-Promise async (polling APIs · DOM side effects · event-driven state):
+Retry callback til pass. Cleaner than `waitFor` for non-Promise async (polling APIs · DOM side effects · event-driven state):
 
 ```ts
 await expect.poll(() => fetchStatus()).toBe('ready')
@@ -166,24 +166,24 @@ test('user profile has all required fields', () => {
   expect.soft(profile.name).toBe('Alice')
   expect.soft(profile.email).toContain('@')
   expect.soft(profile.role).toBe('admin')
-  // All three report on failure — not just first
+  // All three report on failure -- not just first
 })
 ```
 
-Still fail test. No short-circuit. Use for complex state validation need full debug picture.
+Still fail test. No short-circuit. Use for complex state needing full debug picture.
 
 ## Reactive TDD with Monitor
 
-**Monitor** streams test runner watch mode during implementation. RED→GREEN→REFACTOR = continuous feedback.
+**Monitor** streams test runner watch mode during implementation. RED->GREEN->REFACTOR = continuous feedback.
 
 ```
 Monitor: vitest --watch
 ```
 
 1. Start Monitor on watch mode
-2. Write failing test (RED) — Monitor report failure immediate
-3. Write minimal code — Monitor report pass (GREEN) on save
-4. Refactor — Monitor confirm green after each change
+2. Write failing test (RED) -- Monitor report failure immediate
+3. Write minimal code -- Monitor report pass (GREEN) on save
+4. Refactor -- Monitor confirm green after each change
 
 **When**: Phase 3 rapid iteration with many small changes.
 
@@ -198,13 +198,13 @@ Surface open handles as detected, not buffered til exit.
 ## Coverage Gap Analysis
 
 ```bash
-# Text report — quick overview
+# Text report -- quick overview
 vitest run --coverage.enabled --coverage.reporter=text
 
-# JSON report — parseable
+# JSON report -- parseable
 vitest run --coverage.enabled --coverage.reporter=json
 
-# Related files only — faster, scoped
+# Related files only -- faster, scoped
 vitest run --coverage.enabled --coverage.reporter=text --related src/features/auth/
 ```
 
@@ -221,9 +221,9 @@ AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
 
 ### Priority Order for Coverage Gaps
 
-1. **Uncovered branches** (if/else · switch · error paths) — highest bug risk
-2. **Uncovered functions** — entire untested behaviors
-3. **Uncovered lines in covered functions** — edge cases
+1. **Uncovered branches** (if/else · switch · error paths) -- top bug risk
+2. **Uncovered functions** -- entire untested behaviors
+3. **Uncovered lines in covered functions** -- edge cases
 
 ### Don't Chase 100%
 
@@ -236,7 +236,7 @@ Target: **80% lines, 70% branches** for feature code. Focus behavior-critical pa
 
 ## Visual Regression Tests (Route Files)
 
-Add `*.browser.test.tsx` for new route files when project use `@vitest/browser`:
+Add `*.browser.test.tsx` for new route files when project uses `@vitest/browser`:
 
 ```ts
 // routes/oauth-providers/index.browser.test.tsx
@@ -280,7 +280,7 @@ Safe everywhere for unit and integration.
 
 ### Multi-Workspace Configuration
 
-Monorepos with different runtimes need separate configs share one root:
+Monorepos with different runtimes need separate configs sharing one root:
 
 ```ts
 // vitest.workspace.ts
@@ -311,9 +311,9 @@ Safety: tests must not share mutable state · each set up own fixtures.
 
 | Setting | Why skip |
 |---|---|
-| `isolate: false` | Incompatible with per-file `vi.mock()` — passes locally, fails CI |
-| `experimental.fsModuleCache` | Experimental — stale cache issues in CI |
-| Sharding | See [CI Pipeline REFERENCE](../setup-ci-pipeline/REFERENCE.md) — useful for suites >60s |
+| `isolate: false` | Incompatible with per-file `vi.mock()` -- passes locally, fails CI |
+| `experimental.fsModuleCache` | Experimental -- stale cache issues in CI |
+| Sharding | See [CI Pipeline REFERENCE](../setup-ci-pipeline/REFERENCE.md) -- useful for suites >60s |
 
 ### Benchmarks (`pool: 'threads'`, 23 unit + 12 integration files)
 
@@ -323,12 +323,12 @@ Safety: tests must not share mutable state · each set up own fixtures.
 | Integration | Duration | 2.59s | 2.04s (21% faster) |
 | Integration | Import time | 7.9s | 5.5s (30% faster) |
 
-## Element Selectors — Priority Order
+## Element Selectors -- Priority Order
 
-1. **`getByRole` with `{ name }`** — always first
-2. **`getByText`** — non-interactive text only
-3. **`getByTestId`** — when role queries fail
-4. **`document.querySelector('[data-slot="..."]')`** — last resort
+1. **`getByRole` with `{ name }`** -- always first
+2. **`getByText`** -- non-interactive text only
+3. **`getByTestId`** -- when role queries fail
+4. **`document.querySelector('[data-slot="..."]')`** -- last resort
 
 ### Query Type Rules
 
@@ -342,7 +342,7 @@ Safety: tests must not share mutable state · each set up own fixtures.
 ### Selector Gotchas
 
 - Always include `{ name }` with `getByRole` when many elements share same role
-- Password inputs no `textbox` role → use `document.querySelector('input[data-slot="input"]')`
+- Password inputs no `textbox` role -> use `document.querySelector('input[data-slot="input"]')`
 - Number inputs use `spinbutton` role
 - Make helpers for repeated ambiguous queries at `describe` level
 
@@ -358,7 +358,7 @@ const getTrigger = () => screen.getByRole('button', { name: 'Select option' })
 | `<a href>` | `link` |
 | `<input type="text">` | `textbox` |
 | `<input type="number">` | `spinbutton` |
-| `<input type="password">` | (none — use data-slot) |
+| `<input type="password">` | (none -- use data-slot) |
 | `<select>` / Combobox | `combobox` |
 | Dropdown option | `option` |
 
@@ -373,13 +373,13 @@ Portal components (Dialog · AlertDialog · DropdownMenu · Popover · Sheet · 
 3. Action callbacks fire with correct args
 4. Close callbacks fire (`onOpenChange(false)`)
 5. Close mechanisms: Escape · click outside · cancel button
-6. Disabled state — trigger does nothing
+6. Disabled state -- trigger does nothing
 
 ### Key Patterns
 
 **`defaultOpen` for content-only tests.** Skip trigger interaction when testing buttons/callbacks inside portal. Faster, avoid animation timing.
 
-**`waitFor` for ALL close assertions.** Portal content animate out async:
+**`waitFor` for ALL close assertions.** Portal content animates out async:
 
 ```ts
 await waitFor(() => {
@@ -387,7 +387,7 @@ await waitFor(() => {
 })
 ```
 
-**Click-outside — render sibling button:**
+**Click-outside -- render sibling button:**
 
 ```ts
 render(
@@ -401,7 +401,7 @@ await user.click(screen.getByText('Outside'))
 
 **Escape key:** `await user.keyboard('{Escape}')` after opening portal.
 
-**Portal content queryable via `screen`** — no special container needed.
+**Portal content queryable via `screen`** -- no special container needed.
 
 ## Test Mock Patterns
 
@@ -416,9 +416,9 @@ Common browser API mocks for jsdom. Configure in `vitest.setup.ts`, not per-test
 
 ### Rules
 
-- No re-mock in test files — global setup applies
-- No test actual browser behavior — mocks = stubs
-- ResizeObserver callbacks never fire — test behavior via props/interaction
+- No re-mock in test files -- global setup applies
+- No test actual browser behavior -- mocks = stubs
+- ResizeObserver callbacks never fire -- test behavior via props/interaction
 - Add new mocks to `vitest.setup.ts` only
 
 ### Missing Mock Error Guide
@@ -453,7 +453,7 @@ vi.mocked(window.matchMedia).mockImplementation((query) => ({
 
 ## Unhappy Path Testing Checklist
 
-Every form · validator · async op need unhappy path tests. LLMs default happy path — counteract.
+Every form · validator · async op need unhappy path tests. LLMs default happy path -- counteract.
 
 ### Validation Exhaustiveness
 
@@ -573,11 +573,11 @@ test('displays all validation errors not just first', async () => {
 ### Error Path Priority
 
 Cover these paths in order:
-1. **Invalid input** — empty · wrong format · too long/short · special chars
-2. **Network failure** — fetch rejects · timeout · 4xx/5xx
-3. **Parse failure** — malformed JSON · corrupt proto · missing required fields
-4. **State transition errors** — switch types clear old data · concurrent edits
-5. **Partial failure** — batch where some items fail (Promise.allSettled)
+1. **Invalid input** -- empty · wrong format · too long/short · special chars
+2. **Network failure** -- fetch rejects · timeout · 4xx/5xx
+3. **Parse failure** -- malformed JSON · corrupt proto · missing required fields
+4. **State transition errors** -- switch types clear old data · concurrent edits
+5. **Partial failure** -- batch where some items fail (Promise.allSettled)
 
 ## Common Agent Excuses
 
@@ -588,4 +588,4 @@ Cover these paths in order:
 | "Test duplicates implementation" | Test behavior, not implementation. |
 | "Can't test without mocking everything" | Redesign for testability. Heavy mocking = design problem. |
 | "Tests slow development" | Tests catch bugs that slow dev 10x more. |
-| "I'll verify manually" | Manual verification no prevent regressions. |
+| "I'll verify manually" | Manual no prevent regressions. |

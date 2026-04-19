@@ -4,46 +4,46 @@
 
 ```
 Feature idea
-  → /to-prd (community) — interactive PRD creation
-  → /development-lifecycle — plan phase
-  → /domain-model — stress-test plan + update CONTEXT.md/ADRs (auto-invoked)
-  → /to-issues (community) — break into GitHub/Jira issues
-  → implement (use /tdd skill)
-  → code review (development-lifecycle review phase)
-  → merge
+  -> /to-prd (community) -- interactive PRD creation
+  -> /development-lifecycle -- plan phase
+  -> /domain-model -- stress-test plan + update CONTEXT.md/ADRs (auto-invoked)
+  -> /to-issues (community) -- break into GitHub/Jira issues
+  -> implement (use /tdd skill)
+  -> code review (development-lifecycle review phase)
+  -> merge
 
 Bug report
-  → /triage-issue — explore codebase, find root cause, TDD fix plan
-  → implement fix (/tdd: failing test → fix → verify)
-  → code review (development-lifecycle review phase)
-  → merge
+  -> /triage-issue -- explore codebase, find root cause, TDD fix plan
+  -> implement fix (/tdd: failing test -> fix -> verify)
+  -> code review (development-lifecycle review phase)
+  -> merge
 
 Issue management
-  → /github-triage — triage via label state machine
-  → /qa — interactive QA session → auto-file issues
+  -> /github-triage -- triage via label state machine
+  -> /qa -- interactive QA session -> auto-file issues
 
 Design decision
-  → /brainstorming — explore approaches + challenge decisions
-  → /development-lifecycle — plan the chosen approach
-  → /domain-model — stress-test the plan + sharpen terminology (auto-invoked)
-  → implement
+  -> /brainstorming -- explore approaches + challenge decisions
+  -> /development-lifecycle -- plan the chosen approach
+  -> /domain-model -- stress-test the plan + sharpen terminology (auto-invoked)
+  -> implement
 
 Quick question (on a specific decision)
-  → /domain-model — stress-test against domain model
-  → /grill-me — lightweight stress-test (no DDD docs)
+  -> /domain-model -- stress-test against domain model
+  -> /grill-me -- lightweight stress-test (no DDD docs)
 ```
 
 ## Owned vs Community Skills
 
 | Category | Owned | Community (mattpocock) |
 |---|---|---|
-| Testing | tdd | — |
-| Debugging | triage-issue | — |
-| Triage | github-triage, qa | — |
+| Testing | tdd | -- |
+| Debugging | triage-issue | -- |
+| Triage | github-triage, qa | -- |
 | Planning | development-lifecycle (plan phase) | to-prd, to-issues |
-| Review | development-lifecycle (review phase) | — |
-| Design | brainstorming, design-an-interface | — |
-| Architecture | improve-codebase-architecture, request-refactor-plan | — |
+| Review | development-lifecycle (review phase) | -- |
+| Design | brainstorming, design-an-interface | -- |
+| Architecture | improve-codebase-architecture, request-refactor-plan | -- |
 | DDD | domain-model | ubiquitous-language |
 | Meta | write-a-skill, grill-me, zoom-out | git-guardrails |
 

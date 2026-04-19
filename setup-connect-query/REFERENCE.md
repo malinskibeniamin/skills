@@ -8,7 +8,7 @@
 
 `@bufbuild/protobuf` ^1.x: remove checks 5-6 (`new Message()` and `PlainMessage`/`PartialMessage`). Correct in v1.
 
-## TanStack Query Hooks — No False Positives
+## TanStack Query Hooks -- No False Positives
 
 Hook use `\buseQuery\b` word boundaries. `useQueryClient` (stripped before match), `useQueries`, `useSuspenseQuery`, `useInfiniteQuery`, `useMutationState` safe. Not flagged.
 
@@ -77,15 +77,15 @@ Never construct with `$typeName` literals. Use `create()`.
 ### Timestamp
 
 ```ts
-// BAD — fails: "cannot decode Timestamp from JSON: object"
+// BAD -- fails: "cannot decode Timestamp from JSON: object"
 const msg = create(MySchema, {
   createdAt: { seconds: BigInt(Date.now() / 1000), nanos: 0 },
 })
 
-// BAD — raw Date object, not a Timestamp
+// BAD -- raw Date object, not a Timestamp
 const msg = create(MySchema, { createdAt: new Date() })
 
-// GOOD — use @bufbuild/protobuf/wkt helpers
+// GOOD -- use @bufbuild/protobuf/wkt helpers
 import { timestampFromDate, timestampDate } from '@bufbuild/protobuf/wkt'
 
 const msg = create(MySchema, {
@@ -109,10 +109,10 @@ const msg = create(MySchema, {
 ### Any (with @type)
 
 ```ts
-// BAD — fails: "@type" is empty
+// BAD -- fails: "@type" is empty
 const anyMsg = create(AnySchema, { value: toBinary(ConfigSchema, config) })
 
-// GOOD — use anyPack which sets @type automatically
+// GOOD -- use anyPack which sets @type automatically
 import { anyPack, anyUnpack } from '@bufbuild/protobuf/wkt'
 
 const anyMsg = anyPack(ConfigSchema, config)

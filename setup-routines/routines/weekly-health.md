@@ -13,7 +13,7 @@ Do NOT create report if everything green and unchanged. Silence = healthy. Only 
 
 ### 1. Run project quality checks
 
-Detect available scripts from package.json, run them. Continue on failure — collect all results.
+Detect available scripts from package.json, run them. Continue on failure -- collect all results.
 
 ```bash
 # Read available scripts
@@ -53,7 +53,7 @@ fi
 Adapt to project language/framework:
 
 ```bash
-# Large files that may need splitting — check CLAUDE.md for threshold
+# Large files that may need splitting -- check CLAUDE.md for threshold
 find src -name '*.ts' -o -name '*.tsx' -o -name '*.py' -o -name '*.go' 2>/dev/null | while read f; do
   lines=$(wc -l < "$f")
   [ "$lines" -gt 300 ] && echo "$f: $lines lines"
@@ -62,7 +62,7 @@ done
 # TODO/FIXME/HACK count
 grep -r 'TODO\|FIXME\|HACK' src --include='*.ts' --include='*.tsx' --include='*.py' --include='*.go' -c 2>/dev/null | sort -t: -k2 -nr | head -10
 
-# Test coverage gaps — source files without co-located tests
+# Test coverage gaps -- source files without co-located tests
 find src -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.py' \) | grep -v '.test.' | grep -v '.spec.' | grep -v '.gen.' | grep -v '_pb.' | while read f; do
   base="${f%.*}"
   ext="${f##*.}"
@@ -82,13 +82,13 @@ Search previous health report issues:
 gh issue list --state all --label "health-report" --limit 1 --json number,body
 ```
 
-Compare current with previous. Only flag **regressions** — improvements good but not worth issue.
+Compare current with previous. Only flag **regressions** -- improvements good but not worth issue.
 
 ### 6. Report (only if regressions found)
 
 ```bash
 gh issue create \
-  --title "Codebase health regression — $(date +%Y-%m-%d)" \
+  --title "Codebase health regression -- $(date +%Y-%m-%d)" \
   --label "health-report,automated" \
   --body "## Codebase Health Regression
 
@@ -107,12 +107,12 @@ gh issue create \
 *Detected by Claude Code routine. Previous report: #[number]*"
 ```
 
-If everything stable or improved → do nothing. Close previous open health-report issues now resolved.
+If everything stable or improved -> do nothing. Close previous open health-report issues now resolved.
 
 ## Rules
 
 - Read-only. Never edit code, create branches, or fix issues.
-- Compare with previous report — only surface deltas, not absolute state.
-- No previous report exists → create baseline (first run only).
+- Compare with previous report -- only surface deltas, not absolute state.
+- No previous report exists -> create baseline (first run only).
 - Silence = healthy. No "all clear" issues.
-- Adapt checks to project stack — read package.json, Makefile, or build config to detect available tools.
+- Adapt checks to project stack -- read package.json, Makefile, or build config to detect available tools.

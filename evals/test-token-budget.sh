@@ -77,6 +77,67 @@ else
   ERRORS="$ERRORS\n  FAIL: Unicode punctuation reintroduced in docs"
 fi
 
+# Repo-wide: no em-dash or arrow in any .md / agent def (caveman-compress
+# sometimes reintroduces them; guard against regression). Box-drawing
+# glyphs in ASCII art still allowed.
+wide_hits=$(python3 -c '
+import sys, pathlib
+bad = ["\u2014","\u2013","\u2192","\u2190","\u2026","\u2018","\u2019","\u201c","\u201d"]
+total = 0
+offenders = []
+root = pathlib.Path(sys.argv[1])
+for p in list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")) + [root / "README.md", root / "AGENTS.md"]:
+    if "node_modules" in str(p) or ".original.md" in str(p) or "agent-evals/" in str(p):
+        continue
+    try:
+        t = p.read_text()
+        hits = sum(t.count(c) for c in bad)
+        if hits:
+            offenders.append(f"{p}:{hits}")
+            total += hits
+    except Exception:
+        pass
+if total:
+    print(f"{total} {offenders[:5]}")
+else:
+    print("0")
+' "$BUDGET_DIR" 2>/dev/null || echo "0")
+
+if [ "$wide_hits" = "0" ]; then
+  echo "  PASS  all .md files ASCII-only (no em-dash/arrow/smart-quote)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Unicode punctuation in .md files: $wide_hits"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Unicode punctuation in .md files"
+fi
+
+# Trailing whitespace check via python to avoid grep+pipefail abort
+trailing_count=$(python3 -c '
+import pathlib, sys
+n = 0
+root = pathlib.Path(sys.argv[1])
+for p in list(root.glob("*.md")) + list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")):
+    if any(x in str(p) for x in ("node_modules", ".original.md", "agent-evals/")):
+        continue
+    try:
+        for line in p.read_text().splitlines():
+            if line != line.rstrip():
+                n += 1
+                break
+    except Exception:
+        pass
+print(n)
+' "$BUDGET_DIR" 2>/dev/null || echo 0)
+if [ "$trailing_count" = "0" ]; then
+  echo "  PASS  no trailing whitespace in .md files"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  $trailing_count .md files have trailing whitespace"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: trailing whitespace"
+fi
+
 # -- Test B: hook output size ---------------------------------------
 
 fixture_clean='{"session_id":"budget-test","hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/budget-test-clean.tsx","old_string":"x","new_string":"const x: number = 2;"}}'

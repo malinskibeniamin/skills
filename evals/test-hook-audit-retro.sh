@@ -7,7 +7,7 @@ run_content_eval "$SKILL" "retro" "description mentions retro / team analytics"
 run_content_eval "$SKILL" "Retro analytics" "skill has Retro Analytics section"
 
 # Metrics covered in retro
-run_content_eval "$SKILL" "Sessions . PR lag" "retro covers session-to-PR lag"
+run_content_eval "$SKILL" "Sessions .* PR lag" "retro covers session-to-PR lag"
 run_content_eval "$SKILL" "CI first-try pass rate" "retro covers CI first-try pass rate"
 run_content_eval "$SKILL" "Phases skipped" "retro covers phases skipped"
 run_content_eval "$SKILL" "Review-round distribution" "retro covers review-round distribution"

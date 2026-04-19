@@ -43,7 +43,7 @@ jobs:
 
 ## Blacksmith Worker Optimization
 
-Use [Blacksmith MCP](https://github.com/grahamnotgrant/blacksmith-mcp) for CI stats analysis:
+[Blacksmith MCP](https://github.com/grahamnotgrant/blacksmith-mcp) for CI stats analysis:
 
 ```bash
 # Fetch CI run history to find bottlenecks
@@ -60,7 +60,7 @@ Optimization checklist:
 
 Split big suites across parallel runners.
 
-**When to shard**: Suite >60s. Skip if <30s — overhead exceed savings.
+**When to shard**: Suite >60s. Skip if <30s -- overhead exceed savings.
 
 ```yaml
 jobs:
@@ -91,7 +91,7 @@ jobs:
       - run: bunx vitest --merge-reports --coverage
 ```
 
-`--reporter=blob` write shard-aware chunks. `--merge-reports` aggregate into unified coverage+results. Thresholds apply to merged report.
+`--reporter=blob` writes shard-aware chunks. `--merge-reports` aggregates to unified coverage+results. Thresholds apply to merged report.
 
 ## Coverage Gates
 

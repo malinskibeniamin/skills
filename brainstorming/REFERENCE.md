@@ -23,9 +23,9 @@
 
 No auth. Render local HTML headless. Work in CI.
 
-Auth pages → use `claude-in-chrome` MCP.
+Auth pages -> use `claude-in-chrome` MCP.
 
-UI designs → generate HTML mockup:
+UI designs -> generate HTML mockup:
 
 ```bash
 # 1. Write a self-contained HTML mockup
@@ -51,9 +51,9 @@ agent-browser screenshot --annotate /tmp/mockup-v2.png
 
 **When to use mockups:**
 - New page layouts or component arrangements
-- Compare Option A vs Option B visually
+- Compare Option A vs B visually
 - Responsive design decisions
-- Before/after refactor visualization
+- Before/after refactor viz
 
 **When NOT to use mockups:**
 - API design, data modeling, architecture decisions (use text/diagrams)

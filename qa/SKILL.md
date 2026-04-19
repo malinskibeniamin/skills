@@ -19,7 +19,7 @@ Every issue filed during QA **must** include at top of body:
 
 ### 1. Listen + Lightly Clarify
 
-Max 2-3 short questions: expected vs actual, steps to reproduce, consistent or intermittent. If clear -> move on. No over-interview.
+Max 2-3 short questions: expected vs actual, repro steps, consistent or intermittent. If clear -> move on. No over-interview.
 
 ### 2. Background Codebase Exploration
 
@@ -34,13 +34,13 @@ Goal = write better issue. Issue itself NOT reference file paths or internals.
 
 Bug visible in running app? Capture state via
 `scripts/skills-browser.sh` (Vercel agent-browser wrapper). Use refs
-not screenshots — cheaper tokens, cookies preserved across runs.
+not screenshots -- cheaper tokens, cookies preserved across runs.
 
     scripts/skills-browser.sh navigate <url>
     scripts/skills-browser.sh read          # returns @eN ref tree
     scripts/skills-browser.sh screenshot --out /tmp/qa.png
 
-No use for test code — Playwright test files keep using
+No use for test code -- Playwright test files keep using
 `@playwright/test` directly. skills-browser for AI-visible browser
 state (QA, /go phase 4 smoke, /design-review). [docs/rfc/browser-daemon.md]
 
@@ -92,7 +92,7 @@ Create in dependency order (blockers first) so real issue numbers available.
 - No file paths or line numbers
 - Project domain language (check CONTEXT.md)
 - Describe behaviors, not code
-- Reproduction steps mandatory
+- Repro steps mandatory
 - Concise -- readable in 30 seconds
 
 ### 5. Continue

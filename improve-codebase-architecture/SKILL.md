@@ -7,7 +7,7 @@ description: Explore codebase for architectural improvement. Focus testability v
 
 Surface architectural friction, improve testability via module-deepening refactors -> GitHub issue RFCs.
 
-**Deep module** = small interface, large implementation. More testable, more AI-navigable, test at boundary not inside.
+**Deep module** = small interface, big implementation. More testable, more AI-navigable, test at boundary not inside.
 
 ## Process
 
@@ -25,7 +25,7 @@ Numbered list: cluster of related modules, why coupled, dependency category, tes
 ### 3. User Picks
 
 ### 4. Frame Problem Space
-Constraints any new interface must satisfy. Rough illustrative code sketch.
+Constraints new interface must satisfy. Rough illustrative code sketch.
 
 ### 5. Design Interfaces
 Spawn 3+ parallel sub-agents, different constraints each. Outputs: signature, usage, what hides, dependency strategy, trade-offs. Give own recommendation.

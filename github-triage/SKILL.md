@@ -21,11 +21,11 @@ Every comment posted to GitHub during triage **must** start with:
 |---|---|---|
 | `bug` | Category | Something broken |
 | `enhancement` | Category | New feature or improvement |
-| `needs-triage` | State | Maintainer needs evaluate |
-| `needs-info` | State | Waiting on reporter |
+| `needs-triage` | State | Maintainer need evaluate |
+| `needs-info` | State | Wait on reporter |
 | `ready-for-agent` | State | Fully specified, ready for AFK agent |
-| `ready-for-human` | State | Needs human implementation |
-| `wontfix` | State | Will not action |
+| `ready-for-human` | State | Need human implementation |
+| `wontfix` | State | No action |
 
 One state label + one category label per issue. Conflicting states -> flag + ask.
 

@@ -1,12 +1,12 @@
 # TOON Format Evaluation
 
 **Date:** 2026-04-12
-**Status:** Declined — revisit if structured data enters LLM context
+**Status:** Declined -- revisit if structured data enters LLM context
 **Repository:** https://github.com/toon-format/toon
 
 ## What is TOON?
 
-Token-Oriented Object Notation (TOON) is a compact, human-readable encoding of the JSON data model optimized for LLM input. It declares structure once (field names, array lengths) and streams values compactly — eliminating repeated keys that inflate token counts in standard JSON.
+Token-Oriented Object Notation (TOON) is a compact, human-readable encoding of the JSON data model optimized for LLM input. It declares structure once (field names, array lengths) and streams values compactly -- eliminating repeated keys that inflate token counts in standard JSON.
 
 ```
 // JSON: 235 tokens
@@ -33,25 +33,25 @@ Spec v3.0 (2025-11-24). Reference implementation in TypeScript (`@toon-format/to
 
 ### Content shape mismatch
 
-Our skills ecosystem content is prose instructions, shell scripts, and markdown checklists — not structured data arrays.
+Our skills ecosystem content is prose instructions, shell scripts, and markdown checklists -- not structured data arrays.
 
 | Our content type | Tokens | TOON benefit |
 |---|---|---|
-| SKILL.md files (33) | ~19K | None — prose, not tabular |
-| REFERENCE.md files (24) | ~32K | None — code examples, diagnostics |
-| Hook shell scripts | ~4K | None — not structured data |
-| AGENTS.md | ~1K | None — rule lists, not arrays |
+| SKILL.md files (33) | ~19K | None -- prose, not tabular |
+| REFERENCE.md files (24) | ~32K | None -- code examples, diagnostics |
+| Hook shell scripts | ~4K | None -- not structured data |
+| AGENTS.md | ~1K | None -- rule lists, not arrays |
 
-TOON adds **31.9% overhead** on deeply nested/non-uniform structures — the opposite of what we want.
+TOON adds **31.9% overhead** on deeply nested/non-uniform structures -- the opposite of what we want.
 
 ### Existing token efficiency patterns
 
 We already address token costs through:
-1. **One-shot guidance** — orchestration hooks emit per-category guidance once per session
-2. **suppressOutput** — most PostToolUse hooks suppress context pollution
-3. **Caveman compression** — `/caveman` cuts prose ~75%
-4. **Lazy references** — REFERENCE.md loads on-demand, not injected automatically
-5. **Progressive injection** — light at SessionStart, heavy only at Stop
+1. **One-shot guidance** -- orchestration hooks emit per-category guidance once per session
+2. **suppressOutput** -- most PostToolUse hooks suppress context pollution
+3. **Caveman compression** -- `/caveman` cuts prose ~75%
+4. **Lazy references** -- REFERENCE.md loads on-demand, not injected automatically
+5. **Progressive injection** -- light at SessionStart, heavy only at Stop
 
 ### TOON's sweet spot vs ours
 
