@@ -53,6 +53,13 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 ## Commits
 <list each commit: hash + message>
 
+## Screenshots
+<omit entire section if no frontend changes -- see Frontend detection below>
+
+| View | Before | After | Notes |
+|------|--------|-------|-------|
+| <route/component> | ![before](<url>) | ![after](<url>) | <what changed> |
+
 ## Test plan
 <checklist of how to verify -- infer from changes>
 
@@ -66,3 +73,23 @@ Note: `--fill-verbose` set title from commits. Override with `--title` only if a
 Append `--label <label1> --label <label2>` per verified label.
 
 **Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.
+
+## Frontend detection + screenshot table (Phase 5)
+
+**Detect frontend change** -- diff touches any:
+
+- `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`
+- `tailwind.config.*`, `postcss.config.*`
+- `src/components/`, `src/routes/`, `src/pages/`, `src/app/`
+- registry UI (`components/ui/`)
+
+Frontend detected -> **always** include Screenshots table. Omit section entirely otherwise (no empty table, no "N/A" row).
+
+**Capture before/after:**
+
+- `/qa` already ran this session -> reuse captured refs/screenshots
+- Else: `scripts/skills-browser.sh screenshot --out /tmp/pr-<view>-after.png` per affected view
+- Before image: prior PR screenshot, main-branch capture, or `<!-- no prior state -->` for new views
+- Upload via `gh pr comment` drag-paste URL, or reference `/tmp/*.png` path if asset host unavailable -- note blocker in PR body
+
+**Row per visual change.** Group by route or component. One-line `Notes` col: what visibly changed (spacing, copy, new state, a11y). No screenshot for backend-only refactors even if a frontend file touched (e.g. type-only `.tsx` edit).
