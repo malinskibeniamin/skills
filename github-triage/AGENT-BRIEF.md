@@ -1,22 +1,22 @@
 # Writing Agent Briefs
 
-An agent brief is a structured comment posted on a GitHub issue when it moves to `ready-for-agent`. It is the authoritative specification that an AFK agent will work from. The original issue body and discussion are context — the agent brief is the contract.
+Agent brief = structured comment posted on GitHub issue when moves to `ready-for-agent`. Authoritative spec AFK agent work from. Original issue body + discussion = context. Agent brief = contract.
 
 ## Principles
 
 ### Durability over precision
 
-The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the brief so it stays useful even as files are renamed, moved, or refactored.
+Issue may sit in `ready-for-agent` days/weeks. Codebase change meantime. Write brief stay useful even as files renamed, moved, refactored.
 
-- **Do** describe interfaces, types, and behavioral contracts
-- **Do** name specific types, function signatures, or config shapes that the agent should look for or modify
-- **Don't** reference file paths — they go stale
+- **Do** describe interfaces, types, behavioral contracts
+- **Do** name specific types, function signatures, config shapes agent should look for/modify
+- **Don't** reference file paths — go stale
 - **Don't** reference line numbers
-- **Don't** assume the current implementation structure will remain the same
+- **Don't** assume current implementation structure stay same
 
 ### Behavioral, not procedural
 
-Describe **what** the system should do, not **how** to implement it. The agent will explore the codebase fresh and make its own implementation decisions.
+Describe **what** system should do, not **how** to implement. Agent explore codebase fresh, make own implementation decisions.
 
 - **Good:** "The `SkillConfig` type should accept an optional `schedule` field of type `CronExpression`"
 - **Bad:** "Open src/types/skill.ts and add a schedule field on line 42"
@@ -25,14 +25,14 @@ Describe **what** the system should do, not **how** to implement it. The agent w
 
 ### Complete acceptance criteria
 
-The agent needs to know when it's done. Every agent brief must have concrete, testable acceptance criteria. Each criterion should be independently verifiable.
+Agent need know when done. Every brief must have concrete, testable acceptance criteria. Each criterion independently verifiable.
 
 - **Good:** "Running `gh issue list --label needs-triage` returns issues that have been through initial classification"
 - **Bad:** "Triage should work correctly"
 
 ### Explicit scope boundaries
 
-State what is out of scope. This prevents the agent from gold-plating or making assumptions about adjacent features.
+State what out of scope. Prevents gold-plating or assumptions about adjacent features.
 
 ## Template
 
@@ -159,10 +159,10 @@ The function around line 150 has the issue.
 - src/types.ts (line 42)
 ```
 
-This is bad because:
+Bad because:
 - No category
 - Vague description ("the triage thing is broken")
-- References file paths and line numbers that will go stale
+- References file paths + line numbers that go stale
 - No acceptance criteria
 - No scope boundaries
 - No description of current vs desired behavior
