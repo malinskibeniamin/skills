@@ -11,7 +11,7 @@
     {
       "name": "frontend-skills",
       "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 21 LLM failure modes enforced (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. Worktree isolation + branch safety. Agent-browser integration (~91% token reduction). 9 agents (3-hat plan review + karpathy reference), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "4.1.0",
+      "version": "4.2.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
