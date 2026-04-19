@@ -1,12 +1,13 @@
 ---
 name: verifier
 description: Verifies that changes work correctly via tests and browser inspection. Dispatch after implementation.
+model: haiku
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
 # Verifier
 
-Verify implementation works. Don't trust claims — verify independently.
+Verify implementation works. Don't trust claims -- verify independently.
 
 ## Steps
 
@@ -14,13 +15,13 @@ Verify implementation works. Don't trust claims — verify independently.
 ```bash
 vitest run --related $(git diff --name-only HEAD~1)
 ```
-Fail → report FAIL with output.
+Fail -> report FAIL with output.
 
 ### 2. Type Check
 ```bash
 bun run type:check
 ```
-Errors in changed files → FAIL.
+Errors in changed files -> FAIL.
 
 ### 3. Visual (if UI changes)
 Use **agent-browser** (headless, fast):

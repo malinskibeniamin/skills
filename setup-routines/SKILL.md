@@ -5,7 +5,7 @@ description: "Configure Claude Code routines for automated PR review, codebase h
 
 # Setup Routines
 
-Configure [Claude Code routines](https://claude.ai/code/routines) -- cloud-hosted automated sessions triggered by schedule, GitHub events, or API. Routines clone repo, run as full Claude Code sessions. Hooks and CLAUDE.md rules enforce automatically.
+Configure [Claude Code routines](https://claude.ai/code/routines) -- cloud-hosted auto sessions triggered by schedule, GitHub events, or API. Routines clone repo, run as full Claude Code sessions. Hooks + CLAUDE.md rules enforce auto.
 
 ## How it works
 
@@ -21,7 +21,7 @@ Hooks = enforcement layer | routine prompts = task layer. Standards evolve in re
 
 | Template | Trigger | What it does |
 |---|---|---|
-| [pr-review](routines/pr-review.md) | `pull_request.opened` | Reviews PR against standards, posts inline comments |
+| [pr-review](routines/pr-review.md) | `pull_request.opened` | Reviews PR vs standards, posts inline comments |
 | [pr-feedback-resolve](routines/pr-feedback-resolve.md) | `pull_request.review_submitted` | Reads unresolved threads, fixes code, replies, resolves |
 | [issue-triage](routines/issue-triage.md) | `issues.opened` | Explores codebase, classifies, labels, posts investigation |
 | [weekly-health](routines/weekly-health.md) | Schedule: weekly | Runs quality checks, measures drift, opens health report issue |
@@ -61,7 +61,7 @@ Hooks = enforcement layer | routine prompts = task layer. Standards evolve in re
 /schedule daily codebase health check at 9am
 ```
 
-CLI makes scheduled routines only. GitHub/API triggers -> use web UI.
+CLI = scheduled routines only. GitHub/API triggers -> use web UI.
 
 ### 5. Customize prompts
 
@@ -72,36 +72,15 @@ Templates = start point. Customize:
 - **Scope boundaries**: "only review `src/`" or "skip generated files"
 - **Connector actions**: "post summary to #engineering Slack"
 
-See [REFERENCE.md](REFERENCE.md) for customization examples and API trigger setup.
+See [REFERENCE.md](REFERENCE.md) for customization examples + API trigger setup.
 
 ### 6. Test
 
-Run once by hand before trust triggers:
+Run once by hand before trusting triggers:
 
 1. Web: **Run now** on routine detail page
 2. CLI: `/schedule run`
 3. Watch session live at returned URL
 4. Check output -- tweak prompt if wandered
 
-## Routine vs. Sandcastle vs. interactive
-
-| Scenario | Use |
-|---|---|
-| Automated on every PR | **Routine** -- GitHub trigger, cloud-hosted |
-| Scheduled health checks | **Routine** -- schedule trigger |
-| 5+ independent issues in parallel | **Sandcastle** -- parallel Docker agents |
-| Overnight batch | **Sandcastle** -- AFK, local or CI |
-| Interactive feature work | **Claude Code** -- direct session with human |
-| CD pipeline integration | **Routine** -- API trigger from deploy script |
-
-## Enforcement model
-
-Routines run inside harness -- no bypass:
-
-- **Hooks**: fire on every Edit/Write/Bash inside routine session
-- **CLAUDE.md**: loads from repo root | all rules active
-- **Skills**: available via `/skill-name` in routine prompt
-- **Agents**: reviewer agents (code-reviewer, self-reviewer, adversarial-reviewer) dispatchable
-- **Stop hooks**: quality gates (lint, typecheck) fire before session ends
-
-Update hook -> every future routine run picks up (next clone). No prompt changes needed.
+See [REFERENCE.md](REFERENCE.md): routine-vs-sandcastle decision, enforcement model, trigger/API/customization setup, troubleshooting.

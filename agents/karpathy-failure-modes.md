@@ -4,15 +4,15 @@ Required reading for `code-reviewer`, `adversarial-reviewer`, `self-reviewer`.
 
 Based on observed LLM-coding pathologies (Karpathy, et al). Run every item before declaring work complete. Each mode: problem, mitigation, verification command.
 
-The first 7 modes cover single-agent coding failures. A second tier (modes 8-21) -- the **Multi-Agent System Failure Taxonomy (MAST)** from Cemri et al., NeurIPS 2025 -- covers failures specific to agent + subagent orchestration (relevant when a reviewer spawns sub-reviewers, a lifecycle agent spawns phase subagents, or `grill-me` runs a multi-turn debate).
+First 7 modes = single-agent coding failures. Second tier (modes 8-21) = **Multi-Agent System Failure Taxonomy (MAST)** from Cemri et al., NeurIPS 2025 -- covers failures in agent + subagent orchestration (relevant when reviewer spawns sub-reviewers, lifecycle agent spawns phase subagents, or `grill-me` runs multi-turn debate).
 
 ---
 
 ## 1. Hallucinated APIs
 
-**Problem**: Model invents a function, method, import, or package that does not exist. Confident signature, no implementation.
+**Problem**: Model invents function, method, import, or package that doesn't exist. Confident signature, no implementation.
 
-**Mitigation**: Before calling any symbol you did not write this session, grep for its definition in the repo or `node_modules`. Read the actual export. Do not trust recall.
+**Mitigation**: Before calling any symbol not written this session, grep for definition in repo or `node_modules`. Read actual export. Don't trust recall.
 
 **Verify**:
 ```
@@ -23,9 +23,9 @@ rg -n "export (function|const|class) <symbol>" src/ node_modules/<pkg>/
 
 ## 2. Confident Wrong Types
 
-**Problem**: Types compile in your head but runtime shape differs. Stale API version. Off-by-one in enum or index. Optional treated as required.
+**Problem**: Types compile in head but runtime shape differs. Stale API version. Off-by-one in enum or index. Optional treated as required.
 
-**Mitigation**: Run `tsgo` on every edit. Run the actual test, not a mental simulation. If the type was inferred from a schema, re-fetch the schema.
+**Mitigation**: Run `tsgo` every edit. Run actual test, not mental simulation. If type inferred from schema, re-fetch schema.
 
 **Verify**:
 ```
@@ -38,7 +38,7 @@ bun run type:check && bun test path/to/affected.test.ts
 
 **Problem**: JSON from another LLM call (sub-agent, tool response, user-pasted) passed directly into typed code. No zod, no guard.
 
-**Mitigation**: Every LLM-origin payload goes through a zod parser before touching typed code. `z.object(...).parse(raw)` -- not `as T`.
+**Mitigation**: Every LLM-origin payload through zod parser before touching typed code. `z.object(...).parse(raw)` -- not `as T`.
 
 **Verify**:
 ```
@@ -49,7 +49,7 @@ rg "JSON.parse" src/ | rg -v "\.parse\("
 
 ## 4. SSRF via URL Fetch
 
-**Problem**: User-supplied or LLM-supplied URL fetched without origin allowlist. Internal metadata endpoints exposed. `localhost`, `169.254.*`, `file://`, `gopher://`, redirect chains.
+**Problem**: User- or LLM-supplied URL fetched without origin allowlist. Internal metadata endpoints exposed. `localhost`, `169.254.*`, `file://`, `gopher://`, redirect chains.
 
 **Mitigation**: Allowlist scheme (https only), allowlist host (or denylist private ranges), cap redirects, cap response size.
 
@@ -62,9 +62,9 @@ rg "fetch\(|axios\.|got\(|request\(" src/ | rg -v "allowlist|validateUrl"
 
 ## 5. Silent Fallbacks
 
-**Problem**: `catch { return null }`, `catch { return [] }`, or `try { ... } catch {}`. Swallows the real error. User sees empty UI, you see nothing in logs.
+**Problem**: `catch { return null }`, `catch { return [] }`, or `try { ... } catch {}`. Swallows real error. User sees empty UI, you see nothing in logs.
 
-**Mitigation**: Every catch: set error state, re-throw typed, or call error handler. Log at decision point with `requestId`. Show user the failure.
+**Mitigation**: Every catch: set error state, re-throw typed, or call error handler. Log at decision point with `requestId`. Show user failure.
 
 **Verify**:
 ```
@@ -75,9 +75,9 @@ rg "catch\s*\([^)]*\)\s*\{\s*(return|\}|//)" src/
 
 ## 6. Stale Memory
 
-**Problem**: Model cites a fact (file path, function signature, config key) that was true earlier in session or earlier in repo history but is now wrong. File moved, symbol renamed, schema changed.
+**Problem**: Model cites fact (file path, function signature, config key) true earlier in session or repo history but now wrong. File moved, symbol renamed, schema changed.
 
-**Mitigation**: Before citing a path or symbol from memory, re-read it. `git status` and `git log --oneline -20` before trusting your own context.
+**Mitigation**: Before citing path or symbol from memory, re-read. `git status` and `git log --oneline -20` before trusting own context.
 
 **Verify**:
 ```
@@ -90,7 +90,7 @@ git log --oneline --since="1 day ago" -- <file-you-plan-to-cite>
 
 **Problem**: Unit tests pass with mocked DB/API/queue. Integration path has real driver, real migration, real serialization -- breaks on deploy.
 
-**Mitigation**: At least one integration test per seam exercises real driver against ephemeral service. Mock at edge, not middle. Verify migration runs forward and backward.
+**Mitigation**: At least one integration test per seam hits real driver against ephemeral service. Mock at edge, not middle. Verify migration runs forward + backward.
 
 **Verify**:
 ```
@@ -104,21 +104,21 @@ bun test --run e2e/
 
 # Multi-Agent Failure Modes (MAST, Cemri et al. 2025)
 
-Source: *Why Do Multi-Agent LLM Systems Fail?* (arXiv:2503.13657, 285 citations as of 2026-04). Empirical taxonomy derived from 1600+ execution traces across 7 popular MAS frameworks (ChatDev, MetaGPT, HyperAgent, AppWorld, AG2, Magentic-One, OpenManus). Three categories, 14 modes, each annotated with the paper's observed failure prevalence.
+Source: *Why Do Multi-Agent LLM Systems Fail?* (arXiv:2503.13657, 285 citations as of 2026-04). Empirical taxonomy from 1600+ execution traces across 7 popular MAS frameworks (ChatDev, MetaGPT, HyperAgent, AppWorld, AG2, Magentic-One, OpenManus). Three categories, 14 modes, each annotated with paper's observed failure prevalence.
 
-**When to run these checks:** any agent that spawns subagents (`development-lifecycle`, `grill-me`, `work`, `resolve-pr-feedback`, `adversarial-reviewer`). Skip for plain single-turn edits.
+**When to run these checks:** any agent spawning subagents (`development-lifecycle`, `grill-me`, `work`, `resolve-pr-feedback`, `adversarial-reviewer`). Skip for plain single-turn edits.
 
 ## Category FC1 -- System Design Issues (44.2% of observed failures)
 
-Failures arising from architectural or prompt-specification choices at system setup time. Prevention is cheapest -- fix the brief, not the run.
+Failures from architectural or prompt-specification choices at setup. Prevention cheapest -- fix brief, not run.
 
 ---
 
 ### 8. Disobey Task Specification (FM-1.1, 11.8%)
 
-**Problem**: Subagent ignores or deviates from the user's original ask -- e.g., user asked for a 5-letter Wordle, subagent implements a dictionary-fixed version.
+**Problem**: Subagent ignores or deviates from user's original ask -- e.g., user asked for 5-letter Wordle, subagent implements dictionary-fixed version.
 
-**Mitigation**: Parent must restate the user's ask verbatim in the subagent brief. `subagent-length-cap.sh` already caps brief length -- ensure the ask survives the cap. When launching a subagent, include the original user sentence under `ORIGINAL_ASK:` in the prompt.
+**Mitigation**: Parent restates user's ask verbatim in subagent brief. `subagent-length-cap.sh` caps brief length -- ensure ask survives cap. When launching subagent, include original user sentence under `ORIGINAL_ASK:` in prompt.
 
 **Verify**:
 ```
@@ -130,9 +130,9 @@ grep -c "<key noun from ask>" <subagent-transcript>
 
 ### 9. Disobey Role Specification (FM-1.2, 1.5%)
 
-**Problem**: Subagent drops its assigned role mid-task -- reviewer starts writing code, adversarial-reviewer starts approving.
+**Problem**: Subagent drops assigned role mid-task -- reviewer starts writing code, adversarial-reviewer starts approving.
 
-**Mitigation**: Every reviewer/planner subagent MUST emit its role as the first line of output (`{"role": "adversarial-reviewer"}`). Parent rejects response whose first line lacks role.
+**Mitigation**: Every reviewer/planner subagent MUST emit role as first line of output (`{"role": "adversarial-reviewer"}`). Parent rejects response whose first line lacks role.
 
 **Verify**:
 ```
@@ -143,9 +143,9 @@ jq -e '.role == "<expected>"' <subagent-output>.json
 
 ### 10. Step Repetition (FM-1.3, 15.7% -- highest single mode)
 
-**Problem**: Agent or subagent repeats the same step (same tool call, same edit, same question) without new information. Biggest driver of MAS failures in the paper.
+**Problem**: Agent or subagent repeats same step (same tool call, same edit, same question) without new information. Biggest driver of MAS failures in paper.
 
-**Mitigation**: Track tool-call signatures in session; flag >=2 identical signatures within N turns. Our `edit-loop-check.sh` catches identical Edit operations; extend to tool-call-level detection in subagents.
+**Mitigation**: Track tool-call signatures in session; flag >=2 identical signatures within N turns. `edit-loop-check.sh` catches identical Edit ops; extend to tool-call-level detection in subagents.
 
 **Verify**:
 ```
@@ -157,9 +157,9 @@ jq -r '.tool_calls | group_by(.signature) | map(select(length>1))' <session>.jso
 
 ### 11. Loss of Conversation History (FM-1.4, 2.80%)
 
-**Problem**: Subagent forgets earlier turns -- prior decisions, established constraints, completed sub-steps. Especially common after long subagent runs or after compaction.
+**Problem**: Subagent forgets earlier turns -- prior decisions, established constraints, completed sub-steps. Common after long subagent runs or compaction.
 
-**Mitigation**: `subagent-length-cap.sh` trims inputs; ensure the cap preserves *decisions taken*, not just the brief. Before any non-trivial subagent step, re-inject a condensed decision log (`## Decisions so far:`).
+**Mitigation**: `subagent-length-cap.sh` trims inputs; ensure cap preserves *decisions taken*, not just brief. Before any non-trivial subagent step, re-inject condensed decision log (`## Decisions so far:`).
 
 **Verify**:
 ```
@@ -171,9 +171,9 @@ grep -c "^## Decisions" <subagent-prompt>
 
 ### 12. Unaware of Termination Conditions (FM-1.5, 12.4%)
 
-**Problem**: Agent doesn't know when the task is done -- keeps generating, keeps refining, or stops too early. Especially bad in open-ended skills (`grill-me`, `brainstorming`).
+**Problem**: Agent doesn't know when task done -- keeps generating, keeps refining, or stops too early. Bad in open-ended skills (`grill-me`, `brainstorming`).
 
-**Mitigation**: Every subagent brief MUST include an explicit `TERMINATION:` section listing what output shape signals completion. `lifecycle-stop.sh` handles lifecycle phases; extend pattern to all spawned subagents.
+**Mitigation**: Every subagent brief MUST include explicit `TERMINATION:` section listing output shape signaling completion. `lifecycle-stop.sh` handles lifecycle phases; extend pattern to all spawned subagents.
 
 **Verify**:
 ```
@@ -184,15 +184,15 @@ grep -c "^TERMINATION:" <subagent-brief>
 
 ## Category FC2 -- Inter-Agent Misalignment (32.3%)
 
-Failures in coordination, communication, or consistency between agents. Harder to prevent up front -- require runtime checks.
+Failures in coordination, communication, or consistency between agents. Harder to prevent up front -- need runtime checks.
 
 ---
 
 ### 13. Conversation Reset (FM-2.1, 2.20%)
 
-**Problem**: Subagent spawns fresh, loses parent's context. Only the brief survives -- any ambient constraint not in the brief is gone.
+**Problem**: Subagent spawns fresh, loses parent's context. Only brief survives -- any ambient constraint not in brief gone.
 
-**Mitigation**: Treat every subagent spawn as if it's a fresh session. Parent encodes ALL load-bearing context into the brief (CLAUDE.md rule refs, decisions taken, files touched). `subagent-start.sh` should log brief contents for audit.
+**Mitigation**: Treat every subagent spawn as fresh session. Parent encodes ALL load-bearing context into brief (CLAUDE.md rule refs, decisions taken, files touched). `subagent-start.sh` should log brief contents for audit.
 
 **Verify**:
 ```
@@ -204,9 +204,9 @@ grep -c "^## Context\|^## Constraints" <subagent-brief>
 
 ### 14. Fail to Ask for Clarification (FM-2.2, 6.80%)
 
-**Problem**: Agent proceeds on ambiguous input instead of asking. Especially common in agents tuned to be "helpful" -- they guess rather than pause.
+**Problem**: Agent proceeds on ambiguous input instead of asking. Common in agents tuned "helpful" -- guess rather than pause.
 
-**Mitigation**: `/grill-me` skill is the explicit counter. For other agents, require confidence score (`"confidence": 0.0-1.0`) on task interpretation; confidence < 0.7 triggers clarification request before acting.
+**Mitigation**: `/grill-me` skill = explicit counter. For other agents, require confidence score (`"confidence": 0.0-1.0`) on task interpretation; confidence < 0.7 triggers clarification request before acting.
 
 **Verify**:
 ```
@@ -219,7 +219,7 @@ jq -e '.confidence >= 0.7 or .clarification_requested == true' <subagent-output>
 
 **Problem**: Agent drifts from original task into adjacent work -- asked to fix bug X, also refactors Y, also adds tests for Z.
 
-**Mitigation**: Parent re-verifies subagent output against the original ask's acceptance criteria. Files modified must be justifiable against the ask; unrequested scope creep blocks approval.
+**Mitigation**: Parent re-verifies subagent output against original ask's acceptance criteria. Modified files must be justifiable against ask; unrequested scope creep blocks approval.
 
 **Verify**:
 ```
@@ -231,9 +231,9 @@ git diff --name-only | xargs -I{} grep -l "<ask_keyword>" {}
 
 ### 16. Information Withholding (FM-2.4, 0.80%)
 
-**Problem**: Agent has relevant info (error details, edge case seen) but doesn't surface it to the caller/peer. Rare but high-impact when it hides a bug.
+**Problem**: Agent has relevant info (error details, edge case seen) but doesn't surface to caller/peer. Rare but high-impact when hides bug.
 
-**Mitigation**: Subagent output MUST include a `known_unknowns` or `caveats` field; empty field requires justification. Reviewer agents treat missing caveats as a red flag.
+**Mitigation**: Subagent output MUST include `known_unknowns` or `caveats` field; empty field needs justification. Reviewer agents treat missing caveats as red flag.
 
 **Verify**:
 ```
@@ -244,9 +244,9 @@ jq -e 'has("caveats") and (.caveats | type == "array")' <subagent-output>.json
 
 ### 17. Ignored Other Agent's Input (FM-2.5, 1.90%)
 
-**Problem**: In multi-agent debate (`/grill-me`, adversarial-reviewer + self-reviewer), one agent responds without referencing the peer's claims -- parallel monologues, not debate.
+**Problem**: In multi-agent debate (`/grill-me`, adversarial-reviewer + self-reviewer), one agent responds without referencing peer's claims -- parallel monologues, not debate.
 
-**Mitigation**: Second-turn agents MUST cite at least one specific claim from the first-turn agent's output (quoted or paraphrased with reference). Reviewer rejects responses lacking peer citations.
+**Mitigation**: Second-turn agents MUST cite at least one specific claim from first-turn agent's output (quoted or paraphrased with reference). Reviewer rejects responses lacking peer citations.
 
 **Verify**:
 ```
@@ -258,9 +258,9 @@ grep -cE "<peer>:(claim|said|argued)|refuting|responding to" <round2>.md
 
 ### 18. Reasoning-Action Mismatch (FM-2.6, 13.2% -- second-highest mode)
 
-**Problem**: Agent states it will do X, then does Y. Plan says "add test", action runs `git commit` without test. Second-biggest driver of MAS failures in the paper.
+**Problem**: Agent states will do X, then does Y. Plan says "add test", action runs `git commit` without test. Second-biggest driver of MAS failures in paper.
 
-**Mitigation**: Before every tool call, require agent to state intent in one line (`INTENT: <what and why>`). `orchestration-stop.sh` compares intents to executed tool calls; flag divergence.
+**Mitigation**: Before every tool call, require agent state intent in one line (`INTENT: <what and why>`). `orchestration-stop.sh` compares intents to executed tool calls; flag divergence.
 
 **Verify**:
 ```
@@ -278,7 +278,7 @@ Failures in validating outputs -- verifier absent, superficial, or checking wron
 
 ### 19. Premature Termination (FM-3.1, 6.20%)
 
-**Problem**: Agent ends before task is actually complete -- returns early success, skips validation, declares done while errors remain.
+**Problem**: Agent ends before task complete -- returns early success, skips validation, declares done while errors remain.
 
 **Mitigation**: `pr-feedback-completeness-stop.sh` and `lifecycle-stop.sh` gate on completion criteria. Extend to all terminal subagent outputs: each must emit `"status": "complete"|"blocked"|"partial"` with rationale; `complete` without passing verify counts as FM-3.1.
 
@@ -293,7 +293,7 @@ jq -e '.status == "complete" and .verification_passed == true' <subagent-output>
 
 **Problem**: Agent generates output without running verification at all, or runs only superficial checks (compile but don't test, syntax check but not behavior).
 
-**Mitigation**: `verifier` agent exists exactly for this; enforce its invocation at phase 5 of `development-lifecycle`. Multi-level verification mandatory: (a) types, (b) tests, (c) integration, (d) behavior against ask.
+**Mitigation**: `verifier` agent exists exactly for this; enforce invocation at phase 5 of `development-lifecycle`. Multi-level verification mandatory: (a) types, (b) tests, (c) integration, (d) behavior against ask.
 
 **Verify**:
 ```
@@ -305,9 +305,9 @@ grep -c "subagent_type=\"verifier\"" <session>.log
 
 ### 21. Incorrect Verification (FM-3.3, 9.10%)
 
-**Problem**: Agent verifies the wrong thing -- passes unit tests but breaks integration, checks code compiles but output is wrong, validates against stale spec.
+**Problem**: Agent verifies wrong thing -- passes unit tests but breaks integration, checks code compiles but output wrong, validates against stale spec.
 
-**Mitigation**: `adversarial-reviewer` runs here -- its job is to find what the passing verify missed. Pair verify + adversarial reviews for high-stakes changes.
+**Mitigation**: `adversarial-reviewer` runs here -- job = find what passing verify missed. Pair verify + adversarial reviews for high-stakes changes.
 
 **Verify**:
 ```
@@ -352,7 +352,7 @@ grep -cE "subagent_type=\"(verifier|adversarial-reviewer)\"" <session>.log | awk
 
 ## Usage in Reviewer Agents
 
-Each reviewer MUST include in its output JSON:
+Each reviewer MUST include in output JSON:
 
 ```json
 "karpathy_checks": {
@@ -366,7 +366,7 @@ Each reviewer MUST include in its output JSON:
 }
 ```
 
-For any review involving subagent orchestration (lifecycle agents, grill-me, resolve-pr-feedback), ALSO include:
+For review involving subagent orchestration (lifecycle agents, grill-me, resolve-pr-feedback), ALSO include:
 
 ```json
 "mast_checks": {
@@ -387,7 +387,7 @@ For any review involving subagent orchestration (lifecycle agents, grill-me, res
 }
 ```
 
-A `fail` on any `CRITICAL` item (either Karpathy or MAST) blocks the review from returning `status: APPROVED`.
+`fail` on any `CRITICAL` item (Karpathy or MAST) blocks review from returning `status: APPROVED`.
 
 ## References
 

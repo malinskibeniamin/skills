@@ -14,7 +14,7 @@ flowchart TD
     Detect -->|"batch/overnight"| Sandbox[Sandcastle]
 
     Feature --> P1[1. Understand]
-    Bug --> P1_RCA[1. Understand — RCA<br/>reproduce → analyze → hypothesize]
+    Bug --> P1_RCA[1. Understand -- RCA<br/>reproduce -> analyze -> hypothesize]
     Refactor --> P1
 
     P1 --> P2[2. Plan]
@@ -26,7 +26,7 @@ flowchart TD
     Grill --> P3
 
     TestOnly --> P3
-    P3[3. Implement — TDD<br/>RED → GREEN → REFACTOR]
+    P3[3. Implement -- TDD<br/>RED -> GREEN -> REFACTOR]
 
     P3 --> P4[4. Verify<br/>tests + types + visual]
     P4 --> SmallDiff{Trivial?<br/>< 10 lines}
@@ -44,7 +44,7 @@ flowchart TD
     Learn -->|No| Done([Hand off to human])
     P6 --> Done
 
-    Sandbox --> Parallel[N parallel agents<br/>each runs 1→...→5b]
+    Sandbox --> Parallel[N parallel agents<br/>each runs 1->...->5b]
 
     style P3 fill:#f96,stroke:#333
     style Grill fill:#f9f,stroke:#333
@@ -54,84 +54,84 @@ flowchart TD
 ## Phase 1: Understand
 
 ### New Feature
-1. Read relevant code, docs, recent git history
-2. Ask clarifying questions — one at time
-3. Propose 2-3 approaches with trade-offs
-4. UI work: generate HTML mockup → `agent-browser screenshot --annotate` → iterate
-5. Challenge chosen approach (edge cases, failure modes)
-6. Get user approval before proceeding
+1. Read code, docs, recent git history
+2. Clarifying Qs -- one at time
+3. Propose 2-3 approaches w/ trade-offs
+4. UI: HTML mockup -> `agent-browser screenshot --annotate` -> iterate
+5. Challenge approach (edge cases, failure modes)
+6. User approval before proceed
 
 ### Parallel Research Agents
 
-Spawn background agents to:
-- Investigate alternative libraries/patterns
-- Scan codebase for prior art · conventions
-- Surface edge cases · failure modes
-- Check open issues · known gotchas in deps
+Background agents:
+- Alt libraries/patterns
+- Prior art · conventions scan
+- Edge cases · failure modes
+- Open issues · dep gotchas
 
-Run concurrent with user discussion — feed into approach selection.
+Concurrent w/ user discussion. Feeds approach selection.
 
-### Monitor Tool for Background Observation
+### Monitor Tool
 
-**Monitor** stream long-running process output realtime. React immediate, never block.
+Stream long-running process output realtime. React immediate, never block.
 
 - **CI**: `Monitor: gh pr checks <number> --watch`
-- **Dev server**: `Monitor: bun run dev` — watch for ready/error
-- **Test watcher**: `Monitor: vitest --watch` — react to red/green
+- **Dev server**: `Monitor: bun run dev`
+- **Test watcher**: `Monitor: vitest --watch`
 - **Containers**: `Monitor: docker logs -f <container>`
 - **Build**: `Monitor: bun run build`
 
-Pattern: start Monitor, do other work, react when actionable.
+Start Monitor, do other work, react when actionable.
 
 ### Refactor-First Gate
 
-Before adding features to area with mixed patterns:
-- [ ] Multiple patterns for same concern?
+Mixed-pattern area? Check:
+- [ ] Multiple patterns same concern?
 - [ ] Incomplete migration?
-- [ ] Conflicting AI instructions needed?
+- [ ] Conflicting AI instructions?
 
-If any true → refactor to single pattern first, separate PR. Mixed codebases produce lower-quality AI output.
+Any true -> refactor first, separate PR. Mixed codebases = lower AI output quality.
 
-### Bug Fix (4-Phase Root Cause Analysis)
+### Bug Fix (4-Phase RCA)
 
-**Iron law: no fixes without root cause investigation.**
+**Iron law: no fixes w/o root cause.**
 
-1. **Reproduce** — read FULL error, write failing test
-2. **Analyze** — find working examples, trace data flow upstream to origin
-3. **Hypothesize** — "X is root cause because Y." Test ONE hypothesis at time.
-4. **Fix at source** — fix where data originates, not where it crashes. Add defense-in-depth at entry point · business logic · env guards.
+1. **Reproduce** -- FULL error, failing test
+2. **Analyze** -- working examples, trace data upstream
+3. **Hypothesize** -- "X root cause because Y." One at time.
+4. **Fix at source** -- where data originates, not where crashes. Defense-in-depth: entry point · business logic · env guards.
 
 ## Phase 2: Plan
 
 ### Scope Clarity
 
-When scope ambiguous or requirements conflict:
+Scope ambiguous or conflict:
 
 1. **Surface assumptions:**
    ```
    ASSUMPTIONS:
    1. [assumption]
    2. [assumption]
-   → Correct me now or I proceed with these.
+   -> Correct now or I proceed.
    ```
 2. **Stop on confusion.** Name conflict, present tradeoff, wait.
-3. **Reframe to success criteria.** "Goal is [measurable outcome]. Correct?"
-4. **Flag uncertainty.** `[CONFIDENCE: LOW — reason]`
+3. **Reframe to success criteria.** "Goal = [measurable outcome]. Correct?"
+4. **Flag uncertainty.** `[CONFIDENCE: LOW -- reason]`
 
 ### Naive-First Design
 
-Start with dumbest solution that work. Justify every addition:
+Dumbest solution that works. Justify every addition:
 
-1. **Problem** — one paragraph. What and why now.
-2. **Constraints** — hard boundaries (time, team, compat).
-3. **Non-goals** — explicit excluded.
-4. **Simplest viable design** — most boring solution.
-5. **Where naive falls short** — specific demonstrated gaps only.
-6. **For each addition beyond naive** — what gap, what complexity, why simpler insufficient.
+1. **Problem** -- one paragraph. What, why now.
+2. **Constraints** -- time, team, compat.
+3. **Non-goals** -- excluded.
+4. **Simplest viable** -- boring solution.
+5. **Where naive falls short** -- demonstrated gaps only.
+6. **For each addition** -- what gap, complexity, why simpler insufficient.
 
 ### Self-Adversarial Review
 
-Before presenting plan, review:
+Pre-plan review:
 
 | Dimension | Question |
 |---|---|
@@ -145,120 +145,120 @@ Before presenting plan, review:
 
 ### Plan Checklist
 
-- [ ] Every task: exact file paths, exact code, expected output
+- [ ] Every task: exact paths, exact code, expected output
 - [ ] No TBD, no "similar to Task N", no "add error handling"
-- [ ] Bite-sized (2-5 min per task)
-- [ ] Test step alongside every impl step
+- [ ] Bite-sized (2-5 min/task)
+- [ ] Test step per impl step
 - [ ] Self-review: spec coverage, placeholder scan, type consistency
 
-### Rapid Prototyping (UI/Interactive)
+### Rapid Prototyping (UI)
 
-Replace upfront spec with competitive prototyping:
+Competitive prototyping over upfront spec:
 
-1. Define 2-3 constraint sets
-2. Spawn one agent per set in parallel (`claude-sonnet-4-6`)
-3. Each produces working prototype
-4. Review all with user: `agent-browser screenshot` each
-5. Select winner, write plan from chosen prototype
+1. 2-3 constraint sets
+2. One agent per set parallel (`claude-sonnet-4-6`)
+3. Each = working prototype
+4. Review w/ user: `agent-browser screenshot` each
+5. Pick winner, plan from prototype
 
-**When**: any feature where right approach unclear until running. Skip for pure logic/API/data-layer.
+**When**: UI where right approach unclear til running. Skip pure logic/API/data.
 
-### Stacked PRs for Large Features
+### Stacked PRs
 
-For plans with 5+ tasks:
+5+ tasks:
 
-1. Group tasks by logical boundary (data → logic → UI → tests)
-2. Each group = one PR in stack
-3. First PR targets base branch · subsequent target previous PR's branch
-4. Review and merge bottom-up
+1. Group by boundary (data -> logic -> UI -> tests)
+2. Each group = one PR
+3. First PR -> base. Subsequent -> prior PR branch
+4. Merge bottom-up
 
-Small PRs get 2-3x faster review, higher-quality feedback.
+Small PRs = 2-3x faster review, higher feedback quality.
 
 ## Phase 2b: Grill
 
-**Mandatory gate between planning and implementation.**
+**Mandatory gate plan->impl.**
 
-After plan written, auto-initiate `/domain-model`:
+Post-plan, auto-`/domain-model`:
 
-1. Present plan summary
-2. Challenge against existing domain model (CONTEXT.md, ADRs)
-3. Sharpen terminology — resolve ambiguous/overloaded terms
-4. Challenge assumptions, surface trade-offs, find gaps
-5. Resolve every decision branch
-6. Update CONTEXT.md + create ADRs inline as decisions crystallize
-7. Update plan with decisions changed
-8. Get explicit confirmation: "Plan is solid, proceed"
+1. Plan summary
+2. Challenge vs existing domain (CONTEXT.md, ADRs)
+3. Sharpen terminology -- ambiguous/overloaded terms
+4. Challenge assumptions, surface tradeoffs, find gaps
+5. Resolve decision branches
+6. Update CONTEXT.md + ADRs inline
+7. Update plan w/ changed decisions
+8. Confirm: "Plan solid, proceed"
 
-### Why This Phase Exists
+### Why
 
-Code = byproduct of understanding. If user can't defend every decision under pressure → cognitive debt. Domain model grilling ensure human build mental model *before* LLM write code. Inline CONTEXT.md/ADR updates capture decisions as institutional memory.
+Code = byproduct of understanding. Can't defend decisions under pressure -> cognitive debt. Grilling builds human mental model *before* LLM writes. Inline CONTEXT.md/ADR = institutional memory.
 
 ### Skip Conditions
 
-Grill mandatory unless ALL true:
-- [ ] Bug fix with single identified root cause
-- [ ] Plan has fewer than 3 tasks
-- [ ] No architectural decisions
+Mandatory unless ALL true:
+- [ ] Bug fix, single root cause
+- [ ] <3 tasks
+- [ ] No arch decisions
 
-If skipping: "Grill skipped — trivial bug fix, no architectural decisions."
+Skipping: "Grill skipped -- trivial bug fix, no arch decisions."
 
 ## Phase 3: Implement (TDD)
 
 ### Iron Law
-**No production code without failing test first.**
+**No prod code w/o failing test first.**
 
 ### Cycle
-1. RED — write one minimal failing test, verify it fails correctly
-2. GREEN — write minimal code to pass
-3. **TEST INTEGRITY CHECK** — verify test/assertion count not decreased. If dropped → agent deleted/weakened tests. Reject, redo from RED.
-4. REFACTOR — clean up while staying green
+1. RED -- minimal failing test, verify correct fail
+2. GREEN -- minimal code to pass
+3. **TEST INTEGRITY** -- test/assertion count not decreased. Dropped -> agent weakened tests. Reject, redo RED.
+4. REFACTOR -- clean, stay green
 
 ### Test Quality
 - `userEvent.setup()` not `fireEvent`
-- `getByRole` for accessibility assertions
-- No `setTimeout`/`waitForTimeout` — use `await waitFor(() => expect(...))`
-- Run `--detectAsyncLeaks` after
+- `getByRole` for a11y
+- No `setTimeout`/`waitForTimeout` -- `await waitFor(() => expect(...))`
+- `--detectAsyncLeaks` after
 
 ### Test Deletion Guard
 
-AI agents sometimes delete/simplify tests to pass — "unpredictable genie" effect:
+Agents delete/simplify tests to pass ("unpredictable genie"):
 
-1. **Count check**: before GREEN, note `test()` blocks and `expect()` calls. After GREEN, verify counts equal or higher.
-2. **Diff review**: test file deletions in GREEN step → flag for manual review.
-3. **Pre-commit hook** (optional): reject commits reducing assertion count without `// intentional: [reason]`.
+1. **Count check**: pre-GREEN note `test()` + `expect()` count. Post-GREEN verify >=.
+2. **Diff review**: test deletions in GREEN -> manual flag.
+3. **Pre-commit hook**: reject commits reducing assertions w/o `// intentional: [reason]`.
 
 ### Classification
 | Suffix | Purpose |
 |---|---|
-| `.test.ts` | Unit — pure logic, no DOM |
-| `.test.tsx` | Integration — renders components |
-| `e2e/*.spec.ts` | E2E — Playwright browser |
+| `.test.ts` | Unit -- pure logic, no DOM |
+| `.test.tsx` | Integration -- renders components |
+| `e2e/*.spec.ts` | E2E -- Playwright |
 
 ## Phase 3b: Edge-Case Hardening (Optional)
 
-After verification pass, dispatch agent for more tests:
+Post-verify, dispatch agent:
 
-1. Identify functions/components changed
-2. Generate tests: boundary values · empty/null · concurrent access · error paths · large inputs
-3. Run generated tests — keep passing, investigate failing
-4. Add passing edge-case tests to suite
+1. Identify changed functions/components
+2. Generate tests: boundary · empty/null · concurrent · error paths · large inputs
+3. Run -- keep passing, investigate failing
+4. Add passing to suite
 
-**When**: new public APIs, security-sensitive code, complex branching. Skip for trivial changes.
+**When**: new public APIs, security-sensitive, complex branching. Skip trivial.
 
 ## Phase 4b: Refine (Self-Review Loop)
 
-**Goal**: catch quality gaps · missing tests · simplification opportunities while context fresh.
+**Goal**: catch quality gaps · missing tests · simplification while context fresh.
 
-### When to Run
+### When
 
-- **Always** for features and bug fixes
-- **Skip if**: trivial change (<10 lines, no logic) · pure test-only · docs-only
+- **Always** features + bug fixes
+- **Skip**: trivial (<10 lines, no logic) · test-only · docs-only
 
 ### Process
 
 1. Dispatch `self-reviewer` on session diff
-2. If diff >50 lines OR touches auth/security → also dispatch `adversarial-reviewer` in parallel
-3. SubagentStop hook validates JSON output, writes to session dir
+2. Diff >50 lines OR auth/security -> also `adversarial-reviewer` parallel
+3. SubagentStop validates JSON, writes to session dir
 4. Process by priority:
 
 | Priority | Action |
@@ -268,26 +268,26 @@ After verification pass, dispatch agent for more tests:
 | P2 `safe_auto` | Apply automatically |
 | P2 `gated_auto` | Show to user, apply on confirmation |
 | P2 `manual` | Report, let user decide |
-| P3 / `advisory` | Skip — log for Phase 6 |
+| P3 / `advisory` | Skip -- log for Phase 6 |
 
 5. Commit fixes: `refactor(scope): self-review fixes`, re-verify
-6. **Max 2 refinement rounds** — if P0/P1 persist, proceed to Review, flag them
+6. **Max 2 rounds** -- P0/P1 persist -> proceed to Review, flag
 
-### Structured Findings Format
+### Findings Format
 
 Reviewers output JSON per `agents/findings-schema.md`:
 - `severity`: P0-P3 | `autofix_class`: `safe_auto | gated_auto | manual | advisory`
-- `pre_existing`: true if in dirty baseline (never blocks merge) | `confidence`: 0.0-1.0
+- `pre_existing`: true = dirty baseline (never blocks merge) | `confidence`: 0.0-1.0
 
 ### SubagentStart Context
 
-Hook auto-injects: session-touched files · dirty baseline · branch/PR context · pointer to `agents/findings-schema.md`.
+Auto-inject: session-touched files · dirty baseline · branch/PR context · `agents/findings-schema.md` pointer.
 
 ### SubagentStop Validation
 
-Hook (matcher: `self-reviewer|code-reviewer|adversarial-reviewer`):
-- Validate JSON matching findings schema · block/retry if malformed
-- Write to `/tmp/hook-session-$SESSION_ID/review-findings.json` · log to `review-summary.log`
+Matcher `self-reviewer|code-reviewer|adversarial-reviewer`:
+- Validate JSON vs schema · block/retry if malformed
+- Write `/tmp/hook-session-$SESSION_ID/review-findings.json` · log `review-summary.log`
 
 ### Agents
 
@@ -301,42 +301,42 @@ Hook (matcher: `self-reviewer|code-reviewer|adversarial-reviewer`):
 
 ### Security Gate
 
-**Hard gate before PR creation.** AI-generated code statistically more likely to contain security issues.
+**Hard gate pre-PR.** AI code statistically higher security issue rate.
 
-Run SAST/SCA on changed files:
+SAST/SCA on changed files:
 - [ ] No new critical/high findings
-- [ ] No deps with known CVEs
-- [ ] No `eval()` · `innerHTML` · `dangerouslySetInnerHTML` without sanitization
-- [ ] No hardcoded secrets/tokens/API keys
-- [ ] No SQL/command injection vectors
+- [ ] No CVE deps
+- [ ] No `eval()` · `innerHTML` · `dangerouslySetInnerHTML` unsanitized
+- [ ] No hardcoded secrets/tokens/keys
+- [ ] No SQL/command injection
 
-**Tooling**: `eslint-plugin-security` | `semgrep` | `bun audit` | `trivy fs .`
+**Tools**: `eslint-plugin-security` | `semgrep` | `bun audit` | `trivy fs .`
 
-**Block PR creation** if new critical/high findings.
+**Block PR** if new critical/high.
 
-Dispatch `code-reviewer` for fresh-eyes review:
+Dispatch `code-reviewer` fresh-eyes:
 
 ### Stage 1: Spec Compliance
-- [ ] All requirements addressed | No scope creep | Breaking changes documented | Edge cases handled
+- [ ] Requirements addressed | No scope creep | Breaking changes documented | Edge cases handled
 
-### Stage 2: Code Quality (priority order)
-1. **Security** — no eval · innerHTML · hardcoded secrets
-2. **Type safety** — no `as any` · `@ts-ignore`
-3. **Error handling** — async ops have error paths
-4. **Accessibility** — keyboard nav · aria-labels · semantic HTML
-5. **Testing** — tests verify behavior · edge cases covered
-6. **DRY** — no duplicated logic
-7. **Performance** — no unnecessary re-renders · heavy deps lazy-loaded
+### Stage 2: Code Quality (priority)
+1. **Security** -- no eval · innerHTML · secrets
+2. **Type safety** -- no `as any` · `@ts-ignore`
+3. **Error handling** -- async w/ error paths
+4. **A11y** -- kbd nav · aria-labels · semantic HTML
+5. **Testing** -- behavior · edge cases
+6. **DRY** -- no dupes
+7. **Perf** -- no re-render waste · heavy deps lazy
 
-### Review Status Codes
-- **APPROVED** — all checks pass | **CONCERNS** — minor, address then proceed | **NEEDS_CHANGES** — fix and re-review
+### Status Codes
+- **APPROVED** -- all pass | **CONCERNS** -- minor, address, proceed | **NEEDS_CHANGES** -- fix, re-review
 
-### Cross-Model Review (Optional)
+### Cross-Model (Optional)
 ```
 /codex:adversarial-review
 ```
-Require: `bun install -g @openai/codex` and OpenAI API key.
-Install: `/plugin marketplace add openai/codex-plugin-cc` → `/plugin install codex@openai-codex` → `/codex:setup`
+Require: `bun install -g @openai/codex` + OpenAI key.
+Install: `/plugin marketplace add openai/codex-plugin-cc` -> `/plugin install codex@openai-codex` -> `/codex:setup`
 
 ### Ship
 ```bash
@@ -346,52 +346,52 @@ gh pr comment <URL> --body "@claude review"
 
 ## Phase 5b: Iterate
 
-### Monitor CI Instead of Blocking
+### Monitor CI, Don't Block
 
-**Monitor** watch CI in background. Continue working, react immediate on fail/pass.
+Monitor CI background. Continue work, react on fail/pass.
 
 ```
 Monitor: gh pr checks <pr-number> --watch
 ```
 
-**Round 1 — Initial review:**
-1. Push + start monitoring. Continue other work.
-2. CI green → dispatch `code-reviewer`.
-3. `/resolve-pr-feedback` to triage · fix · reply · push.
-4. Monitor CI again.
+**Round 1:**
+1. Push + monitor. Continue other work.
+2. CI green -> dispatch `code-reviewer`.
+3. `/resolve-pr-feedback` -- triage · fix · reply · push.
+4. Monitor again.
 
-**Round 2 — Verification review:**
-1. Dispatch `code-reviewer` (verifies Round 1 fixes).
-2. `/resolve-pr-feedback` for remaining findings.
-3. New issues → fix · push · monitor CI. No third review round.
+**Round 2 (verification):**
+1. `code-reviewer` verifies Round 1 fixes.
+2. `/resolve-pr-feedback` remaining findings.
+3. New issues -> fix · push · monitor. No 3rd round.
 
 **Hand off to human:**
-1. Post final PR comment: changes · review findings · how addressed · test coverage.
-2. Request review: `gh pr edit <number> --add-reviewer <username>`
-3. **Stop.** Do not poll for human approval.
+1. Final PR comment: changes · findings · how addressed · test coverage.
+2. `gh pr edit <number> --add-reviewer <username>`
+3. **Stop.** Don't poll for approval.
 
-**If human requests changes later** (new session):
-1. `/resolve-pr-feedback` — fetch · triage · fix · reply · push
-2. Monitor CI after push
-3. One more `code-reviewer` round + `/resolve-pr-feedback`
-4. Re-request human review, stop
+**Human requests changes later** (new session):
+1. `/resolve-pr-feedback` -- fetch · triage · fix · reply · push
+2. Monitor CI
+3. One `code-reviewer` + `/resolve-pr-feedback`
+4. Re-request review, stop
 
-**Exit conditions:**
-- **Normal**: CI green + 2 automated reviews + human reviewer requested → stop
-- **Re-entry**: human requests changes → new session, one review round, stop
-- **Never**: poll for human approval or >2 review rounds per session
+**Exit:**
+- **Normal**: CI green + 2 reviews + human requested -> stop
+- **Re-entry**: human changes -> new session, one round, stop
+- **Never**: poll for approval or >2 rounds/session
 
-### Deploy Pipeline Monitoring (Post-Merge)
+### Deploy Monitoring (Post-Merge)
 
 ```
 Monitor: gh run watch
 ```
 
-Detect deploy failures immediate. If fail → diagnose, open follow-up PR.
+Deploy fail -> diagnose, open follow-up PR.
 
 ## Lifecycle Stop Gates
 
-`lifecycle-stop.sh` enforce cascade. Each gate block until satisfied.
+`lifecycle-stop.sh` cascade. Each gate blocks til satisfied.
 
 ```mermaid
 flowchart TD
@@ -435,18 +435,18 @@ flowchart TD
 
 ## Hard Rules
 
-- Never ask user to test manually. Use agent-browser · playwright · test runner.
-- Never skip Phase 1.
-- Never write production code without failing test first.
+- No manual user test. Use agent-browser · playwright · runner.
+- No skip Phase 1.
+- No prod code w/o failing test first.
 
 ## Commit Discipline
 
-**Commit when green.** One concern per commit. `type(scope): what changed` format.
-Reference issues: `Closes #42` or `Fixes PROJ-123` in body.
+**Commit when green.** One concern/commit. `type(scope): what changed`.
+Issues: `Closes #42` or `Fixes PROJ-123` in body.
 
 ## Phase 6: Compound
 
-After non-trivial tasks, codify lessons as path-scoped rules:
+Post non-trivial tasks, codify lessons as path-scoped rules:
 
 ```markdown
 <!-- .claude/rules/protobuf-v2-timestamp.md -->
@@ -456,35 +456,35 @@ paths:
   - "**/gen/**"
 ---
 Protobuf v2 Timestamp fields: use timestampFromDate() from @bufbuild/protobuf/wkt.
-Never construct as { seconds, nanos } — causes JSON serialization failure.
+Never construct as { seconds, nanos } -- causes JSON serialization failure.
 ```
 
-Rules auto-load ONLY when Claude works on matching files.
+Rules auto-load ONLY on matching files.
 
-**When to compound:**
-- Bug fix revealing non-obvious pattern
-- Migration gotcha that will recur
-- API contract/convention team agreed on
+**Compound when:**
+- Bug fix reveals non-obvious pattern
+- Recurring migration gotcha
+- Team-agreed API contract/convention
 
-**When NOT to compound:**
-- One-off fix unlikely to recur
-- Pattern already covered by hook
-- Generic knowledge Claude already has
+**Don't compound:**
+- One-off fix
+- Already hook-covered
+- Generic knowledge Claude has
 
-### Regression Evals for AI-Caused Bugs
+### Regression Evals for AI Bugs
 
-When bug traced to AI-generated code:
+Bug traced to AI code:
 
-1. **Classify failure**: category (wrong null handling · missed edge case · incorrect API usage · security gap)
-2. **Create regression test**: catches failure class, not specific instance
-3. **Add to CI**: runs every commit
-4. **Track patterns**: same class recurs 3+ times → create `.claude/rules/` entry
+1. **Classify**: null handling · edge case · API misuse · security gap
+2. **Regression test**: catches class, not instance
+3. **Add CI**: runs every commit
+4. **Track**: same class 3+ times -> `.claude/rules/` entry
 
-Build project-specific quality signal. Generic linting catch generic issues; regression evals catch *your project's* AI failure modes.
+Project-specific quality signal. Generic linting catches generic; regression evals catch *your* AI failure modes.
 
 ## Cross-Model Review
 
-If `/codex:rescue` available → auto-dispatch plan for second opinion. Bug triage: use GitHub issue comments as cross-model channel.
+`/codex:rescue` available -> auto-dispatch plan for 2nd opinion. Bug triage: GitHub issue comments as cross-model channel.
 
 ## Subagents
 
@@ -507,12 +507,12 @@ If `/codex:rescue` available → auto-dispatch plan for second opinion. Bug tria
 | Bug fix | No | Sequential reasoning needed | 1 agent |
 | Code review | 2 agents | spec+quality + Codex | 2-3 reviewers |
 
-`/batch` for migrations · Sandcastle for AFK · 3 agents for design competition.
+`/batch` = migrations · Sandcastle = AFK · 3 agents = design competition.
 
-| Task complexity | Model |
+| Complexity | Model |
 |---|---|
 | Simple (rename, move) | `claude-haiku-4-5` |
 | Standard (feature) | `claude-sonnet-4-6` |
 | Complex (architecture) | `claude-opus-4-7` |
 
-Don't parallelize: bug fixes · hypothesis testing. Don't use >5 agents on overlapping files.
+Don't parallelize: bug fixes · hypothesis testing. Don't >5 agents on overlapping files.
