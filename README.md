@@ -768,10 +768,9 @@ Skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement
 bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y            # PRD via interview
 bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y         # PRD -> GitHub issues with blocking
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
-bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y  # Domain glossary (DDD)
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `github-triage`, `qa`, `zoom-out`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
+**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `github-triage`, `qa`, `zoom-out`, `ubiquitous-language`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 
