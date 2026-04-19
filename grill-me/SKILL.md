@@ -9,7 +9,7 @@ Phase 2b gate. No implementation until plan survive grilling.
 
 ## Step 1: Interview
 
-Walk every branch of decision tree. Resolve dependencies one-by-one. For each question, give recommended answer. One at time.
+Walk every branch of decision tree. Resolve dependencies one-by-one. Each question, give recommended answer. One at time.
 
 If question answerable by exploring codebase, explore first.
 
@@ -25,13 +25,13 @@ Each emit `{reviewer, status, findings[], must_answer[]}` per findings-schema.md
 
 ## Step 3: Merge
 
-Consolidate all `must_answer` questions into single list, deduplicated. Surface to user. User answer each. Plan updated inline.
+Consolidate all `must_answer` questions into single list, deduped. Surface to user. User answer each. Plan updated inline.
 
-Any reviewer return `status: BLOCKED` → plan no advance until blocking finding addressed or explicitly overridden by user.
+Any reviewer return `status: BLOCKED` -> plan no advance until blocking finding addressed or user override.
 
 ## Step 4: Approve
 
-All hats return `APPROVED` or user override specific findings → plan approved → Phase 3 (Implement).
+All hats return `APPROVED` or user override specific findings -> plan approved -> Phase 3 (Implement).
 
 ## Skip Gate
 

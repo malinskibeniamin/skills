@@ -1,4 +1,4 @@
-# Setup Routines — Reference
+# Setup Routines -- Reference
 
 ## Trigger configuration
 
@@ -44,7 +44,7 @@
 For CI/CD integration (deploy verify, post-merge checks):
 
 1. Create routine with prompt
-2. Edit routine → Add trigger → API
+2. Edit routine -> Add trigger -> API
 3. Copy URL, generate token
 4. Store token in CI secrets
 
@@ -97,9 +97,9 @@ Replace label table in issue-triage template:
 ```
 | Type | Labels |
 |---|---|
-| Bug — frontend | bug, area:frontend |
-| Bug — backend | bug, area:backend |
-| Bug — infra | bug, area:infra |
+| Bug -- frontend | bug, area:frontend |
+| Bug -- backend | bug, area:backend |
+| Bug -- infra | bug, area:infra |
 | Feature | enhancement, needs-design |
 | Chore | chore |
 ```
@@ -115,14 +115,14 @@ Add to PR review trigger filters:
 
 ## Noise reduction checklist
 
-Before enabling, verify:
+Before enable, verify:
 
-- [ ] **PR review**: hooks handle style/pattern enforcement — prompt say "skip what hooks catch"
+- [ ] **PR review**: hooks handle style/pattern enforcement -- prompt say "skip what hooks catch"
 - [ ] **PR feedback resolve**: has "skip ambiguous" + "max 2 CI attempts" guardrails
 - [ ] **Issue triage**: labels-only for features, investigation-only for bugs
 - [ ] **Weekly health**: delta-based, silent when stable
 - [ ] **Docs drift**: verified drift only, no false positives
-- [ ] **All templates**: test with "Run now" before enabling triggers
+- [ ] **All templates**: test with "Run now" before enable triggers
 
 ## Enforcement flow diagram
 
@@ -143,9 +143,9 @@ Before enabling, verify:
 │ Execute      │  routine prompt drives session
 │ prompt       │  ┌──────────────────────────┐
 │              │  │ Every Edit/Write:        │
-│              │  │  → PostToolUse hooks fire │
+│              │  │  -> PostToolUse hooks fire │
 │              │  │ Every Bash:              │
-│              │  │  → PreToolUse hooks fire  │
+│              │  │  -> PreToolUse hooks fire  │
 │              │  └──────────────────────────┘
 └──────┬──────┘
        ▼
@@ -168,6 +168,29 @@ Before enabling, verify:
 
 Extra runs consume subscription usage when overage enabled.
 
+## Routine vs. Sandcastle vs. interactive
+
+| Scenario | Use |
+|---|---|
+| Auto on every PR | **Routine** -- GitHub trigger, cloud-hosted |
+| Scheduled health checks | **Routine** -- schedule trigger |
+| 5+ independent issues parallel | **Sandcastle** -- parallel Docker agents |
+| Overnight batch | **Sandcastle** -- AFK, local or CI |
+| Interactive feature work | **Claude Code** -- direct session with human |
+| CD pipeline integration | **Routine** -- API trigger from deploy script |
+
+## Enforcement model
+
+Routines run inside harness -- no bypass:
+
+- **Hooks**: fire on every Edit/Write/Bash in routine session
+- **CLAUDE.md**: loads from repo root | all rules active
+- **Skills**: available via `/skill-name` in routine prompt
+- **Agents**: reviewer agents (code-reviewer, self-reviewer, adversarial-reviewer) dispatchable
+- **Stop hooks**: quality gates (lint, typecheck) fire before session ends
+
+Update hook -> every future routine run picks up (next clone). No prompt changes needed.
+
 ## Routines vs. other automation
 
 | Feature | Routines | Sandcastle | GitHub Actions | `/loop` |
@@ -182,12 +205,12 @@ Extra runs consume subscription usage when overage enabled.
 
 ## Troubleshooting
 
-**Hooks don't fire** — Hooks load from `.claude/settings.json` in cloned repo. Verify file exists. Run `bash scripts/verify-install.sh` locally.
+**Hooks don't fire** -- Hooks load from `.claude/settings.json` in cloned repo. Verify file exists. Run `bash scripts/verify-install.sh` locally.
 
-**Noisy comments** — Tighten prompt: add "skip nitpicks", "only P0/P1", "silent approval". Review transcript for where Claude wandered.
+**Noisy comments** -- Tighten prompt: add "skip nitpicks", "only P0/P1", "silent approval". Review transcript where Claude wandered.
 
-**Hits daily limit** — Reduce trigger frequency. PR review: filter non-draft, non-fork only. Schedules: weekly not daily.
+**Hits daily limit** -- Reduce trigger frequency. PR review: filter non-draft, non-fork only. Schedules: weekly not daily.
 
-**Can't push branches** — Default: routines only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in config if needed.
+**Can't push branches** -- Default: routines only push to `claude/`-prefixed branches. Enable "Allow unrestricted branch pushes" in config if needed.
 
-**GitHub trigger not firing** — Claude GitHub App must install on repo. Trigger setup prompts install. `/web-setup` alone not enough — grants clone access but not webhook delivery.
+**GitHub trigger not firing** -- Claude GitHub App must install on repo. Trigger setup prompts install. `/web-setup` alone not enough -- grants clone access but not webhook delivery.

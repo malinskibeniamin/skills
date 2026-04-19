@@ -36,7 +36,7 @@ fi
 # ── Bug fix / debugging ─────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash|triage|investigate|regression'; then
-  directives="$directives\n[TRIAGE] reproduce(test)→analyze→hypothesize(one at a time)→fix ROOT CAUSE. /codex:rescue if available. Max 2 approach attempts — if second fails, stop and present both with analysis. Don't burn session on unresolvable constraints. Prefer terminal verification (vitest, biome, tsgo) over browser tools."
+  directives="$directives\n[TRIAGE] reproduce(test)->analyze->hypothesize(1 at a time)->fix ROOT CAUSE. /codex:rescue if avail. Max 2 attempts, else stop + present both. Terminal verify (vitest/biome/tsgo) > browser."
 fi
 
 # ── PR/review ────────────────────────────────────────────────────
@@ -67,13 +67,13 @@ fi
 # ── Verification / testing in browser ────────────────────────────
 
 if echo "$prompt" | grep -qiE 'test.*browser|check.*browser|verify.*works|test the flow|test.*ui|check.*page|verify.*page|does it work|try it|smoke test'; then
-  directives="$directives\n[VERIFY] Self-verify when automatable. Don't delegate CI/browser/test checks to user. Escalate only when sandbox lacks credentials/access. Confirm BEFORE reporting. Preference: Playwright CLI assertions > terminal checks > agent-browser > MCP browser (last resort)."
+  directives="$directives\n[VERIFY] Self-verify when automatable. No delegate CI/browser/test to user. Escalate only if sandbox lacks creds. Confirm pre-report. Order: Playwright CLI > terminal > agent-browser > MCP (last)."
 fi
 
 # ── CI fix workflow ──────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix ci|green ci|ci failing|ci broken|check failures|fix pipeline|fix checks|fix pr checks|ci red|checks? fail'; then
-  directives="$directives\n[CI-FIX] Front-load ALL failures. Run quality:gate (or gh pr checks + lint + type:check + test). List EVERY failure grouped by category BEFORE fixing any. Fix dependency order: proto→types→lint→unit→e2e. Push ONCE after all local checks pass. Use parallel agents for independent failure categories. Terminal verification only — no browser tools for CI fixes."
+  directives="$directives\n[CI-FIX] Front-load ALL failures. Run quality:gate (or gh pr checks + lint + type:check + test). List EVERY failure by category BEFORE fixing. Order: proto->types->lint->unit->e2e. Push ONCE after all local pass. Parallel agents for independent categories. Terminal only, no browser."
 fi
 
 # ── General: never delegate verification to user ─────────────────
