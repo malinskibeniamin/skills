@@ -227,15 +227,19 @@ elif command -v vitest &>/dev/null || [ -x "./node_modules/.bin/vitest" ]; then
 
     rm -rf "$(dirname "$_cov_json")" 2>/dev/null || true
   else
-    # Coverage run failed or not configured — fall back to test existence check
+    # Coverage run failed or not configured. Without coverage output we
+    # can't prove tests are missing — only that we couldn't verify. Warn
+    # (exit 0) rather than block; the nudge still surfaces but the
+    # session isn't hostage to a broken tooling path.
     if [ "$_has_tests" = false ]; then
-      hook_stop_block "New source files created but no test files written this session (coverage analysis unavailable). Run /tdd to write tests for the feature. Then run /simplify."
+      hook_warn "New source files on branch with no adjacent / branch-scoped tests (coverage analysis unavailable). Consider /tdd to write tests, then /simplify."
     fi
   fi
 else
-  # No vitest available — fall back to session-level test check
+  # No vitest available — warn only. Hook can't verify coverage; a hard
+  # block here would punish the user for a repo without the test tool.
   if [ "$_has_tests" = false ]; then
-    hook_stop_block "New source files created but no test files written this session. Run /tdd to write tests for the feature. Then run /simplify."
+    hook_warn "New source files on branch with no adjacent / branch-scoped tests. Consider /tdd to write tests, then /simplify."
   fi
 fi
 
@@ -287,9 +291,13 @@ if [ -n "$ci_states" ]; then
     hook_stop_block "CI FAILING on PR #$pr_number. Read failures with: gh pr checks $pr_number — fix the issues, commit, push. Then use Monitor tool on 'gh pr checks $pr_number --watch' to stream results. Do not stop until CI green."
   fi
 
+  # CI pending is a wait condition, not a code-quality issue. Emit a
+  # warn (exit 0) instead of blocking: hostage-holding the session
+  # across long CI runs is noise, and the user can stream status with
+  # Monitor if they actively want to watch. Failures still block.
   if echo "$ci_states" | grep -qi "PENDING\|EXPECTED\|QUEUED\|IN_PROGRESS"; then
     if ! echo "$ci_states" | grep -qi "SUCCESS"; then
-      hook_stop_block "CI still running on PR #$pr_number. Use Monitor tool on 'gh pr checks $pr_number --watch' to stream CI status. Wait for completion, then retry."
+      hook_warn "CI still running on PR #$pr_number. Stream with: gh pr checks $pr_number --watch (via Monitor tool) if you want live status."
     fi
   fi
 fi
