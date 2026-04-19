@@ -256,6 +256,13 @@ hook_parse_edit_write() {
 # ── Filter by file extensions (pipe-separated, e.g. "ts|tsx|js|jsx") ──
 
 hook_filter_extensions() {
+  # Non-frontend repo early exit. session-env.sh sets DISABLE_FRONTEND_HOOKS=1
+  # on SessionStart if package.json lacks react/react-dom. Saves ~50ms per
+  # hook on Go/Python/etc repos where frontend checks are dead weight.
+  if [ "${DISABLE_FRONTEND_HOOKS:-0}" = "1" ]; then
+    _hook_debug "skip: DISABLE_FRONTEND_HOOKS=1 (non-frontend repo)"
+    exit 0
+  fi
   local exts="$1"
   local match=false
   local IFS='|'

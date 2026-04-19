@@ -14,8 +14,15 @@ if [ ! -f "package.json" ] && [ "$_repo_name" != "skills" ]; then
   echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."}}' >&2
 fi
 
+_is_frontend=1
 if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React in package.json. Some hooks may not apply."}}' >&2
+  _is_frontend=0
+  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React in package.json. Frontend hooks disabled (DISABLE_FRONTEND_HOOKS=1). Skills repo auto-exempt."}}' >&2
+fi
+
+# Skip disable flag for skills repo itself (hook authoring, not a frontend app)
+if [ "$_repo_name" = "skills" ]; then
+  _is_frontend=1
 fi
 
 # Set environment variables for LLM-friendly defaults
@@ -26,6 +33,13 @@ if [ -n "$CLAUDE_ENV_FILE" ]; then
 
   # Prevent OOM on large test suites, builds, and type checks
   echo "export NODE_OPTIONS=--max-old-space-size=8192" >> "$CLAUDE_ENV_FILE"
+
+  # Disable frontend hooks on non-React repos (Go, Python, etc).
+  # hook_filter_extensions() early-exits on this flag. Saves ~50ms per
+  # Edit/Write across ~42 gated hooks.
+  if [ "$_is_frontend" = "0" ]; then
+    echo "export DISABLE_FRONTEND_HOOKS=1" >> "$CLAUDE_ENV_FILE"
+  fi
 fi
 
 # Clean up stale session directories from previous sessions (safe: /tmp/ only, specific prefix)
