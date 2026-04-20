@@ -26,7 +26,7 @@ const BAD_RESET = ["git", "reset", "--hard", "HEAD~5"].join(" ");
  */
 export const HighlightsDemo: React.FC = () => {
   return (
-    <AbsoluteFill style={{ background: theme.bg, fontFamily: theme.sans }}>
+    <AbsoluteFill style={{ background: theme.bg, fontFamily: theme.sans, color: theme.text }}>
       <Sequence from={0} durationInFrames={240}>
         <HookScene />
       </Sequence>
@@ -467,31 +467,48 @@ const ProgressiveDisclosureScene: React.FC = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const files = [
-    { name: "route.tsx", skill: "tanstack-router", delay: 30 },
-    { name: "user.test.tsx", skill: "tdd", delay: 80 },
-    { name: "store.ts", skill: "zustand", delay: 130 },
-    { name: "user_pb.ts", skill: "connect-query", delay: 180 },
+  const files: Array<{ name: string; skill: string; delay: number }> = [
+    { name: "route.tsx", skill: "tanstack-router", delay: 25 },
+    { name: "user.test.tsx", skill: "tdd", delay: 50 },
+    { name: "store.ts", skill: "zustand", delay: 75 },
+    { name: "user_pb.ts", skill: "connect-query", delay: 100 },
+    { name: "button.tsx", skill: "accessibility", delay: 125 },
+    { name: "src/env.ts", skill: "env-validation", delay: 150 },
+    { name: "package.json", skill: "bundle-guard", delay: 175 },
+    { name: "signup.e2e.ts", skill: "e2e-testing", delay: 200 },
   ];
   return (
     <AbsoluteFill
       style={{
         opacity,
-        padding: 80,
+        padding: 60,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        gap: 30,
+        gap: 24,
+        color: theme.text,
       }}
     >
       <BigText size={72}>Skills auto-load on file match</BigText>
-      <div style={{ display: "flex", flexDirection: "column", gap: 18, width: 1400 }}>
+      <div style={{ fontSize: 28, color: theme.textMuted, marginTop: -8 }}>
+        `paths:` frontmatter triggers skill injection. Zero `/skill-name` typing.
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 18,
+          width: 1700,
+          marginTop: 10,
+        }}
+      >
         {files.map((f) => {
           const op = interpolate(frame - f.delay, [0, 15], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           });
-          const skillOp = interpolate(frame - f.delay, [25, 45], [0, 1], {
+          const skillOp = interpolate(frame - f.delay, [22, 40], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           });
@@ -501,10 +518,10 @@ const ProgressiveDisclosureScene: React.FC = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 24,
+                gap: 18,
                 opacity: op,
                 fontFamily: theme.mono,
-                fontSize: 30,
+                fontSize: 26,
               }}
             >
               <div
@@ -512,21 +529,23 @@ const ProgressiveDisclosureScene: React.FC = () => {
                   background: theme.bgElev,
                   border: `1px solid ${theme.border}`,
                   borderRadius: 8,
-                  padding: "12px 22px",
-                  minWidth: 360,
+                  padding: "12px 20px",
+                  minWidth: 330,
+                  color: theme.text,
                 }}
               >
                 {f.name}
               </div>
-              <div style={{ color: theme.textMuted, fontSize: 34 }}>→</div>
+              <div style={{ color: theme.textMuted, fontSize: 30 }}>→</div>
               <div
                 style={{
                   opacity: skillOp,
                   background: theme.bgElev,
                   border: `1px solid ${theme.success}`,
                   borderRadius: 8,
-                  padding: "12px 22px",
+                  padding: "12px 20px",
                   color: theme.success,
+                  flex: 1,
                 }}
               >
                 /{f.skill} loaded
@@ -535,12 +554,13 @@ const ProgressiveDisclosureScene: React.FC = () => {
           );
         })}
       </div>
+
       <div
         style={{
-          fontSize: 30,
+          fontSize: 32,
           color: theme.textMuted,
-          marginTop: 10,
-          opacity: interpolate(frame, [260, 320], [0, 1], {
+          marginTop: 12,
+          opacity: interpolate(frame, [260, 310], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           }),
