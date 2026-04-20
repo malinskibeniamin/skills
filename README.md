@@ -306,27 +306,64 @@ Auto-detects current branch PR, triages, fixes, replies to threads.
 
 ### See it in motion
 
-**Hero GIF** -- hook blocking a banned cast at write time (~293ms):
+**Three big wins** -- autoplay teaser, real moments from the last 30 days:
 
 <p align="center">
-  <img src="docs/screenshots/hook-fire.gif" alt="Hook fires in ~293ms, blocks unsafe cast, dev fixes with zod schema" width="820">
+  <img src="docs/screenshots/wow-factor.gif" alt="/grill-me saved 3 weeks of wasted work. /development-lifecycle shipped 4 waves, 13 phases. Force-push to main blocked." width="900">
 </p>
 
-**60-second explainer** -- full pitch (pain → fix → install → proof):
+**Hero GIF** -- hook blocking a banned cast at write time (~293ms, every edit):
 
 <p align="center">
-  <video src="docs/screenshots/explainer.mp4" controls width="820" muted playsinline>
-    Your browser does not support embedded MP4. <a href="docs/screenshots/explainer.mp4">Download explainer.mp4</a>.
+  <img src="docs/screenshots/hook-fire.gif" alt="Hook fires in ~293ms, blocks unsafe cast, dev fixes with zod schema" width="720">
+</p>
+
+**2-minute highlight reel** -- skill wins extracted from real transcripts (ADP UI + ui-registry + skills repo):
+
+<p align="center">
+  <video src="docs/screenshots/highlights.mp4" controls width="900" muted playsinline>
+    Your browser does not support embedded MP4. <a href="docs/screenshots/highlights.mp4">Download highlights.mp4</a>.
   </video>
 </p>
 
-> **Render yourself** (Remotion compositions land as git diffs, not binary churn):
-> ```bash
-> cd demos/remotion && bun install --yarn
-> bun run render:gif   # hero GIF -> docs/screenshots/hook-fire.gif
-> bun run render       # 60s explainer -> docs/screenshots/explainer.mp4
-> bun run studio       # interactive preview at localhost:3000
-> ```
+Featured skill moments -- each from an actual session:
+- **`/grill-me`** -- 100+ rapid-fire questions on autoform proto-schema coupling. Surfaced 3 weeks of wasted work before a line of code was written.
+- **`/development-lifecycle`** -- adp-ui-llm-provider-cards: 4 waves, 13 phases, shipped end-to-end. No scope creep.
+- **`/tdd`** -- applied to `codex/autoform-v2-foundation` refactor. RED → GREEN → REFACTOR across the full PR surface.
+- **`/simplify`** -- three iterative passes on MCP marketplace PR. Caught 15% redundant code reviewers missed.
+- **`/domain-model`** -- stress-tested plans, updated CONTEXT.md + ADRs inline. Institutional memory captured mid-design.
+- **Force-push to main blocked** -- hook redirected to feature branch + PR flow every time.
+- **Dogfooding** -- 12 skills + 60 hooks + 263 unit tests + 9 agent evals shipped using the harness itself.
+- **Skill auto-load on file match** -- `/tdd` on `*.test.ts`, `/tanstack-router` on `route.tsx`, `/connect-query` on `*_pb.ts`. Zero invocation needed.
+
+<details>
+<summary>More videos -- 60s explainer, 50s comparison, 70s announcement</summary>
+
+**60-second explainer** -- pain → fix → install → proof:
+
+<p align="center">
+  <video src="docs/screenshots/explainer.mp4" controls width="720" muted playsinline>
+    <a href="docs/screenshots/explainer.mp4">Download explainer.mp4</a>
+  </video>
+</p>
+
+**50-second comparison** -- prompt-packs vs obra/superpowers vs this harness:
+
+<p align="center">
+  <video src="docs/screenshots/comparison.mp4" controls width="720" muted playsinline>
+    <a href="docs/screenshots/comparison.mp4">Download comparison.mp4</a>
+  </video>
+</p>
+
+**70-second announcement** -- launch version for Slack / social:
+
+<p align="center">
+  <video src="docs/screenshots/announcement.mp4" controls width="720" muted playsinline>
+    <a href="docs/screenshots/announcement.mp4">Download announcement.mp4</a>
+  </video>
+</p>
+
+</details>
 
 ### Head-to-head: how does this compare?
 
