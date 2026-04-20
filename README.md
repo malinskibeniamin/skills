@@ -787,7 +787,7 @@ Fix these in order (each may affect many files):
 1. Class components -> functional components
 2. useEffect for data fetching -> TanStack Query / route loaders
 3. Raw HTML elements (<button>, <input>, etc.) -> @/components/ui/ components
-4. as any, as Record<string, any>, @ts-ignore, @ts-expect-error -> proper types, type guards, or zod validation
+4. as any, as never, as Record<string, any>, @ts-ignore, @ts-expect-error -> proper types, type guards, or zod validation
 5. dangerouslySetInnerHTML -> DOMPurify or safe rendering
 6. Inline style={{}} -> Tailwind utility classes
 7. Raw hex/rgb in className -> design tokens
@@ -807,6 +807,15 @@ Fix these in order (each may affect many files):
 21. react-beautiful-dnd -> @dnd-kit/core (archived by Atlassian)
 22. framer-motion -> motion (renamed package)
 23. plotly.js / recharts -> lazy load (heavy bundles)
+24. JSON.parse(JSON.stringify(x)) -> structuredClone(x)
+25. form.submit() -> form.requestSubmit() (fires validation + submit event)
+26. Bare parseInt(s) -> parseInt(s, 10) or Number(s)
+27. Global isNaN() -> Number.isNaN() (no coercion)
+28. splice/direct mutation to remove -> .filter() or Array.prototype.with()
+29. Unnamed useEffect(() => {...}) -> useEffect(function syncX() {...}, [deps]) (named for devtools)
+30. 100vh -> 100dvh (mobile safe area), 100vw -> 100%, user-scalable=no -> remove (WCAG 1.4.4)
+31. React.lazy() missing for heavy deps (chart.js, three, d3) -> wrap in Suspense + lazy import
+32. Hooks defined inside route files -> extract to /hooks/ (route files stay thin)
 
 ### 2e-2. Protobuf v2 patterns (if applicable)
 1. new Message() -> create(MessageSchema, { ... })
@@ -818,12 +827,20 @@ Fix these in order (each may affect many files):
 1. Raw useQuery/useMutation with ConnectRPC -> use Connect Query hooks
 2. invalidateQueries() with no args -> specify query key
 3. Duplicate Zod schemas for protobuf messages -> Standard Schema + protovalidate
+4. Inline staleTime/gcTime numeric literals -> named constants (STALE_TIME_5_MIN, etc.)
+5. useMutation without onError -> add onError with ConnectError.from() + toast
+6. Mutation hooks missing *Mutation suffix -> rename (useCreateUser -> useCreateUserMutation)
+7. refetchQueries -> await invalidateQueries (reactive, deduped)
 
 ### 2e-4. Accessibility patterns
 1. All `<img>` must have `alt` attribute
 2. Clickable `<div>`/`<span>` must have role + tabIndex + keyboard handler
 3. Icon-only buttons -> add `aria-label`
 4. Interactive elements -> add `data-track` or semantic identifiers for observability
+5. `aria-invalid` field -> add `aria-describedby` pointing to error message id
+6. Disabled `<Button>` -> wrap in `<Tooltip>` explaining why (blind users need context)
+7. `outline: none` / `outline: 0` -> `focus-visible:ring-2 focus-visible:ring-*` (keep keyboard focus visible)
+8. Nested interactives (Button inside Link, etc.) -> flatten to single interactive + aria-label
 
 ### 2e-5. Protobuf well-known types (if applicable)
 1. Timestamp as { seconds, nanos } -> timestampFromDate() from @bufbuild/protobuf/wkt
@@ -834,6 +851,35 @@ Fix create<T>() -> create<T>()(), inline selectors -> useShallow, direct localSt
 
 ### 2g. Routing
 Fix window.location navigation -> TanStack Router, react-router-dom -> @tanstack/react-router, URLSearchParams -> nuqs, untyped hooks -> { from } param.
+
+### 2h. Testing (vitest + React Testing Library + Playwright)
+1. it() -> test() (consistent naming, Biome rule enforces)
+2. jest.fn() / jest.mock() / jest.spyOn() -> vi.fn() / vi.mock() / vi.spyOn()
+3. .toBeInTheDocument() -> .toBeVisible() (also catches display:none, opacity:0)
+4. fireEvent -> userEvent.setup() + user.click() / user.keyboard() (simulates real user)
+5. setTimeout / waitForTimeout -> await waitFor(() => expect(...)) (deterministic)
+6. Missing data-testid on interactive elements -> add stable test identifiers
+7. ConnectRPC calls in tests: raw mocks -> createRouterTransport for typed mocking
+8. test.skip in E2E -> test.fixme() (explicit known bug, not silent skip)
+9. Co-located .test.ts(x) next to source; visual tests .browser.test.tsx; E2E under e2e/*.spec.ts
+
+### 2i. Forms (react-hook-form)
+1. form.watch() in render body -> useWatch({ control, name }) (fewer re-renders)
+2. <input {...register("x")} /> losing ref -> spread ...field from Controller
+3. handleSubmit(onSubmit) -> handleSubmit(onSubmit, onError) (surfaces validation errors)
+4. Async onChange without abort -> AbortController, cancel stale request on next change
+5. Form mode undefined -> mode: "onChange" + per-field validation + <FormMessage /> inline
+6. FieldMask paths hardcoded -> Object.keys(dirtyFields) (only send what user touched)
+7. Oneof protobuf fields: leftover value after branch switch -> clear prev branch explicitly
+8. URL input type="text" -> type="url" (native validation + mobile keyboard)
+
+### 2j. ConnectRPC error handling
+1. throw new Error("...") in ConnectRPC handlers -> ConnectError.from(error, Code.Internal)
+2. Magic numbers for proto enum cases -> import enum, compare by name
+3. Error toasts with raw message -> formatToastErrorMessageGRPC(error) (code + message + trace)
+4. Catch block with only console.log -> set error state, show inline UI, or re-throw
+5. Silent fallbacks on parse failure -> early return <ErrorState /> with retry action
+6. Exhaustive switch on enum: missing default -> add `default: never satisfies never` (compile error on new variant)
 
 ## Phase 3: Verify
 
