@@ -158,6 +158,38 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: <a> tag (not banned)"
 
+# Raw <code> -> CodeBlock/Code from Typography
+echo '<code>meta-llama/Llama-3.1-8B</code>' > "$tmpfile"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw <code>" "CodeBlock"
+
+# Raw <pre> -> CodeBlock
+echo '<pre>some code</pre>' > "$tmpfile"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw <pre>" "CodeBlock"
+
+# Raw headings -> Heading from Typography
+echo '<h1>Title</h1>' > "$tmpfile"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw <h1>" "Heading"
+
+# Raw <p> -> Text from Typography
+echo '<p>paragraph</p>' > "$tmpfile"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw <p>" "Text"
+
+# MDX support -- same check applies in .mdx files
+mdxfile=$(mktemp --suffix=.mdx 2>/dev/null || mktemp -t hook-mdx-XXXXXX).mdx
+echo '<code>meta-llama/Llama</code>' > "$mdxfile"
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$mdxfile\"}}" \
+  2 "block: raw <code> in .mdx" "CodeBlock"
+rm -f "$mdxfile"
+
 # ── UI_LIB_DIRS override ─────────────────────────────────────────
 
 tmpdir2=$(mktemp -d)
