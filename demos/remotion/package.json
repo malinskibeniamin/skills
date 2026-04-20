@@ -1,0 +1,26 @@
+{
+  "name": "skills-demos",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Remotion compositions that render marketing GIFs/videos for frontend-skills README.",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render ExplainerDemo ../../docs/screenshots/explainer.mp4",
+    "render:gif": "remotion render HookFireDemo ../../docs/screenshots/hook-fire.gif --codec=gif --image-format=png",
+    "render:hook-mp4": "remotion render HookFireDemo ../../docs/screenshots/hook-fire.mp4",
+    "render:explainer-gif": "remotion render ExplainerDemo ../../docs/screenshots/explainer.gif --codec=gif --image-format=png",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.6.0"
+  }
+}
