@@ -560,8 +560,8 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
-| **`/domain-model`** | DDD-light grill: challenge plans against domain model, sharpen terminology, update CONTEXT.md + ADRs inline. Auto-invoked as Phase 2b; also standalone. |
-| **`/grill-me`** | Light stress-test of decisions. Standalone alt to `/domain-model` when no need DDD docs. |
+| **`/domain-model`** | **Grill + document.** 3 reviewer hats (product/eng/design) in parallel + sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
+| **`/grill-me`** | **Grill, no docs.** 3 reviewer hats (product/eng/design) in parallel, fast. Skip when decision isn't worth writing down. Standalone alt to `/domain-model`. |
 | **`/github-triage`** | Triage GitHub issues via label-based state machine. Grill sessions, agent briefs, out-of-scope KB. |
 | **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explore codebase in background, auto-file GitHub issues. |
 | **`/zoom-out`** | Go up layer of abstraction. Map relevant modules + callers when unfamiliar with code area. |
