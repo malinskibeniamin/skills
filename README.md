@@ -309,7 +309,7 @@ Auto-detects current branch PR, triages, fixes, replies to threads.
 **Three big wins** -- autoplay teaser, real moments from the last 30 days:
 
 <p align="center">
-  <img src="docs/screenshots/wow-factor.gif" alt="/grill-me saved 3 weeks of wasted work. /development-lifecycle shipped 4 waves, 13 phases. Force-push to main blocked." width="900">
+  <img src="docs/screenshots/wow-factor.gif" alt="3-5 review cycles → 0-1. While you slept Claude shipped 13 phases, 4 waves, 0 destructive commands. Force-push to main at 4am? Blocked. 60 hooks / 74 checks / 0 LLM tokens / 100% deterministic." width="900">
 </p>
 
 **Hero GIF** -- hook blocking a banned cast at write time (~293ms, every edit):
