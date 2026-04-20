@@ -10,6 +10,8 @@
     "render:gif": "remotion render HookFireDemo ../../docs/screenshots/hook-fire.gif --codec=gif --image-format=png",
     "render:hook-mp4": "remotion render HookFireDemo ../../docs/screenshots/hook-fire.mp4",
     "render:explainer-gif": "remotion render ExplainerDemo ../../docs/screenshots/explainer.gif --codec=gif --image-format=png",
+    "render:announcement": "remotion render AnnouncementDemo ../../docs/screenshots/announcement.mp4",
+    "render:announcement-gif": "remotion render AnnouncementDemo ../../docs/screenshots/announcement.gif --codec=gif --image-format=png",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
