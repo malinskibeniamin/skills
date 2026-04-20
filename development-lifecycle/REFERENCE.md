@@ -46,9 +46,9 @@ flowchart TD
 
     Sandbox --> Parallel[N parallel agents<br/>each runs 1->...->5b]
 
-    style P3 fill:#f96,stroke:#333
-    style Grill fill:#f9f,stroke:#333
-    style P5 fill:#69f,stroke:#333
+    style P3 fill:#16a34a,stroke:#14532d,stroke-width:3px,color:#fff
+    style Grill fill:#7c3aed,stroke:#4c1d95,stroke-width:3px,color:#fff
+    style P5 fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
 ```
 
 ## Phase 1: Understand

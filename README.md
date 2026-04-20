@@ -169,10 +169,116 @@ graph TD
     Start -. "Write tests" .-> Implement
     Start -. "Create PR" .-> Review
 
-    style Grill fill:#f9e,stroke:#333
-    style Implement fill:#bfb,stroke:#333
-    style Review fill:#bbf,stroke:#333
+    style Grill fill:#7c3aed,stroke:#4c1d95,stroke-width:3px,color:#fff
+    style Implement fill:#16a34a,stroke:#14532d,stroke-width:3px,color:#fff
+    style Review fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
 ```
+
+<details>
+<summary>Sequence diagram -- full lifecycle (who does what, when)</summary>
+
+Shows timing of user input, Claude phases, hook enforcement, and PR handoff. Two user gates: approve approach (after Plan) and approve plan (after Grill). Everything else automatic.
+
+```mermaid
+sequenceDiagram
+    actor You
+    participant Claude
+    participant Hooks as Hooks<br/>(PostToolUse / Stop)
+    participant GH as GitHub
+
+    You->>Claude: "Build feature X"
+    Claude->>Claude: Phase 1 -- Understand<br/>(explore, RCA if bug)
+    Claude-->>You: Clarifying Qs + 2-3 approaches
+    You-->>Claude: Pick approach (GATE)
+    Claude->>Claude: Phase 2 -- Plan<br/>(files, code, expected output)
+
+    Note over Claude: Auto-invoke /domain-model
+    Claude->>Claude: Phase 2b -- Grill<br/>challenge plan, sharpen terms<br/>update CONTEXT.md + ADRs inline
+    Claude-->>You: "Plan solid, proceed?"
+    You-->>Claude: Confirm (GATE)
+
+    loop TDD cycle per file
+        Claude->>Claude: RED -- failing test
+        Claude->>Hooks: Edit/Write
+        Hooks-->>Claude: react-rules, a11y, zustand... (~293ms)
+        Claude->>Claude: GREEN -- minimal code
+        Claude->>Claude: REFACTOR
+    end
+
+    Claude->>Claude: Phase 4 -- Verify (tests + types + visual)
+    Claude->>Hooks: Stop
+    Hooks->>Hooks: biome-autofix -> typecheck -> doctor<br/>-> orchestration -> violation-summary
+    Hooks-->>Claude: Quality gate result
+    Claude->>GH: git commit + push
+    Claude->>GH: gh pr create
+    Claude->>Claude: Monitor: gh pr checks --watch
+    GH-->>Claude: CI status + reviewer assigned
+    Claude-->>You: PR ready to merge
+```
+
+</details>
+
+<details>
+<summary>Sequence diagram -- PR review resolution loop (/resolve-pr-feedback)</summary>
+
+How Claude handles human review feedback without you babysitting each thread.
+
+```mermaid
+sequenceDiagram
+    actor Reviewer
+    actor You
+    participant Claude
+    participant GH as GitHub
+
+    Reviewer->>GH: Review comments on PR
+    You->>Claude: /resolve-pr-feedback [PR#]
+    Claude->>GH: gh api /pulls/{n}/comments
+    GH-->>Claude: Unresolved threads + line refs
+    Claude->>Claude: Triage:<br/>in-scope / out-of-scope / invalid
+
+    loop Each in-scope comment
+        Claude->>Claude: Implement fix + test
+        Claude->>GH: Reply + resolve thread
+    end
+
+    Claude->>GH: git push
+    GH-->>Claude: CI re-runs
+    Claude->>Claude: Monitor CI
+    Claude-->>You: Summary: N resolved, M deferred<br/>(with reasoning per item)
+```
+
+</details>
+
+**Try it yourself** -- copy-paste into a Claude Code session:
+
+<details>
+<summary>Real starter prompts (pick one)</summary>
+
+**Feature work:**
+```
+/development-lifecycle -- add dark mode toggle to settings page.
+Read src/routes/settings.tsx first. Propose approach, wait for my approval.
+```
+
+**Bug fix (skip plan phase):**
+```
+/development-lifecycle -- users report form submits twice on double-click.
+Reproduce, find root cause, fix with test.
+```
+
+**Overnight batch (Sandcastle):**
+```
+Run Sandcastle on top 5 issues in our bug backlog overnight.
+One agent per issue, Docker sandboxes, each follows development-lifecycle.
+```
+
+**Address PR review:**
+```
+/resolve-pr-feedback
+```
+Auto-detects current branch PR, triages, fixes, replies to threads.
+
+</details>
 
 **Four layers, one outcome:**
 
@@ -197,6 +303,212 @@ graph TD
 **How works**: Hooks fire automatically, 100% reliable, zero LLM tokens. Skills add workflow guidance when need. Combo eliminate 80-90% human review cycles.
 
 **vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers give great workflow skills (TDD, debug, plan). We take their best patterns AND add what they lack: **mechanical enforcement via hooks**. Superpowers teach Claude what do. We teach AND enforce -- if Claude forget, hook catch.
+
+### See it in motion
+
+**Hero GIF** -- hook blocking a banned cast at write time (~293ms):
+
+<p align="center">
+  <img src="docs/screenshots/hook-fire.gif" alt="Hook fires in ~293ms, blocks unsafe cast, dev fixes with zod schema" width="820">
+</p>
+
+**60-second explainer** -- full pitch (pain → fix → install → proof):
+
+<p align="center">
+  <video src="docs/screenshots/explainer.mp4" controls width="820" muted playsinline>
+    Your browser does not support embedded MP4. <a href="docs/screenshots/explainer.mp4">Download explainer.mp4</a>.
+  </video>
+</p>
+
+> **Render yourself** (Remotion compositions land as git diffs, not binary churn):
+> ```bash
+> cd demos/remotion && bun install --yarn
+> bun run render:gif   # hero GIF -> docs/screenshots/hook-fire.gif
+> bun run render       # 60s explainer -> docs/screenshots/explainer.mp4
+> bun run studio       # interactive preview at localhost:3000
+> ```
+
+### Head-to-head: how does this compare?
+
+| | Raw Claude Code | CLAUDE.md only | [obra/superpowers](https://github.com/obra/superpowers) | Prompt-pack / "gstack" | **this harness** |
+|---|---|---|---|---|---|
+| Enforcement model | None | Prompt (LLM reads rules) | Prompt (skills) | Prompt (system prompts) | **Hooks (deterministic) + skills** |
+| Reliability | 0% | ~60% (Claude forgets) | ~70% (skips skill) | ~70% | **100% on hooks, ~90% on `paths:` skills** |
+| LLM token overhead | 0 | ~2-8k / turn | ~500 / skill load | ~3-15k / prompt | **0 for hooks, ~500 for loaded skills** |
+| Catches `as any` at write time | No | No | No | No | **Yes (~293ms)** |
+| Catches missing tests at stop | No | No | No | No | **Yes (Stop gate blocks)** |
+| Forces plan -> grill -> confirm | No | No | Partial (prompts) | No | **Yes (/development-lifecycle gates)** |
+| Codex (OpenAI) support | N/A | N/A | No | N/A | **Yes (first-class, `codex-compat` skill)** |
+| Batch / overnight mode | No | No | No | No | **Yes (Sandcastle, N Docker agents)** |
+| Cloud / scheduled mode | No | No | No | No | **Yes (Routines)** |
+| Cross-session learning | No | Manual edit | No | No | **Yes (Phase 6 Compound -> `.claude/rules/`)** |
+| Opinionated stack | N/A | N/A | Agnostic | Varies | **React + TanStack + ConnectRPC + Bun** |
+| Config surface | 0 | Low | Low | Medium | **Medium (14 setup skills, env vars)** |
+| Setup cost | 0 | ~30 min prompt writing | One `/install` | Varies | **3 commands** |
+
+**TL;DR:** If your stack matches (React + Bun/TypeScript + modern patterns), the deterministic enforcement is worth the opinionation. If not, fork the hook scripts and keep the lifecycle skills.
+
+### Where each approach intervenes
+
+Most alternatives only touch one layer. Deterministic enforcement at every boundary is what closes the reliability gap.
+
+```mermaid
+flowchart LR
+    subgraph Timeline["When does Claude violate a rule?"]
+        direction LR
+        Prompt["User prompt"] --> Think["Claude thinks"]
+        Think --> Edit["Edit/Write"]
+        Edit --> Stop["Stop / turn end"]
+        Stop --> Push["git push"]
+        Push --> CI["CI / PR review"]
+    end
+
+    subgraph Approaches["Where each approach catches"]
+        direction TB
+        ClaudeMd["CLAUDE.md rules"] -. "reads at Prompt" .-> Prompt
+        Superpowers["superpowers"] -. "injects at Prompt" .-> Prompt
+        Eslint["eslint / biome alone"] -. "save-time only" .-> Stop
+        CIHooks["CI-only lint"] -. "after push" .-> CI
+        This["this harness"] -. "Prompt" .-> Prompt
+        This -. "every Edit ~293ms" .-> Edit
+        This -. "Stop gate ~5-13s" .-> Stop
+        This -. "Monitor CI" .-> CI
+    end
+
+    style This fill:#c9f,stroke:#333,color:#000
+    style Prompt fill:#1f2a44,stroke:#333,color:#fff
+    style Edit fill:#1f2a44,stroke:#333,color:#fff
+    style Stop fill:#1f2a44,stroke:#333,color:#fff
+    style CI fill:#1f2a44,stroke:#333,color:#fff
+```
+
+### Real numbers (not marketing claims)
+
+Hooks and rules derive from a 2026-04 audit of **~2,500 PRs / ~3,500 review comments across 4 repos (2022-2026)**. Every hook maps to a pattern that actually generated review churn.
+
+| Metric | Source | Value |
+|---|---|---|
+| Review comments audited | Console, cloudv2, ui-registry, ai-gateway | **~3,500+** |
+| PRs analyzed | Same | **~2,500+** |
+| PostToolUse hooks shipped | Repo | **60** |
+| React/TS/security checks | `react-rules-check.sh` + `tailwind-check.sh` | **34** |
+| Biome rules added from audit | `setup-biome` REFERENCE | **5** |
+| Tokens saved / session (typical) | Compressed messages + dedup + trimmed REFERENCEs | **~6,700** |
+| Hook wall-clock on `.tsx` edit | Concurrent hooks, slowest wins | **~293ms** |
+| Human review cycles per PR | Before / after enforcement | **3-5 -> 0-1** |
+| Token waste per PR | Before / after | **~15-30k -> ~500-2k** |
+
+See memory `project_pr_audit_hooks_2026_04` + `project_transcript_audit_2026_04` for the methodology.
+
+### 5-minute proof (run it yourself)
+
+The fastest way to believe it: reproduce the core claim in your terminal.
+
+<details>
+<summary>Five-minute hook demo -- step by step</summary>
+
+**Prereq:** Claude Code installed, fresh repo.
+
+**1. Install the plugin**
+```bash
+/plugin marketplace add malinskibeniamin/skills
+/plugin install frontend-skills@skills
+/reload-plugins
+```
+
+**2. Ask Claude to write a banned pattern**
+```
+Create src/bad.ts with: export function parseUser(data: unknown) { return data as any; }
+```
+
+**3. Watch the hook fire** -- ~293ms after the Edit, `react-rules-check.sh` blocks with:
+> `as any` banned. Use type guards or zod.
+
+**4. Compare token cost**
+- Without hooks: `as any` ships -> human review catches -> 3-5 comment rounds -> ~3,000 tokens
+- With hooks: blocked at write time -> Claude fixes in same turn -> ~50 tokens
+
+**5. Try to bypass it**
+```
+Use // biome-ignore noExplicitAny to silence
+```
+Hook still fires -- message says "biome-ignore noExplicitAny banned. Fix the underlying type." No escape hatch without an explicit `// allow:` comment (auditable).
+
+**6. Try the Stop gate** -- ask Claude to skip tests:
+```
+Write src/math.ts with an add() function. Skip tests.
+```
+Watch the Stop hook block: "orchestration-stop.sh: missing co-located test for src/math.ts".
+
+Five tests, five deterministic blocks. Everything a human reviewer would catch, caught in <1 second by bash scripts with zero LLM tokens.
+
+</details>
+
+### When NOT to use this
+
+Honest scoping -- this harness is **opinionated**. Here's when to skip it or fork it:
+
+| Don't use if | Why |
+|---|---|
+| Backend-only repo (Go/Python/Rust) | React/TypeScript hooks add no value; fork the lifecycle skills only |
+| Non-React frontend (Vue, Svelte, Angular) | ~80% of checks are React-specific |
+| Throwaway prototype / spike | Stop gate blocks commits without tests; kills exploration velocity (set `ORCHESTRATION_STRICT=0` if keeping the plugin) |
+| Can't use Bun | `enforce-toolchain.sh` bans npm/npx/yarn by default (configurable, but friction) |
+| No Claude Code / Codex access | Hooks are harness-specific; nothing to enforce |
+| Stack: not (TanStack Router + ConnectRPC + Protobuf v2) | Many setup skills assume this; fork to strip them |
+| Team rejects opinionation | Setup skills pin choices (Biome over ESLint, tsgo over tsc, vitest over jest) |
+
+**Partial adoption works.** Install `development-lifecycle` + `tdd` + `grill-me` only to get workflow discipline without the stack-specific hooks.
+
+### FAQ
+
+<details>
+<summary><strong>Why not just write more CLAUDE.md rules?</strong></summary>
+
+CLAUDE.md is read-every-turn context -- costs tokens AND is probabilistic. Claude reads "don't use `as any`" and still writes `as any` sometimes. Hooks are **post-write bash scripts** -- they fire 100% of the time, deterministic, zero LLM tokens. Rules in CLAUDE.md belong there when they're too nuanced for pattern matching (architecture, design judgment). Everything mechanically checkable belongs in a hook.
+</details>
+
+<details>
+<summary><strong>Why not just use obra/superpowers?</strong></summary>
+
+We do -- many lifecycle patterns (TDD red/green, domain-model grilling, write-a-skill) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-prd, to-issues, git-guardrails) are listed under "Community Skills" for install.
+</details>
+
+<details>
+<summary><strong>Why not just use eslint/biome?</strong></summary>
+
+Biome (we ship it via `setup-biome`) handles lint + format -- we don't replace that. What Biome can't do: catch patterns at Edit time (biome runs at save/CI), enforce workflow (plan -> grill -> TDD -> review), inject context (which rules apply to this file type), or block Stop until PR-ready. Hooks + Biome are layers, not alternatives. `setup-biome` adds 5 custom rules from the PR audit that live there because AST rules beat regex for those patterns.
+</details>
+
+<details>
+<summary><strong>Why not a prompt-pack / "gstack" style system prompt?</strong></summary>
+
+Prompt-packs = bundled system prompts or context-injection. They're probabilistic (LLM may or may not follow) and token-heavy (3-15k per prompt). Our prompt layer (intent-detect + user-prompt-context) is ~500-2k tokens and composable with hooks that catch what the prompt misses. Also: prompt-packs can't run bash, can't fail CI, can't verify output, can't spawn subagents. Different tool for different job.
+</details>
+
+<details>
+<summary><strong>Is this Redpanda-specific?</strong></summary>
+
+No. Redpanda-specific rules live in a **separate** kit (`redpanda-frontend-kit`) -- registry workflow, Chakra bans, legacy imports. The core `frontend-starter-kit` is stack-opinionated (React + TanStack + ConnectRPC) but org-agnostic. The public plugin has zero Redpanda internals.
+</details>
+
+<details>
+<summary><strong>How do I customize or remove a hook?</strong></summary>
+
+Every hook is a bash script in `.claude/hooks/` -- inspect, edit, delete. Plugin install places them in `~/.claude/plugins/cache/skills/frontend-skills/<ver>/.claude/hooks/`. Override per-project by copying to `<project>/.claude/hooks/` (takes precedence). Env vars control most behavior: `HOOK_VERBOSITY=terse`, `REACT_RULES_BAN_USEEFFECT=1`, `ORCHESTRATION_STRICT=0`, etc. See [Configuration](#configuration).
+</details>
+
+<details>
+<summary><strong>What about Codex / OpenAI models?</strong></summary>
+
+First-class. `codex-compat` skill generates `.codex/hooks.json` + consolidated Stop-phase batch checker + `AGENTS.md` (replaces Claude's PostCompact context re-injection). Hook scripts use `$(git rev-parse --show-toplevel)` path resolution so they work across both harnesses. `CLAUDE_SESSION_ID` / `CODEX_SESSION_ID` detected transparently.
+</details>
+
+<details>
+<summary><strong>What's the overhead per session?</strong></summary>
+
+PostToolUse hooks on a `.tsx` edit: **~293ms** wall-clock (hooks run concurrent, bottleneck = slowest). Non-JS/TS file: **~80ms** (bash spawn + extension check, all hooks exit immediately). Stop hook: **~5-13s** once per turn (biome autofix + tsgo + related tests + health score). PreToolUse on Bash: **~257ms**. For context: a typical Claude tool call is 3-8 seconds (network + inference), so PostToolUse is **3-8% overhead** -- imperceptible.
+</details>
 
 ## Skills Catalog
 
