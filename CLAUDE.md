@@ -2,7 +2,7 @@
 
 ## Quick Ref (every turn)
 
-bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/components/ui/` | `<Button>` always | zustand `create<T>()()` `useShallow` | `@/env` | TanStack Router | connect-query | TDD: fail first
+bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/components/ui/` | `<Button>` always | zustand `create<T>()()` `useShallow` | `@/env` | TanStack Router | connect-query | TDD: fail first | browser: `agent-browser` / `bunx playwright` (CLI) — never "no browser tools"
 
 ## Toolchain
 

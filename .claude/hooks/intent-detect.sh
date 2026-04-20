@@ -70,6 +70,15 @@ if echo "$prompt" | grep -qiE 'test.*browser|check.*browser|verify.*works|test t
   directives="$directives\n[VERIFY] Self-verify when automatable. No delegate CI/browser/test to user. Escalate only if sandbox lacks creds. Confirm pre-report. Order: Playwright CLI > terminal > agent-browser > MCP (last)."
 fi
 
+# ── Browser task detected (URL / navigate / click / visual bug) ──
+# Fires when prompt implies live-browser interaction. Reminds that
+# CLI browser tools exist (agent-browser, bunx playwright) so Claude
+# never replies "no browser tools available".
+
+if echo "$prompt" | grep -qiE 'https?://|localhost:|click on|click the|navigate to|go to.*http|open.*http|screenshot|white flash|flash.*appears|hover over|fill.*form|visual.*bug|rendering issue|ui bug|page load|reload.*page'; then
+  directives="$directives\n[BROWSER] Browser tools available via CLI: \`agent-browser\` (installed at ~/.local/state/fnm.../bin/agent-browser, run \`agent-browser --help\`) and \`bunx playwright\` (codegen/test/screenshot). Also mcp__claude-in-chrome__* as fallback. Never say \"no browser tools\" — use the CLI. Order: bunx playwright > agent-browser > claude-in-chrome MCP (last)."
+fi
+
 # ── CI fix workflow ──────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'fix ci|green ci|ci failing|ci broken|check failures|fix pipeline|fix checks|fix pr checks|ci red|checks? fail'; then
