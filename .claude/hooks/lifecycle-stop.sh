@@ -126,6 +126,11 @@ while IFS= read -r _src_file; do
     *.gen.*|*_pb.*|*_connectquery.*)
       continue ;;
   esac
+  # Vendor/registry files: can't write colocated tests (vendor-file-check
+  # blocks edits there), so don't enforce colocated-test rule on them.
+  if echo "$_src_file" | grep -qE '/(redpanda-ui|components/ui/registry|vendor|fumadocs)/'; then
+    continue
+  fi
   if echo "$_src_file" | grep -qE '/(routes|components|hooks|features|modules|pages|views)/'; then
     # Only flag as new-source if file was ADDED on this branch
     # (not merely edited). Falls back to flagging only when base lookup
@@ -170,14 +175,19 @@ for _sf in $_source_files; do
   if [ "$_found_adjacent" = true ]; then
     continue
   fi
-  # Global branch scan: any tracked test file anywhere with matching
-  # basename. Covers prior-session tests that live in src/__tests__,
-  # test/, or other non-adjacent locations.
-  if git ls-files -- \
-       "**/${_sf_name}.test.ts" "**/${_sf_name}.test.tsx" \
-       "**/${_sf_name}.spec.ts" "**/${_sf_name}.spec.tsx" \
-       "**/${_sf_name}.browser.test.ts" "**/${_sf_name}.browser.test.tsx" \
-       2>/dev/null | grep -q .; then
+  # Global branch scan: any test file anywhere with matching basename.
+  # Covers prior-session tests in src/__tests__, test/, etc. Includes
+  # untracked files (--others) — session may have written the test but
+  # not yet staged it.
+  _globs=(
+    "**/${_sf_name}.test.ts" "**/${_sf_name}.test.tsx"
+    "**/${_sf_name}.spec.ts" "**/${_sf_name}.spec.tsx"
+    "**/${_sf_name}.browser.test.ts" "**/${_sf_name}.browser.test.tsx"
+  )
+  if {
+    git ls-files -- "${_globs[@]}" 2>/dev/null
+    git ls-files --others --exclude-standard -- "${_globs[@]}" 2>/dev/null
+  } | grep -q .; then
     continue
   fi
   _adjacent_tests_for_all=false
