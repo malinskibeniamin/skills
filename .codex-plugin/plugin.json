@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025), OWASP + STRIDE, Core Web Vitals gate, worktree isolation + branch safety, agent-browser integration (~91% token reduction). 9 agents (3 plan-review hats + karpathy reference), 5 routines. Single-source manifest codegen. Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -55,6 +55,7 @@
     "settings": "settings.json"
   },
   "x-changelog": {
+    "4.3.2": "2026-04-20 -- P0 plugin-install resilience. source-hook-lib.sh adds relative-path fallback (`$shim/../../shared/hook-lib.sh`) before git rev-parse last resort. Handles the dangling-symlink install failure where the Claude plugin packager absolute-ified the `_hook-lib.sh -> ../../shared/hook-lib.sh` relative link to a broken path, making every PostToolUse hook fail with `hook_parse_edit_write: command not found`. Codex plugin ships root so not directly affected, but shim is shared.",
     "4.3.1": "2026-04-20 -- lifecycle-stop UX fix: cross-ext adjacent + global basename test scan (catches Foo.tsx + Foo.test.ts, and prior-session tests in src/__tests__/ or test/). CI-pending / coverage-unavailable / no-vitest paths downgraded from block to warn -- the coverage-unavailable block was causing an infinite /tdd loop. Hard blocks reserved for evidence-based conditions. react-doctor-stop: warn-only branch for known incomplete dead-code failure. 8 evals green (2 new).",
     "4.3.0": "2026-04-19 -- /commit-push-pr nudges LLM to attach a before/after Screenshots table to PR body when diff touches frontend files (*.tsx, *.jsx, *.css, tailwind/postcss, src/components/, src/routes/, src/pages/, src/app/, registry UI). Reuses /qa captures if present, else scripts/skills-browser.sh screenshot. Section omitted on backend-only PRs. No hook changes.",
     "4.1.0": "2026-04-19 -- Failure-mode tier-2: MAST multi-agent taxonomy (Cemri et al. NeurIPS 2025, arXiv:2503.13657) added to agents/karpathy-failure-modes.md. 14 new modes across System Design / Inter-Agent Misalignment / Task Verification. Reviewer agents emit mast_checks JSON alongside karpathy_checks. x-includes.agents 5 -> 9 (corrects prior staleness). Codex plugin ships root so karpathy file already included; version-bumped for description refresh and changelog parity with Claude plugin.",
