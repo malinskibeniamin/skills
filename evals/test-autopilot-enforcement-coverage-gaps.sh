@@ -317,3 +317,16 @@ rm -rf "$_ce_tmpdir"
 
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "biome-ignore-check" "hooks.json has biome-ignore-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "route-visual-test-check" "hooks.json has route-visual-test-check"
+
+# ══════════════════════════════════════════════════════════════════
+# Proto-form hooks: files, executable bits, registration in BOTH
+# hooks.json (plugin manifest) and .claude/settings.json (local dev)
+# ══════════════════════════════════════════════════════════════════
+
+for h in connect-error-fieldmap-check proto-form-parallel-state-check form-setvalue-options-check form-error-summary-check; do
+  run_file_eval       "$HOOKS_DIR/${h}.sh" "${h}.sh exists"
+  run_executable_eval "$HOOKS_DIR/${h}.sh" "${h}.sh is executable"
+  run_content_eval    "$HOOKS_DIR/${h}.sh" "hook_has_escape" "${h} respects escape hatch"
+  run_content_eval    "$REPO_ROOT/hooks/hooks.json"       "${h}" "hooks.json has ${h}"
+  run_content_eval    "$REPO_ROOT/.claude/settings.json"  "${h}" "settings.json has ${h}"
+done
