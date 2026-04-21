@@ -1117,5 +1117,208 @@ _assert_exit 0 "non-Bash tool skipped"
 _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ connect-error-fieldmap-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-fieldmap-$$.tsx"
+
+echo "  toast-only ConnectError on proto form (warn):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+import { formatConnectError } from '@/lib/errors';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  return <form onSubmit={form.handleSubmit(() => {
+    try { doIt() } catch (e) { toast.error(formatConnectError(e)) }
+  })} />;
+};"
+_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "toast-only is warn"
+_assert_stderr_contains "FieldViolation|setError" "suggests setError mapping"
+_cleanup_test_file "$_f"
+
+echo "  setError present (pass):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+import { ConnectError } from '@connectrpc/connect';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  return <form onSubmit={form.handleSubmit(() => {
+    const ce = ConnectError.from(e);
+    ce.findDetails(BadRequestSchema).forEach(d => d.fieldViolations.forEach(v => form.setError(v.field, { type: 'server' })));
+  })} />;
+};"
+_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "mapped fields pass"
+_assert_stderr_not_contains "FieldViolation" "no warning when mapped"
+_cleanup_test_file "$_f"
+
+echo "  no form handler (skip):"
+_setup_test_file "$_f" "const X = formatConnectError(err);"
+_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "non-form file passes"
+_assert_stderr_not_contains "FieldViolation" "no warning"
+_cleanup_test_file "$_f"
+
+echo "  escape hatch (pass):"
+_setup_test_file "$_f" "// allow: connect-error-fieldmap legacy toast-only flow
+import { useProtoForm } from '@/lib/forms';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  return <form onSubmit={form.handleSubmit(() => toast.error(formatConnectError(e)))} />;
+};"
+_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "escape hatch passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ proto-form-parallel-state-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-parallel-$$.tsx"
+
+echo "  parallel useState<*Config> beside useProtoForm (warn):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+import { useState } from 'react';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  const [authConfig, setAuthConfig] = useState<McpAuthConfig>({});
+  return <form />;
+};"
+_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "parallel Config state is warn"
+_assert_stderr_contains "drift|parallel|useProtoForm" "mentions drift"
+_cleanup_test_file "$_f"
+
+echo "  useState for UI state (pass):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+import { useState } from 'react';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  const [open, setOpen] = useState<boolean>(false);
+  return <form />;
+};"
+_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "UI state passes"
+_assert_stderr_not_contains "drift" "no warning"
+_cleanup_test_file "$_f"
+
+echo "  non-proto form (skip):"
+_setup_test_file "$_f" "import { useState } from 'react';
+const X = () => {
+  const [cfg, setCfg] = useState<FooConfig>({});
+  return <div />;
+};"
+_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "no useProtoForm, passes"
+_assert_stderr_not_contains "drift" "no warning"
+_cleanup_test_file "$_f"
+
+echo "  escape hatch (pass):"
+_setup_test_file "$_f" "// allow: proto-form-parallel-state transient wizard state
+import { useProtoForm } from '@/lib/forms';
+import { useState } from 'react';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  const [wizard, setWizard] = useState<WizardConfig>({});
+  return <form />;
+};"
+_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "escape hatch passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ form-setvalue-options-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-setvalue-$$.tsx"
+
+echo "  setValue without options (warn):"
+_setup_test_file "$_f" "const handler = () => { form.setValue('name', 'x'); };"
+_run_hook "form-setvalue-options-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "no-options setValue is warn"
+_assert_stderr_contains "shouldDirty|shouldValidate" "mentions options"
+_cleanup_test_file "$_f"
+
+echo "  setValue with options (pass):"
+_setup_test_file "$_f" "const handler = () => { form.setValue('name', 'x', { shouldDirty: true, shouldValidate: true }); };"
+_run_hook "form-setvalue-options-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "options-provided passes"
+_assert_stderr_not_contains "shouldDirty" "no warning"
+_cleanup_test_file "$_f"
+
+echo "  no setValue (skip):"
+_setup_test_file "$_f" "const X = () => <div />;"
+_run_hook "form-setvalue-options-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "no setValue passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ form-error-summary-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-summary-$$.tsx"
+
+echo "  multi-field proto form without summary (warn):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  return <form onSubmit={form.handleSubmit(onOk)}>
+    <ProtoField name=\"a\" />
+    <ProtoField name=\"b\" />
+  </form>;
+};"
+_run_hook "form-error-summary-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "missing summary is warn"
+_assert_stderr_contains "FormErrorSummary|aria-live|role" "mentions summary primitive"
+_cleanup_test_file "$_f"
+
+echo "  form with FormErrorSummary (pass):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  return <form onSubmit={form.handleSubmit(onOk)}>
+    <FormErrorSummary form={form} />
+    <ProtoField name=\"a\" />
+    <ProtoField name=\"b\" />
+  </form>;
+};"
+_run_hook "form-error-summary-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "summary present passes"
+_assert_stderr_not_contains "FormErrorSummary" "no warning"
+_cleanup_test_file "$_f"
+
+echo "  single-field form (skip):"
+_setup_test_file "$_f" "import { useProtoForm } from '@/lib/forms';
+const X = () => {
+  const form = useProtoForm({ schema: S });
+  return <form onSubmit={form.handleSubmit(onOk)}>
+    <ProtoField name=\"q\" />
+  </form>;
+};"
+_run_hook "form-error-summary-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "tiny form skipped"
+_assert_stderr_not_contains "FormErrorSummary" "no warning"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
 
 _report_results "Pattern-Check Hooks"
