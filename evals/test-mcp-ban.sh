@@ -2,20 +2,24 @@
 # calls and redirects to CLI equivalents (acli, gws, agent-browser, gh, etc.)
 
 HOOK="$REPO_ROOT/.claude/hooks/mcp-ban.sh"
-HOOKS_JSON="$REPO_ROOT/hooks/hooks.json"
+CLAUDE_SETTINGS="$REPO_ROOT/.claude/settings.json"
+CODEX_HOOKS="$REPO_ROOT/.codex/hooks.json"
 
 run_file_eval "$HOOK" "mcp-ban.sh exists"
 run_executable_eval "$HOOK" "mcp-ban.sh executable"
 
-# Registration: must appear in hooks.json PreToolUse matcher
-if grep -q '"matcher": "mcp__' "$HOOKS_JSON" 2>/dev/null; then
-  echo "  PASS  hooks.json registers MCP matcher"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  hooks.json missing MCP matcher"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: mcp-ban not registered"
-fi
+# Registration: must appear in both Claude Code + Codex PreToolUse matchers
+for cfg in "$CLAUDE_SETTINGS" "$CODEX_HOOKS"; do
+  label=$(basename "$(dirname "$cfg")")/$(basename "$cfg")
+  if grep -q '"matcher": "mcp__' "$cfg" 2>/dev/null && grep -q 'mcp-ban.sh' "$cfg" 2>/dev/null; then
+    echo "  PASS  $label registers mcp-ban with mcp__ matcher"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $label missing mcp-ban registration"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: mcp-ban not registered in $label"
+  fi
+done
 
 # Helper: run hook and capture stderr/exit
 _run_mcp() {
