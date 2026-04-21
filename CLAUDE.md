@@ -10,7 +10,7 @@ bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/co
 
 ## Bash Discipline
 
-`find` -> `-maxdepth N` or `| head` | `git log` -> `-n 30` or `--oneline` | `grep -r` -> Grep tool | `cat` >200 lines -> Read | `llm-truncate` caps 4KB | `bash-verbose-guard` nudges pre-exec
+`find` -> `-maxdepth N` or `| head` | `git log` -> `-n 30` or `--oneline` | `grep -r` -> Grep tool | `cat` >200 lines -> Read | `llm-truncate` caps 4KB | `bash-verbose-guard` nudges pre-exec | `rtk-rewrite` auto-prefixes git/cargo/test/gh/tsc with `rtk` (60-90% output cut) -- install: `brew install rtk` -- filters: `.rtk/filters.toml`
 
 ## External Services (MCP banned -> CLI)
 

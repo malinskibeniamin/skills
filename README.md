@@ -24,6 +24,15 @@ Run inside [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session
 
 Three commands. Skills, hooks, agents activate immediately. Done.
 
+**Recommended: rtk** (output-compression proxy, ~60-90% token savings on git/cargo/test/gh):
+
+```bash
+brew install rtk
+rtk trust            # approve .rtk/filters.toml per project
+```
+
+Harness fail-open -- skip safe; SessionStart nudge remind if miss.
+
 **Update** (pull latest):
 
 ```bash
