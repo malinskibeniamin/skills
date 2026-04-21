@@ -283,6 +283,22 @@
           },
           {
             "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/connect-error-fieldmap-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/proto-form-parallel-state-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/form-setvalue-options-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/form-error-summary-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/unhappy-path-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {

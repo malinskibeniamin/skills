@@ -107,6 +107,72 @@ const form = useForm({
 
 Run alongside field-level resolvers (zod, protovalidate) · surface errors via `formState.errors`.
 
+## Proto Forms (useProtoForm + ProtoField)
+
+Proto-backed forms in this codebase use `useProtoForm` (wraps `useForm` with a proto-schema resolver via `protovalidate` + Standard Schema). Keep a single source of truth -- drift is how forms silently break.
+
+### No parallel `useState` (hook: `proto-form-parallel-state-check.sh`)
+
+```tsx
+// BAD -- form-shape state beside useProtoForm
+const form = useProtoForm({ schema: McpServerSchema })
+const [authConfig, setAuthConfig] = useState<McpAuthConfig>({}) // drift
+// ...custom validateAuthConfigFields + surfaceAuthFieldErrors...
+
+// GOOD -- register on the proto form
+const form = useProtoForm({ schema: McpServerSchema })
+<FormField
+  control={form.control}
+  name="authConfig"
+  render={({ field }) => <AuthConfigEditor {...field} />}
+/>
+```
+
+Use `useFieldArray` for list fields. Transient UI state (open/closed dialog, active tab) can stay in `useState`; only form-shape state must live in the form.
+
+### `setValue` options required (hook: `form-setvalue-options-check.sh`)
+
+```tsx
+// BAD -- silent update, stale validation
+form.setValue('providers', next)
+
+// GOOD
+form.setValue('providers', next, { shouldDirty: true, shouldValidate: true })
+```
+
+Silent updates only when intentional (e.g., hydrating defaults) -- mark with `// allow: setvalue-options [reason]`.
+
+### FormErrorSummary for multi-field forms (hook: `form-error-summary-check.sh`)
+
+```tsx
+<form onSubmit={form.handleSubmit(onSubmit)}>
+  <FormErrorSummary form={form} />   {/* role="alert" aria-live="polite" */}
+  <ProtoField name="name" />
+  <ProtoField name="endpoint" />
+  {/* ... */}
+</form>
+```
+
+Inline `FormMessage` alone isn't enough -- offscreen + long forms need a submit-time summary. Accept any equivalent: a shared `<FormErrorSummary>`, an `Alert` with `role="alert"`, or an `aria-live` status region.
+
+### Proto annotations -- hydrate, don't hardcode
+
+Labels / descriptions / placeholders hardcoded in JSX duplicate the proto source of truth and drift when the schema changes. Populate `ProtoAnnotations` once per schema and hydrate via `getFieldDescription(schema, fieldName)`:
+
+```tsx
+<ProtoField
+  name="endpoint"
+  label={getFieldLabel(McpServerSchema, 'endpoint')}
+  description={getFieldDescription(McpServerSchema, 'endpoint')}
+/>
+```
+
+New protos ship with annotation registry entries in the same commit as the generated `_pb.ts` -- not opportunistically later.
+
+### ConnectError -> form.setError per field
+
+See [setup-connect-query/REFERENCE.md](../setup-connect-query/REFERENCE.md#connecterror--formseterror-per-field) for the `BadRequestSchema.fieldViolations` -> `form.setError` pattern enforced by `connect-error-fieldmap-check.sh`.
+
 ## Resetting State on Prop Change -- Use `key`
 
 ```tsx

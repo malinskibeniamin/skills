@@ -118,3 +118,43 @@ import { anyPack, anyUnpack } from '@bufbuild/protobuf/wkt'
 const anyMsg = anyPack(ConfigSchema, config)
 const unpacked = anyUnpack(anyMsg, typeRegistry)
 ```
+
+## ConnectError -> form.setError per field
+
+`formatConnectError` / generic toast loses BadRequest.FieldViolation -- server-side validation feedback dies. Unpack in `onError`:
+
+```tsx
+import { ConnectError } from '@connectrpc/connect'
+import { BadRequestSchema } from '@buf/googleapis_googleapis.bufbuild_es/google/rpc/error_details_pb'
+import { toast } from 'sonner'
+
+function useCreateLLMProvider(form: UseFormReturn<LLMProviderForm>) {
+  return useMutation(createLLMProvider, {
+    onError: (error) => {
+      const ce = ConnectError.from(error)
+      const [badRequest] = ce.findDetails(BadRequestSchema)
+      const mappedFields: string[] = []
+
+      badRequest?.fieldViolations.forEach((v) => {
+        form.setError(v.field as keyof LLMProviderForm, {
+          type: 'server',
+          message: v.description,
+        })
+        mappedFields.push(v.field)
+      })
+
+      // Only toast when we couldn't map to a field -- otherwise the
+      // inline FormMessage shows the server validation error.
+      if (mappedFields.length === 0) {
+        toast.error(formatToastErrorMessageGRPC(ce))
+      }
+    },
+  })
+}
+```
+
+Rules:
+- `ConnectError.findDetails(BadRequestSchema)` -- never parse toast strings
+- One `setError` per violation; use proto field name as key
+- Toast only for non-field errors (auth, network, unmapped) -- otherwise duplicate signal
+- Reset server errors on next submit (`form.clearErrors()` in onSubmit) -- stale server messages confuse users after edit
