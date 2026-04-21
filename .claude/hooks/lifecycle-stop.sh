@@ -254,8 +254,14 @@ else
 fi
 
 # ── Step 0b: Uncommitted changes → commit ──────────────────────
-if [ -n "$(git diff --name-only 2>/dev/null)" ] || [ -n "$(git diff --cached --name-only 2>/dev/null)" ]; then
-  hook_stop_block "Uncommitted changes remain. Run /commit-push to commit and push all changes. Then retry."
+# Session-scoped: only block on dirty files this session actually touched.
+# Pre-existing dirty work (dep-bumps, WIP from prior sessions, untracked
+# scratch files) must not hostage-hold the Stop hook — that was the
+# original "hook is super noisy" bug.
+_session_dirty=$(hook_session_changed_files)
+if [ -n "$_session_dirty" ]; then
+  _dirty_count=$(echo "$_session_dirty" | wc -l | tr -d ' ')
+  hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Run /commit-push to commit and push. Then retry."
 fi
 
 # Need a remote to push to
