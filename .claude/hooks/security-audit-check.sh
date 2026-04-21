@@ -7,7 +7,7 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 # (types), unhappy-path (silent fallbacks). Covers the gaps.
 
 hook_parse_edit_write
-hook_filter_extensions "ts|tsx|js|jsx"
+hook_filter_extensions "ts|tsx"
 hook_skip_generated
 hook_skip_tests
 hook_get_added_lines

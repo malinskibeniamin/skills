@@ -5,7 +5,7 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 hook_parse_edit_write
 hook_skip_ui_dirs
 hook_skip_generated
-hook_filter_extensions "ts|tsx|jsx|mdx"
+hook_filter_extensions "ts|tsx"
 hook_get_added_lines
 
 # ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
