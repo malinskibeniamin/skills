@@ -27,10 +27,10 @@ if [ -z "$_bad" ]; then
   exit 0
 fi
 
-# Filter out setValue assignments that obviously span multiple lines
-# (ends with comma / open paren without closing). Only same-line closers
-# with no options object are the clear violation.
-_real_bad=$(echo "$_bad" | grep -E '\.setValue\(.*\)[;,]?\s*$' || true)
+# Filter out setValue calls that span multiple lines (no closing paren
+# on same line). Same-line closers without options object are the clear
+# violation — nested wrappers ({ ... }) after the call are fine.
+_real_bad=$(echo "$_bad" | grep -E '\.setValue\([^)]*\)' || true)
 
 if [ -z "$_real_bad" ]; then
   exit 0
