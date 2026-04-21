@@ -43,6 +43,10 @@ Jira `acli` | Gmail `gws` (not format:full) | Browser `agent-browser` | CI `gh` 
 - `ConnectError.from(error)` + `formatToastErrorMessageGRPC()` | `*Mutation` suffix
 - No `@redpanda-data/ui` -- registry | no direct `lucide-react` -- `components/icons`
 - No inline `staleTime`/`gcTime` -- named constants
+- Proto forms: `useProtoForm` owns state -- no parallel `useState<*Config>` / `useState<*Auth>` (hook)
+- `form.setValue(name, v, { shouldDirty: true, shouldValidate: true })` -- options required unless silence intentional (hook)
+- Multi-field forms: render `<FormErrorSummary>` / `role="alert"` / `aria-live` (hook) -- submit errors must be screen-reader visible
+- Proto labels/descriptions: hydrate from `getFieldDescription(schema, field)` via `ProtoAnnotations` registry -- don't hardcode strings in JSX when a proto annotation exists
 
 ## Tailwind
 
@@ -113,6 +117,9 @@ Route+loader -> `errorComponent` (hook) | `React.lazy()` in `<Suspense>` | handl
 
 ### Catch -- Never Swallow
 Every catch: set error state / re-throw / error handler | no silent fallbacks | no log-only UI -- user sees feedback | parse errors: early return error UI | `if (parseError) return <ErrorState />`
+
+### ConnectError field mapping
+`ConnectError.findDetails(BadRequestSchema)` in `onError` -> iterate `fieldViolations` -> `form.setError(field, { type: 'server', message })` per violation -- toast only aggregated / non-field errors (hook)
 
 ### Validation
 Format not just presence | UPPER_SNAKE validate pattern | new union variants: handle or fail loud | exhaustive: `default: never`/`satisfies never` | error types match resolver contract
