@@ -331,19 +331,70 @@ hook_skip_ui_dirs() {
   fi
 }
 
-# ── Get added lines from git diff (sets global: added_lines) ────
+# ── Get added lines from tool payload (sets global: added_lines) ──
+# Source of truth is the Edit/Write payload, NOT the working tree.
+#
+# Why: `git diff HEAD` misses untracked files (falls back to `cat`
+# whole file → every pre-existing violation reported as "new" → hook
+# noise). Payload diff shows ONLY what this tool call changed —
+# regardless of tracking status, prior dirty state, or sibling edits.
+#
+#   Edit  → diff old_string vs new_string, take added lines
+#   Write → diff `git show HEAD:file` vs content if tracked,
+#           else treat full content as added (new file)
+#
+# Output lines are prefixed with `+` to match legacy callers that
+# strip the prefix (e.g. `sed 's/^+//'`).
 
 hook_get_added_lines() {
-  local diff_output=""
-  diff_output=$(git diff HEAD -- "$file_path" 2>/dev/null) || true
+  local tool old_str new_str content head_content
+  tool=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
-  if [ -z "$diff_output" ]; then
-    added_lines=$(cat "$file_path")
+  if [ "$tool" = "Edit" ]; then
+    # Prefer payload.old_string/new_string. If neither key is present
+    # (legacy/synthetic callers), fall back to git diff vs HEAD, then
+    # to full file contents. Real Edit payload always carries both.
+    local has_old has_new
+    has_old=$(echo "$_hook_input" | jq -r '.tool_input | has("old_string")' 2>/dev/null || echo "false")
+    has_new=$(echo "$_hook_input" | jq -r '.tool_input | has("new_string")' 2>/dev/null || echo "false")
+    if [ "$has_old" = "true" ] || [ "$has_new" = "true" ]; then
+      old_str=$(echo "$_hook_input" | jq -r '.tool_input.old_string // ""' 2>/dev/null || true)
+      new_str=$(echo "$_hook_input" | jq -r '.tool_input.new_string // ""' 2>/dev/null || true)
+      added_lines=$(diff <(printf '%s\n' "$old_str") <(printf '%s\n' "$new_str") 2>/dev/null \
+        | grep '^>' | sed 's/^> //' || true)
+    else
+      local diff_out
+      diff_out=$(git diff HEAD -- "$file_path" 2>/dev/null || true)
+      if [ -n "$diff_out" ]; then
+        added_lines=$(echo "$diff_out" | grep '^+' | grep -v '^+++' || true)
+      else
+        added_lines=$(cat "$file_path" 2>/dev/null || true)
+      fi
+    fi
+  elif [ "$tool" = "Write" ]; then
+    # Prefer payload.content. If absent (legacy/synthetic callers),
+    # fall back to file on disk — Write creates/overwrites, so disk
+    # state after the call IS the new content.
+    local has_content
+    has_content=$(echo "$_hook_input" | jq -r '.tool_input | has("content")' 2>/dev/null || echo "false")
+    if [ "$has_content" = "true" ]; then
+      content=$(echo "$_hook_input" | jq -r '.tool_input.content // ""' 2>/dev/null || true)
+    else
+      content=$(cat "$file_path" 2>/dev/null || true)
+    fi
+    head_content=$(git show "HEAD:./$file_path" 2>/dev/null || true)
+    if [ -n "$head_content" ]; then
+      added_lines=$(diff <(printf '%s\n' "$head_content") <(printf '%s\n' "$content") 2>/dev/null \
+        | grep '^>' | sed 's/^> //' || true)
+    else
+      added_lines="$content"
+    fi
   else
-    added_lines=$(echo "$diff_output" | grep '^+' | grep -v '^+++' || true)
+    added_lines=""
   fi
 
   if [ -z "$added_lines" ]; then
+    _hook_debug "skip: no added lines from payload ($tool)"
     exit 0
   fi
 }
@@ -468,6 +519,74 @@ hook_has_escape() {
 #   quiet            — all output suppressed (violations still tracked)
 
 _hook_verbosity="${HOOK_VERBOSITY:-normal}"
+
+# ── Elapsed-ms timer (for perf_ms telemetry) ────────────────────
+# Sets _hook_start_ms on library source. _hook_elapsed_ms prints
+# milliseconds since source. Integer-only output (test contract).
+# Cross-platform: uses python3 since macOS `date +%N` is unsupported.
+
+_hook_start_ms=$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0)
+
+_hook_elapsed_ms() {
+  local now
+  now=$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo "$_hook_start_ms")
+  echo $((now - _hook_start_ms))
+}
+
+# ── Tier API: info / nudge / block_strict / emit_diagnostic ─────
+# Added in 2.2.2 to give hooks a richer severity vocabulary than
+# the original block/warn pair.
+#
+#   hook_info          silent. tracks violation + log entry only.
+#                      use for "we saw this pattern" without user noise.
+#   hook_nudge         advisory systemMessage with [nudge] prefix,
+#                      exit 0. for optional improvements.
+#   hook_block_strict  hard-block with [STRICT] prefix, exit 2.
+#                      same exit code as hook_block; prefix distinguishes
+#                      non-negotiable rules (security, correctness) from
+#                      stylistic blocks.
+#   hook_emit_diagnostic  structured diagnostic append; no-op if no sink.
+
+hook_info() {
+  local rule="${1:-$(basename "$0" .sh)}"
+  _hook_debug "INFO [$rule]"
+  _hook_track_violation "$rule"
+  _hook_log_entry "info" "$rule"
+  exit 0
+}
+
+hook_nudge() {
+  local msg="$1"
+  local rule="${2:-$(basename "$0" .sh)}"
+  _hook_debug "NUDGE [$rule]: $msg"
+  _hook_track_violation "$rule"
+  _hook_log_entry "nudge" "$rule"
+  if [ "$_hook_verbosity" = "normal" ]; then
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[nudge] $msg\"}" >&2
+  fi
+  exit 0
+}
+
+hook_block_strict() {
+  local msg="$1"
+  local rule="${2:-$(basename "$0" .sh)}"
+  _hook_debug "STRICT [$rule]: $msg"
+  _hook_track_violation "$rule"
+  _hook_log_entry "block-strict" "$rule"
+  if [ "$_hook_verbosity" != "quiet" ]; then
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[STRICT] $msg\"}" >&2
+  fi
+  exit 2
+}
+
+hook_emit_diagnostic() {
+  local sink="$_hook_session_dir/diagnostics.jsonl"
+  local hook="${2:-$(basename "$0" .sh)}"
+  local payload="${1:-}"
+  [ -z "$payload" ] && return 0
+  printf '{"ts":%d,"hook":"%s","payload":%s}\n' \
+    "$(date +%s)" "$hook" "$payload" >> "$sink" 2>/dev/null || true
+}
 
 # ── PostToolUse: Block with systemMessage (exit 2) ──────────────
 

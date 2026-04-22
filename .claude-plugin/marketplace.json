@@ -5,31 +5,32 @@
     "name": "Beniamin Malinski"
   },
   "metadata": {
-    "description": "React/TypeScript frontend enforcement harness for Claude Code -- 82 hooks, 41 skills, 8 agents, 5 routines"
+    "description": "React/TypeScript frontend enforcement harness for Claude Code -- 89 hooks, 47 skills, 9 agents, 5 routines"
   },
   "plugins": [
     {
       "name": "frontend-skills",
-      "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 21 LLM failure modes enforced (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. Worktree isolation + branch safety. Agent-browser integration (~91% token reduction). 9 agents (3-hat plan review + karpathy reference), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "4.4.0",
+      "description": "React/TypeScript frontend enforcement harness. 89 wired hooks (98 scripts) enforce patterns on every edit. 47 skills from TDD through CI-green PR, including /snyk-ux-security per-path vuln sweep (React 18 pin + changelog-walked major bumps + no-deferral escalation). 21 LLM failure modes enforced (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. bun.lock + yarn.lock parity enforced. Worktree isolation + branch safety. MCP ban with CLI redirect (~20x savings). Agent-browser integration (~91% token reduction). 9 agents (3-hat plan review + karpathy reference), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.5.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
       },
-      "x-updatedAt": "2026-04-21",
+      "x-updatedAt": "2026-04-22",
       "x-includes": {
-        "skills": 46,
-        "hooks": 82,
+        "skills": 47,
+        "hooks": 89,
         "commands": 0,
         "routines": 5,
         "agents": 9,
         "sharedUtilities": 11,
         "references": 25,
-        "evals": 1,
+        "evals": 61,
         "instructions": ["CLAUDE.md", "AGENTS.md"],
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.5.0": "2026-04-22 -- /snyk-ux-security + lockfile parity + payload-diff fix. /snyk-ux-security skill: per-path Snyk sweep for UX/frontend repos. Paths as args; reviewers/labels/UX-assignee/workflow inferred from CODEOWNERS + git history + repo state. Enforces React 18 pin (React 19 peers skipped + reported). Walks majors incrementally via changelog migrations, one commit per hop. Never defers vulns -- escalates. Opens one PR per path. 76-check eval suite. lockfile-sync-check.sh PostToolUse hook enforces bun.lock + yarn.lock parity (Snyk IO doesn't parse bun.lock). Warns on binary bun.lockb. hook_get_added_lines switched from git-diff-HEAD fallback to payload diff (Edit old_string vs new_string, Write HEAD vs payload.content) -- root fix for false-positive noise on untracked files where `cat`-fallback flagged every pre-existing violation as new. New test-hook-payload-diff.sh eval (6/6).",
         "4.4.0": "2026-04-21 -- Wired mcp-ban.sh into PreToolUse (`mcp__.*` matcher) across .claude/settings.json, .codex/hooks.json, and skill-manifest.json. Hook previously existed but was never registered — MCP calls slipped past the deny list. Denies verbose MCP tools (Jira, Gmail, browser, Blacksmith, Calendar, Drive, Buildkite, Box, M365) with CLI-equivalent redirect hints (acli, gws, agent-browser, gh, bk, box, m365). Saves ~20x tokens per call. Eval harness updated to check both Claude + Codex configs. 17/17 pass.",
         "4.3.2": "2026-04-20 -- P0 plugin-install resilience. source-hook-lib.sh self-heals when the packager rewrites the `_hook-lib.sh -> ../../shared/hook-lib.sh` relative symlink into a broken absolute path (observed on 4.3.1 install; every PostToolUse hook was failing with `hook_parse_edit_write: command not found`). Shim now tries `$shim/../../shared/hook-lib.sh` before the last-resort git rev-parse. Affected users: reinstall or let /plugin update pull the fix.",
         "4.3.1": "2026-04-20 -- lifecycle-stop UX fix: cross-ext adjacent + global basename test scan (catches .tsx src + .ts test, and prior-session tests in src/__tests__/ or test/). Three block paths downgraded to warn: CI-pending, coverage-unavailable (was causing infinite /tdd loop), no-vitest. Hard blocks reserved for evidence-based conditions. react-doctor-stop: warn-only branch for known incomplete dead-code failure. 8 evals green (2 new).",
