@@ -2,7 +2,7 @@
 
 ## Quick Ref (every turn)
 
-bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/components/ui/` | `<Button>` always | zustand `create<T>()()` `useShallow` | `@/env` | TanStack Router | connect-query | TDD: fail first | browser: `agent-browser` / `bunx playwright` (CLI) — never "no browser tools"
+bun tsgo biome vitest | Compiler memoizes | fix types (guards, generics) | `@/components/ui/` | `<Button>` always | zustand `create<T>()()` `useShallow` | `@/env` | TanStack Router | connect-query | TDD: fail first | browser: `agent-browser` / `bunx playwright` (CLI) -- never "no browser tools"
 
 ## Toolchain
 
@@ -79,19 +79,9 @@ Order every task. Hooks block skipped steps.
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 
-### Effort per phase (Opus 4.7 `xhigh` tier)
+### Effort per phase (Opus 4.7)
 
-Downsized one level from prior xhigh/max mix. 4.7 hits diminishing returns
-at max for most phases -- keep max/xhigh reserved for the final gates.
-
-| Phase | Effort | Reason |
-|---|---|---|
-| 1 Understand | `high` | Exploration needs real synthesis |
-| 2 Plan / Grill | `high` | Trade-off judgment |
-| 3 Implement (TDD) | `xhigh` | Type-safety + correctness -- highest stakes |
-| 4 Simplify | `high` | Pattern recognition |
-| 5 Verify | `high` | Judgment on edge-case coverage |
-| 5 Review (security/arch) | `xhigh` | Final gate |
+Default `high`. Implement (TDD) + Review (security/arch) = `xhigh`.
 
 ### Monitor (not sleep)
 
@@ -112,26 +102,13 @@ Structured JSON | requestId/traceId all entries | log at decision points | named
 
 ## Error Handling
 
-### Boundaries
-Route+loader -> `errorComponent` (hook) | `React.lazy()` in `<Suspense>` | handle loading+error+empty | error handling async handlers
-
-### Catch -- Never Swallow
-Every catch: set error state / re-throw / error handler | no silent fallbacks | no log-only UI -- user sees feedback | parse errors: early return error UI | `if (parseError) return <ErrorState />`
-
-### ConnectError field mapping
-`ConnectError.findDetails(BadRequestSchema)` in `onError` -> iterate `fieldViolations` -> `form.setError(field, { type: 'server', message })` per violation -- toast only aggregated / non-field errors (hook)
-
-### Validation
-Format not just presence | UPPER_SNAKE validate pattern | new union variants: handle or fail loud | exhaustive: `default: never`/`satisfies never` | error types match resolver contract
-
-### Async Errors
-`onChange` async: `AbortController` cancel stale | `mutate()` needs `onError` (hook) | `Promise.all` independent, `Promise.allSettled` partial-fail OK -- no fire-and-forget
-
-### Form Error UX
-Show ALL errors not first | `aria-invalid` + `aria-describedby` (hook) | `data-invalid` != `aria-invalid` | disabled submit: `<Tooltip>` why (hook) | URL: `type="url"` (hook) | secrets: `type="text"` when verifying format
-
-### State Consistency
-Oneof fields: clear prev branch on switch | auth/config separate from form state -- single source or sync | FieldMask `paths`: `Object.keys(dirtyFields)` (hook)
+Boundaries: route+loader -> `errorComponent` (hook) | `React.lazy()` in `<Suspense>` | handle loading+error+empty
+Catch: set error state / re-throw / handler -- no silent fallbacks, no log-only UI | parse errors: early return `<ErrorState />`
+ConnectError fields: `findDetails(BadRequestSchema)` in `onError` -> iterate `fieldViolations` -> `form.setError` per violation -- toast only non-field (hook)
+Validation: format not presence | UPPER_SNAKE pattern | exhaustive: `default: never`/`satisfies never`
+Async: `onChange` async needs `AbortController` | `mutate()` needs `onError` (hook) | `Promise.allSettled` for partial-fail
+Form UX: show ALL errors | `aria-invalid`+`aria-describedby` (hook) | disabled submit: `<Tooltip>` why (hook) | URL: `type="url"` | secrets: `type="text"` when verifying
+State: oneof clear prev on switch | auth/config separate from form | FieldMask `paths`: `Object.keys(dirtyFields)` (hook)
 
 ## Auto Mode
 

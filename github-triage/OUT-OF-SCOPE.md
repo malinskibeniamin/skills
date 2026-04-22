@@ -2,8 +2,8 @@
 
 `.out-of-scope/` dir in repo store persistent records of rejected feature requests. Two purposes:
 
-1. **Institutional memory** — why feature rejected, so reasoning not lost when issue closed
-2. **Deduplication** — new issue match prior rejection, skill surface previous decision instead of re-litigate
+1. **Institutional memory** -- why feature rejected, so reasoning not lost when issue closed
+2. **Deduplication** -- new issue match prior rejection, skill surface previous decision instead of re-litigate
 
 ## Directory structure
 
@@ -18,7 +18,7 @@ One file per **concept**, not per issue. Multiple issues for same thing grouped 
 
 ## File format
 
-Write relaxed, readable style — more like short design doc than database entry. Use paragraphs, code samples, examples to make reasoning clear to first-time reader.
+Write relaxed, readable style -- more like short design doc than database entry. Use paragraphs, code samples, examples to make reasoning clear to first-time reader.
 
 ```markdown
 # Dark Mode
@@ -48,9 +48,9 @@ interface ThemeConfig {
 
 ## Prior requests
 
-- #42 — "Add dark mode support"
-- #87 — "Night theme for accessibility"
-- #134 — "Dark theme option"
+- #42 -- "Add dark mode support"
+- #87 -- "Night theme for accessibility"
+- #134 -- "Dark theme option"
 ```
 
 ### Naming the file
@@ -59,27 +59,27 @@ Short, descriptive kebab-case concept name: `dark-mode.md`, `plugin-system.md`, 
 
 ### Writing the reason
 
-Reason substantive — not "we don't want this" but why. Good reasons reference:
+Reason substantive -- not "we don't want this" but why. Good reasons reference:
 
 - Project scope/philosophy ("This project focuses on X; theming is a downstream concern")
 - Technical constraints ("Supporting this would require Y, which conflicts with our Z architecture")
 - Strategic decisions ("We chose to use A instead of B because...")
 
-Reason durable. Avoid temporary circumstances ("we're too busy right now") — those not real rejections, just deferrals.
+Reason durable. Avoid temporary circumstances ("we're too busy right now") -- those not real rejections, just deferrals.
 
 ## When to check `.out-of-scope/`
 
 During triage (Step 1: Gather context), read all files in `.out-of-scope/`. When evaluating new issue:
 
 - Check if request matches existing out-of-scope concept
-- Match by concept similarity, not keyword — "night theme" matches `dark-mode.md`
-- If match, surface to maintainer: "This is similar to `.out-of-scope/dark-mode.md` — we rejected this before because [reason]. Do you still feel the same way?"
+- Match by concept similarity, not keyword -- "night theme" matches `dark-mode.md`
+- If match, surface to maintainer: "This is similar to `.out-of-scope/dark-mode.md` -- we rejected this before because [reason]. Do you still feel the same way?"
 
 Maintainer may:
 
-- **Confirm** — new issue added to existing file's "Prior requests" list, then closed
-- **Reconsider** — out-of-scope file deleted or updated, issue proceeds through normal triage
-- **Disagree** — issues related but distinct, proceed with normal triage
+- **Confirm** -- new issue added to existing file's "Prior requests" list, then closed
+- **Reconsider** -- out-of-scope file deleted or updated, issue proceeds through normal triage
+- **Disagree** -- issues related but distinct, proceed with normal triage
 
 ## When to write to `.out-of-scope/`
 
@@ -97,5 +97,5 @@ Only when **enhancement** (not bug) rejected as `wontfix`. Flow:
 If maintainer changes mind about previously rejected concept:
 
 - Delete `.out-of-scope/` file
-- Skill not need reopen old issues — they historical records
+- Skill not need reopen old issues -- they historical records
 - New issue that triggered reconsideration proceeds through normal triage

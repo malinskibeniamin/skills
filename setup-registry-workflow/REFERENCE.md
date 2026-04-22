@@ -6,7 +6,7 @@
 
 ## How It Works
 
-Stop hook checks `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` changes. Modified but `registry.json` not updated → **blocks**. No `redpanda-ui/` dir → exit immediately.
+Stop hook checks `git diff --name-only HEAD` for `redpanda-ui/` or `src/redpanda-ui/` changes. Modified but `registry.json` not updated -> **blocks**. No `redpanda-ui/` dir -> exit immediately.
 
 ## When It Triggers
 
@@ -27,7 +27,7 @@ When blocked:
 
 ## Skipping in Non-Registry Repos
 
-Auto-detect: no `redpanda-ui/` or `src/redpanda-ui/` at repo root → exit 0. No config needed.
+Auto-detect: no `redpanda-ui/` or `src/redpanda-ui/` at repo root -> exit 0. No config needed.
 
 ## Component Taxonomy
 
@@ -79,11 +79,11 @@ find .upstreaming/diffs -empty -delete
 
 ### Import Normalization
 
-Ignore: path alias diff (`@/components/button` vs `../components/button`), `'use client'` directives, biome-ignore comments, whitespace. ONLY these diffs → **Skip-Import-Only**.
+Ignore: path alias diff (`@/components/button` vs `../components/button`), `'use client'` directives, biome-ignore comments, whitespace. ONLY these diffs -> **Skip-Import-Only**.
 
 ### Staleness Detection
 
-Registry version > consumer pinned → **Skip-Outdated** (sync FROM registry). Same or older → proceed.
+Registry version > consumer pinned -> **Skip-Outdated** (sync FROM registry). Same or older -> proceed.
 
 ### Business Logic Detection
 
@@ -96,4 +96,4 @@ if (status === 'premium') { /* ... */ }
 if (pathname.includes('/dashboard')) { /* ... */ }
 ```
 
-Business logic mixed with legit fix → **Skip-Business-Logic**. Re-implement fix clean in registry.
+Business logic mixed with legit fix -> **Skip-Business-Logic**. Re-implement fix clean in registry.

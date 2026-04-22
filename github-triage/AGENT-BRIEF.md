@@ -10,7 +10,7 @@ Issue may sit in `ready-for-agent` days/weeks. Codebase change meantime. Write b
 
 - **Do** describe interfaces, types, behavioral contracts
 - **Do** name specific types, function signatures, config shapes agent should look for/modify
-- **Don't** reference file paths — go stale
+- **Don't** reference file paths -- go stale
 - **Don't** reference line numbers
 - **Don't** assume current implementation structure stay same
 
@@ -51,9 +51,9 @@ Describe what should happen after the agent's work is complete.
 Be specific about edge cases and error conditions.
 
 **Key interfaces:**
-- `TypeName` — what needs to change and why
-- `functionName()` return type — what it currently returns vs what it should return
-- Config shape — any new configuration options needed
+- `TypeName` -- what needs to change and why
+- `functionName()` return type -- what it currently returns vs what it should return
+- Config shape -- any new configuration options needed
 
 **Acceptance criteria:**
 - [ ] Specific, testable criterion 1
@@ -85,7 +85,7 @@ Truncation should break at the last word boundary before 1024 characters
 and append "..." to indicate truncation.
 
 **Key interfaces:**
-- The `SkillMetadata` type's `description` field — no type change needed,
+- The `SkillMetadata` type's `description` field -- no type change needed,
   but the validation/processing logic that populates it needs to respect
   word boundaries
 - Any function that reads SKILL.md frontmatter and extracts the description
@@ -123,7 +123,7 @@ requested the feature. When triaging new issues, these files should be
 checked for matches.
 
 **Key interfaces:**
-- Markdown file format in `.out-of-scope/` — each file should have a
+- Markdown file format in `.out-of-scope/` -- each file should have a
   `# Concept Name` heading, a `**Decision:**` line, a `**Reason:**` line,
   and a `**Prior requests:**` list with issue links
 - The triage workflow should read all `.out-of-scope/*.md` files early

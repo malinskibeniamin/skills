@@ -6,7 +6,7 @@
 
 ## Escape Hatch for useEffect
 
-`useEffect` truly needed (WebSocket cleanup, third-party lib) → add comment before:
+`useEffect` truly needed (WebSocket cleanup, third-party lib) -> add comment before:
 
 ```tsx
 // allow: useEffect -- WebSocket subscription cleanup required
@@ -16,7 +16,7 @@ useEffect(() => {
 }, [url])
 ```
 
-Hook check `// allow: useEffect` anywhere in file · reason required · legacy `// allow-useEffect:` also work.
+Hook check `// allow: useEffect` anywhere in file * reason required * legacy `// allow-useEffect:` also work.
 
 ## Raw HTML -> Component Library Mapping
 
@@ -30,7 +30,7 @@ Hook check `// allow: useEffect` anywhere in file · reason required · legacy `
 | `<table>` | `<Table>` | `@/components/ui/table` |
 | `<label>` | `<Label>` | `@/components/ui/label` |
 
-`<form>` + `<a>` allowed — no registry replacement for `<form>`, `<a>` can't always swap with TanStack Router Link.
+`<form>` + `<a>` allowed -- no registry replacement for `<form>`, `<a>` can't always swap with TanStack Router Link.
 
 ## Auto-Generated Files
 
@@ -66,9 +66,9 @@ useEffect(function connectToWebSocket() {
 ### Why
 
 - Named functions show in stack traces + React DevTools
-- Force articulate what effect do → reveal split chance
-- Can't name without "and" → effect do too much → split
-- Name start with "sync"/"update" + state → likely derived state → compute inline
+- Force articulate what effect do -> reveal split chance
+- Can't name without "and" -> effect do too much -> split
+- Name start with "sync"/"update" + state -> likely derived state -> compute inline
 
 ### Naming conventions
 
@@ -82,7 +82,7 @@ useEffect(function connectToWebSocket() {
 
 ## Form-Level Validation (react-hook-form v7.72+)
 
-Cross-field validation (confirm password, end date > start date) → use `validate` on `useForm`, not custom logic in `onSubmit`:
+Cross-field validation (confirm password, end date > start date) -> use `validate` on `useForm`, not custom logic in `onSubmit`:
 
 ```tsx
 // BAD -- validation buried in submit handler
@@ -105,7 +105,7 @@ const form = useForm({
 })
 ```
 
-Run alongside field-level resolvers (zod, protovalidate) · surface errors via `formState.errors`.
+Run alongside field-level resolvers (zod, protovalidate) * surface errors via `formState.errors`.
 
 ## Proto Forms (useProtoForm + ProtoField)
 
@@ -186,11 +186,11 @@ useEffect(() => {
 <UserProfile key={userId} />
 ```
 
-`key` work on any component · key change → React destroy old instance, create new with fresh state.
+`key` work on any component * key change -> React destroy old instance, create new with fresh state.
 
 ## Subscriptions -- Prefer `useSyncExternalStore`
 
-Browser APIs (online status, media queries, scroll position, external stores) → `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
+Browser APIs (online status, media queries, scroll position, external stores) -> `useSyncExternalStore` over manual `useEffect` + `addEventListener`:
 
 ```tsx
 // BAD -- verbose, tearing in concurrent mode
@@ -232,7 +232,7 @@ Skip for: React state, zustand (use internally), TanStack Query.
 
 ## Functional Programming
 
-Components = pure render functions · props in, JSX out · side effects in hooks only.
+Components = pure render functions * props in, JSX out * side effects in hooks only.
 
 ### Rules
 
@@ -259,7 +259,7 @@ const active = useMemo(() => items.filter(i => i.active), [items])
 
 ### useReducer Consolidation
 
-3+ interrelated `useState` → single `useReducer`:
+3+ interrelated `useState` -> single `useReducer`:
 
 ```tsx
 type State = { open: boolean; query: string; highlighted: number }
@@ -312,11 +312,11 @@ export interface InputProps extends React.ComponentProps<'input'> {
 | Excuse | Counter |
 |---|---|
 | "`as any` is fine just here" | Type erasure spread. Fix type. |
-| "Temporary @ts-expect-error" | Temporary → permanent. Fix now. |
+| "Temporary @ts-expect-error" | Temporary -> permanent. Fix now. |
 | "`style={{}}` is simpler" | Tailwind composable + cacheable. Inline style no. |
-| "Raw `<button>` is fine" | `<Button>` — consistent styling, variants, a11y baked in. |
+| "Raw `<button>` is fine" | `<Button>` -- consistent styling, variants, a11y baked in. |
 | "Add accessibility later" | Later never come. Add now. |
 | "`eval()` needed for dynamic code" | `JSON.parse()` for data. `new Function` also banned. |
-| "useState + useEffect fine here" | Computed from props/state → `useMemo`. No sync state. |
+| "useState + useEffect fine here" | Computed from props/state -> `useMemo`. No sync state. |
 | "Mutation is faster" | Immutable prevent bugs. Spread/filter/map. |
 | "Don't need useReducer yet" | 3+ interrelated useState = useReducer. Don't wait for bugs. |

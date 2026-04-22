@@ -318,7 +318,7 @@ Auto-detects current branch PR, triages, fixes, replies to threads.
 **Three big wins** -- autoplay teaser, real moments from the last 30 days:
 
 <p align="center">
-  <img src="docs/screenshots/wow-factor.gif" alt="3-5 review cycles → 0-1. While you slept Claude shipped 13 phases, 4 waves, 0 destructive commands. Force-push to main at 4am? Blocked. 60 hooks / 74 checks / 0 LLM tokens / 100% deterministic." width="900">
+  <img src="docs/screenshots/wow-factor.gif" alt="3-5 review cycles -> 0-1. While you slept Claude shipped 13 phases, 4 waves, 0 destructive commands. Force-push to main at 4am? Blocked. 60 hooks / 74 checks / 0 LLM tokens / 100% deterministic." width="900">
 </p>
 
 **Hero GIF** -- hook blocking a banned cast at write time (~293ms, every edit):
@@ -338,7 +338,7 @@ Auto-detects current branch PR, triages, fixes, replies to threads.
 Featured skill moments -- each from an actual session:
 - **`/grill-me`** -- 100+ rapid-fire questions on autoform proto-schema coupling. Surfaced 3 weeks of wasted work before a line of code was written.
 - **`/development-lifecycle`** -- adp-ui-llm-provider-cards: 4 waves, 13 phases, shipped end-to-end. No scope creep.
-- **`/tdd`** -- applied to `codex/autoform-v2-foundation` refactor. RED → GREEN → REFACTOR across the full PR surface.
+- **`/tdd`** -- applied to `codex/autoform-v2-foundation` refactor. RED -> GREEN -> REFACTOR across the full PR surface.
 - **`/simplify`** -- three iterative passes on MCP marketplace PR. Caught 15% redundant code reviewers missed.
 - **`/domain-model`** -- stress-tested plans, updated CONTEXT.md + ADRs inline. Institutional memory captured mid-design.
 - **Force-push to main blocked** -- hook redirected to feature branch + PR flow every time.
@@ -348,7 +348,7 @@ Featured skill moments -- each from an actual session:
 <details>
 <summary>More videos -- 60s explainer, 50s comparison, 70s announcement</summary>
 
-**60-second explainer** -- pain → fix → install → proof:
+**60-second explainer** -- pain -> fix -> install -> proof:
 
 <p align="center">
   <video src="docs/screenshots/explainer.mp4" controls width="720" muted playsinline>

@@ -15,7 +15,19 @@ Routine fires -> clones repo -> SessionStart hooks -> CLAUDE.md loads
 -> Stop hooks run quality gates -> session ends
 ```
 
-Hooks = enforcement layer | routine prompts = task layer. Standards evolve in repo (hooks + CLAUDE.md), routine prompts stay stable.
+### Enforcement model
+
+Hooks = enforcement layer | routine prompts = task layer. Standards evolve
+in repo (hooks + CLAUDE.md), routine prompts stay stable. Every routine
+session runs the same PostToolUse/Stop gates as an interactive dev session,
+so a routine cannot ship code that a developer could not ship locally.
+
+### vs. Sandcastle
+
+Sandcastle = local background agent in a tmux pane. Routines = cloud-hosted
+sessions triggered by schedule/webhook/API. Pick Sandcastle for long-running
+local work you want to supervise; pick routines for recurring automation
+that must survive your laptop closing.
 
 ## Available templates
 

@@ -6,7 +6,12 @@ set -euo pipefail
 source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
 
 hook_parse_edit_write
-hook_filter_extensions "ts|tsx"
+
+case "$file_path" in
+  */vitest.config.*|vitest.config.*) ;;  # allow vitest config files (any ext)
+  *) hook_filter_extensions "ts|tsx" ;;
+esac
+
 hook_skip_generated
 
 # ── Route: test file checks vs vitest config checks ──────────────
