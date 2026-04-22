@@ -88,7 +88,8 @@
         "url-state-check.sh",
         "duplicate-function-check.sh",
         "mutation-onerror-check.sh",
-        "edit-loop-check.sh"
+        "edit-loop-check.sh",
+        "lockfile-sync-check.sh"
       ],
       "Bash": ["llm-truncate.sh", "consecutive-failure-check.sh"]
     },

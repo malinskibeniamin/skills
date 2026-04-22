@@ -1,0 +1,279 @@
+# Evals for snyk-ux-security skill
+# Tests file structure, SKILL.md content, react-peer-check script behavior, lockfile-sync hook
+
+SKILL_DIR="$REPO_ROOT/snyk-ux-security"
+SKILL_MD="$SKILL_DIR/SKILL.md"
+PEER_CHECK="$SKILL_DIR/scripts/react-peer-check.sh"
+LOCK_HOOK="$REPO_ROOT/.claude/hooks/lockfile-sync-check.sh"
+MANIFEST="$REPO_ROOT/skill-manifest.json"
+
+# ── File structure ──────────────────────────────────────────────
+
+run_file_eval "$SKILL_MD" "SKILL.md exists"
+run_executable_eval "$PEER_CHECK" "react-peer-check.sh is executable"
+run_executable_eval "$LOCK_HOOK" "lockfile-sync-check.sh is executable"
+
+# Guardrail: no static config file (args-based only)
+if [ -f "$SKILL_DIR/config.yaml" ] || [ -f "$SKILL_DIR/config.yml" ] || [ -f "$SKILL_DIR/config.json" ]; then
+  echo "  FAIL  SKILL has no static config file (should be args-based)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: static config file present"
+else
+  echo "  PASS  SKILL has no static config file (args-based)"
+  PASS=$((PASS + 1))
+fi
+
+# ── SKILL.md frontmatter + triggers ─────────────────────────────
+
+run_content_eval "$SKILL_MD" "^name: snyk-ux-security" "SKILL.md has correct name"
+run_content_eval "$SKILL_MD" "^description:" "SKILL.md has description"
+run_content_eval "$SKILL_MD" "Use when" "SKILL.md description has trigger phrase"
+
+# Description must NOT hardcode specific repo names (generic skill, paths via args)
+desc=$(awk '/^description:/{print; exit}' "$SKILL_MD")
+if echo "$desc" | grep -qE "Cloud UI|Admin UI|Console UI|UI Registry|cloud-ui|admin-ui|console-ui"; then
+  echo "  FAIL  description hardcodes specific repo names (should be generic)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: description hardcodes repo names"
+else
+  echo "  PASS  description is generic (no hardcoded repo names)"
+  PASS=$((PASS + 1))
+fi
+
+# ── Args-based input ────────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "\\\$ARGUMENTS" "SKILL.md reads \$ARGUMENTS"
+run_content_eval "$SKILL_MD" "[Gg]lob" "SKILL.md supports globs in args"
+run_content_eval "$SKILL_MD" "/snyk-ux-security apps/" "SKILL.md shows usage example with paths"
+run_content_eval "$SKILL_MD" "CODEOWNERS" "SKILL.md infers reviewers from CODEOWNERS"
+run_content_eval "$SKILL_MD" "git log" "SKILL.md uses git log for reviewer inference fallback"
+
+# ── Workflow contract ───────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "[Ss]equential" "SKILL.md enforces sequential processing"
+run_content_eval "$SKILL_MD" "snyk test" "SKILL.md runs snyk test"
+run_content_eval "$SKILL_MD" "snyk monitor" "SKILL.md runs snyk monitor"
+run_content_eval "$SKILL_MD" "bun audit" "SKILL.md runs bun audit"
+run_content_eval "$SKILL_MD" "bun why" "SKILL.md uses bun why"
+run_content_eval "$SKILL_MD" "bun update" "SKILL.md uses bun update"
+run_content_eval "$SKILL_MD" "bun info" "SKILL.md uses bun info"
+
+# ── Lockfile sync (bun.lock + yarn.lock) ────────────────────────
+
+run_content_eval "$SKILL_MD" "bun install --yarn" "SKILL.md runs bun install --yarn (regen yarn.lock for Snyk)"
+run_content_eval "$SKILL_MD" "yarn\.lock" "SKILL.md references yarn.lock"
+run_content_eval "$SKILL_MD" "bun\.lock" "SKILL.md references bun.lock"
+run_content_eval "$SKILL_MD" "Snyk IO.*yarn\.lock|yarn\.lock.*Snyk" "SKILL.md explains Snyk IO needs yarn.lock"
+run_content_eval "$SKILL_MD" "[Dd]ual.lockfile|both lockfiles" "SKILL.md enforces dual-lockfile sync"
+run_content_eval "$SKILL_MD" "lockfile-sync-check" "SKILL.md references lockfile-sync-check hook"
+
+# Guardrail: bun-only for runtime (no npm/yarn/pnpm commands except `bun install --yarn`)
+if grep -qE "^\s*(npm (install|update|audit|view|why)|yarn (add|upgrade|audit|why)|pnpm (add|update|audit|why))" "$SKILL_MD"; then
+  echo "  FAIL  SKILL.md contains npm/yarn/pnpm runtime commands"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: npm/yarn/pnpm runtime commands present"
+else
+  echo "  PASS  SKILL.md uses bun-only runtime commands"
+  PASS=$((PASS + 1))
+fi
+
+# ── React 18 pin ────────────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "React 18" "SKILL.md pins React 18"
+run_content_eval "$SKILL_MD" "react19-blocked" "SKILL.md records react19-blocked skip reason"
+run_content_eval "$SKILL_MD" "peerDependencies\.react" "SKILL.md reads react peer dep"
+
+# ── No-deferral rule ────────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "[Nn]ever defer" "SKILL.md forbids deferring vulns"
+run_content_eval "$SKILL_MD" "[Ii]ncremental|step by step|one at time|one major per commit" "SKILL.md describes incremental major migration"
+run_content_eval "$SKILL_MD" "7.*8.*9" "SKILL.md walks majors one at a time"
+run_content_eval "$SKILL_MD" "[Ee]scalate" "SKILL.md escalates instead of skipping"
+
+if grep -q "breaking-deferred" "$SKILL_MD"; then
+  echo "  FAIL  SKILL.md still references breaking-deferred"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: SKILL.md references breaking-deferred"
+else
+  echo "  PASS  SKILL.md does not defer breaking changes"
+  PASS=$((PASS + 1))
+fi
+
+# ── Changelog read mandatory ────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "[Cc]hangelog" "SKILL.md requires changelog read"
+run_content_eval "$SKILL_MD" "BREAKING" "SKILL.md looks for BREAKING markers"
+
+# ── Verify gate ─────────────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "bun run lint:fix" "SKILL.md runs lint:fix verify"
+run_content_eval "$SKILL_MD" "bun run type:check" "SKILL.md runs type:check verify"
+run_content_eval "$SKILL_MD" "bun test" "SKILL.md runs tests verify"
+
+# ── PR open + metadata ──────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "gh pr create" "SKILL.md opens PR via gh"
+run_content_eval "$SKILL_MD" "--reviewer" "SKILL.md assigns reviewers"
+run_content_eval "$SKILL_MD" "--label" "SKILL.md adds labels"
+run_content_eval "$SKILL_MD" "--assignee" "SKILL.md assigns UX team"
+run_content_eval "$SKILL_MD" "security" "SKILL.md uses security label"
+run_content_eval "$SKILL_MD" "gh workflow run" "SKILL.md triggers cloud review workflow"
+
+# ── Commit format ───────────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "fix\(deps\)" "SKILL.md uses fix(deps) conventional commit"
+run_content_eval "$SKILL_MD" "refactor\(deps\)" "SKILL.md uses refactor(deps) for migration commits"
+
+# ── Worktree isolation ──────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "worktree" "SKILL.md uses worktree per path"
+run_content_eval "$SKILL_MD" "isolation" "SKILL.md specifies isolation mode"
+run_content_eval "$SKILL_MD" "subagent" "SKILL.md spawns subagent per path"
+
+# ── Security hygiene ────────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "[Nn]ever (execute|run) code from advisories|[Nn]ever.*token" "SKILL.md has security notes"
+
+# ── lockfile-sync-check.sh hook behavior ────────────────────────
+
+run_content_eval "$LOCK_HOOK" "bun\.lock" "lockfile hook matches bun.lock"
+run_content_eval "$LOCK_HOOK" "yarn\.lock" "lockfile hook matches yarn.lock"
+run_content_eval "$LOCK_HOOK" "package\.json" "lockfile hook matches package.json"
+run_content_eval "$LOCK_HOOK" "bun install --yarn" "lockfile hook suggests bun install --yarn"
+run_content_eval "$LOCK_HOOK" "hook_parse_edit_write" "lockfile hook uses shared lib parser"
+run_content_eval "$LOCK_HOOK" "hook_warn" "lockfile hook uses hook_warn (non-blocking)"
+run_content_eval "$LOCK_HOOK" "git diff" "lockfile hook uses git diff for sync check"
+run_content_eval "$LOCK_HOOK" "bun_changed|yarn_changed" "lockfile hook tracks per-lockfile change state"
+run_content_eval "$LOCK_HOOK" "bun\.lockb" "lockfile hook warns on binary bun.lockb usage"
+
+# Guardrail: SKILL must NOT rely on bun.lockb (binary).
+# Allowed: mention inside explicit deprecation language ("never ... bun.lockb" or "no binary bun.lockb")
+if grep -qE "bun\.lockb" "$SKILL_MD"; then
+  if grep -qE "(never|no).{0,40}bun\.lockb|bun\.lockb.{0,40}(deprecat|never)" "$SKILL_MD"; then
+    echo "  PASS  SKILL.md mentions bun.lockb only in deprecation context"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  SKILL.md references bun.lockb outside deprecation context"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: SKILL.md references bun.lockb"
+  fi
+else
+  echo "  PASS  SKILL.md does not reference binary bun.lockb"
+  PASS=$((PASS + 1))
+fi
+
+# Hook may mention bun.lockb only in the deprecation warning branch; assert it's in a warn context
+if grep -A2 "bun.lockb" "$LOCK_HOOK" | grep -q "hook_warn"; then
+  echo "  PASS  lockfile hook only mentions bun.lockb in deprecation warning"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  lockfile hook references bun.lockb outside deprecation warning"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: bun.lockb referenced as normal path in hook"
+fi
+
+# ── Hook wired in manifest ──────────────────────────────────────
+
+run_content_eval "$MANIFEST" "lockfile-sync-check\.sh" "lockfile-sync-check.sh registered in skill-manifest.json"
+
+# ── lockfile-sync-check.sh behavior (git-diff drift) ───────────
+
+_lock_tmpdir=$(mktemp -d /tmp/snyk-lock-eval-XXXXXX)
+cd "$_lock_tmpdir"
+git init -q
+git config user.email "eval@test"
+git config user.name "eval"
+echo '{"name":"x","version":"1.0.0"}' > package.json
+echo '{"lockfileVersion":1,"packages":{}}' > bun.lock
+printf '# yarn lockfile v1\n\n' > yarn.lock
+git add -A && git commit -q -m "init"
+
+# Modify bun.lock but not yarn.lock
+echo '{"lockfileVersion":1,"packages":{"foo@1.0.0":{}}}' > bun.lock
+
+# Invoke hook with Edit tool_input referencing bun.lock
+hook_out=$(echo "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_lock_tmpdir/bun.lock\"}}" \
+  | "$LOCK_HOOK" 2>&1 || true)
+
+cd "$REPO_ROOT"
+if echo "$hook_out" | grep -qE "yarn.lock unchanged|bun install --yarn"; then
+  echo "  PASS  lockfile hook nudges when bun.lock changes without yarn.lock"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  lockfile hook silent on drift (bun.lock changed, yarn.lock not)"
+  echo "        output: $hook_out"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: lockfile hook silent on drift"
+fi
+
+# Inverse: modify yarn.lock but not bun.lock
+cd "$_lock_tmpdir"
+git checkout -q bun.lock
+printf '# yarn lockfile v1\n\nfoo@1.0.0:\n  version "1.0.0"\n' > yarn.lock
+hook_out2=$(echo "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_lock_tmpdir/yarn.lock\"}}" \
+  | "$LOCK_HOOK" 2>&1 || true)
+cd "$REPO_ROOT"
+if echo "$hook_out2" | grep -qE "bun.lock unchanged|Run: bun install"; then
+  echo "  PASS  lockfile hook nudges when yarn.lock changes without bun.lock"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  lockfile hook silent on drift (yarn.lock changed, bun.lock not)"
+  echo "        output: $hook_out2"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: lockfile hook silent on inverse drift"
+fi
+
+# bun.lockb path triggers deprecation warn (file must exist for parser to proceed)
+cd "$_lock_tmpdir"
+: > bun.lockb
+cd "$REPO_ROOT"
+hook_out3=$(echo "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_lock_tmpdir/bun.lockb\"}}" \
+  | "$LOCK_HOOK" 2>&1 || true)
+if echo "$hook_out3" | grep -q "bun.lockb detected"; then
+  echo "  PASS  lockfile hook warns on bun.lockb (binary, deprecated)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  lockfile hook does not warn on bun.lockb"
+  echo "        output: $hook_out3"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: lockfile hook silent on bun.lockb"
+fi
+
+rm -rf "$_lock_tmpdir"
+
+# ── react-peer-check.sh behavior ────────────────────────────────
+
+_peer_tmpdir=$(mktemp -d /tmp/snyk-peer-eval-XXXXXX)
+cat > "$_peer_tmpdir/bun" <<'EOF'
+#!/bin/bash
+echo "${PEER_RANGE:-}"
+EOF
+chmod +x "$_peer_tmpdir/bun"
+
+peer_test() {
+  local range="$1"
+  local expected_exit="$2"
+  local desc="$3"
+  local actual_exit=0
+  PEER_RANGE="$range" PATH="$_peer_tmpdir:$PATH" "$PEER_CHECK" somepkg 1.2.3 > /dev/null 2>&1 || actual_exit=$?
+  if [ "$actual_exit" -eq "$expected_exit" ]; then
+    echo "  PASS  $desc"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $desc (expected exit $expected_exit, got $actual_exit)"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $desc"
+  fi
+}
+
+peer_test "^18" 0 "peer check: ^18 -> exit 0"
+peer_test "^18.0.0" 0 "peer check: ^18.0.0 -> exit 0"
+peer_test "^17 || ^18" 0 "peer check: ^17 || ^18 -> exit 0"
+peer_test "^18 || ^19" 0 "peer check: ^18 || ^19 -> exit 0"
+peer_test "^19" 1 "peer check: ^19 -> exit 1"
+peer_test ">=19" 1 "peer check: >=19 -> exit 1"
+peer_test "" 0 "peer check: empty -> exit 0"
+peer_test "*" 0 "peer check: wildcard * -> exit 0"
+peer_test ">=17" 0 "peer check: >=17 -> exit 0"
+
+rm -rf "$_peer_tmpdir"
