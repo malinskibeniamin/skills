@@ -277,3 +277,35 @@ peer_test "*" 0 "peer check: wildcard * -> exit 0"
 peer_test ">=17" 0 "peer check: >=17 -> exit 0"
 
 rm -rf "$_peer_tmpdir"
+
+# ── Exploitability triage (top-level-first, override-last rule) ─
+
+run_content_eval "$SKILL_MD" "[Ee]xploitability|[Rr]eachable|[Nn]ot reachable|not-reachable" "SKILL.md triages exploitability before bumping"
+run_content_eval "$SKILL_MD" "snyk ignore" "SKILL.md dismisses non-exploitable vulns via snyk ignore"
+run_content_eval "$SKILL_MD" "--reason" "SKILL.md requires reason on snyk ignore dismissals"
+run_content_eval "$SKILL_MD" "--expiry" "SKILL.md requires expiry on snyk ignore dismissals"
+run_content_eval "$SKILL_MD" "[Tt]op-level|direct dep" "SKILL.md prefers top-level direct dep bumps"
+run_content_eval "$SKILL_MD" "[Ll]ast resort|last-resort" "SKILL.md treats overrides/resolutions as last resort"
+run_content_eval "$SKILL_MD" "resolutions|overrides|replace" "SKILL.md acknowledges resolutions/overrides/replace mechanisms"
+run_content_eval "$SKILL_MD" "[Bb]loat|scale poorly|do not scale|don.t scale" "SKILL.md explains why overrides do not scale"
+
+# REFERENCE.md must document the full upgrade-priority ladder
+REF_MD="$SKILL_DIR/REFERENCE.md"
+run_file_eval "$REF_MD" "REFERENCE.md exists"
+run_content_eval "$REF_MD" "[Ee]xploitability triage" "REFERENCE.md documents exploitability triage"
+run_content_eval "$REF_MD" "[Uu]pgrade priority" "REFERENCE.md documents upgrade priority ladder"
+run_content_eval "$REF_MD" "bun why" "REFERENCE.md uses bun why for JS reachability"
+run_content_eval "$REF_MD" "go mod why" "REFERENCE.md uses go mod why for Go reachability"
+
+# ── Go ecosystem parity ─────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "go\.mod" "SKILL.md handles Go go.mod paths"
+run_content_eval "$SKILL_MD" "govulncheck" "SKILL.md runs govulncheck for Go"
+run_content_eval "$SKILL_MD" "go get -u" "SKILL.md bumps Go modules via go get -u"
+run_content_eval "$SKILL_MD" "go mod tidy" "SKILL.md syncs go.mod + go.sum via go mod tidy"
+run_content_eval "$SKILL_MD" "go test" "SKILL.md runs go test for Go verify"
+run_content_eval "$SKILL_MD" "go build" "SKILL.md runs go build for Go verify"
+run_content_eval "$REF_MD" "snyk test --file=go\.mod" "REFERENCE.md runs snyk test --file=go.mod for Go"
+run_content_eval "$REF_MD" "replace.{0,3}directive" "REFERENCE.md flags Go replace directive as last resort"
+run_content_eval "$REF_MD" "go\.sum" "REFERENCE.md commits go.sum alongside go.mod"
+run_content_eval "$REF_MD" "call graph|reachability" "REFERENCE.md leverages govulncheck reachability"

@@ -1,7 +1,7 @@
-# Snyk UX Security -- Reference
+# Snyk UX + Go Security -- Reference
 
 Deep-dive details split out of SKILL.md to keep the main doc under the
-110-line cap. See [SKILL.md](SKILL.md) for the high-level flow.
+line cap. See [SKILL.md](SKILL.md) for the high-level flow.
 
 ## Arg inference rules
 
@@ -9,14 +9,18 @@ From the user message, infer per path:
 
 - **reviewers**: CODEOWNERS of the path; fall back to
   `git log --format='%an' -n 20 <path> | sort -u` top contributors.
-- **UX team**: match path prefix -> team slug via `.github/CODEOWNERS`
-  team entries.
+- **team**: match path prefix -> team slug via `.github/CODEOWNERS`
+  team entries. `apps/*-ui`, `ui-registry/*`, `console/frontend` ->
+  UX team. `services/*`, `cmd/*`, paths with `go.mod` -> backend
+  team.
 - **labels**: always `security`, `dependencies`, `snyk`. Add a domain
-  label if inferable from path (e.g. `cloud-ui` -> `area/cloud`).
+  label if inferable from path (e.g. `cloud-ui` -> `area/cloud`;
+  `services/ingest` -> `area/ingest`). Add `lang/go` on Go paths,
+  `lang/ts` on JS paths.
 - **cloud review workflow**: look for
-  `.github/workflows/*cloud*review*.yml` or equivalent; skip the trigger
-  step if none found.
-- **PR title/body**: generate per path.
+  `.github/workflows/*cloud*review*.yml` or equivalent; skip the
+  trigger step if none found.
+- **PR title/body**: generate per path. Mention ecosystem.
 
 User can override any of these in the prompt:
 `/snyk-ux-security apps/cloud-ui --reviewer @alice --label area/cloud`.
@@ -24,25 +28,96 @@ User can override any of these in the prompt:
 ## Per-path detail
 
 ### 2a. Scan
+
+JS path:
 ```bash
 snyk test --all-projects --json > .snyk-findings.json
-snyk monitor --all-projects                     # push to Snyk IO
-bun audit --json > .bun-audit.json              # cross-check
+snyk monitor --all-projects
+bun audit --json > .bun-audit.json
 ```
 
-Snyk IO reads `yarn.lock`, not `bun.lock`. If repo has no `yarn.lock`,
-generate first: `bun install --yarn`.
-
-### 2b. Triage
-Parse findings. Per vuln pkg: CVE, severity, fixed-in ver, paths.
-
+Go path:
 ```bash
-bun why <pkg>                                   # why included, depth
+snyk test --file=go.mod --json > .snyk-findings.json
+snyk monitor --file=go.mod
+govulncheck -json ./... > .govulncheck.json
 ```
 
-Group: direct deps (bumpable) vs transitive (parent bump or override).
+Snyk IO reads `yarn.lock`, not `bun.lock`. If JS repo has no
+`yarn.lock`, generate first: `bun install --yarn`.
 
-### 2c. React 18 gate (mandatory)
+### 2b. Exploitability triage
+
+For every finding, decide REACHABLE vs NOT-REACHABLE **before any
+bump**. This is the most important gate -- skipping it leads to
+reflex `resolutions`/`overrides` that bloat `node_modules` and force
+more upgrades later.
+
+Inputs:
+- Advisory attack vector: read the CVE / GHSA description. Which
+  function / endpoint / input surface is the exploit? Server-side
+  parser? Client-side SSR? CLI arg? Build-time plugin?
+- Import graph:
+  - JS: `bun why <pkg>` -- why it's included, which parent(s).
+    `grep -rn "from '<pkg>'"` to see if we import it directly.
+  - Go: `go mod why <mod>` + `grep -rn '"<mod>"' --include='*.go'`
+    for direct imports.
+- Our usage: do we call the vulnerable function / hit the vulnerable
+  code path? Example: `hono-server` ships as a transitive of the MCP
+  SDK protocol package, but we may only use the client half. Server
+  feature never imported -> NOT-REACHABLE.
+
+Decision:
+
+- **NOT-REACHABLE** -- dismiss. Do not add to `resolutions` /
+  `overrides` / `replace`. Document due diligence:
+  ```bash
+  snyk ignore --id=<issue-id> \
+    --reason='Not reachable: <specific pkg path + why we do not hit it>' \
+    --expiry=$(date -u -v+90d +%Y-%m-%dT%H:%M:%SZ)
+  ```
+  Record the dismissal in the PR body under `Dismissed (not
+  exploitable)`. Include CVE, vulnerable symbol, our usage check,
+  snyk ignore command used, expiry date. Expiry forces re-triage so
+  dismissals do not rot.
+
+- **REACHABLE** (or exploit vector credible and reachability cannot
+  be proved false) -- proceed to 2c.
+
+### 2c. Upgrade priority (top-level first, override last)
+
+Always try these in order. Document the order actually taken in the
+PR body.
+
+1. **Direct dep bump.** The package is already in our `package.json`
+   / `go.mod`. Bump it to a fixing version. This is the default path.
+   ```bash
+   # JS
+   bun update <pkg>@<fixed-version>
+   # Go
+   go get -u <module>@<fixed-version>
+   ```
+2. **Parent dep bump.** The vuln is in a transitive. Look up which of
+   our direct deps pulls it. Bump that direct dep to a version whose
+   transitives pin the fixed version. Prefer this over override --
+   one bump, upstream-maintained.
+3. **Override / resolution / replace (last resort).** Only when
+   direct + parent bump are both blocked (upstream has no fix;
+   fixing version needs React 19 and our React 18 pin stands; etc).
+   - JS: `package.json` `"resolutions"` (bun/yarn-compatible) or
+     `"overrides"` (npm-compatible). We use `resolutions` under bun.
+   - Go: `replace` directive in `go.mod`.
+   - Add a follow-up TODO: **Remove this override once upstream
+     ships a fix**. Include the override in a dedicated PR section
+     (`Overrides added -- follow-up to remove`).
+   - Explain in the PR body why steps 1 and 2 were blocked.
+
+**Why this order matters:** every added override is tomorrow's
+forced upgrade. Overrides accumulate, node_modules bloats,
+maintenance compounds weekly. Top-level bumps are upstream-tracked
+and self-maintaining.
+
+### 2d. React 18 gate (JS, mandatory)
 
 ```bash
 bun info <pkg>@<fixed-version> peerDependencies.react
@@ -51,91 +126,136 @@ bun info <pkg>@<fixed-version> peerDependencies.react
 - Need `^19` or `>=19` -> **SKIP**. Log `react19-blocked`.
 - OK with `^18`, `^17 || ^18`, or `^18 || ^19` -> proceed.
 
-### 2d. Changelog read -- incremental major migration
+### 2e. Changelog read -- incremental major migration
 
-Vulns **never defer**. Breaking changes across majors **must apply**.
-Only React 19 peer = hard stop.
+Vulns **never defer** when reachable. Breaking changes across majors
+**must apply**. Only React 19 peer = hard stop.
 
 ```bash
+# JS
 bun info <pkg> repository.url
-# curl raw CHANGELOG.md, or gh release list --repo <owner>/<repo>
+# Go
+go list -m -u <module>
 ```
+
+Then `curl` raw CHANGELOG.md, or `gh release list --repo <owner>/<repo>`.
 
 **Walk majors one at a time.** Current `7.x` -> target `9.x`:
 
-1. Read `7.x -> 8.0.0` migration notes. Apply code changes. Verify (2f).
-   Commit: `refactor(deps): migrate <pkg> to 8.x -- <summary>`.
+1. Read `7.x -> 8.0.0` migration notes. Apply code changes. Verify
+   (2g). Commit: `refactor(deps): migrate <pkg> to 8.x -- <summary>`.
 2. Read `8.x -> 9.0.0` migration notes. Apply. Verify. Commit.
 3. Final bump to target patch. Verify. Commit.
 
-Per major step, log in PR body: from-ver, to-ver, `BREAKING` items done,
-code spots touched.
+Per major step, log in PR body: from-ver, to-ver, `BREAKING` items
+done, code spots touched.
 
-Stuck -> escalate (PR comment or ask user). **No skip.** Vuln unpatched
-is not acceptable. Exception: target needs React 19 peer (2c gate).
+Stuck -> escalate (PR comment or ask user). **No skip.** Real
+reachable vuln unpatched is not acceptable. Exception: target needs
+React 19 peer (2d gate).
 
-### 2e. Apply bumps + lockfile sync
+### 2f. Apply bumps + lockfile sync
+
+JS:
 ```bash
 bun update <pkg>@<target>
-bun install                                      # sync bun.lock
-bun install --yarn                               # sync yarn.lock
+bun install                # sync bun.lock
+bun install --yarn         # sync yarn.lock
 ```
 
-Both lockfiles **must commit together**. Snyk IO scans `yarn.lock` (no
-native `bun.lock` support yet). `bun.lock` (text, bun >= 1.2 -- never
-binary `bun.lockb`) is source of truth for runtime.
+Both lockfiles **must commit together**. Snyk IO scans `yarn.lock`
+(no native `bun.lock` support yet). `bun.lock` (text, bun >= 1.2 --
+never binary `bun.lockb`) is source of truth for runtime.
 
 Sync checked by `lockfile-sync-check.sh` hook via two signals:
 
 1. `git diff` parity -- both lockfiles must appear in same diff.
-2. Package presence -- each added `pkg@ver` in `bun.lock` must appear in
-   `yarn.lock` at same version.
+2. Package presence -- each added `pkg@ver` in `bun.lock` must
+   appear in `yarn.lock` at same version.
 
 Drift -> hook nudges with regen command.
 
-### 2f. Verify
+Go:
+```bash
+go get -u <module>@<target>
+go mod tidy
+```
+
+`go.mod` + `go.sum` must commit together.
+
+### 2g. Verify
+
+JS:
 ```bash
 bun run lint:fix
 bun run type:check
 bun test
-bun run build                                    # if available
+bun run build              # if available
+```
+
+Go:
+```bash
+go build ./...
+go test ./...
+go vet ./...
+govulncheck ./...          # must be clean for addressed CVEs
 ```
 
 Any fail -> diagnose, fix, re-run. Must pass before next step. No
 revert -- fix forward. Truly stuck -> escalate, no skip.
 
-### 2g. Commit
+### 2h. Commit
+
 ```
-fix(deps): snyk sweep -- <cve-count> vulns, <pkg-count> bumps
+fix(deps): snyk sweep -- <cve-count> vulns, <pkg-count> bumps, <n> dismissed
 
 <bullet per package: pkg@from -> to, CVE, severity>
 
+Dismissed (not exploitable):
+- <pkg> -- <CVE>, <reason>, snyk ignore --id=<id> expiry <date>
+
+Overrides added (follow-up to remove):
+- <pkg> -- <CVE>, <why direct+parent bump blocked>
+
 Lockfiles: bun.lock + yarn.lock regenerated (bun i && bun i --yarn).
+Go modules: go.mod + go.sum regenerated (go mod tidy).
 
 Skipped (React 19 peer only -- everything else migrated):
 - <pkg> -- react19-blocked
 ```
 
-### 2h. Open PR
+### 2i. Open PR
+
 ```bash
 gh pr create \
   --title "fix(deps): snyk sweep <path> -- $(date +%Y-%m-%d)" \
   --body-file .pr-body.md \
   --reviewer <inferred from CODEOWNERS + git log> \
-  --label security,dependencies,snyk,<domain-label> \
-  --assignee <inferred ux team>
+  --label security,dependencies,snyk,<domain-label>,lang/<ts|go> \
+  --assignee <inferred team>
 ```
 
 ### PR body template (`.pr-body.md`)
 
 ```markdown
 ## Summary
-Snyk sweep for `<path>` -- <n> CVEs addressed.
+Snyk sweep for `<path>` (ecosystem: <js|go|both>) -- <n> CVEs
+addressed, <m> dismissed (not exploitable).
 
-## Bumped
-| Package | From | To | CVE | Severity | Major hops |
-|---|---|---|---|---|---|
-| ... | ... | ... | ... | ... | 7->8->9 |
+## Bumped (top-level direct first, parent dep second)
+| Package | From | To | CVE | Severity | Priority path | Major hops |
+|---|---|---|---|---|---|---|
+| ... | ... | ... | ... | ... | direct / parent / override | 7->8->9 |
+
+## Dismissed (not exploitable)
+| Package | CVE | Vulnerable symbol | Our usage check | Reason | Snyk ignore id | Expiry |
+|---|---|---|---|---|---|---|
+| hono-server | CVE-XXXX-YYYY | server.listen | grep -rn "hono-server": only client-side import via MCP SDK protocol; server feature never called | Server feature not imported -- attack surface zero in this repo | 12345 | 2026-07-22 |
+
+## Overrides added (follow-up to remove)
+| Package | CVE | Why direct + parent bump blocked | Tracking issue |
+|---|---|---|---|
+| ... | ... | upstream has no fix yet; filed #NN | #NN |
 
 ## Migration notes (per major hop)
 - `pkg 7 -> 8`: <breaking changes handled, code locations>
@@ -145,39 +265,68 @@ Snyk sweep for `<path>` -- <n> CVEs addressed.
 - `pkg` -- requires React 19, frozen on React 18, tracked as follow-up
 
 ## Lockfiles
-Both regenerated via `bun i && bun i --yarn`. Snyk IO scans yarn.lock;
-runtime uses bun.lock.
+JS: both regenerated via `bun i && bun i --yarn`. Snyk IO scans
+yarn.lock; runtime uses bun.lock.
+Go: `go mod tidy` ran; `go.mod` + `go.sum` committed together.
 
 ## Changelog review
 <link per bumped pkg>
 
 ## Verify
+JS:
 - [x] `bun run lint:fix`
 - [x] `bun run type:check`
 - [x] `bun test`
 - [x] Snyk rescan clean for addressed CVEs
+Go:
+- [x] `go build ./...`
+- [x] `go test ./...`
+- [x] `go vet ./...`
+- [x] `govulncheck ./...` clean for addressed CVEs
 
 ## Cloud review
 Triggered via `<workflow>`.
 ```
 
-### 2i. Trigger cloud review
+### 2j. Trigger cloud review
 ```bash
 gh workflow run <inferred_workflow> --ref <branch>
 ```
 
 Skip silently if no cloud-review workflow detected.
 
-### 2j. Report
-Subagent returns: path, branch, PR URL, bumped list, skipped list
-(reason), CI status.
+### 2k. Report
+Subagent returns: path, ecosystem (js/go/both), branch, PR URL,
+bumped list, dismissed list (CVE + reason + snyk ignore id),
+overrides-added list (CVE + blocker), skipped list (reason), CI
+status.
 
 ## Aggregate
 
 Main agent gathers reports. Summary table:
 
-| Path | PR | Fixed | Major migrations applied | React19-blocked |
-|---|---|---|---|---|
+| Path | Ecosystem | PR | Fixed (direct) | Fixed (parent) | Overrides added | Dismissed | Major migrations | React19-blocked |
+|---|---|---|---|---|---|---|---|---|
 
 Show React-19-blocked pkgs -- candidates for the React 18 -> 19
-migration plan.
+migration plan. Show overrides-added as a follow-up backlog --
+remove each once upstream ships a fix.
+
+## Go ecosystem notes
+
+- Use `snyk test --file=go.mod --file=go.sum`. Snyk supports Go
+  modules natively.
+- `govulncheck` is the Go-native static reachability tool from the Go
+  security team. Prefer its reachability verdict over raw CVE lists
+  -- it flags only vulns actually reachable from call graph. This
+  feeds the exploitability triage (2b) for Go paths.
+- For transitive-only vulns that `govulncheck` marks non-reachable,
+  dismiss via `snyk ignore` with reason `govulncheck: not reachable
+  from call graph`.
+- Never use `replace` directive as a first move. Direct
+  `go get -u <module>` comes first; `replace` is last resort and
+  needs a tracking issue.
+- `go mod tidy` after every change. Never hand-edit `go.sum`.
+- Ensure `go.mod` `go 1.XX` directive stays within the repo's
+  supported range (don't bump the toolchain line as part of a CVE
+  sweep -- that's a separate change).
