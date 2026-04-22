@@ -69,17 +69,45 @@ Inputs:
 
 Decision:
 
-- **NOT-REACHABLE** -- dismiss. Do not add to `resolutions` /
-  `overrides` / `replace`. Document due diligence:
-  ```bash
-  snyk ignore --id=<issue-id> \
-    --reason='Not reachable: <specific pkg path + why we do not hit it>' \
-    --expiry=$(date -u -v+90d +%Y-%m-%dT%H:%M:%SZ)
-  ```
+- **NOT-REACHABLE** -- dismiss **via the Snyk CLI, not via PR
+  description alone**. PR text is not an audit artifact; `.snyk` +
+  Snyk IO project state are. Do this per finding, in order:
+
+  1. Run the dismiss now:
+     ```bash
+     snyk ignore --id=<issue-id> \
+       --reason='Not reachable: <specific pkg path + why we do not hit it>' \
+       --expiry=$(date -u -v+90d +%Y-%m-%dT%H:%M:%SZ)
+     ```
+     This writes a policy entry to the `.snyk` file at repo root
+     (creates the file if absent). Run from the repo root so the
+     policy applies project-wide.
+  2. Stage + commit `.snyk` as part of the sweep PR. The dismissal
+     must land in git alongside the bumps. A dismissal that only
+     lives in the PR description is invisible to CI, auditors, and
+     the next sweep.
+  3. Push dismissals to Snyk IO:
+     ```bash
+     snyk monitor --all-projects        # JS
+     snyk monitor --file=go.mod         # Go
+     ```
+     Monitor applies the `.snyk` policy to the IO project, so the IO
+     dashboard shows the issue as `Ignored` with the reason +
+     expiry. Re-run `snyk test` locally to confirm the issue is
+     listed under `Ignored issues` before opening the PR.
+  4. **Do not** add the package to `resolutions` / `overrides` /
+     `replace`. Dismissal replaces the bump, it does not accompany
+     one.
+
   Record the dismissal in the PR body under `Dismissed (not
-  exploitable)`. Include CVE, vulnerable symbol, our usage check,
-  snyk ignore command used, expiry date. Expiry forces re-triage so
-  dismissals do not rot.
+  exploitable)`. Include CVE, vulnerable symbol, usage check,
+  `snyk ignore` issue id used, reason, expiry date, and a link to
+  the IO issue. Expiry forces re-triage so dismissals do not rot.
+
+  If `snyk ignore` errors (e.g. the issue is already ignored,
+  auth missing, wrong org context), fix the CLI state before
+  opening the PR. Do not fall back to "note in the description"
+  -- escalate instead.
 
 - **REACHABLE** (or exploit vector credible and reachability cannot
   be proved false) -- proceed to 2c.
@@ -211,7 +239,7 @@ fix(deps): snyk sweep -- <cve-count> vulns, <pkg-count> bumps, <n> dismissed
 
 <bullet per package: pkg@from -> to, CVE, severity>
 
-Dismissed (not exploitable):
+Dismissed (not exploitable) -- applied via `snyk ignore` + `.snyk` committed:
 - <pkg> -- <CVE>, <reason>, snyk ignore --id=<id> expiry <date>
 
 Overrides added (follow-up to remove):
@@ -219,6 +247,7 @@ Overrides added (follow-up to remove):
 
 Lockfiles: bun.lock + yarn.lock regenerated (bun i && bun i --yarn).
 Go modules: go.mod + go.sum regenerated (go mod tidy).
+Policy: .snyk updated with <n> ignore entries; snyk monitor pushed to IO.
 
 Skipped (React 19 peer only -- everything else migrated):
 - <pkg> -- react19-blocked
@@ -248,9 +277,17 @@ addressed, <m> dismissed (not exploitable).
 | ... | ... | ... | ... | ... | direct / parent / override | 7->8->9 |
 
 ## Dismissed (not exploitable)
-| Package | CVE | Vulnerable symbol | Our usage check | Reason | Snyk ignore id | Expiry |
-|---|---|---|---|---|---|---|
-| hono-server | CVE-XXXX-YYYY | server.listen | grep -rn "hono-server": only client-side import via MCP SDK protocol; server feature never called | Server feature not imported -- attack surface zero in this repo | 12345 | 2026-07-22 |
+
+All entries below were applied via `snyk ignore` (Snyk CLI writes to
+`.snyk` policy file, committed in this PR) and pushed to Snyk IO via
+`snyk monitor`. PR-description text alone is not an audit artifact --
+`.snyk` + IO project state are.
+
+| Package | CVE | Vulnerable symbol | Our usage check | Reason | Snyk ignore id | Expiry | IO link |
+|---|---|---|---|---|---|---|---|
+| hono-server | CVE-XXXX-YYYY | server.listen | grep -rn "hono-server": only client-side import via MCP SDK protocol; server feature never called | Server feature not imported -- attack surface zero in this repo | 12345 | 2026-07-22 | [IO](https://app.snyk.io/...) |
+
+Verify: `snyk test` shows each row as `Ignored` before PR open.
 
 ## Overrides added (follow-up to remove)
 | Package | CVE | Why direct + parent bump blocked | Tracking issue |
@@ -278,6 +315,9 @@ JS:
 - [x] `bun run type:check`
 - [x] `bun test`
 - [x] Snyk rescan clean for addressed CVEs
+- [x] `.snyk` committed with <n> new ignore entries
+- [x] `snyk monitor` pushed ignores to IO
+- [x] `snyk test` confirms all dismissed items show as `Ignored`
 Go:
 - [x] `go build ./...`
 - [x] `go test ./...`
@@ -297,7 +337,8 @@ Skip silently if no cloud-review workflow detected.
 
 ### 2k. Report
 Subagent returns: path, ecosystem (js/go/both), branch, PR URL,
-bumped list, dismissed list (CVE + reason + snyk ignore id),
+bumped list, dismissed list (CVE + reason + snyk ignore id + expiry),
+`.snyk` delta (lines added), `snyk monitor` push confirmation,
 overrides-added list (CVE + blocker), skipped list (reason), CI
 status.
 

@@ -31,7 +31,7 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
 
 - **2a. Scan**: `snyk test`, `snyk monitor`. JS: `bun audit`. Go: `govulncheck ./...`.
 - **2b. Exploitability triage (first gate)**: per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
-  - **NOT reachable** -> dismiss with `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>`. Record in PR under `Dismissed (not exploitable)`. SLA audit trail.
+  - **NOT reachable** -> **run `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>` now** (writes to `.snyk` policy file). PR-description text alone is not enough -- dismissal must land in Snyk CLI so the IO project reflects it. Stage + commit the resulting `.snyk` in the sweep PR. Re-run `snyk test` to confirm the issue shows as `Ignored`. Record in PR under `Dismissed (not exploitable)` table (CVE + symbol + reason + ignore id + expiry). SLA audit trail.
   - **Reachable or credible vector** -> 2c.
 - **2c. Upgrade priority (top-level first, override last)**:
   1. Bump the **direct dep we already have** in `package.json` / `go.mod`.
@@ -56,7 +56,7 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 
 ## Rules
 - **Sequential**, one path at time.
-- **Exploitability triage before any bump.** No reflex `resolutions`. Not-reachable -> dismiss with `snyk ignore` + documented reason (SLA audit trail).
+- **Exploitability triage before any bump.** No reflex `resolutions`. Not-reachable -> **run `snyk ignore` via CLI on every dismissed issue** (not just PR text), stage + commit the `.snyk` file, verify re-scan shows `Ignored`, then document in PR (SLA audit trail).
 - **Top-level direct bump first.** Parent bump second. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
 - **bun only (JS).** Never `npm`, `yarn`, `pnpm` runtime. `yarn.lock` via `bun install --yarn` for Snyk IO compat only.
 - **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift.
