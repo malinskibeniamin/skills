@@ -315,3 +315,26 @@ run_content_eval "$REF_MD" "snyk test --file=go\.mod" "REFERENCE.md runs snyk te
 run_content_eval "$REF_MD" "replace.{0,3}directive" "REFERENCE.md flags Go replace directive as last resort"
 run_content_eval "$REF_MD" "go\.sum" "REFERENCE.md commits go.sum alongside go.mod"
 run_content_eval "$REF_MD" "call graph|reachability" "REFERENCE.md leverages govulncheck reachability"
+
+# ── Existing .snyk revisit (cleanup stale ignores) ──────────────
+
+run_content_eval "$SKILL_MD" "[Rr]evisit|re-triage" "SKILL.md revisits existing .snyk entries before new scan"
+run_content_eval "$SKILL_MD" "snyk ignore --remove|--remove --id=" "SKILL.md removes stale ignores via snyk ignore --remove"
+run_content_eval "$SKILL_MD" "[Cc]leaned up|clean up|accumulate" "SKILL.md prevents dismissal accumulation"
+run_content_eval "$REF_MD" "Existing .snyk revisit|revisit.*every run|revisit.*before scan" "REFERENCE.md documents .snyk revisit procedure"
+run_content_eval "$REF_MD" "snyk ignore --remove" "REFERENCE.md removes stale ignores"
+run_content_eval "$REF_MD" "[Ee]xpiry passed|expir" "REFERENCE.md checks expiry on existing ignores"
+run_content_eval "$REF_MD" "Dismissed .cleaned up." "REFERENCE.md PR template includes Dismissed (cleaned up) section"
+
+# ── PR metadata: assignee = triggerer, reviewer = team group ───
+
+run_content_eval "$SKILL_MD" "gh api user --jq \.login|triggerer|triggered the sweep" "SKILL.md sets assignee to the triggerer"
+run_content_eval "$SKILL_MD" "team group|CODEOWNERS team|@.*/.*|reviewer group" "SKILL.md requires a team-group reviewer"
+run_content_eval "$SKILL_MD" ">=1|at least one" "SKILL.md enforces at least one reviewer"
+run_content_eval "$SKILL_MD" "[Ss]ecurity team.*automatically|security team.*added" "SKILL.md adds security team on dismissals/overrides"
+run_content_eval "$SKILL_MD" "team/" "SKILL.md applies team-domain labels"
+run_content_eval "$SKILL_MD" "dismissals|overrides-added|react19-blocked|cleaned-up" "SKILL.md applies status labels"
+run_content_eval "$REF_MD" "gh api user --jq \.login" "REFERENCE.md resolves triggerer via gh api"
+run_content_eval "$REF_MD" "team group|team-group|CODEOWNERS team" "REFERENCE.md requires team-group reviewers"
+run_content_eval "$REF_MD" "only individual reviewers|lone individual|without a team" "REFERENCE.md rejects PRs with only individual reviewers"
+run_content_eval "$REF_MD" "security team group|security.team.*automatically" "REFERENCE.md auto-adds security team on dismissals/overrides"

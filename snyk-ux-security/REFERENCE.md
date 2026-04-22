@@ -27,7 +27,46 @@ User can override any of these in the prompt:
 
 ## Per-path detail
 
-### 2a. Scan
+### 2a. Existing `.snyk` revisit (every run, before scan)
+
+Run this before `snyk test` so the rescan reflects cleanup. Goal:
+never let the `.snyk` policy file accumulate stale dismissals. Each
+sweep should leave `.snyk` **shorter** than it started, unless the
+codebase genuinely needs new ignores.
+
+For every entry in the repo-root `.snyk` (if any):
+
+1. **Still in the dep graph?**
+   ```bash
+   # JS
+   bun why <pkg>
+   # Go
+   go mod why <module>
+   ```
+   No results / "not a dependency" -> the transitive was bumped out
+   by a prior sweep. Remove the ignore:
+   ```bash
+   snyk ignore --remove --id=<issue-id>
+   # or edit .snyk directly + snyk monitor
+   ```
+   Log under PR `Dismissed (cleaned up)` section.
+
+2. **Still not reachable?** If the transitive is present, re-run the
+   exploitability check from 2b. If reachable now (new caller, new
+   entrypoint, code moved), remove the ignore and proceed to 2c to
+   upgrade/fix properly.
+
+3. **Expiry passed?** If `expiry` is before today, the CLI already
+   stops honoring it -- remove the entry so `.snyk` stays clean.
+
+4. **Reason still valid?** Skim the reason; if the advisory surface
+   changed (new CVE on same pkg, patch landed upstream), re-triage.
+
+Report: include a `Revisited .snyk` count (existing entries
+inspected) and a `Cleaned up` count (entries removed) in the PR
+body + subagent 2k report. Cleanup trims long-term override debt.
+
+### 2a.1 Scan
 
 JS path:
 ```bash
@@ -256,20 +295,63 @@ Skipped (React 19 peer only -- everything else migrated):
 ### 2i. Open PR
 
 ```bash
+# Resolve metadata
+triggerer=$(gh api user --jq .login)
+team_reviewers=$(bash "$SKILL_DIR/scripts/codeowners-teams.sh" "<path>")
+# team_reviewers must be non-empty; if empty, fall back to path-prefix
+# -> team map (documented below). Never open a PR with only individual
+# reviewers -- require >=1 team group.
+labels="security,dependencies,snyk,lang/<ts|go>"
+# Add team-domain labels resolved from CODEOWNERS (e.g. team/ux,
+# team/ai, team/console-ui). Add status labels based on state.
+[ -s .snyk_diff ]            && labels="$labels,dismissals"
+[ -s .overrides-added ]      && labels="$labels,overrides-added"
+[ -s .react19-blocked ]      && labels="$labels,react19-blocked"
+
+# Always add security team group when .snyk touched or overrides added.
+security_team="@<org>/security"
+
 gh pr create \
   --title "fix(deps): snyk sweep <path> -- $(date +%Y-%m-%d)" \
   --body-file .pr-body.md \
-  --reviewer <inferred from CODEOWNERS + git log> \
-  --label security,dependencies,snyk,<domain-label>,lang/<ts|go> \
-  --assignee <inferred team>
+  --reviewer "$team_reviewers,$security_team" \
+  --label "$labels,team/<slug>" \
+  --assignee "$triggerer"
 ```
+
+**Assignee rule**: one assignee per PR, = the user who triggered
+the sweep. Resolve via `gh api user --jq .login` (the authenticated
+gh user). Gives clear accountability: anyone scanning open PRs sees
+who ran the audit.
+
+**Reviewer rule**: at least one **team group** (`@<org>/<team>`)
+resolved from CODEOWNERS entries for the path. Falls back to
+path-prefix inference only if CODEOWNERS has no team owner (edit
+CODEOWNERS rather than leaving the PR without a team). Individual
+committers from `git log` may be added *in addition*, but a PR
+with only individual reviewers is rejected (opens a follow-up note
+asking the user to update CODEOWNERS). Security team group is
+added automatically whenever the PR touches `.snyk` (dismissals)
+or adds an `overrides` entry -- they need visibility on every
+dismissal + override.
+
+**Label rule**: always `security`, `dependencies`, `snyk`,
+`lang/ts` or `lang/go`. Plus team-domain label derived from
+CODEOWNERS team slug (examples from Redpanda monorepo: UX team
+paths, AI team paths, Console UI team paths -- resolved by path,
+not hardcoded). Plus status labels: `dismissals` (on any `.snyk`
+add or remove), `overrides-added`, `react19-blocked`, `cleaned-up`
+(when `.snyk` entries removed). Labels give one-click filters for
+dashboards and oncall sweeps.
 
 ### PR body template (`.pr-body.md`)
 
 ```markdown
 ## Summary
 Snyk sweep for `<path>` (ecosystem: <js|go|both>) -- <n> CVEs
-addressed, <m> dismissed (not exploitable).
+addressed, <m> newly dismissed, <k> existing `.snyk` entries
+revisited, <c> cleaned up (transitive gone / reachable now /
+expired). Triggered by @<triggerer>.
 
 ## Bumped (top-level direct first, parent dep second)
 | Package | From | To | CVE | Severity | Priority path | Major hops |
@@ -288,6 +370,16 @@ All entries below were applied via `snyk ignore` (Snyk CLI writes to
 | hono-server | CVE-XXXX-YYYY | server.listen | grep -rn "hono-server": only client-side import via MCP SDK protocol; server feature never called | Server feature not imported -- attack surface zero in this repo | 12345 | 2026-07-22 | [IO](https://app.snyk.io/...) |
 
 Verify: `snyk test` shows each row as `Ignored` before PR open.
+
+## Dismissed (cleaned up)
+
+Existing `.snyk` entries removed this sweep -- transitive gone,
+reachability changed, or expiry passed. `snyk monitor` pushed the
+cleanup to IO so the dashboard reflects fewer live ignores.
+
+| Package | Original CVE | Original ignore id | Reason removed | Proof |
+|---|---|---|---|---|
+| <pkg> | CVE-... | <id> | Transitive bumped out / reachable now / expired | `bun why <pkg>` -> no results |
 
 ## Overrides added (follow-up to remove)
 | Package | CVE | Why direct + parent bump blocked | Tracking issue |
@@ -337,10 +429,12 @@ Skip silently if no cloud-review workflow detected.
 
 ### 2k. Report
 Subagent returns: path, ecosystem (js/go/both), branch, PR URL,
-bumped list, dismissed list (CVE + reason + snyk ignore id + expiry),
-`.snyk` delta (lines added), `snyk monitor` push confirmation,
-overrides-added list (CVE + blocker), skipped list (reason), CI
-status.
+triggerer (assignee), team reviewers (resolved from CODEOWNERS),
+labels applied, `.snyk` revisited count, `.snyk` cleaned-up count
+(transitive gone / reachable now / expired), newly-dismissed list
+(CVE + reason + snyk ignore id + expiry), `snyk monitor` push
+confirmation, bumped list, overrides-added list (CVE + blocker),
+skipped list (reason), CI status.
 
 ## Aggregate
 
