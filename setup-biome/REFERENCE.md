@@ -136,4 +136,4 @@ Ultracite strict baseline. Overrides:
 
 ## Import Deletion Loop Prevention
 
-PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without: Claude add import → Biome delete (unused, JSX not written yet) → Claude re-add → infinite loop. Stop hook catch when edit done.
+PostToolUse hook skip `noUnusedImports` (`--skip=lint/correctness/noUnusedImports`). Without: Claude add import -> Biome delete (unused, JSX not written yet) -> Claude re-add -> infinite loop. Stop hook catch when edit done.

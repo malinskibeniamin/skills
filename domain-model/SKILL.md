@@ -82,41 +82,6 @@ Any reviewer return `status: BLOCKED` -> plan no advance until blocking finding 
 
 All hats return `APPROVED` or user override specific findings -> plan approved -> Phase 3 (Implement).
 
-## Light DDD -- Document, Don't Prescribe
-
-USE: Ubiquitous Language | Bounded Contexts | ADRs
-SKIP: Entities | Value Objects | Aggregates | Domain Events
-
-Goal = "just enough docs" make codebase navigable. Language into software, not patterns into software.
-
-## Domain Awareness
-
-During codebase exploration, look for existing docs:
-
-### Single context (most repos)
-
-    /
-    ├── CONTEXT.md
-    ├── docs/adr/
-    │   ├── 0001-event-sourced-orders.md
-    │   └── 0002-postgres-for-write-model.md
-    └── src/
-
-### Multi-context (if CONTEXT-MAP.md exists at root)
-
-    /
-    ├── CONTEXT-MAP.md
-    ├── docs/adr/                    <- system-wide decisions
-    ├── src/
-    │   ├── ordering/
-    │   │   ├── CONTEXT.md
-    │   │   └── docs/adr/            <- context-specific decisions
-    │   └── billing/
-    │       ├── CONTEXT.md
-    │       └── docs/adr/
-
-Create files lazy -- only when first term resolved or first ADR needed.
-
 ## Skip Gate
 
 Skip three-hat fan-out only if:

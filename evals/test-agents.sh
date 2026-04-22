@@ -46,10 +46,11 @@ else
   PASS=$((PASS + 1))
 fi
 
-# ── Reviewer agents use sonnet model ─────────────────────────────
-for reviewer in self-reviewer adversarial-reviewer code-reviewer; do
+# ── Reviewer agent models (adversarial=opus for depth; others=sonnet) ──
+for reviewer in self-reviewer code-reviewer; do
   run_content_eval "$AGENTS_DIR/${reviewer}.md" "^model: sonnet" "${reviewer} uses sonnet model"
 done
+run_content_eval "$AGENTS_DIR/adversarial-reviewer.md" "^model: opus" "adversarial-reviewer uses opus model"
 
 # ── verifier does NOT reference findings-schema (not a reviewer) ─
 if grep -q "findings-schema" "$AGENTS_DIR/verifier.md"; then
