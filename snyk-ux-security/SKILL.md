@@ -1,92 +1,75 @@
 ---
 name: snyk-ux-security
-description: "Sequential Snyk security sweep across UX/frontend codebases. Paths passed as args (supports globs). Per path: worktree + branch + subagent, snyk test/monitor, bun audit, bun why, bun update, pin React 18 (skip React-19-only peers), walk majors incrementally via changelog migrations, regen yarn.lock + bun.lock via `bun i && bun i --yarn` (Snyk needs yarn.lock), open PR with reviewers/labels/UX team/description, trigger cloud review. Never defers vulns. Use when user asks for Snyk audit, UX security sweep, frontend dep security review."
+description: "Sequential Snyk sweep across UX/frontend + Go backend codebases. Paths as args (globs ok). Per path: worktree + branch + subagent, snyk test/monitor, ecosystem detect (package.json -> bun audit; go.mod -> govulncheck), exploitability triage first (dismiss non-reachable via `snyk ignore` with --reason + --expiry), then top-level direct dep bump, then parent-dep bump, overrides/resolutions/replace as last resort (scale poorly, bloat lockfiles). Pin React 18, skip React-19-only peers. Walk majors incrementally via changelog migrations. Regen yarn.lock + bun.lock via `bun i && bun i --yarn` (Snyk needs yarn.lock); `go mod tidy` for Go. Open PR with reviewers/labels/team, trigger cloud review. Never defers real vulns -- escalates. Use when user asks for Snyk audit, UX security sweep, frontend dep security review, Go backend dep security review, govulncheck sweep, CVE sweep."
 ---
 
-# Snyk UX Security
+# Snyk UX + Go Security
 
-Sequential per-path vuln audit -> safe bump -> PR -> cloud review.
+Per-path vuln audit -> exploitability triage -> safe bump -> PR -> cloud review. JS (bun + yarn.lock, React 18) and Go (go.mod + govulncheck).
 
 ## Input
+`$ARGUMENTS`: space-separated paths (globs ok). Frontend + backend mix fine.
 
-`$ARGUMENTS`: space-separated paths to scan. Globs supported.
+Example: `/snyk-ux-security apps/cloud-ui apps/admin-ui ui-registry/* console/frontend services/*/cmd`
 
-Example:
-```
-/snyk-ux-security apps/cloud-ui apps/admin-ui apps/adp-ui ui-registry/* console/frontend
-```
-
-Each resolved path = one worktree + one branch + one subagent + one PR.
+Each path = one worktree + one branch + one subagent + one PR.
 
 ## Arg inference
+Reviewers from CODEOWNERS + `git log --format='%an' -n 20 <path>` committers. Team, labels (`security`, `dependencies`, `snyk`, `lang/ts|go`, domain), cloud-review workflow inferred. User flags override. See [REFERENCE.md](REFERENCE.md#arg-inference-rules).
 
-From the user prompt, infer reviewers (CODEOWNERS + recent committers
-via `git log --format='%an' -n 20 <path>`), UX team, labels (`security`,
-`dependencies`, `snyk`, + domain), and the cloud-review workflow. User
-overrides via flags. Full rules in
-[REFERENCE.md](REFERENCE.md#arg-inference-rules).
+## Ecosystem detect
+`package.json` -> JS track. `go.mod` -> Go track. Both present -> both tracks, separate commits, one PR.
 
 ## Workflow
-
-Do paths **one at a time**, no parallel.
+Sequential, one path at time.
 
 ### 1. Prep
-- Expand globs in `$ARGUMENTS` to concrete paths.
-- Check `snyk auth`. Fail fast if not authenticated.
-- Check `gh auth status`.
-- Confirm the resolved path list back to the user before fan-out.
+Expand globs. `snyk auth`, `gh auth status`. Confirm paths + ecosystems to user.
 
 ### 2. Per-path loop
+Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [REFERENCE.md](REFERENCE.md#per-path-detail) for commands + PR template.
 
-Each path, spawn a subagent with `isolation: "worktree"`, branch
-`chore/snyk-sweep-YYYY-MM-DD`. The subagent runs these steps; see
-[REFERENCE.md](REFERENCE.md#per-path-detail) for commands and full PR
-body template:
-
-- **2a. Scan**: `snyk test`, `snyk monitor`, `bun audit`.
-- **2b. Triage**: parse findings, group direct vs transitive.
-- **2c. React 18 gate**: `bun info <pkg>@<v> peerDependencies.react` --
-  skip + log `react19-blocked` if target needs React 19.
-- **2d. Changelog read**: walk majors one at a time (7->8->9), scan for
-  `BREAKING` markers, apply migration notes, one `refactor(deps)` commit
-  per major. **Never defer vulns.**
-- **2e. Apply bumps + lockfile sync**: `bun update`, then
-  `bun install && bun install --yarn` -- both `bun.lock` and `yarn.lock`
-  must commit together (Snyk IO scans `yarn.lock`).
-- **2f. Verify**: `bun run lint:fix`, `bun run type:check`, `bun test`,
-  `bun run build` (if available). Fix forward, no revert.
-- **2g. Commit**: `fix(deps): snyk sweep ...` with per-package detail.
-- **2h. Open PR**: `gh pr create --reviewer <...> --label
-  security,dependencies,snyk,<domain> --assignee <ux-team>`.
-- **2i. Trigger cloud review**: `gh workflow run` if the workflow exists.
-- **2j. Report**: subagent returns path, branch, PR URL, bumped/skipped.
+- **2a. Scan**: `snyk test`, `snyk monitor`. JS: `bun audit`. Go: `govulncheck ./...`.
+- **2b. Exploitability triage (first gate)**: per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
+  - **NOT reachable** -> dismiss with `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>`. Record in PR under `Dismissed (not exploitable)`. SLA audit trail.
+  - **Reachable or credible vector** -> 2c.
+- **2c. Upgrade priority (top-level first, override last)**:
+  1. Bump the **direct dep we already have** in `package.json` / `go.mod`.
+  2. If blocked, bump the **parent dep** that pulls the vuln transitive.
+  3. **Last resort only**: `resolutions` (bun), `overrides` (npm), `replace` (Go). Overrides/resolutions **do not scale** -- each added one bloats lockfiles and forces more next week. Add follow-up TODO to remove once upstream fixes.
+- **2d. React 18 gate (JS)**: `bun info <pkg>@<v> peerDependencies.react` -- skip + log `react19-blocked` if target needs React 19.
+- **2e. Changelog read**: walk majors one at time (7->8->9), scan `BREAKING`, apply migration, one `refactor(deps)` commit per major. **Never defer real vulns.** Go: repo `CHANGELOG.md` + release notes.
+- **2f. Apply bumps + lockfile sync**:
+  - JS: `bun update <pkg>`, then `bun install && bun install --yarn`. Both `bun.lock` + `yarn.lock` commit together.
+  - Go: `go get -u <mod>@<ver>`, then `go mod tidy`. `go.mod` + `go.sum` commit together.
+- **2g. Verify**:
+  - JS: `bun run lint:fix`, `bun run type:check`, `bun test`, `bun run build` (if avail).
+  - Go: `go build ./...`, `go test ./...`, `go vet ./...`, `govulncheck ./...` clean for addressed CVEs.
+  - Fix forward, no revert.
+- **2h. Commit**: `fix(deps): snyk sweep ...` with per-pkg detail. Dismissed + overrides-added in separate sections.
+- **2i. Open PR**: `gh pr create --reviewer <...> --label security,dependencies,snyk,<domain>,lang/<ts|go> --assignee <team>`.
+- **2j. Trigger cloud review**: `gh workflow run` if workflow exists.
+- **2k. Report**: path, ecosystem, branch, PR URL, bumped/dismissed/skipped/overridden counts.
 
 ### 3. Aggregate
-Main agent gathers reports into a summary table (Path, PR, Fixed,
-Major migrations, React19-blocked) and surfaces the React-19-blocked
-set as candidates for a separate React 18 -> 19 migration plan.
+Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed, Overrides-added, Major migrations, React19-blocked). React-19-blocked -> React 18 -> 19 migration plan candidates. Overrides-added -> follow-up backlog.
 
 ## Rules
-
-- **Sequential**, no parallel. One path at a time. Triage cleaner serial.
-- **bun only**. Never `npm`, `yarn`, `pnpm` as runtime pkg managers.
-  `yarn.lock` generated by `bun install --yarn` for Snyk IO compat only.
-- **Dual-lockfile mandatory.** `bun.lock` + `yarn.lock` always synced;
-  `lockfile-sync-check.sh` hook catches drift.
-- **React 18 pin hard.** Any React-19 peer -> skip + report.
-- **Changelog read mandatory** before bump.
-- **Verify before commit.** Lint + types + tests + build.
-- **Snyk monitor** push to Snyk IO (not just `test`).
-- **Never defer vulns.** Majors migrated step-by-step, one major per
-  commit. Stuck -> escalate, not skip.
-- **Infer metadata from prompt + repo.** No static config. User flags
-  override.
+- **Sequential**, one path at time.
+- **Exploitability triage before any bump.** No reflex `resolutions`. Not-reachable -> dismiss with `snyk ignore` + documented reason (SLA audit trail).
+- **Top-level direct bump first.** Parent bump second. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
+- **bun only (JS).** Never `npm`, `yarn`, `pnpm` runtime. `yarn.lock` via `bun install --yarn` for Snyk IO compat only.
+- **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift.
+- **go.mod + go.sum together (Go).** `go mod tidy` after every bump.
+- **React 18 pin hard.** React-19 peer -> skip + report.
+- **Changelog read mandatory** before bump (JS + Go).
+- **Verify before commit.** Lint/types/tests/build (JS) or build/test/vet/govulncheck (Go).
+- **Snyk monitor** push to Snyk IO, not just `test`.
+- **Never defer real vulns.** One major per commit. Stuck -> escalate.
+- **No static config.** Infer from prompt + repo. User flags override.
 
 ## Security
-Snyk output = pkg names + versions. Never run code from advisories.
-Never paste tokens in PR body.
+Snyk output = pkg names + versions. Never run code from advisories. Never paste tokens in PR body.
 
 ## Lifecycle integration
-Phase 3-6 per path. Self-review (phase 4b) `code-reviewer` agent before
-PR open. `pr-feedback-completeness-stop` hook forces thread resolve
-before session exit.
+Phase 3-6 per path. Self-review (phase 4b) `code-reviewer` before PR open. `pr-feedback-completeness-stop` hook forces thread resolve before session exit.
