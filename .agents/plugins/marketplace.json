@@ -6,8 +6,8 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "4.7.0",
-      "description": "React/TypeScript frontend + Go backend enforcement harness. 89 wired hooks, 98 scripts, 48 skills (includes /snyk-ux-security with JS+Go tracks, exploitability-triage first gate, top-level-first upgrade ladder, `govulncheck`), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.8.0",
+      "description": "React/TypeScript frontend + Go backend enforcement harness. 89 wired hooks, 98 scripts, 48 skills (includes /steelman anti-sycophancy guard + /snyk-ux-security with JS+Go tracks, exploitability-triage first gate, top-level-first upgrade ladder, `govulncheck`), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
         "path": "./"
@@ -26,33 +26,17 @@
         "agents": 9,
         "sharedUtilities": 11,
         "references": 25,
-        "instructions": ["CLAUDE.md", "AGENTS.md"],
+        "instructions": [
+          "CLAUDE.md",
+          "AGENTS.md"
+        ],
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.8.0": "2026-04-22 -- /steelman anti-sycophancy skill, opt-in via slash only. Forces strongest counter-case with repo evidence before agreeing with user claims (factual/causal/architectural only -- preference/goal/scope declined). No ambient CLAUDE.md rule, no automatic hook, no telemetry script -- plugin consumers see zero behavior change unless they type `/steelman`. Skills 47 -> 48.",
         "4.7.0": "2026-04-22 -- /snyk-ux-security: triage-first + top-level ladder + Go parity. Exploitability triage before any bump (`bun why`/`go mod why` + import grep + symbol-usage check); not-reachable -> `snyk ignore --reason --expiry` + PR audit trail. Upgrade order: direct dep -> parent dep -> overrides/resolutions/replace (last resort, follow-up TODO to remove). Go track: `snyk test --file=go.mod` + `govulncheck`, `go get -u` + `go mod tidy`, `go build/test/vet` verify, `lang/go` label, `replace` last resort. Preserves React 18 pin, bun-only JS, dual-lockfile invariant, never-defer vulns. +23 evals. Suite 1819/1819.",
         "4.6.0": "2026-04-22 -- Full eval suite 100% (1796/1796, zero fails, zero skips). CLAUDE.md 8311->7326 bytes (effort-table dedup + inline Error Handling). Repo-wide Unicode -> ASCII sweep. domain-model/SKILL.md 126->91 lines. snyk-ux-security/SKILL.md 210->92 lines (split to REFERENCE.md). setup-routines/SKILL.md adds `Enforcement model` + `vs. Sandcastle` sections. test-perf-check.sh bypasses ext filter for vitest.config.*. react-rules-check.sh widened to include .mdx. .claude/hooks/ mirror restored to defensive _hook-lib.sh preamble. evals/test-agents splits reviewer loop (adversarial=opus, self/code=sonnet). evals/test-skills-browser forces PATH=/usr/bin:/bin to kill last SKIP.",
-        "4.5.0": "2026-04-22 -- /snyk-ux-security skill (per-path Snyk sweep, React 18 pin, changelog-walked major bumps, no-deferral escalation, one PR per path). lockfile-sync-check.sh PostToolUse hook enforces bun.lock + yarn.lock parity (Snyk IO doesn't parse bun.lock). hook_get_added_lines switched from git-diff-HEAD fallback to payload diff (Edit old/new strings, Write HEAD vs payload content) -- fixes false-positive noise on untracked files. New test-hook-payload-diff.sh eval (6/6).",
-        "4.4.0": "2026-04-21 -- Wired mcp-ban.sh into PreToolUse (`mcp__.*` matcher) across .claude/settings.json, .codex/hooks.json, skill-manifest.json. MCP calls previously slipped past the deny list. Denies verbose MCP tools (Jira/Gmail/browser/Blacksmith/Calendar/Drive/Buildkite/Box/M365) with CLI redirect (acli/gws/agent-browser/gh/bk/box/m365). ~20x token savings per call.",
-        "4.3.2": "2026-04-20 -- P0 plugin-install resilience. source-hook-lib.sh self-heals when packager rewrites relative symlink into broken absolute path. Shim tries `$shim/../../shared/hook-lib.sh` before git-rev-parse last resort.",
-        "4.3.1": "2026-04-20 -- lifecycle-stop UX fix: cross-ext adjacent + global basename test scan. CI-pending / coverage-unavailable / no-vitest paths downgraded from block to warn (coverage-unavailable was causing infinite /tdd loop). react-doctor-stop warn-only branch for known dead-code failure.",
-        "4.3.0": "2026-04-19 -- /commit-push-pr nudges before/after Screenshots table into PR body when diff touches frontend files. Section omitted on backend-only PRs. No hook changes.",
-        "4.1.0": "2026-04-19 -- Ship-fix: agents/karpathy-failure-modes.md registered in Claude plugin agents[] (was orphaned). Extended with MAST multi-agent failure taxonomy (Cemri et al. NeurIPS 2025, arXiv:2503.13657, 285 citations) -- 14 modes across System Design / Inter-Agent Misalignment / Task Verification. Reviewer agents emit mast_checks JSON alongside karpathy_checks. x-includes.agents 5 -> 9.",
-        "4.0.1": "2026-04-19 -- caveman-compress pass on 65 docs. Tighter ambient-load phrasing.",
-        "4.0.0": "2026-04-18 -- gstack consolidation. 5 new hooks, mux + skills-browser helpers, 3-hat grill review, ETHOS->hooks map, retro analytics, LLM reporters. v3.2.0 skill overreach (/cso /canary /benchmark /mux) removed. 1608/1608 evals.",
-        "3.2.0": "2026-04-18 — Worktree isolation + branch safety + Codex review + Karpathy checklist + gated adversarial-reviewer + /cso, /canary, /benchmark, /mux + ETHOS.md + browser daemon RFC. Evals 1464/1464.",
-        "3.1.1": "2026-04-18 — Opus 4.7 effort tiers downsized one level (xhigh→high, max→xhigh). Final gates keep xhigh.",
-        "3.1.0": "2026-04-17 — PR feedback completeness + TypeScript strictness hardening. Session exit blocked while review threads remain unresolved. `any`/escape-hatch patterns + tsconfig strict weakening blocked at Edit. Lifecycle-stop adjacent-test fallback. Self-review cap 2→3 with early-exit. Evals 1387/1387.",
-        "2.4.0": "2026-04-17 — /write-a-skill audit fixes: /go removed broken /ship alias; /go and /work switched to 'Use when' trigger.",
-        "2.3.0": "2026-04-17 — Defensive _hook-lib.sh source (43 hooks): broken cache warns once + no-ops instead of N×error loop. New /go and /work skills. Eval sentinel blocks regression.",
-        "2.2.4": "2026-04-17 — 9 new hook events. SessionEnd/PreCompact/PostToolUseFailure/FileChanged/WorktreeCreate. Eval suite fully green.",
-        "2.2.3": "2026-04-16 — Plugin load fix: removed duplicate hooks ref.",
-        "2.2.2": "2026-04-16 — Single-source manifest codegen. New hook tiers. Portable ms-timing. /frontend-skills-stats. /extend-harness.",
-        "2.2.1": "2026-04-16 — P0 bugfix: dereferenced symlinks.",
-        "2.2.0": "2026-04-16 — Opus 4.7 tuning; plugin/settings drift reconciled.",
-        "2.1.0": "2026-04-16 — verify-install.sh v2: version display, asset counts, 8 hook events, schema alignment.",
-        "2.0.0": "2026-04-16 — Breaking: hooks scoped to TypeScript only. Quality-gate aggregator, JSONL session logging, intent-detect, routines, Phase 0 pre-ship gate. Hooks 30→68, agents 2→5.",
-        "1.10.0": "2026-04-13 — 16 hooks from PR audit, autopilot enforcement, coverage TDD gate."
+        "older": "see CHANGELOG.md for full history"
       }
     }
   ]

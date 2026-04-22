@@ -50,16 +50,6 @@ Three outcomes:
 - **Contradicted**: evidence against user. Surface with refs. Let user decide (override or revise). Do NOT block.
 - **Mixed**: partial confirm. Name which parts hold, which don't.
 
-### Step 5: Log
-
-Always log verdict for telemetry:
-
-```bash
-scripts/skepticism-log.sh <verdict> "<short claim>"
-```
-
-Verdicts: `confirmed` | `contradicted` | `noise` | `mixed`.
-
 ## When NOT to use
 
 - User request is a goal / preference / scope call
