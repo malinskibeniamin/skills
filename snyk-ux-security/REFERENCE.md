@@ -68,19 +68,46 @@ body + subagent 2k report. Cleanup trims long-term override debt.
 
 ### 2a.1 Scan
 
+Resolve the branch reference once:
+```bash
+branch=$(git rev-parse --abbrev-ref HEAD)
+repo_slug=$(basename "$(git rev-parse --show-toplevel)")
+ref="${repo_slug}-${branch}"           # e.g. cloudv2-release-2.8
+```
+
 JS path:
 ```bash
 snyk test --all-projects --json > .snyk-findings.json
-snyk monitor --all-projects
+snyk monitor --all-projects --target-reference="$branch"
+# Fallback on older CLIs without --target-reference:
+# snyk monitor --all-projects --project-name="$ref"
 bun audit --json > .bun-audit.json
 ```
 
 Go path:
 ```bash
 snyk test --file=go.mod --json > .snyk-findings.json
-snyk monitor --file=go.mod
+snyk monitor --file=go.mod --target-reference="$branch"
+# Fallback: snyk monitor --file=go.mod --project-name="$ref"
 govulncheck -json ./... > .govulncheck.json
 ```
+
+**Why `--target-reference` / `--project-name` is mandatory:**
+Without it, every branch that runs `snyk monitor` for the same
+repo collapses into a single Snyk IO project id. Master and
+release branches then **overwrite each other** on every run, so
+the dashboard shows only the findings from whichever branch ran
+`monitor` last -- per-branch state is lost.
+
+Observed: `master` + `release-2.8` both monitoring into project id
+`22b24cf1-96d9-49e6-9c88-0640121b3aa0` means the security team
+cannot distinguish which branch has which findings.
+
+Rule: every `snyk monitor` invocation (new scan and `.snyk`
+revisit-cleanup push) supplies `--target-reference="$branch"`.
+If the CLI version does not support `--target-reference`, fall
+back to `--project-name="${repo}-${branch}"`. The skill never
+runs a bare `snyk monitor` without one of the two.
 
 Snyk IO reads `yarn.lock`, not `bun.lock`. If JS repo has no
 `yarn.lock`, generate first: `bun install --yarn`.
@@ -127,8 +154,11 @@ Decision:
      the next sweep.
   3. Push dismissals to Snyk IO:
      ```bash
-     snyk monitor --all-projects        # JS
-     snyk monitor --file=go.mod         # Go
+     # Always include --target-reference="$branch" (or
+     # --project-name="${repo}-${branch}") so per-branch state is
+     # preserved; see 2a rule below.
+     snyk monitor --all-projects --target-reference="$branch"   # JS
+     snyk monitor --file=go.mod --target-reference="$branch"    # Go
      ```
      Monitor applies the `.snyk` policy to the IO project, so the IO
      dashboard shows the issue as `Ignored` with the reason +

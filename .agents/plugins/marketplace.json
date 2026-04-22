@@ -7,7 +7,7 @@
     {
       "name": "frontend-skills",
       "version": "4.7.0",
-      "description": "React/TypeScript frontend + Go backend enforcement harness. 89 wired hooks, 98 scripts, 47 skills (includes /snyk-ux-security with JS+Go tracks, exploitability-triage first gate, top-level-first upgrade ladder, `govulncheck`), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
+      "description": "React/TypeScript frontend + Go backend enforcement harness. 89 wired hooks, 98 scripts, 48 skills (includes /snyk-ux-security with JS+Go tracks, exploitability-triage first gate, top-level-first upgrade ladder, `govulncheck`), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
         "path": "./"
@@ -19,7 +19,7 @@
       "category": "Development",
       "x-updatedAt": "2026-04-22",
       "x-includes": {
-        "skills": 47,
+        "skills": 48,
         "hooks": 89,
         "commands": 0,
         "routines": 5,

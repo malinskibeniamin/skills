@@ -30,7 +30,7 @@ Expand globs. `snyk auth`, `gh auth status`. Confirm paths + ecosystems to user.
 Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [REFERENCE.md](REFERENCE.md#per-path-detail) for commands + PR template.
 
 - **2a. `.snyk` revisit (every run, before scan)**: if `.snyk` exists, re-triage every existing ignore entry. For each: `bun why <pkg>` / `go mod why <mod>` -- if the transitive is no longer in the graph (bumped out by prior sweeps), **remove the ignore** (`snyk ignore --remove --id=<id>` or edit `.snyk` + `snyk monitor`) and log under `Dismissed (cleaned up)` in PR. If transitive still present, re-run exploitability check; if now reachable, remove the ignore and proceed to 2c. Goal: never accumulate stale dismissals. See [REFERENCE.md](REFERENCE.md#existing-snyk-revisit).
-- **2a.1 Scan**: `snyk test`, `snyk monitor`. JS: `bun audit`. Go: `govulncheck ./...`.
+- **2a.1 Scan**: `snyk test`, `snyk monitor --target-reference=<branch>` (or `--project-name=<repo>-<branch>`). **Mandatory per-branch reference** so master + release branches don't overwrite the same Snyk project id. Without it every branch collapses into one project and the security dashboard shows only whichever branch ran `monitor` last. JS: `bun audit`. Go: `govulncheck ./...`.
 - **2b. Exploitability triage (first gate)**: per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
   - **NOT reachable** -> **run `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>` now** (writes to `.snyk` policy file). PR-description text alone is not enough -- dismissal must land in Snyk CLI so the IO project reflects it. Stage + commit the resulting `.snyk` in the sweep PR. Re-run `snyk test` to confirm the issue shows as `Ignored`. Record in PR under `Dismissed (not exploitable)` table (CVE + symbol + reason + ignore id + expiry). SLA audit trail.
   - **Reachable or credible vector** -> 2c.
@@ -68,7 +68,7 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **React 18 pin hard.** React-19 peer -> skip + report.
 - **Changelog read mandatory** before bump (JS + Go).
 - **Verify before commit.** Lint/types/tests/build (JS) or build/test/vet/govulncheck (Go).
-- **Snyk monitor** push to Snyk IO, not just `test`.
+- **Snyk monitor** push to Snyk IO, not just `test`. Always `--target-reference=<branch>` (or `--project-name=<repo>-<branch>`) so per-branch state persists -- otherwise every branch clobbers the same project id and the dashboard loses per-branch visibility.
 - **Never defer real vulns.** One major per commit. Stuck -> escalate.
 - **No static config.** Infer from prompt + repo. User flags override.
 - **Revisit `.snyk` every run.** Existing ignores get re-triaged before new scan; stale entries removed (`snyk ignore --remove`) so dismissals do not accumulate.

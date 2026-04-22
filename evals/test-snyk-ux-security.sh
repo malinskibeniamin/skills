@@ -338,3 +338,11 @@ run_content_eval "$REF_MD" "gh api user --jq \.login" "REFERENCE.md resolves tri
 run_content_eval "$REF_MD" "team group|team-group|CODEOWNERS team" "REFERENCE.md requires team-group reviewers"
 run_content_eval "$REF_MD" "only individual reviewers|lone individual|without a team" "REFERENCE.md rejects PRs with only individual reviewers"
 run_content_eval "$REF_MD" "security team group|security.team.*automatically" "REFERENCE.md auto-adds security team on dismissals/overrides"
+
+# ── Per-branch Snyk monitor (prevent project-id overwrite) ─────
+
+run_content_eval "$SKILL_MD" "--target-reference|--project-name" "SKILL.md pins snyk monitor to a per-branch reference"
+run_content_eval "$SKILL_MD" "overwrite|clobber|last ran monitor|collapses" "SKILL.md explains the per-branch overwrite trap"
+run_content_eval "$REF_MD" "--target-reference" "REFERENCE.md uses --target-reference on snyk monitor"
+run_content_eval "$REF_MD" "--project-name" "REFERENCE.md documents --project-name fallback"
+run_content_eval "$REF_MD" "overwrite each other|collapses into|bare.*snyk monitor" "REFERENCE.md explains why bare snyk monitor breaks per-branch state"
