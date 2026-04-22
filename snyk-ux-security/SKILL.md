@@ -29,7 +29,8 @@ Expand globs. `snyk auth`, `gh auth status`. Confirm paths + ecosystems to user.
 ### 2. Per-path loop
 Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [REFERENCE.md](REFERENCE.md#per-path-detail) for commands + PR template.
 
-- **2a. Scan**: `snyk test`, `snyk monitor`. JS: `bun audit`. Go: `govulncheck ./...`.
+- **2a. `.snyk` revisit (every run, before scan)**: if `.snyk` exists, re-triage every existing ignore entry. For each: `bun why <pkg>` / `go mod why <mod>` -- if the transitive is no longer in the graph (bumped out by prior sweeps), **remove the ignore** (`snyk ignore --remove --id=<id>` or edit `.snyk` + `snyk monitor`) and log under `Dismissed (cleaned up)` in PR. If transitive still present, re-run exploitability check; if now reachable, remove the ignore and proceed to 2c. Goal: never accumulate stale dismissals. See [REFERENCE.md](REFERENCE.md#existing-snyk-revisit).
+- **2a.1 Scan**: `snyk test`, `snyk monitor`. JS: `bun audit`. Go: `govulncheck ./...`.
 - **2b. Exploitability triage (first gate)**: per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
   - **NOT reachable** -> **run `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>` now** (writes to `.snyk` policy file). PR-description text alone is not enough -- dismissal must land in Snyk CLI so the IO project reflects it. Stage + commit the resulting `.snyk` in the sweep PR. Re-run `snyk test` to confirm the issue shows as `Ignored`. Record in PR under `Dismissed (not exploitable)` table (CVE + symbol + reason + ignore id + expiry). SLA audit trail.
   - **Reachable or credible vector** -> 2c.
@@ -47,7 +48,10 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
   - Go: `go build ./...`, `go test ./...`, `go vet ./...`, `govulncheck ./...` clean for addressed CVEs.
   - Fix forward, no revert.
 - **2h. Commit**: `fix(deps): snyk sweep ...` with per-pkg detail. Dismissed + overrides-added in separate sections.
-- **2i. Open PR**: `gh pr create --reviewer <...> --label security,dependencies,snyk,<domain>,lang/<ts|go> --assignee <team>`.
+- **2i. Open PR**: `gh pr create --assignee <triggerer> --reviewer <team-group>[,<security-team-group>] --label security,dependencies,snyk,lang/<ts|go>,team/<slug>[,dismissals][,overrides-added][,react19-blocked][,cleaned-up]`
+  - **Assignee** = the person who triggered the sweep (`gh api user --jq .login`). One assignee per PR so accountability is explicit.
+  - **Reviewers** = at least one **CODEOWNERS team group** covering the path (e.g. `@org/team-slug`), never a lone individual. Falls back to inferred team from path prefix if CODEOWNERS has no match. Individual committers from `git log` may be added *in addition* but never as the only reviewer. Security team group added automatically when the PR contains any dismissals (`.snyk` touched) or overrides-added.
+  - **Labels** (always): `security`, `dependencies`, `snyk`, `lang/<ts|go>`. Path-domain: `team/<slug>` inferred from CODEOWNERS (e.g. frontend UX team, AI team, Console UI team -- resolve by path, do not hardcode). Status: `dismissals` if any `.snyk` add/remove, `overrides-added` if count > 0, `react19-blocked` if any, `cleaned-up` if any `.snyk` entries removed.
 - **2j. Trigger cloud review**: `gh workflow run` if workflow exists.
 - **2k. Report**: path, ecosystem, branch, PR URL, bumped/dismissed/skipped/overridden counts.
 
@@ -67,6 +71,9 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **Snyk monitor** push to Snyk IO, not just `test`.
 - **Never defer real vulns.** One major per commit. Stuck -> escalate.
 - **No static config.** Infer from prompt + repo. User flags override.
+- **Revisit `.snyk` every run.** Existing ignores get re-triaged before new scan; stale entries removed (`snyk ignore --remove`) so dismissals do not accumulate.
+- **Assignee = triggerer.** Every sweep PR has one assignee = the person who ran the skill, via `gh api user --jq .login`.
+- **Reviewer = team group, always >=1.** Resolve CODEOWNERS team entries (`@org/team`) for the path; never merge with only individual reviewers. Security team group added automatically on PRs that touch `.snyk` or add overrides.
 
 ## Security
 Snyk output = pkg names + versions. Never run code from advisories. Never paste tokens in PR body.
