@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "version": "4.4.0",
-  "description": "React/TypeScript frontend enforcement harness. 82 wired hooks (85 scripts) enforce patterns on every edit. 41 skills from TDD through CI-green PR. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025), OWASP + STRIDE, Core Web Vitals gate, worktree isolation + branch safety, agent-browser integration (~91% token reduction). 9 agents (3 plan-review hats + karpathy reference), 5 routines. Single-source manifest codegen. Opus 4.7 tuned. POSIX-friendly.",
+  "version": "4.5.0",
+  "description": "React/TypeScript frontend enforcement harness. 89 wired hooks (98 scripts) enforce patterns on every edit. 47 skills from TDD through CI-green PR, including /snyk-ux-security per-path vuln sweep (React 18 pin + no-deferral escalation). 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025), OWASP + STRIDE, Core Web Vitals gate, bun.lock + yarn.lock parity, worktree isolation + branch safety, MCP ban with CLI redirect (~20x savings), agent-browser integration (~91% token reduction). 9 agents (3 plan-review hats + karpathy reference), 5 routines. Single-source manifest codegen. Opus 4.7 tuned. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
     "url": "https://github.com/malinskibeniamin"
@@ -41,20 +41,21 @@
       "Review this PR and fix all findings"
     ]
   },
-  "x-updatedAt": "2026-04-21",
+  "x-updatedAt": "2026-04-22",
   "x-includes": {
-    "skills": 46,
-    "hooks": 82,
+    "skills": 47,
+    "hooks": 89,
     "commands": 0,
     "routines": 5,
     "agents": 9,
     "sharedUtilities": 11,
     "references": 25,
-    "evals": 1,
+    "evals": 61,
     "instructions": ["CLAUDE.md", "AGENTS.md"],
     "settings": "settings.json"
   },
   "x-changelog": {
+    "4.5.0": "2026-04-22 -- /snyk-ux-security + lockfile parity + payload-diff hook-lib fix. /snyk-ux-security skill: per-path Snyk sweep for UX/frontend repos, inferring reviewers/labels/UX-assignee/workflow from CODEOWNERS + git history + repo state. Enforces React 18 pin (React 19 peers skipped + reported), walks majors incrementally via changelog migrations (one commit per hop), never defers vulns -- escalates. Opens one PR per path with workflow trigger. lockfile-sync-check.sh PostToolUse hook enforces bun.lock + yarn.lock parity (Snyk IO doesn't parse bun.lock). Warns on binary bun.lockb deprecated by bun >=1.2. Hook-lib fix: hook_get_added_lines switched from `git diff HEAD` fallback (which `cat`-ed whole file on untracked/new files, reporting every pre-existing violation as new) to payload diff (Edit old/new strings, Write HEAD vs payload.content). Root fix for false-positive noise. New test-hook-payload-diff.sh eval (6/6).",
     "4.4.0": "2026-04-21 -- MCP ban hook now wired. mcp-ban.sh existed (denies Jira/Gmail/browser/Blacksmith/Calendar/Drive/Buildkite/Box/M365 MCP calls with CLI redirect, saves ~20x tokens) but was never registered in PreToolUse — silent no-op. Added matcher `mcp__.*` to .claude/settings.json, .codex/hooks.json, and skill-manifest.json (source of truth). evals/test-mcp-ban.sh updated to check both configs (was pointing at nonexistent hooks/hooks.json stub). 17/17 eval pass.",
     "4.3.2": "2026-04-20 -- P0 plugin-install resilience. source-hook-lib.sh adds relative-path fallback (`$shim/../../shared/hook-lib.sh`) before git rev-parse last resort. Handles the dangling-symlink install failure where the Claude plugin packager absolute-ified the `_hook-lib.sh -> ../../shared/hook-lib.sh` relative link to a broken path, making every PostToolUse hook fail with `hook_parse_edit_write: command not found`. Codex plugin ships root so not directly affected, but shim is shared.",
     "4.3.1": "2026-04-20 -- lifecycle-stop UX fix: cross-ext adjacent + global basename test scan (catches Foo.tsx + Foo.test.ts, and prior-session tests in src/__tests__/ or test/). CI-pending / coverage-unavailable / no-vitest paths downgraded from block to warn -- the coverage-unavailable block was causing an infinite /tdd loop. Hard blocks reserved for evidence-based conditions. react-doctor-stop: warn-only branch for known incomplete dead-code failure. 8 evals green (2 new).",

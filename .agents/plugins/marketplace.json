@@ -6,8 +6,8 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "4.3.0",
-      "description": "React/TypeScript frontend enforcement harness. 82 wired hooks, 85 scripts, 41 skills, 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.5.0",
+      "description": "React/TypeScript frontend enforcement harness. 89 wired hooks, 98 scripts, 47 skills (includes /snyk-ux-security), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
         "path": "./"
@@ -17,10 +17,10 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Development",
-      "x-updatedAt": "2026-04-19",
+      "x-updatedAt": "2026-04-22",
       "x-includes": {
-        "skills": 46,
-        "hooks": 82,
+        "skills": 47,
+        "hooks": 89,
         "commands": 0,
         "routines": 5,
         "agents": 9,
@@ -30,6 +30,10 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.5.0": "2026-04-22 -- /snyk-ux-security skill (per-path Snyk sweep, React 18 pin, changelog-walked major bumps, no-deferral escalation, one PR per path). lockfile-sync-check.sh PostToolUse hook enforces bun.lock + yarn.lock parity (Snyk IO doesn't parse bun.lock). hook_get_added_lines switched from git-diff-HEAD fallback to payload diff (Edit old/new strings, Write HEAD vs payload content) -- fixes false-positive noise on untracked files. New test-hook-payload-diff.sh eval (6/6).",
+        "4.4.0": "2026-04-21 -- Wired mcp-ban.sh into PreToolUse (`mcp__.*` matcher) across .claude/settings.json, .codex/hooks.json, skill-manifest.json. MCP calls previously slipped past the deny list. Denies verbose MCP tools (Jira/Gmail/browser/Blacksmith/Calendar/Drive/Buildkite/Box/M365) with CLI redirect (acli/gws/agent-browser/gh/bk/box/m365). ~20x token savings per call.",
+        "4.3.2": "2026-04-20 -- P0 plugin-install resilience. source-hook-lib.sh self-heals when packager rewrites relative symlink into broken absolute path. Shim tries `$shim/../../shared/hook-lib.sh` before git-rev-parse last resort.",
+        "4.3.1": "2026-04-20 -- lifecycle-stop UX fix: cross-ext adjacent + global basename test scan. CI-pending / coverage-unavailable / no-vitest paths downgraded from block to warn (coverage-unavailable was causing infinite /tdd loop). react-doctor-stop warn-only branch for known dead-code failure.",
         "4.3.0": "2026-04-19 -- /commit-push-pr nudges before/after Screenshots table into PR body when diff touches frontend files. Section omitted on backend-only PRs. No hook changes.",
         "4.1.0": "2026-04-19 -- Ship-fix: agents/karpathy-failure-modes.md registered in Claude plugin agents[] (was orphaned). Extended with MAST multi-agent failure taxonomy (Cemri et al. NeurIPS 2025, arXiv:2503.13657, 285 citations) -- 14 modes across System Design / Inter-Agent Misalignment / Task Verification. Reviewer agents emit mast_checks JSON alongside karpathy_checks. x-includes.agents 5 -> 9.",
         "4.0.1": "2026-04-19 -- caveman-compress pass on 65 docs. Tighter ambient-load phrasing.",
