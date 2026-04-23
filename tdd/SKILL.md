@@ -88,6 +88,7 @@ New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project 
 ## When Done
 
 - [ ] All pass (`vitest run`)
+- [ ] **Zero warnings** -- green run w/ `DeprecationWarning` / React `act()` / unhandled rejection / `@ts-ignore` is NOT done. `test-warning-check` hook surfaces; fix at source. Escape: `// allow: test-warning` w/ reason.
 - [ ] No async leaks (`vitest run --detectAsyncLeaks`) -- Stop hook run auto
 - [ ] No `setTimeout` hacks -- condition-based wait
 - [ ] Coverage gaps closed -- re-run coverage, verify changed files
@@ -95,5 +96,6 @@ New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project 
 - [ ] Portal tests: `defaultOpen` for content tests | `waitFor` for close assertions
 - [ ] Tests verify behavior, not impl
 - [ ] Consider `expect.soft()` for multi-assertion state tests
+- [ ] CI green AND `ci-warning-audit` clean -- `gh run view <id> --log | grep -E 'Warning|Deprecation'` returns nothing
 
 See [REFERENCE.md](REFERENCE.md) for element selectors, portal testing, mock patterns, diagnostics, Vitest config.

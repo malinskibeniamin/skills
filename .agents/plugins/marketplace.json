@@ -6,8 +6,8 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "4.8.0",
-      "description": "React/TypeScript frontend + Go backend enforcement harness. 89 wired hooks, 98 scripts, 48 skills (includes /steelman anti-sycophancy guard + /snyk-ux-security with JS+Go tracks, exploitability-triage first gate, top-level-first upgrade ladder, `govulncheck`), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.9.0",
+      "description": "React/TypeScript frontend + Go backend enforcement harness. 91 wired hooks, 100 scripts, 48 skills (includes green-not-done warnings gate via `test-warning-check` + `ci-warning-audit`, /steelman anti-sycophancy guard, /snyk-ux-security with JS+Go tracks, exploitability-triage first gate, top-level-first upgrade ladder, `govulncheck`), 9 agents, 5 routines. 21 LLM failure modes (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP+STRIDE, Core Web Vitals gate, bun/yarn lockfile parity, MCP ban with CLI redirect, worktree isolation, agent-browser integration. Opus 4.7 tuned. POSIX-friendly.",
       "source": {
         "source": "local",
         "path": "./"
@@ -17,10 +17,10 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Development",
-      "x-updatedAt": "2026-04-22",
+      "x-updatedAt": "2026-04-23",
       "x-includes": {
         "skills": 48,
-        "hooks": 89,
+        "hooks": 91,
         "commands": 0,
         "routines": 5,
         "agents": 9,
@@ -33,9 +33,9 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.9.0": "2026-04-23 -- Green != done warnings gate (+2 hooks, 89->91 wired, 98->100 scripts). `test-warning-check.sh` (PostToolUse Bash) scans passing `vitest`/`bun test`/`playwright`/`tsgo`/`biome`/`lint` stdout+stderr for curated patterns: Node `DeprecationWarning`/`ExperimentalWarning`/`(node:) XxxWarning`, React `act()`/missing-key/DOM-nesting/prop-type/bad-setstate/non-boolean-attr, unhandled rejection + unhandled error, vitest `stderr |` during test, skipped counts, `@ts-expect-error` + `@ts-ignore`, `npm WARN deprecated`. Per-finding escape `// allow: test-warning` or env `TEST_WARNINGS_ALLOW=1`. 3x same-kind streak escalates. `ci-warning-audit.sh` (Stop) fetches `gh run view <id> --log` on green PR CI (per-SHA cache, 45s timeout), greps same pattern, surfaces file:line sample. Gates: feature branch, session touched code, PR exists, all checks SUCCESS. Disable via `CI_WARNING_AUDIT=0`. CLAUDE.md Tests + /tdd `When Done` updated. Why: green tests can spew deprecations / log errors / leak unhandled rejections -- tomorrow's bugs.",
         "4.8.0": "2026-04-22 -- /steelman anti-sycophancy skill, opt-in via slash only. Forces strongest counter-case with repo evidence before agreeing with user claims (factual/causal/architectural only -- preference/goal/scope declined). No ambient CLAUDE.md rule, no automatic hook, no telemetry script -- plugin consumers see zero behavior change unless they type `/steelman`. Skills 47 -> 48.",
         "4.7.0": "2026-04-22 -- /snyk-ux-security: triage-first + top-level ladder + Go parity. Exploitability triage before any bump (`bun why`/`go mod why` + import grep + symbol-usage check); not-reachable -> `snyk ignore --reason --expiry` + PR audit trail. Upgrade order: direct dep -> parent dep -> overrides/resolutions/replace (last resort, follow-up TODO to remove). Go track: `snyk test --file=go.mod` + `govulncheck`, `go get -u` + `go mod tidy`, `go build/test/vet` verify, `lang/go` label, `replace` last resort. Preserves React 18 pin, bun-only JS, dual-lockfile invariant, never-defer vulns. +23 evals. Suite 1819/1819.",
-        "4.6.0": "2026-04-22 -- Full eval suite 100% (1796/1796, zero fails, zero skips). CLAUDE.md 8311->7326 bytes (effort-table dedup + inline Error Handling). Repo-wide Unicode -> ASCII sweep. domain-model/SKILL.md 126->91 lines. snyk-ux-security/SKILL.md 210->92 lines (split to REFERENCE.md). setup-routines/SKILL.md adds `Enforcement model` + `vs. Sandcastle` sections. test-perf-check.sh bypasses ext filter for vitest.config.*. react-rules-check.sh widened to include .mdx. .claude/hooks/ mirror restored to defensive _hook-lib.sh preamble. evals/test-agents splits reviewer loop (adversarial=opus, self/code=sonnet). evals/test-skills-browser forces PATH=/usr/bin:/bin to kill last SKIP.",
         "older": "see CHANGELOG.md for full history"
       }
     }

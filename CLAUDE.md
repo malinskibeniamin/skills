@@ -95,6 +95,7 @@ Sentence case | no Latin abbrev (for example, that is, and so on, through) | no 
 ## Tests
 
 Fail first -> pass | `userEvent.setup()` + `getByRole` | `await waitFor(()=>expect(...))` async | `.test.ts` unit `.test.tsx` integration `.browser.test.tsx` visual `e2e/*.spec.ts` Playwright | co-locate | `test()` not `it()` | `vi.fn()`/`vi.mock()`/`vi.spyOn()` | `.toBeVisible()` > `.toBeInTheDocument()` | no `waitForTimeout` | no `test.skip` E2E (`test.fixme()` known bugs) | `createRouterTransport` ConnectRPC mocks | `data-testid` interactives | `test.step()` Playwright
+Green != done. Zero warnings in local output AND CI. `DeprecationWarning`, React `act()`, unhandled rejections, `@ts-ignore`, `npm WARN deprecated` = fix at source. Hooks: `test-warning-check` (local, Bash PostToolUse) + `ci-warning-audit` (Stop, scans `gh run view --log` on green). Escape: `// allow: test-warning` in test file with reason, or `TEST_WARNINGS_ALLOW=1` / `CI_WARNING_AUDIT=0` env.
 
 ## Logging
 
