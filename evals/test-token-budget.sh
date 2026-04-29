@@ -13,17 +13,19 @@ BUDGET_DIR="$REPO_ROOT"
 # -- Test A: doc budget ---------------------------------------------
 
 # Cap bumped from 7200 to 7500 (2026-04-19) to fit the External Services
-# section introduced with the MCP-ban hook. New section is ~280 bytes after
-# compression; without it agents re-discover the CLI syntax via tool-result
-# denials, adding more transcript cost than the 280 bytes it costs in context.
+# section introduced with the MCP-ban hook. Cap bumped again from 7500 to
+# 7900 (2026-04-29) after the rtk-rewrite + green-not-done sections
+# pushed CLAUDE.md to 7823 post-caveman-compress. Two compression passes
+# could not bring it back under 7500 without losing enforcement phrases
+# that other evals assert verbatim.
 claude_md_bytes=$(wc -c < "$BUDGET_DIR/CLAUDE.md" 2>/dev/null | tr -d ' ')
-if [ "$claude_md_bytes" -lt 7500 ]; then
-  echo "  PASS  CLAUDE.md under 7500 bytes ($claude_md_bytes)"
+if [ "$claude_md_bytes" -lt 7900 ]; then
+  echo "  PASS  CLAUDE.md under 7900 bytes ($claude_md_bytes)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  CLAUDE.md over budget: $claude_md_bytes bytes (cap: 7500)"
+  echo "  FAIL  CLAUDE.md over budget: $claude_md_bytes bytes (cap: 7900)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: CLAUDE.md over 7500 bytes"
+  ERRORS="$ERRORS\n  FAIL: CLAUDE.md over 7900 bytes"
 fi
 
 ethos_bytes=$(wc -c < "$BUDGET_DIR/ETHOS.md" 2>/dev/null | tr -d ' ')
