@@ -224,7 +224,7 @@ _assert_exit 0 "special chars → no crash"
 _cleanup_test_file "$_f"
 
 echo "  content with unicode:"
-_setup_test_file "$_f" 'const X = () => <p>日本語テスト café naïve résumé</p>;'
+_setup_test_file "$_f" 'const X = () => <span>日本語テスト café naïve résumé</span>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "unicode content → no crash"
 _cleanup_test_file "$_f"

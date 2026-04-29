@@ -64,6 +64,21 @@ _run_hook() {
   rm -f "$stderr_file"
 }
 
+_run_hook_cd() {
+  # Same as _run_hook but runs the hook from a specified cwd. Required for
+  # tests that probe worktree-aware logic (`_hook_current_worktree_root`
+  # uses git rev-parse, which reads the caller's cwd).
+  local cwd="$1"
+  local hook="$2"
+  local input="$3"
+  local stderr_file="/tmp/hook-test-stderr-$$-$RANDOM"
+  local exit_code=0
+  ( cd "$cwd" && echo "$input" | bash "$HOOKS_DIR/$hook" 2>"$stderr_file" ) || exit_code=$?
+  _last_stderr=$(cat "$stderr_file")
+  _last_exit=$exit_code
+  rm -f "$stderr_file"
+}
+
 _run_hook_with_env() {
   local hook="$1"
   local input="$2"
@@ -100,7 +115,7 @@ _assert_exit() {
   else
     FAIL=$((FAIL + 1))
     echo -e "  ${RED}✗${NC} $test_name (expected exit $expected, got $_last_exit)"
-    [ -n "$_last_stderr" ] && echo "    stderr: $(echo "$_last_stderr" | head -3)"
+    if [ -n "$_last_stderr" ]; then echo "    stderr: $(echo "$_last_stderr" | head -3)"; fi
   fi
 }
 
@@ -192,12 +207,12 @@ _report_results() {
 
 _edit_json() {
   local file_path="$1"
-  printf '{"tool_name":"Edit","tool_input":{"file_path":"%s","old_string":"x","new_string":"y"}}' "$file_path"
+  printf '{"tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$file_path"
 }
 
 _write_json() {
   local file_path="$1"
-  printf '{"tool_name":"Write","tool_input":{"file_path":"%s","content":"x"}}' "$file_path"
+  printf '{"tool_name":"Write","tool_input":{"file_path":"%s"}}' "$file_path"
 }
 
 _bash_json() {
