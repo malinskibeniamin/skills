@@ -17,57 +17,10 @@ _run_bash() {
   rm -f "$err"
 }
 
-# find without maxdepth
-_run_bash "find /Users/foo -name '*.ts'"
-if echo "$_last_stderr" | grep -q "find without"; then
-  echo "  PASS  warns on find without -maxdepth"; PASS=$((PASS + 1))
-else
-  echo "  FAIL  no warn for find without -maxdepth"; FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: find nudge"
-fi
-
-# find with maxdepth or head: no nudge
-_run_bash "find . -maxdepth 2 -name '*.ts'"
-if ! echo "$_last_stderr" | grep -q "find without"; then
-  echo "  PASS  no warn when find has -maxdepth"; PASS=$((PASS + 1))
-else
-  echo "  FAIL  false-positive find nudge"; FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: find false pos"
-fi
-
-# git log without limit
-_run_bash "git log --graph"
-if echo "$_last_stderr" | grep -q "git log without"; then
-  echo "  PASS  warns on git log without limit"; PASS=$((PASS + 1))
-else
-  echo "  FAIL  no warn for git log"; FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: git log nudge"
-fi
-
-_run_bash "git log -n 30"
-if ! echo "$_last_stderr" | grep -q "git log without"; then
-  echo "  PASS  no warn for git log -n 30"; PASS=$((PASS + 1))
-else
-  echo "  FAIL  false-positive git log nudge"; FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: git log false pos"
-fi
-
-_run_bash "git log --oneline --since yesterday"
-if ! echo "$_last_stderr" | grep -q "git log without"; then
-  echo "  PASS  no warn for git log --oneline"; PASS=$((PASS + 1))
-else
-  echo "  FAIL  false-positive git log --oneline"; FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: git log --oneline false pos"
-fi
-
-# grep -r at repo root
-_run_bash "grep -r foo ."
-if echo "$_last_stderr" | grep -q "grep -r"; then
-  echo "  PASS  warns on grep -r ."; PASS=$((PASS + 1))
-else
-  echo "  FAIL  no warn for grep -r ."; FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: grep -r nudge"
-fi
+# NOTE: nudge-find, nudge-git-log, nudge-grep-root were removed in 19b8577
+# (cost-tune effort, trim duplicate nudges) since CLAUDE.md Bash Discipline
+# already documents the patterns and the nudges duplicated guidance every
+# turn for low marginal value.
 
 # Clean command: no nudge
 _run_bash "ls"

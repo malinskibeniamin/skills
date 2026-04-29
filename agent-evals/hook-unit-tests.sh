@@ -162,7 +162,7 @@ const MyForm = () => {
 };"
 
 echo "  form.watch() in react-hook-form file:"
-_run_hook "form-watch-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+_run_hook "form-watch-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
 _assert_exit 2 "form.watch() blocked (was warn)"
 _assert_stderr_contains "useWatch" "message says use useWatch"
 
@@ -279,15 +279,15 @@ _setup_session
 _test_file="/tmp/hook-test-loop-$$.tsx"
 _setup_test_file "$_test_file" "const x = 1;"
 
-echo "  first 7 edits (no warn):"
-for i in $(seq 1 7); do
-  _run_hook "edit-loop-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+echo "  first 11 edits (no warn):"
+for i in $(seq 1 11); do
+  _run_hook "edit-loop-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
 done
-_assert_exit 0 "7th edit — no warn yet"
+_assert_exit 0 "11th edit — no warn yet"
 
-echo "  8th edit (should warn):"
-_run_hook "edit-loop-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
-_assert_stderr_contains "8 times" "8th edit triggers warning"
+echo "  12th edit (should warn):"
+_run_hook "edit-loop-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
+_assert_stderr_contains "12 times" "12th edit triggers warning"
 
 _cleanup_test_file "$_test_file"
 _teardown_session

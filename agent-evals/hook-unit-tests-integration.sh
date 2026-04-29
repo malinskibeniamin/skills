@@ -103,14 +103,17 @@ if [ -d "$_wt_secondary/.git" ] || [ -f "$_wt_secondary/.git" ]; then
   echo "  primary-worktree file tracked:"
   _f_primary="$_wt_repo/primary.tsx"
   echo 'const X = () => null;' > "$_f_primary"
-  _run_hook "as-cast-check.sh" "$(_edit_json "$_f_primary")"
+  # Run hook with cwd=primary worktree so _hook_current_worktree_root resolves
+  # to the primary repo, not the test runner's repo.
+  _run_hook_cd "$_wt_repo" "as-cast-check.sh" "$(_edit_json "$_f_primary")"
   _assert_exit 0 "primary file hook exits 0"
   _assert_file_contains "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" "primary.tsx" "primary file tracked"
 
   echo "  secondary-worktree file NOT tracked:"
   _f_secondary="$_wt_secondary/subagent.tsx"
   echo 'const Y = () => null;' > "$_f_secondary"
-  _run_hook "as-cast-check.sh" "$(_edit_json "$_f_secondary")"
+  # Same: run hook with cwd=primary so secondary worktree is correctly seen as "outside".
+  _run_hook_cd "$_wt_repo" "as-cast-check.sh" "$(_edit_json "$_f_secondary")"
   _assert_exit 0 "secondary file hook exits 0"
   if grep -q "subagent.tsx" "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" 2>/dev/null; then
     FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} secondary-worktree file leaked into main session tracker"
@@ -398,19 +401,19 @@ echo "  different files have independent counters:"
 _f2="/tmp/hook-test-editloop2-$$.tsx"
 _setup_test_file "$_f2" "const y = 2;"
 
-# Edit file1 7 times
-for i in $(seq 1 7); do
+# Edit file1 11 times
+for i in $(seq 1 11); do
   _run_hook "edit-loop-check.sh" "$(_edit_json "$_f")"
 done
-_assert_exit 0 "7th edit on file1 — no warn"
+_assert_exit 0 "11th edit on file1 — no warn"
 
 # Edit file2 once — should NOT trigger (different file)
 _run_hook "edit-loop-check.sh" "$(_edit_json "$_f2")"
 _assert_exit 0 "1st edit on file2 — no warn"
 
-# Edit file1 once more (8th) — should trigger
+# Edit file1 once more (12th) — should trigger
 _run_hook "edit-loop-check.sh" "$(_edit_json "$_f")"
-_assert_stderr_contains "8 times" "8th edit on file1 triggers warning"
+_assert_stderr_contains "12 times" "12th edit on file1 triggers warning"
 
 _cleanup_test_file "$_f"
 _cleanup_test_file "$_f2"
