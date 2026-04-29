@@ -61,44 +61,10 @@ else
   ERRORS="$ERRORS\n  FAIL: SKILL.md oversize:$oversize_offenders"
 fi
 
-# -- Test C: plugin manifest skills count matches reality -----------
-# Prevents manifest drift when vendoring/removing skills.
-
-actual_count=$(find "$SKILLS_ROOT" -maxdepth 2 -name "SKILL.md" \
-  -not -name "*.original.md" -not -path "*/node_modules/*" \
-  -not -path "*/agent-evals/*" 2>/dev/null | wc -l | tr -d ' ')
-
-for manifest in \
-  "$SKILLS_ROOT/.claude-plugin/plugin.json" \
-  "$SKILLS_ROOT/.codex-plugin/plugin.json" \
-  "$SKILLS_ROOT/.claude-plugin/marketplace.json" \
-  "$SKILLS_ROOT/.agents/plugins/marketplace.json"; do
-
-  [ -f "$manifest" ] || continue
-  name="${manifest#$SKILLS_ROOT/}"
-
-  # marketplace.json nests skills under .plugins[0].includes; plugin.json has .x-includes
-  declared=$(jq -r '
-    if .["x-includes"] then .["x-includes"].skills
-    elif .plugins then (.plugins[0].includes.skills // .plugins[0]["x-includes"].skills // empty)
-    else empty end
-  ' "$manifest" 2>/dev/null)
-
-  if [ -z "$declared" ] || [ "$declared" = "null" ]; then
-    echo "  SKIP  $name has no skills count field"
-    SKIP=$((SKIP + 1))
-    continue
-  fi
-
-  if [ "$declared" = "$actual_count" ]; then
-    echo "  PASS  $name skills count ($declared) matches actual ($actual_count)"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  $name skills=$declared, actual=$actual_count"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: $name manifest skills drift ($declared vs $actual_count)"
-  fi
-done
+# Test C removed: plugin-manifest skills counts drift on every add/remove
+# and required updating 4 files in lockstep. The count was advisory and
+# self-evidently derivable from `find . -maxdepth 2 -name SKILL.md`, so
+# the friction outweighed the signal.
 
 # -- Test D: agent model frontmatter guards cost tier ---------------
 # Verifier=haiku, adversarial-reviewer=opus, others=sonnet.
