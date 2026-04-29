@@ -46,14 +46,6 @@
   },
   "x-updatedAt": "2026-04-23",
   "x-includes": {
-    "skills": 48,
-    "hooks": 91,
-    "commands": 0,
-    "routines": 5,
-    "agents": 9,
-    "sharedUtilities": 11,
-    "references": 25,
-    "evals": 61,
     "instructions": [
       "CLAUDE.md",
       "AGENTS.md"
