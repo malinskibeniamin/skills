@@ -40,6 +40,18 @@ case "$file_path" in
       hook_warn "PERF: userEvent.type() fires per-keystroke (~50ms/char). Use user.clear()+user.paste() or fireEvent.change(). Found: $sample" "test-perf-user-type"
     fi
 
+    # ── Check: setInterval in test files = open handle / leak ────
+    # Even with cleanup, raw setInterval is fragile. Prefer
+    # vi.useFakeTimers() + vi.advanceTimersByTime() so the test is
+    # deterministic and the handle can't escape teardown.
+    interval_usage=$(echo "$added_lines" | grep -E '\bsetInterval\(' || true)
+
+    if [ -n "$interval_usage" ]; then
+      if ! hook_has_escape "test-set-interval"; then
+        hook_warn "LEAK: setInterval in test = open handle. Use vi.useFakeTimers() + vi.advanceTimersByTime(), or guarantee clearInterval in cleanup. Escape: // allow: test-set-interval [reason]" "test-perf-set-interval"
+      fi
+    fi
+
     # ── Check: it.concurrent + isolate: false is unsafe ───────────
     concurrent_usage=$(echo "$added_lines" | grep -E '\.concurrent' || true)
 
