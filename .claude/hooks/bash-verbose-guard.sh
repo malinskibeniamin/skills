@@ -22,31 +22,12 @@ _fire() {
   fi
 }
 
-# find without scope limit
-case "$command" in
-  *"find "*)
-    if ! echo "$command" | grep -qE '\-maxdepth|\| *head|\| *tail'; then
-      _fire "nudge-find" "find without -maxdepth or head: output may be huge. Prefer Glob tool or add -maxdepth N."
-    fi
-    ;;
-esac
-
-# git log without limit
-if echo "$command" | grep -qE '\bgit log\b' && \
-   ! echo "$command" | grep -qE '(\-n [0-9]|\-\-max-count|\-\-oneline|\| *head)'; then
-  _fire "nudge-git-log" "git log without -n/--oneline: default shows all history. Add -n 30 or --oneline."
-fi
-
-# cat on large file (heuristic: specific large-looking paths)
-if echo "$command" | grep -qE '\bcat (node_modules|dist|build|coverage|\.git/)'; then
-  _fire "nudge-cat-artifact" "cat on build artifacts: prefer Read with range or Grep for specific content."
-fi
-
-# grep -r on repo root
-if echo "$command" | grep -qE '\bgrep -r [^ ]* (\.|/Users|/home)' && \
-   ! echo "$command" | grep -qE '\-\-include|\| *head'; then
-  _fire "nudge-grep-root" "grep -r at repo/home: prefer Grep tool (respects .gitignore, faster, filtered)."
-fi
+# NOTE: nudge-find, nudge-git-log, nudge-cat-artifact, nudge-grep-root removed
+# 2026-04-27 — duplicates of CLAUDE.md "Bash Discipline" section. Model honors
+# the rule from CLAUDE.md context; per-call advisory was paying tokens for
+# behaviour the model already exhibited. Kept rules below are non-obvious or
+# repo-specific (not in CLAUDE.md). Re-add via git history if /hook-audit
+# shows regression in catch rate.
 
 # git commit without --quiet when lefthook/husky present
 # Lefthook/Ultracite pre-commit output (~26k chars per commit) is the #1
@@ -58,6 +39,30 @@ if echo "$command" | grep -qE '\bgit +commit\b' && \
   if [ -n "$_repo_root" ] && \
      { [ -f "$_repo_root/lefthook.yml" ] || [ -f "$_repo_root/lefthook.yaml" ] || [ -d "$_repo_root/.husky" ]; }; then
     _fire "nudge-git-commit" "git commit without --quiet in a lefthook/husky repo: pre-commit output spams tokens. Add --quiet (keeps hooks running, hides their logs)."
+  fi
+fi
+
+# rtk proxy nudge: advisory-only. Suggest `rtk <cmd>` prefix for output-heavy
+# commands that rtk has a filter for (60-90% token cut per rtk gain measurements).
+# Fail-open: silent if rtk not installed (rtk-install-check.sh nudges separately).
+# Skip when already rtk-prefixed or when auto-rewrite (rtk-rewrite.sh) is wired.
+if command -v rtk >/dev/null 2>&1 && ! echo "$command" | grep -qE '^[[:space:]]*rtk[[:space:]]'; then
+  _rtk_suggest=""
+  case "$command" in
+    *"git log"*|*"git status"*|*"git diff"*|*"git show"*|*"git push"*|*"git branch"*|*"git stash"*)
+      _rtk_suggest="rtk git ..." ;;
+    *"gh pr"*|*"gh api"*|*"gh issue"*|*"gh run"*|*"gh repo"*|*"gh release"*)
+      _rtk_suggest="rtk gh ..." ;;
+    *"cargo test"*|*"pytest"*|*"bun test"*|*"vitest"*|*"jest"*)
+      _rtk_suggest="rtk test ..." ;;
+    *"kubectl "*) _rtk_suggest="rtk kubectl ..." ;;
+    *"docker "*)  _rtk_suggest="rtk docker ..." ;;
+    *"pnpm "*)    _rtk_suggest="rtk pnpm ..." ;;
+    *"aws "*)     _rtk_suggest="rtk aws ..." ;;
+    *"psql "*)    _rtk_suggest="rtk psql ..." ;;
+  esac
+  if [ -n "$_rtk_suggest" ]; then
+    _fire "nudge-rtk" "prefix with rtk for auto-compression (60-90% token cut per rtk gain): $_rtk_suggest"
   fi
 fi
 

@@ -34,8 +34,16 @@ duration_minutes=$(( (last_ts - first_ts) / 60 ))
 # Count files touched this session
 touched_file="$session_dir/session-touched-files"
 files_touched=0
+files_by_ext=""
 if [ -f "$touched_file" ]; then
   files_touched=$(sort -u "$touched_file" | wc -l | tr -d ' ')
+  # Extension breakdown — used by /hook-audit to filter "silent hooks where
+  # the gate could have fired" from "silent hooks where it couldn't."
+  files_by_ext=$(sort -u "$touched_file" | awk -F/ '{print $NF}' | awk -F. '
+    NF>1 { e=$NF; if (e ~ /^[a-zA-Z0-9_+-]+$/) ext[e]++ }
+    NF==1 { ext["none"]++ }
+    END { for (e in ext) printf "\"%s\":%d,", e, ext[e] }
+  ' | sed 's/,$//')
 fi
 
 # Aggregate by decision type and rule
@@ -86,13 +94,19 @@ perf_ms=$(jq -r 'select(.ms != null) | [.hook, .ms] | @tsv' "$log_file" 2>/dev/n
     ' | sed 's/,$//')
 
 # Build summary JSON
-cat > "$metrics_dir/${session_date}-${session_id:0:8}.json" <<EOF
+# Filename includes first_ts so multiple sessions on the same day don't
+# overwrite each other when CLAUDE_SESSION_ID falls through to "unknown"
+# (was clobbering — fixed 2026-04-29). Bump schema_version on shape change.
+out_file="$metrics_dir/${session_date}-${session_id:0:8}-${first_ts:-$$}.json"
+cat > "$out_file" <<EOF
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "date": "$session_date",
   "session_id": "${session_id:0:8}",
+  "first_ts": ${first_ts:-0},
   "duration_minutes": $duration_minutes,
   "files_touched": $files_touched,
+  "files_by_ext": {${files_by_ext}},
   "total_entries": $total_entries,
   "hooks_fired": $hooks_fired,
   "blocks": {${blocks}},

@@ -81,7 +81,11 @@ Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tai
 
 ### Effort per phase (Opus 4.7)
 
-Default `high`. Implement (TDD) + Review (security/arch) = `xhigh`.
+Default `high`. Implement (TDD) + Plan + Review (security/arch) = `xhigh`. No `max` — diminishing returns + overthinking on 4.7. Never inject `ultrathink` into prompts/hooks/skills — on 4.7 it silently downgrades xhigh→high.
+
+### Subagent model choice (cost)
+
+Explore -> Sonnet (codebase greps don't need Opus). Plan/Review -> Opus xhigh. general-purpose -> Sonnet if plan is atomic, Opus otherwise. Haiku 4.5 for lookups/boilerplate.
 
 ### Monitor (not sleep)
 
