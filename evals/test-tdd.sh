@@ -26,6 +26,10 @@ else
 fi
 
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
+run_file_eval "$SKILL_DIR/tests.md" "tests.md exists (good vs bad test philosophy)"
+run_content_eval "$SKILL_DIR/SKILL.md" "tests\\.md" "SKILL.md links to tests.md"
+run_content_eval "$SKILL_DIR/SKILL.md" "domain glossary" "SKILL.md references project domain glossary"
+run_content_eval "$SKILL_DIR/SKILL.md" "ADRs" "SKILL.md references ADRs"
 run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN.*REFACTOR|Iron Law" "SKILL.md has TDD cycle"
 run_content_eval "$SKILL_DIR/SKILL.md" "paths:" "SKILL.md has paths: for auto-loading"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "setTimeout|waitForTimeout" "REFERENCE has condition-based waiting"

@@ -7,7 +7,7 @@ description: Install planning/project management skills -- PRD creation, impleme
 
 ## Skills Installed
 
-**Owned** (hook-integrated): brainstorming, domain-model, github-triage, qa, zoom-out
+**Owned** (hook-integrated): brainstorming, domain-model, triage, diagnose, qa, zoom-out
 
 **Community**: to-prd, to-issues, write-a-skill
 
@@ -21,13 +21,12 @@ bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code
 
 # Owned
 bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/github-triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
 
 # Community
-bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y
-bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y
 bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
 ```
 

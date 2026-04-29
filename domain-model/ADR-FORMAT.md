@@ -35,12 +35,12 @@ Easy to reverse -> skip. Not surprising -> skip. No real alternative -> skip.
 ### What Qualifies
 
 - **Architectural shape.** "Monorepo." "Write model is event-sourced, read model projected into Postgres."
-- **Integration patterns.** "Ordering and Billing communicate via domain events, not HTTP."
-- **Technology with lock-in.** Database, message bus, auth provider. Not every library -- only quarter-to-swap ones.
-- **Boundary decisions.** "Customer data owned by Customer context; others reference by ID only."
-- **Deliberate deviations.** "Manual SQL instead of ORM because X." Stops next engineer from "fixing" something deliberate.
-- **Invisible constraints.** "Can't use AWS -- compliance." "Response times under 200ms -- partner API contract."
-- **Non-obvious rejections.** Considered GraphQL, picked REST for subtle reasons -> record it.
+- **Integration patterns between contexts.** "Ordering and Billing communicate via domain events, not synchronous HTTP."
+- **Technology choices that carry lock-in.** Database, message bus, auth provider, deployment target. Not every library -- only the ones that would take a quarter to swap out.
+- **Boundary and scope decisions.** "Customer data is owned by the Customer context; others reference by ID only." Explicit no-s are as valuable as yes-s.
+- **Deliberate deviations from the obvious path.** "Manual SQL instead of an ORM because X." Anything where a reasonable reader would assume the opposite. Stops the next engineer from "fixing" something that was deliberate.
+- **Constraints not visible in the code.** "Can't use AWS -- compliance requirements." "Response times must be under 200ms -- partner API contract."
+- **Rejected alternatives when the rejection is non-obvious.** Considered GraphQL, picked REST for subtle reasons -> record it. Otherwise someone will suggest GraphQL again in six months.
 
 ## Numbering
 
