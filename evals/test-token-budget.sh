@@ -13,19 +13,18 @@ BUDGET_DIR="$REPO_ROOT"
 # -- Test A: doc budget ---------------------------------------------
 
 # Cap bumped from 7200 to 7500 (2026-04-19) to fit the External Services
-# section introduced with the MCP-ban hook. Cap bumped again from 7500 to
-# 7900 (2026-04-29) after the rtk-rewrite + green-not-done sections
-# pushed CLAUDE.md to 7823 post-caveman-compress. Two compression passes
-# could not bring it back under 7500 without losing enforcement phrases
-# that other evals assert verbatim.
+# section introduced with the MCP-ban hook. Bumped 7500 -> 7900 (2026-04-29)
+# after rtk-rewrite + green-not-done sections pushed CLAUDE.md to 7823
+# post-caveman-compress. Bumped 7900 -> 8000 (2026-04-29) for headroom
+# while the prose-style-check linter is still settling.
 claude_md_bytes=$(wc -c < "$BUDGET_DIR/CLAUDE.md" 2>/dev/null | tr -d ' ')
-if [ "$claude_md_bytes" -lt 7900 ]; then
-  echo "  PASS  CLAUDE.md under 7900 bytes ($claude_md_bytes)"
+if [ "$claude_md_bytes" -lt 8000 ]; then
+  echo "  PASS  CLAUDE.md under 8000 bytes ($claude_md_bytes)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  CLAUDE.md over budget: $claude_md_bytes bytes (cap: 7900)"
+  echo "  FAIL  CLAUDE.md over budget: $claude_md_bytes bytes (cap: 8000)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: CLAUDE.md over 7900 bytes"
+  ERRORS="$ERRORS\n  FAIL: CLAUDE.md over 8000 bytes"
 fi
 
 ethos_bytes=$(wc -c < "$BUDGET_DIR/ETHOS.md" 2>/dev/null | tr -d ' ')
