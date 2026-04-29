@@ -55,6 +55,29 @@ case "$file_path" in
     ;;
 esac
 
+# ── Check 7: literal timeout: in test option objects ────────────
+# Hardcoded `{ timeout: <ms> }` in waitFor/findBy/expect.poll/page.*
+# is a magic number — brittle if the operation gets slower over time.
+# Prefer condition-based assertion or framework default timeout.
+
+if echo "$added_lines" | grep -qE '\btimeout:\s*[0-9]+'; then
+  if ! hook_has_escape "test-magic-timeout"; then
+    hook_warn "Hardcoded { timeout: <ms> } in test — magic number, brittle as code slows. Prefer condition-based waitFor/expect.poll with default timeout. Escape: // allow: test-magic-timeout [reason]" "test-convention-magic-timeout"
+  fi
+fi
+
+# ── Check 8: findBy*/waitFor without await ──────────────────────
+# Both return Promises. Missing await leads to flaky tests, unhandled
+# rejections, and assertions that pass before the DOM settles.
+
+unawaited=$(echo "$added_lines" | grep -E '(findBy[A-Z][A-Za-z]*|\bwaitFor)\(' | grep -vE '\b(await|return)\b' | grep -vE '^\+?\s*(//|\*)' || true)
+if [ -n "$unawaited" ]; then
+  if ! hook_has_escape "test-unawaited"; then
+    sample=$(echo "$unawaited" | head -2 | sed 's/^+//' | tr '\n' ' ')
+    hook_warn "findBy*/waitFor returns Promise — missing await is flaky. Found: $sample Escape: // allow: test-unawaited [reason]" "test-convention-unawaited"
+  fi
+fi
+
 # ── Check 6: data-testid reminder for interactive elements ───────
 # Advisory only — remind when creating new interactive components.
 

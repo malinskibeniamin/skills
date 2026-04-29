@@ -68,6 +68,8 @@ run_content_eval "$HOOKS_DIR/test-convention-check.sh" "jest" "test-convention d
 run_content_eval "$HOOKS_DIR/test-convention-check.sh" "toBeInTheDocument" "test-convention detects toBeInTheDocument"
 run_content_eval "$HOOKS_DIR/test-convention-check.sh" "waitForTimeout" "test-convention detects waitForTimeout"
 run_content_eval "$HOOKS_DIR/test-convention-check.sh" "test.skip" "test-convention detects test.skip"
+run_content_eval "$HOOKS_DIR/test-convention-check.sh" "test-magic-timeout" "test-convention detects { timeout: <n> } magic number"
+run_content_eval "$HOOKS_DIR/test-convention-check.sh" "test-unawaited" "test-convention detects unawaited findBy/waitFor"
 
 # ── Warn: it() in test file ─────────────────────────────────────
 
@@ -106,6 +108,33 @@ printf "test.skip('broken test', () => {})\n" > "$tmpfile"
 run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: test.skip in E2E file" "skip"
+
+# ── Warn: { timeout: <n> } magic number ────────────────────────
+
+tmpfile="$_tc_tmpdir/wait.test.tsx"
+printf "await waitFor(() => expect(x).toBe(1), { timeout: 5000 })\n" > "$tmpfile"
+
+run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: { timeout: 5000 } magic number" "magic number"
+
+# ── Warn: unawaited findByRole ─────────────────────────────────
+
+tmpfile="$_tc_tmpdir/find.test.tsx"
+printf "screen.findByRole('button')\n" > "$tmpfile"
+
+run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: unawaited findByRole" "missing await"
+
+# ── Allow: awaited findByRole ──────────────────────────────────
+
+tmpfile="$_tc_tmpdir/find-ok.test.tsx"
+printf "const el = await screen.findByRole('button')\n" > "$tmpfile"
+
+run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: awaited findByRole"
 
 (cd /tmp && rm -r "$_tc_tmpdir" 2>/dev/null) || true
 

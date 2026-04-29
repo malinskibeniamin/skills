@@ -380,6 +380,32 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
+# ── test-perf-check.sh: warn on setInterval() in test file ──────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'const id = setInterval(tick, 1000);\n' > "$tmpdir/poll.test.tsx"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init" && printf '+const id = setInterval(tick, 1000);\n' > "$tmpdir/poll.test.tsx") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/poll.test.tsx\"}}" \
+  0 "warn: setInterval() in test file" "open handle"
+
+rm -rf "$tmpdir"
+
+# ── test-perf-check.sh: allow setInterval with escape hatch ─────
+
+tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
+printf 'const id = setInterval(tick, 1000); // allow: test-set-interval needs real timer for x\n' > "$tmpdir/poll.test.tsx"
+(cd "$tmpdir" && git init -q && git add . && git commit -q -m "init" && printf '+const id = setInterval(tick, 1000); // allow: test-set-interval needs real timer for x\n' > "$tmpdir/poll.test.tsx") 2>/dev/null
+
+run_hook_eval "$PERF_CHECK_SCRIPT" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$tmpdir/poll.test.tsx\"}}" \
+  0 "allow: setInterval with escape hatch"
+
+rm -rf "$tmpdir"
+
+run_content_eval "$PERF_CHECK_SCRIPT" "setInterval" "perf-check detects setInterval leak"
+
 # ── test-perf-stop.sh: script content (new features) ────────────
 
 run_content_eval "$PERF_SCRIPT" "detectAsyncLeaks" "perf-stop runs async leak detection"
