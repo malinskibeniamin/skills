@@ -55,7 +55,9 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 
-Effort: xhigh (Understand) -> xhigh (Plan) -> max (TDD) -> xhigh (Simplify) -> xhigh (Verify) -> max (Review)
+Effort: high (Understand) -> xhigh (Plan) -> xhigh (TDD) -> high (Simplify) -> high (Verify) -> xhigh (Review). No `max` on Opus 4.7 (diminishing returns + overthinking).
+
+Subagent model: Explore -> Sonnet (codebase greps don't need Opus). Plan/Review -> Opus xhigh. general-purpose -> Sonnet if plan is atomic, Opus otherwise.
 
 ## UX Copy
 
