@@ -7,11 +7,15 @@ description: Explore codebase for architectural improvement. Focus testability v
 
 Surface architectural friction, improve testability via module-deepening refactors -> GitHub issue RFCs.
 
-**Deep module** = small interface, big implementation. More testable, more AI-navigable, test at boundary not inside.
+This skill is _informed_ by the project's domain model. The domain glossary names good seams; ADRs in the area record decisions the skill should not re-litigate. Read both before exploring.
+
+**Deep module** = small interface, big implementation. More testable, more AI-navigable, test at boundary not inside. See [LANGUAGE.md](LANGUAGE.md) for the canonical vocabulary (module / interface / seam / adapter / depth / leverage / locality + the deletion test).
 
 ## Process
 
 ### 1. Explore
+Read the project's domain glossary and any ADRs in the area first.
+
 Use Agent(subagent_type=Explore). Look for:
 - One concept require bouncing between many files?
 - Interface near as complex as implementation (shallow)?
@@ -20,7 +24,9 @@ Use Agent(subagent_type=Explore). Look for:
 - Untested or hard-to-test areas?
 
 ### 2. Present Candidates
-Numbered list: cluster of related modules, why coupled, dependency category, test impact. No interfaces yet.
+Numbered list: cluster of related modules, why coupled, dependency category, test impact. Use [LANGUAGE.md](LANGUAGE.md) vocabulary for architecture and the project's `CONTEXT.md` vocabulary for the domain. No interfaces yet.
+
+If a candidate contradicts an existing ADR, only surface it when the friction is real enough to warrant revisiting the ADR. Mark it clearly (_"contradicts ADR-0007 -- but worth reopening because..."_). Don't list every theoretical refactor an ADR forbids.
 
 ### 3. User Picks
 

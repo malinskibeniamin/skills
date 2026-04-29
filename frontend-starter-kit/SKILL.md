@@ -24,7 +24,7 @@ description: Complete frontend stack -- 14 setup skills + 14 owned workflow skil
 
 ## Workflow Skills (15-28)
 
-development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, domain-model, grill-me, github-triage, qa, zoom-out, triage-issue, write-a-skill
+development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, domain-model, grill-me, triage, diagnose, qa, zoom-out, write-a-skill
 
 ## Steps
 
@@ -42,10 +42,10 @@ bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent cla
 bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/github-triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/triage-issue --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code -y
 ```
 

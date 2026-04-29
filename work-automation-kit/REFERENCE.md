@@ -13,13 +13,14 @@ Feature idea
   -> merge
 
 Bug report
-  -> /triage-issue -- explore codebase, find root cause, TDD fix plan
+  -> /diagnose -- feedback-loop-first, 6-phase debugging
+  -> /triage -- explore codebase, find root cause, TDD fix plan, file ticket
   -> implement fix (/tdd: failing test -> fix -> verify)
   -> code review (development-lifecycle review phase)
   -> merge
 
 Issue management
-  -> /github-triage -- triage via label state machine
+  -> /triage -- triage via state machine (GitHub via gh, Jira via acli)
   -> /qa -- interactive QA session -> auto-file issues
 
 Design decision
@@ -38,8 +39,8 @@ Quick question (on a specific decision)
 | Category | Owned | Community (mattpocock) |
 |---|---|---|
 | Testing | tdd | -- |
-| Debugging | triage-issue | -- |
-| Triage | github-triage, qa | -- |
+| Debugging | diagnose | -- |
+| Triage | triage, qa | -- |
 | Planning | development-lifecycle (plan phase) | to-prd, to-issues |
 | Review | development-lifecycle (review phase) | -- |
 | Design | brainstorming, design-an-interface | -- |

@@ -106,10 +106,10 @@ bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code
 bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/github-triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/triage-issue --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
@@ -571,11 +571,11 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
 | **`/domain-model`** | **Grill + document.** 3 reviewer hats (product/eng/design) in parallel + sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
 | **`/grill-me`** | **Grill, no docs.** 3 reviewer hats (product/eng/design) in parallel, fast. Skip when decision isn't worth writing down. Standalone alt to `/domain-model`. |
-| **`/github-triage`** | Triage GitHub issues via label-based state machine. Grill sessions, agent briefs, out-of-scope KB. |
+| **`/triage`** | Triage issues via state machine (GitHub via `gh` or Jira via `acli`). Grill sessions, agent briefs, out-of-scope KB. Bug-investigation mode produces a TDD fix plan and files the ticket. |
+| **`/diagnose`** | Hard bug or perf regression. Six-phase loop: build feedback loop -> reproduce -> hypothesise (3-5 ranked) -> instrument -> fix + regression test -> cleanup + post-mortem. |
 | **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explore codebase in background, auto-file GitHub issues. |
 | **`/zoom-out`** | Go up layer of abstraction. Map relevant modules + callers when unfamiliar with code area. |
 | **`/design-an-interface`** | Design API or module. Spawn 3+ agents generate radically different designs. |
-| **`/triage-issue`** | Investigate bug. Explore codebase, find root cause, file GitHub issue with TDD fix plan. |
 | **`/request-refactor-plan`** | Plan refactor. Interview you, break into tiny safe commits, file RFC issue. |
 | **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
 | **`/improve-codebase-architecture`** | Find architectural improvements. Identify shallow modules, propose deep-module refactors. |
@@ -608,9 +608,15 @@ and matching confirm password. Start with the failing tests.
 We're planning to use TanStack Query with a 5-minute stale time.
 ```
 
-**`/github-triage`** -- triage incoming issues:
+**`/triage`** -- triage incoming issues (GitHub or Jira):
 ```
-/github-triage -- show me anything that needs my attention
+/triage -- show me anything that needs my attention
+```
+
+**`/diagnose`** -- debug a hard bug:
+```
+/diagnose -- the export button intermittently throws on Firefox but not Chrome.
+Build the feedback loop first.
 ```
 
 **`/qa`** -- interactive bug report session:
@@ -634,9 +640,9 @@ We're planning to use TanStack Query with a 5-minute stale time.
 Must support email, Slack, and in-app channels with retry and rate limiting.
 ```
 
-**`/triage-issue`** -- investigate bug:
+**`/triage`** -- investigate a bug and file a ticket with a TDD fix plan:
 ```
-/triage-issue -- users report the sidebar flickers on navigation.
+/triage -- users report the sidebar flickers on navigation.
 It started after the last release. Check rendering and route transitions.
 ```
 
@@ -957,7 +963,8 @@ graph TD
         DM[domain-model]
         GM[grill-me]
         DAI[design-an-interface]
-        GT[github-triage]
+        TR[triage]
+        DIAG[diagnose]
         QA[qa]
         RPF[resolve-pr-feedback]
     end
@@ -1174,7 +1181,7 @@ bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y       
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage-issue`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `github-triage`, `qa`, `zoom-out`, `ubiquitous-language`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
+**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage` (multi-tracker GH+Jira), `diagnose`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `qa`, `zoom-out`, `ubiquitous-language`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 

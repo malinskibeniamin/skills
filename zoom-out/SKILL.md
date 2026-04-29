@@ -4,4 +4,4 @@ description: "Go up a layer of abstraction and map the broader context. Use when
 disable-model-invocation: true
 ---
 
-Don't know this code area. Go up layer of abstraction. Give map of all relevant modules and callers.
+Don't know this code area. Go up layer of abstraction. Give map of all relevant modules and callers, using the project's domain glossary vocabulary.

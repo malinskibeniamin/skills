@@ -31,11 +31,12 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ### 0. PLAN -- Coverage gap analysis
 
+- Use project's domain glossary for test/interface names; respect ADRs in the area
 - Run `vitest run --coverage.enabled --coverage.reporter=text`
 - Find uncovered lines/branches/functions in changed files -> test targets
 - Confirm behaviors w/ user (prioritize gaps over covered)
 - Find [deep module](deep-modules.md) chance (small interface, deep impl)
-- Design interfaces for [testability](interface-design.md)
+- Design interfaces for [testability](interface-design.md); test behaviour through public interface, not impl ([tests.md](tests.md))
 
 ### 1. RED -- Failing test (tracer bullet)
 
@@ -94,8 +95,7 @@ New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project 
 - [ ] Coverage gaps closed -- re-run coverage, verify changed files
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
 - [ ] Portal tests: `defaultOpen` for content tests | `waitFor` for close assertions
-- [ ] Tests verify behavior, not impl
-- [ ] Consider `expect.soft()` for multi-assertion state tests
+- [ ] Tests verify behavior, not impl | `expect.soft()` for multi-assertion state tests
 - [ ] CI green AND `ci-warning-audit` clean -- `gh run view <id> --log | grep -E 'Warning|Deprecation'` returns nothing
 
 See [REFERENCE.md](REFERENCE.md) for element selectors, portal testing, mock patterns, diagnostics, Vitest config.

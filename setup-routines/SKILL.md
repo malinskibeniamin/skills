@@ -53,7 +53,7 @@ that must survive your laptop closing.
 |---|---|
 | Any hooks installed | pr-review |
 | resolve-pr-feedback skill | pr-feedback-resolve |
-| triage-issue skill | issue-triage |
+| triage skill | issue-triage |
 | Quality gate hooks/scripts | weekly-health |
 | REFERENCE.md or other docs | docs-drift |
 

@@ -26,7 +26,8 @@
 | Skill | Replaces | Key feature |
 |---|---|---|
 | tdd | mattpocock/tdd (incorporated) | TDD iron law + async leak detection + deep modules |
-| triage-issue | mattpocock/triage-issue (vendored) | Bug root cause -> TDD fix plan |
+| triage | mattpocock/triage (incorporated, multi-tracker GH+Jira) | State-machine triage + bug root cause -> TDD fix plan |
+| diagnose | mattpocock/diagnose (vendored) | Feedback-loop-first 6-phase debugging |
 | brainstorming | -- (owned) | Design + challenge modes |
 
 ### Community Workflow Skills (10) -- from mattpocock/skills
