@@ -303,6 +303,15 @@
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/test-warning-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/post-tool-failure.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -363,6 +372,17 @@
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/cache-telemetry-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "Bash|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/codex-permission-request-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

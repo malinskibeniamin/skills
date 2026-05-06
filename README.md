@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.10.1
+codex plugin marketplace add malinskibeniamin/skills --ref v4.10.2
 codex plugin marketplace upgrade skills
 ```
 
@@ -1374,7 +1374,7 @@ Typical Claude Code tool call takes 3-8 seconds (network + LLM inference). PostT
 
 ## Codex Compatibility
 
-Codex = first-class harness. Hooks that map directly (SessionStart, UserPromptSubmit, PreToolUse/Bash, PostToolUse/Bash, Stop) ported as-is. All Edit|Write PostToolUse hooks consolidated into single Stop-phase batch checker. `AGENTS.md` at repo root replace PostCompact context re-injection.
+Codex = first-class harness. Supported equivalent hooks are mapped directly: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, plus Codex-only PermissionRequest through an adapter that reuses hard-deny Bash/MCP guardrails. Claude PostToolUseFailure maps to Codex PostToolUse because Codex post-tool hooks include failed Bash commands. Claude-only events without Codex equivalents (FileChanged, compact hooks, SessionEnd, Subagent hooks, WorktreeCreate) stay Claude-only until Codex adds matching lifecycle events. `AGENTS.md` at repo root replaces PostCompact context re-injection.
 
 All hook paths use `$(git rev-parse --show-toplevel)` for resolution -- works from any CWD, silently skip in repos without hooks installed.
 
