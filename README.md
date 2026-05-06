@@ -50,39 +50,61 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 <details>
 <summary>Codex (OpenAI) -- install as Codex plugin</summary>
 
-Repo ships Codex-native plugin manifest (`.codex-plugin/plugin.json`). Codex plugins require **vendoring** -- plugin must exist as local directory in repo.
+Repo ships a Codex-native plugin manifest (`.codex-plugin/plugin.json`) and marketplace (`.agents/plugins/marketplace.json`). Use the Codex marketplace CLI when you want Codex to install and track the marketplace source instead of editing `config.toml` by hand.
 
-**1. Vendor into repo** (subtree preferred over submodules):
+**1. Upgrade Codex and enable plugins/hooks**
+
 ```bash
-git subtree add --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash
+brew upgrade --cask codex
+codex features enable plugins
+codex features enable codex_hooks
 ```
 
-**2. Add repo marketplace** at `.agents/plugins/marketplace.json`:
-```json
-{
-  "name": "skills",
-  "interface": { "displayName": "Frontend Skills" },
-  "plugins": [{
-    "name": "frontend-skills",
-    "source": { "source": "local", "path": "./plugins/frontend-skills" },
-    "policy": { "installation": "INSTALLED_BY_DEFAULT", "authentication": "ON_INSTALL" },
-    "category": "Development"
-  }]
-}
+**2. Add this marketplace from the CLI**
+
+Track latest `main`:
+
+```bash
+codex plugin marketplace add malinskibeniamin/skills --ref main
+codex plugin marketplace upgrade skills
 ```
 
-Use `INSTALLED_BY_DEFAULT` for zero-click install (everyone on repo get it). Use `AVAILABLE` for opt-in.
+Or pin a release:
 
-**3. Enable hooks** (separate from plugin -- hooks experimental runtime feature, not plugin payload):
-```toml
-# .codex/config.toml
-[features]
-codex_hooks = true
+```bash
+codex plugin marketplace add malinskibeniamin/skills --ref v4.10.1
+codex plugin marketplace upgrade skills
 ```
 
-Wire `.codex/hooks.json` at vendored plugin scripts (`plugins/frontend-skills/.claude/hooks/...`). Run `codex-compat` skill to generate hooks config + batch checker.
+**General CLI forms**
 
-**Update:** `git subtree pull --prefix=plugins/frontend-skills https://github.com/malinskibeniamin/skills.git main --squash`
+```bash
+codex plugin marketplace add owner/repo
+codex plugin marketplace add owner/repo --ref main
+codex plugin marketplace add https://github.com/example/plugins.git --sparse .agents/plugins
+codex plugin marketplace add ./local-marketplace-root
+```
+
+Marketplace sources can be GitHub shorthand (`owner/repo` or `owner/repo@ref`), HTTP or HTTPS Git URLs, SSH Git URLs, or local marketplace root directories. Use `--ref` to pin a Git ref, and repeat `--sparse PATH` to use a sparse checkout for Git-backed marketplace repos. `--sparse` is valid only for Git marketplace sources.
+
+Do not use `--sparse .agents/plugins` for this repo as-is: the marketplace entry points `frontend-skills` at the repo root (`./`), so Codex needs the root plugin files too.
+
+**Refresh or remove configured marketplaces**
+
+```bash
+codex plugin marketplace upgrade
+codex plugin marketplace upgrade marketplace-name
+codex plugin marketplace remove marketplace-name
+```
+
+For this repo specifically:
+
+```bash
+codex plugin marketplace upgrade skills
+codex plugin marketplace remove skills
+```
+
+After adding or upgrading, restart Codex so the Plugins UI reloads metadata.
 
 </details>
 
