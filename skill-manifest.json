@@ -1,37 +1,65 @@
 {
   "$comment": "Source of truth for all hook configurations. Generates .claude/settings.json, hooks/hooks.json, .claude-plugin/plugin.json counts, .codex-plugin/plugin.json counts, .agents/plugins/marketplace.json, .claude-plugin/marketplace.json. Run scripts/generate-hook-configs.sh to regenerate.",
-  "version": "4.10.0",
+  "version": "4.10.1",
   "hooks": {
     "SessionStart": {
-      "": ["session-env.sh", "llm-env.sh"]
+      "": [
+        "session-env.sh",
+        "llm-env.sh"
+      ]
     },
     "UserPromptSubmit": {
-      "": ["user-prompt-context.sh", "intent-detect.sh"]
+      "": [
+        "user-prompt-context.sh",
+        "intent-detect.sh"
+      ]
     },
     "PostCompact": {
-      "": ["post-compact-context.sh"]
+      "": [
+        "post-compact-context.sh"
+      ]
     },
     "PreCompact": {
-      "": ["pre-compact.sh"]
+      "": [
+        "pre-compact.sh"
+      ]
     },
     "PostToolUseFailure": {
-      "Bash": ["post-tool-failure.sh"]
+      "Bash": [
+        "post-tool-failure.sh"
+      ]
     },
     "FileChanged": {
-      "package.json|bun.lockb|package-lock.json": ["file-changed-deps.sh"],
-      "*.proto|*.graphql|*.graphqls": ["file-changed-schema.sh"],
-      "biome.jsonc|biome.json|tsconfig.json|tsconfig.*.json|vitest.config.*": ["file-changed-config.sh"],
-      "src/env.ts": ["file-changed-env.sh"],
-      "skill-manifest.json": ["file-changed-manifest.sh"]
+      "package.json|bun.lockb|package-lock.json": [
+        "file-changed-deps.sh"
+      ],
+      "*.proto|*.graphql|*.graphqls": [
+        "file-changed-schema.sh"
+      ],
+      "biome.jsonc|biome.json|tsconfig.json|tsconfig.*.json|vitest.config.*": [
+        "file-changed-config.sh"
+      ],
+      "src/env.ts": [
+        "file-changed-env.sh"
+      ],
+      "skill-manifest.json": [
+        "file-changed-manifest.sh"
+      ]
     },
     "WorktreeCreate": {
-      "": ["worktree-create.sh"]
+      "": [
+        "worktree-create.sh"
+      ]
     },
     "SessionEnd": {
-      "": ["session-end.sh"]
+      "": [
+        "session-end.sh"
+      ]
     },
     "PreToolUse": {
-      "Edit|Write|Bash": ["violation-nudge.sh"],
+      "Edit|Write|Bash": [
+        "violation-nudge.sh"
+      ],
       "Bash": [
         "enforce-toolchain.sh",
         "llm-test-flags.sh",
@@ -40,7 +68,9 @@
         "bash-verbose-guard.sh",
         "rtk-rewrite.sh"
       ],
-      "mcp__.*": ["mcp-ban.sh"]
+      "mcp__.*": [
+        "mcp-ban.sh"
+      ]
     },
     "PostToolUse": {
       "Edit|Write": [
@@ -96,13 +126,21 @@
         "form-setvalue-options-check.sh",
         "form-error-summary-check.sh"
       ],
-      "Bash": ["llm-truncate.sh", "consecutive-failure-check.sh", "test-warning-check.sh"]
+      "Bash": [
+        "llm-truncate.sh",
+        "consecutive-failure-check.sh",
+        "test-warning-check.sh"
+      ]
     },
     "SubagentStart": {
-      "": ["subagent-start.sh"]
+      "": [
+        "subagent-start.sh"
+      ]
     },
     "SubagentStop": {
-      "self-reviewer|code-reviewer|adversarial-reviewer": ["subagent-stop.sh"]
+      "self-reviewer|code-reviewer|adversarial-reviewer": [
+        "subagent-stop.sh"
+      ]
     },
     "Stop": {
       "": [
