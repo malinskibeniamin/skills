@@ -4,9 +4,13 @@ Release history for `frontend-skills`. Plugin JSON (`.claude-plugin/plugin.json`
 
 Semver: major = breaking, minor = new skill/hook/feature, patch = bug fix.
 
+## 4.10.2
+
+2026-05-06 -- Codex hook parity pass. `hooks/codex-hooks.json` now uses every currently supported Codex lifecycle event that can carry equivalent harness behavior: direct mappings for `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `PostToolUse`, and `Stop`; Claude `PostToolUseFailure` is appended to Codex `PostToolUse` because Codex post-tool hooks include failed Bash commands; Codex-only `PermissionRequest` runs `codex-permission-request-guard.sh`, an adapter that reuses approval-safe Bash/MCP deny guardrails and emits Codex's native `decision.behavior: deny` shape. Unsupported Claude-only lifecycle events (`FileChanged`, `PreCompact`, `PostCompact`, `SessionEnd`, `SubagentStart`, `SubagentStop`, `WorktreeCreate`) remain excluded from Codex plugin hooks until Codex exposes equivalents. Script count 100 -> 101.
+
 ## 4.10.1
 
-2026-05-06 -- Codex marketplace packaging fix. Codex plugin manifest now points to `./hooks/codex-hooks.json` instead of the stale `.codex/hooks.json`. `scripts/generate-hook-configs.sh` now emits four files from `skill-manifest.json`: Claude full-surface repo hooks (`.claude/settings.json`), Claude full-surface plugin hooks (`hooks/hooks.json`), Codex-supported repo hooks (`.codex/hooks.json`), and Codex-supported plugin hooks (`hooks/codex-hooks.json`). Codex hook packaging is limited to the currently supported Codex lifecycle events (`SessionStart`, `PreToolUse`, `PostToolUse`, `UserPromptSubmit`, `Stop`; `PermissionRequest` is included when present in the manifest) while Claude keeps the full hook surface. Install-surface copy refreshed from stale 68 hooks / 41 skills to current 92 wired hooks / 100 scripts / 51 skills / 9 agents / 5 routines. Plugin and marketplace metadata bumped to 4.10.1 so Codex can detect an upgrade.
+2026-05-06 -- Codex marketplace packaging fix. Codex plugin manifest now points to `./hooks/codex-hooks.json` instead of the stale `.codex/hooks.json`. `scripts/generate-hook-configs.sh` now emits four files from `skill-manifest.json`: Claude full-surface repo hooks (`.claude/settings.json`), Claude full-surface plugin hooks (`hooks/hooks.json`), Codex-supported repo hooks (`.codex/hooks.json`), and Codex-supported plugin hooks (`hooks/codex-hooks.json`). Codex hook packaging is limited to the currently supported Codex lifecycle events (`SessionStart`, `PreToolUse`, `PostToolUse`, `UserPromptSubmit`, `Stop`; `PermissionRequest` is included when present in the manifest) while Claude keeps the full hook surface. Install-surface copy refreshed from stale 68 hooks / 41 skills to current 92 wired hooks / 101 scripts / 51 skills / 9 agents / 5 routines. Plugin and marketplace metadata bumped to 4.10.1 so Codex can detect an upgrade.
 
 ## 4.10.0
 

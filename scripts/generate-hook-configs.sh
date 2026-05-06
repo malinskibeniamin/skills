@@ -67,34 +67,54 @@ PLUGIN_PREFIX='"${CLAUDE_PLUGIN_ROOT}/.claude/hooks'
 
 NEW_SETTINGS=$(_build "$SETTINGS_PREFIX")
 
-# Codex currently supports this subset of lifecycle events. Keep the full
-# manifest for Claude, but only package supported events for Codex so installs
-# do not depend on unknown event handling.
-CODEX_EVENTS='["SessionStart","PreToolUse","PermissionRequest","PostToolUse","UserPromptSubmit","Stop"]'
-NEW_CODEX_SETTINGS=$(jq --arg prefix "$SETTINGS_PREFIX" --argjson events "$CODEX_EVENTS" '
-  {
-    hooks: (
-      .hooks
-      | with_entries(select(.key as $event | $events | index($event)))
-      | to_entries | map(
-        .key as $event
-        | {
-            key: $event,
-            value: (
-              .value | to_entries | map(
-                (if .key == "" then {} else {matcher: .key} end) + {
-                  hooks: (.value | map({
-                    type: "command",
-                    command: ("f=" + $prefix + "/" + . + "; [ -x \"$f\" ] && exec \"$f\"; exit 0")
-                  }))
-                }
-              )
-            )
+# Codex supports a smaller lifecycle surface than Claude Code. Generate a
+# best-effort Codex mapping instead of only dropping unsupported events:
+# - direct equivalents stay direct,
+# - Claude PostToolUseFailure maps to Codex PostToolUse (Codex includes failures),
+# - Codex PermissionRequest gets an adapter that reuses approval-safe deny guards.
+CODEX_EVENTS='["SessionStart","PreToolUse","PostToolUse","UserPromptSubmit","Stop"]'
+_build_codex() {
+  local prefix="$1"
+  local close_quote="${2:-}"
+  jq --arg prefix "$prefix" --arg close "$close_quote" --argjson events "$CODEX_EVENTS" '
+    def command_hook($script): {
+      type: "command",
+      command: ("f=" + $prefix + "/" + $script + $close + "; [ -x \"$f\" ] && exec \"$f\"; exit 0")
+    };
+    . as $root
+    | def groups_for($event):
+      ($root.hooks[$event] // {})
+      | to_entries
+      | map(
+          (if .key == "" then {} else {matcher: .key} end) + {
+            hooks: (.value | map(command_hook(.)))
           }
-      ) | from_entries
-    )
-  }
-' "$MANIFEST")
+        );
+    def supported_direct:
+      $root.hooks
+      | with_entries(select(.key as $event | $events | index($event)))
+      | to_entries
+      | map(.key as $event | {key: $event, value: groups_for($event)})
+      | from_entries;
+
+    {hooks: supported_direct}
+    # Codex PostToolUse runs for failed Bash commands too, so preserve the
+    # Claude failure categorizer by appending it to PostToolUse.
+    | if ($root.hooks.PostToolUseFailure? // null) != null then
+        .hooks.PostToolUse = ((.hooks.PostToolUse // []) + groups_for("PostToolUseFailure"))
+      else . end
+    # Codex-only event: run an adapter during approval prompts so approval-time
+    # Bash/MCP requests still get the same hard-deny guardrails.
+    | .hooks.PermissionRequest = [
+        {
+          matcher: "Bash|mcp__.*",
+          hooks: [command_hook("codex-permission-request-guard.sh")]
+        }
+      ]
+  ' "$MANIFEST"
+}
+
+NEW_CODEX_SETTINGS=$(_build_codex "$SETTINGS_PREFIX")
 
 # For plugin, rebuild with matching-quote prefix:
 NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '
@@ -120,30 +140,7 @@ NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '
   }
 ' "$MANIFEST")
 
-NEW_CODEX_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' --argjson events "$CODEX_EVENTS" '
-  {
-    hooks: (
-      .hooks
-      | with_entries(select(.key as $event | $events | index($event)))
-      | to_entries | map(
-        .key as $event
-        | {
-            key: $event,
-            value: (
-              .value | to_entries | map(
-                (if .key == "" then {} else {matcher: .key} end) + {
-                  hooks: (.value | map({
-                    type: "command",
-                    command: ("f=" + $prefix + "/" + . + "\"; [ -x \"$f\" ] && exec \"$f\"; exit 0")
-                  }))
-                }
-              )
-            )
-          }
-      ) | from_entries
-    )
-  }
-' "$MANIFEST")
+NEW_CODEX_PLUGIN=$(_build_codex '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '"')
 
 # Merge permissions from existing settings.json (hand-edited, not generated)
 if [ -f ".claude/settings.json" ]; then
