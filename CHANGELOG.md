@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.10.3
+
+2026-05-21 -- Add `/handoff` skill for compact cross-session and cross-agent continuation briefs. The skill writes a `mktemp -t handoff-XXXXXX.md` document, references existing artifacts instead of duplicating them, captures next-session focus/open questions/next actions, and suggests follow-on skills. Registered in Claude plugin packaging, README catalog, marketplace metadata, and eval coverage. Skills 51 -> 52.
+
 Release history for `frontend-skills`. Plugin JSON (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, marketplace manifests) keeps only the last 3 releases to bound file size; full history lives here.
 
 Semver: major = breaking, minor = new skill/hook/feature, patch = bug fix.

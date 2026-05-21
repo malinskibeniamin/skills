@@ -601,6 +601,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/request-refactor-plan`** | Plan refactor. Interview you, break into tiny safe commits, file RFC issue. |
 | **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
 | **`/improve-codebase-architecture`** | Find architectural improvements. Identify shallow modules, propose deep-module refactors. |
+| **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
 | **`/write-a-skill`** | Create new agent skill with proper structure + progressive disclosure. |
 
 <details>
@@ -684,6 +685,12 @@ into a standalone AuthService. Must be backwards-compatible during migration.
 ```
 /improve-codebase-architecture -- focus on module boundaries and testability
 in src/features/. Look for tightly coupled modules that should be split.
+```
+
+
+**`/handoff`** -- transfer context to another session:
+```
+/handoff -- next session should prototype the URL-state approach without touching the main implementation branch.
 ```
 
 **`/write-a-skill`** -- create new skill:
@@ -1203,7 +1210,7 @@ bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y       
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage` (multi-tracker GH+Jira), `diagnose`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `qa`, `zoom-out`, `ubiquitous-language`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
+**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage` (multi-tracker GH+Jira), `diagnose`, `handoff`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `qa`, `zoom-out`, `ubiquitous-language`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 
