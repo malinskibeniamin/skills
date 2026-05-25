@@ -126,7 +126,7 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 # Individual skills -- pick what you need:
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
+bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
@@ -184,7 +184,7 @@ graph TD
 
     Understand["1. Understand\nExplore codebase, clarify requirements"]
     Plan["2. Plan\nExact file paths, code, expected output"]
-    Grill["2b. Grill\nAuto /domain-model, stress-test plan\nUpdate CONTEXT.md + ADRs inline\n--- GATE: user confirms ---"]
+    Grill["2b. Grill\nAuto /grill-with-docs, stress-test plan\nUpdate CONTEXT.md + ADRs inline\n--- GATE: user confirms ---"]
     Implement["3. Implement -- TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
     Verify["4. Verify\nSelf-verify via browser tools"]
     Review["5. Review\nSecurity gate, code-reviewer agent, create PR"]
@@ -223,7 +223,7 @@ sequenceDiagram
     You-->>Claude: Pick approach (GATE)
     Claude->>Claude: Phase 2 -- Plan<br/>(files, code, expected output)
 
-    Note over Claude: Auto-invoke /domain-model
+    Note over Claude: Auto-invoke /grill-with-docs
     Claude->>Claude: Phase 2b -- Grill<br/>challenge plan, sharpen terms<br/>update CONTEXT.md + ADRs inline
     Claude-->>You: "Plan solid, proceed?"
     You-->>Claude: Confirm (GATE)
@@ -362,7 +362,7 @@ Featured skill moments -- each from an actual session:
 - **`/development-lifecycle`** -- adp-ui-llm-provider-cards: 4 waves, 13 phases, shipped end-to-end. No scope creep.
 - **`/tdd`** -- applied to `codex/autoform-v2-foundation` refactor. RED -> GREEN -> REFACTOR across the full PR surface.
 - **`/simplify`** -- three iterative passes on MCP marketplace PR. Caught 15% redundant code reviewers missed.
-- **`/domain-model`** -- stress-tested plans, updated CONTEXT.md + ADRs inline. Institutional memory captured mid-design.
+- **`/grill-with-docs`** -- stress-tested plans, updated CONTEXT.md + ADRs inline. Institutional memory captured mid-design.
 - **Force-push to main blocked** -- hook redirected to feature branch + PR flow every time.
 - **Dogfooding** -- 12 skills + 60 hooks + 263 unit tests + 9 agent evals shipped using the harness itself.
 - **Skill auto-load on file match** -- `/tdd` on `*.test.ts`, `/tanstack-router` on `route.tsx`, `/connect-query` on `*_pb.ts`. Zero invocation needed.
@@ -591,8 +591,9 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
-| **`/domain-model`** | **Grill + document.** 3 reviewer hats (product/eng/design) in parallel + sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
-| **`/grill-me`** | **Grill, no docs.** 3 reviewer hats (product/eng/design) in parallel, fast. Skip when decision isn't worth writing down. Standalone alt to `/domain-model`. |
+| **`/grill-with-docs`** | **Grill + document.** Sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
+| **`/domain-model`** | Legacy local DDD grill. Prefer `/grill-with-docs`; kept for explicit legacy requests. |
+| **`/grill-me`** | **Grill, no docs.** 3 reviewer hats (product/eng/design) in parallel, fast. Skip when decision isn't worth writing down. Standalone alt to `/grill-with-docs`. |
 | **`/triage`** | Triage issues via state machine (GitHub via `gh` or Jira via `acli`). Grill sessions, agent briefs, out-of-scope KB. Bug-investigation mode produces a TDD fix plan and files the ticket. |
 | **`/diagnose`** | Hard bug or perf regression. Six-phase loop: build feedback loop -> reproduce -> hypothesise (3-5 ranked) -> instrument -> fix + regression test -> cleanup + post-mortem. |
 | **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explore codebase in background, auto-file GitHub issues. |
@@ -625,9 +626,9 @@ Compare WebSocket, SSE, and CRDT approaches. Focus on latency and offline suppor
 and matching confirm password. Start with the failing tests.
 ```
 
-**`/domain-model`** -- DDD-light grill with inline doc updates:
+**`/grill-with-docs`** -- docs-first grill with inline doc updates:
 ```
-/domain-model -- stress-test the data fetching strategy for the new dashboard feature.
+/grill-with-docs -- stress-test the data fetching strategy for the new dashboard feature.
 We're planning to use TanStack Query with a 5-minute stale time.
 ```
 
@@ -989,7 +990,7 @@ graph TD
     subgraph Workflow["Workflow Skills"]
         DL["development-lifecycle"]
         TDD[tdd]
-        DM[domain-model]
+        DM[grill-with-docs]
         GM[grill-me]
         DAI[design-an-interface]
         TR[triage]
@@ -1210,7 +1211,7 @@ bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y       
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage` (multi-tracker GH+Jira), `diagnose`, `handoff`, `improve-codebase-architecture`, `request-refactor-plan`, `design-an-interface`, `write-a-skill`, `grill-me`, `domain-model`, `qa`, `zoom-out`, `ubiquitous-language`. Our versions incorporate Pocock's best patterns plus hook enforcement, lifecycle integration, DDD-light documentation, accessibility-first testing.
+**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage`, `diagnose`, `handoff`, `improve-codebase-architecture`, `grill-with-docs`, `prototype`, `to-prd`, `to-issues`, `caveman`, `edit-article`, `obsidian-vault`, `write-a-skill`, `grill-me`, `zoom-out`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 
