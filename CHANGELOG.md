@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.10.6
+
+2026-05-25 -- Codex marketplace install fix: expose root plugin through plugins/frontend-skills symlink so Codex marketplace source path is a plugin directory while retaining root-relative plugin packaging. Full eval suite: 2060/2060.
+
 ## 4.10.5
 
 2026-05-25 -- Vendor remaining mattpocock/skills into repo. Added `/caveman`, `/to-prd`, `/to-issues`, `/setup-matt-pocock-skills`, `/git-guardrails-claude-code`, `/prototype`, `/review`, `/migrate-to-shoehorn`, `/scaffold-exercises`, `/setup-pre-commit`, `/edit-article`, `/obsidian-vault`, `/writing-beats`, `/writing-fragments`, and `/writing-shape` as local skills. Ran caveman-compress over new vendored skill docs to keep token cost low, expanded token-budget cap for the larger skill inventory, added `test-matt-vendored-skills`, and fixed branch-safety evals so they test drift in a real branched temp repo instead of this detached-HEAD Codex worktree.
