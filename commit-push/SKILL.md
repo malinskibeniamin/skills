@@ -28,9 +28,9 @@ Run full commit-and-push flow below in one response.
 
 1. Check if review skill invoked this session:
    - `/simplify` -- small fixes/tweaks
-   - `/request-refactor-plan` -- refactors
+   - `/improve-codebase-architecture` -- refactors (prefer this; `/request-refactor-plan` is deprecated)
    - `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
-   - `/design-an-interface` -- redesign module or layout
+   - `/prototype` -- redesign module or layout (prefer this; `/design-an-interface` is deprecated)
 2. If NONE ran: warn -- "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
 3. Proceed only if review skill ran or user confirm skip
 
