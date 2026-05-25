@@ -51,8 +51,11 @@ bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code
 
 ### 3. Community skills (optional)
 ```bash
+bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
+bunx skills@latest add mattpocock/skills/prototype --agent claude-code -y
 bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y
 bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y
+bunx skills@latest add mattpocock/skills/handoff --agent claude-code -y
 bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y
 ```

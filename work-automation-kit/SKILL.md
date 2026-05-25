@@ -9,7 +9,7 @@ description: Install planning/project management skills -- PRD creation, impleme
 
 **Owned** (hook-integrated): brainstorming, domain-model, triage, diagnose, qa, zoom-out
 
-**Community**: to-prd, to-issues, write-a-skill
+**Matt Pocock/community**: grill-with-docs, prototype, to-prd, to-issues, handoff, write-a-skill
 
 **Optional**: setup-atlassian-workflow (Jira via acli, opt-in), codex-plugin-cc (cross-model review)
 

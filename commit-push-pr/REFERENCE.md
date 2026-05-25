@@ -5,9 +5,9 @@
 Before `/commit-push-pr`, one review skill must run in session:
 
 - `/simplify` -- small fixes/tweaks
-- `/request-refactor-plan` -- refactors
+- `/improve-codebase-architecture` -- refactors (prefer this; `/request-refactor-plan` is deprecated)
 - `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
-- `/design-an-interface` -- redesign module or layout
+- `/prototype` -- redesign module or layout (prefer this; `/design-an-interface` is deprecated)
 
 None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/request-refactor-plan` for refactors, `/improve-codebase-architecture` for cleanup."
 
@@ -87,7 +87,7 @@ Frontend detected -> **always** include Screenshots table. Omit section entirely
 
 **Capture before/after:**
 
-- `/qa` already ran this session -> reuse captured refs/screenshots
+- `/triage` already ran this session -> reuse captured refs/screenshots (`/qa` is deprecated)
 - Else: `scripts/skills-browser.sh screenshot --out /tmp/pr-<view>-after.png` per affected view
 - Before image: prior PR screenshot, main-branch capture, or `<!-- no prior state -->` for new views
 - Upload via `gh pr comment` drag-paste URL, or reference `/tmp/*.png` path if asset host unavailable -- note blocker in PR body
