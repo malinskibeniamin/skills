@@ -29,8 +29,8 @@
   "hooks": "./hooks/codex-hooks.json",
   "interface": {
     "displayName": "Frontend Skills",
-    "shortDescription": "React/TypeScript + Go enforcement harness — 92 hooks, 101 scripts, 65 skills, 9 agents, 5 routines",
-    "longDescription": "React/TypeScript frontend + Go backend enforcement harness. 92 wired hooks across 101 scripts enforce patterns on every edit, including accessibility, Tailwind, React Compiler, Zustand, TanStack Router, connect-query, env validation, strict TypeScript, unhappy paths, security, warnings, CI, and PR feedback completeness. 65 skills guide the development lifecycle from TDD through CI-green PR, including /diagnose, /triage, /steelman, /snyk-ux-security, and domain-model/ADR workflows. 9 agents support review and planning hats. 5 routines automate recurring workflows. Codex packaging maps every supported equivalent lifecycle event, including PermissionRequest and PostToolUse failure handling, while Claude packaging keeps the full hook surface.",
+    "shortDescription": "React/TypeScript + Go enforcement harness \u2014 92 hooks, 101 scripts, 65 skills, 9 agents, 5 routines",
+    "longDescription": "React/TypeScript frontend + Go backend enforcement harness. 92 wired hooks across 101 scripts enforce patterns on every edit, including accessibility, Tailwind, React Compiler, Zustand, TanStack Router, connect-query, env validation, strict TypeScript, unhappy paths, security, warnings, CI, and PR feedback completeness. 65 skills guide the development lifecycle from TDD through CI-green PR, including /diagnose, /triage, /steelman, /snyk-ux-security, and grill-with-docs/ADR workflows. 9 agents support review and planning hats. 5 routines automate recurring workflows. Codex packaging maps every supported equivalent lifecycle event, including PermissionRequest and PostToolUse failure handling, while Claude packaging keeps the full hook surface.",
     "developerName": "Beniamin Malinski",
     "category": "Development",
     "capabilities": [
