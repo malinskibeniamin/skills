@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.10.4
+
+2026-05-25 -- Complete mattpocock/skills May 18-20 sync. `/improve-codebase-architecture` now incorporates upstream's HTML-report workflow: architecture candidates render to an OS-temp self-contained HTML file using Tailwind CDN + Mermaid CDN, with before/after diagrams, recommendation-strength badges, top recommendation, and canonical module/interface/seam vocabulary from `LANGUAGE.md`; ships `improve-codebase-architecture/HTML-REPORT.md` with scaffold, diagram patterns, and tone rules. `/handoff` now explicitly redacts secrets, tokens, passwords, personal data, customer data, and other confidential values while preserving compact continuation briefs. `domain-model/CONTEXT-FORMAT.md` tracks upstream's glossary-only template cleanup by removing required relationships, example dialogue, and flagged-ambiguity sections while keeping project-specific term rules. Evals expanded to guard the May sync surface.
+
 ## 4.10.3
 
 2026-05-21 -- Add `/handoff` skill for compact cross-session and cross-agent continuation briefs. The skill writes a `mktemp -t handoff-XXXXXX.md` document, references existing artifacts instead of duplicating them, captures next-session focus/open questions/next actions, and suggests follow-on skills. Registered in Claude plugin packaging, README catalog, marketplace metadata, and eval coverage. Skills 51 -> 52.
@@ -123,4 +127,3 @@ Semver: major = breaking, minor = new skill/hook/feature, patch = bug fix.
 ## 1.10.0
 
 2026-04-13 — Added 16 hooks from PR audit, autopilot enforcement, coverage-based TDD gate, Monitor streaming patterns.
-
