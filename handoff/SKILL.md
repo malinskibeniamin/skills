@@ -26,8 +26,9 @@ Use when the user wants to:
 2. Write the handoff to that path.
 3. Keep it compact. Do not duplicate artifacts already captured in PRDs, plans, ADRs, issues, commits, diffs, or docs. Reference them by path or URL.
 4. If the user provided arguments, treat them as the next session focus and tailor the handoff around that work.
-5. Suggest skills the next session should use, if any.
-6. Return only the handoff path plus a 1-2 sentence summary.
+5. Redact sensitive information: API keys, passwords, tokens, secrets, personal data, customer data, and any other confidential values. Mention redaction only when it affects continuation.
+6. Suggest skills the next session should use, if any.
+7. Return only the handoff path plus a 1-2 sentence summary.
 
 ## Handoff Template
 
@@ -62,5 +63,6 @@ Use when the user wants to:
 
 - Do not use handoff as a hidden summary of everything. Include only continuation context.
 - Prefer paths and URLs over pasted content.
+- Redact secrets and personal data.
 - Call out uncertainty explicitly.
 - If no useful work has happened yet, say so and write a short starter brief.
