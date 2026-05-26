@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.11.0
+
+2026-05-26 -- Add `/visual-review` skill for browser-based frontend QA before PRs. The workflow runs standalone and is wired into `/go`, `/commit-push`, `/commit-push-pr`, self-reviewer, and code-reviewer for frontend diffs, requiring visual review evidence or an explicit skip reason. Ships platform/environment fingerprinting (browser, user agent, platform, viewport, visualViewport, DPR, media preferences, locale/direction), a platform risk map, Web Weekly-informed visual/a11y/perf checks, and 79 eval assertions. Skills 65 -> 66. Full visual-review eval suite: 79/79.
+
 ## 4.10.6
 
 2026-05-25 -- Codex marketplace install fix: expose root plugin through plugins/frontend-skills symlink so Codex marketplace source path is a plugin directory while retaining root-relative plugin packaging. Full eval suite: 2060/2060.
