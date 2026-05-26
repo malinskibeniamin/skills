@@ -30,11 +30,10 @@ MANIFEST="skill-manifest.json"
 [ -f "$MANIFEST" ] || { echo "ERROR: $MANIFEST not found" >&2; exit 1; }
 command -v jq >/dev/null || { echo "ERROR: jq required" >&2; exit 1; }
 
-# Build hook config from manifest using prefix string.
-# jq auto-escapes embedded " → \" during JSON serialization.
-_build() {
-  local prefix="$1"
-  jq --arg prefix "$prefix" '
+# Build Claude settings using exec-form hooks. Keeping the script name in
+# args avoids shell quoting bugs while preserving existing hook scripts.
+_build_claude_settings() {
+  jq '
     {
       hooks: (
         .hooks | to_entries | map(
@@ -43,10 +42,13 @@ _build() {
               key: $event,
               value: (
                 .value | to_entries | map(
-                  (if .key == "" then {} else {matcher: .key} end) + {
+                  (if .key == "" then {} else {matcher: .key} end)
+                  + (if $event == "PostToolUse" then {continueOnBlock: true} else {} end)
+                  + {
                     hooks: (.value | map({
                       type: "command",
-                      command: ("f=" + $prefix + "/" + . + "; [ -x \"$f\" ] && exec \"$f\"; exit 0")
+                      command: ".claude/hooks/run-hook.sh",
+                      args: [ . ]
                     }))
                   }
                 )
@@ -65,7 +67,7 @@ PLUGIN_PREFIX='"${CLAUDE_PLUGIN_ROOT}/.claude/hooks'
 # Assembled string inside jq: "f=" + prefix + "/" + script + "; [ -x ..."
 # Needs close-quote before the `;`. Use suffix via jq sub:
 
-NEW_SETTINGS=$(_build "$SETTINGS_PREFIX")
+NEW_SETTINGS=$(_build_claude_settings)
 
 # Codex supports a smaller lifecycle surface than Claude Code. Generate a
 # best-effort Codex mapping instead of only dropping unsupported events:
@@ -142,11 +144,15 @@ NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '
 
 NEW_CODEX_PLUGIN=$(_build_codex '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '"')
 
-# Merge permissions from existing settings.json (hand-edited, not generated)
+# Merge hand-edited settings not sourced from the manifest.
 if [ -f ".claude/settings.json" ]; then
   _perms=$(jq '.permissions // empty' .claude/settings.json)
+  _skill_overrides=$(jq '.skillOverrides // empty' .claude/settings.json)
   if [ -n "$_perms" ] && [ "$_perms" != "null" ]; then
-    NEW_SETTINGS=$(echo "$NEW_SETTINGS" | jq --argjson p "$_perms" '{permissions: $p, hooks}')
+    NEW_SETTINGS=$(echo "$NEW_SETTINGS" | jq --argjson p "$_perms" '. + {permissions: $p}')
+  fi
+  if [ -n "$_skill_overrides" ] && [ "$_skill_overrides" != "null" ]; then
+    NEW_SETTINGS=$(echo "$NEW_SETTINGS" | jq --argjson s "$_skill_overrides" '. + {skillOverrides: $s}')
   fi
 fi
 
