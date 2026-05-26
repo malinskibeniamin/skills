@@ -72,8 +72,7 @@ run_content_eval "$REPO_ROOT/.codex/hooks.json" '"command"' "Codex hooks keep co
 if grep -q '"args"' "$REPO_ROOT/.codex/hooks.json"; then
   echo "  FAIL  .codex/hooks.json uses Claude exec-form args; Codex compat should keep command shims"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS
-  FAIL: .codex/hooks.json should not rely on args"
+  ERRORS="$ERRORS\n  FAIL: .codex/hooks.json should not rely on args"
 else
   echo "  PASS  .codex/hooks.json avoids Claude-only args"
   PASS=$((PASS + 1))
