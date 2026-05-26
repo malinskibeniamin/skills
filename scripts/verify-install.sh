@@ -331,9 +331,9 @@ for cmd_dir in "${ASSETS_ROOT}/.claude/commands" "${ASSETS_ROOT}/commands"; do
   fi
 done
 if [ "$cmd_count" -gt 0 ]; then
-  _pass "$cmd_count slash commands installed"
+  _pass "$cmd_count legacy slash command files installed"
 else
-  _warn "No slash commands found"
+  _pass "0 legacy slash command files installed (skills are slash commands)"
 fi
 
 # Agents
@@ -446,7 +446,11 @@ if [ -f "package.json" ]; then
     _warn "No React dependency — some hooks may not be relevant"
   fi
 else
-  _warn "No package.json — hooks are designed for frontend projects"
+  if [ "$INSTALL_MODE" = "plugin" ]; then
+    _pass "package.json not checked in plugin cache"
+  else
+    _warn "No package.json — hooks are designed for frontend projects"
+  fi
 fi
 
 # ── 8. Version check (optional, with --remote) ─────────────────

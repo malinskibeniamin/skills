@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.10.7
+
+2026-05-26 -- Verify-install polish: plugin-cache verification no longer warns for skill-only installs or missing consumer package.json; adds eval coverage for warning-free plugin verification. Full eval suite: 2064/2064.
+
 ## 4.10.6
 
 2026-05-25 -- Codex marketplace install fix: expose root plugin through plugins/frontend-skills symlink so Codex marketplace source path is a plugin directory while retaining root-relative plugin packaging. Full eval suite: 2060/2060.
