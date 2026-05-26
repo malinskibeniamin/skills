@@ -30,8 +30,8 @@ MANIFEST="skill-manifest.json"
 [ -f "$MANIFEST" ] || { echo "ERROR: $MANIFEST not found" >&2; exit 1; }
 command -v jq >/dev/null || { echo "ERROR: jq required" >&2; exit 1; }
 
-# Build Claude settings using exec-form hooks. Keeping the script name in
-# args avoids shell quoting bugs while preserving existing hook scripts.
+# Build Claude settings using exec-form hooks. Keeping script names in `args`
+# avoids shell quoting bugs while preserving existing hook scripts.
 _build_claude_settings() {
   jq '
     {
@@ -144,7 +144,7 @@ NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '
 
 NEW_CODEX_PLUGIN=$(_build_codex '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '"')
 
-# Merge hand-edited settings not sourced from the manifest.
+# Merge hand-edited Claude settings not sourced from the manifest.
 if [ -f ".claude/settings.json" ]; then
   _perms=$(jq '.permissions // empty' .claude/settings.json)
   _skill_overrides=$(jq '.skillOverrides // empty' .claude/settings.json)
