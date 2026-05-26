@@ -31,7 +31,7 @@ else
 fi
 
 # ── Both configs reference same script set ──────────────────────
-_settings_scripts=$(jq -r '.. | .command? // empty' "$SETTINGS" 2>/dev/null | grep -oE '[a-z-]+\.sh' | sort -u)
+_settings_scripts=$(jq -r '.. | objects | ((.args? // [])[]?), (.command? // empty)' "$SETTINGS" 2>/dev/null | grep -oE '[a-z-]+\.sh' | grep -v '^run-hook\.sh$' | sort -u)
 _plugin_scripts=$(jq -r '.. | .command? // empty' "$PLUGIN_HOOKS" 2>/dev/null | grep -oE '[a-z-]+\.sh' | sort -u)
 if [ "$_settings_scripts" = "$_plugin_scripts" ]; then
   echo "  PASS  settings.json and hooks.json reference identical script set"
