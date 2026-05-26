@@ -94,7 +94,7 @@ Frontend diff includes:
 - `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`
 - Tailwind/theme/config files that affect rendered UI
 
-Use `/visual-review` output for the PR screenshot table and test plan.
+Use `/visual-review` output for the PR screenshot table and test plan. Follow `visual-review/REFERENCE.md` PR evidence contract.
 
 ### Commit on Green
 

@@ -295,6 +295,7 @@ Read src/routes/settings.tsx first. Propose approach, wait for my approval.
 ```
 /development-lifecycle -- users report form submits twice on double-click.
 Reproduce, find root cause, fix with test.
+/visual-review -- review changed frontend UI before opening a PR.
 ```
 
 **Overnight batch (Sandcastle):**
