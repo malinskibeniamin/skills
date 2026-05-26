@@ -83,12 +83,14 @@ Append `--label <label1> --label <label2>` per verified label.
 - `src/components/`, `src/routes/`, `src/pages/`, `src/app/`
 - registry UI (`components/ui/`)
 
-Frontend detected -> **always** include Screenshots table. Omit section entirely otherwise (no empty table, no "N/A" row).
+Frontend detected -> **require `/visual-review` result or explicit skip reason**, then include Screenshots table. Omit section entirely otherwise (no empty table, no "N/A" row).
 
 **Capture before/after:**
 
+- `/visual-review` already ran this session -> reuse its checked views, screenshots, findings, and skip reasons
 - `/triage` already ran this session -> reuse captured refs/screenshots (`/qa` is deprecated)
-- Else: `scripts/skills-browser.sh screenshot --out /tmp/pr-<view>-after.png` per affected view
+- Else: run `/visual-review`; if user explicitly skips, record reason in PR body
+- Fallback: `scripts/skills-browser.sh screenshot --out /tmp/pr-<view>-after.png` per affected view
 - Before image: prior PR screenshot, main-branch capture, or `<!-- no prior state -->` for new views
 - Upload via `gh pr comment` drag-paste URL, or reference `/tmp/*.png` path if asset host unavailable -- note blocker in PR body
 

@@ -588,7 +588,8 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 |---|---|
 | **`/development-lifecycle`** | Build features, fix bugs, any dev work. Guide understand -> plan -> **grill** -> TDD -> `/go` (verify -> ship). |
 | **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter type. |
-| **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
+| **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for frontend diffs -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
+| **`/visual-review`** | Browser-based frontend review before PRs: screenshots, UI states, a11y, console errors, mobile and cross-browser checks. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
 | **`/grill-with-docs`** | **Grill + document.** Sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
