@@ -5,7 +5,7 @@ description: Browser-based frontend review for changed UI. Use before PRs with R
 
 # Visual Review
 
-Browser-based QA for changed UI. Hooks catch static smells; this catches composed UI regressions that require seeing and interacting.
+Browser-based QA for changed UI. Hooks catch static smells; this catches composed UI regressions that require seeing and interacting. See [REFERENCE.md](REFERENCE.md) for environment fingerprinting, platform risk map, and ecosystem wiring.
 
 ## When to run
 
