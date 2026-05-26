@@ -86,7 +86,7 @@ Append `--label <label1> --label <label2>` per verified label.
 - `src/components/`, `src/routes/`, `src/pages/`, `src/app/`
 - registry UI (`components/ui/`)
 
-Frontend detected -> **require `/visual-review` result or explicit skip reason**, then include Screenshots table. Omit section entirely otherwise (no empty table, no "N/A" row).
+Frontend detected -> **require `/visual-review` result or explicit skip reason**, then include Screenshots table. Follow `visual-review/REFERENCE.md` PR evidence contract. Omit section entirely otherwise (no empty table, no "N/A" row).
 
 **Capture before/after:**
 

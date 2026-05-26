@@ -95,3 +95,14 @@ These belong in visual review even when hooks already exist:
 - `/commit-push` requires it before pushing frontend changes, unless skipped with reason.
 - `self-reviewer` and `code-reviewer` should flag missing `/visual-review` evidence when reviewing frontend diffs.
 - `route-visual-test-check.sh` and browser/e2e tests remain complementary; passing tests do not replace visual review for visual changes.
+
+## PR evidence contract
+
+Every frontend PR should carry or link this `/visual-review` evidence:
+
+- Environment fingerprint: browser, user agent, platform, viewport, visualViewport, DPR, media prefs, locale/direction.
+- Checked matrix: browsers, viewports, states, keyboard path, console/network scan, a11y checks.
+- Screenshots: changed views/states, with path or attachment reference.
+- Findings: P0/P1 fixed or explicitly accepted; P2/P3 noted.
+- Skip reasons: every unrun matrix item gets a concrete reason.
+- Automation candidates: repeatable misses worth hook/eval/docs follow-up.

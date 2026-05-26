@@ -86,3 +86,14 @@ run_content_eval "$REPO_ROOT/commit-push/SKILL.md" "/visual-review" "commit-push
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Frontend diff -> `/visual-review` must run' "commit-push-pr review list requires visual-review for frontend diffs"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Visual Review Evidence" "self-reviewer checks visual-review evidence"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Visual Review Evidence" "code-reviewer checks visual-review evidence"
+
+# ── TDD additions: standalone run + PR evidence contract ─────────
+run_content_eval "$SKILL_DIR/SKILL.md" "Standalone trigger OK" "visual-review explicitly supports standalone trigger"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "PR evidence contract" "visual-review reference defines PR evidence contract"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Environment fingerprint" "PR evidence contract includes environment fingerprint"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Checked matrix" "PR evidence contract includes checked matrix"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Skip reasons" "PR evidence contract includes skip reasons"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Automation candidates" "PR evidence contract includes automation candidates"
+run_content_eval "$REPO_ROOT/go/REFERENCE.md" "PR evidence contract" "go reference points visual review output to PR evidence contract"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "PR evidence contract" "commit-push-pr references visual review PR evidence contract"
+run_content_eval "$REPO_ROOT/README.md" "/visual-review -- review changed frontend UI" "README documents standalone visual-review usage example"
