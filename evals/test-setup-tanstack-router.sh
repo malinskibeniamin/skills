@@ -267,6 +267,38 @@ run_hook_eval "$CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
+
+# ── Check 10: Warn when Router + Query misses defaultPreloadStaleTime ─
+
+tmpfile="$_rt_tmpdir/router.tsx"
+printf "import { createRouter } from '@tanstack/react-router'\nconst router = createRouter({ routeTree, context: { queryClient } })\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: queryClient router context missing defaultPreloadStaleTime" "defaultPreloadStaleTime"
+
+# ── Check 10: Allow Router + Query with defaultPreloadStaleTime: 0 ────
+
+tmpfile="$_rt_tmpdir/router.tsx"
+printf "import { createRouter } from '@tanstack/react-router'\nconst router = createRouter({ routeTree, context: { queryClient }, defaultPreloadStaleTime: 0 })\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: queryClient router context with defaultPreloadStaleTime 0"
+
+# ── Check 10: Warn on useLoaderData with Query-backed loader ─────────
+
+tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/src/routes"
+tmpfile="$tmpdir/src/routes/users.tsx"
+printf "export const Route = createFileRoute('/users')({ loader: ({ context }) => context.queryClient.ensureQueryData(usersOptions()) })\nfunction Users() { const data = useLoaderData({ from: '/users' }); return <div>{data.length}</div> }\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: useLoaderData for Query-backed loader" "useQuery/useSuspenseQuery"
+
+rm -rf "$tmpdir"
+
 # ── Check script content ─────────────────────────────────────────
 
 run_content_eval "$CHECK_SCRIPT" "react-router-dom" "check: bans react-router-dom"

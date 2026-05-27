@@ -106,4 +106,22 @@ if echo "$added_lines" | grep -qE '\buseSearch\b'; then
   fi
 fi
 
+# ── Check 10: Router + Query cache ownership ─────────────────────────
+
+if echo "$added_lines" | grep -qE '\bcreateRouter\s*\('; then
+  file_content=$(cat "$file_path" 2>/dev/null || true)
+  if echo "$file_content" | grep -qE 'context:\s*\{[^}]*queryClient|queryClient\s*[,}]'; then
+    if ! echo "$file_content" | grep -qE 'defaultPreloadStaleTime:\s*0\b'; then
+      hook_warn "TanStack Router + Query: when queryClient owns the cache in router context, set defaultPreloadStaleTime: 0 so Router preloading does not keep a second freshness window."
+    fi
+  fi
+fi
+
+if echo "$added_lines" | grep -qE '\buseLoaderData\s*\('; then
+  file_content=$(cat "$file_path" 2>/dev/null || true)
+  if echo "$file_content" | grep -qE '\b(ensureQueryData|prefetchQuery)\s*\('; then
+    hook_warn "Query-backed loader data detected. Let Query own cache/observers: loader should ensureQueryData/prefetchQuery, component should read via useQuery/useSuspenseQuery instead of useLoaderData."
+  fi
+fi
+
 exit 0
