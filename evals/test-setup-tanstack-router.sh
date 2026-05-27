@@ -274,7 +274,8 @@ tmpdir=$(mktemp -d)
 mkdir -p "$tmpdir/src/routes"
 tmpfile="$tmpdir/src/routes/dashboard.tsx"
 printf "import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
+const dashboardQueryOptions = () => queryOptions({ queryKey: ['dashboard'], queryFn: fetchDashboard })
 export const Route = createFileRoute('/dashboard')({ loader: ({ context }) => context.queryClient.prefetchQuery(dashboardQueryOptions()), component: Dashboard })
 function Dashboard() { const data = Route.useLoaderData(); return <div /> }
 " > "$tmpfile"
@@ -291,7 +292,8 @@ tmpdir=$(mktemp -d)
 mkdir -p "$tmpdir/src/routes"
 tmpfile="$tmpdir/src/routes/dashboard.tsx"
 printf "import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
+const dashboardQueryOptions = () => queryOptions({ queryKey: ['dashboard'], queryFn: fetchDashboard })
 export const Route = createFileRoute('/dashboard')({ loader: ({ context }) => context.queryClient.prefetchQuery(dashboardQueryOptions()), component: Dashboard })
 function Dashboard() { const result = useQuery(dashboardQueryOptions()); return <div /> }
 " > "$tmpfile"
