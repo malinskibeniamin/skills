@@ -138,4 +138,19 @@ if echo "$added_lines" | grep -qE 'createRouter\s*\(' || echo "$added_lines" | g
   fi
 fi
 
+# ── Check 12: Typed root context for QueryClient ──────────────────
+# If router context passes queryClient, root route should type it with
+# createRootRouteWithContext so loaders can access context.queryClient safely.
+
+if echo "$added_lines" | grep -qE 'createRootRoute\s*\(|context\s*:\s*\{[^}]*queryClient'; then
+  file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+  if echo "$file_content" | grep -qE 'context\s*:\s*\{[^}]*queryClient' && echo "$file_content" | grep -qE 'createRootRoute\s*\('; then
+    if ! echo "$file_content" | grep -qE 'createRootRouteWithContext'; then
+      if ! hook_has_escape "router-query-root-context"; then
+        hook_warn "Router passes queryClient context. Use createRootRouteWithContext<{ queryClient: QueryClient }>() so loaders get typed context. Escape: // allow: router-query-root-context [reason]"
+      fi
+    fi
+  fi
+fi
+
 exit 0
