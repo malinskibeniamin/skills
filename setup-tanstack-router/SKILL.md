@@ -20,6 +20,7 @@ paths:
 - Require `validateSearch` when `useSearch` in route files
 - Warn when Query-primed loaders are consumed via `useLoaderData` instead of `useQuery`/`useSuspenseQuery`
 - Warn when router uses `queryClient` context without `defaultPreloadStaleTime: 0`
+- Warn when router uses `queryClient` context without `createRootRouteWithContext`
 
 Auto-regen route tree on route file change.
 
@@ -56,6 +57,10 @@ function Dashboard() {
 Router setup when Query owns cache:
 
 ```tsx
+const rootRoute = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  component: RootLayout,
+})
+
 const router = createRouter({
   routeTree,
   context: { queryClient },
