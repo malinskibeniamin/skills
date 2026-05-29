@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prime"
+  short_description: "Startup brief for an existing codebase."
+  default_prompt: "Prime this repository so I can start work in a new chat."
