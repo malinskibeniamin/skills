@@ -8,9 +8,9 @@ Before `/commit-push-pr`, one review skill must run in session:
 - `/improve-codebase-architecture` -- refactors (prefer this; `/request-refactor-plan` is deprecated)
 - `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
 - `/prototype` -- redesign module or layout (prefer this; `/design-an-interface` is deprecated)
-- `/visual-review` -- browser-based review for frontend/visual diffs
+- `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs
 
-Frontend diff -> `/visual-review` must run or an explicit skip reason must be recorded, even if another review skill already ran.
+Frontend or customer-facing surface diff -> `/visual-review` must run or an explicit skip reason must be recorded, even if another review skill already ran.
 
 None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/improve-codebase-architecture` for cleanup, `/visual-review` for frontend changes."
 
@@ -56,8 +56,8 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 ## Commits
 <list each commit: hash + message>
 
-## Screenshots
-<omit entire section if no frontend changes -- see Frontend detection below>
+## Screenshots / surface review
+<omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>
 
 | View | Before | After | Notes |
 |------|--------|-------|-------|
@@ -86,7 +86,7 @@ Append `--label <label1> --label <label2>` per verified label.
 
 **Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.
 
-## Frontend detection + screenshot table (Phase 5)
+## Frontend/customer-facing detection + screenshot table (Phase 5)
 
 **Detect frontend change** -- diff touches any:
 
@@ -94,8 +94,9 @@ Append `--label <label1> --label <label2>` per verified label.
 - `tailwind.config.*`, `postcss.config.*`
 - `src/components/`, `src/routes/`, `src/pages/`, `src/app/`
 - registry UI (`components/ui/`)
+- CLI/TUI output, mobile/desktop screens, generated reports, rendered docs, onboarding/setup flows
 
-Frontend detected -> **require `/visual-review` result or explicit skip reason**, then include Screenshots table. Follow `visual-review/REFERENCE.md` PR evidence contract. Omit section entirely otherwise (no empty table, no "N/A" row).
+Frontend or customer-facing surface detected -> **require `/visual-review` result or explicit skip reason**, then include Screenshots/Surface review table. Follow `visual-review/REFERENCE.md` PR evidence contract, including HTML report path when generated. Omit section entirely otherwise (no empty table, no "N/A" row).
 
 **Capture before/after:**
 
@@ -106,7 +107,7 @@ Frontend detected -> **require `/visual-review` result or explicit skip reason**
 - Before image: prior PR screenshot, main-branch capture, or `<!-- no prior state -->` for new views
 - Upload via `gh pr comment` drag-paste URL, or reference `/tmp/*.png` path if asset host unavailable -- note blocker in PR body
 
-**Row per visual change.** Group by route or component. One-line `Notes` col: what visibly changed (spacing, copy, new state, a11y). No screenshot for backend-only refactors even if a frontend file touched (e.g. type-only `.tsx` edit).
+**Row per visual change.** Group by route or component. One-line `Notes` col: what visibly changed (spacing, copy, new state, a11y). No screenshot/surface evidence for backend-only refactors even if a frontend file touched (e.g. type-only `.tsx` edit).
 
 ## Dependency upgrade section
 

@@ -56,7 +56,7 @@ Compare each finding against the dirty baseline. If the issue existed before thi
 
 ## Visual Review Evidence
 
-If the diff touches rendered frontend UI (`*.tsx`, CSS, routes, components, forms, dialogs, media, animations, browser/platform branches), check whether `/visual-review` evidence exists in the session or PR body. If absent, add a P1 testing gap recommending `/visual-review` or an explicit skip reason. Do not treat static hook success or unit tests as a substitute for browser screenshot/state/a11y review.
+If the diff touches rendered frontend UI (`*.tsx`, CSS, routes, components, forms, dialogs, media, animations, browser/platform branches) or another customer-facing surface (CLI/TUI output, mobile/desktop screen, generated report, onboarding/setup flow), check whether `/visual-review` evidence exists in the session or PR body. If absent, add a P1 testing gap recommending `/visual-review` or an explicit skip reason. Do not treat static hook success or unit tests as a substitute for browser screenshot/state/a11y review or equivalent surface evidence.
 
 ## Output
 
