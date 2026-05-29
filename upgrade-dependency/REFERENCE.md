@@ -1,10 +1,10 @@
 # Upgrade Dependency Reference
 
-Detailed templates and checklists for `/upgrade-dependency`.
+Templates/checklists for `/upgrade-dependency`.
 
 ## Report template
 
-Write to `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
+Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 
 ```md
 # Dependency upgrade: <package> <from> -> <target>
@@ -16,14 +16,14 @@ Write to `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 - Requested by:
 
 ## Version path
-| Step | From | To | SemVer class or non-SemVer scale | Changelog/release note | Breaking or migration notes | Action |
+| Step | From | To | SemVer class or non-SemVer scale | Source | Migration/breakage | Action |
 |---|---:|---:|---|---|---|---|
 
 ## Dependency tree
-- Target package/module:
+- Target:
 - Direct parents:
 - Transitive children:
-- Dependents in repo:
+- Repo dependents:
 - Peer deps:
 - Plugins/adapters:
 
@@ -31,28 +31,26 @@ Write to `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 - Release cadence:
 - Change volume:
 - Diff size:
-- Public API churn:
-- Effort estimate:
+- API churn:
+- Effort:
 - Danger/blast radius:
 
 ## Ecosystem impact
-- Peer deps:
-- Plugins/adapters:
-- Packages that must move together:
+- Packages that move together:
 - Runtime entrypoints touched:
 
 ## Security notes
-| Advisory | Source | Reachability or exploitability | Fixed version | Decision |
+| Advisory | Source | Reachability/exploitability | Fixed version | Decision |
 |---|---|---|---|---|
 
 ## Risk gate
 - Decision: apply now | create issue | plan only | ask user
 - Reason:
-- Explicit approval, if any:
+- Explicit approval:
 
 ## Commands
 ```bash
-# exact package-manager and verify commands used or recommended
+# exact update + verify commands
 ```
 
 ## Verification
@@ -64,26 +62,26 @@ Write to `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 
 ## GitHub issue template
 
-Use for major, non-SemVer, missing changelog, uncertain migration, peer ecosystem risk, or security uncertainty.
+Use for major, non-SemVer, missing changelog, unclear migration, peer risk, security uncertainty.
 
 ```md
 Title: Plan dependency upgrade: <package> <from> -> <target>
 
 ## Goal
-Upgrade <package> from <from> to <target> with a verified upgrade path.
+Upgrade <package> from <from> to <target> with verified path.
 
 ## Version path
-<paste table from report>
+<paste report table>
 
-## Breaking changes and migrations
+## Breaking changes/migrations
 - <version>: <change, source, required code change>
 
-## Codemods or scripts
+## Codemods/scripts
 - Available:
-- Safe to run automatically: yes/no, reason
+- Safe to auto-run: yes/no, reason
 
-## Related dependencies
-- Peer deps:
+## Related deps
+- Peers:
 - Plugins/adapters:
 - Parent deps if transitive:
 
@@ -93,15 +91,15 @@ Upgrade <package> from <from> to <target> with a verified upgrade path.
 - Fixed versions:
 
 ## Risk gate
-Why this is not auto-applied:
-- [ ] major upgrade
-- [ ] non-SemVer or low SemVer confidence
-- [ ] missing or unclear changelog
+Why not auto-applied:
+- [ ] major
+- [ ] non-SemVer / low SemVer confidence
+- [ ] missing/unclear changelog
 - [ ] peer ecosystem risk
 - [ ] security uncertainty
 - [ ] high effort migration
 
-## Proposed implementation plan
+## Plan
 1. <step>
 2. <step>
 3. Verify: <commands>
@@ -111,58 +109,48 @@ Why this is not auto-applied:
 - Shared blockers:
 - Merge order:
 
-## Acceptance criteria
-- [ ] Manifest and lockfiles updated together
-- [ ] Migration changes landed
+## Acceptance
+- [ ] Manifest + lockfiles updated together
+- [ ] Migration landed
 - [ ] Related deps compatible
 - [ ] Lint/type/test/build clean
-- [ ] Security scan clean or explicitly documented
+- [ ] Security scan clean or documented
 ```
 
 ## Pull request template
 
-Use after applying safe upgrades.
+Use after safe apply.
 
 ```md
 ## Summary
-- Upgraded <package> from <from> to <target>
+- Upgraded <package> <from> -> <target>
 - Upgrade path: <report path>
 
 ## Risk gate
 - Decision: applied automatically
-- Why safe: patch/minor with high SemVer confidence | explicit approval | security remediation
+- Why safe: patch/minor high SemVer confidence | explicit approval | security remediation
 
 ## Changes
 - Manifest/lockfiles:
-- Code migrations:
+- Migrations:
 - Related deps:
 
 ## Security
 - Advisories fixed:
-- Reachability/exploitability notes:
+- Reachability/exploitability:
 - Residual risk:
 
 ## Verification
 - [ ] lint:fix
 - [ ] type:check
 - [ ] test
-- [ ] build/vet/security scan, if applicable
+- [ ] build/vet/security scan if applicable
 ```
 
 ## Command notes
 
-JS/Bun:
-- Use `bun update <pkg>@<version>` for a single package.
-- Run `bun install` after edits so `bun.lock` matches the manifest.
-- Run `bun install --yarn` when `yarn.lock` exists or Snyk IO needs a yarn mirror.
-- Do not use npm, yarn, or pnpm runtime commands in bun repositories.
+JS/Bun: `bun update <pkg>@<version>` -> `bun install`; add `bun install --yarn` when `yarn.lock` exists or Snyk needs mirror. No npm/yarn/pnpm runtime cmds in bun repos.
 
-Go:
-- Use `go get -u <module>@<version>` for module bumps.
-- Run `go mod tidy` so `go.mod` and `go.sum` move together.
-- Do not bump the Go toolchain directive as part of a dependency upgrade unless explicitly requested.
+Go: `go get -u <module>@<version>` -> `go mod tidy`. Keep `go.mod` + `go.sum` together. Do not bump Go toolchain unless requested.
 
-Security remediation ladder:
-1. Direct dep or top-level dep bump.
-2. Parent dep bump when the vulnerable package is transitive.
-3. Override/resolution/replace only as last resort, with a follow-up removal note.
+Security ladder: direct/top-level dep -> parent dep -> override/resolution/replace last, with removal follow-up.
