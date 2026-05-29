@@ -1,38 +1,33 @@
 ---
 name: prime
-description: Builds a compact startup brief for the current repository, branch, PR, CI, review feedback, stack, docs, and likely next actions. Use when starting a new chat in an existing codebase, resuming a branch or worktree, after compaction, or when the user invokes /prime before doing product or code work.
+description: Builds repo startup brief for new chat. Use when starting work, resuming branch/worktree, after compaction, or on /prime.
 ---
 
 # Prime
 
-Create the "where am I and what matters?" brief for a fresh agent session.
+Fresh-session orientation: "where am I, what matters, what read next?"
 
-## Workflow
+## Flow
 
-1. Run the scout:
+1. Run scout:
    ```bash
    prime/scripts/prime-context.sh
    ```
-   If invoked from outside this skill folder, use the absolute path to `scripts/prime-context.sh`.
-2. Read the scout output. It is a map, not the answer.
-3. Read only the highest-signal files needed for this repo and task:
-   - Current-agent rules: `AGENTS.md` for Codex, `CLAUDE.md` for Claude Code.
+   Outside skill dir: use absolute path.
+2. Treat scout as map, not answer.
+3. Read only the highest-signal files for repo + task:
+   - Agent rules: `AGENTS.md` for Codex, `CLAUDE.md` for Claude Code.
    - Domain docs: `CONTEXT.md`, `CONTEXT-MAP.md`, relevant ADRs.
-   - Changed files on the current branch.
-   - PR body/review threads if the branch has a PR.
-4. Produce a concise **Prime brief**:
-   - Repo and work state.
-   - Rules and commands that change how work should happen.
-   - Active PR, CI, review feedback, or issue context.
-   - Relevant architecture/domain map.
-   - Risks, unknowns, and best next actions.
+   - Changed files on current branch.
+   - PR body/review threads when PR exists.
+4. Emit **Prime brief**: state, working rules, PR/CI/review context, codebase map, risks, next actions, read-next paths.
 
 ## Rules
 
-- Do not expose modes. Prime is one adaptive skill; depth follows repo state and user intent.
-- Do not paste full `CLAUDE.md`, `AGENTS.md`, README, source files, or PR comments. Summarize and link paths.
-- Prefer current facts over remembered assumptions.
-- If scout output shows no PR, no dirty files, and no user task, keep the brief short and name likely next reads.
-- If this session already has a fresh Prime brief for the same worktree and branch, do not rerun unless branch, PR, or user intent changed.
+- Do not expose modes. Prime = one adaptive skill.
+- Do not paste full `CLAUDE.md`, `AGENTS.md`, README, source, PR comments. Summarize + link paths.
+- Prefer current facts over memory.
+- No PR/dirty files/task -> short brief + likely next reads.
+- Fresh Prime already exists for same worktree+branch -> skip unless branch, PR, or task changed.
 
-See [REFERENCE.md](REFERENCE.md) for output contract and hook integration options.
+See [REFERENCE.md](REFERENCE.md) for contract + hook options.
