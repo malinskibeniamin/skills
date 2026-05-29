@@ -2,40 +2,30 @@
 
 ## Safe minor
 
-```text
-/upgrade-dependency vite to latest
-```
+`/upgrade-dependency vite to latest`
 
-Expected: build upgrade path, confirm SemVer confidence, read changelog/release notes, apply if peers are compatible, update lockfiles, verify, open PR.
+Build path, confirm SemVer, read changelog/release notes, apply if peers compatible, update lockfiles, verify, PR.
 
 ## Risky major
 
-```text
-/upgrade-dependency react-router to latest
-```
+`/upgrade-dependency react-router to latest`
 
-Expected: build upgrade path, detect major migration risk, write local report, create GitHub issue, stop unless user explicitly approves apply.
+Detect migration risk, write report, create GitHub issue, stop unless approved.
 
 ## Plan only
 
-```text
-/upgrade-dependency plan only for rspack
-```
+`/upgrade-dependency plan only for rspack`
 
-Expected: no code changes. Produce report and issue with version path, breaking changes, codemods, related plugins/adapters, and verification plan.
+No code. Report + issue: version path, breakages, codemods, plugins/adapters, verify plan.
 
 ## Security remediation
 
-```text
-/snyk-ux-security apps/frontend
-```
+`/snyk-ux-security apps/frontend`
 
-Expected: Snyk skill triages reachability, then asks `/upgrade-dependency` to remediate reachable package upgrades. Safe fixes apply; risky fixes become GitHub issues with advisory evidence.
+Snyk triages reachability, then asks `/upgrade-dependency` to remediate. Safe applies; risky -> issue with advisory evidence.
 
 ## Multiple packages
 
-```text
-/upgrade-dependency modernize frontend dependencies to latest stable
-```
+`/upgrade-dependency modernize frontend dependencies to latest stable`
 
-Expected: delegate one package per subagent, walk each dependency tree, merge reports, apply independent safe bumps, and create issues for risky or coupled upgrades.
+One package per subagent. Walk tree, merge reports, apply independent safe bumps, issue risky/coupled upgrades.

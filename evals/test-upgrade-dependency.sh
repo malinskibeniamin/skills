@@ -30,6 +30,18 @@ else
   ERRORS="$ERRORS\n  FAIL: upgrade-dependency SKILL.md too long"
 fi
 
+skill_bytes=$(wc -c < "$SKILL_MD" 2>/dev/null | tr -d ' ' || echo 99999)
+reference_bytes=$(wc -c < "$REFERENCE_MD" 2>/dev/null | tr -d ' ' || echo 99999)
+examples_bytes=$(wc -c < "$EXAMPLES_MD" 2>/dev/null | tr -d ' ' || echo 99999)
+if [ "${skill_bytes:-99999}" -le 3500 ] && [ "${reference_bytes:-99999}" -le 3400 ] && [ "${examples_bytes:-99999}" -le 900 ]; then
+  echo "  PASS  upgrade-dependency docs stay terse"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  upgrade-dependency docs too verbose (skill=$skill_bytes ref=$reference_bytes examples=$examples_bytes)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: upgrade-dependency docs too verbose"
+fi
+
 # -- Core workflow --------------------------------------------------
 
 run_content_eval "$SKILL_MD" "upgrade path" "builds upgrade path first"
