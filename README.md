@@ -295,7 +295,7 @@ Read src/routes/settings.tsx first. Propose approach, wait for my approval.
 ```
 /development-lifecycle -- users report form submits twice on double-click.
 Reproduce, find root cause, fix with test.
-/visual-review -- review changed frontend UI before opening a PR.
+/visual-review -- review changed customer-facing surfaces before opening a PR.
 ```
 
 **Overnight batch (Sandcastle):**
@@ -589,8 +589,8 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 |---|---|
 | **`/development-lifecycle`** | Build features, fix bugs, any dev work. Guide understand -> plan -> **grill** -> TDD -> `/go` (verify -> ship). |
 | **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter type. |
-| **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for frontend diffs -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
-| **`/visual-review`** | Browser-based frontend review before PRs: screenshots, UI states, a11y, console errors, mobile and cross-browser checks. |
+| **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for customer-facing diffs -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
+| **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
 | **`/grill-with-docs`** | **Grill + document.** Sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
