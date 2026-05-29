@@ -1,0 +1,77 @@
+# Evals for upgrade-dependency skill.
+# Guards the transcript decisions: one discoverable skill, upgrade path first,
+# safe auto-apply, risky issue handoff, Snyk reuse, and generic JS/Go support.
+
+SKILL_DIR="$REPO_ROOT/upgrade-dependency"
+SKILL_MD="$SKILL_DIR/SKILL.md"
+REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
+EXAMPLES_MD="$SKILL_DIR/EXAMPLES.md"
+
+# -- File structure -------------------------------------------------
+
+run_file_eval "$SKILL_MD" "upgrade-dependency/SKILL.md exists"
+run_file_eval "$REFERENCE_MD" "upgrade-dependency/REFERENCE.md exists"
+run_file_eval "$EXAMPLES_MD" "upgrade-dependency/EXAMPLES.md exists"
+
+# -- Frontmatter + discoverability --------------------------------
+
+run_content_eval "$SKILL_MD" "^name: upgrade-dependency" "SKILL.md has correct name"
+run_content_eval "$SKILL_MD" "^description:" "SKILL.md has description"
+run_content_eval "$SKILL_MD" "Use when" "description has trigger phrase"
+run_content_eval "$SKILL_MD" "upgrade.*package|dependency upgrade|vulnerable dependency" "description names upgrade triggers"
+
+skill_lines=$(wc -l < "$SKILL_MD" 2>/dev/null | tr -d ' ' || echo 999)
+if [ "${skill_lines:-999}" -le 100 ]; then
+  echo "  PASS  SKILL.md stays under 100 lines"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  SKILL.md over 100 lines ($skill_lines)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: upgrade-dependency SKILL.md too long"
+fi
+
+# -- Core workflow --------------------------------------------------
+
+run_content_eval "$SKILL_MD" "upgrade path" "builds upgrade path first"
+run_content_eval "$SKILL_MD" "SemVer confidence" "checks SemVer confidence"
+run_content_eval "$SKILL_MD" "non-SemVer|non SemVer|missing changelog" "treats non-SemVer as risky"
+run_content_eval "$SKILL_MD" "patch/minor.*apply|apply.*patch/minor" "safe patch/minor may apply"
+run_content_eval "$SKILL_MD" "major.*GitHub issue|GitHub issue.*major" "major changes go to GitHub issue"
+run_content_eval "$SKILL_MD" "plan only" "supports plan-only natural language"
+run_content_eval "$SKILL_MD" "Always leave.*report|leave.*local report" "always leaves local report"
+run_content_eval "$SKILL_MD" "docs/dependency-upgrades" "uses durable local report path"
+
+# -- Research inputs -----------------------------------------------
+
+run_content_eval "$SKILL_MD" "changelog" "requires changelog read"
+run_content_eval "$SKILL_MD" "release notes" "requires release notes"
+run_content_eval "$SKILL_MD" "migration" "checks migration guides"
+run_content_eval "$SKILL_MD" "codemod" "checks codemods"
+run_content_eval "$SKILL_MD" "peer|plugin|adapter|ecosystem" "checks related ecosystem packages"
+run_content_eval "$SKILL_MD" "security advisories|GHSA|OSV|Socket|Snyk" "checks security sources"
+
+# -- Apply + verification ------------------------------------------
+
+run_content_eval "$SKILL_MD" "one major per commit|one commit per major" "walks majors incrementally"
+run_content_eval "$SKILL_MD" "bun update" "supports JS bun update"
+run_content_eval "$SKILL_MD" "bun install --yarn" "syncs yarn.lock when needed for Snyk"
+run_content_eval "$SKILL_MD" "go get -u" "supports Go module bump"
+run_content_eval "$SKILL_MD" "go mod tidy" "syncs Go module files"
+run_content_eval "$SKILL_MD" "lint:fix" "verifies lint"
+run_content_eval "$SKILL_MD" "type:check" "verifies type check"
+run_content_eval "$SKILL_MD" "test" "verifies tests"
+
+# -- Security + Snyk reuse -----------------------------------------
+
+run_content_eval "$SKILL_MD" "snyk-ux-security" "documents Snyk skill reuse"
+run_content_eval "$SKILL_MD" "exploitability|reachability" "handles security reachability"
+run_content_eval "$SKILL_MD" "direct dep.*parent.*override|top-level.*parent.*override" "uses direct-parent-override ladder"
+run_content_eval "$SKILL_MD" "Never run code from advisories" "does not execute advisory code"
+
+# -- Reference templates -------------------------------------------
+
+run_content_eval "$REFERENCE_MD" "GitHub issue template" "reference has GitHub issue template"
+run_content_eval "$REFERENCE_MD" "Pull request template" "reference has Pull request template"
+run_content_eval "$REFERENCE_MD" "Version path" "templates include version path"
+run_content_eval "$REFERENCE_MD" "Risk gate" "templates include risk gate"
+run_content_eval "$EXAMPLES_MD" "/upgrade-dependency" "examples show slash usage"

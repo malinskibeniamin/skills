@@ -92,8 +92,12 @@ run_hook_eval "$INTENT_SCRIPT" \
 # ── Non-matching prompts: no directives at all ──────────────────
 
 _empty_stderr=$(mktemp)
-echo '{"hook_event_name":"UserPromptSubmit","prompt":"what does this function do"}' \
-  | "$INTENT_SCRIPT" 2>"$_empty_stderr" || true
+_empty_tmp=$(mktemp -d /tmp/intent-empty-XXXXXX)
+(
+  cd "$_empty_tmp"
+  echo '{"hook_event_name":"UserPromptSubmit","prompt":"what does this function do"}' \
+    | "$INTENT_SCRIPT" 2>"$_empty_stderr" || true
+)
 if [ -s "$_empty_stderr" ]; then
   echo "  FAIL  question prompt should emit nothing"
   FAIL=$((FAIL + 1))
@@ -103,6 +107,7 @@ else
   PASS=$((PASS + 1))
 fi
 rm -f "$_empty_stderr"
+rm -rf "$_empty_tmp"
 
 # ── Non-UserPromptSubmit event: exits cleanly ───────────────────
 

@@ -35,6 +35,7 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
   - **NOT reachable** -> **run `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>` now** (writes to `.snyk` policy file). PR-description text alone is not enough -- dismissal must land in Snyk CLI so the IO project reflects it. Stage + commit the resulting `.snyk` in the sweep PR. Re-run `snyk test` to confirm the issue shows as `Ignored`. Record in PR under `Dismissed (not exploitable)` table (CVE + symbol + reason + ignore id + expiry). SLA audit trail.
   - **Reachable or credible vector** -> 2c.
 - **2c. Upgrade priority (top-level first, override last)**:
+  - For every reachable remediation, use `/upgrade-dependency` to build the upgrade path first; apply only when its risk gate says safe, otherwise create the issue it recommends and escalate.
   1. Bump the **direct dep we already have** in `package.json` / `go.mod`.
   2. If blocked, bump the **parent dep** that pulls the vuln transitive.
   3. **Last resort only**: `resolutions` (bun), `overrides` (npm), `replace` (Go). Overrides/resolutions **do not scale** -- each added one bloats lockfiles and forces more next week. Add follow-up TODO to remove once upstream fixes.
