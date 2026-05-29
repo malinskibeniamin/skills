@@ -19,7 +19,8 @@ Run all checks. Fix failures before proceed.
 4. Route touched -> `bun vitest run *.browser.test.tsx`
 5. Dev server running -> browser smoke via `scripts/skills-browser.sh` (Vercel agent-browser). Skip if not installed.
 6. Frontend diff -> run `/visual-review` (screenshots, states, a11y, console, mobile/cross-browser when feasible). Skip only with reason.
-7. **When green: commit now.** One commit per passing state.
+7. Dependency changed (`package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`) -> run `/upgrade-dependency` or record skip reason + upgrade report/PR section.
+8. **When green: commit now.** One commit per passing state.
 
 ## Phase 4b: Refine (Self-Review Loop)
 

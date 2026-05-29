@@ -2,6 +2,14 @@
 
 Templates/checklists for `/upgrade-dependency`.
 
+## Harness integration protocol
+
+- Manual: `/upgrade-dependency <pkg>`.
+- `/snyk-ux-security`: owns reachability/Snyk state; calls this for remediation path.
+- `/go`: dependency files changed -> require report/PR section or skip reason.
+- `/commit-push-pr`: dependency diff -> add `Dependency upgrade path` PR section.
+- `file-changed-deps`: nudge only. Run `/upgrade-dependency`, add report, or document skip reason. Never auto-upgrade.
+
 ## Report template
 
 Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
@@ -20,33 +28,19 @@ Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 |---|---:|---:|---|---|---|---|
 
 ## Dependency tree
-- Target:
-- Direct parents:
-- Transitive children:
-- Repo dependents:
-- Peer deps:
-- Plugins/adapters:
+Target:  Parents:  Children:  Repo dependents:  Peers:  Plugins/adapters:
 
 ## Non-SemVer scale
-- Release cadence:
-- Change volume:
-- Diff size:
-- API churn:
-- Effort:
-- Danger/blast radius:
-
-## Ecosystem impact
-- Packages that move together:
-- Runtime entrypoints touched:
+Release cadence:  Change volume:  Diff size:  API churn:  Effort:  Danger/blast radius:
 
 ## Security notes
 | Advisory | Source | Reachability/exploitability | Fixed version | Decision |
 |---|---|---|---|---|
 
 ## Risk gate
-- Decision: apply now | create issue | plan only | ask user
-- Reason:
-- Explicit approval:
+Decision: apply now | create issue | plan only | ask user
+Reason:
+Explicit approval:
 
 ## Commands
 ```bash
@@ -54,21 +48,18 @@ Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 ```
 
 ## Verification
-- Lint:
-- Type check:
-- Tests:
-- Build/vet/security scan:
+Lint:  Type check:  Tests:  Build/vet/security scan:
 ```
 
 ## GitHub issue template
 
-Use for major, non-SemVer, missing changelog, unclear migration, peer risk, security uncertainty.
+Use for major, non-SemVer, missing changelog, unclear migration, peer/security risk.
 
 ```md
 Title: Plan dependency upgrade: <package> <from> -> <target>
 
 ## Goal
-Upgrade <package> from <from> to <target> with verified path.
+Upgrade <package> <from> -> <target> with verified path.
 
 ## Version path
 <paste report table>
@@ -77,27 +68,16 @@ Upgrade <package> from <from> to <target> with verified path.
 - <version>: <change, source, required code change>
 
 ## Codemods/scripts
-- Available:
-- Safe to auto-run: yes/no, reason
+Available:  Safe to auto-run: yes/no, reason
 
 ## Related deps
-- Peers:
-- Plugins/adapters:
-- Parent deps if transitive:
+Peers:  Plugins/adapters:  Parent deps if transitive:
 
 ## Security context
-- Advisories:
-- Reachability/exploitability:
-- Fixed versions:
+Advisories:  Reachability/exploitability:  Fixed versions:
 
 ## Risk gate
-Why not auto-applied:
-- [ ] major
-- [ ] non-SemVer / low SemVer confidence
-- [ ] missing/unclear changelog
-- [ ] peer ecosystem risk
-- [ ] security uncertainty
-- [ ] high effort migration
+Why not auto-applied: major | non-SemVer/low SemVer confidence | missing/unclear changelog | peer risk | security uncertainty | high effort migration
 
 ## Plan
 1. <step>
@@ -105,9 +85,7 @@ Why not auto-applied:
 3. Verify: <commands>
 
 ## Delegation plan
-- One package per agent:
-- Shared blockers:
-- Merge order:
+One package per agent:  Shared blockers:  Merge order:
 
 ## Acceptance
 - [ ] Manifest + lockfiles updated together
@@ -127,18 +105,14 @@ Use after safe apply.
 - Upgrade path: <report path>
 
 ## Risk gate
-- Decision: applied automatically
-- Why safe: patch/minor high SemVer confidence | explicit approval | security remediation
+Decision: applied automatically
+Why safe: patch/minor high SemVer confidence | explicit approval | security remediation
 
 ## Changes
-- Manifest/lockfiles:
-- Migrations:
-- Related deps:
+Manifest/lockfiles:  Migrations:  Related deps:
 
 ## Security
-- Advisories fixed:
-- Reachability/exploitability:
-- Residual risk:
+Advisories fixed:  Reachability/exploitability:  Residual risk:
 
 ## Verification
 - [ ] lint:fix
@@ -149,8 +123,8 @@ Use after safe apply.
 
 ## Command notes
 
-JS/Bun: `bun update <pkg>@<version>` -> `bun install`; add `bun install --yarn` when `yarn.lock` exists or Snyk needs mirror. No npm/yarn/pnpm runtime cmds in bun repos.
+JS/Bun: `bun update <pkg>@<version>` -> `bun install`; add `bun install --yarn` when needed.
 
-Go: `go get -u <module>@<version>` -> `go mod tidy`. Keep `go.mod` + `go.sum` together. Do not bump Go toolchain unless requested.
+Go: `go get -u <module>@<version>` -> `go mod tidy`; keep `go.mod` + `go.sum` together.
 
 Security ladder: direct/top-level dep -> parent dep -> override/resolution/replace last, with removal follow-up.

@@ -82,18 +82,6 @@
     ],
     "FileChanged": [
       {
-        "matcher": "package.json|bun.lockb|package-lock.json",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
-            "args": [
-              "file-changed-deps.sh"
-            ]
-          }
-        ]
-      },
-      {
         "matcher": "*.proto|*.graphql|*.graphqls",
         "hooks": [
           {
@@ -137,6 +125,18 @@
             "command": ".claude/hooks/run-hook.sh",
             "args": [
               "file-changed-manifest.sh"
+            ]
+          }
+        ]
+      },
+      {
+        "matcher": "package.json|bun.lock|bun.lockb|yarn.lock|package-lock.json|go.mod|go.sum",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
+              "file-changed-deps.sh"
             ]
           }
         ]

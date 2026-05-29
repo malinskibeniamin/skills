@@ -30,9 +30,6 @@
       ]
     },
     "FileChanged": {
-      "package.json|bun.lockb|package-lock.json": [
-        "file-changed-deps.sh"
-      ],
       "*.proto|*.graphql|*.graphqls": [
         "file-changed-schema.sh"
       ],
@@ -44,6 +41,9 @@
       ],
       "skill-manifest.json": [
         "file-changed-manifest.sh"
+      ],
+      "package.json|bun.lock|bun.lockb|yarn.lock|package-lock.json|go.mod|go.sum": [
+        "file-changed-deps.sh"
       ]
     },
     "WorktreeCreate": {

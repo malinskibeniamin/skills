@@ -6,6 +6,10 @@ SKILL_DIR="$REPO_ROOT/upgrade-dependency"
 SKILL_MD="$SKILL_DIR/SKILL.md"
 REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
 EXAMPLES_MD="$SKILL_DIR/EXAMPLES.md"
+GO_SKILL="$REPO_ROOT/go/SKILL.md"
+COMMIT_PUSH_PR_REF="$REPO_ROOT/commit-push-pr/REFERENCE.md"
+DEPS_HOOK="$REPO_ROOT/.claude/hooks/file-changed-deps.sh"
+MANIFEST="$REPO_ROOT/skill-manifest.json"
 
 # -- File structure -------------------------------------------------
 
@@ -94,3 +98,19 @@ run_content_eval "$REFERENCE_MD" "Pull request template" "reference has Pull req
 run_content_eval "$REFERENCE_MD" "Version path" "templates include version path"
 run_content_eval "$REFERENCE_MD" "Risk gate" "templates include risk gate"
 run_content_eval "$EXAMPLES_MD" "/upgrade-dependency" "examples show slash usage"
+
+# -- Harness integration -------------------------------------------
+
+run_content_eval "$REFERENCE_MD" "Harness integration protocol" "reference documents harness integration protocol"
+run_content_eval "$REFERENCE_MD" "/go" "reference explains /go integration"
+run_content_eval "$REFERENCE_MD" "/commit-push-pr" "reference explains /commit-push-pr integration"
+run_content_eval "$REFERENCE_MD" "file-changed-deps" "reference explains dependency-change hook integration"
+run_content_eval "$REFERENCE_MD" "skip reason" "reference allows documented skip reason"
+run_content_eval "$GO_SKILL" "dependency.*changed|package\\.json|go\\.mod" "/go checks dependency changes"
+run_content_eval "$GO_SKILL" "/upgrade-dependency" "/go routes dependency changes to upgrade-dependency"
+run_content_eval "$COMMIT_PUSH_PR_REF" "Dependency upgrade path" "PR template includes dependency upgrade section"
+run_content_eval "$COMMIT_PUSH_PR_REF" "upgrade-dependency" "commit-push-pr references upgrade-dependency report"
+run_content_eval "$DEPS_HOOK" "/upgrade-dependency" "dependency hook nudges upgrade-dependency"
+run_content_eval "$DEPS_HOOK" "skip reason" "dependency hook mentions skip reason"
+run_content_eval "$DEPS_HOOK" "docs/dependency-upgrades" "dependency hook mentions report path"
+run_content_eval "$MANIFEST" "bun\\.lock|yarn\\.lock|go\\.mod|go\\.sum" "manifest wires dependency files to deps hook"

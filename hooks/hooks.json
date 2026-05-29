@@ -61,15 +61,6 @@
     ],
     "FileChanged": [
       {
-        "matcher": "package.json|bun.lockb|package-lock.json",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/file-changed-deps.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          }
-        ]
-      },
-      {
         "matcher": "*.proto|*.graphql|*.graphqls",
         "hooks": [
           {
@@ -102,6 +93,15 @@
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/file-changed-manifest.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "package.json|bun.lock|bun.lockb|yarn.lock|package-lock.json|go.mod|go.sum",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/file-changed-deps.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
