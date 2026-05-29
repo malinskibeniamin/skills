@@ -1,11 +1,17 @@
 # Evals for setup-e2e-testing skill
 
 SKILL_DIR="$REPO_ROOT/setup-e2e-testing"
+ROUTE_SIBLING_SCRIPT="$REPO_ROOT/setup-e2e-testing/scripts/route-sibling-test-check.sh"
+STRUCTURAL_TEST_SCRIPT="$REPO_ROOT/setup-e2e-testing/scripts/structural-test-nudge-check.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
+run_file_eval "$ROUTE_SIBLING_SCRIPT" "route-sibling-test-check.sh exists"
+run_file_eval "$STRUCTURAL_TEST_SCRIPT" "structural-test-nudge-check.sh exists"
+run_executable_eval "$ROUTE_SIBLING_SCRIPT" "route-sibling-test-check.sh is executable"
+run_executable_eval "$STRUCTURAL_TEST_SCRIPT" "structural-test-nudge-check.sh is executable"
 
 # ── SKILL.md content (auto-loaded, edit-time guidance) ──────────
 
@@ -14,12 +20,94 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "Test IDs|getByTestId" "SKILL.md has test ID conventions"
 run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priority"
 run_content_eval "$SKILL_DIR/SKILL.md" "agent-browser|Playwright" "SKILL.md mentions test tools"
+run_content_eval "$SKILL_DIR/SKILL.md" "route sibling" "SKILL.md mentions route sibling tests"
+run_content_eval "$SKILL_DIR/SKILL.md" "structural refactor" "SKILL.md mentions structural refactor test nudge"
 
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
 run_content_eval "$SKILL_DIR/SETUP.md" "playwright/test" "SETUP has Playwright install"
 run_content_eval "$SKILL_DIR/SETUP.md" "GenericContainer" "SETUP has Testcontainers setup"
 run_content_eval "$SKILL_DIR/SETUP.md" "AxeBuilder" "SETUP has axe-core fixture"
+
+# ── route-sibling-test-check.sh behavior ────────────────────────
+
+_e2e_tmpdir=$(mktemp -d /tmp/e2e-route-hook-XXXXXX)
+mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin"
+cat > "$_e2e_tmpdir/bin/vitest" << 'EOF'
+#!/bin/bash
+echo "$*" > "$ROUTE_SIBLING_TEST_CAPTURE"
+exit "${ROUTE_SIBLING_TEST_EXIT:-0}"
+EOF
+chmod +x "$_e2e_tmpdir/bin/vitest"
+route_file="$_e2e_tmpdir/src/routes/users.page.tsx"
+test_file="$_e2e_tmpdir/src/routes/users.browser.test.tsx"
+printf "export function UsersPage() { return <div /> }\n" > "$route_file"
+printf "test('users page', () => {})\n" > "$test_file"
+capture="$_e2e_tmpdir/capture.txt"
+
+actual_exit=0
+PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
+  "$ROUTE_SIBLING_SCRIPT" > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
+{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+JSON
+
+if [ "$actual_exit" -eq 0 ] && grep -q "users.browser.test.tsx" "$capture" 2>/dev/null; then
+  echo "  PASS  route sibling hook runs browser test for .page.tsx route"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  route sibling hook did not run browser test"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: route sibling hook did not run browser test"
+fi
+
+actual_exit=0
+PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" ROUTE_SIBLING_TEST_EXIT=1 \
+  "$ROUTE_SIBLING_SCRIPT" > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
+{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+JSON
+
+if [ "$actual_exit" -eq 2 ] && grep -q "Sibling route test failed" /tmp/e2e-route-stderr; then
+  echo "  PASS  route sibling hook blocks failing sibling test"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  route sibling hook did not block failing sibling test"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: route sibling hook did not block failing sibling test"
+fi
+
+# ── structural-test-nudge-check.sh behavior ─────────────────────
+
+rm -f "$test_file"
+actual_exit=0
+"$STRUCTURAL_TEST_SCRIPT" > /tmp/e2e-structural-stdout 2> /tmp/e2e-structural-stderr <<JSON || actual_exit=$?
+{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+JSON
+
+if [ "$actual_exit" -eq 0 ] && grep -q "Structural refactor without test" /tmp/e2e-structural-stderr; then
+  echo "  PASS  structural test hook nudges new page without test"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  structural test hook did not nudge new page without test"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: structural test hook did not nudge new page without test"
+fi
+
+printf "test('users page', () => {})\n" > "$test_file"
+actual_exit=0
+"$STRUCTURAL_TEST_SCRIPT" > /tmp/e2e-structural-stdout 2> /tmp/e2e-structural-stderr <<JSON || actual_exit=$?
+{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+JSON
+
+if [ "$actual_exit" -eq 0 ] && ! grep -q "Structural refactor without test" /tmp/e2e-structural-stderr; then
+  echo "  PASS  structural test hook allows new page with sibling test"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  structural test hook warned despite sibling test"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: structural test hook warned despite sibling test"
+fi
+
+rm -rf "$_e2e_tmpdir" /tmp/e2e-route-stdout /tmp/e2e-route-stderr /tmp/e2e-structural-stdout /tmp/e2e-structural-stderr
 
 # ── Description length ──────────────────────────────────────────
 

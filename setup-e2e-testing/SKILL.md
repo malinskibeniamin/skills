@@ -15,6 +15,11 @@ paths:
 - Selectors: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS
 - Test IDs: `{feature}-{element}`, `{feature}-{element}-{index}`, `{feature}-{state}`
 
+## Edit-time Hooks
+
+- **route sibling test**: when a route or `*.page.tsx` changes, run sibling `*.browser.test.*` or `*.integration.test.*`; block if it fails.
+- **structural refactor test nudge**: new `*.page.tsx` or split component file needs accompanying `.test`, `.integration.test`, or `.browser.test`.
+
 ## Accessibility -- axe on every page
 
 ```ts
