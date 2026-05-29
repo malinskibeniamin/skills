@@ -604,6 +604,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/request-refactor-plan`** | Plan refactor. Interview you, break into tiny safe commits, file RFC issue. |
 | **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
 | **`/improve-codebase-architecture`** | Find architectural improvements. Identify shallow modules, propose deep-module refactors. |
+| **`/upgrade-dependency`** | Plan and safely apply dependency upgrades. Builds upgrade path first, applies safe patch/minor updates, creates issues for risky majors or unclear migrations. |
 | **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
 | **`/write-a-skill`** | Create new agent skill with proper structure + progressive disclosure. |
 

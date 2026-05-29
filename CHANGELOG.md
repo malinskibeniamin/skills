@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.12.0
+
+2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, peer/plugin/adapter packages, and security advisories, applies safe patch/minor upgrades, creates GitHub issues for risky majors or unclear migrations, and can be reused by `/snyk-ux-security` for remediation. Ships report, issue, PR templates and 39 eval assertions. Skills 66 -> 67.
+
 ## 4.11.0
 
 2026-05-26 -- Add `/visual-review` skill for browser-based frontend QA before PRs. The workflow runs standalone and is wired into `/go`, `/commit-push`, `/commit-push-pr`, self-reviewer, and code-reviewer for frontend diffs, requiring visual review evidence or an explicit skip reason. Ships platform/environment fingerprinting (browser, user agent, platform, viewport, visualViewport, DPR, media preferences, locale/direction), a platform risk map, Web Weekly-informed visual/a11y/perf checks, and 79 eval assertions. Skills 65 -> 66. Full visual-review eval suite: 79/79.
