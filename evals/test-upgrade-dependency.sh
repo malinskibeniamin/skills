@@ -33,13 +33,20 @@ fi
 # -- Core workflow --------------------------------------------------
 
 run_content_eval "$SKILL_MD" "upgrade path" "builds upgrade path first"
+run_content_eval "$SKILL_MD" "dependency tree|tree of depend" "walks dependency tree"
+run_content_eval "$SKILL_MD" "per-version|every version|each version" "records per-version steps"
 run_content_eval "$SKILL_MD" "SemVer confidence" "checks SemVer confidence"
+run_content_eval "$SKILL_MD" "major.*minor.*patch" "distinguishes SemVer major/minor/patch"
 run_content_eval "$SKILL_MD" "non-SemVer|non SemVer|missing changelog" "treats non-SemVer as risky"
+run_content_eval "$SKILL_MD" "change volume|release cadence|diff size" "scores non-SemVer change scale"
+run_content_eval "$SKILL_MD" "effort|danger|blast radius" "scores upgrade effort and danger"
 run_content_eval "$SKILL_MD" "patch/minor.*apply|apply.*patch/minor" "safe patch/minor may apply"
 run_content_eval "$SKILL_MD" "major.*GitHub issue|GitHub issue.*major" "major changes go to GitHub issue"
 run_content_eval "$SKILL_MD" "plan only" "supports plan-only natural language"
 run_content_eval "$SKILL_MD" "Always leave.*report|leave.*local report" "always leaves local report"
 run_content_eval "$SKILL_MD" "docs/dependency-upgrades" "uses durable local report path"
+run_content_eval "$SKILL_MD" "subagents|swarm|one package per agent" "supports delegated package swarm"
+run_content_eval "$SKILL_MD" "latest stable|stable enough|modern syntax" "targets latest stable modern stack"
 
 # -- Research inputs -----------------------------------------------
 

@@ -16,8 +16,24 @@ Write to `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 - Requested by:
 
 ## Version path
-| Step | From | To | SemVer confidence | Changelog/release note | Breaking or migration notes | Action |
+| Step | From | To | SemVer class or non-SemVer scale | Changelog/release note | Breaking or migration notes | Action |
 |---|---:|---:|---|---|---|---|
+
+## Dependency tree
+- Target package/module:
+- Direct parents:
+- Transitive children:
+- Dependents in repo:
+- Peer deps:
+- Plugins/adapters:
+
+## Non-SemVer scale
+- Release cadence:
+- Change volume:
+- Diff size:
+- Public API churn:
+- Effort estimate:
+- Danger/blast radius:
 
 ## Ecosystem impact
 - Peer deps:
@@ -89,6 +105,11 @@ Why this is not auto-applied:
 1. <step>
 2. <step>
 3. Verify: <commands>
+
+## Delegation plan
+- One package per agent:
+- Shared blockers:
+- Merge order:
 
 ## Acceptance criteria
 - [ ] Manifest and lockfiles updated together

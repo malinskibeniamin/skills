@@ -5,7 +5,7 @@ description: Plans and safely applies dependency upgrades by building an upgrade
 
 # Upgrade Dependency
 
-Move one dependency from current version to target/latest. Build the upgrade path first; apply only when the risk gate says safe. Otherwise create a GitHub issue and stop.
+Move one dependency from current version to target/latest stable. Build the upgrade path first; apply only when the risk gate says safe. Otherwise create a GitHub issue and stop.
 
 ## Input
 
@@ -21,16 +21,17 @@ Examples:
 
 ### 1. Scope
 
-Detect ecosystem and files: `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`, lockfiles, workspace manifests. Identify current version, requested target, direct dep vs transitive, parent dep, dependents, peer deps, plugins, adapters, and runtime entrypoints. Ask only if package or target cannot be inferred.
+Detect ecosystem and files: `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`, lockfiles, workspace manifests. Walk the dependency tree: target, direct dep vs transitive, parent deps, dependents, peers, plugins, adapters, runtime entrypoints. Ask only if package or target cannot be inferred.
 
 ### 2. Build upgrade path
 
-Research every relevant step from installed version to target:
+Research every relevant per-version step from installed version to target:
 - package manager metadata, repository tags, changelog, release notes, migration guide, codemod docs, release blog
-- SemVer confidence: verify the project actually treats major/minor/patch as SemVer
-- non-SemVer or missing changelog means risky until proven otherwise
+- SemVer confidence: verify the project actually treats major/minor/patch as SemVer; classify every hop as patch, minor, or major
+- non-SemVer or missing changelog means risky until proven otherwise; score change volume, release cadence, diff size, public API churn, effort, and danger/blast radius
 - peer/plugin/adapter ecosystem packages that must move together
 - security advisories: Snyk, GHSA, OSV, Socket.dev, vendor advisories, CVE notes
+- target latest stable, not blind latest; prefer migrations that leave code on modern supported syntax/patterns
 
 Always leave a local report: `docs/dependency-upgrades/<package>-<from>-to-<target>.md`. See [REFERENCE.md](REFERENCE.md#report-template).
 
@@ -44,6 +45,8 @@ Default when user says only "upgrade X to latest":
 5. Snyk context -> apply safe remediation; escalate risky remediation into issue.
 
 User can explicitly approve applying a risky major after the issue/report exists.
+
+For many packages, launch a bounded subagent swarm: one package per agent builds its own report, then main agent merges risk gates and applies only independent safe paths.
 
 ### 4. Apply safe path
 
