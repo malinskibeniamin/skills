@@ -264,6 +264,13 @@
             "type": "command",
             "command": ".claude/hooks/run-hook.sh",
             "args": [
+              "split-file-convention-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
               "react-rules-check.sh"
             ]
           },
@@ -425,7 +432,21 @@
             "type": "command",
             "command": ".claude/hooks/run-hook.sh",
             "args": [
+              "route-sibling-test-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
               "route-visual-test-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
+              "structural-test-nudge-check.sh"
             ]
           },
           {

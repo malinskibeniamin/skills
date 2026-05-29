@@ -76,6 +76,7 @@
       "Edit|Write": [
         "vendor-file-check.sh",
         "ui-registry-warn.sh",
+        "split-file-convention-check.sh",
         "react-rules-check.sh",
         "tailwind-check.sh",
         "accessibility-check.sh",
@@ -99,7 +100,9 @@
         "tdd-prompt-check.sh",
         "error-boundary-check.sh",
         "field-mask-check.sh",
+        "route-sibling-test-check.sh",
         "route-visual-test-check.sh",
+        "structural-test-nudge-check.sh",
         "legacy-linter-check.sh",
         "biome-ignore-check.sh",
         "legacy-import-check.sh",

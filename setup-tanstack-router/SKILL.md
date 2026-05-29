@@ -17,7 +17,8 @@ paths:
 - Ban untyped `useParams()`/`useSearch()`/`useLoaderData()`/`useRouteContext()` missing `{ from }`
 - Ban `URLSearchParams` -- suggest nuqs
 - Warn exported components from route files (break code splitting)
-- Require `validateSearch` when `useSearch` in route files
+- Require `validateSearch` when `useSearch` in route files; `.page.tsx` may resolve it from sibling route file
+- Warn tested route pages using `routeApi.useSearch({ select })`; prefer `useSearch({ from, select })`
 - Warn when Query-primed loaders are consumed via `useLoaderData` instead of `useQuery`/`useSuspenseQuery`
 - Warn when router uses `queryClient` context without `defaultPreloadStaleTime: 0`
 - Warn when router uses `queryClient` context without `createRootRouteWithContext`

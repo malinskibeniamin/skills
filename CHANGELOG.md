@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.12.0
+
+2026-05-29 -- Add route-regression hooks from review feedback. New `route-sibling-test-check.sh` runs sibling `*.browser.test.*` / `*.integration.test.*` after route or `*.page.tsx` edits and blocks failing local tests; `structural-test-nudge-check.sh` nudges when new pages or split components lack an accompanying test; `split-file-convention-check.sh` rejects route-side `-parts` / `.dialogs` / `.checklist` split-file mixes in favor of `*.page.tsx` under routes or reusable components under `components/`. `setup-tanstack-router` now resolves `validateSearch` from sibling route files to avoid `.page.tsx` false positives and warns on `routeApi.useSearch({ select })` in tested route pages. Full eval suite: 2197/2197.
+
 ## 4.11.0
 
 2026-05-26 -- Add `/visual-review` skill for browser-based frontend QA before PRs. The workflow runs standalone and is wired into `/go`, `/commit-push`, `/commit-push-pr`, self-reviewer, and code-reviewer for frontend diffs, requiring visual review evidence or an explicit skip reason. Ships platform/environment fingerprinting (browser, user agent, platform, viewport, visualViewport, DPR, media preferences, locale/direction), a platform risk map, Web Weekly-informed visual/a11y/perf checks, and 79 eval assertions. Skills 65 -> 66. Full visual-review eval suite: 79/79.
