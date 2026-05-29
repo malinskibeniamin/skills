@@ -267,6 +267,38 @@ run_hook_eval "$CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
+# ── Check 9b: Allow useSearch in .page when sibling route validates ─
+
+tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/src/routes"
+routefile="$tmpdir/src/routes/users.tsx"
+tmpfile="$tmpdir/src/routes/users.page.tsx"
+printf "import { createFileRoute } from '@tanstack/react-router'\nimport { z } from 'zod'\nexport const Route = createFileRoute('/users')({ validateSearch: z.object({ page: z.number().optional() }) })\n" > "$routefile"
+printf "import { useSearch } from '@tanstack/react-router'\nexport function UsersPage() { const search = useSearch({ from: '/users' }); return <div /> }\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: useSearch in .page when sibling route has validateSearch"
+
+rm -rf "$tmpdir"
+
+# ── Check 9c: Warn on routeApi.useSearch({ select }) in tested route page ─
+
+tmpdir=$(mktemp -d)
+mkdir -p "$tmpdir/src/routes"
+routefile="$tmpdir/src/routes/users.tsx"
+tmpfile="$tmpdir/src/routes/users.page.tsx"
+testfile="$tmpdir/src/routes/users.browser.test.tsx"
+printf "import { createFileRoute } from '@tanstack/react-router'\nimport { z } from 'zod'\nexport const Route = createFileRoute('/users')({ validateSearch: z.object({ page: z.number().optional() }) })\n" > "$routefile"
+printf "test('users route', () => {})\n" > "$testfile"
+printf "import { getRouteApi } from '@tanstack/react-router'\nconst routeApi = getRouteApi('/users')\nfunction UsersPage() { const page = routeApi.useSearch({ select: (s) => s.page }); return <div /> }\n" > "$tmpfile"
+
+run_hook_eval "$CHECK_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: routeApi.useSearch select in tested route page" "routeApi.useSearch"
+
+rm -rf "$tmpdir"
+
 
 # ── Check 10: Warn on Query loader consumed via useLoaderData ─────
 
@@ -364,6 +396,8 @@ run_content_eval "$CHECK_SCRIPT" "nuqs" "check: suggests nuqs"
 run_content_eval "$CHECK_SCRIPT" "defaultPreloadStaleTime" "check: nudges router preload cache off with Query"
 run_content_eval "$CHECK_SCRIPT" "active observer" "check: nudges Query observer over useLoaderData"
 run_content_eval "$CHECK_SCRIPT" "createRootRouteWithContext" "check: nudges typed router context"
+run_content_eval "$CHECK_SCRIPT" "sibling route" "check: resolves validateSearch from sibling route file"
+run_content_eval "$CHECK_SCRIPT" "routeApi\\.useSearch" "check: flags routeApi.useSearch select footgun"
 run_content_eval "$CHECK_SCRIPT" "hook_block|hook_warn" "check: uses shared output functions"
 
 # ── Check 5b: Warn on bare location.href (no window. prefix) ────
