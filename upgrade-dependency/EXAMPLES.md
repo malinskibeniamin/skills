@@ -31,3 +31,11 @@ Expected: no code changes. Produce report and issue with version path, breaking 
 ```
 
 Expected: Snyk skill triages reachability, then asks `/upgrade-dependency` to remediate reachable package upgrades. Safe fixes apply; risky fixes become GitHub issues with advisory evidence.
+
+## Multiple packages
+
+```text
+/upgrade-dependency modernize frontend dependencies to latest stable
+```
+
+Expected: delegate one package per subagent, walk each dependency tree, merge reports, apply independent safe bumps, and create issues for risky or coupled upgrades.
