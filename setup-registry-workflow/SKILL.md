@@ -8,6 +8,7 @@ description: Registry hooks + component taxonomy + consumer drift analysis. Use 
 ## Hooks
 
 - **PostToolUse** (`ui-registry-warn.sh`): warn once/session when edit UI component dirs | prompt upstream PR
+- **PostToolUse** (`split-file-convention-check.sh`): split-file convention -- route pages are `*.page.tsx`; reusable pieces live under `components/`; reject `-parts`/`.dialogs`/`.checklist` mixes
 - **Stop** (`registry-check.sh`): block if redpanda-ui modified without update `registry.json` + add changeset
 
 ## Component Taxonomy (Atomic Design)

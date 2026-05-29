@@ -1,10 +1,65 @@
 #!/bin/bash
 set -euo pipefail
-source "$(dirname "$0")/_hook-lib.sh"
+_lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
 hook_parse_edit_write
 hook_filter_extensions "ts|tsx"
 hook_get_added_lines
+
+_route_candidate_files() {
+  local dir base stem short
+  dir=$(dirname "$file_path")
+  base=$(basename "$file_path")
+  stem="${base%.*}"
+  short="$stem"
+  case "$short" in
+    *.page) short="${short%.page}" ;;
+  esac
+
+  printf '%s\n' "$file_path"
+  printf '%s\n' "$dir/$short.tsx" "$dir/$short.ts" "$dir/$short.route.tsx" "$dir/$short.route.ts"
+  printf '%s\n' "$dir/route.tsx" "$dir/route.ts" "$dir/index.tsx" "$dir/index.ts" "$dir/__root.tsx" "$dir/__root.ts"
+}
+
+_route_has_validate_search() {
+  local candidate seen
+  seen=""
+  while IFS= read -r candidate; do
+    [ -z "$candidate" ] && continue
+    case "
+$seen
+" in
+      *"
+$candidate
+"*) continue ;;
+    esac
+    seen="$seen
+$candidate"
+    [ -f "$candidate" ] || continue
+    if grep -qF 'validateSearch' "$candidate" 2>/dev/null; then
+      return 0
+    fi
+  done < <(_route_candidate_files)
+  return 1
+}
+
+_has_sibling_route_test() {
+  local dir base stem short suffix
+  dir=$(dirname "$file_path")
+  base=$(basename "$file_path")
+  stem="${base%.*}"
+  short="$stem"
+  case "$short" in
+    *.page) short="${short%.page}" ;;
+  esac
+  for name in "$stem" "$short"; do
+    [ -z "$name" ] && continue
+    for suffix in browser.test.tsx browser.test.ts integration.test.tsx integration.test.ts; do
+      [ -f "$dir/$name.$suffix" ] && return 0
+    done
+  done
+  return 1
+}
 
 # ── Check 1: Ban react-router-dom imports ─────────────────────────────
 
@@ -99,9 +154,22 @@ fi
 
 if echo "$added_lines" | grep -qE '\buseSearch\b'; then
   if echo "$file_path" | grep -qE '/routes/'; then
-    file_content=$(cat "$file_path")
-    if ! echo "$file_content" | grep -qF 'validateSearch'; then
-      hook_block "useSearch requires validateSearch on route. Add zod schema: validateSearch: z.object({...})."
+    if ! _route_has_validate_search; then
+      hook_block "useSearch requires validateSearch on route. Add zod schema in the route file or sibling route file: validateSearch: z.object({...})."
+    fi
+  fi
+fi
+
+# ── Check 9b: routeApi.useSearch({ select }) in tested route pages ────
+# In route page/components with browser or integration coverage, prefer the
+# typed hook with explicit route source. The routeApi form made two regressions
+# harder to spot because the component did not make the validated route source
+# obvious at the call site.
+
+if echo "$added_lines" | grep -qE '[A-Za-z_$][A-Za-z0-9_$]*[.]useSearch[[:space:]]*[(][[:space:]]*[{][^}]*select[[:space:]]*:'; then
+  if echo "$file_path" | grep -qE '/routes/|[.]page[.]tsx$'; then
+    if _has_sibling_route_test; then
+      hook_warn "routeApi.useSearch({ select }) in tested route component. Prefer useSearch({ from: '/route', select }) so the validated route source is explicit." "router-routeapi-use-search-select"
     fi
   fi
 fi

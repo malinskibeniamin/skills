@@ -107,10 +107,16 @@ fi
 # Auto-detected from branch state, not prompt keywords.
 
 _current_branch=$(git branch --show-current 2>/dev/null || true)
+_scope_lock_prompt=false
+if echo "$prompt" | grep -qiE 'fix|debug|broken|refactor|extract|move|split|consolidate|clean.?up|write.*test|add|create|build|implement|wire|integrate|set.*up|open.*pr|pull request|push|deploy|delete|migration|ci'; then
+  _scope_lock_prompt=true
+fi
 case "$_current_branch" in
   main|master|develop|"") ;;
   *)
-    directives="$directives\n[SCOPE-LOCK] On feature branch '$_current_branch'. Prefer committing here. Ask before creating new branches or PRs unless explicitly instructed."
+    if [ "$_scope_lock_prompt" = true ]; then
+      directives="$directives\n[SCOPE-LOCK] On feature branch '$_current_branch'. Prefer committing here. Ask before creating new branches or PRs unless explicitly instructed."
+    fi
     ;;
 esac
 

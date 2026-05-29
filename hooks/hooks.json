@@ -189,6 +189,10 @@
           },
           {
             "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/split-file-convention-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/react-rules-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -281,7 +285,15 @@
           },
           {
             "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/route-sibling-test-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/route-visual-test-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/structural-test-nudge-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
