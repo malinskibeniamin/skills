@@ -26,6 +26,18 @@ run_content_eval "$SCRIPT" "AGENTS.md" "prime scout considers AGENTS.md"
 run_content_eval "$SCRIPT" "gh pr view" "prime scout can detect current PR"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"./prime/\"" "prime registered in Claude plugin skills"
 
+prime_doc_bytes=$(wc -c < "$SKILL_DIR/SKILL.md" | tr -d ' ')
+prime_ref_bytes=$(wc -c < "$SKILL_DIR/REFERENCE.md" | tr -d ' ')
+prime_script_lines=$(wc -l < "$SCRIPT" | tr -d ' ')
+if [ "$prime_doc_bytes" -le 1500 ] && [ "$prime_ref_bytes" -le 1600 ] && [ "$prime_script_lines" -le 125 ]; then
+  echo "  PASS  prime artifacts stay terse"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  prime artifacts too verbose (skill=${prime_doc_bytes}B ref=${prime_ref_bytes}B script=${prime_script_lines}L)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: prime artifacts too verbose"
+fi
+
 if [ -x "$SCRIPT" ]; then
   out=$("$SCRIPT" 2>/dev/null || true)
   if echo "$out" | grep -q "# Prime Scout" && echo "$out" | grep -q "## Work state" && echo "$out" | grep -q "## Candidate next reads"; then
