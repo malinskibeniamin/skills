@@ -44,6 +44,8 @@ Many packages -> bounded subagent swarm: one package per agent builds report; ma
 
 ### 4. Apply safe path
 
+Supply-chain gate before apply: min release age (default 7-30d), Disable scripts / review `trustedDependencies`, block git deps (`git+`, tarball, raw URL), Socket/npq if present, lockfile review, clean install/frozen verify.
+
 Incremental. One commit per major. Patch/minor batches OK only when changelog says low risk.
 
 JS/Bun: `bun update <pkg>@<version>` -> `bun install` -> `bun install --yarn` when `yarn.lock` exists/Snyk needs it -> `bun run lint:fix` -> `bun run type:check` -> `bun test`.

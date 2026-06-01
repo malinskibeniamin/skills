@@ -9,6 +9,7 @@ GO_SKILL="$REPO_ROOT/go/SKILL.md"
 COMMIT_PUSH_PR_REF="$REPO_ROOT/commit-push-pr/REFERENCE.md"
 DEPS_HOOK="$REPO_ROOT/.claude/hooks/file-changed-deps.sh"
 MANIFEST="$REPO_ROOT/skill-manifest.json"
+SNYK_SKILL="$REPO_ROOT/snyk-ux-security/SKILL.md"
 
 # -- File structure -------------------------------------------------
 
@@ -42,7 +43,7 @@ fi
 
 skill_bytes=$(wc -c < "$SKILL_MD" 2>/dev/null | tr -d ' ' || echo 99999)
 reference_bytes=$(wc -c < "$REFERENCE_MD" 2>/dev/null | tr -d ' ' || echo 99999)
-if [ "${skill_bytes:-99999}" -le 3500 ] && [ "${reference_bytes:-99999}" -le 3900 ]; then
+if [ "${skill_bytes:-99999}" -le 3800 ] && [ "${reference_bytes:-99999}" -le 4800 ]; then
   echo "  PASS  upgrade-dependency docs stay terse"
   PASS=$((PASS + 1))
 else
@@ -77,6 +78,12 @@ run_content_eval "$SKILL_MD" "migration" "checks migration guides"
 run_content_eval "$SKILL_MD" "codemod" "checks codemods"
 run_content_eval "$SKILL_MD" "peer|plugin|adapter|ecosystem" "checks related ecosystem packages"
 run_content_eval "$SKILL_MD" "security advisories|GHSA|OSV|Socket|Snyk" "checks security sources"
+run_content_eval "$SKILL_MD" "min release age|release age" "checks min release age"
+run_content_eval "$SKILL_MD" "Disable scripts|disable.*scripts|trustedDependencies" "disables install scripts"
+run_content_eval "$SKILL_MD" "git deps|git\\+|tarball|raw URL" "blocks git/tarball deps"
+run_content_eval "$SKILL_MD" "lockfile review|Review lockfile" "requires lockfile review"
+run_content_eval "$SKILL_MD" "clean install|frozen" "uses clean/frozen install"
+run_content_eval "$SKILL_MD" "Socket|npq" "mentions Socket/npq supply-chain scan"
 
 # -- Apply + verification ------------------------------------------
 
@@ -95,6 +102,14 @@ run_content_eval "$SKILL_MD" "snyk-ux-security" "documents Snyk skill reuse"
 run_content_eval "$SKILL_MD" "exploitability|reachability" "handles security reachability"
 run_content_eval "$SKILL_MD" "direct dep.*parent.*override|top-level.*parent.*override" "uses direct-parent-override ladder"
 run_content_eval "$SKILL_MD" "Never run code from advisories" "does not execute advisory code"
+run_content_eval "$REFERENCE_MD" "Supply-chain gate" "reference has supply-chain gate"
+run_content_eval "$REFERENCE_MD" "min-release-age|minimumReleaseAge|minimumReleaseAge" "reference covers min release age config"
+run_content_eval "$REFERENCE_MD" "Socket Firewall|sfw" "reference covers Socket Firewall"
+run_content_eval "$REFERENCE_MD" "npq" "reference covers npq"
+run_content_eval "$REFERENCE_MD" "Bun.*postinstall|trustedDependencies" "reference covers Bun scripts caveat"
+run_content_eval "$REFERENCE_MD" "git\\+|tarball|raw URL" "reference blocks git/tarball/raw URL deps"
+run_content_eval "$SNYK_SKILL" "Supply-chain gate|/upgrade-dependency.*supply" "snyk skill invokes supply-chain gate"
+run_content_eval "$SNYK_SKILL" "Socket|npq|min release age|release age" "snyk skill mentions supply-chain scan inputs"
 
 # -- Reference templates -------------------------------------------
 

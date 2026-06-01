@@ -136,3 +136,13 @@ Security ladder: direct/top-level dep -> parent dep -> override/resolution/repla
 - Plan only: `/upgrade-dependency plan only for rspack` -> no code, report/issue only.
 - Security: `/snyk-ux-security apps/frontend` -> triage reachability, then use this skill for remediation.
 - Many packages: `/upgrade-dependency modernize frontend dependencies to latest stable` -> one package per subagent, merge reports, apply safe bumps.
+
+## Supply-chain gate
+
+Before apply, check:
+- Min release age: npm `min-release-age`, pnpm/Yarn/Bun `minimumReleaseAge` where supported; default 7-30d unless security fix overrides.
+- Disable scripts: no lifecycle scripts. Bun disables postinstall by default; review `trustedDependencies`.
+- Block git deps: fail on `git+`, tarball, raw URL deps in manifest/lock.
+- Scan deps: Snyk + `bun audit`; optional `npq`/Socket Firewall (`sfw`) if installed. Socket Free supports npm/yarn/pnpm, pip/uv, cargo; not Bun/Go Free.
+- Review lockfile: new names, resolved URLs, integrity, scripts/trusted deps, git/tarball sources.
+- Clean install: frozen/clean command, not dirty incremental only (`bun install --frozen-lockfile`, `npm ci`, `pnpm install --frozen-lockfile`).
