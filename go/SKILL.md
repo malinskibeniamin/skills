@@ -28,11 +28,12 @@ Run all checks. Fix failures before proceed.
 
 1. Dispatch `self-reviewer` agent on session diff
 2. Diff >50 lines OR touches auth/security -> also dispatch `adversarial-reviewer` parallel
-3. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
-4. Fix P0/P1 now, apply P2 `safe_auto`, show P2 `gated_auto` to user
-5. Commit fixes: `refactor(scope): self-review fixes`
-6. Re-verify (tests + types + lint)
-7. **Max 2 refine rounds.** Then proceed.
+3. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
+4. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
+5. Fix P0/P1 now, apply P2 `safe_auto`, show P2 `gated_auto` to user
+6. Commit fixes: `refactor(scope): self-review fixes`
+7. Re-verify (tests + types + lint)
+8. **Max 2 refine rounds.** Then proceed.
 
 ## Phase 5: Simplify + Ship
 
@@ -79,6 +80,7 @@ Before start, check work to ship:
 | `adversarial-reviewer` agent | 4b | Conditional (>50 lines or auth/security) |
 | `/simplify` | 5 | Code quality review |
 | `/visual-review` | 4/5 | Customer-facing surface review with product/design/engineering/QA hats when UI, CLI/TUI, mobile, desktop, or report output changed |
+| `/resilience-review` | 2/4b/5 | Edge cases, error handling, fallback, polish, observability for risky features |
 | `/commit-push-pr` | 5 | Conventional commits + push + PR |
 | `code-reviewer` agent | 5 | Fresh-eyes review on PR |
 | `/resolve-pr-feedback` | 5b | Triage + fix review comments |

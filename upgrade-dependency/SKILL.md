@@ -1,6 +1,6 @@
 ---
 name: upgrade-dependency
-description: Plans safe dependency upgrades via upgrade path, changelog, release notes, migrations, codemods, SemVer confidence, advisories, related packages. Use when asked to upgrade package/module, plan dependency upgrade, remediate vulnerable dependency, inspect breaking changes, or create upgrade issue/PR.
+description: Plans safe dependency upgrades. Use when asked to upgrade package/module, plan dependency upgrade, remediate vulnerable dependency, inspect breaking changes, or create upgrade issue/PR.
 ---
 
 # Upgrade Dependency

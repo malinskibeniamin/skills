@@ -39,6 +39,12 @@ if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|error.*in|crash
   directives="$directives\n[TRIAGE] reproduce(test)→analyze→hypothesize(one at a time)→fix ROOT CAUSE. /codex:rescue if available. Max 2 approach attempts — if second fails, stop and present both with analysis. Don't burn session on unresolvable constraints. Prefer terminal verification (vitest, biome, tsgo) over browser tools."
 fi
 
+# ── Resilience Review prompts ─────────────────────────────────────
+
+if echo "$prompt" | grep -qiE 'edge case|error handling|unhappy path|fallback|loading|empty state|double submit|async validation|form.*validation|retry|timeout|partial outage|stale cache|state transition|polish|resilien|what can go wrong'; then
+  directives="$directives\n[RESILIENCE-REVIEW] Run /resilience-review for edge cases, error handling, fallback, polish, observability. Convert top failures to RED tests."
+fi
+
 # ── PR/review ────────────────────────────────────────────────────
 
 if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push.*branch|submit.*review'; then
