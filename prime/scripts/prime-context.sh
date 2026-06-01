@@ -7,13 +7,28 @@ cd "$root" 2>/dev/null || true
 
 sec(){ printf '\n## %s\n\n' "$1"; }
 one(){ tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//'; }
+sha(){ if command -v shasum >/dev/null 2>&1; then shasum | awk '{print $1}'; elif command -v md5 >/dev/null 2>&1; then md5 -q; else cksum | awk '{print $1}'; fi; }
 fsum(){
   f="$1"; [ -f "$f" ] || return 0
   l=$(wc -l < "$f" | tr -d ' ')
   h=$(grep -E '^(#|##) ' "$f" 2>/dev/null | head -8 | sed 's/^#* //' | one)
   [ -n "$h" ] && printf -- '- `%s` (%s lines): %s\n' "$f" "$l" "$h" || printf -- '- `%s` (%s lines)\n' "$f" "$l"
 }
-uniq10(){ awk 'NF && !seen[$0]++{print}' | head -10; }
+uniq10(){ awk 'NF && !seen[$0]++{if(n<10) print; n++}'; }
+cache_dir(){
+  b="${XDG_CACHE_HOME:-${HOME:-/tmp}/.cache}/codex/prime"
+  id=$(printf '%s' "$root" | sha)
+  printf '%s/%s\n' "$b" "$id"
+}
+fingerprint(){
+  dirty=$(git status --porcelain 2>/dev/null | sha)
+  head=$(git rev-parse HEAD 2>/dev/null || echo none)
+  printf 'root=%s\nbranch=%s\nhead=%s\ndirty=%s\n' "$root" "${br:-}" "$head" "$dirty"
+}
+mark_prime(){
+  d=$(cache_dir); mkdir -p "$d" 2>/dev/null || return 0
+  fingerprint > "$d/prime-current" 2>/dev/null || true
+}
 base_branch(){
   r=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
   [ -n "$r" ] && { printf '%s\n' "${r#origin/}"; return; }
@@ -79,7 +94,7 @@ if command -v gh >/dev/null 2>&1 && git remote -v 2>/dev/null | grep -q github.c
 else echo '- GitHub CLI unavailable, unauthenticated, or non-GitHub remote.'; fi
 
 sec "Candidate next reads"
-{ [ -f AGENTS.md ] && echo AGENTS.md; [ -f CLAUDE.md ] && echo CLAUDE.md; [ -f CONTEXT-MAP.md ] && echo CONTEXT-MAP.md; [ -f CONTEXT.md ] && echo CONTEXT.md; [ -f README.md ] && echo README.md; [ -f package.json ] && echo package.json; printf '%s\n' "$di" "$un" "$ch"; } | uniq10 | sed 's/^/- `/; s/$/`/'
+{ printf '%s\n' "$di" "$un" "$ch"; [ -f CONTEXT-MAP.md ] && echo CONTEXT-MAP.md; [ -f CONTEXT.md ] && echo CONTEXT.md; [ -f AGENTS.md ] && echo AGENTS.md; [ -f CLAUDE.md ] && echo CLAUDE.md; [ -f README.md ] && echo README.md; [ -f package.json ] && echo package.json; true; } | uniq10 | sed 's/^/- `/; s/$/`/'
 
 sec "Agent handoff"
 cat <<'EOF2'
@@ -87,3 +102,5 @@ cat <<'EOF2'
 - Emit Prime brief: state, rules, map, change, risks, next actions, read-next paths.
 - Concrete user task -> bias reads toward changed files + task area.
 EOF2
+
+mark_prime

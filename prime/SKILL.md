@@ -28,6 +28,6 @@ Fresh-session orientation: "where am I, what matters, what read next?"
 - Do not paste full `CLAUDE.md`, `AGENTS.md`, README, source, PR comments. Summarize + link paths.
 - Prefer current facts over memory.
 - No PR/dirty files/task -> short brief + likely next reads.
-- Fresh Prime already exists for same worktree+branch -> skip unless branch, PR, or task changed.
+- Fresh `prime-current` marker for same repo+branch+HEAD -> skip unless task/PR changed.
 
 See [REFERENCE.md](REFERENCE.md) for contract + hook options.
