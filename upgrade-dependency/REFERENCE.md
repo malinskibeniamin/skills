@@ -1,6 +1,6 @@
 # Upgrade Dependency Reference
 
-Templates/checklists for `/upgrade-dependency`.
+Templates for `/upgrade-dependency`.
 
 ## Harness integration protocol
 
@@ -8,7 +8,7 @@ Templates/checklists for `/upgrade-dependency`.
 - `/snyk-ux-security`: owns reachability/Snyk state; calls this for remediation path.
 - `/go`: dependency files changed -> require report/PR section or skip reason.
 - `/commit-push-pr`: dependency diff -> add `Dependency upgrade path` PR section.
-- `file-changed-deps`: nudge only. Run `/upgrade-dependency`, add report, or document skip reason. Never auto-upgrade.
+- `file-changed-deps`: nudge only. Run `/upgrade-dependency`, add report, or note skip reason. No auto-upgrade.
 
 ## Report template
 
@@ -128,3 +128,11 @@ JS/Bun: `bun update <pkg>@<version>` -> `bun install`; add `bun install --yarn` 
 Go: `go get -u <module>@<version>` -> `go mod tidy`; keep `go.mod` + `go.sum` together.
 
 Security ladder: direct/top-level dep -> parent dep -> override/resolution/replace last, with removal follow-up.
+
+## Examples
+
+- Safe minor: `/upgrade-dependency vite to latest` -> path, SemVer, changelog, peers, locks, PR.
+- Risky major: `/upgrade-dependency react-router to latest` -> report + issue; apply after approval.
+- Plan only: `/upgrade-dependency plan only for rspack` -> no code, report/issue only.
+- Security: `/snyk-ux-security apps/frontend` -> triage reachability, then use this skill for remediation.
+- Many packages: `/upgrade-dependency modernize frontend dependencies to latest stable` -> one package per subagent, merge reports, apply safe bumps.

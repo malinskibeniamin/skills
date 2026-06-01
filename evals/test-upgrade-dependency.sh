@@ -5,7 +5,6 @@
 SKILL_DIR="$REPO_ROOT/upgrade-dependency"
 SKILL_MD="$SKILL_DIR/SKILL.md"
 REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
-EXAMPLES_MD="$SKILL_DIR/EXAMPLES.md"
 GO_SKILL="$REPO_ROOT/go/SKILL.md"
 COMMIT_PUSH_PR_REF="$REPO_ROOT/commit-push-pr/REFERENCE.md"
 DEPS_HOOK="$REPO_ROOT/.claude/hooks/file-changed-deps.sh"
@@ -15,7 +14,14 @@ MANIFEST="$REPO_ROOT/skill-manifest.json"
 
 run_file_eval "$SKILL_MD" "upgrade-dependency/SKILL.md exists"
 run_file_eval "$REFERENCE_MD" "upgrade-dependency/REFERENCE.md exists"
-run_file_eval "$EXAMPLES_MD" "upgrade-dependency/EXAMPLES.md exists"
+if [ ! -e "$SKILL_DIR/EXAMPLES.md" ]; then
+  echo "  PASS  examples live in REFERENCE.md, not standalone EXAMPLES.md"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  standalone EXAMPLES.md should be folded into REFERENCE.md"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: upgrade-dependency EXAMPLES.md still standalone"
+fi
 
 # -- Frontmatter + discoverability --------------------------------
 
@@ -36,12 +42,11 @@ fi
 
 skill_bytes=$(wc -c < "$SKILL_MD" 2>/dev/null | tr -d ' ' || echo 99999)
 reference_bytes=$(wc -c < "$REFERENCE_MD" 2>/dev/null | tr -d ' ' || echo 99999)
-examples_bytes=$(wc -c < "$EXAMPLES_MD" 2>/dev/null | tr -d ' ' || echo 99999)
-if [ "${skill_bytes:-99999}" -le 3500 ] && [ "${reference_bytes:-99999}" -le 3400 ] && [ "${examples_bytes:-99999}" -le 900 ]; then
+if [ "${skill_bytes:-99999}" -le 3500 ] && [ "${reference_bytes:-99999}" -le 3900 ]; then
   echo "  PASS  upgrade-dependency docs stay terse"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  upgrade-dependency docs too verbose (skill=$skill_bytes ref=$reference_bytes examples=$examples_bytes)"
+  echo "  FAIL  upgrade-dependency docs too verbose (skill=$skill_bytes ref=$reference_bytes)"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: upgrade-dependency docs too verbose"
 fi
@@ -97,7 +102,8 @@ run_content_eval "$REFERENCE_MD" "GitHub issue template" "reference has GitHub i
 run_content_eval "$REFERENCE_MD" "Pull request template" "reference has Pull request template"
 run_content_eval "$REFERENCE_MD" "Version path" "templates include version path"
 run_content_eval "$REFERENCE_MD" "Risk gate" "templates include risk gate"
-run_content_eval "$EXAMPLES_MD" "/upgrade-dependency" "examples show slash usage"
+run_content_eval "$REFERENCE_MD" "Examples" "reference owns examples section"
+run_content_eval "$REFERENCE_MD" "/upgrade-dependency" "reference examples show slash usage"
 
 # -- Harness integration -------------------------------------------
 

@@ -2,7 +2,7 @@
 
 ## 4.12.0
 
-2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, peer/plugin/adapter packages, and security advisories, applies safe patch/minor upgrades, creates GitHub issues for risky majors or unclear migrations, and can be reused by `/snyk-ux-security` for remediation. Ships report, issue, PR templates and 60 eval assertions. Skills 66 -> 67.
+2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, peer/plugin/adapter packages, and security advisories, applies safe patch/minor upgrades, creates GitHub issues for risky majors or unclear migrations, and can be reused by `/snyk-ux-security` for remediation. Ships report, issue, PR templates and 61 eval assertions. Skills 66 -> 67.
 
 ## 4.11.0
 
