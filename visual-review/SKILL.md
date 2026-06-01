@@ -1,25 +1,34 @@
 ---
 name: visual-review
-description: Browser-based frontend review for changed UI. Use before PRs with React/route/CSS changes to inspect screenshots, states, a11y, console errors, and cross-browser/mobile regressions.
+description: Reviews customer-facing surfaces with product, design, engineering, and QA hats using visual or interaction evidence. Use when changes affect web UI, mobile screens, CLI/TUI, desktop, generated reports, onboarding, forms, or user-visible behavior before PRs/releases.
 ---
 
 # Visual Review
 
-Browser QA for changed UI. Hooks catch static smells; this catches composed UI bugs that need seeing + interaction. See [REFERENCE.md](REFERENCE.md) for environment fingerprint, platform risk map, ecosystem wiring.
+Multi-hat review for changed customer-facing surfaces. Browser-based frontend review common path; terminal output, snapshots, generated reports count too. Hooks catch static smells; this catches product/design/interaction/resilience bugs needing eyes or use. See [REFERENCE.md](REFERENCE.md), [HTML-REPORT.md](HTML-REPORT.md), [EXAMPLES.md](EXAMPLES.md).
 
 ## Run
-Standalone trigger OK: `/visual-review`. Also run before `/commit-push-pr` when diff touches rendered UI: `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`; `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`; Tailwind/theme/config files that affect visuals. Skip only docs-only, test-only, type-only, backend-only, or explicit skip reason.
+Standalone trigger OK: `/visual-review`. Before `/commit-push-pr` when diff touches rendered UI: `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`; `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`; Tailwind/theme/config files that affect visuals. Also for CLI/TUI/mobile/desktop/report output. Skip only docs-only, test-only, type-only, backend-only, or explicit skip reason.
+
+Modes: `plan` before build; `implemented` after diff; `regression` for bug before/after; `release` for PR report.
 
 ## Inputs
-Accept route/component hints. If omitted: inspect `git diff --name-only HEAD`; map route files to URLs when obvious; map component edits to nearest affected route/story/test; if route cannot be inferred, ask one concise question.
+Accept route/component/command/surface hints. If omitted: inspect `git diff --name-only HEAD`; map routes -> URLs, components -> route/story/test, CLI/TUI/report edits -> commands/output. If unclear, ask one concise question.
 
-## Review matrix
+## Hats
+- Product: user value, clarity, task success, friction, competitive quality.
+- Design: hierarchy, spacing, affordance, copy, visual consistency, taste, states.
+- Engineering: resilience under slow network, async races, platform/browser/device risk, performance.
+- QA: reproducible evidence, unhappy paths, regression risk, automation candidates.
+
+## Matrix
 Minimum:
-- Chromium desktop; Chromium mobile viewport; keyboard-only pass: Tab, Shift+Tab, Enter, Space, Escape.
-- console/network error scan; loading, empty, error, dense-data state where reachable.
+- Chromium desktop; Chromium mobile viewport; keyboard-only: Tab, Shift+Tab, Enter, Space, Escape.
+- console/network scan; loading, empty, error, dense-data state where reachable.
 - form submit path when form UI changed; notification/toast path when feedback UI changed.
+- Non-web: command output/screenshot, narrow/wide terminal, color/no-color, error/empty/slow path.
 
-Prefer when feasible:
+Prefer:
 - Firefox desktop; WebKit/mobile Safari equivalent.
 - reduced motion; dark/light mode; high contrast or forced colors.
 - text zoom or larger default font when typography/layout changed.
@@ -27,65 +36,34 @@ Prefer when feasible:
 - back/forward navigation when route/search/theme/storage changed.
 - slow network/media throttling when images/video/loading changed.
 
-Use project scripts first: `scripts/skills-browser.sh`, Playwright, `bun run dev`. Never ask user to verify visual UI manually when tools can.
+Use project scripts first: `scripts/skills-browser.sh`, Playwright, `bun run dev`, Storybook, CLI fixtures. Never ask user to verify customer-facing surface manually when tools can.
 
 ## Inspect
-### Layout/polish
-- horizontal overflow; clipped popovers; sticky/fixed overlap; safe-area issues on mobile bottom/top UI.
-- viewport unit bugs: `100vh`, virtual keyboard, scrollbars, writing mode.
-- layout shift from skeletons, images, lazy video, fonts, accordions, tabs.
-- broken dense tables/cards/lists; captions/headers still explain tables.
-- dark/light contrast and token consistency; text scaling, zoom, system font and OS default font behaviour.
-- CSS shorthand/complex layout edits remain readable and intentional.
+Layout/polish: overflow; clipped popovers; sticky/fixed overlap; safe-area; `100vh`; virtual keyboard; scrollbars; writing mode; skeleton/image/font/lazy-video CLS; dense tables/cards/lists; captions/headers still explain tables; token consistency; text scaling; system fonts; CSS shorthand/complex layout.
 
-### A11y/semantics
-- accessible names match visible intent; native semantics first; ARIA only when needed.
-- `aria-label` not used on static/generic elements and not hiding visible text.
-- labels connect to inputs; password managers/autofill still work.
-- disabled vs `aria-disabled` behaviour clear and keyboard-safe.
-- focus order, focus trap, Escape/close paths, no surprise autofocus.
-- buttons/links do not nest; links look and behave like links.
-- dialogs, popovers, custom selects, tabs, tables, forms.
-- forms submit correctly via Enter, buttons, and `requestSubmit()`-style paths.
-- toasts/notifications announced, persistent enough, not sole carrier for critical actions.
-- text effects, transforms, uppercase, strikethrough, emoji, generated content do not harm screen-reader output.
-- SVG/icons/images have meaningful names or are hidden decoratively.
+A11y/semantics: accessible names match visible intent; native semantics; ARIA only when needed; aria-label not used on static/generic elements; labels connect; password managers/autofill; disabled vs `aria-disabled`; focus order/trap/return; Escape; no surprise autofocus; buttons/links do not nest; dialogs/popovers/selects/tabs/tables/forms; Enter/requestSubmit; toasts announced, persistent, not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images named or decorative.
 
-### Browser/platform
-- Firefox/Safari differences, not just Chromium; in-app browser/WebView quirks when relevant.
-- viewport/virtual-keyboard issues on mobile forms; bfcache/back-forward state for theme/auth/search params.
-- smooth scrolling, scroll snapping, `scrollIntoView`, overscroll, and scrollbar-gutter side effects.
-- view-transition/reduced-motion behaviour and interaction blocking.
-- popover/dialog/select/native-control behaviour across browsers.
-- unsupported Baseline/new platform features have fallback or feature detection.
-
-### Perf-sensitive UI
-- responsive images dimensions/sizes/lazy/preload rules.
-- responsive video/media has controls, captions where needed, and stable aspect ratio.
-- important images not hidden as CSS backgrounds when they need priority/alt.
-- large data URLs/assets, render-blocking additions, third-party embeds/scripts.
-- obvious Core Web Vitals risks: LCP image, CLS, INP/long interaction.
-- animation cost: transform/opacity preferred, no motion that ignores reduced-motion.
-- font loading: fallback, size-adjust/layout shift, oversized custom fonts.
+Browser/platform/perf: Firefox/Safari/WebView; mobile forms; bfcache/back-forward; smooth scrolling, scroll snapping, `scrollIntoView`, overscroll, scrollbar-gutter; view transitions; reduced motion; interaction blocking; native-control behaviour; feature detection; responsive images; responsive video/media controls, captions, stable aspect ratio; LCP/CLS/INP/long interaction; font loading; third-party embeds/scripts; transform/opacity animations.
 
 ## Heuristics
 HTML first. User agents vary. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
 
 ## Output
-Return concise report:
+Return concise report. Non-trivial/release mode: write HTML report to `$TMPDIR/visual-review-<timestamp>.html` (fallback `/tmp`) and open.
 
 ```markdown
 ## Visual review
 Status: ready | needs fixes | blocked
-Changed UI: <routes/components>
-Checked: <browser/viewport/state list>
-Findings: | Severity | Area | Finding | Evidence | Fix |
+Changed UI: <routes/components/commands/surfaces>
+Checked: <browser/viewport/state/terminal list>
+Findings: | Severity | Hat | Surface | Evidence | Why it matters | Fix | Automate? |
 Screenshots: | View | Browser | Path | Notes |
 PR notes: <rows usable in /commit-push-pr screenshot table>
+HTML report: <absolute path or skip reason>
 Automation candidates: <repeatable misses worth hook/eval/docs>
 ```
 
-Severity: P0 blocks use/security/data loss. P1 fix before PR. P2 fix if low-risk else note. P3 advisory.
+Severity: P0 blocks use/security/data loss/infinite loop. P1 fix before PR. P2 low-risk improvement. P3/nit advisory.
 
 ## Finish
-P0/P1 fixed or user accepted. Screenshot evidence captured for visual changes when app runnable. Skip reasons recorded for unrun matrix items. Recurring deterministic issue suggested as hook/eval follow-up.
+P0/P1 fixed or accepted. Evidence captured when runnable. Skip reasons for unrun matrix. Recurring deterministic issue -> hook/eval/test follow-up.

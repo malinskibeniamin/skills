@@ -70,8 +70,8 @@ bun vitest run *.browser.test.tsx
 # 5. Browser smoke (if available)
 # scripts/skills-browser.sh / Playwright: navigate to dev server, verify UI
 
-# 6. Frontend diff: run /visual-review
-# screenshots + states + a11y + console + mobile/cross-browser where feasible
+# 6. Frontend/customer-facing surface diff: run /visual-review
+# screenshots or terminal evidence + states + a11y + console + mobile/cross-browser where feasible
 ```
 
 ### Browser Verification
@@ -86,15 +86,16 @@ bun vitest run *.browser.test.tsx
 
 ### Visual Review Gate
 
-Frontend diff -> run `/visual-review` before `/commit-push-pr`, unless the change is docs-only, test-only, type-only, backend-only, or explicitly skipped with reason.
+Frontend or customer-facing surface diff -> run `/visual-review` before `/commit-push-pr`, unless the change is docs-only, test-only, type-only, backend-only, or explicitly skipped with reason.
 
-Frontend diff includes:
+Frontend/customer-facing surface diff includes:
 
 - `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`
 - `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`
 - Tailwind/theme/config files that affect rendered UI
+- CLI/TUI output, mobile/desktop screens, generated reports, rendered docs, onboarding/setup flows
 
-Use `/visual-review` output for the PR screenshot table and test plan. Follow `visual-review/REFERENCE.md` PR evidence contract.
+Use `/visual-review` output for the PR screenshot/surface-review table and test plan. Follow `visual-review/REFERENCE.md` PR evidence contract.
 
 ### Commit on Green
 
@@ -138,7 +139,7 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 
 2. **Fix issues** from `/simplify`, commit
 
-3. **`/visual-review`** -- if frontend diff and not already run in Phase 4. Capture screenshots, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
+3. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
 
 4. **`/commit-push-pr`** -- handle:
    - Categorized conventional commits
