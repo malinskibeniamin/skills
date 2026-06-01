@@ -63,6 +63,15 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 |------|--------|-------|-------|
 | <route/component> | ![before](<url>) | ![after](<url>) | <what changed> |
 
+## Dependency upgrade path
+<omit entire section if no dependency-file diff>
+
+- Report: <docs/dependency-upgrades/... or skip reason>
+- Packages:
+- SemVer confidence:
+- Risk gate:
+- Security notes:
+
 ## Test plan
 <checklist of how to verify -- infer from changes>
 
@@ -98,3 +107,9 @@ Frontend detected -> **require `/visual-review` result or explicit skip reason**
 - Upload via `gh pr comment` drag-paste URL, or reference `/tmp/*.png` path if asset host unavailable -- note blocker in PR body
 
 **Row per visual change.** Group by route or component. One-line `Notes` col: what visibly changed (spacing, copy, new state, a11y). No screenshot for backend-only refactors even if a frontend file touched (e.g. type-only `.tsx` edit).
+
+## Dependency upgrade section
+
+Dependency diff = `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, or `go.sum`.
+
+If present, add `Dependency upgrade path` section. Prefer `/upgrade-dependency` report path. If change is not a package upgrade (lockfile regen, fixture, rollback), record skip reason. Do not omit silently.

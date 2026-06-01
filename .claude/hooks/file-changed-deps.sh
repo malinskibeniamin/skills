@@ -2,8 +2,8 @@
 set -eo pipefail
 trap 'exit 0' ERR
 
-# FileChanged matcher: package.json, bun.lockb
-# Dependencies changed — remind about install, audit, lockfile consistency.
+# FileChanged matcher: dependency manifests/lockfiles
+# Dependencies changed -- remind about install, audit, upgrade path/report.
 
 input=$(cat 2>/dev/null || echo '{}')
 file=$(echo "$input" | jq -r '.filename // .file_path // empty' 2>/dev/null)
@@ -13,15 +13,31 @@ msg=""
 run_audit=false
 case "$file" in
   */package.json|package.json)
-    msg="package.json changed. Run \`bun install\` to sync bun.lockb. If adding a dep, verify peer deps and run type:check."
+    msg="package.json changed. Run \`bun install\`. Run /upgrade-dependency or add docs/dependency-upgrades report/skip reason."
+    run_audit=true
+    ;;
+  */bun.lock|bun.lock)
+    msg="bun.lock changed. Dependency tree shifted. Run /upgrade-dependency or add docs/dependency-upgrades report/skip reason."
+    run_audit=true
+    ;;
+  */yarn.lock|yarn.lock)
+    msg="yarn.lock changed. Snyk mirror shifted. Run /upgrade-dependency or add docs/dependency-upgrades report/skip reason."
     run_audit=true
     ;;
   */bun.lockb|bun.lockb)
-    msg="bun.lockb changed. Dependency tree shifted."
+    msg="bun.lockb changed. Dependency tree shifted. Prefer text bun.lock. Run /upgrade-dependency or add docs/dependency-upgrades report/skip reason."
+    run_audit=true
+    ;;
+  */go.mod|go.mod)
+    msg="go.mod changed. Run \`go mod tidy\`. Run /upgrade-dependency or add docs/dependency-upgrades report/skip reason."
+    run_audit=true
+    ;;
+  */go.sum|go.sum)
+    msg="go.sum changed. Module tree shifted. Run /upgrade-dependency or add docs/dependency-upgrades report/skip reason."
     run_audit=true
     ;;
   */package-lock.json|package-lock.json)
-    msg="package-lock.json detected in bun project — this is wrong. Delete it, keep bun.lockb only. (enforce-toolchain bans npm.)"
+    msg="package-lock.json detected in bun project -- wrong. Delete it; keep bun.lock/yarn.lock only when needed."
     ;;
 esac
 

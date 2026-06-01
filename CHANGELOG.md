@@ -2,7 +2,7 @@
 
 ## 4.12.0
 
-2026-05-29 -- Add route-regression hooks from review feedback. New `route-sibling-test-check.sh` runs sibling `*.browser.test.*` / `*.integration.test.*` after route or `*.page.tsx` edits and blocks failing local tests; `structural-test-nudge-check.sh` nudges when new pages or split components lack an accompanying test; `split-file-convention-check.sh` rejects route-side `-parts` / `.dialogs` / `.checklist` split-file mixes in favor of `*.page.tsx` under routes or reusable components under `components/`. `setup-tanstack-router` now resolves `validateSearch` from sibling route files to avoid `.page.tsx` false positives and warns on `routeApi.useSearch({ select })` in tested route pages. Full eval suite: 2197/2197.
+2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, peer/plugin/adapter packages, and security advisories, applies safe patch/minor upgrades, creates GitHub issues for risky majors or unclear migrations, and can be reused by `/snyk-ux-security` for remediation. Ships report, issue, PR templates and 75 eval assertions. Skills 66 -> 67.
 
 ## 4.11.0
 
