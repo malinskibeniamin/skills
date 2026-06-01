@@ -1,30 +1,32 @@
 ---
 name: snyk-ux-security
-description: "Sequential Snyk sweep across UX/frontend + Go backend codebases. Paths as args (globs ok). Per path: worktree + branch + subagent, snyk test/monitor, ecosystem detect (package.json -> bun audit; go.mod -> govulncheck), exploitability triage first (dismiss non-reachable via `snyk ignore` with --reason + --expiry), then top-level direct dep bump, then parent-dep bump, overrides/resolutions/replace as last resort (scale poorly, bloat lockfiles). Pin React 18, skip React-19-only peers. Walk majors incrementally via changelog migrations. Regen yarn.lock + bun.lock via `bun i && bun i --yarn` (Snyk needs yarn.lock); `go mod tidy` for Go. Open PR with reviewers/labels/team, trigger cloud review. Never defers real vulns -- escalates. Use when user asks for Snyk audit, UX security sweep, frontend dep security review, Go backend dep security review, govulncheck sweep, CVE sweep."
+description: "Sequential Snyk sweep across UX/frontend + Go backend + Bazel codebases. Paths as args (globs ok) or one pasted Snyk vulnerability. Per path: worktree + branch + subagent, snyk test/monitor, ecosystem detect (package.json -> bun audit; go.mod -> govulncheck; MODULE.bazel or bazel/repositories.bzl -> Bazel track), exploitability triage first (dismiss non-reachable via `snyk ignore` with --reason + --expiry), then top-level direct dep bump, then parent-dep bump, overrides/resolutions/replace as last resort (scale poorly, bloat lockfiles). Pin React 18, skip React-19-only peers. Walk majors incrementally via changelog migrations. Regen yarn.lock + bun.lock via `bun i && bun i --yarn` (Snyk needs yarn.lock); `go mod tidy` for Go; `bazel mod deps --lockfile_mode=update` for Bazel. Open PR with reviewers/labels/team, trigger cloud review. Never defers real vulns -- escalates. Use when user asks for Snyk audit, UX security sweep, frontend dep security review, Go backend dep security review, Bazel dependency CVE fix, govulncheck sweep, CVE sweep."
 ---
 
-# Snyk UX + Go Security
+# Snyk UX + Go + Bazel Security
 
-Per-path vuln audit -> exploitability triage -> safe bump -> PR -> cloud review. JS (bun + yarn.lock, React 18) and Go (go.mod + govulncheck).
+Per-path vuln audit -> exploitability triage -> safe bump -> PR -> cloud review. JS (bun + yarn.lock, React 18), Go (go.mod + govulncheck), and Bazel (MODULE.bazel, bazel/repositories.bzl).
 
 ## Input
-`$ARGUMENTS`: space-separated paths (globs ok). Frontend + backend mix fine.
+`$ARGUMENTS`: space-separated paths (globs ok), or one pasted single Snyk vulnerability summary. Frontend + backend + Bazel mix fine.
 
 Example: `/snyk-ux-security apps/cloud-ui apps/admin-ui ui-registry/* console/frontend services/*/cmd`
 
-Each path = one worktree + one branch + one subagent + one PR.
+Bazel example: paste one Snyk finding, then confirm target branch + optional ticket key.
+
+Each path = one worktree + one branch + one subagent + one PR. One pasted Bazel vuln = one confirmed target branch + possible backport worktrees + draft PRs.
 
 ## Arg inference
 Reviewers from CODEOWNERS + `git log --format='%an' -n 20 <path>` committers. Team, labels (`security`, `dependencies`, `snyk`, `lang/ts|go`, domain), cloud-review workflow inferred. User flags override. See [REFERENCE.md](REFERENCE.md#arg-inference-rules).
 
 ## Ecosystem detect
-`package.json` -> JS track. `go.mod` -> Go track. Both present -> both tracks, separate commits, one PR.
+`package.json` -> JS track. `go.mod` -> Go track. `MODULE.bazel` or `bazel/repositories.bzl` -> Bazel track. Multiple present -> separate track commits, one PR unless Bazel backports need per-branch PRs.
 
 ## Workflow
 Sequential, one path at time.
 
 ### 1. Prep
-Expand globs. `snyk auth`, `gh auth status`. Confirm paths + ecosystems to user.
+Expand globs. `snyk auth`, `gh auth status`. Confirm paths + ecosystems to user. If `$ARGUMENTS` is pasted Snyk output, parse CVE/Snyk ID, package/version, introduced-via path, remediation hint; only proceed when fix is a dependency version bump.
 
 ### 2. Per-path loop
 Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [REFERENCE.md](REFERENCE.md#per-path-detail) for commands + PR template.
@@ -44,6 +46,7 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
 - **2f. Apply bumps + lockfile sync**:
   - JS: `bun update <pkg>`, then `bun install && bun install --yarn`. Both `bun.lock` + `yarn.lock` commit together.
   - Go: `go get -u <mod>@<ver>`, then `go mod tidy`. `go.mod` + `go.sum` commit together.
+  - Bazel: edit `MODULE.bazel` or `bazel/repositories.bzl`, then `bazel mod deps --lockfile_mode=update`. For mirrored artifact URLs, open the artifact tooling draft PR first. See [REFERENCE.md](REFERENCE.md#bazel-track).
 - **2g. Verify**:
   - JS: `bun run lint:fix`, `bun run type:check`, `bun test`, `bun run build` (if avail).
   - Go: `go build ./...`, `go test ./...`, `go vet ./...`, `govulncheck ./...` clean for addressed CVEs.
@@ -56,8 +59,11 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
 - **2j. Trigger cloud review**: `gh workflow run` if workflow exists.
 - **2k. Report**: path, ecosystem, branch, PR URL, bumped/dismissed/skipped/overridden counts.
 
+### 2-bazel. Bazel track
+Use when a pasted Snyk finding maps to `MODULE.bazel` or `bazel/repositories.bzl`. Confirm target branch and ticket key before edits. Work in a dedicated worktree. Check both manifests because default and release branches can manage the same dependency differently. Handle BCR, GitHub URL, and mirrored artifact/tooling-repo flows separately. OpenSSL/FIPS needs CMVP-aware handling before any bump. Assess backports before opening PRs; open draft PRs with the live `.github/pull_request_template.md` when present. See [REFERENCE.md](REFERENCE.md#bazel-track).
+
 ### 3. Aggregate
-Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed, Overrides-added, Major migrations, React19-blocked). React-19-blocked -> React 18 -> 19 migration plan candidates. Overrides-added -> follow-up backlog.
+Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed, Overrides-added, Major migrations, React19-blocked, Backports). React-19-blocked -> React 18 -> 19 migration plan candidates. Overrides-added -> follow-up backlog. Bazel backports -> per-branch draft PR list.
 
 ## Rules
 - **Sequential**, one path at time.
@@ -66,6 +72,7 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **bun only (JS).** Never `npm`, `yarn`, `pnpm` runtime. `yarn.lock` via `bun install --yarn` for Snyk IO compat only.
 - **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift.
 - **go.mod + go.sum together (Go).** `go mod tidy` after every bump.
+- **Bazel checks both manifests.** Validate `bazel/repositories.bzl` and `MODULE.bazel`; run `bazel mod deps --lockfile_mode=update`; never swap mirrored artifact URLs to direct upstream hosting without asking; OpenSSL/FIPS follows CMVP gate; backports need explicit plan.
 - **React 18 pin hard.** React-19 peer -> skip + report.
 - **Changelog read mandatory** before bump (JS + Go).
 - **Verify before commit.** Lint/types/tests/build (JS) or build/test/vet/govulncheck (Go).
