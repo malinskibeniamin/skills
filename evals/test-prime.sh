@@ -2,6 +2,7 @@
 
 SKILL_DIR="$REPO_ROOT/prime"
 SCRIPT="$SKILL_DIR/scripts/prime-context.sh"
+HOOK="$REPO_ROOT/.claude/hooks/prime-nudge.sh"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "prime SKILL.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: prime" "prime has correct name"
@@ -16,6 +17,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Output contract" "prime reference de
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Do not paste full CLAUDE.md or AGENTS.md" "prime reference prevents instruction-file pollution"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "SessionStart" "prime reference documents hook option"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "UserPromptSubmit" "prime reference documents self-invoked option"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "No PRIME.md" "prime rejects stale repo-local PRIME.md"
 
 run_file_eval "$SCRIPT" "prime scout script exists"
 run_executable_eval "$SCRIPT" "prime scout script executable"
@@ -24,7 +26,15 @@ run_content_eval "$SCRIPT" "Candidate next reads" "prime scout suggests next rea
 run_content_eval "$SCRIPT" "CLAUDE.md" "prime scout considers CLAUDE.md"
 run_content_eval "$SCRIPT" "AGENTS.md" "prime scout considers AGENTS.md"
 run_content_eval "$SCRIPT" "gh pr view" "prime scout can detect current PR"
+run_content_eval "$SCRIPT" "codex/prime" "prime scout writes cache marker outside repo"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"./prime/\"" "prime registered in Claude plugin skills"
+
+run_file_eval "$HOOK" "prime nudge hook exists"
+run_executable_eval "$HOOK" "prime nudge hook executable"
+run_content_eval "$HOOK" "UserPromptSubmit" "prime hook runs on prompt submit"
+run_content_eval "$HOOK" "prime-current" "prime hook uses current-state marker"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "prime-nudge.sh" "manifest wires prime nudge hook"
+run_content_eval "$REPO_ROOT/.codex/hooks.json" "prime-nudge.sh" "Codex hooks wire prime nudge"
 
 prime_doc_bytes=$(wc -c < "$SKILL_DIR/SKILL.md" | tr -d ' ')
 prime_ref_bytes=$(wc -c < "$SKILL_DIR/REFERENCE.md" | tr -d ' ')
@@ -57,4 +67,37 @@ if [ -x "$SCRIPT" ]; then
     FAIL=$((FAIL + 1))
     ERRORS="$ERRORS\n  FAIL: prime scout output too large"
   fi
+fi
+
+if [ -x "$HOOK" ]; then
+  _cache=$(mktemp -d)
+  _stderr=$(mktemp)
+  XDG_CACHE_HOME="$_cache" "$HOOK" <<'EOF' 2>"$_stderr" || true
+{"hook_event_name":"UserPromptSubmit","prompt":"implement a repo feature"}
+EOF
+  if grep -q "/prime" "$_stderr"; then
+    echo "  PASS  prime hook nudges before work when unprimed"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  prime hook did not nudge when unprimed"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: prime hook did not nudge when unprimed"
+  fi
+  rm -f "$_stderr"
+
+  XDG_CACHE_HOME="$_cache" "$SCRIPT" >/dev/null 2>/dev/null || true
+  _stderr=$(mktemp)
+  XDG_CACHE_HOME="$_cache" "$HOOK" <<'EOF' 2>"$_stderr" || true
+{"hook_event_name":"UserPromptSubmit","prompt":"implement another repo feature"}
+EOF
+  if grep -q "/prime" "$_stderr"; then
+    echo "  FAIL  prime hook nudged despite current marker"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: prime hook nudged despite current marker"
+  else
+    echo "  PASS  prime hook skips after current marker"
+    PASS=$((PASS + 1))
+  fi
+  rm -f "$_stderr"
+  rm -rf "$_cache"
 fi

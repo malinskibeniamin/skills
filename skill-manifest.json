@@ -11,6 +11,7 @@
     "UserPromptSubmit": {
       "": [
         "user-prompt-context.sh",
+        "prime-nudge.sh",
         "intent-detect.sh"
       ]
     },
