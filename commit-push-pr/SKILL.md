@@ -73,7 +73,7 @@ Record commit types created -- used for auto-labeling Phase 5.
 2. Build `gh pr create` with `--base`, `--fill-verbose`, `--assignee @me`
 3. Auto-label from commit types (see REFERENCE.md auto-label map)
 4. Override auto-filled body with structured template (see REFERENCE.md PR body template)
-5. Frontend change detected (REFERENCE.md rule) -> include Screenshots table summarizing visual changes. One row per affected view (before/after/notes). Omit section if no frontend diff
+5. Frontend or customer-facing surface change detected (REFERENCE.md rule) -> include Screenshots/surface review table summarizing visual changes. One row per affected view/surface (before/after/notes). Omit section if no frontend/customer-facing diff
 6. Print PR URL
 
 ### Phase 6: Watch CI (MANDATORY)
