@@ -27,6 +27,8 @@ User can override any of these in the prompt:
 
 ## Per-path detail
 
+Reachable remediation uses `/upgrade-dependency` as the upgrade primitive. This skill owns vulnerability triage and Snyk IO state; `/upgrade-dependency` owns the version path, SemVer confidence, changelog/migration/codemod research, related dependency checks, and apply-vs-issue risk gate.
+
 ### 2a. Existing `.snyk` revisit (every run, before scan)
 
 Run this before `snyk test` so the rescan reflects cleanup. Goal:
