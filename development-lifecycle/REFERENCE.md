@@ -143,12 +143,19 @@ Pre-plan review:
 | Scope creep | Anything unsolicited? |
 | Alternatives | One simpler rejected design and why. |
 
+### Resilience Review
+
+Run `/resilience-review` when feature has forms, async/data flows, mutations, state transitions, config/resource choices, destructive actions, or user-visible error states. Output becomes plan evidence: Failure matrix, Finding queue, required tests, polish gaps, observability, verdict. Real findings chain to /diagnose -> /tdd -> /visual-review when customer-facing.
+
+Skip only with reason: docs-only, test-only, styling-only, trivial pure logic.
+
 ### Plan Checklist
 
 - [ ] Every task: exact paths, exact code, expected output
 - [ ] No TBD, no "similar to Task N", no "add error handling"
 - [ ] Bite-sized (2-5 min/task)
 - [ ] Test step per impl step
+- [ ] Resilience Review verdict or skip reason for risky features
 - [ ] Self-review: spec coverage, placeholder scan, type consistency
 
 ### Rapid Prototyping (UI)
@@ -239,7 +246,7 @@ Agents delete/simplify tests to pass ("unpredictable genie"):
 Post-verify, dispatch agent:
 
 1. Identify changed functions/components
-2. Generate tests: boundary · empty/null · concurrent · error paths · large inputs
+2. Generate tests: boundary · empty/null · concurrent · error paths · large inputs · resilience-review failures
 3. Run -- keep passing, investigate failing
 4. Add passing to suite
 
@@ -258,8 +265,9 @@ Post-verify, dispatch agent:
 
 1. Dispatch `self-reviewer` on session diff
 2. Diff >50 lines OR auth/security -> also `adversarial-reviewer` parallel
-3. SubagentStop validates JSON, writes to session dir
-4. Process by priority:
+3. Risky feature or hook nudge -> run `/resilience-review` or record skip reason
+4. SubagentStop validates JSON, writes to session dir
+5. Process by priority:
 
 | Priority | Action |
 |----------|--------|

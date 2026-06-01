@@ -364,6 +364,7 @@ Featured skill moments -- each from an actual session:
 - **`/tdd`** -- applied to `codex/autoform-v2-foundation` refactor. RED -> GREEN -> REFACTOR across the full PR surface.
 - **`/simplify`** -- three iterative passes on MCP marketplace PR. Caught 15% redundant code reviewers missed.
 - **`/grill-with-docs`** -- stress-tested plans, updated CONTEXT.md + ADRs inline. Institutional memory captured mid-design.
+- **`/resilience-review`** -- Murphy-law pass for edge cases, error handling, fallback, observability, and feature polish before PR.
 - **Force-push to main blocked** -- hook redirected to feature branch + PR flow every time.
 - **Dogfooding** -- 12 skills + 60 hooks + 263 unit tests + 9 agent evals shipped using the harness itself.
 - **Skill auto-load on file match** -- `/tdd` on `*.test.ts`, `/tanstack-router` on `route.tsx`, `/connect-query` on `*_pb.ts`. Zero invocation needed.

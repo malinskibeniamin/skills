@@ -411,6 +411,13 @@
             "type": "command",
             "command": ".claude/hooks/run-hook.sh",
             "args": [
+              "resilience-review-nudge.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
               "tdd-prompt-check.sh"
             ]
           },
