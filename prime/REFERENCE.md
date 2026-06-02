@@ -55,7 +55,7 @@
 
 ## Scout scope
 
-`prime-context.sh` gathers facts:
+Gather facts:
 
 - Git state, branch, dirty/changed files, commits.
 - Rule docs: `AGENTS.md`, `CLAUDE.md`, copilot instructions.

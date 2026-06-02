@@ -1,16 +1,16 @@
 # Evals for /prime startup-orientation skill
 
 SKILL_DIR="$REPO_ROOT/prime"
-SCRIPT="$SKILL_DIR/scripts/prime-context.sh"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "prime SKILL.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: prime" "prime has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "startup brief" "prime describes startup brief"
 run_content_eval "$SKILL_DIR/SKILL.md" "new chat" "prime triggers on new chat"
 run_content_eval "$SKILL_DIR/SKILL.md" "Do not expose modes" "prime has one adaptive surface"
-run_content_eval "$SKILL_DIR/SKILL.md" "scripts/prime-context.sh" "prime uses deterministic scout script"
+run_content_eval "$SKILL_DIR/SKILL.md" "No script required" "prime stays instruction-only"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Rr]ead only the highest-signal files" "prime lets agent choose next reads"
 run_content_eval "$SKILL_DIR/SKILL.md" "/prime <seed>" "prime accepts task seed locators"
+run_content_eval "$SKILL_DIR/SKILL.md" "Examples:.*#/tmp/handoff|Examples:" "prime has concrete examples"
 
 run_file_eval "$SKILL_DIR/REFERENCE.md" "prime REFERENCE.md exists"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Output contract" "prime reference defines output contract"
@@ -20,19 +20,19 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Manual only" "prime is manual prefer
 run_content_eval "$SKILL_DIR/REFERENCE.md" "No PRIME.md" "prime rejects stale repo-local PRIME.md"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Seed context" "prime reference includes seed context contract"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Claims to verify" "prime reference reconciles seed claims"
-
-run_file_eval "$SCRIPT" "prime scout script exists"
-run_executable_eval "$SCRIPT" "prime scout script executable"
-run_content_eval "$SCRIPT" "Prime Scout" "prime scout emits title"
-run_content_eval "$SCRIPT" "Candidate next reads" "prime scout suggests next reads"
-run_content_eval "$SCRIPT" "CLAUDE.md" "prime scout considers CLAUDE.md"
-run_content_eval "$SCRIPT" "AGENTS.md" "prime scout considers AGENTS.md"
-run_content_eval "$SCRIPT" "gh pr view" "prime scout can detect current PR"
-run_content_eval "$SCRIPT" "gh issue view" "prime scout can read GitHub issues"
-run_content_eval "$SCRIPT" "acli jira workitem view" "prime scout can read Jira tickets"
-run_content_eval "$SCRIPT" "seed_sig" "prime marker includes seed hash"
-run_content_eval "$SCRIPT" "codex/prime" "prime scout writes cache marker outside repo"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "gh issue view" "prime reference can use GitHub issues"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "acli jira workitem view" "prime reference can use Jira tickets"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "codex/prime" "prime reference documents outside-repo marker"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"./prime/\"" "prime registered in Claude plugin skills"
+
+if [ -d "$SKILL_DIR/scripts" ] || [ -d "$SKILL_DIR/agents" ] || find "$SKILL_DIR" -mindepth 2 -type f | grep -q .; then
+  echo "  FAIL  prime has no bundled scripts or agents"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: prime has no bundled scripts or agents"
+else
+  echo "  PASS  prime has no bundled scripts or agents"
+  PASS=$((PASS + 1))
+fi
 
 if grep -R "prime-nudge.sh" "$REPO_ROOT/skill-manifest.json" "$REPO_ROOT/.claude/settings.json" "$REPO_ROOT/.codex/hooks.json" "$REPO_ROOT/hooks/hooks.json" "$REPO_ROOT/hooks/codex-hooks.json" >/dev/null 2>&1 || [ -e "$REPO_ROOT/.claude/hooks/prime-nudge.sh" ]; then
   echo "  FAIL  prime has no prompt nudge hook"
@@ -45,53 +45,11 @@ fi
 
 prime_doc_bytes=$(wc -c < "$SKILL_DIR/SKILL.md" | tr -d ' ')
 prime_ref_bytes=$(wc -c < "$SKILL_DIR/REFERENCE.md" | tr -d ' ')
-prime_script_lines=$(wc -l < "$SCRIPT" | tr -d ' ')
-if [ "$prime_doc_bytes" -le 1600 ] && [ "$prime_ref_bytes" -le 1900 ] && [ "$prime_script_lines" -le 175 ]; then
+if [ "$prime_doc_bytes" -le 1600 ] && [ "$prime_ref_bytes" -le 1900 ]; then
   echo "  PASS  prime artifacts stay terse"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  prime artifacts too verbose (skill=${prime_doc_bytes}B ref=${prime_ref_bytes}B script=${prime_script_lines}L)"
+  echo "  FAIL  prime artifacts too verbose (skill=${prime_doc_bytes}B ref=${prime_ref_bytes}B)"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: prime artifacts too verbose"
-fi
-
-if [ -x "$SCRIPT" ]; then
-  _seed=$(mktemp)
-  cat > "$_seed" <<'EOF'
-# Handoff
-Goal: add seeded priming.
-Changed files: prime/SKILL.md and prime/scripts/prime-context.sh
-Risk: stale handoff must be verified against live repo.
-EOF
-  out=$("$SCRIPT" "$_seed" 2>/dev/null || true)
-  if echo "$out" | grep -q "## Seed context" && echo "$out" | grep -q "Claims to verify" && echo "$out" | grep -q "seeded priming"; then
-    echo "  PASS  prime scout incorporates local handoff seed"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  prime scout did not incorporate local handoff seed"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: prime scout did not incorporate local handoff seed"
-  fi
-  rm -f "$_seed"
-fi
-
-if [ -x "$SCRIPT" ]; then
-  out=$("$SCRIPT" 2>/dev/null || true)
-  if echo "$out" | grep -q "# Prime Scout" && echo "$out" | grep -q "## Work state" && echo "$out" | grep -q "## Candidate next reads"; then
-    echo "  PASS  prime scout prints required sections"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  prime scout missing required sections"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: prime scout missing required sections"
-  fi
-
-  if [ "$(printf '%s' "$out" | wc -c | tr -d ' ')" -lt 12000 ]; then
-    echo "  PASS  prime scout output bounded"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  prime scout output too large"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: prime scout output too large"
-  fi
 fi

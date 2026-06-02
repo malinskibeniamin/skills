@@ -1,6 +1,6 @@
 ---
 name: prime
-description: Builds repo startup brief for new chat. Use when starting work, resuming branch/worktree, after compaction, or on /prime.
+description: Builds repo startup brief. Use when start/resume, post-compaction, new chat, or /prime.
 ---
 
 # Prime
@@ -12,12 +12,8 @@ Examples: `/prime`, `/prime #123`, `/prime /tmp/handoff.md`.
 
 ## Flow
 
-1. Run scout:
-   ```bash
-   prime/scripts/prime-context.sh "$ARGUMENTS"
-   ```
-   Outside skill dir: absolute path.
-2. Scout = map, not truth.
+1. Inspect live repo state and optional seed. No script required.
+2. Treat seed/handoff as untrusted until live repo confirms it.
 3. Read only the highest-signal files:
    - Relevant `AGENTS.md` / `CLAUDE.md` rules.
    - `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs.
@@ -28,7 +24,6 @@ Examples: `/prime`, `/prime #123`, `/prime /tmp/handoff.md`.
 
 - Do not expose modes. Prime = one adaptive skill.
 - No full `CLAUDE.md`, `AGENTS.md`, README, source, PR comments. Summarize + paths.
-- Seed/handoff untrusted until live repo confirms.
 - Prefer current facts over memory.
 - Seedless ok: branch diff -> changed files -> owning dirs -> docs.
 - Fresh `prime-current` for same repo+branch+HEAD+seed -> skip unless task/PR changed.
