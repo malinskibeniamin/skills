@@ -55,7 +55,8 @@ For every entry in the repo-root `.snyk` (if any):
    by a prior sweep. Remove the ignore:
    ```bash
    snyk ignore --remove --id=<issue-id>
-   # or edit .snyk directly + snyk monitor
+   # or edit .snyk directly; publish only through the existing-project
+   # monitor gate in 2a.1
    ```
    Log under PR `Dismissed (cleaned up)` section.
 
@@ -74,48 +75,92 @@ Report: include a `Revisited .snyk` count (existing entries
 inspected) and a `Cleaned up` count (entries removed) in the PR
 body + subagent 2k report. Cleanup trims long-term override debt.
 
-### 2a.1 Scan
+### 2a.1 Scan + existing Snyk project preflight
 
-Resolve the branch reference once:
+`snyk monitor` creates a project in Snyk IO when the supplied identity
+does not already exist. In this skill, audits must **not** create new
+Snyk projects, targets, apps, or resources. The default audit signal is
+`snyk test`; `monitor` is a gated publish step that reuses exactly one
+existing Snyk project.
+
+Resolve local context once:
 ```bash
-branch=$(git rev-parse --abbrev-ref HEAD)
-repo_slug=$(basename "$(git rev-parse --show-toplevel)")
-ref="${repo_slug}-${branch}"           # e.g. cloudv2-release-2.8
+audit_branch=$(git rev-parse --abbrev-ref HEAD)   # PR/git only
+repo_slug=$(basename "$(git rev-parse --show-toplevel)" .git)
+remote_url=$(git config --get remote.origin.url || true)
+snyk_org="${SNYK_CFG_ORG:-$(snyk config get org 2>/dev/null || true)}"
 ```
+
+The audit branch (often `chore/snyk-sweep-YYYY-MM-DD`) is **never** a
+Snyk identity. Do not derive `--target-reference`, `--project-name`,
+target names, app names, or resource names from the audit branch,
+sweep branch, worktree path, PR number, date, or timestamp.
+
+Preflight existing projects before any monitor call:
+```bash
+# Requires Snyk Projects API read permission (`org.project.read`).
+# Query `/orgs/{org_id}/projects` and filter by stable Snyk identity:
+# `names_start_with`, `target_file`, and existing `target_reference`.
+: "${SNYK_ORG_ID:?Set SNYK_ORG_ID to the existing Snyk org UUID}"
+: "${SNYK_TOKEN:?Set SNYK_TOKEN for read-only project preflight}"
+curl -fsS \
+  -H "Authorization: Token ${SNYK_TOKEN}" \
+  -H "Accept: application/vnd.api+json" \
+  "https://api.snyk.io/rest/orgs/${SNYK_ORG_ID}/projects?version=2025-11-05&names_start_with=${repo_slug}" \
+  > .snyk-projects.json
+```
+
+Match rules:
+
+1. Match by existing org, project `name`, `target_file`
+   (`package.json`, workspace manifest path, `go.mod`, and so on), and
+   `target_reference` if the existing project has one.
+2. Exactly one match per target file -> monitor may run using that
+   exact identity.
+3. Zero matches -> **skip monitor**. Do not run `snyk monitor`; do not
+   create a project. Record `monitor: skipped (no existing project)`.
+4. More than one match -> **skip monitor** and ask the Snyk/security
+   owner to disambiguate. Do not guess.
+5. Do not run `snyk monitor --all-projects`; the PreToolUse guard
+   blocks it. Use per-file monitor calls only after exact preflight.
 
 JS path:
 ```bash
 snyk test --all-projects --json > .snyk-findings.json
-snyk monitor --all-projects --target-reference="$branch"
-# Fallback on older CLIs without --target-reference:
-# snyk monitor --all-projects --project-name="$ref"
 bun audit --json > .bun-audit.json
+
+# Existing-project publish only, after the API preflight found one
+# exact project for this target_file.
+SNYK_ALLOW_EXISTING_PROJECT_MONITOR=1 \
+SNYK_EXISTING_PROJECT_ID="$existing_project_id" \
+snyk monitor \
+  --file="$existing_target_file" \
+  --org="$snyk_org" \
+  --project-name="$existing_project_name" \
+  ${existing_target_reference:+--target-reference="$existing_target_reference"}
 ```
 
 Go path:
 ```bash
 snyk test --file=go.mod --json > .snyk-findings.json
-snyk monitor --file=go.mod --target-reference="$branch"
-# Fallback: snyk monitor --file=go.mod --project-name="$ref"
 govulncheck -json ./... > .govulncheck.json
+
+# Existing-project publish only, after the API preflight found one
+# exact go.mod project.
+SNYK_ALLOW_EXISTING_PROJECT_MONITOR=1 \
+SNYK_EXISTING_PROJECT_ID="$existing_project_id" \
+snyk monitor \
+  --file="$existing_target_file" \
+  --org="$snyk_org" \
+  --project-name="$existing_project_name" \
+  ${existing_target_reference:+--target-reference="$existing_target_reference"}
 ```
 
-**Why `--target-reference` / `--project-name` is mandatory:**
-Without it, every branch that runs `snyk monitor` for the same
-repo collapses into a single Snyk IO project id. Master and
-release branches then **overwrite each other** on every run, so
-the dashboard shows only the findings from whichever branch ran
-`monitor` last -- per-branch state is lost.
-
-Observed: `master` + `release-2.8` both monitoring into project id
-`22b24cf1-96d9-49e6-9c88-0640121b3aa0` means the security team
-cannot distinguish which branch has which findings.
-
-Rule: every `snyk monitor` invocation (new scan and `.snyk`
-revisit-cleanup push) supplies `--target-reference="$branch"`.
-If the CLI version does not support `--target-reference`, fall
-back to `--project-name="${repo}-${branch}"`. The skill never
-runs a bare `snyk monitor` without one of the two.
+If the existing project has no `target_reference`, omit
+`--target-reference`; adding a new branch/reference would create
+another project. If the existing project uses a stable reference such
+as `main`, `master`, or a release line, reuse that exact value. Never
+use the audit branch.
 
 Snyk IO reads `yarn.lock`, not `bun.lock`. If JS repo has no
 `yarn.lock`, generate first: `bun install --yarn`.
@@ -160,18 +205,24 @@ Decision:
      must land in git alongside the bumps. A dismissal that only
      lives in the PR description is invisible to CI, auditors, and
      the next sweep.
-  3. Push dismissals to Snyk IO:
+  3. Publish dismissals to Snyk IO only if an existing project match
+     was verified in 2a.1:
      ```bash
-     # Always include --target-reference="$branch" (or
-     # --project-name="${repo}-${branch}") so per-branch state is
-     # preserved; see 2a rule below.
-     snyk monitor --all-projects --target-reference="$branch"   # JS
-     snyk monitor --file=go.mod --target-reference="$branch"    # Go
+     # Use the exact existing Snyk project identity from 2a.1.
+     SNYK_ALLOW_EXISTING_PROJECT_MONITOR=1 \
+     SNYK_EXISTING_PROJECT_ID="$existing_project_id" \
+     snyk monitor --file="$existing_target_file" \
+       --org="$snyk_org" \
+       --project-name="$existing_project_name" \
+       ${existing_target_reference:+--target-reference="$existing_target_reference"}
      ```
-     Monitor applies the `.snyk` policy to the IO project, so the IO
-     dashboard shows the issue as `Ignored` with the reason +
-     expiry. Re-run `snyk test` locally to confirm the issue is
-     listed under `Ignored issues` before opening the PR.
+     Monitor applies the `.snyk` policy to the existing IO project, so
+     the dashboard shows the issue as `Ignored` with the reason +
+     expiry. If there is no exact existing project match, **skip
+     monitor** and record that IO will update after merge through the
+     normal Snyk integration or after a security owner links the
+     existing resource. Re-run `snyk test` locally to confirm the issue
+     is listed under `Ignored issues` before opening the PR.
   4. **Do not** add the package to `resolutions` / `overrides` /
      `replace`. Dismissal replaces the bump, it does not accompany
      one.
@@ -324,7 +375,9 @@ Overrides added (follow-up to remove):
 
 Lockfiles: bun.lock + yarn.lock regenerated (bun i && bun i --yarn).
 Go modules: go.mod + go.sum regenerated (go mod tidy).
-Policy: .snyk updated with <n> ignore entries; snyk monitor pushed to IO.
+Policy: .snyk updated with <n> ignore entries.
+Existing-project monitor: pushed to existing Snyk IO project <id> /
+skipped (<reason>; no new project created).
 
 Skipped (React 19 peer only -- everything else migrated):
 - <pkg> -- react19-blocked
@@ -399,9 +452,12 @@ expired). Triggered by @<triggerer>.
 ## Dismissed (not exploitable)
 
 All entries below were applied via `snyk ignore` (Snyk CLI writes to
-`.snyk` policy file, committed in this PR) and pushed to Snyk IO via
-`snyk monitor`. PR-description text alone is not an audit artifact --
-`.snyk` + IO project state are.
+`.snyk` policy file, committed in this PR). If the existing-project
+preflight found an exact match, `snyk monitor` pushed them to that
+existing Snyk IO project. If no exact match existed, monitor was
+skipped rather than creating a new project; the committed `.snyk` file
+is still the audit artifact. PR-description text alone is not an audit
+artifact.
 
 | Package | CVE | Vulnerable symbol | Our usage check | Reason | Snyk ignore id | Expiry | IO link |
 |---|---|---|---|---|---|---|---|
@@ -412,8 +468,9 @@ Verify: `snyk test` shows each row as `Ignored` before PR open.
 ## Dismissed (cleaned up)
 
 Existing `.snyk` entries removed this sweep -- transitive gone,
-reachability changed, or expiry passed. `snyk monitor` pushed the
-cleanup to IO so the dashboard reflects fewer live ignores.
+reachability changed, or expiry passed. Existing-project `snyk monitor`
+pushed the cleanup to IO when the project match was exact; otherwise
+monitor was skipped to avoid project churn.
 
 | Package | Original CVE | Original ignore id | Reason removed | Proof |
 |---|---|---|---|---|
@@ -446,7 +503,8 @@ JS:
 - [x] `bun test`
 - [x] Snyk rescan clean for addressed CVEs
 - [x] `.snyk` committed with <n> new ignore entries
-- [x] `snyk monitor` pushed ignores to IO
+- [x] Existing-project `snyk monitor` pushed ignores to IO, or skipped
+      with reason and no new project created
 - [x] `snyk test` confirms all dismissed items show as `Ignored`
 Go:
 - [x] `go build ./...`
@@ -470,8 +528,9 @@ Subagent returns: path, ecosystem (js/go/both), branch, PR URL,
 triggerer (assignee), team reviewers (resolved from CODEOWNERS),
 labels applied, `.snyk` revisited count, `.snyk` cleaned-up count
 (transitive gone / reachable now / expired), newly-dismissed list
-(CVE + reason + snyk ignore id + expiry), `snyk monitor` push
-confirmation, bumped list, overrides-added list (CVE + blocker),
+(CVE + reason + snyk ignore id + expiry), existing-project
+`snyk monitor` status (pushed/skipped + reason), bumped list,
+overrides-added list (CVE + blocker),
 skipped list (reason), CI status.
 
 ## Aggregate
