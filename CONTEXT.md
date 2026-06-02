@@ -12,7 +12,18 @@ _Avoid_: UI when not graphical; web page when non-web.
 Multi-hat review of a customer-facing surface: product clarity, design quality, interaction quality, engineering resilience, backed by evidence. Broader than screenshot diff; narrower than code review.
 _Avoid_: Visual QA, pixel check, vibe check.
 
+**Prime**:
+Session-start orientation brief that gives an agent enough current repo, branch, and collaboration context to begin a new chat in the right state without a handoff.
+_Avoid_: Index, cache, memory, handoff
+
+**Handoff**:
+Continuation brief produced at the end of a session for another agent or fresh session.
+_Avoid_: Prime, onboarding
+
 ## Example dialogue
 
 Dev: "CLI-only PR. Need visual review?"
 Reviewer: "Yes, if CLI output is customer-facing surface. Use terminal evidence, not browser screenshots."
+
+Developer: "Run Prime before starting on this branch."
+Domain expert: "Prime is for current-state orientation. Use Handoff only to transfer decisions from one session to next."
