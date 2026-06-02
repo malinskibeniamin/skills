@@ -121,9 +121,8 @@ Match rules:
    create a project. Record `monitor: skipped (no existing project)`.
 4. More than one match -> **skip monitor** and ask the Snyk/security
    owner to disambiguate. Do not guess.
-5. Do not run `snyk monitor --all-projects` unless every detected
-   target file has a verified existing Snyk project match. Prefer
-   per-file monitor calls.
+5. Do not run `snyk monitor --all-projects`; the PreToolUse guard
+   blocks it. Use per-file monitor calls only after exact preflight.
 
 JS path:
 ```bash
@@ -132,6 +131,8 @@ bun audit --json > .bun-audit.json
 
 # Existing-project publish only, after the API preflight found one
 # exact project for this target_file.
+SNYK_ALLOW_EXISTING_PROJECT_MONITOR=1 \
+SNYK_EXISTING_PROJECT_ID="$existing_project_id" \
 snyk monitor \
   --file="$existing_target_file" \
   --org="$snyk_org" \
@@ -146,6 +147,8 @@ govulncheck -json ./... > .govulncheck.json
 
 # Existing-project publish only, after the API preflight found one
 # exact go.mod project.
+SNYK_ALLOW_EXISTING_PROJECT_MONITOR=1 \
+SNYK_EXISTING_PROJECT_ID="$existing_project_id" \
 snyk monitor \
   --file="$existing_target_file" \
   --org="$snyk_org" \
@@ -206,6 +209,8 @@ Decision:
      was verified in 2a.1:
      ```bash
      # Use the exact existing Snyk project identity from 2a.1.
+     SNYK_ALLOW_EXISTING_PROJECT_MONITOR=1 \
+     SNYK_EXISTING_PROJECT_ID="$existing_project_id" \
      snyk monitor --file="$existing_target_file" \
        --org="$snyk_org" \
        --project-name="$existing_project_name" \
