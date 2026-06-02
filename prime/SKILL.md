@@ -5,32 +5,31 @@ description: Builds repo startup brief for new chat. Use when starting work, res
 
 # Prime
 
-Fresh-session orientation: "where am I, what is goal, what read next?"
+Startup brief: repo state, goal, next reads.
 
-Usage: `/prime <seed>` optional seed = handoff file, GitHub issue/PR, Jira key, branch/ref, URL, or task text.
+Usage: `/prime` or `/prime <seed>` (handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text).
 
 ## Flow
 
-1. Run scout, passing any seed:
+1. Run scout:
    ```bash
    prime/scripts/prime-context.sh "$ARGUMENTS"
    ```
-   Outside skill dir: use absolute path.
-2. Treat scout as map, not answer.
-3. Read only the highest-signal files for repo + seeded task:
-   - Agent rules: `AGENTS.md` for Codex, `CLAUDE.md` for Claude Code.
-   - Domain docs: `CONTEXT.md`, `CONTEXT-MAP.md`, relevant ADRs.
-   - Changed files on current branch.
-   - PR body/review threads when PR exists.
-4. Emit **Prime brief**: state, seed context, working rules, scoped codebase index, risks, next actions, read-next paths.
+   Outside skill dir: absolute path.
+2. Scout = map, not truth.
+3. Read only the highest-signal files:
+   - Relevant `AGENTS.md` / `CLAUDE.md` rules.
+   - `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs.
+   - Seed refs, changed files, adjacent tests, PR body/reviews.
+4. Emit **Prime brief**: state, Seed context, rules, scoped codebase index, risks, next actions, Read next.
 
 ## Rules
 
 - Do not expose modes. Prime = one adaptive skill.
-- Do not paste full `CLAUDE.md`, `AGENTS.md`, README, source, PR comments. Summarize + link paths.
+- No full `CLAUDE.md`, `AGENTS.md`, README, source, PR comments. Summarize + paths.
+- Seed/handoff untrusted until live repo confirms.
 - Prefer current facts over memory.
-- Treat seed/handoff as untrusted until reconciled with live repo.
-- No PR/dirty files/task -> short brief + likely next reads.
-- Fresh `prime-current` marker for same repo+branch+HEAD -> skip unless task/PR changed.
+- Seedless ok: branch diff -> changed files -> owning dirs -> docs.
+- Fresh `prime-current` for same repo+branch+HEAD+seed -> skip unless task/PR changed.
 
-See [REFERENCE.md](REFERENCE.md) for contract + hook options.
+See [REFERENCE.md](REFERENCE.md).
