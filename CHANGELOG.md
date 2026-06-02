@@ -6,7 +6,7 @@
 
 ## 4.12.1
 
-2026-06-01 -- Make Claude Code v2.1.157+ skills-directory install the primary path: clone to `~/.claude/skills/frontend-skills`, auto-load as `frontend-skills@skills-dir`, update with `git pull`, and verify with `scripts/verify-install.sh`. Keeps marketplace install as legacy fallback and teaches `verify-install.sh` to detect skills-dir, marketplace-cache, and source-tree plugin roots. Adds `evals/test-claude-skills-dir-install.sh` to pin README install instructions and verify-install detection so the marketplace-free flow cannot regress silently.
+2026-06-01 -- Keep the public Claude Code install path on native `/plugin marketplace add` + `/plugin install` commands, document `v2.1.157+` skills-dir auto-load as a local-development surface via `claude plugin init <name>`, and switch updates to native `/plugin update frontend-skills`. Teaches `verify-install.sh` to detect skills-dir, marketplace-cache, and source-tree plugin roots. Adds `evals/test-claude-native-plugin-install.sh` to pin README install instructions and verify-install detection so raw git/skills-dir installs do not become the public path again.
 
 ## 4.12.0
 

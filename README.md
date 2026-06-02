@@ -10,20 +10,17 @@ Hooks enforce patterns real-time, skills guide workflow, orchestration layer ens
 
 ## Install
 
-Requires Claude Code `v2.1.157+`. Clone once into Claude's personal skills directory:
-
-```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/malinskibeniamin/skills.git ~/.claude/skills/frontend-skills
-```
-
-Start Claude Code, or reload an open session:
+Run inside [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start with `claude` in terminal):
 
 ```text
+/plugin marketplace add malinskibeniamin/skills
+/plugin install frontend-skills@skills
 /reload-plugins
 ```
 
-No marketplace. No install cache. Claude auto-loads it as `frontend-skills@skills-dir`.
+Native Claude Code marketplace install. Skills, hooks, agents activate immediately. Done.
+
+**Note on Claude Code `v2.1.157+`:** plugins placed under `~/.claude/skills/<name>/` auto-load as `<name>@skills-dir`. Use that for local plugin development (`claude plugin init <name>`), not as the public install path for this repo. Marketplace install keeps Claude Code managing install/update state.
 
 **Recommended: rtk** (output-compression proxy, ~60-90% token savings on git/cargo/test/gh):
 
@@ -36,38 +33,24 @@ Harness fail-open -- skip safe; SessionStart nudge remind if miss.
 
 **Update** (pull latest):
 
-```bash
-git -C ~/.claude/skills/frontend-skills pull --ff-only
-```
-
-Run `/reload-plugins` or restart Claude Code so hooks/agents reload.
-
-**Verify:**
-
-```bash
-bash ~/.claude/skills/frontend-skills/scripts/verify-install.sh
-```
-
-<details>
-<summary>Legacy marketplace install (Claude Code before v2.1.157)</summary>
-
-Run inside Claude Code:
-
-```bash
-/plugin marketplace add malinskibeniamin/skills
-/plugin install frontend-skills@skills
+```text
+/plugin update frontend-skills
 /reload-plugins
 ```
 
-Update:
+Restart Claude Code session if hooks do not reload immediately.
 
-```bash
-/plugin install frontend-skills --force
+**Verify:**
+
+```text
+/plugin details frontend-skills
 ```
 
-Restart Claude Code after update so hooks reload from the new cache.
+Optional harness health check:
 
-</details>
+```bash
+bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"
+```
 
 <details>
 <summary>Codex (OpenAI) -- install as Codex plugin</summary>
@@ -502,13 +485,9 @@ The fastest way to believe it: reproduce the core claim in your terminal.
 **Prereq:** Claude Code installed, fresh repo.
 
 **1. Install the plugin**
-```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/malinskibeniamin/skills.git ~/.claude/skills/frontend-skills
-```
-
-Then in Claude Code:
 ```text
+/plugin marketplace add malinskibeniamin/skills
+/plugin install frontend-skills@skills
 /reload-plugins
 ```
 
@@ -591,7 +570,7 @@ No. Redpanda-specific rules live in a **separate** kit (`redpanda-frontend-kit`)
 <details>
 <summary><strong>How do I customize or remove a hook?</strong></summary>
 
-Every hook is a bash script in `~/.claude/skills/frontend-skills/.claude/hooks/` -- inspect, edit, delete. Legacy marketplace installs place them in `~/.claude/plugins/cache/skills/frontend-skills/<ver>/.claude/hooks/`. Override per-project by copying to `<project>/.claude/hooks/` (takes precedence). Env vars control most behavior: `HOOK_VERBOSITY=terse`, `REACT_RULES_BAN_USEEFFECT=1`, `ORCHESTRATION_STRICT=0`, etc. See [Configuration](#configuration).
+Every hook is a bash script in `.claude/hooks/` -- inspect, edit, delete. Plugin install places them in `~/.claude/plugins/cache/skills/frontend-skills/<ver>/.claude/hooks/`. Override per-project by copying to `<project>/.claude/hooks/` (takes precedence). Env vars control most behavior: `HOOK_VERBOSITY=terse`, `REACT_RULES_BAN_USEEFFECT=1`, `ORCHESTRATION_STRICT=0`, etc. See [Configuration](#configuration).
 </details>
 
 <details>
@@ -779,7 +758,7 @@ New to AI-assisted dev? Start here.
 
 **Day 1 (30 min):**
 1. Install (see [Install](#install) above)
-2. Run `bash ~/.claude/skills/frontend-skills/scripts/verify-install.sh` confirm all wired
+2. Run `bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"` confirm all wired
 3. Pick real ticket from backlog -- not toy problem
 
 **First prompt:**
