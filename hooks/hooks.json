@@ -23,10 +23,6 @@
           },
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/prime-nudge.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/intent-detect.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
