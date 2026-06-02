@@ -5,7 +5,8 @@ trap 'exit 0' ERR
 input=$(cat)
 [ "$(echo "$input" | jq -r '.hook_event_name // empty')" = "UserPromptSubmit" ] || exit 0
 
-prompt=$(echo "$input" | jq -r '.prompt // empty' | tr '[:upper:]' '[:lower:]')
+prompt_raw=$(echo "$input" | jq -r '.prompt // empty')
+prompt=$(printf '%s' "$prompt_raw" | tr '[:upper:]' '[:lower:]')
 [ -n "$prompt" ] || exit 0
 echo "$prompt" | grep -qiE '(^|[^a-z])/prime|run prime|prime this' && exit 0
 
@@ -16,6 +17,9 @@ root=$(git rev-parse --show-toplevel 2>/dev/null || true)
 cd "$root" 2>/dev/null || exit 0
 
 sha(){ if command -v shasum >/dev/null 2>&1; then shasum | awk '{print $1}'; elif command -v md5 >/dev/null 2>&1; then md5 -q; else cksum | awk '{print $1}'; fi; }
+locator(){
+  echo "$prompt_raw" | grep -oE 'https://github.com/[^ ]+/(issues|pull)/[0-9]+|[A-Z][A-Z0-9]+-[0-9]+|#[0-9]+' | head -1 || true
+}
 cache_dir(){
   b="${XDG_CACHE_HOME:-${HOME:-/tmp}/.cache}/codex/prime"
   id=$(printf '%s' "$root" | sha)
@@ -27,11 +31,15 @@ fingerprint(){
   dirty=$(git status --porcelain 2>/dev/null | sha)
   printf 'root=%s\nbranch=%s\nhead=%s\ndirty=%s\n' "$root" "$br" "$head" "$dirty"
 }
+loc=$(locator)
+loc_sig=""; [ -n "$loc" ] && loc_sig=$(printf '%s' "$loc" | sha)
 
 dir=$(cache_dir)
 marker="$dir/prime-current"
-if [ -f "$marker" ] && [ "$(cat "$marker" 2>/dev/null)" = "$(fingerprint)" ]; then
-  exit 0
+if [ -f "$marker" ]; then
+  base=$(fingerprint)
+  if [ -z "$loc_sig" ] && [ "$(head -4 "$marker" 2>/dev/null)" = "$base" ]; then exit 0; fi
+  if [ -n "$loc_sig" ] && [ "$(cat "$marker" 2>/dev/null)" = "$base"$'\n'"seed=$loc_sig" ]; then exit 0; fi
 fi
 
 sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
@@ -40,6 +48,7 @@ mkdir -p "$(dirname "$once")" 2>/dev/null || true
 [ -f "$once" ] && exit 0
 touch "$once" 2>/dev/null || true
 
-msg="[PRIME] No current prime-current marker for this repo+branch+HEAD. Run /prime before code/PR/CI work; scout first, no full instruction-file paste."
+cmd="/prime"; [ -n "$loc" ] && cmd="/prime $loc"
+msg="[PRIME] No current prime-current marker for this repo+branch+HEAD+seed. Run $cmd before code/PR/CI work; scout first, no full instruction-file paste."
 escaped=$(printf '%s' "$msg" | jq -Rs . 2>/dev/null) || exit 0
 echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2

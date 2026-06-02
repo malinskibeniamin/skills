@@ -14,6 +14,11 @@
 ## Working rules
 - <Task-relevant rules only>
 
+## Seed context
+- Source:
+- Summary:
+- Claims to verify:
+
 ## Codebase map
 - Stack:
 - Dirs:
@@ -39,11 +44,12 @@
 - Do not paste full CLAUDE.md or AGENTS.md. They may already be loaded; large files duplicate context.
 - Read relevant sections only: quick ref, lifecycle, toolchain, tests, repo warnings.
 - Compress rules into task implications.
-- Read source only if changed, task-referenced, or scout-picked.
+- Read source only if changed, seed-referenced, task-referenced, or scout-picked.
 
 ## Integration
 
 - Manual `/prime`: safest. Agent scouts, chooses reads, emits brief.
+- Manual `/prime <seed>`: seed can be handoff file, GitHub issue/PR, Jira key, branch/ref, URL, or task text.
 - UserPromptSubmit self-invoked: hook says "run `/prime` before work if no `prime-current` marker". Model chooses reads.
 - SessionStart: OK for deterministic facts; poor for AI reading. Keep as nudge/scout, never source dump.
 
@@ -55,6 +61,7 @@
 - Rule docs: `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`.
 - Domain docs: `CONTEXT.md`, `CONTEXT-MAP.md`, ADR titles.
 - Stack/commands from package/config files.
+- Seed context via local file, `gh issue view`, `gh pr view`, `acli jira workitem view`, branch diff/log.
 - Current PR via `gh pr view` if available.
 - Candidate next reads.
 

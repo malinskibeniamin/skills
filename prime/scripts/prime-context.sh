@@ -4,10 +4,12 @@ trap 'exit 0' ERR
 
 root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$root" 2>/dev/null || true
+seed="${*:-}"
 
 sec(){ printf '\n## %s\n\n' "$1"; }
 one(){ tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//'; }
 sha(){ if command -v shasum >/dev/null 2>&1; then shasum | awk '{print $1}'; elif command -v md5 >/dev/null 2>&1; then md5 -q; else cksum | awk '{print $1}'; fi; }
+seed_sig=""; [ -n "$seed" ] && seed_sig=$(printf '%s' "$seed" | sha)
 fsum(){
   f="$1"; [ -f "$f" ] || return 0
   l=$(wc -l < "$f" | tr -d ' ')
@@ -24,6 +26,7 @@ fingerprint(){
   dirty=$(git status --porcelain 2>/dev/null | sha)
   head=$(git rev-parse HEAD 2>/dev/null || echo none)
   printf 'root=%s\nbranch=%s\nhead=%s\ndirty=%s\n' "$root" "${br:-}" "$head" "$dirty"
+  [ -n "$seed_sig" ] && printf 'seed=%s\n' "$seed_sig"
 }
 mark_prime(){
   d=$(cache_dir); mkdir -p "$d" 2>/dev/null || return 0
@@ -35,6 +38,31 @@ base_branch(){
   git rev-parse --verify --quiet origin/main >/dev/null && { echo main; return; }
   git rev-parse --verify --quiet origin/master >/dev/null && { echo master; return; }
   echo ""
+}
+seed_num(){ printf '%s' "$seed" | grep -oE '#?[0-9]+' | head -1 | tr -d '#' || true; }
+seed_key(){ printf '%s' "$seed" | grep -oE '[A-Z][A-Z0-9]+-[0-9]+' | head -1 || true; }
+branch_ref(){
+  s="${seed#branch }"; s="${s#refs/heads/}"
+  git rev-parse --verify --quiet "$s" >/dev/null && { echo "$s"; return; }
+  git rev-parse --verify --quiet "origin/$s" >/dev/null && echo "origin/$s"
+}
+seed_context(){
+  if [ -z "$seed" ]; then echo '- none (repo-led prime)'; return; fi
+  printf -- '- Input: `%s`\n- Seed hash: `%s`\n' "$seed" "$seed_sig"
+  if [ -f "$seed" ]; then
+    fsum "$seed"; echo '- Capped excerpt:'; sed -n '1,40p' "$seed" | sed 's/^/  /'
+  elif printf '%s' "$seed" | grep -qiE 'pull/[0-9]+|(^| )pr #?[0-9]+' && command -v gh >/dev/null 2>&1; then
+    n=$(seed_num); gh pr view "$n" --json number,title,state,isDraft,reviewDecision,body,url --jq '"- GitHub PR: #\(.number) \(.title) [\(.state)] draft=\(.isDraft) review=\(.reviewDecision // "unknown") \(.url)\n- Body: \((.body // "") | split("\n")[:8] | join(" "))"' 2>/dev/null || echo '- GitHub PR lookup failed.'
+  elif printf '%s' "$seed" | grep -qiE 'issues/[0-9]+|(^| )issue #?[0-9]+|^#[0-9]+' && command -v gh >/dev/null 2>&1; then
+    n=$(seed_num); gh issue view "$n" --json number,title,state,body,url --jq '"- GitHub issue: #\(.number) \(.title) [\(.state)] \(.url)\n- Body: \((.body // "") | split("\n")[:8] | join(" "))"' 2>/dev/null || echo '- GitHub issue lookup failed.'
+  elif key=$(seed_key); [ -n "$key" ] && command -v acli >/dev/null 2>&1; then
+    echo "- Jira ticket: \`$key\`"; acli jira workitem view "$key" 2>/dev/null | sed -n '1,50p' | sed 's/^/  /' || echo '  Jira lookup failed.'
+  elif ref=$(branch_ref); [ -n "$ref" ]; then
+    echo "- Branch/ref: \`$ref\`"; git log --oneline --left-right --cherry-pick HEAD..."$ref" 2>/dev/null | head -12 | sed 's/^/  - `/; s/$/`/'; git diff --name-only HEAD..."$ref" 2>/dev/null | head -20 | sed 's/^/  - file `/; s/$/`/'
+  else
+    echo '- Type: text/URL seed. Summarize as user-supplied goal; fetch manually only if needed.'
+  fi
+  echo '- Claims to verify: goal, scope, changed files, assumptions, acceptance criteria, stale facts.'
 }
 
 printf '# Prime Scout\n\n- Root: `%s`\n- Generated: `%s`\n' "$root" "$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date)"
@@ -49,6 +77,17 @@ ab=$(git rev-list --left-right --count HEAD..."$up" 2>/dev/null | awk '{print "a
 printf -- '- Last commit: `%s`\n' "$(git log --oneline -1 2>/dev/null || echo 'no commits')"
 st=$(git status --short 2>/dev/null | head -20 || true)
 if [ -n "$st" ]; then printf -- '- Dirty files:\n'; printf '%s\n' "$st" | sed 's/^/  - `/; s/$/`/'; else echo '- Dirty files: none'; fi
+
+sec "Seed context"
+seed_context
+
+sec "Task lens"
+if [ -n "$seed" ]; then
+  echo '- Index order: seed goal -> changed files -> owning dirs -> adjacent tests -> docs/rules.'
+  echo '- Reconcile seed against live repo before trusting it.'
+else
+  echo '- Index order: branch diff -> changed files -> owning dirs -> adjacent tests -> docs/rules.'
+fi
 
 sec "Instruction sources"
 for f in AGENTS.md CLAUDE.md .github/copilot-instructions.md README.md; do fsum "$f"; done
@@ -98,9 +137,9 @@ sec "Candidate next reads"
 
 sec "Agent handoff"
 cat <<'EOF2'
-- Use scout to choose reads; never paste full instruction files.
+- Use scout + seed to choose reads; never paste full instruction files.
 - Emit Prime brief: state, rules, map, change, risks, next actions, read-next paths.
-- Concrete user task -> bias reads toward changed files + task area.
+- Concrete user task -> bias index toward seed goal, changed files, owning dirs, tests.
 EOF2
 
 mark_prime
