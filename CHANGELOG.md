@@ -4,6 +4,10 @@
 
 2026-06-01 -- Add `/resilience-review` resilience skill and `resilience-review-nudge` hook. The workflow is not security review: it is a Murphy-law pass for edge cases, error handling, invalid/stale states, loading/empty/error/success polish, fallbacks, postconditions, observability, and recovery. Wires into `/development-lifecycle`, `/tdd`, `/go`, self-reviewer, code-reviewer, prompt-time nudges, generated Claude/Codex hooks, README, and evals. Skills 67 -> 68; hooks 92 -> 93; scripts 101 -> 102.
 
+## 4.12.1
+
+2026-06-01 -- Make Claude Code v2.1.157+ skills-directory install the primary path: clone to `~/.claude/skills/frontend-skills`, auto-load as `frontend-skills@skills-dir`, update with `git pull`, and verify with `scripts/verify-install.sh`. Keeps marketplace install as legacy fallback and teaches `verify-install.sh` to detect skills-dir, marketplace-cache, and source-tree plugin roots. Adds `evals/test-claude-skills-dir-install.sh` to pin README install instructions and verify-install detection so the marketplace-free flow cannot regress silently.
+
 ## 4.12.0
 
 2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, peer/plugin/adapter packages, and security advisories, applies safe patch/minor upgrades, creates GitHub issues for risky majors or unclear migrations, and can be reused by `/snyk-ux-security` for remediation. Ships report, issue, PR templates and 75 eval assertions. Skills 66 -> 67.
