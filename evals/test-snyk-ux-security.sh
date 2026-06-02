@@ -316,6 +316,21 @@ run_content_eval "$REF_MD" "replace.{0,3}directive" "REFERENCE.md flags Go repla
 run_content_eval "$REF_MD" "go\.sum" "REFERENCE.md commits go.sum alongside go.mod"
 run_content_eval "$REF_MD" "call graph|reachability" "REFERENCE.md leverages govulncheck reachability"
 
+# ── Bazel Snyk parity ─────────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "single Snyk vulnerability|pasted Snyk|Snyk output" "SKILL.md accepts pasted single-vulnerability Snyk output"
+run_content_eval "$SKILL_MD" "MODULE\.bazel" "SKILL.md checks MODULE.bazel for Bazel-managed deps"
+run_content_eval "$SKILL_MD" "bazel/repositories\.bzl" "SKILL.md checks bazel/repositories.bzl for http_archive deps"
+run_content_eval "$SKILL_MD" "bazel mod deps --lockfile_mode=update" "SKILL.md regenerates Bazel module lockfile"
+run_content_eval "$SKILL_MD" "Backport|backport" "SKILL.md requires backport assessment for Bazel Snyk fixes"
+run_content_eval "$REF_MD" "Bazel track|Bazel Snyk" "REFERENCE.md documents the Bazel Snyk track"
+run_content_eval "$REF_MD" "ticket|FIXES=" "REFERENCE.md preserves ticket auto-linking for Bazel PRs"
+run_content_eval "$REF_MD" "OpenSSL|FIPS|CMVP" "REFERENCE.md documents OpenSSL FIPS handling"
+run_content_eval "$REF_MD" "artifact mirror|mirrored artifact|S3" "REFERENCE.md documents artifact mirror dependency flow"
+run_content_eval "$REF_MD" "Never change.*mirrored.*github\.com|mirrored.*upstream.*ask" "REFERENCE.md forbids silently swapping mirrored artifact URLs to direct upstream hosts"
+run_content_eval "$REF_MD" "draft PR|--draft" "REFERENCE.md opens Bazel Snyk PRs as draft"
+run_content_eval "$REF_MD" "pull_request_template\.md|PR template" "REFERENCE.md uses the live target PR template"
+
 # ── Existing .snyk revisit (cleanup stale ignores) ──────────────
 
 run_content_eval "$SKILL_MD" "[Rr]evisit|re-triage" "SKILL.md revisits existing .snyk entries before new scan"
