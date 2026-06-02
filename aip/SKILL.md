@@ -1,21 +1,23 @@
 ---
 name: aip
-description: "Designs resource-oriented protobuf APIs using Google AIP rules. Use when adding or changing a resource message, standard-method RPC, name versus {resource}_id choice, parent wiring, nested or top-level collections, or singleton resources."
+description: "Designs resource-oriented protobuf APIs using Google AIP rules plus common control-plane/public API proto patterns. Use when adding or changing a resource message, standard-method RPC, name versus {resource}_id choice, parent wiring, CRUD/LRO shape, pagination, filtering, or singleton resources."
 paths:
   - "**/*.proto"
 ---
 
 # Protobuf AIP Design
 
-Use for AIP-121/122/133/134/135/154/156/158/203 resource APIs.
+Use for resource-oriented protobuf APIs. Default to Google AIP canonical shape; treat legacy `id`-based APIs as compatibility only. Details/examples: [REFERENCE.md](REFERENCE.md).
 
-## Core Rule
-`name` = full resource path, resource identity. Never bare id.
+## Core rule
+
+`name` = full resource path, identity. Never bare id. Field 1. `IDENTIFIER` only.
 `{resource}_id` = client-chosen final segment. Create request only.
 `parent` = full parent resource name. Create/List for nested collections.
 Example: `publishers/123` + `book_id=456` -> `publishers/123/books/456`.
 
-## Resource
+## Resource shape
+
 ```proto
 message Book {
   option (google.api.resource) = {
@@ -28,69 +30,38 @@ message Book {
 }
 ```
 
-Rules: `name` field 1; full path only; `IDENTIFIER` alone; no `OUTPUT_ONLY`/`IMMUTABLE`; never in `update_mask`; id regex `^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`.
+Do not add `OUTPUT_ONLY` or `IMMUTABLE` to `name`; `IDENTIFIER` already means immutable + not input. Never allow `name` in `update_mask`. Id segment regex: `^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`.
 
-## Create
-```proto
-message CreateBookRequest {
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference).child_type = "library.example.com/Book"
-  ];
-  string book_id = 2 [(google.api.field_behavior) = OPTIONAL];
-  Book book = 3 [(google.api.field_behavior) = REQUIRED];
-}
-rpc CreateBook(CreateBookRequest) returns (Book) {
-  option (google.api.method_signature) = "parent,book,book_id";
-}
-```
+## Standard methods
 
-Rules: ignore `book.name`; server composes `name = parent + "/books/" + book_id`; empty id -> server generates valid id; management-plane id must exist; data-plane id should exist, may be optional; nested -> required `parent` + `child_type`; top-level -> omit `parent`; add method signature.
+- Get/Delete: request has `string name = 1 [REQUIRED, resource_reference.type]`.
+- List: request has `parent` for nested collections, `page_size`, `page_token`; response has `repeated resources`, `next_page_token`.
+- Create: request has `parent` if nested, `{resource}_id`, body resource. Body `name` ignored.
+- Update: request has resource + `google.protobuf.FieldMask update_mask`; resource `name` identifies target.
+- Singleton: fixed `name`; no `{resource}_id`; no Create/Delete; Get/Update only.
 
-## Parent
-`parent` = full parent resource name, not bare id.
-Get/Update/Delete use full `name`; Create/List use `parent`.
+## Control-plane/public API patterns
 
-## Singleton
+- Mutations may return an operation/LRO. Keep request/resource shape AIP-canonical; operation is response envelope only.
+- HTTP transcoding: `GET/DELETE /v1/{name=...}`; `POST` collection with `body: "resource"`; `PATCH /v1/{resource.name=...}` with `body: "resource"`.
+- Public REST compatibility may expose `id` paths or wrapper responses. New protobuf contract should still prefer `name`; if legacy needs `id`, map at boundary, not in new resource identity.
+- Use `google.api.field_behavior` for contract docs and `buf.validate`/CEL for enforcement.
+- Required oneof: add `option (buf.validate.oneof).required = true`; clear old branch values on switch in handlers/UI.
+- Filters are optional nested `Filter` messages; page tokens must encode/validate filter consistency.
+- Use `etag` for freshness on Update/Delete when concurrent writes matter.
 
-AIP-156 singleton: one per parent. Fixed `name`; no `{resource}_id`; no Create/Delete; Get/Update only.
+## Backend rules
 
-## Standard Methods
-```proto
-message GetBookRequest {
-  string name = 1 [(google.api.field_behavior) = REQUIRED, (google.api.resource_reference).type = "library.example.com/Book"];
-}
-message DeleteBookRequest {
-  string name = 1 [(google.api.field_behavior) = REQUIRED, (google.api.resource_reference).type = "library.example.com/Book"];
-  string etag = 2 [(google.api.field_behavior) = OPTIONAL];
-}
-message UpdateBookRequest {
-  Book book = 1 [(google.api.field_behavior) = REQUIRED];
-  google.protobuf.FieldMask update_mask = 2;
-}
-message ListBooksRequest {
-  string parent = 1 [(google.api.field_behavior) = REQUIRED, (google.api.resource_reference).child_type = "library.example.com/Book"];
-  int32 page_size = 2;
-  string page_token = 3;
-}
-message ListBooksResponse { repeated Book books = 1; string next_page_token = 2; }
-```
-
-## Backend Rules
-- Create: ignore body `name`; parse `parent`; verify parent exists; compose full `name`; persist full `name`.
-- Generated id must match regex; prefix UUID/hex with letter.
-- Store parent id/FK separately; List scoped by parent column.
-- `name` = key, immutable. Reject `update_mask` with `name`.
-- Update: load by `book.name`; field-mask merge; validate; persist; never write output-only client input.
-- Delete: key by full `name`; use `etag` when concurrency needed.
+Create ignores body `name`; parses `parent`; verifies parent exists; composes/persists full `name`. Generated ids must match regex; prefix UUID/hex with a letter. Store parent FK/tenant column separately; scope List by parent/tenant. Update loads by resource `name`, rejects `name` mask, field-mask merges, validates, persists. Output-only fields are server-owned.
 
 ## Checklist
-1. `(google.api.resource)` type/pattern/singular/plural.
-2. `name` field 1, full path, `IDENTIFIER` only.
-3. Nested: `parent` required + `child_type`. Top-level: no `parent`. Singleton: no id/Create/Delete.
-4. Create has `{resource}_id` request field; body `name` ignored; method signature present.
-5. Get/Delete use full `name` + `resource_reference.type`.
-6. Update uses resource + `FieldMask`; rejects `name` mask.
-7. List uses `parent`, `page_size`, `page_token`; response has `next_page_token`.
 
-Refs: AIP-121/122/133/134/135/154/156/158/203 at https://google.aip.dev/.
+1. `(google.api.resource)` has `type`, `pattern`, `singular`, `plural`.
+2. `name` = field 1, full path, `IDENTIFIER` only.
+3. Nested: `parent` required + `resource_reference.child_type`; top-level: no `parent`; singleton: no id/Create/Delete.
+4. Create: `{resource}_id` request field; body `name` ignored; `method_signature` present.
+5. Get/Delete: full `name` + `resource_reference.type`; Delete may include `etag`.
+6. Update: resource + required `FieldMask`; `name` identifies target; reject `name`/output-only/immutable masks.
+7. List: `parent` for nested, `page_size`, `page_token`; response has `next_page_token`; filters stable across tokens.
+8. Validate: field_behavior + buf.validate/CEL agree; enums reject unspecified unless meaningful.
+9. LRO: response operation includes metadata/result types; completion gives steady resource state.
