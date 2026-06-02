@@ -12,7 +12,7 @@ hook_dir=$(cd "$(dirname "$0")" && pwd)
 
 case "$tool_name" in
   Bash)
-    candidates="enforce-toolchain.sh conventional-commits-check.sh branch-safety-check.sh"
+    candidates="enforce-toolchain.sh conventional-commits-check.sh branch-safety-check.sh snyk-project-create-guard.sh"
     ;;
   mcp__*)
     candidates="mcp-ban.sh"

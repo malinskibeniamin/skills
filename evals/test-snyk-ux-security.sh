@@ -354,10 +354,21 @@ run_content_eval "$REF_MD" "team group|team-group|CODEOWNERS team" "REFERENCE.md
 run_content_eval "$REF_MD" "only individual reviewers|lone individual|without a team" "REFERENCE.md rejects PRs with only individual reviewers"
 run_content_eval "$REF_MD" "security team group|security.team.*automatically" "REFERENCE.md auto-adds security team on dismissals/overrides"
 
-# ── Per-branch Snyk monitor (prevent project-id overwrite) ─────
+# ── Existing-project Snyk monitor (prevent project churn) ───────
 
-run_content_eval "$SKILL_MD" "--target-reference|--project-name" "SKILL.md pins snyk monitor to a per-branch reference"
-run_content_eval "$SKILL_MD" "overwrite|clobber|last ran monitor|collapses" "SKILL.md explains the per-branch overwrite trap"
-run_content_eval "$REF_MD" "--target-reference" "REFERENCE.md uses --target-reference on snyk monitor"
-run_content_eval "$REF_MD" "--project-name" "REFERENCE.md documents --project-name fallback"
-run_content_eval "$REF_MD" "overwrite each other|collapses into|bare.*snyk monitor" "REFERENCE.md explains why bare snyk monitor breaks per-branch state"
+run_content_eval "$SKILL_MD" "existing Snyk project|existing project|reuse existing" "SKILL.md reuses existing Snyk projects"
+run_content_eval "$SKILL_MD" "Never create|Do not create|must not create" "SKILL.md forbids creating Snyk projects during audits"
+run_content_eval "$SKILL_MD" "audit branch|sweep branch|YYYY-MM-DD|date-derived" "SKILL.md calls out audit/sweep branch project churn"
+run_content_eval "$REF_MD" "snyk monitor.*creates a project|creates a project.*snyk monitor" "REFERENCE.md documents that snyk monitor is a create-capable write"
+run_content_eval "$REF_MD" "/orgs/\\{org_id\\}/projects|List all Projects|org\\.project\\.read" "REFERENCE.md preflights existing projects via Snyk Projects API"
+run_content_eval "$REF_MD" "target_reference|target_file|names_start_with" "REFERENCE.md matches existing projects by stable Snyk identity"
+run_content_eval "$REF_MD" "skip.*monitor|do not run.*monitor|must not run.*monitor" "REFERENCE.md skips monitor when no existing project match is found"
+
+if grep -qE 'target-reference="?\$branch|target-reference=<branch>|project-name=.*\$\{?repo.*branch|ref="\$\{repo_slug\}-\$\{branch\}"' "$SKILL_MD" "$REF_MD"; then
+  echo "  FAIL  Snyk monitor must not use audit branch/date-derived project identity"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Snyk monitor uses audit branch/date-derived identity"
+else
+  echo "  PASS  Snyk monitor avoids audit branch/date-derived project identity"
+  PASS=$((PASS + 1))
+fi

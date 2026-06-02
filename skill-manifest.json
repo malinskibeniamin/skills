@@ -65,6 +65,7 @@
         "llm-test-flags.sh",
         "conventional-commits-check.sh",
         "branch-safety-check.sh",
+        "snyk-project-create-guard.sh",
         "bash-verbose-guard.sh",
         "rtk-rewrite.sh"
       ],
