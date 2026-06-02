@@ -8,6 +8,7 @@ description: Builds repo startup brief for new chat. Use when starting work, res
 Startup brief: repo state, goal, next reads.
 
 Usage: `/prime` or `/prime <seed>` (handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text).
+Examples: `/prime`, `/prime #123`, `/prime /tmp/handoff.md`.
 
 ## Flow
 
