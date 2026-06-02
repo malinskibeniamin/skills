@@ -1,55 +1,30 @@
 ---
 name: visual-review
-description: Reviews customer-facing surfaces with product, design, engineering, and QA hats using visual or interaction evidence. Use when changes affect web UI, mobile screens, CLI/TUI, desktop, generated reports, onboarding, forms, or user-visible behavior before PRs/releases.
+description: Reviews customer-facing surfaces with product, design, engineering, and QA hats from visual or interaction evidence before PRs/releases. Use when changes affect web UI, mobile screens, CLI/TUI, desktop, generated reports, onboarding, forms, or any user-visible behavior.
 ---
 
 # Visual Review
 
-Multi-hat review for changed customer-facing surfaces. Browser-based frontend review common path; terminal output, snapshots, generated reports count too. Hooks catch static smells; this catches product/design/interaction/resilience bugs needing eyes or use. See [REFERENCE.md](REFERENCE.md), [HTML-REPORT.md](HTML-REPORT.md), [EXAMPLES.md](EXAMPLES.md).
+Surface review for anything user sees/uses. Evidence > opinion. Browser-based frontend review common; CLI/TUI/report output counts. Details: [REFERENCE.md](REFERENCE.md), [HTML-REPORT.md](HTML-REPORT.md), [EXAMPLES.md](EXAMPLES.md).
 
-## Run
-Standalone trigger OK: `/visual-review`. Before `/commit-push-pr` when diff touches rendered UI: `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`; `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`; Tailwind/theme/config files that affect visuals. Also for CLI/TUI/mobile/desktop/report output. Skip only docs-only, test-only, type-only, backend-only, or explicit skip reason.
+## When
 
-Modes: `plan` before build; `implemented` after diff; `regression` for bug before/after; `release` for PR report.
+Standalone trigger OK: `/visual-review`. Before PR/release for surface diffs: `*.tsx|jsx|css|scss|html|mdx`, routes/pages/app/components/ui, Tailwind/theme/tokens, forms/dialogs/popovers/tables/toasts/nav/media/animation/scroll, CLI/TUI/mobile/desktop/report output. Skip only docs/test/type/backend-only or explicit reason.
 
-## Inputs
-Accept route/component/command/surface hints. If omitted: inspect `git diff --name-only HEAD`; map routes -> URLs, components -> route/story/test, CLI/TUI/report edits -> commands/output. If unclear, ask one concise question.
+Modes: `plan`, `implemented`, `regression`, `release`.
 
-## Hats
-- Product: user value, clarity, task success, friction, competitive quality.
-- Design: hierarchy, spacing, affordance, copy, visual consistency, taste, states.
-- Engineering: resilience under slow network, async races, platform/browser/device risk, performance.
-- QA: reproducible evidence, unhappy paths, regression risk, automation candidates.
+## Flow
 
-## Matrix
-Minimum:
-- Chromium desktop; Chromium mobile viewport; keyboard-only: Tab, Shift+Tab, Enter, Space, Escape.
-- console/network scan; loading, empty, error, dense-data state where reachable.
-- form submit path when form UI changed; notification/toast path when feedback UI changed.
-- Non-web: command output/screenshot, narrow/wide terminal, color/no-color, error/empty/slow path.
-
-Prefer:
-- Firefox desktop; WebKit/mobile Safari equivalent.
-- reduced motion; dark/light mode; high contrast or forced colors.
-- text zoom or larger default font when typography/layout changed.
-- RTL or localized-long-text sample when copy/layout changed.
-- back/forward navigation when route/search/theme/storage changed.
-- slow network/media throttling when images/video/loading changed.
-
-Use project scripts first: `scripts/skills-browser.sh`, Playwright, `bun run dev`, Storybook, CLI fixtures. Never ask user to verify customer-facing surface manually when tools can.
-
-## Inspect
-Layout/polish: overflow; clipped popovers; sticky/fixed overlap; safe-area; `100vh`; virtual keyboard; scrollbars; writing mode; skeleton/image/font/lazy-video CLS; dense tables/cards/lists; captions/headers still explain tables; token consistency; text scaling; system fonts; CSS shorthand/complex layout.
-
-A11y/semantics: accessible names match visible intent; native semantics; ARIA only when needed; aria-label not used on static/generic elements; labels connect; password managers/autofill; disabled vs `aria-disabled`; focus order/trap/return; Escape; no surprise autofocus; buttons/links do not nest; dialogs/popovers/selects/tabs/tables/forms; Enter/requestSubmit; toasts announced, persistent, not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images named or decorative.
-
-Browser/platform/perf: Firefox/Safari/WebView; mobile forms; bfcache/back-forward; smooth scrolling, scroll snapping, `scrollIntoView`, overscroll, scrollbar-gutter; view transitions; reduced motion; interaction blocking; native-control behaviour; feature detection; responsive images; responsive video/media controls, captions, stable aspect ratio; LCP/CLS/INP/long interaction; font loading; third-party embeds/scripts; transform/opacity animations.
-
-## Heuristics
-HTML first. User agents vary. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
+1. Infer surfaces from hints or `git diff --name-only HEAD`: routes/components -> URL/story/test; CLI/report -> command/output. If blocked, ask one question.
+2. Collect evidence with project tools first: `scripts/skills-browser.sh`, Playwright, `bun run dev`, Storybook, CLI fixtures. Never ask user to verify manually when tools can.
+3. Hats: Product: user value, clarity, task success, friction. Design: hierarchy, spacing, affordance, copy, states, taste. Engineering: resilience under slow network, races, platform/perf. QA: reproducible evidence, unhappy paths, regression, automation.
+4. Minimum matrix: Chromium desktop; Chromium mobile; keyboard-only Tab, Shift+Tab, Enter, Space, Escape; console/network scan; loading, empty, error, dense-data; form submit path; notification/toast path. Non-web: narrow/wide, color/no-color, error/empty/slow. Prefer Firefox desktop; WebKit; reduced motion; dark/light; forced colors; text zoom or larger default font; RTL/localized-long-text; back/forward; slow network/media throttling.
+5. Inspect: overflow/clipping/sticky/safe-area/`100vh`/virtual keyboard/writing mode/CLS/dense data; captions/headers still explain tables; CSS shorthand/complex layout; accessible names/labels/native semantics; ARIA only when needed; no aria-label on static/generic elements; password managers/autofill; disabled vs aria-disabled; focus trap/return; no surprise autofocus; buttons/links do not nest; requestSubmit; toasts announced, not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images named or decorative; Firefox/Safari/WebView; bfcache; smooth scrolling, scroll snapping, scrollIntoView; interaction blocking; native-control behaviour; feature detection; responsive images; responsive video/media; stable aspect ratio; LCP/CLS/INP/long interaction; font loading; third-party embeds/scripts.
+6. Heuristics: HTML first. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
 
 ## Output
-Return concise report. Non-trivial/release mode: write HTML report to `$TMPDIR/visual-review-<timestamp>.html` (fallback `/tmp`) and open.
+
+Concise report. Non-trivial/release: write/open `$TMPDIR/visual-review-<timestamp>.html` (fallback `/tmp`).
 
 ```markdown
 ## Visual review
@@ -60,10 +35,7 @@ Findings: | Severity | Hat | Surface | Evidence | Why it matters | Fix | Automat
 Screenshots: | View | Browser | Path | Notes |
 PR notes: <rows usable in /commit-push-pr screenshot table>
 HTML report: <absolute path or skip reason>
-Automation candidates: <repeatable misses worth hook/eval/docs>
+Automation candidates: <hook/eval/test/docs candidates>
 ```
 
-Severity: P0 blocks use/security/data loss/infinite loop. P1 fix before PR. P2 low-risk improvement. P3/nit advisory.
-
-## Finish
-P0/P1 fixed or accepted. Evidence captured when runnable. Skip reasons for unrun matrix. Recurring deterministic issue -> hook/eval/test follow-up.
+Severity: P0 blocks use/security/data loss/infinite loop. P1 fix before PR. P2 low-risk improvement. P3/nit advisory. Finish when P0/P1 fixed or accepted, evidence captured or skipped with reason, deterministic repeats tracked as hook/eval/test follow-up.
