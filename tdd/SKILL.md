@@ -34,7 +34,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 - Use project's domain glossary for test/interface names; respect ADRs in the area
 - Run `vitest run --coverage.enabled --coverage.reporter=text`
 - Find uncovered lines/branches/functions in changed files -> test targets
-- Confirm behaviors w/ user (prioritize gaps over covered)
+- Confirm behaviors w/ user; `/resilience-review` failures become RED tests
 - Find [deep module](deep-modules.md) chance (small interface, deep impl)
 - Design interfaces for [testability](interface-design.md); test behaviour through public interface, not impl ([tests.md](tests.md))
 
