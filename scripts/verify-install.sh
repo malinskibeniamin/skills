@@ -5,7 +5,8 @@ set -eo pipefail
 # Run from any consumer repo to check installation health.
 #
 # Usage:
-#   bash verify-install.sh                    # check current repo
+#   bash ~/.claude/skills/frontend-skills/scripts/verify-install.sh
+#   bash verify-install.sh                    # check current source tree
 #   bash verify-install.sh --remote origin    # also check for updates from remote
 #   bash verify-install.sh --json             # machine-readable output
 #
@@ -16,12 +17,25 @@ set -eo pipefail
 REMOTE=""
 JSON_MODE=false
 
-for arg in "$@"; do
-  case "$arg" in
-    --remote) REMOTE="${2:-origin}"; shift ;;
-    --json) JSON_MODE=true ;;
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --remote)
+      if [ -n "${2:-}" ] && [ "${2#-}" = "$2" ]; then
+        REMOTE="$2"
+        shift 2
+      else
+        REMOTE="origin"
+        shift
+      fi
+      ;;
+    --json)
+      JSON_MODE=true
+      shift
+      ;;
+    *)
+      shift
+      ;;
   esac
-  shift 2>/dev/null || true
 done
 
 PASS=0
@@ -37,21 +51,53 @@ $JSON_MODE || echo "=== Skills & Hooks Installation Verification ==="
 $JSON_MODE || echo ""
 
 # ── Detect installation mode ────────────────────────────────────
-# Plugin install: hooks live in plugin cache, wired via hooks.json
+# Skills-dir plugin: ~/.claude/skills/frontend-skills (Claude Code v2.1.157+)
+# Marketplace plugin: ~/.claude/plugins/cache/skills/frontend-skills/<ver>
+# Source tree: this repository
 # Manual install: hooks copied to consumer .claude/hooks/
 
 PLUGIN_ROOT=""
 INSTALL_MODE="manual"
+PLUGIN_SOURCE="manual"
 
-# Check if installed as a plugin (pick latest version, not first)
-for dir in "$HOME/.claude/plugins/cache/skills/frontend-skills"/*/; do
-  if [ -f "${dir}hooks/hooks.json" ]; then
-    PLUGIN_ROOT="$dir"
-    INSTALL_MODE="plugin"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+SCRIPT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd -P)"
+HOME_ROOT="$(cd "$HOME" && pwd -P)"
+
+if [ -f "${SCRIPT_ROOT}/.claude-plugin/plugin.json" ] && [ -f "${SCRIPT_ROOT}/hooks/hooks.json" ]; then
+  PLUGIN_ROOT="${SCRIPT_ROOT}/"
+  INSTALL_MODE="plugin"
+  skills_dir_prefix="${HOME_ROOT%/}/.claude/skills/"
+  plugin_cache_prefix="${HOME_ROOT%/}/.claude/plugins/cache/"
+  if [ "${SCRIPT_ROOT#"$skills_dir_prefix"}" != "$SCRIPT_ROOT" ]; then
+    PLUGIN_SOURCE="skills-dir"
+  elif [ "${SCRIPT_ROOT#"$plugin_cache_prefix"}" != "$SCRIPT_ROOT" ]; then
+    PLUGIN_SOURCE="marketplace-cache"
+  else
+    PLUGIN_SOURCE="source-tree"
   fi
-done
+fi
 
-$JSON_MODE || echo "--- Install Mode: $INSTALL_MODE ---"
+if [ "$INSTALL_MODE" != "plugin" ]; then
+  if [ -f "$HOME/.claude/skills/frontend-skills/hooks/hooks.json" ]; then
+    PLUGIN_ROOT="$HOME/.claude/skills/frontend-skills/"
+    INSTALL_MODE="plugin"
+    PLUGIN_SOURCE="skills-dir"
+  fi
+fi
+
+if [ "$INSTALL_MODE" != "plugin" ]; then
+  # Check marketplace cache (pick latest version, not first)
+  for dir in "$HOME/.claude/plugins/cache/skills/frontend-skills"/*/; do
+    if [ -f "${dir}hooks/hooks.json" ]; then
+      PLUGIN_ROOT="$dir"
+      INSTALL_MODE="plugin"
+      PLUGIN_SOURCE="marketplace-cache"
+    fi
+  done
+fi
+
+$JSON_MODE || echo "--- Install Mode: $INSTALL_MODE ($PLUGIN_SOURCE) ---"
 
 # ── 1. Version info ───────────────────────────────────────────
 
@@ -455,17 +501,21 @@ if [ -n "$REMOTE" ]; then
   $JSON_MODE || echo ""
   $JSON_MODE || echo "--- Version Check (remote: $REMOTE) ---"
 
-  # Check if any hook is a symlink pointing to a skills repo
   skills_repo=""
-  for hook in ".claude/hooks/react-rules-check.sh" ".claude/hooks/enforce-toolchain.sh"; do
-    if [ -L "$hook" ]; then
-      target=$(readlink "$hook" 2>/dev/null || true)
-      if echo "$target" | grep -q "skills"; then
-        skills_repo=$(echo "$target" | sed 's|/setup-.*||;s|/shared/.*||')
-        break
+  if [ "$INSTALL_MODE" = "plugin" ] && [ -d "${PLUGIN_ROOT}.git" ]; then
+    skills_repo="${PLUGIN_ROOT%/}"
+  else
+    # Check if any hook is a symlink pointing to a skills repo
+    for hook in ".claude/hooks/react-rules-check.sh" ".claude/hooks/enforce-toolchain.sh"; do
+      if [ -L "$hook" ]; then
+        target=$(readlink "$hook" 2>/dev/null || true)
+        if echo "$target" | grep -q "skills"; then
+          skills_repo=$(echo "$target" | sed 's|/setup-.*||;s|/shared/.*||')
+          break
+        fi
       fi
-    fi
-  done
+    done
+  fi
 
   if [ -n "$skills_repo" ] && [ -d "$skills_repo/.git" ]; then
     local_hash=$(cd "$skills_repo" && git rev-parse HEAD 2>/dev/null || echo "unknown")
