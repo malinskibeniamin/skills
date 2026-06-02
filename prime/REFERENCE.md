@@ -40,31 +40,31 @@
 
 ## Context hygiene
 
-- No PRIME.md. Derive from live repo, git, PR, docs. Avoid stale repo-local summaries.
-- Do not paste full CLAUDE.md or AGENTS.md. They may already be loaded; large files duplicate context.
+- No PRIME.md. Derive live from repo/git/PR/docs, no stale summaries.
+- Do not paste full CLAUDE.md or AGENTS.md. Avoid duplicate context.
 - Read relevant sections only: quick ref, lifecycle, toolchain, tests, repo warnings.
-- Compress rules into task implications.
-- Read source only if changed, seed-referenced, task-referenced, or scout-picked.
+- Compress rules -> task implications.
+- Read source only if changed, seed/task-referenced, or scout-picked.
 
 ## Integration
 
-- Manual `/prime`: safest. Agent scouts, chooses reads, emits brief.
-- Manual `/prime <seed>`: seed can be handoff file, GitHub issue/PR, Jira key, branch/ref, URL, or task text.
-- UserPromptSubmit self-invoked: hook says "run `/prime` before work if no `prime-current` marker". Model chooses reads.
-- SessionStart: OK for deterministic facts; poor for AI reading. Keep as nudge/scout, never source dump.
+- `/prime`: repo-led brief.
+- `/prime <seed>`: seed = handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text.
+- UserPromptSubmit: nudge `/prime` before work if no `prime-current` marker.
+- SessionStart: deterministic facts only; poor for AI reads. Nudge/scout, never source dump.
 
 ## Scout scope
 
-`prime-context.sh` gathers facts only:
+`prime-context.sh` gathers facts:
 
 - Git state, branch, dirty/changed files, commits.
-- Rule docs: `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`.
-- Domain docs: `CONTEXT.md`, `CONTEXT-MAP.md`, ADR titles.
-- Stack/commands from package/config files.
+- Rule docs: `AGENTS.md`, `CLAUDE.md`, copilot instructions.
+- Domain docs: `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs.
+- Stack/commands from configs.
 - Seed context via local file, `gh issue view`, `gh pr view`, `acli jira workitem view`, branch diff/log.
 - Current PR via `gh pr view` if available.
 - Candidate next reads.
 
-Network fail-open. Never print secrets/env values.
+Network fail-open. Never print secrets/env.
 
-Marker lives in `$XDG_CACHE_HOME/codex/prime` or `~/.cache/codex/prime`, outside repo.
+Marker: `$XDG_CACHE_HOME/codex/prime` or `~/.cache/codex/prime`, outside repo.
