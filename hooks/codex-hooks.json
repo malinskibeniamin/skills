@@ -127,6 +127,10 @@
           },
           {
             "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/aip-proto-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/react-compiler-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {

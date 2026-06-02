@@ -327,6 +327,13 @@
             "type": "command",
             "command": ".claude/hooks/run-hook.sh",
             "args": [
+              "aip-proto-check.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
               "react-compiler-check.sh"
             ]
           },
