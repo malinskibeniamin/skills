@@ -50,8 +50,8 @@
 
 - `/prime`: repo-led brief.
 - `/prime <seed>`: seed = handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text.
-- UserPromptSubmit: nudge `/prime` before work if no `prime-current` marker.
-- SessionStart: deterministic facts only; poor for AI reads. Nudge/scout, never source dump.
+- Manual only by default: user chooses `/prime`; no prompt nudge.
+- SessionStart: optional deterministic scout only; poor for AI reads. Never source dump.
 
 ## Scout scope
 

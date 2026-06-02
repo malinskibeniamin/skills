@@ -34,13 +34,6 @@
             "type": "command",
             "command": ".claude/hooks/run-hook.sh",
             "args": [
-              "prime-nudge.sh"
-            ]
-          },
-          {
-            "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
-            "args": [
               "intent-detect.sh"
             ]
           }
