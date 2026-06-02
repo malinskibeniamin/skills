@@ -2,6 +2,8 @@
 
 ## 4.13.0
 
+2026-06-02 -- Harden `/snyk-ux-security` against Snyk project churn. `snyk monitor` is now existing-project-only in the skill docs, and the new PreToolUse `snyk-project-create-guard.sh` blocks unsafe `snyk monitor --all-projects`, branch/date-derived monitor identities, Snyk CLI project/app/target create commands, and Snyk API writes to project/app/target resources. Read-only `snyk test` and Snyk Projects API lookup stay allowed. Adds eval coverage for the guard and wires it into Claude, Codex, and Codex PermissionRequest guard paths. Hook surface 93 -> 94, scripts 102 -> 103.
+
 2026-06-01 -- Add `/resilience-review` resilience skill and `resilience-review-nudge` hook. The workflow is not security review: it is a Murphy-law pass for edge cases, error handling, invalid/stale states, loading/empty/error/success polish, fallbacks, postconditions, observability, and recovery. Wires into `/development-lifecycle`, `/tdd`, `/go`, self-reviewer, code-reviewer, prompt-time nudges, generated Claude/Codex hooks, README, and evals. Skills 67 -> 68; hooks 92 -> 93; scripts 101 -> 102.
 
 ## 4.12.0

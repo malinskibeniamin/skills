@@ -216,6 +216,13 @@
             "type": "command",
             "command": ".claude/hooks/run-hook.sh",
             "args": [
+              "snyk-project-create-guard.sh"
+            ]
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-hook.sh",
+            "args": [
               "bash-verbose-guard.sh"
             ]
           },
