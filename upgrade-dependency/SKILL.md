@@ -1,6 +1,6 @@
 ---
 name: upgrade-dependency
-description: Safe dependency upgrades. Use for package/module upgrade, vuln remediation, breaking-change review, upgrade issue/PR.
+description: Plans safe dependency upgrades via researched paths and risk gates. Use when upgrading a package/module, remediating a vulnerable dependency, reviewing breaking changes, or creating an upgrade issue/PR.
 ---
 
 # Upgrade Dependency
@@ -15,7 +15,7 @@ Input: `$ARGUMENTS` = package/module, repo/manifest path, target version, natura
 
 2. Path: per installed -> target hop, inspect tags, changelog/notes, migration/codemod docs, blogs. Verify SemVer behavior; classify patch/minor/major. Non-SemVer/weak notes -> score volume, cadence, diff, API churn, effort, blast. Include moving peers/plugins/adapters. Check Snyk/GHSA/OSV/Socket/vendor/CVE. Pick latest stable, not blind latest; use supported patterns. Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md` via [REFERENCE.md](REFERENCE.md#report-template).
 
-3. Gate: safe = patch/minor + high SemVer confidence + clear changelog + peers OK + low security uncertainty. Risky = major/non-SemVer/missing changelog/unclear migration/high effort/blast/peer risk/security uncertainty. Plan-only -> report/issue only. Snyk/vuln -> apply safe remediation, issue risky. Risky major needs report/issue before user approval. Many deps -> subagents one report each; main merges gates; apply only independent safe paths.
+3. Gate: safe = patch/minor + high SemVer confidence + clear changelog + peers OK + low security uncertainty. Risky = major/non-SemVer/missing changelog/unclear migration/high effort/blast/peer risk/security uncertainty. Plan-only -> report/issue only. Snyk/vuln -> apply safe remediation, issue risky. Risky major needs report/issue before user approval. Many dependencies -> subagents one report each; main merges gates; apply only independent safe paths.
 
 4. Apply: supply-chain preflight = release age 7-30d, disable scripts or review `trustedDependencies`, block git/tarball/raw URL, Socket/npq if present, lockfile review, clean/frozen install. Incremental; one commit per major; batch patch/minor only low risk.
 
@@ -28,6 +28,12 @@ Update related packages. Never hand-edit lockfiles/`go.sum`.
 5. Security: preserve exploitability/reachability. Prefer direct/top-level bump -> parent bump -> override/resolution/replace. Never run advisory code. Document fixed versions/advisory ids/reachable symbols/residual risk.
 
 6. Output: risky -> GitHub issue; safe -> PR. Use [REFERENCE.md](REFERENCE.md#github-issue-template) / [REFERENCE.md](REFERENCE.md#pull-request-template).
+
+## Examples
+
+- `react latest`: build hop report; patch/minor safe -> apply; major/migration risk -> issue.
+- `go.opentelemetry.io/otel@<version>`: research hops; `go get` path; run build/test/vet.
+- Snyk alert: preserve advisory/reachability; prefer direct bump before override.
 
 ## Rules
 
