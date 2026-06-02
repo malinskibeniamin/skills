@@ -1,72 +1,34 @@
 ---
 name: upgrade-dependency
-description: Plans safe dependency upgrades. Use when asked to upgrade package/module, plan dependency upgrade, remediate vulnerable dependency, inspect breaking changes, or create upgrade issue/PR.
+description: Safe dependency upgrades. Use for package/module upgrade, vuln remediation, breaking-change review, upgrade issue/PR.
 ---
 
 # Upgrade Dependency
 
-Move dependency current -> target/latest stable. Build upgrade path first. Apply only if risk gate safe; else GitHub issue + stop.
+Goal: dependency current -> target/latest stable. Path first. Safe -> apply. Risky -> report + issue + stop.
 
-## Input
+Input: `$ARGUMENTS` = package/module, repo/manifest path, target version, natural language.
 
-`$ARGUMENTS`: package/module, repo path, manifest path, target version, natural language.
+## Flow
 
-## Workflow
+1. Scope: detect `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`, workspaces. Map target/direct/transitive/parents/dependents/peers/plugins/adapters/runtime entrypoints. Ask only if ambiguous.
 
-### 1. Scope
+2. Path: per installed -> target hop, inspect tags, changelog/notes, migration/codemod docs, blogs. Verify SemVer behavior; classify patch/minor/major. Non-SemVer/weak notes -> score volume, cadence, diff, API churn, effort, blast. Include moving peers/plugins/adapters. Check Snyk/GHSA/OSV/Socket/vendor/CVE. Pick latest stable, not blind latest; use supported patterns. Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md` via [REFERENCE.md](REFERENCE.md#report-template).
 
-Detect files: `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`, workspaces. Walk dependency tree: target, direct/transitive, parents, dependents, peers, plugins, adapters, runtime entrypoints. Ask only if ambiguous.
+3. Gate: safe = patch/minor + high SemVer confidence + clear changelog + peers OK + low security uncertainty. Risky = major/non-SemVer/missing changelog/unclear migration/high effort/blast/peer risk/security uncertainty. Plan-only -> report/issue only. Snyk/vuln -> apply safe remediation, issue risky. Risky major needs report/issue before user approval. Many deps -> subagents one report each; main merges gates; apply only independent safe paths.
 
-### 2. Build upgrade path
-
-Research per-version hops installed -> target:
-- metadata, tags, changelog, release notes, migration guide, codemod docs, release blog
-- SemVer confidence: verify project honors major/minor/patch; classify each hop patch, minor, or major
-- non-SemVer/missing changelog -> risky; score change volume, release cadence, diff size, API churn, effort, danger/blast radius
-- peer/plugin/adapter packages that move together
-- security advisories: Snyk, GHSA, OSV, Socket.dev, vendor, CVE notes
-- target latest stable, not blind latest; migrate to modern supported syntax/patterns
-
-Always leave local report: `docs/dependency-upgrades/<package>-<from>-to-<target>.md`. See [REFERENCE.md](REFERENCE.md#report-template).
-
-### 3. Risk gate
-
-Default for "upgrade X to latest":
-1. Build upgrade path.
-2. patch/minor + high SemVer confidence + clear changelog + compatible peers + low security uncertainty -> apply.
-3. major, non-SemVer, missing changelog, unclear migration, high effort, peer risk, security uncertainty -> GitHub issue + stop.
-4. plan only -> report/issue, no code.
-5. Snyk context -> apply safe remediation; risky remediation -> issue.
-
-User may approve risky major only after report/issue exists.
-
-Many packages -> bounded subagent swarm: one package per agent builds report; main merges gates, applies independent safe paths.
-
-### 4. Apply safe path
-
-Supply-chain gate before apply: min release age (default 7-30d), Disable scripts / review `trustedDependencies`, block git deps (`git+`, tarball, raw URL), Socket/npq if present, lockfile review, clean install/frozen verify.
-
-Incremental. One commit per major. Patch/minor batches OK only when changelog says low risk.
+4. Apply: supply-chain preflight = release age 7-30d, disable scripts or review `trustedDependencies`, block git/tarball/raw URL, Socket/npq if present, lockfile review, clean/frozen install. Incremental; one commit per major; batch patch/minor only low risk.
 
 JS/Bun: `bun update <pkg>@<version>` -> `bun install` -> `bun install --yarn` when `yarn.lock` exists/Snyk needs it -> `bun run lint:fix` -> `bun run type:check` -> `bun test`.
 
 Go: `go get -u <module>@<version>` -> `go mod tidy` -> `go build ./...` -> `go test ./...` -> `go vet ./...`.
 
-Update related packages from path. Never hand-edit lockfiles or `go.sum`.
+Update related packages. Never hand-edit lockfiles/`go.sum`.
 
-### 5. Security mode
+5. Security: preserve exploitability/reachability. Prefer direct/top-level bump -> parent bump -> override/resolution/replace. Never run advisory code. Document fixed versions/advisory ids/reachable symbols/residual risk.
 
-From `snyk-ux-security` or vuln alert: preserve exploitability/reachability evidence. Prefer direct dep/top-level dep bump, then parent dep bump, then override/resolution/replace last. Never run code from advisories. Document fixed versions, advisory ids, reachable symbols, residual risk.
-
-### 6. Output
-
-Risky -> GitHub issue from [REFERENCE.md](REFERENCE.md#github-issue-template). Safe -> PR from [REFERENCE.md](REFERENCE.md#pull-request-template).
+6. Output: risky -> GitHub issue; safe -> PR. Use [REFERENCE.md](REFERENCE.md#github-issue-template) / [REFERENCE.md](REFERENCE.md#pull-request-template).
 
 ## Rules
 
-- Upgrade path before edits.
-- Changelog mandatory per major and non-SemVer jump.
-- Major upgrades: one major per commit.
-- Record every risk decision in issue, PR, or report.
-- Do not defer reachable security fixes without explicit escalation.
-- Generic skill; JS/Go first-class, other ecosystems same path.
+Path before edits. Changelog mandatory for major/non-SemVer. Record risk. Escalate before deferring reachable security fix. JS/Go first-class; same gate elsewhere.
