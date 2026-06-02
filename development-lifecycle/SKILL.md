@@ -27,6 +27,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 ### 2. Plan
 
 - Every step: exact file paths, exact code, expected output. No placeholders.
+- Non-trivial feature -> `/resilience-review` for edge cases/error handling/polish or skip reason.
 - Bite-sized tasks (2-5 min each)
 - UI work: use `/prototype` for 2-3 runnable UI variations, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
 - 5+ tasks -> stacked PRs (one per logical group)
@@ -43,7 +44,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 3. Implement (TDD)
 
-- RED: failing test first | GREEN: minimal code to pass
+- RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
 - **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
 
@@ -52,7 +53,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 Impl done -> run `/go` to ship. Handle all:
 
 - **4. Verify** -- types + lint + tests + browser smoke
-- **4b. Review / Refine** -- self-reviewer + adversarial-reviewer agents (4b->5)
+- **4b. Review / Refine** -- self-reviewer + adversarial-reviewer; ensure Resilience Review evidence for risky features
 - **5. Ship** -- `/simplify` -> `/commit-push-pr` -> code-reviewer agent
 - **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds, early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** -- codify lessons as `.claude/rules/`

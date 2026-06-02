@@ -1,6 +1,6 @@
 {
   "$comment": "Source of truth for all hook configurations. Generates .claude/settings.json, hooks/hooks.json, .claude-plugin/plugin.json counts, .codex-plugin/plugin.json counts, .agents/plugins/marketplace.json, .claude-plugin/marketplace.json. Run scripts/generate-hook-configs.sh to regenerate.",
-  "version": "4.11.0",
+  "version": "4.13.0",
   "hooks": {
     "SessionStart": {
       "": [
@@ -97,6 +97,7 @@
         "connect-error-check.sh",
         "connect-error-format-check.sh",
         "unhappy-path-check.sh",
+        "resilience-review-nudge.sh",
         "tdd-prompt-check.sh",
         "error-boundary-check.sh",
         "field-mask-check.sh",
