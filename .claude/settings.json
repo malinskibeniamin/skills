@@ -5,16 +5,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "session-env.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'session-env.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "llm-env.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'llm-env.sh'; exit 0"
             ]
           }
         ]
@@ -25,16 +27,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "user-prompt-context.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'user-prompt-context.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "intent-detect.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'intent-detect.sh'; exit 0"
             ]
           }
         ]
@@ -45,9 +49,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "post-compact-context.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'post-compact-context.sh'; exit 0"
             ]
           }
         ]
@@ -58,9 +63,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "pre-compact.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pre-compact.sh'; exit 0"
             ]
           }
         ]
@@ -72,9 +78,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "post-tool-failure.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'post-tool-failure.sh'; exit 0"
             ]
           }
         ]
@@ -86,9 +93,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "file-changed-schema.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'file-changed-schema.sh'; exit 0"
             ]
           }
         ]
@@ -98,9 +106,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "file-changed-config.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'file-changed-config.sh'; exit 0"
             ]
           }
         ]
@@ -110,9 +119,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "file-changed-env.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'file-changed-env.sh'; exit 0"
             ]
           }
         ]
@@ -122,9 +132,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "file-changed-manifest.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'file-changed-manifest.sh'; exit 0"
             ]
           }
         ]
@@ -134,9 +145,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "file-changed-deps.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'file-changed-deps.sh'; exit 0"
             ]
           }
         ]
@@ -147,9 +159,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "worktree-create.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'worktree-create.sh'; exit 0"
             ]
           }
         ]
@@ -160,9 +173,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "session-end.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'session-end.sh'; exit 0"
             ]
           }
         ]
@@ -174,9 +188,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "violation-nudge.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'violation-nudge.sh'; exit 0"
             ]
           }
         ]
@@ -186,51 +201,58 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "enforce-toolchain.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'enforce-toolchain.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "llm-test-flags.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'llm-test-flags.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "conventional-commits-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'conventional-commits-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "branch-safety-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'branch-safety-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "snyk-project-create-guard.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'snyk-project-create-guard.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "bash-verbose-guard.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'bash-verbose-guard.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "rtk-rewrite.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'rtk-rewrite.sh'; exit 0"
             ]
           }
         ]
@@ -240,9 +262,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "mcp-ban.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'mcp-ban.sh'; exit 0"
             ]
           }
         ]
@@ -255,394 +278,450 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "vendor-file-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'vendor-file-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "ui-registry-warn.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'ui-registry-warn.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "split-file-convention-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'split-file-convention-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "react-rules-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'react-rules-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "tailwind-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'tailwind-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "accessibility-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'accessibility-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "zustand-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'zustand-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "tanstack-router-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'tanstack-router-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "tanstack-router-gen.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'tanstack-router-gen.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "connect-query-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'connect-query-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "aip-proto-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'aip-proto-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "react-compiler-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'react-compiler-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "env-validation-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'env-validation-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "bundle-guard.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'bundle-guard.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "test-perf-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'test-perf-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "ux-copy-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'ux-copy-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "orchestration-guidance.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'orchestration-guidance.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "form-mode-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'form-mode-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "file-size-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'file-size-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "hook-location-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'hook-location-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "mutation-side-effect-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'mutation-side-effect-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "connect-error-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'connect-error-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "connect-error-format-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'connect-error-format-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "unhappy-path-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'unhappy-path-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "resilience-review-nudge.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'resilience-review-nudge.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "tdd-prompt-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'tdd-prompt-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "error-boundary-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'error-boundary-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "field-mask-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'field-mask-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "route-sibling-test-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'route-sibling-test-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "route-visual-test-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'route-visual-test-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "structural-test-nudge-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'structural-test-nudge-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "legacy-linter-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'legacy-linter-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "biome-ignore-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'biome-ignore-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "legacy-import-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'legacy-import-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "test-convention-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'test-convention-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "form-watch-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'form-watch-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "as-cast-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'as-cast-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "ts-no-escape-hatches-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'ts-no-escape-hatches-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "tsconfig-strict-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'tsconfig-strict-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "llm-failure-mode-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'llm-failure-mode-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "security-audit-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'security-audit-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "mutation-naming-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'mutation-naming-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "magic-number-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'magic-number-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "disabled-button-tooltip-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'disabled-button-tooltip-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "query-pattern-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'query-pattern-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "copyright-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'copyright-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "zustand-subscription-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'zustand-subscription-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "url-state-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'url-state-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "duplicate-function-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'duplicate-function-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "mutation-onerror-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'mutation-onerror-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "edit-loop-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'edit-loop-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "lockfile-sync-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'lockfile-sync-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "connect-error-fieldmap-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'connect-error-fieldmap-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "proto-form-parallel-state-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'proto-form-parallel-state-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "form-setvalue-options-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'form-setvalue-options-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "form-error-summary-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'form-error-summary-check.sh'; exit 0"
             ]
           }
         ]
@@ -653,23 +732,26 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "llm-truncate.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'llm-truncate.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "consecutive-failure-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'consecutive-failure-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "test-warning-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'test-warning-check.sh'; exit 0"
             ]
           }
         ]
@@ -680,9 +762,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "subagent-start.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'subagent-start.sh'; exit 0"
             ]
           }
         ]
@@ -694,9 +777,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "subagent-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'subagent-stop.sh'; exit 0"
             ]
           }
         ]
@@ -707,100 +791,114 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "architecture-review-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'architecture-review-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "biome-autofix.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'biome-autofix.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "typecheck-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'typecheck-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "react-doctor-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'react-doctor-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "registry-check.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'registry-check.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "orchestration-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'orchestration-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "test-perf-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'test-perf-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "quality-gate-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'quality-gate-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "lifecycle-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'lifecycle-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "pr-feedback-completeness-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pr-feedback-completeness-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "ci-warning-audit.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'ci-warning-audit.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "perf-regression-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'perf-regression-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "violation-summary-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'violation-summary-stop.sh'; exit 0"
             ]
           },
           {
             "type": "command",
-            "command": ".claude/hooks/run-hook.sh",
+            "command": "/bin/bash",
             "args": [
-              "cache-telemetry-stop.sh"
+              "-lc",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'cache-telemetry-stop.sh'; exit 0"
             ]
           }
         ]
