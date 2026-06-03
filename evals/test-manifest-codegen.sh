@@ -42,6 +42,18 @@ else
   ERRORS="$ERRORS\n  FAIL: script set mismatch"
 fi
 
+
+# ── Claude hooks use absolute spawn-safe command ────────────────
+_relative_commands=$(jq -r '.. | objects | .command? // empty' "$SETTINGS" 2>/dev/null | grep -c '^\.claude/hooks/' || true)
+if [ "$_relative_commands" = "0" ] && jq -e '.. | objects | select(.command? == "/bin/bash")' "$SETTINGS" >/dev/null 2>&1; then
+  echo "  PASS  settings.json hooks avoid repo-relative posix_spawn commands"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  settings.json still contains repo-relative hook commands"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: repo-relative hook command"
+fi
+
 # ── Every manifest-referenced script exists on disk ─────────────
 _missing=0
 while IFS= read -r script; do
