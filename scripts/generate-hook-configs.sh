@@ -30,10 +30,22 @@ MANIFEST="skill-manifest.json"
 [ -f "$MANIFEST" ] || { echo "ERROR: $MANIFEST not found" >&2; exit 1; }
 command -v jq >/dev/null || { echo "ERROR: jq required" >&2; exit 1; }
 
-# Build Claude settings using exec-form hooks. Keeping script names in `args`
-# avoids shell quoting bugs while preserving existing hook scripts.
+# Build Claude settings using exec-form hooks. Use an absolute executable
+# (`/bin/bash`) instead of a repo-relative command path because Claude may
+# spawn hooks from a worktree subdirectory or from outside the repo. The small
+# shell wrapper resolves the current git root first, then falls back to
+# CLAUDE_PROJECT_DIR. This prevents posix_spawn ENOENT before run-hook.sh can
+# locate the repo-local hook implementation.
 _build_claude_settings() {
   jq '
+    def claude_hook($script): {
+      type: "command",
+      command: "/bin/bash",
+      args: [
+        "-lc",
+        ("root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" " + ($script | @sh) + "; exit 0")
+      ]
+    };
     {
       hooks: (
         .hooks | to_entries | map(
@@ -44,13 +56,7 @@ _build_claude_settings() {
                 .value | to_entries | map(
                   (if .key == "" then {} else {matcher: .key} end)
                   + (if $event == "PostToolUse" then {continueOnBlock: true} else {} end)
-                  + {
-                    hooks: (.value | map({
-                      type: "command",
-                      command: ".claude/hooks/run-hook.sh",
-                      args: [ . ]
-                    }))
-                  }
+                  + {hooks: (.value | map(claude_hook(.)))}
                 )
               )
             }
