@@ -61,6 +61,37 @@ JSON.stringify({
 }, null, 2)
 ```
 
+## UI lifecycle rubric
+
+Treat each changed surface as a small state machine. Review the transition, not just the final screenshot.
+
+| State | Must communicate | Common failure |
+|---|---|---|
+| Idle/unrequested | What the user can do next; default values; constraints | ambiguous affordance, surprising default, hidden prerequisite |
+| Pending/loading | Something is happening; content may change; layout stays stable | blank screen, skeleton lies about shape, cumulative layout shift |
+| Pending/submitting | Form stays visible; duplicate submit prevented; current values preserved | premature close/navigation, enabled double-submit, lost input |
+| Success | New data or completed action is visible; pending indicator gone | stale UI, no confirmation for side effect, user unsure what happened |
+| Error | Error is near cause; all errors visible; recovery path obvious | toast-only critical error, first-error-only, disabled controls stay disabled |
+| Settled/dismissed | Temporary UI disappears; important context persists until user resolves/dismisses | persistent noise, disappearing debug context, ghost state |
+
+Form submit contract:
+- Keep the form on screen while submitting.
+- Disable submit and fields that would corrupt the request; keep safe cancellation if available.
+- Close, reset, or navigate only after success.
+- On error, remove pending indicators, re-enable inputs, show all errors inline, and keep critical errors non-dismissible.
+
+Side-effect contract:
+- User-visible writes/destructive actions need confirmation that the action happened.
+- Failed side effects need persistent, actionable error context; a toast can duplicate but not replace it.
+- Long-running work needs progress text. Add time estimates when functionally possible; otherwise show current step and persistence rules.
+- Decide whether progress/errors are local to the resource view or global enough to survive navigation.
+
+Transition contract:
+- Motion directs attention to the thing that changed.
+- Hover, focus, active, selected, and disabled states move in a consistent visual direction across related controls.
+- Interactive micro-transitions should be short; longer motion must have a reason and respect reduced motion.
+- Motion must not block interaction, hide state changes, or imply loading when nothing is loading.
+
 ## Platform risk map
 
 | Change area | Risk |
@@ -81,6 +112,10 @@ JSON.stringify({
 
 These belong here even when hooks exist:
 - Screenshot comparison for changed views/states.
+- UI lifecycle trace: idle, pending, success, error, settled/dismissed.
+- Form submit lifecycle: visible form while pending, disabled duplicate submit, success-only close/reset/navigation, inline errors.
+- Side-effect lifecycle: success confirmation, persistent failed side effects, progress for long work.
+- Transition consistency: hover/focus/active/selected/disabled direction, duration, reduced motion.
 - Browser matrix evidence: Chromium plus Firefox/WebKit when feasible.
 - Mobile viewport + virtual-keyboard behaviour.
 - Real focus order, keyboard interaction, Escape/close.
@@ -110,16 +145,24 @@ These belong here even when hooks exist:
 
 Scripts = deterministic repeated work: diff->surface inference, env fingerprint, evidence JSON, HTML render. Hooks = workflow enforcement/static source smells.
 
-| Potential script | Could become hook? | Best home |
-|---|---|---|
-| `visual-review-targets` diff -> surfaces | Partly | script first; hook warns missing evidence |
-| `visual-review-evidence` marker | No | script/session artifact |
-| `visual-review-html` render | No | script |
-| missing review evidence before PR | Yes | Stop or `/commit-push-pr` gate |
-| unresolved P0/P1 in report | Yes | Stop/ship gate after schema stable |
-| CSS/Tailwind source gotchas | Yes | PostToolUse hook if deterministic |
-| slow network/mobile/browser behavior | No | Playwright/browser test or skill evidence |
-| subjective product/design taste | No | rubric/eval examples |
+| Candidate | Hook? | Best home | Notes |
+|---|---|---|---|
+| `visual-review-targets` diff -> surfaces | Partly | script first; hook warns missing evidence | Map changed files to routes/stories/commands. |
+| `visual-review-evidence` marker/schema | No | script/session artifact | Generate checked matrix, state trace, screenshot list. |
+| `visual-review-html` render | No | script | JSON or markdown -> HTML report. |
+| Missing visual review before PR for surface diffs | Yes | Stop or `/commit-push-pr` gate | Hard-block only after skip reasons and evidence schema are stable. |
+| Unresolved P0/P1 in report | Yes | Stop/ship gate | Block after stable report markers; allow explicit user override. |
+| `100vh`, fixed/sticky, safe-area risk | Yes | PostToolUse hook | Warn to verify mobile browser chrome, virtual keyboard, `100dvh`. |
+| Long transition/animation on interactive state | Yes | PostToolUse hook | Warn on long durations; require reduced-motion check. |
+| Smooth scroll, scroll snap, `scrollIntoView` | Yes | PostToolUse hook | Warn to verify reduced motion, focus, and interaction blocking. |
+| Async form submit without pending/disabled/error state nearby | Warn only | PostToolUse hook | Source smell; avoid hard-block because patterns vary. |
+| Toast-only failure for submit/write/destructive action | Warn only | PostToolUse hook | Critical errors need persistent inline or page context. |
+| Success side effect without user-visible confirmation | Warn only | PostToolUse hook | Confirmation can be toast, inline update, navigation, or changed data. |
+| Media without size/aspect-ratio hints | Yes | PostToolUse hook | CLS/LCP risk for images/video/iframes. |
+| `autoFocus`, surprise focus movement | Yes | PostToolUse hook | Warn unless dialog/opening flow intentionally focuses first useful control. |
+| ARIA on static/generic elements, nested button/link | Yes | PostToolUse hook | Deterministic accessibility source smells. |
+| Slow network/mobile/browser behavior | No | Playwright/browser test or skill evidence | Runtime evidence, not source text. |
+| Subjective product/design taste | No | rubric/eval | Needs judgement and user-impact evidence. |
 
 Start warn-only. Hard-block after low false positives + stable schema.
 
