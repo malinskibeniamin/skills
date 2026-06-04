@@ -143,9 +143,9 @@ These belong here even when hooks exist:
 
 ## Scripts vs hooks
 
-Scripts = deterministic repeated work: diff->surface inference, env fingerprint, evidence JSON, HTML render. Hooks = workflow enforcement/static source smells.
+Scripts = deterministic repeated work: diff->surface inference, env fingerprint, evidence JSON, HTML render. Hooks = workflow enforcement plus deterministic source/workflow smells.
 
-| Candidate | Hook? | Best home | Notes |
+| Candidate | Could become hook? | Best home | Notes |
 |---|---|---|---|
 | `visual-review-targets` diff -> surfaces | Partly | script first; hook warns missing evidence | Map changed files to routes/stories/commands. |
 | `visual-review-evidence` marker/schema | No | script/session artifact | Generate checked matrix, state trace, screenshot list. |
