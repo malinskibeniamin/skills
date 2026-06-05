@@ -5,7 +5,7 @@ description: Reviews customer-facing surfaces with product, design, engineering,
 
 # Visual Review
 
-Surface review for anything user sees/uses. Evidence > opinion. Browser-based frontend review common; CLI/TUI/report output counts. Details: [REFERENCE.md](REFERENCE.md), [HTML-REPORT.md](HTML-REPORT.md), [EXAMPLES.md](EXAMPLES.md).
+Surface review for anything user sees/uses. Evidence > opinion. Browser-based frontend review common; CLI/TUI/report output counts. Details: [REFERENCE.md](REFERENCE.md), [HTML-REPORT.md](HTML-REPORT.md).
 
 ## When
 
@@ -17,10 +17,11 @@ Modes: `plan`, `implemented`, `regression`, `release`.
 
 1. Infer surfaces from hints or `git diff --name-only HEAD`: routes/components -> URL/story/test; CLI/report -> command/output. If blocked, ask one question.
 2. Collect evidence with project tools first: `scripts/skills-browser.sh`, Playwright, `bun run dev`, Storybook, CLI fixtures. Never ask user to verify manually when tools can.
-3. Hats: Product: user value, clarity, task success, friction. Design: hierarchy, spacing, affordance, copy, states, taste. Engineering: resilience under slow network, races, platform/perf. QA: reproducible evidence, unhappy paths, regression, automation.
-4. Minimum matrix: Chromium desktop; Chromium mobile; keyboard-only Tab, Shift+Tab, Enter, Space, Escape; console/network scan; loading, empty, error, dense-data; form submit path; notification/toast path. Non-web: narrow/wide, color/no-color, error/empty/slow. Prefer Firefox desktop; WebKit; reduced motion; dark/light; forced colors; text zoom or larger default font; RTL/localized-long-text; back/forward; slow network/media throttling.
-5. Inspect: overflow/clipping/sticky/safe-area/`100vh`/virtual keyboard/writing mode/CLS/dense data; captions/headers still explain tables; CSS shorthand/complex layout; accessible names/labels/native semantics; ARIA only when needed; no aria-label on static/generic elements; password managers/autofill; disabled vs aria-disabled; focus trap/return; no surprise autofocus; buttons/links do not nest; requestSubmit; toasts announced, not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images named or decorative; Firefox/Safari/WebView; bfcache; smooth scrolling, scroll snapping, scrollIntoView; interaction blocking; native-control behaviour; feature detection; responsive images; responsive video/media; stable aspect ratio; LCP/CLS/INP/long interaction; font loading; third-party embeds/scripts.
-6. Heuristics: HTML first. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
+3. Hats: Product: user value, clarity, task success, expectations, friction. Design: hierarchy, spacing, affordance, copy, state quality, taste. Engineering: resilience under async stress, races, platform/perf. QA: reproducible evidence, unhappy paths, regression, automation.
+4. Trace UI lifecycle for each changed surface: idle/unrequested -> pending/loading/submitting -> success/error -> settled/dismissed. Check what appears, disappears, disables, persists, announces, and re-enables. Form submit: keep form visible while pending; disable duplicate submit; only close/reset/navigate after success; show all errors inline and non-dismissible until resolved.
+5. Minimum matrix: Chromium desktop; Chromium mobile; keyboard-only Tab, Shift+Tab, Enter, Space, Escape; console/network scan; loading, empty, error, dense-data; form submit path; notification/toast path. Non-web: narrow/wide, color/no-color, error/empty/slow. Prefer Firefox desktop; WebKit; reduced motion; dark/light; forced colors; text zoom or larger default font; RTL/localized-long-text; back/forward; slow network/media throttling.
+6. Inspect: overflow/clipping/sticky/safe-area/`100vh`/virtual keyboard/writing mode/CLS/dense data; captions/headers still explain tables; CSS shorthand/complex layout; accessible names/labels/native semantics; ARIA only when needed; no aria-label on static/generic elements; password managers/autofill; disabled vs aria-disabled; focus trap/return; no surprise autofocus; buttons/links do not nest; requestSubmit; toasts announced, not sole carrier for critical actions; side-effect success confirmed; failed side effects persistent; long-running work shows progress/estimate when possible; strikethrough, emoji, generated content; SVG/icons/images named or decorative; Firefox/Safari/WebView; bfcache; smooth scrolling, scroll snapping, scrollIntoView; interaction blocking; native-control behaviour; feature detection; responsive images; responsive video/media; stable aspect ratio; LCP/CLS/INP/long interaction; font loading; third-party embeds/scripts.
+7. Heuristics: HTML first. Lifecycle beats screenshot. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
 
 ## Output
 
@@ -31,11 +32,12 @@ Concise report. Non-trivial/release: write/open `$TMPDIR/visual-review-<timestam
 Status: ready | needs fixes | blocked
 Changed UI: <routes/components/commands/surfaces>
 Checked: <browser/viewport/state/terminal list>
+State trace: | Surface | Trigger | Pending | Success | Error | Persistence/dismissal | Evidence |
 Findings: | Severity | Hat | Surface | Evidence | Why it matters | Fix | Automate? |
 Screenshots: | View | Browser | Path | Notes |
 PR notes: <rows usable in /commit-push-pr screenshot table>
 HTML report: <absolute path or skip reason>
-Automation candidates: <hook/eval/test/docs candidates>
+Automation candidates: <hook/eval/test/docs candidates; hook only deterministic source/workflow smells>
 ```
 
 Severity: P0 blocks use/security/data loss/infinite loop. P1 fix before PR. P2 low-risk improvement. P3/nit advisory. Finish when P0/P1 fixed or accepted, evidence captured or skipped with reason, deterministic repeats tracked as hook/eval/test follow-up.

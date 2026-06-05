@@ -137,3 +137,30 @@ run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "customer-facing surface" 
 run_content_eval "$REPO_ROOT/CONTEXT.md" "Customer-facing surface" "CONTEXT documents customer-facing surface term"
 run_content_eval "$REPO_ROOT/CONTEXT.md" "Surface review" "CONTEXT documents surface review term"
 run_content_eval "$REPO_ROOT/README.md" "/visual-review -- review changed customer-facing surfaces" "README documents broadened standalone visual-review usage example"
+
+# ── UI lifecycle + deterministic hook candidates ────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "Trace UI lifecycle" "visual-review traces UI lifecycle transitions"
+run_content_eval "$SKILL_DIR/SKILL.md" "idle/unrequested -> pending/loading/submitting -> success/error -> settled/dismissed" "visual-review names lifecycle states"
+run_content_eval "$SKILL_DIR/SKILL.md" "State trace:" "visual-review output includes state trace"
+run_content_eval "$SKILL_DIR/SKILL.md" "Lifecycle beats screenshot" "visual-review prioritizes lifecycle over screenshots"
+run_content_eval "$SKILL_DIR/SKILL.md" "side-effect success confirmed" "visual-review checks side-effect success confirmation"
+run_content_eval "$SKILL_DIR/SKILL.md" "failed side effects persistent" "visual-review checks persistent side-effect failures"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "UI lifecycle rubric" "visual-review reference has UI lifecycle rubric"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Form submit contract" "visual-review reference defines form submit contract"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Side-effect contract" "visual-review reference defines side-effect contract"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Transition contract" "visual-review reference defines transition contract"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "deterministic source/workflow smells" "visual-review reference limits hooks to deterministic source/workflow smells"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Missing visual review before PR for surface diffs" "visual-review reference suggests missing-review hook candidate"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Async form submit without pending/disabled/error state nearby" "visual-review reference suggests async form submit smell"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Toast-only failure for submit/write/destructive action" "visual-review reference suggests toast-only failure smell"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Success side effect without user-visible confirmation" "visual-review reference suggests missing success confirmation smell"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Media without size/aspect-ratio hints" "visual-review reference suggests media aspect-ratio smell"
+
+if grep -qE "EXAMPLES\\.md" "$SKILL_DIR/SKILL.md"; then
+  echo "  FAIL  visual-review SKILL.md avoids examples link"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review SKILL.md avoids examples link"
+else
+  echo "  PASS  visual-review SKILL.md avoids examples link"
+  PASS=$((PASS + 1))
+fi
