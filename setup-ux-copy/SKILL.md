@@ -1,6 +1,6 @@
 ---
 name: setup-ux-copy
-description: Enforce UX text style via PostToolUse hooks. Two scripts -- ux-copy-check.sh for `.ts`/`.tsx` UI strings (bans exclamations, "successfully", "click here", Yes/No buttons, Title Case), and prose-style-check.sh for `.md`/`.mdx` prose (bans em dashes, AI-tell words, canned openers, rule-of-three). Redpanda term capitalization with REDPANDA_KIT=1. Use when enforcing UI copywriting standards, UX text consistency, or prose style for docs/READMEs.
+description: Enforce UX text style hooks for UI strings and prose. Checks sentence case, action labels, banned phrases, inclusive language, Redpanda terms, and Markdown prose style. Use when enforcing UI copywriting standards, UX text consistency, or docs prose style.
 ---
 
 <!-- allow: prose-style this file documents the rules and shows example violations -->

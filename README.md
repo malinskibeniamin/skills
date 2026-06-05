@@ -296,6 +296,7 @@ Read src/routes/settings.tsx first. Propose approach, wait for my approval.
 /development-lifecycle -- users report form submits twice on double-click.
 Reproduce, find root cause, fix with test.
 /visual-review -- review changed customer-facing surfaces before opening a PR.
+/thermo-nuclear-code-quality-review -- release-blocking cold PR review across code quality, frontend harness, resilience, visual UX, security, tests, perf, and steelman axes.
 ```
 
 **Overnight batch (Sandcastle):**
@@ -592,6 +593,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter type. |
 | **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for customer-facing diffs -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
+| **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
 | **`/grill-with-docs`** | **Grill + document.** Sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
