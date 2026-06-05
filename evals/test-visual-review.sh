@@ -4,8 +4,29 @@ SKILL_DIR="$REPO_ROOT/visual-review"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "visual-review SKILL.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: visual-review" "visual-review has correct name"
+
+visual_review_md_files=$(find "$SKILL_DIR" -maxdepth 1 -type f -name "*.md" -print | sed "s#$SKILL_DIR/##" | sort | tr '\n' ' ')
+if [ "$visual_review_md_files" = "REFERENCE.md SKILL.md " ]; then
+  echo "  PASS  visual-review docs stay two-file: SKILL.md and REFERENCE.md"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  visual-review docs should only be SKILL.md and REFERENCE.md (got: $visual_review_md_files)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review docs should only be SKILL.md and REFERENCE.md"
+fi
+
 run_content_eval "$SKILL_DIR/SKILL.md" "Browser-based frontend review" "visual-review describes browser-based review"
 run_content_eval "$SKILL_DIR/SKILL.md" "git diff --name-only HEAD" "visual-review auto-detects changed UI"
+if grep -REq "[Ss]torybook" "$SKILL_DIR"/*.md; then
+  echo "  FAIL  visual-review should not mention legacy component explorer tooling"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review mentions legacy component explorer tooling"
+else
+  echo "  PASS  visual-review avoids legacy component explorer guidance"
+  PASS=$((PASS + 1))
+fi
+run_content_eval "$SKILL_DIR/SKILL.md" "shadcn/ui|@/components/ui" "visual-review points to shadcn-style UI components"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "shadcn/ui|@/components/ui" "visual-review reference points to shadcn-style UI components"
 run_content_eval "$SKILL_DIR/SKILL.md" "Chromium desktop" "visual-review includes Chromium desktop"
 run_content_eval "$SKILL_DIR/SKILL.md" "Chromium mobile" "visual-review includes mobile viewport"
 run_content_eval "$SKILL_DIR/SKILL.md" "Firefox desktop" "visual-review prefers Firefox"
@@ -16,6 +37,72 @@ run_content_eval "$SKILL_DIR/SKILL.md" "safe-area" "visual-review checks mobile 
 run_content_eval "$SKILL_DIR/SKILL.md" "bfcache|back/forward" "visual-review checks navigation state"
 run_content_eval "$SKILL_DIR/SKILL.md" "responsive images" "visual-review checks image performance"
 run_content_eval "$SKILL_DIR/SKILL.md" "Automation candidates" "visual-review feeds hook/eval follow-up"
+
+# ── Design-language handles ───────────────────────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "Design language handles" "visual-review routes design vocabulary through handles"
+run_content_eval "$SKILL_DIR/SKILL.md" "REFERENCE.md" "visual-review links design language reference"
+run_content_eval "$SKILL_DIR/SKILL.md" "Handle \\| Current read \\| Desired read" "visual-review output captures design finding anatomy"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Surface register" "visual-review classifies brand versus product surfaces"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Design language protocol" "visual-review reference documents design language protocol"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "numbered callouts" "visual-review requires screenshot callout references"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Design handles" "visual-review HTML report includes design handles"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Callouts" "visual-review HTML report supports screenshot callouts"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Spacing feels off" "visual-review examples calibrate vague design feedback"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Density" "visual-review language defines density"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Hierarchy" "visual-review language defines hierarchy"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Rhythm" "visual-review language defines rhythm"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Anchor" "visual-review language defines anchor"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Negative space" "visual-review language defines negative space"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Leading" "visual-review language defines leading"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Implementation knobs" "visual-review language maps handles to implementation knobs"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Current read.*Desired read" "visual-review language defines current and desired read"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "squint test" "visual-review language includes squint test"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Jargon is not evidence" "visual-review language blocks vague jargon"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Adjustment magnitude" "visual-review language defines adjustment magnitude"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Nudge.*Step.*System" "visual-review magnitude uses nudge step system scale"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Do not punish product UI for being familiar" "visual-review protects product register familiarity"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Do not praise brand UI for being safe" "visual-review protects brand register distinctiveness"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Design finding anatomy" "visual-review reference names design finding anatomy"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "User-impact sentence" "visual-review design findings require user impact"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Current read.*Desired read.*User-impact sentence" "visual-review design finding anatomy links read delta to impact"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Reviewer prompts" "visual-review reference teaches reviewer prompts"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "What should the user see first" "visual-review prompts first-read hierarchy"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Where does the scan path break" "visual-review prompts scan-path diagnosis"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Which element anchors the composition" "visual-review prompts anchor diagnosis"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Optional detector contract" "visual-review documents optional detector contract"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "npx impeccable detect" "visual-review can use impeccable detector when available"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Detector unavailable" "visual-review reports detector unavailable instead of blocking"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Anti-pattern matrix" "visual-review has anti-pattern matrix"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "overused fonts" "visual-review anti-pattern matrix covers overused fonts"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "gray text on colored backgrounds" "visual-review anti-pattern matrix covers gray-on-color"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "nested cards" "visual-review anti-pattern matrix covers nested cards"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "bounce or elastic easing" "visual-review anti-pattern matrix covers dated easing"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "gradient text" "visual-review anti-pattern matrix covers gradient text"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Design context bootstrap" "visual-review requires design context bootstrap"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Read existing tokens/theme" "visual-review reads existing tokens before judging"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "representative component" "visual-review reads representative component before judging"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Review lanes" "visual-review defines review lanes"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Critique lane.*Audit lane.*Polish lane" "visual-review lanes cover critique audit polish"
+run_content_eval "$SKILL_DIR/SKILL.md" "context bootstrap" "visual-review flow performs context bootstrap"
+run_content_eval "$SKILL_DIR/SKILL.md" "review lanes" "visual-review flow uses review lanes"
+
+if grep -Eq "LANGUAGE.md|HTML-REPORT.md|EXAMPLES.md" "$SKILL_DIR/SKILL.md"; then
+  echo "  FAIL  SKILL.md should only link REFERENCE.md for visual-review details"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review SKILL.md links deleted detail docs"
+else
+  echo "  PASS  SKILL.md only links REFERENCE.md for visual-review details"
+  PASS=$((PASS + 1))
+fi
+
+if grep -REq "LANGUAGE.md|HTML-REPORT.md|EXAMPLES.md" "$SKILL_DIR"/*.md; then
+  echo "  FAIL  visual-review markdown should not reference deleted detail docs"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review markdown references deleted detail docs"
+else
+  echo "  PASS  visual-review markdown has no deleted-detail-doc references"
+  PASS=$((PASS + 1))
+fi
 
 run_content_eval "$REPO_ROOT/go/SKILL.md" "/visual-review" "go skill wires visual-review"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Visual Review Gate" "go reference documents visual-review gate"
@@ -99,8 +186,6 @@ run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "PR evidence contract"
 run_content_eval "$REPO_ROOT/README.md" "/visual-review -- review changed customer-facing surfaces" "README documents standalone visual-review usage example"
 
 # ── Customer-facing surface expansion + HTML report ─────────────
-run_file_eval "$SKILL_DIR/HTML-REPORT.md" "visual-review HTML-REPORT.md exists"
-run_file_eval "$SKILL_DIR/EXAMPLES.md" "visual-review EXAMPLES.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "customer-facing surfaces" "visual-review targets customer-facing surfaces"
 run_content_eval "$SKILL_DIR/SKILL.md" "product, design, engineering, and QA hats" "visual-review description names review hats"
 run_content_eval "$SKILL_DIR/SKILL.md" "CLI/TUI" "visual-review supports CLI/TUI surfaces"
@@ -118,12 +203,12 @@ run_content_eval "$SKILL_DIR/SKILL.md" "QA: reproducible evidence" "visual-revie
 run_content_eval "$SKILL_DIR/SKILL.md" '\$TMPDIR/visual-review-<timestamp>\.html' "visual-review writes temp HTML report"
 run_content_eval "$SKILL_DIR/SKILL.md" "Severity \| Hat \| Surface \| Evidence" "visual-review output uses multi-hat finding schema"
 run_content_eval "$SKILL_DIR/SKILL.md" "P0 blocks use/security/data loss/infinite loop" "visual-review severity includes P0 blocker semantics"
-run_content_eval "$SKILL_DIR/HTML-REPORT.md" "single self-contained HTML report" "visual-review HTML report is self-contained"
-run_content_eval "$SKILL_DIR/HTML-REPORT.md" 'mirrors `/improve-codebase-architecture`' "visual-review HTML report mirrors architecture skill"
-run_content_eval "$SKILL_DIR/HTML-REPORT.md" "Scorecard" "visual-review HTML report includes scorecard"
-run_content_eval "$SKILL_DIR/HTML-REPORT.md" "Product.*Design.*Engineering.*QA" "visual-review HTML report includes all hats"
-run_content_eval "$SKILL_DIR/HTML-REPORT.md" "State matrix" "visual-review HTML report includes state matrix"
-run_content_eval "$SKILL_DIR/HTML-REPORT.md" "Automation candidates" "visual-review HTML report includes automation candidates"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "single self-contained HTML report" "visual-review HTML report is self-contained"
+run_content_eval "$SKILL_DIR/REFERENCE.md" 'mirrors `/improve-codebase-architecture`' "visual-review HTML report mirrors architecture skill"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Scorecard" "visual-review HTML report includes scorecard"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Product.*Design.*Engineering.*QA" "visual-review HTML report includes all hats"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "State matrix" "visual-review HTML report includes state matrix"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Automation candidates" "visual-review HTML report includes automation candidates"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Customer-facing surface detection" "visual-review reference broadens detection"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "CLI command output" "visual-review reference detects CLI surfaces"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Scripts vs hooks" "visual-review reference explains scripts vs hooks"
