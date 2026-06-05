@@ -33,6 +33,14 @@ Not visual by default: docs source with no rendered output, test-only, generated
 
 subjective product/design taste -> No hook. Need evidence + user-impact sentence.
 
+## Design context bootstrap
+
+Read existing tokens/theme and at least one representative component or page before judging. Check design tokens, Tailwind config/theme, registry components, shared typography, Button variants, form controls, layout shell, and neighboring surfaces. Preserve system intent when it works; call out drift when local choices break the system or user task.
+
+## Review lanes
+
+Critique lane = what the surface communicates: first read, hierarchy, scan path, copy, emotional fit. Audit lane = whether it holds under runtime constraints: accessibility, performance, responsive behavior, browser/platform risk. Polish lane = whether it is ready to ship: design-system alignment, states, microcopy, visual consistency, rough edges.
+
 ## Surface register
 
 Classify the surface before judging design quality:
@@ -126,6 +134,32 @@ Adjustment magnitude: Nudge, Step, System.
 | Nudge | One element is optically off | Align icon to text baseline, reduce secondary label weight |
 | Step | One region needs a clearer read | Increase card padding one token, separate body from action row |
 | System | The same issue repeats | Define spacing rhythm for all cards, standardize button hierarchy |
+
+## Anti-pattern matrix
+
+Use this as a detector-backed checklist, not a taste shortcut. If a pattern appears, name the visible symptom, the register mismatch, user impact, and fix knob.
+
+| Pattern | Symptom | Fix knob |
+|---|---|---|
+| overused fonts | interface relies on Inter/Roboto/system defaults where brand voice matters | preserve existing identity or choose type from product/brand register |
+| gray text on colored backgrounds | body/helper text looks washed out even when layout is sound | use darker shade of bg hue, increase contrast token, or simplify surface color |
+| nested cards | cards inside cards create noisy depth and weak grouping | flatten with spacing, dividers, headings, or one container |
+| bounce or elastic easing | motion feels dated or steals attention from state change | use short ease-out motion, instant reduced-motion path |
+| gradient text | heading emphasis becomes decoration, not hierarchy | use solid text color, weight, scale, spacing, or layout isolation |
+| purple/cyan SaaS default | palette reads generated instead of chosen | derive palette from product context, brand token, or existing system |
+| icon tile stack | repeated rounded icon tile above every card heading | inline icon with heading, remove tile, or vary content structure |
+| fake metric hero | decorative stats imply proof without real data | use real evidence, testimonial, product screenshot, or remove stats |
+
+## Optional detector contract
+
+If `npx impeccable detect` is available and network/tooling policy allows it, run it as evidence input:
+
+```bash
+npx impeccable detect <target>
+npx impeccable detect --fast --json <target>
+```
+
+Detector output is supporting evidence, not final judgment. Map each hit to the Anti-pattern matrix, then confirm visually in the relevant state/viewport. Detector unavailable is non-blocking: report `Detector unavailable: <reason>` and continue manual visual review. Do not vendor detector code or copy rule text; keep this skill's wording and evals local.
 
 ## Screenshot callouts
 
