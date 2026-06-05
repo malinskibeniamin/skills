@@ -1,6 +1,6 @@
 ---
 name: snyk-ux-security
-description: "Sequential Snyk sweep across UX/frontend + Go backend + Bazel codebases. Paths as args (globs ok) or one pasted Snyk vulnerability. Per path: worktree + branch + subagent, snyk test plus existing-project-only monitor, ecosystem detect (package.json -> bun audit; go.mod -> govulncheck; MODULE.bazel or bazel/repositories.bzl -> Bazel track), exploitability triage first, then direct dep bump, parent dep bump, overrides/resolutions/replace last. Reuse existing Snyk projects/resources only; never create projects/apps/targets during audits. Pin React 18. Regen yarn.lock + bun.lock; go mod tidy; bazel mod deps --lockfile_mode=update. Open PR. Never defers real vulns. Use when user asks for Snyk audit, UX security sweep, frontend/Go/Bazel dep security review, govulncheck sweep, CVE sweep."
+description: "Sequential Snyk sweep across UX/frontend + Go backend + Bazel codebases. Paths as args (globs ok) or one pasted Snyk vulnerability. Per path: worktree + branch + subagent, snyk test plus existing-project-only monitor, ecosystem detect (package.json -> bun audit; go.mod -> govulncheck; MODULE.bazel or bazel/repositories.bzl -> Bazel track), exploitability triage first, then direct dep bump, parent dep bump, overrides/resolutions/replace last. Reuse existing Snyk projects/resources only; never create projects/apps/targets during audits. Pin React 18. Regen yarn.lock + bun.lock; go mod tidy; bazel mod deps --lockfile_mode=update. Harden JS supply chain with minimum release age gate audit + Socket.dev web check. Open PR. Never defers real vulns. Use when user asks for Snyk audit, UX security sweep, frontend/Go/Bazel dep security review, govulncheck sweep, CVE sweep."
 ---
 
 # Snyk UX + Go + Bazel Security
@@ -34,10 +34,14 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
 - **2a. `.snyk` revisit (every run, before scan)**: if `.snyk` exists, re-triage every existing ignore entry. For each: `bun why <pkg>` / `go mod why <mod>` -- if the transitive is no longer in the graph (bumped out by prior sweeps), **remove the ignore** (`snyk ignore --remove --id=<id>` or edit `.snyk`; publish only through the existing-project monitor gate) and log under `Dismissed (cleaned up)` in PR. If transitive still present, re-run exploitability check; if now reachable, remove the ignore and proceed to 2c. Goal: never accumulate stale dismissals. See [REFERENCE.md](REFERENCE.md#existing-snyk-revisit).
 - **2a.1 Scan + existing-project gate**: `snyk test` is the audit source. `snyk monitor` is write-capable and must run only after matching exactly one existing Snyk project by org + name + target_file + target_reference; `snyk-project-create-guard.sh` blocks unsafe monitor/API writes. Do not create Snyk projects/apps/targets/resources. Never derive `--target-reference` or `--project-name` from the audit branch, sweep branch, worktree path, PR number, or `YYYY-MM-DD`; reuse the existing Snyk project identity or skip monitor. JS: `bun audit`. Go: `govulncheck ./...`.
 - **2b. Exploitability triage (first gate)**: per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
+  - **Invoke `/steelman` for transitive-only findings**: before bumping, parent-bumping, or overriding a package absent from `package.json` / `go.mod`, argue the strongest dismissal case from repo evidence. If direct use, parent reachability, or vulnerable symbol usage is not proven, the bump makes no sense -- dismiss via `snyk ignore` instead. Do not add a new top-level dependency to `package.json` only to make an override/resolution legal. See [REFERENCE.md](REFERENCE.md#steelman-transitive-bump-gate).
+  - **Invoke `/diagnose` before `package.json` fixes**: use a fast reachability loop to prove this is a real potential vulnerability (direct import, reachable parent call, vulnerable symbol, build/install-time execution, or critical Socket vector). **package.json admission gate**: only mutate `package.json` for already-direct deps, reachable parent deps, or last-resort overrides with proof. If reachability is unproven, dismiss to `.snyk` with expiry.
   - **NOT reachable** -> **run `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>` now** (writes to `.snyk` policy file). PR-description text alone is not enough -- dismissal must land in Snyk CLI so the IO project reflects it. Stage + commit the resulting `.snyk` in the sweep PR. Re-run `snyk test` to confirm the issue shows as `Ignored`. Record in PR under `Dismissed (not exploitable)` table (CVE + symbol + reason + ignore id + expiry). SLA audit trail.
   - **Reachable or credible vector** -> 2c.
 - **2c. Upgrade priority (top-level first, override last)**:
-  - For every reachable remediation, use `/upgrade-dependency` to build the upgrade path + Supply-chain gate first; apply only when its risk gate says safe, otherwise create the issue it recommends and escalate. JS gate includes min release age, Socket/npq if present, lockfile review, git/tarball block, clean/frozen install.
+  - For every reachable remediation, use `/upgrade-dependency` to build the upgrade path + Supply-chain gate first; apply only when its risk gate says safe, otherwise create the issue it recommends and escalate. JS gate includes minimum release age gate audit, Socket.dev web check (no CLI required), lockfile review, git/tarball block, clean/frozen install.
+  - **JS warning gate**: inspect the detected package manager config (`bunfig.toml`, `.npmrc`, `pnpm-workspace.yaml`, `.yarnrc.yml`). If the repo lacks a minimum release age gate for that package manager, warn in the PR under `Supply-chain gate warnings`; do not silently pass.
+  - **Socket.dev web check**: for JS packages in the bump / parent / override / dismissal decision, open `https://socket.dev/npm/package/<pkg>` and inspect alerts + dependencies for attack vectors (install script, typosquat, unstable ownership, native code, shell access, environment variable access, network, telemetry, obfuscation). No Socket CLI install, no `socket` command.
   1. Bump the **direct dep we already have** in `package.json` / `go.mod`.
   2. If blocked, bump the **parent dep** that pulls the vuln transitive.
   3. **Last resort only**: `resolutions` (bun), `overrides` (npm), `replace` (Go). Overrides/resolutions **do not scale** -- each added one bloats lockfiles and forces more next week. Add follow-up TODO to remove once upstream fixes.
@@ -51,13 +55,17 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
   - JS: `bun run lint:fix`, `bun run type:check`, `bun test`, `bun run build` (if avail).
   - Go: `go build ./...`, `go test ./...`, `go vet ./...`, `govulncheck ./...` clean for addressed CVEs.
   - Fix forward, no revert.
-- **2h. Commit**: `fix(deps): snyk sweep ...` with per-pkg detail. Dismissed + overrides-added in separate sections.
-- **2i. Open PR**: `gh pr create --assignee <triggerer> --reviewer <team-group>[,<security-team-group>] --label security,dependencies,snyk,lang/<ts|go>,team/<slug>[,dismissals][,overrides-added][,react19-blocked][,cleaned-up]`
+- **2h. Automatic internal skill gates**:
+  - Run `/resilience-review` before PR for `.snyk` policy, Snyk IO monitor, package-manager detection, release-age warnings, Socket.dev findings, and override cleanup paths. Fix guards or document accepted debt.
+  - Run `/to-issues` for security debt: missing release age gate, override added, React 19 blocked, upstream has no parent fix, ambiguous/no existing Snyk project, or Socket.dev critical vector needing owner review.
+  - Run `/review` before PR to verify `/steelman`, `/diagnose`, package.json admission gate, dismissal evidence, and no dependency-surface growth without proof. See [REFERENCE.md](REFERENCE.md#automatic-internal-skill-gates).
+- **2i. Commit**: `fix(deps): snyk sweep ...` with per-pkg detail. Dismissed + overrides-added in separate sections.
+- **2j. Open PR**: `gh pr create --assignee <triggerer> --reviewer <team-group>[,<security-team-group>] --label security,dependencies,snyk,lang/<ts|go>,team/<slug>[,dismissals][,overrides-added][,react19-blocked][,cleaned-up]`
   - **Assignee** = the person who triggered the sweep (`gh api user --jq .login`). One assignee per PR so accountability is explicit.
   - **Reviewers** = at least one **CODEOWNERS team group** covering the path (e.g. `@org/team-slug`), never a lone individual. Falls back to inferred team from path prefix if CODEOWNERS has no match. Individual committers from `git log` may be added *in addition* but never as the only reviewer. Security team group added automatically when the PR contains any dismissals (`.snyk` touched) or overrides-added.
   - **Labels** (always): `security`, `dependencies`, `snyk`, `lang/<ts|go>`. Path-domain: `team/<slug>` inferred from CODEOWNERS (e.g. frontend UX team, AI team, Console UI team -- resolve by path, do not hardcode). Status: `dismissals` if any `.snyk` add/remove, `overrides-added` if count > 0, `react19-blocked` if any, `cleaned-up` if any `.snyk` entries removed.
-- **2j. Trigger cloud review**: `gh workflow run` if workflow exists.
-- **2k. Report**: path, ecosystem, branch, PR URL, bumped/dismissed/skipped/overridden counts.
+- **2k. Trigger cloud review**: `gh workflow run` if workflow exists. Failing checks -> use `/github:gh-fix-ci`; review comments -> use `/resolve-pr-feedback`.
+- **2l. Report**: path, ecosystem, branch, PR URL, bumped/dismissed/skipped/overridden counts.
 
 ### 2-bazel. Bazel track
 Use when a pasted Snyk finding maps to `MODULE.bazel` or `bazel/repositories.bzl`. Confirm target branch and ticket key before edits. Work in a dedicated worktree. Check both manifests because default and release branches can manage the same dependency differently. Handle BCR, GitHub URL, and mirrored artifact/tooling-repo flows separately. OpenSSL/FIPS needs CMVP-aware handling before any bump. Assess backports before opening PRs; open draft PRs with the live `.github/pull_request_template.md` when present. See [REFERENCE.md](REFERENCE.md#bazel-track).
@@ -68,6 +76,10 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 ## Rules
 - **Sequential**, one path at time.
 - **Exploitability triage before any bump.** No reflex `resolutions`. Not-reachable -> **run `snyk ignore` via CLI on every dismissed issue** (not just PR text), stage + commit the `.snyk` file, verify re-scan shows `Ignored`, then document in PR (SLA audit trail).
+- **No package.json growth for suppression.** For transitive-only findings, direct dep absence is dismissal evidence. Do not add a vulnerable transitive as a new top-level dependency just to suppress it with `resolutions` / `overrides`.
+- **`/steelman` before transitive bump/override.** If the strongest dismissal case survives, bump makes no sense; dismiss with evidence instead.
+- **`/diagnose` before package.json real fixes.** Package changes require proof of a real potential vulnerability. DEFAULT: dismiss unproven transitive findings into `.snyk`.
+- **package.json admission gate.** Mutate `package.json` only for already-direct deps, reachable parent deps, or last-resort overrides with explicit proof and removal issue.
 - **Top-level direct bump first.** Parent bump second. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
 - **bun only (JS).** Never `npm`, `yarn`, `pnpm` runtime. `yarn.lock` via `bun install --yarn` for Snyk IO compat only.
 - **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift.
@@ -80,6 +92,9 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **Never defer real vulns.** One major per commit. Stuck -> escalate.
 - **No static config.** Infer from prompt + repo. User flags override.
 - **Revisit `.snyk` every run.** Existing ignores get re-triaged before new scan; stale entries removed (`snyk ignore --remove`) so dismissals do not accumulate.
+- **Warn on missing JS release gates.** For npm/bun/pnpm/Yarn repos, report absent minimum release age configuration as a supply-chain warning.
+- **Socket.dev web check for JS.** Check Socket.dev package pages for supply-chain attack vectors. No Socket CLI install or `socket` command required.
+- **Auto-run internal skill gates.** `/resilience-review`, `/to-issues`, and `/review` are mandatory before PR open for JS Snyk sweeps; `/github:gh-fix-ci` and `/resolve-pr-feedback` handle PR tail when needed.
 - **Assignee = triggerer.** Every sweep PR has one assignee = the person who ran the skill, via `gh api user --jq .login`.
 - **Reviewer = team group, always >=1.** Resolve CODEOWNERS team entries (`@org/team`) for the path; never merge with only individual reviewers. Security team group added automatically on PRs that touch `.snyk` or add overrides.
 

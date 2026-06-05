@@ -3,6 +3,7 @@
 
 SKILL_DIR="$REPO_ROOT/snyk-ux-security"
 SKILL_MD="$SKILL_DIR/SKILL.md"
+REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
 PEER_CHECK="$SKILL_DIR/scripts/react-peer-check.sh"
 LOCK_HOOK="$REPO_ROOT/.claude/hooks/lockfile-sync-check.sh"
 MANIFEST="$REPO_ROOT/skill-manifest.json"
@@ -133,6 +134,52 @@ run_content_eval "$SKILL_MD" "subagent" "SKILL.md spawns subagent per path"
 # ── Security hygiene ────────────────────────────────────────────
 
 run_content_eval "$SKILL_MD" "[Nn]ever (execute|run) code from advisories|[Nn]ever.*token" "SKILL.md has security notes"
+
+# ── Dismissal hardening: transitive-only findings ────────────────
+
+run_content_eval "$SKILL_MD" "direct dep absence.*dismiss|not add.*package\\.json" "SKILL.md warns not to add direct deps just to suppress transitives"
+run_content_eval "$SKILL_MD" "/steelman" "SKILL.md explicitly invokes /steelman for transitive-only bump decisions"
+run_content_eval "$SKILL_MD" "/diagnose" "SKILL.md invokes /diagnose before package.json security fixes"
+run_content_eval "$SKILL_MD" "package\\.json admission gate|admission gate.*package\\.json" "SKILL.md has package.json admission gate"
+run_content_eval "$SKILL_MD" "unproven.*dismiss|dismiss.*unproven" "SKILL.md defaults unproven transitive vulns to dismissal"
+run_content_eval "$SKILL_MD" "bump.*makes no sense|makes no sense.*bump" "SKILL.md blocks nonsensical transitive bumps"
+run_content_eval "$REFERENCE_MD" "Transitive-only dismissal checklist" "REFERENCE.md has transitive-only dismissal checklist"
+run_content_eval "$REFERENCE_MD" "Direct dependency absence is evidence" "REFERENCE.md treats missing direct dep as dismissal evidence"
+run_content_eval "$REFERENCE_MD" "do not add.*package\\.json" "REFERENCE.md forbids package.json growth for suppression-only overrides"
+run_content_eval "$REFERENCE_MD" "/steelman transitive bump gate|transitive bump gate.*\\/steelman" "REFERENCE.md documents the /steelman transitive bump gate"
+run_content_eval "$REFERENCE_MD" "strongest case.*dismiss|dismiss.*strongest case" "REFERENCE.md requires arguing strongest dismissal case before bump"
+run_content_eval "$REFERENCE_MD" "/diagnose reachability loop|reachability loop.*\\/diagnose" "REFERENCE.md documents /diagnose reachability loop"
+run_content_eval "$REFERENCE_MD" "real potential vulnerability" "REFERENCE.md requires real potential vulnerability proof"
+run_content_eval "$REFERENCE_MD" "Package.json admission gate" "REFERENCE.md documents package.json admission gate"
+run_content_eval "$REFERENCE_MD" "DEFAULT.*dismiss|default.*dismiss" "REFERENCE.md defaults uncertain transitive findings to dismissal"
+
+# ── Minimum release age gates ────────────────────────────────────
+
+run_content_eval "$SKILL_MD" "minimum release age gate audit" "SKILL.md requires release age gate audit"
+run_content_eval "$REFERENCE_MD" "Minimum release age gate audit" "REFERENCE.md documents release age gate audit"
+run_content_eval "$REFERENCE_MD" "bunfig\\.toml.*minimumReleaseAge|minimumReleaseAge.*bunfig\\.toml" "REFERENCE.md covers Bun release gate config"
+run_content_eval "$REFERENCE_MD" "\\.npmrc.*min-release-age|min-release-age.*\\.npmrc" "REFERENCE.md covers npm release gate config"
+run_content_eval "$REFERENCE_MD" "pnpm-workspace\\.yaml.*minimumReleaseAge|minimumReleaseAge.*pnpm-workspace\\.yaml" "REFERENCE.md covers pnpm release gate config"
+run_content_eval "$REFERENCE_MD" "\\.yarnrc\\.yml.*npmMinimalAgeGate|npmMinimalAgeGate.*\\.yarnrc\\.yml" "REFERENCE.md covers Yarn release gate config"
+run_content_eval "$REFERENCE_MD" "WARN.*release age gate missing|release age gate missing.*WARN" "REFERENCE.md warns instead of silently passing when age gate absent"
+
+# ── Socket.dev web-only supply-chain scan ────────────────────────
+
+run_content_eval "$SKILL_MD" "Socket\\.dev web check|socket\\.dev web check" "SKILL.md wires Socket.dev web check"
+run_content_eval "$REFERENCE_MD" "Socket\\.dev web check" "REFERENCE.md documents Socket.dev web check"
+run_content_eval "$REFERENCE_MD" "https://socket\\.dev/npm/package" "REFERENCE.md uses Socket package web pages"
+run_content_eval "$REFERENCE_MD" "no Socket CLI|no socket CLI|No Socket CLI" "REFERENCE.md makes Socket check web-only"
+run_content_eval "$REFERENCE_MD" "install script|typosquat|unstable ownership|native code|shell access|environment variable access" "REFERENCE.md lists Socket attack vectors"
+
+# ── Automatic internal skill gates ───────────────────────────────
+
+run_content_eval "$SKILL_MD" "/resilience-review" "SKILL.md auto-runs resilience-review before PR"
+run_content_eval "$SKILL_MD" "/to-issues" "SKILL.md auto-runs to-issues for security debt"
+run_content_eval "$SKILL_MD" "/review" "SKILL.md auto-runs review before PR"
+run_content_eval "$REFERENCE_MD" "Automatic internal skill gates" "REFERENCE.md documents automatic internal skill gates"
+run_content_eval "$REFERENCE_MD" "resilience-review.*before PR|before PR.*resilience-review" "REFERENCE.md runs resilience-review before PR"
+run_content_eval "$REFERENCE_MD" "to-issues.*missing release age|missing release age.*to-issues" "REFERENCE.md sends release gate debt to to-issues"
+run_content_eval "$REFERENCE_MD" "review.*package\\.json admission gate|package\\.json admission gate.*review" "REFERENCE.md review checks admission gate"
 
 # ── lockfile-sync-check.sh hook behavior ────────────────────────
 

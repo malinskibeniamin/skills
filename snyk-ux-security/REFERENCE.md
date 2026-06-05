@@ -186,6 +186,141 @@ Inputs:
   SDK protocol package, but we may only use the client half. Server
   feature never imported -> NOT-REACHABLE.
 
+### /steelman transitive bump gate
+
+Invoke `/steelman` before any JS transitive-only bump, parent bump, or
+override/resolution when the vulnerable package is absent from
+`package.json`.
+
+Goal: prevent "fixes" that merely grow `package.json` or lockfile debt
+when the app does not use the vulnerable package.
+
+Required output in PR evidence:
+
+1. **Claim to challenge:** "We need to bump or override `<pkg>`."
+2. **Strongest case to dismiss:** argue the strongest case for
+   dismissal first, using repo evidence:
+   - package absent from `package.json`;
+   - `bun why <pkg>` shows only deep transitive path;
+   - no direct imports;
+   - parent feature/code path unused by shipped UI;
+   - vulnerable symbol not called;
+   - Socket.dev shows no install-time/build-time credible vector.
+3. **Contradicting evidence:** direct import, reachable parent call,
+   vulnerable symbol usage, install script, build-time execution, or
+   critical Socket.dev supply-chain alert.
+4. **Verdict:**
+   - `dismiss`: strongest dismissal case survives -> `snyk ignore`
+     with parent chain + symbol evidence.
+   - `fix-parent`: vulnerable path reachable only through parent ->
+     bump parent, not transitive.
+   - `override-last-resort`: direct + parent blocked, vector credible,
+     and policy cannot dismiss.
+
+If the evidence cannot prove direct use, parent reachability, or
+vulnerable symbol usage, the bump makes no sense. Dismiss with expiry
+instead of growing the dependency surface.
+
+### /diagnose reachability loop
+
+Invoke `/diagnose` before any `package.json` change that claims to fix
+a JS security finding. Treat the Snyk finding as a bug report and build
+a fast feedback loop that can prove the vulnerable surface is relevant
+to this repo.
+
+Acceptable loops:
+
+- `grep` / import graph proves app code imports the vulnerable package
+  or the direct parent feature that calls it.
+- A unit or integration harness calls the same parent API and reaches
+  the vulnerable symbol / file.
+- A bundler or build script path proves the vulnerable package executes
+  during build, install, or CI.
+- Socket.dev shows a critical install-time or build-time supply-chain
+  vector: known malware, install script payload, shell access,
+  environment variable access, typosquat, or unstable ownership plus a
+  newly introduced version.
+
+Not enough:
+
+- Snyk says "introduced via" without evidence the parent path is used.
+- The package exists somewhere in `node_modules`.
+- The package name appears only in lockfiles.
+- "Fix available" exists but the package is several layers deep and no
+  vulnerable symbol is reachable.
+
+Verdict rule:
+
+- Proven reachable / credible install-time vector -> proceed to the
+  [Package.json admission gate](#packagejson-admission-gate).
+- Unproven or uncertain transitive finding -> **DEFAULT: dismiss** with
+  `snyk ignore`, expiry, parent chain, and diagnostic evidence.
+
+The PR must call this a **real potential vulnerability** before any
+package manifest change is allowed.
+
+### Package.json admission gate
+
+`package.json` is not a suppression ledger. It is the public dependency
+surface. A Snyk fix may mutate `package.json` only when one of these
+admission reasons is true:
+
+1. **Already-direct vulnerable dependency.** The vulnerable package is
+   already declared in `dependencies` / `devDependencies`, and
+   `/diagnose` proves direct use or install/build-time execution.
+2. **Reachable direct parent.** The vulnerable package is transitive,
+   but the direct parent is already declared and `/diagnose` proves the
+   parent path reaches the vulnerable behavior. Bump the parent, not the
+   transitive.
+3. **Last-resort override.** Direct and parent fixes are blocked,
+   the vulnerability is a real potential vulnerability, security policy
+   cannot dismiss it, and the PR includes a removal tracking issue.
+
+Anything else stays out of `package.json`. Use `.snyk` dismissal with a
+90-day expiry and precise reason. This makes the skill more likely to
+ignore/suppress noisy deep transitives than to create dependency debt.
+
+### Transitive-only dismissal checklist
+
+Use this checklist before adding any override/resolution for a finding
+several layers deep in `node_modules`.
+
+1. **Direct dependency absence is evidence.** If the vulnerable package
+   is not listed in `package.json`, that supports a dismissal path; it
+   does not justify adding the transitive as a new top-level dependency.
+2. Identify the parent chain with `bun why <pkg>` and record the first
+   direct parent that introduced it.
+3. Grep imports for both package names:
+   ```bash
+   grep -rn "from ['\"]<pkg>['\"]\\|require(['\"]<pkg>['\"])" .
+   grep -rn "from ['\"]<parent>['\"]\\|require(['\"]<parent>['\"])" .
+   ```
+4. Map the advisory to a vulnerable symbol / file / runtime behavior.
+   A CVE on a server parser, CLI, dev-only loader, or optional plugin
+   is not automatically reachable from a browser UI bundle.
+5. If the parent code path is unused, optional, SSR-only, build-only, or
+   outside shipped UI code, dismiss with `snyk ignore` and a precise
+   reason. Include the parent chain + symbol proof.
+6. If the parent code path is reachable, fix the parent before any
+   override. Do not add the vulnerable transitive to `package.json`
+   just to make a suppression-only override easier.
+7. Override/resolution only when direct + parent remediation are both
+   blocked and the vulnerability is still reachable or Snyk cannot be
+   ignored for policy reasons. Add a removal issue.
+8. In short: do not add a transitive package to `package.json` just to
+   suppress a nested finding.
+
+Anti-pattern to reject in review:
+
+```diff
++ "vulnerable-transitive": "x.y.z"
++ "resolutions": { "vulnerable-transitive": "x.y.z" }
+```
+
+If we do not use the library directly, this grows the public dependency
+surface just to silence a nested finding. Prefer `.snyk` dismissal with
+expiry when not reachable, or parent bump when reachable.
+
 Decision:
 
 - **NOT-REACHABLE** -- dismiss **via the Snyk CLI, not via PR
@@ -272,6 +407,136 @@ PR body.
 forced upgrade. Overrides accumulate, node_modules bloats,
 maintenance compounds weekly. Top-level bumps are upstream-tracked
 and self-maintaining.
+
+### Minimum release age gate audit (JS)
+
+For Node.js / TypeScript / UI repos, treat dependency installation as a
+supply-chain boundary. A lockfile helps reproducibility, but it does not
+stop a fresh malicious version from entering the lockfile during an
+upgrade. Audit the detected package manager before applying a JS bump.
+
+Detection:
+
+| Package manager signal | Config to check | Expected gate |
+|---|---|---|
+| `bun.lock` or bun toolchain | `bunfig.toml` | `minimumReleaseAge = <seconds>` |
+| `package-lock.json` or npm toolchain | `.npmrc` | `min-release-age=<days>` |
+| `pnpm-lock.yaml` | `pnpm-workspace.yaml` or `.npmrc` | `minimumReleaseAge: <minutes>` |
+| `.yarnrc.yml` / modern Yarn | `.yarnrc.yml` | `npmMinimalAgeGate: "<duration>"` |
+
+If the detected package manager has no gate, add this PR warning:
+
+```markdown
+## Supply-chain gate warnings
+- WARN: release age gate missing for <bun|npm|pnpm|yarn>.
+  Configure the package-manager-native minimum release age gate before
+  broad dependency churn. This sweep continued because it fixes a Snyk
+  issue, but future upgrades should not silently accept fresh releases.
+```
+
+Do not invent config in the Snyk PR unless the user asked for policy
+hardening. The warning is enough for a vuln sweep; a separate follow-up
+can set org-wide policy.
+
+Reference docs checked while creating this gate:
+
+- Bun: `minimumReleaseAge` in `bunfig.toml` or
+  `--minimum-release-age` filters newly published npm versions.
+  https://bun.com/docs/pm/cli/install#minimum-release-age
+- npm: `min-release-age` in `.npmrc` constrains installs to versions
+  older than the given number of days.
+  https://docs.npmjs.com/cli/install/#min-release-age
+- pnpm: `minimumReleaseAge` is minutes, applies to direct and
+  transitive deps, and has exclusions.
+  https://pnpm.io/settings#minimumreleaseage
+- Yarn: `npmMinimalAgeGate` delays installing newly published packages;
+  `npmPreapprovedPackages` bypasses package gates.
+  https://yarnpkg.com/features/security#age-gate
+
+### Socket.dev web check
+
+Use Socket.dev as an extra web-only supply-chain signal for JS package
+decisions. This is **no Socket CLI** flow: no install, no `socket`
+command, no local plugin requirement.
+
+For each package involved in a bump, parent bump, override, or
+dismissal decision:
+
+1. Open the package page:
+   - unscoped: `https://socket.dev/npm/package/<pkg>`
+   - scoped: `https://socket.dev/npm/package/%40scope/name`
+2. Check the overview / alerts / dependencies pages. Record high-signal
+   attack vectors:
+   - known malware, typosquat, protestware/troll package;
+   - recently published, unstable ownership, new author;
+   - install script, shell access, environment variable access,
+     filesystem access, network access, telemetry;
+   - obfuscated file, high entropy strings, native code;
+   - git/http dependency, wildcard dependency, unpublished/deprecated
+     package, unmaintained package.
+3. Treat Socket as a triage signal, not a replacement for Snyk:
+   - A critical Socket supply-chain alert can upgrade a NOT-REACHABLE
+     CVE into "credible vector" if install-time or build-time execution
+     affects CI/dev machines.
+   - Low capability alerts alone do not block a security bump, but must
+     be recorded when they explain added risk.
+4. Add a `Socket.dev` row to PR evidence:
+   `pkg`, page URL, highest alert, attack vector, decision impact.
+
+Useful Socket docs:
+
+- Package pages expose score, alerts, dependencies, maintainers, and
+  version views: https://socket.dev/npm/package/react
+- Socket alert categories include supply-chain risk, quality,
+  maintenance, vulnerability, and license:
+  https://docs.socket.dev/docs/package-issues
+- Socket GitHub/App docs list common vectors like install scripts,
+  telemetry, native code, known malware, mutable git/http deps,
+  protestware, and typosquats:
+  https://docs.socket.dev/docs/socket-for-github
+- Socket capability detection covers network, shell, filesystem,
+  `eval()`, and environment variables:
+  https://docs.socket.dev/docs/faq#how-does-sockets-capability-detection-work
+
+### Automatic internal skill gates
+
+The Snyk sweep owns security state, so it should invoke these skills
+internally instead of relying on the user to remember them.
+
+1. **`/resilience-review` before PR.**
+   Run after verify and before commit/PR. Focus the review on:
+   - `.snyk` write succeeded, expiry exists, rescan shows `Ignored`;
+   - existing-project Snyk IO monitor pushed or skipped with reason;
+   - package manager detection is correct;
+   - missing release age gate warning is visible;
+   - Socket.dev web check result is recorded;
+   - override has removal issue and rollback path;
+   - ambiguous workspace or multi-lockfile cases have guards.
+   `NEEDS_GUARDS` means fix or document an explicit accepted risk in
+   PR evidence.
+
+2. **`/to-issues` for security debt.**
+   Create or draft issues whenever the sweep leaves follow-up work:
+   - missing release age gate;
+   - override / resolution / Go replace added;
+   - React 19 blocked;
+   - upstream has no parent fix;
+   - no exact existing Snyk project match or ambiguous project match;
+   - Socket.dev critical/high vector needs owner review but was not
+     fixed in this PR.
+   If tracker publishing is unavailable, include issue drafts in the PR
+   body with owners and acceptance criteria.
+
+3. **`/review` before PR.**
+   Review must explicitly check the package.json admission gate,
+   `/steelman` dismissal argument, `/diagnose` reachability loop,
+   `.snyk` dismissal evidence, and absence of dependency-surface growth
+   without proof. A review finding on these gates blocks PR open unless
+   the user or security owner overrides it in writing.
+
+4. **PR tail.**
+   After PR open, failing checks route to `/github:gh-fix-ci`; review
+   comments route to `/resolve-pr-feedback`.
 
 ### 2d. React 18 gate (JS, mandatory)
 
@@ -449,6 +714,34 @@ expired). Triggered by @<triggerer>.
 |---|---|---|---|---|---|---|
 | ... | ... | ... | ... | ... | direct / parent / override | 7->8->9 |
 
+## Reachability diagnosis (`/diagnose`)
+| Package | Finding | Feedback loop | Real potential vulnerability? | Decision |
+|---|---|---|---|---|
+| <pkg> | <CVE/GHSA> | grep/import graph / harness / Socket.dev critical vector | yes/no | bump parent / direct bump / dismiss to `.snyk` |
+
+## Package.json admission gate
+| Package | Admission reason | Why `.snyk` dismissal is not enough | Removal issue if override |
+|---|---|---|---|
+| <pkg> | already-direct / reachable parent / override-last-resort | <proof> | #NN or none |
+
+## Internal skill gates
+- `/resilience-review`: PASS / NEEDS_GUARDS / BLOCKED -- <summary>
+- `/to-issues`: <n> issue(s) created or drafted for missing release age gate / overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
+- `/review`: PASS / BLOCKED -- package.json admission gate, `/steelman`, `/diagnose`, and `.snyk` evidence checked
+
+## Supply-chain gate warnings
+- WARN: release age gate missing for `<package-manager>` (if absent).
+  Follow-up: configure the package-manager-native minimum release age
+  gate (`bunfig.toml`, `.npmrc`, `pnpm-workspace.yaml`, or
+  `.yarnrc.yml`) before broad dependency churn.
+
+## Socket.dev web check
+No Socket CLI was installed or required.
+
+| Package | Socket URL | Highest alert | Attack vector | Decision impact |
+|---|---|---|---|---|
+| <pkg> | https://socket.dev/npm/package/<pkg> | <alert> | install script / typosquat / unstable ownership / native code / shell access / environment variable access / none | bumped / dismissed / escalated |
+
 ## Dismissed (not exploitable)
 
 All entries below were applied via `snyk ignore` (Snyk CLI writes to
@@ -501,6 +794,8 @@ JS:
 - [x] `bun run lint:fix`
 - [x] `bun run type:check`
 - [x] `bun test`
+- [x] Minimum release age gate audit completed; warnings recorded if missing
+- [x] Socket.dev web check completed for JS packages; no Socket CLI used
 - [x] Snyk rescan clean for addressed CVEs
 - [x] `.snyk` committed with <n> new ignore entries
 - [x] Existing-project `snyk monitor` pushed ignores to IO, or skipped
@@ -530,7 +825,9 @@ labels applied, `.snyk` revisited count, `.snyk` cleaned-up count
 (transitive gone / reachable now / expired), newly-dismissed list
 (CVE + reason + snyk ignore id + expiry), existing-project
 `snyk monitor` status (pushed/skipped + reason), bumped list,
-overrides-added list (CVE + blocker),
+overrides-added list (CVE + blocker), JS release-age gate status
+(configured/missing + package manager), Socket.dev findings
+(package + highest alert + decision impact),
 skipped list (reason), CI status.
 
 ## Aggregate
@@ -542,7 +839,9 @@ Main agent gathers reports. Summary table:
 
 Show React-19-blocked pkgs -- candidates for the React 18 -> 19
 migration plan. Show overrides-added as a follow-up backlog --
-remove each once upstream ships a fix.
+remove each once upstream ships a fix. Show release-age gate missing
+warnings and Socket.dev high/critical alerts as supply-chain follow-up
+items.
 
 ## Bazel track
 
