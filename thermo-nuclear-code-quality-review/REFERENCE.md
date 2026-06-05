@@ -72,7 +72,7 @@ If unsure, prove lower severity with evidence; otherwise bias upward for importa
 
 ## PR comments
 
-Comments must be actionable: tight file/line, severity, evidence, impact, and concrete fix. Do not post duplicate root causes. Do not post style nits unless they hide a P2+ risk. If a finding is architectural and not line-local, put it in the top-level review summary.
+Run many lenses, comment few findings. Inline PR comments only for P0/P1 or high-confidence, actionable P2 with tight file/line, evidence, impact, and concrete fix. Put evidence gaps, skipped lanes, speculative architecture concerns, and duplicate root causes in the top-level summary. Do not post style nits unless they hide a P2+ risk.
 
 ## Approval bar
 
