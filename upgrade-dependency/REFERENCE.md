@@ -1,6 +1,5 @@
 # Upgrade Dependency Reference
 
-Templates for `/upgrade-dependency`.
 
 ## Harness integration protocol
 
@@ -8,7 +7,7 @@ Templates for `/upgrade-dependency`.
 - `/snyk-ux-security`: owns reachability/Snyk state; calls this for remediation path.
 - `/go`: dependency files changed -> require report/PR section or skip reason.
 - `/commit-push-pr`: dependency diff -> add `Dependency upgrade path` PR section.
-- `file-changed-deps`: nudge only. Run `/upgrade-dependency`, add report, or note skip reason. No auto-upgrade.
+- `file-changed-deps`: nudge only; run `/upgrade-dependency`, add report, or skip reason.
 
 ## Report template
 
@@ -24,8 +23,18 @@ Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
 - Requested by:
 
 ## Version path
+Every published stable version from current exclusive to target inclusive; research every row; do not install every version.
+
 | Step | From | To | SemVer class or non-SemVer scale | Source | Migration/breakage | Action |
 |---|---:|---:|---|---|---|---|
+
+## Consolidated upgrade actions
+Priority: majors + announcements/blogs/migrations/codemods, then minors, then patches/security.
+
+API changes:
+Syntax/style-guide changes:
+Behavior/config changes:
+Repo actions before target install:
 
 ## Dependency tree
 Target:  Parents:  Children:  Repo dependents:  Peers:  Plugins/adapters:
@@ -53,13 +62,10 @@ Lint:  Type check:  Tests:  Build/vet/security scan:
 
 ## GitHub issue template
 
-Use for major, non-SemVer, missing changelog, unclear migration, peer/security risk.
+Use for major, non-SemVer, missing changelog, unclear migration, or peer/security risk.
 
 ```md
 Title: Plan dependency upgrade: <package> <from> -> <target>
-
-## Goal
-Upgrade <package> <from> -> <target> with verified path.
 
 ## Version path
 <paste report table>
@@ -67,14 +73,11 @@ Upgrade <package> <from> -> <target> with verified path.
 ## Breaking changes/migrations
 - <version>: <change, source, required code change>
 
-## Codemods/scripts
-Available:  Safe to auto-run: yes/no, reason
+Codemods/scripts: available, safe to auto-run yes/no + reason
 
-## Related deps
-Peers:  Plugins/adapters:  Parent deps if transitive:
+Related deps: peers, plugins/adapters, parent deps if transitive
 
-## Security context
-Advisories:  Reachability/exploitability:  Fixed versions:
+Security context: advisories, reachability/exploitability, fixed versions
 
 ## Risk gate
 Why not auto-applied: major | non-SemVer/low SemVer confidence | missing/unclear changelog | peer risk | security uncertainty | high effort migration
@@ -84,20 +87,16 @@ Why not auto-applied: major | non-SemVer/low SemVer confidence | missing/unclear
 2. <step>
 3. Verify: <commands>
 
-## Delegation plan
-One package per agent:  Shared blockers:  Merge order:
+Delegation plan: one package per agent, blockers, merge order
 
 ## Acceptance
 - [ ] Manifest + lockfiles updated together
 - [ ] Migration landed
 - [ ] Related deps compatible
-- [ ] Lint/type/test/build clean
-- [ ] Security scan clean or documented
+- [ ] Lint/type/test/build/security scan clean or documented
 ```
 
 ## Pull request template
-
-Use after safe apply.
 
 ```md
 ## Summary
@@ -108,24 +107,21 @@ Use after safe apply.
 Decision: applied automatically
 Why safe: patch/minor high SemVer confidence | explicit approval | security remediation
 
-## Changes
-Manifest/lockfiles:  Migrations:  Related deps:
-
-## Security
-Advisories fixed:  Reachability/exploitability:  Residual risk:
+Changes: manifests/lockfiles, migrations, related deps
+Security: advisories fixed, reachability/exploitability, residual risk
 
 ## Verification
 - [ ] lint:fix
 - [ ] type:check
 - [ ] test
-- [ ] build/vet/security scan if applicable
+- [ ] build/vet/security scan
 ```
 
 ## Command notes
 
-JS/Bun: `bun update <pkg>@<version>` -> `bun install`; add `bun install --yarn` when needed.
+JS/Bun: `bun update <pkg>@<version>` -> `bun install`; `bun install --yarn` when needed.
 
-Go: `go get -u <module>@<version>` -> `go mod tidy`; keep `go.mod` + `go.sum` together.
+Go: `go get -u <module>@<version>` -> `go mod tidy`; keep `go.mod` + `go.sum`.
 
 Security ladder: direct/top-level dep -> parent dep -> override/resolution/replace last, with removal follow-up.
 
@@ -143,6 +139,6 @@ Before apply, check:
 - Min release age: npm `min-release-age`, pnpm/Yarn/Bun `minimumReleaseAge` where supported; default 7-30d unless security fix overrides.
 - Disable scripts: no lifecycle scripts. Bun disables postinstall by default; review `trustedDependencies`.
 - Block git deps: fail on `git+`, tarball, raw URL deps in manifest/lock.
-- Scan deps: Snyk + `bun audit`; optional `npq`/Socket Firewall (`sfw`) if installed. Socket Free supports npm/yarn/pnpm, pip/uv, cargo; not Bun/Go Free.
+- Scan deps: Snyk + `bun audit`; optional `npq`/Socket Firewall (`sfw`) if installed.
 - Review lockfile: new names, resolved URLs, integrity, scripts/trusted deps, git/tarball sources.
-- Clean install: frozen/clean command, not dirty incremental only (`bun install --frozen-lockfile`, `npm ci`, `pnpm install --frozen-lockfile`).
+- Clean install: frozen/clean command, not dirty incremental only.
