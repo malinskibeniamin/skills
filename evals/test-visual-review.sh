@@ -17,6 +17,16 @@ fi
 
 run_content_eval "$SKILL_DIR/SKILL.md" "Browser-based frontend review" "visual-review describes browser-based review"
 run_content_eval "$SKILL_DIR/SKILL.md" "git diff --name-only HEAD" "visual-review auto-detects changed UI"
+if grep -REq "Storybook" "$SKILL_DIR"/*.md; then
+  echo "  FAIL  visual-review should not mention Storybook"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review mentions Storybook"
+else
+  echo "  PASS  visual-review avoids Storybook guidance"
+  PASS=$((PASS + 1))
+fi
+run_content_eval "$SKILL_DIR/SKILL.md" "shadcn/ui|@/components/ui" "visual-review points to shadcn-style UI components"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "shadcn/ui|@/components/ui" "visual-review reference points to shadcn-style UI components"
 run_content_eval "$SKILL_DIR/SKILL.md" "Chromium desktop" "visual-review includes Chromium desktop"
 run_content_eval "$SKILL_DIR/SKILL.md" "Chromium mobile" "visual-review includes mobile viewport"
 run_content_eval "$SKILL_DIR/SKILL.md" "Firefox desktop" "visual-review prefers Firefox"
