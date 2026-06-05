@@ -17,12 +17,12 @@ fi
 
 run_content_eval "$SKILL_DIR/SKILL.md" "Browser-based frontend review" "visual-review describes browser-based review"
 run_content_eval "$SKILL_DIR/SKILL.md" "git diff --name-only HEAD" "visual-review auto-detects changed UI"
-if grep -REq "Storybook" "$SKILL_DIR"/*.md; then
-  echo "  FAIL  visual-review should not mention Storybook"
+if grep -REq "[Ss]torybook" "$SKILL_DIR"/*.md; then
+  echo "  FAIL  visual-review should not mention legacy component explorer tooling"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: visual-review mentions Storybook"
+  ERRORS="$ERRORS\n  FAIL: visual-review mentions legacy component explorer tooling"
 else
-  echo "  PASS  visual-review avoids Storybook guidance"
+  echo "  PASS  visual-review avoids legacy component explorer guidance"
   PASS=$((PASS + 1))
 fi
 run_content_eval "$SKILL_DIR/SKILL.md" "shadcn/ui|@/components/ui" "visual-review points to shadcn-style UI components"
