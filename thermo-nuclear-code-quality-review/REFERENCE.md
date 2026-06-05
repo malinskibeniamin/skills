@@ -37,6 +37,7 @@ Use `agents/findings-schema.md` fields when possible. Each reviewer records chec
 {
   "checked": ["diff", "spec", "standards", "runtime evidence"],
   "artifacts": ["test command", "screenshot path", "trace path"],
+  "priority": "blocker | major | minor | nit | follow-up for other PR",
   "severity": "P0 | P1 | P2 | P3",
   "axis": "structural | standards | spec | frontend | resilience | visual | security | tests | perf | steelman",
   "file": "path",
@@ -44,6 +45,7 @@ Use `agents/findings-schema.md` fields when possible. Each reviewer records chec
   "evidence": "specific proof",
   "impact": "production/user/maintainer consequence",
   "required_change": "concrete requested change",
+  "one_shot_prompt": "copy-pasteable fix prompt or null with reason",
   "pr_comment": "GitHub-ready concise comment"
 }
 ```
@@ -72,7 +74,7 @@ If unsure, prove lower severity with evidence; otherwise bias upward for importa
 
 ## PR comments
 
-Run many lenses, comment few findings. Priority labels: blocker, major, minor, nit, follow-up. Map P0->blocker, P1->major, P2->minor or follow-up, P3->nit. Inline PR comments only for blocker/major or high-confidence, actionable minor with tight file/line, evidence, impact, and concrete fix. Comment template: What, Why, Suggested fix, One-shot prompt. One-shot prompt must be a copy-pasteable fix request when possible; otherwise say why no safe one-shot exists. Put evidence gaps, skipped lanes, speculative architecture concerns, and duplicate root causes in the top-level summary. Do not post style nits unless they hide a P2+ risk.
+Run many lenses, comment few findings. Priority labels: blocker, major, minor, nit, follow-up for other PR. Map P0->blocker, P1->major, P2->minor or follow-up, P3->nit. Inline PR comments only for blocker/major or high-confidence, actionable minor with tight file/line, evidence, impact, and concrete fix. Comment template: What, Why, Suggested fix, One-shot prompt. One-shot prompt must be a copy-pasteable fix request when possible; include repo, branch, file, exact change, and verify command. Otherwise say why no safe one-shot exists. Put evidence gaps, skipped lanes, speculative architecture concerns, and duplicate root causes in the top-level summary. Do not post style nits unless they hide a P2+ risk.
 
 ## Approval bar
 

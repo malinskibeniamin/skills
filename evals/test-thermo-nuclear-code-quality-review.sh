@@ -41,6 +41,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "checked.*artifacts|artifacts.*checke
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Run many lenses.*comment few|comment few.*Run many lenses" "reference limits PR comment volume"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "blocker.*major.*minor.*nit.*follow-up" "reference defines PR comment priority labels"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "One-shot prompt.*What.*Why.*Suggested fix|What.*Why.*Suggested fix.*One-shot prompt" "reference requires one-shot fix prompt template"
+run_content_eval "$SKILL_DIR/REFERENCE.md" ""priority".*blocker.*major.*minor.*nit.*follow-up for other PR" "reference schema includes priority labels"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "repo.*branch.*file.*verify|branch.*file.*verify" "reference defines one-shot prompt ingredients"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Inspired by Cursor Team Kit" "reference attributes inspiration without copying"
 
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "./thermo-nuclear-code-quality-review/" "Claude plugin registers skill"
