@@ -427,6 +427,45 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: through instead of via"
 
+# ── Check 21: Impeccable copy slop ───────────────────────────────
+
+tmpfile="$_ux_tmpdir/slop.ts"
+echo "const msg = 'Deploy faster — without extra steps'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: em dash in UI string" "em dash"
+
+echo "const msg = 'Supercharge your seamless workflow'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: marketing buzzwords in UI string" "buzzword"
+
+echo "const msg = 'Not just monitoring, it is observability'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: not-just copy cadence" "not just"
+
+echo "const msg = 'Productivity theater stops here'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: X theater copy" "theater"
+
+echo "const msg = 'Build faster. No busywork. Just results.'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: aphoristic cadence copy" "cadence"
+
+echo "const msg = 'Deploy faster without extra steps'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: direct non-slop copy"
+
 # ── Escape hatch ────────────────────────────────────────────────
 
 tmpfile="$_ux_tmpdir/legacy.ts"
@@ -454,6 +493,11 @@ run_content_eval "$SCRIPT" "Please" "hook checks for please"
 run_content_eval "$SCRIPT" "whitelist|blacklist" "hook checks non-inclusive terms"
 run_content_eval "$SCRIPT" "There is|There are" "hook checks There is/are starters"
 run_content_eval "$SCRIPT" "via" "hook checks for via"
+run_content_eval "$SCRIPT" "em dash" "hook checks em dashes in UI strings"
+run_content_eval "$SCRIPT" "buzzword" "hook checks marketing buzzwords"
+run_content_eval "$SCRIPT" "not just" "hook checks not-just copy cadence"
+run_content_eval "$SCRIPT" "theater" "hook checks X theater copy"
+run_content_eval "$SCRIPT" "aphoristic" "hook checks aphoristic cadence"
 
 # ── REFERENCE content ───────────────────────────────────────────
 

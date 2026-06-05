@@ -72,15 +72,91 @@ if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
   fi
 fi
 
-# ── Check 5: Ban visual style overrides on registry components ────
+# ── Check 5: Button should not restyle gradient/radius/shadow ────
 
 case "$file_path" in
-  *.tsx|*.jsx)
-    _has_diff=$(git diff HEAD -- "$file_path" 2>/dev/null || true)
-    if [ -n "$_has_diff" ]; then
-      _diff_added=$(echo "$_has_diff" | grep '^+' | grep -v '^+++' || true)
-      if echo "$_diff_added" | grep -E '<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea)[[:space:]]' | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
-        hook_warn "Visual override on registry component. Use variant prop instead."
+  *.tsx|*.jsx|*.mdx)
+    _button_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
+    if echo "$_button_added" | grep -E '<Button[[:space:]>]' | grep -qE 'className=.*(bg-gradient-|from-[a-z]+-[0-9]|via-[a-z]+-[0-9]|to-[a-z]+-[0-9]|rounded|shadow)'; then
+      if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token"; then
+        hook_block "Button gradient/radius/shadow override detected. Use Button variant/size or add a registry variant. Escape: // allow: button-visual-override [reason]"
+      fi
+    fi
+    ;;
+esac
+
+# ── Check 5b: Registry palette/gradient overrides ────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx|*.mdx)
+    _registry_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
+    if [ -n "$_registry_added" ]; then
+      _registry_component_pattern='<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea|Tabs|Tooltip|Popover|DropdownMenu|Sheet|Accordion|Avatar|Checkbox|Switch|Slider|Progress|Separator|Skeleton|Toast|Toaster|Command|Calendar|ScrollArea|AspectRatio|RadioGroup|Toggle|ToggleGroup)[[:space:]>]'
+      _hardcoded_palette_colors='red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone|white|black'
+      _palette_or_gradient_pattern="className=.*(bg-($_hardcoded_palette_colors)-|text-($_hardcoded_palette_colors)-|border-($_hardcoded_palette_colors)-|from-($_hardcoded_palette_colors)-|via-($_hardcoded_palette_colors)-|to-($_hardcoded_palette_colors)-|bg-gradient-)"
+      if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE "$_palette_or_gradient_pattern"; then
+        if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
+          hook_block "Registry component has hardcoded palette or gradient override. Use variant props/design tokens. Escape: // allow: registry-visual-override [reason]"
+        fi
+      fi
+      if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
+        if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
+          hook_warn "Visual override on registry component. Use variant prop or design token. Escape: // allow: registry-visual-override [reason]"
+        fi
+      fi
+    fi
+    ;;
+esac
+
+# ── Check 5c: Inline gradient/blur/z-index visual traps ──────────
+
+case "$file_path" in
+  *.tsx|*.jsx|*.mdx)
+    _visual_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
+    if echo "$_visual_added" | grep -qE 'backgroundImage[[:space:]]*:[[:space:]]*.*linear-gradient\('; then
+      if ! hook_has_escape "inline-gradient" && ! hook_has_escape "design-token"; then
+        hook_block "Inline backgroundImage linear-gradient detected. Use Tailwind/theme gradient tokens. Escape: // allow: inline-gradient [reason]"
+      fi
+    fi
+    if echo "$_visual_added" | grep -qE '(backdropFilter|filter)[[:space:]]*:[[:space:]]*.*blur\('; then
+      if ! hook_has_escape "blur-effect"; then
+        hook_warn "Inline filter/backdropFilter blur detected. Prefer tokenized Tailwind blur/backdrop-blur or remove decorative blur. Escape: // allow: blur-effect [reason]"
+      fi
+    fi
+    if echo "$_visual_added" | grep -qE '(z-\[(999|9999)\]|zIndex[[:space:]]*:[[:space:]]*(999|9999)\b)'; then
+      if ! hook_has_escape "z-index"; then
+        hook_warn "Arbitrary z-index 999/9999 detected. Use z-layer tokens or fix stacking context. Escape: // allow: z-index [reason]"
+      fi
+    fi
+    ;;
+esac
+
+# ── Check 5d: Nested/card-like containers and image motion ───────
+
+case "$file_path" in
+  *.tsx|*.jsx|*.mdx)
+    _composition_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
+    _composition_one_line=$(printf '%s\n' "$_composition_added" | tr '\n' ' ')
+    if echo "$_composition_one_line" | grep -qE '<Card[[:space:]>].*<(Card|div|section|article)[^>]*className=.*(rounded|border|shadow|bg-card|bg-background)'; then
+      if ! hook_has_escape "nested-card"; then
+        hook_warn "Nested Card/card-like container detected. Flatten layout or use Card sections, not card-in-card chrome. Escape: // allow: nested-card [reason]"
+      fi
+    fi
+    if echo "$_composition_added" | grep -E '<(img|Image)[[:space:]>]' | grep -qE 'className=.*((group-)?hover:(scale|rotate|translate|skew)-|transition-transform)'; then
+      if ! hook_has_escape "image-hover-transform"; then
+        hook_warn "Image hover transform detected. Prefer non-layout-shifting affordance or tokenized interaction pattern. Escape: // allow: image-hover-transform [reason]"
+      fi
+    fi
+    ;;
+esac
+
+# ── Check 5e: autoFocus surprises ────────────────────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx|*.mdx)
+    if echo "$added_lines" | grep -qE '\bautoFocus\b'; then
+      if ! hook_has_escape "autoFocus"; then
+        hook_warn "autoFocus can steal focus unexpectedly. Prefer explicit focus management after user intent. Escape: // allow: autoFocus [reason]"
       fi
     fi
     ;;
