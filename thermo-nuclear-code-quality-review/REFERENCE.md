@@ -72,7 +72,7 @@ If unsure, prove lower severity with evidence; otherwise bias upward for importa
 
 ## PR comments
 
-Run many lenses, comment few findings. Inline PR comments only for P0/P1 or high-confidence, actionable P2 with tight file/line, evidence, impact, and concrete fix. Put evidence gaps, skipped lanes, speculative architecture concerns, and duplicate root causes in the top-level summary. Do not post style nits unless they hide a P2+ risk.
+Run many lenses, comment few findings. Priority labels: blocker, major, minor, nit, follow-up. Map P0->blocker, P1->major, P2->minor or follow-up, P3->nit. Inline PR comments only for blocker/major or high-confidence, actionable minor with tight file/line, evidence, impact, and concrete fix. Comment template: What, Why, Suggested fix, One-shot prompt. One-shot prompt must be a copy-pasteable fix request when possible; otherwise say why no safe one-shot exists. Put evidence gaps, skipped lanes, speculative architecture concerns, and duplicate root causes in the top-level summary. Do not post style nits unless they hide a P2+ risk.
 
 ## Approval bar
 

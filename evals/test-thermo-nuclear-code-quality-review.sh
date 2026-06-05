@@ -39,6 +39,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "P0.*P1.*P2.*P3" "reference defines s
 run_content_eval "$SKILL_DIR/REFERENCE.md" "findings-schema" "reference uses structured findings schema"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "checked.*artifacts|artifacts.*checked" "reference requires checked artifact evidence per reviewer"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Run many lenses.*comment few|comment few.*Run many lenses" "reference limits PR comment volume"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "blocker.*major.*minor.*nit.*follow-up" "reference defines PR comment priority labels"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "One-shot prompt.*What.*Why.*Suggested fix|What.*Why.*Suggested fix.*One-shot prompt" "reference requires one-shot fix prompt template"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Inspired by Cursor Team Kit" "reference attributes inspiration without copying"
 
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "./thermo-nuclear-code-quality-review/" "Claude plugin registers skill"

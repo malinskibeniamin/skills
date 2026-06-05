@@ -43,7 +43,7 @@ Base: <sha/branch>  Diff: <summary>
 Sources: <spec/standards/PR threads/evidence>
 Reviewers: <axis -> status/artifacts>
 Findings:
-| Severity | Axis | File:line | Evidence | Impact | Required change | PR comments |
+| Priority | Severity | Axis | File:line | Evidence | Impact | Required change | One-shot prompt | PR comments |
 Unresolved questions:
 - ...
 Merge verdict: <why this can or cannot merge>
