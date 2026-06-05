@@ -31,10 +31,12 @@ Check the project rules before commenting:
 
 ## Reviewer output schema
 
-Use `agents/findings-schema.md` fields when possible. Minimum finding:
+Use `agents/findings-schema.md` fields when possible. Each reviewer records checked inputs and artifacts before findings. Minimum finding:
 
 ```json
 {
+  "checked": ["diff", "spec", "standards", "runtime evidence"],
+  "artifacts": ["test command", "screenshot path", "trace path"],
   "severity": "P0 | P1 | P2 | P3",
   "axis": "structural | standards | spec | frontend | resilience | visual | security | tests | perf | steelman",
   "file": "path",
