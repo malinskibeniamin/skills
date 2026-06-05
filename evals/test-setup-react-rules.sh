@@ -280,13 +280,12 @@ tmpfile="$_rr_tmpdir/test.tsx"
 
 # ── Check 5: Visual style overrides on registry components ───────
 
-# Visual style override check only fires on actual git diff lines (not full file scans)
-# In test context (no git repo), the check is skipped entirely to avoid false positives
+# Visual style overrides on registry components should use variants/design tokens.
 echo '<Button onClick={handleClick} className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: visual style override (no git diff in test context)"
+  2 "block: visual style override on registry component" "variant"
 
 # Allow layout-only classes on components (with handler)
 echo '<Button onClick={handleClick} className="mt-4 flex-1 w-full">Click</Button>' > "$tmpfile"
@@ -294,6 +293,27 @@ echo '<Button onClick={handleClick} className="mt-4 flex-1 w-full">Click</Button
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: layout classes on Button"
+
+# Block gradient Button overrides. Use variants instead.
+echo '<Button onClick={handleClick} className="bg-gradient-to-r from-primary to-accent shadow-xl rounded-[32px]">Click</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: Button gradient/shape visual override" "variant"
+
+# Block one-off backgroundImage gradients in JSX style objects.
+echo '<div style={{ backgroundImage: "linear-gradient(90deg, var(--primary), var(--accent))" }}>Hero</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: inline backgroundImage gradient" "gradient"
+
+# Warn on arbitrary z-index values.
+echo '<div className="z-[9999] fixed inset-0">Overlay</div>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: arbitrary z-index" "z-index"
 
 # ── Check 6: onClick+navigate instead of Link ───────────────────
 
@@ -634,6 +654,62 @@ run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: token-based Tailwind color classes"
 
+# Ban hardcoded Tailwind palette utilities in JSX
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-blue-500 text-white border-slate-200">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: hardcoded Tailwind palette utilities" "semantic"
+
+# Warn on side-stripe accent borders
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="rounded-lg border-l-4 border-primary p-4">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: side-stripe accent border" "side-stripe"
+
+# Warn on over-rounded card/section/input surfaces
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<Card className="rounded-[32px] p-6">content</Card>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: over-rounded card surface" "over-rounded"
+
+# Warn on ghost-card border plus large shadow
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<Card className="border border-border shadow-2xl p-6">content</Card>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: ghost-card border plus large shadow" "ghost-card"
+
+# Block gray text on semantic colored backgrounds
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-primary text-gray-500">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: gray text on colored background" "semantic"
+
+# Warn on oversized display text and crushed tracking
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<h1 className="text-[10rem] tracking-[-0.08em]">Huge headline</h1>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: oversized display text and crushed tracking" "Oversized"
+
+# Block decorative glassmorphism
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-background/40 backdrop-blur-xl border border-border">Glass</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: glassmorphism backdrop blur" "glassmorphism"
+
 # Skip .ts files (not CSS or TSX)
 tmpfile="$_rr_tmpdir/test.ts"
 echo 'const x = "!important"' > "$tmpfile"
@@ -658,13 +734,13 @@ run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: 100dvh (correct usage)"
 
-# Skip 100vh in .tsx (CSS-only check)
+# Warn on 100vh in TSX arbitrary classes too
 tmpfile="$_rr_tmpdir/test.tsx"
 echo '<div className="h-[100vh]">content</div>' > "$tmpfile"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: 100vh in TSX (CSS-only check)"
+  0 "warn: 100vh in TSX arbitrary class" "100dvh"
 
 # ── Tailwind: 100vw → 100% ──────────────────────────────────────
 
@@ -705,6 +781,9 @@ run_content_eval "$TW_SCRIPT" "100vw" "tailwind-check warns about 100vw"
 run_content_eval "$TW_SCRIPT" "user-scalable" "tailwind-check blocks user-scalable=no"
 run_content_eval "$TW_SCRIPT" "raw.*color.*design token|design token.*raw.*color" "tailwind-check blocks raw color design-token bypasses"
 run_content_eval "$TW_SCRIPT" "Gradient text" "tailwind-check blocks gradient text"
+run_content_eval "$TW_SCRIPT" "side-stripe" "tailwind-check warns on side-stripe accent borders"
+run_content_eval "$TW_SCRIPT" "ghost-card" "tailwind-check warns on ghost-card shadows"
+run_content_eval "$TW_SCRIPT" "glassmorphism" "tailwind-check blocks glassmorphism"
 
 # ── Check 18: Ban class components ────────────────────────────────
 
@@ -1171,6 +1250,8 @@ tmpfile="$_rr_tmpdir/test.tsx"
 run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
 run_content_eval "$SCRIPT" "REACT_RULES_BAN_USEEFFECT" "hook checks useEffect opt-in env var"
 run_content_eval "$SCRIPT" "variant" "hook suggests using variant prop"
+run_content_eval "$SCRIPT" "Button.*gradient|gradient.*Button" "hook blocks Button gradient overrides"
+run_content_eval "$SCRIPT" "z-index" "hook warns on arbitrary z-index"
 run_content_eval "$SCRIPT" "asChild" "hook suggests asChild for Link wrapping"
 run_content_eval "$SCRIPT" "AlertTitle" "hook checks AlertTitle icon"
 run_content_eval "$SCRIPT" "wrap.*create" "hook checks protobuf create()"
