@@ -221,6 +221,65 @@ If the evidence cannot prove direct use, parent reachability, or
 vulnerable symbol usage, the bump makes no sense. Dismiss with expiry
 instead of growing the dependency surface.
 
+### /diagnose reachability loop
+
+Invoke `/diagnose` before any `package.json` change that claims to fix
+a JS security finding. Treat the Snyk finding as a bug report and build
+a fast feedback loop that can prove the vulnerable surface is relevant
+to this repo.
+
+Acceptable loops:
+
+- `grep` / import graph proves app code imports the vulnerable package
+  or the direct parent feature that calls it.
+- A unit or integration harness calls the same parent API and reaches
+  the vulnerable symbol / file.
+- A bundler or build script path proves the vulnerable package executes
+  during build, install, or CI.
+- Socket.dev shows a critical install-time or build-time supply-chain
+  vector: known malware, install script payload, shell access,
+  environment variable access, typosquat, or unstable ownership plus a
+  newly introduced version.
+
+Not enough:
+
+- Snyk says "introduced via" without evidence the parent path is used.
+- The package exists somewhere in `node_modules`.
+- The package name appears only in lockfiles.
+- "Fix available" exists but the package is several layers deep and no
+  vulnerable symbol is reachable.
+
+Verdict rule:
+
+- Proven reachable / credible install-time vector -> proceed to the
+  [Package.json admission gate](#packagejson-admission-gate).
+- Unproven or uncertain transitive finding -> **DEFAULT: dismiss** with
+  `snyk ignore`, expiry, parent chain, and diagnostic evidence.
+
+The PR must call this a **real potential vulnerability** before any
+package manifest change is allowed.
+
+### Package.json admission gate
+
+`package.json` is not a suppression ledger. It is the public dependency
+surface. A Snyk fix may mutate `package.json` only when one of these
+admission reasons is true:
+
+1. **Already-direct vulnerable dependency.** The vulnerable package is
+   already declared in `dependencies` / `devDependencies`, and
+   `/diagnose` proves direct use or install/build-time execution.
+2. **Reachable direct parent.** The vulnerable package is transitive,
+   but the direct parent is already declared and `/diagnose` proves the
+   parent path reaches the vulnerable behavior. Bump the parent, not the
+   transitive.
+3. **Last-resort override.** Direct and parent fixes are blocked,
+   the vulnerability is a real potential vulnerability, security policy
+   cannot dismiss it, and the PR includes a removal tracking issue.
+
+Anything else stays out of `package.json`. Use `.snyk` dismissal with a
+90-day expiry and precise reason. This makes the skill more likely to
+ignore/suppress noisy deep transitives than to create dependency debt.
+
 ### Transitive-only dismissal checklist
 
 Use this checklist before adding any override/resolution for a finding
@@ -614,6 +673,16 @@ expired). Triggered by @<triggerer>.
 | Package | From | To | CVE | Severity | Priority path | Major hops |
 |---|---|---|---|---|---|---|
 | ... | ... | ... | ... | ... | direct / parent / override | 7->8->9 |
+
+## Reachability diagnosis (`/diagnose`)
+| Package | Finding | Feedback loop | Real potential vulnerability? | Decision |
+|---|---|---|---|---|
+| <pkg> | <CVE/GHSA> | grep/import graph / harness / Socket.dev critical vector | yes/no | bump parent / direct bump / dismiss to `.snyk` |
+
+## Package.json admission gate
+| Package | Admission reason | Why `.snyk` dismissal is not enough | Removal issue if override |
+|---|---|---|---|
+| <pkg> | already-direct / reachable parent / override-last-resort | <proof> | #NN or none |
 
 ## Supply-chain gate warnings
 - WARN: release age gate missing for `<package-manager>` (if absent).

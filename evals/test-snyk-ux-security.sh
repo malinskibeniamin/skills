@@ -139,12 +139,19 @@ run_content_eval "$SKILL_MD" "[Nn]ever (execute|run) code from advisories|[Nn]ev
 
 run_content_eval "$SKILL_MD" "direct dep absence.*dismiss|not add.*package\\.json" "SKILL.md warns not to add direct deps just to suppress transitives"
 run_content_eval "$SKILL_MD" "/steelman" "SKILL.md explicitly invokes /steelman for transitive-only bump decisions"
+run_content_eval "$SKILL_MD" "/diagnose" "SKILL.md invokes /diagnose before package.json security fixes"
+run_content_eval "$SKILL_MD" "package\\.json admission gate|admission gate.*package\\.json" "SKILL.md has package.json admission gate"
+run_content_eval "$SKILL_MD" "unproven.*dismiss|dismiss.*unproven" "SKILL.md defaults unproven transitive vulns to dismissal"
 run_content_eval "$SKILL_MD" "bump.*makes no sense|makes no sense.*bump" "SKILL.md blocks nonsensical transitive bumps"
 run_content_eval "$REFERENCE_MD" "Transitive-only dismissal checklist" "REFERENCE.md has transitive-only dismissal checklist"
 run_content_eval "$REFERENCE_MD" "Direct dependency absence is evidence" "REFERENCE.md treats missing direct dep as dismissal evidence"
 run_content_eval "$REFERENCE_MD" "do not add.*package\\.json" "REFERENCE.md forbids package.json growth for suppression-only overrides"
 run_content_eval "$REFERENCE_MD" "/steelman transitive bump gate|transitive bump gate.*\\/steelman" "REFERENCE.md documents the /steelman transitive bump gate"
 run_content_eval "$REFERENCE_MD" "strongest case.*dismiss|dismiss.*strongest case" "REFERENCE.md requires arguing strongest dismissal case before bump"
+run_content_eval "$REFERENCE_MD" "/diagnose reachability loop|reachability loop.*\\/diagnose" "REFERENCE.md documents /diagnose reachability loop"
+run_content_eval "$REFERENCE_MD" "real potential vulnerability" "REFERENCE.md requires real potential vulnerability proof"
+run_content_eval "$REFERENCE_MD" "Package.json admission gate" "REFERENCE.md documents package.json admission gate"
+run_content_eval "$REFERENCE_MD" "DEFAULT.*dismiss|default.*dismiss" "REFERENCE.md defaults uncertain transitive findings to dismissal"
 
 # ── Minimum release age gates ────────────────────────────────────
 
