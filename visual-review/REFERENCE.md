@@ -33,6 +33,111 @@ Not visual by default: docs source with no rendered output, test-only, generated
 
 subjective product/design taste -> No hook. Need evidence + user-impact sentence.
 
+## Surface register
+
+Classify the surface before judging design quality:
+
+| Register | Standard | Failure mode |
+|---|---|---|
+| Product | Familiar, trustworthy, consistent, task-first | decoration, strange affordances, weak states, broken density |
+| Brand | Distinctive, memorable, art-directed, audience-specific | safe template, no focal point, generic aesthetic lane |
+| Report or CLI/TUI | Scannable, aligned, legible, next action clear | noisy output, no hierarchy, hidden status, no recovery path |
+
+If register is ambiguous, state the assumption in the report. Product UI can be intentionally familiar; brand UI needs a stronger point of view. Do not punish product UI for being familiar. Do not praise brand UI for being safe.
+
+## Design language protocol
+
+Use this section during design-hat review.
+
+1. Run the squint test: identify primary, secondary, and ignored elements.
+2. Name the handle before the fix: hierarchy, density, rhythm, anchor, negative space, leading, measure, visual weight, affordance, scan path.
+3. Write current read and desired read. Current read is what the surface communicates now; desired read is what the user should notice or do.
+4. Tie every subjective note to evidence: screenshot, viewport, state, browser, terminal width, or numbered callouts.
+5. Translate the adjustment into implementation knobs: design tokens, `gap-*`, padding, line-height, max-width, Button variant, grid, copy, state, or component prop.
+6. Choose magnitude: nudge, step, or system change. If the same issue appears twice, prefer a system change and automation candidate.
+
+Bad: "Spacing feels off." Good: "Density is too tight in the billing card; helper text and action read as one group. Move the action row one spacing step away from supporting text."
+
+## Design language handles
+
+Design review needs shared handles, not vibes.
+
+| Handle | Meaning | Look for | Implementation knobs |
+|---|---|---|---|
+| Density | How packed or airy a surface feels | Crowded cards, buried actions, sparse pages with weak grouping | `gap-*`, padding, row height, line-height, container width |
+| Hierarchy | What reads first, second, third | Primary action lost, headings similar to body, too many accents | type scale, weight, contrast, order, placement, whitespace |
+| Rhythm | Repeated spatial beat across a surface | Equal spacing everywhere, random jumps, no section cadence | spacing tokens, `gap`, section padding, grid rhythm, dividers |
+| Anchor | Stable visual starting point | Floating content, unclear alignment edge, weak header/action relationship | grid columns, left edge, baseline, sticky header, action alignment |
+| Negative space | Space that groups, separates, or emphasizes | Cramped groups, hollow empty regions, unrelated content stuck together | margin, padding, max-width, section breaks, grouping containers |
+| Leading | Vertical space inside text lines | Paragraphs feel compressed, dark text feels heavy, long copy tires the eye | `leading-*`, font size, weight, max-width, paragraph spacing |
+| Measure | Width of readable text blocks | Lines too long, headings break awkwardly, metadata wraps noisily | `max-w-*`, `ch` widths, grid columns, copy length |
+| Visual weight | Perceived emphasis of an element | Secondary items overpower primary, borders/shadows compete with content | font weight, fill, border, shadow, opacity, color contrast |
+| Affordance | Whether an element looks actionable | Ghost buttons, link-like text that is not a link, disabled ambiguity | Button variant, hover/focus/active states, cursor, icon, label |
+| Scan path | Eye movement through the task | User must hunt, cards have no obvious reading order, CTA appears too late | layout order, alignment, focal point, progressive disclosure |
+
+Design finding anatomy: Current read, Desired read, User-impact sentence, Evidence, Magnitude, Adjustment, Implementation knobs.
+
+Current read and Desired read are the core pair: first name what the surface communicates now, then name what the user should notice or do after the adjustment. User-impact sentence explains why that read delta matters for task success, trust, comprehension, or conversion.
+
+Design finding format:
+
+```markdown
+Handle: <hierarchy | density | rhythm | anchor | negative space | leading | measure | visual weight | affordance | scan path>
+Current read: <what dominates or feels unclear now>
+Desired read: <what should dominate or feel clear>
+User-impact sentence: <why this blocks comprehension, trust, task success, or conversion>
+Evidence: <screenshot path, viewport, state, numbered callout>
+Magnitude: <nudge | step | system>
+Adjustment: <direction and scope>
+Implementation knobs: <tokens, components, Tailwind utilities, layout props, copy, state>
+```
+
+Calibration:
+
+| Weak note | Better note |
+|---|---|
+| Spacing feels off. | Density is too tight in the billing card. Metadata, helper text, and action read as one group, so the primary action loses hierarchy. Move the action row one spacing step away from supporting text. |
+| Make it pop. | The primary action lacks visual weight. Increase contrast or use the primary button variant so it wins the first-read hierarchy. |
+| Let it breathe. | Negative space is not separating groups. Add section-level space between filters and results while keeping each filter label/input pair tight. |
+| Text is hard to read. | Leading and measure are fighting readability. Keep body copy near 65 to 75 characters and loosen line-height one step. |
+
+Guardrails:
+
+- Jargon is not evidence. Every handle needs observed evidence and user impact.
+- Prefer token-level direction over exact pixels unless the system uses fixed values.
+- Do not inflate whitespace everywhere. Whitespace should group, separate, or emphasize.
+- Do not fix one screen by breaking design-system rhythm elsewhere.
+- Do not confuse accessibility contrast with visual hierarchy.
+
+Reviewer prompts:
+
+- What should the user see first?
+- Where does the eye land after a two-second squint test?
+- Where does the scan path break?
+- Which element anchors the composition?
+- Is whitespace grouping related content or just making holes?
+- Is the action weak because of hierarchy, affordance, copy, or placement?
+- Is density appropriate for the task and user expertise?
+
+Adjustment magnitude: Nudge, Step, System.
+
+| Magnitude | Use when | Example direction |
+|---|---|---|
+| Nudge | One element is optically off | Align icon to text baseline, reduce secondary label weight |
+| Step | One region needs a clearer read | Increase card padding one token, separate body from action row |
+| System | The same issue repeats | Define spacing rhythm for all cards, standardize button hierarchy |
+
+## Screenshot callouts
+
+When screenshots exist, annotate or describe numbered callouts:
+
+1. Assign callout numbers to visible issues.
+2. Reference those numbers in findings.
+3. Include viewport, state, and browser.
+4. Use the squint test: name what remains dominant when details blur.
+
+If image annotation is unavailable, write text callouts: "Callout 2: right side of pricing card, mobile 390x844".
+
 ## Environment fingerprint
 
 | Field | How | Why |
@@ -172,7 +277,67 @@ Every frontend or customer-facing surface PR carries/links:
 - Environment fingerprint: browser, User agent, Platform, Viewport, visualViewport, DPR, media prefs, Locale/direction.
 - Checked matrix: browsers, viewports, states, keyboard path, console/network scan, a11y checks.
 - Screenshots/terminal captures: changed views/states, path or attachment.
+- Design handles: hierarchy/density/rhythm findings include current read, desired read, and numbered callouts when screenshots exist.
 - Findings: P0/P1 fixed or accepted; P2/P3 noted.
 - Skip reasons: every unrun matrix item has reason.
 - HTML report: absolute temp path, uploaded artifact, or skip reason.
 - Automation candidates: repeatable misses worth hook/eval/docs.
+
+## HTML report format
+
+Visual review can render a single self-contained HTML report in OS temp dir. This mirrors `/improve-codebase-architecture`: write the file first; add a renderer script later only if the JSON contract stabilizes.
+
+Location: resolve temp dir from `$TMPDIR`, fallback `/tmp` or `%TEMP%`. Write `<tmpdir>/visual-review-<timestamp>.html`, open via `open`, `xdg-open`, or `start`, return absolute path. Do not write repo artifacts unless user asks.
+
+### Scorecard
+
+Product, Design, Engineering, QA. Four cards: score + one sentence. Scores = `strong`, `ok`, `weak`, `blocked`; decision support, not false precision.
+
+| Hat | Judges |
+|---|---|
+| Product | user value, clarity, task success, friction, competitive quality |
+| Design | hierarchy, spacing, affordance, copy, visual consistency, state quality |
+| Engineering | async/slow-network resilience, platform risk, performance |
+| QA | repro, unhappy paths, regression risk, automation opportunity |
+
+### Design handles
+
+Add a compact design-language strip:
+
+| Handle | Current read | Desired read | Magnitude | Implementation knobs |
+|---|---|---|---|---|
+| hierarchy | secondary metadata dominates action | primary action wins first read | step | Button variant, weight, gap |
+
+### Callouts
+
+Screenshots can include numbered callouts. Each finding references callout number, screenshot path, viewport, browser, and state. If image annotation is unavailable, describe callouts in text.
+
+### Finding cards
+
+One compact card per finding. Sort P0 -> P3, then surface.
+
+- Severity: P0, P1, P2, P3/nit
+- Hat: Product, Design, Engineering, QA
+- Surface: route, component, command, screen, report, flow
+- Evidence: screenshot path, terminal capture, trace, console line, network condition, observation
+- Why it matters: user/business impact, one sentence
+- Fix: concrete next action
+- Automate?: hook, eval, browser test, visual regression, fixture, or no
+
+### State matrix
+
+| Surface | Happy | Loading | Empty | Error | Dense | Slow network | Mobile/narrow | Keyboard | Dark/high contrast |
+|---|---|---|---|---|---|---|---|---|---|
+
+Every skip gets reason. `not reachable` ok; blank not ok.
+
+### Automation candidates
+
+| Candidate | Best home | Why |
+|---|---|---|
+| Deterministic source smell | PostToolUse hook | inspect changed text |
+| Missing review evidence | Stop or commit-push-pr gate | workflow enforcement |
+| Browser behavior regression | Playwright/browser test | runtime evidence |
+| Screenshot diff | Visual regression tool | baseline compare |
+| Subjective taste issue | Skill rubric/eval example | judgement required |
+| Report rendering | Script | JSON -> HTML transform |
