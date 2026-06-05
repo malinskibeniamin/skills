@@ -498,6 +498,46 @@ Useful Socket docs:
   `eval()`, and environment variables:
   https://docs.socket.dev/docs/faq#how-does-sockets-capability-detection-work
 
+### Automatic internal skill gates
+
+The Snyk sweep owns security state, so it should invoke these skills
+internally instead of relying on the user to remember them.
+
+1. **`/resilience-review` before PR.**
+   Run after verify and before commit/PR. Focus the review on:
+   - `.snyk` write succeeded, expiry exists, rescan shows `Ignored`;
+   - existing-project Snyk IO monitor pushed or skipped with reason;
+   - package manager detection is correct;
+   - missing release age gate warning is visible;
+   - Socket.dev web check result is recorded;
+   - override has removal issue and rollback path;
+   - ambiguous workspace or multi-lockfile cases have guards.
+   `NEEDS_GUARDS` means fix or document an explicit accepted risk in
+   PR evidence.
+
+2. **`/to-issues` for security debt.**
+   Create or draft issues whenever the sweep leaves follow-up work:
+   - missing release age gate;
+   - override / resolution / Go replace added;
+   - React 19 blocked;
+   - upstream has no parent fix;
+   - no exact existing Snyk project match or ambiguous project match;
+   - Socket.dev critical/high vector needs owner review but was not
+     fixed in this PR.
+   If tracker publishing is unavailable, include issue drafts in the PR
+   body with owners and acceptance criteria.
+
+3. **`/review` before PR.**
+   Review must explicitly check the package.json admission gate,
+   `/steelman` dismissal argument, `/diagnose` reachability loop,
+   `.snyk` dismissal evidence, and absence of dependency-surface growth
+   without proof. A review finding on these gates blocks PR open unless
+   the user or security owner overrides it in writing.
+
+4. **PR tail.**
+   After PR open, failing checks route to `/github:gh-fix-ci`; review
+   comments route to `/resolve-pr-feedback`.
+
 ### 2d. React 18 gate (JS, mandatory)
 
 ```bash
@@ -683,6 +723,11 @@ expired). Triggered by @<triggerer>.
 | Package | Admission reason | Why `.snyk` dismissal is not enough | Removal issue if override |
 |---|---|---|---|
 | <pkg> | already-direct / reachable parent / override-last-resort | <proof> | #NN or none |
+
+## Internal skill gates
+- `/resilience-review`: PASS / NEEDS_GUARDS / BLOCKED -- <summary>
+- `/to-issues`: <n> issue(s) created or drafted for missing release age gate / overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
+- `/review`: PASS / BLOCKED -- package.json admission gate, `/steelman`, `/diagnose`, and `.snyk` evidence checked
 
 ## Supply-chain gate warnings
 - WARN: release age gate missing for `<package-manager>` (if absent).

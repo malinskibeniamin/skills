@@ -171,6 +171,16 @@ run_content_eval "$REFERENCE_MD" "https://socket\\.dev/npm/package" "REFERENCE.m
 run_content_eval "$REFERENCE_MD" "no Socket CLI|no socket CLI|No Socket CLI" "REFERENCE.md makes Socket check web-only"
 run_content_eval "$REFERENCE_MD" "install script|typosquat|unstable ownership|native code|shell access|environment variable access" "REFERENCE.md lists Socket attack vectors"
 
+# ── Automatic internal skill gates ───────────────────────────────
+
+run_content_eval "$SKILL_MD" "/resilience-review" "SKILL.md auto-runs resilience-review before PR"
+run_content_eval "$SKILL_MD" "/to-issues" "SKILL.md auto-runs to-issues for security debt"
+run_content_eval "$SKILL_MD" "/review" "SKILL.md auto-runs review before PR"
+run_content_eval "$REFERENCE_MD" "Automatic internal skill gates" "REFERENCE.md documents automatic internal skill gates"
+run_content_eval "$REFERENCE_MD" "resilience-review.*before PR|before PR.*resilience-review" "REFERENCE.md runs resilience-review before PR"
+run_content_eval "$REFERENCE_MD" "to-issues.*missing release age|missing release age.*to-issues" "REFERENCE.md sends release gate debt to to-issues"
+run_content_eval "$REFERENCE_MD" "review.*package\\.json admission gate|package\\.json admission gate.*review" "REFERENCE.md review checks admission gate"
+
 # ── lockfile-sync-check.sh hook behavior ────────────────────────
 
 run_content_eval "$LOCK_HOOK" "bun\.lock" "lockfile hook matches bun.lock"
