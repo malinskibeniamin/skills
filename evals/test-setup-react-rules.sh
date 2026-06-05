@@ -578,6 +578,14 @@ run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: raw hex in CSS" "design token"
 
+# Ban raw color functions in CSS
+tmpfile="$_rr_tmpdir/test.css"
+echo '.card { color: hsl(220 90% 56%); background: rgb(255 255 255); }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw color functions in CSS" "design token"
+
 # Allow CSS variables (not raw hex)
 tmpfile="$_rr_tmpdir/test.css"
 echo '.card { color: var(--destructive); }' > "$tmpfile"
@@ -585,6 +593,46 @@ echo '.card { color: var(--destructive); }' > "$tmpfile"
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: CSS variables"
+
+# Ban raw colors in JSX Tailwind arbitrary values
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-[#0f172a] text-[rgb(255,255,255)]">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: raw color arbitrary values in TSX" "design token"
+
+# Ban inline style raw colors in JSX
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div style={{ color: "#fff", backgroundColor: "hsl(220 90% 56%)" }}>content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: inline raw colors in TSX" "design token"
+
+# Ban gradient text
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Launch faster</h1>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: gradient text in TSX" "Gradient text"
+
+# Ban hardcoded Tailwind palette gradients
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-gradient-to-r from-purple-500 via-cyan-400 to-blue-600">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: hardcoded Tailwind palette gradients" "theme gradient"
+
+# Allow token-based Tailwind color classes
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="bg-primary text-primary-foreground border-border">content</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: token-based Tailwind color classes"
 
 # Skip .ts files (not CSS or TSX)
 tmpfile="$_rr_tmpdir/test.ts"
@@ -655,6 +703,8 @@ run_hook_eval "$TW_SCRIPT" \
 run_content_eval "$TW_SCRIPT" "100dvh" "tailwind-check suggests 100dvh"
 run_content_eval "$TW_SCRIPT" "100vw" "tailwind-check warns about 100vw"
 run_content_eval "$TW_SCRIPT" "user-scalable" "tailwind-check blocks user-scalable=no"
+run_content_eval "$TW_SCRIPT" "raw.*color.*design token|design token.*raw.*color" "tailwind-check blocks raw color design-token bypasses"
+run_content_eval "$TW_SCRIPT" "Gradient text" "tailwind-check blocks gradient text"
 
 # ── Check 18: Ban class components ────────────────────────────────
 
