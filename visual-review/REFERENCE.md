@@ -9,7 +9,7 @@ Visual review = surface review for customer-facing surfaces: web UI, mobile scre
 User sees/reads/acts on it -> surface. Frontend/browser signals:
 
 - `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`, `*.mdx`
-- `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`
+- `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`, shadcn/ui, `@/components/ui`
 - design tokens, Tailwind/theme, registry components, typography, icons
 - form, dialog, popover, table, toast, media, nav, animation, scroll code
 - browser/platform branches: UA branches, user agent, viewport, media queries, feature detection, `window`/`document`
@@ -35,7 +35,7 @@ subjective product/design taste -> No hook. Need evidence + user-impact sentence
 
 ## Design context bootstrap
 
-Read existing tokens/theme and at least one representative component or page before judging. Check design tokens, Tailwind config/theme, registry components, shared typography, Button variants, form controls, layout shell, and neighboring surfaces. Preserve system intent when it works; call out drift when local choices break the system or user task.
+Read existing tokens/theme and at least one representative component or page before judging. Check design tokens, Tailwind config/theme, shadcn/ui or `@/components/ui` components, registry components, shared typography, Button variants, form controls, layout shell, and neighboring surfaces. Preserve system intent when it works; call out drift when local choices break the system or user task.
 
 ## Review lanes
 
