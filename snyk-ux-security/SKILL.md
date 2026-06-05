@@ -1,6 +1,6 @@
 ---
 name: snyk-ux-security
-description: "Sequential Snyk sweep across UX/frontend + Go backend + Bazel codebases. Paths as args (globs ok) or one pasted Snyk vulnerability. Per path: worktree + branch + subagent, snyk test plus existing-project-only monitor, ecosystem detect (package.json -> bun audit; go.mod -> govulncheck; MODULE.bazel or bazel/repositories.bzl -> Bazel track), exploitability triage first, then direct dep bump, parent dep bump, overrides/resolutions/replace last. Reuse existing Snyk projects/resources only; never create projects/apps/targets during audits. Pin React 18. Regen yarn.lock + bun.lock; go mod tidy; bazel mod deps --lockfile_mode=update. Harden JS supply chain with minimum release age gate audit + Socket.dev web check. Open PR. Never defers real vulns. Use when user asks for Snyk audit, UX security sweep, frontend/Go/Bazel dep security review, govulncheck sweep, CVE sweep."
+description: "Run sequential Snyk dependency sweeps across frontend, Go, and Bazel paths with release-age and Socket.dev gates. Use when auditing Snyk findings, CVEs, govulncheck, or dependency security without creating new Snyk projects."
 ---
 
 # Snyk UX + Go + Bazel Security
