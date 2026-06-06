@@ -12,6 +12,11 @@ if hook_has_escape "ux-copy"; then
   exit 0
 fi
 
+# UI-ish added lines only: TS/TSX string literals or visible JSX text.
+# Some slop directives are useful to catch in comments too; those checks
+# intentionally use all added lines and still honor the escape hatch above.
+_ux_ui_lines=$(printf '%s\n' "$added_lines" | grep -E "([\"'][^\"']+[\"']|>[^<>{}][^<>{}]*<)" || true)
+
 # ── Check 1: Ban exclamation points at end of string literals ─────
 
 if echo "$added_lines" | grep -qE "!['\"]|!\\\\n|!\s*['\"]"; then
@@ -160,6 +165,56 @@ fi
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*routing rules[^'\"]*\1"; then
   hook_warn "Use 'routing policies' not 'routing rules' (matches docs)." "ux-copy-glossary"
+fi
+
+# ── Check 21: Ban em dashes in UI copy ───────────────────────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -q "—"; then
+  hook_block "No em dashes in UI text. Use a period, colon, or parentheses."
+fi
+
+# ── Check 22: Warn on marketing buzzwords in UI copy ─────────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(seamless|effortless|frictionless|game-changing|game changing|best-in-class|world-class|cutting-edge|next-generation|revolutionary|innovative|intuitive|robust|powerful|comprehensive|unlock|unleash|elevate|supercharge|delight|delightful)\b'; then
+  hook_warn "Marketing buzzword in UI text. Say the concrete user benefit."
+fi
+
+# ── Check 23: Ban "not just X, it is Y" AI contrast frame ────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE "\bnot[[:space:]]+just[[:space:]][^,.;!?]{2,80}[,;]?[[:space:]]+(it'?s|it[[:space:]]+is|this[[:space:]]+is|we'?re|we[[:space:]]+are|they'?re|they[[:space:]]+are)[[:space:]]+"; then
+  hook_warn "No 'not just X, it is Y' framing. State the value directly."
+fi
+
+# ── Check 24: Warn on "X theater" slop phrasing ─────────────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(security|compliance|innovation|process|performance|productivity|collaboration|automation|observability|governance|workflow|agile|testing|design|ai)[ -]+theater\b'; then
+  hook_warn "No 'X theater' phrasing in UI text. Name the actual risk or behavior."
+fi
+
+# ── Check 25: Warn on aphoristic cadence ────────────────────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE "\b(less|more)[[:space:]][^,.;:!?]{2,80},[[:space:]]*(more|less)[[:space:]][^\"']{2,80}|\b(isn'?t|is[[:space:]]+not|not)[[:space:]]+about[[:space:]][^,.;:!?]{2,80},?[[:space:]]+(it'?s|it[[:space:]]+is)[[:space:]]+about\b|[^.!?]{2,80}\.[[:space:]]+(no|not)[[:space:]][^.!?]{2,80}\.[[:space:]]+just[[:space:]][^.!?]{2,80}\."; then
+  hook_warn "Aphoristic cadence in UI text. Use direct product copy."
+fi
+
+# ── Check 26: Warn on repeated section kickers ──────────────────
+
+_repeated_kicker=$(printf '%s\n' "$_ux_ui_lines" \
+  | grep -oiE '\b(Built for|Designed for|Made for|Created for|Use it to|Whether you|For teams that|When you need|From [^"<]{2,40} to)\b' \
+  | sed -E 's/[Ff]rom .+ to/from x to/g' \
+  | tr '[:upper:]' '[:lower:]' \
+  | sort \
+  | uniq -d \
+  | head -1 || true)
+
+if [ -n "$_repeated_kicker" ]; then
+  hook_warn "Repeated section kicker ('$_repeated_kicker'). Vary structure or cut the repeated lead-in."
+fi
+
+# ── Check 27: Ban "make it pop" directives ──────────────────────
+
+if printf '%s\n' "$added_lines" | grep -qiE '\bmake[[:space:]]+(it|this|that|the[[:space:]]+[[:alpha:]-]+)[[:space:]]+pop\b'; then
+  hook_block "No 'make it pop' direction. Specify the visual or copy change."
 fi
 
 exit 0
