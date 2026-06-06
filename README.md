@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.10.2
+codex plugin marketplace add malinskibeniamin/skills --ref v4.15.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -126,6 +126,8 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 # Individual skills -- pick what you need:
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/prime --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/aip --agent claude-code -y
 bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
@@ -595,6 +597,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
 | **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
+| **`/prime`** | Start or resume in a repo. Build a compact startup brief from git state, docs, and optional seeded task context. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
 | **`/grill-with-docs`** | **Grill + document.** Sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
 | **`/domain-model`** | Legacy local DDD grill. Prefer `/grill-with-docs`; kept for explicit legacy requests. |
@@ -608,6 +611,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
 | **`/improve-codebase-architecture`** | Find architectural improvements. Identify shallow modules, propose deep-module refactors. |
 | **`/upgrade-dependency`** | Plan and safely apply dependency upgrades. Builds upgrade path first, applies safe patch/minor updates, creates issues for risky majors or unclear migrations. |
+| **`/aip`** | Design resource-oriented protobuf APIs with Google AIP rules, standard methods, LROs, pagination, filters, field masks, etags, and singleton patterns. |
 | **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
 | **`/write-a-skill`** | Create new agent skill with proper structure + progressive disclosure. |
 
@@ -624,6 +628,11 @@ and notification preferences. Read src/routes/ to understand the routing structu
 ```
 /brainstorming design -- I need to add real-time collaboration to our editor.
 Compare WebSocket, SSE, and CRDT approaches. Focus on latency and offline support.
+```
+
+**`/prime`** -- startup brief:
+```
+/prime -- summarize repo state before I start the URL params work.
 ```
 
 **`/tdd`** -- strict test-first:
@@ -694,6 +703,11 @@ into a standalone AuthService. Must be backwards-compatible during migration.
 in src/features/. Look for tightly coupled modules that should be split.
 ```
 
+
+**`/aip`** -- protobuf API design:
+```
+/aip -- review the Book resource API for standard methods, names, etags, and pagination.
+```
 
 **`/handoff`** -- transfer context to another session:
 ```

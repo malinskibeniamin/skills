@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.15.0
+
+2026-06-06 -- Publish synced release metadata for the current harness. Updates skill-manifest, Claude plugin, Codex plugin, Claude marketplace, and Codex marketplace to 4.15.0; refreshes install copy to 98 wired hooks, 108 hook scripts, and 71 skill dirs; and fixes Claude plugin packaging so `/aip` plus deprecated compatibility aliases `/qa` and `/ubiquitous-language` install alongside the v4.14 `/thermo-nuclear-code-quality-review` release. Adds release metadata eval coverage and updates README release-pin/install docs.
+
 ## 4.14.0
 
 2026-06-05 -- Add `/thermo-nuclear-code-quality-review` for release-blocking cold PR audits. The skill fans out standards/spec, structural quality, frontend harness, resilience, visual UX, security/privacy, tests/perf, and `/steelman` axes; requires evidence or skip reasons for visual and resilience lanes; emits severity-ranked PR comment-ready findings. Skills 69 -> 70.
