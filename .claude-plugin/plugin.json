@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend + Go backend enforcement harness. 94 wired hooks across 103 scripts enforce patterns on every edit. Green != done: `test-warning-check` surfaces warnings on passing test/lint/type runs (DeprecationWarning, React `act()`, unhandled rejection, `@ts-ignore`); `ci-warning-audit` Stop-hook scans `gh run view --log` on green CI for deprecations / console warnings / skipped tests. 70 skills from TDD through CI-green PR, including /resilience-review resilience checks, /steelman anti-sycophancy guard + /upgrade-dependency safe dependency upgrades + /snyk-ux-security per-path vuln sweep (JS + Go ecosystems; exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep bump second, resolutions/overrides/replace as last resort only with follow-up TODO to remove; React 18 pin + changelog-walked major bumps + no-deferral escalation; Go `snyk test --file=go.mod` + `go get -u` + `go mod tidy` + `govulncheck` verify). Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. bun.lock + yarn.lock parity enforced (Snyk IO doesn't parse bun.lock). 21 LLM failure modes enforced: 7 Karpathy single-agent + 14 MAST multi-agent (Cemri et al. NeurIPS 2025). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. MCP ban with CLI redirect (~20x token savings). Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
-  "version": "4.14.0",
+  "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks across 108 scripts enforce patterns on every edit. Green != done: `test-warning-check` surfaces warnings on passing test/lint/type runs (DeprecationWarning, React `act()`, unhandled rejection, `@ts-ignore`); `ci-warning-audit` Stop-hook scans `gh run view --log` on green CI for deprecations / console warnings / skipped tests. 71 skills from TDD through CI-green PR, including /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /steelman anti-sycophancy guard, /upgrade-dependency safe dependency upgrades, and /snyk-ux-security per-path vuln sweep (JS + Go ecosystems; exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep bump second, resolutions/overrides/replace as last resort only with follow-up TODO to remove; React 18 pin + changelog-walked major bumps + no-deferral escalation; Go `snyk test --file=go.mod` + `go get -u` + `go mod tidy` + `govulncheck` verify). Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. bun.lock + yarn.lock parity enforced (Snyk IO doesn't parse bun.lock). 21 LLM failure modes enforced: 7 Karpathy single-agent + 14 MAST multi-agent (Cemri et al. NeurIPS 2025). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. MCP ban with CLI redirect (~20x token savings). Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
+  "version": "4.15.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -25,13 +25,13 @@
     "caveman"
   ],
   "skills": [
+    "./aip/",
     "./brainstorming/",
     "./caveman/",
     "./codex-compat/",
     "./commit-push-pr/",
     "./commit-push/",
     "./design-an-interface/",
-    "./resilience-review/",
     "./development-lifecycle/",
     "./diagnose/",
     "./domain-model/",
@@ -50,8 +50,10 @@
     "./obsidian-vault/",
     "./prime/",
     "./prototype/",
+    "./qa/",
     "./redpanda-frontend-kit/",
     "./request-refactor-plan/",
+    "./resilience-review/",
     "./resolve-pr-feedback/",
     "./review/",
     "./scaffold-exercises/",
@@ -84,6 +86,7 @@
     "./to-issues/",
     "./to-prd/",
     "./triage/",
+    "./ubiquitous-language/",
     "./upgrade-dependency/",
     "./visual-review/",
     "./work-automation-kit/",
@@ -105,7 +108,7 @@
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
-  "x-updatedAt": "2026-06-05",
+  "x-updatedAt": "2026-06-06",
   "x-includes": {
     "instructions": [
       "CLAUDE.md",
@@ -115,6 +118,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "4.15.0": "2026-06-06 -- Publish synced release metadata for the current harness. Updates skill-manifest, Claude plugin, Codex plugin, Claude marketplace, and Codex marketplace to 4.15.0; refreshes install copy to 98 wired hooks, 108 hook scripts, and 71 skill dirs; and fixes Claude plugin packaging so `/aip` plus deprecated compatibility aliases `/qa` and `/ubiquitous-language` install alongside the v4.14 `/thermo-nuclear-code-quality-review` release. Adds release metadata eval coverage and updates README release-pin/install docs.",
     "4.14.0": "2026-06-05 -- Add `/thermo-nuclear-code-quality-review` for release-blocking cold PR audits. The skill fans out standards/spec, structural quality, frontend harness, resilience, visual UX, security/privacy, tests/perf, and `/steelman` axes; requires evidence or skip reasons for visual and resilience lanes; emits severity-ranked PR comment-ready findings. Skills 69 -> 70.",
     "4.13.0": "2026-06-01 -- Add `/resilience-review` resilience skill and `resilience-review-nudge` hook. The workflow is not security review: it is a Murphy-law pass for edge cases, error handling, invalid/stale states, loading/empty/error/success polish, fallbacks, postconditions, observability, and recovery. Wires into `/development-lifecycle`, `/tdd`, `/go`, self-reviewer, code-reviewer, prompt-time nudges, generated Claude/Codex hooks, README, and evals. Skills 67 -> 68; hooks 92 -> 93; scripts 101 -> 102. Follow-up: add Snyk project create guard for unsafe monitor/API writes; hooks 93 -> 94; scripts 102 -> 103.",
     "4.12.0": "2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, related peer/plugin/adapter packages, and security advisories, applies safe patch/minor updates, creates GitHub issues for risky majors or unclear migrations, and is reusable from `/snyk-ux-security`. Adds report/issue/PR templates and 75 eval assertions. Skills 66 -> 67.",
