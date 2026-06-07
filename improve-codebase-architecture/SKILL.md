@@ -1,63 +1,70 @@
 ---
 name: improve-codebase-architecture
-description: Explore codebase for architectural improvement. Focus testability via deepening shallow modules. Use when user want improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make codebase more AI-navigable.
+description: Finds deepening opportunities using domain language and ADRs. Use when improving architecture, finding refactors, consolidating coupling, or improving testability.
 ---
 
 # Improve Codebase Architecture
 
-Surface architectural friction and propose **deepening opportunities**: refactors that turn shallow modules into deep ones. The aim is testability and AI-navigability.
+Goal: find architectural friction and propose **deepening opportunities**: shallow modules -> deeper modules. Optimize testability + AI navigation.
 
-This skill is _informed_ by the project's domain model. The domain glossary names good seams; ADRs in the area record decisions the skill should not re-litigate. Read both before exploring.
+## Language
 
-Use [LANGUAGE.md](LANGUAGE.md) vocabulary exactly: module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality. Do not drift into "component," "service," "API," or "boundary."
+Use [LANGUAGE.md](LANGUAGE.md) terms exactly: module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality.
 
-Key principles:
-- **Deletion test**: deleting a shallow module makes complexity vanish; deleting a deep module spreads complexity across callers.
-- **The interface is the test surface.**
-- **One adapter means a hypothetical seam. Two adapters means a real seam.**
+Principles:
 
-## Process
+- Deletion test: delete module. If complexity vanishes, pass-through. If complexity spreads to callers, module has depth.
+- Interface is test surface.
+- One adapter = hypothetical seam. Two adapters = real seam.
 
-### 1. Explore
-Read the project's domain glossary and any ADRs in the area you're touching first.
+Read `CONTEXT.md` + relevant ADRs first. Domain language names good seams. ADRs avoid re-litigating decisions.
 
-Use Agent(subagent_type=Explore) when available. Otherwise explore with `rg`, `find`, tests, and call graph reading. Look for:
-- One concept require bouncing between many files?
-- Shallow modules: interface nearly as complex as implementation?
-- Pure functions extracted for testability, but real bugs hide in how called (no locality)?
-- Tightly-coupled modules leaking across seams?
-- Untested or hard-to-test areas?
+## 1. Explore
 
-Apply the deletion test to anything that looks shallow.
+Use Explore subagent when available. Otherwise `rg`, `find`, tests, call graph reading.
 
-### 2. Present candidates as an HTML report
+Look for:
 
-Write a self-contained HTML file to the OS temp directory so nothing lands in the repo. Resolve temp dir from `$TMPDIR`, falling back to `/tmp` (or `%TEMP%` on Windows), and write to `<tmpdir>/architecture-review-<timestamp>.html` so each run gets a fresh file. Open it for the user (`open`, `xdg-open`, or `start`) and tell them the absolute path.
+- one concept needing many file hops
+- shallow modules: interface nearly as complex as impl
+- pure functions extracted for testability while bugs hide in call choreography
+- coupled modules leaking across seams
+- hard-to-test areas
 
-Use Tailwind via CDN and Mermaid via CDN. Mix Mermaid with hand-crafted CSS/SVG visuals. Each candidate gets a before/after visualization. See [HTML-REPORT.md](HTML-REPORT.md) for scaffold, diagram patterns, styling, and tone.
+Apply deletion test to suspects.
 
-For each candidate card:
-- Files/modules involved
-- Problem: why current architecture causes friction
-- Solution: what changes
-- Benefits in terms of locality, leverage, and tests
-- Before/after diagram showing shallowness vs deepening
-- Recommendation strength: `Strong`, `Worth exploring`, or `Speculative`
+## 2. HTML report
 
-Use [LANGUAGE.md](LANGUAGE.md) vocabulary for architecture and the project's `CONTEXT.md` vocabulary for the domain. If a candidate contradicts an existing ADR, only surface it when friction is real enough to warrant revisiting the ADR. Mark it clearly.
+Write self-contained HTML to temp dir: `$TMPDIR/architecture-review-<timestamp>.html` fallback `/tmp`. Open it. Use [HTML-REPORT.md](HTML-REPORT.md).
 
-Do **not** propose interfaces yet. After writing the report, ask: "Which of these would you like to explore?"
+Report cards include:
 
-### 3. Grilling loop
+- Files/modules
+- Problem
+- Solution
+- Benefits: locality, leverage, tests
+- Before/after visual
+- Recommendation: `Strong`, `Worth exploring`, `Speculative`
 
-Once the user picks a candidate, drop into a grilling conversation. Walk the design tree: constraints, dependencies, shape of the deepened module, what sits behind the seam, what tests survive.
+End with **Top recommendation**.
 
-Side effects happen inline as decisions crystallize:
-- Naming a deepened module after a concept not in `CONTEXT.md`? Add the term to `CONTEXT.md`. Create the file lazily if missing. See [../domain-model/CONTEXT-FORMAT.md](../domain-model/CONTEXT-FORMAT.md).
-- Sharpening a fuzzy term? Update `CONTEXT.md` right there.
-- User rejects the candidate for a load-bearing reason? Offer an ADR so future architecture reviews do not re-suggest it. See [../domain-model/ADR-FORMAT.md](../domain-model/ADR-FORMAT.md).
-- Want alternative interfaces? Use [../design-an-interface/SKILL.md](../design-an-interface/SKILL.md).
+Use Tailwind CDN + Mermaid CDN. Mix Mermaid for graphs/sequences with custom CSS/SVG for editorial visuals.
 
-### 4. Create GitHub Issue
+Use `CONTEXT.md` terms for domain and [LANGUAGE.md](LANGUAGE.md) terms for architecture. If candidate contradicts ADR, surface only when friction justifies reopening; mark conflict.
 
-Refactor RFC. See [REFERENCE.md](REFERENCE.md) for template and dependency categories.
+Do not propose interfaces yet. Ask: "Which of these would you like to explore?"
+
+## 3. Grilling loop
+
+For chosen candidate, grill constraints, deps, module shape, seam, adapters, tests, rollback.
+
+Inline side effects:
+
+- New domain term -> update `CONTEXT.md` using `/grill-with-docs` format.
+- Fuzzy term sharpened -> update `CONTEXT.md`.
+- User rejects with durable reason -> offer ADR so future reviews skip same suggestion.
+- Need alternative interfaces -> use [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md).
+
+## 4. Issue/RFC
+
+If user wants implementation plan, create refactor RFC with tiny reversible commits. Use [DEEPENING.md](DEEPENING.md) for candidate patterns and [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md) for interface exploration.

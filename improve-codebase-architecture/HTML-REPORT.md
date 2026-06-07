@@ -1,6 +1,6 @@
 # HTML Report Format
 
-The architectural review is rendered as a single self-contained HTML file in the OS temp directory. Tailwind and Mermaid both come from CDNs. Mermaid handles graph-shaped diagrams reliably; hand-built divs and inline SVG handle editorial visuals such as mass diagrams and cross-sections. Mix them. Do not lean on Mermaid for everything.
+The architectural review is rendered as a single self-contained HTML file in the OS temp directory. Tailwind and Mermaid both come from CDNs. Mermaid handles graph-shaped diagrams reliably; hand-built divs and inline SVG handle the more editorial visuals (mass diagrams, cross-sections). Mix the two -- don't lean on Mermaid for everything, it'll start to look generic.
 
 ## Scaffold
 
@@ -16,6 +16,8 @@ The architectural review is rendered as a single self-contained HTML file in the
       mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
     </script>
     <style>
+      /* small custom layer for things Tailwind doesn't cover cleanly:
+         dashed seam lines, hand-drawn-feeling arrow heads, etc. */
       .seam { stroke-dasharray: 4 4; }
       .leak { stroke: #dc2626; }
       .deep { background: linear-gradient(135deg, #0f172a, #1e293b); }
@@ -33,32 +35,32 @@ The architectural review is rendered as a single self-contained HTML file in the
 
 ## Header
 
-Repo name, date, and compact legend: solid box = module, dashed line = seam, red arrow = leakage, thick dark box = deep module. No intro paragraph. Go straight into candidates.
+Repo name, date, and a compact legend: solid box = module, dashed line = seam, red arrow = leakage, thick dark box = deep module. No introduction paragraph -- straight into the candidates.
 
 ## Candidate card
 
-Diagrams carry the weight. Prose is sparse, plain, and uses [LANGUAGE.md](LANGUAGE.md) terms.
+The diagrams carry the weight. Prose is sparse, plain, and uses the glossary terms ([LANGUAGE.md](LANGUAGE.md)) without ceremony.
 
 Each candidate is one `<article>`:
 
-- **Title**: short, names the deepening, for example "Collapse the Order intake pipeline".
-- **Badge row**: recommendation strength (`Strong` = emerald, `Worth exploring` = amber, `Speculative` = slate), plus dependency category (`in-process`, `local-substitutable`, `ports & adapters`, `mock`).
-- **Files**: monospaced list, `font-mono text-sm`.
-- **Before / After diagram**: centrepiece. Two columns, side by side.
-- **Problem**: one sentence. What hurts.
-- **Solution**: one sentence. What changes.
-- **Wins**: bullets, 6 words or fewer.
-- **ADR callout**: if applicable, one line in an amber-tinted box.
+- **Title** -- short, names the deepening (e.g. "Collapse the Order intake pipeline").
+- **Badge row** -- recommendation strength (`Strong` = emerald, `Worth exploring` = amber, `Speculative` = slate), plus a tag for the dependency category (`in-process`, `local-substitutable`, `ports & adapters`, `mock`).
+- **Files** -- monospaced list, `font-mono text-sm`.
+- **Before / After diagram** -- the centrepiece. Two columns, side by side. See patterns below.
+- **Problem** -- one sentence. What hurts.
+- **Solution** -- one sentence. What changes.
+- **Wins** -- bullets, <=6 words each. e.g. "Tests hit one interface", "Pricing logic stops leaking", "Delete 4 shallow wrappers".
+- **ADR callout** (if applicable) -- one line in an amber-tinted box.
 
-No paragraphs of explanation. If the diagram needs a paragraph to be understood, redraw it.
+No paragraphs of explanation. If the diagram needs a paragraph to be understood, redraw the diagram.
 
 ## Diagram patterns
 
-Pick the pattern that fits the candidate. Vary the diagrams.
+Pick the pattern that fits the candidate. Mix them. Don't make every diagram look the same -- variety is part of the point.
 
-### Mermaid graph
+### Mermaid graph (the workhorse for dependencies / call flow)
 
-Use a Mermaid `flowchart` or `graph` when the point is call/dependency shape. Wrap it in a Tailwind-styled card. Style leakage red and deep modules dark.
+Use a Mermaid `flowchart` or `graph` when the point is "X calls Y calls Z, and look at the mess." Wrap it in a Tailwind-styled card so it doesn't feel parachuted in. Style with classDef to colour leakage edges red and the deep module dark. Sequence diagrams work well for "before: 6 round-trips; after: 1."
 
 ```html
 <div class="rounded-lg border border-slate-200 bg-white p-4">
@@ -73,53 +75,49 @@ Use a Mermaid `flowchart` or `graph` when the point is call/dependency shape. Wr
 </div>
 ```
 
-### Hand-built boxes and arrows
+### Hand-built boxes-and-arrows (when Mermaid's layout fights you)
 
-Use `<div>` modules with borders and labels. Use inline SVG lines or paths positioned over a relative container. Good when the after state should feel like one thick-bordered deep module with greyed-out internals.
+Modules as `<div>`s with borders and labels. Arrows as inline SVG `<line>` or `<path>` elements positioned absolutely over a relative container. Reach for this when you want the "after" diagram to feel like one thick-bordered deep module with greyed-out internals -- Mermaid won't render that with the right weight.
 
-### Cross-section
+### Cross-section (good for layered shallowness)
 
-Stack horizontal bands (`h-12 border-l-4`) to show layers a call passes through. Before: many thin layers doing little. After: one thick band labelled with the consolidated responsibility.
+Stack horizontal bands (`h-12 border-l-4`) to show layers a call passes through. Before: 6 thin layers each doing nothing. After: 1 thick band labelled with the consolidated responsibility.
 
-### Mass diagram
+### Mass diagram (good for "interface as wide as implementation")
 
-Two rectangles per module: one for interface surface area, one for implementation. Before: interface nearly as tall as implementation. After: interface short, implementation tall.
+Two rectangles per module -- one for interface surface area, one for implementation. Before: interface rectangle is nearly as tall as the implementation rectangle (shallow). After: interface rectangle is short, implementation rectangle is tall (deep).
 
 ### Call-graph collapse
 
-Before: tree of function calls as nested boxes. After: same tree collapsed into one box, with internal calls faded inside.
+Before: a tree of function calls rendered as nested boxes. After: the same tree collapsed into one box, with the now-internal calls shown faded inside it.
 
 ## Style guidance
 
-- Lean editorial, not corporate dashboard. Generous whitespace.
-- Colour sparingly: one accent plus red for leakage and amber for warnings.
-- Keep diagrams about 320px tall so before/after fits side by side.
-- Use `text-xs uppercase tracking-wider` for module labels.
-- Only scripts: Tailwind CDN and Mermaid ESM import. Otherwise static.
+- Lean editorial, not corporate-dashboard. Generous whitespace. Serif optional for headings (`font-serif` works well with stone/slate).
+- Colour sparingly: one accent (emerald or indigo) plus red for leakage and amber for warnings.
+- Keep diagrams ~320px tall so before/after sits comfortably side by side without scrolling.
+- Use `text-xs uppercase tracking-wider` for module labels inside diagrams -- they should read as schematic, not as UI.
+- The only scripts are the Tailwind CDN and the Mermaid ESM import. The report is otherwise static -- no app code, no interactivity beyond Mermaid's own rendering.
 
-## Top recommendation
+## Top recommendation section
 
-One larger card. Candidate name, one sentence on why, anchor link to its card.
+One larger card. Candidate name, one sentence on why, anchor link to its card. That's it.
 
 ## Tone
 
-Plain English. Concise. Architectural nouns and verbs come from [LANGUAGE.md](LANGUAGE.md).
+Plain English, concise -- but the architectural nouns and verbs come straight from [LANGUAGE.md](LANGUAGE.md). Concision is not an excuse to drift.
 
 **Use exactly:** module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality.
 
-**Never substitute:** component, service, unit for module; API or signature for interface; boundary for seam; layer or wrapper when you mean module.
+**Never substitute:** component, service, unit (for module) · API, signature (for interface) · boundary (for seam) · layer, wrapper (for module, when you mean module).
 
-Good phrasing:
+**Phrasings that fit the style:**
 
-- "Order intake module is shallow: interface nearly matches the implementation."
+- "Order intake module is shallow -- interface nearly matches the implementation."
 - "Pricing leaks across the seam."
 - "Deepen: one interface, one place to test."
 - "Two adapters justify the seam: HTTP in prod, in-memory in tests."
 
-Wins bullets name gains in glossary terms:
+**Wins bullets** name the gain in glossary terms: *"locality: bugs concentrate in one module"*, *"leverage: one interface, N call sites"*, *"interface shrinks; implementation absorbs the wrappers"*. Don't write *"easier to maintain"* or *"cleaner code"* -- those terms aren't in the glossary and don't earn their place.
 
-- "locality: bugs concentrate in one module"
-- "leverage: one interface, N call sites"
-- "interface shrinks; implementation absorbs wrappers"
-
-No hedging. No throat-clearing. If a sentence could be a bullet, make it a bullet. If a bullet could be cut, cut it.
+No hedging, no throat-clearing, no "it's worth noting that...". If a sentence could be a bullet, make it a bullet. If a bullet could be cut, cut it. If a term isn't in [LANGUAGE.md](LANGUAGE.md), reach for one that is before inventing a new one.
