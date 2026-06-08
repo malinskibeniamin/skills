@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.16.0
+
+2026-06-08 -- Publish synced release metadata for the latest skill updates. Updates skill-manifest, Claude plugin, Codex plugin, Claude marketplace, and Codex marketplace to 4.16.0; refreshes release counts to 98 wired hooks, 108 hook scripts, and 72 skill dirs; and ships the vendored /teach skill plus updated /review, /prototype, and /improve-codebase-architecture guidance from the latest Matt Pocock workflow changes.
+
 ## 4.15.0
 
 2026-06-06 -- Publish synced release metadata for the current harness. Updates skill-manifest, Claude plugin, Codex plugin, Claude marketplace, and Codex marketplace to 4.15.0; refreshes install copy to 98 wired hooks, 108 hook scripts, and 71 skill dirs; and fixes Claude plugin packaging so `/aip` plus deprecated compatibility aliases `/qa` and `/ubiquitous-language` install alongside the v4.14 `/thermo-nuclear-code-quality-review` release. Adds release metadata eval coverage and updates README release-pin/install docs.

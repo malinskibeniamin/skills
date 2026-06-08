@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.15.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.16.0
 codex plugin marketplace upgrade skills
 ```
 
