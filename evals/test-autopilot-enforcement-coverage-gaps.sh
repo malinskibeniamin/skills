@@ -12,10 +12,10 @@ run_executable_eval "$HOOKS_DIR/biome-ignore-check.sh" "biome-ignore-check.sh is
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "noExplicitAny" "biome-ignore blocks noExplicitAny"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "hook_block" "biome-ignore uses hook_block for noExplicitAny"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "ts-ignore|ts-expect-error" "biome-ignore catches @ts-ignore/@ts-expect-error"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "hook_has_escape" "biome-ignore respects escape hatch"
+run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "noExplicitAny" "biome-ignore still calls out noExplicitAny"
+run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "hook_block" "biome-ignore hard-blocks lint suppressions"
+run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "ts-ignore|ts-expect-error" "biome-ignore documents ts-ignore ownership"
+run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "No lint suppression" "biome-ignore has no escape-hatch messaging"
 run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "LLMs" "biome-ignore mentions LLM copy risk"
 
 # ── Block: biome-ignore noExplicitAny ────────────────────────────
@@ -30,7 +30,7 @@ run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: biome-ignore noExplicitAny" "noExplicitAny"
 
-# ── Warn: other biome-ignore ─────────────────────────────────────
+# ── Block: any other biome-ignore ────────────────────────────────
 
 tmpfile="$_bi_tmpdir/test2.tsx"
 printf '// biome-ignore lint/a11y/noAriaUnsupported: legacy\n' > "$tmpfile"
@@ -39,7 +39,7 @@ printf '// biome-ignore lint/a11y/noAriaUnsupported: legacy\n' > "$tmpfile"
 
 run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: other biome-ignore (exit 0, not block)" "lint suppression"
+  2 "block: other biome-ignore" "No lint suppression"
 
 # Note: @ts-ignore/@ts-expect-error handling moved to as-cast-check.sh (block, exit 2)
 # in 2.2.x. See evals/test-setup-react-rules.sh for the block test. biome-ignore-check.sh
@@ -56,7 +56,7 @@ run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: clean code with no ignores"
 
-# ── Allow: escape hatch ──────────────────────────────────────────
+# ── Block: old escape hatch is not honored ───────────────────────
 
 tmpfile="$_bi_tmpdir/escaped.tsx"
 printf '// allow: lint-ignore third-party types are untyped\n// biome-ignore lint/correctness/noUndeclaredVariables: untyped lib\n' > "$tmpfile"
@@ -65,7 +65,7 @@ printf '// allow: lint-ignore third-party types are untyped\n// biome-ignore lin
 
 run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: biome-ignore with escape hatch"
+  2 "block: biome-ignore despite escape hatch" "No lint suppression"
 
 # ── Skip: non-JS/TS files ───────────────────────────────────────
 

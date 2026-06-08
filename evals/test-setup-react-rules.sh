@@ -876,7 +876,7 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: React.cloneElement usage" "cloneElement"
 
-# ── Check 25: Warn on biome-ignore (moved to biome-ignore-check.sh) ─
+# ── Check 25: Block biome-ignore (moved to biome-ignore-check.sh) ─
 
 tmpfile="$_rr_tmpdir/test.tsx"
 # Need git-tracked file for added_lines detection
@@ -885,7 +885,7 @@ echo "// biome-ignore lint/a11y/noAriaUnsupportedElements: legacy" > "$tmpfile"
 
 run_hook_eval "$BIOME_IGNORE_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: biome-ignore comment" "biome-ignore"
+  2 "block: biome-ignore comment" "No lint suppression"
 
 echo "/* biome-ignore lint/suspicious/noExplicitAny: third-party */" > "$tmpfile"
 
@@ -1275,7 +1275,7 @@ run_content_eval "$SCRIPT" "setTimeout" "hook checks setTimeout with string"
 run_content_eval "$SCRIPT" "NaN" "hook checks === NaN comparison"
 run_content_eval "$SCRIPT" "React.FC" "hook checks React.FC ban"
 run_content_eval "$SCRIPT" "cloneElement" "hook checks cloneElement ban"
-run_content_eval "$SCRIPT" "biome-ignore" "hook checks biome-ignore warning"
+run_content_eval "$SCRIPT" "biome-ignore" "hook documents biome-ignore ownership"
 run_content_eval "$SCRIPT" "tree-shaking" "hook checks tree-shaking killers"
 run_content_eval "$SCRIPT" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
 run_content_eval "$SCRIPT" "framer-motion" "hook checks deprecated framer-motion"

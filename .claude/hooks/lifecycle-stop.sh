@@ -237,19 +237,17 @@ elif command -v vitest &>/dev/null || [ -x "./node_modules/.bin/vitest" ]; then
 
     rm -rf "$(dirname "$_cov_json")" 2>/dev/null || true
   else
-    # Coverage run failed or not configured. Without coverage output we
-    # can't prove tests are missing — only that we couldn't verify. Warn
-    # (exit 0) rather than block; the nudge still surfaces but the
-    # session isn't hostage to a broken tooling path.
+    # Coverage run failed or not configured. Missing tests are still a
+    # stop-gap: write the behavior test first, then fix coverage tooling.
     if [ "$_has_tests" = false ]; then
-      hook_warn "New source files on branch with no adjacent / branch-scoped tests (coverage analysis unavailable). Consider /tdd to write tests, then /simplify."
+      hook_stop_block "New source files on branch with no adjacent / branch-scoped tests (coverage analysis unavailable). Run /tdd to write tests, fix coverage tooling if needed, then /simplify."
     fi
   fi
 else
-  # No vitest available — warn only. Hook can't verify coverage; a hard
-  # block here would punish the user for a repo without the test tool.
+  # No vitest available. Missing tests still block; add test coverage or the
+  # runner instead of finishing untested code.
   if [ "$_has_tests" = false ]; then
-    hook_warn "New source files on branch with no adjacent / branch-scoped tests. Consider /tdd to write tests, then /simplify."
+    hook_stop_block "New source files on branch with no adjacent / branch-scoped tests. Add tests with /tdd before finishing."
   fi
 fi
 

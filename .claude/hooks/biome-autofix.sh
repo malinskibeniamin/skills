@@ -54,10 +54,20 @@ fix_output=""
 fix_exit=0
 fix_output=$(bun run lint:fix:file -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || fix_exit=$?
 
+warning_lines=$(echo "$fix_output" | grep -iE '(^|[^a-z])(warn|warning|deprecated)([^a-z]|$)' | grep -viE '\b0 warnings?\b|no warnings?' | head -20 || true)
+if [ -n "$warning_lines" ]; then
+  hook_stop_finding "$(printf "Biome warnings are errors:\n%s" "$warning_lines")"
+fi
+
 if [ $fix_exit -ne 0 ]; then
   # Check remaining errors — filter out biome's summary lines to detect real errors
   remaining=""
   remaining=$(bun run lint:file -- --skip=lint/correctness/noUnusedImports $changed_files 2>&1) || true
+
+  remaining_warnings=$(echo "$remaining" | grep -iE '(^|[^a-z])(warn|warning|deprecated)([^a-z]|$)' | grep -viE '\b0 warnings?\b|no warnings?' | head -20 || true)
+  if [ -n "$remaining_warnings" ]; then
+    hook_stop_finding "$(printf "Biome lint warnings are errors:\n%s" "$remaining_warnings")"
+  fi
 
   # Only block if error file paths reference non-registry files
   # Biome error lines look like: src/file.tsx:10:5 lint/rule  FIXABLE

@@ -67,4 +67,4 @@ _marker="$_hook_session_dir/structural-test-${rel_file//[^A-Za-z0-9_.-]/_}"
 [ -f "$_marker" ] && exit 0
 touch "$_marker" 2>/dev/null || true
 
-hook_warn "Structural refactor without test: new $_structural_kind $rel_file needs an accompanying sibling test (.test, .integration.test, or .browser.test)." "structural-test-nudge"
+hook_block "Structural refactor without test: new $_structural_kind $rel_file needs an accompanying sibling test (.test, .integration.test, or .browser.test)." "structural-test-nudge"

@@ -562,7 +562,9 @@ hook_nudge() {
   _hook_track_violation "$rule"
   _hook_log_entry "nudge" "$rule"
   if [ "$_hook_verbosity" = "normal" ]; then
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"[nudge] $msg\"}" >&2
+    local escaped
+    escaped=$(_safe_json_escape "[nudge] $msg")
+    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
   fi
   exit 0
 }
@@ -574,7 +576,9 @@ hook_block_strict() {
   _hook_track_violation "$rule"
   _hook_log_entry "block-strict" "$rule"
   if [ "$_hook_verbosity" != "quiet" ]; then
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"[STRICT] $msg\"}" >&2
+    local escaped
+    escaped=$(_safe_json_escape "[STRICT] $msg")
+    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
   fi
   exit 2
 }
@@ -597,7 +601,9 @@ hook_block() {
   _hook_track_violation "$label"
   _hook_log_entry "block" "$label"
   if [ "$_hook_verbosity" != "quiet" ]; then
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+    local escaped
+    escaped=$(_safe_json_escape "$msg")
+    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
   fi
   exit 2
 }
@@ -611,7 +617,9 @@ hook_warn() {
   _hook_track_violation "$label"
   _hook_log_entry "warn" "$label"
   if [ "$_hook_verbosity" = "normal" ]; then
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"$msg\"}" >&2
+    local escaped
+    escaped=$(_safe_json_escape "$msg")
+    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
   fi
   exit 0
 }
