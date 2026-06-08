@@ -6,7 +6,8 @@ description: React health scoring via react-doctor with Stop hook to fail on sco
 # Setup React Doctor
 
 - **react-doctor** codebase health score (0-100)
-- Stop hook run doctor on changed files, fail on score drop
+- Stop hook run doctor on changed files; failures, low scores, and warnings block
+- No downgrade-to-allow loop; doctor errors are stop-gaps
 - Config disable biome-overlapping rules
 
 ## Steps

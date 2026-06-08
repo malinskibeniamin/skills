@@ -505,7 +505,7 @@ Create src/bad.ts with: export function parseUser(data: unknown) { return data a
 ```
 Use // biome-ignore noExplicitAny to silence
 ```
-Hook still fires -- message says "biome-ignore noExplicitAny banned. Fix the underlying type." No escape hatch without an explicit `// allow:` comment (auditable).
+Hook still fires -- all `biome-ignore` comments are blocked. Fix the underlying type, lint, or style issue at source. Generated files are skipped automatically; source files get no suppression escape hatch.
 
 **6. Try the Stop gate** -- ask Claude to skip tests:
 ```

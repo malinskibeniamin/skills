@@ -19,9 +19,14 @@ run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Coverage gap analysis" "lifecyc
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "coverage-summary.json" "lifecycle-stop parses vitest coverage JSON"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "threshold" "lifecycle-stop has coverage threshold"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "coverage analysis unavailable" "lifecycle-stop falls back when coverage not available"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "hook_stop_block.*coverage analysis unavailable" "lifecycle-stop blocks missing tests when coverage unavailable"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Add tests with /tdd before finishing" "lifecycle-stop blocks missing tests when no runner exists"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/tdd" "lifecycle-stop prescribes /tdd for coverage gaps"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/simplify" "lifecycle-stop prescribes /simplify in remediation"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/commit-push" "lifecycle-stop prescribes /commit-push for uncommitted changes"
+
+run_content_eval "$HOOKS_DIR/orchestration-stop.sh" "SOURCE CHANGED WITHOUT TEST CHANGE" "orchestration-stop blocks source changes without test changes"
+run_content_eval "$HOOKS_DIR/orchestration-stop.sh" "NEW SOURCE WITHOUT TEST" "orchestration-stop blocks new source without tests"
 
 # ── lifecycle-stop.sh: auto-remediation messages ────────────────
 
