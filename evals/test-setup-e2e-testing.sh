@@ -83,13 +83,13 @@ actual_exit=0
 {"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
 JSON
 
-if [ "$actual_exit" -eq 0 ] && grep -q "Structural refactor without test" /tmp/e2e-structural-stderr; then
-  echo "  PASS  structural test hook nudges new page without test"
+if [ "$actual_exit" -eq 2 ] && grep -q "Structural refactor without test" /tmp/e2e-structural-stderr; then
+  echo "  PASS  structural test hook blocks new page without test"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  structural test hook did not nudge new page without test"
+  echo "  FAIL  structural test hook did not block new page without test"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: structural test hook did not nudge new page without test"
+  ERRORS="$ERRORS\n  FAIL: structural test hook did not block new page without test"
 fi
 
 printf "test('users page', () => {})\n" > "$test_file"

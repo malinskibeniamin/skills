@@ -89,8 +89,8 @@ _case_real_untested() {
   printf '%s\n' "$repo/src/routes/demo.tsx" > "$session_dir/session-touched-files"
 }
 _ls_run_case \
-  "lifecycle-stop warns (not blocks) on real untested untracked source" \
-  0 "/tdd" _case_real_untested
+  "lifecycle-stop blocks real untested untracked source" \
+  2 "/tdd" _case_real_untested
 
 # ── Case 3: committed source on feature branch, no tests → exit 2
 # Ensures branch-diff detection catches files already committed.
@@ -102,8 +102,8 @@ _case_committed_untested() {
   printf '%s\n' "$repo/src/routes/committed.tsx" > "$session_dir/session-touched-files"
 }
 _ls_run_case \
-  "lifecycle-stop warns (not blocks) on committed-but-untested source" \
-  0 "/tdd" _case_committed_untested
+  "lifecycle-stop blocks committed-but-untested source" \
+  2 "/tdd" _case_committed_untested
 
 # ── Case 4: real source WITH adjacent test → exit 0 ───────────────
 _case_real_with_adjacent_test() {

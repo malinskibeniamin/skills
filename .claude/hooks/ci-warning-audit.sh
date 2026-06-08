@@ -5,8 +5,7 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 # Stop hook: green-CI warning audit.
 # "Green != done in CI either". When PR CI is all SUCCESS, fetch the run logs
 # and scan for curated warning patterns (deprecations, console errors,
-# skipped tests, etc). Surface findings as a systemMessage (hook_warn, not
-# hook_stop_block) so the agent remediates without being hostage-held.
+# skipped tests, etc). CI warnings are errors: block until fixed at source.
 #
 # Gates:
 #   - gh CLI available
@@ -18,11 +17,9 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 #   - not already audited for this SHA (cached in session dir)
 #
 # Cost: one `gh run view --log` fetch per new SHA, piped directly to grep.
-# Skip via env: CI_WARNING_AUDIT=0
+# No env bypass. If gh/CI data is unavailable, the hook skips as a tool gap.
 
 source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
-
-[ "${CI_WARNING_AUDIT:-1}" = "0" ] && exit 0
 
 command -v gh &>/dev/null || exit 0
 
@@ -91,10 +88,10 @@ fi
 _count=$(wc -l < "$_tmp" | tr -d ' ')
 _sample=$(head -6 "$_tmp" | cut -c1-200)
 
-_msg="CI green on PR #${pr_number} but run ${run_id} has ${_count} warning line(s):
+_msg="CI warnings are errors. CI is green on PR #${pr_number} but run ${run_id} has ${_count} warning line(s):
 ${_sample}
 Fetch full: gh run view ${run_id} --log | grep -E 'Warning|Deprecation|Unhandled'
 Fix at source. Green is not the bar — zero warnings is."
 
-_hook_log_entry "warn" "ci-warnings" ci-warning-audit
-hook_warn "$_msg" "ci-warnings"
+_hook_log_entry "block" "ci-warnings" ci-warning-audit
+hook_stop_block "$_msg"
