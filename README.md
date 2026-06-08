@@ -301,6 +301,11 @@ Reproduce, find root cause, fix with test.
 /thermo-nuclear-code-quality-review -- release-blocking cold PR review across code quality, frontend harness, resilience, visual UX, security, tests, perf, and steelman axes.
 ```
 
+**Swarm execution:**
+```
+/swarm improve URL parameter handling fast. Split tests, implementation, resilience review, and docs across subagents; stay on this branch.
+```
+
 **Overnight batch (Sandcastle):**
 ```
 Run Sandcastle on top 5 issues in our bug backlog overnight.
@@ -594,6 +599,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/development-lifecycle`** | Build features, fix bugs, any dev work. Guide understand -> plan -> **grill** -> TDD -> `/go` (verify -> ship). |
 | **`/work`** | Alias for `/development-lifecycle`. Same full lifecycle, shorter type. |
 | **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for customer-facing diffs -> `/simplify` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
+| **`/swarm`** | Parallel executor. Infer lanes from free-form goal, spawn distinct subagents, keep coordinator ownership, and merge results across shared or per-agent worktrees. |
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
 | **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |

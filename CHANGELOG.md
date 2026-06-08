@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+2026-06-08 -- Add `/swarm` parallel-executor skill. It infers distinct subagent lanes from free-form goals, emits a launch manifest, supports shared branch/worktree/PR by default plus per-agent worktrees on request, defines task packets and output schema, composes with prime/TDD/review/diagnose/architecture/product skills, and keeps coordinator-owned merge and verification. Skills 72 -> 73.
+
 ## 4.16.0
 
 2026-06-08 -- Make quality warnings and suppressions non-bypassable. `biome-ignore-check.sh` now hard-blocks every new `biome-ignore` in source (generated files still skip) instead of only blocking `noExplicitAny` and warning on the rest. `test-warning-check.sh` now treats passing test/lint/type output warnings as errors with no env or comment bypass. `ci-warning-audit.sh` now hard-blocks warnings found in green CI logs with no env bypass. `react-doctor-stop.sh` no longer downgrades repeated failures or internal/incomplete doctor output to allow; doctor errors, low scores, and warnings feed the Stop quality gate. Missing tests now block through structural, orchestration, and lifecycle gates instead of advisory nudges when new/source files lack test coverage. Updates eval coverage and docs to make "fix at source" mandatory.

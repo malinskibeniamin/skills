@@ -1,6 +1,6 @@
 ---
 name: development-lifecycle
-description: "Use when doing frontend/React/TypeScript/UI work. Auto-guides phase: understand -> plan -> grill -> implement (TDD) -> /go (4->4b review->5->5b->6). One skill, full lifecycle. Alias: /work."
+description: "Use when frontend/React/TypeScript/UI work. Guides understand -> plan -> grill -> TDD -> /go (4b->5). Alias: /work."
 ---
 
 # Development Lifecycle
@@ -44,6 +44,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 3. Implement (TDD)
 
+- After plan survives grill, use `/swarm` when independent lanes can safely accelerate implementation, tests, diagnosis, review, or docs. Coordinator owns merge.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
 - **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
