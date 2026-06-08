@@ -46,6 +46,8 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "adversarial-review-hat" "review l
 run_content_eval "$REPO_ROOT/review/SKILL.md" "test-perf-review-hat" "review launches test and perf review hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "thermo-nuclear-review-hat" "review launches thermo nuclear review hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Spawn all review hats" "review fans out all review hats"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "/swarm" "review prefers swarm orchestration when available"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "If /swarm is unavailable" "review falls back when swarm unavailable"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Subagents: regular-review-hat" "review output reports review hat coverage"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Each hat emits" "review requires consistent hat output schema"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Max 3 findings" "adversarial hat stays lightweight"

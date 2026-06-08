@@ -36,6 +36,8 @@ Standards sources:
 
 Spawn all review hats in one message before producing findings, matching `/grill-me` fan-out. Use `general-purpose` subagents. Main agent orchestrates only: gather sources, fan out, merge, dedupe, and write the final report.
 
+Prefer `/swarm` under the hood when available: pass it the fixed point, changed files, sources, full required hat list, subagent prompt contract, and merge contract. If /swarm is unavailable, spawn the hat subagents directly in one message. Swarm is an orchestration detail only; it must not reduce required hats, evidence, lane ownership, or final output.
+
 Required hats:
 
 - **`regular-review-hat`**: always runs the regular `/review` pass. Review Standards and Spec against the diff. Keep Standards and Spec separate. If no spec exists, return `Spec: no spec available`.
