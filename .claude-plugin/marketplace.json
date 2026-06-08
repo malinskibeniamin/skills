@@ -5,18 +5,18 @@
     "name": "Beniamin Malinski"
   },
   "metadata": {
-    "description": "React/TypeScript frontend + Go backend enforcement harness for Claude Code -- 98 hooks, 71 skills, 9 agents, 5 routines"
+    "description": "React/TypeScript frontend + Go backend enforcement harness for Claude Code -- 98 hooks, 72 skills, 9 agents, 5 routines"
   },
   "plugins": [
     {
       "name": "frontend-skills",
-      "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks (108 scripts) enforce patterns on every edit. Green != done: `test-warning-check` + `ci-warning-audit` block passing tests with DeprecationWarning / React `act()` / unhandled rejection noise (local + `gh run view --log` on green CI). 71 skills from TDD through CI-green PR, including /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /diagnose feedback-loop-first 6-phase debugger + /triage multi-tracker (gh + acli) state machine + /steelman anti-sycophancy guard + /upgrade-dependency safe dependency upgrades + /snyk-ux-security JS+Go per-path vuln sweep (exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep second, resolutions/overrides/replace last resort only; React 18 pin + changelog-walked majors + no-deferral escalation; Go `go get -u` + `go mod tidy` + `govulncheck` verify). 21 LLM failure modes enforced (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. bun.lock + yarn.lock parity enforced. Worktree isolation + branch safety. MCP ban with CLI redirect (~20x savings). Agent-browser integration (~91% token reduction). 9 agents (3-hat plan review + karpathy reference), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
-      "version": "4.15.0",
+      "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks (108 scripts) enforce patterns on every edit. Green != done: `test-warning-check` + `ci-warning-audit` block passing tests with DeprecationWarning / React `act()` / unhandled rejection noise (local + `gh run view --log` on green CI). 72 skills from TDD through CI-green PR, including /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /diagnose feedback-loop-first 6-phase debugger + /triage multi-tracker (gh + acli) state machine + /steelman anti-sycophancy guard + /upgrade-dependency safe dependency upgrades + /snyk-ux-security JS+Go per-path vuln sweep (exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep second, resolutions/overrides/replace last resort only; React 18 pin + changelog-walked majors + no-deferral escalation; Go `go get -u` + `go mod tidy` + `govulncheck` verify). 21 LLM failure modes enforced (7 Karpathy single-agent + 14 MAST multi-agent, Cemri et al. NeurIPS 2025). OWASP + STRIDE + snyk/bun audit. Core Web Vitals perf gate. bun.lock + yarn.lock parity enforced. Worktree isolation + branch safety. MCP ban with CLI redirect (~20x savings). Agent-browser integration (~91% token reduction). 9 agents (3-hat plan review + karpathy reference), 5 routines. Opus 4.7 tuned. POSIX-friendly.",
+      "version": "4.16.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
       },
-      "x-updatedAt": "2026-06-06",
+      "x-updatedAt": "2026-06-08",
       "x-includes": {
         "instructions": [
           "CLAUDE.md",
@@ -25,7 +25,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
-        "4.15.0": "2026-06-06 -- Publish synced release metadata for the current harness. Updates skill-manifest, Claude plugin, Codex plugin, Claude marketplace, and Codex marketplace to 4.15.0; refreshes install copy to 98 wired hooks, 108 hook scripts, and 71 skill dirs; and fixes Claude plugin packaging so `/aip` plus deprecated compatibility aliases `/qa` and `/ubiquitous-language` install alongside the v4.14 `/thermo-nuclear-code-quality-review` release. Adds release metadata eval coverage and updates README release-pin/install docs.",
+        "4.16.0": "2026-06-08 -- Publish synced release metadata for the latest skill updates. Updates skill-manifest, Claude plugin, Codex plugin, Claude marketplace, and Codex marketplace to 4.16.0; refreshes release counts to 98 wired hooks, 108 hook scripts, and 72 skill dirs; and ships the vendored /teach skill plus updated /review, /prototype, and /improve-codebase-architecture guidance from the latest Matt Pocock workflow changes.",
         "4.14.0": "2026-06-05 -- Add `/thermo-nuclear-code-quality-review` for release-blocking cold PR audits. The skill fans out standards/spec, structural quality, frontend harness, resilience, visual UX, security/privacy, tests/perf, and `/steelman` axes; requires evidence or skip reasons for visual and resilience lanes; emits severity-ranked PR comment-ready findings. Skills 69 -> 70.",
         "4.13.0": "2026-06-01 -- Add `/resilience-review` resilience skill and `resilience-review-nudge` hook. The workflow is not security review: it is a Murphy-law pass for edge cases, error handling, invalid/stale states, loading/empty/error/success polish, fallbacks, postconditions, observability, and recovery. Wires into `/development-lifecycle`, `/tdd`, `/go`, self-reviewer, code-reviewer, prompt-time nudges, generated Claude/Codex hooks, README, and evals. Skills 67 -> 68; hooks 92 -> 93; scripts 101 -> 102. Follow-up: add Snyk project create guard for unsafe monitor/API writes; hooks 93 -> 94; scripts 102 -> 103.",
         "4.12.0": "2026-05-29 -- Add `/upgrade-dependency` skill for safe dependency upgrades. It builds an upgrade path before edits, checks SemVer confidence, changelogs, release notes, migration guides, codemods, related peer/plugin/adapter packages, and security advisories, applies safe patch/minor updates, creates GitHub issues for risky majors or unclear migrations, and is reusable from `/snyk-ux-security`. Adds report/issue/PR templates and 75 eval assertions. Skills 66 -> 67.",
