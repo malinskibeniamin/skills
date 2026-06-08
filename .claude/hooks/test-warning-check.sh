@@ -2,13 +2,12 @@
 set -eo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
-# PostToolUse Bash: warnings in passing test/lint/type output are violations.
+# PostToolUse Bash: warnings in passing test/lint/type output are hard errors.
 # "Green != done". Scan stdout+stderr of vitest/playwright/tsgo/biome/bun test
-# exit-zero runs for curated warning patterns. Emit nudge with file:line.
-# Third consecutive same-kind → escalate via consecutive-failure chain.
+# exit-zero runs for curated warning patterns. Warnings are errors: block and
+# force source remediation before calling the run clean.
 #
-# Escape: set TEST_WARNINGS_ALLOW=1 in env or add `// allow: test-warning` to
-# the specific test file for intentional deprecation-coverage tests.
+# No env bypass. No allow comment. Fix the warning at source.
 
 input=$(cat 2>/dev/null || echo '{}')
 tool=$(echo "$input" | jq -r '.tool_name // empty' 2>/dev/null)
@@ -24,8 +23,6 @@ case "$command" in
   *vitest*|*"bun test"*|*"bun run test"*|*playwright*|*tsgo*|*tsc*|*"type:check"*|*biome*|*"lint"*) ;;
   *) exit 0 ;;
 esac
-
-[ "${TEST_WARNINGS_ALLOW:-0}" = "1" ] && exit 0
 
 stdout=$(echo "$input" | jq -r '.tool_response.stdout // .tool_result.stdout // empty' 2>/dev/null)
 stderr=$(echo "$input" | jq -r '.tool_response.stderr // .tool_result.stderr // empty' 2>/dev/null)
@@ -73,6 +70,10 @@ _scan '\[vitest\].*warn' 'vitest-warn'
 # Playwright
 _scan 'playwright.*warning|Test ended with interrupted' 'playwright-warn'
 
+# Generic lint/formatter warning lines. Avoid "0 warnings" summaries.
+_scan '(^|[^0-9A-Za-z])(WARNING|[Ww]arning):' 'generic-warning'
+_scan '(^|[^0-9A-Za-z])(WARN|[Ww]arn)(ed|ing)?(:|[[:space:]])' 'generic-warn'
+
 # TypeScript suppression (green run that still contained a silenced error)
 _scan '@ts-expect-error' 'ts-expect-error'
 _scan '@ts-ignore' 'ts-ignore'
@@ -81,26 +82,6 @@ if [ -z "$_findings" ]; then
   _hook_log_entry "info" "no-warnings" test-warning-check
   exit 0
 fi
-
-# Per-file escape: grep the output for test paths that opt out.
-# If ALL finding lines reference files containing `// allow: test-warning`,
-# suppress. Conservative: any finding without the escape → emit.
-_emit=true
-_paths=$(printf '%s' "$_findings" | grep -oE '[^ ]+\.(ts|tsx|js|jsx|spec|test)[^ :]*' | sort -u || true)
-if [ -n "$_paths" ]; then
-  _all_escaped=true
-  while IFS= read -r _p; do
-    [ -z "$_p" ] && continue
-    [ -f "$_p" ] || { _all_escaped=false; break; }
-    if ! grep -qE '//\s*allow:\s*test-warning\b' "$_p" 2>/dev/null; then
-      _all_escaped=false
-      break
-    fi
-  done <<< "$_paths"
-  [ "$_all_escaped" = true ] && _emit=false
-fi
-
-$_emit || { _hook_log_entry "info" "all-escaped" test-warning-check; exit 0; }
 
 # Streak tracking per kind — 3rd consecutive same-kind escalates
 _streak_file="$_hook_session_dir/warning-streak"
@@ -116,16 +97,14 @@ printf '%s\n%s\n' "$_kind" "$_streak" > "$_streak_file" 2>/dev/null || true
 
 # Compact message; reporters already markdown-lean
 _sample=$(printf '%s' "$_findings" | head -5)
-_msg="Green run but warnings present (${_kind}). Fix before calling tests clean:
+_msg="Warnings are errors (${_kind}). Green run is not clean:
 $_sample
-Remediate or add \`// allow: test-warning\` to the test file with reason."
+Drop everything and fix the warning at source before retrying."
 
 if [ "$_streak" -ge 3 ]; then
   _msg="${_msg}
 [${_streak}x same warning — STOP rerunning. Read ALL, fix at source, then one clean run.]"
 fi
 
-_hook_log_entry "nudge" "$_kind" test-warning-check
-_escaped=$(_safe_json_escape "$_msg")
-echo "{\"suppressOutput\":true,\"systemMessage\":${_escaped}}" >&2
-exit 0
+_hook_log_entry "block" "$_kind" test-warning-check
+hook_block "$_msg" "test-warning-check"

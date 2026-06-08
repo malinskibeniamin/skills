@@ -402,12 +402,12 @@ run_hook_eval "$LEGACY_LINTER" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test6.tsx\"}}" \
   2 "block: prettier-ignore block comment" "Biome"
 
-# ── Skip .js files ───────────────────────────────────────────────
+# ── Block .js files too ──────────────────────────────────────────
 
 printf '// eslint-disable-next-line\nconst x = 1;\n' > "$_ll_tmpdir/test7.js"
 run_hook_eval "$LEGACY_LINTER" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test7.js\"}}" \
-  0 "legacy-linter: skip .js file"
+  2 "block: eslint-disable in .js file" "Biome"
 
 # ── Allow clean TS files ─────────────────────────────────────────
 

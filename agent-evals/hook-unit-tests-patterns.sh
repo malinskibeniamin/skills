@@ -386,20 +386,20 @@ _run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
 _assert_exit 2 "noExplicitAny biome-ignore blocked"
 _cleanup_test_file "$_f"
 
-echo "  other biome-ignore (warn):"
+echo "  other biome-ignore (block):"
 _setup_test_file "$_f" '// biome-ignore lint/correctness/noUnusedImports: needed
 import { x } from "y";'
 _run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "other biome-ignore is warn"
-_assert_stderr_contains "biome-ignore" "warns about biome-ignore"
+_assert_exit 2 "other biome-ignore is blocked"
+_assert_stderr_contains "No lint suppression" "blocks biome-ignore"
 _cleanup_test_file "$_f"
 
-echo "  biome-ignore with escape (pass):"
+echo "  biome-ignore with escape (block):"
 _setup_test_file "$_f" '// allow: lint-ignore temporary workaround
 // biome-ignore lint/correctness/noUnusedImports: needed
 import { x } from "y";'
 _run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "lint-ignore escape passes"
+_assert_exit 2 "lint-ignore escape blocked"
 _cleanup_test_file "$_f"
 
 echo "  no biome-ignore (pass):"

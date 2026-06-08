@@ -28,7 +28,7 @@ Jira `acli` | Gmail `gws` (no format:full) | Browser `agent-browser` | CI `gh` (
 
 - Functional only (Compiler) | `@/components/ui/` | DOMPurify user HTML
 - `JSON.parse()` data, `textContent` text, `setHTML` safe HTML
-- Fix type: guard, generic, schema -- no `as any`/`as never`/`biome-ignore noExplicitAny`
+- Fix type: guard, generic, schema -- no `as any`/`as never`/`biome-ignore`
 - `focus-visible:ring-*` not outline:none | Compiler memoize -- no `useMemo`/`useCallback`/`React.memo`
 - `aria-label` icon-only `<Button>` | every `<Button>`: `onClick`/`asChild`/`type="submit"`/`disabled`
 - `<Link>` nav | direct import (tree-shake) | `{ passive: true }` scroll/touch/wheel
@@ -99,7 +99,7 @@ Sentence case | no Latin abbrev (for example, that is, and so on, through) | no 
 ## Tests
 
 Fail first -> pass | `userEvent.setup()` + `getByRole` | `await waitFor(()=>expect(...))` async | `.test.ts` unit `.test.tsx` integration `.browser.test.tsx` visual `e2e/*.spec.ts` Playwright | co-locate | `test()` not `it()` | `vi.fn()`/`vi.mock()`/`vi.spyOn()` | `.toBeVisible()` > `.toBeInTheDocument()` | no `waitForTimeout` | no `test.skip` E2E (`test.fixme()` known bug) | `createRouterTransport` ConnectRPC mock | `data-testid` interactive | `test.step()` Playwright
-Green != done. Zero warn local AND CI. `DeprecationWarning`, React `act()`, unhandled rejection, `@ts-ignore`, `npm WARN deprecated` = fix at source. Hook: `test-warning-check` (local, Bash PostToolUse) + `ci-warning-audit` (Stop, scan `gh run view --log` on green). Escape: `// allow: test-warning` in test file w/ reason, or `TEST_WARNINGS_ALLOW=1` / `CI_WARNING_AUDIT=0` env.
+Green != done. Zero warn local AND CI. `DeprecationWarning`, React `act()`, unhandled rejection, `@ts-ignore`, `npm WARN deprecated` = fix at source. Hook: `test-warning-check` hard-blocks local passing test/lint/type runs with warnings; `ci-warning-audit` scans `gh run view --log` on green CI. No warning bypass.
 
 ## Logging
 
