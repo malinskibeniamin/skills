@@ -68,6 +68,15 @@ No silent skips:
 - Thermo nuclear and Resilience are biased toward running. Skip them only when the diff evidence proves no matching risk surface.
 - If unsure, run the review instead of returning `SKIPPED`.
 
+PR value gate:
+
+- Always quantify the Major improvement before verdict. Name the best value claim, beneficiary, evidence, and delta.
+- Quantify value with the strongest honest metric available: bug/risk removed, steps saved, latency/bundle reduction, coverage increase, failure mode prevented, scope delivered, or user-visible capability added.
+- Value score: HIGH|MEDIUM|LOW|NONE.
+- Maintenance, security, resilience, and test-only PRs can score HIGH when they remove meaningful risk or increase confidence; do not bias toward visible features only.
+- If no Major improvement reaches MEDIUM, run `/steelman` internally against the claim "this PR adds meaningful value" before final verdict.
+- If `/steelman` confirms low value, mark the value gate `low-value` and do not report the review as pass without an explicit user/product override, split, or stronger value justification.
+
 Subagent prompt contract:
 
 - Include fixed point, changed files, diff command, commits command, exact review type, and sources to read.
@@ -136,6 +145,12 @@ Subagents: thermo-nuclear-review-hat: <status/skipped: reason> | resilience-revi
 - Visual review: pass | findings | skipped: <reason>
 - Test/perf review: pass | findings | skipped: <reason>
 - Security/privacy triage: pass | findings | skipped: <reason>
+
+## PR value gate
+Major improvement: <quantified claim, beneficiary, evidence, delta>
+Value score: HIGH|MEDIUM|LOW|NONE
+Steelman: not needed | ran: <confirmed value | mixed | low-value>
+Gate: pass | low-value | blocked pending override
 
 Summary: <standards count>, <spec count>, worst issue: <one line or none>
 ```
