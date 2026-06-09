@@ -40,13 +40,33 @@ Prefer `/swarm` under the hood when available: pass it the fixed point, changed 
 
 Required hats:
 
-- **`regular-review-hat`**: always runs the regular `/review` pass. Review Standards and Spec against the diff. Keep Standards and Spec separate. If no spec exists, return `Spec: no spec available`.
-- **`visual-review-hat`**: always checks the visual gate. Run `/visual-review` when the diff touches UI, copy, forms, routes, reports, CLI/TUI output, or visual behavior; otherwise return `skipped` with concrete reason.
-- **`resilience-review-hat`**: always checks the resilience gate. Run `/resilience-review` when the diff touches forms, validation, async/data, mutations, cache, state machines, config, destructive actions, or loading/error/empty states; otherwise return `skipped` with concrete reason.
-- **`security-privacy-triage-hat`**: always checks whether the diff touches auth, authorization, tenant boundaries, secrets, unsafe HTML, injection, SSRF, redirects, dependency execution, logging, analytics, PII, or data export/import. If none, return `SKIPPED` with reason. If yes, report only exploitable or privacy-impacting issues introduced by the diff.
-- **`adversarial-review-hat`**: always runs a lightweight adversarial pass. Ask: "What could still be wrong if tests pass and the implementation matches the spec?" Report only diff-introduced risks with concrete evidence. Do not repeat Standards, Spec, Visual, Resilience, or Security findings. Max 3 findings. If no credible risk, return `APPROVED`.
-- **`test-perf-review-hat`**: always checks test and performance gates. Review TDD evidence, coverage gaps, flaky/missing tests, slow paths, render/network/bundle risk, and warning-free commands; otherwise return `skipped` with concrete reason.
 - **`thermo-nuclear-review-hat`**: always checks the nuclear gate. Run `/thermo-nuclear-code-quality-review` for release candidates, large PRs, risky refactors, security/privacy/perf/test concerns, or explicit nuclear/cold-audit asks; otherwise return `skipped` with concrete reason.
+- **`resilience-review-hat`**: always checks the resilience gate. Run `/resilience-review` when the diff touches forms, validation, async/data, mutations, cache, state machines, config, destructive actions, or loading/error/empty states; otherwise return `skipped` with concrete reason.
+- **`regular-review-hat`**: always runs the core Standards and Spec pass. Never invoke /review recursively. Keep Standards and Spec separate. If no spec exists, return `Spec: no spec available`.
+- **`adversarial-review-hat`**: always runs a lightweight adversarial pass. Ask: "What could still be wrong if tests pass and the implementation matches the spec?" Report only diff-introduced risks with concrete evidence. Do not repeat Standards, Spec, Visual, Resilience, or Security findings. Max 3 findings. If no credible risk, return `APPROVED`.
+- **`visual-review-hat`**: always checks the visual gate. Run `/visual-review` when the diff touches UI, copy, forms, routes, reports, CLI/TUI output, or visual behavior; otherwise return `skipped` with concrete reason.
+- **`test-perf-review-hat`**: always checks test and performance gates. Review TDD evidence, coverage gaps, flaky/missing tests, slow paths, render/network/bundle risk, and warning-free commands; otherwise return `skipped` with concrete reason.
+- **`security-privacy-triage-hat`**: always checks whether the diff touches auth, authorization, tenant boundaries, secrets, unsafe HTML, injection, SSRF, redirects, dependency execution, logging, analytics, PII, or data export/import. If none, return `SKIPPED` with reason. If yes, report only exploitable or privacy-impacting issues introduced by the diff. Security/privacy is unranked: any finding escalates the Thermo nuclear priority.
+
+Review priority hierarchy:
+
+1. Thermo nuclear review
+2. Resilience review
+3. Regular review
+4. Adversarial review
+5. Visual review
+6. Test/perf review
+
+Use this hierarchy when ordering output, resolving scarce attention, and choosing the worst issue. Security/privacy triage feeds the hierarchy by escalating exploit or privacy risk to Thermo nuclear review.
+
+No silent skips:
+
+- All hats run at least a triage pass every time; swarm must not omit a hat because it looks irrelevant.
+- `SKIPPED` is a reviewed outcome, not a default. It needs `skip_reason`, checked files/surfaces, and absent triggers.
+- Never skip due to time, token budget, small diff, prior confidence, or another hat passing.
+- Thermo nuclear is fail-open: run it when release status, PR size, refactor risk, or security/privacy/perf/test concern is unknown or plausibly true. Skip only when every trigger is explicitly false.
+- Thermo nuclear and Resilience are biased toward running. Skip them only when the diff evidence proves no matching risk surface.
+- If unsure, run the review instead of returning `SKIPPED`.
 
 Subagent prompt contract:
 
@@ -60,7 +80,7 @@ Subagent prompt contract:
 Each hat emits:
 
 ```json
-{ "reviewer": "<name>", "hat": "<regular|visual|resilience|security-privacy|adversarial|test-perf|thermo-nuclear>", "status": "APPROVED|FINDINGS|BLOCKED|SKIPPED", "findings": [], "must_answer": [] }
+{ "reviewer": "<name>", "hat": "<thermo-nuclear|resilience|regular|adversarial|visual|test-perf|security-privacy>", "status": "APPROVED|FINDINGS|BLOCKED|SKIPPED", "findings": [], "must_answer": [], "skip_reason": "<required when SKIPPED>" }
 ```
 
 Merge contract:
@@ -100,7 +120,7 @@ Do not recursively invoke /review from a local gate already running inside `/rev
 ## Review
 Fixed point: <fixed>
 Diff: `git diff <fixed>...HEAD`
-Subagents: regular-review-hat: <status> | visual-review-hat: <status/skipped: reason> | resilience-review-hat: <status/skipped: reason> | security-privacy-triage-hat: <status/skipped: reason> | adversarial-review-hat: <status> | test-perf-review-hat: <status/skipped: reason> | thermo-nuclear-review-hat: <status/skipped: reason>
+Subagents: thermo-nuclear-review-hat: <status/skipped: reason> | resilience-review-hat: <status/skipped: reason> | regular-review-hat: <status> | adversarial-review-hat: <status> | visual-review-hat: <status/skipped: reason> | test-perf-review-hat: <status/skipped: reason> | security-privacy-triage-hat: <status/skipped: reason>
 
 ## Standards
 <findings or pass>
@@ -109,12 +129,13 @@ Subagents: regular-review-hat: <status> | visual-review-hat: <status/skipped: re
 <findings, pass, or no spec available>
 
 ## Local review gates
-- Visual review: pass | findings | skipped: <reason>
-- Resilience review: pass | findings | skipped: <reason>
-- Security review: pass | findings | skipped: <reason>
-- Adversarial review: pass | findings
-- Test/perf review: pass | findings | skipped: <reason>
 - Thermo nuclear review: pass | findings | skipped: <reason>
+- Resilience review: pass | findings | skipped: <reason>
+- Regular review: pass | findings
+- Adversarial review: pass | findings
+- Visual review: pass | findings | skipped: <reason>
+- Test/perf review: pass | findings | skipped: <reason>
+- Security/privacy triage: pass | findings | skipped: <reason>
 
 Summary: <standards count>, <spec count>, worst issue: <one line or none>
 ```
