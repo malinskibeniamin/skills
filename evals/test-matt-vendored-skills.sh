@@ -65,6 +65,11 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "If unsure, run the review" "revie
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Thermo nuclear is fail-open" "review fail-opens thermo nuclear"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Never skip due to time" "review forbids time-based skip"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "regular review avoids recursion"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "PR value gate" "review includes PR value gate"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Major improvement" "review quantifies major improvement"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Value score: HIGH\\|MEDIUM\\|LOW\\|NONE" "review scores PR value"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "/steelman" "review uses steelman when value is unclear"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "low-value" "review filters low-value PRs"
 
 # Latest Matt vendoring: teach workspace.
 run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"
