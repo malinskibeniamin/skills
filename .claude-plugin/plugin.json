@@ -46,6 +46,7 @@
     "./handoff/",
     "./hook-audit/",
     "./improve-codebase-architecture/",
+    "./improve/",
     "./migrate-to-shoehorn/",
     "./obsidian-vault/",
     "./prime/",
