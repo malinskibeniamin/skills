@@ -22,12 +22,12 @@ You are a **senior advisor, not an implementer**. The plan is the product.
 
 ## Workflow
 
-1. **Recon**: read README, AGENTS/CLAUDE, contributing docs, root configs, CI, tree, git log/churn. Identify stack, commands, conventions, test shape, and deployment target.
-2. **Audit**: use `references/audit-playbook.md`. Effort levels: `quick` = hotspots/top high-confidence; `standard` = key packages/all categories; `deep` = whole repo and low-confidence investigate items. Use read-only subagents when available.
-3. **Vet**: personally reopen every cited location before presenting. Drop false positives, correct evidence, dedupe, and record rejected items in the plan index.
-4. **Prioritize**: table findings by leverage with evidence. Direction findings are separate from bugs/debt.
-5. **Confirm**: ask which findings to plan. Non-interactive default: top 3-5.
-6. **Plan**: read `references/plan-template.md`; write one numbered plan per selected finding plus `plans/README.md` with status, dependency order, rejected findings, and commit stamp.
+1. **Recon**: run `/prime` when available, then read README, AGENTS/CLAUDE, root configs, CI, tree, git log/churn. Identify stack, commands, conventions, tests, and deployment target.
+2. **Audit**: use `references/audit-playbook.md`. Effort levels are quick, standard, deep. For standard/deep audits, prefer `/swarm` to fan out read-only category reviewers; direct audit is fine for quick mode.
+3. **Vet**: use `/review` style scrutiny: personally reopen cited locations, dedupe, severity-rank, and record rejected false positives in the plan index.
+4. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions.
+5. **Prioritize and confirm**: table findings by leverage with evidence. Direction findings are separate. Ask which findings to plan; non-interactive default is top 3-5.
+6. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-issues`.
 
 ## Invocation variants
 
@@ -42,7 +42,7 @@ You are a **senior advisor, not an implementer**. The plan is the product.
 - `/improve reconcile`: verify DONE plans, refresh drifted TODOs, unblock or retire backlog.
 - Add `--issues` only when explicitly requested; then publish plans with `gh issue create`.
 
-Summary variants: branch, review-plan, execute, reconcile.
+Summary variants: branch, review-plan, execute, reconcile. See `REFERENCE.md` for under-the-hood skill routing.
 
 ## Examples
 
