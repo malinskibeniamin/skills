@@ -4,6 +4,10 @@
 
 2026-06-08 -- Add `/swarm` parallel-executor skill. It infers distinct subagent lanes from free-form goals, emits a launch manifest, supports shared branch/worktree/PR by default plus per-agent worktrees on request, defines task packets and output schema, composes with prime/TDD/review/diagnose/architecture/product skills, and keeps coordinator-owned merge and verification. Skills 72 -> 73.
 
+## 4.17.0
+
+2026-06-10 -- Vendor shadcn `/improve` advisor skill. Adds the `/improve` skill with upstream `references/` files, local examples/templates, eval coverage, and Claude/Codex plugin registration. Wires improve's advisor-only workflow to existing helper skills under the hood: `/prime` for recon, `/swarm` for audit fan-out, `/review` for vetting, `/steelman` for direction/high-risk findings, `/resilience-review` for STOP conditions, `/thermo-nuclear-code-quality-review` for deep mode, and `/to-issues` for issue publishing. Updates release metadata across skill-manifest, Claude plugin, Codex plugin, and both marketplaces to 4.17.0. Skills 73 -> 74.
+
 ## 4.16.0
 
 2026-06-08 -- Make quality warnings and suppressions non-bypassable. `biome-ignore-check.sh` now hard-blocks every new `biome-ignore` in source (generated files still skip) instead of only blocking `noExplicitAny` and warning on the rest. `test-warning-check.sh` now treats passing test/lint/type output warnings as errors with no env or comment bypass. `ci-warning-audit.sh` now hard-blocks warnings found in green CI logs with no env bypass. `react-doctor-stop.sh` no longer downgrades repeated failures or internal/incomplete doctor output to allow; doctor errors, low scores, and warnings feed the Stop quality gate. Missing tests now block through structural, orchestration, and lifecycle gates instead of advisory nudges when new/source files lack test coverage. Updates eval coverage and docs to make "fix at source" mandatory.
