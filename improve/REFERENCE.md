@@ -17,6 +17,28 @@ Every plan should cover:
 - Done criteria
 - STOP conditions for drift or unexpected complexity
 
+
+## Under-the-hood skill routing
+
+`/improve` is advisor-only: these skills may inform analysis and plan writing, but they must not edit source code during improve itself.
+
+| Improve mode | Skills to use | Purpose |
+|---|---|---|
+| `quick` | `/prime` + direct audit | Fast repo map and hotspot pass. |
+| standard `/improve` | `/prime`, `/swarm`, `/review` | Recon, parallel audit fan-out, vet and dedupe findings. |
+| `deep` | `/prime`, `/swarm`, `/thermo-nuclear-code-quality-review` | Exhaustive audit and release-blocking quality lens. |
+| `next` | `/prime`, `/steelman` | Ground roadmap ideas in repo evidence and argue against weak ideas. |
+| `plan <description>` | `/prime`, `/resilience-review` | Produce one executable plan with unhappy paths and STOP conditions. |
+| `branch` | `/prime`, `/review` | Scope to branch diff, classify introduced versus pre-existing findings. |
+| `--issues` | `/to-issues` | Publish selected plans as tracker-ready issues after plan files exist. |
+| `execute` / `reconcile` | `references/closing-the-loop.md` | Keep executor flow bounded; advisor reviews but does not merge. |
+
+Guardrails:
+
+- Do not call /commit-push-pr from improve. Shipping belongs to executor flows, not advisor mode.
+- If a helper skill would edit source, use only its review questions/checklists, not its mutation steps.
+- If a helper skill is unavailable, continue with the equivalent manual checklist and say so.
+
 ## Audit categories
 
 - **Correctness/bugs**: edge cases, races, stale state, error handling, data loss, broken invariants.
