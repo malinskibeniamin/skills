@@ -5,6 +5,7 @@ description: Reviews customer-facing surfaces with product, design, engineering,
 
 # Visual Review
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Surface review for anything user sees/uses. Evidence > opinion. Browser-based frontend review common; CLI/TUI/report output counts. Design language handles turn vague taste into actionable adjustments. Details: [REFERENCE.md](REFERENCE.md).
 
 ## When

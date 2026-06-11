@@ -5,6 +5,7 @@ description: Add quality:gate package.json script for fast local/CI quality chec
 
 # Setup Quality Gate
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Sets Up
 
 - `quality:gate` script -- lint + type check + related tests in <5s

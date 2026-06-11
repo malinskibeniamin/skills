@@ -5,6 +5,7 @@ description: Analytics dashboard for frontend-skills hook harness. Latency perce
 
 # Frontend skills stats
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Step 0: Gather context
 
 Run these Bash commands before proceed:

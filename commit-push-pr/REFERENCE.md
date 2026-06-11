@@ -5,6 +5,7 @@
 Before `/commit-push-pr`, one review skill must run in session:
 
 - `/simplify` -- small fixes/tweaks
+- `/deslop` -- liability certainty gate; runs `/simplify` first
 - `/improve-codebase-architecture` -- refactors (prefer this; `/request-refactor-plan` is deprecated)
 - `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
 - `/prototype` -- redesign module or layout (prefer this; `/design-an-interface` is deprecated)
@@ -12,7 +13,7 @@ Before `/commit-push-pr`, one review skill must run in session:
 
 Frontend or customer-facing surface diff -> `/visual-review` must run or an explicit skip reason must be recorded, even if another review skill already ran.
 
-None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/simplify` for small changes, `/improve-codebase-architecture` for cleanup, `/visual-review` for frontend changes."
+None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/deslop` for liability certainty, `/simplify` for small changes, `/improve-codebase-architecture` for cleanup, `/visual-review` for frontend changes."
 
 ## Conventional commit types (Phase 3)
 

@@ -5,6 +5,7 @@ description: "Triage issues through a state machine of triage roles. Works with 
 
 # Triage
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Move issues on tracker through small state machine of triage roles.
 
 When explore codebase, use project domain glossary so titles, comments, agent briefs match project language. Respect ADRs in area touched.

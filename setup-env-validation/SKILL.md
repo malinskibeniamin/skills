@@ -5,6 +5,7 @@ description: Enforce type-safe environment variable access using t3-env with zod
 
 # Setup Env Validation
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 t3-env + zod for type-safe env vars. Single `src/env.ts` source of truth. PostToolUse hook block raw `process.env.` in TS/TSX/JS/JSX (skip env files + tests).
 
 ## Steps

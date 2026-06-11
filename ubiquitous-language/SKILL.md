@@ -7,6 +7,7 @@ description: "DEPRECATED. Prefer `/grill-with-docs` for domain language plus CON
 
 # Ubiquitous Language
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Extract and formalize domain terminology from the current conversation into a consistent glossary, saved to a local file.
 
 ## Process
