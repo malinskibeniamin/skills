@@ -5,6 +5,7 @@ description: Turn current context into a PRD and publish it to issue tracker.
 
 # To PRD
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Synthesize current context into PRD. Do not interview unless blocked.
 
 Issue tracker + triage labels should exist. If missing, run `/setup-matt-pocock-skills`.

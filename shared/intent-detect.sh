@@ -94,7 +94,7 @@ fi
 # Inject the full lifecycle sequence so Claude auto-follows every step.
 
 if echo "$prompt" | grep -qiE 'build.*feature|implement|add.*support|create.*endpoint|add.*page|add.*route|add.*hook|add.*component|new.*feature|wire.*up|integrate|set.*up'; then
-  directives="$directives\n[LIFECYCLE] MANDATORY sequence: (1) Plan approach (2) /tdd for every new file — failing test first (3) Implement minimal code to pass (4) /simplify changed code (5) Self-verify with browser/tests (6) /commit-push → PR → Monitor CI → fix failures → request review. Hooks enforce this — do NOT skip steps.\n[MINIMAL] Simplest solution first. No new abstractions, utils, helpers, or wrapper components without explicit user request. Inline > extract. If tempted to create utility, use inline approach instead."
+  directives="$directives\n[LIFECYCLE] MANDATORY sequence: (1) Plan approach (2) /tdd for every new file — failing test first (3) Implement minimal code to pass (4) /simplify then /deslop changed code (5) Self-verify with browser/tests (6) /commit-push → PR → Monitor CI → fix failures → request review. Hooks enforce this — do NOT skip steps.\n[CODE-LIABILITY] Code is liability. Keep additions only for product value, defensive correctness, or test confidence; otherwise delete or inline. Run /deslop before commit, push, or merge when code changed.\n[MINIMAL] Simplest solution first. No new abstractions, utils, helpers, or wrapper components without explicit user request. Inline > extract. If tempted to create utility, use inline approach instead."
 fi
 
 # ── PR-number auto-context ───────────────────────────────────────

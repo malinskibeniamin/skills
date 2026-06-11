@@ -5,6 +5,7 @@ description: Create exercise dirs, readmes, variants, and lint-clean course stub
 
 # Scaffold Exercises
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Create `exercises/` structure that passes `pnpm ai-hero-cli internal lint`, then commit.
 
 ## Naming

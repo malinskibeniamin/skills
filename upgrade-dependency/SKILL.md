@@ -5,6 +5,7 @@ description: Plans safe dependency upgrades via researched paths and risk gates.
 
 # Upgrade Dependency
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Goal: dependency current -> target/latest stable. Build upgrade path first. Safe -> apply. Risky -> report + issue + stop.
 
 Input: `$ARGUMENTS` = package/module, repo/manifest path, target version, natural language, or plan only.

@@ -5,6 +5,7 @@ description: Finds deepening opportunities using domain language and ADRs. Use w
 
 # Improve Codebase Architecture
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Goal: find architectural friction and propose **deepening opportunities**: shallow modules -> deeper modules. Optimize testability + AI navigation.
 
 ## Language

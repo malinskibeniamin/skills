@@ -5,6 +5,7 @@ description: Search, create, and organize Obsidian notes with wikilinks and inde
 
 # Obsidian Vault
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Vault: `/mnt/d/Obsidian Vault/AI Research/`.
 
 Flat root. Organize through `[[wikilinks]]` + `*Index.md` notes.

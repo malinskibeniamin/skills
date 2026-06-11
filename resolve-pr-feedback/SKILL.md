@@ -5,6 +5,7 @@ description: "Resolve PR review feedback by fetching unresolved threads, triagin
 
 # Resolve PR Feedback
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Fetch unresolved PR threads -> triage -> fix -> reply -> resolve.
 
 ## Input

@@ -5,6 +5,7 @@ description: Break PRD or plan into tracker issues as thin vertical slices.
 
 # To Issues
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Break plan into independently grabbable vertical slices.
 
 Issue tracker + triage labels should exist. If missing, run `/setup-matt-pocock-skills`.

@@ -5,6 +5,7 @@ description: Builds repo startup brief. Use when start/resume, post-compaction, 
 
 # Prime
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Startup brief: repo state, goal, next reads.
 
 Usage: `/prime` or `/prime <seed>` (handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text).

@@ -7,6 +7,7 @@ description: "LEGACY LOCAL. Prefer `/grill-with-docs` for docs-first domain gril
 
 # Domain Model
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Grill + document. Three-hat adversarial review PLUS institutional memory captured inline as CONTEXT.md + ADRs.
 
 ## Step 1: Interview
