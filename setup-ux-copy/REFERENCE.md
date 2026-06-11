@@ -53,9 +53,39 @@ State problem. Give solution. No blame.
 | Save changes | OK |
 | Add tag | Add a new tag |
 
+CTA copy names the result or action, not the component event. Prefer "Save changes", "Create topic", or "Export report" over "Submit", "OK", or "Done". Own the ask; do not apologize for it.
+
+## Copywriting Articulation
+
+Use precise copywriting terms in reviews so taste becomes actionable.
+
+| Term | Rule | Better direction |
+|---|---|---|
+| Microcopy | Small UI text carries trust: labels, tooltips, errors, placeholders, toasts. | Replace vague helper copy with one sentence that removes uncertainty. |
+| CTA | The primary action label should name the action or outcome. | "Save changes" beats "Submit". |
+| front-loading | Put the scannable word first. | "Export ready" beats "Your export is complete and available". |
+| Voice and tone | Voice stays consistent; tone adjusts to risk and emotion. | Neutral in settings, careful for destructive actions, encouraging in onboarding. |
+| Success message | Confirm the completed action specifically and briefly. | "Topic created", not "Done" or "Created successfully". |
+| destructive language | Use explicit verbs for irreversible actions. | "Delete cluster" or "Revoke key", not "Clear" when data is lost. |
+| contextual help | Put help next to the control at the moment of need. | One sentence near the field beats a tooltip or docs detour. |
+| numeric formatting | Match the user's locale and keep number style consistent. | Format counts, money, time, and units deliberately. |
+| truncation strategy | Decide how titles, labels, IDs, and descriptions shorten. | Avoid mid-word or mid-identifier cuts; preserve the differentiating part. |
+
 ## Empty States
 
 Explain why empty, what user do next. Include button/link to next step. Running tasks: gerund ("Creating cluster" not "Cluster creation in progress").
+
+## Redundant UX writing
+
+Redundant UX writing makes a UI feel generated. A label, helper, placeholder, tooltip, and error message should each do different work; do not let a label repeat the helper or placeholder. Cut duplicated nouns ("configuration and settings"), duplicated verbs ("manage and configure"), and component-event copy ("Submit") when the user needs an outcome ("Save changes").
+
+## Stress-test copy
+
+Stress-test copy before visual approval: German titles, 60-character names, long IDs, huge prices, zero counts, 500s, offline states, loading states, destructive actions, and narrow mobile widths. Copy that only works with short English happy-path strings is not ready.
+
+## Product naming
+
+Product naming can create taste when it helps memory or trust, but clarity wins. User-facing names should reveal purpose, scope, or outcome. Internal primitive names can stay boring and literal. Avoid cute names for destructive actions, security, billing, errors, or recovery.
 
 ## Tooltips
 
@@ -110,6 +140,8 @@ No physical position -- layouts change. "See the Prerequisites section" not "See
 ## Placeholders
 
 Descriptive lowercase-with-dashes in angle brackets: `<topic-name>`, `<cluster-id>`. Not `<value>`, `<my-cluster>`.
+
+Placeholders in inputs are hints or examples. They disappear during typing, so they cannot replace persistent labels or contextual help.
 
 ## Em Dashes
 

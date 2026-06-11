@@ -20,6 +20,8 @@ PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 
 **Styling**: ban raw hex/rgb in className (use design tokens), ban `!important`, ban `outline: none` (use focus-visible), ban visual overrides on registry components (use variant prop)
 
+**Motion craft**: warn on `transition-all`, `scale(0)` entries, layout property animation, bounce loops, `ease-in` UI entries, and durations beyond the usual 300ms threshold. Prefer transform/opacity, specific transition properties, short ease-out feedback, reduced-motion coverage, and origin-aware popovers/drawers.
+
 **Navigation**: ban `onClick + navigate()` (use `<Button asChild><Link>`), require `aria-label` on icon-only buttons
 
 **React Compiler**: ban manual `useMemo`/`useCallback`/`React.memo`, ban class components
