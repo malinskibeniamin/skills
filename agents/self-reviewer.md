@@ -22,6 +22,11 @@ You receive session context via SubagentStart hook:
 
 ## Review Checklist (in priority order)
 
+### 0. Code Liability Gate
+- Code is liability: every new branch, helper, file, dependency, hook, or export needs a reason.
+- Keep added production code only when it proves product value, defensive correctness, or test confidence.
+- Flag surface-area growth when code is speculative, one-use abstraction, untested, or larger than the problem.
+
 ### 1. Testing Gaps
 - Are all new code paths covered by tests?
 - Are error/edge cases tested? (empty arrays, null responses, network failures)

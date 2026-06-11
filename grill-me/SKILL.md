@@ -5,6 +5,7 @@ description: Interview the user relentlessly about a plan or design until reachi
 
 # Grill Me
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Phase 2b gate. No implementation until plan survive grilling.
 
 ## Step 1: Interview

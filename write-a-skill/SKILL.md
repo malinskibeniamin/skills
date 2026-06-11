@@ -5,6 +5,7 @@ description: Create new agent skills with proper structure, progressive disclosu
 
 # Write a Skill
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## 1. Gather Requirements
 Ask: domain/task? Primary use cases? Scripts needed? Reference materials?
 

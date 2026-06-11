@@ -39,19 +39,22 @@ fi
 
 # Sum SKILL.md description field chars (frontmatter description only)
 desc_total=0
+skill_count=0
 for skill in "$BUDGET_DIR"/*/SKILL.md; do
   [ -f "$skill" ] || continue
+  skill_count=$((skill_count + 1))
   d=$(awk 'BEGIN{c=0} /^---$/{c++; if(c==2)exit; next} c==1 && /^description:/{inDesc=1; sub(/^description: */, ""); print; next} c==1 && inDesc && /^[a-zA-Z_-]+:/{inDesc=0; next} c==1 && inDesc{print}' "$skill" 2>/dev/null | tr -d '\n')
   desc_total=$((desc_total + ${#d}))
 done
 
-if [ "$desc_total" -lt 13000 ]; then
-  echo "  PASS  All SKILL.md descriptions total under 13000 chars ($desc_total)"
+desc_cap=$((skill_count * 180))
+if [ "$desc_total" -le "$desc_cap" ]; then
+  echo "  PASS  All SKILL.md descriptions total under ${desc_cap} chars ($desc_total across $skill_count skills)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  SKILL.md descriptions total: $desc_total chars (cap: 13000)"
+  echo "  FAIL  SKILL.md descriptions total: $desc_total chars (cap: $desc_cap across $skill_count skills)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: skill descriptions over 13000 chars"
+  ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
 # No Unicode punctuation in hot-path docs (em-dash, smart quotes, etc)

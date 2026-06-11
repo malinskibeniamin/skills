@@ -9,6 +9,7 @@ paths:
 
 # Connect Query Enforcement
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Catches
 
 - **Ban raw `useQuery`/`useMutation`** from `@tanstack/react-query` when file use ConnectRPC -- use Connect Query (exception: `useTransport`/`callUnaryMethod` pattern)

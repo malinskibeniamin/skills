@@ -5,6 +5,7 @@ description: Set up Husky, lint-staged, Prettier, typecheck, and test pre-commit
 
 # Setup Pre-Commit
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Sets up Husky + lint-staged + Prettier + optional type/test scripts.
 
 ## Steps

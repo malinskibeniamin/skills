@@ -46,6 +46,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 - After plan survives grill, use `/swarm` when independent lanes can safely accelerate implementation, tests, diagnosis, review, or docs. Coordinator owns merge.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
+- Code is liability: keep additions only for product value, defensive correctness, or test confidence.
 - **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
 
@@ -55,7 +56,7 @@ Impl done -> run `/go` to ship. Handle all:
 
 - **4. Verify** -- types + lint + tests + browser smoke
 - **4b. Review / Refine** -- self-reviewer + adversarial-reviewer; ensure Resilience Review evidence for risky features
-- **5. Ship** -- `/simplify` -> `/commit-push-pr` -> code-reviewer agent
+- **5. Ship** -- `/simplify` -> `/deslop` -> `/commit-push-pr` -> code-reviewer agent
 - **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds, early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** -- codify lessons as `.claude/rules/`
 

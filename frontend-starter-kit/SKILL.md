@@ -5,6 +5,7 @@ description: Complete frontend stack -- 14 setup skills + 14 owned workflow skil
 
 # Frontend Starter Kit
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Setup Skills (1-14, sequential, idempotent)
 
 1. **setup-toolchain** -- bun + tsgo enforcement, destructive command guards

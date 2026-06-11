@@ -15,7 +15,7 @@ Safe rm -rf: node_modules, dist, .next, build, .cache, .turbo, coverage
 
 ## Code Quality
 
-Run `bun run lint:fix` + `bun run type:check` before finish. Prefer: date-fns>moment, lodash-es>lodash, clsx>classnames.
+Code is liability: keep additions only for product value, defensive correctness, or test confidence. Delete/inline before abstract. Run `bun run lint:fix` + `bun run type:check` before finish.
 
 ## React
 
@@ -51,7 +51,7 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 ## Lifecycle
 
-1. Understand -> 2. Plan -> 2b. `/domain-model` (DDD-light grill + CONTEXT.md/ADR updates) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnose` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
+1. Understand -> 2. Plan -> 2b. `/domain-model` (DDD-light grill + CONTEXT.md/ADR updates) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnose` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 

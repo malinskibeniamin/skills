@@ -6,6 +6,7 @@ argument-hint: What should the next session focus on?
 
 # Handoff
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Create a concise handoff document for another agent/session to continue from here.
 
 ## When to Use

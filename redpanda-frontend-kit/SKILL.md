@@ -5,6 +5,7 @@ description: Meta-skill that runs the generic frontend-starter-kit plus addition
 
 # Redpanda Frontend Kit
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Run **frontend-starter-kit** (14 setup + workflow skills), then add Redpanda tooling.
 
 ## Additional Setup

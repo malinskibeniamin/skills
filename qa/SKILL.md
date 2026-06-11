@@ -7,6 +7,7 @@ description: "DEPRECATED. Prefer `/triage` for conversational bug/feature intake
 
 # QA Session
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 User describe problems. You clarify, explore codebase for context, file GitHub issues using project domain language.
 
 ## AI Disclaimer

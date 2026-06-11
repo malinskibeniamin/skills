@@ -8,6 +8,7 @@ paths:
 
 # E2E Testing
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Conventions
 
 - `e2e/*.spec.ts` -- all e2e tests use `.spec.ts`

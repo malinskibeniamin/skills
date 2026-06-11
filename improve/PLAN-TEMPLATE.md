@@ -43,7 +43,7 @@ List exact files and line ranges. Include short excerpts read by the advisor, no
 
 Exact change. Mention tests first when applicable.
 
-**Verify**: `<command>` → `<expected>`.
+**Verify**: `<command>` -> `<expected>`.
 
 ## Test plan
 

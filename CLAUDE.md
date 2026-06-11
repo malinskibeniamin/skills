@@ -22,7 +22,7 @@ Jira `acli` | Gmail `gws` (no format:full) | Browser `agent-browser` | CI `gh` (
 
 ## Code Quality
 
-`bun run lint:fix` + `bun run type:check` pre-done | light dep: date-fns lodash-es clsx
+Code is liability: keep additions only for product value, defensive correctness, or test confidence | delete/inline before abstract | `bun run lint:fix` + `bun run type:check` pre-done | light dep: date-fns lodash-es clsx
 
 ## React
 
@@ -75,7 +75,7 @@ Order every task. Hooks block skipped steps.
 1. **Understand** -- explore, one question at time, propose
 2. **Plan** -- exact path, code, expect output
 3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
-4-6. **`/go`** -- verify -> self-review -> `/simplify` -> `/commit-push-pr` -> monitor CI -> fix -> done
+4-6. **`/go`** -- verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
 Alias: `/work` = `/development-lifecycle` (full). `/go` = phase 4-6 (ship tail).
 

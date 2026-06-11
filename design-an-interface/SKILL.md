@@ -7,6 +7,7 @@ description: "DEPRECATED. Prefer `/prototype` for design exploration and runnabl
 
 # Design an Interface
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 "Design It Twice" (A Philosophy of Software Design): first idea rare best. Generate radical different designs, compare.
 
 ## Workflow

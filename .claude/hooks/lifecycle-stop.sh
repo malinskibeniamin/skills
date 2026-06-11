@@ -2,8 +2,8 @@
 set -eo pipefail
 
 # Stop hook: enforce development lifecycle completion with auto-remediation.
-# Ensures code changes are tested, simplified, pushed, PR'd, CI-checked,
-# and review-requested. Instead of just blocking, prescribes exact actions
+# Ensures code changes are tested, liability-reviewed via /deslop,
+# pushed, PR'd, CI-checked, and review-requested. Instead of just blocking, prescribes exact actions
 # so Claude auto-follows and retries.
 #
 # Lifecycle gates (sequential):
@@ -232,7 +232,7 @@ elif command -v vitest &>/dev/null || [ -x "./node_modules/.bin/vitest" ]; then
     done
 
     if [ -n "$_low_coverage" ]; then
-      hook_stop_block "Coverage gaps found in session-changed files:${_low_coverage}\nRun /tdd to analyze coverage gaps and write tests targeting uncovered code. Then run /simplify."
+      hook_stop_block "Coverage gaps found in session-changed files:${_low_coverage}\nRun /tdd to analyze coverage gaps and write tests targeting uncovered code. Then run /simplify and /deslop."
     fi
 
     rm -rf "$(dirname "$_cov_json")" 2>/dev/null || true
@@ -240,7 +240,7 @@ elif command -v vitest &>/dev/null || [ -x "./node_modules/.bin/vitest" ]; then
     # Coverage run failed or not configured. Missing tests are still a
     # stop-gap: write the behavior test first, then fix coverage tooling.
     if [ "$_has_tests" = false ]; then
-      hook_stop_block "New source files on branch with no adjacent / branch-scoped tests (coverage analysis unavailable). Run /tdd to write tests, fix coverage tooling if needed, then /simplify."
+      hook_stop_block "New source files on branch with no adjacent / branch-scoped tests (coverage analysis unavailable). Run /tdd to write tests, fix coverage tooling if needed, then /simplify and /deslop."
     fi
   fi
 else

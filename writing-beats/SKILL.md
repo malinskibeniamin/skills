@@ -5,6 +5,7 @@ description: Build article beat by beat from raw material with user-chosen pivot
 
 # Writing Beats
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Input: markdown raw material. If output path missing, ask once.
 
 ## Loop

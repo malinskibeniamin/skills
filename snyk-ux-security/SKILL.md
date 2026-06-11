@@ -5,6 +5,7 @@ description: "Run sequential Snyk dependency sweeps across frontend, Go, and Baz
 
 # Snyk UX + Go + Bazel Security
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Per-path vuln audit -> exploitability triage -> safe bump -> PR -> cloud review. JS (bun + yarn.lock, React 18), Go (go.mod + govulncheck), and Bazel (MODULE.bazel, bazel/repositories.bzl).
 
 ## Input

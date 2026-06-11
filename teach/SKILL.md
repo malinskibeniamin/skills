@@ -7,6 +7,7 @@ argument-hint: "What would you like to learn?"
 
 # Teach
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Stateful teaching workspace. Current dir stores learning state.
 
 ## Workspace files

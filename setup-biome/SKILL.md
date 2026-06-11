@@ -5,6 +5,7 @@ description: Install Biome linter with Ultracite preset, create biome.jsonc conf
 
 # Setup Biome + Ultracite
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 - **Biome** linter/formatter + **Ultracite** opinionated preset
 - Stop hook auto-fix lint/format on changed JS/TS files (skip `noUnusedImports`, avoid deletion loops)
 - Strict: `noConsole`, cognitive complexity 15, `noDeprecatedImports`, restricted imports (moment/lodash/classnames/mobx/yup)

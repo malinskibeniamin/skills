@@ -24,7 +24,7 @@ flowchart TD
     FixFindings -->|Round = 2| P5
     Findings -->|No| P5
 
-    P5[5. /simplify -> /commit-push-pr<br/>+ code-reviewer] --> P5b
+    P5[5. /simplify -> /deslop -> /commit-push-pr<br/>+ code-reviewer] --> P5b
 
     P5b[5b. Iterate<br/>Monitor CI] --> CI{CI status?}
     CI -->|Failing| FixCI[Diagnose + fix + push]
@@ -129,7 +129,7 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 - Max 2 rounds. After each: commit fixes, re-verify (tests + types + lint)
 - P0/P1 persist after round 2 -> go Phase 5, flag in PR description
 
-## Phase 5: Simplify + Ship
+## Phase 5: Simplify, Deslop + Ship
 
 ### Sequence
 
@@ -138,20 +138,22 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
    - Code quality (DRY, naming, structure)
    - Efficiency (needless re-renders, bundle impact)
 
-2. **Fix issues** from `/simplify`, commit
+2. **`/deslop`** -- run `/simplify` first, then question every remaining addition. Keep only code with clear product value, defensive correctness, or test confidence.
 
-3. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
+3. **Fix issues** from `/simplify` and `/deslop`, commit
 
-4. **Resilience Review Evidence** -- if risky feature or hook nudge, include verdict, top failure paths, Finding queue, diagnose loops, RED tests/snapshots, polish gaps, observability. If customer-facing, include visual review evidence. If skipped, include low-risk reason.
+4. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
 
-5. **`/commit-push-pr`** -- handle:
+5. **Resilience Review Evidence** -- if risky feature or hook nudge, include verdict, top failure paths, Finding queue, diagnose loops, RED tests/snapshots, polish gaps, observability. If customer-facing, include visual review evidence. If skipped, include low-risk reason.
+
+6. **`/commit-push-pr`** -- handle:
    - Categorized conventional commits
    - Branch strategy
    - Push with tracking
    - PR creation with structured body
    - CI monitor
 
-6. **`code-reviewer` agent** -- dispatch on PR for fresh-eyes review
+7. **`code-reviewer` agent** -- dispatch on PR for fresh-eyes review
 
 ### Security Gate
 

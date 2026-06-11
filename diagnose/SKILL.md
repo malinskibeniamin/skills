@@ -99,7 +99,6 @@ If correct seam exist:
 5. Re-run Phase 1 feedback loop vs original (un-minimised) scenario.
 
 ## Phase 6 -- Cleanup + post-mortem
-
 Required before declare done:
 
 - [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
@@ -108,4 +107,4 @@ Required before declare done:
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message -- so the next debugger learns
 
-**Then ask: what would prevent this bug?** If answer involve architecture change (no good test seam, tangled callers, hidden coupling) hand off to `/improve-codebase-architecture` with specifics. Make recommendation **after** fix in, not before -- have more info now than at start.
+**Then ask: what would prevent this bug?** If answer involve architecture change (no good test seam, tangled callers, hidden coupling) hand off to `/improve-codebase-architecture` with specifics. Make recommendation **after** fix in, not before -- have more info now than at start. Run `/deslop` before shipping.
