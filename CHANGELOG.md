@@ -4,6 +4,10 @@
 
 2026-06-08 -- Add `/swarm` parallel-executor skill. It infers distinct subagent lanes from free-form goals, emits a launch manifest, supports shared branch/worktree/PR by default plus per-agent worktrees on request, defines task packets and output schema, composes with prime/TDD/review/diagnose/architecture/product skills, and keeps coordinator-owned merge and verification. Skills 72 -> 73.
 
+## 4.18.0
+
+2026-06-11 -- Add `/deslop` liability review skill and wire code-liability gates into prompt-time lifecycle, self/code reviewers, review value gate, lifecycle/TDD/Go guidance, CLAUDE/AGENTS, README, every SKILL.md repo-change preamble, and evals. The gate keeps added code only for product value, defensive correctness, or test confidence; otherwise delete, inline, split, or block. Skills 74 -> 75.
+
 ## 4.17.0
 
 2026-06-10 -- Vendor shadcn `/improve` advisor skill. Adds the `/improve` skill with upstream `references/` files, local examples/templates, eval coverage, and Claude/Codex plugin registration. Wires improve's advisor-only workflow to existing helper skills under the hood: `/prime` for recon, `/swarm` for audit fan-out, `/review` for vetting, `/steelman` for direction/high-risk findings, `/resilience-review` for STOP conditions, `/thermo-nuclear-code-quality-review` for deep mode, and `/to-issues` for issue publishing. Updates release metadata across skill-manifest, Claude plugin, Codex plugin, and both marketplaces to 4.17.0. Skills 73 -> 74.

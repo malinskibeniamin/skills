@@ -5,6 +5,7 @@ description: Build throwaway logic or UI prototypes to answer design questions f
 
 # Prototype
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
 ## Pick a branch

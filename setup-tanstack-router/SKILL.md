@@ -8,6 +8,7 @@ paths:
 
 # TanStack Router Enforcement
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Catches
 
 - Ban `react-router-dom` imports

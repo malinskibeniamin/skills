@@ -5,6 +5,7 @@ description: Argue strongest case against the user's assertion with evidence. Ex
 
 # Steelman
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Anti-sycophancy. LLMs agree by default. This skill forces opposite case.
 
 ## When invoked

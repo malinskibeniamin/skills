@@ -1,6 +1,6 @@
 ---
 name: go
-description: "Ship what built. Run verify -> self-review -> simplify -> commit-push-pr -> monitor CI -> fix -> done. Use when implementation done, ready to launch."
+description: "Ship what built. Run verify -> self-review -> simplify -> deslop -> commit-push-pr -> monitor CI -> fix -> done. Use when implementation done, ready to launch."
 ---
 
 # Go -- Ship What You Built
@@ -35,13 +35,14 @@ Run all checks. Fix failures before proceed.
 7. Re-verify (tests + types + lint)
 8. **Max 2 refine rounds.** Then proceed.
 
-## Phase 5: Simplify + Ship
+## Phase 5: Simplify, Deslop + Ship
 
-1. Run `/simplify` -- review changed code for reuse, quality, efficiency
-2. Fix issues, commit
-3. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
-4. Run `/commit-push-pr` -- conventional commits, push, open PR
-5. Dispatch `code-reviewer` agent (fresh-eyes review)
+1. Run `/simplify` -- general cleanup pass
+2. Run `/deslop` -- question every addition; block unless value, defense, or test confidence is certain
+3. Fix issues, commit
+4. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
+5. Run `/commit-push-pr` -- conventional commits, push, open PR
+6. Dispatch `code-reviewer` agent (fresh-eyes review)
 
 ## Phase 5b: Iterate
 
@@ -79,6 +80,7 @@ Before start, check work to ship:
 | `self-reviewer` agent | 4b | Auto-dispatch on diff |
 | `adversarial-reviewer` agent | 4b | Conditional (>50 lines or auth/security) |
 | `/simplify` | 5 | Code quality review |
+| `/deslop` | 5 | Liability certainty gate |
 | `/visual-review` | 4/5 | Customer-facing surface review with product/design/engineering/QA hats when UI, CLI/TUI, mobile, desktop, or report output changed |
 | `/resilience-review` | 2/4b/5 | Edge cases, error handling, fallback, polish, observability for risky features |
 | `/commit-push-pr` | 5 | Conventional commits + push + PR |

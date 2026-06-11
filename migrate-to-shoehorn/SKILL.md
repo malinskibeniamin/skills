@@ -5,6 +5,7 @@ description: Migrate test casts from `as` to @total-typescript/shoehorn.
 
 # Migrate to Shoehorn
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Test code only. Never prod.
 
 `@total-typescript/shoehorn` replaces test `as` casts with type-safe helpers for partial data.

@@ -5,6 +5,7 @@ description: Enforce React/TS/security rules via PostToolUse hooks -- ban raw HT
 
 # Setup React Rules
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 
 ## Enforced Rules

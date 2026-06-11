@@ -7,6 +7,7 @@ description: Enforce UX text style hooks for UI strings and prose. Checks senten
 
 # Setup UX Copy
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Two PostToolUse hooks on Edit/Write: one for code-string UX copy, one for prose.
 
 ## ux-copy-check.sh (`.ts` and `.tsx`)

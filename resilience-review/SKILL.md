@@ -5,6 +5,7 @@ description: Resilience Review checks resilience. Use when edge cases, errors, f
 
 # Resilience Review
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Murphy pass: find every plausible unhappy path, then block, guard, recover, observe.
 
 ## Use when

@@ -5,6 +5,7 @@ description: Install Claude hooks blocking dangerous git commands before executi
 
 # Git Guardrails
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Install PreToolUse Bash hook blocking dangerous git before Claude runs it.
 
 Blocks: `git push`, `git reset --hard`, `git clean -f/-fd`, `git branch -D`, `git checkout .`, `git restore .`.

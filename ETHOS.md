@@ -66,3 +66,14 @@ options with cost. Destructive ops need explicit confirmation.
 
 Behavioral -- not hook-enforceable. Reviewer agents surface, never
 auto-merge.
+
+## 9. Code Is Liability
+
+Every added line can fail, page someone, or need support. Keep new code
+only when it delivers product value, defensive correctness, or test
+confidence. Delete, inline, or split anything speculative, sloppy,
+untested, or larger than the problem needs.
+
+Enforced by: `intent-detect`, `lifecycle-stop`, `/deslop` after `/simplify`,
+`self-reviewer`, `code-reviewer`, `review` value gate,
+`duplicate-function-check`, `file-size-check`.

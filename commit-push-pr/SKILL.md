@@ -5,6 +5,7 @@ description: Analyze changes, create categorized conventional commits, push, and
 
 # Commit, push, and open PR
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 See [REFERENCE.md](REFERENCE.md) for commit-type table, auto-label map, PR body template.
 
 ## Step 0: Gather context

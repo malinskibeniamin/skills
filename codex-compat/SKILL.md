@@ -5,6 +5,7 @@ description: Generate Codex hooks.json and AGENTS.md from Claude Code hooks. Map
 
 # Codex Compatibility Layer
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Codex now supports Claude-style lifecycle hooks for `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `PermissionRequest`, `PostToolUse`, and `Stop`. `PreToolUse`/`PostToolUse` matchers support `Bash`, MCP tool names, `apply_patch`, and `Edit|Write` aliases. Map `Edit|Write` hooks direct whenever possible.
 
 ## What This Creates

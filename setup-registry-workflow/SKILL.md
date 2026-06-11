@@ -5,6 +5,7 @@ description: Registry hooks + component taxonomy + consumer drift analysis. Use 
 
 # Setup Registry Workflow
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Hooks
 
 - **PostToolUse** (`ui-registry-warn.sh`): warn once/session when edit UI component dirs | prompt upstream PR

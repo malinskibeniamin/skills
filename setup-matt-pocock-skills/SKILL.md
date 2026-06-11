@@ -6,6 +6,7 @@ disable-model-invocation: true
 
 # Setup Matt Pocock Skills
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Scaffold per-repo config:
 
 - Issue tracker: GitHub, GitLab, local markdown, or other.

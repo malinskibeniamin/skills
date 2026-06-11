@@ -5,6 +5,7 @@ description: Ultra-compressed reply mode. Use when user asks be brief or /cavema
 
 # Caveman
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Respond terse like smart caveman. Substance stays. Fluff dies.
 
 ## Persistence

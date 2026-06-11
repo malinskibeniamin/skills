@@ -5,6 +5,7 @@ description: "Configure GitHub Actions CI for React/TypeScript frontend projects
 
 # Setup CI Pipeline
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 GitHub Actions tuned for React/TypeScript:
 
 - Quality gate -- lint, type-check, tests in <5 min

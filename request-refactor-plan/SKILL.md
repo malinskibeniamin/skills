@@ -7,6 +7,7 @@ description: "DEPRECATED. Prefer `/improve-codebase-architecture` for refactor d
 
 # Request Refactor Plan
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Process
 
 ### 1. Understand

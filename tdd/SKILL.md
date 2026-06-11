@@ -9,7 +9,7 @@ paths:
 ---
 
 # Test-Driven Development
-
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Iron Law
 
 **No prod code without failing test first.** No exceptions.
@@ -46,7 +46,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ### 2. GREEN -- Minimal code to pass
 
-- Only enough to pass | no premature optimization
+- Only enough to pass | no premature optimization | code is liability: no speculative branches, helpers, or options beyond this failing test.
 - Run test | see green
 
 ### 3. REFACTOR -- Clean up while green

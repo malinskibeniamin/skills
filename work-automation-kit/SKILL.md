@@ -5,6 +5,7 @@ description: Install planning/project management skills -- PRD creation, impleme
 
 # Work Automation Kit
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Skills Installed
 
 **Owned** (hook-integrated): brainstorming, domain-model, triage, diagnose, qa, zoom-out
