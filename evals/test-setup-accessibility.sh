@@ -189,6 +189,45 @@ run_hook_eval "$SCRIPT" \
 
 # tmpfile reused in tmpdir
 
+# ── Index articulation accessibility checks ─────────────────────
+
+tmpfile="$_a11y_tmpdir/articulate.tsx"
+printf '<Button aria-label="Search icon"><SearchIcon /></Button>\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: aria-label describes element type" "describe the action"
+
+printf '<input placeholder="Email" />\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: placeholder-only input label" "Placeholder cannot replace a label"
+
+printf '<label>Email</label><input placeholder="Email" />\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  2 "block: placeholder input with unassociated label" "Placeholder cannot replace a label"
+
+printf '<label>Email</label><input id="email" />\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: label missing htmlFor" "label association"
+
+printf '<label htmlFor="email">Email</label><input id="email" placeholder="name@example.com" />\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: labelled input with helper placeholder"
+
+printf '<label htmlFor={emailId}>Email</label><input id={emailId} placeholder="name@example.com" />\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: dynamically labelled input with helper placeholder"
+
 # ── Escape hatch: allow-a11y-skip ──────────────────────────────
 
 tmpfile="$_a11y_tmpdir/test.tsx"
@@ -209,5 +248,16 @@ run_content_eval "$SCRIPT" "onKeyDown" "hook checks for keyboard handlers"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
 run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "WCAG" "hook references WCAG guidelines"
+run_content_eval "$SCRIPT" "describe the action" "hook checks accessible-name action language"
+run_content_eval "$SCRIPT" "Placeholder cannot replace a label" "hook checks placeholder-only controls"
+run_content_eval "$SCRIPT" "label association" "hook checks label association"
+run_content_eval "$SKILL_DIR/SKILL.md" "accessible names.*action" "SKILL.md documents action-based accessible names"
+run_content_eval "$SKILL_DIR/SKILL.md" "placeholder.*label" "SKILL.md documents placeholders cannot replace labels"
+run_content_eval "$SKILL_DIR/SKILL.md" "DOM order" "SKILL.md documents DOM order"
+run_content_eval "$SKILL_DIR/SKILL.md" "color-only" "SKILL.md documents color-only state"
+run_content_eval "$SKILL_DIR/SKILL.md" "reduced motion.*opacity" "SKILL.md documents reduced-motion-safe feedback"
+run_content_eval "$SKILL_DIR/SKILL.md" "hover: hover.*pointer: fine" "SKILL.md documents touch-safe hover media query"
+run_content_eval "$SKILL_DIR/SKILL.md" "visualViewport" "SKILL.md documents virtual keyboard visualViewport review"
+run_content_eval "$SKILL_DIR/SKILL.md" "physical device|simulator" "SKILL.md asks for physical device or simulator evidence"
 
 rm -rf "$_a11y_tmpdir"

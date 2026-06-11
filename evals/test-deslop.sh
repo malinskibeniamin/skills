@@ -10,6 +10,8 @@ run_content_eval "$SKILL" "product value.*defensive.*test|test.*defensive.*produ
 run_content_eval "$SKILL" "/simplify" "deslop runs simplify under the hood"
 run_content_eval "$SKILL" "commit.*push.*merge|push.*merge" "deslop blocks commit push merge when uncertain"
 run_content_eval "$SKILL" "Delete.*Inline.*Justify|delete.*inline.*justify" "deslop has delete-inline-justify loop"
+run_content_eval "$SKILL" "evals changed|matching evals|eval evidence" "deslop requires eval evidence for skill and harness changes"
+run_content_eval "$SKILL" "RED.*GREEN|failing.*passing" "deslop preserves TDD evidence before commit push PR"
 run_content_eval "$SKILL" "blocking finding|NEEDS_CHANGES|block" "deslop can block low-value changes"
 run_content_eval "$SKILL" "REFERENCE.md" "deslop links reference"
 run_content_eval "$REF" "Surface-area budget" "deslop reference defines surface-area budget"

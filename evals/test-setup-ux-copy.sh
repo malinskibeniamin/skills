@@ -466,6 +466,33 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: direct non-slop copy"
 
+# ── Check 28: Articulate copywriting rules ───────────────────────
+
+tmpfile="$_ux_tmpdir/articulate-copy.tsx"
+echo '<Button onClick={handleSubmit}>Submit</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: generic CTA button label" "generic CTA"
+
+echo "const msg = 'Invalid input'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: vague error message" "specific error"
+
+echo "const empty = 'No items found'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: dead-end empty state" "empty state"
+
+echo '<Button onClick={handleSave}>Save changes</Button>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: specific CTA button label"
+
 # ── Escape hatch ────────────────────────────────────────────────
 
 tmpfile="$_ux_tmpdir/legacy.ts"
@@ -498,6 +525,9 @@ run_content_eval "$SCRIPT" "buzzword" "hook checks marketing buzzwords"
 run_content_eval "$SCRIPT" "not just" "hook checks not-just copy cadence"
 run_content_eval "$SCRIPT" "theater" "hook checks X theater copy"
 run_content_eval "$SCRIPT" "aphoristic" "hook checks aphoristic cadence"
+run_content_eval "$SCRIPT" "generic CTA" "hook checks generic CTA labels"
+run_content_eval "$SCRIPT" "specific error" "hook checks vague error messages"
+run_content_eval "$SCRIPT" "empty state" "hook checks dead-end empty states"
 
 # ── REFERENCE content ───────────────────────────────────────────
 
@@ -510,6 +540,15 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "allowlist" "REFERENCE has inclusive 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Directional" "REFERENCE has directional language guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Placeholder" "REFERENCE has placeholder format guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "[Ee]m [Dd]ash" "REFERENCE has em dash guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "front-loading" "REFERENCE has front-loading guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "contextual help" "REFERENCE has contextual help guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "destructive language" "REFERENCE has destructive language guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "truncation" "REFERENCE has truncation strategy guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Redundant UX writing" "REFERENCE has redundant UX writing guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "label.*helper.*placeholder" "REFERENCE tells labels helpers and placeholders not to repeat"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Stress-test copy" "REFERENCE has copy stress-test guidance"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "German titles.*500s.*offline" "REFERENCE stress-tests localization and failure copy"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Product naming" "REFERENCE covers product naming taste"
 
 # ── GLOSSARY content ────────────────────────────────────────────
 

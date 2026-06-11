@@ -16,6 +16,9 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Codex.*Claude|Claude.*Codex" "swarm is C
 run_content_eval "$SKILL_DIR/SKILL.md" "coordinator" "swarm has coordinator ownership"
 run_content_eval "$SKILL_DIR/SKILL.md" "conflicting" "swarm handles conflicting results"
 run_content_eval "$SKILL_DIR/SKILL.md" "model" "swarm leaves room for model policy"
+run_content_eval "$SKILL_DIR/SKILL.md" "eval ownership|matching evals" "swarm assigns eval ownership for skill and harness lanes"
+run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN|failing-test evidence" "swarm TDD lanes require red-green proof"
+run_content_eval "$SKILL_DIR/SKILL.md" "visual-review.*setup-ux-copy|copywriting.*visual-review" "swarm can split visual review and copywriting lanes"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./swarm/"' "swarm registered in Claude plugin skills"
 
 lines=$(wc -l < "$SKILL_DIR/SKILL.md" 2>/dev/null | tr -d ' ' || echo 999)
