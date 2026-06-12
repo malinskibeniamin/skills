@@ -44,11 +44,18 @@ No silent skips: all hats run at least triage; `SKIPPED` needs `skip_reason`, ch
 
 PR value gate: always quantify the Major improvement before verdict. Code is liability: if added surface area is not product value, defensive correctness, or test confidence, treat it as low-value until justified. Value score: HIGH|MEDIUM|LOW|NONE. Maintenance/security/resilience/test-only can score HIGH. If no Major improvement reaches MEDIUM, run `/steelman` internally against "this PR adds meaningful value". If `/steelman` confirms low-value, gate blocks pending explicit override, split, or stronger value justification.
 
-Subagent prompt contract: include fixed point, changed files, diff command, commits command, exact review type, and sources; require lane ownership, evidence, severity, required change; cap at 400 words; findings must be diff-introduced, user-impacting, actionable.
+Subagent prompt contract: include fixed point, changed files, diff command, commits command, exact review type, and sources; require lane ownership, evidence, severity, priority label, required change, and PR-comment-ready text; cap at 400 words; findings must be diff-introduced, user-impacting, actionable.
 
 Each hat emits: `{ "reviewer": "<name>", "hat": "<thermo-nuclear|resilience|regular|adversarial|visual|test-perf|security-privacy>", "status": "APPROVED|FINDINGS|BLOCKED|SKIPPED", "findings": [], "must_answer": [], "skip_reason": "<required when SKIPPED>" }`.
 
 Merge contract: wait for all hats; dedupe by file/range + reference; Dedupe across hats by root cause, not wording; preserve Standards and Spec separately; keep highest severity on disagreement; if subagents unavailable, stop unless user accepts degraded solo review.
+
+## PR comments
+After all hats finish, merge, dedupe, and verify priority before posting or printing review comments. Do not comment during individual hats.
+If the target is a GitHub PR and PR comment tooling is available, post inline PR comments automatically; the user does not need to ask. If PR comment tooling is unavailable or no PR exists, emit comment-ready output instead.
+Do not dump the whole review into the PR. Comment only distinct, high-confidence, actionable findings with tight file/line evidence. Prefer P0/P1 comments; include P2 only when the fix is clear and useful; keep P3 and Future items in the summary unless explicitly worth an inline note.
+Priority labels: P0 bug/blocker, P1 major, P2 minor, P3 patch, Future follow-up. Every posted/comment-ready item must include exactly one priority label. P0/P1 block merge; P2 fix or track; P3 optional polish; Future follow-up belongs to another PR or later cleanup.
+Comment template: What, Why, Suggested fix, One-shot prompt. Keep each comment short. One-shot prompt must name repo/branch, file/range, exact requested change, and verify command when safe; otherwise say why no safe one-shot exists.
 
 ### Standards
 
@@ -87,7 +94,14 @@ Value score: HIGH|MEDIUM|LOW|NONE
 Steelman: not needed | ran: <confirmed value | mixed | low-value>
 Gate: pass | low-value | blocked pending override
 
-Summary: <standards count>, <spec count>, worst issue: <one line or none>
+## Summary
+What's working: <1-3 concise bullets about verified strengths>
+Needs attention: <P0/P1/P2 counts and highest-impact risks>
+Follow-ups: <P3/Future items, skipped lanes, evidence gaps>
+
+## PR comments
+Posted: <count> | Comment-ready fallback: <count> | Skipped as summary-only: <count>
+- [P0 bug/blocker|P1 major|P2 minor|P3 patch|Future follow-up] <file:line> <title> -- <posted|comment-ready|summary-only>
 ```
 
 Rules: keep Standards and Spec separate. Findings need evidence. No vague praise.
