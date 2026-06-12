@@ -710,6 +710,42 @@ run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: glassmorphism backdrop blur" "glassmorphism"
 
+# Warn on motion craft smells researched from Emil Kowalski animation/component notes
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="transition-all duration-500 ease-in">Panel</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: transition-all motion smell" "transition-all"
+
+tmpfile="$_rr_tmpdir/test.css"
+echo '.panel { transition: all 500ms ease-in; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: CSS transition-all motion smell" "transition-all"
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="transition-opacity duration-[350ms]">Panel</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: over-300ms motion duration" "under 300ms"
+
+tmpfile="$_rr_tmpdir/test.tsx"
+echo '<div className="scale-0 opacity-0 transition-transform">Menu</div>' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: scale-0 entry motion smell" "scale(0)"
+
+tmpfile="$_rr_tmpdir/test.css"
+echo '.panel { transition: height 300ms ease-out; }' > "$tmpfile"
+
+run_hook_eval "$TW_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: layout property animation smell" "layout property"
+
 # Skip .ts files (not CSS or TSX)
 tmpfile="$_rr_tmpdir/test.ts"
 echo 'const x = "!important"' > "$tmpfile"
@@ -784,6 +820,12 @@ run_content_eval "$TW_SCRIPT" "Gradient text" "tailwind-check blocks gradient te
 run_content_eval "$TW_SCRIPT" "side-stripe" "tailwind-check warns on side-stripe accent borders"
 run_content_eval "$TW_SCRIPT" "ghost-card" "tailwind-check warns on ghost-card shadows"
 run_content_eval "$TW_SCRIPT" "glassmorphism" "tailwind-check blocks glassmorphism"
+run_content_eval "$TW_SCRIPT" "transition-all" "tailwind-check warns on transition-all motion smells"
+run_content_eval "$TW_SCRIPT" "scale\\(0\\)" "tailwind-check warns on scale(0) entry motion"
+run_content_eval "$TW_SCRIPT" "layout property" "tailwind-check warns on layout-property animation"
+run_content_eval "$TW_SCRIPT" "300ms" "tailwind-check documents UI motion duration threshold"
+run_content_eval "$SKILL_DIR/SKILL.md" "Motion craft" "setup-react-rules documents motion craft checks"
+run_content_eval "$SKILL_DIR/SKILL.md" "transform/opacity" "setup-react-rules documents performant motion properties"
 
 # ── Check 18: Ban class components ────────────────────────────────
 

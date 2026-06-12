@@ -214,6 +214,30 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "CLI command output" "visual-review r
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Scripts vs hooks" "visual-review reference explains scripts vs hooks"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Could become hook" "visual-review reference evaluates hook candidates"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "subjective product/design taste.*No" "visual-review keeps subjective taste out of hooks"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Index articulation pass" "visual-review has Index articulation pass"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "typography.*color.*iconography.*layout.*interaction.*motion.*accessibility.*information architecture.*copywriting.*components" "visual-review covers Index vocabulary lanes"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "front-loading.*CTA.*contextual help" "visual-review includes copywriting articulation terms"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "accessible names.*DOM order.*label association.*color-only" "visual-review includes accessibility articulation terms"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Research-backed operating loop" "visual-review includes researched operating loop"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "PRODUCT.md.*DESIGN.md.*anti-references" "visual-review captures product and design context before judging"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "pre-ship gauntlet" "visual-review includes pre-ship gauntlet"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "audit.*clarify.*harden" "visual-review pre-ship gauntlet covers audit clarify harden"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Motion decision framework" "visual-review includes motion decision framework"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "frequency.*purpose.*easing.*duration" "visual-review motion framework covers frequency purpose easing duration"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "under 300ms" "visual-review motion framework keeps UI animation short"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Component craft heuristics" "visual-review includes researched component heuristics"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Toast.*Drawer.*Hold-to-delete" "visual-review covers toast drawer hold-to-delete craft"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "slow motion.*frame-by-frame.*physical device" "visual-review debug checklist uses slow motion and real devices"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Before \\| After \\| Why" "visual-review has design-engineering patch table format"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Spring.*interruptible.*gesture" "visual-review covers spring use for interruptible gestures"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "@starting-style" "visual-review covers CSS starting-style entry animations"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "CSS variables.*inheritable" "visual-review covers CSS variable animation perf risk"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "velocity threshold.*damping.*pointer capture.*multi-touch" "visual-review covers gesture edge details"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "WAAPI" "visual-review covers WAAPI for programmatic CSS animations"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "stagger.*30-80ms" "visual-review covers short non-blocking stagger"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "asymmetric enter/exit timing" "visual-review covers deliberate-hold and snappy-release timing"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Slop catalog expansion" "visual-review includes expanded slop catalog"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "flat type hierarchy.*AI color palette.*layout property animation" "visual-review slop catalog covers type color and motion smells"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Start warn-only" "visual-review recommends warn-only hook rollout"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "customer-facing surface diff" "go skill runs visual-review for customer-facing surfaces"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "customer-facing surface diff" "commit-push-pr requires visual-review for customer-facing surfaces"
@@ -247,5 +271,14 @@ if grep -qE "EXAMPLES\\.md" "$SKILL_DIR/SKILL.md"; then
   ERRORS="$ERRORS\n  FAIL: visual-review SKILL.md avoids examples link"
 else
   echo "  PASS  visual-review SKILL.md avoids examples link"
+  PASS=$((PASS + 1))
+fi
+
+if grep -REq "Initial Response|I'm ready to help you build interfaces" "$SKILL_DIR"/*.md; then
+  echo "  FAIL  visual-review does not vendor upstream Initial Response prompt"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: visual-review includes forbidden upstream Initial Response"
+else
+  echo "  PASS  visual-review omits upstream Initial Response prompt"
   PASS=$((PASS + 1))
 fi

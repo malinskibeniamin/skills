@@ -66,6 +66,98 @@ Use this section during design-hat review.
 
 Bad: "Spacing feels off." Good: "Density is too tight in the billing card; helper text and action read as one group. Move the action row one spacing step away from supporting text."
 
+## Index articulation pass
+
+Use [Index /to/articulate](https://index.how/to/articulate) as a vocabulary source, not a rulebook. Before proposing a taste fix, classify the issue by lane: typography, color, iconography, layout, interaction, motion, accessibility, information architecture, copywriting, components.
+
+The goal is precise language. Replace "make it better" with "the CTA loses hierarchy because the icon stroke weight and button label have mismatched visual weight" or "the empty state fails wayfinding because the signpost and next action are missing."
+
+| Lane | Terms to reach for | Review questions |
+|---|---|---|
+| Typography | type scale, weight, leading, measure, line length, font stack, tabular nums, text overflow | Is text readable, aligned, and stable under fallback fonts, long labels, and data changes? |
+| Color | semantic token, contrast ratio, tinted neutral, chroma, OKLCH, alpha, dark mode | Does color carry purpose, contrast, and hierarchy without vibrating or going grey? |
+| Iconography | stroke weight, optical centre, filled vs outlined, meaning collision, breathing room, unified weight | Does the icon read as intended, align optically, and match nearby text weight? |
+| Layout | gap, negative space, border radius, max-width, breakpoint, safe area, z-index, layout shift | Does space group related content, reserve size, and survive viewport changes? |
+| Interaction | affordance, hover state, focus state, active state, disabled state, cursor, touch target | Does each state communicate what can happen and what just happened? |
+| Motion | easing, duration, transition property, reduced motion, choreography, motion as feedback | Does motion guide attention without jank, delay, or vestibular risk? |
+| Accessibility | accessible names, DOM order, label association, color-only state, tab order, focus trap, semantic HTML | Does the screen reader and keyboard experience match what sighted pointer users see? |
+| Information architecture | progressive disclosure, mental model, hierarchy, empty state, wayfinding, signpost, labelling | Does the user know where they are, what matters, and what to do next? |
+| Copywriting | microcopy, CTA, error message, placeholder, sentence case, front-loading, contextual help, truncation strategy | Do the words guide scanning, recovery, and trust at the point of action? |
+| Components | button, input, modal/dialog, toast, badge/tag, tabs, data table, skeleton, empty state | Does the component behave according to its native pattern and product system? |
+
+Copywriting lens: front-loading, CTA, contextual help, success message, destructive language, numeric formatting, and truncation strategy are visual-review concerns because words affect hierarchy, trust, and task completion.
+
+Accessibility lens: accessible names, DOM order, label association, color-only state, tab order, focus trap, and semantic HTML are visual-review concerns because visual polish that does not survive assistive tech is not shippable polish.
+
+## Research-backed operating loop
+
+Use Impeccable-style taste work as an operating loop, not as a replacement for evidence:
+
+1. **Context before taste**: read existing tokens, components, `PRODUCT.md`, `DESIGN.md`, voice notes, and anti-references before judging. If those files do not exist, infer the product register and say the assumption.
+2. **Named dimension pass**: pick one lane at a time, such as typeset, colorize, layout, animate, clarify, harden, onboard, optimize, polish. Do not run conflicting taste directions at once.
+3. **pre-ship gauntlet**: audit, clarify, harden. Score accessibility, performance, theming, responsive behavior, platform risk, state quality, and anti-patterns before calling a surface ready.
+4. **Reality stress**: use long names, localized labels, German titles, huge numbers, dense data, 500s, offline states, slow network, text zoom, reduced motion, dark mode, and mobile keyboard states.
+5. **System maintenance**: if a pattern appears twice, extract a token, component variant, fixture, hook warning, or docs rule. Taste that cannot be repeated is a one-off opinion.
+
+## Motion decision framework
+
+For every animation, ask frequency, purpose, easing, duration before implementation. High-frequency or keyboard-triggered actions should often be instant. Motion needs a job: spatial continuity, state feedback, attention guidance, explanation, or rare delight. Default to ease-out for entry/exit, ease-in-out for morphing or movement, ease for simple hover/color transitions, and linear for progress. Keep common UI motion under 300ms unless distance, platform convention, or large surface size justifies more.
+
+Implementation rules:
+
+- Animate `transform` and `opacity` first. Avoid layout property animation such as width, height, top, left, margin, and padding.
+- Prefer transitions for dynamic, interruptible UI. Use keyframes for predetermined sequences only.
+- Avoid `transition-all`; name the property so unrelated state changes do not animate.
+- Do not animate from `scale(0)`. Start near the final size so text and edges stay credible.
+- Active press feedback should be subtle, often around `scale(0.97)`, and immediate.
+- Popovers, menus, and sheets should animate from their trigger or natural edge through `transform-origin`.
+- Reduced motion should remove movement and large transforms while preserving essential opacity, color, or instant state feedback.
+- Debug motion with slow motion, frame-by-frame, physical device or simulator evidence, and next-day fresh eyes for non-trivial polish.
+
+When reviewing UI code, include a design-engineering patch table for concrete motion/component fixes:
+
+| Before | After | Why |
+|---|---|---|
+| `transition-all duration-500` | `transition-transform duration-200 ease-out` | Exact property, shorter duration, faster perceived response |
+| `scale(0)` entry | `scale(0.95) + opacity` | Entry keeps physical continuity |
+| Center-origin popover | Trigger-origin popover | Motion follows the user's mental model |
+
+Advanced motion checks:
+
+- Spring motion belongs on interruptible gesture work, drag momentum, and decorative living surfaces; avoid springs on dense functional dashboards where movement hides data.
+- `@starting-style` is the preferred CSS entry pattern when supported; use mounted data attributes only as fallback.
+- CSS variables are inheritable, so changing a parent variable during drag can recalculate all children. Update `transform` on the moving element instead.
+- WAAPI is useful when programmatic control needs CSS-level animation performance.
+- Stagger can help multi-item entry, but keep stagger 30-80ms and never block interaction while items finish.
+- Use asymmetric enter/exit timing: deliberate holds can be slow, but release and cancellation should be snappy.
+
+## Component craft heuristics
+
+Toast, Drawer, Hold-to-delete, and clip-path components need interaction review, not screenshot review:
+
+| Component | Review heuristics |
+|---|---|
+| Toast | Loading, success, and error states exist; timers pause when the tab is hidden; swipe dismissal uses pointer capture plus velocity threshold; stacked toasts keep stable height/gaps; hover gaps do not dismiss accidentally; critical errors are also persistent inline or page context. |
+| Drawer | Mobile drawers use dialog-grade focus trap, focus return, background inertness, scroll-at-top drag rules, damped momentum, snap points, multitouch guard, `visualViewport` keyboard handling, safe-area spacing, and physical phone or simulator checks. |
+| Hold-to-delete | Destructive copy says what will be deleted; release cancels; hold progress is visible and linear; release animation is quick; duplicate overlay content is `aria-hidden`; focus and keyboard alternative are present. |
+| Clip-path reveal | Use for reveals, tabs, comparisons, and theme transitions when it prevents layout shift; duplicate visual overlays are `aria-hidden` and `tabIndex={-1}`; scroll-triggered reveals do not replay distractingly; View Transitions API is an optional platform path, not a requirement. |
+
+Gesture details: confirm swipe dismissal has a velocity threshold, boundary damping, pointer capture after drag starts, and multi-touch protection so the component does not jump when fingers change.
+
+## Slop catalog expansion
+
+Priority catalog: flat type hierarchy, AI color palette, layout property animation, gradient text, glassmorphism, side-stripe accent borders, ghost-card border plus large shadow, extreme radius, repeated icon tiles, repeated section kickers, fake metric heroes, nested cards, too-long measure, bounce easing, overlong duration, marketing buzzwords, aphoristic cadence, and placeholder imagery.
+
+Use the catalog as a detector. Still write the finding as evidence:
+
+| Lane | Slop smell | Better review language |
+|---|---|---|
+| Typography | Flat type hierarchy, crushed tracking, oversized hero type, repeated eyebrow chips | "Hierarchy is flat; primary heading and body compete. Step the scale or weight so the CTA path wins first read." |
+| Color | AI color palette, grey text on colored surface, dark glow, cream palette with weak contrast | "Color is decorative rather than semantic. Move emphasis into tokens that preserve contrast and state meaning." |
+| Layout | Nested cards, identical grids, fake metrics, too-long line length, viewport-edge body text | "Grouping is doing decoration work. Flatten containers and use spacing or dividers to show relationships." |
+| Motion | Bounce easing, layout property animation, image hover zoom, delayed frequent tooltip | "Motion steals attention or costs interaction time. Remove it, shorten it, or move it to transform/opacity with reduced-motion coverage." |
+| Copy | Buzzword CTA, theater framing, generic empty state, em dash rhythm | "Copy hides the concrete task. Name the action, object, cause, or recovery path." |
+
 ## Design language handles
 
 Design review needs shared handles, not vibes.
@@ -90,6 +182,7 @@ Current read and Desired read are the core pair: first name what the surface com
 Design finding format:
 
 ```markdown
+Vocabulary lane: <typography | color | iconography | layout | interaction | motion | accessibility | information architecture | copywriting | components>
 Handle: <hierarchy | density | rhythm | anchor | negative space | leading | measure | visual weight | affordance | scan path>
 Current read: <what dominates or feels unclear now>
 Desired read: <what should dominate or feel clear>
@@ -338,9 +431,9 @@ Product, Design, Engineering, QA. Four cards: score + one sentence. Scores = `st
 
 Add a compact design-language strip:
 
-| Handle | Current read | Desired read | Magnitude | Implementation knobs |
-|---|---|---|---|---|
-| hierarchy | secondary metadata dominates action | primary action wins first read | step | Button variant, weight, gap |
+| Vocabulary lane | Handle | Current read | Desired read | Magnitude | Implementation knobs |
+|---|---|---|---|---|---|
+| copywriting | hierarchy | secondary metadata dominates action | primary action wins first read | step | Button variant, weight, gap |
 
 ### Callouts
 

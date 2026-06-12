@@ -22,7 +22,8 @@ Code is liability. Every added line can break, page someone, or need support.
 3. **Delete first** -- remove dead paths, speculative options, unused exports, wrapper layers.
 4. **Inline second** -- inline one-use helpers/components; prefer direct code until reuse is real.
 5. **Tighten last** -- flatten branches, improve names, shrink tests without weakening assertions.
-6. **Verify** -- rerun focused tests/type/lint. Green alone is not enough if diff is noisy.
+6. **Eval evidence** -- skill or harness changes need matching evals changed, with RED->GREEN or failing->passing evidence. No eval evidence means block or record why the change is docs-only/non-deterministic.
+7. **Verify** -- rerun focused tests/type/lint. Green alone is not enough if diff is noisy.
 
 ## Blocking finding
 
