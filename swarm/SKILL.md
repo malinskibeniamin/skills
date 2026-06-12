@@ -56,7 +56,9 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 ## Skill composition
 
 - Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
-- TDD: split coverage by independent behavior or public interface. RED before production edits.
+- TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
+- Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.
+- Design/copy work: split `/visual-review`, `setup-ux-copy`/copywriting, accessibility, and articulation lanes only when their write scopes do not overlap.
 - Review: split standards, spec, resilience, security, performance, tests, UX, and steelman axes.
 - Diagnose: split reproduction loops, hypotheses, instrumentation, and regression tests.
 - Product: combine `/brainstorming`, `/prototype`, and `/steelman` lanes for options and pushback.

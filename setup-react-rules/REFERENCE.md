@@ -32,6 +32,18 @@ Hook check `// allow: useEffect` anywhere in file * reason required * legacy `//
 
 `<form>` + `<a>` allowed -- no registry replacement for `<form>`, `<a>` can't always swap with TanStack Router Link.
 
+## Motion Craft Checks
+
+The Tailwind hook warns on deterministic motion smells. It should stay warn-only because motion quality needs context.
+
+| Smell | Why | Better default |
+|---|---|---|
+| `transition-all` | Unrelated state changes animate and become hard to debug. | Transition only `transform`, `opacity`, or the specific property. |
+| `scale(0)` / `scale-0` entries | Text and edges collapse unnaturally. | Start near final size and fade or translate. |
+| Layout property animation | Width, height, position, margin, and padding can jank. | Use transform/opacity, clip-path for reveals, or instant change. |
+| Long common UI duration | Slow motion hurts frequent actions. | Keep routine UI under 300ms unless distance or platform convention warrants more. |
+| `ease-in` entry/exit | It feels sluggish at the start of interaction. | Use short ease-out for entry/exit, ease-in-out for morphing, ease for simple hover/color. |
+
 ## Auto-Generated Files
 
 All hooks auto-skip:

@@ -25,6 +25,24 @@ Two PostToolUse hooks on Edit/Write: one for code-string UX copy, one for prose.
 - **Warn** spelled-out numbers (1-9 as numerals in UI)
 - **Warn** "and/or" (use "and", "or", or "A, B, or both")
 - **Warn** "etc.", "e.g.", "i.e.", "please", "via", "There is/are" starters
+- **Warn** generic CTA labels ("Submit", "OK", "Done") -- name the action
+- **Warn** vague error copy ("Invalid input", "Something went wrong") -- state cause + recovery
+- **Warn** dead-end empty states ("No data", "No items found") -- explain why + next step
+
+### Copywriting articulation
+
+- Microcopy must guide and reassure: labels, errors, placeholders, tooltips, toasts.
+- CTA text owns the action: "Save changes" beats "Submit".
+- Front-load scannable copy: lead with the object or result users need.
+- Error messages say what happened and how to recover.
+- Placeholders are examples or hints only; never the label.
+- Success messages are specific and brief: "Saved" or "Topic created", not "Done".
+- Destructive language is explicit: delete, remove, revoke, disconnect. Do not soften permanent loss.
+- Contextual help sits near the thing it explains and should remove the next question.
+- Numeric formatting, truncation, and locale-sensitive text are part of UX copy quality.
+- Labels, helper text, placeholders, tooltips, and errors each do different work; cut redundant writing.
+- Stress copy with long localized strings, huge numbers, empty/error/offline states, and destructive actions.
+- Product naming can add identity only when clarity and recovery language stay intact.
 
 ### Redpanda-specific (REDPANDA_KIT=1)
 
