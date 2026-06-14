@@ -1,6 +1,6 @@
 ---
 name: review
-description: Reviews diff since fixed point across Standards and Spec, then routes UI/resilience/release risks. Use for branch, PR, WIP, or "review since X".
+description: Reviews a diff since a fixed point across Standards, Spec, and risk gates. Use when reviewing a branch, PR, WIP, or "review since X".
 ---
 
 # Review
@@ -75,33 +75,23 @@ Do not recursively invoke /review from a local gate already running inside `/rev
 
 ## Output
 
+See [REFERENCE.md](REFERENCE.md) for detailed report schema and examples.
+
 ```md
 ## Review
 Fixed point: <fixed>
 Diff: `git diff <fixed>...HEAD`
 Subagents: thermo-nuclear-review-hat: <status/skipped: reason> | resilience-review-hat: <status/skipped: reason> | regular-review-hat: <status> | adversarial-review-hat: <status> | visual-review-hat: <status/skipped: reason> | test-perf-review-hat: <status/skipped: reason> | security-privacy-triage-hat: <status/skipped: reason>
-
-## Standards
-<findings or pass>
-
-## Spec
-<findings, pass, or no spec available>
-
-## Local review gates
-Thermo nuclear review: pass|findings|skipped: <reason>; Resilience review: pass|findings|skipped; Regular review: pass|findings; Adversarial review: pass|findings; Visual review: pass|findings|skipped; Test/perf review: pass|findings|skipped; Security/privacy triage: pass|findings|skipped.
-
-## PR value gate
+## Standards: <findings or pass>
+## Spec: <findings, pass, or no spec available>
+## Local review gates: <per-hat pass|findings|skipped>
+## PR value gate:
 Major improvement: <quantified claim, beneficiary, evidence, delta>
 Value score: HIGH|MEDIUM|LOW|NONE
 Steelman: not needed | ran: <confirmed value | mixed | low-value>
 Gate: pass | low-value | blocked pending override
-
-## Summary
-What's working: <1-3 concise bullets about verified strengths>
-Needs attention: <P0/P1/P2 counts and highest-impact risks>
-Follow-ups: <P3 Patch/Future items, skipped lanes, evidence gaps>
-
-## PR comments
+## Summary: What's working: <1-3 bullets>; Needs attention: <P0/P1/P2 counts>; Follow-ups: <P3 Patch/Future items, skipped lanes, evidence gaps>
+## PR comments:
 Posted: <count> | Comment-ready fallback: <count> | Skipped as summary-only: <count>
 - [P0 Blocker|P1 Major|P2 Minor|P3 Patch|P3 Future] <file:line> <title> -- <posted|comment-ready|summary-only>
 ```
