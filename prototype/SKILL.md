@@ -19,6 +19,7 @@ The two branches produce very different artifacts -- getting this wrong wastes t
 
 ## Rules that apply to both
 
+Run `/ponytail ultra` first: use stdlib/native/one-file throwaway code; skip all scaffolding not needed to answer the question.
 1. **Throwaway from day one, and clearly marked as such.** Locate the prototype code close to where it will actually be used (next to the module or page it's prototyping for) so context is obvious -- but name it so a casual reader can see it's a prototype, not production. For throwaway UI routes, obey whatever routing convention the project already uses; don't invent a new top-level structure.
 2. **One command to run.** Whatever the project's existing task runner supports -- `pnpm <name>`, `python <path>`, `bun <path>`, etc. The user must be able to start it without thinking.
 3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is _checking_, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE -- wipe me" name.

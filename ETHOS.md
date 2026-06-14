@@ -69,10 +69,11 @@ auto-merge.
 
 ## 9. Code Is Liability
 
-Every added line can fail, page someone, or need support. Keep new code
-only when it delivers product value, defensive correctness, or test
-confidence. Delete, inline, or split anything speculative, sloppy,
-untested, or larger than the problem needs.
+Every added line can fail, page someone, or need support. Before new
+code, try deletion, standard library, native platform, already-installed
+dependency, then one-line local code. Keep new code only when it delivers
+product value, defensive correctness, or test confidence. Delete, inline,
+or split anything speculative, sloppy, untested, or larger than needed.
 
 Enforced by: `intent-detect`, `lifecycle-stop`, `/deslop` after `/simplify`,
 `self-reviewer`, `code-reviewer`, `review` value gate,

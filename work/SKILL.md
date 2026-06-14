@@ -8,4 +8,4 @@ description: "Alias for /development-lifecycle. Full frontend workflow: understa
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Alias for `/development-lifecycle`. See [development-lifecycle/SKILL.md](../development-lifecycle/SKILL.md) details.
 
-Run `/development-lifecycle` now.
+Run `/ponytail full`, then `/development-lifecycle` now.

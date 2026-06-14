@@ -138,7 +138,7 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
    - Code quality (DRY, naming, structure)
    - Efficiency (needless re-renders, bundle impact)
 
-2. **`/deslop`** -- run `/simplify` first, then question every remaining addition. Keep only code with clear product value, defensive correctness, or test confidence.
+2. **`/ponytail-review` -> `/deslop`** -- cut delete/stdlib/native/yagni/shrink candidates first, then question every remaining addition. Keep only code with clear product value, defensive correctness, or test confidence.
 
 3. **Fix issues** from `/simplify` and `/deslop`, commit
 
