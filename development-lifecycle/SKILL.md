@@ -7,6 +7,10 @@ description: "Use when frontend/React/TypeScript/UI work. Guides understand -> p
 
 Auto-detect phase, guide process.
 
+## Ponytail default
+
+Ponytail before implementation: run `/ponytail full` during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.
+
 ## Phases
 
 ### 0. Worktree (automatic, silent if already isolated)
@@ -46,7 +50,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 - After plan survives grill, use `/swarm` when independent lanes can safely accelerate implementation, tests, diagnosis, review, or docs. Coordinator owns merge.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
-- Code is liability: keep additions only for product value, defensive correctness, or test confidence.
+- Code is liability: reuse-first (standard library, native platform, already-installed dependency, one-line), then keep only product value, defense, or test confidence.
 - **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
 

@@ -10,7 +10,7 @@ Treat each addition as production liability:
 - Test helper/mock: can hide real behavior or harden implementation details.
 - Hook/rule: can block good work or create noisy false positives.
 
-`/deslop` composes with `/simplify`: run `/simplify` first for general cleanup, then question whether the remaining diff deserves to be owned.
+`/deslop` composes with `/simplify`, `/ponytail-review`, `/ponytail-audit`, and `/ponytail-debt`: simplify first, cut complexity, harvest marked debt, then question whether the remaining diff deserves ownership. Pair debt/audit findings with `/improve` when they need a plan, not an immediate edit.
 
 ## Keep rules
 
@@ -23,6 +23,19 @@ Keep when the addition does at least one:
 Short form: Keep when product value, defensive correctness, or test confidence is proven.
 
 If none apply, delete it. If unsure, ask for the value claim or split the diff.
+
+## Reuse-first ladder
+
+Before accepting new code, stop at the first rung that solves the behavior:
+
+1. Delete it or skip speculative scope.
+2. Use the standard library.
+3. Use a native platform feature.
+4. Use an already-installed dependency.
+5. Use one-line local code.
+6. Only then own the smallest custom implementation.
+
+Never remove trust-boundary validation, visible error handling, security, accessibility, or explicitly requested behavior.
 
 ## Review passes
 

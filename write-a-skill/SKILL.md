@@ -8,6 +8,7 @@ description: Create new agent skills with proper structure, progressive disclosu
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## 1. Gather Requirements
 Ask: domain/task? Primary use cases? Scripts needed? Reference materials?
+Before new files/scripts, check reuse-first: standard library, native platform, already-installed dependency, one-line instruction.
 
 ## 2. Draft Structure
 
