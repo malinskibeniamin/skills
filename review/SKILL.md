@@ -52,10 +52,12 @@ Merge contract: wait for all hats; dedupe by file/range + reference; Dedupe acro
 
 ## PR comments
 After all hats finish, merge, dedupe, and verify priority before posting or printing review comments. Do not comment during individual hats.
-If the target is a GitHub PR and PR comment tooling is available, post inline PR comments automatically; the user does not need to ask. If PR comment tooling is unavailable or no PR exists, emit comment-ready output instead.
-Do not dump the whole review into the PR. Comment only distinct, high-confidence, actionable findings with tight file/line evidence. Prefer P0/P1 comments; include P2 only when the fix is clear and useful; keep P3 and Future items in the summary unless explicitly worth an inline note.
-Priority labels: P0 bug/blocker, P1 major, P2 minor, P3 patch, Future follow-up. Every posted/comment-ready item must include exactly one priority label. P0/P1 block merge; P2 fix or track; P3 optional polish; Future follow-up belongs to another PR or later cleanup.
-Comment template: What, Why, Suggested fix, One-shot prompt. Keep each comment short. One-shot prompt must name repo/branch, file/range, exact requested change, and verify command when safe; otherwise say why no safe one-shot exists.
+If the target is a GitHub PR and PR comment tooling is available, post inline PR comments automatically to the open or targeted PR; the user does not need to ask. Resolve target in order: explicit PR URL/number, PR targeted by the skill invocation, then the open PR for the current branch. If PR comment tooling is unavailable, no PR exists, or multiple PRs are ambiguous, emit comment-ready output instead.
+Do not dump the whole review into the PR. Comment only distinct, high-confidence, actionable findings with tight file/line evidence. Prefer P0/P1 comments; include P2 only when the fix is clear and useful; keep P3 Patch or P3 Future items in the summary unless explicitly worth an inline note. In legacy terms: keep P3 and Future items in the summary.
+Priority mapping: P0 for Blocker, P1 for Major, P2 for Minor, P3 for Patch or Future. Legacy aliases normalize to this scale: P0 bug/blocker, P1 major, P2 minor, P3 patch, Future follow-up. Every posted/comment-ready item must include exactly one priority label. P0/P1 block merge; P2 fix or track; P3 optional polish or later cleanup.
+Every confirmed bug is P0 or P1. If a bug is diagnosed and reproduced, it must be posted inline with the matching P0/P1 priority; do not demote bugs to P2/P3 because the fix is small. P0 = merge-blocking crash, data loss, security/privacy exposure, corrupt state, outage, impossible core flow, or entirely missing required behavior. P1 = normal-user defect, regression, broken contract/spec, fake success, major accessibility failure, or high-risk edge.
+Place each PR comment on the tightest changed file/range that introduces the issue. Prefer the exact changed line; if the exact line is not in the diff, use the nearest changed line with context. If no accurate inline location exists, use a top-level PR comment-ready item and explain why inline placement is unsafe.
+Comment template: What, Why, Suggested fix, One-shot prompt. Prefix every comment with Priority. Keep each comment short. One-shot prompt must be one sentence when simple and name repo/branch, file/range, exact requested change, and verify command when safe; otherwise say why no safe one-shot exists.
 
 ### Standards
 
@@ -97,11 +99,11 @@ Gate: pass | low-value | blocked pending override
 ## Summary
 What's working: <1-3 concise bullets about verified strengths>
 Needs attention: <P0/P1/P2 counts and highest-impact risks>
-Follow-ups: <P3/Future items, skipped lanes, evidence gaps>
+Follow-ups: <P3 Patch/Future items, skipped lanes, evidence gaps>
 
 ## PR comments
 Posted: <count> | Comment-ready fallback: <count> | Skipped as summary-only: <count>
-- [P0 bug/blocker|P1 major|P2 minor|P3 patch|Future follow-up] <file:line> <title> -- <posted|comment-ready|summary-only>
+- [P0 Blocker|P1 Major|P2 Minor|P3 Patch|P3 Future] <file:line> <title> -- <posted|comment-ready|summary-only>
 ```
 
 Rules: keep Standards and Spec separate. Findings need evidence. No vague praise.
