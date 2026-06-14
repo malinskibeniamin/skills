@@ -22,6 +22,7 @@ Stateful teaching workspace. Current dir stores learning state.
 ## Mission first
 
 If `MISSION.md` missing or vague, interview user before teaching. Push from abstract goal to concrete outcome. One mission per workspace.
+If mission changes, confirm first, update `MISSION.md`, and write learning record.
 
 ## Source discipline
 
@@ -38,6 +39,10 @@ A lesson:
 - gives tangible win
 - uses interactive task, quiz, or real-world step list
 - includes tight feedback loop, ideally automatic/immediate
+- optimizes storage strength over fluency: retrieval, spacing, interleaving
+- avoids quiz tells: same number of words where possible, no formatting clues
+- links related lessons and reference docs with HTML anchors
+- recommends one primary source for deeper study
 - reminds user to ask follow-up questions
 - saves as `lessons/NNNN-dash-case.html`
 - looks clean, readable, printable
