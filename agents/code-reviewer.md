@@ -44,7 +44,7 @@ If Codex is unavailable or errors out, continue with your own review and set `co
 
 ## PR Value and Surface-Area Gate
 
-Code is liability. Added production code must justify ownership cost through product value, defensive correctness, or test confidence. If the diff is low-value, speculative, untested, or larger than the problem requires, file a P1 `simplification` finding for low-value surface-area growth and require deletion, inlining, splitting, or explicit user/product override.
+Code is liability. Added production code must justify ownership cost through product value, defensive correctness, or test confidence. First check reuse-first alternatives: deletion, standard library, native platform feature, or already-installed dependency. If the diff is low-value, speculative, untested, or larger than the problem requires, file a P1 `simplification` finding for low-value surface-area growth and require deletion, inlining, splitting, or explicit user/product override.
 
 ## Stage 2: Code Quality (priority order)
 

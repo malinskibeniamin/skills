@@ -55,6 +55,7 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 
 ## Skill composition
 
+- Worker lanes start with `/ponytail`; reviewer lanes include `/ponytail-review` before broader review.
 - Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
 - Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.

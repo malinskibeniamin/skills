@@ -38,7 +38,7 @@ Run all checks. Fix failures before proceed.
 ## Phase 5: Simplify, Deslop + Ship
 
 1. Run `/simplify` -- general cleanup pass
-2. Run `/deslop` -- question every addition; block unless value, defense, or test confidence is certain
+2. Run `/ponytail-review` then `/deslop` -- cut complexity first, then block unless value, defense, or test confidence is certain
 3. Fix issues, commit
 4. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
 5. Run `/commit-push-pr` -- conventional commits, push, open PR
@@ -80,7 +80,8 @@ Before start, check work to ship:
 | `self-reviewer` agent | 4b | Auto-dispatch on diff |
 | `adversarial-reviewer` agent | 4b | Conditional (>50 lines or auth/security) |
 | `/simplify` | 5 | Code quality review |
-| `/deslop` | 5 | Liability certainty gate |
+| `/ponytail-review` | 5 | Complexity-only delete/stdlib/native/YAGNI pass |
+| `/deslop` | 5 | Liability certainty gate after Ponytail review |
 | `/visual-review` | 4/5 | Customer-facing surface review with product/design/engineering/QA hats when UI, CLI/TUI, mobile, desktop, or report output changed |
 | `/resilience-review` | 2/4b/5 | Edge cases, error handling, fallback, polish, observability for risky features |
 | `/commit-push-pr` | 5 | Conventional commits + push + PR |
