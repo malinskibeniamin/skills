@@ -10,7 +10,7 @@ Code is liability. Every added line can break, page someone, or need support.
 
 ## Inputs
 
-- Run `/simplify` first; use this skill as the stricter certainty gate after it.
+- Run `/simplify`, `/ponytail-review`, `/ponytail-audit` for broad bloat, and `/ponytail-debt` for `ponytail:` markers; then use this skill as the stricter certainty gate.
 - Read `git diff --stat` and `git diff` for changed files.
 - Read nearby code before proposing new helpers or abstractions.
 - If the goal/spec is unclear, ask one question before judging value.
@@ -18,12 +18,15 @@ Code is liability. Every added line can break, page someone, or need support.
 ## Loop: Delete -> Inline -> Justify
 
 1. **Inventory additions** -- new files, functions, branches, deps, config, hooks.
-2. **Question every addition** -- keep code only when you are certain it proves product value, defensive correctness, or test confidence.
-3. **Delete first** -- remove dead paths, speculative options, unused exports, wrapper layers.
-4. **Inline second** -- inline one-use helpers/components; prefer direct code until reuse is real.
-5. **Tighten last** -- flatten branches, improve names, shrink tests without weakening assertions.
-6. **Eval evidence** -- skill or harness changes need matching evals changed, with RED->GREEN or failing->passing evidence. No eval evidence means block or record why the change is docs-only/non-deterministic.
-7. **Verify** -- rerun focused tests/type/lint. Green alone is not enough if diff is noisy.
+2. **Ponytail review** -- run `/ponytail-review`; record delete/stdlib/native/yagni/shrink candidates before judging value.
+3. **Ponytail audit/debt** -- for repo-wide cleanup or marked shortcuts, run `/ponytail-audit` and `/ponytail-debt`. Pair audit/debt with /improve when fixes are not immediate.
+4. **Reuse-first ladder** -- before owning new code, prefer deletion, standard library, native platform, already-installed dependency, then one-line local code.
+5. **Question every addition** -- keep code only when you are certain it proves product value, defensive correctness, or test confidence.
+6. **Delete first** -- remove dead paths, speculative options, unused exports, wrapper layers.
+7. **Inline second** -- inline one-use helpers/components; prefer direct code until reuse is real.
+8. **Tighten last** -- flatten branches, improve names, shrink tests without weakening assertions.
+9. **Eval evidence** -- skill or harness changes need matching evals changed, with RED->GREEN or failing->passing evidence. No eval evidence means block or record why the change is docs-only/non-deterministic.
+10. **Verify** -- rerun focused tests/type/lint. Green alone is not enough if diff is noisy.
 
 ## Blocking finding
 

@@ -28,8 +28,9 @@ Spawn all review hats in one message before producing findings, matching `/grill
 
 Prefer `/swarm` under the hood when available: pass fixed point, changed files, sources, full required hat list, subagent prompt contract, and merge contract. If /swarm is unavailable, spawn hat subagents directly. Swarm must not reduce hats, evidence, lane ownership, or final output.
 
-Required hats: `thermo-nuclear-review-hat`, `resilience-review-hat`, `regular-review-hat`, `adversarial-review-hat`, `visual-review-hat`, `test-perf-review-hat`, `security-privacy-triage-hat`.
+Required hats: `ponytail-review-hat`, `thermo-nuclear-review-hat`, `resilience-review-hat`, `regular-review-hat`, `adversarial-review-hat`, `visual-review-hat`, `test-perf-review-hat`, `security-privacy-triage-hat`.
 
+- **`ponytail-review-hat`**: run `/ponytail-review` on every diff before other hats merge findings; output delete/stdlib/native/yagni/shrink opportunities or `Lean already. Ship.`.
 - **`thermo-nuclear-review-hat`**: run `/thermo-nuclear-code-quality-review` for release candidates, large PRs, risky refactors, security/privacy/perf/test concerns, or explicit nuclear/cold-audit asks; otherwise `SKIPPED` with reason.
 - **`resilience-review-hat`**: run `/resilience-review` for forms, validation, async/data, mutations, cache, state machines, config, destructive actions, or loading/error/empty states; otherwise `SKIPPED` with reason.
 - **`regular-review-hat`**: Standards and Spec pass. Never invoke /review recursively. If no spec, return `Spec: no spec available`.
@@ -38,7 +39,7 @@ Required hats: `thermo-nuclear-review-hat`, `resilience-review-hat`, `regular-re
 - **`test-perf-review-hat`**: check TDD evidence, coverage gaps, flaky/missing tests, slow paths, render/network/bundle risk, and warning-free commands.
 - **`security-privacy-triage-hat`**: check auth, authorization, tenant boundaries, secrets, unsafe HTML, injection, SSRF, redirects, dependency execution, logging, analytics, PII, export/import; exploitable/privacy findings escalate to Thermo nuclear.
 
-Review priority hierarchy: 1. Thermo nuclear review 2. Resilience review 3. Regular review 4. Adversarial review 5. Visual review 6. Test/perf review. Security/privacy triage feeds this hierarchy.
+Review priority hierarchy: 1. Ponytail review 2. Thermo nuclear review 3. Resilience review 4. Regular review 5. Adversarial review 6. Visual review 7. Test/perf review. Security/privacy triage feeds this hierarchy.
 
 No silent skips: all hats run at least triage; `SKIPPED` needs `skip_reason`, checked files/surfaces, and absent triggers. Never skip due to time, token budget, small diff, prior confidence, or another hat passing. Thermo nuclear is fail-open. Thermo nuclear and Resilience skip only when diff evidence proves no matching risk surface. If unsure, run the review.
 
@@ -46,7 +47,7 @@ PR value gate: always quantify the Major improvement before verdict. Code is lia
 
 Subagent prompt contract: include fixed point, changed files, diff command, commits command, exact review type, and sources; require lane ownership, evidence, severity, priority label, required change, and PR-comment-ready text; cap at 400 words; findings must be diff-introduced, user-impacting, actionable.
 
-Each hat emits: `{ "reviewer": "<name>", "hat": "<thermo-nuclear|resilience|regular|adversarial|visual|test-perf|security-privacy>", "status": "APPROVED|FINDINGS|BLOCKED|SKIPPED", "findings": [], "must_answer": [], "skip_reason": "<required when SKIPPED>" }`.
+Each hat emits: `{ "reviewer": "<name>", "hat": "<ponytail|thermo-nuclear|resilience|regular|adversarial|visual|test-perf|security-privacy>", "status": "APPROVED|FINDINGS|BLOCKED|SKIPPED", "findings": [], "must_answer": [], "skip_reason": "<required when SKIPPED>" }`.
 
 Merge contract: wait for all hats; dedupe by file/range + reference; Dedupe across hats by root cause, not wording; preserve Standards and Spec separately; keep highest severity on disagreement; if subagents unavailable, stop unless user accepts degraded solo review.
 
@@ -74,17 +75,16 @@ Each hat checks its gate: UI/copy/forms/routes/reports/CLI/TUI/visual -> `/visua
 Do not recursively invoke /review from a local gate already running inside `/review`. Do not duplicate local gate reports. Link or summarize verdicts.
 
 ## Output
-
 See [REFERENCE.md](REFERENCE.md) for detailed report schema and examples.
 
 ```md
 ## Review
 Fixed point: <fixed>
 Diff: `git diff <fixed>...HEAD`
-Subagents: thermo-nuclear-review-hat: <status/skipped: reason> | resilience-review-hat: <status/skipped: reason> | regular-review-hat: <status> | adversarial-review-hat: <status> | visual-review-hat: <status/skipped: reason> | test-perf-review-hat: <status/skipped: reason> | security-privacy-triage-hat: <status/skipped: reason>
+Subagents: ponytail-review-hat: <status> | thermo-nuclear-review-hat: <status/skipped: reason> | resilience-review-hat: <status/skipped: reason> | regular-review-hat: <status> | adversarial-review-hat: <status> | visual-review-hat: <status/skipped: reason> | test-perf-review-hat: <status/skipped: reason> | security-privacy-triage-hat: <status/skipped: reason>
 ## Standards: <findings or pass>
 ## Spec: <findings, pass, or no spec available>
-## Local review gates: <per-hat pass|findings|skipped>
+## Local review gates: Ponytail review: pass|findings; <per-hat pass|findings|skipped>
 ## PR value gate:
 Major improvement: <quantified claim, beneficiary, evidence, delta>
 Value score: HIGH|MEDIUM|LOW|NONE

@@ -24,6 +24,7 @@ You receive session context via SubagentStart hook:
 
 ### 0. Code Liability Gate
 - Code is liability: every new branch, helper, file, dependency, hook, or export needs a reason.
+- Reuse-first: could deletion, the standard library, a native platform feature, or an already-installed dependency replace custom code?
 - Keep added production code only when it proves product value, defensive correctness, or test confidence.
 - Flag surface-area growth when code is speculative, one-use abstraction, untested, or larger than the problem.
 

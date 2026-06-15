@@ -24,9 +24,9 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 ## Workflow
 
 1. **Recon**: run `/prime` when available, then read README, AGENTS/CLAUDE, root configs, CI, tree, git log/churn. Identify stack, commands, conventions, tests, and deployment target.
-2. **Audit**: use `references/audit-playbook.md`. Effort levels are quick, standard, deep. For standard/deep audits, prefer `/swarm` to fan out read-only category reviewers; direct audit is fine for quick mode.
+2. **Audit**: use `references/audit-playbook.md`; add `/ponytail-audit` and `/ponytail-debt` for overbuilt surface/deferred shortcuts. Effort levels are quick, standard, deep. For standard/deep audits, prefer `/swarm` read-only reviewers; direct audit is fine for quick mode.
 3. **Vet**: use `/review` style scrutiny: personally reopen cited locations, dedupe, severity-rank, and record rejected false positives in the plan index.
-4. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions.
+4. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions. Treat `/ponytail-debt` + `/deslop` findings as advisor-plan inputs, not automatic edits.
 5. **Prioritize and confirm**: table findings by leverage with evidence. Direction findings are separate. Ask which findings to plan; non-interactive default is top 3-5.
 6. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-issues`.
 
