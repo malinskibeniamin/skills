@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-2026-06-08 -- Add `/swarm` parallel-executor skill. It infers distinct subagent lanes from free-form goals, emits a launch manifest, supports shared branch/worktree/PR by default plus per-agent worktrees on request, defines task packets and output schema, composes with prime/TDD/review/diagnose/architecture/product skills, and keeps coordinator-owned merge and verification. Skills 72 -> 73.
+## 4.19.0
+
+2026-06-15 -- Publish Claude Code and Codex marketplace metadata for the latest harness. Registers the Ponytail skill family (`/ponytail`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-review`), keeps release copy current at 98 wired hooks, 108 scripts, and 79 skills, and ships the post-4.18 updates: reuse-first ladder, review PR-comment and priority-comment workflow, vendored `/teach` upstream rules, taste/copy evals, and tightened accessibility, UX copy, Tailwind motion, and visual-review checks. Updates skill-manifest, Claude plugin, Codex plugin, both marketplaces, README release pin, evals, and mirrored root hook scripts so installs get the latest hooks.
 
 ## 4.18.0
 

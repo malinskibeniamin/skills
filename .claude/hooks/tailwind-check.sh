@@ -142,6 +142,37 @@ if ! hook_has_escape "visual-design"; then
   fi
 fi
 
+# ── Warn on deterministic motion-craft smells ──────────────────
+
+if ! hook_has_escape "motion-design"; then
+  if echo "$added_lines" | grep -qiE '(^|[^[:alnum:]_-])!?transition-all\b|transition[[:space:]]*:[[:space:]]*all\b'; then
+    hook_warn "Motion craft: avoid transition-all. Transition only transform/opacity or the specific property that should move. Escape: // allow: motion-design [reason]" "motion-transition-all"
+  fi
+
+  if echo "$added_lines" | grep -qiE '(^|[^[:alnum:]_-])!?duration-(500|700|1000)\b|duration-\[(30[1-9]|3[1-9][0-9]|[4-9][0-9]{2}|[1-9][0-9]{3,})ms\]|transition[^;]*(30[1-9]|3[1-9][0-9]|[4-9][0-9]{2}|[1-9][0-9]{3,})ms|transition[^;]*[1-9][0-9]*s'; then
+    hook_warn "Motion craft: common UI animation should stay under 300ms unless distance or platform convention justifies more. Escape: // allow: motion-design [reason]" "motion-duration"
+  fi
+
+  _ease_in_lines=$(printf '%s\n' "$added_lines" \
+    | grep -qiE '\bease-in\b|transition-timing-function[[:space:]]*:[[:space:]]*ease-in\b' \
+    && printf '%s\n' "$added_lines" | grep -viE 'ease-in-out' || true)
+  if [ -n "$_ease_in_lines" ]; then
+    hook_warn "Motion craft: avoid ease-in for common UI entry/exit. Prefer short ease-out, ease-in-out for morphing, or instant feedback. Escape: // allow: motion-design [reason]" "motion-ease-in"
+  fi
+
+  if echo "$added_lines" | grep -qE '(^|[^[:alnum:]_-])!?scale-0\b|scale\(0\)'; then
+    hook_warn "Motion craft: avoid scale(0) entry. Start near final size so text and edges stay credible. Escape: // allow: motion-design [reason]" "motion-scale-zero"
+  fi
+
+  if echo "$added_lines" | grep -qiE 'transition(-property)?[[:space:]]*:[^;]*(width|height|top|right|bottom|left|margin|padding)|transition-\[(width|height|top|right|bottom|left|margin|padding)\]'; then
+    hook_warn "Motion craft: layout property animation risks jank. Prefer transform/opacity, clip-path for reveals, or an instant state change. Escape: // allow: motion-design [reason]" "motion-layout-property"
+  fi
+
+  if echo "$added_lines" | grep -qE '(^|[^[:alnum:]_-])!?animate-bounce\b'; then
+    hook_warn "Motion craft: bounce animation usually steals attention. Use purposeful, short feedback or remove it. Escape: // allow: motion-design [reason]" "motion-bounce"
+  fi
+fi
+
 # ── Ban 100vh (use 100dvh for mobile) ────────────────────────────
 
 case "$file_path" in
