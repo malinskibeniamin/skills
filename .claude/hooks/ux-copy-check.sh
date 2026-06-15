@@ -217,4 +217,26 @@ if printf '%s\n' "$added_lines" | grep -qiE '\bmake[[:space:]]+(it|this|that|the
   hook_block "No 'make it pop' direction. Specify the visual or copy change."
 fi
 
+# ── Check 28: Warn on generic CTA labels ────────────────────────
+
+case "$file_path" in
+  *.tsx)
+    if printf '%s\n' "$added_lines" | grep -qiE '<(Button|button)\b[^>]*>[[:space:]]*(submit|ok|done)[[:space:]]*</(Button|button)>'; then
+      hook_warn "generic CTA: name the action. Use 'Save changes' or 'Create topic', not 'Submit', 'OK', or 'Done'." "ux-copy-generic-cta"
+    fi
+    ;;
+esac
+
+# ── Check 29: Warn on vague error messages ──────────────────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(invalid input|something went wrong|an error occurred|error occurred|unknown error)\b'; then
+  hook_warn "specific error: say what went wrong and how to fix it. 'Invalid input' names nothing." "ux-copy-specific-error"
+fi
+
+# ── Check 30: Warn on dead-end empty states ─────────────────────
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(no data|no items found|nothing here|no results found)\b'; then
+  hook_warn "empty state: explain why it is empty and offer the next action. Dead-end copy stalls the task." "ux-copy-empty-state"
+fi
+
 exit 0

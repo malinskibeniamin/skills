@@ -3,7 +3,7 @@ set -euo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
 hook_parse_edit_write
-hook_filter_extensions "tsx"
+hook_filter_extensions "tsx|jsx"
 hook_get_added_lines
 
 # Read full file for context
@@ -70,6 +70,50 @@ fi
 if echo "$added_lines" | grep -qE 'role\s*=\s*["{]dialog'; then
   if ! echo "$added_lines" | grep -qE 'aria-label(ledby)?\s*=' && ! echo "$file_content" | grep -qE 'role=.*dialog.*aria-label|aria-label.*role=.*dialog'; then
     hook_block "role=\\\"dialog\\\" needs aria-label or aria-labelledby."
+  fi
+fi
+
+# ── Check: accessible names describe the action ─────────────────
+
+if echo "$added_lines" | grep -qiE "aria-label[[:space:]]*=[[:space:]]*['\"][^'\"]*\\b(icon|button|image|graphic)\\b[^'\"]*['\"]"; then
+  hook_warn "Accessible names should describe the action, not the element type. Use 'Search' not 'Search icon'." "a11y-name-action"
+fi
+
+# ── Check: placeholder-only controls ────────────────────────────
+
+_placeholder_controls=$(printf '%s\n' "$added_lines" | grep -Ei '<(input|textarea)\b[^>]*placeholder[[:space:]]*=' || true)
+if [ -n "$_placeholder_controls" ]; then
+  while IFS= read -r _control_line; do
+    [ -z "$_control_line" ] && continue
+    _has_accessible_name=false
+
+    if printf '%s\n' "$_control_line" | grep -qE 'aria-label(ledby)?[[:space:]]*='; then
+      _has_accessible_name=true
+    fi
+
+    _control_id=$(printf '%s\n' "$_control_line" | sed -nE "s/.*(^|[[:space:]])id[[:space:]]*=[[:space:]]*['\"]([^'\"]+)['\"].*/\\2/p" | head -1)
+    if [ -n "$_control_id" ] && printf '%s\n' "$file_content" | grep -qE "<label[^>]*(htmlFor|for)[[:space:]]*=[[:space:]]*['\"]$_control_id['\"]"; then
+      _has_accessible_name=true
+    fi
+    if printf '%s\n' "$_control_line" | grep -qE '\bid[[:space:]]*=[[:space:]]*\{' && printf '%s\n' "$file_content" | grep -qE '<label[^>]*(htmlFor|for)[[:space:]]*=[[:space:]]*\{'; then
+      _has_accessible_name=true
+    fi
+
+    if printf '%s\n' "$_control_line" | grep -qE '<label\b[^>]*>.*<(input|textarea)\b.*</label>'; then
+      _has_accessible_name=true
+    fi
+
+    if [ "$_has_accessible_name" = false ]; then
+      hook_block "Placeholder cannot replace a label. Add a visible label association with htmlFor/id, aria-labelledby, or aria-label for icon-only controls." "a11y-placeholder-label"
+    fi
+  done <<< "$_placeholder_controls"
+fi
+
+# ── Check: label association ────────────────────────────────────
+
+if echo "$added_lines" | grep -qE '<label\b'; then
+  if ! echo "$added_lines" | grep -qE '<label\b[^>]*(htmlFor|for)[[:space:]]*=' && ! echo "$added_lines" | grep -qE '<label\b[^>]*>.*<(input|textarea|select)\b.*</label>'; then
+    hook_warn "Possible missing label association. Use htmlFor/id or nest the control inside the label." "a11y-label-association"
   fi
 fi
 
