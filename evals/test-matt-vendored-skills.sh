@@ -1,13 +1,19 @@
 # Evals for mattpocock/skills vendoring completeness.
 
 VENDORED=(
-  caveman
   edit-article
   git-guardrails-claude-code
+  ask-ben
+  codebase-design
+  diagnosing-bugs
+  domain-modeling
   grill-with-docs
+  grilling
+  implement
   migrate-to-shoehorn
   obsidian-vault
   prototype
+  resolving-merge-conflicts
   review
   scaffold-exercises
   setup-matt-pocock-skills
@@ -16,6 +22,7 @@ VENDORED=(
   to-issues
   to-prd
   writing-beats
+  writing-great-skills
   writing-fragments
   writing-shape
 )
@@ -26,7 +33,6 @@ for skill in "${VENDORED[@]}"; do
   run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\./$skill/" "Claude plugin registers vendored Matt skill: $skill"
 done
 
-run_content_eval "$REPO_ROOT/caveman/SKILL.md" "Ultra-compressed|token usage|terse" "caveman skill keeps compression purpose"
 run_content_eval "$REPO_ROOT/prototype/SKILL.md" "prototype|throwaway|test" "prototype skill keeps prototype intent"
 run_content_eval "$REPO_ROOT/to-prd/SKILL.md" "PRD|requirements" "to-prd skill keeps PRD intent"
 run_content_eval "$REPO_ROOT/to-issues/SKILL.md" "issue|GitHub" "to-issues skill keeps issue intent"
@@ -86,10 +92,11 @@ run_content_eval "$REPO_ROOT/teach/SKILL.md" "same number of words.*formatting" 
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "reference docs.*HTML anchors" "teach links lessons and references"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "primary source" "teach recommends one primary source per lesson"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "mission changes.*MISSION.md.*learning record" "teach records mission shifts"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses assets before inlining"
 
 # Latest Matt vendoring: improve-codebase-architecture richer report flow.
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "HTML report|architecture-review" "ICA writes HTML architecture report"
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "Top recommendation" "ICA report includes top recommendation"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "INTERFACE-DESIGN.md" "ICA links interface design reference"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "ICA links shared codebase-design skill"
 run_file_eval "$REPO_ROOT/improve-codebase-architecture/HTML-REPORT.md" "ICA HTML report reference exists"
-run_file_eval "$REPO_ROOT/improve-codebase-architecture/INTERFACE-DESIGN.md" "ICA interface design reference exists"
+run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"

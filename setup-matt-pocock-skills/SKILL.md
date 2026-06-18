@@ -54,7 +54,7 @@ Map to existing tracker labels/statuses. Avoid creating dup vocab if repo alread
 
 ### C. Domain docs
 
-Explain glossary + ADRs feed tdd/diagnose/triage/architecture.
+Explain glossary + ADRs feed tdd/diagnosing-bugs/triage/architecture.
 
 Choose:
 

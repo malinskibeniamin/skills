@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Teaches a skill or concept in a stateful workspace. Use when user wants to learn, study, practice, get lessons, or build a learning plan.
+description: Teach the user a new skill or concept within this workspace.
 disable-model-invocation: true
 argument-hint: "What would you like to learn?"
 ---
@@ -17,6 +17,7 @@ Stateful teaching workspace. Current dir stores learning state.
 - `reference/*.html` -- printable cheat sheets, glossaries, algorithms, syntax, routines.
 - `learning-records/*.md` -- demonstrated learning and prior knowledge. Format: [LEARNING-RECORD-FORMAT.md](LEARNING-RECORD-FORMAT.md).
 - `lessons/*.html` -- one self-contained lesson per file.
+- `assets/*` -- reusable components: stylesheets, quiz widgets, simulators, diagram helpers.
 - `NOTES.md` -- user preferences and working notes.
 
 ## Mission first
@@ -48,6 +49,10 @@ A lesson:
 - looks clean, readable, printable
 
 Make lesson easy to open, ideally one CLI command.
+
+## Assets
+
+Reuse is default. Before authoring a lesson, read `./assets/` and build from existing components. If a lesson needs reusable code or style, extract it to `./assets/` and link it; never inline future duplicates. First component should usually be shared stylesheet.
 
 ## Zone of proximal development
 

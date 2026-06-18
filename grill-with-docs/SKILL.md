@@ -1,10 +1,13 @@
 ---
 name: grill-with-docs
-description: Grill plan against CONTEXT.md and ADRs, updating docs as decisions settle.
+description: Grilling session that also builds project domain docs.
+disable-model-invocation: true
 ---
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 <what-to-do>
+
+Run the `/grilling` skill for the interview loop. Run `/domain-modeling` inline whenever terms or ADR-worthy decisions crystallize.
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
 

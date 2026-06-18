@@ -1,6 +1,7 @@
 ---
 name: to-prd
-description: Turn current context into a PRD and publish it to issue tracker.
+description: Turn current context into a PRD and publish it to the issue tracker.
+disable-model-invocation: true
 ---
 
 # To PRD

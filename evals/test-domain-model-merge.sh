@@ -1,58 +1,44 @@
-# Validates the upstream-content merge from mattpocock/skills (2026-04-29):
-#   - improve-codebase-architecture/LANGUAGE.md (canonical vocabulary)
-#   - tdd/tests.md (good vs bad test philosophy)
-#   - domain-model/ADR-FORMAT.md "What Qualifies" enriched list
+# Validates mattpocock/skills v1 shared design/domain model split:
+#   - codebase-design owns architecture vocabulary
+#   - tdd and improve-codebase-architecture invoke codebase-design
+#   - domain-modeling owns active CONTEXT.md/ADR updates
 
-ICA_DIR="$REPO_ROOT/improve-codebase-architecture"
+CBD_DIR="$REPO_ROOT/codebase-design"
 TDD_DIR="$REPO_ROOT/tdd"
-DM_DIR="$REPO_ROOT/domain-model"
+DM_DIR="$REPO_ROOT/domain-modeling"
+ICA_DIR="$REPO_ROOT/improve-codebase-architecture"
 
-# ── improve-codebase-architecture/LANGUAGE.md ────────────────────
-run_file_eval "$ICA_DIR/LANGUAGE.md" "LANGUAGE.md exists in improve-codebase-architecture/"
+# ── codebase-design vocabulary ────────────────────────────────────
+run_file_eval "$CBD_DIR/SKILL.md" "codebase-design SKILL.md exists"
+run_file_eval "$CBD_DIR/DEEPENING.md" "codebase-design DEEPENING.md exists"
+run_file_eval "$CBD_DIR/DESIGN-IT-TWICE.md" "codebase-design DESIGN-IT-TWICE.md exists"
 
 for term in "Module" "Interface" "Implementation" "Depth" "Seam" "Adapter" "Leverage" "Locality"; do
-  run_content_eval "$ICA_DIR/LANGUAGE.md" "^\\*\\*$term\\*\\*" "LANGUAGE.md defines $term"
+  run_content_eval "$CBD_DIR/SKILL.md" "^\\*\\*$term\\*\\*" "codebase-design defines $term"
 done
 
-run_content_eval "$ICA_DIR/LANGUAGE.md" "[Dd]eletion test" "LANGUAGE.md describes the deletion test"
-run_content_eval "$ICA_DIR/LANGUAGE.md" "interface is the test surface" "LANGUAGE.md asserts interface=test surface"
-run_content_eval "$ICA_DIR/LANGUAGE.md" "[Oo]ne adapter.*hypothetical.*[Tt]wo adapters.*real" "LANGUAGE.md has one-vs-two-adapters rule"
-run_content_eval "$ICA_DIR/LANGUAGE.md" "Avoid.*[Bb]oundary|boundary.*overloaded" "LANGUAGE.md rejects boundary as overloaded with DDD"
+run_content_eval "$CBD_DIR/SKILL.md" "[Dd]eletion test" "codebase-design describes deletion test"
+run_content_eval "$CBD_DIR/SKILL.md" "interface is the test surface" "codebase-design asserts interface=test surface"
+run_content_eval "$CBD_DIR/SKILL.md" "One adapter.*hypothetical seam.*Two adapters.*real" "codebase-design has one-vs-two-adapters rule"
+run_content_eval "$CBD_DIR/SKILL.md" "Boundary: use seam|Avoid: boundary" "codebase-design rejects boundary as overloaded"
 
-# SKILL.md links to LANGUAGE.md
-run_content_eval "$ICA_DIR/SKILL.md" "LANGUAGE\\.md" "ICA SKILL.md references LANGUAGE.md"
-run_content_eval "$ICA_DIR/SKILL.md" "domain glossary|CONTEXT\\.md" "ICA SKILL.md references project domain glossary"
-run_content_eval "$ICA_DIR/SKILL.md" "ADR" "ICA SKILL.md references ADRs"
-run_file_eval "$ICA_DIR/HTML-REPORT.md" "HTML-REPORT.md exists in improve-codebase-architecture/"
-run_content_eval "$ICA_DIR/SKILL.md" "HTML report|HTML-REPORT\\.md" "ICA SKILL.md requires HTML report"
-run_content_eval "$ICA_DIR/SKILL.md" "OS temp|\\$TMPDIR|/tmp" "ICA SKILL.md writes report outside repo"
-run_content_eval "$ICA_DIR/SKILL.md" "Tailwind.*CDN|Mermaid.*CDN" "ICA SKILL.md uses Tailwind and Mermaid CDN report"
-run_content_eval "$ICA_DIR/HTML-REPORT.md" "Before / After diagram|before/after" "HTML report includes before/after diagrams"
-run_content_eval "$ICA_DIR/HTML-REPORT.md" "Recommendation strength|Strong.*Worth exploring.*Speculative" "HTML report includes recommendation strength"
-run_content_eval "$ICA_DIR/HTML-REPORT.md" "module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality" "HTML report preserves canonical vocabulary"
-
-# ── tdd/tests.md ─────────────────────────────────────────────────
-run_file_eval "$TDD_DIR/tests.md" "tests.md exists in tdd/"
-run_content_eval "$TDD_DIR/tests.md" "Good Tests" "tests.md has Good Tests section"
-run_content_eval "$TDD_DIR/tests.md" "Bad Tests" "tests.md has Bad Tests section"
+# ── consumers invoke shared design skill ──────────────────────────
+run_content_eval "$ICA_DIR/SKILL.md" "/codebase-design" "ICA invokes codebase-design"
+run_content_eval "$TDD_DIR/SKILL.md" "/codebase-design" "tdd invokes codebase-design"
+run_content_eval "$TDD_DIR/tests.md" "Good Tests" "tests.md keeps Good Tests section"
+run_content_eval "$TDD_DIR/tests.md" "Bad Tests" "tests.md keeps Bad Tests section"
 run_content_eval "$TDD_DIR/tests.md" "[Ii]ntegration-style" "tests.md prefers integration-style tests"
 run_content_eval "$TDD_DIR/tests.md" "[Ii]mplementation-detail" "tests.md flags implementation-detail tests"
-run_content_eval "$TDD_DIR/tests.md" "behaviour|behavior" "tests.md emphasises behaviour over implementation"
-
-# SKILL.md links to tests.md
 run_content_eval "$TDD_DIR/SKILL.md" "tests\\.md" "tdd SKILL.md references tests.md"
 
-# ── domain-model/ADR-FORMAT.md enriched "What Qualifies" ─────────
-run_file_eval "$DM_DIR/ADR-FORMAT.md" "ADR-FORMAT.md exists in domain-model/"
-run_content_eval "$DM_DIR/CONTEXT-FORMAT.md" "Customer" "CONTEXT-FORMAT keeps compact term examples"
-if grep -qE "## Example Dialogue|## Flagged Ambiguities" "$DM_DIR/CONTEXT-FORMAT.md"; then
-  echo "  FAIL  CONTEXT-FORMAT omits upstream-removed relationship/dialogue/ambiguity sections"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: CONTEXT-FORMAT omits upstream-removed relationship/dialogue/ambiguity sections"
-else
-  echo "  PASS  CONTEXT-FORMAT omits upstream-removed relationship/dialogue/ambiguity sections"
-  PASS=$((PASS + 1))
-fi
+# ── domain-modeling active docs discipline ────────────────────────
+run_file_eval "$DM_DIR/SKILL.md" "domain-modeling SKILL.md exists"
+run_file_eval "$DM_DIR/ADR-FORMAT.md" "ADR-FORMAT.md exists in domain-modeling/"
+run_file_eval "$DM_DIR/CONTEXT-FORMAT.md" "CONTEXT-FORMAT.md exists in domain-modeling/"
+run_content_eval "$DM_DIR/SKILL.md" "Update CONTEXT.md inline" "domain-modeling updates CONTEXT.md inline"
+run_content_eval "$DM_DIR/SKILL.md" "Offer ADRs sparingly" "domain-modeling offers ADRs sparingly"
+run_content_eval "$ICA_DIR/SKILL.md" "/domain-modeling" "ICA invokes domain-modeling for side effects"
+run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "/domain-modeling" "grill-with-docs invokes domain-modeling"
 
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Aa]rchitectural shape" "ADR-FORMAT lists architectural shape"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Ii]ntegration patterns" "ADR-FORMAT lists integration patterns"
@@ -61,11 +47,6 @@ run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Bb]oundary.*decisions|[Bb]oundary and
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Dd]eliberate deviations" "ADR-FORMAT lists deliberate deviations"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Cc]onstraints not visible|[Ii]nvisible constraints" "ADR-FORMAT lists invisible constraints"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Rr]ejected alternatives|[Nn]on-obvious rejections" "ADR-FORMAT lists non-obvious rejections"
-
-# ── Three-prong "when to offer" rule ─────────────────────────────
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Hh]ard to reverse" "ADR-FORMAT requires hard-to-reverse"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Ss]urprising without context" "ADR-FORMAT requires surprising-without-context"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Rr]eal trade-off|real alternatives" "ADR-FORMAT requires real trade-off"
-
-# ── zoom-out vague-prose ref ─────────────────────────────────────
-run_content_eval "$REPO_ROOT/zoom-out/SKILL.md" "domain glossary" "zoom-out SKILL.md references project domain glossary"

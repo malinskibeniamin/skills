@@ -145,7 +145,7 @@ Pre-plan review:
 
 ### Resilience Review
 
-Run `/resilience-review` when feature has forms, async/data flows, mutations, state transitions, config/resource choices, destructive actions, or user-visible error states. Output becomes plan evidence: Failure matrix, Finding queue, required tests, polish gaps, observability, verdict. Real findings chain to /diagnose -> /tdd -> /visual-review when customer-facing.
+Run `/resilience-review` when feature has forms, async/data flows, mutations, state transitions, config/resource choices, destructive actions, or user-visible error states. Output becomes plan evidence: Failure matrix, Finding queue, required tests, polish gaps, observability, verdict. Real findings chain to /diagnosing-bugs -> /tdd -> /visual-review when customer-facing.
 
 Skip only with reason: docs-only, test-only, styling-only, trivial pure logic.
 
@@ -395,7 +395,7 @@ Monitor: gh pr checks <pr-number> --watch
 Monitor: gh run watch
 ```
 
-Deploy fail -> diagnose, open follow-up PR.
+Deploy fail -> diagnosing-bugs, open follow-up PR.
 
 ## Lifecycle Stop Gates
 

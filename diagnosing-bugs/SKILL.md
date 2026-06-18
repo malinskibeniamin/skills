@@ -1,9 +1,9 @@
 ---
-name: diagnose
-description: Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce -> minimise -> hypothesise -> instrument -> fix -> regression-test. Use when user says "diagnose this" / "debug this", reports a bug, says something is broken/throwing/failing, or describes a performance regression.
+name: diagnosing-bugs
+description: Diagnosis loop for hard bugs and performance regressions. Use when user says "diagnose"/"debug this", or reports something broken/throwing/failing/slow.
 ---
 
-# Diagnose
+# Diagnosing Bugs
 
 Discipline for hard bugs. Skip phase only if justify. Ponytail commands: `/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`; summarize inline. No `/ponytail-help` skill.
 

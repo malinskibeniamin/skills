@@ -144,7 +144,7 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 
 4. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
 
-5. **Resilience Review Evidence** -- if risky feature or hook nudge, include verdict, top failure paths, Finding queue, diagnose loops, RED tests/snapshots, polish gaps, observability. If customer-facing, include visual review evidence. If skipped, include low-risk reason.
+5. **Resilience Review Evidence** -- if risky feature or hook nudge, include verdict, top failure paths, Finding queue, diagnosing-bugs loops, RED tests/snapshots, polish gaps, observability. If customer-facing, include visual review evidence. If skipped, include low-risk reason.
 
 6. **`/commit-push-pr`** -- handle:
    - Categorized conventional commits

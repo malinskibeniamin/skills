@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: "Test-driven development with red-green-refactor loop. Use when writing tests, creating new features, or fixing bugs. Includes planning phase, tracer bullets, async leak detection, deep module design, and condition-based waiting."
+description: "Test-driven development with red-green-refactor loop. Use when writing tests, creating new features, or fixing bugs. Includes planning phase, tracer bullets, async leak detection, /codebase-design interface design, and condition-based waiting."
 paths:
   - "**/*.test.{ts,tsx}"
   - "**/*.spec.{ts,tsx}"
@@ -35,8 +35,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 - Run `vitest run --coverage.enabled --coverage.reporter=text`
 - Find uncovered lines/branches/functions in changed files -> test targets
 - Confirm behaviors w/ user; `/resilience-review` failures become RED tests
-- Find [deep module](deep-modules.md) chance (small interface, deep impl)
-- Design interfaces for [testability](interface-design.md); test behaviour through public interface, not impl ([tests.md](tests.md))
+- Run `/codebase-design` for deep-module/interface design; test behaviour through public interface, not implementation ([tests.md](tests.md))
 
 ### 1. RED -- Failing test (tracer bullet)
 

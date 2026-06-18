@@ -49,3 +49,5 @@ run_hook_eval "$HOOK" \
   "$(jq -nc --arg f "$TMP_PROTO" --rawfile c "$TMP_PROTO" '{tool_name:"Write",tool_input:{file_path:$f,content:$c}}')" \
   0 \
   "aip hook stays quiet for canonical name" 
+
+rm -f "$TMP_PROTO"
