@@ -5,6 +5,8 @@ description: Analyze changes, create categorized conventional commits, and push.
 
 # Commit and push
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+
 ## Step 0: Gather context
 
 Run these Bash commands before proceed:

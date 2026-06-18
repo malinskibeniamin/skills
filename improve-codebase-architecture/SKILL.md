@@ -1,6 +1,7 @@
 ---
 name: improve-codebase-architecture
-description: Finds deepening opportunities using domain language and ADRs. Use when improving architecture, finding refactors, consolidating coupling, or improving testability.
+description: Scan a codebase for deepening opportunities, present a visual HTML report, then grill the chosen candidate.
+disable-model-invocation: true
 ---
 
 # Improve Codebase Architecture
@@ -10,7 +11,7 @@ Goal: find architectural friction and propose **deepening opportunities**: shall
 
 ## Language
 
-Use [LANGUAGE.md](LANGUAGE.md) terms exactly: module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality.
+Run `/codebase-design` for architecture vocabulary: module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality. Use those terms exactly.
 
 Principles:
 
@@ -51,7 +52,7 @@ End with **Top recommendation**.
 
 Use Tailwind CDN + Mermaid CDN. Mix Mermaid for graphs/sequences with custom CSS/SVG for editorial visuals.
 
-Use `CONTEXT.md` terms for domain and [LANGUAGE.md](LANGUAGE.md) terms for architecture. If candidate contradicts ADR, surface only when friction justifies reopening; mark conflict.
+Use `CONTEXT.md` terms for domain and `/codebase-design` terms for architecture. If candidate contradicts ADR, surface only when friction justifies reopening; mark conflict.
 
 Do not propose interfaces yet. Ask: "Which of these would you like to explore?"
 
@@ -61,11 +62,11 @@ For chosen candidate, grill constraints, deps, module shape, seam, adapters, tes
 
 Inline side effects:
 
-- New domain term -> update `CONTEXT.md` using `/grill-with-docs` format.
-- Fuzzy term sharpened -> update `CONTEXT.md`.
+- New domain term -> run `/domain-modeling` and update `CONTEXT.md`.
+- Fuzzy term sharpened -> run `/domain-modeling` and update `CONTEXT.md`.
 - User rejects with durable reason -> offer ADR so future reviews skip same suggestion.
-- Need alternative interfaces -> use [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md).
+- Need alternative interfaces -> run `/codebase-design` and use its design-it-twice pattern.
 
 ## 4. Issue/RFC
 
-If user wants implementation plan, create refactor RFC with tiny reversible commits. Use [DEEPENING.md](DEEPENING.md) for candidate patterns and [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md) for interface exploration.
+If user wants implementation plan, create refactor RFC with tiny reversible commits. Run `/codebase-design` for deepening patterns and interface exploration.

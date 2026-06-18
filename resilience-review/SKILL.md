@@ -22,7 +22,7 @@ Skip docs/test/style/trivial pure logic only; record reason.
    - System: partial outage, 500, stale cache, deleted resource, permission drift.
    - UX: unclear disabled state, lost errors, fake success, no recovery.
 4. Defenses: Precondition -> Postcondition -> Fallback -> Observability.
-5. Finding loop: /diagnose feedback loop -> /tdd RED test/snapshot -> /visual-review for UI validation.
+5. Finding loop: /diagnosing-bugs feedback loop -> /tdd RED test/snapshot -> /visual-review for UI validation.
 
 ## Output
 ```md
@@ -32,7 +32,7 @@ Risk surface:
 Failure matrix:
 | Scenario | Trigger | Expected behavior | Guard | Test | Observability |
 Finding queue:
-| Finding | Repro/diagnose loop | RED test or snapshot | Owner | Visual review needed |
+| Finding | Repro/diagnosing-bugs loop | RED test or snapshot | Owner | Visual review needed |
 Required tests:
 - ...
 Polish gaps:

@@ -161,7 +161,7 @@ Issue: #{{ISSUE_NUMBER}}
 - /development-lifecycle -- phases: understand -> plan -> TDD -> verify -> review
 - /tdd -- iron law: failing test FIRST
 - /triage -- bug to ticket: explore -> root cause -> TDD fix plan, files via gh or acli
-- /diagnose -- feedback-loop-first 6-phase debugging
+- /diagnosing-bugs -- feedback-loop-first 6-phase debugging
 
 **Hooks active (fire automatically):**
 - react-rules-check (25): raw HTML · as any · ts-ignore · eval · XSS · barrel imports

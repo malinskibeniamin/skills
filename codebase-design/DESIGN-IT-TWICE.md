@@ -1,8 +1,8 @@
-# Interface Design
+# Design It Twice
 
 When the user wants to explore alternative interfaces for a chosen deepening candidate, use this parallel sub-agent pattern. Based on "Design It Twice" (Ousterhout) -- your first idea is unlikely to be the best.
 
-Uses the vocabulary in [LANGUAGE.md](LANGUAGE.md) -- **module**, **interface**, **seam**, **adapter**, **leverage**.
+Uses the vocabulary in [SKILL.md](SKILL.md) -- **module**, **interface**, **seam**, **adapter**, **leverage**.
 
 ## Process
 
@@ -22,12 +22,12 @@ Spawn 3+ sub-agents in parallel using the Agent tool. Each must produce a **radi
 
 Prompt each sub-agent with a separate technical brief (file paths, coupling details, dependency category from [DEEPENING.md](DEEPENING.md), what sits behind the seam). The brief is independent of the user-facing problem-space explanation in Step 1. Give each agent a different design constraint:
 
-- Agent 1: "Minimize the interface -- aim for 1--3 entry points max. Maximise leverage per entry point."
+- Agent 1: "Minimize the interface -- aim for 1-3 entry points max. Maximise leverage per entry point."
 - Agent 2: "Maximise flexibility -- support many use cases and extension."
 - Agent 3: "Optimise for the most common caller -- make the default case trivial."
 - Agent 4 (if applicable): "Design around ports & adapters for cross-seam dependencies."
 
-Include both [LANGUAGE.md](LANGUAGE.md) vocabulary and CONTEXT.md vocabulary in the brief so each sub-agent names things consistently with the architecture language and the project's domain language.
+Include both [SKILL.md](SKILL.md) vocabulary and CONTEXT.md vocabulary in the brief so each sub-agent names things consistently with the architecture language and the project's domain language.
 
 Each sub-agent outputs:
 

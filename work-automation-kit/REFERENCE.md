@@ -6,14 +6,14 @@
 Feature idea
   -> /to-prd (community) -- interactive PRD creation
   -> /development-lifecycle -- plan phase
-  -> /domain-model -- stress-test plan + update CONTEXT.md/ADRs (auto-invoked)
+  -> /grill-with-docs -- stress-test plan + update CONTEXT.md/ADRs
   -> /to-issues (community) -- break into GitHub/Jira issues
   -> implement (use /tdd skill)
   -> code review (development-lifecycle review phase)
   -> merge
 
 Bug report
-  -> /diagnose -- feedback-loop-first, 6-phase debugging
+  -> /diagnosing-bugs -- feedback-loop-first, 6-phase debugging
   -> /triage -- explore codebase, find root cause, TDD fix plan, file ticket
   -> implement fix (/tdd: failing test -> fix -> verify)
   -> code review (development-lifecycle review phase)
@@ -26,11 +26,11 @@ Issue management
 Design decision
   -> /brainstorming -- explore approaches + challenge decisions
   -> /development-lifecycle -- plan the chosen approach
-  -> /domain-model -- stress-test the plan + sharpen terminology (auto-invoked)
+  -> /grill-with-docs -- stress-test the plan + sharpen terminology
   -> implement
 
 Quick question (on a specific decision)
-  -> /domain-model -- stress-test against domain model
+  -> /domain-modeling -- stress-test terms against domain model
   -> /grill-me -- lightweight stress-test (no DDD docs)
 ```
 
@@ -39,14 +39,14 @@ Quick question (on a specific decision)
 | Category | Owned | Community (mattpocock) |
 |---|---|---|
 | Testing | tdd | -- |
-| Debugging | diagnose | -- |
+| Debugging | diagnosing-bugs | -- |
 | Triage | triage, qa | -- |
 | Planning | development-lifecycle (plan phase) | to-prd, to-issues |
 | Review | development-lifecycle (review phase) | -- |
 | Design | brainstorming, design-an-interface | -- |
 | Architecture | improve-codebase-architecture, request-refactor-plan | -- |
-| DDD | domain-model | ubiquitous-language |
-| Meta | write-a-skill, grill-me, zoom-out | git-guardrails |
+| DDD | grill-with-docs, domain-modeling | ubiquitous-language |
+| Meta | writing-great-skills, grill-me, ask-ben | git-guardrails |
 
 Owned skills ship with repo. "Community" skills install from mattpocock/skills.
 

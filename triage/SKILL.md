@@ -1,6 +1,7 @@
 ---
 name: triage
-description: "Triage issues through a state machine of triage roles. Works with GitHub (`gh`) and Jira (`acli`). Use when user wants to triage issues, review incoming bugs/features, prepare issues for an AFK agent, investigate a bug and file a ticket with a TDD fix plan, or manage issue workflow."
+description: Move issues through triage roles and prepare agent-ready work.
+disable-model-invocation: true
 ---
 
 # Triage

@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Surveys a codebase as a senior advisor and produces prioritized, self-contained implementation plans for other models or agents to execute. Use when asked to audit code, find improvement opportunities, suggest roadmap direction, create handoff plans, review plans, dispatch execution, or reconcile a planning backlog.
+description: Surveys a codebase as a senior advisor and writes implementation plans. Use when asked to audit code, find improvements, suggest roadmap direction, create handoff plans, review plans, dispatch execution, or reconcile backlog.
 license: MIT
 metadata:
   author: shadcn

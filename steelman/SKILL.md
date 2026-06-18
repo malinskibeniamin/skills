@@ -1,6 +1,6 @@
 ---
 name: steelman
-description: Argue strongest case against the user's assertion with evidence. Explicit anti-sycophancy guard. Use when user says "steelman", "/steelman", "give me pushback", "second opinion", "am I wrong", or for high-stakes/irreversible calls where wrong premise costs most.
+description: Argue the strongest evidence-backed case against a premise. Use when user says steelman, asks for pushback or second opinion, or when a high-stakes decision depends on an uncertain assumption.
 ---
 
 # Steelman

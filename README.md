@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.19.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.20.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -131,13 +131,12 @@ bunx skills@latest add malinskibeniamin/skills/aip --agent claude-code -y
 bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
 ```
 
@@ -549,7 +548,7 @@ CLAUDE.md is read-every-turn context -- costs tokens AND is probabilistic. Claud
 <details>
 <summary><strong>Why not just use obra/superpowers?</strong></summary>
 
-We do -- many lifecycle patterns (TDD red/green, domain-model grilling, write-a-skill) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-prd, to-issues, git-guardrails) are listed under "Community Skills" for install.
+We do -- many lifecycle patterns (TDD red/green, grill-with-docs/domain-modeling, writing-great-skills) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-prd, to-issues, git-guardrails) are listed under "Community Skills" for install.
 </details>
 
 <details>
@@ -607,12 +606,11 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/prime`** | Start or resume in a repo. Build a compact startup brief from git state, docs, and optional seeded task context. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
 | **`/grill-with-docs`** | **Grill + document.** Sharpen terminology + update CONTEXT.md + ADRs inline. Phase 2b default. |
-| **`/domain-model`** | Legacy local DDD grill. Prefer `/grill-with-docs`; kept for explicit legacy requests. |
+| **`/domain-modeling`** | Model-invoked domain model maintenance. Builds glossary terms and ADRs while `/grill-with-docs` grills. |
 | **`/grill-me`** | **Grill, no docs.** 3 reviewer hats (product/eng/design) in parallel, fast. Skip when decision isn't worth writing down. Standalone alt to `/grill-with-docs`. |
 | **`/triage`** | Triage issues via state machine (GitHub via `gh` or Jira via `acli`). Grill sessions, agent briefs, out-of-scope KB. Bug-investigation mode produces a TDD fix plan and files the ticket. |
-| **`/diagnose`** | Hard bug or perf regression. Six-phase loop: build feedback loop -> reproduce -> hypothesise (3-5 ranked) -> instrument -> fix + regression test -> cleanup + post-mortem. |
+| **`/diagnosing-bugs`** | Hard bug or perf regression. Six-phase loop: build feedback loop -> reproduce -> hypothesise (3-5 ranked) -> instrument -> fix + regression test -> cleanup + post-mortem. |
 | **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explore codebase in background, auto-file GitHub issues. |
-| **`/zoom-out`** | Go up layer of abstraction. Map relevant modules + callers when unfamiliar with code area. |
 | **`/design-an-interface`** | Design API or module. Spawn 3+ agents generate radically different designs. |
 | **`/request-refactor-plan`** | Plan refactor. Interview you, break into tiny safe commits, file RFC issue. |
 | **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
@@ -620,7 +618,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/upgrade-dependency`** | Plan and safely apply dependency upgrades. Builds upgrade path first, applies safe patch/minor updates, creates issues for risky majors or unclear migrations. |
 | **`/aip`** | Design resource-oriented protobuf APIs with Google AIP rules, standard methods, LROs, pagination, filters, field masks, etags, and singleton patterns. |
 | **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
-| **`/write-a-skill`** | Create new agent skill with proper structure + progressive disclosure. |
+| **`/writing-great-skills`** | Reference for writing and editing predictable, low-no-op skills. |
 
 <details>
 <summary>Prompt examples for each workflow skill</summary>
@@ -659,9 +657,9 @@ We're planning to use TanStack Query with a 5-minute stale time.
 /triage -- show me anything that needs my attention
 ```
 
-**`/diagnose`** -- debug a hard bug:
+**`/diagnosing-bugs`** -- debug a hard bug:
 ```
-/diagnose -- the export button intermittently throws on Firefox but not Chrome.
+/diagnosing-bugs -- the export button intermittently throws on Firefox but not Chrome.
 Build the feedback loop first.
 ```
 
@@ -670,10 +668,6 @@ Build the feedback loop first.
 /qa -- I've been testing the settings page and found a few issues. Let me walk you through them.
 ```
 
-**`/zoom-out`** -- understand unfamiliar code:
-```
-/zoom-out on the auth middleware. I need to understand how it connects to the rest of the system.
-```
 
 **`/grill-me`** -- light stress-test (no DDD docs):
 ```
@@ -721,9 +715,9 @@ in src/features/. Look for tightly coupled modules that should be split.
 /handoff -- next session should prototype the URL-state approach without touching the main implementation branch.
 ```
 
-**`/write-a-skill`** -- create new skill:
+**`/writing-great-skills`** -- improve skill quality:
 ```
-/write-a-skill for enforcing our internal design system tokens.
+/writing-great-skills review this new design-system-token skill draft.
 It should check that components use --color-* CSS variables instead of raw hex values.
 ```
 
@@ -1021,7 +1015,7 @@ graph TD
         GM[grill-me]
         DAI[design-an-interface]
         TR[triage]
-        DIAG[diagnose]
+        DIAG[diagnosing-bugs]
         QA[qa]
         RPF[resolve-pr-feedback]
     end
@@ -1238,7 +1232,7 @@ bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y       
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `tdd`, `triage`, `diagnose`, `handoff`, `improve-codebase-architecture`, `grill-with-docs`, `prototype`, `to-prd`, `to-issues`, `caveman`, `edit-article`, `obsidian-vault`, `write-a-skill`, `grill-me`, `zoom-out`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`.
+**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-prd`, `to-issues`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `resolving-merge-conflicts`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 

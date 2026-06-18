@@ -1,6 +1,7 @@
 ---
 name: to-issues
-description: Break PRD or plan into tracker issues as thin vertical slices.
+description: Break a PRD or plan into tracker issues as thin vertical slices.
+disable-model-invocation: true
 ---
 
 # To Issues

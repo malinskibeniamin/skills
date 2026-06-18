@@ -25,7 +25,7 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 ## Workflow Skills (15-28)
 
-development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, domain-model, grill-me, triage, diagnose, qa, zoom-out, write-a-skill
+development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, qa, writing-great-skills
 
 ## Steps
 
@@ -41,13 +41,13 @@ bunx skills@latest add malinskibeniamin/skills/setup-ci-pipeline --agent claude-
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/write-a-skill --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
 ```
 
 ### 3. Community skills (optional)

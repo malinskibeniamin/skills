@@ -1,7 +1,8 @@
 ---
 name: handoff
-description: Compact the current session into a handoff document so another agent or fresh session can continue the work. Use when user asks to hand off, transfer context, continue in another session, start a parallel agent, or preserve only the next-useful context instead of using /compact.
+description: Compact the current session into a handoff document for another agent or fresh session.
 argument-hint: What should the next session focus on?
+disable-model-invocation: true
 ---
 
 # Handoff

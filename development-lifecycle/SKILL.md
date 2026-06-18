@@ -5,6 +5,8 @@ description: "Use when frontend/React/TypeScript/UI work. Guides understand -> p
 
 # Development Lifecycle
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+
 Auto-detect phase, guide process.
 
 ## Ponytail default
