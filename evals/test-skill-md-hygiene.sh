@@ -1,7 +1,7 @@
 # Evals for SKILL.md hygiene.
 #
 # Guards against regressions that would break skill routing or violate
-# /write-a-skill checklist. Three classes:
+# /writing-great-skills checklist. Three classes:
 #
 # Test A: frontmatter present on every SKILL.md (caveman-strip guard)
 # Test B: SKILL.md under 100-line cap (split overflow -> REFERENCE.md)
@@ -36,7 +36,7 @@ else
 fi
 
 # -- Test B: SKILL.md line cap --------------------------------------
-# /write-a-skill checklist: SKILL.md under 100 lines. Overflow -> REFERENCE.md.
+# /writing-great-skills checklist: SKILL.md under 100 lines. Overflow -> REFERENCE.md.
 # Cap at 110 to allow small slack; strict 100 warns.
 
 oversize=0

@@ -9,7 +9,7 @@ run_file_eval "$SKILL_DIR/tracker-github.md" "tracker-github.md exists"
 run_file_eval "$SKILL_DIR/tracker-jira.md" "tracker-jira.md exists"
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: triage" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
+run_content_eval "$SKILL_DIR/SKILL.md" "^disable-model-invocation: true$" "triage is user-invoked"
 
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')
 desc_len=${#desc}

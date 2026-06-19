@@ -25,15 +25,15 @@ Ponytail is a compact agent rule set and plugin that forces a reuse-first, minim
 
 ## Harness scan
 
-Scanned the pre-vendor surface: 75 skills and 108 hook scripts. Final surface is 79 skills. Useful integration points are review orchestration, `/deslop`, `/improve`, `/diagnose`, `/work` and `/development-lifecycle`, `/tdd` GREEN, `/swarm` worker packets, `/prototype`, ship cleanup, commit preflight review evidence, self/code reviewers, and prompt-time implementation nudges. No Ponytail runtime hook is needed.
+Scanned the pre-vendor surface: 75 skills and 108 hook scripts. Final surface is 79 skills. Useful integration points are review orchestration, `/deslop`, `/improve`, `/diagnosing-bugs`, `/work` and `/development-lifecycle`, `/tdd` GREEN, `/swarm` worker packets, `/prototype`, ship cleanup, commit preflight review evidence, self/code reviewers, and prompt-time implementation nudges. No Ponytail runtime hook is needed.
 
 ## Adopted changes
 
 1. Vendor `/ponytail`, `/ponytail-audit`, `/ponytail-debt`, and `/ponytail-review` with MIT provenance; ignore the upstream help skill.
-2. Add the reuse-first ladder to `/deslop`, `/work`/lifecycle, TDD GREEN guidance, `/swarm`, `/prototype`, and `/write-a-skill`; add audit/debt to `/deslop` and `/improve`.
+2. Add the reuse-first ladder to `/deslop`, `/work`/lifecycle, TDD GREEN guidance, `/swarm`, `/prototype`, and `/writing-great-skills`; add audit/debt to `/deslop` and `/improve`.
 3. Inject `[REUSE-FIRST]` in the existing intent hook so consumer repos get the less-code nudge before implementation.
 4. Make `/review` run a `ponytail-review-hat`; make `/deslop` compose `/ponytail-review` before the liability gate.
-5. Add evals so the four vendor skills and review/deslop/improve/diagnose integration cannot drift.
+5. Add evals so the four vendor skills and review/deslop/improve/diagnosing-bugs integration cannot drift.
 
 ## Decision
 

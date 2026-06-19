@@ -5,6 +5,8 @@ description: "Ship what built. Run verify -> self-review -> simplify -> deslop -
 
 # Go -- Ship What You Built
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+
 Phases 4-6 of `/development-lifecycle`, standalone command. Use when code written, ready launch.
 
 **Assumes**: implementation done, tests written. If not -- run `/development-lifecycle`.
@@ -47,7 +49,7 @@ Run all checks. Fix failures before proceed.
 ## Phase 5b: Iterate
 
 1. `Monitor: gh pr checks <number> --watch` -- stream CI background
-2. CI fail -> diagnose, fix, push, re-monitor
+2. CI fail -> diagnosing-bugs, fix, push, re-monitor
 3. `code-reviewer` agent findings -> `/resolve-pr-feedback` triage, fix, reply, push
 4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
 5. **Human review (incl cloud/Copilot)**: NO cap. Address EVERY thread. `pr-feedback-completeness-stop` hook blocks session exit until `bash scripts/pr-unresolved-count.sh` returns 0 and no CHANGES_REQUESTED reviews remain.

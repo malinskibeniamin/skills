@@ -1,6 +1,6 @@
 ---
 name: setup-ux-copy
-description: Enforce UX text style hooks for UI strings and prose. Checks sentence case, action labels, banned phrases, inclusive language, Redpanda terms, and Markdown prose style. Use when enforcing UI copywriting standards, UX text consistency, or docs prose style.
+description: Enforce UX text style hooks for UI strings and prose. Use when checking sentence case, action labels, banned phrases, inclusive language, Redpanda terms, or Markdown prose style.
 ---
 
 <!-- allow: prose-style this file documents the rules and shows example violations -->

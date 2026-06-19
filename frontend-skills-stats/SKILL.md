@@ -1,6 +1,6 @@
 ---
 name: frontend-skills-stats
-description: Analytics dashboard for frontend-skills hook harness. Latency percentiles, top-violated rules, zero-fire hooks, session trends. Use when user ask for hook harness stats, invoke `/frontend-skills-stats`, or want latency profiling and manifest drift checks.
+description: Analytics dashboard for frontend-skills hook harness. Use when inspecting hook latency, top violations, zero-fire rules, session trends, or manifest drift.
 ---
 
 # Frontend skills stats

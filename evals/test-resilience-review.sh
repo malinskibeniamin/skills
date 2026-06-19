@@ -12,7 +12,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "description has trigger phras
 run_content_eval "$SKILL_DIR/SKILL.md" "resilience" "skill is resilience-focused"
 run_content_eval "$SKILL_DIR/SKILL.md" "Failure matrix" "skill outputs failure matrix"
 run_content_eval "$SKILL_DIR/SKILL.md" "Finding queue" "skill outputs finding queue"
-run_content_eval "$SKILL_DIR/SKILL.md" "/diagnose.*(/tdd|TDD).*/visual-review" "skill chains diagnose tdd visual-review"
+run_content_eval "$SKILL_DIR/SKILL.md" "/diagnosing-bugs.*(/tdd|TDD).*/visual-review" "skill chains diagnose tdd visual-review"
 if grep -RqiE "defensive check|defensive-check" "$SKILL_DIR"; then echo "  FAIL  old defensive-check naming removed"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: old defensive-check naming removed"; else echo "  PASS  old defensive-check naming removed"; PASS=$((PASS+1)); fi
 run_content_eval "$SKILL_DIR/SKILL.md" "PASS \| NEEDS_GUARDS \| BLOCKED" "skill has verdict contract"
 run_content_eval "$SKILL_DIR/SKILL.md" "REFERENCE.md" "skill links reference"
@@ -30,7 +30,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Murphy" "reference frames Murphy law
 run_content_eval "$SKILL_DIR/REFERENCE.md" "empty.*null.*duplicate.*stale" "reference probes unhappy path values"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "user.*wrong|wrong.*user" "reference probes user mistakes"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "should not be allowed|prevent.*block.*recover" "reference states prevent/block/recover rule"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "/diagnose.*feedback loop" "reference sends findings to diagnose"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "/diagnosing-bugs.*feedback loop" "reference sends findings to diagnose"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "/tdd.*RED" "reference sends findings to TDD RED tests"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "/visual-review" "reference finishes with visual review"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "loading.*empty.*error.*success" "reference covers UI states"
@@ -48,7 +48,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "double submit" "examples cover doubl
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/resilience-review" "development-lifecycle wires resilience-review"
 run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "Resilience Review" "lifecycle reference documents Resilience Review"
-run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "/diagnose.*/tdd.*/visual-review" "lifecycle chains diagnose tdd visual-review"
+run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "/diagnosing-bugs.*/tdd.*/visual-review" "lifecycle chains diagnose tdd visual-review"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "resilience-review" "tdd consumes resilience-review findings"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "Resilience Review" "go requires resilience review evidence"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Resilience Review Evidence" "go reference documents evidence"

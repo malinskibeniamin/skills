@@ -34,4 +34,4 @@ function processPayment(order) {
 
 If you need to mock 5+ things for one test -> module has too many dependencies. Redesign for testability rather than mocking harder.
 
-See [interface-design.md](interface-design.md) for patterns that make testing natural.
+Run `/codebase-design` for interface patterns that make testing natural.

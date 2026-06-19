@@ -221,9 +221,9 @@ If the evidence cannot prove direct use, parent reachability, or
 vulnerable symbol usage, the bump makes no sense. Dismiss with expiry
 instead of growing the dependency surface.
 
-### /diagnose reachability loop
+### /diagnosing-bugs reachability loop
 
-Invoke `/diagnose` before any `package.json` change that claims to fix
+Invoke `/diagnosing-bugs` before any `package.json` change that claims to fix
 a JS security finding. Treat the Snyk finding as a bug report and build
 a fast feedback loop that can prove the vulnerable surface is relevant
 to this repo.
@@ -267,9 +267,9 @@ admission reasons is true:
 
 1. **Already-direct vulnerable dependency.** The vulnerable package is
    already declared in `dependencies` / `devDependencies`, and
-   `/diagnose` proves direct use or install/build-time execution.
+   `/diagnosing-bugs` proves direct use or install/build-time execution.
 2. **Reachable direct parent.** The vulnerable package is transitive,
-   but the direct parent is already declared and `/diagnose` proves the
+   but the direct parent is already declared and `/diagnosing-bugs` proves the
    parent path reaches the vulnerable behavior. Bump the parent, not the
    transitive.
 3. **Last-resort override.** Direct and parent fixes are blocked,
@@ -529,7 +529,7 @@ internally instead of relying on the user to remember them.
 
 3. **`/review` before PR.**
    Review must explicitly check the package.json admission gate,
-   `/steelman` dismissal argument, `/diagnose` reachability loop,
+   `/steelman` dismissal argument, `/diagnosing-bugs` reachability loop,
    `.snyk` dismissal evidence, and absence of dependency-surface growth
    without proof. A review finding on these gates blocks PR open unless
    the user or security owner overrides it in writing.
@@ -622,7 +622,7 @@ go vet ./...
 govulncheck ./...          # must be clean for addressed CVEs
 ```
 
-Any fail -> diagnose, fix, re-run. Must pass before next step. No
+Any fail -> diagnosing-bugs, fix, re-run. Must pass before next step. No
 revert -- fix forward. Truly stuck -> escalate, no skip.
 
 ### 2h. Commit
@@ -714,7 +714,7 @@ expired). Triggered by @<triggerer>.
 |---|---|---|---|---|---|---|
 | ... | ... | ... | ... | ... | direct / parent / override | 7->8->9 |
 
-## Reachability diagnosis (`/diagnose`)
+## Reachability diagnosis (`/diagnosing-bugs`)
 | Package | Finding | Feedback loop | Real potential vulnerability? | Decision |
 |---|---|---|---|---|
 | <pkg> | <CVE/GHSA> | grep/import graph / harness / Socket.dev critical vector | yes/no | bump parent / direct bump / dismiss to `.snyk` |
@@ -727,7 +727,7 @@ expired). Triggered by @<triggerer>.
 ## Internal skill gates
 - `/resilience-review`: PASS / NEEDS_GUARDS / BLOCKED -- <summary>
 - `/to-issues`: <n> issue(s) created or drafted for missing release age gate / overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
-- `/review`: PASS / BLOCKED -- package.json admission gate, `/steelman`, `/diagnose`, and `.snyk` evidence checked
+- `/review`: PASS / BLOCKED -- package.json admission gate, `/steelman`, `/diagnosing-bugs`, and `.snyk` evidence checked
 
 ## Supply-chain gate warnings
 - WARN: release age gate missing for `<package-manager>` (if absent).

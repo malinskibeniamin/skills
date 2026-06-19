@@ -64,4 +64,4 @@ Never cut input validation at trust boundaries, visible error handling, security
 
 ## Boundary
 
-Ponytail governs what you build, not how you talk. Pair with `/caveman` for even terser prose.
+Ponytail governs what you build, not how you talk. Keep prose terse when reporting changes.

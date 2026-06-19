@@ -27,12 +27,12 @@
 |---|---|---|
 | tdd | mattpocock/tdd (incorporated) | TDD iron law + async leak detection + deep modules |
 | triage | mattpocock/triage (incorporated, multi-tracker GH+Jira) | State-machine triage + bug root cause -> TDD fix plan |
-| diagnose | mattpocock/diagnose (vendored) | Feedback-loop-first 6-phase debugging |
+| diagnosing-bugs | mattpocock/diagnosing-bugs (vendored) | Feedback-loop-first 6-phase debugging |
 | brainstorming | -- (owned) | Design + challenge modes |
 
 ### Community Workflow Skills (10) -- from mattpocock/skills
 
-improve-codebase-architecture, request-refactor-plan, design-an-interface, to-prd, to-issues, write-a-skill, ubiquitous-language, git-guardrails-claude-code
+improve-codebase-architecture, request-refactor-plan, design-an-interface, to-prd, to-issues, writing-great-skills, ubiquitous-language, git-guardrails-claude-code
 
 ## Install Order
 

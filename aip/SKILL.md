@@ -1,6 +1,6 @@
 ---
 name: aip
-description: "Designs resource-oriented protobuf APIs using Google AIP rules plus proven control-plane/public API patterns. Use when adding or changing a resource message, standard-method RPC, name versus {resource}_id choice, parent wiring, CRUD/LRO shape, pagination, filtering, FieldMask, etag, or singleton resources."
+description: "Designs Google AIP-style protobuf resource APIs. Use when changing resource messages, standard-method RPCs, {resource}_id, parent wiring, CRUD/LRO shape, pagination, filtering, FieldMask, etag, or singleton resources."
 paths:
   - "**/*.proto"
 ---
