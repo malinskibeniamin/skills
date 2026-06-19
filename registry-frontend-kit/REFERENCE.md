@@ -1,4 +1,4 @@
-# Redpanda Frontend Kit Reference
+# Registry Frontend Kit Reference
 
 ## What This Adds Over frontend-starter-kit
 
@@ -7,12 +7,12 @@
 | Chakra UI ban | Block `@chakra-ui/react` imports |
 | Legacy import ban | Block `@redpanda-data/ui` imports |
 | `UI_LIB_DIRS` | Set `components/ui\|redpanda-ui` for hook exclusion |
-| `REDPANDA_KIT=1` | Enable registry pattern nudges |
+| `REGISTRY_KIT=1` | Enable registry pattern nudges |
 | setup-registry-workflow | Stop hook for registry.json rebuild reminders |
 
-## Registry Pattern Nudges (REDPANDA_KIT=1)
+## Registry Pattern Nudges (REGISTRY_KIT=1)
 
-`REDPANDA_KIT=1` -> orchestration-guidance add nudges:
+`REGISTRY_KIT=1` -> orchestration-guidance add nudges:
 
 | Detected pattern | Nudge |
 |---|---|
@@ -20,15 +20,15 @@
 | `<h1>`--`<h6>`, `<p>` raw HTML | Use `Heading`/`Text` from registry |
 | Key-value / labels / tags patterns | Consider `KeyValueField` + `BadgeGroup` |
 
-Warn, no block. Surface registry components Claude no know.
+Warn, no block. Surface registry components Claude doesn't know.
 
-## Redpanda-Specific Environment
+## Registry Environment
 
 Set in `.claude/hooks/session-env.sh`:
 
 ```bash
 echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
-echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
+echo "export REGISTRY_KIT=1" >> "$CLAUDE_ENV_FILE"
 ```
 
 ## Component Import Paths
@@ -66,7 +66,7 @@ Document in `CLAUDE.md`. Claude follow symlinks transparent.
 ln -s /path/to/ui-registry linked-repos/ui-registry
 ```
 
-Modify `@/components/redpanda-ui/` -> also update `linked-repos/ui-registry/`. With `REDPANDA_KIT=1`, orchestration nudge upstream PR.
+Modify `@/components/redpanda-ui/` -> also update `linked-repos/ui-registry/`. With `REGISTRY_KIT=1`, orchestration nudge upstream PR.
 
 ## Package Source Code (opensrc)
 

@@ -20,7 +20,7 @@
 9. **Plugin manifest**: `.claude-plugin/plugin.json` for one-command installation
 10. **Fail-closed mode**: `HOOKS_FAIL_CLOSED=1` catches misconfigured hooks
 11. **Violation tracking**: session-scoped temp files, aggregated at Stop
-12. **17 Redpanda UI registry nudges**: useProtoForm, Typography, KeyValueField, Skeleton, Empty, Sonner, etc.
+12. **17 Registry UI registry nudges**: useProtoForm, Typography, KeyValueField, Skeleton, Empty, Sonner, etc.
 13. **Visual mockup workflow**: agent-browser for brainstorming HTML mockups
 
 ### Consumer feedback fixes

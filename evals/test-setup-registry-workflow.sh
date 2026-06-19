@@ -26,6 +26,18 @@ run_content_eval "$SCRIPT" "redpanda-ui/" "hook checks for redpanda-ui changes"
 run_content_eval "$SCRIPT" "registry.json" "hook checks for registry.json update"
 run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2|stop-findings" "hook blocks when registry not rebuilt"
 run_content_eval "$SCRIPT" "CHANGELOG|changeset" "hook reminds about changelog or changeset"
+VENDOR_SCRIPT="$REPO_ROOT/.claude/hooks/vendor-file-check.sh"
+run_content_eval "$VENDOR_SCRIPT" "redpanda-ui" "vendor hook blocks redpanda-ui edits"
+
+_vendor_tmpdir=$(mktemp -d /tmp/vendor-registry-eval-XXXXXX)
+mkdir -p "$_vendor_tmpdir/redpanda-ui"
+tmpfile="$_vendor_tmpdir/redpanda-ui/button.tsx"
+printf '%s\n' "export const Button = () => null" > "$tmpfile"
+_vendor_input=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s","old_string":"null","new_string":"undefined"}}' "$tmpfile")
+run_hook_eval "$VENDOR_SCRIPT" "$_vendor_input" \
+  2 "block: direct redpanda-ui edit" "vendor/registry"
+rm -rf "$_vendor_tmpdir"
+
 run_content_eval "$SPLIT_SCRIPT" "\\.page\\.tsx" "split hook allows .page.tsx route pages"
 run_content_eval "$SPLIT_SCRIPT" "components/" "split hook steers components to components/"
 run_content_eval "$SPLIT_SCRIPT" "parts|dialogs|checklist" "split hook rejects mixed split-file suffixes"

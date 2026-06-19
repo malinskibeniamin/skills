@@ -61,7 +61,7 @@
     "./prime/",
     "./prototype/",
     "./qa/",
-    "./redpanda-frontend-kit/",
+    "./registry-frontend-kit/",
     "./request-refactor-plan/",
     "./resilience-review/",
     "./resolve-pr-feedback/",

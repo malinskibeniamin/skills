@@ -1,6 +1,6 @@
 ---
 name: setup-ux-copy
-description: Enforce UX text style hooks for UI strings and prose. Use when checking sentence case, action labels, banned phrases, inclusive language, Redpanda terms, or Markdown prose style.
+description: Enforce UX text style hooks for UI strings and prose. Use when checking sentence case, action labels, banned phrases, inclusive language, product terms, or Markdown prose style.
 ---
 
 <!-- allow: prose-style this file documents the rules and shows example violations -->
@@ -44,10 +44,10 @@ Two PostToolUse hooks on Edit/Write: one for code-string UX copy, one for prose.
 - Stress copy with long localized strings, huge numbers, empty/error/offline states, and destructive actions.
 - Product naming can add identity only when clarity and recovery language stay intact.
 
-### Redpanda-specific (REDPANDA_KIT=1)
+### Registry-specific (REGISTRY_KIT=1)
 
-- Enforce product name capitalization (Admin API, Schema Registry, HTTP Proxy, Redpanda Console)
-- Warn on "the console" (use "Redpanda Console")
+- Enforce product name capitalization (Admin API, Schema Registry, HTTP Proxy, Admin Console)
+- Warn on "the console" (use "Admin Console")
 
 ### Escape hatch
 
@@ -92,4 +92,4 @@ Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pair with `ubiquit
 - [ ] Hook blocks em dash (U+2014) in `.md` files
 - [ ] Hook blocks "Let's dive in" in `.md` files
 - [ ] Hook blocks "delve" in `.md` files
-- [ ] (If `REDPANDA_KIT=1`) Hook blocks `"schema registry"` (lowercase)
+- [ ] (If `REGISTRY_KIT=1`) Hook blocks `"schema registry"` (lowercase)

@@ -28,7 +28,7 @@ Per gstack [BROWSER.md](https://github.com/garrytan/gstack/blob/main/BROWSER.md)
 Commands: `navigate`, `click`, `type`, `read`, `screenshot`, `batch`, `eval`, `back`, `forward`, `wait_for`. Elements are addressed by accessibility-tree refs (`@e1`, `@e2`) produced by the snapshot parser -- no raw DOM selectors cross the wire.
 
 ```
-$ skills-browser navigate https://app.redpanda.com/clusters
+$ skills-browser navigate https://app.example.com/clusters
 { "url": "...", "title": "Clusters", "ref_count": 47 }
 
 $ skills-browser read
@@ -40,7 +40,7 @@ $ skills-browser read
   table "Active clusters" @e6
 
 $ skills-browser click @e5
-{ "ok": true, "nav": "https://app.redpanda.com/clusters/new" }
+{ "ok": true, "nav": "https://app.example.com/clusters/new" }
 
 $ skills-browser type @e12 "qa-scratch-01"
 $ skills-browser screenshot --out /tmp/s.png

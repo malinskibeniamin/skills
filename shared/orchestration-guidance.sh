@@ -155,9 +155,9 @@ esac
 # Observability nudge removed — too broad, fired on nearly every component.
 # aria-label is already enforced by accessibility-check.sh for icon buttons.
 
-# ── Redpanda registry nudges (only if REDPANDA_KIT=1) ───────────
+# ── component registry nudges (only if REGISTRY_KIT=1) ───────────
 
-if [ "${REDPANDA_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
+if [ "${REGISTRY_KIT:-}" = "1" ] && [ -f "$file_path" ]; then
   file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
 
   # useProtoForm nudge — only for ConnectRPC projects, not REST/Zod

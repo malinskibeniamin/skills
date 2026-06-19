@@ -693,7 +693,7 @@ dismissal + override.
 
 **Label rule**: always `security`, `dependencies`, `snyk`,
 `lang/ts` or `lang/go`. Plus team-domain label derived from
-CODEOWNERS team slug (examples from Redpanda monorepo: UX team
+CODEOWNERS team slug (examples from Registry monorepo: UX team
 paths, AI team paths, Console UI team paths -- resolved by path,
 not hardcoded). Plus status labels: `dismissals` (on any `.snyk`
 add or remove), `overrides-added`, `react19-blocked`, `cleaned-up`

@@ -78,16 +78,16 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b[A-Z]{3,}\s+[A-Z]{3,}\b[^'\"]
   fi
 fi
 
-# ── Check 9: Redpanda term capitalization (REDPANDA_KIT=1) ───────
+# ── Check 9: Registry term capitalization (REGISTRY_KIT=1) ───────
 
-if [ "${REDPANDA_KIT:-}" = "1" ]; then
-  if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(admin api|schema registry|http proxy|redpanda console)\b[^'\"]*\1" && \
-     ! echo "$added_lines" | grep -qE "(Admin API|Schema Registry|HTTP Proxy|Redpanda Console)"; then
-    hook_block "Capitalize Redpanda product names: Admin API, Schema Registry, HTTP Proxy, Redpanda Console."
+if [ "${REGISTRY_KIT:-}" = "1" ]; then
+  if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(admin api|schema registry|http proxy|admin console)\b[^'\"]*\1" && \
+     ! echo "$added_lines" | grep -qE "(Admin API|Schema Registry|HTTP Proxy|Admin Console)"; then
+    hook_block "Capitalize product names: Admin API, Schema Registry, HTTP Proxy, Admin Console."
   fi
 
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\bthe console\b[^'\"]*\1"; then
-    hook_warn "Use 'Redpanda Console' not 'the console'."
+    hook_warn "Use 'Admin Console' not 'the console'."
   fi
 fi
 
@@ -95,7 +95,7 @@ fi
 
 if echo "$added_lines" | grep -qE "(['\"])[A-Z][a-z]+\s+[A-Z][a-z]+\s+[A-Z][a-z]+" ; then
   _title_line=$(echo "$added_lines" | grep -E "(['\"])[A-Z][a-z]+\s+[A-Z][a-z]+\s+[A-Z][a-z]+" | head -1)
-  if ! echo "$_title_line" | grep -qE '(Admin API|Schema Registry|HTTP Proxy|Redpanda Console|Dedicated Cloud|Bring Your Own Cloud|Private Service Connect|Virtual Private Cloud)'; then
+  if ! echo "$_title_line" | grep -qE '(Admin API|Schema Registry|HTTP Proxy|Admin Console|Dedicated Cloud|Bring Your Own Cloud|Private Service Connect|Virtual Private Cloud)'; then
     hook_warn "Possible Title Case. Use sentence case. Exception: product names."
   fi
 fi

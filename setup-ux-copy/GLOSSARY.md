@@ -1,4 +1,4 @@
-# Redpanda Glossary
+# Registry Glossary
 
 Use with Matt Pocock's `ubiquitous-language` skill for project-wide DDD enforcement.
 
@@ -6,11 +6,11 @@ Use with Matt Pocock's `ubiquitous-language` skill for project-wide DDD enforcem
 
 | Term | Notes |
 |------|-------|
-| Redpanda | Never "redpanda" or "RedPanda" |
-| Redpanda Console | Not "the console" |
+| Registry | Never "registry" or "RegistryProduct" |
+| Admin Console | Not "the console" |
 | Admin API | Not "admin api" or "Admin api" |
-| Schema Registry | Capitalized when referring to the Redpanda component |
-| HTTP Proxy | Capitalized when referring to the Redpanda component |
+| Schema Registry | Capitalized when referring to the Registry component |
+| HTTP Proxy | Capitalized when referring to the Registry component |
 | Dedicated Cloud | Product tier name |
 | Serverless Cloud | Product tier name |
 | BYOC | Bring Your Own Cloud |
@@ -29,7 +29,7 @@ Use with Matt Pocock's `ubiquitous-language` skill for project-wide DDD enforcem
 | ACL | Access Control List |
 | RBAC | Role-Based Access Control |
 | ID | Identifier (not "Id" or "id" in UI text) |
-| RPK | Redpanda CLI tool |
+| CLI | Product command line tool |
 | MCP | Model Context Protocol |
 
 ## Generic Terms (lowercase unless starting a sentence)

@@ -149,8 +149,8 @@ npx @tanstack/intent@latest install
 # Atlassian/Jira integration (requires acli installed)
 bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
 
-# Redpanda-specific (Chakra/legacy bans, registry workflow)
-bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
+# Registry-specific (Chakra/legacy bans, registry workflow)
+bunx skills@latest add malinskibeniamin/skills/registry-frontend-kit --agent claude-code -y
 ```
 
 **Verify:** `bash scripts/verify-install.sh`
@@ -564,9 +564,9 @@ Prompt-packs = bundled system prompts or context-injection. They're probabilisti
 </details>
 
 <details>
-<summary><strong>Is this Redpanda-specific?</strong></summary>
+<summary><strong>Is this Registry-specific?</strong></summary>
 
-No. Redpanda-specific rules live in a **separate** kit (`redpanda-frontend-kit`) -- registry workflow, Chakra bans, legacy imports. The core `frontend-starter-kit` is stack-opinionated (React + TanStack + ConnectRPC) but org-agnostic. The public plugin has zero Redpanda internals.
+No. Registry-specific rules live in a **separate** kit (`registry-frontend-kit`) -- registry workflow, Chakra bans, legacy imports. The core `frontend-starter-kit` is stack-opinionated (React + TanStack + ConnectRPC) but org-agnostic. The public plugin has zero Registry internals.
 </details>
 
 <details>
@@ -729,7 +729,7 @@ It should check that components use --color-* CSS variables instead of raw hex v
 |---|---|
 | **`/frontend-starter-kit`** | All setup skills + workflow skills. Full bootstrap new project. |
 | **`/work-automation-kit`** | Planning skills -- PRD creation, issue breakdown, project management. |
-| **`/redpanda-frontend-kit`** | frontend-starter-kit + Redpanda-specific registry workflow. |
+| **`/registry-frontend-kit`** | frontend-starter-kit + Registry-specific registry workflow. |
 | **`/codex-compat`** | Generate `.codex/hooks.json` + `AGENTS.md` for OpenAI Codex compatibility. |
 
 ### Setup Skills (automatic via hooks -- no invocation needed)
@@ -1052,10 +1052,10 @@ graph TD
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
   ```
 
-- **redpanda-frontend-kit** -- Everything in frontend starter kit, plus Redpanda-specific rules: Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, registry workflow.
+- **registry-frontend-kit** -- Everything in frontend starter kit, plus Registry-specific rules: Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, registry workflow.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
+  bunx skills@latest add malinskibeniamin/skills/registry-frontend-kit --agent claude-code -y
   ```
 
 - **work-automation-kit** -- Project planning + management workflow skills: PRD creation, implementation planning, issue breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.

@@ -34,7 +34,7 @@ context="[POST-COMPACTION] Context was compressed. Key rules re-injected:\nRules
 config=""
 [ "${REACT_COMPILER_MODE:-}" ] && config="$config compiler=$REACT_COMPILER_MODE"
 [ "${ISSUE_TRACKER:-}" ] && config="$config tracker=$ISSUE_TRACKER"
-[ "${REDPANDA_KIT:-}" = "1" ] && config="$config redpanda-kit=on"
+[ "${REGISTRY_KIT:-}" = "1" ] && config="$config registry-kit=on"
 [ -n "$config" ] && context="$context\nConfig:$config"
 
 # Re-inject last stop outcome if available

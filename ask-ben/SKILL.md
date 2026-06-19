@@ -18,9 +18,9 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 - Architecture cleanup -> `/improve-codebase-architecture`; broad advisor scan -> `/improve`.
 - PR or diff review -> `/review`; high stakes -> `/thermo-nuclear-code-quality-review`.
 - UI/customer-facing -> `/visual-review`; edge cases/errors -> `/resilience-review`.
-- Too much code -> `/deslop`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail`.
+- Too much code -> `/simplify`, `/deslop`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail`.
 - Issue/PRD flow -> `/to-prd`, `/to-issues`, `/triage`, `/resolve-pr-feedback`.
-- Setup a frontend repo -> `/frontend-starter-kit`; Redpanda repo -> `/redpanda-frontend-kit`.
+- Setup a frontend harness -> `/frontend-starter-kit`; specialized harness -> `/registry-frontend-kit`.
 - Need exact repo state -> `/prime`; hand off context -> `/handoff`; parallelize -> `/swarm`.
 
 | Skill | What Ben uses it for |
@@ -61,7 +61,7 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/prime` | Repo startup/resume brief. |
 | `/prototype` | Throwaway logic/UI prototype to answer design risk. |
 | `/qa` | Deprecated bug intake; prefer `/triage`. |
-| `/redpanda-frontend-kit` | Frontend starter kit plus Redpanda registry workflow. |
+| `/registry-frontend-kit` | Frontend starter kit plus component registry workflow. |
 | `/request-refactor-plan` | Deprecated refactor planner; prefer architecture + issues. |
 | `/resilience-review` | Edge cases, errors, fallback, recovery, polish. |
 | `/resolve-pr-feedback` | Fetch, fix, reply, resolve PR review threads. |

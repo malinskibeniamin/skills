@@ -89,9 +89,9 @@ import { GenericContainer, Wait } from 'testcontainers'
 let container: StartedTestContainer
 
 test.beforeAll(async () => {
-  container = await new GenericContainer('redpandadata/redpanda:latest')
+  container = await new GenericContainer('postgres:16-alpine')
     .withExposedPorts(9092, 8082)
-    .withWaitStrategy(Wait.forLogMessage('Successfully started Redpanda'))
+    .withWaitStrategy(Wait.forLogMessage('database system is ready'))
     .start()
 
   process.env.BASE_URL = `http://${container.getHost()}:${container.getMappedPort(8082)}`

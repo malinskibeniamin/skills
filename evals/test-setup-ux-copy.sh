@@ -16,7 +16,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-ux-copy" "SKILL.md has corr
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "allow.*ux-copy" "SKILL.md documents escape hatch"
 run_content_eval "$SKILL_DIR/SKILL.md" "capitalization" "SKILL.md mentions capitalization rules"
-run_content_eval "$SKILL_DIR/SKILL.md" "REDPANDA_KIT" "SKILL.md documents Redpanda opt-in"
+run_content_eval "$SKILL_DIR/SKILL.md" "REGISTRY_KIT" "SKILL.md documents Registry opt-in"
 
 # ── Hook: skip non-Edit/Write ───────────────────────────────────
 
@@ -222,28 +222,28 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: TLS acronym (not all-caps emphasis)"
 
-# ── Check 9: Redpanda terms (REDPANDA_KIT=1) ────────────────────
+# ── Check 9: product terms (REGISTRY_KIT=1) ────────────────────
 
-tmpfile="$_ux_tmpdir/rp.ts"
+tmpfile="$_ux_tmpdir/product.ts"
 echo "const label = 'the admin api settings'" > "$tmpfile"
 
-REDPANDA_KIT=1 run_hook_eval "$SCRIPT" \
+REGISTRY_KIT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: lowercase Redpanda product name (with REDPANDA_KIT)" "Capitalize"
+  2 "block: lowercase Registry product name (with REGISTRY_KIT)" "Capitalize"
 
 # Allow: correctly capitalized
 echo "const label = 'Admin API settings'" > "$tmpfile"
 
-REDPANDA_KIT=1 run_hook_eval "$SCRIPT" \
+REGISTRY_KIT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: correctly capitalized Redpanda term"
+  0 "allow: correctly capitalized Registry term"
 
-# Allow: no REDPANDA_KIT → skip Redpanda checks
+# Allow: no REGISTRY_KIT → skip Registry checks
 echo "const label = 'the admin api'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: Redpanda checks skipped without REDPANDA_KIT"
+  0 "allow: Registry checks skipped without REGISTRY_KIT"
 
 # ── Check 10: Title Case ────────────────────────────────────────
 
@@ -508,8 +508,8 @@ run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "successfully" "hook checks for successfully"
 run_content_eval "$SCRIPT" "click here" "hook checks for click here"
 run_content_eval "$SCRIPT" "oops" "hook checks for blame language"
-run_content_eval "$SCRIPT" "REDPANDA_KIT" "hook checks Redpanda terms"
-run_content_eval "$SCRIPT" "Admin API" "hook checks Redpanda product names"
+run_content_eval "$SCRIPT" "REGISTRY_KIT" "hook checks product terms"
+run_content_eval "$SCRIPT" "Admin API" "hook checks product names"
 run_content_eval "$SCRIPT" "Title Case" "hook detects Title Case"
 run_content_eval "$SCRIPT" "numeral" "hook checks for spelled-out numbers"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
@@ -600,7 +600,7 @@ run_hook_eval "$PROSE" "$_delve_input" 2 "prose: block 'delve'" "AI-tell"
 
 # Warn (exit 0): AI-tell soft
 _soft_file="$_ux_tmpdir/soft.md"
-printf 'We leverage Redpanda for streaming.\n' > "$_soft_file"
+printf 'We leverage Registry for streaming.\n' > "$_soft_file"
 _soft_content=$(cat "$_soft_file")
 _soft_input=$(jq -nc --arg fp "$_soft_file" --arg c "$_soft_content" \
   '{tool_name:"Write", tool_input:{file_path:$fp, content:$c}}')

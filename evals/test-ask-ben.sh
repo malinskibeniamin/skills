@@ -9,6 +9,17 @@ run_content_eval "$ASK_BEN" "frontend/React/TypeScript/Go" "ask-ben names Ben's 
 run_content_eval "$ASK_BEN" "skills repo" "ask-ben names skills repo work"
 run_content_eval "$ASK_BEN" "installable plugin surfaces" "ask-ben names plugin release surface"
 
+run_content_eval "$ASK_BEN" "Too much code -> .*/simplify" "ask-ben routes overbuilt code through simplify"
+
+if grep -qF "specialized repo" "$ASK_BEN"; then
+  echo "  FAIL  ask-ben fast routes avoid repo-specific setup wording"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: ask-ben fast routes avoid repo-specific setup wording"
+else
+  echo "  PASS  ask-ben fast routes avoid repo-specific setup wording"
+  PASS=$((PASS + 1))
+fi
+
 forbidden_project="Query""lane"
 forbidden_refs=$(grep -R --exclude-dir=.git -nF "$forbidden_project" "$REPO_ROOT" 2>/dev/null || true)
 if [ -z "$forbidden_refs" ]; then

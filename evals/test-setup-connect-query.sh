@@ -140,7 +140,7 @@ run_hook_eval "$SCRIPT" \
 # ── Check 5: (v2) Ban new Message() construction ─────────────────
 
 tmpfile="$_cq_tmpdir/test.ts"
-printf "import { ListTopicsRequest } from '@buf/redpandadata_cloud.bufbuild_es'\nconst req = new ListTopicsRequest({ filter: 'active' })\n" > "$tmpfile"
+printf "import { ListTopicsRequest } from '@buf/example_cloud.bufbuild_es'\nconst req = new ListTopicsRequest({ filter: 'active' })\n" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
