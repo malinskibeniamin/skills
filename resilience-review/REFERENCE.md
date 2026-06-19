@@ -40,11 +40,11 @@ Core: Precondition -> Postcondition -> Fallback -> Observability.
 
 Every real finding gets own loop:
 
-1. `/diagnose`: build feedback loop; repro exact symptom; capture artifact.
+1. `/diagnosing-bugs`: build feedback loop; repro exact symptom; capture artifact.
 2. `/tdd`: convert finding to RED test before fix; public UI/API seam preferred.
 3. Fix: pass test; add snapshot/verification for visual, serialized, config state.
 4. `/visual-review`: UI pass for error text, disabled state, loading/error/empty/success, layout.
-5. PR evidence: finding -> diagnose loop -> RED test/snapshot -> fix -> visual review or skip reason.
+5. PR evidence: finding -> diagnosing-bugs loop -> RED test/snapshot -> fix -> visual review or skip reason.
 
 ## Verdict
 

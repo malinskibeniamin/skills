@@ -1,6 +1,7 @@
 ---
 name: grill-me
-description: Interview the user relentlessly about a plan or design until reaching shared understanding. Phase 2b gate of /development-lifecycle. Spawns 3 parallel reviewer hats (product/engineering/design) to stress-test the plan. Use when user wants to stress-test a plan, get grilled, or mentions "grill me".
+description: A relentless interview to sharpen a plan or design.
+disable-model-invocation: true
 ---
 
 # Grill Me
@@ -10,7 +11,7 @@ Phase 2b gate. No implementation until plan survive grilling.
 
 ## Step 1: Interview
 
-Walk every branch of decision tree. Resolve dependencies one-by-one. Each question, give recommended answer. One at time.
+Run the `/grilling` skill: walk every branch of decision tree. Resolve dependencies one-by-one. Each question, give recommended answer. One at time.
 
 If question answerable by exploring codebase, explore first.
 

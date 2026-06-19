@@ -1,6 +1,6 @@
 ---
 name: extend-harness
-description: Extend frontend-skills hook harness. Add new rules via skill-manifest.json, pick severity tier (block/warn/nudge/info/block-strict/diagnostic), view analytics via /frontend-skills-stats. Use when adding enforcement, tuning rule severity, or debugging hook that isn't firing.
+description: Extend frontend-skills hook harness. Use when adding enforcement rules, tuning severity tiers, viewing analytics, or debugging hooks that are not firing.
 ---
 
 # Extend the Harness

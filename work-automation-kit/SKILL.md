@@ -8,9 +8,9 @@ description: Install planning/project management skills -- PRD creation, impleme
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Skills Installed
 
-**Owned** (hook-integrated): brainstorming, domain-model, triage, diagnose, qa, zoom-out
+**Owned** (hook-integrated): brainstorming, grill-with-docs, domain-modeling, triage, diagnosing-bugs, qa
 
-**Matt Pocock/community**: grill-with-docs, prototype, to-prd, to-issues, handoff, write-a-skill
+**Matt Pocock/community**: grill-with-docs, prototype, to-prd, to-issues, handoff, writing-great-skills
 
 **Optional**: setup-atlassian-workflow (Jira via acli, opt-in), codex-plugin-cc (cross-model review)
 
@@ -21,14 +21,14 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 
 # Owned
-bunx skills@latest add malinskibeniamin/skills/domain-model --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/diagnose --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/zoom-out --agent claude-code -y
 
 # Community
-bunx skills@latest add mattpocock/skills/write-a-skill --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
 ```
 
 ## Optional: Atlassian/Jira

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.20.0
+
+2026-06-19 -- Sync mattpocock/skills v1.0.1 taxonomy. Adds `/ask-ben`, `/codebase-design`, `/domain-modeling`, `/grilling`, `/implement`, `/resolving-merge-conflicts`, and `/writing-great-skills`; renames `/diagnose` to `/diagnosing-bugs`; removes upstream-deleted `/caveman`, `/zoom-out`, and `/write-a-skill`; rewires `/grill-me`, `/grill-with-docs`, `/tdd`, and `/improve-codebase-architecture` onto shared model-invoked skills; updates `/teach` with reusable assets guidance. Skills 79 -> 83.
+
 ## 4.19.0
 
 2026-06-15 -- Publish Claude Code and Codex marketplace metadata for the latest harness. Registers the Ponytail skill family (`/ponytail`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-review`), keeps release copy current at 98 wired hooks, 108 scripts, and 79 skills, and ships the post-4.18 updates: reuse-first ladder, review PR-comment and priority-comment workflow, vendored `/teach` upstream rules, taste/copy evals, and tightened accessibility, UX copy, Tailwind motion, and visual-review checks. Updates skill-manifest, Claude plugin, Codex plugin, both marketplaces, README release pin, evals, and mirrored root hook scripts so installs get the latest hooks.

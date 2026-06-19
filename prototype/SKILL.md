@@ -1,6 +1,7 @@
 ---
 name: prototype
-description: Build throwaway logic or UI prototypes to answer design questions fast. Use when user wants prototype, sanity-check state/model, mock UI, or try designs.
+description: Build a throwaway prototype to answer a design question.
+disable-model-invocation: true
 ---
 
 # Prototype

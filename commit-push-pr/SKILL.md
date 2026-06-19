@@ -82,7 +82,7 @@ Record commit types created -- used for auto-labeling Phase 5.
 1. **Always** stream CI checks: `gh pr checks <PR_NUMBER> --watch` via Monitor tool
 2. Never use `sleep` + polling -- use `--watch` flag
 3. Never skip -- CI failures caught here save time
-4. Checks fail -> read logs, diagnose, fix, commit, push, re-watch
+4. Checks fail -> read logs, diagnosing-bugs, fix, commit, push, re-watch
 5. No CI configured -> note and proceed
 
 ### Phase 7: Verify and summarize
