@@ -26,7 +26,7 @@ Use when the user wants to:
    cat "$handoff_file" >/dev/null
    ```
 2. Write the handoff to that path.
-3. Keep it compact. Do not duplicate artifacts already captured in PRDs, plans, ADRs, issues, commits, diffs, or docs. Reference them by path or URL.
+3. Keep it compact. Do not duplicate artifacts already captured in specs, plans, ADRs, issues, commits, diffs, or docs. Reference them by path or URL.
 4. If the user provided arguments, treat them as the next session focus and tailor the handoff around that work.
 5. Redact sensitive information: API keys, passwords, tokens, secrets, personal data, customer data, and any other confidential values. Mention redaction only when it affects continuation.
 6. Suggest skills the next session should use, if any.

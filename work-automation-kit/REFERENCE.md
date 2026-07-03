@@ -4,10 +4,10 @@
 
 ```
 Feature idea
-  -> /to-prd (community) -- interactive PRD creation
+  -> /to-spec (community) -- interactive spec creation
   -> /development-lifecycle -- plan phase
   -> /grill-with-docs -- stress-test plan + update CONTEXT.md/ADRs
-  -> /to-issues (community) -- break into GitHub/Jira issues
+  -> /to-tickets (community) -- break into GitHub/Jira tickets
   -> implement (use /tdd skill)
   -> code review (development-lifecycle review phase)
   -> merge
@@ -41,7 +41,7 @@ Quick question (on a specific decision)
 | Testing | tdd | -- |
 | Debugging | diagnosing-bugs | -- |
 | Triage | triage, qa | -- |
-| Planning | development-lifecycle (plan phase) | to-prd, to-issues |
+| Planning | development-lifecycle (plan phase) | to-spec, to-tickets |
 | Review | development-lifecycle (review phase) | -- |
 | Design | brainstorming, design-an-interface | -- |
 | Architecture | improve-codebase-architecture, request-refactor-plan | -- |

@@ -3,13 +3,9 @@ name: ask-ben
 description: Router for Ben's frontend-skills harness and every local skill.
 disable-model-invocation: true
 ---
-
 # Ask Ben
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Use this when you forget which local skill fits Ben's work. Default lens: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
-
-## Fast routes
-
 - Build/fix product code -> `/development-lifecycle` or `/work`; done -> `/go`.
 - Hard bug -> `/diagnosing-bugs` first, then `/tdd`.
 - Plan unclear -> `/grill-with-docs`; huge foggy effort -> `/wayfinder`; no repo/docs needed -> `/grill-me`.
@@ -17,15 +13,16 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 - PR or diff review -> `/review`; high stakes -> `/thermo-nuclear-code-quality-review`.
 - UI/customer-facing -> `/visual-review`; edge cases/errors -> `/resilience-review`.
 - Too much code -> `/deslop`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail`.
-- Issue/PRD flow -> `/to-prd`, `/to-issues`, `/triage`, `/resolve-pr-feedback`.
+- Spec/ticket flow -> `/to-spec`, `/to-tickets`, `/triage`, `/resolve-pr-feedback`.
+- Manual setup or one-off migration -> `/wizard`; recurring workflow spec -> `/loop-me`; Claude background continuation -> `/claude-handoff`.
 - Setup a frontend repo -> `/frontend-starter-kit`; Redpanda repo -> `/redpanda-frontend-kit`.
 - Need exact repo state -> `/prime`; docs/API facts -> `/research`; hand off context -> `/handoff`; parallelize -> `/swarm`.
-
 | Skill | What Ben uses it for |
 |---|---|
 | `/aip` | Google AIP-style protobuf/resource API design. |
 | `/ask-ben` | This router: explains all local skills and routes work. |
 | `/brainstorming` | Explore/challenge design options before code. |
+| `/claude-handoff` | Launch a named Claude background agent with a redacted handoff. |
 | `/codebase-design` | Deep-module vocabulary: interface, seam, adapter, depth. |
 | `/codex-compat` | Generate Codex hooks/AGENTS parity from Claude hooks. |
 | `/commit-push` | Conventional commit plus push, no PR. |
@@ -47,9 +44,10 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/grilling` | Reusable model-invoked interview loop. |
 | `/handoff` | Compact context into a continuation file. |
 | `/hook-audit` | Audit hook usefulness and session telemetry. |
-| `/implement` | Execute a PRD/issue with `/tdd` where possible. |
+| `/implement` | Execute a spec/ticket with `/tdd` where possible. |
 | `/improve` | Senior advisor scan and implementation plans. |
 | `/improve-codebase-architecture` | Visual deepening report plus architecture grill. |
+| `/loop-me` | Grill recurring life/work loops into workflow specs. |
 | `/migrate-to-shoehorn` | Replace test casts with `@total-typescript/shoehorn`. |
 | `/obsidian-vault` | Search/create/organize Obsidian notes. |
 | `/ponytail` | Build least-code solution via reuse-first ladder. |
@@ -60,7 +58,7 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/prototype` | Throwaway logic/UI prototype to answer design risk. |
 | `/qa` | Deprecated bug intake; prefer `/triage`. |
 | `/redpanda-frontend-kit` | Frontend starter kit plus Redpanda registry workflow. |
-| `/request-refactor-plan` | Deprecated refactor planner; prefer architecture + issues. |
+| `/request-refactor-plan` | Deprecated refactor planner; prefer architecture + tickets. |
 | `/resilience-review` | Edge cases, errors, fallback, recovery, polish. |
 | `/resolve-pr-feedback` | Fetch, fix, reply, resolve PR review threads. |
 | `/research` | Investigate docs/API/source facts from primary sources into a cited Markdown file. |
@@ -95,15 +93,16 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/tdd` | Red-green-refactor one vertical slice at a time. |
 | `/teach` | Stateful teaching workspace. |
 | `/thermo-nuclear-code-quality-review` | Release-blocking cold audit. |
-| `/to-issues` | Turn PRD/plan into vertical-slice tracker issues. |
-| `/to-prd` | Turn conversation into PRD. |
+| `/to-tickets` | Turn spec/plan into vertical-slice tracker tickets. |
+| `/to-spec` | Turn conversation into a spec. |
 | `/triage` | Move incoming issues through readiness states. |
 | `/ubiquitous-language` | Deprecated domain-language skill; prefer `/grill-with-docs`. |
 | `/upgrade-dependency` | Safe dependency upgrade plan and PR/issue path. |
 | `/visual-review` | Customer-facing UX review with evidence. |
 | `/wayfinder` | Map huge foggy work into issue-tracker investigation tickets. |
+| `/wizard` | Generate an interactive bash wizard for manual setup or migration. |
 | `/work` | Alias for `/development-lifecycle`. |
-| `/work-automation-kit` | Install planning/PRD/triage workflow skills. |
+| `/work-automation-kit` | Install planning/spec/triage workflow skills. |
 | `/writing-beats` | Draft article beat by beat. |
 | `/writing-fragments` | Mine conversation into writing fragments. |
 | `/writing-great-skills` | Write/edit predictable low-no-op skills. |

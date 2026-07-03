@@ -1,6 +1,6 @@
 ---
 name: request-refactor-plan
-description: "DEPRECATED. Prefer `/improve-codebase-architecture` for refactor discovery, then `/to-issues` for tickets. Do not use unless user explicitly says `/request-refactor-plan`."
+description: "DEPRECATED. Prefer `/improve-codebase-architecture` for refactor discovery, then `/to-tickets` for tickets. Do not use unless user explicitly says `/request-refactor-plan`."
 ---
 
 > Deprecated: prefer replacement named in description. Keep only for backward compatibility.

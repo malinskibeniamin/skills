@@ -58,7 +58,7 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
   - Fix forward, no revert.
 - **2h. Automatic internal skill gates**:
   - Run `/resilience-review` before PR for `.snyk` policy, Snyk IO monitor, package-manager detection, release-age warnings, Socket.dev findings, and override cleanup paths. Fix guards or document accepted debt.
-  - Run `/to-issues` for security debt: missing release age gate, override added, React 19 blocked, upstream has no parent fix, ambiguous/no existing Snyk project, or Socket.dev critical vector needing owner review.
+  - Run `/to-tickets` for security debt: missing release age gate, override added, React 19 blocked, upstream has no parent fix, ambiguous/no existing Snyk project, or Socket.dev critical vector needing owner review.
   - Run `/review` before PR to verify `/steelman`, `/diagnosing-bugs`, package.json admission gate, dismissal evidence, and no dependency-surface growth without proof. See [REFERENCE.md](REFERENCE.md#automatic-internal-skill-gates).
 - **2i. Commit**: `fix(deps): snyk sweep ...` with per-pkg detail. Dismissed + overrides-added in separate sections.
 - **2j. Open PR**: `gh pr create --assignee <triggerer> --reviewer <team-group>[,<security-team-group>] --label security,dependencies,snyk,lang/<ts|go>,team/<slug>[,dismissals][,overrides-added][,react19-blocked][,cleaned-up]`
@@ -95,7 +95,7 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **Revisit `.snyk` every run.** Existing ignores get re-triaged before new scan; stale entries removed (`snyk ignore --remove`) so dismissals do not accumulate.
 - **Warn on missing JS release gates.** For npm/bun/pnpm/Yarn repos, report absent minimum release age configuration as a supply-chain warning.
 - **Socket.dev web check for JS.** Check Socket.dev package pages for supply-chain attack vectors. No Socket CLI install or `socket` command required.
-- **Auto-run internal skill gates.** `/resilience-review`, `/to-issues`, and `/review` are mandatory before PR open for JS Snyk sweeps; `/github:gh-fix-ci` and `/resolve-pr-feedback` handle PR tail when needed.
+- **Auto-run internal skill gates.** `/resilience-review`, `/to-tickets`, and `/review` are mandatory before PR open for JS Snyk sweeps; `/github:gh-fix-ci` and `/resolve-pr-feedback` handle PR tail when needed.
 - **Assignee = triggerer.** Every sweep PR has one assignee = the person who ran the skill, via `gh api user --jq .login`.
 - **Reviewer = team group, always >=1.** Resolve CODEOWNERS team entries (`@org/team`) for the path; never merge with only individual reviewers. Security team group added automatically on PRs that touch `.snyk` or add overrides.
 

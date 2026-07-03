@@ -41,7 +41,7 @@ for removed in diagnose write-a-skill caveman zoom-out; do
 done
 
 # User-invoked skills explicitly disable model invocation.
-for skill in ask-ben grill-me grill-with-docs handoff implement improve-codebase-architecture prototype teach to-issues to-prd triage writing-great-skills; do
+for skill in ask-ben grill-me grill-with-docs handoff implement improve-codebase-architecture prototype teach to-tickets to-spec triage writing-great-skills; do
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^disable-model-invocation: true$" "$skill is user-invoked"
 done
 
