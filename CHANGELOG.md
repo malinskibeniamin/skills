@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-2026-07-03 -- Migrate Google Workspace MCP-deny guidance from the older Workspace CLI to `gog`/`gogcli`. Updates live agent quick-ref copy, mcp-ban redirect messages for Gmail, Calendar, and Drive, and eval coverage so Google Workspace hints stay on `gog` and do not regress.
+## 4.23.0
+
+2026-07-03 -- Incorporate current mattpocock/skills WIP surfaces. Renames `/to-prd` to `/to-spec` and `/to-issues` to `/to-tickets` across live skill references, vendors `/wizard`, `/loop-me`, and `/claude-handoff`, and hardens `/wayfinder` handoff claim rechecks before showing the frontier. Skills 85 -> 88. Migrate Google Workspace MCP-deny guidance from the older Workspace CLI to `gog`/`gogcli`. Updates live agent quick-ref copy, mcp-ban redirect messages for Gmail, Calendar, and Drive, and eval coverage so Google Workspace hints stay on `gog` and do not regress.
 
 ## 4.22.0
 

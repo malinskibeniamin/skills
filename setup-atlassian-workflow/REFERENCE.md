@@ -2,9 +2,9 @@
 
 ## Workflow Patterns
 
-### PRD -> Work Items (mirrors to-issues)
+### Spec -> work items (mirrors to-tickets)
 
-After `/to-prd` generate plan:
+After `/to-spec` generates the spec:
 
 ```bash
 # Create epic
