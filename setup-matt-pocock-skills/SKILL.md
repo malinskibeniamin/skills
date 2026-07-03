@@ -66,7 +66,7 @@ Choose:
 Show draft edits before writing:
 
 - `## Agent skills` block for `AGENTS.md` or `CLAUDE.md`
-- `docs/agents/issue-tracker.md`
+- `docs/agents/issue-tracker.md` with `## Wayfinding operations` when `/wayfinder` is installed
 - `docs/agents/triage-labels.md`
 - `docs/agents/domain.md`
 
@@ -76,4 +76,4 @@ Write only approved files. Preserve existing docs. If block exists, update in pl
 
 ## 5. Verify
 
-Confirm files exist and mention selected tracker, labels, domain layout. Tell user which skills now have context.
+Confirm files exist and mention selected tracker, Wayfinding operations, labels, domain layout. Tell user which skills now have context.
