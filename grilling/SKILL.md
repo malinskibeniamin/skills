@@ -10,3 +10,5 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
 
 If a question can be answered by exploring the codebase, explore the codebase instead.
+
+Do not enact the plan until I confirm we have reached a shared understanding.
