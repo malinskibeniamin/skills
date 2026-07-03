@@ -28,7 +28,7 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 3. **Vet**: use `/review` style scrutiny: personally reopen cited locations, dedupe, severity-rank, and record rejected false positives in the plan index.
 4. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions. Treat `/ponytail-debt` + `/deslop` findings as advisor-plan inputs, not automatic edits.
 5. **Prioritize and confirm**: table findings by leverage with evidence. Direction findings are separate. Ask which findings to plan; non-interactive default is top 3-5.
-6. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-issues`.
+6. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-tickets`.
 
 ## Invocation variants
 
