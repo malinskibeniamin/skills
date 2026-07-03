@@ -30,7 +30,7 @@ Every plan should cover:
 | `next` | `/prime`, `/steelman` | Ground roadmap ideas in repo evidence and argue against weak ideas. |
 | `plan <description>` | `/prime`, `/resilience-review` | Produce one executable plan with unhappy paths and STOP conditions. |
 | `branch` | `/prime`, `/review` | Scope to branch diff, classify introduced versus pre-existing findings. |
-| `--issues` | `/to-issues` | Publish selected plans as tracker-ready issues after plan files exist. |
+| `--issues` | `/to-tickets` | Publish selected plans as tracker-ready issues after plan files exist. |
 | `execute` / `reconcile` | `references/closing-the-loop.md` | Keep executor flow bounded; advisor reviews but does not merge. |
 
 Guardrails:

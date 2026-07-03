@@ -32,7 +32,7 @@
 
 ### Community Workflow Skills (10) -- from mattpocock/skills
 
-improve-codebase-architecture, request-refactor-plan, design-an-interface, to-prd, to-issues, writing-great-skills, ubiquitous-language, git-guardrails-claude-code
+improve-codebase-architecture, request-refactor-plan, design-an-interface, to-spec, to-tickets, writing-great-skills, ubiquitous-language, git-guardrails-claude-code
 
 ## Install Order
 

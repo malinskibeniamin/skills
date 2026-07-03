@@ -17,6 +17,7 @@ run_content_eval "$WAYFINDER" "Do not also resolve tickets" "wayfinder charting 
 run_content_eval "$WAYFINDER" "answer is not part of the body|answer isn't part of the body" "wayfinder keeps answers out of ticket body"
 run_content_eval "$WAYFINDER" "Assets.*linked.*not pasted|assets.*linked.*not pasted" "wayfinder links assets instead of pasting"
 run_content_eval "$WAYFINDER" "Fog excludes.*decided.*ticket" "wayfinder keeps fog distinct from decisions and tickets"
+run_content_eval "$WAYFINDER" "Recheck your claims first" "wayfinder rechecks claims before handoff frontier"
 
 run_content_eval "$GITHUB_TRACKER" "issue_dependencies_summary\.blocked_by" "GitHub wayfinding frontier uses dependency summary"
 run_content_eval "$GITHUB_TRACKER" "database id.*not.*#number.*node_id|not.*#number.*node_id" "GitHub blocking uses database id not display ids"

@@ -17,12 +17,15 @@ VENDORED=(
   research
   review
   wayfinder
+  claude-handoff
+  loop-me
   scaffold-exercises
   setup-matt-pocock-skills
   setup-pre-commit
   teach
-  to-issues
-  to-prd
+  to-spec
+  to-tickets
+  wizard
   writing-beats
   writing-great-skills
   writing-fragments
@@ -36,9 +39,54 @@ for skill in "${VENDORED[@]}"; do
 done
 
 run_content_eval "$REPO_ROOT/prototype/SKILL.md" "prototype|throwaway|test" "prototype skill keeps prototype intent"
-run_content_eval "$REPO_ROOT/to-prd/SKILL.md" "PRD|requirements" "to-prd skill keeps PRD intent"
-run_content_eval "$REPO_ROOT/to-issues/SKILL.md" "issue|GitHub" "to-issues skill keeps issue intent"
+run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "spec.*PRD|PRD.*spec" "to-spec skill keeps spec/PRD bridge"
+run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/to-tickets" "to-spec hands approved specs to to-tickets"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "ticket|blocking edges" "to-tickets skill keeps ticket intent"
 run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
+
+for retired_skill in to-prd to-issues; do
+  if [ -e "$REPO_ROOT/$retired_skill/SKILL.md" ]; then
+    echo "  FAIL  retired Matt planning skill removed: $retired_skill"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: retired Matt planning skill still exists: $retired_skill"
+  else
+    echo "  PASS  retired Matt planning skill removed: $retired_skill"
+    PASS=$((PASS + 1))
+  fi
+
+  if grep -q "\"./$retired_skill/\"" "$REPO_ROOT/.claude-plugin/plugin.json"; then
+    echo "  FAIL  retired Matt planning skill absent from Claude plugin: $retired_skill"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: retired Matt planning skill still registered: $retired_skill"
+  else
+    echo "  PASS  retired Matt planning skill absent from Claude plugin: $retired_skill"
+    PASS=$((PASS + 1))
+  fi
+done
+
+if grep -RInE '/to-prd|/to-issues|to-prd|to-issues' \
+  "$REPO_ROOT" \
+  --exclude-dir=.git \
+  --exclude='CHANGELOG.md' \
+  --exclude='*.json' \
+  --exclude='test-matt-vendored-skills.sh' \
+  --exclude='test-matt-wip-skills.sh' >/dev/null; then
+  echo "  FAIL  live docs and skills use to-spec/to-tickets naming"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: live docs still reference to-prd/to-issues"
+else
+  echo "  PASS  live docs and skills use to-spec/to-tickets naming"
+  PASS=$((PASS + 1))
+fi
+
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/to-spec.*to-tickets|/to-tickets.*to-spec" "ask-ben routes specs to tickets"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "/to-tickets" "improve routes issue publishing through to-tickets"
+run_content_eval "$REPO_ROOT/snyk-ux-security/SKILL.md" "/to-tickets" "snyk skill routes security debt through to-tickets"
+
+run_content_eval "$REPO_ROOT/wizard/SKILL.md" "interactive bash wizard|template\\.sh" "wizard builds interactive bash wizards"
+run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
+run_content_eval "$REPO_ROOT/claude-handoff/SKILL.md" "claude --bg --name" "claude-handoff launches named background agent"
+run_content_eval "$REPO_ROOT/loop-me/SKILL.md" "workflows/\\*\\.md|workflow specs" "loop-me writes workflow specs"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
