@@ -5,7 +5,6 @@ disable-model-invocation: true
 ---
 
 # Ask Ben
-
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Use this when you forget which local skill fits Ben's work. Default lens: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
 
@@ -21,7 +20,7 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 - Too much code -> `/deslop`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail`.
 - Issue/PRD flow -> `/to-prd`, `/to-issues`, `/triage`, `/resolve-pr-feedback`.
 - Setup a frontend repo -> `/frontend-starter-kit`; Redpanda repo -> `/redpanda-frontend-kit`.
-- Need exact repo state -> `/prime`; hand off context -> `/handoff`; parallelize -> `/swarm`.
+- Need exact repo state -> `/prime`; docs/API facts -> `/research`; hand off context -> `/handoff`; parallelize -> `/swarm`.
 
 | Skill | What Ben uses it for |
 |---|---|
@@ -65,6 +64,7 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/request-refactor-plan` | Deprecated refactor planner; prefer architecture + issues. |
 | `/resilience-review` | Edge cases, errors, fallback, recovery, polish. |
 | `/resolve-pr-feedback` | Fetch, fix, reply, resolve PR review threads. |
+| `/research` | Investigate docs/API/source facts from primary sources into a cited Markdown file. |
 | `/resolving-merge-conflicts` | Resolve merge/rebase conflicts from primary sources. |
 | `/review` | Multi-hat diff/PR review across standards/spec/risk. |
 | `/scaffold-exercises` | Course exercise directories and stubs. |

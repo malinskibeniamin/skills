@@ -14,14 +14,11 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 **No prod code without failing test first.** No exceptions.
 
-## Anti-Pattern: Horizontal Slices
+## Test seams and anti-patterns
 
-**DO NOT write all tests first, then all impl.** Bulk tests test *imagined* behavior, not *actual*.
-
-**Correct**: Vertical slices -- one test -> one impl -> repeat.
-
-    WRONG:  RED: test1,test2,test3  ->  GREEN: impl1,impl2,impl3
-    RIGHT:  RED->GREEN: test1->impl1  ->  RED->GREEN: test2->impl2
+- **Seams**: test at public boundaries. Before a test, write down the seam and confirm pre-agreed seams with the user when the issue or existing convention does not make it obvious. No tests at unconfirmed internals.
+- **Tautological tests**: do not recompute expected values the same way code does; use an independent source of truth: known-good literal, worked example, fixture, spec, or observed behavior.
+- **Horizontal slices**: do not write all tests first, then all impl. Bulk tests test imagined behavior. Correct: vertical slices -- one RED->GREEN test+impl, then repeat.
 
 ## State Machine
 

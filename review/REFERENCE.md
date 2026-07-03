@@ -43,6 +43,23 @@ One-shot prompt: In <repo> on <branch>, update <file:range> to <exact request>, 
 
 If no safe one-shot prompt exists, say why in one sentence.
 
+## Fowler smell baseline
+
+Use this smell baseline on every Standards review, even when the repo has little written guidance. A documented repo standard always wins; where the repo endorses a shape, suppress the smell. Treat smells as judgement calls, not hard violations, and skip anything tooling already enforces.
+
+- **Mysterious Name** -- a function, variable, or type whose name does not reveal its role. Fix: rename; if no honest name exists, the design is murky.
+- **Duplicated Code** -- the same logic shape appears in more than one hunk or file. Fix: extract the shared shape only when both sites are real.
+- **Feature Envy** -- code reaches into another object more than its own data. Fix: move behavior to the data it envies.
+- **Data Clumps** -- the same fields or params travel together. Fix: bundle them into one type.
+- **Primitive Obsession** -- a primitive or string stands in for a domain concept. Fix: give the concept a small type.
+- **Repeated Switches** -- repeated branching on the same type. Fix: one map, polymorphism, or one central decision point.
+- **Shotgun Surgery** -- one logical change scatters edits. Fix: gather what changes together.
+- **Divergent Change** -- one module changed for unrelated reasons. Fix: split responsibilities.
+- **Speculative Generality** -- abstraction, options, or hooks for needs the spec does not have. Fix: delete or inline until the need is real.
+- **Message Chains** -- caller navigates through a long object chain. Fix: hide the walk behind one method.
+- **Middle Man** -- wrapper mostly delegates. Fix: call the real target.
+- **Refused Bequest** -- subtype ignores inherited contract. Fix: prefer composition.
+
 ## Report schema
 
 ```md

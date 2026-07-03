@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks across 108 scripts enforce patterns on every edit. Green != done: `test-warning-check` hard-blocks warnings on passing test/lint/type runs (DeprecationWarning, React `act()`, unhandled rejection, `@ts-ignore`); `ci-warning-audit` Stop-hook scans `gh run view --log` on green CI for deprecations / console warnings / skipped tests. 83 skills from TDD through CI-green PR, including /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /steelman anti-sycophancy guard, /upgrade-dependency safe dependency upgrades, and /snyk-ux-security per-path vuln sweep (JS + Go ecosystems; exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep bump second, resolutions/overrides/replace as last resort only with follow-up TODO to remove; React 18 pin + changelog-walked major bumps + no-deferral escalation; Go `snyk test --file=go.mod` + `go get -u` + `go mod tidy` + `govulncheck` verify). Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. bun.lock + yarn.lock parity enforced (Snyk IO doesn't parse bun.lock). 21 LLM failure modes enforced: 7 Karpathy single-agent + 14 MAST multi-agent (Cemri et al. NeurIPS 2025). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. MCP ban with CLI redirect (~20x token savings). Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
-  "version": "4.20.0",
+  "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks across 108 scripts enforce patterns on every edit. Green != done: `test-warning-check` hard-blocks warnings on passing test/lint/type runs (DeprecationWarning, React `act()`, unhandled rejection, `@ts-ignore`); `ci-warning-audit` Stop-hook scans `gh run view --log` on green CI for deprecations / console warnings / skipped tests. 84 skills from TDD through CI-green PR, including /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /steelman anti-sycophancy guard, /upgrade-dependency safe dependency upgrades, and /snyk-ux-security per-path vuln sweep (JS + Go ecosystems; exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep bump second, resolutions/overrides/replace as last resort only with follow-up TODO to remove; React 18 pin + changelog-walked major bumps + no-deferral escalation; Go `snyk test --file=go.mod` + `go get -u` + `go mod tidy` + `govulncheck` verify). Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. bun.lock + yarn.lock parity enforced (Snyk IO doesn't parse bun.lock). 21 LLM failure modes enforced: 7 Karpathy single-agent + 14 MAST multi-agent (Cemri et al. NeurIPS 2025). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. MCP ban with CLI redirect (~20x token savings). Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
+  "version": "4.21.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -66,6 +66,7 @@
     "./resilience-review/",
     "./resolve-pr-feedback/",
     "./resolving-merge-conflicts/",
+    "./research/",
     "./review/",
     "./scaffold-exercises/",
     "./setup-accessibility/",
@@ -120,7 +121,7 @@
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
-  "x-updatedAt": "2026-06-19",
+  "x-updatedAt": "2026-07-03",
   "x-includes": {
     "instructions": [
       "CLAUDE.md",
@@ -130,6 +131,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "4.21.0": "2026-07-03 -- Sync latest public mattpocock/skills deltas through upstream 272f99b. Adds /research for primary-source Markdown research; updates /grilling confirmation, /tdd seams and tautological-test guidance, /review Fowler smell baseline, and /ask-ben routing. Skills 83 -> 84.",
     "4.20.0": "2026-06-19 -- Sync mattpocock/skills v1.0.1 taxonomy. Adds /ask-ben, /codebase-design, /domain-modeling, /grilling, /implement, /resolving-merge-conflicts, and /writing-great-skills; renames /diagnose to /diagnosing-bugs; removes upstream-deleted /caveman, /zoom-out, and /write-a-skill; rewires /grill-me, /grill-with-docs, /tdd, and /improve-codebase-architecture onto shared model-invoked skills; updates /teach with reusable assets guidance. Skills 79 -> 83.",
     "4.19.0": "2026-06-15 -- Publish Claude Code and Codex marketplace metadata for the latest harness. Registers the Ponytail skill family (`/ponytail`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-review`), keeps release copy current at 98 wired hooks, 108 scripts, and 79 skills, and ships the post-4.18 updates: reuse-first ladder, review PR-comment and priority-comment workflow, vendored `/teach` upstream rules, taste/copy evals, and tightened accessibility, UX copy, Tailwind motion, and visual-review checks. Updates skill-manifest, Claude plugin, Codex plugin, both marketplaces, README release pin, evals, and mirrored root hook scripts so installs get the latest hooks.",
     "4.18.0": "2026-06-11 -- Add `/deslop` liability review skill and wire code-liability gates into prompt-time lifecycle, self/code reviewers, review value gate, lifecycle/TDD/Go guidance, CLAUDE/AGENTS, README, every SKILL.md repo-change preamble, and evals. The gate keeps added code only for product value, defensive correctness, or test confidence; otherwise delete, inline, split, or block. Skills 74 -> 75.",

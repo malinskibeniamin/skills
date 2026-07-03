@@ -63,3 +63,21 @@ test("createUser makes user retrievable", async () => {
 ## Heuristic
 
 If you rename an internal function and tests fail, those tests were testing implementation, not behaviour. Refactor the test, not the production code.
+
+## Tautological Tests
+
+Expected value must not restate the implementation. Use an independent source of truth: a known literal, worked example, fixture, spec, or externally observed behavior.
+
+```typescript
+// BAD: expected value recomputes the same algorithm
+test("calculateTotal sums line items", () => {
+  const items = [{ price: 10 }, { price: 5 }];
+  const expected = items.reduce((sum, item) => sum + item.price, 0);
+  expect(calculateTotal(items)).toBe(expected);
+});
+
+// GOOD: expected value is a known literal
+test("calculateTotal sums line items", () => {
+  expect(calculateTotal([{ price: 10 }, { price: 5 }])).toBe(15);
+});
+```

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.21.0
+
+2026-07-03 -- Sync latest public mattpocock/skills deltas through upstream `272f99b`. Adds `/research` as a primary-source Markdown research skill; updates `/grilling` with the shared-understanding confirmation gate; tightens `/tdd` around agreed seams and tautological-test avoidance; adds the Fowler smell baseline to `/review`; routes `/ask-ben` to `/research`; and bumps Claude/Codex plugin metadata. Skills 83 -> 84. In-progress upstream `/wayfinder` and `/claude-handoff` were reviewed but left out of the public surface for a narrower, non-Claude-specific sync.
+
 ## 4.20.0
 
 2026-06-19 -- Sync mattpocock/skills v1.0.1 taxonomy. Adds `/ask-ben`, `/codebase-design`, `/domain-modeling`, `/grilling`, `/implement`, `/resolving-merge-conflicts`, and `/writing-great-skills`; renames `/diagnose` to `/diagnosing-bugs`; removes upstream-deleted `/caveman`, `/zoom-out`, and `/write-a-skill`; rewires `/grill-me`, `/grill-with-docs`, `/tdd`, and `/improve-codebase-architecture` onto shared model-invoked skills; updates `/teach` with reusable assets guidance. Skills 79 -> 83.
