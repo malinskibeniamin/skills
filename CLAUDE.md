@@ -14,7 +14,7 @@ bun tsgo biome vitest | Compiler memoize | fix type (guard, generic) | `@/compon
 
 ## External Services (MCP banned -> CLI)
 
-Jira `acli` | Gmail `gws` (no format:full) | Browser `agent-browser` | CI `gh` (Blacksmith run show in GH Actions) | Calendar/Drive `gws` | Buildkite `bk` | Box `box` | M365 `m365`. `mcp-ban.sh` deny + show syntax. MCP 10-25k char, CLI 100-500.
+Jira `acli` | Gmail `gog` (`--readonly --gmail-no-send --no-input --json`) | Browser `agent-browser` | CI `gh` (Blacksmith run show in GH Actions) | Calendar/Drive `gog` | Buildkite `bk` | Box `box` | M365 `m365`. `mcp-ban.sh` deny + show syntax. MCP 10-25k char, CLI 100-500.
 
 ## Commits
 
