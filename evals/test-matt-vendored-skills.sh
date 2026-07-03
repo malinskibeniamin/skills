@@ -14,6 +14,7 @@ VENDORED=(
   obsidian-vault
   prototype
   resolving-merge-conflicts
+  research
   review
   scaffold-exercises
   setup-matt-pocock-skills
@@ -38,6 +39,19 @@ run_content_eval "$REPO_ROOT/to-prd/SKILL.md" "PRD|requirements" "to-prd skill k
 run_content_eval "$REPO_ROOT/to-issues/SKILL.md" "issue|GitHub" "to-issues skill keeps issue intent"
 run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
 
+
+# Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
+run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research prioritizes primary sources"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "Markdown file" "research writes cited markdown artifact"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "where the repo already keeps" "research follows repo note conventions"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
+run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known literal" "tests.md prevents tautological expected values"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "smell baseline" "review carries Fowler smell baseline"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "Mysterious Name" "review baseline includes Mysterious Name"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "Speculative Generality" "review baseline includes Speculative Generality"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "repo standard always wins|repo overrides" "review baseline defers to repo standards"
 
 # Latest Matt vendoring: review orchestrates local review suite.
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/visual-review" "review invokes visual-review for user-facing surfaces"
