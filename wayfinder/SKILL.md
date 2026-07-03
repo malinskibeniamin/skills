@@ -14,7 +14,7 @@ Use when a goal is too large for one context window and the route is still foggy
 - Refer to maps and tickets by **name** (their title), not a bare id or slug. Link the name when needed.
 - The map is an **index**, not a store: decisions live in their ticket; the map keeps only a one-line gist and pointer.
 - Tracker mechanics come from `docs/agents/issue-tracker.md` under **Wayfinding operations**. If missing, use the local-markdown fallback.
-- Claim a ticket before work by assigning it to the driving dev. Open + unassigned means unclaimed.
+- Claim a ticket before work by assigning it to the driving dev; this must be the session's first write. Open + unassigned means unclaimed.
 - Use the tracker's native blocking/dependency feature when available; fallback to an explicit `Blocked by:` line only when native blocking is unavailable.
 - Never resolve more than one ticket per session.
 
@@ -55,16 +55,18 @@ Ticket types:
 - **Grilling**: conversation with `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
 - **Task**: literal manual work needed before decisions can continue. Automate where safe; otherwise hand the human a checklist.
 
+The answer is not part of the body. Record it on resolution. Assets are linked, not pasted.
+
 ## Fog of war
 
-Do not chart what you cannot yet see. Fog is for suspected questions or risks that are not precise enough to assign. A ticket is for a sharp question, even if blocked. Resolving one ticket clears nearby fog and may graduate part of it into new tickets.
+Do not chart what you cannot yet see. Fog is for suspected questions or risks that are not precise enough to assign. A ticket is for a sharp question, even if blocked. Fog excludes what is already decided and what is already a ticket. Resolving one ticket clears nearby fog and may graduate part of it into new tickets.
 
 ## Chart the map
 
 1. Run `/grilling` and `/domain-modeling` to surface open decisions.
 2. Create the map with Notes, empty Decisions so far, and Fog.
 3. Create only the tickets you can specify now. Wire blocking relationships in a second pass after tickets have ids.
-4. Stop. Charting the map is one session's work.
+4. Stop. Charting the map is one session's work. Do not also resolve tickets.
 
 ## Work through a map
 

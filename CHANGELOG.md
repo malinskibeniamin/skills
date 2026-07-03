@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.22.0
+
+2026-07-03 -- Add dedicated `/wayfinder` eval coverage and tighten tracker-operation guidance. Verifies map-as-index, name-based references, first-write claims, one-ticket sessions, answer/assets storage, fog boundaries, GitHub/GitLab/local blocking and frontier mechanics, plus setup guidance for Wayfinding operations. Keeps skill count at 85.
+
 ## 4.21.0
 
 2026-07-03 -- Sync latest public mattpocock/skills deltas through upstream `272f99b`. Adds `/research` as a primary-source Markdown research skill; includes `/wayfinder` for issue-tracker maps of large foggy work; updates `/grilling` with the shared-understanding confirmation gate; tightens `/tdd` around agreed seams and tautological-test avoidance; adds the Fowler smell baseline to `/review`; routes `/ask-ben` to `/research`; and bumps Claude/Codex plugin metadata. Skills 83 -> 85. In-progress upstream `/claude-handoff` was reviewed but left out because it is Claude CLI-specific.

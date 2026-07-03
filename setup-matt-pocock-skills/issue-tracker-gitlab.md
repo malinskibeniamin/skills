@@ -28,7 +28,7 @@ Used by `/wayfinder`. The **map** is a single issue with **child** issues as tic
 
 - **Map**: create one issue labelled `wayfinder:map`, holding Notes / Decisions-so-far / Fog. On tiers with epics, an epic may hold the map instead; a labelled issue works everywhere.
 - **Child ticket**: create an issue with `Part of #<map>` at the top and labels `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
-- **Blocking**: use GitLab native blocking links when available by posting `/blocked_by #<n>` as a note. If unavailable, fallback to `Blocked by: #<n>, #<n>` at the top of the description.
-- **Frontier query**: list the map's open children, drop any with an open blocker or assignee, and take the first in map order.
+- **Blocking**: use GitLab native blocking links when available by posting `/blocked_by #<n>` as a note. Native blocking links are a Premium/Ultimate feature; on the free tier, or when unavailable, fallback to `Blocked by: #<n>, #<n>` at the top of the description.
+- **Frontier query**: list the map's open children, drop any with a native `blocked_by` link to an open issue (`glab api projects/:id/issues/:iid/links`), an open issue in the fallback `Blocked by:` line, or an assignee, and take the first in map order.
 - **Claim**: `glab issue update <n> --assignee @me` before any work.
 - **Resolve**: `glab issue note <n> --message "<answer>"`, then `glab issue close <n>`, then append a context pointer to the map's Decisions-so-far.
