@@ -10,10 +10,9 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 
 ## Fast routes
 
-- Building or fixing product code -> `/development-lifecycle` or `/work`.
-- Implementation done -> `/go`.
+- Build/fix product code -> `/development-lifecycle` or `/work`; done -> `/go`.
 - Hard bug -> `/diagnosing-bugs` first, then `/tdd`.
-- Plan unclear -> `/grill-with-docs`; no repo/docs needed -> `/grill-me`.
+- Plan unclear -> `/grill-with-docs`; huge foggy effort -> `/wayfinder`; no repo/docs needed -> `/grill-me`.
 - Architecture cleanup -> `/improve-codebase-architecture`; broad advisor scan -> `/improve`.
 - PR or diff review -> `/review`; high stakes -> `/thermo-nuclear-code-quality-review`.
 - UI/customer-facing -> `/visual-review`; edge cases/errors -> `/resilience-review`.
@@ -102,6 +101,7 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/ubiquitous-language` | Deprecated domain-language skill; prefer `/grill-with-docs`. |
 | `/upgrade-dependency` | Safe dependency upgrade plan and PR/issue path. |
 | `/visual-review` | Customer-facing UX review with evidence. |
+| `/wayfinder` | Map huge foggy work into issue-tracker investigation tickets. |
 | `/work` | Alias for `/development-lifecycle`. |
 | `/work-automation-kit` | Install planning/PRD/triage workflow skills. |
 | `/writing-beats` | Draft article beat by beat. |

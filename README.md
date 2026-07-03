@@ -1232,7 +1232,7 @@ bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y       
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-prd`, `to-issues`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
+**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-prd`, `to-issues`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`, `wayfinder`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 
