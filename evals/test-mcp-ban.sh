@@ -1,5 +1,5 @@
 # Evals for mcp-ban.sh — PreToolUse hook that denies verbose MCP tool
-# calls and redirects to CLI equivalents (acli, gws, agent-browser, gh, etc.)
+# calls and redirects to CLI equivalents (acli, gog, agent-browser, gh, etc.)
 
 HOOK="$REPO_ROOT/.claude/hooks/mcp-ban.sh"
 CLAUDE_SETTINGS="$REPO_ROOT/.claude/settings.json"
@@ -47,13 +47,13 @@ _assert_denied() {
 
 # Each MCP family: one smoke test per CLI redirect
 _assert_denied "mcp__claude_ai_Atlassian__editJiraIssue" "acli" "Jira -> acli"
-_assert_denied "mcp__claude_ai_Gmail__gmail_search_messages" "gws" "Gmail -> gws"
+_assert_denied "mcp__claude_ai_Gmail__gmail_search_messages" "gog gmail" "Gmail -> gog"
 _assert_denied "mcp__claude-in-chrome__read_page" "agent-browser" "claude-in-chrome -> agent-browser"
 _assert_denied "mcp__chrome-devtools__evaluate_script" "agent-browser" "chrome-devtools -> agent-browser"
 _assert_denied "mcp__playwright__browser_navigate" "agent-browser" "playwright -> agent-browser"
 _assert_denied "mcp__blacksmith__list_runs" "gh run" "blacksmith -> gh"
-_assert_denied "mcp__claude_ai_Google_Calendar__list_events" "gws calendar" "Calendar -> gws"
-_assert_denied "mcp__claude_ai_Google_Drive__files_list" "gws drive" "Drive -> gws"
+_assert_denied "mcp__claude_ai_Google_Calendar__list_events" "gog calendar" "Calendar -> gog"
+_assert_denied "mcp__claude_ai_Google_Drive__files_list" "gog drive" "Drive -> gog"
 _assert_denied "mcp__claude_ai_Buildkite_read-only__list" "bk" "Buildkite -> bk"
 _assert_denied "mcp__claude_ai_Box__files_list" "box" "Box -> box"
 _assert_denied "mcp__claude_ai_Microsoft_365__teams" "m365" "M365 -> m365"
@@ -78,4 +78,16 @@ else
   echo "  FAIL  non-MCP tool should silent-pass (exit=$_last_exit)"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: mcp-ban non-MCP passthrough"
+fi
+
+# Migration guard: live guidance should not point agents at the old Workspace CLI.
+old_cli_pattern="\b([g]ws|[g]oogleworkspace[-]cli|@[g]oogleworkspace/cli|Google[ ]Workspace[ ]CLI)\b"
+if rg -n "$old_cli_pattern" "$REPO_ROOT/.claude/hooks/mcp-ban.sh" "$REPO_ROOT/CLAUDE.md" >/tmp/old-workspace-cli-remnants 2>/dev/null; then
+  echo "  FAIL  no old Workspace CLI remnants in live guidance"
+  sed 's/^/    /' /tmp/old-workspace-cli-remnants
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: old Workspace CLI remnants remain"
+else
+  echo "  PASS  no old Workspace CLI remnants in live guidance"
+  PASS=$((PASS + 1))
 fi

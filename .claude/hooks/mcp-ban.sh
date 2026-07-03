@@ -4,7 +4,7 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 
 # PreToolUse: ban verbose MCP servers with CLI alternatives.
 # Jira/Confluence MCP -> acli (https://developer.atlassian.com/cloud/acli)
-# Gmail MCP           -> gws  (https://github.com/googleworkspace/cli)
+# Gmail MCP           -> gog  (https://github.com/openclaw/gogcli)
 #
 # Data: mcp__claude_ai_Atlassian__editJiraIssue averaged 23k chars/call,
 # mcp__claude_ai_Gmail__gmail_search_messages 15k chars/call. CLI output
@@ -48,22 +48,22 @@ case "$tool_name" in
 
   # ── Gmail / Google Workspace ──────────────────────────────────
   mcp__claude_ai_Gmail__gmail_search_messages)
-    msg='Gmail MCP banned. Use: gws gmail users threads list --params (userId:me, q:<query>, maxResults:5) --format json | jq ".threads[] | {id,snippet}". Threads give snippets; messages list returns bare IDs.'
+    msg='Gmail MCP banned. Use: gog gmail search <query> --max 5 --readonly --gmail-no-send --no-input --json. Searches threads and keeps output parseable for agents.'
     ;;
   mcp__claude_ai_Gmail__gmail_read_message)
-    msg='Gmail MCP banned. Use: gws gmail users messages get --params (userId:me, id:<id>, format:metadata, metadataHeaders:[From,Subject,Date]). WARN: format:full returns 80k+ chars (base64 MIME). For body text use format:full then jq .payload.parts[].body.data | base64 -d.'
+    msg='Gmail MCP banned. Use: gog gmail get <messageId> --readonly --gmail-no-send --no-input --json --format metadata --headers From --headers Subject --headers Date. For body text use --format full --wrap-untrusted.'
     ;;
   mcp__claude_ai_Gmail__gmail_list_labels|mcp__claude_ai_Gmail__list_labels)
-    msg='Gmail MCP banned. Use: gws gmail users labels list --params (userId:me).'
+    msg='Gmail MCP banned. Use: gog gmail labels list --readonly --gmail-no-send --no-input --json.'
     ;;
   mcp__claude_ai_Gmail__gmail_get_profile)
-    msg='Gmail MCP banned. Use: gws gmail users getProfile --params (userId:me).'
+    msg='Gmail MCP banned. Use: gog me --readonly --no-input --json.'
     ;;
   mcp__claude_ai_Gmail__create_draft|mcp__claude_ai_Gmail__create_label|mcp__claude_ai_Gmail__list_drafts|mcp__claude_ai_Gmail__get_thread|mcp__claude_ai_Gmail__search_threads|mcp__claude_ai_Gmail__label_message|mcp__claude_ai_Gmail__label_thread|mcp__claude_ai_Gmail__unlabel_message|mcp__claude_ai_Gmail__unlabel_thread)
-    msg='Gmail MCP banned. Use gws (https://github.com/googleworkspace/cli). Schema: gws schema gmail.users.<resource>.<method>.'
+    msg='Gmail MCP banned. Use gog gmail commands. Discover commands with: gog gmail --help or gog schema --json.'
     ;;
   mcp__claude_ai_Gmail__*)
-    msg='Gmail MCP banned. Use gws (https://github.com/googleworkspace/cli). Install: brew install googleworkspace/tap/gws.'
+    msg='Gmail MCP banned. Use gog. Install: brew install gogcli. Auth: gog auth setup.'
     ;;
 
   # ── Browser automation (Playwright / Chrome DevTools / claude-in-chrome) ──
@@ -112,26 +112,26 @@ case "$tool_name" in
     msg='Blacksmith MCP banned. Use gh CLI (GitHub Actions API covers it). gh run/cache/api.'
     ;;
 
-  # ── Google Calendar (via gws) ──
+  # ── Google Calendar (via gog) ──
   mcp__claude_ai_Google_Calendar__list_events)
-    msg='Calendar MCP banned. Use: gws calendar events list --params (calendarId:primary, timeMin:<ISO>, maxResults:10) --format json | jq ".items[]|{id,summary,start}".'
+    msg='Calendar MCP banned. Use: gog calendar events primary --readonly --no-input --json --from <ISO> --max 10.'
     ;;
   mcp__claude_ai_Google_Calendar__create_event)
-    msg='Calendar MCP banned. Use: gws calendar events insert --params (calendarId:primary) --json <event-body-json>.'
+    msg='Calendar MCP banned. Use: gog calendar create primary --no-input --json --summary <title> --from <start> --to <end>.'
     ;;
   mcp__claude_ai_Google_Calendar__get_event|mcp__claude_ai_Google_Calendar__update_event|mcp__claude_ai_Google_Calendar__delete_event|mcp__claude_ai_Google_Calendar__respond_to_event)
-    msg='Calendar MCP banned. Use: gws calendar events (get|patch|delete) --params (calendarId:primary, eventId:<id>).'
+    msg='Calendar MCP banned. Use: gog calendar event primary <eventId>, gog calendar update primary <eventId>, or gog calendar delete primary <eventId>.'
     ;;
   mcp__claude_ai_Google_Calendar__list_calendars|mcp__claude_ai_Google_Calendar__suggest_time)
-    msg='Calendar MCP banned. Use: gws calendar calendarList list or gws calendar freeBusy query.'
+    msg='Calendar MCP banned. Use: gog calendar calendars --readonly --json or gog calendar freebusy primary --readonly --json --from <ISO> --to <ISO>.'
     ;;
   mcp__claude_ai_Google_Calendar__*)
-    msg='Calendar MCP banned. Use gws calendar. Schema: gws schema calendar.events.<method>.'
+    msg='Calendar MCP banned. Use gog calendar. Discover commands with: gog calendar --help or gog schema --json.'
     ;;
 
-  # ── Google Drive (via gws) ──
+  # ── Google Drive (via gog) ──
   mcp__claude_ai_Google_Drive__*)
-    msg='Drive MCP banned. Use: gws drive files list --params (q:<query>, pageSize:10, fields:files(id,name,mimeType)) --format json. Get content: gws drive files get --params (fileId:<id>, alt:media).'
+    msg='Drive MCP banned. Use: gog drive search <query> --max 10 --readonly --no-input --json. Get metadata: gog drive get <fileId> --readonly --json. Get content: gog drive download <fileId> --out - --readonly.'
     ;;
 
   # ── Buildkite → bk CLI ──
