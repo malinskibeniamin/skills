@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.23.0
+
+2026-07-03 -- Incorporate current mattpocock/skills WIP surfaces. Renames `/to-prd` to `/to-spec` and `/to-issues` to `/to-tickets` across live skill references, vendors `/wizard`, `/loop-me`, and `/claude-handoff`, and hardens `/wayfinder` handoff claim rechecks before showing the frontier. Skills 85 -> 88.
+
 ## 4.22.0
 
 2026-07-03 -- Add dedicated `/wayfinder` eval coverage and tighten tracker-operation guidance. Verifies map-as-index, name-based references, first-write claims, one-ticket sessions, answer/assets storage, fog boundaries, GitHub/GitLab/local blocking and frontier mechanics, plus setup guidance for Wayfinding operations. Keeps skill count at 85.

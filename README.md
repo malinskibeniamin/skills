@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.22.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.23.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -548,7 +548,7 @@ CLAUDE.md is read-every-turn context -- costs tokens AND is probabilistic. Claud
 <details>
 <summary><strong>Why not just use obra/superpowers?</strong></summary>
 
-We do -- many lifecycle patterns (TDD red/green, grill-with-docs/domain-modeling, writing-great-skills) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-prd, to-issues, git-guardrails) are listed under "Community Skills" for install.
+We do -- many lifecycle patterns (TDD red/green, grill-with-docs/domain-modeling, writing-great-skills) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-spec, to-tickets, git-guardrails) are listed under "Community Skills" for install.
 </details>
 
 <details>
@@ -618,6 +618,11 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/upgrade-dependency`** | Plan and safely apply dependency upgrades. Builds upgrade path first, applies safe patch/minor updates, creates issues for risky majors or unclear migrations. |
 | **`/aip`** | Design resource-oriented protobuf APIs with Google AIP rules, standard methods, LROs, pagination, filters, field masks, etags, and singleton patterns. |
 | **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
+| **`/claude-handoff`** | Launch a named Claude background agent with a redacted handoff prompt. |
+| **`/wizard`** | Generate an interactive bash wizard for third-party setup, one-off migration, or manual state transition. |
+| **`/loop-me`** | Grill recurring life/work loops into implementation-ready workflow specs. |
+| **`/to-spec`** | Synthesize current context into a tracker-published spec. |
+| **`/to-tickets`** | Break a spec or plan into blocked vertical-slice tickets. |
 | **`/writing-great-skills`** | Reference for writing and editing predictable, low-no-op skills. |
 
 <details>
@@ -728,7 +733,7 @@ It should check that components use --color-* CSS variables instead of raw hex v
 | Skill | What bundles |
 |---|---|
 | **`/frontend-starter-kit`** | All setup skills + workflow skills. Full bootstrap new project. |
-| **`/work-automation-kit`** | Planning skills -- PRD creation, issue breakdown, project management. |
+| **`/work-automation-kit`** | Planning skills -- spec creation, ticket breakdown, project management. |
 | **`/redpanda-frontend-kit`** | frontend-starter-kit + Redpanda-specific registry workflow. |
 | **`/codex-compat`** | Generate `.codex/hooks.json` + `AGENTS.md` for OpenAI Codex compatibility. |
 
@@ -1046,7 +1051,7 @@ graph TD
     style RT fill:#c9f,stroke:#333,color:#000
 ```
 
-- **frontend-starter-kit** -- Complete frontend stack in one command: all setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing, UX copy) + workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + optional community workflow skills (PRD, QA, DDD glossary, git guardrails). `console.*` fully covered by Biome's `noConsole`.
+- **frontend-starter-kit** -- Complete frontend stack in one command: all setup skills (toolchain, Biome, quality gate, LLM optimization, React Compiler, zustand, accessibility, React rules, env validation, conventional commits, react-doctor, TanStack Router, Connect Query, e2e testing, UX copy) + workflow skills (TDD, triage, architecture, refactoring, design, grilling, skill authoring) + optional community workflow skills (specs, QA, DDD glossary, git guardrails). `console.*` fully covered by Biome's `noConsole`.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -1058,7 +1063,7 @@ graph TD
   bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
   ```
 
-- **work-automation-kit** -- Project planning + management workflow skills: PRD creation, implementation planning, issue breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.
+- **work-automation-kit** -- Project planning + management workflow skills: spec creation, implementation planning, ticket breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.
 
   ```
   bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claude-code -y
@@ -1227,12 +1232,12 @@ Reduce token usage + context waste.
 Skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement vendored ones. Install individually if need:
 
 ```bash
-bunx skills@latest add mattpocock/skills/to-prd --agent claude-code -y            # PRD via interview
-bunx skills@latest add mattpocock/skills/to-issues --agent claude-code -y         # PRD -> GitHub issues with blocking
+bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y            # spec synthesis
+bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y         # spec/plan -> tracker tickets with blockers
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-prd`, `to-issues`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`, `wayfinder`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
+**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `claude-handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`, `wayfinder`, `wizard`, `loop-me`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 
