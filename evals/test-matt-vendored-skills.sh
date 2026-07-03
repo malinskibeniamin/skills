@@ -69,7 +69,8 @@ if grep -RInE '/to-prd|/to-issues|to-prd|to-issues' \
   --exclude-dir=.git \
   --exclude='CHANGELOG.md' \
   --exclude='*.json' \
-  --exclude='test-matt-vendored-skills.sh' >/dev/null; then
+  --exclude='test-matt-vendored-skills.sh' \
+  --exclude='test-matt-wip-skills.sh' >/dev/null; then
   echo "  FAIL  live docs and skills use to-spec/to-tickets naming"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: live docs still reference to-prd/to-issues"
