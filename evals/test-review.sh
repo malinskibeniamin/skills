@@ -9,6 +9,9 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "review description uses trigg
 run_content_eval "$SKILL_DIR/SKILL.md" "REFERENCE.md" "review SKILL.md references one-level details"
 run_content_eval "$REF" "Report schema" "review reference has detailed schema"
 run_content_eval "$REF" "Example inline comment" "review reference has concrete example"
+run_content_eval "$REF" "smell baseline" "review reference has Fowler smell baseline"
+run_content_eval "$REF" "Mysterious Name" "review reference includes Mysterious Name smell"
+run_content_eval "$REF" "Speculative Generality" "review reference includes Speculative Generality smell"
 review_skill_lines=$(wc -l < "$SKILL_DIR/SKILL.md" | tr -d ' ')
 if [ "$review_skill_lines" -lt 100 ]; then
   echo "  PASS  review SKILL.md under 100 lines"
