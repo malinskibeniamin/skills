@@ -4,7 +4,7 @@
 
 ## 4.23.0
 
-2026-07-03 -- Incorporate current mattpocock/skills WIP surfaces. Renames `/to-prd` to `/to-spec` and `/to-issues` to `/to-tickets` across live skill references, vendors `/wizard`, `/loop-me`, and `/claude-handoff`, and hardens `/wayfinder` handoff claim rechecks before showing the frontier. Skills 85 -> 88.
+2026-07-03 -- Incorporate current mattpocock/skills WIP surfaces. Renames `/to-prd` to `/to-spec` and `/to-issues` to `/to-tickets` across live skill references, vendors `/wizard`, `/loop-me`, and `/claude-handoff`, and hardens `/wayfinder` handoff claim rechecks before showing the frontier. Skills 85 -> 88. Migrate Google Workspace MCP-deny guidance from the older Workspace CLI to `gog`/`gogcli`. Updates live agent quick-ref copy, mcp-ban redirect messages for Gmail, Calendar, and Drive, and eval coverage so Google Workspace hints stay on `gog` and do not regress.
 
 ## 4.22.0
 
@@ -112,7 +112,7 @@ Semver: major = breaking, minor = new skill/hook/feature, patch = bug fix.
 
 ## 4.4.0
 
-2026-04-21 -- Wired mcp-ban.sh into PreToolUse (`mcp__.*` matcher) across .claude/settings.json, .codex/hooks.json, and skill-manifest.json. Hook previously existed but was never registered -- MCP calls slipped past the deny list. Denies verbose MCP tools (Jira, Gmail, browser, Blacksmith, Calendar, Drive, Buildkite, Box, M365) with CLI-equivalent redirect hints (acli, gws, agent-browser, gh, bk, box, m365). Saves ~20x tokens per call. Eval harness updated to check both Claude + Codex configs. 17/17 pass.
+2026-04-21 -- Wired mcp-ban.sh into PreToolUse (`mcp__.*` matcher) across .claude/settings.json, .codex/hooks.json, and skill-manifest.json. Hook previously existed but was never registered -- MCP calls slipped past the deny list. Denies verbose MCP tools (Jira, Gmail, browser, Blacksmith, Calendar, Drive, Buildkite, Box, M365) with CLI-equivalent redirect hints (acli, gog, agent-browser, gh, bk, box, m365). Saves ~20x tokens per call. Eval harness updated to check both Claude + Codex configs. 17/17 pass.
 
 ## 4.3.2
 
