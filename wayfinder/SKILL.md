@@ -77,3 +77,9 @@ Do not chart what you cannot yet see. Fog is for suspected questions or risks th
 5. Add newly surfaced tickets and blocking edges; clear graduated Fog so each fact lives in one place.
 
 Expect other sessions to edit the tracker concurrently; read current tracker state before writing.
+
+## Handoff
+
+Recheck your claims first. Before showing the frontier, reread the resolution answer, Decisions-so-far gist, linked assets, and tracker state. Fix any stale or unsupported claim before asking the human to act on the next tickets.
+
+End with copy-pasteable next steps: one command for the next recommended ticket, plus one pinned command per open, unblocked, unclaimed frontier ticket when parallel sessions are safe.

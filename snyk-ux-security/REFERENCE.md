@@ -515,7 +515,7 @@ internally instead of relying on the user to remember them.
    `NEEDS_GUARDS` means fix or document an explicit accepted risk in
    PR evidence.
 
-2. **`/to-issues` for security debt.**
+2. **`/to-tickets` for security debt.**
    Create or draft issues whenever the sweep leaves follow-up work:
    - missing release age gate;
    - override / resolution / Go replace added;
@@ -726,7 +726,7 @@ expired). Triggered by @<triggerer>.
 
 ## Internal skill gates
 - `/resilience-review`: PASS / NEEDS_GUARDS / BLOCKED -- <summary>
-- `/to-issues`: <n> issue(s) created or drafted for missing release age gate / overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
+- `/to-tickets`: <n> issue(s) created or drafted for missing release age gate / overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
 - `/review`: PASS / BLOCKED -- package.json admission gate, `/steelman`, `/diagnosing-bugs`, and `.snyk` evidence checked
 
 ## Supply-chain gate warnings

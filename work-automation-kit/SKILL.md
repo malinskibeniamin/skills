@@ -1,6 +1,6 @@
 ---
 name: work-automation-kit
-description: Install planning/project management skills -- PRD creation, implementation planning, issue breakdown, bug triage, code review. Use when setup project planning workflows or creating PRDs.
+description: Install planning/project management skills -- spec creation, implementation planning, ticket breakdown, bug triage, code review. Use when setup project planning workflows or creating specs.
 ---
 
 # Work Automation Kit
@@ -10,7 +10,7 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 **Owned** (hook-integrated): brainstorming, grill-with-docs, domain-modeling, triage, diagnosing-bugs, qa
 
-**Matt Pocock/community**: grill-with-docs, prototype, to-prd, to-issues, handoff, writing-great-skills
+**Matt Pocock/community**: grill-with-docs, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
 **Optional**: setup-atlassian-workflow (Jira via acli, opt-in), codex-plugin-cc (cross-model review)
 
