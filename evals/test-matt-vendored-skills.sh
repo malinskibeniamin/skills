@@ -14,7 +14,9 @@ VENDORED=(
   obsidian-vault
   prototype
   resolving-merge-conflicts
+  research
   review
+  wayfinder
   scaffold-exercises
   setup-matt-pocock-skills
   setup-pre-commit
@@ -38,6 +40,19 @@ run_content_eval "$REPO_ROOT/to-prd/SKILL.md" "PRD|requirements" "to-prd skill k
 run_content_eval "$REPO_ROOT/to-issues/SKILL.md" "issue|GitHub" "to-issues skill keeps issue intent"
 run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
 
+
+# Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
+run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research prioritizes primary sources"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "Markdown file" "research writes cited markdown artifact"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "where the repo already keeps" "research follows repo note conventions"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
+run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known literal" "tests.md prevents tautological expected values"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "smell baseline" "review carries Fowler smell baseline"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "Mysterious Name" "review baseline includes Mysterious Name"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "Speculative Generality" "review baseline includes Speculative Generality"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "repo standard always wins|repo overrides" "review baseline defers to repo standards"
 
 # Latest Matt vendoring: review orchestrates local review suite.
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/visual-review" "review invokes visual-review for user-facing surfaces"
@@ -77,6 +92,16 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Major improvement" "review quanti
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Value score: HIGH\\|MEDIUM\\|LOW\\|NONE" "review scores PR value"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/steelman" "review uses steelman when value is unclear"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "low-value" "review filters low-value PRs"
+
+# Latest Matt vendoring: wayfinder.
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "map is an .*index" "wayfinder map is an index"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Refer to maps and tickets by .*name" "wayfinder refers by name"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims by assignment"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "native blocking" "wayfinder prefers native blocking"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Never resolve more than one ticket per session" "wayfinder resolves one ticket per session"
+run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-github.md" "Wayfinding operations" "GitHub tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
 # Latest Matt vendoring: teach workspace.
 run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"

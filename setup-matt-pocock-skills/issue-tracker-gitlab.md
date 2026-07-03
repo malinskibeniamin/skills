@@ -21,3 +21,14 @@ Create a GitLab issue.
 ## When a skill says "fetch the relevant ticket"
 
 Run `glab issue view <number> --comments`.
+
+## Wayfinding operations
+
+Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
+
+- **Map**: create one issue labelled `wayfinder:map`, holding Notes / Decisions-so-far / Fog. On tiers with epics, an epic may hold the map instead; a labelled issue works everywhere.
+- **Child ticket**: create an issue with `Part of #<map>` at the top and labels `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
+- **Blocking**: use GitLab native blocking links when available by posting `/blocked_by #<n>` as a note. If unavailable, fallback to `Blocked by: #<n>, #<n>` at the top of the description.
+- **Frontier query**: list the map's open children, drop any with an open blocker or assignee, and take the first in map order.
+- **Claim**: `glab issue update <n> --assignee @me` before any work.
+- **Resolve**: `glab issue note <n> --message "<answer>"`, then `glab issue close <n>`, then append a context pointer to the map's Decisions-so-far.

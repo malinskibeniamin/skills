@@ -1,6 +1,6 @@
 # Evals for mattpocock/skills v1 taxonomy and renamed skills.
 
-# Upstream v1/v1.0.1 skills that this harness vendors directly.
+# Upstream public skills that this harness vendors directly.
 MATT_V1_SKILLS=(
   ask-ben
   codebase-design
@@ -9,6 +9,8 @@ MATT_V1_SKILLS=(
   grilling
   implement
   resolving-merge-conflicts
+  research
+  wayfinder
   writing-great-skills
 )
 
@@ -44,7 +46,7 @@ for skill in ask-ben grill-me grill-with-docs handoff implement improve-codebase
 done
 
 # Model-invoked reusable skills omit disable-model-invocation.
-for skill in codebase-design diagnosing-bugs domain-modeling grilling resolving-merge-conflicts tdd; do
+for skill in codebase-design diagnosing-bugs domain-modeling grilling research resolving-merge-conflicts tdd wayfinder; do
   if grep -q "^disable-model-invocation:" "$REPO_ROOT/$skill/SKILL.md" 2>/dev/null; then
     echo "  FAIL  $skill should be model-invoked"
     FAIL=$((FAIL + 1))
@@ -65,6 +67,10 @@ run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/codebase-design" "TDD uses codebase
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grill-with-docs" "ask-ben routes planning through grill-with-docs"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/diagnosing-bugs" "ask-ben routes hard bugs to diagnosing-bugs"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/research" "ask-ben routes reading legwork to research"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling has confirmation gate"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD requires agreed test seams"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims tickets by assignment"
 run_content_eval "$REPO_ROOT/writing-great-skills/SKILL.md" "Hunt no-ops|No-op" "writing-great-skills includes no-op hunting guidance"
 run_file_eval "$REPO_ROOT/writing-great-skills/GLOSSARY.md" "writing-great-skills glossary exists"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach includes v1.0.1 reusable assets guidance"

@@ -20,7 +20,7 @@ Use:
 
 Spec source, first found wins: issue refs in commits via `docs/agents/issue-tracker.md`; user path; PRD/spec under `docs/`, `specs/`, `.scratch/`; none -> Spec axis reports "no spec available".
 
-Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `CONTEXT-MAP.md`, scoped `CONTEXT.md`, `docs/adr/`, style docs and config (`biome`, `eslint`, `tsconfig`, `prettier`, `.editorconfig`).
+Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `CONTEXT-MAP.md`, scoped `CONTEXT.md`, `docs/adr/`, style docs and config (`biome`, `eslint`, `tsconfig`, `prettier`, `.editorconfig`). Always include the Fowler smell baseline from `REFERENCE.md`; repo standards override it.
 
 ## Parallel review hats
 
