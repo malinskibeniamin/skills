@@ -16,6 +16,7 @@ VENDORED=(
   resolving-merge-conflicts
   research
   review
+  wayfinder
   scaffold-exercises
   setup-matt-pocock-skills
   setup-pre-commit
@@ -91,6 +92,16 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Major improvement" "review quanti
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Value score: HIGH\\|MEDIUM\\|LOW\\|NONE" "review scores PR value"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/steelman" "review uses steelman when value is unclear"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "low-value" "review filters low-value PRs"
+
+# Latest Matt vendoring: wayfinder.
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "map is an .*index" "wayfinder map is an index"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Refer to maps and tickets by .*name" "wayfinder refers by name"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims by assignment"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "native blocking" "wayfinder prefers native blocking"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Never resolve more than one ticket per session" "wayfinder resolves one ticket per session"
+run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-github.md" "Wayfinding operations" "GitHub tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
 # Latest Matt vendoring: teach workspace.
 run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"
