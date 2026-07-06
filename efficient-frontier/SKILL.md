@@ -6,7 +6,7 @@ description: Use when a high-cost frontier model should delegate bounded researc
 # Efficient Frontier
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` for the full upstream workflow.
+Read `references/builder-upstream.md` for the full workflow.
 
 Use the expensive frontier model where marginal judgment matters. Push repeatable, bounded, or token-heavy work to cheaper/faster subagents.
 

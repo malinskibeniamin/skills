@@ -6,7 +6,6 @@ description: Turn text plans into interactive Agent-Native visual plans with dia
 # Visual Plan
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io Agent-Native visual plans.
 Local override: translate upstream `npx @agent-native/core` examples to `bunx @agent-native/core`.
 
 ## Required references

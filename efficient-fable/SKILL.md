@@ -6,7 +6,7 @@ description: Use when Claude Fable should orchestrate codebase-heavy work while 
 # Efficient Fable
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` for the full orchestration notes.
+Read `references/builder-upstream.md` for deeper orchestration notes.
 
 Use Fable as orchestrator, architect, synthesizer, and final judge. Use cheaper subagents for bounded research, coding, testing, log reduction, and repetitive edits.
 

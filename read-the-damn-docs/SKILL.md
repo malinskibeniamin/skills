@@ -6,7 +6,7 @@ description: Use for third-party APIs, libraries, frameworks, CLIs, cloud servic
 # Read The Damn Docs
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` for the complete docs-first trigger list.
+Read `references/builder-upstream.md` for the complete docs-first trigger list.
 
 Do not guess where authoritative docs can answer the question.
 
