@@ -554,7 +554,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Product naming" "REFERENCE covers pr
 
 run_content_eval "$SKILL_DIR/GLOSSARY.md" "Admin API" "GLOSSARY has Admin API"
 run_content_eval "$SKILL_DIR/GLOSSARY.md" "Schema Registry" "GLOSSARY has Schema Registry"
-run_content_eval "$SKILL_DIR/GLOSSARY.md" "ubiquitous-language" "GLOSSARY references DDD skill"
+run_content_eval "$SKILL_DIR/GLOSSARY.md" "grill-with-docs|domain-modeling" "GLOSSARY references active DDD skills"
 
 # ── prose-style-check.sh ────────────────────────────────────────
 

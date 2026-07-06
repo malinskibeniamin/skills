@@ -84,3 +84,7 @@ run_content_eval "$REPO_ROOT/setup-e2e-testing/SKILL.md" "/read-the-damn-docs" "
 run_content_eval "$REPO_ROOT/setup-react-compiler/SKILL.md" "/read-the-damn-docs" "setup-react-compiler reads current compiler docs"
 run_content_eval "$REPO_ROOT/setup-tanstack-router/SKILL.md" "/read-the-damn-docs" "setup-tanstack-router reads current router docs"
 run_content_eval "$REPO_ROOT/setup-connect-query/SKILL.md" "/read-the-damn-docs" "setup-connect-query reads current Connect docs"
+
+run_content_eval "$REPO_ROOT/research/SKILL.md" "durable research artifact|Markdown research artifact|cited Markdown file" "research owns durable research artifacts"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "Do not use.*quick official docs lookup|quick docs lookup.*read-the-damn-docs|quick official fact" "research defers quick docs lookups"
+run_content_eval "$REPO_ROOT/read-the-damn-docs/SKILL.md" "quick official fact check|without creating a research artifact|no research artifact" "read-the-damn-docs owns quick official fact checks"

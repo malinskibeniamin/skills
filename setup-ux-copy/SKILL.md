@@ -83,7 +83,7 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`):
 - `.claude/hooks/prose-style-check.sh`
 
 ### 3. Copy glossary (optional, for DDD)
-Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pair with `ubiquitous-language` community skill.
+Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pair with `/grill-with-docs` and `/domain-modeling` for project-wide terminology work.
 
 ### 4. Verify
 - [ ] Hook blocks `"Something!"` in string literals

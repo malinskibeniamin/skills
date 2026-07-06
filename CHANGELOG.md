@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.26.0
+
+2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review skills; remove legacy Matt/local sediment; and tighten research/docs boundaries. Adds PR reviewability guidance plus concise authored-commit status and weekly summary workflows for concrete date ranges; removes /domain-model, /qa, /request-refactor-plan, /design-an-interface, and /ubiquitous-language in favor of /grill-with-docs, /domain-modeling, /triage, /improve-codebase-architecture, and /prototype; and clarifies /research as durable cited artifacts while /read-the-damn-docs owns quick official fact checks. Skills 98 -> 96.
+
 ## 4.25.0
 
 2026-07-06 -- Vendor Builder.io skill suite and wire it through the harness. Adds direct /visual-plan, /visual-recap, /agent-watchdog, /efficient-fable, /efficient-frontier, /plan-arbiter, /plow-ahead, /quick-recap, /read-the-damn-docs, and /stay-within-limits skills; keeps Agent-Native visual plan/recap upstream content in references; adds sync automation for visual references; strengthens /visual-review with plan/recap artifacts; and routes swarm, planning, architecture, spec, ticketing, research, review, PR, routines, handoff, debugging, resilience, TDD, and lifecycle skills through the new helpers. Skills 88 -> 98.

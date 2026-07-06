@@ -8,7 +8,7 @@ description: Use for third-party APIs, libraries, frameworks, CLIs, cloud servic
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Read `references/builder-upstream.md` for the complete docs-first trigger list.
 
-Do not guess where authoritative docs can answer the question.
+Do not guess where authoritative docs can answer the question. This is the quick official fact check path, usually without creating a research artifact. Use `/research` only when the output needs a durable cited Markdown report or multi-source synthesis.
 
 ## Required workflow
 

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Thin wrapper around Vercel's agent-browser for the skills harness.
-# Invoked by /qa, /go phase 4 browser smoke, and any skill that needs
+# Invoked by /go phase 4 browser smoke and any skill that needs
 # AI-visible browser state (NOT Playwright test code -- those keep
 # using @playwright/test directly).
 #

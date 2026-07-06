@@ -21,7 +21,7 @@ Bug report
 
 Issue management
   -> /triage -- triage via state machine (GitHub via gh, Jira via acli)
-  -> /qa -- interactive QA session -> auto-file issues
+  -> /triage -- interactive intake -> auto-file issues
 
 Design decision
   -> /brainstorming -- explore approaches + challenge decisions
@@ -40,12 +40,12 @@ Quick question (on a specific decision)
 |---|---|---|
 | Testing | tdd | -- |
 | Debugging | diagnosing-bugs | -- |
-| Triage | triage, qa | -- |
+| Triage | triage | -- |
 | Planning | development-lifecycle (plan phase) | to-spec, to-tickets |
 | Review | development-lifecycle (review phase) | -- |
-| Design | brainstorming, design-an-interface | -- |
-| Architecture | improve-codebase-architecture, request-refactor-plan | -- |
-| DDD | grill-with-docs, domain-modeling | ubiquitous-language |
+| Design | brainstorming, prototype | -- |
+| Architecture | improve-codebase-architecture | -- |
+| DDD | grill-with-docs, domain-modeling | -- |
 | Meta | writing-great-skills, grill-me, ask-ben | git-guardrails |
 
 Owned skills ship with repo. "Community" skills install from mattpocock/skills.

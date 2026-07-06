@@ -7,9 +7,9 @@ Before `/commit-push-pr`, one review skill must run in session:
 - `/simplify` -- small fixes/tweaks
 - `/ponytail-review` -- complexity-only delete/stdlib/native/YAGNI pass
 - `/deslop` -- liability certainty gate; runs `/simplify` and `/ponytail-review` first
-- `/improve-codebase-architecture` -- refactors (prefer this; `/request-refactor-plan` is deprecated)
+- `/improve-codebase-architecture` -- refactors and architecture plans
 - `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
-- `/prototype` -- redesign module or layout (prefer this; `/design-an-interface` is deprecated)
+- `/prototype` -- redesign module or layout
 - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs
 
 Frontend or customer-facing surface diff -> `/visual-review` must run or an explicit skip reason must be recorded, even if another review skill already ran.
@@ -103,7 +103,7 @@ Frontend or customer-facing surface detected -> **require `/visual-review` resul
 **Capture before/after:**
 
 - `/visual-review` already ran this session -> reuse its checked views, screenshots, findings, and skip reasons
-- `/triage` already ran this session -> reuse captured refs/screenshots (`/qa` is deprecated)
+- `/triage` already ran this session -> reuse captured refs/screenshots
 - Else: run `/visual-review`; if user explicitly skips, record reason in PR body
 - Fallback: `scripts/skills-browser.sh screenshot --out /tmp/pr-<view>-after.png` per affected view
 - Before image: prior PR screenshot, main-branch capture, or `<!-- no prior state -->` for new views
