@@ -42,6 +42,8 @@ run_content_eval "$REPO_ROOT/prototype/SKILL.md" "prototype|throwaway|test" "pro
 run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "spec.*PRD|PRD.*spec" "to-spec skill keeps spec/PRD bridge"
 run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/to-tickets" "to-spec hands approved specs to to-tickets"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "ticket|blocking edges" "to-tickets skill keeps ticket intent"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "native sub-issue" "to-tickets prefers native sub-issues when available"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/prototype.*context pointer|context pointer.*/prototype" "to-tickets points to prototype code instead of inlining"
 run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
 
 for retired_skill in to-prd to-issues; do
@@ -94,6 +96,8 @@ run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research prio
 run_content_eval "$REPO_ROOT/research/SKILL.md" "Markdown file" "research writes cited markdown artifact"
 run_content_eval "$REPO_ROOT/research/SKILL.md" "where the repo already keeps" "research follows repo note conventions"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "If a \*fact\* can be found" "grilling looks up facts instead of asking"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
 run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known literal" "tests.md prevents tautological expected values"
@@ -147,6 +151,12 @@ run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Refer to maps and tickets by .
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims by assignment"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "native blocking" "wayfinder prefers native blocking"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Never resolve more than one ticket per session" "wayfinder resolves one ticket per session"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "## Destination" "wayfinder names the destination"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Plan, don't do" "wayfinder is planning-first"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Not yet specified" "wayfinder separates not-yet-specified fog"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Out of scope" "wayfinder tracks out-of-scope work separately"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "If this surfaces no fog" "wayfinder exits early when no map is needed"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "HITL.*AFK|AFK.*HITL" "wayfinder separates HITL and AFK tickets"
 run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-github.md" "Wayfinding operations" "GitHub tracker template includes wayfinding operations"
 run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
 run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
@@ -173,3 +183,8 @@ run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "Top recomm
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "ICA links shared codebase-design skill"
 run_file_eval "$REPO_ROOT/improve-codebase-architecture/HTML-REPORT.md" "ICA HTML report reference exists"
 run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"
+
+# Latest Matt vendoring: writing-great-skills negation failure mode.
+run_content_eval "$REPO_ROOT/writing-great-skills/SKILL.md" "Negation" "writing-great-skills names negation failure mode"
+run_content_eval "$REPO_ROOT/writing-great-skills/GLOSSARY.md" "### Negation" "writing-great-skills glossary defines negation"
+run_content_eval "$REPO_ROOT/writing-great-skills/GLOSSARY.md" "prompt the \*\*positive\*\*" "writing-great-skills cures negation with positive prompt"
