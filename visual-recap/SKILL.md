@@ -6,7 +6,6 @@ description: Turn a PR, branch, commit, or diff into an interactive Agent-Native
 # Visual Recap
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io Agent-Native visual recap.
 Local override: translate upstream `npx @agent-native/core` examples to `bunx @agent-native/core`.
 
 ## Required references

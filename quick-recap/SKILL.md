@@ -6,7 +6,7 @@ description: Use when adding or following the red/yellow/green final status bloc
 # Quick Recap
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` for the upstream examples.
+Read `references/builder-upstream.md` for examples.
 
 Make completion state obvious at the end of work.
 

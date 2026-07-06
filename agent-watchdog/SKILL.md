@@ -6,7 +6,7 @@ description: Use when asked to watch, audit, compare, or fix another agent's wor
 # Agent Watchdog
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` when the audit is complex or the source artifact is ambiguous.
+Read `references/builder-upstream.md` when the audit is complex or the source artifact is ambiguous.
 
 ## Modes
 

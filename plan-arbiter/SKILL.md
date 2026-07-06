@@ -6,7 +6,7 @@ description: Use when comparing, cross-reviewing, merging, judging, choosing, or
 # Plan Arbiter
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` for the full judging checklist.
+Read `references/builder-upstream.md` for the judging checklist.
 
 Turn competing plans into one executable direction. Preserve the best ideas, reject weak assumptions, and produce a clear handoff instead of a blended mush.
 

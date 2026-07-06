@@ -6,7 +6,7 @@ description: Use when long-running, high-cost, or parallel agent work must respe
 # Stay Within Limits
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Vendored from Builder.io. Read `references/builder-upstream.md` for the full pause/resume procedure.
+Read `references/builder-upstream.md` for the full pause/resume procedure.
 Local override: translate upstream `npx` examples to `bunx`.
 
 Keep long-running agent work inside current usage windows.

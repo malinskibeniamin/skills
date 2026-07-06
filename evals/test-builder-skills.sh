@@ -19,6 +19,17 @@ for skill in "${BUILDER_SKILLS[@]}"; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "Builder skill exists: $skill"
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^name: $skill$" "Builder skill has matching name: $skill"
   run_content_eval "$PLUGIN" "\./$skill/" "Claude plugin registers Builder skill: $skill"
+
+  if grep -qE "Vendored from Builder\.io|Builder\.io\. Read|Builder\.io Agent-Native" "$REPO_ROOT/$skill/SKILL.md"; then
+    echo "  FAIL  Builder skill avoids origin-label prose: $skill"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: Builder skill has origin-label prose: $skill"
+  else
+    echo "  PASS  Builder skill avoids origin-label prose: $skill"
+    PASS=$((PASS + 1))
+  fi
+
+  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "references/" "Builder skill uses progressive disclosure: $skill"
 done
 
 run_content_eval "$REPO_ROOT/visual-plan/SKILL.md" "Agent-Native|visual plan|references/agent-native-plan.md" "visual-plan keeps Agent-Native plan contract"
