@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.24.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.25.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -600,6 +600,16 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for customer-facing diffs -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
 | **`/deslop`** | Liability certainty gate before commit, push, PR, or merge. Runs `/simplify`, then blocks code lacking product value, defensive correctness, or test confidence. |
 | **`/swarm`** | Parallel executor. Infer lanes from free-form goal, spawn distinct subagents, keep coordinator ownership, and merge results across shared or per-agent worktrees. |
+| **`/stay-within-limits`** | Builder.io usage guard for long or parallel agent waves; checks limits before launching more work. |
+| **`/efficient-frontier`** | Builder.io orchestration pattern: keep judgment with the frontier model, delegate bounded heavy lifting. |
+| **`/efficient-fable`** | Builder.io Fable-specific frontier orchestration. |
+| **`/visual-plan`** | Builder.io Agent-Native interactive plan artifact for reviewable diagrams, file maps, code, and open questions. |
+| **`/visual-recap`** | Builder.io Agent-Native PR/diff recap so reviewers understand what will ship. |
+| **`/agent-watchdog`** | Builder.io watchdog for auditing another agent session, branch, PR, transcript, or completion claim. |
+| **`/plan-arbiter`** | Builder.io arbiter for competing plans from agents, docs, transcripts, or visual plans. |
+| **`/plow-ahead`** | Builder.io autonomy contract for keep-going work that should not pause on routine ambiguity. |
+| **`/quick-recap`** | Builder.io red/yellow/green final status line convention. |
+| **`/read-the-damn-docs`** | Builder.io official-docs-first guard for APIs, SDKs, packages, CLIs, and fast-moving behavior. |
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
 | **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |

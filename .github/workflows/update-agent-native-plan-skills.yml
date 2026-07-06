@@ -1,0 +1,111 @@
+name: Update Agent Native visual skills
+
+on:
+  workflow_dispatch:
+    inputs:
+      sourceSha:
+        description: "Agent Native commit SHA or ref to sync from"
+        required: false
+        type: string
+        default: main
+  repository_dispatch:
+    types: [agent-native-plan-skills-updated]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-agent-native-plan-skills
+  cancel-in-progress: true
+
+env:
+  UPDATE_BRANCH: automation/update-agent-native-plan-skills
+
+jobs:
+  update:
+    name: Refresh visual-plan and visual-recap
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: BuilderIO/agent-native
+          ref: ${{ github.event.client_payload.sourceSha || inputs.sourceSha || 'main' }}
+          path: .agent-native-source
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Run sync:agent-native-plan-skills
+        env:
+          AGENT_NATIVE_FRAMEWORK_PATH: ${{ github.workspace }}/.agent-native-source
+        run: node scripts/sync-agent-native-plan-skills.mjs
+
+      - name: Detect visual skill changes
+        id: diff
+        run: |
+          if git diff --quiet -- visual-plan visual-recap; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check synced visual skills
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          AGENT_NATIVE_FRAMEWORK_PATH: ${{ github.workspace }}/.agent-native-source
+        run: |
+          node scripts/sync-agent-native-plan-skills.mjs --check
+          ./evals/run.sh builder-skills
+          ./evals/run.sh skill-md-hygiene
+
+      - name: Commit update branch
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$UPDATE_BRANCH"
+          git add visual-plan visual-recap
+          git commit -m "chore(skills): update Agent Native visual references"
+          git push --force-with-lease origin "$UPDATE_BRANCH"
+
+      - name: Open or update PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+          SOURCE_REPOSITORY: ${{ github.event.client_payload.sourceRepository || 'BuilderIO/agent-native' }}
+          SOURCE_SHA: ${{ github.event.client_payload.sourceSha || inputs.sourceSha || 'main' }}
+          SOURCE_RUN_URL: ${{ github.event.client_payload.sourceRunUrl }}
+        run: |
+          cat > /tmp/update-visual-skills-pr.md <<PR_BODY
+          This automated PR syncs Agent Native visual-plan and visual-recap upstream references.
+
+          Source:
+          - Repository: \`$SOURCE_REPOSITORY\`
+          - Ref: \`$SOURCE_SHA\`
+          ${SOURCE_RUN_URL:+- Workflow: $SOURCE_RUN_URL}
+
+          Check run before opening/updating this PR:
+          - \`node scripts/sync-agent-native-plan-skills.mjs --check\`
+          - \`./evals/run.sh builder-skills\`
+          - \`./evals/run.sh skill-md-hygiene\`
+          PR_BODY
+
+          pr_number="$(gh pr list --head "$UPDATE_BRANCH" --state open --json number --jq '.[0].number // ""')"
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" \
+              --title "chore(skills): update Agent Native visual references" \
+              --body-file /tmp/update-visual-skills-pr.md
+          else
+            gh pr create \
+              --base "$BASE_BRANCH" \
+              --head "$UPDATE_BRANCH" \
+              --title "chore(skills): update Agent Native visual references" \
+              --body-file /tmp/update-visual-skills-pr.md
+          fi

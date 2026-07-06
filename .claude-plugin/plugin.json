@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks across 108 scripts enforce patterns on every edit. Green != done: `test-warning-check` hard-blocks warnings on passing test/lint/type runs (DeprecationWarning, React `act()`, unhandled rejection, `@ts-ignore`); `ci-warning-audit` Stop-hook scans `gh run view --log` on green CI for deprecations / console warnings / skipped tests. 88 skills from TDD through CI-green PR, including /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /steelman anti-sycophancy guard, /upgrade-dependency safe dependency upgrades, and /snyk-ux-security per-path vuln sweep (JS + Go ecosystems; exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep bump second, resolutions/overrides/replace as last resort only with follow-up TODO to remove; React 18 pin + changelog-walked major bumps + no-deferral escalation; Go `snyk test --file=go.mod` + `go get -u` + `go mod tidy` + `govulncheck` verify). Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. bun.lock + yarn.lock parity enforced (Snyk IO doesn't parse bun.lock). 21 LLM failure modes enforced: 7 Karpathy single-agent + 14 MAST multi-agent (Cemri et al. NeurIPS 2025). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. MCP ban with CLI redirect (~20x token savings). Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
-  "version": "4.24.0",
+  "description": "React/TypeScript frontend + Go backend enforcement harness. 98 wired hooks across 108 scripts enforce patterns on every edit. Green != done: `test-warning-check` hard-blocks warnings on passing test/lint/type runs (DeprecationWarning, React `act()`, unhandled rejection, `@ts-ignore`); `ci-warning-audit` Stop-hook scans `gh run view --log` on green CI for deprecations / console warnings / skipped tests. 98 skills from TDD through CI-green PR, including /visual-plan, /visual-recap, /agent-watchdog, /plan-arbiter, /plow-ahead, /read-the-damn-docs, /stay-within-limits, plus /aip protobuf API design, /prime startup briefs, /thermo-nuclear-code-quality-review release-blocking PR audits, /resilience-review resilience checks, /steelman anti-sycophancy guard, /upgrade-dependency safe dependency upgrades, and /snyk-ux-security per-path vuln sweep (JS + Go ecosystems; exploitability-triage first gate via `bun why`/`go mod why`/`govulncheck`; top-level direct dep bump first, parent dep bump second, resolutions/overrides/replace as last resort only with follow-up TODO to remove; React 18 pin + changelog-walked major bumps + no-deferral escalation; Go `snyk test --file=go.mod` + `go get -u` + `go mod tidy` + `govulncheck` verify). Session exit blocked while PR review threads remain unresolved. TypeScript escape hatches blocked at Edit. tsconfig strictness weakening blocked. Worktree isolation + branch safety hook-enforced. bun.lock + yarn.lock parity enforced (Snyk IO doesn't parse bun.lock). 21 LLM failure modes enforced: 7 Karpathy single-agent + 14 MAST multi-agent (Cemri et al. NeurIPS 2025). OWASP + STRIDE subset + snyk/bun audit. Core Web Vitals perf gate. MCP ban with CLI redirect (~20x token savings). Agent-browser wrap (~91% token reduction for AI browsing). 3-hat plan review (product/engineering/design). 9 agents (adds plan hats + karpathy reference), 5 routines. Opus 4.7 tuned, POSIX-friendly.",
+  "version": "4.25.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -25,6 +25,7 @@
     "mattpocock-v1"
   ],
   "skills": [
+    "./agent-watchdog/",
     "./aip/",
     "./ask-ben/",
     "./brainstorming/",
@@ -40,6 +41,8 @@
     "./domain-model/",
     "./domain-modeling/",
     "./edit-article/",
+    "./efficient-fable/",
+    "./efficient-frontier/",
     "./extend-harness/",
     "./frontend-skills-stats/",
     "./frontend-starter-kit/",
@@ -56,6 +59,8 @@
     "./loop-me/",
     "./migrate-to-shoehorn/",
     "./obsidian-vault/",
+    "./plan-arbiter/",
+    "./plow-ahead/",
     "./ponytail/",
     "./ponytail-audit/",
     "./ponytail-debt/",
@@ -63,6 +68,8 @@
     "./prime/",
     "./prototype/",
     "./qa/",
+    "./quick-recap/",
+    "./read-the-damn-docs/",
     "./redpanda-frontend-kit/",
     "./request-refactor-plan/",
     "./research/",
@@ -94,6 +101,7 @@
     "./setup-ux-copy/",
     "./setup-zustand/",
     "./snyk-ux-security/",
+    "./stay-within-limits/",
     "./steelman/",
     "./swarm/",
     "./tdd/",
@@ -104,6 +112,8 @@
     "./triage/",
     "./ubiquitous-language/",
     "./upgrade-dependency/",
+    "./visual-plan/",
+    "./visual-recap/",
     "./visual-review/",
     "./wayfinder/",
     "./wizard/",
@@ -135,6 +145,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "4.25.0": "2026-07-06 -- Vendor Builder.io skill suite and wire it through the harness. Adds direct /visual-plan, /visual-recap, /agent-watchdog, /efficient-fable, /efficient-frontier, /plan-arbiter, /plow-ahead, /quick-recap, /read-the-damn-docs, and /stay-within-limits skills; keeps Agent-Native visual plan/recap upstream content in references; adds sync automation for visual references; and routes existing swarm, planning, research, review, PR, and lifecycle skills through the new helpers. Skills 88 -> 98.",
     "4.24.0": "2026-07-06 -- Sync latest mattpocock/skills deltas through upstream 16a2a5c. Updates /wayfinder destination, planning-first, no-fog exit, not-yet-specified/out-of-scope, and HITL/AFK ticket semantics while preserving claim rechecks; updates /to-tickets native sub-issue/blocking-edge guidance and /prototype context pointers; tightens /grilling fact-vs-decision handling; adds the Negation failure mode to /writing-great-skills. Skills remain 88.",
     "4.23.0": "2026-07-03 -- Incorporate current mattpocock/skills WIP surfaces. Renames `/to-prd` to `/to-spec` and `/to-issues` to `/to-tickets` across live skill references, vendors `/wizard`, `/loop-me`, and `/claude-handoff`, and hardens `/wayfinder` handoff claim rechecks before showing the frontier. Skills 85 -> 88.",
     "4.22.0": "2026-07-03 -- Add dedicated /wayfinder eval coverage and tighten tracker-operation guidance. Verifies map-as-index, name-based references, first-write claims, one-ticket sessions, answer/assets storage, fog boundaries, GitHub/GitLab/local blocking and frontier mechanics, plus setup guidance for Wayfinding operations. Keeps skill count at 85.",

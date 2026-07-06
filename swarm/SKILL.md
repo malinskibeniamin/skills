@@ -21,18 +21,20 @@ Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for 
 ## Launch flow
 
 1. Prime fast: inspect current repo state, rules, docs, branch, PR, and active goal when present. Use `/prime` style brief internally.
-2. Choose workspace policy from text:
+2. For long/high-cost swarms, invoke `/stay-within-limits` before the first wave and between waves. Default throttle: at most 3 parallel agents unless the user says otherwise.
+3. Use `/efficient-frontier` under the hood: keep orchestration, integration, and final review with the coordinator; delegate bounded repo search, implementation, test, and log-reduction lanes.
+4. Choose workspace policy from text:
    - Default: same branch/worktree/PR.
    - If user asks separate, isolated, or per-agent worktrees: create one worktree/branch per lane.
    - If conflict risk is high: split or serialize writes; say why in manifest.
-3. Draft a tiny swarm manifest, then launch immediately:
+5. Draft a tiny swarm manifest, then launch immediately:
    ```txt
    Swarm manifest
    Policy: shared | worktrees | hybrid
    - swarm-<lane-name>: <mission> | scope: <paths> | skills: </skill...>
    ```
-4. Spawn only distinct lanes. No duplicate or vague agents.
-5. Coordinator keeps critical path local, merges results, resolves conflicting findings, verifies, and closes agents.
+6. Spawn only distinct lanes. No duplicate or vague agents.
+7. Coordinator keeps critical path local, merges results, resolves conflicting findings, verifies, and closes agents.
 
 ## Lane design
 
@@ -55,6 +57,8 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 
 ## Skill composition
 
+- Long/high-cost wave control: `/stay-within-limits` owns usage checks and pause/resume handoffs.
+- Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes start with `/ponytail`; reviewer lanes include `/ponytail-review` before broader review.
 - Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
