@@ -5,6 +5,8 @@ description: Produce a weekly synthesis of authored commits with highlights by b
 
 # Weekly review
 
+Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+
 ## Trigger
 
 Need a weekly recap of shipped work for status updates, retros, or planning.
