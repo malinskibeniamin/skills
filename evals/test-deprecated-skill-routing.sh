@@ -1,17 +1,31 @@
-# Evals for deprecated local skills. Keep installed, discourage auto-use.
+# Evals for removed legacy local/Matt sediment. New skills own these jobs now.
 
-for skill in design-an-interface qa request-refactor-plan ubiquitous-language domain-model; do
-  case "$skill" in
-    design-an-interface) replacement="prototype" ;;
-    qa) replacement="triage" ;;
-    request-refactor-plan) replacement="improve-codebase-architecture" ;;
-    ubiquitous-language) replacement="grill-with-docs" ;;
-    domain-model) replacement="grill-with-docs" ;;
-  esac
-  run_file_eval "$REPO_ROOT/$skill/SKILL.md" "deprecated/legacy skill kept: $skill"
-  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "DEPRECATED|LEGACY" "$skill marked deprecated or legacy"
-  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "$replacement" "$skill points to replacement $replacement"
-  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "explicitly" "$skill requires explicit user request"
+LEGACY_SKILLS=(
+  design-an-interface
+  qa
+  request-refactor-plan
+  ubiquitous-language
+  domain-model
+)
+
+for skill in "${LEGACY_SKILLS[@]}"; do
+  if [ -e "$REPO_ROOT/$skill" ]; then
+    echo "  FAIL  legacy skill directory removed: $skill"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: legacy skill directory still exists: $skill"
+  else
+    echo "  PASS  legacy skill directory removed: $skill"
+    PASS=$((PASS + 1))
+  fi
+
+  if grep -qF "./$skill/" "$REPO_ROOT/.claude-plugin/plugin.json" "$REPO_ROOT/.codex-plugin/plugin.json"; then
+    echo "  FAIL  legacy skill not registered in plugins: $skill"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: legacy skill still registered in plugin metadata: $skill"
+  else
+    echo "  PASS  legacy skill not registered in plugins: $skill"
+    PASS=$((PASS + 1))
+  fi
 done
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/grill-with-docs" "lifecycle prefers grill-with-docs"
@@ -21,3 +35,18 @@ run_content_eval "$REPO_ROOT/commit-push/SKILL.md" "/prototype" "commit-push rec
 run_content_eval "$REPO_ROOT/commit-push/SKILL.md" "/improve-codebase-architecture" "commit-push recommends architecture skill over refactor-plan"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/triage" "commit-push-pr recommends triage over qa"
+
+_live_refs=$(rg -n "/(design-an-interface|qa|request-refactor-plan|ubiquitous-language|domain-model)\b|mattpocock/skills/ubiquitous-language|malinskibeniamin/skills/(design-an-interface|qa|request-refactor-plan)" "$REPO_ROOT" \
+  --glob '!CHANGELOG.md' \
+  --glob '!docs/**' \
+  --glob '!evals/**' \
+  --glob '!domain-modeling/**' || true)
+if [ -n "$_live_refs" ]; then
+  echo "  FAIL  live docs do not route to removed legacy skills"
+  printf '%s\n' "$_live_refs" | sed 's/^/        /'
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: live docs still route to removed legacy skills"
+else
+  echo "  PASS  live docs do not route to removed legacy skills"
+  PASS=$((PASS + 1))
+fi

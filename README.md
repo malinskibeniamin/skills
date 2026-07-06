@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.25.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.26.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -132,10 +132,7 @@ bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/codex-compat --agent claude-code -y
 ```
@@ -603,6 +600,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/stay-within-limits`** | Builder.io usage guard for long or parallel agent waves; checks limits before launching more work. |
 | **`/efficient-frontier`** | Builder.io orchestration pattern: keep judgment with the frontier model, delegate bounded heavy lifting. |
 | **`/efficient-fable`** | Builder.io Fable-specific frontier orchestration. |
+| **`/make-pr-easy-to-review`** | Prepare or tidy PRs for reviewer clarity without code behavior changes. |
 | **`/visual-plan`** | Builder.io Agent-Native interactive plan artifact for reviewable diagrams, file maps, code, and open questions. |
 | **`/visual-recap`** | Builder.io Agent-Native PR/diff recap so reviewers understand what will ship. |
 | **`/agent-watchdog`** | Builder.io watchdog for auditing another agent session, branch, PR, transcript, or completion claim. |
@@ -610,6 +608,8 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/plow-ahead`** | Builder.io autonomy contract for keep-going work that should not pause on routine ambiguity. |
 | **`/quick-recap`** | Builder.io red/yellow/green final status line convention. |
 | **`/read-the-damn-docs`** | Builder.io official-docs-first guard for APIs, SDKs, packages, CLIs, and fast-moving behavior. |
+| **`/weekly-review`** | Cursor Team Kit weekly synthesis: authored commits grouped into highlights plus bugfix/debt/net-new classification. |
+| **`/what-did-i-get-done`** | Cursor Team Kit commit-summary skill: concise status update from authored commits over a concrete date range. |
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
 | **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
@@ -620,9 +620,6 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/grill-me`** | **Grill, no docs.** 3 reviewer hats (product/eng/design) in parallel, fast. Skip when decision isn't worth writing down. Standalone alt to `/grill-with-docs`. |
 | **`/triage`** | Triage issues via state machine (GitHub via `gh` or Jira via `acli`). Grill sessions, agent briefs, out-of-scope KB. Bug-investigation mode produces a TDD fix plan and files the ticket. |
 | **`/diagnosing-bugs`** | Hard bug or perf regression. Six-phase loop: build feedback loop -> reproduce -> hypothesise (3-5 ranked) -> instrument -> fix + regression test -> cleanup + post-mortem. |
-| **`/qa`** | Interactive QA session. Describe bugs conversationally, agent explore codebase in background, auto-file GitHub issues. |
-| **`/design-an-interface`** | Design API or module. Spawn 3+ agents generate radically different designs. |
-| **`/request-refactor-plan`** | Plan refactor. Interview you, break into tiny safe commits, file RFC issue. |
 | **`/resolve-pr-feedback`** | Address PR reviews. Fetch unresolved threads, triage, fix, reply, resolve. Used by Phase 5b. |
 | **`/improve-codebase-architecture`** | Find architectural improvements. Identify shallow modules, propose deep-module refactors. |
 | **`/upgrade-dependency`** | Plan and safely apply dependency upgrades. Builds upgrade path first, applies safe patch/minor updates, creates issues for risky majors or unclear migrations. |
@@ -678,21 +675,10 @@ We're planning to use TanStack Query with a 5-minute stale time.
 Build the feedback loop first.
 ```
 
-**`/qa`** -- interactive bug report session:
-```
-/qa -- I've been testing the settings page and found a few issues. Let me walk you through them.
-```
-
 
 **`/grill-me`** -- light stress-test (no DDD docs):
 ```
 /grill-me on the data fetching strategy for the new dashboard feature.
-```
-
-**`/design-an-interface`** -- compare API shapes:
-```
-/design-an-interface for a notification system module.
-Must support email, Slack, and in-app channels with retry and rate limiting.
 ```
 
 **`/triage`** -- investigate a bug and file a ticket with a TDD fix plan:
@@ -706,12 +692,6 @@ It started after the last release. Check rendering and route transitions.
 /resolve-pr-feedback 123
 ```
 or just `/resolve-pr-feedback` to auto-detect PR from current branch.
-
-**`/request-refactor-plan`** -- plan safe refactor:
-```
-/request-refactor-plan -- extract the auth logic from the monolithic UserService
-into a standalone AuthService. Must be backwards-compatible during migration.
-```
 
 **`/improve-codebase-architecture`** -- find opportunities:
 ```
@@ -1028,10 +1008,9 @@ graph TD
         TDD[tdd]
         DM[grill-with-docs]
         GM[grill-me]
-        DAI[design-an-interface]
+        PROTO[prototype]
         TR[triage]
         DIAG[diagnosing-bugs]
-        QA[qa]
         RPF[resolve-pr-feedback]
     end
 
@@ -1247,7 +1226,7 @@ bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y      
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `claude-handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`, `wayfinder`, `wizard`, `loop-me`. Deprecated but kept: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
+**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `claude-handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`, `wayfinder`, `wizard`, `loop-me`. Removed legacy sediment: `domain-model`, `qa`, `request-refactor-plan`, `design-an-interface`, `ubiquitous-language` in favor of `grill-with-docs`, `domain-modeling`, `triage`, `improve-codebase-architecture`, and `prototype`. Removed upstream-deleted: `caveman`, `zoom-out`, `write-a-skill`; `/diagnose` is now `/diagnosing-bugs`.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 

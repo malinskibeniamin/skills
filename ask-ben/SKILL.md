@@ -8,8 +8,6 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Use this when you forget which local skill fits Ben's work. Default: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
 Routes: product -> `/development-lifecycle`/`/work` -> `/go`; bugs -> `/diagnosing-bugs` + `/tdd`; planning -> `/grill-with-docs`/`/wayfinder`/`/grill-me`; specs -> `/to-spec` -> `/to-tickets`; review -> `/review`/`/thermo-nuclear-code-quality-review`; UI/resilience -> `/visual-review`/`/resilience-review`; parallel -> `/swarm`.
 Builder.io skills are both direct commands and under-the-hood helpers: `/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/efficient-fable`, `/efficient-frontier`, `/plan-arbiter`, `/plow-ahead`, `/quick-recap`, `/read-the-damn-docs`, `/stay-within-limits`.
-| Skill | What Ben uses it for |
-|---|---|
 | `/agent-watchdog` | Watchdog another agent session, PR, transcript, branch, or claim. |
 | `/aip` | Google AIP-style protobuf/resource API design. |
 | `/ask-ben` | This router: explains all local skills and routes work. |
@@ -19,11 +17,9 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/codex-compat` | Generate Codex hooks/AGENTS parity from Claude hooks. |
 | `/commit-push` | Conventional commit plus push, no PR. |
 | `/commit-push-pr` | Commit, push, draft/ready PR, watch CI. |
-| `/design-an-interface` | Deprecated interface-design flow; prefer `/prototype`. |
 | `/deslop` | Liability gate: delete, inline, justify, verify. |
 | `/development-lifecycle` | Main frontend work loop: understand -> plan -> grill -> TDD -> ship. |
 | `/diagnosing-bugs` | Feedback-loop-first bug/perf diagnosis. |
-| `/domain-model` | Legacy DDD grill; prefer `/grill-with-docs`. |
 | `/domain-modeling` | Maintain CONTEXT.md terms and ADRs. |
 | `/edit-article` | Tighten article drafts. |
 | `/efficient-fable` | Fable orchestration: cheap agents do bounded heavy lifting. |
@@ -42,6 +38,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/improve` | Senior advisor scan and implementation plans. |
 | `/improve-codebase-architecture` | Visual deepening report plus architecture grill. |
 | `/loop-me` | Grill recurring life/work loops into workflow specs. |
+| `/make-pr-easy-to-review` | Prepare PRs for fast review without code behavior changes. |
 | `/migrate-to-shoehorn` | Replace test casts with `@total-typescript/shoehorn`. |
 | `/obsidian-vault` | Search/create/organize Obsidian notes. |
 | `/plan-arbiter` | Compare, merge, or reject competing agent plans. |
@@ -52,11 +49,9 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/ponytail-review` | Diff review for delete/stdlib/native/YAGNI only. |
 | `/prime` | Repo startup/resume brief. |
 | `/prototype` | Throwaway logic/UI prototype to answer design risk. |
-| `/qa` | Deprecated bug intake; prefer `/triage`. |
 | `/quick-recap` | Red/yellow/green final status line convention. |
 | `/read-the-damn-docs` | Official-docs-first guard for APIs, SDKs, packages, CLIs. |
 | `/redpanda-frontend-kit` | Frontend starter kit plus Redpanda registry workflow. |
-| `/request-refactor-plan` | Deprecated refactor planner; prefer architecture + tickets. |
 | `/resilience-review` | Edge cases, errors, fallback, recovery, polish. |
 | `/resolve-pr-feedback` | Fetch, fix, reply, resolve PR review threads. |
 | `/research` | Investigate docs/API/source facts from primary sources into a cited Markdown file. |
@@ -95,12 +90,13 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/to-tickets` | Turn spec/plan into vertical-slice tracker tickets. |
 | `/to-spec` | Turn conversation into a spec. |
 | `/triage` | Move incoming issues through readiness states. |
-| `/ubiquitous-language` | Deprecated domain-language skill; prefer `/grill-with-docs`. |
 | `/upgrade-dependency` | Safe dependency upgrade plan and PR/issue path. |
 | `/visual-plan` | Agent-Native interactive plan artifact. |
 | `/visual-recap` | Agent-Native PR/diff recap artifact. |
 | `/visual-review` | Customer-facing UX review with evidence. |
 | `/wayfinder` | Map huge foggy work into issue-tracker investigation tickets. |
+| `/weekly-review` | Summarize the last week of authored commits with bugfix/debt/new-work classification. |
+| `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive bash wizard for manual setup or migration. |
 | `/work` | Alias for `/development-lifecycle`. |
 | `/work-automation-kit` | Install planning/spec/triage workflow skills. |

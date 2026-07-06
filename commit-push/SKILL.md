@@ -34,9 +34,9 @@ Run full commit-and-push flow below in one response.
    - `/simplify` -- small fixes/tweaks
    - `/ponytail-review` -- complexity-only delete/stdlib/native/YAGNI pass
    - `/deslop` -- liability certainty gate; runs `/simplify` and `/ponytail-review` first
-   - `/improve-codebase-architecture` -- refactors (prefer this; `/request-refactor-plan` is deprecated)
+   - `/improve-codebase-architecture` -- refactors and architecture plans
    - `/improve-codebase-architecture` -- cleanup (oversized files, shallow modules, tangled deps)
-   - `/prototype` -- redesign module or layout (prefer this; `/design-an-interface` is deprecated)
+   - `/prototype` -- redesign module or layout
    - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs
 2. If frontend or customer-facing surface diff and `/visual-review` has not run: run `/visual-review` or record explicit skip reason before pushing.
 3. If NONE ran: warn -- "Lifecycle requires review skill before shipping. Recommend: `/deslop` for liability certainty, `/simplify` for small changes, `/improve-codebase-architecture` for cleanup, `/visual-review` for frontend changes."

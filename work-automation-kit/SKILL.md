@@ -8,7 +8,7 @@ description: Install planning/project management skills -- spec creation, implem
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Skills Installed
 
-**Owned** (hook-integrated): brainstorming, grill-with-docs, domain-modeling, triage, diagnosing-bugs, qa
+**Owned** (hook-integrated): brainstorming, grill-with-docs, domain-modeling, triage, diagnosing-bugs
 
 **Matt Pocock/community**: grill-with-docs, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
@@ -27,7 +27,6 @@ bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-co
 bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
 
 # Community
 bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
