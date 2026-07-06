@@ -1,13 +1,17 @@
 ---
 name: wayfinder
-description: Plan huge work that cannot fit in one agent session as a shared issue-tracker map, then resolve one investigation ticket per session until the route is clear.
+description: Plan huge work that cannot fit in one agent session as a shared issue-tracker map, then resolve one investigation ticket per session until the way to the destination is clear.
 ---
 
 # Wayfinder
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
-Use when a goal is too large for one context window and the route is still foggy. Wayfinder turns the unknowns into a shared map on the repo's issue tracker, then works exactly one ticket per session.
+Use when a goal is too large for one context window and the way to the **destination** is still foggy. Wayfinder finds the route; it does not charge at the destination. The destination might be a spec, a decision, or a change whose path is unclear.
+
+## Plan, don't do
+
+Wayfinder is planning by default. Each ticket resolves a decision, and the map is done when nothing is left to decide before someone goes and does the thing. The pull to execute is usually the signal that the edge of the map has been reached. An effort can override this in Notes, but absent that, produce decisions, not deliverables.
 
 ## Invariants
 
@@ -23,6 +27,10 @@ Use when a goal is too large for one context window and the route is still foggy
 The map is one issue or file labelled/marked `wayfinder:map`.
 
 ```markdown
+## Destination
+
+<what reaching the end of this map looks like -- the spec, decision, or change this effort is finding its way to>
+
 ## Notes
 
 <domain; skills every session should consult; standing preferences for this effort>
@@ -31,9 +39,13 @@ The map is one issue or file labelled/marked `wayfinder:map`.
 
 - [<closed ticket title>](link) -- <one-line gist of the answer>
 
-## Fog
+## Not yet specified
 
-<suspected future questions or risks not sharp enough to ticket yet>
+<in-scope future questions or risks not sharp enough to ticket yet>
+
+## Out of scope
+
+<work ruled beyond this destination>
 ```
 
 Open tickets are not listed in the map body; query the issue tracker for open children/frontier tickets.
@@ -48,25 +60,32 @@ Each ticket is a child issue/file with a focused question sized to one 100K-toke
 <the decision or investigation this ticket resolves>
 ```
 
+Each ticket is either **HITL** -- human in the loop, worked with a human who speaks for themselves -- or **AFK**, driven by the agent alone. A HITL ticket only resolves through that live exchange; the agent must not answer its own grilling questions.
+
 Ticket types:
 
-- **Research**: read docs, APIs, specs, source, or other primary sources. Link the cited Markdown summary.
-- **Prototype**: make a cheap artifact to react to, including `/prototype` UI or logic code. Link the artifact.
-- **Grilling**: conversation with `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
-- **Task**: literal manual work needed before decisions can continue. Automate where safe; otherwise hand the human a checklist.
+- **Research** (AFK): read docs, APIs, specs, source, or other primary sources. Link the cited Markdown summary.
+- **Prototype** (HITL): make a cheap artifact to react to, including `/prototype` UI or logic code. Link the artifact.
+- **Grilling** (HITL): conversation with `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
+- **Task** (HITL or AFK): manual work needed before a decision can continue. Automate where safe; otherwise hand the human a checklist. It earns its place by unblocking a decision, not by delivering the destination.
 
 The answer is not part of the body. Record it on resolution. Assets are linked, not pasted.
 
 ## Fog of war
 
-Do not chart what you cannot yet see. Fog is for suspected questions or risks that are not precise enough to assign. A ticket is for a sharp question, even if blocked. Fog excludes what is already decided and what is already a ticket. Resolving one ticket clears nearby fog and may graduate part of it into new tickets.
+Do not chart what you cannot yet see. **Not yet specified** is for suspected in-scope questions or risks that are not precise enough to assign. A ticket is for a sharp question, even if blocked. Not yet specified excludes what is already decided, what is already a ticket, and what is out of scope.
+
+## Out of scope
+
+Fog only gathers toward the destination. Work beyond the destination is **Out of scope**: it is not fog and it never graduates into tickets unless the destination is redrawn. If a ticket turns out to sit beyond the destination, close it, add one Out of scope line with the reason, and do not record it as a route decision.
 
 ## Chart the map
 
-1. Run `/grilling` and `/domain-modeling` to surface open decisions.
-2. Create the map with Notes, empty Decisions so far, and Fog.
-3. Create only the tickets you can specify now. Wire blocking relationships in a second pass after tickets have ids.
-4. Stop. Charting the map is one session's work. Do not also resolve tickets.
+1. Name the Destination. Run `/grilling` and `/domain-modeling` to pin down what this map is finding its way to.
+2. Map the frontier. Grill breadth-first across the whole space, surfacing open decisions and first steps. **If this surfaces no fog**, you don't need a map; stop and ask the user how to proceed.
+3. Create the map with Destination, Notes, empty Decisions so far, Not yet specified, and Out of scope.
+4. Create only the tickets you can specify now. Wire blocking relationships in a second pass after tickets have ids.
+5. Stop. Charting the map is one session's work. Do not also resolve tickets.
 
 ## Work through a map
 
@@ -74,7 +93,7 @@ Do not chart what you cannot yet see. Fog is for suspected questions or risks th
 2. Pick the ticket: use the named ticket, or choose the first open, unblocked, unclaimed frontier ticket. Claim it first.
 3. Resolve it, zooming into related/closed tickets only as needed. Invoke skills named in Notes; when unsure, use `/grilling` and `/domain-modeling`.
 4. Record the answer as a resolution comment or answer section, close/resolve the ticket, then append a context pointer to Decisions so far.
-5. Add newly surfaced tickets and blocking edges; clear graduated Fog so each fact lives in one place.
+5. Add newly surfaced tickets and blocking edges; clear graduated Not yet specified entries so each fact lives in one place. If a ticket sits beyond the Destination, rule it Out of scope rather than resolving it on the route.
 
 Expect other sessions to edit the tracker concurrently; read current tracker state before writing.
 
