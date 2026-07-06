@@ -65,6 +65,8 @@ Ask:
 2. Return results where possible; minimize ambient side effects.
 3. Keep surface small: fewer methods, fewer params, clearer invariants.
 
+When two viable module/interface designs survive the deletion test, use `/plan-arbiter` to compare depth, locality, test surface, and rollback before committing to one.
+
 ## Relationships
 
 - A Module has one Interface.

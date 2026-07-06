@@ -4,6 +4,10 @@ Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go
 
 Visual review = surface review for customer-facing surfaces: web UI, mobile screens, CLI/TUI output, desktop apps, generated reports, onboarding, forms, any user-visible behavior. Browser screenshot review = one adapter.
 
+## Visual artifacts
+
+`/visual-review` judges the surface from evidence. Builder.io artifacts help people inspect that evidence: use `/visual-plan` for planned UI/product/API surfaces before implementation, `/visual-recap` for review-worthy implemented diffs before or during PR handoff, and `/plan-arbiter` when visual plans, design directions, detector findings, or reviewer reports conflict. Do not substitute a hosted plan/recap for browser, terminal, accessibility, or state evidence.
+
 ## Customer-facing surface detection
 
 User sees/reads/acts on it -> surface. Frontend/browser signals:
