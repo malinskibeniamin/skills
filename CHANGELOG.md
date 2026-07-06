@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.24.0
+
+2026-07-06 -- Sync latest mattpocock/skills deltas through upstream 16a2a5c. Updates /wayfinder destination, planning-first, no-fog exit, not-yet-specified/out-of-scope, and HITL/AFK ticket semantics while preserving claim rechecks; updates /to-tickets native sub-issue/blocking-edge guidance and /prototype context pointers; tightens /grilling fact-vs-decision handling; adds the Negation failure mode to /writing-great-skills. Skills remain 88.
+
 ## 4.23.0
 
 2026-07-03 -- Incorporate current mattpocock/skills WIP surfaces. Renames `/to-prd` to `/to-spec` and `/to-issues` to `/to-tickets` across live skill references, vendors `/wizard`, `/loop-me`, and `/claude-handoff`, and hardens `/wayfinder` handoff claim rechecks before showing the frontier. Skills 85 -> 88. Migrate Google Workspace MCP-deny guidance from the older Workspace CLI to `gog`/`gogcli`. Updates live agent quick-ref copy, mcp-ban redirect messages for Gmail, Calendar, and Drive, and eval coverage so Google Workspace hints stay on `gog` and do not regress.
