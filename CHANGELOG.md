@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.25.0
+
+2026-07-06 -- Vendor Builder.io skill suite and wire it through the harness. Adds direct /visual-plan, /visual-recap, /agent-watchdog, /efficient-fable, /efficient-frontier, /plan-arbiter, /plow-ahead, /quick-recap, /read-the-damn-docs, and /stay-within-limits skills; keeps Agent-Native visual plan/recap upstream content in references; adds sync automation for visual references; and routes existing swarm, planning, research, review, PR, and lifecycle skills through the new helpers. Skills 88 -> 98.
+
 ## 4.24.0
 
 2026-07-06 -- Sync latest mattpocock/skills deltas through upstream 16a2a5c. Updates /wayfinder destination, planning-first, no-fog exit, not-yet-specified/out-of-scope, and HITL/AFK ticket semantics while preserving claim rechecks; updates /to-tickets native sub-issue/blocking-edge guidance and /prototype context pointers; tightens /grilling fact-vs-decision handling; adds the Negation failure mode to /writing-great-skills. Skills remain 88.

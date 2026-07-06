@@ -5,20 +5,12 @@ disable-model-invocation: true
 ---
 # Ask Ben
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Use this when you forget which local skill fits Ben's work. Default lens: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
-- Build/fix product code -> `/development-lifecycle` or `/work`; done -> `/go`.
-- Hard bug -> `/diagnosing-bugs` first, then `/tdd`.
-- Plan unclear -> `/grill-with-docs`; huge foggy effort -> `/wayfinder`; no repo/docs needed -> `/grill-me`.
-- Architecture cleanup -> `/improve-codebase-architecture`; broad advisor scan -> `/improve`.
-- PR or diff review -> `/review`; high stakes -> `/thermo-nuclear-code-quality-review`.
-- UI/customer-facing -> `/visual-review`; edge cases/errors -> `/resilience-review`.
-- Too much code -> `/deslop`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail`.
-- Spec/ticket flow -> `/to-spec`, `/to-tickets`, `/triage`, `/resolve-pr-feedback`.
-- Manual setup or one-off migration -> `/wizard`; recurring workflow spec -> `/loop-me`; Claude background continuation -> `/claude-handoff`.
-- Setup a frontend repo -> `/frontend-starter-kit`; Redpanda repo -> `/redpanda-frontend-kit`.
-- Need exact repo state -> `/prime`; docs/API facts -> `/research`; hand off context -> `/handoff`; parallelize -> `/swarm`.
+Use this when you forget which local skill fits Ben's work. Default: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
+Routes: product -> `/development-lifecycle`/`/work` -> `/go`; bugs -> `/diagnosing-bugs` + `/tdd`; planning -> `/grill-with-docs`/`/wayfinder`/`/grill-me`; specs -> `/to-spec` -> `/to-tickets`; review -> `/review`/`/thermo-nuclear-code-quality-review`; UI/resilience -> `/visual-review`/`/resilience-review`; parallel -> `/swarm`.
+Builder.io skills are both direct commands and under-the-hood helpers: `/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/efficient-fable`, `/efficient-frontier`, `/plan-arbiter`, `/plow-ahead`, `/quick-recap`, `/read-the-damn-docs`, `/stay-within-limits`.
 | Skill | What Ben uses it for |
 |---|---|
+| `/agent-watchdog` | Watchdog another agent session, PR, transcript, branch, or claim. |
 | `/aip` | Google AIP-style protobuf/resource API design. |
 | `/ask-ben` | This router: explains all local skills and routes work. |
 | `/brainstorming` | Explore/challenge design options before code. |
@@ -34,6 +26,8 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/domain-model` | Legacy DDD grill; prefer `/grill-with-docs`. |
 | `/domain-modeling` | Maintain CONTEXT.md terms and ADRs. |
 | `/edit-article` | Tighten article drafts. |
+| `/efficient-fable` | Fable orchestration: cheap agents do bounded heavy lifting. |
+| `/efficient-frontier` | Frontier-model orchestration with bounded subagents. |
 | `/extend-harness` | Add/tune hook-harness rules and severity. |
 | `/frontend-skills-stats` | Inspect hook latency, violations, zero-fire rules. |
 | `/frontend-starter-kit` | Install complete generic frontend harness. |
@@ -50,6 +44,8 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/loop-me` | Grill recurring life/work loops into workflow specs. |
 | `/migrate-to-shoehorn` | Replace test casts with `@total-typescript/shoehorn`. |
 | `/obsidian-vault` | Search/create/organize Obsidian notes. |
+| `/plan-arbiter` | Compare, merge, or reject competing agent plans. |
+| `/plow-ahead` | Autonomy contract for "keep going" work. |
 | `/ponytail` | Build least-code solution via reuse-first ladder. |
 | `/ponytail-audit` | Whole-repo overengineering audit. |
 | `/ponytail-debt` | Harvest `ponytail:` shortcut debt. |
@@ -57,6 +53,8 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/prime` | Repo startup/resume brief. |
 | `/prototype` | Throwaway logic/UI prototype to answer design risk. |
 | `/qa` | Deprecated bug intake; prefer `/triage`. |
+| `/quick-recap` | Red/yellow/green final status line convention. |
+| `/read-the-damn-docs` | Official-docs-first guard for APIs, SDKs, packages, CLIs. |
 | `/redpanda-frontend-kit` | Frontend starter kit plus Redpanda registry workflow. |
 | `/request-refactor-plan` | Deprecated refactor planner; prefer architecture + tickets. |
 | `/resilience-review` | Edge cases, errors, fallback, recovery, polish. |
@@ -88,6 +86,7 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/setup-ux-copy` | UX copy, inclusive language, docs prose style. |
 | `/setup-zustand` | Zustand create/useShallow/persist enforcement. |
 | `/snyk-ux-security` | JS/Go/Bazel Snyk sweep with reachability gates. |
+| `/stay-within-limits` | Usage checks between long or parallel agent waves. |
 | `/steelman` | Evidence-backed strongest counterargument. |
 | `/swarm` | Parallel executor with coordinator-owned merge. |
 | `/tdd` | Red-green-refactor one vertical slice at a time. |
@@ -98,6 +97,8 @@ Use this when you forget which local skill fits Ben's work. Default lens: ship f
 | `/triage` | Move incoming issues through readiness states. |
 | `/ubiquitous-language` | Deprecated domain-language skill; prefer `/grill-with-docs`. |
 | `/upgrade-dependency` | Safe dependency upgrade plan and PR/issue path. |
+| `/visual-plan` | Agent-Native interactive plan artifact. |
+| `/visual-recap` | Agent-Native PR/diff recap artifact. |
 | `/visual-review` | Customer-facing UX review with evidence. |
 | `/wayfinder` | Map huge foggy work into issue-tracker investigation tickets. |
 | `/wizard` | Generate an interactive bash wizard for manual setup or migration. |
