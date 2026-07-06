@@ -27,6 +27,8 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, qa, writing-great-skills
 
+Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; quick-recap; stay-within-limits; efficient-frontier.
+
 ## Steps
 
 ### 1. Run setup skills 1-14 sequentially
