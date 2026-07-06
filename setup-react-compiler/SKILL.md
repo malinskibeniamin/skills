@@ -6,6 +6,7 @@ description: Install React Compiler with rsbuild and enforce compiler-friendly p
 # Setup React Compiler
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+Run `/read-the-damn-docs` before pinning current React Compiler or Rsbuild integration syntax.
 ## What This Sets Up
 
 - **babel-plugin-react-compiler** with rsbuild

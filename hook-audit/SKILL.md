@@ -17,6 +17,8 @@ Run Bash commands before proceed:
 
 Metrics dir: `~/.claude/hook-metrics/`
 
+Use `/visual-plan` for large action plans, `/plan-arbiter` for contradictory recommendations, and `/agent-watchdog` when auditing routine/agent-generated reports.
+
 ## Your task
 
 Analyze hook effectiveness across all session metrics. Read every JSON in `~/.claude/hook-metrics/`. Produce report:
