@@ -12,6 +12,8 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 **Matt Pocock/community**: grill-with-docs, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
+**Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, quick-recap, stay-within-limits, efficient-frontier
+
 **Optional**: setup-atlassian-workflow (Jira via acli, opt-in), codex-plugin-cc (cross-model review)
 
 ## Install
