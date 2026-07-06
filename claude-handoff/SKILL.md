@@ -13,6 +13,7 @@ Before launching, check `command -v claude`. If the Claude CLI is unavailable, d
 Always pass `-n`/`--name` with a descriptive name (for example, `--name "Fix login bug"`) -- it sets the display name shown in the job list, session picker, and terminal title.
 
 Include a "suggested skills" section in the summary, which suggests skills that the agent should invoke.
+Include `/agent-watchdog` when the next session must monitor, audit, compare, or verify the spawned/background agent's claims later.
 
 Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
 

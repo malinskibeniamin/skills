@@ -22,6 +22,7 @@ Break the work into **tracer bullet** tickets.
 - Any prefactoring should be done first
 </vertical-slice-rules>
 Give each ticket its **blocking edges** -- the other tickets that must complete before it can start. A ticket with no blockers can start immediately.
+If competing ticket graphs or slice strategies survive review, run `/plan-arbiter`; for a large dependency graph, publish `/visual-plan` so blockers/frontier are inspectable.
 ### 4. Quiz the user
 Present the proposed breakdown as a numbered list. For each ticket, show:
 - **Title**: short descriptive name

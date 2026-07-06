@@ -53,6 +53,7 @@ End with **Top recommendation**.
 Use Tailwind CDN + Mermaid CDN. Mix Mermaid for graphs/sequences with custom CSS/SVG for editorial visuals.
 
 Use `CONTEXT.md` terms for domain and `/codebase-design` terms for architecture. If candidate contradicts ADR, surface only when friction justifies reopening; mark conflict.
+For review-worthy architecture options, publish `/visual-plan`; if multiple candidate reports or interface plans conflict, run `/plan-arbiter` before choosing.
 
 Do not propose interfaces yet. Ask: "Which of these would you like to explore?"
 

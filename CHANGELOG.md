@@ -4,7 +4,7 @@
 
 ## 4.25.0
 
-2026-07-06 -- Vendor Builder.io skill suite and wire it through the harness. Adds direct /visual-plan, /visual-recap, /agent-watchdog, /efficient-fable, /efficient-frontier, /plan-arbiter, /plow-ahead, /quick-recap, /read-the-damn-docs, and /stay-within-limits skills; keeps Agent-Native visual plan/recap upstream content in references; adds sync automation for visual references; and routes existing swarm, planning, research, review, PR, and lifecycle skills through the new helpers. Skills 88 -> 98.
+2026-07-06 -- Vendor Builder.io skill suite and wire it through the harness. Adds direct /visual-plan, /visual-recap, /agent-watchdog, /efficient-fable, /efficient-frontier, /plan-arbiter, /plow-ahead, /quick-recap, /read-the-damn-docs, and /stay-within-limits skills; keeps Agent-Native visual plan/recap upstream content in references; adds sync automation for visual references; strengthens /visual-review with plan/recap artifacts; and routes swarm, planning, architecture, spec, ticketing, research, review, PR, routines, handoff, debugging, resilience, TDD, and lifecycle skills through the new helpers. Skills 88 -> 98.
 
 ## 4.24.0
 

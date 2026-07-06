@@ -22,6 +22,7 @@ Hooks = enforcement layer | routine prompts = task layer. Standards evolve
 in repo (hooks + CLAUDE.md), routine prompts stay stable. Every routine
 session runs the same PostToolUse/Stop gates as an interactive dev session,
 so a routine cannot ship code that a developer could not ship locally.
+For routine outputs, add `/agent-watchdog` audit steps; routines that open PRs should create or link `/visual-recap` when the diff is review-worthy.
 
 ### vs. Sandcastle
 
