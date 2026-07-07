@@ -23,8 +23,8 @@ else
 fi
 run_content_eval "$SKILL_DIR/SKILL.md" "post inline PR comments automatically" "review auto-posts PR comments when available"
 run_content_eval "$SKILL_DIR/SKILL.md" "user does not need to ask" "review does not require explicit comment request"
-run_content_eval "$SKILL_DIR/SKILL.md" "After all lanes finish" "review comments after all review hats finish"
-run_content_eval "$SKILL_DIR/SKILL.md" "Do not comment during individual lanes" "review forbids per-hat real-time comments"
+run_content_eval "$SKILL_DIR/SKILL.md" "After all hats finish" "review comments after all review hats finish"
+run_content_eval "$SKILL_DIR/SKILL.md" "Do not comment during individual hats" "review forbids per-hat real-time comments"
 run_content_eval "$SKILL_DIR/SKILL.md" "Do not dump the whole review" "review avoids dumping full review as PR comment"
 run_content_eval "$SKILL_DIR/SKILL.md" "P0 for Blocker.*P1 for Major.*P2 for Minor.*P3 for Patch or Future" "review defines priority label mapping"
 run_content_eval "$SKILL_DIR/SKILL.md" "P0 for Blocker.*P1 for Major.*P2 for Minor.*P3 for Patch or Future" "review uses requested priority wording"
