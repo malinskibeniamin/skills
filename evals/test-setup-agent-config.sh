@@ -1,13 +1,13 @@
 # Evals for setup-agent-config skill
 
-ENV_SCRIPT="$REPO_ROOT/setup-agent-config/scripts/llm-env.sh"
-FLAGS_SCRIPT="$REPO_ROOT/setup-agent-config/scripts/llm-test-flags.sh"
-TRUNCATE_SCRIPT="$REPO_ROOT/setup-agent-config/scripts/llm-truncate.sh"
-SKILL_DIR="$REPO_ROOT/setup-agent-config"
+ENV_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/agent-config/scripts/llm-env.sh"
+FLAGS_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/agent-config/scripts/llm-test-flags.sh"
+TRUNCATE_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/agent-config/scripts/llm-truncate.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/agent-config"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$ENV_SCRIPT" "llm-env.sh is executable"
 run_executable_eval "$FLAGS_SCRIPT" "llm-test-flags.sh is executable"
@@ -15,12 +15,10 @@ run_executable_eval "$TRUNCATE_SCRIPT" "llm-truncate.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-agent-config" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "AI_AGENT" "SKILL.md mentions AI_AGENT"
-run_content_eval "$SKILL_DIR/SKILL.md" "CLAUDECODE" "SKILL.md mentions CLAUDECODE"
-run_content_eval "$SKILL_DIR/SKILL.md" "NODE_OPTIONS" "SKILL.md mentions NODE_OPTIONS"
-run_content_eval "$SKILL_DIR/SKILL.md" "pool=forks" "SKILL.md mentions pool=forks"
+run_content_eval "$SKILL_DIR/README.md" "AI_AGENT" "SKILL.md mentions AI_AGENT"
+run_content_eval "$SKILL_DIR/README.md" "CLAUDECODE" "SKILL.md mentions CLAUDECODE"
+run_content_eval "$SKILL_DIR/README.md" "NODE_OPTIONS" "SKILL.md mentions NODE_OPTIONS"
+run_content_eval "$SKILL_DIR/README.md" "pool=forks" "SKILL.md mentions pool=forks"
 
 # ── llm-env.sh ──────────────────────────────────────────────────
 

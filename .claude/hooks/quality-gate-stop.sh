@@ -11,7 +11,7 @@ set -eo pipefail
 # reads that file, blocks with the combined report, then cleans up.
 
 # Source hook-lib for safe JSON escaping and ERR trap
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+_shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
 _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
 _findings="$_session_dir/stop-findings"

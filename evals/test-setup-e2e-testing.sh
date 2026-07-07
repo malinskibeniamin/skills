@@ -1,6 +1,6 @@
 # Evals for setup-e2e-testing skill
 
-SKILL_DIR="$REPO_ROOT/setup-e2e-testing"
+SKILL_DIR="$REPO_ROOT/e2e-testing"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -9,7 +9,7 @@ run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 
 # ── SKILL.md content (auto-loaded, edit-time guidance) ──────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-e2e-testing" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: e2e-testing" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "Test IDs|getByTestId" "SKILL.md has test ID conventions"
 run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priority"

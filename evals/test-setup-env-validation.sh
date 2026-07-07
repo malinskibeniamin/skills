@@ -1,20 +1,18 @@
 # Evals for setup-env-validation skill
 
-SCRIPT="$REPO_ROOT/setup-env-validation/scripts/env-validation-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-env-validation"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/env-validation/scripts/env-validation-check.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/env-validation"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "env-validation-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-env-validation" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "t3-env" "SKILL.md mentions t3-env"
-run_content_eval "$SKILL_DIR/SKILL.md" "process.env" "SKILL.md mentions process.env ban"
+run_content_eval "$SKILL_DIR/README.md" "t3-env" "SKILL.md mentions t3-env"
+run_content_eval "$SKILL_DIR/README.md" "process.env" "SKILL.md mentions process.env ban"
 
 # ── Hook: skip non-Edit/Write ──────────────────────────────────
 

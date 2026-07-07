@@ -20,7 +20,7 @@ set -eo pipefail
 #   PR_FEEDBACK_MOCK_THREADS=<json>     — eval-only: canned threads
 #   PR_FEEDBACK_MOCK_REVIEWS=<json>     — eval-only: canned reviews
 
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+_shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
 # ── Global disable ───────────────────────────────────────────────
 [ "${PR_FEEDBACK_ENFORCEMENT:-on}" = "off" ] && exit 0

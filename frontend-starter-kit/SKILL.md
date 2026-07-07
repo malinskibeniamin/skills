@@ -1,58 +1,57 @@
 ---
 name: frontend-starter-kit
-description: Complete frontend stack -- 14 setup skills + active workflow/community skills in one command. Use when starting new frontend project or bootstrapping frontend best practices from scratch.
+description: Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from lazy reference docs. Use when starting a frontend project, setting up any single tool, or exporting the harness to a bare repo.
+argument-hint: "[profile: full | minimal | redpanda | <tool name>]"
 ---
 
 # Frontend Starter Kit
-## Setup Skills (1-14, sequential, idempotent)
 
-1. **setup-toolchain** -- bun + tsgo enforcement, destructive command guards
-2. **setup-biome** -- Biome + Ultracite, auto-fix hook
-3. **setup-quality-gate** -- quality:gate script, CI workflow, Stop hook, bundle guard
-4. **setup-agent-config** -- AI_AGENT=1, output truncation
-5. **setup-react-compiler** -- React Compiler + memoization check
-6. **setup-zustand** -- double-parens create, useShallow, persist
-7. **setup-accessibility** -- ARIA enforcement, Playwright AXE, WCAG 2.1 AA
-8. **setup-react-rules** -- ban raw HTML, TS escapes, XSS, barrel imports
-9. **setup-env-validation** -- t3-env + zod, ban process.env
-10. **setup-conventional-commits** -- type(scope): description
-11. **setup-react-doctor** -- health scoring + Stop hook
-12. **setup-tanstack-router** -- route tree auto-gen + enforcement
-13. **setup-connect-query** -- ConnectRPC + Protobuf enforcement
-14. **setup-e2e-testing** -- Playwright + Testcontainers + axe-core
+One skill owns all bootstrap work. Each tool's install steps live in
+`references/<tool>/README.md` (plus `SETUP.md`/`REFERENCE.md` where present) -- read them
+lazily, only for the profile requested. All steps are idempotent.
 
-## Workflow Skills (15-28)
+Plugin consumers already have every hook shipped and wired -- for them the hook-copy steps
+are no-ops; run the config/tooling steps only. The full copy matters for bare repos without
+the plugin ("export harness").
 
-development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, prototype, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, writing-great-skills
+## Profiles
 
-Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; efficient-frontier (owns usage-limit budgeting).
+- **full** (default): every tool below, in order.
+- **minimal**: toolchain, biome, quality-gate, env-validation, conventional-commits.
+- **redpanda**: full + `references/redpanda/README.md` (registry workflow, Redpanda component
+  taxonomy, `REDPANDA_KIT=1`).
+- **`<tool>`**: just that tool's reference.
+
+## Tools (sequential for full)
+
+| Tool | Reference | What it sets up |
+|---|---|---|
+| toolchain | `references/toolchain/` | bun + tsgo enforcement, destructive command guards |
+| biome | `references/biome/` | Biome + Ultracite, auto-fix hook |
+| quality-gate | `references/quality-gate/` | quality:gate script, CI workflow, Stop hook, bundle guard |
+| agent-config | `references/agent-config/` | AI_AGENT=1, output truncation |
+| react-compiler | `references/react-compiler/` | React Compiler + memoization check |
+| zustand | `references/zustand/` | double-parens create, useShallow, persist |
+| react-rules | `references/react-rules/` | ban raw HTML, TS escapes, XSS, barrel imports |
+| env-validation | `references/env-validation/` | t3-env + zod, ban process.env |
+| conventional-commits | `references/conventional-commits/` | type(scope): description enforcement |
+| react-doctor | `references/react-doctor/` | health scoring + Stop hook |
+| ci-pipeline | `references/ci-pipeline/` | GitHub Actions CI, coverage gates, caching |
+| redpanda | `references/redpanda/` | Redpanda registry workflow + component taxonomy |
+
+Runtime-guidance skills (daily work, not setup): `/accessibility`, `/tanstack-router`,
+`/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Optional infra:
+`/setup-routines`, `/setup-sandcastle`, `/setup-atlassian-workflow` (slash-only).
 
 ## Steps
 
-### 1. Run setup skills 1-14 sequentially
-Each skill `SETUP.md` has install steps. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh.
+1. Confirm the profile (default full). Read each tool's reference lazily as you reach it.
+2. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh when the repo wants strict effects.
+3. Workflow skills (development-lifecycle, tdd, brainstorming, grill-with-docs, triage,
+   diagnosing-bugs, prototype, domain-modeling) ship with this plugin -- nothing to install.
 
-### 2. Install workflow skills
-```bash
-bunx skills@latest add malinskibeniamin/skills/development-lifecycle --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/setup-ci-pipeline --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/prototype --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
-```
+## Verify
 
-### 3. Community skills (optional)
-```bash
-```
-
-### 4. Verify
 - [ ] `.claude/settings.json` has all hooks, `biome.jsonc` + `src/env.ts` exist
 - [ ] Scripts: lint, lint:fix, type:check, test, quality:gate
 - [ ] `.github/workflows/quality-gate.yml` exists, all hooks executable

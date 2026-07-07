@@ -14,7 +14,7 @@ fi
 session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
 
 # Source hook-lib for session-scoped file tracking
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+_shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then

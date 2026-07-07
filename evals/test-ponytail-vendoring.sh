@@ -2,6 +2,7 @@
 
 UPSTREAM_SHA="687c1b339872289d70f65c5eaabce850b1663867"
 
+expected_ponytail_skills="ponytail"
 actual_ponytail_skills=$(
   find "$REPO_ROOT" -maxdepth 2 -name SKILL.md \
     | sed "s#^$REPO_ROOT/##" \
@@ -12,14 +13,15 @@ actual_ponytail_skills=$(
     | sed 's/ $//'
 )
 if [ "$actual_ponytail_skills" = "$expected_ponytail_skills" ]; then
-  echo "  PASS  exactly four Ponytail skills are vendored"
+  echo "  PASS  exactly one Ponytail skill is vendored (family consolidated 4->1 in 4.27.0)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  exactly four Ponytail skills are vendored (got: $actual_ponytail_skills)"
+  echo "  FAIL  exactly one Ponytail skill is vendored (got: $actual_ponytail_skills)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: exactly four Ponytail skills are vendored"
+  ERRORS="$ERRORS\n  FAIL: exactly one Ponytail skill is vendored"
 fi
 
+PONYTAIL_SKILLS=("ponytail")
 for skill in "${PONYTAIL_SKILLS[@]}"; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "vendored Ponytail skill exists: $skill"
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^name: $skill$" "vendored Ponytail skill has matching name: $skill"
@@ -58,10 +60,9 @@ run_content_eval "$REPO_ROOT/ponytail/SKILL.md" "input validation at trust bound
 run_content_eval "$REPO_ROOT/ponytail/SKILL.md" "failing test first|/tdd" "ponytail aligns with harness TDD gate"
 
 
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Pair audit/debt with /improve" "deslop pairs audit debt with improve"
+run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Complexity tags" "deslop owns the complexity tag taxonomy"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "advisor-plan inputs" "improve treats ponytail debt as advisor-plan input"
-run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "Ponytail commands" "diagnosing-bugs owns Ponytail command summary instead of help skill"
-run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" 'No `/ponytail-help` skill' "diagnosing-bugs explicitly replaces ponytail-help skill"
+run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "debt ledger" "diagnosing-bugs routes to the consolidated ponytail"
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/ponytail" "development lifecycle invokes ponytail automatically"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "Ponytail.*before.*implementation|before.*implementation.*Ponytail" "development lifecycle runs ponytail before implementation"

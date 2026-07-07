@@ -1,21 +1,19 @@
 # Evals for setup-quality-gate skill
 
-SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/typecheck-stop.sh"
-SKILL_DIR="$REPO_ROOT/setup-quality-gate"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/quality-gate/scripts/typecheck-stop.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/quality-gate"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "typecheck-stop.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-quality-gate" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "quality:gate" "SKILL.md mentions quality:gate script"
-run_content_eval "$SKILL_DIR/SKILL.md" "type:check" "SKILL.md mentions type:check"
-run_content_eval "$SKILL_DIR/SKILL.md" "GitHub Actions" "SKILL.md mentions CI"
+run_content_eval "$SKILL_DIR/README.md" "quality:gate" "SKILL.md mentions quality:gate script"
+run_content_eval "$SKILL_DIR/README.md" "type:check" "SKILL.md mentions type:check"
+run_content_eval "$SKILL_DIR/README.md" "GitHub Actions" "SKILL.md mentions CI"
 
 # ── REFERENCE.md content ────────────────────────────────────────
 
@@ -42,7 +40,7 @@ run_content_eval "$SCRIPT" "other session" "hook allows errors from other sessio
 
 # ── session-env.sh: baseline capture ──────────────────────────────
 
-SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
+SESSION_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/toolchain/scripts/session-env.sh"
 run_content_eval "$SESSION_SCRIPT" "typecheck-baseline" "session-env captures typecheck baseline"
 run_content_eval "$SESSION_SCRIPT" "bun run type:check" "session-env runs type:check for baseline"
 run_content_eval "$SESSION_SCRIPT" "dirty-files-baseline" "session-env captures dirty-files baseline"
@@ -52,7 +50,7 @@ run_content_eval "$SESSION_SCRIPT" "reporter=json" "session-env uses JSON report
 
 # ── test-perf-stop.sh: File structure ────────────────────────────
 
-PERF_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/test-perf-stop.sh"
+PERF_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/quality-gate/scripts/test-perf-stop.sh"
 run_file_eval "$PERF_SCRIPT" "test-perf-stop.sh exists"
 run_executable_eval "$PERF_SCRIPT" "test-perf-stop.sh is executable"
 
@@ -95,7 +93,7 @@ run_content_eval "$PERF_SCRIPT" "before > 10" "perf hook filters noise from test
 
 # ── bundle-guard.sh: File structure ───────────────────────────────
 
-BUNDLE_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/bundle-guard.sh"
+BUNDLE_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/quality-gate/scripts/bundle-guard.sh"
 run_file_eval "$BUNDLE_SCRIPT" "bundle-guard.sh exists"
 run_executable_eval "$BUNDLE_SCRIPT" "bundle-guard.sh is executable"
 
@@ -198,7 +196,7 @@ run_content_eval "$BUNDLE_SCRIPT" "core-js" "bundle-guard checks core-js"
 
 # ── test-perf-check.sh: File structure ───────────────────────────
 
-PERF_CHECK_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/test-perf-check.sh"
+PERF_CHECK_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/quality-gate/scripts/test-perf-check.sh"
 run_file_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh exists"
 run_executable_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh is executable"
 

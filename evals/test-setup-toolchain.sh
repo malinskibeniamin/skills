@@ -1,23 +1,20 @@
 # Evals for setup-toolchain skill
 # Tests hook scripts, file structure, and SKILL.md correctness
 
-SCRIPT="$REPO_ROOT/setup-toolchain/scripts/enforce-toolchain.sh"
-SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/toolchain/scripts/enforce-toolchain.sh"
+SESSION_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/toolchain/scripts/session-env.sh"
 LEGACY_LINTER="$REPO_ROOT/.claude/hooks/legacy-linter-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-toolchain"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/toolchain"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "enforce-toolchain.sh is executable"
 run_executable_eval "$SESSION_SCRIPT" "session-env.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-toolchain" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md description has trigger phrase"
 
 # ── npm blocked ─────────────────────────────────────────────────
 

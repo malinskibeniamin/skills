@@ -1,20 +1,18 @@
 # Evals for setup-zustand skill
 
-SCRIPT="$REPO_ROOT/setup-zustand/scripts/zustand-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-zustand"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/zustand/scripts/zustand-check.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/zustand"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
 run_executable_eval "$SCRIPT" "zustand-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-zustand" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "useShallow" "SKILL.md mentions useShallow"
-run_content_eval "$SKILL_DIR/SKILL.md" "persist" "SKILL.md mentions persist middleware"
+run_content_eval "$SKILL_DIR/README.md" "useShallow" "SKILL.md mentions useShallow"
+run_content_eval "$SKILL_DIR/README.md" "persist" "SKILL.md mentions persist middleware"
 
 # ── Hook: skip non-Edit/Write tools ────────────────────────────
 

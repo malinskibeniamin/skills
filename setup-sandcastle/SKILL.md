@@ -1,6 +1,7 @@
 ---
 name: setup-sandcastle
-description: "Configure Sandcastle for agent delegation -- headless run(), HITL interactive(), parallel sandboxes, branches. Use when delegating to autonomous agents, parallelizing implementation, or running interactive reviews."
+disable-model-invocation: true
+description: "Configure Sandcastle agent delegation -- headless run(), HITL interactive(), parallel Docker sandboxes, branches."
 ---
 
 # Setup Sandcastle

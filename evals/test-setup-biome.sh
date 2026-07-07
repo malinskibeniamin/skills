@@ -1,23 +1,20 @@
 # Evals for setup-biome skill
 # Tests file structure, SKILL.md, REFERENCE.md, and hook script content
 
-SCRIPT="$REPO_ROOT/setup-biome/scripts/biome-autofix.sh"
-SKILL_DIR="$REPO_ROOT/setup-biome"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/biome/scripts/biome-autofix.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/biome"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "biome-autofix.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-biome" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md description has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "ultracite" "SKILL.md mentions ultracite"
-run_content_eval "$SKILL_DIR/SKILL.md" "Stop" "SKILL.md mentions Stop hook"
-run_content_eval "$SKILL_DIR/SKILL.md" "noUnusedImports" "SKILL.md mentions import loop prevention"
+run_content_eval "$SKILL_DIR/README.md" "ultracite" "SKILL.md mentions ultracite"
+run_content_eval "$SKILL_DIR/README.md" "Stop" "SKILL.md mentions Stop hook"
+run_content_eval "$SKILL_DIR/README.md" "noUnusedImports" "SKILL.md mentions import loop prevention"
 
 # ── REFERENCE.md content ────────────────────────────────────────
 
@@ -79,8 +76,8 @@ fi
 
 # ── SKILL.md has file-targeted scripts ─────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "lint:file" "SKILL.md documents lint:file script"
-run_content_eval "$SKILL_DIR/SKILL.md" "lint:fix:file" "SKILL.md documents lint:fix:file script"
+run_content_eval "$SKILL_DIR/README.md" "lint:file" "SKILL.md documents lint:file script"
+run_content_eval "$SKILL_DIR/README.md" "lint:fix:file" "SKILL.md documents lint:fix:file script"
 
 # ── New rules from PR audit (2025-2026) ─────────────────────────
 

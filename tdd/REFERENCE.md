@@ -313,7 +313,7 @@ Safety: tests must not share mutable state · each set up own fixtures.
 |---|---|
 | `isolate: false` | Incompatible with per-file `vi.mock()` -- passes locally, fails CI |
 | `experimental.fsModuleCache` | Experimental -- stale cache issues in CI |
-| Sharding | See [CI Pipeline REFERENCE](../setup-ci-pipeline/REFERENCE.md) -- useful for suites >60s |
+| Sharding | See [CI Pipeline REFERENCE](../frontend-starter-kit (ci-pipeline reference)/REFERENCE.md) -- useful for suites >60s |
 
 ### Benchmarks (`pool: 'threads'`, 23 unit + 12 integration files)
 

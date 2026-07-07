@@ -3,9 +3,9 @@
 SKILL_DIR="$REPO_ROOT/setup-sandcastle"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_content_eval "$SKILL_DIR/SKILL.md" "disable-model-invocation: true" "skill is slash-only (zero context tax)"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-sandcastle" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "sandcastle" "SKILL.md mentions sandcastle"
 run_content_eval "$SKILL_DIR/SKILL.md" "sandbox" "SKILL.md mentions sandboxes"
 run_content_eval "$SKILL_DIR/SKILL.md" "Docker" "SKILL.md mentions Docker"

@@ -1,20 +1,18 @@
 # Evals for setup-react-compiler skill
 
-SCRIPT="$REPO_ROOT/setup-react-compiler/scripts/react-compiler-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-react-compiler"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-compiler/scripts/react-compiler-check.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-compiler"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-compiler-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-compiler" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "rsbuild" "SKILL.md mentions rsbuild"
-run_content_eval "$SKILL_DIR/SKILL.md" "use no memo" "SKILL.md mentions escape hatch"
+run_content_eval "$SKILL_DIR/README.md" "rsbuild" "SKILL.md mentions rsbuild"
+run_content_eval "$SKILL_DIR/README.md" "use no memo" "SKILL.md mentions escape hatch"
 
 # ── Hook: skip non-Edit/Write tools ────────────────────────────
 
