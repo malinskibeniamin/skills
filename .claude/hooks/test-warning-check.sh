@@ -19,10 +19,15 @@ command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null | tr 
 exit_code=$(echo "$input" | jq -r '.tool_response.exit_code // .tool_result.exit_code // 0' 2>/dev/null)
 [ "$exit_code" = "0" ] || exit 0
 
-case "$command" in
-  *vitest*|*"bun test"*|*"bun run test"*|*playwright*|*tsgo*|*tsc*|*"type:check"*|*biome*|*"lint"*) ;;
-  *) exit 0 ;;
-esac
+# Gate: only scan when the command actually RUNS a test/lint/type tool.
+# The tool must appear as a command word (start of command or after ;|&,
+# or as a bun/bunx/npx subcommand) — never as a substring of a path,
+# config filename, grep pattern, or loop variable. `cat vitest.config.ts`,
+# `ls hooks | grep lint`, and `for f in *test*` must NOT match.
+if ! printf '%s\n' "$command" | grep -qE \
+  '(^|[;&|][[:space:]]*)(vitest|playwright|tsgo|tsc|biome)([[:space:]]|$)|(^|[;&|][[:space:]]*)(bun|bunx|npx)[[:space:]]+(run[[:space:]]+)?(vitest|playwright|tsgo|tsc|biome|test([[:space:]]|$)|[a-z:-]*(test|lint|type:check)[a-z:-]*([[:space:]]|$))'; then
+  exit 0
+fi
 
 stdout=$(echo "$input" | jq -r '.tool_response.stdout // .tool_result.stdout // empty' 2>/dev/null)
 stderr=$(echo "$input" | jq -r '.tool_response.stderr // .tool_result.stderr // empty' 2>/dev/null)
