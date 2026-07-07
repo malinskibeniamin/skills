@@ -28,6 +28,26 @@
         ]
       }
     ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/post-compact-context.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/pre-compact.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write|Bash",
@@ -290,6 +310,27 @@
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/post-tool-failure.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/subagent-start.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "self-reviewer|code-reviewer|adversarial-reviewer",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/subagent-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
