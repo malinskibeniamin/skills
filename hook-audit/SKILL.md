@@ -1,6 +1,6 @@
 ---
 name: hook-audit
-description: Analyze hook effectiveness + session retro from collected metrics. Use when user asks to audit hooks, invokes `/hook-audit`, wants to identify silent/over-aggressive/under-enforced hooks, or asks for a retro / team analytics across recent sessions.
+description: Analyze hook effectiveness + session retro from collected metrics. Use when auditing hooks, inspecting hook latency, top violations, zero-fire rules, manifest drift, session trends, or running a retro across recent sessions.
 ---
 
 # Hook audit
@@ -24,9 +24,14 @@ Analyze hook effectiveness across all session metrics. Read every JSON in `~/.cl
 ### 1. Hook activity
 
 Each hook fired >=1 across sessions:
-- Total blocks, warns, denies
+- Total blocks, warns, nudges, denies
 - Avg fires per session
 - Trend: up or down over time?
+
+### 1b. Latency profile
+
+Parse `perf_ms` per hook from session summaries: P50, P95, invocations, total wall-clock.
+Flag P95 > 100ms (perf budget breach), P95 > 500ms (critical).
 
 ### 2. Silent hooks
 
@@ -65,12 +70,20 @@ Broader than hook-level. Pull from session JSONL + git log same window as metric
 
 Output per-metric: current value, 7-day trend (up/down/flat), actionable next step.
 
+### 6b. Manifest drift check
+
+```
+bash scripts/generate-hook-configs.sh --check
+```
+
+Drift between `skill-manifest.json` and generated configs: RED FLAG -- regression. Run without `--check` to fix.
+
 ### Mode flags
 
 `$ARGUMENTS`:
 - empty / `--hooks` -> run sections 1-5 only (default).
 - `--retro` -> run sections 1-6 with emphasis on section 6.
-- `--all` -> all sections, no emphasis.
+- `--all` -> all sections (including latency + drift), no emphasis.
 
 ### Output format
 

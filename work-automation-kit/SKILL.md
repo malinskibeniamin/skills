@@ -19,7 +19,7 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 **Matt Pocock/community**: grill-with-docs, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
-**Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, stay-within-limits, efficient-frontier
+**Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, efficient-frontier
 
 **Optional**: setup-atlassian-workflow (Jira via acli, opt-in)
 

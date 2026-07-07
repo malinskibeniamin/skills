@@ -44,7 +44,7 @@ Grep can't express nested interactives, exhaustive switches, or useState-object-
 ## 5. View analytics
 
 ```
-/frontend-skills-stats
+/hook-audit --all
 ```
 
 Reports per-hook P50/P95 latency, blocks/warns/nudges/infos per rule, zero-fire candidates (prune), over-aggressive hooks (soften). Needs >=5 session summaries in `~/.claude/hook-metrics/`.

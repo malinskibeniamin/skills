@@ -1,6 +1,6 @@
 ---
 name: efficient-frontier
-description: Use when a high-cost frontier model (Fable, Opus) should delegate bounded research, coding, testing, browser checks, or log reduction while keeping planning, synthesis, risk, integration, and final review central.
+description: Use when a high-cost frontier model (Fable, Opus) should delegate bounded research, coding, testing, browser checks, or log reduction while keeping planning, synthesis, risk, integration, and final review central. Also owns usage-limit budgeting for long or parallel agent waves.
 ---
 
 # Efficient Frontier
@@ -22,3 +22,13 @@ Use the expensive frontier model where marginal judgment matters. Push repeatabl
 - Do not ask multiple agents to edit the same files concurrently.
 - Do not trust subagent conclusions blindly when risk is high.
 - Do not claim universal savings; this works best when work parallelizes cleanly.
+
+## Usage limits (long or parallel waves)
+
+1. Run bounded waves: at most 3 parallel subagents unless the user or host gives a throttle.
+2. Let in-flight agents finish; do not interrupt them only to save budget.
+3. Between waves, check 5-hour and weekly usage with the host's usage tool
+   (Claude Code: `bunx -y ccusage@latest blocks --active --json`).
+4. At or above 95% of either window: stop launching, prepare a self-contained resume
+   (observed window, threshold, next safe check, remaining plan, exact rerun command).
+5. On resume, re-check the real window before continuing.

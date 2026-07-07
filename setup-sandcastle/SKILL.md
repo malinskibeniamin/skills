@@ -13,7 +13,7 @@ Both modes: hooks fire inside each session. Dev lifecycle enforced regardless of
 
 **Capabilities:** task picking (GitHub issues -> one agent per issue), parallel N agents in isolated sandboxes, HITL review with full TUI, `noSandbox()` for git worktrees only, hooks in each session, branch strategies (head, merge-to-head, branch).
 
-Builder.io helper defaults: run `/stay-within-limits` before large batches and between waves, use `/efficient-frontier` for bounded delegation packets, and audit returned branches/sessions with `/agent-watchdog` before merging.
+Builder.io helper defaults: use `/efficient-frontier` for bounded delegation packets and its usage-limit budgeting before large batches and between waves, and audit returned branches/sessions with `/agent-watchdog` before merging.
 
 ```mermaid
 sequenceDiagram

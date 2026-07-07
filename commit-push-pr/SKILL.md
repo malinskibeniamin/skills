@@ -1,6 +1,6 @@
 ---
 name: commit-push-pr
-description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when user asks to open a PR, invokes `/commit-push-pr`, or requests a full commit -> push -> PR flow with CI monitoring.
+description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when the user asks to commit, commit and push, or open a PR. When the user asks for commit+push only, stop after Phase 4 (no PR).
 ---
 
 # Commit, push, and open PR

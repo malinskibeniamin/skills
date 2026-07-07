@@ -31,6 +31,12 @@ Use when the user wants to:
 5. Redact sensitive information: API keys, passwords, tokens, secrets, personal data, customer data, and any other confidential values. Mention redaction only when it affects continuation.
 6. Suggest skills the next session should use, if any.
 7. Return only the handoff path plus a 1-2 sentence summary.
+8. **Background-agent mode** -- user wants a fresh agent to pick the work up immediately:
+   instead of saving the file, launch `claude --bg --name "<descriptive name>" "<handoff summary>"`
+   (check `command -v claude` first; if unavailable or launch fails, do not claim an agent
+   started -- print the exact command plus the summary so the user can run it). Always pass
+   a descriptive `--name`; include `/agent-watchdog` in suggested skills when the next
+   session must verify this agent's claims.
 
 ## Handoff Template
 
