@@ -4,8 +4,6 @@ description: Turn text plans into interactive Agent-Native visual plans with dia
 ---
 
 # Visual Plan
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Local override: translate upstream `npx @agent-native/core` examples to `bunx @agent-native/core`.
 
 ## Required references
@@ -25,5 +23,4 @@ Read these only when relevant:
 
 - Use `/plan-arbiter` when multiple plans or agents disagree.
 - Use `/grill-me` or `/grill-with-docs` before implementation when decisions remain open.
-- Use `/quick-recap` only after the plan or follow-up work has an evidence-backed status.
 - Planning is read-only unless the user explicitly approves implementation.

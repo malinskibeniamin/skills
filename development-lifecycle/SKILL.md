@@ -5,8 +5,6 @@ description: "Use when frontend/React/TypeScript/UI work. Guides understand -> p
 
 # Development Lifecycle
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Auto-detect phase, guide process.
 
 If the user says "plow ahead", "do not stop", "use your best judgment", "keep going until done", or similar, use `/plow-ahead` as the autonomy contract: make reversible assumptions, continue through routine ambiguity, and stop only for true blockers.
@@ -39,8 +37,6 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Bite-sized tasks (2-5 min each)
 - UI work: use `/prototype` for 2-3 runnable UI variations, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
 - 5+ tasks -> stacked PRs (one per logical group)
-- Complex plan (5+ tasks, multi-stakeholder)? Consider `/ultraplan`
-- `/codex:rescue` available -> auto-dispatch second opinion
 
 ### 2b. Grill
 

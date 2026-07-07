@@ -1,11 +1,9 @@
 ---
 name: efficient-frontier
-description: Use when a high-cost frontier model should delegate bounded research, coding, testing, browser checks, or log reduction while keeping planning, synthesis, risk, integration, and final review central.
+description: Use when a high-cost frontier model (Fable, Opus) should delegate bounded research, coding, testing, browser checks, or log reduction while keeping planning, synthesis, risk, integration, and final review central.
 ---
 
 # Efficient Frontier
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Read `references/builder-upstream.md` for the full workflow.
 
 Use the expensive frontier model where marginal judgment matters. Push repeatable, bounded, or token-heavy work to cheaper/faster subagents.

@@ -5,9 +5,7 @@ description: Analyze changes, create categorized conventional commits, and push.
 
 # Commit and push
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
-For a PR flow use `/commit-push-pr`, which wires `/visual-recap` and `/quick-recap`. This skill is commit+push only.
+For a PR flow use `/commit-push-pr`. This skill is commit+push only.
 
 ## Step 0: Gather context
 

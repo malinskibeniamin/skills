@@ -1,11 +1,10 @@
 ---
 name: writing-beats
 description: Build article beat by beat from raw material with user-chosen pivots.
+disable-model-invocation: true
 ---
 
 # Writing Beats
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Input: markdown raw material. If output path missing, ask once.
 
 ## Loop

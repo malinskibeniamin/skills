@@ -2,9 +2,7 @@
 name: to-tickets
 description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker -- edges as text in a local file, or native blocking links on a real tracker.
 disable-model-invocation: true
----
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-# To Tickets
+---# To Tickets
 Break a plan, spec, or conversation into a set of **tickets** -- tracer-bullet vertical slices, each declaring the tickets that **block** it.
 The issue tracker and triage label vocabulary should have been provided in `docs/agents/` -- run `/work-automation-kit` if not.
 ## Process
@@ -62,4 +60,4 @@ The end-to-end behaviour this ticket makes work, from the user's perspective -- 
 - A reference to each blocking ticket, or "None -- can start immediately".
 </issue-template>
 In either form, avoid specific file paths or code snippets -- they go stale fast. Exception: if the `/prototype` skill produced code that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), add a context pointer to where that prototype code lives rather than inlining it.
-Work the frontier one ticket at a time with `/implement`, clearing context between tickets.
+Work the frontier one ticket at a time with `/tdd`, clearing context between tickets.

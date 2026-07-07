@@ -5,8 +5,6 @@ description: Install and configure planning/project management workflows -- spec
 
 # Work Automation Kit
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Installs workflow skills and scaffolds per-repo context:
 
 - Issue tracker: GitHub, GitLab, local markdown, Jira/Atlassian, or other.
@@ -21,9 +19,9 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 **Matt Pocock/community**: grill-with-docs, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
-**Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, quick-recap, stay-within-limits, efficient-frontier
+**Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, stay-within-limits, efficient-frontier
 
-**Optional**: setup-atlassian-workflow (Jira via acli, opt-in), codex-plugin-cc (cross-model review)
+**Optional**: setup-atlassian-workflow (Jira via acli, opt-in)
 
 ## Install
 
