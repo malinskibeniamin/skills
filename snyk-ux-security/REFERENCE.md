@@ -317,6 +317,15 @@ Anything else stays out of `package.json`. Use `.snyk` dismissal with a
 90-day expiry and precise reason. This makes the skill more likely to
 ignore/suppress noisy deep transitives than to create dependency debt.
 
+Treat every new `resolutions` / `overrides` entry as a code smell and
+every existing long override list as a burn-down queue. The safest
+dependency is the one absent from the graph: before adding an override,
+ask whether the direct parent can be deleted, whether the feature is
+unused, or whether native/in-house code can replace the third-party
+dependency with less total surface area. Lower third-party surface area
+means fewer future advisories, fewer transitive surprises, and less
+lockfile churn.
+
 ### Transitive-only dismissal checklist
 
 Use this checklist before adding any override/resolution for a finding
@@ -338,13 +347,18 @@ several layers deep in `node_modules`.
 5. If the parent code path is unused, optional, SSR-only, build-only, or
    outside shipped UI code, dismiss with `snyk ignore` and a precise
    reason. Include the parent chain + symbol proof.
-6. If the parent code path is reachable, fix the parent before any
-   override. Do not add the vulnerable transitive to `package.json`
-   just to make a suppression-only override easier.
-7. Override/resolution only when direct + parent remediation are both
-   blocked and the vulnerability is still reachable or Snyk cannot be
-   ignored for policy reasons. Add a removal issue.
-8. In short: do not add a transitive package to `package.json` just to
+6. If the parent code path is reachable, first ask whether the parent
+   dependency or feature can be removed entirely. Prefer deletion,
+   native platform behavior, or small in-house code when that lowers
+   total dependency surface area.
+7. If removal is not viable, fix the parent before any override. Do
+   not add the vulnerable transitive to `package.json` just to make a
+   suppression-only override easier.
+8. Override/resolution only when direct + parent remediation and
+   dependency removal are all blocked, and the vulnerability is still
+   reachable or Snyk cannot be ignored for policy reasons. Add a
+   removal issue and a burn-down note.
+9. In short: do not add a transitive package to `package.json` just to
    suppress a nested finding.
 
 Anti-pattern to reject in review:
@@ -429,9 +443,14 @@ PR body.
    our direct deps pulls it. Bump that direct dep to a version whose
    transitives pin the fixed version. Prefer this over override --
    one bump, upstream-maintained.
-3. **Override / resolution / replace (last resort).** Only when
-   direct + parent bump are both blocked (upstream has no fix;
-   fixing version needs React 19 and our React 18 pin stands; etc).
+3. **Dependency surface removal.** If the parent dependency exists only
+   for a small/unused feature, remove it or replace it with native or
+   in-house code before accepting more third-party surface area. This
+   is often safer than pinning nested packages forever.
+4. **Override / resolution / replace (last resort).** Only when
+   direct + parent bump and dependency removal are all blocked
+   (upstream has no fix; fixing version needs React 19 and our React
+   18 pin stands; etc).
    - JS: `package.json` `"resolutions"` (bun/yarn-compatible) or
      `"overrides"` (npm-compatible). We use `resolutions` under bun.
    - Go: `replace` directive in `go.mod`.
@@ -440,10 +459,11 @@ PR body.
      (`Overrides added -- follow-up to remove`).
    - Explain in the PR body why steps 1 and 2 were blocked.
 
-**Why this order matters:** every added override is tomorrow's
-forced upgrade. Overrides accumulate, node_modules bloats,
-maintenance compounds weekly. Top-level bumps are upstream-tracked
-and self-maintaining.
+**Why this order matters:** every added override is tomorrow's forced
+upgrade and a smell that the dependency graph is taking control of the
+app. Overrides accumulate, node_modules bloats, maintenance compounds
+weekly, and each nested pin can pull in more packages with their own
+advisories. Lower third-party surface area is the durable win.
 
 ### Minimum release age gate audit (JS)
 
