@@ -49,7 +49,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/resilience-review` | Resilience Review checks resilience. |
 | `/resolve-pr-feedback` | Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. |
 | `/resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. |
-| `/review` | Reviews a diff since a fixed point across Standards, Spec, and risk lanes. |
+| `/review` | Reviews a diff with an 8-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience... |
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
 | `/setup-sandcastle` | Configure Sandcastle agent delegation -- headless run(), HITL interactive(), parallel Docker sandboxes, bra... |

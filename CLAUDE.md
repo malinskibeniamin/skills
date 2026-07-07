@@ -95,7 +95,7 @@ Rankings 1-10, higher better. Cost = what we actually pay, not list price. Intel
 | GPT-5.6 (codex) | 8 | 9 | 6 |
 | GPT-5.5 (codex) | 9 | 5 | 5 |
 
-Rules: ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits -- cheap output below bar -> rerun smarter WITHOUT asking; judge output, not price tag; escalating < shipping mediocre | bulk mechanical (clear-spec impl, data analysis, migrations) -> GPT-5.5, effectively free | user-facing (UI/copy/API design) -> taste >= 7 | review/plan -> Fable-5 or Opus-4.8, optional GPT-5.5 extra independent pass | computer use + token furnaces (browser verify, code-base analysis) -> codex GPT-5.5/5.6, report back to Fable | **NEVER Haiku** | GPT models only via codex CLI (`/codex` skill: exec/review/computer-use, wrapper pattern for workflows) | Claude models via agent/workflow `model` param.
+Rules: ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits -- cheap output below bar -> rerun smarter WITHOUT asking; judge output, not price tag; escalating < shipping mediocre | bulk mechanical (clear-spec impl, data analysis, migrations) -> GPT-5.5, effectively free | user-facing (UI/copy/API design) -> taste >= 7 | review/plan -> Fable-5 or Opus-4.8, optional GPT-5.5 extra independent pass | computer use + token furnaces (browser verify, code-base analysis) -> codex GPT-5.5/5.6, report back to Fable | **thinker/executor split**: smart model plans exact steps -> cheap model executes (Sonnet subagent or codex GPT-5.5) -> smart model reviews the diff | **NEVER Haiku** | GPT models only via codex CLI (`/codex` skill: exec/review/computer-use, wrapper pattern for workflows) | Claude models via agent/workflow `model` param.
 
 ### Monitor (not sleep)
 
