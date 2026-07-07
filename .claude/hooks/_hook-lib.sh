@@ -523,13 +523,24 @@ _hook_verbosity="${HOOK_VERBOSITY:-normal}"
 # ── Elapsed-ms timer (for perf_ms telemetry) ────────────────────
 # Sets _hook_start_ms on library source. _hook_elapsed_ms prints
 # milliseconds since source. Integer-only output (test contract).
-# Cross-platform: uses python3 since macOS `date +%N` is unsupported.
+# Uses bash 5 EPOCHREALTIME (zero subprocess); falls back to python3
+# only on shells without it. macOS `date +%N` is unsupported.
 
-_hook_start_ms=$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0)
+_hook_now_ms() {
+  if [ -n "${EPOCHREALTIME:-}" ]; then
+    local s="${EPOCHREALTIME/,/.}"
+    echo $(( ${s%.*} * 1000 + 10#${s#*.} / 1000 ))
+  else
+    python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0
+  fi
+}
+
+_hook_start_ms=$(_hook_now_ms)
 
 _hook_elapsed_ms() {
   local now
-  now=$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo "$_hook_start_ms")
+  now=$(_hook_now_ms)
+  [ "$now" -eq 0 ] && now=$_hook_start_ms
   echo $((now - _hook_start_ms))
 }
 
