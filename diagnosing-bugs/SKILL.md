@@ -7,7 +7,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 Discipline for hard bugs. Skip phase only if justify. Ponytail commands: `/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`; summarize inline. No `/ponytail-help` skill.
 
-When explore codebase, use project domain glossary for mental model of relevant modules, check ADRs in area you touch.
+When exploring codebase, use project domain glossary + ADRs; for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
 
 ## Phase 1 -- Build a feedback loop
 

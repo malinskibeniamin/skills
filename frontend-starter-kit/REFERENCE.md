@@ -21,7 +21,7 @@
 | 13 | setup-connect-query | PostToolUse | ConnectRPC, protobuf v2 |
 | 14 | setup-e2e-testing | -- | Playwright, Testcontainers, axe-core |
 
-### Owned Workflow Skills (5) -- hook-integrated, auto-load via paths:
+### Owned Workflow Skills -- hook-integrated, auto-load via paths:
 
 | Skill | Replaces | Key feature |
 |---|---|---|
@@ -30,15 +30,15 @@
 | diagnosing-bugs | mattpocock/diagnosing-bugs (vendored) | Feedback-loop-first 6-phase debugging |
 | brainstorming | -- (owned) | Design + challenge modes |
 
-### Community Workflow Skills (10) -- from mattpocock/skills
+### Community Workflow Skills -- from mattpocock/skills
 
-improve-codebase-architecture, request-refactor-plan, design-an-interface, to-spec, to-tickets, writing-great-skills, ubiquitous-language, git-guardrails-claude-code
+improve-codebase-architecture, prototype, to-spec, to-tickets, writing-great-skills, git-guardrails-claude-code
 
 ## Install Order
 
 1. Setup skills 1-14 (sequential, idempotent)
 2. Owned workflow skills (5 installs)
-3. Community skills (10 installs)
+3. Community skills
 4. Set `REACT_RULES_BAN_USEEFFECT=1` in session env
 5. Run `bun run quality:gate` verify
 

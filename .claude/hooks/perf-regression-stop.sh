@@ -117,7 +117,7 @@ _check "CLS" "$_cls" "$_b_cls" 0.05 1
 _check "TBT" "$_tbt" "$_b_tbt" 10
 
 if [ -n "$_regress" ]; then
-  hook_stop_block "Core Web Vitals regression detected:${_regress}. Run /qa to inspect, fix the regression, or update baseline explicitly. [ETHOS: Tests Gate Everything]"
+  hook_stop_block "Core Web Vitals regression detected:${_regress}. Run /visual-review to inspect, fix the regression, or update baseline explicitly. [ETHOS: Tests Gate Everything]"
 fi
 
 exit 0

@@ -9,6 +9,8 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 Auto-detect phase, guide process.
 
+If the user says "plow ahead", "do not stop", "use your best judgment", "keep going until done", or similar, use `/plow-ahead` as the autonomy contract: make reversible assumptions, continue through routine ambiguity, and stop only for true blockers.
+
 ## Ponytail default
 
 Ponytail before implementation: run `/ponytail full` during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.

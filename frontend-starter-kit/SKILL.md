@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Complete frontend stack -- 14 setup skills + 14 owned workflow skills + 4 optional community skills in one command. Use when starting new frontend project or bootstrapping frontend best practices from scratch.
+description: Complete frontend stack -- 14 setup skills + active workflow/community skills in one command. Use when starting new frontend project or bootstrapping frontend best practices from scratch.
 ---
 
 # Frontend Starter Kit
@@ -25,7 +25,9 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 ## Workflow Skills (15-28)
 
-development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, request-refactor-plan, design-an-interface, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, qa, writing-great-skills
+development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, prototype, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, writing-great-skills
+
+Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; quick-recap; stay-within-limits; efficient-frontier.
 
 ## Steps
 
@@ -39,14 +41,12 @@ bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/setup-ci-pipeline --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/improve-codebase-architecture --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/request-refactor-plan --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/design-an-interface --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/prototype --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/qa --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
 ```
 
@@ -57,7 +57,6 @@ bunx skills@latest add mattpocock/skills/prototype --agent claude-code -y
 bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y
 bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y
 bunx skills@latest add mattpocock/skills/handoff --agent claude-code -y
-bunx skills@latest add mattpocock/skills/ubiquitous-language --agent claude-code -y
 bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y
 ```
 

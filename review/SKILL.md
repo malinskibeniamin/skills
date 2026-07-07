@@ -8,6 +8,8 @@ description: Reviews a diff since a fixed point across Standards, Spec, and risk
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Diff review from fixed point to `HEAD`. Keep Standards and Spec axes separate.
 
+Use `/agent-watchdog` when the review target is another agent's branch, transcript, session, PR, or claimed completion. Watchdog reconstructs the original contract before the normal review hats judge the diff.
+
 ## Inputs
 
 If fixed point missing, ask: "Review against what -- branch, commit, or `main`?"
@@ -39,9 +41,7 @@ Required hats: `ponytail-review-hat`, `thermo-nuclear-review-hat`, `resilience-r
 - **`test-perf-review-hat`**: check TDD evidence, coverage gaps, flaky/missing tests, slow paths, render/network/bundle risk, and warning-free commands.
 - **`security-privacy-triage-hat`**: check auth, authorization, tenant boundaries, secrets, unsafe HTML, injection, SSRF, redirects, dependency execution, logging, analytics, PII, export/import; exploitable/privacy findings escalate to Thermo nuclear.
 
-Review priority hierarchy: 1. Ponytail review 2. Thermo nuclear review 3. Resilience review 4. Regular review 5. Adversarial review 6. Visual review 7. Test/perf review. Security/privacy triage feeds this hierarchy.
-
-No silent skips: all hats run at least triage; `SKIPPED` needs `skip_reason`, checked files/surfaces, and absent triggers. Never skip due to time, token budget, small diff, prior confidence, or another hat passing. Thermo nuclear is fail-open. Thermo nuclear and Resilience skip only when diff evidence proves no matching risk surface. If unsure, run the review.
+Review priority hierarchy: 1. Ponytail review 2. Thermo nuclear review 3. Resilience review 4. Regular review 5. Adversarial review 6. Visual review 7. Test/perf review. Security/privacy triage feeds this hierarchy. No silent skips: all hats run at least triage; `SKIPPED` needs `skip_reason`, checked files/surfaces, and absent triggers. Never skip due to time, token budget, small diff, prior confidence, or another hat passing. Thermo nuclear is fail-open. Thermo nuclear and Resilience skip only when diff evidence proves no matching risk surface. If unsure, run the review.
 
 PR value gate: always quantify the Major improvement before verdict. Code is liability: if added surface area is not product value, defensive correctness, or test confidence, treat it as low-value until justified. Value score: HIGH|MEDIUM|LOW|NONE. Maintenance/security/resilience/test-only can score HIGH. If no Major improvement reaches MEDIUM, run `/steelman` internally against "this PR adds meaningful value". If `/steelman` confirms low-value, gate blocks pending explicit override, split, or stronger value justification.
 

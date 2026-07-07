@@ -43,8 +43,10 @@ Run all checks. Fix failures before proceed.
 2. Run `/ponytail-review` then `/deslop` -- cut complexity first, then block unless value, defense, or test confidence is certain
 3. Fix issues, commit
 4. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
-5. Run `/commit-push-pr` -- conventional commits, push, open PR
-6. Dispatch `code-reviewer` agent (fresh-eyes review)
+5. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason
+6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` for reviewer guidance; no history rewrite without user approval
+7. Run `/commit-push-pr` -- conventional commits, push, open PR
+8. Dispatch `code-reviewer` agent (fresh-eyes review)
 
 ## Phase 5b: Iterate
 
@@ -85,6 +87,8 @@ Before start, check work to ship:
 | `/ponytail-review` | 5 | Complexity-only delete/stdlib/native/YAGNI pass |
 | `/deslop` | 5 | Liability certainty gate after Ponytail review |
 | `/visual-review` | 4/5 | Customer-facing surface review with product/design/engineering/QA hats when UI, CLI/TUI, mobile, desktop, or report output changed |
+| `/visual-recap` | 5 | Interactive PR recap for non-trivial diffs so reviewers understand what ships |
+| `/make-pr-easy-to-review` | 5 | Reviewer guidance and safe PR cleanup without behavior changes |
 | `/resilience-review` | 2/4b/5 | Edge cases, error handling, fallback, polish, observability for risky features |
 | `/commit-push-pr` | 5 | Conventional commits + push + PR |
 | `code-reviewer` agent | 5 | Fresh-eyes review on PR |

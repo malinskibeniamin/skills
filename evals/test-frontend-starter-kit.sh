@@ -19,8 +19,9 @@ run_content_eval "$SKILL_DIR/SKILL.md" "setup-react-compiler" "references setup-
 # ── Matt Pocock community skills referenced ──────────────────────
 
 run_content_eval "$SKILL_DIR/SKILL.md" "improve-codebase-architecture" "references improve-codebase-architecture skill"
-run_content_eval "$SKILL_DIR/SKILL.md" "request-refactor-plan" "references request-refactor-plan skill"
-run_content_eval "$SKILL_DIR/SKILL.md" "design-an-interface" "references design-an-interface skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "prototype" "references prototype skill"
+run_content_eval "$SKILL_DIR/SKILL.md" "visual-plan.*visual-recap.*visual-review" "references visual planning review recap flow"
+run_content_eval "$SKILL_DIR/SKILL.md" "read-the-damn-docs.*plan-arbiter.*agent-watchdog" "references Builder docs arbitration watchdog helpers"
 run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not npx) to install community skills"
 
 # ── All setup skill dependencies exist ───────────────────────────
@@ -28,3 +29,12 @@ run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not 
 for dep_skill in setup-toolchain setup-biome setup-quality-gate setup-agent-config setup-react-compiler; do
   run_file_eval "$REPO_ROOT/$dep_skill/SKILL.md" "dependency: $dep_skill exists"
 done
+
+if grep -qE "request-refactor-plan|design-an-interface|malinskibeniamin/skills/qa|mattpocock/skills/ubiquitous-language" "$SKILL_DIR/SKILL.md" "$SKILL_DIR/REFERENCE.md"; then
+  echo "  FAIL  frontend starter avoids removed legacy workflow skills"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: frontend starter still references removed legacy workflow skills"
+else
+  echo "  PASS  frontend starter avoids removed legacy workflow skills"
+  PASS=$((PASS + 1))
+fi
