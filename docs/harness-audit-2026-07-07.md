@@ -122,7 +122,19 @@ moving static text out of the per-session/per-prompt hot path.
   `improve-codebase-architecture` review rows, all references to deleted skills across skills, evals,
   README, and manifests. Counts regenerated: 83 skills, 95 wired hooks, 104 scripts.
 
-## Wave 2 — consolidation (next session, one PR)
+## Wave 2 — consolidation (largely applied in the same PR)
+
+Applied in this PR: 11 low-value per-edit pattern hooks deleted (partial item 1 — the
+family-dispatcher packaging rewrite itself remains); review stack collapsed (thermo-nuclear →
+`/review --deep`, mandatory 8-hat fan-out → evidence-triggered lanes, recursion forbidden);
+ponytail 4 → 1 (debt ledger into ponytail, complexity tags into deslop); stay-within-limits →
+efficient-frontier; claude-handoff → handoff; frontend-skills-stats → hook-audit; commit-push →
+zero-context alias of commit-push-pr; karpathy-failure-modes split into ~6KB core + lazy MAST
+reference; findings-schema.md moved to agents/references/; shared review-evidence reference
+extracted; hardcoded `git diff HEAD~1` base replaced with `${REVIEW_BASE:-merge-base}` in all
+reviewer agents. Surface after wave 2: 76 skills, 84 wired hooks, 93 scripts, 7 registered agents.
+
+Remaining (original wave-2 list; unapplied items are 1's dispatcher packaging, 4, 5, 7, 8, 10):
 
 1. **Hook dispatcher rewrite (highest ROI)**: collapse the 56 Edit/Write PostToolUse scripts into ~8
    family passes (react-ui, router, forms, connect/query, tests, styling/copy, ts-escape-hatches,
