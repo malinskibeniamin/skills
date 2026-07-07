@@ -4,6 +4,7 @@ description: "Use when you need to resolve an in-progress git merge/rebase confl
 ---
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
+Use `/agent-watchdog` when conflict context is another agent branch/claim; use `/plan-arbiter` when semantic conflict choices remain viable after source review.
 
 1. **See the current state** of the merge/rebase. Check git history, and the conflicting files.
 

@@ -14,6 +14,8 @@ Standalone trigger OK: `/visual-review`. Before PR/release for surface diffs: `*
 
 Modes: `plan`, `implemented`, `regression`, `release`.
 
+Builder.io artifacts: `plan` mode may publish `/visual-plan`; implemented/release diffs may feed `/visual-recap`; competing visual directions go through `/plan-arbiter`; browser/platform claims that depend on current APIs go through `/read-the-damn-docs`. These augment visual evidence; they do not replace this review.
+
 ## Flow
 
 1. Infer surfaces from hints or `git diff --name-only HEAD`: routes/components -> URL/test; CLI/report -> command/output. If blocked, ask one question.

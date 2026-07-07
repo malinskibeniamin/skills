@@ -74,8 +74,10 @@ Record commit types created -- used for auto-labeling Phase 5.
 2. Build `gh pr create` with `--base`, `--fill-verbose`, `--assignee @me`
 3. Auto-label from commit types (see REFERENCE.md auto-label map)
 4. Override auto-filled body with structured template (see REFERENCE.md PR body template)
-5. Frontend or customer-facing surface change detected (REFERENCE.md rule) -> include Screenshots/surface review table summarizing visual changes. One row per affected view/surface (before/after/notes). Omit section if no frontend/customer-facing diff
-6. Print PR URL
+5. Non-trivial diff -> create or link `/visual-recap` so reviewers can understand what ships. Skip only for tiny, single-file, obvious diffs and record the skip reason in the PR body.
+6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` in reviewer-guidance mode before finalizing the PR body. Do not rewrite history unless the user asked or approved the plan.
+7. Frontend or customer-facing surface change detected (REFERENCE.md rule) -> include Screenshots/surface review table summarizing visual changes. One row per affected view/surface (before/after/notes). Omit section if no frontend/customer-facing diff
+8. Print PR URL
 
 ### Phase 6: Watch CI (MANDATORY)
 
@@ -89,7 +91,8 @@ Record commit types created -- used for auto-labeling Phase 5.
 
 1. Run `git status` and `git diff` to confirm clean worktree
 2. Anything uncommitted remains -> warn user
-3. Summarize: branch name, commits, PR URL (or existing PR URL), CI status, remaining user actions
+3. Summarize: branch name, commits, PR URL (or existing PR URL), visual recap URL or skip reason, CI status, remaining user actions
+4. End with `/quick-recap` status line: green when PR+CI are done, yellow for pending CI/review, red only when blocked on user input.
 
 ### Safety
 

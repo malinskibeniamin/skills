@@ -25,10 +25,12 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 
 1. **Recon**: run `/prime` when available, then read README, AGENTS/CLAUDE, root configs, CI, tree, git log/churn. Identify stack, commands, conventions, tests, and deployment target.
 2. **Audit**: use `references/audit-playbook.md`; add `/ponytail-audit` and `/ponytail-debt` for overbuilt surface/deferred shortcuts. Effort levels are quick, standard, deep. For standard/deep audits, prefer `/swarm` read-only reviewers; direct audit is fine for quick mode.
-3. **Vet**: use `/review` style scrutiny: personally reopen cited locations, dedupe, severity-rank, and record rejected false positives in the plan index.
-4. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions. Treat `/ponytail-debt` + `/deslop` findings as advisor-plan inputs, not automatic edits.
-5. **Prioritize and confirm**: table findings by leverage with evidence. Direction findings are separate. Ask which findings to plan; non-interactive default is top 3-5.
-6. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-tickets`.
+3. **Docs**: use `/read-the-damn-docs` when findings depend on third-party APIs, packages, cloud behavior, or current official guidance.
+4. **Vet**: use `/review` style scrutiny: personally reopen cited locations, dedupe, severity-rank, and record rejected false positives in the plan index.
+5. **Arbitrate**: use `/plan-arbiter` when reviewing competing plans, agent proposals, or contradictory advisor findings.
+6. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions. Treat `/ponytail-debt` + `/deslop` findings as advisor-plan inputs, not automatic edits.
+7. **Prioritize and confirm**: table findings by leverage with evidence. Direction findings are separate. Ask which findings to plan; non-interactive default is top 3-5.
+8. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-tickets`.
 
 ## Invocation variants
 
@@ -39,7 +41,7 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 - `/improve next`: grounded feature/roadmap suggestions only.
 - `/improve plan <description>`: skip broad audit; investigate enough to write one plan.
 - `/improve review-plan <file>`: critique and tighten an existing plan.
-- `/improve execute <plan>`: dispatch separate executor in isolated worktree if host supports it, then review diff and verification; never merge.
+- `/improve execute <plan>`: dispatch separate executor in isolated worktree if host supports it, using `/efficient-frontier` for bounded delegation, then review diff and verification; never merge.
 - `/improve reconcile`: verify DONE plans, refresh drifted TODOs, unblock or retire backlog.
 - Add `--issues` only when explicitly requested; then publish plans with `gh issue create`.
 

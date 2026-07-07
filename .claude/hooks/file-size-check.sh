@@ -8,7 +8,7 @@ hook_skip_generated
 hook_skip_tests
 
 # ── Check 1: Warn when route files exceed 300 LOC ───────────────
-# Large route components should be split. Suggest /request-refactor-plan.
+# Large route components should be split. Suggest /improve-codebase-architecture.
 # Detect route files by path OR content (supports any directory structure).
 
 is_route=false
@@ -21,7 +21,7 @@ fi
 if [ "$is_route" = true ]; then
   loc=$(wc -l < "$file_path" | tr -d ' ')
   if [ "$loc" -gt 300 ]; then
-    hook_warn "Route file is ${loc} LOC (limit: 300). Split into smaller components or use /request-refactor-plan."
+    hook_warn "Route file is ${loc} LOC (limit: 300). Split into smaller components or use /improve-codebase-architecture."
   fi
 fi
 

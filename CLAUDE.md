@@ -36,7 +36,7 @@ Code is liability: keep additions only for product value, defensive correctness,
 - `.filter()`/`Array.with()` remove | `Number()`/`parseInt(s,10)` | `Number.isNaN()`
 - `<Button>` click thing | function to `setTimeout` | name useEffect: `useEffect(function syncX(){...},[deps])`
 - Form mode: `onChange` only | field validate need | err inline via FormMessage
-- Hook in `/hooks/`, not route file | route >300 LOC -> `/request-refactor-plan`
+- Hook in `/hooks/`, not route file | route >300 LOC -> `/improve-codebase-architecture`
 - No `window.location` -- router/env | side-effect: `useMutation` not raw fetch
 - No `throw new Error()` ConnectRPC -- `ConnectError.from()` | proto enum not magic number
 - `useWatch()` not `form.watch()` | spread `...field` RHF | `mutate()` need `onError`

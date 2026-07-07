@@ -13,9 +13,10 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 1. Explore context -- read files, docs, recent commits
 2. Clarify -- one question at time, not list
 3. Propose 2-3 approaches with trade-offs
-4. Optional: HTML mockup -> `agent-browser` -> annotated screenshot
-5. Present design -> get approval
-6. Write spec doc if needed
+4. If multiple agents/plans/options compete, use `/plan-arbiter` to pick adopt/hybrid/revise before presenting the final direction
+5. Optional: HTML mockup -> `agent-browser` -> annotated screenshot
+6. Present design -> get approval
+7. Write spec doc if needed
 
 ## Challenge Mode
 
@@ -32,3 +33,4 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 | New feature / architecture choice | Design |
 | Review proposed approach / risky refactor | Challenge |
 | "Should we use X or Y?" | Design -> Challenge winner |
+| Multiple competing plans or agent proposals | Design -> `/plan-arbiter` |

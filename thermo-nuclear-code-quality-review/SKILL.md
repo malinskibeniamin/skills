@@ -6,7 +6,7 @@ description: Runs a release-blocking cold PR audit across quality, frontend, res
 # Thermo-Nuclear Code Quality Review
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-A cold review for important PRs. Trust no summary; accept evidence only. This is a review workflow, not a fix workflow. Details: [REFERENCE.md](REFERENCE.md).
+A cold review for important PRs. Trust no summary; accept evidence only. This is a review workflow, not a fix workflow. Details: [REFERENCE.md](REFERENCE.md). Use `/agent-watchdog` for AI-authored claims, `/visual-recap` as PR context, `/stay-within-limits` for long review waves, and `/read-the-damn-docs` for external/current claims.
 
 ## Intake
 

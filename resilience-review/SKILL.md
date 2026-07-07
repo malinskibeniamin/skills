@@ -16,6 +16,7 @@ Skip docs/test/style/trivial pure logic only; record reason.
 ## Workflow
 1. Risk surface: user action, path, state change, side effects, deps.
 2. Unhappy-path inventory: normal-user mistakes, stale state, disabled-control edge, invalid input, race, outage, recovery.
+   For external/browser/platform behavior, run `/read-the-damn-docs`; for complex planned state flows, sketch `/visual-plan` before implementation.
 3. Probes:
    - Input: empty, null, duplicate, malformed, stale, huge, out-of-order.
    - Timing: double submit, tab race, retry, slow net, timeout, cancel.

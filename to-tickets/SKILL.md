@@ -6,7 +6,7 @@ disable-model-invocation: true
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 # To Tickets
 Break a plan, spec, or conversation into a set of **tickets** -- tracer-bullet vertical slices, each declaring the tickets that **block** it.
-The issue tracker and triage label vocabulary should have been provided to you -- run `/setup-matt-pocock-skills` if not.
+The issue tracker and triage label vocabulary should have been provided in `docs/agents/` -- run `/work-automation-kit` if not.
 ## Process
 ### 1. Gather context
 Work from whatever is already in the conversation context. If the user passes a reference (a spec path, an issue number or URL) as an argument, fetch it and read its full body and comments.
@@ -22,6 +22,7 @@ Break the work into **tracer bullet** tickets.
 - Any prefactoring should be done first
 </vertical-slice-rules>
 Give each ticket its **blocking edges** -- the other tickets that must complete before it can start. A ticket with no blockers can start immediately.
+If competing ticket graphs or slice strategies survive review, run `/plan-arbiter`; for a large dependency graph, publish `/visual-plan` so blockers/frontier are inspectable.
 ### 4. Quiz the user
 Present the proposed breakdown as a numbered list. For each ticket, show:
 - **Title**: short descriptive name
@@ -33,7 +34,7 @@ Ask the user:
 - Should any tickets be merged or split further?
 Iterate until the user approves the breakdown.
 ### 5. Publish the tickets to the configured tracker
-Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock-skills` configured -- the tickets are the same either way, only the shape of the blocking edges changes:
+Publish the approved tickets. **How** depends on the tracker documented in `docs/agents/issue-tracker.md` -- the tickets are the same either way, only the shape of the blocking edges changes:
 - **Local files** -> write one `tickets.md` in the repo root, all tickets in dependency order (blockers first), each with its "Blocked by" listing the titles it depends on. Use the file template below.
 - **A real issue tracker (GitHub, Linear, ...)** -> publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use each platform's native sub-issue relationship for the parent and native blocking edge relationship for blockers where available; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the `ready-for-agent` triage label unless instructed otherwise -- the tickets are agent-grabbable by construction.
 Do not close or modify any parent issue.

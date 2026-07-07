@@ -44,16 +44,16 @@ acli jira workitem create \
 acli jira workitem link PROJ-150 PROJ-100 "is caused by"
 ```
 
-### QA Session (mirrors qa skill)
+### Triage Session
 
-During QA, auto-file findings:
+During triage, auto-file findings:
 
 ```bash
 acli jira workitem create \
   --project "$JIRA_PROJECT" \
   --type Bug \
   --summary "Login form does not show error on invalid credentials" \
-  --label qa-session \
+  --label triage-session \
   --label accessibility
 ```
 

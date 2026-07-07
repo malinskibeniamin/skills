@@ -1,10 +1,10 @@
 # Evals for /wayfinder skill and tracker operations.
 
 WAYFINDER="$REPO_ROOT/wayfinder/SKILL.md"
-GITHUB_TRACKER="$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-github.md"
-GITLAB_TRACKER="$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-gitlab.md"
-LOCAL_TRACKER="$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-local.md"
-SETUP_SKILL="$REPO_ROOT/setup-matt-pocock-skills/SKILL.md"
+GITHUB_TRACKER="$REPO_ROOT/work-automation-kit/templates/issue-tracker-github.md"
+GITLAB_TRACKER="$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.md"
+LOCAL_TRACKER="$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md"
+SETUP_SKILL="$REPO_ROOT/work-automation-kit/SKILL.md"
 
 run_file_eval "$WAYFINDER" "wayfinder SKILL.md exists"
 run_content_eval "$WAYFINDER" '^name: wayfinder$' "wayfinder frontmatter name matches directory"
@@ -34,4 +34,4 @@ run_content_eval "$GITLAB_TRACKER" "--assignee @me" "GitLab wayfinding claims by
 run_content_eval "$LOCAL_TRACKER" "Status: claimed" "local wayfinding supports claimed state"
 run_content_eval "$LOCAL_TRACKER" "Status: resolved" "local wayfinding supports resolved state"
 run_content_eval "$LOCAL_TRACKER" "Blocked by: NN, NN" "local wayfinding supports blocking convention"
-run_content_eval "$SETUP_SKILL" "Wayfinding operations" "setup skill tells agents to configure wayfinding operations"
+run_content_eval "$SETUP_SKILL" "Wayfinding operations" "work-automation-kit tells agents to configure wayfinding operations"

@@ -7,13 +7,15 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 This skill takes the current conversation context and codebase understanding and produces a spec (you may know this document as a PRD). Do not interview the user -- just synthesize what you already know.
 
-The issue tracker and triage label vocabulary should have been provided to you -- run `/setup-matt-pocock-skills` if not.
+The issue tracker and triage label vocabulary should have been provided in `docs/agents/` -- run `/work-automation-kit` if not.
 
 ## Process
 
 1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
+
+If the spec relies on current third-party/API behavior, run `/read-the-damn-docs`. If multiple solution or seam plans are plausible, run `/plan-arbiter`. For non-trivial UI/product/API architecture, publish `/visual-plan` as the review artifact.
 
 Check with the user that these seams match their expectations.
 

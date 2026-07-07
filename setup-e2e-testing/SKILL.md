@@ -9,6 +9,7 @@ paths:
 # E2E Testing
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+Run `/read-the-damn-docs` before pinning current Playwright, Testcontainers, axe-core, or browser-tooling APIs.
 ## Conventions
 
 - `e2e/*.spec.ts` -- all e2e tests use `.spec.ts`

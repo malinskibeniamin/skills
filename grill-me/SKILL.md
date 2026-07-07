@@ -25,6 +25,8 @@ Once user present coherent plan, spawn three reviewers **in parallel** (single m
 
 Each emit `{reviewer, status, findings[], must_answer[]}` per findings-schema.md.
 
+If multiple agents, transcripts, visual plans, or alternative implementation plans now compete, run `/plan-arbiter` after the hats. Arbiter chooses `Adopt`, `Hybrid`, or `Revise first` before implementation approval.
+
 ## Step 3: Merge
 
 Consolidate all `must_answer` questions into single list, deduped. Surface to user. User answer each. Plan updated inline.

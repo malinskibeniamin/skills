@@ -20,7 +20,6 @@ VENDORED=(
   claude-handoff
   loop-me
   scaffold-exercises
-  setup-matt-pocock-skills
   setup-pre-commit
   teach
   to-spec
@@ -46,7 +45,7 @@ run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "native sub-issue" "to-tickets
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/prototype.*context pointer|context pointer.*/prototype" "to-tickets points to prototype code instead of inlining"
 run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
 
-for retired_skill in to-prd to-issues; do
+for retired_skill in to-prd to-issues setup-matt-pocock-skills; do
   if [ -e "$REPO_ROOT/$retired_skill/SKILL.md" ]; then
     echo "  FAIL  retired Matt planning skill removed: $retired_skill"
     FAIL=$((FAIL + 1))
@@ -157,9 +156,9 @@ run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Not yet specified" "wayfinder 
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Out of scope" "wayfinder tracks out-of-scope work separately"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "If this surfaces no fog" "wayfinder exits early when no map is needed"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "HITL.*AFK|AFK.*HITL" "wayfinder separates HITL and AFK tickets"
-run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-github.md" "Wayfinding operations" "GitHub tracker template includes wayfinding operations"
-run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
-run_content_eval "$REPO_ROOT/setup-matt-pocock-skills/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-github.md" "Wayfinding operations" "GitHub tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
+run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
 # Latest Matt vendoring: teach workspace.
 run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"

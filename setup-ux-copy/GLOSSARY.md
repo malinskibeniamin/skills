@@ -1,6 +1,6 @@
 # Redpanda Glossary
 
-Use with Matt Pocock's `ubiquitous-language` skill for project-wide DDD enforcement.
+Use with `/grill-with-docs` and `/domain-modeling` for project-wide terminology work.
 
 ## Product Names (capitalize exactly as shown)
 

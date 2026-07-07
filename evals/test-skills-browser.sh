@@ -23,12 +23,6 @@ else
   ERRORS="$ERRORS\n  FAIL: skills-browser 127 exit"
 fi
 
-# qa and go reference the wrapper
-run_content_eval "$REPO_ROOT/qa/SKILL.md" "skills-browser" \
-  "/qa uses skills-browser for optional browser capture"
+# go references the wrapper; removed legacy /qa no longer owns browser capture.
 run_content_eval "$REPO_ROOT/go/SKILL.md" "skills-browser" \
   "/go phase 4 uses skills-browser for smoke test"
-
-# qa clarifies Playwright test code boundary
-run_content_eval "$REPO_ROOT/qa/SKILL.md" "for test code" \
-  "/qa clarifies skills-browser vs test code boundary"
