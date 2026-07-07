@@ -1,6 +1,5 @@
 # Evals for llm-failure-mode-check.sh — 7 Karpathy patterns.
 # 5 block-enforced, 2 warn-only; types + silent-fallbacks delegated
-# to existing hooks (ts-no-escape-hatches, unhappy-path-check).
 
 HOOK="$REPO_ROOT/.claude/hooks/llm-failure-mode-check.sh"
 

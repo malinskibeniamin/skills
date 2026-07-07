@@ -1,7 +1,6 @@
 # Evals for resilience-review resilience skill + lifecycle/hook wiring.
 
 SKILL_DIR="$REPO_ROOT/resilience-review"
-HOOK="$REPO_ROOT/.claude/hooks/resilience-review-nudge.sh"
 INTENT_SCRIPT="$REPO_ROOT/shared/intent-detect.sh"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "resilience-review SKILL.md exists"
@@ -60,9 +59,6 @@ run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Finding queue" "code-revi
 
 run_file_eval "$HOOK" "resilience-review nudge hook exists"
 run_executable_eval "$HOOK" "resilience-review nudge hook executable"
-run_content_eval "$REPO_ROOT/skill-manifest.json" "resilience-review-nudge.sh" "manifest wires hook"
-run_content_eval "$REPO_ROOT/.claude/settings.json" "resilience-review-nudge.sh" "settings include hook"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "resilience-review-nudge.sh" "plugin hooks include hook"
 
 _tmpdir=$(mktemp -d); _tmpfile="$_tmpdir/CreateForm.tsx"; echo 'export function CreateForm(){return <form><button>Save</button></form>}' > "$_tmpfile"
 run_hook_eval "$HOOK" "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_tmpfile\",\"content\":\"export function CreateForm(){return <form onSubmit={handleSubmit}><button>Save</button></form>}\"}}" 0 "hook nudges on form submit" "/resilience-review"

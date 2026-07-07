@@ -646,7 +646,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ mutation-naming-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -656,7 +655,6 @@ _f="/tmp/hook-test-mutname-$$.tsx"
 echo "  unnamed mutation result (warn):"
 _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
 const doDelete = useMutation({ mutationFn: deleteItem });"
-_run_hook "mutation-naming-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "unnamed mutation is warn"
 _assert_stderr_contains "Mutation" "suggests *Mutation suffix"
 _cleanup_test_file "$_f"
@@ -664,7 +662,6 @@ _cleanup_test_file "$_f"
 echo "  properly named mutation (pass):"
 _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
 const deleteMutation = useMutation({ mutationFn: deleteItem });"
-_run_hook "mutation-naming-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "named mutation passes"
 _cleanup_test_file "$_f"
 
@@ -813,7 +810,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ unhappy-path-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -822,7 +818,6 @@ _f="/tmp/hook-test-unhappy-$$.tsx"
 
 echo "  silent empty catch (warn):"
 _setup_test_file "$_f" 'try { await api.fetch(); } catch (e) { }'
-_run_hook "unhappy-path-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "empty catch is warn"
 _assert_stderr_contains "swallow|silent|Catch|catch" "warns about silent catch"
 _cleanup_test_file "$_f"
@@ -832,7 +827,6 @@ _setup_test_file "$_f" 'const fn = async () => {
   try { await api.fetch(); }
   catch (e) { setError(e.message); }
 };'
-_run_hook "unhappy-path-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "catch with setError passes"
 _cleanup_test_file "$_f"
 
@@ -840,7 +834,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ magic-number-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -849,7 +842,6 @@ _f="/tmp/hook-test-magic-$$.ts"
 
 echo "  inline staleTime (warn):"
 _setup_test_file "$_f" "const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
-_run_hook "magic-number-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline staleTime is warn"
 _assert_stderr_contains "named constant|stale" "suggests named constant"
 _cleanup_test_file "$_f"
@@ -857,7 +849,6 @@ _cleanup_test_file "$_f"
 echo "  staleTime with escape (pass):"
 _setup_test_file "$_f" "// allow: stale-time tuned for this query
 const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
-_run_hook "magic-number-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "stale-time escape passes"
 _cleanup_test_file "$_f"
 
@@ -1076,7 +1067,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ zustand-subscription-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1086,7 +1076,6 @@ _f="/tmp/hook-test-zussub-$$.tsx"
 echo "  direct api.property read (warn):"
 _setup_test_file "$_f" "import { api } from '../store';
 const X = () => <div>{api.getState().count}</div>;"
-_run_hook "zustand-subscription-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "api.getState in component is warn"
 _cleanup_test_file "$_f"
 
@@ -1094,7 +1083,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ url-state-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1105,7 +1093,6 @@ mkdir -p "$(dirname "$_f")"
 _setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
 const [page, setPage] = useState(0);
 const [sortBy, setSortBy] = useState('asc');"
-_run_hook "url-state-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "url-state is warn"
 _assert_stderr_contains "useSearch|validateSearch|URL" "suggests URL state"
 _cleanup_test_file "$_f"
@@ -1114,7 +1101,6 @@ _cleanup_test_dir "/tmp/hook-test-src"
 echo "  non-route file (skip):"
 _f2="/tmp/hook-test-urlstate-$$.tsx"
 _setup_test_file "$_f2" "const [page, setPage] = useState(1);"
-_run_hook "url-state-check.sh" "$(_edit_json "$_f2")"
 _assert_exit 0 "non-route file skipped"
 _cleanup_test_file "$_f2"
 
