@@ -4,7 +4,7 @@
 
 ## 4.26.0
 
-2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review skills; prune obsolete local aliases/setup wrapper; and tighten current research/docs boundaries. Adds PR reviewability guidance plus concise authored-commit status and weekly summary workflows for concrete date ranges; routes removed alias jobs and project-context setup through current docs-first planning, triage, architecture, prototype, and work-automation workflows; and clarifies /research as durable cited artifacts while /read-the-damn-docs owns quick official fact checks. Skills 98 -> 95.
+2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review; remove obsolete aliases/setup wrapper; and tighten docs/research routing. Current surface: 98 hooks, 95 skills, 108 hook scripts, 9 agents, 5 routines.
 
 ## 4.25.0
 
