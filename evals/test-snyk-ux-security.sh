@@ -67,6 +67,12 @@ run_content_eval "$SKILL_MD" "bun\.lock" "SKILL.md references bun.lock"
 run_content_eval "$SKILL_MD" "Snyk IO.*yarn\.lock|yarn\.lock.*Snyk" "SKILL.md explains Snyk IO needs yarn.lock"
 run_content_eval "$SKILL_MD" "[Dd]ual.lockfile|both lockfiles" "SKILL.md enforces dual-lockfile sync"
 run_content_eval "$SKILL_MD" "lockfile-sync-check" "SKILL.md references lockfile-sync-check hook"
+run_content_eval "$SKILL_MD" "package-lock\.json" "SKILL.md calls out package-lock.json"
+run_content_eval "$SKILL_MD" 'Do not create, update, or commit|No `package-lock\.json` by default' "SKILL.md avoids package-lock churn"
+run_content_eval "$REFERENCE_MD" "JS package manager stance" "REFERENCE.md documents JS package-manager stance"
+run_content_eval "$REFERENCE_MD" 'Do not run `npm audit`|Do not.*npm audit' "REFERENCE.md forbids npm audit"
+run_content_eval "$REFERENCE_MD" "package-lock\.json.*stale|stale/wrong.*package-lock\.json" "REFERENCE.md treats package-lock as stale in bun projects"
+run_content_eval "$REFERENCE_MD" "False-positive bias for npm transitives" "REFERENCE.md defaults noisy npm transitives toward dismissal"
 
 # Guardrail: bun-only for runtime (no npm/yarn/pnpm commands except `bun install --yarn`)
 if grep -qE "^\s*(npm (install|update|audit|view|why)|yarn (add|upgrade|audit|why)|pnpm (add|update|audit|why))" "$SKILL_MD"; then
@@ -187,6 +193,8 @@ run_content_eval "$LOCK_HOOK" "bun\.lock" "lockfile hook matches bun.lock"
 run_content_eval "$LOCK_HOOK" "yarn\.lock" "lockfile hook matches yarn.lock"
 run_content_eval "$LOCK_HOOK" "package\.json" "lockfile hook matches package.json"
 run_content_eval "$LOCK_HOOK" "bun install --yarn" "lockfile hook suggests bun install --yarn"
+run_content_eval "$LOCK_HOOK" "package-lock\.json" "lockfile hook warns on package-lock.json"
+run_content_eval "$LOCK_HOOK" "do not use npm/package-lock" "lockfile hook rejects npm/package-lock for Snyk sweeps"
 run_content_eval "$LOCK_HOOK" "hook_parse_edit_write" "lockfile hook uses shared lib parser"
 run_content_eval "$LOCK_HOOK" "hook_warn" "lockfile hook uses hook_warn (non-blocking)"
 run_content_eval "$LOCK_HOOK" "git diff" "lockfile hook uses git diff for sync check"
@@ -284,6 +292,19 @@ else
   echo "        output: $hook_out3"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: lockfile hook silent on bun.lockb"
+fi
+
+: > "$_lock_tmpdir/package-lock.json"
+hook_out4=$(echo "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_lock_tmpdir/package-lock.json\"}}" \
+  | "$LOCK_HOOK" 2>&1 || true)
+if echo "$hook_out4" | grep -q "package-lock.json detected"; then
+  echo "  PASS  lockfile hook warns on package-lock.json"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  lockfile hook does not warn on package-lock.json"
+  echo "        output: $hook_out4"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: lockfile hook silent on package-lock.json"
 fi
 
 rm -rf "$_lock_tmpdir"
