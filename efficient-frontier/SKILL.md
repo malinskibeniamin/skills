@@ -8,14 +8,37 @@ Read `references/builder-upstream.md` for the full workflow.
 
 Use the expensive frontier model where marginal judgment matters. Push repeatable, bounded, or token-heavy work to cheaper/faster subagents.
 
-## Model routing
+## Model rankings
 
-The frontier model (Fable, Opus, GPT-5.6) is the brains: it owns ambiguous decomposition,
-architecture/product/safety tradeoffs, integrating partial implementations, resolving conflicting
-subagent reports, and the final review. Mundane bounded work routes to the cheaper tier
-(Sonnet for exploration/atomic coding, Haiku for lookups/boilerplate/log reduction, or the
-host's equivalent mini/fast models). Do not delegate tiny tasks, tightly coupled blockers, or
-judgments that need the frontier model's full reasoning.
+Rankings 1-10, higher better. Cost = what we actually pay, not list price. Intelligence = how
+hard a problem you can hand over. Taste = UI/UX, code quality, API design, design, copy.
+
+| Model | Cost | Intelligence | Taste |
+|---|---|---|---|
+| Fable-5 | 1 | 10 | 9 |
+| Opus-4.8 | 4 | 7 | 8 |
+| Sonnet-5 | 6 | 5 | 7 |
+| GPT-5.6 (codex) | 8 | 9 | 6 |
+| GPT-5.5 (codex) | 9 | 5 | 5 |
+
+How to apply -- defaults, not limits. Standing permission to override: if a cheaper model's
+output does not meet the bar, rerun or redo on a smarter model WITHOUT asking. Judge the
+output, not the price tag; escalating costs less than shipping mediocre output.
+
+- Anything that ships: intelligence > taste > cost. Cost is a tiebreaker only.
+- Bulk mechanical (clear-spec implementation, data analysis, migrations): GPT-5.5 -- effectively free.
+- User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-4.8, Fable-5). GPT-5.5 drafts, Claude finishes.
+- Reviews and plans: Fable-5 or Opus-4.8; optionally GPT-5.5 as an extra independent perspective.
+- Computer use and other token furnaces (browser verification, codebase analysis): shell to
+  codex GPT-5.5/5.6 and report back -- see `/codex` for mechanics (exec/review, timeouts,
+  worktree isolation, the sonnet+low wrapper pattern for workflows with `GPT-5.5:` labels).
+- Fable-5 effort: `high` or lower only -- `xhigh` is token-hungry, `max` a furnace with worse output.
+- **Never use Haiku.**
+
+The frontier model is the brains: ambiguous decomposition, architecture/product/safety
+tradeoffs, integrating partial implementations, resolving conflicting subagent reports, final
+review. Do not delegate tiny tasks, tightly coupled blockers, or judgments that need the
+frontier model's full reasoning.
 
 ## Workflow
 

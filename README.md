@@ -598,6 +598,7 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/deslop`** | Liability certainty gate before commit, push, PR, or merge. Runs `/simplify`, then blocks code lacking product value, defensive correctness, or test confidence. |
 | **`/swarm`** | Parallel executor. Infer lanes from free-form goal, spawn distinct subagents, keep coordinator ownership, and merge results across shared or per-agent worktrees. |
 | **`/efficient-frontier`** | Builder.io orchestration pattern for frontier models (Fable, Opus): keep judgment central, delegate bounded heavy lifting. |
+| **`/codex`** | Delegate to GPT-5.5/5.6 via the codex CLI: clear-spec implementation, independent review, computer use, investigation, and data analysis -- with the sonnet+low wrapper pattern for workflows. |
 | **`/make-pr-easy-to-review`** | Prepare or tidy PRs for reviewer clarity without code behavior changes. |
 | **`/visual-plan`** | Builder.io Agent-Native interactive plan artifact for reviewable diagrams, file maps, code, and open questions. |
 | **`/visual-recap`** | Builder.io Agent-Native PR/diff recap so reviewers understand what will ship. |

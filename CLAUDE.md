@@ -79,13 +79,23 @@ Order every task. Hooks block skipped steps.
 
 Alias: `/work` = `/development-lifecycle` (full). `/go` = phase 4-6 (ship tail).
 
-### Effort per phase (Opus 4.7)
+### Effort
 
-Default `high`. Implement(TDD) + Plan + Review(sec/arch) = `xhigh`. No `max` -- diminish return + overthink 4.7. Never inject `ultrathink` prompt/hook/skill -- 4.7 silent downgrade xhigh->high.
+Default `high`. Fable-5: `high` or lower ONLY -- `xhigh` token-hungry, `max` a furnace with worse output. Never inject `ultrathink` prompt/hook/skill.
 
-### Subagent model choice (cost)
+### Model routing (workflows + subagents)
 
-Explore -> Sonnet (grep no need Opus). Plan/Review -> Opus xhigh. general-purpose -> Sonnet if plan atomic, Opus else. Haiku 4.5 lookup/boilerplate.
+Rankings 1-10, higher better. Cost = what we actually pay, not list price. Intelligence = how hard a problem you can hand over. Taste = UI/UX, code quality, API design, design, copy.
+
+| Model | Cost | Intelligence | Taste |
+|---|---|---|---|
+| Fable-5 | 1 | 10 | 9 |
+| Opus-4.8 | 4 | 7 | 8 |
+| Sonnet-5 | 6 | 5 | 7 |
+| GPT-5.6 (codex) | 8 | 9 | 6 |
+| GPT-5.5 (codex) | 9 | 5 | 5 |
+
+Rules: ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits -- cheap output below bar -> rerun smarter WITHOUT asking; judge output, not price tag; escalating < shipping mediocre | bulk mechanical (clear-spec impl, data analysis, migrations) -> GPT-5.5, effectively free | user-facing (UI/copy/API design) -> taste >= 7 | review/plan -> Fable-5 or Opus-4.8, optional GPT-5.5 extra independent pass | computer use + token furnaces (browser verify, code-base analysis) -> codex GPT-5.5/5.6, report back to Fable | **NEVER Haiku** | GPT models only via codex CLI (`/codex` skill: exec/review/computer-use, wrapper pattern for workflows) | Claude models via agent/workflow `model` param.
 
 ### Monitor (not sleep)
 
