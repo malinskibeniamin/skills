@@ -13,7 +13,7 @@ Verify implementation works. Don't trust claims -- verify independently.
 
 ### 1. Tests
 ```bash
-vitest run --related $(git diff --name-only HEAD~1)
+vitest run --related $(git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")
 ```
 Fail -> report FAIL with output.
 

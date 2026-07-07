@@ -13,7 +13,7 @@ This agent is expensive. Run only when at least one trigger fires.
 
 1. Compute diff size:
    ```
-   git diff --shortstat HEAD~1 | awk '{print $4 + $6}'
+   git diff --shortstat "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | awk '{print $4 + $6}'
    ```
    Call this `diff_lines`.
 
@@ -21,7 +21,7 @@ This agent is expensive. Run only when at least one trigger fires.
 
 3. Scan changed paths for security-sensitive patterns:
    ```
-   git diff --name-only HEAD~1 | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'
+   git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'
    ```
 
 4. Decision:
@@ -45,7 +45,7 @@ Your job is to break things. For every significant change in the diff, construct
 
 ## Approach
 
-1. `git diff HEAD~1` -- read the full diff
+1. `git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}"` -- read the full diff
 2. For each significant change, ask yourself:
 
 ### Failure Classes
@@ -68,7 +68,7 @@ Your job is to break things. For every significant change in the diff, construct
 
 ## Output
 
-Output a single JSON block per [findings-schema.md](findings-schema.md).
+Output a single JSON block per [findings-schema.md](references/findings-schema.md).
 
 - Set `reviewer` to `"adversarial-reviewer"`
 - Every finding must include a concrete scenario: "If X sends Y, then Z happens because..."

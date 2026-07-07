@@ -3,15 +3,15 @@
 AGENTS_DIR="$REPO_ROOT/agents"
 
 # ── Schema exists ────────────────────────────────────────────────
-run_file_eval "$AGENTS_DIR/findings-schema.md" "findings-schema.md exists"
+run_file_eval "$AGENTS_DIR/references/findings-schema.md" "findings-schema.md exists"
 
 # ── Schema has required field definitions ────────────────────────
-run_content_eval "$AGENTS_DIR/findings-schema.md" "severity" "findings-schema defines severity"
-run_content_eval "$AGENTS_DIR/findings-schema.md" "autofix_class" "findings-schema defines autofix_class"
-run_content_eval "$AGENTS_DIR/findings-schema.md" "pre_existing" "findings-schema defines pre_existing"
-run_content_eval "$AGENTS_DIR/findings-schema.md" "confidence" "findings-schema defines confidence"
-run_content_eval "$AGENTS_DIR/findings-schema.md" "P0.*P1.*P2.*P3" "findings-schema has all severity levels"
-run_content_eval "$AGENTS_DIR/findings-schema.md" "safe_auto.*gated_auto.*manual.*advisory" "findings-schema has all autofix classes"
+run_content_eval "$AGENTS_DIR/references/findings-schema.md" "severity" "findings-schema defines severity"
+run_content_eval "$AGENTS_DIR/references/findings-schema.md" "autofix_class" "findings-schema defines autofix_class"
+run_content_eval "$AGENTS_DIR/references/findings-schema.md" "pre_existing" "findings-schema defines pre_existing"
+run_content_eval "$AGENTS_DIR/references/findings-schema.md" "confidence" "findings-schema defines confidence"
+run_content_eval "$AGENTS_DIR/references/findings-schema.md" "P0.*P1.*P2.*P3" "findings-schema has all severity levels"
+run_content_eval "$AGENTS_DIR/references/findings-schema.md" "safe_auto.*gated_auto.*manual.*advisory" "findings-schema has all autofix classes"
 
 # ── All agent definitions exist ──────────────────────────────────
 for agent in self-reviewer adversarial-reviewer code-reviewer verifier; do

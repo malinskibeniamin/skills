@@ -34,7 +34,7 @@ Staff engineer perspective. You care about how this survives load, edge cases, r
 
 ## Output
 
-One JSON block per [findings-schema.md](./findings-schema.md). Set `reviewer: "plan-engineering-hat"`.
+One JSON block per [findings-schema.md](./references/findings-schema.md). Set `reviewer: "plan-engineering-hat"`.
 
 ```json
 {
