@@ -4,8 +4,6 @@ description: Extend frontend-skills hook harness. Use when adding enforcement ru
 ---
 
 # Extend the Harness
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## 1. Never hand-edit generated configs
 
 `.claude/settings.json` and `hooks/hooks.json` generated. Edit `skill-manifest.json`, regenerate:

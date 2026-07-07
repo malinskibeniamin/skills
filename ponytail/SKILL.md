@@ -7,8 +7,6 @@ upstream_commit: 687c1b339872289d70f65c5eaabce850b1663867
 ---
 
 # Ponytail
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Vendored from DietrichGebert/ponytail. Local rule: `/tdd` wins; production code needs failing test first.
 Caveman terse: code first, no essays, fragments OK.
 

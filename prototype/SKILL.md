@@ -6,8 +6,6 @@ disable-model-invocation: true
 
 # Prototype
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Use `/visual-plan` when the prototype is meant to anchor an implementation plan or UI/product review. Use `/plan-arbiter` if multiple prototype directions compete.
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 

@@ -6,8 +6,6 @@ paths:
 ---
 
 # Accessibility Enforcement
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Catches
 
 - **`<img>` without `alt`** -- use `alt=""` for decorative img

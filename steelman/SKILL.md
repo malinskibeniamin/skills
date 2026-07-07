@@ -4,8 +4,6 @@ description: Argue the strongest evidence-backed case against a premise. Use whe
 ---
 
 # Steelman
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Anti-sycophancy. LLMs agree by default. This skill forces opposite case.
 
 ## When invoked

@@ -9,7 +9,7 @@ paths:
 ---
 
 # Test-Driven Development
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+
 ## Iron Law
 
 **No prod code without failing test first.** No exceptions.

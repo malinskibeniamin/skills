@@ -7,8 +7,6 @@ upstream_commit: 687c1b339872289d70f65c5eaabce850b1663867
 ---
 
 # Ponytail Debt
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Vendored from DietrichGebert/ponytail. Reads `ponytail:` comments; report only unless user asks ledger file.
 Caveman terse: rows, counts, rot risk.
 

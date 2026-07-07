@@ -7,8 +7,6 @@ upstream_commit: 687c1b339872289d70f65c5eaabce850b1663867
 ---
 
 # Ponytail Audit
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Vendored from DietrichGebert/ponytail. Repo-wide `/ponytail-review`; report only.
 Caveman terse: ranked cuts, one line each.
 

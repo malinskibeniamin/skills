@@ -4,8 +4,6 @@ description: Enforce bun + tsgo as toolchain via PreToolUse hooks. Blocks npm, n
 ---
 
 # Setup Toolchain Enforcement
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Sets Up
 
 - **PreToolUse hooks** block banned CLI commands, give actionable suggestions

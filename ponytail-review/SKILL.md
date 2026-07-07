@@ -7,8 +7,6 @@ upstream_commit: 687c1b339872289d70f65c5eaabce850b1663867
 ---
 
 # Ponytail Review
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Vendored from DietrichGebert/ponytail. Complexity only; `/deslop` owns value/defense/test gate.
 Caveman terse: one finding per line, no coaching prose.
 

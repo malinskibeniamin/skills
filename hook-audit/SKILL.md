@@ -4,8 +4,6 @@ description: Analyze hook effectiveness + session retro from collected metrics. 
 ---
 
 # Hook audit
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Step 0: Gather context
 
 Run Bash commands before proceed:

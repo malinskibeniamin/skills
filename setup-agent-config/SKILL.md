@@ -4,8 +4,6 @@ description: Token-efficient AI agent hooks -- env vars, test flag optimization,
 ---
 
 # Setup LLM Optimization
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Sets Up
 
 - **SessionStart**: `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`

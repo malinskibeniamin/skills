@@ -4,8 +4,6 @@ description: Builds repo startup brief. Use when start/resume, post-compaction, 
 ---
 
 # Prime
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Startup brief: repo state, goal, next reads.
 
 Use `/agent-watchdog` for seeds from another agent/session/PR claim, `/plan-arbiter` for competing handoffs/plans, and `/read-the-damn-docs` for current external/API facts.

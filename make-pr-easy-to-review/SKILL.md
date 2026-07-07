@@ -5,8 +5,6 @@ description: Prepare PRs for review by cleaning noisy history, improving PR desc
 
 # Make PR Easy to Review
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Prepare a PR so a reviewer can quickly understand the intent, important files, and risk. The default goal is reviewability without behavior changes.
 
 ## Workflow

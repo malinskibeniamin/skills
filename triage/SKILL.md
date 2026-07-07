@@ -5,8 +5,6 @@ disable-model-invocation: true
 ---
 
 # Triage
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Move issues on tracker through small state machine of triage roles.
 
 When explore codebase, use project domain glossary so titles, comments, agent briefs match project language. Respect ADRs in area touched. Use `/read-the-damn-docs` for external/current behavior, `/plan-arbiter` for competing fix plans, and `/visual-plan` for large epics.

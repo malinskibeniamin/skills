@@ -4,8 +4,6 @@ description: "Resolve PR review feedback by fetching unresolved threads, triagin
 ---
 
 # Resolve PR Feedback
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Fetch unresolved PR threads -> triage -> fix -> reply -> resolve.
 
 Use `/agent-watchdog` when picking up feedback after another agent, cloud review, Copilot review, or a prior session claimed completion. Watchdog first verifies the original ask, unresolved threads, CI, and final claims before this skill fixes anything.

@@ -4,8 +4,6 @@ description: "Configure Claude Code routines for automated PR review, codebase h
 ---
 
 # Setup Routines
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Configure [Claude Code routines](https://claude.ai/code/routines) -- cloud-hosted auto sessions triggered by schedule, GitHub events, or API. Routines clone repo, run as full Claude Code sessions. Hooks + CLAUDE.md rules enforce auto.
 
 ## How it works

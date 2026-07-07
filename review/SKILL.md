@@ -4,8 +4,6 @@ description: Reviews a diff since a fixed point across Standards, Spec, and risk
 ---
 
 # Review
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Diff review from fixed point to `HEAD`. Keep Standards and Spec axes separate.
 
 Use `/agent-watchdog` when the review target is another agent's branch, transcript, session, PR, or claimed completion. Watchdog reconstructs the original contract before the normal review hats judge the diff.

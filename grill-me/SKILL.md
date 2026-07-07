@@ -5,8 +5,6 @@ disable-model-invocation: true
 ---
 
 # Grill Me
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Phase 2b gate. No implementation until plan survive grilling.
 
 ## Step 1: Interview

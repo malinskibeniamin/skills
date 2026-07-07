@@ -7,8 +7,6 @@ paths:
 ---
 
 # Zustand Enforcement
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## What This Catches
 
 - **Ban single-parens `create<T>()`** -- must be `create<T>()()` for middleware type inference

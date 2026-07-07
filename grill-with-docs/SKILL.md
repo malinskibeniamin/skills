@@ -3,8 +3,6 @@ name: grill-with-docs
 description: Grilling session that also builds project domain docs.
 disable-model-invocation: true
 ---
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 <what-to-do>
 
 Run the `/grilling` skill for the interview loop. Run `/domain-modeling` inline whenever terms or ADR-worthy decisions crystallize.
