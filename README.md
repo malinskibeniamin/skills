@@ -162,10 +162,6 @@ You: "Build feature X" or "Fix these 5 issues overnight"
   ├── Interactive ──-> Claude Code + /development-lifecycle
   │                    └── understand -> plan -> TDD -> verify -> review -> compound
   │
-  ├── AFK batch ───-> Sandcastle (.sandcastle/main.ts)
-  │                    └── picks issues -> spawns N agents in Docker
-  │                        └── each agent runs development-lifecycle
-  │
   └── Automated ───-> Routines (claude.ai/code/routines)
                       └── schedule, GitHub webhook, or API trigger
                           └── cloud session with hooks + CLAUDE.md active
@@ -302,12 +298,6 @@ Reproduce, find root cause, fix with test.
 /swarm improve URL parameter handling fast. Split tests, implementation, resilience review, and docs across subagents; stay on this branch.
 ```
 
-**Overnight batch (Sandcastle):**
-```
-Run Sandcastle on top 5 issues in our bug backlog overnight.
-One agent per issue, Docker sandboxes, each follows development-lifecycle.
-```
-
 **Address PR review:**
 ```
 /resolve-pr-feedback
@@ -323,7 +313,6 @@ Auto-detects current branch PR, triages, fixes, replies to threads.
 | **Skills** | What do | development-lifecycle (6 phases) | Loaded on demand |
 | **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
 | **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
-| **Sandcastle** | Delegate | N parallel agents in Docker sandboxes | AFK batch mode |
 | **Routines** | Automate | Cloud-hosted sessions on schedule/webhook/API | Unattended, 24/7 |
 
 ## Why This Exists
@@ -413,7 +402,6 @@ Featured skill moments -- each from an actual session:
 | Catches missing tests at stop | No | No | No | No | **Yes (Stop gate blocks)** |
 | Forces plan -> grill -> confirm | No | No | Partial (prompts) | No | **Yes (/development-lifecycle gates)** |
 | Codex (OpenAI) support | N/A | N/A | No | N/A | **Yes (first-class, `codex-compat` skill)** |
-| Batch / overnight mode | No | No | No | No | **Yes (Sandcastle, N Docker agents)** |
 | Cloud / scheduled mode | No | No | No | No | **Yes (Routines)** |
 | Cross-session learning | No | Manual edit | No | No | **Yes (Phase 6 Compound -> `.claude/rules/`)** |
 | Opinionated stack | N/A | N/A | Agnostic | Varies | **React + TanStack + ConnectRPC + Bun** |
@@ -742,7 +730,6 @@ Installed by `/frontend-starter-kit`, run automatic. Never invoke directly.
 | `ci-pipeline` (starter-kit ref) | GitHub Actions quality gate, coverage gates, bundle budgets |
 | `agent-config` (starter-kit ref) | Token-efficient env vars, test flag optimization, output truncation |
 | `/registry-workflow` | Remind rebuild registry.json when UI components change |
-| `setup-sandcastle` | AFK agent delegation -- parallel agents in Docker sandboxes |
 | `setup-routines` | Cloud-hosted automation -- PR review, health checks, triage, docs drift |
 
 ### Agents
@@ -993,7 +980,6 @@ Meta-skills install everything need in one go. Diagram below show how starter ki
 graph TD
     FSK["frontend-starter-kit"]
     Setup["14 Setup Skills\ntoolchain, biome, quality-gate,\nreact-compiler, accessibility, and so on"]
-    SC[setup-sandcastle]
     RT[setup-routines]
 
     subgraph Workflow["Workflow Skills"]
@@ -1021,15 +1007,12 @@ graph TD
     DL -- "Phase 5b" --> RPF
     DL -- "Phase 5" --> CR
 
-    SC -- "N parallel agents" --> DL
-    SC --> CR
 
     RT -- "cloud sessions" --> RPF
     RT -- "cloud sessions" --> CR
 
     style DL fill:#f96,stroke:#333,color:#000
     style FSK fill:#69f,stroke:#333,color:#fff
-    style SC fill:#9c6,stroke:#333,color:#000
     style RT fill:#c9f,stroke:#333,color:#000
 ```
 
@@ -1063,7 +1046,6 @@ react-doctor, ci-pipeline, redpanda (registry workflow, `REDPANDA_KIT=1`).
 Daily-work guidance formerly hidden behind `setup-` names is now directly model-invoked:
 `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`,
 `/ux-copy`. Optional infra stays slash-only: `/setup-routines` (cloud routines),
-`/setup-sandcastle` (AFK delegation), `/setup-atlassian-workflow` (Jira via acli).
 
 ```
 bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
@@ -1234,7 +1216,6 @@ Hook messages compressed (inspired by [Caveman](https://github.com/JuliusBrussee
 | `HOOK_VERBOSITY=terse` (blocks only) | Suppress all warns |
 | REFERENCE.md trimmed to essentials | -21% input tokens on skill loads |
 
-Combined: **~6,700 fewer tokens per session** vs unoptimized hooks. For long sessions or multi-agent (Sandcastle), use `HOOK_VERBOSITY=terse` + `PROMPT_CONTEXT_LEVEL=minimal` to minimize overhead.
 
 ### Context
 

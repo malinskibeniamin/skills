@@ -23,12 +23,9 @@ session runs the same PostToolUse/Stop gates as an interactive dev session,
 so a routine cannot ship code that a developer could not ship locally.
 For routine outputs, add `/agent-watchdog` audit steps; routines that open PRs should create or link `/visual-recap` when the diff is review-worthy.
 
-### vs. Sandcastle
 
-Sandcastle = local background agent in a tmux pane. Routines = cloud-hosted
-sessions triggered by schedule/webhook/API. Pick Sandcastle for long-running
-local work you want to supervise; pick routines for recurring automation
-that must survive your laptop closing.
+Routines are cloud-hosted sessions triggered by schedule/webhook/API --
+recurring automation that must survive your laptop closing.
 
 ## Available templates
 
@@ -95,5 +92,4 @@ Run once by hand before trusting triggers:
 2. CLI: `/schedule run`
 3. Watch session live at returned URL
 4. Check output -- tweak prompt if wandered
-
-See [REFERENCE.md](REFERENCE.md): routine-vs-sandcastle decision, enforcement model, trigger/API/customization setup, troubleshooting.
+See [REFERENCE.md](REFERENCE.md): enforcement model, trigger/API/customization setup, troubleshooting.

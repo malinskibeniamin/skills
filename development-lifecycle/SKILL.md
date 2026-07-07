@@ -79,7 +79,4 @@ Full flowchart [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 | "Write tests for X" | 3 only |
 | "Ship it" / "Create a PR" | **`/go`** only |
 | "Quick question" | Just answer |
-| "Batch these 5 issues" | **Sandcastle** -- parallel agents |
-| "Work on this overnight" | **Sandcastle** -- AFK delegation |
 
-See [REFERENCE.md](REFERENCE.md) detailed checklists + Sandcastle integration.

@@ -19,7 +19,6 @@
     "agents",
     "quality-gate",
     "routines",
-    "sandcastle",
     "session-logging",
     "intent-detect",
     "mattpocock-v1"
@@ -66,7 +65,6 @@
     "./review/",
     "./setup-atlassian-workflow/",
     "./setup-routines/",
-    "./setup-sandcastle/",
     "./snyk-ux-security/",
     "./steelman/",
     "./swarm/",
