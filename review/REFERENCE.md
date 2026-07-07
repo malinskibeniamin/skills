@@ -66,7 +66,7 @@ Use this smell baseline on every Standards review, even when the repo has little
 ## Review
 Fixed point: <fixed>
 Diff: `git diff <fixed>...HEAD`
-Subagents: thermo-nuclear-review-hat: <status/skipped: reason> | resilience-review-hat: <status/skipped: reason> | regular-review-hat: <status> | adversarial-review-hat: <status> | visual-review-hat: <status/skipped: reason> | test-perf-review-hat: <status/skipped: reason> | security-privacy-triage-hat: <status/skipped: reason>
+Lanes: core | <triggered lanes with status> | <skipped lanes with one-line evidence> | Mode: standard|deep
 
 ## Standards
 <findings or pass>

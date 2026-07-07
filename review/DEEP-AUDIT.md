@@ -1,4 +1,4 @@
-# Thermo-Nuclear Review Reference
+# Deep-mode review reference (release audit)
 
 Inspired by Cursor Team Kit's maintainability-review skill (https://github.com/cursor/plugins/blob/3347cbab5b54136f6fba0994c3a01a56f7fb7fca/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md), but rewritten for this frontend skills harness and Codex-style multi-agent review.
 

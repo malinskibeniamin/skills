@@ -5,8 +5,7 @@
 Before `/commit-push-pr`, one review skill must run in session:
 
 - `/simplify` -- small fixes/tweaks
-- `/ponytail-review` -- complexity-only delete/stdlib/native/YAGNI pass
-- `/deslop` -- liability certainty gate; runs `/simplify` and `/ponytail-review` first
+- `/deslop` -- liability certainty gate with complexity tags (delete/stdlib/native/yagni/shrink)
 - `/improve-codebase-architecture` -- refactors, architecture plans, cleanup (oversized files, shallow modules)
 - `/prototype` -- redesign module or layout
 - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs

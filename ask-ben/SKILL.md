@@ -6,13 +6,12 @@ disable-model-invocation: true
 # Ask Ben
 
 Use this when you forget which local skill fits Ben's work. Default: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
-Routes: product -> `/development-lifecycle`/`/work` -> `/go`; bugs -> `/diagnosing-bugs` + `/tdd`; planning -> `/grill-with-docs`/`/wayfinder`/`/grill-me`; specs -> `/to-spec` -> `/to-tickets`; review -> `/review`/`/thermo-nuclear-code-quality-review`; UI/resilience -> `/visual-review`/`/resilience-review`; parallel -> `/swarm`.
-Builder.io skills are both direct commands and under-the-hood helpers: `/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/efficient-frontier`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/stay-within-limits`.
+Routes: product -> `/development-lifecycle`/`/work` -> `/go`; bugs -> `/diagnosing-bugs` + `/tdd`; planning -> `/grill-with-docs`/`/wayfinder`/`/grill-me`; specs -> `/to-spec` -> `/to-tickets`; review -> `/review` (add `--deep` for release audits); UI/resilience -> `/visual-review`/`/resilience-review`; parallel -> `/swarm`.
+Builder.io skills are both direct commands and under-the-hood helpers: `/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/efficient-frontier`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`.
 | `/agent-watchdog` | Watchdog another agent session, PR, transcript, branch, or claim. |
 | `/aip` | Google AIP-style protobuf/resource API design. |
 | `/ask-ben` | This router: explains all local skills and routes work. |
 | `/brainstorming` | Explore/challenge design options before code. |
-| `/claude-handoff` | Launch a named Claude background agent with a redacted handoff. |
 | `/codebase-design` | Deep-module vocabulary: interface, seam, adapter, depth. |
 | `/codex-compat` | Generate Codex hooks/AGENTS parity from Claude hooks. |
 | `/commit-push` | Conventional commit plus push, no PR. |
@@ -24,7 +23,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/edit-article` | Tighten article drafts. |
 | `/efficient-frontier` | Frontier-model orchestration with bounded subagents. |
 | `/extend-harness` | Add/tune hook-harness rules and severity. |
-| `/frontend-skills-stats` | Inspect hook latency, violations, zero-fire rules. |
 | `/frontend-starter-kit` | Install complete generic frontend harness. |
 | `/go` | Ship tail: verify, review, deslop, PR, CI. |
 | `/grill-me` | Stateless relentless plan/design interview. |
@@ -38,9 +36,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/plan-arbiter` | Compare, merge, or reject competing agent plans. |
 | `/plow-ahead` | Autonomy contract for "keep going" work. |
 | `/ponytail` | Build least-code solution via reuse-first ladder. |
-| `/ponytail-audit` | Whole-repo overengineering audit. |
-| `/ponytail-debt` | Harvest `ponytail:` shortcut debt. |
-| `/ponytail-review` | Diff review for delete/stdlib/native/YAGNI only. |
 | `/prime` | Repo startup/resume brief. |
 | `/prototype` | Throwaway logic/UI prototype to answer design risk. |
 | `/read-the-damn-docs` | Official-docs-first guard for APIs, SDKs, packages, CLIs. |
@@ -70,11 +65,9 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/setup-ux-copy` | UX copy, inclusive language, docs prose style. |
 | `/setup-zustand` | Zustand create/useShallow/persist enforcement. |
 | `/snyk-ux-security` | JS/Go/Bazel Snyk sweep with reachability gates. |
-| `/stay-within-limits` | Usage checks between long or parallel agent waves. |
 | `/steelman` | Evidence-backed strongest counterargument. |
 | `/swarm` | Parallel executor with coordinator-owned merge. |
 | `/tdd` | Red-green-refactor one vertical slice at a time. |
-| `/thermo-nuclear-code-quality-review` | Release-blocking cold audit. |
 | `/to-tickets` | Turn spec/plan into vertical-slice tracker tickets. |
 | `/to-spec` | Turn conversation into a spec. |
 | `/triage` | Move incoming issues through readiness states. |

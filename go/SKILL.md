@@ -38,7 +38,7 @@ Run all checks. Fix failures before proceed.
 ## Phase 5: Simplify, Deslop + Ship
 
 1. Run `/simplify` -- general cleanup pass
-2. Run `/ponytail-review` then `/deslop` -- cut complexity first, then block unless value, defense, or test confidence is certain
+2. Run `/deslop` -- tag complexity cuts (delete/stdlib/native/yagni/shrink), then block unless value, defense, or test confidence is certain
 3. Fix issues, commit
 4. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
 5. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason

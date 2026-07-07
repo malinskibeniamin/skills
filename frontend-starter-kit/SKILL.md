@@ -25,7 +25,7 @@ description: Complete frontend stack -- 14 setup skills + active workflow/commun
 
 development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, prototype, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, writing-great-skills
 
-Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; stay-within-limits; efficient-frontier.
+Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; efficient-frontier (owns usage-limit budgeting).
 
 ## Steps
 
