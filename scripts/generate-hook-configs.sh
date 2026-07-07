@@ -75,12 +75,17 @@ PLUGIN_PREFIX='"${CLAUDE_PLUGIN_ROOT}/.claude/hooks'
 
 NEW_SETTINGS=$(_build_claude_settings)
 
-# Codex supports a smaller lifecycle surface than Claude Code. Generate a
-# best-effort Codex mapping instead of only dropping unsupported events:
-# - direct equivalents stay direct,
+# Codex supports a smaller lifecycle surface than Claude Code
+# (https://developers.openai.com/codex/hooks): SessionStart, SubagentStart,
+# PreToolUse, PermissionRequest, PostToolUse, PreCompact, PostCompact,
+# UserPromptSubmit, SubagentStop, Stop. Generate a best-effort mapping:
+# - every Codex-supported event maps directly,
 # - Claude PostToolUseFailure maps to Codex PostToolUse (Codex includes failures),
-# - Codex PermissionRequest gets an adapter that reuses approval-safe deny guards.
-CODEX_EVENTS='["SessionStart","PreToolUse","PostToolUse","UserPromptSubmit","Stop"]'
+# - Codex PermissionRequest gets an adapter that reuses approval-safe deny guards,
+# - Claude-only events with no Codex equivalent are dropped by design:
+#   FileChanged (codex-compat keeps Stop-batch fallback), WorktreeCreate,
+#   SessionEnd (no lifecycle analog; metrics summary is Claude-side only).
+CODEX_EVENTS='["SessionStart","SubagentStart","PreToolUse","PostToolUse","PreCompact","PostCompact","UserPromptSubmit","SubagentStop","Stop"]'
 _build_codex() {
   local prefix="$1"
   local close_quote="${2:-}"

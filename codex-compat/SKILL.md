@@ -4,7 +4,7 @@ description: Generate Codex hooks.json and AGENTS.md from Claude Code hooks. Map
 ---
 
 # Codex Compatibility Layer
-Codex now supports Claude-style lifecycle hooks for `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `PermissionRequest`, `PostToolUse`, and `Stop`. `PreToolUse`/`PostToolUse` matchers support `Bash`, MCP tool names, `apply_patch`, and `Edit|Write` aliases. Map `Edit|Write` hooks direct whenever possible. Run `/read-the-damn-docs` for current hook behavior; use `/plan-arbiter` when direct-vs-fallback mapping is ambiguous.
+Codex supports Claude-style lifecycle hooks for `SessionStart`, `SubagentStart`, `PreToolUse`, `PermissionRequest`, `PostToolUse`, `PreCompact`, `PostCompact`, `UserPromptSubmit`, `SubagentStop`, and `Stop` (https://developers.openai.com/codex/hooks). Claude-only events with no Codex analog -- `FileChanged`, `WorktreeCreate`, `SessionEnd`, `PostToolUseFailure` (folded into Codex `PostToolUse`) -- use the Stop-batch fallback or are dropped by design. `PreToolUse`/`PostToolUse` matchers support `Bash`, MCP tool names, `apply_patch`, and `Edit|Write` aliases. Map `Edit|Write` hooks direct whenever possible. Run `/read-the-damn-docs` for current hook behavior; use `/plan-arbiter` when direct-vs-fallback mapping is ambiguous.
 
 ## What This Creates
 
