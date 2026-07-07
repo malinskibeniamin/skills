@@ -4,7 +4,7 @@
 
 ## 4.26.0
 
-2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review skills; remove legacy Matt/local sediment; and tighten research/docs boundaries. Adds PR reviewability guidance plus concise authored-commit status and weekly summary workflows for concrete date ranges; removes /domain-model, /qa, /request-refactor-plan, /design-an-interface, and /ubiquitous-language in favor of /grill-with-docs, /domain-modeling, /triage, /improve-codebase-architecture, and /prototype; and clarifies /research as durable cited artifacts while /read-the-damn-docs owns quick official fact checks. Skills 98 -> 96.
+2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review skills; prune obsolete local aliases/setup wrapper; and tighten current research/docs boundaries. Adds PR reviewability guidance plus concise authored-commit status and weekly summary workflows for concrete date ranges; routes removed alias jobs and project-context setup through current docs-first planning, triage, architecture, prototype, and work-automation workflows; and clarifies /research as durable cited artifacts while /read-the-damn-docs owns quick official fact checks. Skills 98 -> 95.
 
 ## 4.25.0
 

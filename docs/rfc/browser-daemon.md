@@ -120,7 +120,7 @@ Cookie import via SQLite read of `~/Library/Application Support/Google/Chrome/De
 1. **Bun vs Node**: Bun gives ~3x startup speed but is less battle-tested on long-running servers. Acceptable risk?
 2. **Shim as default**: enabled-by-default means existing skills keep working with zero changes, but users may not realize they're going through an extra layer. Log daemon calls somewhere visible?
 3. **Linux/Windows support in v4.1**: punted for v4.0. Is that acceptable given ~80% Mac user base?
-4. **Headed-mode opt-in**: `/qa` and `/design-review` probably want `--headed` by default. Separate daemon instance or toggle?
+4. **Headed-mode opt-in**: `/visual-review` and `/prototype` probably want `--headed` by default. Separate daemon instance or toggle?
 
 ---
 

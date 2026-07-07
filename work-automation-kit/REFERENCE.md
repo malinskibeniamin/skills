@@ -50,6 +50,62 @@ Quick question (on a specific decision)
 
 Owned skills ship with repo. "Community" skills install from mattpocock/skills.
 
+## Project Context Setup Protocol
+
+### Explore
+
+Read existing state. Do not assume.
+
+- `git remote -v`, `.git/config`
+- `AGENTS.md`, `CLAUDE.md`; existing `## Agent skills`
+- `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, nested ADR dirs
+- `docs/agents/`
+- `.scratch/`
+
+### Ask decisions one at time
+
+**Issue tracker:** explain where issues live; skills need write/read workflow.
+
+Default from remote. Choices:
+
+- GitHub: `gh issue`
+- GitLab: `glab issue`
+- Local markdown: `.scratch/<feature>/`
+- Jira/Atlassian: run `/setup-atlassian-workflow`
+- Other: user describes workflow; record prose
+
+**Triage labels:** map canonical roles to actual labels/statuses:
+
+- `needs-triage`
+- `needs-info`
+- `ready-for-agent`
+- `ready-for-human`
+- `wontfix`
+
+Avoid duplicate vocabulary if repo already has names.
+
+**Domain docs:** explain glossary + ADRs feed tdd/diagnosing-bugs/triage/architecture.
+
+Choose:
+
+- Single context: root `CONTEXT.md` + `docs/adr/`
+- Multi-context: root `CONTEXT-MAP.md` points to per-context docs
+
+### Confirm and write
+
+Show draft edits before writing. Reuse templates from `templates/`:
+
+- `docs/agents/issue-tracker.md` with `## Wayfinding operations` when `/wayfinder` is installed
+- `docs/agents/triage-labels.md`
+- `docs/agents/domain.md`
+- `## Agent skills` block for `AGENTS.md` or `CLAUDE.md`
+
+Write only approved files. Preserve existing docs. If block exists, update in place.
+
+### Verify
+
+Confirm files exist and mention selected tracker, Wayfinding operations, labels, domain layout. Tell user which skills now have context.
+
 ## Optional Integrations
 
 | Integration | Requires | What it adds |

@@ -67,7 +67,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/setup-conventional-commits` | Conventional commit hook setup. |
 | `/setup-e2e-testing` | Playwright/Testcontainers/axe e2e setup. |
 | `/setup-env-validation` | t3-env/zod env validation. |
-| `/setup-matt-pocock-skills` | Configure tracker/labels/domain docs for Matt-derived flows. |
 | `/setup-pre-commit` | Husky/lint-staged/pre-commit setup. |
 | `/setup-quality-gate` | Local/CI quality:gate and Stop typecheck. |
 | `/setup-react-compiler` | React Compiler setup and anti-manual-memo rules. |

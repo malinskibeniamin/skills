@@ -919,11 +919,5 @@
       "Bash(sleep *)"
     ]
   },
-  "skillOverrides": {
-    "domain-model": "user-invocable-only",
-    "ubiquitous-language": "user-invocable-only",
-    "request-refactor-plan": "user-invocable-only",
-    "qa": "user-invocable-only",
-    "design-an-interface": "user-invocable-only"
-  }
+  "skillOverrides": {}
 }
