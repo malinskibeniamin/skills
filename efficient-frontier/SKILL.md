@@ -1,12 +1,21 @@
 ---
 name: efficient-frontier
-description: Use when a high-cost frontier model (Fable, Opus) should delegate bounded research, coding, testing, browser checks, or log reduction while keeping planning, synthesis, risk, integration, and final review central. Also owns usage-limit budgeting for long or parallel agent waves.
+description: Use when a frontier model (Fable, Opus, GPT-5.6) should delegate bounded research, coding, testing, or log reduction to cheaper models while keeping planning, synthesis, risk, and final review central. Owns usage-limit budgeting for agent waves.
 ---
 
 # Efficient Frontier
 Read `references/builder-upstream.md` for the full workflow.
 
 Use the expensive frontier model where marginal judgment matters. Push repeatable, bounded, or token-heavy work to cheaper/faster subagents.
+
+## Model routing
+
+The frontier model (Fable, Opus, GPT-5.6) is the brains: it owns ambiguous decomposition,
+architecture/product/safety tradeoffs, integrating partial implementations, resolving conflicting
+subagent reports, and the final review. Mundane bounded work routes to the cheaper tier
+(Sonnet for exploration/atomic coding, Haiku for lookups/boilerplate/log reduction, or the
+host's equivalent mini/fast models). Do not delegate tiny tasks, tightly coupled blockers, or
+judgments that need the frontier model's full reasoning.
 
 ## Workflow
 

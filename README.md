@@ -128,7 +128,7 @@ bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code
 bunx skills@latest add malinskibeniamin/skills/tdd --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/prime --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/aip --agent claude-code -y
-bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/grill-me --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
@@ -1209,18 +1209,9 @@ Reduce token usage + context waste.
 
 ## Community Skills (Optional)
 
-### mattpocock/skills -- Additional workflow skills
+### mattpocock/skills provenance
 
-Skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement vendored ones. Install individually if need:
-
-```bash
-bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y            # spec synthesis
-bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y         # spec/plan -> tracker tickets with blockers
-```
-
-**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `writing-great-skills`, `grill-me`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream-deleted skills are intentionally not reintroduced; `/diagnose` is now `/diagnosing-bugs`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, teach, implement, loop-me, research, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code) were removed in the 4.27.0 audit.
-
-**Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
+Everything this harness uses from [mattpocock/skills](https://github.com/mattpocock/skills) is vendored locally -- nothing needs installing from the upstream repo. Vendored: `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `writing-great-skills`, `grill-me`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, teach, implement, loop-me, research, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code, edit-article) were removed in the 4.27.0 audit.
 
 ### TanStack Official Skills -- Framework reference (optional)
 

@@ -39,9 +39,6 @@ while IFS= read -r skill; do
   if grep -q '^disable-model-invocation: true$' "$skill_file" && echo "$desc" | grep -q 'Use when'; then
     user_desc_triggers="$user_desc_triggers $skill"
   fi
-  if ! grep -q 'Repo/code changes: run `/deslop` before commit, push, PR, or merge\.' "$skill_file"; then
-    missing_preamble="$missing_preamble $skill"
-  fi
 done <<< "$owned_skills"
 
 if [ -z "$long_desc" ]; then
@@ -62,11 +59,5 @@ else
   ERRORS="$ERRORS\n  FAIL: user-invoked descriptions contain trigger prose:$user_desc_triggers"
 fi
 
-if [ -z "$missing_preamble" ]; then
-  echo "  PASS  owned repo-changing skills keep deslop preamble"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  owned skills missing deslop preamble:$missing_preamble"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: owned skills missing deslop preamble:$missing_preamble"
-fi
+# deslop preamble assertion removed (2026-07 audit): the stamped preamble
+# violated single-source-of-truth; hooks + the deslop skill own the rule.
