@@ -4,8 +4,6 @@ description: "Configure Sandcastle for agent delegation -- headless run(), HITL 
 ---
 
 # Setup Sandcastle
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 [Sandcastle](https://github.com/mattpocock/sandcastle) orchestrate agents in sandboxes with branch strategies. Two modes:
 
 - **`run()`** -- headless (`--print`), stream-JSON parsed. CI, batch, overnight.

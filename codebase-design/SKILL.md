@@ -4,8 +4,6 @@ description: Shared vocabulary for designing deep modules. Use when the user wan
 ---
 
 # Codebase Design
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Design **deep modules**: much behavior behind a small interface at a clean seam, testable through that interface. Aim: leverage for callers, locality for maintainers, testability for agents and people.
 
 ## Glossary

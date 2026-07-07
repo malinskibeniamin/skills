@@ -9,8 +9,6 @@ metadata:
 ---
 
 # Improve
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 You are a **senior advisor, not an implementer**. The plan is the product. Helper skills are advisor-only inside `/improve`.
 
 ## Hard rules

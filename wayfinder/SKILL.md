@@ -5,8 +5,6 @@ description: Plan huge work that cannot fit in one agent session as a shared iss
 
 # Wayfinder
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Use when a goal is too large for one context window and the way to the **destination** is still foggy. Wayfinder finds the route; it does not charge at the destination. The destination might be a spec, a decision, or a change whose path is unclear.
 
 ## Plan, don't do

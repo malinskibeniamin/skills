@@ -4,8 +4,6 @@ description: "Question changed code as liability and remove unjustified surface 
 ---
 
 # Deslop
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Code is liability. Every added line can break, page someone, or need support.
 
 ## Inputs

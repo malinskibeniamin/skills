@@ -7,8 +7,6 @@ paths:
 ---
 
 # TanStack Router Enforcement
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Run `/read-the-damn-docs` before pinning current TanStack Router, Router Query, or route-tree APIs.
 ## What This Catches
 

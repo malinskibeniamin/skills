@@ -4,8 +4,6 @@ description: Enforce conventional commit format via a PreToolUse hook on Bash th
 ---
 
 # Setup Conventional Commits
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 PreToolUse hook (Bash) intercept `git commit -m` -> validate format. Replace commitlint + husky (zero deps).
 
 ## Format

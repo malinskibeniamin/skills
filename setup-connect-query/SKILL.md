@@ -8,8 +8,6 @@ paths:
 ---
 
 # Connect Query Enforcement
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Run `/read-the-damn-docs` before pinning current ConnectRPC, Connect Query, or Protobuf API guidance.
 ## What This Catches
 

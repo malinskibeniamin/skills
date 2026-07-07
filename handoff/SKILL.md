@@ -7,8 +7,6 @@ disable-model-invocation: true
 
 # Handoff
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 If the handoff is for auditing another agent's run, route to `/agent-watchdog`. If it hands off competing plans, include `/plan-arbiter` as the next skill.
 Create a concise handoff document for another agent/session to continue from here.
 

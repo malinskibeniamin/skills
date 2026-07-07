@@ -4,8 +4,6 @@ description: Use when long-running, high-cost, or parallel agent work must respe
 ---
 
 # Stay Within Limits
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Read `references/builder-upstream.md` for the full pause/resume procedure.
 Local override: translate upstream `npx` examples to `bunx`.
 
