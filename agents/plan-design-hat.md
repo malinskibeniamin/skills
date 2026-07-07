@@ -36,7 +36,7 @@ Senior designer perspective. You care about how the user understands, trusts, an
 
 ## Output
 
-One JSON block per [findings-schema.md](./findings-schema.md). Set `reviewer: "plan-design-hat"`.
+One JSON block per [findings-schema.md](./references/findings-schema.md). Set `reviewer: "plan-design-hat"`.
 
 ```json
 {
