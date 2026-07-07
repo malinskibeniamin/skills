@@ -149,6 +149,8 @@ run_content_eval "$SKILL_MD" "/diagnosing-bugs" "SKILL.md invokes /diagnosing-bu
 run_content_eval "$SKILL_MD" "package\\.json admission gate|admission gate.*package\\.json" "SKILL.md has package.json admission gate"
 run_content_eval "$SKILL_MD" "unproven.*dismiss|dismiss.*unproven" "SKILL.md defaults unproven transitive vulns to dismissal"
 run_content_eval "$SKILL_MD" "bump.*makes no sense|makes no sense.*bump" "SKILL.md blocks nonsensical transitive bumps"
+run_content_eval "$SKILL_MD" "Override list growth is a smell|override list.*smell" "SKILL.md treats override-list growth as smell"
+run_content_eval "$SKILL_MD" "Remove dependency surface|dependency surface third|native/in-house" "SKILL.md prefers dependency-surface removal before overrides"
 run_content_eval "$REFERENCE_MD" "Transitive-only dismissal checklist" "REFERENCE.md has transitive-only dismissal checklist"
 run_content_eval "$REFERENCE_MD" "Direct dependency absence is evidence" "REFERENCE.md treats missing direct dep as dismissal evidence"
 run_content_eval "$REFERENCE_MD" "do not add.*package\\.json" "REFERENCE.md forbids package.json growth for suppression-only overrides"
@@ -158,6 +160,8 @@ run_content_eval "$REFERENCE_MD" "/diagnosing-bugs reachability loop|reachabilit
 run_content_eval "$REFERENCE_MD" "real potential vulnerability" "REFERENCE.md requires real potential vulnerability proof"
 run_content_eval "$REFERENCE_MD" "Package.json admission gate" "REFERENCE.md documents package.json admission gate"
 run_content_eval "$REFERENCE_MD" "DEFAULT.*dismiss|default.*dismiss" "REFERENCE.md defaults uncertain transitive findings to dismissal"
+run_content_eval "$REFERENCE_MD" "code smell|burn-down queue" "REFERENCE.md treats overrides/resolutions as burn-down debt"
+run_content_eval "$REFERENCE_MD" "native/in-house|in-house code|dependency surface removal" "REFERENCE.md prefers lower dependency surface before overrides"
 
 # ── Minimum release age gates ────────────────────────────────────
 
@@ -362,6 +366,8 @@ run_content_eval "$SKILL_MD" "[Tt]op-level|direct dep" "SKILL.md prefers top-lev
 run_content_eval "$SKILL_MD" "[Ll]ast resort|last-resort" "SKILL.md treats overrides/resolutions as last resort"
 run_content_eval "$SKILL_MD" "resolutions|overrides|replace" "SKILL.md acknowledges resolutions/overrides/replace mechanisms"
 run_content_eval "$SKILL_MD" "[Bb]loat|scale poorly|do not scale|don.t scale" "SKILL.md explains why overrides do not scale"
+run_content_eval "$REF_MD" "Dependency surface removal" "REFERENCE.md has dependency surface removal step"
+run_content_eval "$REF_MD" "Lower third-party surface area" "REFERENCE.md names lower third-party surface as the durable win"
 
 # REFERENCE.md must document the full upgrade-priority ladder
 REF_MD="$SKILL_DIR/REFERENCE.md"

@@ -78,10 +78,11 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **Sequential**, one path at time.
 - **Exploitability triage before any bump.** No reflex `resolutions`. Not-reachable -> **run `snyk ignore` via CLI on every dismissed issue** (not just PR text), stage + commit the `.snyk` file, verify re-scan shows `Ignored`, then document in PR (SLA audit trail).
 - **No package.json growth for suppression.** For transitive-only findings, direct dep absence is dismissal evidence. Do not add a vulnerable transitive as a new top-level dependency just to suppress it with `resolutions` / `overrides`.
+- **Override list growth is a smell.** A growing `resolutions` / `overrides` list is dependency-surface debt. Prefer deleting the unused parent dependency, replacing it with native/in-house code, or dismissing a false positive before adding another override.
 - **`/steelman` before transitive bump/override.** If the strongest dismissal case survives, bump makes no sense; dismiss with evidence instead.
 - **`/diagnosing-bugs` before package.json real fixes.** Package changes require proof of a real potential vulnerability. DEFAULT: dismiss unproven transitive findings into `.snyk`.
 - **package.json admission gate.** Mutate `package.json` only for already-direct deps, reachable parent deps, or last-resort overrides with explicit proof and removal issue.
-- **Top-level direct bump first.** Parent bump second. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
+- **Top-level direct bump first.** Parent bump second. Remove dependency surface third. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
 - **bun only (JS).** Never `npm`, `yarn`, `pnpm` runtime. `yarn.lock` via `bun install --yarn` for Snyk IO compat only.
 - **No `package-lock.json` by default.** Do not create, update, or commit it during Snyk sweeps. If already present, treat as stale/wrong for bun projects; ask only when the repo is explicitly npm-only.
 - **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift and warns on package-lock churn.
