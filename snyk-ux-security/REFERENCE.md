@@ -165,12 +165,49 @@ use the audit branch.
 Snyk IO reads `yarn.lock`, not `bun.lock`. If JS repo has no
 `yarn.lock`, generate first: `bun install --yarn`.
 
+### 2a.2 JS package manager stance
+
+Use Snyk IO plus `bun audit` plus Socket.dev for JS signal. Do not
+reach for npm tooling during sweeps.
+
+Rules:
+
+1. **Runtime/install/update/audit commands use bun.** Use `bun why`,
+   `bun update`, `bun install`, `bun install --yarn`, `bun audit`,
+   and `bun info`. Do not run `npm audit`, `npm install`,
+   `npm update`, `npm view`, `yarn add`, `yarn audit`, or `pnpm audit`.
+2. **`yarn.lock` is a Snyk compatibility mirror.** Generate it with
+   `bun install --yarn`; do not run Yarn directly.
+3. **`package-lock.json` is not part of the default flow.** Do not
+   create, update, or commit `package-lock.json` for a bun project.
+   If a Snyk sweep introduces one, delete it and rerun
+   `bun install && bun install --yarn`.
+4. **Existing `package-lock.json` gets suspicion, not churn.** If the
+   repo also has `bun.lock` or project docs say bun, treat
+   `package-lock.json` as stale/wrong and leave a note or remove it
+   only if the sweep created it. If the repo is explicitly npm-only
+   (`packageManager: "npm@..."`, no bun/yarn lockfiles), ask the user
+   before touching dependencies; this skill is optimized for bun +
+   Snyk IO.
+5. **False-positive bias for npm transitives.** Deep Node/npm
+   transitives are commonly not exploitable from shipped code. A Snyk
+   "introduced via" chain is not enough. Default to `.snyk` dismissal
+   when reachability and Socket.dev install/build-time risk are both
+   unproven.
+
 ### 2b. Exploitability triage
 
 For every finding, decide REACHABLE vs NOT-REACHABLE **before any
 bump**. This is the most important gate -- skipping it leads to
 reflex `resolutions`/`overrides` that bloat `node_modules` and force
 more upgrades later.
+
+Default stance for npm/Node.js packages: Snyk output is an allegation,
+not proof. Many findings are false positives for browser/UI repos,
+dev-only tools, optional server plugins, and packages present only in
+lockfiles. Dismiss with `.snyk` when no repo code path reaches the
+vulnerable behavior and Socket.dev does not show credible
+install-time/build-time risk.
 
 Inputs:
 - Advisory attack vector: read the CVE / GHSA description. Which
@@ -280,6 +317,15 @@ Anything else stays out of `package.json`. Use `.snyk` dismissal with a
 90-day expiry and precise reason. This makes the skill more likely to
 ignore/suppress noisy deep transitives than to create dependency debt.
 
+Treat every new `resolutions` / `overrides` entry as a code smell and
+every existing long override list as a burn-down queue. The safest
+dependency is the one absent from the graph: before adding an override,
+ask whether the direct parent can be deleted, whether the feature is
+unused, or whether native/in-house code can replace the third-party
+dependency with less total surface area. Lower third-party surface area
+means fewer future advisories, fewer transitive surprises, and less
+lockfile churn.
+
 ### Transitive-only dismissal checklist
 
 Use this checklist before adding any override/resolution for a finding
@@ -301,13 +347,18 @@ several layers deep in `node_modules`.
 5. If the parent code path is unused, optional, SSR-only, build-only, or
    outside shipped UI code, dismiss with `snyk ignore` and a precise
    reason. Include the parent chain + symbol proof.
-6. If the parent code path is reachable, fix the parent before any
-   override. Do not add the vulnerable transitive to `package.json`
-   just to make a suppression-only override easier.
-7. Override/resolution only when direct + parent remediation are both
-   blocked and the vulnerability is still reachable or Snyk cannot be
-   ignored for policy reasons. Add a removal issue.
-8. In short: do not add a transitive package to `package.json` just to
+6. If the parent code path is reachable, first ask whether the parent
+   dependency or feature can be removed entirely. Prefer deletion,
+   native platform behavior, or small in-house code when that lowers
+   total dependency surface area.
+7. If removal is not viable, fix the parent before any override. Do
+   not add the vulnerable transitive to `package.json` just to make a
+   suppression-only override easier.
+8. Override/resolution only when direct + parent remediation and
+   dependency removal are all blocked, and the vulnerability is still
+   reachable or Snyk cannot be ignored for policy reasons. Add a
+   removal issue and a burn-down note.
+9. In short: do not add a transitive package to `package.json` just to
    suppress a nested finding.
 
 Anti-pattern to reject in review:
@@ -392,9 +443,14 @@ PR body.
    our direct deps pulls it. Bump that direct dep to a version whose
    transitives pin the fixed version. Prefer this over override --
    one bump, upstream-maintained.
-3. **Override / resolution / replace (last resort).** Only when
-   direct + parent bump are both blocked (upstream has no fix;
-   fixing version needs React 19 and our React 18 pin stands; etc).
+3. **Dependency surface removal.** If the parent dependency exists only
+   for a small/unused feature, remove it or replace it with native or
+   in-house code before accepting more third-party surface area. This
+   is often safer than pinning nested packages forever.
+4. **Override / resolution / replace (last resort).** Only when
+   direct + parent bump and dependency removal are all blocked
+   (upstream has no fix; fixing version needs React 19 and our React
+   18 pin stands; etc).
    - JS: `package.json` `"resolutions"` (bun/yarn-compatible) or
      `"overrides"` (npm-compatible). We use `resolutions` under bun.
    - Go: `replace` directive in `go.mod`.
@@ -403,10 +459,11 @@ PR body.
      (`Overrides added -- follow-up to remove`).
    - Explain in the PR body why steps 1 and 2 were blocked.
 
-**Why this order matters:** every added override is tomorrow's
-forced upgrade. Overrides accumulate, node_modules bloats,
-maintenance compounds weekly. Top-level bumps are upstream-tracked
-and self-maintaining.
+**Why this order matters:** every added override is tomorrow's forced
+upgrade and a smell that the dependency graph is taking control of the
+app. Overrides accumulate, node_modules bloats, maintenance compounds
+weekly, and each nested pin can pull in more packages with their own
+advisories. Lower third-party surface area is the durable win.
 
 ### Minimum release age gate audit (JS)
 
@@ -420,7 +477,7 @@ Detection:
 | Package manager signal | Config to check | Expected gate |
 |---|---|---|
 | `bun.lock` or bun toolchain | `bunfig.toml` | `minimumReleaseAge = <seconds>` |
-| `package-lock.json` or npm toolchain | `.npmrc` | `min-release-age=<days>` |
+| `package-lock.json` or npm toolchain | `.npmrc` | npm-only exception; otherwise warn and do not touch `package-lock.json` |
 | `pnpm-lock.yaml` | `pnpm-workspace.yaml` or `.npmrc` | `minimumReleaseAge: <minutes>` |
 | `.yarnrc.yml` / modern Yarn | `.yarnrc.yml` | `npmMinimalAgeGate: "<duration>"` |
 
@@ -437,6 +494,16 @@ If the detected package manager has no gate, add this PR warning:
 Do not invent config in the Snyk PR unless the user asked for policy
 hardening. The warning is enough for a vuln sweep; a separate follow-up
 can set org-wide policy.
+
+If `package-lock.json` is present in a bun repo, add this PR warning
+instead of using npm:
+
+```markdown
+## Supply-chain gate warnings
+- WARN: package-lock.json present in a bun/Snyk sweep. Do not use npm
+  or commit package-lock churn. Keep `bun.lock` as runtime truth and
+  `yarn.lock` as the Snyk IO mirror generated by `bun install --yarn`.
+```
 
 Reference docs checked while creating this gate:
 
@@ -784,6 +851,9 @@ monitor was skipped to avoid project churn.
 ## Lockfiles
 JS: both regenerated via `bun i && bun i --yarn`. Snyk IO scans
 yarn.lock; runtime uses bun.lock.
+No npm commands ran, and no `package-lock.json` was created or
+updated. If `package-lock.json` already existed in a bun repo, it was
+reported as supply-chain drift instead of being used.
 Go: `go mod tidy` ran; `go.mod` + `go.sum` committed together.
 
 ## Changelog review

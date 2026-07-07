@@ -1,12 +1,12 @@
 ---
 name: snyk-ux-security
-description: "Run sequential Snyk dependency sweeps across frontend, Go, and Bazel paths with release-age and Socket.dev gates. Use when auditing Snyk findings, CVEs, govulncheck, or dependency security without creating new Snyk projects."
+description: "Run sequential Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage, release-age and Socket.dev gates. Use when auditing Snyk findings, CVEs, govulncheck, or dependency security without creating new Snyk projects."
 ---
 
 # Snyk UX + Go + Bazel Security
 
 Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Per-path vuln audit -> exploitability triage -> safe bump -> PR -> cloud review. JS (bun + yarn.lock, React 18), Go (go.mod + govulncheck), and Bazel (MODULE.bazel, bazel/repositories.bzl).
+Per-path vuln audit -> exploitability triage -> dismiss false positives or safe bump -> PR -> cloud review. JS (bun + yarn.lock, React 18), Go (go.mod + govulncheck), and Bazel (MODULE.bazel, bazel/repositories.bzl).
 
 ## Input
 `$ARGUMENTS`: space-separated paths (globs ok), or one pasted single Snyk vulnerability summary. Frontend + backend + Bazel mix fine.
@@ -27,14 +27,14 @@ Reviewers from CODEOWNERS + `git log --format='%an' -n 20 <path>` committers. Te
 Sequential, one path at time.
 
 ### 1. Prep
-Expand globs. `snyk auth`, `gh auth status`. Preflight existing Snyk project identity for each path. Confirm paths + ecosystems to user. If `$ARGUMENTS` is pasted Snyk output, parse CVE/Snyk ID, package/version, introduced-via path, remediation hint; only proceed when fix is a dependency version bump.
+Expand globs. `snyk auth`, `gh auth status`. Preflight existing Snyk project identity for each path. Confirm paths + ecosystems to user. JS default: bun runtime + `bun.lock`; generate `yarn.lock` only through `bun install --yarn` for Snyk IO. Do not use npm or create/update `package-lock.json` unless the repo is explicitly npm-only and the user confirms. If `$ARGUMENTS` is pasted Snyk output, parse CVE/Snyk ID, package/version, introduced-via path, remediation hint; only proceed when fix is a dependency version bump.
 
 ### 2. Per-path loop
 Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [REFERENCE.md](REFERENCE.md#per-path-detail) for commands + PR template.
 
 - **2a. `.snyk` revisit (every run, before scan)**: if `.snyk` exists, re-triage every existing ignore entry. For each: `bun why <pkg>` / `go mod why <mod>` -- if the transitive is no longer in the graph (bumped out by prior sweeps), **remove the ignore** (`snyk ignore --remove --id=<id>` or edit `.snyk`; publish only through the existing-project monitor gate) and log under `Dismissed (cleaned up)` in PR. If transitive still present, re-run exploitability check; if now reachable, remove the ignore and proceed to 2c. Goal: never accumulate stale dismissals. See [REFERENCE.md](REFERENCE.md#existing-snyk-revisit).
 - **2a.1 Scan + existing-project gate**: `snyk test` is the audit source. `snyk monitor` is write-capable and must run only after matching exactly one existing Snyk project by org + name + target_file + target_reference; `snyk-project-create-guard.sh` blocks unsafe monitor/API writes. Do not create Snyk projects/apps/targets/resources. Never derive `--target-reference` or `--project-name` from the audit branch, sweep branch, worktree path, PR number, or `YYYY-MM-DD`; reuse the existing Snyk project identity or skip monitor. JS: `bun audit`. Go: `govulncheck ./...`.
-- **2b. Exploitability triage (first gate)**: per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
+- **2b. Exploitability triage (first gate)**: npm/Node findings are often noisy false positives, especially deep transitives. Treat every finding as an allegation until repo evidence proves reachability or a credible install/build-time Socket.dev vector. Per finding, decide REACHABLE vs NOT-REACHABLE before any bump. Inputs: advisory attack vector, `bun why <pkg>` / `go mod why <mod>`, grep for direct imports, check if we call the vulnerable symbol. See [REFERENCE.md](REFERENCE.md#exploitability-triage).
   - **Invoke `/steelman` for transitive-only findings**: before bumping, parent-bumping, or overriding a package absent from `package.json` / `go.mod`, argue the strongest dismissal case from repo evidence. If direct use, parent reachability, or vulnerable symbol usage is not proven, the bump makes no sense -- dismiss via `snyk ignore` instead. Do not add a new top-level dependency to `package.json` only to make an override/resolution legal. See [REFERENCE.md](REFERENCE.md#steelman-transitive-bump-gate).
   - **Invoke `/diagnosing-bugs` before `package.json` fixes**: use a fast reachability loop to prove this is a real potential vulnerability (direct import, reachable parent call, vulnerable symbol, build/install-time execution, or critical Socket vector). **package.json admission gate**: only mutate `package.json` for already-direct deps, reachable parent deps, or last-resort overrides with proof. If reachability is unproven, dismiss to `.snyk` with expiry.
   - **NOT reachable** -> **run `snyk ignore --id=<id> --reason='<specific why>' --expiry=<ISO date>` now** (writes to `.snyk` policy file). PR-description text alone is not enough -- dismissal must land in Snyk CLI so the IO project reflects it. Stage + commit the resulting `.snyk` in the sweep PR. Re-run `snyk test` to confirm the issue shows as `Ignored`. Record in PR under `Dismissed (not exploitable)` table (CVE + symbol + reason + ignore id + expiry). SLA audit trail.
@@ -78,12 +78,14 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **Sequential**, one path at time.
 - **Exploitability triage before any bump.** No reflex `resolutions`. Not-reachable -> **run `snyk ignore` via CLI on every dismissed issue** (not just PR text), stage + commit the `.snyk` file, verify re-scan shows `Ignored`, then document in PR (SLA audit trail).
 - **No package.json growth for suppression.** For transitive-only findings, direct dep absence is dismissal evidence. Do not add a vulnerable transitive as a new top-level dependency just to suppress it with `resolutions` / `overrides`.
+- **Override list growth is a smell.** A growing `resolutions` / `overrides` list is dependency-surface debt. Prefer deleting the unused parent dependency, replacing it with native/in-house code, or dismissing a false positive before adding another override.
 - **`/steelman` before transitive bump/override.** If the strongest dismissal case survives, bump makes no sense; dismiss with evidence instead.
 - **`/diagnosing-bugs` before package.json real fixes.** Package changes require proof of a real potential vulnerability. DEFAULT: dismiss unproven transitive findings into `.snyk`.
 - **package.json admission gate.** Mutate `package.json` only for already-direct deps, reachable parent deps, or last-resort overrides with explicit proof and removal issue.
-- **Top-level direct bump first.** Parent bump second. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
+- **Top-level direct bump first.** Parent bump second. Remove dependency surface third. Override/resolution/replace **last resort** only -- overrides bloat lockfiles + scale poorly, each forces more.
 - **bun only (JS).** Never `npm`, `yarn`, `pnpm` runtime. `yarn.lock` via `bun install --yarn` for Snyk IO compat only.
-- **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift.
+- **No `package-lock.json` by default.** Do not create, update, or commit it during Snyk sweeps. If already present, treat as stale/wrong for bun projects; ask only when the repo is explicitly npm-only.
+- **Dual-lockfile mandatory (JS).** `bun.lock` + `yarn.lock` synced; `lockfile-sync-check.sh` hook catches drift and warns on package-lock churn.
 - **go.mod + go.sum together (Go).** `go mod tidy` after every bump.
 - **Bazel checks both manifests.** Validate `bazel/repositories.bzl` and `MODULE.bazel`; run `bazel mod deps --lockfile_mode=update`; never swap mirrored artifact URLs to direct upstream hosting without asking; OpenSSL/FIPS follows CMVP gate; backports need explicit plan.
 - **React 18 pin hard.** React-19 peer -> skip + report.
