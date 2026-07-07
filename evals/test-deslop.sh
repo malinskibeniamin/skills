@@ -19,11 +19,9 @@ run_content_eval "$REF" "Surface-area budget" "deslop reference defines surface-
 run_content_eval "$REF" "Keep when.*product value|Keep when.*defensive|Keep when.*test" "deslop reference defines keep rules"
 run_content_eval "$REF" "standard library|native platform|already-installed|one-line" "deslop reference documents reuse-first ladder"
 
-run_content_eval "$REPO_ROOT/.claude/hooks/intent-detect.sh" "CODE-LIABILITY|Code is liability" "intent-detect injects liability reminder"
-run_content_eval "$REPO_ROOT/.claude/hooks/intent-detect.sh" "/deslop" "intent-detect invokes deslop on code changes"
-run_content_eval "$REPO_ROOT/.claude/hooks/intent-detect.sh" "REUSE-FIRST" "intent-detect injects reuse-first ladder"
-run_content_eval "$REPO_ROOT/shared/intent-detect.sh" "/deslop" "shared intent-detect invokes deslop on code changes"
-run_content_eval "$REPO_ROOT/shared/intent-detect.sh" "REUSE-FIRST" "shared intent-detect injects reuse-first ladder"
+# intent-detect no longer injects CODE-LIABILITY/REUSE-FIRST blobs — those
+# rules live in CLAUDE.md and are enforced by deslop + reviewer agents
+# (2026-07 audit: injection budget, no CLAUDE.md duplication).
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Code is liability|surface-area" "self-reviewer audits liability"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "standard library|native platform|already-installed" "self-reviewer audits reuse-first alternatives"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "low-value|surface-area|Code is liability" "code-reviewer blocks low-value sprawl"

@@ -794,14 +794,6 @@
             "command": "/bin/bash",
             "args": [
               "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'architecture-review-stop.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'biome-autofix.sh'; exit 0"
             ]
           },
@@ -882,23 +874,7 @@
             "command": "/bin/bash",
             "args": [
               "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'perf-regression-stop.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'violation-summary-stop.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'cache-telemetry-stop.sh'; exit 0"
             ]
           }
         ]

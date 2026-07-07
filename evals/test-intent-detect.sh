@@ -75,19 +75,20 @@ run_hook_eval "$INTENT_SCRIPT" \
   "compound prompt: high overrides medium" \
   "RISK:high"
 
-# ── Existing directives still work alongside risk ───────────────
+# ── Dynamic directives work alongside risk (2026-07 audit: static
+# [TDD]/[REFACTOR]/[LIFECYCLE] restatements removed — CLAUDE.md owns them) ──
 
 run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"write a test for the settings store"}' \
+  '{"hook_event_name":"UserPromptSubmit","prompt":"open a pr for this branch"}' \
   0 \
-  "TDD directive still emitted for test prompts" \
-  "[TDD]"
+  "PR directive emitted for PR prompts" \
+  "[PR]"
 
 run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"refactor the auth module into smaller files"}' \
+  '{"hook_event_name":"UserPromptSubmit","prompt":"take a screenshot of localhost:3000"}' \
   0 \
-  "REFACTOR directive still emitted for refactor prompts" \
-  "[REFACTOR]"
+  "BROWSER directive emitted for browser prompts" \
+  "[BROWSER]"
 
 # ── Non-matching prompts: no directives at all ──────────────────
 

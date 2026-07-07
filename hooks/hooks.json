@@ -453,10 +453,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/architecture-review-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/biome-autofix.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -497,15 +493,7 @@
           },
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/perf-regression-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/violation-summary-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/cache-telemetry-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

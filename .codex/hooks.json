@@ -343,10 +343,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/architecture-review-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/biome-autofix.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -387,15 +383,7 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/perf-regression-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/violation-summary-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/cache-telemetry-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
