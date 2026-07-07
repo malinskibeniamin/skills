@@ -294,7 +294,7 @@ Read src/routes/settings.tsx first. Propose approach, wait for my approval.
 /development-lifecycle -- users report form submits twice on double-click.
 Reproduce, find root cause, fix with test.
 /visual-review -- review changed customer-facing surfaces before opening a PR.
-/thermo-nuclear-code-quality-review -- release-blocking cold PR review across code quality, frontend harness, resilience, visual UX, security, tests, perf, and steelman axes.
+/review --deep -- release-blocking cold PR audit across code quality, frontend harness, resilience, visual UX, security, tests, perf, and steelman axes.
 ```
 
 **Swarm execution:**
@@ -597,7 +597,6 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/go`** | Ship what built. Phases 4-6 only: verify -> self-review -> `/visual-review` for customer-facing diffs -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> `/resolve-pr-feedback`. Use when implementation + tests done. |
 | **`/deslop`** | Liability certainty gate before commit, push, PR, or merge. Runs `/simplify`, then blocks code lacking product value, defensive correctness, or test confidence. |
 | **`/swarm`** | Parallel executor. Infer lanes from free-form goal, spawn distinct subagents, keep coordinator ownership, and merge results across shared or per-agent worktrees. |
-| **`/stay-within-limits`** | Builder.io usage guard for long or parallel agent waves; checks limits before launching more work. |
 | **`/efficient-frontier`** | Builder.io orchestration pattern for frontier models (Fable, Opus): keep judgment central, delegate bounded heavy lifting. |
 | **`/make-pr-easy-to-review`** | Prepare or tidy PRs for reviewer clarity without code behavior changes. |
 | **`/visual-plan`** | Builder.io Agent-Native interactive plan artifact for reviewable diagrams, file maps, code, and open questions. |
@@ -608,7 +607,6 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/read-the-damn-docs`** | Builder.io official-docs-first guard for APIs, SDKs, packages, CLIs, and fast-moving behavior. |
 | **`/what-did-i-get-done`** | Cursor Team Kit commit-summary skill: concise status update from authored commits over any date range, including weekly review/retro mode with bugfix/debt/net-new classification. |
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
-| **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
 | **`/prime`** | Start or resume in a repo. Build a compact startup brief from git state, docs, and optional seeded task context. |
 | **`/tdd`** | Write tests or want strict red-green-refactor enforcement. |
@@ -622,7 +620,6 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/upgrade-dependency`** | Plan and safely apply dependency upgrades. Builds upgrade path first, applies safe patch/minor updates, creates issues for risky majors or unclear migrations. |
 | **`/aip`** | Design resource-oriented protobuf APIs with Google AIP rules, standard methods, LROs, pagination, filters, field masks, etags, and singleton patterns. |
 | **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
-| **`/claude-handoff`** | Launch a named Claude background agent with a redacted handoff prompt. |
 | **`/wizard`** | Generate an interactive bash wizard for third-party setup, one-off migration, or manual state transition. |
 | **`/to-spec`** | Synthesize current context into a tracker-published spec. |
 | **`/to-tickets`** | Break a spec or plan into blocked vertical-slice tickets. |
@@ -1221,7 +1218,7 @@ bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y         
 bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y         # spec/plan -> tracker tickets with blockers
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `claude-handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `writing-great-skills`, `grill-me`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream-deleted skills are intentionally not reintroduced; `/diagnose` is now `/diagnosing-bugs`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, teach, implement, loop-me, research, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code) were removed in the 4.27.0 audit.
+**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `writing-great-skills`, `grill-me`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream-deleted skills are intentionally not reintroduced; `/diagnose` is now `/diagnosing-bugs`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, teach, implement, loop-me, research, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code) were removed in the 4.27.0 audit.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 

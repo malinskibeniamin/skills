@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "description": "React/TypeScript + Go enforcement harness: 95 hooks, 83 skills, 104 hook scripts, 9 agents, 5 routines. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
+  "description": "React/TypeScript + Go enforcement harness: 84 hooks, 76 skills, 93 hook scripts, 7 agents, 5 routines. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
   "version": "4.27.0",
   "author": {
     "name": "Beniamin Malinski"
@@ -29,7 +29,6 @@
     "./aip/",
     "./ask-ben/",
     "./brainstorming/",
-    "./claude-handoff/",
     "./codebase-design/",
     "./codex-compat/",
     "./commit-push/",
@@ -41,7 +40,6 @@
     "./edit-article/",
     "./efficient-frontier/",
     "./extend-harness/",
-    "./frontend-skills-stats/",
     "./frontend-starter-kit/",
     "./go/",
     "./grill-me/",
@@ -55,9 +53,6 @@
     "./plan-arbiter/",
     "./plow-ahead/",
     "./ponytail/",
-    "./ponytail-audit/",
-    "./ponytail-debt/",
-    "./ponytail-review/",
     "./prime/",
     "./prototype/",
     "./read-the-damn-docs/",
@@ -87,11 +82,9 @@
     "./setup-ux-copy/",
     "./setup-zustand/",
     "./snyk-ux-security/",
-    "./stay-within-limits/",
     "./steelman/",
     "./swarm/",
     "./tdd/",
-    "./thermo-nuclear-code-quality-review/",
     "./to-spec/",
     "./to-tickets/",
     "./triage/",
@@ -112,8 +105,6 @@
   "agents": [
     "./agents/adversarial-reviewer.md",
     "./agents/code-reviewer.md",
-    "./agents/findings-schema.md",
-    "./agents/karpathy-failure-modes.md",
     "./agents/plan-design-hat.md",
     "./agents/plan-engineering-hat.md",
     "./agents/plan-product-hat.md",
@@ -130,7 +121,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
-    "4.27.0": "2026-07-07 -- Harness audit wave 1: full 5-agent audit of every skill, hook, and agent. Deletes 12 skills that were dead, contradictory, or duplicated (obsidian-vault, scaffold-exercises, setup-pre-commit, git-guardrails-claude-code, teach, migrate-to-shoehorn, implement, loop-me, research, weekly-review, efficient-fable, quick-recap) after porting unique content into survivors (what-did-i-get-done, read-the-damn-docs, go, efficient-frontier). Strips the duplicated /deslop preamble from all 94 SKILL.md files. Converts work + the writing family to zero-context slash-only skills (disable-model-invocation). Unwires three Stop-hook category errors (architecture-review-stop, perf-regression-stop, cache-telemetry-stop). Fixes test-warning-check's substring command gate that misfired on file reads. Replaces the python3-at-source-time timer in the hook lib with EPOCHREALTIME (removes ~56 interpreter spawns per edit). Trims intent-detect and orchestration-guidance to dynamic-context-only, ending per-prompt CLAUDE.md restatement (~2-4k tokens/session). Skills 95 -> 83; wired hooks 98 -> 95; hook scripts 108 -> 104. Full audit report: docs/harness-audit-2026-07-07.md.",
+    "4.27.0": "2026-07-07 -- Harness audit wave 1: full 5-agent audit of every skill, hook, and agent. Deletes 12 skills that were dead, contradictory, or duplicated (obsidian-vault, scaffold-exercises, setup-pre-commit, git-guardrails-claude-code, teach, migrate-to-shoehorn, implement, loop-me, research, weekly-review, efficient-fable, quick-recap) after porting unique content into survivors (what-did-i-get-done, read-the-damn-docs, go, efficient-frontier). Strips the duplicated /deslop preamble from all 94 SKILL.md files. Converts work + the writing family to zero-context slash-only skills (disable-model-invocation). Unwires three Stop-hook category errors (architecture-review-stop, perf-regression-stop, cache-telemetry-stop). Fixes test-warning-check's substring command gate that misfired on file reads. Replaces the python3-at-source-time timer in the hook lib with EPOCHREALTIME (removes ~56 interpreter spawns per edit). Trims intent-detect and orchestration-guidance to dynamic-context-only, ending per-prompt CLAUDE.md restatement (~2-4k tokens/session). Skills 95 -> 83; wired hooks 98 -> 95; hook scripts 108 -> 104. Full audit report: docs/harness-audit-2026-07-07.md. Wave 2 (same release): review-stack collapse (thermo-nuclear folds into /review --deep; mandatory 8-hat fan-out replaced by evidence-triggered lanes), ponytail family 4 -> 1 (debt ledger into ponytail, complexity tags into deslop), stay-within-limits -> efficient-frontier, claude-handoff -> handoff, frontend-skills-stats -> hook-audit, commit-push becomes a zero-context alias of commit-push-pr; 11 low-value per-edit pattern hooks deleted (tdd-prompt, url-state, unhappy-path, resilience-review-nudge, magic-number, duplicate-function, zustand-subscription, mutation-naming, structural-test-nudge, route-sibling-test, route-visual-test); agents cleanup (karpathy-failure-modes split into 6KB core + lazy MAST reference, findings-schema moved to agents/references/, shared review-evidence reference extracted, hardcoded HEAD~1 diff base replaced with merge-base default). Skills 83 -> 76; wired hooks 95 -> 84; hook scripts 104 -> 93; registered agents 9 -> 7.",
     "4.26.0": "2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review; remove obsolete aliases/setup wrapper; and tighten docs/research routing. Current surface: 98 hooks, 95 skills, 108 hook scripts, 9 agents, 5 routines.",
     "4.25.0": "2026-07-06 -- Vendor Builder.io skill suite and wire it through the harness. Adds direct /visual-plan, /visual-recap, /agent-watchdog, /efficient-fable, /efficient-frontier, /plan-arbiter, /plow-ahead, /quick-recap, /read-the-damn-docs, and /stay-within-limits skills; keeps Agent-Native visual plan/recap upstream content in references; adds sync automation for visual references; strengthens /visual-review with plan/recap artifacts; and routes swarm, planning, architecture, spec, ticketing, research, review, PR, routines, handoff, debugging, resilience, TDD, and lifecycle skills through the new helpers. Skills 88 -> 98.",
     "4.24.0": "2026-07-06 -- Sync latest mattpocock/skills deltas through upstream 16a2a5c. Updates /wayfinder destination, planning-first, no-fog exit, not-yet-specified/out-of-scope, and HITL/AFK ticket semantics while preserving claim rechecks; updates /to-tickets native sub-issue/blocking-edge guidance and /prototype context pointers; tightens /grilling fact-vs-decision handling; adds the Negation failure mode to /writing-great-skills. Skills remain 88.",
