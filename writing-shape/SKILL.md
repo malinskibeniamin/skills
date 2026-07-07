@@ -1,11 +1,10 @@
 ---
 name: writing-shape
 description: Shape raw markdown material into an article through conversational drafting.
+disable-model-invocation: true
 ---
 
 # Writing Shape
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Input pile is read-only. Output article is separate. If output path missing, ask once.
 
 ## Loop

@@ -5,8 +5,6 @@ description: "Ship what built. Run verify -> self-review -> simplify -> deslop -
 
 # Go -- Ship What You Built
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Phases 4-6 of `/development-lifecycle`, standalone command. Use when code written, ready launch.
 
 **Assumes**: implementation done, tests written. If not -- run `/development-lifecycle`.
@@ -68,7 +66,9 @@ After non-trivial tasks: "Learn something worth preserve?"
 1. Post final PR comment: changes, review findings, test coverage
 2. Request review: `gh pr edit <number> --add-reviewer <username>`
 3. Report PR URL + CI status
-4. **Stop.** No poll for human approval.
+4. End the final message with one status line, nothing after it (<100 chars):
+   `🟢 done` | `🟡 follow-up remains: <named item>` | `🔴 blocked on user input`
+5. **Stop.** No poll for human approval.
 
 ## Entry Gate
 
@@ -76,22 +76,5 @@ Before start, check work to ship:
 
 - No uncommitted changes AND no unpushed commits -> nothing do, stop
 - On default branch, no feature branch -> **auto-spawn via `scripts/mux-worktree.sh <type>/<name>`** before proceed. Never ship from main. [ETHOS: Worktree Isolation]
-
-## Skills Composed
-
-| Skill | Phase | How |
-|---|---|---|
-| `self-reviewer` agent | 4b | Auto-dispatch on diff |
-| `adversarial-reviewer` agent | 4b | Conditional (>50 lines or auth/security) |
-| `/simplify` | 5 | Code quality review |
-| `/ponytail-review` | 5 | Complexity-only delete/stdlib/native/YAGNI pass |
-| `/deslop` | 5 | Liability certainty gate after Ponytail review |
-| `/visual-review` | 4/5 | Customer-facing surface review with product/design/engineering/QA hats when UI, CLI/TUI, mobile, desktop, or report output changed |
-| `/visual-recap` | 5 | Interactive PR recap for non-trivial diffs so reviewers understand what ships |
-| `/make-pr-easy-to-review` | 5 | Reviewer guidance and safe PR cleanup without behavior changes |
-| `/resilience-review` | 2/4b/5 | Edge cases, error handling, fallback, polish, observability for risky features |
-| `/commit-push-pr` | 5 | Conventional commits + push + PR |
-| `code-reviewer` agent | 5 | Fresh-eyes review on PR |
-| `/resolve-pr-feedback` | 5b | Triage + fix review comments |
 
 See [REFERENCE.md](REFERENCE.md) for detailed checklists, gate logic, flowchart.

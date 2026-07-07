@@ -4,15 +4,12 @@ description: parallel executor. Use /swarm.
 ---
 
 # Swarm
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-Parallel executor: not planner, not `/goal`, not autopilot.
+Parallel executor: not planner, not autopilot.
 
 Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for approval before launch unless required context is missing.
 
 ## Position
 
-- `/goal` owns why and moving target.
 - `/work` owns lifecycle.
 - `/grill-with-docs` settles plan and docs.
 - `/swarm` executes independent lanes faster.

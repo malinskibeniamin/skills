@@ -492,7 +492,7 @@ Project-specific quality signal. Generic linting catches generic; regression eva
 
 ## Cross-Model Review
 
-`/codex:rescue` available -> auto-dispatch plan for 2nd opinion. Bug triage: GitHub issue comments as cross-model channel.
+Bug triage: GitHub issue comments as cross-model channel.
 
 ## Subagents
 

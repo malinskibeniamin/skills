@@ -2,26 +2,17 @@
 
 VENDORED=(
   edit-article
-  git-guardrails-claude-code
   ask-ben
   codebase-design
   diagnosing-bugs
   domain-modeling
   grill-with-docs
   grilling
-  implement
-  migrate-to-shoehorn
-  obsidian-vault
   prototype
   resolving-merge-conflicts
-  research
   review
   wayfinder
   claude-handoff
-  loop-me
-  scaffold-exercises
-  setup-pre-commit
-  teach
   to-spec
   to-tickets
   wizard
@@ -87,13 +78,9 @@ run_content_eval "$REPO_ROOT/snyk-ux-security/SKILL.md" "/to-tickets" "snyk skil
 run_content_eval "$REPO_ROOT/wizard/SKILL.md" "interactive bash wizard|template\\.sh" "wizard builds interactive bash wizards"
 run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
 run_content_eval "$REPO_ROOT/claude-handoff/SKILL.md" "claude --bg --name" "claude-handoff launches named background agent"
-run_content_eval "$REPO_ROOT/loop-me/SKILL.md" "workflows/\\*\\.md|workflow specs" "loop-me writes workflow specs"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
-run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research prioritizes primary sources"
-run_content_eval "$REPO_ROOT/research/SKILL.md" "Markdown file" "research writes cited markdown artifact"
-run_content_eval "$REPO_ROOT/research/SKILL.md" "where the repo already keeps" "research follows repo note conventions"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "If a \*fact\* can be found" "grilling looks up facts instead of asking"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
@@ -161,20 +148,6 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
 # Latest Matt vendoring: teach workspace.
-run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"
-run_file_eval "$REPO_ROOT/teach/MISSION-FORMAT.md" "teach mission format exists"
-run_file_eval "$REPO_ROOT/teach/LEARNING-RECORD-FORMAT.md" "teach learning-record format exists"
-run_file_eval "$REPO_ROOT/teach/GLOSSARY-FORMAT.md" "teach glossary format exists"
-run_file_eval "$REPO_ROOT/teach/RESOURCES-FORMAT.md" "teach resources format exists"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "lessons/.*html|learning-records|NOTES.md" "teach keeps stateful workspace files"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "citations|trusted resources" "teach grounds lessons in trusted resources"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "feedback loop|interactive" "teach requires interactive feedback loops"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "storage strength.*retrieval.*spacing.*interleaving" "teach optimizes for durable retention"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "same number of words.*formatting" "teach prevents quiz answer tells"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "reference docs.*HTML anchors" "teach links lessons and references"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "primary source" "teach recommends one primary source per lesson"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "mission changes.*MISSION.md.*learning record" "teach records mission shifts"
-run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses assets before inlining"
 
 # Latest Matt vendoring: improve-codebase-architecture richer report flow.
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "HTML report|architecture-review" "ICA writes HTML architecture report"

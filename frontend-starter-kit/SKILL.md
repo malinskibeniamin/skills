@@ -4,8 +4,6 @@ description: Complete frontend stack -- 14 setup skills + active workflow/commun
 ---
 
 # Frontend Starter Kit
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 ## Setup Skills (1-14, sequential, idempotent)
 
 1. **setup-toolchain** -- bun + tsgo enforcement, destructive command guards
@@ -27,7 +25,7 @@ Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 
 development-lifecycle, tdd, brainstorming, setup-ci-pipeline, improve-codebase-architecture, prototype, grill-with-docs, domain-modeling, grill-me, triage, diagnosing-bugs, writing-great-skills
 
-Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; quick-recap; stay-within-limits; efficient-frontier.
+Builder helper flow: visual-plan -> visual-recap -> visual-review; read-the-damn-docs -> plan-arbiter -> agent-watchdog; stay-within-limits; efficient-frontier.
 
 ## Steps
 
@@ -57,7 +55,6 @@ bunx skills@latest add mattpocock/skills/prototype --agent claude-code -y
 bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y
 bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y
 bunx skills@latest add mattpocock/skills/handoff --agent claude-code -y
-bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y
 ```
 
 ### 4. Verify

@@ -32,7 +32,7 @@
 
 ### Community Workflow Skills -- from mattpocock/skills
 
-improve-codebase-architecture, prototype, to-spec, to-tickets, writing-great-skills, git-guardrails-claude-code
+improve-codebase-architecture, prototype, to-spec, to-tickets, writing-great-skills
 
 ## Install Order
 

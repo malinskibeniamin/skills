@@ -46,7 +46,7 @@ Quick question (on a specific decision)
 | Design | brainstorming, prototype | -- |
 | Architecture | improve-codebase-architecture | -- |
 | DDD | grill-with-docs, domain-modeling | -- |
-| Meta | writing-great-skills, grill-me, ask-ben | git-guardrails |
+| Meta | writing-great-skills, grill-me, ask-ben | -- |
 
 Owned skills ship with repo. "Community" skills install from mattpocock/skills.
 
@@ -111,4 +111,3 @@ Confirm files exist and mention selected tracker, Wayfinding operations, labels,
 | Integration | Requires | What it adds |
 |---|---|---|
 | setup-atlassian-workflow | `acli` installed + authenticated | Jira work items alongside GitHub issues |
-| codex-plugin-cc | OpenAI API key | `/codex:adversarial-review` for cross-model challenge |

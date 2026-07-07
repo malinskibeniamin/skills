@@ -1,14 +1,13 @@
 # Evals for current mattpocock/skills WIP surface.
 
 CLAUDE_HANDOFF="$REPO_ROOT/claude-handoff/SKILL.md"
-LOOP_ME="$REPO_ROOT/loop-me/SKILL.md"
 WIZARD="$REPO_ROOT/wizard/SKILL.md"
 WIZARD_TEMPLATE="$REPO_ROOT/wizard/template.sh"
 TO_SPEC="$REPO_ROOT/to-spec/SKILL.md"
 TO_TICKETS="$REPO_ROOT/to-tickets/SKILL.md"
 PLUGIN="$REPO_ROOT/.claude-plugin/plugin.json"
 
-for skill in claude-handoff loop-me wizard to-spec to-tickets; do
+for skill in claude-handoff wizard to-spec to-tickets; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "Matt WIP skill exists: $skill"
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^name: $skill$" "Matt WIP skill has matching name: $skill"
   run_content_eval "$PLUGIN" "\\./$skill/" "Claude plugin registers Matt WIP skill: $skill"
