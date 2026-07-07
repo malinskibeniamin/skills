@@ -13,6 +13,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/ask-ben` | This router: explains all local skills and routes work. |
 | `/brainstorming` | Explore/challenge design options before code. |
 | `/codebase-design` | Deep-module vocabulary: interface, seam, adapter, depth. |
+| `/codex` | Delegate to GPT-5.5/5.6 via codex CLI: implement, review, computer use, analysis. |
 | `/codex-compat` | Generate Codex hooks/AGENTS parity from Claude hooks. |
 | `/commit-push` | Conventional commit plus push, no PR. |
 | `/commit-push-pr` | Commit, push, draft/ready PR, watch CI. |

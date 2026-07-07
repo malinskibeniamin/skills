@@ -55,6 +55,7 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 ## Skill composition
 
 - Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
+- Lane model choice: `/efficient-frontier` Model rankings. Bulk mechanical lanes -> GPT-5.5 via `/codex` wrapper (sonnet+low, `GPT-5.5:` label, worktree isolation). Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes start with `/ponytail`; reviewer lanes include `/deslop` complexity tags before broader review.
 - Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
