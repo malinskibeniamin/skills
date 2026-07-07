@@ -11,7 +11,6 @@ flowchart TD
     Detect -->|"refactor"| Refactor[Refactor]
     Detect -->|"test/cover"| TestOnly[Tests only]
     Detect -->|"create PR"| PROnly[PR only]
-    Detect -->|"batch/overnight"| Sandbox[Sandcastle]
 
     Feature --> P1[1. Understand]
     Bug --> P1_RCA[1. Understand -- RCA<br/>reproduce -> analyze -> hypothesize]
@@ -508,14 +507,10 @@ Bug triage: GitHub issue comments as cross-model channel.
 | Task | Parallelize? | How | Sweet spot |
 |---|---|---|---|
 | Codebase-wide migration | Yes | `/batch` | 5-30 agents per file/module |
-| Security scan | Yes | `/batch` or Sandcastle | 3-5 agents per directory |
 | Multiple UI designs | Yes | Spawn 3 agents, different constraints | 3 max |
-| Independent features | Yes | Sandcastle (AFK) | 3-5 agents per issue |
-| Test generation | Yes | Sandcastle or `/batch` | One per module |
 | Bug fix | No | Sequential reasoning needed | 1 agent |
 | Code review | 2 agents | spec+quality + Codex | 2-3 reviewers |
 
-`/batch` = migrations · Sandcastle = AFK · 3 agents = design competition.
 
 | Complexity | Model |
 |---|---|

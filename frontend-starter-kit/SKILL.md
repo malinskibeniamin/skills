@@ -41,7 +41,7 @@ the plugin ("export harness").
 
 Runtime-guidance skills (daily work, not setup): `/accessibility`, `/tanstack-router`,
 `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Optional infra:
-`/setup-routines`, `/setup-sandcastle`, `/setup-atlassian-workflow` (slash-only).
+`/setup-routines`, `/setup-atlassian-workflow` (slash-only).
 
 ## Steps
 

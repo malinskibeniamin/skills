@@ -52,7 +52,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/review` | Reviews a diff with an 8-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience... |
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
-| `/setup-sandcastle` | Configure Sandcastle agent delegation -- headless run(), HITL interactive(), parallel Docker sandboxes, bra... |
 | `/snyk-ux-security` | Run Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage, release-age... |
 | `/steelman` | Argue the strongest evidence-backed case against a premise. |
 | `/swarm` | parallel executor. |

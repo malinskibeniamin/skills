@@ -168,14 +168,12 @@ Before enable, verify:
 
 Extra runs consume subscription usage when overage enabled.
 
-## Routine vs. Sandcastle vs. interactive
+## Routine vs. interactive
 
 | Scenario | Use |
 |---|---|
 | Auto on every PR | **Routine** -- GitHub trigger, cloud-hosted |
 | Scheduled health checks | **Routine** -- schedule trigger |
-| 5+ independent issues parallel | **Sandcastle** -- parallel Docker agents |
-| Overnight batch | **Sandcastle** -- AFK, local or CI |
 | Interactive feature work | **Claude Code** -- direct session with human |
 | CD pipeline integration | **Routine** -- API trigger from deploy script |
 
@@ -193,7 +191,6 @@ Update hook -> every future routine run picks up (next clone). No prompt changes
 
 ## Routines vs. other automation
 
-| Feature | Routines | Sandcastle | GitHub Actions | `/loop` |
 |---|---|---|---|---|
 | Runs on | Anthropic cloud | Local Docker | GitHub runners | Local CLI |
 | Triggers | Schedule, GitHub, API | Manual/script | GitHub events | Timer/manual |
