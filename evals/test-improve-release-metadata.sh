@@ -1,10 +1,10 @@
 # Evals for latest release metadata bump.
 
-run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.26\.0"' "skill manifest bumped to 4.26.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.26\.0"' "Claude plugin bumped to 4.26.0"
-run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.26\.0"' "Codex plugin bumped to 4.26.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.26\.0"' "Claude marketplace bumped to 4.26.0"
-run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.26\.0"' "Codex marketplace bumped to 4.26.0"
+run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.27\.0"' "skill manifest bumped to 4.26.0"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.27\.0"' "Claude plugin bumped to 4.26.0"
+run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.27\.0"' "Codex plugin bumped to 4.26.0"
+run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.27\.0"' "Claude marketplace bumped to 4.26.0"
+run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.27\.0"' "Codex marketplace bumped to 4.26.0"
 skill_count=$(find "$REPO_ROOT" -maxdepth 2 -name SKILL.md -not -path '*/agent-evals/*' | wc -l | tr -d ' ')
 hook_count=$(jq '[.hooks[][][]] | length' "$REPO_ROOT/skill-manifest.json")
 hook_script_count=$(find "$REPO_ROOT/.claude/hooks" -maxdepth 1 -type f -name '*.sh' | wc -l | tr -d ' ')
@@ -24,8 +24,8 @@ do
   run_content_eval "$metadata_file" "${routine_count} routines" "$(basename "$metadata_file") describes current routine count"
 done
 run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" "${hook_count} hooks, ${skill_count} skills" "Claude marketplace top-level description has current counts"
-run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.26\.0$' "changelog has 4.26.0 section"
-run_content_eval "$REPO_ROOT/README.md" 'v4\.26\.0' "README pinned release example updated"
+run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.27\.0$' "changelog has 4.26.0 section"
+run_content_eval "$REPO_ROOT/README.md" 'v4\.27\.0' "README pinned release example updated"
 
 if python3 - "$REPO_ROOT" <<'PY'
 import json

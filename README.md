@@ -72,7 +72,7 @@ codex plugin marketplace upgrade skills
 Or pin a release:
 
 ```bash
-codex plugin marketplace add malinskibeniamin/skills --ref v4.26.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.27.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -598,18 +598,15 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/deslop`** | Liability certainty gate before commit, push, PR, or merge. Runs `/simplify`, then blocks code lacking product value, defensive correctness, or test confidence. |
 | **`/swarm`** | Parallel executor. Infer lanes from free-form goal, spawn distinct subagents, keep coordinator ownership, and merge results across shared or per-agent worktrees. |
 | **`/stay-within-limits`** | Builder.io usage guard for long or parallel agent waves; checks limits before launching more work. |
-| **`/efficient-frontier`** | Builder.io orchestration pattern: keep judgment with the frontier model, delegate bounded heavy lifting. |
-| **`/efficient-fable`** | Builder.io Fable-specific frontier orchestration. |
+| **`/efficient-frontier`** | Builder.io orchestration pattern for frontier models (Fable, Opus): keep judgment central, delegate bounded heavy lifting. |
 | **`/make-pr-easy-to-review`** | Prepare or tidy PRs for reviewer clarity without code behavior changes. |
 | **`/visual-plan`** | Builder.io Agent-Native interactive plan artifact for reviewable diagrams, file maps, code, and open questions. |
 | **`/visual-recap`** | Builder.io Agent-Native PR/diff recap so reviewers understand what will ship. |
 | **`/agent-watchdog`** | Builder.io watchdog for auditing another agent session, branch, PR, transcript, or completion claim. |
 | **`/plan-arbiter`** | Builder.io arbiter for competing plans from agents, docs, transcripts, or visual plans. |
 | **`/plow-ahead`** | Builder.io autonomy contract for keep-going work that should not pause on routine ambiguity. |
-| **`/quick-recap`** | Builder.io red/yellow/green final status line convention. |
 | **`/read-the-damn-docs`** | Builder.io official-docs-first guard for APIs, SDKs, packages, CLIs, and fast-moving behavior. |
-| **`/weekly-review`** | Cursor Team Kit weekly synthesis: authored commits grouped into highlights plus bugfix/debt/net-new classification. |
-| **`/what-did-i-get-done`** | Cursor Team Kit commit-summary skill: concise status update from authored commits over a concrete date range. |
+| **`/what-did-i-get-done`** | Cursor Team Kit commit-summary skill: concise status update from authored commits over any date range, including weekly review/retro mode with bugfix/debt/net-new classification. |
 | **`/visual-review`** | Multi-hat customer-facing surface review before PRs: product/design/engineering/QA findings, screenshots or terminal evidence, states, a11y, console errors, mobile and cross-browser checks. |
 | **`/thermo-nuclear-code-quality-review`** | Release-blocking cold PR audit for very important changes. Fans out `/review`, structural quality, frontend harness, `/resilience-review`, `/visual-review`, security, tests, performance, and `/steelman`; emits PR comment-ready findings. |
 | **`/brainstorming`** | Not sure what approach yet. Explore 2-3 design options with trade-offs. |
@@ -627,7 +624,6 @@ Only remember **one skill**: `/development-lifecycle` (or alias `/work`). Covers
 | **`/handoff`** | Compact current session into a temp handoff doc for another agent or fresh session. Use instead of dragging full transcript when context should move. |
 | **`/claude-handoff`** | Launch a named Claude background agent with a redacted handoff prompt. |
 | **`/wizard`** | Generate an interactive bash wizard for third-party setup, one-off migration, or manual state transition. |
-| **`/loop-me`** | Grill recurring life/work loops into implementation-ready workflow specs. |
 | **`/to-spec`** | Synthesize current context into a tracker-published spec. |
 | **`/to-tickets`** | Break a spec or plan into blocked vertical-slice tickets. |
 | **`/writing-great-skills`** | Reference for writing and editing predictable, low-no-op skills. |
@@ -1223,10 +1219,9 @@ Skills from [mattpocock/skills](https://github.com/mattpocock/skills) complement
 ```bash
 bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y            # spec synthesis
 bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y         # spec/plan -> tracker tickets with blockers
-bunx skills@latest add mattpocock/skills/git-guardrails-claude-code --agent claude-code -y  # Branch protection
 ```
 
-**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `claude-handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `obsidian-vault`, `writing-great-skills`, `grill-me`, `implement`, `research`, `resolving-merge-conflicts`, `wayfinder`, `wizard`, `loop-me`. Upstream-deleted skills are intentionally not reintroduced; `/diagnose` is now `/diagnosing-bugs`.
+**Already vendored** (no need install from mattpocock/skills): `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `claude-handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `grill-with-docs`, `prototype`, `to-spec`, `to-tickets`, `edit-article`, `writing-great-skills`, `grill-me`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream-deleted skills are intentionally not reintroduced; `/diagnose` is now `/diagnosing-bugs`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, teach, implement, loop-me, research, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code) were removed in the 4.27.0 audit.
 
 **Note:** `setup-pre-commit` (husky/lint-staged) intentionally omitted. Claude Code hooks already enforce linting, formatting, type checking deterministically every edit -- pre-commit hooks redundant + add friction for human devs who may prefer different workflows.
 

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.27.0
+
+2026-07-07 -- Harness audit wave 1. Five-agent audit of every skill, wired hook, and agent (211 verdicts; full report in docs/harness-audit-2026-07-07.md). Deletes 12 skills that were dead, contradictory, or duplicated (obsidian-vault, scaffold-exercises, setup-pre-commit, git-guardrails-claude-code, teach, migrate-to-shoehorn, implement, loop-me, research, weekly-review, efficient-fable, quick-recap) after porting unique content into what-did-i-get-done, read-the-damn-docs, go, and efficient-frontier. Strips the duplicated /deslop preamble from all SKILL.md files. Converts /work and the writing family to zero-context slash-only skills. Unwires three Stop-hook category errors (architecture-review-stop, perf-regression-stop, cache-telemetry-stop). Fixes test-warning-check's substring command gate that hard-blocked file reads with no override. Replaces the python3-at-source-time hook-lib timer with EPOCHREALTIME (~56 fewer interpreter spawns per edit). Trims intent-detect and orchestration-guidance to dynamic-context-only, ending per-prompt CLAUDE.md restatement (~2-4k tokens/session). Purges stale references (/ultraplan, /codex:rescue, /goal, codex-plugin-cc, duplicated review rows). Skills 95 -> 83; wired hooks 98 -> 95; hook scripts 108 -> 104. Current surface: 95 hooks, 83 skills, 104 hook scripts, 9 agents, 5 routines.
+
 ## 4.26.0
 
 2026-07-06 -- Vendor Cursor Team Kit /make-pr-easy-to-review, /what-did-i-get-done, and /weekly-review; remove obsolete aliases/setup wrapper; and tighten docs/research routing. Current surface: 98 hooks, 95 skills, 108 hook scripts, 9 agents, 5 routines.
