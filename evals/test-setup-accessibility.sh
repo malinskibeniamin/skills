@@ -1,8 +1,8 @@
 # Evals for setup-accessibility skill
 # Tests file structure, SKILL.md, REFERENCE.md, and hook script content
 
-SCRIPT="$REPO_ROOT/setup-accessibility/scripts/accessibility-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-accessibility"
+SCRIPT="$REPO_ROOT/accessibility/scripts/accessibility-check.sh"
+SKILL_DIR="$REPO_ROOT/accessibility"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -12,7 +12,7 @@ run_executable_eval "$SCRIPT" "accessibility-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-accessibility" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: accessibility" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "ARIA" "SKILL.md mentions ARIA"

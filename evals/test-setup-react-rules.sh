@@ -1,7 +1,7 @@
 # Evals for setup-react-rules skill
 
-SCRIPT="$REPO_ROOT/setup-react-rules/scripts/react-rules-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-react-rules"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-rules/scripts/react-rules-check.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-rules"
 
 # Specialized hooks for rules that moved out of react-rules-check.sh:
 AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/as-cast-check.sh"
@@ -11,17 +11,15 @@ PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-perf-check.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-rules-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-rules" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "REACT_RULES_BAN_USEEFFECT" "SKILL.md documents useEffect opt-in env var"
-run_content_eval "$SKILL_DIR/SKILL.md" "components/ui" "SKILL.md mentions components/ui"
-run_content_eval "$SKILL_DIR/SKILL.md" "as any" "SKILL.md mentions as any ban"
+run_content_eval "$SKILL_DIR/README.md" "REACT_RULES_BAN_USEEFFECT" "SKILL.md documents useEffect opt-in env var"
+run_content_eval "$SKILL_DIR/README.md" "components/ui" "SKILL.md mentions components/ui"
+run_content_eval "$SKILL_DIR/README.md" "as any" "SKILL.md mentions as any ban"
 
 # ── Hook: skip non-Edit/Write ───────────────────────────────────
 
@@ -564,7 +562,7 @@ run_hook_eval "$SCRIPT" \
 
 # ── Tailwind checks (via tailwind-check.sh) ──────────────────────
 
-TW_SCRIPT="$REPO_ROOT/setup-react-rules/scripts/tailwind-check.sh"
+TW_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-rules/scripts/tailwind-check.sh"
 
 # Ban !important in TSX
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -824,8 +822,8 @@ run_content_eval "$TW_SCRIPT" "transition-all" "tailwind-check warns on transiti
 run_content_eval "$TW_SCRIPT" "scale\\(0\\)" "tailwind-check warns on scale(0) entry motion"
 run_content_eval "$TW_SCRIPT" "layout property" "tailwind-check warns on layout-property animation"
 run_content_eval "$TW_SCRIPT" "300ms" "tailwind-check documents UI motion duration threshold"
-run_content_eval "$SKILL_DIR/SKILL.md" "Motion craft" "setup-react-rules documents motion craft checks"
-run_content_eval "$SKILL_DIR/SKILL.md" "transform/opacity" "setup-react-rules documents performant motion properties"
+run_content_eval "$SKILL_DIR/README.md" "Motion craft" "setup-react-rules documents motion craft checks"
+run_content_eval "$SKILL_DIR/README.md" "transform/opacity" "setup-react-rules documents performant motion properties"
 
 # ── Check 18: Ban class components ────────────────────────────────
 

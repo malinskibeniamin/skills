@@ -147,7 +147,7 @@ npx @tanstack/intent@latest install
 bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
 
 # Redpanda-specific (Chakra/legacy bans, registry workflow)
-bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y  # redpanda profile included
 ```
 
 **Verify:** `bash scripts/verify-install.sh`
@@ -466,7 +466,7 @@ Hooks and rules derive from a 2026-04 audit of **~2,500 PRs / ~3,500 review comm
 | PRs analyzed | Same | **~2,500+** |
 | PostToolUse hooks shipped | Repo | **60** |
 | React/TS/security checks | `react-rules-check.sh` + `tailwind-check.sh` | **34** |
-| Biome rules added from audit | `setup-biome` REFERENCE | **5** |
+| Biome rules added from audit | frontend-starter-kit `references/biome` | **5** |
 | Tokens saved / session (typical) | Compressed messages + dedup + trimmed REFERENCEs | **~6,700** |
 | Hook wall-clock on `.tsx` edit | Concurrent hooks, slowest wins | **~293ms** |
 | Human review cycles per PR | Before / after enforcement | **3-5 -> 0-1** |
@@ -551,7 +551,7 @@ We do -- many lifecycle patterns (TDD red/green, grill-with-docs/domain-modeling
 <details>
 <summary><strong>Why not just use eslint/biome?</strong></summary>
 
-Biome (we ship it via `setup-biome`) handles lint + format -- we don't replace that. What Biome can't do: catch patterns at Edit time (biome runs at save/CI), enforce workflow (plan -> grill -> TDD -> review), inject context (which rules apply to this file type), or block Stop until PR-ready. Hooks + Biome are layers, not alternatives. `setup-biome` adds 5 custom rules from the PR audit that live there because AST rules beat regex for those patterns.
+Biome (we ship it via frontend-starter-kit's biome reference) handles lint + format -- we don't replace that. What Biome can't do: catch patterns at Edit time (biome runs at save/CI), enforce workflow (plan -> grill -> TDD -> review), inject context (which rules apply to this file type), or block Stop until PR-ready. Hooks + Biome are layers, not alternatives. The biome reference adds 5 custom rules from the PR audit that live there because AST rules beat regex for those patterns.
 </details>
 
 <details>
@@ -563,7 +563,7 @@ Prompt-packs = bundled system prompts or context-injection. They're probabilisti
 <details>
 <summary><strong>Is this Redpanda-specific?</strong></summary>
 
-No. Redpanda-specific rules live in a **separate** kit (`redpanda-frontend-kit`) -- registry workflow, Chakra bans, legacy imports. The core `frontend-starter-kit` is stack-opinionated (React + TanStack + ConnectRPC) but org-agnostic. The public plugin has zero Redpanda internals.
+No. Redpanda-specific rules live behind the frontend-starter-kit `redpanda` profile -- registry workflow, Chakra bans, legacy imports, gated on `REDPANDA_KIT=1`. The core kit is stack-opinionated (React + TanStack + ConnectRPC) but org-agnostic. The public plugin has zero Redpanda internals.
 </details>
 
 <details>
@@ -718,7 +718,6 @@ It should check that components use --color-* CSS variables instead of raw hex v
 |---|---|
 | **`/frontend-starter-kit`** | All setup skills + workflow skills. Full bootstrap new project. |
 | **`/work-automation-kit`** | Planning skills -- spec creation, ticket breakdown, project management. |
-| **`/redpanda-frontend-kit`** | frontend-starter-kit + Redpanda-specific registry workflow. |
 | **`/codex-compat`** | Generate `.codex/hooks.json` + `AGENTS.md` for OpenAI Codex compatibility. |
 
 ### Setup Skills (automatic via hooks -- no invocation needed)
@@ -727,22 +726,22 @@ Installed by `/frontend-starter-kit`, run automatic. Never invoke directly.
 
 | Skill | What enforces |
 |---|---|
-| `setup-toolchain` | Blocks npm/npx, enforce bun + tsgo |
-| `setup-biome` | Biome + Ultracite linting, auto-fix on Stop |
-| `setup-quality-gate` | Type check + lint + related tests gate, bundle guard |
-| `setup-react-rules` | Ban `as any`, raw HTML, XSS vectors, barrel imports |
-| `setup-react-compiler` | Flag manual memoization, enforce compiler-friendly patterns |
-| `setup-zustand` | Double-parens create, useShallow selectors, persist middleware |
-| `setup-accessibility` | ARIA labels, keyboard handlers, axe-core testing |
-| `setup-tanstack-router` | Route tree generation, ban react-router-dom/window.location |
-| `setup-connect-query` | ConnectRPC + Protobuf v2 patterns, ban raw useQuery |
-| `setup-env-validation` | Type-safe env vars via t3-env + zod, ban raw process.env |
-| `setup-conventional-commits` | Validate commit format `type(scope): description` |
-| `setup-react-doctor` | Health scoring (0-100), fails on score regression |
-| `setup-e2e-testing` | Playwright + Testcontainers + axe-core setup |
-| `setup-ci-pipeline` | GitHub Actions quality gate, coverage gates, bundle budgets |
-| `setup-agent-config` | Token-efficient env vars, test flag optimization, output truncation |
-| `setup-registry-workflow` | Remind rebuild registry.json when UI components change |
+| `toolchain` (starter-kit ref) | Blocks npm/npx, enforce bun + tsgo |
+| `biome` (starter-kit ref) | Biome + Ultracite linting, auto-fix on Stop |
+| `quality-gate` (starter-kit ref) | Type check + lint + related tests gate, bundle guard |
+| `react-rules` (starter-kit ref) | Ban `as any`, raw HTML, XSS vectors, barrel imports |
+| `react-compiler` (starter-kit ref) | Flag manual memoization, enforce compiler-friendly patterns |
+| `zustand` (starter-kit ref) | Double-parens create, useShallow selectors, persist middleware |
+| `/accessibility` | ARIA labels, keyboard handlers, axe-core testing |
+| `/tanstack-router` | Route tree generation, ban react-router-dom/window.location |
+| `/connect-query` | ConnectRPC + Protobuf v2 patterns, ban raw useQuery |
+| `env-validation` (starter-kit ref) | Type-safe env vars via t3-env + zod, ban raw process.env |
+| `conventional-commits` (starter-kit ref) | Validate commit format `type(scope): description` |
+| `react-doctor` (starter-kit ref) | Health scoring (0-100), fails on score regression |
+| `/e2e-testing` | Playwright + Testcontainers + axe-core setup |
+| `ci-pipeline` (starter-kit ref) | GitHub Actions quality gate, coverage gates, bundle budgets |
+| `agent-config` (starter-kit ref) | Token-efficient env vars, test flag optimization, output truncation |
+| `/registry-workflow` | Remind rebuild registry.json when UI components change |
 | `setup-sandcastle` | AFK agent delegation -- parallel agents in Docker sandboxes |
 | `setup-routines` | Cloud-hosted automation -- PR review, health checks, triage, docs drift |
 
@@ -1043,7 +1042,7 @@ graph TD
 - **redpanda-frontend-kit** -- Everything in frontend starter kit, plus Redpanda-specific rules: Chakra/legacy import bans, TanStack Router, Connect Query + Protobuf enforcement, react-doctor, registry workflow.
 
   ```
-  bunx skills@latest add malinskibeniamin/skills/redpanda-frontend-kit --agent claude-code -y
+  bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y  # redpanda profile included
   ```
 
 - **work-automation-kit** -- Project planning + management workflow skills: spec creation, implementation planning, ticket breakdown, bug triage. Optional: Atlassian/Jira integration via acli, Codex cross-model review via codex-plugin-cc.
@@ -1054,159 +1053,21 @@ graph TD
 
 ## Toolchain Enforcement
 
-Claude Code hooks enforce tooling standards via `PreToolUse` + `SessionStart` hooks.
+Bootstrap setup consolidated into **one skill** (4.27.0): `/frontend-starter-kit` with
+profiles `full | minimal | redpanda | <tool>`. Each tool's install steps live in
+`frontend-starter-kit/references/<tool>/` and load lazily -- toolchain (bun+tsgo, destructive
+command guards), biome (+Ultracite, auto-fix Stop hook), quality-gate, agent-config,
+react-compiler, react-rules, zustand, env-validation (t3-env+zod), conventional-commits,
+react-doctor, ci-pipeline, redpanda (registry workflow, `REDPANDA_KIT=1`).
 
-- **setup-toolchain** -- Ban npm/npx/tsc/eslint/prettier, enforce bun as package manager with `--yarn` flag, tsgo as TypeScript compiler, block global installs, guard against destructive commands (`rm -rf`, `git push --force`, `git reset --hard`, `git checkout .`). Set `PKG_MANAGER`, `LINTER`, `TEST_RUNNER` env vars.
+Daily-work guidance formerly hidden behind `setup-` names is now directly model-invoked:
+`/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`,
+`/ux-copy`. Optional infra stays slash-only: `/setup-routines` (cloud routines),
+`/setup-sandcastle` (AFK delegation), `/setup-atlassian-workflow` (Jira via acli).
 
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-toolchain --agent claude-code -y
-  ```
-
-## Code Quality
-
-Lint, format, quality gate automation.
-
-- **setup-biome** -- Install Biome + Ultracite, create `biome.jsonc` with strict overrides (noConsole, cognitive complexity 15, kebab-case filenames, useExhaustiveSwitchCases, restricted imports for moment/lodash/classnames/mobx/yup). Stop hook auto-fix all changed JS/TS files before Claude finish.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-biome --agent claude-code -y
-  ```
-
-- **setup-quality-gate** -- Add `quality:gate` package.json script (biome + tsgo + related tests in <5s), GitHub Actions CI workflow with formatting integrity check (`git diff --exit-code`), Stop hook for tsgo type checking, bundle guard PostToolUse hook, `gh` CLI CI status checks, `@claude review` trigger pattern, optional Codex cross-model review.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-quality-gate --agent claude-code -y
-  ```
-
-## React Rules
-
-PostToolUse hooks enforce React patterns every Edit/Write. All checks skip non-JS/TS files (zero overhead for backend devs) + auto-detect component library directories (`components/ui/`, `redpanda-ui/`, `src/ui/`, `packages/ui/` -- configurable via `UI_LIB_DIRS`).
-
-- **setup-react-rules** -- 34 React/TS/security/a11y checks in two hook scripts (`react-rules-check.sh` + `tailwind-check.sh`). All messages compressed for token efficiency -- keep fix, drop explanation. Key checks:
-  - Ban raw HTML elements, `as any`, `@ts-ignore`, `@ts-expect-error`, class components
-  - Ban `dangerouslySetInnerHTML`, `eval()`, `.innerHTML`, `setTimeout("string")`, `=== NaN`
-  - Ban `onClick + navigate()`, barrel imports, `!important`, `outline: none`
-  - Suggest `structuredClone()` over JSON roundtrip, `.requestSubmit()` over `.submit()`
-  - Suggest `100dvh` over `100vh`, `100%` over `100vw`, block `user-scalable=no`
-  - Use `<Button>` over `<div role="button">`, `Number()` over unradixed `parseInt()`
-  - React Compiler: ban manual `useMemo`/`useCallback`/`React.memo`
-  - Opt-in: ban `useEffect` via `REACT_RULES_BAN_USEEFFECT=1`
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-react-rules --agent claude-code -y
-  ```
-
-- **setup-react-compiler** -- Install `babel-plugin-react-compiler` with rsbuild config. Default `annotation` mode for brownfield codebases (opt-in per file with `"use memo"`), `infer` for greenfield. `'use no memo'` for escape hatch. Compiler modes reference, derived-state detection, named useEffect heuristic. Component library directories auto-excluded.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-react-compiler --agent claude-code -y
-  ```
-
-## Health & Diagnostics
-
-Stop hooks + manual diagnostic skills.
-
-- **setup-react-doctor** -- Install react-doctor, add `doctor` package.json script, Stop hook run health check on changed files. Fails on score regression.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-react-doctor --agent claude-code -y
-  ```
-
-Test health diagnostics (async leaks, slow queries, flaky tests) now part of `/tdd` + `orchestration-stop` quality gate.
-
-## LLM Optimization
-
-Reduce token usage + context waste.
-
-- **setup-agent-config** -- SessionStart set `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`. UserPromptSubmit inject project state (3 context levels) + condensed rules line + intent detection (TDD/component/bug/PR/refactor/e2e). PreToolUse strip `--verbose`, suggest `--pool=forks`/`--bail=1`. PostToolUse truncate output >200 lines + file-aware orchestration guidance. Stop: violation summary + comprehensive quality gate.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-agent-config --agent claude-code -y
-  ```
-
-## Accessibility
-
-- **setup-accessibility** -- PostToolUse hook enforce ARIA accessibility patterns: ban `<img>` without `alt`, ban mouse-only `onClick` on `<div>`/`<span>` (require `role` + `tabIndex` + keyboard handler), enforce required ARIA attributes on `role="combobox"` / `role="tablist"` / `role="dialog"`. Include Playwright AXE test helper for WCAG 2.1 AA scanning + ARIA patterns reference (combobox, tabs, dialog, accordion, alert, listbox, switch, slider, radio group). Escape hatch: `// allow: a11y-skip [reason]`.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-accessibility --agent claude-code -y
-  ```
-
-## State Management
-
-- **setup-zustand** -- PostToolUse hook enforce zustand best practices: ban single-parens `create<T>()` (must be `create<T>()()`), ban inline object selectors (suggest `useShallow`), ban direct localStorage in stores (suggest persist middleware).
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-zustand --agent claude-code -y
-  ```
-
-## Routing & Registry
-
-- **setup-tanstack-router** -- Auto-regenerate TanStack Router route tree when route files change, plus anti-pattern enforcement: ban react-router-dom, window.location navigation, `strict: false`, untyped hooks (`useParams()`/`useSearch()` without `{ from }`), URLSearchParams (suggest nuqs), warn on exported components from route files (code splitting), require `validateSearch` when using `useSearch`. Warn on `window.location.reload()` + `window.location` reads. Optional: install TanStack's 28 official reference skills via `npx @tanstack/intent@latest install`.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-tanstack-router --agent claude-code -y
-  ```
-
-- **setup-registry-workflow** -- Stop hook remind about `registry.json` rebuild + changelog update when redpanda-ui components modified.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-registry-workflow --agent claude-code -y
-  ```
-
-## Data Fetching
-
-- **setup-connect-query** -- PostToolUse hook enforce ConnectRPC + Connect Query + Protobuf best practices: ban raw `useQuery`/`useMutation` when ConnectRPC available (allow `useTransport`/`callUnaryMethod`), ban `invalidateQueries()` with no args, warn on axios/fetch. Protobuf v2: ban `new Message()`, `PlainMessage`/`PartialMessage`, manual `$typeName` literals. Well-known types: warn on `Any` without `@type`, `Timestamp` as plain object (use `timestampFromDate`/`anyPack` from `@bufbuild/protobuf/wkt`). Promote Standard Schema + protovalidate. Auto-loads on `*_pb*`/`*_connectquery*` files via `paths:`.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-connect-query --agent claude-code -y
-  ```
-
-## E2E Testing
-
-- **setup-e2e-testing** -- Playwright for end-to-end testing with Testcontainers for backend infra, axe-core for automated WCAG 2.1 AA accessibility audits. Optional agent-browser integration for AI-driven test scaffolding + visual verification. Include test patterns for forms, tables, multi-step workflows, debugging strategies.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-e2e-testing --agent claude-code -y
-  ```
-
-## Environment & Configuration
-
-- **setup-env-validation** -- PostToolUse hook ban raw `process.env.X` access. Enforce t3-env with zod validation -- all env vars must be declared in `src/env.ts` + imported as validated object. Skip env files + test files.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-env-validation --agent claude-code -y
-  ```
-
-## Commit Format
-
-- **setup-conventional-commits** -- PreToolUse hook enforce `type(scope): description` format on `git commit` commands. Replace commitlint + husky with zero dependencies. Validate type, scope (required), lowercase description, no trailing period, 5-72 character length.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-conventional-commits --agent claude-code -y
-  ```
-
-## Atlassian / Jira (Optional)
-
-- **setup-atlassian-workflow** -- Opt-in Jira integration via `acli` (Atlassian CLI). Mirror gh-based workflow skills for Jira users -- create work items, transition status, comment, link PRs. Works alongside `gh` (`ISSUE_TRACKER=both`) or standalone (`ISSUE_TRACKER=acli`). Require `acli` installed + authenticated.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-atlassian-workflow --agent claude-code -y
-  ```
-
-## Cloud Automation (Optional)
-
-- **setup-routines** -- Configure [Claude Code routines](https://claude.ai/code/routines) for unattended automation. Ships 5 prompt templates: PR review (GitHub trigger), PR feedback resolution (GitHub trigger), issue triage (GitHub trigger), weekly codebase health (schedule), docs drift detection (schedule). Routines run as full Claude Code cloud sessions -- all hooks, CLAUDE.md rules, agents enforce automatically. Stack-agnostic templates with built-in noise controls (silent approval, delta-based reporting, skip-what-hooks-catch).
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-routines --agent claude-code -y
-  ```
-
-- **setup-sandcastle** -- AFK agent delegation via [Sandcastle](https://github.com/mattpocock/sandcastle). N parallel agents in Docker sandboxes, each follow development-lifecycle with hooks enforced. For batch work on multiple issues simultaneously.
-
-  ```
-  bunx skills@latest add malinskibeniamin/skills/setup-sandcastle --agent claude-code -y
-  ```
+```
+bunx skills@latest add malinskibeniamin/skills/frontend-starter-kit --agent claude-code -y
+```
 
 ## Community Skills (Optional)
 

@@ -1,8 +1,8 @@
 # Evals for setup-registry-workflow skill
 
-SCRIPT="$REPO_ROOT/setup-registry-workflow/scripts/registry-check.sh"
-SPLIT_SCRIPT="$REPO_ROOT/setup-registry-workflow/scripts/split-file-convention-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-registry-workflow"
+SCRIPT="$REPO_ROOT/registry-workflow/scripts/registry-check.sh"
+SPLIT_SCRIPT="$REPO_ROOT/registry-workflow/scripts/split-file-convention-check.sh"
+SKILL_DIR="$REPO_ROOT/registry-workflow"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -13,7 +13,7 @@ run_executable_eval "$SPLIT_SCRIPT" "split-file-convention-check.sh is executabl
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-registry-workflow" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: registry-workflow" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "registry.json" "SKILL.md mentions registry.json"
 run_content_eval "$SKILL_DIR/SKILL.md" "redpanda-ui" "SKILL.md mentions redpanda-ui"

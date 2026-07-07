@@ -1,7 +1,7 @@
 # Evals for setup-ux-copy skill
 
-SCRIPT="$REPO_ROOT/setup-ux-copy/scripts/ux-copy-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-ux-copy"
+SCRIPT="$REPO_ROOT/ux-copy/scripts/ux-copy-check.sh"
+SKILL_DIR="$REPO_ROOT/ux-copy"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -12,7 +12,7 @@ run_executable_eval "$SCRIPT" "ux-copy-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-ux-copy" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: ux-copy" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "allow.*ux-copy" "SKILL.md documents escape hatch"
 run_content_eval "$SKILL_DIR/SKILL.md" "capitalization" "SKILL.md mentions capitalization rules"
@@ -558,7 +558,7 @@ run_content_eval "$SKILL_DIR/GLOSSARY.md" "grill-with-docs|domain-modeling" "GLO
 
 # ── prose-style-check.sh ────────────────────────────────────────
 
-PROSE="$REPO_ROOT/setup-ux-copy/scripts/prose-style-check.sh"
+PROSE="$REPO_ROOT/ux-copy/scripts/prose-style-check.sh"
 
 run_executable_eval "$PROSE" "prose-style-check.sh is executable"
 

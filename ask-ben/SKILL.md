@@ -8,79 +8,71 @@ disable-model-invocation: true
 Use this when you forget which local skill fits Ben's work. Default: ship frontend/React/TypeScript/Go changes and skills repo releases with enforced TDD, review, resilience, visual proof, PR, CI, and installable plugin surfaces.
 Routes: product -> `/development-lifecycle`/`/work` -> `/go`; bugs -> `/diagnosing-bugs` + `/tdd`; planning -> `/grill-with-docs`/`/wayfinder`/`/grill-me`; specs -> `/to-spec` -> `/to-tickets`; review -> `/review` (add `--deep` for release audits); UI/resilience -> `/visual-review`/`/resilience-review`; parallel -> `/swarm`.
 Builder.io skills are both direct commands and under-the-hood helpers: `/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/efficient-frontier`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`.
-| `/agent-watchdog` | Watchdog another agent session, PR, transcript, branch, or claim. |
-| `/aip` | Google AIP-style protobuf/resource API design. |
-| `/ask-ben` | This router: explains all local skills and routes work. |
-| `/brainstorming` | Explore/challenge design options before code. |
-| `/codebase-design` | Deep-module vocabulary: interface, seam, adapter, depth. |
-| `/codex` | Delegate to GPT-5.5/5.6 via codex CLI: implement, review, computer use, analysis. |
-| `/codex-compat` | Generate Codex hooks/AGENTS parity from Claude hooks. |
-| `/commit-push` | Conventional commit plus push, no PR. |
-| `/commit-push-pr` | Commit, push, draft/ready PR, watch CI. |
-| `/deslop` | Liability gate: delete, inline, justify, verify. |
-| `/development-lifecycle` | Main frontend work loop: understand -> plan -> grill -> TDD -> ship. |
-| `/diagnosing-bugs` | Feedback-loop-first bug/perf diagnosis. |
-| `/domain-modeling` | Maintain CONTEXT.md terms and ADRs. |
-| `/efficient-frontier` | Frontier-model orchestration with bounded subagents. |
-| `/extend-harness` | Add/tune hook-harness rules and severity. |
-| `/frontend-starter-kit` | Install complete generic frontend harness. |
-| `/go` | Ship tail: verify, review, deslop, PR, CI. |
-| `/grill-me` | Stateless relentless plan/design interview. |
-| `/grill-with-docs` | Plan grill plus domain docs and ADR updates. |
-| `/grilling` | Reusable model-invoked interview loop. |
-| `/handoff` | Compact context into a continuation file. |
-| `/hook-audit` | Audit hook usefulness and session telemetry. |
-| `/improve` | Senior advisor scan and implementation plans. |
-| `/improve-codebase-architecture` | Visual deepening report plus architecture grill. |
-| `/make-pr-easy-to-review` | Prepare PRs for fast review without code behavior changes. |
-| `/plan-arbiter` | Compare, merge, or reject competing agent plans. |
-| `/plow-ahead` | Autonomy contract for "keep going" work. |
-| `/ponytail` | Build least-code solution via reuse-first ladder. |
-| `/prime` | Repo startup/resume brief. |
-| `/prototype` | Throwaway logic/UI prototype to answer design risk. |
-| `/read-the-damn-docs` | Official-docs-first guard for APIs, SDKs, packages, CLIs. |
-| `/redpanda-frontend-kit` | Frontend starter kit plus Redpanda registry workflow. |
-| `/resilience-review` | Edge cases, errors, fallback, recovery, polish. |
-| `/resolve-pr-feedback` | Fetch, fix, reply, resolve PR review threads. |
-| `/resolving-merge-conflicts` | Resolve merge/rebase conflicts from primary sources. |
-| `/review` | Multi-hat diff/PR review across standards/spec/risk. |
-| `/setup-accessibility` | ARIA/a11y hooks and tests. |
-| `/setup-agent-config` | Token-saving agent env, flags, truncation. |
-| `/setup-atlassian-workflow` | Jira/acli workflow integration. |
-| `/setup-biome` | Biome/Ultracite lint-format setup. |
-| `/setup-ci-pipeline` | GitHub Actions quality/coverage/visual CI. |
-| `/setup-connect-query` | ConnectRPC, Connect Query, protobuf v2 enforcement. |
-| `/setup-conventional-commits` | Conventional commit hook setup. |
-| `/setup-e2e-testing` | Playwright/Testcontainers/axe e2e setup. |
-| `/setup-env-validation` | t3-env/zod env validation. |
-| `/setup-quality-gate` | Local/CI quality:gate and Stop typecheck. |
-| `/setup-react-compiler` | React Compiler setup and anti-manual-memo rules. |
-| `/setup-react-doctor` | React health score Stop gate. |
-| `/setup-react-rules` | React/TS/security component rules. |
-| `/setup-registry-workflow` | Component registry drift and taxonomy workflow. |
-| `/setup-routines` | Claude cloud routines for recurring automation. |
-| `/setup-sandcastle` | Sandcastle parallel/headless agent delegation. |
-| `/setup-tanstack-router` | TanStack Router generation and enforcement. |
-| `/setup-toolchain` | Bun/tsgo toolchain and destructive-command guardrails. |
-| `/setup-ux-copy` | UX copy, inclusive language, docs prose style. |
-| `/setup-zustand` | Zustand create/useShallow/persist enforcement. |
-| `/snyk-ux-security` | JS/Go/Bazel Snyk sweep with reachability gates. |
-| `/steelman` | Evidence-backed strongest counterargument. |
-| `/swarm` | Parallel executor with coordinator-owned merge. |
-| `/tdd` | Red-green-refactor one vertical slice at a time. |
-| `/to-tickets` | Turn spec/plan into vertical-slice tracker tickets. |
-| `/to-spec` | Turn conversation into a spec. |
-| `/triage` | Move incoming issues through readiness states. |
-| `/upgrade-dependency` | Safe dependency upgrade plan and PR/issue path. |
-| `/visual-plan` | Agent-Native interactive plan artifact. |
-| `/visual-recap` | Agent-Native PR/diff recap artifact. |
-| `/visual-review` | Customer-facing UX review with evidence. |
-| `/wayfinder` | Map huge foggy work into issue-tracker investigation tickets. |
-| `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
-| `/wizard` | Generate an interactive bash wizard for manual setup or migration. |
-| `/work` | Alias for `/development-lifecycle`. |
-| `/work-automation-kit` | Install planning/spec/triage workflow skills. |
-| `/writing-beats` | Draft article beat by beat. |
-| `/writing-fragments` | Mine conversation into writing fragments. |
-| `/writing-great-skills` | Write/edit predictable low-no-op skills. |
-| `/writing-shape` | Shape raw markdown into an article. |
+<!-- catalog:start (generated by scripts/generate-skill-catalog.sh -- do not edit rows by hand) -->
+| Skill | Use for |
+|---|---|
+| `/accessibility` | React accessibility patterns -- ARIA labels, keyboard handlers, widget attributes, nested-pressable fixes,... |
+| `/agent-watchdog` | Use when asked to watch, audit, compare, or fix another agent's work from a Codex/Claude session, transcrip... |
+| `/aip` | Designs Google AIP-style protobuf resource APIs. |
+| `/ask-ben` | Router for Ben's frontend-skills harness and every local skill. |
+| `/brainstorming` | Use when exploring design options, starting new features, or needing to think before coding. |
+| `/codebase-design` | Shared vocabulary for designing deep modules. |
+| `/codex-compat` | Generate Codex hooks.json and AGENTS.md from Claude Code hooks. |
+| `/codex` | Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implementation, independent review, computer u... |
+| `/commit-push-pr` | Analyze changes, create categorized conventional commits, push, and open a PR. |
+| `/commit-push` | Analyze changes, create categorized conventional commits, and push -- no PR. |
+| `/connect-query` | ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation... |
+| `/deslop` | Question changed code as liability and remove unjustified surface area. |
+| `/development-lifecycle` | Use when frontend/React/TypeScript/UI work. |
+| `/diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. |
+| `/domain-modeling` | Build and sharpen a project's domain model. |
+| `/e2e-testing` | Playwright + Testcontainers + axe-core E2E patterns for forms, tables, and workflows. |
+| `/efficient-frontier` | Use when a frontier model (Fable, Opus, GPT-5.6) should delegate bounded research, coding, testing, or log... |
+| `/extend-harness` | Extend frontend-skills hook harness. |
+| `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
+| `/go` | Ship what built. |
+| `/grill-me` | A relentless interview to sharpen a plan or design. |
+| `/grill-with-docs` | Grilling session that also builds project domain docs. |
+| `/grilling` | Interview the user relentlessly about a plan or design. |
+| `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
+| `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
+| `/improve-codebase-architecture` | Scan a codebase for deepening opportunities, present a visual HTML report, then grill the chosen candidate. |
+| `/improve` | Surveys a codebase as a senior advisor and writes implementation plans. |
+| `/make-pr-easy-to-review` | Prepare PRs for review by cleaning noisy history, improving PR descriptions, and adding reviewer guidance w... |
+| `/plan-arbiter` | Use when comparing, cross-reviewing, merging, judging, choosing, or arbitrating competing plans from agents... |
+| `/plow-ahead` | Use when the user says plow ahead, do not stop, use your best judgment, keep going until done, or similar. |
+| `/ponytail` | Writes the least code that works. |
+| `/prime` | Builds repo startup brief. |
+| `/prototype` | Build a throwaway prototype to answer a design question. |
+| `/read-the-damn-docs` | Use for third-party APIs, libraries, frameworks, CLIs, cloud services, SDKs, fast-moving behavior, current/... |
+| `/registry-workflow` | Component registry maintenance -- taxonomy, consumer drift analysis, sync discipline. |
+| `/resilience-review` | Resilience Review checks resilience. |
+| `/resolve-pr-feedback` | Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. |
+| `/resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. |
+| `/review` | Reviews a diff since a fixed point across Standards, Spec, and risk lanes. |
+| `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
+| `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
+| `/setup-sandcastle` | Configure Sandcastle agent delegation -- headless run(), HITL interactive(), parallel Docker sandboxes, bra... |
+| `/snyk-ux-security` | Run Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage, release-age... |
+| `/steelman` | Argue the strongest evidence-backed case against a premise. |
+| `/swarm` | parallel executor. |
+| `/tanstack-router` | TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generat... |
+| `/tdd` | Test-driven development with red-green-refactor loop. |
+| `/to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker -- no interview, just... |
+| `/to-tickets` | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blo... |
+| `/triage` | Move issues through triage roles and prepare agent-ready work. |
+| `/upgrade-dependency` | Plans safe dependency upgrades via researched paths and risk gates. |
+| `/ux-copy` | UX text style for UI strings and prose -- sentence case, action labels, banned phrases, inclusive language,... |
+| `/visual-plan` | Turn text plans into interactive Agent-Native visual plans with diagrams, file maps, annotated code, questi... |
+| `/visual-recap` | Turn a PR, branch, commit, or diff into an interactive Agent-Native visual recap with diagrams, file maps,... |
+| `/visual-review` | Reviews customer-facing surfaces with product, design, engineering, and QA hats from visual evidence. |
+| `/wayfinder` | Plan huge work that cannot fit in one agent session as a shared issue-tracker map, then resolve one investi... |
+| `/what-did-i-get-done` | Summarize authored git commits over a time period into a concise status update. |
+| `/wizard` | Generate an interactive bash wizard that walks a human through a manual procedure -- third-party setup, a o... |
+| `/work-automation-kit` | Install and configure planning/project management workflows -- specs, ticket breakdown, tracker docs, triag... |
+| `/work` | Alias for /development-lifecycle. |
+| `/writing-beats` | Build article beat by beat from raw material with user-chosen pivots. |
+| `/writing-fragments` | Mine user conversation into raw writing fragments in one markdown file. |
+| `/writing-great-skills` | Reference for writing and editing predictable skills. |
+| `/writing-shape` | Shape raw markdown material into an article through conversational drafting. |
+<!-- catalog:end -->

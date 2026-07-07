@@ -1,6 +1,7 @@
 ---
 name: setup-routines
-description: "Configure Claude Code routines for automated PR review, codebase health, issue triage, and docs drift detection. Use when setting up recurring automation, GitHub-triggered workflows, or API-triggered tasks that run on Anthropic cloud infrastructure."
+disable-model-invocation: true
+description: "Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anthropic cloud infrastructure."
 ---
 
 # Setup Routines

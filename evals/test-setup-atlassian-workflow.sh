@@ -5,12 +5,12 @@ SKILL_DIR="$REPO_ROOT/setup-atlassian-workflow"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_content_eval "$SKILL_DIR/SKILL.md" "disable-model-invocation: true" "skill is slash-only (zero context tax)"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-atlassian-workflow" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "acli" "SKILL.md mentions acli"
 run_content_eval "$SKILL_DIR/SKILL.md" "JIRA_PROJECT" "SKILL.md mentions JIRA_PROJECT"
 run_content_eval "$SKILL_DIR/SKILL.md" "ISSUE_TRACKER" "SKILL.md mentions ISSUE_TRACKER"
