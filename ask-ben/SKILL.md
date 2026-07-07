@@ -20,7 +20,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/development-lifecycle` | Main frontend work loop: understand -> plan -> grill -> TDD -> ship. |
 | `/diagnosing-bugs` | Feedback-loop-first bug/perf diagnosis. |
 | `/domain-modeling` | Maintain CONTEXT.md terms and ADRs. |
-| `/edit-article` | Tighten article drafts. |
 | `/efficient-frontier` | Frontier-model orchestration with bounded subagents. |
 | `/extend-harness` | Add/tune hook-harness rules and severity. |
 | `/frontend-starter-kit` | Install complete generic frontend harness. |

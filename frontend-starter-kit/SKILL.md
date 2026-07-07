@@ -50,11 +50,6 @@ bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent clau
 
 ### 3. Community skills (optional)
 ```bash
-bunx skills@latest add mattpocock/skills/grill-with-docs --agent claude-code -y
-bunx skills@latest add mattpocock/skills/prototype --agent claude-code -y
-bunx skills@latest add mattpocock/skills/to-spec --agent claude-code -y
-bunx skills@latest add mattpocock/skills/to-tickets --agent claude-code -y
-bunx skills@latest add mattpocock/skills/handoff --agent claude-code -y
 ```
 
 ### 4. Verify

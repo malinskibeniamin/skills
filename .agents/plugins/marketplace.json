@@ -7,7 +7,7 @@
     {
       "name": "frontend-skills",
       "version": "4.27.0",
-      "description": "React/TypeScript + Go enforcement harness: 84 hooks, 76 skills, 93 hook scripts, 7 agents, 5 routines. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
+      "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
       "source": {
         "source": "local",
         "path": "./plugins/frontend-skills"

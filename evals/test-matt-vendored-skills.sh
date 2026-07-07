@@ -1,7 +1,6 @@
 # Evals for mattpocock/skills vendoring completeness.
 
 VENDORED=(
-  edit-article
   ask-ben
   codebase-design
   diagnosing-bugs

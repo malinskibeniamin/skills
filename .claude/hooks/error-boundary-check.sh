@@ -13,6 +13,31 @@ hook_skip_tests
 
 file_content=$(cat "$file_path")
 
+# ── Check 0a: React.lazy without Suspense ────────────────────────
+# (moved from orchestration-guidance.sh in the 2026-07 audit; this hook
+# is the single owner of error/loading-boundary rules)
+
+if echo "$file_content" | grep -qE 'React\.lazy\(|[^A-Za-z_]lazy\(' && \
+   ! echo "$file_content" | grep -qE '<Suspense|Suspense>'; then
+  if ! hook_has_escape "lazy-suspense"; then
+    hook_warn "React.lazy() without <Suspense> in this file. Wrap the lazy component or note the boundary location. Escape: // allow: lazy-suspense [reason]" "lazy-suspense"
+  fi
+fi
+
+# ── Check 0b: Query in component without loading/error/empty ─────
+# Components rendering query results must handle non-success states.
+# Skip custom hooks (use*.ts, /hooks/) -- state handling is the consumer's job.
+
+if ! echo "$file_path" | grep -qE '/hooks/|/use[A-Z]'; then
+  if echo "$file_content" | grep -qE 'useQuery|useSuspenseQuery' && \
+     echo "$file_content" | grep -qE 'return.*<' && \
+     ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|fallback|Skeleton|Spinner|EmptyState|ErrorState'; then
+    if ! hook_has_escape "query-states"; then
+      hook_warn "Query result rendered without loading/error/empty handling (isLoading/isPending/isError/fallback). Escape: // allow: query-states [reason]" "query-states"
+    fi
+  fi
+fi
+
 # Detect route file by path or content (supports any directory structure)
 is_route=false
 if echo "$file_path" | grep -qE '/routes/'; then
