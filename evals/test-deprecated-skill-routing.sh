@@ -4,6 +4,7 @@ LEGACY_SKILLS=(
   design-an-interface
   qa
   request-refactor-plan
+  setup-matt-pocock-skills
   ubiquitous-language
   domain-model
 )
@@ -36,17 +37,19 @@ run_content_eval "$REPO_ROOT/commit-push/SKILL.md" "/improve-codebase-architectu
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/triage" "commit-push-pr recommends triage over qa"
 
-_live_refs=$(rg -n "/(design-an-interface|qa|request-refactor-plan|ubiquitous-language|domain-model)\b|mattpocock/skills/ubiquitous-language|malinskibeniamin/skills/(design-an-interface|qa|request-refactor-plan)" "$REPO_ROOT" \
+_live_refs=$(rg -n --hidden '/(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)([^[:alnum:]_-]|$)|"(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)"[[:space:]]*:|\b(design-an-interface|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language)\b|mattpocock/skills/(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)([^[:alnum:]_-]|$)|malinskibeniamin/skills/(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)([^[:alnum:]_-]|$)' "$REPO_ROOT" \
+  --glob '!.git/**' \
   --glob '!CHANGELOG.md' \
-  --glob '!docs/**' \
   --glob '!evals/**' \
-  --glob '!domain-modeling/**' || true)
+  --glob '!.claude-plugin/**' \
+  --glob '!.codex-plugin/**' \
+  --glob '!.agents/plugins/marketplace.json' || true)
 if [ -n "$_live_refs" ]; then
-  echo "  FAIL  live docs do not route to removed legacy skills"
+  echo "  FAIL  live docs/config do not route to removed legacy skills"
   printf '%s\n' "$_live_refs" | sed 's/^/        /'
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: live docs still route to removed legacy skills"
 else
-  echo "  PASS  live docs do not route to removed legacy skills"
+  echo "  PASS  live docs/config do not route to removed legacy skills"
   PASS=$((PASS + 1))
 fi

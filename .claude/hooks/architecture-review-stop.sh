@@ -82,7 +82,7 @@ while IFS= read -r file; do
 
   # ── Check 1: File size ───────────────────────────────────────
   if [ "$is_route" = true ] && [ "$loc" -gt 300 ]; then
-    _add_issue "**${file}** is ${loc} LOC (route limit: 300). Run \`/request-refactor-plan\`."
+    _add_issue "**${file}** is ${loc} LOC (route limit: 300). Run \`/improve-codebase-architecture\`."
   elif [ "$loc" -gt 400 ]; then
     _add_issue "**${file}** is ${loc} LOC (limit: 400). Consider splitting."
   fi
