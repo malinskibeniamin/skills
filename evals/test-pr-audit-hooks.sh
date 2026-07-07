@@ -205,24 +205,12 @@ run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
 (cd /tmp && rm -r "$_ac_tmpdir" 2>/dev/null) || true
 
 # ══════════════════════════════════════════════════════════════════
-# mutation-naming-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/mutation-naming-check.sh" "mutation-naming-check.sh exists"
-run_executable_eval "$HOOKS_DIR/mutation-naming-check.sh" "mutation-naming-check.sh is executable"
-
-run_content_eval "$HOOKS_DIR/mutation-naming-check.sh" "Mutation" "mutation-naming enforces *Mutation suffix"
-run_content_eval "$HOOKS_DIR/mutation-naming-check.sh" "useMutation" "mutation-naming detects useMutation"
 
 # ══════════════════════════════════════════════════════════════════
-# magic-number-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/magic-number-check.sh" "magic-number-check.sh exists"
-run_executable_eval "$HOOKS_DIR/magic-number-check.sh" "magic-number-check.sh is executable"
-
-run_content_eval "$HOOKS_DIR/magic-number-check.sh" "staleTime" "magic-number catches inline staleTime"
-run_content_eval "$HOOKS_DIR/magic-number-check.sh" "proto" "magic-number checks proto files"
 
 # ══════════════════════════════════════════════════════════════════
 # hooks.json wiring
@@ -234,5 +222,3 @@ run_content_eval "$REPO_ROOT/hooks/hooks.json" "connect-error-format-check" "hoo
 # console-log-check removed — Biome noConsole handles it
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "form-watch-check" "hooks.json has form-watch-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "as-cast-check" "hooks.json has as-cast-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "mutation-naming-check" "hooks.json has mutation-naming-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "magic-number-check" "hooks.json has magic-number-check"

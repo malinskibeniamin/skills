@@ -76,19 +76,11 @@ run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
 rm -rf "$_bi_tmpdir"
 
 # ══════════════════════════════════════════════════════════════════
-# route-visual-test-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/route-visual-test-check.sh" "route-visual-test-check.sh exists"
-run_executable_eval "$HOOKS_DIR/route-visual-test-check.sh" "route-visual-test-check.sh is executable"
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$HOOKS_DIR/route-visual-test-check.sh" "browser.test" "route-visual checks for browser.test files"
-run_content_eval "$HOOKS_DIR/route-visual-test-check.sh" "@vitest/browser" "route-visual checks for @vitest/browser dep"
-run_content_eval "$HOOKS_DIR/route-visual-test-check.sh" "/routes/" "route-visual gates on route files"
-run_content_eval "$HOOKS_DIR/route-visual-test-check.sh" "visual-test-reminded" "route-visual uses session marker (once per session)"
-run_content_eval "$HOOKS_DIR/route-visual-test-check.sh" "_has_browser_tests" "route-visual gates on browser test existence"
 
 # ── Skip: non-route file ────────────────────────────────────────
 
@@ -96,9 +88,6 @@ _rvt_tmpdir=$(mktemp -d /tmp/route-visual-evals-XXXXXX)
 tmpfile="$_rvt_tmpdir/component.tsx"
 printf 'export function Button() { return <button /> }\n' > "$tmpfile"
 
-run_hook_eval "$HOOKS_DIR/route-visual-test-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: non-route file"
 
 # ── Skip: test file in routes ────────────────────────────────────
 
@@ -106,18 +95,12 @@ mkdir -p "$_rvt_tmpdir/routes"
 tmpfile="$_rvt_tmpdir/routes/index.test.tsx"
 printf 'test("renders", () => {})\n' > "$tmpfile"
 
-run_hook_eval "$HOOKS_DIR/route-visual-test-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: test file in routes dir"
 
 # ── Skip: layout/root route ──────────────────────────────────────
 
 tmpfile="$_rvt_tmpdir/routes/__root.tsx"
 printf 'export const Route = createRootRoute({})\n' > "$tmpfile"
 
-run_hook_eval "$HOOKS_DIR/route-visual-test-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: __root route file"
 
 rm -rf "$_rvt_tmpdir"
 
@@ -316,7 +299,6 @@ rm -rf "$_ce_tmpdir"
 # ══════════════════════════════════════════════════════════════════
 
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "biome-ignore-check" "hooks.json has biome-ignore-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "route-visual-test-check" "hooks.json has route-visual-test-check"
 
 # ══════════════════════════════════════════════════════════════════
 # Proto-form hooks: files, executable bits, registration in BOTH

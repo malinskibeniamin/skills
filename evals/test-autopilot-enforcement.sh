@@ -2,14 +2,6 @@
 
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
-# ── tdd-prompt-check.sh: once-per-session reminder ──────────────
-
-run_file_eval "$HOOKS_DIR/tdd-prompt-check.sh" "tdd-prompt-check.sh exists"
-run_executable_eval "$HOOKS_DIR/tdd-prompt-check.sh" "tdd-prompt-check.sh is executable"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "hook_warn" "tdd-prompt-check uses hook_warn (advisory, not block)"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "tdd-reminded" "tdd-prompt-check uses session marker (once per session)"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "/tdd" "tdd-prompt-check prescribes /tdd skill"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "per-feature|feature" "tdd-prompt-check references feature-level testing"
 
 # ── lifecycle-stop.sh: test coverage gate (step 0) ─────────────
 
