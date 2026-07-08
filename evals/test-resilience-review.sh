@@ -68,4 +68,4 @@ _no_risk=$(mktemp); echo "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\"
 if [ -s "$_no_risk" ]; then echo "  FAIL  hook noisy on pure helper"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: hook noisy on pure helper"; else echo "  PASS  hook quiet on pure helper"; PASS=$((PASS+1)); fi
 rm -rf "$_tmpdir" "$_no_risk"
 
-run_content_eval "$REPO_ROOT/README.md" "/resilience-review" "README documents resilience-review"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/resilience-review" "generated catalog documents resilience-review"
