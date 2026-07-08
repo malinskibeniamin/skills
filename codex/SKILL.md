@@ -8,8 +8,7 @@ description: Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implem
 GPT-5.5 and GPT-5.6 are reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
 never through the agent/workflow `model` parameter (Claude models only). The local
 `~/.codex/config.toml` defaults to `model = "gpt-5.5"`; pass `-m gpt-5.6` when the task needs
-intelligence 9 -- NOTE: gpt-5.6 requires API-key billing; ChatGPT-account auth rejects it
-(fall back to the gpt-5.5 default and tighten the spec). GPT-5.5/5.6 are extremely steerable:
+intelligence 9 (see the Model routing table in CLAUDE.md). GPT-5.5/5.6 are extremely steerable:
 write explicit, self-contained prompts and they follow them.
 
 ## Prompt contract (every codex run)
