@@ -12,9 +12,9 @@ bun tsgo biome vitest | Compiler memoize | fix type (guard, generic) | `@/compon
 
 `find` -> `-maxdepth N`/`| head` | `git log` -> `--oneline` | `grep -r` -> Grep tool | `cat` >200 line -> Read. Output caps + rtk rewrite enforced by hooks (llm-truncate, bash-verbose-guard, rtk-rewrite).
 
-## External Services (MCP banned -> CLI)
+## External Services (expensive MCP -> CLI; other MCP allowed)
 
-Jira `acli` | Gmail `gog` (`--readonly --gmail-no-send --no-input --json`) | Browser `agent-browser` | CI `gh` (Blacksmith run show in GH Actions) | Calendar/Drive `gog` | Buildkite `bk` | Box `box` | M365 `m365`. `mcp-ban.sh` deny + show syntax. MCP 10-25k char, CLI 100-500.
+Jira `acli` | Gmail/Calendar/Drive `gog` | Browser `agent-browser` | CI `gh` (Blacksmith = GH Actions) | Buildkite `bk` | Box `box` | M365 `m365`. `mcp-ban.sh` denies only these (10-25k char/call vs CLI 100-500) + shows CLI syntax; other MCP allowed.
 
 ## Commits
 
@@ -81,7 +81,7 @@ Default `high`. Fable-5: `high` or lower ONLY (`xhigh` token-hungry, `max` a fur
 
 Rank cost/intel/taste (1-10, higher better; cost = actual pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 (codex) 8/9/6 | GPT-5.5 (codex) 9/5/5. Taste = UI/UX, code quality, API design, copy.
 
-Ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits: output below bar -> rerun smarter WITHOUT asking | bulk mechanical (clear-spec impl, data analysis, migrations) -> GPT-5.5, free | user-facing (UI/copy/API) -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 (+optional GPT-5.5 independent) | computer use + token furnaces -> codex, report back | **thinker/executor split**: smart model plans exact steps -> cheap executor (Sonnet or codex GPT-5.5) -> smart model reviews diff | **NEVER Haiku** | GPT only via codex CLI (`/codex`) | Claude via `model` param.
+Ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits: output below bar -> rerun smarter WITHOUT asking | bulk mechanical (clear-spec impl, migrations) -> codex GPT-5.6, free | user-facing (UI/copy/API) -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 (+optional GPT independent) | computer use + token furnaces -> codex, report back | **thinker/executor split**: smart model plans exact steps -> cheap executor (Sonnet or codex GPT-5.6) -> smart model reviews diff | **NEVER Haiku** | GPT only via codex CLI (`/codex`) | Claude via `model` param.
 
 ### Monitor (not sleep)
 

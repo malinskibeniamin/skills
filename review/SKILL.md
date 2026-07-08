@@ -47,7 +47,7 @@ merges, dedupes by root cause, and reports.
 | security/privacy | auth, tenant boundaries, secrets, unsafe HTML, injection, deps, logging, PII | Opus-4.8 |
 | test/perf | TDD evidence, coverage gaps, flaky tests, render/network/bundle risk | Opus-4.8 |
 
-Optional ninth: `GPT-5.5: independent` -- a codex wrapper hat (see `/codex`) for a cross-model second opinion. Cheap, catches groupthink.
+Optional ninth: `GPT-5.6: independent` -- a codex wrapper hat (see `/codex`) for a cross-model second opinion. Cheap, catches groupthink.
 
 Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals;
 evidence, severity, priority label, required change, PR-comment-ready text; max 400 words;
