@@ -3,10 +3,36 @@ set -euo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
 hook_parse_edit_write
-hook_skip_ui_dirs
+
+_react_rules_skip_ui_dirs=false
+if [ -z "${UI_LIB_DIRS:-}" ]; then
+  _react_rules_ui_dirs="components/ui"
+  _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  [ -d "$_root/redpanda-ui" ] && _react_rules_ui_dirs="$_react_rules_ui_dirs|redpanda-ui"
+  [ -d "$_root/src/components/redpanda-ui" ] && _react_rules_ui_dirs="$_react_rules_ui_dirs|redpanda-ui"
+  [ -d "$_root/src/ui" ] && _react_rules_ui_dirs="$_react_rules_ui_dirs|src/ui"
+  [ -d "$_root/packages/ui" ] && _react_rules_ui_dirs="$_react_rules_ui_dirs|packages/ui"
+else
+  _react_rules_ui_dirs="$UI_LIB_DIRS"
+fi
+if echo "$file_path" | grep -qE "/($_react_rules_ui_dirs)/"; then
+  _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  if [ -f "$_repo_root/registry.json" ]; then
+    # Registry repo — remind to rebuild registry
+    echo '{"suppressOutput":true,"systemMessage":"You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."}' >&2
+  elif [ -f "$_repo_root/components.json" ] || [ -f "$_repo_root/cli.json" ]; then
+    # Consumer repo — warn that this is a registry-sourced component
+    _component=$(basename "$file_path")
+    echo "{"suppressOutput":true,"systemMessage":"WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead."}" >&2
+  fi
+  _react_rules_skip_ui_dirs=true
+fi
+
 hook_skip_generated
 hook_filter_extensions "ts|tsx|mdx"
 hook_get_added_lines
+
+if [ "$_react_rules_skip_ui_dirs" = false ]; then
 
 # ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
 
@@ -57,7 +83,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 3: (moved to as-cast-check.sh — as any, @ts-ignore, @ts-expect-error) ──
+# ── Check 3: (moved to ts-no-escape-hatches-check.sh — as any, @ts-ignore, @ts-expect-error) ──
 
 # ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
 
@@ -325,7 +351,7 @@ if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
   hook_warn "Avoid cloneElement. Use Context or render props."
 fi
 
-# ── Check 25: (moved to biome-ignore-check.sh — biome-ignore) ──
+# ── Check 25: (moved to ts-no-escape-hatches-check.sh — biome-ignore) ──
 
 # ── Check 26: Warn on tree-shaking killers ────────────────────────
 
@@ -419,6 +445,35 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 37: (moved to test-perf-check.sh — user.type()) ──
+# ── Check 37: (moved to test-convention-check.sh — user.type()) ──
+
+fi
+
+# ── absorbed from disabled-button-tooltip-check.sh (4.28 family consolidation) ──
+# ── Check: disabled Button without wrapping Tooltip ──────────────
+# A11y: disabled buttons should explain why via tooltip.
+# Pattern: <Button disabled> without surrounding <Tooltip>.
+
+case "$file_path" in
+  *.tsx)
+    _disabled_tooltip_test_file=false
+    case "$file_path" in
+      *.test.*|*.spec.*|*/__tests__/*) _disabled_tooltip_test_file=true ;;
+    esac
+    if [ "$_disabled_tooltip_test_file" = false ]; then
+      if echo "$added_lines" | grep -qE '<Button[^>]*disabled'; then
+        # Check if there's a Tooltip wrapper nearby in the file
+        file_content=$(cat "$file_path")
+        # Simple heuristic: if file has Tooltip import and disabled Button,
+        # assume it's handled. If no Tooltip import, warn.
+        if ! echo "$file_content" | grep -qE "Tooltip|TooltipTrigger|TooltipProvider"; then
+          if ! hook_has_escape "disabled-tooltip"; then
+            hook_warn "Disabled <Button> without Tooltip. Add tooltip explaining why button is disabled (a11y). Escape: // allow: disabled-tooltip [reason]" "disabled-button-tooltip"
+          fi
+        fi
+      fi
+    fi
+    ;;
+esac
 
 exit 0

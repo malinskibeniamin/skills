@@ -1,6 +1,6 @@
 # Evals for setup-env-validation skill
 
-SCRIPT="$REPO_ROOT/frontend-starter-kit/references/env-validation/scripts/env-validation-check.sh"
+SCRIPT="$REPO_ROOT/.claude/hooks/env-validation-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/env-validation"
 
 # ── File structure ──────────────────────────────────────────────

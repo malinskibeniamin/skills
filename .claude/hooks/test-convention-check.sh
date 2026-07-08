@@ -3,16 +3,30 @@ set -euo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
 hook_parse_edit_write
-hook_filter_extensions "ts|tsx"
+case "$file_path" in
+  */vitest.config.*|vitest.config.*) ;;  # allow vitest config files (any ext)
+  *) hook_filter_extensions "ts|tsx" ;;
+esac
 hook_skip_generated
-hook_get_added_lines
+
+added_lines="$(
+  set +e
+  hook_get_added_lines
+  _status=$?
+  if [ "$_status" -eq 0 ]; then
+    printf '%s' "$added_lines"
+  fi
+  exit 0
+)"
 
 # ── Gate: only test files ────────────────────────────────────────
+_is_test_file=false
 case "$file_path" in
-  *.test.*|*.spec.*|*.integration.*) ;;
-  */__tests__/*) ;;
-  *) exit 0 ;;
+  *.test.*|*.spec.*|*.integration.*) _is_test_file=true ;;
+  */__tests__/*) _is_test_file=true ;;
 esac
+
+if [ "$_is_test_file" = true ] && [ -n "$added_lines" ]; then
 
 # ── Check 1: it() should be test() ──────────────────────────────
 
@@ -94,6 +108,90 @@ case "$file_path" in
           touch "$_marker"
           hook_warn "Heavy getByRole usage (${_role_count}x). Consider adding data-testid for faster, more stable selectors." "test-convention-testid"
         fi
+      fi
+    fi
+    ;;
+esac
+
+fi
+
+# ── absorbed from test-perf-check.sh (4.28 family consolidation) ──
+# PostToolUse hook: detect test performance anti-patterns at edit time.
+
+# ── Route: test file checks vs vitest config checks ──────────────
+
+case "$file_path" in
+  *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)
+    if [ -n "$added_lines" ]; then
+      # ── Check 1: await import() in test files ──────────────────────
+
+      dynamic_imports=$(echo "$added_lines" | grep -E 'await\s+import\(' || true)
+
+      if [ -n "$dynamic_imports" ]; then
+        filtered=$(echo "$dynamic_imports" | grep -vE 'vi\.(importActual|importMock)|import\.meta' || true)
+
+        if [ -n "$filtered" ]; then
+          sample=$(echo "$filtered" | head -3 | sed 's/^+//' | tr '\n' ' ')
+          hook_warn "PERF: await import() in test +~100ms/call. Use static imports. Found: $sample" "test-perf-dynamic-import"
+        fi
+      fi
+
+      # ── Check: userEvent.type() is slow in integration tests ──────
+      type_usage=$(echo "$added_lines" | grep -E 'user(Event)?\.type\(' || true)
+
+      if [ -n "$type_usage" ]; then
+        sample=$(echo "$type_usage" | head -2 | sed 's/^+//' | tr '\n' ' ')
+        hook_warn "PERF: userEvent.type() fires per-keystroke (~50ms/char). Use user.clear()+user.paste() or fireEvent.change(). Found: $sample" "test-perf-user-type"
+      fi
+
+      # ── Check: setInterval in test files = open handle / leak ────
+      # Even with cleanup, raw setInterval is fragile. Prefer
+      # vi.useFakeTimers() + vi.advanceTimersByTime() so the test is
+      # deterministic and the handle can't escape teardown.
+      interval_usage=$(echo "$added_lines" | grep -E '\bsetInterval\(' || true)
+
+      if [ -n "$interval_usage" ]; then
+        if ! hook_has_escape "test-set-interval"; then
+          hook_warn "LEAK: setInterval in test = open handle. Use vi.useFakeTimers() + vi.advanceTimersByTime(), or guarantee clearInterval in cleanup. Escape: // allow: test-set-interval [reason]" "test-perf-set-interval"
+        fi
+      fi
+
+      # ── Check: it.concurrent + isolate: false is unsafe ───────────
+      concurrent_usage=$(echo "$added_lines" | grep -E '\.concurrent' || true)
+
+      if [ -n "$concurrent_usage" ]; then
+        config_dir=$(dirname "$file_path")
+        vitest_config=""
+        while [ "$config_dir" != "/" ]; do
+          for cfg in "$config_dir"/vitest.config.*; do
+            [ -f "$cfg" ] && vitest_config="$cfg" && break 2
+          done
+          config_dir=$(dirname "$config_dir")
+        done
+
+        if [ -n "$vitest_config" ] && grep -qE "isolate.*false" "$vitest_config" 2>/dev/null; then
+          hook_warn "PERF: it.concurrent + isolate:false unsafe. Shared context → race conditions." "test-perf-concurrent-isolate"
+        fi
+      fi
+    fi
+    ;;
+
+  */vitest.config.*|vitest.config.*)
+    # ── Check 2: missing pool: 'threads' ───────────────────────────
+    if ! grep -qE "pool.*['\"]threads['\"]|pool.*:.*['\"]threads['\"]" "$file_path" 2>/dev/null; then
+      hook_warn "PERF: Add pool:'threads' to vitest config. ~30% less import overhead than forks." "test-perf-missing-threads"
+    fi
+
+    # ── Check 3: unit config missing isolate: false ────────────────
+    is_unit_config=false
+
+    if ! grep -qE "environment.*['\"]happy-dom['\"]|environment.*['\"]jsdom['\"]" "$file_path" 2>/dev/null; then
+      is_unit_config=true
+    fi
+
+    if [ "$is_unit_config" = true ]; then
+      if ! grep -qE "isolate.*false" "$file_path" 2>/dev/null; then
+        hook_warn "PERF: Unit config missing isolate:false. Pure-logic tests can share thread context." "test-perf-missing-isolate"
       fi
     fi
     ;;

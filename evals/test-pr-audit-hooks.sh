@@ -139,39 +139,39 @@ run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
 (cd /tmp && rm -r "$_tc_tmpdir" 2>/dev/null) || true
 
 # ══════════════════════════════════════════════════════════════════
-# connect-error-format-check.sh
+# connect-query-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/connect-error-format-check.sh" "connect-error-format-check.sh exists"
-run_executable_eval "$HOOKS_DIR/connect-error-format-check.sh" "connect-error-format-check.sh is executable"
+run_file_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh exists"
+run_executable_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/connect-error-format-check.sh" "ConnectError.from" "connect-error-format prescribes ConnectError.from"
-run_content_eval "$HOOKS_DIR/connect-error-format-check.sh" "formatToastErrorMessageGRPC" "connect-error-format prescribes formatToastErrorMessageGRPC"
-run_content_eval "$HOOKS_DIR/connect-error-format-check.sh" "onError" "connect-error-format checks for onError"
+run_content_eval "$HOOKS_DIR/connect-query-check.sh" "ConnectError.from" "connect-error-format prescribes ConnectError.from"
+run_content_eval "$HOOKS_DIR/connect-query-check.sh" "formatToastErrorMessageGRPC" "connect-error-format prescribes formatToastErrorMessageGRPC"
+run_content_eval "$HOOKS_DIR/connect-query-check.sh" "onError" "connect-error-format checks for onError"
 
 # console-log-check.sh REMOVED — covered by Biome noConsole rule
 
 # ══════════════════════════════════════════════════════════════════
-# form-watch-check.sh
+# form-mode-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/form-watch-check.sh" "form-watch-check.sh exists"
-run_executable_eval "$HOOKS_DIR/form-watch-check.sh" "form-watch-check.sh is executable"
+run_file_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh exists"
+run_executable_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/form-watch-check.sh" "useWatch" "form-watch suggests useWatch"
-run_content_eval "$HOOKS_DIR/form-watch-check.sh" "React Compiler" "form-watch mentions React Compiler"
+run_content_eval "$HOOKS_DIR/form-mode-check.sh" "useWatch" "form-watch suggests useWatch"
+run_content_eval "$HOOKS_DIR/form-mode-check.sh" "React Compiler" "form-watch mentions React Compiler"
 
 # ══════════════════════════════════════════════════════════════════
-# as-cast-check.sh
+# ts-no-escape-hatches-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/as-cast-check.sh" "as-cast-check.sh exists"
-run_executable_eval "$HOOKS_DIR/as-cast-check.sh" "as-cast-check.sh is executable"
+run_file_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hatches-check.sh exists"
+run_executable_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hatches-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/as-cast-check.sh" "as\s*never" "as-cast blocks as never"
-run_content_eval "$HOOKS_DIR/as-cast-check.sh" "as\s*any" "as-cast blocks as any"
-run_content_eval "$HOOKS_DIR/as-cast-check.sh" "hook_block" "as-cast uses hook_block for hard blocks"
-run_content_eval "$HOOKS_DIR/as-cast-check.sh" "type guard" "as-cast suggests type guards"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "as\s*never" "as-cast blocks as never"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "as\s*any" "as-cast blocks as any"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "hook_block" "as-cast uses hook_block for hard blocks"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "type guard" "as-cast suggests type guards"
 
 # ── Block: as never ──────────────────────────────────────────────
 
@@ -180,7 +180,7 @@ tmpfile="$_ac_tmpdir/route.tsx"
 printf "const x = foo as never\n" > "$tmpfile"
 (cd "$_ac_tmpdir" && git init -q && git commit -q --allow-empty -m "init") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: as never" "never"
 
@@ -189,7 +189,7 @@ run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
 tmpfile="$_ac_tmpdir/route2.tsx"
 printf "const x = foo as any\n" > "$tmpfile"
 
-run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: as any" "any"
 
@@ -198,7 +198,7 @@ run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
 tmpfile="$_ac_tmpdir/config.ts"
 printf "const routes = ['/a', '/b'] as const\n" > "$tmpfile"
 
-run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: as const"
 
@@ -218,7 +218,7 @@ run_hook_eval "$HOOKS_DIR/as-cast-check.sh" \
 
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "legacy-import-check" "hooks.json has legacy-import-check"
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "test-convention-check" "hooks.json has test-convention-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "connect-error-format-check" "hooks.json has connect-error-format-check"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "connect-query-check" "hooks.json has connect-query-check"
 # console-log-check removed — Biome noConsole handles it
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "form-watch-check" "hooks.json has form-watch-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "as-cast-check" "hooks.json has as-cast-check"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "form-mode-check" "hooks.json has form-mode-check"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "ts-no-escape-hatches-check" "hooks.json has ts-no-escape-hatches-check"

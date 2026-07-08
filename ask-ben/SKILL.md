@@ -44,7 +44,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/prototype` | Build a throwaway prototype to answer a design question. |
 | `/read-the-damn-docs` | Use for third-party APIs, libraries, frameworks, CLIs, cloud services, SDKs, fast-moving behavior, current/... |
 | `/registry-workflow` | Component registry maintenance -- taxonomy, consumer drift analysis, sync discipline. |
-| `/resilience-review` | Resilience Review checks resilience. |
+| `/resilience-review` | Murphy-law hat panel for unhappy paths -- input, timing, system, state, UX-recovery hats probe a change in... |
 | `/resolve-pr-feedback` | Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. |
 | `/resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. |
 | `/review` | Reviews a diff with an 8-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience... |

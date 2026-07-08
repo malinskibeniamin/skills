@@ -1,9 +1,9 @@
 # Evals for setup-toolchain skill
 # Tests hook scripts, file structure, and SKILL.md correctness
 
-SCRIPT="$REPO_ROOT/frontend-starter-kit/references/toolchain/scripts/enforce-toolchain.sh"
-SESSION_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/toolchain/scripts/session-env.sh"
-LEGACY_LINTER="$REPO_ROOT/.claude/hooks/legacy-linter-check.sh"
+SCRIPT="$REPO_ROOT/.claude/hooks/enforce-toolchain.sh"
+SESSION_SCRIPT="$REPO_ROOT/.claude/hooks/session-env.sh"
+LEGACY_LINTER="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/toolchain"
 
 # ── File structure ──────────────────────────────────────────────
@@ -340,10 +340,10 @@ run_content_eval "$SCRIPT" "git reset.*hard" "hook blocks git reset --hard"
 run_content_eval "$SCRIPT" "git.*checkout.*restore" "hook blocks git checkout/restore ."
 
 # ══════════════════════════════════════════════════════════════════
-# legacy-linter-check.sh (PostToolUse: Edit|Write)
+# ts-no-escape-hatches-check.sh (PostToolUse: Edit|Write)
 # ══════════════════════════════════════════════════════════════════
 
-run_executable_eval "$LEGACY_LINTER" "legacy-linter-check.sh is executable"
+run_executable_eval "$LEGACY_LINTER" "ts-no-escape-hatches-check.sh is executable"
 
 # ── Skip non-Edit/Write ──────────────────────────────────────────
 
@@ -365,7 +365,7 @@ run_hook_eval "$LEGACY_LINTER" \
 
 _ll_tmpdir=$(mktemp -d /tmp/legacy-linter-evals-XXXXXX)
 
-printf '// eslint-disable-next-line @typescript-eslint/no-explicit-any\ntype AnyProtoForm = any;\n' > "$_ll_tmpdir/test1.ts"
+printf '// eslint-disable-next-line @typescript-eslint/no-explicit-any\ntype AnyProtoForm = { value: number };\n' > "$_ll_tmpdir/test1.ts"
 run_hook_eval "$LEGACY_LINTER" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/test1.ts\"}}" \
   2 "block: eslint-disable-next-line comment" "Biome"
@@ -408,7 +408,7 @@ run_hook_eval "$LEGACY_LINTER" \
 
 # ── Allow clean TS files ─────────────────────────────────────────
 
-printf 'const x = 1;\n// biome-ignore lint/suspicious/noExplicitAny: reason\ntype Y = any;\n' > "$_ll_tmpdir/clean.ts"
+printf 'const x = 1;\ntype Y = { value: number };\n' > "$_ll_tmpdir/clean.ts"
 run_hook_eval "$LEGACY_LINTER" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_ll_tmpdir/clean.ts\"}}" \
   0 "allow: clean TS file with biome-ignore"

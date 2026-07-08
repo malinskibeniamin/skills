@@ -149,20 +149,20 @@ _assert_exit 0 "non-commit passes through"
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ form-watch-check.sh (now blocks) ━━━"
+echo "━━━ form-mode-check.sh (now blocks) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
 _test_file="/tmp/hook-test-form-$$.tsx"
 _setup_test_file "$_test_file" "import { useForm } from 'react-hook-form';
 const MyForm = () => {
-  const form = useForm();
+  const form = useForm({ resolver: zodResolver(schema) });
   const val = form.watch('field');
-  return <div>{val}</div>;
+  return <FormMessage>{val}</FormMessage>;
 };"
 
 echo "  form.watch() in react-hook-form file:"
-_run_hook "form-watch-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
+_run_hook "form-mode-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
 _assert_exit 2 "form.watch() blocked (was warn)"
 _assert_stderr_contains "useWatch" "message says use useWatch"
 
@@ -197,7 +197,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ mutation-onerror-check.sh (new) ━━━"
+echo "━━━ query-pattern-check.sh (new) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -210,7 +210,8 @@ const MyComponent = () => {
 };"
 
 echo "  mutate() without onError:"
-_run_hook "mutation-onerror-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+_content=$(jq -Rs . < "$_test_file")
+_run_hook "query-pattern-check.sh" "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_test_file\",\"content\":$_content}}"
 _assert_exit 2 "mutate without onError blocked"
 _assert_stderr_contains "onError" "message mentions onError"
 
@@ -228,7 +229,7 @@ const MyComponent = () => {
 };"
 
 echo "  mutate() with onError:"
-_run_hook "mutation-onerror-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file2\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+_run_hook "query-pattern-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file2\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
 _assert_exit 0 "mutate with onError allowed"
 
 _cleanup_test_file "$_test_file2"
@@ -236,7 +237,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ as-cast-check.sh (absorbed checks) ━━━"
+echo "━━━ ts-no-escape-hatches-check.sh (absorbed checks) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -244,7 +245,8 @@ _test_file="/tmp/hook-test-cast-$$.ts"
 _setup_test_file "$_test_file" "const x = foo as any;"
 
 echo "  as any:"
-_run_hook "as-cast-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+_content=$(jq -Rs . < "$_test_file")
+_run_hook "ts-no-escape-hatches-check.sh" "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_test_file\",\"content\":$_content}}"
 _assert_exit 2 "as any blocked"
 
 _cleanup_test_file "$_test_file"
@@ -254,7 +256,8 @@ _setup_test_file "$_test_file2" "// @ts-ignore
 const x = foo;"
 
 echo "  @ts-ignore:"
-_run_hook "as-cast-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file2\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+_content=$(jq -Rs . < "$_test_file2")
+_run_hook "ts-no-escape-hatches-check.sh" "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_test_file2\",\"content\":$_content}}"
 _assert_exit 2 "@ts-ignore blocked"
 
 _cleanup_test_file "$_test_file2"
@@ -264,7 +267,8 @@ _setup_test_file "$_test_file3" "// @ts-expect-error
 const x = foo;"
 
 echo "  @ts-expect-error:"
-_run_hook "as-cast-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file3\",\"old_string\":\"x\",\"new_string\":\"y\"}}"
+_content=$(jq -Rs . < "$_test_file3")
+_run_hook "ts-no-escape-hatches-check.sh" "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_test_file3\",\"content\":$_content}}"
 _assert_exit 2 "@ts-expect-error blocked"
 
 _cleanup_test_file "$_test_file3"

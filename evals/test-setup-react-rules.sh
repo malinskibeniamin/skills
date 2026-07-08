@@ -1,13 +1,13 @@
 # Evals for setup-react-rules skill
 
-SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-rules/scripts/react-rules-check.sh"
+SCRIPT="$REPO_ROOT/.claude/hooks/react-rules-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-rules"
 
 # Specialized hooks for rules that moved out of react-rules-check.sh:
-AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/as-cast-check.sh"
+AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
 COMPILER_SCRIPT="$REPO_ROOT/.claude/hooks/react-compiler-check.sh"
-BIOME_IGNORE_SCRIPT="$REPO_ROOT/.claude/hooks/biome-ignore-check.sh"
-PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-perf-check.sh"
+BIOME_IGNORE_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
+PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-convention-check.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -200,7 +200,7 @@ UI_LIB_DIRS="custom-lib" REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
 
 rm -rf "$tmpdir2"
 
-# ── Check 3: TypeScript escape hatches (moved to as-cast-check.sh in 2.2.x) ──
+# ── Check 3: TypeScript escape hatches (moved to ts-no-escape-hatches-check.sh in 2.2.x) ──
 
 echo "const x = foo as any" > "$tmpfile"
 
@@ -562,7 +562,7 @@ run_hook_eval "$SCRIPT" \
 
 # ── Tailwind checks (via tailwind-check.sh) ──────────────────────
 
-TW_SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-rules/scripts/tailwind-check.sh"
+TW_SCRIPT="$REPO_ROOT/.claude/hooks/tailwind-check.sh"
 
 # Ban !important in TSX
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -916,7 +916,7 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: React.cloneElement usage" "cloneElement"
 
-# ── Check 25: Block biome-ignore (moved to biome-ignore-check.sh) ─
+# ── Check 25: Block biome-ignore (moved to ts-no-escape-hatches-check.sh) ─
 
 tmpfile="$_rr_tmpdir/test.tsx"
 # Need git-tracked file for added_lines detection
@@ -1027,7 +1027,7 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: normal import (not heavy)"
 
-# ── Check 3b: Ban as Record<string, any> (moved to as-cast-check.sh) ──
+# ── Check 3b: Ban as Record<string, any> (moved to ts-no-escape-hatches-check.sh) ──
 
 tmpfile="$_rr_tmpdir/test.ts"
 echo "const data = response as Record<string, any>" > "$tmpfile"
@@ -1252,7 +1252,7 @@ tmpfile="$_rr_tmpdir/widget.test.tsx"
 
 # ── Check 37: Ban user.type() in integration tests ──────────────
 
-# Trigger: user.type() in a test file (moved to test-perf-check.sh)
+# Trigger: user.type() in a test file (moved to test-convention-check.sh)
 tmpfile="$_rr_tmpdir/widget.test.tsx"
 echo "await user.type(input, 'hello world')" > "$tmpfile"
 
@@ -1287,7 +1287,7 @@ tmpfile="$_rr_tmpdir/test.tsx"
 
 # ── Hook script content checks ──────────────────────────────────
 
-run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
+run_content_eval "$SCRIPT" "_react_rules_skip_ui_dirs|hook_skip_ui_dirs" "hook uses shared UI dir skip"
 run_content_eval "$SCRIPT" "REACT_RULES_BAN_USEEFFECT" "hook checks useEffect opt-in env var"
 run_content_eval "$SCRIPT" "variant" "hook suggests using variant prop"
 run_content_eval "$SCRIPT" "Button.*gradient|gradient.*Button" "hook blocks Button gradient overrides"

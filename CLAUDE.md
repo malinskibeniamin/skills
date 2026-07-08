@@ -10,7 +10,7 @@ bun tsgo biome vitest | Compiler memoize | fix type (guard, generic) | `@/compon
 
 ## Bash Discipline
 
-`find` -> `-maxdepth N` or `| head` | `git log` -> `-n 30` or `--oneline` | `grep -r` -> Grep tool | `cat` >200 line -> Read | `llm-truncate` cap 4KB | `bash-verbose-guard` nudge pre-exec | `rtk-rewrite` auto-prefix git/cargo/test/gh/tsc w/ `rtk` (60-90% cut) -- get: `brew install rtk` -- filter: `.rtk/filters.toml`
+`find` -> `-maxdepth N`/`| head` | `git log` -> `--oneline` | `grep -r` -> Grep tool | `cat` >200 line -> Read. Output caps + rtk rewrite enforced by hooks (llm-truncate, bash-verbose-guard, rtk-rewrite).
 
 ## External Services (MCP banned -> CLI)
 
@@ -58,11 +58,7 @@ Utility class | design token `var(--destructive)` `bg-primary` | fix specificity
 
 ## A11y
 
-`<img>` need `alt` | click div/span: `role` `tabIndex` kbd handler | combobox: `aria-expanded`+`aria-controls` | dialog: `aria-label`/`aria-labelledby` | tablist need tab child | disabled `<Button>`: wrap `<Tooltip>` why | `aria-invalid` need `aria-describedby` | no nested interactive
-
-## Zustand
-
-`create<T>()()` | `useShallow` multi-select | `persist` local storage
+`<img>` alt | clickable div/span: role+tabIndex+kbd | dialog: aria-label(ledby) | disabled `<Button>`: `<Tooltip>` why | `aria-invalid` needs `aria-describedby` | no nested interactive (hooks enforce)
 
 ## State & Data
 
@@ -77,25 +73,15 @@ Order every task. Hooks block skipped steps.
 3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
 4-6. **`/go`** -- verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
-Alias: `/work` = `/development-lifecycle` (full). `/go` = phase 4-6 (ship tail).
+Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
-### Effort
+### Effort + model routing
 
-Default `high`. Fable-5: `high` or lower ONLY -- `xhigh` token-hungry, `max` a furnace with worse output. Never inject `ultrathink` prompt/hook/skill.
+Default `high`. Fable-5: `high` or lower ONLY (`xhigh` token-hungry, `max` a furnace, worse output). Never inject `ultrathink`.
 
-### Model routing (workflows + subagents)
+Rank cost/intel/taste (1-10, higher better; cost = actual pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 (codex) 8/9/6 | GPT-5.5 (codex) 9/5/5. Taste = UI/UX, code quality, API design, copy.
 
-Rankings 1-10, higher better. Cost = what we actually pay, not list price. Intelligence = how hard a problem you can hand over. Taste = UI/UX, code quality, API design, design, copy.
-
-| Model | Cost | Intelligence | Taste |
-|---|---|---|---|
-| Fable-5 | 1 | 10 | 9 |
-| Opus-4.8 | 4 | 7 | 8 |
-| Sonnet-5 | 6 | 5 | 7 |
-| GPT-5.6 (codex) | 8 | 9 | 6 |
-| GPT-5.5 (codex) | 9 | 5 | 5 |
-
-Rules: ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits -- cheap output below bar -> rerun smarter WITHOUT asking; judge output, not price tag; escalating < shipping mediocre | bulk mechanical (clear-spec impl, data analysis, migrations) -> GPT-5.5, effectively free | user-facing (UI/copy/API design) -> taste >= 7 | review/plan -> Fable-5 or Opus-4.8, optional GPT-5.5 extra independent pass | computer use + token furnaces (browser verify, code-base analysis) -> codex GPT-5.5/5.6, report back to Fable | **thinker/executor split**: smart model plans exact steps -> cheap model executes (Sonnet subagent or codex GPT-5.5) -> smart model reviews the diff | **NEVER Haiku** | GPT models only via codex CLI (`/codex` skill: exec/review/computer-use, wrapper pattern for workflows) | Claude models via agent/workflow `model` param.
+Ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits: output below bar -> rerun smarter WITHOUT asking | bulk mechanical (clear-spec impl, data analysis, migrations) -> GPT-5.5, free | user-facing (UI/copy/API) -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 (+optional GPT-5.5 independent) | computer use + token furnaces -> codex, report back | **thinker/executor split**: smart model plans exact steps -> cheap executor (Sonnet or codex GPT-5.5) -> smart model reviews diff | **NEVER Haiku** | GPT only via codex CLI (`/codex`) | Claude via `model` param.
 
 ### Monitor (not sleep)
 
@@ -109,7 +95,7 @@ Sentence case | no Latin abbrev (for example, that is, and so on, through) | no 
 ## Tests
 
 Fail first -> pass | `userEvent.setup()` + `getByRole` | `await waitFor(()=>expect(...))` async | `.test.ts` unit `.test.tsx` integration `.browser.test.tsx` visual `e2e/*.spec.ts` Playwright | co-locate | `test()` not `it()` | `vi.fn()`/`vi.mock()`/`vi.spyOn()` | `.toBeVisible()` > `.toBeInTheDocument()` | no `waitForTimeout` | no `test.skip` E2E (`test.fixme()` known bug) | `createRouterTransport` ConnectRPC mock | `data-testid` interactive | `test.step()` Playwright
-Green != done. Zero warn local AND CI. `DeprecationWarning`, React `act()`, unhandled rejection, `@ts-ignore`, `npm WARN deprecated` = fix at source. Hook: `test-warning-check` hard-blocks local passing test/lint/type runs with warnings; `ci-warning-audit` scans `gh run view --log` on green CI. No warning bypass.
+Green != done: zero warnings local AND CI, fix at source (hooks test-warning-check + ci-warning-audit enforce, no bypass).
 
 ## Logging
 

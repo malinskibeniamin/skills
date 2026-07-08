@@ -1,6 +1,8 @@
 # Evals for setup-e2e-testing skill
 
 SKILL_DIR="$REPO_ROOT/e2e-testing"
+ROUTE_SIBLING_SCRIPT="$REPO_ROOT/e2e-testing/scripts/route-sibling-test-check.sh"
+STRUCTURAL_TEST_SCRIPT="$REPO_ROOT/e2e-testing/scripts/structural-test-nudge-check.sh"
 
 # ── File structure ──────────────────────────────────────────────
 

@@ -4,7 +4,16 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 
 hook_parse_edit_write
 hook_filter_extensions "ts|tsx"
-hook_get_added_lines
+
+added_lines="$(
+  set +e
+  hook_get_added_lines
+  _status=$?
+  if [ "$_status" -eq 0 ]; then
+    printf '%s' "$added_lines"
+  fi
+  exit 0
+)"
 
 _route_candidate_files() {
   local dir base stem short
@@ -60,6 +69,8 @@ _has_sibling_route_test() {
   done
   return 1
 }
+
+if [ -n "$added_lines" ]; then
 
 # ── Check 1: Ban react-router-dom imports ─────────────────────────────
 
@@ -144,9 +155,28 @@ fi
 # ── Check 8: Warn on exported components from route files ──────────────
 
 if echo "$file_path" | grep -qE '/routes/'; then
-  non_route_exports=$(echo "$added_lines" | grep -E 'export\s+(function|const)\s+[A-Z]' | grep -v 'export\s*const\s*Route\b' || true)
-  if [ -n "$non_route_exports" ]; then
-    hook_warn "No component exports from route files (breaks code splitting). Move to separate files."
+  _split_file_candidate=false
+  _route_check_base=$(basename "$file_path")
+  case "$_route_check_base" in
+    *.page.ts|*.page.tsx|route.ts|route.tsx|index.ts|index.tsx|__root.ts|__root.tsx) ;;
+    *)
+      if echo "$_route_check_base" | grep -qE '(-parts|[.]parts|[.]dialogs?|[.]checklists?)\.tsx?$'; then
+        _split_file_candidate=true
+      else
+        file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+        if ! echo "$file_content" | grep -qE 'create(File|Root)?Route|export[[:space:]]+const[[:space:]]+Route\b'; then
+          if echo "$file_content" | grep -qE '(^|[[:space:]])(export[[:space:]]+)?(function|const)[[:space:]]+[A-Z][A-Za-z0-9_]*|export[[:space:]]+default[[:space:]]+function[[:space:]]+[A-Z]'; then
+            _split_file_candidate=true
+          fi
+        fi
+      fi
+      ;;
+  esac
+  if [ "$_split_file_candidate" = false ]; then
+    non_route_exports=$(echo "$added_lines" | grep -E 'export\s+(function|const)\s+[A-Z]' | grep -v 'export\s*const\s*Route\b' || true)
+    if [ -n "$non_route_exports" ]; then
+      hook_warn "No component exports from route files (breaks code splitting). Move to separate files."
+    fi
   fi
 fi
 
@@ -219,6 +249,92 @@ if echo "$added_lines" | grep -qE 'createRootRoute\s*\(|context\s*:\s*\{[^}]*que
       fi
     fi
   fi
+fi
+
+fi
+
+_absorbed_generated_file=false
+case "$file_path" in
+  *.gen.ts|*.gen.tsx|*.gen.js|*_pb.ts|*_pb.js|*_connectquery.ts) _absorbed_generated_file=true ;;
+esac
+if head -5 "$file_path" 2>/dev/null | grep -qE '(@generated|auto-generated|DO NOT EDIT)'; then
+  _absorbed_generated_file=true
+fi
+
+_absorbed_test_file=false
+case "$file_path" in
+  *.test.*|*.spec.*|*/__tests__/*) _absorbed_test_file=true ;;
+esac
+
+# ── absorbed from hook-location-check.sh (4.28 family consolidation) ──
+# ── Check 1: Ban custom hook definitions in route files ──────────
+# Custom hooks (function use*) must live in /hooks/ directory,
+# not inline in route files.
+# Detect route files by path OR content (supports any directory structure).
+
+if [ "$_absorbed_generated_file" = false ] && [ -n "$added_lines" ]; then
+  is_route=false
+  if echo "$file_path" | grep -qE '/routes/'; then
+    is_route=true
+  elif grep -qE 'createFileRoute|createRoute|createLazyRoute' "$file_path" 2>/dev/null; then
+    is_route=true
+  fi
+
+  if [ "$is_route" = true ]; then
+    if echo "$added_lines" | grep -qE '^\+?(export\s+)?(function\s+use[A-Z]|const\s+use[A-Z]\w*\s*=)'; then
+      if ! hook_has_escape "inline-hook"; then
+        hook_warn "Custom hook defined in route file. Move to /hooks/ directory. Escape: // allow: inline-hook [reason]"
+      fi
+    fi
+  fi
+fi
+
+# ── absorbed from file-size-check.sh (4.28 family consolidation) ──
+# ── Check 1: Warn when route files exceed 300 LOC ───────────────
+# Large route components should be split. Suggest /improve-codebase-architecture.
+# Detect route files by path OR content (supports any directory structure).
+
+if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]; then
+  is_route=false
+  if echo "$file_path" | grep -qE '/routes/'; then
+    is_route=true
+  elif grep -qE 'createFileRoute|createRoute|createLazyRoute' "$file_path" 2>/dev/null; then
+    is_route=true
+  fi
+
+  if [ "$is_route" = true ]; then
+    loc=$(wc -l < "$file_path" | tr -d ' ')
+    if [ "$loc" -gt 300 ]; then
+      hook_warn "Route file is ${loc} LOC (limit: 300). Split into smaller components or use /improve-codebase-architecture."
+    fi
+  fi
+fi
+
+# ── absorbed from split-file-convention-check.sh (4.28 family consolidation) ──
+if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]; then
+  case "$file_path" in
+    */routes/*)
+      base=$(basename "$file_path")
+      file_content=$(cat "$file_path" 2>/dev/null || true)
+
+      case "$base" in
+        *.page.ts|*.page.tsx|route.ts|route.tsx|index.ts|index.tsx|__root.ts|__root.tsx) ;;
+        *)
+          if echo "$base" | grep -qE '(-parts|[.]parts|[.]dialogs?|[.]checklists?)\.tsx?$'; then
+            hook_block "Split-file convention: route UI files must be either .page.tsx in routes/ or named components under components/. Avoid -parts/.dialogs/.checklist suffix mixes." "split-file-convention"
+          fi
+
+          # Route declaration files can be named by path, but split UI components should
+          # not live beside them under ad-hoc names.
+          if ! echo "$file_content" | grep -qE 'create(File|Root)?Route|export[[:space:]]+const[[:space:]]+Route\b'; then
+            if echo "$file_content" | grep -qE '(^|[[:space:]])(export[[:space:]]+)?(function|const)[[:space:]]+[A-Z][A-Za-z0-9_]*|export[[:space:]]+default[[:space:]]+function[[:space:]]+[A-Z]'; then
+              hook_block "Split-file convention: route page components stay as *.page.tsx in routes/; reusable pieces move to components/." "split-file-convention"
+            fi
+          fi
+          ;;
+      esac
+      ;;
+  esac
 fi
 
 exit 0
