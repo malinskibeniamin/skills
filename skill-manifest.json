@@ -46,11 +46,6 @@
         "file-changed-deps.sh"
       ]
     },
-    "WorktreeCreate": {
-      "": [
-        "worktree-create.sh"
-      ]
-    },
     "SessionEnd": {
       "": [
         "session-end.sh"
@@ -59,6 +54,9 @@
     "PreToolUse": {
       "Edit|Write|Bash": [
         "violation-nudge.sh"
+      ],
+      "Skill": [
+        "skill-fire-log.sh"
       ],
       "Bash": [
         "enforce-toolchain.sh",
@@ -74,34 +72,6 @@
       ]
     },
     "PostToolUse": {
-      "Edit|Write": [
-        "vendor-file-check.sh",
-        "react-rules-check.sh",
-        "tailwind-check.sh",
-        "accessibility-check.sh",
-        "zustand-check.sh",
-        "tanstack-router-check.sh",
-        "tanstack-router-gen.sh",
-        "connect-query-check.sh",
-        "aip-proto-check.sh",
-        "react-compiler-check.sh",
-        "env-validation-check.sh",
-        "bundle-guard.sh",
-        "ux-copy-check.sh",
-        "orchestration-guidance.sh",
-        "form-mode-check.sh",
-        "error-boundary-check.sh",
-        "legacy-import-check.sh",
-        "test-convention-check.sh",
-        "ts-no-escape-hatches-check.sh",
-        "tsconfig-strict-check.sh",
-        "llm-failure-mode-check.sh",
-        "security-audit-check.sh",
-        "query-pattern-check.sh",
-        "copyright-check.sh",
-        "edit-loop-check.sh",
-        "lockfile-sync-check.sh"
-      ],
       "Bash": [
         "llm-truncate.sh",
         "consecutive-failure-check.sh",
@@ -132,6 +102,39 @@
         "ci-warning-audit.sh",
         "violation-summary-stop.sh"
       ]
+    },
+    "PostToolBatch": {
+      "": [
+        "post-tool-batch.sh"
+      ]
     }
-  }
+  },
+  "x-codex-per-call": [
+    "vendor-file-check.sh",
+    "react-rules-check.sh",
+    "tailwind-check.sh",
+    "accessibility-check.sh",
+    "zustand-check.sh",
+    "tanstack-router-check.sh",
+    "tanstack-router-gen.sh",
+    "connect-query-check.sh",
+    "aip-proto-check.sh",
+    "react-compiler-check.sh",
+    "env-validation-check.sh",
+    "bundle-guard.sh",
+    "ux-copy-check.sh",
+    "orchestration-guidance.sh",
+    "form-mode-check.sh",
+    "error-boundary-check.sh",
+    "legacy-import-check.sh",
+    "test-convention-check.sh",
+    "ts-no-escape-hatches-check.sh",
+    "tsconfig-strict-check.sh",
+    "llm-failure-mode-check.sh",
+    "security-audit-check.sh",
+    "query-pattern-check.sh",
+    "copyright-check.sh",
+    "edit-loop-check.sh",
+    "lockfile-sync-check.sh"
+  ]
 }

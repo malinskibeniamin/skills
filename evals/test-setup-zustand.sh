@@ -1,6 +1,7 @@
 # Evals for setup-zustand skill
 
 SCRIPT="$REPO_ROOT/.claude/hooks/zustand-check.sh"
+SCRIPT_LIB="$REPO_ROOT/.claude/hooks/checks/zustand-check.lib.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/zustand"
 
 # ── File structure ──────────────────────────────────────────────
@@ -130,10 +131,10 @@ run_hook_eval "$SCRIPT" \
 
 # ── Hook script content ──────────────────────────────────────────
 
-run_content_eval "$SCRIPT" "create<" "hook checks for create pattern"
-run_content_eval "$SCRIPT" "useShallow" "hook suggests useShallow"
-run_content_eval "$SCRIPT" "localStorage" "hook checks for localStorage"
-run_content_eval "$SCRIPT" "persist" "hook suggests persist middleware"
-run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
+run_content_eval "$SCRIPT_LIB" "create<" "hook checks for create pattern"
+run_content_eval "$SCRIPT_LIB" "useShallow" "hook suggests useShallow"
+run_content_eval "$SCRIPT_LIB" "localStorage" "hook checks for localStorage"
+run_content_eval "$SCRIPT_LIB" "persist" "hook suggests persist middleware"
+run_content_eval "$SCRIPT_LIB" "hook_block|hook_warn" "hook uses shared output functions"
 
 rm -rf "$_zs_tmpdir"

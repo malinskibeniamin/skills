@@ -1,13 +1,18 @@
 # Evals for setup-react-rules skill
 
 SCRIPT="$REPO_ROOT/.claude/hooks/react-rules-check.sh"
+SCRIPT_LIB="$REPO_ROOT/.claude/hooks/checks/react-rules-check.lib.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-rules"
 
 # Specialized hooks for rules that moved out of react-rules-check.sh:
 AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
+AS_CAST_LIB="$REPO_ROOT/.claude/hooks/checks/ts-no-escape-hatches-check.lib.sh"
 COMPILER_SCRIPT="$REPO_ROOT/.claude/hooks/react-compiler-check.sh"
+COMPILER_LIB="$REPO_ROOT/.claude/hooks/checks/react-compiler-check.lib.sh"
 BIOME_IGNORE_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
+BIOME_IGNORE_LIB="$REPO_ROOT/.claude/hooks/checks/ts-no-escape-hatches-check.lib.sh"
 PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-convention-check.sh"
+PERF_CHECK_LIB="$REPO_ROOT/.claude/hooks/checks/test-convention-check.lib.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -563,6 +568,7 @@ run_hook_eval "$SCRIPT" \
 # ── Tailwind checks (via tailwind-check.sh) ──────────────────────
 
 TW_SCRIPT="$REPO_ROOT/.claude/hooks/tailwind-check.sh"
+TW_LIB="$REPO_ROOT/.claude/hooks/checks/tailwind-check.lib.sh"
 
 # Ban !important in TSX
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -810,18 +816,18 @@ run_hook_eval "$TW_SCRIPT" \
 
 # ── Tailwind content checks ─────────────────────────────────────
 
-run_content_eval "$TW_SCRIPT" "100dvh" "tailwind-check suggests 100dvh"
-run_content_eval "$TW_SCRIPT" "100vw" "tailwind-check warns about 100vw"
-run_content_eval "$TW_SCRIPT" "user-scalable" "tailwind-check blocks user-scalable=no"
-run_content_eval "$TW_SCRIPT" "raw.*color.*design token|design token.*raw.*color" "tailwind-check blocks raw color design-token bypasses"
-run_content_eval "$TW_SCRIPT" "Gradient text" "tailwind-check blocks gradient text"
-run_content_eval "$TW_SCRIPT" "side-stripe" "tailwind-check warns on side-stripe accent borders"
-run_content_eval "$TW_SCRIPT" "ghost-card" "tailwind-check warns on ghost-card shadows"
-run_content_eval "$TW_SCRIPT" "glassmorphism" "tailwind-check blocks glassmorphism"
-run_content_eval "$TW_SCRIPT" "transition-all" "tailwind-check warns on transition-all motion smells"
-run_content_eval "$TW_SCRIPT" "scale\\(0\\)" "tailwind-check warns on scale(0) entry motion"
-run_content_eval "$TW_SCRIPT" "layout property" "tailwind-check warns on layout-property animation"
-run_content_eval "$TW_SCRIPT" "300ms" "tailwind-check documents UI motion duration threshold"
+run_content_eval "$TW_LIB" "100dvh" "tailwind-check suggests 100dvh"
+run_content_eval "$TW_LIB" "100vw" "tailwind-check warns about 100vw"
+run_content_eval "$TW_LIB" "user-scalable" "tailwind-check blocks user-scalable=no"
+run_content_eval "$TW_LIB" "raw.*color.*design token|design token.*raw.*color" "tailwind-check blocks raw color design-token bypasses"
+run_content_eval "$TW_LIB" "Gradient text" "tailwind-check blocks gradient text"
+run_content_eval "$TW_LIB" "side-stripe" "tailwind-check warns on side-stripe accent borders"
+run_content_eval "$TW_LIB" "ghost-card" "tailwind-check warns on ghost-card shadows"
+run_content_eval "$TW_LIB" "glassmorphism" "tailwind-check blocks glassmorphism"
+run_content_eval "$TW_LIB" "transition-all" "tailwind-check warns on transition-all motion smells"
+run_content_eval "$TW_LIB" "scale\\(0\\)" "tailwind-check warns on scale(0) entry motion"
+run_content_eval "$TW_LIB" "layout property" "tailwind-check warns on layout-property animation"
+run_content_eval "$TW_LIB" "300ms" "tailwind-check documents UI motion duration threshold"
 run_content_eval "$SKILL_DIR/README.md" "Motion craft" "setup-react-rules documents motion craft checks"
 run_content_eval "$SKILL_DIR/README.md" "transform/opacity" "setup-react-rules documents performant motion properties"
 
@@ -1287,41 +1293,41 @@ tmpfile="$_rr_tmpdir/test.tsx"
 
 # ── Hook script content checks ──────────────────────────────────
 
-run_content_eval "$SCRIPT" "_react_rules_skip_ui_dirs|hook_skip_ui_dirs" "hook uses shared UI dir skip"
-run_content_eval "$SCRIPT" "REACT_RULES_BAN_USEEFFECT" "hook checks useEffect opt-in env var"
-run_content_eval "$SCRIPT" "variant" "hook suggests using variant prop"
-run_content_eval "$SCRIPT" "Button.*gradient|gradient.*Button" "hook blocks Button gradient overrides"
-run_content_eval "$SCRIPT" "z-index" "hook warns on arbitrary z-index"
-run_content_eval "$SCRIPT" "asChild" "hook suggests asChild for Link wrapping"
-run_content_eval "$SCRIPT" "AlertTitle" "hook checks AlertTitle icon"
-run_content_eval "$SCRIPT" "wrap.*create" "hook checks protobuf create()"
-run_content_eval "$SCRIPT" "bufbuild/protobuf" "hook checks protobuf v2 only"
-run_content_eval "$SCRIPT" "aria-label" "hook checks icon-only button a11y"
-run_content_eval "$SCRIPT" "outline" "hook bans outline removal"
-run_content_eval "$COMPILER_SCRIPT" "useMemo" "hook checks for manual memoization"
-run_content_eval "$SCRIPT" "dangerouslySetInnerHTML" "hook checks dangerouslySetInnerHTML"
-run_content_eval "$SCRIPT" "eval\(" "hook checks eval()"
-run_content_eval "$SCRIPT" "innerHTML" "hook checks innerHTML"
-run_content_eval "$AS_CAST_SCRIPT" "Record<string" "hook checks as Record<string, any/unknown>"
-run_content_eval "$SCRIPT" "barrel" "hook checks barrel imports"
-run_content_eval "$SCRIPT" "passive" "hook checks passive event listeners"
-run_content_eval "$SCRIPT" "chart\.js|d3|three|pdf-lib" "hook checks heavy deps"
-run_content_eval "$SCRIPT" "structuredClone" "hook suggests structuredClone over JSON roundtrip"
-run_content_eval "$SCRIPT" "requestSubmit" "hook suggests requestSubmit over submit"
-run_content_eval "$SCRIPT" "sparse" "hook warns about delete on arrays"
-run_content_eval "$SCRIPT" "parseInt" "hook checks parseInt without radix"
-run_content_eval "$SCRIPT" "role.*button" "hook checks div role=button"
-run_content_eval "$SCRIPT" "setTimeout" "hook checks setTimeout with string"
-run_content_eval "$SCRIPT" "NaN" "hook checks === NaN comparison"
-run_content_eval "$SCRIPT" "React.FC" "hook checks React.FC ban"
-run_content_eval "$SCRIPT" "cloneElement" "hook checks cloneElement ban"
-run_content_eval "$SCRIPT" "biome-ignore" "hook documents biome-ignore ownership"
-run_content_eval "$SCRIPT" "tree-shaking" "hook checks tree-shaking killers"
-run_content_eval "$SCRIPT" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
-run_content_eval "$SCRIPT" "framer-motion" "hook checks deprecated framer-motion"
-run_content_eval "$SCRIPT" "Button.*handler|handler.*Button" "hook checks Button handler requirement"
-run_content_eval "$PERF_CHECK_SCRIPT" "user(Event)?\.type.*slow|slow.*user(Event)?\.type|per-keystroke|test-perf-user-type" "hook warns about slow user.type() in tests"
-run_content_eval "$SCRIPT" "node:assert" "hook bans node:assert in test files"
+run_content_eval "$SCRIPT_LIB" "_react_rules_skip_ui_dirs|hook_skip_ui_dirs" "hook uses shared UI dir skip"
+run_content_eval "$SCRIPT_LIB" "REACT_RULES_BAN_USEEFFECT" "hook checks useEffect opt-in env var"
+run_content_eval "$SCRIPT_LIB" "variant" "hook suggests using variant prop"
+run_content_eval "$SCRIPT_LIB" "Button.*gradient|gradient.*Button" "hook blocks Button gradient overrides"
+run_content_eval "$SCRIPT_LIB" "z-index" "hook warns on arbitrary z-index"
+run_content_eval "$SCRIPT_LIB" "asChild" "hook suggests asChild for Link wrapping"
+run_content_eval "$SCRIPT_LIB" "AlertTitle" "hook checks AlertTitle icon"
+run_content_eval "$SCRIPT_LIB" "wrap.*create" "hook checks protobuf create()"
+run_content_eval "$SCRIPT_LIB" "bufbuild/protobuf" "hook checks protobuf v2 only"
+run_content_eval "$SCRIPT_LIB" "aria-label" "hook checks icon-only button a11y"
+run_content_eval "$SCRIPT_LIB" "outline" "hook bans outline removal"
+run_content_eval "$COMPILER_LIB" "useMemo" "hook checks for manual memoization"
+run_content_eval "$SCRIPT_LIB" "dangerouslySetInnerHTML" "hook checks dangerouslySetInnerHTML"
+run_content_eval "$SCRIPT_LIB" "eval\(" "hook checks eval()"
+run_content_eval "$SCRIPT_LIB" "innerHTML" "hook checks innerHTML"
+run_content_eval "$AS_CAST_LIB" "Record<string" "hook checks as Record<string, any/unknown>"
+run_content_eval "$SCRIPT_LIB" "barrel" "hook checks barrel imports"
+run_content_eval "$SCRIPT_LIB" "passive" "hook checks passive event listeners"
+run_content_eval "$SCRIPT_LIB" "chart\.js|d3|three|pdf-lib" "hook checks heavy deps"
+run_content_eval "$SCRIPT_LIB" "structuredClone" "hook suggests structuredClone over JSON roundtrip"
+run_content_eval "$SCRIPT_LIB" "requestSubmit" "hook suggests requestSubmit over submit"
+run_content_eval "$SCRIPT_LIB" "sparse" "hook warns about delete on arrays"
+run_content_eval "$SCRIPT_LIB" "parseInt" "hook checks parseInt without radix"
+run_content_eval "$SCRIPT_LIB" "role.*button" "hook checks div role=button"
+run_content_eval "$SCRIPT_LIB" "setTimeout" "hook checks setTimeout with string"
+run_content_eval "$SCRIPT_LIB" "NaN" "hook checks === NaN comparison"
+run_content_eval "$SCRIPT_LIB" "React.FC" "hook checks React.FC ban"
+run_content_eval "$SCRIPT_LIB" "cloneElement" "hook checks cloneElement ban"
+run_content_eval "$SCRIPT_LIB" "biome-ignore" "hook documents biome-ignore ownership"
+run_content_eval "$SCRIPT_LIB" "tree-shaking" "hook checks tree-shaking killers"
+run_content_eval "$SCRIPT_LIB" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
+run_content_eval "$SCRIPT_LIB" "framer-motion" "hook checks deprecated framer-motion"
+run_content_eval "$SCRIPT_LIB" "Button.*handler|handler.*Button" "hook checks Button handler requirement"
+run_content_eval "$PERF_CHECK_LIB" "user(Event)?\.type.*slow|slow.*user(Event)?\.type|per-keystroke|test-perf-user-type" "hook warns about slow user.type() in tests"
+run_content_eval "$SCRIPT_LIB" "node:assert" "hook bans node:assert in test files"
 
 # ── REFERENCE content ────────────────────────────────────────────
 
@@ -1332,7 +1338,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket|disconnectWebSock
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useSyncExternalStore" "REFERENCE has useSyncExternalStore guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Resetting State on Prop Change" "REFERENCE has key-prop state reset pattern"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "formValues" "REFERENCE has react-hook-form form-level validate"
-run_content_eval "$SCRIPT" "key prop" "hook suggests key prop for state reset"
+run_content_eval "$SCRIPT_LIB" "key prop" "hook suggests key prop for state reset"
 
 # ── Cleanup ─────────────────────────────────────────────────────
 

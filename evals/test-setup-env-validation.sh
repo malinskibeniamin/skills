@@ -1,6 +1,7 @@
 # Evals for setup-env-validation skill
 
 SCRIPT="$REPO_ROOT/.claude/hooks/env-validation-check.sh"
+SCRIPT_LIB="$REPO_ROOT/.claude/hooks/checks/env-validation-check.lib.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/env-validation"
 
 # ── File structure ──────────────────────────────────────────────
@@ -87,8 +88,8 @@ run_hook_eval "$SCRIPT" \
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$SCRIPT" "process" "hook checks for process.env"
-run_content_eval "$SCRIPT" "env.ts" "hook skips env.ts"
-run_content_eval "$SCRIPT" "hook_skip_tests" "hook uses shared test skip"
+run_content_eval "$SCRIPT_LIB" "process" "hook checks for process.env"
+run_content_eval "$SCRIPT_LIB" "env.ts" "hook skips env.ts"
+run_content_eval "$SCRIPT_LIB" "hook_skip_tests" "hook uses shared test skip"
 
 rm -rf "$_ev_tmpdir"
