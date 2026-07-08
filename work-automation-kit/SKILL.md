@@ -15,9 +15,9 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 ## Skills Installed
 
-**Owned** (hook-integrated): brainstorming, grill-with-docs, domain-modeling, triage, diagnosing-bugs
+**Owned** (hook-integrated): brainstorming, grilling, domain-modeling, triage, diagnosing-bugs
 
-**Matt Pocock/community**: grill-with-docs, prototype, to-spec, to-tickets, handoff, writing-great-skills
+**Matt Pocock/community**: grilling, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
 **Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, efficient-frontier
 
@@ -30,7 +30,7 @@ Prompt-driven. Explore -> present -> confirm -> write.
 bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 
 # Owned
-bunx skills@latest add malinskibeniamin/skills/grill-with-docs --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/grilling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y

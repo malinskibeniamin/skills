@@ -22,5 +22,5 @@ Read these only when relevant:
 ## Local harness overlay
 
 - Use `/plan-arbiter` when multiple plans or agents disagree.
-- Use `/grill-me` or `/grill-with-docs` before implementation when decisions remain open.
+- Use `/grilling` or `/grilling` before implementation when decisions remain open.
 - Planning is read-only unless the user explicitly approves implementation.

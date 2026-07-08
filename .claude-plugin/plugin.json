@@ -44,8 +44,6 @@
     "./extend-harness/",
     "./frontend-starter-kit/",
     "./go/",
-    "./grill-me/",
-    "./grill-with-docs/",
     "./grilling/",
     "./handoff/",
     "./hook-audit/",

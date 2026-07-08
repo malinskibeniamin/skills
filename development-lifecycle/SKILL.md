@@ -42,7 +42,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 **GATE: no impl until plan survive grilling.**
 
-- Auto-invoke `/grill-with-docs` | grill until every branch resolved | update CONTEXT.md + ADRs inline
+- Auto-invoke `/grilling` | grill until every branch resolved | update CONTEXT.md + ADRs inline
 - Update plan with changes | get explicit user confirmation
 - Skip only if: trivial bug fix AND <3 tasks AND no architectural decisions
 

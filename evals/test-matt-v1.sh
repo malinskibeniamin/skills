@@ -39,7 +39,7 @@ for removed in diagnose write-a-skill caveman zoom-out; do
 done
 
 # User-invoked skills explicitly disable model invocation.
-for skill in ask-ben grill-me grill-with-docs handoff improve-codebase-architecture prototype to-tickets to-spec triage writing-great-skills; do
+for skill in ask-ben handoff improve-codebase-architecture prototype to-tickets to-spec triage writing-great-skills; do
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^disable-model-invocation: true$" "$skill is user-invoked"
 done
 
@@ -56,14 +56,12 @@ for skill in codebase-design diagnosing-bugs domain-modeling grilling resolving-
 done
 
 # Shared v1 skills are composed by the existing harness entrypoints.
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "/grilling" "grill-me delegates to grilling"
-run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "/grilling" "grill-with-docs delegates interview loop to grilling"
-run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "/domain-modeling" "grill-with-docs updates docs through domain-modeling"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling updates docs through domain-modeling"
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "ICA uses codebase-design vocabulary"
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/domain-modeling" "ICA uses domain-modeling for side effects"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/codebase-design" "TDD uses codebase-design for interface design"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grill-with-docs" "ask-ben routes planning through grill-with-docs"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grilling" "ask-ben routes planning through grilling"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/diagnosing-bugs" "ask-ben routes hard bugs to diagnosing-bugs"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling has confirmation gate"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD requires agreed test seams"

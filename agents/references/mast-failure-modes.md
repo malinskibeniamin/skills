@@ -8,7 +8,7 @@ spawned subagents. Not required reading for ordinary diff reviews.
 
 Source: *Why Do Multi-Agent LLM Systems Fail?* (arXiv:2503.13657, 285 citations as of 2026-04). Empirical taxonomy from 1600+ execution traces across 7 popular MAS frameworks (ChatDev, MetaGPT, HyperAgent, AppWorld, AG2, Magentic-One, OpenManus). Three categories, 14 modes, each annotated with paper's observed failure prevalence.
 
-**When to run these checks:** any agent spawning subagents (`development-lifecycle`, `grill-me`, `work`, `resolve-pr-feedback`, `adversarial-reviewer`). Skip for plain single-turn edits.
+**When to run these checks:** any agent spawning subagents (`development-lifecycle`, `grilling`, `work`, `resolve-pr-feedback`, `adversarial-reviewer`). Skip for plain single-turn edits.
 
 ## Category FC1 -- System Design Issues (44.2% of observed failures)
 
@@ -73,7 +73,7 @@ grep -c "^## Decisions" <subagent-prompt>
 
 ### 12. Unaware of Termination Conditions (FM-1.5, 12.4%)
 
-**Problem**: Agent doesn't know when task done -- keeps generating, keeps refining, or stops too early. Bad in open-ended skills (`grill-me`, `brainstorming`).
+**Problem**: Agent doesn't know when task done -- keeps generating, keeps refining, or stops too early. Bad in open-ended skills (`grilling`, `brainstorming`).
 
 **Mitigation**: Every subagent brief MUST include explicit `TERMINATION:` section listing output shape signaling completion. `lifecycle-stop.sh` handles lifecycle phases; extend pattern to all spawned subagents.
 
@@ -108,7 +108,7 @@ grep -c "^## Context\|^## Constraints" <subagent-brief>
 
 **Problem**: Agent proceeds on ambiguous input instead of asking. Common in agents tuned "helpful" -- guess rather than pause.
 
-**Mitigation**: `/grill-me` skill = explicit counter. For other agents, require confidence score (`"confidence": 0.0-1.0`) on task interpretation; confidence < 0.7 triggers clarification request before acting.
+**Mitigation**: `/grilling` skill = explicit counter. For other agents, require confidence score (`"confidence": 0.0-1.0`) on task interpretation; confidence < 0.7 triggers clarification request before acting.
 
 **Verify**:
 ```
@@ -146,7 +146,7 @@ jq -e 'has("caveats") and (.caveats | type == "array")' <subagent-output>.json
 
 ### 17. Ignored Other Agent's Input (FM-2.5, 1.90%)
 
-**Problem**: In multi-agent debate (`/grill-me`, adversarial-reviewer + self-reviewer), one agent responds without referencing peer's claims -- parallel monologues, not debate.
+**Problem**: In multi-agent debate (`/grilling`, adversarial-reviewer + self-reviewer), one agent responds without referencing peer's claims -- parallel monologues, not debate.
 
 **Mitigation**: Second-turn agents MUST cite at least one specific claim from first-turn agent's output (quoted or paraphrased with reference). Reviewer rejects responses lacking peer citations.
 
@@ -245,7 +245,7 @@ grep -cE "subagent_type=\"(verifier|adversarial-reviewer)\"" <session>.log | awk
 
 ## Usage in reviewer agents
 
-For review involving subagent orchestration (lifecycle agents, grill-me, resolve-pr-feedback), ALSO include:
+For review involving subagent orchestration (lifecycle agents, grilling, resolve-pr-feedback), ALSO include:
 
 ```json
 "mast_checks": {

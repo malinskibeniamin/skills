@@ -11,7 +11,7 @@ Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for 
 ## Position
 
 - `/work` owns lifecycle.
-- `/grill-with-docs` settles plan and docs.
+- `/grilling` settles plan and docs.
 - `/swarm` executes independent lanes faster.
 - `/go` verifies and ships.
 

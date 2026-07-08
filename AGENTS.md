@@ -51,7 +51,7 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 ## Lifecycle
 
-1. Understand -> 2. Plan -> 2b. `/grill-with-docs` (grill + CONTEXT.md/ADR updates via `/domain-modeling`) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnosing-bugs` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
+1. Understand -> 2. Plan -> 2b. `/grilling` (interview -> 3-hat gate -> CONTEXT.md/ADR capture via `/domain-modeling`) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnosing-bugs` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 

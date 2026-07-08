@@ -41,7 +41,7 @@ run_content_eval "$REPO_ROOT/.github/workflows/update-agent-native-plan-skills.y
 
 run_content_eval "$REPO_ROOT/swarm/SKILL.md" "/efficient-frontier" "swarm uses efficient frontier delegation discipline"
 run_content_eval "$REPO_ROOT/brainstorming/SKILL.md" "/plan-arbiter|competing plans" "brainstorming routes competing plans through plan-arbiter"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "/plan-arbiter|competing plans" "grill-me routes competing plans through plan-arbiter"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/plan-arbiter|competing plans" "grilling routes competing plans through plan-arbiter"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "/visual-recap" "commit-push-pr creates visual recap for PRs"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "/visual-recap" "go includes visual recap before PR handoff"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/agent-watchdog" "review can watchdog other agent or PR work"
