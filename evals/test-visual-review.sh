@@ -169,7 +169,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Visual-review-specific checks" "visu
 run_content_eval "$SKILL_DIR/REFERENCE.md" "can run standalone" "visual-review reference says standalone use is supported"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "self-reviewer" "visual-review reference wires self-reviewer"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "code-reviewer" "visual-review reference wires code-reviewer"
-run_content_eval "$REPO_ROOT/commit-push/SKILL.md" "/visual-review" "commit-push wires visual-review for frontend changes"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/visual-review" "commit-push-pr wires visual-review for frontend changes"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Frontend or customer-facing surface diff -> `/visual-review` must run' "commit-push-pr review list requires visual-review for frontend/customer-facing diffs"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Visual Review Evidence" "self-reviewer checks visual-review evidence"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Visual Review Evidence" "code-reviewer checks visual-review evidence"
@@ -183,7 +183,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Skip reasons" "PR evidence contract 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Automation candidates" "PR evidence contract includes automation candidates"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "PR evidence contract" "go reference points visual review output to PR evidence contract"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "PR evidence contract" "commit-push-pr references visual review PR evidence contract"
-run_content_eval "$REPO_ROOT/README.md" "/visual-review -- review changed customer-facing surfaces" "README documents standalone visual-review usage example"
+run_content_eval "$REPO_ROOT/docs/DEMOS.md" "/visual-review" "demos document standalone visual-review usage"
 
 # ── Customer-facing surface expansion + HTML report ─────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "customer-facing surfaces" "visual-review targets customer-facing surfaces"
@@ -241,11 +241,10 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "flat type hierarchy.*AI color palett
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Start warn-only" "visual-review recommends warn-only hook rollout"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "customer-facing surface diff" "go skill runs visual-review for customer-facing surfaces"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "customer-facing surface diff" "commit-push-pr requires visual-review for customer-facing surfaces"
-run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "customer-facing surface" "self-reviewer checks customer-facing surface evidence"
-run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "customer-facing surface" "code-reviewer checks customer-facing surface evidence"
+run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "customer-facing surface" "shared evidence reference covers customer-facing surfaces"
 run_content_eval "$REPO_ROOT/CONTEXT.md" "Customer-facing surface" "CONTEXT documents customer-facing surface term"
 run_content_eval "$REPO_ROOT/CONTEXT.md" "Surface review" "CONTEXT documents surface review term"
-run_content_eval "$REPO_ROOT/README.md" "/visual-review -- review changed customer-facing surfaces" "README documents broadened standalone visual-review usage example"
+run_content_eval "$REPO_ROOT/docs/DEMOS.md" "customer-facing" "demos document customer-facing visual-review usage"
 
 # ── UI lifecycle + deterministic hook candidates ────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Trace UI lifecycle" "visual-review traces UI lifecycle transitions"

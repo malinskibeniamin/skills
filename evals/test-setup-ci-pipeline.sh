@@ -8,7 +8,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Blacksmith" "REFERENCE mentions Blac
 run_content_eval "$SKILL_DIR/REFERENCE.md" "thresholds|Coverage" "REFERENCE has coverage gates"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "300KB|bundle" "REFERENCE has bundle size budget"
 
-desc=$(grep '^description:' "$SKILL_DIR/README.md" | sed 's/^description: //' | tr -d '"')
+desc=$(grep '^description:' "$SKILL_DIR/README.md" 2>/dev/null | sed 's/^description: //' | tr -d '"' || true)
 desc_len=${#desc}
 if [ $desc_len -le 250 ]; then
   echo "  PASS  description under 250 chars ($desc_len)"

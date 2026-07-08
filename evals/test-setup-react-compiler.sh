@@ -1,6 +1,6 @@
 # Evals for setup-react-compiler skill
 
-SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-compiler/scripts/react-compiler-check.sh"
+SCRIPT="$REPO_ROOT/.claude/hooks/react-compiler-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-compiler"
 
 # ── File structure ──────────────────────────────────────────────

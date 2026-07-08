@@ -1,15 +1,15 @@
 # Evals for setup-registry-workflow skill
 
 SCRIPT="$REPO_ROOT/registry-workflow/scripts/registry-check.sh"
-SPLIT_SCRIPT="$REPO_ROOT/registry-workflow/scripts/split-file-convention-check.sh"
+SPLIT_SCRIPT="$REPO_ROOT/.claude/hooks/tanstack-router-check.sh"
 SKILL_DIR="$REPO_ROOT/registry-workflow"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_executable_eval "$SCRIPT" "registry-check.sh is executable"
-run_file_eval "$SPLIT_SCRIPT" "split-file-convention-check.sh exists"
-run_executable_eval "$SPLIT_SCRIPT" "split-file-convention-check.sh is executable"
+run_file_eval "$SPLIT_SCRIPT" "tanstack-router-check.sh exists"
+run_executable_eval "$SPLIT_SCRIPT" "tanstack-router-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 

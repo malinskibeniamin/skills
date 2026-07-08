@@ -4,12 +4,12 @@
 # git-diff-HEAD fallback `cat` scanned the full file and flagged
 # violations the current Edit/Write didn't introduce.
 #
-# Strategy: drive as-cast-check.sh (which sources hook-lib.sh and
+# Strategy: drive ts-no-escape-hatches-check.sh (which sources hook-lib.sh and
 # calls hook_get_added_lines) with crafted Edit/Write payloads and
 # assert exit codes.
 
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
-HOOK="$HOOKS_DIR/as-cast-check.sh"
+HOOK="$HOOKS_DIR/ts-no-escape-hatches-check.sh"
 
 _tmpdir=$(mktemp -d)
 trap 'rm -rf "$_tmpdir"' EXIT

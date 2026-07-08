@@ -1,6 +1,6 @@
 # Evals for setup-conventional-commits skill
 
-SCRIPT="$REPO_ROOT/frontend-starter-kit/references/conventional-commits/scripts/conventional-commits-check.sh"
+SCRIPT="$REPO_ROOT/.claude/hooks/conventional-commits-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/conventional-commits"
 
 # ── File structure ──────────────────────────────────────────────

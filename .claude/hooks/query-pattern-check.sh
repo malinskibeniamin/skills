@@ -124,4 +124,63 @@ if echo "$added_lines" | grep -qE 'use(Query|InfiniteQuery|SuspenseQuery|Suspens
   fi
 fi
 
+# ── absorbed from mutation-onerror-check.sh (4.28 family consolidation) ──
+# ── Check: mutate()/mutateAsync() must include onError callback ──
+# Silent mutation failures = data loss risk. Users must see feedback.
+
+# Gate: only check files with mutation usage
+if echo "$file_content" | grep -qE 'useMutation|mutate\(|mutateAsync\('; then
+  # Check for mutate/mutateAsync calls in added lines without onError
+  mutation_calls=$(echo "$added_lines" | grep -E '\b(mutate|mutateAsync)\s*\(' || true)
+
+  if [ -n "$mutation_calls" ]; then
+    # Check if onError exists anywhere in the mutation setup (file-level check)
+    has_onerror=false
+    if echo "$file_content" | grep -qE 'onError\s*[:=(\[]'; then
+      has_onerror=true
+    fi
+
+    if [ "$has_onerror" = false ]; then
+      if ! hook_has_escape "mutation-onerror"; then
+        hook_block "mutate()/mutateAsync() without onError callback. Add onError to show user feedback on failure. Use ConnectError.from(error) + formatToastErrorMessageGRPC(). Escape: // allow: mutation-onerror [reason]"
+      fi
+    fi
+  fi
+fi
+
+# ── absorbed from mutation-side-effect-check.sh (4.28 family consolidation) ──
+# ── Check 1: Side-effect fetch calls should use useMutation ──────
+# fetch() with method: DELETE/POST/PUT/PATCH outside mutationFn
+# should be wrapped in useMutation for proper loading/error state.
+# Only fire in React component/route/hook files, not utility/lib files.
+
+# Gate: only check files that are React components or hooks
+is_react_file=false
+if echo "$file_path" | grep -qE '/(routes|components|hooks|pages|features)/'; then
+  is_react_file=true
+elif echo "$file_content" | grep -qE "from\s+['\"]react['\"]|from\s+['\"]@tanstack/"; then
+  is_react_file=true
+fi
+
+if [ "$is_react_file" = true ]; then
+  # Check added lines for side-effect fetch calls
+  side_effect_fetches=$(echo "$added_lines" | grep -E "method:\s*['\"]?(DELETE|POST|PUT|PATCH)['\"]?" || true)
+
+  if [ -n "$side_effect_fetches" ]; then
+    # Count side-effect methods in new code vs mutationFn wrappers in new code.
+    # File-level useMutation check is too broad — a file can have one mutation
+    # but add new raw fetches that bypass it.
+    new_fetch_count=$(echo "$side_effect_fetches" | wc -l | tr -d '[:space:]')
+    new_mutation_count=$(echo "$added_lines" | grep -cE 'mutationFn|useMutation' 2>/dev/null || true)
+    new_mutation_count=${new_mutation_count:-0}
+    new_mutation_count=$(echo "$new_mutation_count" | tr -d '[:space:]')
+
+    if [ "$new_fetch_count" -gt "$new_mutation_count" ]; then
+      if ! hook_has_escape "inline-mutation"; then
+        hook_warn "Side-effect fetch (DELETE/POST/PUT/PATCH) without useMutation. ${new_fetch_count} fetch(es) but only ${new_mutation_count} mutation wrapper(s) in new code. Wrap in useMutation hook. Escape: // allow: inline-mutation [reason]"
+      fi
+    fi
+  fi
+fi
+
 exit 0

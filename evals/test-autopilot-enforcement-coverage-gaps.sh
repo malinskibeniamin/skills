@@ -4,29 +4,29 @@
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
 # ══════════════════════════════════════════════════════════════════
-# biome-ignore-check.sh
+# ts-no-escape-hatches-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/biome-ignore-check.sh" "biome-ignore-check.sh exists"
-run_executable_eval "$HOOKS_DIR/biome-ignore-check.sh" "biome-ignore-check.sh is executable"
+run_file_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hatches-check.sh exists"
+run_executable_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hatches-check.sh is executable"
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "noExplicitAny" "biome-ignore still calls out noExplicitAny"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "hook_block" "biome-ignore hard-blocks lint suppressions"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "ts-ignore|ts-expect-error" "biome-ignore documents ts-ignore ownership"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "No lint suppression" "biome-ignore has no escape-hatch messaging"
-run_content_eval "$HOOKS_DIR/biome-ignore-check.sh" "LLMs" "biome-ignore mentions LLM copy risk"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "noExplicitAny" "biome-ignore still calls out noExplicitAny"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "hook_block" "biome-ignore hard-blocks lint suppressions"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-ignore|ts-expect-error" "biome-ignore documents ts-ignore ownership"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "No lint suppression" "biome-ignore has no escape-hatch messaging"
+run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "LLMs" "biome-ignore mentions LLM copy risk"
 
 # ── Block: biome-ignore noExplicitAny ────────────────────────────
 
 _bi_tmpdir=$(mktemp -d /tmp/biome-ignore-evals-XXXXXX)
 tmpfile="$_bi_tmpdir/test.tsx"
-printf '// biome-ignore lint/suspicious/noExplicitAny: complex type\nconst x: any = {}\n' > "$tmpfile"
+printf '// biome-ignore lint/suspicious/noExplicitAny: complex type\nconst x: unknown = {}\n' > "$tmpfile"
 (cd "$_bi_tmpdir" && git init -q && git add . && git commit -q -m "init" && \
-  printf '+// biome-ignore lint/suspicious/noExplicitAny: complex type\n+const x: any = {}\n' > "$tmpfile") 2>/dev/null
+  printf '+// biome-ignore lint/suspicious/noExplicitAny: complex type\n+const x: unknown = {}\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: biome-ignore noExplicitAny" "noExplicitAny"
 
@@ -37,12 +37,12 @@ printf '// biome-ignore lint/a11y/noAriaUnsupported: legacy\n' > "$tmpfile"
 (cd "$_bi_tmpdir" && git add . && git commit -q -m "init2" && \
   printf '+// biome-ignore lint/a11y/noAriaUnsupported: legacy\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: other biome-ignore" "No lint suppression"
 
-# Note: @ts-ignore/@ts-expect-error handling moved to as-cast-check.sh (block, exit 2)
-# in 2.2.x. See evals/test-setup-react-rules.sh for the block test. biome-ignore-check.sh
+# Note: @ts-ignore/@ts-expect-error handling moved to ts-no-escape-hatches-check.sh (block, exit 2)
+# in 2.2.x. See evals/test-setup-react-rules.sh for the block test. ts-no-escape-hatches-check.sh
 # intentionally skips @ts-ignore to avoid duplicate enforcement.
 
 # ── Allow: clean code ────────────────────────────────────────────
@@ -52,7 +52,7 @@ printf 'const x: string = "hello"\n' > "$tmpfile"
 (cd "$_bi_tmpdir" && git add . && git commit -q -m "init4" && \
   printf '+const x: string = "hello"\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: clean code with no ignores"
 
@@ -63,13 +63,13 @@ printf '// allow: lint-ignore third-party types are untyped\n// biome-ignore lin
 (cd "$_bi_tmpdir" && git add . && git commit -q -m "init5" && \
   printf '+// allow: lint-ignore third-party types are untyped\n+// biome-ignore lint/correctness/noUndeclaredVariables: untyped lib\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   2 "block: biome-ignore despite escape hatch" "No lint suppression"
 
 # ── Skip: non-JS/TS files ───────────────────────────────────────
 
-run_hook_eval "$HOOKS_DIR/biome-ignore-check.sh" \
+run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
   '{"tool_name":"Write","tool_input":{"file_path":"/tmp/test.md"}}' \
   0 "skip: non-JS/TS file"
 
@@ -105,18 +105,18 @@ printf 'export const Route = createRootRoute({})\n' > "$tmpfile"
 rm -rf "$_rvt_tmpdir"
 
 # ══════════════════════════════════════════════════════════════════
-# hook-location-check.sh
+# tanstack-router-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/hook-location-check.sh" "hook-location-check.sh exists"
-run_executable_eval "$HOOKS_DIR/hook-location-check.sh" "hook-location-check.sh is executable"
+run_file_eval "$HOOKS_DIR/tanstack-router-check.sh" "tanstack-router-check.sh exists"
+run_executable_eval "$HOOKS_DIR/tanstack-router-check.sh" "tanstack-router-check.sh is executable"
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$HOOKS_DIR/hook-location-check.sh" "function.*use.A-Z" "hook-location detects function useX pattern"
-run_content_eval "$HOOKS_DIR/hook-location-check.sh" "const.*use.A-Z" "hook-location detects const useX arrow pattern"
-run_content_eval "$HOOKS_DIR/hook-location-check.sh" "hook_warn" "hook-location uses hook_warn (advisory)"
-run_content_eval "$HOOKS_DIR/hook-location-check.sh" "/hooks/" "hook-location prescribes /hooks/ directory"
+run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "function.*use.A-Z" "hook-location detects function useX pattern"
+run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "const.*use.A-Z" "hook-location detects const useX arrow pattern"
+run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "hook_warn" "hook-location uses hook_warn (advisory)"
+run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "/hooks/" "hook-location prescribes /hooks/ directory"
 
 # ── Warn: function hook in route file ────────────────────────────
 
@@ -127,7 +127,7 @@ printf 'function useUserData() { return {} }\n' > "$tmpfile"
 (cd "$_hl_tmpdir" && git init -q && git add . && git commit -q -m "init" && \
   printf '+function useUserData() { return {} }\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/hook-location-check.sh" \
+run_hook_eval "$HOOKS_DIR/tanstack-router-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: function hook in route file" "hooks"
 
@@ -138,7 +138,7 @@ printf 'const useUserData = () => { return {} }\n' > "$tmpfile"
 (cd "$_hl_tmpdir" && git add . && git commit -q -m "init2" && \
   printf '+const useUserData = () => { return {} }\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/hook-location-check.sh" \
+run_hook_eval "$HOOKS_DIR/tanstack-router-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: arrow function hook in route file" "hooks"
 
@@ -150,7 +150,7 @@ printf 'export function useUserData() { return {} }\n' > "$tmpfile"
 (cd "$_hl_tmpdir" && git add . && git commit -q -m "init3" && \
   printf '+export function useUserData() { return {} }\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/hook-location-check.sh" \
+run_hook_eval "$HOOKS_DIR/tanstack-router-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: hook in hooks directory"
 
@@ -161,22 +161,22 @@ printf 'function formatDate(d: Date) { return d.toISOString() }\n' > "$tmpfile"
 (cd "$_hl_tmpdir" && git add . && git commit -q -m "init4" && \
   printf '+function formatDate(d: Date) { return d.toISOString() }\n' > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/hook-location-check.sh" \
+run_hook_eval "$HOOKS_DIR/tanstack-router-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: non-hook function in route file"
 
 rm -rf "$_hl_tmpdir"
 
 # ══════════════════════════════════════════════════════════════════
-# mutation-side-effect-check.sh
+# query-pattern-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/mutation-side-effect-check.sh" "mutation-side-effect-check.sh exists"
-run_executable_eval "$HOOKS_DIR/mutation-side-effect-check.sh" "mutation-side-effect-check.sh is executable"
+run_file_eval "$HOOKS_DIR/query-pattern-check.sh" "query-pattern-check.sh exists"
+run_executable_eval "$HOOKS_DIR/query-pattern-check.sh" "query-pattern-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/mutation-side-effect-check.sh" "useMutation" "mutation-check detects useMutation"
-run_content_eval "$HOOKS_DIR/mutation-side-effect-check.sh" "DELETE.*POST.*PUT.*PATCH" "mutation-check catches side-effect methods"
-run_content_eval "$HOOKS_DIR/mutation-side-effect-check.sh" "new_fetch_count" "mutation-check uses per-fetch counting (not file-level)"
+run_content_eval "$HOOKS_DIR/query-pattern-check.sh" "useMutation" "mutation-check detects useMutation"
+run_content_eval "$HOOKS_DIR/query-pattern-check.sh" "DELETE.*POST.*PUT.*PATCH" "mutation-check catches side-effect methods"
+run_content_eval "$HOOKS_DIR/query-pattern-check.sh" "new_fetch_count" "mutation-check uses per-fetch counting (not file-level)"
 
 # ── Warn: raw fetch DELETE in route file ─────────────────────────
 
@@ -187,7 +187,7 @@ printf "import React from 'react'\nconst disconnect = () => fetch('/api/disconne
 (cd "$_ms_tmpdir" && git init -q && git add . && git commit -q -m "init" && \
   printf "+const disconnect = () => fetch('/api/disconnect', { method: 'DELETE' })\n" > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/mutation-side-effect-check.sh" \
+run_hook_eval "$HOOKS_DIR/query-pattern-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: raw fetch DELETE without useMutation" "useMutation"
 
@@ -198,7 +198,7 @@ printf "import React from 'react'\nimport { useMutation } from '@tanstack/react-
 (cd "$_ms_tmpdir" && git add . && git commit -q -m "init2" && \
   printf "+import { useMutation } from '@tanstack/react-query'\n+const { mutate } = useMutation({ mutationFn: () => fetch('/api/x', { method: 'DELETE' }) })\n" > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/mutation-side-effect-check.sh" \
+run_hook_eval "$HOOKS_DIR/query-pattern-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: fetch DELETE wrapped in useMutation"
 
@@ -209,22 +209,22 @@ printf "export const apiDelete = () => fetch('/api/x', { method: 'DELETE' })\n" 
 (cd "$_ms_tmpdir" && git add . && git commit -q -m "init3" && \
   printf "+export const apiDelete = () => fetch('/api/x', { method: 'DELETE' })\n" > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/mutation-side-effect-check.sh" \
+run_hook_eval "$HOOKS_DIR/query-pattern-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "skip: non-React utility file"
 
 rm -rf "$_ms_tmpdir"
 
 # ══════════════════════════════════════════════════════════════════
-# field-mask-check.sh
+# form-mode-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/field-mask-check.sh" "field-mask-check.sh exists"
-run_executable_eval "$HOOKS_DIR/field-mask-check.sh" "field-mask-check.sh is executable"
+run_file_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh exists"
+run_executable_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/field-mask-check.sh" "FieldMask|updateMask|update_mask" "field-mask detects multiple FieldMask patterns"
-run_content_eval "$HOOKS_DIR/field-mask-check.sh" "dirtyFields" "field-mask suggests dynamic computation"
-run_content_eval "$HOOKS_DIR/field-mask-check.sh" "hook_has_escape" "field-mask respects escape hatch"
+run_content_eval "$HOOKS_DIR/form-mode-check.sh" "FieldMask|updateMask|update_mask" "field-mask detects multiple FieldMask patterns"
+run_content_eval "$HOOKS_DIR/form-mode-check.sh" "dirtyFields" "field-mask suggests dynamic computation"
+run_content_eval "$HOOKS_DIR/form-mode-check.sh" "hook_has_escape" "field-mask respects escape hatch"
 
 # ── Warn: >2 hardcoded paths ─────────────────────────────────────
 
@@ -237,7 +237,7 @@ import { FieldMask } from '@bufbuild/protobuf'
 const mask = { paths: ['name', 'description', 'scopes'] }
 FEOF
 
-run_hook_eval "$HOOKS_DIR/field-mask-check.sh" \
+run_hook_eval "$HOOKS_DIR/form-mode-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: FieldMask with 3+ hardcoded paths" "dirty"
 
@@ -249,7 +249,7 @@ import { FieldMask } from '@bufbuild/protobuf'
 const mask = { paths: ['name', 'description'] }
 FEOF
 
-run_hook_eval "$HOOKS_DIR/field-mask-check.sh" \
+run_hook_eval "$HOOKS_DIR/form-mode-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: FieldMask with <=2 hardcoded paths"
 
@@ -257,15 +257,15 @@ run_hook_eval "$HOOKS_DIR/field-mask-check.sh" \
 (cd /tmp && rm -r "$_fm_tmpdir" 2>/dev/null) || true
 
 # ══════════════════════════════════════════════════════════════════
-# connect-error-check.sh
+# connect-query-check.sh
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/connect-error-check.sh" "connect-error-check.sh exists"
-run_executable_eval "$HOOKS_DIR/connect-error-check.sh" "connect-error-check.sh is executable"
+run_file_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh exists"
+run_executable_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/connect-error-check.sh" "ConnectError.from" "connect-error prescribes ConnectError.from()"
-run_content_eval "$HOOKS_DIR/connect-error-check.sh" "package.json.*@connectrpc" "connect-error checks project-level connectrpc dep"
-run_content_eval "$HOOKS_DIR/connect-error-check.sh" "hook_has_escape" "connect-error respects escape hatch"
+run_content_eval "$HOOKS_DIR/connect-query-check.sh" "ConnectError.from" "connect-error prescribes ConnectError.from()"
+run_content_eval "$HOOKS_DIR/connect-query-check.sh" "package.json.*@connectrpc" "connect-error checks project-level connectrpc dep"
+run_content_eval "$HOOKS_DIR/connect-query-check.sh" "hook_has_escape" "connect-error respects escape hatch"
 
 # ── Warn: throw new Error in connectrpc file ─────────────────────
 
@@ -277,7 +277,7 @@ printf "import { createClient } from '@connectrpc/connect'\nexport const loader 
 (cd "$_ce_tmpdir" && git init -q && git add . && git commit -q -m "init" && \
   printf "+import { createClient } from '@connectrpc/connect'\n+export const loader = async () => { throw new Error('fail') }\n" > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/connect-error-check.sh" \
+run_hook_eval "$HOOKS_DIR/connect-query-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "warn: throw new Error in connectrpc file" "ConnectError"
 
@@ -288,7 +288,7 @@ printf "import { createClient } from '@connectrpc/connect'\nconst loader = async
 (cd "$_ce_tmpdir" && git add . && git commit -q -m "init2" && \
   printf "+const loader = async () => { return data }\n" > "$tmpfile") 2>/dev/null
 
-run_hook_eval "$HOOKS_DIR/connect-error-check.sh" \
+run_hook_eval "$HOOKS_DIR/connect-query-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: no throw new Error in connectrpc file"
 
@@ -298,14 +298,14 @@ rm -rf "$_ce_tmpdir"
 # hooks.json wiring: new hooks registered
 # ══════════════════════════════════════════════════════════════════
 
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "biome-ignore-check" "hooks.json has biome-ignore-check"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "ts-no-escape-hatches-check" "hooks.json has ts-no-escape-hatches-check"
 
 # ══════════════════════════════════════════════════════════════════
 # Proto-form hooks: files, executable bits, registration in BOTH
 # hooks.json (plugin manifest) and .claude/settings.json (local dev)
 # ══════════════════════════════════════════════════════════════════
 
-for h in connect-error-fieldmap-check proto-form-parallel-state-check form-setvalue-options-check form-error-summary-check; do
+for h in connect-query-check form-mode-check form-mode-check form-mode-check; do
   run_file_eval       "$HOOKS_DIR/${h}.sh" "${h}.sh exists"
   run_executable_eval "$HOOKS_DIR/${h}.sh" "${h}.sh is executable"
   run_content_eval    "$HOOKS_DIR/${h}.sh" "hook_has_escape" "${h} respects escape hatch"

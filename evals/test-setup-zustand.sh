@@ -1,6 +1,6 @@
 # Evals for setup-zustand skill
 
-SCRIPT="$REPO_ROOT/frontend-starter-kit/references/zustand/scripts/zustand-check.sh"
+SCRIPT="$REPO_ROOT/.claude/hooks/zustand-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/zustand"
 
 # ── File structure ──────────────────────────────────────────────

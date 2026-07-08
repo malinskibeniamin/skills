@@ -6,15 +6,20 @@ hook_parse_edit_write
 hook_filter_extensions "ts|tsx"
 hook_skip_generated
 
-# Check for escape hatch
-if hook_has_escape "direct-query"; then
+added_lines="$(
+  set +e
+  hook_get_added_lines
+  _status=$?
+  if [ "$_status" -eq 0 ]; then
+    printf '%s' "$added_lines"
+  fi
   exit 0
-fi
-
-hook_get_added_lines
+)"
 
 # Read full file for context
 file_content=$(cat "$file_path")
+
+if [ -n "$added_lines" ] && ! hook_has_escape "direct-query"; then
 
 # Detect if file uses ConnectRPC/Protobuf
 uses_connect=false
@@ -114,6 +119,125 @@ if echo "$added_lines" | grep -qE '\bTimestamp\b' || echo "$file_content" | grep
   if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qE '\bTimestamp\b'; then
     if ! echo "$added_lines" | grep -qE 'timestampFromDate|timestampDate|Timestamp\.fromDate|toTimestamp'; then
       hook_warn "No raw Date to Timestamp field. Use timestampFromDate(date) from @bufbuild/protobuf/wkt."
+    fi
+  fi
+fi
+
+fi
+
+_is_test_file=false
+case "$file_path" in
+  *.test.*|*.spec.*|*/__tests__/*) _is_test_file=true ;;
+esac
+
+# ── absorbed from connect-error-check.sh (4.28 family consolidation) ──
+# ── Check 1: Use ConnectError.from() in ConnectRPC files ─────────
+# In files that import from @connectrpc/, throw new Error() loses
+# gRPC status codes. Use ConnectError.from() for consistency.
+
+if [ "$_is_test_file" = false ] && [ -n "$added_lines" ]; then
+  # Gate: file uses connectrpc OR is in a project that does (sibling files import it)
+  _uses_connect=false
+  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/"; then
+    _uses_connect=true
+  elif echo "$file_path" | grep -qE '/(routes|hooks|components)/'; then
+    # Check if project uses connectrpc (nearest package.json or sibling imports)
+    _dir=$(dirname "$file_path")
+    while [ "$_dir" != "/" ]; do
+      if [ -f "$_dir/package.json" ] && grep -q '@connectrpc' "$_dir/package.json" 2>/dev/null; then
+        _uses_connect=true
+        break
+      fi
+      _dir=$(dirname "$_dir")
+    done
+  fi
+
+  if [ "$_uses_connect" = true ]; then
+    if echo "$added_lines" | grep -qE 'throw\s+new\s+Error\('; then
+      # Flag if near fetch/RPC context — queryFn, mutationFn, loader, fetch handler
+      if echo "$file_content" | grep -qE 'queryFn|mutationFn|loader|\.fetch\(|callUnaryMethod'; then
+        if ! hook_has_escape "connect-error"; then
+          hook_warn "Use ConnectError.from() not throw new Error() in data-fetching code. Preserves gRPC status codes for consistent error handling. Escape: // allow: connect-error [reason]"
+        fi
+      fi
+    fi
+  fi
+fi
+
+# ── absorbed from connect-error-format-check.sh (4.28 family consolidation) ──
+# ── Gate: only React/hook files with mutation or fetch context ────
+is_relevant=false
+if echo "$file_content" | grep -qE 'useMutation|mutationFn|mutateAsync|\.mutate\(|onError|catch\s*\('; then
+  is_relevant=true
+fi
+
+if [ "$_is_test_file" = false ] && [ "$is_relevant" = true ] && [ -n "$added_lines" ]; then
+  # ── Check 1: catch blocks should use ConnectError.from() ─────────
+  # In projects using ConnectRPC, error formatting should be consistent.
+
+  _uses_connect=false
+  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/"; then
+    _uses_connect=true
+  elif echo "$file_path" | grep -qE '/(routes|hooks|components)/'; then
+    _dir=$(dirname "$file_path")
+    while [ "$_dir" != "/" ]; do
+      if [ -f "$_dir/package.json" ] && grep -q '@connectrpc' "$_dir/package.json" 2>/dev/null; then
+        _uses_connect=true
+        break
+      fi
+      _dir=$(dirname "$_dir")
+    done
+  fi
+
+  if [ "$_uses_connect" = true ]; then
+    # Check for catch blocks that create new Error instead of ConnectError.from
+    if echo "$added_lines" | grep -qE 'catch\s*\('; then
+      if echo "$added_lines" | grep -qE 'throw\s+new\s+Error\(|new\s+Error\('; then
+        if ! hook_has_escape "connect-error-format"; then
+          hook_warn "Use ConnectError.from(error) in catch blocks, not new Error(). Preserves gRPC status codes. Escape: // allow: connect-error-format [reason]" "connect-error-format-throw"
+        fi
+      fi
+    fi
+
+    # Check for toast error without formatToastErrorMessageGRPC
+    if echo "$added_lines" | grep -qE 'toast\.(error|warning)\(|showToast\('; then
+      if ! echo "$added_lines" | grep -qE 'formatToastErrorMessageGRPC|formatErrorMessage'; then
+        if ! hook_has_escape "connect-error-format"; then
+          hook_warn "Use formatToastErrorMessageGRPC(ConnectError.from(error)) for toast errors. Consistent gRPC error formatting. Escape: // allow: connect-error-format [reason]" "connect-error-format-toast"
+        fi
+      fi
+    fi
+  fi
+
+  # ── Check 2: mutate/mutateAsync without onError ──────────────────
+  # Mutations should always handle errors explicitly.
+
+  if echo "$added_lines" | grep -qE '\.(mutate|mutateAsync)\s*\('; then
+    # Check if onError is defined nearby in the mutation options
+    if ! echo "$file_content" | grep -qE 'onError\s*:|onError\s*\('; then
+      if ! hook_has_escape "mutation-error"; then
+        hook_warn "mutate()/mutateAsync() called but no onError handler found. Add onError to handle failures. Escape: // allow: mutation-error [reason]" "connect-error-format-onerror"
+      fi
+    fi
+  fi
+fi
+
+# ── absorbed from connect-error-fieldmap-check.sh (4.28 family consolidation) ──
+# Enforce: when a form file handles a ConnectError onError, it must
+# unpack BadRequest.FieldViolation into form.setError per field — not
+# just toast the aggregated message. Missing per-field mapping loses
+# server-side validation feedback (fields stay green while toast dies).
+
+if [ "$_is_test_file" = false ]; then
+  # Gate: file must be a form handler (uses react-hook-form / useProtoForm)
+  # AND surface ConnectError errors (formatConnectError / ConnectError.from).
+  if echo "$file_content" | grep -qE 'useProtoForm|useForm\(|handleSubmit' && \
+     echo "$file_content" | grep -qE 'formatConnectError|ConnectError\.from|ConnectError<'; then
+    # If file already wires per-field mapping, pass.
+    if ! echo "$file_content" | grep -qE '\.setError\(|setError\s*\(|fieldViolations|BadRequest'; then
+      if ! hook_has_escape "connect-error-fieldmap"; then
+        hook_warn "ConnectError surfaced with toast-only — lost server-side FieldViolation feedback. Unpack BadRequest.FieldViolation in onError and call form.setError({ type: 'server', message }) per field; reserve toast for non-field errors. Escape: // allow: connect-error-fieldmap [reason]" "connect-error-fieldmap"
+      fi
     fi
   fi
 fi
