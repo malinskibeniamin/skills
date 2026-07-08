@@ -31,17 +31,17 @@ run_content_eval "$AGENT_DIR/plan-design-hat.md" "[Ee]mpty" "design-hat covers e
 run_content_eval "$AGENT_DIR/plan-design-hat.md" "[Kk]eyboard" "design-hat covers kbd path"
 
 # grill-me wired to fan-out
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "Three-Hat Fan-Out" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Plan gate" \
   "/grill-me has three-hat fan-out section"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "plan-product-hat" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-product-hat" \
   "/grill-me invokes plan-product-hat"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "plan-engineering-hat" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-engineering-hat" \
   "/grill-me invokes plan-engineering-hat"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "plan-design-hat" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-design-hat" \
   "/grill-me invokes plan-design-hat"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "in parallel" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "in parallel" \
   "/grill-me spawns hats in parallel"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "BLOCKED" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "BLOCKED" \
   "/grill-me honors BLOCKED status"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "ETHOS: Grill Before Build" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "ETHOS: Grill Before Build" \
   "/grill-me cross-references ETHOS principle"

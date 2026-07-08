@@ -1,6 +1,6 @@
 # Redpanda Glossary
 
-Use with `/grill-with-docs` and `/domain-modeling` for project-wide terminology work.
+Use with `/grilling` and `/domain-modeling` for project-wide terminology work.
 
 ## Product Names (capitalize exactly as shown)
 

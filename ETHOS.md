@@ -42,7 +42,7 @@ Every spec has gaps. Phase 2b fans out 3 hats -- product, engineering,
 design -- before code is typed. If you cannot write the diff in your
 head, you are not ready to type.
 
-Enforced by: `lifecycle-stop` untested-source gate, `/grill-me` flow.
+Enforced by: `lifecycle-stop` untested-source gate, `/grilling` flow.
 
 ## 6. Search Before Add
 

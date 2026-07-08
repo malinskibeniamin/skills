@@ -5,7 +5,7 @@ VENDORED=(
   codebase-design
   diagnosing-bugs
   domain-modeling
-  grill-with-docs
+  grilling
   grilling
   prototype
   resolving-merge-conflicts
@@ -32,7 +32,7 @@ run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/to-tickets" "to-spec hands appr
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "ticket|blocking edges" "to-tickets skill keeps ticket intent"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "native sub-issue" "to-tickets prefers native sub-issues when available"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/prototype.*context pointer|context pointer.*/prototype" "to-tickets points to prototype code instead of inlining"
-run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "CONTEXT\.md|ADR" "grilling keeps docs sync intent"
 
 for retired_skill in to-prd to-issues setup-matt-pocock-skills; do
   if [ -e "$REPO_ROOT/$retired_skill/SKILL.md" ]; then

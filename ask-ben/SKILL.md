@@ -31,9 +31,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/extend-harness` | Extend frontend-skills hook harness. |
 | `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
 | `/go` | Ship what built. |
-| `/grill-me` | A relentless interview to sharpen a plan or design. |
-| `/grill-with-docs` | Grilling session that also builds project domain docs. |
-| `/grilling` | Interview the user relentlessly about a plan or design. |
+| `/grilling` | Interview the user relentlessly about a plan or design, with a 3-hat plan gate and optional domain-doc capt... |
 | `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
 | `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
 | `/improve-codebase-architecture` | Scan a codebase for deepening opportunities, present a visual HTML report, then grill the chosen candidate. |

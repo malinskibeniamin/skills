@@ -47,7 +47,7 @@ Runtime-guidance skills (daily work, not setup): `/accessibility`, `/tanstack-ro
 
 1. Confirm the profile (default full). Read each tool's reference lazily as you reach it.
 2. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh when the repo wants strict effects.
-3. Workflow skills (development-lifecycle, tdd, brainstorming, grill-with-docs, triage,
+3. Workflow skills (development-lifecycle, tdd, brainstorming, grilling, triage,
    diagnosing-bugs, prototype, domain-modeling) ship with this plugin -- nothing to install.
 
 ## Verify

@@ -4,7 +4,7 @@ Required reading for `code-reviewer`, `adversarial-reviewer`, `self-reviewer`.
 
 Based on observed LLM-coding pathologies (Karpathy, et al). Run every item before declaring work complete. Each mode: problem, mitigation, verification command.
 
-First 7 modes = single-agent coding failures. Second tier (modes 8-21) = **Multi-Agent System Failure Taxonomy (MAST)** from Cemri et al., NeurIPS 2025 -- covers failures in agent + subagent orchestration (relevant when reviewer spawns sub-reviewers, lifecycle agent spawns phase subagents, or `grill-me` runs multi-turn debate).
+First 7 modes = single-agent coding failures. Second tier (modes 8-21) = **Multi-Agent System Failure Taxonomy (MAST)** from Cemri et al., NeurIPS 2025 -- covers failures in agent + subagent orchestration (relevant when reviewer spawns sub-reviewers, lifecycle agent spawns phase subagents, or `grilling` runs multi-turn debate).
 
 ---
 
