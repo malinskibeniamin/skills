@@ -10,6 +10,8 @@ set -euo pipefail
 #   .claude/settings.json        — Claude-compatible full hook surface, repo-local paths
 #   hooks/hooks.json             — Claude-compatible full hook surface, plugin-root paths
 #   .codex/hooks.json            — Codex-supported hook events only, repo-local paths
+#                                  (best-effort; some managed sandboxes mount
+#                                  .codex read-only)
 #   hooks/codex-hooks.json       — Codex-supported hook events only, plugin-root paths
 #
 # Flags:
@@ -29,6 +31,10 @@ cd "$ROOT"
 MANIFEST="skill-manifest.json"
 [ -f "$MANIFEST" ] || { echo "ERROR: $MANIFEST not found" >&2; exit 1; }
 command -v jq >/dev/null || { echo "ERROR: jq required" >&2; exit 1; }
+
+_codex_local_writable() {
+  [ -f ".codex/hooks.json" ] && (: >> .codex/hooks.json) 2>/dev/null
+}
 
 # Build Claude settings using exec-form hooks. Use an absolute executable
 # (`/bin/bash`) instead of a repo-relative command path because Claude may
@@ -111,6 +117,17 @@ _build_codex() {
       | from_entries;
 
     {hooks: supported_direct}
+    # Codex has no PostToolBatch event. Re-expand Claude batch-dispatched
+    # per-edit checks back into the PostToolUse Edit|Write matcher so Codex
+    # keeps the historical one-process-per-tool-call behavior.
+    | if (($root["x-codex-per-call"] // []) | length) > 0 then
+        .hooks.PostToolUse = ([
+          {
+            matcher: "Edit|Write",
+            hooks: (($root["x-codex-per-call"] // []) | map(command_hook(.)))
+          }
+        ] + (.hooks.PostToolUse // []))
+      else . end
     # Codex PostToolUse runs for failed Bash commands too, so preserve the
     # Claude failure categorizer by appending it to PostToolUse.
     | if ($root.hooks.PostToolUseFailure? // null) != null then
@@ -182,11 +199,13 @@ case "$MODE" in
       echo "DRIFT: hooks/hooks.json ≠ manifest" >&2
       _drift=1
     fi
-    _cur_codex_settings=$(jq -S . .codex/hooks.json 2>/dev/null || echo "{}")
-    _new_codex_settings_sorted=$(echo "$NEW_CODEX_SETTINGS" | jq -S .)
-    if ! diff <(echo "$_cur_codex_settings") <(echo "$_new_codex_settings_sorted") >/dev/null 2>&1; then
-      echo "DRIFT: .codex/hooks.json ≠ manifest Codex subset" >&2
-      _drift=1
+    if _codex_local_writable; then
+      _cur_codex_settings=$(jq -S . .codex/hooks.json 2>/dev/null || echo "{}")
+      _new_codex_settings_sorted=$(echo "$NEW_CODEX_SETTINGS" | jq -S .)
+      if ! diff <(echo "$_cur_codex_settings") <(echo "$_new_codex_settings_sorted") >/dev/null 2>&1; then
+        echo "DRIFT: .codex/hooks.json ≠ manifest Codex subset" >&2
+        _drift=1
+      fi
     fi
     _cur_codex_plugin=$(jq -S . hooks/codex-hooks.json 2>/dev/null || echo "{}")
     _new_codex_plugin_sorted=$(echo "$NEW_CODEX_PLUGIN" | jq -S .)
@@ -201,7 +220,11 @@ case "$MODE" in
     mkdir -p .codex hooks
     echo "$NEW_SETTINGS" > .claude/settings.json
     echo "$NEW_PLUGIN" > hooks/hooks.json
-    echo "$NEW_CODEX_SETTINGS" > .codex/hooks.json
+    if _codex_local_writable; then
+      echo "$NEW_CODEX_SETTINGS" > .codex/hooks.json
+    else
+      echo "WARN: .codex/hooks.json not writable; skipped local Codex config" >&2
+    fi
     echo "$NEW_CODEX_PLUGIN" > hooks/codex-hooks.json
     if ! jq empty .claude/settings.json 2>&1; then
       echo "ERROR: generated settings.json invalid" >&2
@@ -211,9 +234,11 @@ case "$MODE" in
       echo "ERROR: generated hooks/hooks.json invalid" >&2
       exit 1
     fi
-    if ! jq empty .codex/hooks.json 2>&1; then
-      echo "ERROR: generated .codex/hooks.json invalid" >&2
-      exit 1
+    if _codex_local_writable; then
+      if ! jq empty .codex/hooks.json 2>&1; then
+        echo "ERROR: generated .codex/hooks.json invalid" >&2
+        exit 1
+      fi
     fi
     if ! jq empty hooks/codex-hooks.json 2>&1; then
       echo "ERROR: generated hooks/codex-hooks.json invalid" >&2

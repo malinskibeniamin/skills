@@ -12,11 +12,11 @@ run_executable_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hat
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "noExplicitAny" "biome-ignore still calls out noExplicitAny"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "hook_block" "biome-ignore hard-blocks lint suppressions"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-ignore|ts-expect-error" "biome-ignore documents ts-ignore ownership"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "No lint suppression" "biome-ignore has no escape-hatch messaging"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "LLMs" "biome-ignore mentions LLM copy risk"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "noExplicitAny" "biome-ignore still calls out noExplicitAny"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "hook_block" "biome-ignore hard-blocks lint suppressions"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "ts-ignore|ts-expect-error" "biome-ignore documents ts-ignore ownership"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "No lint suppression" "biome-ignore has no escape-hatch messaging"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "LLMs" "biome-ignore mentions LLM copy risk"
 
 # ── Block: biome-ignore noExplicitAny ────────────────────────────
 
@@ -113,10 +113,10 @@ run_executable_eval "$HOOKS_DIR/tanstack-router-check.sh" "tanstack-router-check
 
 # ── Script content ──────────────────────────────────────────────
 
-run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "function.*use.A-Z" "hook-location detects function useX pattern"
-run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "const.*use.A-Z" "hook-location detects const useX arrow pattern"
-run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "hook_warn" "hook-location uses hook_warn (advisory)"
-run_content_eval "$HOOKS_DIR/tanstack-router-check.sh" "/hooks/" "hook-location prescribes /hooks/ directory"
+run_content_eval "$HOOKS_DIR/checks/tanstack-router-check.lib.sh" "function.*use.A-Z" "hook-location detects function useX pattern"
+run_content_eval "$HOOKS_DIR/checks/tanstack-router-check.lib.sh" "const.*use.A-Z" "hook-location detects const useX arrow pattern"
+run_content_eval "$HOOKS_DIR/checks/tanstack-router-check.lib.sh" "hook_warn" "hook-location uses hook_warn (advisory)"
+run_content_eval "$HOOKS_DIR/checks/tanstack-router-check.lib.sh" "/hooks/" "hook-location prescribes /hooks/ directory"
 
 # ── Warn: function hook in route file ────────────────────────────
 
@@ -174,9 +174,9 @@ rm -rf "$_hl_tmpdir"
 run_file_eval "$HOOKS_DIR/query-pattern-check.sh" "query-pattern-check.sh exists"
 run_executable_eval "$HOOKS_DIR/query-pattern-check.sh" "query-pattern-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/query-pattern-check.sh" "useMutation" "mutation-check detects useMutation"
-run_content_eval "$HOOKS_DIR/query-pattern-check.sh" "DELETE.*POST.*PUT.*PATCH" "mutation-check catches side-effect methods"
-run_content_eval "$HOOKS_DIR/query-pattern-check.sh" "new_fetch_count" "mutation-check uses per-fetch counting (not file-level)"
+run_content_eval "$HOOKS_DIR/checks/query-pattern-check.lib.sh" "useMutation" "mutation-check detects useMutation"
+run_content_eval "$HOOKS_DIR/checks/query-pattern-check.lib.sh" "DELETE.*POST.*PUT.*PATCH" "mutation-check catches side-effect methods"
+run_content_eval "$HOOKS_DIR/checks/query-pattern-check.lib.sh" "new_fetch_count" "mutation-check uses per-fetch counting (not file-level)"
 
 # ── Warn: raw fetch DELETE in route file ─────────────────────────
 
@@ -222,9 +222,9 @@ rm -rf "$_ms_tmpdir"
 run_file_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh exists"
 run_executable_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/form-mode-check.sh" "FieldMask|updateMask|update_mask" "field-mask detects multiple FieldMask patterns"
-run_content_eval "$HOOKS_DIR/form-mode-check.sh" "dirtyFields" "field-mask suggests dynamic computation"
-run_content_eval "$HOOKS_DIR/form-mode-check.sh" "hook_has_escape" "field-mask respects escape hatch"
+run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "FieldMask|updateMask|update_mask" "field-mask detects multiple FieldMask patterns"
+run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "dirtyFields" "field-mask suggests dynamic computation"
+run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "hook_has_escape" "field-mask respects escape hatch"
 
 # ── Warn: >2 hardcoded paths ─────────────────────────────────────
 
@@ -263,9 +263,9 @@ run_hook_eval "$HOOKS_DIR/form-mode-check.sh" \
 run_file_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh exists"
 run_executable_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/connect-query-check.sh" "ConnectError.from" "connect-error prescribes ConnectError.from()"
-run_content_eval "$HOOKS_DIR/connect-query-check.sh" "package.json.*@connectrpc" "connect-error checks project-level connectrpc dep"
-run_content_eval "$HOOKS_DIR/connect-query-check.sh" "hook_has_escape" "connect-error respects escape hatch"
+run_content_eval "$HOOKS_DIR/checks/connect-query-check.lib.sh" "ConnectError.from" "connect-error prescribes ConnectError.from()"
+run_content_eval "$HOOKS_DIR/checks/connect-query-check.lib.sh" "package.json.*@connectrpc" "connect-error checks project-level connectrpc dep"
+run_content_eval "$HOOKS_DIR/checks/connect-query-check.lib.sh" "hook_has_escape" "connect-error respects escape hatch"
 
 # ── Warn: throw new Error in connectrpc file ─────────────────────
 
@@ -298,7 +298,7 @@ rm -rf "$_ce_tmpdir"
 # hooks.json wiring: new hooks registered
 # ══════════════════════════════════════════════════════════════════
 
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "ts-no-escape-hatches-check" "hooks.json has ts-no-escape-hatches-check"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "ts-no-escape-hatches-check.sh" "codex-hooks.json keeps ts-no-escape-hatches-check per-call"
 
 # ══════════════════════════════════════════════════════════════════
 # Proto-form hooks: files, executable bits, registration in BOTH
@@ -308,7 +308,7 @@ run_content_eval "$REPO_ROOT/hooks/hooks.json" "ts-no-escape-hatches-check" "hoo
 for h in connect-query-check form-mode-check form-mode-check form-mode-check; do
   run_file_eval       "$HOOKS_DIR/${h}.sh" "${h}.sh exists"
   run_executable_eval "$HOOKS_DIR/${h}.sh" "${h}.sh is executable"
-  run_content_eval    "$HOOKS_DIR/${h}.sh" "hook_has_escape" "${h} respects escape hatch"
-  run_content_eval    "$REPO_ROOT/hooks/hooks.json"       "${h}" "hooks.json has ${h}"
-  run_content_eval    "$REPO_ROOT/.claude/settings.json"  "${h}" "settings.json has ${h}"
+  run_content_eval    "$HOOKS_DIR/checks/${h}.lib.sh" "hook_has_escape" "${h} respects escape hatch"
+  run_content_eval    "$REPO_ROOT/hooks/codex-hooks.json" "${h}.sh" "codex-hooks.json keeps ${h} per-call"
+  run_content_eval    "$REPO_ROOT/.claude/settings.json"  "post-tool-batch.sh" "settings.json uses PostToolBatch dispatcher for ${h}"
 done

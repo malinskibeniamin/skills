@@ -9,12 +9,12 @@ HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 run_file_eval "$HOOKS_DIR/legacy-import-check.sh" "legacy-import-check.sh exists"
 run_executable_eval "$HOOKS_DIR/legacy-import-check.sh" "legacy-import-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/legacy-import-check.sh" "@redpanda-data/ui" "legacy-import catches @redpanda-data/ui"
-run_content_eval "$HOOKS_DIR/legacy-import-check.sh" "lucide-react" "legacy-import catches lucide-react"
-run_content_eval "$HOOKS_DIR/legacy-import-check.sh" "<button" "legacy-import catches raw <button>"
-run_content_eval "$HOOKS_DIR/legacy-import-check.sh" "<input" "legacy-import catches raw <input>"
-run_content_eval "$HOOKS_DIR/legacy-import-check.sh" "<a.*href" "legacy-import catches raw <a href>"
-run_content_eval "$HOOKS_DIR/legacy-import-check.sh" "hook_has_escape" "legacy-import respects escape hatch"
+run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "@redpanda-data/ui" "legacy-import catches @redpanda-data/ui"
+run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "lucide-react" "legacy-import catches lucide-react"
+run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "<button" "legacy-import catches raw <button>"
+run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "<input" "legacy-import catches raw <input>"
+run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "<a.*href" "legacy-import catches raw <a href>"
+run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "hook_has_escape" "legacy-import respects escape hatch"
 
 # ── Warn: @redpanda-data/ui import ───────────────────────────────
 
@@ -63,13 +63,13 @@ run_hook_eval "$HOOKS_DIR/legacy-import-check.sh" \
 run_file_eval "$HOOKS_DIR/test-convention-check.sh" "test-convention-check.sh exists"
 run_executable_eval "$HOOKS_DIR/test-convention-check.sh" "test-convention-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "it.*.'" "test-convention detects it() pattern"
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "jest" "test-convention detects jest.fn"
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "toBeInTheDocument" "test-convention detects toBeInTheDocument"
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "waitForTimeout" "test-convention detects waitForTimeout"
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "test.skip" "test-convention detects test.skip"
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "test-magic-timeout" "test-convention detects { timeout: <n> } magic number"
-run_content_eval "$HOOKS_DIR/test-convention-check.sh" "test-unawaited" "test-convention detects unawaited findBy/waitFor"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "it.*.'" "test-convention detects it() pattern"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "jest" "test-convention detects jest.fn"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "toBeInTheDocument" "test-convention detects toBeInTheDocument"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "waitForTimeout" "test-convention detects waitForTimeout"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test.skip" "test-convention detects test.skip"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test-magic-timeout" "test-convention detects { timeout: <n> } magic number"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test-unawaited" "test-convention detects unawaited findBy/waitFor"
 
 # ── Warn: it() in test file ─────────────────────────────────────
 
@@ -145,9 +145,9 @@ run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
 run_file_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh exists"
 run_executable_eval "$HOOKS_DIR/connect-query-check.sh" "connect-query-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/connect-query-check.sh" "ConnectError.from" "connect-error-format prescribes ConnectError.from"
-run_content_eval "$HOOKS_DIR/connect-query-check.sh" "formatToastErrorMessageGRPC" "connect-error-format prescribes formatToastErrorMessageGRPC"
-run_content_eval "$HOOKS_DIR/connect-query-check.sh" "onError" "connect-error-format checks for onError"
+run_content_eval "$HOOKS_DIR/checks/connect-query-check.lib.sh" "ConnectError.from" "connect-error-format prescribes ConnectError.from"
+run_content_eval "$HOOKS_DIR/checks/connect-query-check.lib.sh" "formatToastErrorMessageGRPC" "connect-error-format prescribes formatToastErrorMessageGRPC"
+run_content_eval "$HOOKS_DIR/checks/connect-query-check.lib.sh" "onError" "connect-error-format checks for onError"
 
 # console-log-check.sh REMOVED — covered by Biome noConsole rule
 
@@ -158,8 +158,8 @@ run_content_eval "$HOOKS_DIR/connect-query-check.sh" "onError" "connect-error-fo
 run_file_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh exists"
 run_executable_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/form-mode-check.sh" "useWatch" "form-watch suggests useWatch"
-run_content_eval "$HOOKS_DIR/form-mode-check.sh" "React Compiler" "form-watch mentions React Compiler"
+run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "useWatch" "form-watch suggests useWatch"
+run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "React Compiler" "form-watch mentions React Compiler"
 
 # ══════════════════════════════════════════════════════════════════
 # ts-no-escape-hatches-check.sh
@@ -168,10 +168,10 @@ run_content_eval "$HOOKS_DIR/form-mode-check.sh" "React Compiler" "form-watch me
 run_file_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hatches-check.sh exists"
 run_executable_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "ts-no-escape-hatches-check.sh is executable"
 
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "as\s*never" "as-cast blocks as never"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "as\s*any" "as-cast blocks as any"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "hook_block" "as-cast uses hook_block for hard blocks"
-run_content_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" "type guard" "as-cast suggests type guards"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "as\s*never" "as-cast blocks as never"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "as\s*any" "as-cast blocks as any"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "hook_block" "as-cast uses hook_block for hard blocks"
+run_content_eval "$HOOKS_DIR/checks/ts-no-escape-hatches-check.lib.sh" "type guard" "as-cast suggests type guards"
 
 # ── Block: as never ──────────────────────────────────────────────
 
@@ -216,9 +216,10 @@ run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
 # hooks.json wiring
 # ══════════════════════════════════════════════════════════════════
 
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "legacy-import-check" "hooks.json has legacy-import-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "test-convention-check" "hooks.json has test-convention-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "connect-query-check" "hooks.json has connect-query-check"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "post-tool-batch.sh" "hooks.json has PostToolBatch dispatcher"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "legacy-import-check.sh" "codex-hooks.json keeps legacy-import-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "test-convention-check.sh" "codex-hooks.json keeps test-convention-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "connect-query-check.sh" "codex-hooks.json keeps connect-query-check per-call"
 # console-log-check removed — Biome noConsole handles it
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "form-mode-check" "hooks.json has form-mode-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "ts-no-escape-hatches-check" "hooks.json has ts-no-escape-hatches-check"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "form-mode-check.sh" "codex-hooks.json keeps form-mode-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "ts-no-escape-hatches-check.sh" "codex-hooks.json keeps ts-no-escape-hatches-check per-call"

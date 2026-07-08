@@ -1,0 +1,261 @@
+#!/bin/bash
+# Extracted check logic for connect-query-check.sh. Source ../_hook-lib.sh before this file.
+
+run_connect_query_check() {
+hook_filter_extensions "ts|tsx" || return 0
+hook_skip_generated || return 0
+
+added_lines="$(
+  set +e
+  hook_get_added_lines
+  _status=$?
+  if [ "$_status" -eq 0 ]; then
+    printf '%s' "$added_lines"
+  fi
+  return 0
+)"
+
+# Read full file for context
+file_content=$(cat "$file_path")
+
+if [ -n "$added_lines" ] && ! hook_has_escape "direct-query"; then
+
+# Detect if file uses ConnectRPC/Protobuf
+uses_connect=false
+if echo "$file_content" | grep -qE "from\s+['\"](@connectrpc/|@buf/)"; then
+  uses_connect=true
+fi
+
+# ── Check 1: Ban raw useQuery/useMutation from @tanstack/react-query ─
+
+if [ "$uses_connect" = true ]; then
+  uses_connect_transport=false
+  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/connect['\"]|from\s+['\"]@connectrpc/connect-web['\"]|callUnaryMethod|callServerStreamMethod|createGrpcWebTransport|createConnectTransport|useTransport"; then
+    uses_connect_transport=true
+  fi
+
+  if [ "$uses_connect_transport" = false ]; then
+    tanstack_imports=$(echo "$added_lines" | grep -E "from\s+['\"]@tanstack/react-query['\"]" || true)
+    if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | grep -qE '\buseQuery\b[^C]|\buseQuery\b\s*[,}]|\buseMutation\b[^S]|\buseMutation\b\s*[,}]'; then
+      hook_block "useQuery/useMutation → import from @connectrpc/connect-query, not @tanstack/react-query. Escape: // allow: direct-query [reason]"
+      return 0
+    fi
+  fi
+fi
+
+# ── Check 2: Ban invalidateQueries() with no args ────────────────────
+
+if echo "$added_lines" | grep -qE 'invalidateQueries\(\s*\)'; then
+  hook_block "No invalidateQueries() with empty args (invalidates ALL). Scope: queryKey: [rpcMethod.service.typeName]."
+  return 0
+fi
+
+# ── Check 3: Warn on axios imports ────────────────────────────────────
+
+if echo "$added_lines" | grep -qE "from\s+['\"]axios['\"]|require\(['\"]axios['\"]\)"; then
+  hook_warn "Prefer ConnectRPC transport over axios. Bypass protobuf type safety. Escape: // allow: direct-query [reason]"
+  return 0
+fi
+
+# ── Check 4: Warn on fetch() calls ───────────────────────────────────
+
+if echo "$added_lines" | grep -qE '\bfetch\s*\('; then
+  if [ "$uses_connect" = true ]; then
+    hook_block "No raw fetch() in ConnectRPC files. Use ConnectRPC transport. Escape: // allow: direct-query [reason]"
+    return 0
+  fi
+fi
+
+# ── Check 5: (v2) Ban new Message() construction ────────────────────
+
+if echo "$added_lines" | grep -qE '\bnew\s+[A-Z][a-zA-Z]*(Request|Response|Message)\s*\('; then
+  if echo "$file_content" | grep -qE "from\s+['\"]@buf/"; then
+    hook_block "Proto v2: no new Message(). Use create(Schema, { ... }) from @bufbuild/protobuf."
+    return 0
+  fi
+fi
+
+# ── Check 6: (v2) Ban PlainMessage/PartialMessage ───────────────────
+
+if echo "$added_lines" | grep -qE '\b(PlainMessage|PartialMessage)\b'; then
+  if echo "$file_content" | grep -qE "from\s+['\"]@bufbuild/protobuf['\"]"; then
+    hook_block "Proto v2: PlainMessage/PartialMessage are v1. Use MessageShape<typeof Schema> or MessageInitShape<typeof Schema>."
+    return 0
+  fi
+fi
+
+# ── Check 7: (v2) Ban manual $typeName literals ─────────────────────
+
+if echo "$added_lines" | grep -qE '\$typeName'; then
+  is_proto_v2=false
+  if [ -f "package.json" ] && grep -qE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null; then
+    is_proto_v2=true
+  fi
+
+  if [ "$is_proto_v2" = true ]; then
+    hook_block "Proto v2: no manual \$typeName. Use create(Schema, { ... }) for type-safe construction."
+    return 0
+  fi
+fi
+
+# ── Check 8: Warn on toJson/fromJson of Any without typeRegistry ──────
+
+if echo "$added_lines" | grep -qE 'toJson|fromJson'; then
+  if echo "$file_content" | grep -qE 'google.protobuf.Any|AnySchema|anyPack|anyUnpack'; then
+    if ! echo "$file_content" | grep -qE 'typeRegistry|type_registry|createRegistry'; then
+      hook_warn "toJson/fromJson with Any requires typeRegistry. Pass { typeRegistry } or configure on transport."
+      return 0
+    fi
+  fi
+fi
+
+# ── Check 9: Warn on Any construction without @type/typeUrl ───────
+
+if echo "$added_lines" | grep -qE 'AnySchema|google\.protobuf\.Any'; then
+  if echo "$added_lines" | grep -qE 'create\(.*Any' && ! echo "$added_lines" | grep -qE 'typeUrl|type_url|@type|anyPack'; then
+    hook_warn "Any without typeUrl → JSON fails. Use anyPack() or set typeUrl."
+    return 0
+  fi
+fi
+
+# ── Check 10: Warn on Timestamp as plain object ──────────────────
+
+if echo "$added_lines" | grep -qE '\bTimestamp\b' || echo "$file_content" | grep -qE 'timestamp_pb'; then
+  if echo "$added_lines" | grep -qE '\{\s*seconds\s*:|nanos\s*:' && echo "$file_content" | grep -qE '\bTimestamp\b|timestamp_pb'; then
+    hook_warn "No manual { seconds, nanos } for Timestamp. Use timestampFromDate(new Date()) from @bufbuild/protobuf/wkt."
+    return 0
+  fi
+  if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qE '\bTimestamp\b'; then
+    if ! echo "$added_lines" | grep -qE 'timestampFromDate|timestampDate|Timestamp\.fromDate|toTimestamp'; then
+      hook_warn "No raw Date to Timestamp field. Use timestampFromDate(date) from @bufbuild/protobuf/wkt."
+      return 0
+    fi
+  fi
+fi
+
+fi
+
+_is_test_file=false
+case "$file_path" in
+  *.test.*|*.spec.*|*/__tests__/*) _is_test_file=true ;;
+esac
+
+# ── absorbed from connect-error-check.sh (4.28 family consolidation) ──
+# ── Check 1: Use ConnectError.from() in ConnectRPC files ─────────
+# In files that import from @connectrpc/, throw new Error() loses
+# gRPC status codes. Use ConnectError.from() for consistency.
+
+if [ "$_is_test_file" = false ] && [ -n "$added_lines" ]; then
+  # Gate: file uses connectrpc OR is in a project that does (sibling files import it)
+  _uses_connect=false
+  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/"; then
+    _uses_connect=true
+  elif echo "$file_path" | grep -qE '/(routes|hooks|components)/'; then
+    # Check if project uses connectrpc (nearest package.json or sibling imports)
+    _dir=$(dirname "$file_path")
+    while [ "$_dir" != "/" ]; do
+      if [ -f "$_dir/package.json" ] && grep -q '@connectrpc' "$_dir/package.json" 2>/dev/null; then
+        _uses_connect=true
+        break
+      fi
+      _dir=$(dirname "$_dir")
+    done
+  fi
+
+  if [ "$_uses_connect" = true ]; then
+    if echo "$added_lines" | grep -qE 'throw\s+new\s+Error\('; then
+      # Flag if near fetch/RPC context — queryFn, mutationFn, loader, fetch handler
+      if echo "$file_content" | grep -qE 'queryFn|mutationFn|loader|\.fetch\(|callUnaryMethod'; then
+        if ! hook_has_escape "connect-error"; then
+          hook_warn "Use ConnectError.from() not throw new Error() in data-fetching code. Preserves gRPC status codes for consistent error handling. Escape: // allow: connect-error [reason]"
+          return 0
+        fi
+      fi
+    fi
+  fi
+fi
+
+# ── absorbed from connect-error-format-check.sh (4.28 family consolidation) ──
+# ── Gate: only React/hook files with mutation or fetch context ────
+is_relevant=false
+if echo "$file_content" | grep -qE 'useMutation|mutationFn|mutateAsync|\.mutate\(|onError|catch\s*\('; then
+  is_relevant=true
+fi
+
+if [ "$_is_test_file" = false ] && [ "$is_relevant" = true ] && [ -n "$added_lines" ]; then
+  # ── Check 1: catch blocks should use ConnectError.from() ─────────
+  # In projects using ConnectRPC, error formatting should be consistent.
+
+  _uses_connect=false
+  if echo "$file_content" | grep -qE "from\s+['\"]@connectrpc/"; then
+    _uses_connect=true
+  elif echo "$file_path" | grep -qE '/(routes|hooks|components)/'; then
+    _dir=$(dirname "$file_path")
+    while [ "$_dir" != "/" ]; do
+      if [ -f "$_dir/package.json" ] && grep -q '@connectrpc' "$_dir/package.json" 2>/dev/null; then
+        _uses_connect=true
+        break
+      fi
+      _dir=$(dirname "$_dir")
+    done
+  fi
+
+  if [ "$_uses_connect" = true ]; then
+    # Check for catch blocks that create new Error instead of ConnectError.from
+    if echo "$added_lines" | grep -qE 'catch\s*\('; then
+      if echo "$added_lines" | grep -qE 'throw\s+new\s+Error\(|new\s+Error\('; then
+        if ! hook_has_escape "connect-error-format"; then
+          hook_warn "Use ConnectError.from(error) in catch blocks, not new Error(). Preserves gRPC status codes. Escape: // allow: connect-error-format [reason]" "connect-error-format-throw"
+          return 0
+        fi
+      fi
+    fi
+
+    # Check for toast error without formatToastErrorMessageGRPC
+    if echo "$added_lines" | grep -qE 'toast\.(error|warning)\(|showToast\('; then
+      if ! echo "$added_lines" | grep -qE 'formatToastErrorMessageGRPC|formatErrorMessage'; then
+        if ! hook_has_escape "connect-error-format"; then
+          hook_warn "Use formatToastErrorMessageGRPC(ConnectError.from(error)) for toast errors. Consistent gRPC error formatting. Escape: // allow: connect-error-format [reason]" "connect-error-format-toast"
+          return 0
+        fi
+      fi
+    fi
+  fi
+
+  # ── Check 2: mutate/mutateAsync without onError ──────────────────
+  # Mutations should always handle errors explicitly.
+
+  if echo "$added_lines" | grep -qE '\.(mutate|mutateAsync)\s*\('; then
+    # Check if onError is defined nearby in the mutation options
+    if ! echo "$file_content" | grep -qE 'onError\s*:|onError\s*\('; then
+      if ! hook_has_escape "mutation-error"; then
+        hook_warn "mutate()/mutateAsync() called but no onError handler found. Add onError to handle failures. Escape: // allow: mutation-error [reason]" "connect-error-format-onerror"
+        return 0
+      fi
+    fi
+  fi
+fi
+
+# ── absorbed from connect-error-fieldmap-check.sh (4.28 family consolidation) ──
+# Enforce: when a form file handles a ConnectError onError, it must
+# unpack BadRequest.FieldViolation into form.setError per field — not
+# just toast the aggregated message. Missing per-field mapping loses
+# server-side validation feedback (fields stay green while toast dies).
+
+if [ "$_is_test_file" = false ]; then
+  # Gate: file must be a form handler (uses react-hook-form / useProtoForm)
+  # AND surface ConnectError errors (formatConnectError / ConnectError.from).
+  if echo "$file_content" | grep -qE 'useProtoForm|useForm\(|handleSubmit' && \
+     echo "$file_content" | grep -qE 'formatConnectError|ConnectError\.from|ConnectError<'; then
+    # If file already wires per-field mapping, pass.
+    if ! echo "$file_content" | grep -qE '\.setError\(|setError\s*\(|fieldViolations|BadRequest'; then
+      if ! hook_has_escape "connect-error-fieldmap"; then
+        hook_warn "ConnectError surfaced with toast-only — lost server-side FieldViolation feedback. Unpack BadRequest.FieldViolation in onError and call form.setError({ type: 'server', message }) per field; reserve toast for non-field errors. Escape: // allow: connect-error-fieldmap [reason]" "connect-error-fieldmap"
+        return 0
+      fi
+    fi
+  fi
+fi
+
+return 0
+}

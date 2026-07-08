@@ -94,6 +94,7 @@ run_content_eval "$PERF_SCRIPT" "before > 10" "perf hook filters noise from test
 # ── bundle-guard.sh: File structure ───────────────────────────────
 
 BUNDLE_SCRIPT="$REPO_ROOT/.claude/hooks/bundle-guard.sh"
+BUNDLE_LIB="$REPO_ROOT/.claude/hooks/checks/bundle-guard.lib.sh"
 run_file_eval "$BUNDLE_SCRIPT" "bundle-guard.sh exists"
 run_executable_eval "$BUNDLE_SCRIPT" "bundle-guard.sh is executable"
 
@@ -188,15 +189,16 @@ rm -rf "$tmpdir"
 
 # ── bundle-guard.sh: script content ──────────────────────────────
 
-run_content_eval "$BUNDLE_SCRIPT" "moment" "bundle-guard checks moment"
-run_content_eval "$BUNDLE_SCRIPT" "lodash" "bundle-guard checks lodash"
-run_content_eval "$BUNDLE_SCRIPT" "jquery" "bundle-guard checks jquery"
-run_content_eval "$BUNDLE_SCRIPT" "classnames" "bundle-guard checks classnames"
-run_content_eval "$BUNDLE_SCRIPT" "core-js" "bundle-guard checks core-js"
+run_content_eval "$BUNDLE_LIB" "moment" "bundle-guard checks moment"
+run_content_eval "$BUNDLE_LIB" "lodash" "bundle-guard checks lodash"
+run_content_eval "$BUNDLE_LIB" "jquery" "bundle-guard checks jquery"
+run_content_eval "$BUNDLE_LIB" "classnames" "bundle-guard checks classnames"
+run_content_eval "$BUNDLE_LIB" "core-js" "bundle-guard checks core-js"
 
 # ── test-convention-check.sh: File structure ───────────────────────────
 
 PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-convention-check.sh"
+PERF_CHECK_LIB="$REPO_ROOT/.claude/hooks/checks/test-convention-check.lib.sh"
 run_file_eval "$PERF_CHECK_SCRIPT" "test-convention-check.sh exists"
 run_executable_eval "$PERF_CHECK_SCRIPT" "test-convention-check.sh is executable"
 
@@ -212,25 +214,32 @@ fi
 
 # ── test-convention-check.sh: wired in hook configs ───────────────────
 
-for config_file in "$REPO_ROOT/.claude/settings.json" "$REPO_ROOT/hooks/hooks.json"; do
-  config_name=$(basename "$(dirname "$config_file")")/$(basename "$config_file")
-  if grep -q "test-convention-check" "$config_file" 2>/dev/null; then
-    echo "  PASS  test-convention-check.sh wired in $config_name"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  test-convention-check.sh missing from $config_name"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: test-convention-check.sh missing from $config_name"
-  fi
-done
+if grep -q "post-tool-batch.sh" "$REPO_ROOT/.claude/settings.json" 2>/dev/null && \
+   grep -q "post-tool-batch.sh" "$REPO_ROOT/hooks/hooks.json" 2>/dev/null; then
+  echo "  PASS  Claude configs use PostToolBatch dispatcher for test-convention-check.sh"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Claude configs missing PostToolBatch dispatcher for test-convention-check.sh"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: PostToolBatch dispatcher missing for test-convention-check.sh"
+fi
+
+if grep -q "test-convention-check.sh" "$REPO_ROOT/hooks/codex-hooks.json" 2>/dev/null; then
+  echo "  PASS  codex-hooks.json keeps test-convention-check.sh per-call"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  codex-hooks.json missing test-convention-check.sh per-call"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: codex-hooks missing test-convention-check.sh"
+fi
 
 # ── test-convention-check.sh: script content ──────────────────────────
 
-run_content_eval "$PERF_CHECK_SCRIPT" "await.*import" "perf-check detects dynamic imports"
-run_content_eval "$PERF_CHECK_SCRIPT" "pool.*threads" "perf-check detects missing pool: threads"
-run_content_eval "$PERF_CHECK_SCRIPT" "isolate.*false" "perf-check detects missing isolate: false"
-run_content_eval "$PERF_CHECK_SCRIPT" "importActual" "perf-check excludes vi.importActual from dynamic import check"
-run_content_eval "$PERF_CHECK_SCRIPT" "happy-dom.*jsdom" "perf-check skips isolate check for browser-env configs"
+run_content_eval "$PERF_CHECK_LIB" "await.*import" "perf-check detects dynamic imports"
+run_content_eval "$PERF_CHECK_LIB" "pool.*threads" "perf-check detects missing pool: threads"
+run_content_eval "$PERF_CHECK_LIB" "isolate.*false" "perf-check detects missing isolate: false"
+run_content_eval "$PERF_CHECK_LIB" "importActual" "perf-check excludes vi.importActual from dynamic import check"
+run_content_eval "$PERF_CHECK_LIB" "happy-dom.*jsdom" "perf-check skips isolate check for browser-env configs"
 
 # ── test-convention-check.sh: skip non-test, non-config files ─────────
 
@@ -402,7 +411,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-run_content_eval "$PERF_CHECK_SCRIPT" "setInterval" "perf-check detects setInterval leak"
+run_content_eval "$PERF_CHECK_LIB" "setInterval" "perf-check detects setInterval leak"
 
 # ── test-perf-stop.sh: script content (new features) ────────────
 

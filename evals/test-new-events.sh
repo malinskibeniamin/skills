@@ -1,13 +1,11 @@
 # Evals for new hook events added in 2.2.4:
-# SessionEnd, PreCompact, PostToolUseFailure, FileChanged (5 matchers), WorktreeCreate.
 
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
 # ── Scripts exist and are executable ────────────────────────────
 for script in session-end.sh pre-compact.sh post-tool-failure.sh \
               file-changed-deps.sh file-changed-schema.sh \
-              file-changed-config.sh file-changed-env.sh file-changed-manifest.sh \
-              worktree-create.sh; do
+              file-changed-config.sh file-changed-env.sh file-changed-manifest.sh; do
   if [ -x "$HOOKS_DIR/$script" ]; then
     echo "  PASS  $script exists and executable"
     PASS=$((PASS + 1))
@@ -19,7 +17,7 @@ for script in session-end.sh pre-compact.sh post-tool-failure.sh \
 done
 
 # ── Manifest wires all new events ───────────────────────────────
-for event in SessionEnd PreCompact PostToolUseFailure FileChanged WorktreeCreate; do
+for event in SessionEnd PreCompact PostToolUseFailure FileChanged; do
   if jq -e ".hooks.$event" "$REPO_ROOT/skill-manifest.json" >/dev/null 2>&1; then
     echo "  PASS  manifest wires $event"
     PASS=$((PASS + 1))
@@ -75,8 +73,7 @@ fi
 _bad=0
 for script in session-end.sh pre-compact.sh post-tool-failure.sh \
               file-changed-deps.sh file-changed-schema.sh \
-              file-changed-config.sh file-changed-env.sh file-changed-manifest.sh \
-              worktree-create.sh; do
+              file-changed-config.sh file-changed-env.sh file-changed-manifest.sh; do
   if ! bash -n "$HOOKS_DIR/$script" 2>/dev/null; then
     _bad=$((_bad + 1))
   fi
