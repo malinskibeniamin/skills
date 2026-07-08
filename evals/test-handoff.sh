@@ -8,4 +8,4 @@ run_content_eval "$REPO_ROOT/handoff/SKILL.md" "Do not duplicate artifacts" "han
 run_content_eval "$REPO_ROOT/handoff/SKILL.md" "[Rr]edact.*sensitive|secrets.*personal data" "handoff redacts sensitive information"
 run_content_eval "$REPO_ROOT/handoff/SKILL.md" "Suggested skills" "handoff suggests next skills"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\./handoff/" "handoff registered in Claude plugin skills"
-run_content_eval "$REPO_ROOT/README.md" "/handoff" "README documents handoff"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/handoff" "generated catalog documents handoff"

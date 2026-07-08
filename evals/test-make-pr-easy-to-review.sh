@@ -11,6 +11,6 @@ run_content_eval "$REPO_ROOT/$SKILL/SKILL.md" "Only rewrite history when the use
 run_content_eval "$REPO_ROOT/$SKILL/SKILL.md" "Original tree|Current tree" "make-pr-easy-to-review verifies tree identity after rewrite"
 run_content_eval "$REPO_ROOT/$SKILL/SKILL.md" "PR description|review notes" "make-pr-easy-to-review prefers reviewer guidance over behavior changes"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/$SKILL" "ask-ben routes make-pr-easy-to-review"
-run_content_eval "$REPO_ROOT/README.md" "/$SKILL" "README lists make-pr-easy-to-review"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/$SKILL" "generated catalog lists make-pr-easy-to-review"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "/$SKILL" "commit-push-pr routes reviewer guidance through make-pr-easy-to-review"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "/$SKILL" "go includes make-pr-easy-to-review in ship flow"
