@@ -5,11 +5,11 @@ description: Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implem
 
 # Codex delegation (GPT-5.5 / GPT-5.6)
 
-GPT-5.5 and GPT-5.6 are reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
-never through the agent/workflow `model` parameter (Claude models only). The local
-`~/.codex/config.toml` defaults to `model = "gpt-5.5"`; pass `-m gpt-5.6` when the task needs
-intelligence 9 (see the Model routing table in CLAUDE.md). GPT-5.5/5.6 are extremely steerable:
-write explicit, self-contained prompts and they follow them.
+GPT-5.6 (and 5.5) are reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
+never through the agent/workflow `model` parameter (Claude models only). **Default to GPT-5.6
+for all codex work** (`-m gpt-5.6`, or set `model = "gpt-5.6"` in `~/.codex/config.toml`);
+GPT-5.5 is a fallback only while 5.6 is unavailable on the account. GPT models are extremely
+steerable: write explicit, self-contained prompts and they follow them.
 
 ## Prompt contract (every codex run)
 
@@ -50,7 +50,7 @@ workflow lane or subagent, spawn a thin Claude wrapper:
   codex prompt, run `codex exec` via Bash, and return the report.
 - Structured results: put the `schema` on the wrapper agent; it maps the codex report into
   the schema.
-- **Always label the agent with a `GPT-5.5:` prefix** (for example `label: "GPT-5.5: review"`).
+- **Always label the agent with a `GPT-5.6:` prefix** (for example `label: "GPT-5.6: review"`; use the model actually invoked).
   The workflow UI shows the wrapper's Claude model, so the label is the only indication the
   real worker is GPT.
 - Parallel implementation wrappers MUST use `isolation: "worktree"` so codex edits do not

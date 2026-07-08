@@ -70,6 +70,14 @@ Broader than hook-level. Pull from session JSONL + git log same window as metric
 
 Output per-metric: current value, 7-day trend (up/down/flat), actionable next step.
 
+### 6a. Skill-fire audit
+
+Read `~/.claude/hook-metrics/skill-fires.jsonl` (written by skill-fire-log.sh).
+Model-invoked skills with zero fires over the window are either dead weight or have
+bad trigger descriptions -- both actionable: propose delete/merge or a description
+rewrite per writing-great-skills. Report top-fired skills too (candidates for
+further polish). Run on demand only -- no schedule.
+
 ### 6b. Manifest drift check
 
 ```

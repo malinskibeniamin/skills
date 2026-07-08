@@ -89,7 +89,7 @@ moving static text out of the per-session/per-prompt hot path.
   rule, violating the repo's own `writing-great-skills` single-source-of-truth principle. *Stripped.*
 - **MCP self-contradiction**: CLAUDE.md bans MCP ("MCP banned -> CLI") while `visual-plan`/`visual-recap`
   hard-require the Builder.io Plan MCP server, whose injected tool schemas are the largest MCP payload
-  in the session. *Unresolved -- owner decision required (see wave 2).*
+  in the session. *Resolved in wave 5: the hook was never a blanket ban -- it deny-lists only expensive servers with CLI equivalents; docs now say so. The Plan MCP server is explicitly allowed.*
 - `lifecycle-stop` blocks session termination until a PR exists **and a reviewer is assigned**,
   prescribing `gh pr create --fill NOW` -- the harness forcing junk PRs into existence so you can stop
   working. *Flagged, not changed: deliberate ETHOS design; recommend demoting steps 2-5 to warn.*
