@@ -156,10 +156,6 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/env-validation-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/bundle-guard.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -177,10 +173,6 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/error-boundary-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/legacy-import-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",

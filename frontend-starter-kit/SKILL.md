@@ -35,7 +35,7 @@ the plugin ("export harness").
 | react-compiler | `references/react-compiler/` | React Compiler + memoization check |
 | zustand | `references/zustand/` | double-parens create, useShallow, persist |
 | react-rules | `references/react-rules/` | ban raw HTML, TS escapes, XSS, barrel imports |
-| env-validation | `references/env-validation/` | t3-env + zod, ban process.env |
+| env-validation | `references/env-validation/` | t3-env + zod; process.env ban via Biome noProcessEnv |
 | conventional-commits | `references/conventional-commits/` | type(scope): description enforcement |
 | react-doctor | `references/react-doctor/` | health scoring + Stop hook |
 | ci-pipeline | `references/ci-pipeline/` | GitHub Actions CI, coverage gates, caching |

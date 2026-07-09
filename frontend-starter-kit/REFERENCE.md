@@ -42,7 +42,7 @@ Not in the stack (do not introduce): Next.js, react-router-dom, Radix as new dep
 | 6 | zustand | PostToolUse | Double-parens, useShallow, persist |
 | 7 | accessibility | PostToolUse | ARIA, keyboard nav, alt text |
 | 8 | react-rules | PostToolUse | 22+ React/TS/security checks |
-| 9 | env-validation | PostToolUse | Ban raw process.env |
+| 9 | env-validation | Biome noProcessEnv | Ban raw process.env (lint rule, no hook) |
 | 10 | conventional-commits | PreToolUse | Commit message format |
 | 11 | react-doctor | Stop | Health score regression |
 | 12 | tanstack-router | PostToolUse | Route tree, anti-patterns |

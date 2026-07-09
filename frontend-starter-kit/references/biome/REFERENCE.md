@@ -126,7 +126,8 @@ Ultracite strict baseline. Overrides:
 | `noDeprecatedImports` | project | off | error | Needs Biome Scanner |
 | `useFilenamingConvention` | style | off | kebab-case strict | `my-component.tsx` not `MyComponent.tsx` |
 | `noRestrictedImports` | style | empty | configured | Ban moment, lodash, classnames, mobx, yup, `@redpanda-data/ui`, lucide-react |
-| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>` |
+| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<label>`, `<code>`, `<pre>`, `<h1>`-`<h6>`, `<p>` (component-library owners; replaced the legacy-import + react-rules raw-element hooks) |
+| `noProcessEnv` | nursery | off | error | Raw `process.env` banned outside `src/env.ts` + config files (replaced the env-validation hook) |
 | `useExhaustiveSwitchCases` | nursery | off | error | Type-safe switch/case |
 | `useConsistentTestIt` | nursery | off | test only | `test()` over `it()` |
 | `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` |

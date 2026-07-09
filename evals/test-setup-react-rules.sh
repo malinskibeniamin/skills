@@ -133,19 +133,19 @@ REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: useEffect with escape hatch"
 
-# ── Check 2: raw HTML ban (TSX only) ────────────────────────────
+# ── Check 2: raw HTML elements delegated to Biome noRestrictedElements ──
 
 echo '<button onClick={handleClick}>Click</button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: raw <button> (suggest Button)" "Button"
+  0 "delegated to Biome: raw <button> (noRestrictedElements)"
 
 echo '<input type="text" />' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <input>" "component"
+  0 "delegated to Biome: raw <input> (noRestrictedElements)"
 
 # Allow <form> (not banned — raw <form> is acceptable)
 echo '<form onSubmit={handle}>' > "$tmpfile"
@@ -161,37 +161,19 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: <a> tag (not banned)"
 
-# Raw <code> -> CodeBlock/Code from Typography
+# Raw elements delegated to Biome noRestrictedElements -- hook stays silent.
 echo '<code>meta-llama/Llama-3.1-8B</code>' > "$tmpfile"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <code>" "CodeBlock"
+  0 "delegated to Biome: raw <code> (noRestrictedElements)"
 
-# Raw <pre> -> CodeBlock
-echo '<pre>some code</pre>' > "$tmpfile"
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <pre>" "CodeBlock"
-
-# Raw headings -> Heading from Typography
 echo '<h1>Title</h1>' > "$tmpfile"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <h1>" "Heading"
+  0 "delegated to Biome: raw <h1> (noRestrictedElements)"
 
-# Raw <p> -> Text from Typography
-echo '<p>paragraph</p>' > "$tmpfile"
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw <p>" "Text"
-
-# MDX support -- same check applies in .mdx files
-mdxfile=$(mktemp --suffix=.mdx 2>/dev/null || mktemp -t hook-mdx-XXXXXX).mdx
-echo '<code>meta-llama/Llama</code>' > "$mdxfile"
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$mdxfile\"}}" \
-  2 "block: raw <code> in .mdx" "CodeBlock"
-rm -f "$mdxfile"
+run_content_eval "$REPO_ROOT/.claude/hooks/checks/react-rules-check.lib.sh" "delegated to Biome" \
+  "react-rules documents the raw-element delegation"
 
 # ── UI_LIB_DIRS override ─────────────────────────────────────────
 
@@ -232,29 +214,18 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: clean TypeScript code"
 
-# ── Check 4: Ban type assertions (opt-in) ────────────────────────
+# ── Check 4: type assertions -- single owner is ts-no-escape-hatches-check ──
 
-# Allowed by default (opt-in disabled)
+# react-rules stays silent on as-casts even with the old opt-in flag set.
 tmpfile="$_rr_tmpdir/test.ts"
 echo "const user = response as User" > "$tmpfile"
 
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: type assertion when opt-in not set"
-
-# Block with opt-in enabled
-echo "const user = response as User" > "$tmpfile"
-
 REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: type assertion with opt-in" "type guard"
+  0 "as-cast ownership moved to ts-no-escape-hatches (react-rules silent)"
 
-# Block 'as unknown as X' double assertion
-echo "const x = value as unknown as Record<string, unknown>" > "$tmpfile"
-
-REACT_RULES_BAN_TYPE_ASSERTIONS=1 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: double type assertion with opt-in"
+run_content_eval "$REPO_ROOT/.claude/hooks/checks/ts-no-escape-hatches-check.lib.sh" "as_casts" \
+  "ts-no-escape-hatches owns the as-cast rule"
 
 # Allow 'as const'
 tmpfile="$_rr_tmpdir/test.ts"
