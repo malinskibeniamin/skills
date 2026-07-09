@@ -43,7 +43,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 
 ### 2. GREEN -- Minimal code to pass
 
-- Only enough to pass | run `/ponytail`: deletion, standard library, native platform, already-installed dependency, one-line before custom code | no speculative helpers/options.
+- Only enough to pass | run `/deslop` write mode: deletion, reuse-in-codebase, standard library, native platform, already-installed dependency, one-line before custom code | no speculative helpers/options.
 - Run test | see green
 
 ### 3. REFACTOR -- Clean up while green

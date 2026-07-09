@@ -22,7 +22,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/commit-push-pr` | Analyze changes, create categorized conventional commits, push, and open a PR. |
 | `/commit-push` | Analyze changes, create categorized conventional commits, and push -- no PR. |
 | `/connect-query` | ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation... |
-| `/deslop` | Question changed code as liability and remove unjustified surface area. |
+| `/deslop` | Write the least code that works and remove unjustified surface area. |
 | `/development-lifecycle` | Use when frontend/React/TypeScript/UI work. |
 | `/diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. |
 | `/domain-modeling` | Build and sharpen a project's domain model. |
@@ -39,7 +39,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/make-pr-easy-to-review` | Prepare PRs for review by cleaning noisy history, improving PR descriptions, and adding reviewer guidance w... |
 | `/plan-arbiter` | Use when comparing, cross-reviewing, merging, judging, choosing, or arbitrating competing plans from agents... |
 | `/plow-ahead` | Use when the user says plow ahead, do not stop, use your best judgment, keep going until done, or similar. |
-| `/ponytail` | Writes the least code that works. |
 | `/prime` | Builds repo startup brief. |
 | `/prototype` | Build a throwaway prototype to answer a design question. |
 | `/read-the-damn-docs` | Use for third-party APIs, libraries, frameworks, CLIs, cloud services, SDKs, fast-moving behavior, current/... |

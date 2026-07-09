@@ -26,7 +26,7 @@ Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `C
 
 1. **Standards**: read standards + diff. Report documented violations only. Cite file + rule. Separate hard violations from judgment calls. Skip what tooling enforces. Max 400 words.
 2. **Spec**: read spec + diff. Report missing/partial requirements, scope creep, wrong behavior. Quote spec line for each finding. Max 400 words. Skip if no spec.
-3. **Complexity/value**: tag delete/stdlib/native/yagni/shrink candidates (see `/deslop` tags). Quantify the Major improvement: value score HIGH|MEDIUM|LOW|NONE (maintenance/security/resilience/test-only can score HIGH). Below MEDIUM with no clear justification -> run `/steelman` against "this PR adds meaningful value"; if confirmed low-value, gate blocks pending override, split, or stronger justification.
+3. **Complexity/value**: tag delete/stdlib/native/yagni/shrink candidates (see `/deslop` tags), one line per finding: location, what to cut, what replaces it. The diff's best outcome is getting shorter -- end with `net: -<N> lines possible.`, or `Lean already. Ship.` when nothing cuts. A minimal runnable self-check is never bloat; do not flag it. Quantify the Major improvement: value score HIGH|MEDIUM|LOW|NONE (maintenance/security/resilience/test-only can score HIGH). Below MEDIUM with no clear justification -> run `/steelman` against "this PR adds meaningful value"; if confirmed low-value, gate blocks pending override, split, or stronger justification.
 4. **Adversarial question**: "What could still be wrong if tests pass and implementation matches spec?" Max 3 findings; `APPROVED` if no credible risk.
 
 ## Hat panel (default for PR and branch reviews)
@@ -40,7 +40,7 @@ merges, dedupes by root cause, and reports.
 |---|---|---|
 | product/spec | does the diff serve the user? spec compliance, scope creep, missing requirements | Opus-4.8 |
 | engineering-standards | documented repo-standards violations, Fowler smell baseline | Opus-4.8 |
-| complexity/value | deslop tags (delete/stdlib/native/yagni/shrink), value score, smallest passing diff | Opus-4.8 |
+| complexity/value | deslop tags (delete/stdlib/native/yagni/shrink), net-lines-possible score, value score, smallest passing diff | Opus-4.8 |
 | adversarial | "what is still wrong if tests pass and spec matches?" max 3 findings | Opus-4.8 |
 | resilience | `/resilience-review`: forms, async/data, mutations, state machines, destructive actions, loading/error/empty | Opus-4.8 |
 | visual/design | UI/UX taste, copy, layout, a11y on rendered surfaces (`/visual-review` evidence) | Opus-4.8 or Fable-5 (taste) |
