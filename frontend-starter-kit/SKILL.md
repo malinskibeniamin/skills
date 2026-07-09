@@ -16,7 +16,9 @@ the plugin ("export harness").
 
 ## Profiles
 
-- **full** (default): every tool below, in order.
+- **full** (default): every tool below, in order, targeting the canonical stack in
+  [REFERENCE.md](REFERENCE.md) (React 19 + Rsbuild + Tailwind + TanStack Router/Query +
+  Connect Query + shadcn/Base UI + Vitest/Playwright + Biome/Ultracite + tsgo).
 - **minimal**: toolchain, biome, quality-gate, env-validation, conventional-commits.
 - **redpanda**: full + `references/redpanda/README.md` (registry workflow, Redpanda component
   taxonomy, `REDPANDA_KIT=1`).
