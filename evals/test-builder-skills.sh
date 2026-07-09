@@ -40,7 +40,7 @@ run_content_eval "$REPO_ROOT/scripts/sync-agent-native-plan-skills.mjs" "visual-
 run_content_eval "$REPO_ROOT/.github/workflows/update-agent-native-plan-skills.yml" "Refresh visual-plan and visual-recap|sync:agent-native-plan-skills" "Agent Native visual sync workflow exists"
 
 run_content_eval "$REPO_ROOT/swarm/SKILL.md" "/efficient-frontier" "swarm uses efficient frontier delegation discipline"
-run_content_eval "$REPO_ROOT/brainstorming/SKILL.md" "/plan-arbiter|competing plans" "brainstorming routes competing plans through plan-arbiter"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/plan-arbiter|competing plans" "brainstorming routes competing plans through plan-arbiter"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/plan-arbiter|competing plans" "grilling routes competing plans through plan-arbiter"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "/visual-recap" "commit-push-pr creates visual recap for PRs"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "/visual-recap" "go includes visual recap before PR handoff"

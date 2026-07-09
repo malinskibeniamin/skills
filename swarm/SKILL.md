@@ -64,7 +64,7 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 - Design/copy work: split `/visual-review`, `setup-ux-copy`/copywriting, accessibility, and articulation lanes only when their write scopes do not overlap.
 - Review: split standards, spec, resilience, security, performance, tests, UX, and steelman axes.
 - Diagnose: split reproduction loops, hypotheses, instrumentation, and regression tests.
-- Product: combine `/brainstorming`, `/prototype`, and `/steelman` lanes for options and pushback.
+- Product: combine `/grilling` explore mode, `/prototype`, and `/steelman` lanes for options and pushback.
 - Handoff: after grilling, create compact packets so each agent starts with current decisions.
 - Learning: split topic by theory, examples, repo usage, trade-offs, and pitfalls.
 

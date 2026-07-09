@@ -159,7 +159,7 @@ Only remember one skill: `/development-lifecycle` (or alias `/work`). It covers 
 
 | Category | What it covers | Representative skills |
 |---|---|---|
-| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/tdd`, `/swarm`, `/review` (`--deep` for release-blocking audits), `/triage`, `/diagnosing-bugs`, `/resolve-pr-feedback`, `/visual-review`, `/brainstorming`, `/prime`, `/codex` |
+| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/tdd`, `/swarm`, `/review` (`--deep` for release-blocking audits), `/triage`, `/diagnosing-bugs`, `/resolve-pr-feedback`, `/visual-review`, `/prime`, `/codex` |
 | Kits | Bundles that install groups | `/frontend-starter-kit` (profiles: `full`, `minimal`, `redpanda`, per-tool), `/work-automation-kit`, `/codex-compat` |
 | Guidance | Auto-load on matching files | `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy` |
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |

@@ -414,7 +414,7 @@ flowchart TD
     Coverage -->|No| TDD["Block: Run /tdd"]
     Coverage -->|Yes| Committed{Changes<br/>committed?}
 
-    Committed -->|No| Commit["Block: Run /commit-push"]
+    Committed -->|No| Commit["Block: Run /commit-push-pr --no-pr"]
     Committed -->|Yes| Pushed{Commits<br/>pushed?}
 
     Pushed -->|No| Push["Block: git push -u origin branch"]
