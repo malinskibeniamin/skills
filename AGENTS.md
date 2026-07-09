@@ -51,13 +51,13 @@ zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: 
 
 ## Lifecycle
 
-1. Understand -> 2. Plan -> 2b. `/grill-with-docs` (grill + CONTEXT.md/ADR updates via `/domain-modeling`) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnosing-bugs` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
+1. Understand -> 2. Plan -> 2b. `/grilling` (interview -> 3-hat gate -> CONTEXT.md/ADR capture via `/domain-modeling`) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnosing-bugs` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
 
 Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
 
-Effort: high (Understand) -> xhigh (Plan) -> xhigh (TDD) -> high (Simplify) -> high (Verify) -> xhigh (Review). No `max` on Opus 4.7 (diminishing returns + overthinking).
+Effort: default high. Fable-5: high or lower only (xhigh token-hungry; max a furnace with worse output).
 
-Subagent model: Explore -> Sonnet (codebase greps don't need Opus). Plan/Review -> Opus xhigh. general-purpose -> Sonnet if plan is atomic, Opus otherwise.
+Subagent model routing (rankings 1-10, higher better; cost = actual pay): Fable-5 cost 1 / intelligence 10 / taste 9; Opus-4.8 4/7/8; Sonnet-5 6/5/7; GPT-5.6 (codex) 8/9/6; GPT-5.5 (codex) 9/5/5. Ships -> intelligence > taste > cost (cost tiebreaker only). Defaults not limits: cheap output below bar -> rerun with a smarter model without asking. Bulk mechanical (clear-spec implementation, data analysis, migrations) -> codex GPT-5.6 (effectively free; 5.5 fallback). User-facing (UI/copy/API design) -> taste >= 7. Review/plan -> Fable-5 or Opus-4.8, optional GPT independent pass. Computer use + token furnaces -> codex GPT-5.5/5.6, report back. Thinker/executor split: smart model plans exact steps -> cheap model executes (Sonnet subagent or codex GPT-5.6) -> smart model reviews the diff. NEVER Haiku. GPT models only via codex CLI (see codex skill); Claude models via the agent model parameter.
 
 ## UX Copy
 

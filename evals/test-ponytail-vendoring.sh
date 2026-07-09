@@ -1,8 +1,8 @@
 # Evals for vendored DietrichGebert/ponytail skills and integration.
 
 UPSTREAM_SHA="687c1b339872289d70f65c5eaabce850b1663867"
-PONYTAIL_SKILLS=(ponytail ponytail-audit ponytail-debt ponytail-review)
 
+expected_ponytail_skills="ponytail"
 actual_ponytail_skills=$(
   find "$REPO_ROOT" -maxdepth 2 -name SKILL.md \
     | sed "s#^$REPO_ROOT/##" \
@@ -12,16 +12,16 @@ actual_ponytail_skills=$(
     | tr '\n' ' ' \
     | sed 's/ $//'
 )
-expected_ponytail_skills="ponytail ponytail-audit ponytail-debt ponytail-review"
 if [ "$actual_ponytail_skills" = "$expected_ponytail_skills" ]; then
-  echo "  PASS  exactly four Ponytail skills are vendored"
+  echo "  PASS  exactly one Ponytail skill is vendored (family consolidated 4->1 in 4.27.0)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  exactly four Ponytail skills are vendored (got: $actual_ponytail_skills)"
+  echo "  FAIL  exactly one Ponytail skill is vendored (got: $actual_ponytail_skills)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: exactly four Ponytail skills are vendored"
+  ERRORS="$ERRORS\n  FAIL: exactly one Ponytail skill is vendored"
 fi
 
+PONYTAIL_SKILLS=("ponytail")
 for skill in "${PONYTAIL_SKILLS[@]}"; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "vendored Ponytail skill exists: $skill"
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^name: $skill$" "vendored Ponytail skill has matching name: $skill"
@@ -59,30 +59,10 @@ run_content_eval "$REPO_ROOT/ponytail/SKILL.md" "Already-installed dependency|in
 run_content_eval "$REPO_ROOT/ponytail/SKILL.md" "input validation at trust boundaries" "ponytail keeps safety boundary"
 run_content_eval "$REPO_ROOT/ponytail/SKILL.md" "failing test first|/tdd" "ponytail aligns with harness TDD gate"
 
-run_content_eval "$REPO_ROOT/ponytail-review/SKILL.md" "delete:|stdlib:|native:|yagni:|shrink:" "ponytail-review keeps review tags"
-run_content_eval "$REPO_ROOT/ponytail-review/SKILL.md" "net: -<N> lines possible" "ponytail-review keeps line-reduction metric"
-run_content_eval "$REPO_ROOT/ponytail-review/SKILL.md" "Complexity only" "ponytail-review stays complexity-only"
 
-run_content_eval "$REPO_ROOT/ponytail-audit/SKILL.md" "repo-wide|whole repo|whole-repo" "ponytail-audit scans whole repo"
-run_content_eval "$REPO_ROOT/ponytail-audit/SKILL.md" "net: -<N> lines, -<M> deps possible" "ponytail-audit keeps repo-wide scoring"
-run_content_eval "$REPO_ROOT/ponytail-debt/SKILL.md" "ponytail:" "ponytail-debt harvests ponytail markers"
-run_content_eval "$REPO_ROOT/ponytail-debt/SKILL.md" "no-trigger" "ponytail-debt flags markers without triggers"
-
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "/ponytail-review" "deslop composes ponytail-review before liability gate"
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "/ponytail-audit" "deslop composes ponytail-audit"
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "/ponytail-debt" "deslop composes ponytail-debt"
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Pair audit/debt with /improve" "deslop pairs audit debt with improve"
-run_content_eval "$REPO_ROOT/deslop/REFERENCE.md" "/ponytail-audit.*(/ponytail-debt|marked debt)|/ponytail-debt.*(/ponytail-audit|bloat)" "deslop reference documents audit and debt pass"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "/ponytail-audit" "improve uses ponytail-audit"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "/ponytail-debt" "improve uses ponytail-debt"
+run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Complexity tags" "deslop owns the complexity tag taxonomy"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "advisor-plan inputs" "improve treats ponytail debt as advisor-plan input"
-run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "Ponytail commands" "diagnosing-bugs owns Ponytail command summary instead of help skill"
-run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" 'No `/ponytail-help` skill' "diagnosing-bugs explicitly replaces ponytail-help skill"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "ponytail-review-hat" "review includes ponytail-review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/ponytail-review" "review hat invokes ponytail-review"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Subagents: .*ponytail-review-hat|ponytail-review-hat: <status" "review output reports ponytail-review hat status"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/ponytail-review" "commit-push-pr accepts ponytail-review as review evidence"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "/ponytail-review.*deslop|/deslop.*ponytail-review" "go routes ship cleanup through ponytail-review and deslop"
+run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "debt ledger" "diagnosing-bugs routes to the consolidated ponytail"
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/ponytail" "development lifecycle invokes ponytail automatically"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "Ponytail.*before.*implementation|before.*implementation.*Ponytail" "development lifecycle runs ponytail before implementation"

@@ -1,6 +1,6 @@
 ---
 name: plan-product-hat
-description: Product-perspective plan review. Asks "why, for whom, success metric, scope, reversibility" before any code is typed. Gated in /grill-me phase 2b; spawned in parallel with engineering-hat and design-hat. Outputs structured JSON findings.
+description: Product-perspective plan review. Asks "why, for whom, success metric, scope, reversibility" before any code is typed. Gated in /grilling phase 2b; spawned in parallel with engineering-hat and design-hat. Outputs structured JSON findings.
 model: sonnet
 allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *)
 ---

@@ -6,8 +6,6 @@ paths:
 ---
 
 # Protobuf AIP Design
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Use for protobuf API design. Default to Google AIP. Treat legacy `id` paths/custom operation envelopes as compatibility exceptions, not new precedent. Deep examples: [REFERENCE.md](REFERENCE.md).
 
 ## Non-negotiables

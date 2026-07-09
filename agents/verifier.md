@@ -1,7 +1,7 @@
 ---
 name: verifier
 description: Verifies that changes work correctly via tests and browser inspection. Dispatch after implementation.
-model: haiku
+model: sonnet
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
@@ -13,7 +13,7 @@ Verify implementation works. Don't trust claims -- verify independently.
 
 ### 1. Tests
 ```bash
-vitest run --related $(git diff --name-only HEAD~1)
+vitest run --related $(git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")
 ```
 Fail -> report FAIL with output.
 

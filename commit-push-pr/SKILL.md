@@ -1,11 +1,9 @@
 ---
 name: commit-push-pr
-description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when user asks to open a PR, invokes `/commit-push-pr`, or requests a full commit -> push -> PR flow with CI monitoring.
+description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when the user asks to commit, commit and push, or open a PR. When the user asks for commit+push only, stop after Phase 4 (no PR).
 ---
 
 # Commit, push, and open PR
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 See [REFERENCE.md](REFERENCE.md) for commit-type table, auto-label map, PR body template.
 
 ## Step 0: Gather context
@@ -92,7 +90,7 @@ Record commit types created -- used for auto-labeling Phase 5.
 1. Run `git status` and `git diff` to confirm clean worktree
 2. Anything uncommitted remains -> warn user
 3. Summarize: branch name, commits, PR URL (or existing PR URL), visual recap URL or skip reason, CI status, remaining user actions
-4. End with `/quick-recap` status line: green when PR+CI are done, yellow for pending CI/review, red only when blocked on user input.
+4. End with one status line (<100 chars): 🟢 PR+CI done | 🟡 pending CI/review | 🔴 blocked on user input.
 
 ### Safety
 

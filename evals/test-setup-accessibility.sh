@@ -1,8 +1,8 @@
 # Evals for setup-accessibility skill
 # Tests file structure, SKILL.md, REFERENCE.md, and hook script content
 
-SCRIPT="$REPO_ROOT/setup-accessibility/scripts/accessibility-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-accessibility"
+SCRIPT="$REPO_ROOT/accessibility/scripts/accessibility-check.sh"
+SKILL_DIR="$REPO_ROOT/accessibility"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -12,7 +12,7 @@ run_executable_eval "$SCRIPT" "accessibility-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-accessibility" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: accessibility" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "ARIA" "SKILL.md mentions ARIA"
@@ -63,95 +63,30 @@ run_hook_eval "$SCRIPT" \
   '{"tool_name":"Edit","tool_input":{"file_path":""}}' \
   0 "skip: empty file_path"
 
-# ── Check 1: Ban <img> without alt ──────────────────────────────
+# ── Biome-delegated rules must NOT fire from the hook ────────────
+# img alt, clickable div/span, combobox ARIA, label association are
+# owned by Biome (ultracite preset); the hook stays silent on them.
 
 tmpfile="$_a11y_tmpdir/test.tsx"
 printf '<img src="photo.jpg" />\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: <img> without alt" "WCAG 1.1.1"
+  0 "delegated to Biome: <img> without alt (a11y/useAltText)"
 
-# tmpfile reused in tmpdir
-
-# ── Check 1: Allow <img> with alt ──────────────────────────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
-printf '<img src="photo.jpg" alt="Team photo" />\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: <img> with alt"
-
-# tmpfile reused in tmpdir
-
-# ── Check 1: Allow <img> with empty alt (decorative) ───────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
-printf '<img src="divider.png" alt="" />\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: <img> with empty alt (decorative)"
-
-# tmpfile reused in tmpdir
-
-# ── Check 2: Ban clickable div without keyboard support ─────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
 printf '<div onClick={handleClick}>Click me</div>\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: <div onClick> without role/tabIndex/keyboard" "WCAG 2.1.1"
+  0 "delegated to Biome: clickable <div> (a11y/useKeyWithClickEvents)"
 
-# tmpfile reused in tmpdir
-
-# ── Check 2: Allow clickable div with full a11y support ─────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
-printf '<div role="button" tabIndex={0} onClick={handleClick} onKeyDown={handleKey}>Click me</div>\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: <div onClick> with role + tabIndex + onKeyDown"
-
-# tmpfile reused in tmpdir
-
-# ── Check 2: Ban clickable span without keyboard support ────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
-printf '<span onClick={toggle}>Toggle</span>\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: <span onClick> without keyboard support"
-
-# tmpfile reused in tmpdir
-
-# ── Check 3: Ban role="combobox" without aria-expanded ──────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
 printf '<input role="combobox" aria-autocomplete="both" />\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: role=combobox without aria-expanded/aria-controls" "aria-expanded"
+  0 "delegated to Biome: combobox ARIA (a11y/useAriaPropsForRole)"
 
-# tmpfile reused in tmpdir
-
-# ── Check 3: Allow role="combobox" with required attrs ──────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
-printf '<input role="combobox" aria-expanded={isOpen} aria-controls="listbox-1" aria-autocomplete="both" />\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: role=combobox with aria-expanded + aria-controls"
-
-# tmpfile reused in tmpdir
-
-# ── Check 4: Ban role="tablist" without role="tab" children ──────
+# ── Check: Ban role="tablist" without role="tab" children ────────
 
 tmpfile="$_a11y_tmpdir/test.tsx"
 printf '<div role="tablist"><button>Tab 1</button></div>\n' > "$tmpfile"
@@ -214,7 +149,7 @@ printf '<label>Email</label><input id="email" />\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: label missing htmlFor" "label association"
+  0 "delegated to Biome: label association (a11y/noLabelWithoutControl)"
 
 printf '<label htmlFor="email">Email</label><input id="email" placeholder="name@example.com" />\n' > "$tmpfile"
 
@@ -231,7 +166,7 @@ run_hook_eval "$SCRIPT" \
 # ── Escape hatch: allow-a11y-skip ──────────────────────────────
 
 tmpfile="$_a11y_tmpdir/test.tsx"
-printf '// allow-a11y-skip: third-party component\n<img src="x.png" />\n' > "$tmpfile"
+printf '// allow-a11y-skip: third-party component\n<div role="dialog">Content</div>\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
@@ -241,16 +176,15 @@ run_hook_eval "$SCRIPT" \
 
 # ── Hook script content ──────────────────────────────────────────
 
-run_content_eval "$SCRIPT" "aria-expanded" "hook checks for aria-expanded"
-run_content_eval "$SCRIPT" "aria-controls" "hook checks for aria-controls"
-run_content_eval "$SCRIPT" "tabIndex" "hook checks for tabIndex"
-run_content_eval "$SCRIPT" "onKeyDown" "hook checks for keyboard handlers"
+run_content_eval "$SCRIPT" "useAltText" "hook documents Biome delegation for img alt"
+run_content_eval "$SCRIPT" "useKeyWithClickEvents" "hook documents Biome delegation for click events"
+run_content_eval "$SCRIPT" "useAriaPropsForRole" "hook documents Biome delegation for role ARIA props"
+run_content_eval "$SCRIPT" "noLabelWithoutControl" "hook documents Biome delegation for label association"
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
 run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "WCAG" "hook references WCAG guidelines"
 run_content_eval "$SCRIPT" "describe the action" "hook checks accessible-name action language"
 run_content_eval "$SCRIPT" "Placeholder cannot replace a label" "hook checks placeholder-only controls"
-run_content_eval "$SCRIPT" "label association" "hook checks label association"
 run_content_eval "$SKILL_DIR/SKILL.md" "accessible names.*action" "SKILL.md documents action-based accessible names"
 run_content_eval "$SKILL_DIR/SKILL.md" "placeholder.*label" "SKILL.md documents placeholders cannot replace labels"
 run_content_eval "$SKILL_DIR/SKILL.md" "DOM order" "SKILL.md documents DOM order"

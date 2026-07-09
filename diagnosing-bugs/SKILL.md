@@ -5,7 +5,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 # Diagnosing Bugs
 
-Discipline for hard bugs. Skip phase only if justify. Ponytail commands: `/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`; summarize inline. No `/ponytail-help` skill.
+Discipline for hard bugs. Skip phase only if justify. Ponytail: `/ponytail` (debt ledger included); complexity tags live in `/deslop`. Summarize inline.
 
 When exploring codebase, use project domain glossary + ADRs; for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
 

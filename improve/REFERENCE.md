@@ -26,7 +26,7 @@ Every plan should cover:
 |---|---|---|
 | `quick` | `/prime` + direct audit | Fast repo map and hotspot pass. |
 | standard `/improve` | `/prime`, `/swarm`, `/review` | Recon, parallel audit fan-out, vet and dedupe findings. |
-| `deep` | `/prime`, `/swarm`, `/thermo-nuclear-code-quality-review` | Exhaustive audit and release-blocking quality lens. |
+| `deep` | `/prime`, `/swarm`, `/review --deep` | Exhaustive audit and release-blocking quality lens. |
 | `next` | `/prime`, `/steelman` | Ground roadmap ideas in repo evidence and argue against weak ideas. |
 | `plan <description>` | `/prime`, `/resilience-review` | Produce one executable plan with unhappy paths and STOP conditions. |
 | `branch` | `/prime`, `/review` | Scope to branch diff, classify introduced versus pre-existing findings. |

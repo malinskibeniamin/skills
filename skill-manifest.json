@@ -1,6 +1,6 @@
 {
   "$comment": "Source of truth for all hook configurations. Generates .claude/settings.json, hooks/hooks.json, .claude-plugin/plugin.json counts, .codex-plugin/plugin.json counts, .agents/plugins/marketplace.json, .claude-plugin/marketplace.json. Run scripts/generate-hook-configs.sh to regenerate.",
-  "version": "4.26.0",
+  "version": "4.27.0",
   "hooks": {
     "SessionStart": {
       "": [
@@ -46,11 +46,6 @@
         "file-changed-deps.sh"
       ]
     },
-    "WorktreeCreate": {
-      "": [
-        "worktree-create.sh"
-      ]
-    },
     "SessionEnd": {
       "": [
         "session-end.sh"
@@ -59,6 +54,9 @@
     "PreToolUse": {
       "Edit|Write|Bash": [
         "violation-nudge.sh"
+      ],
+      "Skill": [
+        "skill-fire-log.sh"
       ],
       "Bash": [
         "enforce-toolchain.sh",
@@ -74,64 +72,6 @@
       ]
     },
     "PostToolUse": {
-      "Edit|Write": [
-        "vendor-file-check.sh",
-        "ui-registry-warn.sh",
-        "split-file-convention-check.sh",
-        "react-rules-check.sh",
-        "tailwind-check.sh",
-        "accessibility-check.sh",
-        "zustand-check.sh",
-        "tanstack-router-check.sh",
-        "tanstack-router-gen.sh",
-        "connect-query-check.sh",
-        "aip-proto-check.sh",
-        "react-compiler-check.sh",
-        "env-validation-check.sh",
-        "bundle-guard.sh",
-        "test-perf-check.sh",
-        "ux-copy-check.sh",
-        "orchestration-guidance.sh",
-        "form-mode-check.sh",
-        "file-size-check.sh",
-        "hook-location-check.sh",
-        "mutation-side-effect-check.sh",
-        "connect-error-check.sh",
-        "connect-error-format-check.sh",
-        "unhappy-path-check.sh",
-        "resilience-review-nudge.sh",
-        "tdd-prompt-check.sh",
-        "error-boundary-check.sh",
-        "field-mask-check.sh",
-        "route-sibling-test-check.sh",
-        "route-visual-test-check.sh",
-        "structural-test-nudge-check.sh",
-        "legacy-linter-check.sh",
-        "biome-ignore-check.sh",
-        "legacy-import-check.sh",
-        "test-convention-check.sh",
-        "form-watch-check.sh",
-        "as-cast-check.sh",
-        "ts-no-escape-hatches-check.sh",
-        "tsconfig-strict-check.sh",
-        "llm-failure-mode-check.sh",
-        "security-audit-check.sh",
-        "mutation-naming-check.sh",
-        "magic-number-check.sh",
-        "disabled-button-tooltip-check.sh",
-        "query-pattern-check.sh",
-        "copyright-check.sh",
-        "zustand-subscription-check.sh",
-        "url-state-check.sh",
-        "duplicate-function-check.sh",
-        "mutation-onerror-check.sh",
-        "edit-loop-check.sh",
-        "lockfile-sync-check.sh",
-        "connect-error-fieldmap-check.sh",
-        "proto-form-parallel-state-check.sh",
-        "form-setvalue-options-check.sh",
-        "form-error-summary-check.sh"
-      ],
       "Bash": [
         "llm-truncate.sh",
         "consecutive-failure-check.sh",
@@ -150,7 +90,6 @@
     },
     "Stop": {
       "": [
-        "architecture-review-stop.sh",
         "biome-autofix.sh",
         "typecheck-stop.sh",
         "react-doctor-stop.sh",
@@ -161,10 +100,41 @@
         "lifecycle-stop.sh",
         "pr-feedback-completeness-stop.sh",
         "ci-warning-audit.sh",
-        "perf-regression-stop.sh",
-        "violation-summary-stop.sh",
-        "cache-telemetry-stop.sh"
+        "violation-summary-stop.sh"
+      ]
+    },
+    "PostToolBatch": {
+      "": [
+        "post-tool-batch.sh"
       ]
     }
-  }
+  },
+  "x-codex-per-call": [
+    "vendor-file-check.sh",
+    "react-rules-check.sh",
+    "tailwind-check.sh",
+    "accessibility-check.sh",
+    "zustand-check.sh",
+    "tanstack-router-check.sh",
+    "tanstack-router-gen.sh",
+    "connect-query-check.sh",
+    "aip-proto-check.sh",
+    "react-compiler-check.sh",
+    "env-validation-check.sh",
+    "bundle-guard.sh",
+    "ux-copy-check.sh",
+    "orchestration-guidance.sh",
+    "form-mode-check.sh",
+    "error-boundary-check.sh",
+    "legacy-import-check.sh",
+    "test-convention-check.sh",
+    "ts-no-escape-hatches-check.sh",
+    "tsconfig-strict-check.sh",
+    "llm-failure-mode-check.sh",
+    "security-audit-check.sh",
+    "query-pattern-check.sh",
+    "copyright-check.sh",
+    "edit-loop-check.sh",
+    "lockfile-sync-check.sh"
+  ]
 }

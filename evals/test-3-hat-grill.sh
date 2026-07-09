@@ -1,4 +1,4 @@
-# Evals for 3-hat grill fan-out (Phase 2b of /grill-me).
+# Evals for 3-hat grill fan-out (Phase 2b of /grilling).
 
 AGENT_DIR="$REPO_ROOT/agents"
 
@@ -30,18 +30,18 @@ run_content_eval "$AGENT_DIR/plan-design-hat.md" "[Aa]ccessibility" "design-hat 
 run_content_eval "$AGENT_DIR/plan-design-hat.md" "[Ee]mpty" "design-hat covers empty state"
 run_content_eval "$AGENT_DIR/plan-design-hat.md" "[Kk]eyboard" "design-hat covers kbd path"
 
-# grill-me wired to fan-out
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "Three-Hat Fan-Out" \
-  "/grill-me has three-hat fan-out section"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "plan-product-hat" \
-  "/grill-me invokes plan-product-hat"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "plan-engineering-hat" \
-  "/grill-me invokes plan-engineering-hat"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "plan-design-hat" \
-  "/grill-me invokes plan-design-hat"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "in parallel" \
-  "/grill-me spawns hats in parallel"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "BLOCKED" \
-  "/grill-me honors BLOCKED status"
-run_content_eval "$REPO_ROOT/grill-me/SKILL.md" "ETHOS: Grill Before Build" \
-  "/grill-me cross-references ETHOS principle"
+# grilling wired to fan-out
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Plan gate" \
+  "/grilling has three-hat fan-out section"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-product-hat" \
+  "/grilling invokes plan-product-hat"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-engineering-hat" \
+  "/grilling invokes plan-engineering-hat"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-design-hat" \
+  "/grilling invokes plan-design-hat"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "in parallel" \
+  "/grilling spawns hats in parallel"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "BLOCKED" \
+  "/grilling honors BLOCKED status"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "ETHOS: Grill Before Build" \
+  "/grilling cross-references ETHOS principle"

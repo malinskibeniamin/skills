@@ -6,6 +6,7 @@ SKILL_MD="$SKILL_DIR/SKILL.md"
 REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
 PEER_CHECK="$SKILL_DIR/scripts/react-peer-check.sh"
 LOCK_HOOK="$REPO_ROOT/.claude/hooks/lockfile-sync-check.sh"
+LOCK_LIB="$REPO_ROOT/.claude/hooks/checks/lockfile-sync-check.lib.sh"
 MANIFEST="$REPO_ROOT/skill-manifest.json"
 
 # ── File structure ──────────────────────────────────────────────
@@ -193,17 +194,17 @@ run_content_eval "$REFERENCE_MD" "review.*package\\.json admission gate|package\
 
 # ── lockfile-sync-check.sh hook behavior ────────────────────────
 
-run_content_eval "$LOCK_HOOK" "bun\.lock" "lockfile hook matches bun.lock"
-run_content_eval "$LOCK_HOOK" "yarn\.lock" "lockfile hook matches yarn.lock"
-run_content_eval "$LOCK_HOOK" "package\.json" "lockfile hook matches package.json"
-run_content_eval "$LOCK_HOOK" "bun install --yarn" "lockfile hook suggests bun install --yarn"
-run_content_eval "$LOCK_HOOK" "package-lock\.json" "lockfile hook warns on package-lock.json"
-run_content_eval "$LOCK_HOOK" "do not use npm/package-lock" "lockfile hook rejects npm/package-lock for Snyk sweeps"
+run_content_eval "$LOCK_LIB" "bun\.lock" "lockfile hook matches bun.lock"
+run_content_eval "$LOCK_LIB" "yarn\.lock" "lockfile hook matches yarn.lock"
+run_content_eval "$LOCK_LIB" "package\.json" "lockfile hook matches package.json"
+run_content_eval "$LOCK_LIB" "bun install --yarn" "lockfile hook suggests bun install --yarn"
+run_content_eval "$LOCK_LIB" "package-lock\.json" "lockfile hook warns on package-lock.json"
+run_content_eval "$LOCK_LIB" "do not use npm/package-lock" "lockfile hook rejects npm/package-lock for Snyk sweeps"
 run_content_eval "$LOCK_HOOK" "hook_parse_edit_write" "lockfile hook uses shared lib parser"
-run_content_eval "$LOCK_HOOK" "hook_warn" "lockfile hook uses hook_warn (non-blocking)"
-run_content_eval "$LOCK_HOOK" "git diff" "lockfile hook uses git diff for sync check"
-run_content_eval "$LOCK_HOOK" "bun_changed|yarn_changed" "lockfile hook tracks per-lockfile change state"
-run_content_eval "$LOCK_HOOK" "bun\.lockb" "lockfile hook warns on binary bun.lockb usage"
+run_content_eval "$LOCK_LIB" "hook_warn" "lockfile hook uses hook_warn (non-blocking)"
+run_content_eval "$LOCK_LIB" "git diff" "lockfile hook uses git diff for sync check"
+run_content_eval "$LOCK_LIB" "bun_changed|yarn_changed" "lockfile hook tracks per-lockfile change state"
+run_content_eval "$LOCK_LIB" "bun\.lockb" "lockfile hook warns on binary bun.lockb usage"
 
 # Guardrail: SKILL must NOT rely on bun.lockb (binary).
 # Allowed: mention inside explicit deprecation language ("never ... bun.lockb" or "no binary bun.lockb")
@@ -222,7 +223,7 @@ else
 fi
 
 # Hook may mention bun.lockb only in the deprecation warning branch; assert it's in a warn context
-if grep -A2 "bun.lockb" "$LOCK_HOOK" | grep -q "hook_warn"; then
+if grep -A2 "bun.lockb" "$LOCK_LIB" | grep -q "hook_warn"; then
   echo "  PASS  lockfile hook only mentions bun.lockb in deprecation warning"
   PASS=$((PASS + 1))
 else

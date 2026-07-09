@@ -9,7 +9,7 @@ paths:
 ---
 
 # Test-Driven Development
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+
 ## Iron Law
 
 **No prod code without failing test first.** No exceptions.
@@ -85,13 +85,12 @@ New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project 
 
 ## When Done
 
-- [ ] All pass (`vitest run`)
-- [ ] **Zero warnings** -- green run w/ `DeprecationWarning` / React `act()` / unhandled rejection / `@ts-ignore` is NOT done. `test-warning-check` hard-blocks; fix at source. No warning bypass.
-- [ ] No async leaks (`vitest run --detectAsyncLeaks`) -- Stop hook run auto
+- [ ] All pass (`vitest run`) with **zero warnings** -- hooks (test-warning-check, ci-warning-audit) block otherwise; fix at source
+- [ ] No async leaks (`vitest run --detectAsyncLeaks`)
 - [ ] No `setTimeout` hacks -- condition-based wait
 - [ ] Coverage gaps closed -- re-run coverage, verify changed files
 - [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
 - [ ] Portal tests: `defaultOpen` for content tests | `waitFor` for close assertions
 - [ ] Tests verify behavior, not impl | `expect.soft()` for multi-assertion state tests
-- [ ] CI green AND `ci-warning-audit` clean -- `gh run view <id> --log | grep -E 'Warning|Deprecation'` returns nothing
+- [ ] CI green
 See [REFERENCE.md](REFERENCE.md) for element selectors, portal testing, mock patterns, diagnostics, Vitest config.

@@ -5,14 +5,13 @@ ROUTINES_DIR="$SKILL_DIR/routines"
 
 # Core files exist
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_content_eval "$SKILL_DIR/SKILL.md" "disable-model-invocation: true" "skill is slash-only (zero context tax)"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 
 # SKILL.md structure
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-routines" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "claude.ai/code/routines" "SKILL.md links to routines UI"
 run_content_eval "$SKILL_DIR/SKILL.md" "Enforcement model" "SKILL.md explains enforcement model"
-run_content_eval "$SKILL_DIR/SKILL.md" "Sandcastle" "SKILL.md compares with Sandcastle"
 
 # All 5 routine templates exist
 run_file_eval "$ROUTINES_DIR/pr-review.md" "pr-review template exists"

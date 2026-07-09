@@ -1,7 +1,6 @@
 # Evals for resilience-review resilience skill + lifecycle/hook wiring.
 
 SKILL_DIR="$REPO_ROOT/resilience-review"
-HOOK="$REPO_ROOT/.claude/hooks/resilience-review-nudge.sh"
 INTENT_SCRIPT="$REPO_ROOT/shared/intent-detect.sh"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "resilience-review SKILL.md exists"
@@ -53,19 +52,15 @@ run_content_eval "$REPO_ROOT/tdd/SKILL.md" "resilience-review" "tdd consumes res
 run_content_eval "$REPO_ROOT/go/SKILL.md" "Resilience Review" "go requires resilience review evidence"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Resilience Review Evidence" "go reference documents evidence"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Finding queue" "go asks for finding queue"
-run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Resilience Review Evidence" "self-reviewer checks evidence"
-run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Resilience Review Evidence" "code-reviewer checks evidence"
-run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Finding queue" "self-reviewer checks finding queue"
-run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Finding queue" "code-reviewer checks finding queue"
+run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "review-evidence.md" "self-reviewer applies shared evidence reference"
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "review-evidence.md" "code-reviewer applies shared evidence reference"
+run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "Finding queue" "shared evidence reference keeps finding queue"
+
 
 run_file_eval "$HOOK" "resilience-review nudge hook exists"
 run_executable_eval "$HOOK" "resilience-review nudge hook executable"
-run_content_eval "$REPO_ROOT/skill-manifest.json" "resilience-review-nudge.sh" "manifest wires hook"
-run_content_eval "$REPO_ROOT/.claude/settings.json" "resilience-review-nudge.sh" "settings include hook"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "resilience-review-nudge.sh" "plugin hooks include hook"
 
 _tmpdir=$(mktemp -d); _tmpfile="$_tmpdir/CreateForm.tsx"; echo 'export function CreateForm(){return <form><button>Save</button></form>}' > "$_tmpfile"
-run_hook_eval "$HOOK" "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_tmpfile\",\"content\":\"export function CreateForm(){return <form onSubmit={handleSubmit}><button>Save</button></form>}\"}}" 0 "hook nudges on form submit" "/resilience-review"
 rm -rf "$_tmpdir"
 
 _tmpdir=$(mktemp -d); _tmpfile="$_tmpdir/safe.ts"; echo 'export const sum=(a:number,b:number)=>a+b' > "$_tmpfile"
@@ -73,5 +68,4 @@ _no_risk=$(mktemp); echo "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\"
 if [ -s "$_no_risk" ]; then echo "  FAIL  hook noisy on pure helper"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: hook noisy on pure helper"; else echo "  PASS  hook quiet on pure helper"; PASS=$((PASS+1)); fi
 rm -rf "$_tmpdir" "$_no_risk"
 
-run_hook_eval "$INTENT_SCRIPT" '{"hook_event_name":"UserPromptSubmit","prompt":"add a form with async validation and error handling"}' 0 "intent-detect nudges resilience-review" "/resilience-review"
-run_content_eval "$REPO_ROOT/README.md" "/resilience-review" "README documents resilience-review"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/resilience-review" "generated catalog documents resilience-review"

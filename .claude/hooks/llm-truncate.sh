@@ -11,7 +11,7 @@ set -euo pipefail
 trap 'exit 0' ERR
 
 # Source hook-lib for _hook_log_bash_drain. Optional — silently skip if missing.
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+_shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.tool_name // empty')

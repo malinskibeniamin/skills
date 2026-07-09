@@ -1,27 +1,16 @@
 # Evals for mattpocock/skills vendoring completeness.
 
 VENDORED=(
-  edit-article
-  git-guardrails-claude-code
   ask-ben
   codebase-design
   diagnosing-bugs
   domain-modeling
-  grill-with-docs
   grilling
-  implement
-  migrate-to-shoehorn
-  obsidian-vault
+  grilling
   prototype
   resolving-merge-conflicts
-  research
   review
   wayfinder
-  claude-handoff
-  loop-me
-  scaffold-exercises
-  setup-pre-commit
-  teach
   to-spec
   to-tickets
   wizard
@@ -43,7 +32,7 @@ run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/to-tickets" "to-spec hands appr
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "ticket|blocking edges" "to-tickets skill keeps ticket intent"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "native sub-issue" "to-tickets prefers native sub-issues when available"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/prototype.*context pointer|context pointer.*/prototype" "to-tickets points to prototype code instead of inlining"
-run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "CONTEXT\.md|ADR" "grill-with-docs keeps docs sync intent"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "CONTEXT\.md|ADR" "grilling keeps docs sync intent"
 
 for retired_skill in to-prd to-issues setup-matt-pocock-skills; do
   if [ -e "$REPO_ROOT/$retired_skill/SKILL.md" ]; then
@@ -86,14 +75,9 @@ run_content_eval "$REPO_ROOT/snyk-ux-security/SKILL.md" "/to-tickets" "snyk skil
 
 run_content_eval "$REPO_ROOT/wizard/SKILL.md" "interactive bash wizard|template\\.sh" "wizard builds interactive bash wizards"
 run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
-run_content_eval "$REPO_ROOT/claude-handoff/SKILL.md" "claude --bg --name" "claude-handoff launches named background agent"
-run_content_eval "$REPO_ROOT/loop-me/SKILL.md" "workflows/\\*\\.md|workflow specs" "loop-me writes workflow specs"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
-run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research prioritizes primary sources"
-run_content_eval "$REPO_ROOT/research/SKILL.md" "Markdown file" "research writes cited markdown artifact"
-run_content_eval "$REPO_ROOT/research/SKILL.md" "where the repo already keeps" "research follows repo note conventions"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "If a \*fact\* can be found" "grilling looks up facts instead of asking"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
@@ -108,39 +92,20 @@ run_content_eval "$REPO_ROOT/review/REFERENCE.md" "repo standard always wins|rep
 # Latest Matt vendoring: review orchestrates local review suite.
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/visual-review" "review invokes visual-review for user-facing surfaces"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/resilience-review" "review invokes resilience-review for unhappy paths"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/thermo-nuclear-code-quality-review" "review escalates to thermo nuclear review when release-blocking depth needed"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Standards.*Spec" "review keeps standards and spec axes"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "regular-review-hat" "review launches regular review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "visual-review-hat" "review launches visual review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "resilience-review-hat" "review launches resilience review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "security-privacy-triage-hat" "review launches security privacy triage hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "adversarial-review-hat" "review launches adversarial review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "test-perf-review-hat" "review launches test and perf review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "thermo-nuclear-review-hat" "review launches thermo nuclear review hat"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Spawn all review hats" "review fans out all review hats"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/swarm" "review prefers swarm orchestration when available"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "If /swarm is unavailable" "review falls back when swarm unavailable"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Subagents: ponytail-review-hat:.*thermo-nuclear-review-hat" "review output reports priority-ordered hat coverage"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Each hat emits" "review requires consistent hat output schema"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Max 3 findings" "adversarial hat stays lightweight"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Dedupe across hats by root cause" "review dedupes across hats"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Do not recursively invoke /review" "review guards against recursive thermo fan-out"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Review priority hierarchy" "review defines priority hierarchy"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "1\. Ponytail review" "review prioritizes ponytail first"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "2\\. Thermo nuclear review" "review prioritizes thermo nuclear second after ponytail"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "3\\. Resilience review" "review prioritizes resilience third"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "4\\. Regular review" "review prioritizes regular fourth"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "5\\. Adversarial review" "review prioritizes adversarial fifth"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "6\\. Visual review" "review prioritizes visual sixth"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "7\\. Test/perf review" "review prioritizes test perf seventh"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review forbids silent skipped hats"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "If unsure, run the review" "review runs instead of skipping on uncertainty"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Thermo nuclear is fail-open" "review fail-opens thermo nuclear"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Never skip due to time" "review forbids time-based skip"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "regular review avoids recursion"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "PR value gate" "review includes PR value gate"
+# review: 8-hat parallel panel (default for PR reviews) + quick/deep modes
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Core pass" "review defines the always-on core pass"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the 8-hat panel for PR reviews"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "GPT-5\.[56]: independent" "review offers a cross-model independent hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review hats skip only with diff evidence"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep release-audit mode"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "review forbids recursive invocation"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Max 3 findings" "adversarial question stays bounded"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "dedupe by root cause" "review dedupes across lanes by root cause"
+run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "Deep-mode review reference" "deep-audit reference exists"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Value gate" "review includes value gate"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Major improvement" "review quantifies major improvement"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Value score: HIGH\\|MEDIUM\\|LOW\\|NONE" "review scores PR value"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "value score HIGH" "review scores PR value"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/steelman" "review uses steelman when value is unclear"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "low-value" "review filters low-value PRs"
 
@@ -160,12 +125,28 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-github.
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
-# Latest Matt vendoring: teach workspace.
+# Matt v1.1.0 sync: research skill (restored on owner request).
+run_file_eval "$REPO_ROOT/research/SKILL.md" "research SKILL.md exists"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "background agent" "research delegates to a background agent"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research targets primary sources"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "citing each claim" "research cites every claim"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "read-the-damn-docs" "research routes inline lookups elsewhere"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./research/"' "plugin.json registers research"
+
+# Matt v1.1.0 sync: triage treats external PRs as issues with attached code.
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "PR is an issue with attached code" "triage covers external PRs as issues"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "\[PR\].*\[issue\]" "triage tags discovery lines PR vs issue"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "redundancy" "triage runs redundancy check against codebase"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "Verify the claim" "triage verifies claims (bug repro / PR diff)"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "already implemented" "triage has already-implemented wontfix branch"
+
+# Latest Matt vendoring: teach workspace (restored on owner request, PR #46).
 run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"
 run_file_eval "$REPO_ROOT/teach/MISSION-FORMAT.md" "teach mission format exists"
 run_file_eval "$REPO_ROOT/teach/LEARNING-RECORD-FORMAT.md" "teach learning-record format exists"
 run_file_eval "$REPO_ROOT/teach/GLOSSARY-FORMAT.md" "teach glossary format exists"
 run_file_eval "$REPO_ROOT/teach/RESOURCES-FORMAT.md" "teach resources format exists"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "disable-model-invocation: true" "teach is slash-only (zero description tax)"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "lessons/.*html|learning-records|NOTES.md" "teach keeps stateful workspace files"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "citations|trusted resources" "teach grounds lessons in trusted resources"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "feedback loop|interactive" "teach requires interactive feedback loops"

@@ -16,8 +16,8 @@ Before producing findings, walk through [karpathy-failure-modes.md](./karpathy-f
 ## Cross-Model Review (Codex second opinion)
 
 Trigger a Codex independent review when either:
-- `diff_lines > 100` (compute: `git diff --shortstat HEAD~1 | awk '{print $4 + $6}'`), OR
-- diff touches auth/security paths (`git diff --name-only HEAD~1 | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'`)
+- `diff_lines > 100` (compute: `git diff --shortstat "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | awk '{print $4 + $6}'`), OR
+- diff touches auth/security paths (`git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'`)
 
 Invocation (graceful skip if `codex` CLI absent):
 
@@ -25,7 +25,7 @@ Invocation (graceful skip if `codex` CLI absent):
 if command -v codex >/dev/null 2>&1; then
   codex exec --model gpt-5 --reasoning high \
     "Independently review this diff for correctness, security, and LLM failure modes. Emit findings-schema.md JSON. Diff below:
-$(git diff HEAD~1)" \
+$(git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")" \
     > /tmp/codex-review-$$.json 2>/dev/null || true
 fi
 ```
@@ -36,7 +36,7 @@ If Codex is unavailable or errors out, continue with your own review and set `co
 
 ## Stage 1: Spec Compliance
 
-`git diff HEAD~1` -- verify:
+`git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}"` -- verify:
 - [ ] All requirements addressed
 - [ ] No scope creep
 - [ ] Edge cases handled
@@ -57,17 +57,13 @@ Code is liability. Added production code must justify ownership cost through pro
 7. **Performance** -- no re-renders, heavy deps lazy-loaded
 
 
-## Resilience Review Evidence
+## Resilience + Visual Review Evidence
 
-If diff adds/changes non-trivial feature behavior (forms, async/data flows, mutations, state transitions, config/resource choices, destructive actions, or user-visible error states), check whether `/resilience-review` evidence exists in session or PR body. Evidence should include Failure matrix, Finding queue, diagnosing-bugs/TDD status, and visual review when UI. If absent, add P1 testing gap recommending Resilience Review or explicit skip reason. Happy-path tests/type checks do not prove resilience.
-
-## Visual Review Evidence
-
-If the diff touches rendered frontend UI (`*.tsx`, CSS, routes, components, forms, dialogs, media, animations, browser/platform branches) or another customer-facing surface (CLI/TUI output, mobile/desktop screen, generated report, onboarding/setup flow), check whether `/visual-review` evidence exists in the session or PR body. If absent, add a P1 testing gap recommending `/visual-review` or an explicit skip reason. Do not treat static hook success or unit tests as a substitute for browser screenshot/state/a11y review or equivalent surface evidence.
+Apply [references/review-evidence.md](references/review-evidence.md): missing resilience or visual-review evidence on a matching surface is a P1 testing gap unless an explicit skip reason exists.
 
 ## Output
 
-Output a single JSON block per [findings-schema.md](findings-schema.md).
+Output a single JSON block per [findings-schema.md](references/findings-schema.md).
 
 - Set `reviewer` to `"code-reviewer"`
 - Map findings: security/breakage -> P0, defects in normal usage -> P1, edge cases/maintainability -> P2, style nits -> P3

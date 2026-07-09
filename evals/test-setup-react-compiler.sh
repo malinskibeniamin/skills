@@ -1,20 +1,19 @@
 # Evals for setup-react-compiler skill
 
-SCRIPT="$REPO_ROOT/setup-react-compiler/scripts/react-compiler-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-react-compiler"
+SCRIPT="$REPO_ROOT/.claude/hooks/react-compiler-check.sh"
+SCRIPT_LIB="$REPO_ROOT/.claude/hooks/checks/react-compiler-check.lib.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-compiler"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-compiler-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-compiler" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "rsbuild" "SKILL.md mentions rsbuild"
-run_content_eval "$SKILL_DIR/SKILL.md" "use no memo" "SKILL.md mentions escape hatch"
+run_content_eval "$SKILL_DIR/README.md" "rsbuild" "SKILL.md mentions rsbuild"
+run_content_eval "$SKILL_DIR/README.md" "use no memo" "SKILL.md mentions escape hatch"
 
 # ── Hook: skip non-Edit/Write tools ────────────────────────────
 
@@ -173,13 +172,13 @@ rm -rf "$_ref_tmpdir"
 
 # ── Hook script content ─────────────────────────────────────────
 
-run_content_eval "$SCRIPT" "useMemo" "hook checks for useMemo"
-run_content_eval "$SCRIPT" "useCallback" "hook checks for useCallback"
-run_content_eval "$SCRIPT" "React.memo" "hook checks for React.memo"
-run_content_eval "$SCRIPT" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
-run_content_eval "$SCRIPT" "use no memo" "hook respects 'use no memo'"
-run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
-run_content_eval "$SCRIPT" "useRef.*memoization|memoization cache" "hook includes anti-caching heuristic"
+run_content_eval "$SCRIPT_LIB" "useMemo" "hook checks for useMemo"
+run_content_eval "$SCRIPT_LIB" "useCallback" "hook checks for useCallback"
+run_content_eval "$SCRIPT_LIB" "React.memo" "hook checks for React.memo"
+run_content_eval "$SCRIPT_LIB" "hook_skip_ui_dirs" "hook uses shared UI dir skip"
+run_content_eval "$SCRIPT_LIB" "use no memo" "hook respects 'use no memo'"
+run_content_eval "$SCRIPT_LIB" "hook_block|hook_warn" "hook uses shared output functions"
+run_content_eval "$SCRIPT_LIB" "useRef.*memoization|memoization cache" "hook includes anti-caching heuristic"
 
 # ── REFERENCE content ────────────────────────────────────────────
 

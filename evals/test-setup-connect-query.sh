@@ -1,7 +1,7 @@
 # Evals for setup-connect-query skill
 
-SCRIPT="$REPO_ROOT/setup-connect-query/scripts/connect-query-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-connect-query"
+SCRIPT="$REPO_ROOT/connect-query/scripts/connect-query-check.sh"
+SKILL_DIR="$REPO_ROOT/connect-query"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -11,7 +11,7 @@ run_executable_eval "$SCRIPT" "connect-query-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-connect-query" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: connect-query" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "ConnectRPC" "SKILL.md mentions ConnectRPC"
 run_content_eval "$SKILL_DIR/SKILL.md" "allow.*direct-query" "SKILL.md mentions escape hatch"

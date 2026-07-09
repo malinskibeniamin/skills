@@ -44,7 +44,7 @@ table_rows=$(grep -E '^\| `/[^`]+` \|' "$ASK_BEN" | sed -E 's/^\| `\/([^`]+)` \|
 
 while IFS= read -r skill; do
   [ -n "$skill" ] || continue
-  count=$(printf '%s\n' "$table_rows" | grep -Fx "$skill" | wc -l | tr -d ' ')
+  count=$(printf '%s\n' "$table_rows" | { grep -Fx "$skill" || true; } | wc -l | tr -d ' ')
   if [ "$count" -eq 0 ]; then
     missing_rows="$missing_rows $skill"
   elif [ "$count" -gt 1 ]; then

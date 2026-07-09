@@ -1,11 +1,10 @@
 ---
 name: setup-atlassian-workflow
-description: Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. Mirrors gh-based workflow skills for Jira users. Use when working with Jira, Atlassian, or acli.
+disable-model-invocation: true
+description: Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs.
 ---
 
 # Setup Atlassian Workflow
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Opt-in Jira integration via `acli` (Atlassian CLI). Works alongside `gh`. If `acli` missing, Jira ops skip silent.
 
 Capabilities: create/transition/comment work items, link PRs, search/view for context.

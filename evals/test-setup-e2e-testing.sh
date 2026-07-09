@@ -1,21 +1,17 @@
 # Evals for setup-e2e-testing skill
 
-SKILL_DIR="$REPO_ROOT/setup-e2e-testing"
-ROUTE_SIBLING_SCRIPT="$REPO_ROOT/setup-e2e-testing/scripts/route-sibling-test-check.sh"
-STRUCTURAL_TEST_SCRIPT="$REPO_ROOT/setup-e2e-testing/scripts/structural-test-nudge-check.sh"
+SKILL_DIR="$REPO_ROOT/e2e-testing"
+ROUTE_SIBLING_SCRIPT="$REPO_ROOT/e2e-testing/scripts/route-sibling-test-check.sh"
+STRUCTURAL_TEST_SCRIPT="$REPO_ROOT/e2e-testing/scripts/structural-test-nudge-check.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
-run_file_eval "$ROUTE_SIBLING_SCRIPT" "route-sibling-test-check.sh exists"
-run_file_eval "$STRUCTURAL_TEST_SCRIPT" "structural-test-nudge-check.sh exists"
-run_executable_eval "$ROUTE_SIBLING_SCRIPT" "route-sibling-test-check.sh is executable"
-run_executable_eval "$STRUCTURAL_TEST_SCRIPT" "structural-test-nudge-check.sh is executable"
 
 # ── SKILL.md content (auto-loaded, edit-time guidance) ──────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-e2e-testing" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: e2e-testing" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "Test IDs|getByTestId" "SKILL.md has test ID conventions"
 run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priority"
@@ -29,7 +25,6 @@ run_content_eval "$SKILL_DIR/SETUP.md" "playwright/test" "SETUP has Playwright i
 run_content_eval "$SKILL_DIR/SETUP.md" "GenericContainer" "SETUP has Testcontainers setup"
 run_content_eval "$SKILL_DIR/SETUP.md" "AxeBuilder" "SETUP has axe-core fixture"
 
-# ── route-sibling-test-check.sh behavior ────────────────────────
 
 _e2e_tmpdir=$(mktemp -d /tmp/e2e-route-hook-XXXXXX)
 mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin"
@@ -75,7 +70,6 @@ else
   ERRORS="$ERRORS\n  FAIL: route sibling hook did not block failing sibling test"
 fi
 
-# ── structural-test-nudge-check.sh behavior ─────────────────────
 
 rm -f "$test_file"
 actual_exit=0

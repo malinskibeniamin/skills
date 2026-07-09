@@ -38,7 +38,7 @@ run_file_eval "$DM_DIR/CONTEXT-FORMAT.md" "CONTEXT-FORMAT.md exists in domain-mo
 run_content_eval "$DM_DIR/SKILL.md" "Update CONTEXT.md inline" "domain-modeling updates CONTEXT.md inline"
 run_content_eval "$DM_DIR/SKILL.md" "Offer ADRs sparingly" "domain-modeling offers ADRs sparingly"
 run_content_eval "$ICA_DIR/SKILL.md" "/domain-modeling" "ICA invokes domain-modeling for side effects"
-run_content_eval "$REPO_ROOT/grill-with-docs/SKILL.md" "/domain-modeling" "grill-with-docs invokes domain-modeling"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling invokes domain-modeling"
 
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Aa]rchitectural shape" "ADR-FORMAT lists architectural shape"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Ii]ntegration patterns" "ADR-FORMAT lists integration patterns"

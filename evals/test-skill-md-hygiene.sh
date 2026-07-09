@@ -67,7 +67,7 @@ fi
 # the friction outweighed the signal.
 
 # -- Test D: agent model frontmatter guards cost tier ---------------
-# Verifier=haiku, adversarial-reviewer=opus, others=sonnet.
+# Never Haiku (2026-07 routing policy). adversarial-reviewer=opus, others=sonnet.
 # Guards against regression that would inflate subagent cost ~$650/yr.
 
 agents_dir="$SKILLS_ROOT/agents"
@@ -87,7 +87,7 @@ declare_agent_model() {
   fi
 }
 
-declare_agent_model "$agents_dir/verifier.md" "haiku"
+declare_agent_model "$agents_dir/verifier.md" "sonnet"
 declare_agent_model "$agents_dir/self-reviewer.md" "sonnet"
 declare_agent_model "$agents_dir/code-reviewer.md" "sonnet"
 declare_agent_model "$agents_dir/adversarial-reviewer.md" "opus"

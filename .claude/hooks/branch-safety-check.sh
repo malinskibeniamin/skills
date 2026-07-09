@@ -13,7 +13,7 @@ set -eo pipefail
 # hook rebinds to the new current branch and passes. Intentionally noisy
 # so the user has to opt in each time.
 
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+_shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
 hook_parse_bash
 

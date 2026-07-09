@@ -1,21 +1,19 @@
 # Evals for setup-quality-gate skill
 
-SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/typecheck-stop.sh"
-SKILL_DIR="$REPO_ROOT/setup-quality-gate"
+SCRIPT="$REPO_ROOT/.claude/hooks/typecheck-stop.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/quality-gate"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "typecheck-stop.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-quality-gate" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "quality:gate" "SKILL.md mentions quality:gate script"
-run_content_eval "$SKILL_DIR/SKILL.md" "type:check" "SKILL.md mentions type:check"
-run_content_eval "$SKILL_DIR/SKILL.md" "GitHub Actions" "SKILL.md mentions CI"
+run_content_eval "$SKILL_DIR/README.md" "quality:gate" "SKILL.md mentions quality:gate script"
+run_content_eval "$SKILL_DIR/README.md" "type:check" "SKILL.md mentions type:check"
+run_content_eval "$SKILL_DIR/README.md" "GitHub Actions" "SKILL.md mentions CI"
 
 # ── REFERENCE.md content ────────────────────────────────────────
 
@@ -42,7 +40,7 @@ run_content_eval "$SCRIPT" "other session" "hook allows errors from other sessio
 
 # ── session-env.sh: baseline capture ──────────────────────────────
 
-SESSION_SCRIPT="$REPO_ROOT/setup-toolchain/scripts/session-env.sh"
+SESSION_SCRIPT="$REPO_ROOT/.claude/hooks/session-env.sh"
 run_content_eval "$SESSION_SCRIPT" "typecheck-baseline" "session-env captures typecheck baseline"
 run_content_eval "$SESSION_SCRIPT" "bun run type:check" "session-env runs type:check for baseline"
 run_content_eval "$SESSION_SCRIPT" "dirty-files-baseline" "session-env captures dirty-files baseline"
@@ -52,7 +50,7 @@ run_content_eval "$SESSION_SCRIPT" "reporter=json" "session-env uses JSON report
 
 # ── test-perf-stop.sh: File structure ────────────────────────────
 
-PERF_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/test-perf-stop.sh"
+PERF_SCRIPT="$REPO_ROOT/.claude/hooks/test-perf-stop.sh"
 run_file_eval "$PERF_SCRIPT" "test-perf-stop.sh exists"
 run_executable_eval "$PERF_SCRIPT" "test-perf-stop.sh is executable"
 
@@ -95,7 +93,8 @@ run_content_eval "$PERF_SCRIPT" "before > 10" "perf hook filters noise from test
 
 # ── bundle-guard.sh: File structure ───────────────────────────────
 
-BUNDLE_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/bundle-guard.sh"
+BUNDLE_SCRIPT="$REPO_ROOT/.claude/hooks/bundle-guard.sh"
+BUNDLE_LIB="$REPO_ROOT/.claude/hooks/checks/bundle-guard.lib.sh"
 run_file_eval "$BUNDLE_SCRIPT" "bundle-guard.sh exists"
 run_executable_eval "$BUNDLE_SCRIPT" "bundle-guard.sh is executable"
 
@@ -190,51 +189,59 @@ rm -rf "$tmpdir"
 
 # ── bundle-guard.sh: script content ──────────────────────────────
 
-run_content_eval "$BUNDLE_SCRIPT" "moment" "bundle-guard checks moment"
-run_content_eval "$BUNDLE_SCRIPT" "lodash" "bundle-guard checks lodash"
-run_content_eval "$BUNDLE_SCRIPT" "jquery" "bundle-guard checks jquery"
-run_content_eval "$BUNDLE_SCRIPT" "classnames" "bundle-guard checks classnames"
-run_content_eval "$BUNDLE_SCRIPT" "core-js" "bundle-guard checks core-js"
+run_content_eval "$BUNDLE_LIB" "moment" "bundle-guard checks moment"
+run_content_eval "$BUNDLE_LIB" "lodash" "bundle-guard checks lodash"
+run_content_eval "$BUNDLE_LIB" "jquery" "bundle-guard checks jquery"
+run_content_eval "$BUNDLE_LIB" "classnames" "bundle-guard checks classnames"
+run_content_eval "$BUNDLE_LIB" "core-js" "bundle-guard checks core-js"
 
-# ── test-perf-check.sh: File structure ───────────────────────────
+# ── test-convention-check.sh: File structure ───────────────────────────
 
-PERF_CHECK_SCRIPT="$REPO_ROOT/setup-quality-gate/scripts/test-perf-check.sh"
-run_file_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh exists"
-run_executable_eval "$PERF_CHECK_SCRIPT" "test-perf-check.sh is executable"
+PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-convention-check.sh"
+PERF_CHECK_LIB="$REPO_ROOT/.claude/hooks/checks/test-convention-check.lib.sh"
+run_file_eval "$PERF_CHECK_SCRIPT" "test-convention-check.sh exists"
+run_executable_eval "$PERF_CHECK_SCRIPT" "test-convention-check.sh is executable"
 
-PERF_CHECK_SYMLINK="$REPO_ROOT/.claude/hooks/test-perf-check.sh"
+PERF_CHECK_SYMLINK="$REPO_ROOT/.claude/hooks/test-convention-check.sh"
 if [ -f "$PERF_CHECK_SYMLINK" ] && [ ! -L "$PERF_CHECK_SYMLINK" ]; then
-  echo "  PASS  test-perf-check.sh is a real file in .claude/hooks/"
+  echo "  PASS  test-convention-check.sh is a real file in .claude/hooks/"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  test-perf-check.sh missing or is symlink in .claude/hooks/"
+  echo "  FAIL  test-convention-check.sh missing or is symlink in .claude/hooks/"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: test-perf-check.sh"
+  ERRORS="$ERRORS\n  FAIL: test-convention-check.sh"
 fi
 
-# ── test-perf-check.sh: wired in hook configs ───────────────────
+# ── test-convention-check.sh: wired in hook configs ───────────────────
 
-for config_file in "$REPO_ROOT/.claude/settings.json" "$REPO_ROOT/hooks/hooks.json"; do
-  config_name=$(basename "$(dirname "$config_file")")/$(basename "$config_file")
-  if grep -q "test-perf-check" "$config_file" 2>/dev/null; then
-    echo "  PASS  test-perf-check.sh wired in $config_name"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  test-perf-check.sh missing from $config_name"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: test-perf-check.sh missing from $config_name"
-  fi
-done
+if grep -q "post-tool-batch.sh" "$REPO_ROOT/.claude/settings.json" 2>/dev/null && \
+   grep -q "post-tool-batch.sh" "$REPO_ROOT/hooks/hooks.json" 2>/dev/null; then
+  echo "  PASS  Claude configs use PostToolBatch dispatcher for test-convention-check.sh"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Claude configs missing PostToolBatch dispatcher for test-convention-check.sh"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: PostToolBatch dispatcher missing for test-convention-check.sh"
+fi
 
-# ── test-perf-check.sh: script content ──────────────────────────
+if grep -q "test-convention-check.sh" "$REPO_ROOT/hooks/codex-hooks.json" 2>/dev/null; then
+  echo "  PASS  codex-hooks.json keeps test-convention-check.sh per-call"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  codex-hooks.json missing test-convention-check.sh per-call"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: codex-hooks missing test-convention-check.sh"
+fi
 
-run_content_eval "$PERF_CHECK_SCRIPT" "await.*import" "perf-check detects dynamic imports"
-run_content_eval "$PERF_CHECK_SCRIPT" "pool.*threads" "perf-check detects missing pool: threads"
-run_content_eval "$PERF_CHECK_SCRIPT" "isolate.*false" "perf-check detects missing isolate: false"
-run_content_eval "$PERF_CHECK_SCRIPT" "importActual" "perf-check excludes vi.importActual from dynamic import check"
-run_content_eval "$PERF_CHECK_SCRIPT" "happy-dom.*jsdom" "perf-check skips isolate check for browser-env configs"
+# ── test-convention-check.sh: script content ──────────────────────────
 
-# ── test-perf-check.sh: skip non-test, non-config files ─────────
+run_content_eval "$PERF_CHECK_LIB" "await.*import" "perf-check detects dynamic imports"
+run_content_eval "$PERF_CHECK_LIB" "pool.*threads" "perf-check detects missing pool: threads"
+run_content_eval "$PERF_CHECK_LIB" "isolate.*false" "perf-check detects missing isolate: false"
+run_content_eval "$PERF_CHECK_LIB" "importActual" "perf-check excludes vi.importActual from dynamic import check"
+run_content_eval "$PERF_CHECK_LIB" "happy-dom.*jsdom" "perf-check skips isolate check for browser-env configs"
+
+# ── test-convention-check.sh: skip non-test, non-config files ─────────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'const x = await import("./foo");\n' > "$tmpdir/utils.ts"
@@ -246,7 +253,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: warn on await import() in test file ─────
+# ── test-convention-check.sh: warn on await import() in test file ─────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'const mod = await import("./helpers");\n' > "$tmpdir/foo.test.ts"
@@ -258,7 +265,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: allow vi.importActual ───────────────────
+# ── test-convention-check.sh: allow vi.importActual ───────────────────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'const actual = await vi.importActual("./helpers");\n' > "$tmpdir/bar.test.ts"
@@ -270,7 +277,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: warn on vitest config missing pool ──────
+# ── test-convention-check.sh: warn on vitest config missing pool ──────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 cat > "$tmpdir/vitest.config.mts" << 'VEOF'
@@ -289,7 +296,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: allow vitest config with pool: threads ──
+# ── test-convention-check.sh: allow vitest config with pool: threads ──
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 cat > "$tmpdir/vitest.config.mts" << 'VEOF'
@@ -309,7 +316,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: warn on unit config missing isolate ─────
+# ── test-convention-check.sh: warn on unit config missing isolate ─────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 cat > "$tmpdir/vitest.config.mts" << 'VEOF'
@@ -329,7 +336,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: skip isolate warn for integration config ─
+# ── test-convention-check.sh: skip isolate warn for integration config ─
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 cat > "$tmpdir/vitest.config.integration.mts" << 'VEOF'
@@ -350,13 +357,13 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: skip non-Edit/Write tool ────────────────
+# ── test-convention-check.sh: skip non-Edit/Write tool ────────────────
 
 run_hook_eval "$PERF_CHECK_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"vitest --run"}}' \
   0 "skip: non-Edit/Write tool"
 
-# ── test-perf-check.sh: warn on userEvent.type() ────────────────
+# ── test-convention-check.sh: warn on userEvent.type() ────────────────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'await user.type(input, "hello world");\n' > "$tmpdir/login.test.tsx"
@@ -368,7 +375,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: allow user.paste() ──────────────────────
+# ── test-convention-check.sh: allow user.paste() ──────────────────────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'await user.clear(input);\nawait user.paste("hello world");\n' > "$tmpdir/login.test.tsx"
@@ -380,7 +387,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: warn on setInterval() in test file ──────
+# ── test-convention-check.sh: warn on setInterval() in test file ──────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'const id = setInterval(tick, 1000);\n' > "$tmpdir/poll.test.tsx"
@@ -392,7 +399,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-# ── test-perf-check.sh: allow setInterval with escape hatch ─────
+# ── test-convention-check.sh: allow setInterval with escape hatch ─────
 
 tmpdir=$(mktemp -d /tmp/perf-check-XXXXXX)
 printf 'const id = setInterval(tick, 1000); // allow: test-set-interval needs real timer for x\n' > "$tmpdir/poll.test.tsx"
@@ -404,7 +411,7 @@ run_hook_eval "$PERF_CHECK_SCRIPT" \
 
 rm -rf "$tmpdir"
 
-run_content_eval "$PERF_CHECK_SCRIPT" "setInterval" "perf-check detects setInterval leak"
+run_content_eval "$PERF_CHECK_LIB" "setInterval" "perf-check detects setInterval leak"
 
 # ── test-perf-stop.sh: script content (new features) ────────────
 
