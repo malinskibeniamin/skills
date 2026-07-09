@@ -125,6 +125,13 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-github.
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
+# Matt v1.1.0 sync: triage treats external PRs as issues with attached code.
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "PR is an issue with attached code" "triage covers external PRs as issues"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "\[PR\].*\[issue\]" "triage tags discovery lines PR vs issue"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "redundancy" "triage runs redundancy check against codebase"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "Verify the claim" "triage verifies claims (bug repro / PR diff)"
+run_content_eval "$REPO_ROOT/triage/SKILL.md" "already implemented" "triage has already-implemented wontfix branch"
+
 # Latest Matt vendoring: teach workspace (restored on owner request, PR #46).
 run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"
 run_file_eval "$REPO_ROOT/teach/MISSION-FORMAT.md" "teach mission format exists"
