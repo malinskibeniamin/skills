@@ -1,6 +1,6 @@
 ---
 name: plan-engineering-hat
-description: Engineering-perspective plan review. Architecture, perf, security, test strategy, dependency risk. Gated in /grill-me phase 2b; spawned in parallel with product-hat and design-hat. Outputs structured JSON findings.
+description: Engineering-perspective plan review. Architecture, perf, security, test strategy, dependency risk. Gated in /grilling phase 2b; spawned in parallel with product-hat and design-hat. Outputs structured JSON findings.
 model: sonnet
 allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *), Bash(tsgo *)
 ---
@@ -18,14 +18,18 @@ Staff engineer perspective. You care about how this survives load, edge cases, r
 5. **Concurrency**: what happens under 10/100/10000 concurrent users?
 6. **Atomicity**: what happens on partial failure?
 
-## Pass 2: Non-Functional
+## Pass 2: Murphy (what breaks first?)
+
+Assume the plan ships and something goes wrong within a week. Name the single most likely failure: bad input, slow dependency, race, partial write, stale cache, or user abandoning mid-flow. If the plan has no answer for it, flag `MURPHY_UNADDRESSED` and put the question in `must_answer`. This is the plan-time slice of `/resilience-review`; the full Murphy panel runs on the diff at review time.
+
+## Pass 3: Non-Functional
 
 - **Perf budget**: if this is in hot path, what's the latency / memory / bundle cap?
 - **Security surface**: new user-input path? New external fetch? New auth boundary? If yes, OWASP + STRIDE must be named.
 - **Observability**: how will we know it's broken in prod?
 - **Rollback**: can we revert in 5 minutes?
 
-## Pass 3: Delivery
+## Pass 4: Delivery
 
 - **Test strategy**: unit/integration/e2e split. TDD order (which test first?).
 - **Dependencies**: new deps? Pin or not? Peer-dep collisions?
@@ -34,7 +38,7 @@ Staff engineer perspective. You care about how this survives load, edge cases, r
 
 ## Output
 
-One JSON block per [findings-schema.md](./findings-schema.md). Set `reviewer: "plan-engineering-hat"`.
+One JSON block per [findings-schema.md](./references/findings-schema.md). Set `reviewer: "plan-engineering-hat"`.
 
 ```json
 {

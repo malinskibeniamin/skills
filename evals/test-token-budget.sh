@@ -148,17 +148,17 @@ fixture_clean='{"session_id":"budget-test","hook_event_name":"PostToolUse","tool
 echo "const x: number = 2;" > /tmp/budget-test-clean.tsx 2>/dev/null
 
 # Pick a representative hook that should be silent on clean input
-clean_hook="$BUDGET_DIR/.claude/hooks/as-cast-check.sh"
+clean_hook="$BUDGET_DIR/.claude/hooks/ts-no-escape-hatches-check.sh"
 if [ -x "$clean_hook" ]; then
   out=$(echo "$fixture_clean" | "$clean_hook" 2>&1 || true)
   bytes=${#out}
   if [ "$bytes" -lt 100 ]; then
-    echo "  PASS  as-cast-check silent-pass under 100 bytes ($bytes)"
+    echo "  PASS  ts-no-escape-hatches-check silent-pass under 100 bytes ($bytes)"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  as-cast-check silent-pass emitted $bytes bytes (cap: 100)"
+    echo "  FAIL  ts-no-escape-hatches-check silent-pass emitted $bytes bytes (cap: 100)"
     FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: as-cast-check silent-pass too loud"
+    ERRORS="$ERRORS\n  FAIL: ts-no-escape-hatches-check silent-pass too loud"
   fi
 fi
 

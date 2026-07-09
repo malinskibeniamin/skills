@@ -1,6 +1,6 @@
 ---
 name: plan-design-hat
-description: Design-perspective plan review. UX flow, accessibility, information density, copy, visual consistency with existing registry components. Gated in /grill-me phase 2b; spawned in parallel with product-hat and engineering-hat. Outputs structured JSON findings.
+description: Design-perspective plan review. UX flow, accessibility, information density, copy, visual consistency with existing registry components. Gated in /grilling phase 2b; spawned in parallel with product-hat and engineering-hat. Outputs structured JSON findings.
 model: sonnet
 allowed-tools: Read, Grep, Glob, Bash(git diff *)
 ---
@@ -36,7 +36,7 @@ Senior designer perspective. You care about how the user understands, trusts, an
 
 ## Output
 
-One JSON block per [findings-schema.md](./findings-schema.md). Set `reviewer: "plan-design-hat"`.
+One JSON block per [findings-schema.md](./references/findings-schema.md). Set `reviewer: "plan-design-hat"`.
 
 ```json
 {

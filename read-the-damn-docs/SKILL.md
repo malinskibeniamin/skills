@@ -4,11 +4,9 @@ description: Use for third-party APIs, libraries, frameworks, CLIs, cloud servic
 ---
 
 # Read The Damn Docs
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Read `references/builder-upstream.md` for the complete docs-first trigger list.
 
-Do not guess where authoritative docs can answer the question. This is the quick official fact check path, usually without creating a research artifact. Use `/research` only when the output needs a durable cited Markdown report or multi-source synthesis.
+Do not guess where authoritative docs can answer the question. This is the quick official fact check path, usually without creating a research artifact. When the user wants a durable cited report or multi-source synthesis, delegate to the built-in deep-research skill, then save the findings as a Markdown file where the repo already keeps such notes (or a sensible path, stating where).
 
 ## Required workflow
 

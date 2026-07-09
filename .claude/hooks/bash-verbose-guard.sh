@@ -8,7 +8,7 @@ set -eo pipefail
 # Every nudge also logs to ~/.claude/hook-metrics/bash-drains.jsonl via
 # _hook_log_bash_drain so we can measure fire rate against baseline.
 
-source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+_shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 hook_parse_bash
 
 nudge=""

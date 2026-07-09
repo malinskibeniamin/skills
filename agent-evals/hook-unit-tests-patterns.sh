@@ -372,7 +372,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ biome-ignore-check.sh ━━━"
+echo "━━━ ts-no-escape-hatches-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -382,14 +382,14 @@ _f="/tmp/hook-test-biome-$$.ts"
 echo "  biome-ignore noExplicitAny (block):"
 _setup_test_file "$_f" '// biome-ignore lint/suspicious/noExplicitAny: legacy
 const x: any = {};'
-_run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
+_run_hook "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f")"
 _assert_exit 2 "noExplicitAny biome-ignore blocked"
 _cleanup_test_file "$_f"
 
 echo "  other biome-ignore (block):"
 _setup_test_file "$_f" '// biome-ignore lint/correctness/noUnusedImports: needed
 import { x } from "y";'
-_run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
+_run_hook "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f")"
 _assert_exit 2 "other biome-ignore is blocked"
 _assert_stderr_contains "No lint suppression" "blocks biome-ignore"
 _cleanup_test_file "$_f"
@@ -398,14 +398,14 @@ echo "  biome-ignore with escape (block):"
 _setup_test_file "$_f" '// allow: lint-ignore temporary workaround
 // biome-ignore lint/correctness/noUnusedImports: needed
 import { x } from "y";'
-_run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
+_run_hook "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f")"
 _assert_exit 2 "lint-ignore escape blocked"
 _cleanup_test_file "$_f"
 
 echo "  no biome-ignore (pass):"
 _setup_test_file "$_f" 'import { x } from "y";
 export const z = x;'
-_run_hook "biome-ignore-check.sh" "$(_edit_json "$_f")"
+_run_hook "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "clean file passes"
 _cleanup_test_file "$_f"
 
@@ -646,7 +646,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ mutation-naming-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -656,7 +655,6 @@ _f="/tmp/hook-test-mutname-$$.tsx"
 echo "  unnamed mutation result (warn):"
 _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
 const doDelete = useMutation({ mutationFn: deleteItem });"
-_run_hook "mutation-naming-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "unnamed mutation is warn"
 _assert_stderr_contains "Mutation" "suggests *Mutation suffix"
 _cleanup_test_file "$_f"
@@ -664,7 +662,6 @@ _cleanup_test_file "$_f"
 echo "  properly named mutation (pass):"
 _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
 const deleteMutation = useMutation({ mutationFn: deleteItem });"
-_run_hook "mutation-naming-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "named mutation passes"
 _cleanup_test_file "$_f"
 
@@ -763,7 +760,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ disabled-button-tooltip-check.sh ━━━"
+echo "━━━ react-rules-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -772,7 +769,7 @@ _f="/tmp/hook-test-disbtn-$$.tsx"
 
 echo "  disabled Button without Tooltip (warn):"
 _setup_test_file "$_f" "const X = () => <Button disabled onClick={fn}>Submit</Button>;"
-_run_hook "disabled-button-tooltip-check.sh" "$(_edit_json "$_f")"
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "disabled without Tooltip is warn"
 _assert_stderr_contains "[Tt]ooltip" "suggests Tooltip"
 _cleanup_test_file "$_f"
@@ -780,7 +777,7 @@ _cleanup_test_file "$_f"
 echo "  disabled Button with Tooltip import (pass):"
 _setup_test_file "$_f" "import { Tooltip } from '@/components/ui/tooltip';
 const X = () => <Tooltip><Button disabled>Submit</Button></Tooltip>;"
-_run_hook "disabled-button-tooltip-check.sh" "$(_edit_json "$_f")"
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "disabled with Tooltip passes"
 _cleanup_test_file "$_f"
 
@@ -788,7 +785,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ field-mask-check.sh ━━━"
+echo "━━━ form-mode-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -798,14 +795,14 @@ _f="/tmp/hook-test-fm-$$.ts"
 echo "  hardcoded FieldMask paths (warn):"
 _setup_test_file "$_f" "import { FieldMask } from '@bufbuild/protobuf';
 const mask = { paths: ['name', 'description', 'config'] };"
-_run_hook "field-mask-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "hardcoded FieldMask is warn"
 _assert_stderr_contains "dirty" "suggests dirtyFields"
 _cleanup_test_file "$_f"
 
 echo "  no FieldMask (skip):"
 _setup_test_file "$_f" "const paths = ['a', 'b', 'c'];"
-_run_hook "field-mask-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "non-FieldMask passes"
 _cleanup_test_file "$_f"
 
@@ -813,7 +810,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ unhappy-path-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -822,7 +818,6 @@ _f="/tmp/hook-test-unhappy-$$.tsx"
 
 echo "  silent empty catch (warn):"
 _setup_test_file "$_f" 'try { await api.fetch(); } catch (e) { }'
-_run_hook "unhappy-path-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "empty catch is warn"
 _assert_stderr_contains "swallow|silent|Catch|catch" "warns about silent catch"
 _cleanup_test_file "$_f"
@@ -832,7 +827,6 @@ _setup_test_file "$_f" 'const fn = async () => {
   try { await api.fetch(); }
   catch (e) { setError(e.message); }
 };'
-_run_hook "unhappy-path-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "catch with setError passes"
 _cleanup_test_file "$_f"
 
@@ -840,7 +834,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ magic-number-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -849,7 +842,6 @@ _f="/tmp/hook-test-magic-$$.ts"
 
 echo "  inline staleTime (warn):"
 _setup_test_file "$_f" "const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
-_run_hook "magic-number-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline staleTime is warn"
 _assert_stderr_contains "named constant|stale" "suggests named constant"
 _cleanup_test_file "$_f"
@@ -857,7 +849,6 @@ _cleanup_test_file "$_f"
 echo "  staleTime with escape (pass):"
 _setup_test_file "$_f" "// allow: stale-time tuned for this query
 const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
-_run_hook "magic-number-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "stale-time escape passes"
 _cleanup_test_file "$_f"
 
@@ -904,7 +895,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ test-perf-check.sh ━━━"
+echo "━━━ test-convention-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -917,7 +908,7 @@ test('input', async () => {
   const user = userEvent.setup();
   await user.type(input, 'hello');
 });"
-_run_hook "test-perf-check.sh" "$(_edit_json "$_f")"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "userEvent.type() is warn"
 _assert_stderr_contains "type|clear|paste|50ms" "warns about type perf"
 _cleanup_test_file "$_f"
@@ -925,7 +916,7 @@ _cleanup_test_file "$_f"
 echo "  non-test file (skip):"
 _nf="/tmp/hook-test-perf-$$.tsx"
 _setup_test_file "$_nf" "await user.type(input, 'hello');"
-_run_hook "test-perf-check.sh" "$(_edit_json "$_nf")"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_nf")"
 _assert_exit 0 "non-test file skipped"
 _cleanup_test_file "$_nf"
 
@@ -988,7 +979,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ file-size-check.sh ━━━"
+echo "━━━ tanstack-router-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1003,7 +994,7 @@ mkdir -p "$(dirname "$_f")"
     echo "const line$i = $i;"
   done
 } > "$_f"
-_run_hook "file-size-check.sh" "$(_edit_json "$_f")"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "large route file is warn (not block)"
 _assert_stderr_contains "300|split|refactor" "warns about file size"
 _cleanup_test_file "$_f"
@@ -1013,7 +1004,7 @@ echo "  small file (pass):"
 _f2="/tmp/hook-test-small-$$.tsx"
 _setup_test_file "$_f2" "import { createFileRoute } from '@tanstack/react-router';
 const X = () => <div>small</div>;"
-_run_hook "file-size-check.sh" "$(_edit_json "$_f2")"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f2")"
 _assert_exit 0 "small file passes"
 _cleanup_test_file "$_f2"
 
@@ -1021,7 +1012,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ hook-location-check.sh ━━━"
+echo "━━━ tanstack-router-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1032,7 +1023,7 @@ mkdir -p "$(dirname "$_f")"
 _setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
 function useCustomData() { return useState(null); }
 const Page = () => { const data = useCustomData(); return <div>{data}</div>; };"
-_run_hook "hook-location-check.sh" "$(_edit_json "$_f")"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline hook is warn"
 _assert_stderr_contains "hooks/" "suggests /hooks/"
 _cleanup_test_file "$_f"
@@ -1041,7 +1032,7 @@ _cleanup_test_dir "/tmp/hook-test-routes"
 echo "  hook in hooks dir (pass):"
 _f2="/tmp/hook-test-hooks-$$.ts"
 _setup_test_file "$_f2" "export function useCustomData() { return useState(null); }"
-_run_hook "hook-location-check.sh" "$(_edit_json "$_f2")"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f2")"
 _assert_exit 0 "hook in hooks dir passes"
 _cleanup_test_file "$_f2"
 
@@ -1049,7 +1040,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ connect-error-format-check.sh ━━━"
+echo "━━━ connect-query-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1060,7 +1051,7 @@ echo "  catch without ConnectError.from (warn):"
 _setup_test_file "$_f" "import { useMutation } from '@connectrpc/connect-query';
 try { await fetchData(); }
 catch (error) { toast.error(error.message); }"
-_run_hook "connect-error-format-check.sh" "$(_edit_json "$_f")"
+_run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "missing ConnectError.from is warn"
 _assert_stderr_contains "ConnectError" "suggests ConnectError.from"
 _cleanup_test_file "$_f"
@@ -1068,7 +1059,7 @@ _cleanup_test_file "$_f"
 echo "  non-connect file (skip):"
 _setup_test_file "$_f" "try { await fetchData(); }
 catch (error) { toast.error(error.message); }"
-_run_hook "connect-error-format-check.sh" "$(_edit_json "$_f")"
+_run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "non-connect file skipped"
 _cleanup_test_file "$_f"
 
@@ -1076,7 +1067,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ zustand-subscription-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1086,7 +1076,6 @@ _f="/tmp/hook-test-zussub-$$.tsx"
 echo "  direct api.property read (warn):"
 _setup_test_file "$_f" "import { api } from '../store';
 const X = () => <div>{api.getState().count}</div>;"
-_run_hook "zustand-subscription-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "api.getState in component is warn"
 _cleanup_test_file "$_f"
 
@@ -1094,7 +1083,6 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ url-state-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1105,7 +1093,6 @@ mkdir -p "$(dirname "$_f")"
 _setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
 const [page, setPage] = useState(0);
 const [sortBy, setSortBy] = useState('asc');"
-_run_hook "url-state-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "url-state is warn"
 _assert_stderr_contains "useSearch|validateSearch|URL" "suggests URL state"
 _cleanup_test_file "$_f"
@@ -1114,7 +1101,6 @@ _cleanup_test_dir "/tmp/hook-test-src"
 echo "  non-route file (skip):"
 _f2="/tmp/hook-test-urlstate-$$.tsx"
 _setup_test_file "$_f2" "const [page, setPage] = useState(1);"
-_run_hook "url-state-check.sh" "$(_edit_json "$_f2")"
 _assert_exit 0 "non-route file skipped"
 _cleanup_test_file "$_f2"
 
@@ -1178,7 +1164,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ connect-error-fieldmap-check.sh ━━━"
+echo "━━━ connect-query-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1194,7 +1180,7 @@ const X = () => {
     try { doIt() } catch (e) { toast.error(formatConnectError(e)) }
   })} />;
 };"
-_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "toast-only is warn"
 _assert_stderr_contains "FieldViolation|setError" "suggests setError mapping"
 _cleanup_test_file "$_f"
@@ -1209,14 +1195,14 @@ const X = () => {
     ce.findDetails(BadRequestSchema).forEach(d => d.fieldViolations.forEach(v => form.setError(v.field, { type: 'server' })));
   })} />;
 };"
-_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "mapped fields pass"
 _assert_stderr_not_contains "FieldViolation" "no warning when mapped"
 _cleanup_test_file "$_f"
 
 echo "  no form handler (skip):"
 _setup_test_file "$_f" "const X = formatConnectError(err);"
-_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "non-form file passes"
 _assert_stderr_not_contains "FieldViolation" "no warning"
 _cleanup_test_file "$_f"
@@ -1228,7 +1214,7 @@ const X = () => {
   const form = useProtoForm({ schema: S });
   return <form onSubmit={form.handleSubmit(() => toast.error(formatConnectError(e)))} />;
 };"
-_run_hook "connect-error-fieldmap-check.sh" "$(_edit_json "$_f")"
+_run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "escape hatch passes"
 _cleanup_test_file "$_f"
 
@@ -1236,7 +1222,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ proto-form-parallel-state-check.sh ━━━"
+echo "━━━ form-mode-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1251,7 +1237,7 @@ const X = () => {
   const [authConfig, setAuthConfig] = useState<McpAuthConfig>({});
   return <form />;
 };"
-_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "parallel Config state is warn"
 _assert_stderr_contains "drift|parallel|useProtoForm" "mentions drift"
 _cleanup_test_file "$_f"
@@ -1264,7 +1250,7 @@ const X = () => {
   const [open, setOpen] = useState<boolean>(false);
   return <form />;
 };"
-_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "UI state passes"
 _assert_stderr_not_contains "drift" "no warning"
 _cleanup_test_file "$_f"
@@ -1275,7 +1261,7 @@ const X = () => {
   const [cfg, setCfg] = useState<FooConfig>({});
   return <div />;
 };"
-_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "no useProtoForm, passes"
 _assert_stderr_not_contains "drift" "no warning"
 _cleanup_test_file "$_f"
@@ -1289,7 +1275,7 @@ const X = () => {
   const [wizard, setWizard] = useState<WizardConfig>({});
   return <form />;
 };"
-_run_hook "proto-form-parallel-state-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "escape hatch passes"
 _cleanup_test_file "$_f"
 
@@ -1297,7 +1283,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ form-setvalue-options-check.sh ━━━"
+echo "━━━ form-mode-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1306,21 +1292,21 @@ _f="/tmp/hook-test-setvalue-$$.tsx"
 
 echo "  setValue without options (warn):"
 _setup_test_file "$_f" "const handler = () => { form.setValue('name', 'x'); };"
-_run_hook "form-setvalue-options-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "no-options setValue is warn"
 _assert_stderr_contains "shouldDirty|shouldValidate" "mentions options"
 _cleanup_test_file "$_f"
 
 echo "  setValue with options (pass):"
 _setup_test_file "$_f" "const handler = () => { form.setValue('name', 'x', { shouldDirty: true, shouldValidate: true }); };"
-_run_hook "form-setvalue-options-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "options-provided passes"
 _assert_stderr_not_contains "shouldDirty" "no warning"
 _cleanup_test_file "$_f"
 
 echo "  no setValue (skip):"
 _setup_test_file "$_f" "const X = () => <div />;"
-_run_hook "form-setvalue-options-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "no setValue passes"
 _cleanup_test_file "$_f"
 
@@ -1328,7 +1314,7 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ form-error-summary-check.sh ━━━"
+echo "━━━ form-mode-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -1344,7 +1330,7 @@ const X = () => {
     <ProtoField name=\"b\" />
   </form>;
 };"
-_run_hook "form-error-summary-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "missing summary is warn"
 _assert_stderr_contains "FormErrorSummary|aria-live|role" "mentions summary primitive"
 _cleanup_test_file "$_f"
@@ -1359,7 +1345,7 @@ const X = () => {
     <ProtoField name=\"b\" />
   </form>;
 };"
-_run_hook "form-error-summary-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "summary present passes"
 _assert_stderr_not_contains "FormErrorSummary" "no warning"
 _cleanup_test_file "$_f"
@@ -1372,7 +1358,7 @@ const X = () => {
     <ProtoField name=\"q\" />
   </form>;
 };"
-_run_hook "form-error-summary-check.sh" "$(_edit_json "$_f")"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "tiny form skipped"
 _assert_stderr_not_contains "FormErrorSummary" "no warning"
 _cleanup_test_file "$_f"

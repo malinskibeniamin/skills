@@ -1,29 +1,52 @@
 #!/bin/bash
 set -eo pipefail
 
-# Stop hook: report aggregated violation summary from the session.
+# Stop hook: report aggregated violation summary + session LOC delta.
 # Reads violations tracked by hook_block/hook_warn/hook_deny in hook-lib.sh.
 # Note: set -u removed — CLAUDE_SESSION_ID may be unset in some contexts.
 
-violations_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/violations"
+session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+violations_file="$session_dir/violations"
+session_files="$session_dir/files"
 
-if [ ! -f "$violations_file" ] || [ ! -s "$violations_file" ]; then
+# ── Session LOC delta (code-is-liability visibility) ─────────────
+# Net lines added to session-touched source files vs HEAD. Info only:
+# awareness pressure toward smaller diffs, enforcement stays with
+# /deslop and the review value gate.
+loc_note=""
+if [ -f "$session_files" ] && git rev-parse --git-dir >/dev/null 2>&1; then
+  touched=$(cut -d: -f2- "$session_files" 2>/dev/null | sort -u | head -100 || true)
+  if [ -n "$touched" ]; then
+    stat=$(echo "$touched" | tr '\n' '\0' | xargs -0 git diff HEAD --shortstat -- 2>/dev/null | head -1 || true)
+    added=$(echo "$stat" | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo 0)
+    removed=$(echo "$stat" | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo 0)
+    if [ "${added:-0}" -gt 0 ] || [ "${removed:-0}" -gt 0 ]; then
+      net=$((added - removed))
+      loc_note=" Session LOC delta: +${added}/-${removed} (net ${net}). Code is liability — prefer the smallest passing diff."
+    fi
+  fi
+fi
+
+summary=""
+total=0
+if [ -f "$violations_file" ] && [ -s "$violations_file" ]; then
+  # Aggregate violation counts
+  summary=$(sort "$violations_file" | uniq -c | sort -rn | head -10 | while read -r count label; do
+    echo "${count}x ${label}"
+  done | paste -sd ", " -)
+  total=$(wc -l < "$violations_file" | tr -d ' ')
+fi
+
+if [ -z "$summary" ] && [ -z "$loc_note" ]; then
   exit 0
 fi
 
-# Aggregate violation counts
-summary=$(sort "$violations_file" | uniq -c | sort -rn | head -10 | while read -r count label; do
-  echo "${count}x ${label}"
-done | paste -sd ", " -)
-
-if [ -z "$summary" ]; then
-  exit 0
-fi
-
-total=$(wc -l < "$violations_file" | tr -d ' ')
+msg=""
+[ -n "$summary" ] && msg="Session violation summary ($total total): $summary."
+msg="${msg}${loc_note}"
 
 # Report as additional context (don't block — just inform)
-echo "{\"hookSpecificOutput\":{\"additionalContext\":\"Session violation summary ($total total): $summary\"}}" >&2
+echo "{\"hookSpecificOutput\":{\"additionalContext\":\"$msg\"}}" >&2
 
 # Clean up
 rm -f "$violations_file"

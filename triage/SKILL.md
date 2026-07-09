@@ -5,9 +5,9 @@ disable-model-invocation: true
 ---
 
 # Triage
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Move issues on tracker through small state machine of triage roles.
+
+When repo treats external pull requests as request surface (see tracker config), triage covers them too: **a PR is an issue with attached code** -- same roles, same states, same machine, with deltas marked "for a PR" below. Resolve a bare `#42` to an issue or PR per tracker.
 
 When explore codebase, use project domain glossary so titles, comments, agent briefs match project language. Respect ADRs in area touched. Use `/read-the-damn-docs` for external/current behavior, `/plan-arbiter` for competing fix plans, and `/visual-plan` for large epics.
 
@@ -75,22 +75,25 @@ Query tracker. Present three buckets, oldest first:
 2. **`needs-triage`** -- evaluation in progress
 3. **`needs-info` with reporter activity since last triage notes** -- need re-evaluation
 
-Show counts + one-line summary per issue. Let maintainer pick.
+PRs in scope -> include external PRs in these buckets, tag each line `[PR]` or `[issue]`. Discovery surfaces only *external* PRs (tracker config define who count as external) -- a collaborator's in-flight PR is not triage work. Filter is discovery-only; explicitly named PR always triaged regardless of author.
 
-## Triage a specific issue
+Show counts + one-line summary per item. Let maintainer pick.
 
-1. **Gather context.** Read full issue (body, comments, labels/status, reporter, dates). Parse prior triage notes so resolved questions not re-asked. Explore codebase using project domain glossary, respect ADRs in area. Read `.out-of-scope/*.md` -- surface any prior rejection resembling issue.
+## Triage a specific issue or PR
 
-2. **Recommend.** Tell maintainer category + state recommendation with reasoning, plus brief codebase summary relevant to issue. Wait for direction.
+1. **Gather context.** Read full issue or PR (body, comments, labels/status, reporter, dates; for a PR, the diff too). Parse prior triage notes so resolved questions not re-asked. Explore codebase using project domain glossary, respect ADRs in area. Two codebase checks: (a) **redundancy** -- search for existing implementation of requested behavior by domain concept (not just request's wording), report where you looked; found -> already-implemented `wontfix` (step 5). (b) **prior rejection** -- read `.out-of-scope/*.md`, surface any resembling this request.
 
-3. **Reproduce (bugs only).** Before grill, attempt repro: read reporter steps, trace code, run tests or commands. Report what happened -- successful repro with code path, failed repro, or insufficient detail (strong `needs-info` signal). Confirmed repro make much stronger agent brief. For root-cause investigation + TDD fix plan, see [REFERENCE.md#tdd-fix-plan-mode](./REFERENCE.md).
+2. **Recommend.** Tell maintainer category + state recommendation with reasoning, plus brief codebase summary relevant to request -- including whether already implemented. Wait for direction.
 
-4. **Grill (if needed).** Issue need flesh out -> run `/grill-me` for a fast grill or `/grill-with-docs` when domain language/ADRs matter.
+3. **Verify the claim.** Before grill, check claim holds up. Bug -> reproduce from reporter steps. PR -> confirm diff does what it claims: check out, run relevant tests/commands. Report what happened -- confirmed with code path, failed, or insufficient detail (strong `needs-info` signal). Confirmed verification make much stronger agent brief. For root-cause investigation + TDD fix plan, see [REFERENCE.md#tdd-fix-plan-mode](./REFERENCE.md).
+
+4. **Grill (if needed).** Issue need flesh out -> run `/grilling` for a fast grill or `/grilling` when domain language/ADRs matter.
 
 5. **Apply the outcome:**
    - `ready-for-agent` -> post agent brief comment ([AGENT-BRIEF.md](./AGENT-BRIEF.md))
    - `ready-for-human` -> same structure, but note why can't delegate
    - `needs-info` -> post triage notes (see [REFERENCE.md](./REFERENCE.md))
+   - `wontfix` (already implemented) -> point to where it lives in codebase; do **not** write `.out-of-scope/` (that KB is for *rejected* requests, not built ones), then close
    - `wontfix` (bug) -> polite explanation, then close
    - `wontfix` (enhancement) -> write to `.out-of-scope/`, link from comment, then close ([OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md))
    - `needs-triage` -> apply role; optional comment if partial progress

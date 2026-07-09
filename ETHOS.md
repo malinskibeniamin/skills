@@ -11,7 +11,7 @@ Format gstack-inspired. Content derived from enforced rules.
 No prod code without failing test first. Coverage <60% on a changed
 file blocks stop. Adjacent tests on disk count toward gate.
 
-Enforced by: `lifecycle-stop`, `tdd-prompt-check`.
+Enforced by: `lifecycle-stop`.
 
 ## 2. Types Are The First Reviewer
 
@@ -42,14 +42,14 @@ Every spec has gaps. Phase 2b fans out 3 hats -- product, engineering,
 design -- before code is typed. If you cannot write the diff in your
 head, you are not ready to type.
 
-Enforced by: `lifecycle-stop` untested-source gate, `/grill-me` flow.
+Enforced by: `lifecycle-stop` untested-source gate, `/grilling` flow.
 
 ## 6. Search Before Add
 
 Grep before writing. Read `package.json` before installing. Read
 existing hooks before writing a new one. Reinvention is theft.
 
-Enforced by: `duplicate-function-check`, `legacy-linter-check`.
+Enforced by: `legacy-linter-check`.
 
 ## 7. Toolchain Discipline
 
@@ -77,4 +77,4 @@ or split anything speculative, sloppy, untested, or larger than needed.
 
 Enforced by: `intent-detect`, `lifecycle-stop`, `/deslop` after `/simplify`,
 `self-reviewer`, `code-reviewer`, `review` value gate,
-`duplicate-function-check`, `file-size-check`.
+`file-size-check`.

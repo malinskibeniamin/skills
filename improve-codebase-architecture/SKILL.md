@@ -5,8 +5,6 @@ disable-model-invocation: true
 ---
 
 # Improve Codebase Architecture
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Goal: find architectural friction and propose **deepening opportunities**: shallow modules -> deeper modules. Optimize testability + AI navigation.
 
 ## Language

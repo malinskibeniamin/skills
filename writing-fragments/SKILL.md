@@ -1,11 +1,10 @@
 ---
 name: writing-fragments
 description: Mine user conversation into raw writing fragments in one markdown file.
+disable-model-invocation: true
 ---
 
 # Writing Fragments
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Interview relentlessly. Capture raw fragments. Do not impose outline/phases.
 
 If path missing, ask once. Remember it. Re-read before every write to preserve user edits.

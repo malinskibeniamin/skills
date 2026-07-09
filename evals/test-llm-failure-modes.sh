@@ -1,18 +1,18 @@
 # Evals for llm-failure-mode-check.sh — 7 Karpathy patterns.
 # 5 block-enforced, 2 warn-only; types + silent-fallbacks delegated
-# to existing hooks (ts-no-escape-hatches, unhappy-path-check).
 
 HOOK="$REPO_ROOT/.claude/hooks/llm-failure-mode-check.sh"
+HOOK_LIB="$REPO_ROOT/.claude/hooks/checks/llm-failure-mode-check.lib.sh"
 
 run_file_eval "$HOOK" "llm-failure-mode-check.sh exists"
 run_executable_eval "$HOOK" "llm-failure-mode-check.sh executable"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "llm-failure-mode-check.sh" \
   "manifest registers llm-failure-mode-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "llm-failure-mode-check.sh" \
-  "hooks.json registers llm-failure-mode-check"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "llm-failure-mode-check.sh" \
+  "codex-hooks.json keeps llm-failure-mode-check per-call"
 
 # Principle labels reference ETHOS/Karpathy in error messages
-run_content_eval "$HOOK" "ETHOS/Karpathy" \
+run_content_eval "$HOOK_LIB" "ETHOS/Karpathy" \
   "hook error messages cross-reference ETHOS/Karpathy"
 
 _tmp=$(mktemp -d)

@@ -24,3 +24,6 @@ pre-push:
     manifest-sync:
       glob: "{skill-manifest.json,.claude/settings.json,hooks/hooks.json}"
       run: bash scripts/generate-hook-configs.sh --check
+    catalog-sync:
+      glob: "{*/SKILL.md,.claude-plugin/plugin.json}"
+      run: bash scripts/generate-skill-catalog.sh --check

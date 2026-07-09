@@ -4,8 +4,6 @@ description: "Use when exploring design options, starting new features, or needi
 ---
 
 # Brainstorming
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 **GATE: no code, no files, no impl until design presented and approved.**
 
 ## Design Mode (default)

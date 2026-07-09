@@ -2,6 +2,7 @@
 # OWASP Top 10 subset + STRIDE-I + LLM-trust + snyk/bun audit trigger.
 
 HOOK="$REPO_ROOT/.claude/hooks/security-audit-check.sh"
+HOOK_LIB="$REPO_ROOT/.claude/hooks/checks/security-audit-check.lib.sh"
 DEPS_HOOK="$REPO_ROOT/.claude/hooks/file-changed-deps.sh"
 
 run_file_eval "$HOOK" "security-audit-check.sh exists"
@@ -10,7 +11,7 @@ run_content_eval "$REPO_ROOT/skill-manifest.json" "security-audit-check.sh" \
   "manifest registers security-audit-check"
 
 # Principle cross-reference
-run_content_eval "$HOOK" "\\[ETHOS:" "security-audit-check cross-refs ETHOS"
+run_content_eval "$HOOK_LIB" "\\[ETHOS:" "security-audit-check cross-refs ETHOS"
 
 # deps audit extension
 run_content_eval "$DEPS_HOOK" "snyk test" "deps hook invokes snyk test"

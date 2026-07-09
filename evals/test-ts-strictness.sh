@@ -30,14 +30,14 @@ run_content_eval "$REPO_ROOT/skill-manifest.json" "ts-no-escape-hatches-check.sh
   "manifest registers ts-no-escape-hatches-check"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "tsconfig-strict-check.sh" \
   "manifest registers tsconfig-strict-check"
-run_content_eval "$REPO_ROOT/.claude/settings.json" "ts-no-escape-hatches-check.sh" \
-  "settings.json registers ts-no-escape-hatches-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "ts-no-escape-hatches-check.sh" \
-  "hooks.json registers ts-no-escape-hatches-check"
-run_content_eval "$REPO_ROOT/.claude/settings.json" "tsconfig-strict-check.sh" \
-  "settings.json registers tsconfig-strict-check"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "tsconfig-strict-check.sh" \
-  "hooks.json registers tsconfig-strict-check"
+run_content_eval "$REPO_ROOT/.claude/settings.json" "post-tool-batch.sh" \
+  "settings.json registers PostToolBatch dispatcher"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "post-tool-batch.sh" \
+  "hooks.json registers PostToolBatch dispatcher"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "ts-no-escape-hatches-check.sh" \
+  "codex-hooks.json keeps ts-no-escape-hatches-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "tsconfig-strict-check.sh" \
+  "codex-hooks.json keeps tsconfig-strict-check per-call"
 
 # ── Integration: actually run the hooks on temp files ────────────
 

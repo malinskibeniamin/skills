@@ -1,8 +1,8 @@
 # Evals for setup-tanstack-router skill
 
-GEN_SCRIPT="$REPO_ROOT/setup-tanstack-router/scripts/tanstack-router-gen.sh"
-CHECK_SCRIPT="$REPO_ROOT/setup-tanstack-router/scripts/tanstack-router-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-tanstack-router"
+GEN_SCRIPT="$REPO_ROOT/tanstack-router/scripts/tanstack-router-gen.sh"
+CHECK_SCRIPT="$REPO_ROOT/tanstack-router/scripts/tanstack-router-check.sh"
+SKILL_DIR="$REPO_ROOT/tanstack-router"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -13,7 +13,7 @@ run_executable_eval "$CHECK_SCRIPT" "tanstack-router-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-tanstack-router" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: tanstack-router" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "react-router-dom" "SKILL.md mentions react-router-dom ban"
 run_content_eval "$SKILL_DIR/SKILL.md" "validateSearch" "SKILL.md mentions validateSearch"

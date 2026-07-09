@@ -2,9 +2,11 @@
 set -euo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else exit 0; fi
 
-# PreToolUse: ban verbose MCP servers with CLI alternatives.
-# Jira/Confluence MCP -> acli (https://developer.atlassian.com/cloud/acli)
-# Gmail MCP           -> gog  (https://github.com/openclaw/gogcli)
+# PreToolUse: deny-list ONLY the token-expensive MCP servers that have a
+# cheap CLI equivalent (Atlassian->acli, Gmail/Calendar/Drive->gog,
+# browser->agent-browser, Blacksmith->gh, Buildkite->bk, Box->box,
+# M365->m365). Every other MCP server is ALLOWED (default case exits 0)
+# -- including the Builder.io Plan server used by /visual-plan.
 #
 # Data: mcp__claude_ai_Atlassian__editJiraIssue averaged 23k chars/call,
 # mcp__claude_ai_Gmail__gmail_search_messages 15k chars/call. CLI output

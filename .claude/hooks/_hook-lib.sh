@@ -83,13 +83,34 @@ _hook_track_violation() {
   echo "$label" >> "$_hook_violations_file" 2>/dev/null || true
 }
 
+_hook_default_rule() {
+  printf '%s' "${_hook_current_check:-$(basename "$0" .sh)}"
+}
+
+_hook_collect_emit() {
+  local severity="$1" rule="$2" message="$3"
+  [ "${HOOK_COLLECT:-0}" = "1" ] || return 1
+  [ -n "${HOOK_COLLECT_FILE:-}" ] || return 0
+  message=${message//$'\n'/ }
+  printf '%s|%s|%s\n' "$severity" "$rule" "$message" >> "$HOOK_COLLECT_FILE" 2>/dev/null || true
+  return 0
+}
+
+_hook_skip_or_exit() {
+  local collect_status="${1:-1}"
+  if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+    return "$collect_status"
+  fi
+  exit 0
+}
+
 # ── Structured session log (JSONL) ──────────────────────────────
 # Append one JSON line per hook decision. Used by metrics-summary-stop.sh
 # and /hook-audit skill. Fails silently — never blocks a hook.
 _hook_log_file="$_hook_session_dir/structured.jsonl"
 
 _hook_log_entry() {
-  local decision="$1" rule="$2" hook="${3:-$(basename "$0" .sh)}"
+  local decision="$1" rule="$2" hook="${3:-${_hook_current_check:-$(basename "$0" .sh)}}"
   local target="${file_path:-}"
   # Strip repo root for privacy — store relative path only
   if [ -n "$target" ]; then
@@ -229,16 +250,21 @@ hook_parse_edit_write() {
   _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
   if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ]; then
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
+  tool_name="$_hook_tool_name"
+  tool_input=$(echo "$_hook_input" | jq -c '.tool_input // {}' 2>/dev/null || echo '{}')
 
   file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
 
-  if [ -z "$file_path" ] || [ ! -f "$file_path" ]; then
+  if [ -z "$file_path" ] || { [ ! -f "$file_path" ] && [ "${HOOK_ALLOW_MISSING_FILE:-0}" != "1" ]; }; then
     _hook_debug "skip: file_path empty or missing ($file_path)"
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
 
+  file_content=$(cat "$file_path" 2>/dev/null || true)
   _hook_debug "parse: $file_path"
 
   # Track which files this session touches (for session-scoped Stop hooks).
@@ -261,7 +287,8 @@ hook_filter_extensions() {
   # hook on Go/Python/etc repos where frontend checks are dead weight.
   if [ "${DISABLE_FRONTEND_HOOKS:-0}" = "1" ]; then
     _hook_debug "skip: DISABLE_FRONTEND_HOOKS=1 (non-frontend repo)"
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
   local exts="$1"
   local match=false
@@ -273,7 +300,8 @@ hook_filter_extensions() {
   done
   if [ "$match" = false ]; then
     _hook_debug "skip: extension mismatch (wanted $exts, got ${file_path##*.})"
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
 }
 
@@ -281,11 +309,12 @@ hook_filter_extensions() {
 
 hook_skip_tests() {
   case "$file_path" in
-    *.test.*|*.spec.*) _hook_debug "skip: test file"; exit 0 ;;
+    *.test.*|*.spec.*) _hook_debug "skip: test file"; _hook_skip_or_exit 1; return $? ;;
   esac
   if echo "$file_path" | grep -qE '/__tests__/'; then
     _hook_debug "skip: __tests__ directory"
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
 }
 
@@ -293,14 +322,15 @@ hook_skip_tests() {
 
 hook_skip_generated() {
   case "$file_path" in
-    *.gen.ts|*.gen.tsx|*.gen.js) _hook_debug "skip: generated (.gen)"; exit 0 ;;
-    *_pb.ts|*_pb.js) _hook_debug "skip: generated (_pb)"; exit 0 ;;
-    *_connectquery.ts) _hook_debug "skip: generated (_connectquery)"; exit 0 ;;
+    *.gen.ts|*.gen.tsx|*.gen.js) _hook_debug "skip: generated (.gen)"; _hook_skip_or_exit 1; return $? ;;
+    *_pb.ts|*_pb.js) _hook_debug "skip: generated (_pb)"; _hook_skip_or_exit 1; return $? ;;
+    *_connectquery.ts) _hook_debug "skip: generated (_connectquery)"; _hook_skip_or_exit 1; return $? ;;
   esac
   # Skip files with @generated marker
   if head -5 "$file_path" 2>/dev/null | grep -qE '(@generated|auto-generated|DO NOT EDIT)'; then
     _hook_debug "skip: generated (@generated marker)"
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
 }
 
@@ -321,13 +351,22 @@ hook_skip_ui_dirs() {
     _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     if [ -f "$_repo_root/registry.json" ]; then
       # Registry repo — remind to rebuild registry
-      echo '{"suppressOutput":true,"systemMessage":"You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."}' >&2
+      if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+        _hook_collect_emit "warn" "ui-registry-warn" "You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."
+      else
+        echo '{"suppressOutput":true,"systemMessage":"You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."}' >&2
+      fi
     elif [ -f "$_repo_root/components.json" ] || [ -f "$_repo_root/cli.json" ]; then
       # Consumer repo — warn that this is a registry-sourced component
       _component=$(basename "$file_path")
-      echo "{\"suppressOutput\":true,\"systemMessage\":\"WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead.\"}" >&2
+      if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+        _hook_collect_emit "warn" "ui-registry-warn" "WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead."
+      else
+        echo "{\"suppressOutput\":true,\"systemMessage\":\"WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead.\"}" >&2
+      fi
     fi
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
 }
 
@@ -371,6 +410,21 @@ hook_get_added_lines() {
         added_lines=$(cat "$file_path" 2>/dev/null || true)
       fi
     fi
+  elif [ "$tool" = "MultiEdit" ]; then
+    local edits_len i old_str new_str chunk
+    edits_len=$(echo "$_hook_input" | jq -r '.tool_input.edits | length // 0' 2>/dev/null || echo 0)
+    added_lines=""
+    i=0
+    while [ "$i" -lt "${edits_len:-0}" ]; do
+      old_str=$(echo "$_hook_input" | jq -r --argjson i "$i" '.tool_input.edits[$i].old_string // ""' 2>/dev/null || true)
+      new_str=$(echo "$_hook_input" | jq -r --argjson i "$i" '.tool_input.edits[$i].new_string // ""' 2>/dev/null || true)
+      chunk=$(diff <(printf '%s\n' "$old_str") <(printf '%s\n' "$new_str") 2>/dev/null \
+        | grep '^>' | sed 's/^> //' || true)
+      if [ -n "$chunk" ]; then
+        added_lines="${added_lines}${added_lines:+$'\n'}$chunk"
+      fi
+      i=$((i + 1))
+    done
   elif [ "$tool" = "Write" ]; then
     # Prefer payload.content. If absent (legacy/synthetic callers),
     # fall back to file on disk — Write creates/overwrites, so disk
@@ -395,7 +449,8 @@ hook_get_added_lines() {
 
   if [ -z "$added_lines" ]; then
     _hook_debug "skip: no added lines from payload ($tool)"
-    exit 0
+    _hook_skip_or_exit 1
+    return $?
   fi
 }
 
@@ -523,13 +578,24 @@ _hook_verbosity="${HOOK_VERBOSITY:-normal}"
 # ── Elapsed-ms timer (for perf_ms telemetry) ────────────────────
 # Sets _hook_start_ms on library source. _hook_elapsed_ms prints
 # milliseconds since source. Integer-only output (test contract).
-# Cross-platform: uses python3 since macOS `date +%N` is unsupported.
+# Uses bash 5 EPOCHREALTIME (zero subprocess); falls back to python3
+# only on shells without it. macOS `date +%N` is unsupported.
 
-_hook_start_ms=$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0)
+_hook_now_ms() {
+  if [ -n "${EPOCHREALTIME:-}" ]; then
+    local s="${EPOCHREALTIME/,/.}"
+    echo $(( ${s%.*} * 1000 + 10#${s#*.} / 1000 ))
+  else
+    python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo 0
+  fi
+}
+
+_hook_start_ms=$(_hook_now_ms)
 
 _hook_elapsed_ms() {
   local now
-  now=$(python3 -c 'import time; print(int(time.time()*1000))' 2>/dev/null || echo "$_hook_start_ms")
+  now=$(_hook_now_ms)
+  [ "$now" -eq 0 ] && now=$_hook_start_ms
   echo $((now - _hook_start_ms))
 }
 
@@ -548,7 +614,7 @@ _hook_elapsed_ms() {
 #   hook_emit_diagnostic  structured diagnostic append; no-op if no sink.
 
 hook_info() {
-  local rule="${1:-$(basename "$0" .sh)}"
+  local rule="${1:-$(_hook_default_rule)}"
   _hook_debug "INFO [$rule]"
   _hook_track_violation "$rule"
   _hook_log_entry "info" "$rule"
@@ -557,10 +623,14 @@ hook_info() {
 
 hook_nudge() {
   local msg="$1"
-  local rule="${2:-$(basename "$0" .sh)}"
+  local rule="${2:-$(_hook_default_rule)}"
   _hook_debug "NUDGE [$rule]: $msg"
   _hook_track_violation "$rule"
   _hook_log_entry "nudge" "$rule"
+  if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+    _hook_collect_emit "nudge" "$rule" "[nudge] $msg"
+    return 0
+  fi
   if [ "$_hook_verbosity" = "normal" ]; then
     local escaped
     escaped=$(_safe_json_escape "[nudge] $msg")
@@ -571,10 +641,14 @@ hook_nudge() {
 
 hook_block_strict() {
   local msg="$1"
-  local rule="${2:-$(basename "$0" .sh)}"
+  local rule="${2:-$(_hook_default_rule)}"
   _hook_debug "STRICT [$rule]: $msg"
   _hook_track_violation "$rule"
   _hook_log_entry "block-strict" "$rule"
+  if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+    _hook_collect_emit "block-strict" "$rule" "[STRICT] $msg"
+    return 0
+  fi
   if [ "$_hook_verbosity" != "quiet" ]; then
     local escaped
     escaped=$(_safe_json_escape "[STRICT] $msg")
@@ -596,10 +670,14 @@ hook_emit_diagnostic() {
 
 hook_block() {
   local msg="$1"
-  local label="${2:-$(basename "$0" .sh)}"
+  local label="${2:-$(_hook_default_rule)}"
   _hook_debug "BLOCK [$label]: $msg"
   _hook_track_violation "$label"
   _hook_log_entry "block" "$label"
+  if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+    _hook_collect_emit "block" "$label" "$msg"
+    return 0
+  fi
   if [ "$_hook_verbosity" != "quiet" ]; then
     local escaped
     escaped=$(_safe_json_escape "$msg")
@@ -612,10 +690,14 @@ hook_block() {
 
 hook_warn() {
   local msg="$1"
-  local label="${2:-$(basename "$0" .sh)}"
+  local label="${2:-$(_hook_default_rule)}"
   _hook_debug "WARN [$label]: $msg"
   _hook_track_violation "$label"
   _hook_log_entry "warn" "$label"
+  if [ "${HOOK_COLLECT:-0}" = "1" ]; then
+    _hook_collect_emit "warn" "$label" "$msg"
+    return 0
+  fi
   if [ "$_hook_verbosity" = "normal" ]; then
     local escaped
     escaped=$(_safe_json_escape "$msg")
@@ -646,7 +728,7 @@ hook_parse_bash() {
 
 hook_deny() {
   local msg="$1"
-  local label="${2:-$(basename "$0" .sh)}"
+  local label="${2:-$(_hook_default_rule)}"
   _hook_debug "DENY [$label]: $msg"
   _hook_track_violation "$label"
   _hook_log_entry "deny" "$label"

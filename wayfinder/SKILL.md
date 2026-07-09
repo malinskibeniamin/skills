@@ -5,8 +5,6 @@ description: Plan huge work that cannot fit in one agent session as a shared iss
 
 # Wayfinder
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Use when a goal is too large for one context window and the way to the **destination** is still foggy. Wayfinder finds the route; it does not charge at the destination. The destination might be a spec, a decision, or a change whose path is unclear.
 
 ## Plan, don't do
@@ -21,7 +19,7 @@ Wayfinder is planning by default. Each ticket resolves a decision, and the map i
 - Claim a ticket before work by assigning it to the driving dev; this must be the session's first write. Open + unassigned means unclaimed.
 - Use the tracker's native blocking/dependency feature when available; fallback to an explicit `Blocked by:` line only when native blocking is unavailable.
 - Never resolve more than one ticket per session.
-- For large parallel maps, use `/stay-within-limits` between ticket waves and `/efficient-frontier` to keep synthesis central while delegating bounded tickets.
+- For large parallel maps, apply `/efficient-frontier` usage-limit budgeting between ticket waves and `/efficient-frontier` to keep synthesis central while delegating bounded tickets.
 - Use `/agent-watchdog` when auditing another session's resolved ticket, claim, branch, or frontier summary before trusting the map.
 
 ## Map shape

@@ -2,14 +2,6 @@
 
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
-# ── tdd-prompt-check.sh: once-per-session reminder ──────────────
-
-run_file_eval "$HOOKS_DIR/tdd-prompt-check.sh" "tdd-prompt-check.sh exists"
-run_executable_eval "$HOOKS_DIR/tdd-prompt-check.sh" "tdd-prompt-check.sh is executable"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "hook_warn" "tdd-prompt-check uses hook_warn (advisory, not block)"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "tdd-reminded" "tdd-prompt-check uses session marker (once per session)"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "/tdd" "tdd-prompt-check prescribes /tdd skill"
-run_content_eval "$HOOKS_DIR/tdd-prompt-check.sh" "per-feature|feature" "tdd-prompt-check references feature-level testing"
 
 # ── lifecycle-stop.sh: test coverage gate (step 0) ─────────────
 
@@ -36,50 +28,33 @@ run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Monitor tool" "lifecycle-stop p
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Do not stop until CI green" "lifecycle-stop mandates CI fix loop"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Request review NOW" "lifecycle-stop prescribes review request"
 
-# ── intent-detect.sh: lifecycle mandate injection ───────────────
+# ── intent-detect.sh: dynamic-context-only policy (2026-07 audit) ──
+# Static rule restatements ([LIFECYCLE], [TDD], [MINIMAL], [CLI-FIRST])
+# were removed: they duplicated CLAUDE.md verbatim. intent-detect now
+# injects only environment-derived context (PR numbers, branch state,
+# installed tools, once-per-session markers, risk tier).
 
 run_file_eval "$HOOKS_DIR/intent-detect.sh" "intent-detect.sh exists"
 run_executable_eval "$HOOKS_DIR/intent-detect.sh" "intent-detect.sh is executable"
-run_content_eval "$HOOKS_DIR/intent-detect.sh" "LIFECYCLE.*MANDATORY" "intent-detect has lifecycle mandate directive"
-run_content_eval "$HOOKS_DIR/intent-detect.sh" "/tdd.*failing test" "intent-detect lifecycle includes /tdd"
-run_content_eval "$HOOKS_DIR/intent-detect.sh" "/simplify" "intent-detect lifecycle includes /simplify"
-run_content_eval "$HOOKS_DIR/intent-detect.sh" "/commit-push" "intent-detect lifecycle includes /commit-push"
 run_content_eval "$HOOKS_DIR/intent-detect.sh" "RISK:" "intent-detect has risk tier classification"
-
-# ── intent-detect.sh: implementation intent triggers lifecycle ──
-
-run_hook_eval "$HOOKS_DIR/intent-detect.sh" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"build a new feature for user profiles"}' \
-  0 \
-  "intent-detect injects lifecycle for 'build feature' prompt" \
-  "LIFECYCLE"
+run_content_eval "$HOOKS_DIR/intent-detect.sh" "PR-CONTEXT" "intent-detect injects PR-number branch context"
+run_content_eval "$HOOKS_DIR/intent-detect.sh" "SCOPE-LOCK" "intent-detect injects feature-branch scope lock"
 
 run_hook_eval "$HOOKS_DIR/intent-detect.sh" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"implement dark mode toggle"}' \
+  '{"hook_event_name":"UserPromptSubmit","prompt":"fix ci on pr #4321"}' \
   0 \
-  "intent-detect injects lifecycle for 'implement' prompt" \
-  "LIFECYCLE"
+  "intent-detect injects PR context for PR-number prompt" \
+  "PR-CONTEXT"
 
-run_hook_eval "$HOOKS_DIR/intent-detect.sh" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"add a new component for notifications"}' \
-  0 \
-  "intent-detect injects lifecycle for 'add component' prompt" \
-  "LIFECYCLE"
-
-run_hook_eval "$HOOKS_DIR/intent-detect.sh" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"what does this function do?"}' \
-  0 \
-  "intent-detect does NOT inject lifecycle for non-implementation prompt"
-
-# Verify non-implementation prompt does NOT get LIFECYCLE directive
+# Verify implementation prompts do NOT get static rule restatements
 _eval_stderr=$(mktemp)
-echo '{"hook_event_name":"UserPromptSubmit","prompt":"what does this function do?"}' | "$HOOKS_DIR/intent-detect.sh" 2>"$_eval_stderr" || true
-if grep -q "LIFECYCLE" "$_eval_stderr"; then
-  echo "  FAIL  non-implementation prompt should NOT get LIFECYCLE directive"
+echo '{"hook_event_name":"UserPromptSubmit","prompt":"implement dark mode toggle"}' | "$HOOKS_DIR/intent-detect.sh" 2>"$_eval_stderr" || true
+if grep -qE "LIFECYCLE|CODE-LIABILITY|REUSE-FIRST|CLI-FIRST" "$_eval_stderr"; then
+  echo "  FAIL  implementation prompt should NOT get static CLAUDE.md restatements"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: non-implementation prompt should NOT get LIFECYCLE directive"
+  ERRORS="$ERRORS\n  FAIL: implementation prompt should NOT get static CLAUDE.md restatements"
 else
-  echo "  PASS  non-implementation prompt correctly skips LIFECYCLE directive"
+  echo "  PASS  implementation prompt gets no static CLAUDE.md restatement"
   PASS=$((PASS + 1))
 fi
 rm -f "$_eval_stderr"

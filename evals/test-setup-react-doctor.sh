@@ -1,21 +1,19 @@
 # Evals for setup-react-doctor skill
 
-SCRIPT="$REPO_ROOT/setup-react-doctor/scripts/react-doctor-stop.sh"
-SKILL_DIR="$REPO_ROOT/setup-react-doctor"
+SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-doctor/scripts/react-doctor-stop.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-doctor"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-doctor-stop.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-react-doctor" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "react-doctor" "SKILL.md mentions react-doctor"
-run_content_eval "$SKILL_DIR/SKILL.md" "biome-overlapping" "SKILL.md mentions biome-overlapping rules"
-run_content_eval "$SKILL_DIR/SKILL.md" "react-doctor.config.json" "SKILL.md mentions config file"
+run_content_eval "$SKILL_DIR/README.md" "react-doctor" "SKILL.md mentions react-doctor"
+run_content_eval "$SKILL_DIR/README.md" "biome-overlapping" "SKILL.md mentions biome-overlapping rules"
+run_content_eval "$SKILL_DIR/README.md" "react-doctor.config.json" "SKILL.md mentions config file"
 
 # ── REFERENCE content ────────────────────────────────────────────
 

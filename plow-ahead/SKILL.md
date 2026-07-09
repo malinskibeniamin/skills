@@ -4,8 +4,6 @@ description: Use when the user says plow ahead, do not stop, use your best judgm
 ---
 
 # Plow Ahead
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Read `references/builder-upstream.md` for the autonomy contract.
 
 Treat the user's instruction as permission to continue through normal uncertainty.

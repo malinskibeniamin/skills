@@ -1,19 +1,17 @@
 # Evals for setup-conventional-commits skill
 
-SCRIPT="$REPO_ROOT/setup-conventional-commits/scripts/conventional-commits-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-conventional-commits"
+SCRIPT="$REPO_ROOT/.claude/hooks/conventional-commits-check.sh"
+SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/conventional-commits"
 
 # ── File structure ──────────────────────────────────────────────
 
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
+run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "conventional-commits-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-conventional-commits" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "scope" "SKILL.md mentions scope requirement"
+run_content_eval "$SKILL_DIR/README.md" "scope" "SKILL.md mentions scope requirement"
 
 # ── Hook: skip non-Bash ─────────────────────────────────────────
 

@@ -54,8 +54,8 @@ echo "  Edit appends to session-touched-files:"
 _f="/tmp/hook-test-track-$$.tsx"
 _setup_test_file "$_f" 'const X = () => <div>clean</div>;'
 # Run a simple hook that sources _hook-lib and parses edit
-# as-cast-check is lightweight and always sources hook-lib
-_run_hook "as-cast-check.sh" "$(_edit_json "$_f")"
+# ts-no-escape-hatches-check is lightweight and always sources hook-lib
+_run_hook "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "clean file passes"
 # Check that file was tracked
 _assert_file_contains "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" "$_f" "file tracked in session"
@@ -63,7 +63,7 @@ _assert_file_contains "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-fi
 echo "  multiple edits accumulate:"
 _f2="/tmp/hook-test-track2-$$.ts"
 _setup_test_file "$_f2" 'const y = 1;'
-_run_hook "as-cast-check.sh" "$(_edit_json "$_f2")"
+_run_hook "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f2")"
 line_count=$(wc -l < "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" | tr -d ' ')
 if [ "$line_count" -ge 2 ]; then
   PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} multiple files tracked ($line_count entries)"
@@ -105,7 +105,7 @@ if [ -d "$_wt_secondary/.git" ] || [ -f "$_wt_secondary/.git" ]; then
   echo 'const X = () => null;' > "$_f_primary"
   # Run hook with cwd=primary worktree so _hook_current_worktree_root resolves
   # to the primary repo, not the test runner's repo.
-  _run_hook_cd "$_wt_repo" "as-cast-check.sh" "$(_edit_json "$_f_primary")"
+  _run_hook_cd "$_wt_repo" "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f_primary")"
   _assert_exit 0 "primary file hook exits 0"
   _assert_file_contains "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" "primary.tsx" "primary file tracked"
 
@@ -113,7 +113,7 @@ if [ -d "$_wt_secondary/.git" ] || [ -f "$_wt_secondary/.git" ]; then
   _f_secondary="$_wt_secondary/subagent.tsx"
   echo 'const Y = () => null;' > "$_f_secondary"
   # Same: run hook with cwd=primary so secondary worktree is correctly seen as "outside".
-  _run_hook_cd "$_wt_repo" "as-cast-check.sh" "$(_edit_json "$_f_secondary")"
+  _run_hook_cd "$_wt_repo" "ts-no-escape-hatches-check.sh" "$(_edit_json "$_f_secondary")"
   _assert_exit 0 "secondary file hook exits 0"
   if grep -q "subagent.tsx" "/tmp/hook-session-${CLAUDE_SESSION_ID}/session-touched-files" 2>/dev/null; then
     FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} secondary-worktree file leaked into main session tracker"

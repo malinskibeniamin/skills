@@ -6,7 +6,7 @@
 Feature idea
   -> /to-spec (community) -- interactive spec creation
   -> /development-lifecycle -- plan phase
-  -> /grill-with-docs -- stress-test plan + update CONTEXT.md/ADRs
+  -> /grilling -- stress-test plan + update CONTEXT.md/ADRs
   -> /to-tickets (community) -- break into GitHub/Jira tickets
   -> implement (use /tdd skill)
   -> code review (development-lifecycle review phase)
@@ -26,12 +26,12 @@ Issue management
 Design decision
   -> /brainstorming -- explore approaches + challenge decisions
   -> /development-lifecycle -- plan the chosen approach
-  -> /grill-with-docs -- stress-test the plan + sharpen terminology
+  -> /grilling -- stress-test the plan + sharpen terminology
   -> implement
 
 Quick question (on a specific decision)
   -> /domain-modeling -- stress-test terms against domain model
-  -> /grill-me -- lightweight stress-test (no DDD docs)
+  -> /grilling -- lightweight stress-test (no DDD docs)
 ```
 
 ## Owned vs Community Skills
@@ -45,8 +45,8 @@ Quick question (on a specific decision)
 | Review | development-lifecycle (review phase) | -- |
 | Design | brainstorming, prototype | -- |
 | Architecture | improve-codebase-architecture | -- |
-| DDD | grill-with-docs, domain-modeling | -- |
-| Meta | writing-great-skills, grill-me, ask-ben | git-guardrails |
+| DDD | grilling, domain-modeling | -- |
+| Meta | writing-great-skills, grilling, ask-ben | -- |
 
 Owned skills ship with repo. "Community" skills install from mattpocock/skills.
 
@@ -111,4 +111,3 @@ Confirm files exist and mention selected tracker, Wayfinding operations, labels,
 | Integration | Requires | What it adds |
 |---|---|---|
 | setup-atlassian-workflow | `acli` installed + authenticated | Jira work items alongside GitHub issues |
-| codex-plugin-cc | OpenAI API key | `/codex:adversarial-review` for cross-model challenge |

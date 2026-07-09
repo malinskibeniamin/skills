@@ -28,6 +28,26 @@
         ]
       }
     ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/post-compact-context.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/pre-compact.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write|Bash",
@@ -35,6 +55,15 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/violation-nudge.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/skill-fire-log.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
@@ -91,14 +120,6 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/ui-registry-warn.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/split-file-convention-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/react-rules-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -143,10 +164,6 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/test-perf-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/ux-copy-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -159,63 +176,7 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/file-size-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/hook-location-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/mutation-side-effect-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/connect-error-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/connect-error-format-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/unhappy-path-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/resilience-review-nudge.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/tdd-prompt-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/error-boundary-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/field-mask-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/route-sibling-test-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/route-visual-test-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/structural-test-nudge-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/legacy-linter-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/biome-ignore-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
@@ -224,14 +185,6 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/test-convention-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/form-watch-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/as-cast-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
@@ -251,18 +204,6 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/mutation-naming-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/magic-number-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/disabled-button-tooltip-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/query-pattern-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -271,43 +212,11 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/zustand-subscription-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/url-state-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/duplicate-function-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/mutation-onerror-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/edit-loop-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/lockfile-sync-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/connect-error-fieldmap-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/proto-form-parallel-state-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/form-setvalue-options-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/form-error-summary-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
@@ -338,13 +247,30 @@
         ]
       }
     ],
-    "Stop": [
+    "SubagentStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/architecture-review-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/subagent-start.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "self-reviewer|code-reviewer|adversarial-reviewer",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/subagent-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/biome-autofix.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
@@ -387,15 +313,7 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/perf-regression-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/violation-summary-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/cache-telemetry-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

@@ -1,14 +1,12 @@
 ---
 name: ponytail
-description: Writes the least code that works. Use when user says ponytail, lazy mode, simplest solution, YAGNI, do less, or complains about bloat.
+description: Writes the least code that works. Use when user says ponytail, lazy mode, simplest solution, YAGNI, do less, complains about bloat, or asks what ponytail deferred (debt ledger).
 license: MIT
 vendored_from: https://github.com/DietrichGebert/ponytail
 upstream_commit: 687c1b339872289d70f65c5eaabce850b1663867
 ---
 
 # Ponytail
-
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
 Vendored from DietrichGebert/ponytail. Local rule: `/tdd` wins; production code needs failing test first.
 Caveman terse: code first, no essays, fragments OK.
 
@@ -61,6 +59,16 @@ Use native `<input type="url">`; skip custom URL parser until product needs stri
 ## Not lazy about
 
 Never cut input validation at trust boundaries, visible error handling, security, accessibility, explicit req, hardware calibration knobs, or failing-test-first for non-trivial prod code.
+
+## Debt ledger
+
+User asks "ponytail debt" / "what did we defer": scan `ponytail:` markers, report only.
+
+`grep -rnE '(#|//) ?ponytail:' . --exclude-dir=.git --exclude-dir=node_modules`
+
+One row per marker: `<file>:<line> - <simplified thing>. ceiling: <limit>. upgrade: <trigger>.`
+Tag rows missing a trigger as `no-trigger`. End: `<N> markers, <M> with no trigger.`
+Nothing found: `No ponytail: debt. Clean ledger.` Persist to `PONYTAIL-DEBT.md` only if asked.
 
 ## Boundary
 

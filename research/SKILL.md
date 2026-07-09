@@ -1,24 +1,20 @@
 ---
 name: research
-description: Investigate a question against high-trust primary sources and capture a durable research artifact as a Markdown file in the repo. Use when the user wants a cited report, multi-source synthesis, or delegated reading legwork; do not use for a quick official docs lookup.
+description: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.
 ---
 
 # Research
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
+Spin up a **background agent** to do the research, so you keep working while it reads.
 
-Investigate the question against **primary sources**: official docs, source code, specs, first-party APIs, or standards. Do not rely on secondary summaries when the owning source is reachable. Follow every claim back to the source that owns it.
+Its job:
 
-Use `/read-the-damn-docs` under the hood for official docs facts, but keep the boundary sharp: quick official fact checks belong to `/read-the-damn-docs`; `/research` owns durable research artifacts, cited Markdown files, and multi-source synthesis.
+1. Investigate the question against **primary sources** -- official docs, source code, specs, first-party APIs -- not a secondary write-up of them. Follow every claim back to the source that owns it.
+2. Write the findings to a single Markdown file, citing each claim's source.
+3. Save it where the repo already keeps such notes; match the existing convention, and if there is none, put it somewhere sensible and say where. In this skills repo, exploratory surveys stay in scratch or memory -- only decision-ready findings land in `docs/`.
 
-## Process
+## Routing
 
-1. Trigger `/read-the-damn-docs` when docs freshness or official behavior matters; if that fully answers a quick docs lookup, stop there instead of creating a research note.
-2. If background agents are available and the user asked for delegated reading legwork, spin one up so the main thread can keep moving. If not, do the research in-session and say so.
-3. Find the repo convention for research notes. Save the findings where the repo already keeps such notes; if no convention exists, choose a sensible Markdown path and say where.
-4. Write one Markdown file with concise findings, links/citations for each claim, open questions, and what downstream skill or plan should consume the findings.
-5. Prefer directly quoted snippets only when the wording itself matters; otherwise summarize and link.
-
-## Output
-
-Return the created file path, the primary sources used, and the decision-ready findings.
+- Need a fact **right now** to keep coding (API shape, current flag, version behavior) -> `/read-the-damn-docs` inline instead; no background agent, no artifact.
+- Multi-source fact-checked **report** with adversarial verification -> the deep-research harness.
+- This skill is the middle: delegated reading legwork with a cited Markdown artifact.

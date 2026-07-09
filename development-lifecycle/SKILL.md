@@ -5,8 +5,6 @@ description: "Use when frontend/React/TypeScript/UI work. Guides understand -> p
 
 # Development Lifecycle
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Auto-detect phase, guide process.
 
 If the user says "plow ahead", "do not stop", "use your best judgment", "keep going until done", or similar, use `/plow-ahead` as the autonomy contract: make reversible assumptions, continue through routine ambiguity, and stop only for true blockers.
@@ -39,19 +37,18 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Bite-sized tasks (2-5 min each)
 - UI work: use `/prototype` for 2-3 runnable UI variations, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
 - 5+ tasks -> stacked PRs (one per logical group)
-- Complex plan (5+ tasks, multi-stakeholder)? Consider `/ultraplan`
-- `/codex:rescue` available -> auto-dispatch second opinion
 
 ### 2b. Grill
 
 **GATE: no impl until plan survive grilling.**
 
-- Auto-invoke `/grill-with-docs` | grill until every branch resolved | update CONTEXT.md + ADRs inline
+- Auto-invoke `/grilling` | grill until every branch resolved | update CONTEXT.md + ADRs inline
 - Update plan with changes | get explicit user confirmation
 - Skip only if: trivial bug fix AND <3 tasks AND no architectural decisions
 
 ### 3. Implement (TDD)
 
+- **Thinker/executor split (default)**: the plan that survived grill is the spec. The smart model (Fable-5/Opus-4.8) stays orchestrator; execution goes to a cheaper executor -- Sonnet subagent for coupled or judgment-adjacent steps, `/codex` GPT-5.5 (worktree) for clear-spec bulk. The orchestrator reviews the executor's diff against the plan; below the bar -> rerun smarter, don't patch by hand.
 - After plan survives grill, use `/swarm` when independent lanes can safely accelerate implementation, tests, diagnosis, review, or docs. Coordinator owns merge.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
 - Code is liability: reuse-first (standard library, native platform, already-installed dependency, one-line), then keep only product value, defense, or test confidence.
@@ -82,7 +79,4 @@ Full flowchart [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 | "Write tests for X" | 3 only |
 | "Ship it" / "Create a PR" | **`/go`** only |
 | "Quick question" | Just answer |
-| "Batch these 5 issues" | **Sandcastle** -- parallel agents |
-| "Work on this overnight" | **Sandcastle** -- AFK delegation |
 
-See [REFERENCE.md](REFERENCE.md) detailed checklists + Sandcastle integration.

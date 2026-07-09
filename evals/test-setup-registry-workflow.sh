@@ -1,19 +1,20 @@
 # Evals for setup-registry-workflow skill
 
-SCRIPT="$REPO_ROOT/setup-registry-workflow/scripts/registry-check.sh"
-SPLIT_SCRIPT="$REPO_ROOT/setup-registry-workflow/scripts/split-file-convention-check.sh"
-SKILL_DIR="$REPO_ROOT/setup-registry-workflow"
+SCRIPT="$REPO_ROOT/registry-workflow/scripts/registry-check.sh"
+SPLIT_SCRIPT="$REPO_ROOT/.claude/hooks/tanstack-router-check.sh"
+SPLIT_LIB="$REPO_ROOT/.claude/hooks/checks/tanstack-router-check.lib.sh"
+SKILL_DIR="$REPO_ROOT/registry-workflow"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_executable_eval "$SCRIPT" "registry-check.sh is executable"
-run_file_eval "$SPLIT_SCRIPT" "split-file-convention-check.sh exists"
-run_executable_eval "$SPLIT_SCRIPT" "split-file-convention-check.sh is executable"
+run_file_eval "$SPLIT_SCRIPT" "tanstack-router-check.sh exists"
+run_executable_eval "$SPLIT_SCRIPT" "tanstack-router-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: setup-registry-workflow" "SKILL.md has correct name"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: registry-workflow" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "registry.json" "SKILL.md mentions registry.json"
 run_content_eval "$SKILL_DIR/SKILL.md" "redpanda-ui" "SKILL.md mentions redpanda-ui"
@@ -26,9 +27,9 @@ run_content_eval "$SCRIPT" "redpanda-ui/" "hook checks for redpanda-ui changes"
 run_content_eval "$SCRIPT" "registry.json" "hook checks for registry.json update"
 run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2|stop-findings" "hook blocks when registry not rebuilt"
 run_content_eval "$SCRIPT" "CHANGELOG|changeset" "hook reminds about changelog or changeset"
-run_content_eval "$SPLIT_SCRIPT" "\\.page\\.tsx" "split hook allows .page.tsx route pages"
-run_content_eval "$SPLIT_SCRIPT" "components/" "split hook steers components to components/"
-run_content_eval "$SPLIT_SCRIPT" "parts|dialogs|checklist" "split hook rejects mixed split-file suffixes"
+run_content_eval "$SPLIT_LIB" "\\.page\\.tsx" "split hook allows .page.tsx route pages"
+run_content_eval "$SPLIT_LIB" "components/" "split hook steers components to components/"
+run_content_eval "$SPLIT_LIB" "parts|dialogs|checklist" "split hook rejects mixed split-file suffixes"
 
 # ── hook-lib.sh: consumer repo upstream warning ──────────────────
 

@@ -1,40 +1,34 @@
-# Evals for frontend-starter-kit meta-skill
+# Evals for the consolidated /frontend-starter-kit (profiles + lazy references, 4.27.0).
 
-SKILL_DIR="$REPO_ROOT/frontend-starter-kit"
+KIT="$REPO_ROOT/frontend-starter-kit/SKILL.md"
+run_file_eval "$KIT" "frontend-starter-kit SKILL.md exists"
+run_content_eval "$KIT" "Profiles" "kit defines profiles"
+run_content_eval "$KIT" "full.*minimal.*redpanda" "kit lists full/minimal/redpanda profiles"
+run_content_eval "$KIT" "idempotent" "kit steps are idempotent"
+run_content_eval "$KIT" "no-ops" "kit notes hook copies are no-ops for plugin consumers"
+run_content_eval "$KIT" "references/toolchain" "kit routes to toolchain reference"
+run_content_eval "$KIT" "references/redpanda" "kit routes to redpanda reference"
 
-# ── File structure ──────────────────────────────────────────────
-
-run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
-
-# ── SKILL.md content ────────────────────────────────────────────
-
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: frontend-starter-kit" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "setup-toolchain" "references setup-toolchain"
-run_content_eval "$SKILL_DIR/SKILL.md" "setup-biome" "references setup-biome"
-run_content_eval "$SKILL_DIR/SKILL.md" "setup-quality-gate" "references setup-quality-gate"
-run_content_eval "$SKILL_DIR/SKILL.md" "setup-agent-config" "references setup-agent-config"
-run_content_eval "$SKILL_DIR/SKILL.md" "setup-react-compiler" "references setup-react-compiler"
-
-# ── Matt Pocock community skills referenced ──────────────────────
-
-run_content_eval "$SKILL_DIR/SKILL.md" "improve-codebase-architecture" "references improve-codebase-architecture skill"
-run_content_eval "$SKILL_DIR/SKILL.md" "prototype" "references prototype skill"
-run_content_eval "$SKILL_DIR/SKILL.md" "visual-plan.*visual-recap.*visual-review" "references visual planning review recap flow"
-run_content_eval "$SKILL_DIR/SKILL.md" "read-the-damn-docs.*plan-arbiter.*agent-watchdog" "references Builder docs arbitration watchdog helpers"
-run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not npx) to install community skills"
-
-# ── All setup skill dependencies exist ───────────────────────────
-
-for dep_skill in setup-toolchain setup-biome setup-quality-gate setup-agent-config setup-react-compiler; do
-  run_file_eval "$REPO_ROOT/$dep_skill/SKILL.md" "dependency: $dep_skill exists"
+for ref in toolchain biome quality-gate agent-config conventional-commits env-validation react-compiler react-doctor zustand ci-pipeline react-rules redpanda; do
+  run_file_eval "$REPO_ROOT/frontend-starter-kit/references/$ref/README.md" "reference exists: $ref"
 done
 
-if grep -qE "request-refactor-plan|design-an-interface|malinskibeniamin/skills/qa|mattpocock/skills/ubiquitous-language" "$SKILL_DIR/SKILL.md" "$SKILL_DIR/REFERENCE.md"; then
-  echo "  FAIL  frontend starter avoids removed legacy workflow skills"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: frontend starter still references removed legacy workflow skills"
-else
-  echo "  PASS  frontend starter avoids removed legacy workflow skills"
-  PASS=$((PASS + 1))
-fi
+# Renamed daily-work skills exist under their new names
+for skill in accessibility tanstack-router connect-query e2e-testing registry-workflow ux-copy; do
+  run_file_eval "$REPO_ROOT/$skill/SKILL.md" "daily-work skill exists: $skill"
+  run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^name: $skill$" "daily-work skill renamed: $skill"
+done
+
+# No model-invoked setup-* skills remain (the 3 survivors are slash-only)
+for d in "$REPO_ROOT"/setup-*/; do
+  [ -d "$d" ] || continue
+  name=$(basename "$d")
+  if grep -q "disable-model-invocation: true" "$d/SKILL.md"; then
+    echo "  PASS  $name is slash-only (zero context tax)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $name is a model-invoked setup skill (should be folded or slash-only)"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $name model-invoked setup skill"
+  fi
+done

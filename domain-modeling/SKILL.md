@@ -5,8 +5,6 @@ description: Build and sharpen a project's domain model. Use when the user wants
 
 # Domain Modeling
 
-Repo/code changes: run `/deslop` before commit, push, PR, or merge.
-
 Actively build and sharpen the project's domain model as you design. This is the *active* discipline -- challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `CONTEXT.md` for vocabulary is not this skill -- that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
 
 ## File structure
