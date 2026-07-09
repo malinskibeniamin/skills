@@ -18,7 +18,7 @@ Do not enact the plan until I confirm we have reached a shared understanding.
 Once a coherent plan exists, spawn three reviewer hats **in parallel** (single message, multiple Agent calls), per findings-schema:
 
 - **`plan-product-hat`**: persona, pain, success metric, scope, reversibility, TTV
-- **`plan-engineering-hat`**: architecture, error paths, perf, security, test strategy, rollback
+- **`plan-engineering-hat`**: architecture, error paths, perf, security, test strategy, rollback -- includes the Murphy pass (what breaks first in prod?); the full Murphy panel (`/resilience-review`) runs on the diff at review time, not on the plan
 - **`plan-design-hat`**: flow, a11y, copy, visual consistency, states (empty/loading/error)
 
 Merge: dedupe all `must_answer` questions into one list; user answers each; plan updates inline. Any `BLOCKED` hat halts the plan until addressed or overridden. All `APPROVED` (or explicit override) -> implement. Competing plans/transcripts/visual plans -> run `/plan-arbiter` after the hats (Adopt / Hybrid / Revise first).

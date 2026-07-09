@@ -15,8 +15,11 @@ bash scripts/generate-hook-configs.sh --check   # drift check (lefthook runs thi
 
 ## 2. Add a new rule (grep-expressible)
 
-1. Write `my-check.sh` in `.claude/hooks/` -- start from any existing `*-check.sh` as template.
-2. Add filename to matcher block in `skill-manifest.json` (usually `PostToolUse.Edit|Write`).
+Per-edit checks live as sourceable libs under `.claude/hooks/checks/` and run through the `PostToolBatch` dispatcher (`post-tool-batch.sh`) -- one process per parallel tool batch on Claude; Codex re-expands them to per-call wrappers via the generator.
+
+0. First ask: can Biome/Ultracite express it? Single-element lint rules belong in the Biome config, not a hook (see the delegation header in `checks/accessibility-check.lib.sh`). Hooks are for cross-element, cross-file, workflow, or LLM-behavior rules.
+1. Write `checks/my-check.lib.sh` exposing `run_my_check()` -- start from an existing `*.lib.sh` as template -- plus a thin `.claude/hooks/my-check.sh` wrapper (copy any 450-byte sibling).
+2. Add the wrapper filename to the matcher block in `skill-manifest.json` (usually `PostToolUse.Edit|Write`).
 3. Regenerate: `bash scripts/generate-hook-configs.sh --apply`.
 4. Test: feed synthetic edit event on stdin:
 

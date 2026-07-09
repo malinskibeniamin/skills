@@ -8,12 +8,13 @@ paths:
 # Accessibility Enforcement
 ## What This Catches
 
-- **`<img>` without `alt`** -- use `alt=""` for decorative img
-- **Mouse-only `onClick` on `<div>`/`<span>`** -- needs `role` + `tabIndex` + `onKeyDown`/`onKeyUp`
-- **Missing ARIA on widget roles** -- `role="combobox"` needs `aria-expanded` + `aria-controls`, `role="dialog"` needs `aria-label`/`aria-labelledby`, `role="tablist"` needs child `role="tab"`
+Biome (ultracite preset) owns the single-element rules: `<img>` alt (`a11y/useAltText`), clickable `<div>`/`<span>` keyboard support (`a11y/useKeyWithClickEvents`, `a11y/noStaticElementInteractions`, `a11y/useFocusableInteractive`), combobox required ARIA (`a11y/useAriaPropsForRole`), and label association (`a11y/noLabelWithoutControl`). The hook enforces only what a per-element linter cannot see:
+
+- **Cross-element widget structure** -- `role="tablist"` needs child `role="tab"`; `role="dialog"` needs `aria-label`/`aria-labelledby`
 - **Weak accessible names** -- accessible names describe action, not element type: `Search`, not `Search icon`
 - **Placeholder-only fields** -- placeholder text cannot replace a label; controls need visible label association or an intentional accessible name
-- **Unassociated labels** -- labels need `htmlFor`/`id` or the control nested inside the label
+- **Error-state pairing** -- `aria-invalid` needs `aria-describedby`; `data-invalid` (CSS-only) needs `aria-invalid`
+- **Nested interactive elements** -- buttons/links inside buttons
 
 Escape hatch: `// allow: a11y-skip [reason]`
 

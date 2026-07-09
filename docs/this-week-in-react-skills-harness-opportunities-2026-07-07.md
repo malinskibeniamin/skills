@@ -1,7 +1,7 @@
 # This Week in React skills harness opportunities
 
 Date: 2026-07-07
-Scope: Issues 280-288, with special check for newer releases after 285.
+Scope: Issues 280-289, with special check for newer releases after 285. Updated 2026-07-09 with #289 and owner descoping (supply-chain folded into existing skills; framework router dropped).
 
 ## Newer newsletters after 285
 
@@ -10,33 +10,26 @@ Found three newer issues after the provided 280-285 set:
 - #286, 2026-06-17: React Compiler Rust rollout, React Native 0.86, Biome 2.5, pnpm 11.7, Playwright 1.61.
 - #287, 2026-06-24: Fragment refs, React Compiler updates, React Router 8, actions/checkout v7 security.
 - #288, 2026-07-01: Next.js 16.3 preview AI improvements, React Router 8.1 agent skills, pnpm 11.8/11.9, TypeScript 7 notes.
-
-I found no published #289 on thisweekinreact.com as of 2026-07-07.
+- #289, 2026-07-08 (checked on owner request): shadcn/ui defaults to Base UI over Radix, TypeScript 7.0 Go port (10x type-check, `strict: true` default), React Navigation 8.0, React Native 0.87 RC, pnpm 11.10 (CI auth, self-update to Rust v12), ES2026 ratified, HTTP QUERY proposed standard, nuqs adopting npm staged publishing. Nothing in #289 changes the recommendations below: the supply-chain items reinforce finding 1, and the shadcn/Base UI switch is worth a registry-workflow note only when we actually bump shadcn.
 
 ## Decision-ready findings
 
-### 1. Add supply-chain workflow/release hardening to the harness
+### 1. Supply-chain hardening: fold into existing skills, no new skill
 
-Priority: P0
+Priority: P1 (descoped per owner feedback -- security-scan territory, not a standing harness concern)
 
-Evidence:
+Owner call: no dedicated supply-chain audit skill and no standing workflow scanner. This belongs in the security scan we already run (`/snyk-ux-security`) and in touch-time guidance: when a change touches `.github/workflows/`, bump action versions as part of that change.
 
-- TWiR repeatedly flags supply-chain incidents and mitigations: the TanStack npm compromise, Mini Shai-Hulud follow-on compromises, staged publishing, npm v12 script blocking, actions/checkout v7, and pnpm SBOM/integrity work.
-- GitHub says `actions/checkout` v7 refuses common `pull_request_target`/`workflow_run` pwn-request patterns; SHA/minor pins do not receive the floating-major backport.
-- GitHub says npm v12 will default `allowScripts` off and `--allow-git` / `--allow-remote` to `none`.
-- pnpm 11.8 adds install dry-run and package-map generation; pnpm 11.9 adds missing tarball-integrity computation and SBOM peer exclusion.
-- Current repo already has dependency-upgrade guidance for min release age, script disabling, git/tarball blocking, and lockfile review, but no deterministic workflow scanner or release-publish staged-publishing workflow.
-- Current repo workflow `.github/workflows/update-agent-native-plan-skills.yml` uses pinned `actions/checkout` v4 SHA twice, so it will not automatically inherit the v7/backported protection.
+Evidence worth keeping:
 
-Recommended harness change:
+- `actions/checkout` v7 refuses common `pull_request_target`/`workflow_run` pwn-request patterns; SHA/minor pins do not inherit the floating-major backport. This repo's `.github/workflows/update-agent-native-plan-skills.yml` pins a v4 SHA twice.
+- npm v12 will default `allowScripts` off; pnpm 11.8/11.9 add dry-run, tarball integrity, and SBOM support; nuqs (#289) shows staged publishing being adopted in the ecosystem.
 
-- Add a focused supply-chain/workflow audit skill or extend `setup-ci-pipeline` plus `upgrade-dependency`.
-- Add eval-backed checks for:
-  - `pull_request_target` or privileged `workflow_run` combined with fork PR checkout.
-  - `actions/checkout` pinned below v7 without explicit risk comment or upgrade plan.
-  - npm release flows that do not mention staged publishing or `allowScripts` review.
-  - pnpm repos that do not use dry-run/SBOM/integrity checks during dependency changes.
-- Keep as audit/nudge first, not broad blocking, to avoid false positives.
+Recommended harness change (small):
+
+- Add one paragraph to `/snyk-ux-security`: include GitHub Actions workflow risk (fork-PR checkout under `pull_request_target`, stale action majors) in the sweep.
+- Add one line to `/upgrade-dependency`: when a PR touches workflow files, upgrade `actions/*` majors in the same PR unless pinned with a risk comment.
+- Bump this repo's own `actions/checkout` pins to v7 next time those workflows change. No `refresh-ci` skill -- overkill for two files.
 
 Sources:
 
@@ -52,32 +45,11 @@ Sources:
 - https://pnpm.io/blog/releases/11.8
 - https://pnpm.io/blog/releases/11.9
 
-### 2. Prefer first-party framework skills/local docs instead of static local clones
+### Dropped: first-party framework skills router (Next.js / React Router)
 
-Priority: P0/P1
+Cut per owner feedback: this harness does not use Next.js, and a framework-skill router is too specific to hypothetical stacks. TanStack Router remains the enforced router; `read-the-damn-docs` already covers "use the framework's own current docs" generically.
 
-Evidence:
-
-- Next.js 16.3 auto-manages AGENTS.md pointers to version-matched docs, adds first-party workflow skills, agent-browser React introspection, structured agent-readable errors, and markdown docs endpoints.
-- React Router 8.1 makes the official React Router Agent Skill default-on in `create-react-router --yes` / non-interactive setup, with `--no-agent-skills` opt-out.
-- Current repo has no `setup-nextjs` or `setup-react-router` skill, and `setup-tanstack-router` intentionally bans `react-router-dom` only when installing TanStack Router.
-
-Recommended harness change:
-
-- Add a tiny framework-skill router, not a big new wrapper:
-  - If Next.js detected, tell agent to read local `node_modules/next/dist/docs/`, respect managed AGENTS.md blocks, and optionally install/use first-party `next-dev-loop`, `next-cache-components-adoption`, or `next-cache-components-optimizer`.
-  - If React Router detected, install/use official `remix-run/agent-skills` or generated project skills rather than inventing local docs.
-  - If TanStack Router detected, keep using our existing stricter `setup-tanstack-router` rules.
-- Add this as routing text in `ask-ben`, `frontend-starter-kit`, and `read-the-damn-docs`; avoid new public setup wrappers unless the evals show a real gap.
-
-Sources:
-
-- https://nextjs.org/blog/next-16-3-ai-improvements
-- https://reactrouter.com/changelog
-- https://github.com/remix-run/agent-skills
-- Local: `setup-tanstack-router/SKILL.md`
-
-### 3. Modernize React Compiler setup around Rust/lint-first integrations
+### 2. Modernize React Compiler setup around Rust/lint-first integrations
 
 Priority: P1
 
@@ -106,7 +78,7 @@ Sources:
 - https://rspack.rs/blog/announcing-2-1
 - Local: `setup-react-compiler/SKILL.md`
 
-### 4. Refresh Biome setup for agent output and cross-language checks
+### 3. Refresh Biome setup for agent output and cross-language checks
 
 Priority: P1
 
@@ -127,7 +99,7 @@ Sources:
 - https://biomejs.dev/blog/biome-v2-5/
 - Local: `setup-biome/REFERENCE.md`
 
-### 5. Add optional Playwright Test Agents path to E2E setup
+### 4. Add optional Playwright Test Agents path to E2E setup
 
 Priority: P2
 
@@ -155,12 +127,11 @@ Sources:
 
 ## Suggested implementation order
 
-1. Supply-chain workflow audit + release hardening evals.
-2. Framework skill router for Next.js and React Router first-party skills/local docs.
-3. React Compiler Rust/lint-first setup refresh.
-4. Biome 2.5 concise reporter and opt-in cross-language rules.
-5. Optional Playwright Test Agents setup note.
+1. Supply-chain paragraphs in `/snyk-ux-security` and `/upgrade-dependency` (descoped scope above).
+2. React Compiler Rust/lint-first setup refresh.
+3. Biome 2.5 concise reporter and opt-in cross-language rules.
+4. Optional Playwright Test Agents setup note.
 
 ## Open grill question
 
-Do we want this as one small PR containing only guidance/evals, or split supply-chain hardening into its own PR before the framework-skill-router work?
+Resolved 2026-07-09: no separate supply-chain PR and no framework-skill router. The remaining items are small enough for one guidance/evals PR.

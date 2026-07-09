@@ -45,7 +45,7 @@ Do not push if the tree changed unintentionally.
 
 ## Reviewer Guidance
 
-When code behavior should stay untouched, prefer PR description and review notes:
+For visual context (diagrams, file maps, annotated walkthrough), run `/visual-recap` -- do not duplicate it here. This skill only tightens the PR text itself:
 
 - Add a TL;DR that matches the actual diff.
 - Separate core files from generated or mechanical files.
