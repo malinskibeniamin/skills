@@ -24,7 +24,7 @@ Issue management
   -> /triage -- interactive intake -> auto-file issues
 
 Design decision
-  -> /brainstorming -- explore approaches + challenge decisions
+  -> /grilling explore mode -- explore approaches + challenge decisions
   -> /development-lifecycle -- plan the chosen approach
   -> /grilling -- stress-test the plan + sharpen terminology
   -> implement
@@ -43,7 +43,7 @@ Quick question (on a specific decision)
 | Triage | triage | -- |
 | Planning | development-lifecycle (plan phase) | to-spec, to-tickets |
 | Review | development-lifecycle (review phase) | -- |
-| Design | brainstorming, prototype | -- |
+| Design | grilling (explore mode), prototype | -- |
 | Architecture | improve-codebase-architecture | -- |
 | DDD | grilling, domain-modeling | -- |
 | Meta | writing-great-skills, grilling, ask-ben | -- |

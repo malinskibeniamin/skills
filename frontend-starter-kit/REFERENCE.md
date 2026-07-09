@@ -56,7 +56,6 @@ Not in the stack (do not introduce): Next.js, react-router-dom, Radix as new dep
 | tdd | mattpocock/tdd (incorporated) | TDD iron law + async leak detection + deep modules |
 | triage | mattpocock/triage (incorporated, multi-tracker GH+Jira) | State-machine triage + bug root cause -> TDD fix plan |
 | diagnosing-bugs | mattpocock/diagnosing-bugs (vendored) | Feedback-loop-first 6-phase debugging |
-| brainstorming | -- (owned) | Design + challenge modes |
 
 ### Community Workflow Skills -- from mattpocock/skills
 

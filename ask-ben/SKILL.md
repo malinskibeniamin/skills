@@ -15,12 +15,10 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/agent-watchdog` | Use when asked to watch, audit, compare, or fix another agent's work from a Codex/Claude session, transcrip... |
 | `/aip` | Designs Google AIP-style protobuf resource APIs. |
 | `/ask-ben` | Router for Ben's frontend-skills harness and every local skill. |
-| `/brainstorming` | Use when exploring design options, starting new features, or needing to think before coding. |
 | `/codebase-design` | Shared vocabulary for designing deep modules. |
 | `/codex-compat` | Generate Codex hooks.json and AGENTS.md from Claude Code hooks. |
 | `/codex` | Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implementation, independent review, computer u... |
 | `/commit-push-pr` | Analyze changes, create categorized conventional commits, push, and open a PR. |
-| `/commit-push` | Analyze changes, create categorized conventional commits, and push -- no PR. |
 | `/connect-query` | ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation... |
 | `/deslop` | Write the least code that works and remove unjustified surface area. |
 | `/development-lifecycle` | Use when frontend/React/TypeScript/UI work. |
@@ -31,7 +29,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/extend-harness` | Extend frontend-skills hook harness. |
 | `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
 | `/go` | Ship what built. |
-| `/grilling` | Interview the user relentlessly about a plan or design, with a 3-hat plan gate and optional domain-doc capt... |
+| `/grilling` | Explore design options, then interview the user relentlessly about the chosen plan, with a 3-hat plan gate... |
 | `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
 | `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
 | `/improve-codebase-architecture` | Scan a codebase for deepening opportunities, present a visual HTML report, then grill the chosen candidate. |

@@ -15,7 +15,7 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 ## Skills Installed
 
-**Owned** (hook-integrated): brainstorming, grilling, domain-modeling, triage, diagnosing-bugs
+**Owned** (hook-integrated): grilling (incl. explore mode), domain-modeling, triage, diagnosing-bugs
 
 **Matt Pocock/community**: grilling, prototype, to-spec, to-tickets, handoff, writing-great-skills
 
@@ -27,7 +27,6 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 ```bash
 # Owned
-bunx skills@latest add malinskibeniamin/skills/brainstorming --agent claude-code -y
 
 # Owned
 bunx skills@latest add malinskibeniamin/skills/grilling --agent claude-code -y

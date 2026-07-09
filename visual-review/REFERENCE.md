@@ -1,6 +1,6 @@
 # Visual Review Reference
 
-Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go`, `/commit-push`, `/commit-push-pr`, `/prototype`, `/triage`, `self-reviewer`, `code-reviewer`.
+Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go`, `/commit-push-pr`, `/prototype`, `/triage`, `self-reviewer`, `code-reviewer`.
 
 Visual review = surface review for customer-facing surfaces: web UI, mobile screens, CLI/TUI output, desktop apps, generated reports, onboarding, forms, any user-visible behavior. Browser screenshot review = one adapter.
 
@@ -371,7 +371,7 @@ These belong here even when hooks exist:
 - `/development-lifecycle`: `plan` mode for customer-facing plans; `/go` handles implemented/release.
 - `/go`: auto-run for frontend diffs + customer-facing surface diffs before PR.
 - `/commit-push-pr`: require result or explicit skip reason for frontend/customer-facing surface PRs.
-- `/commit-push`: require before push unless skipped with reason.
+- `/commit-push-pr --no-pr`: require before push unless skipped with reason.
 - `/prototype`: compare alternatives pre-implementation.
 - `/triage`: use `regression` mode for user-visible bugs.
 - `self-reviewer` and `code-reviewer`: flag missing evidence for frontend/customer-facing surface diffs.
