@@ -17,7 +17,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/ask-ben` | Router for Ben's frontend-skills harness and every local skill. |
 | `/codebase-design` | Shared vocabulary for designing deep modules. |
 | `/codex-compat` | Generate Codex hooks.json and AGENTS.md from Claude Code hooks. |
-| `/codex` | Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implementation, independent review, computer u... |
+| `/codex` | Delegate work to GPT-5.6 via the codex CLI -- clear-spec implementation, independent review, computer use,... |
 | `/commit-push-pr` | Analyze changes, create categorized conventional commits, push, and open a PR. |
 | `/connect-query` | ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation... |
 | `/deslop` | Write the least code that works and remove unjustified surface area. |
