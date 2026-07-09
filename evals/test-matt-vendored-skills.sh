@@ -125,7 +125,22 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-github.
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
-# Latest Matt vendoring: teach workspace.
+# Latest Matt vendoring: teach workspace (restored on owner request, PR #46).
+run_file_eval "$REPO_ROOT/teach/SKILL.md" "teach SKILL.md exists"
+run_file_eval "$REPO_ROOT/teach/MISSION-FORMAT.md" "teach mission format exists"
+run_file_eval "$REPO_ROOT/teach/LEARNING-RECORD-FORMAT.md" "teach learning-record format exists"
+run_file_eval "$REPO_ROOT/teach/GLOSSARY-FORMAT.md" "teach glossary format exists"
+run_file_eval "$REPO_ROOT/teach/RESOURCES-FORMAT.md" "teach resources format exists"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "disable-model-invocation: true" "teach is slash-only (zero description tax)"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "lessons/.*html|learning-records|NOTES.md" "teach keeps stateful workspace files"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "citations|trusted resources" "teach grounds lessons in trusted resources"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "feedback loop|interactive" "teach requires interactive feedback loops"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "storage strength.*retrieval.*spacing.*interleaving" "teach optimizes for durable retention"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "same number of words.*formatting" "teach prevents quiz answer tells"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "reference docs.*HTML anchors" "teach links lessons and references"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "primary source" "teach recommends one primary source per lesson"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "mission changes.*MISSION.md.*learning record" "teach records mission shifts"
+run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses assets before inlining"
 
 # Latest Matt vendoring: improve-codebase-architecture richer report flow.
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "HTML report|architecture-review" "ICA writes HTML architecture report"
