@@ -27,13 +27,14 @@ Run all checks. Fix failures before proceed.
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
 1. Dispatch `self-reviewer` agent on session diff
-2. Diff >50 lines OR touches auth/security -> also dispatch `adversarial-reviewer` parallel
-3. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
-4. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
-5. Fix P0/P1 now, apply P2 `safe_auto`, show P2 `gated_auto` to user
-6. Commit fixes: `refactor(scope): self-review fixes`
-7. Re-verify (tests + types + lint)
-8. **Max 2 refine rounds.** Then proceed.
+2. **Cross-model adversarial review (always, automatic)**: the author model never solely reviews its own work. Claude authored the diff -> dispatch `GPT-5.6: adversarial` via `/codex` (read-only review, break-it prompt). Codex authored the diff -> dispatch the Claude `adversarial-reviewer` agent. Codex CLI unavailable -> `adversarial-reviewer` with a clean context, and record the fallback.
+3. Diff >200 lines OR touches auth/security -> ALSO dispatch the Claude `adversarial-reviewer` in parallel (two adversarial lanes, different models)
+4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
+5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
+6. Fix P0/P1 now (delegate per model routing -- author model may fix; the cross reviewer re-checks), apply P2 `safe_auto`, show P2 `gated_auto` to user
+7. Commit fixes: `refactor(scope): self-review fixes`
+8. Re-verify (tests + types + lint)
+9. **Max 2 refine rounds.** Then proceed.
 
 ## Phase 5: Simplify, Deslop + Ship
 
@@ -51,7 +52,7 @@ Run all checks. Fix failures before proceed.
 1. `Monitor: gh pr checks <number> --watch` -- stream CI background
 2. CI fail -> diagnosing-bugs, fix, push, re-monitor
 3. `code-reviewer` agent findings -> `/resolve-pr-feedback` triage, fix, reply, push
-4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
+4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds, **alternating models** -- round fixes authored by Claude are re-reviewed by `GPT-5.6: review` (`codex review`), codex-authored fixes by the Claude `code-reviewer`. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
 5. **Human review (incl cloud/Copilot)**: NO cap. Address EVERY thread. `pr-feedback-completeness-stop` hook blocks session exit until `bash scripts/pr-unresolved-count.sh` returns 0 and no CHANGES_REQUESTED reviews remain.
 
 ## Phase 6: Compound

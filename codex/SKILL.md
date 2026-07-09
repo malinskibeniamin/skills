@@ -1,14 +1,14 @@
 ---
 name: codex
-description: Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implementation, independent review, computer use, investigation, or data analysis. Use for bulk mechanical work, token-hungry tasks, or a cross-model second opinion.
+description: Delegate work to GPT-5.6 via the codex CLI -- clear-spec implementation, independent review, computer use, investigation, or data analysis. Use for bulk mechanical work, token-hungry tasks, or a cross-model second opinion.
 ---
 
-# Codex delegation (GPT-5.5 / GPT-5.6)
+# Codex delegation (GPT-5.6)
 
-GPT-5.6 (and 5.5) are reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
+GPT-5.6 is reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
 never through the agent/workflow `model` parameter (Claude models only). **Default to GPT-5.6
 for all codex work** (`-m gpt-5.6`, or set `model = "gpt-5.6"` in `~/.codex/config.toml`);
-GPT-5.5 is a fallback only while 5.6 is unavailable on the account. GPT models are extremely
+GPT-5.5 is retired -- 5.6 is GA and strictly better. GPT models are extremely
 steerable: write explicit, self-contained prompts and they follow them.
 
 ## Prompt contract (every codex run)
@@ -25,6 +25,14 @@ rerun with a sharper prompt or redo on a smarter model without asking.
 - **Review** (independent second opinion on a diff/PR): `codex review`, or
   `codex exec -s read-only` with the diff command in the prompt. Findings feed the normal
   review merge; treat as one lane, not the verdict.
+- **Adversarial exchange (automatic -- runs on every change, no ask needed)**: the author
+  model never solely reviews its own work. Claude authored the diff -> spin a `GPT-5.6:
+  adversarial` review here (`codex review` / read-only exec, prompt: "try to break this --
+  failure scenarios, spec drift, missing tests; P0-P3 findings only, evidence required").
+  GPT-5.6 authored the diff -> Fable/Opus reviews (the `/review` panel or
+  `adversarial-reviewer` agent); a second clean-context GPT-5.6 run is an acceptable third
+  perspective. Findings route back per model routing: fixes delegated, then re-checked by
+  the cross reviewer. `/go` phase 4b invokes this automatically.
 - **Computer use** (browser/GUI verification, visual re-checks): shell the whole computer-use
   task to codex -- it is a token furnace on Claude models. Prompt must name the URL/app, the
   states to verify, and the evidence to capture; codex reports back, Fable judges.
@@ -43,14 +51,14 @@ codex exec -s read-only "<prompt>. Write the final report to <report-path>." &
 
 ## Inside workflows and subagents (the wrapper pattern)
 
-The workflow/agent `model` parameter only accepts Claude models. To use GPT-5.5/5.6 in a
+The workflow/agent `model` parameter only accepts Claude models. To use GPT-5.6 in a
 workflow lane or subagent, spawn a thin Claude wrapper:
 
 - Wrapper: `model: sonnet`, `effort: low` -- its ONLY job is to compose the self-contained
   codex prompt, run `codex exec` via Bash, and return the report.
 - Structured results: put the `schema` on the wrapper agent; it maps the codex report into
   the schema.
-- **Always label the agent with a `GPT-5.6:` prefix** (for example `label: "GPT-5.6: review"`; use the model actually invoked).
+- **Always label the agent with a `GPT-5.6:` prefix** (for example `label: "GPT-5.6: review"`).
   The workflow UI shows the wrapper's Claude model, so the label is the only indication the
   real worker is GPT.
 - Parallel implementation wrappers MUST use `isolation: "worktree"` so codex edits do not
@@ -62,5 +70,5 @@ workflow lane or subagent, spawn a thin Claude wrapper:
 
 Judgment-heavy work stays with Fable-5/Opus-4.8: ambiguous decomposition, architecture,
 synthesis across conflicting reports, final review of anything that ships. User-facing
-output (UI, copy, API design) needs taste >= 7 -- GPT-5.5 (taste 5) drafts, a Claude model
+output (UI, copy, API design) needs taste >= 7 -- GPT-5.6 (taste 6) drafts, a Claude model
 finishes. Never use Haiku for anything.
