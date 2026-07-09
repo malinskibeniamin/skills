@@ -90,25 +90,7 @@ if [ -n "$changed_css" ] && [ -x "$hooks_dir/tailwind-check.sh" ]; then
   done
 fi
 
-# Run bundle-guard on changed package.json files
-if [ -n "$changed_pkg" ] && [ -x "$hooks_dir/bundle-guard.sh" ]; then
-  for pkg in $changed_pkg; do
-    abs_path="$repo_root/$pkg"
-    [ -f "$abs_path" ] || continue
-
-    input="{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$abs_path\"}}"
-    hook_stderr=""
-    hook_exit=0
-    hook_stderr=$(echo "$input" | "$hooks_dir/bundle-guard.sh" 2>&1 >/dev/null) || hook_exit=$?
-
-    if [ $hook_exit -ne 0 ] && [ -n "$hook_stderr" ]; then
-      msg=$(echo "$hook_stderr" | grep -o '"systemMessage":"[^"]*"' | head -1 | sed 's/"systemMessage":"//;s/"$//' || true)
-      if [ -n "$msg" ]; then
-        errors="$errors\n[bundle-guard] $pkg: $msg"
-      fi
-    fi
-  done
-fi
+# package.json heavy-dep bans: retired hook — Biome noRestrictedImports owns them.
 
 # ── Orchestration gates (same as orchestration-stop.sh) ──────────
 

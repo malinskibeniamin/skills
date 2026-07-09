@@ -7,8 +7,6 @@ SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-rules"
 # Specialized hooks for rules that moved out of react-rules-check.sh:
 AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
 AS_CAST_LIB="$REPO_ROOT/.claude/hooks/checks/ts-no-escape-hatches-check.lib.sh"
-COMPILER_SCRIPT="$REPO_ROOT/.claude/hooks/react-compiler-check.sh"
-COMPILER_LIB="$REPO_ROOT/.claude/hooks/checks/react-compiler-check.lib.sh"
 BIOME_IGNORE_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
 BIOME_IGNORE_LIB="$REPO_ROOT/.claude/hooks/checks/ts-no-escape-hatches-check.lib.sh"
 PERF_CHECK_SCRIPT="$REPO_ROOT/.claude/hooks/test-convention-check.sh"
@@ -94,44 +92,14 @@ rm -rf "$_gen_tmpdir"
 # Create a temp dir for all file-based tests (macOS mktemp doesn't support suffixes)
 _rr_tmpdir=$(mktemp -d /tmp/react-rules-evals-XXXXXX)
 
-# ── Check 1: useEffect ban (opt-in via env var) ────────────────
+# ── Check 1: useEffect misuse delegated to React Doctor ─────────
 
 tmpfile="$_rr_tmpdir/test.tsx"
-
-# useEffect allowed by default (opt-in disabled)
-echo "import { useEffect } from 'react'; useEffect(() => {}, [])" > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: useEffect when REACT_RULES_BAN_USEEFFECT not set"
-
-# Block useEffect when opt-in enabled
 echo "import { useEffect } from 'react'; useEffect(() => {}, [])" > "$tmpfile"
 
 REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useEffect with REACT_RULES_BAN_USEEFFECT=1" "useEffect"
-
-# Block useLayoutEffect when opt-in enabled
-echo "import { useLayoutEffect } from 'react'; useLayoutEffect(() => {}, [])" > "$tmpfile"
-
-REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useLayoutEffect with opt-in" "useEffect"
-
-# Block useInsertionEffect when opt-in enabled
-echo "import { useInsertionEffect } from 'react'; useInsertionEffect(() => {})" > "$tmpfile"
-
-REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: useInsertionEffect with opt-in" "useEffect"
-
-# Allow useEffect with escape hatch (even when opt-in enabled)
-printf "// allow-useEffect: websocket cleanup\nimport { useEffect } from 'react';\nuseEffect(() => {}, [])\n" > "$tmpfile"
-
-REACT_RULES_BAN_USEEFFECT=1 run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: useEffect with escape hatch"
+  0 "delegated to React Doctor: useEffect misuse (state-and-effects family)"
 
 # ── Check 2: raw HTML elements delegated to Biome noRestrictedElements ──
 
@@ -355,67 +323,24 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: icon button with aria-label"
 
-# ── Check 12: outline removal ────────────────────────────────────
-
-echo 'const style = { outline: none }' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: outline: none" "outline"
+# ── Check 12: outline removal delegated to React Doctor design/no-outline-none ──
 
 echo '<div className="outline-none focus:ring">' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: outline-none CSS class" "outline"
+  0 "delegated to React Doctor: outline-none (design/no-outline-none)"
 
-# Allow outline-none when paired with focus-visible:ring replacement
-echo '<div className="outline-none focus-visible:ring-2">' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: outline-none with focus-visible:ring replacement"
-
-# ── Check 13: React Compiler — manual memoization ────────────────
-# Needs mock package.json with react-compiler so the check activates
-_memo_tmpdir=$(mktemp -d /tmp/memo-evals-XXXXXX)
-echo '{"devDependencies":{"babel-plugin-react-compiler":"*"}}' > "$_memo_tmpdir/package.json"
-_memo_file="$_memo_tmpdir/test.tsx"
-
-echo 'const val = useMemo(() => compute(), [dep])' > "$_memo_file"
-cd "$_memo_tmpdir"
-
-run_hook_eval "$COMPILER_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
-  2 "block: useMemo (React Compiler handles it)" "useMemo"
-
-echo 'const cb = useCallback(() => {}, [])' > "$_memo_file"
-
-run_hook_eval "$COMPILER_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
-  2 "block: useCallback (React Compiler handles it)" "useCallback"
-
-echo 'const Wrapped = React.memo(MyComponent)' > "$_memo_file"
-
-run_hook_eval "$COMPILER_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
-  2 "block: React.memo (React Compiler handles it)" "React.memo"
-
-echo 'const Wrapped = memo(MyComponent)' > "$_memo_file"
-
-run_hook_eval "$COMPILER_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
-  2 "block: memo() (React Compiler handles it)" "memo"
-
-# Allow with 'use no memo' directive
-printf "'use no memo'\nconst val = useMemo(() => 1, [])\n" > "$_memo_file"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_memo_file\"}}" \
-  0 "allow: useMemo with 'use no memo' directive"
-
-cd "$REPO_ROOT"
-rm -rf "$_memo_tmpdir"
+# ── Check 13: manual memoization — delegated to React Doctor
+#     (architecture/react-compiler-no-manual-memoization; hook retired) ──
+if [ -e "$REPO_ROOT/.claude/hooks/react-compiler-check.sh" ]; then
+  echo "  FAIL  react-compiler-check resurrected — React Doctor owns memoization rules"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: react-compiler-check resurrected"
+else
+  echo "  PASS  react-compiler-check stays retired (React Doctor owns memoization)"
+  PASS=$((PASS + 1))
+fi
 
 # ── Protobuf: no false positive on Schema imports ────────────────
 
@@ -776,7 +701,7 @@ echo '<meta name="viewport" content="width=device-width, initial-scale=1, user-s
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: user-scalable=no (WCAG violation)" "zoom"
+  0 "delegated to React Doctor: user-scalable=no (design/no-disabled-zoom)"
 
 # Allow normal viewport meta
 echo '<meta name="viewport" content="width=device-width, initial-scale=1" />' > "$tmpfile"
@@ -1169,7 +1094,7 @@ TSXEOF
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: useEffect state reset → key prop" "key prop"
+  0 "delegated to React Doctor: reset-state-on-prop-change (state-and-effects)"
 
 # Allow: useEffect with escape hatch
 cat > "$tmpfile" <<'TSXEOF'
@@ -1265,7 +1190,7 @@ tmpfile="$_rr_tmpdir/test.tsx"
 # ── Hook script content checks ──────────────────────────────────
 
 run_content_eval "$SCRIPT_LIB" "_react_rules_skip_ui_dirs|hook_skip_ui_dirs" "hook uses shared UI dir skip"
-run_content_eval "$SCRIPT_LIB" "REACT_RULES_BAN_USEEFFECT" "hook checks useEffect opt-in env var"
+run_content_eval "$SCRIPT_LIB" "delegated to React Doctor" "hook records React Doctor delegation"
 run_content_eval "$SCRIPT_LIB" "variant" "hook suggests using variant prop"
 run_content_eval "$SCRIPT_LIB" "Button.*gradient|gradient.*Button" "hook blocks Button gradient overrides"
 run_content_eval "$SCRIPT_LIB" "z-index" "hook warns on arbitrary z-index"
@@ -1275,7 +1200,7 @@ run_content_eval "$SCRIPT_LIB" "wrap.*create" "hook checks protobuf create()"
 run_content_eval "$SCRIPT_LIB" "bufbuild/protobuf" "hook checks protobuf v2 only"
 run_content_eval "$SCRIPT_LIB" "aria-label" "hook checks icon-only button a11y"
 run_content_eval "$SCRIPT_LIB" "outline" "hook bans outline removal"
-run_content_eval "$COMPILER_LIB" "useMemo" "hook checks for manual memoization"
+
 run_content_eval "$SCRIPT_LIB" "dangerouslySetInnerHTML" "hook checks dangerouslySetInnerHTML"
 run_content_eval "$SCRIPT_LIB" "eval\(" "hook checks eval()"
 run_content_eval "$SCRIPT_LIB" "innerHTML" "hook checks innerHTML"
@@ -1309,7 +1234,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket|disconnectWebSock
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useSyncExternalStore" "REFERENCE has useSyncExternalStore guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Resetting State on Prop Change" "REFERENCE has key-prop state reset pattern"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "formValues" "REFERENCE has react-hook-form form-level validate"
-run_content_eval "$SCRIPT_LIB" "key prop" "hook suggests key prop for state reset"
+run_content_eval "$SCRIPT_LIB" "no-reset-all-state-on-prop-change" "hook records React Doctor delegation for state reset"
 
 # ── Cleanup ─────────────────────────────────────────────────────
 

@@ -23,8 +23,6 @@ _check_labels=(
   tanstack-router-gen
   connect-query-check
   aip-proto-check
-  react-compiler-check
-  bundle-guard
   ux-copy-check
   orchestration-guidance
   form-mode-check
@@ -49,8 +47,6 @@ _check_funcs=(
   run_tanstack_router_gen
   run_connect_query_check
   run_aip_proto_check
-  run_react_compiler_check
-  run_bundle_guard
   run_ux_copy_check
   run_orchestration_guidance
   run_form_mode_check

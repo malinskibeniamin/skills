@@ -9,10 +9,15 @@ hook_get_added_lines || return 0
 
 file_content=$(cat "$file_path" 2>/dev/null || true)
 
-# Source material: @tanstack/eslint-plugin-query v5.100.14 rules inspected:
-# exhaustive-deps, stable-query-client, no-rest-destructuring,
-# no-unstable-deps, no-void-query-fn, property order, prefer-query-options.
-# Vendored here as lightweight project hooks; no ESLint runtime dependency.
+# Source material: @tanstack/eslint-plugin-query v5.100.14 rules inspected.
+# React Doctor (Stop hook, tanstack-query category) owns the AST-expressible
+# rules; do not re-add them here:
+#   stable QueryClient      -> tanstack-query/query-stable-query-client
+#   rest destructuring      -> tanstack-query/query-no-rest-destructuring
+#   unstable result in deps -> tanstack-query/query-destructure-result
+#   void queryFn            -> tanstack-query/query-no-void-query-fn
+# This hook keeps only project-specific rules and low-noise heuristics
+# React Doctor does not ship.
 
 # ── Existing project checks ──────────────────────────────────────
 
@@ -31,57 +36,8 @@ if [ -n "$no_await" ]; then
   fi
 fi
 
-# ── TanStack ESLint intent: stable-query-client ───────────────────
-# A QueryClient created during render is unstable and can wipe cache.
-
-if echo "$added_lines" | grep -qE 'new[[:space:]]+QueryClient[[:space:]]*\('; then
-  if hook_has_escape "unstable-query-client"; then
-    :
-  elif ! echo "$added_lines" | grep -qE 'useState[[:space:]]*\([^\n]*new[[:space:]]+QueryClient|useMemo[[:space:]]*\([^\n]*new[[:space:]]+QueryClient'; then
-    if echo "$file_content" | grep -qE 'function[[:space:]]+[A-Z][A-Za-z0-9_]*[[:space:]]*\(|const[[:space:]]+[A-Z][A-Za-z0-9_]*[[:space:]]*=.*=>|<[A-Za-z][A-Za-z0-9.]*'; then
-      hook_block "TanStack Query: QueryClient must be stable. Create it outside components or via React.useState(() => new QueryClient()). Escape: // allow: unstable-query-client [reason]"
-      return 0
-    fi
-  fi
-fi
-
-# ── TanStack ESLint intent: no-rest-destructuring ─────────────────
-# Rest destructuring observes every query result property → excess renders.
-
-if echo "$added_lines" | grep -qE '\{[^}\n]*\.\.\.[A-Za-z_$][A-Za-z0-9_$]*[^}\n]*\}[[:space:]]*=[[:space:]]*(use(Query|InfiniteQuery|SuspenseQuery|SuspenseInfiniteQuery)|[A-Za-z_$][A-Za-z0-9_$]*Query\b)'; then
-  if ! hook_has_escape "query-rest-destructure"; then
-    hook_warn "TanStack Query: avoid rest destructuring query results; it subscribes to all result changes. Destructure only fields used. Escape: // allow: query-rest-destructure [reason]" "query-pattern-rest"
-    return 0
-  fi
-fi
-
-# ── TanStack ESLint intent: no-unstable-deps ──────────────────────
-# Query hook return object is not referentially stable. Dependency arrays
-# should contain destructured fields, not the whole query object.
-
-query_vars=$(printf '%s\n%s' "$file_content" "$added_lines" | grep -oE '[A-Za-z_$][A-Za-z0-9_$]*[[:space:]]*=[[:space:]]*use(Query|InfiniteQuery|SuspenseQuery|SuspenseInfiniteQuery)[[:space:]]*\(' | sed -E 's/[[:space:]]*=.*//' | sort -u || true)
-if [ -n "$query_vars" ]; then
-  while IFS= read -r qv; do
-    [ -z "$qv" ] && continue
-    if echo "$added_lines" | grep -qE '\[[^]]*\b'"$qv"'\b[^]]*\]'; then
-      if ! hook_has_escape "unstable-query-deps"; then
-        hook_block "TanStack Query: '$qv' query result is not stable. Destructure fields and put those fields in hook dependency arrays. Escape: // allow: unstable-query-deps [reason]"
-        return 0
-      fi
-    fi
-  done <<< "$query_vars"
-fi
-
-# ── TanStack ESLint intent: no-void-query-fn ──────────────────────
-# queryFn must return data; block common block-body forms with no return.
-
-if echo "$added_lines" | tr '\n' ' ' | grep -qE 'queryFn[[:space:]]*:[[:space:]]*(async[[:space:]]*)?\([^)]*\)[[:space:]]*=>[[:space:]]*\{[^}]*\}'; then
-  query_fn_blocks=$(echo "$added_lines" | tr '\n' ' ' | grep -oE 'queryFn[[:space:]]*:[[:space:]]*(async[[:space:]]*)?\([^)]*\)[[:space:]]*=>[[:space:]]*\{[^}]*\}' || true)
-  if [ -n "$query_fn_blocks" ] && ! echo "$query_fn_blocks" | grep -qE '\breturn\b'; then
-    hook_block "TanStack Query: queryFn must return a value. Add return/implicit expression; undefined query data breaks cache semantics."
-    return 0
-  fi
-fi
+# ── stable-query-client / no-rest-destructuring / no-unstable-deps /
+#     no-void-query-fn — delegated to React Doctor tanstack-query rules ──
 
 # ── TanStack ESLint intent: exhaustive-deps (low-noise subset) ───
 # Warn only when we can see a direct queryFn call argument that is missing

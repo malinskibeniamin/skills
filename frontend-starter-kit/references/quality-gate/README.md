@@ -34,7 +34,6 @@ Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Ru
 ### 4. Hook scripts
 Copy into `.claude/hooks/`, `chmod +x`:
 - `scripts/typecheck-stop.sh` -> Stop
-- `scripts/bundle-guard.sh` -> PostToolUse (Edit|Write)
 - `scripts/test-perf-stop.sh` -> Stop
 
 ### 5. Verify

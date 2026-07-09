@@ -119,8 +119,6 @@
     "tanstack-router-gen.sh",
     "connect-query-check.sh",
     "aip-proto-check.sh",
-    "react-compiler-check.sh",
-    "bundle-guard.sh",
     "ux-copy-check.sh",
     "orchestration-guidance.sh",
     "form-mode-check.sh",

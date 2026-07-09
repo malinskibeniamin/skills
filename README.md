@@ -216,7 +216,7 @@ graph TD
         direction LR
         P1["react-rules\ntailwind\naccessibility"]
         P2["zustand\ntanstack-router\nconnect-query"]
-        P3["react-compiler\nenv-validation\nbundle-guard"]
+        P3["query-pattern\nform-mode\nerror-boundary"]
         P4["test-perf\nux-copy\norchestration-guidance"]
     end
 

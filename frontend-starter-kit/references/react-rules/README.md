@@ -22,7 +22,7 @@ PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 **Protobuf**: enforce `create()` wrapper for message spreads (v2)
 
 ### Opt-in Rules
-- `REACT_RULES_BAN_USEEFFECT=1`: ban useEffect/useLayoutEffect/useInsertionEffect. Escape: `// allow: useEffect [reason]`
+- useEffect misuse detection: owned by React Doctor (state-and-effects family); the old REACT_RULES_BAN_USEEFFECT opt-in is retired.
 - `REACT_RULES_BAN_TYPE_ASSERTIONS=1`: ban `as X` (allow `as const`). Force type guards/generics/schema validation.
 
 ### Soft Guidance (Claude-enforced, not hooks)

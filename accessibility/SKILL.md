@@ -8,13 +8,11 @@ paths:
 # Accessibility Enforcement
 ## What This Catches
 
-Biome (ultracite preset) owns the single-element rules: `<img>` alt (`a11y/useAltText`), clickable `<div>`/`<span>` keyboard support (`a11y/useKeyWithClickEvents`, `a11y/noStaticElementInteractions`, `a11y/useFocusableInteractive`), combobox required ARIA (`a11y/useAriaPropsForRole`), and label association (`a11y/noLabelWithoutControl`). The hook enforces only what a per-element linter cannot see:
+Enforcement is split across three owners -- one owner per rule:
 
-- **Cross-element widget structure** -- `role="tablist"` needs child `role="tab"`; `role="dialog"` needs `aria-label`/`aria-labelledby`
-- **Weak accessible names** -- accessible names describe action, not element type: `Search`, not `Search icon`
-- **Placeholder-only fields** -- placeholder text cannot replace a label; controls need visible label association or an intentional accessible name
-- **Error-state pairing** -- `aria-invalid` needs `aria-describedby`; `data-invalid` (CSS-only) needs `aria-invalid`
-- **Nested interactive elements** -- buttons/links inside buttons
+- **Biome (ultracite preset)** -- single-element rules: `<img>` alt (`a11y/useAltText`), clickable `<div>`/`<span>` keyboard support (`a11y/useKeyWithClickEvents` and friends), combobox required ARIA (`a11y/useAriaPropsForRole`), label association (`a11y/noLabelWithoutControl`)
+- **React Doctor (Stop hook)** -- structural rules: dialog accessible name (`a11y/dialog-has-accessible-name`), nested interactives (`correctness/html-no-nested-interactive`), redundant name wording like `Search icon` (`a11y/img-redundant-alt`), placeholder-as-label (`a11y/label-has-associated-control`)
+- **This hook** -- only the cross-attribute pairings neither engine expresses: `role="tablist"` needs child `role="tab"`; `aria-invalid` needs `aria-describedby`; `data-invalid` (CSS-only) needs `aria-invalid`
 
 Escape hatch: `// allow: a11y-skip [reason]`
 
