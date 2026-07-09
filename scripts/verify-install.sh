@@ -161,8 +161,6 @@ if [ ${#EXPECTED_HOOKS[@]} -eq 0 ]; then
     "zustand-check.sh"
     "tanstack-router-check.sh"
     "connect-query-check.sh"
-    "react-compiler-check.sh"
-    "bundle-guard.sh"
     "test-perf-check.sh"
     "ux-copy-check.sh"
     "enforce-toolchain.sh"

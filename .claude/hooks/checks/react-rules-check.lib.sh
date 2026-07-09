@@ -41,16 +41,10 @@ hook_get_added_lines || return 0
 
 if [ "$_react_rules_skip_ui_dirs" = false ]; then
 
-# ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
-
-if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
-  if echo "$added_lines" | grep -qE '\b(useEffect|useLayoutEffect|useInsertionEffect)\b'; then
-    if ! hook_has_escape "useEffect"; then
-      hook_block "Remove useEffect. Use React Query, zustand, event handlers, or useTransition. Escape: // allow: useEffect [reason]"
-      return 0
-    fi
-  fi
-fi
+# ── Check 1: useEffect misuse — delegated to React Doctor ────────
+# React Doctor's state-and-effects family (no-fetch-in-effect, no-derived-state-effect,
+# no-effect-chain, no-mirror-prop-effect, no-event-handler, ...) owns effect-misuse
+# detection with AST precision. The old blanket opt-in ban is retired.
 
 # ── Check 2: raw HTML elements — delegated to Biome ─────────────
 # Biome a11y/correctness noRestrictedElements (ultracite preset + starter-kit
@@ -234,14 +228,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 12: No outline removal (breaks keyboard navigation) ────
-
-if (echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
-    echo "$added_lines" | grep -qE 'outline-none') && \
-   ! echo "$added_lines" | grep -qE 'focus-visible:(outline|ring)'; then
-  hook_block "No outline removal. Use focus-visible:ring-* replacement."
-  return 0
-fi
+# ── Check 12: outline removal — delegated to React Doctor design/no-outline-none ──
 
 # ── Check 13: (moved to react-compiler-check.sh — memoization) ──
 
@@ -436,19 +423,8 @@ if echo "$added_lines" | grep -qE '===?\s*NaN\b'; then
   return 0
 fi
 
-# ── Check 35: useEffect to reset state on prop change → key prop ──
-
-case "$file_path" in
-  *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE 'useEffect\(' && \
-       echo "$added_lines" | grep -qE "set[A-Z][a-zA-Z]*\((''|\"\"|\[\]|\{\}|null|undefined|false|0)\)"; then
-      if ! hook_has_escape "useEffect"; then
-        hook_warn "Resetting state in useEffect? Use key prop: <Component key={id} />. Escape: // allow: useEffect [reason]"
-        return 0
-      fi
-    fi
-    ;;
-esac
+# ── Check 35: reset-state-on-prop-change — delegated to React Doctor
+#     (state-and-effects/no-reset-all-state-on-prop-change, no-adjust-state-on-prop-change) ──
 
 # ── Check 36: Ban node:assert in test files ───────────────────────
 

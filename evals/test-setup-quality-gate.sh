@@ -91,109 +91,23 @@ run_content_eval "$PERF_SCRIPT" "additionalContext" "perf hook outputs as inform
 run_content_eval "$PERF_SCRIPT" "pct > 30" "perf hook uses 30% threshold for significant changes"
 run_content_eval "$PERF_SCRIPT" "before > 10" "perf hook filters noise from tests under 10ms"
 
-# ── bundle-guard.sh: File structure ───────────────────────────────
+# ── bundle-guard: retired, Biome noRestrictedImports owns heavy-dep bans ──
 
-BUNDLE_SCRIPT="$REPO_ROOT/.claude/hooks/bundle-guard.sh"
-BUNDLE_LIB="$REPO_ROOT/.claude/hooks/checks/bundle-guard.lib.sh"
-run_file_eval "$BUNDLE_SCRIPT" "bundle-guard.sh exists"
-run_executable_eval "$BUNDLE_SCRIPT" "bundle-guard.sh is executable"
+for _p in ".claude/hooks/bundle-guard.sh" ".claude/hooks/checks/bundle-guard.lib.sh"; do
+  if [ -e "$REPO_ROOT/$_p" ]; then
+    echo "  FAIL  $_p resurrected — Biome noRestrictedImports owns heavy-dep bans"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $_p resurrected"
+  else
+    echo "  PASS  $_p stays retired (Biome owns heavy-dep bans)"
+    PASS=$((PASS + 1))
+  fi
+done
 
-# ── bundle-guard.sh: skip non-package.json ────────────────────────
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/test.ts"}}' \
-  0 "skip: non-package.json file"
-
-# ── bundle-guard.sh: skip non-Edit/Write ─────────────────────────
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  '{"tool_name":"Bash","tool_input":{"command":"echo hi"}}' \
-  0 "skip: Bash tool"
-
-# ── bundle-guard.sh: block moment in dependencies ────────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"dependencies":{"moment":"^2.29.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  2 "block: moment in dependencies" "moment"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: block lodash in dependencies ────────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"dependencies":{"lodash":"^4.17.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  2 "block: lodash in dependencies" "lodash"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: allow lodash-es ─────────────────────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"dependencies":{"lodash-es":"^4.17.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  0 "allow: lodash-es in dependencies"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: block jquery ────────────────────────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"dependencies":{"jquery":"^3.6.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  2 "block: jquery in dependencies" "jQuery"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: allow moment in devDependencies ─────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"devDependencies":{"moment":"^2.29.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  0 "allow: moment in devDependencies"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: block classnames ────────────────────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"dependencies":{"classnames":"^2.3.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  2 "block: classnames in dependencies" "clsx"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: block core-js ───────────────────────────────
-
-tmpdir=$(mktemp -d /tmp/bundle-guard-XXXXXX)
-printf '{"dependencies":{"core-js":"^3.37.0"}}' > "$tmpdir/package.json"
-
-run_hook_eval "$BUNDLE_SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpdir/package.json\"}}" \
-  2 "block: core-js in dependencies" "core-js"
-
-rm -rf "$tmpdir"
-
-# ── bundle-guard.sh: script content ──────────────────────────────
-
-run_content_eval "$BUNDLE_LIB" "moment" "bundle-guard checks moment"
-run_content_eval "$BUNDLE_LIB" "lodash" "bundle-guard checks lodash"
-run_content_eval "$BUNDLE_LIB" "jquery" "bundle-guard checks jquery"
-run_content_eval "$BUNDLE_LIB" "classnames" "bundle-guard checks classnames"
-run_content_eval "$BUNDLE_LIB" "core-js" "bundle-guard checks core-js"
+_BIOME_REF="$REPO_ROOT/frontend-starter-kit/references/biome/REFERENCE.md"
+for dep in moment lodash classnames jquery core-js; do
+  run_content_eval "$_BIOME_REF" "$dep" "Biome config bans $dep (noRestrictedImports)"
+done
 
 # ── test-convention-check.sh: File structure ───────────────────────────
 

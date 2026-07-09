@@ -147,7 +147,7 @@ Generate from `.claude/settings.json`. Copy supported events directly. Add the b
 
 ## Batch fallback: `codex-batch-check.sh`
 
-Stop hook wrapper. Runs selected Claude `PostToolUse`-style checks on changed files when direct mapping is impossible or unsafe. Reuses `.claude/hooks/` scripts. No duplication. Handles JS/TS, CSS/SCSS via `tailwind-check`, and `package.json` via `bundle-guard`.
+Stop hook wrapper. Runs selected Claude `PostToolUse`-style checks on changed files when direct mapping is impossible or unsafe. Reuses `.claude/hooks/` scripts. No duplication. Handles JS/TS and CSS/SCSS via `tailwind-check`; package.json heavy-dep bans live in Biome noRestrictedImports.
 
 > Script: [`scripts/codex-batch-check.sh`](scripts/codex-batch-check.sh)
 

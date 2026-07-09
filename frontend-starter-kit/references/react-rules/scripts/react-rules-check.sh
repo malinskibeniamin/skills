@@ -8,40 +8,9 @@ hook_skip_generated
 hook_filter_extensions "ts|tsx|mdx"
 hook_get_added_lines
 
-# ── Check 1: Ban useEffect/useLayoutEffect/useInsertionEffect (opt-in) ──
+# ── Check 1: useEffect misuse — delegated to React Doctor (state-and-effects family) ──
 
-if [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ]; then
-  if echo "$added_lines" | grep -qE '\b(useEffect|useLayoutEffect|useInsertionEffect)\b'; then
-    if ! hook_has_escape "useEffect"; then
-      hook_block "Remove useEffect. Use React Query, zustand, event handlers, or useTransition. Escape: // allow: useEffect [reason]"
-    fi
-  fi
-fi
-
-# ── Check 2: Ban raw HTML elements (TSX/MDX files) ─────────────
-
-case "$file_path" in
-  *.tsx|*.jsx|*.mdx)
-    raw_element=""
-    if echo "$added_lines" | grep -qE '<button[[:space:]>]'; then
-      hook_warn "Prefer <Button> over raw <button>. Card wrappers: <Card asChild>."
-    fi
-    if echo "$added_lines" | grep -qE '<input[[:space:]/>]'; then raw_element="<input> → <Input> from @/components/ui/input"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<select[[:space:]>]'; then raw_element="<select> → <Select> from @/components/ui/select"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<textarea[[:space:]>]'; then raw_element="<textarea> → <Textarea> from @/components/ui/textarea"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<dialog[[:space:]>]'; then raw_element="<dialog> → <Dialog> from @/components/ui/dialog"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<table[[:space:]>]'; then raw_element="<table> → <Table> from @/components/ui/table"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<label[[:space:]>]'; then raw_element="<label> → <Label> from @/components/ui/label"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<code[[:space:]>]'; then raw_element="<code> → <CodeBlock> or <Code> from Typography. Inline snippets: <Code>, multi-line blocks: <CodeBlock>"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<pre[[:space:]>]'; then raw_element="<pre> → <CodeBlock> from Typography (handles syntax highlight + copy button)"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<h[1-6][[:space:]>]'; then raw_element="<h1>-<h6> → <Heading level={1-6}> from Typography (consistent type scale + semantic)"; fi
-    if [ -z "$raw_element" ] && echo "$added_lines" | grep -qE '<p[[:space:]>]'; then raw_element="<p> → <Text> from Typography (consistent line-height + color tokens)"; fi
-
-    if [ -n "$raw_element" ]; then
-      hook_block "Use component library: $raw_element"
-    fi
-    ;;
-esac
+# ── Check 2: raw HTML elements — delegated to Biome noRestrictedElements ──
 
 # ── Check 2b: Name useEffect callbacks ──────────────────────────
 # useEffect(function syncDocumentTitle() { ... }, [title]) not useEffect(() => {
@@ -59,18 +28,7 @@ esac
 
 # ── Check 3: (moved to as-cast-check.sh — as any, @ts-ignore, @ts-expect-error) ──
 
-# ── Check 4: Ban all type assertions except 'as const' (opt-in) ──
-
-if [ "${REACT_RULES_BAN_TYPE_ASSERTIONS:-}" = "1" ]; then
-  _non_import_lines=$(echo "$added_lines" | grep -v '^\+\?import ' || true)
-  if [ -n "$_non_import_lines" ] && \
-     echo "$_non_import_lines" | grep -qE '\)\s+as\s+[A-Z]|\b\w+\s+as\s+[A-Z]|\bas\s+unknown\b|\bas\s+never\b' && \
-     ! echo "$_non_import_lines" | grep -qE '\bas\s+const\b'; then
-    if ! hook_has_escape "type-assertion"; then
-      hook_block "Remove type assertion (\`as X\`). Use type guards/generics/schema. Allowed: \`as const\`. Escape: // allow: type-assertion [reason]"
-    fi
-  fi
-fi
+# ── Check 4: type assertions — single owner is ts-no-escape-hatches / as-cast check ──
 
 # ── Check 5: Button should not restyle gradient/radius/shadow ────
 
@@ -217,13 +175,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 12: No outline removal (breaks keyboard navigation) ────
-
-if (echo "$added_lines" | grep -qE 'outline[[:space:]]*:[[:space:]]*(none|0)' || \
-    echo "$added_lines" | grep -qE 'outline-none') && \
-   ! echo "$added_lines" | grep -qE 'focus-visible:(outline|ring)'; then
-  hook_block "No outline removal. Use focus-visible:ring-* replacement."
-fi
+# ── Check 12: outline removal — delegated to React Doctor design/no-outline-none ──
 
 # ── Check 13: (moved to react-compiler-check.sh — memoization) ──
 
@@ -396,18 +348,8 @@ if echo "$added_lines" | grep -qE '===?\s*NaN\b'; then
   hook_block "=== NaN always false. Use Number.isNaN(value)."
 fi
 
-# ── Check 35: useEffect to reset state on prop change → key prop ──
-
-case "$file_path" in
-  *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE 'useEffect\(' && \
-       echo "$added_lines" | grep -qE "set[A-Z][a-zA-Z]*\((''|\"\"|\[\]|\{\}|null|undefined|false|0)\)"; then
-      if ! hook_has_escape "useEffect"; then
-        hook_warn "Resetting state in useEffect? Use key prop: <Component key={id} />. Escape: // allow: useEffect [reason]"
-      fi
-    fi
-    ;;
-esac
+# ── Check 35: reset-state-on-prop-change — delegated to React Doctor
+#     (state-and-effects/no-reset-all-state-on-prop-change) ──
 
 # ── Check 36: Ban node:assert in test files ───────────────────────
 

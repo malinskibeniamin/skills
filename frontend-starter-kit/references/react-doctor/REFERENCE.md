@@ -4,18 +4,25 @@
 
 > Script: [`scripts/react-doctor-stop.sh`](scripts/react-doctor-stop.sh)
 
-## Rule Categories
+React Doctor runs on its own bundled oxlint engine -- that is an internal implementation detail, not a linter we adopt or configure. The project toolchain stays Biome/Ultracite for lint/format; React Doctor is the React-pattern layer on top. Pin the react-doctor version in package.json -- it moves fast and the stop hook already works around known internal bugs.
 
-| Category | Biome covers? | Keep in react-doctor? |
-|----------|--------------|----------------------|
-| Hook dependencies | Yes | No (disabled) |
-| Nested components | Yes | No (disabled) |
-| Performance patterns | No | Yes |
-| Bundle size analysis | No | Yes |
-| Dead code detection | No | Yes |
-| Security (secrets, XSS) | Partial | Yes |
-| Accessibility | Partial | Yes |
-| Architecture (prop drilling) | No | Yes |
+## Rule ownership
+
+React Doctor ships 22 rule categories (~200 rules): a11y, architecture, bundle-size, client, correctness, design, js-performance, performance, react-builtins, react-ui, security, security-scan, server, state-and-effects, tanstack-query, zod, plus framework-specific sets (nextjs, preact, react-native, tanstack-start, jotai, view-transitions).
+
+Per-edit hooks retired into React Doctor (do not re-add -- one owner per rule):
+
+| Former hook rule | React Doctor rule |
+|---|---|
+| react-compiler-check (all 3 rules) | `architecture/react-compiler-no-manual-memoization`, `state-and-effects/no-derived-state-effect`, `rerender-lazy-ref-init` |
+| react-rules blanket no-useEffect | `state-and-effects/*` (no-fetch-in-effect, no-effect-chain, no-mirror-prop-effect, ...) |
+| react-rules outline removal | `design/no-outline-none` |
+| react-rules reset-state-on-prop-change | `state-and-effects/no-reset-all-state-on-prop-change` |
+| tailwind user-scalable=no | `design/no-disabled-zoom` |
+| a11y dialog name / nested interactive / name wording / placeholder label | `a11y/dialog-has-accessible-name`, `correctness/html-no-nested-interactive`, `a11y/img-redundant-alt`, `a11y/label-has-associated-control` |
+| query-pattern stable-client / rest-destructure / unstable-deps / void queryFn | `tanstack-query/query-stable-query-client`, `query-no-rest-destructuring`, `query-destructure-result`, `query-no-void-query-fn` |
+
+Disabled in react-doctor config (Biome/Ultracite owns): hook dependencies, nested component definitions, and any rule duplicating `noRestrictedImports`/`noRestrictedElements`/`noProcessEnv`.
 
 ## CLI Flags
 

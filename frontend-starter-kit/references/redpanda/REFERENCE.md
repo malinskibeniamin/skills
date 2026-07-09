@@ -79,4 +79,4 @@ opensrc list
 
 ## Dependency Changes
 
-Handled by `bundle-guard.sh` (heavy deps) + `orchestration-guidance.sh` (package.json nudge).
+Handled by Biome noRestrictedImports (heavy deps) + `orchestration-guidance.sh` (package.json nudge).

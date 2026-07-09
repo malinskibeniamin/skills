@@ -206,11 +206,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Ban user-scalable=no (WCAG zoom violation) ──────────────────
-
-if echo "$added_lines" | grep -qE 'user-scalable\s*=\s*no'; then
-  hook_block "user-scalable=no is WCAG 1.4.4 violation. Users must zoom."
-fi
+# ── user-scalable=no — delegated to React Doctor design/no-disabled-zoom ──
 
 return 0
 }
