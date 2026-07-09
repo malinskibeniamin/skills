@@ -10,7 +10,7 @@ Treat each addition as production liability:
 - Test helper/mock: can hide real behavior or harden implementation details.
 - Hook/rule: can block good work or create noisy false positives.
 
-`/deslop` composes with `/simplify` and `/ponytail` (its delete/stdlib/native/yagni/shrink tags now live in the deslop skill): simplify first, cut complexity, harvest marked debt, then question whether the remaining diff deserves ownership. Pair debt/audit findings with `/improve` when they need a plan, not an immediate edit.
+`/deslop` composes with `/simplify` (ponytail write mode and its delete/stdlib/native/yagni/shrink tags are absorbed into this skill): simplify first, cut complexity, harvest marked debt, then question whether the remaining diff deserves ownership. Pair debt/audit findings with `/improve` when they need a plan, not an immediate edit.
 
 ## Keep rules
 

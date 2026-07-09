@@ -11,7 +11,7 @@ If the user says "plow ahead", "do not stop", "use your best judgment", "keep go
 
 ## Ponytail default
 
-Ponytail before implementation: run `/ponytail full` during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.
+Ponytail before implementation: run `/deslop full` (write mode) during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.
 
 ## Phases
 
