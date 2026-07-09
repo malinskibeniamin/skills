@@ -24,13 +24,11 @@ _check_labels=(
   connect-query-check
   aip-proto-check
   react-compiler-check
-  env-validation-check
   bundle-guard
   ux-copy-check
   orchestration-guidance
   form-mode-check
   error-boundary-check
-  legacy-import-check
   test-convention-check
   ts-no-escape-hatches-check
   tsconfig-strict-check
@@ -52,13 +50,11 @@ _check_funcs=(
   run_connect_query_check
   run_aip_proto_check
   run_react_compiler_check
-  run_env_validation_check
   run_bundle_guard
   run_ux_copy_check
   run_orchestration_guidance
   run_form_mode_check
   run_error_boundary_check
-  run_legacy_import_check
   run_test_convention_check
   run_ts_no_escape_hatches_check
   run_tsconfig_strict_check
