@@ -55,6 +55,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/swarm` | parallel executor. |
 | `/tanstack-router` | TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generat... |
 | `/tdd` | Test-driven development with red-green-refactor loop. |
+| `/teach` | Teach the user a new skill or concept within this workspace. |
 | `/thermo-nuclear-code-quality-review` | Alias for /review --deep -- release-blocking cold PR audit. |
 | `/to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker -- no interview, just... |
 | `/to-tickets` | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blo... |
