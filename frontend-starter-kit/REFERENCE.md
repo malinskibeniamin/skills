@@ -1,5 +1,33 @@
 # Frontend Starter Kit Reference
 
+## Canonical Stack (owner-provided, 2026-07-09)
+
+The `full` profile targets this stack. Every enforcement hook and reference assumes these choices unless the repo proves otherwise.
+
+| Layer | Choice | Enforced / guided by |
+|---|---|---|
+| UI runtime | React 19 (Compiler on) | react-compiler, react-rules |
+| Bundler | Rsbuild | quality-gate (bundle guard), toolchain |
+| Styling | Tailwind (design tokens) | tailwind-check hook, CLAUDE.md |
+| Type checking | TypeScript 7 + tsgo | toolchain |
+| Lint/format | Biome + Ultracite | biome (owns single-element a11y rules) |
+| Unit/integration tests | Vitest + happy-dom + React Testing Library | quality-gate, test conventions |
+| Browser/E2E tests | Vitest browser mode + Playwright | e2e-testing |
+| Navigation | TanStack Router | tanstack-router |
+| REST data | TanStack Query | connect-query reference (query patterns) |
+| gRPC data | @bufbuild/protobuf + Connect Query | connect-query |
+| Forms | react-hook-form + @bufbuild/protovalidate + @bufbuild/cel + @standard-schema/spec | form-mode + error-boundary hooks, connect-query |
+| Schema validation (non-proto) | Zod | env-validation (t3-env + zod) |
+| Client state | Zustand (when context is not enough) | zustand |
+| Component layer | shadcn + Base UI | registry-workflow |
+| Charts | Recharts v3+ | registry-workflow taxonomy |
+| Syntax highlighting | ShikiJS v4+ | -- (React.lazy heavy dep rule) |
+| Flow canvas | XYFlow React | -- (React.lazy heavy dep rule) |
+| Dates | date-fns + react-day-picker | CLAUDE.md light-dep list |
+| Toasts | sonner | error-handling rules (formatToastErrorMessageGRPC) |
+
+Not in the stack (do not introduce): Next.js, react-router-dom, Radix as new dependency (Base UI is the headless layer), moment/dayjs, Jest, ESLint/Prettier, npm/yarn/pnpm as package runner.
+
 ## Full Skill Inventory
 
 ### Setup Skills (14) -- configure hooks + packages
