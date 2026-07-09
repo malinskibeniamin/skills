@@ -125,6 +125,14 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-github.
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.md" "Wayfinding operations" "GitLab tracker template includes wayfinding operations"
 run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.md" "Wayfinding operations" "local tracker template includes wayfinding operations"
 
+# Matt v1.1.0 sync: research skill (restored on owner request).
+run_file_eval "$REPO_ROOT/research/SKILL.md" "research SKILL.md exists"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "background agent" "research delegates to a background agent"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research targets primary sources"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "citing each claim" "research cites every claim"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "read-the-damn-docs" "research routes inline lookups elsewhere"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./research/"' "plugin.json registers research"
+
 # Matt v1.1.0 sync: triage treats external PRs as issues with attached code.
 run_content_eval "$REPO_ROOT/triage/SKILL.md" "PR is an issue with attached code" "triage covers external PRs as issues"
 run_content_eval "$REPO_ROOT/triage/SKILL.md" "\[PR\].*\[issue\]" "triage tags discovery lines PR vs issue"

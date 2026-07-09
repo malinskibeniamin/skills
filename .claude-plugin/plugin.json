@@ -57,6 +57,7 @@
     "./prototype/",
     "./read-the-damn-docs/",
     "./registry-workflow/",
+    "./research/",
     "./resilience-review/",
     "./resolve-pr-feedback/",
     "./resolving-merge-conflicts/",
