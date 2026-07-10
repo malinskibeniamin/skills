@@ -28,7 +28,7 @@ Run all checks. Fix failures before proceed.
 
 1. Dispatch `self-reviewer` agent on session diff
 2. **Cross-model adversarial review (always, automatic, cross-FAMILY preferred)**: the author model never solely reviews its own work, and the reviewer comes from a different family whenever possible. Claude authored the diff -> dispatch `GPT-5.6-sol: adversarial` via `/codex` (read-only review, medium+ effort, break-it prompt). GPT authored the diff -> dispatch the Claude `adversarial-reviewer` agent (Opus). The initial adversarial pass is Sol or Opus -- never Terra/Luna; Terra may re-check fix rounds. Cross-provider gates apply (see /codex): repo without codex opt-in -> clean-context Claude adversarial lane instead. Codex CLI or model unavailable -> `adversarial-reviewer` with a clean context, and record the substitution.
-3. Diff >200 lines OR touches auth/security -> ALSO dispatch the Claude `adversarial-reviewer` in parallel (two adversarial lanes, different models)
+3. Diff >200 lines -> ALSO dispatch the Claude `adversarial-reviewer` in parallel (two adversarial lanes, different models)
 4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
 6. Fix P0/P1 now (delegate per model routing -- author model may fix; the cross reviewer re-checks), apply P2 `safe_auto`, show P2 `gated_auto` to user

@@ -104,9 +104,9 @@ else
 fi
 
 # (e) Codex keeps per-call scripts and never gets PostToolBatch.
-_codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.command | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|security-audit-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
-if [ "$_codex_count" = "22" ] && ! grep -q 'post-tool-batch.sh' "$CODEX_HOOKS" 2>/dev/null; then
-  echo "  PASS  codex-hooks.json keeps 22 per-call scripts and omits dispatcher"
+_codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.command | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
+if [ "$_codex_count" = "21" ] && ! grep -q 'post-tool-batch.sh' "$CODEX_HOOKS" 2>/dev/null; then
+  echo "  PASS  codex-hooks.json keeps 21 per-call scripts and omits dispatcher"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  codex-hooks.json per-call parity (count=$_codex_count)"
@@ -114,9 +114,9 @@ else
   ERRORS="$ERRORS\n  FAIL: codex-hooks per-call parity"
 fi
 
-# (f) Claude settings has dispatcher, not the 22 per-edit scripts under PostToolUse.
+# (f) Claude settings has dispatcher, not the 21 per-edit scripts under PostToolUse.
 _claude_batch=$(jq '[.hooks.PostToolBatch[]?.hooks[]?.args[]? | select(test("post-tool-batch\\.sh"))] | length' "$CLAUDE_SETTINGS" 2>/dev/null || echo 0)
-_claude_posttool_edit_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.args[]? | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|security-audit-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CLAUDE_SETTINGS" 2>/dev/null || echo 0)
+_claude_posttool_edit_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.args[]? | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CLAUDE_SETTINGS" 2>/dev/null || echo 0)
 if [ "$_claude_batch" = "1" ] && [ "$_claude_posttool_edit_count" = "0" ]; then
   echo "  PASS  Claude settings uses PostToolBatch dispatcher only for per-edit checks"
   PASS=$((PASS + 1))

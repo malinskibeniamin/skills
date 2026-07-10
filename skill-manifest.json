@@ -121,7 +121,6 @@
     "ts-no-escape-hatches-check.sh",
     "tsconfig-strict-check.sh",
     "llm-failure-mode-check.sh",
-    "security-audit-check.sh",
     "query-pattern-check.sh",
     "copyright-check.sh",
     "edit-loop-check.sh",

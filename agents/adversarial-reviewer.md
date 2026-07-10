@@ -1,6 +1,6 @@
 ---
 name: adversarial-reviewer
-description: 'Constructs failure scenarios and stress-tests implementations. Asks "what breaks this?" not "does this look right?" Gated: runs only when cross-model duty applies (codex authored the diff), diff_lines > 200, any prior reviewer returned a CRITICAL finding, OR diff touches auth/security paths. Outputs structured JSON findings per findings-schema.md.'
+description: 'Constructs failure scenarios and stress-tests implementations. Asks "what breaks this?" not "does this look right?" Gated: runs only when cross-model duty applies (codex authored the diff), diff_lines > 200, any prior reviewer returned a CRITICAL finding. Outputs structured JSON findings per findings-schema.md.'
 model: opus
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 ---
@@ -19,8 +19,6 @@ This agent is expensive. Run only when at least one trigger fires.
 
 2. Read prior reviewer outputs from orchestrator context (code-reviewer, self-reviewer JSON blocks already emitted this turn). Scan for any finding with `severity: "CRITICAL"`.
 
-3. Scan changed paths for security-sensitive patterns:
-   ```
    git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'
    ```
 
@@ -28,7 +26,6 @@ This agent is expensive. Run only when at least one trigger fires.
    - If the orchestrator marked this dispatch `cross_model: true` (the diff was authored by a codex/GPT executor, so this Claude agent IS the cross-model reviewer) -- PROCEED. Cheap adversarial coverage for Claude-authored diffs is the `GPT-5.6: adversarial` codex lane, not this agent.
    - If `diff_lines > 200` -- PROCEED.
    - If any prior reviewer returned `severity: "CRITICAL"` -- PROCEED.
-   - If security-path match non-empty -- PROCEED.
    - Else -- EMIT the skip block below and STOP.
 
    Skip block:
