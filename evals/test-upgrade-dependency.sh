@@ -68,9 +68,20 @@ run_content_eval "$SKILL_MD" "change volume|release cadence|diff size" "scores n
 run_content_eval "$SKILL_MD" "effort|danger|blast radius" "scores upgrade effort and danger"
 run_content_eval "$SKILL_MD" "patch/minor.*apply|apply.*patch/minor" "safe patch/minor may apply"
 run_content_eval "$SKILL_MD" "major.*GitHub issue|GitHub issue.*major" "major changes go to GitHub issue"
-run_content_eval "$SKILL_MD" "plan only" "supports plan-only natural language"
-run_content_eval "$SKILL_MD" "Always leave.*report|leave.*local report" "always leaves local report"
-run_content_eval "$SKILL_MD" "docs/dependency-upgrades" "uses durable local report path"
+run_content_eval "$SKILL_MD" "plan.*only|plan only" "supports plan-only invocation"
+# Reports are opt-in now (owner call): no unprompted repo reports.
+if grep -qE "Always leave.*report|docs/dependency-upgrades" "$SKILL_MD"; then
+  echo "  FAIL  unprompted local report requirement crept back"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: unprompted report requirement returned"
+else
+  echo "  PASS  no unprompted repo reports (upgrade+adapt is the default)"
+  PASS=$((PASS + 1))
+fi
+run_content_eval "$SKILL_MD" "same PR" "migration + benefit ride in the same PR as the bump"
+run_content_eval "$SKILL_MD" "Benefit" "has the benefit-adoption pass"
+run_content_eval "$SKILL_MD" "Deprecation warnings.*fixed NOW|fixed NOW, not suppressed" "deprecations fixed in the upgrade PR"
+run_content_eval "$SKILL_MD" "failed run" "bump-only PR counts as a failed run"
+
 run_content_eval "$SKILL_MD" "subagents|swarm|one package per agent" "supports delegated package swarm"
 run_content_eval "$SKILL_MD" "latest stable|stable enough|modern syntax" "targets latest stable modern stack"
 

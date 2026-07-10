@@ -59,7 +59,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker -- no interview, just... |
 | `/to-tickets` | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blo... |
 | `/triage` | Move issues through triage roles and prepare agent-ready work. |
-| `/upgrade-dependency` | Plans safe dependency upgrades via researched paths and risk gates. |
+| `/upgrade-dependency` | Upgrade a dependency AND adapt the code to it in one pass -- bump, codemods, call-site migration, new-API a... |
 | `/ux-copy` | UX text style for UI strings and prose -- sentence case, action labels, banned phrases, inclusive language,... |
 | `/visual-plan` | Turn text plans into interactive Agent-Native visual plans with diagrams, file maps, annotated code, questi... |
 | `/visual-recap` | Turn a PR, branch, commit, or diff into an interactive Agent-Native visual recap with diagrams, file maps,... |
