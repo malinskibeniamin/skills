@@ -27,7 +27,7 @@ output does not meet the bar, rerun or redo on a smarter model WITHOUT asking. J
 output, not the price tag; escalating costs less than shipping mediocre output.
 
 - Anything that ships: intelligence > taste > cost. Cost is a tiebreaker only.
-- Bulk mechanical (clear-spec implementation, data analysis, migrations): GPT-5.6 -- effectively free.
+- Bulk mechanical (clear-spec implementation, data analysis, migrations): GPT-5.6 -- plan allowance, cheap relative to Claude tokens (not free; see /codex budget gate).
 - User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-4.8, Fable-5). GPT-5.6 drafts, Claude finishes.
 - Reviews and plans: Fable-5 or Opus-4.8, plus GPT-5.6 as the independent cross-model perspective.
 - Cross-model review, automatic on every change: the author model never solely reviews its

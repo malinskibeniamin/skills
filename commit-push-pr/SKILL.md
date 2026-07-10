@@ -67,7 +67,7 @@ Record commit types created -- used for auto-labeling Phase 5.
 
 ### Phase 5: Open pull request
 
-Skip this phase entirely when invoked with `--no-pr` or when the user asked for commit+push only.
+**`--no-pr` (or user asked for commit+push only): stop the PR track here.** Skip Phases 5 and 6 entirely, then run only the no-PR tail of Phase 7: confirm clean worktree (`git status`/`git diff`), summarize branch + commits pushed, end with the one status line (🟢 pushed, no PR by request). No PR number, no CI watch, no PR URL.
 
 **PR exists** (from context) -> skip to Phase 6, push updated it already.
 

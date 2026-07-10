@@ -11,10 +11,7 @@ Use `/agent-watchdog` when the target is another agent's branch, transcript, PR,
 ## Inputs
 
 If fixed point missing, ask: "Review against what -- branch, commit, or `main`?"
-
-Use:
-- Diff: `git diff <fixed>...HEAD`
-- Commits: `git log <fixed>..HEAD --oneline`
+Diff: `git diff <fixed>...HEAD` | Commits: `git log <fixed>..HEAD --oneline`
 
 ## Gather
 
@@ -31,10 +28,12 @@ Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `C
 
 ## Hat panel (default for PR and branch reviews)
 
-The panel is what makes this skill find problems others miss: eight parallel perspectives,
-each owning one axis with explicit non-goals so they don't converge on the same findings.
-Spawn all hats in one message as subagents; the orchestrator only gathers sources, fans out,
-merges, dedupes by root cause, and reports.
+The panel is what makes this skill find problems others miss: nine perspectives, each owning
+one axis with explicit non-goals so they don't converge. Schedule in **bounded waves sized
+to host capacity** (default 3 concurrent subagents; excess hats queue -- never assume all
+nine fit at once). The orchestrator gathers sources, fans out wave by wave, merges, dedupes
+by root cause, reports -- and MUST assert every non-skipped hat completed; a hat lost to a
+spawn failure is rerun, not dropped.
 
 | Hat | Owns | Model |
 |---|---|---|
@@ -73,7 +72,7 @@ After all hats finish, merge, dedupe, and verify priority before posting or prin
 If the target is a GitHub PR and PR comment tooling is available, post inline PR comments automatically to the open or targeted PR; the user does not need to ask. Resolve target in order: explicit PR URL/number, PR targeted by the skill invocation, then the open PR for the current branch. If PR comment tooling is unavailable, no PR exists, or multiple PRs are ambiguous, emit comment-ready output instead.
 Do not dump the whole review into the PR. Comment only distinct, high-confidence, actionable findings with tight file/line evidence. Prefer P0/P1 comments; include P2 only when the fix is clear and useful; keep P3 Patch or P3 Future items in the summary unless explicitly worth an inline note.
 Priority mapping: P0 for Blocker, P1 for Major, P2 for Minor, P3 for Patch or Future. Legacy aliases normalize to this scale. Every posted/comment-ready item carries exactly one priority label. P0/P1 block merge; P2 fix or track; P3 optional polish or later cleanup.
-**Findings drive fixes automatically** on every PR this harness opens (not someone else's), no ask needed: P0/P1 -> delegate per model routing (clear-spec -> `GPT-5.6:` codex wrapper in a worktree; judgment-adjacent -> Claude subagent; author model may fix -- the cross-model reviewer re-checks the fix diff), P2 -> fix if mechanical else track in summary, P3 -> summary only. Rerun only affected hats, then update posted comments.
+**`/review` is diagnostic-only in every mode -- it never edits, commits, or pushes.** The automatic fix loop lives in `/go` phase 5b: on every PR this harness opens (not someone else's), review findings hand off to `/go`, which delegates P0/P1 per model routing (clear-spec -> `GPT-5.6:` codex wrapper in a worktree; judgment-adjacent -> Claude subagent; author model may fix -- the cross-model reviewer re-checks the fix diff), fixes P2 if mechanical else tracks it, and leaves P3 in the summary. After fixes, `/go` reruns only the affected hats and updates the posted comments. Standalone `/review` (no /go context) reports and stops.
 Every confirmed bug is P0 or P1; never demote a reproduced bug to P2/P3 because the fix is small. P0 = merge-blocking crash, data loss, security/privacy exposure, corrupt state, outage, impossible core flow, or entirely missing required behavior. P1 = normal-user defect, regression, broken contract/spec, fake success, major accessibility failure, or high-risk edge.
 Place each PR comment on the tightest changed file/range that introduces the issue. Prefer the exact changed line; if not in the diff, the nearest changed line with context; otherwise a top-level comment-ready item with the reason inline placement is unsafe.
 Comment template: What, Why, Suggested fix, One-shot prompt. Prefix every comment with Priority. Keep each comment short. One-shot prompt is one sentence when simple and names repo/branch, file/range, exact requested change, and verify command when safe; otherwise say why no safe one-shot exists.

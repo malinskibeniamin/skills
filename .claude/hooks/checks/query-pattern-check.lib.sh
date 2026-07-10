@@ -89,6 +89,18 @@ if echo "$added_lines" | grep -qE 'use(Query|InfiniteQuery|SuspenseQuery|Suspens
   fi
 fi
 
+# ── Check: useMutation result variables carry the *Mutation suffix ──
+# Restored after the legacy-import retirement audit: naming is a project
+# convention neither Biome nor React Doctor expresses.
+
+_unnamed_mutation=$(echo "$added_lines" | grep -E 'const[[:space:]]+[A-Za-z_$][A-Za-z0-9_$]*[[:space:]]*=[[:space:]]*useMutation\b' | grep -vE 'const[[:space:]]+[A-Za-z_$][A-Za-z0-9_$]*Mutation[[:space:]]*=' || true)
+if [ -n "$_unnamed_mutation" ]; then
+  if ! hook_has_escape "mutation-name"; then
+    hook_warn "useMutation result should carry the *Mutation suffix (deleteMutation, not doDelete). Escape: // allow: mutation-name [reason]" "query-pattern-mutation-name"
+    return 0
+  fi
+fi
+
 # ── absorbed from mutation-onerror-check.sh (4.28 family consolidation) ──
 # ── Check: mutate()/mutateAsync() must include onError callback ──
 # Silent mutation failures = data loss risk. Users must see feedback.
