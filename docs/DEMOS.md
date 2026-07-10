@@ -41,20 +41,16 @@ Auto-detects current branch PR, triages, fixes, replies to threads.
 **Three big wins** -- autoplay teaser, real moments from the last 30 days:
 
 <p align="center">
-  <img src="docs/screenshots/wow-factor.gif" alt="3-5 review cycles -> 0-1. While you slept Claude shipped 13 phases, 4 waves, 0 destructive commands. Force-push to main at 4am? Blocked. 60 hooks / 74 checks / 0 LLM tokens / 100% deterministic." width="900">
 </p>
 
 **Hero GIF** -- hook blocking a banned cast at write time (~293ms, every edit):
 
 <p align="center">
-  <img src="docs/screenshots/hook-fire.gif" alt="Hook fires in ~293ms, blocks unsafe cast, dev fixes with zod schema" width="720">
 </p>
 
 **2-minute highlight reel** -- skill wins extracted from real transcripts (ADP UI + ui-registry + skills repo):
 
 <p align="center">
-  <video src="docs/screenshots/highlights.mp4" controls width="900" muted playsinline>
-    Your browser does not support embedded MP4. <a href="docs/screenshots/highlights.mp4">Download highlights.mp4</a>.
   </video>
 </p>
 
@@ -75,24 +71,18 @@ Featured skill moments -- each from an actual session:
 **60-second explainer** -- pain -> fix -> install -> proof:
 
 <p align="center">
-  <video src="docs/screenshots/explainer.mp4" controls width="720" muted playsinline>
-    <a href="docs/screenshots/explainer.mp4">Download explainer.mp4</a>
   </video>
 </p>
 
 **50-second comparison** -- prompt-packs vs obra/superpowers vs this harness:
 
 <p align="center">
-  <video src="docs/screenshots/comparison.mp4" controls width="720" muted playsinline>
-    <a href="docs/screenshots/comparison.mp4">Download comparison.mp4</a>
   </video>
 </p>
 
 **70-second announcement** -- launch version for Slack / social:
 
 <p align="center">
-  <video src="docs/screenshots/announcement.mp4" controls width="720" muted playsinline>
-    <a href="docs/screenshots/announcement.mp4">Download announcement.mp4</a>
   </video>
 </p>
 
