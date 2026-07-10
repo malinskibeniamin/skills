@@ -81,10 +81,8 @@ codex exec -s read-only "<prompt>. Write the final report to <report-path>." </d
 # Bash(run_in_background: true), then poll/Read <report-path>
 ```
 
-**Always redirect stdin from /dev/null on background runs.** codex accepts its
-prompt from stdin too, so with an open-but-silent stdin pipe it blocks forever
-waiting for EOF -- 0s CPU, no session, looks "stuck". Foreground runs get away
-with it; background runs do not.
+**Always `</dev/null` on background runs**: codex also reads its prompt from stdin, so an
+open-but-silent stdin pipe blocks it forever waiting for EOF -- 0s CPU, no session, looks "stuck".
 
 ## Inside workflows and subagents (the wrapper pattern)
 
