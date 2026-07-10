@@ -49,7 +49,7 @@ printf "it('should render', () => {})\n" > "$tmpfile"
 
 run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: it() in test file" "test()"
+  0 "delegated to Biome: it() vs test() (useConsistentTestIt)"
 
 # ── Warn: jest.fn() ─────────────────────────────────────────────
 

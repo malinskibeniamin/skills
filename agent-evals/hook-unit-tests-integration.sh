@@ -245,28 +245,11 @@ else
   FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} missing fields (ts=$has_ts hook=$has_hook rule=$has_rule decision=$has_decision)"
 fi
 
-echo "  metrics-summary-stop reads JSONL:"
-# Simulate enough data for metrics
-source "$HOOKS_DIR/_hook-lib.sh"
-_hook_log_entry "block" "eval-ban" "react-rules-check"
-_hook_log_entry "warn" "inline-style" "react-rules-check"
-_hook_log_entry "block" "eval-ban" "react-rules-check"
-_run_hook "metrics-summary-stop.sh" ""
-_assert_exit 0 "metrics-summary exits 0"
-
-# Check that metrics file was written
-metrics_dir="$HOME/.claude/hook-metrics"
-if ls "$metrics_dir"/*.json >/dev/null 2>&1; then
-  latest=$(ls -t "$metrics_dir"/*.json | head -1)
-  if jq -e '.total_entries' "$latest" >/dev/null 2>&1; then
-    PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} metrics JSON written with total_entries"
-  else
-    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} metrics JSON invalid"
-  fi
-  # Clean up test metrics
-  rm -f "$latest"
+# metrics-summary-stop was CUT (wave 6.5): session-end.sh owns session metrics.
+if [ -e "$HOOKS_DIR/metrics-summary-stop.sh" ]; then
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}\xe2\x9c\x97${NC} metrics-summary-stop resurrected -- session-end owns metrics"
 else
-  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} no metrics file created"
+  _pass "metrics-summary-stop stays cut (session-end owns session metrics)"
 fi
 
 _cleanup_test_file "$_f"

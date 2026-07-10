@@ -99,7 +99,6 @@ else
 fi
 rm -f "$_test_script"
 
-# ── session-end.sh includes perf_ms field (moved from metrics-summary-stop in 2.2.4) ─
 if grep -q 'perf_ms' "$REPO_ROOT/.claude/hooks/session-end.sh"; then
   echo "  PASS  session-end.sh emits perf_ms field (schema v2)"
   PASS=$((PASS + 1))

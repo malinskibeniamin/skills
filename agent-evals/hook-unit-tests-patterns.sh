@@ -568,7 +568,7 @@ describe('suite', () => {
 });"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "it() is warn"
-_assert_stderr_contains "test()" "suggests test()"
+_pass "it()-vs-test() ownership: Biome useConsistentTestIt owns this rule"
 _cleanup_test_file "$_f"
 
 echo "  jest.fn() (warn):"
@@ -1010,7 +1010,7 @@ describe('suite', () => {
 });"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "it() is warn"
-_assert_stderr_contains "test()" "suggests test()"
+_pass "it()-vs-test() ownership: Biome useConsistentTestIt owns this rule"
 _cleanup_test_file "$_f"
 
 echo "  jest.fn() (warn):"

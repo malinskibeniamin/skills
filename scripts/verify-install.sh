@@ -194,7 +194,6 @@ if [ ${#EXPECTED_HOOKS[@]} -eq 0 ]; then
     "orchestration-guidance.sh"
     "orchestration-stop.sh"
     "quality-gate-stop.sh"
-    "metrics-summary-stop.sh"
     "violation-summary-stop.sh"
     "violation-nudge.sh"
     "architecture-review-stop.sh"
