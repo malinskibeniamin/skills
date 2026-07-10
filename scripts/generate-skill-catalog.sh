@@ -13,7 +13,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MODE="${1:-apply}"
 
 python3 - "$REPO_ROOT" "$MODE" <<'PY'
-import json, pathlib, re, sys
+import json, pathlib, re, shutil, sys
 
 repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
@@ -25,22 +25,37 @@ if codex_manifest.get("skills") != "./codex-skills/":
     sys.exit(1)
 
 index = repo / "codex-skills"
-expected_links = {pathlib.Path(entry).name: pathlib.Path("..") / entry for entry in skills}
+expected_proxies = {}
+for entry in skills:
+    canonical = entry.removeprefix("./").rstrip("/")
+    text = (repo / canonical / "SKILL.md").read_text()
+    frontmatter = re.match(r"---\n(.*?)\n---", text, re.S)
+    if not frontmatter:
+        print(f"MISSING frontmatter for registered skill: {canonical}", file=sys.stderr)
+        sys.exit(1)
+    target = f"../../{canonical}/SKILL.md"
+    expected_proxies[pathlib.Path(canonical).name] = (
+        f"---\n{frontmatter.group(1)}\n---\n\n"
+        f"Read and follow the complete [canonical skill instructions]({target}) before acting.\n"
+    )
+
 if mode == "--check":
-    actual_links = {
-        path.name: pathlib.Path(path.readlink())
+    actual_proxies = {
+        path.name: (path / "SKILL.md").read_text()
         for path in index.iterdir()
-        if path.is_symlink()
+        if not path.is_symlink() and path.is_dir() and (path / "SKILL.md").is_file()
     } if index.is_dir() else {}
-    if actual_links != expected_links or len(list(index.iterdir())) != len(expected_links):
+    if actual_proxies != expected_proxies or len(list(index.iterdir())) != len(expected_proxies):
         print("DRIFT: codex-skills differs from registered plugin skills. Run scripts/generate-skill-catalog.sh", file=sys.stderr)
         sys.exit(1)
 else:
     index.mkdir(exist_ok=True)
     for path in index.iterdir():
-        path.unlink()
-    for name, target in expected_links.items():
-        (index / name).symlink_to(target, target_is_directory=True)
+        path.unlink() if path.is_symlink() or path.is_file() else shutil.rmtree(path)
+    for name, content in expected_proxies.items():
+        directory = index / name
+        directory.mkdir()
+        (directory / "SKILL.md").write_text(content)
 
 rows = []
 for entry in sorted(skills):

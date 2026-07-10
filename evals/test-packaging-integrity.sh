@@ -6,6 +6,7 @@
 if python3 - "$REPO_ROOT" <<'PY'
 import json
 import pathlib
+import re
 import sys
 
 repo = pathlib.Path(sys.argv[1])
@@ -16,15 +17,30 @@ index = repo / "codex-skills"
 if codex_manifest.get("skills") != "./codex-skills/":
     raise SystemExit("Codex skills must point to ./codex-skills/")
 
-expected = {pathlib.Path(path).name: (repo / path).resolve() for path in claude_manifest["skills"]}
-actual = {path.name: path.resolve() for path in index.iterdir()}
-if actual != expected:
-    missing = sorted(expected.keys() - actual.keys())
-    extra = sorted(actual.keys() - expected.keys())
+expected = {pathlib.Path(path).name: path.removeprefix("./").rstrip("/") for path in claude_manifest["skills"]}
+actual = {path.name for path in index.iterdir()}
+if actual != set(expected):
+    missing = sorted(expected.keys() - actual)
+    extra = sorted(actual - expected.keys())
     raise SystemExit(f"Codex skill index drift: missing={missing}, extra={extra}")
+
+for name, canonical in expected.items():
+    directory = index / name
+    proxy = directory / "SKILL.md"
+    if directory.is_symlink() or not directory.is_dir() or proxy.is_symlink() or not proxy.is_file():
+        raise SystemExit(f"Codex cache-safe proxy missing: {name}")
+    canonical_text = (repo / canonical / "SKILL.md").read_text()
+    canonical_frontmatter = re.match(r"---\n(.*?)\n---", canonical_text, re.S)
+    proxy_text = proxy.read_text()
+    proxy_frontmatter = re.match(r"---\n(.*?)\n---", proxy_text, re.S)
+    if not canonical_frontmatter or not proxy_frontmatter or proxy_frontmatter.group(1) != canonical_frontmatter.group(1):
+        raise SystemExit(f"Codex proxy frontmatter drift: {name}")
+    target = f"../../{canonical}/SKILL.md"
+    if proxy_text.split("---", 2)[2].strip() != f"Read and follow the complete [canonical skill instructions]({target}) before acting.":
+        raise SystemExit(f"Codex proxy target drift: {name}")
 PY
 then
-  echo "  PASS  Codex plugin exposes every registered skill through one valid index"
+  echo "  PASS  Codex plugin exposes every registered skill through cache-safe proxies"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  Codex plugin skill index matches the registered skill surface"

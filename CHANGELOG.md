@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.28.2
+
+2026-07-10 -- Make Codex skill discovery cache-safe. The Codex plugin cache copier omits nested symlinks, leaving the v4.28.1 skill index empty. Generate 62 real proxy SKILL.md entrypoints that preserve canonical frontmatter and route to canonical instructions, with integrity checks guarding both surfaces. Claude skill and hook behavior is unchanged.
+
 ## 4.28.1
 
 2026-07-10 -- Fix Codex 0.144+ plugin skill discovery by replacing the invalid root-array skills declaration with a generated ./codex-skills/ index for all 62 registered skills. Add packaging eval coverage and a drift guard to the existing skill-surface generator, update install docs to the stable Codex hooks feature flag, and remove stale counts from Codex UI metadata. Skill and hook behavior is unchanged.
