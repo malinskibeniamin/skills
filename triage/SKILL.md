@@ -87,7 +87,7 @@ Show counts + one-line summary per item. Let maintainer pick.
 
 3. **Verify the claim.** Before grill, check claim holds up. Bug -> reproduce from reporter steps. PR -> confirm diff does what it claims: check out, run relevant tests/commands. Report what happened -- confirmed with code path, failed, or insufficient detail (strong `needs-info` signal). Confirmed verification make much stronger agent brief. For root-cause investigation + TDD fix plan, see [REFERENCE.md#tdd-fix-plan-mode](./REFERENCE.md).
 
-4. **Grill (if needed).** Issue need flesh out -> run `/grilling` for a fast grill or `/grilling` when domain language/ADRs matter.
+4. **Grill (if needed).** Issue need flesh out -> run `/grilling` when domain language/ADRs matter.
 
 5. **Apply the outcome:**
    - `ready-for-agent` -> post agent brief comment ([AGENT-BRIEF.md](./AGENT-BRIEF.md))

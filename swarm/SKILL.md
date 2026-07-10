@@ -1,9 +1,10 @@
 ---
 name: swarm
-description: parallel executor. Use /swarm.
+description: Parallel executor for independent bulk work across worktree lanes.
 ---
 
 # Swarm
+A parallel executor: shard independent bulk work across isolated worktree lanes, verify each, merge review.
 Parallel executor: not planner, not autopilot.
 
 Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for approval before launch unless required context is missing.
