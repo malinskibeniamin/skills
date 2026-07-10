@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-# Generate the ask-ben routing table from .claude-plugin/plugin.json + each
-# skill's SKILL.md frontmatter. Kills the hand-maintained catalog copy: rows
-# can no longer drift from the skills on disk.
+# Generate the ask-ben routing table and Codex plugin skill index from
+# .claude-plugin/plugin.json + each skill's SKILL.md frontmatter. Kills the
+# hand-maintained copies: neither surface can drift from registered skills.
 #
 # Usage: scripts/generate-skill-catalog.sh [--check]
 #   (no args)  rewrite the table block in ask-ben/SKILL.md
@@ -19,6 +19,28 @@ repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
 skills = json.loads((repo / ".claude-plugin/plugin.json").read_text())["skills"]
+codex_manifest = json.loads((repo / ".codex-plugin/plugin.json").read_text())
+if codex_manifest.get("skills") != "./codex-skills/":
+    print("DRIFT: Codex plugin skills must point to ./codex-skills/", file=sys.stderr)
+    sys.exit(1)
+
+index = repo / "codex-skills"
+expected_links = {pathlib.Path(entry).name: pathlib.Path("..") / entry for entry in skills}
+if mode == "--check":
+    actual_links = {
+        path.name: pathlib.Path(path.readlink())
+        for path in index.iterdir()
+        if path.is_symlink()
+    } if index.is_dir() else {}
+    if actual_links != expected_links or len(list(index.iterdir())) != len(expected_links):
+        print("DRIFT: codex-skills differs from registered plugin skills. Run scripts/generate-skill-catalog.sh", file=sys.stderr)
+        sys.exit(1)
+else:
+    index.mkdir(exist_ok=True)
+    for path in index.iterdir():
+        path.unlink()
+    for name, target in expected_links.items():
+        (index / name).symlink_to(target, target_is_directory=True)
 
 rows = []
 for entry in sorted(skills):
@@ -62,8 +84,8 @@ if mode == "--check":
     if new != s:
         print("DRIFT: ask-ben catalog table differs from generated output. Run scripts/generate-skill-catalog.sh", file=sys.stderr)
         sys.exit(1)
-    print("OK: ask-ben catalog matches generated output")
+    print("OK: ask-ben catalog and Codex skill index match registered skills")
 else:
     askben.write_text(new)
-    print(f"ask-ben catalog regenerated: {len(rows)} rows")
+    print(f"skill surfaces regenerated: {len(rows)} skills")
 PY

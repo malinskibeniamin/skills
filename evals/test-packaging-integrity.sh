@@ -1,6 +1,36 @@
 # Packaging integrity (issue #48 WS2): no dangling relative links in shipped
 # markdown, no broken symlinks, every hook script executable.
 
+# Codex accepts one non-root directory for plugin skills. Keep that directory
+# aligned with Claude's authoritative registered skill list.
+if python3 - "$REPO_ROOT" <<'PY'
+import json
+import pathlib
+import sys
+
+repo = pathlib.Path(sys.argv[1])
+codex_manifest = json.loads((repo / ".codex-plugin/plugin.json").read_text())
+claude_manifest = json.loads((repo / ".claude-plugin/plugin.json").read_text())
+index = repo / "codex-skills"
+
+if codex_manifest.get("skills") != "./codex-skills/":
+    raise SystemExit("Codex skills must point to ./codex-skills/")
+
+expected = {pathlib.Path(path).name: (repo / path).resolve() for path in claude_manifest["skills"]}
+actual = {path.name: path.resolve() for path in index.iterdir()}
+if actual != expected:
+    missing = sorted(expected.keys() - actual.keys())
+    extra = sorted(actual.keys() - expected.keys())
+    raise SystemExit(f"Codex skill index drift: missing={missing}, extra={extra}")
+PY
+then
+  echo "  PASS  Codex plugin exposes every registered skill through one valid index"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Codex plugin skill index matches the registered skill surface"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Codex plugin skill index drift"
+fi
+
 _pi_bad=""
 while IFS= read -r _pi_file; do
   _pi_dir=$(dirname "$_pi_file")

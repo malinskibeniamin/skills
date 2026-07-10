@@ -31,7 +31,7 @@ run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.6 Terra" "effic
 
 # Effort floors are stated wherever a variant is routed.
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "only . ALL code writing" "Sol effort floor stated"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "`high` only.*last resort" "Luna high-only floor stated"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" '`high` only.*last resort' "Luna high-only floor stated"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.5 retired" "CLAUDE.md retires GPT-5.5"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "Cross-model review, automatic on every change" "CLAUDE.md mandates automatic cross-model review"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "author model never solely reviews its own work" "CLAUDE.md states the author-reviewer separation rule"
