@@ -80,7 +80,8 @@ seen_file="$tmp_dir/seen"
 # Canonical Codex apply_patch calls carry targets inside the patch body, not
 # tool_input.file_path. Expand each into one synthetic per-target call (patch
 # body preserved so the lib extracts added lines) BEFORE the dedup reduce.
-_input=$(printf '%s' "$_input" | jq -c '
+_pb_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+_input=$(printf '%s' "$_input" | jq -c --arg root "$_pb_root" '
   .tool_calls = ([ (.tool_calls // [])[] |
     if (.tool_name == "apply_patch") then
       ( (if (.tool_input.command|type) == "array" then .tool_input.command[1:] | join("\n")
@@ -88,7 +89,7 @@ _input=$(printf '%s' "$_input" | jq -c '
          else (.tool_input.patch // .tool_input.input // "") end) ) as $body
       | [ $body | split("\n")[] | capture("^\\*\\*\\* (Update|Add) File: (?<f>.+)$").f ] as $targets
       | if ($targets | length) > 0 then
-          $targets[] | {tool_name: "Edit", tool_input: {file_path: ., patch: $body}}
+          $targets[] | {tool_name: "Edit", tool_input: {file_path: (if startswith("/") then . else $root + "/" + . end), patch: $body}}
         else empty end
     else . end ])
 ' 2>/dev/null || printf '%s' "$_input")

@@ -148,5 +148,5 @@ run_content_eval "$COMMIT_PUSH_PR_REF" "Dependency upgrade path" "PR template in
 run_content_eval "$COMMIT_PUSH_PR_REF" "upgrade-dependency" "commit-push-pr references upgrade-dependency report"
 run_content_eval "$DEPS_HOOK" "/upgrade-dependency" "dependency hook nudges upgrade-dependency"
 run_content_eval "$DEPS_HOOK" "skip reason" "dependency hook mentions skip reason"
-run_content_eval "$DEPS_HOOK" "docs/dependency-upgrades" "dependency hook mentions report path"
+run_content_eval "$DEPS_HOOK" "upgrade\\+adapt in one pass" "dependency hook nudges the one-pass upgrade contract"
 run_content_eval "$MANIFEST" "bun\\.lock|yarn\\.lock|go\\.mod|go\\.sum" "manifest wires dependency files to deps hook"
