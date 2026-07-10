@@ -36,11 +36,35 @@ jobs:
           jq --version
           perl --version | head -2 | tail -1
 
+      - name: Shellcheck (error severity)
+        # -S error only: the surface is bash 3.2-compatible hand-rolled
+        # shell; style/info findings would drown the signal. Errors are
+        # the parse-level bug class (quoting, redirection, syntax) that
+        # has shipped real breakage before. -s bash covers the sourced
+        # eval files that carry no shebang by design. Ubuntu runner has
+        # shellcheck preinstalled; macOS skips (same files, no per-OS
+        # divergence).
+        if: runner.os == 'Linux'
+        run: |
+          shellcheck --version | head -2
+          shellcheck -s bash -S error .claude/hooks/*.sh .claude/hooks/checks/*.lib.sh \
+            shared/*.sh scripts/*.sh agent-evals/*.sh evals/*.sh \
+            frontend-starter-kit/references/*/scripts/*.sh
+
       - name: Generation gates (hooks, catalog, rules)
         run: |
           bash scripts/generate-hook-configs.sh --check
           bash scripts/generate-skill-catalog.sh --check
           bash scripts/generate-agents-md.sh --check
+
+      - name: Setup bun (typed protocol layer)
+        uses: oven-sh/setup-bun@v2
+
+      - name: Typed protocol unit tests
+        # cd shared: a repo-rooted `bun test` scan also loads the
+        # agent-evals EVAL.ts suites, whose imports patch stdio and
+        # corrupt spawnSync capture. Scoped to the one file under test.
+        run: cd shared && bun test hook-protocol.test.ts
 
       - name: Shell eval suite
         run: bash evals/run.sh

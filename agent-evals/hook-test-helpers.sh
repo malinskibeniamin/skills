@@ -32,18 +32,47 @@ _teardown_session() {
 
 # ── File helpers ────────────────────────────────────────────────
 
+_hooktest_created_list="/tmp/hooktest-created-$$"
+
 _setup_test_file() {
   local path="$1"
   local content="$2"
   mkdir -p "$(dirname "$path")"
+  # Never clobber uncommitted work (issue #60 P2 -- this helper family
+  # destroyed real files): a tracked file dirty vs HEAD is an in-progress
+  # edit; an untracked file we did not create is someone's data (cleanup
+  # would classify it absent-from-HEAD and DELETE it). Tracked-clean files
+  # are fine -- cleanup restores them from HEAD.
+  if [ -e "$path" ] && ! grep -qxF "$path" "$_hooktest_created_list" 2>/dev/null; then
+    if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+      if ! git diff --quiet HEAD -- "$path" 2>/dev/null; then
+        echo "REFUSING to overwrite dirty tracked file: $path" >&2
+        exit 1
+      fi
+    else
+      echo "REFUSING to overwrite pre-existing untracked file: $path" >&2
+      exit 1
+    fi
+  fi
+  echo "$path" >> "$_hooktest_created_list" 2>/dev/null || true
   echo "$content" > "$path"
   git add "$path" 2>/dev/null || true
 }
 
 _cleanup_test_file() {
   local path="$1"
-  git checkout -- "$path" 2>/dev/null || true
-  rm -f "$path" 2>/dev/null || true
+  # Tracked at HEAD: restore the committed content (checkout HEAD, not the
+  # index -- setup's git add put the fixture in the index) and keep the
+  # file. Created by the test: unstage and remove. Never checkout-then-rm
+  # -- that deleted tracked files after "restoring" them.
+  local rel
+  rel=$(git ls-files --full-name -- "$path" 2>/dev/null | head -1 || true)
+  if [ -n "$rel" ] && git cat-file -e "HEAD:$rel" 2>/dev/null; then
+    git checkout HEAD -- "$path" 2>/dev/null || true
+  else
+    git rm --cached -q -f "$path" 2>/dev/null || true
+    rm -f "$path" 2>/dev/null || true
+  fi
 }
 
 _cleanup_test_dir() {

@@ -199,6 +199,77 @@ _check "capped stop-block downgrades to exit 0" '[ "$_rc" = "0" ]'
 _check "capped stop-block message lands on stdout" 'printf "%s" "$_stdout" | jq -re ".systemMessage" 2>/dev/null | grep -q "stop-block cap"'
 rm -f "/tmp/hook-session-${CLAUDE_SESSION_ID}/stop-block-count" "/tmp/hook-session-${CLAUDE_SESSION_ID}/stop-block-marker" 2>/dev/null || true
 
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ typed protocol parity (bun path == shell fallback) ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+# The lib delegates emission to shared/hook-protocol.ts when bun exists;
+# HOOK_PROTOCOL=shell forces the pure-shell path. Both must land on the
+# same stream with the same exit code, or consumers without bun diverge.
+
+_run_lib_call_env() {
+  local envmode="$1" body="$2"
+  local script stdout_file stderr_file
+  script=$(mktemp)
+  stdout_file=$(mktemp)
+  stderr_file=$(mktemp)
+  cat > "$script" <<EOF
+#!/bin/bash
+export HOOK_PROTOCOL=$envmode
+source "$HOOKS_DIR/_hook-lib.sh"
+$body
+EOF
+  chmod +x "$script"
+  _rc=0
+  echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' \
+    | bash "$script" >"$stdout_file" 2>"$stderr_file" || _rc=$?
+  _stdout=$(cat "$stdout_file")
+  _stderr=$(cat "$stderr_file")
+  rm -f "$script" "$stdout_file" "$stderr_file"
+}
+
+if command -v bun >/dev/null 2>&1; then
+  # Hostile fixture: embedded quotes + newline. Catches escaping divergence
+  # between JSON.stringify and _safe_json_escape that a plain message hides.
+  _pmsg='say "hi" and
+then stop'
+  for _tier_case in "warn:hook_warn \"\$_pmsg\" r:0:stdout" "nudge:hook_nudge \"\$_pmsg\" r:0:stdout" "block:hook_block \"\$_pmsg\" r:2:stderr" "block-strict:hook_block_strict \"\$_pmsg\" r:2:stderr" "deny:hook_deny \"\$_pmsg\" r:2:stderr" "stop:hook_stop_block \"\$_pmsg\":2:stderr"; do
+    _name="${_tier_case%%:*}"
+    _rest="${_tier_case#*:}"
+    _call="${_rest%%:*}"; _rest="${_rest#*:}"
+    _want_rc="${_rest%%:*}"; _want_stream="${_rest#*:}"
+    _typed_payload=""; _shell_payload=""
+    for _mode in typed shell; do
+      _run_lib_call_env "$_mode" "_pmsg='say \"hi\" and
+then stop'; $_call"
+      _got=""
+      [ -n "$_stdout" ] && _got="stdout"
+      [ -n "$_stderr" ] && _got="${_got:+$_got+}stderr"
+      _check "$_name/$_mode: exit $_want_rc, payload on $_want_stream only" '[ "$_rc" = "$_want_rc" ] && [ "$_got" = "$_want_stream" ]'
+      if [ "$_want_stream" = "stdout" ]; then
+        _payload="$_stdout"
+      else
+        _payload="$_stderr"
+      fi
+      _check "$_name/$_mode: payload is valid JSON" '_is_json "$_payload"'
+      _norm=$(printf '%s' "$_payload" | jq -Sc . 2>/dev/null || printf 'INVALID-%s' "$_mode")
+      if [ "$_mode" = "typed" ]; then _typed_payload="$_norm"; else _shell_payload="$_norm"; fi
+    done
+    _check "$_name: typed and shell payloads are byte-identical (normalized)" '[ -n "$_typed_payload" ] && [ "$_typed_payload" = "$_shell_payload" ]'
+  done
+
+  # parse: shell-safe assignments round-trip quotes and newlines
+  _hp_out=$(jq -nc '{session_id:"s-42",tool_name:"Bash",tool_input:{command:"echo '"'"'a b'"'"'\nsecond"}}' | bun "$REPO_ROOT/shared/hook-protocol.ts" parse) || true
+  hp_session_id=""; hp_tool_name=""; hp_command=""
+  eval "$_hp_out"
+  _rc=0
+  _check "parse exports shell-safe fields" '[ "$hp_session_id" = "s-42" ] && [ "$hp_tool_name" = "Bash" ]'
+  _check "parse round-trips quoted command text" 'printf "%s" "$hp_command" | grep -q "a b" && printf "%s" "$hp_command" | grep -q "second"'
+else
+  _skip "typed protocol parity" "bun not installed"
+fi
+
 _teardown_session
 
 # ═══════════════════════════════════════════════════════════════

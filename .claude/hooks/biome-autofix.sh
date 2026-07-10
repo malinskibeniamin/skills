@@ -6,6 +6,10 @@ set -eo pipefail
 
 # Source hook-lib for session-scoped file tracking
 _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
+# Codex passes session_id on stdin; adopt it so this reader sees the same
+# dir the per-edit producers wrote to (no-op under Claude Code env ids).
+type hook_adopt_stdin_session &>/dev/null && hook_adopt_stdin_session
+
 
 # git diff returns paths relative to repo root; strip the prefix so they're
 # relative to cwd (where bun run lint:fix:file executes).
@@ -75,7 +79,7 @@ if [ $fix_exit -ne 0 ]; then
   if [ -n "$error_files" ]; then
     truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -20)
     # Write to shared findings — quality-gate-stop.sh aggregates
-    _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+    _session_dir="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}"
     printf "Biome unfixable errors:\n%s\n" "$truncated" >> "$_session_dir/stop-findings" 2>/dev/null
   fi
 fi

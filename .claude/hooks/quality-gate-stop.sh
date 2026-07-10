@@ -17,8 +17,14 @@ _sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/
 
 # Source hook-lib for safe JSON escaping and ERR trap
 _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
+# Codex passes session_id on stdin; the escape hatch above already consumed
+# stdin into _sha_in, so repoint from THAT -- hook_adopt_stdin_session would
+# read EOF here and leave the reader on the PID-scoped fallback dir.
+type _hook_repoint_session_dir &>/dev/null && \
+  _hook_repoint_session_dir "$(printf '%s' "$_sha_in" | jq -r '.session_id // empty' 2>/dev/null || true)"
 
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+
+_session_dir="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}"
 _findings="$_session_dir/stop-findings"
 
 if [ -f "$_findings" ] && [ -s "$_findings" ]; then

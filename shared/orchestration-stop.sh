@@ -11,10 +11,15 @@ if [ "${ORCHESTRATION_STRICT:-1}" = "0" ]; then
   exit 0
 fi
 
-session_files="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/files"
-
-# Source hook-lib for session-scoped file tracking
+# Source hook-lib for session-scoped file tracking (before deriving the
+# session dir, so the lib's worktree-hashed fallback wins over a bare $$)
 source "$(dirname "$0")/source-hook-lib.sh" 2>/dev/null || true
+# Codex passes session_id on stdin; adopt it so this reader sees the same
+# dir the per-edit producers wrote to (no-op under Claude Code env ids).
+type hook_adopt_stdin_session &>/dev/null && hook_adopt_stdin_session
+
+
+session_files="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}/files"
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then

@@ -5,7 +5,15 @@ set -eo pipefail
 # (replaces metrics-summary-stop.sh which ran on every turn end = wasteful).
 # Also writes a memory summary for next-session context.
 
-session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+# Session state needs a stable id: env first, Codex stdin second. With
+# neither, every hook run has a fresh PID, so a bare $$ dir can never be
+# shared across invocations and can collide after PID wrap -- skip.
+_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+if [ -z "$_hook_sid" ] && [ ! -t 0 ]; then
+  _hook_sid=$(jq -r '.session_id // empty' 2>/dev/null || true)
+fi
+[ -z "$_hook_sid" ] && exit 0
+session_dir="/tmp/hook-session-${_hook_sid}"
 log_file="$session_dir/structured.jsonl"
 
 [ -f "$log_file" ] && [ -s "$log_file" ] || exit 0
@@ -15,7 +23,7 @@ metrics_dir="$HOME/.claude/hook-metrics"
 mkdir -p "$metrics_dir" 2>/dev/null || exit 0
 
 session_date=$(date +%Y-%m-%d)
-session_id="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-unknown}}"
+session_id="${_hook_sid}"
 total_entries=$(wc -l < "$log_file" | tr -d ' ')
 
 first_ts=$(head -1 "$log_file" | jq -r '.ts // 0')

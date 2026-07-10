@@ -38,7 +38,13 @@ config=""
 [ -n "$config" ] && context="$context\nConfig:$config"
 
 # Re-inject last stop outcome if available
-stop_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop"
+# Session state needs a stable id: env first, Codex stdin second. With
+# neither, every hook run has a fresh PID, so a bare $$ dir can never be
+# shared across invocations and can collide after PID wrap -- skip.
+_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+[ -z "$_hook_sid" ] && _hook_sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
+[ -z "$_hook_sid" ] && exit 0
+stop_file="/tmp/hook-session-${_hook_sid}/last-stop"
 if [ -f "$stop_file" ]; then
   context="$context\nLast stop: $(cat "$stop_file" | head -1)"
 fi

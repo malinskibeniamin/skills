@@ -256,6 +256,41 @@ _hook_assert_bound_worktree() {
   fi
 }
 
+# ── Session re-point: adopt a stdin-provided session id ─────────
+# Codex delivers session_id on stdin, not the environment. Re-point the
+# session dir once when the env vars are absent, re-deriving every
+# source-time path that captured the fallback dir.
+
+_hook_repoint_session_dir() {
+  local sid="$1"
+  [ -n "$sid" ] || return 0
+  if [ -n "${CLAUDE_SESSION_ID:-}" ] || [ -n "${CODEX_SESSION_ID:-}" ]; then
+    return 0
+  fi
+  _hook_session_id="$sid"
+  _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
+  mkdir -p "$_hook_session_dir" 2>/dev/null || true
+  [ -n "${_hook_violations_file:-}" ] && _hook_violations_file="$_hook_session_dir/violations"
+  [ -n "${_hook_log_file:-}" ] && _hook_log_file="$_hook_session_dir/hook-log.jsonl"
+  [ -n "${_hook_debug_file:-}" ] && _hook_debug_file="$_hook_session_dir/debug.log"
+  # The guards above return 1 when a path var is unset -- never let that
+  # become the function's exit status under a caller's set -e.
+  return 0
+}
+
+# For hooks that never call hook_parse_* (Stop hooks, autofixers): consume
+# stdin and adopt its session_id so readers see the same dir Codex
+# producers wrote to. No-op when env ids exist or stdin is a terminal.
+hook_adopt_stdin_session() {
+  if [ -n "${CLAUDE_SESSION_ID:-}" ] || [ -n "${CODEX_SESSION_ID:-}" ]; then
+    return 0
+  fi
+  [ -t 0 ] && return 0
+  _hook_input=$(cat 2>/dev/null || true)
+  _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
+  return 0
+}
+
 # ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
 
 hook_parse_edit_write() {
@@ -265,20 +300,7 @@ hook_parse_edit_write() {
 
   # Codex session id arrives on stdin, not the environment: re-point the
   # session dir once per parse when the env vars are absent (issue #48 WS1).
-  if [ -z "${CLAUDE_SESSION_ID:-}" ] && [ -z "${CODEX_SESSION_ID:-}" ]; then
-    local _stdin_sid
-    _stdin_sid=$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)
-    if [ -n "$_stdin_sid" ]; then
-      _hook_session_id="$_stdin_sid"
-      _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
-      mkdir -p "$_hook_session_dir" 2>/dev/null || true
-      # Re-derive every source-time path that captured the fallback dir, so
-      # violations/logs land in the stdin-scoped dir, not the wt-* fallback.
-      [ -n "${_hook_violations_file:-}" ] && _hook_violations_file="$_hook_session_dir/violations"
-      [ -n "${_hook_log_file:-}" ] && _hook_log_file="$_hook_session_dir/hook-log.jsonl"
-      [ -n "${_hook_debug_file:-}" ] && _hook_debug_file="$_hook_session_dir/debug.log"
-    fi
-  fi
+  _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
 
   if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ] && [ "$_hook_tool_name" != "apply_patch" ]; then
     _hook_skip_or_exit 1
@@ -710,6 +732,68 @@ _hook_elapsed_ms() {
   echo $((now - _hook_start_ms))
 }
 
+# ── Typed protocol delegation ────────────────────────────────────
+# When bun and shared/hook-protocol.ts are available, emission delegates to
+# the typed layer: stream/exit pairing is a lookup table and JSON comes from
+# JSON.stringify -- the two live bug classes of the shell emitters (wrong
+# stream, hand-rolled escaping) become impossible. HOOK_PROTOCOL=shell
+# forces the pure-shell fallback (also the path when bun is absent).
+
+_hook_protocol_entry=""
+_hook_protocol_resolve() {
+  if [ -n "$_hook_protocol_entry" ]; then
+    [ "$_hook_protocol_entry" = "NONE" ] && return 1
+    return 0
+  fi
+  # BASH_SOURCE keeps the symlink spelling -- skill-dir links to this lib
+  # would resolve candidates relative to the link location and miss the
+  # real entrypoint. Follow file symlinks before deriving the base dir.
+  local src="${BASH_SOURCE[0]}" tgt
+  while [ -L "$src" ]; do
+    tgt=$(readlink "$src" 2>/dev/null) || break
+    case "$tgt" in
+      /*) src="$tgt" ;;
+      *) src="$(dirname "$src")/$tgt" ;;
+    esac
+  done
+  local dir
+  dir="$(cd "$(dirname "$src")" 2>/dev/null && pwd -P)" || { _hook_protocol_entry="NONE"; return 1; }
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+  local c
+  for c in "$dir/hook-protocol.ts" "$dir/../shared/hook-protocol.ts" "$dir/../../shared/hook-protocol.ts" "${root:+$root/shared/hook-protocol.ts}"; do
+    [ -n "$c" ] || continue
+    if [ -f "$c" ]; then
+      _hook_protocol_entry="$c"
+      return 0
+    fi
+  done
+  _hook_protocol_entry="NONE"
+  return 1
+}
+
+# Emit via the typed layer. Returns 0 when the payload went out (bun exited
+# with the tier's contract code, 0 or 2); returns 1 when the caller must use
+# the shell fallback. The caller owns the final exit code either way.
+_hook_protocol_emit() {
+  local tier="$1" msg="$2" rc out_f err_f
+  [ "${HOOK_PROTOCOL:-}" = "shell" ] && return 1
+  command -v bun >/dev/null 2>&1 || return 1
+  _hook_protocol_resolve || return 1
+  # Capture both streams and release ONLY the contract stream on a contract
+  # exit code -- a bun crash mid-run must not leave a diagnostic on the live
+  # stream next to the shell fallback's JSON (two payloads never parse).
+  out_f=$(mktemp 2>/dev/null) || return 1
+  err_f=$(mktemp 2>/dev/null) || { rm -f "$out_f"; return 1; }
+  rc=0
+  bun "$_hook_protocol_entry" emit "$tier" "$msg" >"$out_f" 2>"$err_f" || rc=$?
+  case "$rc" in
+    0) cat "$out_f"; rm -f "$out_f" "$err_f"; return 0 ;;
+    2) cat "$err_f" >&2; rm -f "$out_f" "$err_f"; return 0 ;;
+    *) _hook_debug "protocol emit failed (rc=$rc) -- shell fallback"; rm -f "$out_f" "$err_f"; return 1 ;;
+  esac
+}
+
 # ── Tier API: info / nudge / block_strict / emit_diagnostic ─────
 # Added in 2.2.2 to give hooks a richer severity vocabulary than
 # the original block/warn pair.
@@ -744,10 +828,12 @@ hook_nudge() {
     return 0
   fi
   if [ "$_hook_verbosity" = "normal" ]; then
-    local escaped
-    escaped=$(_safe_json_escape "[nudge] $msg")
-    # Exit-0 JSON is parsed from STDOUT (stderr is dropped on exit 0).
-    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
+    if ! _hook_protocol_emit nudge "$msg"; then
+      local escaped
+      escaped=$(_safe_json_escape "[nudge] $msg")
+      # Exit-0 JSON is parsed from STDOUT (stderr is dropped on exit 0).
+      echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
+    fi
   fi
   exit 0
 }
@@ -764,9 +850,11 @@ hook_block_strict() {
     return 0
   fi
   if [ "$_hook_verbosity" != "quiet" ]; then
-    local escaped
-    escaped=$(_safe_json_escape "[STRICT] $msg")
-    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
+    if ! _hook_protocol_emit block-strict "$msg"; then
+      local escaped
+      escaped=$(_safe_json_escape "[STRICT] $msg")
+      echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
+    fi
   fi
   exit 2
 }
@@ -794,9 +882,11 @@ hook_block() {
     return 0
   fi
   if [ "$_hook_verbosity" != "quiet" ]; then
-    local escaped
-    escaped=$(_safe_json_escape "$msg")
-    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
+    if ! _hook_protocol_emit block "$msg"; then
+      local escaped
+      escaped=$(_safe_json_escape "$msg")
+      echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
+    fi
   fi
   exit 2
 }
@@ -815,10 +905,12 @@ hook_warn() {
     return 0
   fi
   if [ "$_hook_verbosity" = "normal" ]; then
-    local escaped
-    escaped=$(_safe_json_escape "$msg")
-    # Exit-0 JSON is parsed from STDOUT (stderr is dropped on exit 0).
-    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
+    if ! _hook_protocol_emit warn "$msg"; then
+      local escaped
+      escaped=$(_safe_json_escape "$msg")
+      # Exit-0 JSON is parsed from STDOUT (stderr is dropped on exit 0).
+      echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
+    fi
   fi
   exit 0
 }
@@ -849,7 +941,11 @@ hook_deny() {
   _hook_debug "DENY [$label]: $msg"
   _hook_track_violation "$label"
   _hook_log_entry "deny" "$label"
-  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"$msg\"}" >&2
+  if ! _hook_protocol_emit deny "$msg"; then
+    local escaped
+    escaped=$(_safe_json_escape "$msg")
+    echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":$escaped}" >&2
+  fi
   exit 2
 }
 
@@ -887,17 +983,19 @@ _hook_stop_note_block() {
 }
 
 hook_stop_block() {
-  local msg="$1"
-  msg=$(_hook_cap_msg "$msg")
-  local reason
-  reason=$(_safe_json_escape "$msg")
+  local msg
+  msg=$(_hook_cap_msg "$1")
   if _hook_stop_block_budget_spent; then
     _hook_log_entry "block-downgraded" "stop-block-cap" "$(basename "$0" .sh)"
     echo "{\"suppressOutput\":true,\"systemMessage\":$(_safe_json_escape "[stop-block cap] Not blocking again (harness caps consecutive Stop blocks). Unresolved: $msg")}"
     exit 0
   fi
   _hook_stop_note_block
-  echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
+  if ! _hook_protocol_emit stop-block "$msg"; then
+    local reason
+    reason=$(_safe_json_escape "$msg")
+    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
+  fi
   exit 2
 }
 

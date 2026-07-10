@@ -47,11 +47,18 @@ if [ -n "$CLAUDE_ENV_FILE" ]; then
   fi
 fi
 
-# Clean up stale session directories from previous sessions (safe: /tmp/ only, specific prefix)
-# Clean up stale session directories from both harnesses
-# -H: /tmp is a symlink on macOS; plain `find /tmp` never descends it,
-# so this sweep had been a silent no-op on Darwin.
-find -H /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
+# Clean up stale session directories (safe: /tmp/ only, specific prefix).
+# Age by the newest file INSIDE each dir, not dir mtime -- appends don't
+# bump dir mtime, so -mmin on the dir deleted live sessions that were
+# merely quiet for an hour (issue #60 P2). 24h keeps overnight sessions.
+for _stale_dir in /tmp/hook-session-*; do
+  [ -d "$_stale_dir" ] || continue
+  # One find covers both liveness signals: depth 0 matches the dir itself
+  # (young empty dir) and deeper matches catch recent files.
+  if [ -z "$(find "$_stale_dir" -mmin -1440 2>/dev/null | head -1)" ]; then
+    rm -r "$_stale_dir" 2>/dev/null || true
+  fi
+done
 
 # ── Session directory for state tracking ──────────────────────────
 # Deterministic fallback when CLAUDE_SESSION_ID/CODEX_SESSION_ID unset:

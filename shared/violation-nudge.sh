@@ -6,7 +6,15 @@ set -eo pipefail
 # injects a nudge so Claude adjusts approach instead of repeating.
 # Target: <10ms (file read + awk).
 
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+# Session state needs a stable id: env first, Codex stdin second. With
+# neither, every hook run has a fresh PID, so a bare $$ dir can never be
+# shared across invocations and can collide after PID wrap -- skip.
+_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+if [ -z "$_hook_sid" ] && [ ! -t 0 ]; then
+  _hook_sid=$(jq -r '.session_id // empty' 2>/dev/null || true)
+fi
+[ -z "$_hook_sid" ] && exit 0
+_session_dir="/tmp/hook-session-${_hook_sid}"
 _violations_file="$_session_dir/violations"
 
 # No violations yet — nothing to do

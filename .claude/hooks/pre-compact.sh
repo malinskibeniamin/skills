@@ -10,7 +10,13 @@ input=$(cat)
 hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
 [ "$hook_event" = "PreCompact" ] || exit 0
 
-session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+# Session state needs a stable id: env first, Codex stdin second. With
+# neither, every hook run has a fresh PID, so a bare $$ dir can never be
+# shared across invocations and can collide after PID wrap -- skip.
+_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+[ -z "$_hook_sid" ] && _hook_sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
+[ -z "$_hook_sid" ] && exit 0
+session_dir="/tmp/hook-session-${_hook_sid}"
 [ -d "$session_dir" ] || exit 0
 
 snapshot="$session_dir/pre-compact-snapshot.json"

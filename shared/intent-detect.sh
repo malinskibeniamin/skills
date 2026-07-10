@@ -30,12 +30,19 @@ directives=""
 # ── PR/review: once-per-session review request marker ────────────
 
 if echo "$prompt" | grep -qiE 'create.*pr|open.*pr|pull request|push.*branch|submit.*review'; then
-  review_marker="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/review-requested"
-  if [ -f "$review_marker" ]; then
+  # Once-per-session dedup needs a stable id: env first, Codex stdin
+  # second. With neither, a bare $$ dir can never be shared across
+  # invocations (fresh PID per hook run) and can collide after PID wrap
+  # -- emit the directive without dedup instead.
+  _hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+  [ -z "$_hook_sid" ] && _hook_sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
+  review_marker=""
+  [ -n "$_hook_sid" ] && review_marker="/tmp/hook-session-${_hook_sid}/review-requested"
+  if [ -n "$review_marker" ] && [ -f "$review_marker" ]; then
     directives="$directives\n[PR] quality:gate + type:check first. (Review already requested this session.)"
   else
     directives="$directives\n[PR] quality:gate + type:check first. After: @claude review."
-    touch "$review_marker" 2>/dev/null || true
+    [ -n "$review_marker" ] && touch "$review_marker" 2>/dev/null || true
   fi
 fi
 
