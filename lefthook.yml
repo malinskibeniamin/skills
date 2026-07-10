@@ -28,5 +28,5 @@ pre-push:
       glob: "{*/SKILL.md,.claude-plugin/plugin.json,.codex-plugin/plugin.json,codex-skills/*}"
       run: bash scripts/generate-skill-catalog.sh --check
     rules-sync:
-      glob: "{CLAUDE.md,AGENTS.md,.agents/codex-appendix.md}"
+      glob: "{CLAUDE.md,AGENTS.md,.agents/codex-appendix.md,scripts/generate-agents-md.sh}"
       run: bash scripts/generate-agents-md.sh --check

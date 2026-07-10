@@ -1,0 +1,29 @@
+# Evals for the positive-steering mechanisms (owner: "not just done -- clean").
+
+# 1. Codex steering payload travels with delegations.
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Steering payload" "codex contract requires steering payload"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "exemplars/" "codex prompts inline the matching exemplar"
+
+# 2. Exemplars exist and carry the conventions they claim.
+for f in README.md component.tsx use-resource.ts route.tsx component.test.tsx; do
+  run_file_eval "$REPO_ROOT/exemplars/$f" "exemplar exists: $f"
+done
+run_content_eval "$REPO_ROOT/exemplars/component.tsx" "@/components/ui/button" "component exemplar is registry-first"
+run_content_eval "$REPO_ROOT/exemplars/component.tsx" "ConnectError.from" "component exemplar surfaces errors canonically"
+run_content_eval "$REPO_ROOT/exemplars/use-resource.ts" "STALE_TIME" "hook exemplar names staleTime constant"
+run_content_eval "$REPO_ROOT/exemplars/use-resource.ts" "function sync" "hook exemplar names its effect"
+run_content_eval "$REPO_ROOT/exemplars/route.tsx" "validateSearch" "route exemplar validates search params"
+run_content_eval "$REPO_ROOT/exemplars/route.tsx" "errorComponent" "route exemplar has error boundary"
+run_content_eval "$REPO_ROOT/exemplars/component.test.tsx" "userEvent.setup" "test exemplar uses userEvent"
+run_content_eval "$REPO_ROOT/exemplars/component.test.tsx" "getByRole" "test exemplar queries by role"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "exemplars/" "tdd points at exemplars"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "exemplars/" "CLAUDE.md lifecycle points at exemplars"
+
+# 3. Deslop write mode is always-on for implementation.
+run_content_eval "$REPO_ROOT/CLAUDE.md" "write mode ON for the whole session" "lifecycle activates write mode automatically"
+run_content_eval "$REPO_ROOT/deslop/SKILL.md" "AUTOMATICALLY for every lifecycle implementation phase" "deslop documents auto-activation"
+
+# 4. React Doctor score ratchet.
+run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "ratchet baseline" "doctor stop hook has the score ratchet"
+run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "hook_stop_enforce" "ratchet enforces directly (no aggregator race)"
+run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/REFERENCE.md" "Score ratchet" "react-doctor reference documents the ratchet"

@@ -24,6 +24,10 @@ Per-edit hooks retired into React Doctor (do not re-add -- one owner per rule):
 
 Disabled in react-doctor config (Biome/Ultracite owns): hook dependencies, nested component definitions, and any rule duplicating `noRestrictedImports`/`noRestrictedElements`/`noProcessEnv`.
 
+## Score ratchet
+
+The Stop hook keeps a per-repo baseline (best score achieved, `~/.claude/hook-metrics/doctor-baseline-<repo>`). Scores below the baseline block the session; scores above it raise it. 80 remains the absolute floor; the ratchet makes gradual decline impossible. Lowering the baseline is a deliberate act: edit the file and justify it in the commit.
+
 ## CLI Flags
 
 | Flag | Purpose |

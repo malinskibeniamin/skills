@@ -26,7 +26,7 @@ Order every task. Hooks block skipped steps.
 
 1. **Understand** -- explore, one question at time, propose
 2. **Plan** -- exact path, code, expect output
-3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
+3. **Implement** -- `/tdd` every file, `/deslop` write mode ON for the whole session (both runtimes): ladder before every line. Fail first -> pass -> refactor. Match the shape of the matching `exemplars/` file
 4-6. **`/go`** -- verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
 Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
@@ -39,7 +39,7 @@ Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-4.
 
 GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- smartest model rivaled only by Fable-5, efficient for the price; ALL code writing, implementation, and adversarial review; run at `medium`|`high` ONLY. **Terra** = budget non-code work -- posting PR comments, routine review passes, test-runner/CI chores; `medium`|`high` ONLY; never writes product code. **Luna** = last resort for extremely cheap, quick, limited tasks far from code -- tracker orchestration (Jira/GitHub issue shuffling), mundane tool-call loops, test fixtures; `high` ONLY; never development.
 
-Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | bulk mechanical -> codex Sol (plan allowance) | user-facing -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 | token furnaces -> codex | **thinker/executor split**: Fable/frontier thinks, tastes, plans; Sol executes; smart model reviews diff | **Cross-model review, automatic on every change**: author model never solely reviews its own work, and the reviewer comes from a DIFFERENT family whenever possible -- Claude wrote -> Sol reviews; GPT wrote -> Fable/Opus; same-family clean-context only when cross-family unavailable, record it; Terra may take routine re-check rounds; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via `model` param.
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | bulk mechanical -> codex Sol (plan allowance) | user-facing -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 | token furnaces -> codex | **thinker/executor split**: Fable/frontier thinks, tastes, plans; Sol executes; smart model reviews diff | **Cross-model review, automatic on every non-trivial change** (trivial/test-only/docs-only diffs skip refine, honestly): author model never solely reviews its own work, and the reviewer comes from a DIFFERENT family whenever possible -- Claude wrote -> Sol reviews; GPT wrote -> Fable/Opus; same-family clean-context only when cross-family unavailable, record it; Terra may take routine re-check rounds; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via `model` param.
 
 ### Monitor (not sleep)
 

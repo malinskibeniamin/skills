@@ -26,7 +26,12 @@ Set `model = "gpt-5.6-sol"` in `~/.codex/config.toml` as the default.
 
 ## Prompt contract (every codex run)
 
-Self-contained -- codex sees none of this conversation. Include: repo path + branch, objective,
+Self-contained -- codex sees none of this conversation. **Steering payload (required for
+implementation work)**: codex gets none of Claude's path-scoped skill autoloading, so the
+prompt must carry the conventions -- include the matched skill rules for every touched
+surface (ConnectRPC files -> connect-query rules; UI -> registry/token + a11y rules; routes
+-> tanstack-router rules; UI strings -> ux-copy), plus "match the shape of the relevant
+`exemplars/` file" with that file inlined. Also include: repo path + branch, objective,
 scope and out-of-scope, acceptance criteria, exact verify commands, evidence format for the
 report, and stop conditions. Fable judges the returned output against the bar; below bar ->
 rerun with a sharper prompt or redo on a smarter model without asking.
@@ -72,9 +77,12 @@ Codex runs can exceed Bash's default 10-minute timeout. Either pass an explicit 
 on the Bash call, or run in the background and poll for the report file:
 
 ```bash
-codex exec -s read-only "<prompt>. Write the final report to <report-path>." &
+codex exec -s read-only "<prompt>. Write the final report to <report-path>." </dev/null &
 # Bash(run_in_background: true), then poll/Read <report-path>
 ```
+
+**Always `</dev/null` on background runs**: codex also reads its prompt from stdin, so an
+open-but-silent stdin pipe blocks it forever waiting for EOF -- 0s CPU, no session, looks "stuck".
 
 ## Inside workflows and subagents (the wrapper pattern)
 

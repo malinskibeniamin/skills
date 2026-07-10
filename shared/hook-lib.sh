@@ -258,6 +258,11 @@ hook_parse_edit_write() {
       _hook_session_id="$_stdin_sid"
       _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
       mkdir -p "$_hook_session_dir" 2>/dev/null || true
+      # Re-derive every source-time path that captured the fallback dir, so
+      # violations/logs land in the stdin-scoped dir, not the wt-* fallback.
+      [ -n "${_hook_violations_file:-}" ] && _hook_violations_file="$_hook_session_dir/violations"
+      [ -n "${_hook_log_file:-}" ] && _hook_log_file="$_hook_session_dir/hook-log.jsonl"
+      [ -n "${_hook_debug_file:-}" ] && _hook_debug_file="$_hook_session_dir/debug.log"
     fi
   fi
 
