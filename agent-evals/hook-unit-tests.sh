@@ -349,7 +349,7 @@ echo "━━━ session-env.sh (skills repo excluded) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 echo "  skills repo (no package.json warning):"
-cd /Users/beniamin.malinski/Documents/git/skills
+cd "$(git rev-parse --show-toplevel)"
 _run_hook "session-env.sh" ""
 if echo "$_last_stderr" | grep -q "No package.json"; then
   FAIL=$((FAIL + 1))
