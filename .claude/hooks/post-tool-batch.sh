@@ -77,19 +77,27 @@ seen_file="$tmp_dir/seen"
 : > "$review_file"
 : > "$seen_file"
 
+# A file edited more than once in the batch drops its old/new_string payload so
+# hook_get_added_lines falls back to git-diff-vs-HEAD: checks then see the
+# SURVIVING final-file additions (call-1 violations still present are caught;
+# later-reverted lines are correctly absent), not just the last call's strings.
 printf '%s' "$_input" | jq -c '
   reduce ((.tool_calls // [])[]) as $c
-    ({order: [], by: {}};
+    ({order: [], by: {}, count: {}};
       ($c.tool_name // "") as $name |
       ($c.tool_input.file_path // "") as $fp |
       if (($name == "Edit" or $name == "Write" or $name == "MultiEdit") and $fp != "") then
-        (if (.by[$fp] == null) then .order += [$fp] else . end) | .by[$fp] = $c
+        (if (.by[$fp] == null) then .order += [$fp] else . end)
+        | .by[$fp] = $c
+        | .count[$fp] = ((.count[$fp] // 0) + 1)
       else
         .
       end
     )
+  | . as $acc
   | .order[] as $fp
-  | .by[$fp]
+  | $acc.by[$fp]
+  | if ($acc.count[$fp] > 1) then .tool_input |= del(.old_string, .new_string, .content) else . end
 ' > "$calls_file" 2>/dev/null || true
 
 [ -s "$calls_file" ] || exit 0

@@ -102,7 +102,7 @@ Generate from `.claude/settings.json`. Copy supported events directly. Add the b
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/unhappy-path-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/error-boundary-check.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
@@ -182,7 +182,7 @@ Codex supports plugin-bundled hooks when `[features].plugin_hooks = true`. Prefe
 
 Codex does not fully match Claude Code events such as `SubagentStart`, `SubagentStop`, `PostToolBatch`, `FileChanged`, `PreCompact`, `PostCompact`, and `SessionEnd` in this compatibility layer.
 
-Self-review loop enforcement that depends on subagent hooks should become soft guidance in `AGENTS.md`. Findings schema (`agents/findings-schema.md`) and agent definitions remain readable by Codex, but output enforcement is best effort.
+Self-review loop enforcement that depends on subagent hooks should become soft guidance in `AGENTS.md`. Findings schema (`agents/references/findings-schema.md`) and agent definitions remain readable by Codex, but output enforcement is best effort.
 
 ## AGENTS.md
 
