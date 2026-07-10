@@ -290,3 +290,7 @@ Everything this harness uses from [mattpocock/skills](https://github.com/mattpoc
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
 Optional: TanStack packages ship their own reference skills via `npx @tanstack/intent@latest install` -- soft guidance only, no hooks. Lifecycle patterns (TDD red/green, grilling, writing-great-skills) are inspired by or vendored from [obra/superpowers](https://github.com/obra/superpowers); this harness adds mechanical enforcement on top.
+
+## Security review: intentionally absent
+
+Model-driven security review (per-edit security-audit hook, the review security hat, auth-path adversarial triggers) was removed by owner decision on 2026-07-10 after persistent false-positive flagging of legitimate cybersecurity work. Deterministic scanning (`/snyk-ux-security`, Biome) remains. Do not assume security coverage from this harness; restore from git history when model precision improves.

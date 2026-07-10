@@ -39,7 +39,7 @@ run_content_eval "$REPO_ROOT/AGENTS.md" "author model never solely reviews its o
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Adversarial exchange \(automatic" "codex skill has the automatic adversarial exchange mode"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "Cross-model adversarial review \(always, automatic" "go phase 4b runs cross-model review automatically"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "alternating models" "go phase 5b alternates reviewer models"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Ninth hat, \*\*mandatory\*\*: cross-model" "review panel has a mandatory cross-model hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Eighth hat, \*\*mandatory\*\*: cross-model" "review panel has a mandatory cross-model hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "diagnostic-only in every mode" "review is diagnostic-only; /go owns the fix loop"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "delegate per model routing|Fix P0/P1 now .delegate per model routing" "go owns automatic P0/P1 fix delegation"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.5 is retired" "efficient-frontier retires GPT-5.5"

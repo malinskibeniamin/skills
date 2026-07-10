@@ -46,7 +46,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/resolve-pr-feedback` | Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. |
 | `/resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. |
 | `/revamp` | Run a large rewrite, port, or migration using the Bun-in-Rust playbook -- baselines, mechanical-first trans... |
-| `/review` | Reviews a diff with an 8-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience... |
+| `/review` | Reviews a diff with a 7-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience,... |
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
 | `/snyk-ux-security` | Run Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage, release-age... |

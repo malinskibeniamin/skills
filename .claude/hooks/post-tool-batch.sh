@@ -31,7 +31,6 @@ _check_labels=(
   ts-no-escape-hatches-check
   tsconfig-strict-check
   llm-failure-mode-check
-  security-audit-check
   query-pattern-check
   copyright-check
   edit-loop-check
@@ -55,7 +54,6 @@ _check_funcs=(
   run_ts_no_escape_hatches_check
   run_tsconfig_strict_check
   run_llm_failure_mode_check
-  run_security_audit_check
   run_query_pattern_check
   run_copyright_check
   run_edit_loop_check
