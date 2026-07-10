@@ -270,19 +270,35 @@ hook_parse_edit_write() {
 
   file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
 
-  # Canonical Codex apply_patch payload: the target path lives inside the patch
-  # body ("*** Update File: x" / "*** Add File: x"), not in tool_input.file_path.
+  # Canonical Codex apply_patch payload: the patch text arrives in
+  # tool_input.command (string, or ["apply_patch", "<patch>"] array per the
+  # Codex hook contract); targets live inside the patch body as
+  # "*** Update File: x" / "*** Add File: x". Multi-file patches: file_path is
+  # the first existing target; _hook_apply_patch_targets carries them all and
+  # hook_get_added_lines returns the union of + lines so no target escapes
+  # per-call checks (the batch dispatcher expands per target for attribution).
   if [ -z "$file_path" ] && [ "$_hook_tool_name" = "apply_patch" ]; then
-    local _patch_body _patch_rel
-    _patch_body=$(echo "$_hook_input" | jq -r '.tool_input.patch // .tool_input.input // empty' 2>/dev/null || true)
-    _patch_rel=$(printf '%s\n' "$_patch_body" | sed -nE 's/^\*\*\* (Update|Add) File: (.*)$/\2/p' | head -1)
-    if [ -n "$_patch_rel" ]; then
+    local _patch_body _patch_rel _root
+    _patch_body=$(echo "$_hook_input" | jq -r 'if (.tool_input.command|type) == "array" then .tool_input.command[1:] | join("\n") elif (.tool_input.command|type) == "string" then .tool_input.command else (.tool_input.patch // .tool_input.input // empty) end' 2>/dev/null || true)
+    _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    _hook_apply_patch_targets=""
+    while IFS= read -r _patch_rel; do
+      [ -z "$_patch_rel" ] && continue
       case "$_patch_rel" in
-        /*) file_path="$_patch_rel" ;;
-        *)  file_path="$(git rev-parse --show-toplevel 2>/dev/null || pwd)/$_patch_rel" ;;
+        /*) : ;;
+        *) _patch_rel="$_root/$_patch_rel" ;;
       esac
-      _hook_apply_patch_body="$_patch_body"
+      _hook_apply_patch_targets="${_hook_apply_patch_targets}${_patch_rel}
+"
+      if [ -z "$file_path" ] && [ -e "$_patch_rel" ]; then
+        file_path="$_patch_rel"
+      fi
+    done < <(printf '%s\n' "$_patch_body" | sed -nE 's/^\*\*\* (Update|Add) File: (.*)$/\2/p')
+    # No existing target (pure Add before write lands): take the first named one.
+    if [ -z "$file_path" ] && [ -n "$_hook_apply_patch_targets" ]; then
+      file_path=$(printf '%s' "$_hook_apply_patch_targets" | head -1)
     fi
+    [ -n "$_hook_apply_patch_targets" ] && _hook_apply_patch_body="$_patch_body"
   fi
 
   if [ -z "$file_path" ] || { [ ! -f "$file_path" ] && [ "${HOOK_ALLOW_MISSING_FILE:-0}" != "1" ]; }; then
@@ -417,7 +433,8 @@ hook_get_added_lines() {
   tool=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
   if [ "$tool" = "apply_patch" ] && [ -n "${_hook_apply_patch_body:-}" ]; then
-    # Added lines are the +-prefixed patch lines for this file's hunk.
+    # Union of +-prefixed lines across ALL targets in the patch -- a violation
+    # in any file of a multi-file patch is seen even by single-file checks.
     added_lines=$(printf '%s\n' "$_hook_apply_patch_body" | grep '^+' | grep -v '^+++' | sed 's/^+//' || true)
     return 0
   fi

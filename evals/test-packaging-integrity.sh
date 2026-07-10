@@ -11,7 +11,7 @@ while IFS= read -r _pi_file; do
     _pi_clean="${_pi_clean%% *}"
     [ -e "$_pi_dir/$_pi_clean" ] || [ -e "$REPO_ROOT/$_pi_clean" ] || _pi_bad="$_pi_bad $_pi_file->$_pi_clean"
   done < <(grep -oE '\]\(([^)]+)\)' "$_pi_file" 2>/dev/null | sed 's/^](//;s/)$//')
-done < <(find "$REPO_ROOT" -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/docs/*' -not -path '*/deprecated/*' ! -name '*-FORMAT.md')
+done < <(find "$REPO_ROOT" -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/deprecated/*' ! -name '*-FORMAT.md')
 
 if [ -n "$_pi_bad" ]; then
   echo "  FAIL  dangling markdown links:$_pi_bad"
@@ -58,4 +58,32 @@ if printf '%s' "$_pi_cfg" | jq -e . >/dev/null 2>&1; then
 else
   echo "  FAIL  Biome reference config block does not parse as JSON"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Biome config unparseable"
+fi
+
+# Media references (video/img tags and inline paths) must exist -- docs included.
+_pi_media_bad=""
+while IFS= read -r _pi_ref; do
+  [ -e "$REPO_ROOT/$_pi_ref" ] || _pi_media_bad="$_pi_media_bad $_pi_ref"
+done < <(grep -rhoE 'docs/screenshots/[a-zA-Z0-9._-]+' "$REPO_ROOT/README.md" "$REPO_ROOT/docs" 2>/dev/null | sort -u)
+if [ -n "$_pi_media_bad" ]; then
+  echo "  FAIL  referenced media missing:$_pi_media_bad"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: referenced media missing"
+else
+  echo "  PASS  all referenced docs/screenshots media exist"
+  PASS=$((PASS + 1))
+fi
+
+# Library mirror integrity: every _hook-lib.sh in an executable location must
+# resolve to the ONE authoritative shared/hook-lib.sh (the diverged-mirror bug
+# left live hooks calling functions that only existed in shared/).
+_pi_lib_bad=""
+while IFS= read -r _pi_lib; do
+  cmp -s "$_pi_lib" "$REPO_ROOT/shared/hook-lib.sh" || _pi_lib_bad="$_pi_lib_bad $_pi_lib"
+done < <(find "$REPO_ROOT/.claude/hooks" "$REPO_ROOT/frontend-starter-kit" "$REPO_ROOT/accessibility" -name '_hook-lib.sh' 2>/dev/null)
+if [ -n "$_pi_lib_bad" ]; then
+  echo "  FAIL  diverged hook-lib mirrors:$_pi_lib_bad"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: diverged hook-lib mirrors"
+else
+  echo "  PASS  every _hook-lib.sh resolves to the authoritative shared lib"
+  PASS=$((PASS + 1))
 fi

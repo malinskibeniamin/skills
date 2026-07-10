@@ -29,6 +29,7 @@
     "rules": {
       "suspicious": {
         "noConsole": "error",
+        "noEmptyBlockStatements": "error",
         "noReactForwardRef": "off"
       },
       "complexity": {
@@ -143,6 +144,7 @@ Ultracite strict baseline. Overrides:
 | `noReactForwardRef` | suspicious | on | off | forwardRef still needed React 18 |
 | `noExcessiveCognitiveComplexity` | complexity | 20 | 15 | Stricter complexity cap |
 | `noExplicitAny` in tests | suspicious | off | error | No `any` even tests |
+| `noEmptyBlockStatements` | suspicious | off | error | Empty `catch (e) {}` swallows errors (replaced the silent-catch hook) |
 | `noDeprecatedImports` | project | off | error | Needs Biome Scanner |
 | `useFilenamingConvention` | style | off | kebab-case strict | `my-component.tsx` not `MyComponent.tsx` |
 | `noRestrictedImports` | style | empty | configured | Ban moment, lodash, classnames, mobx, yup, jquery, core-js, `@redpanda-data/ui`, lucide-react (replaced the bundle-guard hook) |
