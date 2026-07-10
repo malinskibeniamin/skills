@@ -27,7 +27,7 @@ Run all checks. Fix failures before proceed.
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
 1. Dispatch `self-reviewer` agent on session diff
-2. **Cross-model adversarial review (always, automatic)**: the author model never solely reviews its own work. Claude authored the diff -> dispatch `GPT-5.6: adversarial` via `/codex` (read-only review, break-it prompt). Codex authored the diff -> dispatch the Claude `adversarial-reviewer` agent. Cross-provider gates apply (see /codex): repo without codex opt-in -> clean-context Claude adversarial lane instead. Codex CLI or model unavailable -> `adversarial-reviewer` with a clean context, and record the fallback.
+2. **Cross-model adversarial review (always, automatic, cross-FAMILY preferred)**: the author model never solely reviews its own work, and the reviewer comes from a different family whenever possible. Claude authored the diff -> dispatch `GPT-5.6-sol: adversarial` via `/codex` (read-only review, medium+ effort, break-it prompt). GPT authored the diff -> dispatch the Claude `adversarial-reviewer` agent (Opus). The initial adversarial pass is Sol or Opus -- never Terra/Luna; Terra may re-check fix rounds. Cross-provider gates apply (see /codex): repo without codex opt-in -> clean-context Claude adversarial lane instead. Codex CLI or model unavailable -> `adversarial-reviewer` with a clean context, and record the substitution.
 3. Diff >200 lines OR touches auth/security -> ALSO dispatch the Claude `adversarial-reviewer` in parallel (two adversarial lanes, different models)
 4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
@@ -52,7 +52,7 @@ Run all checks. Fix failures before proceed.
 1. `Monitor: gh pr checks <number> --watch` -- stream CI background
 2. CI fail -> diagnosing-bugs, fix, push, re-monitor
 3. `code-reviewer` agent findings -> `/resolve-pr-feedback` triage, fix, reply, push
-4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds, **alternating models** -- round fixes authored by Claude are re-reviewed by `GPT-5.6: review` (`codex review`), codex-authored fixes by the Claude `code-reviewer`. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
+4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds, **alternating models** -- round fixes authored by Claude are re-reviewed by GPT (`GPT-5.6-terra: review` for routine rounds, Sol when the fix is substantive), codex-authored fixes by the Claude `code-reviewer`. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
 5. **Human review (incl cloud/Copilot)**: NO cap. Address EVERY thread. `pr-feedback-completeness-stop` hook blocks session exit until `bash scripts/pr-unresolved-count.sh` returns 0 and no CHANGES_REQUESTED reviews remain.
 
 ## Phase 6: Compound

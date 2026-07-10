@@ -46,7 +46,7 @@ spawn failure is rerun, not dropped.
 | security/privacy | auth, tenant boundaries, secrets, unsafe HTML, injection, deps, logging, PII | Opus-4.8 |
 | test/perf | TDD evidence, coverage gaps, flaky tests, render/network/bundle risk | Opus-4.8 |
 
-Ninth hat, **mandatory**: cross-model. The reviewer model must differ from the diff's author model. Claude authored -> `GPT-5.6: independent` codex wrapper hat (see `/codex`) -- spends codex plan allowance (cheap relative to Claude tokens, not free; capped per /codex budget gates), catches groupthink. Codex authored -> the eight Claude hats already are the cross-model review; add a clean-context `GPT-5.6: independent` as a third perspective when stakes warrant. Skippable ONLY when the codex CLI is unavailable -- record the skip like any other hat.
+Ninth hat, **mandatory**: cross-model, ideally cross-FAMILY -- family diversity catches blind spots the author's family shares. Claude authored -> `GPT-5.6-sol: independent` codex wrapper hat (see `/codex`; medium+ effort; spends plan allowance, cheap not free, capped per /codex budget gates). GPT authored -> the eight Claude hats (Opus-4.8) already are the cross-family review. Terra may run routine re-check rounds after fixes; Sol or Opus owns the initial pass; Luna never reviews. Same-family clean-context only when the other family is unavailable -- record it like any hat skip.
 
 Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals;
 evidence, severity, priority label, required change, PR-comment-ready text; max 400 words;
