@@ -49,9 +49,10 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 ```bash
 brew upgrade --cask codex
 codex features enable plugins
-codex features enable codex_hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.28.0
+codex features enable hooks
+codex plugin marketplace add malinskibeniamin/skills --ref v4.28.2
 codex plugin marketplace upgrade skills
+codex plugin add frontend-skills@skills
 ```
 
 Track `main` instead of the pin with `--ref main`. Restart Codex after adding or upgrading so the Plugins UI reloads metadata.
