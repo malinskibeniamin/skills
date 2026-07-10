@@ -8,8 +8,12 @@ description: Delegate work to GPT-5.6 via the codex CLI -- clear-spec implementa
 GPT-5.6 is reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
 never through the agent/workflow `model` parameter (Claude models only). **Default to GPT-5.6
 for all codex work** (`-m gpt-5.6`, or set `model = "gpt-5.6"` in `~/.codex/config.toml`);
-GPT-5.5 is retired -- 5.6 is GA and strictly better. GPT models are extremely
-steerable: write explicit, self-contained prompts and they follow them.
+GPT-5.5 is retired as a routing target. **Capability-detect before relying on 5.6**: run
+`codex exec -m gpt-5.6 "reply OK"` once per session; on model-unavailable (account not in
+the 5.6 preview) fall back to the strongest GPT available and label wrappers with the model
+actually invoked -- distinguish that from CLI-unavailable (codex not installed), which skips
+the codex lane entirely and records the skip. GPT models are extremely steerable: write
+explicit, self-contained prompts and they follow them.
 
 ## Prompt contract (every codex run)
 
@@ -33,6 +37,17 @@ rerun with a sharper prompt or redo on a smarter model without asking.
   `adversarial-reviewer` agent); a second clean-context GPT-5.6 run is an acceptable third
   perspective. Findings route back per model routing: fixes delegated, then re-checked by
   the cross reviewer. `/go` phase 4b invokes this automatically.
+
+  **Cross-provider gates (checked before every automatic exchange):**
+  - *Authorization*: send code to OpenAI only when the repo opts in -- a `.codex/` directory
+    or an AGENTS.md at the repo root is the opt-in signal (the owner configured Codex for
+    this codebase). Unclassified/private repos without it -> the adversarial lane is a
+    clean-context Claude agent instead; record the substitution.
+  - *Minimization*: send the diff, acceptance criteria, and verify commands -- never the
+    conversation, secrets, or unrelated files.
+  - *Budget*: codex spends plan allowance/credits -- it is cheap relative to Claude tokens,
+    not free. Cap the automatic exchange at one codex review per refine round and one per
+    PR-iterate round; extra runs need a reason.
 - **Computer use** (browser/GUI verification, visual re-checks): shell the whole computer-use
   task to codex -- it is a token furnace on Claude models. Prompt must name the URL/app, the
   states to verify, and the evidence to capture; codex reports back, Fable judges.
@@ -63,7 +78,7 @@ workflow lane or subagent, spawn a thin Claude wrapper:
   real worker is GPT.
 - Parallel implementation wrappers MUST use `isolation: "worktree"` so codex edits do not
   collide in the shared checkout.
-- Workflow token budgets count Claude tokens only -- codex work is free and invisible to
+- Workflow token budgets count Claude tokens only -- codex work is invisible to
   `budget.spent()`. Budget the wrappers, not the codex runs.
 
 ## When NOT to delegate

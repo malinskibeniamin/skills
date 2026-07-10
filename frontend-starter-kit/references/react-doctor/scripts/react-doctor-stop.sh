@@ -4,11 +4,13 @@ set -eo pipefail
 # Source hook-lib for session-scoped file tracking
 _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
-# Session-scoped: only check files this session touched
+# Session-scoped: only check files this session touched.
+# Includes .ts: transferred rules (tanstack-query, state-and-effects) fire in plain
+# TypeScript files too -- a QueryClient created in a .ts module must still be scanned.
 if type hook_session_changed_files &>/dev/null; then
-  changed_files=$(hook_session_changed_files "tsx|jsx")
+  changed_files=$(hook_session_changed_files "tsx?|jsx")
 else
-  changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(tsx|jsx)$' || true)
+  changed_files=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.(tsx?|jsx)$' || true)
 fi
 
 if [ -z "$changed_files" ]; then
@@ -44,6 +46,16 @@ fi
 if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -30)
   hook_stop_finding "$(printf "React Doctor errors are stop-gaps. Fix before continuing:\n%s" "$truncated")"
+  exit 0
+fi
+
+# Transferred rules are hard blocks regardless of score. These were per-edit
+# hook_block rules before the React Doctor delegation; a finding on any of them
+# must stop the session even when the overall score clears 80.
+_transferred='react-compiler-no-manual-memoization|no-derived-state-effect|no-derived-use-state|rerender-lazy-ref-init|no-reset-all-state-on-prop-change|no-adjust-state-on-prop-change|no-outline-none|no-disabled-zoom|dialog-has-accessible-name|html-no-nested-interactive|img-redundant-alt|label-has-associated-control|query-stable-query-client|query-no-rest-destructuring|query-destructure-result|query-no-void-query-fn'
+_transferred_hits=$(echo "$output" | grep -oE "$_transferred" | sort -u | tr '\n' ' ' || true)
+if [ -n "$_transferred_hits" ]; then
+  hook_stop_finding "React Doctor flagged transferred hard rules (block regardless of score): ${_transferred_hits}. These were per-edit blocks before delegation; fix before finishing."
   exit 0
 fi
 

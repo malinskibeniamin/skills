@@ -27,7 +27,7 @@ Run all checks. Fix failures before proceed.
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
 1. Dispatch `self-reviewer` agent on session diff
-2. **Cross-model adversarial review (always, automatic)**: the author model never solely reviews its own work. Claude authored the diff -> dispatch `GPT-5.6: adversarial` via `/codex` (read-only review, break-it prompt). Codex authored the diff -> dispatch the Claude `adversarial-reviewer` agent. Codex CLI unavailable -> `adversarial-reviewer` with a clean context, and record the fallback.
+2. **Cross-model adversarial review (always, automatic)**: the author model never solely reviews its own work. Claude authored the diff -> dispatch `GPT-5.6: adversarial` via `/codex` (read-only review, break-it prompt). Codex authored the diff -> dispatch the Claude `adversarial-reviewer` agent. Cross-provider gates apply (see /codex): repo without codex opt-in -> clean-context Claude adversarial lane instead. Codex CLI or model unavailable -> `adversarial-reviewer` with a clean context, and record the fallback.
 3. Diff >200 lines OR touches auth/security -> ALSO dispatch the Claude `adversarial-reviewer` in parallel (two adversarial lanes, different models)
 4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
