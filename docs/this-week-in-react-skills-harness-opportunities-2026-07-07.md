@@ -62,11 +62,10 @@ Evidence:
 
 Recommended harness change:
 
-- Update `setup-react-compiler` to split:
-  - Compiler-friendly coding rules: current hooks remain useful.
-  - Lint-only diagnostics: recommend Oxlint `react/react-compiler` where projects can tolerate an extra linter.
-  - Build transform: choose per bundler; include Rspack/SWC/Oxc/Bun/Next detection, but mark non-Babel integrations experimental until docs stabilize.
-- Add evals proving the hook detects React Compiler when enabled via Rspack/SWC/Oxc/Next/Bun, not only `babel-plugin-react-compiler`.
+- Update `setup-react-compiler` to split (revised 2026-07-10 for the settled toolchain -- Biome/Ultracite + React Doctor, no standalone Oxlint/ESLint/Prettier):
+  - Compiler-friendly coding rules: owned by React Doctor (react-compiler-no-manual-memoization + state-and-effects family); the per-edit react-compiler hook was retired.
+  - Lint-only diagnostics: covered by React Doctor's bundled engine -- do not add a second linter.
+  - Build transform: choose per bundler; include Rspack/SWC/Bun detection, but mark non-Babel integrations experimental until docs stabilize.
 
 Sources:
 

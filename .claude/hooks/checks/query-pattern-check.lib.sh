@@ -9,17 +9,21 @@ hook_get_added_lines || return 0
 
 file_content=$(cat "$file_path" 2>/dev/null || true)
 
-# Source material: @tanstack/eslint-plugin-query v5.100.14 rules inspected:
-# exhaustive-deps, stable-query-client, no-rest-destructuring,
-# no-unstable-deps, no-void-query-fn, property order, prefer-query-options.
-# Vendored here as lightweight project hooks; no ESLint runtime dependency.
+# Source material: @tanstack/eslint-plugin-query v5.100.14 rules inspected.
+# React Doctor (Stop hook, tanstack-query category) owns the AST-expressible
+# rules; do not re-add them here:
+#   stable QueryClient      -> tanstack-query/query-stable-query-client
+#   rest destructuring      -> tanstack-query/query-no-rest-destructuring
+#   unstable result in deps -> tanstack-query/query-destructure-result
+#   void queryFn            -> tanstack-query/query-no-void-query-fn
+# This hook keeps only project-specific rules and low-noise heuristics
+# React Doctor does not ship.
 
 # ── Existing project checks ──────────────────────────────────────
 
 if echo "$added_lines" | grep -qE '\.refetchQueries\('; then
   if ! hook_has_escape "refetch-queries"; then
     hook_warn "Prefer invalidateQueries() over refetchQueries(). Invalidation lets React Query decide optimal refetch timing. Escape: // allow: refetch-queries [reason]" "query-pattern-refetch"
-    return 0
   fi
 fi
 
@@ -27,61 +31,11 @@ no_await=$(echo "$added_lines" | grep -E 'invalidateQueries\(' | grep -vE 'await
 if [ -n "$no_await" ]; then
   if ! hook_has_escape "await-invalidate"; then
     hook_warn "Always await invalidateQueries() — without await, subsequent code may see stale cache. Escape: // allow: await-invalidate [reason]" "query-pattern-await"
-    return 0
   fi
 fi
 
-# ── TanStack ESLint intent: stable-query-client ───────────────────
-# A QueryClient created during render is unstable and can wipe cache.
-
-if echo "$added_lines" | grep -qE 'new[[:space:]]+QueryClient[[:space:]]*\('; then
-  if hook_has_escape "unstable-query-client"; then
-    :
-  elif ! echo "$added_lines" | grep -qE 'useState[[:space:]]*\([^\n]*new[[:space:]]+QueryClient|useMemo[[:space:]]*\([^\n]*new[[:space:]]+QueryClient'; then
-    if echo "$file_content" | grep -qE 'function[[:space:]]+[A-Z][A-Za-z0-9_]*[[:space:]]*\(|const[[:space:]]+[A-Z][A-Za-z0-9_]*[[:space:]]*=.*=>|<[A-Za-z][A-Za-z0-9.]*'; then
-      hook_block "TanStack Query: QueryClient must be stable. Create it outside components or via React.useState(() => new QueryClient()). Escape: // allow: unstable-query-client [reason]"
-      return 0
-    fi
-  fi
-fi
-
-# ── TanStack ESLint intent: no-rest-destructuring ─────────────────
-# Rest destructuring observes every query result property → excess renders.
-
-if echo "$added_lines" | grep -qE '\{[^}\n]*\.\.\.[A-Za-z_$][A-Za-z0-9_$]*[^}\n]*\}[[:space:]]*=[[:space:]]*(use(Query|InfiniteQuery|SuspenseQuery|SuspenseInfiniteQuery)|[A-Za-z_$][A-Za-z0-9_$]*Query\b)'; then
-  if ! hook_has_escape "query-rest-destructure"; then
-    hook_warn "TanStack Query: avoid rest destructuring query results; it subscribes to all result changes. Destructure only fields used. Escape: // allow: query-rest-destructure [reason]" "query-pattern-rest"
-    return 0
-  fi
-fi
-
-# ── TanStack ESLint intent: no-unstable-deps ──────────────────────
-# Query hook return object is not referentially stable. Dependency arrays
-# should contain destructured fields, not the whole query object.
-
-query_vars=$(printf '%s\n%s' "$file_content" "$added_lines" | grep -oE '[A-Za-z_$][A-Za-z0-9_$]*[[:space:]]*=[[:space:]]*use(Query|InfiniteQuery|SuspenseQuery|SuspenseInfiniteQuery)[[:space:]]*\(' | sed -E 's/[[:space:]]*=.*//' | sort -u || true)
-if [ -n "$query_vars" ]; then
-  while IFS= read -r qv; do
-    [ -z "$qv" ] && continue
-    if echo "$added_lines" | grep -qE '\[[^]]*\b'"$qv"'\b[^]]*\]'; then
-      if ! hook_has_escape "unstable-query-deps"; then
-        hook_block "TanStack Query: '$qv' query result is not stable. Destructure fields and put those fields in hook dependency arrays. Escape: // allow: unstable-query-deps [reason]"
-        return 0
-      fi
-    fi
-  done <<< "$query_vars"
-fi
-
-# ── TanStack ESLint intent: no-void-query-fn ──────────────────────
-# queryFn must return data; block common block-body forms with no return.
-
-if echo "$added_lines" | tr '\n' ' ' | grep -qE 'queryFn[[:space:]]*:[[:space:]]*(async[[:space:]]*)?\([^)]*\)[[:space:]]*=>[[:space:]]*\{[^}]*\}'; then
-  query_fn_blocks=$(echo "$added_lines" | tr '\n' ' ' | grep -oE 'queryFn[[:space:]]*:[[:space:]]*(async[[:space:]]*)?\([^)]*\)[[:space:]]*=>[[:space:]]*\{[^}]*\}' || true)
-  if [ -n "$query_fn_blocks" ] && ! echo "$query_fn_blocks" | grep -qE '\breturn\b'; then
-    hook_block "TanStack Query: queryFn must return a value. Add return/implicit expression; undefined query data breaks cache semantics."
-    return 0
-  fi
-fi
+# ── stable-query-client / no-rest-destructuring / no-unstable-deps /
+#     no-void-query-fn — delegated to React Doctor tanstack-query rules ──
 
 # ── TanStack ESLint intent: exhaustive-deps (low-noise subset) ───
 # Warn only when we can see a direct queryFn call argument that is missing
@@ -103,7 +57,6 @@ if echo "$compact_added" | grep -qE 'queryKey[[:space:]]*:[[:space:]]*\[[^]]*\].
       done <<< "$candidates"
       if [ -n "$missing_deps" ]; then
         hook_warn "TanStack Query: queryFn uses $missing_deps but queryKey does not include it. Add it to queryKey or escape: // allow: query-key-deps [reason]" "query-pattern-key-deps"
-        return 0
       fi
     fi
   fi
@@ -115,12 +68,10 @@ fi
 
 if echo "$added_lines" | tr '\n' ' ' | grep -qE 'useMutation\([^{]*\{[^}]*on(Error|Settled)[^}]*onMutate'; then
   hook_warn "TanStack Query: put onMutate before onError/onSettled in useMutation options for reliable inference." "query-pattern-mutation-order"
-  return 0
 fi
 
 if echo "$added_lines" | tr '\n' ' ' | grep -qE '(useInfiniteQuery|useSuspenseInfiniteQuery|infiniteQueryOptions)\([^{]*\{[^}]*get(Next|Previous)PageParam[^}]*queryFn'; then
   hook_warn "TanStack Query: put queryFn before getPreviousPageParam/getNextPageParam in infinite query options for reliable inference." "query-pattern-infinite-order"
-  return 0
 fi
 
 # ── TanStack ESLint intent: prefer-query-options (strict) ─────────
@@ -129,7 +80,17 @@ fi
 if echo "$added_lines" | grep -qE 'use(Query|InfiniteQuery|SuspenseQuery|SuspenseInfiniteQuery)\([[:space:]]*\{' && echo "$added_lines" | grep -qE 'queryKey[[:space:]]*:.*queryFn[[:space:]]*:|queryFn[[:space:]]*:.*queryKey[[:space:]]*:'; then
   if ! hook_has_escape "inline-query-options"; then
     hook_warn "TanStack Query: consider queryOptions()/infiniteQueryOptions() to co-locate queryKey and queryFn for reuse. Escape: // allow: inline-query-options [reason]" "query-pattern-options"
-    return 0
+  fi
+fi
+
+# ── Check: useMutation result variables carry the *Mutation suffix ──
+# Restored after the legacy-import retirement audit: naming is a project
+# convention neither Biome nor React Doctor expresses.
+
+_unnamed_mutation=$(echo "$added_lines" | grep -E 'const[[:space:]]+[A-Za-z_$][A-Za-z0-9_$]*[[:space:]]*=[[:space:]]*useMutation\b' | grep -vE 'const[[:space:]]+[A-Za-z_$][A-Za-z0-9_$]*Mutation[[:space:]]*=' || true)
+if [ -n "$_unnamed_mutation" ]; then
+  if ! hook_has_escape "mutation-name"; then
+    hook_warn "useMutation result should carry the *Mutation suffix (deleteMutation, not doDelete). Escape: // allow: mutation-name [reason]" "query-pattern-mutation-name"
   fi
 fi
 
@@ -152,7 +113,6 @@ if echo "$file_content" | grep -qE 'useMutation|mutate\(|mutateAsync\('; then
     if [ "$has_onerror" = false ]; then
       if ! hook_has_escape "mutation-onerror"; then
         hook_block "mutate()/mutateAsync() without onError callback. Add onError to show user feedback on failure. Use ConnectError.from(error) + formatToastErrorMessageGRPC(). Escape: // allow: mutation-onerror [reason]"
-        return 0
       fi
     fi
   fi
@@ -188,7 +148,6 @@ if [ "$is_react_file" = true ]; then
     if [ "$new_fetch_count" -gt "$new_mutation_count" ]; then
       if ! hook_has_escape "inline-mutation"; then
         hook_warn "Side-effect fetch (DELETE/POST/PUT/PATCH) without useMutation. ${new_fetch_count} fetch(es) but only ${new_mutation_count} mutation wrapper(s) in new code. Wrap in useMutation hook. Escape: // allow: inline-mutation [reason]"
-        return 0
       fi
     fi
   fi

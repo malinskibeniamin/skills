@@ -39,7 +39,7 @@ for removed in diagnose write-a-skill caveman zoom-out; do
 done
 
 # User-invoked skills explicitly disable model invocation.
-for skill in ask-ben handoff improve-codebase-architecture prototype to-tickets to-spec triage writing-great-skills; do
+for skill in ask-ben handoff prototype to-tickets to-spec triage writing-great-skills; do
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^disable-model-invocation: true$" "$skill is user-invoked"
 done
 
@@ -57,8 +57,8 @@ done
 
 # Shared v1 skills are composed by the existing harness entrypoints.
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling updates docs through domain-modeling"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "ICA uses codebase-design vocabulary"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/domain-modeling" "ICA uses domain-modeling for side effects"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "/codebase-design" "architecture mode uses codebase-design vocabulary"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "/domain-modeling" "architecture mode uses domain-modeling for side effects"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/codebase-design" "TDD uses codebase-design for interface design"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grilling" "ask-ben routes planning through grilling"

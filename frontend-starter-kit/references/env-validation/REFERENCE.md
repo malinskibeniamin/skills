@@ -1,10 +1,8 @@
 # Env Validation Reference
 
-## env-validation-check.sh
+## Enforcement: Biome, not a hook
 
-PostToolUse hook. Block raw `process.env.` access outside dedicated env files.
-
-> Script: [`scripts/env-validation-check.sh`](scripts/env-validation-check.sh)
+Raw `process.env` access is banned by Biome's `noProcessEnv` (nursery, `error`) configured in [`../biome/REFERENCE.md`](../biome/REFERENCE.md), with overrides allowing it in `src/env.ts` and build/test config files. The former `env-validation-check.sh` PostToolUse hook was retired in favor of the lint rule -- one owner per rule.
 
 ## Example `src/env.ts`
 

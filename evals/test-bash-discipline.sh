@@ -4,7 +4,7 @@ HOOK="$REPO_ROOT/.claude/hooks/bash-verbose-guard.sh"
 
 run_file_eval "$HOOK" "bash-verbose-guard.sh exists"
 run_executable_eval "$HOOK" "bash-verbose-guard.sh executable"
-run_content_eval "$REPO_ROOT/skill-manifest.json" "bash-verbose-guard.sh" \
+run_content_eval "$REPO_ROOT/.claude/hooks/pre-bash.sh" "bash-verbose-guard.sh" \
   "manifest registers bash-verbose-guard"
 
 # Nudge paths
@@ -31,10 +31,8 @@ else
   ERRORS="$ERRORS\n  FAIL: ls false pos"
 fi
 
-# CLAUDE.md has Bash Discipline section
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Bash Discipline" \
-  "CLAUDE.md has Bash Discipline section"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "llm-truncate" \
-  "Bash Discipline references llm-truncate cap"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "bash-verbose-guard" \
-  "Bash Discipline references bash-verbose-guard"
+# Bash discipline is machine-enforced, not documented in CLAUDE.md (lean contract).
+run_file_eval "$REPO_ROOT/.claude/hooks/bash-verbose-guard.sh" \
+  "bash-verbose-guard hook exists (owns bash discipline)"
+run_file_eval "$REPO_ROOT/.claude/hooks/llm-truncate.sh" \
+  "llm-truncate hook exists (owns output caps)"

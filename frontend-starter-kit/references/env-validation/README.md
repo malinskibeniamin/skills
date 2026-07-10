@@ -29,7 +29,7 @@ export const env = createEnv({
 Use `import { env } from "@/env"` everywhere instead of `process.env`.
 
 ### 3. Hook
-Copy `scripts/env-validation-check.sh` + `scripts/_hook-lib.sh` -> `.claude/hooks/`. `chmod +x`. Add to PostToolUse (Edit|Write).
+No hook to copy -- enforcement is Biome noProcessEnv (see ../biome/REFERENCE.md config template, incl. the src/env.ts + config-file overrides).
 
 ### 4. Verify
 - [ ] `import { env } from "@/env"` works

@@ -1,6 +1,6 @@
 # Visual Review Reference
 
-Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go`, `/commit-push`, `/commit-push-pr`, `/prototype`, `/triage`, `self-reviewer`, `code-reviewer`.
+Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go`, `/commit-push-pr`, `/prototype`, `/triage`, `self-reviewer`, `code-reviewer`.
 
 Visual review = surface review for customer-facing surfaces: web UI, mobile screens, CLI/TUI output, desktop apps, generated reports, onboarding, forms, any user-visible behavior. Browser screenshot review = one adapter.
 
@@ -371,7 +371,7 @@ These belong here even when hooks exist:
 - `/development-lifecycle`: `plan` mode for customer-facing plans; `/go` handles implemented/release.
 - `/go`: auto-run for frontend diffs + customer-facing surface diffs before PR.
 - `/commit-push-pr`: require result or explicit skip reason for frontend/customer-facing surface PRs.
-- `/commit-push`: require before push unless skipped with reason.
+- `/commit-push-pr --no-pr`: require before push unless skipped with reason.
 - `/prototype`: compare alternatives pre-implementation.
 - `/triage`: use `regression` mode for user-visible bugs.
 - `self-reviewer` and `code-reviewer`: flag missing evidence for frontend/customer-facing surface diffs.
@@ -416,7 +416,7 @@ Every frontend or customer-facing surface PR carries/links:
 
 ## HTML report format
 
-Visual review can render a single self-contained HTML report in OS temp dir. This mirrors `/improve-codebase-architecture`: write the file first; add a renderer script later only if the JSON contract stabilizes.
+Visual review can render a single self-contained HTML report in OS temp dir. This mirrors `/improve architecture`: write the file first; add a renderer script later only if the JSON contract stabilizes.
 
 Location: resolve temp dir from `$TMPDIR`, fallback `/tmp` or `%TEMP%`. Write `<tmpdir>/visual-review-<timestamp>.html`, open via `open`, `xdg-open`, or `start`, return absolute path. Do not write repo artifacts unless user asks.
 

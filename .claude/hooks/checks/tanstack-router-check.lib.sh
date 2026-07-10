@@ -75,21 +75,18 @@ if [ -n "$added_lines" ]; then
 
 if echo "$added_lines" | grep -qE "from\s+['\"]react-router-dom['\"/]"; then
   hook_block "react-router-dom banned. Use TanStack Router: useNavigate, useParams({from}), useSearch(validateSearch), <Link>."
-  return 0
 fi
 
 # ── Check 2: Ban window.location for navigation ──────────────────────
 
 if echo "$added_lines" | grep -qE 'window\.location\.(href|assign|replace)\s*[=(]'; then
   hook_block "No window.location nav (full reload). Use navigate({to}) or <Link> from @tanstack/react-router."
-  return 0
 fi
 
 # ── Check 2b: Ban navigate(-1) / history.back() ─────────────────────
 
 if echo "$added_lines" | grep -qE 'navigate\(\s*-1\s*\)|history\.back\(\)|history\.go\(\s*-'; then
   hook_warn "navigate(-1) can exit app if no history. Use explicit route path."
-  return 0
 fi
 
 # ── Check 3: Ban URLSearchParams in client code ──────────────────────
@@ -293,7 +290,7 @@ fi
 
 # ── absorbed from file-size-check.sh (4.28 family consolidation) ──
 # ── Check 1: Warn when route files exceed 300 LOC ───────────────
-# Large route components should be split. Suggest /improve-codebase-architecture.
+# Large route components should be split. Suggest /improve architecture.
 # Detect route files by path OR content (supports any directory structure).
 
 if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]; then
@@ -307,7 +304,7 @@ if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]
   if [ "$is_route" = true ]; then
     loc=$(wc -l < "$file_path" | tr -d ' ')
     if [ "$loc" -gt 300 ]; then
-      hook_warn "Route file is ${loc} LOC (limit: 300). Split into smaller components or use /improve-codebase-architecture."
+      hook_warn "Route file is ${loc} LOC (limit: 300). Split into smaller components or use /improve architecture."
     fi
   fi
 fi

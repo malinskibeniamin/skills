@@ -20,7 +20,6 @@ if echo "$file_content" | grep -qE 'React\.lazy\(|[^A-Za-z_]lazy\(' && \
    ! echo "$file_content" | grep -qE '<Suspense|Suspense>'; then
   if ! hook_has_escape "lazy-suspense"; then
     hook_warn "React.lazy() without <Suspense> in this file. Wrap the lazy component or note the boundary location. Escape: // allow: lazy-suspense [reason]" "lazy-suspense"
-    return 0
   fi
 fi
 
@@ -34,7 +33,6 @@ if ! echo "$file_path" | grep -qE '/hooks/|/use[A-Z]'; then
      ! echo "$file_content" | grep -qE 'isLoading|isPending|isError|fallback|Skeleton|Spinner|EmptyState|ErrorState'; then
     if ! hook_has_escape "query-states"; then
       hook_warn "Query result rendered without loading/error/empty handling (isLoading/isPending/isError/fallback). Escape: // allow: query-states [reason]" "query-states"
-      return 0
     fi
   fi
 fi
@@ -73,7 +71,6 @@ if [ "$has_loader" = true ]; then
     if [ "$has_parent_boundary" = false ]; then
       if ! hook_has_escape "error-boundary"; then
         hook_block "Route with loader has no errorComponent. Add errorComponent to handle fetch failures gracefully. Escape: // allow: error-boundary [reason]"
-        return 0
       fi
     fi
   fi

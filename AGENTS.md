@@ -1,88 +1,63 @@
+<!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->
 # Project Rules
 
-## Quick Reference
-
-Rules: bun tsgo biome vitest | React Compiler handles memoization | fix types properly (type guards, generics) | UI from @/components/ui/ | <Button> for all buttons | zustand:create<T>()() useShallow | env from @/env | TanStack Router for routing | connect-query for data fetching | TDD: failing test first, always
+Lean by design: only rules that are neither machine-enforced nor inferable. Hooks, Biome (ultracite), and React Doctor teach at violation time; path-scoped skills (accessibility, connect-query, tanstack-router, e2e-testing, ux-copy, registry-workflow) auto-load the deep guidance. Do not re-add enforced rules here.
 
 ## Toolchain
 
-bun (pkg mgr) | tsgo (type check) | Biome (lint/format) | --force-with-lease for force pushes
-Safe rm -rf: node_modules, dist, .next, build, .cache, .turbo, coverage
-
-## Commits
-
-`type(scope): description` -- feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars.
+`bun` pkg | `tsgo` typecheck | Biome lint/fmt | React Doctor (Stop hook) React patterns | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
+External services via CLI, not MCP: Jira `acli` | Google `gog` | browser `agent-browser` | CI `gh` | Buildkite `bk` | Box `box` | M365 `m365`
 
 ## Code Quality
 
-Code is liability: keep additions only for product value, defensive correctness, or test confidence. Delete/inline before abstract. Run `bun run lint:fix` + `bun run type:check` before finish.
+Code is liability: keep additions only for product value, defensive correctness, or test confidence | delete/inline before abstract | `bun run lint:fix` + `bun run type:check` pre-done
 
-## React
+## Stack conventions (chosen, not inferable)
 
-- Functional components only (React Compiler require)
-- `@/components/ui/` for all form/interactive UI
-- DOMPurify for user HTML. JSON.parse() for data, textContent for text, setHTML for safe HTML
-- Type guards/generics/schema validation -- no `as any`, no `@ts-ignore`
-- `focus-visible:ring-*` not outline. React Compiler handle memo -- remove useMemo/useCallback/React.memo
-- `aria-label` on icon buttons. `<Button>` need: onClick|asChild|type="submit"|disabled
-- `<Link>` for navigation. Direct source imports (tree-shaking). `{ passive: true }` on scroll/touch/wheel
-- `React.lazy()` for heavy deps. `structuredClone()` for cloning. `.requestSubmit()` for forms
-- `Number()` or `parseInt(s,10)`. `Number.isNaN()`. Named useEffect callbacks.
+- UI: `@/components/ui/` registry first, `<Button>` for every button, variant props + design tokens (`bg-primary`, `var(--destructive)`) -- fix specificity at source, never restyle registry components inline
+- State: zustand = client, TanStack Query = server, connect-query for ConnectRPC | env via `@/env` (t3-env+zod, declare in `src/env.ts`)
+- Proto: enums by name, never magic numbers | Functional components only (Compiler)
+- Validate format, not presence: URL regex, enum membership, UPPER_SNAKE patterns
+- Tests: `.test.ts` unit | `.test.tsx` integration | `.browser.test.tsx` visual | `e2e/*.spec.ts` Playwright | co-locate with source
 
-## Tailwind
+## Lifecycle (MANDATORY -- hooks enforce)
 
-Utility classes. Design tokens (`bg-primary`). Fix specificity at source. variant prop on registry components. `100dvh` for viewport. `width:100%` for containers. Keep user-scalable enabled.
+Order every task. Hooks block skipped steps.
 
-## Env
+1. **Understand** -- explore, one question at time, propose
+2. **Plan** -- exact path, code, expect output
+3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
+4-6. **`/go`** -- verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
-`import { env } from "@/env"` (t3-env+zod). All vars in `src/env.ts`. Exception: `process.env` in build/test configs.
+Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
-## Accessibility
+### Effort + model routing
 
-`<img>` need alt. Clickable div/span need role+tabIndex+keyboard handler. combobox->aria-expanded+aria-controls. dialog->aria-label/labelledby. tablist->child role="tab".
+Default `high`. Fable-5: `high` or lower ONLY (`xhigh`/`max` furnaces, worse output). Never inject `ultrathink`.
 
-## Zustand
+Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 Sol (codex) 8/9/6 | GPT-5.6 Terra 9/6/5 | GPT-5.6 Luna 10/3/2. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
 
-`create<T>()()` double-parens. `useShallow` for multi-value selectors. `persist` for localStorage.
+GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- smartest model rivaled only by Fable-5, efficient for the price; ALL code writing, implementation, and adversarial review; run at `medium`|`high` ONLY. **Terra** = budget non-code work -- posting PR comments, routine review passes, test-runner/CI chores; `medium`|`high` ONLY; never writes product code. **Luna** = last resort for extremely cheap, quick, limited tasks far from code -- tracker orchestration (Jira/GitHub issue shuffling), mundane tool-call loops, test fixtures; `high` ONLY; never development.
 
-## State & Data
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | bulk mechanical -> codex Sol (plan allowance) | user-facing -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 | token furnaces -> codex | **thinker/executor split**: Fable/frontier thinks, tastes, plans; Sol executes; smart model reviews diff | **Cross-model review, automatic on every change**: author model never solely reviews its own work, and the reviewer comes from a DIFFERENT family whenever possible -- Claude wrote -> Sol reviews; GPT wrote -> Fable/Opus; same-family clean-context only when cross-family unavailable, record it; Terra may take routine re-check rounds; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via `model` param.
 
-zustand=client, TanStack Query=server. connect-query for ConnectRPC (exception: useTransport/callUnaryMethod). Proto v2: `create(Schema,{})`, `timestampFromDate()`, `anyPack()` with typeRegistry. `handleSubmit(onSubmit, onError)`.
+### Monitor (not sleep)
 
-## Lifecycle
+`Bash(run_in_background)` + `Monitor` stream output:
+CI: `gh pr checks <n> --watch` | dev server | vitest watcher | container log | build output
 
-1. Understand -> 2. Plan -> 2b. `/grilling` (interview -> 3-hat gate -> CONTEXT.md/ADR capture via `/domain-modeling`) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnosing-bugs` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
+## Auto-Generated (never edit)
 
-Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
+`*.gen.ts`/`*.gen.tsx` | `*_pb.ts`/`*_pb.js` | `*_connectquery.ts` | `@generated`/`DO NOT EDIT` first 5 line
 
-Effort: default high. Fable-5: high or lower only (xhigh token-hungry; max a furnace with worse output).
+## Codex-specific
 
-Subagent model routing (rankings 1-10, higher better; cost = actual pay): Fable-5 cost 1 / intelligence 10 / taste 9; Opus-4.8 4/7/8; Sonnet-5 6/5/7; GPT-5.6 (codex) 8/9/6; GPT-5.5 (codex) 9/5/5. Ships -> intelligence > taste > cost (cost tiebreaker only). Defaults not limits: cheap output below bar -> rerun with a smarter model without asking. Bulk mechanical (clear-spec implementation, data analysis, migrations) -> codex GPT-5.6 (effectively free; 5.5 fallback). User-facing (UI/copy/API design) -> taste >= 7. Review/plan -> Fable-5 or Opus-4.8, optional GPT independent pass. Computer use + token furnaces -> codex GPT-5.5/5.6, report back. Thinker/executor split: smart model plans exact steps -> cheap model executes (Sonnet subagent or codex GPT-5.6) -> smart model reviews the diff. NEVER Haiku. GPT models only via codex CLI (see codex skill); Claude models via the agent model parameter.
+### Commits
 
-## UX Copy
+`type(scope): description` -- feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars. (Codex has no conventional-commits deny hook on every event; state the format here.)
 
-Sentence case. No Latin abbreviations (for example, that is, and so on, through). No ableist language. Gender-neutral.
+### Runtime notes
 
-## Tests
-
-Failing test FIRST. `userEvent.setup()` + `getByRole`. `waitFor()` for async. .test.ts=unit, .test.tsx=integration, e2e/*.spec.ts=Playwright. Co-locate with source.
-
-## Resilience
-
-Route data fetching->errorComponent. React.lazy()->`<Suspense fallback>`. Query hooks->loading/error/empty states. Async handlers->error handling.
-
-### Unhappy Paths (enforced by hook)
-
-- **Catch blocks**: set error state, re-throw, or call error handler -- never swallow silent
-- **Error + form**: early return with error UI when deserialization/parse fail -- don't render form below broken Alert
-- **Validation depth**: check format (URL regex, enum values, UPPER_SNAKE pattern), not just presence/truthiness
-- **Exhaustive switch**: `default: never` or `satisfies never` -- new union variants must fail loud
-- **Async validation**: onChange + async validator need AbortController or debounce -- no stale race conditions
-- **All errors visible**: `errors.map()` not `errors[0]` -- user see every validation failure
-- **Oneof/union fields**: clear previous branch values on switch -- ghost data cause silent bugs
-- **Form inputs**: URL fields use `type="url"`, secret-ref fields use `type="text"` (user verify format)
-- **aria-invalid** on error inputs, not just data-invalid -- screen readers need ARIA
-
-## Auto-Generated (skip)
-
-*.gen.ts/tsx, *_pb.ts/js, *_connectquery.ts, files with @generated/DO NOT EDIT in first 5 lines.
+- Hooks arrive per-call (no PostToolBatch); behavior is generated to parity from skill-manifest.json.
+- `process.env` allowed only in build/test configs; app code goes through `@/env`.
+- Subagent output enforcement is best effort; follow `agents/references/findings-schema.md` for review findings.

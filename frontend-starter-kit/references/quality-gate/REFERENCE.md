@@ -4,9 +4,10 @@
 
 > Script: [`scripts/typecheck-stop.sh`](scripts/typecheck-stop.sh)
 
-## bundle-guard.sh
+## Enforcement: Biome, not a hook
 
-> Script: [`scripts/bundle-guard.sh`](scripts/bundle-guard.sh)
+Heavy-dependency bans (moment, full lodash, jquery, core-js, classnames) live in Biome noRestrictedImports (see ../biome/REFERENCE.md). The former bundle-guard.sh hook was retired -- one owner per rule.
+
 
 ## quality-gate.yml
 

@@ -73,7 +73,7 @@ grep -c "^## Decisions" <subagent-prompt>
 
 ### 12. Unaware of Termination Conditions (FM-1.5, 12.4%)
 
-**Problem**: Agent doesn't know when task done -- keeps generating, keeps refining, or stops too early. Bad in open-ended skills (`grilling`, `brainstorming`).
+**Problem**: Agent doesn't know when task done -- keeps generating, keeps refining, or stops too early. Bad in open-ended skills (`grilling` explore mode).
 
 **Mitigation**: Every subagent brief MUST include explicit `TERMINATION:` section listing output shape signaling completion. `lifecycle-stop.sh` handles lifecycle phases; extend pattern to all spawned subagents.
 

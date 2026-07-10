@@ -55,16 +55,16 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 ## Skill composition
 
 - Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
-- Lane model choice: `/efficient-frontier` Model rankings. Bulk mechanical lanes -> GPT-5.5 via `/codex` wrapper (sonnet+low, `GPT-5.5:` label, worktree isolation). Never Haiku.
+- Lane model choice: `/efficient-frontier` Model rankings. Bulk mechanical lanes -> GPT-5.6 Sol via `/codex` wrapper (sonnet+low, `GPT-5.6-sol:` label, worktree isolation); tracker/issue chores -> Luna, PR-comment/review chores -> Terra. Cross-model review per CLAUDE.md runs on every lane result. Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
-- Worker lanes start with `/ponytail`; reviewer lanes include `/deslop` complexity tags before broader review.
-- Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
+- Worker lanes start with `/deslop` write mode; reviewer lanes include `/deslop` complexity tags before broader review.
+- Architecture: fan out `/improve architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
 - Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.
 - Design/copy work: split `/visual-review`, `setup-ux-copy`/copywriting, accessibility, and articulation lanes only when their write scopes do not overlap.
 - Review: split standards, spec, resilience, security, performance, tests, UX, and steelman axes.
 - Diagnose: split reproduction loops, hypotheses, instrumentation, and regression tests.
-- Product: combine `/brainstorming`, `/prototype`, and `/steelman` lanes for options and pushback.
+- Product: combine `/grilling` explore mode, `/prototype`, and `/steelman` lanes for options and pushback.
 - Handoff: after grilling, create compact packets so each agent starts with current decisions.
 - Learning: split topic by theory, examples, repo usage, trade-offs, and pitfalls.
 

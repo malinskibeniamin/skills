@@ -102,48 +102,29 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: role=tablist with role=tab children"
 
-# ── Check 5: Ban role="dialog" without aria-label ───────────────
+# ── React Doctor-delegated rules must NOT fire from the hook ─────
+# dialog accessible name, redundant name wording, placeholder-as-label
+# are owned by React Doctor's a11y category (Stop hook).
 
 tmpfile="$_a11y_tmpdir/test.tsx"
 printf '<div role="dialog">Content</div>\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: role=dialog without aria-label" "aria-label"
-
-# tmpfile reused in tmpdir
-
-# ── Check 5: Allow role="dialog" with aria-labelledby ───────────
-
-tmpfile="$_a11y_tmpdir/test.tsx"
-printf '<div role="dialog" aria-labelledby="title-1">Content</div>\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: role=dialog with aria-labelledby"
-
-# tmpfile reused in tmpdir
-
-# ── Index articulation accessibility checks ─────────────────────
+  0 "delegated to React Doctor: dialog accessible name (a11y/dialog-has-accessible-name)"
 
 tmpfile="$_a11y_tmpdir/articulate.tsx"
 printf '<Button aria-label="Search icon"><SearchIcon /></Button>\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: aria-label describes element type" "describe the action"
+  0 "delegated to React Doctor: redundant name wording (a11y/img-redundant-alt)"
 
 printf '<input placeholder="Email" />\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: placeholder-only input label" "Placeholder cannot replace a label"
-
-printf '<label>Email</label><input placeholder="Email" />\n' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: placeholder input with unassociated label" "Placeholder cannot replace a label"
+  0 "delegated to React Doctor: placeholder-as-label (a11y/label-has-associated-control)"
 
 printf '<label>Email</label><input id="email" />\n' > "$tmpfile"
 
@@ -166,7 +147,7 @@ run_hook_eval "$SCRIPT" \
 # ── Escape hatch: allow-a11y-skip ──────────────────────────────
 
 tmpfile="$_a11y_tmpdir/test.tsx"
-printf '// allow-a11y-skip: third-party component\n<div role="dialog">Content</div>\n' > "$tmpfile"
+printf '// allow-a11y-skip: third-party component\n<div role="tablist"><button>Tab</button></div>\n' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
@@ -183,10 +164,10 @@ run_content_eval "$SCRIPT" "noLabelWithoutControl" "hook documents Biome delegat
 run_content_eval "$SCRIPT" "hook_block|hook_warn" "hook uses shared output functions"
 run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "WCAG" "hook references WCAG guidelines"
-run_content_eval "$SCRIPT" "describe the action" "hook checks accessible-name action language"
-run_content_eval "$SCRIPT" "Placeholder cannot replace a label" "hook checks placeholder-only controls"
-run_content_eval "$SKILL_DIR/SKILL.md" "accessible names.*action" "SKILL.md documents action-based accessible names"
-run_content_eval "$SKILL_DIR/SKILL.md" "placeholder.*label" "SKILL.md documents placeholders cannot replace labels"
+run_content_eval "$SCRIPT" "dialog-has-accessible-name" "hook documents React Doctor delegation for dialog names"
+run_content_eval "$SCRIPT" "label-has-associated-control" "hook documents React Doctor delegation for placeholder-as-label"
+run_content_eval "$SKILL_DIR/SKILL.md" "React Doctor" "SKILL.md routes structural rules to React Doctor"
+run_content_eval "$SKILL_DIR/SKILL.md" "aria-invalid" "SKILL.md documents error-state pairing rules"
 run_content_eval "$SKILL_DIR/SKILL.md" "DOM order" "SKILL.md documents DOM order"
 run_content_eval "$SKILL_DIR/SKILL.md" "color-only" "SKILL.md documents color-only state"
 run_content_eval "$SKILL_DIR/SKILL.md" "reduced motion.*opacity" "SKILL.md documents reduced-motion-safe feedback"

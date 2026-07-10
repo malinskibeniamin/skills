@@ -19,7 +19,6 @@ if ! head -5 "$file_path" | grep -qiE 'copyright|license'; then
   if [ ! -f "$_marker" ]; then
     touch "$_marker"
     hook_warn "New file missing copyright header. Add: // Copyright ${_year} Redpanda Data, Inc." "copyright-header"
-    return 0
   fi
 fi
 

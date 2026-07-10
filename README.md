@@ -53,7 +53,7 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable codex_hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.27.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.28.0
 codex plugin marketplace upgrade skills
 ```
 
@@ -159,7 +159,7 @@ Only remember one skill: `/development-lifecycle` (or alias `/work`). It covers 
 
 | Category | What it covers | Representative skills |
 |---|---|---|
-| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/tdd`, `/swarm`, `/review` (`--deep` for release-blocking audits), `/triage`, `/diagnosing-bugs`, `/resolve-pr-feedback`, `/visual-review`, `/brainstorming`, `/prime`, `/codex` |
+| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/tdd`, `/swarm`, `/review` (`--deep` for release-blocking audits), `/triage`, `/diagnosing-bugs`, `/resolve-pr-feedback`, `/visual-review`, `/prime`, `/codex` |
 | Kits | Bundles that install groups | `/frontend-starter-kit` (profiles: `full`, `minimal`, `redpanda`, per-tool), `/work-automation-kit`, `/codex-compat` |
 | Guidance | Auto-load on matching files | `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy` |
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |
@@ -216,7 +216,7 @@ graph TD
         direction LR
         P1["react-rules\ntailwind\naccessibility"]
         P2["zustand\ntanstack-router\nconnect-query"]
-        P3["react-compiler\nenv-validation\nbundle-guard"]
+        P3["query-pattern\nform-mode\nerror-boundary"]
         P4["test-perf\nux-copy\norchestration-guidance"]
     end
 
@@ -287,7 +287,7 @@ cd agent-evals && bun install --yarn && npx @vercel/agent-eval
 
 ## Credits and provenance
 
-Everything this harness uses from [mattpocock/skills](https://github.com/mattpocock/skills) is vendored locally -- nothing needs installing from the upstream repo. Vendored: `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `improve-codebase-architecture`, `codebase-design`, `domain-modeling`, `grilling`, `prototype`, `research` (v1.1.0 rewrite, restored on owner request), `teach` (slash-only, kept on owner request), `to-spec`, `to-tickets`, `writing-great-skills`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, implement, loop-me, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code, edit-article) were removed in the 4.27.0 audit.
+Everything this harness uses from [mattpocock/skills](https://github.com/mattpocock/skills) is vendored locally -- nothing needs installing from the upstream repo. Vendored: `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `codebase-design` (improve-codebase-architecture absorbed into /improve architecture), `domain-modeling`, `grilling`, `prototype`, `research` (v1.1.0 rewrite, restored on owner request), `teach` (slash-only, kept on owner request), `to-spec`, `to-tickets`, `writing-great-skills`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream skills judged dead, off-domain, or contradictory to this harness (obsidian-vault, scaffold-exercises, implement, loop-me, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code, edit-article) were removed in the 4.27.0 audit.
 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 

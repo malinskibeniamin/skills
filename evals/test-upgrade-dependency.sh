@@ -68,9 +68,20 @@ run_content_eval "$SKILL_MD" "change volume|release cadence|diff size" "scores n
 run_content_eval "$SKILL_MD" "effort|danger|blast radius" "scores upgrade effort and danger"
 run_content_eval "$SKILL_MD" "patch/minor.*apply|apply.*patch/minor" "safe patch/minor may apply"
 run_content_eval "$SKILL_MD" "major.*GitHub issue|GitHub issue.*major" "major changes go to GitHub issue"
-run_content_eval "$SKILL_MD" "plan only" "supports plan-only natural language"
-run_content_eval "$SKILL_MD" "Always leave.*report|leave.*local report" "always leaves local report"
-run_content_eval "$SKILL_MD" "docs/dependency-upgrades" "uses durable local report path"
+run_content_eval "$SKILL_MD" "plan.*only|plan only" "supports plan-only invocation"
+# Reports are opt-in now (owner call): no unprompted repo reports.
+if grep -qE "Always leave.*report|docs/dependency-upgrades" "$SKILL_MD"; then
+  echo "  FAIL  unprompted local report requirement crept back"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: unprompted report requirement returned"
+else
+  echo "  PASS  no unprompted repo reports (upgrade+adapt is the default)"
+  PASS=$((PASS + 1))
+fi
+run_content_eval "$SKILL_MD" "same PR" "migration + benefit ride in the same PR as the bump"
+run_content_eval "$SKILL_MD" "Benefit" "has the benefit-adoption pass"
+run_content_eval "$SKILL_MD" "Deprecation warnings.*fixed NOW|fixed NOW, not suppressed" "deprecations fixed in the upgrade PR"
+run_content_eval "$SKILL_MD" "failed run" "bump-only PR counts as a failed run"
+
 run_content_eval "$SKILL_MD" "subagents|swarm|one package per agent" "supports delegated package swarm"
 run_content_eval "$SKILL_MD" "latest stable|stable enough|modern syntax" "targets latest stable modern stack"
 
@@ -137,5 +148,5 @@ run_content_eval "$COMMIT_PUSH_PR_REF" "Dependency upgrade path" "PR template in
 run_content_eval "$COMMIT_PUSH_PR_REF" "upgrade-dependency" "commit-push-pr references upgrade-dependency report"
 run_content_eval "$DEPS_HOOK" "/upgrade-dependency" "dependency hook nudges upgrade-dependency"
 run_content_eval "$DEPS_HOOK" "skip reason" "dependency hook mentions skip reason"
-run_content_eval "$DEPS_HOOK" "docs/dependency-upgrades" "dependency hook mentions report path"
+run_content_eval "$DEPS_HOOK" "upgrade\\+adapt in one pass" "dependency hook nudges the one-pass upgrade contract"
 run_content_eval "$MANIFEST" "bun\\.lock|yarn\\.lock|go\\.mod|go\\.sum" "manifest wires dependency files to deps hook"

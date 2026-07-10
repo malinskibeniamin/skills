@@ -15,19 +15,17 @@ echo "━━━ react-rules-check.sh (37 checks) ━━━"
 
 _setup_session
 
-echo "  Check 2 — raw <button> (warn):"
+echo "  Check 2 — raw elements delegated to Biome noRestrictedElements (hook silent):"
 _f="/tmp/hook-test-rr-$$.tsx"
 _setup_test_file "$_f" 'const X = () => <button onClick={fn}>click</button>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "raw <button> is a warn not block"
-_assert_stderr_contains "Button.*button|button.*Button" "warns about <Button>"
+_assert_exit 0 "raw <button> silent (Biome owns)"
+_assert_stderr_not_contains "Button" "no hook output for Biome-owned raw <button>"
 _cleanup_test_file "$_f"
 
-echo "  Check 2 — raw <input> (block):"
 _setup_test_file "$_f" 'const X = () => <input type="text" />;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "raw <input> blocked"
-_assert_stderr_contains "Input" "suggests <Input>"
+_assert_exit 0 "raw <input> silent (Biome owns)"
 _cleanup_test_file "$_f"
 
 echo "  Check 6 — onClick+navigate (block):"
@@ -62,16 +60,10 @@ _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "icon-only Button with aria-label passes"
 _cleanup_test_file "$_f"
 
-echo "  Check 12 — outline:none without focus-visible (block):"
+echo "  Check 12 — outline:none delegated to React Doctor design/no-outline-none (hook silent):"
 _setup_test_file "$_f" 'const X = () => <div className="outline-none">x</div>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "outline-none blocked"
-_cleanup_test_file "$_f"
-
-echo "  Check 12 — outline:none with focus-visible:ring (pass):"
-_setup_test_file "$_f" 'const X = () => <div className="outline-none focus-visible:ring-2">x</div>;'
-_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "outline-none + focus-visible passes"
+_assert_exit 0 "outline-none silent (React Doctor owns)"
 _cleanup_test_file "$_f"
 
 echo "  Check 14 — dangerouslySetInnerHTML (block):"
@@ -217,10 +209,10 @@ _run_hook "tailwind-check.sh" "$(_edit_json "$_css")"
 _assert_exit 0 "100dvh passes"
 _cleanup_test_file "$_css"
 
-echo "  user-scalable=no (block):"
+echo "  user-scalable=no delegated to React Doctor design/no-disabled-zoom (hook silent):"
 _setup_test_file "$_f" '<meta name="viewport" content="width=device-width, user-scalable=no" />'
 _run_hook "tailwind-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "user-scalable=no blocked"
+_assert_exit 0 "user-scalable=no silent (React Doctor owns)"
 _cleanup_test_file "$_f"
 
 _teardown_session
@@ -234,35 +226,28 @@ _setup_session
 
 _f="/tmp/hook-test-a11y-$$.tsx"
 
-echo "  img without alt (block):"
+echo "  img without alt delegated to Biome a11y/useAltText (hook silent):"
 _setup_test_file "$_f" 'const X = () => <img src="pic.png" />;'
 _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "img without alt blocked"
+_assert_exit 0 "img without alt silent (Biome owns)"
 _cleanup_test_file "$_f"
 
-echo "  img with alt (pass):"
-_setup_test_file "$_f" 'const X = () => <img src="pic.png" alt="Photo" />;'
-_run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "img with alt passes"
-_cleanup_test_file "$_f"
-
-echo "  clickable div without keyboard (block):"
+echo "  clickable div delegated to Biome useKeyWithClickEvents (hook silent):"
 _setup_test_file "$_f" 'const X = () => <div onClick={fn}>click me</div>;'
 _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "clickable div blocked"
-_assert_stderr_contains "role.*tabIndex.*onKeyDown|WCAG" "mentions WCAG/kbd"
+_assert_exit 0 "clickable div silent (Biome owns)"
 _cleanup_test_file "$_f"
 
-echo "  clickable div with full a11y (pass):"
-_setup_test_file "$_f" 'const X = () => <div onClick={fn} onKeyDown={fn} role="button" tabIndex={0}>click</div>;'
-_run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "accessible clickable div passes"
-_cleanup_test_file "$_f"
-
-echo "  role=dialog without aria-label (block):"
+echo "  role=dialog delegated to React Doctor dialog-has-accessible-name (hook silent):"
 _setup_test_file "$_f" 'const X = () => <div role="dialog"><p>content</p></div>;'
 _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "dialog without label blocked"
+_assert_exit 0 "dialog without label silent (React Doctor owns)"
+_cleanup_test_file "$_f"
+
+echo "  role=tablist without tab children (block — hook keeps this):"
+_setup_test_file "$_f" 'const X = () => <div role="tablist"><button>t</button></div>;'
+_run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "tablist without tab children blocked"
 _cleanup_test_file "$_f"
 
 echo "  aria-invalid without aria-describedby (warn):"
@@ -274,7 +259,7 @@ _cleanup_test_file "$_f"
 
 echo "  a11y-skip escape hatch (pass):"
 _setup_test_file "$_f" '// allow: a11y-skip custom widget
-const X = () => <img src="x.png" />;'
+const X = () => <div role="tablist"><button>t</button></div>;'
 _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "a11y-skip escape allows through"
 _cleanup_test_file "$_f"
@@ -341,32 +326,28 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ env-validation-check.sh ━━━"
+echo "━━━ env-validation: retired, Biome noProcessEnv owns it ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
 
-_f="/tmp/hook-test-env-$$.ts"
+if [ -e "$HOOKS_DIR/env-validation-check.sh" ]; then
+  echo "  ✗ env-validation-check.sh resurrected — Biome noProcessEnv owns this rule"
+  FAIL=$((FAIL + 1))
+else
+  echo "  ✓ env-validation-check.sh stays retired (Biome noProcessEnv owns it)"
+  PASS=$((PASS + 1))
+fi
 
-echo "  raw process.env.CUSTOM (block):"
-_setup_test_file "$_f" 'const apiUrl = process.env.API_URL;'
-_run_hook "env-validation-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "raw process.env blocked"
-_assert_stderr_contains "@/env|t3-env" "suggests @/env"
-_cleanup_test_file "$_f"
-
-echo "  process.env.NODE_ENV (allowed):"
-_setup_test_file "$_f" 'const isDev = process.env.NODE_ENV === "development";'
-_run_hook "env-validation-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "NODE_ENV allowed"
-_cleanup_test_file "$_f"
-
-echo "  test file (skip):"
-_tf="/tmp/hook-test-env-$$.test.ts"
-_setup_test_file "$_tf" 'const url = process.env.API_URL;'
-_run_hook "env-validation-check.sh" "$(_edit_json "$_tf")"
-_assert_exit 0 "test files skipped"
-_cleanup_test_file "$_tf"
+# The shipped Biome template must actually carry the rule + overrides.
+_biome_ref="$REPO_ROOT/frontend-starter-kit/references/biome/REFERENCE.md"
+if grep -q '"noProcessEnv": "error"' "$_biome_ref" && grep -q '"noProcessEnv": "off"' "$_biome_ref"; then
+  echo "  ✓ Biome template carries noProcessEnv error + env-file override"
+  PASS=$((PASS + 1))
+else
+  echo "  ✗ Biome template missing executable noProcessEnv config"
+  FAIL=$((FAIL + 1))
+fi
 
 _teardown_session
 
@@ -622,25 +603,31 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ legacy-import-check.sh ━━━"
+echo "━━━ legacy-import: retired, Biome noRestrictedImports/Elements owns it ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
 
-_f="/tmp/hook-test-legacy-$$.tsx"
+if [ -e "$HOOKS_DIR/legacy-import-check.sh" ]; then
+  echo "  ✗ legacy-import-check.sh resurrected — Biome owns these rules"
+  FAIL=$((FAIL + 1))
+else
+  echo "  ✓ legacy-import-check.sh stays retired (Biome owns imports/elements)"
+  PASS=$((PASS + 1))
+fi
 
-echo "  @redpanda-data/ui import (warn):"
-_setup_test_file "$_f" "import { Button } from '@redpanda-data/ui';"
-_run_hook "legacy-import-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "@redpanda-data/ui is warn"
-_assert_stderr_contains "redpanda-ui|registry" "suggests registry"
-_cleanup_test_file "$_f"
-
-echo "  direct lucide-react — no icons barrel (skip):"
-_setup_test_file "$_f" "import { Trash } from 'lucide-react';"
-_run_hook "legacy-import-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "lucide without icons barrel → no warn (correct)"
-_cleanup_test_file "$_f"
+_biome_ref="$REPO_ROOT/frontend-starter-kit/references/biome/REFERENCE.md"
+_missing=""
+for _key in '"@redpanda-data/ui"' '"lucide-react"' '"jquery"' '"core-js"' '"dialog"' '"a"' '"h1"' '"p"'; do
+  grep -q "$_key:" "$_biome_ref" || _missing="$_missing $_key"
+done
+if [ -z "$_missing" ]; then
+  echo "  ✓ Biome template carries every transferred import/element ban as executable JSON"
+  PASS=$((PASS + 1))
+else
+  echo "  ✗ Biome template missing transferred bans:$_missing"
+  FAIL=$((FAIL + 1))
+fi
 
 _teardown_session
 
@@ -652,16 +639,18 @@ _setup_session
 
 _f="/tmp/hook-test-mutname-$$.tsx"
 
-echo "  unnamed mutation result (warn):"
+echo "  unnamed mutation result (warn — query-pattern-check owns naming):"
 _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
-const doDelete = useMutation({ mutationFn: deleteItem });"
+const doDelete = useMutation({ onError: handle, mutationFn: deleteItem });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "unnamed mutation is warn"
 _assert_stderr_contains "Mutation" "suggests *Mutation suffix"
 _cleanup_test_file "$_f"
 
 echo "  properly named mutation (pass):"
 _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
-const deleteMutation = useMutation({ mutationFn: deleteItem });"
+const deleteMutation = useMutation({ onError: handle, mutationFn: deleteItem });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "named mutation passes"
 _cleanup_test_file "$_f"
 
@@ -697,34 +686,17 @@ _assert_exit 0 "await invalidateQueries passes"
 _cleanup_test_file "$_f"
 
 
-echo "  unstable QueryClient in component (block):"
+echo "  stable-client/rest-destructure/unstable-deps delegated to React Doctor (hook silent):"
 _setup_test_file "$_f" "import { QueryClient } from '@tanstack/react-query';
 function App() { const queryClient = new QueryClient(); return <Provider client={queryClient} />; }"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "unstable QueryClient blocks"
-_assert_stderr_contains "QueryClient must be stable" "explains stable query client"
+_assert_exit 0 "unstable QueryClient silent (React Doctor owns)"
 _cleanup_test_file "$_f"
 
-echo "  query rest destructuring (warn):"
-_setup_test_file "$_f" "const { data, ...query } = useQuery({ queryKey: ['users'], queryFn: fetchUsers });"
+echo "  void queryFn delegated to React Doctor query-no-void-query-fn (hook may still nudge queryOptions):"
+_setup_test_file "$_f" "useQuery({ queryKey: ['u'], queryFn: async () => { await fetchUsers(); } });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "rest destructuring warns"
-_assert_stderr_contains "rest destructuring" "explains rest destructuring"
-_cleanup_test_file "$_f"
-
-echo "  query result in deps (block):"
-_setup_test_file "$_f" "const usersQuery = useQuery({ queryKey: ['users'], queryFn: fetchUsers });
-useEffect(function syncUsers() {}, [usersQuery]);"
-_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "unstable deps block"
-_assert_stderr_contains "not stable" "explains unstable deps"
-_cleanup_test_file "$_f"
-
-echo "  queryFn without return (block):"
-_setup_test_file "$_f" "useQuery({ queryKey: ['users'], queryFn: async () => { await fetchUsers(); } });"
-_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "void queryFn blocks"
-_assert_stderr_contains "queryFn must return" "explains return requirement"
+_assert_exit 0 "void queryFn no longer hook-blocked (React Doctor owns)"
 _cleanup_test_file "$_f"
 
 echo "  inline query options (warn):"
@@ -818,8 +790,8 @@ _f="/tmp/hook-test-unhappy-$$.tsx"
 
 echo "  silent empty catch (warn):"
 _setup_test_file "$_f" 'try { await api.fetch(); } catch (e) { }'
-_assert_exit 0 "empty catch is warn"
-_assert_stderr_contains "swallow|silent|Catch|catch" "warns about silent catch"
+_assert_exit 0 "empty catch is silent here (retired hook)"
+_assert_biome_owns "noEmptyBlockStatements" "silent-catch owner: Biome noEmptyBlockStatements"
 _cleanup_test_file "$_f"
 
 echo "  catch with error state (pass):"
@@ -842,8 +814,8 @@ _f="/tmp/hook-test-magic-$$.ts"
 
 echo "  inline staleTime (warn):"
 _setup_test_file "$_f" "const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
-_assert_exit 0 "inline staleTime is warn"
-_assert_stderr_contains "named constant|stale" "suggests named constant"
+_assert_exit 0 "inline staleTime passes (rule retired as low-value, wave 2)"
+_skip_note "staleTime nudge retired as low-value (wave 2) -- no owner by design"
 _cleanup_test_file "$_f"
 
 echo "  staleTime with escape (pass):"
@@ -924,56 +896,460 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ bundle-guard.sh ━━━"
+echo "━━━ package admission: file-changed-deps.sh manifest guard ━━━"
+# ═══════════════════════════════════════════════════════════════
+# bundle-guard retired: Biome noRestrictedImports blocks the imports;
+# file-changed-deps.sh blocks the dependency ADMISSION at the manifest.
+
+_setup_session
+
+echo "  package.json with moment (block at manifest):"
+_pf="/tmp/hook-test-deps-pkg-$$/package.json"
+mkdir -p "$(dirname "$_pf")"
+_setup_test_file "$_pf" '{"dependencies":{"moment":"^2.30.0","react":"^18"}}'
+_run_hook "file-changed-deps.sh" "{\"filename\":\"$_pf\"}"
+_assert_exit 2 "moment admission blocked"
+_assert_stderr_contains "moment" "names the banned dependency"
+_cleanup_test_file "$_pf"
+_cleanup_test_dir "$(dirname "$_pf")"
+
+echo "  package.json with jquery (block at manifest):"
+_pf2="/tmp/hook-test-deps-pkg2-$$/package.json"
+mkdir -p "$(dirname "$_pf2")"
+_setup_test_file "$_pf2" '{"dependencies":{"jquery":"^3.6.0"}}'
+_run_hook "file-changed-deps.sh" "{\"filename\":\"$_pf2\"}"
+_assert_exit 2 "jquery admission blocked"
+_cleanup_test_file "$_pf2"
+_cleanup_test_dir "$(dirname "$_pf2")"
+
+echo "  clean package.json (pass, nudge only):"
+_pf3="/tmp/hook-test-deps-pkg3-$$/package.json"
+mkdir -p "$(dirname "$_pf3")"
+_setup_test_file "$_pf3" '{"dependencies":{"react":"^18","date-fns":"^3.0.0","lodash-es":"^4.17.0"}}'
+_run_hook "file-changed-deps.sh" "{\"filename\":\"$_pf3\"}"
+_assert_exit 0 "clean deps pass"
+_cleanup_test_file "$_pf3"
+_cleanup_test_dir "$(dirname "$_pf3")"
+
+echo "  moment in devDependencies (allowed, parity with old bundle-guard):"
+_pf4="/tmp/hook-test-deps-pkg4-$$/package.json"
+mkdir -p "$(dirname "$_pf4")"
+_setup_test_file "$_pf4" '{"devDependencies":{"moment":"^2.30.0"}}'
+_run_hook "file-changed-deps.sh" "{\"filename\":\"$_pf4\"}"
+_assert_exit 0 "devDependencies moment allowed"
+_cleanup_test_file "$_pf4"
+_cleanup_test_dir "$(dirname "$_pf4")"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ tanstack-router-check.sh ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
 
-echo "  non-package.json file (skip):"
-_f="/tmp/hook-test-bundle-$$.ts"
-_setup_test_file "$_f" 'import moment from "moment";'
-_run_hook "bundle-guard.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "non-package.json skipped"
+_f="/tmp/hook-test-router-$$.tsx"
+
+echo "  react-router-dom import (block):"
+_setup_test_file "$_f" "import { useNavigate } from 'react-router-dom';"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "react-router-dom blocked"
+_assert_stderr_contains "TanStack" "suggests TanStack Router"
 _cleanup_test_file "$_f"
 
-echo "  package.json with moment (block):"
-_pf="/tmp/hook-test-bundle-pkg-$$/package.json"
-mkdir -p "$(dirname "$_pf")"
-_setup_test_file "$_pf" '{"dependencies":{"moment":"^2.30.0","react":"^18"}}'
-_run_hook "bundle-guard.sh" "$(_edit_json "$_pf")"
-_assert_exit 2 "moment in deps blocked"
-_assert_stderr_contains "date-fns" "suggests date-fns"
-_cleanup_test_file "$_pf"
-_cleanup_test_dir "$(dirname "$_pf")"
+echo "  window.location.href assignment (block):"
+_setup_test_file "$_f" 'window.location.href = "/dashboard";'
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "window.location.href blocked"
+_cleanup_test_file "$_f"
 
-echo "  package.json with lodash (block):"
-_pf2="/tmp/hook-test-bundle-pkg2-$$/package.json"
-mkdir -p "$(dirname "$_pf2")"
-_setup_test_file "$_pf2" '{"dependencies":{"lodash":"^4.17.0"}}'
-_run_hook "bundle-guard.sh" "$(_edit_json "$_pf2")"
-_assert_exit 2 "lodash blocked"
-_assert_stderr_contains "lodash-es" "suggests lodash-es"
-_cleanup_test_file "$_pf2"
-_cleanup_test_dir "$(dirname "$_pf2")"
+echo "  URLSearchParams in client file (block):"
+_setup_test_file "$_f" "import { useSearch } from '@tanstack/react-router';
+const params = new URLSearchParams(window.location.search);"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "URLSearchParams blocked"
+_cleanup_test_file "$_f"
 
-echo "  package.json with classnames (block):"
-_pf3="/tmp/hook-test-bundle-pkg3-$$/package.json"
-mkdir -p "$(dirname "$_pf3")"
-_setup_test_file "$_pf3" '{"dependencies":{"classnames":"^2.0.0"}}'
-_run_hook "bundle-guard.sh" "$(_edit_json "$_pf3")"
-_assert_exit 2 "classnames blocked"
-_assert_stderr_contains "clsx" "suggests clsx"
-_cleanup_test_file "$_pf3"
-_cleanup_test_dir "$(dirname "$_pf3")"
+echo "  useParams without from (block):"
+_setup_test_file "$_f" "import { useParams } from '@tanstack/react-router';
+const params = useParams();"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "empty useParams blocked"
+_cleanup_test_file "$_f"
 
-echo "  clean package.json (pass):"
-_pf4="/tmp/hook-test-bundle-pkg4-$$/package.json"
-mkdir -p "$(dirname "$_pf4")"
-_setup_test_file "$_pf4" '{"dependencies":{"react":"^18","date-fns":"^3.0.0"}}'
-_run_hook "bundle-guard.sh" "$(_edit_json "$_pf4")"
-_assert_exit 0 "clean deps pass"
-_cleanup_test_file "$_pf4"
-_cleanup_test_dir "$(dirname "$_pf4")"
+echo "  useParams with from (pass):"
+_setup_test_file "$_f" "import { useParams } from '@tanstack/react-router';
+const params = useParams({ from: '/users/\$userId' });"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "useParams with from passes"
+_cleanup_test_file "$_f"
+
+echo "  clean TanStack file (pass):"
+_setup_test_file "$_f" "import { Link } from '@tanstack/react-router';
+const X = () => <Link to='/dashboard'>Go</Link>;"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "clean TanStack usage passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ test-convention-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-conv-$$.test.ts"
+
+echo "  it() instead of test() (warn):"
+_setup_test_file "$_f" "import { describe, it } from 'vitest';
+describe('suite', () => {
+  it('should work', () => { expect(1).toBe(1); });
+});"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "it() is warn"
+_assert_stderr_contains "test()" "suggests test()"
+_cleanup_test_file "$_f"
+
+echo "  jest.fn() (warn):"
+_setup_test_file "$_f" "const mock = jest.fn();"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "jest.fn() is warn"
+_assert_stderr_contains "vi.fn" "suggests vi.fn()"
+_cleanup_test_file "$_f"
+
+echo "  toBeInTheDocument (warn):"
+_setup_test_file "$_f" "expect(el).toBeInTheDocument();"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "toBeInTheDocument is warn"
+_assert_stderr_contains "toBeVisible" "suggests toBeVisible()"
+_cleanup_test_file "$_f"
+
+echo "  clean test file (pass):"
+_setup_test_file "$_f" "import { test, expect, vi } from 'vitest';
+test('works', () => { expect(1).toBe(1); });"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "clean test passes"
+_cleanup_test_file "$_f"
+
+echo "  non-test file (skip):"
+_nf="/tmp/hook-test-conv-$$.ts"
+_setup_test_file "$_nf" "const mock = jest.fn();"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_nf")"
+_assert_exit 0 "non-test file skipped"
+_cleanup_test_file "$_nf"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ legacy-import: retired, Biome noRestrictedImports/Elements owns it ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+if [ -e "$HOOKS_DIR/legacy-import-check.sh" ]; then
+  echo "  ✗ legacy-import-check.sh resurrected — Biome owns these rules"
+  FAIL=$((FAIL + 1))
+else
+  echo "  ✓ legacy-import-check.sh stays retired (Biome owns imports/elements)"
+  PASS=$((PASS + 1))
+fi
+
+_biome_ref="$REPO_ROOT/frontend-starter-kit/references/biome/REFERENCE.md"
+_missing=""
+for _key in '"@redpanda-data/ui"' '"lucide-react"' '"jquery"' '"core-js"' '"dialog"' '"a"' '"h1"' '"p"'; do
+  grep -q "$_key:" "$_biome_ref" || _missing="$_missing $_key"
+done
+if [ -z "$_missing" ]; then
+  echo "  ✓ Biome template carries every transferred import/element ban as executable JSON"
+  PASS=$((PASS + 1))
+else
+  echo "  ✗ Biome template missing transferred bans:$_missing"
+  FAIL=$((FAIL + 1))
+fi
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-mutname-$$.tsx"
+
+echo "  unnamed mutation result (warn — query-pattern-check owns naming):"
+_setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
+const doDelete = useMutation({ onError: handle, mutationFn: deleteItem });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "unnamed mutation is warn"
+_assert_stderr_contains "Mutation" "suggests *Mutation suffix"
+_cleanup_test_file "$_f"
+
+echo "  properly named mutation (pass):"
+_setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
+const deleteMutation = useMutation({ onError: handle, mutationFn: deleteItem });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "named mutation passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ query-pattern-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-query-$$.ts"
+
+echo "  refetchQueries (warn):"
+_setup_test_file "$_f" "queryClient.refetchQueries({ queryKey: ['users'] });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "refetchQueries is warn"
+_assert_stderr_contains "invalidateQueries" "suggests invalidateQueries"
+_cleanup_test_file "$_f"
+
+echo "  invalidateQueries without await (warn):"
+_setup_test_file "$_f" "queryClient.invalidateQueries({ queryKey: ['users'] });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "no-await invalidate is warn"
+_assert_stderr_contains "await|invalidateQueries" "warns about await"
+_cleanup_test_file "$_f"
+
+echo "  await invalidateQueries (pass):"
+_setup_test_file "$_f" "await queryClient.invalidateQueries({ queryKey: ['users'] });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "await invalidateQueries passes"
+_cleanup_test_file "$_f"
+
+
+echo "  stable-client/rest-destructure/unstable-deps delegated to React Doctor (hook silent):"
+_setup_test_file "$_f" "import { QueryClient } from '@tanstack/react-query';
+function App() { const queryClient = new QueryClient(); return <Provider client={queryClient} />; }"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "unstable QueryClient silent (React Doctor owns)"
+_cleanup_test_file "$_f"
+
+echo "  void queryFn delegated to React Doctor query-no-void-query-fn (hook silent on it):"
+_setup_test_file "$_f" "useQuery({ queryKey: ['users'], queryFn: async () => { await fetchUsers(); } });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "void queryFn no longer hook-blocked (React Doctor owns)"
+_cleanup_test_file "$_f"
+
+echo "  inline query options (warn):"
+_setup_test_file "$_f" "useQuery({ queryKey: ['users'], queryFn: fetchUsers });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "inline query options warns"
+_assert_stderr_contains "queryOptions" "suggests queryOptions"
+_cleanup_test_file "$_f"
+
+
+echo "  queryKey missing direct queryFn arg (warn):"
+_setup_test_file "$_f" "useQuery({ queryKey: ['user'], queryFn: () => fetchUser(userId) });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "missing query key dep warns"
+_assert_stderr_contains "userId" "names missing dep"
+_cleanup_test_file "$_f"
+
+echo "  queryKey includes direct queryFn arg (pass):"
+_setup_test_file "$_f" "useQuery({ queryKey: ['user', userId], queryFn: () => fetchUser(userId) });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "included query key dep passes"
+_assert_stderr_not_contains "queryFn uses userId" "does not warn when key includes dep"
+_cleanup_test_file "$_f"
+
+echo "  queryKey deps ambiguous object arg (pass):"
+_setup_test_file "$_f" "useQuery({ queryKey: ['user'], queryFn: () => fetchUser({ userId }) });"
+_run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "ambiguous object args skipped"
+_assert_stderr_not_contains "queryFn uses userId" "no noisy object-arg warning"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ react-rules-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-disbtn-$$.tsx"
+
+echo "  disabled Button without Tooltip (warn):"
+_setup_test_file "$_f" "const X = () => <Button disabled onClick={fn}>Submit</Button>;"
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "disabled without Tooltip is warn"
+_assert_stderr_contains "[Tt]ooltip" "suggests Tooltip"
+_cleanup_test_file "$_f"
+
+echo "  disabled Button with Tooltip import (pass):"
+_setup_test_file "$_f" "import { Tooltip } from '@/components/ui/tooltip';
+const X = () => <Tooltip><Button disabled>Submit</Button></Tooltip>;"
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "disabled with Tooltip passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ form-mode-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-fm-$$.ts"
+
+echo "  hardcoded FieldMask paths (warn):"
+_setup_test_file "$_f" "import { FieldMask } from '@bufbuild/protobuf';
+const mask = { paths: ['name', 'description', 'config'] };"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "hardcoded FieldMask is warn"
+_assert_stderr_contains "dirty" "suggests dirtyFields"
+_cleanup_test_file "$_f"
+
+echo "  no FieldMask (skip):"
+_setup_test_file "$_f" "const paths = ['a', 'b', 'c'];"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "non-FieldMask passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-unhappy-$$.tsx"
+
+echo "  silent empty catch (warn):"
+_setup_test_file "$_f" 'try { await api.fetch(); } catch (e) { }'
+_assert_exit 0 "empty catch is silent here (retired hook)"
+_assert_biome_owns "noEmptyBlockStatements" "silent-catch owner: Biome noEmptyBlockStatements"
+_cleanup_test_file "$_f"
+
+echo "  catch with error state (pass):"
+_setup_test_file "$_f" 'const fn = async () => {
+  try { await api.fetch(); }
+  catch (e) { setError(e.message); }
+};'
+_assert_exit 0 "catch with setError passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-magic-$$.ts"
+
+echo "  inline staleTime (warn):"
+_setup_test_file "$_f" "const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
+_assert_exit 0 "inline staleTime passes (rule retired as low-value, wave 2)"
+_skip_note "staleTime nudge retired as low-value (wave 2) -- no owner by design"
+_cleanup_test_file "$_f"
+
+echo "  staleTime with escape (pass):"
+_setup_test_file "$_f" "// allow: stale-time tuned for this query
+const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
+_assert_exit 0 "stale-time escape passes"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ error-boundary-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-errbnd-$$.tsx"
+
+echo "  route with loader but no errorComponent (block):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/users')({
+  loader: () => fetchUsers(),
+  component: UsersPage,
+});"
+_run_hook "error-boundary-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "missing errorComponent blocked"
+_assert_stderr_contains "errorComponent" "suggests errorComponent"
+_cleanup_test_file "$_f"
+
+echo "  route with loader + errorComponent (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/users')({
+  loader: () => fetchUsers(),
+  component: UsersPage,
+  errorComponent: UsersError,
+});"
+_run_hook "error-boundary-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "route with errorComponent passes"
+_cleanup_test_file "$_f"
+
+echo "  non-route file (skip):"
+_setup_test_file "$_f" "const X = () => <div>component</div>;"
+_run_hook "error-boundary-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "non-route file skipped"
+_cleanup_test_file "$_f"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ test-convention-check.sh ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+_f="/tmp/hook-test-perf-$$.test.tsx"
+
+echo "  userEvent.type() in integration test (warn):"
+_setup_test_file "$_f" "import userEvent from '@testing-library/user-event';
+test('input', async () => {
+  const user = userEvent.setup();
+  await user.type(input, 'hello');
+});"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "userEvent.type() is warn"
+_assert_stderr_contains "type|clear|paste|50ms" "warns about type perf"
+_cleanup_test_file "$_f"
+
+echo "  non-test file (skip):"
+_nf="/tmp/hook-test-perf-$$.tsx"
+_setup_test_file "$_nf" "await user.type(input, 'hello');"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_nf")"
+_assert_exit 0 "non-test file skipped"
+_cleanup_test_file "$_nf"
+
+_teardown_session
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ bundle-guard: retired (Biome imports + file-changed-deps admission) ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_setup_session
+
+if [ -e "$HOOKS_DIR/bundle-guard.sh" ]; then
+  echo "  ✗ bundle-guard.sh resurrected"
+  FAIL=$((FAIL + 1))
+else
+  echo "  ✓ bundle-guard.sh stays retired (Biome + manifest guard own it)"
+  PASS=$((PASS + 1))
+fi
 
 _teardown_session
 
@@ -1093,8 +1469,8 @@ mkdir -p "$(dirname "$_f")"
 _setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
 const [page, setPage] = useState(0);
 const [sortBy, setSortBy] = useState('asc');"
-_assert_exit 0 "url-state is warn"
-_assert_stderr_contains "useSearch|validateSearch|URL" "suggests URL state"
+_assert_exit 0 "url-state passes (rule retired as low-value, wave 2)"
+_skip_note "url-state nudge retired as low-value (wave 2) -- no owner by design"
 _cleanup_test_file "$_f"
 _cleanup_test_dir "/tmp/hook-test-src"
 

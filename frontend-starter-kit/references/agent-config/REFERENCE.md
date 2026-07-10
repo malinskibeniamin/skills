@@ -6,7 +6,7 @@
 
 ## user-prompt-context.sh (UserPromptSubmit)
 
-> Script: [`../shared/user-prompt-context.sh`](../shared/user-prompt-context.sh)
+> Script: [`../../../shared/user-prompt-context.sh`](../../../shared/user-prompt-context.sh)
 
 Inject project state into every prompt as `additionalContext` · Claude know state, skip waste tool calls.
 

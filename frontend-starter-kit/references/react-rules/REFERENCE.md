@@ -183,7 +183,7 @@ New protos ship with annotation registry entries in the same commit as the gener
 
 ### ConnectError -> form.setError per field
 
-See [setup-connect-query/REFERENCE.md](../setup-connect-query/REFERENCE.md#connecterror--formseterror-per-field) for the `BadRequestSchema.fieldViolations` -> `form.setError` pattern enforced by `connect-error-fieldmap-check.sh`.
+See [setup-connect-query/REFERENCE.md](../../../connect-query/REFERENCE.md#connecterror--formseterror-per-field) for the `BadRequestSchema.fieldViolations` -> `form.setError` pattern enforced by `connect-error-fieldmap-check.sh`.
 
 ## Resetting State on Prop Change -- Use `key`
 

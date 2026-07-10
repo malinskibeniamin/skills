@@ -11,12 +11,12 @@ SHARED="$REPO_ROOT/shared"
 
 run_file_eval "$HOOKS/branch-safety-check.sh" "branch-safety-check.sh exists"
 run_executable_eval "$HOOKS/branch-safety-check.sh" "branch-safety-check.sh executable"
-run_content_eval "$REPO_ROOT/skill-manifest.json" "branch-safety-check.sh" \
-  "manifest registers branch-safety-check.sh"
-run_content_eval "$REPO_ROOT/hooks/hooks.json" "branch-safety-check.sh" \
-  "hooks.json registers branch-safety-check.sh"
-run_content_eval "$REPO_ROOT/.claude/settings.json" "branch-safety-check.sh" \
-  "settings.json registers branch-safety-check.sh"
+run_content_eval "$REPO_ROOT/.claude/hooks/pre-bash.sh" "branch-safety-check.sh" \
+  "pre-bash dispatcher routes git branch commands to branch-safety-check"
+run_content_eval "$REPO_ROOT/hooks/hooks.json" "pre-bash.sh" \
+  "hooks.json registers the pre-bash dispatcher"
+run_content_eval "$REPO_ROOT/.claude/settings.json" "pre-bash.sh" \
+  "settings.json registers the pre-bash dispatcher"
 
 # ── Hook-lib helpers defined ────────────────────────────────────
 run_content_eval "$SHARED/hook-lib.sh" "_hook_current_worktree_root" \

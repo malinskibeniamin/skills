@@ -11,7 +11,7 @@ If the user says "plow ahead", "do not stop", "use your best judgment", "keep go
 
 ## Ponytail default
 
-Ponytail before implementation: run `/ponytail full` during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.
+Ponytail before implementation: run `/deslop full` (write mode) during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.
 
 ## Phases
 
@@ -48,7 +48,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 3. Implement (TDD)
 
-- **Thinker/executor split (default)**: the plan that survived grill is the spec. The smart model (Fable-5/Opus-4.8) stays orchestrator; execution goes to a cheaper executor -- Sonnet subagent for coupled or judgment-adjacent steps, `/codex` GPT-5.5 (worktree) for clear-spec bulk. The orchestrator reviews the executor's diff against the plan; below the bar -> rerun smarter, don't patch by hand.
+- **Thinker/executor split (default)**: the plan that survived grill is the spec. The smart model (Fable-5/Opus-4.8) stays orchestrator; execution goes to a cheaper executor -- Sonnet subagent for coupled or judgment-adjacent steps, `/codex` GPT-5.6 Sol (worktree, medium+ effort) for clear-spec bulk. The orchestrator reviews the executor's diff against the plan, and the cross-model adversarial review in /go phase 4b runs automatically on the result; below the bar -> rerun smarter, don't patch by hand.
 - After plan survives grill, use `/swarm` when independent lanes can safely accelerate implementation, tests, diagnosis, review, or docs. Coordinator owns merge.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
 - Code is liability: reuse-first (standard library, native platform, already-installed dependency, one-line), then keep only product value, defense, or test confidence.

@@ -6,13 +6,13 @@ Before `/commit-push-pr`, one review skill must run in session:
 
 - `/simplify` -- small fixes/tweaks
 - `/deslop` -- liability certainty gate with complexity tags (delete/stdlib/native/yagni/shrink)
-- `/improve-codebase-architecture` -- refactors, architecture plans, cleanup (oversized files, shallow modules)
+- `/improve architecture` -- refactors, architecture plans, cleanup (oversized files, shallow modules)
 - `/prototype` -- redesign module or layout
 - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs
 
 Frontend or customer-facing surface diff -> `/visual-review` must run or an explicit skip reason must be recorded, even if another review skill already ran.
 
-None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/deslop` for liability certainty, `/simplify` for small changes, `/improve-codebase-architecture` for cleanup, `/visual-review` for frontend changes."
+None ran -> warn: "Lifecycle requires review skill before shipping. Recommend: `/deslop` for liability certainty, `/simplify` for small changes, `/improve architecture` for cleanup, `/visual-review` for frontend changes."
 
 ## Conventional commit types (Phase 3)
 
@@ -66,7 +66,7 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 ## Dependency upgrade path
 <omit entire section if no dependency-file diff>
 
-- Report: <docs/dependency-upgrades/... or skip reason>
+- Upgrade evidence: <what broke / adapted / adopted + verify commands, or skip reason>
 - Packages:
 - SemVer confidence:
 - Risk gate:

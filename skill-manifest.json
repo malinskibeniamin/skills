@@ -1,6 +1,6 @@
 {
   "$comment": "Source of truth for all hook configurations. Generates .claude/settings.json, hooks/hooks.json, .claude-plugin/plugin.json counts, .codex-plugin/plugin.json counts, .agents/plugins/marketplace.json, .claude-plugin/marketplace.json. Run scripts/generate-hook-configs.sh to regenerate.",
-  "version": "4.27.0",
+  "version": "4.28.0",
   "hooks": {
     "SessionStart": {
       "": [
@@ -59,13 +59,7 @@
         "skill-fire-log.sh"
       ],
       "Bash": [
-        "enforce-toolchain.sh",
-        "llm-test-flags.sh",
-        "conventional-commits-check.sh",
-        "branch-safety-check.sh",
-        "snyk-project-create-guard.sh",
-        "bash-verbose-guard.sh",
-        "rtk-rewrite.sh"
+        "pre-bash.sh"
       ],
       "mcp__.*": [
         "mcp-ban.sh"
@@ -119,14 +113,10 @@
     "tanstack-router-gen.sh",
     "connect-query-check.sh",
     "aip-proto-check.sh",
-    "react-compiler-check.sh",
-    "env-validation-check.sh",
-    "bundle-guard.sh",
     "ux-copy-check.sh",
     "orchestration-guidance.sh",
     "form-mode-check.sh",
     "error-boundary-check.sh",
-    "legacy-import-check.sh",
     "test-convention-check.sh",
     "ts-no-escape-hatches-check.sh",
     "tsconfig-strict-check.sh",

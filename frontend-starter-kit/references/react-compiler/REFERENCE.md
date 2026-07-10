@@ -18,9 +18,10 @@
 8. **Never remove `'use no memo'`** -- last-resort opt-out.
 9. **Naming** -- PascalCase components, `use*` hooks (aids compiler inference).
 
-## react-compiler-check.sh
+## Enforcement: React Doctor, not a hook
 
-> Script: [`scripts/react-compiler-check.sh`](scripts/react-compiler-check.sh)
+Manual memoization (useMemo/useCallback/React.memo), useState+useEffect derived state, and useRef-as-cache are owned by React Doctor (architecture/react-compiler-no-manual-memoization, state-and-effects/no-derived-state-effect, rerender-lazy-ref-init) via the react-doctor Stop hook. The former react-compiler-check.sh was retired -- one owner per rule.
+
 
 ## Escape Hatch: 'use no memo'
 

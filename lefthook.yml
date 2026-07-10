@@ -22,8 +22,11 @@ pre-push:
       glob: "*.{ts,tsx,js,jsx,mjs,mts}"
       run: bun run lint:file -- {push_files}
     manifest-sync:
-      glob: "{skill-manifest.json,.claude/settings.json,hooks/hooks.json}"
+      glob: "{skill-manifest.json,.claude/settings.json,hooks/hooks.json,shared/hook-lib.sh,.claude/hooks/_hook-lib.sh}"
       run: bash scripts/generate-hook-configs.sh --check
     catalog-sync:
       glob: "{*/SKILL.md,.claude-plugin/plugin.json}"
       run: bash scripts/generate-skill-catalog.sh --check
+    rules-sync:
+      glob: "{CLAUDE.md,AGENTS.md,.agents/codex-appendix.md}"
+      run: bash scripts/generate-agents-md.sh --check
