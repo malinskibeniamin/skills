@@ -18,9 +18,15 @@ hard a problem you can hand over. Taste = UI/UX, code quality, API design, desig
 | Fable-5 | 1 | 10 | 9 |
 | Opus-4.8 | 4 | 7 | 8 |
 | Sonnet-5 | 6 | 5 | 7 |
-| GPT-5.6 (codex) | 8 | 9 | 6 |
+| GPT-5.6 Sol (codex) | 8 | 9 | 6 |
+| GPT-5.6 Terra (codex) | 9 | 6 | 5 |
+| GPT-5.6 Luna (codex) | 10 | 3 | 2 |
 
-GPT-5.5 is retired -- 5.6 is GA and strictly better on every axis that matters.
+GPT-5.5 is retired. Variant floors are hard: Sol runs at medium|high effort only (all code
+writing and adversarial review -- smartest model rivaled only by Fable-5); Terra medium|high
+(budget non-code: PR comments, routine review passes, test-runner chores -- never product
+code); Luna high only (last resort for cheap tool-call loops far from code: tracker
+orchestration, test fixtures -- never development).
 
 How to apply -- defaults, not limits. Standing permission to override: if a cheaper model's
 output does not meet the bar, rerun or redo on a smarter model WITHOUT asking. Judge the
@@ -28,15 +34,16 @@ output, not the price tag; escalating costs less than shipping mediocre output.
 
 - Anything that ships: intelligence > taste > cost. Cost is a tiebreaker only.
 - Bulk mechanical (clear-spec implementation, data analysis, migrations): GPT-5.6 -- plan allowance, cheap relative to Claude tokens (not free; see /codex budget gate).
-- User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-4.8, Fable-5). GPT-5.6 drafts, Claude finishes.
-- Reviews and plans: Fable-5 or Opus-4.8, plus GPT-5.6 as the independent cross-model perspective.
+- User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-4.8, Fable-5). Sol drafts, Claude finishes.
+- Reviews and plans: Fable-5 or Opus-4.8, plus Sol as the independent cross-model perspective (Terra for routine re-check rounds).
 - Cross-model review, automatic on every change: the author model never solely reviews its
-  own work. Claude authored -> GPT-5.6 adversarial review; GPT-5.6 authored -> Fable/Opus
-  reviews; a clean-context GPT-5.6 run is an acceptable third perspective. Findings P0-P3
-  -> fixes delegated per routing, re-checked by the cross reviewer.
+  own work, and the reviewer comes from a DIFFERENT family whenever possible (family
+  diversity catches shared blind spots). Claude authored -> Sol reviews; GPT authored ->
+  Fable/Opus reviews; same-family clean-context only when the other family is unavailable
+  (record it). Findings P0-P3 -> fixes delegated per routing, re-checked by the cross reviewer.
 - Computer use and other token furnaces (browser verification, codebase analysis): shell to
-  codex GPT-5.6 and report back -- see `/codex` for mechanics (exec/review, timeouts,
-  worktree isolation, the sonnet+low wrapper pattern for workflows with `GPT-5.6:` labels).
+  codex Sol and report back -- see `/codex` for variant routing (Sol/Terra/Luna + effort
+  floors), exec/review mechanics, timeouts, worktree isolation, and wrapper labels.
 - Fable-5 effort: `high` or lower only -- `xhigh` is token-hungry, `max` a furnace with worse output.
 - **Never use Haiku.**
 
