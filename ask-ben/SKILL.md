@@ -50,6 +50,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
 | `/snyk-ux-security` | Run Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage, release-age... |
+| `/stay-within-limits` | Use when long-running or parallel agent work must respect 5-hour and weekly usage limits by checking usage... |
 | `/steelman` | Argue the strongest evidence-backed case against a premise. |
 | `/swarm` | parallel executor. |
 | `/tanstack-router` | TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generat... |
