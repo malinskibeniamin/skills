@@ -69,4 +69,4 @@ else
   echo "  PASS  no agent definition uses haiku"
   PASS=$((PASS + 1))
 fi
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "redirect stdin from /dev/null on background" "codex skill mandates stdin closure on background runs"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "/dev/null. on background runs" "codex skill mandates stdin closure on background runs"
