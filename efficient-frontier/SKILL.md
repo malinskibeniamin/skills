@@ -71,7 +71,7 @@ frontier model's full reasoning.
 
 1. Run bounded waves: at most 3 parallel subagents unless the user or host gives a throttle.
 2. Let in-flight agents finish; do not interrupt them only to save budget.
-3. Between waves, check 5-hour and weekly usage with the host's usage tool
+3. Between waves, run `/stay-within-limits` (usage check, 95% pause rule, wake-to-resume)
    (Claude Code: `bunx -y ccusage@latest blocks --active --json`).
 4. At or above 95% of either window: stop launching, prepare a self-contained resume
    (observed window, threshold, next safe check, remaining plan, exact rerun command).

@@ -55,6 +55,7 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 ## Skill composition
 
 - Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
+- Before launching lanes and between waves: `/stay-within-limits` (pause at 95% of the 5-hour/weekly window; resume via wakeup).
 - Lane model choice: `/efficient-frontier` Model rankings. Bulk mechanical lanes -> GPT-5.6 Sol via `/codex` wrapper (sonnet+low, `GPT-5.6-sol:` label, worktree isolation); tracker/issue chores -> Luna, PR-comment/review chores -> Terra. Cross-model review per CLAUDE.md runs on every lane result. Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes start with `/deslop` write mode; reviewer lanes include `/deslop` complexity tags before broader review.

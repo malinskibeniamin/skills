@@ -1,0 +1,9 @@
+# stay-within-limits: restored standalone (owner request; wave-2 fold lost the behavior)
+run_file_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "skill exists"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "95%" "has the 95% pause threshold"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "ccusage" "uses ccusage as the usage source"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "Do not trust" "re-checks the window on wake, not wall-clock"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "Codex work is a separate budget" "documents the codex escape valve"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./stay-within-limits/"' "registered in plugin"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "/stay-within-limits" "efficient-frontier delegates the usage loop"
+run_content_eval "$REPO_ROOT/swarm/SKILL.md" "/stay-within-limits" "swarm gates lanes on the usage window"

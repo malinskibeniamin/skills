@@ -63,6 +63,7 @@
     "./setup-atlassian-workflow/",
     "./setup-routines/",
     "./snyk-ux-security/",
+    "./stay-within-limits/",
     "./steelman/",
     "./swarm/",
     "./tanstack-router/",
