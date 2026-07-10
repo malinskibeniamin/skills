@@ -62,6 +62,26 @@ fi
 # Extract score
 score=$(echo "$output" | grep -oE '[0-9]+' | tail -1 || echo "")
 
+# ── Score ratchet: quality is a one-way street ──────────────────
+# Baseline = best score this repo has ever achieved (per-repo file under
+# ~/.claude/hook-metrics). A diff may never land below it; beating it
+# raises it. 80 stays the absolute floor below, but the ratchet is the
+# anti-rot mechanism: slow decline becomes mechanically impossible.
+if [ -n "$score" ]; then
+  _rd_repo_hash=$(git rev-parse --show-toplevel 2>/dev/null | cksum | cut -d' ' -f1)
+  _rd_baseline_file="$HOME/.claude/hook-metrics/doctor-baseline-${_rd_repo_hash}"
+  _rd_baseline=$(cat "$_rd_baseline_file" 2>/dev/null | tr -dc '0-9' || true)
+  if [ -z "$_rd_baseline" ]; then
+    mkdir -p "$HOME/.claude/hook-metrics" 2>/dev/null || true
+    echo "$score" > "$_rd_baseline_file" 2>/dev/null || true
+  elif [ "$score" -lt "$_rd_baseline" ]; then
+    hook_stop_finding "Doctor score $score/100 is BELOW this repo's ratchet baseline ($_rd_baseline). Quality only moves up: fix the regression or justify lowering the baseline explicitly (edit $_rd_baseline_file with a reason in the commit)."
+    hook_stop_enforce
+  elif [ "$score" -gt "$_rd_baseline" ]; then
+    echo "$score" > "$_rd_baseline_file" 2>/dev/null || true
+  fi
+fi
+
 # Finding on critical score
 if [ -n "$score" ] && [ "$score" -lt 50 ]; then
   hook_stop_finding "Doctor score $score/100 (critical). Fix."

@@ -26,7 +26,12 @@ Set `model = "gpt-5.6-sol"` in `~/.codex/config.toml` as the default.
 
 ## Prompt contract (every codex run)
 
-Self-contained -- codex sees none of this conversation. Include: repo path + branch, objective,
+Self-contained -- codex sees none of this conversation. **Steering payload (required for
+implementation work)**: codex gets none of Claude's path-scoped skill autoloading, so the
+prompt must carry the conventions -- include the matched skill rules for every touched
+surface (ConnectRPC files -> connect-query rules; UI -> registry/token + a11y rules; routes
+-> tanstack-router rules; UI strings -> ux-copy), plus "match the shape of the relevant
+`exemplars/` file" with that file inlined. Also include: repo path + branch, objective,
 scope and out-of-scope, acceptance criteria, exact verify commands, evidence format for the
 report, and stop conditions. Fable judges the returned output against the bar; below bar ->
 rerun with a sharper prompt or redo on a smarter model without asking.

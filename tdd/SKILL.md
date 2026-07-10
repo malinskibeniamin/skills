@@ -44,6 +44,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 ### 2. GREEN -- Minimal code to pass
 
 - Only enough to pass | run `/deslop` write mode: deletion, reuse-in-codebase, standard library, native platform, already-installed dependency, one-line before custom code | no speculative helpers/options.
+- Match the shape of the matching `exemplars/` file (component/hook/route/test) -- naming rhythm, comment restraint, structure; not its content.
 - Run test | see green
 
 ### 3. REFACTOR -- Clean up while green

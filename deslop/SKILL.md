@@ -10,7 +10,7 @@ Code is liability. Every added line can break, page someone, or need support. Tw
 
 ## Write mode (lazy senior dev)
 
-Active when invoked before/during implementation (`/deslop write`, "ponytail", "lazy mode") and via the lifecycle planning phase. **Persistent**: once activated it stays on for the rest of the session -- every subsequent coding response, no drift back to over-building -- until the user says "stop deslop" / "stop ponytail" / "normal mode". Intensity level persists until changed or session end. (Breaking change from the ponytail merge, owner-approved: the ponytail slash command is gone -- say "ponytail" or use `/deslop`; behavior is otherwise the ponytail union.) Lazy = efficient, not careless. The best code is the code never written.
+Active when invoked before/during implementation (`/deslop write`, "ponytail", "lazy mode") -- and AUTOMATICALLY for every lifecycle implementation phase (step 3): no invocation needed, both runtimes. **Persistent**: once activated it stays on for the rest of the session -- every subsequent coding response, no drift back to over-building -- until the user says "stop deslop" / "stop ponytail" / "normal mode". Intensity level persists until changed or session end. (Breaking change from the ponytail merge, owner-approved: the ponytail slash command is gone -- say "ponytail" or use `/deslop`; behavior is otherwise the ponytail union.) Lazy = efficient, not careless. The best code is the code never written.
 
 **Understand first.** The ladder shortens the solution, never the reading. Trace every file the change touches and the actual flow end to end, then climb. Laziness that skips comprehension ships a confident wrong fix.
 

@@ -25,7 +25,7 @@ Order every task. Hooks block skipped steps.
 
 1. **Understand** -- explore, one question at time, propose
 2. **Plan** -- exact path, code, expect output
-3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
+3. **Implement** -- `/tdd` every file, `/deslop` write mode ON for the whole session (both runtimes): ladder before every line. Fail first -> pass -> refactor. Match the shape of the matching `exemplars/` file
 4-6. **`/go`** -- verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
 Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
