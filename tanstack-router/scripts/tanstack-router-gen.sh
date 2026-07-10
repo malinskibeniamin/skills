@@ -15,5 +15,5 @@ hook_filter_extensions "ts|tsx"
 # Regenerate route tree silently
 bun run generate:routes > /dev/null 2>&1 || true
 
-echo '{"suppressOutput":true}' >&2
+echo '{"suppressOutput":true}'
 exit 0

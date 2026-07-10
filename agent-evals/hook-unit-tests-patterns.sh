@@ -84,6 +84,25 @@ _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 2 "multiline Button without purpose still blocked"
 _cleanup_test_file "$_f"
 
+echo "  Check 6 — multiline onClick handler calling navigate (block):"
+_setup_test_file "$_f" 'const X = () => (
+  <div
+    onClick={() =>
+      navigate("/home")
+    }
+  >go</div>
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "multiline onClick+navigate blocked"
+_cleanup_test_file "$_f"
+
+echo "  Check 6 — unrelated onClick and navigate in same hunk (pass):"
+_setup_test_file "$_f" 'const X = () => <Button onClick={openMenu}>menu</Button>;
+export function goHome(router: Router) { router.navigate("/home"); }'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "separate onClick and navigate not blocked"
+_cleanup_test_file "$_f"
+
 echo "  Check 6 — onClick+navigate in comment only (pass):"
 _setup_test_file "$_f" '// old approach: onClick={() => navigate("/home")} was replaced by Link
 const X = () => <Link to="/home">go</Link>;'

@@ -79,7 +79,7 @@ body=$(echo "$msg" | tail -n +2 | sed '/^$/d')
 commit_type=$(echo "$subject" | sed -E "s/^($valid_types)\(.*/\1/")
 
 if [ -z "$body" ] && { [ "$commit_type" = "feat" ] || [ "$commit_type" = "fix" ]; }; then
-  echo "{\"decision\":\"allow\",\"reason\":\"Consider adding body for $commit_type commits.\"}" >&2
+  echo "{\"decision\":\"allow\",\"reason\":\"Consider adding body for $commit_type commits.\"}"
   exit 0
 fi
 

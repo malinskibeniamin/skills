@@ -14,6 +14,6 @@ hook_filter_extensions "ts|tsx" || return 0
 # Regenerate route tree silently
 bun run generate:routes > /dev/null 2>&1 || true
 
-if [ "${HOOK_COLLECT:-0}" != "1" ]; then echo '{"suppressOutput":true}' >&2; fi
+if [ "${HOOK_COLLECT:-0}" != "1" ]; then echo '{"suppressOutput":true}'; fi
 return 0
 }

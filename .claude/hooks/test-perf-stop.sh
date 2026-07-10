@@ -9,15 +9,6 @@ source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
 
 baseline="$_hook_session_dir/test-timing-baseline.tsv"
 
-# Baseline is captured in background at SessionStart (session-env.sh).
-# By the time Stop hooks fire, the session has been running for minutes —
-# the baseline is ready. If not, skip gracefully rather than sleeping.
-
-
-if [ ! -f "$baseline" ] || [ ! -s "$baseline" ]; then
-  exit 0
-fi
-
 # Session-scoped: only audit files this session touched
 if type hook_session_changed_files &>/dev/null; then
   changed_files=$(hook_session_changed_files "ts|tsx")
@@ -29,18 +20,23 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
-# Need vitest configs to run
-vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
-if [ -z "$vitest_configs" ]; then
-  exit 0
-fi
-
 # Build absolute paths for --related
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 abs_changed=""
 for f in $changed_files; do
   abs_changed="$abs_changed $repo_root/$f"
 done
+
+# ── Timing audit (needs baseline + vitest configs) ───────────────
+# Baseline is captured in background at SessionStart (session-env.sh).
+# If it never landed, skip ONLY the timing comparison — this hook also
+# owns async-leak detection (issue #54), which must still run below.
+
+audit=""
+slow_tests=""
+vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
+
+if [ -f "$baseline" ] && [ -s "$baseline" ] && [ -n "$vitest_configs" ]; then
 
 # Run related tests with JSON reporter for each vitest config
 current_tsv="$_hook_session_dir/test-timing-current.tsv"
@@ -52,10 +48,7 @@ for cfg in $vitest_configs; do
     >> "$current_tsv" 2>/dev/null || true
 done
 
-if [ ! -s "$current_tsv" ]; then
-  rm -f "$current_tsv"
-  exit 0
-fi
+if [ -s "$current_tsv" ]; then
 
 # Compare: find tests with >30% timing change AND baseline >10ms
 # Positive pct = faster, negative = slower
@@ -86,7 +79,6 @@ audit=$(awk -F'\t' '
 # Reads THIS run's timings — the baseline holds session-start incumbents,
 # which are not this session's doing.
 
-slow_tests=""
 while IFS=$'\t' read -r name duration; do
   dur_int=${duration%.*}
   [ -z "$dur_int" ] && continue
@@ -98,7 +90,11 @@ while IFS=$'\t' read -r name duration; do
   fi
 done < <(awk -F'\t' '{print $1 "\t" $2}' "$current_tsv" 2>/dev/null || true)
 
+fi
+
 rm -f "$current_tsv"
+
+fi
 
 # ── Compose ONE context payload ──────────────────────────────────
 # Stacked JSON objects on one stream don't parse as a hook response;

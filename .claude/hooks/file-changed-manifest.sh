@@ -21,7 +21,11 @@ generator="$root/scripts/generate-hook-configs.sh"
 [ -x "$generator" ] || exit 0
 
 out=$("$generator" --apply 2>&1) || {
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"[manifest] Codegen FAILED: $out — configs may be stale.\"}"
+  # $out is arbitrary generator output — escape it or the JSON (parsed from
+  # stdout on exit 0) breaks and the failure warning is dropped.
+  msg=$(printf '[manifest] Codegen FAILED: %s — configs may be stale.' "$out" | jq -Rs . 2>/dev/null) \
+    || msg='"[manifest] Codegen FAILED — configs may be stale."'
+  echo "{\"suppressOutput\":true,\"systemMessage\":$msg}"
   exit 0
 }
 

@@ -65,7 +65,9 @@ case "$file_path" in
   *.tsx|*.jsx|*.mdx)
     _button_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
     if echo "$_button_added" | grep -E '<Button[[:space:]>]' | grep -qE 'className=.*(bg-gradient-|from-[a-z]+-[0-9]|via-[a-z]+-[0-9]|to-[a-z]+-[0-9]|rounded|shadow)'; then
-      if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token"; then
+      # Honor tailwind-check's gradient escape too — one escape hatch must
+      # quiet every hook that fires on the same line.
+      if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token" && ! hook_has_escape "gradient"; then
         hook_block "Button gradient/radius/shadow override detected. Use Button variant/size or add a registry variant. Escape: // allow: button-visual-override [reason]"
       fi
     fi
@@ -149,7 +151,10 @@ esac
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$_react_code_added" | grep -qE 'onClick.*navigate\('; then
+    # Joined view catches multiline handlers; [^}]* keeps the match inside
+    # one handler expression so an unrelated navigate() elsewhere in the
+    # hunk can't pair with an innocent onClick.
+    if printf '%s' "$_react_joined_added" | grep -qE 'onClick(=\{|:)[^}]*navigate\('; then
       hook_block "Use <Link> not onClick+navigate(). Breaks a11y+basePath. Use <Button asChild><Link to=\\\"/path\\\">...</Link></Button>."
     fi
     ;;
