@@ -38,7 +38,7 @@ _current=$(git branch --show-current 2>/dev/null || echo "")
 # Rebind opt-in: user explicitly acknowledges branch change.
 if [ "${CLAUDE_BRANCH_REBIND:-0}" = "1" ]; then
   echo "$_current" > "$_bound_file" 2>/dev/null || true
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"[branch-safety] rebound: '$_bound' -> '$_current'\"}" >&2
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"[branch-safety] rebound: '$_bound' -> '$_current'\"}"
   exit 0
 fi
 

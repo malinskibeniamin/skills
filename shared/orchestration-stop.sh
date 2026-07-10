@@ -30,42 +30,9 @@ if [ -z "$changed" ] && [ ! -f "$session_files" ]; then
   exit 0
 fi
 
-# Check if typecheck-stop already ran related tests (avoid double-running)
-stop_outcome_file="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}/last-stop"
-typecheck_ran_tests=false
-if [ -f "$stop_outcome_file" ] && grep -q "tests PASS\|tests FAIL" "$stop_outcome_file" 2>/dev/null; then
-  typecheck_ran_tests=true
-fi
-
-# ── Gate 1: Test files changed → check for async leaks ──────────
-
-if [ -f "$session_files" ] && grep -q "^test:" "$session_files" 2>/dev/null; then
-  test_files=$(grep "^test:" "$session_files" | cut -d: -f2- | sort -u | tr '\n' ' ')
-
-  # Check for async leaks if vitest available
-  if [ -f "node_modules/.bin/vitest" ] && [ -n "$test_files" ]; then
-    leak_output=""
-    leak_exit=0
-    leak_output=$(vitest run --detectAsyncLeaks $test_files 2>&1) || leak_exit=$?
-    if [ $leak_exit -ne 0 ] && echo "$leak_output" | grep -qiE 'leak|open handle|did not exit'; then
-      issues="$issues\n- ASYNC LEAK. vitest run --detectAsyncLeaks"
-    fi
-  fi
-fi
-
-# ── Gate 1b: Run related tests (Bazel-style — only affected tests) ────
-
-if [ "$typecheck_ran_tests" = false ] && [ -n "$changed" ]; then
-  changed_source=$(echo "$changed" | grep -E '\.(ts|tsx)$' | grep -vE '(\.test\.|\.spec\.|\.unit\.|\.integration\.|\.d\.ts$|\.gen\.)' || true)
-  if [ -n "$changed_source" ] && [ -f "node_modules/.bin/vitest" ]; then
-    test_exit=0
-    test_output=$(vitest run --related $changed_source 2>&1) || test_exit=$?
-    if [ $test_exit -ne 0 ]; then
-      truncated=$(echo "$test_output" | tail -10)
-      issues="$issues\n- TESTS FAIL. Fix:\n  $truncated"
-    fi
-  fi
-fi
+# Gate 1 (async leaks) is owned by test-perf-stop.sh; Gate 1b (related
+# tests) is owned by typecheck-stop.sh. One Stop-time owner per rule —
+# concurrent Stop hooks double-running vitest was pure waste (issue #54).
 
 # ── Gate 2: JSX/TSX source changed → verify co-located test ─────
 
@@ -141,12 +108,8 @@ if [ -f "$session_files" ] && grep -q "^security:" "$session_files" 2>/dev/null;
   security_files=$(grep "^security:" "$session_files" | cut -d: -f2- | sort -u)
   for f in $security_files; do
     if [ -f "$f" ]; then
-      if grep -qE '(eval\(|new Function\(|dangerouslySetInnerHTML|\.innerHTML\s*=)' "$f" 2>/dev/null; then
-        if ! grep -qE '(allow-dangerouslySetInnerHTML|allow:\s*dangerouslySetInnerHTML|allow-eval|allow:\s*eval)' "$f" 2>/dev/null; then
-          short_name=$(basename "$f")
-          issues="$issues\n- SECURITY: $short_name — eval/innerHTML. Fix or escape hatch."
-        fi
-      fi
+      # eval/new Function/innerHTML/dangerouslySetInnerHTML are owned by
+      # react-rules-check.lib.sh at edit time — no Stop-time re-scan.
       if grep -qE "(password|secret|api.?key)\s*[:=]\s*['\"][^'\"]{3,}" "$f" 2>/dev/null; then
         short_name=$(basename "$f")
         issues="$issues\n- SECURITY: $short_name — hardcoded secrets. @/env."

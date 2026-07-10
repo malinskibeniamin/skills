@@ -397,14 +397,14 @@ _warn_script="/tmp/hook-test-warn-$$.sh"
 _make_hook_script "$_warn_script" 'hook_warn "Test warning"'
 
 echo "  hook_warn outputs valid JSON, exits 0:"
-local_stderr="/tmp/hook-test-warn-stderr-$$"
+local_stdout="/tmp/hook-test-warn-stdout-$$"
 exit_code=0
-echo "" | bash "$_warn_script" 2>"$local_stderr" || exit_code=$?
-stderr_out=$(cat "$local_stderr"); rm -f "$local_stderr"
-if echo "$stderr_out" | jq -e '.suppressOutput' >/dev/null 2>&1; then
+echo "" | bash "$_warn_script" >"$local_stdout" 2>/dev/null || exit_code=$?
+stdout_out=$(cat "$local_stdout"); rm -f "$local_stdout"
+if echo "$stdout_out" | jq -e '.suppressOutput' >/dev/null 2>&1; then
   PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} hook_warn produces valid JSON"
 else
-  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} hook_warn JSON invalid (got: $stderr_out)"
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} hook_warn JSON invalid (got: $stdout_out)"
 fi
 if [ "$exit_code" -eq 0 ]; then
   PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} hook_warn exits 0"

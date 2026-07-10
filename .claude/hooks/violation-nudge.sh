@@ -31,6 +31,6 @@ fi
 
 touch "$_nudge_marker" 2>/dev/null || true
 
-echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[VIOLATION PATTERN] Repeated blocks: $repeaters. Adjust approach — read the block messages and change strategy instead of retrying the same pattern.\"}}" >&2
+echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[VIOLATION PATTERN] Repeated blocks: $repeaters. Adjust approach — read the block messages and change strategy instead of retrying the same pattern.\"}}"
 
 exit 0

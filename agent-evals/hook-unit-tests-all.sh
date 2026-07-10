@@ -53,6 +53,7 @@ echo -e "${NC}"
 
 run_suite "Original (baseline)" "hook-unit-tests.sh"
 run_suite "_hook-lib.sh" "hook-unit-tests-lib.sh"
+run_suite "Channel Contracts" "hook-unit-tests-channels.sh"
 run_suite "Pattern-Check Hooks" "hook-unit-tests-patterns.sh"
 run_suite "Integration" "hook-unit-tests-integration.sh"
 run_suite "Resilience" "hook-unit-tests-resilience.sh"
@@ -63,7 +64,7 @@ echo -e "${BOLD}  GRAND TOTAL${NC}"
 echo -e "${BOLD}═══════════════════════════════════════════════════════════${NC}"
 TOTAL=$((TOTAL_PASS + TOTAL_FAIL + TOTAL_SKIP))
 echo -e "  Tests:  ${GREEN}${TOTAL_PASS} passed${NC}, ${RED}${TOTAL_FAIL} failed${NC}, ${YELLOW}${TOTAL_SKIP} skipped${NC} (${TOTAL} total)"
-echo -e "  Suites: $((5 - SUITES_FAILED))/5 passed"
+echo -e "  Suites: $((6 - SUITES_FAILED))/6 passed"
 echo ""
 
 if [ "${SUITES_FAILED:-0}" -gt 0 ]; then

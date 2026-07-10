@@ -43,6 +43,6 @@ EOF
 # Inject brief context: "compaction imminent, state saved"
 context="[PRE-COMPACT] Session state snapshot saved. ${_log_entries} hook entries, ${_touched_count} files touched. Violation counters survive compaction."
 escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
-echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreCompact\",\"additionalContext\":$escaped}}" >&2
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreCompact\",\"additionalContext\":$escaped}}"
 
 exit 0

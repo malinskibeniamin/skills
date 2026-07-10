@@ -57,11 +57,13 @@ _run_hook() {
   local hook="$1"
   local input="$2"
   local stderr_file="/tmp/hook-test-stderr-$$-$RANDOM"
+  local stdout_file="/tmp/hook-test-stdout-$$-$RANDOM"
   local exit_code=0
-  echo "$input" | bash "$HOOKS_DIR/$hook" 2>"$stderr_file" || exit_code=$?
+  echo "$input" | bash "$HOOKS_DIR/$hook" >"$stdout_file" 2>"$stderr_file" || exit_code=$?
   _last_stderr=$(cat "$stderr_file")
+  _last_stdout=$(cat "$stdout_file")
   _last_exit=$exit_code
-  rm -f "$stderr_file"
+  rm -f "$stderr_file" "$stdout_file"
 }
 
 _run_hook_cd() {
@@ -73,10 +75,12 @@ _run_hook_cd() {
   local input="$3"
   local stderr_file="/tmp/hook-test-stderr-$$-$RANDOM"
   local exit_code=0
-  ( cd "$cwd" && echo "$input" | bash "$HOOKS_DIR/$hook" 2>"$stderr_file" ) || exit_code=$?
+  local stdout_file="/tmp/hook-test-stdout-$$-$RANDOM"
+  ( cd "$cwd" && echo "$input" | bash "$HOOKS_DIR/$hook" >"$stdout_file" 2>"$stderr_file" ) || exit_code=$?
   _last_stderr=$(cat "$stderr_file")
+  _last_stdout=$(cat "$stdout_file")
   _last_exit=$exit_code
-  rm -f "$stderr_file"
+  rm -f "$stderr_file" "$stdout_file"
 }
 
 _run_hook_with_env() {
@@ -86,10 +90,12 @@ _run_hook_with_env() {
   # Remaining args are VAR=val pairs
   local stderr_file="/tmp/hook-test-stderr-$$-$RANDOM"
   local exit_code=0
-  echo "$input" | env "$@" bash "$HOOKS_DIR/$hook" 2>"$stderr_file" || exit_code=$?
+  local stdout_file="/tmp/hook-test-stdout-$$-$RANDOM"
+  echo "$input" | env "$@" bash "$HOOKS_DIR/$hook" >"$stdout_file" 2>"$stderr_file" || exit_code=$?
   _last_stderr=$(cat "$stderr_file")
+  _last_stdout=$(cat "$stdout_file")
   _last_exit=$exit_code
-  rm -f "$stderr_file"
+  rm -f "$stderr_file" "$stdout_file"
 }
 
 # Run hook from shared/ directory
@@ -98,10 +104,12 @@ _run_shared_hook() {
   local input="$2"
   local stderr_file="/tmp/hook-test-stderr-$$-$RANDOM"
   local exit_code=0
-  echo "$input" | bash "$SHARED_DIR/$hook" 2>"$stderr_file" || exit_code=$?
+  local stdout_file="/tmp/hook-test-stdout-$$-$RANDOM"
+  echo "$input" | bash "$SHARED_DIR/$hook" >"$stdout_file" 2>"$stderr_file" || exit_code=$?
   _last_stderr=$(cat "$stderr_file")
+  _last_stdout=$(cat "$stdout_file")
   _last_exit=$exit_code
-  rm -f "$stderr_file"
+  rm -f "$stderr_file" "$stdout_file"
 }
 
 # ── Assertions ──────────────────────────────────────────────────
@@ -139,6 +147,32 @@ _assert_stderr_not_contains() {
     FAIL=$((FAIL + 1))
     echo -e "  ${RED}✗${NC} $test_name (stderr unexpectedly contains: $pattern)"
     echo "    stderr: $(echo "$_last_stderr" | head -3)"
+  else
+    PASS=$((PASS + 1))
+    echo -e "  ${GREEN}✓${NC} $test_name"
+  fi
+}
+
+_assert_stdout_contains() {
+  local pattern="$1"
+  local test_name="$2"
+  if echo "$_last_stdout" | grep -qE "$pattern"; then
+    PASS=$((PASS + 1))
+    echo -e "  ${GREEN}✓${NC} $test_name"
+  else
+    FAIL=$((FAIL + 1))
+    echo -e "  ${RED}✗${NC} $test_name (stdout missing pattern: $pattern)"
+    echo "    stdout: $(echo "$_last_stdout" | head -3)"
+  fi
+}
+
+_assert_stdout_not_contains() {
+  local pattern="$1"
+  local test_name="$2"
+  if echo "$_last_stdout" | grep -qE "$pattern"; then
+    FAIL=$((FAIL + 1))
+    echo -e "  ${RED}✗${NC} $test_name (stdout unexpectedly contains: $pattern)"
+    echo "    stdout: $(echo "$_last_stdout" | head -3)"
   else
     PASS=$((PASS + 1))
     echo -e "  ${GREEN}✓${NC} $test_name"

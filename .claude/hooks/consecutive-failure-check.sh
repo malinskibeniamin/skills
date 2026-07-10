@@ -53,7 +53,7 @@ echo "$_streak" > "$_hook_session_dir/fail-streak" 2>/dev/null
 
 if [ "$_streak" -ge 3 ]; then
   _hook_log_entry "warn" "consecutive-failure"
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"${_cmd_type} failed ${_streak}x in a row. STOP. Read ALL errors in the output. Fix ALL of them at once. Then run the check ONE time.\"}" >&2
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"${_cmd_type} failed ${_streak}x in a row. STOP. Read ALL errors in the output. Fix ALL of them at once. Then run the check ONE time.\"}"
 fi
 
 exit 0

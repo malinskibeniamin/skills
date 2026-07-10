@@ -48,11 +48,13 @@ _run_hook() {
   local hook="$1"
   local input="$2"
   local stderr_file="/tmp/hook-test-stderr-$$"
+  local stdout_file="/tmp/hook-test-stdout-$$"
   local exit_code=0
-  echo "$input" | bash "$HOOKS_DIR/$hook" 2>"$stderr_file" || exit_code=$?
+  echo "$input" | bash "$HOOKS_DIR/$hook" >"$stdout_file" 2>"$stderr_file" || exit_code=$?
   _last_stderr=$(cat "$stderr_file")
+  _last_stdout=$(cat "$stdout_file")
   _last_exit=$exit_code
-  rm -f "$stderr_file"
+  rm -f "$stderr_file" "$stdout_file"
 }
 
 _assert_exit() {
@@ -78,6 +80,19 @@ _assert_stderr_contains() {
     FAIL=$((FAIL + 1))
     echo -e "  ${RED}✗${NC} $test_name (stderr missing pattern: $pattern)"
     echo "    stderr: $_last_stderr"
+  fi
+}
+
+_assert_stdout_contains() {
+  local pattern="$1"
+  local test_name="$2"
+  if echo "$_last_stdout" | grep -qE "$pattern"; then
+    PASS=$((PASS + 1))
+    echo -e "  ${GREEN}✓${NC} $test_name"
+  else
+    FAIL=$((FAIL + 1))
+    echo -e "  ${RED}✗${NC} $test_name (stdout missing pattern: $pattern)"
+    echo "    stdout: $_last_stdout"
   fi
 }
 
@@ -291,7 +306,7 @@ _assert_exit 0 "11th edit — no warn yet"
 
 echo "  12th edit (should warn):"
 _run_hook "edit-loop-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
-_assert_stderr_contains "12 times" "12th edit triggers warning"
+_assert_stdout_contains "12 times" "12th edit triggers warning"
 
 _cleanup_test_file "$_test_file"
 _teardown_session
@@ -313,7 +328,7 @@ _assert_exit 0 "2nd failure — no message yet"
 
 echo "  third lint failure (should inject):"
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_assert_stderr_contains "failed.*3x|Fix ALL" "3rd consecutive failure triggers guidance"
+_assert_stdout_contains "failed.*3x|Fix ALL" "3rd consecutive failure triggers guidance"
 
 echo "  lint success (resets counter):"
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'

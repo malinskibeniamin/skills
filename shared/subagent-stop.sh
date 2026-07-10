@@ -86,5 +86,5 @@ summary="${agent_type}: ${status} — ${finding_count} findings (P0:${p0_count} 
 echo "$summary" >> "$session_dir/review-summary.log"
 
 # ── Emit summary as system message ───────────────────────────────
-echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"${summary}\"}" >&2
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"${summary}\"}"
 exit 0

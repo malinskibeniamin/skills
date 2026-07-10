@@ -11,13 +11,13 @@ CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-}"
 # Skip warning in the skills repo itself (hook authoring project, not a frontend app)
 _repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || true)
 if [ ! -f "package.json" ] && [ "$_repo_name" != "skills" ]; then
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."}}' >&2
+  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."}}'
 fi
 
 _is_frontend=1
 if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
   _is_frontend=0
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React in package.json. Frontend hooks disabled (DISABLE_FRONTEND_HOOKS=1). Skills repo auto-exempt."}}' >&2
+  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React in package.json. Frontend hooks disabled (DISABLE_FRONTEND_HOOKS=1). Skills repo auto-exempt."}}'
 fi
 
 # Skip disable flag for skills repo itself (hook authoring, not a frontend app)
@@ -102,7 +102,7 @@ if [ -f "$_settings" ] && command -v jq >/dev/null 2>&1; then
   _post_count=$(jq '[.hooks.PostToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
   _stop_count=$(jq '[.hooks.Stop[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
   _pre_count=$(jq '[.hooks.PreToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
-  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[GUARDRAILS] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active. Auto mode safe.\"}}" >&2
+  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[GUARDRAILS] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active. Auto mode safe.\"}}"
 fi
 
 # ── Capture typecheck baseline (opt-out, background, no latency) ─

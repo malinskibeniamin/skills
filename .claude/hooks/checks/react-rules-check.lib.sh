@@ -14,30 +14,21 @@ if [ -z "${UI_LIB_DIRS:-}" ]; then
 else
   _react_rules_ui_dirs="$UI_LIB_DIRS"
 fi
+# Registry-edit warning is owned by vendor-file-check.lib.sh (single owner);
+# here the match only flags library code so component-level checks skip it.
 if echo "$file_path" | grep -qE "/($_react_rules_ui_dirs)/"; then
-  _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-  if [ -f "$_repo_root/registry.json" ]; then
-    # Registry repo — remind to rebuild registry
-    if [ "${HOOK_COLLECT:-0}" = "1" ]; then
-      _hook_collect_emit "warn" "ui-registry-warn" "You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."
-    else
-      echo '{"suppressOutput":true,"systemMessage":"You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."}' >&2
-    fi
-  elif [ -f "$_repo_root/components.json" ] || [ -f "$_repo_root/cli.json" ]; then
-    # Consumer repo — warn that this is a registry-sourced component
-    _component=$(basename "$file_path")
-    if [ "${HOOK_COLLECT:-0}" = "1" ]; then
-      _hook_collect_emit "warn" "ui-registry-warn" "WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead."
-    else
-      echo "{"suppressOutput":true,"systemMessage":"WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead."}" >&2
-    fi
-  fi
   _react_rules_skip_ui_dirs=true
 fi
 
 hook_skip_generated || return 0
 hook_filter_extensions "ts|tsx|mdx" || return 0
 hook_get_added_lines || return 0
+
+# Comment-only lines can't violate JSX rules, and multiline tags only parse
+# in a joined view — hard blocks below use these instead of raw added_lines
+# (line-anchored greps false-blocked comments and missed multiline <Button>).
+_react_code_added=$(printf '%s\n' "$added_lines" | grep -vE '^[[:space:]]*(//|/?\*|\{/\*)' || true)
+_react_joined_added=$(printf '%s\n' "$_react_code_added" | tr '\n' ' ')
 
 if [ "$_react_rules_skip_ui_dirs" = false ]; then
 
@@ -88,13 +79,9 @@ case "$file_path" in
     _registry_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
     if [ -n "$_registry_added" ]; then
       _registry_component_pattern='<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea|Tabs|Tooltip|Popover|DropdownMenu|Sheet|Accordion|Avatar|Checkbox|Switch|Slider|Progress|Separator|Skeleton|Toast|Toaster|Command|Calendar|ScrollArea|AspectRatio|RadioGroup|Toggle|ToggleGroup)[[:space:]>]'
-      _hardcoded_palette_colors='red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone|white|black'
-      _palette_or_gradient_pattern="className=.*(bg-($_hardcoded_palette_colors)-|text-($_hardcoded_palette_colors)-|border-($_hardcoded_palette_colors)-|from-($_hardcoded_palette_colors)-|via-($_hardcoded_palette_colors)-|to-($_hardcoded_palette_colors)-|bg-gradient-)"
-      if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE "$_palette_or_gradient_pattern"; then
-        if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
-          hook_block "Registry component has hardcoded palette or gradient override. Use variant props/design tokens. Escape: // allow: registry-visual-override [reason]"
-        fi
-      fi
+      # Hardcoded palette/gradient utilities are owned by tailwind-check.lib.sh
+      # (it bans them on ANY element); this check keeps only the component
+      # semantics: registry components take variant props, not className chrome.
       if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
         if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
           hook_warn "Visual override on registry component. Use variant prop or design token. Escape: // allow: registry-visual-override [reason]"
@@ -162,18 +149,21 @@ esac
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE 'onClick.*navigate\('; then
+    if echo "$_react_code_added" | grep -qE 'onClick.*navigate\('; then
       hook_block "Use <Link> not onClick+navigate(). Breaks a11y+basePath. Use <Button asChild><Link to=\\\"/path\\\">...</Link></Button>."
     fi
     ;;
 esac
 
 # ── Check 7: Button must have handler or purpose ────────────────
+# Judge complete opening tags only — a hunk that adds `<Button` while the
+# props live on unchanged lines outside the diff cannot be judged.
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE '<Button[[:space:]>]' && \
-       ! echo "$added_lines" | grep -qE '<Button[^>]*(onClick|asChild|type="submit"|disabled)'; then
+    _button_tags=$(printf '%s\n' "$_react_joined_added" | grep -oE '<Button[^>]*>' || true)
+    if [ -n "$_button_tags" ] && \
+       printf '%s\n' "$_button_tags" | grep -qvE '(onClick|asChild|type="submit"|disabled)'; then
       hook_block "Button needs purpose: onClick, asChild, type=\\\"submit\\\", or disabled."
     fi
     ;;
@@ -206,8 +196,9 @@ fi
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' && \
-       ! echo "$added_lines" | grep -qE '<Button[^>]*aria-label'; then
+    _icon_buttons=$(printf '%s\n' "$_react_joined_added" | grep -oE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' || true)
+    if [ -n "$_icon_buttons" ] && \
+       printf '%s\n' "$_icon_buttons" | grep -qv 'aria-label'; then
       hook_block "Icon-only button needs aria-label for screen readers."
     fi
     ;;

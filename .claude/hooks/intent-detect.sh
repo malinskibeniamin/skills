@@ -105,7 +105,7 @@ fi
 
 if [ -n "$directives" ]; then
   escaped=$(printf '%s' "$directives" | jq -Rs . 2>/dev/null) || exit 0
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}"
 fi
 
 exit 0

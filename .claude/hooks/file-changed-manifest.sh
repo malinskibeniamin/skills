@@ -21,9 +21,9 @@ generator="$root/scripts/generate-hook-configs.sh"
 [ -x "$generator" ] || exit 0
 
 out=$("$generator" --apply 2>&1) || {
-  echo "{\"suppressOutput\":true,\"systemMessage\":\"[manifest] Codegen FAILED: $out — configs may be stale.\"}" >&2
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"[manifest] Codegen FAILED: $out — configs may be stale.\"}"
   exit 0
 }
 
-echo "{\"suppressOutput\":true,\"systemMessage\":\"[manifest] skill-manifest.json changed — .claude/settings.json and hooks/hooks.json regenerated.\"}" >&2
+echo "{\"suppressOutput\":true,\"systemMessage\":\"[manifest] skill-manifest.json changed — .claude/settings.json and hooks/hooks.json regenerated.\"}"
 exit 0

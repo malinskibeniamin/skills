@@ -60,6 +60,48 @@ _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "icon-only Button with aria-label passes"
 _cleanup_test_file "$_f"
 
+echo "  Check 7 — multiline Button with onClick on next line (pass):"
+_setup_test_file "$_f" 'const X = () => (
+  <Button
+    onClick={fn}
+  >
+    click
+  </Button>
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "multiline Button with onClick passes"
+_cleanup_test_file "$_f"
+
+echo "  Check 7 — multiline Button without purpose (block):"
+_setup_test_file "$_f" 'const X = () => (
+  <Button
+    variant="ghost"
+  >
+    click
+  </Button>
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "multiline Button without purpose still blocked"
+_cleanup_test_file "$_f"
+
+echo "  Check 6 — onClick+navigate in comment only (pass):"
+_setup_test_file "$_f" '// old approach: onClick={() => navigate("/home")} was replaced by Link
+const X = () => <Link to="/home">go</Link>;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "commented-out onClick+navigate not blocked"
+_cleanup_test_file "$_f"
+
+echo "  Check 11 — multiline icon Button with aria-label (pass):"
+_setup_test_file "$_f" 'const X = () => (
+  <Button
+    onClick={fn}
+    aria-label="Delete"
+  ><TrashIcon /></Button>
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "multiline icon Button with aria-label passes"
+_cleanup_test_file "$_f"
+
 echo "  Check 12 — outline:none delegated to React Doctor design/no-outline-none (hook silent):"
 _setup_test_file "$_f" 'const X = () => <div className="outline-none">x</div>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
@@ -95,7 +137,7 @@ echo "  Check 17 — inline style={{}} (warn):"
 _setup_test_file "$_f" 'const X = () => <div style={{color: "red"}}>x</div>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline style is warn not block"
-_assert_stderr_contains "Tailwind|style" "warns about inline style"
+_assert_stdout_contains "Tailwind|style" "warns about inline style"
 _cleanup_test_file "$_f"
 
 echo "  Check 18 — class component (block):"
@@ -120,7 +162,7 @@ echo "  Check 22 — handleSubmit without error callback (warn):"
 _setup_test_file "$_f" 'const X = () => <form onSubmit={handleSubmit(onSubmit)}>x</form>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "handleSubmit no error is warn"
-_assert_stderr_contains "onError|error callback" "warns about error callback"
+_assert_stdout_contains "onError|error callback" "warns about error callback"
 _cleanup_test_file "$_f"
 
 echo "  Check 22 — handleSubmit with error callback (pass):"
@@ -133,14 +175,14 @@ echo "  Check 28 — JSON.parse(JSON.stringify()) (warn):"
 _setup_test_file "$_f" 'const copy = JSON.parse(JSON.stringify(obj));'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "JSON roundtrip is warn"
-_assert_stderr_contains "structuredClone" "suggests structuredClone"
+_assert_stdout_contains "structuredClone" "suggests structuredClone"
 _cleanup_test_file "$_f"
 
 echo "  Check 31 — parseInt without radix (warn):"
 _setup_test_file "$_f" 'const n = parseInt(str);'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "parseInt no radix is warn"
-_assert_stderr_contains "radix|parseInt.*10|Number" "warns about radix"
+_assert_stdout_contains "radix|parseInt.*10|Number" "warns about radix"
 _cleanup_test_file "$_f"
 
 echo "  Check 33 — setTimeout with string (block):"
@@ -200,7 +242,7 @@ _css="/tmp/hook-test-tw-$$.css"
 _setup_test_file "$_css" 'body { height: 100vh; }'
 _run_hook "tailwind-check.sh" "$(_edit_json "$_css")"
 _assert_exit 0 "100vh is warn"
-_assert_stderr_contains "100dvh" "suggests 100dvh"
+_assert_stdout_contains "100dvh" "suggests 100dvh"
 _cleanup_test_file "$_css"
 
 echo "  100dvh in CSS file (pass):"
@@ -254,7 +296,7 @@ echo "  aria-invalid without aria-describedby (warn):"
 _setup_test_file "$_f" 'const X = () => <input aria-invalid={true} />;'
 _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "aria-invalid without describedby is warn"
-_assert_stderr_contains "aria-describedby" "mentions aria-describedby"
+_assert_stdout_contains "aria-describedby" "mentions aria-describedby"
 _cleanup_test_file "$_f"
 
 echo "  a11y-skip escape hatch (pass):"
@@ -442,7 +484,7 @@ echo "  Please prefix (warn):"
 _setup_test_file "$_f" "const hint = \"Please enter your email\";"
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "Please prefix is warn"
-_assert_stderr_contains "Please|direct" "warns about Please"
+_assert_stdout_contains "Please|direct" "warns about Please"
 _cleanup_test_file "$_f"
 
 echo "  and/or (warn):"
@@ -489,7 +531,7 @@ const MyForm = () => {
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "onBlur is warn"
-_assert_stderr_contains "onChange" "suggests onChange"
+_assert_stdout_contains "onChange" "suggests onChange"
 _cleanup_test_file "$_f"
 
 echo "  no useForm (skip):"
@@ -575,14 +617,14 @@ echo "  jest.fn() (warn):"
 _setup_test_file "$_f" "const mock = jest.fn();"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "jest.fn() is warn"
-_assert_stderr_contains "vi.fn" "suggests vi.fn()"
+_assert_stdout_contains "vi.fn" "suggests vi.fn()"
 _cleanup_test_file "$_f"
 
 echo "  toBeInTheDocument (warn):"
 _setup_test_file "$_f" "expect(el).toBeInTheDocument();"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "toBeInTheDocument is warn"
-_assert_stderr_contains "toBeVisible" "suggests toBeVisible()"
+_assert_stdout_contains "toBeVisible" "suggests toBeVisible()"
 _cleanup_test_file "$_f"
 
 echo "  clean test file (pass):"
@@ -644,7 +686,7 @@ _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
 const doDelete = useMutation({ onError: handle, mutationFn: deleteItem });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "unnamed mutation is warn"
-_assert_stderr_contains "Mutation" "suggests *Mutation suffix"
+_assert_stdout_contains "Mutation" "suggests *Mutation suffix"
 _cleanup_test_file "$_f"
 
 echo "  properly named mutation (pass):"
@@ -669,14 +711,14 @@ echo "  refetchQueries (warn):"
 _setup_test_file "$_f" "queryClient.refetchQueries({ queryKey: ['users'] });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "refetchQueries is warn"
-_assert_stderr_contains "invalidateQueries" "suggests invalidateQueries"
+_assert_stdout_contains "invalidateQueries" "suggests invalidateQueries"
 _cleanup_test_file "$_f"
 
 echo "  invalidateQueries without await (warn):"
 _setup_test_file "$_f" "queryClient.invalidateQueries({ queryKey: ['users'] });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "no-await invalidate is warn"
-_assert_stderr_contains "await|invalidateQueries" "warns about await"
+_assert_stdout_contains "await|invalidateQueries" "warns about await"
 _cleanup_test_file "$_f"
 
 echo "  await invalidateQueries (pass):"
@@ -703,7 +745,7 @@ echo "  inline query options (warn):"
 _setup_test_file "$_f" "useQuery({ queryKey: ['users'], queryFn: fetchUsers });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline query options warns"
-_assert_stderr_contains "queryOptions" "suggests queryOptions"
+_assert_stdout_contains "queryOptions" "suggests queryOptions"
 _cleanup_test_file "$_f"
 
 
@@ -711,7 +753,7 @@ echo "  queryKey missing direct queryFn arg (warn):"
 _setup_test_file "$_f" "useQuery({ queryKey: ['user'], queryFn: () => fetchUser(userId) });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "missing query key dep warns"
-_assert_stderr_contains "userId" "names missing dep"
+_assert_stdout_contains "userId" "names missing dep"
 _cleanup_test_file "$_f"
 
 echo "  queryKey includes direct queryFn arg (pass):"
@@ -743,7 +785,7 @@ echo "  disabled Button without Tooltip (warn):"
 _setup_test_file "$_f" "const X = () => <Button disabled onClick={fn}>Submit</Button>;"
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "disabled without Tooltip is warn"
-_assert_stderr_contains "[Tt]ooltip" "suggests Tooltip"
+_assert_stdout_contains "[Tt]ooltip" "suggests Tooltip"
 _cleanup_test_file "$_f"
 
 echo "  disabled Button with Tooltip import (pass):"
@@ -769,7 +811,7 @@ _setup_test_file "$_f" "import { FieldMask } from '@bufbuild/protobuf';
 const mask = { paths: ['name', 'description', 'config'] };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "hardcoded FieldMask is warn"
-_assert_stderr_contains "dirty" "suggests dirtyFields"
+_assert_stdout_contains "dirty" "suggests dirtyFields"
 _cleanup_test_file "$_f"
 
 echo "  no FieldMask (skip):"
@@ -882,7 +924,7 @@ test('input', async () => {
 });"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "userEvent.type() is warn"
-_assert_stderr_contains "type|clear|paste|50ms" "warns about type perf"
+_assert_stdout_contains "type|clear|paste|50ms" "warns about type perf"
 _cleanup_test_file "$_f"
 
 echo "  non-test file (skip):"
@@ -1017,14 +1059,14 @@ echo "  jest.fn() (warn):"
 _setup_test_file "$_f" "const mock = jest.fn();"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "jest.fn() is warn"
-_assert_stderr_contains "vi.fn" "suggests vi.fn()"
+_assert_stdout_contains "vi.fn" "suggests vi.fn()"
 _cleanup_test_file "$_f"
 
 echo "  toBeInTheDocument (warn):"
 _setup_test_file "$_f" "expect(el).toBeInTheDocument();"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "toBeInTheDocument is warn"
-_assert_stderr_contains "toBeVisible" "suggests toBeVisible()"
+_assert_stdout_contains "toBeVisible" "suggests toBeVisible()"
 _cleanup_test_file "$_f"
 
 echo "  clean test file (pass):"
@@ -1086,7 +1128,7 @@ _setup_test_file "$_f" "import { useMutation } from '@tanstack/react-query';
 const doDelete = useMutation({ onError: handle, mutationFn: deleteItem });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "unnamed mutation is warn"
-_assert_stderr_contains "Mutation" "suggests *Mutation suffix"
+_assert_stdout_contains "Mutation" "suggests *Mutation suffix"
 _cleanup_test_file "$_f"
 
 echo "  properly named mutation (pass):"
@@ -1111,14 +1153,14 @@ echo "  refetchQueries (warn):"
 _setup_test_file "$_f" "queryClient.refetchQueries({ queryKey: ['users'] });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "refetchQueries is warn"
-_assert_stderr_contains "invalidateQueries" "suggests invalidateQueries"
+_assert_stdout_contains "invalidateQueries" "suggests invalidateQueries"
 _cleanup_test_file "$_f"
 
 echo "  invalidateQueries without await (warn):"
 _setup_test_file "$_f" "queryClient.invalidateQueries({ queryKey: ['users'] });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "no-await invalidate is warn"
-_assert_stderr_contains "await|invalidateQueries" "warns about await"
+_assert_stdout_contains "await|invalidateQueries" "warns about await"
 _cleanup_test_file "$_f"
 
 echo "  await invalidateQueries (pass):"
@@ -1145,7 +1187,7 @@ echo "  inline query options (warn):"
 _setup_test_file "$_f" "useQuery({ queryKey: ['users'], queryFn: fetchUsers });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline query options warns"
-_assert_stderr_contains "queryOptions" "suggests queryOptions"
+_assert_stdout_contains "queryOptions" "suggests queryOptions"
 _cleanup_test_file "$_f"
 
 
@@ -1153,7 +1195,7 @@ echo "  queryKey missing direct queryFn arg (warn):"
 _setup_test_file "$_f" "useQuery({ queryKey: ['user'], queryFn: () => fetchUser(userId) });"
 _run_hook "query-pattern-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "missing query key dep warns"
-_assert_stderr_contains "userId" "names missing dep"
+_assert_stdout_contains "userId" "names missing dep"
 _cleanup_test_file "$_f"
 
 echo "  queryKey includes direct queryFn arg (pass):"
@@ -1185,7 +1227,7 @@ echo "  disabled Button without Tooltip (warn):"
 _setup_test_file "$_f" "const X = () => <Button disabled onClick={fn}>Submit</Button>;"
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "disabled without Tooltip is warn"
-_assert_stderr_contains "[Tt]ooltip" "suggests Tooltip"
+_assert_stdout_contains "[Tt]ooltip" "suggests Tooltip"
 _cleanup_test_file "$_f"
 
 echo "  disabled Button with Tooltip import (pass):"
@@ -1211,7 +1253,7 @@ _setup_test_file "$_f" "import { FieldMask } from '@bufbuild/protobuf';
 const mask = { paths: ['name', 'description', 'config'] };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "hardcoded FieldMask is warn"
-_assert_stderr_contains "dirty" "suggests dirtyFields"
+_assert_stdout_contains "dirty" "suggests dirtyFields"
 _cleanup_test_file "$_f"
 
 echo "  no FieldMask (skip):"
@@ -1324,7 +1366,7 @@ test('input', async () => {
 });"
 _run_hook "test-convention-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "userEvent.type() is warn"
-_assert_stderr_contains "type|clear|paste|50ms" "warns about type perf"
+_assert_stdout_contains "type|clear|paste|50ms" "warns about type perf"
 _cleanup_test_file "$_f"
 
 echo "  non-test file (skip):"
@@ -1372,7 +1414,7 @@ mkdir -p "$(dirname "$_f")"
 } > "$_f"
 _run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "large route file is warn (not block)"
-_assert_stderr_contains "300|split|refactor" "warns about file size"
+_assert_stdout_contains "300|split|refactor" "warns about file size"
 _cleanup_test_file "$_f"
 _cleanup_test_dir "/tmp/hook-test-routes"
 
@@ -1401,7 +1443,7 @@ function useCustomData() { return useState(null); }
 const Page = () => { const data = useCustomData(); return <div>{data}</div>; };"
 _run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "inline hook is warn"
-_assert_stderr_contains "hooks/" "suggests /hooks/"
+_assert_stdout_contains "hooks/" "suggests /hooks/"
 _cleanup_test_file "$_f"
 _cleanup_test_dir "/tmp/hook-test-routes"
 
@@ -1429,7 +1471,7 @@ try { await fetchData(); }
 catch (error) { toast.error(error.message); }"
 _run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "missing ConnectError.from is warn"
-_assert_stderr_contains "ConnectError" "suggests ConnectError.from"
+_assert_stdout_contains "ConnectError" "suggests ConnectError.from"
 _cleanup_test_file "$_f"
 
 echo "  non-connect file (skip):"
@@ -1509,7 +1551,7 @@ _setup_session
 echo "  vitest with --verbose (rewrite, exit 0 with updatedInput):"
 _run_hook "llm-test-flags.sh" '{"tool_name":"Bash","tool_input":{"command":"vitest run --verbose src/"}}'
 _assert_exit 0 "--verbose rewritten (allow with updated input)"
-_assert_stderr_contains "updatedInput" "provides updatedInput"
+_assert_stdout_contains "updatedInput" "provides updatedInput"
 
 echo "  non-test command (pass):"
 _run_hook "llm-test-flags.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run build"}}'
@@ -1558,7 +1600,7 @@ const X = () => {
 };"
 _run_hook "connect-query-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "toast-only is warn"
-_assert_stderr_contains "FieldViolation|setError" "suggests setError mapping"
+_assert_stdout_contains "FieldViolation|setError" "suggests setError mapping"
 _cleanup_test_file "$_f"
 
 echo "  setError present (pass):"
@@ -1615,7 +1657,7 @@ const X = () => {
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "parallel Config state is warn"
-_assert_stderr_contains "drift|parallel|useProtoForm" "mentions drift"
+_assert_stdout_contains "drift|parallel|useProtoForm" "mentions drift"
 _cleanup_test_file "$_f"
 
 echo "  useState for UI state (pass):"
@@ -1670,7 +1712,7 @@ echo "  setValue without options (warn):"
 _setup_test_file "$_f" "const handler = () => { form.setValue('name', 'x'); };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "no-options setValue is warn"
-_assert_stderr_contains "shouldDirty|shouldValidate" "mentions options"
+_assert_stdout_contains "shouldDirty|shouldValidate" "mentions options"
 _cleanup_test_file "$_f"
 
 echo "  setValue with options (pass):"
@@ -1708,7 +1750,7 @@ const X = () => {
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "missing summary is warn"
-_assert_stderr_contains "FormErrorSummary|aria-live|role" "mentions summary primitive"
+_assert_stdout_contains "FormErrorSummary|aria-live|role" "mentions summary primitive"
 _cleanup_test_file "$_f"
 
 echo "  form with FormErrorSummary (pass):"

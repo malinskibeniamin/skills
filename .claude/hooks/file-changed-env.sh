@@ -13,7 +13,7 @@ file=$(echo "$input" | jq -r '.filename // .file_path // empty' 2>/dev/null)
 case "$file" in
   */src/env.ts|src/env.ts)
     msg="src/env.ts changed. Env contract modified. Update: (1) .env.example with new vars + defaults, (2) deployment secrets (1Password/AWS/k8s), (3) .github/workflows/*.yml env blocks. Missing vars will cause runtime crash, not type error."
-    echo "{\"suppressOutput\":true,\"systemMessage\":\"[env] $msg\"}" >&2
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[env] $msg\"}"
     ;;
 esac
 

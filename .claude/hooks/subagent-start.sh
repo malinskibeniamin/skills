@@ -55,7 +55,7 @@ if [ ${#context_parts[@]} -gt 0 ]; then
   combined=$(printf '%b\n\n' "${context_parts[@]}")
   # Escape for JSON
   escaped=$(echo "$combined" | jq -Rs . 2>/dev/null) || exit 0
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStart\",\"additionalContext\":${escaped}}}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStart\",\"additionalContext\":${escaped}}}"
 fi
 
 exit 0

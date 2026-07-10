@@ -63,12 +63,21 @@ if [ -f "$file_path" ]; then
     if [ ! -f "$_seen_file" ]; then
       touch "$_seen_file" 2>/dev/null || true
 
-      # ── Emit warning ───────────────────────────────────────────────
+      # ── Emit warning (single owner of the registry-edit warn) ─────
+      # Registry repo (registry.json): edits here ARE upstream — remind to
+      # rebuild. Consumer repo (components.json/cli.json): edits get
+      # overwritten on the next pull — steer to an upstream PR.
 
       component_name=$(basename "$file_path")
       dir_matched=$(echo "$file_path" | grep -oE "($_ui_dirs)" | head -1)
+      _vendor_repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 
-      hook_warn "[UI REGISTRY] Modifying '$component_name' ($dir_matched/). Registry-sourced — local changes overwritten on next pull. PR upstream instead." "ui-registry-warn"
+      if [ -f "$_vendor_repo_root/registry.json" ]; then
+        hook_warn "[UI REGISTRY] Editing '$component_name' in the registry source. Rebuild registry.json and update CHANGELOG.md when done." "ui-registry-warn"
+      else
+        # Consumer repo (components.json / cli.json) or unmarked checkout.
+        hook_warn "[UI REGISTRY] Modifying '$component_name' ($dir_matched/). Registry-sourced — local changes overwritten on next pull. PR upstream instead." "ui-registry-warn"
+      fi
     fi
   fi
 fi

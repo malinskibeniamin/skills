@@ -222,12 +222,14 @@ tmpfile="$_rr_tmpdir/test.tsx"
 
 # ── Check 5: Visual style overrides on registry components ───────
 
-# Visual style overrides on registry components should use variants/design tokens.
+# Visual style overrides on registry components: the hardcoded-palette BLOCK
+# is owned by tailwind-check.lib.sh; react-rules keeps only the component-
+# semantics WARN (use variant props, not className chrome) — exit 0.
 echo '<Button onClick={handleClick} className="bg-red-500 mt-4">Click</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: visual style override on registry component" "variant"
+  0 "warn: visual style override on registry component (tailwind owns the block)" "variant"
 
 # Allow layout-only classes on components (with handler)
 echo '<Button onClick={handleClick} className="mt-4 flex-1 w-full">Click</Button>' > "$tmpfile"

@@ -100,15 +100,15 @@ fi
 if [ "$must_rewrite" = true ]; then
   updated_input=$(echo "$input" | jq --arg cmd "$rewritten" '.tool_input | .command = $cmd')
   if [ -n "$suggestions" ]; then
-    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input,\"additionalContext\":\"Test suggestions:$suggestions\"}}" >&2
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input,\"additionalContext\":\"Test suggestions:$suggestions\"}}"
   else
-    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input}}" >&2
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":$updated_input}}"
   fi
   exit 0
 fi
 
 if [ -n "$suggestions" ]; then
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"Test suggestions:$suggestions\"}}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"Test suggestions:$suggestions\"}}"
   exit 0
 fi
 

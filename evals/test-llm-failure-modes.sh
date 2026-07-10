@@ -28,12 +28,13 @@ _run() {
   local content="$1" file="$2"
   printf '%s\n' "$content" > "$_tmp/$file"
   git -C "$_tmp" add -N "$file" 2>/dev/null || true
-  local err; err=$(mktemp); local ec=0
+  local err out; err=$(mktemp); out=$(mktemp); local ec=0
   export CLAUDE_SESSION_ID="eval-lf-$$"
   echo "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_tmp/$file\"}}" \
-    | bash "$HOOK" 2>"$err" >/dev/null || ec=$?
-  _last_stderr=$(cat "$err"); _last_exit=$ec
-  rm -f "$err"; rm -rf "/tmp/hook-session-eval-lf-$$" 2>/dev/null || true
+    | bash "$HOOK" 2>"$err" >"$out" || ec=$?
+  # Warns ride stdout (exit 0), blocks ride stderr (exit 2) — assert on both.
+  _last_stderr=$(cat "$err" "$out"); _last_exit=$ec
+  rm -f "$err" "$out"; rm -rf "/tmp/hook-session-eval-lf-$$" 2>/dev/null || true
 }
 
 _ok() {
