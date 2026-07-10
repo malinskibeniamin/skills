@@ -207,9 +207,21 @@ _emit_section "MUST FIX before proceeding:" "$blocks_file"
 _emit_section "Review:" "$review_file"
 
 if [ "$_findings_total" -gt "$emitted" ]; then
-  echo "+$((_findings_total - emitted)) more" >> "$context_file"
+  echo "+$((_findings_total - emitted)) more (rerun after fixing to see the rest)" >> "$context_file"
 fi
 
 _context=$(cat "$context_file")
+
+# Hard tier: any block-severity finding turns the whole batch into a blocking
+# decision (exit 2 + systemMessage), never advisory additionalContext. Warn-only
+# batches stay advisory. Ordering is deterministic (file order, then check
+# order), dedup by rule+message happens in _add_collected_line, truncation is
+# the 40-line cap with an explicit "+N more" recovery hint.
+_block_count=$(wc -l < "$blocks_file" | tr -d '[:space:]')
+if [ "${_block_count:-0}" -gt 0 ]; then
+  jq -n --arg msg "$_context" '{suppressOutput:true,systemMessage:$msg}' >&2
+  exit 2
+fi
+
 jq -n --arg context "$_context" '{hookSpecificOutput:{hookEventName:"PostToolBatch",additionalContext:$context}}'
 exit 0

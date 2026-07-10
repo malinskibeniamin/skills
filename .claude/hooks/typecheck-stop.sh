@@ -119,4 +119,4 @@ else
   hook_stop_save_test_results "PASS" "$test_output"
 fi
 
-exit 0
+hook_stop_enforce

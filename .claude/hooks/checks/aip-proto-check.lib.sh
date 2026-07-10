@@ -50,5 +50,4 @@ fi
 
 [ -n "$msg" ] || return 0
 hook_warn "AIP proto nudge: $msg. See /aip." "aip-proto"
-return 0
 }

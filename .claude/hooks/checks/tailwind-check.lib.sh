@@ -27,7 +27,6 @@ _tw_line_has_pair() {
 
 if echo "$added_lines" | grep -qE '!important'; then
   hook_block "No !important — breaks Tailwind cascade. Fix specificity."
-  return 0
 fi
 
 # ── Ban raw colors in CSS files ───────────────────────────────────

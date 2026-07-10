@@ -80,4 +80,4 @@ if [ $fix_exit -ne 0 ]; then
   fi
 fi
 
-exit 0
+hook_stop_enforce

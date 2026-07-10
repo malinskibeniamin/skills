@@ -175,4 +175,4 @@ fi
 # Clean up session tracking
 rm -f "$session_files" 2>/dev/null || true
 
-exit 0
+hook_stop_enforce

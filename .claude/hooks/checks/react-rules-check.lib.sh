@@ -60,7 +60,6 @@ case "$file_path" in
        ! echo "$added_lines" | grep -qE 'useEffect\(\s*function\s+\w+'; then
       if ! hook_has_escape "named-effect"; then
         hook_warn "Name useEffect callback: useEffect(function syncX() { ... }, [deps]). Aids debugging. Escape: // allow: named-effect [reason]"
-        return 0
       fi
     fi
     ;;
@@ -77,7 +76,6 @@ case "$file_path" in
     if echo "$_button_added" | grep -E '<Button[[:space:]>]' | grep -qE 'className=.*(bg-gradient-|from-[a-z]+-[0-9]|via-[a-z]+-[0-9]|to-[a-z]+-[0-9]|rounded|shadow)'; then
       if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token"; then
         hook_block "Button gradient/radius/shadow override detected. Use Button variant/size or add a registry variant. Escape: // allow: button-visual-override [reason]"
-        return 0
       fi
     fi
     ;;
@@ -95,13 +93,11 @@ case "$file_path" in
       if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE "$_palette_or_gradient_pattern"; then
         if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
           hook_block "Registry component has hardcoded palette or gradient override. Use variant props/design tokens. Escape: // allow: registry-visual-override [reason]"
-          return 0
         fi
       fi
       if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
         if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
           hook_warn "Visual override on registry component. Use variant prop or design token. Escape: // allow: registry-visual-override [reason]"
-          return 0
         fi
       fi
     fi
@@ -116,19 +112,16 @@ case "$file_path" in
     if echo "$_visual_added" | grep -qE 'backgroundImage[[:space:]]*:[[:space:]]*.*linear-gradient\('; then
       if ! hook_has_escape "inline-gradient" && ! hook_has_escape "design-token"; then
         hook_block "Inline backgroundImage linear-gradient detected. Use Tailwind/theme gradient tokens. Escape: // allow: inline-gradient [reason]"
-        return 0
       fi
     fi
     if echo "$_visual_added" | grep -qE '(backdropFilter|filter)[[:space:]]*:[[:space:]]*.*blur\('; then
       if ! hook_has_escape "blur-effect"; then
         hook_warn "Inline filter/backdropFilter blur detected. Prefer tokenized Tailwind blur/backdrop-blur or remove decorative blur. Escape: // allow: blur-effect [reason]"
-        return 0
       fi
     fi
     if echo "$_visual_added" | grep -qE '(z-\[(999|9999)\]|zIndex[[:space:]]*:[[:space:]]*(999|9999)\b)'; then
       if ! hook_has_escape "z-index"; then
         hook_warn "Arbitrary z-index 999/9999 detected. Use z-layer tokens or fix stacking context. Escape: // allow: z-index [reason]"
-        return 0
       fi
     fi
     ;;
@@ -143,13 +136,11 @@ case "$file_path" in
     if echo "$_composition_one_line" | grep -qE '<Card[[:space:]>].*<(Card|div|section|article)[^>]*className=.*(rounded|border|shadow|bg-card|bg-background)'; then
       if ! hook_has_escape "nested-card"; then
         hook_warn "Nested Card/card-like container detected. Flatten layout or use Card sections, not card-in-card chrome. Escape: // allow: nested-card [reason]"
-        return 0
       fi
     fi
     if echo "$_composition_added" | grep -E '<(img|Image)[[:space:]>]' | grep -qE 'className=.*((group-)?hover:(scale|rotate|translate|skew)-|transition-transform)'; then
       if ! hook_has_escape "image-hover-transform"; then
         hook_warn "Image hover transform detected. Prefer non-layout-shifting affordance or tokenized interaction pattern. Escape: // allow: image-hover-transform [reason]"
-        return 0
       fi
     fi
     ;;
@@ -162,7 +153,6 @@ case "$file_path" in
     if echo "$added_lines" | grep -qE '\bautoFocus\b'; then
       if ! hook_has_escape "autoFocus"; then
         hook_warn "autoFocus can steal focus unexpectedly. Prefer explicit focus management after user intent. Escape: // allow: autoFocus [reason]"
-        return 0
       fi
     fi
     ;;
@@ -174,7 +164,6 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'onClick.*navigate\('; then
       hook_block "Use <Link> not onClick+navigate(). Breaks a11y+basePath. Use <Button asChild><Link to=\\\"/path\\\">...</Link></Button>."
-      return 0
     fi
     ;;
 esac
@@ -186,7 +175,6 @@ case "$file_path" in
     if echo "$added_lines" | grep -qE '<Button[[:space:]>]' && \
        ! echo "$added_lines" | grep -qE '<Button[^>]*(onClick|asChild|type="submit"|disabled)'; then
       hook_block "Button needs purpose: onClick, asChild, type=\\\"submit\\\", or disabled."
-      return 0
     fi
     ;;
 esac
@@ -198,7 +186,6 @@ case "$file_path" in
     if echo "$added_lines" | grep -qE '<AlertTitle>.*<.*Icon' || \
        echo "$added_lines" | grep -qE '<AlertTitle>.*<svg'; then
       hook_block "No icons in <AlertTitle>. <Alert> renders icons auto. Use icon prop."
-      return 0
     fi
     ;;
 esac
@@ -211,7 +198,6 @@ if echo "$added_lines" | grep -E '\.\.\.[a-zA-Z]+' | grep -qE '(Message|Request|
     proto_version=$(grep -oE '"@bufbuild/protobuf":\s*"[\^~]?2' package.json 2>/dev/null || true)
     if [ -n "$proto_version" ]; then
       hook_block "Wrap protobuf spread with create(). Spreading drops \$typeName. Use: create(Schema, { ...existing, field: val })"
-      return 0
     fi
   fi
 fi
@@ -223,7 +209,6 @@ case "$file_path" in
     if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' && \
        ! echo "$added_lines" | grep -qE '<Button[^>]*aria-label'; then
       hook_block "Icon-only button needs aria-label for screen readers."
-      return 0
     fi
     ;;
 esac
@@ -239,7 +224,6 @@ case "$file_path" in
     if echo "$added_lines" | grep -qF 'dangerouslySetInnerHTML'; then
       if ! hook_has_escape "dangerouslySetInnerHTML"; then
         hook_block "dangerouslySetInnerHTML banned — XSS. Use DOMPurify. Escape: // allow: dangerouslySetInnerHTML [reason]"
-        return 0
       fi
     fi
     ;;
@@ -249,7 +233,6 @@ esac
 
 if echo "$added_lines" | grep -qE '\beval\(|\bnew Function\('; then
   hook_block "eval()/new Function() banned — injection risk. Use JSON.parse() for data."
-  return 0
 fi
 
 # ── Check 16: Ban .innerHTML assignment (TSX/JSX only) ────────
@@ -258,7 +241,6 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '\.innerHTML\s*='; then
       hook_block ".innerHTML banned — XSS. Use textContent or Sanitizer API (setHTML)."
-      return 0
     fi
     ;;
 esac
@@ -269,7 +251,6 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE 'style=\{\{'; then
       hook_warn "Inline style={{}} detected. Use Tailwind classes."
-      return 0
     fi
     ;;
 esac
@@ -278,7 +259,6 @@ esac
 
 if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)\b'; then
   hook_block "Functional components only. Class components incompatible with React Compiler."
-  return 0
 fi
 
 # ── Check 19: Ban barrel imports (re-exports from index files) ────
@@ -292,7 +272,6 @@ if echo "$added_lines" | grep -qE "from\s+['\"]\.\.?/[^'\"]*['\"]" && \
       resolved="$dir/$imp"
       if [ -d "$resolved" ] || [ -f "$resolved/index.ts" ] || [ -f "$resolved/index.tsx" ] || [ -f "$resolved/index.js" ]; then
         hook_warn "Barrel import: \`$imp\`. Import from source file directly."
-        return 0
         break
       fi
     done
@@ -304,7 +283,6 @@ fi
 if echo "$added_lines" | grep -qE "addEventListener\s*\(\s*['\"](scroll|touchstart|touchmove|wheel)['\"]" && \
    ! echo "$added_lines" | grep -qE "passive\s*:\s*true"; then
   hook_block "Add { passive: true } to scroll/touch/wheel listener. Non-passive blocks main thread."
-  return 0
 fi
 
 # ── Check 21: Ban static imports of heavy deps ──────────────────
@@ -312,7 +290,6 @@ fi
 if echo "$added_lines" | grep -qE "^[+]?import\s.*from\s+['\"]" | grep -qE "(chart\.js|d3|three|pdf-lib|plotly\.js|recharts)['\"/]" 2>/dev/null || \
    echo "$added_lines" | grep -qE "from\s+['\"](chart\.js|d3|three|pdf-lib|plotly\.js|recharts)['\"/]"; then
   hook_warn "Heavy dep — use React.lazy() or dynamic import()."
-  return 0
 fi
 
 # ── Check 22: handleSubmit must have error callback ────────────────
@@ -322,7 +299,6 @@ case "$file_path" in
     if echo "$added_lines" | grep -qE 'handleSubmit\([a-zA-Z_]+\)' && \
        ! echo "$added_lines" | grep -qE 'handleSubmit\([a-zA-Z_]+,'; then
       hook_warn "Add error callback: handleSubmit(onSubmit, onError). Errors swallowed without it."
-      return 0
     fi
     ;;
 esac
@@ -331,14 +307,12 @@ esac
 
 if echo "$added_lines" | grep -qE '\bReact\.FC\b|\bReact\.FunctionComponent\b|:\s*FC[<\s>]'; then
   hook_warn "Prefer function MyComponent(props: Props) over React.FC."
-  return 0
 fi
 
 # ── Check 24: Ban cloneElement ────────────────────────────────────
 
 if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
   hook_warn "Avoid cloneElement. Use Context or render props."
-  return 0
 fi
 
 # ── Check 25: (moved to ts-no-escape-hatches-check.sh — biome-ignore) ──
@@ -348,31 +322,26 @@ fi
 if echo "$added_lines" | grep -qE 'import \* as \w+ from' && \
    ! echo "$added_lines" | grep -qE 'import \* as React from'; then
   hook_warn "Namespace import (import *) prevents tree-shaking. Import specific exports."
-  return 0
 fi
 
 if echo "$added_lines" | grep -qE "export \* from ['\"]"; then
   hook_warn "export * prevents tree-shaking. Export specific items."
-  return 0
 fi
 
 # ── Check 27: Warn on deprecated package imports ─────────────────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]react-beautiful-dnd['\"/]"; then
   hook_warn "react-beautiful-dnd archived. Use @dnd-kit/core or react-aria drag."
-  return 0
 fi
 
 if echo "$added_lines" | grep -qE "from\s+['\"]framer-motion['\"/]"; then
   hook_warn "framer-motion renamed to 'motion'. Use: import { motion } from 'motion'."
-  return 0
 fi
 
 # ── Check 28: Suggest structuredClone over JSON roundtrip ────────
 
 if echo "$added_lines" | grep -qF 'JSON.parse(JSON.stringify('; then
   hook_warn "Use structuredClone() not JSON.parse(JSON.stringify()). Handles Date/Map/Set."
-  return 0
 fi
 
 # ── Check 29: Suggest .requestSubmit() over .submit() ───────────
@@ -380,14 +349,12 @@ fi
 if echo "$added_lines" | grep -qE '\.submit\(\)' && \
    ! echo "$added_lines" | grep -qE '\.requestSubmit\(\)'; then
   hook_warn "Use .requestSubmit() not .submit(). submit() bypasses validation."
-  return 0
 fi
 
 # ── Check 30: Ban delete on arrays ───────────────────────────────
 
 if echo "$added_lines" | grep -qE 'delete\s+\w+\['; then
   hook_warn "No delete on arrays (sparse holes). Use .filter() or Array.with()."
-  return 0
 fi
 
 # ── Check 31: parseInt without radix ─────────────────────────────
@@ -395,7 +362,6 @@ fi
 if echo "$added_lines" | grep -qE 'parseInt\([^,)]+\)' && \
    ! echo "$added_lines" | grep -qE 'parseInt\([^)]*,'; then
   hook_warn "parseInt() no radix. Use Number() or parseInt(str, 10)."
-  return 0
 fi
 
 # ── Check 32: div role="button" → use <Button> ────────────────
@@ -404,7 +370,6 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<div[^>]*role=["'"'"']button["'"'"']'; then
       hook_warn "Use <Button> not <div role=\"button\">. Native kbd/focus/a11y."
-      return 0
     fi
     ;;
 esac
@@ -413,14 +378,12 @@ esac
 
 if echo "$added_lines" | grep -qE 'setTimeout\s*\(\s*['"'"'"`]'; then
   hook_block "No strings in setTimeout (uses eval). Pass function: setTimeout(() => { ... }, delay)."
-  return 0
 fi
 
 # ── Check 34: === NaN is always false ────────────────────────────
 
 if echo "$added_lines" | grep -qE '===?\s*NaN\b'; then
   hook_block "=== NaN always false. Use Number.isNaN(value)."
-  return 0
 fi
 
 # ── Check 35: reset-state-on-prop-change — delegated to React Doctor
@@ -432,7 +395,6 @@ case "$file_path" in
   *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)
     if echo "$added_lines" | grep -qE "from\s+['\"]node:assert"; then
       hook_block "Use vitest assert not node:assert. import { assert } from 'vitest'."
-      return 0
     fi
     ;;
 esac
@@ -461,7 +423,6 @@ case "$file_path" in
         if ! echo "$file_content" | grep -qE "Tooltip|TooltipTrigger|TooltipProvider"; then
           if ! hook_has_escape "disabled-tooltip"; then
             hook_warn "Disabled <Button> without Tooltip. Add tooltip explaining why button is disabled (a11y). Escape: // allow: disabled-tooltip [reason]" "disabled-button-tooltip"
-            return 0
           fi
         fi
       fi

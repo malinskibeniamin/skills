@@ -42,7 +42,6 @@ if [ -f "$repo_root/package.json" ]; then
   done < <(printf '%s\n' "$scan" | grep -oE 'from\s+["'\''][^"'\'']+["'\'']' | sed -E "s/from[[:space:]]+[\"']([^\"']+)[\"']/\1/" || true)
   if [ -n "$_halluc" ]; then
     hook_warn "Possible hallucinated API: import(s) not in package.json:${_halluc}. Run \`bun add\` or fix. [ETHOS/Karpathy: Hallucinated APIs]" "llm-hallucinated-api"
-    return 0
   fi
 fi
 
@@ -52,7 +51,6 @@ fi
 if printf '%s' "$scan" | grep -qE '\bJSON\.parse\('; then
   if ! printf '%s' "$scan" | grep -qE '(\bz\..*\.parse\(|[A-Z][A-Za-z0-9_]*Schema\.parse\(|\bcreate\([A-Z][A-Za-z0-9_]*Schema\b|\bfromBinary\(|\bfromJson\(|\bMessageFromJSON\(|// allow: json-raw)'; then
     hook_block "Unvalidated shape: JSON.parse() without schema validation. Use z.object(...).parse(raw), UserSchema.parse(raw), create(Schema, raw), or fromJson(Schema, raw). [ETHOS/Karpathy: Unvalidated LLM Shapes]" "llm-unvalidated-shape"
-    return 0
   fi
 fi
 
@@ -60,7 +58,6 @@ fi
 if printf '%s' "$scan" | grep -qE '\b(fetch|axios\.(get|post|put|delete)|got|http\.get)\(\s*[A-Za-z_][A-Za-z0-9_]*\b'; then
   if ! printf '%s' "$scan" | grep -qE '(allowlist|isAllowedHost|validateUrl|// allow: ssrf)'; then
     hook_block "Possible SSRF: fetch with non-literal URL, no allowlist. Validate scheme+host before fetch. [ETHOS/Karpathy: SSRF]" "llm-ssrf"
-    return 0
   fi
 fi
 
@@ -77,7 +74,6 @@ while IFS= read -r _path; do
 done < <(printf '%s\n' "$scan" | grep -oE '(\./|src/|app/|components/|hooks/|routes/|features/|modules/|pages/|views/)[A-Za-z0-9_./-]+\.(ts|tsx)' | sort -u || true)
 if [ -n "$_stale" ]; then
   hook_warn "Possible stale memory: cited path(s) do not exist:${_stale}. Re-read before citing. [ETHOS/Karpathy: Stale Memory]" "llm-stale-memory"
-  return 0
 fi
 
 # 7. Mock != Prod (warn): new source file with only vi.mock-based tests
