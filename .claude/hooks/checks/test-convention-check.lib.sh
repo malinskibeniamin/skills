@@ -27,13 +27,7 @@ esac
 
 if [ "$_is_test_file" = true ] && [ -n "$added_lines" ]; then
 
-# ── Check 1: it() should be test() ──────────────────────────────
-
-if echo "$added_lines" | grep -qE '^\+?\s*it\(\s*['\''"]'; then
-  if ! hook_has_escape "test-convention"; then
-    hook_warn "Use test() not it() for consistency. Project standard is test('description', ...)." "test-convention-it"
-  fi
-fi
+# it() vs test() -- Biome useConsistentTestIt owns this rule.
 
 # ── Check 2: jest.fn() should be vi.fn() ────────────────────────
 
@@ -50,12 +44,7 @@ if echo "$added_lines" | grep -qE '\.toBeInTheDocument\(\)'; then
   fi
 fi
 
-# ── Check 4: waitForTimeout in test files ────────────────────────
-# Flaky pattern — use waitFor/waitForURL/proper assertions instead.
-
-if echo "$added_lines" | grep -qE 'waitForTimeout|page\.waitForTimeout|setTimeout.*[0-9]{3,}'; then
-  hook_warn "Avoid waitForTimeout in tests — flaky. Use waitFor(() => expect(...)), waitForURL(), or waitForSelector() instead." "test-convention-timeout"
-fi
+# waitForTimeout -- Biome noPlaywrightWaitForTimeout owns this rule.
 
 # ── Check 5: test.skip in E2E files ─────────────────────────────
 # E2E tests should hard fail, not skip. Missing env = CI config issue.

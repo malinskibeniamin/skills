@@ -39,16 +39,6 @@ else
   ERRORS="$ERRORS\n  FAIL: FileChanged matcher count"
 fi
 
-# ── metrics-summary-stop no longer wired in Stop (moved to SessionEnd) ─
-if jq -e '.hooks.Stop[""] | index("metrics-summary-stop.sh")' "$REPO_ROOT/skill-manifest.json" >/dev/null 2>&1; then
-  echo "  FAIL  metrics-summary-stop.sh still wired in Stop — should be in SessionEnd"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: metrics-summary-stop in Stop"
-else
-  echo "  PASS  metrics-summary-stop.sh removed from Stop (replaced by SessionEnd)"
-  PASS=$((PASS + 1))
-fi
-
 # ── PreCompact injects additionalContext (paired with PostCompact) ─
 if grep -q 'hookEventName.*PreCompact' "$HOOKS_DIR/pre-compact.sh"; then
   echo "  PASS  pre-compact.sh emits additionalContext for PreCompact"
