@@ -77,9 +77,14 @@ Codex runs can exceed Bash's default 10-minute timeout. Either pass an explicit 
 on the Bash call, or run in the background and poll for the report file:
 
 ```bash
-codex exec -s read-only "<prompt>. Write the final report to <report-path>." &
+codex exec -s read-only "<prompt>. Write the final report to <report-path>." </dev/null &
 # Bash(run_in_background: true), then poll/Read <report-path>
 ```
+
+**Always redirect stdin from /dev/null on background runs.** codex accepts its
+prompt from stdin too, so with an open-but-silent stdin pipe it blocks forever
+waiting for EOF -- 0s CPU, no session, looks "stuck". Foreground runs get away
+with it; background runs do not.
 
 ## Inside workflows and subagents (the wrapper pattern)
 
