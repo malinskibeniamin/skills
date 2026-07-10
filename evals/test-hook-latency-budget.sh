@@ -36,3 +36,13 @@ else
   echo "  FAIL  fast path swallowed the npm deny"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: fast path swallowed npm deny"
 fi
+
+# Guard evasion: backslash-escaped commands must still deny (Sol P1).
+_ge=$(printf '{"tool_name":"Bash","tool_input":{"command":"r\\\\m -rf /tmp/x"}}' | bash "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>&1 || true)
+if printf '%s' "$_ge" | grep -q "rm -r blocked"; then
+  echo "  PASS  backslash-escaped rm still denied through the dispatcher"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  escape evasion: r\\m bypassed the rm guard"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: escape evasion"
+fi

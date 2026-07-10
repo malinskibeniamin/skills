@@ -123,7 +123,7 @@ _build_codex() {
     | if (($root["x-codex-per-call"] // []) | length) > 0 then
         .hooks.PostToolUse = ([
           {
-            matcher: "Edit|Write",
+            matcher: "Edit|Write|apply_patch",
             hooks: (($root["x-codex-per-call"] // []) | map(command_hook(.)))
           }
         ] + (.hooks.PostToolUse // []))

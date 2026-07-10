@@ -19,6 +19,9 @@ _input=$(cat)
 _dir="$(cd "$(dirname "$0")" && pwd)"
 _cmd=$(printf '%s' "$_input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 [ -z "$_cmd" ] && exit 0
+# Union matching is on NORMALIZED text: backslash escapes (r\m) and quote
+# splitting (r"m") are classic guard evasion; argv still resolves to rm.
+_cmd_norm=$(printf '%s' "$_cmd" | tr -d "\\\\\"'")
 
 # hook script -> trigger union (ERE). Child is spawned only when it matches.
 _hooks=(
@@ -36,18 +39,26 @@ for _entry in "${_hooks[@]}"; do
   _h="${_entry%%|*}"
   _union="${_entry#*|}"
   [ -x "$_dir/$_h" ] || continue
-  printf '%s' "$_cmd" | grep -qE "$_union" || continue
-  _out=""; _err=""; _code=0
-  _out=$(printf '%s' "$_input" | "$_dir/$_h" 2>/tmp/pre-bash-err.$$) || _code=$?
-  _err=$(cat /tmp/pre-bash-err.$$ 2>/dev/null || true)
-  command rm -f /tmp/pre-bash-err.$$ 2>/dev/null || true
+  printf '%s' "$_cmd_norm" | grep -qE "$_union" || continue
+  # Children write stderr straight through (no temp file: an unwritable /tmp
+  # must never silently disable guards). Deny = exit 2. A child emitting
+  # updatedInput rewrites the command for every LATER child, so rewrites
+  # compose instead of last-stdout-wins clobbering earlier ones.
+  _out=""; _code=0
+  _out=$(printf '%s' "$_input" | "$_dir/$_h") || _code=$?
   if [ "$_code" -eq 2 ]; then
-    [ -n "$_err" ] && printf '%s\n' "$_err" >&2
     [ -n "$_out" ] && printf '%s\n' "$_out"
     exit 2
   fi
-  [ -n "$_err" ] && printf '%s\n' "$_err" >&2
-  [ -n "$_out" ] && _stdout_final="$_out"
+  if [ -n "$_out" ]; then
+    _stdout_final="$_out"
+    _upd=$(printf '%s' "$_out" | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null || true)
+    if [ -n "$_upd" ]; then
+      _cmd="$_upd"
+      _cmd_norm=$(printf '%s' "$_cmd" | tr -d "\\\\\"'")
+      _input=$(printf '%s' "$_input" | jq -c --arg c "$_upd" '.tool_input.command = $c' 2>/dev/null || printf '%s' "$_input")
+    fi
+  fi
 done
 
 [ -n "$_stdout_final" ] && printf '%s\n' "$_stdout_final"

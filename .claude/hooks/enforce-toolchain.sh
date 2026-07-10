@@ -12,6 +12,9 @@ fi
 # Most Bash calls are innocent; they exit here after 1 pipeline instead of ~40.
 # The union is the set of trigger tokens from every rule in this file -- when
 # adding a rule below, add its trigger token here (eval fixtures catch drift).
+# De-escape BEFORE the fast path: r\m and r"m" are guard evasion; argv
+# still resolves to rm. All rule regexes below run on the same de-escaped text.
+command=$(printf '%s' "$command" | tr -d '\\')
 if ! printf '%s' "$command" | grep -qE 'npm|npx|yarn|pnpm|tsc|eslint|prettier|bun|rm|sleep|git|cat <<'; then
   exit 0
 fi
@@ -24,7 +27,7 @@ if echo "$command" | grep -qE '(^|\s|&&|\|\||;)git\s+(commit|tag)\s'; then
 fi
 
 # Strip quoted strings and heredoc content to avoid matching banned words
-_cmd_stripped=$(echo "$_cmd_for_check" | sed 's/"[^"]*"//g' | sed "s/'[^']*'//g")
+_cmd_stripped=$(echo "$_cmd_for_check" | sed 's/"[^"]*"//g' | sed "s/'[^']*'//g" | tr -d '\\')
 if echo "$_cmd_for_check" | grep -qE 'cat <<'; then
   _cmd_stripped=$(echo "$_cmd_stripped" | sed '/<<.*EOF/,/^[[:space:]]*EOF/d')
 fi

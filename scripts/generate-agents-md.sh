@@ -11,6 +11,10 @@ APPENDIX="$ROOT/.agents/codex-appendix.md"
 OUT="$ROOT/AGENTS.md"
 
 _render() {
+  if [ ! -f "$APPENDIX" ]; then
+    echo "FATAL: $APPENDIX missing -- AGENTS.md would silently lose every Codex-specific rule" >&2
+    exit 1
+  fi
   echo "<!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->"
   cat "$SRC"
   if [ -f "$APPENDIX" ]; then

@@ -33,7 +33,7 @@ run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.6 Terra" "effic
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "only . ALL code writing" "Sol effort floor stated"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "`high` only.*last resort" "Luna high-only floor stated"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.5 retired" "CLAUDE.md retires GPT-5.5"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Cross-model review, automatic on every change" "CLAUDE.md mandates automatic cross-model review"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Cross-model review, automatic on every non-trivial change" "CLAUDE.md mandates automatic cross-model review, honestly scoped"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "author model never solely reviews its own work" "CLAUDE.md states the author-reviewer separation rule"
 run_content_eval "$REPO_ROOT/AGENTS.md" "author model never solely reviews its own work" "AGENTS.md states the author-reviewer separation rule"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Adversarial exchange \(automatic" "codex skill has the automatic adversarial exchange mode"
@@ -45,7 +45,7 @@ run_content_eval "$REPO_ROOT/go/SKILL.md" "delegate per model routing|Fix P0/P1 
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.5 is retired" "efficient-frontier retires GPT-5.5"
 
 # GPT-5.5 must not survive as an active routing target anywhere.
-_stale55=$(grep -rlE "GPT-5\.5" "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/AGENTS.md" "$REPO_ROOT/codex/SKILL.md" "$REPO_ROOT/efficient-frontier/SKILL.md" "$REPO_ROOT/development-lifecycle/SKILL.md" "$REPO_ROOT/go/SKILL.md" "$REPO_ROOT/review/SKILL.md" 2>/dev/null | xargs -I{} sh -c 'grep -lE "GPT-5\.5" {} | xargs grep -LE "retired" 2>/dev/null' || true)
+_stale55=$(grep -hE "GPT-5\\.5" "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/AGENTS.md" "$REPO_ROOT/codex/SKILL.md" "$REPO_ROOT/efficient-frontier/SKILL.md" "$REPO_ROOT/development-lifecycle/SKILL.md" "$REPO_ROOT/go/SKILL.md" "$REPO_ROOT/review/SKILL.md" 2>/dev/null | grep -viE "retired|retirement" || true)
 if [ -n "$_stale55" ]; then
   echo "  FAIL  GPT-5.5 still an active routing target in: $_stale55"
   FAIL=$((FAIL + 1))

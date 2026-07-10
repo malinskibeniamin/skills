@@ -87,9 +87,9 @@ _input=$(printf '%s' "$_input" | jq -c --arg root "$_pb_root" '
       ( (if (.tool_input.command|type) == "array" then .tool_input.command[1:] | join("\n")
          elif (.tool_input.command|type) == "string" then .tool_input.command
          else (.tool_input.patch // .tool_input.input // "") end) ) as $body
-      | [ $body | split("\n")[] | capture("^\\*\\*\\* (Update|Add) File: (?<f>.+)$").f ] as $targets
+      | [ $body | split("\n")[] | capture("^\\*\\*\\* (Update|Add|Delete) File: (?<f>.+)$").f ] as $targets
       | if ($targets | length) > 0 then
-          $targets[] | {tool_name: "Edit", tool_input: {file_path: (if startswith("/") then . else $root + "/" + . end), patch: $body}}
+          $targets[] | (. as $t | {tool_name: "Edit", tool_input: {file_path: (if ($t|startswith("/")) then $t else $root + "/" + $t end), patch: $body, deleted: (($body | split("\n") | map(select(. == ("*** Delete File: " + $t))) | length) > 0)}})
         else empty end
     else . end ])
 ' 2>/dev/null || printf '%s' "$_input")
@@ -157,7 +157,10 @@ while IFS= read -r call; do
   tool_input=$(printf '%s' "$call" | jq -c '.tool_input // {}' 2>/dev/null || echo '{}')
   file_path=$(printf '%s' "$tool_input" | jq -r '.file_path // empty' 2>/dev/null || true)
   [ -n "$file_path" ] || continue
-  [ -f "$file_path" ] || continue
+  # Deleted apply_patch targets no longer exist on disk but path-based guards
+  # (vendor-file-check) must still see them.
+  _pb_deleted=$(printf '%s' "$tool_input" | jq -r '.deleted // false' 2>/dev/null || echo false)
+  [ -f "$file_path" ] || [ "$_pb_deleted" = "true" ] || continue
 
   _hook_input=$(jq -nc --arg tool_name "$tool_name" --argjson tool_input "$tool_input" '{tool_name:$tool_name,tool_input:$tool_input}')
   _hook_tool_name="$tool_name"
