@@ -54,6 +54,29 @@ PERF_SCRIPT="$REPO_ROOT/.claude/hooks/test-perf-stop.sh"
 run_file_eval "$PERF_SCRIPT" "test-perf-stop.sh exists"
 run_executable_eval "$PERF_SCRIPT" "test-perf-stop.sh is executable"
 
+# ── test-perf-stop.sh: slow-test list reads THIS run, not the baseline ──
+# Regression pin for issue #54: the slow-test loop used to iterate the
+# session-start baseline AFTER deleting the current run's timings, reporting
+# incumbent slowness as session regressions.
+
+if awk '/Slow test detection/,/rm -f "\$current_tsv"/' "$PERF_SCRIPT" | grep -q 'done < <(awk.*"\$current_tsv"' ; then
+  echo "  PASS  slow-test detection reads current run timings"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  slow-test detection must read \$current_tsv (before rm), not \$baseline"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: test-perf-stop slow-test source"
+fi
+
+if [ "$(grep -c 'hookSpecificOutput' "$PERF_SCRIPT")" = "1" ]; then
+  echo "  PASS  test-perf-stop emits a single combined context payload"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  test-perf-stop must emit exactly one hookSpecificOutput payload"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: test-perf-stop single emit"
+fi
+
 # ── test-perf-stop.sh: symlink wiring ───────────────────────────
 
 PERF_SYMLINK="$REPO_ROOT/.claude/hooks/test-perf-stop.sh"

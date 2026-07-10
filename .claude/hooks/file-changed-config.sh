@@ -24,5 +24,5 @@ case "$file" in
 esac
 
 [ -n "$msg" ] || exit 0
-echo "{\"suppressOutput\":true,\"systemMessage\":\"[config] $msg\"}" >&2
+echo "{\"suppressOutput\":true,\"systemMessage\":\"[config] $msg\"}"
 exit 0

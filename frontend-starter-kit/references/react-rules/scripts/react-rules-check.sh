@@ -8,6 +8,12 @@ hook_skip_generated
 hook_filter_extensions "ts|tsx|mdx"
 hook_get_added_lines
 
+# Comment-only lines can't violate JSX rules, and multiline tags only parse
+# in a joined view — hard blocks below use these instead of raw added_lines
+# (line-anchored greps false-blocked comments and missed multiline <Button>).
+_react_code_added=$(printf '%s\n' "$added_lines" | grep -vE '^[[:space:]]*(//|/?\*|\{/\*)' || true)
+_react_joined_added=$(printf '%s\n' "$_react_code_added" | tr '\n' ' ')
+
 # ── Check 1: useEffect misuse — delegated to React Doctor (state-and-effects family) ──
 
 # ── Check 2: raw HTML elements — delegated to Biome noRestrictedElements ──
@@ -36,7 +42,9 @@ case "$file_path" in
   *.tsx|*.jsx|*.mdx)
     _button_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
     if echo "$_button_added" | grep -E '<Button[[:space:]>]' | grep -qE 'className=.*(bg-gradient-|from-[a-z]+-[0-9]|via-[a-z]+-[0-9]|to-[a-z]+-[0-9]|rounded|shadow)'; then
-      if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token"; then
+      # Honor tailwind-check's gradient escape too — one escape hatch must
+      # quiet every hook that fires on the same line.
+      if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token" && ! hook_has_escape "gradient"; then
         hook_block "Button gradient/radius/shadow override detected. Use Button variant/size or add a registry variant. Escape: // allow: button-visual-override [reason]"
       fi
     fi
@@ -50,13 +58,9 @@ case "$file_path" in
     _registry_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
     if [ -n "$_registry_added" ]; then
       _registry_component_pattern='<(Button|Input|Select|Alert|Dialog|Card|Badge|Table|Label|Textarea|Tabs|Tooltip|Popover|DropdownMenu|Sheet|Accordion|Avatar|Checkbox|Switch|Slider|Progress|Separator|Skeleton|Toast|Toaster|Command|Calendar|ScrollArea|AspectRatio|RadioGroup|Toggle|ToggleGroup)[[:space:]>]'
-      _hardcoded_palette_colors='red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone|white|black'
-      _palette_or_gradient_pattern="className=.*(bg-($_hardcoded_palette_colors)-|text-($_hardcoded_palette_colors)-|border-($_hardcoded_palette_colors)-|from-($_hardcoded_palette_colors)-|via-($_hardcoded_palette_colors)-|to-($_hardcoded_palette_colors)-|bg-gradient-)"
-      if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE "$_palette_or_gradient_pattern"; then
-        if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
-          hook_block "Registry component has hardcoded palette or gradient override. Use variant props/design tokens. Escape: // allow: registry-visual-override [reason]"
-        fi
-      fi
+      # Hardcoded palette/gradient utilities are owned by tailwind-check
+      # (it bans them on ANY element); this check keeps only the component
+      # semantics: registry components take variant props, not className chrome.
       if echo "$_registry_added" | grep -E "$_registry_component_pattern" | grep -qE 'className=.*\b(bg-|border-|shadow-|rounded-)'; then
         if ! hook_has_escape "registry-visual-override" && ! hook_has_escape "design-token"; then
           hook_warn "Visual override on registry component. Use variant prop or design token. Escape: // allow: registry-visual-override [reason]"
@@ -124,7 +128,10 @@ esac
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE 'onClick.*navigate\('; then
+    # Joined view catches multiline handlers; [^}]* keeps the match inside
+    # one handler expression so an unrelated navigate() elsewhere in the
+    # hunk can't pair with an innocent onClick.
+    if printf '%s' "$_react_joined_added" | grep -qE 'onClick(=\{|:)[^}]*navigate\('; then
       hook_block "Use <Link> not onClick+navigate(). Breaks a11y+basePath. Use <Button asChild><Link to=\\\"/path\\\">...</Link></Button>."
     fi
     ;;
@@ -134,8 +141,11 @@ esac
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE '<Button[[:space:]>]' && \
-       ! echo "$added_lines" | grep -qE '<Button[^>]*(onClick|asChild|type="submit"|disabled)'; then
+    # Judge complete opening tags only — a hunk that adds `<Button` while the
+    # props live on unchanged lines outside the diff cannot be judged.
+    _button_tags=$(printf '%s\n' "$_react_joined_added" | grep -oE '<Button[^>]*>' || true)
+    if [ -n "$_button_tags" ] && \
+       printf '%s\n' "$_button_tags" | grep -qvE '(onClick|asChild|type="submit"|disabled)'; then
       hook_block "Button needs purpose: onClick, asChild, type=\\\"submit\\\", or disabled."
     fi
     ;;
@@ -168,8 +178,9 @@ fi
 
 case "$file_path" in
   *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' && \
-       ! echo "$added_lines" | grep -qE '<Button[^>]*aria-label'; then
+    _icon_buttons=$(printf '%s\n' "$_react_joined_added" | grep -oE '<Button[^>]*>[[:space:]]*<[A-Z][a-zA-Z]*Icon' || true)
+    if [ -n "$_icon_buttons" ] && \
+       printf '%s\n' "$_icon_buttons" | grep -qv 'aria-label'; then
       hook_block "Icon-only button needs aria-label for screen readers."
     fi
     ;;

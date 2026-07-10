@@ -9,15 +9,6 @@ source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
 
 baseline="$_hook_session_dir/test-timing-baseline.tsv"
 
-# Baseline is captured in background at SessionStart (session-env.sh).
-# By the time Stop hooks fire, the session has been running for minutes —
-# the baseline is ready. If not, skip gracefully rather than sleeping.
-
-
-if [ ! -f "$baseline" ] || [ ! -s "$baseline" ]; then
-  exit 0
-fi
-
 # Session-scoped: only audit files this session touched
 if type hook_session_changed_files &>/dev/null; then
   changed_files=$(hook_session_changed_files "ts|tsx")
@@ -29,18 +20,23 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
-# Need vitest configs to run
-vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
-if [ -z "$vitest_configs" ]; then
-  exit 0
-fi
-
 # Build absolute paths for --related
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 abs_changed=""
 for f in $changed_files; do
   abs_changed="$abs_changed $repo_root/$f"
 done
+
+# ── Timing audit (needs baseline + vitest configs) ───────────────
+# Baseline is captured in background at SessionStart (session-env.sh).
+# If it never landed, skip ONLY the timing comparison — this hook also
+# owns async-leak detection (issue #54), which must still run below.
+
+audit=""
+slow_tests=""
+vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
+
+if [ -f "$baseline" ] && [ -s "$baseline" ] && [ -n "$vitest_configs" ]; then
 
 # Run related tests with JSON reporter for each vitest config
 current_tsv="$_hook_session_dir/test-timing-current.tsv"
@@ -52,10 +48,7 @@ for cfg in $vitest_configs; do
     >> "$current_tsv" 2>/dev/null || true
 done
 
-if [ ! -s "$current_tsv" ]; then
-  rm -f "$current_tsv"
-  exit 0
-fi
+if [ -s "$current_tsv" ]; then
 
 # Compare: find tests with >30% timing change AND baseline >10ms
 # Positive pct = faster, negative = slower
@@ -81,45 +74,11 @@ audit=$(awk -F'\t' '
   }
 ' "$baseline" "$current_tsv")
 
-rm -f "$current_tsv"
-
-if [ -z "$audit" ]; then
-  exit 0
-fi
-
-# Count improvements vs regressions
-improvements=$(echo "$audit" | awk -F'\t' '{v=$4+0; if(v>0) c++} END{print c+0}')
-regressions=$(echo "$audit" | awk -F'\t' '{v=$4+0; if(v<0) c++} END{print c+0}')
-
-# Build header
-header="Test Performance Audit:"
-if [ "$improvements" -gt 0 ] && [ "$regressions" -eq 0 ]; then
-  header="$header $improvements test(s) faster"
-elif [ "$regressions" -gt 0 ] && [ "$improvements" -eq 0 ]; then
-  header="$header $regressions test(s) slower"
-elif [ "$improvements" -gt 0 ] && [ "$regressions" -gt 0 ]; then
-  header="$header $improvements faster, $regressions slower"
-fi
-
-# Build markdown table
-table="$header\\n\\nTest | Before | After | Change\\n--- | --- | --- | ---"
-while IFS=$'\t' read -r name before after pct; do
-  table="$table\\n$name | $before | $after | $pct"
-done <<< "$audit"
-
-# Add regression warning if needed
-if [ "$regressions" -gt 0 ]; then
-  table="$table\\n\\nWARNING: Test regressions detected. Consider investigating before finishing."
-fi
-
-msg=$(_safe_json_escape "$table")
-echo "{\"hookSpecificOutput\":{\"additionalContext\":$msg}}" >&2
-
 # ── Slow test detection ──────────────────────────────────────────
 # Flag individual tests exceeding thresholds: unit >500ms, integration >2s.
-# Uses current run data (not comparison).
+# Reads THIS run's timings — the baseline holds session-start incumbents,
+# which are not this session's doing.
 
-slow_tests=""
 while IFS=$'\t' read -r name duration; do
   dur_int=${duration%.*}
   [ -z "$dur_int" ] && continue
@@ -129,11 +88,51 @@ while IFS=$'\t' read -r name duration; do
     # Only flag as slow for unit tests (no DOM env)
     slow_tests="${slow_tests}\n  ${name}: ${dur_int}ms (>500ms)"
   fi
-done < <(awk -F'\t' '{print $1 "\t" $2}' "$baseline" 2>/dev/null || true)
+done < <(awk -F'\t' '{print $1 "\t" $2}' "$current_tsv" 2>/dev/null || true)
+
+fi
+
+rm -f "$current_tsv"
+
+fi
+
+# ── Compose ONE context payload ──────────────────────────────────
+# Stacked JSON objects on one stream don't parse as a hook response;
+# everything this hook has to say goes out in a single emit.
+
+context=""
+
+if [ -n "$audit" ]; then
+  # Count improvements vs regressions
+  improvements=$(echo "$audit" | awk -F'\t' '{v=$4+0; if(v>0) c++} END{print c+0}')
+  regressions=$(echo "$audit" | awk -F'\t' '{v=$4+0; if(v<0) c++} END{print c+0}')
+
+  # Build header
+  header="Test Performance Audit:"
+  if [ "$improvements" -gt 0 ] && [ "$regressions" -eq 0 ]; then
+    header="$header $improvements test(s) faster"
+  elif [ "$regressions" -gt 0 ] && [ "$improvements" -eq 0 ]; then
+    header="$header $regressions test(s) slower"
+  elif [ "$improvements" -gt 0 ] && [ "$regressions" -gt 0 ]; then
+    header="$header $improvements faster, $regressions slower"
+  fi
+
+  # Build markdown table
+  table="$header\\n\\nTest | Before | After | Change\\n--- | --- | --- | ---"
+  while IFS=$'\t' read -r name before after pct; do
+    table="$table\\n$name | $before | $after | $pct"
+  done <<< "$audit"
+
+  # Add regression warning if needed
+  if [ "$regressions" -gt 0 ]; then
+    table="$table\\n\\nWARNING: Test regressions detected. Consider investigating before finishing."
+  fi
+
+  context="$table"
+fi
 
 if [ -n "$slow_tests" ]; then
-  slow_msg=$(_safe_json_escape "$(printf "Slow tests detected:%b\nConsider: smaller scope, fewer re-renders, mock heavy deps, or .concurrent for independent tests." "$slow_tests")")
-  echo "{\"hookSpecificOutput\":{\"additionalContext\":$slow_msg}}" >&2
+  context="${context:+$context\\n\\n}Slow tests detected:${slow_tests}\\nConsider: smaller scope, fewer re-renders, mock heavy deps, or .concurrent for independent tests."
 fi
 
 # ── Async leak detection ─────────────────────────────────────────
@@ -148,9 +147,13 @@ if command -v "$_vitest_bin" &>/dev/null || [ -x "$_vitest_bin" ]; then
 
   if [ -n "$leak_warnings" ]; then
     leak_sample=$(echo "$leak_warnings" | head -5 | tr '\n' ' ')
-    leak_msg=$(_safe_json_escape "$(printf "Async leak detected: %s\nFix open handles (timers, connections, listeners) before finishing." "$leak_sample")")
-    echo "{\"hookSpecificOutput\":{\"additionalContext\":$leak_msg}}" >&2
+    context="${context:+$context\\n\\n}Async leak detected: ${leak_sample}\\nFix open handles (timers, connections, listeners) before finishing."
   fi
+fi
+
+if [ -n "$context" ]; then
+  msg=$(_safe_json_escape "$(printf '%b' "$context")")
+  echo "{\"hookSpecificOutput\":{\"additionalContext\":$msg}}"
 fi
 
 exit 0

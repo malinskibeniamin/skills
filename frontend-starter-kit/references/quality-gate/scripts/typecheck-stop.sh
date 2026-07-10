@@ -38,7 +38,7 @@ if [ $exit_code -ne 0 ]; then
     _session_errors=$(hook_filter_errors_to_session "$output" "$changed_files")
     if [ -z "$_session_errors" ]; then
       # All errors are in files OTHER sessions touched — allow through
-      echo "{\"decision\":\"allow\",\"reason\":\"Type errors exist but none in session files. Allow.\"}" >&2
+      echo "{\"decision\":\"allow\",\"reason\":\"Type errors exist but none in session files. Allow.\"}"
       echo "typecheck FAIL (other session)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
       exit 0
     fi
@@ -61,7 +61,7 @@ if [ $exit_code -ne 0 ]; then
 
     if [ -z "$_new_errors" ]; then
       _error_count=$(echo "$_current_errors" | wc -l | tr -d ' ')
-      echo "{\"decision\":\"allow\",\"reason\":\"$_error_count pre-existing type error(s). Allow.\"}" >&2
+      echo "{\"decision\":\"allow\",\"reason\":\"$_error_count pre-existing type error(s). Allow.\"}"
       echo "typecheck FAIL (pre-existing only)" > "$_hook_session_dir/last-stop" 2>/dev/null || true
       exit 0
     fi

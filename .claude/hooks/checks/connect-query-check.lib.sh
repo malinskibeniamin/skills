@@ -208,17 +208,8 @@ if [ "$_is_test_file" = false ] && [ "$is_relevant" = true ] && [ -n "$added_lin
     fi
   fi
 
-  # ── Check 2: mutate/mutateAsync without onError ──────────────────
-  # Mutations should always handle errors explicitly.
-
-  if echo "$added_lines" | grep -qE '\.(mutate|mutateAsync)\s*\('; then
-    # Check if onError is defined nearby in the mutation options
-    if ! echo "$file_content" | grep -qE 'onError\s*:|onError\s*\('; then
-      if ! hook_has_escape "mutation-error"; then
-        hook_warn "mutate()/mutateAsync() called but no onError handler found. Add onError to handle failures. Escape: // allow: mutation-error [reason]" "connect-error-format-onerror"
-      fi
-    fi
-  fi
+  # (mutate/mutateAsync-without-onError is owned by query-pattern-check.lib.sh;
+  # this file keeps only ConnectRPC-specific error formatting and field mapping.)
 fi
 
 # ── absorbed from connect-error-fieldmap-check.sh (4.28 family consolidation) ──

@@ -358,7 +358,7 @@ echo "  3 failures then quality-gate check:"
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_assert_stderr_contains "failed.*3x|Fix ALL" "3rd failure triggers guidance"
+_assert_stdout_contains "failed.*3x|Fix ALL" "3rd failure triggers guidance"
 
 echo "  success resets counter:"
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'
@@ -396,7 +396,7 @@ _assert_exit 0 "1st edit on file2 — no warn"
 
 # Edit file1 once more (12th) — should trigger
 _run_hook "edit-loop-check.sh" "$(_edit_json "$_f")"
-_assert_stderr_contains "12 times" "12th edit on file1 triggers warning"
+_assert_stdout_contains "12 times" "12th edit on file1 triggers warning"
 
 _cleanup_test_file "$_f"
 _cleanup_test_file "$_f2"

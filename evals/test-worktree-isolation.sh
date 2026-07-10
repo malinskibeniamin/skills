@@ -64,13 +64,15 @@ _run_bs() {
 _run_bs_in_repo() {
   local repo="$1"
   local input="$2"
-  local stderr_file
+  local stderr_file stdout_file
   stderr_file=$(mktemp)
+  stdout_file=$(mktemp)
   local exit_code=0
-  (cd "$repo" && echo "$input" | bash "$HOOKS/branch-safety-check.sh" 2>"$stderr_file" > /dev/null) || exit_code=$?
-  _last_stderr=$(cat "$stderr_file")
+  (cd "$repo" && echo "$input" | bash "$HOOKS/branch-safety-check.sh" 2>"$stderr_file" >"$stdout_file") || exit_code=$?
+  # Denies ride stderr (exit 2); the rebound notice rides stdout (exit 0).
+  _last_stderr=$(cat "$stderr_file" "$stdout_file")
   _last_exit=$exit_code
-  rm -f "$stderr_file"
+  rm -f "$stderr_file" "$stdout_file"
 }
 _assert_bs() {
   local desc="$1" expected="$2" pattern="${3:-}"

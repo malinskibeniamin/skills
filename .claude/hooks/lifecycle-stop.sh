@@ -328,7 +328,7 @@ reviewer_count=$(echo "$pr_data" | jq -r '.reviewRequests | length' 2>/dev/null 
 # Advisory only (audit: Stop hooks gate code properties, not the org chart --
 # a solo repo must never be hostage to an unassignable reviewer).
 if [ "$reviewer_count" = "0" ] || [ -z "$reviewer_count" ]; then
-  echo '{"suppressOutput":true,"systemMessage":"CI green, no reviewer on the PR yet -- consider: gh pr edit '"$pr_number"' --add-reviewer <user>."}' >&2
+  echo '{"suppressOutput":true,"systemMessage":"CI green, no reviewer on the PR yet -- consider: gh pr edit '"$pr_number"' --add-reviewer <user>."}'
 fi
 
 # ── Lifecycle complete ───────────────────────────────────────────

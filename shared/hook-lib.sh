@@ -437,24 +437,9 @@ hook_skip_ui_dirs() {
   else
     _ui_dirs="$UI_LIB_DIRS"
   fi
+  # Registry-edit warning is owned by vendor-file-check.lib.sh (single owner);
+  # this helper only skips so per-component checks don't fire on library code.
   if echo "$file_path" | grep -qE "/($_ui_dirs)/"; then
-    _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-    if [ -f "$_repo_root/registry.json" ]; then
-      # Registry repo — remind to rebuild registry
-      if [ "${HOOK_COLLECT:-0}" = "1" ]; then
-        _hook_collect_emit "warn" "ui-registry-warn" "You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."
-      else
-        echo '{"suppressOutput":true,"systemMessage":"You are editing a UI registry component. Remember to rebuild registry.json and update CHANGELOG.md when done."}' >&2
-      fi
-    elif [ -f "$_repo_root/components.json" ] || [ -f "$_repo_root/cli.json" ]; then
-      # Consumer repo — warn that this is a registry-sourced component
-      _component=$(basename "$file_path")
-      if [ "${HOOK_COLLECT:-0}" = "1" ]; then
-        _hook_collect_emit "warn" "ui-registry-warn" "WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead."
-      else
-        echo "{\"suppressOutput\":true,\"systemMessage\":\"WARNING: You are modifying '$_component' which comes from the UI registry. Local changes will be overwritten on next registry pull. If this change is intentional, submit a PR upstream to the UI registry repo instead.\"}" >&2
-      fi
-    fi
     _hook_skip_or_exit 1
     return $?
   fi
@@ -746,7 +731,8 @@ hook_nudge() {
   if [ "$_hook_verbosity" = "normal" ]; then
     local escaped
     escaped=$(_safe_json_escape "[nudge] $msg")
-    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
+    # Exit-0 JSON is parsed from STDOUT (stderr is dropped on exit 0).
+    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
   fi
   exit 0
 }
@@ -813,7 +799,8 @@ hook_warn() {
   if [ "$_hook_verbosity" = "normal" ]; then
     local escaped
     escaped=$(_safe_json_escape "$msg")
-    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}" >&2
+    # Exit-0 JSON is parsed from STDOUT (stderr is dropped on exit 0).
+    echo "{\"suppressOutput\":true,\"systemMessage\":$escaped}"
   fi
   exit 0
 }

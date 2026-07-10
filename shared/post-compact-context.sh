@@ -48,7 +48,7 @@ context="$context\n[BREVITY:ultra] Max compression. Code>prose. No preamble/reca
 
 if [ -n "$context" ]; then
   escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}"
 fi
 
 exit 0

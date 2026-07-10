@@ -100,5 +100,5 @@ fi
 
 [ -z "$nudge" ] && exit 0
 
-echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"[bash-verbose]$nudge\"}}" >&2
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"[bash-verbose]$nudge\"}}"
 exit 0

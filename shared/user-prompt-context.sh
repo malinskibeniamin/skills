@@ -154,7 +154,7 @@ fi
 
 if [ -n "$context" ]; then
   escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":$escaped}}"
 fi
 
 exit 0

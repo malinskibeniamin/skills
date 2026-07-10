@@ -30,7 +30,7 @@ mkdir -p "$_test_session_dir"
 # ── No violations: exits silently ────────────────────────────────
 
 _nv_stderr=$(mktemp)
-CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" 2>"$_nv_stderr" </dev/null || true
+CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" >"$_nv_stderr" 2>&1 </dev/null || true
 if [ -s "$_nv_stderr" ]; then
   echo "  FAIL  no violations should produce no output"
   FAIL=$((FAIL + 1))
@@ -45,7 +45,7 @@ rm -f "$_nv_stderr"
 
 printf 'zustand-check\nzustand-check\n' > "$_test_session_dir/violations"
 _ut_stderr=$(mktemp)
-CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" 2>"$_ut_stderr" </dev/null || true
+CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" >"$_ut_stderr" 2>&1 </dev/null || true
 if [ -s "$_ut_stderr" ]; then
   echo "  FAIL  2 violations (under threshold) should be silent"
   FAIL=$((FAIL + 1))
@@ -62,7 +62,7 @@ rm -f "$_ut_stderr"
 rm -f "$_test_session_dir"/nudge-* 2>/dev/null || true
 printf 'zustand-check\nzustand-check\nzustand-check\n' > "$_test_session_dir/violations"
 _at_stderr=$(mktemp)
-CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" 2>"$_at_stderr" </dev/null || true
+CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" >"$_at_stderr" 2>&1 </dev/null || true
 if grep -q 'VIOLATION PATTERN' "$_at_stderr" && grep -q '3x zustand-check' "$_at_stderr"; then
   echo "  PASS  3x same rule: emits nudge with rule name and count"
   PASS=$((PASS + 1))
@@ -77,7 +77,7 @@ rm -f "$_at_stderr"
 # ── Dedup: same violations don't re-nudge ────────────────────────
 
 _dup_stderr=$(mktemp)
-CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" 2>"$_dup_stderr" </dev/null || true
+CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" >"$_dup_stderr" 2>&1 </dev/null || true
 if [ -s "$_dup_stderr" ]; then
   echo "  FAIL  duplicate nudge should be suppressed (marker exists)"
   FAIL=$((FAIL + 1))
@@ -92,7 +92,7 @@ rm -f "$_dup_stderr"
 
 printf 'accessibility-check\naccessibility-check\naccessibility-check\n' >> "$_test_session_dir/violations"
 _new_stderr=$(mktemp)
-CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" 2>"$_new_stderr" </dev/null || true
+CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" >"$_new_stderr" 2>&1 </dev/null || true
 if grep -q 'VIOLATION PATTERN' "$_new_stderr"; then
   echo "  PASS  new violation pattern triggers fresh nudge"
   PASS=$((PASS + 1))
@@ -108,7 +108,7 @@ rm -f "$_new_stderr"
 rm -f "$_test_session_dir"/nudge-* 2>/dev/null || true
 printf 'react-rules-check\nreact-rules-check\nreact-rules-check\nform-mode-check\nform-mode-check\nform-mode-check\n' > "$_test_session_dir/violations"
 _multi_stderr=$(mktemp)
-CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" 2>"$_multi_stderr" </dev/null || true
+CLAUDE_SESSION_ID="$_test_session_id" "$NUDGE_SCRIPT" >"$_multi_stderr" 2>&1 </dev/null || true
 if grep -q 'react-rules-check' "$_multi_stderr" && grep -q 'form-mode-check' "$_multi_stderr"; then
   echo "  PASS  multiple rules: both mentioned in nudge"
   PASS=$((PASS + 1))

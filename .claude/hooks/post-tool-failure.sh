@@ -70,6 +70,6 @@ if [ "$(tail -3 "$_fail_file" 2>/dev/null | sort -u | head -1)" = "$_rule" ] && 
 fi
 
 _hook_log_entry "info" "$_rule" post-tool-failure
-echo "{\"suppressOutput\":true,\"systemMessage\":\"[tool-fail:$_rule] $_hint\"}" >&2
+echo "{\"suppressOutput\":true,\"systemMessage\":\"[tool-fail:$_rule] $_hint\"}"
 
 exit 0

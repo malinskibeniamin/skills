@@ -46,7 +46,7 @@ msg=""
 msg="${msg}${loc_note}"
 
 # Report as additional context (don't block — just inform)
-echo "{\"hookSpecificOutput\":{\"additionalContext\":\"$msg\"}}" >&2
+echo "{\"hookSpecificOutput\":{\"additionalContext\":\"$msg\"}}"
 
 # Clean up
 rm -f "$violations_file"

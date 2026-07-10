@@ -65,5 +65,5 @@ if [ "$run_audit" = true ]; then
 fi
 
 [ -n "$msg" ] || exit 0
-echo "{\"suppressOutput\":true,\"systemMessage\":\"[deps] $msg\"}" >&2
+echo "{\"suppressOutput\":true,\"systemMessage\":\"[deps] $msg\"}"
 exit 0

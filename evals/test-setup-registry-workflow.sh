@@ -33,10 +33,12 @@ run_content_eval "$SPLIT_LIB" "parts|dialogs|checklist" "split hook rejects mixe
 
 # ── hook-lib.sh: consumer repo upstream warning ──────────────────
 
-HOOKLIB="$REPO_ROOT/shared/hook-lib.sh"
-run_content_eval "$HOOKLIB" "components.json.*cli.json" "hook-lib detects consumer repos"
-run_content_eval "$HOOKLIB" "UI registry" "hook-lib warns about upstream PR for consumer edits"
-run_content_eval "$HOOKLIB" "registry.json" "hook-lib detects registry repo for rebuild reminder"
+# Single owner of the registry-edit warning is vendor-file-check.lib.sh
+# (hook_skip_ui_dirs in hook-lib only skips; it no longer emits).
+VENDORLIB="$REPO_ROOT/.claude/hooks/checks/vendor-file-check.lib.sh"
+run_content_eval "$VENDORLIB" "registry.json" "vendor-file detects registry repo for rebuild reminder"
+run_content_eval "$VENDORLIB" "UI REGISTRY" "vendor-file warns about upstream PR for consumer edits"
+run_content_eval "$VENDORLIB" "overwritten on next" "vendor-file explains consumer-edit overwrite risk"
 run_content_eval "$SCRIPT" "hook_session_changed_files" "registry-check uses session-scoped file detection"
 
 # ── Stop hook behavioral test ───────────────────────────────────
