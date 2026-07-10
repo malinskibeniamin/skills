@@ -52,7 +52,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/snyk-ux-security` | Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage and release-age... |
 | `/stay-within-limits` | Use when long-running or parallel agent work must respect 5-hour and weekly usage limits by checking usage... |
 | `/steelman` | Argue the strongest evidence-backed case against a premise. |
-| `/swarm` | parallel executor. |
+| `/swarm` | Parallel executor for independent bulk work across worktree lanes. |
 | `/tanstack-router` | TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generat... |
 | `/tdd` | Test-driven development with red-green-refactor loop. |
 | `/teach` | Teach the user a new skill or concept within this workspace. |

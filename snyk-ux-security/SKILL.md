@@ -64,7 +64,7 @@ Subagent, `isolation: "worktree"`, branch `chore/snyk-sweep-YYYY-MM-DD`. See [RE
   - **Assignee** = the person who triggered the sweep (`gh api user --jq .login`). One assignee per PR so accountability is explicit.
   - **Reviewers** = at least one **CODEOWNERS team group** covering the path (e.g. `@org/team-slug`), never a lone individual. Falls back to inferred team from path prefix if CODEOWNERS has no match. Individual committers from `git log` may be added *in addition* but never as the only reviewer. Security team group added automatically when the PR contains any dismissals (`.snyk` touched) or overrides-added.
   - **Labels** (always): `security`, `dependencies`, `snyk`, `lang/<ts|go>`. Path-domain: `team/<slug>` inferred from CODEOWNERS (e.g. frontend UX team, AI team, Console UI team -- resolve by path, do not hardcode). Status: `dismissals` if any `.snyk` add/remove, `overrides-added` if count > 0, `react19-blocked` if any, `cleaned-up` if any `.snyk` entries removed.
-- **2k. Trigger cloud review**: `gh workflow run` if workflow exists. Failing checks -> use `/github:gh-fix-ci`; review comments -> use `/resolve-pr-feedback`.
+- **2k. Trigger cloud review**: `gh workflow run` if workflow exists. Failing checks -> use `/diagnosing-bugs (CI failure loop)`; review comments -> use `/resolve-pr-feedback`.
 - **2l. Report**: path, ecosystem, branch, PR URL, bumped/dismissed/skipped/overridden counts.
 
 ### 2-bazel. Bazel track
@@ -96,7 +96,7 @@ Main agent gathers reports: summary table (Path, Ecosystem, PR, Fixed, Dismissed
 - **Revisit `.snyk` every run.** Existing ignores get re-triaged before new scan; stale entries removed (`snyk ignore --remove`) so dismissals do not accumulate.
 - **Warn on missing JS release gates.** For npm/bun/pnpm/Yarn repos, report absent minimum release age configuration as a supply-chain warning.
 - **Socket.dev web check for JS.** Check Socket.dev package pages for supply-chain attack vectors. No Socket CLI install or `socket` command required.
-- **Auto-run internal skill gates.** `/resilience-review`, `/to-tickets`, and `/review` are mandatory before PR open for JS Snyk sweeps; `/github:gh-fix-ci` and `/resolve-pr-feedback` handle PR tail when needed.
+- **Auto-run internal skill gates.** `/resilience-review`, `/to-tickets`, and `/review` are mandatory before PR open for JS Snyk sweeps; `/diagnosing-bugs (CI failure loop)` and `/resolve-pr-feedback` handle PR tail when needed.
 - **Assignee = triggerer.** Every sweep PR has one assignee = the person who ran the skill, via `gh api user --jq .login`.
 - **Reviewer = team group, always >=1.** Resolve CODEOWNERS team entries (`@org/team`) for the path; never merge with only individual reviewers. Security team group added automatically on PRs that touch `.snyk` or add overrides.
 
