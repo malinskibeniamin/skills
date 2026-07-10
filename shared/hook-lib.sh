@@ -249,7 +249,19 @@ hook_parse_edit_write() {
   _hook_input=$(cat)
   _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
-  if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ]; then
+  # Codex session id arrives on stdin, not the environment: re-point the
+  # session dir once per parse when the env vars are absent (issue #48 WS1).
+  if [ -z "${CLAUDE_SESSION_ID:-}" ] && [ -z "${CODEX_SESSION_ID:-}" ]; then
+    local _stdin_sid
+    _stdin_sid=$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)
+    if [ -n "$_stdin_sid" ]; then
+      _hook_session_id="$_stdin_sid"
+      _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
+      mkdir -p "$_hook_session_dir" 2>/dev/null || true
+    fi
+  fi
+
+  if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ] && [ "$_hook_tool_name" != "apply_patch" ]; then
     _hook_skip_or_exit 1
     return $?
   fi
@@ -257,6 +269,54 @@ hook_parse_edit_write() {
   tool_input=$(echo "$_hook_input" | jq -c '.tool_input // {}' 2>/dev/null || echo '{}')
 
   file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
+
+  # Canonical Codex apply_patch payload: the patch text arrives in
+  # tool_input.command (string, or ["apply_patch", "<patch>"] array per the
+  # Codex hook contract); targets live inside the patch body as
+  # "*** Update File: x" / "*** Add File: x". Multi-file patches: file_path is
+  # the first existing target; _hook_apply_patch_targets carries them all and
+  # hook_get_added_lines returns the union of + lines so no target escapes
+  # per-call checks (the batch dispatcher expands per target for attribution).
+  if [ -z "$file_path" ] && [ "$_hook_tool_name" = "apply_patch" ]; then
+    local _patch_body _patch_rel _root
+    _patch_body=$(echo "$_hook_input" | jq -r 'if (.tool_input.command|type) == "array" then .tool_input.command[1:] | join("\n") elif (.tool_input.command|type) == "string" then .tool_input.command else (.tool_input.patch // .tool_input.input // empty) end' 2>/dev/null || true)
+    _root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    _hook_apply_patch_targets=""
+    while IFS= read -r _patch_rel; do
+      [ -z "$_patch_rel" ] && continue
+      case "$_patch_rel" in
+        /*) : ;;
+        *) _patch_rel="$_root/$_patch_rel" ;;
+      esac
+      _hook_apply_patch_targets="${_hook_apply_patch_targets}${_patch_rel}
+"
+      if [ -z "$file_path" ] && [ -e "$_patch_rel" ]; then
+        file_path="$_patch_rel"
+      fi
+    done < <(printf '%s\n' "$_patch_body" | sed -nE 's/^\*\*\* (Update|Add) File: (.*)$/\2/p')
+    # No existing target (pure Add before write lands): take the first named one.
+    if [ -z "$file_path" ] && [ -n "$_hook_apply_patch_targets" ]; then
+      file_path=$(printf '%s' "$_hook_apply_patch_targets" | head -1)
+    fi
+    [ -n "$_hook_apply_patch_targets" ] && _hook_apply_patch_body="$_patch_body"
+
+    # Per-target fan-out: re-exec THIS wrapper once per target as a synthetic
+    # Edit carrying the patch body. Every check then sees the right file_path
+    # for its own extension/case gates and only that file's hunk -- a .ts
+    # violation cannot hide behind a .md first target. Worst exit wins.
+    if [ -n "$_hook_apply_patch_targets" ] && [ -z "${_HOOK_APPLY_PATCH_CHILD:-}" ] && [ -x "$0" ]; then
+      local _apx_worst=0 _apx_rc _apx_t _apx_payload
+      while IFS= read -r _apx_t; do
+        [ -z "$_apx_t" ] && continue
+        _apx_payload=$(jq -nc --arg f "$_apx_t" --arg p "$_patch_body" --arg sid "${_hook_session_id:-}" '{tool_name:"Edit",session_id:$sid,tool_input:{file_path:$f,patch:$p}}' 2>/dev/null || true)
+        [ -z "$_apx_payload" ] && continue
+        _apx_rc=0
+        printf '%s' "$_apx_payload" | _HOOK_APPLY_PATCH_CHILD=1 "$0" || _apx_rc=$?
+        [ "$_apx_rc" -gt "$_apx_worst" ] && _apx_worst=$_apx_rc
+      done <<< "$_hook_apply_patch_targets"
+      exit "$_apx_worst"
+    fi
+  fi
 
   if [ -z "$file_path" ] || { [ ! -f "$file_path" ] && [ "${HOOK_ALLOW_MISSING_FILE:-0}" != "1" ]; }; then
     _hook_debug "skip: file_path empty or missing ($file_path)"
@@ -293,11 +353,27 @@ hook_filter_extensions() {
   local exts="$1"
   local match=false
   local IFS='|'
+  # Multi-file apply_patch: the call passes the gate if ANY target matches --
+  # file_path alone would gate every check on the first target's extension
+  # and let a .ts violation hide behind a .md first file.
+  if [ -n "${_hook_apply_patch_targets:-}" ]; then
+    local _apt
+    while IFS= read -r _apt; do
+      [ -z "$_apt" ] && continue
+      for ext in $exts; do
+        case "$_apt" in
+          *."$ext") match=true; break 2 ;;
+        esac
+      done
+    done <<< "$_hook_apply_patch_targets"
+  fi
+  if [ "$match" = false ]; then
   for ext in $exts; do
     case "$file_path" in
       *."$ext") match=true; break ;;
     esac
   done
+  fi
   if [ "$match" = false ]; then
     _hook_debug "skip: extension mismatch (wanted $exts, got ${file_path##*.})"
     _hook_skip_or_exit 1
@@ -388,6 +464,28 @@ hook_skip_ui_dirs() {
 hook_get_added_lines() {
   local tool old_str new_str content head_content
   tool=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+
+  if [ "$tool" = "Edit" ]; then
+    # Dispatcher-synthesized apply_patch expansion: prefer this file's own hunk
+    # from tool_input.patch over disk/git fallbacks (which would resurrect
+    # pre-existing lines as "added" once the file matches HEAD).
+    local _edit_patch
+    _edit_patch=$(echo "$_hook_input" | jq -r '.tool_input.patch // empty' 2>/dev/null || true)
+    if [ -n "$_edit_patch" ]; then
+      added_lines=$(printf '%s\n' "$_edit_patch" | awk -v f="$file_path" '
+        /^\*\*\* (Update|Add) File: / { h = substr($0, index($0, ": ") + 2); in_target = (h == f || (length(f) > length(h) && substr(f, length(f) - length(h)) == "/" h)); next }
+        /^\*\*\*/ { in_target = 0; next }
+        in_target && /^\+/ { print substr($0, 2) }')
+      return 0
+    fi
+  fi
+
+  if [ "$tool" = "apply_patch" ] && [ -n "${_hook_apply_patch_body:-}" ]; then
+    # Union of +-prefixed lines across ALL targets in the patch -- a violation
+    # in any file of a multi-file patch is seen even by single-file checks.
+    added_lines=$(printf '%s\n' "$_hook_apply_patch_body" | grep '^+' | grep -v '^+++' | sed 's/^+//' || true)
+    return 0
+  fi
 
   if [ "$tool" = "Edit" ]; then
     # Prefer payload.old_string/new_string. If neither key is present
@@ -747,14 +845,31 @@ hook_stop_block() {
 }
 
 # ── Stop hook: Append finding to shared file (no block) ──────────
-# Quality-gate pattern: each Stop hook reports findings, then
-# quality-gate-stop.sh aggregates and blocks ONCE with all issues.
-# This avoids serial blocking where each hook blocks independently.
+# Quality-gate pattern: each Stop hook records findings, then enforces its OWN
+# findings directly via hook_stop_enforce at its exit points. The stop-findings
+# file remains as a best-effort sweep for crashed writers -- Stop hooks run
+# concurrently, so a late writer racing the quality-gate aggregator would
+# otherwise be silently lost (issue #48 WS1).
 
 hook_stop_finding() {
   local msg="$1"
   # Delimiter separates findings so quality-gate-stop.sh can count issues (not lines)
   printf '%s\n---\n' "$msg" >> "$_hook_session_dir/stop-findings" 2>/dev/null || true
+  _hook_stop_local="${_hook_stop_local:-}${msg}
+"
+}
+
+# Call at every exit point of an enforcing Stop hook: blocks with this
+# script'"'"'s accumulated findings (exit 2), or exits 0 when none.
+hook_stop_enforce() {
+  if [ -n "${_hook_stop_local:-}" ]; then
+    local reason
+    reason=$(_safe_json_escape "$(printf 'Fix before stopping:\n%s' "$_hook_stop_local")")
+    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
+    rm -f "$_hook_session_dir/stop-findings" 2>/dev/null || true
+    exit 2
+  fi
+  exit 0
 }
 
 # ── Stop hook: Save test results for sharing across hooks ────────

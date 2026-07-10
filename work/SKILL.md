@@ -7,4 +7,4 @@ disable-model-invocation: true
 # Work
 Alias for `/development-lifecycle`. See [development-lifecycle/SKILL.md](../development-lifecycle/SKILL.md) details.
 
-Run `/ponytail full`, then `/development-lifecycle` now.
+Run `/deslop full` (write mode), then `/development-lifecycle` now.

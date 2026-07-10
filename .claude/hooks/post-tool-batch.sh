@@ -23,14 +23,10 @@ _check_labels=(
   tanstack-router-gen
   connect-query-check
   aip-proto-check
-  react-compiler-check
-  env-validation-check
-  bundle-guard
   ux-copy-check
   orchestration-guidance
   form-mode-check
   error-boundary-check
-  legacy-import-check
   test-convention-check
   ts-no-escape-hatches-check
   tsconfig-strict-check
@@ -51,14 +47,10 @@ _check_funcs=(
   run_tanstack_router_gen
   run_connect_query_check
   run_aip_proto_check
-  run_react_compiler_check
-  run_env_validation_check
-  run_bundle_guard
   run_ux_copy_check
   run_orchestration_guidance
   run_form_mode_check
   run_error_boundary_check
-  run_legacy_import_check
   run_test_convention_check
   run_ts_no_escape_hatches_check
   run_tsconfig_strict_check
@@ -85,19 +77,44 @@ seen_file="$tmp_dir/seen"
 : > "$review_file"
 : > "$seen_file"
 
+# Canonical Codex apply_patch calls carry targets inside the patch body, not
+# tool_input.file_path. Expand each into one synthetic per-target call (patch
+# body preserved so the lib extracts added lines) BEFORE the dedup reduce.
+_pb_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+_input=$(printf '%s' "$_input" | jq -c --arg root "$_pb_root" '
+  .tool_calls = ([ (.tool_calls // [])[] |
+    if (.tool_name == "apply_patch") then
+      ( (if (.tool_input.command|type) == "array" then .tool_input.command[1:] | join("\n")
+         elif (.tool_input.command|type) == "string" then .tool_input.command
+         else (.tool_input.patch // .tool_input.input // "") end) ) as $body
+      | [ $body | split("\n")[] | capture("^\\*\\*\\* (Update|Add) File: (?<f>.+)$").f ] as $targets
+      | if ($targets | length) > 0 then
+          $targets[] | {tool_name: "Edit", tool_input: {file_path: (if startswith("/") then . else $root + "/" + . end), patch: $body}}
+        else empty end
+    else . end ])
+' 2>/dev/null || printf '%s' "$_input")
+
+# A file edited more than once in the batch drops its old/new_string payload so
+# hook_get_added_lines falls back to git-diff-vs-HEAD: checks then see the
+# SURVIVING final-file additions (call-1 violations still present are caught;
+# later-reverted lines are correctly absent), not just the last call's strings.
 printf '%s' "$_input" | jq -c '
   reduce ((.tool_calls // [])[]) as $c
-    ({order: [], by: {}};
+    ({order: [], by: {}, count: {}};
       ($c.tool_name // "") as $name |
       ($c.tool_input.file_path // "") as $fp |
       if (($name == "Edit" or $name == "Write" or $name == "MultiEdit") and $fp != "") then
-        (if (.by[$fp] == null) then .order += [$fp] else . end) | .by[$fp] = $c
+        (if (.by[$fp] == null) then .order += [$fp] else . end)
+        | .by[$fp] = $c
+        | .count[$fp] = ((.count[$fp] // 0) + 1)
       else
         .
       end
     )
+  | . as $acc
   | .order[] as $fp
-  | .by[$fp]
+  | $acc.by[$fp]
+  | if ($acc.count[$fp] > 1) then .tool_input |= del(.old_string, .new_string, .content) else . end
 ' > "$calls_file" 2>/dev/null || true
 
 [ -s "$calls_file" ] || exit 0
@@ -207,9 +224,21 @@ _emit_section "MUST FIX before proceeding:" "$blocks_file"
 _emit_section "Review:" "$review_file"
 
 if [ "$_findings_total" -gt "$emitted" ]; then
-  echo "+$((_findings_total - emitted)) more" >> "$context_file"
+  echo "+$((_findings_total - emitted)) more (rerun after fixing to see the rest)" >> "$context_file"
 fi
 
 _context=$(cat "$context_file")
+
+# Hard tier: any block-severity finding turns the whole batch into a blocking
+# decision (exit 2 + systemMessage), never advisory additionalContext. Warn-only
+# batches stay advisory. Ordering is deterministic (file order, then check
+# order), dedup by rule+message happens in _add_collected_line, truncation is
+# the 40-line cap with an explicit "+N more" recovery hint.
+_block_count=$(wc -l < "$blocks_file" | tr -d '[:space:]')
+if [ "${_block_count:-0}" -gt 0 ]; then
+  jq -n --arg msg "$_context" '{suppressOutput:true,systemMessage:$msg}' >&2
+  exit 2
+fi
+
 jq -n --arg context "$_context" '{hookSpecificOutput:{hookEventName:"PostToolBatch",additionalContext:$context}}'
 exit 0

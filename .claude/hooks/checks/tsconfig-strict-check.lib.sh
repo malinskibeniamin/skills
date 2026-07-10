@@ -55,7 +55,6 @@ fi
 
 if [ -n "$_violations" ]; then
   hook_block "tsconfig strictness weakened —${_violations}. Restore the strict flags. Strictness is the type-level enforcement that keeps 'any' and friends from spreading. Escape hatch: // allow: tsconfig-strict [reason]" "tsconfig-strict"
-  return 0
 fi
 
 return 0

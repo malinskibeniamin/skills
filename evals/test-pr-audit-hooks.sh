@@ -3,58 +3,27 @@
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
 # ══════════════════════════════════════════════════════════════════
-# legacy-import-check.sh
+# legacy-import-check + env-validation-check: retired, Biome owns them
+# (noRestrictedImports / noRestrictedElements / noProcessEnv).
+# Guard: the hooks stay dead and the Biome config carries the rules.
 # ══════════════════════════════════════════════════════════════════
 
-run_file_eval "$HOOKS_DIR/legacy-import-check.sh" "legacy-import-check.sh exists"
-run_executable_eval "$HOOKS_DIR/legacy-import-check.sh" "legacy-import-check.sh is executable"
+for _dead_hook in legacy-import-check env-validation-check; do
+  if [ -e "$HOOKS_DIR/$_dead_hook.sh" ] || [ -e "$HOOKS_DIR/checks/$_dead_hook.lib.sh" ]; then
+    echo "  FAIL  $_dead_hook resurrected — Biome owns these rules"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $_dead_hook resurrected"
+  else
+    echo "  PASS  $_dead_hook stays retired (Biome owns the rules)"
+    PASS=$((PASS + 1))
+  fi
+done
 
-run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "@redpanda-data/ui" "legacy-import catches @redpanda-data/ui"
-run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "lucide-react" "legacy-import catches lucide-react"
-run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "<button" "legacy-import catches raw <button>"
-run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "<input" "legacy-import catches raw <input>"
-run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "<a.*href" "legacy-import catches raw <a href>"
-run_content_eval "$HOOKS_DIR/checks/legacy-import-check.lib.sh" "hook_has_escape" "legacy-import respects escape hatch"
-
-# ── Warn: @redpanda-data/ui import ───────────────────────────────
-
-_li_tmpdir=$(mktemp -d /tmp/legacy-import-evals-XXXXXX)
-tmpfile="$_li_tmpdir/component.tsx"
-printf "import { Button } from '@redpanda-data/ui'\n" > "$tmpfile"
-(cd "$_li_tmpdir" && git init -q && git commit -q --allow-empty -m "init") 2>/dev/null
-
-run_hook_eval "$HOOKS_DIR/legacy-import-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: @redpanda-data/ui import" "legacy"
-
-# ── Warn: raw <button> in tsx ────────────────────────────────────
-
-tmpfile="$_li_tmpdir/page.tsx"
-printf "export default function Page() {\n  return <button onClick={fn}>Click</button>\n}\n" > "$tmpfile"
-
-run_hook_eval "$HOOKS_DIR/legacy-import-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: raw <button> in tsx" "button"
-
-# ── Allow: .ts file (no JSX check) ──────────────────────────────
-
-tmpfile="$_li_tmpdir/util.ts"
-printf "const x = 1\n" > "$tmpfile"
-
-run_hook_eval "$HOOKS_DIR/legacy-import-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: clean .ts file"
-
-# ── Skip: test file ─────────────────────────────────────────────
-
-tmpfile="$_li_tmpdir/page.test.tsx"
-printf "import { Button } from '@redpanda-data/ui'\n" > "$tmpfile"
-
-run_hook_eval "$HOOKS_DIR/legacy-import-check.sh" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: test file"
-
-(cd /tmp && rm -r "$_li_tmpdir" 2>/dev/null) || true
+_BIOME_REF="$REPO_ROOT/frontend-starter-kit/references/biome/REFERENCE.md"
+run_content_eval "$_BIOME_REF" "@redpanda-data/ui" "Biome config bans @redpanda-data/ui (noRestrictedImports)"
+run_content_eval "$_BIOME_REF" "lucide-react" "Biome config bans lucide-react (noRestrictedImports)"
+run_content_eval "$_BIOME_REF" "noRestrictedElements" "Biome config bans raw elements (noRestrictedElements)"
+run_content_eval "$_BIOME_REF" "noProcessEnv" "Biome config bans raw process.env (noProcessEnv)"
 
 # ══════════════════════════════════════════════════════════════════
 # test-convention-check.sh
@@ -217,7 +186,6 @@ run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
 # ══════════════════════════════════════════════════════════════════
 
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "post-tool-batch.sh" "hooks.json has PostToolBatch dispatcher"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "legacy-import-check.sh" "codex-hooks.json keeps legacy-import-check per-call"
 run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "test-convention-check.sh" "codex-hooks.json keeps test-convention-check per-call"
 run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "connect-query-check.sh" "codex-hooks.json keeps connect-query-check per-call"
 # console-log-check removed — Biome noConsole handles it

@@ -23,7 +23,6 @@ if [ "$_vendor_frontend_file" = true ]; then
     else
       _dir=$(echo "$file_path" | grep -oE "($_blocked_dirs)" | head -1)
       hook_block "Editing vendor/registry file in $_dir/. These are CLI-installed — don't modify directly. If fixing pre-existing lint, skip the file." "vendor-file-check"
-      return 0
     fi
   fi
 
@@ -32,7 +31,6 @@ if [ "$_vendor_frontend_file" = true ]; then
     _header=$(head -5 "$file_path" 2>/dev/null || true)
     if echo "$_header" | grep -qE '@generated|DO NOT EDIT|AUTO-GENERATED'; then
       hook_block "Editing auto-generated file. Regenerate from source instead of editing directly." "vendor-file-check"
-      return 0
     fi
   fi
 fi
@@ -71,7 +69,6 @@ if [ -f "$file_path" ]; then
       dir_matched=$(echo "$file_path" | grep -oE "($_ui_dirs)" | head -1)
 
       hook_warn "[UI REGISTRY] Modifying '$component_name' ($dir_matched/). Registry-sourced — local changes overwritten on next pull. PR upstream instead." "ui-registry-warn"
-      return 0
     fi
   fi
 fi

@@ -219,3 +219,27 @@ _bash_json() {
   local cmd="$1"
   printf '{"tool_name":"Bash","tool_input":{"command":"%s"}}' "$cmd"
 }
+
+# Ownership/retirement record: counts as SKIP (not PASS) -- we are not
+# executing the new owner here, only recording where the rule went.
+_skip_note() {
+  SKIP=$((SKIP + 1))
+  echo -e "  ${YELLOW:-}~${NC} SKIP (ownership record): $1"
+}
+
+# Artifact-backed ownership assert: the claimed owner rule must exist in the
+# parsed Biome reference config (executable against the artifact, not prose).
+_assert_biome_owns() {
+  local rule="$1" desc="$2"
+  local cfg
+  cfg=$(awk '/^```jsonc?$/{f=1;next} /^```$/{f=0} f' "$(git rev-parse --show-toplevel)/frontend-starter-kit/references/biome/REFERENCE.md" | sed -e 's://[^"]*$::')
+  local _val
+  _val=$(printf '%s' "$cfg" | jq -r ".. | objects | select(has(\"$rule\")) | .[\"$rule\"] | if type == \"object\" then (.level // \"configured\") else . end" 2>/dev/null | head -1)
+  if [ -n "$_val" ] && [ "$_val" != "off" ] && [ "$_val" != "null" ]; then
+    PASS=$((PASS + 1))
+    echo -e "  ${GREEN}\xe2\x9c\x93${NC} $desc (rule ENABLED in parsed Biome config: $_val)"
+  else
+    FAIL=$((FAIL + 1))
+    echo -e "  ${RED}\xe2\x9c\x97${NC} $desc (rule missing or disabled in Biome config: ${_val:-absent})"
+  fi
+}

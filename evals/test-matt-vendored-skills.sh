@@ -96,7 +96,7 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Standards.*Spec" "review keeps st
 # review: 8-hat parallel panel (default for PR reviews) + quick/deep modes
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Core pass" "review defines the always-on core pass"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the 8-hat panel for PR reviews"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "GPT-5\.[56]: independent" "review offers a cross-model independent hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "GPT-5\.6-sol: independent" "review offers a cross-family independent hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review hats skip only with diff evidence"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep release-audit mode"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "review forbids recursive invocation"
@@ -157,11 +157,11 @@ run_content_eval "$REPO_ROOT/teach/SKILL.md" "primary source" "teach recommends 
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "mission changes.*MISSION.md.*learning record" "teach records mission shifts"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses assets before inlining"
 
-# Latest Matt vendoring: improve-codebase-architecture richer report flow.
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "HTML report|architecture-review" "ICA writes HTML architecture report"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "Top recommendation" "ICA report includes top recommendation"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "ICA links shared codebase-design skill"
-run_file_eval "$REPO_ROOT/improve-codebase-architecture/HTML-REPORT.md" "ICA HTML report reference exists"
+# Matt ICA flow absorbed into /improve architecture mode (wave 6).
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "HTML report|architecture-report" "improve architecture mode writes HTML report"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "Top recommendation" "architecture mode includes top recommendation"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "/codebase-design" "architecture mode links shared codebase-design skill"
+run_file_eval "$REPO_ROOT/improve/references/architecture-report.md" "architecture report reference exists"
 run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"
 
 # Latest Matt vendoring: writing-great-skills negation failure mode.

@@ -31,7 +31,7 @@ Check the project rules before commenting:
 
 ## Reviewer output schema
 
-Use `agents/findings-schema.md` fields when possible. Each reviewer records checked inputs and artifacts before findings. Minimum finding:
+Use `agents/references/findings-schema.md` fields when possible. Each reviewer records checked inputs and artifacts before findings. Minimum finding:
 
 ```json
 {

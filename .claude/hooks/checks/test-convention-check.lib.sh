@@ -32,7 +32,6 @@ if [ "$_is_test_file" = true ] && [ -n "$added_lines" ]; then
 if echo "$added_lines" | grep -qE '^\+?\s*it\(\s*['\''"]'; then
   if ! hook_has_escape "test-convention"; then
     hook_warn "Use test() not it() for consistency. Project standard is test('description', ...)." "test-convention-it"
-    return 0
   fi
 fi
 
@@ -40,7 +39,6 @@ fi
 
 if echo "$added_lines" | grep -qE 'jest\.(fn|mock|spyOn|clearAllMocks|restoreAllMocks)\b'; then
   hook_warn "Use vi.fn()/vi.mock()/vi.spyOn() — project uses Vitest not Jest." "test-convention-jest"
-  return 0
 fi
 
 # ── Check 3: .toBeInTheDocument() → .toBeVisible() ──────────────
@@ -49,7 +47,6 @@ fi
 if echo "$added_lines" | grep -qE '\.toBeInTheDocument\(\)'; then
   if ! hook_has_escape "to-be-in-document"; then
     hook_warn "Prefer .toBeVisible() over .toBeInTheDocument() — verifies element is actually visible, not just in DOM. Escape: // allow: to-be-in-document [reason]" "test-convention-visible"
-    return 0
   fi
 fi
 
@@ -58,7 +55,6 @@ fi
 
 if echo "$added_lines" | grep -qE 'waitForTimeout|page\.waitForTimeout|setTimeout.*[0-9]{3,}'; then
   hook_warn "Avoid waitForTimeout in tests — flaky. Use waitFor(() => expect(...)), waitForURL(), or waitForSelector() instead." "test-convention-timeout"
-  return 0
 fi
 
 # ── Check 5: test.skip in E2E files ─────────────────────────────
@@ -68,7 +64,6 @@ case "$file_path" in
   *.spec.*|*e2e*|*playwright*)
     if echo "$added_lines" | grep -qE '\b(test|it)\.skip\b'; then
       hook_warn "No test.skip in E2E tests. If env/credentials missing, fail loudly so CI catches it. Use test.fixme() with linked GitHub issue for known bugs." "test-convention-skip"
-      return 0
     fi
     ;;
 esac
@@ -81,7 +76,6 @@ esac
 if echo "$added_lines" | grep -qE '\btimeout:\s*[0-9]+'; then
   if ! hook_has_escape "test-magic-timeout"; then
     hook_warn "Hardcoded { timeout: <ms> } in test — magic number, brittle as code slows. Prefer condition-based waitFor/expect.poll with default timeout. Escape: // allow: test-magic-timeout [reason]" "test-convention-magic-timeout"
-    return 0
   fi
 fi
 
@@ -94,7 +88,6 @@ if [ -n "$unawaited" ]; then
   if ! hook_has_escape "test-unawaited"; then
     sample=$(echo "$unawaited" | head -2 | sed 's/^+//' | tr '\n' ' ')
     hook_warn "findBy*/waitFor returns Promise — missing await is flaky. Found: $sample Escape: // allow: test-unawaited [reason]" "test-convention-unawaited"
-    return 0
   fi
 fi
 
@@ -113,7 +106,6 @@ case "$file_path" in
         if [ ! -f "$_marker" ]; then
           touch "$_marker"
           hook_warn "Heavy getByRole usage (${_role_count}x). Consider adding data-testid for faster, more stable selectors." "test-convention-testid"
-          return 0
         fi
       fi
     fi
@@ -140,7 +132,6 @@ case "$file_path" in
         if [ -n "$filtered" ]; then
           sample=$(echo "$filtered" | head -3 | sed 's/^+//' | tr '\n' ' ')
           hook_warn "PERF: await import() in test +~100ms/call. Use static imports. Found: $sample" "test-perf-dynamic-import"
-          return 0
         fi
       fi
 
@@ -150,7 +141,6 @@ case "$file_path" in
       if [ -n "$type_usage" ]; then
         sample=$(echo "$type_usage" | head -2 | sed 's/^+//' | tr '\n' ' ')
         hook_warn "PERF: userEvent.type() fires per-keystroke (~50ms/char). Use user.clear()+user.paste() or fireEvent.change(). Found: $sample" "test-perf-user-type"
-        return 0
       fi
 
       # ── Check: setInterval in test files = open handle / leak ────
@@ -162,7 +152,6 @@ case "$file_path" in
       if [ -n "$interval_usage" ]; then
         if ! hook_has_escape "test-set-interval"; then
           hook_warn "LEAK: setInterval in test = open handle. Use vi.useFakeTimers() + vi.advanceTimersByTime(), or guarantee clearInterval in cleanup. Escape: // allow: test-set-interval [reason]" "test-perf-set-interval"
-          return 0
         fi
       fi
 
@@ -181,7 +170,6 @@ case "$file_path" in
 
         if [ -n "$vitest_config" ] && grep -qE "isolate.*false" "$vitest_config" 2>/dev/null; then
           hook_warn "PERF: it.concurrent + isolate:false unsafe. Shared context → race conditions." "test-perf-concurrent-isolate"
-          return 0
         fi
       fi
     fi
@@ -191,7 +179,6 @@ case "$file_path" in
     # ── Check 2: missing pool: 'threads' ───────────────────────────
     if ! grep -qE "pool.*['\"]threads['\"]|pool.*:.*['\"]threads['\"]" "$file_path" 2>/dev/null; then
       hook_warn "PERF: Add pool:'threads' to vitest config. ~30% less import overhead than forks." "test-perf-missing-threads"
-      return 0
     fi
 
     # ── Check 3: unit config missing isolate: false ────────────────
@@ -204,7 +191,6 @@ case "$file_path" in
     if [ "$is_unit_config" = true ]; then
       if ! grep -qE "isolate.*false" "$file_path" 2>/dev/null; then
         hook_warn "PERF: Unit config missing isolate:false. Pure-logic tests can share thread context." "test-perf-missing-isolate"
-        return 0
       fi
     fi
     ;;

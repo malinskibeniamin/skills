@@ -59,15 +59,25 @@ printf '// Copyright 2026 Redpanda Data, Inc.\nexport function bad(x: any) { ret
 printf '// Copyright 2026 Redpanda Data, Inc.\nexport function clean(x: number) { return x; }\n' > "$_clean_file"
 _bad_json=$(jq -n --arg bad "$_bad_file" --arg clean "$_clean_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$bad,old_string:"export function bad(x: number) { return x; }",new_string:"export function bad(x: any) { return x; }"},tool_use_id:"bad",tool_response:"{}"},{tool_name:"Edit",tool_input:{file_path:$clean,old_string:"export function clean(x: string) { return x; }",new_string:"export function clean(x: number) { return x; }"},tool_use_id:"clean",tool_response:"{}"}]}')
 _run_batch "$_bad_json"
-_assert_batch "batch aggregates TypeScript escape hatch for bad file only" 0 "MUST FIX before proceeding:" "clean.ts"
-_assert_batch "batch mentions ': any' escape hatch" 0 ": any" ""
+_assert_batch "batch blocks on hard finding for bad file only" 2 "MUST FIX before proceeding:" "clean.ts"
+_assert_batch "batch mentions ': any' escape hatch" 2 ": any" ""
 
-# (b) Same file edited twice: last edit wins, so earlier bad payload is ignored.
+# (b) Same file edited twice: duplicate drops payloads and re-diffs SURVIVING
+# final state -- the transient ": any" was reverted by the second edit, so no
+# finding (file on disk matches its committed/clean state).
 _same_file="$_batch_tmp/same.ts"
 printf '// Copyright 2026 Redpanda Data, Inc.\nexport const value: number = 2;\n' > "$_same_file"
 _same_json=$(jq -n --arg f "$_same_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const value: number = 0;",new_string:"export const value: any = 1;"},tool_use_id:"first",tool_response:"{}"},{tool_name:"Bash",tool_input:{command:"echo ignored"},tool_use_id:"bash",tool_response:"ok"},{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const value: any = 1;",new_string:"export const value: number = 2;"},tool_use_id:"second",tool_response:"{}"}]}')
 _run_batch "$_same_json"
-_assert_batch "batch dedupes same file and evaluates last edit only" 0 "" ": any"
+_assert_batch "batch re-diffs surviving state on duplicate file (reverted violation silent)" 0 "" ": any"
+
+# (b2) Same file edited twice, violation PERSISTS in final state: caught via
+# surviving-state re-diff even though the LAST payload alone is clean.
+_pers_file="$_batch_tmp/persist.ts"
+printf '// Copyright 2026 Redpanda Data, Inc.\nexport const v: any = 1;\nexport const w = 2;\n' > "$_pers_file"
+_pers_json=$(jq -n --arg f "$_pers_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const v: number = 1;",new_string:"export const v: any = 1;"},tool_use_id:"first",tool_response:"{}"},{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const w = 1;",new_string:"export const w = 2;"},tool_use_id:"second",tool_response:"{}"}]}')
+_run_batch "$_pers_json"
+_assert_batch "duplicate-file batch catches persistent violation from earlier call" 2 ": any" ""
 
 # (c) All-clean batch is silent and exit 0.
 _clean_batch=$(jq -n --arg f "$_clean_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export function clean(x: string) { return x; }",new_string:"export function clean(x: number) { return x; }"},tool_use_id:"clean",tool_response:"{}"}]}')
@@ -94,9 +104,9 @@ else
 fi
 
 # (e) Codex keeps per-call scripts and never gets PostToolBatch.
-_codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write") | .hooks[]?.command | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|react-compiler-check|env-validation-check|bundle-guard|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|legacy-import-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|security-audit-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
-if [ "$_codex_count" = "26" ] && ! grep -q 'post-tool-batch.sh' "$CODEX_HOOKS" 2>/dev/null; then
-  echo "  PASS  codex-hooks.json keeps 26 per-call scripts and omits dispatcher"
+_codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write") | .hooks[]?.command | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|security-audit-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
+if [ "$_codex_count" = "22" ] && ! grep -q 'post-tool-batch.sh' "$CODEX_HOOKS" 2>/dev/null; then
+  echo "  PASS  codex-hooks.json keeps 22 per-call scripts and omits dispatcher"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  codex-hooks.json per-call parity (count=$_codex_count)"
@@ -104,9 +114,9 @@ else
   ERRORS="$ERRORS\n  FAIL: codex-hooks per-call parity"
 fi
 
-# (f) Claude settings has dispatcher, not the 26 per-edit scripts under PostToolUse.
+# (f) Claude settings has dispatcher, not the 22 per-edit scripts under PostToolUse.
 _claude_batch=$(jq '[.hooks.PostToolBatch[]?.hooks[]?.args[]? | select(test("post-tool-batch\\.sh"))] | length' "$CLAUDE_SETTINGS" 2>/dev/null || echo 0)
-_claude_posttool_edit_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write") | .hooks[]?.args[]? | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|react-compiler-check|env-validation-check|bundle-guard|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|legacy-import-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|security-audit-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CLAUDE_SETTINGS" 2>/dev/null || echo 0)
+_claude_posttool_edit_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write") | .hooks[]?.args[]? | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|security-audit-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CLAUDE_SETTINGS" 2>/dev/null || echo 0)
 if [ "$_claude_batch" = "1" ] && [ "$_claude_posttool_edit_count" = "0" ]; then
   echo "  PASS  Claude settings uses PostToolBatch dispatcher only for per-edit checks"
   PASS=$((PASS + 1))

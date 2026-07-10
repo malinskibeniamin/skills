@@ -1,9 +1,25 @@
 ---
 name: grilling
-description: Interview the user relentlessly about a plan or design, with a 3-hat plan gate and optional domain-doc capture. Use when stress-testing a plan before building, as the lifecycle phase 2b gate, or on any 'grill' trigger phrase.
+description: Explore design options, then interview the user relentlessly about the chosen plan, with a 3-hat plan gate and optional domain-doc capture. Use when brainstorming approaches, starting new features, thinking before coding, stress-testing a plan or decision, as the lifecycle phase 2b gate, or on any 'grill' trigger phrase.
 ---
 
 # Grilling
+
+**GATE: no code, no files, no implementation until a design is presented, grilled, and approved.**
+
+## Explore mode (no plan yet)
+
+When invoked before a coherent plan exists ("brainstorm", "explore options", "should we use X or Y?", new feature/architecture choice):
+
+1. Explore context -- read files, docs, recent commits.
+2. Clarify -- one question at a time, not a list.
+3. Propose 2-3 approaches with trade-offs. Optional: HTML mockup -> `agent-browser` -> annotated screenshot.
+4. Multiple competing plans/options (incl. from other agents) -> `/plan-arbiter` to pick adopt/hybrid/revise.
+5. Present the chosen direction, then grill it (below).
+
+**Challenge variant** (reviewing a proposed approach or risky refactor): question every assumption -- "Why this? What breaks if X changes? Empty list? 10,000 items?" -- present alternatives, push back on weak reasoning; consensus only when all concerns are addressed. "Should we use X or Y?" -> explore, then challenge the winner.
+
+## Grill (plan exists)
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
 

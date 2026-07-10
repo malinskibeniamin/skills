@@ -5,7 +5,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 # Diagnosing Bugs
 
-Discipline for hard bugs. Skip phase only if justify. Ponytail: `/ponytail` (debt ledger included); complexity tags live in `/deslop`. Summarize inline.
+Discipline for hard bugs. Skip phase only if justify. Write mode + debt ledger + complexity tags all live in `/deslop`. Summarize inline.
 
 When exploring codebase, use project domain glossary + ADRs; for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
 
@@ -107,4 +107,4 @@ Required before declare done:
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message -- so the next debugger learns
 
-**Then ask: what would prevent this bug?** If answer involve architecture change (no good test seam, tangled callers, hidden coupling) hand off to `/improve-codebase-architecture` with specifics. Make recommendation **after** fix in, not before -- have more info now than at start. Run `/deslop` before shipping.
+**Then ask: what would prevent this bug?** If answer involve architecture change (no good test seam, tangled callers, hidden coupling) hand off to `/improve architecture` with specifics. Make recommendation **after** fix in, not before -- have more info now than at start. Run `/deslop` before shipping.

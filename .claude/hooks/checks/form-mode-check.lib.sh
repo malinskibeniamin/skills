@@ -29,7 +29,6 @@ if [ -n "$added_lines" ]; then
 if echo "$added_lines" | grep -qE "mode:\s*['\"]on(Blur|Submit)['\"]"; then
   if ! hook_has_escape "form-mode"; then
     hook_warn "Form mode should be 'onChange' for immediate validation feedback. Avoid 'onBlur'/'onSubmit'. Escape: // allow: form-mode [reason]"
-    return 0
   fi
 fi
 
@@ -60,7 +59,6 @@ if [ "$_is_form_file" = true ]; then
     if [ "$_has_field_validation" = false ]; then
       if ! hook_has_escape "form-validate"; then
         hook_warn "Form has no field validation. Add validate/required/pattern to register() or use a resolver (zodResolver). Escape: // allow: form-validate [reason]" "form-mode-validate"
-        return 0
       fi
     fi
   fi
@@ -78,7 +76,6 @@ if [ "$_is_form_file" = true ]; then
   if [ "$_has_error_display" = false ]; then
     if ! hook_has_escape "form-errors"; then
       hook_warn "Form lacks inline error display next to fields. Surface errors via FormMessage/FieldError/Field component with error descriptions. Escape: // allow: form-errors [reason]" "form-mode-errors"
-      return 0
     fi
   fi
 fi
@@ -95,7 +92,6 @@ if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.watch\(\s*['\''"]|
   if echo "$file_content" | grep -qE "from\s+['\"]react-hook-form['\"]|useForm\(|useFormContext\("; then
     if ! hook_has_escape "form-watch"; then
       hook_block "Use useWatch() instead of form.watch() for React Compiler compatibility. useWatch triggers proper rerenders. Escape: // allow: form-watch [reason]"
-      return 0
     fi
   fi
 fi
@@ -121,7 +117,6 @@ if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.setValue\('; then
     if [ -n "$_real_bad" ]; then
       if ! hook_has_escape "setvalue-options"; then
         hook_warn "form.setValue() missing { shouldDirty: true, shouldValidate: true } — value updates silently, validation goes stale. Pass options unless the silence is intentional. Escape: // allow: setvalue-options [reason]" "setvalue-options"
-        return 0
       fi
     fi
   fi
@@ -147,7 +142,6 @@ if echo "$file_content" | grep -qE 'useProtoForm\b|useForm\(' && \
     if [ "${_field_count:-0}" -ge 2 ]; then
       if ! hook_has_escape "form-error-summary"; then
         hook_warn "Multi-field form with no <FormErrorSummary /> / role=\"alert\" / aria-live region. Submit-time errors stay inline-only — screen readers miss them and offscreen errors are invisible. Render a summary from form.formState.errors (or useProtoForm.getNestedErrors). Escape: // allow: form-error-summary [reason]" "form-error-summary"
-        return 0
       fi
     fi
   fi
@@ -168,7 +162,6 @@ if echo "$file_content" | grep -qE 'useProtoForm\b'; then
   if echo "$file_content" | grep -qE "$_suspect_patterns"; then
     if ! hook_has_escape "proto-form-parallel-state"; then
       hook_warn "useState holds form-shape state beside useProtoForm — drift risk. Register the field via form.register / nested FormField / useFieldArray so protovalidate + resolver own validation. Escape: // allow: proto-form-parallel-state [reason]" "proto-form-parallel-state"
-      return 0
     fi
   fi
 fi
@@ -189,7 +182,6 @@ if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE 'FieldMaskSchema|Fiel
   if [ "$path_count" -gt 2 ]; then
     if ! hook_has_escape "field-mask"; then
       hook_warn "FieldMask with ${path_count} hardcoded paths. Compute from dirty fields: Object.keys(form.formState.dirtyFields). Escape: // allow: field-mask [reason]"
-      return 0
     fi
   fi
 fi

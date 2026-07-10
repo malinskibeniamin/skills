@@ -1,6 +1,7 @@
 ---
 name: commit-push-pr
-description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when the user asks to commit, commit and push, or open a PR. When the user asks for commit+push only, stop after Phase 4 (no PR).
+description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when the user asks to commit, commit and push, or open a PR. With --no-pr (or when the user asks for commit+push only), stop after Phase 4.
+argument-hint: "[--no-pr]"
 ---
 
 # Commit, push, and open PR
@@ -65,6 +66,8 @@ Record commit types created -- used for auto-labeling Phase 5.
 3. Never force push -- `--force-with-lease` OK when needed (after rebase)
 
 ### Phase 5: Open pull request
+
+**`--no-pr` (or user asked for commit+push only): stop the PR track here.** Skip Phases 5 and 6 entirely, then run only the no-PR tail of Phase 7: confirm clean worktree (`git status`/`git diff`), summarize branch + commits pushed, end with the one status line (🟢 pushed, no PR by request). No PR number, no CI watch, no PR URL.
 
 **PR exists** (from context) -> skip to Phase 6, push updated it already.
 

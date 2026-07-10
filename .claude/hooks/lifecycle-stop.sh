@@ -259,7 +259,7 @@ fi
 _session_dirty=$(hook_session_changed_files)
 if [ -n "$_session_dirty" ]; then
   _dirty_count=$(echo "$_session_dirty" | wc -l | tr -d ' ')
-  hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Run /commit-push to commit and push. Then retry."
+  hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Run /commit-push-pr --no-pr to commit and push. Then retry."
 fi
 
 # Need a remote to push to

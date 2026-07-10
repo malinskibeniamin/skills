@@ -4,7 +4,7 @@
 
 ### 1. Create hook script
 
-Copy [`scripts/zustand-check.sh`](scripts/zustand-check.sh) and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) into `.claude/hooks/`. Make executable.
+Copy [`scripts/zustand-check.sh`](scripts/zustand-check.sh) and `scripts/_hook-lib.sh` (symlinked to the shared lib) into `.claude/hooks/`. Make executable.
 
 ### 2. Configure hook in `.claude/settings.json`
 

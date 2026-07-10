@@ -1,68 +1,23 @@
 # Project Rules
 
-## Quick Ref (every turn)
-
-bun tsgo biome vitest | Compiler memoize | fix type (guard, generic) | `@/components/ui/` | `<Button>` always | zustand `create<T>()()` `useShallow` | `@/env` | TanStack Router | connect-query | TDD: fail first | browser: `agent-browser` / `bunx playwright` (CLI) -- never "no browser tools"
+Lean by design: only rules that are neither machine-enforced nor inferable. Hooks, Biome (ultracite), and React Doctor teach at violation time; path-scoped skills (accessibility, connect-query, tanstack-router, e2e-testing, ux-copy, registry-workflow) auto-load the deep guidance. Do not re-add enforced rules here.
 
 ## Toolchain
 
-`bun` pkg | `tsgo` typecheck | Biome lint/fmt | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
-
-## Bash Discipline
-
-`find` -> `-maxdepth N`/`| head` | `git log` -> `--oneline` | `grep -r` -> Grep tool | `cat` >200 line -> Read. Output caps + rtk rewrite enforced by hooks (llm-truncate, bash-verbose-guard, rtk-rewrite).
-
-## External Services (expensive MCP -> CLI; other MCP allowed)
-
-Jira `acli` | Gmail/Calendar/Drive `gog` | Browser `agent-browser` | CI `gh` (Blacksmith = GH Actions) | Buildkite `bk` | Box `box` | M365 `m365`. `mcp-ban.sh` denies only these (10-25k char/call vs CLI 100-500) + shows CLI syntax; other MCP allowed.
-
-## Commits
-
-`type(scope): description` -- feat fix refactor style test docs chore perf ci build revert -- scope need -- lowercase, 5-72 char
+`bun` pkg | `tsgo` typecheck | Biome lint/fmt | React Doctor (Stop hook) React patterns | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
+External services via CLI, not MCP: Jira `acli` | Google `gog` | browser `agent-browser` | CI `gh` | Buildkite `bk` | Box `box` | M365 `m365`
 
 ## Code Quality
 
-Code is liability: keep additions only for product value, defensive correctness, or test confidence | delete/inline before abstract | `bun run lint:fix` + `bun run type:check` pre-done | light dep: date-fns lodash-es clsx
+Code is liability: keep additions only for product value, defensive correctness, or test confidence | delete/inline before abstract | `bun run lint:fix` + `bun run type:check` pre-done
 
-## React
+## Stack conventions (chosen, not inferable)
 
-- Functional only (Compiler) | `@/components/ui/` | DOMPurify user HTML
-- `JSON.parse()` data, `textContent` text, `setHTML` safe HTML
-- Fix type: guard, generic, schema -- no `as any`/`as never`/`biome-ignore`
-- `focus-visible:ring-*` not outline:none | Compiler memoize -- no `useMemo`/`useCallback`/`React.memo`
-- `aria-label` icon-only `<Button>` | every `<Button>`: `onClick`/`asChild`/`type="submit"`/`disabled`
-- `<Link>` nav | direct import (tree-shake) | `{ passive: true }` scroll/touch/wheel
-- `React.lazy()` heavy dep | `structuredClone()` deep clone | `.requestSubmit()` form
-- `.filter()`/`Array.with()` remove | `Number()`/`parseInt(s,10)` | `Number.isNaN()`
-- `<Button>` click thing | function to `setTimeout` | name useEffect: `useEffect(function syncX(){...},[deps])`
-- Form mode: `onChange` only | field validate need | err inline via FormMessage
-- Hook in `/hooks/`, not route file | route >300 LOC -> `/improve-codebase-architecture`
-- No `window.location` -- router/env | side-effect: `useMutation` not raw fetch
-- No `throw new Error()` ConnectRPC -- `ConnectError.from()` | proto enum not magic number
-- `useWatch()` not `form.watch()` | spread `...field` RHF | `mutate()` need `onError`
-- `ConnectError.from(error)` + `formatToastErrorMessageGRPC()` | `*Mutation` suffix
-- No `@redpanda-data/ui` -- registry | no direct `lucide-react` -- `components/icons`
-- No inline `staleTime`/`gcTime` -- named const
-- Proto form: `useProtoForm` own state -- no parallel `useState<*Config>` / `useState<*Auth>` (hook)
-- `form.setValue(name, v, { shouldDirty: true, shouldValidate: true })` -- option need unless silence on purpose (hook)
-- Multi-field form: render `<FormErrorSummary>` / `role="alert"` / `aria-live` (hook) -- submit err screen-reader visible
-- Proto label/desc: hydrate from `getFieldDescription(schema, field)` via `ProtoAnnotations` registry -- no hardcode string in JSX when proto annotation exist
-
-## Tailwind
-
-Utility class | design token `var(--destructive)` `bg-primary` | fix specificity at source | variant prop registry component | `100dvh` | `width:100%` | keep user-scalable (WCAG 1.4.4)
-
-## Env Vars
-
-`@/env` (t3-env+zod) | declare in `src/env.ts` | `process.env` OK build/test config only
-
-## A11y
-
-`<img>` alt | clickable div/span: role+tabIndex+kbd | dialog: aria-label(ledby) | disabled `<Button>`: `<Tooltip>` why | `aria-invalid` needs `aria-describedby` | no nested interactive (hooks enforce)
-
-## State & Data
-
-zustand client, TanStack Query server | connect-query for ConnectRPC (except `useTransport`/`callUnaryMethod`) | Protobuf v2: `create(Schema,{...})` schema-first | `timestampFromDate()` Timestamp | `anyPack()` Any+`typeRegistry` | `handleSubmit(onSubmit, onError)` | FieldMask: `Object.keys(dirtyFields)` never hardcode | `invalidateQueries` > `refetchQueries` -- always `await` | new file need test -- `/tdd`
+- UI: `@/components/ui/` registry first, `<Button>` for every button, variant props + design tokens (`bg-primary`, `var(--destructive)`) -- fix specificity at source, never restyle registry components inline
+- State: zustand = client, TanStack Query = server, connect-query for ConnectRPC | env via `@/env` (t3-env+zod, declare in `src/env.ts`)
+- Proto: enums by name, never magic numbers | Functional components only (Compiler)
+- Validate format, not presence: URL regex, enum membership, UPPER_SNAKE patterns
+- Tests: `.test.ts` unit | `.test.tsx` integration | `.browser.test.tsx` visual | `e2e/*.spec.ts` Playwright | co-locate with source
 
 ## Lifecycle (MANDATORY -- hooks enforce)
 
@@ -71,50 +26,25 @@ Order every task. Hooks block skipped steps.
 1. **Understand** -- explore, one question at time, propose
 2. **Plan** -- exact path, code, expect output
 3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
-4-6. **`/go`** -- verify -> self-review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
+4-6. **`/go`** -- verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
 Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
 ### Effort + model routing
 
-Default `high`. Fable-5: `high` or lower ONLY (`xhigh` token-hungry, `max` a furnace, worse output). Never inject `ultrathink`.
+Default `high`. Fable-5: `high` or lower ONLY (`xhigh`/`max` furnaces, worse output). Never inject `ultrathink`.
 
-Rank cost/intel/taste (1-10, higher better; cost = actual pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 (codex) 8/9/6 | GPT-5.5 (codex) 9/5/5. Taste = UI/UX, code quality, API design, copy.
+Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 Sol (codex) 8/9/6 | GPT-5.6 Terra 9/6/5 | GPT-5.6 Luna 10/3/2. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
 
-Ships -> intelligence > taste > cost; cost tiebreaker only | defaults not limits: output below bar -> rerun smarter WITHOUT asking | bulk mechanical (clear-spec impl, migrations) -> codex GPT-5.6, free | user-facing (UI/copy/API) -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 (+optional GPT independent) | computer use + token furnaces -> codex, report back | **thinker/executor split**: smart model plans exact steps -> cheap executor (Sonnet or codex GPT-5.6) -> smart model reviews diff | **NEVER Haiku** | GPT only via codex CLI (`/codex`) | Claude via `model` param.
+GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- smartest model rivaled only by Fable-5, efficient for the price; ALL code writing, implementation, and adversarial review; run at `medium`|`high` ONLY. **Terra** = budget non-code work -- posting PR comments, routine review passes, test-runner/CI chores; `medium`|`high` ONLY; never writes product code. **Luna** = last resort for extremely cheap, quick, limited tasks far from code -- tracker orchestration (Jira/GitHub issue shuffling), mundane tool-call loops, test fixtures; `high` ONLY; never development.
+
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | bulk mechanical -> codex Sol (plan allowance) | user-facing -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 | token furnaces -> codex | **thinker/executor split**: Fable/frontier thinks, tastes, plans; Sol executes; smart model reviews diff | **Cross-model review, automatic on every change**: author model never solely reviews its own work, and the reviewer comes from a DIFFERENT family whenever possible -- Claude wrote -> Sol reviews; GPT wrote -> Fable/Opus; same-family clean-context only when cross-family unavailable, record it; Terra may take routine re-check rounds; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via `model` param.
 
 ### Monitor (not sleep)
 
 `Bash(run_in_background)` + `Monitor` stream output:
 CI: `gh pr checks <n> --watch` | dev server | vitest watcher | container log | build output
 
-## UX Copy
-
-Sentence case | no Latin abbrev (for example, that is, and so on, through) | no ableist word | they/them
-
-## Tests
-
-Fail first -> pass | `userEvent.setup()` + `getByRole` | `await waitFor(()=>expect(...))` async | `.test.ts` unit `.test.tsx` integration `.browser.test.tsx` visual `e2e/*.spec.ts` Playwright | co-locate | `test()` not `it()` | `vi.fn()`/`vi.mock()`/`vi.spyOn()` | `.toBeVisible()` > `.toBeInTheDocument()` | no `waitForTimeout` | no `test.skip` E2E (`test.fixme()` known bug) | `createRouterTransport` ConnectRPC mock | `data-testid` interactive | `test.step()` Playwright
-Green != done: zero warnings local AND CI, fix at source (hooks test-warning-check + ci-warning-audit enforce, no bypass).
-
-## Logging
-
-Structured JSON | requestId/traceId every entry | log at decision point | named level per module | never log secret/PII
-
-## Error Handling
-
-Boundary: route+loader -> `errorComponent` (hook) | `React.lazy()` in `<Suspense>` | handle loading+error+empty
-Catch: set err state / re-throw / handler -- no silent fallback, no log-only UI | parse err: early return `<ErrorState />`
-ConnectError field: `findDetails(BadRequestSchema)` in `onError` -> iterate `fieldViolations` -> `form.setError` per violation -- toast only non-field (hook)
-Validate: format not presence | UPPER_SNAKE pattern | exhaustive: `default: never`/`satisfies never`
-Async: `onChange` async need `AbortController` | `mutate()` need `onError` (hook) | `Promise.allSettled` partial-fail
-Form UX: show ALL err | `aria-invalid`+`aria-describedby` (hook) | disabled submit: `<Tooltip>` why (hook) | URL: `type="url"` | secret: `type="text"` when verify
-State: oneof clear prev on switch | auth/config separate from form | FieldMask `paths`: `Object.keys(dirtyFields)` (hook)
-
-## Auto Mode
-
-Deny rule mirror `enforce-toolchain.sh` | test `bunx skills:*` allow rule | admin: `autoMode.environment` whitelist | `claude auto-mode defaults` schema | plan->approve->auto natural fit
-
-## Auto-Generated (skip)
+## Auto-Generated (never edit)
 
 `*.gen.ts`/`*.gen.tsx` | `*_pb.ts`/`*_pb.js` | `*_connectquery.ts` | `@generated`/`DO NOT EDIT` first 5 line

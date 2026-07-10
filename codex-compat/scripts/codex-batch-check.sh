@@ -90,22 +90,17 @@ if [ -n "$changed_css" ] && [ -x "$hooks_dir/tailwind-check.sh" ]; then
   done
 fi
 
-# Run bundle-guard on changed package.json files
-if [ -n "$changed_pkg" ] && [ -x "$hooks_dir/bundle-guard.sh" ]; then
+# package.json heavy-dep ADMISSION: an import lint cannot reject adding an
+# unused/delayed-use dependency to the manifest. Same banned set as the Claude
+# FileChanged hook (file-changed-deps.sh); devDependencies stay allowed.
+if [ -n "$changed_pkg" ]; then
   for pkg in $changed_pkg; do
     abs_path="$repo_root/$pkg"
     [ -f "$abs_path" ] || continue
-
-    input="{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$abs_path\"}}"
-    hook_stderr=""
-    hook_exit=0
-    hook_stderr=$(echo "$input" | "$hooks_dir/bundle-guard.sh" 2>&1 >/dev/null) || hook_exit=$?
-
-    if [ $hook_exit -ne 0 ] && [ -n "$hook_stderr" ]; then
-      msg=$(echo "$hook_stderr" | grep -o '"systemMessage":"[^"]*"' | head -1 | sed 's/"systemMessage":"//;s/"$//' || true)
-      if [ -n "$msg" ]; then
-        errors="$errors\n[bundle-guard] $pkg: $msg"
-      fi
+    _banned=$(jq -r '(.dependencies // {}) | keys[]' "$abs_path" 2>/dev/null \
+      | grep -xE 'moment|lodash|jquery|core-js|classnames' | head -5 | tr '\n' ' ' || true)
+    if [ -n "$_banned" ]; then
+      errors="$errors\n[dep-admission] $pkg: banned heavy deps in dependencies: ${_banned}(moment->date-fns, lodash->lodash-es, jquery->native DOM, core-js->targeted polyfills, classnames->clsx)"
     fi
   done
 fi

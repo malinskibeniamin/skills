@@ -29,6 +29,7 @@
     "rules": {
       "suspicious": {
         "noConsole": "error",
+        "noEmptyBlockStatements": "error",
         "noReactForwardRef": "off"
       },
       "complexity": {
@@ -61,7 +62,9 @@
               "react-beautiful-dnd": "Archived by Atlassian. Use @dnd-kit/core instead.",
               "framer-motion": "Renamed to 'motion'. Use the motion package instead.",
               "@redpanda-data/ui": "Legacy Chakra library. Use redpanda-ui registry components instead.",
-              "lucide-react": "Use components/icons barrel for consistent icon usage."
+              "lucide-react": "Use components/icons barrel for consistent icon usage.",
+              "jquery": "No jQuery in React. Use native DOM APIs or refs.",
+              "core-js": "No full core-js. Use specific polyfills or @babel/preset-env useBuiltIns."
             }
           }
         }
@@ -74,12 +77,26 @@
               "button": "Use <Button> from @/components/ui/ instead.",
               "input": "Use <Input> from @/components/ui/ instead.",
               "select": "Use <Select> from @/components/ui/ instead.",
-              "textarea": "Use <Textarea> from @/components/ui/ instead."
+              "textarea": "Use <Textarea> from @/components/ui/ instead.",
+              "dialog": "Use <Dialog> from @/components/ui/ instead.",
+              "table": "Use <Table> from @/components/ui/ instead.",
+              "label": "Use <Label> from @/components/ui/ instead.",
+              "a": "Use <Link> from TanStack Router or the UI registry instead.",
+              "code": "Use <Code>/<CodeBlock> from Typography instead.",
+              "pre": "Use <CodeBlock> from Typography instead.",
+              "h1": "Use <Heading level={1}> from Typography instead.",
+              "h2": "Use <Heading level={2}> from Typography instead.",
+              "h3": "Use <Heading level={3}> from Typography instead.",
+              "h4": "Use <Heading level={4}> from Typography instead.",
+              "h5": "Use <Heading level={5}> from Typography instead.",
+              "h6": "Use <Heading level={6}> from Typography instead.",
+              "p": "Use <Text> from Typography instead."
             }
           }
         }
       },
       "nursery": {
+        "noProcessEnv": "error",
         "useExhaustiveSwitchCases": "error",
         "useConsistentTestIt": {
           "level": "error",
@@ -93,6 +110,10 @@
     }
   },
   "overrides": [
+    {
+      "includes": ["src/env.ts", "**/*.config.*", "vitest.*.ts", "rsbuild.*.ts", "playwright.*.ts"],
+      "linter": { "rules": { "nursery": { "noProcessEnv": "off" } } }
+    },
     {
       "includes": ["**/*.test.*", "**/*.spec.*", "**/__tests__/**"],
       "linter": {
@@ -123,10 +144,12 @@ Ultracite strict baseline. Overrides:
 | `noReactForwardRef` | suspicious | on | off | forwardRef still needed React 18 |
 | `noExcessiveCognitiveComplexity` | complexity | 20 | 15 | Stricter complexity cap |
 | `noExplicitAny` in tests | suspicious | off | error | No `any` even tests |
+| `noEmptyBlockStatements` | suspicious | off | error | Empty `catch (e) {}` swallows errors (replaced the silent-catch hook) |
 | `noDeprecatedImports` | project | off | error | Needs Biome Scanner |
 | `useFilenamingConvention` | style | off | kebab-case strict | `my-component.tsx` not `MyComponent.tsx` |
-| `noRestrictedImports` | style | empty | configured | Ban moment, lodash, classnames, mobx, yup, `@redpanda-data/ui`, lucide-react |
-| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>` |
+| `noRestrictedImports` | style | empty | configured | Ban moment, lodash, classnames, mobx, yup, jquery, core-js, `@redpanda-data/ui`, lucide-react (replaced the bundle-guard hook) |
+| `noRestrictedElements` | correctness | off | configured | Ban raw `<button>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<table>`, `<label>`, `<code>`, `<pre>`, `<h1>`-`<h6>`, `<p>` (component-library owners; replaced the legacy-import + react-rules raw-element hooks) |
+| `noProcessEnv` | nursery | off | error | Raw `process.env` banned outside `src/env.ts` + config files (replaced the env-validation hook) |
 | `useExhaustiveSwitchCases` | nursery | off | error | Type-safe switch/case |
 | `useConsistentTestIt` | nursery | off | test only | `test()` over `it()` |
 | `noPlaywrightWaitForTimeout` | nursery | off | error | Ban `page.waitForTimeout()` |

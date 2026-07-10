@@ -35,7 +35,7 @@ the plugin ("export harness").
 | react-compiler | `references/react-compiler/` | React Compiler + memoization check |
 | zustand | `references/zustand/` | double-parens create, useShallow, persist |
 | react-rules | `references/react-rules/` | ban raw HTML, TS escapes, XSS, barrel imports |
-| env-validation | `references/env-validation/` | t3-env + zod, ban process.env |
+| env-validation | `references/env-validation/` | t3-env + zod; process.env ban via Biome noProcessEnv |
 | conventional-commits | `references/conventional-commits/` | type(scope): description enforcement |
 | react-doctor | `references/react-doctor/` | health scoring + Stop hook |
 | ci-pipeline | `references/ci-pipeline/` | GitHub Actions CI, coverage gates, caching |
@@ -49,7 +49,7 @@ Runtime-guidance skills (daily work, not setup): `/accessibility`, `/tanstack-ro
 
 1. Confirm the profile (default full). Read each tool's reference lazily as you reach it.
 2. Set `REACT_RULES_BAN_USEEFFECT=1` in session-env.sh when the repo wants strict effects.
-3. Workflow skills (development-lifecycle, tdd, brainstorming, grilling, triage,
+3. Workflow skills (development-lifecycle, tdd, grilling, triage,
    diagnosing-bugs, prototype, domain-modeling) ship with this plugin -- nothing to install.
 
 ## Verify

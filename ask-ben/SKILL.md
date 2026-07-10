@@ -15,14 +15,12 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/agent-watchdog` | Use when asked to watch, audit, compare, or fix another agent's work from a Codex/Claude session, transcrip... |
 | `/aip` | Designs Google AIP-style protobuf resource APIs. |
 | `/ask-ben` | Router for Ben's frontend-skills harness and every local skill. |
-| `/brainstorming` | Use when exploring design options, starting new features, or needing to think before coding. |
 | `/codebase-design` | Shared vocabulary for designing deep modules. |
 | `/codex-compat` | Generate Codex hooks.json and AGENTS.md from Claude Code hooks. |
-| `/codex` | Delegate work to GPT-5.5/5.6 via the codex CLI -- clear-spec implementation, independent review, computer u... |
+| `/codex` | Delegate work to GPT-5.6 via the codex CLI -- clear-spec implementation, independent review, computer use,... |
 | `/commit-push-pr` | Analyze changes, create categorized conventional commits, push, and open a PR. |
-| `/commit-push` | Analyze changes, create categorized conventional commits, and push -- no PR. |
 | `/connect-query` | ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation... |
-| `/deslop` | Question changed code as liability and remove unjustified surface area. |
+| `/deslop` | Write the least code that works and remove unjustified surface area. |
 | `/development-lifecycle` | Use when frontend/React/TypeScript/UI work. |
 | `/diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. |
 | `/domain-modeling` | Build and sharpen a project's domain model. |
@@ -31,23 +29,23 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/extend-harness` | Extend frontend-skills hook harness. |
 | `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
 | `/go` | Ship what built. |
-| `/grilling` | Interview the user relentlessly about a plan or design, with a 3-hat plan gate and optional domain-doc capt... |
+| `/grilling` | Explore design options, then interview the user relentlessly about the chosen plan, with a 3-hat plan gate... |
 | `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
 | `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
-| `/improve-codebase-architecture` | Scan a codebase for deepening opportunities, present a visual HTML report, then grill the chosen candidate. |
 | `/improve` | Surveys a codebase as a senior advisor and writes implementation plans. |
 | `/make-pr-easy-to-review` | Prepare PRs for review by cleaning noisy history, improving PR descriptions, and adding reviewer guidance w... |
 | `/plan-arbiter` | Use when comparing, cross-reviewing, merging, judging, choosing, or arbitrating competing plans from agents... |
 | `/plow-ahead` | Use when the user says plow ahead, do not stop, use your best judgment, keep going until done, or similar. |
-| `/ponytail` | Writes the least code that works. |
 | `/prime` | Builds repo startup brief. |
 | `/prototype` | Build a throwaway prototype to answer a design question. |
 | `/read-the-damn-docs` | Use for third-party APIs, libraries, frameworks, CLIs, cloud services, SDKs, fast-moving behavior, current/... |
+| `/redpanda-ai-gateway` | Run AI CLIs (claude, codex) through the Redpanda AI Gateway via rpk ai -- auth, environments, providers, ga... |
 | `/registry-workflow` | Component registry maintenance -- taxonomy, consumer drift analysis, sync discipline. |
 | `/research` | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in th... |
 | `/resilience-review` | Murphy-law hat panel for unhappy paths -- input, timing, system, state, UX-recovery hats probe a change in... |
 | `/resolve-pr-feedback` | Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. |
 | `/resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. |
+| `/revamp` | Run a large rewrite, port, or migration using the Bun-in-Rust playbook -- baselines, mechanical-first trans... |
 | `/review` | Reviews a diff with an 8-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience... |
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
@@ -61,7 +59,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker -- no interview, just... |
 | `/to-tickets` | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blo... |
 | `/triage` | Move issues through triage roles and prepare agent-ready work. |
-| `/upgrade-dependency` | Plans safe dependency upgrades via researched paths and risk gates. |
+| `/upgrade-dependency` | Upgrade a dependency AND adapt the code to it in one pass -- bump, codemods, call-site migration, new-API a... |
 | `/ux-copy` | UX text style for UI strings and prose -- sentence case, action labels, banned phrases, inclusive language,... |
 | `/visual-plan` | Turn text plans into interactive Agent-Native visual plans with diagrams, file maps, annotated code, questi... |
 | `/visual-recap` | Turn a PR, branch, commit, or diff into an interactive Agent-Native visual recap with diagrams, file maps,... |
