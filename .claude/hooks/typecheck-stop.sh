@@ -1,6 +1,11 @@
 #!/bin/bash
 set -eo pipefail
 
+# Escape hatch: when Claude is already responding to a Stop block, do not
+# block again -- prevents infinite hostage loops (audit cluster 1).
+_sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
+
+
 # Stop hook: run type checking and related tests before Claude finishes.
 # Only runs if JS/TS files were actually changed BY THIS SESSION.
 
@@ -91,7 +96,8 @@ test_output=""
 test_exit=0
 
 if [ -f "node_modules/.bin/vitest" ] || [ -f "$repo_root/node_modules/.bin/vitest" ]; then
-  test_output=$(vitest run --related $abs_changed 2>&1) || test_exit=$?
+  _vbin="node_modules/.bin/vitest"; [ -f "$_vbin" ] || _vbin="$repo_root/node_modules/.bin/vitest"
+  test_output=$("$_vbin" run --related $abs_changed 2>&1) || test_exit=$?
 elif [ -f "node_modules/.bin/jest" ] || [ -f "$repo_root/node_modules/.bin/jest" ]; then
   test_output=$(npx jest --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
 else

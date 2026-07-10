@@ -1,6 +1,11 @@
 #!/bin/bash
 set -eo pipefail
 
+# Escape hatch: when Claude is already responding to a Stop block, do not
+# block again -- prevents infinite hostage loops (audit cluster 1).
+_sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
+
+
 # Stop hook: enforce development lifecycle completion with auto-remediation.
 # Ensures code changes are tested, liability-reviewed via /deslop,
 # pushed, PR'd, CI-checked, and review-requested. Instead of just blocking, prescribes exact actions
@@ -207,7 +212,7 @@ elif command -v vitest &>/dev/null || [ -x "./node_modules/.bin/vitest" ]; then
 
   _cov_json=$(mktemp -d)/coverage
   _cov_report=""
-  _cov_report=$($_vitest_bin run --coverage.enabled --coverage.reporter=json \
+  _cov_report=$($_vitest_bin run --coverage.enabled --coverage.reporter=json-summary \
     --coverage.reportsDirectory="$_cov_json" \
     --reporter=json --run 2>/dev/null || true)
 
@@ -320,8 +325,10 @@ fi
 
 reviewer_count=$(echo "$pr_data" | jq -r '.reviewRequests | length' 2>/dev/null || echo "0")
 
+# Advisory only (audit: Stop hooks gate code properties, not the org chart --
+# a solo repo must never be hostage to an unassignable reviewer).
 if [ "$reviewer_count" = "0" ] || [ -z "$reviewer_count" ]; then
-  hook_stop_block "CI green but no reviewer on PR #$pr_number. Request review NOW: gh pr edit $pr_number --add-reviewer <user> — then retry."
+  echo '{"suppressOutput":true,"systemMessage":"CI green, no reviewer on the PR yet -- consider: gh pr edit '"$pr_number"' --add-reviewer <user>."}' >&2
 fi
 
 # ── Lifecycle complete ───────────────────────────────────────────

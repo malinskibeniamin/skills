@@ -1,6 +1,11 @@
 #!/bin/bash
 set -eo pipefail
 
+# Escape hatch: when Claude is already responding to a Stop block, do not
+# block again -- prevents infinite hostage loops (audit cluster 1).
+_sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
+
+
 # Source hook-lib for session-scoped file tracking
 _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 

@@ -514,7 +514,7 @@ Bug triage: GitHub issue comments as cross-model channel.
 
 | Complexity | Model |
 |---|---|
-| Simple (rename, move) | `claude-haiku-4-5` |
+| Simple (rename, move) | `claude-sonnet-5 (NEVER Haiku -- see CLAUDE.md routing)` |
 | Standard (feature) | `claude-sonnet-4-6` |
 | Complex (architecture) | `claude-opus-4-7` |
 

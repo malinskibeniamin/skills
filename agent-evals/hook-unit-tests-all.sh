@@ -66,6 +66,10 @@ echo -e "  Tests:  ${GREEN}${TOTAL_PASS} passed${NC}, ${RED}${TOTAL_FAIL} failed
 echo -e "  Suites: $((5 - SUITES_FAILED))/5 passed"
 echo ""
 
+if [ "${SUITES_FAILED:-0}" -gt 0 ]; then
+  echo -e "${RED}FAILED${NC} — $SUITES_FAILED suite(s) crashed or failed before summary"
+  exit 1
+fi
 if [ "$TOTAL_FAIL" -gt 0 ]; then
   echo -e "${RED}FAILED${NC} — $TOTAL_FAIL test(s) failed"
   exit 1

@@ -243,3 +243,10 @@ _assert_biome_owns() {
     echo -e "  ${RED}\xe2\x9c\x97${NC} $desc (rule missing or disabled in Biome config: ${_val:-absent})"
   fi
 }
+
+# Unconditional pass with a note -- ownership/retirement records where a
+# rule moved to another enforcement owner.
+_pass() {
+  PASS=$((PASS + 1))
+  echo -e "  ${GREEN}\xe2\x9c\x93${NC} $1"
+}

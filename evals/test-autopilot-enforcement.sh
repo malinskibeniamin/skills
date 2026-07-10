@@ -26,7 +26,7 @@ run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Run:.*git push" "lifecycle-stop
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Create one NOW" "lifecycle-stop prescribes PR creation"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Monitor tool" "lifecycle-stop prescribes Monitor for CI"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Do not stop until CI green" "lifecycle-stop mandates CI fix loop"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Request review NOW" "lifecycle-stop prescribes review request"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "consider: gh pr edit" "lifecycle-stop nudges (not blocks) review request -- audit demotion"
 
 # ── intent-detect.sh: dynamic-context-only policy (2026-07 audit) ──
 # Static rule restatements ([LIFECYCLE], [TDD], [MINIMAL], [CLI-FIRST])
