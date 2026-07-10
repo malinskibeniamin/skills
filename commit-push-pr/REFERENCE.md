@@ -66,7 +66,7 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 ## Dependency upgrade path
 <omit entire section if no dependency-file diff>
 
-- Report: <docs/dependency-upgrades/... or skip reason>
+- Upgrade evidence: <what broke / adapted / adopted + verify commands, or skip reason>
 - Packages:
 - SemVer confidence:
 - Risk gate:

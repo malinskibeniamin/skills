@@ -233,11 +233,13 @@ _assert_biome_owns() {
   local rule="$1" desc="$2"
   local cfg
   cfg=$(awk '/^```jsonc?$/{f=1;next} /^```$/{f=0} f' "$(git rev-parse --show-toplevel)/frontend-starter-kit/references/biome/REFERENCE.md" | sed -e 's://[^"]*$::')
-  if printf '%s' "$cfg" | jq -e ".. | objects | select(has(\"$rule\"))" >/dev/null 2>&1 || printf '%s' "$cfg" | grep -q "\"$rule\""; then
+  local _val
+  _val=$(printf '%s' "$cfg" | jq -r ".. | objects | select(has(\"$rule\")) | .[\"$rule\"] | if type == \"object\" then (.level // \"configured\") else . end" 2>/dev/null | head -1)
+  if [ -n "$_val" ] && [ "$_val" != "off" ] && [ "$_val" != "null" ]; then
     PASS=$((PASS + 1))
-    echo -e "  ${GREEN}\xe2\x9c\x93${NC} $desc (rule present in parsed Biome config)"
+    echo -e "  ${GREEN}\xe2\x9c\x93${NC} $desc (rule ENABLED in parsed Biome config: $_val)"
   else
     FAIL=$((FAIL + 1))
-    echo -e "  ${RED}\xe2\x9c\x97${NC} $desc (rule MISSING from Biome config)"
+    echo -e "  ${RED}\xe2\x9c\x97${NC} $desc (rule missing or disabled in Biome config: ${_val:-absent})"
   fi
 }

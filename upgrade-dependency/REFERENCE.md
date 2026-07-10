@@ -5,13 +5,13 @@
 
 - Manual: `/upgrade-dependency <pkg>`.
 - `/snyk-ux-security`: owns reachability/Snyk state; calls this for remediation path.
-- `/go`: dependency files changed -> require report/PR section or skip reason.
+- `/go`: dependency files changed -> require upgrade evidence in the PR body (what broke/adapted/adopted + verify) or skip reason.
 - `/commit-push-pr`: dependency diff -> add `Dependency upgrade path` PR section.
-- `file-changed-deps`: nudge only; run `/upgrade-dependency`, add report, or skip reason.
+- `file-changed-deps`: nudge only; run `/upgrade-dependency` (upgrade+adapt) or record a skip reason.
 
 ## Report template
 
-Write `docs/dependency-upgrades/<package>-<from>-to-<target>.md`.
+Templates below serve the risky-gate GitHub ISSUE and PR body only -- no unprompted repo reports.
 
 ```md
 # Dependency upgrade: <package> <from> -> <target>
@@ -68,7 +68,7 @@ Use for major, non-SemVer, missing changelog, unclear migration, or peer/securit
 Title: Plan dependency upgrade: <package> <from> -> <target>
 
 ## Version path
-<paste report table>
+<version-hop table: version | breaking | action>
 
 ## Breaking changes/migrations
 - <version>: <change, source, required code change>
@@ -101,7 +101,7 @@ Delegation plan: one package per agent, blockers, merge order
 ```md
 ## Summary
 - Upgraded <package> <from> -> <target>
-- Upgrade path: <report path>
+- Upgrade path: <installed -> target hops>
 
 ## Risk gate
 Decision: applied automatically
@@ -128,10 +128,10 @@ Security ladder: direct/top-level dep -> parent dep -> override/resolution/repla
 ## Examples
 
 - Safe minor: `/upgrade-dependency vite to latest` -> path, SemVer, changelog, peers, locks, PR.
-- Risky major: `/upgrade-dependency react-router to latest` -> report + issue; apply after approval.
-- Plan only: `/upgrade-dependency plan only for rspack` -> no code, report/issue only.
+- Risky major: `/upgrade-dependency react-router to latest` -> GitHub issue; apply after approval.
+- Plan only: `plan only for rspack` -> path + risk in chat; nothing written.
 - Security: `/snyk-ux-security apps/frontend` -> triage reachability, then use this skill for remediation.
-- Many packages: `/upgrade-dependency modernize frontend dependencies to latest stable` -> one package per subagent, merge reports, apply safe bumps.
+- Many packages: `/upgrade-dependency modernize frontend dependencies to latest stable` -> one package per subagent, merge gates, apply safe bumps.
 
 ## Supply-chain gate
 
