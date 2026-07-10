@@ -191,7 +191,7 @@ Remaining (original wave-2 list; unapplied items are 1's dispatcher packaging, 4
 
 - README 1460 -> ~300 lines: install, architecture, when-not-to-use; demo/FAQ/marketing move to docs/;
   catalog becomes generated.
-- Move `docs/screenshots` (31MB) out of git history (filter-repo + release assets or LFS) while the
+- Move `docs/screenshots (removed 2026-07-10)` (31MB) out of git history (filter-repo + release assets or LFS) while the
   consumer base is small -- every plugin install clones it.
 - Deduplicate the rule sources: one canonical rule pack generating project CLAUDE.md (repo deltas
   only), the global CLAUDE.md, and AGENTS.md -- in this repo the near-identical global and project
@@ -438,4 +438,4 @@ record; wave-1 items are marked by the changelog).
 | `meta:CONTEXT.md` | **keep** | medium | 1.3KB domain glossary (customer-facing surface, surface review, prime vs handoff) that dogfoods the domain-modeling skill and demonstrably resolves real term collisions the skills trade in. Small enough to cost nothing. |
 | `meta:skill-manifest.json/plugin.json` | **keep** | high | The manifest-as-source-of-truth pattern is solid: skill-manifest.json generates settings.json, hooks.json, both plugin.jsons and marketplaces via generate-hook-configs.sh, with a lefthook pre-push --check guard against drift. |
 | `meta:evals/` | **rewrite** | high | 93 eval scripts with a real runner (evals/run.sh) but zero CI wiring -- the only GitHub workflow is update-agent-native-plan-skills.yml, and lefthook runs typecheck/lint/manifest-sync only. |
-| `meta:docs/` | **trim** | high | 31MB, almost all docs/screenshots, permanently baked into the git history of a plugin repo that every consumer clones on install. The written content (rfc/, evaluation notes, harness-orchestration-learnings.md) is a few hundred KB of genuine value. |
+| `meta:docs/` | **trim** | high | 31MB, almost all docs/screenshots (removed 2026-07-10), permanently baked into the git history of a plugin repo that every consumer clones on install. The written content (rfc/, evaluation notes, harness-orchestration-learnings.md) is a few hundred KB of genuine value. |

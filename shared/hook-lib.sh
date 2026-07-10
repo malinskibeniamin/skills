@@ -324,6 +324,15 @@ hook_parse_edit_write() {
     return $?
   fi
 
+  # Binary files are not source code: skip before any sed/grep touches the
+  # content (BSD sed under a UTF-8 locale dies with "RE error: illegal byte
+  # sequence" on invalid UTF-8 -- caught by macOS CI).
+  if [ -s "$file_path" ] && ! LC_ALL=C grep -Iq . "$file_path" 2>/dev/null; then
+    _hook_debug "skip: binary content ($file_path)"
+    _hook_skip_or_exit 1
+    return $?
+  fi
+
   file_content=$(cat "$file_path" 2>/dev/null || true)
   _hook_debug "parse: $file_path"
 

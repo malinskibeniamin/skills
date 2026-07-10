@@ -60,16 +60,21 @@ else
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Biome config unparseable"
 fi
 
-# Media references (video/img tags and inline paths) must exist -- docs included.
-_pi_media_bad=""
-while IFS= read -r _pi_ref; do
-  [ -e "$REPO_ROOT/$_pi_ref" ] || _pi_media_bad="$_pi_media_bad $_pi_ref"
-done < <(grep -rhoE 'docs/screenshots/[a-zA-Z0-9._-]+' "$REPO_ROOT/README.md" "$REPO_ROOT/docs" 2>/dev/null | sort -u)
-if [ -n "$_pi_media_bad" ]; then
-  echo "  FAIL  referenced media missing:$_pi_media_bad"
-  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: referenced media missing"
+# docs/screenshots is dead (owner call 2026-07-10): nothing may reference it
+# and the directory must not return.
+if [ -d "$REPO_ROOT/docs/screenshots" ]; then
+  echo "  FAIL  docs/screenshots resurrected -- killed by owner decision"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: docs/screenshots resurrected"
 else
-  echo "  PASS  all referenced docs/screenshots media exist"
+  echo "  PASS  docs/screenshots stays dead"
+  PASS=$((PASS + 1))
+fi
+_pi_media_refs=$(grep -rl "docs/screenshots" "$REPO_ROOT/README.md" "$REPO_ROOT"/*/SKILL.md 2>/dev/null || true)
+if [ -n "$_pi_media_refs" ]; then
+  echo "  FAIL  live references to dead docs/screenshots: $_pi_media_refs"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: dead screenshots referenced"
+else
+  echo "  PASS  no live references to docs/screenshots"
   PASS=$((PASS + 1))
 fi
 
