@@ -16,7 +16,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/aip` | Designs Google AIP-style protobuf resource APIs. |
 | `/ask-ben` | Router for Ben's frontend-skills harness and every local skill. |
 | `/codebase-design` | Shared vocabulary for designing deep modules. |
-| `/codex-compat` | Generate Codex hooks.json and AGENTS.md from Claude Code hooks. |
+| `/codex-compat` | Generate Codex hooks.json and AGENTS.md parity surfaces from the Claude hook manifest. |
 | `/codex` | Delegate work to GPT-5.6 via the codex CLI -- clear-spec implementation, independent review, computer use,... |
 | `/commit-push-pr` | Analyze changes, create categorized conventional commits, push, and open a PR. |
 | `/connect-query` | ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation... |
@@ -26,14 +26,14 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/domain-modeling` | Build and sharpen a project's domain model. |
 | `/e2e-testing` | Playwright + Testcontainers + axe-core E2E patterns for forms, tables, and workflows. |
 | `/efficient-frontier` | Use when a frontier model (Fable, Opus, GPT-5.6) should delegate bounded research, coding, testing, or log... |
-| `/extend-harness` | Extend frontend-skills hook harness. |
+| `/extend-harness` | Extend the frontend-skills hook harness: add rules, tune severity tiers, view analytics, debug non-firing h... |
 | `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
 | `/go` | Ship what built. |
 | `/grilling` | Explore design options, then interview the user relentlessly about the chosen plan, with a 3-hat plan gate... |
 | `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
 | `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
 | `/improve` | Surveys a codebase as a senior advisor and writes implementation plans. |
-| `/make-pr-easy-to-review` | Prepare PRs for review by cleaning noisy history, improving PR descriptions, and adding reviewer guidance w... |
+| `/make-pr-easy-to-review` | Clean noisy PR history and add reviewer guidance without changing code behavior. |
 | `/plan-arbiter` | Use when comparing, cross-reviewing, merging, judging, choosing, or arbitrating competing plans from agents... |
 | `/plow-ahead` | Use when the user says plow ahead, do not stop, use your best judgment, keep going until done, or similar. |
 | `/prime` | Builds repo startup brief. |
@@ -49,7 +49,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/review` | Reviews a diff with a 7-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience,... |
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
-| `/snyk-ux-security` | Run Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage, release-age... |
+| `/snyk-ux-security` | Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage and release-age... |
 | `/stay-within-limits` | Use when long-running or parallel agent work must respect 5-hour and weekly usage limits by checking usage... |
 | `/steelman` | Argue the strongest evidence-backed case against a premise. |
 | `/swarm` | parallel executor. |
@@ -68,7 +68,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/wayfinder` | Plan huge work that cannot fit in one agent session as a shared issue-tracker map, then resolve one investi... |
 | `/what-did-i-get-done` | Summarize authored git commits over a time period into a concise status update. |
 | `/wizard` | Generate an interactive bash wizard that walks a human through a manual procedure -- third-party setup, a o... |
-| `/work-automation-kit` | Install and configure planning/project management workflows -- specs, ticket breakdown, tracker docs, triag... |
+| `/work-automation-kit` | Install planning/PM workflows: specs, ticket breakdown, tracker docs, triage. |
 | `/work` | Alias for /development-lifecycle. |
 | `/writing-beats` | Build article beat by beat from raw material with user-chosen pivots. |
 | `/writing-fragments` | Mine user conversation into raw writing fragments in one markdown file. |

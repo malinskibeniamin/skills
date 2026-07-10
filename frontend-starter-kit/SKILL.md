@@ -1,6 +1,7 @@
 ---
 name: frontend-starter-kit
-description: Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from lazy reference docs. Use when starting a frontend project, setting up any single tool, or exporting the harness to a bare repo.
+description: Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from lazy per-tool profiles.
+disable-model-invocation: true
 argument-hint: "[profile: full | minimal | redpanda | <tool name>]"
 ---
 

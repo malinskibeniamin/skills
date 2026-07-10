@@ -1,6 +1,7 @@
 ---
 name: extend-harness
-description: Extend frontend-skills hook harness. Use when adding enforcement rules, tuning severity tiers, viewing analytics, or debugging hooks that are not firing.
+description: Extend the frontend-skills hook harness: add rules, tune severity tiers, view analytics, debug non-firing hooks.
+disable-model-invocation: true
 ---
 
 # Extend the Harness

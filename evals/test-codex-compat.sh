@@ -13,7 +13,7 @@ run_executable_eval "$SCRIPT" "codex-batch-check.sh is executable"
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: codex-compat" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "^description:" "SKILL.md has description"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
+run_content_eval "$SKILL_DIR/SKILL.md" "disable-model-invocation: true" "codex-compat is slash-only (no trigger prose needed)"
 run_content_eval "$SKILL_DIR/SKILL.md" "Codex" "SKILL.md mentions Codex"
 run_content_eval "$SKILL_DIR/SKILL.md" "AGENTS.md" "SKILL.md mentions AGENTS.md"
 run_content_eval "$SKILL_DIR/SKILL.md" "Stop" "SKILL.md mentions Stop hook"
