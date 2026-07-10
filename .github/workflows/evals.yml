@@ -1,0 +1,49 @@
+name: evals
+
+# Deterministic harness gates -- pure bash/jq/perl, zero LLM calls, zero
+# secrets. Public-repo GitHub-hosted runners are free; macOS is in the matrix
+# because its /bin/bash is 3.2 (the class of portability bug that shipped a
+# broken latency timer in 4.27).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evals:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Tool versions
+        run: |
+          bash --version | head -1
+          jq --version
+          perl --version | head -2 | tail -1
+
+      - name: Generation gates (hooks, catalog, rules)
+        run: |
+          bash scripts/generate-hook-configs.sh --check
+          bash scripts/generate-skill-catalog.sh --check
+          bash scripts/generate-agents-md.sh --check
+
+      - name: Shell eval suite
+        run: bash evals/run.sh
+
+      - name: Behavioral hook unit tests
+        run: bash agent-evals/hook-unit-tests-all.sh

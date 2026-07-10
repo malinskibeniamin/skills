@@ -4,9 +4,6 @@
 
 Hooks enforce patterns real-time, skills guide workflow, orchestration layer ensure nothing ships without tests, accessibility, type safety, code review -- zero babysit.
 
-<p align="center">
-  <img src="docs/screenshots/plugin-card.png" alt="Frontend Skills plugin card -- React/TypeScript skills, hooks, and agents for Claude Code and Codex" width="720">
-</p>
 
 ## Install
 
