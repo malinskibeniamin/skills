@@ -38,3 +38,24 @@ else
   echo "  PASS  all hook scripts executable"
   PASS=$((PASS + 1))
 fi
+
+# Executable ownership (issue #48 WS3): the Biome reference config must be
+# machine-loadable and actually carry every rule the retirement notes claim --
+# asserted against the parsed artifact, not prose.
+_pi_cfg=$(awk '/^```jsonc?$/{f=1;next} /^```$/{f=0} f' "$REPO_ROOT/frontend-starter-kit/references/biome/REFERENCE.md" | sed -e 's://[^"]*$::' )
+if printf '%s' "$_pi_cfg" | jq -e . >/dev/null 2>&1; then
+  echo "  PASS  Biome reference config parses as JSON"
+  PASS=$((PASS + 1))
+  for _pi_rule in noRestrictedImports noRestrictedElements noProcessEnv; do
+    if printf '%s' "$_pi_cfg" | jq -e ".. | objects | select(has(\"$_pi_rule\"))" >/dev/null 2>&1; then
+      echo "  PASS  parsed Biome config carries $_pi_rule"
+      PASS=$((PASS + 1))
+    else
+      echo "  FAIL  parsed Biome config missing $_pi_rule"
+      FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Biome config missing $_pi_rule"
+    fi
+  done
+else
+  echo "  FAIL  Biome reference config block does not parse as JSON"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Biome config unparseable"
+fi

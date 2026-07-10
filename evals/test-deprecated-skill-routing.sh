@@ -33,7 +33,7 @@ run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/grilling" "lifecy
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/prototype" "lifecycle prefers prototype"
 run_content_eval "$REPO_ROOT/triage/SKILL.md" "/grilling" "triage uses grilling for docs grill"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/improve-codebase-architecture" "commit-push recommends architecture skill over refactor-plan"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/improve architecture" "commit-push recommends architecture skill over refactor-plan"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/triage" "commit-push-pr recommends triage over qa"
 

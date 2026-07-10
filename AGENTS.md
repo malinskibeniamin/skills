@@ -1,39 +1,61 @@
+<!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->
 # Project Rules
 
-Lean by design: only rules that are neither machine-enforced nor inferable. Per-call hooks, Biome (ultracite), and React Doctor teach at violation time; skills carry the deep guidance. Do not re-add enforced rules here.
+Lean by design: only rules that are neither machine-enforced nor inferable. Hooks, Biome (ultracite), and React Doctor teach at violation time; path-scoped skills (accessibility, connect-query, tanstack-router, e2e-testing, ux-copy, registry-workflow) auto-load the deep guidance. Do not re-add enforced rules here.
 
 ## Toolchain
 
-bun (pkg mgr) | tsgo (type check) | Biome (lint/format) | React Doctor (Stop hook, React patterns) | --force-with-lease for force pushes
-Safe rm -rf: node_modules, dist, .next, build, .cache, .turbo, coverage
-External services via CLI, not MCP: Jira acli | Google gog | browser agent-browser | CI gh | Buildkite bk | Box box | M365 m365
-
-## Commits
-
-`type(scope): description` -- feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars.
+`bun` pkg | `tsgo` typecheck | Biome lint/fmt | React Doctor (Stop hook) React patterns | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
+External services via CLI, not MCP: Jira `acli` | Google `gog` | browser `agent-browser` | CI `gh` | Buildkite `bk` | Box `box` | M365 `m365`
 
 ## Code Quality
 
-Code is liability: keep additions only for product value, defensive correctness, or test confidence. Delete/inline before abstract. Run `bun run lint:fix` + `bun run type:check` before finish.
+Code is liability: keep additions only for product value, defensive correctness, or test confidence | delete/inline before abstract | `bun run lint:fix` + `bun run type:check` pre-done
 
 ## Stack conventions (chosen, not inferable)
 
-- UI: `@/components/ui/` registry first, `<Button>` for every button, variant props + design tokens (`bg-primary`) -- fix specificity at source, never restyle registry components inline
-- State: zustand = client, TanStack Query = server, connect-query for ConnectRPC. Env via `@/env` (t3-env+zod, declared in `src/env.ts`; `process.env` only in build/test configs)
-- Proto: enums by name, never magic numbers. Functional components only (React Compiler)
+- UI: `@/components/ui/` registry first, `<Button>` for every button, variant props + design tokens (`bg-primary`, `var(--destructive)`) -- fix specificity at source, never restyle registry components inline
+- State: zustand = client, TanStack Query = server, connect-query for ConnectRPC | env via `@/env` (t3-env+zod, declare in `src/env.ts`)
+- Proto: enums by name, never magic numbers | Functional components only (Compiler)
 - Validate format, not presence: URL regex, enum membership, UPPER_SNAKE patterns
-- Tests: .test.ts=unit, .test.tsx=integration, .browser.test.tsx=visual, e2e/*.spec.ts=Playwright. Co-locate with source
+- Tests: `.test.ts` unit | `.test.tsx` integration | `.browser.test.tsx` visual | `e2e/*.spec.ts` Playwright | co-locate with source
 
-## Lifecycle
+## Lifecycle (MANDATORY -- hooks enforce)
 
-1. Understand -> 2. Plan -> 2b. `/grilling` (interview -> 3-hat gate -> CONTEXT.md/ADR capture via `/domain-modeling`) -> 3. TDD (RED->GREEN->REFACTOR) -> 4-6. `/go` (verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done). Hard bug? `/diagnosing-bugs` (feedback-loop-first 6-phase). Bug to ticket? `/triage` (GH or Jira).
+Order every task. Hooks block skipped steps.
 
-Aliases: `/work` = `/development-lifecycle` (full). `/go` = phases 4-6 (ship tail).
+1. **Understand** -- explore, one question at time, propose
+2. **Plan** -- exact path, code, expect output
+3. **Implement** -- `/tdd` every file. Fail first -> pass -> refactor
+4-6. **`/go`** -- verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
 
-Effort: default high. Fable-5: high or lower only (xhigh token-hungry; max a furnace with worse output).
+Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
-Subagent model routing (rankings 1-10, higher better; cost = actual pay): Fable-5 cost 1 / intelligence 10 / taste 9; Opus-4.8 4/7/8; Sonnet-5 6/5/7; GPT-5.6 (codex) 8/9/6. GPT-5.5 retired -- 5.6 GA, strictly better. Ships -> intelligence > taste > cost (cost tiebreaker only). Defaults not limits: cheap output below bar -> rerun with a smarter model without asking. Bulk mechanical (clear-spec implementation, data analysis, migrations) -> codex GPT-5.6 (plan allowance -- cheap, not free). User-facing (UI/copy/API design) -> taste >= 7. Review/plan -> Fable-5 or Opus-4.8, plus GPT-5.6 independent pass. Computer use + token furnaces -> codex GPT-5.6, report back. Thinker/executor split: Fable/frontier owns thinking, design taste, and the plan; GPT-5.6 executes implementation from that plan; the smart model reviews the diff. Cross-model review, automatic on every change: author model never solely reviews its own work -- Claude authored -> GPT-5.6 adversarial review; GPT-5.6 authored -> Fable/Opus reviews; clean-context GPT-5.6 is an acceptable third perspective; findings P0-P3 -> fixes delegated per routing, re-checked by the cross reviewer. NEVER Haiku. GPT models only via codex CLI (see codex skill); Claude models via the agent model parameter.
+### Effort + model routing
+
+Default `high`. Fable-5: `high` or lower ONLY (`xhigh`/`max` furnaces, worse output). Never inject `ultrathink`.
+
+Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 (codex) 8/9/6. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
+
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | bulk mechanical -> codex GPT-5.6 (plan allowance) | user-facing -> taste >= 7 | review/plan -> Fable-5/Opus-4.8 | token furnaces -> codex | **thinker/executor split**: Fable/frontier thinks, tastes, plans; GPT-5.6 executes; smart model reviews diff | **Cross-model review, automatic on every change**: author model never solely reviews its own work -- Claude wrote -> GPT-5.6 reviews; GPT wrote -> Fable/Opus (clean GPT-5.6 OK); P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via `model` param.
+
+### Monitor (not sleep)
+
+`Bash(run_in_background)` + `Monitor` stream output:
+CI: `gh pr checks <n> --watch` | dev server | vitest watcher | container log | build output
 
 ## Auto-Generated (never edit)
 
-*.gen.ts/tsx, *_pb.ts/js, *_connectquery.ts, files with @generated/DO NOT EDIT in first 5 lines.
+`*.gen.ts`/`*.gen.tsx` | `*_pb.ts`/`*_pb.js` | `*_connectquery.ts` | `@generated`/`DO NOT EDIT` first 5 line
+
+## Codex-specific
+
+### Commits
+
+`type(scope): description` -- feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert. Scope required. Lowercase, 5-72 chars. (Codex has no conventional-commits deny hook on every event; state the format here.)
+
+### Runtime notes
+
+- Hooks arrive per-call (no PostToolBatch); behavior is generated to parity from skill-manifest.json.
+- `process.env` allowed only in build/test configs; app code goes through `@/env`.
+- Subagent output enforcement is best effort; follow `agents/references/findings-schema.md` for review findings.

@@ -53,7 +53,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "domain glossary" "SKILL.md references pr
 run_content_eval "$SKILL_DIR/SKILL.md" "ADRs" "SKILL.md references ADRs"
 
 # ── Hand-off to architecture skill ───────────────────────────────
-run_content_eval "$SKILL_DIR/SKILL.md" "/improve-codebase-architecture" "SKILL.md hands off to /improve-codebase-architecture for architectural fixes"
+run_content_eval "$SKILL_DIR/SKILL.md" "/improve architecture" "SKILL.md hands off to /improve architecture for architectural fixes"
 
 # ── HITL template substance ──────────────────────────────────────
 run_content_eval "$SKILL_DIR/scripts/hitl-loop.template.sh" "^step\\(\\)" "hitl-loop has step() helper"

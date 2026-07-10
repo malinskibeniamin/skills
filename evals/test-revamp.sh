@@ -1,0 +1,16 @@
+# Evals for /revamp -- rewrite playbook distilled from Bun-in-Rust.
+
+run_file_eval "$REPO_ROOT/revamp/SKILL.md" "revamp SKILL.md exists"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "disable-model-invocation: true" "revamp is slash-only (deliberate invocation)"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "bun.com/blog/bun-in-rust" "revamp credits its source"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Baselines before any code" "revamp mandates pre-rewrite baselines"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "implementation-independent" "revamp requires decoupled test suite"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Mechanical first" "revamp ports mechanically before refactoring"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Trial run before fleet" "revamp calibrates on a small trial"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "work queue" "revamp drives the fleet off compiler errors"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "assume it is wrong" "revamp mandates adversarial split-context review"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Semantic-equivalence traps" "revamp hunts cross-stack semantic traps"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "fix the prompt/checklist/queue" "revamp fixes the process, not the output"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "zero skipped/deleted" "revamp exit gate protects the test suite"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "worktree" "revamp isolates parallel lanes in worktrees"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./revamp/"' "plugin registers revamp"

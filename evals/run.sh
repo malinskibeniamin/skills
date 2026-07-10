@@ -170,6 +170,11 @@ for eval_file in "$EVALS_DIR"/test-*.sh; do
   if [ -z "$_p" ]; then
     echo "  FAIL  eval file crashed before reporting: $skill_name"
     FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: eval file crashed: $skill_name"
+  elif [ "$_p" = "0" ] && [ "$_f" = "0" ] && [ "$_s" = "0" ]; then
+    # A file that asserts nothing is not evidence -- it is false green
+    # (a stray `false`, a syntax path that skips every assert, an empty file).
+    echo "  FAIL  eval file made zero assertions: $skill_name"
+    FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: zero assertions: $skill_name"
   else
     PASS=$((PASS + _p)); FAIL=$((FAIL + _f)); SKIP=$((SKIP + _s))
     [ -n "$_e" ] && ERRORS="$ERRORS$_e"

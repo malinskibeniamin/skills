@@ -203,55 +203,7 @@
             "command": "/bin/bash",
             "args": [
               "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'enforce-toolchain.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'llm-test-flags.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'conventional-commits-check.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'branch-safety-check.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'snyk-project-create-guard.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'bash-verbose-guard.sh'; exit 0"
-            ]
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-lc",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'rtk-rewrite.sh'; exit 0"
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pre-bash.sh'; exit 0"
             ]
           }
         ]

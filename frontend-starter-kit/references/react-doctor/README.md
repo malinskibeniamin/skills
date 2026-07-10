@@ -13,7 +13,7 @@ bun add -D react-doctor@2.2.6 --yarn   # PIN the version -- the tool moves fast 
 
 ### 2. Package.json
 ```json
-{ "scripts": { "doctor": "react-doctor ." } }
+{ "scripts": { "doctor": "react-doctor ." }, "devDependencies": { "react-doctor": "2.2.6" } }   // exact pin, not caret -- upgrade deliberately
 ```
 
 ### 3. Config (`react-doctor.config.json`)
