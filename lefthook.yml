@@ -25,7 +25,7 @@ pre-push:
       glob: "{skill-manifest.json,.claude/settings.json,hooks/hooks.json,shared/hook-lib.sh,.claude/hooks/_hook-lib.sh}"
       run: bash scripts/generate-hook-configs.sh --check
     catalog-sync:
-      glob: "{*/SKILL.md,.claude-plugin/plugin.json}"
+      glob: "{*/SKILL.md,.claude-plugin/plugin.json,.codex-plugin/plugin.json,codex-skills/*}"
       run: bash scripts/generate-skill-catalog.sh --check
     rules-sync:
       glob: "{CLAUDE.md,AGENTS.md,.agents/codex-appendix.md}"
