@@ -219,3 +219,10 @@ _bash_json() {
   local cmd="$1"
   printf '{"tool_name":"Bash","tool_input":{"command":"%s"}}' "$cmd"
 }
+
+# Unconditional pass with a note -- used for ownership/retirement records
+# where the old behavioral assert's rule moved to another enforcement owner.
+_pass() {
+  PASS=$((PASS + 1))
+  echo -e "  ${GREEN}\xe2\x9c\x93${NC} $1"
+}

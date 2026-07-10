@@ -4,7 +4,7 @@
 
 > Script: [`scripts/react-doctor-stop.sh`](scripts/react-doctor-stop.sh)
 
-React Doctor runs on its own bundled oxlint engine -- that is an internal implementation detail, not a linter we adopt or configure. The project toolchain stays Biome/Ultracite for lint/format; React Doctor is the React-pattern layer on top. Pin the react-doctor version in package.json -- it moves fast and the stop hook already works around known internal bugs.
+React Doctor runs on its own bundled oxlint engine -- that is an internal implementation detail, not a linter we adopt or configure. The project toolchain stays Biome/Ultracite for lint/format; React Doctor is the React-pattern layer on top. Pin the react-doctor version in package.json (current pin: 2.2.6) -- it moves fast and the stop hook already works around known internal bugs.
 
 ## Rule ownership
 

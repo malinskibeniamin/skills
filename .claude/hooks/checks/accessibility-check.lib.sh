@@ -30,7 +30,6 @@ fi
 if echo "$added_lines" | grep -qE 'role\s*=\s*["{]tablist'; then
   if ! echo "$file_content" | grep -qE 'role\s*=\s*["{]tab[^l]'; then
     hook_block "role=\\\"tablist\\\" needs children with role=\\\"tab\\\" + role=\\\"tabpanel\\\"."
-    return 0
   fi
 fi
 
@@ -39,7 +38,6 @@ fi
 if echo "$added_lines" | grep -qE 'aria-invalid'; then
   if ! echo "$file_content" | grep -qE 'aria-describedby'; then
     hook_warn "aria-invalid without aria-describedby. Add error description reference for screen readers." "a11y-describedby"
-    return 0
   fi
 fi
 
@@ -50,7 +48,6 @@ fi
 if echo "$added_lines" | grep -qE 'data-invalid'; then
   if ! echo "$file_content" | grep -qE 'aria-invalid'; then
     hook_warn "data-invalid used without aria-invalid. data-invalid is CSS-only — add aria-invalid for screen reader support. WCAG 3.3.1." "a11y-data-invalid"
-    return 0
   fi
 fi
 

@@ -38,7 +38,6 @@ if [ "$uses_connect" = true ]; then
     tanstack_imports=$(echo "$added_lines" | grep -E "from\s+['\"]@tanstack/react-query['\"]" || true)
     if [ -n "$tanstack_imports" ] && echo "$tanstack_imports" | grep -qE '\buseQuery\b[^C]|\buseQuery\b\s*[,}]|\buseMutation\b[^S]|\buseMutation\b\s*[,}]'; then
       hook_block "useQuery/useMutation → import from @connectrpc/connect-query, not @tanstack/react-query. Escape: // allow: direct-query [reason]"
-      return 0
     fi
   fi
 fi
@@ -47,14 +46,12 @@ fi
 
 if echo "$added_lines" | grep -qE 'invalidateQueries\(\s*\)'; then
   hook_block "No invalidateQueries() with empty args (invalidates ALL). Scope: queryKey: [rpcMethod.service.typeName]."
-  return 0
 fi
 
 # ── Check 3: Warn on axios imports ────────────────────────────────────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]axios['\"]|require\(['\"]axios['\"]\)"; then
   hook_warn "Prefer ConnectRPC transport over axios. Bypass protobuf type safety. Escape: // allow: direct-query [reason]"
-  return 0
 fi
 
 # ── Check 4: Warn on fetch() calls ───────────────────────────────────
@@ -62,7 +59,6 @@ fi
 if echo "$added_lines" | grep -qE '\bfetch\s*\('; then
   if [ "$uses_connect" = true ]; then
     hook_block "No raw fetch() in ConnectRPC files. Use ConnectRPC transport. Escape: // allow: direct-query [reason]"
-    return 0
   fi
 fi
 
@@ -71,7 +67,6 @@ fi
 if echo "$added_lines" | grep -qE '\bnew\s+[A-Z][a-zA-Z]*(Request|Response|Message)\s*\('; then
   if echo "$file_content" | grep -qE "from\s+['\"]@buf/"; then
     hook_block "Proto v2: no new Message(). Use create(Schema, { ... }) from @bufbuild/protobuf."
-    return 0
   fi
 fi
 
@@ -80,7 +75,6 @@ fi
 if echo "$added_lines" | grep -qE '\b(PlainMessage|PartialMessage)\b'; then
   if echo "$file_content" | grep -qE "from\s+['\"]@bufbuild/protobuf['\"]"; then
     hook_block "Proto v2: PlainMessage/PartialMessage are v1. Use MessageShape<typeof Schema> or MessageInitShape<typeof Schema>."
-    return 0
   fi
 fi
 
@@ -94,7 +88,6 @@ if echo "$added_lines" | grep -qE '\$typeName'; then
 
   if [ "$is_proto_v2" = true ]; then
     hook_block "Proto v2: no manual \$typeName. Use create(Schema, { ... }) for type-safe construction."
-    return 0
   fi
 fi
 
@@ -104,7 +97,6 @@ if echo "$added_lines" | grep -qE 'toJson|fromJson'; then
   if echo "$file_content" | grep -qE 'google.protobuf.Any|AnySchema|anyPack|anyUnpack'; then
     if ! echo "$file_content" | grep -qE 'typeRegistry|type_registry|createRegistry'; then
       hook_warn "toJson/fromJson with Any requires typeRegistry. Pass { typeRegistry } or configure on transport."
-      return 0
     fi
   fi
 fi
@@ -114,7 +106,6 @@ fi
 if echo "$added_lines" | grep -qE 'AnySchema|google\.protobuf\.Any'; then
   if echo "$added_lines" | grep -qE 'create\(.*Any' && ! echo "$added_lines" | grep -qE 'typeUrl|type_url|@type|anyPack'; then
     hook_warn "Any without typeUrl → JSON fails. Use anyPack() or set typeUrl."
-    return 0
   fi
 fi
 
@@ -123,12 +114,10 @@ fi
 if echo "$added_lines" | grep -qE '\bTimestamp\b' || echo "$file_content" | grep -qE 'timestamp_pb'; then
   if echo "$added_lines" | grep -qE '\{\s*seconds\s*:|nanos\s*:' && echo "$file_content" | grep -qE '\bTimestamp\b|timestamp_pb'; then
     hook_warn "No manual { seconds, nanos } for Timestamp. Use timestampFromDate(new Date()) from @bufbuild/protobuf/wkt."
-    return 0
   fi
   if echo "$added_lines" | grep -qE 'new Date\(\)' && echo "$added_lines" | grep -qE '\bTimestamp\b'; then
     if ! echo "$added_lines" | grep -qE 'timestampFromDate|timestampDate|Timestamp\.fromDate|toTimestamp'; then
       hook_warn "No raw Date to Timestamp field. Use timestampFromDate(date) from @bufbuild/protobuf/wkt."
-      return 0
     fi
   fi
 fi
@@ -168,7 +157,6 @@ if [ "$_is_test_file" = false ] && [ -n "$added_lines" ]; then
       if echo "$file_content" | grep -qE 'queryFn|mutationFn|loader|\.fetch\(|callUnaryMethod'; then
         if ! hook_has_escape "connect-error"; then
           hook_warn "Use ConnectError.from() not throw new Error() in data-fetching code. Preserves gRPC status codes for consistent error handling. Escape: // allow: connect-error [reason]"
-          return 0
         fi
       fi
     fi
@@ -206,7 +194,6 @@ if [ "$_is_test_file" = false ] && [ "$is_relevant" = true ] && [ -n "$added_lin
       if echo "$added_lines" | grep -qE 'throw\s+new\s+Error\(|new\s+Error\('; then
         if ! hook_has_escape "connect-error-format"; then
           hook_warn "Use ConnectError.from(error) in catch blocks, not new Error(). Preserves gRPC status codes. Escape: // allow: connect-error-format [reason]" "connect-error-format-throw"
-          return 0
         fi
       fi
     fi
@@ -216,7 +203,6 @@ if [ "$_is_test_file" = false ] && [ "$is_relevant" = true ] && [ -n "$added_lin
       if ! echo "$added_lines" | grep -qE 'formatToastErrorMessageGRPC|formatErrorMessage'; then
         if ! hook_has_escape "connect-error-format"; then
           hook_warn "Use formatToastErrorMessageGRPC(ConnectError.from(error)) for toast errors. Consistent gRPC error formatting. Escape: // allow: connect-error-format [reason]" "connect-error-format-toast"
-          return 0
         fi
       fi
     fi
@@ -230,7 +216,6 @@ if [ "$_is_test_file" = false ] && [ "$is_relevant" = true ] && [ -n "$added_lin
     if ! echo "$file_content" | grep -qE 'onError\s*:|onError\s*\('; then
       if ! hook_has_escape "mutation-error"; then
         hook_warn "mutate()/mutateAsync() called but no onError handler found. Add onError to handle failures. Escape: // allow: mutation-error [reason]" "connect-error-format-onerror"
-        return 0
       fi
     fi
   fi
@@ -251,7 +236,6 @@ if [ "$_is_test_file" = false ]; then
     if ! echo "$file_content" | grep -qE '\.setError\(|setError\s*\(|fieldViolations|BadRequest'; then
       if ! hook_has_escape "connect-error-fieldmap"; then
         hook_warn "ConnectError surfaced with toast-only — lost server-side FieldViolation feedback. Unpack BadRequest.FieldViolation in onError and call form.setError({ type: 'server', message }) per field; reserve toast for non-field errors. Escape: // allow: connect-error-fieldmap [reason]" "connect-error-fieldmap"
-        return 0
       fi
     fi
   fi

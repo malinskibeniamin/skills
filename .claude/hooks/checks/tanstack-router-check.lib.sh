@@ -75,21 +75,18 @@ if [ -n "$added_lines" ]; then
 
 if echo "$added_lines" | grep -qE "from\s+['\"]react-router-dom['\"/]"; then
   hook_block "react-router-dom banned. Use TanStack Router: useNavigate, useParams({from}), useSearch(validateSearch), <Link>."
-  return 0
 fi
 
 # ── Check 2: Ban window.location for navigation ──────────────────────
 
 if echo "$added_lines" | grep -qE 'window\.location\.(href|assign|replace)\s*[=(]'; then
   hook_block "No window.location nav (full reload). Use navigate({to}) or <Link> from @tanstack/react-router."
-  return 0
 fi
 
 # ── Check 2b: Ban navigate(-1) / history.back() ─────────────────────
 
 if echo "$added_lines" | grep -qE 'navigate\(\s*-1\s*\)|history\.back\(\)|history\.go\(\s*-'; then
   hook_warn "navigate(-1) can exit app if no history. Use explicit route path."
-  return 0
 fi
 
 # ── Check 3: Ban URLSearchParams in client code ──────────────────────

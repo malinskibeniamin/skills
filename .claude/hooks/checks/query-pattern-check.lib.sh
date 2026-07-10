@@ -24,7 +24,6 @@ file_content=$(cat "$file_path" 2>/dev/null || true)
 if echo "$added_lines" | grep -qE '\.refetchQueries\('; then
   if ! hook_has_escape "refetch-queries"; then
     hook_warn "Prefer invalidateQueries() over refetchQueries(). Invalidation lets React Query decide optimal refetch timing. Escape: // allow: refetch-queries [reason]" "query-pattern-refetch"
-    return 0
   fi
 fi
 
@@ -32,7 +31,6 @@ no_await=$(echo "$added_lines" | grep -E 'invalidateQueries\(' | grep -vE 'await
 if [ -n "$no_await" ]; then
   if ! hook_has_escape "await-invalidate"; then
     hook_warn "Always await invalidateQueries() — without await, subsequent code may see stale cache. Escape: // allow: await-invalidate [reason]" "query-pattern-await"
-    return 0
   fi
 fi
 
@@ -59,7 +57,6 @@ if echo "$compact_added" | grep -qE 'queryKey[[:space:]]*:[[:space:]]*\[[^]]*\].
       done <<< "$candidates"
       if [ -n "$missing_deps" ]; then
         hook_warn "TanStack Query: queryFn uses $missing_deps but queryKey does not include it. Add it to queryKey or escape: // allow: query-key-deps [reason]" "query-pattern-key-deps"
-        return 0
       fi
     fi
   fi
@@ -71,12 +68,10 @@ fi
 
 if echo "$added_lines" | tr '\n' ' ' | grep -qE 'useMutation\([^{]*\{[^}]*on(Error|Settled)[^}]*onMutate'; then
   hook_warn "TanStack Query: put onMutate before onError/onSettled in useMutation options for reliable inference." "query-pattern-mutation-order"
-  return 0
 fi
 
 if echo "$added_lines" | tr '\n' ' ' | grep -qE '(useInfiniteQuery|useSuspenseInfiniteQuery|infiniteQueryOptions)\([^{]*\{[^}]*get(Next|Previous)PageParam[^}]*queryFn'; then
   hook_warn "TanStack Query: put queryFn before getPreviousPageParam/getNextPageParam in infinite query options for reliable inference." "query-pattern-infinite-order"
-  return 0
 fi
 
 # ── TanStack ESLint intent: prefer-query-options (strict) ─────────
@@ -85,7 +80,6 @@ fi
 if echo "$added_lines" | grep -qE 'use(Query|InfiniteQuery|SuspenseQuery|SuspenseInfiniteQuery)\([[:space:]]*\{' && echo "$added_lines" | grep -qE 'queryKey[[:space:]]*:.*queryFn[[:space:]]*:|queryFn[[:space:]]*:.*queryKey[[:space:]]*:'; then
   if ! hook_has_escape "inline-query-options"; then
     hook_warn "TanStack Query: consider queryOptions()/infiniteQueryOptions() to co-locate queryKey and queryFn for reuse. Escape: // allow: inline-query-options [reason]" "query-pattern-options"
-    return 0
   fi
 fi
 
@@ -97,7 +91,6 @@ _unnamed_mutation=$(echo "$added_lines" | grep -E 'const[[:space:]]+[A-Za-z_$][A
 if [ -n "$_unnamed_mutation" ]; then
   if ! hook_has_escape "mutation-name"; then
     hook_warn "useMutation result should carry the *Mutation suffix (deleteMutation, not doDelete). Escape: // allow: mutation-name [reason]" "query-pattern-mutation-name"
-    return 0
   fi
 fi
 
@@ -120,7 +113,6 @@ if echo "$file_content" | grep -qE 'useMutation|mutate\(|mutateAsync\('; then
     if [ "$has_onerror" = false ]; then
       if ! hook_has_escape "mutation-onerror"; then
         hook_block "mutate()/mutateAsync() without onError callback. Add onError to show user feedback on failure. Use ConnectError.from(error) + formatToastErrorMessageGRPC(). Escape: // allow: mutation-onerror [reason]"
-        return 0
       fi
     fi
   fi
@@ -156,7 +148,6 @@ if [ "$is_react_file" = true ]; then
     if [ "$new_fetch_count" -gt "$new_mutation_count" ]; then
       if ! hook_has_escape "inline-mutation"; then
         hook_warn "Side-effect fetch (DELETE/POST/PUT/PATCH) without useMutation. ${new_fetch_count} fetch(es) but only ${new_mutation_count} mutation wrapper(s) in new code. Wrap in useMutation hook. Escape: // allow: inline-mutation [reason]"
-        return 0
       fi
     fi
   fi

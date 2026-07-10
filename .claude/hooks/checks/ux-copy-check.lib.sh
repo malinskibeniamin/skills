@@ -21,7 +21,6 @@ _ux_ui_lines=$(printf '%s\n' "$added_lines" | grep -E "([\"'][^\"']+[\"']|>[^<>{
 if echo "$added_lines" | grep -qE "!['\"]|!\\\\n|!\s*['\"]"; then
   if ! echo "$added_lines" | grep -E '!["\x27]' | grep -qE '!==|!=|!important|http'; then
     hook_block "No ! in UI text. Remove it."
-    return 0
   fi
 fi
 
@@ -29,7 +28,6 @@ fi
 
 if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*successfully[^'\"]*\1"; then
   hook_block "Drop 'successfully'. Past-tense verb: 'Topic created' not 'Topic successfully created'."
-  return 0
 fi
 
 # ── Check 3: Ban "click here" / bare "here" link text ────────────
@@ -38,7 +36,6 @@ case "$file_path" in
   *.tsx)
     if echo "$added_lines" | grep -qiE '>[[:space:]]*(click here|here)[[:space:]]*<'; then
       hook_block "No 'click here' link text. Descriptive destination text instead."
-      return 0
     fi
     ;;
 esac
@@ -47,14 +44,12 @@ esac
 
 if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(oops|uh oh|oh no|whoops)\b[^'\"]*\1"; then
   hook_block "No casual error language. State problem + solution clearly."
-  return 0
 fi
 
 # ── Check 5: Warn on possessive pronouns in titles/nav ────────────
 
 if echo "$added_lines" | grep -qE "(['\"])(My |Your )[A-Z]"; then
   hook_warn "No possessives in titles/nav. 'Settings' not 'My Settings'."
-  return 0
 fi
 
 # ── Check 6: Ban "Yes"/"No" button labels ─────────────────────────
@@ -63,7 +58,6 @@ case "$file_path" in
   *.tsx)
     if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*(Yes|No)[[:space:]]*</Button>'; then
       hook_block "No Yes/No button labels. Action verbs: 'Delete cluster'/'Keep cluster'."
-      return 0
     fi
     ;;
 esac
@@ -72,7 +66,6 @@ esac
 
 if echo "$added_lines" | grep -qE '(\*\*[^*]+\*\*|__[^_]+__)'; then
   hook_warn "No bold/italic in UI text. Use component library formatting props."
-  return 0
 fi
 
 # ── Check 8: Warn on ALL CAPS for emphasis ────────────────────────
@@ -81,7 +74,6 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b[A-Z]{3,}\s+[A-Z]{3,}\b[^'\"]
   _caps_line=$(echo "$added_lines" | grep -E "(['\"])[^'\"]*\b[A-Z]{3,}\s+[A-Z]{3,}\b" | head -1)
   if ! echo "$_caps_line" | grep -qE '\b(HTTP|HTTPS|API|TLS|MTLS|OIDC|SASL|BYOC|VPC|CIDR|PSC|ACL|RBAC|AWS|GCP|DNS|URL|URI|SSH|SSL|IAM|ARN|EKS|GKE|CLI)\b'; then
     hook_warn "No ALL CAPS for emphasis. Sentence case. Exception: acronyms."
-    return 0
   fi
 fi
 
@@ -91,12 +83,10 @@ if [ "${REDPANDA_KIT:-}" = "1" ]; then
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(admin api|schema registry|http proxy|redpanda console)\b[^'\"]*\1" && \
      ! echo "$added_lines" | grep -qE "(Admin API|Schema Registry|HTTP Proxy|Redpanda Console)"; then
     hook_block "Capitalize Redpanda product names: Admin API, Schema Registry, HTTP Proxy, Redpanda Console."
-    return 0
   fi
 
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\bthe console\b[^'\"]*\1"; then
     hook_warn "Use 'Redpanda Console' not 'the console'."
-    return 0
   fi
 fi
 
@@ -106,7 +96,6 @@ if echo "$added_lines" | grep -qE "(['\"])[A-Z][a-z]+\s+[A-Z][a-z]+\s+[A-Z][a-z]
   _title_line=$(echo "$added_lines" | grep -E "(['\"])[A-Z][a-z]+\s+[A-Z][a-z]+\s+[A-Z][a-z]+" | head -1)
   if ! echo "$_title_line" | grep -qE '(Admin API|Schema Registry|HTTP Proxy|Redpanda Console|Dedicated Cloud|Bring Your Own Cloud|Private Service Connect|Virtual Private Cloud)'; then
     hook_warn "Possible Title Case. Use sentence case. Exception: product names."
-    return 0
   fi
 fi
 
@@ -116,7 +105,6 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b(one|two|three|four|five|six|
   _num_line=$(echo "$added_lines" | grep -E "(['\"])[^'\"]*\b(one|two|three|four|five|six|seven|eight|nine)\b" | head -1)
   if ! echo "$_num_line" | grep -qiE '(one of|one or|one-time|one-way|two-factor|two-way|day one)'; then
     hook_warn "Use numerals (1-9) not spelled-out numbers in UI text."
-    return 0
   fi
 fi
 
@@ -124,103 +112,88 @@ fi
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\band/or\b[^'\"]*\1"; then
   hook_warn "No 'and/or'. Use 'and', 'or', or 'A, B, or both'."
-  return 0
 fi
 
 # ── Check 13: Ban "etc." in UI text ──────────────────────────────
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\betc\.[^'\"]*\1"; then
   hook_warn "No 'etc.' in UI. List specifics or use 'such as'."
-  return 0
 fi
 
 # ── Check 14: Ban "e.g." / "i.e." — suggest plain English ────────
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b(e\.g\.|i\.e\.)[^'\"]*\1"; then
   hook_warn "No Latin abbrevs in UI. 'for example'/'that is' not 'e.g.'/'i.e.'."
-  return 0
 fi
 
 # ── Check 15: Ban "Please ..." imperative pattern in UI strings ───
 
 if echo "$added_lines" | grep -qE "(['\"])Please [^'\"]*\1"; then
   hook_warn "No 'Please' prefix. Direct: 'Enter your email' not 'Please enter...'."
-  return 0
 fi
 
 # ── Check 16: Ban non-inclusive terminology ───────────────────────
 
 if echo "$added_lines" | grep -qiE '\b(whitelist|blacklist|master|slave)\b'; then
   hook_block "Inclusive terms: allowlist/denylist, leader/follower, primary/secondary."
-  return 0
 fi
 
 # ── Check 17: Warn on "There is" / "There are" starters ─────────
 
 if echo "$added_lines" | grep -qE "(['\"])(There is |There are )[^'\"]*\1"; then
   hook_warn "No 'There is/are' starters. Subject first."
-  return 0
 fi
 
 # ── Check 18: Warn on "via" in UI text ───────────────────────────
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\bvia\b[^'\"]*\1"; then
   hook_warn "No 'via' in UI. Use 'through'/'using'/'with'."
-  return 0
 fi
 
 # ── Check 19: Redundant phrasing in UI strings ───────────────────
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*configuration and settings[^'\"]*\1"; then
   hook_warn "Redundant: 'configuration and settings'. Pick one term."
-  return 0
 fi
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*manage and configure[^'\"]*\1"; then
   hook_warn "Redundant: 'manage and configure'. Pick one verb."
-  return 0
 fi
 
 # ── Check 20: Inconsistent terminology (glossary) ────────────────
 
 if echo "$added_lines" | grep -qE "(['\"])[^'\"]*routing rules[^'\"]*\1"; then
   hook_warn "Use 'routing policies' not 'routing rules' (matches docs)." "ux-copy-glossary"
-  return 0
 fi
 
 # ── Check 21: Ban em dashes in UI copy ───────────────────────────
 
 if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -q "—"; then
   hook_block "No em dashes in UI text. Use a period, colon, or parentheses."
-  return 0
 fi
 
 # ── Check 22: Warn on marketing buzzwords in UI copy ─────────────
 
 if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(seamless|effortless|frictionless|game-changing|game changing|best-in-class|world-class|cutting-edge|next-generation|revolutionary|innovative|intuitive|robust|powerful|comprehensive|unlock|unleash|elevate|supercharge|delight|delightful)\b'; then
   hook_warn "Marketing buzzword in UI text. Say the concrete user benefit."
-  return 0
 fi
 
 # ── Check 23: Ban "not just X, it is Y" AI contrast frame ────────
 
 if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE "\bnot[[:space:]]+just[[:space:]][^,.;!?]{2,80}[,;]?[[:space:]]+(it'?s|it[[:space:]]+is|this[[:space:]]+is|we'?re|we[[:space:]]+are|they'?re|they[[:space:]]+are)[[:space:]]+"; then
   hook_warn "No 'not just X, it is Y' framing. State the value directly."
-  return 0
 fi
 
 # ── Check 24: Warn on "X theater" slop phrasing ─────────────────
 
 if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(security|compliance|innovation|process|performance|productivity|collaboration|automation|observability|governance|workflow|agile|testing|design|ai)[ -]+theater\b'; then
   hook_warn "No 'X theater' phrasing in UI text. Name the actual risk or behavior."
-  return 0
 fi
 
 # ── Check 25: Warn on aphoristic cadence ────────────────────────
 
 if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE "\b(less|more)[[:space:]][^,.;:!?]{2,80},[[:space:]]*(more|less)[[:space:]][^\"']{2,80}|\b(isn'?t|is[[:space:]]+not|not)[[:space:]]+about[[:space:]][^,.;:!?]{2,80},?[[:space:]]+(it'?s|it[[:space:]]+is)[[:space:]]+about\b|[^.!?]{2,80}\.[[:space:]]+(no|not)[[:space:]][^.!?]{2,80}\.[[:space:]]+just[[:space:]][^.!?]{2,80}\."; then
   hook_warn "Aphoristic cadence in UI text. Use direct product copy."
-  return 0
 fi
 
 # ── Check 26: Warn on repeated section kickers ──────────────────

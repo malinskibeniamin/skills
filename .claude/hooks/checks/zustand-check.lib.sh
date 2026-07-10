@@ -17,7 +17,6 @@ fi
 if [ "$imports_zustand" = true ]; then
   if echo "$added_lines" | grep -qE 'create<[^>]+>\(' && ! echo "$added_lines" | grep -qE 'create<[^>]+>\(\)\s*\('; then
     hook_block "Use create<T>()() double-parens. Single-parens breaks middleware types."
-    return 0
   fi
 fi
 
@@ -25,7 +24,6 @@ fi
 
 if echo "$added_lines" | grep -qE 'use\w+Store\(.*=>\s*\(\{'; then
   hook_block "Wrap multi-field selector with useShallow. Inline object = new ref = infinite re-render."
-  return 0
 fi
 
 # ── Check 3: Ban localStorage/sessionStorage in zustand stores ──
@@ -33,7 +31,6 @@ fi
 if [ "$imports_zustand" = true ]; then
   if echo "$added_lines" | grep -qE '\b(localStorage|sessionStorage)\b'; then
     hook_block "No direct localStorage in stores. Use zustand persist middleware."
-    return 0
   fi
 fi
 

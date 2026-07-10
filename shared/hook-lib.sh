@@ -249,7 +249,19 @@ hook_parse_edit_write() {
   _hook_input=$(cat)
   _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
-  if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ]; then
+  # Codex session id arrives on stdin, not the environment: re-point the
+  # session dir once per parse when the env vars are absent (issue #48 WS1).
+  if [ -z "${CLAUDE_SESSION_ID:-}" ] && [ -z "${CODEX_SESSION_ID:-}" ]; then
+    local _stdin_sid
+    _stdin_sid=$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)
+    if [ -n "$_stdin_sid" ]; then
+      _hook_session_id="$_stdin_sid"
+      _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
+      mkdir -p "$_hook_session_dir" 2>/dev/null || true
+    fi
+  fi
+
+  if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ] && [ "$_hook_tool_name" != "apply_patch" ]; then
     _hook_skip_or_exit 1
     return $?
   fi
@@ -257,6 +269,21 @@ hook_parse_edit_write() {
   tool_input=$(echo "$_hook_input" | jq -c '.tool_input // {}' 2>/dev/null || echo '{}')
 
   file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
+
+  # Canonical Codex apply_patch payload: the target path lives inside the patch
+  # body ("*** Update File: x" / "*** Add File: x"), not in tool_input.file_path.
+  if [ -z "$file_path" ] && [ "$_hook_tool_name" = "apply_patch" ]; then
+    local _patch_body _patch_rel
+    _patch_body=$(echo "$_hook_input" | jq -r '.tool_input.patch // .tool_input.input // empty' 2>/dev/null || true)
+    _patch_rel=$(printf '%s\n' "$_patch_body" | sed -nE 's/^\*\*\* (Update|Add) File: (.*)$/\2/p' | head -1)
+    if [ -n "$_patch_rel" ]; then
+      case "$_patch_rel" in
+        /*) file_path="$_patch_rel" ;;
+        *)  file_path="$(git rev-parse --show-toplevel 2>/dev/null || pwd)/$_patch_rel" ;;
+      esac
+      _hook_apply_patch_body="$_patch_body"
+    fi
+  fi
 
   if [ -z "$file_path" ] || { [ ! -f "$file_path" ] && [ "${HOOK_ALLOW_MISSING_FILE:-0}" != "1" ]; }; then
     _hook_debug "skip: file_path empty or missing ($file_path)"
@@ -388,6 +415,12 @@ hook_skip_ui_dirs() {
 hook_get_added_lines() {
   local tool old_str new_str content head_content
   tool=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+
+  if [ "$tool" = "apply_patch" ] && [ -n "${_hook_apply_patch_body:-}" ]; then
+    # Added lines are the +-prefixed patch lines for this file's hunk.
+    added_lines=$(printf '%s\n' "$_hook_apply_patch_body" | grep '^+' | grep -v '^+++' | sed 's/^+//' || true)
+    return 0
+  fi
 
   if [ "$tool" = "Edit" ]; then
     # Prefer payload.old_string/new_string. If neither key is present
@@ -747,14 +780,31 @@ hook_stop_block() {
 }
 
 # ── Stop hook: Append finding to shared file (no block) ──────────
-# Quality-gate pattern: each Stop hook reports findings, then
-# quality-gate-stop.sh aggregates and blocks ONCE with all issues.
-# This avoids serial blocking where each hook blocks independently.
+# Quality-gate pattern: each Stop hook records findings, then enforces its OWN
+# findings directly via hook_stop_enforce at its exit points. The stop-findings
+# file remains as a best-effort sweep for crashed writers -- Stop hooks run
+# concurrently, so a late writer racing the quality-gate aggregator would
+# otherwise be silently lost (issue #48 WS1).
 
 hook_stop_finding() {
   local msg="$1"
   # Delimiter separates findings so quality-gate-stop.sh can count issues (not lines)
   printf '%s\n---\n' "$msg" >> "$_hook_session_dir/stop-findings" 2>/dev/null || true
+  _hook_stop_local="${_hook_stop_local:-}${msg}
+"
+}
+
+# Call at every exit point of an enforcing Stop hook: blocks with this
+# script'"'"'s accumulated findings (exit 2), or exits 0 when none.
+hook_stop_enforce() {
+  if [ -n "${_hook_stop_local:-}" ]; then
+    local reason
+    reason=$(_safe_json_escape "$(printf 'Fix before stopping:\n%s' "$_hook_stop_local")")
+    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
+    rm -f "$_hook_session_dir/stop-findings" 2>/dev/null || true
+    exit 2
+  fi
+  exit 0
 }
 
 # ── Stop hook: Save test results for sharing across hooks ────────

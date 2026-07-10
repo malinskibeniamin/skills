@@ -33,20 +33,20 @@ output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 # Known incomplete dead-code failure — still a stop-gap because results are incomplete
 if echo "$output" | grep -qE 'issues\.files is not iterable|dead code detection failed \(non-fatal, skipping\)|results are incomplete'; then
   hook_stop_finding "$(printf "React Doctor incomplete results:\n%s" "$(echo "$output" | tail -20)")"
-  exit 0
+  hook_stop_enforce
 fi
 
 # Known doctor-tool internal bugs — block until the tool/config path is fixed
 if echo "$output" | grep -qE 'is not iterable|Cannot read propert|TypeError:|ReferenceError:'; then
   hook_stop_finding "$(printf "React Doctor internal error. Fix doctor config/tooling or pin before continuing:\n%s" "$(echo "$output" | tail -20)")"
-  exit 0
+  hook_stop_enforce
 fi
 
 # Block on errors (non-zero exit)
 if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -30)
   hook_stop_finding "$(printf "React Doctor errors are stop-gaps. Fix before continuing:\n%s" "$truncated")"
-  exit 0
+  hook_stop_enforce
 fi
 
 # Transferred rules are hard blocks regardless of score. These were per-edit
@@ -56,7 +56,7 @@ _transferred='react-compiler-no-manual-memoization|no-derived-state-effect|no-de
 _transferred_hits=$(echo "$output" | grep -oE "$_transferred" | sort -u | tr '\n' ' ' || true)
 if [ -n "$_transferred_hits" ]; then
   hook_stop_finding "React Doctor flagged transferred hard rules (block regardless of score): ${_transferred_hits}. These were per-edit blocks before delegation; fix before finishing."
-  exit 0
+  hook_stop_enforce
 fi
 
 # Extract score
@@ -70,7 +70,7 @@ fi
 # Block on low score (warnings are errors)
 if [ -n "$score" ] && [ "$score" -lt 80 ]; then
   hook_stop_finding "Doctor score $score/100. React Doctor warnings are errors; fix before finishing."
-  exit 0
+  hook_stop_enforce
 fi
 
 # Surface any warnings in output even if score is OK
@@ -79,4 +79,4 @@ if echo "$output" | grep -qiE 'warn|warning'; then
   hook_stop_finding "Doctor warnings are errors (${score:-N/A}/100, $warning_count warning(s)). Run bun run doctor and fix at source."
 fi
 
-exit 0
+hook_stop_enforce

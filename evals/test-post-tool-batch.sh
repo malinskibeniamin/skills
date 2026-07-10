@@ -59,15 +59,25 @@ printf '// Copyright 2026 Redpanda Data, Inc.\nexport function bad(x: any) { ret
 printf '// Copyright 2026 Redpanda Data, Inc.\nexport function clean(x: number) { return x; }\n' > "$_clean_file"
 _bad_json=$(jq -n --arg bad "$_bad_file" --arg clean "$_clean_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$bad,old_string:"export function bad(x: number) { return x; }",new_string:"export function bad(x: any) { return x; }"},tool_use_id:"bad",tool_response:"{}"},{tool_name:"Edit",tool_input:{file_path:$clean,old_string:"export function clean(x: string) { return x; }",new_string:"export function clean(x: number) { return x; }"},tool_use_id:"clean",tool_response:"{}"}]}')
 _run_batch "$_bad_json"
-_assert_batch "batch aggregates TypeScript escape hatch for bad file only" 0 "MUST FIX before proceeding:" "clean.ts"
-_assert_batch "batch mentions ': any' escape hatch" 0 ": any" ""
+_assert_batch "batch blocks on hard finding for bad file only" 2 "MUST FIX before proceeding:" "clean.ts"
+_assert_batch "batch mentions ': any' escape hatch" 2 ": any" ""
 
-# (b) Same file edited twice: last edit wins, so earlier bad payload is ignored.
+# (b) Same file edited twice: duplicate drops payloads and re-diffs SURVIVING
+# final state -- the transient ": any" was reverted by the second edit, so no
+# finding (file on disk matches its committed/clean state).
 _same_file="$_batch_tmp/same.ts"
 printf '// Copyright 2026 Redpanda Data, Inc.\nexport const value: number = 2;\n' > "$_same_file"
 _same_json=$(jq -n --arg f "$_same_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const value: number = 0;",new_string:"export const value: any = 1;"},tool_use_id:"first",tool_response:"{}"},{tool_name:"Bash",tool_input:{command:"echo ignored"},tool_use_id:"bash",tool_response:"ok"},{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const value: any = 1;",new_string:"export const value: number = 2;"},tool_use_id:"second",tool_response:"{}"}]}')
 _run_batch "$_same_json"
-_assert_batch "batch dedupes same file and evaluates last edit only" 0 "" ": any"
+_assert_batch "batch re-diffs surviving state on duplicate file (reverted violation silent)" 0 "" ": any"
+
+# (b2) Same file edited twice, violation PERSISTS in final state: caught via
+# surviving-state re-diff even though the LAST payload alone is clean.
+_pers_file="$_batch_tmp/persist.ts"
+printf '// Copyright 2026 Redpanda Data, Inc.\nexport const v: any = 1;\nexport const w = 2;\n' > "$_pers_file"
+_pers_json=$(jq -n --arg f "$_pers_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const v: number = 1;",new_string:"export const v: any = 1;"},tool_use_id:"first",tool_response:"{}"},{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const w = 1;",new_string:"export const w = 2;"},tool_use_id:"second",tool_response:"{}"}]}')
+_run_batch "$_pers_json"
+_assert_batch "duplicate-file batch catches persistent violation from earlier call" 2 ": any" ""
 
 # (c) All-clean batch is silent and exit 0.
 _clean_batch=$(jq -n --arg f "$_clean_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export function clean(x: string) { return x; }",new_string:"export function clean(x: number) { return x; }"},tool_use_id:"clean",tool_response:"{}"}]}')

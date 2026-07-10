@@ -8,7 +8,7 @@
 
 ### 1. Install
 ```bash
-bun add -D react-doctor --yarn
+bun add -D react-doctor@2.2.6 --yarn   # PIN the version -- the tool moves fast and the Stop hook works around known bugs; upgrade deliberately, rerun transferred-rule fixtures after
 ```
 
 ### 2. Package.json
