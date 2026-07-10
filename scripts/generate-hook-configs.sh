@@ -187,6 +187,12 @@ fi
 case "$MODE" in
   check)
     _drift=0
+    # hook-lib mirror: the packager cannot follow symlinks, so .claude/hooks
+    # carries a real-file copy of shared/hook-lib.sh; divergence fails open.
+    if ! cmp -s shared/hook-lib.sh .claude/hooks/_hook-lib.sh; then
+      echo "DRIFT: .claude/hooks/_hook-lib.sh diverged from shared/hook-lib.sh" >&2
+      _drift=1
+    fi
     _cur_settings=$(jq -S . .claude/settings.json 2>/dev/null || echo "{}")
     _new_settings_sorted=$(echo "$NEW_SETTINGS" | jq -S .)
     if ! diff <(echo "$_cur_settings") <(echo "$_new_settings_sorted") >/dev/null 2>&1; then
@@ -218,6 +224,7 @@ case "$MODE" in
     ;;
   apply)
     mkdir -p .codex hooks
+    cp shared/hook-lib.sh .claude/hooks/_hook-lib.sh && chmod +x .claude/hooks/_hook-lib.sh  # hook-lib mirror sync
     echo "$NEW_SETTINGS" > .claude/settings.json
     echo "$NEW_PLUGIN" > hooks/hooks.json
     if _codex_local_writable; then

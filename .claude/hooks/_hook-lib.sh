@@ -840,5 +840,3 @@ hook_stop_save_test_results() {
 hook_stop_get_test_status() {
   cat "$_hook_session_dir/shared-test-status" 2>/dev/null || echo ""
 }
-
-# drift
