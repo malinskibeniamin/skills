@@ -35,6 +35,7 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 - `/improve`: standard audit, then ask which findings to plan.
 - `/improve quick` or `/improve deep`: change audit depth.
 - `/improve security|perf|tests|bugs|docs|dx|dependencies`: focused audit.
+- `/improve architecture`: deepening scan (absorbed from improve-codebase-architecture) -- find shallow modules, seams, and file-hop friction using `/codebase-design` vocabulary and the deletion test; write a self-contained HTML report (`references/architecture-report.md`) with per-candidate cards (problem, solution, locality/leverage/test benefits, before/after, Strong|Worth exploring|Speculative) ending in a Top recommendation; then grill the chosen candidate (constraints, seam, adapters, tests, rollback), with `/domain-modeling` for new terms, ADR offers on durable rejections, and `/codebase-design` design-it-twice for alternative interfaces. Report first, no interfaces until asked.
 - `/improve branch`: audit current branch diff plus direct callers; tag findings `introduced` or `pre-existing`.
 - `/improve next`: grounded feature/roadmap suggestions only.
 - `/improve plan <description>`: skip broad audit; investigate enough to write one plan.

@@ -58,7 +58,7 @@ Agents may read and write unless the packet says `report-only`. In shared policy
 - Lane model choice: `/efficient-frontier` Model rankings. Bulk mechanical lanes -> GPT-5.6 via `/codex` wrapper (sonnet+low, `GPT-5.6:` label, worktree isolation). Cross-model review per CLAUDE.md runs on every lane result. Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes start with `/deslop` write mode; reviewer lanes include `/deslop` complexity tags before broader review.
-- Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
+- Architecture: fan out `/improve architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
 - Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.
 - Design/copy work: split `/visual-review`, `setup-ux-copy`/copywriting, accessibility, and articulation lanes only when their write scopes do not overlap.

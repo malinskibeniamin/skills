@@ -416,7 +416,7 @@ Every frontend or customer-facing surface PR carries/links:
 
 ## HTML report format
 
-Visual review can render a single self-contained HTML report in OS temp dir. This mirrors `/improve-codebase-architecture`: write the file first; add a renderer script later only if the JSON contract stabilizes.
+Visual review can render a single self-contained HTML report in OS temp dir. This mirrors `/improve architecture`: write the file first; add a renderer script later only if the JSON contract stabilizes.
 
 Location: resolve temp dir from `$TMPDIR`, fallback `/tmp` or `%TEMP%`. Write `<tmpdir>/visual-review-<timestamp>.html`, open via `open`, `xdg-open`, or `start`, return absolute path. Do not write repo artifacts unless user asks.
 

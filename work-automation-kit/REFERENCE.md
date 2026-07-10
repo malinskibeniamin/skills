@@ -44,7 +44,7 @@ Quick question (on a specific decision)
 | Planning | development-lifecycle (plan phase) | to-spec, to-tickets |
 | Review | development-lifecycle (review phase) | -- |
 | Design | grilling (explore mode), prototype | -- |
-| Architecture | improve-codebase-architecture | -- |
+| Architecture | improve (architecture mode) | -- |
 | DDD | grilling, domain-modeling | -- |
 | Meta | writing-great-skills, grilling, ask-ben | -- |
 

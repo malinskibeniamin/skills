@@ -26,7 +26,8 @@ Local gateway (no cloud): `rpk ai env add local --ai-gateway-url http://localhos
 Everything after `--` passes through to the underlying tool untouched:
 
 ```bash
-rpk ai run claude --llmprovider claude-code-enterprise-local -- --dangerously-skip-permissions
+rpk ai run claude --llmprovider claude-code-enterprise-local
+rpk ai run claude --llmprovider claude-code-enterprise-local -- --dangerously-skip-permissions   # ONLY in sandboxed/throwaway envs: this disables Claude Code approval prompts
 rpk ai run codex  --llmprovider <provider-name> -- exec -s read-only "<prompt>"
 ```
 

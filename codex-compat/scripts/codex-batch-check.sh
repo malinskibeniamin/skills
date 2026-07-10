@@ -90,7 +90,20 @@ if [ -n "$changed_css" ] && [ -x "$hooks_dir/tailwind-check.sh" ]; then
   done
 fi
 
-# package.json heavy-dep bans: retired hook — Biome noRestrictedImports owns them.
+# package.json heavy-dep ADMISSION: an import lint cannot reject adding an
+# unused/delayed-use dependency to the manifest. Same banned set as the Claude
+# FileChanged hook (file-changed-deps.sh); devDependencies stay allowed.
+if [ -n "$changed_pkg" ]; then
+  for pkg in $changed_pkg; do
+    abs_path="$repo_root/$pkg"
+    [ -f "$abs_path" ] || continue
+    _banned=$(jq -r '(.dependencies // {}) | keys[]' "$abs_path" 2>/dev/null \
+      | grep -xE 'moment|lodash|jquery|core-js|classnames' | head -5 | tr '\n' ' ' || true)
+    if [ -n "$_banned" ]; then
+      errors="$errors\n[dep-admission] $pkg: banned heavy deps in dependencies: ${_banned}(moment->date-fns, lodash->lodash-es, jquery->native DOM, core-js->targeted polyfills, classnames->clsx)"
+    fi
+  done
+fi
 
 # ── Orchestration gates (same as orchestration-stop.sh) ──────────
 

@@ -59,7 +59,7 @@ Not in the stack (do not introduce): Next.js, react-router-dom, Radix as new dep
 
 ### Community Workflow Skills -- from mattpocock/skills
 
-improve-codebase-architecture, prototype, to-spec, to-tickets, writing-great-skills
+prototype, to-spec, to-tickets, writing-great-skills
 
 ## Install Order
 

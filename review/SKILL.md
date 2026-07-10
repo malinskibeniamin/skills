@@ -46,7 +46,7 @@ spawn failure is rerun, not dropped.
 | security/privacy | auth, tenant boundaries, secrets, unsafe HTML, injection, deps, logging, PII | Opus-4.8 |
 | test/perf | TDD evidence, coverage gaps, flaky tests, render/network/bundle risk | Opus-4.8 |
 
-Ninth hat, **mandatory**: cross-model. The reviewer model must differ from the diff's author model. Claude authored -> `GPT-5.6: independent` codex wrapper hat (see `/codex`) -- effectively free, catches groupthink. Codex authored -> the eight Claude hats already are the cross-model review; add a clean-context `GPT-5.6: independent` as a third perspective when stakes warrant. Skippable ONLY when the codex CLI is unavailable -- record the skip like any other hat.
+Ninth hat, **mandatory**: cross-model. The reviewer model must differ from the diff's author model. Claude authored -> `GPT-5.6: independent` codex wrapper hat (see `/codex`) -- spends codex plan allowance (cheap relative to Claude tokens, not free; capped per /codex budget gates), catches groupthink. Codex authored -> the eight Claude hats already are the cross-model review; add a clean-context `GPT-5.6: independent` as a third perspective when stakes warrant. Skippable ONLY when the codex CLI is unavailable -- record the skip like any other hat.
 
 Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals;
 evidence, severity, priority label, required change, PR-comment-ready text; max 400 words;

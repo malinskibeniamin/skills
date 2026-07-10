@@ -32,7 +32,6 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/grilling` | Explore design options, then interview the user relentlessly about the chosen plan, with a 3-hat plan gate... |
 | `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
 | `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
-| `/improve-codebase-architecture` | Scan a codebase for deepening opportunities, present a visual HTML report, then grill the chosen candidate. |
 | `/improve` | Surveys a codebase as a senior advisor and writes implementation plans. |
 | `/make-pr-easy-to-review` | Prepare PRs for review by cleaning noisy history, improving PR descriptions, and adding reviewer guidance w... |
 | `/plan-arbiter` | Use when comparing, cross-reviewing, merging, judging, choosing, or arbitrating competing plans from agents... |
@@ -40,12 +39,13 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/prime` | Builds repo startup brief. |
 | `/prototype` | Build a throwaway prototype to answer a design question. |
 | `/read-the-damn-docs` | Use for third-party APIs, libraries, frameworks, CLIs, cloud services, SDKs, fast-moving behavior, current/... |
-| `/redpanda-ai-gateway` | Run AI CLIs (claude, codex) through the Redpanda AI Gateway via rpk ai -- authenticate, pick an environment... |
+| `/redpanda-ai-gateway` | Run AI CLIs (claude, codex) through the Redpanda AI Gateway via rpk ai -- auth, environments, providers, ga... |
 | `/registry-workflow` | Component registry maintenance -- taxonomy, consumer drift analysis, sync discipline. |
 | `/research` | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in th... |
 | `/resilience-review` | Murphy-law hat panel for unhappy paths -- input, timing, system, state, UX-recovery hats probe a change in... |
 | `/resolve-pr-feedback` | Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. |
 | `/resolving-merge-conflicts` | Use when you need to resolve an in-progress git merge/rebase conflict. |
+| `/revamp` | Run a large rewrite, port, or migration using the Bun-in-Rust playbook -- baselines, mechanical-first trans... |
 | `/review` | Reviews a diff with an 8-hat parallel panel -- product/spec, standards, complexity, adversarial, resilience... |
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |

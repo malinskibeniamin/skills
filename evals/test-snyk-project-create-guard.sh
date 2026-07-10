@@ -9,9 +9,10 @@ PERMISSION_GUARD="$REPO_ROOT/.claude/hooks/codex-permission-request-guard.sh"
 
 run_file_eval "$HOOK" "snyk project create guard exists"
 run_executable_eval "$HOOK" "snyk project create guard is executable"
-run_content_eval "$MANIFEST" "snyk-project-create-guard\\.sh" "manifest wires Snyk guard"
-run_content_eval "$CLAUDE_SETTINGS" "snyk-project-create-guard\\.sh" "Claude settings include Snyk guard"
-run_content_eval "$CODEX_HOOKS" "snyk-project-create-guard\\.sh" "Codex hooks include Snyk guard"
+run_content_eval "$MANIFEST" "pre-bash\\.sh" "manifest wires the pre-bash dispatcher"
+run_content_eval "$REPO_ROOT/.claude/hooks/pre-bash.sh" "snyk-project-create-guard\\.sh" "pre-bash dispatcher routes snyk commands to the guard"
+run_content_eval "$CLAUDE_SETTINGS" "pre-bash\\.sh" "Claude settings include the pre-bash dispatcher"
+run_content_eval "$CODEX_HOOKS" "pre-bash\\.sh" "Codex hooks include the pre-bash dispatcher"
 run_content_eval "$PERMISSION_GUARD" "snyk-project-create-guard\\.sh" "PermissionRequest guard reuses Snyk guard"
 
 _snyk_guard_case() {
