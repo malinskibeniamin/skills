@@ -478,14 +478,20 @@ git add . && git commit -q -m "base"
 echo "const a = 2" > fileA.ts
 echo "const b = 3" > fileB.ts
 
-# Simulate session state: session only touched fileA.ts, fileB.ts was dirty at start
+# Simulate session state: session only touched fileA.ts, fileB.ts was dirty at start.
+# Hermetic: the function starts from `git diff HEAD`, so build a throwaway repo
+# with BOTH files modified -- a clean CI checkout must not make this vacuous.
 _test_session="$_scope_tmpdir/.session"
 mkdir -p "$_test_session"
-echo "$_scope_tmpdir/fileA.ts" > "$_test_session/session-touched-files"
+( cd "$_scope_tmpdir" && git init -q . && printf 'a\n' > fileA.ts && printf 'b\n' > fileB.ts \
+  && git add . && git -c user.email=t@t -c user.name=t commit -qm init \
+  && printf 'a2\n' > fileA.ts && printf 'b2\n' > fileB.ts )
+echo "fileA.ts" > "$_test_session/session-touched-files"
 echo "fileB.ts" > "$_test_session/dirty-files-baseline"
 
 # Source hook-lib and override session dir
 (
+  cd "$_scope_tmpdir"
   source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
   _hook_session_dir="$_test_session"
 
