@@ -14,7 +14,7 @@ if [ "$tool_name" != "Bash" ]; then
   exit 0
 fi
 
-exit_code=$(echo "$input" | jq -r '.tool_result.exit_code // "0"' 2>/dev/null || echo "0")
+exit_code=$(echo "$input" | jq -r '.tool_response.exit_code // .tool_result.exit_code // "0"' 2>/dev/null || echo "0")
 
 # Short-circuit: most Bash calls succeed — skip classification entirely
 if [ "$exit_code" = "0" ]; then

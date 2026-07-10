@@ -20,7 +20,7 @@ if [ "$tool_name" != "Bash" ]; then
   exit 0
 fi
 
-result=$(echo "$input" | jq -r '.tool_result // empty')
+result=$(echo "$input" | jq -r '.tool_response // .tool_result // empty')
 
 if [ -z "$result" ]; then
   exit 0

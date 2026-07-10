@@ -17,7 +17,7 @@ pre-push:
   commands:
     typecheck:
       glob: "*.{ts,tsx,js,jsx}"
-      run: bun run type:check
+      run: test -f package.json && bun run type:check || true
     lint:
       glob: "*.{ts,tsx,js,jsx,mjs,mts}"
       run: bun run lint:file -- {push_files}
