@@ -17,7 +17,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "PASS \| NEEDS_GUARDS \| BLOCKED" "skill 
 run_content_eval "$SKILL_DIR/SKILL.md" "REFERENCE.md" "skill links reference"
 if ! grep -q "EXAMPLES.md" "$SKILL_DIR/SKILL.md"; then echo "  PASS  skill has one-level reference link only"; PASS=$((PASS+1)); else echo "  FAIL  skill should not link EXAMPLES.md"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: skill should not link EXAMPLES.md"; fi
 
-for path in "$SKILL_DIR/SKILL.md:50" "$SKILL_DIR/REFERENCE.md:90" "$HOOK:50"; do
+for path in "$SKILL_DIR/SKILL.md:50" "$SKILL_DIR/REFERENCE.md:90"; do
   file=${path%:*}; max=${path#*:}; lines=$(wc -l < "$file" 2>/dev/null | tr -d ' ' || echo 999)
   if [ "$lines" -le "$max" ]; then echo "  PASS  ${file#$REPO_ROOT/} compact ($lines <= $max)"; PASS=$((PASS+1)); else echo "  FAIL  ${file#$REPO_ROOT/} too verbose ($lines > $max)"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: ${file#$REPO_ROOT/} too verbose"; fi
 done
@@ -57,15 +57,14 @@ run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "review-evidence.md" "code
 run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "Finding queue" "shared evidence reference keeps finding queue"
 
 
-run_file_eval "$HOOK" "resilience-review nudge hook exists"
-run_executable_eval "$HOOK" "resilience-review nudge hook executable"
-
-_tmpdir=$(mktemp -d); _tmpfile="$_tmpdir/CreateForm.tsx"; echo 'export function CreateForm(){return <form><button>Save</button></form>}' > "$_tmpfile"
-rm -rf "$_tmpdir"
-
-_tmpdir=$(mktemp -d); _tmpfile="$_tmpdir/safe.ts"; echo 'export const sum=(a:number,b:number)=>a+b' > "$_tmpfile"
-_no_risk=$(mktemp); echo "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_tmpfile\",\"content\":\"export const sum=(a:number,b:number)=>a+b\"}}" | "$HOOK" 2>"$_no_risk" || true
-if [ -s "$_no_risk" ]; then echo "  FAIL  hook noisy on pure helper"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: hook noisy on pure helper"; else echo "  PASS  hook quiet on pure helper"; PASS=$((PASS+1)); fi
-rm -rf "$_tmpdir" "$_no_risk"
+# The per-edit resilience nudge hook was retired; the lifecycle (/go phase 4b)
+# owns the resilience-review trigger now. Guard: no ghost hook resurrects.
+if ls "$REPO_ROOT/.claude/hooks/"*resilience* >/dev/null 2>&1; then
+  echo "  FAIL  a resilience hook reappeared -- lifecycle owns the trigger"
+  FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  FAIL: resilience hook resurrected"
+else
+  echo "  PASS  no resilience hook (lifecycle owns the trigger)"
+  PASS=$((PASS+1))
+fi
 
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/resilience-review" "generated catalog documents resilience-review"

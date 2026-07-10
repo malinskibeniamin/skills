@@ -40,6 +40,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/prime` | Builds repo startup brief. |
 | `/prototype` | Build a throwaway prototype to answer a design question. |
 | `/read-the-damn-docs` | Use for third-party APIs, libraries, frameworks, CLIs, cloud services, SDKs, fast-moving behavior, current/... |
+| `/redpanda-ai-gateway` | Run AI CLIs (claude, codex) through the Redpanda AI Gateway via rpk ai -- authenticate, pick an environment... |
 | `/registry-workflow` | Component registry maintenance -- taxonomy, consumer drift analysis, sync discipline. |
 | `/research` | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in th... |
 | `/resilience-review` | Murphy-law hat panel for unhappy paths -- input, timing, system, state, UX-recovery hats probe a change in... |

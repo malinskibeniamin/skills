@@ -145,18 +145,34 @@ for eval_file in "$EVALS_DIR"/test-*.sh; do
     continue
   fi
 
-  # Re-anchor before every eval: some evals cd into tmpdirs and a failed
-  # branch can skip the return, and some export CLAUDE_SESSION_ID -- both
-  # poison every later behavioral test since eval files are sourced.
+  # Isolation: each eval file runs in its own subshell so leaked variables
+  # (an undefined $HOOK inheriting a prior file's value), cd's into tmpdirs,
+  # and exported session ids cannot poison later files. Counters cross the
+  # boundary via a marker line on fd 3.
   cd "$REPO_ROOT"
   unset CLAUDE_SESSION_ID
 
-  if [ "$JSON_MODE" = true ]; then
-    source "$eval_file" > /dev/null
+  _counts=$(
+    (
+      PASS=0; FAIL=0; SKIP=0; ERRORS=""
+      if [ "$JSON_MODE" = true ]; then
+        source "$eval_file" > /dev/null
+      else
+        echo "[$skill_name]"
+        source "$eval_file"
+        echo ""
+      fi
+      printf 'EVAL_COUNTS %d %d %d %s\n' "$PASS" "$FAIL" "$SKIP" "$(printf '%b' "$ERRORS" | base64 | tr -d '\n')" >&3
+    ) 3>&1 1>&2
+  )
+  _p=$(echo "$_counts" | awk '/^EVAL_COUNTS/{print $2}'); _f=$(echo "$_counts" | awk '/^EVAL_COUNTS/{print $3}'); _s=$(echo "$_counts" | awk '/^EVAL_COUNTS/{print $4}')
+  _e=$(echo "$_counts" | awk '/^EVAL_COUNTS/{print $5}' | base64 -d 2>/dev/null || true)
+  if [ -z "$_p" ]; then
+    echo "  FAIL  eval file crashed before reporting: $skill_name"
+    FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: eval file crashed: $skill_name"
   else
-    echo "[$skill_name]"
-    source "$eval_file"
-    echo ""
+    PASS=$((PASS + _p)); FAIL=$((FAIL + _f)); SKIP=$((SKIP + _s))
+    [ -n "$_e" ] && ERRORS="$ERRORS$_e"
   fi
 done
 
