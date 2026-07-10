@@ -1,10 +1,10 @@
 # Evals for latest release metadata bump.
 
-run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.28\.1"' "skill manifest bumped to 4.28.1"
-run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.28\.1"' "Claude plugin bumped to 4.28.1"
-run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.28\.1"' "Codex plugin bumped to 4.28.1"
-run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.28\.1"' "Claude marketplace bumped to 4.28.1"
-run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.28\.1"' "Codex marketplace bumped to 4.28.1"
+run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.28\.2"' "skill manifest bumped to 4.28.2"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.28\.2"' "Claude plugin bumped to 4.28.2"
+run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.28\.2"' "Codex plugin bumped to 4.28.2"
+run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.28\.2"' "Claude marketplace bumped to 4.28.2"
+run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.28\.2"' "Codex marketplace bumped to 4.28.2"
 
 # Count strings were removed from metadata descriptions (PR #46 feedback:
 # hand-maintained counts drift). Assert their ABSENCE instead.
@@ -25,8 +25,8 @@ do
   fi
 done
 
-run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.28\.1$' "changelog has 4.28.1 section"
-run_content_eval "$REPO_ROOT/README.md" 'v4\.28\.1' "README pinned release example updated"
+run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.28\.2$' "changelog has 4.28.2 section"
+run_content_eval "$REPO_ROOT/README.md" 'v4\.28\.2' "README pinned release example updated"
 run_content_eval "$REPO_ROOT/README.md" 'codex features enable hooks' "README enables the stable Codex hooks feature"
 run_content_eval "$REPO_ROOT/README.md" 'codex plugin add frontend-skills@skills' "README installs the Codex plugin after adding its marketplace"
 
