@@ -77,6 +77,22 @@ seen_file="$tmp_dir/seen"
 : > "$review_file"
 : > "$seen_file"
 
+# Canonical Codex apply_patch calls carry targets inside the patch body, not
+# tool_input.file_path. Expand each into one synthetic per-target call (patch
+# body preserved so the lib extracts added lines) BEFORE the dedup reduce.
+_input=$(printf '%s' "$_input" | jq -c '
+  .tool_calls = ([ (.tool_calls // [])[] |
+    if (.tool_name == "apply_patch") then
+      ( (if (.tool_input.command|type) == "array" then .tool_input.command[1:] | join("\n")
+         elif (.tool_input.command|type) == "string" then .tool_input.command
+         else (.tool_input.patch // .tool_input.input // "") end) ) as $body
+      | [ $body | split("\n")[] | capture("^\\*\\*\\* (Update|Add) File: (?<f>.+)$").f ] as $targets
+      | if ($targets | length) > 0 then
+          $targets[] | {tool_name: "Edit", tool_input: {file_path: ., patch: $body}}
+        else empty end
+    else . end ])
+' 2>/dev/null || printf '%s' "$_input")
+
 # A file edited more than once in the batch drops its old/new_string payload so
 # hook_get_added_lines falls back to git-diff-vs-HEAD: checks then see the
 # SURVIVING final-file additions (call-1 violations still present are caught;

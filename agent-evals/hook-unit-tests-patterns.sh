@@ -791,7 +791,7 @@ _f="/tmp/hook-test-unhappy-$$.tsx"
 echo "  silent empty catch (warn):"
 _setup_test_file "$_f" 'try { await api.fetch(); } catch (e) { }'
 _assert_exit 0 "empty catch is silent here (retired hook)"
-_pass "silent-catch ownership: Biome noEmptyBlockStatements (ultracite) owns empty catch blocks"
+_assert_biome_owns "noEmptyBlockStatements" "silent-catch owner: Biome noEmptyBlockStatements"
 _cleanup_test_file "$_f"
 
 echo "  catch with error state (pass):"
@@ -815,7 +815,7 @@ _f="/tmp/hook-test-magic-$$.ts"
 echo "  inline staleTime (warn):"
 _setup_test_file "$_f" "const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
 _assert_exit 0 "inline staleTime passes (rule retired as low-value, wave 2)"
-_pass "staleTime nudge deliberately retired -- no owner by design"
+_skip_note "staleTime nudge retired as low-value (wave 2) -- no owner by design"
 _cleanup_test_file "$_f"
 
 echo "  staleTime with escape (pass):"
@@ -1233,7 +1233,7 @@ _f="/tmp/hook-test-unhappy-$$.tsx"
 echo "  silent empty catch (warn):"
 _setup_test_file "$_f" 'try { await api.fetch(); } catch (e) { }'
 _assert_exit 0 "empty catch is silent here (retired hook)"
-_pass "silent-catch ownership: Biome noEmptyBlockStatements (ultracite) owns empty catch blocks"
+_assert_biome_owns "noEmptyBlockStatements" "silent-catch owner: Biome noEmptyBlockStatements"
 _cleanup_test_file "$_f"
 
 echo "  catch with error state (pass):"
@@ -1257,7 +1257,7 @@ _f="/tmp/hook-test-magic-$$.ts"
 echo "  inline staleTime (warn):"
 _setup_test_file "$_f" "const query = useQuery({ queryKey: ['x'], staleTime: 30000 });"
 _assert_exit 0 "inline staleTime passes (rule retired as low-value, wave 2)"
-_pass "staleTime nudge deliberately retired -- no owner by design"
+_skip_note "staleTime nudge retired as low-value (wave 2) -- no owner by design"
 _cleanup_test_file "$_f"
 
 echo "  staleTime with escape (pass):"
@@ -1470,7 +1470,7 @@ _setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router'
 const [page, setPage] = useState(0);
 const [sortBy, setSortBy] = useState('asc');"
 _assert_exit 0 "url-state passes (rule retired as low-value, wave 2)"
-_pass "url-state nudge deliberately retired -- no owner by design"
+_skip_note "url-state nudge retired as low-value (wave 2) -- no owner by design"
 _cleanup_test_file "$_f"
 _cleanup_test_dir "/tmp/hook-test-src"
 

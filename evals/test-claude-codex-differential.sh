@@ -47,3 +47,44 @@ for _dp_d in "/tmp/hook-session-dp-pc-$$" "/tmp/hook-session-dp-b-$$" "/tmp/hook
   command rm -f "$_dp_d"/* 2>/dev/null || true
   rmdir "$_dp_d" 2>/dev/null || true
 done
+
+# Canonical Codex apply_patch (array command form, multi-file): both the
+# installed per-call entrypoint and the batch dispatcher must block, and the
+# stdin session_id must scope the session dir.
+_dp_ap_dir=$(mktemp -d /tmp/apx-eval-XXXXXX)
+printf 'export const a: any = 1;\n' > "$_dp_ap_dir/a.ts"
+printf 'export const b = 2;\n' > "$_dp_ap_dir/b.ts"
+_dp_patch=$(printf '*** Begin Patch\n*** Update File: %s/a.ts\n+export const a: any = 1;\n*** Update File: %s/b.ts\n+export const b = 2;\n*** End Patch' "$_dp_ap_dir" "$_dp_ap_dir")
+_dp_ap_pc=$(jq -n --arg p "$_dp_patch" '{tool_name:"apply_patch",session_id:"apx-eval-pc",tool_input:{command:["apply_patch",$p]}}')
+_dp_ap_b=$(jq -n --arg p "$_dp_patch" '{hook_event_name:"PostToolBatch",session_id:"apx-eval-b",tool_calls:[{tool_name:"apply_patch",tool_input:{command:["apply_patch",$p]}}]}')
+_dp_pc_exit=0; printf '%s' "$_dp_ap_pc" | "$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh" >/dev/null 2>&1 || _dp_pc_exit=$?
+_dp_b_exit=0;  printf '%s' "$_dp_ap_b" | "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" >/dev/null 2>&1 || _dp_b_exit=$?
+if [ "$_dp_pc_exit" -eq 2 ] && [ "$_dp_b_exit" -eq 2 ]; then
+  echo "  PASS  canonical apply_patch blocks in both runtimes (exit 2/2)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  apply_patch divergence: per-call=$_dp_pc_exit batch=$_dp_b_exit"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: apply_patch divergence"
+fi
+if [ -d "/tmp/hook-session-apx-eval-pc" ]; then
+  echo "  PASS  stdin session_id scopes the session dir"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  stdin session_id ignored"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: stdin session_id ignored"
+fi
+
+# Second rule (zustand) through both runtimes -- parity is not one-rule-deep.
+printf 'import { create } from "zustand";\nexport const useS = create<S>((set) => ({}));\n' > "$_dp_ap_dir/store.ts"
+_dp_z_pc=$(jq -n --arg f "$_dp_ap_dir/store.ts" '{tool_name:"Edit",tool_input:{file_path:$f,old_string:"x",new_string:"export const useS = create<S>((set) => ({}));"}}')
+_dp_z_b=$(jq -n --arg f "$_dp_ap_dir/store.ts" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"x",new_string:"export const useS = create<S>((set) => ({}));"},tool_use_id:"z",tool_response:"{}"}]}')
+_dp_pc_exit=0; printf '%s' "$_dp_z_pc" | CLAUDE_SESSION_ID=dp-z-pc-$$ "$REPO_ROOT/.claude/hooks/zustand-check.sh" >/dev/null 2>&1 || _dp_pc_exit=$?
+_dp_b_exit=0;  printf '%s' "$_dp_z_b" | CLAUDE_SESSION_ID=dp-z-b-$$ "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" >/dev/null 2>&1 || _dp_b_exit=$?
+if [ "$_dp_pc_exit" -eq "$_dp_b_exit" ]; then
+  echo "  PASS  zustand rule agrees across runtimes (exit $_dp_pc_exit/$_dp_b_exit)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  zustand divergence: per-call=$_dp_pc_exit batch=$_dp_b_exit"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: zustand divergence"
+fi
+command rm -f "$_dp_ap_dir"/*.ts 2>/dev/null || true; rmdir "$_dp_ap_dir" 2>/dev/null || true
