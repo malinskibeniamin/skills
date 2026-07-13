@@ -1,0 +1,3 @@
+interface:
+  display_name: "Commit Push PR"
+  short_description: "Commit, push, and publish a reviewable pull request"

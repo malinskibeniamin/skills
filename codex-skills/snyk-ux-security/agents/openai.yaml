@@ -1,0 +1,5 @@
+interface:
+  display_name: "Snyk UX Security"
+  short_description: "Audit dependency security with Snyk and release gates"
+policy:
+  allow_implicit_invocation: false

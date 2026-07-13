@@ -1,0 +1,5 @@
+interface:
+  display_name: "Redpanda AI Gateway"
+  short_description: "Run AI CLIs through the Redpanda AI Gateway"
+policy:
+  allow_implicit_invocation: false

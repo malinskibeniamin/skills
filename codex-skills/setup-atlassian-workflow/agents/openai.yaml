@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Atlassian Workflow"
+  short_description: "Configure opt-in Jira and Atlassian workflows"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Work Automation Kit"
+  short_description: "Install planning, ticketing, and triage workflows"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Extend Harness"
+  short_description: "Extend and debug the frontend skill harness"
+policy:
+  allow_implicit_invocation: false

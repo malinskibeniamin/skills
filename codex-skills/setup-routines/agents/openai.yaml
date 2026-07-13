@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Routines"
+  short_description: "Configure automated Claude Code maintenance routines"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ask Ben"
+  short_description: "Route work through Ben's frontend skill harness"
+policy:
+  allow_implicit_invocation: false

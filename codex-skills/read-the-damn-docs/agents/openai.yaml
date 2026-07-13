@@ -1,0 +1,3 @@
+interface:
+  display_name: "Read The Damn Docs"
+  short_description: "Research current behavior from primary documentation"

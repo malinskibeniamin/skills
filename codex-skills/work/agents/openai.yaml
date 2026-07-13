@@ -1,0 +1,5 @@
+interface:
+  display_name: "Work"
+  short_description: "Run the complete development lifecycle"
+policy:
+  allow_implicit_invocation: false

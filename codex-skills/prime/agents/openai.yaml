@@ -1,0 +1,3 @@
+interface:
+  display_name: "Prime"
+  short_description: "Build a concise repository startup brief"

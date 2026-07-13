@@ -46,6 +46,10 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 
 Summary variants: branch, review-plan, execute, reconcile. See `REFERENCE.md` for under-the-hood skill routing.
 
+### Architecture scan scope
+
+**Scope before scanning -- YAGNI.** If the user named a direction, take it instead of inferring a broader audit. Otherwise, inspect a meaningful stretch of path-aware history with `git log --name-only --format=` and prioritize the recently changing hot spots. If history is scattered with no clear hot spot, widen the net and state the resulting scope.
+
 ## Examples
 
 See `EXAMPLES.md` for invocation examples. See `references/closing-the-loop.md` before execute or reconcile.

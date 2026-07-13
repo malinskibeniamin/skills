@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Arbiter"
+  short_description: "Compare competing plans and choose a grounded direction"

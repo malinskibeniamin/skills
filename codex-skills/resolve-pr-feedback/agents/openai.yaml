@@ -1,0 +1,3 @@
+interface:
+  display_name: "Resolve PR Feedback"
+  short_description: "Resolve pull request feedback and review threads"

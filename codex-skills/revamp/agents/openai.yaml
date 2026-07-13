@@ -1,0 +1,5 @@
+interface:
+  display_name: "Revamp"
+  short_description: "Run a large rewrite with baseline-driven translation"
+policy:
+  allow_implicit_invocation: false

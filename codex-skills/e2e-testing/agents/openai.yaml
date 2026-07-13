@@ -1,0 +1,3 @@
+interface:
+  display_name: "E2E Testing"
+  short_description: "Build resilient Playwright end-to-end tests"

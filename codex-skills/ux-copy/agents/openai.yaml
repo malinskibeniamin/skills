@@ -1,0 +1,3 @@
+interface:
+  display_name: "UX Copy"
+  short_description: "Write clear, inclusive product copy in Redpanda style"

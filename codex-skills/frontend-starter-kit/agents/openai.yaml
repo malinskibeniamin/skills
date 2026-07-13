@@ -1,0 +1,5 @@
+interface:
+  display_name: "Frontend Starter Kit"
+  short_description: "Bootstrap the standard frontend toolchain and gates"
+policy:
+  allow_implicit_invocation: false

@@ -95,8 +95,10 @@ run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "If a \*fact\* can be found" "grilling looks up facts instead of asking"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan, decision, or idea" "grilling applies beyond implementation plans"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decision tree" "grilling walks decisions rather than design-only branches"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "environment.*filesystem.*tools" "grilling looks up facts across the available environment"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling waits for shared-understanding confirmation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
@@ -178,6 +180,10 @@ run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses as
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "HTML report|architecture-report" "improve architecture mode writes HTML report"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "Top recommendation" "architecture mode includes top recommendation"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "/codebase-design" "architecture mode links shared codebase-design skill"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "Scope before.*YAGNI" "architecture mode decides scope before scanning"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "user named a direction.*take it" "architecture mode honors explicit scope"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "git log --(name-only|stat).*hot spots" "architecture mode uses path-aware history for recent change hot spots"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "scattered.*widen the net" "architecture mode widens only when history has no hot spot"
 run_file_eval "$REPO_ROOT/improve/references/architecture-report.md" "architecture report reference exists"
 run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"
 
