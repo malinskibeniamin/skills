@@ -1,0 +1,3 @@
+interface:
+  display_name: "Visual Review"
+  short_description: "Review customer-facing surfaces from visual evidence"

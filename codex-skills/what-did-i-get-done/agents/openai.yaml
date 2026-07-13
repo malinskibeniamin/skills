@@ -1,0 +1,3 @@
+interface:
+  display_name: "What Did I Get Done"
+  short_description: "Summarize authored commits into a concise status update"

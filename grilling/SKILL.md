@@ -1,15 +1,15 @@
 ---
 name: grilling
-description: Explore design options, then interview the user relentlessly about the chosen plan, with a 3-hat plan gate and optional domain-doc capture. Use when brainstorming approaches, starting new features, thinking before coding, stress-testing a plan or decision, as the lifecycle phase 2b gate, or on any 'grill' trigger phrase.
+description: Explore options, then interview the user relentlessly about a plan, decision, or idea, with a 3-hat plan gate and optional domain-doc capture. Use when brainstorming approaches, starting new features, thinking before coding, stress-testing reasoning, as the lifecycle phase 2b gate, or on any 'grill' trigger phrase.
 ---
 
 # Grilling
 
-**GATE: no code, no files, no implementation until a design is presented, grilled, and approved.**
+**GATE: no code, no files, no implementation until a direction is presented, grilled, and approved.**
 
-## Explore mode (no plan yet)
+## Explore mode (no direction yet)
 
-When invoked before a coherent plan exists ("brainstorm", "explore options", "should we use X or Y?", new feature/architecture choice):
+When invoked before a coherent direction exists ("brainstorm", "explore options", "should we use X or Y?", new feature/architecture choice):
 
 1. Explore context -- read files, docs, recent commits.
 2. Clarify -- one question at a time, not a list.
@@ -19,15 +19,15 @@ When invoked before a coherent plan exists ("brainstorm", "explore options", "sh
 
 **Challenge variant** (reviewing a proposed approach or risky refactor): question every assumption -- "Why this? What breaks if X changes? Empty list? 10,000 items?" -- present alternatives, push back on weak reasoning; consensus only when all concerns are addressed. "Should we use X or Y?" -> explore, then challenge the winner.
 
-## Grill (plan exists)
+## Grill (direction exists)
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
 
 Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
 
-If a *fact* can be found by exploring the codebase, look it up rather than asking me. The *decisions*, though, are mine -- put each one to me and wait for my answer.
+If a *fact* can be found by exploring the environment (filesystem, tools, and available sources), look it up rather than asking me. The *decisions*, though, are mine -- put each one to me and wait for my answer.
 
-Do not enact the plan until I confirm we have reached a shared understanding.
+Do not act on it until I confirm we have reached a shared understanding.
 
 ## Plan gate (lifecycle phase 2b)
 

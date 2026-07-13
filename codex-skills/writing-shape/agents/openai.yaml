@@ -1,0 +1,5 @@
+interface:
+  display_name: "Writing Shape"
+  short_description: "Shape raw Markdown into a coherent article draft"
+policy:
+  allow_implicit_invocation: false

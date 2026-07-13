@@ -46,12 +46,14 @@ Run `setup-atlassian-workflow` if team use Jira.
 
 See `REFERENCE.md` for details.
 
-1. Explore `git remote -v`, agent docs, existing `docs/agents/`, context docs, and ADRs.
-2. Ask tracker, triage-label, and domain-doc decisions one at a time.
-3. Confirm draft docs before writing. Reuse `templates/`.
-4. Write approved docs only:
+1. Explore `git remote -v`, agent docs, existing `docs/agents/`, context docs, ADRs, whether `triage` is installed, and monorepo signals (`pnpm-workspace.yaml`, package workspaces, or populated `packages/*/src`).
+2. Present the recommended tracker first; ask only when the choice genuinely branches.
+3. If `triage` is installed, ask one question: "Keep the default triage labels?" (recommended: **yes**). On yes, use the five canonical role names. Only if the user says no, collect overrides. Without `triage`, skip label setup.
+4. Without monorepo signals, choose **single-context without asking**. Offer **multi-context only for a monorepo**, then confirm the layout.
+5. Confirm draft docs before writing. Reuse `templates/`.
+6. Choose the agent-instructions file deterministically: edit `CLAUDE.md` first when it exists, otherwise edit `AGENTS.md`; if neither exists, ask which one to create. Update only the selected file, then write approved docs:
    - `docs/agents/issue-tracker.md` with `## Wayfinding operations` when `/wayfinder` is installed
-   - `docs/agents/triage-labels.md`
+   - `docs/agents/triage-labels.md` only when `triage` is installed
    - `docs/agents/domain.md`
-   - `## Agent skills` block for `AGENTS.md` or `CLAUDE.md`
-5. Verify tracker, labels, Wayfinding operations, and domain layout are present.
+   - `## Agent skills` block in the selected agent-instructions file; it must contain `### Issue tracker` with a one-line summary and link to `docs/agents/issue-tracker.md`, plus conditional triage-label and domain-doc pointers
+7. Verify `### Issue tracker` exists in the agent-instructions block and links the selected tracker document; also verify any required labels, Wayfinding operations, and domain layout.

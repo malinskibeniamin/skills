@@ -1,0 +1,3 @@
+interface:
+  display_name: "Hook Audit"
+  short_description: "Audit hook effectiveness, latency, and drift"

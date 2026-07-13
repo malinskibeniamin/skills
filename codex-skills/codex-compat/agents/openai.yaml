@@ -1,0 +1,5 @@
+interface:
+  display_name: "Codex Compat"
+  short_description: "Generate Codex hook and instruction parity"
+policy:
+  allow_implicit_invocation: false

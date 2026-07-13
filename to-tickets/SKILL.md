@@ -1,12 +1,12 @@
 ---
 name: to-tickets
-description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker -- edges as text in a local file, or native blocking links on a real tracker.
+description: Break a plan, spec, or the current conversation into tracer-bullet tickets with blocking edges, published as one file per ticket locally or native blocking links on a real tracker.
 disable-model-invocation: true
 ---
 
 # To Tickets
 Break a plan, spec, or conversation into a set of **tickets** -- tracer-bullet vertical slices, each declaring the tickets that **block** it.
-The issue tracker and triage label vocabulary should have been provided in `docs/agents/` -- run `/work-automation-kit` if not.
+Read `CLAUDE.md` first when it exists; otherwise read `AGENTS.md`. Resolve tracker instructions through that file's **Issue tracker** pointer; never assume a document path. If neither file or pointer exists, run `/work-automation-kit` or use its local-markdown fallback.
 ## Process
 ### 1. Gather context
 Work from whatever is already in the conversation context. If the user passes a reference (a spec path, an issue number or URL) as an argument, fetch it and read its full body and comments.
@@ -22,6 +22,7 @@ Break the work into **tracer bullet** tickets.
 - Any prefactoring should be done first
 </vertical-slice-rules>
 Give each ticket its **blocking edges** -- the other tickets that must complete before it can start. A ticket with no blockers can start immediately.
+**Wide refactors are the exception** to vertical slicing. When one mechanical change fans across the codebase and no narrow slice can stay green, sequence it as expand-contract: **expand** the new form beside the old, **migrate** callers in independently green batches, then **contract** by deleting the old form after every migration finishes. Every migrate batch is blocked by expand; contract is blocked by every migrate batch. If migration batches cannot stay green alone, use an integration branch and make them all block a final integrate-and-verify ticket.
 If competing ticket graphs or slice strategies survive review, run `/plan-arbiter`; for a large dependency graph, publish `/visual-plan` so blockers/frontier are inspectable.
 ### 4. Quiz the user
 Present the proposed breakdown as a numbered list. For each ticket, show:
@@ -34,22 +35,19 @@ Ask the user:
 - Should any tickets be merged or split further?
 Iterate until the user approves the breakdown.
 ### 5. Publish the tickets to the configured tracker
-Publish the approved tickets. **How** depends on the tracker documented in `docs/agents/issue-tracker.md` -- the tickets are the same either way, only the shape of the blocking edges changes:
-- **Local files** -> write one `tickets.md` in the repo root, all tickets in dependency order (blockers first), each with its "Blocked by" listing the titles it depends on. Use the file template below.
+Publish the approved tickets. **How** depends on the tracker reached through the agent-instructions pointer -- the tickets are the same either way, only the shape of the blocking edges changes:
+- **Local files** -> write one file per ticket at `.scratch/<feature-slug>/tickets/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers and titles it depends on. Use the per-ticket template below; never combine tickets into one file.
 - **A real issue tracker (GitHub, Linear, ...)** -> publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use each platform's native sub-issue relationship for the parent and native blocking edge relationship for blockers where available; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the `ready-for-agent` triage label unless instructed otherwise -- the tickets are agent-grabbable by construction.
 Do not close or modify any parent issue.
-<tickets-file-template>
-# Tickets: <short name of the work>
-A one-line summary of what these tickets build. Reference the source spec if there is one.
 Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
-## <Ticket title>
+<local-ticket-template>
+# <NN> -- <Ticket title>
 **What to build:** the end-to-end behaviour this ticket makes work, from the user's perspective -- not a layer-by-layer implementation list.
-**Blocked by:** the titles of the tickets that gate this one, or "None -- can start immediately".
+**Blocked by:** the numbers and titles of the tickets that gate this one, or "None -- can start immediately".
+**Status:** ready-for-agent
 - [ ] Acceptance criterion 1
 - [ ] Acceptance criterion 2
-## <Ticket title>
-...
-</tickets-file-template>
+</local-ticket-template>
 <issue-template>
 ## Parent
 A reference to the parent issue on the tracker (if the source was an existing issue, otherwise omit this section).

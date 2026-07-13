@@ -1,0 +1,5 @@
+interface:
+  display_name: "Wizard"
+  short_description: "Generate an interactive Bash wizard for manual setup"
+policy:
+  allow_implicit_invocation: false

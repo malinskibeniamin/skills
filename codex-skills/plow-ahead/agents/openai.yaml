@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plow Ahead"
+  short_description: "Continue autonomously through routine ambiguity"

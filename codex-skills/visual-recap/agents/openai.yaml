@@ -1,0 +1,3 @@
+interface:
+  display_name: "Visual Recap"
+  short_description: "Turn a code change into an interactive visual recap"

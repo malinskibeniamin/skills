@@ -1,0 +1,3 @@
+interface:
+  display_name: "Registry Workflow"
+  short_description: "Maintain component registry taxonomy and sync discipline"

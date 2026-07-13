@@ -1,0 +1,5 @@
+interface:
+  display_name: "Writing Beats"
+  short_description: "Build an article beat by beat with user pivots"
+policy:
+  allow_implicit_invocation: false

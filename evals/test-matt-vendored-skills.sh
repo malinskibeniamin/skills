@@ -32,6 +32,23 @@ run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/to-tickets" "to-spec hands appr
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "ticket|blocking edges" "to-tickets skill keeps ticket intent"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "native sub-issue" "to-tickets prefers native sub-issues when available"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/prototype.*context pointer|context pointer.*/prototype" "to-tickets points to prototype code instead of inlining"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "Wide refactors.*exception" "to-tickets treats wide refactors as a vertical-slice exception"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "expand.*migrate.*contract" "to-tickets sequences wide refactors with expand-contract"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "migrate.*blocked by.*expand" "to-tickets blocks every migration batch on expand"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "contract.*blocked by every.*migrate" "to-tickets blocks contract on every migration batch"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "integration branch.*integrate-and-verify|integrate-and-verify.*integration branch" "to-tickets handles migration batches that cannot stay green alone"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "\\.scratch/<feature-slug>/tickets/<NN>-<slug>\\.md" "to-tickets publishes one canonical local file per ticket"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "AGENTS\\.md.*CLAUDE\\.md|CLAUDE\\.md.*AGENTS\\.md" "to-tickets resolves tracker docs through agent instructions"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "CLAUDE\\.md.*first|If.*CLAUDE\\.md.*exists.*AGENTS\\.md" "to-tickets defines instruction-file precedence"
+
+if grep -qE 'one `tickets\.md`|docs/agents/issue-tracker\.md' "$REPO_ROOT/to-tickets/SKILL.md"; then
+  echo "  FAIL  to-tickets removes combined-file and hardcoded-tracker instructions"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: to-tickets still contains a combined tickets.md or hardcoded tracker instruction"
+else
+  echo "  PASS  to-tickets removes combined-file and hardcoded-tracker instructions"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "CONTEXT\.md|ADR" "grilling keeps docs sync intent"
 
 for retired_skill in to-prd to-issues setup-matt-pocock-skills; do
@@ -78,8 +95,10 @@ run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not enact the plan until I confirm" "grilling waits for shared-understanding confirmation"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "If a \*fact\* can be found" "grilling looks up facts instead of asking"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan, decision, or idea" "grilling applies beyond implementation plans"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decision tree" "grilling walks decisions rather than design-only branches"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "environment.*filesystem.*tools" "grilling looks up facts across the available environment"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling waits for shared-understanding confirmation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
@@ -161,6 +180,10 @@ run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses as
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "HTML report|architecture-report" "improve architecture mode writes HTML report"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "Top recommendation" "architecture mode includes top recommendation"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "/codebase-design" "architecture mode links shared codebase-design skill"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "Scope before.*YAGNI" "architecture mode decides scope before scanning"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "user named a direction.*take it" "architecture mode honors explicit scope"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "git log --(name-only|stat).*hot spots" "architecture mode uses path-aware history for recent change hot spots"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "scattered.*widen the net" "architecture mode widens only when history has no hot spot"
 run_file_eval "$REPO_ROOT/improve/references/architecture-report.md" "architecture report reference exists"
 run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"
 

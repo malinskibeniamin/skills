@@ -1,0 +1,5 @@
+interface:
+  display_name: "Thermo Nuclear Code Quality Review"
+  short_description: "Run a release-blocking deep code quality review"
+policy:
+  allow_implicit_invocation: false

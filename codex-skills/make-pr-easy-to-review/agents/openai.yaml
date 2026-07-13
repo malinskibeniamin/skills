@@ -1,0 +1,5 @@
+interface:
+  display_name: "Make PR Easy to Review"
+  short_description: "Make pull request history and guidance easier to review"
+policy:
+  allow_implicit_invocation: false

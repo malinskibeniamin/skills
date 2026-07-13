@@ -19,7 +19,7 @@ run_content_eval "$GRILL" "brainstorming approaches" "grilling description carri
 run_content_eval "$GRILL" "Explore mode" "grilling has explore mode"
 run_content_eval "$GRILL" "2-3 approaches with trade-offs" "explore mode proposes approaches with trade-offs"
 run_content_eval "$GRILL" "Challenge variant" "explore mode keeps challenge variant"
-run_content_eval "$GRILL" "no code, no files, no implementation" "hard no-implementation gate preserved"
+run_content_eval "$GRILL" "no code, no files, no implementation until a direction is presented" "hard gate applies to any direction, not design only"
 run_content_eval "$GRILL" "/plan-arbiter" "explore mode routes competing plans to plan-arbiter"
 
 # commit-push folded into commit-push-pr --no-pr.

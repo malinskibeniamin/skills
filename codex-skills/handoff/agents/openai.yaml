@@ -1,0 +1,5 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Prepare a compact session handoff for another agent"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Watchdog"
+  short_description: "Audit and repair work from another coding agent"

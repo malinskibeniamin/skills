@@ -19,6 +19,12 @@ if codex_manifest.get("skills") != "./codex-skills/":
 
 expected = {pathlib.Path(path).name: path.removeprefix("./").rstrip("/") for path in claude_manifest["skills"]}
 actual = {path.name for path in index.iterdir()}
+representative_descriptions = {
+    "ask-ben": "Route work through Ben's frontend skill harness",
+    "grilling": "Stress-test plans, decisions, and ideas",
+    "to-spec": "Turn the conversation into a tracker-ready spec",
+    "wayfinder": "Map huge, foggy work through decision tickets",
+}
 if actual != set(expected):
     missing = sorted(expected.keys() - actual)
     extra = sorted(actual - expected.keys())
@@ -27,8 +33,11 @@ if actual != set(expected):
 for name, canonical in expected.items():
     directory = index / name
     proxy = directory / "SKILL.md"
+    metadata = directory / "agents" / "openai.yaml"
     if directory.is_symlink() or not directory.is_dir() or proxy.is_symlink() or not proxy.is_file():
         raise SystemExit(f"Codex cache-safe proxy missing: {name}")
+    if metadata.is_symlink() or not metadata.is_file():
+        raise SystemExit(f"Codex skill metadata missing: {name}")
     canonical_text = (repo / canonical / "SKILL.md").read_text()
     canonical_frontmatter = re.match(r"---\n(.*?)\n---", canonical_text, re.S)
     proxy_text = proxy.read_text()
@@ -38,12 +47,26 @@ for name, canonical in expected.items():
     target = f"../../{canonical}/SKILL.md"
     if proxy_text.split("---", 2)[2].strip() != f"Read and follow the complete [canonical skill instructions]({target}) before acting.":
         raise SystemExit(f"Codex proxy target drift: {name}")
+    metadata_text = metadata.read_text()
+    display_name = re.search(r'^  display_name: "(.+)"$', metadata_text, re.M)
+    short_description = re.search(r'^  short_description: "(.+)"$', metadata_text, re.M)
+    if not display_name or not short_description or not 25 <= len(short_description.group(1)) <= 64:
+        raise SystemExit(f"Codex skill interface metadata invalid: {name}")
+    if short_description.group(1).startswith("Help with "):
+        raise SystemExit(f"Codex skill description is generic rather than skill-derived: {name}")
+    expected_description = representative_descriptions.get(name)
+    if expected_description and short_description.group(1) != expected_description:
+        raise SystemExit(f"Codex skill description is not review-ready: {name}")
+    user_invoked = bool(re.search(r'^disable-model-invocation:\s*true$', canonical_frontmatter.group(1), re.M))
+    implicit_disabled = bool(re.search(r'^  allow_implicit_invocation:\s*false$', metadata_text, re.M))
+    if user_invoked != implicit_disabled:
+        raise SystemExit(f"Codex invocation policy drift: {name}")
 PY
 then
-  echo "  PASS  Codex plugin exposes every registered skill through cache-safe proxies"
+  echo "  PASS  Codex plugin exposes cache-safe proxies with matching metadata"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  Codex plugin skill index matches the registered skill surface"
+  echo "  FAIL  Codex plugin skill index and metadata match the registered skill surface"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Codex plugin skill index drift"
 fi
 

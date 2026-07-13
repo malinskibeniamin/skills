@@ -1,0 +1,3 @@
+interface:
+  display_name: "AIP"
+  short_description: "Design Google AIP-style protobuf resource APIs"

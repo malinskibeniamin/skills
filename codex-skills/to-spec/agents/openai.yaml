@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Spec"
+  short_description: "Turn the conversation into a tracker-ready spec"
+policy:
+  allow_implicit_invocation: false

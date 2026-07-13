@@ -1,0 +1,5 @@
+interface:
+  display_name: "Writing Fragments"
+  short_description: "Mine conversation into reusable writing fragments"
+policy:
+  allow_implicit_invocation: false

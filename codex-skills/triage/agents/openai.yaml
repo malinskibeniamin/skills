@@ -1,0 +1,5 @@
+interface:
+  display_name: "Triage"
+  short_description: "Prepare issues for reliable agent or human execution"
+policy:
+  allow_implicit_invocation: false
