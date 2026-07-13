@@ -61,8 +61,10 @@ Read existing state. Do not assume.
 - `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, nested ADR dirs
 - `docs/agents/`
 - `.scratch/`
+- Whether `triage` is installed, either as an available skill or a sibling skill folder
+- Monorepo signals: `pnpm-workspace.yaml`, a `workspaces` field in `package.json`, or populated `packages/*/src`
 
-### Ask decisions one at time
+### Ask only branching decisions
 
 **Issue tracker:** explain where issues live; skills need write/read workflow.
 
@@ -74,7 +76,7 @@ Default from remote. Choices:
 - Jira/Atlassian: run `/setup-atlassian-workflow`
 - Other: user describes workflow; record prose
 
-**Triage labels:** map canonical roles to actual labels/statuses:
+**Triage labels:** skip this section when `triage` is not installed. Otherwise ask one question: "Keep the default triage labels?" (recommended: **yes**). On yes, use these canonical roles as their own label strings:
 
 - `needs-triage`
 - `needs-info`
@@ -82,9 +84,9 @@ Default from remote. Choices:
 - `ready-for-human`
 - `wontfix`
 
-Avoid duplicate vocabulary if repo already has names.
+Only if the user says no, collect overrides so existing project labels are reused instead of duplicated.
 
-**Domain docs:** explain glossary + ADRs feed tdd/diagnosing-bugs/triage/architecture.
+**Domain docs:** glossary + ADRs feed tdd/diagnosing-bugs/triage/architecture. Without monorepo signals, select single-context without asking. Offer multi-context only for a monorepo, then confirm the choice.
 
 Choose:
 
@@ -96,15 +98,33 @@ Choose:
 Show draft edits before writing. Reuse templates from `templates/`:
 
 - `docs/agents/issue-tracker.md` with `## Wayfinding operations` when `/wayfinder` is installed
-- `docs/agents/triage-labels.md`
+- `docs/agents/triage-labels.md` only when `triage` is installed
 - `docs/agents/domain.md`
 - `## Agent skills` block for `AGENTS.md` or `CLAUDE.md`
+
+The block must expose the pointers consumers resolve. Use this shape, omitting **Triage labels** when `triage` is not installed:
+
+```markdown
+## Agent skills
+
+### Issue tracker
+
+[one-line summary]. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+[one-line summary]. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+[single-context or multi-context summary]. See `docs/agents/domain.md`.
+```
 
 Write only approved files. Preserve existing docs. If block exists, update in place.
 
 ### Verify
 
-Confirm files exist and mention selected tracker, Wayfinding operations, labels, domain layout. Tell user which skills now have context.
+Confirm `### Issue tracker` exists in the agent-instructions block and links the selected tracker document. Also confirm Wayfinding operations, any required labels, and domain layout. Tell user which skills now have context.
 
 ## Optional Integrations
 

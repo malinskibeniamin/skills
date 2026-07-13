@@ -24,6 +24,18 @@ run_content_eval "$WAYFINDER" "Not yet specified" "wayfinder names unspecifiable
 run_content_eval "$WAYFINDER" "Out of scope" "wayfinder tracks scoped-out work"
 run_content_eval "$WAYFINDER" "If this surfaces no fog" "wayfinder exits when no map needed"
 run_content_eval "$WAYFINDER" "HITL.*AFK|AFK.*HITL" "wayfinder marks ticket collaboration mode"
+run_content_eval "$WAYFINDER" "AGENTS\\.md.*CLAUDE\\.md|CLAUDE\\.md.*AGENTS\\.md" "wayfinder resolves tracker docs through agent instructions"
+run_content_eval "$WAYFINDER" "Issue tracker.*pointer|issue tracker.*pointer" "wayfinder follows the configured tracker pointer"
+run_content_eval "$WAYFINDER" "local-markdown fallback" "wayfinder retains a local tracker fallback"
+
+if grep -q 'docs/agents/issue-tracker\.md' "$WAYFINDER"; then
+  echo "  FAIL  wayfinder does not hardcode the tracker document path"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: wayfinder still hardcodes docs/agents/issue-tracker.md"
+else
+  echo "  PASS  wayfinder does not hardcode the tracker document path"
+  PASS=$((PASS + 1))
+fi
 
 run_content_eval "$GITHUB_TRACKER" "issue_dependencies_summary\.blocked_by" "GitHub wayfinding frontier uses dependency summary"
 run_content_eval "$GITHUB_TRACKER" "database id.*not.*#number.*node_id|not.*#number.*node_id" "GitHub blocking uses database id not display ids"

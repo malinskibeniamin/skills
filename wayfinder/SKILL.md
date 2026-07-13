@@ -15,7 +15,7 @@ Wayfinder is planning by default. Each ticket resolves a decision, and the map i
 
 - Refer to maps and tickets by **name** (their title), not a bare id or slug. Link the name when needed.
 - The map is an **index**, not a store: decisions live in their ticket; the map keeps only a one-line gist and pointer.
-- Tracker mechanics come from `docs/agents/issue-tracker.md` under **Wayfinding operations**. If missing, use the local-markdown fallback.
+- Find the **Issue tracker** pointer in the repo's `AGENTS.md` or `CLAUDE.md`, follow it, then read **Wayfinding operations**. Never assume a document path. If no pointer exists, use the local-markdown fallback.
 - Claim a ticket before work by assigning it to the driving dev; this must be the session's first write. Open + unassigned means unclaimed.
 - Use the tracker's native blocking/dependency feature when available; fallback to an explicit `Blocked by:` line only when native blocking is unavailable.
 - Never resolve more than one ticket per session.

@@ -32,6 +32,22 @@ run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/to-tickets" "to-spec hands appr
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "ticket|blocking edges" "to-tickets skill keeps ticket intent"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "native sub-issue" "to-tickets prefers native sub-issues when available"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/prototype.*context pointer|context pointer.*/prototype" "to-tickets points to prototype code instead of inlining"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "Wide refactors.*exception" "to-tickets treats wide refactors as a vertical-slice exception"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "expand.*migrate.*contract" "to-tickets sequences wide refactors with expand-contract"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "migrate.*blocked by.*expand" "to-tickets blocks every migration batch on expand"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "contract.*blocked by every.*migrate" "to-tickets blocks contract on every migration batch"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "integration branch.*integrate-and-verify|integrate-and-verify.*integration branch" "to-tickets handles migration batches that cannot stay green alone"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "\\.scratch/<feature-slug>/tickets/<NN>-<slug>\\.md" "to-tickets publishes one canonical local file per ticket"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "AGENTS\\.md.*CLAUDE\\.md|CLAUDE\\.md.*AGENTS\\.md" "to-tickets resolves tracker docs through agent instructions"
+
+if grep -qE 'one `tickets\.md`|docs/agents/issue-tracker\.md' "$REPO_ROOT/to-tickets/SKILL.md"; then
+  echo "  FAIL  to-tickets removes combined-file and hardcoded-tracker instructions"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: to-tickets still contains a combined tickets.md or hardcoded tracker instruction"
+else
+  echo "  PASS  to-tickets removes combined-file and hardcoded-tracker instructions"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "CONTEXT\.md|ADR" "grilling keeps docs sync intent"
 
 for retired_skill in to-prd to-issues setup-matt-pocock-skills; do

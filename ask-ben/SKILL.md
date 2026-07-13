@@ -58,7 +58,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/teach` | Teach the user a new skill or concept within this workspace. |
 | `/thermo-nuclear-code-quality-review` | Alias for /review --deep -- release-blocking cold PR audit. |
 | `/to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker -- no interview, just... |
-| `/to-tickets` | Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blo... |
+| `/to-tickets` | Break a plan, spec, or the current conversation into tracer-bullet tickets with blocking edges, published a... |
 | `/triage` | Move issues through triage roles and prepare agent-ready work. |
 | `/upgrade-dependency` | Upgrade a dependency AND adapt the code to it in one pass -- bump, codemods, call-site migration, new-API a... |
 | `/ux-copy` | UX text style for UI strings and prose -- sentence case, action labels, banned phrases, inclusive language,... |
