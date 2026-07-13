@@ -1,5 +1,9 @@
 # Development Lifecycle Reference
 
+> **Native Codex override:** every spawn or dispatch below runs as an inline axis unless the
+> user explicitly requests agents or invokes `/swarm`. `/work`, `/go`, `/review`, and
+> `/plow-ahead` are not delegation consent. Claude-hosted behavior is unchanged.
+
 ## Phase Flowchart
 
 ```mermaid

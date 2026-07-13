@@ -8,6 +8,8 @@ A parallel executor: shard independent bulk work across isolated worktree lanes,
 Parallel executor: not planner, not autopilot.
 
 Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for approval before launch unless required context is missing.
+Invoking `/swarm` or explicitly requesting parallel agents is the opt-in for native Codex
+subagents. No other skill activation grants that consent.
 
 ## Position
 
@@ -47,11 +49,13 @@ context: docs, decisions, branch or PR, relevant paths
 workspace_policy: shared | worktree | hybrid
 write_scope: exact paths or "report-only"
 forbidden: duplicate lanes, unrelated files, commits, pushes unless asked
+termination: concrete deliverable and stop condition for this lane
 model_policy: inherit by default; override only when useful or user asks
 output schema: status, summary, changed_files, tests_run, findings, blockers, next_action
 ```
 
 Agents may read and write unless the packet says `report-only`. In shared policy, assign file ownership or serialize write-heavy lanes. In worktree policy, branch names should be descriptive and may follow `<owner>/<ticket>/<lane-desc>` when creating worktrees.
+Spawned lanes may not create descendants without separate authorization for nested delegation.
 
 ## Skill composition
 

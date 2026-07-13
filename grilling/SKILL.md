@@ -31,7 +31,9 @@ Do not act on it until I confirm we have reached a shared understanding.
 
 ## Plan gate (lifecycle phase 2b)
 
-Once a coherent plan exists, spawn three reviewer hats **in parallel** (single message, multiple Agent calls), per findings-schema:
+Once a coherent plan exists, run three reviewer hats per findings-schema. Claude-hosted sessions
+spawn them **in parallel**. Native Codex runs all three hats inline unless the user explicitly
+requests agents or invokes `/swarm`; skill activation alone is not consent:
 
 - **`plan-product-hat`**: persona, pain, success metric, scope, reversibility, TTV
 - **`plan-engineering-hat`**: architecture, error paths, perf, security, test strategy, rollback -- includes the Murphy pass (what breaks first in prod?); the full Murphy panel (`/resilience-review`) runs on the diff at review time, not on the plan

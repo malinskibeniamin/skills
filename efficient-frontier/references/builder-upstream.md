@@ -8,6 +8,9 @@ description: >-
 
 # Efficient Frontier
 
+> **Native Codex override:** delegation below requires an explicit request for agents or `/swarm`.
+> Otherwise run the same slices inline. Claude-hosted behavior is unchanged.
+
 Use the expensive frontier model where its marginal judgment matters. Push
 repeatable, bounded, or token-heavy work to cheaper/faster subagents.
 

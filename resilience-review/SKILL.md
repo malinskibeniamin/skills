@@ -11,7 +11,10 @@ Diffs touching forms, validation, submit, async/data, mutations, cache, retries,
 
 ## Hat panel (parallel)
 
-Map the risk surface first (user action, path, state change, side effects, deps), then spawn the hats in one message as subagents -- each owns one failure class with non-goals, so they don't converge on the same findings. Small single-concern diff: run the hats inline instead, same axes, same output.
+Map the risk surface first (user action, path, state change, side effects, deps). Claude-hosted
+sessions may spawn the hats in parallel. Native Codex runs every axis inline unless the user
+explicitly requests agents or invokes `/swarm`; skill activation alone is not consent. Each hat
+owns one failure class with non-goals, so findings do not converge. Small diffs stay inline everywhere.
 
 | Hat | Owns (and probes) | Non-goals |
 |---|---|---|
