@@ -27,6 +27,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "issue-tracker\\.md" "setup links the tra
 run_content_eval "$SKILL_DIR/REFERENCE.md" "### Issue tracker" "setup reference defines the tracker pointer shape"
 run_content_eval "$SKILL_DIR/SKILL.md" "Verify.*### Issue tracker|### Issue tracker.*verify" "setup verifies the tracker pointer after writing"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Confirm.*### Issue tracker|### Issue tracker.*confirm" "setup reference verifies the tracker pointer after writing"
+run_content_eval "$SKILL_DIR/SKILL.md" "CLAUDE\\.md.*first|If.*CLAUDE\\.md.*exists.*AGENTS\\.md" "setup defines instruction-file precedence"
+run_content_eval "$SKILL_DIR/SKILL.md" "neither exists.*ask|ask.*neither exists" "setup asks which instruction file to create"
 
 if grep -q 'Ask tracker, triage-label, and domain-doc decisions one at a time' "$SKILL_DIR/SKILL.md"; then
   echo "  FAIL  work automation removes the blanket three-question setup flow"

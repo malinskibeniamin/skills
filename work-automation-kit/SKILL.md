@@ -51,9 +51,9 @@ See `REFERENCE.md` for details.
 3. If `triage` is installed, ask one question: "Keep the default triage labels?" (recommended: **yes**). On yes, use the five canonical role names. Only if the user says no, collect overrides. Without `triage`, skip label setup.
 4. Without monorepo signals, choose **single-context without asking**. Offer **multi-context only for a monorepo**, then confirm the layout.
 5. Confirm draft docs before writing. Reuse `templates/`.
-6. Write approved docs only:
+6. Choose the agent-instructions file deterministically: edit `CLAUDE.md` first when it exists, otherwise edit `AGENTS.md`; if neither exists, ask which one to create. Update only the selected file, then write approved docs:
    - `docs/agents/issue-tracker.md` with `## Wayfinding operations` when `/wayfinder` is installed
    - `docs/agents/triage-labels.md` only when `triage` is installed
    - `docs/agents/domain.md`
-   - `## Agent skills` block for `AGENTS.md` or `CLAUDE.md`; it must contain `### Issue tracker` with a one-line summary and link to `docs/agents/issue-tracker.md`, plus conditional triage-label and domain-doc pointers
+   - `## Agent skills` block in the selected agent-instructions file; it must contain `### Issue tracker` with a one-line summary and link to `docs/agents/issue-tracker.md`, plus conditional triage-label and domain-doc pointers
 7. Verify `### Issue tracker` exists in the agent-instructions block and links the selected tracker document; also verify any required labels, Wayfinding operations, and domain layout.

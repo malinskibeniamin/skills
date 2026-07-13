@@ -25,6 +25,7 @@ run_content_eval "$WAYFINDER" "Out of scope" "wayfinder tracks scoped-out work"
 run_content_eval "$WAYFINDER" "If this surfaces no fog" "wayfinder exits when no map needed"
 run_content_eval "$WAYFINDER" "HITL.*AFK|AFK.*HITL" "wayfinder marks ticket collaboration mode"
 run_content_eval "$WAYFINDER" "AGENTS\\.md.*CLAUDE\\.md|CLAUDE\\.md.*AGENTS\\.md" "wayfinder resolves tracker docs through agent instructions"
+run_content_eval "$WAYFINDER" "CLAUDE\\.md.*first|If.*CLAUDE\\.md.*exists.*AGENTS\\.md" "wayfinder defines instruction-file precedence"
 run_content_eval "$WAYFINDER" "Issue tracker.*pointer|issue tracker.*pointer" "wayfinder follows the configured tracker pointer"
 run_content_eval "$WAYFINDER" "local-markdown fallback" "wayfinder retains a local tracker fallback"
 

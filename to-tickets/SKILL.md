@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # To Tickets
 Break a plan, spec, or conversation into a set of **tickets** -- tracer-bullet vertical slices, each declaring the tickets that **block** it.
-Resolve tracker instructions through the **Issue tracker** pointer in the repo's `AGENTS.md` or `CLAUDE.md`; never assume a document path. If no pointer exists, run `/work-automation-kit` or use its local-markdown fallback.
+Read `CLAUDE.md` first when it exists; otherwise read `AGENTS.md`. Resolve tracker instructions through that file's **Issue tracker** pointer; never assume a document path. If neither file or pointer exists, run `/work-automation-kit` or use its local-markdown fallback.
 ## Process
 ### 1. Gather context
 Work from whatever is already in the conversation context. If the user passes a reference (a spec path, an issue number or URL) as an argument, fetch it and read its full body and comments.

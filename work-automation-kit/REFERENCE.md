@@ -97,6 +97,8 @@ Choose:
 
 Show draft edits before writing. Reuse templates from `templates/`:
 
+Choose the agent-instructions file deterministically: edit `CLAUDE.md` first when it exists, otherwise edit `AGENTS.md`; if neither exists, ask which one to create. Update only the selected file. If its `## Agent skills` block already exists, update it in place without changing surrounding content.
+
 - `docs/agents/issue-tracker.md` with `## Wayfinding operations` when `/wayfinder` is installed
 - `docs/agents/triage-labels.md` only when `triage` is installed
 - `docs/agents/domain.md`

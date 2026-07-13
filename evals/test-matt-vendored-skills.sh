@@ -39,6 +39,7 @@ run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "contract.*blocked by every.*m
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "integration branch.*integrate-and-verify|integrate-and-verify.*integration branch" "to-tickets handles migration batches that cannot stay green alone"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "\\.scratch/<feature-slug>/tickets/<NN>-<slug>\\.md" "to-tickets publishes one canonical local file per ticket"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "AGENTS\\.md.*CLAUDE\\.md|CLAUDE\\.md.*AGENTS\\.md" "to-tickets resolves tracker docs through agent instructions"
+run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "CLAUDE\\.md.*first|If.*CLAUDE\\.md.*exists.*AGENTS\\.md" "to-tickets defines instruction-file precedence"
 
 if grep -qE 'one `tickets\.md`|docs/agents/issue-tracker\.md' "$REPO_ROOT/to-tickets/SKILL.md"; then
   echo "  FAIL  to-tickets removes combined-file and hardcoded-tracker instructions"
