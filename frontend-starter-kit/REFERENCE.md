@@ -9,7 +9,7 @@ The `full` profile targets this stack. Every enforcement hook and reference assu
 | UI runtime | React 19 (Compiler on) | react-compiler, react-rules |
 | Bundler | Rsbuild | quality-gate (bundle guard), toolchain |
 | Styling | Tailwind (design tokens) | tailwind-check hook, CLAUDE.md |
-| Type checking | TypeScript 7 + tsgo | toolchain |
+| Type checking | TypeScript 7 + `tsc` | toolchain |
 | Lint/format | Biome + Ultracite | biome (owns single-element a11y rules) |
 | Unit/integration tests | Vitest + happy-dom + React Testing Library | quality-gate, test conventions |
 | Browser/E2E tests | Vitest browser mode + Playwright | e2e-testing |
@@ -34,9 +34,9 @@ Not in the stack (do not introduce): Next.js, react-router-dom, Radix as new dep
 
 | # | Skill | Hook type | What enforce |
 |---|---|---|---|
-| 1 | toolchain | PreToolUse, SessionStart | bun, tsgo, no npm/npx/tsc |
+| 1 | toolchain | PreToolUse, SessionStart | bun, TypeScript 7 `tsc`, no npm/npx/tsgo |
 | 2 | biome | Stop | Biome + Ultracite lint/format |
-| 3 | quality-gate | Stop, PostToolUse | tsgo, related tests, bundle guard |
+| 3 | quality-gate | Stop, PostToolUse | `tsc`, related tests, bundle guard |
 | 4 | agent-config | SessionStart, PreToolUse, PostToolUse, UserPromptSubmit | AI_AGENT, output truncation, context injection |
 | 5 | react-compiler | PostToolUse | Ban manual memoization (if compiler installed) |
 | 6 | zustand | PostToolUse | Double-parens, useShallow, persist |

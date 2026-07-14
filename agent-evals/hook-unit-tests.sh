@@ -117,10 +117,14 @@ _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"n
 _assert_exit 2 "npx vitest denied"
 _assert_stderr_contains "bunx vitest run" "stderr includes exact bunx replacement"
 
-echo "  tsc → tsgo rewrite:"
+echo "  tsgo → tsc rewrite:"
+_run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"tsgo --noEmit"}}'
+_assert_exit 2 "tsgo denied"
+_assert_stderr_contains "TypeScript 7 Go compiler" "stderr explains tsc is the Go compiler"
+_assert_stderr_contains "tsc --noEmit" "stderr includes exact tsc replacement"
+
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"tsc --noEmit"}}'
-_assert_exit 2 "tsc denied"
-_assert_stderr_contains "tsgo --noEmit" "stderr includes exact tsgo replacement"
+_assert_exit 0 "tsc allowed"
 
 echo "  sleep ban:"
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"sleep 5"}}'

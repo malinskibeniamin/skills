@@ -85,7 +85,7 @@ Suggest not force · appear only when flag absent:
 ## NODE_OPTIONS
 
 `NODE_OPTIONS=--max-old-space-size=8192` set in SessionStart (`session-env.sh`) · 8GB heap prevent OOM on:
-- Large test suites | TypeScript compilation (`tsgo`/`tsc`) | Bundler builds | Protobuf codegen
+- Large test suites | TypeScript 7 compilation (`tsc`) | Bundler builds | Protobuf codegen
 
 ## Vitest Config Optimizations
 

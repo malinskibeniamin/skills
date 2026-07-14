@@ -53,7 +53,7 @@ Enforced by: `legacy-linter-check`.
 
 ## 7. Toolchain Discipline
 
-`bun` not `npm`. `tsgo` not `tsc`. Biome not ESLint. `vitest` not
+`bun` not `npm`. TypeScript 7 `tsc` not preview-era `tsgo`. Biome not ESLint. `vitest` not
 `jest`. No `--no-verify`. No `bunx skills:*` workarounds.
 
 Enforced by: `enforce-toolchain.sh`.

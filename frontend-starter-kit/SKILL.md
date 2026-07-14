@@ -19,7 +19,7 @@ the plugin ("export harness").
 
 - **full** (default): every tool below, in order, targeting the canonical stack in
   [REFERENCE.md](REFERENCE.md) (React 19 + Rsbuild + Tailwind + TanStack Router/Query +
-  Connect Query + shadcn/Base UI + Vitest/Playwright + Biome/Ultracite + tsgo).
+  Connect Query + shadcn/Base UI + Vitest/Playwright + Biome/Ultracite + TypeScript 7 `tsc`).
 - **minimal**: toolchain, biome, quality-gate, env-validation, conventional-commits.
 - **redpanda**: full + `references/redpanda/README.md` (registry workflow, Redpanda component
   taxonomy, `REDPANDA_KIT=1`).
@@ -29,7 +29,7 @@ the plugin ("export harness").
 
 | Tool | Reference | What it sets up |
 |---|---|---|
-| toolchain | `references/toolchain/` | bun + tsgo enforcement, destructive command guards |
+| toolchain | `references/toolchain/` | bun + TypeScript 7 `tsc` enforcement, destructive command guards |
 | biome | `references/biome/` | Biome + Ultracite, auto-fix hook |
 | quality-gate | `references/quality-gate/` | quality:gate script, CI workflow, Stop hook, bundle guard |
 | agent-config | `references/agent-config/` | AI_AGENT=1, output truncation |

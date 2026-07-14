@@ -49,7 +49,7 @@ First-class. `codex-compat` skill generates `.codex/hooks.json` + consolidated S
 <details>
 <summary><strong>What's the overhead per session?</strong></summary>
 
-PostToolUse hooks on a `.tsx` edit: **~293ms** wall-clock (hooks run concurrent, bottleneck = slowest). Non-JS/TS file: **~80ms** (bash spawn + extension check, all hooks exit immediately). Stop hook: **~5-13s** once per turn (biome autofix + tsgo + related tests + health score). PreToolUse on Bash: **~257ms**. For context: a typical Claude tool call is 3-8 seconds (network + inference), so PostToolUse is **3-8% overhead** -- imperceptible.
+PostToolUse hooks on a `.tsx` edit: **~293ms** wall-clock (hooks run concurrent, bottleneck = slowest). Non-JS/TS file: **~80ms** (bash spawn + extension check, all hooks exit immediately). Stop hook: **~5-13s** once per turn (Biome autofix + `tsc` + related tests + health score). PreToolUse on Bash: **~257ms**. For context: a typical Claude tool call is 3-8 seconds (network + inference), so PostToolUse is **3-8% overhead** -- imperceptible.
 </details>
 
 ## Head-to-head: how does this compare?
@@ -160,7 +160,7 @@ PostToolUse hooks run **concurrently** -- wall-clock time is slowest hook, not s
 | Hook | Time | Notes |
 |------|------|-------|
 | biome-autofix.sh | 1-3s | Only changed files, skips UI library dirs |
-| typecheck-stop.sh | 2-5s | tsgo (incremental) + related tests only |
+| typecheck-stop.sh | 2-5s | TypeScript 7 `tsc` (incremental) + related tests only |
 | test-perf-stop.sh | 1-3s | Compare timings against session-start baseline |
 | react-doctor-stop.sh | 1-2s | `--diff` mode, changed files only |
 | **Total** | **~5-13s** | Runs once when Claude finishes, not per edit |

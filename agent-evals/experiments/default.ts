@@ -8,6 +8,6 @@ export default {
   sandbox: "docker",
   copyFiles: "changed",
   setup: async (sandbox: any) => {
-    await sandbox.runShell("npm install -g @typescript/native-preview bun");
+    await sandbox.runShell("npm install -g typescript bun");
   },
 } satisfies ExperimentConfig;

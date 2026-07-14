@@ -147,7 +147,7 @@ Honest scoping -- this harness is **opinionated**. Here's when to skip it or for
 | Can't use Bun | `enforce-toolchain.sh` bans npm/npx/yarn by default (configurable, but friction) |
 | No Claude Code / Codex access | Hooks are harness-specific; nothing to enforce |
 | Stack: not (TanStack Router + ConnectRPC + Protobuf v2) | Many setup skills assume this; fork to strip them |
-| Team rejects opinionation | Setup skills pin choices (Biome over ESLint, tsgo over tsc, vitest over jest) |
+| Team rejects opinionation | Setup skills pin choices (Biome over ESLint, TypeScript 7 `tsc` over preview-era `tsgo`, Vitest over Jest) |
 
 **Partial adoption works.** Install `development-lifecycle` + `tdd` + `grilling` only to get workflow discipline without the stack-specific hooks.
 
@@ -242,7 +242,7 @@ The authoritative hook inventory (every lifecycle event and the scripts wired to
 
 Bootstrap setup consolidated into **one skill** (4.27.0): `/frontend-starter-kit` with
 profiles `full | minimal | redpanda | <tool>`. Each tool's install steps live in
-`frontend-starter-kit/references/<tool>/` and load lazily -- toolchain (bun+tsgo, destructive
+`frontend-starter-kit/references/<tool>/` and load lazily -- toolchain (bun+TypeScript 7 `tsc`, destructive
 command guards), biome (+Ultracite, auto-fix Stop hook), quality-gate, agent-config,
 react-compiler, react-rules, zustand, env-validation (t3-env+zod), conventional-commits,
 react-doctor, ci-pipeline, redpanda (registry workflow, `REDPANDA_KIT=1`).

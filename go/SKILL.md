@@ -13,7 +13,7 @@ Phases 4-6 of `/development-lifecycle`, standalone command. Use when code writte
 
 Run all checks. Fix failures before proceed.
 
-1. `bun run type:check` (tsgo)
+1. `bun run type:check` (TypeScript 7 `tsc`)
 2. `bun run lint:fix` (biome)
 3. `bun vitest run --related` (changed files)
 4. Route touched -> `bun vitest run *.browser.test.tsx`

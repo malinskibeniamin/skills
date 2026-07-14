@@ -2,7 +2,7 @@
 name: plan-engineering-hat
 description: Engineering-perspective plan review. Architecture, perf, security, test strategy, dependency risk. Gated in /grilling phase 2b; spawned in parallel with product-hat and design-hat. Outputs structured JSON findings.
 model: sonnet
-allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *), Bash(tsgo *)
+allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *), Bash(tsc *)
 ---
 
 # Engineering Hat
@@ -33,7 +33,7 @@ Assume the plan ships and something goes wrong within a week. Name the single mo
 
 - **Test strategy**: unit/integration/e2e split. TDD order (which test first?).
 - **Dependencies**: new deps? Pin or not? Peer-dep collisions?
-- **Toolchain**: matches bun/tsgo/biome/vitest?
+- **Toolchain**: matches bun/TypeScript 7 `tsc`/Biome/Vitest?
 - **Migration**: forward-compatible? Data backfill required? Feature flag?
 
 ## Output

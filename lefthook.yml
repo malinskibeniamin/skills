@@ -4,7 +4,7 @@
 #   brew install lefthook && lefthook install
 #
 # What it checks (changed files only):
-#   - TypeScript type checking (tsgo incremental)
+#   - TypeScript 7 type checking (tsc incremental)
 #   - Biome lint (changed files only)
 #
 # Why pre-push and not pre-commit:

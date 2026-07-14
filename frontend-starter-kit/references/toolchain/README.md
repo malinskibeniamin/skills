@@ -24,8 +24,10 @@ Add to hooks config (merge existing):
 - [ ] `.claude/hooks/session-env.sh` exists, executable
 - [ ] `.claude/settings.json` has both hook entries
 - [ ] Test: run `npm install` in Claude -- should block
+- [ ] Test: run `tsgo --noEmit` in Claude -- should block and suggest `tsc --noEmit`
+- [ ] Test: run `tsc --noEmit` in Claude -- should pass through
 - [ ] Test: run `bun add lodash` in Claude -- should block (missing --yarn)
 
 ### 4. Commit
 
-Stage `.claude/hooks/` and `.claude/settings.json`. Commit: `Add toolchain enforcement hooks (bun + tsgo)`
+Stage `.claude/hooks/` and `.claude/settings.json`. Commit: `Add toolchain enforcement hooks (bun + TypeScript 7 tsc)`
