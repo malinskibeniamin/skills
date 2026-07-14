@@ -26,7 +26,8 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 ### 1. Understand
 
 - Explore | clarify one-at-a-time | new->2-3 approaches+tradeoffs | bug->failing test->root cause
-- Spawn background agents: alternatives, prior art, edge cases parallel
+- Claude-hosted: background agents may explore alternatives, prior art, and edge cases in parallel.
+- Native Codex: explore inline unless the user explicitly requests agents or invokes `/swarm`; skill activation alone is not consent.
 - Mixed patterns area? Refactor to single pattern FIRST before add features
 - **GATE: no impl code until approach approved.**
 
@@ -48,8 +49,9 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 3. Implement (TDD)
 
-- **Thinker/executor split (default)**: the plan that survived grill is the spec. The smart model (Fable-5/Opus-4.8) stays orchestrator; execution goes to a cheaper executor -- Sonnet subagent for coupled or judgment-adjacent steps, `/codex` GPT-5.6 Sol (worktree, medium+ effort) for clear-spec bulk. The orchestrator reviews the executor's diff against the plan, and the cross-model adversarial review in /go phase 4b runs automatically on the result; below the bar -> rerun smarter, don't patch by hand.
-- After plan survives grill, use `/swarm` when independent lanes can safely accelerate implementation, tests, diagnosis, review, or docs. Coordinator owns merge.
+- **Thinker/executor split (Claude-hosted default)**: the plan that survived grill is the spec. Fable-5/Opus-4.8 stays orchestrator; execution may go to Sonnet or `/codex` GPT-5.6 Sol. The orchestrator reviews the diff; below the bar -> rerun smarter.
+- **Native Codex**: implement the approved plan inline. Do not recursively invoke `/codex` or auto-route to `/swarm`; use native agents only after explicit user consent.
+- After plan survives grill, Claude may use `/swarm` when independent lanes safely accelerate work. In Codex, `/swarm` runs only when the user invokes it or explicitly asks for parallel agents.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
 - Code is liability: reuse-first (standard library, native platform, already-installed dependency, one-line), then keep only product value, defense, or test confidence.
 - **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
@@ -79,4 +81,3 @@ Full flowchart [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 | "Write tests for X" | 3 only |
 | "Ship it" / "Create a PR" | **`/go`** only |
 | "Quick question" | Just answer |
-

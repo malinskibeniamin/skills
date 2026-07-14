@@ -12,7 +12,7 @@ work until the window is clear enough to continue safely.
 
 ## Core Loop
 
-1. Run a bounded wave of work. Default to at most 3 parallel subagents unless
+1. Run a bounded, authorized wave of work. Default to at most 3 parallel subagents unless
    the user or host gives a different throttle.
 2. Wait for the wave to finish. Do not interrupt in-flight subagents just to
    save budget; that usually loses work.
@@ -24,7 +24,8 @@ work until the window is clear enough to continue safely.
 
 ## Usage Signals
 
-Prefer a first-party host usage tool when available. In Claude Code, use:
+Prefer a first-party host usage tool when available. `ccusage` measures Claude usage only.
+In Claude Code, use:
 
 ```sh
 npx -y ccusage@latest blocks --active --json
@@ -33,6 +34,12 @@ npx -y ccusage@latest blocks --active --json
 Use the JSON to identify the active block start, current cost or percentage, and
 time remaining. On wake, compare the active block start timestamp with the
 previous one; a new timestamp is stronger evidence than "enough time passed."
+
+In native Codex, use a host-provided meter or a value the user reports from their
+dashboard or codexbar. If neither exists, usage is unknown: report `Codex usage
+unavailable to the harness`, allow at most one explicitly requested agent wave,
+then checkpoint. Do not guess a percentage or reset time from session tokens,
+and do not schedule a guessed reset.
 
 If the tool reports cost instead of a direct percentage, convert through the
 current account limit when known. For Claude Max-style 5-hour blocks, some users
@@ -85,5 +92,5 @@ conversation momentum.
 ## Local wiring (this harness)
 
 - `bunx -y ccusage@latest blocks --active --json` is the usage source; `ScheduleWakeup`/`Monitor` are the resume tools.
-- Long fan-outs route here BEFORE launching: `/swarm` lanes, `/efficient-frontier` delegation waves, `/review` deep mode, overnight `/setup-routines` runs.
-- Codex work is a separate budget: GPT-5.6 runs do not count against the Claude window (and vice versa) -- when the Claude window is near cap, clear-spec work can continue on Sol via `/codex` while Claude-side waves pause.
+- Long authorized fan-outs route here BEFORE launching: `/swarm` lanes, `/efficient-frontier` delegation waves, Claude-hosted `/review` deep mode, overnight `/setup-routines` runs.
+- Codex and Claude are separate budgets; never infer one provider's remaining allowance from the other. Claude-hosted clear-spec work may continue on Sol via `/codex` while Claude waves pause, subject to real Codex evidence or the unknown-usage checkpoint above.

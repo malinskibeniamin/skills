@@ -1,5 +1,9 @@
 # Go -- Reference
 
+> **Native Codex override:** run every reviewer dispatch below inline unless the user explicitly
+> requests agents or invokes `/swarm`; do not recursively invoke `/codex`. Claude-hosted behavior
+> is unchanged. After the first review/fix pass and one CI snapshot, apply the stop rule in SKILL.md.
+
 ## Flowchart
 
 ```mermaid

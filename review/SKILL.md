@@ -29,12 +29,11 @@ Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `C
 ## Hat panel (default for PR and branch reviews)
 
 Security review is intentionally absent (owner decision 2026-07-10; restore from git history).
-The panel is what makes this skill find problems others miss: eight perspectives, each owning
-one axis with explicit non-goals so they don't converge. Schedule in **bounded waves sized
-to host capacity** (default 3 concurrent subagents; excess hats queue -- never assume all
-eight fit at once). The orchestrator gathers sources, fans out wave by wave, merges, dedupes
-by root cause, reports -- and MUST assert every non-skipped hat completed; a hat lost to a
-spawn failure is rerun, not dropped.
+The panel has eight perspectives, each owning one axis with explicit non-goals. Claude-hosted
+sessions schedule bounded waves (default 3 concurrent subagents; excess hats queue). Native
+Codex runs every axis inline unless the user explicitly requests agents or invokes `/swarm`;
+skill activation alone is not consent. The orchestrator merges by root cause and MUST assert
+every non-skipped axis completed; an authorized agent lost to spawn failure is rerun.
 
 | Hat | Owns | Model |
 |---|---|---|
@@ -46,7 +45,7 @@ spawn failure is rerun, not dropped.
 | visual/design | UI/UX taste, copy, layout, a11y on rendered surfaces (`/visual-review` evidence) | Opus-4.8 or Fable-5 (taste) |
 | test/perf | TDD evidence, coverage gaps, flaky tests, render/network/bundle risk | Opus-4.8 |
 
-Eighth hat, **mandatory**: cross-model, ideally cross-FAMILY -- family diversity catches blind spots the author's family shares. Claude authored -> `GPT-5.6-sol: independent` codex wrapper hat (see `/codex`; medium+ effort; spends plan allowance, cheap not free, capped per /codex budget gates). GPT authored -> the seven Claude hats (Opus-4.8) already are the cross-family review. Terra may run routine re-check rounds after fixes; Sol or Opus owns the initial pass; Luna never reviews. Same-family clean-context only when the other family is unavailable -- record it like any hat skip.
+Eighth axis, **mandatory**. Claude-hosted: cross-model, ideally cross-FAMILY, because family diversity catches shared blind spots. Claude authored -> `GPT-5.6-sol: independent` via `/codex`; GPT authored -> the Opus hats already cross families. Native Codex must not recursively invoke `/codex` or auto-spawn: run the adversarial axis inline and record cross-family as unavailable, not completed. Terra may re-check fixes; Sol or Opus owns the initial pass; Luna never reviews. Same-family clean-context is fallback only -- record it.
 
 Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals;
 evidence, severity, priority label, required change, PR-comment-ready text; max 400 words;

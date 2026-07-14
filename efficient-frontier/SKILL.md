@@ -8,6 +8,10 @@ Read `references/builder-upstream.md` for the full workflow.
 
 Use the expensive frontier model where marginal judgment matters. Push repeatable, bounded, or token-heavy work to cheaper/faster subagents.
 
+**Host gate:** Claude-hosted workflows may apply the delegation rules below automatically.
+In native Codex, this skill does not authorize subagents by itself: work inline unless the user
+explicitly requests agents or invokes `/swarm`. Do not recursively invoke `codex exec` from Codex.
+
 ## Model rankings
 
 Rankings 1-10, higher better. Cost = what we actually pay, not list price. Intelligence = how
@@ -56,7 +60,7 @@ frontier model's full reasoning.
 
 1. Identify frontier-only decisions: architecture, prioritization, ambiguity resolution, risk, synthesis, final review.
 2. Identify delegable work: repo inventory, docs extraction, source comparison, browser/testing passes, log clustering, narrow edits.
-3. Spawn independent subagents with clear ownership, verification gates, and stop conditions.
+3. When delegation is authorized, spawn independent subagents with clear ownership, verification gates, and stop conditions; otherwise execute the same lanes inline.
 4. Require compact evidence: findings, changed files, commands, residual risk, blockers.
 5. Integrate centrally. Reopen high-risk cited files and inspect key diffs before claiming completion.
 
@@ -76,3 +80,7 @@ frontier model's full reasoning.
 4. At or above 95% of either window: stop launching, prepare a self-contained resume
    (observed window, threshold, next safe check, remaining plan, exact rerun command).
 5. On resume, re-check the real window before continuing.
+
+For native Codex, use a real host meter or a user-reported dashboard value. If neither is
+available, usage is unknown: do not infer a percentage or reset time from session tokens.
+Run at most one explicitly requested wave, checkpoint, then ask before another wave.

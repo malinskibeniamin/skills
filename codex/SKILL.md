@@ -5,24 +5,24 @@ description: Delegate work to GPT-5.6 via the codex CLI -- clear-spec implementa
 
 # Codex delegation (GPT-5.6)
 
-GPT-5.6 is reachable ONLY through the codex CLI (`codex exec`, `codex review`) --
-never through the agent/workflow `model` parameter (Claude models only). GPT-5.5 is retired
-as a routing target. **Capability-detect before relying on 5.6**: run
-`codex exec -m gpt-5.6-sol "reply OK"` once per session; on model-unavailable fall back to
-the strongest GPT available and label wrappers with the model actually invoked -- distinguish
-that from CLI-unavailable (codex not installed), which skips the codex lane entirely and
-records the skip. GPT models are extremely steerable: write explicit, self-contained prompts
-and they follow them.
+**Host gate:** this CLI delegation path is Claude-hosted. If already in native Codex, do not start
+a recursive `codex exec` or native subagent unless the user requests delegation or parallel agents.
+Work inline; preserve the selected model and reasoning effort; do not rewrite Codex configuration.
 
-**Variant routing (effort floors are HARD -- never run a variant below its floor):**
+GPT-5.6 is reachable ONLY through the codex CLI (`codex exec`, `codex review`), never the
+agent/workflow `model` parameter (Claude models only). GPT-5.5 is retired. **Capability-detect**:
+run `codex exec -m gpt-5.6-sol "reply OK"` once per session; if the model is unavailable, fall
+back to the strongest GPT and label the actual model. CLI unavailable skips the lane and records it.
+GPT models are extremely steerable: write explicit, self-contained prompts.
+
+**Delegated CLI variant routing (effort floors are HARD -- never run a delegated variant below its floor):**
 
 | Variant | Flag | Effort | Use for | Never |
 |---|---|---|---|---|
 | **Sol** | `-m gpt-5.6-sol` (default) | `medium`\|`high` only | ALL code writing, implementation, adversarial review -- smartest model rivaled only by Fable-5, efficient for the price | low effort |
 | **Terra** | `-m gpt-5.6-terra` | `medium`\|`high` only | budget non-code work: posting PR comments, routine review passes, test-runner/CI chores | writing product code |
 | **Luna** | `-m gpt-5.6-luna` | `high` only | last resort: extremely cheap/quick/limited tasks far from code -- Jira/GitHub issue orchestration, mundane tool-call loops, test fixtures | development of any kind |
-
-Set `model = "gpt-5.6-sol"` in `~/.codex/config.toml` as the default.
+Optional user setup: `model = "gpt-5.6-sol"` in `~/.codex/config.toml`; agents do not mutate it.
 
 ## Prompt contract (every codex run)
 
@@ -43,7 +43,7 @@ rerun with a sharper prompt or redo on a smarter model without asking.
 - **Review** (independent second opinion on a diff/PR): `codex review`, or
   `codex exec -s read-only` with the diff command in the prompt. Findings feed the normal
   review merge; treat as one lane, not the verdict.
-- **Adversarial exchange (automatic -- runs on every change, no ask needed)**: the author
+- **Adversarial exchange (automatic in Claude-hosted workflows -- no ask needed)**: the author
   model never solely reviews its own work, and the reviewer comes from a DIFFERENT FAMILY
   whenever possible -- family diversity catches what same-family blind spots share. Claude
   authored the diff -> `GPT-5.6-sol: adversarial` review here (`codex review` / read-only
@@ -53,7 +53,8 @@ rerun with a sharper prompt or redo on a smarter model without asking.
   review is the fallback ONLY when the other family is unavailable -- record the
   substitution. Terra may take routine re-check rounds after fixes; Sol or Claude owns the
   initial adversarial pass. Findings route back per model routing. `/go` phase 4b invokes
-  this automatically.
+  this automatically. Native Codex runs the axis inline and records cross-family review as
+  unavailable unless the user explicitly requests an external lane.
 
   **Cross-provider gates (checked before every automatic exchange):**
   - *Authorization*: send code to OpenAI only when the repo opts in -- a `.codex/` directory
@@ -84,7 +85,7 @@ codex exec -s read-only "<prompt>. Write the final report to <report-path>." </d
 **Always `</dev/null` on background runs**: codex also reads its prompt from stdin, so an
 open-but-silent stdin pipe blocks it forever waiting for EOF -- 0s CPU, no session, looks "stuck".
 
-## Inside workflows and subagents (the wrapper pattern)
+## Inside Claude-hosted workflows and subagents (the wrapper pattern)
 
 The workflow/agent `model` parameter only accepts Claude models. To use GPT-5.6 in a
 workflow lane or subagent, spawn a thin Claude wrapper:

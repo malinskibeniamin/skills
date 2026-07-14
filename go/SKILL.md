@@ -26,12 +26,12 @@ Run all checks. Fix failures before proceed.
 
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
-1. Dispatch `self-reviewer` agent on session diff
-2. **Cross-model adversarial review (always, automatic, cross-FAMILY preferred)**: the author model never solely reviews its own work, and the reviewer comes from a different family whenever possible. Claude authored the diff -> dispatch `GPT-5.6-sol: adversarial` via `/codex` (read-only review, medium+ effort, break-it prompt). GPT authored the diff -> dispatch the Claude `adversarial-reviewer` agent (Opus). The initial adversarial pass is Sol or Opus -- never Terra/Luna; Terra may re-check fix rounds. Cross-provider gates apply (see /codex): repo without codex opt-in -> clean-context Claude adversarial lane instead. Codex CLI or model unavailable -> `adversarial-reviewer` with a clean context, and record the substitution.
-3. Diff >200 lines -> ALSO dispatch the Claude `adversarial-reviewer` in parallel (two adversarial lanes, different models)
+1. Claude-hosted: dispatch `self-reviewer`. Native Codex: run the same self-review axis inline unless the user explicitly requests agents.
+2. **Cross-model adversarial review (automatic in Claude-hosted workflows, cross-FAMILY preferred)**: Claude authored -> dispatch `GPT-5.6-sol: adversarial` via `/codex`; GPT authored -> dispatch the Claude `adversarial-reviewer` (Opus). Initial pass is Sol or Opus -- never Terra/Luna. Native Codex runs the adversarial axis inline, does not recursively invoke `/codex`, and records cross-family review as unavailable unless explicitly requested.
+3. Claude-hosted diff >200 lines -> ALSO dispatch `adversarial-reviewer` in parallel. Native Codex stays inline without delegation consent.
 4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
-6. Fix P0/P1 now (delegate per model routing -- author model may fix; the cross reviewer re-checks), apply P2 `safe_auto`, show P2 `gated_auto` to user
+6. Fix P0/P1 now (Claude may delegate per model routing; native Codex fixes inline unless delegation was requested), apply P2 `safe_auto`, show P2 `gated_auto` to user
 7. Commit fixes: `refactor(scope): self-review fixes`
 8. Re-verify (tests + types + lint)
 9. **Max 2 refine rounds.** Then proceed.
@@ -45,15 +45,18 @@ Run all checks. Fix failures before proceed.
 5. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason
 6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` for reviewer guidance; no history rewrite without user approval
 7. Run `/commit-push-pr` -- conventional commits, push, open PR
-8. Dispatch `code-reviewer` agent (fresh-eyes review)
+8. Claude-hosted: dispatch `code-reviewer`. Native Codex: run its fresh-eyes checklist inline unless agents were explicitly requested.
 
 ## Phase 5b: Iterate
 
-1. `Monitor: gh pr checks <number> --watch` -- stream CI background
-2. CI fail -> diagnosing-bugs, fix, push, re-monitor
-3. `code-reviewer` agent findings -> `/resolve-pr-feedback` triage, fix, reply, push
-4. **AI self-review cap**: up to 3 auto `code-reviewer` rounds, **alternating models** -- round fixes authored by Claude are re-reviewed by GPT (`GPT-5.6-terra: review` for routine rounds, Sol when the fix is substantive), codex-authored fixes by the Claude `code-reviewer`. **Early-exit** when reviewer returns `APPROVED` or empty findings -- never run round N+1 on clean round N. After 3 rounds still noisy -> hand off to human.
-5. **Human review (incl cloud/Copilot)**: NO cap. Address EVERY thread. `pr-feedback-completeness-stop` hook blocks session exit until `bash scripts/pr-unresolved-count.sh` returns 0 and no CHANGES_REQUESTED reviews remain.
+Native Codex handles the first automated review/fix pass and one CI status snapshot, then stops.
+Extra rounds require an explicit "babysit until clean" or `/plow-ahead`; neither grants subagent consent.
+
+1. Claude-hosted: `Monitor: gh pr checks <number> --watch`. Native Codex: take one `gh pr checks <number>` snapshot.
+2. CI fail -> diagnosing-bugs, fix, push. Claude re-monitors; native Codex reports the new pending status unless continuation was explicit.
+3. Fresh-eyes findings (agent in Claude, inline in Codex) -> `/resolve-pr-feedback` triage, fix, reply, push
+4. **AI self-review cap (Claude-hosted)**: up to 3 auto `code-reviewer` rounds, alternating models. **Early-exit** on `APPROVED` or empty findings; after 3 noisy rounds, hand off to a human. Native Codex defaults to one inline round; extra rounds follow the stop rule above.
+5. **Existing human review (incl cloud/Copilot)**: NO cap. Address EVERY present thread, but do not poll for later feedback unless asked. `pr-feedback-completeness-stop` blocks exit until unresolved count is 0 and no CHANGES_REQUESTED reviews remain.
 
 ## Phase 6: Compound
 
