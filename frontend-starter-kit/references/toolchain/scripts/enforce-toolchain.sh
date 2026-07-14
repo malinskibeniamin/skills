@@ -35,10 +35,10 @@ if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)npx\s'; then
   exit 2
 fi
 
-# Block tsc commands — include exact replacement
-if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)tsc(\s|$)'; then
-  _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]]|&&|\|\||;)tsc([[:space:]]|$)/\1tsgo\2/g')
-  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"tsc banned. Rerun with tsgo: ${_rewritten}\"}" >&2
+# Block tsgo commands — TypeScript 7 ships the Go compiler as tsc
+if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)tsgo(\s|$)'; then
+  _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]]|&&|\|\||;)tsgo([[:space:]]|$)/\1tsc\2/g')
+  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"tsgo banned. tsc is now the TypeScript 7 Go compiler. Rerun with tsc: ${_rewritten}\"}" >&2
   exit 2
 fi
 
