@@ -15,10 +15,18 @@ describe("setup-quality-gate: LLM uses quality:gate correctly", () => {
     expect(directBiome).toHaveLength(0);
   });
 
-  it("should not run tsc directly", () => {
-    const directTsc = shellCommands.filter(
-      (c) => /\btsc(\s|$)/.test(c.command) && c.success === true
+  it("should run the quality:gate script", () => {
+    const qualityGateCommands = shellCommands.filter(
+      (c) =>
+        /\bbun\s+run\s+quality:gate\b/.test(c.command) && c.success === true
     );
-    expect(directTsc).toHaveLength(0);
+    expect(qualityGateCommands.length).toBeGreaterThan(0);
+  });
+
+  it("should not run tsgo", () => {
+    const directTsgo = shellCommands.filter(
+      (c) => /\btsgo(\s|$)/.test(c.command) && c.success === true
+    );
+    expect(directTsgo).toHaveLength(0);
   });
 });

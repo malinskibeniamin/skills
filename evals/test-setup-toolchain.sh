@@ -2,15 +2,19 @@
 # Tests hook scripts, file structure, and SKILL.md correctness
 
 SCRIPT="$REPO_ROOT/.claude/hooks/enforce-toolchain.sh"
+PRE_BASH_SCRIPT="$REPO_ROOT/.claude/hooks/pre-bash.sh"
 SESSION_SCRIPT="$REPO_ROOT/.claude/hooks/session-env.sh"
 LEGACY_LINTER="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/toolchain"
+TEMPLATE_SCRIPT="$SKILL_DIR/scripts/enforce-toolchain.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "enforce-toolchain.sh is executable"
+run_executable_eval "$PRE_BASH_SCRIPT" "pre-bash.sh is executable"
+run_executable_eval "$TEMPLATE_SCRIPT" "toolchain template enforce-toolchain.sh is executable"
 run_executable_eval "$SESSION_SCRIPT" "session-env.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
@@ -52,45 +56,65 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"npx vitest run"}}' \
   2 "block: npx vitest" "npx banned"
 
-# ── tsc blocked ─────────────────────────────────────────────────
+# ── tsc allowed ──────────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc"}}' \
-  2 "block: tsc (bare)" "tsc banned"
+  0 "allow: tsc (bare)"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc --noEmit"}}' \
-  2 "block: tsc --noEmit" "tsc banned"
+  0 "allow: tsc --noEmit"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc --watch"}}' \
-  2 "block: tsc --watch" "tsc banned"
+  0 "allow: tsc --watch"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsc -p tsconfig.json"}}' \
-  2 "block: tsc -p tsconfig.json" "tsc banned"
+  0 "allow: tsc -p tsconfig.json"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx tsc --noEmit"}}' \
-  2 "block: bunx tsc --noEmit" "tsc banned"
+  0 "allow: bunx tsc --noEmit"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun run tsc"}}' \
-  2 "block: bun run tsc" "tsc banned"
+  0 "allow: bun run tsc"
 
-# ── tsgo allowed ────────────────────────────────────────────────
+# ── tsgo blocked ────────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsgo --noEmit"}}' \
-  0 "allow: tsgo --noEmit"
+  2 "block: tsgo --noEmit" "TypeScript 7 Go compiler"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsgo"}}' \
-  0 "allow: tsgo (bare)"
+  2 "block: tsgo (bare)" "tsgo banned"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx tsgo --noEmit"}}' \
-  0 "allow: bunx tsgo --noEmit"
+  2 "block: bunx tsgo --noEmit" "tsc --noEmit"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun run tsgo"}}' \
+  2 "block: bun run tsgo" "tsc"
+
+run_hook_eval "$TEMPLATE_SCRIPT" \
+  '{"tool_input":{"command":"tsgo --noEmit"}}' \
+  2 "template block: tsgo --noEmit" "TypeScript 7 Go compiler"
+
+run_hook_eval "$TEMPLATE_SCRIPT" \
+  '{"tool_input":{"command":"tsc --noEmit"}}' \
+  0 "template allow: tsc --noEmit"
+
+run_hook_eval "$PRE_BASH_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"tsgo --noEmit"}}' \
+  2 "dispatcher block: tsgo --noEmit" "TypeScript 7 Go compiler"
+
+run_hook_eval "$PRE_BASH_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"tsc --noEmit"}}' \
+  0 "dispatcher allow: tsc --noEmit"
 
 # ── global install blocked ──────────────────────────────────────
 
@@ -217,8 +241,8 @@ run_hook_eval "$SCRIPT" \
   2 "block: npx after semicolon" "npx banned"
 
 run_hook_eval "$SCRIPT" \
-  '{"tool_input":{"command":"cat file || tsc --noEmit"}}' \
-  2 "block: tsc after ||" "tsc banned"
+  '{"tool_input":{"command":"cat file || tsgo --noEmit"}}' \
+  2 "block: tsgo after ||" "tsgo banned"
 
 # ── edge cases ──────────────────────────────────────────────────
 

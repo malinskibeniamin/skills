@@ -22,11 +22,11 @@ describe("setup-toolchain: LLM respects toolchain rules", () => {
     expect(npxOk).toHaveLength(0);
   });
 
-  it("should not successfully execute tsc", () => {
-    const tscOk = shellCommands.filter(
-      (c) => /\btsc(\s|$)/.test(c.command) && c.success === true
+  it("should not successfully execute tsgo", () => {
+    const tsgoOk = shellCommands.filter(
+      (c) => /\btsgo(\s|$)/.test(c.command) && c.success === true
     );
-    expect(tscOk).toHaveLength(0);
+    expect(tsgoOk).toHaveLength(0);
   });
 
   it("should use bun for package installation", () => {
@@ -54,10 +54,10 @@ describe("setup-toolchain: LLM respects toolchain rules", () => {
     expect(globalOk).toHaveLength(0);
   });
 
-  it("should use tsgo for type checking", () => {
-    const tsgoCommands = shellCommands.filter((c) =>
-      /\btsgo\b/.test(c.command)
+  it("should use tsc for type checking", () => {
+    const tscCommands = shellCommands.filter(
+      (c) => /\btsc\b/.test(c.command) && c.success === true
     );
-    expect(tsgoCommands.length).toBeGreaterThan(0);
+    expect(tscCommands.length).toBeGreaterThan(0);
   });
 });
