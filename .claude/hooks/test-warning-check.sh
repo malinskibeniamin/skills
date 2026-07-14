@@ -3,7 +3,7 @@ set -eo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
 # PostToolUse Bash: warnings in passing test/lint/type output are hard errors.
-# "Green != done". Scan stdout+stderr of vitest/playwright/tsgo/biome/bun test
+# "Green != done". Scan stdout+stderr of vitest/playwright/tsc/biome/bun test
 # exit-zero runs for curated warning patterns. Warnings are errors: block and
 # force source remediation before calling the run clean.
 #

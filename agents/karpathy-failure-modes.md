@@ -25,7 +25,7 @@ rg -n "export (function|const|class) <symbol>" src/ node_modules/<pkg>/
 
 **Problem**: Types compile in head but runtime shape differs. Stale API version. Off-by-one in enum or index. Optional treated as required.
 
-**Mitigation**: Run `tsgo` every edit. Run actual test, not mental simulation. If type inferred from schema, re-fetch schema.
+**Mitigation**: Run `tsc` every edit. Run actual test, not mental simulation. If type inferred from schema, re-fetch schema.
 
 **Verify**:
 ```
@@ -115,7 +115,7 @@ for the MAST taxonomy and its `mast_checks` output block. Skip it for ordinary d
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "checks": [
     { "id": "hallucinated-api",      "check": "Every external symbol grep-verified in repo or node_modules", "command": "rg -n 'export (function|const|class) <symbol>'", "severity": "CRITICAL", "scope": "single-agent" },
-    { "id": "confident-wrong-types", "check": "tsgo clean AND affected test executed",                        "command": "bun run type:check && bun test <path>",          "severity": "CRITICAL", "scope": "single-agent" },
+    { "id": "confident-wrong-types", "check": "tsc clean AND affected test executed",                         "command": "bun run type:check && bun test <path>",          "severity": "CRITICAL", "scope": "single-agent" },
     { "id": "unvalidated-llm-shape", "check": "All LLM-origin JSON passed through zod .parse()",              "command": "rg 'JSON.parse' src/",                           "severity": "HIGH",     "scope": "single-agent" },
     { "id": "ssrf-url-fetch",        "check": "URL fetches have scheme+host allowlist and redirect cap",      "command": "rg 'fetch\\(|axios\\.|got\\(' src/",              "severity": "CRITICAL", "scope": "single-agent" },
     { "id": "silent-fallback",       "check": "No empty catch blocks; every catch sets state or rethrows",    "command": "rg 'catch\\s*\\([^)]*\\)\\s*\\{\\s*(return|\\}|//)' src/", "severity": "HIGH", "scope": "single-agent" },

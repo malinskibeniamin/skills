@@ -5,7 +5,7 @@ Lean by design: only rules that are neither machine-enforced nor inferable. Hook
 
 ## Toolchain
 
-`bun` pkg | `tsgo` typecheck | Biome lint/fmt | React Doctor (Stop hook) React patterns | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
+`bun` pkg | TypeScript 7 `tsc` typecheck | Biome lint/fmt | React Doctor (Stop hook) React patterns | `--force-with-lease` | safe rm: node_modules dist .next build .cache .turbo coverage
 External services via CLI, not MCP: Jira `acli` | Google `gog` | browser `agent-browser` | CI `gh` | Buildkite `bk` | Box `box` | M365 `m365`
 
 ## Code Quality

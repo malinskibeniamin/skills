@@ -624,7 +624,7 @@ hook_has_session_tracking() {
 }
 
 # ── Filter error output to session-owned files ───────────────────
-# For project-wide tools (tsgo, doctor) that cannot target files,
+# For project-wide tools (tsc, doctor) that cannot target files,
 # filters error lines to only those mentioning session-owned files.
 
 hook_filter_errors_to_session() {

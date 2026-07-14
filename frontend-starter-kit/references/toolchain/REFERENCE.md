@@ -15,8 +15,9 @@
 | `npm install` | Yes | `bun install --yarn` |
 | `npm run build` | Yes | `bun run build` |
 | `npx some-tool` | Yes | `bunx some-tool` or `bun run <script>` |
-| `tsc` | Yes | `tsgo` |
-| `tsc --noEmit` | Yes | `tsgo --noEmit` |
+| `tsgo` | Yes | `tsc` |
+| `tsgo --noEmit` | Yes | `tsc --noEmit` |
+| `tsc --noEmit` | No | Allowed (TypeScript 7 Go compiler) |
 | `bun add -g pkg` | Yes | `bun add -D pkg --yarn` |
 | `bun install` | Yes | `bun install --yarn` |
 | `bun add lodash` | Yes | `bun add lodash --yarn` |

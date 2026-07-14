@@ -24,7 +24,7 @@ if [ ! -f "package.json" ] || ! jq -e '.scripts["type:check"]' package.json >/de
 fi
 
 # ── Type check (incremental for speed) ──────────────────────────
-# tsgo/tsc cannot target single files — they need the full project graph.
+# tsc cannot target single files — it needs the full project graph.
 # --incremental reuses .tsbuildinfo to skip unchanged modules.
 output=""
 exit_code=0
@@ -32,7 +32,7 @@ output=$(bun run type:check 2>&1) || exit_code=$?
 
 if [ $exit_code -ne 0 ]; then
   # ── Filter errors to session-owned files ──────────────────────────
-  # tsgo runs project-wide, so filter output to only errors in files
+  # tsc runs project-wide, so filter output to only errors in files
   # this session touched. Errors in sibling-session files pass through.
   if [ "$(hook_has_session_tracking 2>/dev/null && echo true || echo false)" = true ] && [ -n "$changed_files" ]; then
     _session_errors=$(hook_filter_errors_to_session "$output" "$changed_files")

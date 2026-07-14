@@ -52,7 +52,7 @@ jobs:
 |--------|-------------|---------------|
 | `lint` | `biome check .` | ~1s |
 | `lint:fix` | `biome check --write .` | ~1s |
-| `type:check` | `tsgo` | ~2s |
+| `type:check` | `tsc` | ~2s |
 | `test` | `vitest --run` | varies |
 | `test:related` | `vitest --run --related` | ~1-3s |
 | `quality:gate` | lint + type:check + related tests | <5s target |
@@ -69,7 +69,7 @@ Flamegraph timing. Diagnostic, not routine CI.
 
 ## Asset Type Declarations
 
-`tsgo` need asset import declarations. Create `src/types/assets.d.ts`:
+`tsc` needs asset import declarations. Create `src/types/assets.d.ts`:
 
 ```ts
 declare module '*.svg' {

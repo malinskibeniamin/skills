@@ -3,7 +3,7 @@
 
 - `quality:gate` script -- lint + type check + related tests in <5s
 - GitHub Actions workflow w/ formatting integrity (`git diff --exit-code`)
-- Stop hook: tsgo + related tests before finish
+- Stop hook: TypeScript 7 `tsc` + related tests before finish
 - Bundle guard hook: warn on heavy deps (moment, lodash, jquery, core-js, classnames)
 - Test perf audit hook: surface duration regressions >30%
 - CI status check + `@claude review` trigger
@@ -17,16 +17,16 @@
   "scripts": {
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "type:check": "tsgo",
+    "type:check": "tsc",
     "test": "vitest --run",
     "test:related": "vitest --run --related",
-    "quality:gate": "biome check . && tsgo && vitest --run --related $(git diff --name-only HEAD)"
+    "quality:gate": "biome check . && tsc && vitest --run --related $(git diff --name-only HEAD)"
   }
 }
 ```
 
 ### 2. Asset type declarations
-Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) -- tsgo need for .svg/.css/.png imports.
+Create `src/types/assets.d.ts` from [REFERENCE.md](REFERENCE.md) -- `tsc` needs declarations for .svg/.css/.png imports.
 
 ### 3. GitHub Actions
 Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md). Run on PR + push to main.

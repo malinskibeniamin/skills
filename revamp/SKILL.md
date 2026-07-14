@@ -28,7 +28,7 @@ Port 3 representative files end-to-end with the FULL loop (translate -> compile 
 
 ## 5. Compiler/typechecker as the work queue
 
-Drive the fleet off mechanical signals: `cargo check`/`tsgo` error counts per module, ranked. Parallelize across **worktrees** (one per lane) so executors never collide; forbid executors from running any git command that isn't "commit this specific file" -- no stash, no reset, no cross-lane surgery.
+Drive the fleet off mechanical signals: `cargo check`/`tsc` error counts per module, ranked. Parallelize across **worktrees** (one per lane) so executors never collide; forbid executors from running any git command that isn't "commit this specific file" -- no stash, no reset, no cross-lane surgery.
 
 ## 6. Adversarial review with split contexts (non-negotiable)
 
