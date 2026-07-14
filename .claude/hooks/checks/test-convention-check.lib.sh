@@ -27,6 +27,33 @@ esac
 
 if [ "$_is_test_file" = true ] && [ -n "$added_lines" ]; then
 
+# ── Browser visual assertions: use the Browser Mode matcher ─────
+
+case "$file_path" in
+  *.browser.test.*)
+    if printf '%s\n' "$added_lines" | grep -qE 'toMatchSnapshot[[:space:]]*\('; then
+      _browser_visual_snapshots() {
+        if command -v perl >/dev/null 2>&1; then perl -0pe 's{/\*.*?\*/}{}gs'; else cat; fi |
+          grep -vE '^[[:space:]]*//' | tr '\n' ' ' | grep -oE 'expect[[:space:]]*\([[:space:]]*(page|element)[[:space:]]*\)[[:space:]]*\.[[:space:]]*toMatchSnapshot[[:space:]]*\(' || true
+      }
+      _current_browser_snapshots=$(printf '%s' "$file_content" | _browser_visual_snapshots)
+      _head_browser_snapshots=""
+      _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+      case "$file_path" in
+        "$_repo_root"/*)
+          _head_content=$(git show "HEAD:${file_path#"$_repo_root"/}" 2>/dev/null || true)
+          _head_browser_snapshots=$(printf '%s' "$_head_content" | _browser_visual_snapshots)
+          ;;
+      esac
+      _current_count=$(printf '%s\n' "$_current_browser_snapshots" | grep -c . || true)
+      _head_count=$(printf '%s\n' "$_head_browser_snapshots" | grep -c . || true)
+      if [ "${_current_count:-0}" -gt "${_head_count:-0}" ]; then
+        hook_block_strict "Browser visual assertions must use toMatchScreenshot(), not toMatchSnapshot()." "test-convention-browser-snapshot"
+      fi
+    fi
+    ;;
+esac
+
 # it() vs test() -- Biome useConsistentTestIt owns this rule.
 
 # ── Check 2: jest.fn() should be vi.fn() ────────────────────────

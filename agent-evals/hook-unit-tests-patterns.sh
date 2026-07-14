@@ -10,7 +10,7 @@ echo "╚═══════════════════════�
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ react-rules-check.sh (37 checks) ━━━"
+echo "━━━ react-rules-check.sh (38 checks) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -26,6 +26,44 @@ _cleanup_test_file "$_f"
 _setup_test_file "$_f" 'const X = () => <input type="text" />;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "raw <input> silent (Biome owns)"
+_cleanup_test_file "$_f"
+
+echo "  Check 2a — sizes=auto without lazy loading (block):"
+_setup_test_file "$_f" 'const X = () => <img src="hero.jpg" sizes="auto" alt="" />;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "literal sizes=auto without lazy loading blocked"
+_assert_stderr_contains "loading.*lazy" "explains the lazy-loading requirement"
+_cleanup_test_file "$_f"
+
+echo "  Check 2a — multiline sizes=auto without lazy loading (block):"
+_setup_test_file "$_f" 'const X = () => (
+  <img
+    src="hero.jpg"
+    sizes="auto"
+    alt=""
+  />
+);'
+_img_edit=$(jq -nc --arg f "$_f" --arg old '    src="hero.jpg"' --arg new $'    src="hero.jpg"\n    sizes="auto"' '{tool_name:"Edit",tool_input:{file_path:$f,old_string:$old,new_string:$new}}')
+_run_hook "react-rules-check.sh" "$_img_edit"
+_assert_exit 2 "added sizes=auto attribute without lazy loading blocked"
+_cleanup_test_file "$_f"
+
+echo "  Check 2a — sizes=auto with lazy loading (pass):"
+_setup_test_file "$_f" 'const X = () => <img src="hero.jpg" sizes="auto" loading="lazy" alt="" />;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "literal sizes=auto with lazy loading passes"
+_cleanup_test_file "$_f"
+
+echo "  Check 2a — commented sizes=auto (pass):"
+_setup_test_file "$_f" 'const X = () => (
+  <div>
+    {/*
+    <img sizes="auto" alt="" />
+    */}
+  </div>
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "commented sizes=auto passes"
 _cleanup_test_file "$_f"
 
 echo "  Check 6 — onClick+navigate (block):"
@@ -621,6 +659,35 @@ echo "━━━ test-convention-check.sh ━━━"
 _setup_session
 
 _f="/tmp/hook-test-conv-$$.test.ts"
+
+echo "  browser toMatchSnapshot() on page (block):"
+_browser_f="/tmp/hook-test-conv-$$.browser.test.tsx"
+_setup_test_file "$_browser_f" "await expect(page).toMatchSnapshot();"
+_snapshot_edit=$(jq -nc --arg f "$_browser_f" --arg old 'toMatchScreenshot()' --arg new 'toMatchSnapshot()' '{tool_name:"Edit",tool_input:{file_path:$f,old_string:$old,new_string:$new}}')
+_run_hook "test-convention-check.sh" "$_snapshot_edit"
+_assert_exit 2 "added browser page toMatchSnapshot matcher blocked"
+_assert_stderr_contains "toMatchScreenshot" "suggests the browser screenshot matcher"
+_cleanup_test_file "$_browser_f"
+
+echo "  browser toMatchSnapshot() on element (block):"
+_setup_test_file "$_browser_f" "await expect(element).toMatchSnapshot();"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_browser_f")"
+_assert_exit 2 "browser element toMatchSnapshot blocked"
+_cleanup_test_file "$_browser_f"
+
+echo "  browser toMatchScreenshot() (pass):"
+_setup_test_file "$_browser_f" "await expect(page).toMatchScreenshot();"
+_run_hook "test-convention-check.sh" "$(_edit_json "$_browser_f")"
+_assert_exit 0 "browser toMatchScreenshot passes"
+_cleanup_test_file "$_browser_f"
+
+echo "  commented browser toMatchSnapshot() (pass):"
+_setup_test_file "$_browser_f" '/*
+await expect(page).toMatchSnapshot();
+*/'
+_run_hook "test-convention-check.sh" "$(_edit_json "$_browser_f")"
+_assert_exit 0 "commented browser toMatchSnapshot passes"
+_cleanup_test_file "$_browser_f"
 
 echo "  it() instead of test() (warn):"
 _setup_test_file "$_f" "import { describe, it } from 'vitest';
