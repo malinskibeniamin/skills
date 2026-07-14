@@ -42,6 +42,33 @@ if [ "$_react_rules_skip_ui_dirs" = false ]; then
 # config) owns the raw <button>/<input>/<select>/<h*>/<p>/... bans. Do not
 # re-add them here; one owner per rule.
 
+# ── Check 2a: sizes="auto" requires lazy loading ────────────────
+
+case "$file_path" in
+  *.tsx|*.jsx|*.mdx)
+    if printf '%s\n' "$_react_code_added" | grep -qE "sizes[[:space:]]*=[[:space:]]*['\"]auto['\"]"; then
+      _react_invalid_auto_sized_imgs() {
+        if command -v perl >/dev/null 2>&1; then perl -0pe 's{/\*.*?\*/}{}gs'; else cat; fi |
+          grep -vE '^[[:space:]]*//' | tr '\n' ' ' | grep -oE '<img[[:space:]][^>]*>' | grep -E "sizes[[:space:]]*=[[:space:]]*['\"]auto['\"]" | grep -vE "loading[[:space:]]*=[[:space:]]*['\"]lazy['\"]" || true
+      }
+      _current_invalid_imgs=$(printf '%s' "$file_content" | _react_invalid_auto_sized_imgs)
+      _head_invalid_imgs=""
+      _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+      case "$file_path" in
+        "$_repo_root"/*)
+          _head_content=$(git show "HEAD:${file_path#"$_repo_root"/}" 2>/dev/null || true)
+          _head_invalid_imgs=$(printf '%s' "$_head_content" | _react_invalid_auto_sized_imgs)
+          ;;
+      esac
+      _current_count=$(printf '%s\n' "$_current_invalid_imgs" | grep -c . || true)
+      _head_count=$(printf '%s\n' "$_head_invalid_imgs" | grep -c . || true)
+      if [ "${_current_count:-0}" -gt "${_head_count:-0}" ]; then
+        hook_block_strict "Literal sizes=\"auto\" on <img> requires loading=\"lazy\"." "react-rules-auto-sizes-lazy"
+      fi
+    fi
+    ;;
+esac
+
 # ── Check 2b: Name useEffect callbacks ──────────────────────────
 # useEffect(function syncDocumentTitle() { ... }, [title]) not useEffect(() => {
 
