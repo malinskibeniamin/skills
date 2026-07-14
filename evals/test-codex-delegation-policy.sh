@@ -71,11 +71,32 @@ run_content_eval "$REPO_ROOT/go/SKILL.md" "Codex.*inline" \
 run_content_eval "$REPO_ROOT/shared/subagent-start.sh" "Cannot block subagent creation" \
   "SubagentStart remains context-only"
 
-if git diff --name-only origin/main -- | grep -qE '(^|/)(config\.toml|skill-manifest\.json|shared/subagent-start\.sh)$'; then
-  echo "  FAIL  policy PR must not mutate config, manifest, or SubagentStart"
+if git diff --name-only origin/main -- | grep -qE '(^|/)(config\.toml|shared/subagent-start\.sh)$'; then
+  echo "  FAIL  policy must not mutate config or SubagentStart"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: forbidden policy surface changed"
+elif ! python3 - "$REPO_ROOT" <<'PY'
+import json
+import pathlib
+import subprocess
+import sys
+
+repo = pathlib.Path(sys.argv[1])
+base = json.loads(subprocess.check_output(
+    ["git", "show", "origin/main:skill-manifest.json"],
+    cwd=repo,
+    text=True,
+))
+current = json.loads((repo / "skill-manifest.json").read_text())
+base.pop("version", None)
+current.pop("version", None)
+raise SystemExit(base != current)
+PY
+then
+  echo "  FAIL  policy must not mutate manifest fields other than release version"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: forbidden manifest policy surface changed"
 else
-  echo "  PASS  policy PR avoids config, manifest, and SubagentStart mutations"
+  echo "  PASS  policy avoids config, SubagentStart, and non-version manifest mutations"
   PASS=$((PASS + 1))
 fi
