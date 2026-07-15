@@ -66,15 +66,17 @@ type EmitPayload =
   | StopBlockPayload
   | ContextPayload;
 
-interface TierSpec {
-  stream: "stdout" | "stderr";
-  exit: 0 | 2;
+type StdoutTier = "warn" | "nudge" | "context";
+
+type TierSpec<T extends Tier> = {
   build: (message: string) => EmitPayload;
-}
+} & (T extends StdoutTier
+  ? { stream: "stdout"; exit: 0 }
+  : { stream: "stderr"; exit: 2 });
 
 // The whole channel contract in one table. A new tier MUST declare its
 // stream and exit code here — there is no way to emit without them.
-const TIERS: Record<Tier, TierSpec> = {
+const TIERS = {
   warn: {
     stream: "stdout",
     exit: 0,
@@ -113,7 +115,7 @@ const TIERS: Record<Tier, TierSpec> = {
     exit: 2,
     build: (m) => ({ decision: "block", reason: m }),
   },
-};
+} satisfies { [T in Tier]: TierSpec<T> };
 
 function emit(tier: Tier, message: string): never {
   const spec = TIERS[tier];
@@ -183,7 +185,9 @@ async function parse(): Promise<never> {
     typeof rawCommand === "string"
       ? rawCommand
       : Array.isArray(rawCommand)
-        ? rawCommand.filter((c): c is string => typeof c === "string").join("\n")
+        ? rawCommand
+            .filter((c): c is string => typeof c === "string")
+            .join("\n")
         : "";
   const fields: Record<string, string> = {
     hp_session_id: str(data.session_id),

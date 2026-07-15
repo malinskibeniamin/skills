@@ -59,12 +59,21 @@ jobs:
 
       - name: Setup bun (typed protocol layer)
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
 
-      - name: Typed protocol unit tests
+      - name: Install typed protocol dependencies
+        run: cd shared && bun install --frozen-lockfile
+
+      - name: Typed protocol checks
         # cd shared: a repo-rooted `bun test` scan also loads the
         # agent-evals EVAL.ts suites, whose imports patch stdio and
         # corrupt spawnSync capture. Scoped to the one file under test.
-        run: cd shared && bun test hook-protocol.test.ts
+        run: |
+          cd shared
+          bun run lint
+          bun run type:check
+          bun run test
 
       - name: Shell eval suite
         run: bash evals/run.sh

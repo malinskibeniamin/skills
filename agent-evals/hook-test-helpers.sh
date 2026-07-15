@@ -19,20 +19,23 @@ NC='\033[0m'
 
 # ── Session helpers ─────────────────────────────────────────────
 
+_hooktest_created_list=""
+
 _setup_session() {
   export CLAUDE_SESSION_ID="test-$$-$(date +%s)-$RANDOM"
   _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID}"
   mkdir -p "$_session_dir"
+  _hooktest_created_list="$_session_dir/test-created-files"
+  : > "$_hooktest_created_list"
 }
 
 _teardown_session() {
-  rm -rf "/tmp/hook-session-${CLAUDE_SESSION_ID}" 2>/dev/null || true
+  rm -rf "$_session_dir" 2>/dev/null || true
+  _hooktest_created_list=""
   unset CLAUDE_SESSION_ID
 }
 
 # ── File helpers ────────────────────────────────────────────────
-
-_hooktest_created_list="/tmp/hooktest-created-$$"
 
 _setup_test_file() {
   local path="$1"

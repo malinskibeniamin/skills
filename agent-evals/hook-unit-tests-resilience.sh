@@ -370,4 +370,85 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 
+echo ""
+echo "━━━ Test fixture file safety ━━━"
+
+_fixture_repo=$(mktemp -d "${TMPDIR:-/tmp}/hook-helper-test.XXXXXX")
+git -C "$_fixture_repo" init -q
+git -C "$_fixture_repo" config user.email "hook-tests@example.com"
+git -C "$_fixture_repo" config user.name "Hook tests"
+echo "committed" > "$_fixture_repo/tracked.txt"
+git -C "$_fixture_repo" add tracked.txt
+git -C "$_fixture_repo" commit -qm "test fixture"
+
+_run_setup_test_file() {
+  local path="$1"
+  local content="$2"
+  _last_exit=0
+  _last_stderr=""
+  _last_stderr=$(cd "$_fixture_repo" && _setup_test_file "$path" "$content" 2>&1) || _last_exit=$?
+}
+
+_assert_setup_refused() {
+  local path="$1"
+  local expected="$2"
+  local label="$3"
+  _run_setup_test_file "$path" "fixture"
+  _assert_exit 1 "$label file refused"
+  if [ "$(cat "$_fixture_repo/$path")" = "$expected" ]; then
+    _pass "$label content preserved"
+  else
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} $label content overwritten"
+  fi
+}
+
+echo "  pre-existing untracked file is preserved:"
+_setup_session
+echo "personal" > "$_fixture_repo/untracked.txt"
+_assert_setup_refused "untracked.txt" "personal" "pre-existing untracked"
+_teardown_session
+
+echo "  dirty tracked file is preserved:"
+_setup_session
+echo "working copy" > "$_fixture_repo/tracked.txt"
+_assert_setup_refused "tracked.txt" "working copy" "dirty tracked"
+_teardown_session
+
+echo "  staged-only tracked file is preserved:"
+git -C "$_fixture_repo" reset -q --hard HEAD
+_setup_session
+echo "staged copy" > "$_fixture_repo/tracked.txt"
+git -C "$_fixture_repo" add tracked.txt
+_assert_setup_refused "tracked.txt" "staged copy" "staged-only tracked"
+_teardown_session
+
+echo "  tracked clean file is restored after cleanup:"
+git -C "$_fixture_repo" reset -q --hard HEAD
+_setup_session
+_run_setup_test_file "tracked.txt" "fixture"
+_assert_exit 0 "tracked clean file accepted"
+(cd "$_fixture_repo" && _cleanup_test_file "tracked.txt")
+if [ "$(cat "$_fixture_repo/tracked.txt")" = "committed" ] &&
+  git -C "$_fixture_repo" diff --quiet HEAD -- tracked.txt; then
+  _pass "tracked clean file restored to HEAD"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} tracked clean file not restored"
+fi
+_teardown_session
+
+echo "  stale ownership marker cannot authorize an overwrite:"
+rm -f "$_fixture_repo/untracked.txt"
+echo "personal" > "$_fixture_repo/untracked.txt"
+_setup_session
+echo "untracked.txt" >> "$_hooktest_created_list"
+_stale_marker="$_hooktest_created_list"
+_teardown_session
+_assert_file_not_exists "$_stale_marker" "ownership marker removed with session"
+_setup_session
+_assert_setup_refused "untracked.txt" "personal" "stale marker"
+_teardown_session
+
+rm -rf "$_fixture_repo"
+rm -f "/tmp/hooktest-created-$$"
+
 _report_results "Resilience Tests"

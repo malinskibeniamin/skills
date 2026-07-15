@@ -5,10 +5,15 @@
 // stream/exit per tier, escaping, parse coercion, and shell-quote safety.
 
 import { describe, expect, test } from "bun:test";
+import { unlinkSync } from "node:fs";
 
 const ENTRY = new URL("./hook-protocol.ts", import.meta.url).pathname;
+const TSC = new URL("./node_modules/.bin/tsc", import.meta.url).pathname;
 
-function run(args: string[], stdin = ""): {
+function run(
+  args: string[],
+  stdin = "",
+): {
   code: number;
   stdout: string;
   stderr: string;
@@ -61,11 +66,55 @@ describe("emit: stream/exit contract per tier", () => {
   });
 
   test("inherited property names are not tiers", () => {
-    for (const bad of ["toString", "constructor", "__proto__", "hasOwnProperty"]) {
+    for (const bad of [
+      "toString",
+      "constructor",
+      "__proto__",
+      "hasOwnProperty",
+    ]) {
       const r = run(["emit", bad, "x"]);
       expect(r.code).toBe(2);
       expect(r.stderr).toContain("usage:");
       expect(r.stdout).toBe("");
+    }
+  });
+
+  test("typecheck rejects warn on the blocking channel", async () => {
+    const source = await Bun.file(ENTRY).text();
+    const validWarn = `  warn: {\n    stream: "stdout",\n    exit: 0,`;
+    const invalidWarn = `  warn: {\n    stream: "stderr",\n    exit: 2,`;
+    expect(source).toContain(validWarn);
+
+    const fixture = new URL(
+      `./.hook-protocol-invalid-${crypto.randomUUID()}.ts`,
+      import.meta.url,
+    ).pathname;
+    await Bun.write(fixture, source.replace(validWarn, invalidWarn));
+
+    try {
+      const proc = Bun.spawnSync([
+        TSC,
+        "--noEmit",
+        "--ignoreConfig",
+        "--strict",
+        "--module",
+        "Preserve",
+        "--moduleDetection",
+        "force",
+        "--moduleResolution",
+        "bundler",
+        "--types",
+        "bun",
+        fixture,
+      ]);
+      const diagnostics = proc.stdout.toString() + proc.stderr.toString();
+      expect(proc.exitCode).not.toBe(0);
+      expect(diagnostics).toContain(
+        `Type '"stderr"' is not assignable to type '"stdout"'`,
+      );
+      expect(diagnostics).toContain("Type '2' is not assignable to type '0'");
+    } finally {
+      unlinkSync(fixture);
     }
   });
 });
@@ -110,10 +159,14 @@ describe("parse: coercion and shell-quote safety", () => {
   test("quotes in values cannot escape the single-quoted assignment", () => {
     const r = run(
       ["parse"],
-      JSON.stringify({ tool_input: { command: "x'; rm -rf /tmp/pwned; echo '" } }),
+      JSON.stringify({
+        tool_input: { command: "x'; rm -rf /tmp/pwned; echo '" },
+      }),
     );
     // The '\'' escape keeps the payload inert data under eval.
-    expect(r.stdout).toContain(`hp_command='x'\\''; rm -rf /tmp/pwned; echo '\\'''`);
+    expect(r.stdout).toContain(
+      `hp_command='x'\\''; rm -rf /tmp/pwned; echo '\\'''`,
+    );
   });
 
   test("NUL bytes are stripped", () => {
