@@ -232,5 +232,43 @@ if [ "$_is_test_file" = false ]; then
   fi
 fi
 
+# ── Check: no inline staleTime/gcTime numbers — use tier constants ──
+# Cache lifetimes are a policy, not a per-call magic number. Keep 2-3
+# semantic tiers (SHORT/MEDIUM/LONG_LIVED_CACHE_STALE_TIME) in one file
+# so global tuning stays possible; Infinity only for invalidate-driven data.
+
+if echo "$added_lines" | grep -qE '(staleTime|gcTime)\s*:\s*[0-9]'; then
+  if ! hook_has_escape "cache-tier"; then
+    hook_warn "Inline staleTime/gcTime number. Use the semantic tier constants (SHORT/MEDIUM/LONG_LIVED_CACHE_STALE_TIME) from the shared query utils — cache lifetime is a policy, not a magic number. Escape: // allow: cache-tier [reason]" "cache-tier"
+  fi
+fi
+
+# ── Check: invalidateQueries must be awaited ──────────────────────
+# Fire-and-forget invalidation races navigation/unmount: the list the
+# user lands on renders stale data. Await it (onSuccess can be async).
+
+if echo "$added_lines" | grep -qE '(^|[^.\w])(queryClient\.)?invalidateQueries\(' ; then
+  _unawaited_invalidate=$(echo "$added_lines" | grep -E 'invalidateQueries\(' | grep -vE 'await |return |Promise\.all|void ' || true)
+  if [ -n "$_unawaited_invalidate" ]; then
+    if ! hook_has_escape "await-invalidate"; then
+      hook_warn "invalidateQueries not awaited — invalidation races navigation and the next screen renders stale cache. Use: await queryClient.invalidateQueries(...). Escape: // allow: await-invalidate [reason]" "await-invalidate"
+    fi
+  fi
+fi
+
+# ── Check: proto optional fields are undefined, never null ────────
+# protobuf-es models absent optional fields as undefined. Writing null
+# into create()/message fields desyncs types and serialization.
+
+if echo "$file_content" | grep -qE "from\s+['\"][^'\"]*_pb(\.js)?['\"]|@bufbuild/protobuf"; then
+  if echo "$added_lines" | grep -qE 'create\([A-Za-z0-9_]+Schema' || echo "$file_content" | grep -qE 'create\([A-Za-z0-9_]+Schema'; then
+    if echo "$added_lines" | grep -qE ':\s*null\b|=\s*null\b'; then
+      if ! hook_has_escape "proto-null"; then
+        hook_warn "null assigned in proto-adjacent code — protobuf-es models absent optionals as undefined, never null. Use undefined (or omit the field). Escape: // allow: proto-null [reason]" "proto-null"
+      fi
+    fi
+  fi
+fi
+
 return 0
 }

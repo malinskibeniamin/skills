@@ -186,5 +186,20 @@ if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE 'FieldMaskSchema|Fiel
   fi
 fi
 
+# ── Check: mark required, never "(optional)" ──────────────────────
+# Convention: required fields carry a RequiredIndicator (asterisk);
+# optional fields carry no annotation. "(optional)" labels invert the
+# signal and drift out of sync with validation.
+
+case "$file_path" in
+  *.tsx)
+    if echo "$added_lines" | grep -qiE '\(optional\)'; then
+      if ! hook_has_escape "optional-label"; then
+        hook_warn "\"(optional)\" in a form label — convention is the inverse: mark REQUIRED fields with RequiredIndicator (*), leave optional fields unannotated. Escape: // allow: optional-label [reason]" "optional-label"
+      fi
+    fi
+    ;;
+esac
+
 return 0
 }

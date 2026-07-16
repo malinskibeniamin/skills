@@ -336,5 +336,26 @@ if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]
   esac
 fi
 
+# ── Check: ban { strict: false } on router hooks ──────────────────
+# useSearch/useParams with strict:false erases the route-typed shape —
+# it is `as any` with extra steps. Pass the `from` route id instead.
+
+if echo "$added_lines" | grep -qE 'use(Search|Params|RouteContext|LoaderData)\s*(\(|<[^>]*>\s*\()' && \
+   echo "$added_lines" | grep -qE 'strict\s*:\s*false'; then
+  hook_block "{ strict: false } on a router hook is 'as any' with extra steps — the search/params shape is unchecked. Use useSearch({ from: Route.id }) / the route-scoped API to keep types."
+fi
+
+# ── Check: clamp URL-sourced pagination indices ───────────────────
+# A stale/oversized ?page= fed straight into table state renders an
+# empty table ("no results" lie). Clamp against data length.
+
+if echo "$added_lines" | grep -qE 'page(Index)?\s*:\s*(search|searchParams|params)\.' ; then
+  if ! echo "$file_content" | grep -qE 'Math\.(min|max)|clamp|pageCount'; then
+    if ! hook_has_escape "clamp-page-index"; then
+      hook_warn "URL-sourced page index fed into table state without clamping — a stale ?page=999 renders an empty table even when data exists. Clamp against page count. Escape: // allow: clamp-page-index [reason]" "clamp-page-index"
+    fi
+  fi
+fi
+
 return 0
 }
