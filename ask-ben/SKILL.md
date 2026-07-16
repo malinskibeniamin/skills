@@ -29,6 +29,8 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/extend-harness` | Extend the frontend-skills hook harness: add rules, tune severity tiers, view analytics, debug non-firing h... |
 | `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
 | `/go` | Ship what built. |
+| `/golang-review` | Evidence-backed Go review for bounds, APIs, concurrency, errors, security, tests, rollout, and controllers. |
+| `/golang` | Evidence-backed Go conventions for workload bounds, error boundaries, proto/API implementation, Temporal, t... |
 | `/grilling` | Explore options, then interview the user relentlessly about a plan, decision, or idea, with a 3-hat plan ga... |
 | `/handoff` | Compact the current session into a handoff document for another agent or fresh session. |
 | `/hook-audit` | Analyze hook effectiveness + session retro from collected metrics. |
