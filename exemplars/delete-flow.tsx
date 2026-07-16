@@ -4,31 +4,31 @@ import { ConnectError } from '@connectrpc/connect';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent } from '@/components/ui/alert-dialog';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { deleteWebhook, listWebhookReferences } from '@/gen/webhook-WebhookService_connectquery';
+import { deleteResource, listResourceReferences } from '@/gen/resource-ResourceService_connectquery';
 import { formatToastErrorMessageGRPC } from '@/lib/errors';
 import { toast } from 'sonner';
 
-interface DeleteWebhookFlowProps {
-  webhookName: string;
+interface DeleteResourceFlowProps {
+  resourceName: string;
   onDeleted: () => Promise<void>;
 }
 
 // Destructive flows fail CLOSED: confirm enables only after a fresh,
 // successful, zero-reference lookup. Loading or errored lookup is NOT
 // confirmable. An unknown blast radius never gets a one-click delete.
-export function DeleteWebhookFlow({ webhookName, onDeleted }: DeleteWebhookFlowProps) {
+export function DeleteResourceFlow({ resourceName, onDeleted }: DeleteResourceFlowProps) {
   const [open, setOpen] = useState(false);
 
   const references = useQuery(
-    listWebhookReferences,
-    { name: webhookName },
+    listResourceReferences,
+    { name: resourceName },
     // Fresh-lookup semantics: a passive "used by" card may have cached an
     // empty result; the delete dialog always re-checks.
     // allow: cache-tier destructive dialogs deliberately bypass tiers with staleTime 0
     { enabled: open, staleTime: 0, refetchOnMount: 'always' },
   );
 
-  const { mutate, isPending } = useMutation(deleteWebhook, {
+  const { mutate, isPending } = useMutation(deleteResource, {
     onSuccess: async () => {
       await onDeleted(); // awaited invalidation before the dialog closes
       setOpen(false);
@@ -41,13 +41,13 @@ export function DeleteWebhookFlow({ webhookName, onDeleted }: DeleteWebhookFlowP
 
   return (
     <AlertDialog open={open} onOpenChange={(next) => !isPending && setOpen(next)}>
-      <Button variant="destructive" onClick={() => setOpen(true)} data-testid="delete-webhook-button">
-        Delete webhook
+      <Button variant="destructive" onClick={() => setOpen(true)} data-testid="delete-resource-button">
+        Delete resource
       </Button>
-      <AlertDialogContent aria-label={`Delete webhook ${webhookName}`}>
+      <AlertDialogContent aria-label={`Delete resource ${resourceName}`}>
         {/* The dialog names its exact subject, never a generic "Are you sure?" */}
         <p>
-          Permanently delete <strong>{webhookName}</strong>? This cannot be undone.
+          Permanently delete <strong>{resourceName}</strong>? This cannot be undone.
         </p>
         {references.isError && (
           <Alert variant="destructive">
@@ -61,14 +61,14 @@ export function DeleteWebhookFlow({ webhookName, onDeleted }: DeleteWebhookFlowP
         <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
         <AlertDialogAction
           disabled={!confirmable}
-          aria-describedby="delete-webhook-blocked-reason"
-          onClick={() => mutate({ name: webhookName })}
-          data-testid="confirm-delete-webhook"
+          aria-describedby="delete-resource-blocked-reason"
+          onClick={() => mutate({ name: resourceName })}
+          data-testid="confirm-delete-resource"
         >
           {isPending ? 'Deleting…' : 'Delete'}
         </AlertDialogAction>
         {!confirmable && (
-          <span id="delete-webhook-blocked-reason" className="sr-only">
+          <span id="delete-resource-blocked-reason" className="sr-only">
             Delete is unavailable until the reference check succeeds with zero references.
           </span>
         )}

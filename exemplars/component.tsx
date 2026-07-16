@@ -1,18 +1,18 @@
 import { useMutation } from '@connectrpc/connect-query';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { deleteTopic } from '@/gen/topic-TopicService_connectquery';
+import { deleteResource } from '@/gen/resource-ResourceService_connectquery';
 import { ConnectError } from '@connectrpc/connect';
 import { formatToastErrorMessageGRPC } from '@/lib/errors';
 import { toast } from 'sonner';
 
-interface DeleteTopicButtonProps {
-  topicName: string;
+interface DeleteResourceButtonProps {
+  resourceName: string;
   disabled?: boolean;
 }
 
-export function DeleteTopicButton({ topicName, disabled }: DeleteTopicButtonProps) {
-  const { mutate, isPending } = useMutation(deleteTopic, {
+export function DeleteResourceButton({ resourceName, disabled }: DeleteResourceButtonProps) {
+  const { mutate, isPending } = useMutation(deleteResource, {
     onError: (error) => toast.error(formatToastErrorMessageGRPC(ConnectError.from(error))),
   });
 
@@ -20,11 +20,11 @@ export function DeleteTopicButton({ topicName, disabled }: DeleteTopicButtonProp
     <Button
       variant="destructive"
       disabled={disabled || isPending}
-      onClick={() => mutate({ topicName })}
-      aria-label={`Delete topic ${topicName}`}
-      data-testid="delete-topic-button"
+      onClick={() => mutate({ resourceName })}
+      aria-label={`Delete resource ${resourceName}`}
+      data-testid="delete-resource-button"
     >
-      {isPending ? 'Deleting…' : 'Delete topic'}
+      {isPending ? 'Deleting…' : 'Delete resource'}
     </Button>
   );
 
@@ -32,7 +32,7 @@ export function DeleteTopicButton({ topicName, disabled }: DeleteTopicButtonProp
   return (
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent>Topics with active consumers cannot be deleted</TooltipContent>
+      <TooltipContent>Resources with active dependents cannot be deleted</TooltipContent>
     </Tooltip>
   );
 }

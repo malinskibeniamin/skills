@@ -5,21 +5,21 @@ import { useMutation } from '@connectrpc/connect-query';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormMessage, FormErrorSummary, RequiredIndicator } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createSecret } from '@/gen/secret-SecretService_connectquery';
-import { CreateSecretRequestSchema } from '@/gen/secret_pb';
+import { createResource } from '@/gen/resource-ResourceService_connectquery';
+import { CreateResourceRequestSchema } from '@/gen/resource_pb';
 import { setServerFieldErrors } from '@/lib/errors';
 
-interface CreateSecretFormProps {
+interface CreateResourceFormProps {
   onCreated: (name: string) => Promise<void>;
 }
 
 // Submit contract: the button stays clickable — errors surface via the
 // summary + inline messages. Native disabled is for in-flight state only.
-export function CreateSecretForm({ onCreated }: CreateSecretFormProps) {
+export function CreateResourceForm({ onCreated }: CreateResourceFormProps) {
   const form = useForm({ mode: 'onChange', defaultValues: { name: '', value: '' } });
   const name = useWatch({ control: form.control, name: 'name' });
 
-  const { mutate, isPending } = useMutation(createSecret, {
+  const { mutate, isPending } = useMutation(createResource, {
     onSuccess: async () => {
       await onCreated(name); // caller invalidates the list — awaited, never fire-and-forget
     },
@@ -29,7 +29,7 @@ export function CreateSecretForm({ onCreated }: CreateSecretFormProps) {
   });
 
   const onSubmit = form.handleSubmit((values) =>
-    mutate(create(CreateSecretRequestSchema, values)),
+    mutate(create(CreateResourceRequestSchema, values)),
   );
 
   return (
@@ -43,19 +43,19 @@ export function CreateSecretForm({ onCreated }: CreateSecretFormProps) {
           rules={{ pattern: { value: /^[A-Z][A-Z0-9_]*$/, message: 'Name must be uppercase letters, numbers, or underscores' } }}
           render={({ field }) => (
             <label>
-              Secret name <RequiredIndicator />
+              Resource name <RequiredIndicator />
               <Input
                 {...field}
-                data-testid="secret-name-input"
+                data-testid="resource-name-input"
                 aria-invalid={!!form.formState.errors.name}
-                aria-describedby="secret-name-error"
+                aria-describedby="resource-name-error"
               />
-              <FormMessage id="secret-name-error" />
+              <FormMessage id="resource-name-error" />
             </label>
           )}
         />
-        <Button type="submit" disabled={isPending} data-testid="create-secret-submit">
-          {isPending ? 'Creating…' : 'Create secret'}
+        <Button type="submit" disabled={isPending} data-testid="create-resource-submit">
+          {isPending ? 'Creating…' : 'Create resource'}
         </Button>
       </form>
     </Form>
