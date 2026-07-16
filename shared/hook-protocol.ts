@@ -20,13 +20,18 @@
 //
 // CLI (called from _hook-lib.sh when bun is available; shell fallback
 // otherwise, HOOK_PROTOCOL=shell forces it):
-//   hook-protocol.ts emit <tier> <message>
+//   hook-protocol.ts emit <tier> <message> [event-name]
 //     tier: warn | nudge | block | block-strict | deny | stop-block | context
+//     event-name: required for context (hookEventName is part of the
+//     harness contract for additionalContext payloads), ignored otherwise
 //   hook-protocol.ts parse                     # stdin JSON -> shell vars
 //
-// Latency budget (explicit decision): each typed emit pays one bun process
-// start, ~+15ms over the pure-shell path. Emits fire only on violations --
-// the hot no-violation path never reaches this file.
+// Latency budget (explicit decision, measured on M-series/bun 1.3.14):
+// each typed emit costs ~40ms end-to-end through the lib's capture-and-
+// release wrapper (bun spawn ~13ms + mktemp/stream plumbing) vs ~35ms
+// for the pure-shell emitter alone. Emits fire only on violations -- the
+// hot no-violation path never reaches this file. The typed parse costs
+// one bun spawn in place of the 2-3 jq spawns it replaces (a wash).
 //
 // `parse` prints NUL-safe, single-quoted shell assignments for the fields
 // the shell lib actually consumes, so `eval "$(... parse)"` can never break
@@ -57,7 +62,7 @@ interface StopBlockPayload {
 }
 
 interface ContextPayload {
-  hookSpecificOutput: { additionalContext: string };
+  hookSpecificOutput: { hookEventName: string; additionalContext: string };
 }
 
 type EmitPayload =
@@ -69,7 +74,7 @@ type EmitPayload =
 type StdoutTier = "warn" | "nudge" | "context";
 
 type TierSpec<T extends Tier> = {
-  build: (message: string) => EmitPayload;
+  build: (message: string, eventName: string) => EmitPayload;
 } & (T extends StdoutTier
   ? { stream: "stdout"; exit: 0 }
   : { stream: "stderr"; exit: 2 });
@@ -90,7 +95,9 @@ const TIERS = {
   context: {
     stream: "stdout",
     exit: 0,
-    build: (m) => ({ hookSpecificOutput: { additionalContext: m } }),
+    build: (m, event) => ({
+      hookSpecificOutput: { hookEventName: event, additionalContext: m },
+    }),
   },
   block: {
     stream: "stderr",
@@ -117,9 +124,9 @@ const TIERS = {
   },
 } satisfies { [T in Tier]: TierSpec<T> };
 
-function emit(tier: Tier, message: string): never {
+function emit(tier: Tier, message: string, eventName: string): never {
   const spec = TIERS[tier];
-  const line = JSON.stringify(spec.build(message));
+  const line = JSON.stringify(spec.build(message, eventName));
   if (spec.stream === "stdout") {
     console.log(line);
   } else {
@@ -180,6 +187,16 @@ async function parse(): Promise<never> {
   // ({"session_id":7}, {"tool_input":{"file_path":{}}}) must export as ""
   // -- never crash before an eval'ing caller enforces anything.
   const str = (v: unknown): string => (typeof v === "string" ? v : "");
+  // Trailing newlines are trimmed to command-substitution semantics: the
+  // jq fallback reads every field via $(... | jq -r ...), which strips ALL
+  // trailing \n. The eval'd assignment preserves them, so without this an
+  // end-anchored matcher downstream would disagree with the jq path on
+  // byte-identical stdin (cross-model review P2).
+  const sub = (v: string): string => v.replace(/\n+$/, "");
+  // Array commands (Codex apply_patch spelling) join with \n. The jq
+  // fallback never sees arrays here -- its consumers gate on tool_name
+  // "Bash", where command is contractually a string -- so this branch has
+  // no parity twin by construction.
   const rawCommand = data.tool_input?.command;
   const command =
     typeof rawCommand === "string"
@@ -189,12 +206,17 @@ async function parse(): Promise<never> {
             .filter((c): c is string => typeof c === "string")
             .join("\n")
         : "";
+  // hp_file_path and hp_filename stay separate: the shell lib's jq path
+  // reads .tool_input.file_path alone, so folding .filename in here would
+  // make the typed path extract a path the fallback cannot see (parity
+  // break). Consumers that want the FileChanged spelling read hp_filename.
   const fields: Record<string, string> = {
-    hp_session_id: str(data.session_id),
-    hp_event: str(data.hook_event_name),
-    hp_tool_name: str(data.tool_name),
-    hp_file_path: str(data.tool_input?.file_path) || str(data.filename),
-    hp_command: command,
+    hp_session_id: sub(str(data.session_id)),
+    hp_event: sub(str(data.hook_event_name)),
+    hp_tool_name: sub(str(data.tool_name)),
+    hp_file_path: sub(str(data.tool_input?.file_path)),
+    hp_filename: sub(str(data.filename)),
+    hp_command: sub(command),
   };
   const out = Object.entries(fields)
     .map(([k, v]) => `${k}=${shellQuote(v)}`)
@@ -205,7 +227,7 @@ async function parse(): Promise<never> {
 
 // ── CLI dispatch ─────────────────────────────────────────────────
 
-const [, , cmd, arg1, arg2] = process.argv;
+const [, , cmd, arg1, arg2, arg3] = process.argv;
 
 function isTier(value: string | undefined): value is Tier {
   // Object.hasOwn, not `in`: the prototype chain must not mint tiers
@@ -215,11 +237,15 @@ function isTier(value: string | undefined): value is Tier {
 
 switch (cmd) {
   case "emit": {
-    if (!isTier(arg1) || arg2 === undefined) {
-      console.error("usage: hook-protocol.ts emit <tier> <message>");
+    // context without an event name would put a contract-violating payload
+    // (no hookEventName) on the live stream -- reject it as a usage error.
+    if (!isTier(arg1) || arg2 === undefined || (arg1 === "context" && !arg3)) {
+      console.error(
+        "usage: hook-protocol.ts emit <tier> <message> [event-name (required for context)]",
+      );
       process.exit(2);
     }
-    emit(arg1, arg2);
+    emit(arg1, arg2, arg3 ?? "");
     break;
   }
   case "parse": {

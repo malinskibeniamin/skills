@@ -210,6 +210,8 @@ echo "━━━ typed protocol parity (bun path == shell fallback) ━━━"
 
 _run_lib_call_env() {
   local envmode="$1" body="$2"
+  local stdin_payload="${3:-}"
+  [ -n "$stdin_payload" ] || stdin_payload='{"tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}'
   local script stdout_file stderr_file
   script=$(mktemp)
   stdout_file=$(mktemp)
@@ -222,7 +224,7 @@ $body
 EOF
   chmod +x "$script"
   _rc=0
-  echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' \
+  printf '%s' "$stdin_payload" \
     | bash "$script" >"$stdout_file" 2>"$stderr_file" || _rc=$?
   _stdout=$(cat "$stdout_file")
   _stderr=$(cat "$stderr_file")
@@ -234,7 +236,7 @@ if command -v bun >/dev/null 2>&1; then
   # between JSON.stringify and _safe_json_escape that a plain message hides.
   _pmsg='say "hi" and
 then stop'
-  for _tier_case in "warn:hook_warn \"\$_pmsg\" r:0:stdout" "nudge:hook_nudge \"\$_pmsg\" r:0:stdout" "block:hook_block \"\$_pmsg\" r:2:stderr" "block-strict:hook_block_strict \"\$_pmsg\" r:2:stderr" "deny:hook_deny \"\$_pmsg\" r:2:stderr" "stop:hook_stop_block \"\$_pmsg\":2:stderr"; do
+  for _tier_case in "warn:hook_warn \"\$_pmsg\" r:0:stdout" "nudge:hook_nudge \"\$_pmsg\" r:0:stdout" "block:hook_block \"\$_pmsg\" r:2:stderr" "block-strict:hook_block_strict \"\$_pmsg\" r:2:stderr" "deny:hook_deny \"\$_pmsg\" r:2:stderr" "stop:hook_stop_block \"\$_pmsg\":2:stderr" "context:hook_context \"\$_pmsg\" UserPromptSubmit:0:stdout"; do
     _name="${_tier_case%%:*}"
     _rest="${_tier_case#*:}"
     _call="${_rest%%:*}"; _rest="${_rest#*:}"
@@ -259,6 +261,13 @@ then stop'; $_call"
     _check "$_name: typed and shell payloads are byte-identical (normalized)" '[ -n "$_typed_payload" ] && [ "$_typed_payload" = "$_shell_payload" ]'
   done
 
+  # context payloads must carry hookEventName -- harness contract for
+  # additionalContext -- on BOTH paths.
+  for _mode in typed shell; do
+    _run_lib_call_env "$_mode" 'hook_context "ctx body" PostCompact'
+    _check "context/$_mode: payload carries hookEventName" 'printf "%s" "$_stdout" | jq -re ".hookSpecificOutput.hookEventName" 2>/dev/null | grep -qx "PostCompact"'
+  done
+
   # parse: shell-safe assignments round-trip quotes and newlines
   _hp_out=$(jq -nc '{session_id:"s-42",tool_name:"Bash",tool_input:{command:"echo '"'"'a b'"'"'\nsecond"}}' | bun "$REPO_ROOT/shared/hook-protocol.ts" parse) || true
   hp_session_id=""; hp_tool_name=""; hp_command=""
@@ -266,6 +275,56 @@ then stop'; $_call"
   _rc=0
   _check "parse exports shell-safe fields" '[ "$hp_session_id" = "s-42" ] && [ "$hp_tool_name" = "Bash" ]'
   _check "parse round-trips quoted command text" 'printf "%s" "$hp_command" | grep -q "a b" && printf "%s" "$hp_command" | grep -q "second"'
+
+  # parse-path parity (phase 2): the wired typed parse and the jq fallback
+  # must extract byte-identical fields from a hostile payload.
+  _hostile_cmd='echo '\''a b'\'' "q"
+line2'
+  _parse_payload=$(jq -nc --arg c "$_hostile_cmd" '{session_id:"s-77",tool_name:"Bash",tool_input:{command:$c}}')
+  _parse_body='hook_parse_bash; printf "%s" "$command"'
+  _run_lib_call_env typed "$_parse_body" "$_parse_payload"
+  _typed_cmd="$_stdout"; _typed_rc="$_rc"
+  _run_lib_call_env shell "$_parse_body" "$_parse_payload"
+  _shell_cmd="$_stdout"; _shell_rc="$_rc"
+  _check "parse-path: typed extraction succeeds on hostile command" '[ "$_typed_rc" = "0" ] && [ -n "$_typed_cmd" ]'
+  _check "parse-path: typed and shell extract identical command" '[ "$_typed_cmd" = "$_shell_cmd" ]'
+  _check "parse-path: newline and quotes survive extraction" 'printf "%s" "$_typed_cmd" | grep -q "line2" && printf "%s" "$_typed_cmd" | grep -q "\"q\""'
+
+  # Trailing newline: $(... | jq -r ...) strips it, so the typed layer
+  # must pre-trim or an end-anchored matcher diverges across paths. The
+  # byte COUNT is asserted inside the script -- capturing via $() out here
+  # would strip the very newline under test on both paths and mask it.
+  _tnl_payload=$(jq -nc '{tool_name:"Bash",tool_input:{command:"sleep 1\n"}}')
+  _tnl_body='hook_parse_bash; printf "%s" "$command" | wc -c | tr -d " "'
+  _run_lib_call_env typed "$_tnl_body" "$_tnl_payload"
+  _typed_len="$_stdout"
+  _run_lib_call_env shell "$_tnl_body" "$_tnl_payload"
+  _shell_len="$_stdout"
+  _check "parse-path: trailing newline trims identically (typed=$_typed_len shell=$_shell_len)" '[ "$_typed_len" = "7" ] && [ "$_shell_len" = "7" ]'
+
+  # Empty event name: contract-invalid on every path -- both must skip
+  # silently (exit 0, no payload) instead of diverging (typed usage error
+  # vs shell emitting hookEventName:"").
+  for _mode in typed shell; do
+    _run_lib_call_env "$_mode" 'hook_context "ctx body" ""'
+    _check "context/$_mode: empty event name skips emission" '[ "$_rc" = "0" ] && [ -z "$_stdout" ] && [ -z "$_stderr" ]'
+  done
+
+  # Path with a space: the field the shell reads must be the exact string,
+  # not a word-split fragment. The file must exist or the parser skips.
+  # mktemp -d: a predictable /tmp name would race concurrent runs and
+  # could clobber a user's real file.
+  _parity_dir=$(mktemp -d "${TMPDIR:-/tmp}/hook-parity.XXXXXX")
+  _parity_file="$_parity_dir/parity check.ts"
+  : > "$_parity_file"
+  _edit_payload=$(jq -nc --arg f "$_parity_file" '{session_id:"s-78",tool_name:"Edit",tool_input:{file_path:$f}}')
+  _edit_body='hook_parse_edit_write; printf "%s" "$file_path"'
+  _run_lib_call_env typed "$_edit_body" "$_edit_payload"
+  _typed_fp="$_stdout"
+  _run_lib_call_env shell "$_edit_body" "$_edit_payload"
+  _shell_fp="$_stdout"
+  rm -rf "$_parity_dir"
+  _check "parse-path: typed and shell extract identical file_path" '[ "$_typed_fp" = "$_parity_file" ] && [ "$_typed_fp" = "$_shell_fp" ]'
 else
   _skip "typed protocol parity" "bun not installed"
 fi

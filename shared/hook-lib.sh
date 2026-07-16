@@ -281,13 +281,22 @@ _hook_repoint_session_dir() {
 # For hooks that never call hook_parse_* (Stop hooks, autofixers): consume
 # stdin and adopt its session_id so readers see the same dir Codex
 # producers wrote to. No-op when env ids exist or stdin is a terminal.
+# Safe to combine with hook_parse_* in either order: stdin is delivered
+# once per hook process, so whoever reads it first stores it in
+# _hook_input and the other reuses it instead of reading EOF.
 hook_adopt_stdin_session() {
   if [ -n "${CLAUDE_SESSION_ID:-}" ] || [ -n "${CODEX_SESSION_ID:-}" ]; then
     return 0
   fi
-  [ -t 0 ] && return 0
-  _hook_input=$(cat 2>/dev/null || true)
-  _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
+  if [ -z "${_hook_input:-}" ]; then
+    [ -t 0 ] && return 0
+    _hook_input=$(cat 2>/dev/null || true)
+  fi
+  if _hook_protocol_parse; then
+    _hook_repoint_session_dir "$hp_session_id"
+  else
+    _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
+  fi
   return 0
 }
 
@@ -295,12 +304,16 @@ hook_adopt_stdin_session() {
 
 hook_parse_edit_write() {
   _hook_assert_bound_worktree
-  _hook_input=$(cat)
-  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
-
+  [ -n "${_hook_input:-}" ] || _hook_input=$(cat)
   # Codex session id arrives on stdin, not the environment: re-point the
   # session dir once per parse when the env vars are absent (issue #48 WS1).
-  _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
+  if _hook_protocol_parse; then
+    _hook_tool_name="$hp_tool_name"
+    _hook_repoint_session_dir "$hp_session_id"
+  else
+    _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+    _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
+  fi
 
   if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ] && [ "$_hook_tool_name" != "apply_patch" ]; then
     _hook_skip_or_exit 1
@@ -309,7 +322,11 @@ hook_parse_edit_write() {
   tool_name="$_hook_tool_name"
   tool_input=$(echo "$_hook_input" | jq -c '.tool_input // {}' 2>/dev/null || echo '{}')
 
-  file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
+  if [ "$_hook_protocol_parsed" = "OK" ]; then
+    file_path="$hp_file_path"
+  else
+    file_path=$(echo "$_hook_input" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)
+  fi
 
   # Canonical Codex apply_patch payload: the patch text arrives in
   # tool_input.command (string, or ["apply_patch", "<patch>"] array per the
@@ -772,11 +789,40 @@ _hook_protocol_resolve() {
   return 1
 }
 
+# Bounded bun invocation: a wedged bun (corrupted install that hangs
+# instead of crashing) must cost one hook a few seconds, not the harness's
+# full hook timeout. timeout/gtimeout when present (Linux always; macOS via
+# coreutils); bare bun otherwise -- the harness timeout stays as the
+# last-resort bound. A kill exits with a non-contract code (124/137), so
+# callers fall back to shell exactly like any other bun failure.
+_hook_protocol_run() {
+  local bound="${HOOK_PROTOCOL_TIMEOUT_S:-5}"
+  # A malformed bound would make timeout exit 125 on EVERY invocation --
+  # silently degrading the whole session to the shell path. And GNU
+  # `timeout 0` DISABLES the timeout entirely, which would un-bound the
+  # hang this wrapper exists to bound. Sanitize both to the default.
+  case "$bound" in
+    '' | *[!0-9]*)
+      _hook_debug "invalid HOOK_PROTOCOL_TIMEOUT_S='$bound' -- using 5"
+      bound=5
+      ;;
+  esac
+  [ "$bound" -eq 0 ] && bound=5
+  if command -v timeout >/dev/null 2>&1; then
+    timeout "$bound" bun "$@"
+  elif command -v gtimeout >/dev/null 2>&1; then
+    gtimeout "$bound" bun "$@"
+  else
+    bun "$@"
+  fi
+}
+
 # Emit via the typed layer. Returns 0 when the payload went out (bun exited
 # with the tier's contract code, 0 or 2); returns 1 when the caller must use
 # the shell fallback. The caller owns the final exit code either way.
+# $3 (event name) is required by the context tier, ignored by the rest.
 _hook_protocol_emit() {
-  local tier="$1" msg="$2" rc out_f err_f
+  local tier="$1" msg="$2" event="${3:-}" rc out_f err_f
   [ "${HOOK_PROTOCOL:-}" = "shell" ] && return 1
   command -v bun >/dev/null 2>&1 || return 1
   _hook_protocol_resolve || return 1
@@ -786,12 +832,106 @@ _hook_protocol_emit() {
   out_f=$(mktemp 2>/dev/null) || return 1
   err_f=$(mktemp 2>/dev/null) || { rm -f "$out_f"; return 1; }
   rc=0
-  bun "$_hook_protocol_entry" emit "$tier" "$msg" >"$out_f" 2>"$err_f" || rc=$?
+  if [ -n "$event" ]; then
+    _hook_protocol_run "$_hook_protocol_entry" emit "$tier" "$msg" "$event" >"$out_f" 2>"$err_f" || rc=$?
+  else
+    _hook_protocol_run "$_hook_protocol_entry" emit "$tier" "$msg" >"$out_f" 2>"$err_f" || rc=$?
+  fi
+  # Release the contract stream only when it holds a JSON object. A bun
+  # shim that exits with a contract code but prints a banner (or usage
+  # text) must fall back to shell, not put non-JSON on the live stream
+  # while the caller skips its fallback (cross-model review P1).
   case "$rc" in
-    0) cat "$out_f"; rm -f "$out_f" "$err_f"; return 0 ;;
-    2) cat "$err_f" >&2; rm -f "$out_f" "$err_f"; return 0 ;;
+    0)
+      if jq -e 'type == "object"' "$out_f" >/dev/null 2>&1; then
+        cat "$out_f"; rm -f "$out_f" "$err_f"; return 0
+      fi
+      _hook_debug "protocol emit rc=0 without JSON payload -- shell fallback"
+      rm -f "$out_f" "$err_f"
+      return 1
+      ;;
+    2)
+      # Exit 2 is a contract payload only for the stderr tiers. For the
+      # stdout tiers (warn/nudge/context) bun exiting 2 is a usage error
+      # -- catting it to stderr would strand the message on a stream the
+      # harness drops at exit 0, and the caller would skip its fallback
+      # believing the emit succeeded (cross-model review P2).
+      case "$tier" in
+        warn | nudge | context)
+          _hook_debug "protocol emit usage error on stdout tier '$tier' -- shell fallback"
+          rm -f "$out_f" "$err_f"
+          return 1
+          ;;
+        *)
+          if jq -e 'type == "object"' "$err_f" >/dev/null 2>&1; then
+            cat "$err_f" >&2; rm -f "$out_f" "$err_f"; return 0
+          fi
+          _hook_debug "protocol emit rc=2 without JSON payload -- shell fallback"
+          rm -f "$out_f" "$err_f"
+          return 1
+          ;;
+      esac
+      ;;
     *) _hook_debug "protocol emit failed (rc=$rc) -- shell fallback"; rm -f "$out_f" "$err_f"; return 1 ;;
   esac
+}
+
+# Typed parse delegation (phase 2): one bun run exports every scalar the
+# shell parsers consume (hp_session_id / hp_event / hp_tool_name /
+# hp_file_path / hp_filename / hp_command) as shell-safe single-quoted
+# assignments.
+# Costs one bun spawn in place of the 2-3 jq spawns it replaces (measured
+# a wash: ~39ms vs ~43ms). Complex extraction (tool_input blob,
+# apply_patch body, edits arrays) stays on jq. Returns 0 with hp_*
+# populated; 1 = caller must use the jq path. Memoized: _hook_input never
+# changes within a hook process, so the second caller (adopt-then-parse)
+# reuses the first result instead of respawning bun.
+_hook_protocol_parsed=""
+_hook_protocol_parse() {
+  if [ -n "$_hook_protocol_parsed" ]; then
+    [ "$_hook_protocol_parsed" = "OK" ] && return 0
+    return 1
+  fi
+  _hook_protocol_parsed="NO"
+  [ "${HOOK_PROTOCOL:-}" = "shell" ] && return 1
+  command -v bun >/dev/null 2>&1 || return 1
+  _hook_protocol_resolve || return 1
+  local out rc=0
+  out=$(printf '%s' "${_hook_input:-}" | _hook_protocol_run "$_hook_protocol_entry" parse 2>/dev/null) || rc=$?
+  # Empty output = stdin was not a JSON object; the jq path agrees (every
+  # extraction comes back empty), so falling back is correct, just idle.
+  [ "$rc" -eq 0 ] && [ -n "$out" ] || return 1
+  # Trust boundary: only output that starts like the typed layer's first
+  # assignment reaches eval. A bun wrapper that exits 0 with foreign
+  # stdout (version banner, shim noise) must fall back to jq, not eval.
+  case "$out" in
+    "hp_session_id='"*) : ;;
+    *)
+      _hook_debug "protocol parse output shape rejected -- jq fallback"
+      return 1
+      ;;
+  esac
+  # The assignments are hp_*-namespaced, single-quoted, and NUL-free by the
+  # typed layer's contract (pinned by shared/hook-protocol.test.ts) -- eval
+  # here is data, not code, and stderr was already dropped above. Trust
+  # boundary note: bun stdout carries the same trust as executing bun
+  # itself; the guards here defend against ACCIDENTAL foreign output
+  # (shims, banners, truncation), not a hostile bun -- a hostile bun is
+  # already arbitrary code execution.
+  if ! eval "$out" 2>/dev/null; then
+    _hook_debug "protocol parse eval failed -- jq fallback"
+    return 1
+  fi
+  # Completeness: truncated output (killed bun flushing part of a write)
+  # can pass the prefix guard yet leave later fields unset -- an unbound
+  # variable crash under a caller's set -u. All six or fall back.
+  if [ -z "${hp_session_id+x}" ] || [ -z "${hp_event+x}" ] || [ -z "${hp_tool_name+x}" ] \
+    || [ -z "${hp_file_path+x}" ] || [ -z "${hp_filename+x}" ] || [ -z "${hp_command+x}" ]; then
+    _hook_debug "protocol parse output incomplete -- jq fallback"
+    return 1
+  fi
+  _hook_protocol_parsed="OK"
+  return 0
 }
 
 # ── Tier API: info / nudge / block_strict / emit_diagnostic ─────
@@ -919,14 +1059,22 @@ hook_warn() {
 
 hook_parse_bash() {
   _hook_assert_bound_worktree
-  _hook_input=$(cat)
-  _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+  [ -n "${_hook_input:-}" ] || _hook_input=$(cat)
+  if _hook_protocol_parse; then
+    _hook_tool_name="$hp_tool_name"
+  else
+    _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+  fi
 
   if [ "$_hook_tool_name" != "Bash" ]; then
     exit 0
   fi
 
-  command=$(echo "$_hook_input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
+  if [ "$_hook_protocol_parsed" = "OK" ]; then
+    command="$hp_command"
+  else
+    command=$(echo "$_hook_input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
+  fi
 
   if [ -z "$command" ]; then
     exit 0
@@ -1015,6 +1163,31 @@ hook_stop_context() {
   local escaped
   escaped=$(_safe_json_escape "$msg")
   echo "{\"hookSpecificOutput\":{\"hookEventName\":\"Stop\",\"additionalContext\":$escaped},\"suppressOutput\":true}"
+  exit 0
+}
+
+# ── UserPromptSubmit/SessionStart/PostCompact: inject context ────
+# additionalContext payloads carry hookEventName per the harness contract,
+# so the event name is a required argument. The standalone context hooks
+# (user-prompt-context.sh, post-compact-context.sh) stay lib-free by
+# design -- every-prompt latency -- and keep their own jq -Rs emission;
+# this emitter is for lib-sourcing hooks that inject context.
+hook_context() {
+  local msg="$1" event="${2:-}"
+  # An empty event name is a caller bug: the payload would be
+  # contract-invalid on every path. Skip identically on both paths
+  # instead of emitting broken JSON (shell) or losing the message to a
+  # usage error (typed).
+  if [ -z "$event" ]; then
+    _hook_debug "hook_context called without an event name -- skipping"
+    exit 0
+  fi
+  if ! _hook_protocol_emit context "$msg" "$event"; then
+    local escaped eescaped
+    escaped=$(_safe_json_escape "$msg")
+    eescaped=$(_safe_json_escape "$event")
+    echo "{\"hookSpecificOutput\":{\"hookEventName\":$eescaped,\"additionalContext\":$escaped}}"
+  fi
   exit 0
 }
 

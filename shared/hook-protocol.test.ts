@@ -42,7 +42,8 @@ describe("emit: stream/exit contract per tier", () => {
   ];
   for (const [tier, code, stream] of cases) {
     test(`${tier} -> exit ${code}, payload on ${stream} only`, () => {
-      const r = run(["emit", tier, HOSTILE]);
+      const extra = tier === "context" ? ["UserPromptSubmit"] : [];
+      const r = run(["emit", tier, HOSTILE, ...extra]);
       expect(r.code).toBe(code);
       const payload = stream === "stdout" ? r.stdout : r.stderr;
       const other = stream === "stdout" ? r.stderr : r.stdout;
@@ -63,6 +64,23 @@ describe("emit: stream/exit contract per tier", () => {
     expect(
       JSON.parse(run(["emit", "block-strict", "x"]).stderr).systemMessage,
     ).toBe("[STRICT] x");
+  });
+
+  test("context carries the required hookEventName", () => {
+    const r = run(["emit", "context", HOSTILE, "PostCompact"]);
+    expect(r.code).toBe(0);
+    const payload = JSON.parse(r.stdout);
+    expect(payload.hookSpecificOutput.hookEventName).toBe("PostCompact");
+    expect(payload.hookSpecificOutput.additionalContext).toBe(HOSTILE);
+  });
+
+  test("context without an event name is a usage error, not a payload", () => {
+    // The harness contract requires hookEventName next to additionalContext;
+    // a payload without it must never reach the live stream.
+    const r = run(["emit", "context", "some context"]);
+    expect(r.code).toBe(2);
+    expect(r.stdout).toBe("");
+    expect(r.stderr).toContain("usage:");
   });
 
   test("inherited property names are not tiers", () => {
@@ -135,6 +153,22 @@ describe("parse: coercion and shell-quote safety", () => {
     expect(r.stdout).toContain("hp_command='echo hi'");
   });
 
+  test("file_path and filename export separately (parity with the jq path)", () => {
+    const r = run(
+      ["parse"],
+      JSON.stringify({
+        filename: "/tmp/changed.ts",
+        tool_input: { file_path: "/tmp/edited.ts" },
+      }),
+    );
+    expect(r.stdout).toContain("hp_file_path='/tmp/edited.ts'");
+    expect(r.stdout).toContain("hp_filename='/tmp/changed.ts'");
+    const only = run(["parse"], JSON.stringify({ filename: "/tmp/f.ts" }));
+    // The jq fallback cannot see .filename in file_path -- neither may we.
+    expect(only.stdout).toContain("hp_file_path=''");
+    expect(only.stdout).toContain("hp_filename='/tmp/f.ts'");
+  });
+
   test("wrong-typed fields export as empty instead of crashing", () => {
     for (const payload of [
       { session_id: 7 },
@@ -167,6 +201,27 @@ describe("parse: coercion and shell-quote safety", () => {
     expect(r.stdout).toContain(
       `hp_command='x'\\''; rm -rf /tmp/pwned; echo '\\'''`,
     );
+  });
+
+  test("trailing newlines trim to command-substitution semantics", () => {
+    // $(... | jq -r ...) strips ALL trailing newlines; the eval'd
+    // assignment preserves them -- the typed layer must pre-trim or the
+    // two paths disagree on byte-identical stdin.
+    const r = run(
+      ["parse"],
+      JSON.stringify({
+        tool_name: "Bash",
+        tool_input: { command: "rm -rf /tmp/x\n\n", file_path: "/tmp/y\n" },
+      }),
+    );
+    expect(r.stdout).toContain("hp_command='rm -rf /tmp/x'");
+    expect(r.stdout).toContain("hp_file_path='/tmp/y'");
+    // Interior newlines are data and must survive.
+    const inner = run(
+      ["parse"],
+      JSON.stringify({ tool_input: { command: "a\nb" } }),
+    );
+    expect(inner.stdout).toContain("hp_command='a\nb'");
   });
 
   test("NUL bytes are stripped", () => {
