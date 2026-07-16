@@ -19,6 +19,12 @@ When invoked before a coherent direction exists ("brainstorm", "explore options"
 
 **Challenge variant** (reviewing a proposed approach or risky refactor): question every assumption -- "Why this? What breaks if X changes? Empty list? 10,000 items?" -- present alternatives, push back on weak reasoning; consensus only when all concerns are addressed. "Should we use X or Y?" -> explore, then challenge the winner.
 
+**Standing questions** (mined from years of unresolved review debates -- ask whichever applies):
+- Risky UI swap: "If this ships broken, is the revert path a flag flip or a deploy? Who flips it, and when does the losing branch get deleted?" (flag lifecycle: removal is the definition of done)
+- New dependency: "Does a planned platform migration make this redundant within a quarter?" and "Is this >=~40 lines of tricky domain logic (dates, money, parsing -> take the library) or a trivial util (keep it local)?"
+- New abstraction/helper: "Where is the second call site?" -- no extraction without one.
+- New escape hatch, ignore, or compat shim: "Will the next LLM session imitate and spread this?" -- if yes, fix at source or gate it mechanically.
+
 ## Grill (direction exists)
 
 Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.

@@ -51,10 +51,16 @@ Map commit types to GitHub labels. Verify label exist first: `gh label list --se
 ```
 gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 ## Summary
-<bulleted summary synthesized from commits>
+<bulleted summary synthesized from commits -- behavior changes, not file lists>
+
+## Why
+<rationale + explicit out-of-scope line for anything deliberately deferred>
 
 ## Commits
 <list each commit: hash + message>
+
+## Reviewer guide
+<read-order file map for non-trivial diffs: start here -> then -> then; name the one file that carries the core change>
 
 ## Screenshots / surface review
 <omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>

@@ -30,6 +30,16 @@ Builder.io artifacts: `plan` mode may publish `/visual-plan`; implemented/releas
 10. Inspect: overflow/clipping/sticky/safe-area/`100vh`/virtual keyboard/writing mode/CLS/dense data; captions/headers still explain tables; CSS shorthand/complex layout; accessible names/labels/native semantics; ARIA only when needed; no aria-label on static/generic elements; password managers/autofill; disabled vs aria-disabled; focus trap/return; no surprise autofocus; buttons/links do not nest; requestSubmit; toasts announced, not sole carrier for critical actions; side-effect success confirmed; failed side effects persistent; long-running work shows progress/estimate when possible; strikethrough, emoji, generated content; SVG/icons/images named or decorative; Firefox/Safari/WebView; bfcache; smooth scrolling, scroll snapping, scrollIntoView; interaction blocking; native-control behaviour; feature detection; responsive images; responsive video/media; stable aspect ratio; LCP/CLS/INP/long interaction; font loading; third-party embeds/scripts.
 11. Heuristics: HTML first. Lifecycle beats screenshot. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
 
+## House taste principles (mined from years of design-review history)
+
+- **Never lie in the rendering**: no fake defaults or lossy pretty-printing; show machine truth (IDs, raw values) beside human labels; absent numeric data renders an explicit "not configured" only on `== null`, never on 0; degraded states name possible causes, quote the reported reason verbatim, and offer retry.
+- **Two-click create; the detail page is the wizard** -- shallow create forms, depth lives in the resource's own page. Flatten nesting with helper drawers; card-grid pickers for choice-of-kind.
+- **Empty states carry exactly one primary CTA** and exist for all four variants (no data / no match / error / no permission). Don't show unready features -- hiding beats teasing.
+- **Tables earn their columns**: fewer, denser columns; truncate with recovery (tooltip/expand), never wrap into ragged rows; group related columns; count + decorate ("2 policies" + icons), not icons alone.
+- **Tone lives in the surface, not the text**: status/semantic color on background+border+icon with high-contrast neutral text; color ramps carry equal perceptual weight across hues in both themes; dark mode is designed and tested, not derived.
+- **Loading reserves layout** (no CLS on resolve); spacing is the parent's job (`gap`, not child margins); modals/confirms name their subject ("Delete topic 'orders'?"); scroll-to-section beats filtering for settings/config sidebars; reduced motion is the default posture -- animation only when it clarifies state, deleted when it fights usability.
+- **Buttons act, links navigate** -- whole-card/row click targets are real links (cmd-click, middle-click work); primary action per page gets the primary variant, destructive surfaces get matching-prominence recovery actions.
+
 ## Output
 
 Concise report. Non-trivial/release: write/open `$TMPDIR/visual-review-<timestamp>.html` (fallback `/tmp`).

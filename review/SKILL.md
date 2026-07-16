@@ -6,6 +6,8 @@ description: Reviews a diff with a 7-hat parallel panel -- product/spec, standar
 # Review
 Diff review from fixed point to `HEAD`. Keep Standards and Spec axes separate.
 
+**Why zero tolerance (the amplification principle):** in an AI-authored codebase every tolerated anti-pattern is a training example -- let one escape hatch, ignore, or shortcut in and the next LLM session imitates and spreads it. The review bar exists to keep the corpus clean, not just this diff.
+
 Use `/agent-watchdog` when the target is another agent's branch, transcript, PR, or claimed completion -- it reconstructs the original contract first. Built-in `/code-review` owns the generic pass; this skill adds repo standards, spec compliance, and the hat panel on top.
 
 ## Inputs
@@ -25,6 +27,14 @@ Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `C
 2. **Spec**: read spec + diff. Report missing/partial requirements, scope creep, wrong behavior. Quote spec line for each finding. Max 400 words. Skip if no spec.
 3. **Complexity/value**: tag delete/stdlib/native/yagni/shrink candidates (see `/deslop` tags), one line per finding: location, what to cut, what replaces it. The diff's best outcome is getting shorter -- end with `net: -<N> lines possible.`, or `Lean already. Ship.` when nothing cuts. A minimal runnable self-check is never bloat; do not flag it. Quantify the Major improvement: value score HIGH|MEDIUM|LOW|NONE (maintenance/security/resilience/test-only can score HIGH). Below MEDIUM with no clear justification -> run `/steelman` against "this PR adds meaningful value"; if confirmed low-value, gate blocks pending override, split, or stronger justification.
 4. **Adversarial question**: "What could still be wrong if tests pass and implementation matches spec?" Max 3 findings; `APPROVED` if no credible risk.
+
+## Verification standard
+
+Review is verification, not opinion. Check claims against the source (the API the diff calls, the schema it renders, the vendor doc it configures) before asserting them; when you cannot verify (no env, no staging, external service), say so explicitly and downgrade to "verify before merge" instead of over-promising. On re-review, post per-finding status against the new tip (fixed / still open / no longer applies) -- never a fresh unanchored review. A reasoned decline with evidence is a valid resolution; accept it and record it. Any "later / follow-up / separate PR" resolution requires a ticket reference in the same thread.
+
+**Anti-nit guard:** no perf nits without a measured or structural argument ("less legible for ~0 gain" loses). Style the formatter owns is out of bounds -- if a style rule matters, propose the lint rule, don't litigate it per diff.
+
+Hat aids (mined review sweeps): test/perf hat runs the **testability sweep** -- testids + `aria-expanded` on collapsibles, parsing logic extracted to utils with unit tests, tab/filter state in the URL (shareable), duplicate helpers consolidated. Visual/design hat runs the **registry-consumer sweep** -- search the registry before accepting bespoke UI (button/badge/empty/typography variants), no `text-sm`-style one-offs where a variant exists, overflow handled by the group component, no deep child selectors, before/after screenshots required for any visual change.
 
 ## Hat panel (default for PR and branch reviews)
 

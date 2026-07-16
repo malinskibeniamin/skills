@@ -33,3 +33,10 @@ Input: `$ARGUMENTS` = package/module, manifest path, target version, natural lan
 ## Rules
 
 Path before edits. Changelog + release notes mandatory for major/non-SemVer. A bump-only PR that forces a follow-up is a failed run. No unprompted repo reports. JS/Go first-class; same gate elsewhere.
+
+## Migration doctrine (mined from seven full stack migrations)
+
+- **A migration ends with a mechanical freeze**: the same PR that completes it adds the lint/hook ban on the old import/pattern (`noRestrictedImports` or equivalent). Unbanned old stacks get resurrected by LLM authors.
+- **Big-bang for routers and framework-owned layers** (a router touches everything -- gradual costs more); **strangler for data layers** (expect the old and new fetching stacks to coexist for months; budget for it).
+- **Migration PRs migrate**: 1:1 behavior parity, trivial adjacent wins allowed, structural refactors named as follow-ups with tickets. Tests are reconciled in the SAME PR -- a migration that breaks the suite for the next person is unfinished.
+- **Delete the dead layer on the way out**: legacy styles, bespoke modals, unused experiments, compat shims (once the codemod exists). Reject unmaintained deps with root-cause evidence (what breaks, why) and bundle-size numbers, not vibes.

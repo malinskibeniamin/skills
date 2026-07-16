@@ -26,6 +26,10 @@ owns one failure class with non-goals, so findings do not converge. Small diffs 
 
 Each hat emits findings with: scenario, trigger, expected behavior, guard (Precondition -> Postcondition -> Fallback -> Observability), test to write, evidence (file/route/form/API cited). For external/browser/platform behavior, the hat runs `/read-the-damn-docs`; complex planned state flows sketch `/visual-plan` first.
 
+**The recurring meta-bug** (mined from years of production fixes -- every hat probes its variant): *state resolved asynchronously, read too early or scoped too broadly*. Concrete shapes: cache keyed without its scope (env/org/user) leaking data across contexts; teardown fired-and-forgotten before navigation/unload; out-of-order responses without abort/last-write-wins; feature-flag defaults read before the provider resolves; chained dependent queries gating render and flickering.
+
+**Boundary + destructive contracts:** error boundaries layer in a fixed order -- unauthenticated -> stale-chunk-after-deploy recovery -> cancellation-as-non-error -> generic fallback. Destructive flows fail CLOSED: the confirm button enables only after a successful fresh (staleTime 0) zero-reference lookup -- loading or errored lookup is NOT confirmable; every close path (X, ESC, Enter, back navigation) respects in-flight and dirty state, not just the Cancel button. Retries are bounded and code-classified (network/5xx once; never 4xx); honest degraded states name both possible causes, show the reported reason verbatim, and offer retry.
+
 Merge: dedupe by root cause, keep the highest-severity framing, then drive the finding loop: `/diagnosing-bugs` feedback loop -> `/tdd` RED test/snapshot -> `/visual-review` for UI validation.
 
 ## Output

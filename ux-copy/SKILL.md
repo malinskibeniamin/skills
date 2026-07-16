@@ -66,6 +66,14 @@ For documentation, READMEs, PR description files, and any markdown prose.
 
 Fenced code, indented code, inline code spans, and URLs are stripped before matching to reduce false positives.
 
+## UI-string rules (mined from years of copy review)
+
+- **"Cannot" over "Don't"** in validation messages (less accusatory); no "Please"; error messages state the constraint precisely ("Name must only contain letters, numbers, or hyphens" -- and the message regenerates when the regex changes, so keep regex + message adjacent).
+- **Entity-precise verbs**: "Assign roles" not "Change roles"; buttons name the action + object; confirm dialogs name the exact subject being acted on.
+- **No unexplained acronyms** in routes, labels, or filenames -- acronyms tax every new reader; verbose names also reduce LLM hallucination.
+- **Interpolation tags stay semantic**: a single link is `<link>`, not `<link1>`; docs links live inline at the decision point, not in a separate box.
+- **Copy authority**: user-facing copy changes get a docs-editor review pass; machine keys/IDs are never shown as labels (derive the display string, keep the key visible beside it when operators need it).
+
 ### Escape hatch
 
 `<!-- allow: prose-style [reason] -->` or `// allow: prose-style [reason]` anywhere in file skips all checks.

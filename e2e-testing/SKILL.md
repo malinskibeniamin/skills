@@ -31,6 +31,18 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 })
 ```
 
+## Determinism rules (mined from years of flake fixes)
+
+- **Wait for a cause, never a duration**: `waitForURL()` after navigation clicks, `waitForResponse()`/`waitForRequest()` before asserting UI the RPC drives, element-state waits otherwise. No `waitForTimeout`; no `expect.soft` inside `toPass` (soft failures never retry the block).
+- **No `force: true` clicks** -- if the element needs forcing, something obstructs it and users hit the same wall; fix the obstruction.
+- **Match RPC routes on `Service/Method` only**, never version-pinned (`v1alpha1` in a matcher breaks on the next API bump).
+- **`test.step()` around every logical action** -- CI failure output then names the exact step; the smaller the step, the faster the diagnosis.
+- **Ephemeral UI**: run the suite with a test-mode flag that keeps toasts from auto-dismissing; assert side effects (request fired, row appeared), not toast text.
+- **Clipboard/permission-dependent specs run Chromium-only** (Firefox/WebKit permission models differ).
+- **Debuggability is part of the test**: buffer backend/container logs so they survive teardown; on `start()` failure capture logs before bailing. Redact secrets/tokens from failure dumps.
+- Retries: 1 in CI as a stopgap, 0 as the goal; a spec that needs retries has a wait bug. Locally prefer the markdown reporter (LLM-token-friendly).
+- Quality over quantity: delete render-only specs; every spec must exercise a side effect a user can cause.
+
 ## Monitor for E2E
 `Monitor: bun run test:e2e` -- stream results, react fail before suite finish.
 

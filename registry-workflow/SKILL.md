@@ -74,6 +74,18 @@ Safe: prop-based logic (`variant === 'destructive'`, `size === 'lg'`).
 | **Skip-Outdated** | Registry newer -- consumer pull, not push |
 | **Skip-Business-Logic** | App-specific logic -- re-implement cleanly if needed |
 
+## Governance rules (mined from the registry's own review history)
+
+- **Registry sync is its own PR** -- never mixed with feature work; a registry update inside a feature diff hides accidental component regressions.
+- **Consumers never hand-edit managed files** -- local edits get blasted away by the next upstream sync; consumer-specific code lives in a sibling file, never inside the managed one.
+- **Breaking changes ship a codemod + a changelog entry with a migration example.** Manual white-gloving of consumers does not scale ("agents never seem to find them all"). After the codemod exists, delete the compat shim.
+- **Consumer smoke tests on destructive flows after every registry upgrade** -- the canonical incident: a primitive renamed `onSelect`->`onClick` and every delete-confirmation dialog silently stopped opening. Visual baselines don't catch dead handlers.
+- **Framework-agnostic invariant**: the registry never imports a router or app framework; consumers span routers and React majors.
+- **API shape**: composition (children) over render-props/items arrays; variant axes are small and orthogonal (`tone` x `variant`), `default` maps to a named variant; deprecate-then-remove, never break.
+- **Fix consumer misuse structurally**: when consumers repeatedly misuse an API (icon sizes, spacing), encode the correction in the component (selectors, stricter props) instead of repeating review comments.
+- **Changesets are design docs**: each states affected components, user-visible before/after, and reasoning -- good enough that a consumer can decide to upgrade from the changeset alone.
+- **Every animation honors `prefers-reduced-motion`; restrained motion is the default.** Documented tradeoffs (e.g. an extra lockfile for a scanner) carry a written why + external reference so they aren't re-litigated.
+
 ## Steps
 
 1. Copy `scripts/ui-registry-warn.sh` + `scripts/registry-check.sh` -> `.claude/hooks/` | `chmod +x`
