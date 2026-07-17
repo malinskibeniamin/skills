@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.30.0
+
+2026-07-16 -- Go vertical based on a two-year multi-repository review analysis (102 conventions, each supported by at least three independent examples). New `/golang` skill, path-scoped to `*.go`/`go.mod`: core S-grade non-negotiables, context-dependent tensions, and nine domain files (proto/API implementation, concurrency, errors, testing, Temporal, security/tenancy, rollout, structure, controllers). New `/golang-review` skill: evidence-backed Go review axis whose RULES.md catalog carries every rule with its grade, statement, and anonymous aggregate support count; /review adds it as a conditional golang hat whenever the diff touches Go, in every tier including mini panel. Two warn-tier per-edit hooks cover removed protobuf fields and floating test-service image tags. 17 new evals cover both hooks and the skill surface.
+
 ## 4.29.0
 
 2026-07-14 -- Make native Codex delegation explicit and bounded. Native Codex now runs required planning and review axes inline unless the user asks for subagents, delegation, parallel work, or invokes /swarm; recursive codex exec and descendant fan-out require separate authorization. Claude-hosted parallel hats and cross-family Codex review remain unchanged. Preserve the user's selected model and reasoning effort, stop after the first automated review/fix pass plus one CI snapshot by default, and report Codex usage as unavailable rather than guessing from Claude-only ccusage or session tokens.

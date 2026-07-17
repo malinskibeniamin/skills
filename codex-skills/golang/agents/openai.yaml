@@ -1,0 +1,3 @@
+interface:
+  display_name: "Golang"
+  short_description: "Write Go with evidence-backed engineering conventions"

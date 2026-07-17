@@ -40,6 +40,8 @@ SHORT_DESCRIPTIONS = {
     "extend-harness": "Extend and debug the frontend skill harness",
     "frontend-starter-kit": "Bootstrap the standard frontend toolchain and gates",
     "go": "Verify, review, simplify, and ship completed work",
+    "golang": "Write Go with evidence-backed engineering conventions",
+    "golang-review": "Review Go diffs against evidence-backed conventions",
     "grilling": "Stress-test plans, decisions, and ideas",
     "handoff": "Prepare a compact session handoff for another agent",
     "hook-audit": "Audit hook effectiveness, latency, and drift",

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Golang Review"
+  short_description: "Review Go diffs against evidence-backed conventions"
