@@ -15,6 +15,12 @@ Run Bash commands before proceed:
 
 Metrics dir: `~/.claude/hook-metrics/`
 
+Codex sessions appear twice in the dir: per-turn records in
+`codex-turns.jsonl` (written by codex-notify.sh on agent-turn-complete) and
+schema-v2 summaries named `*-codex-*.json` (source: "codex", turn counts, no
+per-hook metrics -- Codex emits no SessionEnd). Include them in session
+counts and retro flow; do not report their empty hook maps as silent hooks.
+
 Use `/visual-plan` for large action plans, `/plan-arbiter` for contradictory recommendations, and `/agent-watchdog` when auditing routine/agent-generated reports.
 
 ## Your task
