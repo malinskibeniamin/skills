@@ -1,0 +1,3 @@
+#!/bin/sh
+printf '%s\n' "$*" >> .api-linter-invocations
+printf '%s\n' "api-linter fixture: no syntactic findings"

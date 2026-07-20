@@ -54,7 +54,7 @@ done <<< "$all_skills"
 
 while IFS= read -r row_skill; do
   [ -n "$row_skill" ] || continue
-  if ! printf '%s\n' "$all_skills" | grep -Fxq "$row_skill"; then
+  if ! grep -Fxq "$row_skill" <<< "$all_skills"; then
     extra_rows="$extra_rows $row_skill"
   fi
 done <<< "$table_rows"
