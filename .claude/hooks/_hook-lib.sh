@@ -172,6 +172,20 @@ _safe_json_escape() {
   printf '"%s"' "$escaped"
 }
 
+# Cap a model-facing message. Codex forwards at most ~2,500 tokens of hook
+# output per call (~10KB); Claude spills >10K chars to disk. 8000 chars keeps
+# every emitter safely under both. Never cap machine-parsed payloads
+# (updatedInput, updatedToolOutput) — only human/model prose.
+_HOOK_MSG_MAX=8000
+_hook_cap_msg() {
+  local msg="$1"
+  if [ "${#msg}" -gt "$_HOOK_MSG_MAX" ]; then
+    printf '%s\n[truncated: message exceeded %d chars]' "$(printf '%s' "$msg" | cut -c1-$_HOOK_MSG_MAX)" "$_HOOK_MSG_MAX"
+  else
+    printf '%s' "$msg"
+  fi
+}
+
 # ── Worktree detection helpers ───────────────────────────────────
 # Two problems solved here:
 #
@@ -719,7 +733,8 @@ hook_info() {
 }
 
 hook_nudge() {
-  local msg="$1"
+  local msg
+  msg=$(_hook_cap_msg "$1")
   local rule="${2:-$(_hook_default_rule)}"
   _hook_debug "NUDGE [$rule]: $msg"
   _hook_track_violation "$rule"
@@ -738,7 +753,8 @@ hook_nudge() {
 }
 
 hook_block_strict() {
-  local msg="$1"
+  local msg
+  msg=$(_hook_cap_msg "$1")
   local rule="${2:-$(_hook_default_rule)}"
   _hook_debug "STRICT [$rule]: $msg"
   _hook_track_violation "$rule"
@@ -767,7 +783,8 @@ hook_emit_diagnostic() {
 # ── PostToolUse: Block with systemMessage (exit 2) ──────────────
 
 hook_block() {
-  local msg="$1"
+  local msg
+  msg=$(_hook_cap_msg "$1")
   local label="${2:-$(_hook_default_rule)}"
   _hook_debug "BLOCK [$label]: $msg"
   _hook_track_violation "$label"
@@ -787,7 +804,8 @@ hook_block() {
 # ── PostToolUse: Warn with systemMessage (exit 0) ───────────────
 
 hook_warn() {
-  local msg="$1"
+  local msg
+  msg=$(_hook_cap_msg "$1")
   local label="${2:-$(_hook_default_rule)}"
   _hook_debug "WARN [$label]: $msg"
   _hook_track_violation "$label"
@@ -836,13 +854,70 @@ hook_deny() {
 }
 
 # ── Stop hook: Block with decision (exit 2) ──────────────────────
+# Claude Code force-continues at most CLAUDE_CODE_STOP_HOOK_BLOCK_CAP (8)
+# consecutive Stop blocks, then treats further blocks as errors. Stay two
+# under the harness cap: track consecutive blocked Stop events in session
+# state (reset on UserPromptSubmit — a new prompt ends the streak) and
+# downgrade to a visible systemMessage once the budget is spent, so the
+# final findings reach the user instead of burning the cap.
+
+_hook_stop_block_budget_spent() {
+  # Escape hatch for eval harnesses: fixtures share one session dir across
+  # many synthetic Stop events, so consecutive-block accounting is
+  # meaningless there. HOOK_STOP_BLOCK_CAP_GUARD=0 disables check+increment.
+  [ "${HOOK_STOP_BLOCK_CAP_GUARD:-1}" = "0" ] && return 1
+  local cap="${CLAUDE_CODE_STOP_HOOK_BLOCK_CAP:-8}"
+  local n
+  n=$(cat "$_hook_session_dir/stop-block-count" 2>/dev/null | tr -dc '0-9')
+  [ "${n:-0}" -ge $((cap > 2 ? cap - 2 : 1)) ]
+}
+
+_hook_stop_note_block() {
+  [ "${HOOK_STOP_BLOCK_CAP_GUARD:-1}" = "0" ] && return 0
+  # Parallel Stop hooks blocking the same event must count as ONE
+  # consecutive block. Blocks within 5s share the event (continuation
+  # turns take far longer); collisions undercount, which is safe.
+  local now last n
+  now=$(date +%s)
+  last=$(cat "$_hook_session_dir/stop-block-marker" 2>/dev/null | tr -dc '0-9')
+  [ $((now - ${last:-0})) -le 5 ] && return 0
+  n=$(cat "$_hook_session_dir/stop-block-count" 2>/dev/null | tr -dc '0-9')
+  echo $((${n:-0} + 1)) > "$_hook_session_dir/stop-block-count" 2>/dev/null || true
+  echo "$now" > "$_hook_session_dir/stop-block-marker" 2>/dev/null || true
+}
 
 hook_stop_block() {
   local msg="$1"
+  msg=$(_hook_cap_msg "$msg")
   local reason
   reason=$(_safe_json_escape "$msg")
+  if _hook_stop_block_budget_spent; then
+    _hook_log_entry "block-downgraded" "stop-block-cap" "$(basename "$0" .sh)"
+    echo "{\"suppressOutput\":true,\"systemMessage\":$(_safe_json_escape "[stop-block cap] Not blocking again (harness caps consecutive Stop blocks). Unresolved: $msg")}"
+    exit 0
+  fi
+  _hook_stop_note_block
   echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
   exit 2
+}
+
+# ── Stop hook: Feedback that keeps the turn alive (exit 0) ───────
+# Since v2.1.16x Stop/SubagentStop hooks may return
+# hookSpecificOutput.additionalContext: Claude receives the text as context
+# and CONTINUES the turn — softer than decision:block (no error framing),
+# stronger than systemMessage (which ends the turn). Use for "worth fixing
+# now, but phrase it as guidance" findings.
+
+hook_stop_context() {
+  local msg="$1"
+  local rule="${2:-$(_hook_default_rule)}"
+  msg=$(_hook_cap_msg "$msg")
+  _hook_track_violation "$rule"
+  _hook_log_entry "stop-context" "$rule"
+  local escaped
+  escaped=$(_safe_json_escape "$msg")
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"Stop\",\"additionalContext\":$escaped},\"suppressOutput\":true}"
+  exit 0
 }
 
 # ── Stop hook: Append finding to shared file (no block) ──────────
@@ -864,11 +939,8 @@ hook_stop_finding() {
 # script'"'"'s accumulated findings (exit 2), or exits 0 when none.
 hook_stop_enforce() {
   if [ -n "${_hook_stop_local:-}" ]; then
-    local reason
-    reason=$(_safe_json_escape "$(printf 'Fix before stopping:\n%s' "$_hook_stop_local")")
-    echo "{\"decision\":\"block\",\"reason\":$reason}" >&2
     rm -f "$_hook_session_dir/stop-findings" 2>/dev/null || true
-    exit 2
+    hook_stop_block "$(printf 'Fix before stopping:\n%s' "$_hook_stop_local")"
   fi
   exit 0
 }

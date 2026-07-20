@@ -28,15 +28,28 @@ for event in SessionEnd PreCompact PostToolUseFailure FileChanged; do
   fi
 done
 
-# ── FileChanged has 5 matchers ──────────────────────────────────
+# ── FileChanged has 4 matcher groups ─────────────────────────────
+# Literal groups for static names (env/manifest/deps) plus one empty-matcher
+# group for pattern-shaped names (schema/config) whose watches session-env
+# registers via watchPaths — FileChanged matchers are literal-only, so the
+# old glob matchers never fired.
 _matchers=$(jq '.hooks.FileChanged | keys | length' "$REPO_ROOT/skill-manifest.json" 2>/dev/null)
-if [ "$_matchers" = "5" ]; then
-  echo "  PASS  FileChanged has 5 matchers (deps/schema/config/env/manifest)"
+if [ "$_matchers" = "4" ]; then
+  echo "  PASS  FileChanged has 4 matcher groups (dynamic/env/manifest/deps)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  FileChanged matcher count wrong: $_matchers (expected 5)"
+  echo "  FAIL  FileChanged matcher count wrong: $_matchers (expected 4)"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: FileChanged matcher count"
+fi
+if jq -e '.hooks.FileChanged[""] | index("file-changed-schema.sh")' "$REPO_ROOT/skill-manifest.json" >/dev/null 2>&1 \
+  && grep -q "watchPaths" "$HOOKS_DIR/session-env.sh"; then
+  echo "  PASS  dynamic FileChanged names routed via watchPaths + internal filters"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  dynamic FileChanged routing broken (empty matcher group or watchPaths missing)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: FileChanged dynamic routing"
 fi
 
 # ── PreCompact injects additionalContext (paired with PostCompact) ─

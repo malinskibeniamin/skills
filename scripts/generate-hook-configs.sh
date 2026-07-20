@@ -4,7 +4,14 @@ set -euo pipefail
 # Generate hook configuration files from skill-manifest.json (single source of truth).
 #
 # Inputs:
-#   skill-manifest.json  — events → matcher → [hook scripts]
+#   skill-manifest.json  — events → matcher → [hook entries]
+#                          entry = "script.sh" or {script, if, async,
+#                          asyncRewake, statusMessage, timeout}. The object
+#                          fields are Claude-only hook capabilities; Codex
+#                          output keeps the bare command (script-side guards
+#                          cover the `if` semantics there).
+#   hooks/frontend-skills.rules — Codex execpolicy mirror of the
+#                          enforce-toolchain deny list (hand-maintained).
 #
 # Outputs:
 #   .claude/settings.json        — Claude-compatible full hook surface, repo-local paths
@@ -12,6 +19,7 @@ set -euo pipefail
 #   .codex/hooks.json            — Codex-supported hook events only, repo-local paths
 #                                  (best-effort; some managed sandboxes mount
 #                                  .codex read-only)
+#   .codex/rules/frontend-skills.rules — execpolicy copy (same writability caveat)
 #   hooks/codex-hooks.json       — Codex-supported hook events only, plugin-root paths
 #
 # Flags:
@@ -36,6 +44,21 @@ _codex_local_writable() {
   [ -f ".codex/hooks.json" ] && (: >> .codex/hooks.json) 2>/dev/null
 }
 
+# Shared jq prelude: normalize a manifest entry (string or object) and emit
+# the Claude-only extra fields. `-c` (NOT `-lc`): a login shell sources the
+# user's profile on EVERY hook spawn — measured milliseconds × ~30 hooks per
+# tool batch for zero benefit; hooks inherit the session environment already.
+JQ_CLAUDE_PRELUDE='
+  def norm($e): if ($e|type) == "object" then $e else {script: $e} end;
+  def extra_fields($e):
+    ({}
+     + (if $e.if then {if: $e.if} else {} end)
+     + (if $e.async then {async: true} else {} end)
+     + (if $e.asyncRewake then {asyncRewake: true} else {} end)
+     + (if $e.statusMessage then {statusMessage: $e.statusMessage} else {} end)
+     + (if $e.timeout then {timeout: $e.timeout} else {} end));
+'
+
 # Build Claude settings using exec-form hooks. Use an absolute executable
 # (`/bin/bash`) instead of a repo-relative command path because Claude may
 # spawn hooks from a worktree subdirectory or from outside the repo. The small
@@ -43,15 +66,17 @@ _codex_local_writable() {
 # CLAUDE_PROJECT_DIR. This prevents posix_spawn ENOENT before run-hook.sh can
 # locate the repo-local hook implementation.
 _build_claude_settings() {
-  jq '
-    def claude_hook($script): {
-      type: "command",
-      command: "/bin/bash",
-      args: [
-        "-lc",
-        ("root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" " + ($script | @sh) + "; exit 0")
-      ]
-    };
+  jq "$JQ_CLAUDE_PRELUDE"'
+    def claude_hook($entry):
+      norm($entry) as $e
+      | {
+          type: "command",
+          command: "/bin/bash",
+          args: [
+            "-c",
+            ("root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" " + ($e.script | @sh) + "; exit 0")
+          ]
+        } + extra_fields($e);
     {
       hooks: (
         .hooks | to_entries | map(
@@ -73,11 +98,6 @@ _build_claude_settings() {
 }
 
 SETTINGS_PREFIX='$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks'
-PLUGIN_PREFIX='"${CLAUDE_PLUGIN_ROOT}/.claude/hooks'
-# Hack: opening quote only; closing quote comes right before `; [ -x ...`
-# We want: f="${CLAUDE_PLUGIN_ROOT}/.claude/hooks/X.sh"; [ -x ...
-# Assembled string inside jq: "f=" + prefix + "/" + script + "; [ -x ..."
-# Needs close-quote before the `;`. Use suffix via jq sub:
 
 NEW_SETTINGS=$(_build_claude_settings)
 
@@ -90,15 +110,21 @@ NEW_SETTINGS=$(_build_claude_settings)
 # - Codex PermissionRequest gets an adapter that reuses approval-safe deny guards,
 # - Claude-only events with no Codex equivalent are dropped by design:
 #   FileChanged (codex-compat keeps Stop-batch fallback), WorktreeCreate,
-#   SessionEnd (no lifecycle analog; metrics summary is Claude-side only).
+#   SessionEnd (no lifecycle analog; the `notify` turn-complete adapter in
+#   codex-compat covers the metrics summary), Setup, UserPromptExpansion,
+#   CwdChanged, ConfigChange, TaskCompleted, StopFailure, PermissionDenied,
+#   Notification.
+# Object-entry extras (if/async/statusMessage/timeout) are stripped: Codex
+# parses only command hooks, and each script self-guards on its stdin.
 CODEX_EVENTS='["SessionStart","SubagentStart","PreToolUse","PostToolUse","PreCompact","PostCompact","UserPromptSubmit","SubagentStop","Stop"]'
 _build_codex() {
   local prefix="$1"
   local close_quote="${2:-}"
   jq --arg prefix "$prefix" --arg close "$close_quote" --argjson events "$CODEX_EVENTS" '
-    def command_hook($script): {
+    def entry_script($e): if ($e|type) == "object" then $e.script else $e end;
+    def command_hook($entry): {
       type: "command",
-      command: ("f=" + $prefix + "/" + $script + $close + "; [ -x \"$f\" ] && exec \"$f\"; exit 0")
+      command: ("f=" + $prefix + "/" + entry_script($entry) + $close + "; [ -x \"$f\" ] && exec \"$f\"; exit 0")
     };
     . as $root
     | def groups_for($event):
@@ -146,8 +172,16 @@ _build_codex() {
 
 NEW_CODEX_SETTINGS=$(_build_codex "$SETTINGS_PREFIX")
 
-# For plugin, rebuild with matching-quote prefix:
-NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '
+# For plugin, rebuild with matching-quote prefix. Same entry normalization
+# and Claude-only extra fields as settings — hooks/hooks.json is the Claude
+# plugin surface.
+NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' "$JQ_CLAUDE_PRELUDE"'
+  def plugin_hook($entry):
+    norm($entry) as $e
+    | {
+        type: "command",
+        command: ("f=" + $prefix + "/" + $e.script + "\"; [ -x \"$f\" ] && exec \"$f\"; exit 0")
+      } + extra_fields($e);
   {
     hooks: (
       .hooks | to_entries | map(
@@ -157,10 +191,7 @@ NEW_PLUGIN=$(jq --arg prefix '"${CLAUDE_PLUGIN_ROOT}/.claude/hooks' '
             value: (
               .value | to_entries | map(
                 (if .key == "" then {} else {matcher: .key} end) + {
-                  hooks: (.value | map({
-                    type: "command",
-                    command: ("f=" + $prefix + "/" + . + "\"; [ -x \"$f\" ] && exec \"$f\"; exit 0")
-                  }))
+                  hooks: (.value | map(plugin_hook(.)))
                 }
               )
             )
@@ -212,6 +243,10 @@ case "$MODE" in
         echo "DRIFT: .codex/hooks.json ≠ manifest Codex subset" >&2
         _drift=1
       fi
+      if [ -f ".codex/rules/frontend-skills.rules" ] && ! cmp -s hooks/frontend-skills.rules .codex/rules/frontend-skills.rules; then
+        echo "DRIFT: .codex/rules/frontend-skills.rules ≠ hooks/frontend-skills.rules" >&2
+        _drift=1
+      fi
     fi
     _cur_codex_plugin=$(jq -S . hooks/codex-hooks.json 2>/dev/null || echo "{}")
     _new_codex_plugin_sorted=$(echo "$NEW_CODEX_PLUGIN" | jq -S .)
@@ -229,6 +264,11 @@ case "$MODE" in
     echo "$NEW_PLUGIN" > hooks/hooks.json
     if _codex_local_writable; then
       echo "$NEW_CODEX_SETTINGS" > .codex/hooks.json
+      if mkdir -p .codex/rules 2>/dev/null && (: >> .codex/rules/frontend-skills.rules) 2>/dev/null; then
+        cp hooks/frontend-skills.rules .codex/rules/frontend-skills.rules
+      else
+        echo "WARN: .codex/rules not writable; skipped execpolicy copy" >&2
+      fi
     else
       echo "WARN: .codex/hooks.json not writable; skipped local Codex config" >&2
     fi
@@ -252,7 +292,8 @@ case "$MODE" in
       exit 1
     fi
     echo "Generated .claude/settings.json, hooks/hooks.json, .codex/hooks.json, and hooks/codex-hooks.json from $MANIFEST"
-    # Verify scripts exist
+    # Verify scripts exist. Object entries contribute their .script value;
+    # the grep keeps only *.sh strings so if/statusMessage text never trips it.
     _missing=0
     while IFS= read -r script; do
       [ -z "$script" ] && continue
@@ -260,7 +301,7 @@ case "$MODE" in
         echo "WARN: .claude/hooks/$script not found on disk" >&2
         _missing=$((_missing + 1))
       fi
-    done < <(jq -r '.hooks | .. | .[]? | select(type=="string")' "$MANIFEST" | grep -E '\.sh$' | sort -u)
+    done < <(jq -r '.hooks | .. | strings' "$MANIFEST" | grep -E '^[a-z0-9-]+\.sh$' | sort -u)
     if [ "$_missing" -gt 0 ]; then
       echo "WARN: $_missing scripts missing" >&2
       exit 1

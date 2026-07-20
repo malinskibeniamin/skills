@@ -11,7 +11,10 @@ run_content_eval "$SCRIPT" "hook_block" "test-warning-check blocks warnings"
 run_content_eval "$SCRIPT" "No env bypass" "test-warning-check forbids env bypass"
 run_file_eval "$CI_SCRIPT" "ci-warning-audit.sh exists"
 run_executable_eval "$CI_SCRIPT" "ci-warning-audit.sh is executable"
-run_content_eval "$CI_SCRIPT" "hook_stop_block" "ci-warning-audit blocks CI warnings"
+# asyncRewake contract: exit 2 + plain-text stderr (shown to Claude as a
+# system reminder), NOT hook_stop_block decision JSON.
+run_content_eval "$CI_SCRIPT" "asyncRewake" "ci-warning-audit documents asyncRewake contract"
+run_content_eval "$CI_SCRIPT" "exit 2" "ci-warning-audit blocks CI warnings"
 run_content_eval "$CI_SCRIPT" "No env bypass" "ci-warning-audit forbids env bypass"
 
 run_hook_eval "$SCRIPT" \

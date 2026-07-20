@@ -9,6 +9,11 @@ set -euo pipefail
 
 EVALS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$EVALS_DIR/.." && pwd)"
+
+# Eval fixtures fire many synthetic Stop blocks against shared session dirs;
+# consecutive-block budgeting (hook_stop_block cap guard) only makes sense in
+# real sessions. The guard itself is covered by agent-evals channels tests.
+export HOOK_STOP_BLOCK_CAP_GUARD=0
 PASS=0
 FAIL=0
 SKIP=0

@@ -29,7 +29,9 @@ _hooks=(
   "llm-test-flags.sh|vitest|playwright|bun (run )?test|jest|--watch"
   "conventional-commits-check.sh|git commit|git.*-m"
   "branch-safety-check.sh|git (commit|push|checkout|switch|worktree|branch)"
-  "snyk-project-create-guard.sh|snyk"
+  # snyk-project-create-guard.sh moved to a standalone if-gated PreToolUse
+  # entry ("if": "Bash(snyk *)") -- the harness skips the spawn entirely for
+  # non-snyk commands, and `if` checks &&/$()/backtick subcommands too.
   "bash-verbose-guard.sh|git commit|gh |rtk|curl|wget|taskw|bun run|--json|--jq"
   "rtk-rewrite.sh|git|gh |cargo|go |bun|vitest|npm|pnpm"
 )

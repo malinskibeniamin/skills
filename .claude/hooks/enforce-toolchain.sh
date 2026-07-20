@@ -1,6 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+# MIRROR: hooks/frontend-skills.rules carries these bans as Codex execpolicy
+# prefix_rules (deterministic floor when Codex hooks are off). When adding or
+# removing a ban here, update that file too — the generator drift-checks the
+# .codex/rules/ copy.
+
 input=$(cat)
 command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
