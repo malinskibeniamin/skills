@@ -4,9 +4,7 @@ description: Reviews a diff with a 7-hat parallel panel -- product/spec, standar
 ---
 
 # Review
-Diff review from fixed point to `HEAD`. Keep Standards and Spec axes separate.
-
-**Why zero tolerance (the amplification principle):** in an AI-authored codebase every tolerated anti-pattern is a training example -- let one escape hatch, ignore, or shortcut in and the next LLM session imitates and spreads it. The review bar exists to keep the corpus clean, not just this diff.
+Diff review from fixed point to `HEAD`. Keep Standards and Spec axes separate. **Amplification principle (why zero tolerance):** in an AI-authored codebase every tolerated anti-pattern is a training example the next LLM session imitates and spreads -- the review bar keeps the corpus clean, not just this diff.
 
 Use `/agent-watchdog` when the target is another agent's branch, transcript, PR, or claimed completion -- it reconstructs the original contract first. Built-in `/code-review` owns the generic pass; this skill adds repo standards, spec compliance, and the hat panel on top.
 
@@ -30,20 +28,13 @@ Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `C
 
 ## Verification standard
 
-Review is verification, not opinion. Check claims against the source (the API the diff calls, the schema it renders, the vendor doc it configures) before asserting them; when you cannot verify (no env, no staging, external service), say so explicitly and downgrade to "verify before merge" instead of over-promising. On re-review, post per-finding status against the new tip (fixed / still open / no longer applies) -- never a fresh unanchored review. A reasoned decline with evidence is a valid resolution; accept it and record it. Any "later / follow-up / separate PR" resolution requires a ticket reference in the same thread.
-
-**Anti-nit guard:** no perf nits without a measured or structural argument ("less legible for ~0 gain" loses). Style the formatter owns is out of bounds -- if a style rule matters, propose the lint rule, don't litigate it per diff.
-
-Hat aids (mined review sweeps): test/perf hat runs the **testability sweep** -- testids + `aria-expanded` on collapsibles, parsing logic extracted to utils with unit tests, tab/filter state in the URL (shareable), duplicate helpers consolidated. Visual/design hat runs the **registry-consumer sweep** -- search the registry before accepting bespoke UI (button/badge/empty/typography variants), no `text-sm`-style one-offs where a variant exists, overflow handled by the group component, no deep child selectors, before/after screenshots required for any visual change.
+Review is verification, not opinion: check claims against the source (the API the diff calls, the schema it renders, the vendor doc it configures); when you cannot verify (no env, external service), say so and downgrade to "verify before merge". Re-review posts per-finding status against the new tip (fixed / still open / no longer applies) -- never a fresh unanchored review. A reasoned decline with evidence is a valid resolution; any "later / follow-up" resolution requires a ticket reference in the same thread. **Anti-nit guard:** no perf nits without a measured or structural argument; style the formatter owns is out of bounds -- propose the lint rule, don't litigate it per diff. Hat aids: test/perf hat runs the **testability sweep** (testids + `aria-expanded` on collapsibles, parsing logic in tested utils, tab/filter state in the URL, duplicate helpers consolidated); visual/design hat runs the **registry-consumer sweep** (search the registry before bespoke UI, no one-offs where a variant exists, overflow handled by the group component, no deep child selectors, before/after screenshots for any visual change).
 
 ## Hat panel (default for PR and branch reviews)
 
 Security review is intentionally absent (owner decision 2026-07-10; restore from git history).
-The panel has eight perspectives, each owning one axis with explicit non-goals. Claude-hosted
-sessions schedule bounded waves (default 3 concurrent subagents; excess hats queue). Native
-Codex runs every axis inline unless the user explicitly requests agents or invokes `/swarm`;
-skill activation alone is not consent. The orchestrator merges by root cause and MUST assert
-every non-skipped axis completed; an authorized agent lost to spawn failure is rerun.
+The panel has eight perspectives, each owning one axis with explicit non-goals. Claude-hosted sessions schedule bounded waves (default 3 concurrent subagents; excess hats queue). Native Codex runs every axis inline unless the user explicitly requests agents or invokes `/swarm`; skill activation alone is not consent.
+The orchestrator merges by root cause and MUST assert every non-skipped axis completed; an authorized agent lost to spawn failure is rerun.
 
 | Hat | Owns | Model |
 |---|---|---|
@@ -58,10 +49,8 @@ every non-skipped axis completed; an authorized agent lost to spawn failure is r
 
 Eighth axis, **mandatory**. Claude-hosted: cross-model, ideally cross-FAMILY, because family diversity catches shared blind spots. Claude authored -> `GPT-5.6-sol: independent` via `/codex`; GPT authored -> the Opus hats already cross families. Native Codex must not recursively invoke `/codex` or auto-spawn: run the adversarial axis inline and record cross-family as unavailable, not completed. Terra may re-check fixes; Sol or Opus owns the initial pass; Luna never reviews. Same-family clean-context is fallback only -- record it.
 
-Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals;
-evidence, severity, priority label, required change, PR-comment-ready text; max 400 words;
-findings must be diff-introduced, user-impacting, actionable. Merge: dedupe by root cause,
-keep highest severity on disagreement, preserve Standards and Spec separately.
+Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals; evidence, severity, priority label, required change, PR-comment-ready text; max 400 words; findings must be diff-introduced, user-impacting, actionable.
+Merge: dedupe by root cause, keep highest severity on disagreement, preserve Standards and Spec separately.
 
 No silent skips: a hat may be skipped only with one-line diff evidence ("no rendered UI in
 diff"), never for time or budget. **Tiered by diff size** -- small PRs do not pay for the full panel:
