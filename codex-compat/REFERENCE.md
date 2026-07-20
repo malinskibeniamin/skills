@@ -178,6 +178,60 @@ Codex supports plugin-bundled hooks when `[features].plugin_hooks = true`. Prefe
 - `continue`, `stopReason`, and `suppressOutput` are not portable for `PreToolUse` in this layer.
 - Move Claude `if` conditions into command scripts because Codex matchers do not inspect tool arguments.
 
+## Trust model, feature flag, and output cap
+
+Codex hooks do NOT run on a fresh install until two gates pass -- a silent
+no-op otherwise:
+
+1. **Feature flag**: `[features] hooks = true` in `~/.codex/config.toml` (or
+   the repo `.codex/config.toml` layer).
+2. **Hash trust**: non-managed command hooks require explicit trust. Run
+   `/hooks` in the Codex TUI to review and trust the definitions (trust is
+   per content hash -- re-trust after every hook config change). Headless/CI:
+   `--dangerously-bypass-hook-trust`, or install via the managed hooks
+   directory (`[hooks] managed_dir`), which bypasses trust and supports
+   `allow_managed_hooks_only = true`.
+
+`scripts/verify-install.sh` warns when `.codex/hooks.json` exists but the
+feature flag is absent from a reachable `config.toml`.
+
+Codex forwards at most ~2,500 tokens (~10KB) of hook output to the model per
+call. `shared/hook-lib.sh` caps every prose emitter at 8,000 chars
+(`_hook_cap_msg`); keep hand-rolled emitters under the same bound --
+`agent-evals/hook-unit-tests-channels.sh` pins this.
+
+Per-call cost note: Claude-side `if`-gated entries (for example
+`snyk-project-create-guard.sh` with `"if": "Bash(snyk *)"`) translate to
+ungated per-call commands on Codex. That is intentional: the scripts
+self-guard on stdin in a few milliseconds, and Codex has no `if` field.
+
+## execpolicy rules -- deterministic floor under the hooks
+
+`hooks/frontend-skills.rules` mirrors the enforce-toolchain deny list as
+Codex execpolicy `prefix_rule` entries (npm/npx/yarn/pnpm/tsgo/eslint/
+prettier/sleep forbidden, `git reset --hard` and `git push --force`
+forbidden, recursive rm prompts). The generator copies it to
+`.codex/rules/frontend-skills.rules` and drift-checks the pair. Rules run in
+the approval pipeline itself -- no feature flag, no trust, no process spawn --
+so the bans hold even where hooks are off. Flag-order variants a prefix
+cannot express stay covered by the hook layer. Test:
+
+```bash
+codex execpolicy check --pretty --rules hooks/frontend-skills.rules -- npm install
+```
+
+## notify adapter -- SessionEnd parity
+
+Codex has no `SessionEnd`. Its `notify` config invokes a command with one
+JSON argument on `agent-turn-complete`. `.claude/hooks/codex-notify.sh`
+appends those turns to `~/.claude/hook-metrics/codex-turns.jsonl` (same feed
+family as Claude's session-end metrics) so `/hook-audit` retros see Codex
+sessions. Wire in `~/.codex/config.toml`:
+
+```toml
+notify = ["bash", "/path/to/repo/.claude/hooks/codex-notify.sh"]
+```
+
 ## Codex limitations: subagent and lifecycle events
 
 Codex does not fully match Claude Code events such as `SubagentStart`, `SubagentStop`, `PostToolBatch`, `FileChanged`, `PreCompact`, `PostCompact`, and `SessionEnd` in this compatibility layer.

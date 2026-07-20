@@ -34,6 +34,11 @@ context=""
 
 _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
 mkdir -p "$_session_dir" 2>/dev/null || true
+
+# A new user prompt ends any consecutive Stop-block streak — reset the
+# budget hook_stop_block tracks against CLAUDE_CODE_STOP_HOOK_BLOCK_CAP.
+rm -f "$_session_dir/stop-block-count" "$_session_dir/stop-block-marker" 2>/dev/null || true
+
 _first_turn_marker="$_session_dir/first-turn-done"
 _is_first_turn=0
 if [ ! -f "$_first_turn_marker" ]; then

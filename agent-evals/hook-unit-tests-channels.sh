@@ -164,6 +164,41 @@ _check "llm-test-flags exits 0" '[ "$_rc" = "0" ]'
 _check "llm-test-flags updatedInput lands on stdout" '_is_json "$_stdout" && printf "%s" "$_stdout" | jq -re ".hookSpecificOutput.updatedInput.command" 2>/dev/null | grep -qv -- "--verbose"'
 _check "llm-test-flags emits nothing to stderr" '[ -z "$_stderr" ]'
 
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ message cap (Codex forwards ~2.5K tokens ≈ 10KB per call) ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_run_lib_call 'hook_warn "$(printf "x%.0s" $(seq 1 20000))" cap-test'
+_check "oversized warn still exits 0" '[ "$_rc" = "0" ]'
+_check "oversized warn is truncated under 9KB" '[ "${#_stdout}" -lt 9216 ]'
+_check "truncation is announced, not silent" 'printf "%s" "$_stdout" | grep -q "truncated: message exceeded"'
+
+_run_lib_call 'hook_block "$(printf "y%.0s" $(seq 1 20000))" cap-test'
+_check "oversized block still exits 2" '[ "$_rc" = "2" ]'
+_check "oversized block reason truncated under 9KB" '[ "${#_stderr}" -lt 9216 ]'
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ Stop tier — block-cap guard + additionalContext channel ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_run_lib_call 'hook_stop_context "advice for the model" ctx-test'
+_check "stop-context exits 0" '[ "$_rc" = "0" ]'
+_check "stop-context additionalContext lands on stdout" '_is_json "$_stdout" && printf "%s" "$_stdout" | jq -re ".hookSpecificOutput.additionalContext" >/dev/null 2>&1'
+_check "stop-context names its event" 'printf "%s" "$_stdout" | jq -re ".hookSpecificOutput.hookEventName" 2>/dev/null | grep -q "^Stop$"'
+
+_run_lib_call 'hook_stop_block "fix this first"'
+_check "stop-block exits 2" '[ "$_rc" = "2" ]'
+_check "stop-block decision lands on stderr" 'printf "%s" "$_stderr" | jq -re ".decision" 2>/dev/null | grep -q "^block$"'
+
+# Spend the consecutive-block budget (cap 8 → guard at 6), next call downgrades.
+echo "999" > "/tmp/hook-session-${CLAUDE_SESSION_ID}/stop-block-count" 2>/dev/null || true
+_run_lib_call 'hook_stop_block "still broken"'
+_check "capped stop-block downgrades to exit 0" '[ "$_rc" = "0" ]'
+_check "capped stop-block message lands on stdout" 'printf "%s" "$_stdout" | jq -re ".systemMessage" 2>/dev/null | grep -q "stop-block cap"'
+rm -f "/tmp/hook-session-${CLAUDE_SESSION_ID}/stop-block-count" "/tmp/hook-session-${CLAUDE_SESSION_ID}/stop-block-marker" 2>/dev/null || true
+
 _teardown_session
 
 # ═══════════════════════════════════════════════════════════════

@@ -29,6 +29,9 @@ _hooks=(
   "llm-test-flags.sh|vitest|playwright|bun (run )?test|jest|--watch"
   "conventional-commits-check.sh|git commit|git.*-m"
   "branch-safety-check.sh|git (commit|push|checkout|switch|worktree|branch)"
+  # snyk stays dispatcher-routed: a standalone `if: "Bash(snyk *)"` entry
+  # missed bunx/npx/env-prefixed invocations and curl calls to api.snyk.io
+  # (PR 72 review). The union below covers every shape the guard accepts.
   "snyk-project-create-guard.sh|snyk"
   "bash-verbose-guard.sh|git commit|gh |rtk|curl|wget|taskw|bun run|--json|--jq"
   "rtk-rewrite.sh|git|gh |cargo|go |bun|vitest|npm|pnpm"

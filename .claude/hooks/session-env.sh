@@ -8,16 +8,21 @@ CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-}"
 # These skills are for React/TypeScript frontend projects.
 # Warn if installed in the wrong directory (backend, Go, root of monorepo).
 
+# A hook's stdout is parsed as ONE JSON object — stacked objects arrive as
+# raw text. Accumulate context lines and emit a single combined payload at
+# the end of this script.
+_ctx=""
+
 # Skip warning in the skills repo itself (hook authoring project, not a frontend app)
 _repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || true)
 if [ ! -f "package.json" ] && [ "$_repo_name" != "skills" ]; then
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."}}'
+  _ctx="WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."
 fi
 
 _is_frontend=1
 if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
   _is_frontend=0
-  echo '{"hookSpecificOutput":{"additionalContext":"WARNING: No React in package.json. Frontend hooks disabled (DISABLE_FRONTEND_HOOKS=1). Skills repo auto-exempt."}}'
+  _ctx="${_ctx:+$_ctx }WARNING: No React in package.json. Frontend hooks disabled (DISABLE_FRONTEND_HOOKS=1). Skills repo auto-exempt."
 fi
 
 # Skip disable flag for skills repo itself (hook authoring, not a frontend app)
@@ -44,7 +49,9 @@ fi
 
 # Clean up stale session directories from previous sessions (safe: /tmp/ only, specific prefix)
 # Clean up stale session directories from both harnesses
-find /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
+# -H: /tmp is a symlink on macOS; plain `find /tmp` never descends it,
+# so this sweep had been a silent no-op on Darwin.
+find -H /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
 
 # ── Session directory for state tracking ──────────────────────────
 # Deterministic fallback when CLAUDE_SESSION_ID/CODEX_SESSION_ID unset:
@@ -102,7 +109,30 @@ if [ -f "$_settings" ] && command -v jq >/dev/null 2>&1; then
   _post_count=$(jq '[.hooks.PostToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
   _stop_count=$(jq '[.hooks.Stop[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
   _pre_count=$(jq '[.hooks.PreToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
-  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[GUARDRAILS] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active. Auto mode safe.\"}}"
+  _ctx="${_ctx:+$_ctx
+}[GUARDRAILS] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active. Auto mode safe."
+fi
+
+# ── Register FileChanged watches for pattern-shaped filenames ─────
+# FileChanged matchers are literal filenames only (no globs). Static names
+# (biome.jsonc, package.json, ...) are matched in settings; dynamic names
+# (*.proto, tsconfig.*.json, vitest.config.*) are discovered here and
+# registered via the SessionStart watchPaths output field. Capped at 200 —
+# the overflow is reported in context, never silently dropped.
+_watch_paths="[]"
+if command -v jq >/dev/null 2>&1; then
+  # watchPaths requires ABSOLUTE paths; discovery is shared with
+  # cwd-changed.sh (which re-registers after /cd) via this helper.
+  _watch_found=$("$(dirname "$0")/discover-watch-paths.sh" "$PWD" 2>/dev/null || true)
+  if [ -n "$_watch_found" ]; then
+    _watch_count=$(printf '%s\n' "$_watch_found" | wc -l | tr -d ' ')
+    if [ "$_watch_count" -gt 200 ]; then
+      _watch_found=$(printf '%s\n' "$_watch_found" | head -200)
+      _ctx="${_ctx:+$_ctx
+}[watch] 200-file FileChanged watch cap hit; some schema/config files unwatched."
+    fi
+    _watch_paths=$(printf '%s\n' "$_watch_found" | jq -R . | jq -s -c .)
+  fi
 fi
 
 # ── Capture typecheck baseline (opt-out, background, no latency) ─
@@ -120,6 +150,18 @@ fi
 # Used by test-perf-stop.sh to detect test performance changes.
 # Full vitest run is heavy (10s–2min depending on suite) — default OFF.
 # Opt in with CAPTURE_TEST_BASELINE=1 for sessions that will edit tests.
+# ── Single combined SessionStart payload ─────────────────────────
+# One JSON object on stdout: additionalContext (accumulated above) +
+# watchPaths (FileChanged registrations). Emitting them separately would
+# reach Claude as raw text, not parsed output.
+if command -v jq >/dev/null 2>&1 && { [ -n "$_ctx" ] || [ "$_watch_paths" != "[]" ]; }; then
+  jq -cn --arg ctx "$_ctx" --argjson wp "$_watch_paths" '
+    {hookSpecificOutput:
+      ({hookEventName: "SessionStart"}
+       | (if $ctx != "" then . + {additionalContext: $ctx} else . end)
+       + (if ($wp | length) > 0 then {watchPaths: $wp} else {} end))}' 2>/dev/null || true
+fi
+
 if [ "${CAPTURE_TEST_BASELINE:-0}" = "1" ]; then
   _vitest_configs=$(find . -maxdepth 1 -name 'vitest.config.*' 2>/dev/null | head -5)
   if [ -n "$_vitest_configs" ] && command -v jq >/dev/null 2>&1; then

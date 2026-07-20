@@ -23,6 +23,9 @@ _check_labels=(
   tanstack-router-gen
   connect-query-check
   aip-proto-check
+  # Go checks stay GLOBAL, not golang-skill frontmatter: they act on *.proto
+  # and e2e/testdata YAML, which never match the skill's *.go/go.mod paths
+  # (PR 72 review) — skill scoping would silently drop coverage.
   go-proto-reserved-check
   go-test-image-pin-check
   ux-copy-check

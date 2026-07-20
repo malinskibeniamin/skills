@@ -400,6 +400,25 @@ if [ -f "${CODEX_ROOT}/.codex/hooks.json" ]; then
   else
     _warn "codex-batch-check.sh missing — Codex Stop hook won't run Edit|Write checks"
   fi
+  # Hooks are gated twice on Codex: the [features] hooks flag AND hash trust.
+  # A missing flag makes every hook a silent no-op — the worst failure mode.
+  _codex_flag_found=0
+  for _cfg in "${CODEX_ROOT}/.codex/config.toml" "$HOME/.codex/config.toml"; do
+    if [ -f "$_cfg" ] && grep -qE '^[[:space:]]*hooks[[:space:]]*=[[:space:]]*true' "$_cfg" 2>/dev/null; then
+      _codex_flag_found=1
+      break
+    fi
+  done
+  if [ "$_codex_flag_found" = "1" ]; then
+    _pass "Codex hooks feature flag enabled in config.toml"
+  else
+    _warn "Codex hooks feature flag not found — set [features] hooks = true in config.toml, then trust definitions via /hooks (hooks silently no-op otherwise)"
+  fi
+  if [ -f "${CODEX_ROOT}/.codex/rules/frontend-skills.rules" ]; then
+    _pass "execpolicy rules installed (.codex/rules/frontend-skills.rules)"
+  else
+    _warn ".codex/rules/frontend-skills.rules missing — toolchain bans have no deterministic floor when Codex hooks are off"
+  fi
 else
   _warn ".codex/hooks.json not found — Codex hooks not configured (install codex-compat skill)"
 fi

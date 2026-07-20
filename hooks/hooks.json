@@ -14,6 +14,17 @@
         ]
       }
     ],
+    "Setup": [
+      {
+        "matcher": "init|maintenance",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/setup-init.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -24,6 +35,16 @@
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/intent-detect.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/skill-fire-log.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -59,19 +80,76 @@
         ]
       }
     ],
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/cwd-changed.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "ConfigChange": [
+      {
+        "matcher": "project_settings",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/config-change-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/task-completed-gate.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/stop-failure-telemetry.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/permission-denied-retry.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|idle_prompt|agent_needs_input|agent_completed",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/notification-alert.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
+      }
+    ],
     "FileChanged": [
       {
-        "matcher": "*.proto|*.graphql|*.graphqls",
         "hooks": [
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/file-changed-schema.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          }
-        ]
-      },
-      {
-        "matcher": "biome.jsonc|biome.json|tsconfig.json|tsconfig.*.json|vitest.config.*",
-        "hooks": [
+          },
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/file-changed-config.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
@@ -203,7 +281,8 @@
           },
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/typecheck-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/typecheck-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0",
+            "statusMessage": "Type-checking session changes"
           },
           {
             "type": "command",
@@ -235,7 +314,10 @@
           },
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/ci-warning-audit.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/ci-warning-audit.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0",
+            "async": true,
+            "asyncRewake": true,
+            "statusMessage": "Auditing green CI logs for warnings"
           },
           {
             "type": "command",

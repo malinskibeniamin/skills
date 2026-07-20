@@ -23,11 +23,15 @@ Codex supports Claude-style lifecycle hooks for `SessionStart`, `SubagentStart`,
    - `PermissionRequest` for `Bash` / MCP / `apply_patch` -> direct where scripts understand Codex payloads
    - Unsupported Claude events or handler types -> omit, document, or route to fallback only when semantics stay safe
 3. Copy `scripts/codex-batch-check.sh` -> `.codex/hooks/` only if fallback hooks are needed. `chmod +x`.
-4. Generate `AGENTS.md` + `CLAUDE.md` from [REFERENCE.md](REFERENCE.md) template.
+4. Copy `hooks/frontend-skills.rules` -> `.codex/rules/` (execpolicy floor; works without the hooks feature flag).
+5. Generate `AGENTS.md` + `CLAUDE.md` from [REFERENCE.md](REFERENCE.md) template.
+6. Enable + trust: set `[features] hooks = true` in `config.toml`, then run `/hooks` in the Codex TUI and trust the definitions (re-trust after every hook change; CI uses `--dangerously-bypass-hook-trust` or the managed hooks dir). Optionally wire `notify = ["bash", "<repo>/.claude/hooks/codex-notify.sh"]` for turn-complete telemetry.
 
 ## Verify
 
 - [ ] `.codex/hooks.json` contains direct `Edit|Write` PostToolUse hooks when source has them
 - [ ] Batch checker is absent unless a real fallback-only hook needs it
+- [ ] `.codex/rules/frontend-skills.rules` present and identical to `hooks/frontend-skills.rules`
+- [ ] Hooks feature flag on + definitions trusted (`/hooks` shows them active, not pending)
 - [ ] `AGENTS.md` + `CLAUDE.md` at repo root
 - [ ] `.claude/settings.json` unchanged

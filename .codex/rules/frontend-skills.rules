@@ -1,0 +1,91 @@
+# Codex execpolicy rules — deterministic enforcement floor for the toolchain
+# bans that .claude/hooks/enforce-toolchain.sh teaches at hook time.
+#
+# Why both layers exist: command hooks are the teaching layer (rich messages,
+# rewrite suggestions) but require the Codex hooks feature flag AND hash
+# trust; execpolicy rules run in the approval pipeline itself, with neither.
+# Keep the two in sync — when a ban is added to enforce-toolchain.sh, mirror
+# it here (scripts/generate-hook-configs.sh --check flags drift against the
+# .codex/rules/ copy).
+#
+# prefix_rule matches an argv PREFIX, so flag-order variants a prefix cannot
+# express (e.g. `git push origin --force`) stay covered by the hook layer
+# only. Test: codex execpolicy check --pretty --rules hooks/frontend-skills.rules -- npm install
+
+prefix_rule(
+    pattern = ["npm"],
+    decision = "forbidden",
+    justification = "npm is banned in this stack. Use bun (bun install, bun run <script>).",
+)
+
+prefix_rule(
+    pattern = ["npx"],
+    decision = "forbidden",
+    justification = "npx is banned in this stack. Use bunx.",
+)
+
+prefix_rule(
+    pattern = ["yarn"],
+    decision = "forbidden",
+    justification = "yarn is banned in this stack. Use bun.",
+)
+
+prefix_rule(
+    pattern = ["pnpm"],
+    decision = "forbidden",
+    justification = "pnpm is banned in this stack. Use bun.",
+)
+
+prefix_rule(
+    pattern = ["tsgo"],
+    decision = "forbidden",
+    justification = "tsgo is banned. TypeScript 7 ships the Go compiler as tsc — use tsc.",
+)
+
+prefix_rule(
+    pattern = ["eslint"],
+    decision = "forbidden",
+    justification = "eslint is banned. Use Biome: bun run lint.",
+)
+
+prefix_rule(
+    pattern = ["prettier"],
+    decision = "forbidden",
+    justification = "prettier is banned. Use Biome: bun run lint:fix.",
+)
+
+prefix_rule(
+    pattern = ["sleep"],
+    decision = "forbidden",
+    justification = "sleep is banned — never poll. Use background execution with streamed output, or gh pr checks --watch for CI.",
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "git reset --hard is blocked. Use git stash or git reset --soft.",
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "forbidden",
+    justification = "git push --force is blocked. Use --force-with-lease.",
+)
+
+prefix_rule(
+    pattern = ["git", "push", "-f"],
+    decision = "forbidden",
+    justification = "git push -f is blocked. Use --force-with-lease.",
+)
+
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "prompt",
+    justification = "Recursive delete needs review. Safe targets: node_modules dist .next build .cache .turbo coverage.",
+)
+
+prefix_rule(
+    pattern = ["rm", "-r"],
+    decision = "prompt",
+    justification = "Recursive delete needs review. Safe targets: node_modules dist .next build .cache .turbo coverage.",
+)

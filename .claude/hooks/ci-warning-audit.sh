@@ -94,4 +94,7 @@ Fetch full: gh run view ${run_id} --log | grep -E 'Warning|Deprecation|Unhandled
 Fix at source. Green is not the bar — zero warnings is."
 
 _hook_log_entry "block" "ci-warnings" ci-warning-audit
-hook_stop_block "$_msg"
+# This hook runs with asyncRewake: exit 2 wakes Claude and stderr is shown
+# verbatim as a system reminder — plain text, not Stop-decision JSON.
+printf '%s\n' "$_msg" >&2
+exit 2
