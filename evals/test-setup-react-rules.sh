@@ -3,6 +3,7 @@
 SCRIPT="$REPO_ROOT/.claude/hooks/react-rules-check.sh"
 SCRIPT_LIB="$REPO_ROOT/.claude/hooks/checks/react-rules-check.lib.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-rules"
+STARTER_SCRIPT="$SKILL_DIR/scripts/react-rules-check.sh"
 
 # Specialized hooks for rules that moved out of react-rules-check.sh:
 AS_CAST_SCRIPT="$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh"
@@ -17,18 +18,30 @@ PERF_CHECK_LIB="$REPO_ROOT/.claude/hooks/checks/test-convention-check.lib.sh"
 run_file_eval "$SKILL_DIR/README.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_executable_eval "$SCRIPT" "react-rules-check.sh is executable"
+run_executable_eval "$STARTER_SCRIPT" "starter react-rules-check.sh is executable"
 
 # ── SKILL.md content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/README.md" "REACT_RULES_BAN_USEEFFECT" "SKILL.md documents useEffect opt-in env var"
 run_content_eval "$SKILL_DIR/README.md" "components/ui" "SKILL.md mentions components/ui"
 run_content_eval "$SKILL_DIR/README.md" "as any" "SKILL.md mentions as any ban"
+run_content_eval "$SKILL_DIR/README.md" "className.*cn.*clsx" "SKILL.md documents className composition rule"
 
 # ── Hook: skip non-Edit/Write ───────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"echo"}}' \
   0 "skip: Bash tool"
+
+_starter_tmpdir=$(mktemp -d /tmp/starter-react-rules-evals-XXXXXX)
+_starter_file="$_starter_tmpdir/test.tsx"
+echo 'const X = () => <div className={`base ${active ? "block" : "hidden"}`} />;' > "$_starter_file"
+
+run_hook_eval "$STARTER_SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_starter_file\"}}" \
+  2 "block: starter hook rejects interpolated className" "cn(...) or clsx(...)"
+
+rm -rf "$_starter_tmpdir"
 
 # ── Hook: skip component library directories ─────────────────────
 

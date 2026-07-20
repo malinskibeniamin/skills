@@ -11,7 +11,7 @@ PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 
 **Performance**: ban barrel imports (use direct paths), ban missing `{ passive: true }` on scroll/touch/wheel, ban static import of heavy deps (chart.js/d3/three.js/pdf-lib -- use `React.lazy()`)
 
-**Styling**: ban raw hex/rgb in className (use design tokens), ban `!important`, ban `outline: none` (use focus-visible), ban visual overrides on registry components (use variant prop)
+**Styling**: ban raw hex/rgb in className (use design tokens), ban interpolated className templates (use `cn` or `clsx`), ban `!important`, ban `outline: none` (use focus-visible), ban visual overrides on registry components (use variant prop)
 
 **Motion craft**: warn on `transition-all`, `scale(0)` entries, layout property animation, bounce loops, `ease-in` UI entries, and durations beyond the usual 300ms threshold. Prefer transform/opacity, specific transition properties, short ease-out feedback, reduced-motion coverage, and origin-aware popovers/drawers.
 

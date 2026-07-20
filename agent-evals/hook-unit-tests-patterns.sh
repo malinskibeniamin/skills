@@ -10,7 +10,7 @@ echo "╚═══════════════════════�
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ react-rules-check.sh (38 checks) ━━━"
+echo "━━━ react-rules-check.sh (39 checks) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -64,6 +64,50 @@ _setup_test_file "$_f" 'const X = () => (
 );'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "commented sizes=auto passes"
+_cleanup_test_file "$_f"
+
+echo "  Check 2c — interpolated className without cn/clsx (block):"
+_setup_test_file "$_f" 'const X = () => <div className={`base ${active ? "text-foreground" : "text-muted-foreground"}`} />;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "interpolated className without cn/clsx blocked"
+_assert_stderr_contains "cn|clsx" "suggests cn or clsx"
+_cleanup_test_file "$_f"
+
+_setup_test_file "$_f" 'const X = () => (
+  <div
+    className={`base ${
+      active ? "text-foreground" : "text-muted-foreground"
+    }`}
+  />
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "multiline interpolated className blocked"
+_cleanup_test_file "$_f"
+
+_setup_test_file "$_f" 'const X = () => <div className={cn("base", active ? "block" : "hidden")} />;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "className composed with cn passes"
+_cleanup_test_file "$_f"
+
+_setup_test_file "$_f" 'const X = () => <div className={clsx("base", active && "block")} />;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "className composed with clsx passes"
+_cleanup_test_file "$_f"
+
+_setup_test_file "$_f" 'const X = () => <div className={`base text-foreground`} />;'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "static className template passes"
+_cleanup_test_file "$_f"
+
+_setup_test_file "$_f" 'const X = () => (
+  <div>
+    {/*
+      className={`old ${active ? "block" : "hidden"}`}
+    */}
+  </div>
+);'
+_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "commented interpolated className passes"
 _cleanup_test_file "$_f"
 
 echo "  Check 6 — onClick+navigate (block):"

@@ -83,6 +83,19 @@ case "$file_path" in
     ;;
 esac
 
+# ── Check 2c: Compose dynamic className values with cn/clsx ──────
+
+case "$file_path" in
+  *.tsx|*.jsx|*.mdx)
+    if printf '%s' "$_react_joined_added" | grep -qE 'className[[:space:]]*=[[:space:]]*[{][[:space:]]*`[^`]*[$][{]'; then
+      _react_classname_code=$(printf '%s\n' "$added_lines" | perl -0pe 's{/\*.*?\*/}{}gs' | grep -vE '^[[:space:]]*[+]?[[:space:]]*//' | tr '\n' ' ' || true)
+      if printf '%s' "$_react_classname_code" | grep -qE 'className[[:space:]]*=[[:space:]]*[{][[:space:]]*`[^`]*[$][{]'; then
+        hook_block_strict 'Do not interpolate className template literals. Compose classes with cn(...) or clsx(...).'
+      fi
+    fi
+    ;;
+esac
+
 # ── Check 3+4: (moved to ts-no-escape-hatches-check.sh — as any, @ts-ignore,
 #     @ts-expect-error, and all type assertions. Single owner for cast bans.) ──
 
