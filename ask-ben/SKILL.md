@@ -13,7 +13,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 |---|---|
 | `/accessibility` | React accessibility patterns -- ARIA labels, keyboard handlers, widget attributes, nested-pressable fixes,... |
 | `/agent-watchdog` | Use when asked to watch, audit, compare, or fix another agent's work from a Codex/Claude session, transcrip... |
-| `/aip` | Designs Google AIP-style protobuf resource APIs. |
+| `/aip` | Designs/reviews APIs against applicable Google AIPs 1-236. |
 | `/ask-ben` | Router for Ben's frontend-skills harness and every local skill. |
 | `/codebase-design` | Shared vocabulary for designing deep modules. |
 | `/codex-compat` | Generate Codex hooks.json and AGENTS.md parity surfaces from the Claude hook manifest. |
