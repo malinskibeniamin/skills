@@ -18,10 +18,55 @@ run_content_eval "$SKILL" "api-linter" \
   "aip skill uses api-linter when available"
 run_content_eval "$SKILL" "openapi" \
   "aip skill auto-loads for OpenAPI schemas"
+run_content_eval "$SKILL" "applicable-row URLs.*research trace.*fetch every gap" \
+  "aip skill reconciles every applicable source with the research trace"
+run_content_eval "$SKILL" "AIP-127 and AIP-130 for HTTP-transcoded resource methods" \
+  "aip skill keeps cross-cutting method conventions applicable"
+run_content_eval "$SKILL" "oneof expiration.*Duration ttl.*INPUT_ONLY" \
+  "aip skill preserves relative expiration capability"
+run_content_eval "$SKILL" "expire_time.*must not be.*OUTPUT_ONLY" \
+  "aip skill keeps exact expiration input-capable"
+run_content_eval "$SKILL" "request.*name.*resource_reference\.type.*List/Create.*parent.*resource_reference\.child_type" \
+  "aip skill wires request resource references in the correct direction"
 run_content_eval "$REFERENCE" 'AIP-134 requires an `update_mask` field but specifies it as optional' \
   "aip reference preserves AIP-134 optional update-mask semantics"
 run_content_eval "$REFERENCE" 'string etag = 3;' \
   "aip reference leaves resource etag without field behavior"
+
+AGENT_EVAL_DIR="$REPO_ROOT/agent-evals/evals/aip-design-review"
+AGENT_EXPERIMENT="$REPO_ROOT/agent-evals/experiments/aip.ts"
+run_file_eval "$AGENT_EVAL_DIR/PROMPT.md" "aip adversarial agent prompt exists"
+run_file_eval "$AGENT_EVAL_DIR/candidate.proto" "aip adversarial proto exists"
+run_file_eval "$AGENT_EVAL_DIR/EVAL.ts" "aip behavioral oracle exists"
+run_executable_eval "$AGENT_EVAL_DIR/tools/api-linter" \
+  "aip adversarial linter fixture is executable"
+run_file_eval "$AGENT_EXPERIMENT" "aip agent experiment exists"
+run_content_eval "$AGENT_EXPERIMENT" 'evals: \["aip-design-review"\]' \
+  "aip experiment targets only the adversarial review"
+run_content_eval "$AGENT_EXPERIMENT" 'runs: 3' \
+  "aip experiment repeats the behavioral scenario"
+run_content_eval "$AGENT_EXPERIMENT" 'earlyExit: false' \
+  "aip experiment records every repeat"
+run_content_eval "$AGENT_EXPERIMENT" 'timeout: 900' \
+  "aip experiment allows a full official-source audit"
+run_content_eval "$AGENT_EXPERIMENT" '\.claude/skills/aip/SKILL\.md' \
+  "aip experiment injects the canonical skill"
+run_content_eval "$AGENT_EXPERIMENT" '\.claude/skills/aip/REFERENCE\.md' \
+  "aip experiment injects the canonical reference"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" 'AIP-\$\{aip\}|AIP-' \
+  "aip oracle requires per-AIP evidence"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" 'accounts for all 72 published General AIPs' \
+  "aip oracle verifies full-catalog behavioral coverage"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" '162, 182' \
+  "aip oracle protects advisory lifecycle states"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" 'consults every reported applicable official AIP page' \
+  "aip oracle verifies official-page consultation"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" 'IDENTIFIER' \
+  "aip oracle verifies resource identity"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" 'update_mask' \
+  "aip oracle verifies current update-mask semantics"
+run_content_eval "$AGENT_EVAL_DIR/EVAL.ts" 'api-linter' \
+  "aip oracle verifies linter execution"
 
 if _aip_reference_error=$(python3 - "$REFERENCE" 2>&1 <<'PY'
 from pathlib import Path
