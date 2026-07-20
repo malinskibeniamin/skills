@@ -11,8 +11,9 @@ trap 'exit 0' ERR
 #      package.json. Refresh via CLAUDE_ENV_FILE (preambles later Bash).
 
 input=$(cat 2>/dev/null || echo '{}')
-new_cwd=$(echo "$input" | jq -r '.cwd // empty' 2>/dev/null)
+new_cwd=$(echo "$input" | jq -r '.new_cwd // .cwd // empty' 2>/dev/null)
 [ -n "$new_cwd" ] && [ -d "$new_cwd" ] || exit 0
+_hook_dir="$(cd "$(dirname "$0")" && pwd)"
 cd "$new_cwd" 2>/dev/null || exit 0
 
 _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
@@ -30,6 +31,18 @@ if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
     echo "export DISABLE_FRONTEND_HOOKS=1" >> "$CLAUDE_ENV_FILE"
   else
     echo "unset DISABLE_FRONTEND_HOOKS" >> "$CLAUDE_ENV_FILE"
+  fi
+fi
+
+# ── Re-register FileChanged watches under the NEW root ────────────
+# SessionStart watchPaths were absolute under the old PWD; without this,
+# schema/config edits in the new tree are never seen. Same bounded
+# discovery as session-env.sh via the shared helper.
+if command -v jq >/dev/null 2>&1; then
+  _watch_found=$("$_hook_dir/discover-watch-paths.sh" "$new_cwd" 2>/dev/null | head -200)
+  if [ -n "$_watch_found" ]; then
+    printf '%s\n' "$_watch_found" | jq -R . | jq -s -c \
+      '{hookSpecificOutput: {hookEventName: "CwdChanged", watchPaths: .}}'
   fi
 fi
 

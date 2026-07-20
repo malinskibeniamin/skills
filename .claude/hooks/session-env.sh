@@ -49,7 +49,9 @@ fi
 
 # Clean up stale session directories from previous sessions (safe: /tmp/ only, specific prefix)
 # Clean up stale session directories from both harnesses
-find /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
+# -H: /tmp is a symlink on macOS; plain `find /tmp` never descends it,
+# so this sweep had been a silent no-op on Darwin.
+find -H /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
 
 # ── Session directory for state tracking ──────────────────────────
 # Deterministic fallback when CLAUDE_SESSION_ID/CODEX_SESSION_ID unset:
@@ -119,13 +121,9 @@ fi
 # the overflow is reported in context, never silently dropped.
 _watch_paths="[]"
 if command -v jq >/dev/null 2>&1; then
-  # watchPaths requires ABSOLUTE paths; include the static config names too
-  # so their FileChanged routing no longer depends on matcher-side watches.
-  _watch_found=$(find "$PWD" -maxdepth 4 \
-    \( -name '*.proto' -o -name '*.graphql' -o -name '*.graphqls' \
-       -o -name 'tsconfig.*.json' -o -name 'vitest.config.*' \
-       -o -name 'biome.json' -o -name 'biome.jsonc' -o -name 'tsconfig.json' \) \
-    -not -path '*/node_modules/*' -not -path '*/.git/*' 2>/dev/null | head -201)
+  # watchPaths requires ABSOLUTE paths; discovery is shared with
+  # cwd-changed.sh (which re-registers after /cd) via this helper.
+  _watch_found=$("$(dirname "$0")/discover-watch-paths.sh" "$PWD" 2>/dev/null || true)
   if [ -n "$_watch_found" ]; then
     _watch_count=$(printf '%s\n' "$_watch_found" | wc -l | tr -d ' ')
     if [ "$_watch_count" -gt 200 ]; then
