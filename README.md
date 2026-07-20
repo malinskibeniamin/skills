@@ -277,11 +277,13 @@ Two layers testing prevent regressions:
 ./evals/run.sh
 ```
 
-**Agent-level evals** -- 14 behavioral tests using [@vercel/agent-eval](https://github.com/vercel-labs/agent-eval) verify Claude Code actually follow rules when given adversarial prompts. Runs in Docker sandbox:
+**Agent-level evals** -- behavioral tests using [@vercel/agent-eval](https://github.com/vercel-labs/agent-eval) verify Claude Code actually follows rules when given adversarial prompts. Runs in Docker sandbox:
 
 ```
 cd agent-evals && bun install --yarn && npx @vercel/agent-eval
 ```
+
+Run only the adversarial AIP design review with `npx @vercel/agent-eval aip`.
 
 ## Credits and provenance
 
