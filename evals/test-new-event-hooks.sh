@@ -336,7 +336,9 @@ else
 fi
 # Integration: a *.proto edit reaches the proto check with NO skill invoked
 _go_fix=$(mktemp -d)
-(cd "$_go_fix" && git init -q . && git commit -q --allow-empty -m init)
+(cd "$_go_fix" && git init -q . \
+  && git config user.email eval@example.com && git config user.name Eval \
+  && git commit -q --allow-empty -m init)
 cat > "$_go_fix/api.proto" <<'PROTO'
 syntax = "proto3";
 message Thing {
