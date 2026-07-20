@@ -27,6 +27,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/e2e-testing` | Playwright + Testcontainers + axe-core E2E patterns for forms, tables, and workflows. |
 | `/efficient-frontier` | Use when a frontier model (Fable, Opus, GPT-5.6) should delegate bounded research, coding, testing, or log... |
 | `/extend-harness` | Extend the frontend-skills hook harness: add rules, tune severity tiers, view analytics, debug non-firing h... |
+| `/frontend-invariants` | The timeless frontend invariants -- principles that survived seven full stack migrations. |
 | `/frontend-starter-kit` | Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from l... |
 | `/go` | Ship what built. |
 | `/golang-review` | Evidence-backed Go review for bounds, APIs, concurrency, errors, security, tests, rollout, and controllers. |
@@ -52,6 +53,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/setup-atlassian-workflow` | Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs. |
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
 | `/snyk-ux-security` | Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage and release-age... |
+| `/stack-registry` | Governance for stack-tagged rules -- the current frontend stack, the banned ones, and wholesale rule retire... |
 | `/stay-within-limits` | Use when long-running or parallel agent work must respect 5-hour and weekly usage limits by checking usage... |
 | `/steelman` | Argue the strongest evidence-backed case against a premise. |
 | `/swarm` | Parallel executor for independent bulk work across worktree lanes. |

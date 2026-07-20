@@ -101,7 +101,7 @@ if echo "$added_lines" | grep -qE '\bnew URLSearchParams\b|searchParams\.(get|se
     _is_client_file=true
   fi
   if [ "$_is_client_file" = true ]; then
-    hook_block "No URLSearchParams in client code. Use TanStack Router validateSearch+zod or nuqs."
+    hook_block "No URLSearchParams in client code. Use TanStack Router validateSearch+zod and Route.useSearch()."
   fi
 fi
 
@@ -334,6 +334,18 @@ if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]
       esac
       ;;
   esac
+fi
+
+# ── Check: clamp URL-sourced pagination indices ───────────────────
+# A stale/oversized ?page= fed straight into table state renders an
+# empty table ("no results" lie). Clamp against data length.
+
+if echo "$added_lines" | grep -qE 'page(Index)?\s*:\s*(search|searchParams|params)\.' ; then
+  if ! echo "$file_content" | grep -qE 'Math\.(min|max)|clamp|pageCount'; then
+    if ! hook_has_escape "clamp-page-index"; then
+      hook_warn "URL-sourced page index fed into table state without clamping — a stale ?page=999 renders an empty table even when data exists. Clamp against page count. Escape: // allow: clamp-page-index [reason]" "clamp-page-index"
+    fi
+  fi
 fi
 
 return 0

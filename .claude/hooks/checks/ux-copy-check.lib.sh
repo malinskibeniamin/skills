@@ -238,5 +238,37 @@ if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(no da
   hook_warn "empty state: explain why it is empty and offer the next action. Dead-end copy stalls the task." "ux-copy-empty-state"
 fi
 
+# ── Check 31: uninterpolated template placeholder in a plain string ──
+# '${name}' inside single/double quotes renders the literal ${name} to
+# the user. Almost always a missing backtick.
+
+case "$file_path" in
+  *.ts|*.tsx)
+    if echo "$added_lines" | grep -qE "'[^']*\\\$\{[^}]+\}[^']*'|\"[^\"]*\\\$\{[^}]+\}[^\"]*\""; then
+      # Exclude shell/YAML/regex-looking lines (heredocs, env templates, sed)
+      if ! echo "$added_lines" | grep -E "\\\$\{[^}]+\}" | grep -qE 'process\.env|envsubst|sed |bash|sh -c|\\\$\{\{'; then
+        if ! hook_has_escape "template-literal"; then
+          hook_block "\${...} inside a plain-quoted string — the user sees the literal placeholder. Use backticks for interpolation. Escape: // allow: template-literal [reason]"
+        fi
+      fi
+    fi
+    ;;
+esac
+
+# ── Check 32: copy-paste command purity ──────────────────────────
+# A code block whose template mixes a command with its sample output
+# makes the copy button paste the output into the user's shell.
+
+case "$file_path" in
+  *.tsx)
+    if echo "$added_lines" | grep -qE 'code=\{`[^`]*\\n\\n' || \
+       echo "$added_lines" | grep -qE 'code=\{\s*\[[^]]*(output|response|result)' ; then
+      if ! hook_has_escape "copy-purity"; then
+        hook_warn "Code block appears to bundle a command with its sample output — the copy button will paste the output into the user's shell. Split command and output into separate blocks. Escape: // allow: copy-purity [reason]" "copy-purity"
+      fi
+    fi
+    ;;
+esac
+
 return 0
 }

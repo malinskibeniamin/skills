@@ -212,5 +212,41 @@ case "$file_path" in
     ;;
 esac
 
+# ── e2e discipline pack (spec files only) ─────────────────────────
+case "$file_path" in
+  *.spec.ts|*.spec.tsx)
+    # force-clicks paper over obstructed elements — the obstruction is the bug.
+    if echo "$added_lines" | grep -qE 'force\s*:\s*true'; then
+      if ! hook_has_escape "force-click"; then
+        hook_warn "force:true click — if the element needs forcing, something obstructs it and users hit the same wall. Fix the obstruction or wait for the right state. Escape: // allow: force-click [reason]" "e2e-force-click"
+      fi
+    fi
+    # expect.soft inside toPass polls nothing — soft failures never retry the block.
+    if echo "$added_lines" | grep -qE 'expect\.soft\(' && echo "$file_content" | grep -qE '\.toPass\('; then
+      hook_warn "expect.soft inside a toPass block is a silent no-op wait — soft failures do not fail the retry block. Use hard expect inside toPass." "e2e-soft-topass"
+    fi
+    # Version-pinned RPC route matchers break on API version bumps.
+    if echo "$added_lines" | grep -qE 'route\([^)]*v1(alpha|beta)[0-9]*'; then
+      hook_warn "page.route matcher pins the RPC version (v1alpha/v1beta) — the spec breaks on the next version bump. Match on Service/Method only." "e2e-versioned-route"
+    fi
+    ;;
+esac
+
+# ── Check: proto fixture version must match the component under test ──
+# A v1beta2 fixture cast into a v1-typed prop passes type-check but tests
+# the wrong shape — invisible to CI until production.
+
+case "$file_path" in
+  *.test.ts|*.test.tsx)
+    _pb_versions=$(echo "$file_content" | grep -oE "from\s+['\"][^'\"]*/(v1(alpha|beta)?[0-9]*)/[^'\"]*_pb" | grep -oE 'v1(alpha|beta)?[0-9]*' | sort -u || true)
+    _pb_version_count=$(printf '%s\n' "$_pb_versions" | grep -c . || true)
+    if [ "${_pb_version_count:-0}" -gt 1 ]; then
+      if ! hook_has_escape "fixture-proto-version"; then
+        hook_warn "Test imports _pb types from multiple API versions ($(echo "$_pb_versions" | tr '\n' ' ')). Fixtures must use the SAME proto version as the component under test — mixed versions test the wrong shape and CI can't see it. Escape: // allow: fixture-proto-version [reason]" "fixture-proto-version"
+      fi
+    fi
+    ;;
+esac
+
 return 0
 }

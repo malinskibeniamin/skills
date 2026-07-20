@@ -284,6 +284,26 @@ if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)
   hook_block "Functional components only. Class components incompatible with React Compiler."
 fi
 
+# ── Check 18b: Ban dead-stack imports (see /stack-registry) ───────
+# Unbanned dead stacks get resurrected by LLM authors. Chakra and
+# react-router-dom are banned elsewhere; this owns the rest.
+
+if echo "$added_lines" | grep -qE "from\s+['\"](mobx|mobx-react|mobx-react-lite)['\"/]"; then
+  hook_block "MobX is a banned dead stack. Client state: zustand (create<T>()(), useShallow); server state: connect-query."
+fi
+if echo "$added_lines" | grep -qE "from\s+['\"](react-intl)['\"/]|<FormattedMessage\b"; then
+  hook_block "react-intl/FormattedMessage is a banned dead stack. Use plain strings (docs-editor reviewed); no i18n dictionary machinery."
+fi
+if echo "$added_lines" | grep -qE "from\s+['\"](formik)['\"/]"; then
+  hook_block "Formik is a banned dead stack. Use react-hook-form (mode: onChange) with proto-driven or zod resolvers."
+fi
+if echo "$added_lines" | grep -qE "from\s+['\"](yup)['\"/]"; then
+  hook_block "Yup is a banned dead stack. Validation: protovalidate for proto-backed forms, zod for route search schemas. Keep the lesson: validate format, not presence."
+fi
+if echo "$added_lines" | grep -qE "from\s+['\"]nuqs['\"/]"; then
+  hook_block "nuqs is banned — the router owns search-param typing. Use TanStack validateSearch + Route.useSearch()."
+fi
+
 # ── Check 19: Ban barrel imports (re-exports from index files) ────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]\.\.?/[^'\"]*['\"]" && \
@@ -426,28 +446,81 @@ esac
 
 fi
 
-# ── absorbed from disabled-button-tooltip-check.sh (4.28 family consolidation) ──
-# ── Check: disabled Button without wrapping Tooltip ──────────────
-# A11y: disabled buttons should explain why via tooltip.
-# Pattern: <Button disabled> without surrounding <Tooltip>.
+# ── Check: submit-button contract — never native disabled on validity ──
+# Validity-disabled submits hide WHY the form won't submit and are invisible
+# to screen readers. Keep submit clickable and surface errors via a form
+# error summary, or soft-disable with aria-disabled + tooltip. Native
+# disabled is only legitimate for in-flight state (isPending/isSubmitting).
 
 case "$file_path" in
   *.tsx)
-    _disabled_tooltip_test_file=false
+    _submit_test_file=false
     case "$file_path" in
-      *.test.*|*.spec.*|*/__tests__/*) _disabled_tooltip_test_file=true ;;
+      *.test.*|*.spec.*|*/__tests__/*) _submit_test_file=true ;;
     esac
-    if [ "$_disabled_tooltip_test_file" = false ]; then
-      if echo "$added_lines" | grep -qE '<Button[^>]*disabled'; then
-        # Check if there's a Tooltip wrapper nearby in the file
-        file_content=$(cat "$file_path")
-        # Simple heuristic: if file has Tooltip import and disabled Button,
-        # assume it's handled. If no Tooltip import, warn.
-        if ! echo "$file_content" | grep -qE "Tooltip|TooltipTrigger|TooltipProvider"; then
-          if ! hook_has_escape "disabled-tooltip"; then
-            hook_warn "Disabled <Button> without Tooltip. Add tooltip explaining why button is disabled (a11y). Escape: // allow: disabled-tooltip [reason]" "disabled-button-tooltip"
+    if [ "$_submit_test_file" = false ]; then
+      if echo "$added_lines" | grep -qE 'type="submit"[^>]*\bdisabled=\{|disabled=\{[^}]*\}[^>]*type="submit"'; then
+        _submit_disabled_expr=$(echo "$added_lines" | grep -oE 'disabled=\{[^}]*\}' | head -1)
+        if ! echo "$_submit_disabled_expr" | grep -qE 'isPending|isSubmitting|isLoading|isMutating'; then
+          if ! hook_has_escape "submit-disabled"; then
+            hook_block "Never native-disable submit on validity (disabled={!isValid} hides why). Keep it clickable + render a form error summary, or use aria-disabled + Tooltip. Native disabled is for in-flight state only (isPending/isSubmitting). Escape: // allow: submit-disabled [reason]"
           fi
         fi
+      fi
+
+      # Non-submit disabled Button: prefer a reason the user can perceive.
+      if echo "$added_lines" | grep -qE '<Button[^>]*\bdisabled\b' && \
+         ! echo "$added_lines" | grep -qE 'type="submit"'; then
+        file_content=$(cat "$file_path")
+        if ! echo "$file_content" | grep -qE "Tooltip|TooltipTrigger|TooltipProvider|disabledReason|aria-disabled"; then
+          if ! hook_has_escape "disabled-tooltip"; then
+            hook_warn "Disabled <Button> without a perceivable reason. Prefer a disabledReason prop / wrapping Tooltip / aria-disabled explaining why (a11y). Escape: // allow: disabled-tooltip [reason]" "disabled-button-tooltip"
+          fi
+        fi
+      fi
+    fi
+    ;;
+esac
+
+# ── Check: no component/type definitions inside a component body ──
+# Components defined in render remount every parent render (state loss,
+# focus loss); types declared in render are noise. Hoist to module scope.
+
+case "$file_path" in
+  *.tsx)
+    if [ "${_submit_test_file:-false}" = false ]; then
+      _render_defs=$(echo "$added_lines" | grep -E '^\s{2,}(const\s+[A-Z][A-Za-z0-9]*\s*=\s*(\([^)]*\)|[A-Za-z0-9_,{}\s]*)\s*=>\s*(\(|<)|(type|interface)\s+[A-Z][A-Za-z0-9]*\s*[={])' || true)
+      if [ -n "$_render_defs" ]; then
+        if ! hook_has_escape "def-in-render"; then
+          hook_warn "Component/type defined inside a component body — remounts on every render (state/focus loss). Hoist to module scope or its own file. Escape: // allow: def-in-render [reason]" "def-in-render"
+        fi
+      fi
+    fi
+    ;;
+esac
+
+# ── Check: numeric display truthiness — 0 renders as the empty fallback ──
+# `value ? value : '-'` (or && chains) hides legitimate zeros ("quota set
+# to 0 renders as No limit"). Numeric display fallbacks must use == null.
+
+if echo "$added_lines" | grep -qE "\{[a-zA-Z0-9_.?]*\b(count|total|size|bytes|rate|limit|quota|balance|amount|lag|usage|price|cost)[a-zA-Z0-9_.?]*\s*\?\s*[^:]+:\s*['\"\`<]" ; then
+  if ! echo "$added_lines" | grep -qE '==\s*null|!=\s*null|isFinite|Number\.isNaN'; then
+    if ! hook_has_escape "numeric-truthiness"; then
+      hook_warn "Numeric display uses truthiness — 0 will render the fallback (a real 0 becomes 'not configured'). Use value == null ? fallback : value. Escape: // allow: numeric-truthiness [reason]" "numeric-truthiness"
+    fi
+  fi
+fi
+
+# ── Check: no new barrel files under components/ ──────────────────
+# index.ts re-export barrels defeat code splitting and tree shaking;
+# the convention is direct imports from source files.
+
+case "$file_path" in
+  */components/*/index.ts|*/components/*/index.tsx|*/components/index.ts|*/components/index.tsx)
+    if echo "$added_lines" | grep -qE '^\s*export\s+(\*|\{)' && \
+       ! echo "$added_lines" | grep -qE 'export\s+(default|const|function|type|interface|class)\b'; then
+      if ! hook_has_escape "barrel-file"; then
+        hook_block "New barrel file under components/ — re-export barrels defeat code splitting and make imports ambiguous. Import from source files directly. Escape: // allow: barrel-file [reason]"
       fi
     fi
     ;;

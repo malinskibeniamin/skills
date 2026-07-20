@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
 import { useQuery } from '@connectrpc/connect-query';
-import { listTopics } from '@/gen/topic-TopicService_connectquery';
+import { listResources } from '@/gen/resource-ResourceService_connectquery';
 
-const TOPIC_LIST_STALE_TIME_MS = 30_000;
+const RESOURCE_LIST_STALE_TIME_MS = 30_000;
 
-export function useTopicList(clusterId: string) {
+export function useResourceList(projectId: string) {
   const { data, isLoading, error } = useQuery(
-    listTopics,
-    { clusterId },
-    { staleTime: TOPIC_LIST_STALE_TIME_MS },
+    listResources,
+    { projectId },
+    { staleTime: RESOURCE_LIST_STALE_TIME_MS },
   );
 
   useEffect(function syncDocumentTitle() {
-    if (data?.topics.length) {
-      document.title = `Topics (${data.topics.length})`;
+    if (data?.resources.length) {
+      document.title = `Resources (${data.resources.length})`;
     }
-  }, [data?.topics.length]);
+  }, [data?.resources.length]);
 
-  return { topics: data?.topics ?? [], isLoading, error };
+  return { resources: data?.resources ?? [], isLoading, error };
 }

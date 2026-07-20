@@ -15,7 +15,7 @@ Run `/read-the-damn-docs` before pinning current TanStack Router, Router Query, 
 - Warn `window.location.reload()` -- suggest `router.invalidate()`
 - Ban `strict: false` in router hooks
 - Ban untyped `useParams()`/`useSearch()`/`useLoaderData()`/`useRouteContext()` missing `{ from }`
-- Ban `URLSearchParams` -- suggest nuqs
+- Ban `URLSearchParams` -- use `validateSearch`+zod (nuqs is banned)
 - Warn exported components from route files (break code splitting)
 - Require `validateSearch` when `useSearch` in route files; `.page.tsx` may resolve it from sibling route file
 - Warn tested route pages using `routeApi.useSearch({ select })`; prefer `useSearch({ from, select })`
@@ -83,15 +83,28 @@ if ! echo "$file_path" | grep -qE '/pages/'; then     # pages-based
 if ! echo "$file_path" | grep -qE '/app/routes/'; then # nested
 ```
 
-## Type-Safe Search Params with nuqs
+## Type-Safe Search Params (native `validateSearch` -- no nuqs)
+
+The router owns search-param typing; a wrapper library duplicates it and dies at the next migration (nuqs was adopted, then deleted, for exactly this reason).
 
 ```tsx
-import { useQueryState, parseAsInteger, parseAsString } from 'nuqs'
+const searchSchema = z.object({
+  page: z.coerce.number().int().min(1).catch(1),
+  tab: z.enum(['overview', 'settings']).catch('overview'),
+})
 
-function UsersPage() {
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
-  const [filter, setFilter] = useQueryState('filter', parseAsString)
-}
+export const Route = createFileRoute('/users/')({
+  validateSearch: searchSchema,
+})
+// read: const { page, tab } = Route.useSearch()
+// write: navigate({ search: (prev) => ({ ...prev, page: 2 }) })
 ```
+
+Rules mined from years of URL-state fixes:
+- **URL = shareable state** (tabs, filters, sort, pagination -- anything a teammate should get from your link); **local/session storage = personal prefs** (page size, collapsed panels). Never swap them.
+- Never `{ strict: false }` on `useSearch`/`useParams` -- it is `as any` with extra steps; use the route-scoped API.
+- Clamp URL-sourced page indices against page count -- a stale `?page=999` must not render an empty table.
+- Intra-section navigation (tabs, wizard steps, detail sub-views) uses `replace: true`; only section entry pushes history, so Back escapes the section instead of replaying it.
+- zod enums/dates in `validateSearch`, not free strings; this is the one place zod belongs in the form/URL layer.
 
 Setup (install, config, verify): see [SETUP.md](SETUP.md).

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Stack Registry"
+  short_description: "Current and banned stack governance for harness rules"
