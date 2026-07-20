@@ -4,14 +4,6 @@ description: "Evidence-backed Go conventions for workload bounds, error boundari
 paths:
   - "**/*.go"
   - "**/go.mod"
-hooks:
-  PostToolUse:
-    - matcher: "Edit|Write"
-      hooks:
-        - type: command
-          command: "f=\"${CLAUDE_PLUGIN_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null)}/.claude/hooks/go-proto-reserved-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-        - type: command
-          command: "f=\"${CLAUDE_PLUGIN_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null)}/.claude/hooks/go-test-image-pin-check.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
 ---
 
 # Go engineering

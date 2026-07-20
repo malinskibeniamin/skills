@@ -23,9 +23,11 @@ _check_labels=(
   tanstack-router-gen
   connect-query-check
   aip-proto-check
-  # go-proto-reserved-check + go-test-image-pin-check moved to golang skill
-  # frontmatter hooks (scoped to the skill's lifetime). Codex keeps them
-  # per-call via x-codex-per-call — frontmatter hooks are Claude-only.
+  # Go checks stay GLOBAL, not golang-skill frontmatter: they act on *.proto
+  # and e2e/testdata YAML, which never match the skill's *.go/go.mod paths
+  # (PR 72 review) — skill scoping would silently drop coverage.
+  go-proto-reserved-check
+  go-test-image-pin-check
   ux-copy-check
   orchestration-guidance
   form-mode-check
@@ -49,6 +51,8 @@ _check_funcs=(
   run_tanstack_router_gen
   run_connect_query_check
   run_aip_proto_check
+  run_go_proto_reserved_check
+  run_go_test_image_pin_check
   run_ux_copy_check
   run_orchestration_guidance
   run_form_mode_check
