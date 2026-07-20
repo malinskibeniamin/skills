@@ -10,7 +10,9 @@ trap 'exit 0' ERR
 
 input=$(cat 2>/dev/null || echo '{}')
 
-category=$(echo "$input" | jq -r '.matcher // .failure_type // .error_type // "unknown"' 2>/dev/null)
+# Runtime payload carries the category in .error (matches the event's
+# matcher vocabulary: rate_limit, overloaded, max_output_tokens, ...).
+category=$(echo "$input" | jq -r '.error // .matcher // .failure_type // "unknown"' 2>/dev/null)
 dir="$HOME/.claude/hook-metrics"
 mkdir -p "$dir" 2>/dev/null || true
 printf '{"ts":"%s","category":"%s","session":"%s"}\n' \

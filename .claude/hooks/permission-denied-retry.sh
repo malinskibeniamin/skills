@@ -27,7 +27,9 @@ case "$cmd" in
 esac
 
 if printf '%s' "$cmd" | grep -qE '^[[:space:]]*(git (status|log|diff|show|branch|remote -v)|ls|rg|grep|fgrep|egrep|cat|head|tail|wc|file|stat|which|jq|gh pr (view|checks|list|diff)|gh run (view|list)|bun run (lint|type:check))([[:space:]]|$)'; then
-  echo '{"retry": true}'
+  # retry is only consumed under hookSpecificOutput with the event name —
+  # a top-level {"retry":true} is ignored by the harness.
+  echo '{"hookSpecificOutput":{"hookEventName":"PermissionDenied","retry":true}}'
 fi
 
 exit 0

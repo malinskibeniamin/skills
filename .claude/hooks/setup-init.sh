@@ -10,7 +10,9 @@ trap 'exit 0' ERR
 #   maintenance  — sweep stale hook-session state and oversized metric logs.
 
 input=$(cat 2>/dev/null || echo '{}')
-mode=$(echo "$input" | jq -r '.source // .matcher // empty' 2>/dev/null)
+# Runtime payload carries the mode in .trigger ({"trigger":"init"});
+# source/matcher kept as defensive fallbacks only.
+mode=$(echo "$input" | jq -r '.trigger // .source // .matcher // empty' 2>/dev/null)
 
 case "$mode" in
   init)
@@ -19,7 +21,8 @@ case "$mode" in
     fi
     ;;
   maintenance)
-    find /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
+    # -H: /tmp is a symlink on macOS; plain `find /tmp` never descends it.
+    find -H /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
     # Rotate metric logs past 10MB; keep the newest half by line count.
     for f in "$HOME"/.claude/hook-metrics/*.jsonl; do
       [ -f "$f" ] || continue
