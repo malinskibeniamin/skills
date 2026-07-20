@@ -15,7 +15,7 @@ Run `/read-the-damn-docs` before pinning current TanStack Router, Router Query, 
 - Warn `window.location.reload()` -- suggest `router.invalidate()`
 - Ban `strict: false` in router hooks
 - Ban untyped `useParams()`/`useSearch()`/`useLoaderData()`/`useRouteContext()` missing `{ from }`
-- Ban `URLSearchParams` -- suggest nuqs
+- Ban `URLSearchParams` -- use `validateSearch`+zod (nuqs is banned)
 - Warn exported components from route files (break code splitting)
 - Require `validateSearch` when `useSearch` in route files; `.page.tsx` may resolve it from sibling route file
 - Warn tested route pages using `routeApi.useSearch({ select })`; prefer `useSearch({ from, select })`

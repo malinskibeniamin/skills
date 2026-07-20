@@ -101,7 +101,7 @@ if echo "$added_lines" | grep -qE '\bnew URLSearchParams\b|searchParams\.(get|se
     _is_client_file=true
   fi
   if [ "$_is_client_file" = true ]; then
-    hook_block "No URLSearchParams in client code. Use TanStack Router validateSearch+zod or nuqs."
+    hook_block "No URLSearchParams in client code. Use TanStack Router validateSearch+zod and Route.useSearch()."
   fi
 fi
 
@@ -334,15 +334,6 @@ if [ "$_absorbed_generated_file" = false ] && [ "$_absorbed_test_file" = false ]
       esac
       ;;
   esac
-fi
-
-# ── Check: ban { strict: false } on router hooks ──────────────────
-# useSearch/useParams with strict:false erases the route-typed shape —
-# it is `as any` with extra steps. Pass the `from` route id instead.
-
-if echo "$added_lines" | grep -qE 'use(Search|Params|RouteContext|LoaderData)\s*(\(|<[^>]*>\s*\()' && \
-   echo "$added_lines" | grep -qE 'strict\s*:\s*false'; then
-  hook_block "{ strict: false } on a router hook is 'as any' with extra steps — the search/params shape is unchecked. Use useSearch({ from: Route.id }) / the route-scoped API to keep types."
 fi
 
 # ── Check: clamp URL-sourced pagination indices ───────────────────
