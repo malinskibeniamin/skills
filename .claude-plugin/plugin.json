@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
   "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
-  "version": "4.30.0",
+  "version": "4.31.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -101,7 +101,7 @@
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],
-  "x-updatedAt": "2026-07-14",
+  "x-updatedAt": "2026-07-20",
   "x-includes": {
     "instructions": [
       "CLAUDE.md",
@@ -111,6 +111,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "4.31.0": "2026-07-20 -- Publish the latest Claude Code and Codex bundle, superseding the unpublished 4.30.0 metadata. Includes the TypeScript 7 tsc migration, browser/image invariants, evidence-backed Go authoring and review guidance, expanded Claude hook lifecycle support, Codex execpolicy parity and telemetry, evidence-mined frontend invariants, stack-registry guidance, reusable exemplars, and exhaustive AIP review coverage. Refreshes every manifest, marketplace, and install pin together.",
     "4.30.0": "2026-07-16 -- Go vertical based on a two-year multi-repository review analysis (102 conventions, each supported by at least three independent examples). New /golang skill, path-scoped to *.go/go.mod: core S-grade non-negotiables, context-dependent tensions, and nine domain files (proto/API implementation, concurrency, errors, testing, Temporal, security/tenancy, rollout, structure, controllers). New /golang-review skill: evidence-backed Go review axis whose RULES.md catalog carries every rule with its grade, statement, and anonymous aggregate support count; /review adds it as a conditional golang hat whenever the diff touches Go, in every tier including mini panel. Two warn-tier per-edit hooks cover removed protobuf fields and floating test-service image tags. 17 new evals cover both hooks and the skill surface.",
     "4.29.0": "2026-07-14 -- Publish the post-4.28 harness updates: restore advisory hook channels and consolidate rule ownership; sync Matt Pocock's latest Wayfinder, to-tickets, grilling, and work-automation-kit behavior; add generated Codex skill interface metadata; and make native Codex subagents explicit opt-in while preserving Claude-hosted parallelism and the user's selected reasoning effort. Refresh Claude and Codex manifests, marketplaces, and install pins.",
     "4.28.2": "2026-07-10 -- Make Codex skill discovery cache-safe. The Codex plugin cache copier omits nested symlinks, leaving the v4.28.1 skill index empty. Generate 62 real proxy SKILL.md entrypoints that preserve canonical frontmatter and route to canonical instructions, with integrity checks guarding both surfaces. Claude skill and hook behavior is unchanged.",
