@@ -97,11 +97,7 @@
         "skill-fire-log.sh"
       ],
       "Bash": [
-        "pre-bash.sh",
-        {
-          "script": "snyk-project-create-guard.sh",
-          "if": "Bash(snyk *)"
-        }
+        "pre-bash.sh"
       ],
       "mcp__.*": [
         "mcp-ban.sh"

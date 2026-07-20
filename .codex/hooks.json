@@ -73,10 +73,6 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/pre-bash.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/snyk-project-create-guard.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       },
