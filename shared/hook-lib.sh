@@ -271,7 +271,7 @@ _hook_repoint_session_dir() {
   _hook_session_dir="/tmp/hook-session-${_hook_session_id}"
   mkdir -p "$_hook_session_dir" 2>/dev/null || true
   [ -n "${_hook_violations_file:-}" ] && _hook_violations_file="$_hook_session_dir/violations"
-  [ -n "${_hook_log_file:-}" ] && _hook_log_file="$_hook_session_dir/hook-log.jsonl"
+  [ -n "${_hook_log_file:-}" ] && _hook_log_file="$_hook_session_dir/structured.jsonl"
   [ -n "${_hook_debug_file:-}" ] && _hook_debug_file="$_hook_session_dir/debug.log"
   # The guards above return 1 when a path var is unset -- never let that
   # become the function's exit status under a caller's set -e.
@@ -1062,8 +1062,10 @@ hook_parse_bash() {
   [ -n "${_hook_input:-}" ] || _hook_input=$(cat)
   if _hook_protocol_parse; then
     _hook_tool_name="$hp_tool_name"
+    _hook_repoint_session_dir "$hp_session_id"
   else
     _hook_tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+    _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
   fi
 
   if [ "$_hook_tool_name" != "Bash" ]; then
