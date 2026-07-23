@@ -4,6 +4,7 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
+      "!.context",
       "!exemplars",
       "!**/*.gen.ts",
       "!**/*.gen.tsx",

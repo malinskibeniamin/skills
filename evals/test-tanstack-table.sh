@@ -84,32 +84,62 @@ TSX
 run_table_hook_eval_without "$TMP_ROOT/v9/src/commented-migration.tsx" \
   "uses useTable" "ignores V8 API names in comments"
 
-mkdir -p "$TMP_ROOT/v8/src"
-cat > "$TMP_ROOT/v8/package.json" <<'JSON'
-{"dependencies":{"@tanstack/react-table":"^8.21.3"}}
-JSON
-cp "$TMP_ROOT/v9/src/table.tsx" "$TMP_ROOT/v8/src/table.tsx"
+create_version_fixture() {
+  local name="$1" spec="$2" installed_version="${3:-}"
+  local root="$TMP_ROOT/$name"
+  mkdir -p "$root/src"
+  jq -nc --arg spec "$spec" \
+    '{dependencies: {"@tanstack/react-table": $spec}}' > "$root/package.json"
+  if [ -n "$installed_version" ]; then
+    mkdir -p "$root/node_modules/@tanstack/react-table"
+    jq -nc --arg version "$installed_version" \
+      '{name: "@tanstack/react-table", version: $version}' \
+      > "$root/node_modules/@tanstack/react-table/package.json"
+  fi
+  cp "$TMP_ROOT/v9/src/table.tsx" "$root/src/table.tsx"
+}
+
+create_version_fixture v8 "^8.21.3" "9.0.0-beta.49"
 
 run_table_hook_eval "$TMP_ROOT/v8/src/table.tsx" 0 \
-  "does not apply V9 rules to a V8 project"
+  "does not let stale installed metadata override a direct V8 spec"
 
-mkdir -p "$TMP_ROOT/v8-beta/src"
-cat > "$TMP_ROOT/v8-beta/package.json" <<'JSON'
-{"dependencies":{"@tanstack/react-table":"8.0.0-beta.9"}}
-JSON
-cp "$TMP_ROOT/v9/src/table.tsx" "$TMP_ROOT/v8-beta/src/table.tsx"
+create_version_fixture v8-beta "8.0.0-beta.9"
 
 run_table_hook_eval "$TMP_ROOT/v8-beta/src/table.tsx" 0 \
   "does not mistake an old V8 beta version for V9"
 
-mkdir -p "$TMP_ROOT/beta-tag/src"
-cat > "$TMP_ROOT/beta-tag/package.json" <<'JSON'
-{"dependencies":{"@tanstack/react-table":"beta"}}
-JSON
-cp "$TMP_ROOT/v9/src/table.tsx" "$TMP_ROOT/beta-tag/src/table.tsx"
+create_version_fixture beta-tag beta
 
 run_table_hook_eval "$TMP_ROOT/beta-tag/src/table.tsx" 2 \
   "recognizes the V9 beta dist-tag" "useTable"
+
+create_version_fixture catalog "catalog:" "9.0.0-beta.49"
+
+run_table_hook_eval "$TMP_ROOT/catalog/src/table.tsx" 2 \
+  "resolves catalog specs from installed package metadata" "useTable"
+
+create_version_fixture workspace "workspace:*" "9.0.0-beta.49"
+
+run_table_hook_eval "$TMP_ROOT/workspace/src/table.tsx" 2 \
+  "resolves workspace specs from installed package metadata" "useTable"
+
+create_version_fixture npm-alias \
+  "npm:@tanstack/react-table@^9.0.0-beta.49"
+
+run_table_hook_eval "$TMP_ROOT/npm-alias/src/table.tsx" 2 \
+  "recognizes an explicit V9 npm alias" "useTable"
+
+create_version_fixture catalog-v8 "catalog:" "8.21.3"
+
+run_table_hook_eval_without "$TMP_ROOT/catalog-v8/src/table.tsx" \
+  "useTable" "does not apply V9 rules to a catalog-resolved V8 package"
+
+create_version_fixture npm-alias-v8 \
+  "npm:@tanstack/react-table@^8.21.3"
+
+run_table_hook_eval_without "$TMP_ROOT/npm-alias-v8/src/table.tsx" \
+  "useTable" "does not apply V9 rules to an explicit V8 npm alias"
 
 cat > "$TMP_ROOT/v9/src/destructured-row.tsx" <<'TSX'
 import type { Row } from '@tanstack/react-table'
@@ -382,6 +412,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "external atoms.*reset|reset.*external at
   "skill covers external atom ownership and reset"
 run_content_eval "$SKILL_DIR/SKILL.md" "individual.*(filter|sort|aggregation)" \
   "skill preserves V9 tree-shaking"
+run_content_eval "$SKILL_DIR/SKILL.md" "catalog.*installed|installed.*catalog" \
+  "skill explains indirect version resolution"
 run_content_eval "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" "tanstack-table-check" \
   "Claude batch dispatcher runs the Table check"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "tanstack-table-check.sh" \

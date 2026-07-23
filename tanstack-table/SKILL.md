@@ -5,7 +5,7 @@ description: TanStack Table V9 React patterns for reactive reads, granular subsc
 
 # TanStack Table V9
 
-Run `/read-the-damn-docs` before changing APIs: V9 is still published under the beta tag. Inspect the nearest `package.json`; do not apply V9 guidance to V8. Start with the official [V9 reactivity article](https://tanstack.com/blog/tanstack-table-v9-reactivity), [migration guide](https://tanstack.com/table/beta/docs/framework/react/guide/migrating), and [table-state guide](https://tanstack.com/table/beta/docs/framework/react/guide/table-state).
+Run `/read-the-damn-docs` before changing APIs: V9 is still published under the beta tag. Inspect the nearest `package.json`; do not apply V9 guidance to V8. The hook parses direct versions, npm aliases, and explicit workspace versions. It resolves catalog and wildcard workspace specs from installed package metadata; install dependencies first because ambiguous specs without that metadata are skipped. Start with the official [V9 reactivity article](https://tanstack.com/blog/tanstack-table-v9-reactivity), [migration guide](https://tanstack.com/table/beta/docs/framework/react/guide/migrating), and [table-state guide](https://tanstack.com/table/beta/docs/framework/react/guide/table-state).
 
 ## Reactivity contract
 
