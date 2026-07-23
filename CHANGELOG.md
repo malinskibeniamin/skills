@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.32.0
+
+2026-07-24 -- Publish the post-4.31 Claude Code and Codex bundle. This release adds TanStack Table v9 reactive guidance and enforcement, React Hook Form resilience checks, quota-aware review routing, typed hook protocol parsing, and a repository-wide quality gate; syncs the latest planning and writing skills; and fixes dynamic class-name checks, Go proto validation, and Codex telemetry. It repackages `/golang` and `/golang-review` on a fresh immutable tag for both runtimes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.32.0.
+
 2026-07-23 -- Sync the useful mattpocock/skills changes from the previous two weeks. `/prototype` now preserves runnable primary-source branches and uses shareable single-file HTML logic demos; `/grilling` asks the whole dependency-ready frontier each round; new `/to-questionnaire` captures missing stakeholder context; `/writing-great-skills` becomes model-invoked `/writing-for-agents`; `/to-tickets` stops at publication. Linux-centric `/spawn`, superseded `/batch-grill-me`, and upstream-only plugin/release machinery remain intentionally unregistered.
 
 2026-07-23 -- Make review and plan hats quota-aware. Claude Code statusline quota snapshots now route the higher 5-hour/7-day usage through Fable low (<20%), Opus high (<50%), Opus low (<75%), Sonnet low (<90%), then disable Claude at 90% or on missing/stale data. Reviewer and planning agents inherit the per-wave profile. Every review/plan still gets an independent GPT-5.6 Sol xhigh pass; Sol covers every required hat when Claude is disabled. Terra and Luna no longer review. Codex remains ungated when its subscription meter is unavailable because local `ccusage` token/cost data is not quota evidence.
