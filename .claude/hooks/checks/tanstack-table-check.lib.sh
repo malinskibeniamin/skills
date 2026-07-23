@@ -9,7 +9,8 @@ run_tanstack_table_check() {
   file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
   printf '%s' "$file_content" | grep -qF "@tanstack/react-table" || return 0
 
-  local dir package_file version
+  local dir package_file version installed_package resolve_installed
+  resolve_installed=false
   dir=$(dirname "$file_path")
   package_file=""
   while [ "$dir" != "/" ]; do
@@ -33,10 +34,41 @@ run_tanstack_table_check() {
     // .optionalDependencies["@tanstack/react-table"]
     // ""
   ' "$package_file")
+  case "$version" in
+    npm:*@*)
+      version="${version##*@}"
+      case "$version" in
+        *[0-9]*|beta) ;;
+        *) resolve_installed=true ;;
+      esac
+      ;;
+    workspace:*)
+      version="${version#workspace:}"
+      case "$version" in
+        *[0-9]*) ;;
+        *) resolve_installed=true ;;
+      esac
+      ;;
+    catalog:*) resolve_installed=true ;;
+  esac
   version=$(printf '%s' "$version" | sed -E 's/^[[:space:]~^<>=v]*//')
   case "$version" in
     9|9.*|beta) ;;
-    *) return 0 ;;
+    *)
+      [ "$resolve_installed" = true ] || return 0
+      while [ "$dir" != "/" ]; do
+        installed_package="$dir/node_modules/@tanstack/react-table/package.json"
+        if [ -f "$installed_package" ]; then
+          version=$(jq -r '.version // ""' "$installed_package")
+          break
+        fi
+        dir=$(dirname "$dir")
+      done
+      case "$version" in
+        9|9.*) ;;
+        *) return 0 ;;
+      esac
+      ;;
   esac
 
   local added_code file_code subscription_pattern
