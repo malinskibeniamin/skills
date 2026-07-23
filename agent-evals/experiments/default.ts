@@ -1,4 +1,4 @@
-import type { ExperimentConfig } from "@vercel/agent-eval";
+import type { ExperimentConfig, Sandbox } from "@vercel/agent-eval";
 
 export default {
   agent: "claude-code",
@@ -7,7 +7,7 @@ export default {
   timeout: 300,
   sandbox: "docker",
   copyFiles: "changed",
-  setup: async (sandbox: any) => {
-    await sandbox.runShell("npm install -g typescript bun");
+  setup: async (sandbox: Sandbox) => {
+    await sandbox.runCommand("npm", ["install", "-g", "typescript", "bun"]);
   },
 } satisfies ExperimentConfig;

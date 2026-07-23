@@ -3,66 +3,40 @@
   "version": "4.31.0",
   "hooks": {
     "SessionStart": {
-      "": [
-        "session-env.sh",
-        "llm-env.sh"
-      ]
+      "": ["session-env.sh", "llm-env.sh"]
     },
     "Setup": {
-      "init|maintenance": [
-        "setup-init.sh"
-      ]
+      "init|maintenance": ["setup-init.sh"]
     },
     "UserPromptSubmit": {
-      "": [
-        "user-prompt-context.sh",
-        "intent-detect.sh"
-      ]
+      "": ["user-prompt-context.sh", "intent-detect.sh"]
     },
     "UserPromptExpansion": {
-      "": [
-        "skill-fire-log.sh"
-      ]
+      "": ["skill-fire-log.sh"]
     },
     "PostCompact": {
-      "": [
-        "post-compact-context.sh"
-      ]
+      "": ["post-compact-context.sh"]
     },
     "PreCompact": {
-      "": [
-        "pre-compact.sh"
-      ]
+      "": ["pre-compact.sh"]
     },
     "PostToolUseFailure": {
-      "Bash": [
-        "post-tool-failure.sh"
-      ]
+      "Bash": ["post-tool-failure.sh"]
     },
     "CwdChanged": {
-      "": [
-        "cwd-changed.sh"
-      ]
+      "": ["cwd-changed.sh"]
     },
     "ConfigChange": {
-      "project_settings": [
-        "config-change-guard.sh"
-      ]
+      "project_settings": ["config-change-guard.sh"]
     },
     "TaskCompleted": {
-      "": [
-        "task-completed-gate.sh"
-      ]
+      "": ["task-completed-gate.sh"]
     },
     "StopFailure": {
-      "": [
-        "stop-failure-telemetry.sh"
-      ]
+      "": ["stop-failure-telemetry.sh"]
     },
     "PermissionDenied": {
-      "Bash": [
-        "permission-denied-retry.sh"
-      ]
+      "Bash": ["permission-denied-retry.sh"]
     },
     "Notification": {
       "permission_prompt|idle_prompt|agent_needs_input|agent_completed": [
@@ -70,38 +44,21 @@
       ]
     },
     "FileChanged": {
-      "": [
-        "file-changed-schema.sh",
-        "file-changed-config.sh"
-      ],
-      "src/env.ts": [
-        "file-changed-env.sh"
-      ],
-      "skill-manifest.json": [
-        "file-changed-manifest.sh"
-      ],
+      "": ["file-changed-schema.sh", "file-changed-config.sh"],
+      "src/env.ts": ["file-changed-env.sh"],
+      "skill-manifest.json": ["file-changed-manifest.sh"],
       "package.json|bun.lock|bun.lockb|yarn.lock|package-lock.json|go.mod|go.sum": [
         "file-changed-deps.sh"
       ]
     },
     "SessionEnd": {
-      "": [
-        "session-end.sh"
-      ]
+      "": ["session-end.sh"]
     },
     "PreToolUse": {
-      "Edit|Write|Bash": [
-        "violation-nudge.sh"
-      ],
-      "Skill": [
-        "skill-fire-log.sh"
-      ],
-      "Bash": [
-        "pre-bash.sh"
-      ],
-      "mcp__.*": [
-        "mcp-ban.sh"
-      ]
+      "Edit|Write|Bash": ["violation-nudge.sh"],
+      "Skill": ["skill-fire-log.sh"],
+      "Bash": ["pre-bash.sh"],
+      "mcp__.*": ["mcp-ban.sh"]
     },
     "PostToolUse": {
       "Bash": [
@@ -111,14 +68,10 @@
       ]
     },
     "SubagentStart": {
-      "": [
-        "subagent-start.sh"
-      ]
+      "": ["subagent-start.sh"]
     },
     "SubagentStop": {
-      "self-reviewer|code-reviewer|adversarial-reviewer": [
-        "subagent-stop.sh"
-      ]
+      "self-reviewer|code-reviewer|adversarial-reviewer": ["subagent-stop.sh"]
     },
     "Stop": {
       "": [
@@ -145,9 +98,7 @@
       ]
     },
     "PostToolBatch": {
-      "": [
-        "post-tool-batch.sh"
-      ]
+      "": ["post-tool-batch.sh"]
     }
   },
   "x-codex-per-call": [

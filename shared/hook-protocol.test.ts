@@ -8,7 +8,7 @@ import { describe, expect, test } from "bun:test";
 import { unlinkSync } from "node:fs";
 
 const ENTRY = new URL("./hook-protocol.ts", import.meta.url).pathname;
-const TSC = new URL("./node_modules/.bin/tsc", import.meta.url).pathname;
+const TSC = new URL("../node_modules/.bin/tsc", import.meta.url).pathname;
 
 function run(
   args: string[],

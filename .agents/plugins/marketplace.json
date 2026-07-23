@@ -19,10 +19,7 @@
       "category": "Development",
       "x-updatedAt": "2026-07-20",
       "x-includes": {
-        "instructions": [
-          "CLAUDE.md",
-          "AGENTS.md"
-        ],
+        "instructions": ["CLAUDE.md", "AGENTS.md"],
         "settings": "settings.json"
       },
       "x-changelog": {

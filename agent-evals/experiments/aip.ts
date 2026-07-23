@@ -1,7 +1,10 @@
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig, Sandbox } from "@vercel/agent-eval";
 
-const skill = readFileSync(new URL("../../aip/SKILL.md", import.meta.url), "utf8");
+const skill = readFileSync(
+  new URL("../../aip/SKILL.md", import.meta.url),
+  "utf8",
+);
 const reference = readFileSync(
   new URL("../../aip/REFERENCE.md", import.meta.url),
   "utf8",

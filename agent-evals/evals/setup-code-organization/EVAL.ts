@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 describe("setup-code-organization: LLM respects code organization rules", () => {
@@ -18,7 +18,7 @@ describe("setup-code-organization: LLM respects code organization rules", () => 
     const content = readFileSync("src/routes/connections.tsx", "utf-8");
     // No function use* definitions in route files
     expect(content).not.toMatch(
-      /(?:export\s+)?function\s+use[A-Z][a-zA-Z]*\s*\(/
+      /(?:export\s+)?function\s+use[A-Z][a-zA-Z]*\s*\(/,
     );
   });
 
@@ -67,14 +67,14 @@ describe("setup-code-organization: LLM respects code organization rules", () => 
   it("should NOT use biome-ignore noExplicitAny in hooks file", () => {
     const content = readFileSync("src/hooks/use-connections.ts", "utf-8");
     expect(content).not.toMatch(
-      /biome-ignore\s+lint\/suspicious\/noExplicitAny/
+      /biome-ignore\s+lint\/suspicious\/noExplicitAny/,
     );
   });
 
   it("should NOT use biome-ignore noExplicitAny in route file", () => {
     const content = readFileSync("src/routes/connections.tsx", "utf-8");
     expect(content).not.toMatch(
-      /biome-ignore\s+lint\/suspicious\/noExplicitAny/
+      /biome-ignore\s+lint\/suspicious\/noExplicitAny/,
     );
   });
 
@@ -83,7 +83,7 @@ describe("setup-code-organization: LLM respects code organization rules", () => 
   it("should NOT use window.location in route file", () => {
     const content = readFileSync("src/routes/connections.tsx", "utf-8");
     expect(content).not.toMatch(
-      /window\.location\.(href|assign|replace|search|pathname|hash|origin)/
+      /window\.location\.(href|assign|replace|search|pathname|hash|origin)/,
     );
   });
 

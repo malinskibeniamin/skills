@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 const read = (path: string) => readFileSync(path, "utf8");
 
 const publishedAips = [
-  1, 2, 3, 8, 9, 100, 111, 121, 122, 123, 124, 126, 127, 128, 129, 130,
-  131, 132, 133, 134, 135, 136, 140, 141, 142, 143, 144, 145, 146, 147,
-  148, 149, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162,
-  163, 164, 165, 180, 181, 182, 185, 190, 191, 192, 193, 194, 200, 202,
-  203, 205, 210, 211, 213, 214, 215, 216, 217, 231, 233, 234, 235, 236,
+  1, 2, 3, 8, 9, 100, 111, 121, 122, 123, 124, 126, 127, 128, 129, 130, 131,
+  132, 133, 134, 135, 136, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149,
+  151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165,
+  180, 181, 182, 185, 190, 191, 192, 193, 194, 200, 202, 203, 205, 210, 211,
+  213, 214, 215, 216, 217, 231, 233, 234, 235, 236,
 ];
 
 const requiredAips = [
@@ -17,15 +17,13 @@ const requiredAips = [
 ];
 
 const aipRow = (review: string, aip: number) =>
-  review
-    .split("\n")
-    .find((line) => {
-      const firstCell = line.split("|")[1];
-      return (
-        firstCell !== undefined &&
-        new RegExp(`(?:AIP-)?${aip}\\b`, "i").test(firstCell)
-      );
-    });
+  review.split("\n").find((line) => {
+    const firstCell = line.split("|")[1];
+    return (
+      firstCell !== undefined &&
+      new RegExp(`(?:AIP-)?${aip}\\b`, "i").test(firstCell)
+    );
+  });
 
 describe("aip-design-review: applies the skill to an adversarial API", () => {
   it("creates both requested deliverables", () => {
@@ -77,7 +75,9 @@ describe("aip-design-review: applies the skill to an adversarial API", () => {
   it("flags the stable field rename as a compatibility failure", () => {
     const row = aipRow(read("review.md"), 180);
     expect(row).toMatch(/fail|incompatible|violation/i);
-    expect(read("review.md")).toMatch(/title.*display_name|display_name.*title/is);
+    expect(read("review.md")).toMatch(
+      /title.*display_name|display_name.*title/is,
+    );
     const proto = read("corrected.proto");
     expect(proto).toMatch(/string\s+title\s*=\s*2\b/);
     expect(proto).not.toMatch(/string\s+display_name\s*=\s*2\b/);
@@ -161,7 +161,8 @@ describe("aip-design-review: applies the skill to an adversarial API", () => {
 
   it("documents every public proto declaration", () => {
     const lines = read("corrected.proto").split("\n");
-    const declaration = /^(?:message|service|rpc)\s|^(?:repeated\s+)?[A-Za-z][\w.<>]*\s+\w+\s*=/;
+    const declaration =
+      /^(?:message|service|rpc)\s|^(?:repeated\s+)?[A-Za-z][\w.<>]*\s+\w+\s*=/;
     for (const [index, line] of lines.entries()) {
       if (!declaration.test(line.trim())) continue;
       let previous = index - 1;
@@ -222,9 +223,10 @@ describe("aip-design-review: applies the skill to an adversarial API", () => {
       });
     expect(reportedAips.length).toBeGreaterThan(0);
     for (const aip of new Set(reportedAips)) {
-      expect(observations, `official AIP-${aip} page was not consulted`).toMatch(
-        new RegExp(`google\\.aip\\.dev/${aip}\\b`),
-      );
+      expect(
+        observations,
+        `official AIP-${aip} page was not consulted`,
+      ).toMatch(new RegExp(`google\\.aip\\.dev/${aip}\\b`));
     }
   });
 });

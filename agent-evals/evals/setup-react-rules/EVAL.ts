@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 describe("setup-react-rules: LLM respects React enforcement rules", () => {
@@ -74,7 +74,7 @@ describe("setup-react-rules: LLM respects React enforcement rules", () => {
   it("should NOT use class components", () => {
     const content = readFileSync("src/UserProfile.tsx", "utf-8");
     expect(content).not.toMatch(
-      /extends\s+(React\.)?(Component|PureComponent)\b/
+      /extends\s+(React\.)?(Component|PureComponent)\b/,
     );
   });
 
@@ -135,7 +135,7 @@ describe("setup-react-rules: LLM respects React enforcement rules", () => {
   it("should NOT use biome-ignore for noExplicitAny", () => {
     const content = readFileSync("src/UserProfile.tsx", "utf-8");
     expect(content).not.toMatch(
-      /biome-ignore\s+lint\/suspicious\/noExplicitAny/
+      /biome-ignore\s+lint\/suspicious\/noExplicitAny/,
     );
   });
 

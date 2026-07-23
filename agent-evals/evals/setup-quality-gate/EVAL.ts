@@ -1,8 +1,8 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 const results = JSON.parse(
-  readFileSync("__agent_eval__/results.json", "utf-8")
+  readFileSync("__agent_eval__/results.json", "utf-8"),
 );
 const shellCommands: { command: string; success?: boolean }[] =
   results.o11y?.shellCommands || [];
@@ -10,7 +10,7 @@ const shellCommands: { command: string; success?: boolean }[] =
 describe("setup-quality-gate: LLM uses quality:gate correctly", () => {
   it("should not run biome directly via bunx", () => {
     const directBiome = shellCommands.filter(
-      (c) => /bunx\s+biome/.test(c.command) && c.success === true
+      (c) => /bunx\s+biome/.test(c.command) && c.success === true,
     );
     expect(directBiome).toHaveLength(0);
   });
@@ -18,14 +18,14 @@ describe("setup-quality-gate: LLM uses quality:gate correctly", () => {
   it("should run the quality:gate script", () => {
     const qualityGateCommands = shellCommands.filter(
       (c) =>
-        /\bbun\s+run\s+quality:gate\b/.test(c.command) && c.success === true
+        /\bbun\s+run\s+quality:gate\b/.test(c.command) && c.success === true,
     );
     expect(qualityGateCommands.length).toBeGreaterThan(0);
   });
 
   it("should not run tsgo", () => {
     const directTsgo = shellCommands.filter(
-      (c) => /\btsgo(\s|$)/.test(c.command) && c.success === true
+      (c) => /\btsgo(\s|$)/.test(c.command) && c.success === true,
     );
     expect(directTsgo).toHaveLength(0);
   });

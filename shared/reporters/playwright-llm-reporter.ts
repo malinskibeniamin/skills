@@ -21,7 +21,12 @@
  *   - Playwright Test Agents (official): https://playwright.dev/docs/test-agents
  */
 
-import type { FullResult, Reporter, TestCase, TestResult } from '@playwright/test/reporter';
+import type {
+  FullResult,
+  Reporter,
+  TestCase,
+  TestResult,
+} from "@playwright/test/reporter";
 
 type Failure = {
   file: string;
@@ -34,7 +39,9 @@ type Failure = {
 };
 
 // allow: env-validation -- reporter runs in Node test-runner context, pre-@/env boundary
-const env: Record<string, string | undefined> = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
+const env: Record<string, string | undefined> =
+  (globalThis as { process?: { env?: Record<string, string | undefined> } })
+    .process?.env ?? {};
 const MAX_FAILURES = Number(env.PW_LLM_MAX_FAILURES ?? 15);
 const STACK_LINES = Number(env.PW_LLM_STACK_LINES ?? 3);
 
@@ -44,29 +51,31 @@ export default class PwLlmReporter implements Reporter {
   private skipped = 0;
   private flaky = 0;
   // allow: env-validation -- reporter runs in Node test-runner context
-  private cwd = (globalThis as { process?: { cwd?: () => string } }).process?.cwd?.() ?? '';
+  private cwd =
+    (globalThis as { process?: { cwd?: () => string } }).process?.cwd?.() ?? "";
 
   onTestEnd(test: TestCase, result: TestResult): void {
-    if (result.status === 'passed') {
+    if (result.status === "passed") {
       if (result.retry > 0) this.flaky++;
       this.passed++;
       return;
     }
 
-    if (result.status === 'skipped') {
+    if (result.status === "skipped") {
       this.skipped++;
       return;
     }
 
     const error = result.errors[0];
+    const stack = error?.stack?.split("\n").slice(0, STACK_LINES).join(" | ");
     this.failures.push({
-      file: test.location.file.replace(this.cwd + '/', ''),
-      test: test.titlePath().slice(1).join(' > '),
+      file: test.location.file.replace(`${this.cwd}/`, ""),
+      test: test.titlePath().slice(1).join(" > "),
       line: test.location.line,
       status: result.status,
       attempt: result.retry,
-      msg: (error?.message ?? 'unknown').split('\n')[0],
-      stack: error?.stack?.split('\n').slice(0, STACK_LINES).join(' | '),
+      msg: (error?.message ?? "unknown").split("\n")[0] ?? "unknown",
+      ...(stack === undefined ? {} : { stack }),
     });
   }
 
@@ -75,9 +84,9 @@ export default class PwLlmReporter implements Reporter {
       const parts = [`ok ${this.passed}`];
       if (this.skipped > 0) parts.push(`skip ${this.skipped}`);
       if (this.flaky > 0) parts.push(`flaky ${this.flaky}`);
-      if (this.passed === 0 && this.skipped === 0) parts.push('[ZERO-TESTS]');
-      if (result.status !== 'passed') parts.push(`status=${result.status}`);
-      process.stdout.write(parts.join(' ') + '\n');
+      if (this.passed === 0 && this.skipped === 0) parts.push("[ZERO-TESTS]");
+      if (result.status !== "passed") parts.push(`status=${result.status}`);
+      process.stdout.write(`${parts.join(" ")}\n`);
       return;
     }
 
@@ -90,7 +99,7 @@ export default class PwLlmReporter implements Reporter {
       failures: this.failures.slice(0, MAX_FAILURES),
       truncated: this.failures.length > MAX_FAILURES,
     };
-    process.stdout.write(JSON.stringify(payload) + '\n');
+    process.stdout.write(`${JSON.stringify(payload)}\n`);
   }
 
   printsToStdio(): boolean {

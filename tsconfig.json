@@ -12,5 +12,12 @@
     "strict": true,
     "types": ["bun"]
   },
-  "include": ["hook-protocol.ts", "hook-protocol.test.ts"]
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "exemplars",
+    "**/*.gen.ts",
+    "**/*.gen.tsx",
+    "**/*_pb.ts",
+    "**/*_connectquery.ts"
+  ]
 }
