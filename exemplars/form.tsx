@@ -1,4 +1,4 @@
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { create } from '@bufbuild/protobuf';
 import { ConnectError } from '@connectrpc/connect';
 import { useMutation } from '@connectrpc/connect-query';
@@ -13,15 +13,29 @@ interface CreateResourceFormProps {
   onCreated: (name: string) => Promise<void>;
 }
 
+interface CreateResourceFormValues {
+  name: string;
+}
+
+const CREATE_RESOURCE_DEFAULT_VALUES = {
+  name: '',
+} satisfies CreateResourceFormValues;
+
 // Submit contract: the button stays clickable — errors surface via the
 // summary + inline messages. Native disabled is for in-flight state only.
 export function CreateResourceForm({ onCreated }: CreateResourceFormProps) {
-  const form = useForm({ mode: 'onChange', defaultValues: { name: '', value: '' } });
-  const name = useWatch({ control: form.control, name: 'name' });
+  const form = useForm<CreateResourceFormValues>({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: CREATE_RESOURCE_DEFAULT_VALUES,
+  });
 
   const { mutate, isPending } = useMutation(createResource, {
-    onSuccess: async () => {
-      await onCreated(name); // caller invalidates the list — awaited, never fire-and-forget
+    onSuccess: async (_response, request) => {
+      if (!request.name) {
+        throw new Error('Submitted create-resource request is missing its name');
+      }
+      await onCreated(request.name); // use the submitted request, not mutable live form state
     },
     // Unpacks BadRequest fieldViolations into form.setError per field;
     // toast only ever carries non-field errors.
@@ -35,19 +49,25 @@ export function CreateResourceForm({ onCreated }: CreateResourceFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} noValidate>
-        <FormErrorSummary />
+        <FormErrorSummary form={form} />
         <FormField
           control={form.control}
           name="name"
-          // Validate format, not presence: the constraint text mirrors the regex.
-          rules={{ pattern: { value: /^[A-Z][A-Z0-9_]*$/, message: 'Name must be uppercase letters, numbers, or underscores' } }}
-          render={({ field }) => (
+          // Validate presence and format; each message mirrors its constraint.
+          rules={{
+            required: 'Name is required',
+            pattern: {
+              value: /^[A-Z][A-Z0-9_]*$/,
+              message: 'Name must be uppercase letters, numbers, or underscores',
+            },
+          }}
+          render={({ field, fieldState }) => (
             <label>
               Resource name <RequiredIndicator />
               <Input
                 {...field}
                 data-testid="resource-name-input"
-                aria-invalid={!!form.formState.errors.name}
+                aria-invalid={fieldState.invalid}
                 aria-describedby="resource-name-error"
               />
               <FormMessage id="resource-name-error" />

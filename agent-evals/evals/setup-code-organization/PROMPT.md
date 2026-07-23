@@ -20,7 +20,7 @@ This project enforces strict code organization and data mutation patterns:
 - When using `FieldMask` for update operations, compute `paths` dynamically from dirty fields instead of hardcoding them. Example: `paths: Object.keys(form.formState.dirtyFields).map(camelToSnake)`.
 
 ## Forms
-- Form validation mode must be `onChange` for immediate feedback. Never use `onBlur` or `onSubmit`.
+- Select validation lifecycle from the UX: `mode` controls validation before submit and `reValidateMode` controls corrections after submit. Do not force `onChange` merely to make rendered filters reactive; use a localized `useWatch` subscription.
 
 ## Package manager
 - Use bun with `--yarn` flag.
@@ -45,5 +45,5 @@ A route component that:
 5. Shows a grid of connection cards
 6. Has "Connect" and "Disconnect" buttons using `<Button>` from `@/components/ui/button`
 7. Uses the `disconnect` mutation from the hook (NOT raw fetch in onClick handler)
-8. Has a form for filtering connections — must use `mode: 'onChange'`
+8. Has a form for filtering connections — use `useWatch` for reactive filter values
 9. Stays under 300 lines

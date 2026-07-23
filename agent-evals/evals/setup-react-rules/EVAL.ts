@@ -139,12 +139,11 @@ describe("setup-react-rules: LLM respects React enforcement rules", () => {
     );
   });
 
-  // ── Form mode must be onChange ────────────────────────────────────
+  // ── Form validation lifecycle ─────────────────────────────────────
 
-  it("should use mode onChange not onBlur or onSubmit", () => {
+  it("should select pre-submit and post-submit validation modes", () => {
     const content = readFileSync("src/UserProfile.tsx", "utf-8");
-    const hasOnBlur = /mode:\s*['"]onBlur['"]/.test(content);
-    const hasOnSubmit = /mode:\s*['"]onSubmit['"]/.test(content);
-    expect(hasOnBlur || hasOnSubmit).toBe(false);
+    expect(content).toMatch(/mode:\s*['"]onSubmit['"]/);
+    expect(content).toMatch(/reValidateMode:\s*['"]onChange['"]/);
   });
 });

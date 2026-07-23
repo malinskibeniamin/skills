@@ -92,7 +92,24 @@ useEffect(function connectToWebSocket() {
 | `initialize` | One-time setup |
 | `poll` | Interval-based fetching |
 
-## Form-Level Validation (react-hook-form v7.72+)
+## React Hook Form validation lifecycle
+
+`mode` controls validation before submit; `reValidateMode` controls revalidation after submit. Select both from the product lifecycle instead of forcing every form to validate on change:
+
+See the official [`mode` and `reValidateMode` contract](https://react-hook-form.com/docs/useform#mode).
+
+| User experience | Configuration |
+|---|---|
+| Keep a new form quiet until submit, then clear errors as the user fixes them | `mode: 'onSubmit', reValidateMode: 'onChange'` |
+| Validate a field after the user leaves it | `mode: 'onBlur'` |
+| Validate after first blur, then on change | `mode: 'onTouched'` |
+| Live feedback for cheap, synchronous constraints | `mode: 'onChange'` |
+
+`onChange` and `all` can do validation work on every change. Do not use them to compensate for stale dependencies, and do not use `delayError` as a debounce. Async validation still needs debounce or cancellation.
+
+`criteriaMode` selects how many rule failures RHF collects per field. Use `criteriaMode: 'all'` only when the UI renders every entry in `error.types`; otherwise keep the default first error and avoid collecting hidden work.
+
+## Form-level validation (react-hook-form v7.72+)
 
 Cross-field validation (confirm password, end date > start date) -> use `validate` on `useForm`, not custom logic in `onSubmit`:
 
@@ -119,6 +136,64 @@ const form = useForm({
 
 Run alongside field-level resolvers (zod, protovalidate) * surface errors via `formState.errors`.
 
+### Dependent validation and cleanup
+
+The [`deps` register option](https://react-hook-form.com/docs/useform/register) revalidates named dependent fields when the registered source changes; it does not clear a dependent value, error, touched state, or dirty state:
+
+```tsx
+<Input {...register('password', { deps: ['confirmPassword'] })} />
+<Input
+  {...register('confirmPassword', {
+    validate: (value, formValues) =>
+      value === formValues.password || 'Passwords must match',
+  })}
+/>
+```
+
+`deps` is limited to `register`; do not pair it with manual `trigger` for the same transition. When a parent choice invalidates a child selection, reset that child explicitly:
+
+```tsx
+function changeCountry(country: string) {
+  setValue('country', country, { shouldDirty: true })
+  resetField('region', { defaultValue: '' })
+}
+```
+
+Use `unregister` or `shouldUnregister` when an unmounted branch must leave the payload. Revalidation and cleanup are separate contracts; test both.
+
+### Read versus subscribe
+
+[`getValues`](https://react-hook-form.com/docs/useform/getvalues) reads an event-time snapshot and does not subscribe or trigger a re-render. Use it in event handlers and imperative boundaries; use the validator's `formValues` argument inside validation. Rendered UI that reacts to values needs a localized `useWatch`.
+
+Subscribe with [`useFormState`](https://react-hook-form.com/docs/useformstate) at the leaf that renders it. Destructure the needed property so RHF's proxy enables that subscription:
+
+```tsx
+function EndpointError({ control }: { control: Control<FormValues> }) {
+  const { errors } = useFormState({ control, name: 'endpoint', exact: true })
+  return <FormMessage>{errors.endpoint?.message}</FormMessage>
+}
+```
+
+Inside a `FormField` render prop, prefer its `fieldState` over subscribing the form root to `form.formState`. Use `exact: true` when nested-name changes should not wake a leaf.
+
+### Deterministic default values
+
+Provide every registered field a defined, serializable baseline. `defaultValues` must not contain `undefined`; use empty strings, booleans, arrays, or an explicit nullable schema value. Avoid `Date`, Moment, Luxon, `Date.now()`, random IDs, and other prototype-bearing or nondeterministic values.
+
+```tsx
+const CREATE_DEFAULT_VALUES: CreateFormValues = {
+  name: '',
+  enabled: false,
+  labels: [],
+}
+
+const form = useForm<CreateFormValues>({
+  defaultValues: CREATE_DEFAULT_VALUES,
+})
+```
+
+[`defaultValues`](https://react-hook-form.com/docs/useform#defaultValues) are cached at initialization. When server data or record identity changes, use `reset(nextValues)` or the reactive `values` option with deliberate reset options; do not expect a new object literal to replace the cached baseline. Async defaults must map the response to the complete deterministic shape and render `formState.isLoading`.
+
 ## Proto Forms (useProtoForm + ProtoField)
 
 Proto-backed forms in this codebase use `useProtoForm` (wraps `useForm` with a proto-schema resolver via `protovalidate` + Standard Schema). Keep a single source of truth -- drift is how forms silently break.
@@ -142,17 +217,37 @@ const form = useProtoForm({ schema: McpServerSchema })
 
 Use `useFieldArray` for list fields. Transient UI state (open/closed dialog, active tab) can stay in `useState`; only form-shape state must live in the form.
 
-### `setValue` options required (hook: `form-setvalue-options-check.sh`)
+### Select `setValue` state transitions (hook: `form-setvalue-options-check.sh`)
 
 ```tsx
-// BAD -- silent update, stale validation
+// BAD in a user-edit handler -- state transition is ambiguous
 form.setValue('providers', next)
 
-// GOOD
+// GOOD when this edit should become dirty and revalidate now
 form.setValue('providers', next, { shouldDirty: true, shouldValidate: true })
 ```
 
-Silent updates only when intentional (e.g., hydrating defaults) -- mark with `// allow: setvalue-options [reason]`.
+`shouldDirty`, `shouldValidate`, and `shouldTouch` default to false. Choose only the transitions the caller owns. For hydration or a new baseline, prefer `reset(nextValues)` over a loop of `setValue` calls. The hook is an optional intent nudge; mark deliberate silent writes with `// allow: setvalue-options [reason]`.
+
+### Delayed validation is exceptional (react-hook-form v7.82+)
+
+Default to immediate errors. `delayError` changes when an error appears; it does not debounce validation or network work. Add it only to address observed error flicker. Debounce or abort expensive async validation instead.
+
+The [shipped v7.82.0 `SetValueConfig` type](https://github.com/react-hook-form/react-hook-form/blob/v7.82.0/src/types/form.ts#L78-L84) is authoritative; the release-note snippet puts the numeric duration on the wrong option.
+
+If delayed errors are justified, `useForm({ delayError: 500 })` owns the duration and `setValue.delayError` is the boolean opt-in for programmatic validation:
+
+```tsx
+form.setValue('endpoint', next, {
+  shouldDirty: true,
+  shouldValidate: true,
+  delayError: true,
+})
+```
+
+Omitting `setValue.delayError` is the normal immediate path and stays silent. The form-mode hook only nudges numeric values copied from the release note; it never recommends adding delayed validation.
+
+`dirtyFields` is not uniformly object-shaped: a registered array leaf can be boolean `true`, while `useFieldArray` produces nested or sparse state. Test changed, reverted, disabled-form programmatic writes, and remove-all transitions; do not cast every dirty node to one container shape.
 
 ### FormErrorSummary for multi-field forms (hook: `form-error-summary-check.sh`)
 
@@ -166,6 +261,8 @@ Silent updates only when intentional (e.g., hydrating defaults) -- mark with `//
 ```
 
 Inline `FormMessage` alone isn't enough -- offscreen + long forms need a submit-time summary. Accept any equivalent: a shared `<FormErrorSummary>`, an `Alert` with `role="alert"`, or an `aria-live` status region.
+
+The summary must enumerate every field error rather than indexing the first one. With `criteriaMode: 'all'`, the inline renderer must also enumerate every message in each field's `error.types`.
 
 ### Proto annotations -- hydrate, don't hardcode
 

@@ -532,41 +532,78 @@ test('clears OAuth fields when switching to SAML', async () => {
 
 ### Async Validation Race Condition
 
-Rapid edits must not show stale validation:
+Rapid edits must not show an older result after a newer validation wins. Write this RED before adding debounce, `AbortController`, or request-generation guards:
 
 ```ts
-test('cancels stale async validation on rapid input', async () => {
-  const user = userEvent.setup()
-  const validateFn = vi.fn()
-    .mockResolvedValueOnce({ valid: false, error: 'stale' }) // slow first
-    .mockResolvedValueOnce({ valid: true })                   // fast second
+test('ignores stale async validation results', async () => {
+  let resolveFirst!: (result: ValidationResult) => void
+  let resolveSecond!: (result: ValidationResult) => void
+  const first = new Promise<ValidationResult>((resolve) => { resolveFirst = resolve })
+  const second = new Promise<ValidationResult>((resolve) => { resolveSecond = resolve })
+  const validateFn = vi.fn().mockReturnValueOnce(first).mockReturnValueOnce(second)
 
   render(<ValidatedInput validate={validateFn} />)
+  const input = screen.getByRole('textbox', { name: /endpoint/i })
 
-  await fireEvent.change(input, { target: { value: 'a' } })
-  await fireEvent.change(input, { target: { value: 'ab' } })
+  fireEvent.change(input, { target: { value: 'a' } })
+  fireEvent.change(input, { target: { value: 'ab' } })
+  await waitFor(() => expect(validateFn).toHaveBeenCalledTimes(2))
 
-  await waitFor(() => {
-    expect(screen.queryByText('stale')).not.toBeInTheDocument()
+  await act(async () => {
+    resolveSecond({ valid: true })
+    await second
+    resolveFirst({ valid: false, error: 'stale' })
+    await first
   })
+
+  expect(screen.queryByText('stale')).toBeNull()
+})
+```
+
+For delayed or debounced validation, use fake timers in unit/integration tests: assert no early error, deadline visibility, cancellation after correction, and two fields remain independent. E2E asserts the eventual outcome without sleeping.
+
+### Dependent-field cleanup
+
+`deps` can revalidate another field, but it does not clear a value or field state that became invalid when its parent changed. Write the cleanup contract RED before wiring `resetField`, `unregister`, or an explicit `setValue` transition:
+
+```ts
+test('clears dependent field state when its parent changes', async () => {
+  const user = userEvent.setup()
+  const onSubmit = vi.fn()
+  render(<CountryRegionForm onSubmit={onSubmit} />)
+
+  await user.selectOptions(screen.getByRole('combobox', { name: /country/i }), 'US')
+  await user.selectOptions(screen.getByRole('combobox', { name: /region/i }), 'CA')
+  await user.click(screen.getByRole('button', { name: /check address/i }))
+  expect(await screen.findByText(/california is unavailable/i)).toBeVisible()
+
+  await user.selectOptions(screen.getByRole('combobox', { name: /country/i }), 'Canada')
+  await user.click(screen.getByRole('button', { name: /save draft/i }))
+
+  expect(screen.getByRole('combobox', { name: /region/i })).toHaveValue('')
+  expect(screen.queryByText(/california is unavailable/i)).not.toBeInTheDocument()
+  await waitFor(() => expect(onSubmit).toHaveBeenCalled())
+  expect(onSubmit.mock.calls[0]?.[0]).toEqual({ country: 'Canada', region: '' })
 })
 ```
 
 ### All Errors Visible
 
-Show all errors, not just first:
+Collecting errors is not rendering them. Write the summary contract RED; with RHF `criteriaMode: 'all'`, assert multiple failures for one field plus failures from other fields:
 
 ```ts
-test('displays all validation errors not just first', async () => {
+test('renders every validation error', async () => {
   const user = userEvent.setup()
-  render(<ConfigForm />)
+  render(<PasswordForm />)
 
-  await user.click(screen.getByRole('button', { name: /save/i }))
+  await user.clear(screen.getByLabelText(/^password$/i))
+  await user.paste('lowercase')
+  await user.click(screen.getByRole('button', { name: /create account/i }))
 
-  await waitFor(() => {
-    expect(screen.getByText(/name is required/i)).toBeVisible()
-    expect(screen.getByText(/url must be valid/i)).toBeVisible()
-  })
+  const summary = await screen.findByRole('alert')
+  expect(within(summary).getByText(/uppercase letter/i)).toBeVisible()
+  expect(within(summary).getByText(/number/i)).toBeVisible()
+  expect(within(summary).getByText(/confirmation is required/i)).toBeVisible()
 })
 ```
 
