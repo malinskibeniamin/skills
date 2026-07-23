@@ -128,7 +128,7 @@ run_file_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh exists"
 run_executable_eval "$HOOKS_DIR/form-mode-check.sh" "form-mode-check.sh is executable"
 
 run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "useWatch" "form-watch suggests useWatch"
-run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "React Compiler" "form-watch mentions React Compiler"
+run_content_eval "$HOOKS_DIR/checks/form-mode-check.lib.sh" "getValues.*snapshot" "form-watch distinguishes getValues snapshots"
 
 # ══════════════════════════════════════════════════════════════════
 # ts-no-escape-hatches-check.sh

@@ -168,7 +168,7 @@ _assert_exit 0 "non-commit passes through"
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ form-mode-check.sh (now blocks) ━━━"
+echo "━━━ form-mode-check.sh (advisory subscription guidance) ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
@@ -182,8 +182,9 @@ const MyForm = () => {
 
 echo "  form.watch() in react-hook-form file:"
 _run_hook "form-mode-check.sh" "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$_test_file\"}}"
-_assert_exit 2 "form.watch() blocked (was warn)"
-_assert_stderr_contains "useWatch" "message says use useWatch"
+_assert_exit 0 "form.watch() is advisory"
+_assert_stdout_contains "\\[nudge\\].*useWatch" "message suggests localized useWatch"
+_assert_stdout_contains "getValues.*snapshot" "message distinguishes event-time snapshots"
 
 _cleanup_test_file "$_test_file"
 _teardown_session

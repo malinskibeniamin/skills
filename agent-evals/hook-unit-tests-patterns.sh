@@ -624,15 +624,27 @@ _setup_session
 
 _f="/tmp/hook-test-form-mode-$$.tsx"
 
-echo "  mode: 'onBlur' (warn):"
+echo "  mode: 'onBlur' (lifecycle nudge):"
 _setup_test_file "$_f" "import { useForm } from 'react-hook-form';
 const MyForm = () => {
   const form = useForm({ mode: 'onBlur' });
   return <form />;
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "onBlur is warn"
-_assert_stdout_contains "onChange" "suggests onChange"
+_assert_exit 0 "onBlur lifecycle guidance is optional"
+_assert_stdout_contains "\\[nudge\\].*before.*submit.*reValidateMode.*after" "explains validation lifecycle"
+_assert_stdout_not_contains "Avoid.*onBlur|should be.*onChange" "does not reject a valid mode"
+_cleanup_test_file "$_f"
+
+echo "  explicit pre/post-submit lifecycle (pass):"
+_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
+const MyForm = () => {
+  const form = useForm({ mode: 'onSubmit', reValidateMode: 'onChange' });
+  return <form />;
+};"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "explicit validation lifecycle passes"
+_assert_stdout_not_contains "\\[nudge\\].*reValidateMode" "does not nudge an explicit lifecycle"
 _cleanup_test_file "$_f"
 
 echo "  no useForm (skip):"
@@ -1838,11 +1850,12 @@ _setup_session
 
 _f="/tmp/hook-test-setvalue-$$.tsx"
 
-echo "  setValue without options (warn):"
+echo "  setValue without options (intent nudge):"
 _setup_test_file "$_f" "const handler = () => { form.setValue('name', 'x'); };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "no-options setValue is warn"
-_assert_stdout_contains "shouldDirty|shouldValidate" "mentions options"
+_assert_exit 0 "no-options setValue guidance is optional"
+_assert_stdout_contains "\\[nudge\\].*Choose.*shouldDirty.*shouldValidate" "asks callers to choose state transitions"
+_assert_stdout_contains "reset" "uses reset for hydration guidance"
 _cleanup_test_file "$_f"
 
 echo "  setValue with options (pass):"

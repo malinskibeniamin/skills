@@ -308,7 +308,7 @@ if echo "$added_lines" | grep -qE "from\s+['\"](react-intl)['\"/]|<FormattedMess
   hook_block "react-intl/FormattedMessage is a banned dead stack. Use plain strings (docs-editor reviewed); no i18n dictionary machinery."
 fi
 if echo "$added_lines" | grep -qE "from\s+['\"](formik)['\"/]"; then
-  hook_block "Formik is a banned dead stack. Use react-hook-form (mode: onChange) with proto-driven or zod resolvers."
+  hook_block "Formik is a banned dead stack. Use react-hook-form with proto-driven or zod resolvers; select mode for validation before submit and reValidateMode for corrections after submit."
 fi
 if echo "$added_lines" | grep -qE "from\s+['\"](yup)['\"/]"; then
   hook_block "Yup is a banned dead stack. Validation: protovalidate for proto-backed forms, zod for route search schemas. Keep the lesson: validate format, not presence."

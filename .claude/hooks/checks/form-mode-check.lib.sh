@@ -23,12 +23,14 @@ if [ -n "$added_lines" ]; then
 # Allow escape hatch: // allow: form-mode [reason]
 # (covers all checks in this hook)
 
-# ── Check 1: Ban mode: 'onBlur' / 'onSubmit' in form options ────
-# Forms must use onChange for immediate validation feedback.
+# ── Check 1: Make validation lifecycle selection explicit ────────
+# mode controls pre-submit validation; reValidateMode controls errors after
+# submit. onBlur/onSubmit are valid choices, so this stays advisory.
 
-if echo "$added_lines" | grep -qE "mode:\s*['\"]on(Blur|Submit)['\"]"; then
+if echo "$added_lines" | grep -qE "mode:\s*['\"]on(Blur|Submit)['\"]" && \
+   ! echo "$file_content" | grep -qE "reValidateMode:\s*['\"]on(Change|Blur|Submit)['\"]"; then
   if ! hook_has_escape "form-mode"; then
-    hook_warn "Form mode should be 'onChange' for immediate validation feedback. Avoid 'onBlur'/'onSubmit'. Escape: // allow: form-mode [reason]"
+    hook_nudge "RHF mode selects validation before submit; onBlur and onSubmit are valid. Choose reValidateMode for corrections after submit. Use onChange only when live feedback justifies per-keystroke validation. Escape: // allow: form-mode [reason]" "form-mode"
   fi
 fi
 
@@ -83,24 +85,22 @@ fi
 fi
 
 # ── absorbed from form-watch-check.sh (4.28 family consolidation) ──
-# ── Check: form.watch() should be useWatch() ─────────────────────
-# React Compiler needs useWatch for proper rerender tracking.
-# form.watch() doesn't trigger component rerenders reliably.
+# ── Check: localize broad form.watch() subscriptions ─────────────
+# watch is valid but re-renders at the useForm root. Prefer the narrow API
+# matching the job; this is a performance nudge, not a correctness block.
 
 if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.watch\(\s*['\''"]|form\.watch\(|\.watch\(\)'; then
   # Only fire if file uses react-hook-form
   if echo "$file_content" | grep -qE "from\s+['\"]react-hook-form['\"]|useForm\(|useFormContext\("; then
     if ! hook_has_escape "form-watch"; then
-      hook_block "Use useWatch() instead of form.watch() for React Compiler compatibility. useWatch triggers proper rerenders. Escape: // allow: form-watch [reason]"
+      hook_nudge "form.watch() is valid but re-renders at the useForm root. Prefer localized useWatch for render subscriptions, getValues for an event-time snapshot, or subscribe for side effects. Escape: // allow: form-watch [reason]" "form-watch"
     fi
   fi
 fi
 
 # ── absorbed from form-setvalue-options-check.sh (4.28 family consolidation) ──
-# Enforce: form.setValue(name, value) must pass { shouldDirty: true,
-# shouldValidate: true } options unless intentional. Without options,
-# value updates silently and validation state goes stale — surprising
-# users and bypassing resolver feedback.
+# setValue state transitions are opt-in. Surface missing options as a prompt
+# to choose intent, not a claim that every programmatic write is user input.
 
 if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.setValue\('; then
   # Multiline scan the file for setValue calls lacking shouldDirty/shouldValidate.
@@ -116,7 +116,7 @@ if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.setValue\('; then
 
     if [ -n "$_real_bad" ]; then
       if ! hook_has_escape "setvalue-options"; then
-        hook_warn "form.setValue() missing { shouldDirty: true, shouldValidate: true } — value updates silently, validation goes stale. Pass options unless the silence is intentional. Escape: // allow: setvalue-options [reason]" "setvalue-options"
+        hook_nudge "Choose setValue state transitions explicitly: shouldDirty for user-visible edits, shouldValidate when this write must revalidate now, and shouldTouch only when it represents interaction. Prefer reset for hydration or a new baseline. Escape: // allow: setvalue-options [reason]" "setvalue-options"
       fi
     fi
   fi

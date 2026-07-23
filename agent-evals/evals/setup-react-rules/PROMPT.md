@@ -27,7 +27,7 @@ This project enforces strict React rules. Read each one carefully.
 
 ## Forms
 - Use `react-hook-form` for form management.
-- **Form validation mode must be `onChange`** for immediate feedback. Never use `onBlur` or `onSubmit`.
+- Select validation lifecycle from the UX: `mode` controls validation before submit and `reValidateMode` controls corrections after submit. For this email update form, use `mode: 'onSubmit'` with `reValidateMode: 'onChange'`.
 - For cross-field validation (e.g., confirm email must match email), use **form-level `validate`** in `useForm()`:
   ```tsx
   const form = useForm({
@@ -77,7 +77,7 @@ A component that:
 2. Fetches user data from `/api/users/:id` using `useQuery` (NOT useEffect)
 3. Shows a loading spinner using `isLoading`
 4. Displays the user's name and email
-5. Has a form to update email with a "confirm email" field — use `react-hook-form` with form-level `validate` for cross-field validation (confirm email must match email)
+5. Has a form to update email with a "confirm email" field — use `react-hook-form` with `mode: 'onSubmit'`, `reValidateMode: 'onChange'`, and form-level `validate` for cross-field validation (confirm email must match email)
 6. Always passes an error callback to `handleSubmit`
 7. Uses `<Button>`, `<Input>` from shadcn/ui (NOT raw HTML elements)
 8. Uses Tailwind utility classes (no inline styles)

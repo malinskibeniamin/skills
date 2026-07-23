@@ -55,16 +55,11 @@ describe("setup-code-organization: LLM respects code organization rules", () => 
     expect(hasFetch && hasPost).toBe(false);
   });
 
-  // ── Form mode: onChange required ───────────────────────────────
+  // ── Form subscriptions: filtering reacts without forcing validation mode ──
 
-  it("should NOT use form mode onBlur", () => {
+  it("should use a localized form value subscription for filters", () => {
     const content = readFileSync("src/routes/connections.tsx", "utf-8");
-    expect(content).not.toMatch(/mode:\s*['"]onBlur['"]/);
-  });
-
-  it("should NOT use form mode onSubmit", () => {
-    const content = readFileSync("src/routes/connections.tsx", "utf-8");
-    expect(content).not.toMatch(/mode:\s*['"]onSubmit['"]/);
+    expect(content).toMatch(/\buseWatch\s*\(/);
   });
 
   // ── biome-ignore noExplicitAny ban ─────────────────────────────
