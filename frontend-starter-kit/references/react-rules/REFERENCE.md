@@ -154,6 +154,24 @@ form.setValue('providers', next, { shouldDirty: true, shouldValidate: true })
 
 Silent updates only when intentional (e.g., hydrating defaults) -- mark with `// allow: setvalue-options [reason]`.
 
+### Programmatic delayed validation (react-hook-form v7.82+)
+
+`useForm({ delayError: 500 })` owns the duration; `setValue.delayError` is boolean and opts programmatic validation into that delay:
+
+The [shipped v7.82.0 `SetValueConfig` type](https://github.com/react-hook-form/react-hook-form/blob/v7.82.0/src/types/form.ts#L78-L84) is authoritative; the release-note snippet puts the numeric duration on the wrong option.
+
+```tsx
+form.setValue('endpoint', next, {
+  shouldDirty: true,
+  shouldValidate: true,
+  delayError: true,
+})
+```
+
+Omit `delayError` or set it to `false` when an immediate programmatic error is intentional. The form-mode hook only nudges ambiguous calls; escape with `// allow: setvalue-immediate-error [reason]`.
+
+`dirtyFields` is not uniformly object-shaped: a registered array leaf can be boolean `true`, while `useFieldArray` produces nested or sparse state. Test changed, reverted, disabled-form programmatic writes, and remove-all transitions; do not cast every dirty node to one container shape.
+
 ### FormErrorSummary for multi-field forms (hook: `form-error-summary-check.sh`)
 
 ```tsx

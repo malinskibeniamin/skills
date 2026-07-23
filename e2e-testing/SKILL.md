@@ -34,6 +34,7 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 ## Determinism rules (mined from years of flake fixes)
 
 - **Wait for a cause, never a duration**: `waitForURL()` after navigation clicks, `waitForResponse()`/`waitForRequest()` before asserting UI the RPC drives, element-state waits otherwise. No `waitForTimeout`; no `expect.soft` inside `toPass` (soft failures never retry the block).
+- **Timed behavior belongs below E2E**: prove debounce/delay deadlines and cancellation with fake timers in unit/integration tests; E2E asserts the visible outcome without sleeping.
 - **No `force: true` clicks** -- if the element needs forcing, something obstructs it and users hit the same wall; fix the obstruction.
 - **Match RPC routes on `Service/Method` only**, never version-pinned (`v1alpha1` in a matcher breaks on the next API bump).
 - **`test.step()` around every logical action** -- CI failure output then names the exact step; the smaller the step, the faster the diagnosis.

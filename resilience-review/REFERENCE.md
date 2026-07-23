@@ -21,6 +21,7 @@ For each form/API/mutation/config/job:
 - Value: empty, null, duplicate, stale, malformed, huge, unsupported enum.
 - Time: stale, slow, timeout, cancelled, double submit, tab race.
 - State: mode switch, partial edit, dirty form, deleted resource, stale cache.
+- Form state: delayed validation uses per-field timers; a registered array dirty leaf is boolean while useFieldArray state is nested/sparse; reverting or removing all values clears empty dirty containers.
 - System: partial outage, 500, retry storm, queue delay, background failure.
 - UX: loading, empty, error, success, disabled, optimistic, rollback.
 

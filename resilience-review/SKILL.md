@@ -17,14 +17,14 @@ Each hat owns one failure class with non-goals, so findings do not converge. Sma
 | Hat | Owns (and probes) | Non-goals |
 |---|---|---|
 | input | empty, null, duplicate, malformed, stale, huge, out-of-order payloads; validation format-vs-presence | timing, infra |
-| timing | double submit, tab race, retry storms, slow network, timeout, cancel, out-of-order responses | payload validity |
+| timing | double submit, tab race, retry storms, slow network, timeout, cancel, out-of-order responses, per-field timers | payload validity |
 | system | partial outage, 500s, stale cache, deleted resource, permission drift, dependency failure | UI polish |
 | state | invalid/impossible states, mode-switch residue, oneof cleanup, stale derived state, recovery to a good state | network causes |
 | ux-recovery | unclear disabled states, lost errors, fake success, dead ends without retry/undo, missing loading/empty states | root causes owned by other hats |
 
 Each hat emits findings with: scenario, trigger, expected behavior, guard (Precondition -> Postcondition -> Fallback -> Observability), test to write, evidence (file/route/form/API cited). For external/browser/platform behavior, the hat runs `/read-the-damn-docs`; complex planned state flows sketch `/visual-plan` first.
 
-**The recurring meta-bug** (every hat probes its variant): *state resolved asynchronously, read too early or scoped too broadly* -- cache keyed without its scope (env/org/user), fire-and-forget teardown, out-of-order responses without abort, flag defaults read before the provider resolves. **Contracts:** error boundaries layer unauthenticated -> stale-chunk recovery -> cancellation-as-non-error -> generic. Destructive flows fail CLOSED: confirm enables only after a fresh (staleTime 0) zero-reference lookup succeeds -- loading or errored is NOT confirmable; every close path (X, ESC, Enter, back) respects in-flight and dirty state. Retries bounded and code-classified (network/5xx once, never 4xx); degraded states show the reported reason verbatim and offer retry.
+**The recurring meta-bug** (every hat probes its variant): *state resolved asynchronously, read too early or scoped too broadly* -- cache keyed without its scope (env/org/user), one timer shared by independent fields, fire-and-forget teardown, out-of-order responses without abort, flag defaults read before the provider resolves. **Contracts:** error boundaries layer unauthenticated -> stale-chunk recovery -> cancellation-as-non-error -> generic. Destructive flows fail CLOSED: confirm enables only after a fresh (staleTime 0) zero-reference lookup succeeds -- loading or errored is NOT confirmable; every close path (X, ESC, Enter, back) respects in-flight and dirty state. Retries bounded and code-classified (network/5xx once, never 4xx); degraded states show the reported reason verbatim and offer retry.
 
 Merge: dedupe by root cause, keep the highest-severity framing, then drive the finding loop: `/diagnosing-bugs` feedback loop -> `/tdd` RED test/snapshot -> `/visual-review` for UI validation.
 

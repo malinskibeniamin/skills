@@ -536,21 +536,30 @@ Rapid edits must not show stale validation:
 
 ```ts
 test('cancels stale async validation on rapid input', async () => {
-  const user = userEvent.setup()
-  const validateFn = vi.fn()
-    .mockResolvedValueOnce({ valid: false, error: 'stale' }) // slow first
-    .mockResolvedValueOnce({ valid: true })                   // fast second
+  let resolveFirst!: (result: ValidationResult) => void
+  let resolveSecond!: (result: ValidationResult) => void
+  const first = new Promise<ValidationResult>((resolve) => { resolveFirst = resolve })
+  const second = new Promise<ValidationResult>((resolve) => { resolveSecond = resolve })
+  const validateFn = vi.fn().mockReturnValueOnce(first).mockReturnValueOnce(second)
 
   render(<ValidatedInput validate={validateFn} />)
 
-  await fireEvent.change(input, { target: { value: 'a' } })
-  await fireEvent.change(input, { target: { value: 'ab' } })
+  fireEvent.change(input, { target: { value: 'a' } })
+  fireEvent.change(input, { target: { value: 'ab' } })
+  await waitFor(() => expect(validateFn).toHaveBeenCalledTimes(2))
 
-  await waitFor(() => {
-    expect(screen.queryByText('stale')).not.toBeInTheDocument()
+  await act(async () => {
+    resolveSecond({ valid: true })
+    await second
+    resolveFirst({ valid: false, error: 'stale' })
+    await first
   })
+
+  expect(screen.queryByText('stale')).toBeNull()
 })
 ```
+
+For delayed or debounced validation, use fake timers in unit/integration tests: assert no early error, deadline visibility, cancellation after correction, and two fields remain independent. E2E asserts the eventual outcome without sleeping.
 
 ### All Errors Visible
 

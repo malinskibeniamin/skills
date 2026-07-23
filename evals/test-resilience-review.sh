@@ -44,6 +44,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "TDD" "examples show TDD conversion"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Visual review" "examples show visual review validation"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "partial outage" "examples cover partial outage"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "double submit" "examples cover double submit"
+run_content_eval "$SKILL_DIR/SKILL.md" "per-field.*timer|timer.*per-field" "timing hat scopes delayed validation per field"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "registered array.*boolean.*useFieldArray|useFieldArray.*registered array.*boolean" "reference covers dirtyFields shape variants"
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/resilience-review" "development-lifecycle wires resilience-review"
 run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "Resilience Review" "lifecycle reference documents Resilience Review"

@@ -18,6 +18,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priori
 run_content_eval "$SKILL_DIR/SKILL.md" "agent-browser|Playwright" "SKILL.md mentions test tools"
 run_content_eval "$SKILL_DIR/SKILL.md" "route sibling" "SKILL.md mentions route sibling tests"
 run_content_eval "$SKILL_DIR/SKILL.md" "structural refactor" "SKILL.md mentions structural refactor test nudge"
+run_content_eval "$SKILL_DIR/SKILL.md" "fake timers.*E2E|E2E.*fake timers" "SKILL.md separates timer contracts from E2E outcomes"
 
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 

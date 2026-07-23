@@ -38,6 +38,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Common Agent Excuses" "REFERENCE has
 run_content_eval "$SKILL_DIR/REFERENCE.md" "detectAsyncLeaks" "REFERENCE has async leak detection"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "pool.*threads" "REFERENCE has pool: threads optimization"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "isolate.*false.*Incompatible" "REFERENCE bans isolate: false with reason"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "two fields.*independent|independent.*two fields" "REFERENCE tests delayed validation isolation"
 
 # ── Coverage gap analysis ────────────────────────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "coverage" "SKILL.md references coverage in PLAN phase"

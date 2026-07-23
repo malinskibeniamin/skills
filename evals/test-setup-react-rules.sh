@@ -1249,6 +1249,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "connectToWebSocket|disconnectWebSock
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useSyncExternalStore" "REFERENCE has useSyncExternalStore guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Resetting State on Prop Change" "REFERENCE has key-prop state reset pattern"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "formValues" "REFERENCE has react-hook-form form-level validate"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "delayError: true" "REFERENCE documents programmatic delayed validation"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "registered array.*boolean|boolean.*registered array" "REFERENCE documents dirtyFields array shapes"
 run_content_eval "$SCRIPT_LIB" "no-reset-all-state-on-prop-change" "hook records React Doctor delegation for state reset"
 
 # ── Cleanup ─────────────────────────────────────────────────────
