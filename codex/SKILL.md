@@ -19,9 +19,9 @@ GPT models are extremely steerable: write explicit, self-contained prompts.
 
 | Variant | Flag | Effort | Use for | Never |
 |---|---|---|---|---|
-| **Sol** | `-m gpt-5.6-sol` (default) | `medium`\|`high` only | ALL code writing, implementation, adversarial review -- smartest model rivaled only by Fable-5, efficient for the price | low effort |
-| **Terra** | `-m gpt-5.6-terra` | `medium`\|`high` only | budget non-code work: posting PR comments, routine review passes, test-runner/CI chores | writing product code |
-| **Luna** | `-m gpt-5.6-luna` | `high` only | last resort: extremely cheap/quick/limited tasks far from code -- Jira/GitHub issue orchestration, mundane tool-call loops, test fixtures | development of any kind |
+| **Sol** | `-m gpt-5.6-sol` (default) | `medium`\|`high`; review/plan `xhigh` | ALL code writing, implementation, review, and plan checks | low effort |
+| **Terra** | `-m gpt-5.6-terra` | `medium`\|`high` only | PR comments and test-runner/CI chores | product code or review |
+| **Luna** | `-m gpt-5.6-luna` | `high` only | tracker orchestration and mundane tool loops | development or review |
 Optional user setup: `model = "gpt-5.6-sol"` in `~/.codex/config.toml`; agents do not mutate it.
 
 ## Prompt contract (every codex run)
@@ -40,19 +40,18 @@ rerun with a sharper prompt or redo on a smarter model without asking.
 
 - **Implement** (clear spec, migrations, mechanical sweeps): `codex exec` with write access,
   in a worktree when anything else touches the checkout.
-- **Review** (independent second opinion on a diff/PR): `codex review`, or
-  `codex exec -s read-only` with the diff command in the prompt. Findings feed the normal
-  review merge; treat as one lane, not the verdict.
+- **Review** (independent second opinion on a diff/PR): always run
+  `codex exec -m gpt-5.6-sol -c 'model_reasoning_effort="xhigh"' -s read-only "<prompt>"`.
+  Include the diff command; merge its findings as one lane, not the verdict.
 - **Adversarial exchange (automatic in Claude-hosted workflows -- no ask needed)**: the author
   model never solely reviews its own work, and the reviewer comes from a DIFFERENT FAMILY
   whenever possible -- family diversity catches what same-family blind spots share. Claude
   authored the diff -> `GPT-5.6-sol: adversarial` review here (`codex review` / read-only
-  exec, medium+ effort, prompt: "try to break this -- failure scenarios, spec drift, missing
+  exec, xhigh effort, prompt: "try to break this -- failure scenarios, spec drift, missing
   tests; P0-P3 findings only, evidence required"). GPT authored the diff -> Fable/Opus
   reviews (the `/review` panel or `adversarial-reviewer` agent). Same-family clean-context
   review is the fallback ONLY when the other family is unavailable -- record the
-  substitution. Terra may take routine re-check rounds after fixes; Sol or Claude owns the
-  initial adversarial pass. Findings route back per model routing. `/go` phase 4b invokes
+  substitution. Terra/Luna never review. Findings route back per model routing. `/go` phase 4b invokes
   this automatically. Native Codex runs the axis inline and records cross-family review as
   unavailable unless the user explicitly requests an external lane.
 
@@ -63,9 +62,9 @@ rerun with a sharper prompt or redo on a smarter model without asking.
     clean-context Claude agent instead; record the substitution.
   - *Minimization*: send the diff, acceptance criteria, and verify commands -- never the
     conversation, secrets, or unrelated files.
-  - *Budget*: codex spends plan allowance/credits -- it is cheap relative to Claude tokens,
-    not free. Cap the automatic exchange at one codex review per refine round and one per
-    PR-iterate round; extra runs need a reason.
+  - *Budget*: Claude and Codex quotas are separate. Codex review stays Sol xhigh when its
+    subscription meter is unavailable; never substitute `ccusage` token/cost data for quota.
+    Cap the exchange at one Sol review per refine round and one per PR-iterate round.
 - **Computer use** (browser/GUI verification, visual re-checks): shell the whole computer-use
   task to codex -- it is a token furnace on Claude models. Prompt must name the URL/app, the
   states to verify, and the evidence to capture; codex reports back, Fable judges.
@@ -87,8 +86,8 @@ open-but-silent stdin pipe blocks it forever waiting for EOF -- 0s CPU, no sessi
 
 ## Inside Claude-hosted workflows and subagents (the wrapper pattern)
 
-The workflow/agent `model` parameter only accepts Claude models. To use GPT-5.6 in a
-workflow lane or subagent, spawn a thin Claude wrapper:
+The workflow/agent `model` parameter only accepts Claude models. Review calls Codex directly
+through Bash so a wrapper cannot spend Claude quota. Other workflow lanes may use a thin wrapper:
 
 - Wrapper: `model: sonnet`, `effort: low` -- its ONLY job is to compose the self-contained
   codex prompt, run `codex exec` via Bash, and return the report.
@@ -104,7 +103,7 @@ workflow lane or subagent, spawn a thin Claude wrapper:
 
 ## When NOT to delegate
 
-Judgment-heavy work stays with Fable-5/Opus-4.8: ambiguous decomposition, architecture,
-synthesis across conflicting reports, final review of anything that ships. User-facing
+Judgment-heavy work uses the quota-routed Claude profile plus Sol xhigh, or Sol alone when
+Claude is disabled: ambiguous decomposition, architecture, synthesis. User-facing
 output (UI, copy, API design) needs taste >= 7 -- GPT-5.6 (taste 6) drafts, a Claude model
 finishes. Never use Haiku for anything.

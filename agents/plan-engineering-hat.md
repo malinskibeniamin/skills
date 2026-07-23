@@ -1,7 +1,7 @@
 ---
 name: plan-engineering-hat
 description: Engineering-perspective plan review. Architecture, perf, security, test strategy, dependency risk. Gated in /grilling phase 2b; spawned in parallel with product-hat and design-hat. Outputs structured JSON findings.
-model: sonnet
+model: inherit
 allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *), Bash(tsc *)
 ---
 

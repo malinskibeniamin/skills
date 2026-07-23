@@ -66,9 +66,8 @@ fi
 # self-evidently derivable from `find . -maxdepth 2 -name SKILL.md`, so
 # the friction outweighed the signal.
 
-# -- Test D: agent model frontmatter guards cost tier ---------------
-# Never Haiku (2026-07 routing policy). adversarial-reviewer=opus, others=sonnet.
-# Guards against regression that would inflate subagent cost ~$650/yr.
+# -- Test D: agent model frontmatter guards routing policy ----------
+# Review and planning agents inherit the quota-selected per-invocation profile.
 
 agents_dir="$SKILLS_ROOT/agents"
 declare_agent_model() {
@@ -88,9 +87,9 @@ declare_agent_model() {
 }
 
 declare_agent_model "$agents_dir/verifier.md" "sonnet"
-declare_agent_model "$agents_dir/self-reviewer.md" "sonnet"
-declare_agent_model "$agents_dir/code-reviewer.md" "sonnet"
-declare_agent_model "$agents_dir/adversarial-reviewer.md" "opus"
-declare_agent_model "$agents_dir/plan-product-hat.md" "sonnet"
-declare_agent_model "$agents_dir/plan-engineering-hat.md" "sonnet"
-declare_agent_model "$agents_dir/plan-design-hat.md" "sonnet"
+declare_agent_model "$agents_dir/self-reviewer.md" "inherit"
+declare_agent_model "$agents_dir/code-reviewer.md" "inherit"
+declare_agent_model "$agents_dir/adversarial-reviewer.md" "inherit"
+declare_agent_model "$agents_dir/plan-product-hat.md" "inherit"
+declare_agent_model "$agents_dir/plan-engineering-hat.md" "inherit"
+declare_agent_model "$agents_dir/plan-design-hat.md" "inherit"

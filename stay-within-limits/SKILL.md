@@ -1,96 +1,57 @@
 ---
 name: stay-within-limits
-description: Use when long-running or parallel agent work must respect 5-hour and weekly usage limits by checking usage between waves, pausing near the cap, and resuming only when the window is clear.
+description: Use when review, planning, or parallel agent work must route around Claude 5-hour and weekly usage limits without weakening required coverage.
 ---
 
 # Stay Within Limits
 
-Keep long-running agent work inside the current 5-hour and weekly usage windows.
-Check usage before launching substantial work and between waves of parallel
-subagents. If an active 5-hour or weekly limit is at or above 95%, pause new
-work until the window is clear enough to continue safely.
+Keep Claude review and planning inside both subscription windows. Use the exact Claude Code
+statusline quota snapshot described in [REFERENCE.md](REFERENCE.md); `ccusage` is not
+subscription-quota evidence and cannot select these bands.
 
-## Core Loop
+## Review And Planning Profile
 
-1. Run a bounded, authorized wave of work. Default to at most 3 parallel subagents unless
-   the user or host gives a different throttle.
-2. Wait for the wave to finish. Do not interrupt in-flight subagents just to
-   save budget; that usually loses work.
-3. Check current 5-hour and weekly usage with the host's usage/budget tool.
-4. If either window is at or above 95%, stop launching work and schedule a
-   self-contained resume when the relevant window should clear.
-5. On resume, re-check the real window or block before continuing. Do not trust
-   elapsed wall-clock time alone.
+Before every Claude review/planning wave and between waves:
 
-## Usage Signals
+1. Run `select-review-profile.sh`.
+2. Route from the higher of `five_hour.used_percentage` and
+   `seven_day.used_percentage`.
+3. Use one selected Claude profile for every hat in that wave:
+   - `<20%`: Fable low.
+   - `20-<50%`: Opus high.
+   - `50-<75%`: Opus low.
+   - `75-<90%`: Sonnet low.
+   - `>=90%`: no Claude.
+4. Missing, malformed, or stale quota snapshot means no Claude.
+5. Always run the independent GPT-5.6 Sol xhigh check. If Claude is disabled, Sol owns all
+   required hats; do not silently skip axes.
 
-Prefer a first-party host usage tool when available. `ccusage` measures Claude usage only.
-In Claude Code, use:
+Use per-invocation Claude `model` and `effort`; reviewer and planning agent definitions
+inherit so static frontmatter cannot override the selected profile. Let an in-flight wave
+finish, then reroute the next wave from a fresh snapshot.
 
-```sh
-npx -y ccusage@latest blocks --active --json
-```
+## Other Agent Waves
 
-Use the JSON to identify the active block start, current cost or percentage, and
-time remaining. On wake, compare the active block start timestamp with the
-previous one; a new timestamp is stronger evidence than "enough time passed."
+For long non-review fan-outs, default to at most 3 parallel subagents. Re-check the real
+5-hour and 7-day windows between waves. At `>=90%`, stop new Claude work and prepare a
+self-contained resume; use Sol only where the repo authorizes Codex.
 
-In native Codex, use a host-provided meter or a value the user reports from their
-dashboard or codexbar. If neither exists, usage is unknown: report `Codex usage
-unavailable to the harness`, allow at most one explicitly requested agent wave,
-then checkpoint. Do not guess a percentage or reset time from session tokens,
-and do not schedule a guessed reset.
+## Separate Budgets
 
-If the tool reports cost instead of a direct percentage, convert through the
-current account limit when known. For Claude Max-style 5-hour blocks, some users
-prefer an earlier caution threshold around $500-550; treat that as a
-user-configured guardrail, not a universal rule. The default stop rule is still
-95% of the active 5-hour or weekly limit.
+Codex and Claude are separate budgets. Claude usage never gates Codex. Codex review uses
+GPT-5.6 Sol xhigh even when no Codex quota meter is available; do not infer Codex
+subscription usage from `ccusage`, local tokens, session tokens, or Claude percentages.
+Without a Codex meter, usage is unknown. Do not guess its reset time.
+Native Codex runs required review/planning axes inline and never recursively invokes Codex.
 
-## Pausing And Resuming
+## Resume
 
-When a wake/resume tool is available, schedule a wakeup for:
-
-```txt
-min(3600, secondsUntilWindowClears)
-```
-
-If the runtime clamps wake delays to 60-3600 seconds, chain wakeups for longer
-waits. Each wakeup should re-check usage, reschedule if still over budget, and
-continue only when the window is safely below the threshold.
-
-Make wake prompts self-contained. Include:
-
-- The remaining plan.
-- The check-then-reschedule rule.
-- The 95% threshold and wave throttle.
-- The exact usage command or host usage tool to run.
-- The previous block/window identifier when available.
-- The next verification steps.
-- The next wave's handoff packets, including scope, verification commands, and
-  stop conditions, if delegation will resume.
-
-## Choosing The Wait Mechanism
-
-- Use a wake/resume tool when the agent needs instructions attached to the
-  future resume.
-- Use a background sleep or watcher for fixed timers and things a process can
-  observe directly.
-- Use cron or recurring schedules only for recurring fresh-session work.
-
-Avoid short-interval polling for things the host will notify you about, such as
-background task or subagent completion. For budget pauses, a prompt-cache miss
-after a long sleep is acceptable; preserving the limit matters more.
+On resume, re-read the snapshot; do not trust elapsed wall-clock time. A resume handoff
+names the remaining plan, last observed windows, exact selector command, next wave, verify
+commands, and stop conditions.
 
 ## Reporting
 
-If you pause, tell the user which window is over threshold, the observed usage,
-when you scheduled or expect the next check, and what work remains. Keep enough
-state in the wake prompt that the next turn can resume without relying on
-conversation momentum.
-
-## Local wiring (this harness)
-
-- `bunx -y ccusage@latest blocks --active --json` is the usage source; `ScheduleWakeup`/`Monitor` are the resume tools.
-- Long authorized fan-outs route here BEFORE launching: `/swarm` lanes, `/efficient-frontier` delegation waves, Claude-hosted `/review` deep mode, overnight `/setup-routines` runs.
-- Codex and Claude are separate budgets; never infer one provider's remaining allowance from the other. Claude-hosted clear-spec work may continue on Sol via `/codex` while Claude waves pause, subject to real Codex evidence or the unknown-usage checkpoint above.
+Report the two observed percentages, selected maximum, Claude profile or disable reason,
+and Sol xhigh status. When Claude is disabled, state which Sol pass covered each required
+hat.
