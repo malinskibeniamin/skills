@@ -1852,6 +1852,87 @@ _assert_exit 0 "options-provided passes"
 _assert_stderr_not_contains "shouldDirty" "no warning"
 _cleanup_test_file "$_f"
 
+echo "  delayed form with immediate programmatic validation (nudge):"
+_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
+const X = () => {
+  const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
+  const validate = () => form.setValue('name', 'x', { shouldValidate: true });
+  return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
+};"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "delayError mismatch is optional"
+_assert_stdout_contains "\\[nudge\\].*delayError" "nudges explicit programmatic error timing"
+_cleanup_test_file "$_f"
+
+echo "  multiline programmatic validation (nudge):"
+_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
+const X = () => {
+  const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
+  const validate = () =>
+    form.setValue(
+      'name',
+      'x',
+      { shouldValidate: true },
+    );
+  return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
+};"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "multiline delayError mismatch is optional"
+_assert_stdout_contains "\\[nudge\\].*delayError" "nudges multiline programmatic validation"
+_cleanup_test_file "$_f"
+
+echo "  numeric setValue delayError copied from release note (nudge):"
+_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
+const X = () => {
+  const form = useForm({ mode: 'onChange', resolver: resolver });
+  const validate = () =>
+    form.setValue(
+      'name',
+      'x',
+      {
+        delayError: 500,
+        shouldValidate: true,
+      },
+    );
+  return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
+};"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "numeric setValue delayError is optional"
+_assert_stdout_contains "\\[nudge\\].*boolean" "corrects numeric release-note example"
+_cleanup_test_file "$_f"
+
+echo "  delayed form with explicit setValue timing (pass):"
+_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
+const X = () => {
+  const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
+  const delayed = () =>
+    form.setValue(
+      'name',
+      'x',
+      { shouldValidate: true, delayError: true },
+    );
+  const immediate = () => form.setValue('name', 'x', { shouldValidate: true, delayError: false });
+  const inherited = () => form.setValue('name', 'x', { shouldValidate: true, delayError });
+  return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
+};"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "explicit setValue error timing passes"
+_assert_stdout_not_contains "setValue validation" "no nudge when timing is explicit"
+_cleanup_test_file "$_f"
+
+echo "  immediate validation escape hatch (pass):"
+_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
+// allow: setvalue-immediate-error server validation must surface immediately
+const X = () => {
+  const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
+  const validate = () => form.setValue('name', 'x', { shouldValidate: true });
+  return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
+};"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "intentional immediate validation passes"
+_assert_stdout_not_contains "setValue validation" "escape suppresses delayError nudge"
+_cleanup_test_file "$_f"
+
 echo "  no setValue (skip):"
 _setup_test_file "$_f" "const X = () => <div />;"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
