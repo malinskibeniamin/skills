@@ -20,6 +20,7 @@ _check_labels=(
   accessibility-check
   zustand-check
   tanstack-router-check
+  tanstack-table-check
   tanstack-router-gen
   connect-query-check
   aip-proto-check
@@ -48,6 +49,7 @@ _check_funcs=(
   run_accessibility_check
   run_zustand_check
   run_tanstack_router_check
+  run_tanstack_table_check
   run_tanstack_router_gen
   run_connect_query_check
   run_aip_proto_check

@@ -69,6 +69,7 @@ SHORT_DESCRIPTIONS = {
     "steelman": "Build the strongest evidence-backed counterargument",
     "swarm": "Execute independent work across parallel worktree lanes",
     "tanstack-router": "Apply typed TanStack Router data and search patterns",
+    "tanstack-table": "Build reactive TanStack Table V9 interfaces safely",
     "tdd": "Develop through failing tests and small green steps",
     "teach": "Teach a workspace concept through durable practice",
     "thermo-nuclear-code-quality-review": "Run a release-blocking deep code quality review",

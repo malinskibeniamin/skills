@@ -71,6 +71,7 @@
     "./steelman/",
     "./swarm/",
     "./tanstack-router/",
+    "./tanstack-table/",
     "./tdd/",
     "./teach/",
     "./thermo-nuclear-code-quality-review/",

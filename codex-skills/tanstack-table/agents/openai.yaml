@@ -1,0 +1,3 @@
+interface:
+  display_name: "TanStack Table"
+  short_description: "Build reactive TanStack Table V9 interfaces safely"

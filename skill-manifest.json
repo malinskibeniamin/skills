@@ -157,6 +157,7 @@
     "accessibility-check.sh",
     "zustand-check.sh",
     "tanstack-router-check.sh",
+    "tanstack-table-check.sh",
     "tanstack-router-gen.sh",
     "connect-query-check.sh",
     "aip-proto-check.sh",
