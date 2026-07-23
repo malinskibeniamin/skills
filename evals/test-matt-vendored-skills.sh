@@ -231,8 +231,7 @@ else
   PASS=$((PASS + 1))
 fi
 
-# Reviewed but intentionally adapted, superseded, or incompatible upstream surfaces.
-run_file_eval "$REPO_ROOT/frontend-starter-kit/references/deep-modules/README.md" "setup-ts-deep-modules is absorbed into the starter kit"
+# Reviewed but intentionally omitted, superseded, or incompatible upstream surfaces.
 for excluded in batch-grill-me setup-ts-deep-modules spawn writing-great-skills; do
   if [ -e "$REPO_ROOT/$excluded/SKILL.md" ] || grep -q "\"./$excluded/\"" "$REPO_ROOT/.claude-plugin/plugin.json"; then
     echo "  FAIL  incompatible or superseded Matt skill stays unregistered: $excluded"
@@ -243,3 +242,12 @@ for excluded in batch-grill-me setup-ts-deep-modules spawn writing-great-skills;
     PASS=$((PASS + 1))
   fi
 done
+
+if [ -e "$REPO_ROOT/frontend-starter-kit/references/deep-modules" ]; then
+  echo "  FAIL  experimental setup-ts-deep-modules adaptation is absent"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: experimental setup-ts-deep-modules adaptation remains"
+else
+  echo "  PASS  experimental setup-ts-deep-modules adaptation is absent"
+  PASS=$((PASS + 1))
+fi
