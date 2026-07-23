@@ -9,7 +9,7 @@ MATT_V1_SKILLS=(
   grilling
   resolving-merge-conflicts
   wayfinder
-  writing-great-skills
+  writing-for-agents
 )
 
 for skill in "${MATT_V1_SKILLS[@]}"; do
@@ -19,7 +19,7 @@ for skill in "${MATT_V1_SKILLS[@]}"; do
 done
 
 # Renamed/removed upstream surfaces should not remain slash-invocable.
-for removed in diagnose write-a-skill caveman zoom-out; do
+for removed in diagnose write-a-skill caveman zoom-out writing-great-skills; do
   if [ ! -e "$REPO_ROOT/$removed/SKILL.md" ]; then
     echo "  PASS  upstream-removed skill not present: $removed"
     PASS=$((PASS + 1))
@@ -39,12 +39,12 @@ for removed in diagnose write-a-skill caveman zoom-out; do
 done
 
 # User-invoked skills explicitly disable model invocation.
-for skill in ask-ben handoff prototype to-tickets to-spec triage writing-great-skills; do
+for skill in ask-ben handoff prototype to-questionnaire to-tickets to-spec triage; do
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^disable-model-invocation: true$" "$skill is user-invoked"
 done
 
 # Model-invoked reusable skills omit disable-model-invocation.
-for skill in codebase-design diagnosing-bugs domain-modeling grilling resolving-merge-conflicts tdd wayfinder; do
+for skill in codebase-design diagnosing-bugs domain-modeling grilling resolving-merge-conflicts tdd wayfinder writing-for-agents; do
   if grep -q "^disable-model-invocation:" "$REPO_ROOT/$skill/SKILL.md" 2>/dev/null; then
     echo "  FAIL  $skill should be model-invoked"
     FAIL=$((FAIL + 1))
@@ -66,5 +66,5 @@ run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/diagnosing-bugs" "ask-ben route
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling has general confirmation gate"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD requires agreed test seams"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims tickets by assignment"
-run_content_eval "$REPO_ROOT/writing-great-skills/SKILL.md" "Hunt no-ops|No-op" "writing-great-skills includes no-op hunting guidance"
-run_file_eval "$REPO_ROOT/writing-great-skills/GLOSSARY.md" "writing-great-skills glossary exists"
+run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Hunt.*no-ops|No-op|no-ops" "writing-for-agents includes no-op hunting guidance"
+run_file_eval "$REPO_ROOT/writing-for-agents/SKILL-MECHANICS.md" "writing-for-agents skill mechanics exist"

@@ -75,6 +75,7 @@
     "./tdd/",
     "./teach/",
     "./thermo-nuclear-code-quality-review/",
+    "./to-questionnaire/",
     "./to-spec/",
     "./to-tickets/",
     "./triage/",
@@ -89,8 +90,8 @@
     "./work-automation-kit/",
     "./work/",
     "./writing-beats/",
+    "./writing-for-agents/",
     "./writing-fragments/",
-    "./writing-great-skills/",
     "./writing-shape/"
   ],
   "agents": [

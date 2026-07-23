@@ -1,4 +1,4 @@
-# Evals for owned SKILL.md quality under /writing-great-skills.
+# Evals for owned SKILL.md quality under /writing-for-agents.
 
 vendored_skills=$(awk '
   /^VENDORED=\(/ {in_list=1; next}

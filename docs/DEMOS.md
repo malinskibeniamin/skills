@@ -210,9 +210,15 @@ in src/features/. Look for tightly coupled modules that should be split.
 /handoff -- next session should prototype the URL-state approach without touching the main implementation branch.
 ```
 
-**`/writing-great-skills`** -- improve skill quality:
+**`/to-questionnaire`** -- collect missing stakeholder context:
 ```
-/writing-great-skills review this new design-system-token skill draft.
+/to-questionnaire draft a discovery questionnaire for the platform owner.
+We need their launch traffic assumptions and rollback constraints.
+```
+
+**`/writing-for-agents`** -- improve agent-facing documents:
+```
+/writing-for-agents review this new design-system-token skill draft.
 It should check that components use --color-* CSS variables instead of raw hex values.
 ```
 
@@ -391,4 +397,3 @@ Commit everything as: refactor(webui): migrate to frontend-starter-kit patterns
 </details>
 
 Migration ordered from least disruptive (auto-fixable lint) to most disruptive (React pattern rewrites) -- commit incrementally after each phase.
-

@@ -18,7 +18,7 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 **Owned** (hook-integrated): grilling (incl. explore mode), domain-modeling, triage, diagnosing-bugs
 
-**Matt Pocock/community**: grilling, prototype, to-spec, to-tickets, handoff, writing-great-skills
+**Matt Pocock/community**: grilling, prototype, to-questionnaire, to-spec, to-tickets, handoff, writing-for-agents
 
 **Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, efficient-frontier
 
@@ -36,7 +36,8 @@ bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
 
 # Community
-bunx skills@latest add malinskibeniamin/skills/writing-great-skills --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/to-questionnaire --agent claude-code -y
+bunx skills@latest add malinskibeniamin/skills/writing-for-agents --agent claude-code -y
 ```
 
 ## Optional: Atlassian/Jira

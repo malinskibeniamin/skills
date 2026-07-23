@@ -21,6 +21,19 @@ run_content_eval "$GRILL" "2-3 approaches with trade-offs" "explore mode propose
 run_content_eval "$GRILL" "Challenge variant" "explore mode keeps challenge variant"
 run_content_eval "$GRILL" "no code, no files, no implementation until a direction is presented" "hard gate applies to any direction, not design only"
 run_content_eval "$GRILL" "/plan-arbiter" "explore mode routes competing plans to plan-arbiter"
+run_content_eval "$GRILL" "frontier" "grilling maps the currently answerable frontier"
+run_content_eval "$GRILL" "whole frontier" "grilling asks the whole frontier each round"
+run_content_eval "$GRILL" "Recompute the frontier" "grilling recomputes after each answer round"
+run_content_eval "$GRILL" "Native Codex.*inline" "native Codex fact-finding stays inline without delegation consent"
+
+if grep -q "Ask the questions one at a time" "$GRILL"; then
+  echo "  FAIL  grilling still forces one-question-at-a-time interviews"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: grilling still uses one-question-at-a-time"
+else
+  echo "  PASS  grilling no longer forces one-question-at-a-time interviews"
+  PASS=$((PASS + 1))
+fi
 
 # commit-push folded into commit-push-pr --no-pr.
 CPP="$REPO_ROOT/commit-push-pr/SKILL.md"
