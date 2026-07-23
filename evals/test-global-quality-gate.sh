@@ -91,3 +91,18 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: pre-push rejects a file accepted by repository checks"
 fi
+
+mkdir -p "$REPO_ROOT/.context"
+context_probe_dir=$(mktemp -d "$REPO_ROOT/.context/quality-gate.XXXXXX")
+printf '{"unformatted":true}' > "$context_probe_dir/probe.json"
+if (cd "$REPO_ROOT" && bun run format:check) >/dev/null 2>&1; then
+  echo "  PASS  repository formatting ignores Conductor context artifacts"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  repository formatting ignores Conductor context artifacts"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: gitignored .context artifacts enter the global gate"
+fi
+rm -f "$context_probe_dir/probe.json"
+rmdir "$context_probe_dir"
+rmdir "$REPO_ROOT/.context" 2>/dev/null || true
