@@ -54,7 +54,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/setup-routines` | Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anth... |
 | `/snyk-ux-security` | Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage and release-age... |
 | `/stack-registry` | Governance for stack-tagged rules -- the current frontend stack, the banned ones, and wholesale rule retire... |
-| `/stay-within-limits` | Use when long-running or parallel agent work must respect 5-hour and weekly usage limits by checking usage... |
+| `/stay-within-limits` | Use when review, planning, or parallel agent work must route around Claude 5-hour and weekly usage limits w... |
 | `/steelman` | Argue the strongest evidence-backed case against a premise. |
 | `/swarm` | Parallel executor for independent bulk work across worktree lanes. |
 | `/tanstack-router` | TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generat... |

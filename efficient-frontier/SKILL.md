@@ -26,11 +26,9 @@ hard a problem you can hand over. Taste = UI/UX, code quality, API design, desig
 | GPT-5.6 Terra (codex) | 9 | 6 | 5 |
 | GPT-5.6 Luna (codex) | 10 | 3 | 2 |
 
-GPT-5.5 is retired. Variant floors are hard: Sol runs at medium|high effort only (all code
-writing and adversarial review -- smartest model rivaled only by Fable-5); Terra medium|high
-(budget non-code: PR comments, routine review passes, test-runner chores -- never product
-code); Luna high only (last resort for cheap tool-call loops far from code: tracker
-orchestration, test fixtures -- never development).
+GPT-5.5 is retired. Variant floors are hard: Sol runs at medium|high for code and xhigh for
+every review/plan check; Terra medium|high handles PR comments and test-runner chores but
+never product code or review; Luna high only handles cheap tool loops far from development.
 
 How to apply -- defaults, not limits. Standing permission to override: if a cheaper model's
 output does not meet the bar, rerun or redo on a smarter model WITHOUT asking. Judge the
@@ -39,12 +37,12 @@ output, not the price tag; escalating costs less than shipping mediocre output.
 - Anything that ships: intelligence > taste > cost. Cost is a tiebreaker only.
 - Bulk mechanical (clear-spec implementation, data analysis, migrations): GPT-5.6 -- plan allowance, cheap relative to Claude tokens (not free; see /codex budget gate).
 - User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-4.8, Fable-5). Sol drafts, Claude finishes.
-- Reviews and plans: Fable-5 or Opus-4.8, plus Sol as the independent cross-model perspective (Terra for routine re-check rounds).
+- Reviews and plans: run `/stay-within-limits`. Fable <20% low | Opus <50% high | Opus <75% low | Sonnet <90% low | no Claude >=90% or unknown. Always add Sol xhigh; Sol owns all axes without Claude.
 - Cross-model review, automatic on every change: the author model never solely reviews its
   own work, and the reviewer comes from a DIFFERENT family whenever possible (family
-  diversity catches shared blind spots). Claude authored -> Sol reviews; GPT authored ->
-  Fable/Opus reviews; same-family clean-context only when the other family is unavailable
-  (record it). Findings P0-P3 -> fixes delegated per routing, re-checked by the cross reviewer.
+  diversity catches shared blind spots). Always run Sol xhigh plus the quota-selected Claude
+  profile when enabled; otherwise Sol covers every axis. Record unavailable cross-family
+  coverage. Findings P0-P3 -> fixes delegated per routing, re-checked by the reviewer.
 - Computer use and other token furnaces (browser verification, codebase analysis): shell to
   codex Sol and report back -- see `/codex` for variant routing (Sol/Terra/Luna + effort
   floors), exec/review mechanics, timeouts, worktree isolation, and wrapper labels.
@@ -75,9 +73,8 @@ frontier model's full reasoning.
 
 1. Run bounded waves: at most 3 parallel subagents unless the user or host gives a throttle.
 2. Let in-flight agents finish; do not interrupt them only to save budget.
-3. Between waves, run `/stay-within-limits` (usage check, 95% pause rule, wake-to-resume)
-   (Claude Code: `bunx -y ccusage@latest blocks --active --json`).
-4. At or above 95% of either window: stop launching, prepare a self-contained resume
+3. Before and between waves, run `/stay-within-limits` against the Claude statusline quota snapshot.
+4. At or above 90% of either window: stop launching Claude, prepare a self-contained resume
    (observed window, threshold, next safe check, remaining plan, exact rerun command).
 5. On resume, re-check the real window before continuing.
 

@@ -1,7 +1,7 @@
 ---
 name: self-reviewer
 description: Reviews own session changes for quality gaps, missing tests, and simplification opportunities. Dispatched in phase 4b (Refine) before external review. Outputs structured JSON findings per findings-schema.md.
-model: sonnet
+model: inherit
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(vitest *), Bash(bun run lint *), Bash(bun run type:check *)
 ---
 

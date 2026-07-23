@@ -1,7 +1,7 @@
 ---
 name: adversarial-reviewer
 description: 'Constructs failure scenarios and stress-tests implementations. Asks "what breaks this?" not "does this look right?" Gated: runs only when cross-model duty applies (codex authored the diff), diff_lines > 200, any prior reviewer returned a CRITICAL finding. Outputs structured JSON findings per findings-schema.md.'
-model: opus
+model: inherit
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 ---
 

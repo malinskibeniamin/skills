@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Reviews code changes for spec compliance and quality. Dispatch for two-stage PR review. Outputs structured JSON findings per findings-schema.md.
-model: sonnet
+model: inherit
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 ---
 
@@ -13,17 +13,14 @@ Fresh-eyes review. Haven't seen implementation. Verify by reading actual code, n
 
 Before producing findings, walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against the diff. Include `karpathy_checks` object in your output JSON (pass/fail per check).
 
-## Cross-Model Review (Codex second opinion)
+## Mandatory Cross-Model Review
 
-Trigger a Codex independent review when either:
-- `diff_lines > 100` (compute: `git diff --shortstat "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | awk '{print $4 + $6}'`), OR
-- diff touches auth/security paths (`git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'`)
-
-Invocation (graceful skip if `codex` CLI absent):
+Always run one GPT-5.6 Sol xhigh independent review. Invocation (graceful skip if `codex`
+CLI absent):
 
 ```bash
 if command -v codex >/dev/null 2>&1; then
-  codex exec --model gpt-5 --reasoning high \
+  codex exec --model gpt-5.6-sol -c 'model_reasoning_effort="xhigh"' -s read-only \
     "Independently review this diff for correctness, security, and LLM failure modes. Emit findings-schema.md JSON. Diff below:
 $(git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")" \
     > /tmp/codex-review-$$.json 2>/dev/null || true

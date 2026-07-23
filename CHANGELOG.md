@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+2026-07-23 -- Make review and plan hats quota-aware. Claude Code statusline quota snapshots now route the higher 5-hour/7-day usage through Fable low (<20%), Opus high (<50%), Opus low (<75%), Sonnet low (<90%), then disable Claude at 90% or on missing/stale data. Reviewer and planning agents inherit the per-wave profile. Every review/plan still gets an independent GPT-5.6 Sol xhigh pass; Sol covers every required hat when Claude is disabled. Terra and Luna no longer review. Codex remains ungated when its subscription meter is unavailable because local `ccusage` token/cost data is not quota evidence.
+
 ## 4.31.0
 
 2026-07-20 -- Publish the latest Claude Code and Codex bundle, superseding the unpublished 4.30.0 metadata. The release includes the TypeScript 7 `tsc` migration, browser and image invariants, evidence-backed Go authoring/review guidance, Go proto/image hooks, the expanded Claude hook lifecycle, Codex execpolicy parity and telemetry, evidence-mined frontend invariants, stack-registry guidance, reusable form/delete/E2E exemplars, and exhaustive AIP review coverage. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release all move together at 4.31.0.
