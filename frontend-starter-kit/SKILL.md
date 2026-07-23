@@ -42,6 +42,10 @@ the plugin ("export harness").
 | ci-pipeline | `references/ci-pipeline/` | GitHub Actions CI, coverage gates, caching |
 | redpanda | `references/redpanda/` | Redpanda registry workflow + component taxonomy |
 
+Optional profile: `deep-modules` reads `references/deep-modules/` and installs
+dependency-cruiser boundaries for repos that deliberately organize TypeScript packages as
+deep modules. It is never part of `full`; the package layout is an architecture decision.
+
 Runtime-guidance skills (daily work, not setup): `/accessibility`, `/tanstack-router`,
 `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Optional infra:
 `/setup-routines`, `/setup-atlassian-workflow` (slash-only).

@@ -95,14 +95,14 @@ Put the switcher in a single shared component so both sub-shapes can reuse it. L
 
 Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** -- that's the actual design they want.
 
-### 6. Capture the answer and clean up
+### 6. Capture the answer and prototype
 
-Once a variant has won, write down which one and why (commit message, ADR, issue, or a `NOTES.md` next to the prototype if running AFK and the user hasn't responded yet). Then:
+Once a variant has won, capture the answer -- which variant and why -- then capture the full variant set as the primary source on the throwaway branch described by [SKILL.md](SKILL.md). Fold the winner into production code and remove prototype-only code from main:
 
-- **Sub-shape A** -- delete the losing variants and the switcher; fold the winner into the existing page.
-- **Sub-shape B** -- promote the winning variant to a real route, delete the throwaway route and the switcher.
+- **Sub-shape A** -- fold the winner into the existing page; keep losing variants and the switcher only on the throwaway branch.
+- **Sub-shape B** -- promote the winner to a real route; keep the throwaway route and switcher only on the throwaway branch.
 
-Don't leave variant components or the switcher lying around. They rot fast and confuse the next reader.
+Leave a context pointer to the branch on the implementation issue. Variant components and the switcher must not remain on main, where they rot and confuse the next reader.
 
 ## Anti-patterns
 

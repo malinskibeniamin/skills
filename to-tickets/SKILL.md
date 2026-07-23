@@ -60,4 +60,3 @@ The end-to-end behaviour this ticket makes work, from the user's perspective -- 
 - A reference to each blocking ticket, or "None -- can start immediately".
 </issue-template>
 In either form, avoid specific file paths or code snippets -- they go stale fast. Exception: if the `/prototype` skill produced code that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), add a context pointer to where that prototype code lives rather than inlining it.
-Work the frontier one ticket at a time with `/tdd`, clearing context between tickets.

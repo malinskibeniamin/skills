@@ -62,6 +62,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/tdd` | Test-driven development with red-green-refactor loop. |
 | `/teach` | Teach the user a new skill or concept within this workspace. |
 | `/thermo-nuclear-code-quality-review` | Alias for /review --deep -- release-blocking cold PR audit. |
+| `/to-questionnaire` | Turn a decision you cannot fully answer into a questionnaire for someone else. |
 | `/to-spec` | Turn the current conversation into a spec and publish it to the project issue tracker -- no interview, just... |
 | `/to-tickets` | Break a plan, spec, or the current conversation into tracer-bullet tickets with blocking edges, published a... |
 | `/triage` | Move issues through triage roles and prepare agent-ready work. |
@@ -76,7 +77,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/work-automation-kit` | Install planning/PM workflows: specs, ticket breakdown, tracker docs, triage. |
 | `/work` | Alias for /development-lifecycle. |
 | `/writing-beats` | Build article beat by beat from raw material with user-chosen pivots. |
+| `/writing-for-agents` | Writing documents for agents. |
 | `/writing-fragments` | Mine user conversation into raw writing fragments in one markdown file. |
-| `/writing-great-skills` | Reference for writing and editing predictable skills. |
 | `/writing-shape` | Shape raw markdown material into an article through conversational drafting. |
 <!-- catalog:end -->

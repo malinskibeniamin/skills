@@ -15,7 +15,7 @@ run_content_eval "$REPO_ROOT/improve/PLAN-TEMPLATE.md" "STOP conditions" "improv
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\./improve/" "Claude plugin registers improve skill"
 run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" "skills.*\./" "Codex plugin exposes root skills including improve"
 run_file_eval "$REPO_ROOT/improve/EXAMPLES.md" "improve examples exist"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "Use when asked to audit code" "improve description uses writing-great-skills trigger sentence"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "Use when asked to audit code" "improve description uses writing-for-agents trigger sentence"
 run_content_eval "$REPO_ROOT/improve/EXAMPLES.md" "/improve quick security" "improve examples include focused audit"
 run_file_eval "$REPO_ROOT/improve/references/audit-playbook.md" "improve upstream audit playbook exists"
 run_file_eval "$REPO_ROOT/improve/references/closing-the-loop.md" "improve upstream closing loop reference exists"

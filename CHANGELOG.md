@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+2026-07-23 -- Sync the useful mattpocock/skills changes from the previous two weeks. `/prototype` now preserves runnable primary-source branches and uses shareable single-file HTML logic demos; `/grilling` asks the whole dependency-ready frontier each round; new `/to-questionnaire` captures missing stakeholder context; `/writing-great-skills` becomes model-invoked `/writing-for-agents`; `/to-tickets` stops at publication. The merged `setup-ts-deep-modules` experiment is adapted as an opt-in Bun/co-located-test `frontend-starter-kit deep-modules` profile. Linux-centric `/spawn`, the superseded `/batch-grill-me`, and upstream-only plugin/release machinery remain intentionally unregistered.
+
 2026-07-23 -- Make review and plan hats quota-aware. Claude Code statusline quota snapshots now route the higher 5-hour/7-day usage through Fable low (<20%), Opus high (<50%), Opus low (<75%), Sonnet low (<90%), then disable Claude at 90% or on missing/stale data. Reviewer and planning agents inherit the per-wave profile. Every review/plan still gets an independent GPT-5.6 Sol xhigh pass; Sol covers every required hat when Claude is disabled. Terra and Luna no longer review. Codex remains ungated when its subscription meter is unavailable because local `ccusage` token/cost data is not quota evidence.
 
 ## 4.31.0

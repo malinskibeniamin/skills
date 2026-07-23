@@ -6,16 +6,21 @@ VENDORED=(
   diagnosing-bugs
   domain-modeling
   grilling
-  grilling
+  handoff
   prototype
+  research
   resolving-merge-conflicts
   review
-  wayfinder
+  tdd
+  teach
+  to-questionnaire
   to-spec
   to-tickets
+  triage
+  wayfinder
   wizard
   writing-beats
-  writing-great-skills
+  writing-for-agents
   writing-fragments
   writing-shape
 )
@@ -100,6 +105,8 @@ run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decision tree" "grilling walks 
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "environment.*filesystem.*tools" "grilling looks up facts across the available environment"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling waits for shared-understanding confirmation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "whole frontier" "grilling interviews round by round"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "running exploration.*unsettled prerequisite|unsettled prerequisite.*running exploration" "grilling does not block independent frontier questions"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
 run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known literal" "tests.md prevents tautological expected values"
@@ -187,7 +194,52 @@ run_content_eval "$REPO_ROOT/improve/SKILL.md" "scattered.*widen the net" "archi
 run_file_eval "$REPO_ROOT/improve/references/architecture-report.md" "architecture report reference exists"
 run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"
 
-# Latest Matt vendoring: writing-great-skills negation failure mode.
-run_content_eval "$REPO_ROOT/writing-great-skills/SKILL.md" "Negation" "writing-great-skills names negation failure mode"
-run_content_eval "$REPO_ROOT/writing-great-skills/GLOSSARY.md" "### Negation" "writing-great-skills glossary defines negation"
-run_content_eval "$REPO_ROOT/writing-great-skills/GLOSSARY.md" "prompt the \*\*positive\*\*" "writing-great-skills cures negation with positive prompt"
+# Latest Matt vendoring: writing-for-agents generalizes the reference and keeps the negation cure.
+run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "AGENTS\\.md.*CLAUDE\\.md" "writing-for-agents covers all agent-consumed documents"
+run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Negation" "writing-for-agents names negation failure mode"
+run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Prompt the \*\*positive\*\*|prompt the \*\*positive\*\*" "writing-for-agents cures negation with positive prompting"
+
+# Matt 2026-07 prototype lifecycle and logic-demo updates.
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "primary source" "prototype is retained as a primary source"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "throwaway branch" "prototype leaves main on a throwaway branch"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "context pointer" "prototype leaves an implementation context pointer"
+run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "single, self-contained HTML file|single self-contained HTML file" "logic prototype is a shareable HTML demo"
+run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "Guided walkthroughs" "logic prototype includes guided scenarios"
+run_content_eval "$REPO_ROOT/prototype/UI.md" "primary source" "UI variants are retained as primary-source evidence"
+
+if grep -qE "Delete or absorb when done|answer is the only thing worth keeping|prototype gets deleted" "$REPO_ROOT/prototype/SKILL.md" "$REPO_ROOT/prototype/LOGIC.md"; then
+  echo "  FAIL  prototype still instructs deleting its primary source"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: prototype primary source still deleted"
+else
+  echo "  PASS  prototype no longer deletes its primary source"
+  PASS=$((PASS + 1))
+fi
+
+# Matt 2026-07 questionnaire skill.
+run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "Grill the send, not the subject" "questionnaire asks only what the sender can answer"
+run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "discovery questionnaire" "questionnaire frames async discovery"
+run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "most-important-first" "questionnaire prioritizes a partial async response"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./to-questionnaire/"' "plugin registers to-questionnaire"
+
+if grep -qE "Work the frontier.*(/tdd|/implement)" "$REPO_ROOT/to-tickets/SKILL.md"; then
+  echo "  FAIL  to-tickets still owns ticket implementation"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: to-tickets still owns ticket implementation"
+else
+  echo "  PASS  to-tickets ends after ticket publication"
+  PASS=$((PASS + 1))
+fi
+
+# Reviewed but intentionally adapted, superseded, or incompatible upstream surfaces.
+run_file_eval "$REPO_ROOT/frontend-starter-kit/references/deep-modules/README.md" "setup-ts-deep-modules is absorbed into the starter kit"
+for excluded in batch-grill-me setup-ts-deep-modules spawn writing-great-skills; do
+  if [ -e "$REPO_ROOT/$excluded/SKILL.md" ] || grep -q "\"./$excluded/\"" "$REPO_ROOT/.claude-plugin/plugin.json"; then
+    echo "  FAIL  incompatible or superseded Matt skill stays unregistered: $excluded"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: excluded Matt skill registered: $excluded"
+  else
+    echo "  PASS  incompatible or superseded Matt skill stays unregistered: $excluded"
+    PASS=$((PASS + 1))
+  fi
+done

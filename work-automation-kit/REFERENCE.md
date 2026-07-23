@@ -46,7 +46,7 @@ Quick question (on a specific decision)
 | Design | grilling (explore mode), prototype | -- |
 | Architecture | improve (architecture mode) | -- |
 | DDD | grilling, domain-modeling | -- |
-| Meta | writing-great-skills, grilling, ask-ben | -- |
+| Meta | writing-for-agents, grilling, ask-ben | to-questionnaire |
 
 Owned skills ship with repo. "Community" skills install from mattpocock/skills.
 

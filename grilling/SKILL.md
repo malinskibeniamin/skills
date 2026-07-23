@@ -12,7 +12,7 @@ description: Explore options, then interview the user relentlessly about a plan,
 When invoked before a coherent direction exists ("brainstorm", "explore options", "should we use X or Y?", new feature/architecture choice):
 
 1. Explore context -- read files, docs, recent commits.
-2. Clarify -- one question at a time, not a list.
+2. Clarify -- map the current decision tree and ask its whole frontier in one numbered round.
 3. Propose 2-3 approaches with trade-offs. Optional: HTML mockup -> `agent-browser` -> annotated screenshot.
 4. Multiple competing plans/options (incl. from other agents) -> `/plan-arbiter` to pick adopt/hybrid/revise.
 5. Present the chosen direction, then grill it (below).
@@ -27,13 +27,15 @@ When invoked before a coherent direction exists ("brainstorm", "explore options"
 
 ## Grill (direction exists)
 
-Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Interview me relentlessly until we reach a shared understanding. Map this as a **decision tree**: every decision branches into the decisions that depend on it.
 
-Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are settled -- questions answerable now without guessing at another open answer. Ask the whole frontier in one numbered round and provide your recommended answer for each question. Then wait.
 
-If a *fact* can be found by exploring the environment (filesystem, tools, and available sources), look it up rather than asking me. The *decisions*, though, are mine -- put each one to me and wait for my answer.
+Each answer round reshapes the tree. Settled decisions push the frontier outward and unblock dependent questions. Recompute the frontier before the next round; a question that depends on another answer still open this round belongs to a later round.
 
-Do not act on it until I confirm we have reached a shared understanding.
+Finding *facts* is your job, never mine. Explore the environment -- filesystem, tools, and available sources -- rather than asking me. Claude-hosted sessions may dispatch a fact-finding subagent; Native Codex keeps fact-finding inline unless the user explicitly authorized delegation. Do not block independent questions: a running exploration is an unsettled prerequisite, so only its downstream questions wait while the rest of the frontier proceeds. The *decisions* are mine -- put each to me and wait.
+
+The interview ends when the frontier is empty: every branch visited, nothing left silently assumed. Do not act on it until I confirm we have reached a shared understanding.
 
 ## Plan gate (lifecycle phase 2b)
 

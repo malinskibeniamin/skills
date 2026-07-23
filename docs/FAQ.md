@@ -13,7 +13,7 @@ CLAUDE.md is read-every-turn context -- costs tokens AND is probabilistic. Claud
 <details>
 <summary><strong>Why not just use obra/superpowers?</strong></summary>
 
-We do -- many lifecycle patterns (TDD red/green, grilling/domain-modeling, writing-great-skills) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-spec, to-tickets) are listed under "Community Skills" for install.
+We do -- many lifecycle patterns (TDD red/green, grilling/domain-modeling, writing-for-agents) are inspired by or vendored from superpowers. The difference: superpowers teaches Claude what to do via prompts. We teach AND enforce. If Claude forgets the TDD rule mid-session, superpowers has no safety net. Our Stop hook refuses to end the turn until tests exist. Complementary, not competitive -- Pocock's own skills (to-questionnaire, to-spec, to-tickets) are listed under "Community Skills" for install.
 </details>
 
 <details>

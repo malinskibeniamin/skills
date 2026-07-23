@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Questionnaire"
+  short_description: "Create focused discovery questionnaires for stakeholders"
+policy:
+  allow_implicit_invocation: false

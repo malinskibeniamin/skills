@@ -73,6 +73,7 @@ SHORT_DESCRIPTIONS = {
     "tdd": "Develop through failing tests and small green steps",
     "teach": "Teach a workspace concept through durable practice",
     "thermo-nuclear-code-quality-review": "Run a release-blocking deep code quality review",
+    "to-questionnaire": "Create focused discovery questionnaires for stakeholders",
     "to-spec": "Turn the conversation into a tracker-ready spec",
     "to-tickets": "Split a plan into tracer-bullet tickets with blockers",
     "triage": "Prepare issues for reliable agent or human execution",
@@ -87,8 +88,8 @@ SHORT_DESCRIPTIONS = {
     "work-automation-kit": "Install planning, ticketing, and triage workflows",
     "work": "Run the complete development lifecycle",
     "writing-beats": "Build an article beat by beat with user pivots",
+    "writing-for-agents": "Write predictable skills and agent instruction files",
     "writing-fragments": "Mine conversation into reusable writing fragments",
-    "writing-great-skills": "Write and review predictable reusable skills",
     "writing-shape": "Shape raw Markdown into a coherent article draft",
 }
 
