@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 describe("setup-accessibility: LLM respects ARIA accessibility rules", () => {
@@ -43,8 +43,7 @@ describe("setup-accessibility: LLM respects ARIA accessibility rules", () => {
 
   it("should NOT have clickable div without keyboard support", () => {
     const content = readFileSync("src/SearchPanel.tsx", "utf-8");
-    const clickableDivs =
-      content.match(/<div[^>]*onClick[^>]*>/g) || [];
+    const clickableDivs = content.match(/<div[^>]*onClick[^>]*>/g) || [];
     for (const div of clickableDivs) {
       expect(div).toMatch(/onKeyDown|onKeyUp/);
     }

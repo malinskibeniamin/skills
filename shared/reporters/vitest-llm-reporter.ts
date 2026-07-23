@@ -22,7 +22,7 @@
  *   - Vitest Reporter interface: https://vitest.dev/advanced/reporters
  */
 
-import type { Reporter, TestModule, TestCase } from 'vitest/node';
+import type { Reporter, TestModule, TestCase } from "vitest/node";
 
 type Failure = {
   file: string;
@@ -33,7 +33,9 @@ type Failure = {
 };
 
 // allow: env-validation -- reporter runs in Node test-runner context, pre-@/env boundary
-const env: Record<string, string | undefined> = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
+const env: Record<string, string | undefined> =
+  (globalThis as { process?: { env?: Record<string, string | undefined> } })
+    .process?.env ?? {};
 const MAX_FAILURES = Number(env.VITEST_LLM_MAX_FAILURES ?? 20);
 const STACK_LINES = Number(env.VITEST_LLM_STACK_LINES ?? 3);
 
@@ -50,24 +52,24 @@ export default class VitestLlmReporter implements Reporter {
   onTestCaseResult(tc: TestCase) {
     this.testCount++;
     const result = tc.result();
-    const state = result?.state;
-
-    if (state === 'skipped') {
+    if (result?.state === "skipped") {
       this.skipCount++;
       return;
     }
 
-    if (state !== 'failed') {
+    if (result?.state !== "failed") {
       return;
     }
 
-    const error = (result as { errors?: Array<{ message?: string; stack?: string; location?: { line?: number } }> }).errors?.[0];
+    const error = result.errors[0];
+    const line = error?.stacks?.[0]?.line;
+    const stack = error?.stack?.split("\n").slice(0, STACK_LINES).join(" | ");
     this.failures.push({
       file: tc.module.moduleId,
       test: tc.fullName,
-      line: error?.location?.line,
-      msg: (error?.message ?? 'unknown').split('\n')[0],
-      stack: error?.stack?.split('\n').slice(0, STACK_LINES).join(' | '),
+      msg: (error?.message ?? "unknown").split("\n")[0] ?? "unknown",
+      ...(line === undefined ? {} : { line }),
+      ...(stack === undefined ? {} : { stack }),
     });
   }
 
@@ -75,13 +77,13 @@ export default class VitestLlmReporter implements Reporter {
     if (this.failures.length === 0) {
       const parts = [`ok ${this.testCount}`];
       if (this.skipCount > 0) parts.push(`skip ${this.skipCount}`);
-      if (this.testCount === 0) parts.push('[ZERO-TESTS]');
-      process.stdout.write(parts.join(' ') + '\n');
+      if (this.testCount === 0) parts.push("[ZERO-TESTS]");
+      process.stdout.write(`${parts.join(" ")}\n`);
       return;
     }
 
     const payload = {
-      status: 'fail' as const,
+      status: "fail" as const,
       total: this.testCount,
       failed: this.failures.length,
       skipped: this.skipCount,
@@ -89,6 +91,6 @@ export default class VitestLlmReporter implements Reporter {
       failures: this.failures.slice(0, MAX_FAILURES),
       truncated: this.failures.length > MAX_FAILURES,
     };
-    process.stdout.write(JSON.stringify(payload) + '\n');
+    process.stdout.write(`${JSON.stringify(payload)}\n`);
   }
 }

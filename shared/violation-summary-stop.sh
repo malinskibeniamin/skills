@@ -5,7 +5,15 @@ set -eo pipefail
 # Reads violations tracked by hook_block/hook_warn/hook_deny in hook-lib.sh.
 # Note: set -u removed — CLAUDE_SESSION_ID may be unset in some contexts.
 
-session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+# Session state needs a stable id: env first, Codex stdin second. With
+# neither, every hook run has a fresh PID, so a bare $$ dir can never be
+# shared across invocations and can collide after PID wrap -- skip.
+_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+if [ -z "$_hook_sid" ] && [ ! -t 0 ]; then
+  _hook_sid=$(jq -r '.session_id // empty' 2>/dev/null || true)
+fi
+[ -z "$_hook_sid" ] && exit 0
+session_dir="/tmp/hook-session-${_hook_sid}"
 violations_file="$session_dir/violations"
 session_files="$session_dir/files"
 

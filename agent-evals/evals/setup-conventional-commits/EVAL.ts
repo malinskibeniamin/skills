@@ -1,8 +1,8 @@
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 const results = JSON.parse(
-  readFileSync("__agent_eval__/results.json", "utf-8")
+  readFileSync("__agent_eval__/results.json", "utf-8"),
 );
 const shellCommands: { command: string; success?: boolean }[] =
   results.o11y?.shellCommands || [];
@@ -21,19 +21,20 @@ describe("setup-conventional-commits: LLM uses correct commit format", () => {
 
   it("should make at least one git commit", () => {
     const commits = shellCommands.filter((c) =>
-      /\bgit\s+commit\b/.test(c.command)
+      /\bgit\s+commit\b/.test(c.command),
     );
     expect(commits.length).toBeGreaterThan(0);
   });
 
   it("should use conventional commit format in all commits", () => {
     const commits = shellCommands.filter(
-      (c) => /\bgit\s+commit\b/.test(c.command) && c.success === true
+      (c) => /\bgit\s+commit\b/.test(c.command) && c.success === true,
     );
     for (const cmd of commits) {
       const msgMatch = cmd.command.match(/-m\s+["']([^"']+)["']/);
-      if (msgMatch) {
-        const firstLine = msgMatch[1].split("\n")[0];
+      const message = msgMatch?.[1];
+      if (message !== undefined) {
+        const firstLine = message.split("\n")[0];
         expect(firstLine).toMatch(COMMIT_REGEX);
       }
     }
@@ -41,7 +42,7 @@ describe("setup-conventional-commits: LLM uses correct commit format", () => {
 
   it("should include a scope in commit messages", () => {
     const commits = shellCommands.filter(
-      (c) => /\bgit\s+commit\b/.test(c.command) && c.success === true
+      (c) => /\bgit\s+commit\b/.test(c.command) && c.success === true,
     );
     for (const cmd of commits) {
       expect(cmd.command).toMatch(/\([a-z][a-z0-9-]*\):/);

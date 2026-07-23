@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 // ── StatusBadge (Atom) ──────────────────────────────────────────
@@ -11,7 +11,7 @@ describe("setup-registry-workflow: Atom — StatusBadge", () => {
   it("should export prop interface", () => {
     const content = readFileSync("src/components/StatusBadge.tsx", "utf-8");
     expect(content).toMatch(
-      /export\s+(interface|type)\s+StatusBadge(Props|Type)/
+      /export\s+(interface|type)\s+StatusBadge(Props|Type)/,
     );
   });
 
@@ -41,7 +41,7 @@ describe("setup-registry-workflow: Atom — StatusBadge", () => {
     const content = readFileSync("src/components/StatusBadge.tsx", "utf-8");
     expect(content).not.toMatch(/\buseEffect\b/);
     expect(content).not.toMatch(
-      /\b(localStorage|sessionStorage)\.(setItem|removeItem)/
+      /\b(localStorage|sessionStorage)\.(setItem|removeItem)/,
     );
   });
 
@@ -86,7 +86,7 @@ describe("setup-registry-workflow: Molecule — StatusFilter", () => {
   it("should use immutable state updates only", () => {
     const content = readFileSync("src/components/StatusFilter.tsx", "utf-8");
     expect(content).not.toMatch(
-      /\.(push|splice|unshift|pop|shift|reverse|sort)\(/
+      /\.(push|splice|unshift|pop|shift|reverse|sort)\(/,
     );
   });
 });
@@ -117,10 +117,10 @@ describe("setup-registry-workflow: Organism — StatusDashboard", () => {
     const content = readFileSync("src/components/StatusDashboard.tsx", "utf-8");
     // Reducer should be defined before the component function
     const reducerIndex = content.search(
-      /const\s+\w*[Rr]educer\s*=|function\s+\w*[Rr]educer/
+      /const\s+\w*[Rr]educer\s*=|function\s+\w*[Rr]educer/,
     );
     const componentIndex = content.search(
-      /export\s+(default\s+)?function\s+StatusDashboard|export\s+const\s+StatusDashboard/
+      /export\s+(default\s+)?function\s+StatusDashboard|export\s+const\s+StatusDashboard/,
     );
     expect(reducerIndex).toBeGreaterThanOrEqual(0);
     expect(componentIndex).toBeGreaterThan(reducerIndex);
@@ -142,7 +142,7 @@ describe("setup-registry-workflow: Organism — StatusDashboard", () => {
     // Should be defined outside component
     const fnIndex = content.search(/groupByStatus/);
     const componentIndex = content.search(
-      /export\s+(default\s+)?function\s+StatusDashboard|export\s+const\s+StatusDashboard/
+      /export\s+(default\s+)?function\s+StatusDashboard|export\s+const\s+StatusDashboard/,
     );
     expect(fnIndex).toBeLessThan(componentIndex);
   });
@@ -150,7 +150,7 @@ describe("setup-registry-workflow: Organism — StatusDashboard", () => {
   it("should NOT mutate state directly", () => {
     const content = readFileSync("src/components/StatusDashboard.tsx", "utf-8");
     expect(content).not.toMatch(
-      /\.(push|splice|unshift|pop|shift|reverse|sort)\(/
+      /\.(push|splice|unshift|pop|shift|reverse|sort)\(/,
     );
     expect(content).not.toMatch(/\bdelete\s+\w+\[/);
   });
@@ -161,7 +161,9 @@ describe("setup-registry-workflow: Organism — StatusDashboard", () => {
     if (hasUseEffect) {
       // If useEffect exists, it should NOT be setting state from derived values
       const effectSetsState =
-        /useEffect\([^]*?set[A-Z][a-zA-Z]*\([^]*?\}\s*,\s*\[/.test(content);
+        /useEffect\([\s\S]*?set[A-Z][a-zA-Z]*\([\s\S]*?\}\s*,\s*\[/.test(
+          content,
+        );
       expect(effectSetsState).toBe(false);
     }
   });

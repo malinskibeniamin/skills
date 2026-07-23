@@ -137,8 +137,12 @@ done
 
 # Setup event dispatches on the runtime .trigger field
 _setup_stale="/tmp/hook-session-eval-setup-stale-$$"
+_setup_active="/tmp/hook-session-eval-setup-active-$$"
 mkdir -p "$_setup_stale"
+mkdir -p "$_setup_active"
+echo "recent" > "$_setup_active/violations"
 touch -t 202601010000 "$_setup_stale"
+touch -t 202601010000 "$_setup_active"
 run_hook_eval "$HOOKS_DIR/setup-init.sh" '{"trigger":"maintenance"}' 0 \
   "setup-init maintenance exits 0"
 if [ ! -d "$_setup_stale" ]; then
@@ -150,6 +154,15 @@ else
   ERRORS="$ERRORS\n  FAIL: setup-init trigger dispatch"
   rm -rf "$_setup_stale"
 fi
+if [ -d "$_setup_active" ]; then
+  echo "  PASS  setup-init maintenance keeps sessions with recent state"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  setup-init maintenance deleted a session with recent state"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: setup-init recent session state"
+fi
+rm -rf "$_setup_active"
 # init in a fixture with package.json + fake bun on PATH → install invoked
 _setup_fix=$(mktemp -d)
 _setup_bin=$(mktemp -d)

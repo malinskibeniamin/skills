@@ -13,7 +13,7 @@ run_orchestration_guidance() {
 # Target: <10ms (path matching + 1 line append).
 
 
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+_session_dir="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}"
 mkdir -p "$_session_dir" 2>/dev/null || true
 session_files="$_session_dir/files"
 

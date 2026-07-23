@@ -1,12 +1,22 @@
 #!/usr/bin/env node
-import { cp, mkdir, readdir, readFile, stat, unlink, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  readdir,
+  readFile,
+  stat,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
-const defaultFrameworkPath = path.resolve(repoRoot, "../agent-native/framework");
+const defaultFrameworkPath = path.resolve(
+  repoRoot,
+  "../agent-native/framework",
+);
 const args = process.argv.slice(2);
 const check = args.includes("--check");
 const sourceArg = args.find((arg) => arg !== "--check");
@@ -25,8 +35,8 @@ function normalizeMarkdown(text) {
     .replaceAll("…", "...")
     .replaceAll("‘", "'")
     .replaceAll("’", "'")
-    .replaceAll("“", "\"")
-    .replaceAll("”", "\"");
+    .replaceAll("“", '"')
+    .replaceAll("”", '"');
 }
 
 function hasSkill(dir) {
@@ -48,8 +58,14 @@ function resolveSources(sourcePath) {
     },
     {
       label: "Agent-Native visual plans plugin",
-      visualPlan: path.join(source, ".agents/plugins/agent-native-visual-plans/skills/visual-plan"),
-      visualRecap: path.join(source, ".agents/plugins/agent-native-visual-plans/skills/visual-recap"),
+      visualPlan: path.join(
+        source,
+        ".agents/plugins/agent-native-visual-plans/skills/visual-plan",
+      ),
+      visualRecap: path.join(
+        source,
+        ".agents/plugins/agent-native-visual-plans/skills/visual-recap",
+      ),
     },
     {
       label: "legacy framework skills",
@@ -59,13 +75,19 @@ function resolveSources(sourcePath) {
   ];
 
   const match = candidates.find(
-    (candidate) => hasSkill(candidate.visualPlan) && hasSkill(candidate.visualRecap),
+    (candidate) =>
+      hasSkill(candidate.visualPlan) && hasSkill(candidate.visualRecap),
   );
   if (!match) {
     const checked = candidates
-      .map((candidate) => `- ${candidate.label}: ${candidate.visualPlan} and ${candidate.visualRecap}`)
+      .map(
+        (candidate) =>
+          `- ${candidate.label}: ${candidate.visualPlan} and ${candidate.visualRecap}`,
+      )
       .join("\n");
-    throw new Error(`Could not find visual-plan and visual-recap from ${source}.\nChecked:\n${checked}`);
+    throw new Error(
+      `Could not find visual-plan and visual-recap from ${source}.\nChecked:\n${checked}`,
+    );
   }
   return match;
 }
@@ -90,7 +112,8 @@ async function clearMarkdownFiles(dir) {
 }
 
 function destinationFor(name) {
-  const referenceName = name === "visual-plan" ? "agent-native-plan.md" : "agent-native-recap.md";
+  const referenceName =
+    name === "visual-plan" ? "agent-native-plan.md" : "agent-native-recap.md";
   return {
     root: path.join(repoRoot, name),
     refs: path.join(repoRoot, name, "references"),
@@ -120,10 +143,14 @@ async function syncSkill(name, sourceDir) {
 
 async function assertCurrent(name, sourceDir) {
   const destination = destinationFor(name);
-  if (!existsSync(destination.upstreamSkill)) throw new Error(`${name} upstream reference missing`);
-  const sourceSkill = normalizeMarkdown(await readFile(path.join(sourceDir, "SKILL.md"), "utf8"));
+  if (!existsSync(destination.upstreamSkill))
+    throw new Error(`${name} upstream reference missing`);
+  const sourceSkill = normalizeMarkdown(
+    await readFile(path.join(sourceDir, "SKILL.md"), "utf8"),
+  );
   const destinationSkill = await readFile(destination.upstreamSkill, "utf8");
-  if (sourceSkill !== destinationSkill) throw new Error(`${name} upstream SKILL reference is out of sync`);
+  if (sourceSkill !== destinationSkill)
+    throw new Error(`${name} upstream SKILL reference is out of sync`);
 
   const sourceRefs = path.join(sourceDir, "references");
   const sourceFiles = existsSync(sourceRefs) ? await listFiles(sourceRefs) : [];
@@ -140,7 +167,8 @@ async function assertCurrent(name, sourceDir) {
       readFile(path.join(sourceRefs, rel), "utf8").then(normalizeMarkdown),
       readFile(path.join(destination.refs, rel), "utf8"),
     ]);
-    if (sourceBody !== destinationBody) throw new Error(`${name}/references/${rel} is out of sync`);
+    if (sourceBody !== destinationBody)
+      throw new Error(`${name}/references/${rel} is out of sync`);
   }
   console.log(`${name} upstream references are current`);
 }

@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, it, expect } from "vitest";
 
 describe("setup-connect-query: LLM respects ConnectRPC patterns", () => {
@@ -9,7 +9,7 @@ describe("setup-connect-query: LLM respects ConnectRPC patterns", () => {
   it("should NOT import useQuery from @tanstack/react-query", () => {
     const content = readFileSync("src/TopicList.tsx", "utf-8");
     const tanstackImport = content.match(
-      /import\s+\{[^}]*\buse(?:Query|Mutation)\b[^}]*\}\s+from\s+['"]@tanstack\/react-query['"]/
+      /import\s+\{[^}]*\buse(?:Query|Mutation)\b[^}]*\}\s+from\s+['"]@tanstack\/react-query['"]/,
     );
     expect(tanstackImport).toBeNull();
   });
@@ -17,7 +17,7 @@ describe("setup-connect-query: LLM respects ConnectRPC patterns", () => {
   it("should use Connect Query hooks", () => {
     const content = readFileSync("src/TopicList.tsx", "utf-8");
     expect(content).toMatch(
-      /@connectrpc\/connect-query|useQuery.*connectquery|useMutation.*connectquery/
+      /@connectrpc\/connect-query|useQuery.*connectquery|useMutation.*connectquery/,
     );
   });
 
@@ -29,7 +29,7 @@ describe("setup-connect-query: LLM respects ConnectRPC patterns", () => {
   it("should use create() for message construction (not new Message)", () => {
     const content = readFileSync("src/TopicList.tsx", "utf-8");
     expect(content).not.toMatch(
-      /\bnew\s+[A-Z][a-zA-Z]*(Request|Response|Message)\s*\(/
+      /\bnew\s+[A-Z][a-zA-Z]*(Request|Response|Message)\s*\(/,
     );
   });
 

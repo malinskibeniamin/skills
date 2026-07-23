@@ -75,7 +75,7 @@ if [ $fix_exit -ne 0 ]; then
   if [ -n "$error_files" ]; then
     truncated=$(echo "$remaining" | grep -vE "/($_ui_dirs)/" | head -20)
     # Write to shared findings — quality-gate-stop.sh aggregates
-    _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+    _session_dir="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}"
     printf "Biome unfixable errors:\n%s\n" "$truncated" >> "$_session_dir/stop-findings" 2>/dev/null
   fi
 fi

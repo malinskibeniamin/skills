@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "exactOptionalPropertyTypes": true,
+    "lib": ["ESNext"],
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": ["bun"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "exemplars",
+    "**/*.gen.ts",
+    "**/*.gen.tsx",
+    "**/*_pb.ts",
+    "**/*_connectquery.ts"
+  ]
+}

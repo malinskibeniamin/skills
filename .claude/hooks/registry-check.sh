@@ -11,6 +11,10 @@ fi
 
 # Source hook-lib for session-scoped file tracking
 _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
+# Codex passes session_id on stdin; adopt it so this reader sees the same
+# dir the per-edit producers wrote to (no-op under Claude Code env ids).
+type hook_adopt_stdin_session &>/dev/null && hook_adopt_stdin_session
+
 
 # Session-scoped: only check files this session touched
 if type hook_session_changed_files &>/dev/null; then
@@ -34,7 +38,7 @@ registry_changed=$(echo "$changed" | grep -F 'registry.json' || true)
 
 if [ -z "$registry_changed" ]; then
   # Write to shared findings — quality-gate-stop.sh aggregates
-  _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+  _session_dir="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}"
   echo "redpanda-ui modified, registry.json not rebuilt. Run: bun run build:registry && bunx changeset" >> "$_session_dir/stop-findings" 2>/dev/null
   exit 0
 fi
@@ -43,7 +47,7 @@ fi
 changeset_added=$(echo "$changed" | grep -E '^\.changeset/.*\.md$' || true)
 
 if [ -z "$changeset_added" ]; then
-  _session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+  _session_dir="${_hook_session_dir:-/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}}"
   echo "registry.json rebuilt but no changeset added. Run: bunx changeset" >> "$_session_dir/stop-findings" 2>/dev/null
   exit 0
 fi

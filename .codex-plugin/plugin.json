@@ -32,10 +32,7 @@
     "longDescription": "React/TypeScript + Go enforcement harness. Hooks cover accessibility, React Compiler and TypeScript rules, styling, env/data access, warning-free test and CI runs, security, PR feedback completeness, and worktree safety. Skills guide planning, TDD, review, dependency upgrades, resilience, shipping, and handoff. Codex and Claude packaging share one generated skill and hook surface.",
     "developerName": "Beniamin Malinski",
     "category": "Development",
-    "capabilities": [
-      "Interactive",
-      "Write"
-    ],
+    "capabilities": ["Interactive", "Write"],
     "websiteURL": "https://github.com/malinskibeniamin/skills",
     "defaultPrompt": [
       "Set up the frontend development lifecycle",
@@ -45,10 +42,7 @@
   },
   "x-updatedAt": "2026-07-20",
   "x-includes": {
-    "instructions": [
-      "CLAUDE.md",
-      "AGENTS.md"
-    ],
+    "instructions": ["CLAUDE.md", "AGENTS.md"],
     "settings": "settings.json"
   },
   "x-changelog": {

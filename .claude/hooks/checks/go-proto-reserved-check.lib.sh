@@ -74,11 +74,11 @@ while IFS= read -r line; do
   [ -n "$fname" ] && [ -n "$fnum" ] || continue
 
   # Same name and number re-added: the field only moved.
-  if printf '%s\n' "$_go_added" | grep -qE "[[:space:]]$fname[[:space:]]*=[[:space:]]*$fnum\b"; then
+  if printf '%s\n' "$_go_added" | grep -qE "[[:space:]]${fname}[[:space:]]*=[[:space:]]*${fnum}\b"; then
     continue
   fi
   # Name re-added under a different number: renumbering shipped fields breaks the wire format.
-  if printf '%s\n' "$_go_added" | grep -qE "[[:space:]]$fname[[:space:]]*=[[:space:]]*[0-9]+"; then
+  if printf '%s\n' "$_go_added" | grep -qE "[[:space:]]${fname}[[:space:]]*=[[:space:]]*[0-9]+"; then
     _add_msg "field '$fname' looks renumbered; never renumber shipped proto fields, add a new field and reserve the old"
     continue
   fi

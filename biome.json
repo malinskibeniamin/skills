@@ -1,0 +1,31 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!exemplars",
+      "!**/*.gen.ts",
+      "!**/*.gen.tsx",
+      "!**/*_pb.ts",
+      "!**/*_connectquery.ts",
+      "!.claude/settings.json",
+      "!.codex/hooks.json",
+      "!hooks/hooks.json",
+      "!hooks/codex-hooks.json"
+    ]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 80
+  },
+  "assist": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    }
+  }
+}

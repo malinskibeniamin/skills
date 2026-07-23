@@ -32,7 +32,13 @@ context=""
 # Subsequent turns: emit only dynamic state (git, violations).
 # Saves ~150 tok/turn × N turns. CLAUDE.md + CLAUDE_PLUGIN rules cover steady-state.
 
-_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-$$}}"
+# Session state needs a stable id: env first, Codex stdin second. With
+# neither, every hook run has a fresh PID, so a bare $$ dir can never be
+# shared across invocations and can collide after PID wrap -- skip.
+_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+[ -z "$_hook_sid" ] && _hook_sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
+[ -z "$_hook_sid" ] && exit 0
+_session_dir="/tmp/hook-session-${_hook_sid}"
 mkdir -p "$_session_dir" 2>/dev/null || true
 _first_turn_marker="$_session_dir/first-turn-done"
 _is_first_turn=0

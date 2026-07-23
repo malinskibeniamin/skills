@@ -581,5 +581,57 @@ fi
 _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ Codex stdin session adoption ━━━"
+# ═══════════════════════════════════════════════════════════════
+
+_codex_test_file=$(mktemp "${TMPDIR:-/tmp}/hook-codex-session.XXXXXX.ts")
+_codex_modes="shell"
+command -v bun >/dev/null 2>&1 && _codex_modes="shell typed"
+
+for _codex_mode in $_codex_modes; do
+  for _codex_parser in edit bash; do
+    _codex_sid="hook-lib-${_codex_parser}-${_codex_mode}-$$-$RANDOM"
+    _codex_script=$(mktemp "${TMPDIR:-/tmp}/hook-codex-session.XXXXXX.sh")
+    _codex_fallback=$(mktemp "${TMPDIR:-/tmp}/hook-codex-fallback.XXXXXX")
+    if [ "$_codex_parser" = "edit" ]; then
+      _codex_call="hook_parse_edit_write"
+      _codex_payload=$(jq -nc --arg sid "$_codex_sid" --arg file "$_codex_test_file" \
+        '{session_id:$sid,tool_name:"Edit",tool_input:{file_path:$file}}')
+    else
+      _codex_call="hook_parse_bash"
+      _codex_payload=$(jq -nc --arg sid "$_codex_sid" \
+        '{session_id:$sid,tool_name:"Bash",tool_input:{command:"echo hi"}}')
+    fi
+    cat > "$_codex_script" <<EOF
+#!/bin/bash
+set -euo pipefail
+unset CLAUDE_SESSION_ID CODEX_SESSION_ID
+export HOOK_PROTOCOL=$_codex_mode
+source "$HOOKS_DIR/_hook-lib.sh"
+_fallback="\$_hook_session_dir"
+$_codex_call
+_hook_log_entry "warn" "codex-session" "$_codex_parser"
+printf '%s' "\$_fallback" > "$_codex_fallback"
+EOF
+    chmod +x "$_codex_script"
+    printf '%s' "$_codex_payload" | bash "$_codex_script"
+
+    _codex_log="/tmp/hook-session-${_codex_sid}/structured.jsonl"
+    if [ -f "$_codex_log" ] \
+      && jq -e --arg hook "$_codex_parser" '.hook == $hook and .rule == "codex-session"' "$_codex_log" >/dev/null 2>&1; then
+      PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} $_codex_parser/$_codex_mode logs to stdin session"
+    else
+      FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} $_codex_parser/$_codex_mode missed $_codex_log"
+    fi
+
+    rm -rf "/tmp/hook-session-${_codex_sid}" "$(cat "$_codex_fallback")"
+    rm -f "$_codex_script" "$_codex_fallback"
+  done
+done
+
+rm -f "$_codex_test_file"
+
+# ═══════════════════════════════════════════════════════════════
 
 _report_results "_hook-lib.sh"

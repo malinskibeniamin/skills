@@ -21,8 +21,14 @@ case "$mode" in
     fi
     ;;
   maintenance)
-    # -H: /tmp is a symlink on macOS; plain `find /tmp` never descends it.
-    find -H /tmp -maxdepth 1 -name "hook-session-*" -type d -mmin +60 -exec rm -r {} + 2>/dev/null || true
+    # Appends do not update directory mtime. Keep any session with state
+    # touched in the last 24 hours; remove only wholly stale directories.
+    for _stale_dir in /tmp/hook-session-*; do
+      [ -d "$_stale_dir" ] || continue
+      if [ -z "$(find "$_stale_dir" -mmin -1440 2>/dev/null | head -1)" ]; then
+        rm -r "$_stale_dir" 2>/dev/null || true
+      fi
+    done
     # Rotate metric logs past 10MB; keep the newest half by line count.
     for f in "$HOME"/.claude/hook-metrics/*.jsonl; do
       [ -f "$f" ] || continue

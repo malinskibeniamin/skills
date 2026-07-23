@@ -370,4 +370,249 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 
+echo ""
+echo "━━━ Test fixture file safety ━━━"
+
+_fixture_repo=$(mktemp -d "${TMPDIR:-/tmp}/hook-helper-test.XXXXXX")
+git -C "$_fixture_repo" init -q
+git -C "$_fixture_repo" config user.email "hook-tests@example.com"
+git -C "$_fixture_repo" config user.name "Hook tests"
+echo "committed" > "$_fixture_repo/tracked.txt"
+git -C "$_fixture_repo" add tracked.txt
+git -C "$_fixture_repo" commit -qm "test fixture"
+
+_run_setup_test_file() {
+  local path="$1"
+  local content="$2"
+  _last_exit=0
+  _last_stderr=""
+  _last_stderr=$(cd "$_fixture_repo" && _setup_test_file "$path" "$content" 2>&1) || _last_exit=$?
+}
+
+_assert_setup_refused() {
+  local path="$1"
+  local expected="$2"
+  local label="$3"
+  _run_setup_test_file "$path" "fixture"
+  _assert_exit 1 "$label file refused"
+  if [ "$(cat "$_fixture_repo/$path")" = "$expected" ]; then
+    _pass "$label content preserved"
+  else
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} $label content overwritten"
+  fi
+}
+
+echo "  pre-existing untracked file is preserved:"
+_setup_session
+echo "personal" > "$_fixture_repo/untracked.txt"
+_assert_setup_refused "untracked.txt" "personal" "pre-existing untracked"
+_teardown_session
+
+echo "  dirty tracked file is preserved:"
+_setup_session
+echo "working copy" > "$_fixture_repo/tracked.txt"
+_assert_setup_refused "tracked.txt" "working copy" "dirty tracked"
+_teardown_session
+
+echo "  staged-only tracked file is preserved:"
+git -C "$_fixture_repo" reset -q --hard HEAD
+_setup_session
+echo "staged copy" > "$_fixture_repo/tracked.txt"
+git -C "$_fixture_repo" add tracked.txt
+_assert_setup_refused "tracked.txt" "staged copy" "staged-only tracked"
+_teardown_session
+
+echo "  tracked clean file is restored after cleanup:"
+git -C "$_fixture_repo" reset -q --hard HEAD
+_setup_session
+_run_setup_test_file "tracked.txt" "fixture"
+_assert_exit 0 "tracked clean file accepted"
+(cd "$_fixture_repo" && _cleanup_test_file "tracked.txt")
+if [ "$(cat "$_fixture_repo/tracked.txt")" = "committed" ] &&
+  git -C "$_fixture_repo" diff --quiet HEAD -- tracked.txt; then
+  _pass "tracked clean file restored to HEAD"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} tracked clean file not restored"
+fi
+_teardown_session
+
+echo "  stale ownership marker cannot authorize an overwrite:"
+rm -f "$_fixture_repo/untracked.txt"
+echo "personal" > "$_fixture_repo/untracked.txt"
+_setup_session
+echo "untracked.txt" >> "$_hooktest_created_list"
+_stale_marker="$_hooktest_created_list"
+_teardown_session
+_assert_file_not_exists "$_stale_marker" "ownership marker removed with session"
+_setup_session
+_assert_setup_refused "untracked.txt" "personal" "stale marker"
+_teardown_session
+
+rm -rf "$_fixture_repo"
+rm -f "/tmp/hooktest-created-$$"
+
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "━━━ Typed protocol bun failure modes ━━━"
+# ═══════════════════════════════════════════════════════════════
+# The typed layer must never make a hook worse than the shell fallback:
+# a crashing bun falls back silently, a hanging bun is killed within
+# HOOK_PROTOCOL_TIMEOUT_S. Fake bun binaries shadow the real one in PATH.
+
+_fakebin=$(mktemp -d "${TMPDIR:-/tmp}/hook-fakebun.XXXXXX")
+
+_run_emit_with_fake_bun() {
+  local timeout_s="$1"
+  local script stdout_file stderr_file
+  script=$(mktemp)
+  stdout_file=$(mktemp)
+  stderr_file=$(mktemp)
+  cat > "$script" <<EOF
+#!/bin/bash
+export PATH="$_fakebin:\$PATH"
+export HOOK_PROTOCOL_TIMEOUT_S=$timeout_s
+export CLAUDE_SESSION_ID="$CLAUDE_SESSION_ID"
+source "$HOOKS_DIR/_hook-lib.sh"
+hook_warn "fallback message" r
+EOF
+  _last_exit=0
+  bash "$script" </dev/null >"$stdout_file" 2>"$stderr_file" || _last_exit=$?
+  _last_stdout=$(cat "$stdout_file")
+  _last_stderr=$(cat "$stderr_file")
+  rm -f "$script" "$stdout_file" "$stderr_file"
+}
+
+_assert_fallback_payload() {
+  local label="$1"
+  if printf '%s' "$_last_stdout" | jq -e . >/dev/null 2>&1; then
+    _pass "$label: fallback JSON on stdout"
+  else
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} $label: no valid JSON on stdout"
+  fi
+  if [ -z "$_last_stderr" ]; then
+    _pass "$label: diagnostic suppressed on stderr"
+  else
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} $label: stderr leaked: $(echo "$_last_stderr" | head -1)"
+  fi
+}
+
+_setup_session
+
+echo "  crashing bun → silent shell fallback:"
+printf '#!/bin/sh\necho "panic: broken install" >&2\nexit 134\n' > "$_fakebin/bun"
+chmod +x "$_fakebin/bun"
+_run_emit_with_fake_bun 5
+_assert_exit 0 "crashing bun → exit 0"
+_assert_fallback_payload "crashing bun"
+
+echo "  bun exiting 0 with banner stdout → emit shape guard, shell fallback:"
+printf '#!/bin/sh\necho "bun v9.9.9 (shim banner)"\nexit 0\n' > "$_fakebin/bun"
+chmod +x "$_fakebin/bun"
+_run_emit_with_fake_bun 5
+_assert_exit 0 "banner bun → exit 0"
+_assert_fallback_payload "banner bun"
+
+echo "  bun exiting 0 with truncated JSON → emit guard is real parsing, not a prefix:"
+printf '#!/bin/sh\nprintf "%%s" "{\\"unterminated"\nexit 0\n' > "$_fakebin/bun"
+chmod +x "$_fakebin/bun"
+_run_emit_with_fake_bun 5
+_assert_exit 0 "truncated-JSON bun → exit 0"
+_assert_fallback_payload "truncated-JSON bun"
+
+if command -v timeout >/dev/null 2>&1 || command -v gtimeout >/dev/null 2>&1; then
+  echo "  hanging bun → killed within HOOK_PROTOCOL_TIMEOUT_S, shell fallback:"
+  printf '#!/bin/sh\nsleep 30\n' > "$_fakebin/bun"
+  chmod +x "$_fakebin/bun"
+  _hang_start=$(date +%s)
+  _run_emit_with_fake_bun 1
+  _hang_elapsed=$(( $(date +%s) - _hang_start ))
+  _assert_exit 0 "hanging bun → exit 0"
+  _assert_fallback_payload "hanging bun"
+  if [ "$_hang_elapsed" -le 5 ]; then
+    _pass "hanging bun bounded (took ${_hang_elapsed}s, budget 1s + slack)"
+  else
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} hanging bun not bounded (took ${_hang_elapsed}s)"
+  fi
+
+  echo "  HOOK_PROTOCOL_TIMEOUT_S=0 → sanitized to default, still bounded:"
+  # GNU timeout 0 disables the bound entirely; the lib must reject 0 or a
+  # wedged bun hangs to the harness timeout. Budget: 5s default + slack.
+  _hang_start=$(date +%s)
+  _run_emit_with_fake_bun 0
+  _hang_elapsed=$(( $(date +%s) - _hang_start ))
+  _assert_exit 0 "timeout=0 → exit 0"
+  if [ "$_hang_elapsed" -le 12 ]; then
+    _pass "timeout=0 sanitized, still bounded (took ${_hang_elapsed}s)"
+  else
+    FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} timeout=0 disabled the bound (took ${_hang_elapsed}s)"
+  fi
+else
+  _skip "hanging bun bound" "no timeout/gtimeout binary"
+fi
+
+_run_parse_with_fake_bun() {
+  local script stdout_file stderr_file
+  script=$(mktemp)
+  stdout_file=$(mktemp)
+  stderr_file=$(mktemp)
+  cat > "$script" <<EOF
+#!/bin/bash
+export PATH="$_fakebin:\$PATH"
+export HOOK_PROTOCOL_TIMEOUT_S=5
+export CLAUDE_SESSION_ID="$CLAUDE_SESSION_ID"
+source "$HOOKS_DIR/_hook-lib.sh"
+hook_parse_bash
+printf '%s' "\$command"
+EOF
+  _last_exit=0
+  printf '%s' '{"tool_name":"Bash","tool_input":{"command":"echo fallback-ok"}}' \
+    | bash "$script" >"$stdout_file" 2>"$stderr_file" || _last_exit=$?
+  _last_stdout=$(cat "$stdout_file")
+  _last_stderr=$(cat "$stderr_file")
+  rm -f "$script" "$stdout_file" "$stderr_file"
+}
+
+echo "  crashing bun → parse falls back to jq:"
+printf '#!/bin/sh\necho "panic: broken install" >&2\nexit 134\n' > "$_fakebin/bun"
+chmod +x "$_fakebin/bun"
+_run_parse_with_fake_bun
+_assert_exit 0 "crashing bun → parse exit 0"
+if [ "$_last_stdout" = "echo fallback-ok" ]; then
+  _pass "crashing bun → command extracted via jq fallback"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} crashing bun → jq fallback missed (got: $_last_stdout)"
+fi
+
+echo "  bun exiting 0 with foreign stdout → shape guard rejects, jq fallback:"
+printf '#!/bin/sh\necho "bun v9.9.9 (shim banner)"\nexit 0\n' > "$_fakebin/bun"
+chmod +x "$_fakebin/bun"
+_run_parse_with_fake_bun
+_assert_exit 0 "garbage-stdout bun → parse exit 0"
+if [ "$_last_stdout" = "echo fallback-ok" ]; then
+  _pass "garbage-stdout bun → never eval'd, jq fallback used"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} garbage-stdout bun → wrong extraction (got: $_last_stdout)"
+fi
+
+echo "  bun emitting truncated assignments → completeness check, jq fallback:"
+# Passes the prefix guard but stops after the first field -- a killed bun
+# flushing a partial write. Without the completeness check this would
+# leave hp_command unset for typed-path consumers.
+{
+  echo '#!/bin/sh'
+  echo "echo \"hp_session_id='s-partial'\""
+  echo 'exit 0'
+} > "$_fakebin/bun"
+chmod +x "$_fakebin/bun"
+_run_parse_with_fake_bun
+_assert_exit 0 "truncated-output bun → parse exit 0"
+if [ "$_last_stdout" = "echo fallback-ok" ]; then
+  _pass "truncated-output bun → jq fallback used"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} truncated-output bun → wrong extraction (got: $_last_stdout)"
+fi
+
+_teardown_session
+rm -rf "$_fakebin"
+
 _report_results "Resilience Tests"

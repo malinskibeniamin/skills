@@ -36,11 +36,40 @@ jobs:
           jq --version
           perl --version | head -2 | tail -1
 
+      - name: Shellcheck (error severity)
+        # -S error only: the surface is bash 3.2-compatible hand-rolled
+        # shell; style/info findings would drown the signal. Errors are
+        # the parse-level bug class (quoting, redirection, syntax) that
+        # has shipped real breakage before. -s bash covers the sourced
+        # eval files that carry no shebang by design. Ubuntu runner has
+        # shellcheck preinstalled; macOS skips (same files, no per-OS
+        # divergence).
+        if: runner.os == 'Linux'
+        run: |
+          shellcheck --version | head -2
+          shellcheck -s bash -S error .claude/hooks/*.sh .claude/hooks/checks/*.lib.sh \
+            shared/*.sh scripts/*.sh agent-evals/*.sh evals/*.sh \
+            frontend-starter-kit/references/*/scripts/*.sh
+
       - name: Generation gates (hooks, catalog, rules)
         run: |
           bash scripts/generate-hook-configs.sh --check
           bash scripts/generate-skill-catalog.sh --check
           bash scripts/generate-agents-md.sh --check
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Install repository dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Repository quality gate
+        run: bun run quality:gate
+
+      - name: Typed protocol tests
+        run: bun run test
 
       - name: Shell eval suite
         run: bash evals/run.sh

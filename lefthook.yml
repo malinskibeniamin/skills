@@ -3,9 +3,9 @@
 # Install:
 #   brew install lefthook && lefthook install
 #
-# What it checks (changed files only):
-#   - TypeScript 7 type checking (tsc incremental)
-#   - Biome lint (changed files only)
+# What it checks:
+#   - TypeScript 7 type checking (repository-wide when TS changes)
+#   - Biome formatting + lint (changed supported files only)
 #
 # Why pre-push and not pre-commit:
 #   - Developers can commit freely (WIP, messy, whatever)
@@ -17,10 +17,10 @@ pre-push:
   commands:
     typecheck:
       glob: "*.{ts,tsx,js,jsx}"
-      run: test -f package.json && bun run type:check || true
-    lint:
-      glob: "*.{ts,tsx,js,jsx,mjs,mts}"
-      run: bun run lint:file -- {push_files}
+      run: bun run type:check
+    check:
+      glob: "*.{ts,tsx,js,jsx,mjs,mts,json,jsonc,css,scss}"
+      run: bun run check:files -- {push_files}
     manifest-sync:
       glob: "{skill-manifest.json,.claude/settings.json,hooks/hooks.json,shared/hook-lib.sh,.claude/hooks/_hook-lib.sh}"
       run: bash scripts/generate-hook-configs.sh --check
