@@ -154,11 +154,13 @@ form.setValue('providers', next, { shouldDirty: true, shouldValidate: true })
 
 Silent updates only when intentional (e.g., hydrating defaults) -- mark with `// allow: setvalue-options [reason]`.
 
-### Programmatic delayed validation (react-hook-form v7.82+)
+### Delayed validation is exceptional (react-hook-form v7.82+)
 
-`useForm({ delayError: 500 })` owns the duration; `setValue.delayError` is boolean and opts programmatic validation into that delay:
+Default to immediate errors. `delayError` changes when an error appears; it does not debounce validation or network work. Add it only to address observed error flicker. Debounce or abort expensive async validation instead.
 
 The [shipped v7.82.0 `SetValueConfig` type](https://github.com/react-hook-form/react-hook-form/blob/v7.82.0/src/types/form.ts#L78-L84) is authoritative; the release-note snippet puts the numeric duration on the wrong option.
+
+If delayed errors are justified, `useForm({ delayError: 500 })` owns the duration and `setValue.delayError` is the boolean opt-in for programmatic validation:
 
 ```tsx
 form.setValue('endpoint', next, {
@@ -168,7 +170,7 @@ form.setValue('endpoint', next, {
 })
 ```
 
-Omit `delayError` or set it to `false` when an immediate programmatic error is intentional. The form-mode hook only nudges ambiguous calls; escape with `// allow: setvalue-immediate-error [reason]`.
+Omitting `setValue.delayError` is the normal immediate path and stays silent. The form-mode hook only nudges numeric values copied from the release note; it never recommends adding delayed validation.
 
 `dirtyFields` is not uniformly object-shaped: a registered array leaf can be boolean `true`, while `useFieldArray` produces nested or sparse state. Test changed, reverted, disabled-form programmatic writes, and remove-all transitions; do not cast every dirty node to one container shape.
 

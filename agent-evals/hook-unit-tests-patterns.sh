@@ -1852,7 +1852,7 @@ _assert_exit 0 "options-provided passes"
 _assert_stderr_not_contains "shouldDirty" "no warning"
 _cleanup_test_file "$_f"
 
-echo "  delayed form with immediate programmatic validation (nudge):"
+echo "  delayed form with immediate programmatic validation (pass):"
 _setup_test_file "$_f" "import { useForm } from 'react-hook-form';
 const X = () => {
   const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
@@ -1860,25 +1860,8 @@ const X = () => {
   return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "delayError mismatch is optional"
-_assert_stdout_contains "\\[nudge\\].*delayError" "nudges explicit programmatic error timing"
-_cleanup_test_file "$_f"
-
-echo "  multiline programmatic validation (nudge):"
-_setup_test_file "$_f" "import { useForm } from 'react-hook-form';
-const X = () => {
-  const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
-  const validate = () =>
-    form.setValue(
-      'name',
-      'x',
-      { shouldValidate: true },
-    );
-  return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
-};"
-_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "multiline delayError mismatch is optional"
-_assert_stdout_contains "\\[nudge\\].*delayError" "nudges multiline programmatic validation"
+_assert_exit 0 "immediate programmatic validation is the default"
+_assert_stdout_not_contains "\\[nudge\\].*delayError" "does not promote delayed validation"
 _cleanup_test_file "$_f"
 
 echo "  numeric setValue delayError copied from release note (nudge):"
@@ -1901,7 +1884,14 @@ _assert_exit 0 "numeric setValue delayError is optional"
 _assert_stdout_contains "\\[nudge\\].*boolean" "corrects numeric release-note example"
 _cleanup_test_file "$_f"
 
-echo "  delayed form with explicit setValue timing (pass):"
+echo "  destructured numeric setValue delayError (nudge):"
+_setup_test_file "$_f" "const validate = () => setValue('name', 'x', { shouldValidate: true, delayError: 500 });"
+_run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "destructured numeric setValue delayError is optional"
+_assert_stdout_contains "\\[nudge\\].*boolean" "corrects the exact release-note call shape"
+_cleanup_test_file "$_f"
+
+echo "  boolean setValue delayError values (pass):"
 _setup_test_file "$_f" "import { useForm } from 'react-hook-form';
 const X = () => {
   const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
@@ -1916,21 +1906,21 @@ const X = () => {
   return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "explicit setValue error timing passes"
-_assert_stdout_not_contains "setValue validation" "no nudge when timing is explicit"
+_assert_exit 0 "boolean setValue delayError values pass"
+_assert_stdout_not_contains "\\[nudge\\].*delayError" "does not nudge valid boolean timing"
 _cleanup_test_file "$_f"
 
-echo "  immediate validation escape hatch (pass):"
+echo "  numeric setValue delayError escape hatch (pass):"
 _setup_test_file "$_f" "import { useForm } from 'react-hook-form';
-// allow: setvalue-immediate-error server validation must surface immediately
+// allow: setvalue-delay-error-type compatibility fixture
 const X = () => {
-  const form = useForm({ mode: 'onChange', resolver: resolver, delayError: 500 });
-  const validate = () => form.setValue('name', 'x', { shouldValidate: true });
+  const form = useForm({ mode: 'onChange', resolver: resolver });
+  const validate = () => form.setValue('name', 'x', { shouldValidate: true, delayError: 500 });
   return <FormMessage>{form.formState.errors.name?.message}</FormMessage>;
 };"
 _run_hook "form-mode-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "intentional immediate validation passes"
-_assert_stdout_not_contains "setValue validation" "escape suppresses delayError nudge"
+_assert_exit 0 "numeric setValue delayError escape passes"
+_assert_stdout_not_contains "\\[nudge\\].*delayError" "escape suppresses type nudge"
 _cleanup_test_file "$_f"
 
 echo "  no setValue (skip):"

@@ -122,48 +122,28 @@ if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.setValue\('; then
   fi
 fi
 
-# ── React Hook Form v7.82+: delayError is opt-in for setValue ────
-# A form-level delayError does not apply to programmatic validation unless
-# setValue opts in. Keep this a narrow nudge: only inspect newly added calls.
+# ── React Hook Form v7.82+: setValue delayError is boolean ────
+# The release note shows a numeric value, but the shipped type is boolean.
+# Keep this a narrow nudge: only inspect newly added setValue calls.
 
-_setvalue_timing=""
-if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '\.setValue[[:space:]]*\('; then
-  _setvalue_timing=$(
+_numeric_setvalue_delay_error=""
+if [ -n "$added_lines" ] && echo "$added_lines" | grep -qE '(^|[^[:alnum:]_$])setValue[[:space:]]*\('; then
+  _numeric_setvalue_delay_error=$(
     echo "$added_lines" | awk '
-      /\.setValue[[:space:]]*\(/ {
-        in_call = 1
-        validates = 0
-        explicit_timing = 0
-        numeric_timing = 0
-      }
+      /(^|[^[:alnum:]_$])setValue[[:space:]]*\(/ { in_call = 1 }
       in_call {
-        if ($0 ~ /shouldValidate[[:space:]]*:[[:space:]]*true/) validates = 1
-        if ($0 ~ /delayError[[:space:]]*:/ || $0 ~ /(^|[, {])delayError([, }]|$)/) explicit_timing = 1
-        if ($0 ~ /delayError[[:space:]]*:[[:space:]]*[0-9]/) numeric_timing = 1
-        if ($0 ~ /\)[[:space:]]*[;,}]?[[:space:]]*$/) {
-          if (numeric_timing) numeric_found = 1
-          else if (validates && !explicit_timing) implicit_found = 1
-          in_call = 0
+        if ($0 ~ /delayError[[:space:]]*:[[:space:]]*[0-9]/) {
+          print "numeric"
+          exit
         }
-      }
-      END {
-        if (numeric_found) print "numeric"
-        else if (implicit_found) print "implicit"
+        if ($0 ~ /\)[[:space:]]*[;,}]?[[:space:]]*$/) in_call = 0
       }
     '
   )
 fi
 
-if [ "$_setvalue_timing" = "numeric" ] && ! hook_has_escape "setvalue-delay-error-type"; then
-  hook_nudge "setValue delayError is boolean in react-hook-form v7.82. Keep milliseconds on useForm({ delayError: 500 }) and pass delayError: true here; the release-note snippet's number does not match the shipped type. Escape: // allow: setvalue-delay-error-type [reason]" "setvalue-delay-error-type"
-fi
-
-if [ "$_setvalue_timing" = "implicit" ] && \
-   echo "$file_content" | grep -qE 'useForm\s*[(<]' && \
-   echo "$file_content" | grep -qE 'delayError\s*:'; then
-  if ! hook_has_escape "setvalue-immediate-error"; then
-    hook_nudge "useForm({ delayError }) does not delay setValue validation automatically. With react-hook-form v7.82+, add delayError: true for consistent delayed errors, or keep this immediate behavior intentionally. Escape: // allow: setvalue-immediate-error [reason]" "setvalue-delay-error"
-  fi
+if [ "$_numeric_setvalue_delay_error" = "numeric" ] && ! hook_has_escape "setvalue-delay-error-type"; then
+  hook_nudge "setValue delayError is boolean in react-hook-form v7.82. Remove it for immediate validation. If delayed errors address observed flicker, keep milliseconds on useForm({ delayError: 500 }) and pass delayError: true here. The release-note snippet's number does not match the shipped type. Escape: // allow: setvalue-delay-error-type [reason]" "setvalue-delay-error-type"
 fi
 
 # ── absorbed from form-error-summary-check.sh (4.28 family consolidation) ──
