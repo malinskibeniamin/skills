@@ -5,7 +5,7 @@ AGENT_DIR="$REPO_ROOT/agents"
 for hat in plan-product-hat plan-engineering-hat plan-design-hat; do
   run_file_eval "$AGENT_DIR/$hat.md" "$hat.md exists"
   run_content_eval "$AGENT_DIR/$hat.md" "^name: $hat" "$hat has name frontmatter"
-  run_content_eval "$AGENT_DIR/$hat.md" "^model:" "$hat declares model"
+  run_content_eval "$AGENT_DIR/$hat.md" "^model: inherit" "$hat inherits usage-routed model"
   run_content_eval "$AGENT_DIR/$hat.md" "^allowed-tools:" "$hat declares allowed-tools"
   run_content_eval "$AGENT_DIR/$hat.md" "phase 2b" "$hat mentions phase 2b"
   run_content_eval "$AGENT_DIR/$hat.md" "findings-schema" "$hat references findings-schema"
@@ -45,3 +45,9 @@ run_content_eval "$REPO_ROOT/grilling/SKILL.md" "BLOCKED" \
   "/grilling honors BLOCKED status"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "ETHOS: Grill Before Build" \
   "/grilling cross-references ETHOS principle"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/stay-within-limits" \
+  "/grilling checks Claude quota before plan hats"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Sol.*xhigh" \
+  "/grilling always adds the Sol xhigh plan check"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "no Claude|Claude is disabled" \
+  "/grilling lets Sol cover plan hats when Claude is disabled"
