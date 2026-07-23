@@ -46,6 +46,9 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "partial outage" "examples cover part
 run_content_eval "$SKILL_DIR/REFERENCE.md" "double submit" "examples cover double submit"
 run_content_eval "$SKILL_DIR/SKILL.md" "per-field.*timer|timer.*per-field" "timing hat scopes delayed validation per field"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "registered array.*boolean.*useFieldArray|useFieldArray.*registered array.*boolean" "reference covers dirtyFields shape variants"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "stale async validation" "reference probes stale validation results"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "[Dd]ependent-field cleanup" "reference probes dependent-field cleanup"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "criteriaMode.*all|all validation errors" "reference probes all-errors rendering"
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/resilience-review" "development-lifecycle wires resilience-review"
 run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "Resilience Review" "lifecycle reference documents Resilience Review"

@@ -21,7 +21,10 @@ For each form/API/mutation/config/job:
 - Value: empty, null, duplicate, stale, malformed, huge, unsupported enum.
 - Time: stale, slow, timeout, cancelled, double submit, tab race.
 - State: mode switch, partial edit, dirty form, deleted resource, stale cache.
-- Form state: delayed validation uses per-field timers; a registered array dirty leaf is boolean while useFieldArray state is nested/sparse; reverting or removing all values clears empty dirty containers.
+- Form state: choose pre-submit and post-submit validation lifecycles separately; delayed validation uses per-field timers; a registered array dirty leaf is boolean while useFieldArray state is nested/sparse; reverting or removing all values clears empty dirty containers.
+- Validation timing: a stale async validation result must not replace a newer result; debounce reduces work but cancellation or generation checks own ordering.
+- Dependent-field cleanup: `deps` revalidates but does not clear invalid child values or field state; test the parent change, payload, error, touched, and dirty transitions.
+- Error visibility: `criteriaMode: 'all'` only helps when the UI renders all validation errors for each field and the summary includes every invalid field.
 - System: partial outage, 500, retry storm, queue delay, background failure.
 - UX: loading, empty, error, success, disabled, optimistic, rollback.
 

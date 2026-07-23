@@ -28,7 +28,7 @@ PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 ### Soft Guidance (Claude-enforced, not hooks)
 - Named useEffect functions describe purpose. No name without "and"? Split.
 - `useSyncExternalStore` for browser API subscriptions (navigator.onLine, matchMedia, scroll)
-- Form-level `validate` cross-field validation (react-hook-form v7.72+)
+- React Hook Form lifecycle selection, dependent revalidation/cleanup, snapshot versus subscription APIs, and deterministic defaults
 
 ### Functional Programming (Claude-enforced)
 - Pure render -- no side effects in component body

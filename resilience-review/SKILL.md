@@ -17,10 +17,10 @@ Each hat owns one failure class with non-goals, so findings do not converge. Sma
 | Hat | Owns (and probes) | Non-goals |
 |---|---|---|
 | input | empty, null, duplicate, malformed, stale, huge, out-of-order payloads; validation format-vs-presence | timing, infra |
-| timing | double submit, tab race, retry storms, slow network, timeout, cancel, out-of-order responses, per-field timers | payload validity |
+| timing | double submit, tab race, retry storms, slow network, timeout, cancel, out-of-order responses, stale async validation, per-field timers | payload validity |
 | system | partial outage, 500s, stale cache, deleted resource, permission drift, dependency failure | UI polish |
-| state | invalid/impossible states, mode-switch residue, oneof cleanup, stale derived state, recovery to a good state | network causes |
-| ux-recovery | unclear disabled states, lost errors, fake success, dead ends without retry/undo, missing loading/empty states | root causes owned by other hats |
+| state | invalid/impossible states, mode-switch residue, dependent-field cleanup, oneof cleanup, stale derived state, recovery to a good state | network causes |
+| ux-recovery | unclear disabled states, lost or partially rendered validation errors, fake success, dead ends without retry/undo, missing loading/empty states | root causes owned by other hats |
 
 Each hat emits findings with: scenario, trigger, expected behavior, guard (Precondition -> Postcondition -> Fallback -> Observability), test to write, evidence (file/route/form/API cited). For external/browser/platform behavior, the hat runs `/read-the-damn-docs`; complex planned state flows sketch `/visual-plan` first.
 

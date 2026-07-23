@@ -16,6 +16,12 @@ run_content_eval "$REPO_ROOT/exemplars/route.tsx" "validateSearch" "route exempl
 run_content_eval "$REPO_ROOT/exemplars/route.tsx" "errorComponent" "route exemplar has error boundary"
 run_content_eval "$REPO_ROOT/exemplars/component.test.tsx" "userEvent.setup" "test exemplar uses userEvent"
 run_content_eval "$REPO_ROOT/exemplars/component.test.tsx" "getByRole" "test exemplar queries by role"
+run_content_eval "$REPO_ROOT/exemplars/form.tsx" "CREATE_RESOURCE_DEFAULT_VALUES" "form exemplar has deterministic defaults"
+run_content_eval "$REPO_ROOT/exemplars/form.tsx" "reValidateMode: 'onChange'" "form exemplar selects post-submit revalidation"
+run_content_eval "$REPO_ROOT/exemplars/form.tsx" "FormErrorSummary form=\\{form\\}" "form exemplar wires the error summary"
+run_content_eval "$REPO_ROOT/exemplars/form.tsx" "fieldState.invalid" "form exemplar avoids broad formState subscription"
+run_content_eval "$REPO_ROOT/exemplars/form.tsx" "required: 'Name is required'" "form exemplar matches its required indicator"
+run_content_eval "$REPO_ROOT/exemplars/form.tsx" "onCreated\\(request.name\\)" "form exemplar uses submitted mutation values"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "exemplars/" "tdd points at exemplars"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "exemplars/" "CLAUDE.md lifecycle points at exemplars"
 

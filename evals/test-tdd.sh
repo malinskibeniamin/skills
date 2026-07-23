@@ -39,6 +39,9 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "detectAsyncLeaks" "REFERENCE has asy
 run_content_eval "$SKILL_DIR/REFERENCE.md" "pool.*threads" "REFERENCE has pool: threads optimization"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "isolate.*false.*Incompatible" "REFERENCE bans isolate: false with reason"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "two fields.*independent|independent.*two fields" "REFERENCE tests delayed validation isolation"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('ignores stale async validation results" "REFERENCE has RED stale-validation test"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('clears dependent field state when its parent changes" "REFERENCE has RED dependent-cleanup test"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('renders every validation error" "REFERENCE has RED all-errors test"
 
 # ── Coverage gap analysis ────────────────────────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "coverage" "SKILL.md references coverage in PLAN phase"

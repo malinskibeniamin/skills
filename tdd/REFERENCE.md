@@ -532,10 +532,10 @@ test('clears OAuth fields when switching to SAML', async () => {
 
 ### Async Validation Race Condition
 
-Rapid edits must not show stale validation:
+Rapid edits must not show an older result after a newer validation wins. Write this RED before adding debounce, `AbortController`, or request-generation guards:
 
 ```ts
-test('cancels stale async validation on rapid input', async () => {
+test('ignores stale async validation results', async () => {
   let resolveFirst!: (result: ValidationResult) => void
   let resolveSecond!: (result: ValidationResult) => void
   const first = new Promise<ValidationResult>((resolve) => { resolveFirst = resolve })
@@ -543,6 +543,7 @@ test('cancels stale async validation on rapid input', async () => {
   const validateFn = vi.fn().mockReturnValueOnce(first).mockReturnValueOnce(second)
 
   render(<ValidatedInput validate={validateFn} />)
+  const input = screen.getByRole('textbox', { name: /endpoint/i })
 
   fireEvent.change(input, { target: { value: 'a' } })
   fireEvent.change(input, { target: { value: 'ab' } })
@@ -561,21 +562,48 @@ test('cancels stale async validation on rapid input', async () => {
 
 For delayed or debounced validation, use fake timers in unit/integration tests: assert no early error, deadline visibility, cancellation after correction, and two fields remain independent. E2E asserts the eventual outcome without sleeping.
 
-### All Errors Visible
+### Dependent-field cleanup
 
-Show all errors, not just first:
+`deps` can revalidate another field, but it does not clear a value or field state that became invalid when its parent changed. Write the cleanup contract RED before wiring `resetField`, `unregister`, or an explicit `setValue` transition:
 
 ```ts
-test('displays all validation errors not just first', async () => {
+test('clears dependent field state when its parent changes', async () => {
   const user = userEvent.setup()
-  render(<ConfigForm />)
+  const onSubmit = vi.fn()
+  render(<CountryRegionForm onSubmit={onSubmit} />)
 
-  await user.click(screen.getByRole('button', { name: /save/i }))
+  await user.selectOptions(screen.getByRole('combobox', { name: /country/i }), 'US')
+  await user.selectOptions(screen.getByRole('combobox', { name: /region/i }), 'CA')
+  await user.click(screen.getByRole('button', { name: /check address/i }))
+  expect(await screen.findByText(/california is unavailable/i)).toBeVisible()
 
-  await waitFor(() => {
-    expect(screen.getByText(/name is required/i)).toBeVisible()
-    expect(screen.getByText(/url must be valid/i)).toBeVisible()
-  })
+  await user.selectOptions(screen.getByRole('combobox', { name: /country/i }), 'Canada')
+  await user.click(screen.getByRole('button', { name: /save draft/i }))
+
+  expect(screen.getByRole('combobox', { name: /region/i })).toHaveValue('')
+  expect(screen.queryByText(/california is unavailable/i)).not.toBeInTheDocument()
+  await waitFor(() => expect(onSubmit).toHaveBeenCalled())
+  expect(onSubmit.mock.calls[0]?.[0]).toEqual({ country: 'Canada', region: '' })
+})
+```
+
+### All Errors Visible
+
+Collecting errors is not rendering them. Write the summary contract RED; with RHF `criteriaMode: 'all'`, assert multiple failures for one field plus failures from other fields:
+
+```ts
+test('renders every validation error', async () => {
+  const user = userEvent.setup()
+  render(<PasswordForm />)
+
+  await user.clear(screen.getByLabelText(/^password$/i))
+  await user.paste('lowercase')
+  await user.click(screen.getByRole('button', { name: /create account/i }))
+
+  const summary = await screen.findByRole('alert')
+  expect(within(summary).getByText(/uppercase letter/i)).toBeVisible()
+  expect(within(summary).getByText(/number/i)).toBeVisible()
+  expect(within(summary).getByText(/confirmation is required/i)).toBeVisible()
 })
 ```
 

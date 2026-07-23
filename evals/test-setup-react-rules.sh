@@ -1252,7 +1252,14 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "formValues" "REFERENCE has react-hoo
 run_content_eval "$SKILL_DIR/REFERENCE.md" "delayError: true" "REFERENCE documents programmatic delayed validation"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "does not debounce" "REFERENCE keeps delayError as exceptional presentation timing"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "registered array.*boolean|boolean.*registered array" "REFERENCE documents dirtyFields array shapes"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "mode.*before.*submit.*reValidateMode.*after" "REFERENCE separates pre-submit and post-submit validation"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "deps.*revalidat.*does not clear|does not clear.*deps" "REFERENCE limits deps to dependent revalidation"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "getValues.*does not subscribe|does not subscribe.*getValues" "REFERENCE treats getValues as a snapshot"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useFormState.*exact: true" "REFERENCE localizes form-state subscriptions"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "defaultValues.*cached" "REFERENCE documents cached defaults"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "defaultValues.*undefined" "REFERENCE requires defined deterministic defaults"
 run_content_eval "$SCRIPT_LIB" "no-reset-all-state-on-prop-change" "hook records React Doctor delegation for state reset"
+run_content_eval "$SCRIPT_LIB" "reValidateMode" "Formik replacement message selects a validation lifecycle"
 
 # ── Cleanup ─────────────────────────────────────────────────────
 
