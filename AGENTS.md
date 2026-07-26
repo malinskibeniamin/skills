@@ -35,13 +35,15 @@ Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
 Default `high`. Fable-5: `high` or lower ONLY (`xhigh`/`max` furnaces, worse output). Never inject `ultrathink`.
 
-Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-4.8 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 Sol (codex) 8/9/6 | GPT-5.6 Terra 9/6/5 | GPT-5.6 Luna 10/3/2. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
+Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-5 5/8/9 | Sonnet-5 6/5/5 | GPT-5.6 Sol (codex) 8/9/6 | GPT-5.6 Terra 9/6/5 | GPT-5.6 Luna 10/3/2. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
 
-GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- smartest model rivaled only by Fable-5; ALL code writing and implementation at `medium`|`high`, every review/plan check at `xhigh`. **Terra** = budget non-code work -- posting PR comments and test-runner/CI chores at `medium`|`high`; never product code or review. **Luna** = last resort for cheap tool loops far from code at `high`; never development or review.
+Model character: Sol = ultimate robot/tool/AI assistant, efficient exhaustive instruction-following, turn every stone | Fable = smartest, broadest, best frontend and gorgeous visible code; extremely complex work plus initial sketches/wireframes/prototypes before cheaper execution | Opus = low-harness default with Fable-like taste, less intelligence, lower cost.
 
-Claude review/plan quota ladder (higher of 5h/7d): <20% Fable low | 20-<50% Opus high | 50-<75% Opus low | 75-<90% Sonnet low | >=90% or missing/stale usage no Claude. Re-check `/stay-within-limits` before every wave. Always add Sol xhigh; if Claude is disabled, Sol owns all required hats.
+GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- actual implementation at `xhigh`, Opus-work adversarial review at `high`, plan and Sol-only review at `xhigh`. **Terra** = budget non-code work -- posting PR comments and test-runner/CI chores at `medium`|`high`; never product code or review. **Luna** = last resort for cheap tool loops far from code at `high`; never development or review.
 
-Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | bulk mechanical -> codex Sol (plan allowance) | user-facing -> taste >= 7 | token furnaces -> codex | **thinker/executor split**: frontier thinks, tastes, plans; Sol executes | **Cross-model review, automatic on every non-trivial change**: author model never solely reviews its own work; use a DIFFERENT family when available; Claude profile + Sol xhigh, or Sol-only complete coverage; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via per-invocation `model` + `effort`.
+Claude taste quota ladder (higher of 5h/7d): 0-20% Fable high | 21-35% Fable medium | 36-50% Fable low | 51-75% Opus xhigh | 76-90% Opus medium | 91-95% Opus low | 96-100% or missing/stale no Claude. Re-check `/stay-within-limits` before every wave and every Claude review dispatch; never reuse a review profile.
+
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | user-facing -> taste >= 7 | token furnaces -> codex | **implementation pair**: when Claude enabled, Opus 5 xhigh + Sol xhigh in isolated/non-overlapping lanes; without Claude, Sol xhigh only | **Cross-model review, automatic on every non-trivial change**: author model never solely reviews its own work; use a DIFFERENT family; fresh Sol high adversarial review checks Opus work, and Opus 5 xhigh feedback checks Sol implementation; without Claude, clean-context Sol xhigh owns all hats; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via per-invocation `model` + `effort`.
 
 ### Monitor (not sleep)
 

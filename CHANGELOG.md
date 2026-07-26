@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+2026-07-27 -- Add routing character: Sol for exhaustive instruction-following execution, Fable for the smartest visible/frontend/exploratory work, and Opus for lower-cost Fable-like taste without orchestration overhead.
+
+2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, and lower Sonnet 5 taste to 5. Route taste work by Claude usage: Fable high/medium/low through 50%, Opus xhigh/medium/low through 95%, then no Claude. Pair Claude-enabled implementation across Opus 5 xhigh and Sol xhigh, fall back to clean-context Sol xhigh only without Claude, and use reciprocal review: Sol high checks Opus work while Opus 5 xhigh gives feedback on Sol implementation. `/review` now fail-closes through `/stay-within-limits` immediately before every Claude reviewer dispatch.
+
 ## 4.32.0
 
 2026-07-24 -- Publish the post-4.31 Claude Code and Codex bundle. This release adds TanStack Table v9 reactive guidance and enforcement, React Hook Form resilience checks, quota-aware review routing, typed hook protocol parsing, and a repository-wide quality gate; syncs the latest planning and writing skills; and fixes dynamic class-name checks, Go proto validation, and Codex telemetry. It repackages `/golang` and `/golang-review` on a fresh immutable tag for both runtimes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.32.0.

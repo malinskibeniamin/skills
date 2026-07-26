@@ -14,6 +14,11 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "model routing" "CLAUDE.md has model rou
 run_content_eval "$REPO_ROOT/CLAUDE.md" "NEVER Haiku" "CLAUDE.md bans Haiku"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "intelligence > taste > cost" "CLAUDE.md orders the axes"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "Fable-5 1/10/9" "CLAUDE.md ranks Fable-5"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Opus-5 5/8/9" "CLAUDE.md ranks Opus-5"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" '\| Opus-5 \| 5 \| 8 \| 9 \|' "efficient-frontier ranks Opus-5"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Sonnet-5 6/5/5" "CLAUDE.md ranks Sonnet-5"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" '\| Sonnet-5 \| 6 \| 5 \| 5 \|' "efficient-frontier ranks Sonnet-5"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" 'taste >= 7 \(Opus-5, Fable-5\)' "user-facing routing excludes Sonnet-5"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.6 Sol \(codex\) 8/9/6" "CLAUDE.md ranks GPT-5.6 Sol"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.6 Terra 9/6/5" "CLAUDE.md ranks Terra"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.6 Luna 10/3/2" "CLAUDE.md ranks Luna"
@@ -28,9 +33,12 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "cross-FAMILY" "review ninth hat p
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Terra/Luna never review" "Terra and Luna banned from review"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "Terra/Luna never review" "Terra and Luna never review"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.6 Terra" "efficient-frontier ranks Terra"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Sol.*ultimate robot.*does what.*told.*every stone" "efficient-frontier describes Sol as exhaustive instruction-following tool"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Fable.*code people look at.*frontend.*extremely complex.*sketches.*wireframes.*prototypes.*offload" "efficient-frontier routes visible and exploratory work to Fable"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Opus.*without.*harness.*Fable.*taste.*less smart.*cheaper" "efficient-frontier positions Opus as lower-friction cheaper taste"
 
 # Effort floors are stated wherever a variant is routed.
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "medium.*high.*review/plan.*xhigh" "Sol effort policy stated"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "implementation.*xhigh|xhigh.*implementation" "Sol implementation effort policy stated"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" 'model_reasoning_effort="xhigh"' "codex skill gives an executable Sol xhigh override"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" 'Luna.*`high` only' "Luna high-only floor stated"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.5 retired" "CLAUDE.md retires GPT-5.5"
@@ -42,12 +50,19 @@ run_content_eval "$REPO_ROOT/go/SKILL.md" "Cross-model adversarial review" "go k
 run_content_eval "$REPO_ROOT/go/SKILL.md" "Native Codex runs inline and does not recurse" "go avoids recursive Codex review delegation"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "fresh usage before each round" "go phase 5b reroutes each reviewer round"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Eighth axis, \*\*mandatory\*\*" "review panel keeps the mandatory adversarial axis"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Claude-hosted always runs.*GPT-5.6-sol" "Claude review keeps the cross-model hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Claude-hosted runs.*GPT-5.6-sol" "Claude review keeps the cross-model hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "diagnostic-only in every mode" "review is diagnostic-only; /go owns the fix loop"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Sol.*xhigh.*review|review.*Sol.*xhigh" "CLAUDE.md routes review to Sol xhigh"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "Review.*xhigh|review.*xhigh" "codex skill routes review at xhigh"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Claude review/plan.*Fable.*Opus.*Sonnet|Fable.*20%.*Opus.*50%.*Sonnet.*90%" "CLAUDE.md records quota-aware Claude routing"
-run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Fable.*20%.*Opus.*50%.*Sonnet.*90%" "efficient-frontier records review bands"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Sol high.*adversarial|adversarial.*Sol high" "CLAUDE.md routes Opus adversarial review to Sol high"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Opus.*review.*high|review.*Opus.*high" "codex skill routes Opus review at high"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Sol-only.*xhigh|xhigh.*Sol-only" "codex skill routes Sol-only review at xhigh"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Claude taste.*Fable high.*Fable medium.*Fable low.*Opus xhigh.*Opus medium.*Opus low" "CLAUDE.md records quota-aware taste routing"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Fable high.*Fable medium.*Fable low.*Opus xhigh.*Opus medium.*Opus low" "efficient-frontier records taste bands"
+run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "Opus 5 xhigh.*Sol xhigh|Sol xhigh.*Opus 5 xhigh" "implementation pairs Opus 5 and Sol xhigh"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Opus.*Sol high|Sol high.*Opus" "codex adversarial review checks Opus work at high"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Sol.*implementation.*Opus 5.*xhigh|Opus 5.*xhigh.*Sol.*implementation" "codex routes Sol implementation feedback to Opus 5 xhigh"
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" 'model_reasoning_effort="high"' "code-reviewer invokes Sol at high"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "Opus work.*GPT-5\\.6-sol.*high|GPT-5\\.6-sol.*high.*Opus work" "go reviews Opus work with Sol high"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "Sol implementation.*Opus 5 xhigh|Opus 5 xhigh.*Sol implementation" "go asks Opus 5 xhigh for feedback on Sol implementation"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "delegate per model routing|Fix P0/P1 now .delegate per model routing" "go owns automatic P0/P1 fix delegation"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.5 is retired" "efficient-frontier retires GPT-5.5"
 
@@ -66,6 +81,19 @@ run_content_eval "$REPO_ROOT/AGENTS.md" "NEVER Haiku" "AGENTS.md bans Haiku"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Model rankings" "efficient-frontier has the rankings section"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Never use Haiku" "efficient-frontier bans Haiku"
 run_content_eval "$REPO_ROOT/agents/verifier.md" "model: sonnet" "verifier agent no longer uses haiku"
+
+# Opus 4.8 may survive in release history, but never as an active routing target.
+_stale_opus=$(grep -RInE "Opus-4\.8|claude-opus-4-8" "$REPO_ROOT" \
+  --exclude-dir=.context --exclude-dir=.git --exclude-dir=node_modules \
+  --exclude=CHANGELOG.md --exclude=test-model-routing.sh 2>/dev/null || true)
+if [ -n "$_stale_opus" ]; then
+  echo "  FAIL  Opus 4.8 still an active routing target in: $_stale_opus"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Opus 4.8 still active"
+else
+  echo "  PASS  Opus 4.8 appears only in release history"
+  PASS=$((PASS + 1))
+fi
 
 # No agent definition may use haiku
 if grep -l "model: haiku" "$REPO_ROOT/agents/"*.md >/dev/null 2>&1; then
