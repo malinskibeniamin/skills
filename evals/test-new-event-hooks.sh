@@ -196,7 +196,7 @@ fi
 _codex_summary=$(ls "$HOME/.claude/hook-metrics/"*-codex-t-eval*.json 2>/dev/null | tail -1)
 if [ -n "$_codex_summary" ] \
   && jq -e '.schema_version == 2 and .source == "codex" and .turns == 2' "$_codex_summary" >/dev/null 2>&1 \
-  && grep -q "codex-turns.jsonl" "$REPO_ROOT/hook-audit/SKILL.md"; then
+  && grep -q "codex-turns.jsonl" "$REPO_ROOT/hook-audit/"{SKILL,REFERENCE}.md; then
   echo "  PASS  codex turns appear in hook-audit's session-summary feed"
   PASS=$((PASS + 1))
 else

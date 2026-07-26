@@ -1,110 +1,50 @@
 ---
 name: tanstack-router
-description: TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generation, useLoaderData pitfalls. Use when writing or editing routes, loaders, navigation, or search params.
+description: Apply TanStack Router patterns for Query ownership and typed search. Use when changing routes, loaders, navigation, route trees, or search parameters.
 paths:
   - "**/routes/**/*.tsx"
   - "**/routes/**/*.ts"
 ---
 
-# TanStack Router Enforcement
-Run `/read-the-damn-docs` before pinning current TanStack Router, Router Query, or route-tree APIs.
-## What This Catches
+# TanStack Router
 
-- Ban `react-router-dom` imports
-- Ban `window.location` navigation (block) + reads (warn)
-- Warn `window.location.reload()` -- suggest `router.invalidate()`
-- Ban `strict: false` in router hooks
-- Ban untyped `useParams()`/`useSearch()`/`useLoaderData()`/`useRouteContext()` missing `{ from }`
-- Ban `URLSearchParams` -- use `validateSearch`+zod (nuqs is banned)
-- Warn exported components from route files (break code splitting)
-- Require `validateSearch` when `useSearch` in route files; `.page.tsx` may resolve it from sibling route file
-- Warn tested route pages using `routeApi.useSearch({ select })`; prefer `useSearch({ from, select })`
-- Warn when Query-primed loaders are consumed via `useLoaderData` instead of `useQuery`/`useSuspenseQuery`
-- Warn when router uses `queryClient` context without `defaultPreloadStaleTime: 0`
-- Warn when router uses `queryClient` context without `createRootRouteWithContext`
+Run `/read-the-damn-docs` before changing current APIs. Read
+[REFERENCE.md](REFERENCE.md) for code shapes and [SETUP.md](SETUP.md) for installation.
 
-Auto-regen route tree on route file change.
+## Ownership
 
-## TanStack Router + Query
+- Router loaders start server fetches after navigation intent.
+- TanStack Query owns cache, refetch, invalidation, and garbage collection.
+- Components observe Query through `useQuery` or `useSuspenseQuery`.
 
-When a route needs server data, prefer this ownership split:
+Use suspense for page-critical blocking data; use regular queries for deferred data with
+inline loading, empty, and error states. Query-backed loaders set
+`defaultPreloadStaleTime: 0` and use `createRootRouteWithContext`.
 
-- **Router loader**: start fetching early after navigation intent.
-- **TanStack Query**: own cache, refetch, invalidation, and garbage collection.
-- **Component**: read via `useQuery()` or `useSuspenseQuery()` so Query has an active observer.
+## Route rules
 
-Do **not** enforce suspense globally. Choose per field/page:
+- Scope `useParams`, `useSearch`, `useLoaderData`, and `useRouteContext` with `{ from }` or
+  a route API; reject `strict: false`.
+- Query-backed components read Query, not `Route.useLoaderData`.
+- Route files export route configuration only; reusable components live elsewhere.
+- Navigation uses router APIs, not `window.location`.
+- `react-router-dom`, `URLSearchParams`, and nuqs are migration debt.
+- Route-tree changes trigger generation.
 
-- `useSuspenseQuery()` for blocking, page-critical data that should use route pending/error boundaries.
-- `useQuery()` for deferred or secondary data with inline loading/empty/error states.
+## Search parameters
 
-```tsx
-export const Route = createFileRoute('/dashboards/$dashboardId')({
-  loader: ({ context, params }) => {
-    context.queryClient.prefetchQuery(dashboardQueryOptions(params.dashboardId))
-  },
-  component: Dashboard,
-})
+The router owns search typing through `validateSearch`.
 
-function Dashboard() {
-  const params = Route.useParams()
-  const dashboard = useSuspenseQuery(dashboardQueryOptions(params.dashboardId))
-  const widgetCount = useQuery(widgetCountQueryOptions(params.dashboardId))
+- URL: shareable tabs, filters, sort, and page.
+- Storage: personal density, page size, and collapsed state.
+- Validate enums, dates, and bounded numbers; clamp stale page indexes.
+- Merge updates from prior search state.
+- Use `replace: true` inside a section so Back exits the section.
 
-  return <DashboardView dashboard={dashboard.data} widgetCount={widgetCount.data} />
-}
-```
+## Completion
 
-Router setup when Query owns cache:
-
-```tsx
-const rootRoute = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  component: RootLayout,
-})
-
-const router = createRouter({
-  routeTree,
-  context: { queryClient },
-  defaultPreloadStaleTime: 0,
-  defaultPendingComponent: DefaultLoader,
-  defaultErrorComponent: DefaultError,
-})
-```
-
-Avoid `Route.useLoaderData()` for Query-loaded data. It bypasses Query observers, so focus refetch, invalidation refetch, and cache retention can behave surprisingly.
-
-## Customization
-
-Routes dir pattern default `/routes/`. Update grep pattern in hook scripts if project use different convention:
-
-```bash
-if ! echo "$file_path" | grep -qE '/routes/'; then    # default
-if ! echo "$file_path" | grep -qE '/pages/'; then     # pages-based
-if ! echo "$file_path" | grep -qE '/app/routes/'; then # nested
-```
-
-## Type-Safe Search Params (native `validateSearch` -- no nuqs)
-
-The router owns search-param typing; a wrapper library duplicates it and dies at the next migration (nuqs was adopted, then deleted, for exactly this reason).
-
-```tsx
-const searchSchema = z.object({
-  page: z.coerce.number().int().min(1).catch(1),
-  tab: z.enum(['overview', 'settings']).catch('overview'),
-})
-
-export const Route = createFileRoute('/users/')({
-  validateSearch: searchSchema,
-})
-// read: const { page, tab } = Route.useSearch()
-// write: navigate({ search: (prev) => ({ ...prev, page: 2 }) })
-```
-
-Rules mined from years of URL-state fixes:
-- **URL = shareable state** (tabs, filters, sort, pagination -- anything a teammate should get from your link); **local/session storage = personal prefs** (page size, collapsed panels). Never swap them.
-- Never `{ strict: false }` on `useSearch`/`useParams` -- it is `as any` with extra steps; use the route-scoped API.
-- Clamp URL-sourced page indices against page count -- a stale `?page=999` must not render an empty table.
-- Intra-section navigation (tabs, wizard steps, detail sub-views) uses `replace: true`; only section entry pushes history, so Back escapes the section instead of replaying it.
-- zod enums/dates in `validateSearch`, not free strings; this is the one place zod belongs in the form/URL layer.
-
-Setup (install, config, verify): see [SETUP.md](SETUP.md).
+- Types prove route and search scope.
+- Query data has an active observer and complete visible states.
+- Navigation preserves browser history semantics.
+- Search URLs survive malformed, stale, and shared values.
+- Route tree, focused tests, typecheck, and lint pass.

@@ -97,3 +97,15 @@ if (pathname.includes('/dashboard')) { /* ... */ }
 ```
 
 Business logic mixed with legit fix -> **Skip-Business-Logic**. Re-implement fix clean in registry.
+
+## Governance
+
+- Ship registry syncs separately from feature work.
+- Keep consumer-specific behavior outside managed files.
+- Breaking changes include a codemod, changelog entry, migration example, and destructive
+  consumer smoke tests.
+- Keep registry components router and framework agnostic.
+- Prefer composition to render props or item arrays; keep variant axes small and orthogonal.
+- Encode recurring consumer corrections in the component API.
+- Changesets state affected components, visible before/after, and rationale.
+- Respect reduced motion and document non-obvious trade-offs with their evidence.

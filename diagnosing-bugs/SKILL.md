@@ -5,9 +5,8 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 # Diagnosing Bugs
 
-Discipline for hard bugs. Skip phase only if justify. Write mode + debt ledger + complexity tags all live in `/deslop`. Summarize inline.
-
-When exploring codebase, use project domain glossary + ADRs; for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
+Discipline for hard bugs. Skip a phase only with reason. Use the domain glossary and ADRs;
+for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
 
 ## Phase 1 -- Build a feedback loop
 
@@ -26,13 +25,9 @@ When exploring codebase, use project domain glossary + ADRs; for third-party/API
 9. **Differential loop.** Run same input through old-version vs new-version (or two configs), diff output.
 10. **HITL bash script.** Last resort. If human must click, drive _them_ with `scripts/hitl-loop.template.sh` so loop still structured. Captured output feed back to you.
 
-Build right feedback loop, bug 90% fixed.
-
 ### Iterate on the loop itself
 
 Treat loop as product. Once have _a_ loop, ask: faster? (cache setup, narrow test scope.) Sharper signal? (assert specific symptom, not "didn't crash".) More deterministic? (pin time, seed RNG, isolate filesystem, freeze network.)
-
-30-second flaky loop barely better than no loop. 2-second deterministic loop = debug superpower.
 
 ### Non-deterministic bugs
 
@@ -48,8 +43,6 @@ No proceed to Phase 2 till have loop you believe.
 
 Run the loop, then `/dogfood` the reporter's real user entrypoint. Watch the same bug appear.
 
-Confirm:
-
 - [ ] Loop produce failure mode **user** described -- not different failure nearby. Wrong bug = wrong fix.
 - [ ] Failure repro across multiple runs (or, for non-determ, repro at high enough rate to debug).
 - [ ] Captured exact symptom (error message, wrong output, slow timing) so later phase verify fix really address it.
@@ -58,9 +51,8 @@ No proceed till repro bug.
 
 ## Phase 3 -- Hypothesise
 
-Generate **3-5 ranked hypotheses** before test any. Single-hypothesis anchor on first plausible idea.
-
-Each hypothesis must be **falsifiable**: state prediction.
+Generate **3-5 ranked, falsifiable hypotheses** before testing any; single-hypothesis work
+anchors on the first plausible idea.
 
 > Format: "If <X> is the cause, then <changing Y> will make the bug disappear / <changing Z> will make it worse."
 
@@ -71,8 +63,6 @@ If cannot state prediction, hypothesis = vibe -- discard or sharpen.
 ## Phase 4 -- Instrument
 
 Each probe must map to specific prediction from Phase 3. **Change one variable at a time.**
-
-Tool preference:
 
 1. **Debugger / REPL inspection** if env support. One breakpoint beat ten logs.
 2. **Targeted logs** at boundaries that distinguish hypotheses.

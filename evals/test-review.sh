@@ -5,7 +5,7 @@ REF="$SKILL_DIR/REFERENCE.md"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "review SKILL.md exists"
 run_file_eval "$REF" "review REFERENCE.md exists"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "review description uses trigger wording"
+run_content_eval "$SKILL_DIR/SKILL.md" "Use (when|for)" "review description uses trigger wording"
 run_content_eval "$SKILL_DIR/SKILL.md" "REFERENCE.md" "review SKILL.md references one-level details"
 run_content_eval "$REF" "Report schema" "review reference has detailed schema"
 run_content_eval "$REF" "Example inline comment" "review reference has concrete example"

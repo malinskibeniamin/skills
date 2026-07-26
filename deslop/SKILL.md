@@ -1,13 +1,12 @@
 ---
 name: deslop
-description: "Write the least code that works and remove unjustified surface area. Use before commit/push/PR/merge, when a change feels overbuilt, or on ponytail, lazy mode, YAGNI, simplest solution, do less, bloat complaints, or debt-ledger asks."
+description: "Remove unjustified code and write the least that works. Use before shipping, when work feels overbuilt, or for ponytail, lazy mode, YAGNI, bloat, and debt-ledger requests."
 license: MIT
 vendored_from: https://github.com/DietrichGebert/ponytail (write mode)
 ---
 
 # Deslop
 Code is liability. Every added line can break, page someone, or need support. Two modes, one doctrine: **write mode** while building (absorbed from ponytail), **gate mode** before shipping. Local rule: `/tdd` wins; production code needs a failing test first.
-
 ## Write mode (lazy senior dev)
 
 Active when invoked before/during implementation (`/deslop write`, "ponytail", "lazy mode") -- and AUTOMATICALLY for every lifecycle implementation phase (step 3): no invocation needed, both runtimes. **Persistent**: once activated it stays on for the rest of the session -- every subsequent coding response, no drift back to over-building -- until the user says "stop deslop" / "stop ponytail" / "normal mode". Intensity level persists until changed or session end. (Breaking change from the ponytail merge, owner-approved: the ponytail slash command is gone -- say "ponytail" or use `/deslop`; behavior is otherwise the ponytail union.) Lazy = efficient, not careless. The best code is the code never written.
@@ -36,11 +35,9 @@ Active when invoked before/during implementation (`/deslop write`, "ponytail", "
 - Non-trivial logic leaves one runnable check (smallest thing that fails if the logic breaks). One-liners need none -- YAGNI applies to tests too.
 
 **Output:** code first, then max 3 short lines: `skipped: [X], add when [Y].` Asked-for reports in full; unasked prose is debt.
-
 **Intensity** (`/deslop lite|full|ultra`, default full): lite = build it, name the lazier alternative in one line; full = ladder enforced; ultra = deletion before addition, ship the one-liner and challenge the requirement in the same breath.
 
 **Never cut:** input validation at trust boundaries, error handling preventing data loss, security, accessibility basics, hardware calibration knobs, explicit requests, or failing-test-first for non-trivial prod code.
-
 ## Gate mode (ship gate)
 
 ### Inputs

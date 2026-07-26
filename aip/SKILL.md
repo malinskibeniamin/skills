@@ -1,6 +1,6 @@
 ---
 name: aip
-description: "Designs/reviews APIs against applicable Google AIPs 1-236. Use for API proposals, protobuf/REST schemas, resources, methods, HTTP, fields, pagination/filtering, LROs, compatibility/versioning, errors/retries, docs, or declarative/batch patterns."
+description: "Design Google AIP resource APIs. Use for protobuf or REST resources, standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors, compatibility, or batch APIs."
 paths:
   - "**/*.proto"
   - "**/*openapi*.{yaml,yml,json}"

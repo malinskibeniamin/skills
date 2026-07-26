@@ -5,6 +5,25 @@ SKILL_DIR="$REPO_ROOT/visual-review"
 run_file_eval "$SKILL_DIR/SKILL.md" "visual-review SKILL.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: visual-review" "visual-review has correct name"
 
+# Detailed contracts may live behind the SKILL.md context pointer.
+run_content_eval() {
+  local file="$1"
+  local pattern="$2"
+  local description="$3"
+  local files=("$file")
+  if [ "$file" = "$SKILL_DIR/SKILL.md" ]; then
+    files+=("$SKILL_DIR/REFERENCE.md")
+  fi
+  if grep -qE -- "$pattern" "${files[@]}"; then
+    echo "  PASS  $description"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $description (pattern not found: $pattern)"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $description"
+  fi
+}
+
 visual_review_md_files=$(find "$SKILL_DIR" -maxdepth 1 -type f -name "*.md" -print | sed "s#$SKILL_DIR/##" | sort | tr '\n' ' ')
 if [ "$visual_review_md_files" = "REFERENCE.md SKILL.md " ]; then
   echo "  PASS  visual-review docs stay two-file: SKILL.md and REFERENCE.md"

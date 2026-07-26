@@ -1,13 +1,11 @@
 ---
 name: resilience-review
-description: Murphy-law hat panel for unhappy paths -- input, timing, system, state, UX-recovery hats probe a change in parallel. Use when forms, validation, async/data, mutations, cache, state machines, destructive actions, or loading/empty/error states change.
+description: Run a Murphy-law review of unhappy paths. Use when forms, validation, async data, mutations, cache, state machines, destructive actions, or loading, empty, and error states change.
 ---
 
 # Resilience Review
 Murphy pass: find every plausible unhappy path, then block, guard, recover, observe.
-
-## Use when
-Diffs touching forms, validation, submit, async/data, mutations, cache, retries, state machines, mode/union switches, config/resource choice, destructive actions, or loading/empty/error/success UI. Skip docs/test/style/trivial pure logic only; record reason.
+Skip docs-only, test-only, style-only, or trivial pure-logic diffs with a recorded reason.
 
 ## Hat panel (parallel)
 

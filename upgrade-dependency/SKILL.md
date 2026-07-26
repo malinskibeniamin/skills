@@ -1,10 +1,12 @@
 ---
 name: upgrade-dependency
-description: Upgrade a dependency AND adapt the code to it in one pass -- bump, codemods, call-site migration, new-API adoption, verify, ship-ready PR. Use when upgrading a package/module, remediating a vulnerable dependency, or reviewing breaking changes.
+description: Upgrade a dependency and adapt every affected call site. Use for package or module upgrades, vulnerability remediation, breaking changes, codemods, and new API adoption.
 ---
 
 # Upgrade Dependency
 Dependency current -> latest stable, **with the code changes that benefit from it, in the same PR**. No follow-up cleanup, no report ceremony. Default is DO; `plan` (plan only) or a blocked gate stops at paper.
+Read [REFERENCE.md](REFERENCE.md) for supply-chain checks and issue/PR templates when those
+branches fire.
 
 Input: `$ARGUMENTS` = package/module, manifest path, target version, natural language, or `plan`.
 ## Flow

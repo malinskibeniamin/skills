@@ -1,5 +1,34 @@
 # Visual Review Reference
 
+## House taste
+
+- Rendering stays honest: show machine truth beside human labels; preserve zero values;
+  name degraded causes and offer retry.
+- Create flows stay shallow; the detail page carries depth. Empty states get one primary
+  action and cover no-data, no-match, error, and no-permission.
+- Tables earn columns, truncate with recovery, and keep headers/captions meaningful.
+- Semantic color uses background, border, icon, and readable text in both themes.
+- Loading reserves layout. Parents own spacing. Destructive copy names the subject.
+- Buttons act; links navigate. Motion clarifies state and respects reduced motion.
+
+## Surface stress checklist
+
+Check safe areas, virtual keyboards, writing modes, clipping, sticky elements, viewport
+units, CLS, dense data, table semantics, complex CSS, accessible names, label association,
+native semantics, ARIA restraint, password managers, autofill, disabled semantics, focus
+trap/return, autofocus, nested controls, `requestSubmit`, toast persistence, side-effect
+confirmation, strikethrough/emoji/generated content, SVG/icons/images, Firefox, Safari,
+WebView, bfcache, smooth scrolling, scroll snapping, `scrollIntoView`, interaction
+blocking, native-control behaviour, feature detection, responsive images/video, stable
+aspect ratio, LCP/CLS/INP, font loading, and third-party embeds.
+
+Minimum evidence names the Chromium mobile viewport and keyboard path: Tab, Shift+Tab, Enter, Space, Escape.
+Exercise the notification/toast path. Confirm captions/headers still explain tables.
+Require no surprise autofocus, and ensure buttons/links do not nest. Critical actions keep
+information persistent; toasts are not sole carrier for critical actions. Stress
+strikethrough, emoji, generated content; responsive video/media; stable aspect ratio; and
+third-party embeds/scripts.
+
 Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go`, `/commit-push-pr`, `/prototype`, `/triage`, `self-reviewer`, `code-reviewer`.
 
 Visual review = surface review for customer-facing surfaces: web UI, mobile screens, CLI/TUI output, desktop apps, generated reports, onboarding, forms, any user-visible behavior. Browser screenshot review = one adapter.

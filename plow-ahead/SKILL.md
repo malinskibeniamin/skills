@@ -1,6 +1,6 @@
 ---
 name: plow-ahead
-description: Use when the user says plow ahead, do not stop, use your best judgment, keep going until done, or similar. Convert routine ambiguity into assumptions, proceed, validate, and stop only for true blockers.
+description: Continue through routine ambiguity using reversible assumptions. Use when the user says plow ahead, keep going, use your judgment, or do not stop until done.
 ---
 
 # Plow Ahead

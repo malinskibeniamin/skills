@@ -1,6 +1,6 @@
 ---
 name: registry-workflow
-description: Component registry maintenance -- taxonomy, consumer drift analysis, sync discipline. Use when maintaining the shadcn registry or design system, syncing registry components, or analyzing consumer-repo drift.
+description: Maintain component registries through taxonomy and sync discipline. Use when changing a shadcn registry or design system, syncing components, or analyzing consumer drift.
 ---
 
 Read and follow the complete [canonical skill instructions](../../registry-workflow/SKILL.md) before acting.

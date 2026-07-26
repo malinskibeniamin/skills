@@ -7,7 +7,7 @@ FIRE_HOOK="$REPO_ROOT/.claude/hooks/skill-fire-log.sh"
 run_file_eval "$SKILL" "dogfood SKILL.md exists"
 run_file_eval "$STOP_HOOK" "dogfood completion hook exists"
 run_content_eval "$SKILL" "^name: dogfood" "dogfood has correct name"
-run_content_eval "$SKILL" "^description:.*(building|built|fixing|fixed|iterating)" \
+run_content_eval "$SKILL" "^description:.*Use after each material behavior slice" \
   "description triggers after runnable work"
 run_content_eval "$SKILL" "material runnable (increment|slice)" \
   "dogfood defines its checkpoint cadence"

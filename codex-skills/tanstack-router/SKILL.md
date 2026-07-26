@@ -1,6 +1,6 @@
 ---
 name: tanstack-router
-description: TanStack Router patterns -- Router-loader vs Query-cache ownership, typed search params, route tree generation, useLoaderData pitfalls. Use when writing or editing routes, loaders, navigation, or search params.
+description: Apply TanStack Router patterns for Query ownership and typed search. Use when changing routes, loaders, navigation, route trees, or search parameters.
 paths:
   - "**/routes/**/*.tsx"
   - "**/routes/**/*.ts"

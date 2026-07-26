@@ -1,6 +1,6 @@
 ---
 name: snyk-ux-security
-description: Snyk dependency sweeps across frontend, Go, and Bazel paths with npm false-positive triage and release-age gates.
+description: Audit frontend, Go, and Bazel dependencies with Snyk, exploitability triage, and release gates.
 disable-model-invocation: true
 ---
 

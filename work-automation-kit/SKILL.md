@@ -28,8 +28,6 @@ Prompt-driven. Explore -> present -> confirm -> write.
 
 ```bash
 # Owned
-
-# Owned
 bunx skills@latest add malinskibeniamin/skills/grilling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
 bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y

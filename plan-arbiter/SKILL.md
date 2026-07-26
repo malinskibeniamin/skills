@@ -1,6 +1,6 @@
 ---
 name: plan-arbiter
-description: Use when comparing, cross-reviewing, merging, judging, choosing, or arbitrating competing plans from agents, transcripts, visual-plan links, PR descriptions, files, or pasted strategies.
+description: Arbitrate competing plans. Use when choosing or merging proposals from agents, transcripts, visual plans, PR descriptions, files, or pasted strategies.
 ---
 
 # Plan Arbiter

@@ -1,101 +1,52 @@
 ---
 name: ux-copy
-description: UX text style for UI strings and prose -- sentence case, action labels, banned phrases, inclusive language, Redpanda terms. Use when writing or reviewing UI copy, labels, empty states, error messages, or docs prose.
+description: Write clear, inclusive UX copy. Use when changing UI strings, labels, actions, empty states, errors, documentation prose, or Redpanda product terms.
 ---
 
 <!-- allow: prose-style this file documents the rules and shows example violations -->
 
-# Setup UX Copy
-Two PostToolUse hooks on Edit/Write: one for code-string UX copy, one for prose.
+# UX Copy
 
-## ux-copy-check.sh (`.ts` and `.tsx`)
+Read [REFERENCE.md](REFERENCE.md) for capitalization, controls, errors, empty states,
+inclusive language, and prose rules.
 
-- **Ban** exclamation points in UI strings
-- **Ban** "successfully" (use past-tense verb: "Topic created")
-- **Ban** "click here" and bare "here" link text
-- **Ban** blame language ("Oops", "Uh oh", "Whoops")
-- **Ban** "Yes"/"No" button labels (use action verbs)
-- **Ban** non-inclusive terms (whitelist/blacklist -> allowlist/denylist, master/slave -> leader/follower)
-- **Warn** possessive pronouns in titles/nav ("My Settings" -> "Settings")
-- **Warn** bold/italic/monospace in string literals
-- **Warn** ALL CAPS for emphasis (not acronyms)
-- **Warn** Title Case (3+ consecutive capitalized words)
-- **Warn** spelled-out numbers (1-9 as numerals in UI)
-- **Warn** "and/or" (use "and", "or", or "A, B, or both")
-- **Warn** "etc.", "e.g.", "i.e.", "please", "via", "There is/are" starters
-- **Warn** generic CTA labels ("Submit", "OK", "Done") -- name the action
-- **Warn** vague error copy ("Invalid input", "Something went wrong") -- state cause + recovery
-- **Warn** dead-end empty states ("No data", "No items found") -- explain why + next step
+## Product copy
 
-### Copywriting articulation
+- Use sentence case and front-load the object or result.
+- Buttons name the action and object; avoid Yes, No, Submit, OK, or Done.
+- Errors state the cause, constraint, and recovery.
+- Empty states explain why and provide one next step.
+- Labels persist; placeholders provide examples only.
+- Destructive language names permanent loss directly.
+- Keep regex and validation messages adjacent.
+- Stress long localization, large numbers, offline/error states, truncation, and recovery.
 
-- Microcopy must guide and reassure: labels, errors, placeholders, tooltips, toasts.
-- CTA text owns the action: "Save changes" beats "Submit".
-- Front-load scannable copy: lead with the object or result users need.
-- Error messages say what happened and how to recover.
-- Placeholders are examples or hints only; never the label.
-- Success messages are specific and brief: "Saved" or "Topic created", not "Done".
-- Destructive language is explicit: delete, remove, revoke, disconnect. Do not soften permanent loss.
-- Contextual help sits near the thing it explains and should remove the next question.
-- Numeric formatting, truncation, and locale-sensitive text are part of UX copy quality.
-- Labels, helper text, placeholders, tooltips, and errors each do different work; cut redundant writing.
-- Stress copy with long localized strings, huge numbers, empty/error/offline states, and destructive actions.
-- Product naming can add identity only when clarity and recovery language stay intact.
+With `REDPANDA_KIT=1`, use canonical product names from [GLOSSARY.md](GLOSSARY.md).
+Code-string escape: `// allow: ux-copy [reason]`.
 
-### Redpanda-specific (REDPANDA_KIT=1)
+## Prose
 
-- Enforce product name capitalization (Admin API, Schema Registry, HTTP Proxy, Redpanda Console)
-- Warn on "the console" (use "Redpanda Console")
+- Prefer direct sentences and concrete verbs.
+- Remove canned openings, AI-tell words, heavy transitions, Latin abbreviations, praise
+  triads, and em dashes.
+- Keep links descriptive and at the decision point.
 
-### Escape hatch
+Prose escape: `<!-- allow: prose-style [reason] -->`.
 
-`// allow: ux-copy [reason]` anywhere in file skip all checks.
+## Hook setup
 
-## prose-style-check.sh (`.md`, `.mdx`, `.markdown`)
+Copy and register these PostToolUse `Edit|Write` hooks:
 
-For documentation, READMEs, PR description files, and any markdown prose.
+- `scripts/ux-copy-check.sh`
+- `scripts/prose-style-check.sh`
+- `scripts/_hook-lib.sh`
 
-- **Ban** em dashes (Unicode U+2014). Use commas, periods, or parentheses.
-- **Ban** canned AI openers ("Let's dive in", "Here's why", "In conclusion", "In today's digital landscape").
-- **Ban** AI-tell words (hard list): delve, tapestry, realm, pivotal, underscore.
-- **Warn** AI-tell words (soft list): leverage, foster, intricate, nuanced, robust, comprehensive, significantly, showcase.
-- **Warn** "not just X, but Y" / "not just X, it's Y" contrast framing.
-- **Warn** heavy transitions (Moreover, Furthermore, Additionally, Nevertheless).
-- **Warn** Latin abbrevs (e.g., i.e., etc.).
-- **Warn** rule-of-three praise lists (e.g., "fast, efficient, and reliable").
+Make them executable. Optionally copy `GLOSSARY.md` into project docs for shared domain
+language.
 
-Fenced code, indented code, inline code spans, and URLs are stripped before matching to reduce false positives.
+## Completion
 
-## UI-string rules (mined from years of copy review)
-
-- **"Cannot" over "Don't"** in validation messages (less accusatory); no "Please"; error messages state the constraint precisely ("Name must only contain letters, numbers, or hyphens" -- and the message regenerates when the regex changes, so keep regex + message adjacent).
-- **Entity-precise verbs**: "Assign roles" not "Change roles"; buttons name the action + object; confirm dialogs name the exact subject being acted on.
-- **No unexplained acronyms** in routes, labels, or filenames -- acronyms tax every new reader; verbose names also reduce LLM hallucination.
-- **Interpolation tags stay semantic**: a single link is `<link>`, not `<link1>`; docs links live inline at the decision point, not in a separate box.
-- **Copy authority**: user-facing copy changes get a docs-editor review pass; machine keys/IDs are never shown as labels (derive the display string, keep the key visible beside it when operators need it).
-
-### Escape hatch
-
-`<!-- allow: prose-style [reason] -->` or `// allow: prose-style [reason]` anywhere in file skips all checks.
-
-## Steps
-
-### 1. Create hook scripts
-Copy [`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh), [`scripts/prose-style-check.sh`](scripts/prose-style-check.sh), and [`scripts/_hook-lib.sh`](scripts/_hook-lib.sh) to `.claude/hooks/`. Make executable.
-
-### 2. Configure hooks
-Add to hooks config: **PostToolUse** (matcher: `Edit|Write`):
-- `.claude/hooks/ux-copy-check.sh`
-- `.claude/hooks/prose-style-check.sh`
-
-### 3. Copy glossary (optional, for DDD)
-Copy [`GLOSSARY.md`](GLOSSARY.md) to project root or `docs/`. Pair with `/grilling` and `/domain-modeling` for project-wide terminology work.
-
-### 4. Verify
-- [ ] Hook blocks `"Something!"` in string literals
-- [ ] Hook blocks `"successfully"` in UI strings
-- [ ] Hook blocks `<Button>Yes</Button>` in TSX
-- [ ] Hook blocks em dash (U+2014) in `.md` files
-- [ ] Hook blocks "Let's dive in" in `.md` files
-- [ ] Hook blocks "delve" in `.md` files
-- [ ] (If `REDPANDA_KIT=1`) Hook blocks `"schema registry"` (lowercase)
+Verify `ux-copy-check.sh` catches exclamation points, `successfully`, blame language,
+generic actions, and vague errors. Verify `prose-style-check.sh` catches canned AI prose,
+em dashes, and hard-banned words. When Redpanda mode is active, verify product
+capitalization.

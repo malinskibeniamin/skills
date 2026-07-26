@@ -1,6 +1,6 @@
 ---
 name: frontend-invariants
-description: The timeless frontend invariants -- principles that survived seven full stack migrations. Use when writing or reviewing any React/TS/UI code; these hold regardless of which router, data layer, or design system is current.
+description: Apply stack-independent frontend invariants. Use when writing or reviewing React, TypeScript, or UI code across routing, state, data, and design systems.
 paths:
   - "**/*.tsx"
   - "**/*.ts"

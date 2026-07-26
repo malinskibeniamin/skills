@@ -1,6 +1,6 @@
 ---
 name: visual-plan
-description: Turn text plans into interactive Agent-Native visual plans with diagrams, file maps, annotated code, questions, and UI/prototype review. Use for non-trivial planning, UI/product, architecture, data, API, or competing options.
+description: Create interactive Agent-Native visual plans. Use for non-trivial UI, product, architecture, data, API, or competing-option plans needing diagrams, file maps, or prototypes.
 ---
 
 # Visual Plan
