@@ -33,6 +33,8 @@ Before every Claude taste/review/planning wave and between waves:
 Use per-invocation Claude `model` and `effort`; reviewer and planning agent definitions
 inherit so static frontmatter cannot override the selected profile. Let an in-flight wave
 finish, then reroute the next wave from a fresh snapshot.
+`/review` must invoke this selector immediately before each Claude reviewer dispatch,
+including the Opus 5 feedback lane. Never reuse a prior review profile.
 
 ## Implementation Profile
 

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, and lower Sonnet 5 taste to 5. Route taste work by Claude usage: Fable high/medium/low through 50%, Opus xhigh/medium/low through 95%, then no Claude. Pair Claude-enabled implementation across Opus 5 xhigh and Sol xhigh, fall back to clean-context Sol xhigh only without Claude, and use reciprocal review: Sol high checks Opus work while Opus 5 xhigh gives feedback on Sol implementation.
+2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, and lower Sonnet 5 taste to 5. Route taste work by Claude usage: Fable high/medium/low through 50%, Opus xhigh/medium/low through 95%, then no Claude. Pair Claude-enabled implementation across Opus 5 xhigh and Sol xhigh, fall back to clean-context Sol xhigh only without Claude, and use reciprocal review: Sol high checks Opus work while Opus 5 xhigh gives feedback on Sol implementation. `/review` now fail-closes through `/stay-within-limits` immediately before every Claude reviewer dispatch.
 
 ## 4.32.0
 

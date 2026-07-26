@@ -34,6 +34,7 @@ Review is verification, not opinion: check claims against the source (the API th
 
 Security review is intentionally absent (owner decision 2026-07-10; restore from git history).
 Claude-hosted sessions run `/stay-within-limits` before each bounded wave, then dispatch every hat with the selected Claude profile. Opus work gets a fresh Sol high adversarial review; Sol implementation gets Opus 5 xhigh feedback. With no Claude, a clean-context Sol xhigh pass covers all hats. Native Codex runs axes inline unless delegation was requested.
+Hard gate: invoke `/stay-within-limits` immediately before every Claude reviewer dispatch, including Opus feedback. Never reuse an earlier profile; missing, stale, or disabled usage means do not launch Claude and use the Sol fallback.
 The orchestrator merges by root cause and MUST assert every non-skipped axis completed; failed dispatches are rerun.
 
 | Hat | Owns | Model |
