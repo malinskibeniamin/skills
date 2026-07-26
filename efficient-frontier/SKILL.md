@@ -42,8 +42,9 @@ output, not the price tag; escalating costs less than shipping mediocre output.
 - Cross-model review, automatic on every change: the author model never solely reviews its
   own work, and the reviewer comes from a DIFFERENT family whenever possible (family
   diversity catches shared blind spots). Fresh Sol high adversarial review checks Opus work;
-  without Claude, Sol xhigh alone covers every axis. Record unavailable cross-family coverage.
-  Findings P0-P3 -> fixes delegated per routing, re-checked by the reviewer.
+  Opus 5 xhigh feedback checks Sol implementation. Without Claude, clean-context Sol xhigh
+  covers every axis. Record unavailable cross-family coverage. Findings P0-P3 -> fixes
+  delegated per routing, re-checked by the reviewer.
 - Computer use and other token furnaces (browser verification, codebase analysis): shell to
   codex Sol and report back -- see `/codex` for variant routing (Sol/Terra/Luna + effort
   floors), exec/review mechanics, timeouts, worktree isolation, and wrapper labels.

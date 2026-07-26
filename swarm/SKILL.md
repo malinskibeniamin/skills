@@ -61,7 +61,7 @@ Spawned lanes may not create descendants without separate authorization for nest
 
 - Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
 - Before launching lanes and between waves: `/stay-within-limits` (stop Claude above 95% of either window; resume after a fresh check).
-- Lane model choice: `/efficient-frontier` Model rankings. Implementation pairs Opus 5 xhigh with Sol xhigh in isolated lanes; Opus work gets Sol high adversarial review; without Claude, use Sol xhigh only. Tracker chores -> Luna; PR-comment chores -> Terra. Never Haiku.
+- Lane model choice: `/efficient-frontier` Model rankings. Implementation pairs Opus 5 xhigh with Sol xhigh in isolated lanes; review is reciprocal: Sol high checks Opus work and Opus 5 xhigh checks Sol implementation. Without Claude, use clean-context Sol xhigh only. Tracker chores -> Luna; PR-comment chores -> Terra. Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes start with `/deslop` write mode; reviewer lanes include `/deslop` complexity tags before broader review.
 - Architecture: fan out `/improve architecture` by context, module, seam, or adapter.

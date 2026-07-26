@@ -19,6 +19,7 @@ run_content_eval "$LIMITS_DIR/SKILL.md" "96-100%.*no Claude|no Claude.*96-100%" 
 run_content_eval "$LIMITS_DIR/SKILL.md" "missing|stale" "fails safely on unavailable quota data"
 run_content_eval "$LIMITS_DIR/SKILL.md" "Opus 5 xhigh.*Sol xhigh|Sol xhigh.*Opus 5 xhigh" "pairs Opus 5 and Sol xhigh for implementation"
 run_content_eval "$LIMITS_DIR/SKILL.md" "Sol high.*adversarial|adversarial.*Sol high" "uses Sol high for Opus adversarial review"
+run_content_eval "$LIMITS_DIR/SKILL.md" "Sol implementation.*Opus 5 xhigh|Opus 5 xhigh.*Sol implementation" "uses Opus 5 xhigh feedback for Sol implementation"
 run_content_eval "$LIMITS_DIR/SKILL.md" "Sol xhigh only" "falls back to Sol xhigh only without Claude"
 run_content_eval "$LIMITS_DIR/SKILL.md" "[Bb]efore (each|every).*wave" "re-checks usage before each wave"
 run_content_eval "$LIMITS_DIR/SKILL.md" "Codex and Claude are separate budgets" "documents separate provider budgets"
@@ -60,11 +61,15 @@ if [ -x "$CAPTURE" ] && [ -x "$SELECT" ]; then
         if $enabled then
           .implementation_claude_model == "claude-opus-5"
           and .implementation_claude_effort == "xhigh"
+          and .feedback_claude_model == "claude-opus-5"
+          and .feedback_claude_effort == "xhigh"
           and .adversarial_codex_model == "gpt-5.6-sol"
           and .adversarial_codex_effort == "high"
         else
           (.implementation_claude_model // "") == ""
           and (.implementation_claude_effort // "") == ""
+          and (.feedback_claude_model // "") == ""
+          and (.feedback_claude_effort // "") == ""
           and (.adversarial_codex_model // "") == ""
           and (.adversarial_codex_effort // "") == ""
         end
@@ -98,6 +103,7 @@ if [ -x "$CAPTURE" ] && [ -x "$SELECT" ]; then
     and .reason == "missing_or_stale_claude_usage"
     and .codex_effort == "xhigh"
     and (.implementation_claude_model // "") == ""
+    and (.feedback_claude_model // "") == ""
     and (.adversarial_codex_model // "") == ""' <<<"$_stale_profile" >/dev/null; then
     echo "  PASS  stale quota snapshot falls back to Sol xhigh only"
     PASS=$((PASS + 1))

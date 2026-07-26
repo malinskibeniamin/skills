@@ -33,7 +33,7 @@ Review is verification, not opinion: check claims against the source (the API th
 ## Hat panel (default for PR and branch reviews)
 
 Security review is intentionally absent (owner decision 2026-07-10; restore from git history).
-Claude-hosted sessions run `/stay-within-limits` before each bounded wave, then dispatch every hat with the selected Claude profile. Opus work always gets a fresh Sol high adversarial review; with no Claude, Sol xhigh alone covers all hats. Native Codex runs axes inline unless delegation was requested.
+Claude-hosted sessions run `/stay-within-limits` before each bounded wave, then dispatch every hat with the selected Claude profile. Opus work gets a fresh Sol high adversarial review; Sol implementation gets Opus 5 xhigh feedback. With no Claude, a clean-context Sol xhigh pass covers all hats. Native Codex runs axes inline unless delegation was requested.
 The orchestrator merges by root cause and MUST assert every non-skipped axis completed; failed dispatches are rerun.
 
 | Hat | Owns | Model |
@@ -47,7 +47,7 @@ The orchestrator merges by root cause and MUST assert every non-skipped axis com
 | test/perf | TDD evidence, coverage gaps, flaky tests, render/network/bundle risk | usage-routed Claude |
 | golang (auto for Go/backend proto diffs; every tier) | `/golang-review`: findings cite the local catalog rule | usage-routed Claude |
 
-Eighth axis, **mandatory**. Claude-hosted always runs `GPT-5.6-sol: adversarial` via `/codex` at high against Opus work. Claude hats provide cross-FAMILY coverage for GPT-authored diffs. Terra/Luna never review. With no Claude, Sol xhigh alone runs every hat. Native Codex does not recurse: run axes inline and record cross-family unavailable.
+Eighth axis, **mandatory**. Reciprocal cross-FAMILY review: Claude-hosted runs `GPT-5.6-sol: adversarial` via `/codex` at high against Opus work, and asks Opus 5 xhigh for feedback on Sol implementation. Terra/Luna never review. With no Claude, clean-context Sol xhigh runs every hat. Native Codex does not recurse: run axes inline and record cross-family unavailable.
 
 Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals; evidence, severity, priority label, required change, PR-comment-ready text; max 400 words; findings must be diff-introduced, user-impacting, actionable.
 Merge: dedupe by root cause, keep highest severity on disagreement, preserve Standards and Spec separately.

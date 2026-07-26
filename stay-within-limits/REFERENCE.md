@@ -51,6 +51,8 @@ implementation and Sol-only fallback. A fresh valid snapshot also includes:
 - `claude_model` and `claude_effort`: the quota-selected taste profile.
 - `implementation_claude_model: "claude-opus-5"` and
   `implementation_claude_effort: "xhigh"`.
+- `feedback_claude_model: "claude-opus-5"` and `feedback_claude_effort: "xhigh"` for
+  required feedback on Sol implementation.
 - `adversarial_codex_model: "gpt-5.6-sol"` and
   `adversarial_codex_effort: "high"` for fresh review of Opus work.
 

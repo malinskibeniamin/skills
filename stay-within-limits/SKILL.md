@@ -26,8 +26,9 @@ Before every Claude taste/review/planning wave and between waves:
    - `96-100%`: no Claude.
 4. Missing, malformed, or stale quota snapshot means no Claude.
 5. Plan gates retain the independent Sol xhigh check. Opus-authored work gets a fresh Sol
-   high adversarial review. If Claude is disabled, use Sol xhigh only and let it own every
-   required hat; do not silently skip axes.
+   high adversarial review. Sol implementation gets Opus 5 xhigh feedback as a required
+   review lane. If Claude is disabled, use Sol xhigh only and let a clean-context pass own
+   every required hat; do not silently skip axes.
 
 Use per-invocation Claude `model` and `effort`; reviewer and planning agent definitions
 inherit so static frontmatter cannot override the selected profile. Let an in-flight wave
@@ -48,9 +49,9 @@ self-contained resume; use Sol only where the repo authorizes Codex.
 ## Separate Budgets
 
 Codex and Claude are separate budgets. Claude usage never gates Codex. Codex implementation
-uses Sol xhigh and Opus-work adversarial review uses Sol high even when no Codex quota meter
-is available; do not infer Codex subscription usage from `ccusage`, local tokens, session
-tokens, or Claude percentages.
+uses Sol xhigh; Opus-work adversarial review uses Sol high; Sol implementation gets Opus 5
+xhigh feedback while Claude is enabled. Do not infer Codex subscription usage from `ccusage`,
+local tokens, session tokens, or Claude percentages.
 Without a Codex meter, usage is unknown. Do not guess its reset time.
 Native Codex runs required review/planning axes inline and never recursively invokes Codex.
 
@@ -63,5 +64,6 @@ commands, and stop conditions.
 ## Reporting
 
 Report the two observed percentages, selected maximum, taste profile, implementation pair,
-adversarial Sol high status, or disable reason. When Claude is disabled, state which Sol
-xhigh pass covered each required hat.
+reciprocal review status (Sol high on Opus work and Opus 5 xhigh on Sol implementation), or
+disable reason. When Claude is disabled, state which clean-context Sol xhigh pass covered
+each required hat.

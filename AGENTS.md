@@ -41,7 +41,7 @@ GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- actual imp
 
 Claude taste quota ladder (higher of 5h/7d): 0-20% Fable high | 21-35% Fable medium | 36-50% Fable low | 51-75% Opus xhigh | 76-90% Opus medium | 91-95% Opus low | 96-100% or missing/stale no Claude. Re-check `/stay-within-limits` before every wave.
 
-Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | user-facing -> taste >= 7 | token furnaces -> codex | **implementation pair**: when Claude enabled, Opus 5 xhigh + Sol xhigh in isolated/non-overlapping lanes; without Claude, Sol xhigh only | **Cross-model review, automatic on every non-trivial change**: author model never solely reviews its own work; use a DIFFERENT family; fresh Sol high adversarial review checks Opus work; without Claude, Sol xhigh owns all hats; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via per-invocation `model` + `effort`.
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | user-facing -> taste >= 7 | token furnaces -> codex | **implementation pair**: when Claude enabled, Opus 5 xhigh + Sol xhigh in isolated/non-overlapping lanes; without Claude, Sol xhigh only | **Cross-model review, automatic on every non-trivial change**: author model never solely reviews its own work; use a DIFFERENT family; fresh Sol high adversarial review checks Opus work, and Opus 5 xhigh feedback checks Sol implementation; without Claude, clean-context Sol xhigh owns all hats; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via per-invocation `model` + `effort`.
 
 ### Monitor (not sleep)
 

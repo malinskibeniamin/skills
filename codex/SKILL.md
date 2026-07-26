@@ -41,19 +41,19 @@ rerun with a sharper prompt or redo on a smarter model without asking.
 - **Implement** (clear spec, migrations, mechanical sweeps): run
   `codex exec -m gpt-5.6-sol -c 'model_reasoning_effort="xhigh"'` with write access, in a
   worktree when anything else touches the checkout.
-- **Review** (independent second opinion on a diff/PR): Opus work gets Sol high; Sol-only
-  fallback uses xhigh. Include the diff command; merge findings as one lane, not the verdict.
+- **Review**: Opus work gets Sol high; Sol implementation gets Opus 5 xhigh feedback;
+  Sol-only fallback uses clean-context xhigh. Include the diff; merge findings as one lane.
 - **Adversarial exchange (automatic in Claude-hosted workflows -- no ask needed)**: the author
   model never solely reviews its own work, and the reviewer comes from a DIFFERENT FAMILY
   whenever possible -- family diversity catches what same-family blind spots share. Claude
   authored the diff -> `GPT-5.6-sol: adversarial` review here (`codex review` / read-only
   exec, high effort, prompt: "try to break this -- failure scenarios, spec drift, missing
-  tests; P0-P3 findings only, evidence required"). GPT authored the diff -> Fable/Opus
-  reviews (the `/review` panel or `adversarial-reviewer` agent). Same-family clean-context
-  review is the fallback ONLY when the other family is unavailable -- record the
-  substitution. Terra/Luna never review. Findings route back per model routing. `/go` phase 4b invokes
-  this automatically. Native Codex runs the axis inline and records cross-family review as
-  unavailable unless the user explicitly requests an external lane.
+  tests; P0-P3 findings only, evidence required"). Sol implementation -> Opus 5 xhigh
+  feedback through the `/review` panel. Other GPT-authored diffs -> usage-routed Claude
+  review. Same-family clean-context review is the fallback ONLY when the other family is
+  unavailable -- record the substitution. Terra/Luna never review. Findings route back per
+  model routing. `/go` phase 4b invokes this automatically. Native Codex runs the axis inline
+  and records cross-family review as unavailable unless the user requests an external lane.
 
   **Cross-provider gates (checked before every automatic exchange):**
   - *Authorization*: send code to OpenAI only when the repo opts in -- a `.codex/` directory

@@ -15,8 +15,8 @@ Before producing findings, walk through [karpathy-failure-modes.md](./karpathy-f
 
 ## Mandatory Cross-Model Review
 
-Always run one GPT-5.6 Sol high adversarial review of Opus work. Invocation (graceful skip if `codex`
-CLI absent):
+For Opus-authored work, always run one GPT-5.6 Sol high adversarial review. Invocation
+(graceful skip if `codex` CLI absent):
 
 ```bash
 if command -v codex >/dev/null 2>&1; then
@@ -30,6 +30,10 @@ fi
 Include Codex findings in your output under `codex_findings: [...]`. Divergence from your own findings is a signal -- call it out in `divergence_notes`.
 
 If Codex is unavailable or errors out, continue with your own review and set `codex_status: "unavailable"`.
+
+For Sol implementation, the orchestrator must run this reviewer as Opus 5 xhigh for
+cross-family feedback. If Claude is unavailable, record the limitation and use a
+clean-context Sol xhigh pass.
 
 ## Stage 1: Spec Compliance
 
