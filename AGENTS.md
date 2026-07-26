@@ -35,7 +35,7 @@ Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
 Default `high`. Fable-5: `high` or lower ONLY (`xhigh`/`max` furnaces, worse output). Never inject `ultrathink`.
 
-Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-5 4/7/8 | Sonnet-5 6/5/7 | GPT-5.6 Sol (codex) 8/9/6 | GPT-5.6 Terra 9/6/5 | GPT-5.6 Luna 10/3/2. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
+Rank cost/intel/taste (1-10 higher better; cost = pay): Fable-5 1/10/9 | Opus-5 5/8/9 | Sonnet-5 6/5/7 | GPT-5.6 Sol (codex) 8/9/6 | GPT-5.6 Terra 9/6/5 | GPT-5.6 Luna 10/3/2. Taste = UI/UX, code quality, API, copy. GPT-5.5 retired (5.6 GA).
 
 GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- smartest model rivaled only by Fable-5; ALL code writing and implementation at `medium`|`high`, every review/plan check at `xhigh`. **Terra** = budget non-code work -- posting PR comments and test-runner/CI chores at `medium`|`high`; never product code or review. **Luna** = last resort for cheap tool loops far from code at `high`; never development or review.
 

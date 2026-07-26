@@ -20,7 +20,7 @@ hard a problem you can hand over. Taste = UI/UX, code quality, API design, desig
 | Model | Cost | Intelligence | Taste |
 |---|---|---|---|
 | Fable-5 | 1 | 10 | 9 |
-| Opus-5 | 4 | 7 | 8 |
+| Opus-5 | 5 | 8 | 9 |
 | Sonnet-5 | 6 | 5 | 7 |
 | GPT-5.6 Sol (codex) | 8 | 9 | 6 |
 | GPT-5.6 Terra (codex) | 9 | 6 | 5 |
