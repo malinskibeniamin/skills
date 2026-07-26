@@ -52,6 +52,7 @@ Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
 - Kill duplication | fix naming | deepen modules
 - Tests after every change -- stay green
 - **Never refactor while RED.** Get GREEN first.
+- Material runnable increment clean -> run `/dogfood` before REPEAT; a found defect becomes the next RED, then repair and replay.
 - Flag unit tests >500ms, integration >2s
 - Avoid per-keystroke sim (slow, flaky) -> bulk input
 - Commit when clean

@@ -17,7 +17,7 @@ Run all checks. Fix failures before proceed.
 2. `bun run lint:fix` (biome)
 3. `bun vitest run --related` (changed files)
 4. Route touched -> `bun vitest run *.browser.test.tsx`
-5. Dev server running -> browser smoke via `scripts/skills-browser.sh` (Vercel agent-browser). Skip if not installed.
+5. Runnable behavior changed -> run `/dogfood` through the real entrypoint on the current implementation. For UI, use `scripts/skills-browser.sh` or Playwright when available. Tests never replace this. Record a non-runnable reason only for docs/test-only changes.
 6. Frontend or customer-facing surface diff -> run `/visual-review` (screenshots/terminal evidence, states, a11y, console, mobile/cross-browser when feasible). Skip only with reason.
 7. Dependency changed (`package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`) -> run `/upgrade-dependency` or record skip reason + upgrade report/PR section.
 8. **When green: commit now.** One commit per passing state.
@@ -33,14 +33,14 @@ Run all checks. Fix failures before proceed.
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
 6. Fix P0/P1 now (Claude may delegate per model routing; native Codex fixes inline unless delegation was requested), apply P2 `safe_auto`, show P2 `gated_auto` to user
 7. Commit fixes: `refactor(scope): self-review fixes`
-8. Re-verify (tests + types + lint)
+8. Re-verify (tests + types + lint + `/dogfood` for runnable repairs)
 9. **Max 2 refine rounds.** Then proceed.
 
 ## Phase 5: Simplify, Deslop + Ship
 
 1. Run `/simplify` -- general cleanup pass
 2. Run `/deslop` -- tag complexity cuts (delete/stdlib/native/yagni/shrink), then block unless value, defense, or test confidence is certain
-3. Fix issues, commit
+3. Fix issues; if runnable behavior changed since its receipt, rerun `/dogfood`; commit only current PASS evidence
 4. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
 5. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason
 6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` for reviewer guidance; no history rewrite without user approval
@@ -53,7 +53,7 @@ Native Codex handles the first automated review/fix pass and one CI status snaps
 Extra rounds require an explicit "babysit until clean" or `/plow-ahead`; neither grants subagent consent.
 
 1. Claude-hosted: `Monitor: gh pr checks <number> --watch`. Native Codex: take one `gh pr checks <number>` snapshot.
-2. CI fail -> diagnosing-bugs, fix, push. Claude re-monitors; native Codex reports the new pending status unless continuation was explicit.
+2. CI fail -> diagnosing-bugs, fix, `/dogfood` runnable repairs, push. Claude re-monitors; native Codex reports the new pending status unless continuation was explicit.
 3. Fresh-eyes findings (agent in Claude, inline in Codex) -> `/resolve-pr-feedback` triage, fix, reply, push
 4. **AI self-review cap (Claude-hosted)**: up to 3 auto `code-reviewer` rounds, rerouting from fresh usage before each round. **Early-exit** on `APPROVED` or empty findings; after 3 noisy rounds, hand off to a human. Native Codex defaults to one inline round; extra rounds follow the stop rule above.
 5. **Existing human review (incl cloud/Copilot)**: NO cap. Address EVERY present thread, but do not poll for later feedback unless asked. `pr-feedback-completeness-stop` blocks exit until unresolved count is 0 and no CHANGES_REQUESTED reviews remain.
@@ -67,7 +67,7 @@ After non-trivial tasks: "Learn something worth preserve?"
 
 ## Done
 
-1. Post final PR comment: changes, review findings, test coverage
+1. Post final PR comment: changes, dogfood receipt, review findings, test coverage
 2. Request review: `gh pr edit <number> --add-reviewer <username>`
 3. Report PR URL + CI status
 4. End the final message with one status line, nothing after it (<100 chars):

@@ -69,6 +69,16 @@ gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
 |------|--------|-------|-------|
 | <route/component> | ![before](<url>) | ![after](<url>) | <what changed> |
 
+## Dogfood evidence
+<omit only when no runnable behavior changed; otherwise copy the current /dogfood receipt>
+
+- Verdict:
+- Entrypoint:
+- Actions and break attempts:
+- Observations:
+- Repairs and replay:
+- Limits:
+
 ## Dependency upgrade path
 <omit entire section if no dependency-file diff>
 

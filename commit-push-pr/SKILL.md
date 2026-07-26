@@ -31,6 +31,7 @@ Execute full commit-push-PR flow below in single response.
 ### Phase 0: Pre-flight -- verify review skill ran
 
 Check REFERENCE.md for review skill list. If NONE ran this session, warn and block unless user confirms skip.
+Runnable behavior diff -> require current `/dogfood` PASS evidence. Tests do not count. BLOCKED evidence needs an explicit user waiver before publishing.
 
 ### Phase 1: Scope confirmation
 
@@ -78,7 +79,8 @@ Record commit types created -- used for auto-labeling Phase 5.
 5. Non-trivial diff -> create or link `/visual-recap` so reviewers can understand what ships. Skip only for tiny, single-file, obvious diffs and record the skip reason in the PR body.
 6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` in reviewer-guidance mode before finalizing the PR body. Do not rewrite history unless the user asked or approved the plan.
 7. Frontend or customer-facing surface change detected (REFERENCE.md rule) -> include Screenshots/surface review table summarizing visual changes. One row per affected view/surface (before/after/notes). Omit section if no frontend/customer-facing diff
-8. Print PR URL
+8. Runnable behavior diff -> include Dogfood evidence from the current implementation. Omit only for non-runnable work with the reason recorded.
+9. Print PR URL
 
 ### Phase 6: Watch CI (MANDATORY)
 

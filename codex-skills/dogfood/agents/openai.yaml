@@ -1,0 +1,3 @@
+interface:
+  display_name: "Dogfood"
+  short_description: "Use and stress-test every runnable change"

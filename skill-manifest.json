@@ -85,6 +85,7 @@
         "orchestration-stop.sh",
         "test-perf-stop.sh",
         "quality-gate-stop.sh",
+        "dogfood-stop.sh",
         "lifecycle-stop.sh",
         "pr-feedback-completeness-stop.sh",
         {

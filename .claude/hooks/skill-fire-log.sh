@@ -2,7 +2,8 @@
 set -eo pipefail
 
 # Skill-fire telemetry for /hook-audit's zero-fire-skills report (dead weight
-# or bad trigger descriptions -- both actionable). Observe-only: never blocks.
+# or bad trigger descriptions -- both actionable). Never blocks. /dogfood also
+# records a session checkpoint consumed by dogfood-stop.sh.
 # Two feeds, one log:
 #   PreToolUse Skill      -- model-invoked skills (tool_input.skill)
 #   UserPromptExpansion   -- user-typed /slash commands expanding to a prompt
@@ -26,10 +27,26 @@ case "$event" in
 esac
 [ -n "$skill" ] || exit 0
 
+session="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+[ -n "$session" ] || session=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null)
+
 dir="$HOME/.claude/hook-metrics"
 mkdir -p "$dir" 2>/dev/null || true
 printf '{"ts":"%s","skill":"%s","session":"%s","source":"%s"}\n' \
-  "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$skill" "${CLAUDE_SESSION_ID:-unknown}" "$source" \
+  "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$skill" "${session:-unknown}" "$source" \
   >> "$dir/skill-fires.jsonl" 2>/dev/null || true
+
+case "$skill" in
+  dogfood|*/dogfood|*:dogfood)
+    if [ -n "$session" ]; then
+      session_dir="/tmp/hook-session-${session}"
+      mkdir -p "$session_dir" 2>/dev/null || true
+      touched="$session_dir/session-touched-files"
+      touched_count=0
+      [ -f "$touched" ] && touched_count=$(wc -l < "$touched" | tr -d '[:space:]')
+      printf '%s\n' "${touched_count:-0}" > "$session_dir/dogfood-invocation" 2>/dev/null || true
+    fi
+    ;;
+esac
 
 exit 0
