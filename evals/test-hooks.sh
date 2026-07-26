@@ -107,10 +107,24 @@ run_hook_eval "$SHARED_DIR/subagent-start.sh" \
   "subagent-start exits 0 for code-reviewer" \
   "Branch Context"
 
-# ── lifecycle-stop.sh has adjacent-test fallback (no false-flag on
-#    worktree / multi-session flows where tests exist on disk but
-#    were not edited this session) ─────────────────────────────────
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "_adjacent_tests_for_all" \
-  "lifecycle-stop has adjacent-test fallback"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "__tests__" \
-  "lifecycle-stop adjacent fallback checks __tests__ dir"
+# lifecycle-stop deliberately does not infer test requirements from file paths.
+if grep -q "_adjacent_tests_for_all" "$HOOKS_DIR/lifecycle-stop.sh"; then
+  echo "  FAIL  lifecycle-stop still enforces adjacent tests"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: lifecycle-stop still enforces adjacent tests"
+else
+  echo "  PASS  lifecycle-stop does not enforce adjacent tests"
+  PASS=$((PASS + 1))
+fi
+
+# A linked worktree has a .git file, not a directory. Stop hooks must still run.
+for hook in "$HOOKS_DIR/orchestration-stop.sh" "$SHARED_DIR/orchestration-stop.sh"; do
+  if grep -q "git rev-parse --is-inside-work-tree" "$hook"; then
+    echo "  PASS  $(basename "$hook") recognizes linked worktrees"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $(basename "$hook") exits early in linked worktrees"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $(basename "$hook") exits early in linked worktrees"
+  fi
+done

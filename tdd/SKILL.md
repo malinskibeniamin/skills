@@ -10,68 +10,53 @@ paths:
 
 # Test-Driven Development
 
-## Iron Law
+TDD protects meaningful behavior; it is not a tax on every changed file.
 
-**No prod code without failing test first.** No exceptions.
+Use RED -> GREEN -> REFACTOR for bugs, regressions, and new or changed
+contracts: domain rules, branches, state transitions, parsing, validation,
+async effects, and integration behavior whose failure matters. Types,
+re-exports, declarative wiring, static copy/styles, and behavior-preserving
+deletion may need only existing focused verification.
 
-## Test seams and anti-patterns
-
-- **Seams**: test at public boundaries. Before a test, write down the seam and confirm pre-agreed seams with the user when the issue or existing convention does not make it obvious. No tests at unconfirmed internals.
-- **Tautological tests**: do not recompute expected values the same way code does; use an independent source of truth: known-good literal, worked example, fixture, spec, or observed behavior.
-- **Horizontal slices**: do not write all tests first, then all impl. Bulk tests test imagined behavior. Correct: vertical slices -- one RED->GREEN test+impl, then repeat.
-
-## State Machine
-
-Full state diagram: [REFERENCE.md#state-machine](REFERENCE.md#state-machine).
+Coverage can reveal a suspected blind spot. It is never a target or a reason
+to invent tests.
 
 ## Workflow
 
-### 0. PLAN -- Coverage gap analysis
+### 0. Contract
 
-- Use project's domain glossary for test/interface names; respect ADRs in the area
-- Run `vitest run --coverage.enabled --coverage.reporter=text`
-- Find uncovered lines/branches/functions in changed files -> test targets
-- If expected behavior comes from third-party API/browser/CLI docs, run `/read-the-damn-docs` and cite the exact rule.
-- Confirm behaviors w/ user; `/resilience-review` failures become RED tests
-- Run `/codebase-design` for deep-module/interface design; test behaviour through public interface, not implementation ([tests.md](tests.md))
+- Name the observable behavior at a public interface. Follow the project domain glossary and ADRs.
+- If the issue or convention does not imply the seam, confirm test seams before testing internals; use `/codebase-design` only when the public interface is genuinely unclear.
+- Choose the smallest test that would fail if that behavior broke. One test may prove many lines.
+- Add another case only for an independent credible risk, not every imaginable edge.
+- **Tautological tests:** avoid them by using an independent expected value such as a literal, worked example, fixture, spec, or observed behavior.
+- If third-party behavior defines the contract, use `/read-the-damn-docs`.
+- Read [tests.md](tests.md) when the seam or test shape is unclear.
 
-### 1. RED -- Failing test (tracer bullet)
+### 1. RED
 
-- ONE test, ONE behavior, clear name
-- Real code, no mocks (unless unavoidable -- see [mocking.md](mocking.md))
-- Verify fails for RIGHT reason
+- Write one behavior test and verify it fails for the intended reason.
+- Prefer real public interfaces; mock only external boundaries that cannot run locally.
 
-### 2. GREEN -- Minimal code to pass
+### 2. GREEN
 
-- Only enough to pass | run `/deslop` write mode: deletion, reuse-in-codebase, standard library, native platform, already-installed dependency, one-line before custom code | no speculative helpers/options.
-- Match the shape of the matching `exemplars/` file (component/hook/route/test) -- naming rhythm, comment restraint, structure; not its content.
-- Run test | see green
+- Write the smallest obvious implementation that passes.
+- Delete or reuse first; then prefer the language, platform, or installed dependency over custom machinery.
+- Match the relevant `exemplars/` file's clarity and conventions, not its size.
 
-### 3. REFACTOR -- Clean up while green
+### 3. REFACTOR
 
-- Kill duplication | fix naming | deepen modules
-- Tests after every change -- stay green
-- **Never refactor while RED.** Get GREEN first.
-- Material runnable increment clean -> run `/dogfood` before REPEAT; a found defect becomes the next RED, then repair and replay.
-- Flag unit tests >500ms, integration >2s
-- Avoid per-keystroke sim (slow, flaky) -> bulk input
-- Commit when clean
+- Improve names and structure only when meaning becomes clearer or real duplication disappears.
+- Stay green. Never weaken a behavior assertion merely to pass.
+- Flag unit tests over 500ms and integration tests over 2s; prefer bulk input over per-keystroke simulation.
+- Run `/dogfood` on material runnable behavior; observed defects become the next RED.
 
-### Reactive TDD with Monitor
+### 4. REPEAT
 
-`Monitor: vitest --watch` -- stream pass/fail as edit. Edit->fail->fix->pass->refactor->repeat.
+Repeat only for another required contract or independent credible risk.
 
-### 4. REPEAT -- Next behavior
-
-RED->GREEN->REFACTOR per behavior. One at a time.
-
-### Per-Cycle Checklist
-
-- [ ] Test describe behavior, not impl
-- [ ] Test use public interface only
-- [ ] Test survive internal refactor
-- [ ] Code minimal for this test
-- [ ] No speculative features
+For active work, monitor `vitest --watch`. Use condition-based waits and
+`--detectAsyncLeaks` when the change creates async work.
 
 ## Test Classification
 
@@ -81,18 +66,18 @@ RED->GREEN->REFACTOR per behavior. One at a time.
 | `.test.tsx` / `.integration.tsx` | Integration -- render components | Yes |
 | `e2e/*.spec.ts` | E2E -- Playwright browser | Browser |
 
-## Visual Regression Tests (Route Files)
+## Visual Regression Tests
 
-New TanStack Router routes need `*.browser.test.tsx` sibling -- only if project use vitest browser mode (existing `*.browser.test.*` files or `@vitest/browser` dep). Skip layout/redirect-only routes. See [REFERENCE.md](REFERENCE.md).
+When a route adds customer-visible behavior not already covered and the project
+uses `@vitest/browser`, add the smallest useful `*.browser.test.tsx`. Skip
+layout, redirect, and purely declarative routes.
 
 ## When Done
 
-- [ ] All pass (`vitest run`) with **zero warnings** -- hooks (test-warning-check, ci-warning-audit) block otherwise; fix at source
-- [ ] No async leaks (`vitest run --detectAsyncLeaks`)
-- [ ] No `setTimeout` hacks -- condition-based wait
-- [ ] Coverage gaps closed -- re-run coverage, verify changed files
-- [ ] Selector priority: `getByRole` > `getByText` > `getByTestId` > `querySelector`
-- [ ] Portal tests: `defaultOpen` for content tests | `waitFor` for close assertions
-- [ ] Tests verify behavior, not impl | `expect.soft()` for multi-assertion state tests
-- [ ] CI green
-See [REFERENCE.md](REFERENCE.md) for element selectors, portal testing, mock patterns, diagnostics, Vitest config.
+- Relevant tests pass without warnings.
+- Async changes have no leaked work or duration-based waits.
+- Tests survive internal refactors because they verify behavior, not implementation.
+- No redundant case exists only to raise coverage.
+
+See [REFERENCE.md](REFERENCE.md) for condition-based waiting, selectors,
+portals, mocks, diagnostics, and targeted resilience examples.

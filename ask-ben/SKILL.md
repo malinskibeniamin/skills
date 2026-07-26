@@ -20,7 +20,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/codex` | Delegate to GPT-5.6 through the Codex CLI. |
 | `/commit-push-pr` | Commit, push, and open a reviewable PR. |
 | `/connect-query` | Build typed ConnectRPC data flows with Connect Query and Protobuf v2. |
-| `/deslop` | Remove unjustified code and write the least that works. |
+| `/deslop` | Fallback audit for removing unjustified code from an already-bloated diff or repository. |
 | `/development-lifecycle` | Run frontend work from understanding through TDD and shipping. |
 | `/diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. |
 | `/dogfood` | Dogfood runnable work at its real user entrypoint. |
@@ -30,7 +30,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/extend-harness` | Extend and debug the frontend-skills hook harness, rules, severity tiers, and analytics. |
 | `/frontend-invariants` | Apply stack-independent frontend invariants. |
 | `/frontend-starter-kit` | Bootstrap the frontend toolchain, lint, quality gates, React stack, data stack, and CI. |
-| `/go` | Ship completed work through verification, review, simplification, PR, and CI. |
+| `/go` | Ship completed work through verification, review, PR, and CI. |
 | `/golang-review` | Review Go against evidence-backed rules for bounds, APIs, concurrency, errors, security, tests, and rollout. |
 | `/golang` | Apply evidence-backed Go rules for bounds, APIs, errors, concurrency, Temporal, tests, rollout, and control... |
 | `/grilling` | Grill plans, decisions, and ideas. |
@@ -46,7 +46,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/redpanda-ai-gateway` | Run Claude and Codex through the Redpanda AI Gateway with rpk ai. |
 | `/registry-workflow` | Maintain component registries through taxonomy and sync discipline. |
 | `/research` | Research primary sources and save cited findings. |
-| `/resilience-review` | Run a Murphy-law review of unhappy paths. |
+| `/resilience-review` | Run a risk-ranked Murphy review when credible failure could cause data loss, security or privacy harm, irre... |
 | `/resolve-pr-feedback` | Resolve PR feedback through triage, fixes, replies, and thread closure. |
 | `/resolving-merge-conflicts` | Resolve an in-progress Git merge or rebase conflict. |
 | `/revamp` | Run a large rewrite, port, or migration with baselines and mechanical-first translation. |

@@ -195,7 +195,10 @@ Monitor: vitest run --detectAsyncLeaks
 
 Surface open handles as detected, not buffered til exit.
 
-## Coverage Gap Analysis
+## Coverage as Investigation
+
+Use coverage only when a credible behavior may be untested. It locates code;
+it does not decide what deserves a test.
 
 ```bash
 # Text report -- quick overview
@@ -217,22 +220,9 @@ useAuth.ts      |   72.5  |    50.0  |   80.0  |   72.5  | 34-41,67-72
 AuthForm.tsx    |   85.0  |    75.0  |  100.0  |   85.0  | 23-28
 ```
 
-**Uncovered Line #s** = exact targets for new tests.
-
-### Priority Order for Coverage Gaps
-
-1. **Uncovered branches** (if/else · switch · error paths) -- top bug risk
-2. **Uncovered functions** -- entire untested behaviors
-3. **Uncovered lines in covered functions** -- edge cases
-
-### Don't Chase 100%
-
-Coverage = tool for finding gaps, not goal. Accept lower for:
-- Type stubs · barrel exports · re-exports
-- Framework glue (route config · provider wrappers)
-- Generated code
-
-Target: **80% lines, 70% branches** for feature code. Focus behavior-critical paths.
+An uncovered line is a prompt to ask what observable contract it serves. Add a
+test only when that contract or a credible failure is otherwise unproved.
+Never set a percentage target for changed files.
 
 ## Visual Regression Tests (Route Files)
 
@@ -609,19 +599,16 @@ test('renders every validation error', async () => {
 
 ### Error Path Priority
 
-Cover these paths in order:
-1. **Invalid input** -- empty · wrong format · too long/short · special chars
-2. **Network failure** -- fetch rejects · timeout · 4xx/5xx
-3. **Parse failure** -- malformed JSON · corrupt proto · missing required fields
-4. **State transition errors** -- switch types clear old data · concurrent edits
-5. **Partial failure** -- batch where some items fail (Promise.allSettled)
+Start with the most credible failure for this change. Trust boundaries,
+irreversible effects, specified contracts, observed incidents, demonstrated
+scale, and likely user paths are evidence. A merely imaginable edge case is not.
 
 ## Common Agent Excuses
 
 | Excuse | Counter |
 |---|---|
-| "I'll add test later" | No. Failing test FIRST (RED). |
-| "Too simple to test" | Simple things become complex. Test now. |
+| "I'll add the regression test later" | Reproduce the bug with RED first. |
+| "Every changed file needs a test" | Prove meaningful behavior, not file activity. |
 | "Test duplicates implementation" | Test behavior, not implementation. |
 | "Can't test without mocking everything" | Redesign for testability. Heavy mocking = design problem. |
 | "Tests slow development" | Tests catch bugs that slow dev 10x more. |

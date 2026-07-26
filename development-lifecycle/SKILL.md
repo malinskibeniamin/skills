@@ -9,10 +9,6 @@ Auto-detect phase, guide process.
 
 If the user says "plow ahead", "do not stop", "use your best judgment", "keep going until done", or similar, use `/plow-ahead` as the autonomy contract: make reversible assumptions, continue through routine ambiguity, and stop only for true blockers.
 
-## Ponytail default
-
-Ponytail before implementation: run `/deslop full` (write mode) during planning and keep it active through `/go`: delete, stdlib, native, installed dependency, one-line before custom code.
-
 ## Phases
 
 ### 0. Worktree (automatic, silent if already isolated)
@@ -34,7 +30,9 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 ### 2. Plan
 
 - Every step: exact file paths, exact code, expected output. No placeholders.
-- Non-trivial feature -> `/resilience-review` for edge cases/error handling/polish or skip reason.
+- Start with the smallest obvious design. Name what can be deleted, reused, or left unbuilt.
+- Use current requirements and demonstrated scale. Do not add machinery for hypothetical growth.
+- Run `/resilience-review` only when credible failure could cause data loss, security/privacy harm, irreversible action, broken contracts, or a likely user dead end.
 - Bite-sized tasks (2-5 min each)
 - UI work: use `/prototype` for 2-3 runnable UI variations, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
 - 5+ tasks -> stacked PRs (one per logical group)
@@ -47,14 +45,16 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Update plan with changes | get explicit user confirmation
 - Skip only if: trivial bug fix AND <3 tasks AND no architectural decisions
 
-### 3. Implement (TDD)
+### 3. Implement
 
 - **Paired implementation (Claude-hosted default)**: the grilled plan is the spec. When Claude is enabled, run Opus 5 xhigh and Sol xhigh in isolated or non-overlapping lanes, then integrate centrally. If Claude is unavailable or above 95%, use Sol xhigh only. Route taste work through `/stay-within-limits`.
 - **Native Codex**: implement the approved plan inline. Do not recursively invoke `/codex` or auto-route to `/swarm`; use native agents only after explicit user consent.
 - After plan survives grill, Claude may use `/swarm` when independent lanes safely accelerate work. In Codex, `/swarm` runs only when the user invokes it or explicitly asks for parallel agents.
-- RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests
-- Code is liability: reuse-first (standard library, native platform, already-installed dependency, one-line), then keep only product value, defense, or test confidence.
-- **Test deletion guard**: verify test+assertion count not decrease after GREEN. AI may weaken tests -> reject and redo.
+- Bugs and meaningful behavior: RED public-contract test -> smallest GREEN implementation -> REFACTOR.
+- Trivial types, wiring, static copy/styles, and behavior-preserving deletion need focused verification, not manufactured tests.
+- Before adding code: delete, reuse existing code, use the language/platform, then write the smallest clear local expression.
+- Every branch, helper, file, option, and dependency must carry required behavior, clarify the domain, or address a credible risk.
+- Never weaken an existing behavior test merely to make GREEN.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
 - After each material runnable increment is green and clean, run `/dogfood` before the next behavior; observed defects re-enter RED, then repair and replay.
 
@@ -64,7 +64,7 @@ Impl done -> run `/go` to ship. Handle all:
 
 - **4. Verify** -- types + lint + tests + final `/dogfood`
 - **4b. Review / Refine** -- self-reviewer + adversarial-reviewer; ensure Resilience Review evidence for risky features
-- **5. Ship** -- `/simplify` -> `/deslop` -> `/commit-push-pr` -> code-reviewer agent
+- **5. Ship** -- `/commit-push-pr` -> code-reviewer agent
 - **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds, early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** -- codify lessons as `.claude/rules/`
 

@@ -6,6 +6,10 @@ description: Design deep modules with small interfaces. Use when choosing seams,
 # Codebase Design
 Design **deep modules**: much behavior behind a small interface at a clean seam, testable through that interface. Aim: leverage for callers, locality for maintainers, testability for agents and people.
 
+Depth must increase semantic density now. Do not create a module, seam, adapter,
+or interface for hypothetical reuse. The design wins only when it removes more
+knowledge and coordination from callers than it introduces.
+
 ## Glossary
 
 Use these terms exactly; avoid loose synonyms.
@@ -56,6 +60,7 @@ Ask:
 - **Deletion test.** If deleting a module makes complexity vanish, it was pass-through. If complexity reappears across callers/tests, it earned its keep.
 - **The interface is the test surface.** Callers and tests cross same seam. Testing past it usually means wrong shape.
 - **One adapter means a hypothetical seam. Two adapters means a real one.** Do not add seams for imaginary variation.
+- **Direct is a design.** A small local expression is better than an abstraction that merely moves code.
 
 ## Designing for testability
 

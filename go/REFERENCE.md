@@ -28,7 +28,7 @@ flowchart TD
     FixFindings -->|Round = 2| P5
     Findings -->|No| P5
 
-    P5[5. /simplify -> /deslop -> /commit-push-pr<br/>+ code-reviewer] --> P5b
+    P5[5. /commit-push-pr<br/>+ code-reviewer] --> P5b
 
     P5b[5b. Iterate<br/>Monitor CI] --> CI{CI status?}
     CI -->|Failing| FixCI[Diagnose + fix + push]
@@ -114,7 +114,7 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 | Any non-trivial diff | `self-reviewer` |
 | Diff >50 lines | `self-reviewer` + `adversarial-reviewer` |
 | Touches auth/security paths | `self-reviewer` + `adversarial-reviewer` |
-| Risky feature or resilience-review hook nudge | `/resilience-review` evidence required |
+| Credible high-impact failure surface | `/resilience-review` evidence required |
 | Trivial (<10 lines, no logic) | Skip 4b entirely |
 
 ### Priority Actions
@@ -133,31 +133,27 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 - Max 2 rounds. After each: commit fixes, re-verify (tests + types + lint)
 - P0/P1 persist after round 2 -> go Phase 5, flag in PR description
 
-## Phase 5: Simplify, Deslop + Ship
+## Phase 5: Ship Clean
 
 ### Sequence
 
-1. **`/simplify`** -- review changed code for:
-   - Reuse chances (existing components/utilities)
-   - Code quality (DRY, naming, structure)
-   - Efficiency (needless re-renders, bundle impact)
+1. Fix concrete review findings and commit. Do not run a generic cleanup pass;
+   semantic density belongs in the first implementation.
 
-2. **`/deslop`** -- cut delete/stdlib/native/yagni/shrink candidates first, then question every remaining addition. Keep only code with clear product value, defensive correctness, or test confidence.
+2. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
 
-3. **Fix issues** from `/simplify` and `/deslop`, commit
+3. **Resilience Review Evidence** -- for credible data-loss, security/privacy,
+   irreversible, broken-contract, or likely stuck-user risk, include evidence,
+   smallest guard, and contract test.
 
-4. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
-
-5. **Resilience Review Evidence** -- if risky feature or hook nudge, include verdict, top failure paths, Finding queue, diagnosing-bugs loops, RED tests/snapshots, polish gaps, observability. If customer-facing, include visual review evidence. If skipped, include low-risk reason.
-
-6. **`/commit-push-pr`** -- handle:
+4. **`/commit-push-pr`** -- handle:
    - Categorized conventional commits
    - Branch strategy
    - Push with tracking
    - PR creation with structured body
    - CI monitor
 
-7. **`code-reviewer` agent** -- dispatch on PR for fresh-eyes review
+5. **`code-reviewer` agent** -- dispatch on PR for fresh-eyes review
 
 ### Security Gate
 
@@ -185,7 +181,7 @@ Before PR creation, verify:
 
 ### Hand Off
 
-1. Post final PR comment: changes, findings, how addressed, test coverage
+1. Post final PR comment: changes, findings, how addressed, verification
 2. `gh pr edit <number> --add-reviewer <username>`
 3. **Stop.** No poll for human approval.
 

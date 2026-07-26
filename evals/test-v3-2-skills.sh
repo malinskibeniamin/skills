@@ -9,7 +9,7 @@
 
 run_file_eval "$REPO_ROOT/ETHOS.md" "ETHOS.md exists"
 # Renamed in v4.0 — principles now reflect actual enforced hook rules
-for p in "Tests Gate Everything" "Types Are The First Reviewer" "Every Thread Resolved" "Worktree Isolation" "Grill Before Build" "Search Before Add" "Toolchain Discipline" "User Sovereignty"; do
+for p in "Less Code, More Meaning" "Types Are The First Reviewer" "Every Thread Resolved" "Worktree Isolation" "Grill Before Build" "Search Before Add" "Toolchain Discipline" "User Sovereignty" "Tests Prove Behavior"; do
   run_content_eval "$REPO_ROOT/ETHOS.md" "$p" "ETHOS.md has principle: $p"
 done
 

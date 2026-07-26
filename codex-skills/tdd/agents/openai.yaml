@@ -1,3 +1,3 @@
 interface:
   display_name: "TDD"
-  short_description: "Develop through failing tests and small green steps"
+  short_description: "Develop meaningful behavior through red-green-refactor"

@@ -1,6 +1,6 @@
 ---
 name: go
-description: "Ship completed work through verification, review, simplification, PR, and CI. Use when implementation is ready to launch."
+description: "Ship completed work through verification, review, PR, and CI. Use when implementation is ready to launch."
 ---
 
 # Go -- Ship What You Built
@@ -29,23 +29,25 @@ Run all checks. Fix failures before proceed.
 1. Claude-hosted: run `/stay-within-limits`, then dispatch `self-reviewer` with the selected Claude profile; no Claude means Sol covers the axis. Native Codex runs it inline unless agents were requested.
 2. **Cross-model adversarial review**: Opus work gets a fresh `GPT-5.6-sol: adversarial` high pass via `/codex`; Sol implementation gets Opus 5 xhigh feedback. With no Claude, clean-context Sol xhigh covers every hat. Terra/Luna never review. Native Codex runs inline and does not recurse.
 3. Claude-hosted diff >200 lines -> ALSO dispatch `adversarial-reviewer` with the selected profile. Re-check usage before the wave.
-4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
+4. Resilience Review: run only for credible data-loss, security/privacy, irreversible, contract, or likely stuck-user risk
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
 6. Fix P0/P1 now (Claude may delegate per model routing; native Codex fixes inline unless delegation was requested), apply P2 `safe_auto`, show P2 `gated_auto` to user
 7. Commit fixes: `refactor(scope): self-review fixes`
 8. Re-verify (tests + types + lint + `/dogfood` for runnable repairs)
 9. **Max 2 refine rounds.** Then proceed.
 
-## Phase 5: Simplify, Deslop + Ship
+## Phase 5: Ship Clean
 
-1. Run `/simplify` -- general cleanup pass
-2. Run `/deslop` -- tag complexity cuts (delete/stdlib/native/yagni/shrink), then block unless value, defense, or test confidence is certain
-3. Fix issues; if runnable behavior changed since its receipt, rerun `/dogfood`; commit only current PASS evidence
-4. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
-5. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason
-6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` for reviewer guidance; no history rewrite without user approval
-7. Run `/commit-push-pr` -- conventional commits, push, open PR
-8. Claude-hosted: re-check `/stay-within-limits`, then dispatch `code-reviewer` with the selected profile; Sol covers it when Claude is disabled. Native Codex runs inline unless agents were requested.
+The implementation and review phases already own semantic density. Do not add a
+mandatory cleanup ceremony. If review found avoidable surface area, fix that
+specific finding and re-verify.
+
+1. If runnable behavior changed since its receipt, rerun `/dogfood`; commit only current PASS evidence
+2. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
+3. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason
+4. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` for reviewer guidance; no history rewrite without user approval
+5. Run `/commit-push-pr` -- conventional commits, push, open PR
+6. Claude-hosted: re-check `/stay-within-limits`, then dispatch `code-reviewer` with the selected profile; Sol covers it when Claude is disabled. Native Codex runs inline unless agents were requested.
 
 ## Phase 5b: Iterate
 
@@ -67,7 +69,7 @@ After non-trivial tasks: "Learn something worth preserve?"
 
 ## Done
 
-1. Post final PR comment: changes, dogfood receipt, review findings, test coverage
+1. Post final PR comment: changes, dogfood receipt, review findings, verification
 2. Request review: `gh pr edit <number> --add-reviewer <username>`
 3. Report PR URL + CI status
 4. End the final message with one status line, nothing after it (<100 chars):

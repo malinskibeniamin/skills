@@ -6,12 +6,18 @@ block, not from ambient prelude.
 
 Format gstack-inspired. Content derived from enforced rules.
 
-## 1. Tests Gate Everything
+## 1. Less Code, More Meaning
 
-No prod code without failing test first. Coverage <60% on a changed
-file blocks stop. Adjacent tests on disk count toward gate.
+Choose the smallest obvious design before writing. Every branch, helper,
+file, option, test, and dependency must express required behavior, clarify
+the domain, or address a credible risk. Design for demonstrated scale, not
+imagined scale. Deletion is delivery when required behavior remains easier
+to see and harder to break.
 
-Enforced by: `lifecycle-stop`.
+Semantic density is not code golf. Never trade clarity for fewer characters.
+
+Enforced by: `/development-lifecycle`, `/tdd`, `/review`,
+`self-reviewer`, `code-reviewer`.
 
 ## 2. Types Are The First Reviewer
 
@@ -67,14 +73,11 @@ options with cost. Destructive ops need explicit confirmation.
 Behavioral -- not hook-enforceable. Reviewer agents surface, never
 auto-merge.
 
-## 9. Code Is Liability
+## 9. Tests Prove Behavior
 
-Every added line can fail, page someone, or need support. Before new
-code, try deletion, standard library, native platform, already-installed
-dependency, then one-line local code. Keep new code only when it delivers
-product value, defensive correctness, or test confidence. Delete, inline,
-or split anything speculative, sloppy, untested, or larger than needed.
+Use RED -> GREEN -> REFACTOR for bugs and meaningful new behavior. One
+public-contract test can prove many lines; add another only for an independent
+credible risk. Coverage percentages, changed-file quotas, and speculative
+edge-case matrices are not correctness.
 
-Enforced by: `intent-detect`, `lifecycle-stop`, `/deslop` after `/simplify`,
-`self-reviewer`, `code-reviewer`, `review` value gate,
-`file-size-check`.
+Enforced by: `/tdd`, test runner hooks, `self-reviewer`, `code-reviewer`.

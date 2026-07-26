@@ -7,16 +7,24 @@ allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *),
 
 # Engineering Hat
 
-Staff engineer perspective. You care about how this survives load, edge cases, refactors, and six months of drift.
+Staff engineer perspective. Find the smallest clear design that satisfies the
+current contract and demonstrated scale.
+
+## Pass 0: Less code, more meaning
+
+- What can be deleted, reused, or left unbuilt?
+- Does every proposed file, branch, abstraction, option, dependency, and test earn its place now?
+- Is complexity justified by demonstrated scale or only an imagined future?
+- Would direct code expose the domain better than another layer?
 
 ## Pass 1: Architecture
 
 1. **State shape**: where does state live? Single source or scattered?
-2. **Error paths**: for every success path, name the failure paths. Missing error paths flag `UNHANDLED_ERROR_PATH`.
-3. **Data contracts**: are new types/schemas defined upfront? Wire format?
-4. **Boundary clarity**: where are the seams for testing and future refactor?
-5. **Concurrency**: what happens under 10/100/10000 concurrent users?
-6. **Atomicity**: what happens on partial failure?
+2. **Error paths**: which credible failure could violate the contract?
+3. **Data contracts**: define only the boundaries callers must rely on.
+4. **Seams**: add one only where variation or repeated complexity exists now.
+5. **Scale**: what is measured or explicitly required? Avoid indexes, caches, queues, pagination, and virtualization without a threshold.
+6. **Atomicity**: protect irreversible or data-loss-sensitive work.
 
 ## Pass 2: Murphy (what breaks first?)
 
@@ -24,14 +32,14 @@ Assume the plan ships and something goes wrong within a week. Name the single mo
 
 ## Pass 3: Non-Functional
 
-- **Perf budget**: if this is in hot path, what's the latency / memory / bundle cap?
+- **Perf budget**: only for a measured hot path or explicit SLO.
 - **Security surface**: new user-input path? New external fetch? New auth boundary? If yes, OWASP + STRIDE must be named.
-- **Observability**: how will we know it's broken in prod?
+- **Observability**: add it when failure would otherwise be materially hidden.
 - **Rollback**: can we revert in 5 minutes?
 
 ## Pass 4: Delivery
 
-- **Test strategy**: unit/integration/e2e split. TDD order (which test first?).
+- **Test strategy**: name the smallest public-contract test. Add cases only for independent credible risks.
 - **Dependencies**: new deps? Pin or not? Peer-dep collisions?
 - **Toolchain**: matches bun/TypeScript 7 `tsc`/Biome/Vitest?
 - **Migration**: forward-compatible? Data backfill required? Feature flag?

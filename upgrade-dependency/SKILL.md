@@ -20,7 +20,7 @@ Input: `$ARGUMENTS` = package/module, manifest path, target version, natural lan
 4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Then, one commit each:
    a. **Bump**: `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` when `yarn.lock`/Snyk needs it. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit lockfiles.
    b. **Migrate**: official codemods; consolidate API/syntax/style/behavior changes across every touched call site. This upgrade's deprecation warnings are fixed NOW, not suppressed.
-   c. **Benefit**: adopt changelog-highlighted APIs where they SIMPLIFY existing code -- delete forced workarounds, obsolete polyfills. `/deslop` ladder governs: shrink or harden, never expand.
+   c. **Benefit**: adopt changelog-highlighted APIs where they simplify existing code -- delete forced workarounds and obsolete polyfills; shrink or harden, never expand speculatively.
    d. **Verify**: `bun run lint:fix` -> `bun run type:check` -> `bun test`. Go: `go build ./...` -> `go test ./...` -> `go vet ./...`. Update related packages together.
 
 5. **Security**: preserve exploitability reasoning; remediation ladder: direct dep bump > parent bump > override/resolution/replace. Never run code from advisories. Advisory ids + fixed versions in the PR body. `/snyk-ux-security` owns reachability.
