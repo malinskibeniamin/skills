@@ -46,7 +46,7 @@ No proceed to Phase 2 till have loop you believe.
 
 ## Phase 2 -- Reproduce
 
-Run loop. Watch bug appear.
+Run the loop, then `/dogfood` the reporter's real user entrypoint. Watch the same bug appear.
 
 Confirm:
 
@@ -96,12 +96,12 @@ If correct seam exist:
 2. Watch it fail.
 3. Apply fix.
 4. Watch it pass.
-5. Re-run Phase 1 feedback loop vs original (un-minimised) scenario.
+5. Run `/dogfood` to replay the identical user reproduction, then re-run the original un-minimised Phase 1 loop.
 
 ## Phase 6 -- Cleanup + post-mortem
 Required before declare done:
 
-- [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
+- [ ] `/dogfood` confirms the exact user repro no longer reproduces; Phase 1 loop also passes
 - [ ] Regression test passes (or absence of seam is documented)
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)

@@ -23,6 +23,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/deslop` | Write the least code that works and remove unjustified surface area. |
 | `/development-lifecycle` | Use when frontend/React/TypeScript/UI work. |
 | `/diagnosing-bugs` | Diagnosis loop for hard bugs and performance regressions. |
+| `/dogfood` | Dogfood runnable work through its real user entrypoint. |
 | `/domain-modeling` | Build and sharpen a project's domain model. |
 | `/e2e-testing` | Playwright + Testcontainers + axe-core E2E patterns for forms, tables, and workflows. |
 | `/efficient-frontier` | Use when a frontier model (Fable, Opus, GPT-5.6) should delegate bounded research, coding, testing, or log... |

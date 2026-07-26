@@ -71,22 +71,22 @@ bun vitest run --related
 # 4. Visual tests (if route touched)
 bun vitest run *.browser.test.tsx
 
-# 5. Browser smoke (if available)
-# scripts/skills-browser.sh / Playwright: navigate to dev server, verify UI
+# 5. Dogfood every runnable behavior diff
+# /dogfood: real entrypoint, intended journey, break attempts, repair, replay
 
 # 6. Frontend/customer-facing surface diff: run /visual-review
 # screenshots or terminal evidence + states + a11y + console + mobile/cross-browser where feasible
 ```
 
-### Browser Verification
+### Dogfood Evidence
 
-**Never ask user verify.** Use tools:
+Run `/dogfood` yourself on every runnable behavior diff. Tests and code inspection do not replace real use. Preserve the receipt: verdict, entrypoint, actions, break attempts, observations, repairs/replay, limits.
 
-- `claude-in-chrome` MCP: open dev server URL, verify visual, screenshot
-- Playwright: automated E2E asserts
-- `Monitor: bun run dev` -- watch ready, verify
+- Browser: `scripts/skills-browser.sh`, Playwright, or the available interactive browser against `Monitor: bun run dev`
+- CLI/API/worker: invoke the built command, request, or event and inspect side effects
+- Library/hook/skill: exercise the public seam against a representative consumer or fixture
 
-**When**: UI changes, route changes, visual regressions. **Skip**: pure logic, API, data-layer.
+Evidence becomes stale after any runnable implementation edit. Rerun before `/commit-push-pr`. Skip only non-runnable docs/test-only work and record the reason.
 
 ### Visual Review Gate
 

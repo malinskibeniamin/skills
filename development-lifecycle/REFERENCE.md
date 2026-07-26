@@ -222,6 +222,7 @@ Skipping: "Grill skipped -- trivial bug fix, no arch decisions."
 2. GREEN -- minimal code to pass
 3. **TEST INTEGRITY** -- test/assertion count not decreased. Dropped -> agent weakened tests. Reject, redo RED.
 4. REFACTOR -- clean, stay green
+5. DOGFOOD -- material runnable increment -> `/dogfood`; a found defect returns to RED before the next behavior
 
 ### Test Quality
 - `userEvent.setup()` not `fireEvent`

@@ -26,7 +26,8 @@ Run `/deslop ultra` (write mode) first: use stdlib/native/one-file throwaway cod
 3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is _checking_, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE -- wipe me" name.
 4. **Skip the polish.** No tests, no error handling beyond what makes the prototype _runnable_, no abstractions. The point is to learn something fast.
 5. **Surface the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user can see what changed.
-6. **Capture it when done.** Fold the validated decision into the real code, then preserve the prototype as a **primary source** on a project-convention throwaway branch outside main. Leave a context pointer to that branch on the implementation issue and record the question plus verdict there or in the implementing commit. Main keeps only the validated decision.
+6. **Dogfood every runnable iteration.** Run `/dogfood`; play the intended path, abuse likely boundaries, repair failures, and replay before accepting the prototype's answer.
+7. **Capture it when done.** Fold the validated decision into the real code, then preserve the prototype as a **primary source** on a project-convention throwaway branch outside main. Leave a context pointer to that branch on the implementation issue and record the question plus verdict there or in the implementing commit. Main keeps only the validated decision.
 
 ## When done
 

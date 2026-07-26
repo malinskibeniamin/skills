@@ -36,6 +36,7 @@
     "./deslop/",
     "./development-lifecycle/",
     "./diagnosing-bugs/",
+    "./dogfood/",
     "./domain-modeling/",
     "./e2e-testing/",
     "./efficient-frontier/",

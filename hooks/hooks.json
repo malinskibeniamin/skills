@@ -306,6 +306,10 @@
           },
           {
             "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/dogfood-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/lifecycle-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {

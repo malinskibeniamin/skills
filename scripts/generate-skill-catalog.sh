@@ -34,6 +34,7 @@ SHORT_DESCRIPTIONS = {
     "deslop": "Remove unjustified code and keep solutions lean",
     "development-lifecycle": "Run the full frontend development lifecycle",
     "diagnosing-bugs": "Diagnose hard bugs with a tight feedback loop",
+    "dogfood": "Use and stress-test every runnable change",
     "domain-modeling": "Build a shared domain model and vocabulary",
     "e2e-testing": "Build resilient Playwright end-to-end tests",
     "efficient-frontier": "Delegate bounded work while preserving central judgment",
