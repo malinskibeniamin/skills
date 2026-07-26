@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, and preserve effort bands, quota thresholds, prompts, agents, and verification behavior.
+2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, lower Sonnet 5 taste to 5, and preserve effort bands, quota thresholds, prompts, agents, and verification behavior.
 
 ## 4.32.0
 
