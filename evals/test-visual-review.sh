@@ -2,9 +2,6 @@
 
 SKILL_DIR="$REPO_ROOT/visual-review"
 
-run_file_eval "$SKILL_DIR/SKILL.md" "visual-review SKILL.md exists"
-run_content_eval "$SKILL_DIR/SKILL.md" "^name: visual-review" "visual-review has correct name"
-
 # Detailed contracts may live behind the SKILL.md context pointer.
 run_content_eval() {
   local file="$1"
@@ -23,6 +20,9 @@ run_content_eval() {
     ERRORS="$ERRORS\n  FAIL: $description"
   fi
 }
+
+run_file_eval "$SKILL_DIR/SKILL.md" "visual-review SKILL.md exists"
+run_content_eval "$SKILL_DIR/SKILL.md" "^name: visual-review" "visual-review has correct name"
 
 visual_review_md_files=$(find "$SKILL_DIR" -maxdepth 1 -type f -name "*.md" -print | sed "s#$SKILL_DIR/##" | sort | tr '\n' ' ')
 if [ "$visual_review_md_files" = "REFERENCE.md SKILL.md " ]; then
