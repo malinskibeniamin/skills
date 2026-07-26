@@ -20,7 +20,7 @@ hard a problem you can hand over. Taste = UI/UX, code quality, API design, desig
 | Model | Cost | Intelligence | Taste |
 |---|---|---|---|
 | Fable-5 | 1 | 10 | 9 |
-| Opus-4.8 | 4 | 7 | 8 |
+| Opus-5 | 4 | 7 | 8 |
 | Sonnet-5 | 6 | 5 | 7 |
 | GPT-5.6 Sol (codex) | 8 | 9 | 6 |
 | GPT-5.6 Terra (codex) | 9 | 6 | 5 |
@@ -36,7 +36,7 @@ output, not the price tag; escalating costs less than shipping mediocre output.
 
 - Anything that ships: intelligence > taste > cost. Cost is a tiebreaker only.
 - Bulk mechanical (clear-spec implementation, data analysis, migrations): GPT-5.6 -- plan allowance, cheap relative to Claude tokens (not free; see /codex budget gate).
-- User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-4.8, Fable-5). Sol drafts, Claude finishes.
+- User-facing (UI, copy, API design): taste >= 7 (Sonnet-5, Opus-5, Fable-5). Sol drafts, Claude finishes.
 - Reviews and plans: run `/stay-within-limits`. Fable <20% low | Opus <50% high | Opus <75% low | Sonnet <90% low | no Claude >=90% or unknown. Always add Sol xhigh; Sol owns all axes without Claude.
 - Cross-model review, automatic on every change: the author model never solely reviews its
   own work, and the reviewer comes from a DIFFERENT family whenever possible (family

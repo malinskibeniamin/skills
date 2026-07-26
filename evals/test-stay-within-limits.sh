@@ -58,8 +58,8 @@ if [ -x "$CAPTURE" ] && [ -x "$SELECT" ]; then
   }
 
   _assert_profile 0 19 "claude-fable-5" "low" true
-  _assert_profile 20 5 "claude-opus-4-8" "high" true
-  _assert_profile 49 50 "claude-opus-4-8" "low" true
+  _assert_profile 20 5 "claude-opus-5" "high" true
+  _assert_profile 49 50 "claude-opus-5" "low" true
   _assert_profile 75 3 "claude-sonnet-5" "low" true
   _assert_profile 89 90 "" "" false
 

@@ -34,7 +34,7 @@ if ! profile=$(jq -ce --argjson now "$now" --argjson max_age "$max_age" '
       claude_usage_percentage: $usage,
       claude_model: (
         if $usage < 20 then "claude-fable-5"
-        elif $usage < 75 then "claude-opus-4-8"
+        elif $usage < 75 then "claude-opus-5"
         elif $usage < 90 then "claude-sonnet-5"
         else null
         end

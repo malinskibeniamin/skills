@@ -14,6 +14,7 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "model routing" "CLAUDE.md has model rou
 run_content_eval "$REPO_ROOT/CLAUDE.md" "NEVER Haiku" "CLAUDE.md bans Haiku"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "intelligence > taste > cost" "CLAUDE.md orders the axes"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "Fable-5 1/10/9" "CLAUDE.md ranks Fable-5"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Opus-5 4/7/8" "CLAUDE.md ranks Opus-5"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.6 Sol \(codex\) 8/9/6" "CLAUDE.md ranks GPT-5.6 Sol"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.6 Terra 9/6/5" "CLAUDE.md ranks Terra"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.6 Luna 10/3/2" "CLAUDE.md ranks Luna"
@@ -66,6 +67,19 @@ run_content_eval "$REPO_ROOT/AGENTS.md" "NEVER Haiku" "AGENTS.md bans Haiku"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Model rankings" "efficient-frontier has the rankings section"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Never use Haiku" "efficient-frontier bans Haiku"
 run_content_eval "$REPO_ROOT/agents/verifier.md" "model: sonnet" "verifier agent no longer uses haiku"
+
+# Opus 4.8 may survive in release history, but never as an active routing target.
+_stale_opus=$(grep -RInE "Opus-4\.8|claude-opus-4-8" "$REPO_ROOT" \
+  --exclude-dir=.context --exclude-dir=.git --exclude-dir=node_modules \
+  --exclude=CHANGELOG.md --exclude=test-model-routing.sh 2>/dev/null || true)
+if [ -n "$_stale_opus" ]; then
+  echo "  FAIL  Opus 4.8 still an active routing target in: $_stale_opus"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Opus 4.8 still active"
+else
+  echo "  PASS  Opus 4.8 appears only in release history"
+  PASS=$((PASS + 1))
+fi
 
 # No agent definition may use haiku
 if grep -l "model: haiku" "$REPO_ROOT/agents/"*.md >/dev/null 2>&1; then

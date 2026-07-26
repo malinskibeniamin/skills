@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5 while preserving rankings, effort bands, quota thresholds, prompts, agents, and verification behavior.
+
 ## 4.32.0
 
 2026-07-24 -- Publish the post-4.31 Claude Code and Codex bundle. This release adds TanStack Table v9 reactive guidance and enforcement, React Hook Form resilience checks, quota-aware review routing, typed hook protocol parsing, and a repository-wide quality gate; syncs the latest planning and writing skills; and fixes dynamic class-name checks, Go proto validation, and Codex telemetry. It repackages `/golang` and `/golang-review` on a fresh immutable tag for both runtimes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.32.0.
