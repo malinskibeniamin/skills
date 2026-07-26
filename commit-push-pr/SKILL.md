@@ -1,106 +1,59 @@
 ---
 name: commit-push-pr
-description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when the user asks to commit, commit and push, or open a PR. With --no-pr (or when the user asks for commit+push only), stop after Phase 4.
+description: Commit, push, and open a reviewable PR. Use for commit-only, commit-and-push, PR creation, or updating an existing branch; --no-pr stops after push.
 argument-hint: "[--no-pr]"
 ---
 
-# Commit, push, and open PR
-See [REFERENCE.md](REFERENCE.md) for commit-type table, auto-label map, PR body template.
+# Commit, Push, and Open PR
 
-## Step 0: Gather context
+Read [REFERENCE.md](REFERENCE.md) for review prerequisites, commit types, labels, body
+template, screenshots, and dependency-upgrade sections.
 
-Run these Bash commands before proceed:
+## Preflight
 
-- `git status -sb` -- working-tree state
-- `git diff HEAD` -- staged + unstaged changes
-- `git branch --show-current` -- current branch
-- `gh repo view --json defaultBranchRef -q '.defaultBranchRef.name'` -- default branch
-- `git log --oneline -5` -- recent commits for style ref
-- `gh pr list --head $(git branch --show-current) --json number,url,title --jq '.[0] // empty'` -- existing PR on branch
+1. Run `git status -sb`, `git diff HEAD`, `git branch --show-current`,
+   `git log --oneline -5`, and inspect any PR already open from this branch.
+2. Resolve the default branch with `gh repo view`.
+3. Verify `gh` exists, is authenticated, and the repo has an accessible remote.
+4. Confirm a review skill ran. Otherwise block until the user accepts the skip.
+5. Runnable behavior needs a current `/dogfood` PASS. BLOCKED needs a user waiver.
+6. Group changed files by purpose. Mixed or unrelated changes require scope confirmation;
+   stage explicit paths only.
 
-## Prerequisites
+## Commit
 
-1. Verify `gh --version` -- if missing, stop, ask user install
-2. Verify `gh auth status` -- if not authed, ask user run `gh auth login` and stop
-3. Verify inside git repo
+1. Stay on the current feature branch. On the default branch, create `type/description`.
+2. For each coherent group:
+   - `git add <explicit paths>`
+   - commit `type(scope): terse description`
+   - keep lowercase, 5-72 characters, no trailing period
+3. Show `origin/<branch>..HEAD`, then push with tracking.
+4. Use `--force-with-lease` only after an approved history rewrite.
 
-## Your task
+## Pull request
 
-Execute full commit-push-PR flow below in single response.
+`--no-pr` or an explicit commit-and-push request ends after a clean-tree check and pushed
+commit summary.
 
-### Phase 0: Pre-flight -- verify review skill ran
+Otherwise:
 
-Check REFERENCE.md for review skill list. If NONE ran this session, warn and block unless user confirms skip.
-Runnable behavior diff -> require current `/dogfood` PASS evidence. Tests do not count. BLOCKED evidence needs an explicit user waiver before publishing.
+1. Reuse an existing branch PR or create one with explicit base, assignee, labels, and the
+   reference body template.
+2. Add a `/visual-recap` for non-trivial diffs; record the skip for tiny obvious diffs.
+3. Run `/make-pr-easy-to-review` for non-trivial or mixed diffs. Rewrite history only with
+   approval.
+4. For customer-facing changes, include one screenshot/surface-review row per view.
+5. Include the current dogfood receipt for runnable changes.
+6. Print the PR URL.
 
-### Phase 1: Scope confirmation
+## CI and completion
 
-1. Inspect status and diff above
-2. PR exists on branch (from context) -> inform user, new commits update existing PR. Skip to Phase 3.
-3. Worktree has unrelated changes -> **ask user** which files belong. Never default `git add -A`
-4. Present file list grouped by category for confirmation before proceed
+1. Stream `gh pr checks <number> --watch`; no sleep polling.
+2. Diagnose failures, fix, commit, push, and re-watch. Note when no CI exists.
+3. Run `git status` and `git diff`; report uncommitted work.
+4. Summarize branch, commits, PR, recap or skip, CI, and remaining action.
+5. End with one status line: `🟢 PR+CI done`, `🟡 pending CI/review`, or
+   `🔴 blocked on user input`.
 
-### Phase 2: Branch strategy
-
-1. On default branch -> create new branch `type/description` (e.g. `feat/add-commit-push-command`) and switch
-2. Else stay on current branch
-
-### Phase 3: Categorized commits
-
-Group changed files by conventional commit type (see REFERENCE.md type table).
-
-**For each category with files:**
-
-1. Stage only relevant files with explicit paths: `git add <file1> <file2> ...` -- never `git add -A` or `git add .`
-2. Commit: `type(scope): terse description`
-   - Infer scope from directory/module
-   - Lowercase first letter, 5-72 chars, no trailing period
-   - Include `Co-Authored-By` trailer
-3. Next category
-
-Record commit types created -- used for auto-labeling Phase 5.
-
-### Phase 4: Push
-
-1. Show what push: `git log --oneline origin/<branch>..HEAD 2>/dev/null || git log --oneline -5`
-2. Push with tracking: `git push -u origin $(git branch --show-current)`
-3. Never force push -- `--force-with-lease` OK when needed (after rebase)
-
-### Phase 5: Open pull request
-
-**`--no-pr` (or user asked for commit+push only): stop the PR track here.** Skip Phases 5 and 6 entirely, then run only the no-PR tail of Phase 7: confirm clean worktree (`git status`/`git diff`), summarize branch + commits pushed, end with the one status line (🟢 pushed, no PR by request). No PR number, no CI watch, no PR URL.
-
-**PR exists** (from context) -> skip to Phase 6, push updated it already.
-
-1. Determine base branch from context
-2. Build `gh pr create` with `--base`, `--fill-verbose`, `--assignee @me`
-3. Auto-label from commit types (see REFERENCE.md auto-label map)
-4. Override auto-filled body with structured template (see REFERENCE.md PR body template)
-5. Non-trivial diff -> create or link `/visual-recap` so reviewers can understand what ships. Skip only for tiny, single-file, obvious diffs and record the skip reason in the PR body.
-6. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` in reviewer-guidance mode before finalizing the PR body. Do not rewrite history unless the user asked or approved the plan.
-7. Frontend or customer-facing surface change detected (REFERENCE.md rule) -> include Screenshots/surface review table summarizing visual changes. One row per affected view/surface (before/after/notes). Omit section if no frontend/customer-facing diff
-8. Runnable behavior diff -> include Dogfood evidence from the current implementation. Omit only for non-runnable work with the reason recorded.
-9. Print PR URL
-
-### Phase 6: Watch CI (MANDATORY)
-
-1. **Always** stream CI checks: `gh pr checks <PR_NUMBER> --watch` via Monitor tool
-2. Never use `sleep` + polling -- use `--watch` flag
-3. Never skip -- CI failures caught here save time
-4. Checks fail -> read logs, diagnosing-bugs, fix, commit, push, re-watch
-5. No CI configured -> note and proceed
-
-### Phase 7: Verify and summarize
-
-1. Run `git status` and `git diff` to confirm clean worktree
-2. Anything uncommitted remains -> warn user
-3. Summarize: branch name, commits, PR URL (or existing PR URL), visual recap URL or skip reason, CI status, remaining user actions
-4. End with one status line (<100 chars): 🟢 PR+CI done | 🟡 pending CI/review | 🔴 blocked on user input.
-
-### Safety
-
-- Never stage unrelated changes silently
-- Never push without confirming scope when worktree mixed
-- Never force push -- `--force-with-lease` OK when needed (after rebase)
-- No accessible git remote -> stop, explain blocker
-- `gh pr create` fails -> show error, suggest `--recover` flag for retry
+Never stage unrelated changes, push mixed scope without confirmation, or hide a failed
+command. If `gh pr create` fails, show the error and recovery command.

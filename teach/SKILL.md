@@ -71,7 +71,9 @@ Write record only when user demonstrates understanding, discloses prior knowledg
 
 ## Reference docs
 
-Create references while teaching when topic benefits from compression: syntax, routines, algorithms, poses, exercises, glossary. Glossary terms only after user understands them.
+Create references when the topic benefits from compressed syntax, routines, algorithms,
+poses, exercises, or a glossary. Use [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md); add terms
+only after the user understands them.
 
 ## Wisdom/community
 

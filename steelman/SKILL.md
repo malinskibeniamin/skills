@@ -5,10 +5,8 @@ description: Argue the strongest evidence-backed case against a premise. Use whe
 
 # Steelman
 Anti-sycophancy. LLMs agree by default. This skill forces opposite case.
-
-## When invoked
-
-User asserted something -- design, architecture, bug cause, "we should X", "Y won't work". Build strongest possible case *against* it before agreeing.
+Skip preferences, goals, trivial operations, user-proven claims, and implementation work
+unless security, data loss, or irreversibility makes pushback necessary.
 
 ## Procedure
 
@@ -48,13 +46,6 @@ Three outcomes:
 - **Confirmed**: evidence supports user. Say so with refs. Proceed with user plan.
 - **Contradicted**: evidence against user. Surface with refs. Let user decide (override or revise). Do NOT block.
 - **Mixed**: partial confirm. Name which parts hold, which don't.
-
-## When NOT to use
-
-- User request is a goal / preference / scope call
-- Trivial op (read file, list dir, format code)
-- User already showed their work (grep output, test run in prompt)
-- Implementation phases 3-6 unless security / data loss / irreversible
 
 ## Anti-pattern
 

@@ -55,18 +55,6 @@ Canonical role names. Actual label/status strings in tracker may differ -- when 
 - [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) -- the `.out-of-scope/` knowledge base
 - [REFERENCE.md](./REFERENCE.md) -- needs-info template, full triage workflow, TDD-fix-plan mode
 
-## Invocation
-
-User invoke `/triage` and describe want in natural language. Examples:
-
-- "Show me anything that needs my attention"
-- "Let's look at #42" / "Let's look at FOO-123"
-- "Move #42 to ready-for-agent"
-- "What's ready for agents to pick up?"
-- "Users report the sidebar flickers on navigation" -> bug investigation -> file ticket
-
-Interpret and act.
-
 ## Show what needs attention
 
 Query tracker. Present three buckets, oldest first:

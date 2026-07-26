@@ -1,7 +1,7 @@
 ---
 name: setup-routines
 disable-model-invocation: true
-description: "Configure Claude Code routines -- automated PR review, codebase health, issue triage, docs drift -- on Anthropic cloud infrastructure."
+description: "Configure Claude Code routines for PR review, codebase health, issue triage, and docs drift."
 ---
 
 # Setup Routines

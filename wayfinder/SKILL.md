@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Plan huge work that cannot fit in one agent session as a shared issue-tracker map, then resolve decision tickets until the way to the destination is clear.
+description: Map work larger than one session through issue-tracker decision tickets until the route to the destination is clear.
 ---
 
 # Wayfinder
@@ -28,23 +28,14 @@ The map is one issue or file labelled/marked `wayfinder:map`.
 
 ```markdown
 ## Destination
-
 <what reaching the end of this map looks like -- the spec, decision, or change this effort is finding its way to>
-
 ## Notes
-
 <domain; skills every session should consult; standing preferences for this effort>
-
 ## Decisions so far
-
 - [<closed ticket title>](link) -- <one-line gist of the answer>
-
 ## Not yet specified
-
 <in-scope future questions or risks not sharp enough to ticket yet>
-
 ## Out of scope
-
 <work ruled beyond this destination>
 ```
 

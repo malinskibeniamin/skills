@@ -1,7 +1,7 @@
 ---
 name: setup-atlassian-workflow
 disable-model-invocation: true
-description: Opt-in Atlassian/Jira integration via acli -- create work items, transition status, comment, link PRs.
+description: Configure opt-in Jira workflows through acli for work items, status, comments, and PR links.
 ---
 
 # Setup Atlassian Workflow

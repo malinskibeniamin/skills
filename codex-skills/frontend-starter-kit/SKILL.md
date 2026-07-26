@@ -1,6 +1,6 @@
 ---
 name: frontend-starter-kit
-description: Bootstrap the frontend stack -- toolchain, lint, quality gates, React/router/data enforcement, CI -- from lazy per-tool profiles.
+description: Bootstrap the frontend toolchain, lint, quality gates, React stack, data stack, and CI.
 disable-model-invocation: true
 argument-hint: "[profile: full | minimal | redpanda | <tool name>]"
 ---

@@ -1,13 +1,9 @@
 ---
 name: what-did-i-get-done
-description: Summarize authored git commits over a time period into a concise status update. Use for "what did I get done", weekly review/recap, shipped-work summary, retro notes, or any date range.
+description: Summarize authored commits for a date range. Use for status updates, retrospectives, weekly reviews, or shipped-work recaps.
 ---
 
 # What did I get done
-
-## Trigger
-
-Need a short, high-signal summary of work completed in a specific time range (for example: yesterday, last 3 days, last week, or a weekly review).
 
 ## Workflow
 

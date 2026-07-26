@@ -1,6 +1,6 @@
 ---
 name: commit-push-pr
-description: Analyze changes, create categorized conventional commits, push, and open a PR. Use when the user asks to commit, commit and push, or open a PR. With --no-pr (or when the user asks for commit+push only), stop after Phase 4.
+description: Commit, push, and open a reviewable PR. Use for commit-only, commit-and-push, PR creation, or updating an existing branch; --no-pr stops after push.
 argument-hint: "[--no-pr]"
 ---
 

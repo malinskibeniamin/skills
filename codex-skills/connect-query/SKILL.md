@@ -1,6 +1,6 @@
 ---
 name: connect-query
-description: ConnectRPC + connect-query + Protobuf v2 patterns -- schema-first create(), typed transports, invalidation discipline. Use when writing API calls, mutations, query hooks, or proto-generated client code.
+description: Build typed ConnectRPC data flows with Connect Query and Protobuf v2. Use for API calls, mutations, query hooks, transports, invalidation, or generated clients.
 paths:
   - "**/*_connectquery*"
   - "**/*_pb*"

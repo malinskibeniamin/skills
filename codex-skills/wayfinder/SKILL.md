@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Plan huge work that cannot fit in one agent session as a shared issue-tracker map, then resolve decision tickets until the way to the destination is clear.
+description: Map work larger than one session through issue-tracker decision tickets until the route to the destination is clear.
 ---
 
 Read and follow the complete [canonical skill instructions](../../wayfinder/SKILL.md) before acting.

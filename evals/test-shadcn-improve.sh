@@ -2,7 +2,15 @@
 
 run_file_eval "$REPO_ROOT/improve/SKILL.md" "vendored shadcn improve skill exists"
 run_file_eval "$REPO_ROOT/improve/REFERENCE.md" "improve reference exists"
-run_file_eval "$REPO_ROOT/improve/PLAN-TEMPLATE.md" "improve plan template exists"
+run_file_eval "$REPO_ROOT/improve/references/plan-template.md" "improve plan template exists"
+if [ -e "$REPO_ROOT/improve/PLAN-TEMPLATE.md" ]; then
+  echo "  FAIL  improve keeps one plan-template source"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: improve keeps one plan-template source"
+else
+  echo "  PASS  improve keeps one plan-template source"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "^name: improve$" "improve skill has matching name"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "senior advisor, not an implementer|Never modify source code" "improve preserves advisor-only rule"
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "plans/" "improve writes plans only under plans dir"
@@ -10,12 +18,12 @@ run_content_eval "$REPO_ROOT/improve/SKILL.md" "quick.*standard.*deep" "improve 
 run_content_eval "$REPO_ROOT/improve/SKILL.md" "branch.*review-plan.*execute.*reconcile" "improve keeps invocation variants"
 run_content_eval "$REPO_ROOT/improve/REFERENCE.md" "correctness.*security.*performance.*test coverage.*tech debt" "improve reference keeps audit categories"
 run_content_eval "$REPO_ROOT/improve/REFERENCE.md" "Finding format" "improve reference includes finding format"
-run_content_eval "$REPO_ROOT/improve/PLAN-TEMPLATE.md" "Drift check" "improve plans require drift check"
-run_content_eval "$REPO_ROOT/improve/PLAN-TEMPLATE.md" "STOP conditions" "improve plans require stop conditions"
+run_content_eval "$REPO_ROOT/improve/references/plan-template.md" "Drift check" "improve plans require drift check"
+run_content_eval "$REPO_ROOT/improve/references/plan-template.md" "STOP conditions" "improve plans require stop conditions"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\./improve/" "Claude plugin registers improve skill"
 run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" "skills.*\./" "Codex plugin exposes root skills including improve"
 run_file_eval "$REPO_ROOT/improve/EXAMPLES.md" "improve examples exist"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "Use when asked to audit code" "improve description uses writing-for-agents trigger sentence"
+run_content_eval "$REPO_ROOT/improve/SKILL.md" "Use for improvement surveys" "improve description carries distinct trigger branches"
 run_content_eval "$REPO_ROOT/improve/EXAMPLES.md" "/improve quick security" "improve examples include focused audit"
 run_file_eval "$REPO_ROOT/improve/references/audit-playbook.md" "improve upstream audit playbook exists"
 run_file_eval "$REPO_ROOT/improve/references/closing-the-loop.md" "improve upstream closing loop reference exists"

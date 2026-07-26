@@ -1,6 +1,6 @@
 ---
 name: resolving-merge-conflicts
-description: "Use when you need to resolve an in-progress git merge/rebase conflict."
+description: "Resolve an in-progress Git merge or rebase conflict."
 ---
 Use `/agent-watchdog` when conflict context is another agent branch/claim; use `/plan-arbiter` when semantic conflict choices remain viable after source review.
 

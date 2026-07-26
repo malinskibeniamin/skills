@@ -28,8 +28,8 @@ fi
 
 run_content_eval "$SKILL_MD" "^name: upgrade-dependency" "SKILL.md has correct name"
 run_content_eval "$SKILL_MD" "^description:" "SKILL.md has description"
-run_content_eval "$SKILL_MD" "Use when" "description has trigger phrase"
-run_content_eval "$SKILL_MD" "upgrade.*package|dependency upgrade|vulnerable dependency" "description names upgrade triggers"
+run_content_eval "$SKILL_MD" "Use (when|for)" "description has trigger phrase"
+run_content_eval "$SKILL_MD" "[Uu]pgrade.*package|[Dd]ependency upgrade|vulnerable dependency" "description names upgrade triggers"
 
 skill_lines=$(wc -l < "$SKILL_MD" 2>/dev/null | tr -d ' ' || echo 999)
 if [ "${skill_lines:-999}" -le 100 ]; then

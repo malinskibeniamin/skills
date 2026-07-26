@@ -1,6 +1,6 @@
 ---
 name: golang
-description: "Evidence-backed Go conventions for workload bounds, error boundaries, proto/API implementation, Temporal, testing, rollout, and controllers. Use when writing or changing Go services, handlers, workflows, controllers, or Go tests."
+description: "Apply evidence-backed Go rules for bounds, APIs, errors, concurrency, Temporal, tests, rollout, and controllers. Use when changing Go services, handlers, workflows, or tests."
 paths:
   - "**/*.go"
   - "**/go.mod"

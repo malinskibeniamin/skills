@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Surveys a codebase as a senior advisor and writes implementation plans. Use when asked to audit code, find improvements, suggest roadmap direction, create handoff plans, review plans, dispatch execution, or reconcile backlog.
+description: Audit a codebase and write executor-ready plans. Use for improvement surveys, roadmap direction, plan review, architecture reports, execution dispatch, or backlog reconciliation.
 license: MIT
 metadata:
   author: shadcn

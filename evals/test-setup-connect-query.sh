@@ -12,7 +12,7 @@ run_executable_eval "$SCRIPT" "connect-query-check.sh is executable"
 # ── SKILL.md content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: connect-query" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
+run_content_eval "$SKILL_DIR/SKILL.md" "Use (when|for)" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "ConnectRPC" "SKILL.md mentions ConnectRPC"
 run_content_eval "$SKILL_DIR/SKILL.md" "allow.*direct-query" "SKILL.md mentions escape hatch"
 

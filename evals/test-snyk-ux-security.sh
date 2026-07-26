@@ -29,7 +29,7 @@ fi
 
 run_content_eval "$SKILL_MD" "^name: snyk-ux-security" "SKILL.md has correct name"
 run_content_eval "$SKILL_MD" "^description:" "SKILL.md has description"
-run_content_eval "$SKILL_MD" "Use when" "SKILL.md description has trigger phrase"
+run_content_eval "$SKILL_MD" "disable-model-invocation: true" "SKILL.md is user-invoked"
 
 # Description must NOT hardcode specific repo names (generic skill, paths via args)
 desc=$(awk '/^description:/{print; exit}' "$SKILL_MD")
@@ -41,6 +41,12 @@ else
   echo "  PASS  description is generic (no hardcoded repo names)"
   PASS=$((PASS + 1))
 fi
+
+# Detailed contracts may live behind the SKILL.md context pointer.
+DISCLOSED_MD=$(mktemp)
+cat "$SKILL_MD" "$REFERENCE_MD" > "$DISCLOSED_MD"
+SKILL_MD="$DISCLOSED_MD"
+trap 'rm -f "$DISCLOSED_MD"' EXIT
 
 # ── Args-based input ────────────────────────────────────────────
 

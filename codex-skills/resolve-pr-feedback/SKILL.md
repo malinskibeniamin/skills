@@ -1,6 +1,6 @@
 ---
 name: resolve-pr-feedback
-description: "Resolve PR review feedback by fetching unresolved threads, triaging, fixing in parallel, and replying. Use when addressing PR review comments, resolving threads, or picking up after human review."
+description: "Resolve PR feedback through triage, fixes, replies, and thread closure. Use for unresolved comments, requested changes, or continuing an earlier review pass."
 hooks:
   Stop:
     - hooks:

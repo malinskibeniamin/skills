@@ -100,7 +100,7 @@ run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan, decision, or idea" "grilling applies beyond implementation plans"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plans, decisions, and ideas|plan, decision, or idea" "grilling applies beyond implementation plans"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decision tree" "grilling walks decisions rather than design-only branches"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "environment.*filesystem.*tools" "grilling looks up facts across the available environment"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling waits for shared-understanding confirmation"
