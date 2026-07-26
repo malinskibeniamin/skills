@@ -26,6 +26,12 @@ hard a problem you can hand over. Taste = UI/UX, code quality, API design, desig
 | GPT-5.6 Terra (codex) | 9 | 6 | 5 |
 | GPT-5.6 Luna (codex) | 10 | 3 | 2 |
 
+Model character and best fit:
+
+- **GPT-5.6 Sol -- ultimate robot**: does what it is told, behaves like a tool and AI assistant, uses tools efficiently, and turns every stone. Choose it for exhaustive, explicit execution.
+- **Fable-5 -- code people look at**: strongest taste, gorgeous code, excellent frontend work, extremely complex reasoning, and broad big-model knowledge. Use it for hard problems and initial sketches, wireframes, or prototypes, then offload clear mechanical execution to a cheaper model.
+- **Opus-5 -- capable without a harness**: use when you want one model without orchestration overhead. It has much of Fable's taste, is less smart, and is cheaper.
+
 GPT-5.5 is retired. Variant floors are hard: Sol runs actual implementation at xhigh,
 Opus-work adversarial review at high, and plan or Sol-only review at xhigh; Terra medium|high
 handles PR comments and test-runner chores but never product code or review; Luna high only

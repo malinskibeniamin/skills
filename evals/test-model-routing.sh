@@ -33,6 +33,9 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "cross-FAMILY" "review ninth hat p
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Terra/Luna never review" "Terra and Luna banned from review"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "Terra/Luna never review" "Terra and Luna never review"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.6 Terra" "efficient-frontier ranks Terra"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Sol.*ultimate robot.*does what.*told.*every stone" "efficient-frontier describes Sol as exhaustive instruction-following tool"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Fable.*code people look at.*frontend.*extremely complex.*sketches.*wireframes.*prototypes.*offload" "efficient-frontier routes visible and exploratory work to Fable"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Opus.*without.*harness.*Fable.*taste.*less smart.*cheaper" "efficient-frontier positions Opus as lower-friction cheaper taste"
 
 # Effort floors are stated wherever a variant is routed.
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "implementation.*xhigh|xhigh.*implementation" "Sol implementation effort policy stated"
