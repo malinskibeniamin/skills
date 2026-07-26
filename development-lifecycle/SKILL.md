@@ -49,7 +49,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 3. Implement (TDD)
 
-- **Thinker/executor split (Claude-hosted default)**: the grilled plan is the spec. Route review/planning Claude through `/stay-within-limits`; always add Sol xhigh. Execution may go to Sonnet or `/codex` Sol. Below the review bar -> rerun smarter.
+- **Paired implementation (Claude-hosted default)**: the grilled plan is the spec. When Claude is enabled, run Opus 5 xhigh and Sol xhigh in isolated or non-overlapping lanes, then integrate centrally. If Claude is unavailable or above 95%, use Sol xhigh only. Route taste work through `/stay-within-limits`.
 - **Native Codex**: implement the approved plan inline. Do not recursively invoke `/codex` or auto-route to `/swarm`; use native agents only after explicit user consent.
 - After plan survives grill, Claude may use `/swarm` when independent lanes safely accelerate work. In Codex, `/swarm` runs only when the user invokes it or explicitly asks for parallel agents.
 - RED: failing test first | GREEN: minimal code to pass | defensive gaps -> RED tests

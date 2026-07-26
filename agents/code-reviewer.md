@@ -15,12 +15,12 @@ Before producing findings, walk through [karpathy-failure-modes.md](./karpathy-f
 
 ## Mandatory Cross-Model Review
 
-Always run one GPT-5.6 Sol xhigh independent review. Invocation (graceful skip if `codex`
+Always run one GPT-5.6 Sol high adversarial review of Opus work. Invocation (graceful skip if `codex`
 CLI absent):
 
 ```bash
 if command -v codex >/dev/null 2>&1; then
-  codex exec --model gpt-5.6-sol -c 'model_reasoning_effort="xhigh"' -s read-only \
+  codex exec --model gpt-5.6-sol -c 'model_reasoning_effort="high"' -s read-only \
     "Independently review this diff for correctness, security, and LLM failure modes. Emit findings-schema.md JSON. Diff below:
 $(git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")" \
     > /tmp/codex-review-$$.json 2>/dev/null || true

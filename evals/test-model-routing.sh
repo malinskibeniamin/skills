@@ -35,7 +35,7 @@ run_content_eval "$REPO_ROOT/go/SKILL.md" "Terra/Luna never review" "Terra and L
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.6 Terra" "efficient-frontier ranks Terra"
 
 # Effort floors are stated wherever a variant is routed.
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "medium.*high.*review/plan.*xhigh" "Sol effort policy stated"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "implementation.*xhigh|xhigh.*implementation" "Sol implementation effort policy stated"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" 'model_reasoning_effort="xhigh"' "codex skill gives an executable Sol xhigh override"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" 'Luna.*`high` only' "Luna high-only floor stated"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "GPT-5.5 retired" "CLAUDE.md retires GPT-5.5"
@@ -49,10 +49,15 @@ run_content_eval "$REPO_ROOT/go/SKILL.md" "fresh usage before each round" "go ph
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Eighth axis, \*\*mandatory\*\*" "review panel keeps the mandatory adversarial axis"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Claude-hosted always runs.*GPT-5.6-sol" "Claude review keeps the cross-model hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "diagnostic-only in every mode" "review is diagnostic-only; /go owns the fix loop"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Sol.*xhigh.*review|review.*Sol.*xhigh" "CLAUDE.md routes review to Sol xhigh"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "Review.*xhigh|review.*xhigh" "codex skill routes review at xhigh"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Claude review/plan.*Fable.*Opus.*Sonnet|Fable.*20%.*Opus.*50%.*Sonnet.*90%" "CLAUDE.md records quota-aware Claude routing"
-run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Fable.*20%.*Opus.*50%.*Sonnet.*90%" "efficient-frontier records review bands"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Sol high.*adversarial|adversarial.*Sol high" "CLAUDE.md routes Opus adversarial review to Sol high"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Opus.*review.*high|review.*Opus.*high" "codex skill routes Opus review at high"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Sol-only.*xhigh|xhigh.*Sol-only" "codex skill routes Sol-only review at xhigh"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Claude taste.*Fable high.*Fable medium.*Fable low.*Opus xhigh.*Opus medium.*Opus low" "CLAUDE.md records quota-aware taste routing"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Fable high.*Fable medium.*Fable low.*Opus xhigh.*Opus medium.*Opus low" "efficient-frontier records taste bands"
+run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "Opus 5 xhigh.*Sol xhigh|Sol xhigh.*Opus 5 xhigh" "implementation pairs Opus 5 and Sol xhigh"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Opus.*Sol high|Sol high.*Opus" "codex adversarial review checks Opus work at high"
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" 'model_reasoning_effort="high"' "code-reviewer invokes Sol at high"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "Opus work.*GPT-5\\.6-sol.*high|GPT-5\\.6-sol.*high.*Opus work" "go reviews Opus work with Sol high"
 run_content_eval "$REPO_ROOT/go/SKILL.md" "delegate per model routing|Fix P0/P1 now .delegate per model routing" "go owns automatic P0/P1 fix delegation"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "GPT-5.5 is retired" "efficient-frontier retires GPT-5.5"
 

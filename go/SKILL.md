@@ -27,7 +27,7 @@ Run all checks. Fix failures before proceed.
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
 1. Claude-hosted: run `/stay-within-limits`, then dispatch `self-reviewer` with the selected Claude profile; no Claude means Sol covers the axis. Native Codex runs it inline unless agents were requested.
-2. **Cross-model adversarial review**: always run `GPT-5.6-sol: adversarial` xhigh via `/codex`; when Claude is enabled, its usage-routed reviewer adds cross-FAMILY coverage. Terra/Luna never review. Native Codex runs inline and does not recurse.
+2. **Cross-model adversarial review**: Opus work always gets a fresh `GPT-5.6-sol: adversarial` high pass via `/codex`; with no Claude, Sol xhigh alone covers every hat. Terra/Luna never review. Native Codex runs inline and does not recurse.
 3. Claude-hosted diff >200 lines -> ALSO dispatch `adversarial-reviewer` with the selected profile. Re-check usage before the wave.
 4. Resilience Review: risky feature/hook nudge -> run `/resilience-review` or record skip reason
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)

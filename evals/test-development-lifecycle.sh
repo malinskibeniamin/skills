@@ -12,6 +12,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Implement" "SKILL.md has implement phase
 run_content_eval "$SKILL_DIR/SKILL.md" "Review" "SKILL.md has review phase"
 run_content_eval "$SKILL_DIR/SKILL.md" "TDD" "SKILL.md references TDD"
 run_content_eval "$SKILL_DIR/SKILL.md" "standard library|native platform|already-installed|reuse-first" "SKILL.md has reuse-first implementation gate"
+run_content_eval "$SKILL_DIR/SKILL.md" "Opus 5 xhigh.*Sol xhigh|Sol xhigh.*Opus 5 xhigh" "SKILL.md pairs Opus 5 and Sol xhigh implementation"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Iron Law" "REFERENCE has TDD iron law"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Spec Compliance" "REFERENCE has spec compliance review"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "codex" "REFERENCE has codex review instructions"

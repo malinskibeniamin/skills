@@ -1,4 +1,4 @@
-# stay-within-limits: quota-aware review and planning routing.
+# stay-within-limits: quota-aware taste, implementation, and review routing.
 LIMITS_DIR="$REPO_ROOT/stay-within-limits"
 CAPTURE="$LIMITS_DIR/capture-rate-limits.sh"
 SELECT="$LIMITS_DIR/select-review-profile.sh"
@@ -9,13 +9,17 @@ run_executable_eval "$CAPTURE" "statusline quota capture is executable"
 run_executable_eval "$SELECT" "review profile selector is executable"
 run_content_eval "$LIMITS_DIR/SKILL.md" "five_hour.*seven_day|5-hour.*7-day" "uses both Claude quota windows"
 run_content_eval "$LIMITS_DIR/SKILL.md" "higher|maximum|max\\(" "routes from the higher quota usage"
-run_content_eval "$LIMITS_DIR/SKILL.md" "<20%.*Fable low" "routes low-usage reviews to Fable low"
-run_content_eval "$LIMITS_DIR/SKILL.md" "20-<50%.*Opus high" "routes 20-49% reviews to Opus high"
-run_content_eval "$LIMITS_DIR/SKILL.md" "50-<75%.*Opus low" "routes 50-74% reviews to Opus low"
-run_content_eval "$LIMITS_DIR/SKILL.md" "75-<90%.*Sonnet low" "routes 75-89% reviews to Sonnet low"
-run_content_eval "$LIMITS_DIR/SKILL.md" "90%.*no Claude|no Claude.*90%" "disables Claude review at 90%"
+run_content_eval "$LIMITS_DIR/SKILL.md" "0-20%.*Fable high" "routes 0-20% taste work to Fable high"
+run_content_eval "$LIMITS_DIR/SKILL.md" "21-35%.*Fable medium" "routes 21-35% taste work to Fable medium"
+run_content_eval "$LIMITS_DIR/SKILL.md" "36-50%.*Fable low" "routes 36-50% taste work to Fable low"
+run_content_eval "$LIMITS_DIR/SKILL.md" "51-75%.*Opus 5 xhigh" "routes 51-75% taste work to Opus 5 xhigh"
+run_content_eval "$LIMITS_DIR/SKILL.md" "76-90%.*Opus 5 medium" "routes 76-90% taste work to Opus 5 medium"
+run_content_eval "$LIMITS_DIR/SKILL.md" "91-95%.*Opus 5 low" "routes 91-95% taste work to Opus 5 low"
+run_content_eval "$LIMITS_DIR/SKILL.md" "96-100%.*no Claude|no Claude.*96-100%" "disables Claude above 95%"
 run_content_eval "$LIMITS_DIR/SKILL.md" "missing|stale" "fails safely on unavailable quota data"
-run_content_eval "$LIMITS_DIR/SKILL.md" "Sol.*xhigh" "always keeps the Sol xhigh review"
+run_content_eval "$LIMITS_DIR/SKILL.md" "Opus 5 xhigh.*Sol xhigh|Sol xhigh.*Opus 5 xhigh" "pairs Opus 5 and Sol xhigh for implementation"
+run_content_eval "$LIMITS_DIR/SKILL.md" "Sol high.*adversarial|adversarial.*Sol high" "uses Sol high for Opus adversarial review"
+run_content_eval "$LIMITS_DIR/SKILL.md" "Sol xhigh only" "falls back to Sol xhigh only without Claude"
 run_content_eval "$LIMITS_DIR/SKILL.md" "[Bb]efore (each|every).*wave" "re-checks usage before each wave"
 run_content_eval "$LIMITS_DIR/SKILL.md" "Codex and Claude are separate budgets" "documents separate provider budgets"
 run_content_eval "$LIMITS_DIR/SKILL.md" "ccusage" "names ccusage only to reject it as quota evidence"
@@ -23,6 +27,7 @@ run_content_eval "$LIMITS_DIR/SKILL.md" "subscription-quota evidence" "does not 
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./stay-within-limits/"' "registered in plugin"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "/stay-within-limits" "efficient-frontier delegates the usage loop"
 run_content_eval "$REPO_ROOT/swarm/SKILL.md" "/stay-within-limits" "swarm gates lanes on the usage window"
+run_content_eval "$REPO_ROOT/swarm/SKILL.md" "95%" "swarm stops Claude only above 95%"
 
 if [ -x "$CAPTURE" ] && [ -x "$SELECT" ]; then
   _limits_tmp=$(mktemp -d)
@@ -46,7 +51,24 @@ if [ -x "$CAPTURE" ] && [ -x "$SELECT" ]; then
     local profile
     profile=$(CLAUDE_RATE_LIMIT_SNAPSHOT="$_snapshot" CLAUDE_USAGE_NOW=1000 "$SELECT")
     if jq -e --arg model "$model" --arg effort "$effort" --argjson enabled "$enabled" \
-      '.claude_enabled == $enabled and (.claude_model // "") == $model and (.claude_effort // "") == $effort and .codex_model == "gpt-5.6-sol" and .codex_effort == "xhigh"' \
+      '.claude_enabled == $enabled
+      and (.claude_model // "") == $model
+      and (.claude_effort // "") == $effort
+      and .codex_model == "gpt-5.6-sol"
+      and .codex_effort == "xhigh"
+      and (
+        if $enabled then
+          .implementation_claude_model == "claude-opus-5"
+          and .implementation_claude_effort == "xhigh"
+          and .adversarial_codex_model == "gpt-5.6-sol"
+          and .adversarial_codex_effort == "high"
+        else
+          (.implementation_claude_model // "") == ""
+          and (.implementation_claude_effort // "") == ""
+          and (.adversarial_codex_model // "") == ""
+          and (.adversarial_codex_effort // "") == ""
+        end
+      )' \
       <<<"$profile" >/dev/null; then
       echo "  PASS  usage max($five,$seven) selects ${model:-no Claude}/${effort:-fallback}"
       PASS=$((PASS + 1))
@@ -57,15 +79,26 @@ if [ -x "$CAPTURE" ] && [ -x "$SELECT" ]; then
     fi
   }
 
-  _assert_profile 0 19 "claude-fable-5" "low" true
-  _assert_profile 20 5 "claude-opus-5" "high" true
-  _assert_profile 49 50 "claude-opus-5" "low" true
-  _assert_profile 75 3 "claude-sonnet-5" "low" true
-  _assert_profile 89 90 "" "" false
+  _assert_profile 0 20 "claude-fable-5" "high" true
+  _assert_profile 21 0 "claude-fable-5" "medium" true
+  _assert_profile 0 35 "claude-fable-5" "medium" true
+  _assert_profile 36 0 "claude-fable-5" "low" true
+  _assert_profile 0 50 "claude-fable-5" "low" true
+  _assert_profile 51 0 "claude-opus-5" "xhigh" true
+  _assert_profile 0 75 "claude-opus-5" "xhigh" true
+  _assert_profile 76 0 "claude-opus-5" "medium" true
+  _assert_profile 0 90 "claude-opus-5" "medium" true
+  _assert_profile 91 0 "claude-opus-5" "low" true
+  _assert_profile 0 95 "claude-opus-5" "low" true
+  _assert_profile 96 0 "" "" false
 
   jq -n '{captured_at:1,five_hour:{used_percentage:0},seven_day:{used_percentage:0}}' >"$_snapshot"
   _stale_profile=$(CLAUDE_RATE_LIMIT_SNAPSHOT="$_snapshot" CLAUDE_USAGE_NOW=1000 CLAUDE_RATE_LIMIT_MAX_AGE=120 "$SELECT")
-  if jq -e '.claude_enabled == false and .reason == "missing_or_stale_claude_usage" and .codex_effort == "xhigh"' <<<"$_stale_profile" >/dev/null; then
+  if jq -e '.claude_enabled == false
+    and .reason == "missing_or_stale_claude_usage"
+    and .codex_effort == "xhigh"
+    and (.implementation_claude_model // "") == ""
+    and (.adversarial_codex_model // "") == ""' <<<"$_stale_profile" >/dev/null; then
     echo "  PASS  stale quota snapshot falls back to Sol xhigh only"
     PASS=$((PASS + 1))
   else

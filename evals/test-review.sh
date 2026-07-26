@@ -41,6 +41,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Comment template: What, Why, Suggested f
 run_content_eval "$SKILL_DIR/SKILL.md" "comment-ready output" "review has fallback when PR comment tooling unavailable"
 run_content_eval "$SKILL_DIR/SKILL.md" "Posted: <count> \\| Comment-ready fallback: <count> \\| Skipped as summary-only: <count>" "review reports posted and skipped comment counts"
 run_content_eval "$SKILL_DIR/SKILL.md" "/stay-within-limits" "review checks quota-aware routing"
-run_content_eval "$SKILL_DIR/SKILL.md" "Sol.*xhigh" "review always runs Sol xhigh"
+run_content_eval "$SKILL_DIR/SKILL.md" "Sol high.*Opus|Opus.*Sol high" "review checks Opus work with Sol high"
+run_content_eval "$SKILL_DIR/SKILL.md" "no Claude.*Sol xhigh|Sol xhigh.*no Claude" "review uses Sol xhigh alone without Claude"
 run_content_eval "$SKILL_DIR/SKILL.md" "selected Claude profile|usage-routed Claude" "review hats use the selected Claude profile"
 run_content_eval "$SKILL_DIR/SKILL.md" "Sol.*all.*hat|all.*hat.*Sol" "Sol covers all hats when Claude is disabled"

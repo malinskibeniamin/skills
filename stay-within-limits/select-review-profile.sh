@@ -11,6 +11,10 @@ fallback() {
   jq -nc '{
     claude_enabled: false,
     reason: "missing_or_stale_claude_usage",
+    implementation_claude_model: null,
+    implementation_claude_effort: null,
+    adversarial_codex_model: null,
+    adversarial_codex_effort: null,
     codex_model: "gpt-5.6-sol",
     codex_effort: "xhigh"
   }'
@@ -30,23 +34,29 @@ if ! profile=$(jq -ce --argjson now "$now" --argjson max_age "$max_age" '
   | select(($now - .captured_at) >= 0 and ($now - .captured_at) <= $max_age)
   | ([.five_hour.used_percentage, .seven_day.used_percentage] | max) as $usage
   | {
-      claude_enabled: ($usage < 90),
+      claude_enabled: ($usage <= 95),
       claude_usage_percentage: $usage,
       claude_model: (
-        if $usage < 20 then "claude-fable-5"
-        elif $usage < 75 then "claude-opus-5"
-        elif $usage < 90 then "claude-sonnet-5"
+        if $usage <= 50 then "claude-fable-5"
+        elif $usage <= 95 then "claude-opus-5"
         else null
         end
       ),
       claude_effort: (
-        if $usage < 20 then "low"
-        elif $usage < 50 then "high"
-        elif $usage < 90 then "low"
+        if $usage <= 20 then "high"
+        elif $usage <= 35 then "medium"
+        elif $usage <= 50 then "low"
+        elif $usage <= 75 then "xhigh"
+        elif $usage <= 90 then "medium"
+        elif $usage <= 95 then "low"
         else null
         end
       ),
-      reason: (if $usage >= 90 then "claude_usage_at_or_above_90" else null end),
+      implementation_claude_model: (if $usage <= 95 then "claude-opus-5" else null end),
+      implementation_claude_effort: (if $usage <= 95 then "xhigh" else null end),
+      adversarial_codex_model: (if $usage <= 95 then "gpt-5.6-sol" else null end),
+      adversarial_codex_effort: (if $usage <= 95 then "high" else null end),
+      reason: (if $usage > 95 then "claude_usage_above_95" else null end),
       codex_model: "gpt-5.6-sol",
       codex_effort: "xhigh"
     }

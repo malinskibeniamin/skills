@@ -122,7 +122,7 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Standards.*Spec" "review keeps st
 # review: 8-hat parallel panel (default for PR reviews) + quick/deep modes
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Core pass" "review defines the always-on core pass"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the 8-hat panel for PR reviews"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "GPT-5\.6-sol: independent" "review offers a cross-family independent hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "GPT-5\.6-sol: adversarial" "review offers a cross-family adversarial hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review hats skip only with diff evidence"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep release-audit mode"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "review forbids recursive invocation"

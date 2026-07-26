@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, lower Sonnet 5 taste to 5, and preserve effort bands, quota thresholds, prompts, agents, and verification behavior.
+2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, and lower Sonnet 5 taste to 5. Route taste work by Claude usage: Fable high/medium/low through 50%, Opus xhigh/medium/low through 95%, then no Claude. Pair Claude-enabled implementation across Opus 5 xhigh and Sol xhigh, fall back to Sol xhigh only without Claude, and use fresh Sol high adversarial review on Opus work.
 
 ## 4.32.0
 

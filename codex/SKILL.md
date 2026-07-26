@@ -19,7 +19,7 @@ GPT models are extremely steerable: write explicit, self-contained prompts.
 
 | Variant | Flag | Effort | Use for | Never |
 |---|---|---|---|---|
-| **Sol** | `-m gpt-5.6-sol` (default) | `medium`\|`high`; review/plan `xhigh` | ALL code writing, implementation, review, and plan checks | low effort |
+| **Sol** | `-m gpt-5.6-sol` (default) | implementation/plan/Sol-only review `xhigh`; Opus adversarial review `high` | ALL code writing, implementation, review, and plan checks | low effort |
 | **Terra** | `-m gpt-5.6-terra` | `medium`\|`high` only | PR comments and test-runner/CI chores | product code or review |
 | **Luna** | `-m gpt-5.6-luna` | `high` only | tracker orchestration and mundane tool loops | development or review |
 Optional user setup: `model = "gpt-5.6-sol"` in `~/.codex/config.toml`; agents do not mutate it.
@@ -38,16 +38,16 @@ rerun with a sharper prompt or redo on a smarter model without asking.
 
 ## Modes
 
-- **Implement** (clear spec, migrations, mechanical sweeps): `codex exec` with write access,
-  in a worktree when anything else touches the checkout.
-- **Review** (independent second opinion on a diff/PR): always run
-  `codex exec -m gpt-5.6-sol -c 'model_reasoning_effort="xhigh"' -s read-only "<prompt>"`.
-  Include the diff command; merge its findings as one lane, not the verdict.
+- **Implement** (clear spec, migrations, mechanical sweeps): run
+  `codex exec -m gpt-5.6-sol -c 'model_reasoning_effort="xhigh"'` with write access, in a
+  worktree when anything else touches the checkout.
+- **Review** (independent second opinion on a diff/PR): Opus work gets Sol high; Sol-only
+  fallback uses xhigh. Include the diff command; merge findings as one lane, not the verdict.
 - **Adversarial exchange (automatic in Claude-hosted workflows -- no ask needed)**: the author
   model never solely reviews its own work, and the reviewer comes from a DIFFERENT FAMILY
   whenever possible -- family diversity catches what same-family blind spots share. Claude
   authored the diff -> `GPT-5.6-sol: adversarial` review here (`codex review` / read-only
-  exec, xhigh effort, prompt: "try to break this -- failure scenarios, spec drift, missing
+  exec, high effort, prompt: "try to break this -- failure scenarios, spec drift, missing
   tests; P0-P3 findings only, evidence required"). GPT authored the diff -> Fable/Opus
   reviews (the `/review` panel or `adversarial-reviewer` agent). Same-family clean-context
   review is the fallback ONLY when the other family is unavailable -- record the
@@ -62,8 +62,9 @@ rerun with a sharper prompt or redo on a smarter model without asking.
     clean-context Claude agent instead; record the substitution.
   - *Minimization*: send the diff, acceptance criteria, and verify commands -- never the
     conversation, secrets, or unrelated files.
-  - *Budget*: Claude and Codex quotas are separate. Codex review stays Sol xhigh when its
-    subscription meter is unavailable; never substitute `ccusage` token/cost data for quota.
+  - *Budget*: Claude and Codex quotas are separate. Opus adversarial review stays Sol high;
+    Sol-only review stays xhigh when its subscription meter is unavailable. Never substitute
+    `ccusage` token/cost data for quota.
     Cap the exchange at one Sol review per refine round and one per PR-iterate round.
 - **Computer use** (browser/GUI verification, visual re-checks): shell the whole computer-use
   task to codex -- it is a token furnace on Claude models. Prompt must name the URL/app, the
