@@ -27,6 +27,9 @@ to invent tests.
 - **Tautological tests**: do not recompute expected values the same way code does; use an independent source of truth: known-good literal, worked example, fixture, spec, or observed behavior.
 - **Horizontal slices**: do not write all tests first, then all impl. Bulk tests test imagined behavior. Correct: vertical slices -- one RED->GREEN test+impl, then repeat.
 
+If the public seam itself is unclear, use `/codebase-design`; do not invent an
+internal seam for test convenience.
+
 ## Workflow
 
 ### 0. Contract
