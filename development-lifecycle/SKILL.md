@@ -32,6 +32,7 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Every step: exact file paths, exact code, expected output. No placeholders.
 - Start with the smallest obvious design. Name what can be deleted, reused, or left unbuilt.
 - Use current requirements and demonstrated scale. Do not add machinery for hypothetical growth.
+- Run `/quantify-impact` when a direct, decision-useful metric exists; lock the base, metric, guardrail, scenario, and worthwhile delta before coding.
 - Run `/resilience-review` only when credible failure could cause data loss, security/privacy harm, irreversible action, broken contracts, or a likely user dead end.
 - Bite-sized tasks (2-5 min each)
 - UI work: prototype alternatives only when the user requests exploration or a material

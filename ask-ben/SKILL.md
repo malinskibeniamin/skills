@@ -42,6 +42,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/plow-ahead` | Continue through routine ambiguity using reversible assumptions. |
 | `/prime` | Builds repo startup brief. |
 | `/prototype` | Build a throwaway prototype to answer a design question. |
+| `/quantify-impact` | Prove product or codebase value with proportional before-and-after evidence. |
 | `/read-the-damn-docs` | Research current behavior from primary documentation. |
 | `/redpanda-ai-gateway` | Run Claude and Codex through the Redpanda AI Gateway with rpk ai. |
 | `/registry-workflow` | Maintain component registries through taxonomy and sync discipline. |
