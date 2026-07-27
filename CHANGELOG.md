@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+2026-07-27 -- Make less code, more meaning the default: design for demonstrated scale, require credible-risk evidence, scope TDD to meaningful contracts instead of files or coverage quotas, remove mechanical test gates and mandatory cleanup passes, and keep `/deslop` as an explicit fallback for already-bloated work.
+
 2026-07-27 -- Add routing character: Sol for exhaustive instruction-following execution, Fable for the smartest visible/frontend/exploratory work, and Opus for lower-cost Fable-like taste without orchestration overhead.
 
 2026-07-26 -- Replace active Opus 4.8 routing targets with Opus 5, rank it 5/8/9 for cost/intelligence/taste, and lower Sonnet 5 taste to 5. Route taste work by Claude usage: Fable high/medium/low through 50%, Opus xhigh/medium/low through 95%, then no Claude. Pair Claude-enabled implementation across Opus 5 xhigh and Sol xhigh, fall back to clean-context Sol xhigh only without Claude, and use reciprocal review: Sol high checks Opus work while Opus 5 xhigh gives feedback on Sol implementation. `/review` now fail-closes through `/stay-within-limits` immediately before every Claude reviewer dispatch.

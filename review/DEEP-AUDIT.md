@@ -56,7 +56,7 @@ Use `agents/references/findings-schema.md` fields when possible. Each reviewer r
 |---|---|---|
 | P0 | Security hole, data loss, corrupt state, outage, crash, impossible core flow | Block |
 | P1 | Normal user failure, fake success, broken required behavior, major a11y miss, unhandled high-risk edge | Block unless owner override |
-| P2 | Maintainability, edge-case, perf, observability, or test gap with contained impact | Fix or track |
+| P2 | Maintainability, credible edge, measured perf, observability, or test gap with contained impact | Fix or track |
 | P3 | Minor cleanup or polish | Advisory |
 
 If unsure, prove lower severity with evidence; otherwise bias upward for important reviews.
@@ -68,7 +68,7 @@ If unsure, prove lower severity with evidence; otherwise bias upward for importa
 - Per-reviewer statuses and skipped-axis reasons.
 - Exact test/type/lint commands and results.
 - UI/customer-facing changes: `/visual-review` matrix, screenshots or terminal artifacts, environment fingerprint.
-- Forms/async/state/destructive changes: `/resilience-review` failure matrix and required RED tests.
+- Credible high-impact failure surfaces: `/resilience-review` evidence and the smallest RED contract test.
 - Security/dependency changes: scan or explicit skip reason.
 - Performance-sensitive changes: bundle/profile/trace evidence or explicit skip reason.
 

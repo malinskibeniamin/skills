@@ -1,48 +1,49 @@
 ---
 name: resilience-review
-description: Run a Murphy-law review of unhappy paths. Use when forms, validation, async data, mutations, cache, state machines, destructive actions, or loading, empty, and error states change.
+description: Run a risk-ranked Murphy review when credible failure could cause data loss, security or privacy harm, irreversible action, broken contracts, or a likely user dead end.
 ---
 
 # Resilience Review
-Murphy pass: find every plausible unhappy path, then block, guard, recover, observe.
-Skip docs-only, test-only, style-only, or trivial pure-logic diffs with a recorded reason.
+Murphy pass for credible risk, not an exhaustive edge-case harvest.
 
-## Hat panel (parallel)
+## Evidence first
 
-Map the risk surface first (user action, path, state change, side effects, deps). Claude-hosted sessions may spawn the hats in parallel. Native Codex runs every axis inline unless the user explicitly requests agents or invokes `/swarm`; skill activation alone is not consent.
-Each hat owns one failure class with non-goals, so findings do not converge. Small diffs stay inline everywhere.
+A risk is credible when supported by a trust boundary, irreversible effect,
+specified contract, observed incident, demonstrated scale, or likely user path.
+"Could happen" is insufficient. Skip low-risk work without ceremony.
 
-| Hat | Owns (and probes) | Non-goals |
-|---|---|---|
-| input | empty, null, duplicate, malformed, stale, huge, out-of-order payloads; validation format-vs-presence | timing, infra |
-| timing | double submit, tab race, retry storms, slow network, timeout, cancel, out-of-order responses, stale async validation, per-field timers | payload validity |
-| system | partial outage, 500s, stale cache, deleted resource, permission drift, dependency failure | UI polish |
-| state | invalid/impossible states, mode-switch residue, dependent-field cleanup, oneof cleanup, stale derived state, recovery to a good state | network causes |
-| ux-recovery | unclear disabled states, lost or partially rendered validation errors, fake success, dead ends without retry/undo, missing loading/empty states | root causes owned by other hats |
+Map the action, state change, side effects, dependencies, and current scale.
+Probe only relevant classes. Native Codex runs them inline unless the user
+explicitly requests agents or invokes `/swarm`.
+- **Input:** malformed or stale data crossing a trust boundary.
+- **Timing:** duplicate or out-of-order work that can corrupt or mislead.
+- **System:** dependency failure that breaks a required contract.
+- **State:** an impossible state with a likely path to reach it.
+- **Recovery:** a normal user can become stuck or receive fake success.
 
-Each hat emits findings with: scenario, trigger, expected behavior, guard (Precondition -> Postcondition -> Fallback -> Observability), test to write, evidence (file/route/form/API cited). For external/browser/platform behavior, the hat runs `/read-the-damn-docs`; complex planned state flows sketch `/visual-plan` first.
+For each credible finding, state evidence, trigger, expected behavior, smallest
+guard, and smallest public-contract test. No evidence means no finding.
 
-**The recurring meta-bug** (every hat probes its variant): *state resolved asynchronously, read too early or scoped too broadly* -- cache keyed without its scope (env/org/user), one timer shared by independent fields, fire-and-forget teardown, out-of-order responses without abort, flag defaults read before the provider resolves. **Contracts:** error boundaries layer unauthenticated -> stale-chunk recovery -> cancellation-as-non-error -> generic. Destructive flows fail CLOSED: confirm enables only after a fresh (staleTime 0) zero-reference lookup succeeds -- loading or errored is NOT confirmable; every close path (X, ESC, Enter, back) respects in-flight and dirty state. Retries bounded and code-classified (network/5xx once, never 4xx); degraded states show the reported reason verbatim and offer retry.
+Security, privacy, data loss, and destructive actions fail closed. Otherwise,
+prefer clear failure over speculative retries, fallbacks, caches, flags, or
+observability.
 
-Merge: dedupe by root cause, keep the highest-severity framing, then drive the finding loop: `/diagnosing-bugs` feedback loop -> `/tdd` RED test/snapshot -> `/visual-review` for UI validation.
-
+Use `/read-the-damn-docs` when external behavior defines the risk. Confirm real
+defects through `/diagnosing-bugs`; then add one RED regression test. Use
+`/visual-review` only for a customer-facing recovery flow.
 ## Output
 ```md
 ## Resilience review
 Risk surface:
 - ...
-Hats: input <status> | timing <status> | system <status> | state <status> | ux-recovery <status>
-Failure matrix:
-| Scenario | Trigger | Expected behavior | Guard | Test | Observability |
-Finding queue:
-| Finding | Repro/diagnosing-bugs loop | RED test or snapshot | Owner | Visual review needed |
-Required tests:
+Evidence:
 - ...
-Polish gaps:
-- ...
+Credible findings:
+| Scenario | Evidence | Smallest guard | Contract test |
 Verdict: PASS | NEEDS_GUARDS | BLOCKED
 ```
 
-Rules: cite files/routes/forms/API. Docs/help text not enough when code can prevent bad state. Real gap unfixed -> PR evidence with owner/deferral. No silent hat skips -- one-line evidence per skipped hat.
+Rules: cite files/routes/forms/API. Rank findings; do not reward quantity. A
+real high-impact gap blocks. A hypothetical edge case does not become work.
 
 See [REFERENCE.md](REFERENCE.md).

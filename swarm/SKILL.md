@@ -63,7 +63,7 @@ Spawned lanes may not create descendants without separate authorization for nest
 - Before launching lanes and between waves: `/stay-within-limits` (stop Claude above 95% of either window; resume after a fresh check).
 - Lane model choice: `/efficient-frontier` Model rankings. Implementation pairs Opus 5 xhigh with Sol xhigh in isolated lanes; review is reciprocal: Sol high checks Opus work and Opus 5 xhigh checks Sol implementation. Without Claude, use clean-context Sol xhigh only. Tracker chores -> Luna; PR-comment chores -> Terra. Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
-- Worker lanes start with `/deslop` write mode; reviewer lanes include `/deslop` complexity tags before broader review.
+- Worker lanes author the smallest clear solution from the start; reviewer lanes assess semantic density directly.
 - Architecture: fan out `/improve architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
 - Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.

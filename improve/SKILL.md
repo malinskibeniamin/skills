@@ -22,11 +22,11 @@ You are a **senior advisor, not an implementer**. The plan is the product. Helpe
 ## Workflow
 
 1. **Recon**: run `/prime` when available, then read README, AGENTS/CLAUDE, root configs, CI, tree, git log/churn. Identify stack, commands, conventions, tests, and deployment target.
-2. **Audit**: use `references/audit-playbook.md`; use `/deslop` repo-wide audit mode and its debt ledger for overbuilt surface/deferred shortcuts. Effort levels are quick, standard, deep. For standard/deep audits, prefer `/swarm` read-only reviewers; direct audit is fine for quick mode.
+2. **Audit**: use `references/audit-playbook.md`; `/deslop` repo-wide audit mode is an explicit fallback for already-overbuilt surfaces. Effort levels are quick, standard, deep. For standard/deep audits, prefer `/swarm` read-only reviewers; direct audit is fine for quick mode.
 3. **Docs**: use `/read-the-damn-docs` when findings depend on third-party APIs, packages, cloud behavior, or current official guidance.
 4. **Vet**: use `/review` style scrutiny: personally reopen cited locations, dedupe, severity-rank, and record rejected false positives in the plan index.
 5. **Arbitrate**: use `/plan-arbiter` when reviewing competing plans, agent proposals, or contradictory advisor findings.
-6. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for unhappy paths, recovery, and STOP conditions. Treat `/deslop` debt-ledger and gate findings as advisor-plan inputs, not automatic edits.
+6. **Stress-test**: use `/steelman` for high-risk findings and direction ideas; use `/resilience-review` for credible unhappy paths, recovery, and STOP conditions. Treat `/deslop` audit findings as advisor-plan inputs, not automatic edits.
 7. **Prioritize and confirm**: table findings by leverage with evidence. Direction findings are separate. Ask which findings to plan; non-interactive default is top 3-5.
 8. **Plan**: read `references/plan-template.md`; write numbered plans plus `plans/README.md`. If `--issues`, hand selected plans to `/to-tickets`.
 

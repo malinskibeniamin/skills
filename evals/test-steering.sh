@@ -25,9 +25,10 @@ run_content_eval "$REPO_ROOT/exemplars/form.tsx" "onCreated\\(request.name\\)" "
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "exemplars/" "tdd points at exemplars"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "exemplars/" "CLAUDE.md lifecycle points at exemplars"
 
-# 3. Deslop write mode is always-on for implementation.
-run_content_eval "$REPO_ROOT/CLAUDE.md" "write mode ON for the whole session" "lifecycle activates write mode automatically"
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "AUTOMATICALLY for every lifecycle implementation phase" "deslop documents auto-activation"
+# 3. Less-is-more is core; deslop is fallback only.
+run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "lifecycle authors the smallest design directly"
+run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Fallback, not lifecycle" "deslop documents fallback status"
+run_content_eval "$REPO_ROOT/exemplars/e2e.spec.ts" "test\\.step" "test.step structure remains exemplary"
 
 # 4. React Doctor score ratchet.
 run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "ratchet baseline" "doctor stop hook has the score ratchet"

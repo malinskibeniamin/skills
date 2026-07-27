@@ -1,24 +1,24 @@
-# Evals for autopilot enforcement: TDD hard block, lifecycle auto-remediation, intent injection
+# Evals for lifecycle auto-remediation and intent injection.
 
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
 
-# ── lifecycle-stop.sh: test coverage gate (step 0) ─────────────
+# ── lifecycle-stop.sh: no mechanical test quota ─────────────────
 
 run_file_eval "$HOOKS_DIR/lifecycle-stop.sh" "lifecycle-stop.sh exists"
 run_executable_eval "$HOOKS_DIR/lifecycle-stop.sh" "lifecycle-stop.sh is executable"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Coverage gap analysis" "lifecycle-stop has coverage gap analysis (step 0)"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "coverage-summary.json" "lifecycle-stop parses vitest coverage JSON"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "threshold" "lifecycle-stop has coverage threshold"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "coverage analysis unavailable" "lifecycle-stop falls back when coverage not available"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "hook_stop_block.*coverage analysis unavailable" "lifecycle-stop blocks missing tests when coverage unavailable"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Add tests with /tdd before finishing" "lifecycle-stop blocks missing tests when no runner exists"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/tdd" "lifecycle-stop prescribes /tdd for coverage gaps"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/simplify" "lifecycle-stop prescribes /simplify in remediation"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/commit-push" "lifecycle-stop prescribes /commit-push for uncommitted changes"
 
-run_content_eval "$HOOKS_DIR/orchestration-stop.sh" "SOURCE CHANGED WITHOUT TEST CHANGE" "orchestration-stop blocks source changes without test changes"
-run_content_eval "$HOOKS_DIR/orchestration-stop.sh" "NEW SOURCE WITHOUT TEST" "orchestration-stop blocks new source without tests"
+for pattern in "coverage-summary.json" "SOURCE CHANGED WITHOUT TEST CHANGE" "NEW SOURCE WITHOUT TEST"; do
+  if grep -Rq -- "$pattern" "$HOOKS_DIR/lifecycle-stop.sh" "$HOOKS_DIR/orchestration-stop.sh"; then
+    echo "  FAIL  mechanical test gate absent: $pattern"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: mechanical test gate remains: $pattern"
+  else
+    echo "  PASS  mechanical test gate absent: $pattern"
+    PASS=$((PASS + 1))
+  fi
+done
 
 # ── lifecycle-stop.sh: auto-remediation messages ────────────────
 
@@ -63,6 +63,6 @@ rm -f "$_eval_stderr"
 
 run_content_eval "$REPO_ROOT/CLAUDE.md" "MANDATORY.*hooks enforce" "CLAUDE.md lifecycle section is marked MANDATORY"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "Hooks block skipped steps" "CLAUDE.md uses imperative enforcement language"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "/tdd.*every" "CLAUDE.md mandates /tdd for new files"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "/simplify" "CLAUDE.md mandates /simplify before commit"
+run_content_eval "$REPO_ROOT/CLAUDE.md" 'meaningful behavior use `/tdd`' "CLAUDE.md scopes TDD to meaningful behavior"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "CLAUDE.md starts with the smallest design"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/commit-push" "CLAUDE.md mandates /commit-push in ship phase"

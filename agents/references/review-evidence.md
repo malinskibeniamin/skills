@@ -4,7 +4,11 @@ Shared by code-reviewer and self-reviewer.
 
 ## Resilience Review Evidence
 
-If diff adds/changes non-trivial feature behavior (forms, async/data flows, mutations, state transitions, config/resource choices, destructive actions, or user-visible error states), check whether `/resilience-review` evidence exists in session or PR body. Evidence should include Failure matrix, Finding queue, diagnosing-bugs/TDD status, and visual review when UI. If absent, add P1 testing gap recommending Resilience Review or explicit skip reason. Happy-path tests/type checks do not prove resilience.
+Require `/resilience-review` evidence only when credible failure could cause data
+loss, security or privacy harm, irreversible action, broken external contracts,
+or a likely user dead end. Missing evidence on that surface is a P1 testing gap.
+Do not require a resilience artifact for ordinary forms, async code, or state by
+category alone.
 
 ## Visual Review Evidence
 

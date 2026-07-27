@@ -148,7 +148,10 @@ Pre-plan review:
 
 ### Resilience Review
 
-Run `/resilience-review` when feature has forms, async/data flows, mutations, state transitions, config/resource choices, destructive actions, or user-visible error states. Output becomes plan evidence: Failure matrix, Finding queue, required tests, polish gaps, observability, verdict. Real findings chain to /diagnosing-bugs -> /tdd -> /visual-review when customer-facing.
+Run `/resilience-review` when evidence points to credible data-loss,
+security/privacy, irreversible, broken-contract, or likely stuck-user risk.
+Ordinary forms, async code, and state do not require a resilience artifact by
+category alone.
 
 Skip only with reason: docs-only, test-only, styling-only, trivial pure logic.
 
@@ -212,15 +215,19 @@ Mandatory unless ALL true:
 
 Skipping: "Grill skipped -- trivial bug fix, no arch decisions."
 
-## Phase 3: Implement (TDD)
+## Phase 3: Implement
 
-### Iron Law
-**No prod code w/o failing test first.**
+### Test meaningful behavior
+
+Use TDD for bugs, regressions, and meaningful contracts. Do not create tests
+because a file changed or to satisfy a percentage. Types, declarative wiring,
+static copy/styles, and behavior-preserving deletion may need only existing
+verification.
 
 ### Cycle
 1. RED -- minimal failing test, verify correct fail
 2. GREEN -- minimal code to pass
-3. **TEST INTEGRITY** -- test/assertion count not decreased. Dropped -> agent weakened tests. Reject, redo RED.
+3. **TEST INTEGRITY** -- do not weaken behavior proof merely to reach GREEN.
 4. REFACTOR -- clean, stay green
 5. DOGFOOD -- material runnable increment -> `/dogfood`; a found defect returns to RED before the next behavior
 
@@ -230,13 +237,10 @@ Skipping: "Grill skipped -- trivial bug fix, no arch decisions."
 - No `setTimeout`/`waitForTimeout` -- `await waitFor(() => expect(...))`
 - `--detectAsyncLeaks` after
 
-### Test Deletion Guard
+### Test deletion
 
-Agents delete/simplify tests to pass ("unpredictable genie"):
-
-1. **Count check**: pre-GREEN note `test()` + `expect()` count. Post-GREEN verify >=.
-2. **Diff review**: test deletions in GREEN -> manual flag.
-3. **Pre-commit hook**: reject commits reducing assertions w/o `// intentional: [reason]`.
+Deleting implementation-detail, duplicate, or obsolete tests is valid when the
+remaining suite still proves the public contract. Judge behavior, not counts.
 
 ### Classification
 | Suffix | Purpose |
@@ -245,16 +249,11 @@ Agents delete/simplify tests to pass ("unpredictable genie"):
 | `.test.tsx` | Integration -- renders components |
 | `e2e/*.spec.ts` | E2E -- Playwright |
 
-## Phase 3b: Edge-Case Hardening (Optional)
+## Phase 3b: Credible-Risk Hardening (Optional)
 
-Post-verify, dispatch agent:
-
-1. Identify changed functions/components
-2. Generate tests: boundary · empty/null · concurrent · error paths · large inputs · resilience-review failures
-3. Run -- keep passing, investigate failing
-4. Add passing to suite
-
-**When**: new public APIs, security-sensitive, complex branching. Skip trivial.
+Add another test only for an independent credible risk: a trust boundary,
+irreversible effect, specified contract, observed incident, demonstrated scale,
+or likely user failure. Do not harvest hypothetical edge cases.
 
 ## Phase 4b: Refine (Self-Review Loop)
 
@@ -269,7 +268,7 @@ Post-verify, dispatch agent:
 
 1. Dispatch `self-reviewer` on session diff
 2. Diff >50 lines OR auth/security -> also `adversarial-reviewer` parallel
-3. Risky feature or hook nudge -> run `/resilience-review` or record skip reason
+3. Credible high-impact failure surface -> run `/resilience-review`
 4. SubagentStop validates JSON, writes to session dir
 5. Process by priority:
 
@@ -336,7 +335,7 @@ Dispatch `code-reviewer` fresh-eyes:
 2. **Type safety** -- no `as any` · `@ts-ignore`
 3. **Error handling** -- async w/ error paths
 4. **A11y** -- kbd nav · aria-labels · semantic HTML
-5. **Testing** -- behavior · edge cases
+5. **Testing** -- meaningful behavior · credible risks
 6. **DRY** -- no dupes
 7. **Perf** -- no re-render waste · heavy deps lazy
 
@@ -378,7 +377,7 @@ Monitor: gh pr checks <pr-number> --watch
 3. New issues -> fix · push · monitor. No 3rd round.
 
 **Hand off to human:**
-1. Final PR comment: changes · findings · how addressed · test coverage.
+1. Final PR comment: changes · findings · how addressed · verification.
 2. `gh pr edit <number> --add-reviewer <username>`
 3. **Stop.** Don't poll for approval.
 
@@ -414,10 +413,7 @@ flowchart TD
 
     Types -->|No| RunTypes["bun run type:check"]
     RunTypes --> Types
-    Types -->|Yes| Coverage{Coverage ≥ 60%?}
-
-    Coverage -->|No| TDD["Block: Run /tdd"]
-    Coverage -->|Yes| Committed{Changes<br/>committed?}
+    Types -->|Yes| Committed{Changes<br/>committed?}
 
     Committed -->|No| Commit["Block: Run /commit-push-pr --no-pr"]
     Committed -->|Yes| Pushed{Commits<br/>pushed?}
@@ -435,7 +431,6 @@ flowchart TD
     Reviewer -->|No| RequestReview["Block: gh pr edit --add-reviewer"]
     Reviewer -->|Yes| Done([All gates pass ✓])
 
-    style TDD fill:#f96,stroke:#333
     style Commit fill:#f96,stroke:#333
     style Push fill:#f96,stroke:#333
     style CreatePR fill:#f96,stroke:#333
@@ -449,7 +444,7 @@ flowchart TD
 
 - No manual user test. Use agent-browser · playwright · runner.
 - No skip Phase 1.
-- No prod code w/o failing test first.
+- Bugs and meaningful behavior start with a failing public-contract test.
 
 ## Commit Discipline
 
@@ -487,7 +482,7 @@ Rules auto-load ONLY on matching files.
 
 Bug traced to AI code:
 
-1. **Classify**: null handling · edge case · API misuse · security gap
+1. **Classify**: broken contract · credible failure · API misuse · security gap
 2. **Regression test**: catches class, not instance
 3. **Add CI**: runs every commit
 4. **Track**: same class 3+ times -> `.claude/rules/` entry

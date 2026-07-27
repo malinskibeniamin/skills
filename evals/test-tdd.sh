@@ -30,9 +30,13 @@ run_file_eval "$SKILL_DIR/tests.md" "tests.md exists (good vs bad test philosoph
 run_content_eval "$SKILL_DIR/SKILL.md" "tests\\.md" "SKILL.md links to tests.md"
 run_content_eval "$SKILL_DIR/SKILL.md" "domain glossary" "SKILL.md references project domain glossary"
 run_content_eval "$SKILL_DIR/SKILL.md" "ADRs" "SKILL.md references ADRs"
-run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN.*REFACTOR|Iron Law" "SKILL.md has TDD cycle"
-run_content_eval "$SKILL_DIR/SKILL.md" "standard library|native platform|already-installed|one-line" "GREEN phase prefers reuse-first minimal code"
+run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN.*REFACTOR" "SKILL.md has TDD cycle"
+run_content_eval "$SKILL_DIR/SKILL.md" "language.*platform.*installed dependency|installed dependency.*platform" "GREEN phase prefers existing capabilities"
 run_content_eval "$SKILL_DIR/SKILL.md" "paths:" "SKILL.md has paths: for auto-loading"
+run_content_eval "$SKILL_DIR/SKILL.md" "## Test seams and anti-patterns" "SKILL.md preserves test seams section"
+run_content_eval "$SKILL_DIR/SKILL.md" "No tests at unconfirmed internals" "SKILL.md rejects unconfirmed internal seams"
+run_content_eval "$SKILL_DIR/SKILL.md" "independent source of truth" "SKILL.md rejects tautological tests"
+run_content_eval "$SKILL_DIR/SKILL.md" "vertical slices" "SKILL.md requires vertical TDD slices"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "setTimeout|waitForTimeout" "REFERENCE has condition-based waiting"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Common Agent Excuses" "REFERENCE has rationalization table"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "detectAsyncLeaks" "REFERENCE has async leak detection"
@@ -43,12 +47,10 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('ignores stale async validati
 run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('clears dependent field state when its parent changes" "REFERENCE has RED dependent-cleanup test"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('renders every validation error" "REFERENCE has RED all-errors test"
 
-# ── Coverage gap analysis ────────────────────────────────────────
-run_content_eval "$SKILL_DIR/SKILL.md" "coverage" "SKILL.md references coverage in PLAN phase"
-run_content_eval "$SKILL_DIR/SKILL.md" "Coverage gaps closed" "SKILL.md has coverage verification in When Done"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Coverage Gap Analysis" "REFERENCE has coverage gap analysis section"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Uncovered Line" "REFERENCE explains uncovered line numbers"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Priority Order" "REFERENCE has coverage priority order"
+# ── Coverage is diagnostic, never a quota ───────────────────────
+run_content_eval "$SKILL_DIR/SKILL.md" "Coverage.*never a target|never a target.*Coverage" "SKILL.md rejects coverage targets"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Coverage as Investigation" "REFERENCE treats coverage as investigation"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Never set a percentage target" "REFERENCE rejects percentage targets"
 
 # ── Visual regression test section ──────────────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Visual Regression|browser.test" "SKILL.md has visual regression test section"

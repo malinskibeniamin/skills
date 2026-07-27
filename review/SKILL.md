@@ -23,12 +23,12 @@ Standards sources: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `C
 
 1. **Standards**: read standards + diff. Report documented violations only. Cite file + rule. Separate hard violations from judgment calls. Skip what tooling enforces. Max 400 words.
 2. **Spec**: read spec + diff. Report missing/partial requirements, scope creep, wrong behavior. Quote spec line for each finding. Max 400 words. Skip if no spec.
-3. **Complexity/value**: tag delete/stdlib/native/yagni/shrink candidates (see `/deslop` tags), one line per finding: location, what to cut, what replaces it. The diff's best outcome is getting shorter -- end with `net: -<N> lines possible.`, or `Lean already. Ship.` when nothing cuts. A minimal runnable self-check is never bloat; do not flag it. Quantify the Major improvement: value score HIGH|MEDIUM|LOW|NONE (maintenance/security/resilience/test-only can score HIGH). Below MEDIUM with no clear justification -> run `/steelman` against "this PR adds meaningful value"; if confirmed low-value, gate blocks pending override, split, or stronger justification.
+3. **Complexity/value**: review semantic density directly. Tag proven delete/stdlib/native/yagni/shrink candidates (see `/deslop`) with location and replacement. Prefer behavior-preserving deletion when it improves clarity, but never optimize LOC or reward code golf. Check every branch, helper, file, option, dependency, and test against required behavior, domain clarity, credible risk, and demonstrated scale. Quantify the Major improvement: value score HIGH|MEDIUM|LOW|NONE. Below MEDIUM with no clear justification -> run `/steelman` against "this PR adds meaningful value"; if confirmed low-value, gate blocks pending override, split, or stronger justification.
 4. **Adversarial question**: "What could still be wrong if tests pass and implementation matches spec?" Max 3 findings; `APPROVED` if no credible risk.
 
 ## Verification standard
 
-Review is verification, not opinion: check claims against the source (the API the diff calls, the schema it renders, the vendor doc it configures); when you cannot verify (no env, external service), say so and downgrade to "verify before merge". Re-review posts per-finding status against the new tip (fixed / still open / no longer applies) -- never a fresh unanchored review. A reasoned decline with evidence is a valid resolution; any "later / follow-up" resolution requires a ticket reference in the same thread. **Anti-nit guard:** no perf nits without a measured or structural argument; style the formatter owns is out of bounds -- propose the lint rule, don't litigate it per diff. Hat aids: test/perf hat runs the **testability sweep** (testids + `aria-expanded` on collapsibles, parsing logic in tested utils, tab/filter state in the URL, duplicate helpers consolidated); visual/design hat runs the **registry-consumer sweep** (search the registry before bespoke UI, no one-offs where a variant exists, overflow handled by the group component, no deep child selectors, before/after screenshots for any visual change).
+Review is verification, not opinion: check claims against the source (the API the diff calls, the schema it renders, the vendor doc it configures); when you cannot verify (no env, external service), say so and downgrade to "verify before merge". Re-review posts per-finding status against the new tip (fixed / still open / no longer applies) -- never a fresh unanchored review. A reasoned decline with evidence is a valid resolution; any "later / follow-up" resolution requires a ticket reference in the same thread. **Anti-nit guard:** no perf nits without a measured or structural argument; no edge-case finding without credible risk; style the formatter owns is out of bounds. Hat aids: test/perf checks meaningful public contracts and measured performance; visual/design searches the registry before bespoke UI and requires visual evidence for actual surface changes.
 
 ## Hat panel (default for PR and branch reviews)
 
@@ -41,11 +41,11 @@ The orchestrator merges by root cause and MUST assert every non-skipped axis com
 |---|---|---|
 | product/spec | does the diff serve the user? spec compliance, scope creep, missing requirements | usage-routed Claude |
 | engineering-standards | documented repo-standards violations, Fowler smell baseline | usage-routed Claude |
-| complexity/value | deslop tags (delete/stdlib/native/yagni/shrink), net-lines-possible score, value score, smallest passing diff | usage-routed Claude |
+| complexity/value | semantic density, justified deletion, value score, smallest clear diff | usage-routed Claude |
 | adversarial | "what is still wrong if tests pass and spec matches?" max 3 findings | usage-routed Claude |
-| resilience | `/resilience-review`: forms, async/data, mutations, state machines, destructive actions, loading/error/empty | usage-routed Claude |
+| resilience | `/resilience-review` only for credible data-loss, security/privacy, irreversible, contract, or likely stuck-user risk | usage-routed Claude |
 | visual/design | UI/UX taste, copy, layout, a11y on rendered surfaces (`/visual-review` evidence) | usage-routed Claude |
-| test/perf | TDD evidence, coverage gaps, flaky tests, render/network/bundle risk | usage-routed Claude |
+| test/perf | meaningful contract proof, flaky tests, measured render/network/bundle risk | usage-routed Claude |
 | golang (auto for Go/backend proto diffs; every tier) | `/golang-review`: findings cite the local catalog rule | usage-routed Claude |
 
 Eighth axis, **mandatory**. Reciprocal cross-FAMILY review: Claude-hosted runs `GPT-5.6-sol: adversarial` via `/codex` at high against Opus work, and asks Opus 5 xhigh for feedback on Sol implementation. Terra/Luna never review. With no Claude, clean-context Sol xhigh runs every hat. Native Codex does not recurse: run axes inline and record cross-family unavailable.

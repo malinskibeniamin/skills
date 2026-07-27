@@ -126,7 +126,7 @@ graph TD
 | Problem | Without repo | With repo |
 |---|---|---|
 | Claude write `as any` | Ships to PR -> human catches -> feedback loop | Hook blocks immediately -> 50 tokens -> fixed |
-| Claude skip tests | Ships -> human requests -> another round | Stop gate blocks -> tests added automatically |
+| Claude misses meaningful behavior | Ships -> human finds regression | TDD + review require public-contract proof |
 | Claude use wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
 | Forget ask accessibility | No a11y until manual audit | Every component checked automatically |
 | Must babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
@@ -225,7 +225,7 @@ graph TD
         ST1["biome-autofix.sh\nlint:fix changed files"]
         ST2["typecheck-stop.sh\ntsgo + related tests"]
         ST3["react-doctor-stop.sh\nhealth score"]
-        ST4["orchestration-stop.sh\nasync leaks, missing tests, security"]
+        ST4["orchestration-stop.sh\nsecurity-sensitive changes"]
         ST5["violation-summary-stop.sh\naggregate session violations"]
         ST1 --> ST2 --> ST3 --> ST4 --> ST5
     end

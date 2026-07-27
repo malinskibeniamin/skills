@@ -10,17 +10,17 @@ Treat each addition as production liability:
 - Test helper/mock: can hide real behavior or harden implementation details.
 - Hook/rule: can block good work or create noisy false positives.
 
-`/deslop` composes with `/simplify` (ponytail write mode and its delete/stdlib/native/yagni/shrink tags are absorbed into this skill): simplify first, cut complexity, harvest marked debt, then question whether the remaining diff deserves ownership. Pair debt/audit findings with `/improve` when they need a plan, not an immediate edit.
+`/deslop` is an explicit fallback for work that is already bloated. Normal
+authoring should apply these principles from the first design and need no
+cleanup skill.
 
 ## Keep rules
 
 Keep when the addition does at least one:
 
-1. **Product value** -- user-visible capability, clearer workflow, saved time, or removed pain.
-2. **Defensive correctness** -- prevents a plausible outage, data loss, security issue, bad state, or support burden.
-3. **Test confidence** -- proves behavior, regression, edge case, or release safety without coupling to implementation.
-
-Short form: Keep when product value, defensive correctness, or test confidence is proven.
+1. **Required behavior** -- implements an explicit user or caller contract.
+2. **Domain clarity** -- makes the real concepts and invariants easier to see.
+3. **Credible risk** -- prevents a failure supported by evidence, not imagination.
 
 If none apply, delete it. If unsure, ask for the value claim or split the diff.
 
@@ -32,7 +32,7 @@ Before accepting new code, stop at the first rung that solves the behavior:
 2. Use the standard library.
 3. Use a native platform feature.
 4. Use an already-installed dependency.
-5. Use one-line local code.
+5. Use the smallest clear local expression.
 6. Only then own the smallest custom implementation.
 
 Never remove trust-boundary validation, visible error handling, security, accessibility, or explicitly requested behavior.
@@ -41,19 +41,19 @@ Never remove trust-boundary validation, visible error handling, security, access
 
 1. **Scope** -- Does every changed file trace to the ask?
 2. **Shape** -- Can a branch, option, abstraction, helper, or file disappear?
-3. **Reuse** -- Is extraction backed by two real call sites? If not, inline.
+3. **Reuse** -- Does extraction remove real repeated complexity? If not, inline.
 4. **State** -- Can one source of truth replace mirrored state or flags?
-5. **Errors** -- Are unhappy paths visible and tested, not swallowed?
-6. **Tests** -- Do tests fail for the right reason and protect behavior?
+5. **Errors** -- Does each guard address a credible failure?
+6. **Tests** -- Does each test protect a meaningful public contract?
 7. **Cost** -- Would you be comfortable owning this during an incident?
 
 ## Block examples
 
 - New wrapper component only changes names around an existing component.
 - Utility used once with no clear semantic boundary.
-- Happy-path feature without regression or edge-case test.
+- Behavior change without a meaningful contract test.
 - Broad config/dependency change to solve a one-line local problem.
-- Defensive-looking fallback that hides errors instead of surfacing them.
+- Defensive-looking fallback for an unsubstantiated failure.
 
 ## Output template
 

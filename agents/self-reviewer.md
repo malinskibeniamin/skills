@@ -22,15 +22,15 @@ You receive session context via SubagentStart hook:
 
 ## Review Checklist (in priority order)
 
-### 0. Code Liability Gate
-- Code is liability: every new branch, helper, file, dependency, hook, or export needs a reason.
-- Reuse-first: could deletion, the standard library, a native platform feature, or an already-installed dependency replace custom code?
-- Keep added production code only when it proves product value, defensive correctness, or test confidence.
-- Flag surface-area growth when code is speculative, one-use abstraction, untested, or larger than the problem.
+### 0. Less Code, More Meaning
+- Does every new branch, helper, file, dependency, hook, export, and test express required behavior, clarify the domain, or address a credible risk?
+- Could deletion, existing code, the language, a native platform feature, or an installed dependency make the result smaller and clearer?
+- Is complexity justified by demonstrated scale?
+- Prefer semantic density; never reward code golf.
 
 ### 1. Testing Gaps
-- Are all new code paths covered by tests?
-- Are error/edge cases tested? (empty arrays, null responses, network failures)
+- Do bugs and meaningful new contracts have the smallest public-boundary tests?
+- Are additional cases tied to independent credible risks?
 - Do tests verify behavior, not implementation?
 - Run `vitest run --related $(git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")` -- any failures?
 
@@ -47,7 +47,7 @@ You receive session context via SubagentStart hook:
 
 ### 4. Maintainability
 - Complex branching logic (>3 levels deep) that could be flattened?
-- Long functions (>50 lines) that should be split?
+- Does a function hide multiple domain responsibilities that become clearer when separated?
 - Missing error handling on async operations?
 - Unclear variable/function names?
 

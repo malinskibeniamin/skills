@@ -10,7 +10,7 @@ External services via CLI, not MCP: Jira `acli` | Google `gog` | browser `agent-
 
 ## Code Quality
 
-Code is liability: keep additions only for product value, defensive correctness, or test confidence | delete/inline before abstract | `bun run lint:fix` + `bun run type:check` pre-done
+Less code, more meaning: choose the smallest obvious design before writing | deletion is delivery | design for demonstrated scale | add branches, abstractions, defenses, and tests only for required behavior or credible risk | clarity beats code golf | `bun run lint:fix` + `bun run type:check` pre-done
 
 ## Stack conventions (chosen, not inferable)
 
@@ -26,8 +26,8 @@ Order every task. Hooks block skipped steps.
 
 1. **Understand** -- explore, one question at time, propose
 2. **Plan** -- exact path, code, expect output
-3. **Implement** -- `/tdd` every file, `/deslop` write mode ON for the whole session (both runtimes): ladder before every line. Fail first -> pass -> refactor. Match the shape of the matching `exemplars/` file
-4-6. **`/go`** -- verify -> self-review + cross-model review -> `/simplify` -> `/deslop` -> `/commit-push-pr` -> monitor CI -> fix -> done
+3. **Implement** -- bugs and meaningful behavior use `/tdd`: fail -> pass -> refactor. Trivial wiring stays direct. Match the shape, not the size, of the matching `exemplars/` file
+4-6. **`/go`** -- verify -> self-review + cross-model review -> `/commit-push-pr` -> monitor CI -> fix -> done
 
 Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 

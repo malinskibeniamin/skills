@@ -1,3 +1,3 @@
 interface:
   display_name: "Resilience Review"
-  short_description: "Probe unhappy paths with a Murphy-law review panel"
+  short_description: "Review credible high-impact failures with Murphy law"

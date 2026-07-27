@@ -1,3 +1,3 @@
 interface:
   display_name: "Deslop"
-  short_description: "Remove unjustified code and keep solutions lean"
+  short_description: "Audit already-bloated code and remove unjustified surface"

@@ -40,12 +40,19 @@ clean-context Sol xhigh pass.
 `git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}"` -- verify:
 - [ ] All requirements addressed
 - [ ] No scope creep
-- [ ] Edge cases handled
+- [ ] Credible risks handled
 - [ ] Breaking changes documented
 
-## PR Value and Surface-Area Gate
+## Less Code, More Meaning
 
-Code is liability. Added production code must justify ownership cost through product value, defensive correctness, or test confidence. First check reuse-first alternatives: deletion, standard library, native platform feature, or already-installed dependency. If the diff is low-value, speculative, untested, or larger than the problem requires, file a P1 `simplification` finding for low-value surface-area growth and require deletion, inlining, splitting, or explicit user/product override.
+Review semantic density directly. Every addition must express required behavior,
+clarify the domain, or address a credible risk at demonstrated scale. Check
+deletion, existing code, the language, native platform features, and installed
+dependencies before custom machinery. Behavior-preserving deletion is valuable;
+negative LOC and code golf are not goals.
+
+File a P1 `simplification` finding when avoidable surface area materially hides
+the behavior or increases failure risk.
 
 ## Stage 2: Code Quality (priority order)
 
@@ -53,9 +60,9 @@ Code is liability. Added production code must justify ownership cost through pro
 2. **Type safety** -- no `as any`/`@ts-ignore`, proper generics
 3. **Error handling** -- async error paths, error boundaries
 4. **Accessibility** -- kbd-nav, aria-labels, semantic HTML
-5. **Testing** -- behavior-based (not impl), edge cases covered
-6. **DRY** -- no duplicated extractable logic
-7. **Performance** -- no re-renders, heavy deps lazy-loaded
+5. **Testing** -- meaningful public contracts, not implementation or quotas
+6. **Duplication** -- extract only when a shared concept removes real complexity
+7. **Performance** -- optimize measured hot paths or explicit budgets
 
 
 ## Resilience + Visual Review Evidence
