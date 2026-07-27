@@ -13,8 +13,8 @@ specified contract, observed incident, demonstrated scale, or likely user path.
 "Could happen" is insufficient. Skip low-risk work without ceremony.
 
 Map the action, state change, side effects, dependencies, and current scale.
-Probe only relevant classes, inline. Native Codex uses agents only when the user
-explicitly requests them or invokes `/swarm`.
+Probe only relevant classes. Native Codex runs them inline unless the user
+explicitly requests agents or invokes `/swarm`.
 - **Input:** malformed or stale data crossing a trust boundary.
 - **Timing:** duplicate or out-of-order work that can corrupt or mislead.
 - **System:** dependency failure that breaks a required contract.
