@@ -10,6 +10,10 @@ vendored_from: https://github.com/DietrichGebert/ponytail (write mode)
 Fallback, not lifecycle. Clean code should arrive clean; invoke this skill only
 when a diff or repository already feels larger than its behavior.
 
+Claude Code's bundled `/simplify` remains available on explicit request for
+tactical cleanup. It is not a lifecycle gate or a substitute for correctness
+review; `/deslop` questions whether the surface should exist at all.
+
 ## Advocate for less is more
 
 Code is liability, but negative LOC is not the goal. Prefer **semantic density**:

@@ -21,6 +21,8 @@ run_content_eval "$REPO_ROOT/deslop/SKILL.md" "[Ff]allback" \
   "deslop is an explicit fallback"
 run_content_eval "$REPO_ROOT/deslop/SKILL.md" "[Ss]emantic density" \
   "deslop advocates semantic density"
+run_content_eval "$REPO_ROOT/deslop/SKILL.md" 'bundled `/simplify`' \
+  "deslop keeps Claude built-in simplify available on demand"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "semantic density" \
   "review evaluates semantic density directly"
 run_content_eval "$REPO_ROOT/agents/plan-engineering-hat.md" "demonstrated scale|current scale" \
