@@ -21,15 +21,19 @@ deletion may need only existing focused verification.
 Coverage can reveal a suspected blind spot. It is never a target or a reason
 to invent tests.
 
+## Test seams and anti-patterns
+
+- **Seams**: test at public boundaries. Before a test, write down the seam and confirm pre-agreed seams with the user when the issue or existing convention does not make it obvious. No tests at unconfirmed internals.
+- **Tautological tests**: do not recompute expected values the same way code does; use an independent source of truth: known-good literal, worked example, fixture, spec, or observed behavior.
+- **Horizontal slices**: do not write all tests first, then all impl. Bulk tests test imagined behavior. Correct: vertical slices -- one RED->GREEN test+impl, then repeat.
+
 ## Workflow
 
 ### 0. Contract
 
 - Name the observable behavior at a public interface. Follow the project domain glossary and ADRs.
-- If the issue or convention does not imply the seam, confirm test seams before testing internals; use `/codebase-design` only when the public interface is genuinely unclear.
 - Choose the smallest test that would fail if that behavior broke. One test may prove many lines.
 - Add another case only for an independent credible risk, not every imaginable edge.
-- **Tautological tests:** avoid them by using an independent expected value such as a literal, worked example, fixture, spec, or observed behavior.
 - If third-party behavior defines the contract, use `/read-the-damn-docs`.
 - Read [tests.md](tests.md) when the seam or test shape is unclear.
 
