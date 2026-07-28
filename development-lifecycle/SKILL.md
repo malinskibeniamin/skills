@@ -34,6 +34,9 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Use current requirements and demonstrated scale. Do not add machinery for hypothetical growth.
 - Run `/quantify-impact` when a direct, decision-useful metric exists; lock the base, metric, guardrail, scenario, and worthwhile delta before coding.
 - Run `/resilience-review` only when credible failure could cause data loss, security/privacy harm, irreversible action, broken contracts, or a likely user dead end.
+- When `/grilling` applies, let its evidence select quick, standard, or deep-risk
+  review. Deep-risk includes the resilience pass above; standard keeps the smaller
+  engineering Murphy pass.
 - Bite-sized tasks (2-5 min each)
 - UI work: prototype alternatives only when the user requests exploration or a material
   visual direction is unresolved.
@@ -43,7 +46,8 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 - Invoke `/grilling` when the user requests planning/grilling or an unresolved architectural, product, or UX decision would materially change the result.
 - Ordinary build/fix/implement work skips this stop gate and continues immediately after its concise plan.
-- When invoked: grill until every branch resolves | update CONTEXT.md + ADRs inline
+- When invoked: gather one evidence packet | select the tier | run required axes inline |
+  grill until every branch resolves | update CONTEXT.md + ADRs inline
 - Update plan with changes | get explicit user confirmation
 
 ### 3. Implement

@@ -36,20 +36,10 @@ Senior designer perspective. You care about how the user understands, trusts, an
 
 ## Output
 
-One JSON block per [findings-schema.md](./references/findings-schema.md). Set `reviewer: "plan-design-hat"`.
-
-```json
-{
-  "reviewer": "plan-design-hat",
-  "status": "APPROVED" | "NEEDS_REDESIGN" | "BLOCKED",
-  "findings": [
-    { "id": "INCOMPLETE_STATES", "severity": "HIGH", "detail": "...", "recommendation": "..." }
-  ],
-  "must_answer": [
-    "What does the empty state show to a first-time user?"
-  ]
-}
-```
+One JSON block per
+[plan-findings-schema.md](./references/plan-findings-schema.md). Set
+`reviewer: "plan-design-hat"` and `axis: "design"`. Put only unresolved user
+decisions in `must_answer`; label findings `section: "design"`.
 
 ## Non-Goals
 
