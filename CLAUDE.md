@@ -19,14 +19,32 @@ Less code, more meaning: choose the smallest obvious design before writing | del
 - Validate format, not presence: URL regex, enum membership, UPPER_SNAKE patterns
 - Tests: `.test.ts` unit | `.test.tsx` integration | `.browser.test.tsx` visual | `e2e/*.spec.ts` Playwright | co-locate with source
 
+## Execution contract
+
+The user's requested endpoint defines scope and done:
+
+- Answer, explain, plan, or review: return that artifact; do not edit.
+- Build/fix/implement: state a concise plan, then continue immediately as the single owner. Stop after verified local changes; do not commit or push.
+- Commit: commit only. Push: commit if needed, then push; do not open a PR.
+- Make/open/create a PR: verify, commit, push, open the PR, take one CI status snapshot, then stop. Push is an implied prerequisite, not a separate permission.
+- Ship, `/go`, or plow ahead: run the full delivery loop requested.
+
+An explicit endpoint or earlier stop point wins. Stay inside requested acceptance criteria; report adjacent improvements without editing them. Pause only for a user-reserved decision or destructive, irreversible, production, legal/privacy, or high-security risk.
+
+Action turns end with exactly one final status line: `🟢 done — <evidence>`, `🟡 awaiting decision — <specific decision>`, or `🔴 blocked — <external blocker and needed input>`. Remaining work, failed checks, and routine ambiguity are not blockers: continue. Before final status, stop every background task, agent, timer, watcher, and process created this turn unless the user explicitly asked it to persist. Never schedule delayed work without an explicit request.
+
+Do not spawn subagents, recursive model calls, agent teams, or background sessions unless the user explicitly requests delegation or invokes `/swarm`. Skill activation alone is not consent. The sole default exception is one bounded, foreground, awaited cross-model review for non-trivial PR/ship work.
+
+Use isolated browser automation only. Never close, restart, resize, or take over a human-owned browser or desktop app; if isolation is unavailable, report the blocked verification.
+
 ## Lifecycle (MANDATORY -- hooks enforce)
 
-Order every task. Hooks block skipped steps.
+Use the smallest lifecycle that reaches the requested endpoint.
 
-1. **Understand** -- explore, one question at time, propose
-2. **Plan** -- exact path, code, expect output
+1. **Understand** -- explore; ask only blocking questions
+2. **Plan** -- concise for ordinary work; exact path/code/output for decision-heavy work
 3. **Implement** -- bugs and meaningful behavior use `/tdd`: fail -> pass -> refactor. Trivial wiring stays direct. Match the shape, not the size, of the matching `exemplars/` file
-4-6. **`/go`** -- verify -> self-review + cross-model review -> `/commit-push-pr` -> monitor CI -> fix -> done
+4-6. **Ship only when requested** -- verify -> review -> `/commit-push-pr` -> requested CI endpoint
 
 Alias: `/work` = full lifecycle. `/go` = phase 4-6 (ship tail).
 
@@ -42,12 +60,11 @@ GPT-5.6 variants (effort floors are hard): **Sol** = the workhorse -- actual imp
 
 Claude taste quota ladder (higher of 5h/7d): 0-20% Fable high | 21-35% Fable medium | 36-50% Fable low | 51-75% Opus xhigh | 76-90% Opus medium | 91-95% Opus low | 96-100% or missing/stale no Claude. Re-check `/stay-within-limits` before every wave and every Claude review dispatch; never reuse a review profile.
 
-Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | user-facing -> taste >= 7 | token furnaces -> codex | **implementation pair**: when Claude enabled, Opus 5 xhigh + Sol xhigh in isolated/non-overlapping lanes; without Claude, Sol xhigh only | **Cross-model review, automatic on every non-trivial change**: author model never solely reviews its own work; use a DIFFERENT family; fresh Sol high adversarial review checks Opus work, and Opus 5 xhigh feedback checks Sol implementation; without Claude, clean-context Sol xhigh owns all hats; P0-P3 fix per routing, cross re-check | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via per-invocation `model` + `effort`.
+Ships -> intelligence > taste > cost (tiebreaker) | below bar -> rerun smarter, don't ask | user-facing -> taste >= 7 | token furnaces -> codex | **single owner**: the selected primary model implements; no automatic implementation pair or background delegation | **Cross-model review at non-trivial PR/ship endpoints**: one awaited pass; author model never solely reviews its own work; use a DIFFERENT family when available; Sol high checks Opus/Fable work, clean-context Sol xhigh is the fallback | **NEVER Haiku** | GPT via `/codex` CLI only | Claude via per-invocation `model` + `effort`.
 
-### Monitor (not sleep)
+### Long-running work
 
-`Bash(run_in_background)` + `Monitor` stream output:
-CI: `gh pr checks <n> --watch` | dev server | vitest watcher | container log | build output
+Foreground by default. Use background execution or Monitor only when the user requested persistence or active streaming. Join or stop it before final status. A PR request takes one `gh pr checks <n>` snapshot; `/go`, ship, or explicit babysitting may use `gh pr checks <n> --watch`. Never sleep-poll.
 
 ## Auto-Generated (never edit)
 

@@ -7,7 +7,7 @@ HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
 run_file_eval "$HOOKS_DIR/lifecycle-stop.sh" "lifecycle-stop.sh exists"
 run_executable_eval "$HOOKS_DIR/lifecycle-stop.sh" "lifecycle-stop.sh is executable"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "/commit-push" "lifecycle-stop prescribes /commit-push for uncommitted changes"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Commit the requested scope" "lifecycle-stop prescribes scoped commit for external endpoints"
 
 for pattern in "coverage-summary.json" "SOURCE CHANGED WITHOUT TEST CHANGE" "NEW SOURCE WITHOUT TEST"; do
   if grep -Rq -- "$pattern" "$HOOKS_DIR/lifecycle-stop.sh" "$HOOKS_DIR/orchestration-stop.sh"; then
@@ -24,9 +24,16 @@ done
 
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Run:.*git push" "lifecycle-stop prescribes exact push command"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Create one NOW" "lifecycle-stop prescribes PR creation"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Monitor tool" "lifecycle-stop prescribes Monitor for CI"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Do not stop until CI green" "lifecycle-stop mandates CI fix loop"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "consider: gh pr edit" "lifecycle-stop nudges (not blocks) review request -- audit demotion"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Requested PR endpoint is complete" "PR endpoint stops after CI snapshot"
+run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "explicit ship loop" "ship endpoint alone owns CI monitoring"
+if grep -q "consider: gh pr edit" "$HOOKS_DIR/lifecycle-stop.sh"; then
+  echo "  FAIL  lifecycle-stop adds unrequested reviewer work"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: lifecycle-stop adds reviewer work"
+else
+  echo "  PASS  lifecycle-stop adds no unrequested reviewer work"
+  PASS=$((PASS + 1))
+fi
 
 # ── intent-detect.sh: dynamic-context-only policy (2026-07 audit) ──
 # Static rule restatements ([LIFECYCLE], [TDD], [MINIMAL], [CLI-FIRST])
@@ -62,7 +69,7 @@ rm -f "$_eval_stderr"
 # ── CLAUDE.md: imperative lifecycle language ────────────────────
 
 run_content_eval "$REPO_ROOT/CLAUDE.md" "MANDATORY.*hooks enforce" "CLAUDE.md lifecycle section is marked MANDATORY"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Hooks block skipped steps" "CLAUDE.md uses imperative enforcement language"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Use the smallest lifecycle" "CLAUDE.md uses endpoint-aware imperative language"
 run_content_eval "$REPO_ROOT/CLAUDE.md" 'meaningful behavior use `/tdd`' "CLAUDE.md scopes TDD to meaningful behavior"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "CLAUDE.md starts with the smallest design"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/commit-push" "CLAUDE.md mandates /commit-push in ship phase"

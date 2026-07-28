@@ -8,8 +8,8 @@ description: Delegate bounded work while keeping judgment central. Use for model
 Keep architecture, prioritization, risk, synthesis, and final review with the strongest
 model. Delegate repeatable, bounded, or token-heavy work.
 
-Native Codex requires an explicit request for agents or `/swarm`; otherwise run the same
-lanes inline. Claude-hosted workflows may delegate automatically.
+Every runtime requires an explicit request for agents or `/swarm`; otherwise run the same
+lanes inline.
 
 ## Routing
 
@@ -45,7 +45,7 @@ delegation packet.
 2. Keep the immediate blocker local.
 3. Give each authorized lane one outcome, write scope, verification gate, evidence format,
    and stop conditions.
-4. Avoid overlapping writers; cap default waves at three agents.
+4. Avoid overlapping writers; cap authorized waves at three agents.
 5. Require changed files, commands, findings, residual risk, and blockers.
 6. Reopen high-risk evidence and integrate centrally.
 7. Re-check `/stay-within-limits` between long waves.

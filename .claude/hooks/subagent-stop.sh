@@ -1,6 +1,6 @@
 #!/bin/bash
-# SubagentStop hook — validates reviewer output and logs findings.
-# Matcher: self-reviewer|code-reviewer|adversarial-reviewer
+# SubagentStop hook — clears all active markers and validates reviewer output.
+# Matcher: all subagents; schema validation applies only to reviewer types.
 # Blocks (exit 2) if output doesn't match findings schema — forces retry.
 # Writes valid findings to session dir for downstream consumption.
 
@@ -9,13 +9,24 @@ set -euo pipefail
 # ── Parse stdin ──────────────────────────────────────────────────
 input=$(cat)
 agent_type=$(echo "$input" | jq -r '.agent_type // empty')
+agent_id=$(echo "$input" | jq -r '.agent_id // empty')
 session_id=$(echo "$input" | jq -r '.session_id // empty')
 last_message=$(echo "$input" | jq -r '.last_assistant_message // empty')
+session_dir="/tmp/hook-session-${session_id:-${CLAUDE_SESSION_ID:-$$}}"
+safe_agent_id=$(printf '%s' "$agent_id" | tr -cd '[:alnum:]_.-')
+
+clear_active_agent() {
+  [ -n "$safe_agent_id" ] || return 0
+  rm -f "$session_dir/active-subagents/$safe_agent_id" 2>/dev/null || true
+}
 
 # Only validate reviewer agents
 case "$agent_type" in
   self-reviewer|code-reviewer|adversarial-reviewer) ;;
-  *) exit 0 ;;
+  *)
+    clear_active_agent
+    exit 0
+    ;;
 esac
 
 # ── Extract JSON from last message ───────────────────────────────
@@ -69,7 +80,6 @@ if [ "$finding_count" -gt 0 ]; then
 fi
 
 # ── Log findings ─────────────────────────────────────────────────
-session_dir="/tmp/hook-session-${session_id:-${CLAUDE_SESSION_ID:-$$}}"
 mkdir -p "$session_dir" 2>/dev/null || true
 
 # Append to review findings (multiple reviewers may contribute)
@@ -86,5 +96,6 @@ summary="${agent_type}: ${status} — ${finding_count} findings (P0:${p0_count} 
 echo "$summary" >> "$session_dir/review-summary.log"
 
 # ── Emit summary as system message ───────────────────────────────
+clear_active_agent
 echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"${summary}\"}"
 exit 0

@@ -9,7 +9,7 @@ fi
 
 # Belt-and-braces: load-bearing phrases present in both files.
 
-for pat in "NEVER Haiku" "intelligence > taste > cost" "implementation pair" "Fable-5" "GPT-5.6 Sol (codex) 8/9/6" "author model never solely reviews its own work"; do
+for pat in "NEVER Haiku" "intelligence > taste > cost" "single owner" "Fable-5" "GPT-5.6 Sol (codex) 8/9/6" "author model never solely reviews its own work"; do
   if grep -qF "$pat" "$REPO_ROOT/CLAUDE.md" && grep -qF "$pat" "$REPO_ROOT/AGENTS.md"; then
     echo "  PASS  rule in both CLAUDE.md and AGENTS.md: $pat"
     PASS=$((PASS + 1))

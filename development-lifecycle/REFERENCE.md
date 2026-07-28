@@ -1,8 +1,8 @@
 # Development Lifecycle Reference
 
-> **Native Codex override:** every spawn or dispatch below runs as an inline axis unless the
-> user explicitly requests agents or invokes `/swarm`. `/work`, `/go`, `/review`, and
-> `/plow-ahead` are not delegation consent. Claude-hosted behavior is unchanged.
+> **Single-owner rule:** every axis below runs inline unless the user explicitly requests
+> agents or invokes `/swarm`. `/work`, `/go`, `/review`, `/grilling`, and `/plow-ahead`
+> are not delegation consent in either runtime.
 
 ## Phase Flowchart
 
@@ -21,17 +21,19 @@ flowchart TD
     Refactor --> P1
 
     P1 --> P2[2. Plan]
-    P1_RCA --> P3
+    P1_RCA --> P2
 
-    P2 --> Trivial{Trivial?<br/>< 3 tasks,<br/>no arch decisions}
-    Trivial -->|No| Grill[2b. Grill<br/>/grilling]
-    Trivial -->|Yes| P3
+    P2 --> Decision{Unresolved material<br/>product/arch/UX decision?}
+    Decision -->|Yes| Grill[2b. Grill<br/>/grilling]
+    Decision -->|No| P3
     Grill --> P3
 
     TestOnly --> P3
     P3[3. Implement -- TDD<br/>RED -> GREEN -> REFACTOR]
 
-    P3 --> P4[4. Verify<br/>tests + types + visual]
+    P3 --> Endpoint{Requested endpoint?}
+    Endpoint -->|local build/fix| LocalDone([Verify locally + stop])
+    Endpoint -->|PR/ship| P4[4. Verify<br/>tests + types + visual]
     P4 --> SmallDiff{Trivial?<br/>< 10 lines}
     SmallDiff -->|No| P4b[4b. Refine<br/>self-reviewer + adversarial]
     SmallDiff -->|Yes| P5
@@ -41,13 +43,14 @@ flowchart TD
     Refactor --> P1
 
     P5[5. Review<br/>security gate + code-reviewer]
-    P5 --> P5b[5b. Iterate<br/>2 rounds max]
+    P5 --> Delivery{Requested endpoint?}
+    Delivery -->|PR| Snapshot[Take one CI snapshot]
+    Snapshot --> Done
+    Delivery -->|ship| P5b[5b. Iterate<br/>2 rounds max]
     P5b --> Learn{Non-trivial<br/>learning?}
     Learn -->|Yes| P6[6. Compound<br/>.claude/rules/]
     Learn -->|No| Done([Hand off to human])
     P6 --> Done
-
-    Sandbox --> Parallel[N parallel agents<br/>each runs 1->...->5b]
 
     style P3 fill:#16a34a,stroke:#14532d,stroke-width:3px,color:#fff
     style Grill fill:#7c3aed,stroke:#4c1d95,stroke-width:3px,color:#fff
@@ -59,20 +62,20 @@ flowchart TD
 ### New Feature
 1. Read code, docs, recent git history
 2. Clarifying Qs -- one at time
-3. Propose 2-3 approaches w/ trade-offs
-4. UI: HTML mockup -> `agent-browser screenshot --annotate` -> iterate
+3. State one concise approach; offer 2-3 trade-offs only for an unresolved material decision
+4. UI alternatives only when requested or visual direction is unresolved
 5. Challenge approach (edge cases, failure modes)
-6. User approval before proceed
+6. Continue immediately when the request is well scoped; ask only when an unresolved material decision remains
 
-### Parallel Research Agents
+### Research
 
-Background agents:
+Research inline:
 - Alt libraries/patterns
 - Prior art · conventions scan
 - Edge cases · failure modes
 - Open issues · dep gotchas
 
-Concurrent w/ user discussion. Feeds approach selection.
+Background research requires explicit delegation.
 
 ### Monitor Tool
 
@@ -84,7 +87,8 @@ Stream long-running process output realtime. React immediate, never block.
 - **Containers**: `Monitor: docker logs -f <container>`
 - **Build**: `Monitor: bun run build`
 
-Start Monitor, do other work, react when actionable.
+Use Monitor only while actively supervising requested long-running work. Stop it before
+final status unless the user explicitly requested persistence.
 
 ### Refactor-First Gate
 
@@ -93,7 +97,8 @@ Mixed-pattern area? Check:
 - [ ] Incomplete migration?
 - [ ] Conflicting AI instructions?
 
-Any true -> refactor first, separate PR. Mixed codebases = lower AI output quality.
+Any true -> reuse the pattern required by this task. Refactor only when the requested
+behavior cannot be completed safely without it; otherwise report convergence separately.
 
 ### Bug Fix (4-Phase RCA)
 
@@ -169,16 +174,17 @@ Skip only with reason: docs-only, test-only, styling-only, trivial pure logic.
 Competitive prototyping over upfront spec:
 
 1. 2-3 constraint sets
-2. One agent per set parallel (`claude-sonnet-4-6`)
-3. Each = working prototype
-4. Review w/ user: `agent-browser screenshot` each
+2. Build the smallest useful alternatives inline
+3. Capture each with an isolated `agent-browser` or Playwright session
+4. Review the alternatives with the user
 5. Pick winner, plan from prototype
 
 **When**: UI where right approach unclear til running. Skip pure logic/API/data.
+Parallel prototype lanes require explicit delegation or `/swarm`.
 
 ### Stacked PRs
 
-5+ tasks:
+For a PR/ship endpoint where the user approves a split:
 
 1. Group by boundary (data -> logic -> UI -> tests)
 2. Each group = one PR
@@ -189,9 +195,10 @@ Small PRs = 2-3x faster review, higher feedback quality.
 
 ## Phase 2b: Grill
 
-**Mandatory gate plan->impl.**
+**Explicit or decision-driven gate.**
 
-Post-plan, auto-`/grilling`:
+Run `/grilling` only when the user asks for planning/grilling or an unresolved material
+product, architecture, or UX decision remains:
 
 1. Plan summary
 2. Challenge vs existing domain (CONTEXT.md, ADRs)
@@ -200,20 +207,14 @@ Post-plan, auto-`/grilling`:
 5. Resolve decision branches
 6. Update CONTEXT.md + ADRs inline
 7. Update plan w/ changed decisions
-8. Confirm: "Plan solid, proceed"
+8. Confirm the decision, then proceed
 
 ### Why
 
 Code = byproduct of understanding. Can't defend decisions under pressure -> cognitive debt. Grilling builds human mental model *before* LLM writes. Inline CONTEXT.md/ADR = institutional memory.
 
-### Skip Conditions
-
-Mandatory unless ALL true:
-- [ ] Bug fix, single root cause
-- [ ] <3 tasks
-- [ ] No arch decisions
-
-Skipping: "Grill skipped -- trivial bug fix, no arch decisions."
+Ordinary build/fix/implement work gets a concise plan and continues immediately. Do not
+pause merely because implementation has multiple tasks.
 
 ## Phase 3: Implement
 
@@ -266,18 +267,18 @@ or likely user failure. Do not harvest hypothetical edge cases.
 
 ### Process
 
-1. Dispatch `self-reviewer` on session diff
-2. Diff >50 lines OR auth/security -> also `adversarial-reviewer` parallel
-3. Credible high-impact failure surface -> run `/resilience-review`
-4. SubagentStop validates JSON, writes to session dir
+1. Run the self-review and adversarial axes inline.
+2. For non-trivial PR/ship work, add one bounded, foreground, awaited Sol high pass.
+3. Credible high-impact failure surface -> run `/resilience-review`.
+4. Do not dispatch background or paired reviewers without explicit delegation.
 5. Process by priority:
 
 | Priority | Action |
 |----------|--------|
 | P0 (blocks merge) | Fix immediately, re-run tests |
 | P1 (should fix) | Fix, re-run tests |
-| P2 `safe_auto` | Apply automatically |
-| P2 `gated_auto` | Show to user, apply on confirmation |
+| P2 `safe_auto` | Report; apply only if required by requested behavior |
+| P2 `gated_auto` | Report for a later decision |
 | P2 `manual` | Report, let user decide |
 | P3 / `advisory` | Skip -- log for Phase 6 |
 
@@ -290,23 +291,24 @@ Reviewers output JSON per `agents/findings-schema.md`:
 - `severity`: P0-P3 | `autofix_class`: `safe_auto | gated_auto | manual | advisory`
 - `pre_existing`: true = dirty baseline (never blocks merge) | `confidence`: 0.0-1.0
 
-### SubagentStart Context
+### Explicitly delegated reviewer context
 
-Auto-inject: session-touched files · dirty baseline · branch/PR context · `agents/findings-schema.md` pointer.
+When the user explicitly requests agents, SubagentStart auto-injects session-touched files,
+dirty baseline, branch/PR context, and an `agents/findings-schema.md` pointer.
 
-### SubagentStop Validation
+SubagentStop validates delegated reviewer output:
 
 Matcher `self-reviewer|code-reviewer|adversarial-reviewer`:
 - Validate JSON vs schema · block/retry if malformed
 - Write `/tmp/hook-session-$SESSION_ID/review-findings.json` · log `review-summary.log`
 
-### Agents
+### Review axes
 
-| Agent | Focus | When |
+| Axis | Focus | When |
 |-------|-------|------|
-| `self-reviewer` | Testing gaps · simplification · CI readiness | Always in 4b |
-| `adversarial-reviewer` | Failure scenarios · boundary/race conditions | Diff >50 lines or auth/security |
-| `code-reviewer` | Spec compliance · code quality (fresh-eyes) | Phase 5 |
+| self-review | Testing gaps · simplification · CI readiness | Non-trivial PR/ship |
+| adversarial | Failure scenarios · boundary/race conditions | Non-trivial PR/ship |
+| fresh-eyes | Spec compliance · code quality | Phase 5 |
 
 ## Phase 4: Review
 
@@ -325,7 +327,7 @@ SAST/SCA on changed files:
 
 **Block PR** if new critical/high.
 
-Dispatch `code-reviewer` fresh-eyes:
+Run the fresh-eyes axis inline:
 
 ### Stage 1: Spec Compliance
 - [ ] Requirements addressed | No scope creep | Breaking changes documented | Edge cases handled
@@ -342,37 +344,37 @@ Dispatch `code-reviewer` fresh-eyes:
 ### Status Codes
 - **APPROVED** -- all pass | **CONCERNS** -- minor, address, proceed | **NEEDS_CHANGES** -- fix, re-review
 
-### Cross-Model (Optional)
-```
-/codex:adversarial-review
-```
-Require: `bun install -g @openai/codex` + OpenAI key.
-Install: `/plugin marketplace add openai/codex-plugin-cc` -> `/plugin install codex@openai-codex` -> `/codex:setup`
+### Cross-model
+
+Non-trivial PR/ship work gets one bounded, foreground, awaited Sol high pass. If unavailable,
+record the limitation rather than spawning substitutes.
 
 ### Ship
 ```bash
 gh pr create --title "type(scope): description" --body "..."
-gh pr comment <URL> --body "@claude review"
 ```
+
+Posting comments or requesting reviewers requires explicit user intent.
 
 ## Phase 5b: Iterate
 
-### Monitor CI, Don't Block
+### Requested endpoint controls CI
 
-Monitor CI background. Continue work, react on fail/pass.
+A normal PR request takes one `gh pr checks <number>` snapshot and stops. `/go`, ship,
+or explicit babysitting may actively watch CI:
 
 ```
 Monitor: gh pr checks <pr-number> --watch
 ```
 
 **Round 1:**
-1. Push + monitor. Continue other work.
-2. CI green -> dispatch `code-reviewer`.
+1. Push + monitor in the foreground.
+2. CI green -> run the fresh-eyes axis inline.
 3. `/resolve-pr-feedback` -- triage · fix · reply · push.
 4. Monitor again.
 
 **Round 2 (verification):**
-1. `code-reviewer` verifies Round 1 fixes.
+1. Fresh-eyes axis verifies Round 1 fixes.
 2. `/resolve-pr-feedback` remaining findings.
 3. New issues -> fix · push · monitor. No 3rd round.
 
@@ -384,7 +386,7 @@ Monitor: gh pr checks <pr-number> --watch
 **Human requests changes later** (new session):
 1. `/resolve-pr-feedback` -- fetch · triage · fix · reply · push
 2. Monitor CI
-3. One `code-reviewer` + `/resolve-pr-feedback`
+3. One fresh-eyes pass + `/resolve-pr-feedback`
 4. Re-request review, stop
 
 **Exit:**
@@ -402,47 +404,32 @@ Deploy fail -> diagnosing-bugs, open follow-up PR.
 
 ## Lifecycle Stop Gates
 
-`lifecycle-stop.sh` cascade. Each gate blocks til satisfied.
+`lifecycle-stop.sh` enforces only the requested external endpoint. Local work never
+commits, pushes, or opens a PR.
 
 ```mermaid
 flowchart TD
-    Stop([Stop hook fires]) --> Tests{Tests pass?}
-    Tests -->|No| RunTests["vitest run --related"]
-    RunTests --> Tests
-    Tests -->|Yes| Types{Types pass?}
-
-    Types -->|No| RunTypes["bun run type:check"]
-    RunTypes --> Types
-    Types -->|Yes| Committed{Changes<br/>committed?}
-
-    Committed -->|No| Commit["Block: Run /commit-push-pr --no-pr"]
-    Committed -->|Yes| Pushed{Commits<br/>pushed?}
-
-    Pushed -->|No| Push["Block: git push -u origin branch"]
-    Pushed -->|Yes| PR{PR exists?}
-
-    PR -->|No| CreatePR["Block: gh pr create --fill"]
-    PR -->|Yes| CI{CI status?}
-
-    CI -->|Failing| FixCI["Block: Read failures, fix, push"]
-    CI -->|Pending| Monitor["Block: Monitor gh pr checks --watch"]
-    CI -->|Passing| Reviewer{Has reviewer?}
-
-    Reviewer -->|No| RequestReview["Block: gh pr edit --add-reviewer"]
-    Reviewer -->|Yes| Done([All gates pass ✓])
-
-    style Commit fill:#f96,stroke:#333
-    style Push fill:#f96,stroke:#333
-    style CreatePR fill:#f96,stroke:#333
-    style FixCI fill:#f96,stroke:#333
-    style Monitor fill:#ff9,stroke:#333
-    style RequestReview fill:#f96,stroke:#333
-    style Done fill:#9c6,stroke:#333
+    Stop([Stop hook fires]) --> Endpoint{Requested endpoint?}
+    Endpoint -->|local/none| Done([Allow local completion])
+    Endpoint -->|commit| Commit{Requested changes committed?}
+    Endpoint -->|push| Push{Committed and pushed?}
+    Endpoint -->|PR| PR{Verified, committed,<br/>pushed, PR exists?}
+    Endpoint -->|ship| Ship{PR exists and<br/>ship loop complete?}
+    Commit -->|No| BlockCommit[Block with exact next action]
+    Push -->|No| BlockPush[Block with exact next action]
+    PR -->|No| BlockPR[Block with exact next action]
+    PR -->|Yes| Snapshot[Take one CI snapshot]
+    Ship -->|No| ContinueShip[Continue foreground ship loop]
+    Commit -->|Yes| Done
+    Push -->|Yes| Done
+    Snapshot --> Done
+    Ship -->|Yes| Done
 ```
 
 ## Hard Rules
 
-- No manual user test. Use agent-browser · playwright · runner.
+- Do not take over a human-owned browser. Use isolated agent-browser, Playwright, or a
+  runner; if isolation is unavailable, report the blocked verification.
 - No skip Phase 1.
 - Bugs and meaningful behavior start with a failing public-contract test.
 
@@ -493,29 +480,32 @@ Project-specific quality signal. Generic linting catches generic; regression eva
 
 Bug triage: GitHub issue comments as cross-model channel.
 
-## Subagents
+## Review axes
 
-| Agent | Role | When |
+| Axis | Role | When |
 |---|---|---|
 | `self-reviewer` | Testing gaps · simplification · CI readiness | Phase 4b |
 | `adversarial-reviewer` | Failure scenarios · boundary/race conditions | Phase 4b (conditional) |
 | `code-reviewer` | Fresh-eyes spec compliance + quality | Phase 5 |
 | `verifier` | Tests + visual verification via browser | Phase 4 |
 
-## Parallelization Guide
+Run these inline by default. One bounded foreground Sol review is allowed for non-trivial
+PR/ship work. Agent dispatch requires explicit delegation.
+
+## Explicit parallelization guide
 
 | Task | Parallelize? | How | Sweet spot |
 |---|---|---|---|
-| Codebase-wide migration | Yes | `/batch` | 5-30 agents per file/module |
-| Multiple UI designs | Yes | Spawn 3 agents, different constraints | 3 max |
+| Codebase-wide migration | Only when requested | `/swarm` | bounded non-overlapping lanes |
+| Multiple UI designs | Only when requested | `/swarm`, different constraints | 3 max |
 | Bug fix | No | Sequential reasoning needed | 1 agent |
-| Code review | 2 agents | spec+quality + Codex | 2-3 reviewers |
+| Code review | Foreground | inline axes + one awaited Codex pass | 1 owner |
 
 
 | Complexity | Model |
 |---|---|
-| Simple (rename, move) | `claude-sonnet-5 (NEVER Haiku -- see CLAUDE.md routing)` |
-| Standard (feature) | `claude-sonnet-4-6` |
-| Complex (architecture) | `claude-opus-4-7` |
+| Simple (rename, move) | Selected primary owner |
+| Standard (feature) | Selected primary owner |
+| Complex (architecture) | Selected primary owner at the configured effort |
 
-Don't parallelize: bug fixes · hypothesis testing. Don't >5 agents on overlapping files.
+Don't parallelize without explicit consent. Never leave agents running after final status.

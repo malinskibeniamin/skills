@@ -1,8 +1,8 @@
 # Go -- Reference
 
-> **Native Codex override:** run every reviewer dispatch below inline unless the user explicitly
-> requests agents or invokes `/swarm`; do not recursively invoke `/codex`. Claude-hosted behavior
-> is unchanged. After the first review/fix pass and one CI snapshot, apply the stop rule in SKILL.md.
+> **Single-owner rule:** run every review axis inline unless the user explicitly requests
+> agents or invokes `/swarm`. Non-trivial PR/ship work may add one bounded, foreground,
+> awaited Sol pass. `/go` owns the active CI loop; an ordinary PR request takes one snapshot.
 
 ## Flowchart
 
@@ -22,13 +22,13 @@ flowchart TD
     SmallDiff -->|Yes| P5
     SmallDiff -->|No| P4b
 
-    P4b[4b. Refine<br/>self-reviewer + adversarial] --> Findings{P0/P1?}
+    P4b[4b. Refine<br/>inline review axes + one Sol pass] --> Findings{P0/P1?}
     Findings -->|Yes| FixFindings[Fix + re-verify]
     FixFindings -->|Round < 2| P4b
     FixFindings -->|Round = 2| P5
     Findings -->|No| P5
 
-    P5[5. /commit-push-pr<br/>+ code-reviewer] --> P5b
+    P5[5. /commit-push-pr<br/>+ inline fresh-eyes pass] --> P5b
 
     P5b[5b. Iterate<br/>Monitor CI] --> CI{CI status?}
     CI -->|Failing| FixCI[Diagnose + fix + push]
@@ -107,13 +107,12 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 
 ## Phase 4b: Refine -- Findings Triage
 
-### Dispatch Rules
+### Review axes
 
-| Condition | Agents |
+| Condition | Action |
 |---|---|
-| Any non-trivial diff | `self-reviewer` |
-| Diff >50 lines | `self-reviewer` + `adversarial-reviewer` |
-| Touches auth/security paths | `self-reviewer` + `adversarial-reviewer` |
+| Any non-trivial diff | self-review + adversarial axes inline |
+| Non-trivial PR/ship | one bounded, foreground, awaited Sol high pass |
 | Credible high-impact failure surface | `/resilience-review` evidence required |
 | Trivial (<10 lines, no logic) | Skip 4b entirely |
 
@@ -123,8 +122,8 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 |---|---|
 | P0 (blocks merge) | Fix now, re-run tests |
 | P1 (should fix) | Fix, re-run tests |
-| P2 `safe_auto` | Apply auto |
-| P2 `gated_auto` | Show user, apply on confirm |
+| P2 `safe_auto` | Report; apply only if required by requested behavior |
+| P2 `gated_auto` | Report for a later decision |
 | P2 `manual` | Report, user decide |
 | P3 / `advisory` | Skip -- log for Phase 6 |
 
@@ -151,9 +150,9 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
    - Branch strategy
    - Push with tracking
    - PR creation with structured body
-   - CI monitor
+   - PR creation and initial CI snapshot
 
-5. **`code-reviewer` agent** -- dispatch on PR for fresh-eyes review
+5. **Fresh-eyes axis** -- run inline against the PR diff
 
 ### Security Gate
 
@@ -168,13 +167,13 @@ Before PR creation, verify:
 ### Round 1 -- Initial
 
 1. Push + `Monitor: gh pr checks <pr-number> --watch`
-2. CI green -> dispatch `code-reviewer`
+2. CI green -> run the fresh-eyes axis inline
 3. `/resolve-pr-feedback` to triage, fix, reply, push
 4. Monitor CI again
 
 ### Round 2 -- Verification
 
-1. `code-reviewer` (verify Round 1 fixes)
+1. Fresh-eyes axis verifies Round 1 fixes
 2. `/resolve-pr-feedback` for remain findings
 3. New issues -> fix, push, monitor CI
 4. **NO third round**
@@ -190,7 +189,7 @@ Before PR creation, verify:
 If human request change later:
 1. `/resolve-pr-feedback` -- fetch, triage, fix, reply, push
 2. Monitor CI after push
-3. One more `code-reviewer` round + `/resolve-pr-feedback`
+3. One more inline fresh-eyes round + `/resolve-pr-feedback`
 4. Re-request human review, stop
 
 ## Phase 6: Compound

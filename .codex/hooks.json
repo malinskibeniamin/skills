@@ -227,7 +227,6 @@
     ],
     "SubagentStop": [
       {
-        "matcher": "self-reviewer|code-reviewer|adversarial-reviewer",
         "hooks": [
           {
             "type": "command",
@@ -281,15 +280,15 @@
           },
           {
             "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/ci-warning-audit.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          },
-          {
-            "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/suppression-gate-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/violation-summary-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/completion-contract-stop.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

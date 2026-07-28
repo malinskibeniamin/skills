@@ -35,8 +35,8 @@ run_content_eval "$GO_SKILL" "pr-feedback-completeness-stop" \
   "go/SKILL.md references the hook"
 run_content_eval "$GO_SKILL" "NO cap" \
   "go/SKILL.md states human review has no cap"
-run_content_eval "$GO_SKILL" "up to 3" \
-  "go/SKILL.md allows up to 3 AI self-review rounds"
+run_content_eval "$GO_SKILL" "up to 2" \
+  "go/SKILL.md allows up to 2 AI self-review rounds"
 run_content_eval "$GO_SKILL" "[Ee]arly-exit" \
   "go/SKILL.md has early-exit condition for self-review"
 run_content_eval "$LC_SKILL" "hook-enforced" \

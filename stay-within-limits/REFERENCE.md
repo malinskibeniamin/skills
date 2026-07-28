@@ -49,15 +49,13 @@ The JSON result always includes `codex_model: "gpt-5.6-sol"` and `codex_effort: 
 implementation and Sol-only fallback. A fresh valid snapshot also includes:
 
 - `claude_model` and `claude_effort`: the quota-selected taste profile.
-- `implementation_claude_model: "claude-opus-5"` and
-  `implementation_claude_effort: "xhigh"`.
-- `feedback_claude_model: "claude-opus-5"` and `feedback_claude_effort: "xhigh"` for
-  required feedback on Sol implementation.
-- `adversarial_codex_model: "gpt-5.6-sol"` and
-  `adversarial_codex_effort: "high"` for fresh review of Opus work.
+- `primary_model: "claude-opus-5"` and `primary_effort: "xhigh"`: the single
+  implementation owner.
+- `review_model: "gpt-5.6-sol"` and `review_effort: "high"`: the one bounded foreground
+  review available for non-trivial PR/ship work.
 
 Above 95%, or for missing, malformed, or stale data, Claude and the separate Sol high
-adversarial pass are disabled; Sol xhigh is the only profile. The default freshness window
+review pass are disabled; `primary_model` becomes Sol xhigh only. The default freshness window
 is 120 seconds; override with `CLAUDE_RATE_LIMIT_MAX_AGE`.
 
 Do not substitute `ccusage`: it reconstructs local token/cost history, not the live

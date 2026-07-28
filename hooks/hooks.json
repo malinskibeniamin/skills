@@ -263,7 +263,6 @@
     ],
     "SubagentStop": [
       {
-        "matcher": "self-reviewer|code-reviewer|adversarial-reviewer",
         "hooks": [
           {
             "type": "command",
@@ -318,18 +317,15 @@
           },
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/ci-warning-audit.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0",
-            "async": true,
-            "asyncRewake": true,
-            "statusMessage": "Auditing green CI logs for warnings"
-          },
-          {
-            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/suppression-gate-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/violation-summary-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/completion-contract-stop.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

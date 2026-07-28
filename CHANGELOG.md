@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+2026-07-28 -- Make execution endpoint-aware and single-owner. Ordinary build/fix/implement requests now plan briefly, continue immediately, verify locally, and stop without commit or push; PR intent authorizes verify/commit/push/PR plus one CI snapshot, while `/go` retains the full CI loop. Remove automatic paired implementation, background planning/research, delayed `asyncRewake` CI auditing, and default background typecheck capture. Add deterministic visible completion statuses, active-subagent cleanup, strict scope boundaries, and human-owned browser protection.
+
 2026-07-27 -- Make less code, more meaning the default: design for demonstrated scale, require credible-risk evidence, scope TDD to meaningful contracts instead of files or coverage quotas, remove mechanical test gates and mandatory cleanup passes, and keep `/deslop` as an explicit fallback for already-bloated work.
 
 2026-07-27 -- Add routing character: Sol for exhaustive instruction-following execution, Fable for the smartest visible/frontend/exploratory work, and Opus for lower-cost Fable-like taste without orchestration overhead.

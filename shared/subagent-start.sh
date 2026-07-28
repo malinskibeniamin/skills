@@ -9,11 +9,21 @@ trap 'exit 0' ERR
 # ── Parse stdin ──────────────────────────────────────────────────
 input=$(cat)
 agent_type=$(echo "$input" | jq -r '.agent_type // empty')
+agent_id=$(echo "$input" | jq -r '.agent_id // empty')
 session_id=$(echo "$input" | jq -r '.session_id // empty')
 
 # ── Session state ────────────────────────────────────────────────
 session_dir="/tmp/hook-session-${session_id:-${CLAUDE_SESSION_ID:-$$}}"
 context_parts=()
+
+# ── Active-agent registry ────────────────────────────────────────
+if [ -n "$agent_id" ]; then
+  safe_agent_id=$(printf '%s' "$agent_id" | tr -cd '[:alnum:]_.-')
+  if [ -n "$safe_agent_id" ]; then
+    mkdir -p "$session_dir/active-subagents" 2>/dev/null || true
+    printf '%s\n' "${agent_type:-unknown}" > "$session_dir/active-subagents/$safe_agent_id" 2>/dev/null || true
+  fi
+fi
 
 # ── Touched files ────────────────────────────────────────────────
 touched_file="$session_dir/session-touched-files"
@@ -43,9 +53,9 @@ fi
 context_parts+=("$branch_context")
 
 # ── Reviewer-specific context ────────────────────────────────────
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 case "$agent_type" in
   self-reviewer|code-reviewer|adversarial-reviewer)
-    repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per the findings-schema.md in the agents/ directory. Read \`${repo_root}/agents/findings-schema.md\` for the exact format.")
     ;;
 esac

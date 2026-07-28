@@ -617,9 +617,16 @@ hook_get_added_lines() {
 hook_session_changed_files() {
   local ext_filter="${1:-}"
 
-  # Get current git diff
+  # Get current tracked changes plus untracked files. Session-touch
+  # intersection and the start baseline below prevent unrelated untracked
+  # files from becoming this turn's responsibility.
   local current_diff
-  current_diff=$(git diff --name-only HEAD 2>/dev/null || true)
+  current_diff=$(
+    {
+      git diff --name-only HEAD 2>/dev/null
+      git ls-files --others --exclude-standard 2>/dev/null
+    } | sort -u
+  )
 
   if [ -z "$current_diff" ]; then
     return

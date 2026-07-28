@@ -258,6 +258,32 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx some-other-tool"}}' \
   0 "allow: bunx for non-scripted tools"
 
+# ── human browser sovereignty ──────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"killall \"Google Chrome\""}}' \
+  2 "block: closing human Chrome" "human-owned browser"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"pkill -f Safari"}}' \
+  2 "block: killing human Safari" "human-owned browser"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"osascript -e '\''quit app \"Firefox\"'\''"}}' \
+  2 "block: AppleScript browser quit" "human-owned browser"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"osascript -e '\''tell application \"Google Chrome\" to quit'\''"}}' \
+  2 "block: AppleScript tell-browser quit" "human-owned browser"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"pkill -f node"}}' \
+  0 "allow: stopping non-browser process"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"pkill -f search-indexer"}}' \
+  0 "allow: non-browser name containing arc"
+
 # ── rm -rf guards ─────────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
@@ -509,8 +535,8 @@ _test_session="$_scope_tmpdir/.session"
 mkdir -p "$_test_session"
 ( cd "$_scope_tmpdir" && git init -q . && printf 'a\n' > fileA.ts && printf 'b\n' > fileB.ts \
   && git add . && git -c user.email=t@t -c user.name=t commit -qm init \
-  && printf 'a2\n' > fileA.ts && printf 'b2\n' > fileB.ts )
-echo "fileA.ts" > "$_test_session/session-touched-files"
+  && printf 'a2\n' > fileA.ts && printf 'b2\n' > fileB.ts && printf 'c\n' > fileC.ts )
+printf 'fileA.ts\nfileC.ts\n' > "$_test_session/session-touched-files"
 echo "fileB.ts" > "$_test_session/dirty-files-baseline"
 
 # Source hook-lib and override session dir
@@ -540,18 +566,27 @@ echo "fileB.ts" > "$_test_session/dirty-files-baseline"
     echo "PASS" > "$_test_session/test2"
   fi
 
+  # fileC.ts should be included (this session created it and it is untracked).
+  if echo "$result" | grep -q "fileC.ts"; then
+    echo "  PASS  session-scoping includes session-created untracked file"
+    echo "PASS" > "$_test_session/test3"
+  else
+    echo "  FAIL  session-scoping should include untracked fileC.ts but got: $result"
+    echo "FAIL" > "$_test_session/test3"
+  fi
+
   # hook_has_session_tracking should be active
   if hook_has_session_tracking; then
     echo "  PASS  hook_has_session_tracking returns true with tracking data"
-    echo "PASS" > "$_test_session/test3"
+    echo "PASS" > "$_test_session/test4"
   else
     echo "  FAIL  hook_has_session_tracking should be true"
-    echo "FAIL" > "$_test_session/test3"
+    echo "FAIL" > "$_test_session/test4"
   fi
 ) 2>/dev/null
 
 # Collect results
-for i in 1 2 3; do
+for i in 1 2 3 4; do
   _r=$(cat "$_test_session/test$i" 2>/dev/null || echo "FAIL")
   if [ "$_r" = "PASS" ]; then
     PASS=$((PASS + 1))
@@ -560,7 +595,8 @@ for i in 1 2 3; do
     case $i in
       1) ERRORS="$ERRORS\n  FAIL: session-scoping includes session-touched file" ;;
       2) ERRORS="$ERRORS\n  FAIL: session-scoping excludes dirty-baseline file" ;;
-      3) ERRORS="$ERRORS\n  FAIL: hook_has_session_tracking returns true" ;;
+      3) ERRORS="$ERRORS\n  FAIL: session-scoping includes session-created untracked file" ;;
+      4) ERRORS="$ERRORS\n  FAIL: hook_has_session_tracking returns true" ;;
     esac
   fi
 done

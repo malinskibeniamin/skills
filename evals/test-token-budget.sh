@@ -57,7 +57,8 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
-# No Unicode punctuation in hot-path docs (em-dash, smart quotes, etc)
+# No Unicode punctuation in hot-path docs except the three user-visible
+# completion markers, whose em dash is part of the protocol.
 unicode_hits=$(python3 -c '
 import sys, pathlib
 chars = ["\u2014","\u2013","\u2192","\u2190","\u2022","\u00b7","\u2026","\u2018","\u2019","\u201c","\u201d","\u2260"]
@@ -65,6 +66,8 @@ total = 0
 for p in sys.argv[1:]:
     try:
         t = pathlib.Path(p).read_text()
+        for marker in ["\U0001f7e2 done \u2014", "\U0001f7e1 awaiting decision \u2014", "\U0001f534 blocked \u2014"]:
+            t = t.replace(marker, "")
         for c in chars:
             total += t.count(c)
     except Exception:
@@ -81,9 +84,8 @@ else
   ERRORS="$ERRORS\n  FAIL: Unicode punctuation reintroduced in docs"
 fi
 
-# Repo-wide: no em-dash or arrow in any .md / agent def (caveman-compress
-# sometimes reintroduces them; guard against regression). Box-drawing
-# glyphs in ASCII art still allowed.
+# Repo-wide: no em-dash or arrow outside completion markers in any .md /
+# agent def. Box-drawing glyphs in ASCII art still allowed.
 wide_hits=$(python3 -c '
 import sys, pathlib
 bad = ["\u2014","\u2013","\u2192","\u2190","\u2026","\u2018","\u2019","\u201c","\u201d"]
@@ -95,6 +97,8 @@ for p in list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")) + [root / "READ
         continue
     try:
         t = p.read_text()
+        for marker in ["\U0001f7e2 done \u2014", "\U0001f7e1 awaiting decision \u2014", "\U0001f534 blocked \u2014"]:
+            t = t.replace(marker, "")
         hits = sum(t.count(c) for c in bad)
         if hits:
             offenders.append(f"{p}:{hits}")

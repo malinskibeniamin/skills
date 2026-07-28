@@ -9,11 +9,21 @@ trap 'exit 0' ERR
 # ── Parse stdin ──────────────────────────────────────────────────
 input=$(cat)
 agent_type=$(echo "$input" | jq -r '.agent_type // empty')
+agent_id=$(echo "$input" | jq -r '.agent_id // empty')
 session_id=$(echo "$input" | jq -r '.session_id // empty')
 
 # ── Session state ────────────────────────────────────────────────
 session_dir="/tmp/hook-session-${session_id:-${CLAUDE_SESSION_ID:-$$}}"
 context_parts=()
+
+# ── Active-agent registry ────────────────────────────────────────
+if [ -n "$agent_id" ]; then
+  safe_agent_id=$(printf '%s' "$agent_id" | tr -cd '[:alnum:]_.-')
+  if [ -n "$safe_agent_id" ]; then
+    mkdir -p "$session_dir/active-subagents" 2>/dev/null || true
+    printf '%s\n' "${agent_type:-unknown}" > "$session_dir/active-subagents/$safe_agent_id" 2>/dev/null || true
+  fi
+fi
 
 # ── Touched files ────────────────────────────────────────────────
 touched_file="$session_dir/session-touched-files"

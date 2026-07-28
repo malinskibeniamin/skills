@@ -6,17 +6,14 @@ set -eo pipefail
 _sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
 
 
-# Stop hook: enforce delivery completion with auto-remediation.
-# Ensures session changes are committed, pushed, PR'd, CI-checked, and
-# review-requested. Instead of just blocking, prescribes exact actions.
+# Stop hook: enforce only the external delivery endpoint the user requested.
+# Local build/fix/implement work never commits, pushes, or opens a PR.
 #
 # Lifecycle gates (sequential):
-#   0. Uncommitted changes? → prescribe: run /commit-push
-#   1. Unpushed commits? → prescribe: git push
-#   2. No PR? → prescribe: gh pr create
-#   3. CI failing? → prescribe: fix and push
-#   4. CI pending? → prescribe: monitor with Monitor tool
-#   5. No reviewer? → prescribe: request review
+#   commit → commit, stop
+#   push   → commit + push, stop
+#   pr     → verify + commit + push + PR + one CI snapshot, stop
+#   ship   → full PR + CI remediation loop
 #   All pass → allow finish
 
 source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
@@ -28,70 +25,18 @@ if ! hook_has_session_tracking 2>/dev/null; then
   exit 0
 fi
 
-# Need gh CLI for PR/CI operations
-if ! command -v gh &>/dev/null; then
-  exit 0
-fi
-
-# Only enforce on feature branches
-branch=$(git branch --show-current 2>/dev/null || true)
-case "$branch" in
-  main|master|develop|"") exit 0 ;;
+endpoint=$(cat "$_hook_session_dir/task-endpoint" 2>/dev/null | tr -d '[:space:]')
+case "$endpoint" in
+  commit|push|pr|ship) ;;
+  *) exit 0 ;;
 esac
 
-# Only enforce if this session touched code files (even if already committed)
-_touched_file="$_hook_session_dir/session-touched-files"
-if [ ! -f "$_touched_file" ] || [ ! -s "$_touched_file" ]; then
-  exit 0
-fi
-_session_code=$(grep -E '\.(ts|tsx)$' "$_touched_file" 2>/dev/null || true)
-# Defense-in-depth: drop any path that points at a secondary worktree
-# (subagent scope), lives outside the current worktree (sibling
-# worktree / session-id collision), no longer exists, or is not part
-# of the current branch diff (stale tracker entry from a prior session,
-# rolled-back edit, or subagent that never landed). Prevents false
-# "untested source" blocks on sessions that did no real editing.
-if [ -n "$_session_code" ] && type _hook_in_secondary_worktree &>/dev/null; then
-  # Branch-local change set: files currently dirty OR committed since
-  # branch-off. If a tracked entry isn't in this set, it's stale.
-  _repo_root=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
-  _branch_changes=""
-  for _base in origin/main origin/master main master; do
-    if git rev-parse --verify "$_base" &>/dev/null; then
-      _branch_changes=$(
-        { git diff --name-only "$_base...HEAD" 2>/dev/null
-          git diff --name-only HEAD 2>/dev/null
-          git ls-files --others --exclude-standard 2>/dev/null; } | sort -u
-      )
-      break
-    fi
-  done
-  _filtered=""
-  while IFS= read -r _p; do
-    [ -z "$_p" ] && continue
-    [ -e "$_p" ] || continue
-    if _hook_in_secondary_worktree "$_p"; then
-      continue
-    fi
-    if type _hook_file_outside_current_worktree &>/dev/null \
-      && _hook_file_outside_current_worktree "$_p"; then
-      continue
-    fi
-    if [ -n "$_branch_changes" ] && [ -n "$_repo_root" ]; then
-      # Resolve symlinks before stripping (macOS /var → /private/var)
-      _p_real=$(cd "$(dirname "$_p")" 2>/dev/null && echo "$(pwd -P)/$(basename "$_p")" || echo "$_p")
-      _rel="${_p_real#"$_repo_root"/}"
-      if ! grep -Fxq -- "$_rel" <<< "$_branch_changes"; then
-        continue
-      fi
-    fi
-    _filtered="${_filtered}${_p}"$'\n'
-  done <<< "$_session_code"
-  _session_code="${_filtered%$'\n'}"
-fi
-if [ -z "$_session_code" ]; then
-  exit 0
-fi
+branch=$(git branch --show-current 2>/dev/null || true)
+case "$branch" in
+  main|master|develop|"")
+    hook_stop_block "Requested '$endpoint' endpoint cannot finish on the default or detached branch. Create or switch to the intended feature branch, then retry."
+    ;;
+esac
 
 # ── Step 0: Uncommitted changes → commit ───────────────────────
 # Session-scoped: only block on dirty files this session actually touched.
@@ -101,12 +46,16 @@ fi
 _session_dirty=$(hook_session_changed_files)
 if [ -n "$_session_dirty" ]; then
   _dirty_count=$(echo "$_session_dirty" | wc -l | tr -d ' ')
-  hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Run /commit-push-pr --no-pr to commit and push. Then retry."
+  hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Commit the requested scope, then retry."
+fi
+
+if [ "$endpoint" = "commit" ]; then
+  exit 0
 fi
 
 # Need a remote to push to
 if ! git remote get-url origin &>/dev/null 2>&1; then
-  exit 0
+  hook_stop_block "Requested '$endpoint' endpoint needs an origin remote. Configure or identify the intended remote, then retry."
 fi
 
 # ── Step 1: Unpushed commits → push ─────────────────────────────
@@ -129,6 +78,15 @@ if [ -n "$unpushed" ]; then
   hook_stop_block "${_count} unpushed on '$branch'. Run: git push -u origin $branch — then retry."
 fi
 
+if [ "$endpoint" = "push" ]; then
+  exit 0
+fi
+
+# Need gh CLI for PR/CI operations
+if ! command -v gh &>/dev/null; then
+  hook_stop_block "Requested '$endpoint' endpoint needs the authenticated gh CLI. Install or authenticate gh, then retry."
+fi
+
 # ── Step 2: No PR → create one ──────────────────────────────────
 
 pr_number=$(gh pr list --head "$branch" --json number --jq '.[0].number' 2>/dev/null || true)
@@ -139,33 +97,28 @@ fi
 
 # ── Step 3 & 4: CI status ───────────────────────────────────────
 
-pr_data=$(gh pr view "$pr_number" --json statusCheckRollup,reviewRequests 2>/dev/null || true)
+pr_data=$(gh pr view "$pr_number" --json statusCheckRollup 2>/dev/null || true)
 ci_states=$(echo "$pr_data" | jq -r '.statusCheckRollup[]?.state // empty' 2>/dev/null || true)
 
 if [ -n "$ci_states" ]; then
   if echo "$ci_states" | grep -qi "FAILURE\|ERROR"; then
-    hook_stop_block "CI FAILING on PR #$pr_number. Read failures with: gh pr checks $pr_number — fix the issues, commit, push. Then use Monitor tool on 'gh pr checks $pr_number --watch' to stream results. Do not stop until CI green."
+    if [ "$endpoint" = "ship" ]; then
+      hook_stop_block "CI FAILING on PR #$pr_number. Read failures with: gh pr checks $pr_number — fix, commit, push, and re-monitor until green."
+    fi
+    hook_warn "CI snapshot is failing on PR #$pr_number. Requested PR endpoint is complete; report failures without starting an unrequested fix loop."
   fi
 
   # CI pending is a wait condition, not a code-quality issue. Emit a
-  # warn (exit 0) instead of blocking: hostage-holding the session
-  # across long CI runs is noise, and the user can stream status with
-  # Monitor if they actively want to watch. Failures still block.
+  # warning instead of hostage-holding an ordinary PR request.
   if echo "$ci_states" | grep -qi "PENDING\|EXPECTED\|QUEUED\|IN_PROGRESS"; then
     if ! echo "$ci_states" | grep -qi "SUCCESS"; then
-      hook_warn "CI still running on PR #$pr_number. Stream with: gh pr checks $pr_number --watch (via Monitor tool) if you want live status."
+      if [ "$endpoint" = "ship" ]; then
+        hook_stop_block "CI still running on PR #$pr_number. Continue the explicit ship loop with: gh pr checks $pr_number --watch."
+      else
+        hook_warn "CI snapshot is pending on PR #$pr_number. Report it and stop; do not leave a monitor running."
+      fi
     fi
   fi
-fi
-
-# ── Step 5: Review requested → assign reviewer ──────────────────
-
-reviewer_count=$(echo "$pr_data" | jq -r '.reviewRequests | length' 2>/dev/null || echo "0")
-
-# Advisory only (audit: Stop hooks gate code properties, not the org chart --
-# a solo repo must never be hostage to an unassignable reviewer).
-if [ "$reviewer_count" = "0" ] || [ -z "$reviewer_count" ]; then
-  echo '{"suppressOutput":true,"systemMessage":"CI green, no reviewer on the PR yet -- consider: gh pr edit '"$pr_number"' --add-reviewer <user>."}'
 fi
 
 # ── Lifecycle complete ───────────────────────────────────────────

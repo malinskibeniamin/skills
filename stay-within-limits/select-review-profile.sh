@@ -11,12 +11,10 @@ fallback() {
   jq -nc '{
     claude_enabled: false,
     reason: "missing_or_stale_claude_usage",
-    implementation_claude_model: null,
-    implementation_claude_effort: null,
-    feedback_claude_model: null,
-    feedback_claude_effort: null,
-    adversarial_codex_model: null,
-    adversarial_codex_effort: null,
+    primary_model: "gpt-5.6-sol",
+    primary_effort: "xhigh",
+    review_model: null,
+    review_effort: null,
     codex_model: "gpt-5.6-sol",
     codex_effort: "xhigh"
   }'
@@ -54,12 +52,10 @@ if ! profile=$(jq -ce --argjson now "$now" --argjson max_age "$max_age" '
         else null
         end
       ),
-      implementation_claude_model: (if $usage <= 95 then "claude-opus-5" else null end),
-      implementation_claude_effort: (if $usage <= 95 then "xhigh" else null end),
-      feedback_claude_model: (if $usage <= 95 then "claude-opus-5" else null end),
-      feedback_claude_effort: (if $usage <= 95 then "xhigh" else null end),
-      adversarial_codex_model: (if $usage <= 95 then "gpt-5.6-sol" else null end),
-      adversarial_codex_effort: (if $usage <= 95 then "high" else null end),
+      primary_model: (if $usage <= 95 then "claude-opus-5" else "gpt-5.6-sol" end),
+      primary_effort: "xhigh",
+      review_model: (if $usage <= 95 then "gpt-5.6-sol" else null end),
+      review_effort: (if $usage <= 95 then "high" else null end),
       reason: (if $usage > 95 then "claude_usage_above_95" else null end),
       codex_model: "gpt-5.6-sol",
       codex_effort: "xhigh"

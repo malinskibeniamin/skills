@@ -380,7 +380,6 @@
     ],
     "SubagentStop": [
       {
-        "matcher": "self-reviewer|code-reviewer|adversarial-reviewer",
         "hooks": [
           {
             "type": "command",
@@ -482,17 +481,6 @@
             "command": "/bin/bash",
             "args": [
               "-c",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'ci-warning-audit.sh'; exit 0"
-            ],
-            "async": true,
-            "asyncRewake": true,
-            "statusMessage": "Auditing green CI logs for warnings"
-          },
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'suppression-gate-stop.sh'; exit 0"
             ]
           },
@@ -502,6 +490,14 @@
             "args": [
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'violation-summary-stop.sh'; exit 0"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'completion-contract-stop.sh'; exit 0"
             ]
           }
         ]

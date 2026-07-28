@@ -1,8 +1,8 @@
 # Commit-push-pr reference
 
-## Review skill list (Phase 0 pre-flight)
+## Review evidence (Phase 0 pre-flight)
 
-Before `/commit-push-pr`, one review skill must run in session:
+Before the PR endpoint, run the applicable review axes inline:
 
 - `/review` -- correctness, value, and semantic density
 - `/improve architecture` -- refactors, architecture plans, cleanup (oversized files, shallow modules)
@@ -11,7 +11,8 @@ Before `/commit-push-pr`, one review skill must run in session:
 
 Frontend or customer-facing surface diff -> `/visual-review` must run or an explicit skip reason must be recorded, even if another review skill already ran.
 
-None ran -> warn: "Lifecycle requires review before shipping. Recommend: `/review` for the diff, `/improve architecture` for structural concerns, `/visual-review` for frontend changes."
+A named review skill is not a separate approval gate. Use `/review` only when requested;
+frontend/customer-facing changes still need `/visual-review` evidence or an explicit skip.
 
 ## Conventional commit types (Phase 3)
 
