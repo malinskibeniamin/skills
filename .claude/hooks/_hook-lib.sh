@@ -617,9 +617,16 @@ hook_get_added_lines() {
 hook_session_changed_files() {
   local ext_filter="${1:-}"
 
-  # Get current git diff
+  # Get current tracked changes plus untracked files. Session-touch
+  # intersection and the start baseline below prevent unrelated untracked
+  # files from becoming this turn's responsibility.
   local current_diff
-  current_diff=$(git diff --name-only HEAD 2>/dev/null || true)
+  current_diff=$(
+    {
+      git diff --name-only HEAD 2>/dev/null
+      git ls-files --others --exclude-standard 2>/dev/null
+    } | sort -u
+  )
 
   if [ -z "$current_diff" ]; then
     return
@@ -1107,6 +1114,11 @@ hook_deny() {
 # downgrade to a visible systemMessage once the budget is spent, so the
 # final findings reach the user instead of burning the cap.
 
+_hook_stop_read_digits() {
+  [ -r "$1" ] || return 0
+  tr -dc '0-9' < "$1" 2>/dev/null || true
+}
+
 _hook_stop_block_budget_spent() {
   # Escape hatch for eval harnesses: fixtures share one session dir across
   # many synthetic Stop events, so consecutive-block accounting is
@@ -1114,7 +1126,7 @@ _hook_stop_block_budget_spent() {
   [ "${HOOK_STOP_BLOCK_CAP_GUARD:-1}" = "0" ] && return 1
   local cap="${CLAUDE_CODE_STOP_HOOK_BLOCK_CAP:-8}"
   local n
-  n=$(cat "$_hook_session_dir/stop-block-count" 2>/dev/null | tr -dc '0-9')
+  n=$(_hook_stop_read_digits "$_hook_session_dir/stop-block-count")
   [ "${n:-0}" -ge $((cap > 2 ? cap - 2 : 1)) ]
 }
 
@@ -1125,9 +1137,9 @@ _hook_stop_note_block() {
   # turns take far longer); collisions undercount, which is safe.
   local now last n
   now=$(date +%s)
-  last=$(cat "$_hook_session_dir/stop-block-marker" 2>/dev/null | tr -dc '0-9')
+  last=$(_hook_stop_read_digits "$_hook_session_dir/stop-block-marker")
   [ $((now - ${last:-0})) -le 5 ] && return 0
-  n=$(cat "$_hook_session_dir/stop-block-count" 2>/dev/null | tr -dc '0-9')
+  n=$(_hook_stop_read_digits "$_hook_session_dir/stop-block-count")
   echo $((${n:-0} + 1)) > "$_hook_session_dir/stop-block-count" 2>/dev/null || true
   echo "$now" > "$_hook_session_dir/stop-block-marker" 2>/dev/null || true
 }

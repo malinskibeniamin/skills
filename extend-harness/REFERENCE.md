@@ -18,11 +18,12 @@ feedback that keeps the turn alive. Prose emitters truncate at 8,000 characters.
 
 ```json
 {"script": "snyk-project-create-guard.sh", "if": "Bash(snyk *)"}
-{"script": "ci-warning-audit.sh", "async": true, "asyncRewake": true, "statusMessage": "Auditing CI"}
+{"script": "typecheck-stop.sh", "statusMessage": "Type-checking session changes"}
 ```
 
 - `if`: Claude permission-rule filter; fail open. Codex omits it, so keep the script guard.
-- `async` and `asyncRewake`: background execution and wake-on-failure.
+- `async`: background execution. Do not use `asyncRewake`: delayed hook wakeups violate the
+  completion contract. Prefer bounded foreground work or an explicitly requested monitor.
 - `statusMessage`: spinner text.
 - `timeout`: seconds.
 

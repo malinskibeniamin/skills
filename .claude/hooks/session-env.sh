@@ -105,7 +105,10 @@ fi
 
 # ── Capture dirty-files baseline (which files are already uncommitted) ──
 # Used by Stop hooks to exclude files dirty before this session started.
-git diff --name-only HEAD > "$_session_dir/dirty-files-baseline" 2>/dev/null || touch "$_session_dir/dirty-files-baseline"
+{
+  git diff --name-only HEAD 2>/dev/null
+  git ls-files --others --exclude-standard 2>/dev/null
+} | sort -u > "$_session_dir/dirty-files-baseline" || touch "$_session_dir/dirty-files-baseline"
 
 # ── Emit hook safety context (for auto mode awareness) ───────────
 # Counts active PostToolUse and Stop hooks so Claude (and auto mode
@@ -142,12 +145,12 @@ if command -v jq >/dev/null 2>&1; then
   fi
 fi
 
-# ── Capture typecheck baseline (opt-out, background, no latency) ─
+# ── Capture typecheck baseline (opt-in, background) ──────────────
 # Used by typecheck-stop.sh to distinguish pre-existing errors from
-# errors introduced by this session. Runs in background so SessionStart
-# returns immediately. Opt out with CAPTURE_TYPECHECK_BASELINE=0 on
-# battery or for question-only sessions.
-if [ "${CAPTURE_TYPECHECK_BASELINE:-1}" != "0" ] \
+# errors introduced by this session. Default off: SessionStart must not
+# launch work that can outlive an ordinary turn. Opt in explicitly for
+# long implementation sessions.
+if [ "${CAPTURE_TYPECHECK_BASELINE:-0}" = "1" ] \
   && [ -f "package.json" ] \
   && jq -e '.scripts["type:check"]' package.json >/dev/null 2>&1; then
   (bun run type:check 2>&1 | grep -E '^.+\.(ts|tsx)\([0-9]+,' | sort > "$_session_dir/typecheck-baseline" 2>/dev/null || touch "$_session_dir/typecheck-baseline") &

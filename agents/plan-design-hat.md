@@ -1,6 +1,6 @@
 ---
 name: plan-design-hat
-description: Design-perspective plan review. UX flow, accessibility, information density, copy, visual consistency with existing registry components. Gated in /grilling phase 2b; spawned in parallel with product-hat and engineering-hat. Outputs structured JSON findings.
+description: Design-perspective plan review. UX flow, accessibility, density, copy, and consistency. Applied inline by /grilling; dispatch requires explicit delegation.
 model: inherit
 allowed-tools: Read, Grep, Glob, Bash(git diff *)
 ---

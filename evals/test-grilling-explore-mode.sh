@@ -24,7 +24,7 @@ run_content_eval "$GRILL" "/plan-arbiter" "explore mode routes competing plans t
 run_content_eval "$GRILL" "frontier" "grilling maps the currently answerable frontier"
 run_content_eval "$GRILL" "whole frontier" "grilling asks the whole frontier each round"
 run_content_eval "$GRILL" "Recompute the frontier" "grilling recomputes after each answer round"
-run_content_eval "$GRILL" "Native Codex.*inline" "native Codex fact-finding stays inline without delegation consent"
+run_content_eval "$GRILL" "fact-finding inline" "fact-finding stays inline without delegation consent"
 
 if grep -q "Ask the questions one at a time" "$GRILL"; then
   echo "  FAIL  grilling still forces one-question-at-a-time interviews"
@@ -39,7 +39,7 @@ fi
 CPP="$REPO_ROOT/commit-push-pr/SKILL.md"
 run_content_eval "$CPP" "--no-pr" "commit-push-pr documents --no-pr flag"
 run_content_eval "$CPP" "--no-pr.*ends after|ends after.*push" "phase 5 stops the PR track under --no-pr"
-run_content_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" "/commit-push-pr --no-pr" "lifecycle-stop prescribes the surviving skill"
+run_content_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" "Commit the requested scope" "lifecycle-stop prescribes the surviving commit path"
 
 # No stale invocations of the dead names outside history.
 _stale=$(grep -rlnE '`/(brainstorming|commit-push)`' "$REPO_ROOT" --include='*.md' 2>/dev/null | grep -v CHANGELOG | grep -v "$REPO_ROOT/docs/" || true)

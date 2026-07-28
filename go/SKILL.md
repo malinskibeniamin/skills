@@ -26,12 +26,12 @@ Run all checks. Fix failures before proceed.
 
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
-1. Claude-hosted: run `/stay-within-limits`, then dispatch `self-reviewer` with the selected Claude profile; no Claude means Sol covers the axis. Native Codex runs it inline unless agents were requested.
-2. **Cross-model adversarial review**: Opus work gets a fresh `GPT-5.6-sol: adversarial` high pass via `/codex`; Sol implementation gets Opus 5 xhigh feedback. With no Claude, clean-context Sol xhigh covers every hat. Terra/Luna never review. Native Codex runs inline and does not recurse.
-3. Claude-hosted diff >200 lines -> ALSO dispatch `adversarial-reviewer` with the selected profile. Re-check usage before the wave.
+1. Run the self-reviewer and adversarial axes inline in the primary context.
+2. **Cross-model adversarial review**: for non-trivial PR/ship work, run one bounded, awaited `GPT-5.6-sol: adversarial` high pass via `/codex`. Terra/Luna never review. If Codex is unavailable, record the limitation; do not spawn a substitute.
+3. Do not dispatch background or paired reviewers unless the user explicitly requested delegation.
 4. Resilience Review: run only for credible data-loss, security/privacy, irreversible, contract, or likely stuck-user risk
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)
-6. Fix P0/P1 now (Claude may delegate per model routing; native Codex fixes inline unless delegation was requested), apply P2 `safe_auto`, show P2 `gated_auto` to user
+6. Fix P0/P1 inline when in scope. Report P2 unless it blocks the requested endpoint.
 7. Commit fixes: `refactor(scope): self-review fixes`
 8. Re-verify (tests + types + lint + `/dogfood` for runnable repairs)
 9. **Max 2 refine rounds.** Then proceed.
@@ -44,36 +44,37 @@ specific finding and re-verify.
 
 1. If runnable behavior changed since its receipt, rerun `/dogfood`; commit only current PASS evidence
 2. Frontend or customer-facing surface diff and `/visual-review` not run this session -> run it now or record explicit skip reason
-3. Non-trivial diff -> prepare `/visual-recap` context so the PR explains what will ship; tiny obvious diff may skip with reason
-4. Non-trivial or mixed diff -> run `/make-pr-easy-to-review` for reviewer guidance; no history rewrite without user approval
-5. Run `/commit-push-pr` -- conventional commits, push, open PR
-6. Claude-hosted: re-check `/stay-within-limits`, then dispatch `code-reviewer` with the selected profile; Sol covers it when Claude is disabled. Native Codex runs inline unless agents were requested.
+3. Run `/commit-push-pr` -- conventional commits, push, open PR.
+4. Run the code-reviewer axis inline; do not dispatch another agent.
+
+Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests
+that extra artifact or history work.
 
 ## Phase 5b: Iterate
 
-Native Codex handles the first automated review/fix pass and one CI status snapshot, then stops.
-Extra rounds require an explicit "babysit until clean" or `/plow-ahead`; neither grants subagent consent.
+`/go` is an explicit full-delivery endpoint. It may monitor CI, but every reviewer remains
+foreground and awaited. `/plow-ahead` does not grant subagent consent.
 
-1. Claude-hosted: `Monitor: gh pr checks <number> --watch`. Native Codex: take one `gh pr checks <number>` snapshot.
-2. CI fail -> diagnosing-bugs, fix, `/dogfood` runnable repairs, push. Claude re-monitors; native Codex reports the new pending status unless continuation was explicit.
-3. Fresh-eyes findings (agent in Claude, inline in Codex) -> `/resolve-pr-feedback` triage, fix, reply, push
-4. **AI self-review cap (Claude-hosted)**: up to 3 auto `code-reviewer` rounds, rerouting from fresh usage before each round. **Early-exit** on `APPROVED` or empty findings; after 3 noisy rounds, hand off to a human. Native Codex defaults to one inline round; extra rounds follow the stop rule above.
+1. `Monitor: gh pr checks <number> --watch`.
+2. CI fail -> diagnosing-bugs, fix, `/dogfood` runnable repairs, push, re-monitor.
+3. Fresh-eyes findings inline -> `/resolve-pr-feedback` triage, fix, reply, push.
+4. **AI self-review cap**: up to 2 inline rounds. **Early-exit** on `APPROVED` or empty findings; after 2 noisy rounds, hand off to a human.
 5. **Existing human review (incl cloud/Copilot)**: NO cap. Address EVERY present thread, but do not poll for later feedback unless asked. `pr-feedback-completeness-stop` blocks exit until unresolved count is 0 and no CHANGES_REQUESTED reviews remain.
 
 ## Phase 6: Compound
 
-After non-trivial tasks: "Learn something worth preserve?"
+After non-trivial tasks, report a reusable lesson if one exists. Do not create unrelated
+rules or follow-up artifacts unless the user asks or the same defect class has recurred.
 
-- Write rule to `.claude/rules/<topic>.md` with `paths:` glob
-- AI bug -> create eval/test fixture catch same error class
+- Repeated AI bug -> propose a focused `.claude/rules/<topic>.md` rule or regression eval.
 
 ## Done
 
 1. Post final PR comment: changes, dogfood receipt, review findings, verification
 2. Request review: `gh pr edit <number> --add-reviewer <username>`
 3. Report PR URL + CI status
-4. End the final message with one status line, nothing after it (<100 chars):
-   `🟢 done` | `🟡 follow-up remains: <named item>` | `🔴 blocked on user input`
+4. End the final message with one status line, nothing after it:
+   `🟢 done — <verification evidence>` | `🟡 awaiting decision — <specific decision>` | `🔴 blocked — <external blocker and needed input>`
 5. **Stop.** No poll for human approval.
 
 ## Entry Gate

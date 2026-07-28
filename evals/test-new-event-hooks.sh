@@ -280,13 +280,13 @@ else
   ERRORS="$ERRORS\n  FAIL: generator if passthrough"
 fi
 rm -rf "$_gen_fix"
-if jq -e '.hooks.Stop[0].hooks[] | select(.asyncRewake==true)' "$REPO_ROOT/.claude/settings.json" >/dev/null 2>&1; then
-  echo "  PASS  ci-warning-audit runs asyncRewake"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  no asyncRewake Stop hook in settings"
+if jq -e '.. | objects | select(.asyncRewake==true)' "$REPO_ROOT/.claude/settings.json" >/dev/null 2>&1; then
+  echo "  FAIL  settings still contain delayed asyncRewake behavior"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: asyncRewake missing"
+  ERRORS="$ERRORS\n  FAIL: asyncRewake remains configured"
+else
+  echo "  PASS  settings contain no delayed asyncRewake behavior"
+  PASS=$((PASS + 1))
 fi
 if jq -re '.hooks.SessionStart[0].hooks[0].args[0]' "$REPO_ROOT/.claude/settings.json" 2>/dev/null | grep -qx -- "-c"; then
   echo "  PASS  hooks spawn without login shell (-c)"

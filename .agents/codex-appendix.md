@@ -19,6 +19,10 @@
 
 ### Native stop boundaries
 
-- Honor any user-supplied earlier stop point. Otherwise, stop after plan and grilling before edits; after implementation approval, stop after opening the PR, handling the first automated review/fix pass, and taking one CI status snapshot.
-- `/plow-ahead` may waive milestone stops, but it is not delegation consent. Do not poll for later human feedback unless the user asks.
+- Honor the endpoint-aware execution contract above. A well-scoped build/fix/implement
+  request continues after its concise plan and stops at verified local changes. Stop for plan
+  approval only when the user requested planning/grilling or a material reserved decision remains.
+- A PR request ends after opening the PR and taking one CI status snapshot. `/go`, ship, or
+  explicit babysitting owns any CI remediation loop. `/plow-ahead` is not delegation consent.
+  Do not poll for later human feedback unless the user asks.
 - `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Sol xhigh review/plan checks remain ungated; other unknown-usage agent waves checkpoint after one explicitly requested wave.

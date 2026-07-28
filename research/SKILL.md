@@ -5,7 +5,7 @@ description: Research primary sources and save cited findings. Use when a durabl
 
 # Research
 
-Spin up a **background agent** to do the research, so you keep working while it reads.
+Research inline by default. A background agent requires explicit delegation or `/swarm`.
 
 Its job:
 
@@ -17,4 +17,4 @@ Its job:
 
 - Need a fact **right now** to keep coding (API shape, current flag, version behavior) -> `/read-the-damn-docs` inline instead; no background agent, no artifact.
 - Multi-source fact-checked **report** with adversarial verification -> the deep-research harness.
-- This skill is the middle: delegated reading legwork with a cited Markdown artifact.
+- This skill is the middle: focused reading legwork with a cited Markdown artifact.

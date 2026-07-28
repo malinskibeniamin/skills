@@ -20,7 +20,7 @@ fi
 # De-escape BEFORE the fast path: r\m and r"m" are guard evasion; argv
 # still resolves to rm. All rule regexes below run on the same de-escaped text.
 command=$(printf '%s' "$command" | tr -d '\\')
-if ! printf '%s' "$command" | grep -qE 'npm|npx|yarn|pnpm|tsgo|eslint|prettier|bun|rm|sleep|git|cat <<'; then
+if ! printf '%s' "$command" | grep -qE 'npm|npx|yarn|pnpm|tsgo|eslint|prettier|bun|rm|sleep|git|cat <<|killall|pkill|osascript'; then
   exit 0
 fi
 
@@ -35,6 +35,15 @@ fi
 _cmd_stripped=$(echo "$_cmd_for_check" | sed 's/"[^"]*"//g' | sed "s/'[^']*'//g" | tr -d '\\')
 if echo "$_cmd_for_check" | grep -qE 'cat <<'; then
   _cmd_stripped=$(echo "$_cmd_stripped" | sed '/<<.*EOF/,/^[[:space:]]*EOF/d')
+fi
+
+# Never terminate a human-owned browser to make it available for automation.
+_browser_apps='google[[:space:]]+chrome|chrome|chromium|safari|firefox|arc|brave([[:space:]]+browser)?|microsoft[[:space:]]+edge'
+_browser_app_match="(^|[^[:alnum:]_])($_browser_apps)([^[:alnum:]_]|$)"
+if printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)(sudo[[:space:]]+)?(killall|pkill)[^;&|]*${_browser_app_match}" \
+  || printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)osascript[^;&|]*((quit|close)[^;&|]*${_browser_app_match}|${_browser_app_match}[^;&|]*(quit|close))"; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"Refusing to close a human-owned browser. Use an isolated agent-browser or Playwright session; if isolation is unavailable, report blocked verification."}' >&2
+  exit 2
 fi
 
 # Block npm commands — include exact replacement
@@ -127,7 +136,7 @@ fi
 
 # Block all sleep commands — always a sign of polling instead of proper waiting
 if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)sleep\s'; then
-  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"sleep banned. Use: Monitor tool (stream output), Bash(run_in_background=true) (async wait), gh pr checks --watch (CI). Never poll with sleep."}' >&2
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"sleep banned. Use a foreground wait/monitor primitive instead. If the user explicitly requested persistent background work, join or stop it before final status. Never poll with sleep."}' >&2
   exit 2
 fi
 

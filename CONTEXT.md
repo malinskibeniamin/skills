@@ -42,6 +42,23 @@ Removing code, configuration, dependencies, or tests while preserving required
 behavior and making the system clearer.
 _Avoid_: Negative LOC as a goal
 
+**Requested endpoint**:
+The externally visible stopping point named by the user: answer, local implementation,
+commit, push, PR, or full ship. Prerequisites logically required by that endpoint are
+authorized; later endpoints are not.
+_Avoid_: Always ship, stop whenever
+
+**Completion status**:
+The final evidence-bearing line on an action turn: done, awaiting a specific decision,
+or blocked on an external dependency. It prevents silent model stops without inventing a
+semantic completion judge.
+_Avoid_: Progress update, background notification
+
+**Human-owned application**:
+A browser or desktop-app session the person is actively using or has configured. Agent
+verification uses an isolated session and never closes or takes over the human-owned one.
+_Avoid_: Browser automation session
+
 ## Example dialogue
 
 Dev: "CLI-only PR. Need visual review?"

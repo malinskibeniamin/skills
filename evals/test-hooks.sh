@@ -107,6 +107,33 @@ run_hook_eval "$SHARED_DIR/subagent-start.sh" \
   "subagent-start exits 0 for code-reviewer" \
   "Branch Context"
 
+rm -rf /tmp/hook-session-test-agent-tracking
+run_hook_eval "$SHARED_DIR/subagent-start.sh" \
+  '{"agent_id":"agent-track-1","agent_type":"Explore","session_id":"test-agent-tracking"}' \
+  0 \
+  "subagent-start tracks active agent"
+if [ -f /tmp/hook-session-test-agent-tracking/active-subagents/agent-track-1 ]; then
+  echo "  PASS  active subagent marker created"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  active subagent marker created"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: active subagent marker missing"
+fi
+run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+  '{"agent_id":"agent-track-1","agent_type":"Explore","session_id":"test-agent-tracking","last_assistant_message":"done"}' \
+  0 \
+  "subagent-stop accepts completed non-reviewer"
+if [ ! -e /tmp/hook-session-test-agent-tracking/active-subagents/agent-track-1 ]; then
+  echo "  PASS  completed subagent marker cleared"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  completed subagent marker cleared"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: active subagent marker leaked"
+fi
+rm -rf /tmp/hook-session-test-agent-tracking
+
 # lifecycle-stop deliberately does not infer test requirements from file paths.
 if grep -q "_adjacent_tests_for_all" "$HOOKS_DIR/lifecycle-stop.sh"; then
   echo "  FAIL  lifecycle-stop still enforces adjacent tests"

@@ -47,7 +47,10 @@ mkdir -p "$_session_dir" 2>/dev/null || true
 
 # ── Capture dirty-files baseline (which files are already uncommitted) ──
 # Used by Stop hooks to exclude files dirty before this session started.
-git diff --name-only HEAD > "$_session_dir/dirty-files-baseline" 2>/dev/null || touch "$_session_dir/dirty-files-baseline"
+{
+  git diff --name-only HEAD 2>/dev/null
+  git ls-files --others --exclude-standard 2>/dev/null
+} | sort -u > "$_session_dir/dirty-files-baseline" || touch "$_session_dir/dirty-files-baseline"
 
 # ── Emit hook safety context (for auto mode awareness) ───────────
 # Counts active PostToolUse and Stop hooks so Claude (and auto mode

@@ -33,18 +33,15 @@ Work the tree in **rounds**. The **frontier** is every decision whose prerequisi
 
 Each answer round reshapes the tree. Settled decisions push the frontier outward and unblock dependent questions. Recompute the frontier before the next round; a question that depends on another answer still open this round belongs to a later round.
 
-Finding *facts* is your job, never mine. Explore the environment -- filesystem, tools, and available sources -- rather than asking me. Claude-hosted sessions may dispatch a fact-finding subagent; Native Codex keeps fact-finding inline unless the user explicitly authorized delegation. Do not block independent questions: a running exploration is an unsettled prerequisite, so only its downstream questions wait while the rest of the frontier proceeds. The *decisions* are mine -- put each to me and wait.
+Finding *facts* is your job, never mine. Explore the environment -- filesystem, tools, and available sources -- rather than asking me. Keep fact-finding inline unless I explicitly authorize delegation or invoke `/swarm`. Do not block independent questions: an unsettled prerequisite delays only its downstream questions while the rest of the frontier proceeds. The *decisions* are mine -- put each to me and wait.
 
 The interview ends when the frontier is empty: every branch visited, nothing left silently assumed. Do not act on it until I confirm we have reached a shared understanding.
 
 ## Plan gate (lifecycle phase 2b)
 
-Once a coherent plan exists, run three reviewer hats per findings-schema. Claude-hosted sessions
-run `/stay-within-limits`, then spawn them **in parallel** with the selected Claude profile.
-Re-check before each wave. Always add one independent GPT-5.6 Sol xhigh combined plan check
-via `/codex`; when Claude is disabled, Sol covers all three hats. Native Codex runs all hats inline
-unless the user explicitly requests agents or invokes `/swarm`; skill activation
-alone is not consent:
+Once a coherent plan exists, run three reviewer hats inline in the current context. Do not
+spawn plan agents or start a recursive model call unless I explicitly request delegation or
+invoke `/swarm`; skill activation alone is not consent:
 
 - **`plan-product-hat`**: persona, pain, success metric, scope, reversibility, TTV
 - **`plan-engineering-hat`**: architecture, error paths, perf, security, test strategy, rollback -- includes the Murphy pass (what breaks first in prod?); the full Murphy panel (`/resilience-review`) runs on the diff at review time, not on the plan
@@ -52,7 +49,9 @@ alone is not consent:
 
 Merge: dedupe all `must_answer` questions into one list; user answers each; plan updates inline. Any `BLOCKED` hat halts the plan until addressed or overridden. All `APPROVED` (or explicit override) -> implement. Competing plans/transcripts/visual plans -> run `/plan-arbiter` after the hats (Adopt / Hybrid / Revise first).
 
-Skip the fan-out only when ALL hold: trivial bug fix, <3 tasks, no architectural/product/UX decisions. [ETHOS: Grill Before Build]
+The lifecycle invokes this gate only for explicit grilling/planning or unresolved material
+architectural, product, or UX decisions. Ordinary well-scoped build/fix/implement work states
+its concise plan and continues without this stop. [ETHOS: Grill Before Build]
 
 ## With docs (domain capture)
 

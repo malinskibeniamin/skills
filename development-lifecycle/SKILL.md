@@ -21,11 +21,11 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 1. Understand
 
-- Explore | clarify one-at-a-time | new->2-3 approaches+tradeoffs | bug->failing test->root cause
-- Claude-hosted: background agents may explore alternatives, prior art, and edge cases in parallel.
-- Native Codex: explore inline unless the user explicitly requests agents or invokes `/swarm`; skill activation alone is not consent.
-- Mixed patterns area? Refactor to single pattern FIRST before add features
-- **GATE: no impl code until approach approved.**
+- Explore inline | ask only blocking questions | new decision->2-3 approaches+tradeoffs | bug->failing test->root cause
+- A well-scoped build/fix/implement request approves execution. State the approach, then continue immediately; do not manufacture an approval stop.
+- One primary model is the single owner. Do not spawn agents, background research, or a recursive model call unless the user explicitly requests delegation or invokes `/swarm`.
+- Mixed patterns area? Reuse the pattern required by this task; report broader convergence separately.
+- Stay inside the requested acceptance criteria. Report adjacent cleanup separately unless it blocks the requested behavior.
 
 ### 2. Plan
 
@@ -34,22 +34,21 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Use current requirements and demonstrated scale. Do not add machinery for hypothetical growth.
 - Run `/resilience-review` only when credible failure could cause data loss, security/privacy harm, irreversible action, broken contracts, or a likely user dead end.
 - Bite-sized tasks (2-5 min each)
-- UI work: use `/prototype` for 2-3 runnable UI variations, review with user, pick best. See [REFERENCE.md](REFERENCE.md).
-- 5+ tasks -> stacked PRs (one per logical group)
+- UI work: prototype alternatives only when the user requests exploration or a material
+  visual direction is unresolved.
+- Large PR/ship scope may propose stacked PRs; never create extra PRs without approval.
 
 ### 2b. Grill
 
-**GATE: no impl until plan survive grilling.**
-
-- Auto-invoke `/grilling` | grill until every branch resolved | update CONTEXT.md + ADRs inline
+- Invoke `/grilling` when the user requests planning/grilling or an unresolved architectural, product, or UX decision would materially change the result.
+- Ordinary build/fix/implement work skips this stop gate and continues immediately after its concise plan.
+- When invoked: grill until every branch resolves | update CONTEXT.md + ADRs inline
 - Update plan with changes | get explicit user confirmation
-- Skip only if: trivial bug fix AND <3 tasks AND no architectural decisions
 
 ### 3. Implement
 
-- **Paired implementation (Claude-hosted default)**: the grilled plan is the spec. When Claude is enabled, run Opus 5 xhigh and Sol xhigh in isolated or non-overlapping lanes, then integrate centrally. If Claude is unavailable or above 95%, use Sol xhigh only. Route taste work through `/stay-within-limits`.
-- **Native Codex**: implement the approved plan inline. Do not recursively invoke `/codex` or auto-route to `/swarm`; use native agents only after explicit user consent.
-- After plan survives grill, Claude may use `/swarm` when independent lanes safely accelerate work. In Codex, `/swarm` runs only when the user invokes it or explicitly asks for parallel agents.
+- **Single owner**: the primary model implements the approved or well-scoped plan inline.
+- Do not auto-route to `/swarm`, background agents, paired implementation, or recursive `/codex`. Explicit user delegation is required.
 - Bugs and meaningful behavior: RED public-contract test -> smallest GREEN implementation -> REFACTOR.
 - Trivial types, wiring, static copy/styles, and behavior-preserving deletion need focused verification, not manufactured tests.
 - Before adding code: delete, reuse existing code, use the language/platform, then write the smallest clear local expression.
@@ -58,14 +57,14 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
 - After each material runnable increment is green and clean, run `/dogfood` before the next behavior; observed defects re-enter RED, then repair and replay.
 
-### 4-6. Ship -- `/go`
+### 4-6. Ship when requested -- `/go`
 
-Impl done -> run `/go` to ship. Handle all:
+Run only for a PR/ship endpoint. Local build/fix/implement stops after focused verification.
 
 - **4. Verify** -- types + lint + tests + final `/dogfood`
-- **4b. Review / Refine** -- self-reviewer + adversarial-reviewer; ensure Resilience Review evidence for risky features
-- **5. Ship** -- `/commit-push-pr` -> code-reviewer agent
-- **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 3 rounds, early-exit on clean; human review: address ALL (hook-enforced)
+- **4b. Review / Refine** -- inline self/adversarial review plus one awaited cross-model review for non-trivial PR/ship work
+- **5. Ship** -- `/commit-push-pr` -> one bounded foreground review
+- **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 2 rounds, early-exit on clean; human review: address ALL (hook-enforced)
 - **6. Compound** -- codify lessons as `.claude/rules/`
 
 See `/go` skill full details. See [REFERENCE.md](REFERENCE.md) phase-specific checklists.
@@ -76,9 +75,10 @@ Full flowchart [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
 
 | User says | Phases |
 |---|---|
-| "Build a new feature" | 1->2->**2b**->3->**`/go`** |
-| "Fix this bug" | 1(reproduce)->3(TDD)->**`/go`** |
-| "Refactor this module" | 1->2->**2b**->3->**`/go`** |
+| "Build a new feature" | 1->2->3->verify locally->stop |
+| "Fix this bug" | 1(reproduce)->3(TDD)->verify locally->stop |
+| "Refactor this module" | 1->2->3->verify locally->stop |
 | "Write tests for X" | 3 only |
-| "Ship it" / "Create a PR" | **`/go`** only |
+| "Create a PR" | verify->`/commit-push-pr`->one CI snapshot->stop |
+| "Ship it" / `/go` | **`/go`** full delivery |
 | "Quick question" | Just answer |

@@ -13,7 +13,7 @@ run_content_eval "$APPENDIX" 'do not.*recursive.*`codex exec`' \
   "native Codex does not recursively invoke codex"
 run_content_eval "$APPENDIX" "run.*axes inline" \
   "required review coverage falls back inline"
-run_content_eval "$APPENDIX" "first automated review/fix pass.*one CI.*snapshot" \
+run_content_eval "$APPENDIX" "PR request.*one CI status snapshot" \
   "Codex has a concrete post-PR stop boundary"
 run_content_eval "$APPENDIX" '`/plow-ahead`.*not.*delegation consent' \
   "plow-ahead does not silently authorize subagents"
@@ -35,8 +35,8 @@ for file in \
   resilience-review/SKILL.md \
   review/SKILL.md \
   stay-within-limits/SKILL.md; do
-  run_content_eval "$REPO_ROOT/$file" "[Nn]ative Codex|Codex host" \
-    "$file has a Codex-host execution rule"
+  run_content_eval "$REPO_ROOT/$file" "[Ee]xplicit.*delegation|[Ee]xplicit.*agents|[Ss]ingle owner|primary context" \
+    "$file has a runtime-safe ownership rule"
 done
 
 run_content_eval "$REPO_ROOT/swarm/SKILL.md" "explicit.*opt-in" \
@@ -60,14 +60,14 @@ run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "usage is unknown" \
 run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "Do not.*guess.*reset" \
   "Codex reset timing is never guessed"
 
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Codex.*inline" \
-  "Codex grilling keeps every hat inline by default"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Codex.*inline" \
-  "Codex review keeps every axis inline by default"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "reviewer hats inline|hats inline" \
+  "grilling keeps every hat inline by default"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "applicable hat inline" \
+  "review keeps every axis inline by default"
 run_content_eval "$REPO_ROOT/resilience-review/SKILL.md" "Codex.*inline" \
   "Codex resilience review keeps every axis inline by default"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "Codex.*inline" \
-  "Codex go review stays inline by default"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "axes inline" \
+  "go review stays inline by default"
 
 # A hook cannot prevent a spawn after admission; keep the enforcement surface honest.
 run_content_eval "$REPO_ROOT/shared/subagent-start.sh" "Cannot block subagent creation" \

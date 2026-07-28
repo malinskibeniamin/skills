@@ -106,7 +106,7 @@ run_content_eval "$REPO_ROOT/grilling/SKILL.md" "environment.*filesystem.*tools"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling waits for shared-understanding confirmation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "whole frontier" "grilling interviews round by round"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "running exploration.*unsettled prerequisite|unsettled prerequisite.*running exploration" "grilling does not block independent frontier questions"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "unsettled prerequisite.*rest of the frontier proceeds" "grilling does not block independent frontier questions"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
 run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known literal" "tests.md prevents tautological expected values"
@@ -153,7 +153,7 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-local.m
 
 # Matt v1.1.0 sync: research skill (restored on owner request).
 run_file_eval "$REPO_ROOT/research/SKILL.md" "research SKILL.md exists"
-run_content_eval "$REPO_ROOT/research/SKILL.md" "background agent" "research delegates to a background agent"
+run_content_eval "$REPO_ROOT/research/SKILL.md" "inline by default" "research stays inline without delegation consent"
 run_content_eval "$REPO_ROOT/research/SKILL.md" "primary sources" "research targets primary sources"
 run_content_eval "$REPO_ROOT/research/SKILL.md" "citing each claim" "research cites every claim"
 run_content_eval "$REPO_ROOT/research/SKILL.md" "read-the-damn-docs" "research routes inline lookups elsewhere"

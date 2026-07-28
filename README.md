@@ -1,8 +1,9 @@
 # Agent Skills
 
-**Tell Claude what build. Get PR ready merge.**
+**Tell Claude what to build. It stops at the endpoint you requested.**
 
-Hooks enforce patterns real-time, skills guide workflow, orchestration layer ensure nothing ships without tests, accessibility, type safety, code review -- zero babysit.
+Hooks enforce patterns in real time; skills guide a single-owner workflow without surprise
+delegation, browser takeover, background wakeups, or unrequested shipping.
 
 
 ## Install
@@ -91,25 +92,34 @@ graph TD
 
     Understand["1. Understand\nExplore codebase, clarify requirements"]
     Plan["2. Plan\nExact file paths, code, expected output"]
-    Grill["2b. Grill\nAuto /grilling, stress-test plan\nUpdate CONTEXT.md + ADRs inline\n--- GATE: user confirms ---"]
+    Decide{"Material decision\nor explicit grilling?"}
+    Grill["2b. Grill\nStress-test plan inline\nUpdate CONTEXT.md + ADRs inline"]
     Implement["3. Implement -- TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
     Verify["4. Verify\nSelf-verify via browser tools"]
-    Review["5. Review\nSecurity gate, code-reviewer agent, create PR"]
-    Iterate["5b. Iterate\n2 automated CI + review rounds\nthen request human review"]
+    ReviewPR["5. Review\nInline axes + one foreground Sol pass"]
+    ReviewShip["5. Review\nInline axes + one foreground Sol pass"]
+    Iterate["5b. Iterate\nOnly for /go, ship, or babysitting"]
     Compound["6. Compound\nWrite .claude/rules/ rule"]
-    Done([PR ready to merge])
+    Endpoint{"Requested endpoint?"}
+    Done([Requested endpoint complete])
 
-    Understand --> Plan --> Grill --> Implement
-    Implement --> Verify --> Review --> Iterate --> Compound --> Done
+    Understand --> Plan --> Decide
+    Decide -->|"yes"| Grill --> Implement
+    Decide -->|"no"| Implement
+    Implement --> Verify --> Endpoint
+    Endpoint -->|"local"| Done
+    Endpoint -->|"PR"| ReviewPR --> Done
+    Endpoint -->|"ship"| ReviewShip --> Iterate --> Compound --> Done
 
     Start -. "Fix bug" .-> Understand
     Understand -. "skip plan" .-> Implement
     Start -. "Write tests" .-> Implement
-    Start -. "Create PR" .-> Review
+    Start -. "Create PR" .-> Verify
 
     style Grill fill:#7c3aed,stroke:#4c1d95,stroke-width:3px,color:#fff
     style Implement fill:#16a34a,stroke:#14532d,stroke-width:3px,color:#fff
-    style Review fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
+    style ReviewPR fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
+    style ReviewShip fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
 ```
 
 **Four layers, one outcome:**
@@ -118,7 +128,7 @@ graph TD
 |---|---|---|---|
 | **Skills** | What do | development-lifecycle (6 phases) | Loaded on demand |
 | **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
-| **Agents** | Specialize | code-reviewer + verifier | Dispatched by skills |
+| **Agents** | Optional specialization | Explicit delegation or `/swarm` only | Never automatic |
 | **Routines** | Automate | Cloud-hosted sessions on schedule/webhook/API | Unattended, 24/7 |
 
 ## Why this exists
@@ -129,7 +139,7 @@ graph TD
 | Claude misses meaningful behavior | Ships -> human finds regression | TDD + review require public-contract proof |
 | Claude use wrong patterns | 3-5 human review cycles per PR | 0-1 human review cycles per PR |
 | Forget ask accessibility | No a11y until manual audit | Every component checked automatically |
-| Must babysit every step | Manual: "now write tests", "now check types" | Full lifecycle runs without prompting |
+| Must babysit every step | Manual: "now write tests", "now check types" | Ordinary work plans briefly, then continues |
 
 **How works**: Hooks fire automatically, 100% reliable, zero LLM tokens. Skills add workflow guidance when need. Combo eliminate 80-90% human review cycles.
 
@@ -161,7 +171,7 @@ Only remember one skill: `/development-lifecycle` (or alias `/work`). It covers 
 | Kits | Bundles that install groups | `/frontend-starter-kit` (profiles: `full`, `minimal`, `redpanda`, per-tool), `/work-automation-kit`, `/codex-compat` |
 | Guidance | Auto-load on matching files | `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy` |
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |
-| Agents | Dispatched by skills | `code-reviewer` (PR correctness, patterns, coverage), `verifier` (read-only independent verification) |
+| Agents | Optional, explicit delegation | `code-reviewer` (PR correctness), `verifier` (read-only verification) |
 
 The generated authoritative catalog with every skill and its trigger lives in [ask-ben/SKILL.md](ask-ben/SKILL.md).
 
@@ -173,7 +183,9 @@ Three layers automation run without manual invocation:
 
 **Layer 2 -- Pattern Enforcement** (every Edit/Write, ~293ms): PostToolUse hooks catch violations real-time. Claude see error, fix, hook re-check -- cycle repeat until clean. Plus file-aware guidance: write test file -> async leak tips, write component -> accessibility checklist.
 
-**Layer 3 -- Quality Gate** (when Claude finish, <10s): Stop hooks verify work production-ready. Type check, lint autofix, health score, PLUS orchestration gate blocks on missing tests, async leaks, security issues. Claude no stop until PR ready merge.
+**Layer 3 -- Quality Gate** (when Claude finishes, <10s): Stop hooks verify local quality,
+reject silent completion once, and enforce only the requested endpoint. Local implementation
+never auto-commits or opens a PR.
 
 **Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude work on matching files. Write test -> TDD patterns load. Edit route -> TanStack Router patterns load. No `/skill-name` invocation needed.
 
@@ -226,7 +238,7 @@ graph TD
         ST2["typecheck-stop.sh\ntsgo + related tests"]
         ST3["react-doctor-stop.sh\nhealth score"]
         ST4["orchestration-stop.sh\nsecurity-sensitive changes"]
-        ST5["violation-summary-stop.sh\naggregate session violations"]
+        ST5["completion-contract-stop.sh\nvisible terminal status"]
         ST1 --> ST2 --> ST3 --> ST4 --> ST5
     end
 

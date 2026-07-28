@@ -21,6 +21,15 @@ if echo "$_cmd_for_check" | grep -qE 'cat <<'; then
   _cmd_stripped=$(echo "$_cmd_stripped" | sed '/<<.*EOF/,/^[[:space:]]*EOF/d')
 fi
 
+# Never terminate a human-owned browser to make it available for automation.
+_browser_apps='google[[:space:]]+chrome|chrome|chromium|safari|firefox|arc|brave([[:space:]]+browser)?|microsoft[[:space:]]+edge'
+_browser_app_match="(^|[^[:alnum:]_])($_browser_apps)([^[:alnum:]_]|$)"
+if printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)(sudo[[:space:]]+)?(killall|pkill)[^;&|]*${_browser_app_match}" \
+  || printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)osascript[^;&|]*((quit|close)[^;&|]*${_browser_app_match}|${_browser_app_match}[^;&|]*(quit|close))"; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"Refusing to close a human-owned browser. Use an isolated agent-browser or Playwright session; if isolation is unavailable, report blocked verification."}' >&2
+  exit 2
+fi
+
 # Block npm commands — include exact replacement
 if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)npm\s'; then
   _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]])npm[[:space:]]/\1bun /g')
@@ -111,7 +120,7 @@ fi
 
 # Block all sleep commands — always a sign of polling instead of proper waiting
 if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)sleep\s'; then
-  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"sleep banned. Use: Monitor tool (stream output), Bash(run_in_background=true) (async wait), gh pr checks --watch (CI). Never poll with sleep."}' >&2
+  echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"sleep banned. Use a foreground wait/monitor primitive instead. If the user explicitly requested persistent background work, join or stop it before final status. Never poll with sleep."}' >&2
   exit 2
 fi
 
