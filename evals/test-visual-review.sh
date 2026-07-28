@@ -89,7 +89,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "What should the user see first" "vis
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Where does the scan path break" "visual-review prompts scan-path diagnosis"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Which element anchors the composition" "visual-review prompts anchor diagnosis"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Optional detector contract" "visual-review documents optional detector contract"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "npx impeccable detect" "visual-review can use impeccable detector when available"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "bunx impeccable detect" "visual-review can use impeccable detector when available"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Detector unavailable" "visual-review reports detector unavailable instead of blocking"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Anti-pattern matrix" "visual-review has anti-pattern matrix"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "overused fonts" "visual-review anti-pattern matrix covers overused fonts"

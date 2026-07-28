@@ -47,6 +47,13 @@ case "$skill" in
       printf '%s\n' "${touched_count:-0}" > "$session_dir/dogfood-invocation" 2>/dev/null || true
     fi
     ;;
+  resolve-pr-feedback|*/resolve-pr-feedback|*:resolve-pr-feedback)
+    if [ -n "$session" ]; then
+      session_dir="/tmp/hook-session-${session}"
+      mkdir -p "$session_dir" 2>/dev/null || true
+      touch "$session_dir/pr-feedback-active" 2>/dev/null || true
+    fi
+    ;;
 esac
 
 exit 0

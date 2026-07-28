@@ -14,7 +14,8 @@ token/cost history, not subscription-quota evidence, and cannot select bands.
 Before every Claude taste/review/planning wave and between waves. Inspect both
 `five_hour` and `seven_day` quota windows:
 
-1. Run `select-review-profile.sh`.
+1. Run the selector adjacent to this skill. In this repository:
+   `bash stay-within-limits/select-review-profile.sh`.
 2. Route from the higher of `five_hour.used_percentage` and
    `seven_day.used_percentage`.
 3. Use the selected Claude taste profile for every hat in that wave:

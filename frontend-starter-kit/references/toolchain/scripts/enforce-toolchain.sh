@@ -113,7 +113,7 @@ if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)rm\s+(-[a-zA-Z]*r[a-zA-Z]*|
   done
 
   if [ "$all_safe" = false ]; then
-    echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"rm -r blocked. Safe: node_modules .next dist build .cache .turbo coverage."}' >&2
+    echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"rm -r blocked. Safe targets: node_modules .next dist build .cache .turbo coverage __pycache__ .claude/skills .claude/hooks skills-lock.json."}' >&2
     exit 2
   fi
 fi

@@ -1,6 +1,7 @@
 ---
 name: go
-description: "Ship completed work through verification, review, PR, and CI. Use when implementation is ready to launch."
+description: "Ship completed work through verification, review, PR, and CI."
+disable-model-invocation: true
 ---
 
 # Go -- Ship What You Built
@@ -11,17 +12,18 @@ Phases 4-6 of `/development-lifecycle`, standalone command. Use when code writte
 
 ## Phase 4: Verify
 
-Run all checks. Fix failures before proceed.
+Discover the repository's documented checks, then run every applicable ecosystem branch.
+Fix failures before proceeding.
 
-1. `bun run type:check` (TypeScript 7 `tsc`)
-2. `bun run lint:fix` (biome)
-3. `bun vitest run --related` (changed files)
-4. Route touched -> `bun vitest run *.browser.test.tsx`
-5. Runnable behavior changed -> run `/dogfood` through the real entrypoint on the current implementation. For UI, use `scripts/skills-browser.sh` or Playwright when available. Tests never replace this. Record a non-runnable reason only for docs/test-only changes.
-6. Frontend or customer-facing surface diff -> run `/visual-review` (screenshots/terminal evidence, states, a11y, console, mobile/cross-browser when feasible). Skip only with reason.
-7. Dependency changed (`package.json`, `bun.lock`, `yarn.lock`, `go.mod`, `go.sum`) -> run `/upgrade-dependency` or record the skip reason in the PR body.
-8. Impact evidence -> if `/quantify-impact` locked a contract or the diff presents an obvious measurable benefit, run the identical candidate scenario and record before/after, delta, method, and verdict. Otherwise keep a concise value explanation; do not force a benchmark.
-9. **When green: commit now.** One commit per passing state.
+1. TypeScript/frontend: `bun run type:check`, `bun run lint:fix`, and the repository's
+   targeted Vitest command. A touched route also runs its `.browser.test.tsx` coverage.
+2. Go: `go test ./...`, `go vet ./...`, and the repository's documented build command.
+3. Other ecosystems: use the commands in the repository instructions and CI configuration.
+4. Runnable behavior changed -> run `/dogfood` through the real entrypoint on the current implementation. For UI, use `scripts/skills-browser.sh` or Playwright when available. Tests never replace this. Record a non-runnable reason only for docs/test-only changes.
+5. Frontend or customer-facing surface diff -> run `/visual-review` (screenshots/terminal evidence, states, a11y, console, mobile/cross-browser when feasible). Skip only with reason.
+6. A dependency version upgrade -> reuse `/upgrade-dependency` evidence. An ordinary dependency add/remove needs install, lockfile, audit, and affected-call-site evidence without invoking the upgrade workflow.
+7. Impact evidence -> if `/quantify-impact` locked a contract or the diff presents an obvious measurable benefit, run the identical candidate scenario and record before/after, delta, method, and verdict. Otherwise keep a concise value explanation; do not force a benchmark.
+8. **When green: commit now.** One commit per passing state.
 
 ## Phase 4b: Refine (Self-Review Loop)
 

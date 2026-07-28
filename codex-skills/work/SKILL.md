@@ -1,6 +1,6 @@
 ---
 name: work
-description: "Alias for /development-lifecycle: understand, plan, grill, implement with TDD, then ship."
+description: "Alias for /development-lifecycle through the user's requested endpoint."
 disable-model-invocation: true
 ---
 

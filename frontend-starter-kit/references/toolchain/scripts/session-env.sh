@@ -61,7 +61,7 @@ if [ -f "$_settings" ] && command -v jq >/dev/null 2>&1; then
   _post_count=$(jq '[.hooks.PostToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
   _stop_count=$(jq '[.hooks.Stop[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
   _pre_count=$(jq '[.hooks.PreToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
-  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[GUARDRAILS] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active. Auto mode safe.\"}}"
+  echo "{\"hookSpecificOutput\":{\"additionalContext\":\"[HOOK INVENTORY] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active.\"}}"
 fi
 
 # ── Capture typecheck baseline (opt-out, background, no latency) ─

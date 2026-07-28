@@ -13,7 +13,7 @@ msg=""
 run_audit=false
 case "$file" in
   */package.json|package.json)
-    msg="package.json changed. Run \`bun install\`. Run /upgrade-dependency (upgrade+adapt in one pass) or record a skip reason."
+    msg="package.json changed. Run \`bun install\` and verify affected call sites. If this is a version upgrade, run /upgrade-dependency; otherwise record the dependency add/remove reason."
     run_audit=true
     # Package admission: heavy/banned deps blocked at the manifest, not just at
     # import time (Biome noRestrictedImports cannot reject an unused dependency).
@@ -25,23 +25,23 @@ case "$file" in
     fi
     ;;
   */bun.lock|bun.lock)
-    msg="bun.lock changed. Dependency tree shifted. Run /upgrade-dependency (upgrade+adapt in one pass) or record a skip reason."
+    msg="bun.lock changed. Verify it matches package.json and the intended install. If this is a version upgrade, run /upgrade-dependency; ordinary install drift does not require that workflow."
     run_audit=true
     ;;
   */yarn.lock|yarn.lock)
-    msg="yarn.lock changed. Snyk mirror shifted. Run /upgrade-dependency (upgrade+adapt in one pass) or record a skip reason."
+    msg="yarn.lock changed. Verify the Snyk mirror matches bun.lock. If this is a version upgrade, run /upgrade-dependency; ordinary mirror regeneration does not require it."
     run_audit=true
     ;;
   */bun.lockb|bun.lockb)
-    msg="bun.lockb changed. Dependency tree shifted. Prefer text bun.lock. Run /upgrade-dependency (upgrade+adapt in one pass) or record a skip reason."
+    msg="bun.lockb changed. Prefer text bun.lock. If this is a version upgrade, run /upgrade-dependency; otherwise regenerate the supported lockfile."
     run_audit=true
     ;;
   */go.mod|go.mod)
-    msg="go.mod changed. Run \`go mod tidy\`. Run /upgrade-dependency (upgrade+adapt in one pass) or record a skip reason."
+    msg="go.mod changed. Run \`go mod tidy\` and verify affected packages. If this is a version upgrade, run /upgrade-dependency; otherwise record the module add/remove reason."
     run_audit=true
     ;;
   */go.sum|go.sum)
-    msg="go.sum changed. Module tree shifted. Run /upgrade-dependency (upgrade+adapt in one pass) or record a skip reason."
+    msg="go.sum changed. Verify it matches go.mod and \`go mod tidy\`. If this is a version upgrade, run /upgrade-dependency; ordinary checksum drift does not require it."
     run_audit=true
     ;;
   */package-lock.json|package-lock.json)

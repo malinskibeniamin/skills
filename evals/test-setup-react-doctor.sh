@@ -28,7 +28,7 @@ run_content_eval "$SCRIPT" "bun run doctor" "hook uses package.json script (not 
 run_content_eval "$SCRIPT" "git diff --name-only" "hook checks for changed files"
 run_content_eval "$SCRIPT" "tsx|jsx" "hook filters React files"
 run_content_eval "$SCRIPT" "scripts.*doctor" "hook skips when doctor script missing"
-run_content_eval "$SCRIPT" "doctor errors are stop-gaps" "hook treats doctor errors as stop-gaps"
+run_content_eval "$SCRIPT" "blocking errors" "hook treats doctor errors as blocking findings"
 run_content_eval "$SCRIPT" "hook_stop_finding.*Doctor warnings|Doctor warnings" "hook blocks doctor warnings through quality gate"
 run_content_eval "$SCRIPT" "No downgrade-to-allow" "hook does not downgrade repeated failures to allow"
 run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"

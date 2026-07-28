@@ -14,28 +14,25 @@ Installs workflow skills and scaffolds per-repo context:
 
 Prompt-driven. Explore -> present -> confirm -> write.
 
-## Skills Installed
+## Included workflows
 
-**Owned** (hook-integrated): grilling (incl. explore mode), domain-modeling, triage, diagnosing-bugs
+Install the planning set once each: `grilling`, `domain-modeling`, `triage`,
+`diagnosing-bugs`, `prototype`, `to-questionnaire`, `to-spec`, `to-tickets`, `handoff`,
+`writing-for-agents`, `visual-plan`, `visual-recap`, `plan-arbiter`, `agent-watchdog`,
+`read-the-damn-docs`, and `efficient-frontier`.
 
-**Matt Pocock/community**: grilling, prototype, to-questionnaire, to-spec, to-tickets, handoff, writing-for-agents
-
-**Builder helpers**: visual-plan, visual-recap, plan-arbiter, agent-watchdog, read-the-damn-docs, efficient-frontier
-
-**Optional**: setup-atlassian-workflow (Jira via acli, opt-in)
+`setup-atlassian-workflow` is optional for Jira via `acli`.
 
 ## Install
 
 ```bash
-# Owned
-bunx skills@latest add malinskibeniamin/skills/grilling --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/domain-modeling --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/triage --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/diagnosing-bugs --agent claude-code -y
-
-# Community
-bunx skills@latest add malinskibeniamin/skills/to-questionnaire --agent claude-code -y
-bunx skills@latest add malinskibeniamin/skills/writing-for-agents --agent claude-code -y
+for skill in \
+  grilling domain-modeling triage diagnosing-bugs prototype to-questionnaire to-spec \
+  to-tickets handoff writing-for-agents visual-plan visual-recap plan-arbiter \
+  agent-watchdog read-the-damn-docs efficient-frontier
+do
+  bunx skills@latest add "malinskibeniamin/skills/$skill" --agent claude-code -y
+done
 ```
 
 ## Optional: Atlassian/Jira

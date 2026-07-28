@@ -35,6 +35,14 @@ _current=$(git branch --show-current 2>/dev/null || echo "")
 # Same branch → fine.
 [ "$_bound" = "$_current" ] && exit 0
 
+# Return-to-bound recovery is always safe and must remain executable even after drift.
+case "$command" in
+  "git checkout $_bound"|"git switch $_bound")
+    echo "{\"suppressOutput\":true,\"systemMessage\":\"[branch-safety:return-to-bound] returning to session branch '$_bound'\"}"
+    exit 0
+    ;;
+esac
+
 # Rebind opt-in: user explicitly acknowledges branch change.
 if [ "${CLAUDE_BRANCH_REBIND:-0}" = "1" ]; then
   echo "$_current" > "$_bound_file" 2>/dev/null || true

@@ -61,13 +61,13 @@ run_content_eval "$SKILL_MD" "every published stable version|each published stab
 run_content_eval "$SKILL_MD" "do not install each|do not install every|install.*target.*once" "researches every hop but installs target once"
 run_content_eval "$SKILL_MD" "major.*announcement.*minor.*patch|major.*blog.*minor.*patch" "prioritizes majors and announcements before minor and patch notes"
 run_content_eval "$SKILL_MD" "API.*syntax.*style" "consolidates API syntax style changes"
-run_content_eval "$SKILL_MD" "SemVer confidence" "checks SemVer confidence"
+run_content_eval "$SKILL_MD" "Classify SemVer" "checks SemVer confidence"
 run_content_eval "$SKILL_MD" "major.*minor.*patch" "distinguishes SemVer major/minor/patch"
 run_content_eval "$SKILL_MD" "non-SemVer|non SemVer|missing changelog" "treats non-SemVer as risky"
 run_content_eval "$SKILL_MD" "change volume|release cadence|diff size" "scores non-SemVer change scale"
 run_content_eval "$SKILL_MD" "effort|danger|blast radius" "scores upgrade effort and danger"
 run_content_eval "$SKILL_MD" "patch/minor.*apply|apply.*patch/minor" "safe patch/minor may apply"
-run_content_eval "$SKILL_MD" "major.*GitHub issue|GitHub issue.*major" "major changes go to GitHub issue"
+run_content_eval "$SKILL_MD" "Documented major.*apply|major.*one major hop" "documented majors advance one hop at a time"
 run_content_eval "$SKILL_MD" "plan.*only|plan only" "supports plan-only invocation"
 # Evidence stays in existing collaboration surfaces unless the user requests a report.
 if grep -qE "Always leave.*report|docs/dependency-upgrades" "$SKILL_MD"; then
@@ -77,17 +77,16 @@ else
   echo "  PASS  no unprompted repo reports (upgrade+adapt is the default)"
   PASS=$((PASS + 1))
 fi
-run_content_eval "$SKILL_MD" "never local Markdown" "never creates local Markdown reports"
-run_content_eval "$SKILL_MD" "PR body or chat" "keeps upgrade evidence in existing surfaces"
-run_content_eval "$SKILL_MD" "one umbrella GitHub issue" "uses one issue for a blocked package batch"
-run_content_eval "$SKILL_MD" "Reports only by explicit request" "standalone reports require explicit user request"
-run_content_eval "$SKILL_MD" "same PR" "migration + benefit ride in the same PR as the bump"
+run_content_eval "$SKILL_MD" "local Markdown only when asked" "never creates local Markdown reports implicitly"
+run_content_eval "$SKILL_MD" "chat or the requested PR" "keeps upgrade evidence in existing surfaces"
+run_content_eval "$SKILL_MD" "blocked risk gate creates an issue only when requested" "blocked upgrades create issues only when requested"
+run_content_eval "$SKILL_MD" "one PR contains bump.*migration.*benefit" "migration + benefit ride in the same PR as the bump"
 run_content_eval "$SKILL_MD" "Benefit" "has the benefit-adoption pass"
 run_content_eval "$SKILL_MD" "Deprecation warnings.*fixed NOW|fixed NOW, not suppressed" "deprecations fixed in the upgrade PR"
-run_content_eval "$SKILL_MD" "failed run" "bump-only PR counts as a failed run"
+run_content_eval "$SKILL_MD" "every affected call site is adapted" "completion requires adapted call sites"
 
 run_content_eval "$SKILL_MD" "subagents|swarm|one package per agent" "supports delegated package swarm"
-run_content_eval "$SKILL_MD" "latest stable|stable enough|modern syntax" "targets latest stable modern stack"
+run_content_eval "$SKILL_MD" "requested stable version" "targets the requested stable version"
 
 # -- Research inputs -----------------------------------------------
 
@@ -106,7 +105,7 @@ run_content_eval "$SKILL_MD" "Socket|npq" "mentions Socket/npq supply-chain scan
 
 # -- Apply + verification ------------------------------------------
 
-run_content_eval "$SKILL_MD" "one major per commit|one commit per major" "walks majors incrementally"
+run_content_eval "$SKILL_MD" "one major hop" "walks majors incrementally"
 run_content_eval "$SKILL_MD" "bun update" "supports JS bun update"
 run_content_eval "$SKILL_MD" "bun install --yarn" "syncs yarn.lock when needed for Snyk"
 run_content_eval "$SKILL_MD" "go get -u" "supports Go module bump"
@@ -146,12 +145,12 @@ run_content_eval "$REFERENCE_MD" "/go" "reference explains /go integration"
 run_content_eval "$REFERENCE_MD" "/commit-push-pr" "reference explains /commit-push-pr integration"
 run_content_eval "$REFERENCE_MD" "file-changed-deps" "reference explains dependency-change hook integration"
 run_content_eval "$REFERENCE_MD" "skip reason" "reference allows documented skip reason"
-run_content_eval "$GO_SKILL" "dependency.*changed|package\\.json|go\\.mod" "/go checks dependency changes"
+run_content_eval "$GO_SKILL" "[Dd]ependency version upgrade" "/go checks dependency upgrades"
 run_content_eval "$GO_SKILL" "/upgrade-dependency" "/go routes dependency changes to upgrade-dependency"
 run_content_eval "$COMMIT_PUSH_PR_REF" "Dependency upgrade path" "PR template includes dependency upgrade section"
 run_content_eval "$COMMIT_PUSH_PR_REF" "Reuse.*upgrade-dependency.*notes directly" "commit-push-pr reuses notes without a report file"
 run_content_eval "$COMMIT_PUSH_PR_REF" "never create or link a local Markdown report" "commit-push-pr forbids local upgrade reports"
 run_content_eval "$DEPS_HOOK" "/upgrade-dependency" "dependency hook nudges upgrade-dependency"
-run_content_eval "$DEPS_HOOK" "skip reason" "dependency hook mentions skip reason"
-run_content_eval "$DEPS_HOOK" "upgrade\\+adapt in one pass" "dependency hook nudges the one-pass upgrade contract"
+run_content_eval "$DEPS_HOOK" "ordinary.*does not require|dependency add/remove reason" "dependency hook distinguishes ordinary changes"
+run_content_eval "$DEPS_HOOK" "If this is a version upgrade" "dependency hook routes only actual upgrades"
 run_content_eval "$MANIFEST" "bun\\.lock|yarn\\.lock|go\\.mod|go\\.sum" "manifest wires dependency files to deps hook"

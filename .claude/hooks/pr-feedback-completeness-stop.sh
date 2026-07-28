@@ -4,14 +4,17 @@ set -eo pipefail
 # Escape hatch: when Claude is already responding to a Stop block, do not
 # block again -- prevents infinite hostage loops (audit cluster 1).
 _sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
+if [ -z "${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}" ]; then
+  CODEX_SESSION_ID=$(printf '%s' "$_sha_in" | jq -r '.session_id // empty' 2>/dev/null || true)
+  export CODEX_SESSION_ID
+fi
 
 
-# Stop hook: enforce every review thread addressed before session exit.
+# Stop hook: enforce every review thread addressed during an explicit
+# /resolve-pr-feedback workflow.
 #
-# When a human (or the code-reviewer agent on behalf of a human) leaves
-# feedback on the PR for the current branch, the AI must reply to AND
-# resolve every thread before stopping. No stones unturned before the
-# human gets back in the loop.
+# During an explicit feedback-resolution workflow, reply to and resolve every
+# actionable thread before stopping.
 #
 # Checks (in order):
 #   1. Unresolved, non-outdated review threads with at least one
@@ -29,6 +32,14 @@ _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 
 
 # ── Global disable ───────────────────────────────────────────────
 [ "${PR_FEEDBACK_ENFORCEMENT:-on}" = "off" ] && exit 0
+
+# ── Workflow scope ───────────────────────────────────────────────
+# skill-fire-log writes this marker when /resolve-pr-feedback starts. A PR on
+# the current branch alone is not consent to hijack an unrelated Stop.
+if [ "${PR_FEEDBACK_SCOPE:-0}" != "1" ] \
+  && [ ! -f "${_hook_session_dir:-/tmp/no-session}/pr-feedback-active" ]; then
+  exit 0
+fi
 
 # ── Prereqs ──────────────────────────────────────────────────────
 command -v jq &>/dev/null || exit 0
@@ -107,7 +118,7 @@ fi
 
 # ── Decision ─────────────────────────────────────────────────────
 if [ "$unresolved_count" -gt 0 ] || [ "$pending_changes_count" -gt 0 ]; then
-  msg="PR #$pr_number has unresolved review feedback. Address ALL before stopping — no stones unturned before handing back to human."
+  msg="PR #$pr_number has unresolved review feedback. Continue this workflow until each actionable item is fixed or answered."
 
   if [ "$unresolved_count" -gt 0 ]; then
     msg="$msg
@@ -122,9 +133,10 @@ $pending_changes_count reviewer(s) still in CHANGES_REQUESTED state."
 
   msg="$msg
 
-Run /resolve-pr-feedback to triage, fix, reply, and resolve every thread. Push, re-monitor CI. Do not stop until every thread is resolved and no CHANGES_REQUESTED remain. If a comment is not actionable, reply explaining why and resolve."
+Run /resolve-pr-feedback to triage, fix, reply, and resolve every thread. Push and recheck CI. For a non-actionable comment, reply with the evidence and resolve it."
 
   hook_stop_block "$msg"
 fi
 
+rm -f "${_hook_session_dir:-/tmp/no-session}/pr-feedback-active" 2>/dev/null || true
 exit 0

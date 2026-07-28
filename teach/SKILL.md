@@ -7,7 +7,6 @@ argument-hint: "What would you like to learn?"
 
 # Teach
 
-Repo/code changes: author the smallest clear solution from the start; review semantic density before shipping.
 Stateful teaching workspace. Current dir stores learning state.
 
 ## Workspace files

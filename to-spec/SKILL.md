@@ -3,9 +3,12 @@ name: to-spec
 description: Turn the current conversation into a tracker-ready specification.
 disable-model-invocation: true
 ---
-This skill takes the current conversation context and codebase understanding and produces a spec (you may know this document as a PRD). Do not interview the user -- just synthesize what you already know.
+This skill produces a spec (sometimes called a PRD) from settled conversation context and codebase
+evidence. Synthesize without reopening settled decisions. Mark any material missing decision under
+Further Notes instead of silently assuming it.
 
-The issue tracker and triage label vocabulary should have been provided in `docs/agents/` -- run `/work-automation-kit` if not.
+Use the issue-tracker and triage-label vocabulary under `docs/agents/` when present. If it is
+missing, return the spec in chat and note `/work-automation-kit` as an optional setup follow-up.
 
 ## Process
 
@@ -13,11 +16,12 @@ The issue tracker and triage label vocabulary should have been provided in `docs
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
-If the spec relies on current third-party/API behavior, run `/read-the-damn-docs`. If multiple solution or seam plans are plausible, run `/plan-arbiter`. For non-trivial UI/product/API architecture, publish `/visual-plan` as the review artifact.
+If the spec relies on current third-party/API behavior, run `/read-the-damn-docs`. If multiple
+solution or seam plans are plausible, run `/plan-arbiter`. Use `/visual-plan` only when the user
+requested that additional review artifact.
 
-Check with the user that these seams match their expectations.
-
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Write the spec using the template below. Return it in chat by default; publish it to the
+project issue tracker and apply `ready-for-agent` only when the user requested publication.
 
 4. If the user wants implementation work broken down next, hand the approved spec to `/to-tickets`.
 
@@ -33,7 +37,7 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+A numbered list with one story per distinct in-scope actor outcome:
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -41,7 +45,8 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+**Completion:** every in-scope behavior, boundary, and recovery outcome maps to one story;
+duplicate wording, implementation details, and out-of-scope behavior are absent.
 
 ## Implementation Decisions
 

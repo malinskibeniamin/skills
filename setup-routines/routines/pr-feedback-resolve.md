@@ -66,7 +66,7 @@ Group feedback pointing to same underlying issue. Per cluster:
 2. Understand reviewer ask
 3. Make fix -- hooks enforce patterns automatically
 4. Run related tests
-5. Commit: `fix: address review feedback -- [summary]`
+5. Commit: `fix(review): <cluster summary>`
 
 One commit per cluster. Sequential.
 

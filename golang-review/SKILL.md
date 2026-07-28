@@ -10,8 +10,8 @@ One review axis: does this Go diff follow the evidence-backed conventions in
 so findings cite the rule id and explain repository-visible impact rather than relying
 on reviewer taste.
 
-Runs standalone on any Go diff, or as the **golang hat** inside the `/review` panel
-(one subagent, this skill as its contract).
+Runs standalone on any Go diff, or inline as the **golang hat** inside `/review`. Explicit
+delegation or `/swarm` may use this skill as a bounded reviewer-lane contract.
 
 ## Non-goals
 

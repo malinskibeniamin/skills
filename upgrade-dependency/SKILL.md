@@ -4,7 +4,9 @@ description: Upgrade a dependency and adapt every affected call site. Use for pa
 ---
 
 # Upgrade Dependency
-Dependency current -> latest stable, **with beneficial code changes in the same PR**. Default is DO; `plan` (plan only) or a blocked gate stops at paper.
+Move to the requested stable version; use latest stable if omitted. Adapt affected call sites.
+Honor the requested endpoint: `plan` is read-only; build/fix stops at verified local changes;
+commit, push, or PR happens only when requested.
 Read [REFERENCE.md](REFERENCE.md) for supply-chain checks and issue/PR templates when those
 branches fire.
 
@@ -15,9 +17,12 @@ Input: `$ARGUMENTS` = package/module, manifest path, target version, natural lan
 
 2. **Research what changes behavior**: build the upgrade path: every published stable version installed -> target with per-version behavior notes; read deeply only at major/breaking hops (migration guides, codemods, announcements, `/read-the-damn-docs`); skim minors, skip patch archaeology; install the target once, not each hop. Classify SemVer; non-SemVer/missing changelog -> score change volume/cadence/diff size/blast radius. Check advisories (Snyk/GHSA/OSV/Socket/CVE).
 
-3. **Gate**: patch/minor + SemVer confidence + clear changelog + peers OK -> apply, don't ask. Major with documented migration -> apply, one commit per major hop. Risky (non-SemVer, no changelog, unclear migration, high blast, security uncertainty) -> STOP; one umbrella GitHub issue per blocked batch. `plan` -> path + risk read in chat, nothing written. Many packages -> subagents, one per package; apply independent safe paths.
+3. **Gate**: confident patch/minor -> apply. Documented major -> apply one major hop at a
+   time. Non-SemVer, unclear migration, high blast, or security uncertainty -> stop with
+   evidence and the required decision. `plan` -> report the path and risk in chat. Process
+   packages sequentially; explicit delegation or `/swarm` may assign independent lanes.
 
-4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Then, one commit each:
+4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Keep separate verified groups; commit separately only when requested:
    a. **Bump**: `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` when `yarn.lock`/Snyk needs it. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit lockfiles.
    b. **Migrate**: official codemods; consolidate API/syntax/style/behavior changes across every touched call site. This upgrade's deprecation warnings are fixed NOW, not suppressed.
    c. **Benefit**: adopt changelog-highlighted APIs where they simplify existing code -- delete forced workarounds and obsolete polyfills; shrink or harden, never expand speculatively.
@@ -25,11 +30,14 @@ Input: `$ARGUMENTS` = package/module, manifest path, target version, natural lan
 
 5. **Security**: preserve exploitability reasoning; remediation ladder: direct dep bump > parent bump > override/resolution/replace. Never run code from advisories. Advisory ids + fixed versions in the PR body. `/snyk-ux-security` owns reachability.
 
-6. **Ship**: one PR = bump + migration + benefit commits; body = what broke/adapted/adopted + verify evidence. Merges as-is: cleanup before push. Risky-only -> GitHub issue instead.
+6. **Requested delivery**: one PR contains bump + migration + benefit and records verification.
+   A blocked risk gate creates an issue only when requested.
 
 ## Rules
 
-Evidence: PR body or chat; never local Markdown reports. Reports only by explicit request. Path before edits. Changelog + release notes for major/non-SemVer. A bump-only PR is a failed run. JS/Go first-class.
+Evidence belongs in chat or the requested PR; create local Markdown only when asked. State the
+path before edits. Read changelog + release notes for major/non-SemVer changes. Completion
+means every affected call site is adapted. JS and Go are first-class.
 
 ## Migration doctrine
 

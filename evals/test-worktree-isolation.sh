@@ -94,6 +94,9 @@ _assert_bs() {
 _bs_repo=$(mktemp -d)
 git -C "$_bs_repo" init -q
 git -C "$_bs_repo" checkout -q -b eval-current
+git -C "$_bs_repo" config user.email "eval@example.com"
+git -C "$_bs_repo" config user.name "Eval"
+git -C "$_bs_repo" commit -q --allow-empty -m "init"
 
 # Same branch → pass (exit 0)
 _setup_bs "eval-current"
@@ -105,6 +108,13 @@ _teardown_bs
 _setup_bs "feat/definitely-not-current-$RANDOM"
 _run_bs_in_repo "$_bs_repo" '{"tool_name":"Bash","tool_input":{"command":"git commit -m foo"}}'
 _assert_bs "branch-safety: drift denies" 2 "Refusing this git call"
+_teardown_bs
+
+# Returning to the bound branch is the positive recovery path.
+git -C "$_bs_repo" branch eval-bound
+_setup_bs "eval-bound"
+_run_bs_in_repo "$_bs_repo" '{"tool_name":"Bash","tool_input":{"command":"git checkout eval-bound"}}'
+_assert_bs "branch-safety: return to bound branch passes" 0 "return-to-bound"
 _teardown_bs
 
 # Rebind env → pass (exit 0) and update bound-branch

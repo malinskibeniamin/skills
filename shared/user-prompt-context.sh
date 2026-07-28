@@ -79,25 +79,6 @@ if [ "$_is_first_turn" = "1" ] && { [ "$level" = "standard" ] || [ "$level" = "f
     [ -n "$scripts" ] && context="$context\nScripts: $scripts"
   fi
 
-  # ── Condensed rules line (~3ms) ────────────────────────────────
-  # Compresses 300+ lines of PostToolUse enforcement into one line.
-  # Prevents first-violation costs (estimated 3000-8000 tokens/session saved).
-
-  rules=""
-  [ "${PKG_MANAGER:-}" ] && rules="$rules ${PKG_MANAGER}"
-  [ "${LINTER:-}" ] && rules="$rules ${LINTER}"
-  [ "${TEST_RUNNER:-}" ] && rules="$rules ${TEST_RUNNER}"
-  rules="$rules | no-memo(compiler) no-as-any no-ts-ignore no-style={{}}"
-  [ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ] && rules="$rules no-useEffect"
-  rules="$rules | UI:@/components/ui/ | no-raw-HTML(<button>→<Button>)"
-  rules="$rules | zustand:create<T>()() useShallow | env:@/env(no process.env)"
-
-  # Conditional rules based on installed hooks
-  [ -f ".claude/hooks/tanstack-router-check.sh" ] && rules="$rules | TanStack-Router(no react-router-dom)"
-  [ -f ".claude/hooks/connect-query-check.sh" ] && rules="$rules | connect-query(no raw useQuery)"
-
-  context="$context\nRules:$rules"
-
   # ── Active config (~5ms) ───────────────────────────────────────
 
   config=""

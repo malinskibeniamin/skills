@@ -1,11 +1,12 @@
 ---
 name: swarm
 description: Parallel executor for independent bulk work across worktree lanes.
+disable-model-invocation: true
 ---
 
 # Swarm
-A parallel executor: shard independent bulk work across isolated worktree lanes, verify each, merge review.
-Parallel executor: not planner, not autopilot.
+Shard independent bulk work across isolated lanes, verify each, then merge the results. Swarm
+executes an existing goal; it does not replace planning or own the delivery endpoint.
 
 Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for approval before launch unless required context is missing.
 Invoking `/swarm` or explicitly requesting parallel agents is the opt-in for native Codex
@@ -61,13 +62,13 @@ Spawned lanes may not create descendants without separate authorization for nest
 
 - Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
 - Before launching lanes and between waves: `/stay-within-limits` (stop Claude above 95% of either window; resume after a fresh check).
-- Lane model choice: `/efficient-frontier` Model rankings. Implementation pairs Opus 5 xhigh with Sol xhigh in isolated lanes; review is reciprocal: Sol high checks Opus work and Opus 5 xhigh checks Sol implementation. Without Claude, use clean-context Sol xhigh only. Tracker chores -> Luna; PR-comment chores -> Terra. Never Haiku.
+- Lane model choice: use `/efficient-frontier` rankings. Give each write scope one implementation owner; do not duplicate an implementation as a model pair. Tracker chores -> Luna; PR-comment chores -> Terra. Never Haiku.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes author the smallest clear solution from the start; reviewer lanes assess semantic density directly.
 - Architecture: fan out `/improve architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
 - Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.
-- Design/copy work: split `/visual-review`, `setup-ux-copy`/copywriting, accessibility, and articulation lanes only when their write scopes do not overlap.
+- Design/copy work: split `/visual-review`, `/ux-copy`, accessibility, and articulation lanes only when their write scopes do not overlap.
 - Review: split standards, spec, resilience, security, performance, tests, UX, and steelman axes.
 - Diagnose: split reproduction loops, hypotheses, instrumentation, and regression tests.
 - Product: combine `/grilling` explore mode, `/prototype`, and `/steelman` lanes for options and pushback.

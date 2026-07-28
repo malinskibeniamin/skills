@@ -99,7 +99,8 @@ if [ -f "node_modules/.bin/vitest" ] || [ -f "$repo_root/node_modules/.bin/vites
   _vbin="node_modules/.bin/vitest"; [ -f "$_vbin" ] || _vbin="$repo_root/node_modules/.bin/vitest"
   test_output=$("$_vbin" run --related $abs_changed 2>&1) || test_exit=$?
 elif [ -f "node_modules/.bin/jest" ] || [ -f "$repo_root/node_modules/.bin/jest" ]; then
-  test_output=$(npx jest --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
+  _jbin="node_modules/.bin/jest"; [ -f "$_jbin" ] || _jbin="$repo_root/node_modules/.bin/jest"
+  test_output=$("$_jbin" --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
 else
   test_files=""
   for f in $changed_files; do

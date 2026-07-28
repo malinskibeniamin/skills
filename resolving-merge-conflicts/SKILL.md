@@ -8,7 +8,10 @@ Use `/agent-watchdog` when conflict context is another agent branch/claim; use `
 
 2. **Find the primary sources** for each conflict. Understand deeply why each change was made, and what the original intent was. Read the commit messages, check the PRs, check original issues/tickets.
 
-3. **Resolve each hunk.** Preserve both intents where possible. Where incompatible, pick the one matching the merge's stated goal and note the trade-off. Do **not** invent new behaviour. Always resolve; never `--abort`.
+3. **Resolve each hunk.** Preserve both intents where possible. Where incompatible, pick the
+   one matching the merge's stated goal and note the trade-off. If primary sources show the
+   merge/rebase itself is wrong, or the intended result remains ambiguous, stop with the exact
+   conflict and ask whether to abort; never abort without approval.
 
 4. Discover the project's **automated checks** and run them -- typically typecheck, then tests, then format. Fix anything the merge broke.
 

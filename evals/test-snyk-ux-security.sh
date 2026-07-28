@@ -5,6 +5,7 @@ SKILL_DIR="$REPO_ROOT/snyk-ux-security"
 SKILL_MD="$SKILL_DIR/SKILL.md"
 REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
 PEER_CHECK="$SKILL_DIR/scripts/react-peer-check.sh"
+CODEOWNERS_TEAMS="$SKILL_DIR/scripts/codeowners-teams.sh"
 LOCK_HOOK="$REPO_ROOT/.claude/hooks/lockfile-sync-check.sh"
 LOCK_LIB="$REPO_ROOT/.claude/hooks/checks/lockfile-sync-check.lib.sh"
 MANIFEST="$REPO_ROOT/skill-manifest.json"
@@ -12,8 +13,40 @@ MANIFEST="$REPO_ROOT/skill-manifest.json"
 # ── File structure ──────────────────────────────────────────────
 
 run_file_eval "$SKILL_MD" "SKILL.md exists"
+run_file_eval "$REFERENCE_MD" "REFERENCE.md router exists"
+for branch in triage js go bazel publish; do
+  run_file_eval "$SKILL_DIR/references/$branch.md" "Snyk $branch branch reference exists"
+done
 run_executable_eval "$PEER_CHECK" "react-peer-check.sh is executable"
 run_executable_eval "$LOCK_HOOK" "lockfile-sync-check.sh is executable"
+run_executable_eval "$CODEOWNERS_TEAMS" "codeowners-teams.sh is executable"
+
+_codeowners_tmp=$(mktemp -d)
+git -C "$_codeowners_tmp" init -q
+mkdir -p "$_codeowners_tmp/.github"
+mkdir -p "$_codeowners_tmp/nested" "$_codeowners_tmp/src/secret"
+touch "$_codeowners_tmp/nested/readme.md" "$_codeowners_tmp/nested/config.ts" \
+  "$_codeowners_tmp/src/secret/key.ts"
+cat > "$_codeowners_tmp/.github/CODEOWNERS" <<'EOF'
+* @acme/all
+*.ts @acme/types
+/src/ @acme/frontend
+/src/secret/** @acme/security @alice
+EOF
+_codeowners_global=$(cd "$_codeowners_tmp" && "$CODEOWNERS_TEAMS" nested/readme.md)
+_codeowners_types=$(cd "$_codeowners_tmp" && "$CODEOWNERS_TEAMS" ./nested/config.ts)
+_codeowners_last=$(cd "$_codeowners_tmp" && "$CODEOWNERS_TEAMS" "$_codeowners_tmp/src/secret/key.ts")
+if [ "$_codeowners_global" = "@acme/all" ] \
+  && [ "$_codeowners_types" = "@acme/types" ] \
+  && [ "$_codeowners_last" = "@acme/security" ]; then
+  echo "  PASS  codeowners resolver handles basename globs, last match, and team filtering"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  codeowners resolver handles basename globs, last match, and team filtering"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: CODEOWNERS resolver behavior"
+fi
+rm -rf "$_codeowners_tmp"
 
 # Guardrail: no static config file (args-based only)
 if [ -f "$SKILL_DIR/config.yaml" ] || [ -f "$SKILL_DIR/config.yml" ] || [ -f "$SKILL_DIR/config.json" ]; then
@@ -42,11 +75,14 @@ else
   PASS=$((PASS + 1))
 fi
 
-# Detailed contracts may live behind the SKILL.md context pointer.
+# Detailed contracts may live behind the router's ecosystem pointers.
+REFERENCE_BUNDLE=$(mktemp)
+cat "$REFERENCE_MD" "$SKILL_DIR"/references/*.md > "$REFERENCE_BUNDLE"
+REFERENCE_MD="$REFERENCE_BUNDLE"
 DISCLOSED_MD=$(mktemp)
 cat "$SKILL_MD" "$REFERENCE_MD" > "$DISCLOSED_MD"
 SKILL_MD="$DISCLOSED_MD"
-trap 'rm -f "$DISCLOSED_MD"' EXIT
+trap 'rm -f "$DISCLOSED_MD" "$REFERENCE_BUNDLE"' EXIT
 
 # ── Args-based input ────────────────────────────────────────────
 
@@ -60,7 +96,7 @@ run_content_eval "$SKILL_MD" "git log" "SKILL.md uses git log for reviewer infer
 
 run_content_eval "$SKILL_MD" "[Ss]equential" "SKILL.md enforces sequential processing"
 run_content_eval "$SKILL_MD" "snyk test" "SKILL.md runs snyk test"
-run_content_eval "$SKILL_MD" "snyk monitor" "SKILL.md runs snyk monitor"
+run_content_eval "$SKILL_MD" "snyk monitor.*only when" "SKILL.md scopes snyk monitor to cloud-update endpoints"
 run_content_eval "$SKILL_MD" "bun audit" "SKILL.md runs bun audit"
 run_content_eval "$SKILL_MD" "bun why" "SKILL.md uses bun why"
 run_content_eval "$SKILL_MD" "bun update" "SKILL.md uses bun update"
@@ -126,23 +162,23 @@ run_content_eval "$SKILL_MD" "bun test" "SKILL.md runs tests verify"
 
 # ── PR open + metadata ──────────────────────────────────────────
 
-run_content_eval "$SKILL_MD" "gh pr create" "SKILL.md opens PR via gh"
+run_content_eval "$SKILL_MD" "open a PR only when requested" "SKILL.md opens PRs only when requested"
 run_content_eval "$SKILL_MD" "--reviewer" "SKILL.md assigns reviewers"
 run_content_eval "$SKILL_MD" "--label" "SKILL.md adds labels"
 run_content_eval "$SKILL_MD" "--assignee" "SKILL.md assigns UX team"
 run_content_eval "$SKILL_MD" "security" "SKILL.md uses security label"
-run_content_eval "$SKILL_MD" "gh workflow run" "SKILL.md triggers cloud review workflow"
+run_content_eval "$SKILL_MD" "gh workflow run.*only when" "SKILL.md triggers cloud review only when requested"
 
 # ── Commit format ───────────────────────────────────────────────
 
-run_content_eval "$SKILL_MD" "fix\(deps\)" "SKILL.md uses fix(deps) conventional commit"
-run_content_eval "$SKILL_MD" "refactor\(deps\)" "SKILL.md uses refactor(deps) for migration commits"
+run_content_eval "$SKILL_MD" "commit.*fix\(deps\)" "SKILL.md uses fix(deps) when a commit was requested"
+run_content_eval "$SKILL_MD" "Commit.*refactor\(deps\).*only when requested" "SKILL.md scopes migration commits to the endpoint"
 
-# ── Worktree isolation ──────────────────────────────────────────
+# ── Explicit parallelism ────────────────────────────────────────
 
-run_content_eval "$SKILL_MD" "worktree" "SKILL.md uses worktree per path"
-run_content_eval "$SKILL_MD" "isolation" "SKILL.md specifies isolation mode"
-run_content_eval "$SKILL_MD" "subagent" "SKILL.md spawns subagent per path"
+run_content_eval "$SKILL_MD" "primary context" "SKILL.md processes paths inline by default"
+run_content_eval "$SKILL_MD" 'explicitly delegates|invokes `/swarm`' "SKILL.md gates worktree lanes on consent"
+run_content_eval "$SKILL_MD" "worktree" "SKILL.md supports authorized worktree lanes"
 
 # ── Security hygiene ────────────────────────────────────────────
 
@@ -190,9 +226,9 @@ run_content_eval "$REFERENCE_MD" "install script|typosquat|unstable ownership|na
 
 # ── Automatic internal skill gates ───────────────────────────────
 
-run_content_eval "$SKILL_MD" "/resilience-review" "SKILL.md auto-runs resilience-review before PR"
-run_content_eval "$SKILL_MD" "/to-tickets" "SKILL.md auto-runs to-tickets for security debt"
-run_content_eval "$SKILL_MD" "/review" "SKILL.md auto-runs review before PR"
+run_content_eval "$SKILL_MD" "/resilience-review" "SKILL.md runs resilience review before requested delivery"
+run_content_eval "$SKILL_MD" "/to-tickets.*only when ticket publication" "SKILL.md publishes security-debt tickets only when requested"
+run_content_eval "$SKILL_MD" "/review" "SKILL.md runs review before requested delivery"
 run_content_eval "$REFERENCE_MD" "Automatic internal skill gates" "REFERENCE.md documents automatic internal skill gates"
 run_content_eval "$REFERENCE_MD" "resilience-review.*before PR|before PR.*resilience-review" "REFERENCE.md runs resilience-review before PR"
 run_content_eval "$REFERENCE_MD" "to-tickets.*missing release age|missing release age.*to-tickets" "REFERENCE.md sends release gate debt to to-tickets"
@@ -363,9 +399,9 @@ run_content_eval "$SKILL_MD" "[Ee]xploitability|[Rr]eachable|[Nn]ot reachable|no
 run_content_eval "$SKILL_MD" "snyk ignore" "SKILL.md dismisses non-exploitable vulns via snyk ignore"
 run_content_eval "$SKILL_MD" "--reason" "SKILL.md requires reason on snyk ignore dismissals"
 run_content_eval "$SKILL_MD" "--expiry" "SKILL.md requires expiry on snyk ignore dismissals"
-run_content_eval "$SKILL_MD" "\.snyk" "SKILL.md requires .snyk policy file committed with dismissals"
+run_content_eval "$SKILL_MD" 'include `\.snyk` in any requested delivery' "SKILL.md includes .snyk in requested dismissal delivery"
 run_content_eval "$SKILL_MD" "[Pp]R[- ]description.*not enough|[Nn]ot an audit artifact|PR.*alone.*not enough|not just PR" "SKILL.md states PR-description text alone is insufficient"
-REF_MD="$SKILL_DIR/REFERENCE.md"
+REF_MD="$REFERENCE_MD"
 run_content_eval "$REF_MD" "\.snyk" "REFERENCE.md documents .snyk policy file commit"
 run_content_eval "$REF_MD" "snyk monitor" "REFERENCE.md pushes ignores to Snyk IO via monitor"
 run_content_eval "$REF_MD" "[Ii]gnored" "REFERENCE.md verifies re-scan shows Ignored status"
@@ -377,7 +413,7 @@ run_content_eval "$REF_MD" "Dependency surface removal" "REFERENCE.md has depend
 run_content_eval "$REF_MD" "Lower third-party surface area" "REFERENCE.md names lower third-party surface as the durable win"
 
 # REFERENCE.md must document the full upgrade-priority ladder
-REF_MD="$SKILL_DIR/REFERENCE.md"
+REF_MD="$REFERENCE_MD"
 run_file_eval "$REF_MD" "REFERENCE.md exists"
 run_content_eval "$REF_MD" "[Ee]xploitability triage" "REFERENCE.md documents exploitability triage"
 run_content_eval "$REF_MD" "[Uu]pgrade priority" "REFERENCE.md documents upgrade priority ladder"

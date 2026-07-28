@@ -107,27 +107,6 @@ if [ -n "$unawaited" ]; then
   fi
 fi
 
-# ── Check 6: data-testid reminder for interactive elements ───────
-# Advisory only — remind when creating new interactive components.
-
-case "$file_path" in
-  *.test.tsx|*.spec.tsx|*.integration.tsx)
-    if echo "$added_lines" | grep -qE 'getByRole\('; then
-      # Count getByRole usage in added lines
-      _role_count=$(echo "$added_lines" | grep -c 'getByRole\(' || echo "0")
-      _role_count=$(echo "$_role_count" | tr -d '[:space:]')
-      if [ "${_role_count:-0}" -gt 5 ]; then
-        # Session-scoped: only warn once
-        _marker="$_hook_session_dir/testid-reminded"
-        if [ ! -f "$_marker" ]; then
-          touch "$_marker"
-          hook_warn "Heavy getByRole usage (${_role_count}x). Consider adding data-testid for faster, more stable selectors." "test-convention-testid"
-        fi
-      fi
-    fi
-    ;;
-esac
-
 fi
 
 # ── absorbed from test-perf-check.sh (4.28 family consolidation) ──

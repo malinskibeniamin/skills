@@ -106,16 +106,13 @@ fi
 # ── PR-number auto-context ───────────────────────────────────────
 # When prompt references a PR number near action keywords, inject branch context.
 
-_pr_number=$(echo "$prompt" | grep -oE '(pr|pull request|fix|ci|check|review).*#([0-9]+)' | grep -oE '#[0-9]+' | head -1 | tr -d '#' || true)
-if [ -z "$_pr_number" ]; then
-  _pr_number=$(echo "$prompt" | grep -oE '#([0-9]{4,})' | head -1 | tr -d '#' || true)
-fi
+_pr_number=$(echo "$prompt" | grep -oiE '(pr|pull request)[^#]*#([0-9]+)' | grep -oE '#[0-9]+' | head -1 | tr -d '#' || true)
 
 if [ -n "$_pr_number" ]; then
   if [ -z "$_endpoint" ] && echo "$prompt" | grep -qiE 'review|analy[sz]e|summarize|inspect|explain'; then
     directives="$directives\n[PR-CONTEXT] Review PR #$_pr_number read-only with: gh pr view $_pr_number and gh pr diff $_pr_number. Do not checkout, edit, push, or comment unless asked."
   else
-    directives="$directives\n[PR-CONTEXT] Detected PR #$_pr_number. Before changes: gh pr checkout $_pr_number to get on correct branch. All changes on that branch. Do not create new branches."
+    directives="$directives\n[PR-CONTEXT] Explicit PR #$_pr_number. First verify it with gh pr view $_pr_number. For requested write work, checkout only after that succeeds; otherwise keep the current branch and report the artifact mismatch."
   fi
 fi
 

@@ -104,7 +104,7 @@ printf '%s\n%s\n' "$_kind" "$_streak" > "$_streak_file" 2>/dev/null || true
 _sample=$(printf '%s' "$_findings" | head -5)
 _msg="Warnings are errors (${_kind}). Green run is not clean:
 $_sample
-Drop everything and fix the warning at source before retrying."
+Fix the warning at source before retrying the test."
 
 if [ "$_streak" -ge 3 ]; then
   _msg="${_msg}

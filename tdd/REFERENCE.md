@@ -245,7 +245,7 @@ Detection: existing `*.browser.test.*` files or `@vitest/browser` in package.jso
 
 ```bash
 vitest run --detectAsyncLeaks          # async leaks
-vitest run --reporter=verbose --pool=forks  # profile slow tests
+vitest run --reporter=verbose --pool=threads  # profile slow tests with project policy
 grep -rn 'getByRole' --include='*.integration.*' | wc -l  # slow selectors
 ```
 

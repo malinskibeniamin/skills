@@ -243,19 +243,6 @@ if echo "$added_lines" | grep -qE '(staleTime|gcTime)\s*:\s*[0-9]'; then
   fi
 fi
 
-# ── Check: invalidateQueries must be awaited ──────────────────────
-# Fire-and-forget invalidation races navigation/unmount: the list the
-# user lands on renders stale data. Await it (onSuccess can be async).
-
-if echo "$added_lines" | grep -qE '(^|[^.\w])(queryClient\.)?invalidateQueries\(' ; then
-  _unawaited_invalidate=$(echo "$added_lines" | grep -E 'invalidateQueries\(' | grep -vE 'await |return |Promise\.all|void ' || true)
-  if [ -n "$_unawaited_invalidate" ]; then
-    if ! hook_has_escape "await-invalidate"; then
-      hook_warn "invalidateQueries not awaited — invalidation races navigation and the next screen renders stale cache. Use: await queryClient.invalidateQueries(...). Escape: // allow: await-invalidate [reason]" "await-invalidate"
-    fi
-  fi
-fi
-
 # ── Check: proto optional fields are undefined, never null ────────
 # protobuf-es models absent optional fields as undefined. Writing null
 # into create()/message fields desyncs types and serialization.

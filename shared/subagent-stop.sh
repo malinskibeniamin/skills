@@ -14,6 +14,8 @@ session_id=$(echo "$input" | jq -r '.session_id // empty')
 last_message=$(echo "$input" | jq -r '.last_assistant_message // empty')
 session_dir="/tmp/hook-session-${session_id:-${CLAUDE_SESSION_ID:-$$}}"
 safe_agent_id=$(printf '%s' "$agent_id" | tr -cd '[:alnum:]_.-')
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+findings_schema="$repo_root/agents/references/findings-schema.md"
 
 clear_active_agent() {
   [ -n "$safe_agent_id" ] || return 0
@@ -39,7 +41,7 @@ if [ -z "$json_block" ]; then
 fi
 
 if [ -z "$json_block" ]; then
-  echo '{"hookSpecificOutput":{"hookEventName":"SubagentStop"},"systemMessage":"Output must contain ```json``` block per findings-schema.md. Re-read and output correct format."}' >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Output must contain a fenced JSON block. Read ${findings_schema} and output that format.\"}" >&2
   exit 2
 fi
 
@@ -55,7 +57,7 @@ if [ -z "$has_reviewer" ] || [ -z "$has_status" ] || [ -z "$has_findings" ]; the
   [ -z "$has_status" ] && missing="${missing} status,"
   [ -z "$has_findings" ] && missing="${missing} findings[],"
   missing="${missing%,}"
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Missing fields:${missing}. Re-read findings-schema.md.\"}" >&2
+  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"SubagentStop\"},\"systemMessage\":\"Missing fields:${missing}. Read ${findings_schema}.\"}" >&2
   exit 2
 fi
 

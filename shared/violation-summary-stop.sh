@@ -30,7 +30,7 @@ if [ -f "$session_files" ] && git rev-parse --git-dir >/dev/null 2>&1; then
     removed=$(echo "$stat" | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo 0)
     if [ "${added:-0}" -gt 0 ] || [ "${removed:-0}" -gt 0 ]; then
       net=$((added - removed))
-      loc_note=" Session LOC delta: +${added}/-${removed} (net ${net}). Code is liability — prefer the smallest passing diff."
+      loc_note=" Session LOC delta: +${added}/-${removed} (net ${net})."
     fi
   fi
 fi

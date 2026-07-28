@@ -11,9 +11,11 @@ run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: work-automation-kit" "SKILL.md has correct name"
 run_content_eval "$SKILL_DIR/SKILL.md" "disable-model-invocation: true" "work-automation-kit is slash-only (no trigger prose needed)"
 run_content_eval "$SKILL_DIR/SKILL.md" "to-spec" "references to-spec (mattpocock)"
-run_content_eval "$SKILL_DIR/SKILL.md" "explore mode" "references grilling explore mode (owned)"
+run_content_eval "$SKILL_DIR/SKILL.md" "grilling" "references grilling explore workflow (owned)"
 run_content_eval "$SKILL_DIR/SKILL.md" "to-tickets" "references to-tickets (mattpocock)"
-run_content_eval "$SKILL_DIR/SKILL.md" "visual-plan.*visual-recap.*plan-arbiter.*agent-watchdog.*read-the-damn-docs" "references Builder planning and review helpers"
+for helper in visual-plan visual-recap plan-arbiter agent-watchdog read-the-damn-docs; do
+  run_content_eval "$SKILL_DIR/SKILL.md" "$helper" "references Builder helper: $helper"
+done
 run_content_eval "$SKILL_DIR/SKILL.md" "bunx skills@latest add" "uses bunx (not npx) to install"
 run_content_eval "$SKILL_DIR/SKILL.md" "triage.*installed|installed.*triage" "setup detects whether triage labels are needed"
 run_content_eval "$SKILL_DIR/SKILL.md" "recommended.*yes|yes.*recommended" "setup recommends the default triage labels"
