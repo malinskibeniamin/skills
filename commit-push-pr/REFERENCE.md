@@ -141,4 +141,4 @@ Frontend or customer-facing surface detected -> **require `/visual-review` resul
 
 Dependency diff = `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, or `go.sum`.
 
-If present, add `Dependency upgrade path` section. Prefer `/upgrade-dependency` report path. If change is not a package upgrade (lockfile regen, fixture, rollback), record skip reason. Do not omit silently.
+If present, add `Dependency upgrade path` section. Reuse `/upgrade-dependency` notes directly; never create or link a local Markdown report. If change is not a package upgrade (lockfile regen, fixture, rollback), record skip reason. Do not omit silently.

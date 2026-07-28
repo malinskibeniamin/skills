@@ -9,9 +9,9 @@
 - `/commit-push-pr`: dependency diff -> add `Dependency upgrade path` PR section.
 - `file-changed-deps`: nudge only; run `/upgrade-dependency` (upgrade+adapt) or record a skip reason.
 
-## Report template
+## PR/issue evidence
 
-Templates below serve the risky-gate GitHub ISSUE and PR body only -- no unprompted repo reports.
+Use in the PR body or one umbrella GitHub issue. No local Markdown report unless explicitly requested.
 
 ```md
 # Dependency upgrade: <package> <from> -> <target>

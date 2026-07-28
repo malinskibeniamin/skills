@@ -3,7 +3,7 @@ set -eo pipefail
 trap 'exit 0' ERR
 
 # FileChanged matcher: dependency manifests/lockfiles
-# Dependencies changed -- remind about install, audit, upgrade path/report.
+# Dependencies changed -- remind about install, audit, and PR evidence.
 
 input=$(cat 2>/dev/null || echo '{}')
 file=$(echo "$input" | jq -r '.filename // .file_path // empty' 2>/dev/null)
