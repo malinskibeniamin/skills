@@ -61,10 +61,11 @@ For any driver, ORM, migration tool, or builder:
 3. Review transaction/pooler, migration, escaping, and type behavior.
 4. Re-check prerelease APIs at use time.
 
-Drizzle's stable and prerelease lines have differed in escaping, codecs,
-migration tracking/diffs, casing, RLS helpers, and prepared queries. Consult the
-pinned [release](https://github.com/drizzle-team/drizzle-orm/releases), inspect
-generated SQL, and apply the dedicated [Drizzle boundary](DRIZZLE.md).
+Drizzle's corpus is evidence for these generic guardrails, not a separate
+timeless PostgreSQL contract. Its stable and prerelease lines have differed in
+escaping, codecs, migration tracking/diffs, casing, RLS helpers, and prepared
+queries. Consult the pinned [release](https://github.com/drizzle-team/drizzle-orm/releases),
+inspect generated SQL, and route the concern to the matching domain reference.
 
 Complete when every recommendation identifies the exact version/provider,
 portable versus provider-specific behavior, current source, and fallback.

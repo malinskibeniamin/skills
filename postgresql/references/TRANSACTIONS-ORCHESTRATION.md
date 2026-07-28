@@ -11,6 +11,13 @@
   `idle_in_transaction_session_timeout` for the workload/role.
 - Keep external effects idempotent or behind an outbox; a database rollback
   cannot retract an already-sent email or API call.
+- Use the transaction handle for every operation protecting the invariant. A
+  call through an outer database handle escapes the transaction. Treat nested
+  transaction helpers as savepoints unless the pinned integration proves a
+  different contract.
+- Route read-after-write and other consistency-sensitive reads through the
+  primary, the transaction connection, or the write's `RETURNING` data. Assume
+  an asynchronous replica can be stale.
 
 PostgreSQL defaults to Read Committed. Repeatable Read gives a stable
 transaction snapshot but can abort on conflicts. Serializable prevents

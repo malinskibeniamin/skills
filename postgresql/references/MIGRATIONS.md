@@ -38,7 +38,9 @@ Useful PostgreSQL choreography:
 
 ## Generated migration tools
 
-Use schema tools and ORMs as diff assistants:
+Use schema tools and ORMs as diff assistants. Keep one applied-history owner and
+one serialized deployment path; never let ordinary application startup race to
+apply schema changes.
 
 1. Pin the exact version.
 2. Generate SQL without applying it.
@@ -50,10 +52,11 @@ Use schema tools and ORMs as diff assistants:
 
 Drizzle's release history motivated this guardrail: escaping, introspection,
 constraint, enum, index, view-order, schema-filter, and migration-history
-defects have changed across releases. Prefer reviewed `generate` + `migrate`;
-reserve direct production `push` for an explicit, inspected decision. Consult
-the pinned [Drizzle migration docs](https://orm.drizzle.team/docs/migrations)
-and release notes rather than encoding its current API here.
+defects have changed across releases. Prefer reviewed `generate` plus one
+controlled `migrate` deployment; reserve direct production `push` for an
+explicit, inspected decision with equivalent approval and recovery. Consult the
+pinned [Drizzle migration docs](https://orm.drizzle.team/docs/migrations) and
+release notes rather than encoding its current API here.
 
 Stop automation on unresolved rename, data-loss, or destructive prompts.
 Structured output makes the decision machine-readable; it does not authorize

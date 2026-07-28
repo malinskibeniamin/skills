@@ -17,6 +17,8 @@ atomic where possible; avoid read-then-write races.
 
 - Bind every dynamic value. Whitelist dynamic identifiers/operators before
   composing SQL; placeholders cannot bind identifiers.
+- Treat raw SQL fragments as an injection boundary. Allow only trusted constants
+  or mechanically allowlisted identifiers, operators, and directions.
 - Name columns. Avoid `SELECT *` across stable API, mapping, or high-volume
   boundaries.
 - Qualify ambiguous columns and aliases. Make join cardinality intentional;
@@ -32,8 +34,10 @@ atomic where possible; avoid read-then-write races.
 - Keep time semantics explicit: `timestamptz` for instants, named zones for
   presentation/business rules, and half-open ranges for intervals.
 - Use exact numeric types for money/precision; define rounding ownership.
-- Verify the actual SQL emitted by an ORM or builder. Static types cannot prove
-  cardinality, isolation, index use, or runtime mapping.
+- Verify the actual SQL and parameters emitted by an ORM or builder, including
+  aliases, casts, nulls, ordering, limits, locks, and conflict targets. Static
+  result annotations do not perform runtime conversion or prove cardinality,
+  isolation, index use, or mapping.
 
 ## Common shapes
 

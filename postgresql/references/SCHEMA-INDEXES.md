@@ -13,6 +13,9 @@
   for unique constraints when nulls must collide.
 - Index the referencing side of a foreign key when its deletes/updates or joins
   justify it; PostgreSQL does not create that index automatically.
+- Application relation metadata does not create database constraints. It can
+  improve query construction, but PostgreSQL-owned invariants belong in the
+  schema and generated-migration tests.
 - Normalize for correctness first. Denormalize/materialize only for a measured
   path with explicit freshness, repair, and write-amplification ownership.
 - Treat extensions, collations, generated columns, enums, domains, and provider

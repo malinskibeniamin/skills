@@ -13,7 +13,7 @@ ORM, query builder, provider abstraction, or vendor claim.
 
 1. **Choose the mode:** author/review SQL; model schema/indexes; orchestrate
    transactions/queues; migrate; diagnose/tune; operate/recover; secure/tenant;
-   report; or integrate Drizzle or Jet.
+   report; or integrate Jet.
 2. **Establish the contract:** PostgreSQL major/minor and provider/fork;
    extensions/topology/pooler; workload shape; data volume/skew/growth;
    concurrency; latency/throughput SLO; RPO/RTO; security; change window.
@@ -46,7 +46,7 @@ ORM, query builder, provider abstraction, or vendor claim.
 | Roles, RLS, tenant isolation, sensitive copies | [SECURITY-TENANCY.md](references/SECURITY-TENANCY.md) |
 | Operational recap or database health report | [WEEKLY-REPORT.md](references/WEEKLY-REPORT.md) |
 | Supported features, managed-provider boundaries | [VERSIONS-PROVIDERS.md](references/VERSIONS-PROVIDERS.md) |
-| TypeScript using Drizzle ORM or Drizzle Kit | [DRIZZLE.md](references/DRIZZLE.md) |
+| Drizzle-generated SQL or migrations | [SQL-AUTHORING.md](references/SQL-AUTHORING.md), [MIGRATIONS.md](references/MIGRATIONS.md), and [VERSIONS-PROVIDERS.md](references/VERSIONS-PROVIDERS.md) |
 | Go code using `go-jet/jet` | [GO-JET.md](references/GO-JET.md) |
 | Evidence strength or corpus refresh | [EVIDENCE.md](references/EVIDENCE.md) |
 
