@@ -36,9 +36,9 @@ pooler, performance, and denial-of-service complexity.
 
 ## Research snapshot
 
-Snapshot date: **2026-07-28**. The machine-readable
-[source-decision index](source-index.jsonl) records 10,357 unique URL-level
-decisions: 2,029 included and 8,328 excluded or screened out.
+Snapshot date: **2026-07-29**. The machine-readable
+[source-decision index](source-index.jsonl) records 10,358 unique URL-level
+decisions: 2,029 included and 8,329 excluded or screened out.
 
 | Corpus | Decisions | Included |
 |---|---:|---:|
@@ -47,7 +47,7 @@ decisions: 2,029 included and 8,328 excluded or screened out.
 | Neon blog/changelog | 734 | 562 |
 | Drizzle docs/changelogs/releases | 1,222 | 567 |
 | go-jet releases/wiki/source/issues | 74 | 74 |
-| Databricks blog/releases/docs | 7,064 | 177 |
+| Databricks blog/releases/docs | 7,065 | 177 |
 | PostgreSQL Global Development Group | 64 | 64 |
 
 PlanetScale and Supabase pages received complete full-text semantic screening.
