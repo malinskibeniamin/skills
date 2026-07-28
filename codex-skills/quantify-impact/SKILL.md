@@ -1,6 +1,6 @@
 ---
 name: quantify-impact
-description: Prove product or codebase value with proportional before-and-after evidence. Use for dependency upgrades/package bumps, UI bug fixes, UI performance, benchmark comparisons, frontend audits, leak fixes, optimizations, and measurable features.
+description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
 Read and follow the complete [canonical skill instructions](../../quantify-impact/SKILL.md) before acting.

@@ -18,14 +18,22 @@ Prefer a direct outcome over a convenient proxy. Use a proxy only when its causa
 
 ## Metric map
 
-| Change | Product lane | Codebase lane |
-|---|---|---|
-| UI bug | Reproduction rate, task success, errors, steps | Branches/workarounds removed, regression coverage |
-| UI performance | Commit/render count, interaction latency, network requests/bytes | Bundle size, dependency or observer count |
-| Dependency upgrade | User-visible behavior, vulnerabilities, requests/renders when causally affected | Deprecation warnings, code/polyfills removed, bundle/build cost |
-| AI feature | Task success, TTFT (time to first token), completion latency, token/cost per task | Open async handles, heap growth, retries, test duration |
-| Leak fix | Crash/repro rate, long-session responsiveness | Memory leak slope, retained objects, open async handles |
-| Refactor | Behavior invariant plus developer task time when observable | Complexity, duplication, dependency count, maintenance surface |
+| Change | Measure when | Primary benefit | Guardrail |
+|---|---|---|---|
+| UI bug | Reproducible behavior changes | Reproduction rate, task success, errors | Complexity/workarounds, regression coverage |
+| UX/UI flow | Interaction sequence changes | Task success, completion time, clicks, abandonment | Errors, requests, accessibility |
+| Accessibility | Semantics or input paths change | Keyboard completion, accessibility violations, contrast/focus failures | Task completion, interaction latency |
+| UI performance | Subscriptions, state, rendering, or fetching change | Commit/render count, INP, interaction latency, network requests/bytes | Bundle, memory, errors |
+| API/data | Fetching, queries, caching, or payloads change | p50/p95 latency, request/query count, payload bytes, cache-hit rate | Errors, retries, consistency |
+| Dependency upgrade | Package API or runtime mechanism changes | Warnings, reachable vulnerabilities, workarounds removed | Bundle/build cost; runtime only when causal |
+| AI execution | Prompt, model, tools, or context change | Task success, TTFT, completion latency, token/cost per task | Retries, invalid schemas, open handles |
+| AI inspector | Observability or tracing changes | Trace completeness, diagnosis time, dropped spans | TTFT, memory, and trace cost as overhead guardrails |
+| Leak/reliability | Async lifecycle or long sessions change | Memory-leak slope, retained objects, open async handles, crash rate | Long-session responsiveness |
+| Refactor | Behavior stays invariant while structure changes | Complexity, duplication, dependency count, maintenance surface | Product behavior, build/test time |
+| Infrastructure | Runtime or deployment architecture changes | CPU, memory, cold start, throughput, cost/request | Error rate, tail latency |
+| Delivery tooling | CI, test, or review workflow changes | CI duration, flaky-run rate, first-pass success, review turnaround | Correctness and coverage invariant |
+| Security/privacy | Trust boundaries or dependency exposure change | Reachable vulnerabilities, permissions/scopes, exposed fields, attack paths | UX, latency, operational burden |
+| Production outcome | Post-release telemetry is available | Adoption, conversion, retention, support tickets, failure rate | Operational cost and error rate |
 
 Good exact evidence includes `bug reproduction 5/5 -> 0/5`, `network requests 12 -> 4`, `open async handles 100 -> 0`, `warnings 18 -> 0`, or `bundle 248 kB -> 221 kB`. Do not claim faster renders because an upgraded API merely looks simpler.
 
