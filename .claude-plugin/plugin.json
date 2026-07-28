@@ -55,6 +55,7 @@
     "./plow-ahead/",
     "./prime/",
     "./prototype/",
+    "./quantify-impact/",
     "./read-the-damn-docs/",
     "./redpanda-ai-gateway/",
     "./registry-workflow/",

@@ -19,7 +19,8 @@ Modes: `plan`, `implemented`, `regression`, `release`. Standalone trigger OK.
 2. **Bootstrap context:** read tokens/theme and one representative surface. Classify brand
    versus product register before judging.
 3. **Collect evidence:** use repo tools, `scripts/skills-browser.sh`, Playwright, fixtures,
-   screenshots, and command output. Ask only when tools cannot reach the surface.
+   screenshots, and command output. Run `/quantify-impact` when a direct UI value or
+   performance metric exists; skip measurement ceremony for tiny changes.
 4. **Run review lanes:** critique (hierarchy and task flow), audit (accessibility,
    responsive behavior, performance), polish (ship quality and system fit).
 5. **Apply hats:** Product: user value and friction. Design: hierarchy, affordance, copy,
@@ -59,6 +60,7 @@ State trace: | Surface | Trigger | Pending | Success | Error | Persistence/dismi
 Findings: | Severity | Hat | Surface | Evidence | Why it matters | Fix | Automate? |
 Design findings: | Severity | Surface | Handle | Current read | Desired read | Adjustment |
 Screenshots: | View | Browser | Path | Notes |
+Impact: <Proven impact table + verdict, or why measurement was not useful>
 Automation candidates: <deterministic hook/eval/test candidates>
 ```
 

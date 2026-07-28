@@ -50,6 +50,18 @@ Map commit types to GitHub labels. Verify label exist first: `gh label list --se
 
 ```
 gh pr create --base <base> --assignee @me --fill-verbose --body "$(cat <<'EOF'
+## Proven impact
+<include only when /quantify-impact produced meaningful evidence; otherwise omit this entire section>
+
+| Metric | Before | After | Delta |
+|---|---:|---:|---:|
+| <direct metric> | <base> | <candidate> | <absolute and %> |
+
+**Value proven:** <product or codebase benefit>
+<or **Value not proven:** <honest negative/inconclusive result>>
+
+Method: <exact command, fixture/run count, environment, base/candidate>
+
 ## Summary
 <bulleted summary synthesized from commits -- behavior changes, not file lists>
 
@@ -129,4 +141,4 @@ Frontend or customer-facing surface detected -> **require `/visual-review` resul
 
 Dependency diff = `package.json`, `bun.lock`, `yarn.lock`, `go.mod`, or `go.sum`.
 
-If present, add `Dependency upgrade path` section. Prefer `/upgrade-dependency` report path. If change is not a package upgrade (lockfile regen, fixture, rollback), record skip reason. Do not omit silently.
+If present, add `Dependency upgrade path` section. Reuse `/upgrade-dependency` notes directly; never create or link a local Markdown report. If change is not a package upgrade (lockfile regen, fixture, rollback), record skip reason. Do not omit silently.

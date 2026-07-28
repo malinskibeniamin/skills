@@ -4,18 +4,18 @@ description: Upgrade a dependency and adapt every affected call site. Use for pa
 ---
 
 # Upgrade Dependency
-Dependency current -> latest stable, **with the code changes that benefit from it, in the same PR**. No follow-up cleanup, no report ceremony. Default is DO; `plan` (plan only) or a blocked gate stops at paper.
+Dependency current -> latest stable, **with beneficial code changes in the same PR**. Default is DO; `plan` (plan only) or a blocked gate stops at paper.
 Read [REFERENCE.md](REFERENCE.md) for supply-chain checks and issue/PR templates when those
 branches fire.
 
 Input: `$ARGUMENTS` = package/module, manifest path, target version, natural language, or `plan`.
 ## Flow
 
-1. **Scope**: detect manifests/lockfiles (`package.json`, `bun.lock`, `go.mod`) and workspaces. Map the dependency tree as far as it bites: direct/transitive, parents/dependents, peers/plugins/adapters.
+1. **Scope**: detect manifests/lockfiles (`package.json`, `bun.lock`, `go.mod`) and workspaces. Map the dependency tree: direct/transitive, parents/dependents, peers/plugins/adapters. Run `/quantify-impact` for a direct metric.
 
 2. **Research what changes behavior**: build the upgrade path: every published stable version installed -> target with per-version behavior notes; read deeply only at major/breaking hops (migration guides, codemods, announcements, `/read-the-damn-docs`); skim minors, skip patch archaeology; install the target once, not each hop. Classify SemVer; non-SemVer/missing changelog -> score change volume/cadence/diff size/blast radius. Check advisories (Snyk/GHSA/OSV/Socket/CVE).
 
-3. **Gate**: patch/minor + SemVer confidence + clear changelog + peers OK -> apply, don't ask. Major with documented migration -> apply, one commit per major hop. Risky (non-SemVer, no changelog, unclear migration, high blast, security uncertainty) -> STOP; decision goes to a GitHub issue (the only unprompted artifact). `plan` -> path + risk read in chat, nothing written. Many packages -> subagents, one per package; apply independent safe paths.
+3. **Gate**: patch/minor + SemVer confidence + clear changelog + peers OK -> apply, don't ask. Major with documented migration -> apply, one commit per major hop. Risky (non-SemVer, no changelog, unclear migration, high blast, security uncertainty) -> STOP; one umbrella GitHub issue per blocked batch. `plan` -> path + risk read in chat, nothing written. Many packages -> subagents, one per package; apply independent safe paths.
 
 4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Then, one commit each:
    a. **Bump**: `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` when `yarn.lock`/Snyk needs it. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit lockfiles.
@@ -29,7 +29,7 @@ Input: `$ARGUMENTS` = package/module, manifest path, target version, natural lan
 
 ## Rules
 
-Path before edits. Changelog + release notes mandatory for major/non-SemVer. A bump-only PR that forces a follow-up is a failed run. No unprompted repo reports. JS/Go first-class; same gate elsewhere.
+Evidence: PR body or chat; never local Markdown reports. Reports only by explicit request. Path before edits. Changelog + release notes for major/non-SemVer. A bump-only PR is a failed run. JS/Go first-class.
 
 ## Migration doctrine
 

@@ -48,6 +48,7 @@ Do not push if the tree changed unintentionally.
 
 For visual context (diagrams, file maps, annotated walkthrough), run `/visual-recap` -- do not duplicate it here. This skill only tightens the PR text itself:
 
+- When `/quantify-impact` produced meaningful evidence, put its `## Proven impact` block (`Metric | Before | After | Delta`) first, followed by the exact command/environment. If measurement was not useful, keep the normal value summary; no fake empty table. If evidence missed its threshold, say `Value not proven` rather than hiding it.
 - Add a TL;DR that matches the actual diff.
 - Separate core files from generated or mechanical files.
 - Call out risky behavior changes, migration order, rollout plan, and test coverage.

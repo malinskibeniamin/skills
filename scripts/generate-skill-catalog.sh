@@ -53,6 +53,7 @@ SHORT_DESCRIPTIONS = {
     "plow-ahead": "Continue autonomously through routine ambiguity",
     "prime": "Build a concise repository startup brief",
     "prototype": "Build a throwaway artifact to answer a design question",
+    "quantify-impact": "Prove meaningful product and codebase improvements",
     "read-the-damn-docs": "Research current behavior from primary documentation",
     "redpanda-ai-gateway": "Run AI CLIs through the Redpanda AI Gateway",
     "registry-workflow": "Maintain component registry taxonomy and sync discipline",

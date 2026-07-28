@@ -69,7 +69,7 @@ run_content_eval "$SKILL_MD" "effort|danger|blast radius" "scores upgrade effort
 run_content_eval "$SKILL_MD" "patch/minor.*apply|apply.*patch/minor" "safe patch/minor may apply"
 run_content_eval "$SKILL_MD" "major.*GitHub issue|GitHub issue.*major" "major changes go to GitHub issue"
 run_content_eval "$SKILL_MD" "plan.*only|plan only" "supports plan-only invocation"
-# Reports are opt-in now (owner call): no unprompted repo reports.
+# Evidence stays in existing collaboration surfaces unless the user requests a report.
 if grep -qE "Always leave.*report|docs/dependency-upgrades" "$SKILL_MD"; then
   echo "  FAIL  unprompted local report requirement crept back"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: unprompted report requirement returned"
@@ -77,6 +77,10 @@ else
   echo "  PASS  no unprompted repo reports (upgrade+adapt is the default)"
   PASS=$((PASS + 1))
 fi
+run_content_eval "$SKILL_MD" "never local Markdown" "never creates local Markdown reports"
+run_content_eval "$SKILL_MD" "PR body or chat" "keeps upgrade evidence in existing surfaces"
+run_content_eval "$SKILL_MD" "one umbrella GitHub issue" "uses one issue for a blocked package batch"
+run_content_eval "$SKILL_MD" "Reports only by explicit request" "standalone reports require explicit user request"
 run_content_eval "$SKILL_MD" "same PR" "migration + benefit ride in the same PR as the bump"
 run_content_eval "$SKILL_MD" "Benefit" "has the benefit-adoption pass"
 run_content_eval "$SKILL_MD" "Deprecation warnings.*fixed NOW|fixed NOW, not suppressed" "deprecations fixed in the upgrade PR"
@@ -145,7 +149,8 @@ run_content_eval "$REFERENCE_MD" "skip reason" "reference allows documented skip
 run_content_eval "$GO_SKILL" "dependency.*changed|package\\.json|go\\.mod" "/go checks dependency changes"
 run_content_eval "$GO_SKILL" "/upgrade-dependency" "/go routes dependency changes to upgrade-dependency"
 run_content_eval "$COMMIT_PUSH_PR_REF" "Dependency upgrade path" "PR template includes dependency upgrade section"
-run_content_eval "$COMMIT_PUSH_PR_REF" "upgrade-dependency" "commit-push-pr references upgrade-dependency report"
+run_content_eval "$COMMIT_PUSH_PR_REF" "Reuse.*upgrade-dependency.*notes directly" "commit-push-pr reuses notes without a report file"
+run_content_eval "$COMMIT_PUSH_PR_REF" "never create or link a local Markdown report" "commit-push-pr forbids local upgrade reports"
 run_content_eval "$DEPS_HOOK" "/upgrade-dependency" "dependency hook nudges upgrade-dependency"
 run_content_eval "$DEPS_HOOK" "skip reason" "dependency hook mentions skip reason"
 run_content_eval "$DEPS_HOOK" "upgrade\\+adapt in one pass" "dependency hook nudges the one-pass upgrade contract"
