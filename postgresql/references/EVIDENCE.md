@@ -37,8 +37,8 @@ pooler, performance, and denial-of-service complexity.
 ## Research snapshot
 
 Snapshot date: **2026-07-28**. The machine-readable
-[source-decision index](source-index.jsonl) records 10,350 unique URL-level
-decisions: 2,025 included and 8,325 excluded or screened out.
+[source-decision index](source-index.jsonl) records 10,357 unique URL-level
+decisions: 2,029 included and 8,328 excluded or screened out.
 
 | Corpus | Decisions | Included |
 |---|---:|---:|
@@ -46,8 +46,8 @@ decisions: 2,025 included and 8,325 excluded or screened out.
 | Supabase blog/changelog | 626 | 224 |
 | Neon blog/changelog | 734 | 562 |
 | Drizzle docs/changelogs/releases | 1,222 | 567 |
-| go-jet releases/wiki/source/issues | 70 | 70 |
-| Databricks blog/releases/docs | 7,061 | 177 |
+| go-jet releases/wiki/source/issues | 74 | 74 |
+| Databricks blog/releases/docs | 7,064 | 177 |
 | PostgreSQL Global Development Group | 64 | 64 |
 
 PlanetScale and Supabase pages received complete full-text semantic screening.
@@ -75,6 +75,9 @@ bun postgresql/scripts/refresh-corpus.ts
 bun postgresql/scripts/refresh-corpus.ts --fetch
 bun postgresql/scripts/refresh-corpus.ts --check
 ```
+
+Set `GITHUB_TOKEN` or `GH_TOKEN` for authenticated GitHub API discovery; the
+updater sends it only to `api.github.com`.
 
 The script discovers official sitemaps, feeds, and releases; writes fetched
 bodies only under `.context/postgresql-corpus`; computes content hashes when

@@ -8,6 +8,7 @@ import {
   parseFeed,
   parseGitHubTree,
   parseSitemap,
+  requestHeaders,
   shouldFetchRecord,
   validateLedger,
   type DiscoveredRecord,
@@ -15,6 +16,21 @@ import {
 } from "./refresh-corpus";
 
 describe("corpus discovery", () => {
+  test("authenticates GitHub API discovery without leaking the token", () => {
+    expect(
+      requestHeaders(
+        "https://api.github.com/repos/go-jet/jet/releases",
+        "github-token",
+      ),
+    ).toMatchObject({ authorization: "Bearer github-token" });
+    expect(
+      requestHeaders(
+        "https://planetscale.com/blog/sitemap.xml",
+        "github-token",
+      ),
+    ).not.toHaveProperty("authorization");
+  });
+
   test("parses and normalizes sitemap URLs", () => {
     const xml = `<?xml version="1.0"?>
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

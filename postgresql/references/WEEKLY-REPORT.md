@@ -8,7 +8,12 @@ maintenance. Use rates, percentiles, deltas, and workload-normalized values.
 PlanetScale's supplied [weekly report](https://planetscale.com/changelog/postgres-weekly-database-reports)
 provides the starting shape: anomalies; expensive queries by total time with
 calls, p99, and cache-hit ratio; schema suggestions; throttles; storage delta;
-CPU and memory. Add the operational/recovery evidence below.
+CPU and memory. The earlier
+[database-report overview](https://planetscale.com/blog/introducing-database-reports)
+documents the email workflow, while the later
+[egress update](https://planetscale.com/changelog/postgres-weekly-reports-egress-metrics)
+shows why the report contract must evolve. Add the operational/recovery
+evidence below.
 
 ## Report contract
 

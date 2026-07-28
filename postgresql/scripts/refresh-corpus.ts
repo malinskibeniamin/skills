@@ -427,12 +427,23 @@ async function sha256(value: string): Promise<string> {
   ).join("");
 }
 
+export function requestHeaders(
+  url: string,
+  githubToken = Bun.env.GITHUB_TOKEN ?? Bun.env.GH_TOKEN,
+): Record<string, string> {
+  const headers: Record<string, string> = {
+    accept: "application/json, application/xml, text/html, text/markdown",
+    "user-agent": "frontend-skills-postgresql-corpus/1.0",
+  };
+  if (githubToken && new URL(url).hostname === "api.github.com") {
+    headers.authorization = `Bearer ${githubToken}`;
+  }
+  return headers;
+}
+
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, {
-    headers: {
-      accept: "application/json, application/xml, text/html, text/markdown",
-      "user-agent": "frontend-skills-postgresql-corpus/1.0",
-    },
+    headers: requestHeaders(url),
     signal: AbortSignal.timeout(30_000),
   });
   if (!response.ok) {

@@ -4,6 +4,31 @@ Jet is a type-safe SQL builder, schema-driven code generator, and query result
 mapper, not an ORM. Start from the pinned `go.mod` version and matching
 [release notes](https://github.com/go-jet/jet/releases).
 
+## Hard fit limits
+
+At reviewed commit `10d3623`, released statement/QRM execution uses
+`database/sql` rows and results; native pgx remained a separate
+[workstream](https://github.com/go-jet/jet/pull/523). A pgx-native service can
+call `stmt.Sql()` and execute the text/arguments itself, but loses Jet's direct
+result mapper. Pilot representative queries before adopting Jet service-wide.
+
+The default generator maps PostgreSQL `jsonb` and user-defined/unsupported
+types to string-like builder columns. PostGIS `geography` and specialized JSONB
+operators therefore need generator customization plus typed custom/raw
+expressions. Prefer handwritten SQL if escape hatches dominate the complex
+queries Jet was meant to clarify.
+
+Generated tables provide per-value `FromSchema`. Package-level `UseSchema`
+mutates generated globals and is documented for one-time startup. A
+schema-per-tenant service must authorize schema identifiers, keep tenant schemas
+structurally identical, and clone table values per query rather than switching
+global schema state concurrently.
+
+Evidence:
+[statement interfaces](https://github.com/go-jet/jet/blob/10d3623ccad6a3a696367ca93314ff96427908e6/internal/jet/statement.go),
+[default type mappings](https://github.com/go-jet/jet/blob/10d3623ccad6a3a696367ca93314ff96427908e6/generator/template/sql_builder_template.go#L163-L238), and
+[generated schema APIs](https://github.com/go-jet/jet/blob/10d3623ccad6a3a696367ca93314ff96427908e6/generator/template/file_templates.go#L51-L111).
+
 ## Generation ownership
 
 - Generate from an already-running schema through a least-privilege metadata
