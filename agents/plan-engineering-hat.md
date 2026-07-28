@@ -10,14 +10,22 @@ allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *),
 Staff engineer perspective. Find the smallest clear design that satisfies the
 current contract and demonstrated scale.
 
-## Pass 0: Less code, more meaning
+## Pass 0: Standards axis
+
+Own the **Standards axis** separately from architecture judgment. Read every
+`standards_sources` entry in the shared evidence packet and report only planned choices
+that conflict with a documented rule. Cite the exact file and rule. Do not litigate
+formatting or checks already owned by tooling. Label these findings
+`section: "standards"`; label the remaining findings `section: "engineering"`.
+
+## Pass 1: Less code, more meaning
 
 - What can be deleted, reused, or left unbuilt?
 - Does every proposed file, branch, abstraction, option, dependency, and test earn its place now?
 - Is complexity justified by demonstrated scale or only an imagined future?
 - Would direct code expose the domain better than another layer?
 
-## Pass 1: Architecture
+## Pass 2: Architecture
 
 1. **State shape**: where does state live? Single source or scattered?
 2. **Error paths**: which credible failure could violate the contract?
@@ -26,18 +34,18 @@ current contract and demonstrated scale.
 5. **Scale**: what is measured or explicitly required? Avoid indexes, caches, queues, pagination, and virtualization without a threshold.
 6. **Atomicity**: protect irreversible or data-loss-sensitive work.
 
-## Pass 2: Murphy (what breaks first?)
+## Pass 3: Murphy (what breaks first?)
 
 Assume the plan ships and something goes wrong within a week. Name the single most likely failure: bad input, slow dependency, race, partial write, stale cache, or user abandoning mid-flow. If the plan has no answer for it, flag `MURPHY_UNADDRESSED` and put the question in `must_answer`. This is the plan-time slice of `/resilience-review`; the full Murphy panel runs on the diff at review time.
 
-## Pass 3: Non-Functional
+## Pass 4: Non-Functional
 
 - **Perf budget**: only for a measured hot path or explicit SLO.
 - **Security surface**: new user-input path? New external fetch? New auth boundary? If yes, OWASP + STRIDE must be named.
 - **Observability**: add it when failure would otherwise be materially hidden.
 - **Rollback**: can we revert in 5 minutes?
 
-## Pass 4: Delivery
+## Pass 5: Delivery
 
 - **Test strategy**: name the smallest public-contract test. Add cases only for independent credible risks.
 - **Dependencies**: new deps? Pin or not? Peer-dep collisions?
@@ -46,23 +54,10 @@ Assume the plan ships and something goes wrong within a week. Name the single mo
 
 ## Output
 
-One JSON block per [findings-schema.md](./references/findings-schema.md). Set `reviewer: "plan-engineering-hat"`.
-
-```json
-{
-  "reviewer": "plan-engineering-hat",
-  "status": "APPROVED" | "NEEDS_DESIGN" | "BLOCKED",
-  "findings": [
-    { "id": "UNHANDLED_ERROR_PATH", "severity": "HIGH", "detail": "...", "recommendation": "..." }
-  ],
-  "must_answer": [
-    "What's the rollback plan if the backfill corrupts rows?"
-  ],
-  "test_first": [
-    "RED test case N: when the feature is behind flag-off, API returns legacy shape"
-  ]
-}
-```
+One JSON block per
+[plan-findings-schema.md](./references/plan-findings-schema.md). Set
+`reviewer: "plan-engineering-hat"` and `axis: "engineering"`. Put the smallest
+public-contract tests implied by credible risks in `test_first`.
 
 ## Non-Goals
 

@@ -200,14 +200,19 @@ Small PRs = 2-3x faster review, higher feedback quality.
 Run `/grilling` only when the user asks for planning/grilling or an unresolved material
 product, architecture, or UX decision remains:
 
-1. Plan summary
-2. Challenge vs existing domain (CONTEXT.md, ADRs)
-3. Sharpen terminology -- ambiguous/overloaded terms
-4. Challenge assumptions, surface tradeoffs, find gaps
-5. Resolve decision branches
-6. Update CONTEXT.md + ADRs inline
-7. Update plan w/ changed decisions
-8. Confirm the decision, then proceed
+1. Gather one evidence packet: plan, request/spec, standards, paths, facts, assumptions.
+2. Select quick, standard, or deep-risk review.
+3. Apply the required plan axes inline.
+4. Challenge vs existing domain (CONTEXT.md, ADRs).
+5. Sharpen terminology -- ambiguous/overloaded terms.
+6. Challenge assumptions, surface tradeoffs, find gaps.
+7. Resolve decision branches.
+8. Update CONTEXT.md + ADRs and the plan.
+9. Confirm the decision, then proceed.
+
+The [`/grilling` plan gate](../grilling/SKILL.md#plan-gate-lifecycle-phase-2b) owns tier
+definitions, axes, specialist routing, and the merge/block contract. Apply it before
+step 9; every omitted axis needs evidence.
 
 ### Why
 
@@ -215,7 +220,6 @@ Code = byproduct of understanding. Can't defend decisions under pressure -> cogn
 
 Ordinary build/fix/implement work gets a concise plan and continues immediately. Do not
 pause merely because implementation has multiple tasks.
-
 ## Phase 3: Implement
 
 ### Test meaningful behavior

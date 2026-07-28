@@ -39,19 +39,53 @@ The interview ends when the frontier is empty: every branch visited, nothing lef
 
 ## Plan gate (lifecycle phase 2b)
 
-Once a coherent plan exists, run three reviewer hats inline in the current context. Do not
-spawn plan agents or start a recursive model call unless I explicitly request delegation or
-invoke `/swarm`; skill activation alone is not consent:
+Once a coherent plan exists, review it with the shared
+[plan findings contract](../agents/references/plan-findings-schema.md). Apply every
+required axis and all three reviewer hats inline in the current context. Do not spawn
+plan agents or start a recursive model call unless I explicitly request delegation or
+invoke `/swarm`.
 
-- **`plan-product-hat`**: persona, pain, success metric, scope, reversibility, TTV
-- **`plan-engineering-hat`**: architecture, error paths, perf, security, test strategy, rollback -- includes the Murphy pass (what breaks first in prod?); the full Murphy panel (`/resilience-review`) runs on the diff at review time, not on the plan
-- **`plan-design-hat`**: flow, a11y, copy, visual consistency, states (empty/loading/error)
+**Evidence packet:** gather the exact plan, request and Spec sources, Standards sources,
+planned paths, repo facts, assumptions, tier, and specialist matches once. Give every
+axis the same packet. Find facts yourself; `must_answer` contains user decisions only.
 
-Merge: dedupe all `must_answer` questions into one list; user answers each; plan updates inline. Any `BLOCKED` hat halts the plan until addressed or overridden. All `APPROVED` (or explicit override) -> implement. Competing plans/transcripts/visual plans -> run `/plan-arbiter` after the hats (Adopt / Hybrid / Revise first).
+**Axes:** keep Spec and Standards separate.
+- **Spec (`plan-product-hat`)**: requirements, persona, pain, success, scope, reversibility, TTV.
+- **Standards (`plan-engineering-hat`)**: documented rules, architecture, failure paths, tests, rollback, Murphy.
+- **Design (`plan-design-hat`)**: flow, a11y, copy, consistency, empty/loading/error.
 
-The lifecycle invokes this gate only for explicit grilling/planning or unresolved material
-architectural, product, or UX decisions. Ordinary well-scoped build/fix/implement work states
-its concise plan and continues without this stop. [ETHOS: Grill Before Build]
+**Tiers:**
+
+| Tier | Trigger | Axes |
+|---|---|---|
+| **Quick** | All hold: trivial bug, fewer than 3 tasks, no architectural/product/UX decision | Orchestrator checks Spec, Standards, and adversarial/value inline. Name every skipped hat and specialist with a one-line `skip_reason`; no fan-out. |
+| **Standard** | Default within this gate | Three plan hats, inline adversarial/value, and every matched specialist. |
+| **Deep-risk** | Credible high-impact or hard-to-reverse surface | Standard plus a plan-time `/resilience-review` and `/steelman` of the highest-risk eligible assumption. |
+
+Deep-risk triggers include auth/security, migrations, public APIs, destructive actions,
+concurrency/Temporal, cross-service changes, and one-way doors. Size alone is not risk.
+Steelman the highest-risk factual, causal, or architectural assumption; preferences,
+goals, and scope choices get an evidence-backed skip reason.
+
+**Adversarial/value:** inline, ask what makes the plan wrong even if implemented
+perfectly and whether the smallest plan is worth its cost.
+
+**Specialist registry:** conditional axes use the same packet and schema. Initially,
+`*.go`, `go.mod`, or planned Go implementation around a backend proto routes through
+`/golang` for bounds, APIs, errors, concurrency, Temporal, tests, rollout, and
+controllers. `/golang-review` waits for a diff. Add routes only after repeated misses.
+
+**Merge:** validate the plan schema; dedupe findings and `must_answer` by root cause;
+preserve Spec and Standards; keep the strongest evidence. Every axis reports
+`APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED`; a skip needs a one-line skip
+reason. Update the plan for changes. Blocking findings halt until answered or explicitly
+overridden. Then ask for implementation confirmation. Competing plans go through
+`/plan-arbiter`.
+
+The lifecycle invokes this gate only for explicit grilling/planning or unresolved
+material architectural, product, or UX decisions. Ordinary well-scoped
+build/fix/implement work states its concise plan and continues without this stop.
+[ETHOS: Grill Before Build]
 
 ## With docs (domain capture)
 
