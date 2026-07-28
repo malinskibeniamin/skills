@@ -51,6 +51,7 @@ SHORT_DESCRIPTIONS = {
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
     "plan-arbiter": "Compare competing plans and choose a grounded direction",
     "plow-ahead": "Continue autonomously through routine ambiguity",
+    "postgresql": "Engineer and operate PostgreSQL from workload evidence",
     "prime": "Build a concise repository startup brief",
     "prototype": "Build a throwaway artifact to answer a design question",
     "quantify-impact": "Prove meaningful product and codebase improvements",

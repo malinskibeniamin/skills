@@ -53,6 +53,7 @@
     "./make-pr-easy-to-review/",
     "./plan-arbiter/",
     "./plow-ahead/",
+    "./postgresql/",
     "./prime/",
     "./prototype/",
     "./quantify-impact/",

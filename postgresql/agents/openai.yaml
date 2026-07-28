@@ -1,0 +1,4 @@
+interface:
+  display_name: "PostgreSQL"
+  short_description: "Engineer and operate PostgreSQL from workload evidence"
+  default_prompt: "Use $postgresql to design, review, or operate this PostgreSQL change safely."
