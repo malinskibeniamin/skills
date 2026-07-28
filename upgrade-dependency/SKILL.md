@@ -11,7 +11,7 @@ branches fire.
 Input: `$ARGUMENTS` = package/module, manifest path, target version, natural language, or `plan`.
 ## Flow
 
-1. **Scope**: detect manifests/lockfiles (`package.json`, `bun.lock`, `go.mod`) and workspaces. Map the dependency tree as far as it bites: direct/transitive, parents/dependents, peers/plugins/adapters. Run `/quantify-impact` before the bump only for a direct measurable mechanism.
+1. **Scope**: detect manifests/lockfiles (`package.json`, `bun.lock`, `go.mod`) and workspaces. Map the dependency tree: direct/transitive, parents/dependents, peers/plugins/adapters. Run `/quantify-impact` for a direct metric.
 
 2. **Research what changes behavior**: build the upgrade path: every published stable version installed -> target with per-version behavior notes; read deeply only at major/breaking hops (migration guides, codemods, announcements, `/read-the-damn-docs`); skim minors, skip patch archaeology; install the target once, not each hop. Classify SemVer; non-SemVer/missing changelog -> score change volume/cadence/diff size/blast radius. Check advisories (Snyk/GHSA/OSV/Socket/CVE).
 
