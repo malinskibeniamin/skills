@@ -40,6 +40,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/make-pr-easy-to-review` | Clean noisy PR history and add reviewer guidance without changing code behavior. |
 | `/plan-arbiter` | Arbitrate competing plans. |
 | `/plow-ahead` | Continue through routine ambiguity using reversible assumptions. |
+| `/postgresql` | Engineer and operate PostgreSQL from workload evidence. |
 | `/prime` | Builds repo startup brief. |
 | `/prototype` | Build a throwaway prototype to answer a design question. |
 | `/quantify-impact` | Measure whether a change made the product or codebase meaningfully better. |

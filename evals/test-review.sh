@@ -43,3 +43,4 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Posted: <count> \\| Comment-ready fallba
 run_content_eval "$SKILL_DIR/SKILL.md" "Run every applicable hat inline" "review hats run inline"
 run_content_eval "$SKILL_DIR/SKILL.md" "one bounded, foreground, awaited Sol high" "review permits one foreground cross-model pass"
 run_content_eval "$SKILL_DIR/SKILL.md" "do not launch a substitute agent" "review fails open when cross-model review is unavailable"
+run_content_eval "$SKILL_DIR/SKILL.md" "postgresql.*actual-SQL evidence" "review adds workload-informed PostgreSQL axis"
