@@ -24,8 +24,8 @@ fi
 # Never terminate a human-owned browser to make it available for automation.
 _browser_apps='google[[:space:]]+chrome|chrome|chromium|safari|firefox|arc|brave([[:space:]]+browser)?|microsoft[[:space:]]+edge'
 _browser_app_match="(^|[^[:alnum:]_])($_browser_apps)([^[:alnum:]_]|$)"
-if printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)(sudo[[:space:]]+)?(killall|pkill)[^;&|]*$_browser_app_match" \
-  || printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)osascript[^;&|]*((quit|close)[^;&|]*$_browser_app_match|$_browser_app_match[^;&|]*(quit|close))"; then
+if printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)(sudo[[:space:]]+)?(killall|pkill)[^;&|]*${_browser_app_match}" \
+  || printf '%s' "$command" | grep -qiE "(^|[;&|][;&|]?[[:space:]]*)osascript[^;&|]*((quit|close)[^;&|]*${_browser_app_match}|${_browser_app_match}[^;&|]*(quit|close))"; then
   echo '{"hookSpecificOutput":{"permissionDecision":"deny"},"systemMessage":"Refusing to close a human-owned browser. Use an isolated agent-browser or Playwright session; if isolation is unavailable, report blocked verification."}' >&2
   exit 2
 fi
