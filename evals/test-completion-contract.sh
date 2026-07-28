@@ -195,6 +195,24 @@ else
   ERRORS="$ERRORS\n  FAIL: silent stop was allowed"
 fi
 
+_fresh_stop_session="completion-contract-fresh-stop-eval-$$"
+_fresh_stop_dir="/tmp/hook-session-${_fresh_stop_session}"
+mkdir -p "$_fresh_stop_dir"
+printf 'local\n' > "$_fresh_stop_dir/task-endpoint"
+_fresh_stop_exit=0
+printf '%s' '{"session_id":"completion-contract-fresh-stop-eval-'$$'","last_assistant_message":"Implemented it."}' \
+  | HOOK_STOP_BLOCK_CAP_GUARD=1 CLAUDE_SESSION_ID="$_fresh_stop_session" "$COMPLETION" \
+    >/tmp/completion-contract-out 2>/tmp/completion-contract-err \
+  || _fresh_stop_exit=$?
+if [ "$_fresh_stop_exit" -eq 2 ] && grep -qi "silent" /tmp/completion-contract-out /tmp/completion-contract-err; then
+  echo "  PASS  fresh session emits a deterministic silent-stop block"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  fresh session emits a deterministic silent-stop block"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: fresh session silent-stop block exited $_fresh_stop_exit without guidance"
+fi
+
 run_hook_eval "$COMPLETION" \
   '{"session_id":"completion-contract-eval-'$$'","last_assistant_message":"Summary.\n\n🟢 done — focused tests pass"}' \
   0 \
@@ -269,4 +287,4 @@ else
   PASS=$((PASS + 1))
 fi
 
-rm -rf "$_cc_dir" "$_plan_dir" "$_plan_action_dir" "$_review_fix_dir" "$_plow_dir" "$_negative_dir" "$_negative_plan_dir" "$_conflict_dir" "$_history_dir" "$_review_dir" "$_agent_dir" /tmp/completion-contract-out /tmp/completion-contract-err
+rm -rf "$_cc_dir" "$_plan_dir" "$_plan_action_dir" "$_review_fix_dir" "$_plow_dir" "$_negative_dir" "$_negative_plan_dir" "$_conflict_dir" "$_history_dir" "$_review_dir" "$_agent_dir" "$_fresh_stop_dir" /tmp/completion-contract-out /tmp/completion-contract-err
