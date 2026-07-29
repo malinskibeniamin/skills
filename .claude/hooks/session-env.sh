@@ -90,6 +90,7 @@ if [ -n "$_current_root" ]; then
   _current_root=$(cd "$_current_root" 2>/dev/null && pwd -P 2>/dev/null || echo "$_current_root")
   echo "$_current_root" > "$_session_dir/bound-worktree" 2>/dev/null || true
   git branch --show-current > "$_session_dir/bound-branch" 2>/dev/null || true
+  git rev-parse HEAD > "$_session_dir/session-start-head" 2>/dev/null || true
 fi
 
 # ── /mux session-hint: pre-bind for worktrees spawned via /mux ────

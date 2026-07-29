@@ -41,10 +41,15 @@ case "$skill" in
     if [ -n "$session" ]; then
       session_dir="/tmp/hook-session-${session}"
       mkdir -p "$session_dir" 2>/dev/null || true
-      touched="$session_dir/session-touched-files"
-      touched_count=0
-      [ -f "$touched" ] && touched_count=$(wc -l < "$touched" | tr -d '[:space:]')
-      printf '%s\n' "${touched_count:-0}" > "$session_dir/dogfood-invocation" 2>/dev/null || true
+      state_lib="$(dirname "$0")/dogfood-state.sh"
+      fingerprint=""
+      if [ -f "$state_lib" ]; then
+        # shellcheck source=dogfood-state.sh
+        source "$state_lib"
+        fingerprint=$(dogfood_state_fingerprint 2>/dev/null || true)
+      fi
+      printf '{"fingerprint":"%s"}\n' "$fingerprint" \
+        > "$session_dir/dogfood-invocation" 2>/dev/null || true
     fi
     ;;
   resolve-pr-feedback|*/resolve-pr-feedback|*:resolve-pr-feedback)

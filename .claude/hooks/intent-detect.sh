@@ -82,6 +82,22 @@ fi
 if [ -n "$_endpoint" ] && [ -n "$_session_dir" ]; then
   printf '%s\n' "$_endpoint" > "$_session_dir/task-endpoint" 2>/dev/null || true
   rm -f "$_session_dir/task-completed" 2>/dev/null || true
+
+  # Per-turn dogfood baseline. Session-wide touch/head state would make a
+  # later docs-only task inherit an earlier runnable edit and get blocked.
+  _dogfood_touched="$_session_dir/session-touched-files"
+  _dogfood_touched_count=0
+  [ -f "$_dogfood_touched" ] \
+    && _dogfood_touched_count=$(wc -l < "$_dogfood_touched" | tr -d '[:space:]')
+  printf '%s\n' "${_dogfood_touched_count:-0}" \
+    > "$_session_dir/dogfood-task-start-touched-count" 2>/dev/null || true
+  git rev-parse HEAD \
+    > "$_session_dir/dogfood-task-start-head" 2>/dev/null || true
+  {
+    git diff --name-only HEAD 2>/dev/null
+    git ls-files --others --exclude-standard 2>/dev/null
+  } | sort -u \
+    > "$_session_dir/dogfood-task-dirty-baseline" 2>/dev/null || true
 fi
 
 # ── PR delivery context ──────────────────────────────────────────
