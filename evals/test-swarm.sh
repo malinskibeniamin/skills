@@ -4,8 +4,8 @@ SKILL_DIR="$REPO_ROOT/swarm"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "swarm SKILL.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: swarm" "swarm has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "parallel executor" "swarm defines parallel executor role"
-run_content_eval "$SKILL_DIR/SKILL.md" "not a planner|not planner" "swarm does not replace planning"
+run_content_eval "$SKILL_DIR/SKILL.md" "[Ss]hard independent bulk work|parallel executor" "swarm defines parallel executor role"
+run_content_eval "$SKILL_DIR/SKILL.md" "does not replace planning" "swarm does not replace planning"
 run_content_eval "$SKILL_DIR/SKILL.md" "swarm manifest" "swarm shows manifest before launch"
 run_content_eval "$SKILL_DIR/SKILL.md" "same branch/worktree/PR" "swarm defaults to shared workspace"
 run_content_eval "$SKILL_DIR/SKILL.md" "worktree" "swarm supports per-agent worktrees"
@@ -18,7 +18,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "conflicting" "swarm handles conflicting 
 run_content_eval "$SKILL_DIR/SKILL.md" "model" "swarm leaves room for model policy"
 run_content_eval "$SKILL_DIR/SKILL.md" "eval ownership|matching evals" "swarm assigns eval ownership for skill and harness lanes"
 run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN|failing-test evidence" "swarm TDD lanes require red-green proof"
-run_content_eval "$SKILL_DIR/SKILL.md" "visual-review.*setup-ux-copy|copywriting.*visual-review" "swarm can split visual review and copywriting lanes"
+run_content_eval "$SKILL_DIR/SKILL.md" "visual-review.*ux-copy|ux-copy.*visual-review" "swarm can split visual review and copywriting lanes"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./swarm/"' "swarm registered in Claude plugin skills"
 
 lines=$(wc -l < "$SKILL_DIR/SKILL.md" 2>/dev/null | tr -d ' ' || echo 999)

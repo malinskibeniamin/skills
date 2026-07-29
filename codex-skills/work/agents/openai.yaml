@@ -1,5 +1,5 @@
 interface:
   display_name: "Work"
-  short_description: "Run the complete development lifecycle"
+  short_description: "Run the lifecycle through the requested endpoint"
 policy:
   allow_implicit_invocation: false

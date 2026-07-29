@@ -1,6 +1,7 @@
 ---
 name: visual-recap
-description: Turn a PR, branch, commit, or diff into an interactive Agent-Native visual recap with diagrams, file maps, API/schema summaries, annotated diffs, UI wireframes, and review notes.
+description: Create an interactive visual recap for a PR, branch, commit, or diff.
+disable-model-invocation: true
 ---
 
 # Visual Recap
@@ -18,7 +19,10 @@ Read these only when relevant:
 
 ## Local harness overlay
 
-- `/commit-push-pr` should create or link a visual recap before opening or updating a PR when the diff is review-worthy.
-- `/go` should treat recap as part of the PR handoff for non-trivial work.
+- When the user explicitly invokes `/visual-recap`, create or link it to the named PR, branch,
+  commit, or diff.
+- Recap creation is extra artifact work; `/commit-push-pr` and `/go` do not invoke it
+  automatically.
 - Keep recaps grounded in the real diff. Redact secrets and do not infer facts absent from changed lines.
-- Skip recap for tiny, single-file, obvious diffs; state the skip reason.
+- If the explicitly requested target has no meaningful visual structure, return that evidence
+  instead of manufacturing a recap.

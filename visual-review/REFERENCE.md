@@ -278,11 +278,11 @@ Use this as a detector-backed checklist, not a taste shortcut. If a pattern appe
 
 ## Optional detector contract
 
-If `npx impeccable detect` is available and network/tooling policy allows it, run it as evidence input:
+If the detector is available and network/tooling policy allows it, run it as evidence input:
 
 ```bash
-npx impeccable detect <target>
-npx impeccable detect --fast --json <target>
+bunx impeccable detect <target>
+bunx impeccable detect --fast --json <target>
 ```
 
 Detector output is supporting evidence, not final judgment. Map each hit to the Anti-pattern matrix, then confirm visually in the relevant state/viewport. Detector unavailable is non-blocking: report `Detector unavailable: <reason>` and continue manual visual review. Do not vendor detector code or copy rule text; keep this skill's wording and evals local.
@@ -404,7 +404,8 @@ These belong here even when hooks exist:
 - `/prototype`: compare alternatives pre-implementation.
 - `/triage`: use `regression` mode for user-visible bugs.
 - `self-reviewer` and `code-reviewer`: flag missing evidence for frontend/customer-facing surface diffs.
-- `route-visual-test-check.sh`, browser/e2e tests, CLI snapshots, visual regression tools complement; passing tests do not replace review.
+- Browser/e2e tests, CLI snapshots, and visual regression tools complement the review;
+  passing tests do not replace rendered evidence.
 
 ## Scripts vs hooks
 

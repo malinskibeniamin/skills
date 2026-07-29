@@ -70,7 +70,7 @@ case "$tool_name" in
 
   # ── Browser automation (Playwright / Chrome DevTools / claude-in-chrome) ──
   mcp__claude-in-chrome__navigate|mcp__chrome-devtools__navigate_page|mcp__playwright__browser_navigate)
-    msg='Browser MCP banned. Use: agent-browser open <url>. A11y-tree refs (@e1, @e2), not DOM dumps. ~17x smaller than read_page MCP. Alt: npx playwright open <url>.'
+    msg='Browser MCP banned. Use: agent-browser open <url>. A11y-tree refs (@e1, @e2), not DOM dumps. ~17x smaller than read_page MCP. Alt: bunx playwright open <url>.'
     ;;
   mcp__claude-in-chrome__computer|mcp__claude-in-chrome__find)
     msg='Browser MCP banned. Use: agent-browser click/type/hover <sel-or-@ref>. Get refs via: agent-browser snapshot.'
@@ -94,7 +94,7 @@ case "$tool_name" in
     msg='Browser MCP banned. Use agent-browser directly: agent-browser open <url>. Persistent daemon keeps cookies across calls.'
     ;;
   mcp__claude-in-chrome__*|mcp__chrome-devtools__*|mcp__playwright__*)
-    msg='Browser MCP banned. Use: agent-browser (brew install vercel/tap/agent-browser). Alt: npx playwright codegen/open for interactive flows.'
+    msg='Browser MCP banned. Use: agent-browser (brew install vercel/tap/agent-browser). Alt: bunx playwright codegen/open for interactive flows.'
     ;;
 
   # ── Blacksmith (CI) = GitHub Actions replacement → use gh CLI ──
@@ -148,7 +148,7 @@ case "$tool_name" in
 
   # ── Microsoft 365 → m365 CLI ──
   mcp__claude_ai_Microsoft_365__*|mcp__microsoft365__*|mcp__m365__*)
-    msg='M365 MCP banned. Use: m365 teams/outlook/sharepoint with -o json. Install: npm i -g @pnp/cli-microsoft365. Auth: m365 login.'
+    msg='M365 MCP banned. Use installed m365 teams/outlook/sharepoint with -o json. If unavailable, prefix the same subcommands with bunx @pnp/cli-microsoft365; authenticate with bunx @pnp/cli-microsoft365 login.'
     ;;
 
   *)

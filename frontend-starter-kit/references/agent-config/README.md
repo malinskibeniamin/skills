@@ -3,7 +3,8 @@
 
 - **SessionStart**: `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`
 - **UserPromptSubmit**: inject project state (git branch, dirty files, scripts, violations, config) -> Claude know state, no tool calls
-- **PreToolUse (Bash)**: optimize vitest commands -- strip `--verbose`, suggest `--pool=forks`, `--bail=1`, `--teardownTimeout=5000`. Also handle jest/bun test (back-compat)
+- **PreToolUse (Bash)**: optimize Vitest commands -- strip `--verbose`, suggest
+  `--pool=threads`, `--bail=1`, and `--teardownTimeout=5000`
 - **PostToolUse (Bash)**: truncate verbose output, cut context bloat
 
 ## Steps

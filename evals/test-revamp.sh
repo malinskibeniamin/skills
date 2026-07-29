@@ -8,7 +8,7 @@ run_content_eval "$REPO_ROOT/revamp/SKILL.md" "implementation-independent" "reva
 run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Mechanical first" "revamp ports mechanically before refactoring"
 run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Trial run before fleet" "revamp calibrates on a small trial"
 run_content_eval "$REPO_ROOT/revamp/SKILL.md" "work queue" "revamp drives the fleet off compiler errors"
-run_content_eval "$REPO_ROOT/revamp/SKILL.md" "assume it is wrong" "revamp mandates adversarial split-context review"
+run_content_eval "$REPO_ROOT/revamp/SKILL.md" "fresh context|fresh evidence" "revamp requires an adversarial fresh-context review"
 run_content_eval "$REPO_ROOT/revamp/SKILL.md" "Semantic-equivalence traps" "revamp hunts cross-stack semantic traps"
 run_content_eval "$REPO_ROOT/revamp/SKILL.md" "fix the prompt/checklist/queue" "revamp fixes the process, not the output"
 run_content_eval "$REPO_ROOT/revamp/SKILL.md" "zero skipped/deleted" "revamp exit gate protects the test suite"

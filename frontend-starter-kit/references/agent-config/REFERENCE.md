@@ -63,7 +63,7 @@ See `codex-compat` REFERENCE.md for approximation strategy.
 
 | Action | Runner | Why |
 |--------|--------|-----|
-| Strip `--verbose` | Vitest, Jest | Waste tokens -- agent reporters show only failures |
+| Strip `--verbose` | Vitest | Waste tokens -- agent reporters show only failures |
 
 ### Soft suggestions (`additionalContext`)
 
@@ -71,12 +71,10 @@ Suggest not force · appear only when flag absent:
 
 | Flag | Runner | Why |
 |------|--------|-----|
-| `--pool=forks` | Vitest | Own process per file -- OS clean zombies if vitest crash |
+| `--pool=threads` | Vitest | Match the configured low-import-overhead project pool |
 | `--bail=1` | Vitest | Fail fast -- skip waste tokens on cascade failures |
 | `--teardownTimeout=5000` | Vitest | Kill hang teardown after 5s |
 | `--reporter=github` | Vitest (CI) | GitHub Actions annotations inline in PR diffs |
-| `--bail` | Jest | Fail fast |
-| `--forceExit` | Jest | Force exit -- prevent hang from open handles |
 
 ## llm-truncate.sh (PostToolUse on Bash)
 
@@ -157,7 +155,7 @@ export default defineConfig({
 | Strip --verbose | Prevent verbose mode (`updatedInput` rewrite) | variable |
 | --bail=1 | Stop after first failure | ~1,000-50,000 tokens |
 | Truncate >200 lines | Cap `bun install`, stack traces, etc. | ~80% large outputs |
-| --pool=forks | Reliability (zombie prevention), not savings | 0 |
+| --pool=threads | Match project pool policy and reduce import overhead | configuration-dependent |
 
 ## Environment Variable Reference
 

@@ -4,26 +4,24 @@ description: Map work larger than one session through issue-tracker decision tic
 ---
 
 # Wayfinder
-
 Use when a goal is too large for one context window and the way to the **destination** is still foggy. Wayfinder finds the route through **decision tickets** -- questions whose resolution is a decision, not slices of a build to execute. The destination might be a spec, a decision, or a change whose path is unclear.
 
 ## Plan, don't do
-
 Wayfinder is planning by default. Each ticket resolves a decision, and the map is done when nothing is left to decide before someone goes and does the thing. The pull to execute is usually the signal that the edge of the map has been reached. An effort can override this in Notes, but absent that, produce decisions, not deliverables.
 
 ## Invariants
-
 - Refer to maps and tickets by **name** (their title), not a bare id or slug. Link the name when needed.
 - The map is an **index**, not a store: decisions live in their ticket; the map keeps only a one-line gist and pointer.
 - Read `CLAUDE.md` first when it exists; otherwise read `AGENTS.md`. Follow that file's **Issue tracker** pointer, then read **Wayfinding operations**. Never assume a document path. If neither file or pointer exists, use the local-markdown fallback.
 - Claim a ticket before work by assigning it to the driving dev; this must be the session's first write. Open + unassigned means unclaimed.
 - Use the tracker's native blocking/dependency feature when available; fallback to an explicit `Blocked by:` line only when native blocking is unavailable.
-- Never resolve more than one ticket per session by hand. Parallel research subagents may resolve ready research tickets while the map is charted.
-- For large parallel maps, apply `/efficient-frontier` usage-limit budgeting between ticket waves and `/efficient-frontier` to keep synthesis central while delegating bounded tickets.
+- Resolve at most one ticket per session in the primary context. Explicit delegation or
+  `/swarm` may authorize parallel ready research tickets; wayfinder invocation alone does not.
+- For an authorized parallel map, apply `/efficient-frontier` budgeting between ticket waves
+  and keep synthesis with the coordinator.
 - Use `/agent-watchdog` when auditing another session's resolved ticket, claim, branch, or frontier summary before trusting the map.
 
 ## Map shape
-
 The map is one issue or file labelled/marked `wayfinder:map`.
 
 ```markdown
@@ -42,7 +40,6 @@ The map is one issue or file labelled/marked `wayfinder:map`.
 Open tickets are not listed in the map body; query the issue tracker for open children/frontier tickets.
 
 ## Tickets
-
 Each decision ticket is a child issue/file with a focused question sized to one 100K-token agent session:
 
 ```markdown
@@ -55,7 +52,9 @@ Each ticket is either **HITL** -- human in the loop, worked with a human who spe
 
 Ticket types:
 
-- **Research** (AFK): read docs, APIs, specs, source, or other primary sources through a `/research` subagent. Link the cited Markdown summary.
+- **Research** (AFK): read docs, APIs, specs, source, or other primary sources through
+  `/research` in the primary context. Link the cited Markdown summary. Use a research lane
+  only after explicit delegation or `/swarm`.
 - **Prototype** (HITL): make a cheap artifact to react to, including `/prototype` UI or logic code. Link the artifact.
 - **Grilling** (HITL): conversation with `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
 - **Task** (HITL or AFK): manual work needed before a decision can continue. Automate where safe; otherwise hand the human a checklist. It earns its place by unblocking a decision, not by delivering the destination.
@@ -63,7 +62,6 @@ Ticket types:
 The answer is not part of the body. Record it on resolution. Assets are linked, not pasted.
 
 ## Fog of war
-
 Do not chart what you cannot yet see. **Not yet specified** is for suspected in-scope questions or risks that are not precise enough to assign. A ticket is for a sharp question, even if blocked. Not yet specified excludes what is already decided, what is already a ticket, and what is out of scope.
 
 ## Out of scope
@@ -76,8 +74,11 @@ Fog only gathers toward the destination. Work beyond the destination is **Out of
 2. Map the frontier. Grill breadth-first across the whole space, surfacing open decisions and first steps. **If this surfaces no fog**, you don't need a map; stop and ask the user how to proceed.
 3. Create the map with Destination, Notes, empty Decisions so far, Not yet specified, and Out of scope.
 4. Create only the tickets you can specify now. Wire blocking relationships in a second pass after tickets have ids.
-5. Fire research subagents in parallel for every ready AFK Research ticket. Each subagent claims its ticket first and follows `/research`'s artifact location; agents do not invent a root file or branch.
-6. Stop. Charting the map is one session's work. Do not also resolve tickets by hand.
+5. Resolve one ready AFK Research ticket inline in the primary context. If the user explicitly
+   authorized delegation or invoked `/swarm`, launch distinct ready research lanes; each lane
+   claims its ticket first, follows `/research`'s artifact location, and does not invent a root
+   file or branch.
+6. Stop after that one ready research ticket; do not resolve another ticket in this session.
 
 ## Work through a map
 

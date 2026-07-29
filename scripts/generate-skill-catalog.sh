@@ -47,7 +47,7 @@ SHORT_DESCRIPTIONS = {
     "grilling": "Stress-test plans, decisions, and ideas",
     "handoff": "Prepare a compact session handoff for another agent",
     "hook-audit": "Audit hook effectiveness, latency, and drift",
-    "improve": "Audit a codebase and write implementation plans",
+    "improve": "Audit codebases or write requested implementation plans",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
     "plan-arbiter": "Compare competing plans and choose a grounded direction",
     "plow-ahead": "Continue autonomously through routine ambiguity",
@@ -89,7 +89,7 @@ SHORT_DESCRIPTIONS = {
     "what-did-i-get-done": "Summarize authored commits into a concise status update",
     "wizard": "Generate an interactive Bash wizard for manual setup",
     "work-automation-kit": "Install planning, ticketing, and triage workflows",
-    "work": "Run the complete development lifecycle",
+    "work": "Run the lifecycle through the requested endpoint",
     "writing-beats": "Build an article beat by beat with user pivots",
     "writing-for-agents": "Write predictable skills and agent instruction files",
     "writing-fragments": "Mine conversation into reusable writing fragments",
@@ -195,13 +195,10 @@ for entry in sorted(skills):
     m = re.match(r"---\n(.*?)\n---", text, re.S)
     fm = m.group(1) if m else ""
     name = re.search(r"^name:\s*(.+)$", fm, re.M)
-    desc = re.search(r"^description:\s*(.+)$", fm, re.M)
     name = name.group(1).strip().strip('"') if name else d
-    desc = desc.group(1).strip().strip('"') if desc else ""
-    # first sentence, trimmed for the table
-    first = re.split(r"(?<=[.!?]) ", desc)[0].strip()
-    if len(first) > 110:
-        first = first[:107].rstrip() + "..."
+    # Reuse the bounded router copy that also feeds Codex metadata. This avoids
+    # truncating model-facing descriptions mid-branch or mid-word.
+    first = SHORT_DESCRIPTIONS[name].rstrip(".") + "."
     rows.append(f"| `/{name}` | {first} |")
 
 table = "\n".join(rows)

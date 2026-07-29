@@ -56,7 +56,7 @@ context_parts+=("$branch_context")
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 case "$agent_type" in
   self-reviewer|code-reviewer|adversarial-reviewer)
-    context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per the findings-schema.md in the agents/ directory. Read \`${repo_root}/agents/findings-schema.md\` for the exact format.")
+    context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per \`${repo_root}/agents/references/findings-schema.md\`. Read that file for the exact format.")
     ;;
 esac
 

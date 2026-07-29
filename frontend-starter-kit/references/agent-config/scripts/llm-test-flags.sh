@@ -29,7 +29,7 @@ if echo "$rewritten" | grep -qE '(vitest|bun (test|run test\S*))'; then
   fi
 
   if ! echo "$rewritten" | grep -qE '\-\-pool[= ]'; then
-    suggestions="$suggestions\n- --pool=forks prevents zombie processes"
+    suggestions="$suggestions\n- --pool=threads matches the project Vitest policy"
   fi
 
   if ! echo "$rewritten" | grep -qE '\-\-bail[= ]'; then
@@ -44,24 +44,6 @@ if echo "$rewritten" | grep -qE '(vitest|bun (test|run test\S*))'; then
     if [ "${CI:-}" = "true" ]; then
       suggestions="$suggestions\n- --reporter=github for inline PR annotations"
     fi
-  fi
-fi
-
-# ── Jest optimization ───────────────────────────────────────────
-
-if echo "$rewritten" | grep -qE '\bjest\b'; then
-
-  if echo "$rewritten" | grep -qE '\-\-verbose'; then
-    rewritten=$(echo "$rewritten" | sed -E 's/[[:space:]]+--verbose//g; s/--verbose[[:space:]]+//g; s/--verbose$//g')
-    must_rewrite=true
-  fi
-
-  if ! echo "$rewritten" | grep -qE '\-\-bail'; then
-    suggestions="$suggestions\n- --bail fails fast"
-  fi
-
-  if ! echo "$rewritten" | grep -qE '\-\-forceExit'; then
-    suggestions="$suggestions\n- --forceExit prevents zombie processes"
   fi
 fi
 

@@ -42,30 +42,6 @@ if echo "$command" | grep -qE '\bgit +commit\b' && \
   fi
 fi
 
-# rtk proxy nudge: advisory-only. Suggest `rtk <cmd>` prefix for output-heavy
-# commands that rtk has a filter for (60-90% token cut per rtk gain measurements).
-# Fail-open: silent if rtk not installed (rtk-install-check.sh nudges separately).
-# Skip when already rtk-prefixed or when auto-rewrite (rtk-rewrite.sh) is wired.
-if command -v rtk >/dev/null 2>&1 && ! echo "$command" | grep -qE '^[[:space:]]*rtk[[:space:]]'; then
-  _rtk_suggest=""
-  case "$command" in
-    *"git log"*|*"git status"*|*"git diff"*|*"git show"*|*"git push"*|*"git branch"*|*"git stash"*)
-      _rtk_suggest="rtk git ..." ;;
-    *"gh pr"*|*"gh api"*|*"gh issue"*|*"gh run"*|*"gh repo"*|*"gh release"*)
-      _rtk_suggest="rtk gh ..." ;;
-    *"cargo test"*|*"pytest"*|*"bun test"*|*"vitest"*|*"jest"*)
-      _rtk_suggest="rtk test ..." ;;
-    *"kubectl "*) _rtk_suggest="rtk kubectl ..." ;;
-    *"docker "*)  _rtk_suggest="rtk docker ..." ;;
-    *"pnpm "*)    _rtk_suggest="rtk pnpm ..." ;;
-    *"aws "*)     _rtk_suggest="rtk aws ..." ;;
-    *"psql "*)    _rtk_suggest="rtk psql ..." ;;
-  esac
-  if [ -n "$_rtk_suggest" ]; then
-    _fire "nudge-rtk" "prefix with rtk for auto-compression (60-90% token cut per rtk gain): $_rtk_suggest"
-  fi
-fi
-
 # gh with --json but no --jq / pipe filter
 # Measured: gh pr view/api with --json and no filter averaged 6.7k chars,
 # 3 calls hit the 30k output cap on the same PR in the sample.

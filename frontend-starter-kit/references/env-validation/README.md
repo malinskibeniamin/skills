@@ -1,5 +1,7 @@
 # Setup Env Validation
-t3-env + zod for type-safe env vars. Single `src/env.ts` source of truth. PostToolUse hook block raw `process.env.` in TS/TSX/JS/JSX (skip env files + tests).
+t3-env + zod for type-safe env vars. `src/env.ts` is the single source of truth. Biome
+`noProcessEnv` rejects raw `process.env` outside environment and build/test configuration
+files.
 
 ## Steps
 
@@ -28,11 +30,11 @@ export const env = createEnv({
 
 Use `import { env } from "@/env"` everywhere instead of `process.env`.
 
-### 3. Hook
-No hook to copy -- enforcement is Biome noProcessEnv (see ../biome/REFERENCE.md config template, incl. the src/env.ts + config-file overrides).
+### 3. Enforcement
+No hook to copy. Biome `noProcessEnv` owns enforcement; see
+`../biome/REFERENCE.md` for `src/env.ts` and configuration-file overrides.
 
 ### 4. Verify
 - [ ] `import { env } from "@/env"` works
-- [ ] Hook block `process.env.X` in regular files
-- [ ] Hook allow `process.env` in env.ts/env.mts/env.mjs/env.js
-- [ ] Hook skip test files
+- [ ] `bun run lint` rejects `process.env.X` in application files
+- [ ] `bun run lint` allows `process.env` in environment and build/test configuration files

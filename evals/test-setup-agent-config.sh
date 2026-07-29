@@ -18,7 +18,7 @@ run_executable_eval "$TRUNCATE_SCRIPT" "llm-truncate.sh is executable"
 run_content_eval "$SKILL_DIR/README.md" "AI_AGENT" "SKILL.md mentions AI_AGENT"
 run_content_eval "$SKILL_DIR/README.md" "CLAUDECODE" "SKILL.md mentions CLAUDECODE"
 run_content_eval "$SKILL_DIR/README.md" "NODE_OPTIONS" "SKILL.md mentions NODE_OPTIONS"
-run_content_eval "$SKILL_DIR/README.md" "pool=forks" "SKILL.md mentions pool=forks"
+run_content_eval "$SKILL_DIR/README.md" "pool=threads" "SKILL.md mentions pool=threads"
 
 # ── llm-env.sh ──────────────────────────────────────────────────
 
@@ -54,13 +54,13 @@ run_hook_eval "$FLAGS_SCRIPT" \
 
 run_hook_eval "$FLAGS_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"jest --verbose"}}' \
-  0 "rewrite: jest --verbose → strip verbose" "updatedInput"
+  0 "skip: Jest is outside the configured stack"
 
 # ── Suggestions: vitest without flags gets additionalContext ────
 
 run_hook_eval "$FLAGS_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"vitest --run"}}' \
-  0 "suggest: vitest --run (no verbose)" "pool=forks"
+  0 "suggest: vitest --run (no verbose)" "pool=threads"
 
 run_hook_eval "$FLAGS_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"bun test"}}' \

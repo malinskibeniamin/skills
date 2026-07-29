@@ -32,7 +32,7 @@ output=""
 exit_code=0
 output=$(bun run doctor -- --diff --score 2>&1) || exit_code=$?
 
-# No downgrade-to-allow: doctor errors are stop-gaps. If React Doctor cannot
+# No downgrade-to-allow: doctor errors are blocking findings. If React Doctor cannot
 # complete, fix the code, config, or toolchain before continuing.
 
 # Known incomplete dead-code failure — still a stop-gap because results are incomplete
@@ -50,7 +50,7 @@ fi
 # Block on errors (non-zero exit)
 if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -30)
-  hook_stop_finding "$(printf "React Doctor errors are stop-gaps. Fix before continuing:\n%s" "$truncated")"
+  hook_stop_finding "$(printf "React Doctor found blocking errors. Fix before continuing:\n%s" "$truncated")"
   hook_stop_enforce
 fi
 

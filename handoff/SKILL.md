@@ -23,7 +23,6 @@ Use when the user wants to:
 1. Create a temp file:
    ```bash
    handoff_file=$(mktemp -t handoff-XXXXXX.md)
-   cat "$handoff_file" >/dev/null
    ```
 2. Write the handoff to that path.
 3. Keep it compact. Do not duplicate artifacts already captured in specs, plans, ADRs, issues, commits, diffs, or docs. Reference them by path or URL.

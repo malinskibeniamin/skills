@@ -28,11 +28,17 @@ Port 3 representative files end-to-end with the FULL loop (translate -> compile 
 
 ## 5. Compiler/typechecker as the work queue
 
-Drive the fleet off mechanical signals: `cargo check`/`tsc` error counts per module, ranked. Parallelize across **worktrees** (one per lane) so executors never collide; forbid executors from running any git command that isn't "commit this specific file" -- no stash, no reset, no cross-lane surgery.
+Drive the work from ranked mechanical signals such as `cargo check` or `tsc` errors.
+Without delegation, work sequentially under one owner. After explicit delegation or
+`/swarm`, isolate independent lanes in worktrees; each lane commits only its assigned scope
+and never stashes, resets, or edits another lane.
 
-## 6. Adversarial review with split contexts (non-negotiable)
+## 6. Adversarial review with fresh context
 
-Implementers see full codebase context; reviewers see ONLY the diff and are instructed to assume it is wrong. Fresh context prevents reviewer bias; this caught use-after-free and numeric bugs before compilation. Maps directly onto this harness's cross-model review: executor implements, a different model (or clean-context instance) attacks the diff.
+The implementer uses full codebase context; the review pass starts from the diff and its
+contract, assuming the translation may be wrong. At a non-trivial PR or ship endpoint, use
+the repository's permitted foreground cross-model review. Otherwise review inline with a
+fresh evidence pass.
 
 ## 7. Semantic-equivalence traps
 

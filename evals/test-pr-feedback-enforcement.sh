@@ -64,6 +64,7 @@ _run_hook_with_env() {
   local exit_code=0
   (
     export CLAUDE_SESSION_ID="eval-prfb-$$"
+    export PR_FEEDBACK_SCOPE=1
     for kv in "$@"; do
       export "${kv?}"
     done
@@ -95,6 +96,12 @@ _assert() {
 }
 
 if [ -x "$HOOK" ] && command -v jq &>/dev/null; then
+  # A PR on the current branch does not scope an unrelated session into feedback work.
+  unresolved='{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[{"isResolved":false,"isOutdated":false,"comments":{"nodes":[{"author":{"login":"alice"},"body":"use const not let"}]}}]}}}}}'
+  clean_reviews='{"reviews":[]}'
+  _run_hook_with_env "$HOOK" "PR_FEEDBACK_SCOPE=0" "PR_FEEDBACK_MOCK_PR=42" "PR_FEEDBACK_MOCK_THREADS=$unresolved" "PR_FEEDBACK_MOCK_REVIEWS=$clean_reviews"
+  _assert "unscoped sessions ignore existing PR feedback" 0
+
   # No PR on branch → pass through
   _run_hook_with_env "$HOOK" "PR_FEEDBACK_MOCK_PR=none"
   _assert "exits 0 when branch has no PR" 0
@@ -106,7 +113,6 @@ if [ -x "$HOOK" ] && command -v jq &>/dev/null; then
   _assert "exits 0 when PR has no unresolved feedback" 0
 
   # Unresolved non-bot thread → block
-  unresolved='{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[{"isResolved":false,"isOutdated":false,"comments":{"nodes":[{"author":{"login":"alice"},"body":"use const not let"}]}}]}}}}}'
   _run_hook_with_env "$HOOK" "PR_FEEDBACK_MOCK_PR=42" "PR_FEEDBACK_MOCK_THREADS=$unresolved" "PR_FEEDBACK_MOCK_REVIEWS=$clean_reviews"
   _assert "blocks (exit 2) on unresolved non-bot thread" 2 "unresolved review thread"
   _assert "prescribes /resolve-pr-feedback" 2 "/resolve-pr-feedback"

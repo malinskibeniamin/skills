@@ -1,11 +1,12 @@
 ---
 name: grilling
-description: Grill plans, decisions, and ideas. Use for brainstorming approaches, starting features, pre-code planning, stress tests, or lifecycle phase 2b.
+description: Grill plans, decisions, and ideas. Use for explicit brainstorming approaches, competing options, pre-code decision work, plan stress tests, or lifecycle phase 2b.
 ---
 
 # Grilling
 
-**GATE: no code, no files, no implementation until a direction is presented, grilled, and approved.**
+**GATE: no production code or implementation until a direction is presented, grilled, and
+approved. Decision artifacts described below are allowed.**
 
 ## Explore mode (no direction yet)
 

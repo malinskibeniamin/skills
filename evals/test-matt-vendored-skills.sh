@@ -140,7 +140,7 @@ run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "map is an .*index" "wayfinder 
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Refer to maps and tickets by .*name" "wayfinder refers by name"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims by assignment"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "native blocking" "wayfinder prefers native blocking"
-run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Never resolve more than one ticket per session" "wayfinder resolves one ticket per session"
+run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Resolve at most one ticket per session" "wayfinder resolves one ticket per session"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "## Destination" "wayfinder names the destination"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Plan, don't do" "wayfinder is planning-first"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Not yet specified" "wayfinder separates not-yet-specified fog"

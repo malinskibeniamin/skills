@@ -1,37 +1,30 @@
-# Redpanda Frontend Kit
-Run **frontend-starter-kit** (14 setup + workflow skills), then add Redpanda tooling.
+# Redpanda frontend profile
 
-## Additional Setup
+Run `/frontend-starter-kit redpanda` to apply the full profile plus Redpanda-specific
+registry paths, terminology checks, and import restrictions.
 
-### Redpanda-specific
-- **setup-registry-workflow** -- UI registry component workflow
+## Configure
 
-### Redpanda environment (session-env.sh)
-```bash
-echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
-echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
-```
-`REDPANDA_KIT=1` enables registry nudges (useProtoForm, Typography, KeyValueField, registry sync).
+1. Add the Redpanda UI directory and terminology profile to the session environment:
 
-### Chakra UI ban (add to react-rules-check.sh)
-```bash
-if echo "$added_lines" | grep -qE "from\s+['\"]@chakra-ui/"; then
-  echo '{"suppressOutput":true,"systemMessage":"@chakra-ui/react banned. Use @/components/ui/."}' >&2
-  exit 2
-fi
-if echo "$added_lines" | grep -qE "from\s+['\"]@redpanda-data/ui['\"/]"; then
-  echo '{"suppressOutput":true,"systemMessage":"@redpanda-data/ui legacy (Chakra). Use redpanda-ui registry."}' >&2
-  exit 2
-fi
-```
+   ```bash
+   echo "export UI_LIB_DIRS=components/ui|redpanda-ui" >> "$CLAUDE_ENV_FILE"
+   echo "export REDPANDA_KIT=1" >> "$CLAUDE_ENV_FILE"
+   ```
 
-## Steps
-1. Run frontend-starter-kit (all 14 setup + workflow + community skills)
-2. Configure Redpanda env vars
-3. Add Chakra ban to react-rules-check.sh
-4. Run setup-registry-workflow
+   `UI_LIB_DIRS` marks registry-owned files. `REDPANDA_KIT=1` enables canonical product-name
+   checks in `/ux-copy`; it does not enable orchestration or registry nudges.
+
+2. Extend Biome `noRestrictedImports` with:
+   - `@chakra-ui/react` -> use `@/components/ui/`
+   - `@redpanda-data/ui` -> use `@/components/redpanda-ui/`
+
+3. Use `/registry-workflow` only when maintaining registry taxonomy or synchronizing a
+   consumer with its upstream registry.
 
 ## Verify
-- [ ] All hooks executable, settings.json complete
-- [ ] `REDPANDA_KIT=1` in session env
-- [ ] connect-query-check.sh match detected protobuf version
+
+- [ ] `UI_LIB_DIRS` and `REDPANDA_KIT` are exported by the session environment
+- [ ] `bun run lint` rejects both legacy UI imports
+- [ ] `/ux-copy` recognizes canonical Redpanda product names
+- [ ] Registry consumers document their upstream registry path

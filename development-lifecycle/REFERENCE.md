@@ -291,14 +291,14 @@ or likely user failure. Do not harvest hypothetical edge cases.
 
 ### Findings Format
 
-Reviewers output JSON per `agents/findings-schema.md`:
+Reviewers output JSON per `agents/references/findings-schema.md`:
 - `severity`: P0-P3 | `autofix_class`: `safe_auto | gated_auto | manual | advisory`
 - `pre_existing`: true = dirty baseline (never blocks merge) | `confidence`: 0.0-1.0
 
 ### Explicitly delegated reviewer context
 
 When the user explicitly requests agents, SubagentStart auto-injects session-touched files,
-dirty baseline, branch/PR context, and an `agents/findings-schema.md` pointer.
+dirty baseline, branch/PR context, and an `agents/references/findings-schema.md` pointer.
 
 SubagentStop validates delegated reviewer output:
 

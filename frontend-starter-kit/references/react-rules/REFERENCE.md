@@ -198,7 +198,7 @@ const form = useForm<CreateFormValues>({
 
 Proto-backed forms in this codebase use `useProtoForm` (wraps `useForm` with a proto-schema resolver via `protovalidate` + Standard Schema). Keep a single source of truth -- drift is how forms silently break.
 
-### No parallel `useState` (hook: `proto-form-parallel-state-check.sh`)
+### No parallel `useState` (owner: `form-mode-check`)
 
 ```tsx
 // BAD -- form-shape state beside useProtoForm
@@ -217,7 +217,7 @@ const form = useProtoForm({ schema: McpServerSchema })
 
 Use `useFieldArray` for list fields. Transient UI state (open/closed dialog, active tab) can stay in `useState`; only form-shape state must live in the form.
 
-### Select `setValue` state transitions (hook: `form-setvalue-options-check.sh`)
+### Select `setValue` state transitions (owner: `form-mode-check`)
 
 ```tsx
 // BAD in a user-edit handler -- state transition is ambiguous
@@ -249,7 +249,7 @@ Omitting `setValue.delayError` is the normal immediate path and stays silent. Th
 
 `dirtyFields` is not uniformly object-shaped: a registered array leaf can be boolean `true`, while `useFieldArray` produces nested or sparse state. Test changed, reverted, disabled-form programmatic writes, and remove-all transitions; do not cast every dirty node to one container shape.
 
-### FormErrorSummary for multi-field forms (hook: `form-error-summary-check.sh`)
+### FormErrorSummary for multi-field forms (owner: `form-mode-check`)
 
 ```tsx
 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -280,7 +280,9 @@ New protos ship with annotation registry entries in the same commit as the gener
 
 ### ConnectError -> form.setError per field
 
-See [setup-connect-query/REFERENCE.md](../../../connect-query/REFERENCE.md#connecterror--formseterror-per-field) for the `BadRequestSchema.fieldViolations` -> `form.setError` pattern enforced by `connect-error-fieldmap-check.sh`.
+See [connect-query/REFERENCE.md](../../../connect-query/REFERENCE.md#connecterror--formseterror-per-field)
+for the `BadRequestSchema.fieldViolations` -> `form.setError` pattern owned by
+`connect-query-check`.
 
 ## Resetting State on Prop Change -- Use `key`
 
