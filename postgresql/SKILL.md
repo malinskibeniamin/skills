@@ -1,6 +1,6 @@
 ---
 name: postgresql
-description: "Engineer and operate PostgreSQL from workload evidence. Use for SQL, schemas, indexes, transactions, migrations, performance, security/RLS, backup/PITR, reports, and Drizzle- or Jet-generated SQL."
+description: "Engineer PostgreSQL from workload evidence. Use for SQL pull requests, schemas, indexes, transactions, migrations, performance, security/RLS, backup/PITR, reports, and generated Drizzle or Jet SQL."
 ---
 
 # Workload-informed PostgreSQL
@@ -37,6 +37,7 @@ ORM, query builder, provider abstraction, or vendor claim.
 
 | Work | Read |
 |---|---|
+| Review a SQL pull request or database diff | [SQL-PR-REVIEW.md](references/SQL-PR-REVIEW.md) plus every domain reference touched by the diff |
 | Query semantics, joins, pagination, DML | [SQL-AUTHORING.md](references/SQL-AUTHORING.md) |
 | Types, constraints, indexes, partitioning | [SCHEMA-INDEXES.md](references/SCHEMA-INDEXES.md) |
 | Isolation, retries, locks, queues, budgets | [TRANSACTIONS-ORCHESTRATION.md](references/TRANSACTIONS-ORCHESTRATION.md) |

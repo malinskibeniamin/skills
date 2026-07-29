@@ -44,3 +44,6 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Run every applicable hat inline" "review
 run_content_eval "$SKILL_DIR/SKILL.md" "one bounded, foreground, awaited Sol high" "review permits one foreground cross-model pass"
 run_content_eval "$SKILL_DIR/SKILL.md" "do not launch a substitute agent" "review fails open when cross-model review is unavailable"
 run_content_eval "$SKILL_DIR/SKILL.md" "postgresql.*actual-SQL evidence" "review adds workload-informed PostgreSQL axis"
+run_content_eval "$SKILL_DIR/SKILL.md" 'database/SQL.*\.sql.*migration.*schema' "review auto-detects database and SQL diffs"
+run_content_eval "$SKILL_DIR/SKILL.md" "database/sql.*sqlc.*Jet.*Drizzle.*DuckDB" "review detects database libraries and generators"
+run_content_eval "$SKILL_DIR/SKILL.md" "determine dialect.*official dialect docs" "review keeps non-PostgreSQL guidance dialect-aware"
