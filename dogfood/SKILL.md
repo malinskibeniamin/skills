@@ -7,6 +7,16 @@ description: Dogfood runnable work at its real user entrypoint. Use after each m
 
 A **material runnable increment** is a behavior slice that can be exercised through a real user or public entrypoint. Dogfood it before starting the next slice and again before handoff or shipping. Tests are not dogfood: they prove assertions, not the experience.
 
+## Inventory the runnable change
+
+Before using the implementation, identify the complete behavior inventory:
+
+1. Resolve the target branch from `DOGFOOD_BASE_REF` when set, otherwise the remote default branch (`origin/HEAD`, then `origin/main` or `origin/master`).
+2. Inspect the whole PR diff from its merge-base through committed, staged, unstaged, and untracked changes. Do not limit scope to files touched in the current session.
+3. Map every runnable artifact to its changed behavior and real entrypoint. A skill includes `SKILL.md` plus its referenced guidance, assets, and scripts; hooks and automation are runnable through their actual events. Exclude standalone documentation, tests, and evals from required experiential coverage.
+
+For an ordinary local turn, dogfood when that turn changed runnable behavior. Before PR or ship completion, dogfood every runnable behavior in the full PR even when it was implemented in an earlier session.
+
 ## Loop
 
 Run **use -> abuse -> repair -> replay** on the current implementation.
@@ -69,4 +79,4 @@ Bind the entrypoint, actions, and observations to the current implementation. Re
 - **Repairs:** defects found, tests added, fixes made, replay result
 - **Limits:** untried behavior and why
 
-PASS requires experiential evidence for every changed behavior on the current implementation. FAIL means an observed defect remains. BLOCKED names the missing access, environment, hardware, or safety constraint and the evidence needed next.
+Include the complete structured receipt in the final response. PASS requires experiential evidence for every changed behavior on the current implementation. FAIL means an observed defect remains. BLOCKED names the missing access, environment, hardware, or safety constraint and the evidence needed next.

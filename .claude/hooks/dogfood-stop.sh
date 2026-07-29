@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eo pipefail
 
-# Stop gate: runnable work must have a /dogfood invocation after its latest
-# runnable edit. The skill owns evidence quality; this hook only prevents
-# silent omission and stale receipts.
+# Stop gate: a runnable PR state must have a matching /dogfood invocation
+# and a structured PASS receipt. PR/ship endpoints inspect the whole branch;
+# other endpoints activate only when this session changed runnable behavior.
 
 input=$(cat 2>/dev/null || echo '{}')
 if printf '%s' "$input" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then
@@ -16,68 +16,106 @@ if [ -z "${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}" ]; then
 fi
 
 source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
-hook_has_session_tracking 2>/dev/null || exit 0
+[ -n "${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}" ] || exit 0
 
+state_lib="$(dirname "$0")/dogfood-state.sh"
+if [ ! -f "$state_lib" ]; then
+  hook_stop_block "Dogfood enforcement is incomplete: dogfood-state.sh is missing. Restore the plugin installation, then run /dogfood."
+fi
+# shellcheck source=dogfood-state.sh
+source "$state_lib"
+
+runnable_files=$(dogfood_runnable_files)
+[ -n "$runnable_files" ] || exit 0
+
+endpoint=$(cat "$_hook_session_dir/task-endpoint" 2>/dev/null | tr -d '[:space:]')
 touched="$_hook_session_dir/session-touched-files"
-[ -s "$touched" ] || exit 0
+touch_start="$_hook_session_dir/dogfood-task-start-touched-count"
+baseline="$_hook_session_dir/dogfood-task-dirty-baseline"
+[ -f "$baseline" ] || baseline="$_hook_session_dir/dirty-files-baseline"
+start_head="$_hook_session_dir/dogfood-task-start-head"
+[ -f "$start_head" ] || start_head="$_hook_session_dir/session-start-head"
 
-is_runnable_artifact() {
-  local path="$1"
-  [ -n "$path" ] || return 1
-  case "$path" in
-    */.context/*|*/node_modules/*|*/dist/*|*/build/*|*/coverage/*|*/.cache/*|*/.turbo/*)
-      return 1 ;;
-    */evals/*|*/agent-evals/*|*/e2e/*|*.test.*|*.spec.*|*.snap)
-      return 1 ;;
-    */SKILL.md)
-      return 0 ;;
-    *.md|*.mdx|*.txt|*.rst|*.png|*.jpg|*.jpeg|*.gif|*.webp|*.svg|*.ico|*.woff|*.woff2|*.ttf)
-      return 1 ;;
-  esac
-  return 0
-}
-
-range_has_runnable_artifact() {
-  local path
-  while IFS= read -r path; do
-    if is_runnable_artifact "$path"; then
+list_has_runnable_pr_file() {
+  local candidates="$1" raw path
+  while IFS= read -r raw; do
+    [ -n "$raw" ] || continue
+    path=$(dogfood_normalize_touched_path "$raw" 2>/dev/null || printf '%s' "${raw#./}")
+    if printf '%s\n' "$runnable_files" | grep -Fqx -- "$path"; then
       return 0
     fi
-  done
+  done <<< "$candidates"
   return 1
 }
 
-dogfood_block() {
-  # hook_stop_block's cap bookkeeping reads optional fresh-session files.
-  # Keep those absent reads from tripping this script's global `set -e`.
-  set +e
-  hook_stop_block "$1"
-}
-
-if ! range_has_runnable_artifact < "$touched"; then
-  exit 0
+session_changed_runnable=false
+if [ -s "$touched" ]; then
+  touched_candidates=$(cat "$touched")
+  if [ -s "$touch_start" ]; then
+    touched_checkpoint=$(tr -dc '0-9' < "$touch_start")
+    touched_candidates=$(tail -n "+$((${touched_checkpoint:-0} + 1))" "$touched" 2>/dev/null || true)
+  fi
+  if [ -n "$touched_candidates" ] \
+    && list_has_runnable_pr_file "$touched_candidates"; then
+    session_changed_runnable=true
+  fi
 fi
+
+current_dirty=$(
+  {
+    git diff --name-only HEAD 2>/dev/null
+    git ls-files --others --exclude-standard 2>/dev/null
+  } | LC_ALL=C sort -u
+)
+if [ -n "$current_dirty" ]; then
+  new_dirty="$current_dirty"
+  if [ -f "$baseline" ] && [ -s "$baseline" ]; then
+    new_dirty=$(comm -23 \
+      <(printf '%s\n' "$current_dirty" | LC_ALL=C sort -u) \
+      <(LC_ALL=C sort -u "$baseline") 2>/dev/null || printf '%s\n' "$current_dirty")
+  fi
+  if [ -n "$new_dirty" ] && list_has_runnable_pr_file "$new_dirty"; then
+    session_changed_runnable=true
+  fi
+fi
+
+if [ -s "$start_head" ]; then
+  initial_head=$(tr -d '[:space:]' < "$start_head")
+  current_head=$(git rev-parse HEAD 2>/dev/null || true)
+  if [ -n "$initial_head" ] && [ "$initial_head" != "$current_head" ]; then
+    committed_this_session=$(git diff --name-only "$initial_head" HEAD -- 2>/dev/null || true)
+    if [ -n "$committed_this_session" ] \
+      && list_has_runnable_pr_file "$committed_this_session"; then
+      session_changed_runnable=true
+    fi
+  fi
+fi
+
+case "$endpoint" in
+  pr|ship) ;;
+  local|commit|push)
+    [ "$session_changed_runnable" = true ] || exit 0
+    ;;
+  *) exit 0 ;;
+esac
 
 marker="$_hook_session_dir/dogfood-invocation"
 if [ ! -s "$marker" ]; then
-  dogfood_block "Runnable work changed without experiential verification. Run /dogfood through the real entrypoint, repair findings, replay, and include its receipt."
+  hook_stop_block "Runnable PR work lacks experiential verification. Run /dogfood against the whole PR diff through each real entrypoint, repair findings, replay, and include its PASS receipt."
 fi
 
-checkpoint=$(tr -d '[:space:]' < "$marker")
-case "$checkpoint" in
-  ''|*[!0-9]*)
-    dogfood_block "Dogfood checkpoint is invalid. Run /dogfood again on the current implementation."
-    ;;
-esac
-
-current_count=$(wc -l < "$touched" | tr -d '[:space:]')
-if [ "$checkpoint" -gt "$current_count" ]; then
-  dogfood_block "Dogfood checkpoint is stale. Run /dogfood again on the current implementation."
+checkpoint=$(jq -r '.fingerprint // empty' "$marker" 2>/dev/null || true)
+current_fingerprint=$(dogfood_state_fingerprint 2>/dev/null || true)
+if [ -z "$checkpoint" ] || [ -z "$current_fingerprint" ]; then
+  hook_stop_block "Dogfood checkpoint is invalid. Run /dogfood again so it can bind evidence to the current PR state."
+fi
+if [ "$checkpoint" != "$current_fingerprint" ]; then
+  hook_stop_block "Runnable work changed after /dogfood. Run /dogfood again on the current PR state, repair findings, and replay."
 fi
 
-next_line=$((checkpoint + 1))
-if tail -n "+$next_line" "$touched" | range_has_runnable_artifact; then
-  dogfood_block "Runnable work changed after the last dogfood checkpoint. Run /dogfood after the latest runnable edit, then repair and replay any findings."
+last_message=$(printf '%s' "$input" | jq -r '.last_assistant_message // empty' 2>/dev/null)
+if ! dogfood_receipt_is_pass "$last_message"; then
+  hook_stop_block "Dogfood invocation is current, but completion lacks a structured PASS receipt. Include Verdict: PASS plus Entrypoint, Actions, Observations, Repairs, and Limits."
 fi
 
 exit 0
