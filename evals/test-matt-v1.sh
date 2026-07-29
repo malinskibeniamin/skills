@@ -39,12 +39,12 @@ for removed in diagnose write-a-skill caveman zoom-out writing-great-skills; do
 done
 
 # User-invoked skills explicitly disable model invocation.
-for skill in ask-ben handoff prototype to-questionnaire to-tickets to-spec triage; do
+for skill in ask-ben handoff to-questionnaire to-tickets to-spec triage wayfinder; do
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^disable-model-invocation: true$" "$skill is user-invoked"
 done
 
 # Model-invoked reusable skills omit disable-model-invocation.
-for skill in codebase-design diagnosing-bugs domain-modeling grilling resolving-merge-conflicts tdd wayfinder writing-for-agents; do
+for skill in codebase-design diagnosing-bugs domain-modeling grilling prototype resolving-merge-conflicts tdd writing-for-agents; do
   if grep -q "^disable-model-invocation:" "$REPO_ROOT/$skill/SKILL.md" 2>/dev/null; then
     echo "  FAIL  $skill should be model-invoked"
     FAIL=$((FAIL + 1))
@@ -63,7 +63,7 @@ run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/codebase-design" "TDD uses codebase
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grilling" "ask-ben routes planning through grilling"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/diagnosing-bugs" "ask-ben routes hard bugs to diagnosing-bugs"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling has general confirmation gate"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "confirmation only when.*requested" "grilling confirms only at the requested endpoint"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD requires agreed test seams"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims tickets by assignment"
 run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Hunt.*no-ops|No-op|no-ops" "writing-for-agents includes no-op hunting guidance"

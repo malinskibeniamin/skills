@@ -22,12 +22,12 @@ lane and records why.
 
 | Variant | Effort | Use |
 |---|---|---|
-| Sol | xhigh for implementation, plans, or Sol-only review; high reviewing Opus | all code, review, planning |
-| Terra | medium/high | PR comments, test-runner and CI chores |
-| Luna | high | tracker orchestration and remote tool loops |
+| Sol | `xhigh`; `max` when eval-backed or explicitly selected | code, UI, review, planning, computer use |
+| Terra | capability-dependent | eval-gated non-code tool loops |
+| Luna | capability-dependent | eval-gated low-risk tool loops |
 
-Terra and Luna never write product code or review. Read [REFERENCE.md](REFERENCE.md) for
-cross-provider gates, quota rules, background execution, and Claude wrapper mechanics.
+Read `config/model-routing.json` before choosing. Do not infer variant quality from price
+or a name. Read [REFERENCE.md](REFERENCE.md) for cross-provider gates and CLI mechanics.
 
 ## Prompt contract
 
@@ -43,20 +43,22 @@ file for implementation work.
 
 - **Implement:** `codex exec -m gpt-5.6-sol -c 'model_reasoning_effort="xhigh"'`;
   isolate concurrent writes in worktrees.
-- **Review:** Opus work gets Sol high; Sol implementation gets Opus 5 xhigh feedback;
-  Sol-only fallback gets clean-context Sol xhigh. Use read-only mode and P0-P3 evidence.
+- **Review:** prefer a different model family from the author. Sol-authored work may use
+  a Claude quality alternative; the fallback is a labeled clean-context Sol pass. Use
+  `-s read-only` mode and P0-P3 evidence.
 - **Adversarial exchange (automatic in Claude-hosted workflows):** use a different family
   when authorized; treat the result as one lane, not the verdict.
 - **Computer use:** name URL/app, states, and evidence.
-- **Investigate/analyze:** read-only with a compact report.
+- **Investigate/analyze:** `-s read-only` with a compact report.
 
 ## Workflow
 
 1. Pass the host and authorization gates.
-2. Select the cheapest permitted variant that meets the task's judgment and taste bar.
+2. Select the quality-qualified route from `config/model-routing.json`.
 3. Write the self-contained prompt contract.
 4. Run with explicit timeout or the reference background pattern.
 5. Verify cited files, commands, and high-risk conclusions before integrating.
 
 Judgment-heavy architecture, synthesis, product, safety, and final review stay with the
-frontier coordinator. User-facing output needs Fable or Opus taste; Sol may draft.
+frontier coordinator. Sol may own user-facing output and must meet the same visual
+evidence gate.

@@ -1,7 +1,6 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question.
-disable-model-invocation: true
+description: Build disposable evidence for unresolved logic, interaction, or visual questions. Use when runnable evidence would resolve behavior or UI uncertainty before commitment.
 ---
 
 Read and follow the complete [canonical skill instructions](../../prototype/SKILL.md) before acting.

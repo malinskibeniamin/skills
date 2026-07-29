@@ -1,6 +1,6 @@
 ---
 name: hook-audit
-description: Audit hook effectiveness from session metrics. Use for latency, violations, zero-fire rules, manifest drift, skill firing, session trends, or retrospectives.
+description: Analyze hook effectiveness and session telemetry. Use when auditing hook latency, violations, zero-fire rules, severity, manifest drift, skill firing, session trends, or retrospectives.
 ---
 
 # Hook Audit

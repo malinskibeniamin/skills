@@ -29,14 +29,17 @@ case "$mode" in
         rm -r "$_stale_dir" 2>/dev/null || true
       fi
     done
-    # Rotate metric logs past 10MB; keep the newest half by line count.
-    for f in "$HOME"/.claude/hook-metrics/*.jsonl; do
-      [ -f "$f" ] || continue
-      if [ "$(wc -c < "$f" 2>/dev/null | tr -d ' ')" -gt 10485760 ]; then
-        _keep=$(($(wc -l < "$f" | tr -d ' ') / 2))
-        tail -n "$_keep" "$f" > "$f.tmp" 2>/dev/null && mv "$f.tmp" "$f" 2>/dev/null || rm -f "$f.tmp"
-      fi
-    done
+    if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
+      # Rotate metric logs past 10MB; keep the newest half by line count.
+      _metrics_dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
+      for f in "$_metrics_dir"/*.jsonl; do
+        [ -f "$f" ] || continue
+        if [ "$(wc -c < "$f" 2>/dev/null | tr -d ' ')" -gt 10485760 ]; then
+          _keep=$(($(wc -l < "$f" | tr -d ' ') / 2))
+          tail -n "$_keep" "$f" > "$f.tmp" 2>/dev/null && mv "$f.tmp" "$f" 2>/dev/null || rm -f "$f.tmp"
+        fi
+      done
+    fi
     ;;
 esac
 

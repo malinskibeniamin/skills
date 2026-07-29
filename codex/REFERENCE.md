@@ -6,8 +6,8 @@
   root `AGENTS.md`. Otherwise use a clean-context Claude review and record the substitution.
 - **Minimization:** send the diff, acceptance criteria, and verify commands, never the
   conversation, secrets, or unrelated files.
-- **Budget:** Claude and Codex quotas are separate. Keep Codex review on Sol xhigh when its
-  subscription meter is unavailable; never substitute `ccusage` or session tokens.
+- **Budget:** Claude and Codex quotas are separate. Unknown capacity is not a reason to
+  guess or lower the quality gate; never substitute `ccusage` or session tokens.
 - **Diversity:** the author never solely reviews its own work. Prefer another model family;
   record unavailable cross-family coverage.
 
@@ -35,15 +35,16 @@ invisible to them.
 
 ## Routing notes
 
-- Sol: `gpt-5.6-sol`; xhigh for implementation, plans, and Sol-only review; high for
-  adversarial review of Opus work. Override with `-c 'model_reasoning_effort="xhigh"'`.
-- Terra: `gpt-5.6-terra`, medium or high; PR comments and test/CI chores only.
-- Luna: `gpt-5.6-luna`, `high` only; tracker and remote-tool loops only.
-- GPT-5.5 is retired. Name any fallback model in the result.
-- User-facing UI, copy, and API work gets a taste-qualified final pass.
+Read `config/model-routing.json`. Sol defaults to `xhigh`; `max` is eligible for difficult
+quality-first work and must be explicit or eval-backed. Terra and Luna remain eval-gated
+until the behavioral suite promotes a use. Sol is eligible to own UI, copy, API, and
+computer-use work. Name any fallback model in the result.
+
+`ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
+programmatic tool calling, and explicit cache controls are API-only unless the current
+harness exposes them.
 
 ## Adversarial exchange
 
-Adversarial exchange (automatic in Claude-hosted ship workflows) uses a DIFFERENT FAMILY
-whenever authorized. Opus work gets Sol high; Sol implementation gets Opus 5 xhigh
-feedback. Sol-only fallback gets a labeled clean-context xhigh pass.
+Adversarial exchange uses a different family whenever authorized. The fallback is a
+labeled clean-context Sol pass, not an eval-gated cheaper variant.

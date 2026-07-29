@@ -1,6 +1,6 @@
 ---
 name: efficient-frontier
-description: Delegate bounded work while keeping judgment central. Use for model routing, agent waves, usage budgeting, or splitting research, coding, testing, and log reduction.
+description: Apply eval-backed model routing and budget explicitly authorized agent waves without moving judgment away from the owner.
 ---
 
 Read and follow the complete [canonical skill instructions](../../efficient-frontier/SKILL.md) before acting.

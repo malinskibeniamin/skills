@@ -1,3 +1,5 @@
 interface:
   display_name: "Stay Within Limits"
   short_description: "Budget long-running agent work around usage limits"
+policy:
+  allow_implicit_invocation: false

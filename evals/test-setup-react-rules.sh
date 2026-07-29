@@ -39,7 +39,7 @@ echo 'const X = () => <div className={`base ${active ? "block" : "hidden"}`} />;
 
 run_hook_eval "$STARTER_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$_starter_file\"}}" \
-  2 "block: starter hook rejects interpolated className" "cn(...) or clsx(...)"
+  0 "warn: starter hook flags interpolated className" "cn(...) or clsx(...)"
 
 rm -rf "$_starter_tmpdir"
 
@@ -256,14 +256,14 @@ echo '<Button onClick={handleClick} className="bg-gradient-to-r from-primary to-
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: Button gradient/shape visual override" "variant"
+  0 "warn: Button gradient/shape visual override" "variant"
 
 # Block one-off backgroundImage gradients in JSX style objects.
 echo '<div style={{ backgroundImage: "linear-gradient(90deg, var(--primary), var(--accent))" }}>Hero</div>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: inline backgroundImage gradient" "gradient"
+  0 "warn: inline backgroundImage gradient" "gradient"
 
 # Warn on arbitrary z-index values.
 echo '<div className="z-[9999] fixed inset-0">Overlay</div>' > "$tmpfile"
@@ -286,7 +286,7 @@ echo '<Button>Click me</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: Button without handler" "purpose"
+  0 "warn: Button without handler" "purpose"
 
 # Allow: Button with onClick
 echo '<Button onClick={handleClick}>Click me</Button>' > "$tmpfile"
@@ -322,7 +322,7 @@ echo '<AlertTitle><InfoIcon /> Warning</AlertTitle>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: icon inside AlertTitle" "AlertTitle"
+  0 "warn: icon inside AlertTitle" "AlertTitle"
 
 # ── Check 11: Icon-only button a11y ──────────────────────────────
 
@@ -487,7 +487,7 @@ echo '<div className="mt-4 !important">forced</div>' > "$tmpfile"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: !important in TSX"
+  0 "warn: !important in TSX"
 
 # Ban !important in CSS
 tmpfile="$_rr_tmpdir/test.css"
@@ -495,7 +495,7 @@ echo '.card { margin-top: 16px !important; }' > "$tmpfile"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: !important in CSS"
+  0 "warn: !important in CSS"
 
 # Ban !important in SCSS
 tmpfile="$_rr_tmpdir/test.scss"
@@ -503,7 +503,7 @@ echo '.card { color: red !important; }' > "$tmpfile"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: !important in SCSS"
+  0 "warn: !important in SCSS"
 
 # Ban raw hex in CSS
 tmpfile="$_rr_tmpdir/test.css"
@@ -511,7 +511,7 @@ echo '.card { color: #ff0000; }' > "$tmpfile"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw hex in CSS" "design token"
+  0 "warn: raw hex in CSS" "design token"
 
 # Ban raw color functions in CSS
 tmpfile="$_rr_tmpdir/test.css"
@@ -519,7 +519,7 @@ echo '.card { color: hsl(220 90% 56%); background: rgb(255 255 255); }' > "$tmpf
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw color functions in CSS" "design token"
+  0 "warn: raw color functions in CSS" "design token"
 
 # Allow CSS variables (not raw hex)
 tmpfile="$_rr_tmpdir/test.css"
@@ -535,7 +535,7 @@ echo '<div className="bg-[#0f172a] text-[rgb(255,255,255)]">content</div>' > "$t
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: raw color arbitrary values in TSX" "design token"
+  0 "warn: raw color arbitrary values in TSX" "design token"
 
 # Ban inline style raw colors in JSX
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -543,7 +543,7 @@ echo '<div style={{ color: "#fff", backgroundColor: "hsl(220 90% 56%)" }}>conten
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: inline raw colors in TSX" "design token"
+  0 "warn: inline raw colors in TSX" "design token"
 
 # Ban gradient text
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -551,7 +551,7 @@ echo '<h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-t
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: gradient text in TSX" "Gradient text"
+  0 "warn: gradient text in TSX" "Gradient text"
 
 # Ban hardcoded Tailwind palette gradients
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -559,7 +559,7 @@ echo '<div className="bg-gradient-to-r from-purple-500 via-cyan-400 to-blue-600"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: hardcoded Tailwind palette gradients" "theme gradient"
+  0 "warn: hardcoded Tailwind palette gradients" "theme gradient"
 
 # Allow token-based Tailwind color classes
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -575,7 +575,7 @@ echo '<div className="bg-blue-500 text-white border-slate-200">content</div>' > 
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: hardcoded Tailwind palette utilities" "semantic"
+  0 "warn: hardcoded Tailwind palette utilities" "semantic"
 
 # Warn on side-stripe accent borders
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -607,7 +607,7 @@ echo '<div className="bg-primary text-gray-500">content</div>' > "$tmpfile"
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: gray text on colored background" "semantic"
+  0 "warn: gray text on colored background" "semantic"
 
 # Warn on oversized display text and crushed tracking
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -623,7 +623,7 @@ echo '<div className="bg-background/40 backdrop-blur-xl border border-border">Gl
 
 run_hook_eval "$TW_SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: glassmorphism backdrop blur" "glassmorphism"
+  0 "warn: glassmorphism backdrop blur" "glassmorphism"
 
 # Warn on motion craft smells researched from Emil Kowalski animation/component notes
 tmpfile="$_rr_tmpdir/test.tsx"
@@ -749,13 +749,13 @@ echo 'class MyComponent extends React.Component { render() { return <div /> } }'
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: class component (React.Component)" "Functional"
+  0 "warn: class component (React.Component)" "functional"
 
 echo 'class MyComponent extends PureComponent { render() { return <div /> } }' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: class component (PureComponent)" "Functional"
+  0 "warn: class component (PureComponent)" "functional"
 
 # Allow functional components
 echo 'function MyComponent() { return <div /> }' > "$tmpfile"
@@ -908,13 +908,13 @@ echo "element.addEventListener('scroll', handler)" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: addEventListener scroll without passive" "passive"
+  0 "warn: addEventListener scroll without passive" "passive"
 
 echo "element.addEventListener('touchstart', handler)" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: addEventListener touchstart without passive"
+  0 "warn: addEventListener touchstart without passive"
 
 echo "element.addEventListener('scroll', handler, { passive: true })" > "$tmpfile"
 
@@ -1141,13 +1141,13 @@ echo "import assert from 'node:assert/strict'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: node:assert in test file" "vitest"
+  0 "warn: node:assert in test file" "Vitest"
 
 echo "import assert from 'node:assert'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: node:assert (no /strict) in test file" "vitest"
+  0 "warn: node:assert (no /strict) in test file" "Vitest"
 
 # Allow: vitest assert
 echo "import { assert } from 'vitest'" > "$tmpfile"
@@ -1259,7 +1259,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "useFormState.*exact: true" "REFERENC
 run_content_eval "$SKILL_DIR/REFERENCE.md" "defaultValues.*cached" "REFERENCE documents cached defaults"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "defaultValues.*undefined" "REFERENCE requires defined deterministic defaults"
 run_content_eval "$SCRIPT_LIB" "no-reset-all-state-on-prop-change" "hook records React Doctor delegation for state reset"
-run_content_eval "$SCRIPT_LIB" "reValidateMode" "Formik replacement message selects a validation lifecycle"
+run_content_eval "$SCRIPT_LIB" "react-hook-form" "Formik replacement names the active form stack"
 
 # ── Cleanup ─────────────────────────────────────────────────────
 

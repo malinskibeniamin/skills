@@ -103,15 +103,15 @@ else
   ERRORS="$ERRORS\n  FAIL: non-Edit tools ignored"
 fi
 
-# (e) Codex keeps per-call scripts and never gets PostToolBatch.
-_codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.command | select(test("(vendor-file-check|react-rules-check|tailwind-check|accessibility-check|zustand-check|tanstack-router-check|tanstack-router-gen|connect-query-check|aip-proto-check|ux-copy-check|orchestration-guidance|form-mode-check|error-boundary-check|test-convention-check|ts-no-escape-hatches-check|tsconfig-strict-check|llm-failure-mode-check|query-pattern-check|copyright-check|edit-loop-check|lockfile-sync-check)\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
-if [ "$_codex_count" = "21" ] && ! grep -q 'post-tool-batch.sh' "$CODEX_HOOKS" 2>/dev/null; then
-  echo "  PASS  codex-hooks.json keeps 21 per-call scripts and omits dispatcher"
+# (e) Codex adapts each edit into the shared batch protocol in one process.
+_codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.command | select(test("codex-edit-dispatch\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
+if [ "$_codex_count" = "1" ] && ! grep -q 'vendor-file-check.sh' "$CODEX_HOOKS" 2>/dev/null; then
+  echo "  PASS  codex-hooks.json uses one edit dispatcher"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  codex-hooks.json per-call parity (count=$_codex_count)"
+  echo "  FAIL  codex-hooks.json edit dispatcher parity (count=$_codex_count)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: codex-hooks per-call parity"
+  ERRORS="$ERRORS\n  FAIL: codex-hooks edit dispatcher parity"
 fi
 
 # (f) Claude settings has dispatcher, not the 21 per-edit scripts under PostToolUse.

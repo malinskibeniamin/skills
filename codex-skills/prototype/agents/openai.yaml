@@ -1,5 +1,3 @@
 interface:
   display_name: "Prototype"
   short_description: "Build a throwaway artifact to answer a design question"
-policy:
-  allow_implicit_invocation: false

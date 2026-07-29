@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "block": [
+    "safety",
+    "security",
+    "provable-correctness",
+    "explicit-incompatibility",
+    "workflow-integrity"
+  ],
+  "warn": ["taste", "heuristic", "maintainability", "cost"],
+  "rules": {
+    "block": "Use only when the hook can identify a concrete failure with low false-positive risk and give a local repair.",
+    "warn": "Teach preferences at the edit boundary without preventing progress.",
+    "retire": "Delete rules that are inferable, duplicate another layer, or show no quality lift in ablation."
+  }
+}

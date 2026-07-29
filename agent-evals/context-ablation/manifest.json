@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "purpose": "Measure quality before deleting or adding ambient context.",
+  "agents": ["codex", "claude-code"],
+  "variants": ["current", "lean"],
+  "efforts": ["high", "xhigh", "max"],
+  "metrics": [
+    "task_success",
+    "regressions",
+    "human_quality",
+    "input_tokens",
+    "output_tokens",
+    "duration_seconds"
+  ],
+  "runs_per_cell": 3,
+  "tasks": [
+    "setup-code-organization",
+    "setup-accessibility",
+    "violation-nudge",
+    "aip-design-review"
+  ],
+  "capabilities": {
+    "codex": {
+      "model": "gpt-5.6-sol",
+      "efforts": ["xhigh", "max"]
+    },
+    "claude-code": {
+      "models": ["fable", "opus"],
+      "efforts": ["high", "xhigh"]
+    }
+  },
+  "gate": {
+    "quality": "No lower task success, no new high-severity regression, and median human-quality score no lower than current.",
+    "efficiency": "Among quality-equivalent cells, prefer fewer input tokens and shorter duration.",
+    "method": "Change one context group at a time; do not infer causality from a multi-group rewrite."
+  }
+}

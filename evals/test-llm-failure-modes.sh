@@ -8,8 +8,8 @@ run_file_eval "$HOOK" "llm-failure-mode-check.sh exists"
 run_executable_eval "$HOOK" "llm-failure-mode-check.sh executable"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "llm-failure-mode-check.sh" \
   "manifest registers llm-failure-mode-check"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "llm-failure-mode-check.sh" \
-  "codex-hooks.json keeps llm-failure-mode-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "codex-edit-dispatch.sh" \
+  "codex-hooks.json uses the edit dispatcher"
 
 # Principle labels reference ETHOS/Karpathy in error messages
 run_content_eval "$HOOK_LIB" "ETHOS/Karpathy" \

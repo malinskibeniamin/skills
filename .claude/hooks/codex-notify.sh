@@ -2,6 +2,8 @@
 set -eo pipefail
 trap 'exit 0' ERR
 
+[ "${HOOK_METRICS_DISABLED:-0}" = "1" ] && exit 0
+
 # Codex `notify` adapter. Codex has no SessionEnd lifecycle event; its
 # `notify` mechanism invokes an external command with ONE JSON argument on
 # agent-turn-complete. Wire in ~/.codex/config.toml:
@@ -20,9 +22,10 @@ type=$(printf '%s' "$payload" | jq -r '.type // empty' 2>/dev/null)
 
 thread=$(printf '%s' "$payload" | jq -r '."thread-id" // empty' 2>/dev/null)
 cwd=$(printf '%s' "$payload" | jq -r '.cwd // empty' 2>/dev/null)
-last=$(printf '%s' "$payload" | jq -r '."last-assistant-message" // empty' 2>/dev/null | head -c 200)
+last_full=$(printf '%s' "$payload" | jq -r '."last-assistant-message" // empty' 2>/dev/null)
+last=$(printf '%s' "$last_full" | head -c 200)
 
-dir="$HOME/.claude/hook-metrics"
+dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
 mkdir -p "$dir" 2>/dev/null || true
 jq -cn --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg thread "$thread" \
   --arg cwd "$cwd" --arg last "$last" \
@@ -33,14 +36,21 @@ jq -cn --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg thread "$thread" \
 # "read every *.json in hook-metrics" pass sees Codex sessions without a
 # separate reader: one file per thread, turn count incremented per event.
 _date=$(date -u +%Y-%m-%d)
-_thread8=$(printf '%s' "${thread:-unknown}" | tr -cd 'a-zA-Z0-9-' | cut -c1-8)
-_summary="$dir/${_date}-codex-${_thread8:-unknown}.json"
+_thread_key=$(printf '%s' "${thread:-unknown}" | cksum | awk '{print $1"-"$2}')
+_summary="$dir/${_date}-codex-${_thread_key}.json"
+_outcome="ended"
+case "$last_full" in
+  *"🟢 done"*) _outcome="completed" ;;
+  *"🟡 awaiting decision"*) _outcome="awaiting-decision" ;;
+  *"🔴 blocked"*) _outcome="blocked" ;;
+esac
 if [ -f "$_summary" ]; then
-  jq '.turns = ((.turns // 0) + 1)' "$_summary" > "$_summary.tmp" 2>/dev/null \
+  jq --arg outcome "$_outcome" '.turns = ((.turns // 0) + 1) | .outcome = $outcome' "$_summary" > "$_summary.tmp" 2>/dev/null \
     && mv "$_summary.tmp" "$_summary" 2>/dev/null || rm -f "$_summary.tmp"
 else
-  jq -cn --arg date "$_date" --arg sid "codex-${_thread8:-unknown}" '
-    {schema_version: 2, source: "codex", date: $date, session_id: $sid,
+  jq -cn --arg date "$_date" --arg sid "codex-${_thread_key}" --arg outcome "$_outcome" '
+    {schema_version: 3, source: "codex", date: $date, session_id: $sid,
+     endpoint: "unknown", outcome: $outcome,
      turns: 1, hooks_fired: 0, blocks: {}, warns: {}, denies: {},
      nudges: {}, infos: {}, diagnostics: {}, perf_ms: {}}' \
     > "$_summary" 2>/dev/null || true

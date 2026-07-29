@@ -25,7 +25,7 @@ Review is verification, not opinion: check claims against the source (the API th
 ## Hat panel (default for PR and branch reviews)
 
 Run every applicable hat inline in the primary context. For non-trivial PR/ship work,
-add one bounded, foreground, awaited Sol high adversarial pass. Do not dispatch Claude
+add one bounded, foreground, awaited different-family adversarial pass. Do not dispatch
 reviewers, paired reviewers, or background agents without explicit delegation.
 
 | Hat | Owns | Model |
@@ -41,8 +41,8 @@ reviewers, paired reviewers, or background agents without explicit delegation.
 | database/SQL (auto; every tier) | Match changed `.sql`; database migration, schema, or DDL; SQL query code; or database dependencies/imports such as `database/sql`, sqlc, Jet/go-jet, Drizzle, DuckDB, Prisma, SQLAlchemy, and other ORMs/query builders/generators. First determine dialect/provider. PostgreSQL uses `/postgresql` with actual-SQL evidence; otherwise apply the portable [SQL PR checks](../postgresql/references/SQL-PR-REVIEW.md) and official dialect docs. | primary owner |
 
 Cross-model axis, **mandatory for non-trivial PR/ship work**: one awaited
-`GPT-5.6-sol: adversarial` high pass against Claude-authored work. If unavailable,
-record the limitation; do not launch a substitute agent. Terra/Luna never review.
+different-family adversarial pass when available. If unavailable, use a labeled
+clean-context Sol pass or record the limitation; do not launch an eval-gated substitute.
 
 Hat contract: fixed point, changed files, diff command, sources, owned axis + non-goals; evidence, severity, priority label, required change, PR-comment-ready text; max 400 words; findings must be diff-introduced, user-impacting, actionable.
 Merge: dedupe by root cause, keep highest severity on disagreement, preserve Standards and Spec separately.

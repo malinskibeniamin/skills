@@ -65,7 +65,7 @@ run_content_eval "$REPO_ROOT/grilling/SKILL.md" "inline" \
   "/grilling runs hats inline"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "BLOCKED" \
   "/grilling honors BLOCKED status"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "ETHOS: Grill Before Build" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "ETHOS: Discover Before Commitment" \
   "/grilling cross-references ETHOS principle"
 if grep -q "spawn them.*parallel" "$REPO_ROOT/grilling/SKILL.md"; then
   echo "  FAIL  /grilling still auto-spawns parallel plan agents"

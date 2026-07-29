@@ -19,7 +19,7 @@ run_content_eval "$GRILL" "brainstorming approaches" "grilling description carri
 run_content_eval "$GRILL" "Explore mode" "grilling has explore mode"
 run_content_eval "$GRILL" "2-3 approaches with trade-offs" "explore mode proposes approaches with trade-offs"
 run_content_eval "$GRILL" "Challenge variant" "explore mode keeps challenge variant"
-run_content_eval "$GRILL" "no production code or implementation until a direction is presented" "hard gate applies to any direction, not design only"
+run_content_eval "$GRILL" "no production code or implementation while a" "hard gate applies while a material decision is open"
 run_content_eval "$GRILL" "/plan-arbiter" "explore mode routes competing plans to plan-arbiter"
 run_content_eval "$GRILL" "frontier" "grilling maps the currently answerable frontier"
 run_content_eval "$GRILL" "whole frontier" "grilling asks the whole frontier each round"

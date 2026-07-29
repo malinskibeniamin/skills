@@ -7,15 +7,35 @@ else
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: AGENTS.md generation drift"
 fi
 
-# Belt-and-braces: load-bearing phrases present in both files.
+# Routing is data, not duplicated subjective prose.
+ROUTING="$REPO_ROOT/config/model-routing.json"
+run_file_eval "$ROUTING" "model routing source exists"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "config/model-routing.json" \
+  "ambient rules point to the routing source"
+run_content_eval "$REPO_ROOT/AGENTS.md" "config/model-routing.json" \
+  "generated Codex rules point to the routing source"
 
-for pat in "NEVER Haiku" "intelligence > taste > cost" "single owner" "Fable-5" "GPT-5.6 Sol (codex) 8/9/6" "author model never solely reviews its own work"; do
-  if grep -qF "$pat" "$REPO_ROOT/CLAUDE.md" && grep -qF "$pat" "$REPO_ROOT/AGENTS.md"; then
-    echo "  PASS  rule in both CLAUDE.md and AGENTS.md: $pat"
+for query in \
+  '.policy == "quality-first"' \
+  '.quality_first.default.model == "gpt-5.6-sol"' \
+  '.selection.single_owner == true' \
+  '.selection.cross_family_review_for_non_trivial_pr == true'; do
+  if jq -e "$query" "$ROUTING" >/dev/null; then
+    echo "  PASS  routing contract: $query"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  rule drifted between CLAUDE.md and AGENTS.md: $pat"
+    echo "  FAIL  routing contract: $query"
     FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: rule drift: $pat"
+    ERRORS="$ERRORS\n  FAIL: routing contract: $query"
   fi
 done
+
+if grep -qE '[0-9]+/[0-9]+/[0-9]+|intelligence > taste > cost' \
+  "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/AGENTS.md"; then
+  echo "  FAIL  subjective model rankings returned to ambient context"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: ambient subjective model rankings"
+else
+  echo "  PASS  ambient context omits subjective model rankings"
+  PASS=$((PASS + 1))
+fi

@@ -112,7 +112,7 @@ Each passing verify state = one commit. Format: `type(scope): what changed`.
 | Condition | Action |
 |---|---|
 | Any non-trivial diff | self-review + adversarial axes inline |
-| Non-trivial PR/ship | one bounded, foreground, awaited Sol high pass |
+| Non-trivial PR/ship | one bounded, foreground, awaited different-family pass; clean-context Sol fallback |
 | Credible high-impact failure surface | `/resilience-review` evidence required |
 | Trivial (<10 lines, no logic) | Skip 4b entirely |
 

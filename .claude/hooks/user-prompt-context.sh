@@ -2,7 +2,7 @@
 set -euo pipefail
 trap 'exit 0' ERR
 
-# UserPromptSubmit hook: inject project state into every prompt.
+# UserPromptSubmit hook: inject project state on the first prompt and when it changes.
 # Target: <200ms total. Claude starts each response knowing the project state
 # without wasting tool calls on git status, file reads, or config checks.
 #
@@ -52,26 +52,35 @@ if [ ! -f "$_first_turn_marker" ]; then
   touch "$_first_turn_marker" 2>/dev/null || true
 fi
 
-# ── Git state (~80ms) — every turn ──────────────────────────────
+# ── Git state (~80ms) ───────────────────────────────────────────
 
 branch=$(git branch --show-current 2>/dev/null || echo "detached")
 dirty=$(git diff --stat HEAD 2>/dev/null | tail -1 || echo "clean")
 last_commit=$(git log --oneline -1 2>/dev/null || echo "no commits")
 ahead_behind=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null | awk '{if(NF>=2) print "ahead:"$1" behind:"$2}' 2>/dev/null || echo "")
 
+vfile="$_session_dir/violations"
+violation_state=""
+if [ -f "$vfile" ] && [ -s "$vfile" ]; then
+  total=$(wc -l < "$vfile" | tr -d ' ')
+  summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
+  violation_state="Violations ($total): $summary"
+fi
+
+state_raw="$branch|$dirty|$last_commit|$ahead_behind|$violation_state"
+state_hash=$(printf '%s' "$state_raw" | cksum | awk '{print $1":"$2}')
+state_file="$_session_dir/last-prompt-state"
+if [ "$_is_first_turn" != "1" ] && [ -f "$state_file" ] \
+  && [ "$(cat "$state_file" 2>/dev/null)" = "$state_hash" ]; then
+  exit 0
+fi
+printf '%s\n' "$state_hash" > "$state_file" 2>/dev/null || true
+
 context="Branch: $branch"
 [ -n "$dirty" ] && context="$context | $dirty"
 [ -n "$ahead_behind" ] && context="$context | $ahead_behind"
 context="$context\nLast commit: $last_commit"
-
-# ── Session violations (~5ms) — every turn, only if present ──────
-
-vfile="$_session_dir/violations"
-if [ -f "$vfile" ] && [ -s "$vfile" ]; then
-  total=$(wc -l < "$vfile" | tr -d ' ')
-  summary=$(sort "$vfile" | uniq -c | sort -rn | head -5 | awk '{print $1"x "$2}' | paste -sd ", " -)
-  context="$context\nViolations ($total): $summary"
-fi
+[ -n "$violation_state" ] && context="$context\n$violation_state"
 
 # ── Standard+ sections — FIRST TURN ONLY ────────────────────────
 

@@ -100,11 +100,11 @@ run_file_eval "$REPO_ROOT/wizard/template.sh" "wizard template exists"
 
 
 # Latest Matt vendoring: public research skill and upstream review/TDD/grilling deltas.
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plans, decisions, and ideas|plan, decision, or idea" "grilling applies beyond implementation plans"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plans, decisions,.*ideas" "grilling applies beyond implementation plans"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decision tree" "grilling walks decisions rather than design-only branches"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "environment.*filesystem.*tools" "grilling looks up facts across the available environment"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Do not act on it until I confirm" "grilling waits for shared-understanding confirmation"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "decisions.*are mine" "grilling leaves decisions to the user"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "confirmation only when.*requested" "grilling respects the requested endpoint"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "user.*decisions.*theirs" "grilling leaves decisions to the user"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "whole frontier" "grilling interviews round by round"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "unsettled prerequisite.*rest of the frontier proceeds" "grilling does not block independent frontier questions"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD tests only agreed seams"
@@ -122,7 +122,7 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Standards.*Spec" "review keeps st
 # review: 8-hat parallel panel (default for PR reviews) + quick/deep modes
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Core pass" "review defines the always-on core pass"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the 8-hat panel for PR reviews"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "GPT-5\.6-sol: adversarial" "review offers a cross-family adversarial hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "different-family adversarial" "review offers a cross-family adversarial hat"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review hats skip only with diff evidence"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep release-audit mode"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "review forbids recursive invocation"
@@ -200,21 +200,22 @@ run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Negation" "writing-fo
 run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Prompt the \*\*positive\*\*|prompt the \*\*positive\*\*" "writing-for-agents cures negation with positive prompting"
 
 # Matt 2026-07 prototype lifecycle and logic-demo updates.
-run_content_eval "$REPO_ROOT/prototype/SKILL.md" "primary source" "prototype is retained as a primary source"
-run_content_eval "$REPO_ROOT/prototype/SKILL.md" "throwaway branch" "prototype leaves main on a throwaway branch"
-run_content_eval "$REPO_ROOT/prototype/SKILL.md" "context pointer" "prototype leaves an implementation context pointer"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "\.context/prototypes" "prototype uses a disposable local artifact"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "delete.*before shipping|Delete the artifact by default" "prototype is deleted by default"
+if grep -q "throwaway branch" "$REPO_ROOT/prototype/SKILL.md"; then
+  echo "  FAIL  prototype still requires a preservation branch"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: prototype requires a branch"
+else
+  echo "  PASS  prototype does not require a preservation branch"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "single, self-contained HTML file|single self-contained HTML file" "logic prototype is a shareable HTML demo"
 run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "Guided walkthroughs" "logic prototype includes guided scenarios"
 run_content_eval "$REPO_ROOT/prototype/UI.md" "primary source" "UI variants are retained as primary-source evidence"
 
-if grep -qE "Delete or absorb when done|answer is the only thing worth keeping|prototype gets deleted" "$REPO_ROOT/prototype/SKILL.md" "$REPO_ROOT/prototype/LOGIC.md"; then
-  echo "  FAIL  prototype still instructs deleting its primary source"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: prototype primary source still deleted"
-else
-  echo "  PASS  prototype no longer deletes its primary source"
-  PASS=$((PASS + 1))
-fi
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "question, evidence, and verdict" \
+  "prototype preserves its durable verdict"
 
 # Matt 2026-07 questionnaire skill.
 run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "Grill the send, not the subject" "questionnaire asks only what the sender can answer"

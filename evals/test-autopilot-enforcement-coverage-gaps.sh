@@ -298,7 +298,7 @@ rm -rf "$_ce_tmpdir"
 # hooks.json wiring: new hooks registered
 # ══════════════════════════════════════════════════════════════════
 
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "ts-no-escape-hatches-check.sh" "codex-hooks.json keeps ts-no-escape-hatches-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "codex-edit-dispatch.sh" "codex-hooks.json uses one edit dispatcher"
 
 # ══════════════════════════════════════════════════════════════════
 # Proto-form hooks: files, executable bits, registration in BOTH
@@ -309,6 +309,6 @@ for h in connect-query-check form-mode-check form-mode-check form-mode-check; do
   run_file_eval       "$HOOKS_DIR/${h}.sh" "${h}.sh exists"
   run_executable_eval "$HOOKS_DIR/${h}.sh" "${h}.sh is executable"
   run_content_eval    "$HOOKS_DIR/checks/${h}.lib.sh" "hook_has_escape" "${h} respects escape hatch"
-  run_content_eval    "$REPO_ROOT/hooks/codex-hooks.json" "${h}.sh" "codex-hooks.json keeps ${h} per-call"
+  run_content_eval    "$REPO_ROOT/skill-manifest.json" "${h}.sh" "edit dispatcher includes ${h}"
   run_content_eval    "$REPO_ROOT/.claude/settings.json"  "post-tool-batch.sh" "settings.json uses PostToolBatch dispatcher for ${h}"
 done

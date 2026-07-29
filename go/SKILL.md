@@ -30,7 +30,10 @@ Fix failures before proceeding.
 **Skip if**: trivial change (<10 lines, no logic) | test-only | docs-only.
 
 1. Run the self-reviewer and adversarial axes inline in the primary context.
-2. **Cross-model adversarial review**: for non-trivial PR/ship work, run one bounded, awaited `GPT-5.6-sol: adversarial` high pass via `/codex`. Terra/Luna never review. If Codex is unavailable, record the limitation; do not spawn a substitute.
+2. **Cross-model adversarial review**: for non-trivial PR/ship work, run one bounded,
+   awaited pass from a different model family when available. Otherwise use a labeled
+   clean-context Sol pass. Follow `config/model-routing.json`; do not silently substitute
+   an eval-gated variant.
 3. Do not dispatch background or paired reviewers unless the user explicitly requested delegation.
 4. Resilience Review: run only for credible data-loss, security/privacy, irreversible, contract, or likely stuck-user risk
 5. Process findings by priority -- see [REFERENCE.md](REFERENCE.md)

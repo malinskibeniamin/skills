@@ -136,10 +136,11 @@ _hook_log_entry() {
 #                   | nudge-grep-root | cap_hit
 #   cmd_snippet     first 120 chars of the command (ANSI-stripped)
 #   bytes           cap_hit: actual bytes truncated; nudges: 0 (fire count proxy)
-_hook_drain_log="${HOME}/.claude/hook-metrics/bash-drains.jsonl"
+_hook_drain_log="${HOOK_METRICS_DIR:-${HOME}/.claude/hook-metrics}/bash-drains.jsonl"
 
 _hook_log_bash_drain() {
   local drain_type="$1" cmd_snippet="$2" bytes="${3:-0}"
+  [ "${HOOK_METRICS_DISABLED:-0}" = "1" ] && return 0
   mkdir -p "$(dirname "$_hook_drain_log")" 2>/dev/null || true
   # Trim + escape cmd_snippet for JSON. Cap length to keep log compact.
   cmd_snippet="${cmd_snippet:0:120}"

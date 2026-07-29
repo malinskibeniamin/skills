@@ -20,14 +20,14 @@ _ux_ui_lines=$(printf '%s\n' "$added_lines" | grep -E "([\"'][^\"']+[\"']|>[^<>{
 
 if echo "$added_lines" | grep -qE "!['\"]|!\\\\n|!\s*['\"]"; then
   if ! echo "$added_lines" | grep -E '!["\x27]' | grep -qE '!==|!=|!important|http'; then
-    hook_block "No ! in UI text. Remove it."
+    hook_warn "No ! in UI text. Remove it."
   fi
 fi
 
 # ── Check 2: Ban "successfully" in UI text ────────────────────────
 
 if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*successfully[^'\"]*\1"; then
-  hook_block "Drop 'successfully'. Past-tense verb: 'Topic created' not 'Topic successfully created'."
+  hook_warn "Drop 'successfully'. Past-tense verb: 'Topic created' not 'Topic successfully created'."
 fi
 
 # ── Check 3: Ban "click here" / bare "here" link text ────────────
@@ -35,7 +35,7 @@ fi
 case "$file_path" in
   *.tsx)
     if echo "$added_lines" | grep -qiE '>[[:space:]]*(click here|here)[[:space:]]*<'; then
-      hook_block "No 'click here' link text. Descriptive destination text instead."
+      hook_warn "No 'click here' link text. Descriptive destination text instead."
     fi
     ;;
 esac
@@ -43,7 +43,7 @@ esac
 # ── Check 4: Ban blame language ───────────────────────────────────
 
 if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(oops|uh oh|oh no|whoops)\b[^'\"]*\1"; then
-  hook_block "No casual error language. State problem + solution clearly."
+  hook_warn "No casual error language. State problem + solution clearly."
 fi
 
 # ── Check 5: Warn on possessive pronouns in titles/nav ────────────
@@ -57,7 +57,7 @@ fi
 case "$file_path" in
   *.tsx)
     if echo "$added_lines" | grep -qE '<Button[^>]*>[[:space:]]*(Yes|No)[[:space:]]*</Button>'; then
-      hook_block "No Yes/No button labels. Action verbs: 'Delete cluster'/'Keep cluster'."
+      hook_warn "No Yes/No button labels. Action verbs: 'Delete cluster'/'Keep cluster'."
     fi
     ;;
 esac
@@ -82,7 +82,7 @@ fi
 if [ "${REDPANDA_KIT:-}" = "1" ]; then
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\b(admin api|schema registry|http proxy|redpanda console)\b[^'\"]*\1" && \
      ! echo "$added_lines" | grep -qE "(Admin API|Schema Registry|HTTP Proxy|Redpanda Console)"; then
-    hook_block "Capitalize Redpanda product names: Admin API, Schema Registry, HTTP Proxy, Redpanda Console."
+    hook_warn "Capitalize Redpanda product names: Admin API, Schema Registry, HTTP Proxy, Redpanda Console."
   fi
 
   if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*\bthe console\b[^'\"]*\1"; then
@@ -135,7 +135,7 @@ fi
 # ── Check 16: Ban non-inclusive terminology ───────────────────────
 
 if echo "$added_lines" | grep -qiE '\b(whitelist|blacklist|master|slave)\b'; then
-  hook_block "Inclusive terms: allowlist/denylist, leader/follower, primary/secondary."
+  hook_warn "Inclusive terms: allowlist/denylist, leader/follower, primary/secondary."
 fi
 
 # ── Check 17: Warn on "There is" / "There are" starters ─────────
@@ -169,7 +169,7 @@ fi
 # ── Check 21: Ban em dashes in UI copy ───────────────────────────
 
 if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -q "—"; then
-  hook_block "No em dashes in UI text. Use a period, colon, or parentheses."
+  hook_warn "No em dashes in UI text. Use a period, colon, or parentheses."
 fi
 
 # ── Check 22: Warn on marketing buzzwords in UI copy ─────────────
@@ -213,7 +213,7 @@ fi
 # ── Check 27: Ban "make it pop" directives ──────────────────────
 
 if printf '%s\n' "$added_lines" | grep -qiE '\bmake[[:space:]]+(it|this|that|the[[:space:]]+[[:alpha:]-]+)[[:space:]]+pop\b'; then
-  hook_block "No 'make it pop' direction. Specify the visual or copy change."
+  hook_warn "No 'make it pop' direction. Specify the visual or copy change."
 fi
 
 # ── Check 28: Warn on generic CTA labels ────────────────────────

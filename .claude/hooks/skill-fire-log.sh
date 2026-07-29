@@ -30,11 +30,13 @@ esac
 session="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 [ -n "$session" ] || session=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null)
 
-dir="$HOME/.claude/hook-metrics"
-mkdir -p "$dir" 2>/dev/null || true
-printf '{"ts":"%s","skill":"%s","session":"%s","source":"%s"}\n' \
-  "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$skill" "${session:-unknown}" "$source" \
-  >> "$dir/skill-fires.jsonl" 2>/dev/null || true
+if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
+  dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
+  mkdir -p "$dir" 2>/dev/null || true
+  printf '{"ts":"%s","skill":"%s","session":"%s","source":"%s"}\n' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$skill" "${session:-unknown}" "$source" \
+    >> "$dir/skill-fires.jsonl" 2>/dev/null || true
+fi
 
 case "$skill" in
   dogfood|*/dogfood|*:dogfood)
