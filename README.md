@@ -51,7 +51,7 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.32.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.33.0
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
