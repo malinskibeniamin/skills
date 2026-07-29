@@ -6,7 +6,7 @@
 
 ### Runtime notes
 
-- Hooks arrive per-call (no PostToolBatch); behavior is generated to parity from skill-manifest.json.
+- Hooks arrive per-call; `codex-edit-dispatch.sh` adapts edits to the shared batch protocol.
 - `process.env` allowed only in build/test configs; app code goes through `@/env`.
 - Subagent output enforcement is best effort; follow `agents/references/findings-schema.md` for review findings.
 

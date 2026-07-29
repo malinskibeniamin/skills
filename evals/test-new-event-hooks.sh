@@ -3,6 +3,9 @@
 # Notification — plus the codex-notify adapter and execpolicy mirror.
 
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
+export HOOK_METRICS_DISABLED=0
+export HOOK_METRICS_DIR
+HOOK_METRICS_DIR=$(mktemp -d)
 
 # ── Scripts exist and are executable ─────────────────────────────
 for _s in setup-init.sh cwd-changed.sh config-change-guard.sh \
@@ -80,7 +83,7 @@ fi
 run_hook_eval "$HOOKS_DIR/skill-fire-log.sh" \
   '{"hook_event_name":"UserPromptExpansion","skill_name":"eval-fixture-skill"}' 0 \
   "skill-fire-log accepts UserPromptExpansion"
-if tail -5 "$HOME/.claude/hook-metrics/skill-fires.jsonl" 2>/dev/null | grep -q '"skill":"eval-fixture-skill","session":"eval-new-events-'"$$"'","source":"expansion"'; then
+if tail -5 "$HOOK_METRICS_DIR/skill-fires.jsonl" 2>/dev/null | grep -q '"skill":"eval-fixture-skill","session":"eval-new-events-'"$$"'","source":"expansion"'; then
   echo "  PASS  skill-fire-log records expansion source"
   PASS=$((PASS + 1))
 else
@@ -125,7 +128,7 @@ for _cat in rate_limit max_output_tokens; do
   run_hook_eval "$HOOKS_DIR/stop-failure-telemetry.sh" \
     "{\"hook_event_name\":\"StopFailure\",\"error\":\"$_cat\"}" 0 \
     "stop-failure-telemetry exits 0 on $_cat"
-  if tail -3 "$HOME/.claude/hook-metrics/stop-failures.jsonl" 2>/dev/null | grep -q "\"category\":\"$_cat\""; then
+  if tail -3 "$HOOK_METRICS_DIR/stop-failures.jsonl" 2>/dev/null | grep -q "\"category\":\"$_cat\""; then
     echo "  PASS  stop-failure-telemetry records $_cat from .error"
     PASS=$((PASS + 1))
   else
@@ -181,10 +184,15 @@ fi
 rm -rf "$_setup_fix" "$_setup_bin"
 
 # codex-notify adapter (argument-style invocation, not stdin)
-rm -f "$HOME/.claude/hook-metrics/"*-codex-t-eval*.json
+rm -f "$HOOK_METRICS_DIR/"*-codex-*.json
 "$HOOKS_DIR/codex-notify.sh" '{"type":"agent-turn-complete","thread-id":"t-eval","cwd":"/tmp"}' </dev/null
-"$HOOKS_DIR/codex-notify.sh" '{"type":"agent-turn-complete","thread-id":"t-eval","cwd":"/tmp"}' </dev/null
-if tail -5 "$HOME/.claude/hook-metrics/codex-turns.jsonl" 2>/dev/null | grep -q '"thread":"t-eval"'; then
+_long_last=$(printf 'verified %.0s' {1..40})
+"$HOOKS_DIR/codex-notify.sh" \
+  "$(jq -nc --arg last "${_long_last}
+🟢 done — verified" \
+    '{type:"agent-turn-complete","thread-id":"t-eval",cwd:"/tmp","last-assistant-message":$last}')" \
+  </dev/null
+if tail -5 "$HOOK_METRICS_DIR/codex-turns.jsonl" 2>/dev/null | grep -q '"thread":"t-eval"'; then
   echo "  PASS  codex-notify logs agent-turn-complete"
   PASS=$((PASS + 1))
 else
@@ -192,10 +200,10 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: codex-notify telemetry"
 fi
-# The consumer contract: a schema-v2 summary /hook-audit's *.json pass reads
-_codex_summary=$(ls "$HOME/.claude/hook-metrics/"*-codex-t-eval*.json 2>/dev/null | tail -1)
+# The consumer contract: a schema-v3 summary /hook-audit's *.json pass reads
+_codex_summary=$(ls "$HOOK_METRICS_DIR/"*-codex-*.json 2>/dev/null | tail -1)
 if [ -n "$_codex_summary" ] \
-  && jq -e '.schema_version == 2 and .source == "codex" and .turns == 2' "$_codex_summary" >/dev/null 2>&1 \
+  && jq -e '.schema_version == 3 and .source == "codex" and .turns == 2 and .outcome == "completed"' "$_codex_summary" >/dev/null 2>&1 \
   && grep -q "codex-turns.jsonl" "$REPO_ROOT/hook-audit/"{SKILL,REFERENCE}.md; then
   echo "  PASS  codex turns appear in hook-audit's session-summary feed"
   PASS=$((PASS + 1))
@@ -204,7 +212,7 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: codex-notify consumer"
 fi
-rm -f "$HOME/.claude/hook-metrics/"*-codex-t-eval*.json
+rm -f "$HOOK_METRICS_DIR/"*-codex-*.json
 
 # ── Execpolicy mirror invariants ─────────────────────────────────
 if cmp -s "$REPO_ROOT/hooks/frontend-skills.rules" "$REPO_ROOT/.codex/rules/frontend-skills.rules" 2>/dev/null; then

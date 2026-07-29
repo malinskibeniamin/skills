@@ -14,11 +14,13 @@ SETTINGS_JSON="$REPO_ROOT/.claude/settings.json"
 run_file_eval "$HOOK" "pr-feedback-completeness-stop.sh exists"
 run_executable_eval "$HOOK" "pr-feedback-completeness-stop.sh is executable"
 
-# ── Registration in both hook configs ────────────────────────────
-run_content_eval "$HOOKS_JSON" "pr-feedback-completeness-stop.sh" \
-  "hooks.json registers pr-feedback-completeness-stop.sh"
-run_content_eval "$SETTINGS_JSON" "pr-feedback-completeness-stop.sh" \
-  ".claude/settings.json registers pr-feedback-completeness-stop.sh"
+# ── Registration through the endpoint-aware Stop dispatcher ─────
+run_content_eval "$HOOKS_JSON" "stop-dispatch.sh" \
+  "hooks.json registers the Stop dispatcher"
+run_content_eval "$SETTINGS_JSON" "stop-dispatch.sh" \
+  ".claude/settings.json registers the Stop dispatcher"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "pr-feedback-completeness-stop.sh" \
+  "Stop dispatcher owns PR feedback completeness"
 
 # ── Skill documents enforcement ──────────────────────────────────
 run_content_eval "$SKILL" "Completeness Verification" \

@@ -61,8 +61,11 @@ Spawned lanes may not create descendants without separate authorization for nest
 ## Skill composition
 
 - Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
-- Before launching lanes and between waves: `/stay-within-limits` (stop Claude above 95% of either window; resume after a fresh check).
-- Lane model choice: use `/efficient-frontier` rankings. Give each write scope one implementation owner; do not duplicate an implementation as a model pair. Tracker chores -> Luna; PR-comment chores -> Terra. Never Haiku.
+- Before launching lanes and between waves: `/efficient-frontier`; use
+  `/stay-within-limits` only when a fresh host quota snapshot is available.
+- Lane model choice: use `config/model-routing.json`. Give each write scope one
+  implementation owner; do not duplicate an implementation as a model pair. Eval-gated
+  variants remain unavailable until promoted by the ablation suite.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes author the smallest clear solution from the start; reviewer lanes assess semantic density directly.
 - Architecture: fan out `/improve architecture` by context, module, seam, or adapter.

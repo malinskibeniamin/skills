@@ -1,6 +1,6 @@
 ---
 name: grilling
-description: Grill plans, decisions, and ideas. Use for explicit brainstorming approaches, competing options, pre-code decision work, plan stress tests, or lifecycle phase 2b.
+description: Explore and stress-test plans, decisions, ideas, and brainstorming approaches when a material choice remains open.
 ---
 
 Read and follow the complete [canonical skill instructions](../../grilling/SKILL.md) before acting.

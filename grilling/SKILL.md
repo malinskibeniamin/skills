@@ -1,100 +1,81 @@
 ---
 name: grilling
-description: Grill plans, decisions, and ideas. Use for explicit brainstorming approaches, competing options, pre-code decision work, plan stress tests, or lifecycle phase 2b.
+description: Explore and stress-test plans, decisions, ideas, and brainstorming approaches when a material choice remains open.
 ---
 
 # Grilling
 
-**GATE: no production code or implementation until a direction is presented, grilled, and
-approved. Decision artifacts described below are allowed.**
+Grilling discovers consequential unknowns; it does not demand certainty about every
+implementation detail. During grilling, no production code or implementation while a
+material user-reserved decision is open. Invocation does not authorize delegation.
 
-## Explore mode (no direction yet)
+## 1. Build the evidence packet
 
-When invoked before a coherent direction exists ("brainstorm", "explore options", "should we use X or Y?", new feature/architecture choice):
+Read the request, plan, repository, tests, docs, references, and recent decisions. Facts
+are the agent's job. Ask the user only for preferences, scope, risk appetite, and
+decisions that cannot be learned from evidence.
 
-1. Explore context -- read files, docs, recent commits.
-2. Clarify -- map the current decision tree and ask its whole frontier in one numbered round.
-3. Propose 2-3 approaches with trade-offs. Optional: HTML mockup -> `agent-browser` -> annotated screenshot.
-4. Multiple competing plans/options (incl. from other agents) -> `/plan-arbiter` to pick adopt/hybrid/revise.
-5. Present the chosen direction, then grill it (below).
+Name the blind spot most likely to invalidate the current direction. If seeing behavior
+would answer it faster than prose, build or request a disposable prototype first.
 
-**Challenge variant** (reviewing a proposed approach or risky refactor): question every assumption -- "Why this? What breaks if X changes? Empty list? 10,000 items?" -- present alternatives, push back on weak reasoning; consensus only when all concerns are addressed. "Should we use X or Y?" -> explore, then challenge the winner.
+## 2. Explore mode
 
-**Standing questions** (mined from years of unresolved review debates -- ask whichever applies):
-- Risky UI swap: "If this ships broken, is the revert path a flag flip or a deploy? Who flips it, and when does the losing branch get deleted?" (flag lifecycle: removal is the definition of done)
-- New dependency: "Does a planned platform migration make this redundant within a quarter?" and "Is this >=~40 lines of tricky domain logic (dates, money, parsing -> take the library) or a trivial util (keep it local)?"
-- New abstraction/helper: "Where is the second call site?" -- no extraction without one.
-- New escape hatch, ignore, or compat shim: "Will the next LLM session imitate and spread this?" -- if yes, fix at source or gate it mechanically.
+When no direction exists, present 2-3 approaches with trade-offs, reversibility, and
+evidence. Recommend one. Competing plans go through `/plan-arbiter`.
 
-## Grill (direction exists)
+**Challenge variant:** when a direction exists, steelman the best alternative and
+identify what would make the current choice wrong.
 
-Interview me relentlessly until we reach a shared understanding. Map this as a **decision tree**: every decision branches into the decisions that depend on it.
+Map a decision tree. Its frontier is every currently answerable decision. Ask the whole frontier
+in one numbered round with a recommendation for each.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are settled -- questions answerable now without guessing at another open answer. Ask the whole frontier in one numbered round and provide your recommended answer for each question. Then wait.
+An unsettled prerequisite delays only its branch while the rest of the frontier proceeds.
+Recompute the frontier after every answer round.
 
-Each answer round reshapes the tree. Settled decisions push the frontier outward and unblock dependent questions. Recompute the frontier before the next round; a question that depends on another answer still open this round belongs to a later round.
+Keep fact-finding inline unless the user explicitly authorizes delegation. Search the
+environment, filesystem, tools, and sources. The user's decisions are theirs.
 
-Finding *facts* is your job, never mine. Explore the environment -- filesystem, tools, and available sources -- rather than asking me. Keep fact-finding inline unless I explicitly authorize delegation or invoke `/swarm`. Do not block independent questions: an unsettled prerequisite delays only its downstream questions while the rest of the frontier proceeds. The *decisions* are mine -- put each to me and wait.
+Useful challenges:
 
-The interview ends when the frontier is empty: every branch visited, nothing left silently assumed. Do not act on it until I confirm we have reached a shared understanding.
+- Risky UI replacement: rollback path, owner, and deletion condition.
+- Dependency: evidence it beats local code and will survive planned migration.
+- Abstraction: demonstrated second call site.
+- Escape hatch: whether the next session will copy it.
+- Scale or failure claim: the concrete input, timing, or system condition that proves it.
 
-## Plan gate (lifecycle phase 2b)
+## 3. Exit with classified unknowns
 
-Once a coherent plan exists, review it with the shared
-[plan findings contract](../agents/references/plan-findings-schema.md). Apply every
-required axis and all three reviewer hats inline in the current context. Do not spawn
-plan agents or start a recursive model call unless I explicitly request delegation or
-invoke `/swarm`.
+Architecture-changing decisions must be resolved or explicitly reserved for the user.
+Classify everything else: **lookup -> prototype -> reversible assumption -> pause trigger**.
+The interview ends when no unresolved item can silently invalidate the next slice, not
+when all future details are known.
 
-**Evidence packet:** gather the exact plan, request and Spec sources, Standards sources,
-planned paths, repo facts, assumptions, tier, and specialist matches once. Give every
-axis the same packet. Find facts yourself; `must_answer` contains user decisions only.
+## 4. Plan gate
 
-**Axes:** keep Spec and Standards separate.
-- **Spec (`plan-product-hat`)**: requirements, persona, pain, success, scope, reversibility, TTV.
-- **Standards (`plan-engineering-hat`)**: documented rules, architecture, failure paths, tests, rollback, Murphy.
-- **Design (`plan-design-hat`)**: flow, a11y, copy, consistency, empty/loading/error.
+Gather one **Evidence packet**: request, plan, spec sources, standards sources, planned
+paths, repo facts, assumptions, and unresolved decisions.
 
-**Tiers:**
+Use the smallest gate matching the risk:
 
-| Tier | Trigger | Axes |
-|---|---|---|
-| **Quick** | All hold: trivial bug, fewer than 3 tasks, no architectural/product/UX decision | Orchestrator checks Spec, Standards, and adversarial/value inline. Name every skipped hat and specialist with a one-line `skip_reason`; no fan-out. |
-| **Standard** | Default within this gate | Three plan hats, inline adversarial/value, and every matched specialist. |
-| **Deep-risk** | Credible high-impact or hard-to-reverse surface | Standard plus a plan-time `/resilience-review` and `/steelman` of the highest-risk eligible assumption. |
+- **Quick**: trivial bug, fewer than three tasks, no material architecture/product/UX
+  choice. Check spec, standards, and value inline.
+- **Standard**: product/spec, engineering/standards, and design/UX hats inline.
+- **Deep-risk**: standard plus resilience review and a steelman for a credible
+  high-impact or hard-to-reverse assumption.
 
-Deep-risk triggers include auth/security, migrations, public APIs, destructive actions,
-concurrency/Temporal, cross-service changes, and one-way doors. Size alone is not risk.
-Steelman the highest-risk factual, causal, or architectural assumption; preferences,
-goals, and scope choices get an evidence-backed skip reason.
+Axes: Spec -> `plan-product-hat`; Standards -> `plan-engineering-hat`; design/UX ->
+`plan-design-hat`; plus adversarial/value. Run them inline.
 
-**Adversarial/value:** inline, ask what makes the plan wrong even if implemented
-perfectly and whether the smallest plan is worth its cost.
+Deep-risk triggers: auth, migration, public API, destructive actions, concurrency, Temporal, cross-service changes, and one-way doors. Add `/resilience-review` and `/steelman`.
 
-**Specialist registry:** conditional axes use the same packet and schema. Initially,
-`*.go`, `go.mod`, or planned Go implementation around a backend proto routes through
-`/golang` for bounds, APIs, errors, concurrency, Temporal, tests, rollout, and
-controllers. `/golang-review` waits for a diff. Add routes only after repeated misses.
+**Specialist registry:** planned Go or `go.mod` work uses `/golang`; add another
+specialist only after repeated misses.
 
-**Merge:** validate the plan schema; dedupe findings and `must_answer` by root cause;
-preserve Spec and Standards; keep the strongest evidence. Every axis reports
-`APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED`; a skip needs a one-line skip
-reason. Update the plan for changes. Blocking findings halt until answered or explicitly
-overridden. Then ask for implementation confirmation. Competing plans go through
-`/plan-arbiter`.
+For each applicable axis, report `APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED`
+with evidence; a skip needs a skip reason. Dedupe findings by root cause. Blocking user
+decisions halt; facts trigger research or a prototype.
 
-The lifecycle invokes this gate only for explicit grilling/planning or unresolved
-material architectural, product, or UX decisions. Ordinary well-scoped
-build/fix/implement work states its concise plan and continues without this stop.
-[ETHOS: Grill Before Build]
+Require confirmation only when the user requested a plan/grill endpoint. [ETHOS: Discover Before Commitment]
 
-## With docs (domain capture)
-
-When terms or ADR-worthy decisions crystallize mid-grill, run `/domain-modeling` inline rather than batching:
-
-- **Challenge against the glossary**: a term conflicting with `CONTEXT.md` gets called out immediately ("your glossary defines 'cancellation' as X, you seem to mean Y -- which?").
-- **Sharpen fuzzy language**: propose a precise canonical term for vague or overloaded words.
-- **Stress-test with concrete scenarios** that probe boundaries between concepts.
-- **Cross-reference with code**: when the user states how something works, check whether the code agrees; surface contradictions.
-- **Update `CONTEXT.md` inline** as terms resolve (glossary only -- never a spec or scratch pad).
-- **Offer ADRs sparingly**: only when hard to reverse AND surprising without context AND a real trade-off. Formats: see `domain-modeling/CONTEXT-FORMAT.md` and `domain-modeling/ADR-FORMAT.md`.
+Use `/domain-modeling` to capture domain terms in `CONTEXT.md`, and an ADR only when the
+decision is hard to reverse, surprising without context, and has a real trade-off.

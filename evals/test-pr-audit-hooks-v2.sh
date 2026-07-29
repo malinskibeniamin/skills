@@ -42,8 +42,8 @@ run_content_eval "$HOOKS_DIR/checks/copyright-check.lib.sh" "git show HEAD" "cop
 # ══════════════════════════════════════════════════════════════════
 
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "post-tool-batch.sh" "hooks.json has PostToolBatch dispatcher"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "query-pattern-check.sh" "codex-hooks.json keeps query-pattern-check per-call"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "copyright-check.sh" "codex-hooks.json keeps copyright-check per-call"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "query-pattern-check.sh" "edit dispatcher includes query-pattern-check"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "copyright-check.sh" "edit dispatcher includes copyright-check"
 
 # ══════════════════════════════════════════════════════════════════
 # accessibility-check.sh extensions

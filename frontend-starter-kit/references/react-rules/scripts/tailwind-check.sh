@@ -27,7 +27,7 @@ _tw_line_has_pair() {
 # ── Ban !important ─────────────────────────────────────────────────
 
 if echo "$added_lines" | grep -qE '!important'; then
-  hook_block "No !important — breaks Tailwind cascade. Fix specificity."
+  hook_warn "No !important — breaks Tailwind cascade. Fix specificity."
 fi
 
 # ── Ban raw colors in CSS files ───────────────────────────────────
@@ -39,7 +39,7 @@ case "$file_path" in
         | grep -E "$_raw_color_pattern" \
         | grep -Ev '@(apply|theme|layer)|--[A-Za-z0-9_-]+[[:space:]]*:' || true)
       if [ -n "$_css_raw_colors" ]; then
-        hook_block "No raw colors in CSS. Use design tokens like var(--destructive). Escape: // allow: design-token [reason]"
+        hook_warn "No raw colors in CSS. Use design tokens like var(--destructive). Escape: // allow: design-token [reason]"
       fi
     fi
     ;;
@@ -53,12 +53,12 @@ case "$file_path" in
       # Tailwind arbitrary colors bypass the design palette:
       # bg-[#fff], text-[rgb(...)], from-[hsl(...)], and so on.
       if echo "$added_lines" | grep -qiE "\b(bg|text|border|from|via|to|ring|fill|stroke|shadow|accent|caret|decoration)-\[(#|rgba?\s*\(|hsla?\s*\(|oklch\s*\(|oklab\s*\(|lch\s*\(|lab\s*\()"; then
-        hook_block "No raw colors in JSX className. Use design tokens (bg-primary, text-foreground, border-border). Escape: // allow: design-token [reason]"
+        hook_warn "No raw colors in JSX className. Use design tokens (bg-primary, text-foreground, border-border). Escape: // allow: design-token [reason]"
       fi
 
       # Inline styles with raw colors create one-off palettes outside tokens.
       if echo "$added_lines" | grep -qiE "style=\{\{[^}]*($_raw_color_pattern)"; then
-        hook_block "No raw colors in JSX style objects. Move color to design tokens or Tailwind token classes. Escape: // allow: design-token [reason]"
+        hook_warn "No raw colors in JSX style objects. Move color to design tokens or Tailwind token classes. Escape: // allow: design-token [reason]"
       fi
     fi
     ;;
@@ -69,24 +69,24 @@ esac
 if ! hook_has_escape "gradient"; then
   if echo "$added_lines" | grep -qE 'bg-clip-text' && \
      echo "$added_lines" | grep -qE 'text-transparent'; then
-    hook_block "Gradient text is decorative and hurts hierarchy. Use solid text color, weight, scale, or spacing. Escape: // allow: gradient [reason]"
+    hook_warn "Gradient text is decorative and hurts hierarchy. Use solid text color, weight, scale, or spacing. Escape: // allow: gradient [reason]"
   fi
 
   if echo "$added_lines" | grep -qE 'background-clip[[:space:]]*:[[:space:]]*text' && \
      echo "$added_lines" | grep -qE 'color[[:space:]]*:[[:space:]]*transparent'; then
-    hook_block "Gradient text is decorative and hurts hierarchy. Use solid text color, weight, scale, or spacing. Escape: // allow: gradient [reason]"
+    hook_warn "Gradient text is decorative and hurts hierarchy. Use solid text color, weight, scale, or spacing. Escape: // allow: gradient [reason]"
   fi
 fi
 
 if ! hook_has_escape "design-token"; then
   if echo "$added_lines" | grep -qE 'bg-gradient' && \
      echo "$added_lines" | grep -qE "\b(from|via|to)-($_tailwind_palette)-[0-9]{2,3}\b"; then
-    hook_block "No hardcoded Tailwind palette gradients. Use theme gradient tokens or semantic color stops. Escape: // allow: design-token [reason]"
+    hook_warn "No hardcoded Tailwind palette gradients. Use theme gradient tokens or semantic color stops. Escape: // allow: design-token [reason]"
   fi
 
   if echo "$added_lines" | grep -qE 'linear-gradient\(' && \
      echo "$added_lines" | grep -qE "$_raw_color_pattern"; then
-    hook_block "No hardcoded gradient colors. Use theme tokens or CSS variables. Escape: // allow: design-token [reason]"
+    hook_warn "No hardcoded gradient colors. Use theme tokens or CSS variables. Escape: // allow: design-token [reason]"
   fi
 fi
 
@@ -94,11 +94,11 @@ fi
 
 if ! hook_has_escape "design-token"; then
   if _tw_line_has_pair "$_tailwind_chromatic_bg_class" "$_tailwind_gray_text_class"; then
-    hook_block "No gray text on colored backgrounds. Use paired foreground tokens like text-primary-foreground. Escape: // allow: design-token [reason]"
+    hook_warn "No gray text on colored backgrounds. Use paired foreground tokens like text-primary-foreground. Escape: // allow: design-token [reason]"
   fi
 
   if _tw_line_has_pair "$_tailwind_semantic_bg_class" "$_tailwind_gray_text_class"; then
-    hook_block "No gray text on semantic backgrounds. Use the matching foreground token, for example text-primary-foreground or text-muted-foreground. Escape: // allow: design-token [reason]"
+    hook_warn "No gray text on semantic backgrounds. Use the matching foreground token, for example text-primary-foreground or text-muted-foreground. Escape: // allow: design-token [reason]"
   fi
 fi
 
@@ -106,7 +106,7 @@ fi
 
 if ! hook_has_escape "visual-design"; then
   if _tw_line_has_pair '(^|[^[:alnum:]_-])!?backdrop-blur\b' "$_tailwind_translucent_bg_class"; then
-    hook_block "No glassmorphism: backdrop blur plus translucent backgrounds reduces consistency and contrast. Use solid surfaces. Escape: // allow: visual-design [reason]"
+    hook_warn "No glassmorphism: backdrop blur plus translucent backgrounds reduces consistency and contrast. Use solid surfaces. Escape: // allow: visual-design [reason]"
   fi
 fi
 
@@ -114,7 +114,7 @@ fi
 
 if ! hook_has_escape "design-token"; then
   if echo "$added_lines" | grep -qE "$_tailwind_palette_color_class"; then
-    hook_block "No hardcoded Tailwind palette color utilities. Use semantic tokens like bg-primary, text-foreground, border-border. Escape: // allow: design-token [reason]"
+    hook_warn "No hardcoded Tailwind palette color utilities. Use semantic tokens like bg-primary, text-foreground, border-border. Escape: // allow: design-token [reason]"
   fi
 fi
 

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "policy": "quality-first",
+  "quality_first": {
+    "default": {
+      "model": "gpt-5.6-sol",
+      "effort": "xhigh"
+    },
+    "hard": {
+      "model": "gpt-5.6-sol",
+      "efforts": ["xhigh", "max"],
+      "selection": "Use the smallest effort that clears the context-ablation quality gate."
+    },
+    "ui_owners": ["gpt-5.6-sol", "claude-fable-5", "claude-opus-5"],
+    "ultra": {
+      "requires_explicit_delegation": true,
+      "use": "Independent lanes only; never silently create an agent team."
+    }
+  },
+  "models": {
+    "gpt-5.6-sol": {
+      "status": "primary",
+      "work": ["planning", "implementation", "review", "ui", "computer-use"]
+    },
+    "gpt-5.6-terra": {
+      "status": "eval-gated",
+      "work": ["non-code-tool-loops"]
+    },
+    "gpt-5.6-luna": {
+      "status": "eval-gated",
+      "work": ["low-risk-tool-loops"]
+    },
+    "claude-fable-5": {
+      "status": "quality-alternative",
+      "work": ["planning", "implementation", "review", "ui"]
+    },
+    "claude-opus-5": {
+      "status": "quality-alternative",
+      "work": ["planning", "implementation", "review", "ui"]
+    }
+  },
+  "selection": {
+    "single_owner": true,
+    "cross_family_review_for_non_trivial_pr": true,
+    "fallback": "If the preferred family is unavailable, use a clean-context gpt-5.6-sol pass.",
+    "promotion_rule": "Promote a model, effort, or context variant only after it passes the versioned ablation gate."
+  },
+  "api_only": {
+    "pro_mode": "Available through the API; do not imply that a local CLI session uses it.",
+    "persistence_and_ptc": "Use persisted reasoning or programmatic tool calling only in an API harness that exposes them.",
+    "explicit_prompt_cache": "Use only in API integrations that expose cache controls."
+  },
+  "sources": [
+    "https://openai.com/index/gpt-5-6/",
+    "https://developers.openai.com/api/docs/guides/latest-model"
+  ]
+}

@@ -417,4 +417,4 @@ run_content_eval "$SKILL_DIR/SKILL.md" "catalog.*installed|installed.*catalog" \
 run_content_eval "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" "tanstack-table-check" \
   "Claude batch dispatcher runs the Table check"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "tanstack-table-check.sh" \
-  "Codex per-call manifest includes the Table check"
+  "Codex edit dispatcher includes the Table check"

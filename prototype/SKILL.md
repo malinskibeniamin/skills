@@ -1,34 +1,34 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question.
-disable-model-invocation: true
+description: Build disposable evidence for unresolved logic, interaction, or visual questions. Use when runnable evidence would resolve behavior or UI uncertainty before commitment.
 ---
 
 # Prototype
 
-Use `/visual-plan` when the prototype is meant to anchor an implementation plan or UI/product review. Use `/plan-arbiter` if multiple prototype directions compete.
-A prototype is **throwaway code that answers a question**. The question decides the shape.
+A prototype answers one named question. It is evidence, not an early production branch.
 
-## Pick a branch
+Choose the cheapest faithful shape:
 
-Identify which question is being answered -- from the user's prompt, the surrounding code, or by asking if the user is around:
+- Logic/state uncertainty -> a small executable state model; see [LOGIC.md](LOGIC.md).
+- UI/interaction uncertainty -> several meaningfully different variants; see
+  [UI.md](UI.md).
+- API/tool uncertainty -> a minimal call against a sandbox or fixture.
 
-- **"Does this logic / state model feel right?"** -> [LOGIC.md](LOGIC.md). Build a single-file HTML demo that lets anyone push the state machine through cases that are hard to reason about on paper.
-- **"What should this look like?"** -> [UI.md](UI.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+Put disposable artifacts under `.context/prototypes/<question>/` when possible, or next
+to the target only when the real runtime must load them. Mark any in-tree artifact
+clearly and delete it before shipping unless the user explicitly wants it preserved.
 
-The two branches produce very different artifacts -- getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module -> logic; a page or component -> UI) and state the assumption at the top of the prototype.
+## Constraints
 
-## Rules that apply to both
+1. Standard library and existing dependencies first; no scaffolding unrelated to the
+   question.
+2. One command to run.
+3. In-memory or scratch persistence only.
+4. Show the relevant state and observations.
+5. Before relying on the verdict, run `/dogfood` once through the decisive path and likely
+   boundary; do not dogfood every intermediate edit.
+6. Record question, evidence, and verdict in the issue, ADR, implementation notes, or
+   implementing commit. Delete the artifact by default.
 
-Use standard-library, native, one-file throwaway code; skip all scaffolding not needed to answer the question.
-1. **Throwaway from day one, and clearly marked as such.** Locate the prototype code close to where it will actually be used (next to the module or page it's prototyping for) so context is obvious -- but name it so a casual reader can see it's a prototype, not production. For throwaway UI routes, obey whatever routing convention the project already uses; don't invent a new top-level structure.
-2. **One command to run.** Whatever the project's existing task runner supports -- `pnpm <name>`, `python <path>`, `bun <path>`, etc. The user must be able to start it without thinking.
-3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is _checking_, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE -- wipe me" name.
-4. **Skip the polish.** No tests, no error handling beyond what makes the prototype _runnable_, no abstractions. The point is to learn something fast.
-5. **Surface the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user can see what changed.
-6. **Dogfood every runnable iteration.** Run `/dogfood`; play the intended path, abuse likely boundaries, repair failures, and replay before accepting the prototype's answer.
-7. **Capture it when done.** Fold the validated decision into the real code, then preserve the prototype as a **primary source** on a project-convention throwaway branch outside main. Leave a context pointer to that branch on the implementation issue and record the question plus verdict there or in the implementing commit. Main keeps only the validated decision.
-
-## When done
-
-Capture both forms of evidence: the answer belongs in a durable issue, ADR, or commit; the runnable prototype belongs on the throwaway branch. If the user is absent, leave a `NOTES.md` beside the prototype so the verdict can be filled in before the branch is handed off.
+If the prototype contradicts the plan, revisit the affected decision before production
+implementation.

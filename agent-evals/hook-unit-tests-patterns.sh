@@ -66,11 +66,11 @@ _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "commented sizes=auto passes"
 _cleanup_test_file "$_f"
 
-echo "  Check 2c — interpolated className without cn/clsx (block):"
+echo "  Check 2c — interpolated className without cn/clsx (warn):"
 _setup_test_file "$_f" 'const X = () => <div className={`base ${active ? "text-foreground" : "text-muted-foreground"}`} />;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "interpolated className without cn/clsx blocked"
-_assert_stderr_contains "cn|clsx" "suggests cn or clsx"
+_assert_exit 0 "interpolated className without cn/clsx warns"
+_assert_stdout_contains "cn|clsx" "suggests cn or clsx"
 _cleanup_test_file "$_f"
 
 _setup_test_file "$_f" 'const X = () => (
@@ -81,7 +81,7 @@ _setup_test_file "$_f" 'const X = () => (
   />
 );'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "multiline interpolated className blocked"
+_assert_exit 0 "multiline interpolated className warns"
 _cleanup_test_file "$_f"
 
 _setup_test_file "$_f" 'const X = () => <div className={cn("base", active ? "block" : "hidden")} />;'
@@ -117,10 +117,11 @@ _assert_exit 2 "onClick+navigate blocked"
 _assert_stderr_contains "Link" "suggests <Link>"
 _cleanup_test_file "$_f"
 
-echo "  Check 7 — Button without handler (block):"
+echo "  Check 7 — Button without handler (warn):"
 _setup_test_file "$_f" 'const X = () => <Button>click</Button>;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "Button without purpose blocked"
+_assert_exit 0 "Button without purpose warns"
+_assert_stdout_contains "purpose|onClick|asChild|submit|disabled" "explains Button purpose"
 _cleanup_test_file "$_f"
 
 echo "  Check 7 — Button with onClick (pass):"
@@ -154,7 +155,7 @@ _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "multiline Button with onClick passes"
 _cleanup_test_file "$_f"
 
-echo "  Check 7 — multiline Button without purpose (block):"
+echo "  Check 7 — multiline Button without purpose (warn):"
 _setup_test_file "$_f" 'const X = () => (
   <Button
     variant="ghost"
@@ -163,7 +164,7 @@ _setup_test_file "$_f" 'const X = () => (
   </Button>
 );'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "multiline Button without purpose still blocked"
+_assert_exit 0 "multiline Button without purpose warns"
 _cleanup_test_file "$_f"
 
 echo "  Check 6 — multiline onClick handler calling navigate (block):"
@@ -241,16 +242,18 @@ _assert_exit 0 "inline style is warn not block"
 _assert_stdout_contains "Tailwind|style" "warns about inline style"
 _cleanup_test_file "$_f"
 
-echo "  Check 18 — class component (block):"
+echo "  Check 18 — class component (warn):"
 _setup_test_file "$_f" 'class MyComp extends React.Component { render() { return <div/>; } }'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "class component blocked"
+_assert_exit 0 "class component warns"
+_assert_stdout_contains "functional" "suggests a functional component"
 _cleanup_test_file "$_f"
 
-echo "  Check 20 — addEventListener without passive (block):"
+echo "  Check 20 — addEventListener without passive (warn):"
 _setup_test_file "$_f" "addEventListener('scroll', handler);"
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "scroll listener without passive blocked"
+_assert_exit 0 "scroll listener without passive warns"
+_assert_stdout_contains "passive" "suggests passive listeners"
 _cleanup_test_file "$_f"
 
 echo "  Check 20 — addEventListener with passive (pass):"
@@ -299,11 +302,12 @@ _assert_exit 2 "=== NaN blocked"
 _assert_stderr_contains "Number.isNaN" "suggests Number.isNaN"
 _cleanup_test_file "$_f"
 
-echo "  Check 36 — node:assert in test file (block):"
+echo "  Check 36 — node:assert in test file (warn):"
 _tf="/tmp/hook-test-rr-$$.test.ts"
 _setup_test_file "$_tf" "import { strict } from 'node:assert';"
 _run_hook "react-rules-check.sh" "$(_edit_json "$_tf")"
-_assert_exit 2 "node:assert in test blocked"
+_assert_exit 0 "node:assert in test warns"
+_assert_stdout_contains "[Vv]itest|expect" "suggests the test assertion stack"
 _cleanup_test_file "$_tf"
 
 echo "  clean .tsx file (all pass):"
@@ -332,10 +336,11 @@ _setup_session
 
 _f="/tmp/hook-test-tw-$$.tsx"
 
-echo "  !important in TSX (block):"
+echo "  !important in TSX (warn):"
 _setup_test_file "$_f" 'const X = () => <div className="bg-red-500 !important">x</div>;'
 _run_hook "tailwind-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "!important blocked"
+_assert_exit 0 "!important warns"
+_assert_stdout_contains "specificity" "explains the cascade risk"
 _cleanup_test_file "$_f"
 
 echo "  100vh in CSS file (warn):"
@@ -544,41 +549,41 @@ _setup_session
 
 _f="/tmp/hook-test-ux-$$.tsx"
 
-echo "  'successfully' in string (block):"
+echo "  'successfully' in string (warn):"
 _setup_test_file "$_f" "const msg = \"Topic successfully created\";"
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "successfully blocked"
-_assert_stderr_contains "successfully|Past-tense" "mentions successfully"
+_assert_exit 0 "successfully warns"
+_assert_stdout_contains "successfully|Past-tense" "mentions successfully"
 _cleanup_test_file "$_f"
 
-echo "  exclamation in string literal (block):"
+echo "  exclamation in string literal (warn):"
 _setup_test_file "$_f" "const msg = \"Action completed!\";"
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "exclamation blocked"
+_assert_exit 0 "exclamation warns"
 _cleanup_test_file "$_f"
 
-echo "  'click here' link text (block):"
+echo "  'click here' link text (warn):"
 _setup_test_file "$_f" 'const X = () => <a href="/docs">Click here</a>;'
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "click here blocked"
+_assert_exit 0 "click here warns"
 _cleanup_test_file "$_f"
 
-echo "  Yes/No button labels (block):"
+echo "  Yes/No button labels (warn):"
 _setup_test_file "$_f" 'const X = () => <Button onClick={fn}>Yes</Button>;'
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "Yes/No labels blocked"
+_assert_exit 0 "Yes/No labels warn"
 _cleanup_test_file "$_f"
 
-echo "  blame language — oops (block):"
+echo "  blame language — oops (warn):"
 _setup_test_file "$_f" "const msg = \"Oops! Something went wrong\";"
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "blame language blocked"
+_assert_exit 0 "blame language warns"
 _cleanup_test_file "$_f"
 
-echo "  non-inclusive term — whitelist (block):"
+echo "  non-inclusive term — whitelist (warn):"
 _setup_test_file "$_f" "const label = \"Add to whitelist\";"
 _run_hook "ux-copy-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "whitelist blocked"
+_assert_exit 0 "whitelist warns"
 _cleanup_test_file "$_f"
 
 echo "  Please prefix (warn):"

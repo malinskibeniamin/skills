@@ -21,7 +21,14 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 1. Understand
 
-- Explore inline | ask only blocking questions | new decision->2-3 approaches+tradeoffs | bug->failing test->root cause
+- Start with the **blind spot**: what are we assuming, what has not been observed, and
+  which unknown could invalidate the approach?
+- Resolve facts from code, tests, logs, docs, and rich references. Prefer executable
+  examples, fixtures, rubrics, prototypes, and neighboring implementations over another
+  prose summary.
+- Classify each remaining unknown as lookup, prototype, reversible assumption, or pause
+  trigger. Ask the user only for a decision that materially changes the result.
+- New decision -> 2-3 approaches + tradeoffs. Bug -> failing test -> root cause.
 - A well-scoped build/fix/implement request approves execution. State the approach, then continue immediately; do not manufacture an approval stop.
 - One primary model is the single owner. Do not spawn agents, background research, or a recursive model call unless the user explicitly requests delegation or invokes `/swarm`.
 - Mixed patterns area? Reuse the pattern required by this task; report broader convergence separately.
@@ -29,7 +36,9 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 
 ### 2. Plan
 
-- Every step: exact file paths, exact code, expected output. No placeholders.
+- Plan the most **volatile** or falsifiable slice first; stable mechanical work follows.
+- Give exact paths, behavior, evidence, and acceptance checks where they reduce
+  ambiguity. Do not predict every line of code before discovery.
 - Start with the smallest obvious design. Name what can be deleted, reused, or left unbuilt.
 - Use current requirements and demonstrated scale. Do not add machinery for hypothetical growth.
 - Run `/quantify-impact` when a direct, decision-useful metric exists; lock the base, metric, guardrail, scenario, and worthwhile delta before coding.
@@ -41,13 +50,17 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - UI work: prototype alternatives only when the user requests exploration or a material
   visual direction is unresolved.
 - Large PR/ship scope may propose stacked PRs; never create extra PRs without approval.
+- For long or high-unknown work, create gitignored
+  `.context/implementation-notes.md` with: current hypothesis, observed evidence,
+  deviations, reversible assumptions, and pause triggers. Short work stays in context.
 
 ### 2b. Grill
 
 - Invoke `/grilling` when the user requests planning/grilling or an unresolved architectural, product, or UX decision would materially change the result.
 - Ordinary build/fix/implement work skips this stop gate and continues immediately after its concise plan.
 - When invoked: gather one evidence packet | select the tier | run required axes inline |
-  grill until every branch resolves | update CONTEXT.md + ADRs inline
+  settle architecture-changing decisions | classify remaining unknowns | update
+  CONTEXT.md + ADRs only when durable domain knowledge crystallizes
 - Update plan with changes | get explicit user confirmation
 
 ### 3. Implement
@@ -60,7 +73,10 @@ Claude invoke silent when phase 1 start on default branch. User never run.
 - Every branch, helper, file, option, and dependency must carry required behavior, clarify the domain, or address a credible risk.
 - Never weaken an existing behavior test merely to make GREEN.
 - REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
-- After each material runnable increment is green and clean, run `/dogfood` before the next behavior; observed defects re-enter RED, then repair and replay.
+- After a material runnable increment is green and clean, run `/dogfood` before relying
+  on it; observed defects re-enter RED, then repair and replay.
+- When evidence contradicts the plan, record the deviation (for long work), revisit the
+  nearest affected decision, and re-plan that slice. Do not obey a stale plan.
 
 ### 4-6. Ship when requested -- `/go`
 
@@ -74,16 +90,8 @@ Run only for a PR/ship endpoint. Local build/fix/implement stops after focused v
 
 See `/go` skill full details. See [REFERENCE.md](REFERENCE.md) phase-specific checklists.
 
-## Phase Selection
+## Phase selection
 
-Full flowchart [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
-
-| User says | Phases |
-|---|---|
-| "Build a new feature" | 1->2->3->verify locally->stop |
-| "Fix this bug" | 1(reproduce)->3(TDD)->verify locally->stop |
-| "Refactor this module" | 1->2->3->verify locally->stop |
-| "Write tests for X" | 3 only |
-| "Create a PR" | verify->`/commit-push-pr`->one CI snapshot->stop |
-| "Ship it" / `/go` | **`/go`** full delivery |
-| "Quick question" | Just answer |
+Questions return answers. Local implementation ends after verification. PR requests run
+verify -> `/commit-push-pr` -> one CI snapshot; `/go` owns the full delivery loop.
+Full flowchart: [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).

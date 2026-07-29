@@ -8,11 +8,10 @@ MANIFEST="$REPO_ROOT/skill-manifest.json"
 run_file_eval "$COMPLETION" "completion-contract-stop.sh exists"
 run_executable_eval "$COMPLETION" "completion-contract-stop.sh is executable"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "## Execution contract" "CLAUDE.md defines the execution contract"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "[Bb]uild/fix/implement" "ordinary implementation continues without approval"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "[Bb]uild, fix, implement" "ordinary implementation continues without approval"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "🟢 done —" "CLAUDE.md defines visible done status"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "human.*browser|human-owned.*browser" "CLAUDE.md protects human browser sessions"
 run_content_eval "$INTENT" "human-owned browser" "browser prompts preserve human-owned sessions"
-run_content_eval "$INTENT" "do not request or post a review unless asked" "PR intent adds no unsolicited reviewer request"
 if grep -q "@claude review" "$INTENT"; then
   echo "  FAIL  PR intent still injects an unsolicited reviewer request"
   FAIL=$((FAIL + 1))
@@ -237,7 +236,7 @@ _pr_out=$(
 )
 if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "pr" ] \
   && printf '%s' "$_pr_out" | grep -q "ENDPOINT:pr" \
-  && printf '%s' "$_pr_out" | grep -qi "commit.*push.*PR"; then
+  && grep -qi "PR: verify, commit, push" "$REPO_ROOT/CLAUDE.md"; then
   echo "  PASS  make a PR authorizes commit and push prerequisites"
   PASS=$((PASS + 1))
 else

@@ -2,6 +2,8 @@
 set -eo pipefail
 trap 'exit 0' ERR
 
+[ "${HOOK_METRICS_DISABLED:-0}" = "1" ] && exit 0
+
 # StopFailure: the turn ended on an API error (rate_limit, overloaded,
 # max_output_tokens, ...). The harness ignores this hook's output and exit
 # code — observe-only by design. Feed /hook-audit and /stay-within-limits
@@ -13,7 +15,7 @@ input=$(cat 2>/dev/null || echo '{}')
 # Runtime payload carries the category in .error (matches the event's
 # matcher vocabulary: rate_limit, overloaded, max_output_tokens, ...).
 category=$(echo "$input" | jq -r '.error // .matcher // .failure_type // "unknown"' 2>/dev/null)
-dir="$HOME/.claude/hook-metrics"
+dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
 mkdir -p "$dir" 2>/dev/null || true
 printf '{"ts":"%s","category":"%s","session":"%s"}\n' \
   "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$category" "${CLAUDE_SESSION_ID:-unknown}" \

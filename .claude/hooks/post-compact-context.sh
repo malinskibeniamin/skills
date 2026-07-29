@@ -2,59 +2,36 @@
 set -eo pipefail
 trap 'exit 0' ERR
 
-# PostCompact hook: re-inject critical context after context compression.
-# When Claude's context gets compacted, the rules line and config from
-# UserPromptSubmit are lost. This re-injects the essentials.
-# Inspired by Boris Cherny's (Claude Code creator) recommendation.
+# Restore volatile session state after compaction. Static repository rules stay in
+# CLAUDE.md and skills; repeating them here costs context and creates drift.
 
 input=$(cat)
-hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
+[ "$(echo "$input" | jq -r '.hook_event_name // empty')" = "PostCompact" ] || exit 0
 
-if [ "$hook_event" != "PostCompact" ]; then
-  exit 0
+sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
+[ -z "$sid" ] && sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
+[ -n "$sid" ] || exit 0
+
+session_dir="/tmp/hook-session-${sid}"
+branch=$(git branch --show-current 2>/dev/null || echo detached)
+context="[POST-COMPACTION] Branch: $branch"
+
+if [ -f "$session_dir/task-endpoint" ]; then
+  context="$context\nEndpoint: $(head -1 "$session_dir/task-endpoint")"
 fi
 
-context=""
-
-# Re-inject condensed rules (same as user-prompt-context.sh standard level)
-rules=""
-[ "${PKG_MANAGER:-}" ] && rules="$rules ${PKG_MANAGER}"
-[ "${LINTER:-}" ] && rules="$rules ${LINTER}"
-[ "${TEST_RUNNER:-}" ] && rules="$rules ${TEST_RUNNER}"
-rules="$rules | no-memo(compiler) no-as-any no-ts-ignore no-style={{}}"
-[ "${REACT_RULES_BAN_USEEFFECT:-}" = "1" ] && rules="$rules no-useEffect"
-rules="$rules | UI:@/components/ui/ | no-raw-HTML | zustand:create<T>()() useShallow | env:@/env"
-
-[ -f ".claude/hooks/tanstack-router-check.sh" ] && rules="$rules | TanStack-Router"
-[ -f ".claude/hooks/connect-query-check.sh" ] && rules="$rules | connect-query proto-v2:create()"
-
-context="[POST-COMPACTION] Context was compressed. Key rules re-injected:\nRules:$rules"
-
-# Re-inject active config
-config=""
-[ "${REACT_COMPILER_MODE:-}" ] && config="$config compiler=$REACT_COMPILER_MODE"
-[ "${ISSUE_TRACKER:-}" ] && config="$config tracker=$ISSUE_TRACKER"
-[ "${REDPANDA_KIT:-}" = "1" ] && config="$config redpanda-kit=on"
-[ -n "$config" ] && context="$context\nConfig:$config"
-
-# Re-inject last stop outcome if available
-# Session state needs a stable id: env first, Codex stdin second. With
-# neither, every hook run has a fresh PID, so a bare $$ dir can never be
-# shared across invocations and can collide after PID wrap -- skip.
-_hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
-[ -z "$_hook_sid" ] && _hook_sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
-[ -z "$_hook_sid" ] && exit 0
-stop_file="/tmp/hook-session-${_hook_sid}/last-stop"
-if [ -f "$stop_file" ]; then
-  context="$context\nLast stop: $(cat "$stop_file" | head -1)"
+if [ -f "$session_dir/session-touched-files" ]; then
+  touched=$(sort -u "$session_dir/session-touched-files" | wc -l | tr -d '[:space:]')
+  context="$context\nSession-touched files: ${touched:-0}"
 fi
 
-# Post-compaction brevity: context is tight, maximize token efficiency (arxiv:2604.00025)
-context="$context\n[BREVITY:ultra] Max compression. Code>prose. No preamble/recap/summary. Exception: full clarity for security, irreversible ops, destructive commands."
-
-if [ -n "$context" ]; then
-  escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
-  echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}"
+if [ -f "$session_dir/last-stop" ]; then
+  context="$context\nLast stop: $(head -1 "$session_dir/last-stop")"
 fi
 
-exit 0
+if [ -f ".context/implementation-notes.md" ]; then
+  context="$context\nWorking notes: .context/implementation-notes.md"
+fi
+
+escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}"

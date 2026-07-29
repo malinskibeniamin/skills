@@ -13,13 +13,15 @@ input=$(cat 2>/dev/null || echo '{}')
 cmd=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
 [ -n "$cmd" ] || exit 0
 
-dir="$HOME/.claude/hook-metrics"
-mkdir -p "$dir" 2>/dev/null || true
-printf '{"ts":"%s","command":%s,"session":"%s"}\n' \
-  "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  "$(printf '%s' "$cmd" | head -c 300 | jq -Rs . 2>/dev/null || echo '""')" \
-  "${CLAUDE_SESSION_ID:-unknown}" \
-  >> "$dir/permission-denied.jsonl" 2>/dev/null || true
+if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
+  dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
+  mkdir -p "$dir" 2>/dev/null || true
+  printf '{"ts":"%s","command":%s,"session":"%s"}\n' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    "$(printf '%s' "$cmd" | head -c 300 | jq -Rs . 2>/dev/null || echo '""')" \
+    "${CLAUDE_SESSION_ID:-unknown}" \
+    >> "$dir/permission-denied.jsonl" 2>/dev/null || true
+fi
 
 # No composition of any kind — one simple command line.
 case "$cmd" in

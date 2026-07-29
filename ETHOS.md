@@ -1,18 +1,13 @@
 # ETHOS
 
-Permanent principles. Outrank turn-level instructions. Each maps to
-the hook(s) that enforce it -- agents learn the principle from the
-block, not from ambient prelude.
-
-Format gstack-inspired. Content derived from enforced rules.
+Permanent principles. Learn each at its enforcement boundary, not ambient prelude.
 
 ## 1. Less Code, More Meaning
 
-Choose the smallest obvious design before writing. Every branch, helper,
-file, option, test, and dependency must express required behavior, clarify
-the domain, or address a credible risk. Design for demonstrated scale, not
-imagined scale. Deletion is delivery when required behavior remains easier
-to see and harder to break.
+Choose the smallest obvious design. Every branch, helper, file, option, test,
+and dependency must express required behavior, clarify the domain, or address
+a credible risk. Design for demonstrated scale. Deletion is delivery when
+required behavior remains easier to see and harder to break.
 
 Semantic density is not code golf. Never trade clarity for fewer characters.
 
@@ -29,8 +24,8 @@ Enforced by: `ts-no-escape-hatches-check`, `tsconfig-strict-check`,
 
 ## 3. Every Thread Resolved Before Human
 
-PR feedback is not a suggestion queue. Every non-bot, non-outdated
-thread: reply + resolve. `scripts/pr-unresolved-count.sh` must print 0.
+Every non-bot, non-outdated PR thread: reply + resolve.
+`scripts/pr-unresolved-count.sh` must print 0.
 
 Enforced by: `pr-feedback-completeness-stop`.
 
@@ -42,11 +37,13 @@ bound worktree. `git commit|push|checkout|switch` across drift denied.
 Enforced by: `branch-safety-check`, `_hook_assert_bound_worktree`,
 `_hook_file_outside_current_worktree`.
 
-## 5. Grill Before Build
+## 5. Discover Before Commitment
 
-Every spec has gaps. Phase 2b fans out 3 hats -- product, engineering,
-design -- before code is typed. If you cannot write the diff in your
-head, you are not ready to type.
+Every spec has gaps, but not every gap needs a user interview. Find blind
+spots, resolve facts from evidence, prototype volatile unknowns, and ask the
+human only for decisions that materially change the result. A plan is ready
+when architecture-changing decisions are settled and every remaining unknown
+has a lookup, prototype, reversible assumption, or pause trigger.
 
 Enforced by: `lifecycle-stop` untested-source gate, `/grilling` flow.
 
@@ -75,9 +72,9 @@ auto-merge.
 
 ## 9. Tests Prove Behavior
 
-Use RED -> GREEN -> REFACTOR for bugs and meaningful new behavior. One
+Use RED -> GREEN -> REFACTOR for bugs and meaningful behavior. One
 public-contract test can prove many lines; add another only for an independent
-credible risk. Coverage percentages, changed-file quotas, and speculative
-edge-case matrices are not correctness.
+credible risk. Coverage quotas and speculative edge-case matrices are not
+correctness.
 
 Enforced by: `/tdd`, test runner hooks, `self-reviewer`, `code-reviewer`.

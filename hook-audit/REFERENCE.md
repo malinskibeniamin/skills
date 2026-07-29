@@ -27,3 +27,9 @@ deletion. High-fire skills are candidates for more tuning.
 
 `codex-turns.jsonl` and `*-codex-*.json` contribute session and retro counts. Codex lacks
 SessionEnd per-hook metrics, so empty hook maps are missing data, not silent-hook evidence.
+
+## Session summaries
+
+Schema v3 summaries carry a stable hashed `session_id`, requested `endpoint`, and terminal
+`outcome`. Group by the hash; never reconstruct or expose the raw provider session ID. Treat
+`unknown` endpoints and `ended` outcomes as missing classification, not success.

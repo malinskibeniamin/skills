@@ -1,16 +1,20 @@
 #!/bin/bash
 set -eo pipefail
 
+[ "${HOOK_METRICS_DISABLED:-0}" = "1" ] && exit 0
+
 # SessionEnd: aggregate session JSONL into summary. Runs ONCE per session
 # (replaces metrics-summary-stop.sh which ran on every turn end = wasteful).
 # Also writes a memory summary for next-session context.
+
+_input=$(cat 2>/dev/null || echo '{}')
 
 # Session state needs a stable id: env first, Codex stdin second. With
 # neither, every hook run has a fresh PID, so a bare $$ dir can never be
 # shared across invocations and can collide after PID wrap -- skip.
 _hook_sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 if [ -z "$_hook_sid" ] && [ ! -t 0 ]; then
-  _hook_sid=$(jq -r '.session_id // empty' 2>/dev/null || true)
+  _hook_sid=$(printf '%s' "$_input" | jq -r '.session_id // empty' 2>/dev/null || true)
 fi
 [ -z "$_hook_sid" ] && exit 0
 session_dir="/tmp/hook-session-${_hook_sid}"
@@ -19,11 +23,11 @@ log_file="$session_dir/structured.jsonl"
 [ -f "$log_file" ] && [ -s "$log_file" ] || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 
-metrics_dir="$HOME/.claude/hook-metrics"
+metrics_dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
 mkdir -p "$metrics_dir" 2>/dev/null || exit 0
 
 session_date=$(date +%Y-%m-%d)
-session_id="${_hook_sid}"
+session_id=$(printf '%s' "$_hook_sid" | cksum | awk '{print $1"-"$2}')
 total_entries=$(wc -l < "$log_file" | tr -d ' ')
 
 first_ts=$(head -1 "$log_file" | jq -r '.ts // 0')
@@ -64,11 +68,27 @@ perf_ms=$(jq -r 'select(.ms != null) | [.hook, .ms] | @tsv' "$log_file" 2>/dev/n
 
 hooks_fired=$(jq -r '.hook' "$log_file" | sort -u | wc -l | tr -d ' ')
 
-cat > "$metrics_dir/${session_date}-${session_id:0:8}.json" <<EOF
+endpoint="unknown"
+[ -f "$session_dir/task-endpoint" ] && endpoint=$(head -1 "$session_dir/task-endpoint")
+outcome=$(printf '%s' "$_input" | jq -r '.outcome // .reason // empty' 2>/dev/null || true)
+if [ -z "$outcome" ]; then
+  if [ -f "$session_dir/task-completed" ]; then
+    outcome="completed"
+  elif [ -f "$session_dir/last-stop" ]; then
+    outcome="stopped-with-findings"
+  else
+    outcome="ended"
+  fi
+fi
+
+cat > "$metrics_dir/${session_date}-${session_id}.json" <<EOF
 {
-  "schema_version": 2,
+  "schema_version": 3,
+  "source": "claude",
   "date": "$session_date",
-  "session_id": "${session_id:0:8}",
+  "session_id": "$session_id",
+  "endpoint": "$endpoint",
+  "outcome": "$outcome",
   "duration_minutes": $duration_minutes,
   "files_touched": $files_touched,
   "total_entries": $total_entries,

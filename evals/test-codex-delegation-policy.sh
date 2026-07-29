@@ -53,12 +53,12 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" "recursive.*codex exec" \
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "preserve.*selected model.*reasoning" \
   "codex skill does not lower interactive reasoning"
 
-run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "ccusage.*Claude" \
-  "ccusage is described as Claude-only"
-run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "usage is unknown" \
-  "Codex missing-meter fallback says usage is unknown"
-run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "Do not.*guess.*reset" \
-  "Codex reset timing is never guessed"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "ccusage.*not subscription" \
+  "ccusage is rejected as subscription-capacity evidence"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "Claude capacity is unknown" \
+  "missing Claude meter evidence stays unknown"
+run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "do not guess.*reset" \
+  "Claude reset timing is never guessed"
 
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "reviewer hats inline|hats inline" \
   "grilling keeps every hat inline by default"

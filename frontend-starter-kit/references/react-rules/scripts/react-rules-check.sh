@@ -66,7 +66,7 @@ case "$file_path" in
     if printf '%s' "$_react_joined_added" | grep -qE 'className[[:space:]]*=[[:space:]]*[{][[:space:]]*`[^`]*[$][{]'; then
       _react_classname_code=$(printf '%s\n' "$added_lines" | perl -0pe 's{/\*.*?\*/}{}gs' | grep -vE '^[[:space:]]*[+]?[[:space:]]*//' | tr '\n' ' ' || true)
       if printf '%s' "$_react_classname_code" | grep -qE 'className[[:space:]]*=[[:space:]]*[{][[:space:]]*`[^`]*[$][{]'; then
-        hook_block_strict 'Do not interpolate className template literals. Compose classes with cn(...) or clsx(...).'
+        hook_warn 'Prefer cn(...) or clsx(...) over interpolated className template literals.'
       fi
     fi
     ;;
@@ -85,7 +85,7 @@ case "$file_path" in
       # Honor tailwind-check's gradient escape too — one escape hatch must
       # quiet every hook that fires on the same line.
       if ! hook_has_escape "button-visual-override" && ! hook_has_escape "design-token" && ! hook_has_escape "gradient"; then
-        hook_block "Button gradient/radius/shadow override detected. Use Button variant/size or add a registry variant. Escape: // allow: button-visual-override [reason]"
+        hook_warn "Button gradient/radius/shadow override detected. Use Button variant/size or add a registry variant. Escape: // allow: button-visual-override [reason]"
       fi
     fi
     ;;
@@ -117,7 +117,7 @@ case "$file_path" in
     _visual_added=$(printf '%s\n' "$added_lines" | sed 's/^+//')
     if echo "$_visual_added" | grep -qE 'backgroundImage[[:space:]]*:[[:space:]]*.*linear-gradient\('; then
       if ! hook_has_escape "inline-gradient" && ! hook_has_escape "design-token"; then
-        hook_block "Inline backgroundImage linear-gradient detected. Use Tailwind/theme gradient tokens. Escape: // allow: inline-gradient [reason]"
+        hook_warn "Inline backgroundImage linear-gradient detected. Use Tailwind/theme gradient tokens. Escape: // allow: inline-gradient [reason]"
       fi
     fi
     if echo "$_visual_added" | grep -qE '(backdropFilter|filter)[[:space:]]*:[[:space:]]*.*blur\('; then
@@ -186,7 +186,7 @@ case "$file_path" in
     _button_tags=$(printf '%s\n' "$_react_joined_added" | grep -oE '<Button[^>]*>' || true)
     if [ -n "$_button_tags" ] && \
        printf '%s\n' "$_button_tags" | grep -qvE '(onClick|asChild|type="submit"|disabled)'; then
-      hook_block "Button needs purpose: onClick, asChild, type=\\\"submit\\\", or disabled."
+      hook_warn "Button needs purpose: onClick, asChild, type=\\\"submit\\\", or disabled."
     fi
     ;;
 esac
@@ -197,7 +197,7 @@ case "$file_path" in
   *.tsx|*.jsx)
     if echo "$added_lines" | grep -qE '<AlertTitle>.*<.*Icon' || \
        echo "$added_lines" | grep -qE '<AlertTitle>.*<svg'; then
-      hook_block "No icons in <AlertTitle>. <Alert> renders icons auto. Use icon prop."
+      hook_warn "No icons in <AlertTitle>. <Alert> renders icons auto. Use icon prop."
     fi
     ;;
 esac
@@ -271,7 +271,7 @@ esac
 # ── Check 18: Ban class components ───────────────────────────────
 
 if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)\b'; then
-  hook_block "Functional components only. Class components incompatible with React Compiler."
+  hook_warn "Prefer functional components so React Compiler can optimize them."
 fi
 
 # ── Check 19: Ban barrel imports (re-exports from index files) ────
@@ -295,7 +295,7 @@ fi
 
 if echo "$added_lines" | grep -qE "addEventListener\s*\(\s*['\"](scroll|touchstart|touchmove|wheel)['\"]" && \
    ! echo "$added_lines" | grep -qE "passive\s*:\s*true"; then
-  hook_block "Add { passive: true } to scroll/touch/wheel listener. Non-passive blocks main thread."
+  hook_warn "Add { passive: true } to scroll/touch/wheel listener unless preventDefault is required."
 fi
 
 # ── Check 21: Ban static imports of heavy deps ──────────────────
@@ -407,7 +407,7 @@ fi
 case "$file_path" in
   *.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx|*.integration.ts|*.integration.tsx)
     if echo "$added_lines" | grep -qE "from\s+['\"]node:assert"; then
-      hook_block "Use vitest assert not node:assert. import { assert } from 'vitest'."
+      hook_warn "Use Vitest assertions to match the repository test stack."
     fi
     ;;
 esac

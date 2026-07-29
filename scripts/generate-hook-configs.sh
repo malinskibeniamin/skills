@@ -143,14 +143,13 @@ _build_codex() {
       | from_entries;
 
     {hooks: supported_direct}
-    # Codex has no PostToolBatch event. Re-expand Claude batch-dispatched
-    # per-edit checks back into the PostToolUse Edit|Write matcher so Codex
-    # keeps the historical one-process-per-tool-call behavior.
-    | if (($root["x-codex-per-call"] // []) | length) > 0 then
+    # Codex has no PostToolBatch event. One adapter turns each edit call into
+    # the batch protocol, keeping all checks inside a single process.
+    | if (($root["x-codex-edit-dispatch"] // "") | length) > 0 then
         .hooks.PostToolUse = ([
           {
             matcher: "Edit|Write|apply_patch",
-            hooks: (($root["x-codex-per-call"] // []) | map(command_hook(.)))
+            hooks: [command_hook($root["x-codex-edit-dispatch"])]
           }
         ] + (.hooks.PostToolUse // []))
       else . end

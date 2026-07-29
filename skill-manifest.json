@@ -74,30 +74,29 @@
       "": ["subagent-stop.sh"]
     },
     "Stop": {
-      "": [
-        "biome-autofix.sh",
-        {
-          "script": "typecheck-stop.sh",
-          "statusMessage": "Type-checking session changes"
-        },
-        "react-doctor-stop.sh",
-        "registry-check.sh",
-        "orchestration-stop.sh",
-        "test-perf-stop.sh",
-        "quality-gate-stop.sh",
-        "dogfood-stop.sh",
-        "lifecycle-stop.sh",
-        "pr-feedback-completeness-stop.sh",
-        "suppression-gate-stop.sh",
-        "violation-summary-stop.sh",
-        "completion-contract-stop.sh"
-      ]
+      "": ["stop-dispatch.sh"]
     },
     "PostToolBatch": {
       "": ["post-tool-batch.sh"]
     }
   },
-  "x-codex-per-call": [
+  "x-stop-dispatch": [
+    "biome-autofix.sh",
+    "typecheck-stop.sh",
+    "react-doctor-stop.sh",
+    "registry-check.sh",
+    "orchestration-stop.sh",
+    "test-perf-stop.sh",
+    "quality-gate-stop.sh",
+    "dogfood-stop.sh",
+    "lifecycle-stop.sh",
+    "pr-feedback-completeness-stop.sh",
+    "suppression-gate-stop.sh",
+    "violation-summary-stop.sh",
+    "completion-contract-stop.sh"
+  ],
+  "x-codex-edit-dispatch": "codex-edit-dispatch.sh",
+  "x-post-tool-checks": [
     "vendor-file-check.sh",
     "react-rules-check.sh",
     "tailwind-check.sh",

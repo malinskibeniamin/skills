@@ -63,7 +63,7 @@ echo 'const msg = "Something went wrong!"' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: exclamation at end of string" "No !"
+  0 "warn: exclamation at end of string" "No !"
 
 # Allow: no exclamation
 echo 'const msg = "Something went wrong"' > "$tmpfile"
@@ -93,7 +93,7 @@ echo "const msg = 'Topic successfully created'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: successfully in string" "successfully"
+  0 "warn: successfully in string" "successfully"
 
 # Allow: past tense without "successfully"
 echo "const msg = 'Topic created'" > "$tmpfile"
@@ -109,13 +109,13 @@ echo '<Link>click here</Link>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: click here link text" "click here"
+  0 "warn: click here link text" "click here"
 
 echo '<a>here</a>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: bare here link text"
+  0 "warn: bare here link text"
 
 # Allow: descriptive link text
 echo '<Link>View documentation</Link>' > "$tmpfile"
@@ -131,13 +131,13 @@ echo "const msg = \"Oops, something went wrong\"" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: Oops in string" "casual"
+  0 "warn: Oops in string" "casual"
 
 echo "const msg = 'Uh oh, an error occurred'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: Uh oh in string"
+  0 "warn: Uh oh in string"
 
 # Allow: neutral error message
 echo "const msg = 'Could not save changes'" > "$tmpfile"
@@ -175,13 +175,13 @@ echo '<Button onClick={handleConfirm}>Yes</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: Yes button label" "Yes"
+  0 "warn: Yes button label" "Yes"
 
 echo '<Button onClick={handleCancel}>No</Button>' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: No button label" "No"
+  0 "warn: No button label" "No"
 
 # Allow: action verb button
 echo '<Button onClick={handleDelete}>Delete cluster</Button>' > "$tmpfile"
@@ -229,7 +229,7 @@ echo "const label = 'the admin api settings'" > "$tmpfile"
 
 REDPANDA_KIT=1 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: lowercase Redpanda product name (with REDPANDA_KIT)" "Capitalize"
+  0 "warn: lowercase Redpanda product name (with REDPANDA_KIT)" "Capitalize"
 
 # Allow: correctly capitalized
 echo "const label = 'Admin API settings'" > "$tmpfile"
@@ -365,19 +365,19 @@ echo "const list = whitelist" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: whitelist (non-inclusive)" "Inclusive"
+  0 "warn: whitelist (non-inclusive)" "Inclusive"
 
 echo "const list = blacklist" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: blacklist (non-inclusive)" "Inclusive"
+  0 "warn: blacklist (non-inclusive)" "Inclusive"
 
 echo "const role = master" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: master (non-inclusive)" "Inclusive"
+  0 "warn: master (non-inclusive)" "Inclusive"
 
 echo "const list = allowlist" > "$tmpfile"
 
@@ -434,7 +434,7 @@ echo "const msg = 'Deploy faster — without extra steps'" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: em dash in UI string" "em dash"
+  0 "warn: em dash in UI string" "em dash"
 
 echo "const msg = 'Supercharge your seamless workflow'" > "$tmpfile"
 

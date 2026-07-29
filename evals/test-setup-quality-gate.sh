@@ -89,19 +89,21 @@ else
   ERRORS="$ERRORS\n  FAIL: test-perf-stop.sh"
 fi
 
-# ── test-perf-stop.sh: wired in all hook configs ────────────────
+# ── test-perf-stop.sh: owned by the Stop dispatcher ─────────────
 
 for config_file in "$REPO_ROOT/.claude/settings.json" "$REPO_ROOT/hooks/hooks.json" "$REPO_ROOT/.codex/hooks.json"; do
   config_name=$(basename "$(dirname "$config_file")")/$(basename "$config_file")
-  if grep -q "test-perf-stop" "$config_file" 2>/dev/null; then
-    echo "  PASS  test-perf-stop.sh wired in $config_name"
+  if grep -q "stop-dispatch" "$config_file" 2>/dev/null; then
+    echo "  PASS  Stop dispatcher wired in $config_name"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  test-perf-stop.sh missing from $config_name"
+    echo "  FAIL  Stop dispatcher missing from $config_name"
     FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: test-perf-stop.sh missing from $config_name"
+    ERRORS="$ERRORS\n  FAIL: Stop dispatcher missing from $config_name"
   fi
 done
+run_content_eval "$REPO_ROOT/skill-manifest.json" "test-perf-stop.sh" \
+  "Stop dispatcher includes test-perf-stop.sh"
 
 # ── test-perf-stop.sh: script content ───────────────────────────
 
@@ -161,13 +163,14 @@ else
   ERRORS="$ERRORS\n  FAIL: PostToolBatch dispatcher missing for test-convention-check.sh"
 fi
 
-if grep -q "test-convention-check.sh" "$REPO_ROOT/hooks/codex-hooks.json" 2>/dev/null; then
-  echo "  PASS  codex-hooks.json keeps test-convention-check.sh per-call"
+if grep -q "codex-edit-dispatch.sh" "$REPO_ROOT/hooks/codex-hooks.json" 2>/dev/null \
+  && grep -q "test-convention-check.sh" "$REPO_ROOT/skill-manifest.json" 2>/dev/null; then
+  echo "  PASS  Codex dispatcher owns test-convention-check.sh"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  codex-hooks.json missing test-convention-check.sh per-call"
+  echo "  FAIL  Codex dispatcher missing test-convention-check.sh"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: codex-hooks missing test-convention-check.sh"
+  ERRORS="$ERRORS\n  FAIL: Codex dispatcher missing test-convention-check.sh"
 fi
 
 # ── test-convention-check.sh: script content ──────────────────────────

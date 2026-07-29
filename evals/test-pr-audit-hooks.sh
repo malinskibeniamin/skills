@@ -186,8 +186,8 @@ run_hook_eval "$HOOKS_DIR/ts-no-escape-hatches-check.sh" \
 # ══════════════════════════════════════════════════════════════════
 
 run_content_eval "$REPO_ROOT/hooks/hooks.json" "post-tool-batch.sh" "hooks.json has PostToolBatch dispatcher"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "test-convention-check.sh" "codex-hooks.json keeps test-convention-check per-call"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "connect-query-check.sh" "codex-hooks.json keeps connect-query-check per-call"
+run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "codex-edit-dispatch.sh" "codex-hooks.json uses one edit dispatcher"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "connect-query-check.sh" "edit dispatcher includes connect-query-check"
 # console-log-check removed — Biome noConsole handles it
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "form-mode-check.sh" "codex-hooks.json keeps form-mode-check per-call"
-run_content_eval "$REPO_ROOT/hooks/codex-hooks.json" "ts-no-escape-hatches-check.sh" "codex-hooks.json keeps ts-no-escape-hatches-check per-call"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "form-mode-check.sh" "edit dispatcher includes form-mode-check"
+run_content_eval "$REPO_ROOT/skill-manifest.json" "ts-no-escape-hatches-check.sh" "edit dispatcher includes ts-no-escape-hatches-check"

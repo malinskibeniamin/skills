@@ -14,6 +14,9 @@ REPO_ROOT="$(cd "$EVALS_DIR/.." && pwd)"
 # consecutive-block budgeting (hook_stop_block cap guard) only makes sense in
 # real sessions. The guard itself is covered by agent-evals channels tests.
 export HOOK_STOP_BLOCK_CAP_GUARD=0
+# Fixture and dogfood calls must never enter the production telemetry corpus.
+# Telemetry-specific evals opt back in with an isolated HOOK_METRICS_DIR.
+export HOOK_METRICS_DISABLED=1
 PASS=0
 FAIL=0
 SKIP=0

@@ -9,7 +9,7 @@
 
 run_file_eval "$REPO_ROOT/ETHOS.md" "ETHOS.md exists"
 # Renamed in v4.0 — principles now reflect actual enforced hook rules
-for p in "Less Code, More Meaning" "Types Are The First Reviewer" "Every Thread Resolved" "Worktree Isolation" "Grill Before Build" "Search Before Add" "Toolchain Discipline" "User Sovereignty" "Tests Prove Behavior"; do
+for p in "Less Code, More Meaning" "Types Are The First Reviewer" "Every Thread Resolved" "Worktree Isolation" "Discover Before Commitment" "Search Before Add" "Toolchain Discipline" "User Sovereignty" "Tests Prove Behavior"; do
   run_content_eval "$REPO_ROOT/ETHOS.md" "$p" "ETHOS.md has principle: $p"
 done
 
@@ -67,12 +67,12 @@ run_content_eval "$REPO_ROOT/agents/adversarial-reviewer.md" "karpathy-failure-m
 run_content_eval "$REPO_ROOT/agents/adversarial-reviewer.md" "SKIPPED" \
   "adversarial-reviewer has skip block"
 
-run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "codex exec" \
-  "code-reviewer wires codex exec"
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "never starts a recursive model call" \
+  "code-reviewer leaves dispatch to the coordinator"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "karpathy-failure-modes" \
   "code-reviewer references karpathy"
-run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "codex_status" \
-  "code-reviewer handles codex-unavailable"
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "clean-context Sol" \
+  "code-reviewer documents the unavailable-family fallback"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "karpathy-failure-modes" \
   "self-reviewer references karpathy"
 

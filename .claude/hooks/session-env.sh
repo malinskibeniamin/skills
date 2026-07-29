@@ -111,16 +111,6 @@ fi
   git ls-files --others --exclude-standard 2>/dev/null
 } | sort -u > "$_session_dir/dirty-files-baseline" || touch "$_session_dir/dirty-files-baseline"
 
-# ── Emit factual hook inventory ──────────────────────────────────
-_settings="$(git rev-parse --show-toplevel 2>/dev/null)/.claude/settings.json"
-if [ -f "$_settings" ] && command -v jq >/dev/null 2>&1; then
-  _post_count=$(jq '[.hooks.PostToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
-  _stop_count=$(jq '[.hooks.Stop[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
-  _pre_count=$(jq '[.hooks.PreToolUse[]?.hooks // [] | length] | add // 0' "$_settings" 2>/dev/null || echo 0)
-  _ctx="${_ctx:+$_ctx
-}[HOOK INVENTORY] ${_post_count} PostToolUse + ${_pre_count} PreToolUse + ${_stop_count} Stop hooks active."
-fi
-
 # ── Register FileChanged watches for pattern-shaped filenames ─────
 # FileChanged matchers are literal filenames only (no globs). Static names
 # (biome.jsonc, package.json, ...) are matched in settings; dynamic names

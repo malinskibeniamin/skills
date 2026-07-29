@@ -1,6 +1,7 @@
 ---
 name: wayfinder
-description: Map work larger than one session through issue-tracker decision tickets until the route to the destination is clear.
+description: Map multi-session work through issue-tracker decision tickets.
+disable-model-invocation: true
 ---
 
 # Wayfinder
@@ -17,7 +18,7 @@ Wayfinder is planning by default. Each ticket resolves a decision, and the map i
 - Use the tracker's native blocking/dependency feature when available; fallback to an explicit `Blocked by:` line only when native blocking is unavailable.
 - Resolve at most one ticket per session in the primary context. Explicit delegation or
   `/swarm` may authorize parallel ready research tickets; wayfinder invocation alone does not.
-- For an authorized parallel map, apply `/efficient-frontier` budgeting between ticket waves
+- For an authorized parallel map, apply `/efficient-frontier` between ticket waves
   and keep synthesis with the coordinator.
 - Use `/agent-watchdog` when auditing another session's resolved ticket, claim, branch, or frontier summary before trusting the map.
 
