@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.33.0
+
+2026-07-29 -- Publish the post-4.32 Claude Code and Codex bundle. This release adds `/dogfood` with PR-aware experiential verification, `/postgresql`, and `/quantify-impact`; makes lifecycle completion endpoint-aware and planning/review risk-tiered; adopts leaner TDD and skill guidance; updates Opus 5 and Fable routing; and adds Codex installer coverage plus hook correctness fixes. It packages `/dogfood` for both runtimes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.33.0.
+
 2026-07-28 -- Make execution endpoint-aware and single-owner. Ordinary build/fix/implement requests now plan briefly, continue immediately, verify locally, and stop without commit or push; PR intent authorizes verify/commit/push/PR plus one CI snapshot, while `/go` retains the full CI loop. Remove automatic paired implementation, background planning/research, delayed `asyncRewake` CI auditing, and default background typecheck capture. Add deterministic visible completion statuses, active-subagent cleanup, strict scope boundaries, and human-owned browser protection.
 
 2026-07-28 -- Bring review-grade evidence discipline into explicit or decision-driven feature planning. `/grilling` now tiers plan review into quick, standard, and deep-risk gates; keeps Spec and Standards separate; adds an inline adversarial/value check, evidence-backed skip reporting, and conditional Go guidance; and runs resilience plus steelman passes for credible high-risk plans. The three inline plan hats now share a dedicated findings schema and one evidence packet.
