@@ -71,7 +71,14 @@ jobs:
       - name: Typed protocol tests
         run: bun run test
 
+      - name: Install Codex CLI for plugin integration
+        run: |
+          bun add --global @openai/codex@0.146.0
+          codex --version
+
       - name: Shell eval suite
+        env:
+          CODEX_PLUGIN_INSTALL_REQUIRED: "1"
         run: bash evals/run.sh
 
       - name: Behavioral hook unit tests
