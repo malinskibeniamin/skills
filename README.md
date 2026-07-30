@@ -236,7 +236,7 @@ graph TD
         direction TB
         ST1["biome-autofix.sh\nlint:fix changed files"]
         ST2["typecheck-stop.sh\ntsgo + related tests"]
-        ST3["react-doctor-stop.sh\nhealth score"]
+        ST3["react-doctor-stop.sh\ndiagnostic gate"]
         ST4["orchestration-stop.sh\nsecurity-sensitive changes"]
         ST5["completion-contract-stop.sh\nvisible terminal status"]
         ST1 --> ST2 --> ST3 --> ST4 --> ST5

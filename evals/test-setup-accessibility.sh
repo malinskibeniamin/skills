@@ -103,7 +103,8 @@ run_hook_eval "$SCRIPT" \
   0 "allow: role=tablist with role=tab children"
 
 # ── React Doctor-delegated rules must NOT fire from the hook ─────
-# dialog accessible name, redundant name wording, placeholder-as-label
+# dialog accessible name, redundant name wording, placeholder-as-label, and
+# invalid-control descriptions
 # are owned by React Doctor's a11y category (Stop hook).
 
 tmpfile="$_a11y_tmpdir/test.tsx"
@@ -112,6 +113,12 @@ printf '<div role="dialog">Content</div>\n' > "$tmpfile"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "delegated to React Doctor: dialog accessible name (a11y/dialog-has-accessible-name)"
+
+printf '<input aria-invalid={true} />\n' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "delegated to React Doctor: invalid control description (no-aria-invalid-without-description)"
 
 tmpfile="$_a11y_tmpdir/articulate.tsx"
 printf '<Button aria-label="Search icon"><SearchIcon /></Button>\n' > "$tmpfile"
@@ -166,6 +173,15 @@ run_content_eval "$SCRIPT" "hook_has_escape" "hook supports escape hatch"
 run_content_eval "$SCRIPT" "WCAG" "hook references WCAG guidelines"
 run_content_eval "$SCRIPT" "dialog-has-accessible-name" "hook documents React Doctor delegation for dialog names"
 run_content_eval "$SCRIPT" "label-has-associated-control" "hook documents React Doctor delegation for placeholder-as-label"
+run_content_eval "$SCRIPT" "no-aria-invalid-without-description" "hook documents React Doctor delegation for invalid-control descriptions"
+if grep -qF "aria-invalid without aria-describedby" "$SCRIPT"; then
+  echo "  FAIL  accessibility hook still duplicates React Doctor invalid-control diagnostics"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: accessibility hook still duplicates React Doctor invalid-control diagnostics"
+else
+  echo "  PASS  accessibility hook no longer duplicates React Doctor invalid-control diagnostics"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$SKILL_DIR/SKILL.md" "React Doctor" "SKILL.md routes structural rules to React Doctor"
 run_content_eval "$SKILL_DIR/SKILL.md" "aria-invalid" "SKILL.md documents error-state pairing rules"
 run_content_eval "$SKILL_DIR/SKILL.md" "DOM order" "SKILL.md documents DOM order"

@@ -30,7 +30,8 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "lifecycle authors th
 run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Fallback, not lifecycle" "deslop documents fallback status"
 run_content_eval "$REPO_ROOT/exemplars/e2e.spec.ts" "test\\.step" "test.step structure remains exemplary"
 
-# 4. React Doctor score ratchet.
-run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "ratchet baseline" "doctor stop hook has the score ratchet"
-run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "hook_stop_enforce" "ratchet enforces directly (no aggregator race)"
-run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/REFERENCE.md" "Score ratchet" "react-doctor reference documents the ratchet"
+# 4. React Doctor diagnostic gate.
+run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "--scope changed" "doctor stop hook scans changed diagnostics"
+run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "--blocking error" "doctor stop hook delegates the severity gate"
+run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "hook_stop_enforce" "doctor stop hook enforces directly (no aggregator race)"
+run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/REFERENCE.md" "no score parser or score ratchet" "react-doctor reference rejects incomparable score ratchets"

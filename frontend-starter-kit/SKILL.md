@@ -38,7 +38,7 @@ the plugin ("export harness").
 | react-rules | `references/react-rules/` | ban raw HTML, TS escapes, XSS, barrel imports |
 | env-validation | `references/env-validation/` | t3-env + zod; process.env ban via Biome noProcessEnv |
 | conventional-commits | `references/conventional-commits/` | type(scope): description enforcement |
-| react-doctor | `references/react-doctor/` | health scoring + Stop hook |
+| react-doctor | `references/react-doctor/` | changed-diagnostic gate + Stop hook |
 | ci-pipeline | `references/ci-pipeline/` | GitHub Actions CI, coverage gates, caching |
 | redpanda | `references/redpanda/` | Redpanda registry workflow + component taxonomy |
 

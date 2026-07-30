@@ -11,8 +11,8 @@ paths:
 Enforcement is split across three owners -- one owner per rule:
 
 - **Biome (ultracite preset)** -- single-element rules: `<img>` alt (`a11y/useAltText`), clickable `<div>`/`<span>` keyboard support (`a11y/useKeyWithClickEvents` and friends), combobox required ARIA (`a11y/useAriaPropsForRole`), label association (`a11y/noLabelWithoutControl`)
-- **React Doctor (Stop hook)** -- structural rules: dialog accessible name (`a11y/dialog-has-accessible-name`), nested interactives (`correctness/html-no-nested-interactive`), redundant name wording like `Search icon` (`a11y/img-redundant-alt`), placeholder-as-label (`a11y/label-has-associated-control`)
-- **This hook** -- only the cross-attribute pairings neither engine expresses: `role="tablist"` needs child `role="tab"`; `aria-invalid` needs `aria-describedby`; `data-invalid` (CSS-only) needs `aria-invalid`
+- **React Doctor (Stop hook)** -- structural rules: dialog accessible name (`react-doctor/dialog-has-accessible-name`), nested interactives (`react-doctor/html-no-nested-interactive`), redundant name wording like `Search icon` (`react-doctor/img-redundant-alt`), placeholder-as-label (`react-doctor/label-has-associated-control`), and invalid controls without an error description (`react-doctor/no-aria-invalid-without-description`)
+- **This hook** -- only the cross-attribute pairings neither engine expresses: `role="tablist"` needs child `role="tab"`; `data-invalid` (CSS-only) needs `aria-invalid`
 
 Escape hatch: `// allow: a11y-skip [reason]`
 

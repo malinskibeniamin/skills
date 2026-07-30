@@ -398,11 +398,11 @@ _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
 _assert_exit 2 "tablist without tab children blocked"
 _cleanup_test_file "$_f"
 
-echo "  aria-invalid without aria-describedby (warn):"
+echo "  aria-invalid without description delegated to React Doctor (hook silent):"
 _setup_test_file "$_f" 'const X = () => <input aria-invalid={true} />;'
 _run_hook "accessibility-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "aria-invalid without describedby is warn"
-_assert_stdout_contains "aria-describedby" "mentions aria-describedby"
+_assert_exit 0 "aria-invalid without description is silent (React Doctor owns)"
+_assert_stdout_not_contains "aria-describedby" "does not duplicate React Doctor"
 _cleanup_test_file "$_f"
 
 echo "  a11y-skip escape hatch (pass):"
