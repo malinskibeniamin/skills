@@ -25,6 +25,8 @@ Run **use -> abuse -> repair -> replay** on the current implementation.
 
 Identify every changed behavior and its real user entrypoint. Start the actual implementation and perform the intended journey yourself. Inspect the visible output, state transitions, side effects, logs, and console rather than inferring success from code or tests.
 
+Use representative live-scale data that matches production shape and cardinality. Compare expected and observed counts, ordering, timing, state, and side effects; repeat long enough to expose steady-state or accumulation behavior.
+
 For a bug, first run the reporter's exact steps against the unfixed behavior and capture the exact symptom. If you cannot reproduce it, stop diagnosis, report what you tried, and request the missing environment or evidence. Do not fix an assumed bug.
 
 **Complete when:** each changed behavior has a directly observed baseline at its public seam.
@@ -36,6 +38,8 @@ Try to break each changed behavior like a real user:
 - **Careless:** empty, invalid, oversized, duplicate, or out-of-order input.
 - **Impatient:** repeat, double-submit, navigate away, reload, cancel, or interrupt.
 - **Unlucky:** stale state, missing data, dependency failure, slow response, or partial completion.
+- **Live data:** sparse fields, duplicate IDs, mixed tenants or versions, long text, Unicode, timezone boundaries, and realistic cardinality.
+- **Performance:** measure response time, network, render, CPU, and memory when relevant; compare evidence with an explicit budget or baseline.
 
 Apply every relevant lens and at least one plausible break attempt per changed behavior. Prefer likely user behavior over arbitrary cases.
 
@@ -75,7 +79,7 @@ Bind the entrypoint, actions, and observations to the current implementation. Re
 
 - **Entrypoint:** exact command, URL, event, or consumer
 - **Actions:** intended journey and break attempts
-- **Observations:** outputs, state, side effects, console or logs
+- **Observations:** data shape/scale, counts/order/timing, outputs, state, side effects, console/network/logs
 - **Repairs:** defects found, tests added, fixes made, replay result
 - **Limits:** untried behavior and why
 

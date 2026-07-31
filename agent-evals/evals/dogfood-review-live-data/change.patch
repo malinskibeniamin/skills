@@ -1,0 +1,93 @@
+diff --git a/package.json b/package.json
+index 0a1b2c3..4d5e6f7 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,9 @@
+ {
+   "type": "module",
++  "scripts": {
++    "demo": "bun run src/cli.ts"
++  },
+   "devDependencies": {
+     "vitest": "^4.1.0"
+   }
+ }
+diff --git a/src/cli.ts b/src/cli.ts
+new file mode 100644
+--- /dev/null
++++ b/src/cli.ts
+@@ -0,0 +1,15 @@
++import { makeLiveEvents } from "./live-data";
++import { buildTimeline } from "./timeline";
++
++const events = makeLiveEvents();
++const startedAt = performance.now();
++const timeline = buildTimeline(events);
++const elapsedMs = Math.round(performance.now() - startedAt);
++
++console.log(
++  JSON.stringify({
++    expected: events.length,
++    shown: timeline.length,
++    elapsedMs,
++  }),
++);
+diff --git a/src/timeline.ts b/src/timeline.ts
+new file mode 100644
+--- /dev/null
++++ b/src/timeline.ts
+@@ -0,0 +1,19 @@
++export type TimelineEvent = {
++  id: string;
++  tenantId: string;
++  occurredAt: string;
++};
++
++export const buildTimeline = (events: TimelineEvent[]): TimelineEvent[] => {
++  const ordered = [...events].sort((left, right) =>
++    right.occurredAt.localeCompare(left.occurredAt),
++  );
++  const unique: TimelineEvent[] = [];
++  for (const event of ordered) {
++    if (unique.some((candidate) => candidate.id === event.id)) {
++      continue;
++    }
++    unique.push(event);
++  }
++  return unique;
++};
+diff --git a/src/timeline.test.ts b/src/timeline.test.ts
+new file mode 100644
+--- /dev/null
++++ b/src/timeline.test.ts
+@@ -0,0 +1,30 @@
++import { describe, expect, it } from "vitest";
++
++import { buildTimeline, type TimelineEvent } from "./timeline";
++
++describe("buildTimeline", () => {
++  it("deduplicates a replayed event", () => {
++    const events: TimelineEvent[] = [
++      {
++        id: "event-1",
++        tenantId: "tenant-a",
++        occurredAt: "2026-07-31T12:00:00Z",
++      },
++      {
++        id: "event-1",
++        tenantId: "tenant-a",
++        occurredAt: "2026-07-31T11:00:00Z",
++      },
++      {
++        id: "event-2",
++        tenantId: "tenant-a",
++        occurredAt: "2026-07-31T10:00:00Z",
++      },
++    ];
++
++    expect(buildTimeline(events).map((event) => event.id)).toEqual([
++      "event-1",
++      "event-2",
++    ]);
++  });
++});

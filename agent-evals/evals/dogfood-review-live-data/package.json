@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "scripts": {
+    "demo": "bun run src/cli.ts"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  }
+}

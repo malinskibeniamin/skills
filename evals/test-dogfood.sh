@@ -31,6 +31,12 @@ run_content_eval "$SKILL" "current implementation|current runnable" \
   "dogfood evidence binds to current work"
 run_content_eval "$SKILL" "merge-base|whole PR|full PR|PR diff" \
   "dogfood inventories the whole PR"
+run_content_eval "$SKILL" "representative live-scale data" \
+  "dogfood uses realistic data shape and cardinality"
+run_content_eval "$SKILL" "counts.*ordering.*timing" \
+  "dogfood compares observable data outcomes"
+run_content_eval "$SKILL" "response time.*network.*render.*CPU.*memory" \
+  "dogfood measures applicable performance"
 
 if grep -q "^disable-model-invocation:" "$SKILL" 2>/dev/null; then
   echo "  FAIL  dogfood must be model-invoked"
