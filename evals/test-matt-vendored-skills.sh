@@ -119,10 +119,10 @@ run_content_eval "$REPO_ROOT/review/REFERENCE.md" "repo standard always wins|rep
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/visual-review" "review invokes visual-review for user-facing surfaces"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/resilience-review" "review invokes resilience-review for unhappy paths"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Standards.*Spec" "review keeps standards and spec axes"
-# review: 8-hat parallel panel (default for PR reviews) + quick/deep modes
+# review: evidence-triggered hat panel (default for PR reviews) + quick/deep modes
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Core pass" "review defines the always-on core pass"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the 8-hat panel for PR reviews"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "different-family adversarial" "review offers a cross-family adversarial hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the hat panel for PR reviews"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "one bounded, foreground, awaited different-family" "review offers a bounded cross-family pass"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review hats skip only with diff evidence"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep release-audit mode"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "review forbids recursive invocation"

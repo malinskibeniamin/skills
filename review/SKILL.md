@@ -23,7 +23,7 @@ Review is verification, not opinion: check claims against the source (the API th
 
 `config/model-routing.json` is the source of truth. Run current-family hats inline and batch the other family's hats into one bounded pass.
 With explicit delegation and fresh eligible Claude capacity, run Claude-owned hats inline in Claude Code or batch them into one bounded Claude Code pass from another family for non-trivial or product/visual diffs.
-Trivial reviews use GPT-5.6 Sol. Missing delegation, unknown or ineligible capacity falls back to GPT-5.6 Sol. Never dispatch reviewers, paired reviewers, or background agents without consent.
+Trivial reviews use GPT-5.6 Sol. Missing delegation, unknown or ineligible capacity falls back to GPT-5.6 Sol; run every applicable hat inline. Never dispatch reviewers, paired reviewers, or background agents without consent.
 
 | Hat | Owns | Model |
 |---|---|---|
