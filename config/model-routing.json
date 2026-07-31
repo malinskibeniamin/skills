@@ -39,6 +39,40 @@
       "work": ["planning", "implementation", "review", "ui"]
     }
   },
+  "review": {
+    "hat_owners": {
+      "claude-family": [
+        "product/spec",
+        "complexity/value",
+        "visual/design",
+        "adversarial"
+      ],
+      "gpt-5.6-sol": [
+        "engineering-standards",
+        "resilience",
+        "dogfood",
+        "test/perf",
+        "aip",
+        "golang",
+        "database/SQL"
+      ]
+    },
+    "execution": {
+      "batch_by_family": true,
+      "max_external_calls_per_family": 1
+    },
+    "claude_lane": {
+      "max_calls_per_review": 1,
+      "activate_for": ["non-trivial", "product", "visual"],
+      "requires_explicit_delegation": true,
+      "requires_fresh_capacity": true,
+      "capacity_command": "bash stay-within-limits/select-review-profile.sh",
+      "missing_delegation_fallback": "gpt-5.6-sol",
+      "unknown_or_ineligible_fallback": "gpt-5.6-sol",
+      "model_selection": "Use a quality-qualified configured Claude alternative; deep or high-risk work may use the strongest available option only after eval promotion and a fresh eligible capacity reading."
+    },
+    "trivial_owner": "gpt-5.6-sol"
+  },
   "selection": {
     "single_owner": true,
     "cross_family_review_for_non_trivial_pr": true,

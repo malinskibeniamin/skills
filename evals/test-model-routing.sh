@@ -26,6 +26,25 @@ else
   ERRORS="$ERRORS\n  FAIL: model-routing quality policy"
 fi
 
+if jq -e '.review.hat_owners["claude-family"] == ["product/spec", "complexity/value", "visual/design", "adversarial"]
+  and .review.hat_owners["gpt-5.6-sol"] == ["engineering-standards", "resilience", "dogfood", "test/perf", "aip", "golang", "database/SQL"]
+  and .review.claude_lane.max_calls_per_review == 1
+  and .review.claude_lane.requires_explicit_delegation == true
+  and .review.claude_lane.requires_fresh_capacity == true
+  and .review.claude_lane.capacity_command == "bash stay-within-limits/select-review-profile.sh"
+  and .review.claude_lane.missing_delegation_fallback == "gpt-5.6-sol"
+  and .review.claude_lane.unknown_or_ineligible_fallback == "gpt-5.6-sol"
+  and .review.execution.batch_by_family == true
+  and .review.execution.max_external_calls_per_family == 1
+  and .review.trivial_owner == "gpt-5.6-sol"' "$ROUTING" >/dev/null; then
+  echo "  PASS  review routing batches four Claude hats and seven Sol hats"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  review routing batches four Claude hats and seven Sol hats"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: review 4/7 family routing"
+fi
+
 if ! grep -qE '1/10/9|5/8/9|8/9/6|Rank cost/intel/taste' \
   "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/efficient-frontier/SKILL.md"; then
   echo "  PASS  routing omits subjective score tables"
