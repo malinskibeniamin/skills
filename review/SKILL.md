@@ -7,50 +7,51 @@ description: Review a diff for evidence-backed, diff-introduced product and engi
 Produce a diagnostic artifact from a fixed point to `HEAD`. Do not edit, commit, push,
 reply, resolve, or post comments unless the user explicitly requests posting.
 Keep one owner in the primary context; agents require explicit delegation.
-
 ## Review contract
 - **Objective**: determine whether the diff achieves its requested outcome without a
   credible defect.
 - **Guardrails**: report only diff-introduced, actionable findings; keep documented
   standards separate from product/spec gaps; treat generated files as evidence, not edit
   targets.
-- **Verification**: trace claims to source, run cheap deterministic checks, and exercise a
-  real entrypoint when runnable behavior is locally reviewable.
+- **Verification**: trace claims to source. Dogfood every runnable change yourself at its
+  real entrypoint; automated tests are supporting evidence, not experiential evidence.
 - **Stop**: every applicable surface is accounted for and each finding has evidence,
   consequence, priority, and a concrete correction.
-
 If the fixed point is missing, ask what to review against. Otherwise use the PR base or
 `origin/main`. Pin the comparison before reading summaries:
-
 ```bash
 git diff <fixed>...HEAD
 git log <fixed>..HEAD --oneline
 ```
-
 ## Evidence loop
 **inspect -> verify -> classify -> synthesize.**
-
 ### Inspect
 1. Read the request or spec, repository instructions, complete diff, and relevant
    call-sites. Do not trust a PR summary over code.
-2. Map changed behavior, contracts, data flow, permissions, visible surfaces, and tests.
-   Skip formatter-owned style and pre-existing defects.
-3. Ask what could still be wrong if tests pass and the code appears to match the request.
-
+2. For each changed assumption, reverse-trace it to authoritative sources across relevant
+   producers, types or schemas, storage, consumers, and public surfaces. Search by domain concept,
+   data field, and emitted value, not only the changed symbol.
+3. Test surprising claims against independent artifacts in relevant unchanged code, current base,
+   recent history, fixtures, or runtime output. Treat diff comments as hypotheses, not evidence.
+4. Compare fixtures with production shape and construct one behavioral counterexample that
+   separates the intended field or state from a plausible collision elsewhere.
+   Map permissions and visible surfaces; skip formatter-owned style and pre-existing defects.
+5. Ask what could still be wrong if tests pass and the code appears to match the request.
 ### Verify
-
 - Reproduce claims against source, schema, current primary documentation, or the smallest
   executable check.
-- For runnable behavior, exercise the intended path and one credible failure or recovery path
-  through the public seam. State exact environmental limits instead of guessing.
+- With representative live-scale data, exercise the intended path and one credible failure or recovery path.
+  Observe console/network/logs and response time yourself; tests never substitute for use.
+- When no safe runnable environment exists, name the blocker and evidence needed; keep the
+  behavior unverified instead of inferring success.
 - Inspect test integrity: public behavior, correct failure before the fix, meaningful
   assertions, no weakened coverage, and no flaky duration waits.
 - Challenge every helper, branch, dependency, option, and file against required behavior,
   semantic density, domain clarity, credible risk, and demonstrated scale.
-Never optimize LOC or reward code golf; reduce concepts while preserving clarity.
+Prefer cross-boundary contradictions over local polish.
+Never optimize LOC or reward code golf; preserve clarity by reducing concepts.
 
 Add surface-specific scrutiny only when the diff supplies evidence for it:
-
 | Surface | Check |
 |---|---|
 | Customer-facing UI/CLI/report | Rendered behavior, key states, copy, keyboard/a11y, console, relevant viewport |
@@ -91,9 +92,9 @@ changed public surface, and exact verification evidence. Read
 ## Output
 
 Read [REFERENCE.md](REFERENCE.md) for priority vocabulary and the comment-ready schema.
-Report the fixed point, diff command, mode, verification evidence or limits, findings as
-`[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`,
-finding counts, and merge verdict.
+Report the fixed point, diff command, mode, and dogfood receipt: `entrypoint, data, actions, observations, timing, limits`.
+Then report `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
+verify command>`, finding counts, and merge verdict.
 
 If there are no findings, say so and list residual verification limits. Posting comments
 requires explicit user intent; otherwise return comment-ready text only.
