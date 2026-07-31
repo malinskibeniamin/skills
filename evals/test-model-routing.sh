@@ -34,6 +34,10 @@ if jq -e '.review.hat_owners["claude-family"] == ["product/spec", "complexity/va
   and .review.claude_lane.capacity_command == "bash stay-within-limits/select-review-profile.sh"
   and .review.claude_lane.missing_delegation_fallback == "gpt-5.6-sol"
   and .review.claude_lane.unknown_or_ineligible_fallback == "gpt-5.6-sol"
+  and .review.claude_lane.ineligible_takeover.runtime == "codex"
+  and .review.claude_lane.ineligible_takeover.model == "gpt-5.6-sol"
+  and .review.claude_lane.ineligible_takeover.scope == "complete-review"
+  and .review.claude_lane.ineligible_takeover.claude_calls == 0
   and .review.execution.batch_by_family == true
   and .review.execution.max_external_calls_per_family == 1
   and .review.trivial_owner == "gpt-5.6-sol"' "$ROUTING" >/dev/null; then
@@ -44,6 +48,10 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: review 4/7 family routing"
 fi
+
+run_content_eval "$REPO_ROOT/review/SKILL.md" "claude_eligible.*false.*entire review.*Codex" "ineligible Claude capacity triggers complete Codex takeover"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "every applicable hat.*dogfood.*synthesis.*final verdict" "Codex takeover owns the complete review contract"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "zero Claude calls" "Codex takeover makes no Claude calls"
 
 if ! grep -qE '1/10/9|5/8/9|8/9/6|Rank cost/intel/taste' \
   "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/efficient-frontier/SKILL.md"; then
