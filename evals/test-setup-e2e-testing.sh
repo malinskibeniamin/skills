@@ -8,6 +8,7 @@ STRUCTURAL_TEST_SCRIPT="$REPO_ROOT/e2e-testing/scripts/structural-test-nudge-che
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/SETUP.md" "SETUP.md exists"
+run_file_eval "$SKILL_DIR/SOAK-TESTING.md" "SOAK-TESTING.md exists"
 
 # ── SKILL.md content (auto-loaded, edit-time guidance) ──────────
 
@@ -19,6 +20,13 @@ run_content_eval "$SKILL_DIR/SKILL.md" "agent-browser|Playwright" "SKILL.md ment
 run_content_eval "$SKILL_DIR/SKILL.md" "route sibling" "SKILL.md mentions route sibling tests"
 run_content_eval "$SKILL_DIR/SKILL.md" "structural refactor" "SKILL.md mentions structural refactor test nudge"
 run_content_eval "$SKILL_DIR/SKILL.md" "fake timers.*E2E|E2E.*fake timers" "SKILL.md separates timer contracts from E2E outcomes"
+run_content_eval "$SKILL_DIR/SKILL.md" "SOAK-TESTING" "SKILL.md routes long-lived SPA risks to soak guidance"
+run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "round trip" "soak guidance requires a round-trip flow"
+run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "positive control" "soak guidance calibrates with a positive control"
+run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "multiple checkpoints|three.*checkpoint" "soak guidance samples multiple checkpoints"
+run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "timer-only|timers.*counter" "soak guidance covers timer-only counter blind spots"
+run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "fixed.*allowance|fixed.*budget" "soak guidance uses calibrated fixed thresholds"
+run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "heap snapshot|MemLab" "soak guidance includes leak localization"
 
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 

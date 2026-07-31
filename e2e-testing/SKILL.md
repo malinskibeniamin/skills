@@ -44,6 +44,12 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 - Retries: 1 in CI as a stopgap, 0 as the goal; a spec that needs retries has a wait bug. Locally prefer the markdown reporter (LLM-token-friendly).
 - Quality over quantity: delete render-only specs; every spec must exercise a side effect a user can cause.
 
+## Long-lived SPA resources
+
+For listeners, detached DOM, timers, subscriptions, or heap growth that accumulates
+within one browser context, read [SOAK-TESTING.md](SOAK-TESTING.md). Treat the repeated
+round trip as a resource-lifetime contract; ordinary isolated E2E tests cannot prove it.
+
 ## Monitor for E2E
 `Monitor: bun run test:e2e` -- stream results, react fail before suite finish.
 

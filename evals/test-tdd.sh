@@ -37,6 +37,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "## Test seams and anti-patterns" "SKILL.
 run_content_eval "$SKILL_DIR/SKILL.md" "No tests at unconfirmed internals" "SKILL.md rejects unconfirmed internal seams"
 run_content_eval "$SKILL_DIR/SKILL.md" "independent source of truth" "SKILL.md rejects tautological tests"
 run_content_eval "$SKILL_DIR/SKILL.md" "vertical slices" "SKILL.md requires vertical TDD slices"
+run_content_eval "$SKILL_DIR/SKILL.md" "resource-lifetime|resource lifetime" "SKILL.md covers long-lived resource contracts"
+run_content_eval "$SKILL_DIR/SKILL.md" "SOAK-TESTING" "SKILL.md routes browser lifetime risks to soak guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "setTimeout|waitForTimeout" "REFERENCE has condition-based waiting"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Common Agent Excuses" "REFERENCE has rationalization table"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "detectAsyncLeaks" "REFERENCE has async leak detection"
