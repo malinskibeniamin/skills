@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.35.0
+
+2026-07-31 -- Publish the post-4.34 Claude Code and Codex bundle. This release rebuilds lifecycle, shipping, and review orchestration around concise outcome contracts and a single inspect-act-verify loop. It adds a bare-to-current model-release ablation ladder, harder self-verifying repair evidence, versioned telemetry with per-rule latency and shadow trials, and portable property-based testing guidance with independent-oracle safeguards. Reviews now reverse-trace assumptions across authoritative contracts and require representative live-data dogfooding for runnable changes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.35.0.
+
 2026-07-31 -- Rebuild the harness around high-level outcome contracts and executable exit
 criteria. Collapse lifecycle, shipping, and review phase/skill/model panels into one
 inspect-act-verify loop; trim prompt-time intent coaching to endpoint and repository facts;
