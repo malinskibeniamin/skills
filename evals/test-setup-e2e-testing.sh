@@ -27,6 +27,8 @@ run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "multiple checkpoints|three.*check
 run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "timer-only|timers.*counter" "soak guidance covers timer-only counter blind spots"
 run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "fixed.*allowance|fixed.*budget" "soak guidance uses calibrated fixed thresholds"
 run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "heap snapshot|MemLab" "soak guidance includes leak localization"
+run_content_eval "$SKILL_DIR/SKILL.md" "generated action sequences|stateful property" "SKILL.md routes combinatorial browser flows to property testing"
+run_content_eval "$SKILL_DIR/SKILL.md" "PROPERTY-BASED-TESTING\\.md" "SKILL.md links to vendor-neutral property testing guidance"
 
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
