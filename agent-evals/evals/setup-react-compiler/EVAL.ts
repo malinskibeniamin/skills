@@ -9,21 +9,24 @@ describe("setup-react-compiler: LLM avoids manual memoization", () => {
   it("should NOT use useMemo (React Compiler handles it)", () => {
     const content = readFileSync("src/Dashboard.tsx", "utf-8");
     const hasUseMemo = /\buseMemo\b/.test(content);
-    const hasUseNoMemo = /['"]use no memo['"]/.test(content);
-    expect(hasUseMemo && !hasUseNoMemo).toBe(false);
+    expect(hasUseMemo).toBe(false);
   });
 
   it("should NOT use useCallback (React Compiler handles it)", () => {
     const content = readFileSync("src/Dashboard.tsx", "utf-8");
     const hasUseCallback = /\buseCallback\b/.test(content);
-    const hasUseNoMemo = /['"]use no memo['"]/.test(content);
-    expect(hasUseCallback && !hasUseNoMemo).toBe(false);
+    expect(hasUseCallback).toBe(false);
   });
 
   it("should NOT use React.memo (React Compiler handles it)", () => {
     const content = readFileSync("src/Dashboard.tsx", "utf-8");
     const hasReactMemo = /\bReact\.memo\b|\bmemo\(/.test(content);
+    expect(hasReactMemo).toBe(false);
+  });
+
+  it("should NOT opt out of the compiler to justify manual memoization", () => {
+    const content = readFileSync("src/Dashboard.tsx", "utf-8");
     const hasUseNoMemo = /['"]use no memo['"]/.test(content);
-    expect(hasReactMemo && !hasUseNoMemo).toBe(false);
+    expect(hasUseNoMemo).toBe(false);
   });
 });
