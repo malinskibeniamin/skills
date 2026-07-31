@@ -186,6 +186,9 @@ rm -rf "$_setup_fix" "$_setup_bin"
 # codex-notify adapter (argument-style invocation, not stdin)
 rm -f "$HOOK_METRICS_DIR/"*-codex-*.json
 "$HOOKS_DIR/codex-notify.sh" '{"type":"agent-turn-complete","thread-id":"t-eval","cwd":"/tmp"}' </dev/null
+_codex_summary=$(ls "$HOOK_METRICS_DIR/"*-codex-*.json 2>/dev/null | tail -1)
+jq 'del(.shadow_blocks, .shadow_warns, .shadow_nudges) | .schema_version = 3' \
+  "$_codex_summary" > "$_codex_summary.tmp" && mv "$_codex_summary.tmp" "$_codex_summary"
 _long_last=$(printf 'verified %.0s' {1..40})
 "$HOOKS_DIR/codex-notify.sh" \
   "$(jq -nc --arg last "${_long_last}
@@ -200,10 +203,13 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: codex-notify telemetry"
 fi
-# The consumer contract: a schema-v3 summary /hook-audit's *.json pass reads
+# The consumer contract: a schema-v4 summary /hook-audit's *.json pass reads
 _codex_summary=$(ls "$HOOK_METRICS_DIR/"*-codex-*.json 2>/dev/null | tail -1)
 if [ -n "$_codex_summary" ] \
-  && jq -e '.schema_version == 3 and .source == "codex" and .turns == 2 and .outcome == "completed"' "$_codex_summary" >/dev/null 2>&1 \
+  && jq -e '.schema_version == 4 and .source == "codex" and .turns == 2
+    and .outcome == "completed" and .harness_version and .run_kind and .model
+    and (.shadow_blocks | type == "object") and (.shadow_warns | type == "object")
+    and (.shadow_nudges | type == "object")' "$_codex_summary" >/dev/null 2>&1 \
   && grep -q "codex-turns.jsonl" "$REPO_ROOT/hook-audit/"{SKILL,REFERENCE}.md; then
   echo "  PASS  codex turns appear in hook-audit's session-summary feed"
   PASS=$((PASS + 1))

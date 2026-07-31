@@ -1,50 +1,55 @@
-# Evals for development-lifecycle skill
+# Evals for the outcome-oriented development lifecycle.
 
 SKILL_DIR="$REPO_ROOT/development-lifecycle"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: development-lifecycle" "SKILL.md has correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "Use (when|for)" "SKILL.md has trigger phrase"
-run_content_eval "$SKILL_DIR/SKILL.md" "Understand" "SKILL.md has understand phase"
-run_content_eval "$SKILL_DIR/SKILL.md" "Plan" "SKILL.md has plan phase"
-run_content_eval "$SKILL_DIR/SKILL.md" "Implement" "SKILL.md has implement phase"
-run_content_eval "$SKILL_DIR/SKILL.md" "Review" "SKILL.md has review phase"
-run_content_eval "$SKILL_DIR/SKILL.md" "TDD" "SKILL.md references TDD"
-run_content_eval "$SKILL_DIR/SKILL.md" "smallest obvious" "SKILL.md starts with smallest design"
-run_content_eval "$SKILL_DIR/SKILL.md" "demonstrated scale" "SKILL.md designs for demonstrated scale"
-run_content_eval "$SKILL_DIR/SKILL.md" "[Ss]ingle owner" "SKILL.md uses single-owner implementation"
-run_content_eval "$SKILL_DIR/SKILL.md" "continue immediately" "SKILL.md continues ordinary implementation without approval"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Test meaningful behavior" "REFERENCE scopes TDD to meaningful behavior"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "P1_RCA --> P2" "bug fixes receive a concise plan before implementation"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Spec Compliance" "REFERENCE has spec compliance review"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "foreground.*Sol high|Sol high.*foreground" "REFERENCE has bounded cross-model review instructions"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Hard Rules" "REFERENCE has hard rules"
+run_content_eval "$SKILL_DIR/SKILL.md" "high-level outcome through self-verification" "description states the result, not a phase chain"
 
-# ── Phase 4b (Refine) ───────────────────────────────────────────
-run_content_eval "$SKILL_DIR/SKILL.md" "4b.*Refine" "SKILL.md has Phase 4b (Refine)"
-run_content_eval "$SKILL_DIR/SKILL.md" "inline self/adversarial review" "SKILL.md keeps review axes inline"
-run_content_eval "$SKILL_DIR/SKILL.md" "awaited cross-model review" "SKILL.md keeps one foreground cross-model pass"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Phase 4b.*Refine" "REFERENCE has Phase 4b section"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "self-reviewer" "REFERENCE references self-reviewer"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "adversarial-reviewer" "REFERENCE references adversarial-reviewer"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "findings-schema" "REFERENCE references findings-schema"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "SubagentStart" "REFERENCE documents SubagentStart hook"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "SubagentStop" "REFERENCE documents SubagentStop hook"
+for field in Objective Guardrails Verification Stop; do
+  run_content_eval "$SKILL_DIR/SKILL.md" "\*\*$field\*\*" "lifecycle outcome contract defines $field"
+done
 
-# ── Routing table includes 4b ────────────────────────────────────
-run_content_eval "$SKILL_DIR/SKILL.md" "4b\\. Review" "SKILL.md routing includes phase 4b"
-run_content_eval "$SKILL_DIR/SKILL.md" "5\\. Ship" "SKILL.md routing includes phase 5"
+run_content_eval "$SKILL_DIR/SKILL.md" "inspect -> act -> verify -> repeat" "lifecycle owns one evidence loop"
+run_content_eval "$SKILL_DIR/SKILL.md" "blind spot" "lifecycle starts with the likeliest invalidating unknown"
+run_content_eval "$SKILL_DIR/SKILL.md" "volatile unknown" "lifecycle orders discovery by volatility"
+run_content_eval "$SKILL_DIR/SKILL.md" "demonstrated scale" "lifecycle designs for demonstrated scale"
+run_content_eval "$SKILL_DIR/SKILL.md" "[Ss]ingle owner" "lifecycle keeps one owner"
+run_content_eval "$SKILL_DIR/SKILL.md" "continue immediately" "ordinary implementation does not wait for approval"
+run_content_eval "$SKILL_DIR/SKILL.md" "smallest obvious change" "implementation starts with the smallest clear change"
+run_content_eval "$SKILL_DIR/SKILL.md" "RED -> smallest GREEN" "meaningful behavior uses TDD"
+run_content_eval "$SKILL_DIR/SKILL.md" "public contract" "tests prove the public seam"
+run_content_eval "$SKILL_DIR/SKILL.md" "Re-plan the affected slice" "evidence can revise the approach"
+run_content_eval "$SKILL_DIR/SKILL.md" "real entrypoint" "verification includes actual use"
+run_content_eval "$SKILL_DIR/SKILL.md" "failure becomes the next action" "failed evidence feeds the loop"
+run_content_eval "$SKILL_DIR/SKILL.md" "user-reserved decision" "lifecycle pauses only for reserved decisions"
+run_content_eval "$SKILL_DIR/SKILL.md" "requested endpoint" "lifecycle stops at the user endpoint"
+
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Outcome evidence by task" "reference branches by task evidence"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Bug branch" "reference has a root-cause bug branch"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Meaningful behavior branch" "reference has a TDD behavior branch"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Review depth" "reference scales review to evidence"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Endpoint evidence" "reference defines delivery completion"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "schedule fixed review rounds" "reference rejects review ceremony"
+
+if grep -qE '^## Phase|^### Phase|2-5 min|/grilling|/dogfood|/resilience-review|self-reviewer|adversarial-reviewer|different-family' \
+  "$SKILL_DIR/SKILL.md" "$SKILL_DIR/REFERENCE.md"; then
+  echo "  FAIL  lifecycle retains phase, skill, or model ceremony"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: lifecycle ceremony remains"
+else
+  echo "  PASS  lifecycle has no phase, skill, or model ceremony"
+  PASS=$((PASS + 1))
+fi
 
 desc=$(grep '^description:' "$SKILL_DIR/SKILL.md" | sed 's/^description: //' | tr -d '"')
 desc_len=${#desc}
-if [ $desc_len -le 250 ]; then
-  echo "  PASS  description under 250 chars ($desc_len)"
+if [ "$desc_len" -le 180 ]; then
+  echo "  PASS  description stays compact ($desc_len chars)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  description over 250 chars ($desc_len)"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: description over 250 chars ($desc_len)"
+  echo "  FAIL  description too long ($desc_len chars)"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: lifecycle description too long"
 fi
 
 line_count=$(wc -l < "$SKILL_DIR/SKILL.md" | tr -d ' ')
@@ -53,6 +58,5 @@ if [ "$line_count" -le 100 ]; then
   PASS=$((PASS + 1))
 else
   echo "  FAIL  SKILL.md over 100 lines ($line_count)"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: SKILL.md over 100 lines ($line_count)"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: lifecycle SKILL.md over 100 lines"
 fi

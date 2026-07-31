@@ -6,11 +6,8 @@ trap 'exit 0' ERR
 # environment state. Runs alongside user-prompt-context.sh.
 # Target: <30ms (keyword grep cascade).
 #
-# Policy (2026-07 audit): only directives that carry information the model
-# does NOT already have belong here — branch state, PR numbers, installed
-# tools, once-per-session markers. Static rule restatements ([TDD],
-# [LIFECYCLE], [MINIMAL], [CLI-FIRST], ...) were removed: they duplicated
-# CLAUDE.md verbatim and cost ~2-4k redundant tokens per session.
+# Policy (2026-07 audit): only dynamic endpoint, branch, and PR state belongs here.
+# Static rule restatements stay in ambient repository instructions.
 
 input=$(cat)
 hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
@@ -36,7 +33,8 @@ if [ -n "$_hook_sid" ]; then
   _session_dir="/tmp/hook-session-${_hook_sid}"
   mkdir -p "$_session_dir" 2>/dev/null || true
   if [ -f "$_session_dir/task-completed" ]; then
-    rm -f "$_session_dir/task-endpoint" "$_session_dir/task-completed" 2>/dev/null || true
+    rm -f "$_session_dir/task-endpoint" "$_session_dir/task-completed" \
+      "$_session_dir/last-injected-endpoint" 2>/dev/null || true
   fi
 fi
 
@@ -59,48 +57,32 @@ if echo "$prompt" | grep -qiE '^[[:space:]]*(stop|cancel|never mind|nevermind)([
 elif echo "$prompt" | grep -qiE '(^|[[:space:]])(/go|ship( it)?|plow ahead|babysit|do not stop|keep going until done|use your best judgment)([[:space:][:punct:]]|$)' \
   && [ "$_negated_pr" = false ] && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="ship"
-  directives="$directives\n[ENDPOINT:ship] Run the requested full delivery loop. No background activity may survive final status."
 elif echo "$prompt" | grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)([^[:alnum:]_]|$)|/commit-push-pr([^[:alnum:]]|$)' \
   && ! echo "$prompt" | grep -qi -- '--no-pr' \
   && [ "$_negated_pr" = false ] && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="pr"
-  directives="$directives\n[ENDPOINT:pr] Making a PR includes verify + commit + push + PR creation + one CI snapshot. Push is an implied prerequisite; merge and force-push are not authorized."
 elif { echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?push([[:space:][:punct:]]|$)' || echo "$prompt" | grep -qi -- '--no-pr'; } \
   && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="push"
-  directives="$directives\n[ENDPOINT:push] Commit if needed, push the current branch, then stop. Do not open a PR."
 elif echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?commit([[:space:][:punct:]]|$)' \
   && [ "$_negated_commit" = false ]; then
   _endpoint="commit"
-  directives="$directives\n[ENDPOINT:commit] Commit the requested scope, then stop. Do not push."
 elif echo "$prompt" | grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]|$)" \
   && [ "$_negated_action" = false ] && [ "$_artifact_only" = false ]; then
   _endpoint="local"
-  directives="$directives\n[ENDPOINT:local] State a concise plan, continue immediately, verify local changes, then stop without commit or push."
 fi
 
 if [ -n "$_endpoint" ] && [ -n "$_session_dir" ]; then
   printf '%s\n' "$_endpoint" > "$_session_dir/task-endpoint" 2>/dev/null || true
   rm -f "$_session_dir/task-completed" 2>/dev/null || true
-fi
 
-# ── PR delivery context ──────────────────────────────────────────
-
-if echo "$prompt" | grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)([^[:alnum:]_]|$)'; then
-  directives="$directives\n[PR] quality:gate + type:check first. Take one CI snapshot; do not request or post a review unless asked."
-fi
-
-# ── Browser task detected (URL / navigate / click / visual bug) ──
-# Environment fact the model cannot know: which browser CLIs exist here.
-
-if echo "$prompt" | grep -qiE 'https?://|localhost:|click on|click the|navigate to|go to.*http|open.*http|screenshot|hover over|fill.*form|visual.*bug|rendering issue|ui bug|page load|reload.*page'; then
-  directives="$directives\n[BROWSER] Use an isolated \`agent-browser\` or \`bunx playwright\` session. Never close, restart, resize, or take over a human-owned browser or desktop app. If isolation is unavailable, report blocked verification."
-fi
-
-# ── CI fix workflow ──────────────────────────────────────────────
-
-if echo "$prompt" | grep -qiE 'fix ci|green ci|ci failing|ci broken|check failures|fix pipeline|fix checks|fix pr checks|ci red|checks? fail'; then
-  directives="$directives\n[CI-FIX] Front-load ALL failures: list EVERY failure by category BEFORE fixing. Order: proto->types->lint->unit->e2e. Push ONCE after all local pass. Terminal only, no browser."
+  _last_endpoint=""
+  [ -f "$_session_dir/last-injected-endpoint" ] \
+    && _last_endpoint=$(cat "$_session_dir/last-injected-endpoint" 2>/dev/null || true)
+  if [ "$_endpoint" != "$_last_endpoint" ]; then
+    directives="$directives\n[ENDPOINT:$_endpoint]"
+    printf '%s\n' "$_endpoint" > "$_session_dir/last-injected-endpoint" 2>/dev/null || true
+  fi
 fi
 
 # ── PR-number auto-context ───────────────────────────────────────
@@ -132,26 +114,6 @@ case "$_current_branch" in
     fi
     ;;
 esac
-
-# ── Risk tier (informs auto mode confidence) ────────────────────
-# low: tests, components, refactoring — fully guarded by hooks
-# medium: bug fixes, debugging — may need exploratory actions
-# high: PRs, deploys, infra — touches shared/external systems
-
-risk=""
-
-if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|crash|triage|investigate|regression'; then
-  risk="medium"
-fi
-
-if echo "$prompt" | grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)|push|deploy|migration|drop|delete.*branch|force'; then
-  risk="high"
-fi
-
-# Only emit risk tier for medium/high — low is default, no need to announce
-if [ -n "$risk" ]; then
-  directives="$directives\n[RISK:$risk]"
-fi
 
 # ── Output ───────────────────────────────────────────────────────
 

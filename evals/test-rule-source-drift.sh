@@ -19,7 +19,7 @@ for query in \
   '.policy == "quality-first"' \
   '.quality_first.default.model == "gpt-5.6-sol"' \
   '.selection.single_owner == true' \
-  '.selection.cross_family_review_for_non_trivial_pr == true'; do
+  '.selection.cross_family_review_for_non_trivial_pr == false'; do
   if jq -e "$query" "$ROUTING" >/dev/null; then
     echo "  PASS  routing contract: $query"
     PASS=$((PASS + 1))

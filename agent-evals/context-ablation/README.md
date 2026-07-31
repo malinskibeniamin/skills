@@ -9,15 +9,22 @@ agent-evals/context-ablation/run.sh --smoke
 agent-evals/context-ablation/run.sh --force
 ```
 
-`current` and `lean` share tasks, run counts, validation, and a fixed quality gate.
-The prompts state outcomes rather than copying the rule text that hidden tests check.
-Compare each one-group change against the previous winner. Treat token and duration
-savings as tie-breakers only after quality is non-inferior.
+The ladder starts with the bare model, then restores guardrails, lean repository context,
+and current runtime-native context. Codex receives `AGENTS.md`; Claude Code receives
+`CLAUDE.md`. Every variant shares tasks, run counts, validation, and a fixed quality gate.
+Prompts state high-level outcomes and verification paths without copying the hidden grader
+rules. Compare each group against the previous winner. Treat token and duration savings as
+tie-breakers only after quality is non-inferior.
 
 The manifest lists `max` because GPT-5.6 Sol exposes it. Fable and Opus run at their
 supported quality efforts, so family comparisons do not pretend that effort labels are portable.
-Keep raw results out of git; promote only the winning policy into
-`config/model-routing.json`.
+Keep raw results out of git. On every major model release, record the decision with
+`scorecard-template.md`, promote only the winning policy into `config/model-routing.json`,
+and replace tasks that no longer discriminate between variants.
+
+This suite measures ambient context. Use `HOOK_SHADOW_RULES` plus version-qualified
+`/hook-audit` telemetry for hook holdouts. A skill is retained from observed, real-session
+use or a separate behavioral treatment; discovery metadata alone is not evidence.
 
 Motivation: [GPT-5.6](https://openai.com/index/gpt-5-6/) reports better coding
 efficiency from leaner instructions; the

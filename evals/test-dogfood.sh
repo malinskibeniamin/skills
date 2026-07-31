@@ -46,12 +46,12 @@ run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "/dogfood" \
   "bug diagnosis dogfoods before and after"
 run_content_eval "$REPO_ROOT/prototype/SKILL.md" "/dogfood" \
   "prototypes are dogfooded before verdict"
-run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/dogfood" \
-  "development lifecycle dogfoods during implementation"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "/dogfood" \
-  "go has a final dogfood gate"
-run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Dogfood [Ee]vidence" \
-  "go reference preserves dogfood evidence"
+run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "real entrypoint" \
+  "development lifecycle exercises material behavior during implementation"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "real user or public entrypoint" \
+  "go has a final real-use gate"
+run_content_eval "$REPO_ROOT/go/REFERENCE.md" "real entrypoint and one credible failure" \
+  "go reference preserves experiential evidence without a skill chain"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "/dogfood|[Dd]ogfood" \
   "PR creation requires dogfood evidence"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "## Dogfood evidence" \

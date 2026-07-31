@@ -35,16 +35,16 @@ run_content_eval "$REF" "PR_FEEDBACK_ENFORCEMENT=off" \
 # Go + lifecycle skills reflect the distinction
 run_content_eval "$GO_SKILL" "pr-feedback-completeness-stop" \
   "go/SKILL.md references the hook"
-run_content_eval "$GO_SKILL" "NO cap" \
+run_content_eval "$GO_SKILL" "Human feedback has no cap" \
   "go/SKILL.md states human review has no cap"
-run_content_eval "$GO_SKILL" "up to 2" \
-  "go/SKILL.md allows up to 2 AI self-review rounds"
-run_content_eval "$GO_SKILL" "[Ee]arly-exit" \
-  "go/SKILL.md has early-exit condition for self-review"
-run_content_eval "$LC_SKILL" "hook-enforced" \
-  "development-lifecycle/SKILL.md mentions hook enforcement"
-run_content_eval "$LC_SKILL" "early-exit" \
-  "development-lifecycle/SKILL.md mentions early-exit"
+run_content_eval "$GO_SKILL" "Stop self-review as soon as it is clean" \
+  "go/SKILL.md exits review based on evidence"
+run_content_eval "$GO_SKILL" "Repeated noisy findings.*hand off" \
+  "go/SKILL.md hands off noise instead of scheduling rounds"
+run_content_eval "$LC_SKILL" "failure becomes the next action" \
+  "development lifecycle loops on failed evidence"
+run_content_eval "$LC_SKILL" "every exit criterion passes" \
+  "development lifecycle exits when evidence is clean"
 
 # Self-check wrapper script (hides GraphQL detail)
 run_file_eval "$REPO_ROOT/scripts/pr-unresolved-count.sh" \

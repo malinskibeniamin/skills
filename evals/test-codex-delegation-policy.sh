@@ -62,12 +62,12 @@ run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "do not guess.*reset" 
 
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "reviewer hats inline|hats inline" \
   "grilling keeps every hat inline by default"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "applicable hat inline" \
-  "review keeps every axis inline by default"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "one owner in the primary context" \
+  "review keeps diagnostic ownership in the primary context"
 run_content_eval "$REPO_ROOT/resilience-review/SKILL.md" "Codex.*inline" \
   "Codex resilience review keeps every axis inline by default"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "axes inline" \
-  "go review stays inline by default"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "single owner in the primary context" \
+  "go keeps delivery ownership in the primary context"
 
 # A hook cannot prevent a spawn after admission; keep the enforcement surface honest.
 run_content_eval "$REPO_ROOT/shared/subagent-start.sh" "Cannot block subagent creation" \

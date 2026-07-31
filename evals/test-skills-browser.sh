@@ -23,6 +23,6 @@ else
   ERRORS="$ERRORS\n  FAIL: skills-browser 127 exit"
 fi
 
-# go references the wrapper; removed legacy /qa no longer owns browser capture.
-run_content_eval "$REPO_ROOT/go/SKILL.md" "skills-browser" \
-  "/go phase 4 uses skills-browser for smoke test"
+# The wrapper stays available; /go states the observable browser outcome instead of a tool chain.
+run_content_eval "$REPO_ROOT/go/SKILL.md" "real user or public entrypoint" \
+  "/go smoke-tests material changes at the real entrypoint"

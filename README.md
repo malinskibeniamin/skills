@@ -1,8 +1,9 @@
 # Agent Skills
 
-**Tell Claude what to build. It stops at the endpoint you requested.**
+**Give Claude the outcome, a way to verify it, and the endpoint. Let it work.**
 
-Hooks enforce patterns in real time; skills guide a single-owner workflow without surprise
+Hooks protect deterministic boundaries; skills disclose specialist knowledge only when a
+task enters that domain. The primary model owns planning and execution without surprise
 delegation, browser takeover, background wakeups, or unrequested shipping.
 
 
@@ -78,8 +79,8 @@ Want proof and examples? Demo scripts, featured skill moments, and starter promp
 ```
 You: "Build feature X" or "Fix these 5 issues overnight"
   │
-  ├── Interactive ──-> Claude Code + /development-lifecycle
-  │                    └── understand -> plan -> TDD -> verify -> review -> compound
+  ├── Interactive ──-> Claude Code + an outcome contract
+  │                    └── inspect -> act -> verify -> repeat
   │
   └── Automated ───-> Routines (claude.ai/code/routines)
                       └── schedule, GitHub webhook, or API trigger
@@ -87,51 +88,39 @@ You: "Build feature X" or "Fix these 5 issues overnight"
                               └── PR review, triage, health checks, docs drift
 ```
 
-### Development lifecycle
+### Outcome contract
 
-6-phase workflow drive every task, feature to fix. Phases skippable by task type -- bug fix jump straight to TDD, test request go direct Phase 3.
+Most work needs four fields, not a prescribed workflow:
+
+```md
+Objective: the high-level end state
+Guardrails: non-inferable constraints and reserved decisions
+Verification: tests, commands, or observable behavior that prove success
+Stop: the requested endpoint and genuine blockers
+```
+
+The model then owns one evidence loop:
 
 ```mermaid
 graph TD
-    Start([User prompt]) --> Understand
+    Contract([Outcome contract]) --> Inspect[Inspect evidence and hardest unknown]
+    Inspect --> Act[Act with the smallest clear change]
+    Act --> Verify[Verify through tests and the real entrypoint]
+    Verify -->|Failed| Repair[Repair or revise the approach]
+    Repair --> Verify
+    Verify -->|Passed| Endpoint{Requested endpoint reached?}
+    Endpoint -->|No| Inspect
+    Endpoint -->|Yes| Done([Done with evidence])
 
-    Understand["1. Understand\nExplore codebase, clarify requirements"]
-    Plan["2. Plan\nExact file paths, code, expected output"]
-    Decide{"Material decision\nor explicit grilling?"}
-    Grill["2b. Grill\nStress-test plan inline\nUpdate CONTEXT.md + ADRs inline"]
-    Implement["3. Implement -- TDD\nRED: failing test\nGREEN: minimal code\nREFACTOR: clean up"]
-    Verify["4. Verify\nSelf-verify via browser tools"]
-    ReviewPR["5. Review\nInline axes + one foreground Sol pass"]
-    ReviewShip["5. Review\nInline axes + one foreground Sol pass"]
-    Iterate["5b. Iterate\nOnly for /go, ship, or babysitting"]
-    Compound["6. Compound\nWrite .claude/rules/ rule"]
-    Endpoint{"Requested endpoint?"}
-    Done([Requested endpoint complete])
-
-    Understand --> Plan --> Decide
-    Decide -->|"yes"| Grill --> Implement
-    Decide -->|"no"| Implement
-    Implement --> Verify --> Endpoint
-    Endpoint -->|"local"| Done
-    Endpoint -->|"PR"| ReviewPR --> Done
-    Endpoint -->|"ship"| ReviewShip --> Iterate --> Compound --> Done
-
-    Start -. "Fix bug" .-> Understand
-    Understand -. "skip plan" .-> Implement
-    Start -. "Write tests" .-> Implement
-    Start -. "Create PR" .-> Verify
-
-    style Grill fill:#7c3aed,stroke:#4c1d95,stroke-width:3px,color:#fff
-    style Implement fill:#16a34a,stroke:#14532d,stroke-width:3px,color:#fff
-    style ReviewPR fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
-    style ReviewShip fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
+    style Act fill:#16a34a,stroke:#14532d,stroke-width:3px,color:#fff
+    style Verify fill:#2563eb,stroke:#1e3a8a,stroke-width:3px,color:#fff
 ```
 
 **Four layers, one outcome:**
 
 | Layer | What | How | Reliability |
 |---|---|---|---|
-| **Skills** | What do | development-lifecycle (6 phases) | Loaded on demand |
+| **Skills** | Specialist knowledge | Loaded only when the observed task enters that domain | Progressive |
 | **Hooks** | Enforce quality | PostToolUse + Stop hooks, every edit | 100% automatic |
 | **Agents** | Optional specialization | Explicit delegation or `/swarm` only | Never automatic |
 | **Routines** | Automate | Cloud-hosted sessions on schedule/webhook/API | Unattended, 24/7 |
@@ -146,7 +135,9 @@ graph TD
 | Forget ask accessibility | No a11y until manual audit | Every component checked automatically |
 | Must babysit every step | Manual: "now write tests", "now check types" | Ordinary work plans briefly, then continues |
 
-**How works**: Hooks fire automatically, 100% reliable, zero LLM tokens. Skills add workflow guidance when need. Combo eliminate 80-90% human review cycles.
+**How it works**: deterministic hooks guard mechanical boundaries without spending model
+tokens. Skills disclose specialist knowledge when the observed task needs it. Outcome and
+verification stay with one primary model.
 
 **vs. [obra/superpowers](https://github.com/obra/superpowers)**: Superpowers give great workflow skills (TDD, debug, plan). We take their best patterns AND add what they lack: **mechanical enforcement via hooks**. Superpowers teach Claude what do. We teach AND enforce -- if Claude forget, hook catch.
 
@@ -164,15 +155,18 @@ Honest scoping -- this harness is **opinionated**. Here's when to skip it or for
 | Stack: not (TanStack Router + ConnectRPC + Protobuf v2) | Many setup skills assume this; fork to strip them |
 | Team rejects opinionation | Setup skills pin choices (Biome over ESLint, TypeScript 7 `tsc` over preview-era `tsgo`, Vitest over Jest) |
 
-**Partial adoption works.** Install `development-lifecycle` + `tdd` + `grilling` only to get workflow discipline without the stack-specific hooks.
+**Partial adoption works.** Install only the specialist skills or hook groups your tasks
+and evals justify.
 
 ## Skills catalog
 
-Only remember one skill: `/development-lifecycle` (or alias `/work`). It covers the full flow. Everything else is optional -- reach for it when you need a specific capability.
+Most work needs no named skill. `/development-lifecycle` provides the compact execution
+contract for frontend implementation. Everything else is optional specialist guidance or
+an explicit artifact command.
 
 | Category | What it covers | Representative skills |
 |---|---|---|
-| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/tdd`, `/swarm`, `/review` (`--deep` for release-blocking audits), `/triage`, `/diagnosing-bugs`, `/resolve-pr-feedback`, `/visual-review`, `/prime`, `/codex` |
+| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/review`, `/diagnosing-bugs` |
 | Kits | Bundles that install groups | `/frontend-starter-kit` (profiles: `full`, `minimal`, `redpanda`, per-tool), `/work-automation-kit`, `/codex-compat` |
 | Guidance | Auto-load on matching files | `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy` |
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |
@@ -184,7 +178,7 @@ The generated authoritative catalog with every skill and its trigger lives in [a
 
 Three layers automation run without manual invocation:
 
-**Layer 1 -- Intent Detection** (every prompt, ~30ms): Detect what doing from prompt keywords, inject workflow directives. "Write test" -> TDD workflow. "Fix bug" -> triage pattern. "Create component" -> accessibility + design system checklist. "Create PR" -> CI verify + review.
+**Layer 1 -- Dynamic Context** (every prompt, ~30ms): Record the requested endpoint and inject only facts the model cannot know, such as current branch and explicit PR identity. It does not prescribe a workflow.
 
 **Layer 2 -- Pattern Enforcement** (every Edit/Write, ~293ms): PostToolUse hooks catch violations real-time. Claude see error, fix, hook re-check -- cycle repeat until clean. Plus file-aware guidance: write test file -> async leak tips, write component -> accessibility checklist.
 
@@ -205,6 +199,11 @@ Never see hook output directly. Claude just produce better code, with tests, acc
 | `REACT_COMPILER_MODE` | `infer` | Set `annotation` for brownfield codebases |
 | `HOOK_VERBOSITY` | `normal` | `terse` = blocks only (suppress warns), `quiet` = all output suppressed |
 | `HOOKS_FAIL_CLOSED` | `0` | Set `1` to block on hook script errors (catch misconfiguration) |
+| `HOOK_SHADOW_RULES` | empty | Comma-separated non-strict rule labels to log without steering or blocking |
+
+Use shadow mode for controlled model-release holdouts. Compare equivalent tasks with
+version-qualified telemetry before retaining or deleting a rule. Strict blocks and
+permission denials are never shadowed.
 
 ## Why hooks over skills over manual prompting
 

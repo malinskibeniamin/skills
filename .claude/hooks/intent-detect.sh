@@ -6,11 +6,8 @@ trap 'exit 0' ERR
 # environment state. Runs alongside user-prompt-context.sh.
 # Target: <30ms (keyword grep cascade).
 #
-# Policy (2026-07 audit): only directives that carry information the model
-# does NOT already have belong here — branch state, PR numbers, installed
-# tools, once-per-session markers. Static rule restatements ([TDD],
-# [LIFECYCLE], [MINIMAL], [CLI-FIRST], ...) were removed: they duplicated
-# CLAUDE.md verbatim and cost ~2-4k redundant tokens per session.
+# Policy (2026-07 audit): only dynamic endpoint, branch, and PR state belongs here.
+# Static rule restatements stay in ambient repository instructions.
 
 input=$(cat)
 hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
@@ -36,7 +33,8 @@ if [ -n "$_hook_sid" ]; then
   _session_dir="/tmp/hook-session-${_hook_sid}"
   mkdir -p "$_session_dir" 2>/dev/null || true
   if [ -f "$_session_dir/task-completed" ]; then
-    rm -f "$_session_dir/task-endpoint" "$_session_dir/task-completed" 2>/dev/null || true
+    rm -f "$_session_dir/task-endpoint" "$_session_dir/task-completed" \
+      "$_session_dir/last-injected-endpoint" 2>/dev/null || true
   fi
 fi
 
@@ -103,21 +101,6 @@ if [ -n "$_endpoint" ] && [ -n "$_session_dir" ]; then
   fi
 fi
 
-# ── PR delivery context ──────────────────────────────────────────
-
-# ── Browser task detected (URL / navigate / click / visual bug) ──
-# Environment fact the model cannot know: which browser CLIs exist here.
-
-if echo "$prompt" | grep -qiE 'https?://|localhost:|click on|click the|navigate to|go to.*http|open.*http|screenshot|hover over|fill.*form|visual.*bug|rendering issue|ui bug|page load|reload.*page'; then
-  directives="$directives\n[BROWSER] Use an isolated \`agent-browser\` or \`bunx playwright\` session. Never close, restart, resize, or take over a human-owned browser or desktop app. If isolation is unavailable, report blocked verification."
-fi
-
-# ── CI fix workflow ──────────────────────────────────────────────
-
-if echo "$prompt" | grep -qiE 'fix ci|green ci|ci failing|ci broken|check failures|fix pipeline|fix checks|fix pr checks|ci red|checks? fail'; then
-  directives="$directives\n[CI-FIX] Front-load ALL failures: list EVERY failure by category BEFORE fixing. Order: proto->types->lint->unit->e2e. Push ONCE after all local pass. Terminal only, no browser."
-fi
-
 # ── PR-number auto-context ───────────────────────────────────────
 # When prompt references a PR number near action keywords, inject branch context.
 
@@ -147,26 +130,6 @@ case "$_current_branch" in
     fi
     ;;
 esac
-
-# ── Risk tier (informs auto mode confidence) ────────────────────
-# low: tests, components, refactoring — fully guarded by hooks
-# medium: bug fixes, debugging — may need exploratory actions
-# high: PRs, deploys, infra — touches shared/external systems
-
-risk=""
-
-if echo "$prompt" | grep -qiE 'fix.*bug|debug|broken|not working|crash|triage|investigate|regression'; then
-  risk="medium"
-fi
-
-if echo "$prompt" | grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)|push|deploy|migration|drop|delete.*branch|force'; then
-  risk="high"
-fi
-
-# Only emit risk tier for medium/high — low is default, no need to announce
-if [ -n "$risk" ]; then
-  directives="$directives\n[RISK:$risk]"
-fi
 
 # ── Output ───────────────────────────────────────────────────────
 

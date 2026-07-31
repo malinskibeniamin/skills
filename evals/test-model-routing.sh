@@ -17,7 +17,7 @@ if jq -e '.policy == "quality-first"
   and .models["gpt-5.6-terra"].status == "eval-gated"
   and .models["gpt-5.6-luna"].status == "eval-gated"
   and .selection.single_owner
-  and .selection.cross_family_review_for_non_trivial_pr' "$ROUTING" >/dev/null; then
+  and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then
   echo "  PASS  routing config encodes quality-first GPT-5.6 policy"
   PASS=$((PASS + 1))
 else
@@ -26,32 +26,17 @@ else
   ERRORS="$ERRORS\n  FAIL: model-routing quality policy"
 fi
 
-if jq -e '.review.hat_owners["claude-family"] == ["product/spec", "complexity/value", "visual/design", "adversarial"]
-  and .review.hat_owners["gpt-5.6-sol"] == ["engineering-standards", "resilience", "dogfood", "test/perf", "aip", "golang", "database/SQL"]
-  and .review.claude_lane.max_calls_per_review == 1
-  and .review.claude_lane.requires_explicit_delegation == true
-  and .review.claude_lane.requires_fresh_capacity == true
-  and .review.claude_lane.capacity_command == "bash stay-within-limits/select-review-profile.sh"
-  and .review.claude_lane.missing_delegation_fallback == "gpt-5.6-sol"
-  and .review.claude_lane.unknown_or_ineligible_fallback == "gpt-5.6-sol"
-  and .review.claude_lane.ineligible_takeover.runtime == "codex"
-  and .review.claude_lane.ineligible_takeover.model == "gpt-5.6-sol"
-  and .review.claude_lane.ineligible_takeover.scope == "complete-review"
-  and .review.claude_lane.ineligible_takeover.claude_calls == 0
-  and .review.execution.batch_by_family == true
-  and .review.execution.max_external_calls_per_family == 1
-  and .review.trivial_owner == "gpt-5.6-sol"' "$ROUTING" >/dev/null; then
-  echo "  PASS  review routing batches four Claude hats and seven Sol hats"
+if jq -e 'has("review") | not' "$ROUTING" >/dev/null; then
+  echo "  PASS  routing config does not encode a review panel"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  review routing batches four Claude hats and seven Sol hats"
+  echo "  FAIL  routing config does not encode a review panel"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: review 4/7 family routing"
+  ERRORS="$ERRORS\n  FAIL: review panel remains in model routing"
 fi
 
-run_content_eval "$REPO_ROOT/review/SKILL.md" "claude_eligible.*false.*entire review.*Codex" "ineligible Claude capacity triggers complete Codex takeover"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "every applicable hat.*dogfood.*synthesis.*final verdict" "Codex takeover owns the complete review contract"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "zero Claude calls" "Codex takeover makes no Claude calls"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "do not add automatic agents" "review keeps one owner"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "explicitly authorizes a different-family pass" "cross-family work requires user authorization"
 
 if ! grep -qE '1/10/9|5/8/9|8/9/6|Rank cost/intel/taste' \
   "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/efficient-frontier/SKILL.md"; then
@@ -71,8 +56,8 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" "max.*eval-backed|eval-backed.*max"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Sol may own user-facing" "Sol can own visible work"
 run_content_eval "$REPO_ROOT/codex/REFERENCE.md" "ultra.*explicit delegation" "ultra requires delegation"
 run_content_eval "$REPO_ROOT/codex/REFERENCE.md" "API-only" "API-only features are labeled"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "different-family" "review prefers a different family"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "clean-context Sol" "shipping has a truthful review fallback"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "inspect -> verify -> classify -> synthesize" "review stays with one evidence loop"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "different model.*explicit user authorization" "shipping does not silently change models"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "never starts a recursive model call" "reviewer leaves model dispatch to coordinator"
 
 if grep -qE 'Terra and Luna never|Terra/Luna never' \

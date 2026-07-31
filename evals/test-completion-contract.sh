@@ -11,7 +11,13 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "## Execution contract" "CLAUDE.md defin
 run_content_eval "$REPO_ROOT/CLAUDE.md" "[Bb]uild, fix, implement" "ordinary implementation continues without approval"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "🟢 done —" "CLAUDE.md defines visible done status"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "human.*browser|human-owned.*browser" "CLAUDE.md protects human browser sessions"
-run_content_eval "$INTENT" "human-owned browser" "browser prompts preserve human-owned sessions"
+if grep -q '\[BROWSER\]' "$INTENT"; then
+  echo "  FAIL  intent hook coaches browser workflow"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: intent browser coaching"
+else
+  echo "  PASS  browser safety stays ambient instead of prompt-injected"
+  PASS=$((PASS + 1))
+fi
 if grep -q "@claude review" "$INTENT"; then
   echo "  FAIL  PR intent still injects an unsolicited reviewer request"
   FAIL=$((FAIL + 1))

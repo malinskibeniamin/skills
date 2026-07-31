@@ -14,7 +14,7 @@ run_content_eval "$SKILL" "Retro metrics" "skill has retro metrics"
 # Metrics covered in retro
 run_content_eval "$SKILL" "first edit to PR" "retro covers session-to-PR lag"
 run_content_eval "$SKILL" "CI first-run pass rate" "retro covers CI first-try pass rate"
-run_content_eval "$SKILL" "lifecycle grill marker" "retro covers phases skipped"
+run_content_eval "$SKILL" "without a classified endpoint or outcome" "retro covers unclassified sessions"
 run_content_eval "$SKILL" "Review rounds" "retro covers review-round distribution"
 run_content_eval "$SKILL" "Human comment.*resolved-thread" "retro covers human-review latency"
 run_content_eval "$SKILL" "Active worktrees" "retro covers worktree sprawl"

@@ -29,8 +29,14 @@ for skill in "${LEGACY_SKILLS[@]}"; do
   fi
 done
 
-run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/grilling" "lifecycle prefers grilling"
-run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "prototype alternatives" "lifecycle keeps prototype as a decision-driven option"
+if grep -qE '/grilling|/prototype' "$REPO_ROOT/development-lifecycle/SKILL.md"; then
+  echo "  FAIL  lifecycle pre-routes optional skills"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: lifecycle pre-routes optional skills"
+else
+  echo "  PASS  lifecycle loads specialist guidance only from observed need"
+  PASS=$((PASS + 1))
+fi
+run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "Disposable prototype" "lifecycle keeps executable probes available without skill chaining"
 run_content_eval "$REPO_ROOT/triage/SKILL.md" "/grilling" "triage uses grilling for docs grill"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/improve architecture" "commit-push recommends architecture skill over refactor-plan"

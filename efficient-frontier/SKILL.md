@@ -17,9 +17,8 @@ Quality comes first:
    lift or the user explicitly selects it.
 4. Treat Terra and Luna as eval-gated. Do not route product code or review to them until a
    versioned behavioral eval promotes that use.
-5. Fable or Opus may own work when available and quality-qualified. For a non-trivial PR,
-   prefer one bounded review from a different model family; otherwise use a labeled,
-   clean-context Sol fallback.
+5. Fable or Opus may own work when available and quality-qualified. Keep review with the
+   primary owner unless the user explicitly authorizes a different-family pass.
 6. `ultra` means a multi-agent team and requires explicit delegation or `/swarm`.
    Pro mode, persisted reasoning, programmatic tool calling, and explicit cache controls
    are API-only unless the active harness exposes them.

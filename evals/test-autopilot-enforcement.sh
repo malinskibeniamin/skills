@@ -39,11 +39,17 @@ fi
 # Static rule restatements ([LIFECYCLE], [TDD], [MINIMAL], [CLI-FIRST])
 # were removed: they duplicated CLAUDE.md verbatim. intent-detect now
 # injects only environment-derived context (PR numbers, branch state,
-# installed tools, once-per-session markers, risk tier).
+# installed tools, and once-per-session markers).
 
 run_file_eval "$HOOKS_DIR/intent-detect.sh" "intent-detect.sh exists"
 run_executable_eval "$HOOKS_DIR/intent-detect.sh" "intent-detect.sh is executable"
-run_content_eval "$HOOKS_DIR/intent-detect.sh" "RISK:" "intent-detect has risk tier classification"
+if grep -qE 'RISK:|\[BROWSER\]|\[CI-FIX\]' "$HOOKS_DIR/intent-detect.sh"; then
+  echo "  FAIL  intent-detect contains workflow coaching"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: intent-detect workflow coaching"
+else
+  echo "  PASS  intent-detect contains only endpoint and repository context"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$HOOKS_DIR/intent-detect.sh" "PR-CONTEXT" "intent-detect injects PR-number branch context"
 run_content_eval "$HOOKS_DIR/intent-detect.sh" "SCOPE-LOCK" "intent-detect injects feature-branch scope lock"
 
@@ -69,7 +75,8 @@ rm -f "$_eval_stderr"
 # ── CLAUDE.md: imperative lifecycle language ────────────────────
 
 run_content_eval "$REPO_ROOT/CLAUDE.md" "## Work" "CLAUDE.md keeps a compact work contract"
-run_content_eval "$REPO_ROOT/CLAUDE.md" 'Use `/development-lifecycle`' "CLAUDE.md points to progressive lifecycle guidance"
-run_content_eval "$REPO_ROOT/CLAUDE.md" 'meaningful behavior RED -> GREEN -> REFACTOR' "CLAUDE.md scopes TDD to meaningful behavior"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "outcome contract" "CLAUDE.md defines the high-level work contract"
+run_content_eval "$REPO_ROOT/CLAUDE.md" 'Meaningful behavior starts with' "CLAUDE.md scopes TDD to meaningful behavior"
+run_content_eval "$REPO_ROOT/CLAUDE.md" 'failing public-contract test' "CLAUDE.md requires a failing public-contract test"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "CLAUDE.md starts with the smallest design"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/commit-push" "CLAUDE.md mandates /commit-push in ship phase"

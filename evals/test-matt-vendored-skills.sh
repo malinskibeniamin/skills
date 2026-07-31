@@ -113,27 +113,30 @@ run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" "smell baseline" "review carries Fowler smell baseline"
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" "Mysterious Name" "review baseline includes Mysterious Name"
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" "Speculative Generality" "review baseline includes Speculative Generality"
-run_content_eval "$REPO_ROOT/review/REFERENCE.md" "repo standard always wins|repo overrides" "review baseline defers to repo standards"
+run_content_eval "$REPO_ROOT/review/REFERENCE.md" "standard always wins|repo overrides" "review baseline defers to repo standards"
 
-# Latest Matt vendoring: review orchestrates local review suite.
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/visual-review" "review invokes visual-review for user-facing surfaces"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/resilience-review" "review invokes resilience-review for unhappy paths"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Standards.*Spec" "review keeps standards and spec axes"
-# review: evidence-triggered hat panel (default for PR reviews) + quick/deep modes
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Core pass" "review defines the always-on core pass"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Hat panel" "review defaults to the hat panel for PR reviews"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "one bounded, foreground, awaited different-family" "review offers a bounded cross-family pass"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "No silent skips" "review hats skip only with diff evidence"
+# Latest harness adaptation: review retains upstream evidence depth without orchestration ceremony.
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Customer-facing UI/CLI/report" "review detects user-facing surfaces"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Security/privacy/data loss" "review detects credible high-impact failures"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "standards separate from product/spec" "review keeps standards and spec axes separate"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "inspect -> verify -> classify -> synthesize" "review defines one evidence loop"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "surface-specific scrutiny only when the diff supplies evidence" "review depth is evidence-triggered"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Do not edit, commit, push" "review stays diagnostic"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep release-audit mode"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Never invoke /review recursively" "review forbids recursive invocation"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Max 3 findings" "adversarial question stays bounded"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "dedupe by root cause" "review dedupes across lanes by root cause"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "complete applicability ledger" "deep review accounts for every surface"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "could still be wrong if tests pass" "review keeps an adversarial question"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Deduplicate by root cause" "review deduplicates findings"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "semantic density" "review evaluates change value directly"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "No performance finding without measurement" "review rejects unsupported value claims"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "No edge-case finding" "review filters hypothetical defects"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "Deep-mode review reference" "deep-audit reference exists"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Value gate" "review includes value gate"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "Major improvement" "review quantifies major improvement"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "value score HIGH" "review scores PR value"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/steelman" "review uses steelman when value is unclear"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "low-value" "review filters low-value PRs"
+if grep -qE '/visual-review|/resilience-review|/steelman|Hat panel|different-family' "$REPO_ROOT/review/SKILL.md"; then
+  echo "  FAIL  review retains orchestration chains"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: review orchestration chains remain"
+else
+  echo "  PASS  review retains no orchestration chains"
+  PASS=$((PASS + 1))
+fi
 
 # Latest Matt vendoring: wayfinder.
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "map is an .*index" "wayfinder map is an index"

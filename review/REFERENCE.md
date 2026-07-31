@@ -1,104 +1,84 @@
 # Review reference
 
-Detailed rules for `/review`. `SKILL.md` is the routing contract; this file holds longer schema and examples.
+Detailed output rules for `/review`. The skill owns the evidence loop; this file keeps the
+priority vocabulary, smell baseline, and comment shape out of the default context.
 
-## PR comment priority policy
+## Priority and comment policy
 
-Use exactly one priority label on every posted or comment-ready finding:
+Use one priority label on every finding:
 
 | Label | Meaning | Merge rule |
 |---|---|---|
-| P0 Blocker | Crash, data loss, security/privacy exposure, corrupt state, outage, impossible core flow, or entirely missing required behavior | Block merge |
-| P1 Major | Normal-user defect, regression, broken contract/spec, fake success, major accessibility failure, or high-risk edge | Block unless owner override |
-| P2 Minor | Clear contained edge case, maintainability, performance, observability, or test gap | Fix or track |
-| P3 Patch | Optional polish or tiny cleanup | Summary-only by default |
-| P3 Future | Valid follow-up for another PR or later cleanup | Summary-only by default |
+| P0 Blocker | Security/privacy exposure, data loss, outage, impossible core flow, or entirely missing required behavior | Block |
+| P1 Major | Normal-user defect, regression, broken contract/spec, false success, or major accessibility failure | Block unless owner overrides |
+| P2 Minor | Clear contained lower-impact defect or test gap | Fix or track |
+| P3 Future | Optional polish or later cleanup | Summary only by default |
 
-Every confirmed bug is P0 or P1. If a bug is diagnosed and reproduced, post it inline with the matching P0/P1 priority. Do not demote a bug because the fix is small.
+A reproduced normal-user bug is at least P1. Do not lower priority because the correction
+is small. Place a comment on the tightest changed line that introduces the defect; when no
+accurate inline location exists, return a top-level comment-ready item and explain why.
 
-## Targeting PR comments
+Post only when explicitly requested. Resolve the target in this order: explicit PR URL or
+number, open PR for the current branch, then comment-ready output. Never post while still
+investigating or dump the entire review into a PR.
 
-Resolve the PR target in order:
-
-1. Explicit PR URL or number from the user.
-2. PR targeted by the skill invocation.
-3. Open PR for the current branch.
-4. If none or ambiguous, emit comment-ready output instead.
-
-Post comments only after all hats finish and findings are merged and deduped. Never comment during individual hats.
-
-Place comments on the tightest changed file/range introducing the issue. Prefer the exact changed line. If the exact line is outside the diff, use the nearest changed line with context. If no accurate inline location exists, produce a top-level comment-ready item and explain why inline placement is unsafe.
-
-## Comment template
-
-Use this shape for posted and comment-ready items:
+## Comment shape
 
 ```md
 [P1 Major] <short title>
-What: <one sentence about the defect>
-Why: <production/user impact>
-Suggested fix: <specific change>
-One-shot prompt: In <repo> on <branch>, update <file:range> to <exact request>, then run <safe verify command>.
+What: <the defect and concrete execution path>
+Why: <user or contract consequence>
+Suggested fix: <smallest safe correction>
+Verify: <exact command or real-entrypoint replay>
 ```
-
-If no safe one-shot prompt exists, say why in one sentence.
 
 ## Fowler smell baseline
 
-Use this smell baseline on every Standards review, even when the repo has little written guidance. A documented repo standard always wins; where the repo endorses a shape, suppress the smell. Treat smells as judgement calls, not hard violations, and skip anything tooling already enforces.
+Use this as judgment support for semantic density, not a quota. A documented repository
+standard always wins; skip anything deterministic tooling already owns.
 
-- **Mysterious Name** -- a function, variable, or type whose name does not reveal its role. Fix: rename; if no honest name exists, the design is murky.
-- **Duplicated Code** -- the same logic shape appears in more than one hunk or file. Fix: extract the shared shape only when both sites are real.
-- **Feature Envy** -- code reaches into another object more than its own data. Fix: move behavior to the data it envies.
-- **Data Clumps** -- the same fields or params travel together. Fix: bundle them into one type.
-- **Primitive Obsession** -- a primitive or string stands in for a domain concept. Fix: give the concept a small type.
-- **Repeated Switches** -- repeated branching on the same type. Fix: one map, polymorphism, or one central decision point.
-- **Shotgun Surgery** -- one logical change scatters edits. Fix: gather what changes together.
-- **Divergent Change** -- one module changed for unrelated reasons. Fix: split responsibilities.
-- **Speculative Generality** -- abstraction, options, or hooks for needs the spec does not have. Fix: delete or inline until the need is real.
-- **Message Chains** -- caller navigates through a long object chain. Fix: hide the walk behind one method.
-- **Middle Man** -- wrapper mostly delegates. Fix: call the real target.
-- **Refused Bequest** -- subtype ignores inherited contract. Fix: prefer composition.
+- **Mysterious Name**: the name does not reveal the role.
+- **Duplicated Code**: the same real logic exists in multiple places.
+- **Feature Envy**: behavior reaches into another object more than its own data.
+- **Data Clumps**: the same related fields travel together repeatedly.
+- **Primitive Obsession**: a primitive stands in for a domain concept.
+- **Repeated Switches**: the same type decision is scattered.
+- **Shotgun Surgery**: one logical change requires unrelated edits across modules.
+- **Divergent Change**: one module changes for unrelated reasons.
+- **Speculative Generality**: abstraction or options exist for unproven needs.
+- **Message Chains**: a caller walks deep object structure.
+- **Middle Man**: a wrapper mostly delegates without adding a contract.
+- **Refused Bequest**: a subtype does not honor the inherited contract.
 
 ## Report schema
 
 ```md
 ## Review
-Fixed point: <fixed>
+Fixed point: <commit>
 Diff: `git diff <fixed>...HEAD`
-Lanes: core | <triggered lanes with status> | <skipped lanes with one-line evidence> | Mode: standard|deep
+Mode: standard | deep
+Applicability: <changed surfaces and evidence checked>
+Verification: <commands, real-entrypoint replay, and exact limits>
 
-## Standards
-<findings or pass>
-
-## Spec
-<findings, pass, or no spec available>
-
-## Local review gates
-Thermo nuclear review: pass|findings|skipped: <reason>; Resilience review: pass|findings|skipped; Regular review: pass|findings; Adversarial review: pass|findings; Visual review: pass|findings|skipped; Test/perf review: pass|findings|skipped; Security/privacy triage: pass|findings|skipped.
-
-## PR value gate
-Major improvement: <quantified claim, beneficiary, evidence, delta>
-Value score: HIGH|MEDIUM|LOW|NONE
-Steelman: not needed | ran: <confirmed value | mixed | low-value>
-Gate: pass | low-value | blocked pending override
+## Findings
+- [P0|P1|P2] <file:line> <title>
+  Evidence: <reproduction or concrete path>
+  Consequence: <user or contract impact>
+  Correction: <smallest safe fix>
+  Verify: <command or replay>
 
 ## Summary
-What's working: <1-3 concise bullets about verified strengths>
-Needs attention: <P0/P1/P2 counts and highest-impact risks>
-Follow-ups: <P3 Patch/Future items, skipped lanes, evidence gaps>
-
-## PR comments
-Posted: <count> | Comment-ready fallback: <count> | Skipped as summary-only: <count>
-- [P0 Blocker|P1 Major|P2 Minor|P3 Patch|P3 Future] <file:line> <title> -- <posted|comment-ready|summary-only>
+Counts: <P0/P1/P2>
+Verdict: approve | changes required | blocked by missing evidence
+Residual limits: <unverified external behavior or none>
 ```
 
 ## Example inline comment
 
 ```md
-[P1 Major] Mutation reports success before cache refresh
-What: The save handler resolves before the list query is invalidated.
-Why: Normal users can return to stale data and believe their change was lost.
-Suggested fix: Await the invalidation before showing the success state.
-One-shot prompt: In malinskibeniamin/skills on codex/example, update src/items/save.ts:42-47 to await query invalidation before success, then run `bun test src/items/save.test.ts`.
+[P1 Major] Save reports success before refresh
+What: The handler resolves before list invalidation, so navigation can show stale data.
+Why: A normal user can believe the saved change was lost.
+Suggested fix: Await invalidation before the success state.
+Verify: `bun test src/items/save.test.ts`
 ```

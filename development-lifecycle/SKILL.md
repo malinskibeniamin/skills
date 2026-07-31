@@ -1,97 +1,73 @@
 ---
 name: development-lifecycle
-description: "Run frontend work from understanding through TDD and shipping. Use for React, TypeScript, or UI implementation."
+description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
-# Development Lifecycle
+# Development lifecycle
 
-Auto-detect phase, guide process.
+Own one outcome and keep working until evidence proves it or a real blocker appears.
 
-If the user says "plow ahead", "do not stop", "use your best judgment", "keep going until done", or similar, use `/plow-ahead` as the autonomy contract: make reversible assumptions, continue through routine ambiguity, and stop only for true blockers.
+## Outcome contract
 
-## Phases
+Before editing, extract four things from the request and repository:
 
-### 0. Worktree (automatic, silent if already isolated)
+- **Objective**: the high-level end state.
+- **Guardrails**: non-inferable repository constraints, user-reserved decisions, and
+  irreversible boundaries.
+- **Verification**: executable checks or observable behavior that distinguish done from
+  plausible.
+- **Stop**: the requested endpoint and conditions that genuinely require the user.
 
-Feature branch? Skip. On main/master/develop? Spawn worktree before code. [ETHOS: Worktree Isolation]
+Do not expand this into predicted code or a long procedure. A well-scoped build, fix, or
+implementation request authorizes execution: state the compact contract and continue immediately.
 
-    scripts/mux-worktree.sh <type>/<branch-name>
+## Execution loop
 
-Claude invoke silent when phase 1 start on default branch. User never run.
+**inspect -> act -> verify -> repeat.**
 
-### 1. Understand
+### Inspect
 
-- Start with the **blind spot**: what are we assuming, what has not been observed, and
-  which unknown could invalidate the approach?
-- Resolve facts from code, tests, logs, docs, and rich references. Prefer executable
-  examples, fixtures, rubrics, prototypes, and neighboring implementations over another
-  prose summary.
-- Classify each remaining unknown as lookup, prototype, reversible assumption, or pause
-  trigger. Ask the user only for a decision that materially changes the result.
-- New decision -> 2-3 approaches + tradeoffs. Bug -> failing test -> root cause.
-- A well-scoped build/fix/implement request approves execution. State the approach, then continue immediately; do not manufacture an approval stop.
-- One primary model is the single owner. Do not spawn agents, background research, or a recursive model call unless the user explicitly requests delegation or invokes `/swarm`.
-- Mixed patterns area? Reuse the pattern required by this task; report broader convergence separately.
-- Stay inside the requested acceptance criteria. Report adjacent cleanup separately unless it blocks the requested behavior.
+- Find the blind spot most likely to invalidate the approach.
+- Read code, tests, logs, current docs, and neighboring examples. Prefer executable
+  evidence over another prose summary.
+- Resolve the most volatile unknown first. Classify the rest as lookup, prototype,
+  reversible assumption, or pause trigger.
+- Match existing idiom and demonstrated scale. Load specialist guidance only when the
+  observed task enters its distinct domain.
 
-### 2. Plan
+### Act
 
-- Plan the most **volatile** or falsifiable slice first; stable mechanical work follows.
-- Give exact paths, behavior, evidence, and acceptance checks where they reduce
-  ambiguity. Do not predict every line of code before discovery.
-- Start with the smallest obvious design. Name what can be deleted, reused, or left unbuilt.
-- Use current requirements and demonstrated scale. Do not add machinery for hypothetical growth.
-- Run `/quantify-impact` when a direct, decision-useful metric exists; lock the base, metric, guardrail, scenario, and worthwhile delta before coding.
-- Run `/resilience-review` only when credible failure could cause data loss, security/privacy harm, irreversible action, broken contracts, or a likely user dead end.
-- When `/grilling` applies, let its evidence select quick, standard, or deep-risk
-  review. Deep-risk includes the resilience pass above; standard keeps the smaller
-  engineering Murphy pass.
-- Bite-sized tasks (2-5 min each)
-- UI work: prototype alternatives only when the user requests exploration or a material
-  visual direction is unresolved.
-- Large PR/ship scope may propose stacked PRs; never create extra PRs without approval.
-- For long or high-unknown work, create gitignored
-  `.context/implementation-notes.md` with: current hypothesis, observed evidence,
-  deviations, reversible assumptions, and pause triggers. Short work stays in context.
+- One primary model is the single owner. Delegation and persistent background work require
+  explicit user authorization.
+- Start with the smallest obvious change. Delete or reuse before adding machinery.
+- For bugs and meaningful behavior, use TDD at the public contract: RED -> smallest GREEN
+  -> REFACTOR. Do not manufacture tests for static wiring or behavior-preserving deletion.
+- Let findings revise the approach. Re-plan the affected slice instead of obeying a stale
+  prediction.
+- Stay within the objective. Adjacent cleanup is a report unless it blocks verification.
 
-### 2b. Grill
+### Verify
 
-- Invoke `/grilling` when the user requests planning/grilling or an unresolved architectural, product, or UX decision would materially change the result.
-- Ordinary build/fix/implement work skips this stop gate and continues immediately after its concise plan.
-- When invoked: gather one evidence packet | select the tier | run required axes inline |
-  settle architecture-changing decisions | classify remaining unknowns | update
-  CONTEXT.md + ADRs only when durable domain knowledge crystallizes
-- Update plan with changes | get explicit user confirmation
+- Run the repository's applicable tests, types, lint, build, and static checks.
+- Exercise material behavior through its real entrypoint. Check intended use and one
+  credible failure or recovery path.
+- Review the result against the objective, guardrails, and credible risk. Verification is
+  evidence, not a checklist receipt.
+- A failure becomes the next action. Repair and repeat until every exit criterion passes.
 
-### 3. Implement
+## Boundaries
 
-- **Single owner**: the primary model implements the approved or well-scoped plan inline.
-- Do not auto-route to `/swarm`, background agents, paired implementation, or recursive `/codex`. Explicit user delegation is required.
-- Bugs and meaningful behavior: RED public-contract test -> smallest GREEN implementation -> REFACTOR.
-- Trivial types, wiring, static copy/styles, and behavior-preserving deletion need focused verification, not manufactured tests.
-- Before adding code: delete, reuse existing code, use the language/platform, then write the smallest clear local expression.
-- Every branch, helper, file, option, and dependency must carry required behavior, clarify the domain, or address a credible risk.
-- Never weaken an existing behavior test merely to make GREEN.
-- REFACTOR while green | no `setTimeout` hacks | run `--detectAsyncLeaks`
-- After a material runnable increment is green and clean, run `/dogfood` before relying
-  on it; observed defects re-enter RED, then repair and replay.
-- When evidence contradicts the plan, record the deviation (for long work), revisit the
-  nearest affected decision, and re-plan that slice. Do not obey a stale plan.
+- Ask only for a material user-reserved decision or an irreversible production,
+  legal/privacy, destructive, or high-security action.
+- Never merge, force-push, create extra PRs, or broaden the endpoint without permission.
+- On main/master/develop before code, create an isolated worktree with
+  `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Worktree Isolation]
+- Long or high-unknown work may record the current hypothesis, evidence, deviations, and
+  pause triggers in gitignored `.context/implementation-notes.md`. Short work stays in
+  conversation.
 
-### 4-6. Ship when requested -- `/go`
+## Completion
 
-Run only for a PR/ship endpoint. Local build/fix/implement stops after focused verification.
-
-- **4. Verify** -- types + lint + tests + final `/dogfood`
-- **4b. Review / Refine** -- inline self/adversarial review plus one awaited cross-model review for non-trivial PR/ship work
-- **5. Ship** -- `/commit-push-pr` -> one bounded foreground review
-- **5b. Iterate** -- monitor CI -> `/resolve-pr-feedback` -> AI self-review: up to 2 rounds, early-exit on clean; human review: address ALL (hook-enforced)
-- **6. Compound** -- codify lessons as `.claude/rules/`
-
-See `/go` skill full details. See [REFERENCE.md](REFERENCE.md) phase-specific checklists.
-
-## Phase selection
-
-Questions return answers. Local implementation ends after verification. PR requests run
-verify -> `/commit-push-pr` -> one CI snapshot; `/go` owns the full delivery loop.
-Full flowchart: [REFERENCE.md#phase-flowchart](REFERENCE.md#phase-flowchart).
+Stop at the requested endpoint: answer, verified local change, commit, push, PR, or full
+ship. Do not stop merely because a planned step finished. See [REFERENCE.md](REFERENCE.md)
+only when a concrete verification or delivery branch needs its detailed commands.
