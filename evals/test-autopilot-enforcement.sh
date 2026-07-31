@@ -69,7 +69,7 @@ rm -f "$_eval_stderr"
 # ── CLAUDE.md: imperative lifecycle language ────────────────────
 
 run_content_eval "$REPO_ROOT/CLAUDE.md" "## Work" "CLAUDE.md keeps a compact work contract"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Use `/development-lifecycle`" "CLAUDE.md points to progressive lifecycle guidance"
+run_content_eval "$REPO_ROOT/CLAUDE.md" 'Use `/development-lifecycle`' "CLAUDE.md points to progressive lifecycle guidance"
 run_content_eval "$REPO_ROOT/CLAUDE.md" 'meaningful behavior RED -> GREEN -> REFACTOR' "CLAUDE.md scopes TDD to meaningful behavior"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "CLAUDE.md starts with the smallest design"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/commit-push" "CLAUDE.md mandates /commit-push in ship phase"

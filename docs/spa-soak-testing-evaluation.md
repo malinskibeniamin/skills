@@ -1,7 +1,7 @@
 # SPA Soak Testing Evaluation
 
-**Date:** 2026-07-31  
-**Status:** Adopt with corrections  
+**Date:** 2026-07-31
+**Status:** Adopt with corrections
 **Source article:** [Your SPA Is Leaking Memory. Soak Test It](https://denodell.com/blog/your-spa-is-leaking-memory-soak-test-it)
 
 ## Verdict

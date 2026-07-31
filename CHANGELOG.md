@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.34.0
+
+2026-07-31 -- Publish the post-4.33 Claude Code and Codex bundle. This release expands React Doctor coverage to the full applicable rule surface, makes dogfood and AIP review lanes mandatory when relevant, corrects React Compiler memoization and referential-stability guidance, and adds SPA soak-testing practices. The reliability slice adds an explicit `/release` workflow, a real isolated Claude Code plugin installation test alongside Codex coverage, and installation diagnostics for stale Claude/Codex plugins and pinned Codex marketplace refs. It also fixes the SPA soak documentation whitespace regression that broke main CI. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.34.0.
+
 ## 4.33.0
 
 2026-07-29 -- Publish the post-4.32 Claude Code and Codex bundle. This release adds `/dogfood` with PR-aware experiential verification, `/postgresql`, and `/quantify-impact`; makes lifecycle completion endpoint-aware and planning/review risk-tiered; adopts leaner TDD and skill guidance; updates Opus 5 and Fable routing; and adds Codex installer coverage plus hook correctness fixes. It packages `/dogfood` for both runtimes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.33.0.

@@ -31,10 +31,11 @@ rtk trust            # approve .rtk/filters.toml per project
 
 Harness fail-open -- skip safe; SessionStart nudge remind if miss.
 
-**Update** (pull latest):
+**Update** (refresh the catalog, then pull latest):
 
 ```bash
-/plugin install frontend-skills --force
+claude plugin marketplace update skills
+claude plugin update frontend-skills@skills
 ```
 
 Restart Claude Code session so hooks reload from new cache.
@@ -42,7 +43,11 @@ Restart Claude Code session so hooks reload from new cache.
 **Verify:**
 
 ```bash
-bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)scripts/verify-install.sh"
+CLAUDE_PLUGIN_ROOT="$(
+  claude plugin list --json |
+    jq -er '.[] | select(.id == "frontend-skills@skills" and .enabled) | .installPath'
+)"
+bash "$CLAUDE_PLUGIN_ROOT/scripts/verify-install.sh" --remote origin
 ```
 
 **Codex (OpenAI)** -- install as a Codex plugin from the repo's marketplace manifest:
@@ -51,7 +56,7 @@ bash "$(ls -d ~/.claude/plugins/cache/skills/frontend-skills/*/ | tail -1)script
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.33.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.34.0
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
