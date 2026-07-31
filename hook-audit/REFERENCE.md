@@ -12,7 +12,7 @@
 
 - Median first edit to PR.
 - CI first-run pass rate.
-- Sessions that wrote code without the lifecycle grill marker.
+- Sessions ending without a classified endpoint or outcome.
 - Review rounds per change.
 - Human comment to resolved-thread latency.
 - Active worktrees; sustained counts above four require inspection.
@@ -20,8 +20,23 @@
 ## Skill firing
 
 Read `~/.claude/hook-metrics/skill-fires.jsonl`. A model-invoked skill with no firing
-evidence may have a weak description or no remaining value. Inspect both before proposing
-deletion. High-fire skills are candidates for more tuning.
+evidence is not automatically dead: first establish that comparable tasks presented a
+real opportunity for the skill. Inspect its description and distinct knowledge before
+proposing deletion. High-fire skills are candidates for more tuning, not automatic
+promotion into ambient context.
+
+Only use `run_kind: real` records for production-retention claims. Compare records from
+the same `harness_version` and `model`; missing or `unknown` qualifiers cannot support a
+prune decision. Synthetic and eval runs are useful for controlled shadow trials, not
+adoption counts.
+
+## Shadow trials
+
+Set `HOOK_SHADOW_RULES` to a comma-separated list of non-strict rule labels. Shadowed
+rules log `shadow-block`, `shadow-warn`, or `shadow-nudge` without steering the model.
+Compare equivalent tasks on the same model and harness version, then retain the rule only
+when it improves outcomes enough to justify its latency and prompt interference. Strict
+safety and permission checks stay enforced.
 
 ## Codex records
 
@@ -30,6 +45,7 @@ SessionEnd per-hook metrics, so empty hook maps are missing data, not silent-hoo
 
 ## Session summaries
 
-Schema v3 summaries carry a stable hashed `session_id`, requested `endpoint`, and terminal
-`outcome`. Group by the hash; never reconstruct or expose the raw provider session ID. Treat
-`unknown` endpoints and `ended` outcomes as missing classification, not success.
+Schema v4 summaries carry a stable hashed `session_id`, requested `endpoint`, terminal
+`outcome`, harness version, model, and run kind. Group by the hash; never reconstruct or
+expose the raw provider session ID. Treat `unknown` qualifiers and `ended` outcomes as
+missing classification, not success.

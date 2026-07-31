@@ -43,10 +43,18 @@ End action turns with exactly one status line:
 
 ## Work
 
-Use `/development-lifecycle`: discover blind spots, plan volatile unknowns first,
-implement meaningful behavior RED -> GREEN -> REFACTOR, then verify. `/go` owns the ship
-tail. Long or high-unknown work may keep deviations and pause triggers in the gitignored
-`.context/implementation-notes.md`; short work stays in conversation.
+For action work, establish one outcome contract:
+
+- **Objective** -- the end state, stated at a high level.
+- **Guardrails** -- only non-inferable constraints and reserved decisions.
+- **Verification** -- tests, commands, or observable behavior that prove the result.
+- **Stop** -- the requested endpoint and conditions that genuinely block progress.
+
+Then inspect -> act -> verify -> repeat. Let evidence choose the plan, tools, and any
+specialist guidance. Continue immediately through reversible decisions; do not insert
+approval gates, fixed task durations, or skill ceremonies. Meaningful behavior starts with
+a failing public-contract test. Long or high-unknown work may record evidence, deviations,
+and pause triggers in gitignored `.context/implementation-notes.md`.
 
 Model selection is data-driven in `config/model-routing.json`; `/efficient-frontier`
 applies it. Quality wins. Do not invent capability rankings or infer subscription usage

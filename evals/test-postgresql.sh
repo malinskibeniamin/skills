@@ -53,7 +53,7 @@ run_content_eval "$MIGRATIONS" "push.*production|production.*push" "generated mi
 run_content_eval "$SCHEMA" "relation.*metadata.*constraint|application.*relations.*database.*constraints" "schema guidance separates relation metadata from database constraints"
 run_content_eval "$SQL_AUTHORING" "raw.*injection|injection.*raw" "SQL guidance treats raw fragments as an injection boundary"
 run_content_eval "$TRANSACTIONS" "outer.*database|read.after.write|transaction handle" "transaction guidance prevents abstraction escape"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "postgresql" "review panel routes PostgreSQL changes"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "SQL/PostgreSQL.*actual dialect" "review scrutinizes PostgreSQL changes when evidenced"
 run_content_eval "$REPO_ROOT/scripts/generate-skill-catalog.sh" '"postgresql"' "catalog generator knows postgresql"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./postgresql/"' "Claude plugin registers postgresql"
 

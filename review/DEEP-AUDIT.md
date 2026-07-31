@@ -1,6 +1,7 @@
 # Deep-mode review reference (release audit)
 
-Inspired by Cursor Team Kit's maintainability-review skill (https://github.com/cursor/plugins/blob/3347cbab5b54136f6fba0994c3a01a56f7fb7fca/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md), but rewritten for this frontend skills harness and Codex-style multi-agent review.
+Adapted from Cursor Team Kit's maintainability-review posture for a single-owner,
+evidence-driven frontend harness audit.
 
 ## Posture
 
@@ -29,9 +30,9 @@ Check the project rules before commenting:
 - Tests: failing test first, `userEvent.setup()`, `getByRole`, `waitFor`, behavior over implementation, warning-free output.
 - Harness integrity: `skill-manifest.json` is source of truth; check generated config drift, executable hooks, `_hook-lib.sh`, and quality scripts before blaming agents.
 
-## Reviewer output schema
+## Finding evidence schema
 
-Use `agents/references/findings-schema.md` fields when possible. Each reviewer records checked inputs and artifacts before findings. Minimum finding:
+Record checked inputs and artifacts before findings. Minimum finding:
 
 ```json
 {
@@ -65,16 +66,20 @@ If unsure, prove lower severity with evidence; otherwise bias upward for importa
 
 - Base SHA/branch and diff summary.
 - Spec, standards, and PR feedback sources.
-- Per-reviewer statuses and skipped-axis reasons.
+- Applicable-surface statuses and evidence-based skip reasons.
 - Exact test/type/lint commands and results.
-- UI/customer-facing changes: `/visual-review` matrix, screenshots or terminal artifacts, environment fingerprint.
-- Credible high-impact failure surfaces: `/resilience-review` evidence and the smallest RED contract test.
+- UI/customer-facing changes: rendered evidence matrix, screenshots or terminal artifacts, environment fingerprint.
+- Credible high-impact failure surfaces: failure-path evidence and the smallest RED contract test.
 - Security/dependency changes: scan or explicit skip reason.
 - Performance-sensitive changes: bundle/profile/trace evidence or explicit skip reason.
 
 ## PR comments
 
-Run many lenses, comment few findings. Priority labels: blocker, major, minor, nit, follow-up for other PR. Map P0->blocker, P1->major, P2->minor or follow-up, P3->nit. Inline PR comments only for blocker/major or high-confidence, actionable minor with tight file/line, evidence, impact, and concrete fix. Comment template: What, Why, Suggested fix, One-shot prompt. One-shot prompt must be a copy-pasteable fix request when possible; include repo, branch, file, exact change, and verify command. Otherwise say why no safe one-shot exists. Put evidence gaps, skipped lanes, speculative architecture concerns, and duplicate root causes in the top-level summary. Do not post style nits unless they hide a P2+ risk.
+Inspect every applicable surface, but comment only distinct findings. Inline PR comments are
+for P0/P1 or high-confidence, actionable P2 issues with a tight file/line, evidence,
+impact, and concrete correction. Put evidence gaps, skipped surfaces, speculative concerns,
+and duplicate root causes in the top-level summary. Do not post style nits unless they
+hide a P2+ risk.
 
 ## Approval bar
 

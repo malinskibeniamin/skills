@@ -110,7 +110,7 @@ _hook_skip_or_exit() {
 _hook_log_file="$_hook_session_dir/structured.jsonl"
 
 _hook_log_entry() {
-  local decision="$1" rule="$2" hook="${3:-${_hook_current_check:-$(basename "$0" .sh)}}"
+  local decision="$1" rule="$2" hook="${3:-${_hook_current_check:-$(basename "$0" .sh)}}" ms="${4:-}"
   local target="${file_path:-}"
   # Strip repo root for privacy — store relative path only
   if [ -n "$target" ]; then
@@ -118,9 +118,27 @@ _hook_log_entry() {
     root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     target="${target#"$root"/}"
   fi
-  printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s"}\n' \
-    "$(date +%s)" "$hook" "$rule" "$decision" "$target" \
-    >> "$_hook_log_file" 2>/dev/null || true
+  if [ -n "$ms" ]; then
+    printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s","ms":%d}\n' \
+      "$(date +%s)" "$hook" "$rule" "$decision" "$target" "$ms" \
+      >> "$_hook_log_file" 2>/dev/null || true
+  else
+    printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s"}\n' \
+      "$(date +%s)" "$hook" "$rule" "$decision" "$target" \
+      >> "$_hook_log_file" 2>/dev/null || true
+  fi
+}
+
+# Comma-separated, explicit rule holdouts for model-release trials. A shadowed
+# rule records what it would have emitted but never steers or blocks the model.
+# Strict safety/permission tiers do not call this helper and cannot be shadowed.
+_hook_rule_shadowed() {
+  local rule="$1" configured=",${HOOK_SHADOW_RULES:-},"
+  [ "$configured" != ",," ] || return 1
+  case "$configured" in
+    *,"$rule",*) return 0 ;;
+    *) return 1 ;;
+  esac
 }
 
 # ── Bash token-drain log (persistent, cross-session) ────────────
@@ -969,6 +987,11 @@ hook_nudge() {
   msg=$(_hook_cap_msg "$1")
   local rule="${2:-$(_hook_default_rule)}"
   _hook_debug "NUDGE [$rule]: $msg"
+  if _hook_rule_shadowed "$rule"; then
+    _hook_log_entry "shadow-nudge" "$rule"
+    if [ "${HOOK_COLLECT:-0}" = "1" ]; then return 0; fi
+    exit 0
+  fi
   _hook_track_violation "$rule"
   _hook_log_entry "nudge" "$rule"
   if [ "${HOOK_COLLECT:-0}" = "1" ]; then
@@ -1023,6 +1046,11 @@ hook_block() {
   msg=$(_hook_cap_msg "$1")
   local label="${2:-$(_hook_default_rule)}"
   _hook_debug "BLOCK [$label]: $msg"
+  if _hook_rule_shadowed "$label"; then
+    _hook_log_entry "shadow-block" "$label"
+    if [ "${HOOK_COLLECT:-0}" = "1" ]; then return 0; fi
+    exit 0
+  fi
   _hook_track_violation "$label"
   _hook_log_entry "block" "$label"
   if [ "${HOOK_COLLECT:-0}" = "1" ]; then
@@ -1046,6 +1074,11 @@ hook_warn() {
   msg=$(_hook_cap_msg "$1")
   local label="${2:-$(_hook_default_rule)}"
   _hook_debug "WARN [$label]: $msg"
+  if _hook_rule_shadowed "$label"; then
+    _hook_log_entry "shadow-warn" "$label"
+    if [ "${HOOK_COLLECT:-0}" = "1" ]; then return 0; fi
+    exit 0
+  fi
   _hook_track_violation "$label"
   _hook_log_entry "warn" "$label"
   if [ "${HOOK_COLLECT:-0}" = "1" ]; then

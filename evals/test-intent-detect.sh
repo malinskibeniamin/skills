@@ -1,118 +1,74 @@
-# Intent detection: risk tier and directive tests
+# Intent detection records endpoint and repository facts without workflow coaching.
 
-SHARED_DIR="$REPO_ROOT/shared"
-INTENT_SCRIPT="$SHARED_DIR/intent-detect.sh"
+INTENT_SCRIPT="$REPO_ROOT/shared/intent-detect.sh"
 
 run_file_eval "$INTENT_SCRIPT" "intent-detect.sh exists"
 run_executable_eval "$INTENT_SCRIPT" "intent-detect.sh is executable"
+run_content_eval "$INTENT_SCRIPT" "ENDPOINT:" "intent detection exposes the requested endpoint"
+run_content_eval "$INTENT_SCRIPT" "PR-CONTEXT" "intent detection exposes an explicit PR identity"
+run_content_eval "$INTENT_SCRIPT" "SCOPE-LOCK" "intent detection exposes current feature-branch state"
 
-# ── Risk tier: low-risk prompts emit NO risk tag ─────────────────
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"create a new component for settings"}' \
-  0 \
-  "low-risk prompt: no RISK tag emitted (component creation)"
-
-# Verify low risk does NOT contain RISK: tag
-_lr_stderr=$(mktemp)
-echo '{"hook_event_name":"UserPromptSubmit","prompt":"write a test for the auth hook"}' \
-  | "$INTENT_SCRIPT" 2>"$_lr_stderr" || true
-if grep -q 'RISK:' "$_lr_stderr"; then
-  echo "  FAIL  low-risk prompt should not emit RISK tag"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: low-risk prompt should not emit RISK tag"
+if grep -qE 'RISK:|\[BROWSER\]|\[CI-FIX\]|\[LIFECYCLE\]|\[TDD\]|quality:gate' "$INTENT_SCRIPT"; then
+  echo "  FAIL  intent detection contains prompt coaching"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: intent prompt coaching"
 else
-  echo "  PASS  low-risk prompt: no RISK tag (test writing)"
+  echo "  PASS  intent detection omits risk and workflow coaching"
   PASS=$((PASS + 1))
 fi
-rm -f "$_lr_stderr"
 
-# ── Risk tier: medium-risk prompts emit [RISK:medium] ───────────
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"fix the bug in auth middleware"}' \
-  0 \
-  "medium-risk prompt: bug fix emits RISK:medium" \
-  "RISK:medium"
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"debug why the page is not working"}' \
-  0 \
-  "medium-risk prompt: debug emits RISK:medium" \
-  "RISK:medium"
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"investigate the regression in login"}' \
-  0 \
-  "medium-risk prompt: regression emits RISK:medium" \
-  "RISK:medium"
-
-# ── Risk tier: high-risk prompts emit [RISK:high] ───────────────
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"create a PR for the auth changes"}' \
-  0 \
-  "high-risk prompt: create PR emits RISK:high" \
-  "RISK:high"
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"push the branch and deploy"}' \
-  0 \
-  "high-risk prompt: push+deploy emits RISK:high" \
-  "RISK:high"
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"run the migration on the database"}' \
-  0 \
-  "high-risk prompt: migration emits RISK:high" \
-  "RISK:high"
-
-# ── High overrides medium (prompt matches both) ─────────────────
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"fix the bug then create a PR"}' \
-  0 \
-  "compound prompt: high overrides medium" \
-  "RISK:high"
-
-# ── Dynamic directives work alongside risk (2026-07 audit: static
-# [TDD]/[REFACTOR]/[LIFECYCLE] restatements removed — CLAUDE.md owns them) ──
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"open a pr for this branch"}' \
-  0 \
-  "PR directive emitted for PR prompts" \
-  "[PR]"
-
-run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"UserPromptSubmit","prompt":"take a screenshot of localhost:3000"}' \
-  0 \
-  "BROWSER directive emitted for browser prompts" \
-  "[BROWSER]"
-
-# ── Non-matching prompts: no directives at all ──────────────────
-
-_empty_stderr=$(mktemp)
-_empty_tmp=$(mktemp -d /tmp/intent-empty-XXXXXX)
-(
-  cd "$_empty_tmp"
-  echo '{"hook_event_name":"UserPromptSubmit","prompt":"what does this function do"}' \
-    | "$INTENT_SCRIPT" 2>"$_empty_stderr" || true
-)
-if [ -s "$_empty_stderr" ]; then
-  echo "  FAIL  question prompt should emit nothing"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: question prompt should emit nothing"
-else
-  echo "  PASS  question prompt: no directives emitted"
+_sid="intent-eval-$$"
+_dir="/tmp/hook-session-${_sid}"
+rm -rf "$_dir"
+_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","prompt":"fix the auth regression","session_id":"intent-eval-'$$'"}' \
+  | CLAUDE_SESSION_ID="$_sid" "$INTENT_SCRIPT")
+if [ "$(cat "$_dir/task-endpoint" 2>/dev/null)" = "local" ] \
+  && printf '%s' "$_out" | jq -e '.hookSpecificOutput.additionalContext | contains("[ENDPOINT:local]")' >/dev/null 2>&1; then
+  echo "  PASS  local action records and emits only its endpoint"
   PASS=$((PASS + 1))
+else
+  echo "  FAIL  local action records and emits its endpoint"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: local endpoint context"
 fi
-rm -f "$_empty_stderr"
-rm -rf "$_empty_tmp"
 
-# ── Non-UserPromptSubmit event: exits cleanly ───────────────────
+touch "$_dir/task-completed"
+_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","prompt":"fix another auth regression","session_id":"intent-eval-'$$'"}' \
+  | CLAUDE_SESSION_ID="$_sid" "$INTENT_SCRIPT")
+if printf '%s' "$_out" | jq -e '.hookSpecificOutput.additionalContext | contains("[ENDPOINT:local]")' >/dev/null 2>&1; then
+  echo "  PASS  a completed task resets endpoint injection for the next task"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  completed task suppresses the next matching endpoint"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: endpoint reset between tasks"
+fi
+
+_pr_sid="intent-pr-eval-$$"
+_pr_dir="/tmp/hook-session-${_pr_sid}"
+rm -rf "$_pr_dir"
+_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","prompt":"create a draft PR","session_id":"intent-pr-eval-'$$'"}' \
+  | CLAUDE_SESSION_ID="$_pr_sid" "$INTENT_SCRIPT")
+if [ "$(cat "$_pr_dir/task-endpoint" 2>/dev/null)" = "pr" ] \
+  && printf '%s' "$_out" | jq -e '.hookSpecificOutput.additionalContext | contains("[ENDPOINT:pr]")' >/dev/null 2>&1; then
+  echo "  PASS  PR action records and emits only its endpoint"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  PR action records and emits its endpoint"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: PR endpoint context"
+fi
+
+_artifact_sid="intent-artifact-eval-$$"
+rm -rf "/tmp/hook-session-${_artifact_sid}"
+printf '%s' '{"hook_event_name":"UserPromptSubmit","prompt":"review this fix and report findings","session_id":"intent-artifact-eval-'$$'"}' \
+  | CLAUDE_SESSION_ID="$_artifact_sid" "$INTENT_SCRIPT" >/dev/null
+if [ ! -e "/tmp/hook-session-${_artifact_sid}/task-endpoint" ]; then
+  echo "  PASS  review artifact does not become action work"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  review artifact became action work"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: review artifact endpoint"
+fi
 
 run_hook_eval "$INTENT_SCRIPT" \
-  '{"hook_event_name":"PostToolUse","prompt":"fix the bug"}' \
-  0 \
-  "non-UserPromptSubmit event: exits 0 silently"
+  '{"hook_event_name":"PostToolUse","prompt":"fix the bug"}' 0 \
+  "non-UserPromptSubmit event exits cleanly"
+
+rm -rf "$_dir" "$_pr_dir" "/tmp/hook-session-${_artifact_sid}"

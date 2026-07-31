@@ -123,8 +123,8 @@ else
   PASS=$((PASS + 1))
 fi
 
-run_content_eval "$REPO_ROOT/go/SKILL.md" "/visual-review" "go skill wires visual-review"
-run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Visual Review Gate" "go reference documents visual-review gate"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "customer-facing surface" "go inspects changed visual surfaces"
+run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Browser/UI" "go reference documents visual verification evidence"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'require `/visual-review` result or explicit skip reason' "commit-push-pr requires visual-review or skip reason for frontend PRs"
 
 # ── Consolidated Web Weekly visual-review checklist ──────────────
@@ -200,7 +200,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Environment fingerprint" "PR evidenc
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Checked matrix" "PR evidence contract includes checked matrix"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Skip reasons" "PR evidence contract includes skip reasons"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Automation candidates" "PR evidence contract includes automation candidates"
-run_content_eval "$REPO_ROOT/go/REFERENCE.md" "PR evidence contract" "go reference points visual review output to PR evidence contract"
+run_content_eval "$REPO_ROOT/go/REFERENCE.md" "include verification and real-use evidence in the PR body" "go reference carries visual evidence into PR delivery"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "PR evidence contract" "commit-push-pr references visual review PR evidence contract"
 run_content_eval "$REPO_ROOT/docs/DEMOS.md" "/visual-review" "demos document standalone visual-review usage"
 
@@ -258,7 +258,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "asymmetric enter/exit timing" "visua
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Slop catalog expansion" "visual-review includes expanded slop catalog"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "flat type hierarchy.*AI color palette.*layout property animation" "visual-review slop catalog covers type color and motion smells"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Start warn-only" "visual-review recommends warn-only hook rollout"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "customer-facing surface diff" "go skill runs visual-review for customer-facing surfaces"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "rendered or terminal result" "go verifies customer-facing surfaces directly"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "customer-facing surface diff" "commit-push-pr requires visual-review for customer-facing surfaces"
 run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "customer-facing surface" "shared evidence reference covers customer-facing surfaces"
 run_content_eval "$REPO_ROOT/CONTEXT.md" "Customer-facing surface" "CONTEXT documents customer-facing surface term"

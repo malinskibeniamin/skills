@@ -13,4 +13,4 @@ run_content_eval "$REPO_ROOT/$SKILL/SKILL.md" "PR description|review notes" "mak
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/$SKILL" "ask-ben routes make-pr-easy-to-review"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/$SKILL" "generated catalog lists make-pr-easy-to-review"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "Do not run.*$SKILL.*unless the user explicitly requests" "commit-push-pr keeps make-pr-easy-to-review opt-in"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "Do not run.*$SKILL.*unless the user explicitly requests" "go keeps make-pr-easy-to-review opt-in"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "history-cleanup.*require.*explicit request" "go keeps history cleanup opt-in"

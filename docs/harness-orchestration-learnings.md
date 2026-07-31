@@ -12,20 +12,18 @@ No source repository was modified during research.
 
 ## High-leverage patterns
 
-### Goal contracts
+### Outcome contracts
 
-A long-running goal should be an execution contract, not a loose reminder.
+A long-running goal should be an outcome contract, not a loose reminder or a workflow
+script. Ordinary short tasks keep this in conversation.
 
 Recommended fields:
 
 - Objective.
-- Non-goals.
-- Acceptance criteria.
-- Verification commands.
-- Current phase.
-- Stop condition.
-- Blocked condition.
-- Artifact links, such as branch, task file, RFC, PR, and reviewed SHA.
+- Guardrails.
+- Verification.
+- Stop condition, including real blockers.
+- Artifact links when execution must survive a session boundary.
 
 The useful pattern is outcome-oriented goal text, for example: work item plus the exact end state that proves completion. The harness should keep driving until that state is reached or a blocked condition is met.
 
@@ -76,21 +74,11 @@ Do not infer async completion from weak signals like comment count, body length,
 
 This prevents both early exits and endless polling.
 
-### Review state machines
+### Review freshness
 
-Good review workflows separate these stages:
-
-1. Run review in read-only mode.
-2. Store review artifact locally.
-3. Classify verdict.
-4. Reproduce and verify findings.
-5. Fix root cause.
-6. Add regression test for accepted bugs.
-7. Re-run verification.
-8. Re-review only the relevant delta.
-9. Publish or update PR context.
-
-The key invariant: a clean review is only valid for the exact artifact it reviewed.
+Use one loop: inspect the fixed artifact, verify claims, classify actionable findings, and
+synthesize. Accepted defects return to implementation and invalidate affected evidence.
+The key invariant: a clean review is valid only for the exact artifact it reviewed.
 
 ### Misconception-first skill docs
 
@@ -146,52 +134,34 @@ Harness recommendations:
 - Add checksums to custom repository downloads.
 - Preserve tag taxonomy so agents do not accidentally run hour-scale work.
 
-## Gaps to close in this skills repository
+## Remaining evidence questions
 
-### P0
+1. On each major model release, rebuild ambient context from the bare-model ablation and
+   restore only groups that improve quality.
+2. Shadow non-strict hooks before deletion and qualify retention data by harness version,
+   model, and real versus synthetic run.
+3. Replace eval tasks once every context variant passes them; saturated checks cannot
+   justify prompt weight.
+4. Use persistent task state and structured review footers only for workflows that must
+   survive session boundaries. Ordinary work stays in the compact outcome loop.
 
-1. Create a standard goal contract and require it in plans, task files, and subagent briefs.
-2. Normalize reviewer schemas across all reviewer and plan-hat agents.
-3. Add per-task state files for long-running workflows.
-4. Bind every approval to a content hash, commit SHA, or run id.
-
-### P1
-
-1. Add resume preflight to long-running skills: inspect branch, task state, RFC, PR, CI, and reviewed SHA.
-2. Split review loops into spec compliance first, then quality review.
-3. Add skill-authoring TDD: write a failing pressure scenario before adding or editing a skill.
-4. Add structured review footers with status, reviewed artifact, findings, and next action.
-
-### P2
-
-1. Add critical misconception sections to orchestration skills.
-2. Compact frontmatter descriptions so they focus on trigger conditions.
-3. Move long procedural bodies into reference files when possible.
-4. Add CI wiring for evals, hook unit tests, manifest drift, and shell checks.
-
-## Proposed goal contract template
+## Proposed outcome contract template
 
 ```md
-## Goal contract
+## Outcome contract
 
 Objective:
 
-Non-goals:
-
-Acceptance criteria:
+Guardrails:
 
 Verification:
 
 Stop condition:
 
-Blocked condition:
-
 Artifacts:
-
-Current phase:
 ```
 
-## Proposed structured review footer
+## Structured footer for persistent automation
 
 ```yaml
 status: approved | needs_changes | blocked | skipped

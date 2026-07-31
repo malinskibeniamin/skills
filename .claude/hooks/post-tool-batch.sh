@@ -190,7 +190,10 @@ while IFS= read -r call; do
   _i=0
   while [ "$_i" -lt "${#_check_funcs[@]}" ]; do
     _hook_current_check="${_check_labels[$_i]}"
+    _check_start_ms=$(_hook_now_ms)
     ( "${_check_funcs[$_i]}" ) || true
+    _check_end_ms=$(_hook_now_ms)
+    _hook_log_entry "run" "$_hook_current_check" "$_hook_current_check" "$((_check_end_ms - _check_start_ms))"
     _i=$((_i + 1))
   done
   unset _hook_current_check

@@ -1,6 +1,5 @@
 import { createExperiment } from "./create-experiment.ts";
 
 export default createExperiment({
-  claudeCode: "CLAUDE.md",
-  codex: "AGENTS.md",
+  shared: "agent-evals/context-ablation/guardrails-context.md",
 });

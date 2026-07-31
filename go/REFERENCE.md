@@ -1,232 +1,74 @@
-# Go -- Reference
+# Go reference
 
-> **Single-owner rule:** run every review axis inline unless the user explicitly requests
-> agents or invokes `/swarm`. Non-trivial PR/ship work may add one bounded, foreground,
-> awaited Sol pass. `/go` owns the active CI loop; an ordinary PR request takes one snapshot.
+`/go` means actively carry a verified change through delivery. Keep one owner and one
+loop: inspect evidence, verify, repair, repeat. Do not dispatch agents or recursive model
+calls without explicit authorization.
 
-## Flowchart
+## Select verification from the diff
 
-```mermaid
-flowchart TD
-    Start([/go invoked]) --> Gate{Work to ship?}
-
-    Gate -->|No changes| Stop([Nothing to ship])
-    Gate -->|Has changes| P4
-
-    P4[4. Verify<br/>types + lint + tests] --> Green{All green?}
-    Green -->|No| Fix4[Fix failures]
-    Fix4 --> P4
-    Green -->|Yes| Commit4[Commit passing state]
-
-    Commit4 --> SmallDiff{Trivial?<br/>< 10 lines}
-    SmallDiff -->|Yes| P5
-    SmallDiff -->|No| P4b
-
-    P4b[4b. Refine<br/>inline review axes + one Sol pass] --> Findings{P0/P1?}
-    Findings -->|Yes| FixFindings[Fix + re-verify]
-    FixFindings -->|Round < 2| P4b
-    FixFindings -->|Round = 2| P5
-    Findings -->|No| P5
-
-    P5[5. /commit-push-pr<br/>+ inline fresh-eyes pass] --> P5b
-
-    P5b[5b. Iterate<br/>Monitor CI] --> CI{CI status?}
-    CI -->|Failing| FixCI[Diagnose + fix + push]
-    FixCI --> P5b
-    CI -->|Pending| Wait[Monitor: gh pr checks --watch]
-    Wait --> CI
-    CI -->|Passing| Reviews{Review comments?}
-
-    Reviews -->|Yes| Resolve[/resolve-pr-feedback]
-    Resolve --> Round{Round < 2?}
-    Round -->|Yes| P5b
-    Round -->|No| Handoff
-    Reviews -->|No| Handoff
-
-    Handoff --> Learn{Non-trivial<br/>learning?}
-    Learn -->|Yes| P6[6. Compound<br/>.claude/rules/]
-    Learn -->|No| Done
-    P6 --> Done([PR URL + status. Stop.])
-
-    style P4 fill:#f96,stroke:#333
-    style P4b fill:#f9f,stroke:#333
-    style P5 fill:#69f,stroke:#333
-    style Done fill:#9c6,stroke:#333
-```
-
-## Phase 4: Verify -- Checklist
-
-### Automated Checks
+Start with repository-native commands rather than this generic example:
 
 ```bash
-# 1. Type check
-bun run type:check
-
-# 2. Lint + autofix
 bun run lint:fix
-
-# 3. Related tests
-bun vitest run --related
-
-# 4. Visual tests (if route touched)
-bun vitest run *.browser.test.tsx
-
-# 5. Dogfood every runnable behavior diff
-# /dogfood: real entrypoint, intended journey, break attempts, repair, replay
-
-# 6. Frontend/customer-facing surface diff: run /visual-review
-# screenshots or terminal evidence + states + a11y + console + mobile/cross-browser where feasible
+bun run type:check
+bun test
 ```
 
-### Dogfood Evidence
+Then add only checks implied by the changed surface:
 
-Run `/dogfood` yourself on every runnable behavior diff. Tests and code inspection do not replace real use. Preserve the receipt: verdict, entrypoint, actions, break attempts, observations, repairs/replay, limits.
-
-- Browser: `scripts/skills-browser.sh`, Playwright, or the available interactive browser against `Monitor: bun run dev`
-- CLI/API/worker: invoke the built command, request, or event and inspect side effects
-- Library/hook/skill: exercise the public seam against a representative consumer or fixture
-
-Evidence becomes stale after any runnable implementation edit. Rerun before `/commit-push-pr`. Skip only non-runnable docs/test-only work and record the reason.
-
-### Visual Review Gate
-
-Frontend or customer-facing surface diff -> run `/visual-review` before `/commit-push-pr`, unless the change is docs-only, test-only, type-only, backend-only, or explicitly skipped with reason.
-
-Frontend/customer-facing surface diff includes:
-
-- `*.tsx`, `*.jsx`, `*.css`, `*.scss`, `*.html`
-- `src/routes/`, `src/pages/`, `src/app/`, `src/components/`, `components/ui/`
-- Tailwind/theme/config files that affect rendered UI
-- CLI/TUI output, mobile/desktop screens, generated reports, rendered docs, onboarding/setup flows
-
-Use `/visual-review` output for the PR screenshot/surface-review table and test plan. Follow `visual-review/REFERENCE.md` PR evidence contract.
-
-### Commit on Green
-
-Each passing verify state = one commit. Format: `type(scope): what changed`.
-
-## Phase 4b: Refine -- Findings Triage
-
-### Review axes
-
-| Condition | Action |
+| Surface | Evidence |
 |---|---|
-| Any non-trivial diff | self-review + adversarial axes inline |
-| Non-trivial PR/ship | one bounded, foreground, awaited different-family pass; clean-context Sol fallback |
-| Credible high-impact failure surface | `/resilience-review` evidence required |
-| Trivial (<10 lines, no logic) | Skip 4b entirely |
+| Runtime behavior | Targeted test plus real entrypoint invocation |
+| Browser/UI | Rendered intended path, loading/error/empty states, keyboard/a11y, console |
+| CLI/TUI/report | Actual command or generated artifact, including one invalid input |
+| Hook/skill/library | Representative consumer or fixture through its public seam |
+| API/schema | Contract test, generated artifacts, compatibility check |
+| Dependency | Lockfile, build, affected call sites, current security/advisory check |
+| Docs/config | Parser, generator, renderer, or documented command |
 
-### Priority Actions
+For runnable behavior, use the real entrypoint and one credible failure or recovery path.
+Implementation edits make earlier behavior evidence stale. Replay the affected path after
+repair. Record a limit when the real entrypoint is unavailable rather than substituting a
+claim based on code inspection.
 
-| Priority | Action |
-|---|---|
-| P0 (blocks merge) | Fix now, re-run tests |
-| P1 (should fix) | Fix, re-run tests |
-| P2 `safe_auto` | Report; apply only if required by requested behavior |
-| P2 `gated_auto` | Report for a later decision |
-| P2 `manual` | Report, user decide |
-| P3 / `advisory` | Skip -- log for Phase 6 |
+## Review the complete change
 
-### Refinement Rounds
+After checks pass, inspect the diff against the requested outcome:
 
-- Max 2 rounds. After each: commit fixes, re-verify (tests + types + lint)
-- P0/P1 persist after round 2 -> go Phase 5, flag in PR description
+1. Scope and public contract.
+2. Correctness, error paths, types, and credible boundary/race failures.
+3. Security, privacy, accessibility, and rendered behavior when touched.
+4. Test integrity and untested product behavior.
+5. Unnecessary code, prompts, abstractions, dependencies, and generated-file edits.
 
-## Phase 5: Ship Clean
+Fix concrete findings and rerun affected verification. If a high-severity issue persists,
+keep repairing or report the external blocker; do not declare success after an arbitrary
+review-round cap.
 
-### Sequence
+## Delivery
 
-1. Fix concrete review findings and commit. Do not run a generic cleanup pass;
-   semantic density belongs in the first implementation.
+Use `../commit-push-pr/REFERENCE.md` for preflight, explicit staging, conventional commit
+format, push, PR creation, and PR body structure.
 
-2. **`/visual-review`** -- if frontend/customer-facing surface diff and not already run in Phase 4. Capture screenshots or terminal evidence, states, a11y/console issues, and cross-browser/mobile notes. Fix P0/P1 or record user-accepted skip/deferral.
+Before delivery:
 
-3. **Resilience Review Evidence** -- for credible data-loss, security/privacy,
-   irreversible, broken-contract, or likely stuck-user risk, include evidence,
-   smallest guard, and contract test.
+- confirm the branch and target base;
+- review staged diff and secret scan;
+- include verification and real-use evidence in the PR body;
+- never merge or force-push without permission.
 
-4. **`/commit-push-pr`** -- handle:
-   - Categorized conventional commits
-   - Branch strategy
-   - Push with tracking
-   - PR creation with structured body
-   - PR creation and initial CI snapshot
+For an explicit `/go`, monitor the PR checks in the foreground:
 
-5. **Fresh-eyes axis** -- run inline against the PR diff
-
-### Security Gate
-
-Before PR creation, verify:
-- [ ] No new critical/high SAST findings
-- [ ] No deps with known CVEs
-- [ ] No `eval()` / `innerHTML` / `dangerouslySetInnerHTML` without sanitization
-- [ ] No hardcoded secrets/tokens/API keys
-
-## Phase 5b: Iterate
-
-### Round 1 -- Initial
-
-1. Push + `Monitor: gh pr checks <pr-number> --watch`
-2. CI green -> run the fresh-eyes axis inline
-3. `/resolve-pr-feedback` to triage, fix, reply, push
-4. Monitor CI again
-
-### Round 2 -- Verification
-
-1. Fresh-eyes axis verifies Round 1 fixes
-2. `/resolve-pr-feedback` for remain findings
-3. New issues -> fix, push, monitor CI
-4. **NO third round**
-
-### Hand Off
-
-1. Post final PR comment: changes, findings, how addressed, verification
-2. `gh pr edit <number> --add-reviewer <username>`
-3. **Stop.** No poll for human approval.
-
-### Re-entry (New Session)
-
-If human request change later:
-1. `/resolve-pr-feedback` -- fetch, triage, fix, reply, push
-2. Monitor CI after push
-3. One more inline fresh-eyes round + `/resolve-pr-feedback`
-4. Re-request human review, stop
-
-## Phase 6: Compound
-
-### When to Compound
-
-- Bug fix reveal non-obvious pattern
-- Migration gotcha that recur
-- API contract/convention team agreed on
-
-### When NOT to Compound
-
-- One-off fix unlikely recur
-- Pattern already covered by hook
-- Generic knowledge Claude already has
-
-### Format
-
-```markdown
-<!-- .claude/rules/<topic>.md -->
----
-paths:
-  - "**/<matching-glob>"
----
-Rule description. Auto-loads when Claude works on matching files.
+```bash
+gh pr checks <number> --watch
 ```
 
-### Regression Evals
+Diagnose a failure from its logs, repair locally, rerun relevant checks, commit, push, and
+watch again. Resolve actionable human feedback when it already exists. Stop after checks
+and requested feedback are clean; do not poll for later approval or manufacture reviewer
+comments.
 
-AI-caused bug -> classify failure -> make regression test -> add to CI -> track patterns (3+ recurrences -> `.claude/rules/` entry).
+## Handoff
 
-## Lifecycle Integration
-
-`/go` = phases 4-6 of `/development-lifecycle`. Lifecycle Phase 3 (Implement/TDD) hands off to `/go` when implementation done.
-
-```
-/development-lifecycle phases 1-3 -> /go phases 4-6
-```
-
-`lifecycle-stop.sh` gates still fire at session end. `/go` front-run them so no surprise blocks.
+Return the PR URL, CI state, verification commands, real-use result, and any genuine
+limits. Do not add optional review artifacts or request reviewers unless the user asked.

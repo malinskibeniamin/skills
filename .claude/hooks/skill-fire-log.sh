@@ -30,11 +30,29 @@ esac
 session="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 [ -n "$session" ] || session=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null)
 
+harness_version="${HARNESS_VERSION:-}"
+if [ -z "$harness_version" ]; then
+  manifest="$(dirname "$0")/../../skill-manifest.json"
+  [ -f "$manifest" ] && harness_version=$(jq -r '.version // empty' "$manifest" 2>/dev/null || true)
+fi
+harness_version="${harness_version:-unknown}"
+run_kind="${HOOK_METRICS_RUN_KIND:-real}"
+input_model=$(printf '%s' "$input" | jq -r '.model // .model_name // empty' 2>/dev/null || true)
+model="${CLAUDE_MODEL:-${CODEX_MODEL:-${input_model:-unknown}}}"
+
 if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
   dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
   mkdir -p "$dir" 2>/dev/null || true
-  printf '{"ts":"%s","skill":"%s","session":"%s","source":"%s"}\n' \
-    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$skill" "${session:-unknown}" "$source" \
+  jq -cn \
+    --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    --arg skill "$skill" \
+    --arg session "${session:-unknown}" \
+    --arg source "$source" \
+    --arg harness_version "$harness_version" \
+    --arg run_kind "$run_kind" \
+    --arg model "$model" \
+    '{ts: $ts, skill: $skill, session: $session, source: $source,
+      harness_version: $harness_version, run_kind: $run_kind, model: $model}' \
     >> "$dir/skill-fires.jsonl" 2>/dev/null || true
 fi
 

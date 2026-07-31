@@ -42,7 +42,7 @@ run_content_eval "$DESLOP" "accessibility" "deslop preserves accessibility"
 
 # Review integration (ponytail-review conventions live in /review's complexity hat).
 run_content_eval "$REPO_ROOT/review/SKILL.md" "semantic density" "review owns semantic-density checks directly"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "never optimize LOC or reward code golf" "review rejects LOC gaming"
+run_content_eval "$REPO_ROOT/review/SKILL.md" "[Nn]ever optimize LOC or reward code golf" "review rejects LOC gaming"
 
 # No stale /ponytail invocations anywhere outside history/docs.
 _stale=$(grep -rln '`/ponytail' "$REPO_ROOT" --include='*.md' 2>/dev/null | grep -v CHANGELOG | grep -v "$REPO_ROOT/docs/" || true)

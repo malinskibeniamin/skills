@@ -11,6 +11,6 @@
   "rules": {
     "block": "Use only when the hook can identify a concrete failure with low false-positive risk and give a local repair.",
     "warn": "Teach preferences at the edit boundary without preventing progress.",
-    "retire": "Delete rules that are inferable, duplicate another layer, or show no quality lift in ablation."
+    "retire": "Use a shadow trial for non-strict candidates first; delete rules that are inferable, duplicate another layer, or show no quality lift in a version-qualified trial."
   }
 }

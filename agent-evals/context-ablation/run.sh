@@ -35,9 +35,13 @@ run_cell() {
     "agent-evals/context-ablation/${variant}.ts"
 }
 
-for variant in current lean; do
+while IFS= read -r variant; do
   run_cell codex "$variant" xhigh gpt-5.6-sol
   run_cell codex "$variant" max gpt-5.6-sol
   run_cell claude-code "$variant" high fable
   run_cell claude-code "$variant" xhigh opus
-done
+done < <(jq -r '.variants[]' agent-evals/context-ablation/manifest.json)
+
+if [ "$mode" = "--force" ]; then
+  echo "Record the decision with agent-evals/context-ablation/scorecard-template.md"
+fi
