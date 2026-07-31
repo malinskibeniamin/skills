@@ -44,6 +44,15 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 - Retries: 1 in CI as a stopgap, 0 as the goal; a spec that needs retries has a wait bug. Locally prefer the markdown reporter (LLM-token-friendly).
 - Quality over quantity: delete render-only specs; every spec must exercise a side effect a user can cause.
 
+## Generated browser exploration
+
+When a credible customer contract spans combinatorial state transitions and cannot be
+proved at a cheaper seam, use narrow generated action sequences or a stateful property.
+Follow the runner-neutral [property-based testing guide](../tdd/PROPERTY-BASED-TESTING.md):
+keep an independent boundary oracle, preserve replay evidence, and turn each real finding
+into a deterministic regression. Generated exploration complements fixed journeys,
+cross-browser checks, accessibility, visual review, and dogfood; it replaces none of them.
+
 ## Long-lived SPA resources
 
 For listeners, detached DOM, timers, subscriptions, or heap growth that accumulates

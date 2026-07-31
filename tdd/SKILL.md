@@ -37,6 +37,8 @@ internal seam for test convenience.
 - Name the observable behavior at a public interface. Follow the project domain glossary and ADRs.
 - Choose the smallest test that would fail if that behavior broke. One test may prove many lines.
 - Add another case only for an independent credible risk, not every imaginable edge.
+- When one invariant spans high-cardinality inputs or reachable state sequences, read
+  [property-based testing](PROPERTY-BASED-TESTING.md). Require an independent oracle and replayable failures.
 - For a resource-lifetime contract in a long-lived browser page, use a repeatable
   round trip and read [SPA soak testing](../e2e-testing/SOAK-TESTING.md). A fresh
   browser context cannot expose accumulation across interactions.

@@ -27,7 +27,9 @@ fi
 
 run_file_eval "$SKILL_DIR/REFERENCE.md" "REFERENCE.md exists"
 run_file_eval "$SKILL_DIR/tests.md" "tests.md exists (good vs bad test philosophy)"
+run_file_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "property-based testing guide exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "tests\\.md" "SKILL.md links to tests.md"
+run_content_eval "$SKILL_DIR/SKILL.md" "PROPERTY-BASED-TESTING\\.md" "SKILL.md routes high-leverage properties to the guide"
 run_content_eval "$SKILL_DIR/SKILL.md" "domain glossary" "SKILL.md references project domain glossary"
 run_content_eval "$SKILL_DIR/SKILL.md" "ADRs" "SKILL.md references ADRs"
 run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN.*REFACTOR" "SKILL.md has TDD cycle"
@@ -48,6 +50,14 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "two fields.*independent|independent.
 run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('ignores stale async validation results" "REFERENCE has RED stale-validation test"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('clears dependent field state when its parent changes" "REFERENCE has RED dependent-cleanup test"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "test\\('renders every validation error" "REFERENCE has RED all-errors test"
+
+# ── Property-based testing stays portable and evidence-backed ───
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "independent oracle" "property guide requires an independent oracle"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "known counterexample|deliberate mutation|positive control" "property guide proves the detector can fail"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "seed|trace" "property guide preserves replay evidence"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "[Ss]hrink|[Mm]inimi[sz]" "property guide minimizes failures"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "deterministic.*regression|regression.*deterministic" "property guide converts findings into deterministic regressions"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "no required runner|runner-neutral|tool-neutral" "property guide does not impose a vendor dependency"
 
 # ── Coverage is diagnostic, never a quota ───────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Coverage.*never a target|never a target.*Coverage" "SKILL.md rejects coverage targets"
