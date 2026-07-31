@@ -210,17 +210,10 @@ _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "outline-none silent (React Doctor owns)"
 _cleanup_test_file "$_f"
 
-echo "  Check 14 — dangerouslySetInnerHTML (block):"
+echo "  Check 14 — dangerouslySetInnerHTML delegated to React Doctor:"
 _setup_test_file "$_f" 'const X = () => <div dangerouslySetInnerHTML={{__html: data}} />;'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 2 "dangerouslySetInnerHTML blocked"
-_cleanup_test_file "$_f"
-
-echo "  Check 14 — dangerouslySetInnerHTML with escape (pass):"
-_setup_test_file "$_f" '// allow: dangerouslySetInnerHTML sanitized with DOMPurify
-const X = () => <div dangerouslySetInnerHTML={{__html: clean}} />;'
-_run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "dangerouslySetInnerHTML with escape passes"
+_assert_exit 0 "dangerouslySetInnerHTML is silent (React Doctor owns)"
 _cleanup_test_file "$_f"
 
 echo "  Check 15 — eval() (block):"
@@ -242,11 +235,11 @@ _assert_exit 0 "inline style is warn not block"
 _assert_stdout_contains "Tailwind|style" "warns about inline style"
 _cleanup_test_file "$_f"
 
-echo "  Check 18 — class component (warn):"
+echo "  Check 18 — class component delegated to React Doctor:"
 _setup_test_file "$_f" 'class MyComp extends React.Component { render() { return <div/>; } }'
 _run_hook "react-rules-check.sh" "$(_edit_json "$_f")"
-_assert_exit 0 "class component warns"
-_assert_stdout_contains "functional" "suggests a functional component"
+_assert_exit 0 "class component is silent (React Doctor owns)"
+_assert_stdout_not_contains "functional" "does not duplicate React Doctor"
 _cleanup_test_file "$_f"
 
 echo "  Check 20 — addEventListener without passive (warn):"

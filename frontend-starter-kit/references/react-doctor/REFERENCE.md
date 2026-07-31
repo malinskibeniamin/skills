@@ -25,64 +25,44 @@ An opt-in rule runs only when its full `react-doctor/<rule>` key appears in
 opt-in rules.
 
 Design diagnostics are excluded from `prComment`, `score`, and `ciFailure`
-surfaces by default. Every blocking design rule therefore needs both:
-
-1. `"react-doctor/<rule>": "error"` under `rules`
-2. its full key under `surfaces.ciFailure.includeRules`
+surfaces by default. The config restores the complete `design` tag to all three
+surfaces and explicitly activates every design rule.
 
 [`doctor.config.json`](doctor.config.json) is the executable ownership map:
 
-| Disposition | Count | Behavior |
+| Policy | Count | Behavior |
 |---|---:|---|
-| Blocking design | 24 | Explicit errors included in `ciFailure` |
-| Advisory design | 50 | Explicit warnings visible in general CLI scans |
-| Focused review | 30 | Left opt-in; run with `react-doctor design` |
-| Disabled taste rules | 8 | Explicitly off because they are brand decisions |
+| Applicable catalog rules | 728 | Enabled; warnings and errors both fail changed scope |
+| React Native rules | 42 | Excluded by tag because this is a browser starter |
+| Explicit conflicts / terminal opt-ins | 11 | Off; owned elsewhere or inapplicable |
+| Total registry | 781 | Pinned 0.9.2 catalog |
 
-Blocking rules cover deterministic accessibility, interaction, layout, motion,
-and runtime hazards. Advisory rules are local, actionable smells with credible
-exceptions. Focused-review rules judge page composition or repeated visual
-motifs, so running them on every Stop would create noise. Disabled rules ban
-valid brand choices rather than defects.
+The explicit rule map contains 183 entries: 42 errors, 130 warnings, and 11
+off. All 112 design rules are active; the versioned
+[`design-rules-0.9.2.txt`](design-rules-0.9.2.txt) inventory makes omissions
+testable. `blocking: "warning"` turns both configured severities into a strict
+changed-scope gate.
 
-The config names every blocking, advisory, and disabled rule. These are the 30
-remaining design rules reserved for focused review:
+The 11 exclusions are intentional:
 
-- `react-doctor/no-cramped-container-padding`
-- `react-doctor/no-dark-mode-glow`
-- `react-doctor/no-decorative-blur-orb`
-- `react-doctor/no-decorative-grid-background`
-- `react-doctor/no-decorative-radial-spotlight`
-- `react-doctor/no-default-purple-page-gradient`
-- `react-doctor/no-emoji-heading-decoration`
-- `react-doctor/no-excessive-card-surfaces`
-- `react-doctor/no-excessive-centered-copy`
-- `react-doctor/no-excessive-pill-treatment`
-- `react-doctor/no-fake-browser-chrome`
-- `react-doctor/no-flat-page-type-scale`
-- `react-doctor/no-full-viewport-centered-hero`
-- `react-doctor/no-generic-purple-blue-icon-gradient`
-- `react-doctor/no-hero-eyebrow-chip`
-- `react-doctor/no-icon-tile-heading-stack`
-- `react-doctor/no-monotonous-page-spacing`
-- `react-doctor/no-numbered-section-markers`
-- `react-doctor/no-oversized-long-heading`
-- `react-doctor/no-placeholder-persona-copy`
-- `react-doctor/no-radial-halo`
-- `react-doctor/no-repeated-emoji-tiles`
-- `react-doctor/no-repeated-glass-surfaces`
-- `react-doctor/no-repeated-hover-scale`
-- `react-doctor/no-repeated-section-shells`
-- `react-doctor/no-repeating-gradient-decoration`
-- `react-doctor/no-tight-display-tracking`
-- `react-doctor/no-uniform-feature-card-grid`
-- `react-doctor/no-uppercase-mono-label`
-- `react-doctor/prefer-motion-transform-property`
+- Biome owns exhaustive dependencies and nested-component definitions.
+- Automatic JSX runtime makes `react-in-jsx-scope` invalid.
+- Tailwind component props, React Hook Form prop spreading, and encapsulated
+  hook handlers conflict with three style opt-ins.
+- Escaping every apostrophe creates noisy JSX without changing rendered text.
+- Three Ink-only opt-ins do not apply to browser applications.
 
-The other 669 active or retired non-design rules retain the release defaults
-unless the config transfers ownership from a harness hook or disables a proven
-Biome overlap. Re-audit them on every version bump; do not mirror the entire
-upstream default registry into project config.
+All other released defaults and browser-app opt-ins remain active. Re-audit the
+inventory, exclusions, and tag counts on every pinned version bump.
+
+`respectInlineDisables: false` prevents source comments from hiding findings.
+For a proven false positive or required platform exception, add the narrowest
+file-scoped `ignore.overrides` entry with a rationale in the project copy of
+the config.
+
+`deadCode: true` applies to the advisory full-project scan
+(`bun run doctor:full`). React Doctor skips reachability analysis for changed
+scope because unused-file and unused-export results require the full graph.
 
 ## Transferred hook ownership
 
@@ -97,6 +77,9 @@ Do not restore these regex checks after their React Doctor fixture passes:
 | Outline removal / disabled zoom | `react-doctor/no-outline-none`, `react-doctor/no-disabled-zoom` |
 | Dialog name / nested interactive / redundant alt / placeholder label | `react-doctor/dialog-has-accessible-name`, `react-doctor/html-no-nested-interactive`, `react-doctor/img-redundant-alt`, `react-doctor/label-has-associated-control` |
 | `aria-invalid` without an error description | `react-doctor/no-aria-invalid-without-description` |
+| Dangerous React HTML sink | `react-doctor/no-danger` |
+| Class components | `react-doctor/prefer-function-component` |
+| `cloneElement` | `react-doctor/no-clone-element` |
 | Query stable client / rest destructuring / whole-result spread / void query function | `react-doctor/query-stable-query-client`, `react-doctor/query-no-rest-destructuring`, `react-doctor/query-destructure-result`, `react-doctor/query-no-void-query-fn` |
 
 Biome/Ultracite still owns exhaustive hook dependencies and nested component
@@ -115,7 +98,7 @@ The hook first checks whether this session changed a React source file, then
 invokes:
 
 ```bash
-bun run doctor -- --scope changed --include-untracked --blocking error --no-score
+bun run doctor -- --scope changed --include-untracked --blocking warning --no-score
 ```
 
 The React Doctor exit code owns diagnostic blocking. The wrapper only handles
@@ -132,7 +115,7 @@ changed-file set is also not a stable baseline for another.
 |---|---|
 | `--scope changed` | Report diagnostics introduced relative to the detected base |
 | `--include-untracked` | Include new React source files |
-| `--blocking error` | Exit non-zero when an error reaches `ciFailure` |
+| `--blocking warning` | Exit non-zero when a warning or error reaches `ciFailure` |
 | `--no-score` | Skip score upload and keep diagnostic output available |
 | `--verbose` | Show file-level details during a manual investigation |
 | `design` | Run the focused opt-in design review |

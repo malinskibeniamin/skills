@@ -32,6 +32,6 @@ run_content_eval "$REPO_ROOT/exemplars/e2e.spec.ts" "test\\.step" "test.step str
 
 # 4. React Doctor diagnostic gate.
 run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "--scope changed" "doctor stop hook scans changed diagnostics"
-run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "--blocking error" "doctor stop hook delegates the severity gate"
+run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "--blocking warning" "doctor stop hook delegates the severity gate"
 run_content_eval "$REPO_ROOT/.claude/hooks/react-doctor-stop.sh" "hook_stop_enforce" "doctor stop hook enforces directly (no aggregator race)"
 run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/REFERENCE.md" "no score parser or score ratchet" "react-doctor reference rejects incomparable score ratchets"

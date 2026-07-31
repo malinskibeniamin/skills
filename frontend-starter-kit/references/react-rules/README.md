@@ -7,7 +7,7 @@ PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 
 **TypeScript**: ban `as any`, `as Record<string,any>`, `@ts-ignore`, `@ts-expect-error`
 
-**Security**: ban `dangerouslySetInnerHTML`, `eval()`, `new Function()`, `.innerHTML =` (XSS/OWASP A03)
+**Security**: React Doctor owns `dangerouslySetInnerHTML`; this hook bans `eval()`, `new Function()`, and `.innerHTML =` (XSS/OWASP A03)
 
 **Performance**: ban barrel imports (use direct paths), ban missing `{ passive: true }` on scroll/touch/wheel, ban static import of heavy deps (chart.js/d3/three.js/pdf-lib -- use `React.lazy()`)
 
@@ -17,7 +17,7 @@ PostToolUse hooks on Edit/Write (auto-skip component library dirs):
 
 **Navigation**: ban `onClick + navigate()` (use `<Button asChild><Link>`), require `aria-label` on icon-only buttons
 
-**React Compiler**: ban manual `useMemo`/`useCallback`/`React.memo`, ban class components
+**React Compiler**: React Doctor owns manual memoization, class components, and `cloneElement`
 
 **Protobuf**: enforce `create()` wrapper for message spreads (v2)
 

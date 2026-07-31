@@ -32,15 +32,15 @@ fi
 # command into the harness Stop protocol.
 output=""
 exit_code=0
-output=$(bun run doctor -- --scope changed --include-untracked --blocking error --no-score 2>&1) || exit_code=$?
+output=$(bun run doctor -- --scope changed --include-untracked --blocking warning --no-score 2>&1) || exit_code=$?
 
-# No downgrade-to-allow: doctor errors are blocking findings. If React Doctor cannot
+# No downgrade-to-allow: doctor diagnostics are blocking findings. If React Doctor cannot
 # complete, fix the code, config, or toolchain before continuing.
 
 # Block on errors (non-zero exit)
 if [ $exit_code -ne 0 ]; then
   truncated=$(echo "$output" | head -40)
-  hook_stop_finding "$(printf "React Doctor found blocking errors. Fix before continuing:\n%s" "$truncated")"
+  hook_stop_finding "$(printf "React Doctor found blocking diagnostics. Fix before continuing:\n%s" "$truncated")"
   exit 0
 fi
 
