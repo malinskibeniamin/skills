@@ -20,7 +20,7 @@
 
 ## Enforcement: React Doctor, not a hook
 
-Manual memoization (useMemo/useCallback/React.memo), useState+useEffect derived state, and useRef-as-cache are owned by React Doctor (architecture/react-compiler-no-manual-memoization, state-and-effects/no-derived-state-effect, rerender-lazy-ref-init) via the react-doctor Stop hook. The former react-compiler-check.sh was retired -- one owner per rule.
+Manual memoization (useMemo/useCallback/React.memo), useState+useEffect derived state, and useRef-as-cache are owned by React Doctor (`react-doctor/react-compiler-no-manual-memoization`, `react-doctor/no-derived-state-effect`, `react-doctor/rerender-lazy-ref-init`) via the React Doctor Stop hook. The former `react-compiler-check.sh` was retired -- one owner per rule.
 
 
 ## Escape Hatch: 'use no memo'

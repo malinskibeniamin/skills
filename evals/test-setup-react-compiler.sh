@@ -24,5 +24,5 @@ done
 
 # React Doctor reference records the full ownership map.
 RD_REF="$REPO_ROOT/frontend-starter-kit/references/react-doctor/REFERENCE.md"
-run_content_eval "$RD_REF" "react-compiler-check \(all 3 rules\)" "react-doctor reference owns the compiler rules"
-run_content_eval "$RD_REF" "Pin the react-doctor version" "react-doctor reference mandates version pinning"
+run_content_eval "$RD_REF" "react-compiler-no-manual-memoization" "react-doctor reference owns the compiler rules"
+run_content_eval "$RD_REF" "pinned npm release" "react-doctor reference mandates version pinning"

@@ -253,17 +253,7 @@ esac
 
 # ── Check 13: (moved to react-compiler-check.sh — memoization) ──
 
-# ── Check 14: Ban dangerouslySetInnerHTML (TSX/JSX only) ──────
-
-case "$file_path" in
-  *.tsx|*.jsx)
-    if echo "$added_lines" | grep -qF 'dangerouslySetInnerHTML'; then
-      if ! hook_has_escape "dangerouslySetInnerHTML"; then
-        hook_block "dangerouslySetInnerHTML banned — XSS. Use DOMPurify. Escape: // allow: dangerouslySetInnerHTML [reason]"
-      fi
-    fi
-    ;;
-esac
+# ── Check 14: dangerouslySetInnerHTML — React Doctor no-danger ──
 
 # ── Check 15: Ban eval() and new Function() ──────────────────
 
@@ -291,11 +281,7 @@ case "$file_path" in
     ;;
 esac
 
-# ── Check 18: Ban class components ───────────────────────────────
-
-if echo "$added_lines" | grep -qE 'extends\s+(React\.)?(Component|PureComponent)\b'; then
-  hook_warn "Prefer functional components so React Compiler can optimize them."
-fi
+# ── Check 18: class components — React Doctor prefer-function-component ──
 
 # ── Check 18b: Ban dead-stack imports (see /stack-registry) ───────
 # Unbanned dead stacks get resurrected by LLM authors. Chakra and
@@ -365,11 +351,7 @@ if echo "$added_lines" | grep -qE '\bReact\.FC\b|\bReact\.FunctionComponent\b|:\
   hook_warn "Prefer function MyComponent(props: Props) over React.FC."
 fi
 
-# ── Check 24: Ban cloneElement ────────────────────────────────────
-
-if echo "$added_lines" | grep -qE 'cloneElement\(|React\.cloneElement'; then
-  hook_warn "Avoid cloneElement. Use Context or render props."
-fi
+# ── Check 24: cloneElement — React Doctor no-clone-element ───────
 
 # ── Check 25: (moved to ts-no-escape-hatches-check.sh — biome-ignore) ──
 

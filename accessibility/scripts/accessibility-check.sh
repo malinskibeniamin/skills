@@ -20,10 +20,11 @@ fi
 #   combobox ARIA props  -> a11y/useAriaPropsForRole
 #   label association    -> a11y/noLabelWithoutControl
 # React Doctor (Stop hook, a11y category) owns the structural rules; do not re-add:
-#   dialog accessible name  -> a11y/dialog-has-accessible-name
-#   nested interactives     -> correctness/html-no-nested-interactive
-#   redundant name wording  -> a11y/img-redundant-alt
-#   placeholder-as-label    -> a11y/label-has-associated-control
+#   dialog accessible name  -> react-doctor/dialog-has-accessible-name
+#   nested interactives     -> react-doctor/html-no-nested-interactive
+#   redundant name wording  -> react-doctor/img-redundant-alt
+#   placeholder-as-label    -> react-doctor/label-has-associated-control
+#   invalid control description -> react-doctor/no-aria-invalid-without-description
 # This hook keeps only the cross-attribute pairings neither engine expresses.
 
 # ── Check: Ban role="tablist" without role="tab" children ───────────
@@ -31,14 +32,6 @@ fi
 if echo "$added_lines" | grep -qE 'role\s*=\s*["{]tablist'; then
   if ! echo "$file_content" | grep -qE 'role\s*=\s*["{]tab[^l]'; then
     hook_block "role=\\\"tablist\\\" needs children with role=\\\"tab\\\" + role=\\\"tabpanel\\\"."
-  fi
-fi
-
-# ── Check: aria-invalid without aria-describedby ─────────────────
-
-if echo "$added_lines" | grep -qE 'aria-invalid'; then
-  if ! echo "$file_content" | grep -qE 'aria-describedby'; then
-    hook_warn "aria-invalid without aria-describedby. Add error description reference for screen readers." "a11y-describedby"
   fi
 fi
 

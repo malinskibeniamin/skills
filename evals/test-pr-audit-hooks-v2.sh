@@ -49,7 +49,7 @@ run_content_eval "$REPO_ROOT/skill-manifest.json" "copyright-check.sh" "edit dis
 # accessibility-check.sh extensions
 # ══════════════════════════════════════════════════════════════════
 
-run_content_eval "$HOOKS_DIR/checks/accessibility-check.lib.sh" "aria-invalid" "accessibility-check detects aria-invalid without describedby"
+run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/doctor.config.json" "no-aria-invalid-without-description" "React Doctor detects aria-invalid without a description"
 run_content_eval "$HOOKS_DIR/checks/accessibility-check.lib.sh" "nested interactive" "accessibility-check detects nested interactives"
 
 # ══════════════════════════════════════════════════════════════════

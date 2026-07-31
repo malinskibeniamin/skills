@@ -369,32 +369,14 @@ run_hook_eval "$SCRIPT" \
 
 # tmpfile reused in tmpdir
 
-# ── Check 14: dangerouslySetInnerHTML (TSX/JSX only) ─────────────
+# ── Check 14: dangerouslySetInnerHTML delegated to React Doctor ───
 
-# Block dangerouslySetInnerHTML in TSX
 tmpfile="$_rr_tmpdir/test.tsx"
 echo '<div dangerouslySetInnerHTML={{ __html: content }} />' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  2 "block: dangerouslySetInnerHTML in TSX" "XSS"
-
-# Allow dangerouslySetInnerHTML with escape hatch
-printf "// allow-dangerouslySetInnerHTML: sanitized upstream\n<div dangerouslySetInnerHTML={{ __html: content }} />\n" > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: dangerouslySetInnerHTML with escape hatch"
-
-# tmpfile reused in tmpdir
-
-# Skip dangerouslySetInnerHTML in .ts file (TSX/JSX only)
-tmpfile="$_rr_tmpdir/test.ts"
-echo '<div dangerouslySetInnerHTML={{ __html: content }} />' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "skip: dangerouslySetInnerHTML in .ts file"
+  0 "delegated to React Doctor: dangerouslySetInnerHTML"
 
 # tmpfile reused in tmpdir
 
@@ -742,27 +724,14 @@ run_content_eval "$TW_LIB" "300ms" "tailwind-check documents UI motion duration 
 run_content_eval "$SKILL_DIR/README.md" "Motion craft" "setup-react-rules documents motion craft checks"
 run_content_eval "$SKILL_DIR/README.md" "transform/opacity" "setup-react-rules documents performant motion properties"
 
-# ── Check 18: Ban class components ────────────────────────────────
+# ── Check 18: Class components delegated to React Doctor ─────────
 
 tmpfile="$_rr_tmpdir/test.tsx"
 echo 'class MyComponent extends React.Component { render() { return <div /> } }' > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: class component (React.Component)" "functional"
-
-echo 'class MyComponent extends PureComponent { render() { return <div /> } }' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: class component (PureComponent)" "functional"
-
-# Allow functional components
-echo 'function MyComponent() { return <div /> }' > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "allow: functional component"
+  0 "delegated to React Doctor: class component"
 
 # ── Check 19: Ban barrel imports ──────────────────────────────────
 
@@ -818,20 +787,14 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: function declaration component"
 
-# ── Check 24: Ban cloneElement ───────────────────────────────────
+# ── Check 24: cloneElement delegated to React Doctor ─────────────
 
 tmpfile="$_rr_tmpdir/test.tsx"
 echo "const enhanced = cloneElement(child, { className: 'extra' })" > "$tmpfile"
 
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: cloneElement usage" "cloneElement"
-
-echo "const enhanced = React.cloneElement(child, { className: 'extra' })" > "$tmpfile"
-
-run_hook_eval "$SCRIPT" \
-  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
-  0 "warn: React.cloneElement usage" "cloneElement"
+  0 "delegated to React Doctor: cloneElement"
 
 # ── Check 25: Block biome-ignore (moved to ts-no-escape-hatches-check.sh) ─
 
@@ -1216,7 +1179,7 @@ run_content_eval "$SCRIPT_LIB" "bufbuild/protobuf" "hook checks protobuf v2 only
 run_content_eval "$SCRIPT_LIB" "aria-label" "hook checks icon-only button a11y"
 run_content_eval "$SCRIPT_LIB" "outline" "hook bans outline removal"
 
-run_content_eval "$SCRIPT_LIB" "dangerouslySetInnerHTML" "hook checks dangerouslySetInnerHTML"
+run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/doctor.config.json" "no-danger" "React Doctor owns dangerouslySetInnerHTML"
 run_content_eval "$SCRIPT_LIB" "eval\(" "hook checks eval()"
 run_content_eval "$SCRIPT_LIB" "innerHTML" "hook checks innerHTML"
 run_content_eval "$AS_CAST_LIB" "Record<string" "hook checks as Record<string, any/unknown>"
@@ -1231,7 +1194,7 @@ run_content_eval "$SCRIPT_LIB" "role.*button" "hook checks div role=button"
 run_content_eval "$SCRIPT_LIB" "setTimeout" "hook checks setTimeout with string"
 run_content_eval "$SCRIPT_LIB" "NaN" "hook checks === NaN comparison"
 run_content_eval "$SCRIPT_LIB" "React.FC" "hook checks React.FC ban"
-run_content_eval "$SCRIPT_LIB" "cloneElement" "hook checks cloneElement ban"
+run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-doctor/doctor.config.json" "no-clone-element" "React Doctor owns cloneElement guidance"
 run_content_eval "$SCRIPT_LIB" "biome-ignore" "hook documents biome-ignore ownership"
 run_content_eval "$SCRIPT_LIB" "tree-shaking" "hook checks tree-shaking killers"
 run_content_eval "$SCRIPT_LIB" "react-beautiful-dnd" "hook checks deprecated react-beautiful-dnd"
