@@ -76,8 +76,14 @@ jobs:
           bun add --global @openai/codex@0.146.0
           codex --version
 
+      - name: Install Claude Code for plugin integration
+        run: |
+          bun add --global @anthropic-ai/claude-code@2.1.220
+          claude --version
+
       - name: Shell eval suite
         env:
+          CLAUDE_PLUGIN_INSTALL_REQUIRED: "1"
           CODEX_PLUGIN_INSTALL_REQUIRED: "1"
         run: bash evals/run.sh
 

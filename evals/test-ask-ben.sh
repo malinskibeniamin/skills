@@ -10,7 +10,8 @@ run_content_eval "$ASK_BEN" "skills repo" "ask-ben names skills repo work"
 run_content_eval "$ASK_BEN" "installable plugin surfaces" "ask-ben names plugin release surface"
 
 forbidden_project="Query""lane"
-forbidden_refs=$(grep -R --exclude-dir=.git -nF "$forbidden_project" "$REPO_ROOT" 2>/dev/null || true)
+forbidden_refs=$(grep -R --exclude-dir=.git --exclude-dir=.context --exclude-dir=node_modules \
+  -nF "$forbidden_project" "$REPO_ROOT" 2>/dev/null || true)
 if [ -z "$forbidden_refs" ]; then
   echo "  PASS  ask-ben avoids unrelated project names"
   PASS=$((PASS + 1))
@@ -24,7 +25,8 @@ fi
 # The old upstream router name should not leak after localizing the router.
 old_router_slug="ask""-matt"
 old_router_title="Ask ""Matt"
-stale_router_refs=$(grep -R --exclude-dir=.git -nE "$old_router_slug|$old_router_title" "$REPO_ROOT" 2>/dev/null || true)
+stale_router_refs=$(grep -R --exclude-dir=.git --exclude-dir=.context --exclude-dir=node_modules \
+  -nE "$old_router_slug|$old_router_title" "$REPO_ROOT" 2>/dev/null || true)
 if [ -z "$stale_router_refs" ]; then
   echo "  PASS  old router name fully removed"
   PASS=$((PASS + 1))

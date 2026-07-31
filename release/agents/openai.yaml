@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release"
+  short_description: "Publish an immutable frontend-skills release"
+  default_prompt: "Use $release to publish the next frontend-skills version safely."

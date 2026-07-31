@@ -1,6 +1,6 @@
 {
   "$comment": "Source of truth for all hook configurations. Generates .claude/settings.json, hooks/hooks.json, .claude-plugin/plugin.json counts, .codex-plugin/plugin.json counts, .agents/plugins/marketplace.json, .claude-plugin/marketplace.json. Run scripts/generate-hook-configs.sh to regenerate. Entries are either a script filename string or an object {script, if, async, statusMessage, timeout}; asyncRewake is prohibited by the completion contract. Extra fields are Claude-only (Codex configs keep the bare command; `if` gating falls back to the script's own input guard there).",
-  "version": "4.33.0",
+  "version": "4.34.0",
   "hooks": {
     "SessionStart": {
       "": ["session-env.sh", "llm-env.sh"]

@@ -16,12 +16,26 @@ set -eo pipefail
 REMOTE=""
 JSON_MODE=false
 
-for arg in "$@"; do
-  case "$arg" in
-    --remote) REMOTE="${2:-origin}"; shift ;;
-    --json) JSON_MODE=true ;;
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --remote)
+      if [ "$#" -gt 1 ] && [[ "$2" != --* ]]; then
+        REMOTE="$2"
+        shift 2
+      else
+        REMOTE="origin"
+        shift
+      fi
+      ;;
+    --json)
+      JSON_MODE=true
+      shift
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      exit 1
+      ;;
   esac
-  shift 2>/dev/null || true
 done
 
 PASS=0
@@ -33,6 +47,28 @@ _pass() { PASS=$((PASS + 1)); $JSON_MODE || echo "  PASS  $1"; }
 _warn() { WARN=$((WARN + 1)); ISSUES="$ISSUES\n  WARN  $1"; $JSON_MODE || echo "  WARN  $1"; }
 _fail() { FAIL=$((FAIL + 1)); ISSUES="$ISSUES\n  FAIL  $1"; $JSON_MODE || echo "  FAIL  $1"; }
 
+_semver_valid() {
+  [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+}
+
+_semver_gt() {
+  local left_major left_minor left_patch right_major right_minor right_patch
+  IFS=. read -r left_major left_minor left_patch <<<"$1"
+  IFS=. read -r right_major right_minor right_patch <<<"$2"
+  [ "$left_major" -gt "$right_major" ] ||
+    { [ "$left_major" -eq "$right_major" ] && [ "$left_minor" -gt "$right_minor" ]; } ||
+    { [ "$left_major" -eq "$right_major" ] && [ "$left_minor" -eq "$right_minor" ] && [ "$left_patch" -gt "$right_patch" ]; }
+}
+
+LATEST_VERSION="unknown"
+_consider_latest() {
+  local candidate="${1#v}"
+  _semver_valid "$candidate" || return 0
+  if [ "$LATEST_VERSION" = "unknown" ] || _semver_gt "$candidate" "$LATEST_VERSION"; then
+    LATEST_VERSION="$candidate"
+  fi
+}
+
 $JSON_MODE || echo "=== Skills & Hooks Installation Verification ==="
 $JSON_MODE || echo ""
 
@@ -43,11 +79,19 @@ $JSON_MODE || echo ""
 PLUGIN_ROOT=""
 INSTALL_MODE="manual"
 
-# Check if installed as a plugin (pick latest version, not first)
-for dir in "$HOME/.claude/plugins/cache/skills/frontend-skills"/*/; do
+# Check if installed as a plugin. Compare SemVer numerically: 4.33 beats 4.9.
+CLAUDE_CONFIG_ROOT="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+CLAUDE_CACHE_ROOT="$CLAUDE_CONFIG_ROOT/plugins/cache/skills/frontend-skills"
+PLUGIN_VERSION="unknown"
+for dir in "$CLAUDE_CACHE_ROOT"/*/; do
   if [ -f "${dir}hooks/hooks.json" ]; then
-    PLUGIN_ROOT="$dir"
-    INSTALL_MODE="plugin"
+    candidate_version="$(basename "${dir%/}")"
+    if _semver_valid "$candidate_version" &&
+      { [ "$PLUGIN_VERSION" = "unknown" ] || _semver_gt "$candidate_version" "$PLUGIN_VERSION"; }; then
+      PLUGIN_ROOT="$dir"
+      PLUGIN_VERSION="$candidate_version"
+      INSTALL_MODE="plugin"
+    fi
   fi
 done
 
@@ -69,7 +113,153 @@ if [ -f "$PLUGIN_JSON" ] && command -v jq &>/dev/null; then
   _updated=$(jq -r '.["x-updatedAt"] // "unknown"' "$PLUGIN_JSON")
   _pass "Version: ${_version} (updated: ${_updated})"
 else
+  _version="unknown"
+  _updated="unknown"
   _warn "Could not read plugin version — plugin.json missing or jq unavailable"
+fi
+
+# ── 1b. Runtime and marketplace freshness ─────────────────────
+
+CLAUDE_VERSION="unknown"
+CODEX_VERSION="unknown"
+CODEX_MARKETPLACE_REF="unknown"
+CODEX_HOME_ROOT="${CODEX_HOME:-$HOME/.codex}"
+
+if command -v jq >/dev/null 2>&1; then
+  if command -v claude >/dev/null 2>&1; then
+    CLAUDE_VERSION="$(
+      claude plugin list --json 2>/dev/null |
+        jq -r '[.[] | select(.id == "frontend-skills@skills") | .version] | first // "unknown"' \
+          2>/dev/null || echo "unknown"
+    )"
+  fi
+  [ -n "$CLAUDE_VERSION" ] || CLAUDE_VERSION="unknown"
+  if [ "$CLAUDE_VERSION" = "unknown" ] && [ "$INSTALL_MODE" = "plugin" ]; then
+    CLAUDE_VERSION="$_version"
+  fi
+
+  if command -v codex >/dev/null 2>&1; then
+    CODEX_VERSION="$(
+      codex plugin list --json 2>/dev/null |
+        jq -r '[.installed[] | select(.pluginId == "frontend-skills@skills") | .version] | first // "unknown"' \
+          2>/dev/null || echo "unknown"
+    )"
+    [ -n "$CODEX_VERSION" ] || CODEX_VERSION="unknown"
+    while IFS= read -r candidate_version; do
+      _consider_latest "$candidate_version"
+    done < <(
+      codex plugin list --available --json 2>/dev/null |
+        jq -r '.available[]? | select(.pluginId == "frontend-skills@skills") | .version' \
+          2>/dev/null || true
+    )
+  fi
+
+  for marketplace_manifest in \
+    "$CLAUDE_CONFIG_ROOT"/plugins/marketplaces/*/.claude-plugin/marketplace.json \
+    .claude-plugin/marketplace.json; do
+    [ -f "$marketplace_manifest" ] || continue
+    while IFS= read -r candidate_version; do
+      _consider_latest "$candidate_version"
+    done < <(
+      jq -r '.plugins[]? | select(.name == "frontend-skills") | .version' \
+        "$marketplace_manifest" 2>/dev/null || true
+    )
+  done
+fi
+
+if [ "$CODEX_VERSION" = "unknown" ]; then
+  CODEX_CACHE_VERSION="unknown"
+  for dir in "$CODEX_HOME_ROOT/plugins/cache/skills/frontend-skills"/*/; do
+    [ -f "${dir}.codex-plugin/plugin.json" ] || continue
+    candidate_version="$(basename "${dir%/}")"
+    if _semver_valid "$candidate_version" &&
+      { [ "$CODEX_CACHE_VERSION" = "unknown" ] || _semver_gt "$candidate_version" "$CODEX_CACHE_VERSION"; }; then
+      CODEX_CACHE_VERSION="$candidate_version"
+    fi
+  done
+  CODEX_VERSION="$CODEX_CACHE_VERSION"
+fi
+
+CODEX_CONFIG="$CODEX_HOME_ROOT/config.toml"
+if [ -f "$CODEX_CONFIG" ]; then
+  CODEX_MARKETPLACE_REF="$(
+    awk '
+      /^\[marketplaces\.skills\][[:space:]]*$/ { in_skills = 1; next }
+      /^\[/ { in_skills = 0 }
+      in_skills && /^[[:space:]]*ref[[:space:]]*=/ {
+        value = $0
+        sub(/^[^=]*=[[:space:]]*/, "", value)
+        gsub(/["[:space:]]/, "", value)
+        print value
+        exit
+      }
+    ' "$CODEX_CONFIG"
+  )"
+  [ -n "$CODEX_MARKETPLACE_REF" ] || CODEX_MARKETPLACE_REF="unknown"
+fi
+
+if [ -n "$REMOTE" ]; then
+  remote_target="$REMOTE"
+  repository_url=""
+  if [ -f "$PLUGIN_JSON" ] && command -v jq >/dev/null 2>&1; then
+    repository_url="$(jq -r '.repository // empty' "$PLUGIN_JSON")"
+  fi
+  case "$remote_target" in
+    *://* | git@*) ;;
+    *)
+      configured_remote="$(git remote get-url "$remote_target" 2>/dev/null || true)"
+      if [ -n "$configured_remote" ] && printf '%s\n' "$configured_remote" | grep -q 'malinskibeniamin/skills'; then
+        remote_target="$configured_remote"
+      elif [ -n "$repository_url" ]; then
+        # This script is normally run from a consumer repository. Its `origin`
+        # is unrelated and must never decide the frontend-skills latest tag.
+        remote_target="$repository_url"
+      fi
+      ;;
+  esac
+  if ! git ls-remote --refs --tags "$remote_target" 'v*' >/dev/null 2>&1 &&
+    [ -n "$repository_url" ]; then
+    remote_target="$repository_url"
+  fi
+  while IFS= read -r tag; do
+    _consider_latest "$tag"
+  done < <(
+    git ls-remote --refs --tags "$remote_target" 'v*' 2>/dev/null |
+      sed 's#.*refs/tags/##' || true
+  )
+fi
+
+$JSON_MODE || echo ""
+$JSON_MODE || echo "--- Plugin Freshness ---"
+
+if [ "$LATEST_VERSION" = "unknown" ]; then
+  _warn "Could not determine the latest frontend-skills marketplace version"
+else
+  _pass "Latest available version: $LATEST_VERSION"
+  if _semver_valid "$CLAUDE_VERSION" && _semver_gt "$LATEST_VERSION" "$CLAUDE_VERSION"; then
+    _warn "Claude plugin $CLAUDE_VERSION is behind $LATEST_VERSION"
+  elif _semver_valid "$CLAUDE_VERSION"; then
+    _pass "Claude plugin is current ($CLAUDE_VERSION)"
+  else
+    _warn "Could not determine the installed Claude plugin version"
+  fi
+
+  if _semver_valid "$CODEX_VERSION" && _semver_gt "$LATEST_VERSION" "$CODEX_VERSION"; then
+    _warn "Codex plugin $CODEX_VERSION is behind $LATEST_VERSION"
+  elif _semver_valid "$CODEX_VERSION"; then
+    _pass "Codex plugin is current ($CODEX_VERSION)"
+  else
+    _warn "Could not determine the installed Codex plugin version"
+  fi
+
+  codex_ref_version="${CODEX_MARKETPLACE_REF#v}"
+  if _semver_valid "$codex_ref_version" && _semver_gt "$LATEST_VERSION" "$codex_ref_version"; then
+    _warn "Codex marketplace ref $CODEX_MARKETPLACE_REF is behind v$LATEST_VERSION"
+  elif _semver_valid "$codex_ref_version"; then
+    _pass "Codex marketplace ref is current ($CODEX_MARKETPLACE_REF)"
+  else
+    _warn "Could not determine the Codex marketplace ref"
+  fi
 fi
 
 # ── 2. Basic structure ──────────────────────────────────────────
@@ -463,49 +653,32 @@ else
   _warn "No package.json — hooks are designed for frontend projects"
 fi
 
-# ── 8. Version check (optional, with --remote) ─────────────────
-
-if [ -n "$REMOTE" ]; then
-  $JSON_MODE || echo ""
-  $JSON_MODE || echo "--- Version Check (remote: $REMOTE) ---"
-
-  # Check if any hook is a symlink pointing to a skills repo
-  skills_repo=""
-  for hook in ".claude/hooks/react-rules-check.sh" ".claude/hooks/enforce-toolchain.sh"; do
-    if [ -L "$hook" ]; then
-      target=$(readlink "$hook" 2>/dev/null || true)
-      if echo "$target" | grep -q "skills"; then
-        skills_repo=$(echo "$target" | sed 's|/setup-.*||;s|/shared/.*||')
-        break
-      fi
-    fi
-  done
-
-  if [ -n "$skills_repo" ] && [ -d "$skills_repo/.git" ]; then
-    local_hash=$(cd "$skills_repo" && git rev-parse HEAD 2>/dev/null || echo "unknown")
-    remote_hash=$(cd "$skills_repo" && git ls-remote "$REMOTE" HEAD 2>/dev/null | cut -f1 || echo "unknown")
-
-    if [ "$local_hash" = "unknown" ] || [ "$remote_hash" = "unknown" ]; then
-      _warn "Could not check version — git remote unreachable"
-    elif [ "$local_hash" = "$remote_hash" ]; then
-      _pass "Skills repo is up-to-date (${local_hash:0:7})"
-    else
-      local_date=$(cd "$skills_repo" && git log -1 --format=%ci HEAD 2>/dev/null || echo "unknown")
-      remote_date=$(cd "$skills_repo" && git log -1 --format=%ci "$REMOTE/main" 2>/dev/null || echo "unknown")
-      _warn "Skills repo is behind remote. Local: ${local_hash:0:7} ($local_date) Remote: ${remote_hash:0:7}"
-      _warn "Run: cd $skills_repo && git pull"
-    fi
-  else
-    _warn "Could not locate skills source repo — hooks may be copies (not symlinks)"
-  fi
-fi
-
 # ── Summary ─────────────────────────────────────────────────────
 
 $JSON_MODE || echo ""
 
 if $JSON_MODE; then
-  echo "{\"pass\":$PASS,\"warn\":$WARN,\"fail\":$FAIL,\"version\":\"${_version:-unknown}\",\"updatedAt\":\"${_updated:-unknown}\"}"
+  jq -cn \
+    --argjson pass "$PASS" \
+    --argjson warn "$WARN" \
+    --argjson fail "$FAIL" \
+    --arg version "${_version:-unknown}" \
+    --arg updatedAt "${_updated:-unknown}" \
+    --arg claudeVersion "$CLAUDE_VERSION" \
+    --arg codexVersion "$CODEX_VERSION" \
+    --arg latestVersion "$LATEST_VERSION" \
+    --arg codexMarketplaceRef "$CODEX_MARKETPLACE_REF" \
+    '{
+      pass: $pass,
+      warn: $warn,
+      fail: $fail,
+      version: $version,
+      updatedAt: $updatedAt,
+      claudeVersion: $claudeVersion,
+      codexVersion: $codexVersion,
+      latestVersion: $latestVersion,
+      codexMarketplaceRef: $codexMarketplaceRef
+    }'
 else
   echo "=== Summary: $PASS passed, $WARN warnings, $FAIL failures ==="
   if [ $FAIL -gt 0 ]; then

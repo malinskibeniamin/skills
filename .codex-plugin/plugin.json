@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "4.33.0",
+  "version": "4.34.0",
   "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -40,12 +40,13 @@
       "Review this PR and fix all findings"
     ]
   },
-  "x-updatedAt": "2026-07-29",
+  "x-updatedAt": "2026-07-31",
   "x-includes": {
     "instructions": ["CLAUDE.md", "AGENTS.md"],
     "settings": "settings.json"
   },
   "x-changelog": {
+    "4.34.0": "2026-07-31 -- Publish the post-4.33 Claude Code and Codex bundle. Expands React Doctor coverage, review routing, React Compiler guidance, and SPA soak testing. Adds an explicit /release workflow, isolated Claude installer coverage, and stale Claude/Codex plugin and pinned-marketplace diagnostics; fixes the SPA soak documentation whitespace regression that broke CI. Refreshes every manifest, marketplace, and install pin together.",
     "4.33.0": "2026-07-29 -- Publish the post-4.32 Claude Code and Codex bundle. Adds /dogfood with PR-aware experiential verification, /postgresql, and /quantify-impact; makes lifecycle completion endpoint-aware and planning/review risk-tiered; adopts leaner TDD and skill guidance; updates Opus 5/Fable routing; and adds Codex installer coverage plus hook correctness fixes. Packages /dogfood for both runtimes and refreshes every manifest, marketplace, and install pin together.",
     "4.32.0": "2026-07-24 -- Publish the post-4.31 Claude Code and Codex bundle. Adds TanStack Table v9 reactive guidance and enforcement, React Hook Form resilience checks, quota-aware review routing, typed hook protocol parsing, and a repository-wide quality gate; syncs the latest planning and writing skills; and fixes dynamic class-name checks, Go proto validation, and Codex telemetry. Repackages /golang and /golang-review on a fresh immutable tag for both runtimes. Refreshes every manifest, marketplace, and install pin together.",
     "4.31.0": "2026-07-20 -- Publish the latest Claude Code and Codex bundle, superseding the unpublished 4.30.0 metadata. Includes the TypeScript 7 tsc migration, browser/image invariants, evidence-backed Go authoring and review guidance, expanded Claude hook lifecycle support, Codex execpolicy parity and telemetry, evidence-mined frontend invariants, stack-registry guidance, reusable exemplars, and exhaustive AIP review coverage. Refreshes every manifest, marketplace, and install pin together.",

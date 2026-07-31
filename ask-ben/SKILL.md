@@ -47,6 +47,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/read-the-damn-docs` | Research current behavior from primary documentation. |
 | `/redpanda-ai-gateway` | Run AI CLIs through the Redpanda AI Gateway. |
 | `/registry-workflow` | Maintain component registry taxonomy and sync discipline. |
+| `/release` | Publish an immutable frontend-skills release safely. |
 | `/research` | Research primary sources and save cited findings. |
 | `/resilience-review` | Review credible high-impact failures with Murphy law. |
 | `/resolve-pr-feedback` | Resolve pull request feedback and review threads. |
