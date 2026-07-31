@@ -10,7 +10,8 @@ This project has **React Compiler** (babel-plugin-react-compiler) enabled in rsb
 
 Just write plain functions, plain callbacks, and plain components. The compiler optimizes them.
 
-**Escape hatch:** If a file must opt out of the compiler, add `'use no memo'` as the first line.
+**Compiler opt-out:** Use `'use no memo'` only when the component itself is incompatible
+with compilation. Do not use it to justify routine manual memoization.
 
 # Task
 

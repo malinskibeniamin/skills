@@ -14,7 +14,9 @@
 4. **Derive, don't store** -- never `useState` + `useEffect` for derived values.
 5. **Hooks for semantics** -- `useState` for UI state, `useEffect` for external sync, `useRef` for imperative handles.
 6. **No `useRef` as memo cache** -- compiler own caching.
-7. **`useMemo`/`useCallback`/`React.memo` = escape hatches** -- only for non-React integration or correctness-critical referential stability. Document why.
+7. **`useMemo`/`useCallback`/`React.memo` = escape hatches** -- only for measured
+   post-compiler performance, non-React integrations that observe identity, or precise
+   effect re-execution. Code must remain correct if React discards the cache. Document why.
 8. **Never remove `'use no memo'`** -- last-resort opt-out.
 9. **Naming** -- PascalCase components, `use*` hooks (aids compiler inference).
 
@@ -22,6 +24,12 @@
 
 Manual memoization (useMemo/useCallback/React.memo), useState+useEffect derived state, and useRef-as-cache are owned by React Doctor (`react-doctor/react-compiler-no-manual-memoization`, `react-doctor/no-derived-state-effect`, `react-doctor/rerender-lazy-ref-init`) via the React Doctor Stop hook. The former `react-compiler-check.sh` was retired -- one owner per rule.
 
+## Hook Import Boundary
+
+Import compiler-sensitive built-in hooks directly from `react`. Do not route them through
+local or third-party re-exports: runtime identity does not guarantee that React Compiler,
+exhaustive-dependency linting, and manual-memoization validation will recognize the
+built-in semantics. Configure Biome explicitly for an unavoidable custom effect hook.
 
 ## Escape Hatch: 'use no memo'
 
@@ -102,4 +110,14 @@ All files in `components/ui/` or `redpanda-ui/` need `'use no memo'` -- registry
 
 ## When Manual Optimization IS Allowed
 
-Only when: profiling reveal real bottleneck **after** compilation, interfacing with non-React/legacy systems, referential stability for **correctness** (not performance), or precise effect re-execution control beyond compiler inference. Add `'use no memo'` and document why.
+Only when profiling reveals a real bottleneck **after** compilation, a non-React or legacy
+integration does unnecessary work when identity changes, or an effect needs precise
+re-execution control beyond compiler inference. Application behavior must remain correct
+if React discards the cache and recomputes the value.
+
+Manual memoization does not require `'use no memo'`; keep the component compiled unless
+the compiler itself is incompatible with it. Because React Doctor blocks routine manual
+memoization, a proven exception needs a file-scoped
+`react-compiler-no-manual-memoization` ignore override with a rationale in
+`doctor.config.json`. Import the hook directly from `react`, document the measured or
+external identity boundary, and verify cleanup/re-subscription behavior where applicable.
