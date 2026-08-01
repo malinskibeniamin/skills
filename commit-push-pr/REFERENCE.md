@@ -65,6 +65,10 @@ Method: <exact command, fixture/run count, environment, base/candidate>
 ## Summary
 <bulleted summary synthesized from commits -- behavior changes, not file lists>
 
+## Stack context
+<include only for a stacked PR: layer position, parent PR/branch, dependent PRs, and whether
+the stack is draft or ready; omit for an ordinary PR>
+
 ## Why
 <rationale + explicit out-of-scope line for anything deliberately deferred>
 
@@ -111,6 +115,11 @@ EOF
 Note: `--fill-verbose` set title from commits. Override with `--title` only if auto-gen title poor.
 
 Append `--label <label1> --label <label2>` per verified label.
+
+Resolve `<base>` with `scripts/resolve-pr-base.sh` from the plugin root. For a stack layer,
+this is the branch immediately below it, not the stack trunk. Ordinary `/commit-push-pr`
+publishes only the current layer; `gh stack submit` belongs to an explicit `/stacked-prs`
+endpoint because it can publish every unsubmitted branch.
 
 **Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.
 

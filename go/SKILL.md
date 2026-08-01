@@ -50,6 +50,10 @@ Follow [commit-push-pr/REFERENCE.md](../commit-push-pr/REFERENCE.md) for explici
 commit format, push, draft PR creation, reviewer guidance, and the PR body. Never merge or
 force-push without permission.
 
+If `gh stack view --json` identifies a stack, review and verify the current layer against its
+parent. Ship the whole stack only when explicitly requested through `/stacked-prs`; an ordinary
+PR endpoint must not publish other unsubmitted layers.
+
 - Bind review and verification to current `HEAD`; later edits invalidate that evidence.
 - Monitor CI only because this command is the explicit full-delivery endpoint. Repair a
   failure, replay affected verification, push, and continue.

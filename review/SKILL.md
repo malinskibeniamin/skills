@@ -17,11 +17,11 @@ Keep one owner in the primary context; agents require explicit delegation.
   real entrypoint; automated tests are supporting evidence, not experiential evidence.
 - **Stop**: every applicable surface is accounted for and each finding has evidence,
   consequence, priority, and a concrete correction.
-If the fixed point is missing, ask what to review against. Otherwise use the PR base or
-`origin/main`. Pin the comparison before reading summaries:
+If the fixed point is missing, ask what to review against. Otherwise resolve the current PR layer first; this selects a stacked PR's parent before the remote trunk:
 ```bash
-git diff <fixed>...HEAD
-git log <fixed>..HEAD --oneline
+BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")
+git diff "$BASE"...HEAD
+git log "$BASE"..HEAD --oneline
 ```
 ## Evidence loop
 **inspect -> verify -> classify -> synthesize.**

@@ -32,7 +32,8 @@ You receive session context via SubagentStart hook:
 - Do bugs and meaningful new contracts have the smallest public-boundary tests?
 - Are additional cases tied to independent credible risks?
 - Do tests verify behavior, not implementation?
-- Run `vitest run --related $(git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}")` -- any failures?
+- Run `vitest run --related $(git diff --name-only "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD)`
+  -- any failures?
 
 ### 2. Simplification
 - Can any new code be simplified while keeping tests green?

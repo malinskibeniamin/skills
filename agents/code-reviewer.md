@@ -26,7 +26,8 @@ labeled clean-context Sol pass.
 
 ## Stage 1: Spec Compliance
 
-`git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}"` -- verify:
+Run `git diff "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD`
+so a stacked PR includes only its current layer. Verify:
 - [ ] All requirements addressed
 - [ ] No scope creep
 - [ ] Credible risks handled
