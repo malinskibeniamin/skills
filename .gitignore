@@ -1,4 +1,7 @@
 node_modules/
+.blume/
+.blume-verify/
+dist/
 redpanda-evals/**/*.go
 redpanda-evals/**/*.sh
 
