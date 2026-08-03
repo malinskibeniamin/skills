@@ -72,6 +72,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/triage` | Prepare issues for reliable agent or human execution. |
 | `/upgrade-dependency` | Upgrade a dependency and adapt every affected call site. |
 | `/ux-copy` | Write clear, inclusive product copy in Redpanda style. |
+| `/video-research` | Turn videos into timestamped research evidence. |
 | `/visual-plan` | Turn a plan into an interactive visual artifact. |
 | `/visual-recap` | Turn a code change into an interactive visual recap. |
 | `/visual-review` | Review customer-facing surfaces from visual evidence. |

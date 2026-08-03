@@ -16,5 +16,6 @@ Its job:
 ## Routing
 
 - Need a fact **right now** to keep coding (API shape, current flag, version behavior) -> `/read-the-damn-docs` inline instead; no background agent, no artifact.
+- Video URL or attachment -> `/video-research` first; treat its timestamped transcript, OCR, and frames as source evidence.
 - Multi-source fact-checked **report** with adversarial verification -> the deep-research harness.
 - This skill is the middle: focused reading legwork with a cited Markdown artifact.
