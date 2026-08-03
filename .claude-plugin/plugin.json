@@ -87,6 +87,7 @@
     "./triage/",
     "./upgrade-dependency/",
     "./ux-copy/",
+    "./video-research/",
     "./visual-plan/",
     "./visual-recap/",
     "./visual-review/",
