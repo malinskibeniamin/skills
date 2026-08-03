@@ -31,6 +31,7 @@ SHORT_DESCRIPTIONS = {
     "codex": "Delegate bounded work through the Codex CLI",
     "commit-push-pr": "Commit, push, and publish a reviewable pull request",
     "connect-query": "Build typed ConnectRPC data flows with Connect Query",
+    "demo": "Create a customer-facing feature recording",
     "deslop": "Audit already-bloated code and remove unjustified surface",
     "development-lifecycle": "Run the full frontend development lifecycle",
     "diagnosing-bugs": "Diagnose hard bugs with a tight feedback loop",

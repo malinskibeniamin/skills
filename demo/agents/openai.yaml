@@ -1,0 +1,6 @@
+interface:
+  display_name: "Demo"
+  short_description: "Create a customer-facing feature recording"
+  default_prompt: "Use $demo to turn this branch into a customer-facing recording and draft PR."
+policy:
+  allow_implicit_invocation: false

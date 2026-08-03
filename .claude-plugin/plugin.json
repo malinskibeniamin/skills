@@ -33,6 +33,7 @@
     "./codex/",
     "./commit-push-pr/",
     "./connect-query/",
+    "./demo/",
     "./deslop/",
     "./development-lifecycle/",
     "./diagnosing-bugs/",

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Demo"
+  short_description: "Create a customer-facing feature recording"
+policy:
+  allow_implicit_invocation: false
