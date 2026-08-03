@@ -19,7 +19,7 @@ repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
 ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "UI", "URL", "UX"}
-BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "redpanda": "Redpanda", "snyk": "Snyk", "tanstack": "TanStack"}
+BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "tanstack": "TanStack"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
     "accessibility": "Build accessible React interactions and components",
@@ -70,6 +70,7 @@ SHORT_DESCRIPTIONS = {
     "setup-routines": "Configure automated Claude Code maintenance routines",
     "snyk-ux-security": "Audit dependency security with Snyk and release gates",
     "stack-registry": "Current and banned stack governance for harness rules",
+    "stacked-prs": "Create and manage dependent GitHub pull request stacks",
     "stay-within-limits": "Budget long-running agent work around usage limits",
     "steelman": "Build the strongest evidence-backed counterargument",
     "swarm": "Execute independent work across parallel worktree lanes",

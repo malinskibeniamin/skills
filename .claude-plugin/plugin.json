@@ -72,6 +72,7 @@
     "./setup-routines/",
     "./snyk-ux-security/",
     "./stack-registry/",
+    "./stacked-prs/",
     "./stay-within-limits/",
     "./steelman/",
     "./swarm/",

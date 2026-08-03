@@ -13,13 +13,13 @@ This agent is expensive. Run only when at least one trigger fires.
 
 1. Compute diff size:
    ```
-   git diff --shortstat "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | awk '{print $4 + $6}'
+   git diff --shortstat "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD | awk '{print $4 + $6}'
    ```
    Call this `diff_lines`.
 
 2. Read prior reviewer outputs from orchestrator context (code-reviewer, self-reviewer JSON blocks already emitted this turn). Scan for any finding with `severity: "CRITICAL"`.
 
-   git diff --name-only "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}" | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'
+   git diff --name-only "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD | rg '(auth|login|session|token|crypto|secret|password|permission|acl|rbac)'
    ```
 
 4. Decision:
@@ -43,7 +43,7 @@ Your job is to break things. For every significant change in the diff, construct
 
 ## Approach
 
-1. `git diff "${REVIEW_BASE:-$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD~1)}"` -- read the full diff
+1. `git diff "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD` -- read the full current PR layer
 2. For each significant change, ask yourself:
 
 ### Failure Classes

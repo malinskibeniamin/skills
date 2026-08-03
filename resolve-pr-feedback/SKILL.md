@@ -35,7 +35,9 @@ Use `/agent-watchdog` when picking up feedback after another agent, cloud review
 ## Workflow
 
 ### 1. Detect PR
-`gh pr view --json number -q .number` or use `$ARGUMENTS`. No PR found -> stop.
+`gh pr view --json number,baseRefName -q .number` or use `$ARGUMENTS`. No PR found -> stop.
+Read the REST `stack` object when present. If the owning branch is checked out by another
+worktree, report that workspace instead of stealing the branch.
 
 ### 2. Fetch Feedback
 Three sources: inline review threads (GraphQL reviewThreads), top-level comments (`gh pr view --json comments`), review bodies (`gh pr view --json reviews`). See [REFERENCE.md](REFERENCE.md) for queries.
@@ -55,14 +57,20 @@ Filter hard. Zero new items -> comment "All feedback addressed" -> stop.
 Group feedback hit same issue. Each cluster = one unit work.
 
 ### 5. Fix Each Cluster
-Read code -> understand ask -> fix -> run related tests -> commit:
+Read code -> understand ask -> move to the branch that owns the change -> fix -> run related
+tests -> commit:
 `fix(review): <cluster summary>`. Sequential, one commit per cluster.
 
 ### 6. Reply and Resolve
 Reply each thread, explain fix. Resolve via GraphQL. See [REFERENCE.md](REFERENCE.md) for mutations.
 
 ### 7. Push + Monitor CI
-`git push` then `Monitor: gh pr checks $pr_number --watch`. Fix CI fails before summary.
+For an ordinary PR, `git push` then `Monitor: gh pr checks $pr_number --watch`. For a lower
+stack layer, run `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`, then obtain explicit authorization
+before `gh stack rebase --upstack --remote origin` and `gh stack push --remote origin`; both
+can rewrite upper branches with force-with-lease. Monitor every PR changed by that cascade.
+External-link mode requires coordinating or freeing other worktrees first. Fix CI failures
+before summary.
 
 ### 8. Completeness Verification (MANDATORY -- hook enforces)
 Before stop, assert zero unresolved non-bot non-outdated threads **and** zero stale CHANGES_REQUESTED reviews. Any remain -> loop step 3. `pr-feedback-completeness-stop` hook block session exit until true.

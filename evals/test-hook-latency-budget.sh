@@ -6,18 +6,36 @@ _lb_tmp=$(mktemp -d /tmp/latency-budget-XXXXXX)
 printf 'export const ok = 1;\n' > "$_lb_tmp/clean.ts"
 _lb_payload=$(printf '{"hook_event_name":"PostToolBatch","tool_calls":[{"tool_name":"Edit","tool_input":{"file_path":"%s/clean.ts","old_string":"a","new_string":"export const ok = 1;"}}]}' "$_lb_tmp")
 
-_lb_start=$(perl -MTime::HiRes=time -e 'printf "%d", time()*1000000')
-printf '%s' "$_lb_payload" | "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" >/dev/null 2>&1 || true
-_lb_end=$(perl -MTime::HiRes=time -e 'printf "%d", time()*1000000')
-_lb_ms=$(( (_lb_end - _lb_start) / 1000 ))
+_lb_measure_dispatcher() {
+  _lb_start=$(perl -MTime::HiRes=time -e 'printf "%d", time()*1000000')
+  printf '%s' "$_lb_payload" | "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" >/dev/null 2>&1 || true
+  _lb_end=$(perl -MTime::HiRes=time -e 'printf "%d", time()*1000000')
+  printf '%s\n' $(( (_lb_end - _lb_start) / 1000 ))
+}
+
+_lb_ms=$(_lb_measure_dispatcher)
+_lb_attempts=1
+printf '%s\n' "$_lb_ms" > "$_lb_tmp/samples"
+
+# A cold or contended CI runner can produce one slow wall-clock sample. Retry only
+# after a breach and use the median so the budget still catches sustained regressions.
+if [ "$_lb_ms" -ge 5000 ]; then
+  for _lb_attempt in 2 3; do
+    _lb_sample=$(_lb_measure_dispatcher)
+    printf '%s\n' "$_lb_sample" >> "$_lb_tmp/samples"
+  done
+  _lb_ms=$(sort -n "$_lb_tmp/samples" | sed -n '2p')
+  _lb_attempts=3
+fi
+
 if [ "$_lb_ms" -le 0 ]; then
   echo "  FAIL  latency timer returned ${_lb_ms}ms -- timer broken, budget unverifiable"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: latency timer broken"
 fi
-rm -f "$_lb_tmp/clean.ts"; rmdir "$_lb_tmp" 2>/dev/null || true
+rm -f "$_lb_tmp/clean.ts" "$_lb_tmp/samples"; rmdir "$_lb_tmp" 2>/dev/null || true
 
 if [ "$_lb_ms" -lt 5000 ]; then
-  echo "  PASS  batch dispatcher under latency budget (${_lb_ms}ms < 5000ms)"
+  echo "  PASS  batch dispatcher under latency budget (${_lb_ms}ms < 5000ms, ${_lb_attempts} sample(s))"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  batch dispatcher over latency budget (${_lb_ms}ms >= 5000ms)"

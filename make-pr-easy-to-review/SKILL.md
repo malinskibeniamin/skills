@@ -12,8 +12,11 @@ Prepare a PR so a reviewer can quickly understand the intent, important files, a
 
 1. Resolve the target PR from the user-provided URL or current branch.
 2. Inspect commits, diff size, changed paths, generated files, and PR description.
+   For a stacked PR, compare with `baseRefName`, record its layer and adjacent PRs, and keep
+   history operations inside the owning branch.
 3. Identify reviewability issues: noisy commits, stale description, unrelated changes, mixed mechanical and logic changes, missing tests, or unclear reviewer entry points.
-4. Propose a plan before rewriting history or force-pushing.
+4. Propose a plan before rewriting history or force-pushing. Reordering, folding, or
+   cascading a stack requires explicit whole-stack approval.
 5. Apply safe improvements, then verify the tree or diff still matches the intended code.
 
 ## History Cleanup

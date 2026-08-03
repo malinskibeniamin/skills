@@ -11,7 +11,9 @@ A **material runnable increment** is a behavior slice that can be exercised thro
 
 Before using the implementation, identify the complete behavior inventory:
 
-1. Resolve the target branch from `DOGFOOD_BASE_REF` when set, otherwise the remote default branch (`origin/HEAD`, then `origin/main` or `origin/master`).
+1. Resolve the target with
+   `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
+   This selects the current stacked PR's parent before falling back to the remote default.
 2. Inspect the whole PR diff from its merge-base through committed, staged, unstaged, and untracked changes. Do not limit scope to files touched in the current session.
 3. Map every runnable artifact to its changed behavior and real entrypoint. A skill includes `SKILL.md` plus its referenced guidance, assets, and scripts; hooks and automation are runnable through their actual events. Exclude standalone documentation, tests, and evals from required experiential coverage.
 

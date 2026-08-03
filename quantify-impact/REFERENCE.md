@@ -40,7 +40,11 @@ Good exact evidence includes `bug reproduction 5/5 -> 0/5`, `network requests 12
 ## Base and candidate
 
 1. Prefer a pre-edit baseline.
-2. If edits already exist, resolve the repository's default branch, set `BASE=$(git merge-base origin/<default> HEAD)`, and reconstruct that tree in an isolated checkout or build artifact.
+2. If edits already exist, resolve the current PR layer with
+   `BASE_REF=$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`, set
+   `BASE=$(git merge-base "$BASE_REF" HEAD)`, and reconstruct that tree in an isolated
+   checkout or build artifact. Set `PR_BASE_REF` to the trunk only when the thesis measures
+   the whole stack rather than one layer.
 3. Record both SHAs and dirty state.
 4. Install each tree from its own lockfile. Use the same runtime/browser version, machine, power mode, fixture, data size, build mode, cache state, and command.
 5. Compare production builds for user performance unless the claim explicitly concerns development.
