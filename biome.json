@@ -5,6 +5,10 @@
     "includes": [
       "**",
       "!.context",
+      "!.blume",
+      "!**/.blume",
+      "!**/.blume-verify",
+      "!**/dist",
       "!exemplars",
       "!**/*.gen.ts",
       "!**/*.gen.tsx",

@@ -3,8 +3,14 @@
   "type": "module",
   "private": true,
   "packageManager": "bun@1.3.14",
+  "workspaces": [
+    "docs-site"
+  ],
   "scripts": {
     "check:files": "biome check --error-on-warnings --no-errors-on-unmatched",
+    "docs:build": "bun run --cwd docs-site build",
+    "docs:check": "bun run --cwd docs-site check",
+    "docs:dev": "bun run --cwd docs-site dev",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint --error-on-warnings .",

@@ -74,6 +74,18 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 
 Want proof and examples? Demo scripts, featured skill moments, and starter prompts live in [docs/DEMOS.md](docs/DEMOS.md); comparisons, measurement methodology, and common questions live in [docs/FAQ.md](docs/FAQ.md).
 
+## Browse the docs
+
+The Blume site turns every canonical `SKILL.md` into a searchable page without a
+second documentation copy. Skill names, descriptions, instructions, and new skills are
+picked up automatically.
+
+```bash
+bun run docs:dev    # local site with hot reload
+bun run docs:check  # content and Astro checks
+bun run docs:build  # static output in docs-site/dist
+```
+
 ## How it all connects
 
 ```
