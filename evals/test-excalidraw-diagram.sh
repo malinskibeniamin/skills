@@ -4,6 +4,8 @@ SKILL="$REPO_ROOT/excalidraw-diagram/SKILL.md"
 REFERENCE="$REPO_ROOT/excalidraw-diagram/REFERENCE.md"
 VISUAL_REVIEW="$REPO_ROOT/visual-review/SKILL.md"
 VISUAL_RECAP="$REPO_ROOT/visual-recap/SKILL.md"
+IMPROVE="$REPO_ROOT/improve/SKILL.md"
+ARCHITECTURE_REPORT="$REPO_ROOT/improve/references/architecture-report.md"
 
 run_file_eval "$SKILL" "Excalidraw skill exists"
 run_file_eval "$REFERENCE" "Excalidraw scene reference exists"
@@ -43,3 +45,11 @@ run_content_eval "$VISUAL_RECAP" 'Agent-Native.*primary|primary.*Agent-Native' \
   "visual recap keeps the Agent-Native recap as the primary review surface"
 run_content_eval "$VISUAL_RECAP" '\.excalidraw.*(PNG|SVG)|PNG.*\.excalidraw|SVG.*\.excalidraw' \
   "visual recap preserves editable source beside its rendered diagram"
+run_content_eval "$IMPROVE" '/excalidraw-diagram' \
+  "architecture improvement can create editable before-and-after diagrams"
+run_content_eval "$IMPROVE" 'artifact.*requested|requested.*artifact' \
+  "architecture improvement keeps diagram files behind the requested artifact boundary"
+run_content_eval "$ARCHITECTURE_REPORT" '/excalidraw-diagram' \
+  "architecture report documents its Excalidraw rendering path"
+run_content_eval "$ARCHITECTURE_REPORT" 'Mermaid.*simple|simple.*Mermaid' \
+  "architecture report keeps Mermaid for simple graph-shaped evidence"

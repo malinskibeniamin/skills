@@ -54,10 +54,11 @@ You are a **senior advisor**. Select the output mode from the request before ins
 - `/improve architecture`: find shallow modules, seams, and file-hop friction using
   `/codebase-design` vocabulary and the deletion test. Return per-candidate cards (problem,
   solution, locality/leverage/test benefits, before/after, Strong|Worth
-  exploring|Speculative) plus **Top recommendation:** with the strongest evidence. Create the HTML artifact from
-  `references/architecture-report.md` only when requested, then grill a chosen candidate
-  before proposing interfaces. Run `/domain-modeling` inline only when glossary or ADR-worthy
-  decisions crystallize.
+  exploring|Speculative) plus **Top recommendation:** with the strongest evidence. Create the
+  HTML artifact from `references/architecture-report.md` only when requested. In that artifact,
+  use `/excalidraw-diagram` for editable before/after views when spatial relationships carry
+  the argument; keep Mermaid for a simple graph. Then grill a chosen candidate before proposing
+  interfaces. Run `/domain-modeling` inline only when glossary or ADR-worthy decisions crystallize.
 - `/improve branch`: audit current branch diff plus direct callers; tag findings `introduced` or `pre-existing`.
 - `/improve next`: grounded feature/roadmap suggestions only.
 - `/improve plan <description>`: skip broad audit; investigate enough to write one plan.
