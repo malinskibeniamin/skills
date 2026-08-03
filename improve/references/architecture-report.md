@@ -1,6 +1,10 @@
 # HTML Report Format
 
-The architectural review is rendered as a single self-contained HTML file in the OS temp directory. Tailwind and Mermaid both come from CDNs. Mermaid handles graph-shaped diagrams reliably; hand-built divs and inline SVG handle the more editorial visuals (mass diagrams, cross-sections). Mix the two -- don't lean on Mermaid for everything, it'll start to look generic.
+The architectural review is rendered as a single self-contained HTML file in the OS temp
+directory. Use `/excalidraw-diagram` for art-directed before/after architecture views and
+inline its exported SVG in the report; keep the editable `.excalidraw` source beside the HTML.
+Tailwind and Mermaid both come from CDNs. Mermaid remains the simple graph-shaped option;
+hand-built divs and inline SVG handle compact mass diagrams and cross-sections. Mix the forms.
 
 ## Scaffold
 
@@ -57,6 +61,14 @@ No paragraphs of explanation. If the diagram needs a paragraph to be understood,
 ## Diagram patterns
 
 Pick the pattern that fits the candidate. Mix them. Don't make every diagram look the same -- variety is part of the point.
+
+### Excalidraw before/after (the architecture centrepiece)
+
+Use `/excalidraw-diagram` when a candidate depends on grouping, leakage callouts, nested
+responsibility, or an irregular current-to-target layout. Give the top recommendation a paired
+before/after scene, export SVG, visually inspect it, and inline that SVG so the HTML remains
+self-contained. Save the `.excalidraw` source beside the report and return both paths. If the
+canvas is unavailable, fall back to Mermaid or the compact HTML patterns below and record why.
 
 ### Mermaid graph (the workhorse for dependencies / call flow)
 

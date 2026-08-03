@@ -41,6 +41,7 @@
     "./domain-modeling/",
     "./e2e-testing/",
     "./efficient-frontier/",
+    "./excalidraw-diagram/",
     "./extend-harness/",
     "./frontend-invariants/",
     "./frontend-starter-kit/",

@@ -23,6 +23,11 @@ Read these only when relevant:
   commit, or diff.
 - Recap creation is extra artifact work; `/commit-push-pr` and `/go` do not invoke it
   automatically.
+- For a meaningful architecture or data-flow shift, use `/excalidraw-diagram` to create
+  `.excalidraw` source plus PNG or SVG. Keep the Agent-Native recap as the primary review
+  surface: embed the rendered asset only when the current block catalog supports media;
+  otherwise use its `diagram` block and include the source/export paths in the handoff.
+  Prefer the built-in Mermaid path for a simple graph or when the canvas is unavailable.
 - Keep recaps grounded in the real diff. Redact secrets and do not infer facts absent from changed lines.
 - If the explicitly requested target has no meaningful visual structure, return that evidence
   instead of manufacturing a recap.
