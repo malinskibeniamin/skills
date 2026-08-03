@@ -2,6 +2,8 @@
 
 SKILL="$REPO_ROOT/excalidraw-diagram/SKILL.md"
 REFERENCE="$REPO_ROOT/excalidraw-diagram/REFERENCE.md"
+VISUAL_REVIEW="$REPO_ROOT/visual-review/SKILL.md"
+VISUAL_RECAP="$REPO_ROOT/visual-recap/SKILL.md"
 
 run_file_eval "$SKILL" "Excalidraw skill exists"
 run_file_eval "$REFERENCE" "Excalidraw scene reference exists"
@@ -29,3 +31,15 @@ run_file_eval "$REPO_ROOT/codex-skills/excalidraw-diagram/SKILL.md" \
   "Codex plugin exposes the Excalidraw skill"
 run_file_eval "$REPO_ROOT/codex-skills/excalidraw-diagram/agents/openai.yaml" \
   "Codex plugin exposes Excalidraw UI metadata"
+run_content_eval "$VISUAL_REVIEW" '/excalidraw-diagram' \
+  "visual review can add an editable flow map when screenshots are insufficient"
+run_content_eval "$VISUAL_REVIEW" 'screenshots.*primary|primary.*screenshots' \
+  "visual review keeps screenshots as primary evidence"
+run_content_eval "$VISUAL_REVIEW" 'Mermaid.*fallback|fallback.*Mermaid' \
+  "visual review degrades gracefully when the Excalidraw canvas is unavailable"
+run_content_eval "$VISUAL_RECAP" '/excalidraw-diagram' \
+  "visual recap can map architecture and data-flow changes with Excalidraw"
+run_content_eval "$VISUAL_RECAP" 'Agent-Native.*primary|primary.*Agent-Native' \
+  "visual recap keeps the Agent-Native recap as the primary review surface"
+run_content_eval "$VISUAL_RECAP" '\.excalidraw.*(PNG|SVG)|PNG.*\.excalidraw|SVG.*\.excalidraw' \
+  "visual recap preserves editable source beside its rendered diagram"

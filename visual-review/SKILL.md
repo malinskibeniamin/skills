@@ -46,6 +46,15 @@ embeds/scripts.
 Heuristics: HTML first. Lifecycle beats screenshot. State beats happy path. Motion is interaction.
 Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
 
+## Flow maps
+
+When screenshots cannot explain a non-trivial state journey, UI/system boundary, or
+before/after structure, use `/excalidraw-diagram` for one concise flow map. Keep
+screenshots as the primary evidence; the map explains relationships, not pixels. Embed
+its inline SVG or data-encoded PNG in the HTML report and report the adjacent editable
+`.excalidraw` path.
+For a simple graph or unavailable canvas, use Mermaid as the fallback and record the limit.
+
 ## Output
 
 Write a concise report. For non-trivial or release review, create
