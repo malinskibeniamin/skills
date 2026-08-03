@@ -1,0 +1,562 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "mcp-excalidraw-server",
+  "elements": [
+    {
+      "id": "canvas",
+      "type": "rectangle",
+      "x": 0,
+      "y": 0,
+      "width": 1400,
+      "height": 900,
+      "backgroundColor": "#121212",
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "locked": true,
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "pipeline",
+      "type": "rectangle",
+      "x": 480,
+      "y": 60,
+      "width": 440,
+      "height": 760,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "prompt",
+      "type": "rectangle",
+      "x": 510,
+      "y": 90,
+      "width": 380,
+      "height": 100,
+      "backgroundColor": "#1c4f73",
+      "strokeColor": "#4dabf7",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Natural-language prompt"
+      },
+      "fontSize": 23,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "workflow",
+      "type": "rectangle",
+      "x": 510,
+      "y": 220,
+      "width": 380,
+      "height": 420,
+      "backgroundColor": "#0b4f1c",
+      "strokeColor": "#40c057",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "route",
+      "type": "rectangle",
+      "x": 540,
+      "y": 255,
+      "width": 320,
+      "height": 95,
+      "backgroundColor": "#402f00",
+      "strokeColor": "#f08c00",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "label": {
+        "text": "Choose generation route"
+      },
+      "fontSize": 21,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "build",
+      "type": "rectangle",
+      "x": 540,
+      "y": 380,
+      "width": 320,
+      "height": 95,
+      "backgroundColor": "#2d1b69",
+      "strokeColor": "#9775fa",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Generate Excalidraw elements"
+      },
+      "fontSize": 21,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "verify",
+      "type": "rectangle",
+      "x": 540,
+      "y": 505,
+      "width": 320,
+      "height": 100,
+      "backgroundColor": "#134e4a",
+      "strokeColor": "#38d9a9",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Render, inspect, correct"
+      },
+      "fontSize": 21,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "output",
+      "type": "rectangle",
+      "x": 510,
+      "y": 675,
+      "width": 380,
+      "height": 115,
+      "backgroundColor": "#6b3232",
+      "strokeColor": "#ff8787",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Editable source + rendered assets"
+      },
+      "fontSize": 22,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "skill-name",
+      "type": "text",
+      "x": 75,
+      "y": 70,
+      "width": 340,
+      "height": 40,
+      "strokeColor": "#e9ecef",
+      "text": "<$excalidraw-diagram />",
+      "fontSize": 28,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "skill-note",
+      "type": "text",
+      "x": 125,
+      "y": 112,
+      "width": 265,
+      "height": 26,
+      "strokeColor": "#adb5bd",
+      "text": "deterministic, editable",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "skill-arrow",
+      "type": "arrow",
+      "x": 300,
+      "y": 145,
+      "width": 180,
+      "height": 35,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          82,
+          0
+        ],
+        [
+          180,
+          35
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "prompt-callout",
+      "type": "text",
+      "x": 1030,
+      "y": 102,
+      "width": 245,
+      "height": 34,
+      "strokeColor": "#e9ecef",
+      "text": "Prompt",
+      "fontSize": 25,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "prompt-note",
+      "type": "text",
+      "x": 1030,
+      "y": 140,
+      "width": 280,
+      "height": 26,
+      "strokeColor": "#adb5bd",
+      "text": "describe the visual",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "prompt-arrow",
+      "type": "arrow",
+      "x": 890,
+      "y": 145,
+      "width": 125,
+      "height": 0,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          58,
+          -8
+        ],
+        [
+          125,
+          0
+        ]
+      ],
+      "startArrowhead": "arrow",
+      "endArrowhead": null,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "mermaid-callout",
+      "type": "text",
+      "x": 115,
+      "y": 260,
+      "width": 245,
+      "height": 34,
+      "strokeColor": "#e9ecef",
+      "text": "Mermaid mode",
+      "fontSize": 25,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "mermaid-note",
+      "type": "text",
+      "x": 132,
+      "y": 298,
+      "width": 280,
+      "height": 26,
+      "strokeColor": "#adb5bd",
+      "text": "flows + sequences",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "mermaid-arrow",
+      "type": "arrow",
+      "x": 315,
+      "y": 315,
+      "width": 225,
+      "height": -12,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          100,
+          12
+        ],
+        [
+          225,
+          -12
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "direct-callout",
+      "type": "text",
+      "x": 1020,
+      "y": 382,
+      "width": 270,
+      "height": 34,
+      "strokeColor": "#e9ecef",
+      "text": "Direct elements",
+      "fontSize": 25,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "direct-note",
+      "type": "text",
+      "x": 1020,
+      "y": 420,
+      "width": 285,
+      "height": 26,
+      "strokeColor": "#adb5bd",
+      "text": "art-directed layout",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "direct-arrow",
+      "type": "arrow",
+      "x": 860,
+      "y": 425,
+      "width": 145,
+      "height": 5,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          -8
+        ],
+        [
+          145,
+          5
+        ]
+      ],
+      "startArrowhead": "arrow",
+      "endArrowhead": null,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "qa-callout",
+      "type": "text",
+      "x": 75,
+      "y": 505,
+      "width": 350,
+      "height": 34,
+      "strokeColor": "#e9ecef",
+      "text": "Screenshot → inspect → fix",
+      "fontSize": 24,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "qa-note",
+      "type": "text",
+      "x": 132,
+      "y": 543,
+      "width": 280,
+      "height": 26,
+      "strokeColor": "#adb5bd",
+      "text": "repeat until clean",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "qa-arrow",
+      "type": "arrow",
+      "x": 335,
+      "y": 565,
+      "width": 205,
+      "height": -12,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          95,
+          12
+        ],
+        [
+          205,
+          -12
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "output-callout",
+      "type": "text",
+      "x": 1005,
+      "y": 690,
+      "width": 330,
+      "height": 34,
+      "strokeColor": "#e9ecef",
+      "text": ".excalidraw + PNG + SVG",
+      "fontSize": 24,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "output-note",
+      "type": "text",
+      "x": 1035,
+      "y": 728,
+      "width": 270,
+      "height": 26,
+      "strokeColor": "#adb5bd",
+      "text": "source stays editable",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    },
+    {
+      "id": "output-arrow",
+      "type": "arrow",
+      "x": 890,
+      "y": 735,
+      "width": 100,
+      "height": 0,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          45,
+          8
+        ],
+        [
+          100,
+          0
+        ]
+      ],
+      "startArrowhead": "arrow",
+      "endArrowhead": null,
+      "createdAt": "2026-08-03T15:19:10.730Z",
+      "updatedAt": "2026-08-03T15:19:10.730Z",
+      "version": 1
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": null
+  }
+}

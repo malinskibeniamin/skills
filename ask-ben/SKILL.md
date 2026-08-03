@@ -27,6 +27,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/domain-modeling` | Build a shared domain model and vocabulary. |
 | `/e2e-testing` | Build resilient Playwright end-to-end tests. |
 | `/efficient-frontier` | Delegate bounded work while preserving central judgment. |
+| `/excalidraw-diagram` | Draw editable Excalidraw diagrams from prompts. |
 | `/extend-harness` | Extend and debug the frontend skill harness. |
 | `/frontend-invariants` | Timeless frontend principles that outlive stacks. |
 | `/frontend-starter-kit` | Bootstrap the standard frontend toolchain and gates. |

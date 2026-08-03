@@ -1,0 +1,3 @@
+interface:
+  display_name: "Excalidraw Diagram"
+  short_description: "Draw editable Excalidraw diagrams from prompts"

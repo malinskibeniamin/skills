@@ -1,0 +1,4 @@
+interface:
+  display_name: "Excalidraw Diagram"
+  short_description: "Draw editable hand-sketched diagrams automatically"
+  default_prompt: "Use $excalidraw-diagram to draw an editable architecture diagram from this description."
