@@ -27,7 +27,7 @@ Run `glab issue view <number> --comments`.
 Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
 
 - **Map**: create one issue labelled `wayfinder:map`, holding Notes / Decisions-so-far / Fog. On tiers with epics, an epic may hold the map instead; a labelled issue works everywhere.
-- **Child ticket**: create an issue with `Part of #<map>` at the top and labels `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
+- **Child ticket**: use the native parent/child hierarchy when the project tier and configured API support it, then verify the relationship. Otherwise create an issue with `Part of #<map>` at the top and labels `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
 - **Blocking**: use GitLab native blocking links when available by posting `/blocked_by #<n>` as a note. Native blocking links are a Premium/Ultimate feature; on the free tier, or when unavailable, fallback to `Blocked by: #<n>, #<n>` at the top of the description.
 - **Frontier query**: list the map's open children, drop any with a native `blocked_by` link to an open issue (`glab api projects/:id/issues/:iid/links`), an open issue in the fallback `Blocked by:` line, or an assignee, and take the first in map order.
 - **Claim**: `glab issue update <n> --assignee @me` before any work.

@@ -8,7 +8,7 @@ disable-model-invocation: true
 Use when a goal is too large for one context window and the way to the **destination** is still foggy. Wayfinder finds the route through **decision tickets** -- questions whose resolution is a decision, not slices of a build to execute. The destination might be a spec, a decision, or a change whose path is unclear.
 
 ## Plan, don't do
-Wayfinder is planning by default. Each ticket resolves a decision, and the map is done when nothing is left to decide before someone goes and does the thing. The pull to execute is usually the signal that the edge of the map has been reached. An effort can override this in Notes, but absent that, produce decisions, not deliverables.
+Wayfinder is planning only. Each ticket resolves a decision, and the map is done when nothing is left to decide before someone goes and does the thing. The pull to execute signals that the edge of the map has been reached. Keep Notes for planning preferences and decision-support work; Notes do not authorize implementation or delivery.
 
 ## Invariants
 - Refer to maps and tickets by **name** (their title), not a bare id or slug. Link the name when needed.
@@ -29,7 +29,7 @@ The map is one issue or file labelled/marked `wayfinder:map`.
 ## Destination
 <what reaching the end of this map looks like -- the spec, decision, or change this effort is finding its way to>
 ## Notes
-<domain; skills every session should consult; standing preferences for this effort>
+<domain; skills every session should consult; standing planning preferences for this effort>
 ## Decisions so far
 - [<closed ticket title>](link) -- <one-line gist of the answer>
 ## Not yet specified
@@ -57,7 +57,7 @@ Ticket types:
   `/research` in the primary context. Link the cited Markdown summary. Use a research lane
   only after explicit delegation or `/swarm`.
 - **Prototype** (HITL): make a cheap artifact to react to, including `/prototype` UI or logic code. Link the artifact.
-- **Grilling** (HITL): conversation with `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
+- **Grilling** (HITL): conversation. Always invoke `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
 - **Task** (HITL or AFK): manual work needed before a decision can continue. Automate where safe; otherwise hand the human a checklist. It earns its place by unblocking a decision, not by delivering the destination.
 
 The answer is not part of the body. Record it on resolution. Assets are linked, not pasted.
@@ -74,7 +74,7 @@ Fog only gathers toward the destination. Work beyond the destination is **Out of
 1. Name the Destination. Run `/grilling` and `/domain-modeling` to pin down what this map is finding its way to.
 2. Map the frontier. Grill breadth-first across the whole space, surfacing open decisions and first steps. **If this surfaces no fog**, you don't need a map; stop and ask the user how to proceed.
 3. Create the map with Destination, Notes, empty Decisions so far, Not yet specified, and Out of scope.
-4. Create only the tickets you can specify now. Wire blocking relationships in a second pass after tickets have ids.
+4. Create only the tickets you can specify now. Attach each through the tracker's native child/sub-issue relationship when available; use a body or task-list link only when native hierarchy is unavailable. Re-read the map and verify every ticket appears as a child, then wire blocking relationships in a second pass.
 5. Resolve one ready AFK Research ticket inline in the primary context. If the user explicitly
    authorized delegation or invoked `/swarm`, launch distinct ready research lanes; each lane
    claims its ticket first, follows `/research`'s artifact location, and does not invent a root

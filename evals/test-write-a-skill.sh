@@ -21,6 +21,8 @@ run_content_eval "$SKILL" "[Pp]rogressive disclosure" "writing-for-agents keeps 
 run_content_eval "$SKILL" "Context load|context load" "writing-for-agents controls context cost"
 run_content_eval "$SKILL" "no-ops" "writing-for-agents hunts no-ops"
 run_content_eval "$SKILL" "Negation" "writing-for-agents keeps the negation failure mode"
+run_content_eval "$SKILL" "environment.*source of truth|source of truth.*environment" "writing-for-agents treats the environment as authoritative"
+run_content_eval "$SKILL" "cache.*lookup|lookup.*cache" "writing-for-agents only caches expensive lookups"
 run_content_eval "$MECHANICS" "Invocation" "skill mechanics define invocation"
 run_content_eval "$MECHANICS" "Router skills" "skill mechanics define router skills"
 

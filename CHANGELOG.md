@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+2026-08-05 -- Adapt mattpocock/skills v1.2 and its first field reports. `/writing-for-agents` treats environment lookups as the source of truth and documents only valuable caches; `/grilling` pins a compact numbered question/recommendation shape; `/wayfinder` stays planning-only, always pairs grilling with domain modeling, and verifies native map-child wiring instead of trusting body references.
+
 ## 4.35.0
 
 2026-07-31 -- Publish the post-4.34 Claude Code and Codex bundle. This release rebuilds lifecycle, shipping, and review orchestration around concise outcome contracts and a single inspect-act-verify loop. It adds a bare-to-current model-release ablation ladder, harder self-verifying repair evidence, versioned telemetry with per-rule latency and shadow trials, and portable property-based testing guidance with independent-oracle safeguards. Reviews now reverse-trace assumptions across authoritative contracts and require representative live-data dogfooding for runnable changes. Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release move together at 4.35.0.
