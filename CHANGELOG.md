@@ -2,7 +2,22 @@
 
 ## Unreleased
 
-2026-08-05 -- Adapt mattpocock/skills v1.2 and its first field reports. `/writing-for-agents` treats environment lookups as the source of truth and documents only valuable caches; `/grilling` pins a compact numbered question/recommendation shape; `/wayfinder` stays planning-only, always pairs grilling with domain modeling, and verifies native map-child wiring instead of trusting body references.
+## 4.36.0
+
+2026-08-05 -- Publish the post-4.35 Claude Code and Codex bundle. This release adds
+`/excalidraw-diagram` for editable diagrams with preview exports, `/video-research` for
+local transcript-driven research, `/stacked-prs` for dependent pull request workflows,
+and `/demo` for evidence-backed customer showcases. It extends `/improve` with Excalidraw
+architecture reports, publishes the Blume documentation site, adapts mattpocock/skills
+v1.2 guidance from PR #111, and fixes the Markdown punctuation gate that blocked main CI.
+Claude and Codex plugin manifests, both marketplaces, the source manifest, install pin,
+tag, and GitHub release move together at 4.36.0.
+
+2026-08-05 -- Adapt mattpocock/skills v1.2 and its first field reports.
+`/writing-for-agents` treats environment lookups as the source of truth and documents only
+valuable caches; `/grilling` pins a compact numbered question/recommendation shape;
+`/wayfinder` stays planning-only, always pairs grilling with domain modeling, and verifies
+native map-child wiring instead of trusting body references.
 
 ## 4.35.0
 

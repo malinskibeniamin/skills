@@ -57,7 +57,7 @@ bash "$CLAUDE_PLUGIN_ROOT/scripts/verify-install.sh" --remote origin
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.35.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.36.0
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
