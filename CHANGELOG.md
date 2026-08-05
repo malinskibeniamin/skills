@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+2026-08-05 -- Complete the mattpocock/skills v1.2 adoption: vendor `/wait-what`,
+make `/wizard` model-invoked in Claude Code and Codex, and retain prototype evidence
+consistently without bypassing the requested commit endpoint.
+
 ## 4.37.0
 
 2026-08-05 -- Publish the mattpocock/skills v1.2 guidance from PR #111 under a

@@ -18,6 +18,7 @@ VENDORED=(
   to-tickets
   triage
   wayfinder
+  wait-what
   wizard
   writing-beats
   writing-for-agents
@@ -203,16 +204,12 @@ run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Negation" "writing-fo
 run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Prompt the \*\*positive\*\*|prompt the \*\*positive\*\*" "writing-for-agents cures negation with positive prompting"
 
 # Matt 2026-07 prototype lifecycle and logic-demo updates.
-run_content_eval "$REPO_ROOT/prototype/SKILL.md" "\.context/prototypes" "prototype uses a disposable local artifact"
-run_content_eval "$REPO_ROOT/prototype/SKILL.md" "delete.*before shipping|Delete the artifact by default" "prototype is deleted by default"
-if grep -q "throwaway branch" "$REPO_ROOT/prototype/SKILL.md"; then
-  echo "  FAIL  prototype still requires a preservation branch"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: prototype requires a branch"
-else
-  echo "  PASS  prototype does not require a preservation branch"
-  PASS=$((PASS + 1))
-fi
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "\.context/prototypes" "prototype retains a local artifact"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "primary source" "prototype retains runnable evidence"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "endpoint.*authorizes commits|authorizes commits.*endpoint" \
+  "prototype branch retention respects the requested endpoint"
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "\.context/prototypes" \
+  "prototype has a retained no-commit destination"
 run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "single, self-contained HTML file|single self-contained HTML file" "logic prototype is a shareable HTML demo"
 run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "Guided walkthroughs" "logic prototype includes guided scenarios"
 run_content_eval "$REPO_ROOT/prototype/UI.md" "primary source" "UI variants are retained as primary-source evidence"
@@ -225,6 +222,21 @@ run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "Grill the send, not the
 run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "discovery questionnaire" "questionnaire frames async discovery"
 run_content_eval "$REPO_ROOT/to-questionnaire/SKILL.md" "most-important-first" "questionnaire prioritizes a partial async response"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./to-questionnaire/"' "plugin registers to-questionnaire"
+
+# Matt v1.2 completion: concise repair and model-invoked human-only setup.
+run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "ASD-STE100 Simplified Technical English" \
+  "wait-what re-pitches with simplified English"
+run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "CONTEXT\.md" \
+  "wait-what uses the project vocabulary"
+run_content_eval "$REPO_ROOT/wizard/SKILL.md" "human-only" \
+  "wizard names its human-only boundary"
+if grep -q '^disable-model-invocation:' "$REPO_ROOT/wizard/SKILL.md"; then
+  echo "  FAIL  wizard remains explicit-use only"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: wizard is not model-invoked"
+else
+  echo "  PASS  wizard is model-invoked"
+  PASS=$((PASS + 1))
+fi
 
 if grep -qE "Work the frontier.*(/tdd|/implement)" "$REPO_ROOT/to-tickets/SKILL.md"; then
   echo "  FAIL  to-tickets still owns ticket implementation"
