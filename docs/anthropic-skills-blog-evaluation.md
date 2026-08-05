@@ -18,7 +18,7 @@ Anthropic's internal lessons from hundreds of skills in active use. Defines 9 sk
 | **Business Process** | standup-post, create-ticket, weekly-recap | **Partial** -- setup-atlassian-workflow, work-automation-kit | Enough for our needs |
 | **Code Scaffolding** | new-workflow, new-migration, create-app | **Covered** -- frontend-starter-kit (14 skills), redpanda-frontend-kit | |
 | **Code Quality & Review** | adversarial-review, code-style, testing-practices | **Exceeds** -- 3 reviewer agents, 13 PostToolUse validators, structured findings schema | Our strongest category |
-| **CI/CD & Deployment** | babysit-pr, deploy-service, cherry-pick-prod | **Partial** -- setup-ci-pipeline, development-lifecycle monitors CI | No babysit-pr equivalent |
+| **CI/CD & Deployment** | babysit-pr, deploy-service, cherry-pick-prod | **Covered** -- pr-shepherd, setup-ci-pipeline, development-lifecycle | PR shepherd persists SHA-bound review, CI, dogfood, and thread state |
 | **Runbooks** | service-debugging, oncall-runner | **N/A** | Outside scope |
 | **Infrastructure Ops** | orphan-cleanup, dependency-management | **N/A** | Outside scope |
 

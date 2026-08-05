@@ -56,6 +56,7 @@
     "./plan-arbiter/",
     "./plow-ahead/",
     "./postgresql/",
+    "./pr-shepherd/",
     "./prime/",
     "./prototype/",
     "./quantify-impact/",
