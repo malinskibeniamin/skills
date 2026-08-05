@@ -11,7 +11,7 @@
     {
       "name": "frontend-skills",
       "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
-      "version": "4.36.0",
+      "version": "4.37.0",
       "source": {
         "source": "github",
         "repo": "malinskibeniamin/skills"
@@ -22,6 +22,7 @@
         "settings": "settings.json"
       },
       "x-changelog": {
+        "4.37.0": "2026-08-05 -- Publish the mattpocock/skills v1.2 guidance from PR #111 under a dedicated immutable release pin. Keeps /grilling, /wayfinder, /writing-for-agents, and tracker templates aligned across Claude Code and Codex. Supersedes v4.36.0 without further skill-surface changes and refreshes every manifest, marketplace, and install pin together.",
         "4.36.0": "2026-08-05 -- Publish the post-4.35 Claude Code and Codex bundle. Adds /excalidraw-diagram, /video-research, /stacked-prs, and /demo; extends /improve with Excalidraw architecture reports; adds Blume documentation; adapts mattpocock/skills v1.2 guidance from PR #111; and fixes the Markdown punctuation CI gate. Refreshes every manifest, marketplace, and install pin together.",
         "4.35.0": "2026-07-31 -- Publish the post-4.34 Claude Code and Codex bundle. Rebuilds lifecycle and review orchestration around concise outcome contracts, adds model-release ablation and richer telemetry, introduces portable property-based testing guidance, and requires contract tracing plus live-data dogfooding in reviews. Refreshes every manifest, marketplace, and install pin together.",
         "4.34.0": "2026-07-31 -- Publish the post-4.33 Claude Code and Codex bundle. Expands React Doctor coverage, review routing, React Compiler guidance, and SPA soak testing. Adds an explicit /release workflow, isolated Claude installer coverage, and stale Claude/Codex plugin and pinned-marketplace diagnostics; fixes the SPA soak documentation whitespace regression that broke CI. Refreshes every manifest, marketplace, and install pin together.",
