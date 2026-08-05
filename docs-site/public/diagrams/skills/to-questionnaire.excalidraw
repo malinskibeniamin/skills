@@ -1,0 +1,279 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/to-questionnaire",
+      "width": 359,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Turn a decision you cannot fully answer into a questionnaire for someone\nelse.",
+      "width": 804,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "CONCEPT MAP",
+      "width": 116,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-center",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 120,
+      "label": {
+        "text": "Decision to\nunblock"
+      },
+      "roughness": 1,
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 300,
+      "x": 450,
+      "y": 295
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-branch-1",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#402f00",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 82,
+      "label": {
+        "text": "Context"
+      },
+      "roughness": 1,
+      "strokeColor": "#f08c00",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 240,
+      "x": 450,
+      "y": 175
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-branch-2",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#2d1b69",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 82,
+      "label": {
+        "text": "Product questions"
+      },
+      "roughness": 1,
+      "strokeColor": "#9775fa",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 240,
+      "x": 90,
+      "y": 330
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-branch-3",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#134e4a",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 82,
+      "label": {
+        "text": "Engineering\nquestions"
+      },
+      "roughness": 1,
+      "strokeColor": "#38d9a9",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 240,
+      "x": 870,
+      "y": 330
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-link-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 38,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          38
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 0,
+      "x": 570,
+      "y": 257
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-link-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 16,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          120,
+          -16
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 120,
+      "x": 330,
+      "y": 371
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "mind-map-link-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 16,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          120,
+          16
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 120,
+      "x": 750,
+      "y": 355
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "mind-map",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}

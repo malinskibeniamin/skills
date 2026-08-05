@@ -1,0 +1,572 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/domain-modeling",
+      "width": 338,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Build a shared domain model. Use when defining terminology, sharpening\nubiquitous language, reconciling code with domain concepts,",
+      "width": 782,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "ENTITY RELATIONSHIPS",
+      "width": 211,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#1c4f73",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 120,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#4dabf7",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 340,
+      "x": 120,
+      "y": 190
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-title-1",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 19,
+      "height": 26,
+      "strokeColor": "#4dabf7",
+      "text": "Term",
+      "width": 48,
+      "x": 142,
+      "y": 208
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-divider-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          304,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 304,
+      "x": 138,
+      "y": 242
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-fields-1",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 38,
+      "strokeColor": "#adb5bd",
+      "text": "name\ndefinition",
+      "width": 87,
+      "x": 142,
+      "y": 254
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 120,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 340,
+      "x": 740,
+      "y": 190
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-title-2",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 19,
+      "height": 26,
+      "strokeColor": "#40c057",
+      "text": "Entity",
+      "width": 71,
+      "x": 762,
+      "y": 208
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-divider-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          304,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 304,
+      "x": 758,
+      "y": 242
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-fields-2",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 38,
+      "strokeColor": "#adb5bd",
+      "text": "identity\ninvariants",
+      "width": 87,
+      "x": 762,
+      "y": 254
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-3",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#402f00",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 120,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#f08c00",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 340,
+      "x": 120,
+      "y": 380
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-title-3",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 19,
+      "height": 26,
+      "strokeColor": "#f08c00",
+      "text": "Relationship",
+      "width": 142,
+      "x": 142,
+      "y": 398
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-divider-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          304,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 304,
+      "x": 138,
+      "y": 432
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-fields-3",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 38,
+      "strokeColor": "#adb5bd",
+      "text": "from / to\ncardinality",
+      "width": 96,
+      "x": 142,
+      "y": 444
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-4",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#2d1b69",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 120,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#9775fa",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 340,
+      "x": 740,
+      "y": 380
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-title-4",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 19,
+      "height": 26,
+      "strokeColor": "#9775fa",
+      "text": "Decision / ADR",
+      "width": 165,
+      "x": 762,
+      "y": 398
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-divider-4",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          304,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 304,
+      "x": 758,
+      "y": 432
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-fields-4",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 38,
+      "strokeColor": "#adb5bd",
+      "text": "context\nconsequence",
+      "width": 96,
+      "x": 762,
+      "y": 444
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-link-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          280,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 280,
+      "x": 460,
+      "y": 250
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-link-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 70,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          70
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 0,
+      "x": 290,
+      "y": 310
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-link-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": null,
+      "height": 70,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          70
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 0,
+      "x": 910,
+      "y": 310
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-relation-1",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 19,
+      "strokeColor": "#adb5bd",
+      "text": "names",
+      "width": 44,
+      "x": 555,
+      "y": 225
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-relation-2",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 19,
+      "strokeColor": "#adb5bd",
+      "text": "connects",
+      "width": 70,
+      "x": 305,
+      "y": 330
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "entity-relation-3",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 19,
+      "strokeColor": "#adb5bd",
+      "text": "constrains",
+      "width": 87,
+      "x": 925,
+      "y": 330
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "entity-relationship",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}
