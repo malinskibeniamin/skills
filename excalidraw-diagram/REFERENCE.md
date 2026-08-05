@@ -77,9 +77,9 @@ export light, then restore the preferred editable scene. A light preset uses can
 
 ## Layout bounds
 
-- Body text: at least 16 px; labels: 18–22 px; titles: 24–32 px.
-- Labeled shapes: at least 120×60 px; estimate width as `max(160, characters × 12)`.
-- Gaps: 40–80 px; give labeled arrows at least 120 px.
+- Body text: at least 16 px; labels: 18-22 px; titles: 24-32 px.
+- Labeled shapes: at least 120x60 px; estimate width as `max(160, characters x 12)`.
+- Gaps: 40-80 px; give labeled arrows at least 120 px.
 - Background zones: at least 50 px padding around children.
 - Route arrows around unrelated shapes. Use elbowed or curved paths when a straight line
   would cross content.
