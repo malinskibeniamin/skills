@@ -14,9 +14,21 @@ Choose the cheapest faithful shape:
   [UI.md](UI.md).
 - API/tool uncertainty -> a minimal call against a sandbox or fixture.
 
-Put disposable artifacts under `.context/prototypes/<question>/` when possible, or next
-to the target only when the real runtime must load them. Mark any in-tree artifact
-clearly and delete it before shipping unless the user explicitly wants it preserved.
+Put working artifacts under `.context/prototypes/<question>/` when possible, or next to
+the target only when the real runtime must load them. Mark any in-tree artifact clearly.
+
+## Retention
+
+Keep the finished prototype as a runnable **primary source**, but never merge prototype-only
+code into main:
+
+- When the requested endpoint authorizes commits, capture the artifact on an isolated
+  `prototype/<name>` branch and leave a context pointer in the issue or decision record.
+- Otherwise retain it under `.context/prototypes/<question>/` and report the path. Move or
+  copy any in-tree artifact there before cleaning the shippable diff. Do not delete it.
+
+Record the question, evidence, and verdict in the issue, ADR, implementation notes, or
+implementing commit. Main keeps only the validated production decision.
 
 ## Constraints
 
@@ -27,8 +39,7 @@ clearly and delete it before shipping unless the user explicitly wants it preser
 4. Show the relevant state and observations.
 5. Before relying on the verdict, run `/dogfood` once through the decisive path and likely
    boundary; do not dogfood every intermediate edit.
-6. Record question, evidence, and verdict in the issue, ADR, implementation notes, or
-   implementing commit. Delete the artifact by default.
+6. Apply the retention policy above after the decisive path answers the question.
 
 If the prototype contradicts the plan, revisit the affected decision before production
 implementation.

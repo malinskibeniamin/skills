@@ -51,7 +51,7 @@ Send or open the file. The useful moments are "that shouldn't be possible" and "
 
 ### 5. Capture the answer and prototype
 
-Capture the verdict, then follow [SKILL.md](SKILL.md): lift validated logic into the real module and preserve the HTML demo on the throwaway primary-source branch. Leave a context pointer on the implementation issue so the evidence stays runnable.
+Capture the verdict, then follow the retention policy in [SKILL.md](SKILL.md): lift validated logic into the real module, preserve the HTML demo at the endpoint-appropriate destination, and leave a context pointer so the evidence stays runnable.
 
 ## Anti-patterns
 

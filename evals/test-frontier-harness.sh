@@ -183,8 +183,9 @@ run_content_eval "development-lifecycle/SKILL.md" '\.context/implementation-note
 run_content_eval "development-lifecycle/SKILL.md" 'revisit|[Rr]e-plan' "implementation can revise the plan"
 run_content_eval "grilling/SKILL.md" 'lookup.*prototype.*reversible assumption.*pause trigger' "grill classifies remaining unknowns"
 run_absent_eval "grilling/SKILL.md" 'frontier is empty' "grill does not demand exhaustive certainty"
-run_content_eval "prototype/SKILL.md" '\.context/prototypes' "prototypes have a local disposable home"
-run_absent_eval "prototype/SKILL.md" 'throwaway branch' "prototype retention does not require a branch"
+run_content_eval "prototype/SKILL.md" '\.context/prototypes' "prototypes have a no-commit retention home"
+run_content_eval "prototype/SKILL.md" 'endpoint.*authorizes commits|authorizes commits.*endpoint' \
+  "prototype branch retention respects endpoint ownership"
 
 run_absent_eval "CLAUDE.md" 'Rank cost/intel/taste|Terra.*never|Luna.*never' "ambient context has no subjective model rankings"
 if [ "$(wc -c < CLAUDE.md | tr -d '[:space:]')" -le 4500 ]; then

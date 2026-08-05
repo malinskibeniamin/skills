@@ -97,12 +97,12 @@ Surface the URL (and the `?variant=` keys). The user will flip through whenever 
 
 ### 6. Capture the answer and prototype
 
-Once a variant has won, capture the answer -- which variant and why -- then capture the full variant set as the primary source on the throwaway branch described by [SKILL.md](SKILL.md). Fold the winner into production code and remove prototype-only code from main:
+Once a variant has won, capture the answer -- which variant and why -- then preserve the full variant set using the retention policy in [SKILL.md](SKILL.md). Fold the winner into production code and remove prototype-only code from the shippable diff:
 
-- **Sub-shape A** -- fold the winner into the existing page; keep losing variants and the switcher only on the throwaway branch.
-- **Sub-shape B** -- promote the winner to a real route; keep the throwaway route and switcher only on the throwaway branch.
+- **Sub-shape A** -- fold the winner into the existing page; keep losing variants and the switcher only in the retained primary source.
+- **Sub-shape B** -- promote the winner to a real route; keep the throwaway route and switcher only in the retained primary source.
 
-Leave a context pointer to the branch on the implementation issue. Variant components and the switcher must not remain on main, where they rot and confuse the next reader.
+Leave a context pointer to the retained artifact on the implementation issue. Variant components and the switcher must not remain in the shippable diff, where they rot and confuse the next reader.
 
 ## Anti-patterns
 

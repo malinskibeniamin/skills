@@ -1,0 +1,5 @@
+interface:
+  display_name: "Wait What"
+  short_description: "Re-pitch that with simpler language and missing context"
+policy:
+  allow_implicit_invocation: false

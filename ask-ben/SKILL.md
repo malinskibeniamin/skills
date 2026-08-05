@@ -79,6 +79,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/visual-plan` | Turn a plan into an interactive visual artifact. |
 | `/visual-recap` | Turn a code change into an interactive visual recap. |
 | `/visual-review` | Review customer-facing surfaces from visual evidence. |
+| `/wait-what` | Re-pitch that with simpler language and missing context. |
 | `/wayfinder` | Map huge, foggy work through decision tickets. |
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
