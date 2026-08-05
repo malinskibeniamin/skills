@@ -20,10 +20,13 @@ Turn finished work into customer proof, not a developer status update. Read
    the same demo; never scatter generated media across the repository.
 4. Prefer a Remotion composition and render `demos/<slug>/output/demo.mp4`. Reuse real
    product captures when they make the result more credible.
-5. Fall back to a rendered sequence or architecture diagram only after a concrete
-   Remotion blocker or when motion would add no customer value. Record the reason.
+5. Fall back to a rendered sequence, state, flow, or architecture diagram only after a
+   concrete Remotion blocker or when motion would add no customer value. Use Mermaid for a
+   simple graph and `/excalidraw-diagram` for art-directed spatial explanation. Record the
+   reason.
 6. Inspect representative frames or the complete diagram, repair visible defects, and
-   verify that no secret, private data, or customer PII appears.
+   verify that no secret, private data, or customer PII appears. Give every diagram fallback
+   a concise accessible description.
 7. Do not edit any README. Commit the demo, push the current branch, and create a draft PR
    with the recording or fallback linked in its body. Update an existing PR without
    changing its review state.

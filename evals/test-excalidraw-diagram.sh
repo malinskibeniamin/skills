@@ -19,6 +19,8 @@ run_content_eval "$SKILL" 'Mermaid.*direct elements|direct elements.*Mermaid' \
   "skill routes structured and art-directed diagrams separately"
 run_content_eval "$SKILL" 'screenshot.*view.*fix|screenshot.*inspect.*fix' \
   "skill requires a visual correction loop"
+run_content_eval "$SKILL" 'describe.*elements.*before|before.*export.*describe.*elements' \
+  "skill refuses empty editable exports after Mermaid conversion"
 run_content_eval "$SKILL" '\.excalidraw.*(PNG|SVG)|PNG.*\.excalidraw|SVG.*\.excalidraw' \
   "skill preserves editable source with rendered output"
 run_content_eval "$SKILL" 'isolated browser' \
@@ -27,6 +29,14 @@ run_content_eval "$REFERENCE" 'Shadcn-style preset' \
   "reference defines the requested visual preset"
 run_content_eval "$REFERENCE" 'roughness' \
   "reference preserves Excalidraw rough rendering"
+run_content_eval "$REFERENCE" '5.?10 nodes|five to ten nodes' \
+  "reference bounds Mermaid complexity before tool switching"
+run_content_eval "$REFERENCE" 'accTitle.*accDescr|accDescr.*accTitle' \
+  "reference requires Mermaid-native accessibility metadata"
+run_content_eval "$REFERENCE" 'canonical source|source of truth' \
+  "reference prevents Mermaid and Excalidraw sources from drifting"
+run_content_eval "$REFERENCE" 'target renderer|repository.*build|build.*repository' \
+  "reference validates durable Mermaid in its destination renderer"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"\./excalidraw-diagram/"' \
   "Claude plugin registers the Excalidraw skill"
 run_file_eval "$REPO_ROOT/codex-skills/excalidraw-diagram/SKILL.md" \
@@ -53,3 +63,7 @@ run_content_eval "$ARCHITECTURE_REPORT" '/excalidraw-diagram' \
   "architecture report documents its Excalidraw rendering path"
 run_content_eval "$ARCHITECTURE_REPORT" 'Mermaid.*simple|simple.*Mermaid' \
   "architecture report keeps Mermaid for simple graph-shaped evidence"
+run_content_eval "$ARCHITECTURE_REPORT" 'mermaid@11\.16\.1' \
+  "architecture report pins the Mermaid renderer exactly"
+run_content_eval "$ARCHITECTURE_REPORT" 'securityLevel: "strict"' \
+  "architecture report keeps Mermaid HTML rendering strict"

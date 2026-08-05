@@ -1,10 +1,12 @@
 # HTML Report Format
 
-The architectural review is rendered as a single self-contained HTML file in the OS temp
-directory. Use `/excalidraw-diagram` for art-directed before/after architecture views and
+The architectural review is rendered as a single HTML file in the OS temp directory. Use
+`/excalidraw-diagram` for art-directed before/after architecture views and
 inline its exported SVG in the report; keep the editable `.excalidraw` source beside the HTML.
-Tailwind and Mermaid both come from CDNs. Mermaid remains the simple graph-shaped option;
-hand-built divs and inline SVG handle compact mass diagrams and cross-sections. Mix the forms.
+Tailwind and Mermaid come from external CDNs; Mermaid is pinned exactly for reproducible
+layout. Mermaid remains the simple graph-shaped option; hand-built divs and inline SVG handle
+compact mass diagrams and cross-sections. Mix the forms. If the report must work offline,
+pre-render Mermaid as SVG and inline it instead of loading the runtime.
 
 ## Scaffold
 
@@ -16,8 +18,8 @@ hand-built divs and inline SVG handle compact mass diagrams and cross-sections. 
     <title>Architecture review -- {{repo name}}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-      mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.esm.min.mjs";
+      mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "strict" });
     </script>
     <style>
       /* small custom layer for things Tailwind doesn't cover cleanly:
@@ -66,18 +68,21 @@ Pick the pattern that fits the candidate. Mix them. Don't make every diagram loo
 
 Use `/excalidraw-diagram` when a candidate depends on grouping, leakage callouts, nested
 responsibility, or an irregular current-to-target layout. Give the top recommendation a paired
-before/after scene, export SVG, visually inspect it, and inline that SVG so the HTML remains
-self-contained. Save the `.excalidraw` source beside the report and return both paths. If the
-canvas is unavailable, fall back to Mermaid or the compact HTML patterns below and record why.
+before/after scene, export SVG, visually inspect it, and inline that SVG so the diagram has no
+separate asset dependency. Save the `.excalidraw` source beside the report and return both
+paths. If the canvas is unavailable, fall back to Mermaid or the compact HTML patterns below
+and record why.
 
 ### Mermaid graph (the workhorse for dependencies / call flow)
 
-Use a Mermaid `flowchart` or `graph` when the point is "X calls Y calls Z, and look at the mess." Wrap it in a Tailwind-styled card so it doesn't feel parachuted in. Style with classDef to colour leakage edges red and the deep module dark. Sequence diagrams work well for "before: 6 round-trips; after: 1."
+Use a Mermaid `flowchart` or `graph` when the point is "X calls Y calls Z, and look at the mess." Wrap it in a Tailwind-styled card so it doesn't feel parachuted in. Style with classDef to colour leakage edges red and the deep module dark. Sequence diagrams work well for "before: 6 round-trips; after: 1." Give every diagram an `accTitle` and `accDescr`, keep its reading direction consistent, and verify the rendered report at wide and narrow viewport widths.
 
 ```html
 <div class="rounded-lg border border-slate-200 bg-white p-4">
   <pre class="mermaid">
     flowchart LR
+      accTitle: Order intake call flow
+      accDescr: The order handler delegates validation before reaching the repository.
       A[OrderHandler] --> B[OrderValidator]
       B --> C[OrderRepo]
       C -.leak.-> D[PricingClient]

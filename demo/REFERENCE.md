@@ -62,9 +62,14 @@
 
 Use the fallback only after one documented concrete blocker prevents a faithful Remotion
 render, or when a static explanation communicates the customer value better than motion.
-Create `demos/<slug>/output/architecture.svg` plus editable Mermaid source. Prefer a sequence
-diagram for interactions and a flow or architecture diagram for structure. Render and inspect
-the SVG; do not deliver source-only Mermaid. Put the blocker and fallback rationale in the PR.
+Prefer a sequence diagram for interactions, a state diagram for lifecycle changes, and a flow
+or architecture diagram for structure. Use Mermaid for a simple graph-shaped explanation; use
+`/excalidraw-diagram` when grouping, annotation, or exact placement carries the story.
+
+Create `demos/<slug>/output/diagram.svg` plus one canonical editable source: Mermaid `.mmd`
+or `.excalidraw`, never both presented as synchronized. Render and inspect the SVG; do not
+deliver editable source alone. Add a caption and concise accessible description or equivalent
+text alternative to the PR. Put the blocker and fallback rationale there too.
 
 ## Publish
 

@@ -5,11 +5,11 @@ description: Generate, refine, and export editable Excalidraw diagrams from prom
 
 # Excalidraw Diagram
 
-Generate real Excalidraw elements, not a bitmap imitation. Keep the editable scene as
-the source of truth and derive presentation assets from it.
+Generate real Excalidraw elements, not a bitmap imitation. Keep one editable source of
+truth and derive presentation assets from it.
 
-Read [REFERENCE.md](REFERENCE.md) before direct element creation or when matching the
-Shadcn-style visual language.
+Read [REFERENCE.md](REFERENCE.md) before Mermaid conversion, direct element creation, or
+matching the Shadcn-style visual language.
 
 ## Canvas
 
@@ -32,15 +32,23 @@ ask the user to open the reported URL once.
    requested project path for durable assets. Avoid overwriting existing files.
 2. Preserve any existing canvas with `snapshot save <name>` or `export --out <file>`
    before clearing it or importing with `--replace`.
-3. Route standard flow, sequence, or relationship structure through Mermaid; use direct elements
+3. Choose one canonical source. For a Mermaid deliverable, keep `.mmd` authoritative and
+   validate it in the target renderer. For an Excalidraw deliverable, Mermaid is import
+   scaffolding; after direct edits, `.excalidraw` is authoritative.
+4. Route standard flow, sequence, state, or relationship structure through Mermaid; use direct elements
    for exact placement, component anatomy, logos, zones, or free-form callouts.
-4. Create the whole first slice in one `mermaid`, `add`, or `apply` call. Give meaningful
+5. Create the whole first slice in one `mermaid`, `add`, or `apply` call. Give meaningful
    IDs to anything likely to move or change.
-5. Run `describe`, then `screenshot --out <check.png>` -> view the image -> fix collisions,
+6. After `mermaid`, run `describe` and require converted elements before export or direct
+   correction. If a screenshot renders but the described scene stays empty, keep `.mmd`
+   canonical or rebuild with direct elements; never report an empty `.excalidraw` as editable.
+7. Run `describe`, then `screenshot --out <check.png>` -> view the image -> fix collisions,
    clipping, weak contrast, and crossed arrows with one `apply` patch. Repeat until clean.
-6. Export `.excalidraw` source plus PNG or SVG. For project assets, keep the editable
-   source beside the rendered output unless the user explicitly requests a flattened file.
-7. Report final paths, diagram mode, and any manual browser edit still required.
+8. Export a non-empty `.excalidraw` plus PNG or SVG for a synchronized canvas. Otherwise
+   export `.mmd` plus the rendered asset while Mermaid remains authoritative. For project
+   assets, keep the editable source beside the render unless the user requests a flat file.
+9. Report final paths, diagram mode, canonical source, accessible description location, and
+   any manual browser edit still required.
 
 ## Commands
 
