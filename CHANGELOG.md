@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 4.37.0
+
+2026-08-05 -- Publish the mattpocock/skills v1.2 guidance from PR #111 under a
+dedicated immutable release pin. `/grilling` uses a compact numbered
+question/recommendation shape; `/wayfinder` remains planning-only, pairs grilling with
+domain modeling, and verifies native map-child wiring; `/writing-for-agents` treats the
+environment as authoritative and caches only expensive lookups. Claude and Codex plugin
+manifests, both marketplaces, the source manifest, install pin, tag, and GitHub release
+move together at 4.37.0.
+
 ## 4.36.0
 
 2026-08-05 -- Publish the post-4.35 Claude Code and Codex bundle. This release adds
