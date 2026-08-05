@@ -25,6 +25,9 @@ run_content_eval "$GRILL" "frontier" "grilling maps the currently answerable fro
 run_content_eval "$GRILL" "whole frontier" "grilling asks the whole frontier each round"
 run_content_eval "$GRILL" "Recompute the frontier" "grilling recomputes after each answer round"
 run_content_eval "$GRILL" "fact-finding inline" "fact-finding stays inline without delegation consent"
+run_content_eval "$GRILL" "Question format" "grilling pins a consistent question format"
+run_content_eval "$GRILL" "\\*\\*Q1.*<question title>\\*\\*" "grilling titles and numbers every question"
+run_content_eval "$GRILL" "\\*\\*Recommended:\\*\\*" "grilling separates each recommendation"
 
 if grep -q "Ask the questions one at a time" "$GRILL"; then
   echo "  FAIL  grilling still forces one-question-at-a-time interviews"

@@ -21,6 +21,15 @@ run_content_eval "$WAYFINDER" "Not yet specified excludes.*decided.*ticket.*out 
 run_content_eval "$WAYFINDER" "Recheck your claims first" "wayfinder rechecks claims before handoff frontier"
 run_content_eval "$WAYFINDER" "## Destination" "wayfinder map includes destination"
 run_content_eval "$WAYFINDER" "Plan, don't do" "wayfinder defaults to planning"
+run_content_eval "$WAYFINDER" "Notes.*planning.*not.*authorize implementation|Notes.*do not authorize implementation" "wayfinder Notes cannot authorize implementation"
+if grep -qE "override.*Notes|Notes.*override" "$WAYFINDER"; then
+  echo "  FAIL  wayfinder still lets Notes override planning-only behavior"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: wayfinder Notes still carry an execution override"
+else
+  echo "  PASS  wayfinder has no Notes execution override"
+  PASS=$((PASS + 1))
+fi
 run_content_eval "$WAYFINDER" "decision ticket" "wayfinder names its planning unit a decision ticket"
 run_content_eval "$WAYFINDER" "primary context" "wayfinder researches inline by default"
 run_content_eval "$WAYFINDER" 'explicit.*delegation|invoked `/swarm`' "wayfinder gates parallel research on consent"
@@ -36,6 +45,9 @@ run_content_eval "$WAYFINDER" "AGENTS\\.md.*CLAUDE\\.md|CLAUDE\\.md.*AGENTS\\.md
 run_content_eval "$WAYFINDER" "CLAUDE\\.md.*first|If.*CLAUDE\\.md.*exists.*AGENTS\\.md" "wayfinder defines instruction-file precedence"
 run_content_eval "$WAYFINDER" "Issue tracker.*pointer|issue tracker.*pointer" "wayfinder follows the configured tracker pointer"
 run_content_eval "$WAYFINDER" "local-markdown fallback" "wayfinder retains a local tracker fallback"
+run_content_eval "$WAYFINDER" "native child/sub-issue|native.*child.*sub-issue" "wayfinder attaches every ticket through native hierarchy"
+run_content_eval "$WAYFINDER" "verify every ticket appears|verify.*ticket.*child" "wayfinder verifies child attachment"
+run_content_eval "$WAYFINDER" "Grilling.*Always invoke.*/grilling.*/domain-modeling" "wayfinder grilling tickets always invoke both skills"
 
 if grep -q 'docs/agents/issue-tracker\.md' "$WAYFINDER"; then
   echo "  FAIL  wayfinder does not hardcode the tracker document path"
@@ -49,9 +61,11 @@ fi
 run_content_eval "$GITHUB_TRACKER" "issue_dependencies_summary\.blocked_by" "GitHub wayfinding frontier uses dependency summary"
 run_content_eval "$GITHUB_TRACKER" "database id.*not.*#number.*node_id|not.*#number.*node_id" "GitHub blocking uses database id not display ids"
 run_content_eval "$GITHUB_TRACKER" "--add-assignee @me" "GitHub wayfinding claims by assignment"
+run_content_eval "$GITHUB_TRACKER" "verify every.*ticket.*child|verify.*child.*count" "GitHub wayfinding verifies native sub-issues"
 run_content_eval "$GITLAB_TRACKER" "glab api projects/:id/issues/:iid/links" "GitLab wayfinding checks native blocker links"
 run_content_eval "$GITLAB_TRACKER" "Premium/Ultimate|free tier" "GitLab wayfinding documents blocking fallback tier"
 run_content_eval "$GITLAB_TRACKER" "--assignee @me" "GitLab wayfinding claims by assignment"
+run_content_eval "$GITLAB_TRACKER" "native child|native parent" "GitLab wayfinding prefers native hierarchy"
 run_content_eval "$LOCAL_TRACKER" "Status: claimed" "local wayfinding supports claimed state"
 run_content_eval "$LOCAL_TRACKER" "Status: resolved" "local wayfinding supports resolved state"
 run_content_eval "$LOCAL_TRACKER" "Blocked by: NN, NN" "local wayfinding supports blocking convention"

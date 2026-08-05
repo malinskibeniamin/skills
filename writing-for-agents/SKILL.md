@@ -64,6 +64,7 @@ Hunt repeated phrases that one strong word can replace. The gain is fewer tokens
 ## Pruning
 
 - Keep each meaning in one source of truth. Duplication inflates prominence and maintenance cost.
+- Treat the environment as a source of truth: scripts, config, layout, and `--help` already answer cheap lookups. A document is a cache; keep it only for expensive lookups, unwritten conventions, reasons, and hidden gotchas.
 - Check every line for relevance. Unpruned documents accumulate stale sediment.
 - Hunt no-ops sentence by sentence. If an instruction does not change behavior from the model's default, delete the sentence rather than polishing it.
 - Treat sprawl as an information-hierarchy failure: disclose by branch or split a genuinely rushed sequence.

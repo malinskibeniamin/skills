@@ -26,7 +26,7 @@ Run `gh issue view <number> --comments`.
 Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
 
 - **Map**: create one issue labelled `wayfinder:map`, holding Notes / Decisions-so-far / Fog.
-- **Child ticket**: create an issue linked to the map as a GitHub sub-issue. If sub-issues are unavailable, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
+- **Child ticket**: create an issue linked to the map as a GitHub sub-issue. Re-read the map and verify every created ticket appears in its child count; a body reference alone does not count. If sub-issues are unavailable, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
 - **Blocking**: use GitHub native issue dependencies. Add an edge with `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where `<blocker-db-id>` is the blocker's numeric database id from `gh api repos/<owner>/<repo>/issues/<n> --jq .id`, not the `#number` or `node_id`. If dependencies are unavailable, fallback to `Blocked by: #<n>, #<n>` at the top of the child body.
 - **Frontier query**: list the map's open children, drop any with `issue_dependencies_summary.blocked_by > 0` (or an open issue in the fallback `Blocked by:` line) or an assignee, and take the first in map order.
 - **Claim**: `gh issue edit <n> --add-assignee @me` before any work.

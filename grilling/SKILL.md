@@ -29,6 +29,15 @@ identify what would make the current choice wrong.
 Map a decision tree. Its frontier is every currently answerable decision. Ask the whole frontier
 in one numbered round with a recommendation for each.
 
+Use this fixed **Question format** so the user can scan and answer by number:
+
+```markdown
+**Q1 -- <question title>**
+<question body or choices>
+
+**Recommended:** <answer>
+```
+
 An unsettled prerequisite delays only its branch while the rest of the frontier proceeds.
 Recompute the frontier after every answer round.
 
