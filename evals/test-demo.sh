@@ -33,6 +33,14 @@ run_content_eval "$REFERENCE" "secret|PII|private" \
   "demo redacts sensitive source material"
 run_content_eval "$REFERENCE" "one documented.*blocker|only.*block" \
   "demo falls back only after a concrete Remotion blocker"
+run_content_eval "$REFERENCE" "state diagram|state.*lifecycle" \
+  "demo can explain lifecycle changes with a state diagram"
+run_content_eval "$REFERENCE" "\/excalidraw-diagram" \
+  "demo routes art-directed diagram fallbacks through Excalidraw"
+run_content_eval "$REFERENCE" "canonical.*(Mermaid|Excalidraw)|one canonical" \
+  "demo keeps one editable diagram source authoritative"
+run_content_eval "$REFERENCE" "text alternative|accessible description|alt text" \
+  "demo publishes an accessible alternative for diagram fallbacks"
 run_content_eval "$REFERENCE" "\/commit-push-pr|gh pr create" \
   "demo reuses the repository PR workflow"
 run_content_eval "$REFERENCE" "--draft" "demo always requests draft PR mode"

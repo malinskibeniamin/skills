@@ -52,6 +52,36 @@ An `apply` patch has this shape:
 }
 ```
 
+## Mermaid conversion
+
+Use Mermaid for standard graph-shaped structure, then switch to direct elements only when
+spatial composition carries meaning. Complexity is not a reason to switch tools: keep one
+claim per diagram and split it first. For flow and architecture views, aim for 5-10 nodes;
+use subgraphs for meaningful groups, one reading direction, and color only for emphasis.
+
+Choose the diagram by the question:
+
+- Flowchart: what happens next or where a decision branches.
+- Sequence: who exchanges messages, and in what order.
+- State: which lifecycle transitions are valid.
+- Relationship or sparse ER view: which things connect. Split attribute-heavy schemas.
+
+Every durable Mermaid source includes `accTitle` and `accDescr`. A caption or nearby prose
+must also explain the point; the diagram supplements the text. Treat Mermaid-to-Excalidraw
+conversion as visual scaffolding, not preservation of accessibility metadata.
+
+Keep one canonical source:
+
+- Mermaid deliverable: `.mmd` is the source of truth. Render from it and validate with the
+  repository build or target renderer at representative wide and narrow widths.
+- Excalidraw deliverable: after any direct canvas edit, `.excalidraw` is the source of truth.
+  Retain the Mermaid input only as clearly named import provenance, never as synchronized
+  editable source.
+
+For a durable PNG or SVG, place a concise accessible description beside the image in its
+host document or handoff. Pair color with labels, shapes, or line styles so color is never
+the only carrier of meaning.
+
 ## Shadcn-style preset
 
 Use this preset for the dark hand-sketched diagrams shown in Shadcn documentation:
@@ -93,5 +123,6 @@ Inspect the rendered screenshot, not only scene JSON. Require:
 3. No arrow crossing an unrelated element.
 4. Strong text/background contrast in the exported theme.
 5. Balanced framing with all content visible and useful negative space.
+6. Meaning remains clear without relying on color alone.
 
 Fix every visible issue, render again, and inspect the corrected image before export.
