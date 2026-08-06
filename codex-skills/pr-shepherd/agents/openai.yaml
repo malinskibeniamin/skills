@@ -1,0 +1,5 @@
+interface:
+  display_name: "PR Shepherd"
+  short_description: "Resume changed PRs and shepherd current workspace repairs"
+policy:
+  allow_implicit_invocation: false

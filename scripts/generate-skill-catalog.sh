@@ -54,6 +54,7 @@ SHORT_DESCRIPTIONS = {
     "plan-arbiter": "Compare competing plans and choose a grounded direction",
     "plow-ahead": "Continue autonomously through routine ambiguity",
     "postgresql": "Engineer and operate PostgreSQL from workload evidence",
+    "pr-shepherd": "Resume changed PRs and shepherd current workspace repairs",
     "prime": "Build a concise repository startup brief",
     "prototype": "Build a throwaway artifact to answer a design question",
     "quantify-impact": "Prove meaningful product and codebase improvements",
