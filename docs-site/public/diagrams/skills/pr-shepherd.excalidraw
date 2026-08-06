@@ -1,0 +1,391 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/pr-shepherd",
+      "width": 253,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Shepherd changed pull requests with SHA-bound state and safe\ncurrent-workspace repairs.",
+      "width": 670,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "STATE MACHINE",
+      "width": 138,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-initial",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#e9ecef",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 34,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 34,
+      "x": 45,
+      "y": 325
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#1c4f73",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 105,
+      "label": {
+        "text": "Changed or unseen\nPR"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#4dabf7",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 210,
+      "x": 130,
+      "y": 290
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 105,
+      "label": {
+        "text": "Route by workspace"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 210,
+      "x": 390,
+      "y": 290
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-3",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#402f00",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 105,
+      "label": {
+        "text": "Repair + refresh\nHEAD"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#f08c00",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 210,
+      "x": 650,
+      "y": 290
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-4",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#2d1b69",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 105,
+      "label": {
+        "text": "Quiet / deferred /\nactive"
+      },
+      "roughness": 1,
+      "strokeColor": "#9775fa",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 210,
+      "x": 910,
+      "y": 290
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-transition-start",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          57,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 57,
+      "x": 76,
+      "y": 342
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-transition-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          56,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 56,
+      "x": 337,
+      "y": 342
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-transition-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          56,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 56,
+      "x": 597,
+      "y": 342
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-transition-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          56,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 56,
+      "x": 857,
+      "y": 342
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-retry",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 70,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -35,
+          -70
+        ],
+        [
+          -225,
+          -70
+        ],
+        [
+          -260,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "dashed",
+      "strokeWidth": 2,
+      "width": 260,
+      "x": 755,
+      "y": 305
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "state-retry-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 19,
+      "strokeColor": "#adb5bd",
+      "text": "retry / revise",
+      "width": 122,
+      "x": 585,
+      "y": 200
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "state-machine",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}

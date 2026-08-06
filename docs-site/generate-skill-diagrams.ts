@@ -347,6 +347,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     ],
     relations: ["shapes", "protects", "measures"],
   },
+  "pr-shepherd": {
+    kind: "state-machine",
+    nodes: [
+      "Changed or unseen PR",
+      "Route by workspace",
+      "Repair + refresh HEAD",
+      "Quiet / deferred / active",
+    ],
+  },
   prime: {
     kind: "system-context",
     nodes: [
