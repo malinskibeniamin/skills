@@ -129,6 +129,16 @@ ${
 }---
 ${body}`;
 
+const skillDiagram = (skillName: string): string => {
+  const diagramBase = `/diagrams/skills/${skillName}`;
+
+  return `![Diagram of the /${skillName} skill](${diagramBase}.svg)
+
+[Open the editable Excalidraw source](${diagramBase}.excalidraw)
+
+`;
+};
+
 const loadSkills = async (
   options: SkillSourceOptions,
 ): Promise<SkillDocument[]> => {
@@ -155,13 +165,10 @@ const loadSkills = async (
 };
 
 const landingBody = (skills: SkillDocument[]): string => {
-  const cards = skills
-    .map(
-      (skill) => `<Card title="/${skill.name}" href="/skills/${skill.name}">
-  {${JSON.stringify(skill.description)}}
-</Card>`,
-    )
-    .join("\n");
+  const searchableSkills = skills.map((skill) => ({
+    description: skill.description,
+    name: skill.name,
+  }));
 
   return `The frontend-skills harness combines focused instructions with deterministic hooks, so agents can use the right guidance without loading the entire repository into context.
 
@@ -171,11 +178,9 @@ Most work starts with an outcome, constraints, verification, and the endpoint. T
 
 ## Find a skill
 
-Browse all ${skills.length} skills, or use search to jump straight to a task. Each page is rendered from its canonical \`SKILL.md\`, so the site never drifts from what agents actually use.
+Browse all ${skills.length} skills. Filter by skill name, technology, or task. Each page is rendered from its canonical \`SKILL.md\`, so the site never drifts from what agents actually use.
 
-<CardGroup cols={2}>
-${cards}
-</CardGroup>
+<SkillSearch skills={${JSON.stringify(searchableSkills)}} />
 `;
 };
 
@@ -205,7 +210,7 @@ const createEntries = async (
         sidebar: { label: `/${skill.name}` },
         title: `/${skill.name}`,
       };
-      const body = rewriteRelativeLinks(skill.body, skill, options);
+      const body = `${skillDiagram(skill.name)}${rewriteRelativeLinks(skill.body, skill, options)}`;
       const repositoryPath = relative(
         options.repositoryRoot,
         skill.sourcePath,

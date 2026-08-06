@@ -1,0 +1,411 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/agent-watchdog",
+      "width": 317,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Audit another agent against the original request and live evidence. Use for\nsessions, transcripts, PRs, branches, logs, comparisons, or",
+      "width": 837,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "SWIMLANE",
+      "width": 85,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 95,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#495057",
+      "strokeStyle": "dashed",
+      "strokeWidth": 2,
+      "width": 1040,
+      "x": 80,
+      "y": 175
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-label-1",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Agent",
+      "width": 50,
+      "x": 95,
+      "y": 187
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 95,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#495057",
+      "strokeStyle": "dashed",
+      "strokeWidth": 2,
+      "width": 1040,
+      "x": 80,
+      "y": 285
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-label-2",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Watchdog",
+      "width": 80,
+      "x": 95,
+      "y": 297
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-3",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 95,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#495057",
+      "strokeStyle": "dashed",
+      "strokeWidth": 2,
+      "width": 1040,
+      "x": 80,
+      "y": 395
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-label-3",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Repository",
+      "width": 100,
+      "x": 95,
+      "y": 407
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-task-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#6b3232",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 52,
+      "label": {
+        "text": "Claim work\ncomplete"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#ff8787",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 180,
+      "x": 275,
+      "y": 205
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-task-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#1c4f73",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 52,
+      "label": {
+        "text": "Compare request +\ndiff"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#4dabf7",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 180,
+      "x": 470,
+      "y": 315
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-task-3",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 52,
+      "label": {
+        "text": "Dogfood entrypoint"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 180,
+      "x": 690,
+      "y": 315
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-task-4",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#402f00",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 14,
+      "height": 52,
+      "label": {
+        "text": "Repair or verdict"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#f08c00",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 180,
+      "x": 900,
+      "y": 425
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-flow-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 110,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          15,
+          110
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 15,
+      "x": 455,
+      "y": 231
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-flow-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 40,
+      "x": 650,
+      "y": 341
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "swimlane-flow-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 110,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          30,
+          110
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 30,
+      "x": 870,
+      "y": 341
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "swimlane",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}

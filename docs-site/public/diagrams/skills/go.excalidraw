@@ -1,0 +1,308 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/go",
+      "width": 64,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 25,
+      "strokeColor": "#adb5bd",
+      "text": "Ship completed work through verification, review, PR, and CI.",
+      "width": 681,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "LIFECYCLE",
+      "width": 95,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-stage-1",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#134e4a",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "Verify"
+      },
+      "roughness": 1,
+      "strokeColor": "#38d9a9",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 260,
+      "x": 470,
+      "y": 175
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-stage-2",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#6b3232",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "Review"
+      },
+      "roughness": 1,
+      "strokeColor": "#ff8787",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 260,
+      "x": 820,
+      "y": 300
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-stage-3",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#1c4f73",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "Deliver"
+      },
+      "roughness": 1,
+      "strokeColor": "#4dabf7",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 260,
+      "x": 470,
+      "y": 425
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-stage-4",
+      "type": "ellipse",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "CI or done"
+      },
+      "roughness": 1,
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 260,
+      "x": 120,
+      "y": 300
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-arrow-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 115,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          90,
+          115
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 90,
+      "x": 730,
+      "y": 220
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-arrow-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 100,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -90,
+          100
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 90,
+      "x": 820,
+      "y": 365
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-arrow-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 100,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -90,
+          -100
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 90,
+      "x": 470,
+      "y": 465
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "cycle-arrow-4",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 115,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          90,
+          -115
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 90,
+      "x": 380,
+      "y": 335
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "lifecycle",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}

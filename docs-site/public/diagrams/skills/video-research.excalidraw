@@ -1,0 +1,291 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/video-research",
+      "width": 317,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Ingest video URLs, video attachments, or local files into timestamped\ntranscripts, OCR, and research-ready artifacts",
+      "width": 771,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "DATA PIPELINE",
+      "width": 138,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-stage-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#2d1b69",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 185,
+      "label": {
+        "text": "Video input"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#9775fa",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 232.5,
+      "x": 60,
+      "y": 245
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-stage-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#134e4a",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 185,
+      "label": {
+        "text": "Transcript + OCR"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#38d9a9",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 232.5,
+      "x": 342.5,
+      "y": 245
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-stage-3",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#6b3232",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 185,
+      "label": {
+        "text": "Timestamped\nevidence"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#ff8787",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 232.5,
+      "x": 625,
+      "y": 245
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-stage-4",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#1c4f73",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 185,
+      "label": {
+        "text": "Research artifact"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#4dabf7",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 232.5,
+      "x": 907.5,
+      "y": 245
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-arrow-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 50,
+      "x": 292.5,
+      "y": 338
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-arrow-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 50,
+      "x": 575,
+      "y": 338
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "linear-arrow-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 50,
+      "x": 857.5,
+      "y": 338
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "pipeline",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}

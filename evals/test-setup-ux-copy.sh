@@ -16,7 +16,16 @@ run_content_eval "$SKILL_DIR/SKILL.md" "^name: ux-copy" "SKILL.md has correct na
 run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "allow.*ux-copy" "SKILL.md documents escape hatch"
 run_content_eval "$SKILL_DIR/SKILL.md" "capitalization" "SKILL.md mentions capitalization rules"
-run_content_eval "$SKILL_DIR/SKILL.md" "REDPANDA_KIT" "SKILL.md documents Redpanda opt-in"
+run_content_eval "$SKILL_DIR/SKILL.md" "canonical product names" "SKILL.md keeps product terminology generic"
+
+if grep -qi "redpanda" "$SKILL_DIR/SKILL.md"; then
+  echo "  FAIL  SKILL.md is product-neutral"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: SKILL.md is product-neutral"
+else
+  echo "  PASS  SKILL.md is product-neutral"
+  PASS=$((PASS + 1))
+fi
 
 # ── Hook: skip non-Edit/Write ───────────────────────────────────
 

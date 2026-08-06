@@ -1,0 +1,288 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/steelman",
+      "width": 190,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Argue the strongest evidence-backed case against a premise. Use when user\nsays steelman, asks for pushback or second",
+      "width": 815,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "DECISION TREE",
+      "width": 138,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-input",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#6b3232",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 105,
+      "label": {
+        "text": "Premise"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#ff8787",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 240,
+      "x": 70,
+      "y": 300
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-decision",
+      "type": "diamond",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#1c4f73",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 145,
+      "label": {
+        "text": "Strongest\nalternative"
+      },
+      "roughness": 1,
+      "strokeColor": "#4dabf7",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 220,
+      "x": 420,
+      "y": 280
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-outcome-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 105,
+      "label": {
+        "text": "Falsifying\nevidence"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 300,
+      "x": 800,
+      "y": 210
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-outcome-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#402f00",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 105,
+      "label": {
+        "text": "Revised decision"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#f08c00",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 300,
+      "x": 800,
+      "y": 400
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-arrow-input",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          116,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 116,
+      "x": 307,
+      "y": 352
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-arrow-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 90,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          166,
+          -90
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 166,
+      "x": 637,
+      "y": 352
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "branch-arrow-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 100,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          166,
+          100
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 166,
+      "x": 637,
+      "y": 352
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "decision-tree",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}

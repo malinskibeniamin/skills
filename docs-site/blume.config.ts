@@ -1,14 +1,20 @@
 import { fileURLToPath } from "node:url";
 
-import { defineConfig } from "blume";
+import { defineConfig, type ComponentMarkdown } from "blume";
 
+import { serializeSkillSearchMarkdown } from "./skill-search.ts";
 import { createSkillSource } from "./skill-source.ts";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
+const skillSearchMarkdown: ComponentMarkdown = ({ lossy, props }) =>
+  lossy ? null : serializeSkillSearchMarkdown(props.skills);
 
 export default defineConfig({
   ai: {
     llmsTxt: true,
+    markdownComponents: {
+      SkillSearch: skillSearchMarkdown,
+    },
   },
   content: {
     sources: [

@@ -1,0 +1,390 @@
+{
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "elements": [
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "canvas",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#121212",
+      "fillStyle": "solid",
+      "height": 630,
+      "locked": true,
+      "roughness": 0,
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "width": 1200,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "title",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 34,
+      "height": 46,
+      "strokeColor": "#e9ecef",
+      "text": "/e2e-testing",
+      "width": 253,
+      "x": 60,
+      "y": 45
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "description",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 49,
+      "strokeColor": "#adb5bd",
+      "text": "Playwright + Testcontainers + axe-core E2E patterns for forms, tables, and\nworkflows",
+      "width": 826,
+      "x": 60,
+      "y": 100
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "map-label",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 17,
+      "height": 23,
+      "strokeColor": "#adb5bd",
+      "text": "COMPONENT ARCHITECTURE",
+      "width": 232,
+      "x": 900,
+      "y": 58
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "architecture-boundary",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 340,
+      "label": {
+        "text": ""
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#495057",
+      "strokeStyle": "dashed",
+      "strokeWidth": 2,
+      "width": 1040,
+      "x": 80,
+      "y": 175
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-1",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#0b4f1c",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "User journey"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#40c057",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 360,
+      "x": 130,
+      "y": 215
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-2",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#402f00",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "Playwright test"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#f08c00",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 360,
+      "x": 710,
+      "y": 215
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-3",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#2d1b69",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "Real boundaries"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#9775fa",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 360,
+      "x": 130,
+      "y": 385
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-4",
+      "type": "rectangle",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "backgroundColor": "#134e4a",
+      "fillStyle": "solid",
+      "fontFamily": "excalifont",
+      "fontSize": 18,
+      "height": 88,
+      "label": {
+        "text": "Assertions + axe"
+      },
+      "roughness": 1,
+      "roundness": {
+        "type": 3
+      },
+      "strokeColor": "#38d9a9",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 360,
+      "x": 710,
+      "y": 385
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-link-1",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          220,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 220,
+      "x": 490,
+      "y": 259
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-link-2",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 82,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          82
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 0,
+      "x": 310,
+      "y": 303
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-link-3",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 82,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          82
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 0,
+      "x": 890,
+      "y": 303
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-link-4",
+      "type": "arrow",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "endArrowhead": "arrow",
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          220,
+          0
+        ]
+      ],
+      "roughness": 1,
+      "roundness": {
+        "type": 2
+      },
+      "strokeColor": "#e9ecef",
+      "strokeStyle": "solid",
+      "strokeWidth": 2,
+      "width": 220,
+      "x": 490,
+      "y": 429
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-relation-1",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 15,
+      "height": 21,
+      "strokeColor": "#adb5bd",
+      "text": "drives",
+      "width": 56,
+      "x": 555,
+      "y": 230
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-relation-2",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 15,
+      "height": 21,
+      "strokeColor": "#adb5bd",
+      "text": "crosses",
+      "width": 66,
+      "x": 325,
+      "y": 330
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "component-relation-3",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 15,
+      "height": 21,
+      "strokeColor": "#adb5bd",
+      "text": "observes",
+      "width": 75,
+      "x": 920,
+      "y": 330
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "footer",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 20,
+      "height": 27,
+      "strokeColor": "#e9ecef",
+      "text": "canonical guidance → focused action → observable proof",
+      "width": 670,
+      "x": 60,
+      "y": 535
+    },
+    {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "id": "source-note",
+      "type": "text",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "version": 1,
+      "fontFamily": "excalifont",
+      "fontSize": 16,
+      "height": 22,
+      "strokeColor": "#adb5bd",
+      "text": "Editable Excalidraw source included with this page",
+      "width": 496,
+      "x": 60,
+      "y": 575
+    }
+  ],
+  "diagramKind": "architecture",
+  "source": "frontend-skills/docs-site/generate-skill-diagrams.ts",
+  "type": "excalidraw",
+  "version": 2
+}
