@@ -64,6 +64,41 @@ codex plugin add frontend-skills@skills
 
 Track `main` instead of the pin with `--ref main`. Restart Codex after adding or upgrading so the Plugins UI reloads metadata.
 
+### TraceDecay code graph
+
+This harness uses [TraceDecay](https://github.com/ScriptedAlchemy/tracedecay) as a
+user-level Codex companion for semantic code search, call graphs, impact analysis, and
+affected-test selection. It remains a separate installation so projects do not acquire a
+runtime dependency.
+
+Install it once:
+
+```bash
+brew install ScriptedAlchemy/tap/tracedecay
+tracedecay install --agent codex
+codex plugin add tracedecay@personal
+tracedecay daemon install-service
+```
+
+Enroll each repository once, then start a new Codex or Conductor agent session:
+
+```bash
+cd /path/to/repository
+tracedecay init
+tracedecay doctor --agent codex
+```
+
+Linked worktrees share one enrollment and keep branch-specific graph databases. Check
+`tracedecay tool active_project --json` if results appear to come from another branch; after
+the first linked-worktree enrollment, run `tracedecay daemon restart` once if the daemon
+still reports the initial database.
+
+**Token-first hook profile:** TraceDecay v0.0.73 `UserPromptSubmit` emitted about 2,600
+characters on every prompt in dogfood testing. Disable only that TraceDecay hook through
+Codex `/hooks`; keep SessionStart, PostToolUse, PostCompact, and Stop for startup guidance,
+incremental sync, compaction recovery, and session ingestion. Re-measure after TraceDecay
+upgrades before changing the profile.
+
 **Fallback: individual skills via skills.sh** -- when you want specific skills instead of the full plugin:
 
 ```bash
