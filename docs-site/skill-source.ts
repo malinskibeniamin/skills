@@ -17,7 +17,7 @@ interface SkillDocument {
 
 interface SourceEntry {
   body: { format: "md" | "mdx"; text: string };
-  data: Record<string, unknown>;
+  data: PageData;
   editUrl?: string;
   raw?: string;
   ref: string;
@@ -25,9 +25,11 @@ interface SourceEntry {
 }
 
 interface PageData {
+  [key: string]: unknown;
   description: string;
   sidebar?: { label: string };
   title: string;
+  type: "doc" | "skill";
 }
 
 interface SkillContentSource {
@@ -122,6 +124,7 @@ const rewriteRelativeLinks = (
 const serializePage = (data: PageData, body: string): string => `---
 title: ${JSON.stringify(data.title)}
 description: ${JSON.stringify(data.description)}
+type: ${data.type}
 ${
   data.sidebar
     ? `sidebar:\n  label: ${JSON.stringify(data.sidebar.label)}\n`
@@ -188,10 +191,11 @@ const createEntries = async (
   options: SkillSourceOptions,
 ): Promise<SourceEntry[]> => {
   const skills = await loadSkills(options);
-  const landingData = {
+  const landingData: PageData = {
     description:
       "Practical skills for planning, building, testing, reviewing, and shipping software with coding agents.",
     title: "Agent skills",
+    type: "doc",
   };
   const landing = landingBody(skills);
   const landingEntry: SourceEntry = {
@@ -205,10 +209,11 @@ const createEntries = async (
   return [
     landingEntry,
     ...skills.map((skill): SourceEntry => {
-      const data = {
+      const data: PageData = {
         description: skill.description,
         sidebar: { label: `/${skill.name}` },
         title: `/${skill.name}`,
+        type: "skill",
       };
       const body = `${skillDiagram(skill.name)}${rewriteRelativeLinks(skill.body, skill, options)}`;
       const repositoryPath = relative(

@@ -120,11 +120,13 @@ describe("skill docs source", () => {
     expect(new Set(skillNames).size).toBe(skillNames.length);
 
     const landing = entries.find((entry) => entry.ref === "index.mdx");
+    expect(landing?.data.type).toBe("doc");
     expect(landing?.body.text).toContain(
       `Browse all ${canonicalSkillFiles.length} skills`,
     );
     expect(landing?.body.text).toContain("<SkillSearch skills={");
     for (const entry of skillEntries) {
+      expect(entry.data.type).toBe("skill");
       expect(landing?.body.text).toContain(
         `"name":"${String(entry.data.title).slice(1)}"`,
       );
@@ -215,6 +217,7 @@ Read [REFERENCE.md](REFERENCE.md) before acting.
         description: 'Use it when a plan needs "proof".',
         sidebar: { label: "/sample-skill" },
         title: "/sample-skill",
+        type: "skill",
       });
       expect(page?.slug).toBe("skills/sample-skill");
       expect(page?.body.text).toContain(
