@@ -71,7 +71,23 @@ user-level Codex companion for semantic code search, call graphs, impact analysi
 affected-test selection. It remains a separate installation so projects do not acquire a
 runtime dependency.
 
-Install it once:
+Recommended opt-in setup after installing the Codex plugin:
+
+```bash
+FRONTEND_SKILLS_ROOT="$(
+  codex plugin list --json |
+    jq -er '.installed[] | select(.pluginId == "frontend-skills@skills").source.path'
+)"
+bash "$FRONTEND_SKILLS_ROOT/scripts/setup-tracedecay.sh" --agent codex --project "$PWD"
+```
+
+The helper shows its scope and asks before changing the machine or repository. It installs
+a missing binary through Homebrew, configures the selected host, starts the user daemon,
+enrolls the current project only when needed, and runs `tracedecay doctor`. Use `--dry-run`
+to preview it. The installation remains optional and the harness continues to fail open
+when TraceDecay is absent.
+
+Manual fallback:
 
 ```bash
 brew install ScriptedAlchemy/tap/tracedecay
