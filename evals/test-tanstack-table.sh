@@ -401,19 +401,14 @@ run_table_hook_eval "$TMP_ROOT/v9/src/snapshot-read.tsx" 0 \
 
 run_file_eval "$SKILL_DIR/SKILL.md" "TanStack Table skill exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "^name: tanstack-table" "skill has the correct name"
-run_content_eval "$SKILL_DIR/SKILL.md" "/read-the-damn-docs" "skill checks the current beta API"
-run_content_eval "$SKILL_DIR/SKILL.md" "tanstack-table-v9-reactivity" \
-  "skill links the V9 reactivity source article"
-run_content_eval "$SKILL_DIR/SKILL.md" "snapshot.*subscription|subscription.*snapshot" \
-  "skill distinguishes current-value reads from subscriptions"
-run_content_eval "$SKILL_DIR/SKILL.md" "Subscribe.*useSelector|useSelector.*Subscribe" \
-  "skill teaches React subscription boundaries"
-run_content_eval "$SKILL_DIR/SKILL.md" "external atoms.*reset|reset.*external atoms" \
-  "skill covers external atom ownership and reset"
-run_content_eval "$SKILL_DIR/SKILL.md" "individual.*(filter|sort|aggregation)" \
-  "skill preserves V9 tree-shaking"
-run_content_eval "$SKILL_DIR/SKILL.md" "catalog.*installed|installed.*catalog" \
-  "skill explains indirect version resolution"
+run_content_eval "$SKILL_DIR/SKILL.md" "/tanstack-intent" \
+  "skill loads version-matched Table guidance first"
+run_content_eval "$SKILL_DIR/SKILL.md" "installed.*(version|package)|(version|package).*installed" \
+  "skill follows the installed Table package"
+run_content_eval "$SKILL_DIR/SKILL.md" "Intent.*owns.*(API|syntax)|(API|syntax).*Intent" \
+  "skill gives official Intent guidance API ownership"
+run_content_eval "$SKILL_DIR/SKILL.md" "hook defect|fix the harness" \
+  "skill treats conflicts as harness defects"
 run_content_eval "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" "tanstack-table-check" \
   "Claude batch dispatcher runs the Table check"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "tanstack-table-check.sh" \

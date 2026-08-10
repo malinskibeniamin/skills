@@ -73,7 +73,7 @@ run_content_eval "$REPO_ROOT/resolving-merge-conflicts/SKILL.md" "/agent-watchdo
 run_content_eval "$REPO_ROOT/frontend-starter-kit/references/ci-pipeline/README.md" "/read-the-damn-docs" "setup-ci-pipeline reads current GitHub Actions docs"
 run_content_eval "$REPO_ROOT/e2e-testing/SKILL.md" "/read-the-damn-docs" "setup-e2e-testing reads current Playwright docs"
 run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-compiler/README.md" "/read-the-damn-docs" "setup-react-compiler reads current compiler docs"
-run_content_eval "$REPO_ROOT/tanstack-router/SKILL.md" "/read-the-damn-docs" "setup-tanstack-router reads current router docs"
+run_content_eval "$REPO_ROOT/tanstack-router/SKILL.md" "/tanstack-intent" "TanStack Router loads version-matched package docs"
 run_content_eval "$REPO_ROOT/connect-query/SKILL.md" "/read-the-damn-docs" "setup-connect-query reads current Connect docs"
 
 run_content_eval "$REPO_ROOT/read-the-damn-docs/SKILL.md" "quick official fact check|without creating a research artifact|no research artifact" "read-the-damn-docs owns quick official fact checks"

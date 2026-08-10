@@ -65,8 +65,9 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/stay-within-limits` | Budget long-running agent work around usage limits. |
 | `/steelman` | Build the strongest evidence-backed counterargument. |
 | `/swarm` | Execute independent work across parallel worktree lanes. |
+| `/tanstack-intent` | Load version-matched guidance for every TanStack package. |
 | `/tanstack-router` | Apply typed TanStack Router data and search patterns. |
-| `/tanstack-table` | Build reactive TanStack Table V9 interfaces safely. |
+| `/tanstack-table` | Apply local Table checks after loading official guidance. |
 | `/tdd` | Develop meaningful behavior through red-green-refactor. |
 | `/teach` | Teach a workspace concept through durable practice. |
 | `/thermo-nuclear-code-quality-review` | Run a release-blocking deep code quality review. |
