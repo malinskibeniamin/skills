@@ -96,5 +96,5 @@ Complete every item before declaring the diagnosis done:
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message -- so the next debugger learns
 
 Then ask what would prevent recurrence. If the answer is an architectural change, hand the
-specific seam or coupling problem to `/improve architecture`. Recommend it after the root-cause
+specific seam or coupling problem to `/improve-codebase-architecture`. Recommend it after the root-cause
 fix, when the evidence is strongest.

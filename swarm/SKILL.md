@@ -68,7 +68,7 @@ Spawned lanes may not create descendants without separate authorization for nest
   variants remain unavailable until promoted by the ablation suite.
 - Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
 - Worker lanes author the smallest clear solution from the start; reviewer lanes assess semantic density directly.
-- Architecture: fan out `/improve architecture` by context, module, seam, or adapter.
+- Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
 - TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
 - Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.
 - Design/copy work: split `/visual-review`, `/ux-copy`, accessibility, and articulation lanes only when their write scopes do not overlap.

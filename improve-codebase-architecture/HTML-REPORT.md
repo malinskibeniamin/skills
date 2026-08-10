@@ -55,6 +55,8 @@ Each candidate is one `<article>`:
 - **Before / After diagram** -- the centrepiece. Two columns, side by side. See patterns below.
 - **Problem** -- one sentence. What hurts.
 - **Solution** -- one sentence. What changes.
+- **Error class** -- the repeatable mistake the current design permits.
+- **Invariant** -- the target rule and the owner that makes invalid states unrepresentable.
 - **Wins** -- bullets, <=6 words each. e.g. "Tests hit one interface", "Pricing logic stops leaking", "Delete 4 shallow wrappers".
 - **ADR callout** (if applicable) -- one line in an amber-tinted box.
 
@@ -136,5 +138,9 @@ Plain English, concise -- but the architectural nouns and verbs come straight fr
 - "Two adapters justify the seam: HTTP in prod, in-memory in tests."
 
 **Wins bullets** name the gain in glossary terms: *"locality: bugs concentrate in one module"*, *"leverage: one interface, N call sites"*, *"interface shrinks; implementation absorbs the wrappers"*. Don't write *"easier to maintain"* or *"cleaner code"* -- those terms aren't in the glossary and don't earn their place.
+
+The before view must show where the invariant is currently optional: competing writers, parallel
+lists, illegal state combinations, or caller-owned choreography. The after view must show the
+single owner and the interface through which the invariant is preserved.
 
 No hedging, no throat-clearing, no "it's worth noting that...". If a sentence could be a bullet, make it a bullet. If a bullet could be cut, cut it. If a term isn't in `/codebase-design`, reach for one that is before inventing a new one.

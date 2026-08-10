@@ -5,7 +5,7 @@
 Before the PR endpoint, run the applicable review axes inline:
 
 - `/review` -- correctness, value, and semantic density
-- `/improve architecture` -- refactors, architecture plans, cleanup (oversized files, shallow modules)
+- `/improve-codebase-architecture` -- deep-module and invariant redesigns that remove error classes
 - `/prototype` -- redesign module or layout
 - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs
 

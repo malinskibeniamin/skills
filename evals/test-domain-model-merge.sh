@@ -1,12 +1,12 @@
 # Validates mattpocock/skills v1 shared design/domain model split:
 #   - codebase-design owns architecture vocabulary
-#   - tdd and /improve architecture mode invoke codebase-design
+#   - tdd and improve-codebase-architecture invoke codebase-design
 #   - domain-modeling owns active CONTEXT.md/ADR updates
 
 CBD_DIR="$REPO_ROOT/codebase-design"
 TDD_DIR="$REPO_ROOT/tdd"
 DM_DIR="$REPO_ROOT/domain-modeling"
-ICA_DIR="$REPO_ROOT/improve"
+ICA_DIR="$REPO_ROOT/improve-codebase-architecture"
 
 # ── codebase-design vocabulary ────────────────────────────────────
 run_file_eval "$CBD_DIR/SKILL.md" "codebase-design SKILL.md exists"
@@ -23,7 +23,7 @@ run_content_eval "$CBD_DIR/SKILL.md" "One adapter.*hypothetical seam.*Two adapte
 run_content_eval "$CBD_DIR/SKILL.md" "Boundary: use seam|Avoid: boundary" "codebase-design rejects boundary as overloaded"
 
 # ── consumers invoke shared design skill ──────────────────────────
-run_content_eval "$ICA_DIR/SKILL.md" "/codebase-design" "improve architecture mode invokes codebase-design"
+run_content_eval "$ICA_DIR/SKILL.md" "/codebase-design" "architecture skill invokes codebase-design"
 run_content_eval "$TDD_DIR/SKILL.md" "/codebase-design" "tdd invokes codebase-design"
 run_content_eval "$TDD_DIR/tests.md" "Good Tests" "tests.md keeps Good Tests section"
 run_content_eval "$TDD_DIR/tests.md" "Bad Tests" "tests.md keeps Bad Tests section"

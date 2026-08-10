@@ -38,6 +38,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/grilling` | Stress-test plans, decisions, and ideas. |
 | `/handoff` | Prepare a compact session handoff for another agent. |
 | `/hook-audit` | Audit hook effectiveness, latency, and drift. |
+| `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
