@@ -80,6 +80,18 @@ else
   ERRORS="$ERRORS\n  FAIL: mcp-ban non-MCP passthrough"
 fi
 
+# TraceDecay is the harness's local semantic code graph, not a verbose remote
+# service with a cheaper CLI replacement. Preserve its MCP path explicitly.
+_run_mcp "mcp__graph__tracedecay_context"
+if [ "$_last_exit" = "0" ] && [ -z "$_last_stderr" ]; then
+  echo "  PASS  TraceDecay MCP remains allowed"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  TraceDecay MCP should silent-pass (exit=$_last_exit)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: TraceDecay MCP passthrough"
+fi
+
 # Migration guard: live guidance should not point agents at the old Workspace CLI.
 old_cli_pattern="\b([g]ws|[g]oogleworkspace[-]cli|@[g]oogleworkspace/cli|Google[ ]Workspace[ ]CLI)\b"
 if rg -n "$old_cli_pattern" "$REPO_ROOT/.claude/hooks/mcp-ban.sh" "$REPO_ROOT/CLAUDE.md" >/tmp/old-workspace-cli-remnants 2>/dev/null; then

@@ -52,18 +52,19 @@ fi
 exit 1
 SH
 chmod +x "$_verify_bin/claude" "$_verify_bin/codex"
+ln -s "$(command -v jq)" "$_verify_bin/jq"
 
 _verify_output="$(
   {
     cd "$_verify_tmp/consumer"
-    HOME="$_verify_home" PATH="$_verify_bin:$PATH" \
+    HOME="$_verify_home" PATH="$_verify_bin:/usr/bin:/bin" \
       bash "$REPO_ROOT/scripts/verify-install.sh"
   } 2>&1 || true
 )"
 _verify_json="$(
   {
     cd "$_verify_tmp/consumer"
-    HOME="$_verify_home" PATH="$_verify_bin:$PATH" \
+    HOME="$_verify_home" PATH="$_verify_bin:/usr/bin:/bin" \
       bash "$REPO_ROOT/scripts/verify-install.sh" --json
   } 2>/dev/null || true
 )"
@@ -85,6 +86,8 @@ _verify_assert "Version: 4.33.0" "verify-install chooses 4.33 over lexicographic
 _verify_assert "Claude plugin 4.33.0 is behind 4.34.0" "verify-install detects stale Claude plugin"
 _verify_assert "Codex plugin 4.33.0 is behind 4.34.0" "verify-install detects stale Codex plugin"
 _verify_assert "Codex marketplace ref v4.33.0 is behind v4.34.0" "verify-install detects stale Codex pin"
+_verify_assert "TraceDecay not found — optional semantic graph" \
+  "verify-install points users to optional TraceDecay setup"
 
 if printf '%s\n' "$_verify_json" | tail -1 | jq -e '
   .claudeVersion == "4.33.0" and

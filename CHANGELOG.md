@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-08-09 -- Adopt TraceDecay as the Codex/Conductor semantic exploration layer. Add
+user-level installation and worktree recovery guidance, preserve its local MCP server in
+the MCP policy, and document the measured token-first hook profile without treating
+TraceDecay estimates as Codex billing or quota evidence. Add an opt-in, idempotent setup
+helper and surface it from installation verification when TraceDecay is missing.
+
 2026-08-05 -- Complete the mattpocock/skills v1.2 adoption: vendor `/wait-what`,
 make `/wizard` model-invoked in Claude Code and Codex, and retain prototype evidence
 consistently without bypassing the requested commit endpoint.
