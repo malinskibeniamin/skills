@@ -84,7 +84,13 @@ picked up automatically.
 bun run docs:dev    # local site with hot reload
 bun run docs:check  # content and Astro checks
 bun run docs:build  # static output in docs-site/dist
+bun run docs:translate        # refresh zh-CN, zh-TW, and pl with Codex
+bun run docs:translate:check  # fail when a translation is missing or stale
 ```
+
+The English filesystem pages are generated from the canonical `SKILL.md` files and
+ignored by Git. Blume commits only the translated pages and its freshness ledger, so
+English guidance still has one source of truth.
 
 ## How it all connects
 

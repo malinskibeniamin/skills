@@ -1,9 +1,20 @@
+import { randomUUID } from "node:crypto";
 import { existsSync, watch as watchFiles } from "node:fs";
-import { readFile, readdir } from "node:fs/promises";
+import {
+  mkdir,
+  readFile,
+  readdir,
+  rename,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { basename, dirname, join, relative } from "node:path";
+
+import { filesystemSource } from "#blume-filesystem";
 
 interface SkillSourceOptions {
   branch: string;
+  contentRoot: string;
   repositoryRoot: string;
   repositoryUrl: string;
 }
@@ -30,15 +41,6 @@ interface PageData {
   sidebar?: { label: string };
   title: string;
   type: "doc" | "skill";
-}
-
-interface SkillContentSource {
-  load: () => Promise<{ diagnostics: never[]; entries: SourceEntry[] }>;
-  name: string;
-  read: (ref: string) => Promise<string>;
-  staged: true;
-  validate: () => void;
-  watch: (onChange: () => void) => () => void;
 }
 
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
@@ -183,7 +185,7 @@ Most work starts with an outcome, constraints, verification, and the endpoint. T
 
 Browse all ${skills.length} skills. Filter by skill name, technology, or task. Each page is rendered from its canonical \`SKILL.md\`, so the site never drifts from what agents actually use.
 
-<SkillSearch skills={${JSON.stringify(searchableSkills)}} />
+<SkillSearch locale="en" skills={${JSON.stringify(searchableSkills)}} />
 `;
 };
 
@@ -233,37 +235,175 @@ const createEntries = async (
   ];
 };
 
+const atomicWriteIfChanged = async (
+  targetPath: string,
+  content: string,
+): Promise<void> => {
+  if (
+    existsSync(targetPath) &&
+    (await readFile(targetPath, "utf8")) === content
+  ) {
+    return;
+  }
+
+  await mkdir(dirname(targetPath), { recursive: true });
+  const temporaryPath = `${targetPath}.${randomUUID()}.tmp`;
+  try {
+    await writeFile(temporaryPath, content);
+    await rename(temporaryPath, targetPath);
+  } finally {
+    await rm(temporaryPath, { force: true });
+  }
+};
+
+const materializeDefaultContent = async (
+  options: SkillSourceOptions,
+): Promise<void> => {
+  const entries = await createEntries(options);
+  const expectedSkillFiles = new Set<string>();
+
+  for (const entry of entries) {
+    if (!entry.raw) {
+      throw new Error(
+        `Generated docs entry ${entry.ref} requires raw Markdown.`,
+      );
+    }
+    const targetPath = join(options.contentRoot, entry.ref);
+    await atomicWriteIfChanged(targetPath, entry.raw);
+    if (entry.ref.startsWith("skills/")) {
+      expectedSkillFiles.add(basename(targetPath));
+    }
+  }
+
+  const skillsDirectory = join(options.contentRoot, "skills");
+  for (const entry of await readdir(skillsDirectory, { withFileTypes: true })) {
+    if (
+      entry.isFile() &&
+      entry.name.endsWith(".md") &&
+      !expectedSkillFiles.has(entry.name)
+    ) {
+      await rm(join(skillsDirectory, entry.name));
+    }
+  }
+};
+
+const editUrlFor = (ref: string, options: SkillSourceOptions): string => {
+  const normalizedRef = ref.replaceAll("\\", "/");
+  const defaultSkill = normalizedRef.match(/^skills\/([^/]+)\.md$/);
+  if (defaultSkill) {
+    return `${options.repositoryUrl}/edit/${options.branch}/${defaultSkill[1]}/SKILL.md`;
+  }
+  if (normalizedRef === "index.mdx") {
+    return `${options.repositoryUrl}/edit/${options.branch}/docs-site/skill-source.ts`;
+  }
+
+  const contentPath = relative(
+    options.repositoryRoot,
+    join(options.contentRoot, ref),
+  ).replaceAll("\\", "/");
+  return `${options.repositoryUrl}/edit/${options.branch}/${contentPath}`;
+};
+
+const localizeSkillSearch = async (
+  entries: Awaited<
+    ReturnType<ReturnType<typeof filesystemSource>["load"]>
+  >["entries"],
+  options: SkillSourceOptions,
+): Promise<boolean> => {
+  const defaultSkillCount = entries.filter((entry) =>
+    entry.ref.startsWith("skills/"),
+  ).length;
+  const skillsByLocale = new Map<
+    string,
+    { description: string; name: string }[]
+  >();
+
+  for (const entry of entries) {
+    const match = entry.ref
+      .replaceAll("\\", "/")
+      .match(/^([^/]+)\/skills\/([^/]+)\.md$/);
+    const description = entry.data.description;
+    if (!(match?.[1] && match[2] && typeof description === "string")) {
+      continue;
+    }
+    const skills = skillsByLocale.get(match[1]) ?? [];
+    skills.push({ description, name: match[2] });
+    skillsByLocale.set(match[1], skills);
+  }
+
+  let changed = false;
+  for (const [locale, skills] of skillsByLocale) {
+    if (skills.length !== defaultSkillCount) {
+      continue;
+    }
+    skills.sort((left, right) => left.name.localeCompare(right.name));
+    const targetPath = join(options.contentRoot, locale, "index.mdx");
+    if (!existsSync(targetPath)) {
+      continue;
+    }
+    const source = await readFile(targetPath, "utf8");
+    const lines = source.split("\n");
+    const componentLine = lines.findIndex((line) =>
+      line.startsWith("<SkillSearch "),
+    );
+    if (componentLine === -1) {
+      continue;
+    }
+    lines[componentLine] =
+      `<SkillSearch locale="${locale}" skills={${JSON.stringify(skills)}} />`;
+    const localized = lines.join("\n");
+    if (localized !== source) {
+      await atomicWriteIfChanged(targetPath, localized);
+      changed = true;
+    }
+  }
+  return changed;
+};
+
 export const createSkillSource = (
   sourceOptions: SkillSourceOptions,
-): SkillContentSource => {
+): ReturnType<typeof filesystemSource> => {
   const options = {
     ...sourceOptions,
     repositoryUrl: sourceOptions.repositoryUrl.replace(/\/$/, ""),
   };
+  const filesystem = filesystemSource({
+    exclude: [],
+    include: ["**/*.md", "**/*.mdx"],
+    name: "skills-harness",
+    projectRoot: options.repositoryRoot,
+    root: options.contentRoot,
+  });
 
   return {
-    load: async () => ({
-      diagnostics: [],
-      entries: await createEntries(options),
-    }),
-    name: "skills-harness",
-    read: async (ref) => {
-      const entry = (await createEntries(options)).find(
-        (candidate) => candidate.ref === ref,
-      );
-      if (!entry) {
-        throw new Error(`Unknown skill docs entry: ${ref}`);
+    ...filesystem,
+    load: async () => {
+      await materializeDefaultContent(options);
+      let result = await filesystem.load();
+      if (await localizeSkillSearch(result.entries, options)) {
+        result = await filesystem.load();
       }
-      return entry.raw ?? entry.body.text;
+      return {
+        ...result,
+        entries: result.entries.map((entry) => ({
+          ...entry,
+          editUrl: editUrlFor(entry.ref, options),
+        })),
+      };
     },
-    staged: true,
     validate: () => {
       if (!existsSync(options.repositoryRoot)) {
         throw new Error(`Repository root not found: ${options.repositoryRoot}`);
       }
+      filesystem.validate();
     },
     watch: (onChange) => {
       let timeout: ReturnType<typeof setTimeout> | undefined;
+      const notify = () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(onChange, 50);
+      };
+      const stopContentWatcher = filesystem.watch(notify);
       const watcher = watchFiles(
         options.repositoryRoot,
         { recursive: true },
@@ -271,12 +411,12 @@ export const createSkillSource = (
           if (!filename?.toString().endsWith("SKILL.md")) {
             return;
           }
-          clearTimeout(timeout);
-          timeout = setTimeout(onChange, 50);
+          notify();
         },
       );
       return () => {
         clearTimeout(timeout);
+        stopContentWatcher();
         watcher.close();
       };
     },

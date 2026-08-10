@@ -2,11 +2,19 @@
   "name": "@frontend-skills/docs",
   "type": "module",
   "private": true,
+  "imports": {
+    "#blume-filesystem": {
+      "types": "./blume-filesystem.d.ts",
+      "default": "blume/sources/filesystem.ts"
+    }
+  },
   "scripts": {
     "build": "blume build",
     "check": "blume check --strict",
     "dev": "blume dev",
-    "diagrams": "bun run generate-skill-diagrams.ts --render"
+    "diagrams": "bun run generate-skill-diagrams.ts --render",
+    "translate": "blume translate --codex",
+    "translate:check": "blume translate --check"
   },
   "devDependencies": {
     "@types/react": "19.2.18",

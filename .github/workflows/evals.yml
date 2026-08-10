@@ -68,6 +68,9 @@ jobs:
       - name: Repository quality gate
         run: bun run quality:gate
 
+      - name: Translation freshness
+        run: bun run docs:translate:check
+
       - name: Typed protocol tests
         run: bun run test
 
