@@ -16,6 +16,10 @@ done
 
 # Grilling absorbed brainstorming.
 run_content_eval "$GRILL" "brainstorming approaches" "grilling description carries brainstorming trigger words"
+run_content_eval "$GRILL" "^description:.*UI layout" \
+  "grilling description carries the material UI layout trigger"
+run_content_eval "$REPO_ROOT/codex-skills/grilling/SKILL.md" "^description:.*UI layout" \
+  "Codex grilling wrapper carries the material UI layout trigger"
 run_content_eval "$GRILL" "Explore mode" "grilling has explore mode"
 run_content_eval "$GRILL" "2-3 approaches with trade-offs" "explore mode proposes approaches with trade-offs"
 run_content_eval "$GRILL" "Challenge variant" "explore mode keeps challenge variant"
@@ -28,6 +32,13 @@ run_content_eval "$GRILL" "fact-finding inline" "fact-finding stays inline witho
 run_content_eval "$GRILL" "Question format" "grilling pins a consistent question format"
 run_content_eval "$GRILL" "\\*\\*Q1.*<question title>\\*\\*" "grilling titles and numbers every question"
 run_content_eval "$GRILL" "\\*\\*Recommended:\\*\\*" "grilling separates each recommendation"
+run_content_eval "$GRILL" "ASCII wireframe" "UI grilling requires an ASCII wireframe"
+run_content_eval "$GRILL" "[Ee]ach materially different.*layout" \
+  "UI grilling sketches each materially different layout"
+run_content_eval "$GRILL" "[Dd]esktop.*mobile.*composition" \
+  "UI grilling adds responsive sketches only for composition changes"
+run_content_eval "$GRILL" "structure, not pixel" \
+  "UI grilling states the fidelity of ASCII wireframes"
 
 if grep -q "Ask the questions one at a time" "$GRILL"; then
   echo "  FAIL  grilling still forces one-question-at-a-time interviews"
