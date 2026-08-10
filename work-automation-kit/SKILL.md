@@ -1,6 +1,6 @@
 ---
 name: work-automation-kit
-description: Install planning/PM workflows: specs, ticket breakdown, tracker docs, triage.
+description: "Install planning/PM workflows: specs, ticket breakdown, tracker docs, triage."
 disable-model-invocation: true
 ---
 

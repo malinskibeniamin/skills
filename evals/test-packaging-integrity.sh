@@ -78,9 +78,19 @@ while IFS= read -r _pi_file; do
     case "$_pi_target" in http*|\#*|mailto:*|\<*|link) continue ;; esac
     _pi_clean="${_pi_target%%#*}"
     _pi_clean="${_pi_clean%% *}"
-    [ -e "$_pi_dir/$_pi_clean" ] || [ -e "$REPO_ROOT/$_pi_clean" ] || _pi_bad="$_pi_bad $_pi_file->$_pi_clean"
+    if [ -e "$_pi_dir/$_pi_clean" ] || [ -e "$REPO_ROOT/$_pi_clean" ]; then
+      continue
+    fi
+    case "$_pi_file" in
+      "$REPO_ROOT/docs-site/content/"*)
+        case "$_pi_clean" in
+          /*) [ -e "$REPO_ROOT/docs-site/public$_pi_clean" ] && continue ;;
+        esac
+        ;;
+    esac
+    _pi_bad="$_pi_bad $_pi_file->$_pi_clean"
   done < <(grep -oE '\]\(([^)]+)\)' "$_pi_file" 2>/dev/null | sed 's/^](//;s/)$//')
-done < <(find "$REPO_ROOT" -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/deprecated/*' ! -name '*-FORMAT.md')
+done < <(find "$REPO_ROOT" -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/deprecated/*' ! -name '*-FORMAT.md')
 
 if [ -n "$_pi_bad" ]; then
   echo "  FAIL  dangling markdown links:$_pi_bad"

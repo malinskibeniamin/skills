@@ -97,12 +97,15 @@ describe("skill docs source", () => {
     const repositoryRoot = join(import.meta.dir, "..");
     const source = createSkillSource({
       branch: "main",
+      contentRoot: join(import.meta.dir, "content"),
       repositoryRoot,
       repositoryUrl: REPOSITORY_URL,
     });
 
     const { diagnostics, entries } = await source.load();
-    const skillEntries = entries.filter((entry) => entry.ref !== "index.mdx");
+    const skillEntries = entries.filter((entry) =>
+      entry.ref.startsWith("skills/"),
+    );
     const diagramKinds = new Set<string>();
     const diagramLayouts = new Map<string, number>();
     const skillNames = skillEntries.map((entry) => entry.data.title);
@@ -124,7 +127,7 @@ describe("skill docs source", () => {
     expect(landing?.body.text).toContain(
       `Browse all ${canonicalSkillFiles.length} skills`,
     );
-    expect(landing?.body.text).toContain("<SkillSearch skills={");
+    expect(landing?.body.text).toContain('<SkillSearch locale="en" skills={');
     for (const entry of skillEntries) {
       expect(entry.data.type).toBe("skill");
       expect(landing?.body.text).toContain(
@@ -207,6 +210,7 @@ Read [REFERENCE.md](REFERENCE.md) before acting.
 
       const source = createSkillSource({
         branch: "next",
+        contentRoot: join(repositoryRoot, "docs-site", "content"),
         repositoryRoot,
         repositoryUrl: REPOSITORY_URL,
       });
@@ -219,12 +223,98 @@ Read [REFERENCE.md](REFERENCE.md) before acting.
         title: "/sample-skill",
         type: "skill",
       });
-      expect(page?.slug).toBe("skills/sample-skill");
+      expect(page?.sourcePath).toBe(
+        join(
+          repositoryRoot,
+          "docs-site",
+          "content",
+          "skills",
+          "sample-skill.md",
+        ),
+      );
       expect(page?.body.text).toContain(
         `${REPOSITORY_URL}/blob/next/sample-skill/REFERENCE.md`,
       );
       expect(page?.editUrl).toBe(
         `${REPOSITORY_URL}/edit/next/sample-skill/SKILL.md`,
+      );
+    } finally {
+      await rm(repositoryRoot, { force: true, recursive: true });
+    }
+  });
+
+  test("materializes translatable filesystem pages from canonical skills", async () => {
+    const repositoryRoot = await mkdtemp(join(tmpdir(), "skill-docs-"));
+    const contentRoot = join(repositoryRoot, "docs-site", "content");
+
+    try {
+      await mkdir(join(repositoryRoot, "sample-skill"), { recursive: true });
+      await mkdir(join(contentRoot, "pl", "skills"), { recursive: true });
+      await writeFile(
+        join(repositoryRoot, "sample-skill", "SKILL.md"),
+        `---
+name: sample-skill
+description: Use it to prove one source of truth.
+---
+# Sample skill
+
+Canonical guidance.
+`,
+      );
+      await writeFile(
+        join(contentRoot, "pl", "skills", "sample-skill.md"),
+        `---
+description: "Użyj jej, aby potwierdzić jedno źródło prawdy."
+sidebar:
+  label: "/sample-skill"
+title: "/sample-skill"
+type: "skill"
+---
+# Przykładowa umiejętność
+
+Kanoniczne wskazówki.
+`,
+      );
+      await writeFile(
+        join(contentRoot, "pl", "index.mdx"),
+        `---
+title: Umiejętności agentów
+description: Praktyczne umiejętności dla agentów programistycznych.
+type: doc
+---
+## Znajdź umiejętność
+
+<SkillSearch locale="en" skills={[{"description":"English description.","name":"sample-skill"}]} />
+`,
+      );
+
+      const source = createSkillSource({
+        branch: "main",
+        contentRoot,
+        repositoryRoot,
+        repositoryUrl: REPOSITORY_URL,
+      });
+      const { entries } = await source.load();
+      const defaultPage = entries.find(
+        (entry) => entry.ref === "skills/sample-skill.md",
+      );
+      const polishPage = entries.find(
+        (entry) => entry.ref === "pl/skills/sample-skill.md",
+      );
+
+      expect(source.staged).toBe(false);
+      expect(source.contentRoot).toBe(contentRoot);
+      expect(defaultPage?.sourcePath).toBe(
+        join(contentRoot, "skills", "sample-skill.md"),
+      );
+      expect(
+        await Bun.file(join(contentRoot, "skills", "sample-skill.md")).text(),
+      ).toContain("Canonical guidance.");
+      expect(polishPage?.body.text).toContain("Kanoniczne wskazówki.");
+      expect(
+        await Bun.file(join(contentRoot, "pl", "index.mdx")).text(),
+      ).toContain(
+        '<SkillSearch locale="pl" skills={[{"description":"Użyj jej, aby potwierdzić jedno źródło prawdy.","name":"sample-skill"}]} />',
       );
     } finally {
       await rm(repositoryRoot, { force: true, recursive: true });

@@ -2,6 +2,8 @@ node_modules/
 .blume/
 .blume-verify/
 dist/
+docs-site/content/index.mdx
+docs-site/content/skills/
 redpanda-evals/**/*.go
 redpanda-evals/**/*.sh
 
