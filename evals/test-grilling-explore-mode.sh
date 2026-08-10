@@ -39,6 +39,8 @@ run_content_eval "$GRILL" "[Dd]esktop.*mobile.*composition" \
   "UI grilling adds responsive sketches only for composition changes"
 run_content_eval "$GRILL" "structure, not pixel" \
   "UI grilling states the fidelity of ASCII wireframes"
+run_content_eval "$GRILL" "[Kk]eep.*borders aligned" \
+  "UI grilling keeps ASCII wireframes scannable"
 
 if grep -q "Ask the questions one at a time" "$GRILL"; then
   echo "  FAIL  grilling still forces one-question-at-a-time interviews"

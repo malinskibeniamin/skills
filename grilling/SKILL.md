@@ -25,10 +25,11 @@ evidence. Recommend one. Competing plans go through `/plan-arbiter`.
 
 For customer-facing UI choices, put an **ASCII wireframe** before the question round.
 Sketch each materially different proposed layout in a fenced `text` block using printable
-ASCII. Use the proposal's real labels, controls, grouping, order, and fixed or scrolling
-regions instead of generic placeholders. Treat the sketch as structure, not pixel accuracy;
-label inferred content. Show desktop and mobile only when the breakpoint changes composition.
-If approaches share a layout, sketch it once and annotate their visual or behavioral deltas.
+ASCII. Keep box borders aligned and narrow enough to scan. Use the proposal's real labels,
+controls, grouping, order, and fixed or scrolling regions instead of generic placeholders.
+Treat the sketch as structure, not pixel accuracy; label inferred content.
+Show desktop and mobile only when composition changes at a breakpoint. If approaches share a
+layout, sketch it once and annotate their visual or behavioral deltas.
 
 **Challenge variant:** when a direction exists, steelman the best alternative and
 identify what would make the current choice wrong.
