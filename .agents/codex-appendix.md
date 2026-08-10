@@ -10,6 +10,12 @@
 - `process.env` allowed only in build/test configs; app code goes through `@/env`.
 - Subagent output enforcement is best effort; follow `agents/references/findings-schema.md` for review findings.
 
+### Code exploration
+
+- Use the TraceDecay graph before broad shell search or whole-file reads: start with context or symbol search, then use callers, callees, affected tests, or test maps for relationships.
+- Use `tracedecay tool` as the CLI fallback when MCP is unavailable. Fall back to scoped `rg` and file reads only when the index is unavailable or stale, or when generated and ignored artifacts are outside the graph.
+- Treat TraceDecay savings as local estimates, not Codex usage, quota, or billing evidence. In linked worktrees, confirm the active project and branch before relying on graph results.
+
 ### Native delegation
 
 - In native Codex, do not spawn subagents or start a recursive `codex exec` unless the user explicitly requests subagents, delegation, parallel agent work, or invokes `/swarm`. Skill activation alone is not consent. `/work`, `/go`, `/review`, `/grilling`, `/resilience-review`, and `/plow-ahead` do not grant it.

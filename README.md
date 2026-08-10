@@ -64,6 +64,57 @@ codex plugin add frontend-skills@skills
 
 Track `main` instead of the pin with `--ref main`. Restart Codex after adding or upgrading so the Plugins UI reloads metadata.
 
+### TraceDecay code graph
+
+This harness uses [TraceDecay](https://github.com/ScriptedAlchemy/tracedecay) as a
+user-level Codex companion for semantic code search, call graphs, impact analysis, and
+affected-test selection. It remains a separate installation so projects do not acquire a
+runtime dependency.
+
+Recommended opt-in setup after installing the Codex plugin:
+
+```bash
+FRONTEND_SKILLS_ROOT="$(
+  codex plugin list --json |
+    jq -er '.installed[] | select(.pluginId == "frontend-skills@skills").source.path'
+)"
+bash "$FRONTEND_SKILLS_ROOT/scripts/setup-tracedecay.sh" --agent codex --project "$PWD"
+```
+
+The helper shows its scope and asks before changing the machine or repository. It installs
+a missing binary through Homebrew, configures the selected host, starts the user daemon,
+enrolls the current project only when needed, and runs `tracedecay doctor`. Use `--dry-run`
+to preview it. The installation remains optional and the harness continues to fail open
+when TraceDecay is absent.
+
+Manual fallback:
+
+```bash
+brew install ScriptedAlchemy/tap/tracedecay
+tracedecay install --agent codex
+codex plugin add tracedecay@personal
+tracedecay daemon install-service
+```
+
+Enroll each repository once, then start a new Codex or Conductor agent session:
+
+```bash
+cd /path/to/repository
+tracedecay init
+tracedecay doctor --agent codex
+```
+
+Linked worktrees share one enrollment and keep branch-specific graph databases. Check
+`tracedecay tool active_project --json` if results appear to come from another branch; after
+the first linked-worktree enrollment, run `tracedecay daemon restart` once if the daemon
+still reports the initial database.
+
+**Token-first hook profile:** TraceDecay v0.0.73 `UserPromptSubmit` emitted about 2,600
+characters on every prompt in dogfood testing. Disable only that TraceDecay hook through
+Codex `/hooks`; keep SessionStart, PostToolUse, PostCompact, and Stop for startup guidance,
+incremental sync, compaction recovery, and session ingestion. Re-measure after TraceDecay
+upgrades before changing the profile.
+
 **Fallback: individual skills via skills.sh** -- when you want specific skills instead of the full plugin:
 
 ```bash
@@ -84,7 +135,13 @@ picked up automatically.
 bun run docs:dev    # local site with hot reload
 bun run docs:check  # content and Astro checks
 bun run docs:build  # static output in docs-site/dist
+bun run docs:translate        # refresh zh-CN, zh-TW, and pl with Codex
+bun run docs:translate:check  # fail when a translation is missing or stale
 ```
+
+The English filesystem pages are generated from the canonical `SKILL.md` files and
+ignored by Git. Blume commits only the translated pages and its freshness ledger, so
+English guidance still has one source of truth.
 
 ## How it all connects
 

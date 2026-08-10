@@ -1,0 +1,410 @@
+{
+  "files": {
+    "content/index.mdx": {
+      "pl": "554a6cd13a60fec2",
+      "zh-CN": "554a6cd13a60fec2",
+      "zh-TW": "554a6cd13a60fec2"
+    },
+    "content/skills/accessibility.md": {
+      "pl": "f26e309e7156eef5",
+      "zh-CN": "f26e309e7156eef5",
+      "zh-TW": "f26e309e7156eef5"
+    },
+    "content/skills/agent-watchdog.md": {
+      "pl": "5003509895e3d706",
+      "zh-CN": "5003509895e3d706",
+      "zh-TW": "5003509895e3d706"
+    },
+    "content/skills/aip.md": {
+      "pl": "44bf6a6911b826e9",
+      "zh-CN": "44bf6a6911b826e9",
+      "zh-TW": "44bf6a6911b826e9"
+    },
+    "content/skills/ask-ben.md": {
+      "pl": "a10e0cb73d55b2ff",
+      "zh-CN": "a10e0cb73d55b2ff",
+      "zh-TW": "a10e0cb73d55b2ff"
+    },
+    "content/skills/codebase-design.md": {
+      "pl": "e8f946b051b569ae",
+      "zh-CN": "e8f946b051b569ae",
+      "zh-TW": "e8f946b051b569ae"
+    },
+    "content/skills/codex-compat.md": {
+      "pl": "89d63caaaf2e1aa8",
+      "zh-CN": "89d63caaaf2e1aa8",
+      "zh-TW": "89d63caaaf2e1aa8"
+    },
+    "content/skills/codex.md": {
+      "pl": "d3287385d489e03c",
+      "zh-CN": "d3287385d489e03c",
+      "zh-TW": "d3287385d489e03c"
+    },
+    "content/skills/commit-push-pr.md": {
+      "pl": "4cda90a311955be7",
+      "zh-CN": "4cda90a311955be7",
+      "zh-TW": "4cda90a311955be7"
+    },
+    "content/skills/connect-query.md": {
+      "pl": "72f1059a36b04f8e",
+      "zh-CN": "72f1059a36b04f8e",
+      "zh-TW": "72f1059a36b04f8e"
+    },
+    "content/skills/demo.md": {
+      "pl": "31fce26ff9b1ba56",
+      "zh-CN": "31fce26ff9b1ba56",
+      "zh-TW": "31fce26ff9b1ba56"
+    },
+    "content/skills/deslop.md": {
+      "pl": "51ca218e5e1aac23",
+      "zh-CN": "51ca218e5e1aac23",
+      "zh-TW": "51ca218e5e1aac23"
+    },
+    "content/skills/development-lifecycle.md": {
+      "pl": "f883c0126da0f17c",
+      "zh-CN": "f883c0126da0f17c",
+      "zh-TW": "f883c0126da0f17c"
+    },
+    "content/skills/diagnosing-bugs.md": {
+      "pl": "dfd035d2b32520e7",
+      "zh-CN": "dfd035d2b32520e7",
+      "zh-TW": "dfd035d2b32520e7"
+    },
+    "content/skills/dogfood.md": {
+      "pl": "15fcc6ba07f61ec4",
+      "zh-CN": "15fcc6ba07f61ec4",
+      "zh-TW": "15fcc6ba07f61ec4"
+    },
+    "content/skills/domain-modeling.md": {
+      "pl": "c4b7e9793ef9219d",
+      "zh-CN": "c4b7e9793ef9219d",
+      "zh-TW": "c4b7e9793ef9219d"
+    },
+    "content/skills/e2e-testing.md": {
+      "pl": "d456ace845af1c0f",
+      "zh-CN": "d456ace845af1c0f",
+      "zh-TW": "d456ace845af1c0f"
+    },
+    "content/skills/efficient-frontier.md": {
+      "pl": "73338e63472cd6fc",
+      "zh-CN": "73338e63472cd6fc",
+      "zh-TW": "73338e63472cd6fc"
+    },
+    "content/skills/excalidraw-diagram.md": {
+      "pl": "50c5ce1c22a0cf8f",
+      "zh-CN": "50c5ce1c22a0cf8f",
+      "zh-TW": "50c5ce1c22a0cf8f"
+    },
+    "content/skills/extend-harness.md": {
+      "pl": "8876cb02ae11ffcb",
+      "zh-CN": "8876cb02ae11ffcb",
+      "zh-TW": "8876cb02ae11ffcb"
+    },
+    "content/skills/frontend-invariants.md": {
+      "pl": "437345f1f2fdd6f3",
+      "zh-CN": "437345f1f2fdd6f3",
+      "zh-TW": "437345f1f2fdd6f3"
+    },
+    "content/skills/frontend-starter-kit.md": {
+      "pl": "c3ec9b21c0e39e15",
+      "zh-CN": "c3ec9b21c0e39e15",
+      "zh-TW": "c3ec9b21c0e39e15"
+    },
+    "content/skills/go.md": {
+      "pl": "cb07168a4b34b59d",
+      "zh-CN": "cb07168a4b34b59d",
+      "zh-TW": "cb07168a4b34b59d"
+    },
+    "content/skills/golang-review.md": {
+      "pl": "fb6b28e7cc871c08",
+      "zh-CN": "fb6b28e7cc871c08",
+      "zh-TW": "fb6b28e7cc871c08"
+    },
+    "content/skills/golang.md": {
+      "pl": "1892579e892e9802",
+      "zh-CN": "1892579e892e9802",
+      "zh-TW": "1892579e892e9802"
+    },
+    "content/skills/grilling.md": {
+      "pl": "1bea684ab5f4b026",
+      "zh-CN": "1bea684ab5f4b026",
+      "zh-TW": "1bea684ab5f4b026"
+    },
+    "content/skills/handoff.md": {
+      "pl": "cde054ea54183f6c",
+      "zh-CN": "cde054ea54183f6c",
+      "zh-TW": "cde054ea54183f6c"
+    },
+    "content/skills/hook-audit.md": {
+      "pl": "b8d70bfed8abf0cd",
+      "zh-CN": "b8d70bfed8abf0cd",
+      "zh-TW": "b8d70bfed8abf0cd"
+    },
+    "content/skills/improve.md": {
+      "pl": "a0a7c316f70ef18d",
+      "zh-CN": "a0a7c316f70ef18d",
+      "zh-TW": "a0a7c316f70ef18d"
+    },
+    "content/skills/make-pr-easy-to-review.md": {
+      "pl": "7118a86c8951c73f",
+      "zh-CN": "7118a86c8951c73f",
+      "zh-TW": "7118a86c8951c73f"
+    },
+    "content/skills/plan-arbiter.md": {
+      "pl": "596c641d153b23ab",
+      "zh-CN": "596c641d153b23ab",
+      "zh-TW": "596c641d153b23ab"
+    },
+    "content/skills/plow-ahead.md": {
+      "pl": "596fe0547676b7a8",
+      "zh-CN": "596fe0547676b7a8",
+      "zh-TW": "596fe0547676b7a8"
+    },
+    "content/skills/postgresql.md": {
+      "pl": "088d6ea625fb445e",
+      "zh-CN": "088d6ea625fb445e",
+      "zh-TW": "088d6ea625fb445e"
+    },
+    "content/skills/pr-shepherd.md": {
+      "pl": "827502d2c864ba89",
+      "zh-CN": "827502d2c864ba89",
+      "zh-TW": "827502d2c864ba89"
+    },
+    "content/skills/prime.md": {
+      "pl": "836c38b0343d6193",
+      "zh-CN": "836c38b0343d6193",
+      "zh-TW": "836c38b0343d6193"
+    },
+    "content/skills/prototype.md": {
+      "pl": "d0d7ed9e0b059bfa",
+      "zh-CN": "d0d7ed9e0b059bfa",
+      "zh-TW": "d0d7ed9e0b059bfa"
+    },
+    "content/skills/quantify-impact.md": {
+      "pl": "7155e68bf124803c",
+      "zh-CN": "7155e68bf124803c",
+      "zh-TW": "7155e68bf124803c"
+    },
+    "content/skills/read-the-damn-docs.md": {
+      "pl": "df1328d069486353",
+      "zh-CN": "df1328d069486353",
+      "zh-TW": "df1328d069486353"
+    },
+    "content/skills/redpanda-ai-gateway.md": {
+      "pl": "0c8baefd12a0ee76",
+      "zh-CN": "0c8baefd12a0ee76",
+      "zh-TW": "0c8baefd12a0ee76"
+    },
+    "content/skills/registry-workflow.md": {
+      "pl": "6dafad354db9d13e",
+      "zh-CN": "6dafad354db9d13e",
+      "zh-TW": "6dafad354db9d13e"
+    },
+    "content/skills/release.md": {
+      "pl": "ab63a5fda3a1678a",
+      "zh-CN": "ab63a5fda3a1678a",
+      "zh-TW": "ab63a5fda3a1678a"
+    },
+    "content/skills/research.md": {
+      "pl": "ab15ecf24f42e66e",
+      "zh-CN": "ab15ecf24f42e66e",
+      "zh-TW": "ab15ecf24f42e66e"
+    },
+    "content/skills/resilience-review.md": {
+      "pl": "384fe0171c5b0b1d",
+      "zh-CN": "384fe0171c5b0b1d",
+      "zh-TW": "384fe0171c5b0b1d"
+    },
+    "content/skills/resolve-pr-feedback.md": {
+      "pl": "266c78c7608c2261",
+      "zh-CN": "266c78c7608c2261",
+      "zh-TW": "266c78c7608c2261"
+    },
+    "content/skills/resolving-merge-conflicts.md": {
+      "pl": "3a38090db9274edc",
+      "zh-CN": "3a38090db9274edc",
+      "zh-TW": "3a38090db9274edc"
+    },
+    "content/skills/revamp.md": {
+      "pl": "bae4d1f77e8317d1",
+      "zh-CN": "bae4d1f77e8317d1",
+      "zh-TW": "bae4d1f77e8317d1"
+    },
+    "content/skills/review.md": {
+      "pl": "7ea7605523e667b2",
+      "zh-CN": "7ea7605523e667b2",
+      "zh-TW": "7ea7605523e667b2"
+    },
+    "content/skills/setup-atlassian-workflow.md": {
+      "pl": "a5ab46ebae873375",
+      "zh-CN": "a5ab46ebae873375",
+      "zh-TW": "a5ab46ebae873375"
+    },
+    "content/skills/setup-routines.md": {
+      "pl": "4749fed7d50539ed",
+      "zh-CN": "4749fed7d50539ed",
+      "zh-TW": "4749fed7d50539ed"
+    },
+    "content/skills/snyk-ux-security.md": {
+      "pl": "cfc6820207516d1e",
+      "zh-CN": "cfc6820207516d1e",
+      "zh-TW": "cfc6820207516d1e"
+    },
+    "content/skills/stack-registry.md": {
+      "pl": "7f58dc726279ae9c",
+      "zh-CN": "7f58dc726279ae9c",
+      "zh-TW": "7f58dc726279ae9c"
+    },
+    "content/skills/stacked-prs.md": {
+      "pl": "85d7dbd3b1335290",
+      "zh-CN": "85d7dbd3b1335290",
+      "zh-TW": "85d7dbd3b1335290"
+    },
+    "content/skills/stay-within-limits.md": {
+      "pl": "264a0339680af7b7",
+      "zh-CN": "264a0339680af7b7",
+      "zh-TW": "264a0339680af7b7"
+    },
+    "content/skills/steelman.md": {
+      "pl": "9db580ed7c4a5769",
+      "zh-CN": "9db580ed7c4a5769",
+      "zh-TW": "9db580ed7c4a5769"
+    },
+    "content/skills/swarm.md": {
+      "pl": "05477416ce175cab",
+      "zh-CN": "05477416ce175cab",
+      "zh-TW": "05477416ce175cab"
+    },
+    "content/skills/tanstack-intent.md": {
+      "pl": "05820af55e713fdd",
+      "zh-CN": "05820af55e713fdd",
+      "zh-TW": "05820af55e713fdd"
+    },
+    "content/skills/tanstack-router.md": {
+      "pl": "0bcb44a17679e239",
+      "zh-CN": "0bcb44a17679e239",
+      "zh-TW": "0bcb44a17679e239"
+    },
+    "content/skills/tanstack-table.md": {
+      "pl": "ecf485974a640aa5",
+      "zh-CN": "ecf485974a640aa5",
+      "zh-TW": "ecf485974a640aa5"
+    },
+    "content/skills/tdd.md": {
+      "pl": "c3fe4ac021407214",
+      "zh-CN": "c3fe4ac021407214",
+      "zh-TW": "c3fe4ac021407214"
+    },
+    "content/skills/teach.md": {
+      "pl": "1cfcdee956306ed1",
+      "zh-CN": "1cfcdee956306ed1",
+      "zh-TW": "1cfcdee956306ed1"
+    },
+    "content/skills/thermo-nuclear-code-quality-review.md": {
+      "pl": "267c908c4bd4a331",
+      "zh-CN": "267c908c4bd4a331",
+      "zh-TW": "267c908c4bd4a331"
+    },
+    "content/skills/to-questionnaire.md": {
+      "pl": "d9135e956edd48ad",
+      "zh-CN": "d9135e956edd48ad",
+      "zh-TW": "d9135e956edd48ad"
+    },
+    "content/skills/to-spec.md": {
+      "pl": "fe2abf1edf2d9fb3",
+      "zh-CN": "fe2abf1edf2d9fb3",
+      "zh-TW": "fe2abf1edf2d9fb3"
+    },
+    "content/skills/to-tickets.md": {
+      "pl": "dfddbc70f210cb1e",
+      "zh-CN": "dfddbc70f210cb1e",
+      "zh-TW": "dfddbc70f210cb1e"
+    },
+    "content/skills/triage.md": {
+      "pl": "18ca2e89ffd4f626",
+      "zh-CN": "18ca2e89ffd4f626",
+      "zh-TW": "18ca2e89ffd4f626"
+    },
+    "content/skills/upgrade-dependency.md": {
+      "pl": "3bba0655b8ad2582",
+      "zh-CN": "3bba0655b8ad2582",
+      "zh-TW": "3bba0655b8ad2582"
+    },
+    "content/skills/ux-copy.md": {
+      "pl": "2b58e35cbe5a1675",
+      "zh-CN": "2b58e35cbe5a1675",
+      "zh-TW": "2b58e35cbe5a1675"
+    },
+    "content/skills/video-research.md": {
+      "pl": "068595609c820004",
+      "zh-CN": "068595609c820004",
+      "zh-TW": "068595609c820004"
+    },
+    "content/skills/visual-plan.md": {
+      "pl": "91e9fbd138882b97",
+      "zh-CN": "91e9fbd138882b97",
+      "zh-TW": "91e9fbd138882b97"
+    },
+    "content/skills/visual-recap.md": {
+      "pl": "c9d285720544f145",
+      "zh-CN": "c9d285720544f145",
+      "zh-TW": "c9d285720544f145"
+    },
+    "content/skills/visual-review.md": {
+      "pl": "7cbcd30db9966ccf",
+      "zh-CN": "7cbcd30db9966ccf",
+      "zh-TW": "7cbcd30db9966ccf"
+    },
+    "content/skills/wait-what.md": {
+      "pl": "5d9c3fb216cd4bf5",
+      "zh-CN": "5d9c3fb216cd4bf5",
+      "zh-TW": "5d9c3fb216cd4bf5"
+    },
+    "content/skills/wayfinder.md": {
+      "pl": "4c60e760bd62b202",
+      "zh-CN": "4c60e760bd62b202",
+      "zh-TW": "4c60e760bd62b202"
+    },
+    "content/skills/what-did-i-get-done.md": {
+      "pl": "41f60e287b871a9c",
+      "zh-CN": "41f60e287b871a9c",
+      "zh-TW": "41f60e287b871a9c"
+    },
+    "content/skills/wizard.md": {
+      "pl": "047ab92172796037",
+      "zh-CN": "047ab92172796037",
+      "zh-TW": "047ab92172796037"
+    },
+    "content/skills/work-automation-kit.md": {
+      "pl": "66c6811ee80e9593",
+      "zh-CN": "66c6811ee80e9593",
+      "zh-TW": "66c6811ee80e9593"
+    },
+    "content/skills/work.md": {
+      "pl": "d3d801d9623bc0a8",
+      "zh-CN": "d3d801d9623bc0a8",
+      "zh-TW": "d3d801d9623bc0a8"
+    },
+    "content/skills/writing-beats.md": {
+      "pl": "4222e32caba0cbb3",
+      "zh-CN": "4222e32caba0cbb3",
+      "zh-TW": "4222e32caba0cbb3"
+    },
+    "content/skills/writing-for-agents.md": {
+      "pl": "4c0c6c0782e0ad73",
+      "zh-CN": "4c0c6c0782e0ad73",
+      "zh-TW": "4c0c6c0782e0ad73"
+    },
+    "content/skills/writing-fragments.md": {
+      "pl": "7152d227844bb996",
+      "zh-CN": "7152d227844bb996",
+      "zh-TW": "7152d227844bb996"
+    },
+    "content/skills/writing-shape.md": {
+      "pl": "b6248f62fc35d3ea",
+      "zh-CN": "b6248f62fc35d3ea",
+      "zh-TW": "b6248f62fc35d3ea"
+    }
+  },
+  "version": 1
+}

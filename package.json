@@ -11,6 +11,8 @@
     "docs:build": "bun run --cwd docs-site build",
     "docs:check": "bun run --cwd docs-site check",
     "docs:dev": "bun run --cwd docs-site dev",
+    "docs:translate": "bun run --cwd docs-site translate",
+    "docs:translate:check": "bun run --cwd docs-site translate:check",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint --error-on-warnings .",

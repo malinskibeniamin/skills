@@ -15,6 +15,7 @@ set -eo pipefail
 
 REMOTE=""
 JSON_MODE=false
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -640,6 +641,16 @@ if command -v bun &>/dev/null; then
   _pass "bun available"
 else
   _warn "bun not found — toolchain hooks expect bun as package manager"
+fi
+
+if command -v tracedecay &>/dev/null; then
+  _pass "TraceDecay available (optional semantic graph)"
+else
+  _tracedecay_agent="codex"
+  if ! command -v codex &>/dev/null && command -v claude &>/dev/null; then
+    _tracedecay_agent="claude"
+  fi
+  _warn "TraceDecay not found — optional semantic graph. Run: bash \"$SCRIPT_DIR/setup-tracedecay.sh\" --agent $_tracedecay_agent --project \"$PWD\""
 fi
 
 if [ -f "package.json" ]; then
