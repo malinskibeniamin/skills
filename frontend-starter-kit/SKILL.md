@@ -30,6 +30,7 @@ the plugin ("export harness").
 | Tool | Reference | What it sets up |
 |---|---|---|
 | toolchain | `references/toolchain/` | bun + TypeScript 7 `tsc` enforcement, destructive command guards |
+| tanstack-intent | `references/tanstack-intent/` | version-matched TanStack package guidance + official edit gates |
 | biome | `references/biome/` | Biome + Ultracite, auto-fix hook |
 | quality-gate | `references/quality-gate/` | quality:gate script, CI workflow, Stop hook, bundle guard |
 | agent-config | `references/agent-config/` | AI_AGENT=1, output truncation |
@@ -55,6 +56,6 @@ Runtime-guidance skills (daily work, not setup): `/accessibility`, `/tanstack-ro
 
 ## Verify
 
-- [ ] `.claude/settings.json` has all hooks, `biome.jsonc` + `src/env.ts` exist
+- [ ] `.claude/settings.json` has all hooks, including TanStack Intent when TanStack packages are installed; `biome.jsonc` + `src/env.ts` exist
 - [ ] Scripts: lint, lint:fix, type:check, test, quality:gate
 - [ ] `.github/workflows/quality-gate.yml` exists, all hooks executable

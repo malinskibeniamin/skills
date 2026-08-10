@@ -1,0 +1,3 @@
+interface:
+  display_name: "TanStack Intent"
+  short_description: "Load version-matched guidance for every TanStack package"

@@ -8,8 +8,10 @@ paths:
 
 # TanStack Router
 
-Run `/read-the-damn-docs` before changing current APIs. Read
-[REFERENCE.md](REFERENCE.md) for code shapes and [SETUP.md](SETUP.md) for installation.
+Follow `/tanstack-intent` first and load the matching guidance shipped by the installed
+Router package. Intent owns current API syntax and version behavior. This skill adds local
+ownership and URL-state policy. Read [REFERENCE.md](REFERENCE.md) for local code shapes and
+[SETUP.md](SETUP.md) for installation.
 
 ## Ownership
 

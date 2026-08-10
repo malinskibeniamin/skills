@@ -38,13 +38,11 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`):
 - [ ] Hook warns on exported components from route files
 - [ ] Hook blocks `useSearch` without `validateSearch` in route files
 
-### 5. TanStack official skills (optional)
+### 5. TanStack Intent (required)
 
-```bash
-npx @tanstack/intent@latest install
-```
-
-Adds 28 reference skills from TanStack Router docs.
+Complete the shared [TanStack Intent setup](../tanstack-intent/SETUP.md). Before Router
+work, follow `/tanstack-intent`: discover the installed package catalog and load the
+task-specific `use` ids returned by Intent.
 
 ### 6. Commit
 

@@ -78,6 +78,7 @@
     "./stay-within-limits/",
     "./steelman/",
     "./swarm/",
+    "./tanstack-intent/",
     "./tanstack-router/",
     "./tanstack-table/",
     "./tdd/",

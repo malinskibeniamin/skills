@@ -544,6 +544,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     ],
     relations: ["assigns", "isolates", "integrates"],
   },
+  "tanstack-intent": {
+    kind: "pipeline",
+    nodes: [
+      "TanStack mention or import",
+      "Installed package catalog",
+      "Task-matched use ids",
+      "Version-matched guidance",
+    ],
+  },
   "tanstack-router": {
     kind: "state-machine",
     nodes: ["Navigate", "Validate search", "Load query", "Render / error"],

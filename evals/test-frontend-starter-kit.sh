@@ -9,7 +9,7 @@ run_content_eval "$KIT" "no-ops" "kit notes hook copies are no-ops for plugin co
 run_content_eval "$KIT" "references/toolchain" "kit routes to toolchain reference"
 run_content_eval "$KIT" "references/redpanda" "kit routes to redpanda reference"
 
-for ref in toolchain biome quality-gate agent-config conventional-commits env-validation react-compiler react-doctor zustand ci-pipeline react-rules redpanda; do
+for ref in toolchain tanstack-intent biome quality-gate agent-config conventional-commits env-validation react-compiler react-doctor zustand ci-pipeline react-rules redpanda; do
   run_file_eval "$REPO_ROOT/frontend-starter-kit/references/$ref/README.md" "reference exists: $ref"
 done
 
