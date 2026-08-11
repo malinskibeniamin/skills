@@ -74,7 +74,7 @@ Uruchomione obszary nie mogą tworzyć potomków bez osobnej zgody na zagnieżd�
   wymagające akceptacji na podstawie ewaluacji pozostają niedostępne do czasu zatwierdzenia przez zestaw testów ablacyjnych.
 - Dyscyplina użycia tokenów modelu frontier: `/efficient-frontier` określa, co delegować, a co pozostawić koordynatorowi.
 - Obszary wykonawcze od początku tworzą najmniejsze przejrzyste rozwiązanie; obszary przeglądowe bezpośrednio oceniają gęstość semantyczną.
-- Architektura: rozdziel `/improve architecture` według kontekstu, modułu, granicy lub adaptera.
+- Architektura: rozdziel `/improve-codebase-architecture` według kontekstu, modułu, granicy lub adaptera.
 - TDD: podziel zakres testów według niezależnych zachowań lub publicznych interfejsów. RED przed zmianami w kodzie produkcyjnym; wynik musi zawierać dowód RED->GREEN lub niezaliczonego testu.
 - Praca nad umiejętnościami lub mechanizmem testowym: przypisz odpowiedzialność za ewaluację w każdym obszarze. Każda zmieniona umiejętność lub hook wymaga odpowiednich ewaluacji w zakresie, za które odpowiada obszar lub koordynator.
 - Projektowanie i treści: wydzielaj obszary `/visual-review`, `/ux-copy`, dostępności i artykulacji tylko wtedy, gdy ich zakresy zapisu się nie pokrywają.

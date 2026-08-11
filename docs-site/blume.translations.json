@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "554a6cd13a60fec2",
-      "zh-CN": "554a6cd13a60fec2",
-      "zh-TW": "554a6cd13a60fec2"
+      "pl": "5e7ae2298c60788d",
+      "zh-CN": "5e7ae2298c60788d",
+      "zh-TW": "5e7ae2298c60788d"
     },
     "content/skills/accessibility.md": {
       "pl": "f26e309e7156eef5",
@@ -21,9 +21,9 @@
       "zh-TW": "44bf6a6911b826e9"
     },
     "content/skills/ask-ben.md": {
-      "pl": "a10e0cb73d55b2ff",
-      "zh-CN": "a10e0cb73d55b2ff",
-      "zh-TW": "a10e0cb73d55b2ff"
+      "pl": "14666fe1d386e0f8",
+      "zh-CN": "14666fe1d386e0f8",
+      "zh-TW": "14666fe1d386e0f8"
     },
     "content/skills/codebase-design.md": {
       "pl": "e8f946b051b569ae",
@@ -66,9 +66,9 @@
       "zh-TW": "f883c0126da0f17c"
     },
     "content/skills/diagnosing-bugs.md": {
-      "pl": "dfd035d2b32520e7",
-      "zh-CN": "dfd035d2b32520e7",
-      "zh-TW": "dfd035d2b32520e7"
+      "pl": "3d214f95cbeb8921",
+      "zh-CN": "3d214f95cbeb8921",
+      "zh-TW": "3d214f95cbeb8921"
     },
     "content/skills/dogfood.md": {
       "pl": "15fcc6ba07f61ec4",
@@ -140,10 +140,15 @@
       "zh-CN": "b8d70bfed8abf0cd",
       "zh-TW": "b8d70bfed8abf0cd"
     },
+    "content/skills/improve-codebase-architecture.md": {
+      "pl": "e33c0e75c357b82b",
+      "zh-CN": "e33c0e75c357b82b",
+      "zh-TW": "e33c0e75c357b82b"
+    },
     "content/skills/improve.md": {
-      "pl": "a0a7c316f70ef18d",
-      "zh-CN": "a0a7c316f70ef18d",
-      "zh-TW": "a0a7c316f70ef18d"
+      "pl": "d3cde385976229fa",
+      "zh-CN": "d3cde385976229fa",
+      "zh-TW": "d3cde385976229fa"
     },
     "content/skills/make-pr-easy-to-review.md": {
       "pl": "7118a86c8951c73f",
@@ -271,9 +276,9 @@
       "zh-TW": "9db580ed7c4a5769"
     },
     "content/skills/swarm.md": {
-      "pl": "05477416ce175cab",
-      "zh-CN": "05477416ce175cab",
-      "zh-TW": "05477416ce175cab"
+      "pl": "00d4fe09fdab6679",
+      "zh-CN": "00d4fe09fdab6679",
+      "zh-TW": "00d4fe09fdab6679"
     },
     "content/skills/tanstack-intent.md": {
       "pl": "05820af55e713fdd",

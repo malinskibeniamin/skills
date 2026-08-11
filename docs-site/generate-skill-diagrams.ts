@@ -310,6 +310,16 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Measured improvement",
     ],
   },
+  "improve-codebase-architecture": {
+    kind: "architecture",
+    nodes: [
+      "Scattered callers",
+      "Deep module interface",
+      "Parallel state",
+      "Owned invariant\n(error impossible)",
+    ],
+    relations: ["replaced by", "duplicates", "enforces"],
+  },
   "make-pr-easy-to-review": {
     kind: "timeline",
     nodes: [
