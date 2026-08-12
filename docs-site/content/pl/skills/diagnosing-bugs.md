@@ -104,5 +104,5 @@ Wykonaj wszystkie punkty przed uznaniem diagnozy za zakończoną:
 - [ ] Hipoteza, która okazała się prawidłowa, została podana w komunikacie commita / PR -- aby pomóc kolejnej osobie debugującej
 
 Następnie zapytaj, co zapobiegłoby ponownemu wystąpieniu problemu. Jeśli odpowiedzią jest zmiana architektoniczna, przekaż
-konkretny problem dotyczący punktu testowania lub powiązań do `/improve architecture`. Zarekomenduj ją po usunięciu pierwotnej
+konkretny problem dotyczący punktu testowania lub powiązań do `/improve-codebase-architecture`. Zarekomenduj ją po usunięciu pierwotnej
 przyczyny, gdy dowody są najsilniejsze.

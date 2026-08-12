@@ -3,8 +3,7 @@ title: /improve
 description: >-
   Przeprowadź audyt bazy kodu lub napisz plany gotowe do realizacji. Użyj do
   przeglądów usprawnień, wyznaczania kierunku rozwoju, weryfikacji planów,
-  raportów architektonicznych, jednoznacznego przekazania do realizacji lub
-  uzgadniania backlogu.
+  jednoznacznego przekazania do realizacji lub uzgadniania backlogu.
 type: skill
 sidebar:
   label: /improve
@@ -16,7 +15,7 @@ sidebar:
 Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku na podstawie żądania:
 
 - **Tryb raportu**: audyt, przegląd, analiza lub doradztwo -> zwróć ustalenia na czacie; niczego nie zapisuj.
-- **Tryb planu**: plan, plan architektury lub przekazanie wykonawcy -> zapisz wyłącznie żądany artefakt planu.
+- **Tryb planu**: plan implementacji lub przekazanie wykonawcy -> zapisz wyłącznie żądany artefakt planu.
 - **Tryb wykonania**: jawne `/improve execute` -> przekaż wybrany plan bieżącemu
   pojedynczemu właścicielowi; delegowanie nadal wymaga wyraźnej zgody lub `/swarm`.
 
@@ -55,14 +54,6 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
 - `/improve`: standardowy audyt w trybie raportu.
 - `/improve quick` lub `/improve deep`: zmiana głębokości audytu.
 - `/improve security|perf|tests|bugs|docs|dx|dependencies`: audyt ukierunkowany.
-- `/improve architecture`: znajdź płytkie moduły, miejsca rozdziału i utrudnienia wymagające przechodzenia między plikami, używając
-  słownictwa `/codebase-design` oraz testu usunięcia. Zwróć karty kandydatów (problem,
-  rozwiązanie, lokalność/wpływ/korzyści testowe, przed/po, Mocny|Warty
-  rozważenia|Spekulatywny) oraz **Najważniejsza rekomendacja:** z najsilniejszymi dowodami. Utwórz
-  artefakt HTML na podstawie `references/architecture-report.md` tylko na żądanie. W tym artefakcie
-  użyj `/excalidraw-diagram` do edytowalnych widoków przed/po, gdy relacje przestrzenne są istotne
-  dla argumentacji; dla prostego grafu pozostaw Mermaid. Następnie poddaj wybranego kandydata rygorystycznej analizie przed zaproponowaniem
-  interfejsów. Uruchom `/domain-modeling` samodzielnie tylko wtedy, gdy wykrystalizują się decyzje warte uwzględnienia w glosariuszu lub ADR.
 - `/improve branch`: przeprowadź audyt różnic bieżącej gałęzi oraz bezpośrednich miejsc wywołania; oznacz ustalenia jako `introduced` lub `pre-existing`.
 - `/improve next`: wyłącznie sugestie funkcji lub planu rozwoju oparte na dostępnych danych.
 - `/improve plan <description>`: pomiń szeroki audyt; zbadaj wystarczająco dużo, aby napisać jeden plan.
@@ -74,10 +65,6 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
 - Dodaj `--issues` tylko na wyraźne żądanie; następnie opublikuj plany za pomocą `gh issue create`.
 
 Warianty skrócone: branch, review-plan, execute, reconcile. Szczegóły wewnętrznego przekierowywania umiejętności znajdziesz w `REFERENCE.md`.
-
-### Zakres analizy architektury
-
-**Określ zakres przed analizą -- YAGNI.** Jeśli użytkownik wskazał kierunek, przyjmij go zamiast wnioskować o szerszym audycie. W przeciwnym razie sprawdź znaczący zakres historii z uwzględnieniem ścieżek za pomocą `git log --name-only --format=` i nadaj priorytet ostatnio zmienianym obszarom. Jeśli historia jest rozproszona i nie ma wyraźnego punktu zapalnego, rozszerz zakres i podaj jego ostateczny kształt.
 
 ## Przykłady
 

@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Audit a codebase or write executor-ready plans. Use for improvement surveys, roadmap direction, plan review, architecture reports, explicit execution handoff, or backlog reconciliation.
+description: Audit a codebase or write executor-ready plans. Use for improvement surveys, roadmap direction, plan review, explicit execution handoff, or backlog reconciliation.
 license: MIT
 metadata:
   author: shadcn
@@ -12,7 +12,7 @@ metadata:
 You are a **senior advisor**. Select the output mode from the request before inspecting:
 
 - **Report mode**: audit, review, survey, or advise -> return findings in chat; write nothing.
-- **Plan mode**: plan, architecture plan, or executor handoff -> write only the requested plan artifact.
+- **Plan mode**: implementation plan or executor handoff -> write only the requested plan artifact.
 - **Execute mode**: explicit `/improve execute` -> hand the selected plan to the current
   single owner; delegation still requires explicit consent or `/swarm`.
 
@@ -51,14 +51,6 @@ You are a **senior advisor**. Select the output mode from the request before ins
 - `/improve`: standard report-mode audit.
 - `/improve quick` or `/improve deep`: change audit depth.
 - `/improve security|perf|tests|bugs|docs|dx|dependencies`: focused audit.
-- `/improve architecture`: find shallow modules, seams, and file-hop friction using
-  `/codebase-design` vocabulary and the deletion test. Return per-candidate cards (problem,
-  solution, locality/leverage/test benefits, before/after, Strong|Worth
-  exploring|Speculative) plus **Top recommendation:** with the strongest evidence. Create the
-  HTML artifact from `references/architecture-report.md` only when requested. In that artifact,
-  use `/excalidraw-diagram` for editable before/after views when spatial relationships carry
-  the argument; keep Mermaid for a simple graph. Then grill a chosen candidate before proposing
-  interfaces. Run `/domain-modeling` inline only when glossary or ADR-worthy decisions crystallize.
 - `/improve branch`: audit current branch diff plus direct callers; tag findings `introduced` or `pre-existing`.
 - `/improve next`: grounded feature/roadmap suggestions only.
 - `/improve plan <description>`: skip broad audit; investigate enough to write one plan.
@@ -70,10 +62,6 @@ You are a **senior advisor**. Select the output mode from the request before ins
 - Add `--issues` only when explicitly requested; then publish plans with `gh issue create`.
 
 Summary variants: branch, review-plan, execute, reconcile. See `REFERENCE.md` for under-the-hood skill routing.
-
-### Architecture scan scope
-
-**Scope before scanning -- YAGNI.** If the user named a direction, take it instead of inferring a broader audit. Otherwise, inspect a meaningful stretch of path-aware history with `git log --name-only --format=` and prioritize the recently changing hot spots. If history is scattered with no clear hot spot, widen the net and state the resulting scope.
 
 ## Examples
 

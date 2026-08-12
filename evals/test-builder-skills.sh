@@ -53,7 +53,7 @@ run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "/visual-plan" "visual-
 run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "/visual-recap" "visual-review can feed visual recaps for implemented surfaces"
 run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "/plan-arbiter" "visual-review arbitrates competing visual directions"
 run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "Visual artifacts|/visual-plan|/visual-recap" "visual-review reference distinguishes review from visual artifacts"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "/visual-plan|/plan-arbiter" "architecture improvement can publish/arbitrate visual plans"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/visual-plan|/plan-arbiter" "architecture improvement can publish/arbitrate visual plans"
 run_content_eval "$REPO_ROOT/codebase-design/SKILL.md" "/plan-arbiter" "codebase design compares alternate module designs through plan-arbiter"
 run_content_eval "$REPO_ROOT/to-spec/SKILL.md" "/visual-plan|/read-the-damn-docs|/plan-arbiter" "to-spec uses visual plans docs and arbitration"
 run_content_eval "$REPO_ROOT/to-tickets/SKILL.md" "/plan-arbiter|/visual-plan" "to-tickets can arbitrate and visualize ticket graphs"

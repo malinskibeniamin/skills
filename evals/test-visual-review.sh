@@ -223,7 +223,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" '\$TMPDIR/visual-review-<timestamp>\.html
 run_content_eval "$SKILL_DIR/SKILL.md" "Severity \| Hat \| Surface \| Evidence" "visual-review output uses multi-hat finding schema"
 run_content_eval "$SKILL_DIR/SKILL.md" "P0 blocks use/security/data loss/infinite loop" "visual-review severity includes P0 blocker semantics"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "single self-contained HTML report" "visual-review HTML report is self-contained"
-run_content_eval "$SKILL_DIR/REFERENCE.md" 'mirrors `/improve architecture`' "visual-review HTML report mirrors architecture skill"
+run_content_eval "$SKILL_DIR/REFERENCE.md" 'mirrors `/improve-codebase-architecture`' "visual-review HTML report mirrors architecture skill"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Scorecard" "visual-review HTML report includes scorecard"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Product.*Design.*Engineering.*QA" "visual-review HTML report includes all hats"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "State matrix" "visual-review HTML report includes state matrix"

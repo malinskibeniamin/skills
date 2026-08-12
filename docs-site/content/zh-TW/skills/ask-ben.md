@@ -42,6 +42,7 @@ Builder.io 技能既可作為直接命令，也可作為底層輔助工具：`/v
 | `/grilling` | 對計畫、決策與構想進行壓力測試。 |
 | `/handoff` | 準備精簡的工作階段交接資料，供另一個代理程式使用。 |
 | `/hook-audit` | 稽核掛鉤的成效、延遲與偏移。 |
+| `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |

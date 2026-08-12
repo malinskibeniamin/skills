@@ -72,7 +72,7 @@ output schema: status, summary, changed_files, tests_run, findings, blockers, ne
   变体仍不可用。
 - 前沿模型令牌规范：由 `/efficient-frontier` 决定哪些工作应委派，哪些工作应保留给协调者。
 - 工作通道应从一开始就编写最小且清晰的解决方案；审查通道直接评估语义密度。
-- 架构：按上下文、模块、接缝或适配器并行分派 `/improve architecture`。
+- 架构：按上下文、模块、接缝或适配器并行分派 `/improve-codebase-architecture`。
 - TDD：按独立行为或公共接口拆分覆盖范围。在编辑生产代码前进入 RED 阶段；要求结果中提供 RED->GREEN 过程或测试失败证据。
 - 技能／测试框架工作：为每个通道分配评估职责。每个发生变更的技能或钩子都需要在范围内配套相应的评估，并由该通道或协调者负责。
 - 设计／文案工作：仅当写入范围不重叠时，才拆分 `/visual-review`、`/ux-copy`、无障碍和表达方式通道。

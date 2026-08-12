@@ -42,6 +42,7 @@ Builder.io 技能既可作为直接命令使用，也可作为底层辅助工具
 | `/grilling` | 对计划、决策和想法进行压力测试。 |
 | `/handoff` | 为其他智能体准备精简的会话交接信息。 |
 | `/hook-audit` | 审计钩子的有效性、延迟和偏移。 |
+| `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |

@@ -44,3 +44,11 @@ run_content_eval "$REPO_ROOT/improve/REFERENCE.md" "quick.*direct audit" "improv
 run_content_eval "$REPO_ROOT/improve/REFERENCE.md" "standard.*swarm.*review" "improve standard mode uses swarm and review"
 run_content_eval "$REPO_ROOT/improve/REFERENCE.md" "--issues.*to-tickets" "improve issues mode routes to to-tickets"
 run_content_eval "$REPO_ROOT/improve/REFERENCE.md" "helper skill would edit source" "improve forbids helper source edits"
+if grep -qE '/improve architecture|architecture-report|shallow modules' "$REPO_ROOT/improve/SKILL.md"; then
+  echo "  FAIL  shadcn improve contains the standalone architecture workflow"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shadcn improve contains the standalone architecture workflow"
+else
+  echo "  PASS  shadcn improve stays focused on audits and plans"
+  PASS=$((PASS + 1))
+fi

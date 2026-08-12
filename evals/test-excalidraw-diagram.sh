@@ -4,8 +4,8 @@ SKILL="$REPO_ROOT/excalidraw-diagram/SKILL.md"
 REFERENCE="$REPO_ROOT/excalidraw-diagram/REFERENCE.md"
 VISUAL_REVIEW="$REPO_ROOT/visual-review/SKILL.md"
 VISUAL_RECAP="$REPO_ROOT/visual-recap/SKILL.md"
-IMPROVE="$REPO_ROOT/improve/SKILL.md"
-ARCHITECTURE_REPORT="$REPO_ROOT/improve/references/architecture-report.md"
+IMPROVE="$REPO_ROOT/improve-codebase-architecture/SKILL.md"
+ARCHITECTURE_REPORT="$REPO_ROOT/improve-codebase-architecture/HTML-REPORT.md"
 
 run_file_eval "$SKILL" "Excalidraw skill exists"
 run_file_eval "$REFERENCE" "Excalidraw scene reference exists"
@@ -57,8 +57,8 @@ run_content_eval "$VISUAL_RECAP" '\.excalidraw.*(PNG|SVG)|PNG.*\.excalidraw|SVG.
   "visual recap preserves editable source beside its rendered diagram"
 run_content_eval "$IMPROVE" '/excalidraw-diagram' \
   "architecture improvement can create editable before-and-after diagrams"
-run_content_eval "$IMPROVE" 'artifact.*requested|requested.*artifact' \
-  "architecture improvement keeps diagram files behind the requested artifact boundary"
+run_content_eval "$IMPROVE" '\$TMPDIR/architecture-review|OS temp directory' \
+  "architecture improvement keeps report artifacts outside the repository"
 run_content_eval "$ARCHITECTURE_REPORT" '/excalidraw-diagram' \
   "architecture report documents its Excalidraw rendering path"
 run_content_eval "$ARCHITECTURE_REPORT" 'Mermaid.*simple|simple.*Mermaid' \

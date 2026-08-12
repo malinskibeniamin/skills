@@ -51,6 +51,7 @@
     "./grilling/",
     "./handoff/",
     "./hook-audit/",
+    "./improve-codebase-architecture/",
     "./improve/",
     "./make-pr-easy-to-review/",
     "./plan-arbiter/",

@@ -1,6 +1,6 @@
 ---
 title: /improve
-description: 稽核程式碼庫或撰寫可供執行者直接採用的計畫。適用於改善調查、產品路線圖方向、計畫審查、架構報告、明確的執行交接或待辦事項核對。
+description: 稽核程式碼庫或撰寫可供執行者直接採用的計畫。適用於改善調查、產品路線圖方向、計畫審查、明確的執行交接或待辦事項核對。
 type: skill
 sidebar:
   label: /improve
@@ -12,7 +12,7 @@ sidebar:
 你是一位**資深顧問**。請先根據請求選擇輸出模式，再開始檢視：
 
 - **報告模式**：稽核、審查、調查或提供建議 -> 在對話中回傳發現；不寫入任何內容。
-- **計畫模式**：計畫、架構計畫或執行者交接 -> 僅寫入所要求的計畫成品。
+- **計畫模式**：實作計畫或執行者交接 -> 僅寫入所要求的計畫成品。
 - **執行模式**：明確的 `/improve execute` -> 將所選計畫交給目前的單一負責人；委派仍需明確同意或 `/swarm`。
 
 ## 硬性規則
@@ -40,7 +40,6 @@ sidebar:
 - `/improve`：標準報告模式稽核。
 - `/improve quick` 或 `/improve deep`：變更稽核深度。
 - `/improve security|perf|tests|bugs|docs|dx|dependencies`：聚焦式稽核。
-- `/improve architecture`：使用 `/codebase-design` 詞彙與刪除測試，找出淺薄模組、接合處與跨檔案跳轉摩擦。針對每個候選項目回傳卡片（問題、解決方案、區域性／效益／測試優點、變更前／後、強烈建議|值得探索|推測性），並加上具有最有力證據的**首要建議：**。僅在收到要求時，依據 `references/architecture-report.md` 建立 HTML 成品。在該成品中，當空間關係是論證重點時，使用 `/excalidraw-diagram` 製作可編輯的變更前／後檢視；簡單圖形則繼續使用 Mermaid。接著，先深入檢驗所選候選項目，再提出介面。僅當詞彙表或值得撰寫 ADR 的決策逐漸成形時，才直接在目前流程中執行 `/domain-modeling`。
 - `/improve branch`：稽核目前分支的差異與直接呼叫端；將發現標記為 `introduced` 或 `pre-existing`。
 - `/improve next`：僅提供有依據的功能／產品路線圖建議。
 - `/improve plan <description>`：略過廣泛稽核；進行足以撰寫單一計畫的調查。
@@ -50,10 +49,6 @@ sidebar:
 - 僅在明確要求時新增 `--issues`；接著使用 `gh issue create` 發布計畫。
 
 摘要變體：branch、review-plan、execute、reconcile。底層技能路由請參閱 `REFERENCE.md`。
-
-### 架構掃描範圍
-
-**掃描前先界定範圍 -- YAGNI。**若使用者已指定方向，請直接採用，不要推斷出更廣泛的稽核範圍。否則，使用 `git log --name-only --format=` 檢視一段具有意義且能辨識路徑的歷史紀錄，並優先處理近期頻繁變動的熱點。若歷史變更分散且沒有明確熱點，請擴大範圍並說明最終的掃描範圍。
 
 ## 範例
 

@@ -7,6 +7,7 @@ MATT_V1_SKILLS=(
   diagnosing-bugs
   domain-modeling
   grilling
+  improve-codebase-architecture
   resolving-merge-conflicts
   wayfinder
   writing-for-agents
@@ -39,7 +40,7 @@ for removed in diagnose write-a-skill caveman zoom-out writing-great-skills; do
 done
 
 # User-invoked skills explicitly disable model invocation.
-for skill in ask-ben handoff to-questionnaire to-tickets to-spec triage wayfinder; do
+for skill in ask-ben handoff improve-codebase-architecture to-questionnaire to-tickets to-spec triage wayfinder; do
   run_content_eval "$REPO_ROOT/$skill/SKILL.md" "^disable-model-invocation: true$" "$skill is user-invoked"
 done
 
@@ -57,8 +58,8 @@ done
 
 # Shared v1 skills are composed by the existing harness entrypoints.
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling updates docs through domain-modeling"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "/codebase-design" "architecture mode uses codebase-design vocabulary"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "/domain-modeling" "architecture mode uses domain-modeling for side effects"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "architecture skill uses codebase-design vocabulary"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/domain-modeling" "architecture skill uses domain-modeling for side effects"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/codebase-design" "TDD uses codebase-design for interface design"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grilling" "ask-ben routes planning through grilling"

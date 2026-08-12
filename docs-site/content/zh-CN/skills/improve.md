@@ -1,6 +1,6 @@
 ---
 title: /improve
-description: 审计代码库或编写可供执行者直接使用的计划。适用于改进调研、路线图方向、计划审查、架构报告、明确的执行交接或待办事项核对。
+description: 审计代码库或编写可供执行者直接使用的计划。适用于改进调研、路线图方向、计划审查、明确的执行交接或待办事项核对。
 type: skill
 sidebar:
   label: /improve
@@ -12,7 +12,7 @@ sidebar:
 你是一名**高级顾问**。检查之前，先根据请求选择输出模式：
 
 - **报告模式**：审计、审查、调研或提供建议 -> 在聊天中返回发现；不写入任何内容。
-- **计划模式**：制定计划、架构计划或执行者交接 -> 仅写入请求的计划产物。
+- **计划模式**：制定实施计划或执行者交接 -> 仅写入请求的计划产物。
 - **执行模式**：明确使用 `/improve execute` -> 将选定计划交给当前的单一负责人；委派仍需明确同意或使用 `/swarm`。
 
 ## 硬性规则
@@ -40,7 +40,6 @@ sidebar:
 - `/improve`：标准报告模式审计。
 - `/improve quick` 或 `/improve deep`：更改审计深度。
 - `/improve security|perf|tests|bugs|docs|dx|dependencies`：专项审计。
-- `/improve architecture`：使用 `/codebase-design` 词汇和删除测试，查找浅层模块、衔接点和文件间跳转阻力。为每个候选项返回卡片（问题、解决方案、局部性/影响力/测试收益、前后对比、强烈推荐|值得探索|推测），并附上具有最有力证据的**首要建议：**。仅在收到请求时，才根据 `references/architecture-report.md` 创建 HTML 产物。在该产物中，当空间关系是论证重点时，使用 `/excalidraw-diagram` 创建可编辑的前后对比视图；简单图形则继续使用 Mermaid。然后，在提出接口之前深入质询所选候选项。仅当术语表或值得写入 ADR 的决策逐渐明确时，才内联运行 `/domain-modeling`。
 - `/improve branch`：审计当前分支差异及其直接调用方；将发现标记为 `introduced` 或 `pre-existing`。
 - `/improve next`：仅提供有依据的功能/路线图建议。
 - `/improve plan <description>`：跳过广泛审计；进行足够的调查以编写一个计划。
@@ -50,10 +49,6 @@ sidebar:
 - 仅在明确请求时添加 `--issues`；随后使用 `gh issue create` 发布计划。
 
 摘要变体：branch、review-plan、execute、reconcile。有关底层技能路由，请参阅 `REFERENCE.md`。
-
-### 架构扫描范围
-
-**扫描前先限定范围——YAGNI。**如果用户指定了方向，就遵循该方向，不要推断出更广泛的审计范围。否则，使用 `git log --name-only --format=` 检查一段有意义且路径明确的历史记录，并优先处理近期频繁变更的热点。如果历史记录分散且没有明确热点，则扩大范围并说明最终采用的范围。
 
 ## 示例
 

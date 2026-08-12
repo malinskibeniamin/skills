@@ -72,7 +72,7 @@ output schema: status, summary, changed_files, tests_run, findings, blockers, ne
   變體在消融測試套件正式採用前仍不可使用。
 - 前沿模型權杖規範：由 `/efficient-frontier` 決定哪些工作要委派、哪些要保留給協調者。
 - 工作者工作線從一開始就撰寫最精簡清楚的解決方案；審查者工作線直接評估語意密度。
-- 架構：依情境、模組、接縫或配接器分散執行 `/improve architecture`。
+- 架構：依情境、模組、接縫或配接器分散執行 `/improve-codebase-architecture`。
 - TDD：依獨立行為或公開介面拆分涵蓋範圍。在編輯正式環境程式碼前先完成 RED；結果中必須包含 RED->GREEN 或測試失敗的證據。
 - 技能／測試框架工作：為每條工作線指派評估的負責人。每個變更的技能或掛鉤都必須在範圍內有對應的評估，並由該工作線或協調者負責。
 - 設計／文案工作：只有在寫入範圍不重疊時，才能拆分 `/visual-review`、`/ux-copy`、無障礙與表達工作線。

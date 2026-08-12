@@ -7,6 +7,7 @@ VENDORED=(
   domain-modeling
   grilling
   handoff
+  improve-codebase-architecture
   prototype
   research
   resolving-merge-conflicts
@@ -187,15 +188,15 @@ run_content_eval "$REPO_ROOT/teach/SKILL.md" "primary source" "teach recommends 
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "mission changes.*MISSION.md.*learning record" "teach records mission shifts"
 run_content_eval "$REPO_ROOT/teach/SKILL.md" "./assets/|Assets" "teach reuses assets before inlining"
 
-# Matt ICA flow absorbed into /improve architecture mode (wave 6).
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "HTML report|architecture-report" "improve architecture mode writes HTML report"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "Top recommendation" "architecture mode includes top recommendation"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "/codebase-design" "architecture mode links shared codebase-design skill"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "Scope before.*YAGNI" "architecture mode decides scope before scanning"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "user named a direction.*take it" "architecture mode honors explicit scope"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "git log --(name-only|stat).*hot spots" "architecture mode uses path-aware history for recent change hot spots"
-run_content_eval "$REPO_ROOT/improve/SKILL.md" "scattered.*widen the net" "architecture mode widens only when history has no hot spot"
-run_file_eval "$REPO_ROOT/improve/references/architecture-report.md" "architecture report reference exists"
+# Matt ICA flow is a standalone, architecture-only skill.
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "HTML report|architecture-review" "ICA writes HTML architecture report"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "Top recommendation" "ICA report includes top recommendation"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "ICA links shared codebase-design skill"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "Scope before.*YAGNI" "ICA decides scope before scanning"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "user names a module|take that scope" "ICA honors explicit scope"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "git log --(name-only|stat).*hot spots" "ICA uses path-aware history for recent change hot spots"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "scattered" "ICA widens only when history has no hot spot"
+run_file_eval "$REPO_ROOT/improve-codebase-architecture/HTML-REPORT.md" "ICA architecture report reference exists"
 run_file_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" "codebase-design interface design reference exists"
 
 # Latest Matt vendoring: writing-for-agents generalizes the reference and keeps the negation cure.
