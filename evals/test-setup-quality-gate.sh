@@ -38,6 +38,120 @@ run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scope
 run_content_eval "$SCRIPT" "hook_filter_errors_to_session" "hook filters errors to session files"
 run_content_eval "$SCRIPT" "other session" "hook allows errors from other sessions"
 
+# ── Shared related-test runner selection ───────────────────────────
+
+_runner_tmp=$(mktemp -d /tmp/test-runner-XXXXXX)
+mkdir -p "$_runner_tmp/node_modules/.bin"
+touch "$_runner_tmp/node_modules/.bin/vitest" "$_runner_tmp/node_modules/.bin/rstest"
+cat > "$_runner_tmp/package.json" <<'JSON'
+{"scripts":{"test":"rstest run"}}
+JSON
+
+_selected_runner=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_select_test_runner "$_runner_tmp"
+)
+if [ "$_selected_runner" = "rstest" ]; then
+  echo "  PASS  shared runner selection honors Rstest project scripts"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared runner selection expected rstest, got ${_selected_runner:-none}"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shared Rstest runner selection"
+fi
+
+cat > "$_runner_tmp/node_modules/.bin/rstest" <<'SH'
+#!/bin/bash
+printf '%s\n' "$*"
+SH
+chmod +x "$_runner_tmp/node_modules/.bin/rstest"
+_related_args=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_run_related_tests "$_runner_tmp" "src/button.ts"
+)
+if [ "$_related_args" = "run --related $_runner_tmp/src/button.ts" ]; then
+  echo "  PASS  shared related-test runner uses Rstest CLI"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared Rstest related command incorrect: ${_related_args:-none}"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shared Rstest related command"
+fi
+
+rm "$_runner_tmp/node_modules/.bin/rstest"
+if _missing_runner=$(env -i PATH="/opt/homebrew/bin:/usr/bin:/bin" \
+  REPO_ROOT="$REPO_ROOT" RUNNER_ROOT="$_runner_tmp" \
+  bash -c 'source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null; trap - ERR; hook_run_related_tests "$RUNNER_ROOT" "src/button.ts"' 2>&1); then
+  echo "  FAIL  missing configured Rstest runner passed silently"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: missing configured Rstest runner"
+elif printf '%s' "$_missing_runner" | grep -qF "Configured test runner 'rstest' not found"; then
+  echo "  PASS  missing configured Rstest runner fails visibly"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  missing Rstest failure lacks actionable output: $_missing_runner"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: missing Rstest error output"
+fi
+
+printf '{"scripts":{"test":"vitest run"}}\n' > "$_runner_tmp/package.json"
+_selected_runner=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_select_test_runner "$_runner_tmp"
+)
+if [ "$_selected_runner" = "vitest" ]; then
+  echo "  PASS  shared runner selection preserves Vitest projects"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared runner selection expected vitest, got ${_selected_runner:-none}"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shared Vitest runner selection"
+fi
+cat > "$_runner_tmp/node_modules/.bin/vitest" <<'SH'
+#!/bin/bash
+printf '%s\n' "$*"
+SH
+chmod +x "$_runner_tmp/node_modules/.bin/vitest"
+_related_args=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_run_related_tests "$_runner_tmp" "src/button.ts"
+)
+if [ "$_related_args" = "run --related $_runner_tmp/src/button.ts" ]; then
+  echo "  PASS  shared related-test runner preserves Vitest CLI"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared Vitest related command incorrect: ${_related_args:-none}"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shared Vitest related command"
+fi
+_empty_related=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_run_related_tests "$_runner_tmp" ""
+)
+if [ -z "$_empty_related" ]; then
+  echo "  PASS  empty changed-file set does not run the full suite"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  empty changed-file set invoked runner: $_empty_related"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: empty related-test set"
+fi
+cp "$_runner_tmp/node_modules/.bin/vitest" "$_runner_tmp/node_modules/.bin/rstest"
+printf '{"scripts":{"test":"bun test"}}\n' > "$_runner_tmp/package.json"
+_selected_runner=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_select_test_runner "$_runner_tmp"
+)
+if [ "$_selected_runner" = "vitest" ]; then
+  echo "  PASS  ambiguous binary fallback preserves Vitest precedence"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  ambiguous binary fallback expected vitest, got ${_selected_runner:-none}"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Vitest binary precedence"
+fi
+rm -rf "$_runner_tmp"
+
 # ── session-env.sh: baseline capture ──────────────────────────────
 
 SESSION_SCRIPT="$REPO_ROOT/.claude/hooks/session-env.sh"

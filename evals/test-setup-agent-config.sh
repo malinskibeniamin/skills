@@ -19,6 +19,7 @@ run_content_eval "$SKILL_DIR/README.md" "AI_AGENT" "SKILL.md mentions AI_AGENT"
 run_content_eval "$SKILL_DIR/README.md" "CLAUDECODE" "SKILL.md mentions CLAUDECODE"
 run_content_eval "$SKILL_DIR/README.md" "NODE_OPTIONS" "SKILL.md mentions NODE_OPTIONS"
 run_content_eval "$SKILL_DIR/README.md" "pool=threads" "SKILL.md mentions pool=threads"
+run_content_eval "$SKILL_DIR/README.md" "Rstest" "SKILL.md documents Rstest optimization"
 
 # ── llm-env.sh ──────────────────────────────────────────────────
 
@@ -53,6 +54,10 @@ run_hook_eval "$FLAGS_SCRIPT" \
   0 "rewrite: bun test --verbose → strip verbose" "updatedInput"
 
 run_hook_eval "$FLAGS_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"rstest run --reporters=verbose"}}' \
+  0 "rewrite: Rstest verbose reporter → md" "--reporters=md"
+
+run_hook_eval "$FLAGS_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"jest --verbose"}}' \
   0 "skip: Jest is outside the configured stack"
 
@@ -65,6 +70,10 @@ run_hook_eval "$FLAGS_SCRIPT" \
 run_hook_eval "$FLAGS_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"bun test"}}' \
   0 "suggest: bun test" "bail"
+
+run_hook_eval "$FLAGS_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"rstest run"}}' \
+  0 "suggest: Rstest run" "--bail=1"
 
 # ── No modification: flags already present ──────────────────────
 

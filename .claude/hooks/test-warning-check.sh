@@ -3,7 +3,7 @@ set -eo pipefail
 _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; else _m="${TMPDIR:-/tmp}/frontend-skills-broken.${CLAUDE_SESSION_ID:-fs}"; [ -f "$_m" ] || { echo "[frontend-skills] _hook-lib.sh unavailable - run: /plugin install frontend-skills --force" >&2; touch "$_m" 2>/dev/null; }; exit 0; fi
 
 # PostToolUse Bash: warnings in passing test/lint/type output are hard errors.
-# "Green != done". Scan stdout+stderr of vitest/playwright/tsc/biome/bun test
+# "Green != done". Scan stdout+stderr of vitest/rstest/playwright/tsc/biome/bun test
 # exit-zero runs for curated warning patterns. Warnings are errors: block and
 # force source remediation before calling the run clean.
 #
@@ -25,7 +25,7 @@ exit_code=$(echo "$input" | jq -r '.tool_response.exit_code // .tool_result.exit
 # config filename, grep pattern, or loop variable. `cat vitest.config.ts`,
 # `ls hooks | grep lint`, and `for f in *test*` must NOT match.
 if ! printf '%s\n' "$command" | grep -qE \
-  '(^|[;&|][[:space:]]*)(vitest|playwright|tsgo|tsc|biome)([[:space:]]|$)|(^|[;&|][[:space:]]*)(bun|bunx|npx)[[:space:]]+(run[[:space:]]+)?(vitest|playwright|tsgo|tsc|biome|test([[:space:]]|$)|[a-z:-]*(test|lint|type:check)[a-z:-]*([[:space:]]|$))'; then
+  '(^|[;&|][[:space:]]*)(vitest|rstest|playwright|tsgo|tsc|biome)([[:space:]]|$)|(^|[;&|][[:space:]]*)(bun|bunx|npx)[[:space:]]+(run[[:space:]]+)?(vitest|rstest|playwright|tsgo|tsc|biome|test([[:space:]]|$)|[a-z:-]*(test|lint|type:check)[a-z:-]*([[:space:]]|$))'; then
   exit 0
 fi
 

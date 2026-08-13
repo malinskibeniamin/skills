@@ -57,6 +57,9 @@ jobs:
 | `test:related` | `vitest --run --related` | ~1-3s |
 | `quality:gate` | lint + type:check + related tests | <5s target |
 
+The Stop and Codex fallback gates also detect Rstest projects from package
+scripts or `rstest.config.*` and run `rstest run --related` automatically.
+
 ## Test Performance Profiling
 
 `test-perf-stop.sh` detect regression -> use `vitest-profiler`:

@@ -2,7 +2,8 @@
 set -eo pipefail
 trap 'exit 0' ERR
 
-# FileChanged matcher: biome.jsonc, tsconfig.json, tsconfig.*.json, vitest.config.*
+# FileChanged matcher: biome.jsonc, tsconfig.json, tsconfig.*.json,
+# vitest.config.*, rstest.config.*
 # Config that affects the whole project. A change may flip lint/type
 # results across many files silently.
 
@@ -20,6 +21,9 @@ case "$file" in
     ;;
   */vitest.config.*|vitest.config.*)
     msg="Vitest config changed. Test include/exclude or environment may have shifted. Run full \`bun run test\` to verify all tests still collected."
+    ;;
+  */rstest.config.*|rstest.config.*)
+    msg="Rstest config changed. Test include/exclude or environment may have shifted. Run full \`bun run test\` to verify all tests still collected."
     ;;
 esac
 

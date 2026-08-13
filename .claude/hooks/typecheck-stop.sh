@@ -87,34 +87,9 @@ fi
 
 # ── Related tests (only tests affected by session's changed files) ──
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-abs_changed=""
-for f in $changed_files; do
-  abs_changed="$abs_changed $repo_root/$f"
-done
-
 test_output=""
 test_exit=0
-
-if [ -f "node_modules/.bin/vitest" ] || [ -f "$repo_root/node_modules/.bin/vitest" ]; then
-  _vbin="node_modules/.bin/vitest"; [ -f "$_vbin" ] || _vbin="$repo_root/node_modules/.bin/vitest"
-  test_output=$("$_vbin" run --related $abs_changed 2>&1) || test_exit=$?
-elif [ -f "node_modules/.bin/jest" ] || [ -f "$repo_root/node_modules/.bin/jest" ]; then
-  _jbin="node_modules/.bin/jest"; [ -f "$_jbin" ] || _jbin="$repo_root/node_modules/.bin/jest"
-  test_output=$("$_jbin" --findRelatedTests $abs_changed --passWithNoTests 2>&1) || test_exit=$?
-else
-  test_files=""
-  for f in $changed_files; do
-    base="${f%.*}"
-    ext="${f##*.}"
-    for suffix in test spec; do
-      candidate="$repo_root/${base}.${suffix}.${ext}"
-      [ -f "$candidate" ] && test_files="$test_files $candidate"
-    done
-  done
-  if [ -n "$test_files" ]; then
-    test_output=$(bun test $test_files 2>&1) || test_exit=$?
-  fi
-fi
+test_output=$(hook_run_related_tests "$repo_root" "$changed_files" 2>&1) || test_exit=$?
 
 if [ $test_exit -ne 0 ] && [ -n "$test_output" ]; then
   truncated=$(echo "$test_output" | tail -20)

@@ -3,8 +3,9 @@
 
 - **SessionStart**: `AI_AGENT=1`, `CLAUDECODE=1`, `NODE_OPTIONS=--max-old-space-size=8192`
 - **UserPromptSubmit**: inject project state (git branch, dirty files, scripts, violations, config) -> Claude know state, no tool calls
-- **PreToolUse (Bash)**: optimize Vitest commands -- strip `--verbose`, suggest
-  `--pool=threads`, `--bail=1`, and `--teardownTimeout=5000`
+- **PreToolUse (Bash)**: optimize Vitest and Rstest commands -- bound verbose
+  output, suggest `--bail=1`, and keep Vitest-specific `--pool=threads` and
+  `--teardownTimeout=5000` guidance
 - **PostToolUse (Bash)**: truncate verbose output, cut context bloat
 
 ## Steps
@@ -18,6 +19,7 @@
 ## Verify
 - [ ] `AI_AGENT`/`CLAUDECODE` set after session start
 - [ ] `vitest --verbose` rewrite to `vitest`
+- [ ] `rstest --reporters=verbose` rewrite to `rstest --reporters=md`
 - [ ] Long output truncated
 
-See [REFERENCE.md](REFERENCE.md) for vitest config optimizations.
+See [REFERENCE.md](REFERENCE.md) for runner-specific optimizations.

@@ -1265,12 +1265,99 @@ hook_stop_enforce() {
 }
 
 # ── Stop hook: Save test results for sharing across hooks ────────
-# typecheck-stop.sh saves vitest output here so orchestration-stop
-# and test-perf-stop can read it instead of re-running vitest.
+# typecheck-stop.sh saves test-runner output here so orchestration-stop
+# and test-perf-stop can read it instead of re-running tests.
+
+# Select one project runner from its scripts/config before inspecting installed
+# binaries. This avoids choosing a transitive runner dependency by accident.
+hook_select_test_runner() {
+  local repo_root="${1:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+  local test_script="" all_scripts=""
+
+  if [ -f "$repo_root/package.json" ] && command -v jq >/dev/null 2>&1; then
+    test_script=$(jq -r '.scripts.test // empty' "$repo_root/package.json" 2>/dev/null || true)
+    all_scripts=$(jq -r '.scripts // {} | values[]' "$repo_root/package.json" 2>/dev/null || true)
+  fi
+
+  case "$test_script" in
+    *rstest*) echo "rstest"; return 0 ;;
+    *vitest*) echo "vitest"; return 0 ;;
+    *jest*) echo "jest"; return 0 ;;
+  esac
+
+  for runner in vitest rstest jest; do
+    if printf '%s\n' "$all_scripts" | grep -qw "$runner"; then
+      echo "$runner"
+      return 0
+    fi
+    for config in "$repo_root/$runner.config."*; do
+      if [ -f "$config" ]; then
+        echo "$runner"
+        return 0
+      fi
+    done
+  done
+
+  for runner in vitest rstest jest; do
+    if [ -x "$repo_root/node_modules/.bin/$runner" ] || command -v "$runner" >/dev/null 2>&1; then
+      echo "$runner"
+      return 0
+    fi
+  done
+  return 0
+}
+
+hook_run_related_tests() {
+  local repo_root="$1"
+  local changed_files="$2"
+  local runner bin="" abs_changed="" test_files=""
+
+  [ -n "$changed_files" ] || return 0
+  runner=$(hook_select_test_runner "$repo_root")
+  for file in $changed_files; do
+    case "$file" in
+      /*) abs_changed="$abs_changed $file" ;;
+      *) abs_changed="$abs_changed $repo_root/$file" ;;
+    esac
+  done
+
+  if [ -n "$runner" ]; then
+    bin="$repo_root/node_modules/.bin/$runner"
+    [ -x "$bin" ] || bin=$(command -v "$runner" 2>/dev/null || true)
+    if [ -z "$bin" ]; then
+      echo "Configured test runner '$runner' not found. Install dependencies before finishing." >&2
+      return 127
+    fi
+  fi
+
+  case "$runner" in
+    rstest|vitest)
+      "$bin" run --related $abs_changed
+      return $?
+      ;;
+    jest)
+      "$bin" --findRelatedTests $abs_changed --passWithNoTests
+      return $?
+      ;;
+  esac
+
+  for file in $changed_files; do
+    local base="${file%.*}" ext="${file##*.}" suffix candidate
+    for suffix in test spec; do
+      candidate="$repo_root/${base}.${suffix}.${ext}"
+      [ -f "$candidate" ] && test_files="$test_files $candidate"
+    done
+  done
+  if [ -n "$test_files" ]; then
+    bun test $test_files
+    return $?
+  fi
+  return 0
+}
 
 hook_stop_save_test_results() {
   local status="$1"  # PASS or FAIL
-  local output="$2"  # full vitest output (optional)
+  local output="$2"  # full test-runner output (optional)
   echo "$status" > "$_hook_session_dir/shared-test-status" 2>/dev/null || true
   if [ -n "$output" ]; then
     echo "$output" > "$_hook_session_dir/shared-test-output" 2>/dev/null || true

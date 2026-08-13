@@ -23,6 +23,10 @@ run_hook_eval "$SCRIPT" \
   2 "block: green test run with deprecation warning" "Warnings are errors"
 
 run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"rstest run"},"tool_response":{"exit_code":0,"stdout":"pass","stderr":"DeprecationWarning: old api"}}' \
+  2 "block: green Rstest run with deprecation warning" "Warnings are errors"
+
+run_hook_eval "$SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_response":{"exit_code":0,"stdout":"WARNING: formatter skipped file","stderr":""}}' \
   2 "block: green lint run with warning" "Warnings are errors"
 

@@ -26,13 +26,13 @@ fi
 command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
 # Classify command type with single combined regex
-_cmd_type=$(echo "$command" | grep -oE 'lint|biome|ultracite|type:check|typecheck|tsgo|tsc|vitest|jest|bun test|build|rsbuild|webpack|vite build' | head -1 || true)
+_cmd_type=$(echo "$command" | grep -oE 'lint|biome|ultracite|type:check|typecheck|tsgo|tsc|vitest|rstest|jest|bun test|build|rsbuild|webpack|vite build' | head -1 || true)
 
 # Normalize to category
 case "$_cmd_type" in
   lint|biome|ultracite) _cmd_type="lint" ;;
   type:check|typecheck|tsgo|tsc) _cmd_type="typecheck" ;;
-  vitest|jest|"bun test") _cmd_type="test" ;;
+  vitest|rstest|jest|"bun test") _cmd_type="test" ;;
   build|rsbuild|webpack|"vite build") _cmd_type="build" ;;
   *) exit 0 ;;
 esac

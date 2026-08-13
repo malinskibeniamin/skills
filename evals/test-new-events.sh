@@ -89,3 +89,21 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: syntax in new hooks"
 fi
+
+# ── Rstest configuration watches ────────────────────────────────────────
+
+run_hook_eval "$HOOKS_DIR/file-changed-config.sh" \
+  '{"filename":"rstest.config.ts"}' \
+  0 "Rstest config changes request full test collection" "Rstest config changed"
+
+_watch_tmp=$(mktemp -d /tmp/rstest-watch-XXXXXX)
+touch "$_watch_tmp/rstest.config.ts"
+if "$HOOKS_DIR/discover-watch-paths.sh" "$_watch_tmp" | grep -qF "$_watch_tmp/rstest.config.ts"; then
+  echo "  PASS  Rstest config registered as dynamic FileChanged watch"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Rstest config missing from dynamic FileChanged watches"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Rstest FileChanged watch"
+fi
+rm -rf "$_watch_tmp"
