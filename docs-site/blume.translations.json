@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "5e7ae2298c60788d",
-      "zh-CN": "5e7ae2298c60788d",
-      "zh-TW": "5e7ae2298c60788d"
+      "pl": "88c80ee0e08fe28f",
+      "zh-CN": "88c80ee0e08fe28f",
+      "zh-TW": "88c80ee0e08fe28f"
     },
     "content/skills/accessibility.md": {
       "pl": "f26e309e7156eef5",
@@ -21,9 +21,9 @@
       "zh-TW": "44bf6a6911b826e9"
     },
     "content/skills/ask-ben.md": {
-      "pl": "14666fe1d386e0f8",
-      "zh-CN": "14666fe1d386e0f8",
-      "zh-TW": "14666fe1d386e0f8"
+      "pl": "faf72a82c5cad5d8",
+      "zh-CN": "faf72a82c5cad5d8",
+      "zh-TW": "faf72a82c5cad5d8"
     },
     "content/skills/codebase-design.md": {
       "pl": "e8f946b051b569ae",
@@ -409,6 +409,11 @@
       "pl": "b6248f62fc35d3ea",
       "zh-CN": "b6248f62fc35d3ea",
       "zh-TW": "b6248f62fc35d3ea"
+    },
+    "content/skills/ux-performance.md": {
+      "pl": "330b0203221c3466",
+      "zh-CN": "330b0203221c3466",
+      "zh-TW": "330b0203221c3466"
     }
   },
   "version": 1

@@ -52,6 +52,9 @@ Before implementation, name:
    [CI.md](CI.md) to place stable cheap checks in pull requests, noisy/deep checks nightly,
    and real-user monitoring after deploy. Hooks are optional and advisory until calibrated.
 
+When scale, burst, contention, or long-session behavior is part of the claim, use
+[STRESS.md](STRESS.md) to find the capacity knee and verify correctness under pressure.
+
 ## Output
 
 Lead with the user outcome and the slowest segment:
