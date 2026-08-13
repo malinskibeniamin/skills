@@ -37,6 +37,28 @@ run_content_eval "$SCRIPT" "new type error|_new_errors|typecheck-baseline" "hook
 run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"
 run_content_eval "$SCRIPT" "hook_filter_errors_to_session" "hook filters errors to session files"
 run_content_eval "$SCRIPT" "other session" "hook allows errors from other sessions"
+run_content_eval "$REPO_ROOT/shared/hook-lib.sh" '"\$bin" related --run --passWithNoTests' "shared runner uses the Vitest 4 related command"
+
+_VITEST_RELATED_SURFACES="
+$REPO_ROOT/.claude/hooks/typecheck-stop.sh
+$REPO_ROOT/.claude/hooks/test-perf-stop.sh
+$REPO_ROOT/codex-compat/scripts/codex-batch-check.sh
+$REPO_ROOT/frontend-starter-kit/references/quality-gate/scripts/typecheck-stop.sh
+$REPO_ROOT/frontend-starter-kit/references/quality-gate/scripts/test-perf-stop.sh
+$REPO_ROOT/frontend-starter-kit/references/quality-gate/README.md
+$REPO_ROOT/frontend-starter-kit/references/quality-gate/REFERENCE.md
+$REPO_ROOT/agents/self-reviewer.md
+$REPO_ROOT/agents/verifier.md
+$REPO_ROOT/tdd/REFERENCE.md
+"
+if grep -En '(vitest|_vbin|_vitest_bin).*--related' $_VITEST_RELATED_SURFACES >/dev/null 2>&1; then
+  echo "  FAIL  Vitest surfaces still use removed --related option"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: obsolete Vitest --related option"
+else
+  echo "  PASS  Vitest surfaces use the related subcommand"
+  PASS=$((PASS + 1))
+fi
 
 # ── Shared related-test runner selection ───────────────────────────
 
@@ -116,8 +138,8 @@ _related_args=$(
   source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
   hook_run_related_tests "$_runner_tmp" "src/button.ts"
 )
-if [ "$_related_args" = "run --related $_runner_tmp/src/button.ts" ]; then
-  echo "  PASS  shared related-test runner preserves Vitest CLI"
+if [ "$_related_args" = "related --run --passWithNoTests $_runner_tmp/src/button.ts" ]; then
+  echo "  PASS  shared related-test runner uses Vitest 4 CLI"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  shared Vitest related command incorrect: ${_related_args:-none}"

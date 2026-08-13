@@ -54,7 +54,7 @@ jobs:
 | `lint:fix` | `biome check --write .` | ~1s |
 | `type:check` | `tsc` | ~2s |
 | `test` | `vitest --run` | varies |
-| `test:related` | `vitest --run --related` | ~1-3s |
+| `test:related` | `vitest related --run --passWithNoTests` | ~1-3s |
 | `quality:gate` | lint + type:check + related tests | <5s target |
 
 The Stop and Codex fallback gates also detect Rstest projects from package

@@ -20,7 +20,7 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
-# Build absolute paths for --related
+# Build absolute paths for the related-test command
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 abs_changed=""
 for f in $changed_files; do
@@ -43,7 +43,7 @@ current_tsv="$_hook_session_dir/test-timing-current.tsv"
 : > "$current_tsv"
 
 for cfg in $vitest_configs; do
-  bun vitest --run --reporter=json --config "$cfg" --related $abs_changed 2>/dev/null \
+  bun vitest related --run --passWithNoTests --reporter=json --config "$cfg" $abs_changed 2>/dev/null \
     | jq -r '.testResults[]?.assertionResults[]? | [.fullName, (.duration // 0 | tostring)] | @tsv' \
     >> "$current_tsv" 2>/dev/null || true
 done
@@ -142,7 +142,7 @@ _vitest_bin="vitest"
 [ -x "./node_modules/.bin/vitest" ] && _vitest_bin="./node_modules/.bin/vitest"
 
 if command -v "$_vitest_bin" &>/dev/null || [ -x "$_vitest_bin" ]; then
-  leak_output=$($_vitest_bin run --detectAsyncLeaks --related $abs_changed 2>&1 || true)
+  leak_output=$($_vitest_bin related --run --passWithNoTests --detectAsyncLeaks $abs_changed 2>&1 || true)
   leak_warnings=$(echo "$leak_output" | grep -iE 'async.*leak|open handle|did not close' || true)
 
   if [ -n "$leak_warnings" ]; then
