@@ -208,7 +208,7 @@ vitest run --coverage.enabled --coverage.reporter=text
 vitest run --coverage.enabled --coverage.reporter=json
 
 # Related files only -- faster, scoped
-vitest run --coverage.enabled --coverage.reporter=text --related src/features/auth/
+vitest related --run --passWithNoTests --coverage.enabled --coverage.reporter=text src/features/auth/
 ```
 
 ### Reading Coverage Output
@@ -439,7 +439,7 @@ vi.mocked(window.matchMedia).mockImplementation((query) => ({
 
 | Runner | Detect | Related tests |
 |--------|--------|---------------|
-| Vitest | `node_modules/.bin/vitest` | `vitest run --related <files>` |
+| Vitest | `node_modules/.bin/vitest` | `vitest related --run --passWithNoTests <files>` |
 
 ## Unhappy Path Testing Checklist
 

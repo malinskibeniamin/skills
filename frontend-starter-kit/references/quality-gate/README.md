@@ -19,8 +19,8 @@
     "lint:fix": "biome check --write .",
     "type:check": "tsc",
     "test": "vitest --run",
-    "test:related": "vitest --run --related",
-    "quality:gate": "biome check . && tsc && vitest --run --related $(git diff --name-only HEAD)"
+    "test:related": "vitest related --run --passWithNoTests",
+    "quality:gate": "biome check . && tsc && vitest related --run --passWithNoTests $(git diff --name-only HEAD)"
   }
 }
 ```

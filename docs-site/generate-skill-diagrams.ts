@@ -644,6 +644,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Accessible outcome",
     ],
   },
+  "ux-performance": {
+    kind: "feedback-loop",
+    nodes: [
+      "User journey baseline",
+      "Critical-path waterfall",
+      "Narrow intervention",
+      "Paired verification",
+    ],
+  },
   "video-research": {
     kind: "pipeline",
     nodes: [

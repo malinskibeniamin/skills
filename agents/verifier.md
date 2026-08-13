@@ -13,7 +13,7 @@ Verify implementation works. Don't trust claims -- verify independently.
 
 ### 1. Tests
 ```bash
-vitest run --related $(git diff --name-only "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD)
+vitest related --run --passWithNoTests $(git diff --name-only "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD)
 ```
 Fail -> report FAIL with output.
 

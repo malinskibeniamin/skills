@@ -1331,8 +1331,12 @@ hook_run_related_tests() {
   fi
 
   case "$runner" in
-    rstest|vitest)
+    rstest)
       "$bin" run --related $abs_changed
+      return $?
+      ;;
+    vitest)
+      "$bin" related --run --passWithNoTests $abs_changed
       return $?
       ;;
     jest)

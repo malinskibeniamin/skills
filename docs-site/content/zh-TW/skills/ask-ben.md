@@ -82,6 +82,7 @@ Builder.io 技能既可作為直接命令，也可作為底層輔助工具：`/v
 | `/triage` | 整理問題，使代理程式或人員能可靠執行。 |
 | `/upgrade-dependency` | 升級相依套件，並調整所有受影響的呼叫端。 |
 | `/ux-copy` | 以 Redpanda 風格撰寫清晰且具包容性的產品文案。 |
+| `/ux-performance` | 稽核並最佳化真實的 Web 使用者體驗效能。 |
 | `/video-research` | 將影片轉換為附有時間戳記的研究實證。 |
 | `/visual-plan` | 將計畫轉換為互動式視覺成品。 |
 | `/visual-recap` | 將程式碼變更轉換為互動式視覺摘要。 |
