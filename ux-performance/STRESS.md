@@ -57,7 +57,7 @@ shape can be attributed to network, JavaScript, React, layout/paint, memory, or 
 
 ## Exercise distinct load shapes
 
-Do not collapse different risks into one “large dataset” run:
+Do not collapse different risks into one "large dataset" run:
 
 | Shape | What it reveals | Browser example |
 |---|---|---|
@@ -102,8 +102,8 @@ scroll jumps, inaccessible pending states, and error UI that never recovers. Ver
 and unmount cancellation, bounded retry/backoff, idempotency where required, and cleanup of
 workers, streams, observers, subscriptions, timers, and object URLs.
 
-Make completion semantic: correct rows painted and usable, not “request resolved” or
-“spinner disappeared.” Track errors and dropped work explicitly. A latency percentile is
+Make completion semantic: correct rows painted and usable, not "request resolved" or
+"spinner disappeared." Track errors and dropped work explicitly. A latency percentile is
 invalid if failed or abandoned journeys are silently excluded.
 
 ## Separate browser and service load

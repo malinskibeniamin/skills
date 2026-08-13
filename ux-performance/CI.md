@@ -60,7 +60,7 @@ diff, and emit an actionable trace/report on failure.
   payload sizes, response ordering, cache headers, and delays.
 - Repeat runtime checks, report samples and spread, and warn before blocking while calibrating.
 - Attach HAR/trace/Lighthouse JSON/bundle diff on failure. Fail on the metric and budget, not
-  on a generic “performance dropped” message.
+  on a generic "performance dropped" message.
 - Run React Doctor's performance category on changed scope if the repository already uses it.
   Static warnings generate work items; they do not prove runtime latency.
 
@@ -122,7 +122,7 @@ arrival rate/concurrency, dataset cardinality, think time, cache mix, and depend
 5. Check generator CPU/network headroom so the harness does not manufacture latency.
 6. Stop on safety thresholds. Clean up test data and cost-bearing infrastructure.
 
-Gate a service-level objective, not “handled N users.” A faster response that returns errors,
+Gate a service-level objective, not "handled N users." A faster response that returns errors,
 drops work, overloads a dependency, or serves stale unauthorized data fails the contract.
 
 ## Primary sources

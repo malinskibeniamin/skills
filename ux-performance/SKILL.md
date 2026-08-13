@@ -41,12 +41,12 @@ Before implementation, name:
    serial dependency before making the same work faster.
 5. **Intervene** with the narrowest evidence-backed option from
    [OPTIMIZATION.md](OPTIMIZATION.md). A wrapper, context, cache, worker, compiler,
-   framework upgrade, prefetch, or server render is a candidate—not a default win.
+   framework upgrade, prefetch, or server render is a candidate - not a default win.
 6. **Verify** base and candidate with the same scenario, fixture, machine, browser, build,
    and cache state. Use paired runs; report median and spread. Re-run correctness,
    accessibility, memory, bundle, and error guardrails.
 7. **Decide**. Keep a clear worthwhile gain. If the result is inside variance, moves cost
-   elsewhere, or regresses a guardrail, report `Value not proven — inconclusive` and revert
+   elsewhere, or regresses a guardrail, report `Value not proven - inconclusive` and revert
    the speculative complexity. Do not metric-shop.
 8. **Prevent recurrence** only when requested or when the endpoint includes CI. Use
    [CI.md](CI.md) to place stable cheap checks in pull requests, noisy/deep checks nightly,

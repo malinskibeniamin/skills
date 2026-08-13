@@ -40,7 +40,7 @@ Start with the milestone the user cares about, then use supporting metrics to ex
 | Does it stay fast? | journey duration and memory slope over repeated round trips | heap, retained DOM, listeners, timers, subscriptions, workers, cache size |
 
 The stable Core Web Vitals are **LCP, INP, and CLS**. Judge field distributions at the
-75th percentile (p75), segmented at least by mobile and desktop. Current “good” reference
+75th percentile (p75), segmented at least by mobile and desktop. Current "good" reference
 thresholds are LCP <= 2.5 s, INP <= 200 ms, and CLS <= 0.1; a product may need tighter
 budgets. FCP and TTFB explain loading; TBT is a lab proxy for main-thread blocking and
 cannot replace field INP. Core Web Vitals do not reset for ordinary SPA route changes, so
