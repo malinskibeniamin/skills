@@ -91,6 +91,7 @@
     "./triage/",
     "./upgrade-dependency/",
     "./ux-copy/",
+    "./ux-performance/",
     "./video-research/",
     "./visual-plan/",
     "./visual-recap/",

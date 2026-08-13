@@ -1,0 +1,3 @@
+interface:
+  display_name: "UX Performance"
+  short_description: "Audit and optimize real web UX performance"

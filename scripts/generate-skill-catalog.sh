@@ -89,6 +89,7 @@ SHORT_DESCRIPTIONS = {
     "triage": "Prepare issues for reliable agent or human execution",
     "upgrade-dependency": "Upgrade a dependency and adapt every affected call site",
     "ux-copy": "Write clear, inclusive product copy in Redpanda style",
+    "ux-performance": "Audit and optimize real web UX performance",
     "video-research": "Turn videos into timestamped research evidence",
     "visual-plan": "Turn a plan into an interactive visual artifact",
     "visual-recap": "Turn a code change into an interactive visual recap",
