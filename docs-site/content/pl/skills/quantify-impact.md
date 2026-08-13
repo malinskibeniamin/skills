@@ -32,7 +32,7 @@ Natychmiast pokaż wartość, bez pozorowanych testów porównawczych. To wskaz�
 6. **Porównuj rzetelnie**: w przypadku metryk, które przekraczają zadeklarowany wcześniej próg, podaj surowe wartości przed zmianą i po niej, różnicę bezwzględną i procentową, metodę, środowisko oraz poziom szumu. Pomiń metryki poniżej tego progu lub mieszczące się w granicach normalnej zmienności; sam pomiar liczby nie czyni jej istotną. Nigdy nie przedstawiaj testu niezmienników ani wskaźnika zastępczego jako dowodu poprawy wydajności.
 7. **Podejmij decyzję**:
    - Wyraźna, wartościowa poprawa: `Value proven`.
-   - Jawna deklaracja poprawy wydajności z niejednoznacznym, pomijalnym wynikiem lub bez poprawy: `Value not proven`; pomiń minimalne różnice i nie dobieraj metryk pod oczekiwany wynik.
+   - Jawna deklaracja poprawy wydajności z niejednoznacznym, pomijalnym wynikiem lub bez poprawy: `Value not proven`; pomiń minimalne różnice i nie dobieraj metryk pod oczekiwany wynik. Dopuść jedną korektę opartą na dowodach, a następnie zaleć porzucenie zmian lub zamknięcie PR.
    - Brak jawnej deklaracji poprawy wydajności i brak wartościowej metryki: pomiń ilościowe zestawienie wpływu i użyj zwykłego podsumowania wartości.
    - Pogorszenie: napraw, zawęź zakres lub zatrzymaj prace.
 

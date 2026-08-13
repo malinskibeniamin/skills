@@ -25,7 +25,7 @@ Make value immediately obvious without benchmark theater. This is advisory, not 
 6. **Compare honestly**: for metrics that clear the predeclared threshold, report raw before/after, absolute and percentage delta, method, environment, and noise. Suppress metrics below that threshold or within normal variance; measuring a number does not make it meaningful. Never turn an invariant test or proxy into a performance claim.
 7. **Decide**:
    - Clear worthwhile gain: `Value proven`.
-   - Explicit performance claim with ambiguous, negligible, or no gain: `Value not proven`; omit the micro-deltas and do not metric-shop.
+   - Explicit performance claim with ambiguous, negligible, or no gain: `Value not proven`; omit the micro-deltas and do not metric-shop. Allow one evidence-driven revision, then recommend scrap or close the PR.
    - No explicit performance claim and no worthwhile metric: omit quantified impact output and use a normal value summary.
    - Regression: fix, narrow, or stop.
 
