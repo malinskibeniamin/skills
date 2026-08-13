@@ -1693,6 +1693,16 @@ _run_hook "llm-test-flags.sh" '{"tool_name":"Bash","tool_input":{"command":"vite
 _assert_exit 0 "--verbose rewritten (allow with updated input)"
 _assert_stdout_contains "updatedInput" "provides updatedInput"
 
+echo "  rstest with verbose reporter (rewrite to agent reporter):"
+_run_hook "llm-test-flags.sh" '{"tool_name":"Bash","tool_input":{"command":"rstest run --reporters=verbose src/"}}'
+_assert_exit 0 "Rstest verbose reporter rewritten"
+_assert_stdout_contains "reporters=md" "Rstest uses markdown reporter"
+
+echo "  rstest through pre-bash dispatcher (suggest fail-fast):"
+_run_hook "pre-bash.sh" '{"tool_name":"Bash","tool_input":{"command":"rstest run src/"}}'
+_assert_exit 0 "Rstest command reaches dispatcher"
+_assert_stdout_contains "bail=1" "Rstest gets fail-fast guidance"
+
 echo "  non-test command (pass):"
 _run_hook "llm-test-flags.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run build"}}'
 _assert_exit 0 "non-test command passes"

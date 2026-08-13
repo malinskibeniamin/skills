@@ -503,6 +503,7 @@ run_content_eval "$SESSION_SCRIPT" "react" "session-env checks for React depende
 run_content_eval "$SESSION_SCRIPT" "WARNING" "session-env warns on non-frontend projects"
 run_content_eval "$SESSION_SCRIPT" "NODE_OPTIONS" "session-env sets NODE_OPTIONS"
 run_content_eval "$SESSION_SCRIPT" "dirty-files-baseline" "session-env captures dirty-files baseline"
+run_content_eval "$SESSION_SCRIPT" "rstest" "session-env detects Rstest projects"
 
 # ── hook-lib.sh: session-scoped file tracking ──────────────────
 

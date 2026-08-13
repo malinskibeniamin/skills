@@ -49,6 +49,18 @@ fi
 
 # ── Apply ────────────────────────────────────────────────────────
 
+# Rstest models verbosity as a reporter. Keep agent output bounded.
+if echo "$rewritten" | grep -qE '(^|[[:space:]/])rstest([[:space:]]|$)'; then
+  if echo "$rewritten" | grep -qE '\-\-reporters?(=|[[:space:]])verbose'; then
+    rewritten=$(echo "$rewritten" | sed -E 's/--reporters?=verbose/--reporters=md/g; s/--reporters?[[:space:]]+verbose/--reporters=md/g')
+    must_rewrite=true
+  fi
+
+  if ! echo "$rewritten" | grep -qE '\-\-bail([=[:space:]]|$)'; then
+    suggestions="$suggestions\n- --bail=1 fails fast, saves tokens"
+  fi
+fi
+
 if [ "$must_rewrite" = true ]; then
   updated_input=$(echo "$input" | jq --arg cmd "$rewritten" '.tool_input | .command = $cmd')
   if [ -n "$suggestions" ]; then

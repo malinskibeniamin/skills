@@ -52,6 +52,18 @@ if echo "$rewritten" | grep -qE '(vitest|bun (test|run test\S*))'; then
   fi
 fi
 
+# Rstest models verbosity as a reporter. Keep agent output bounded.
+if echo "$rewritten" | grep -qE '(^|[[:space:]/])rstest([[:space:]]|$)'; then
+  if echo "$rewritten" | grep -qE '\-\-reporters?(=|[[:space:]])verbose'; then
+    rewritten=$(echo "$rewritten" | sed -E 's/--reporters?=verbose/--reporters=md/g; s/--reporters?[[:space:]]+verbose/--reporters=md/g')
+    must_rewrite=true
+  fi
+
+  if ! echo "$rewritten" | grep -qE '\-\-bail([=[:space:]]|$)'; then
+    suggestions="$suggestions\n- --bail=1 fails fast, saves tokens"
+  fi
+fi
+
 # -- Playwright optimization --------------------------------------
 
 if echo "$rewritten" | grep -qE '\bplaywright (test|show-report)\b'; then

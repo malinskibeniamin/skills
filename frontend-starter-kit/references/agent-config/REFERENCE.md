@@ -29,7 +29,7 @@ echo "export PROMPT_CONTEXT_LEVEL=standard" >> "$CLAUDE_ENV_FILE"
 Most valuable injection · compress 300+ lines PostToolUse enforcement to one line Claude apply *before* write code:
 
 ```
-Rules: bun biome vitest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} no-useEffect | UI:@/components/ui/ | no-raw-HTML(<button>-><Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery)
+Rules: bun biome vitest/rstest | no-memo(compiler) no-as-any no-ts-ignore no-style={{}} no-useEffect | UI:@/components/ui/ | no-raw-HTML(<button>-><Button>) | zustand:create<T>()() useShallow | env:@/env(no process.env) | TanStack-Router(no react-router-dom) | connect-query(no raw useQuery)
 ```
 
 Instead of write->block->fix (3 tool calls, ~1500 tokens), Claude write correct first try (1 call). Est savings: **3000-8000 tokens/session**.
@@ -64,6 +64,7 @@ See `codex-compat` REFERENCE.md for approximation strategy.
 | Action | Runner | Why |
 |--------|--------|-----|
 | Strip `--verbose` | Vitest | Waste tokens -- agent reporters show only failures |
+| Replace verbose reporter with `md` | Rstest | Preserve failures and repro commands without pass-case noise |
 
 ### Soft suggestions (`additionalContext`)
 
@@ -75,6 +76,7 @@ Suggest not force · appear only when flag absent:
 | `--bail=1` | Vitest | Fail fast -- skip waste tokens on cascade failures |
 | `--teardownTimeout=5000` | Vitest | Kill hang teardown after 5s |
 | `--reporter=github` | Vitest (CI) | GitHub Actions annotations inline in PR diffs |
+| `--bail=1` | Rstest | Fail fast -- skip waste tokens on cascade failures |
 
 ## llm-truncate.sh (PostToolUse on Bash)
 
@@ -163,4 +165,4 @@ export default defineConfig({
 |-----|--------|-----|--------|
 | `AI_AGENT=1` | Agent reporter (failures only) | No effect | Default to md reporter |
 | `CLAUDECODE=1` | No effect | Failures + summary only | No effect |
-| `NODE_OPTIONS=--max-old-space-size=8192` | 8GB heap for workers | 8GB heap | N/A (Rust) |
+| `NODE_OPTIONS=--max-old-space-size=8192` | 8GB heap for workers | 8GB heap | 8GB heap for the Node host |

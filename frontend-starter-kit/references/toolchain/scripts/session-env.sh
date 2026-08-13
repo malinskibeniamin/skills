@@ -20,9 +20,24 @@ fi
 
 # Set environment variables for LLM-friendly defaults
 if [ -n "$CLAUDE_ENV_FILE" ]; then
+  _test_runner="vitest"
+  _test_script=$(jq -r '.scripts.test // empty' package.json 2>/dev/null || true)
+  case "$_test_script" in
+    *rstest*) _test_runner="rstest" ;;
+    *vitest*) _test_runner="vitest" ;;
+    *)
+      if jq -e '[.scripts[]? | select(contains("rstest"))] | length > 0' package.json >/dev/null 2>&1; then
+        _test_runner="rstest"
+      else
+        for _config in ./rstest.config.*; do
+          [ -f "$_config" ] && _test_runner="rstest" && break
+        done
+      fi
+      ;;
+  esac
   echo "export PKG_MANAGER=bun" >> "$CLAUDE_ENV_FILE"
   echo "export LINTER=biome" >> "$CLAUDE_ENV_FILE"
-  echo "export TEST_RUNNER=vitest" >> "$CLAUDE_ENV_FILE"
+  echo "export TEST_RUNNER=$_test_runner" >> "$CLAUDE_ENV_FILE"
 
   # Prevent OOM on large test suites, builds, and type checks
   echo "export NODE_OPTIONS=--max-old-space-size=8192" >> "$CLAUDE_ENV_FILE"

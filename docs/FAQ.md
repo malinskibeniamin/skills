@@ -191,6 +191,10 @@ import LlmReporter from './shared/reporters/vitest-llm-reporter';
 export default defineConfig({ test: { reporters: [new LlmReporter()] } });
 ```
 
+**Rstest:** no custom reporter needed. With `AI_AGENT=1`, Rstest selects its
+built-in Markdown reporter; explicit verbose reporters are rewritten to
+`--reporters=md` during agent runs.
+
 **Playwright:** `shared/reporters/playwright-llm-reporter.ts` -- silent-pass `ok N` trailer with optional `skip`/`flaky` counts; fail-case single-line JSON capped at `PW_LLM_MAX_FAILURES` (default 15). Wire:
 
 ```ts

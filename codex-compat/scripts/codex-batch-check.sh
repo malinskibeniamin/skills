@@ -122,10 +122,10 @@ if [ -n "$new_files" ]; then
   done
 fi
 
-# Gate: Run related tests if vitest available
-if [ -n "$changed_js" ] && [ -f "$repo_root/node_modules/.bin/vitest" ]; then
+# Gate: Run related tests with the project's configured runner
+if [ -n "$changed_js" ]; then
   test_exit=0
-  test_output=$(cd "$repo_root" && vitest run --related $changed_js 2>&1) || test_exit=$?
+  test_output=$(hook_run_related_tests "$repo_root" "$changed_js" 2>&1) || test_exit=$?
   if [ $test_exit -ne 0 ]; then
     errors="$errors\n[orchestration] TESTS FAILING: $(echo "$test_output" | tail -5)"
   fi

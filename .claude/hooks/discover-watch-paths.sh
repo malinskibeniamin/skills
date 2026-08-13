@@ -13,7 +13,7 @@ root="${1:-$PWD}"
 
 find "$root" -maxdepth 4 \
   \( -name '*.proto' -o -name '*.graphql' -o -name '*.graphqls' \
-     -o -name 'tsconfig.*.json' -o -name 'vitest.config.*' \
+     -o -name 'tsconfig.*.json' -o -name 'vitest.config.*' -o -name 'rstest.config.*' \
      -o -name 'biome.json' -o -name 'biome.jsonc' -o -name 'tsconfig.json' \) \
   -not -path '*/node_modules/*' -not -path '*/.git/*' 2>/dev/null | head -201
 

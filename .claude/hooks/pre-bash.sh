@@ -26,7 +26,7 @@ _cmd_norm=$(printf '%s' "$_cmd" | tr -d "\\\\\"'")
 # hook script -> trigger union (ERE). Child is spawned only when it matches.
 _hooks=(
   "enforce-toolchain.sh|npm|npx|yarn|pnpm|tsgo|eslint|prettier|bun|rm|sleep|git|cat <<|killall|pkill|osascript"
-  "llm-test-flags.sh|vitest|playwright|bun (run )?test|jest|--watch"
+  "llm-test-flags.sh|vitest|rstest|playwright|bun (run )?test|jest|--watch"
   "conventional-commits-check.sh|git commit|git.*-m"
   "branch-safety-check.sh|git (commit|push|checkout|switch|worktree|branch)"
   # snyk stays dispatcher-routed: a standalone `if: "Bash(snyk *)"` entry
