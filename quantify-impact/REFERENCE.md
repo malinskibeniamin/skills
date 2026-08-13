@@ -74,11 +74,29 @@ Use paired inputs and the same scenario. Separate cold-start and warm-cache clai
 - Primary unchanged: **Value not proven**.
 - Guardrail materially regresses: **Value not proven -- regression**.
 
-Do not select a replacement metric after seeing results. A new metric requires a new thesis and baseline. One evidence-driven revision is reasonable; after another miss, recommend scrap or close the PR. Negative research is useful; preserve the method and result in the PR/issue instead of forcing a merge.
+Do not select a replacement metric after seeing results. A new metric requires a new thesis and baseline. One evidence-driven revision is reasonable; after another miss, recommend scrap or close the PR. Negative research is useful; preserve its method and `Value not proven` conclusion in the PR/issue, while keeping suppressed raw measurements in the local evidence artifact.
+
+## Output filter
+
+Measurement and publication are separate decisions. A metric belongs in quantified impact output only when its delta:
+
+1. measures a direct or explicitly justified proxy outcome;
+2. clears the minimum worthwhile delta registered before measurement; and
+3. exceeds normal variance when the measurement is noisy.
+
+There is no universal percentage cutoff. The scenario and decision determine what is worthwhile. Exact counts are noise-free, but still need to be large enough to matter.
+
+- Suppress every below-threshold or within-noise metric, even when another metric qualifies.
+- Suppress negligible guardrail movement entirely. Do not show its raw values or emit a `Guardrail held` line solely because it was measured.
+- Keep suppressed raw output in `.context/impact/<change>/` when it helps reproduce or audit the work; do not promote it into PR feedback.
+- If no metric qualifies and the change makes an explicit performance claim, state **Value not proven** without listing the negligible deltas.
+- If no metric qualifies and there is no explicit performance claim, omit the quantified impact section and use a normal value summary.
+
+Do not round a negligible delta into apparent significance, combine several immaterial metrics into a value claim, or publish a metric merely because the tooling produced it.
 
 ## Reproducible PR evidence
 
-Put the result first:
+Put only decision-useful results first:
 
 ```md
 ## Proven impact
