@@ -3,7 +3,7 @@
 SCRIPT="$REPO_ROOT/frontend-starter-kit/references/react-doctor/scripts/react-doctor-stop.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/react-doctor"
 CONFIG="$SKILL_DIR/doctor.config.json"
-DESIGN_RULES="$SKILL_DIR/design-rules-0.9.2.txt"
+DESIGN_RULES="$SKILL_DIR/design-rules-0.9.12.txt"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -17,7 +17,7 @@ run_executable_eval "$SCRIPT" "react-doctor-stop.sh is executable"
 
 run_content_eval "$SKILL_DIR/README.md" "react-doctor" "SKILL.md mentions react-doctor"
 run_content_eval "$SKILL_DIR/README.md" "biome-overlapping" "SKILL.md mentions biome-overlapping rules"
-run_content_eval "$SKILL_DIR/README.md" "react-doctor@0\\.9\\.2" "SKILL.md pins the released npm version"
+run_content_eval "$SKILL_DIR/README.md" "react-doctor@0\\.9\\.12" "SKILL.md pins the released npm version"
 run_content_eval "$SKILL_DIR/README.md" "doctor.config.json" "SKILL.md mentions config file"
 run_content_eval "$SKILL_DIR/README.md" "doctor:full" "SKILL.md provides an advisory full-project scan"
 
@@ -48,6 +48,8 @@ run_content_eval "$CONFIG" '"react-doctor/prefer-function-component": "warn"' "c
 run_content_eval "$CONFIG" '"react-doctor/no-clone-element": "warn"' "config owns cloneElement guidance"
 run_content_eval "$CONFIG" '"react-doctor/no-cramped-container-padding": "warn"' "config enables contextual design diagnostics"
 run_content_eval "$CONFIG" '"react-doctor/no-common-root-font": "warn"' "config enables brand-sensitive design diagnostics"
+run_content_eval "$CONFIG" '"react-doctor/no-controlled-selection-focus-effect": "warn"' "config enables controlled-selection focus diagnostics"
+run_content_eval "$CONFIG" '"react-doctor/no-passive-request-owner-ref": "warn"' "config enables request-ownership diagnostics"
 run_content_eval "$CONFIG" '"react-doctor/ink-prefer-use-paste": "off"' "config explicitly disables terminal-only opt-ins"
 
 _rd_config_errors="config missing"
@@ -63,7 +65,7 @@ if [ -f "$CONFIG" ] && [ -f "$DESIGN_RULES" ]; then
       or (.surfaces.prComment.includeTags | index("design")) == null
       or (.surfaces.score.includeTags | index("design")) == null
       or ([.rules[] | select(. == "off")] | length) != 11
-      or (.rules | length) != 183
+      or (.rules | length) != 185
     )
     | "strict config contract mismatch"
   ' "$CONFIG" 2>/dev/null || echo "invalid config")
@@ -84,7 +86,7 @@ if [ -f "$CONFIG" ] && [ -f "$DESIGN_RULES" ]; then
   fi
 fi
 if [ -z "$_rd_config_errors" ]; then
-  echo "  PASS  strict config activates all 112 design rules and 728 applicable catalog rules"
+  echo "  PASS  strict config activates all 112 design rules and 829 active browser rules"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  strict rule activation is incomplete: $_rd_config_errors"

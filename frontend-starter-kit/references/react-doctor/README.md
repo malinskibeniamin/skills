@@ -6,13 +6,15 @@
   different changed-file sets are not comparable
 - Browser-app opt-ins and all design rules are active in `doctor.config.json`
 - `biome-overlapping` rules remain disabled
+- React Doctor owns React Compiler diagnostics; Biome's nursery compiler rule
+  stays off to prevent duplicates
 
 ## Steps
 
 ### 1. Install
 
 ```bash
-bun add -D --exact react-doctor@0.9.2
+bun add -D --exact react-doctor@0.9.12
 ```
 
 Pin the npm version. React Doctor moves quickly; upgrade deliberately and rerun
@@ -28,7 +30,7 @@ the transferred-rule fixtures.
     "doctor:design": "react-doctor design"
   },
   "devDependencies": {
-    "react-doctor": "0.9.2"
+    "react-doctor": "0.9.12"
   }
 }
 ```
@@ -43,6 +45,7 @@ The config:
 - enables all 112 released design rules
 - enables every applicable browser correctness, accessibility, React, and
   maintainability opt-in
+- enables the new controlled-selection focus and request-ownership opt-ins
 - blocks warning and error diagnostics on changed scope
 - excludes the complete React Native family by tag
 - disables `exhaustive-deps` and nested-component diagnostics already owned by

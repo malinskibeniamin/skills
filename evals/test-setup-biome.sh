@@ -3,6 +3,8 @@
 
 SCRIPT="$REPO_ROOT/frontend-starter-kit/references/biome/scripts/biome-autofix.sh"
 SKILL_DIR="$REPO_ROOT/frontend-starter-kit/references/biome"
+PACKAGE_JSON="$REPO_ROOT/package.json"
+BIOME_CONFIG="$REPO_ROOT/biome.json"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -13,8 +15,12 @@ run_executable_eval "$SCRIPT" "biome-autofix.sh is executable"
 # ── SKILL.md content ────────────────────────────────────────────
 
 run_content_eval "$SKILL_DIR/README.md" "ultracite" "SKILL.md mentions ultracite"
+run_content_eval "$SKILL_DIR/README.md" "@biomejs/biome@2\\.5\\.9" "SKILL.md pins the current Biome release"
+run_content_eval "$SKILL_DIR/README.md" "ultracite@7\\.10\\.6" "SKILL.md pins the current Ultracite release"
 run_content_eval "$SKILL_DIR/README.md" "Stop" "SKILL.md mentions Stop hook"
 run_content_eval "$SKILL_DIR/README.md" "noUnusedImports" "SKILL.md mentions import loop prevention"
+run_content_eval "$PACKAGE_JSON" '"@biomejs/biome": "2\.5\.9"' "repository uses the current Biome release"
+run_content_eval "$BIOME_CONFIG" "schemas/2\\.5\\.9/schema.json" "repository uses the matching Biome schema"
 
 # ── REFERENCE.md content ────────────────────────────────────────
 
@@ -39,6 +45,18 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "noRestrictedImports" "REFERENCE has 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "useFilenamingConvention" "REFERENCE has filename convention rule"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "kebab-case" "REFERENCE enforces kebab-case filenames"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "strictCase" "REFERENCE uses strictCase for filenames"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "useReactCompiler" "REFERENCE documents Biome React Compiler support"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "React Doctor.*owns" "REFERENCE keeps one React Compiler diagnostics owner"
+
+_biome_template=$(sed -n '/^```jsonc$/,/^```$/p' "$SKILL_DIR/REFERENCE.md")
+if printf '%s\n' "$_biome_template" | grep -q 'useReactCompiler'; then
+  echo "  FAIL  Biome template duplicates React Doctor compiler diagnostics"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Biome template duplicates React Doctor compiler diagnostics"
+else
+  echo "  PASS  Biome template leaves compiler diagnostics to React Doctor"
+  PASS=$((PASS + 1))
+fi
 
 # ── Hook script content checks ──────────────────────────────────
 

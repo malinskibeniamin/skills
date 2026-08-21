@@ -43,35 +43,35 @@ const absoluteArrowPoints = (
 };
 
 describe("skill diagram layout regressions", () => {
-  test.each([
-    "efficient-frontier",
-    "steelman",
-  ])("%s decision-tree edges visibly overlap their connected node borders", async (name) => {
-    const scene = await loadScene(name);
-    const input = requireElement(scene, "branch-input");
-    const decision = requireElement(scene, "branch-decision");
-    const firstOutcome = requireElement(scene, "branch-outcome-1");
-    const secondOutcome = requireElement(scene, "branch-outcome-2");
-    const inputArrow = absoluteArrowPoints(
-      requireElement(scene, "branch-arrow-input"),
-    );
-    const firstBranch = absoluteArrowPoints(
-      requireElement(scene, "branch-arrow-1"),
-    );
-    const secondBranch = absoluteArrowPoints(
-      requireElement(scene, "branch-arrow-2"),
-    );
+  test.each(["efficient-frontier", "steelman"])(
+    "%s decision-tree edges visibly overlap their connected node borders",
+    async (name) => {
+      const scene = await loadScene(name);
+      const input = requireElement(scene, "branch-input");
+      const decision = requireElement(scene, "branch-decision");
+      const firstOutcome = requireElement(scene, "branch-outcome-1");
+      const secondOutcome = requireElement(scene, "branch-outcome-2");
+      const inputArrow = absoluteArrowPoints(
+        requireElement(scene, "branch-arrow-input"),
+      );
+      const firstBranch = absoluteArrowPoints(
+        requireElement(scene, "branch-arrow-1"),
+      );
+      const secondBranch = absoluteArrowPoints(
+        requireElement(scene, "branch-arrow-2"),
+      );
 
-    expect(inputArrow[0]?.[0]).toBeLessThan(
-      (input.x ?? 0) + (input.width ?? 0),
-    );
-    expect(inputArrow.at(-1)?.[0]).toBeGreaterThan(decision.x ?? 0);
-    expect(firstBranch[0]?.[0]).toBeLessThan(
-      (decision.x ?? 0) + (decision.width ?? 0),
-    );
-    expect(firstBranch.at(-1)?.[0]).toBeGreaterThan(firstOutcome.x ?? 0);
-    expect(secondBranch.at(-1)?.[0]).toBeGreaterThan(secondOutcome.x ?? 0);
-  });
+      expect(inputArrow[0]?.[0]).toBeLessThan(
+        (input.x ?? 0) + (input.width ?? 0),
+      );
+      expect(inputArrow.at(-1)?.[0]).toBeGreaterThan(decision.x ?? 0);
+      expect(firstBranch[0]?.[0]).toBeLessThan(
+        (decision.x ?? 0) + (decision.width ?? 0),
+      );
+      expect(firstBranch.at(-1)?.[0]).toBeGreaterThan(firstOutcome.x ?? 0);
+      expect(secondBranch.at(-1)?.[0]).toBeGreaterThan(secondOutcome.x ?? 0);
+    },
+  );
 
   test("sequence message labels stay clear of their arrows", async () => {
     const scene = await loadScene("handoff");
@@ -91,27 +91,30 @@ describe("skill diagram layout regressions", () => {
     "stay-within-limits",
     "tdd",
     "triage",
-  ])("%s retry arrow connects the third state back to the second", async (name) => {
-    const scene = await loadScene(name);
-    const source = requireElement(scene, "state-3");
-    const target = requireElement(scene, "state-2");
-    const points = absoluteArrowPoints(requireElement(scene, "state-retry"));
-    const first = points[0];
-    const last = points.at(-1);
+  ])(
+    "%s retry arrow connects the third state back to the second",
+    async (name) => {
+      const scene = await loadScene(name);
+      const source = requireElement(scene, "state-3");
+      const target = requireElement(scene, "state-2");
+      const points = absoluteArrowPoints(requireElement(scene, "state-retry"));
+      const first = points[0];
+      const last = points.at(-1);
 
-    expect(points.length).toBeGreaterThanOrEqual(4);
-    expect(first?.[1]).toBeGreaterThanOrEqual((source.y ?? 0) + 12);
-    expect(first?.[1]).toBeLessThan((source.y ?? 0) + (source.height ?? 0));
-    expect(first?.[0]).toBeGreaterThan(source.x ?? 0);
-    expect(first?.[0]).toBeLessThan((source.x ?? 0) + (source.width ?? 0));
-    expect(last?.[1]).toBeGreaterThanOrEqual((target.y ?? 0) + 12);
-    expect(last?.[1]).toBeLessThan((target.y ?? 0) + (target.height ?? 0));
-    expect(last?.[0]).toBeGreaterThan(target.x ?? 0);
-    expect(last?.[0]).toBeLessThan((target.x ?? 0) + (target.width ?? 0));
-    expect(points.slice(1, -1).every(([, y]) => y < (target.y ?? 0))).toBe(
-      true,
-    );
-  });
+      expect(points.length).toBeGreaterThanOrEqual(4);
+      expect(first?.[1]).toBeGreaterThanOrEqual((source.y ?? 0) + 12);
+      expect(first?.[1]).toBeLessThan((source.y ?? 0) + (source.height ?? 0));
+      expect(first?.[0]).toBeGreaterThan(source.x ?? 0);
+      expect(first?.[0]).toBeLessThan((source.x ?? 0) + (source.width ?? 0));
+      expect(last?.[1]).toBeGreaterThanOrEqual((target.y ?? 0) + 12);
+      expect(last?.[1]).toBeLessThan((target.y ?? 0) + (target.height ?? 0));
+      expect(last?.[0]).toBeGreaterThan(target.x ?? 0);
+      expect(last?.[0]).toBeLessThan((target.x ?? 0) + (target.width ?? 0));
+      expect(points.slice(1, -1).every(([, y]) => y < (target.y ?? 0))).toBe(
+        true,
+      );
+    },
+  );
 
   test("state-machine transitions visibly overlap both connected nodes", async () => {
     const scene = await loadScene("tanstack-router");

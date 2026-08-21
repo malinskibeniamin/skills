@@ -1283,6 +1283,7 @@ hook_select_test_runner() {
     *rstest*) echo "rstest"; return 0 ;;
     *vitest*) echo "vitest"; return 0 ;;
     *jest*) echo "jest"; return 0 ;;
+    *"bun test"*) echo "bun"; return 0 ;;
   esac
 
   for runner in vitest rstest jest; do
@@ -1331,6 +1332,10 @@ hook_run_related_tests() {
   fi
 
   case "$runner" in
+    bun)
+      "$bin" run --cwd "$repo_root" test
+      return $?
+      ;;
     rstest)
       "$bin" run --related $abs_changed
       return $?

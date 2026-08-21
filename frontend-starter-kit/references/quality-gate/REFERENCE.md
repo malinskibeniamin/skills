@@ -59,6 +59,8 @@ jobs:
 
 The Stop and Codex fallback gates also detect Rstest projects from package
 scripts or `rstest.config.*` and run `rstest run --related` automatically.
+When the package test script uses `bun test`, the gate runs that project-owned
+script instead of selecting an installed Vitest binary.
 
 ## Test Performance Profiling
 
