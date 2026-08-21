@@ -159,18 +159,31 @@ else
   ERRORS="$ERRORS\n  FAIL: empty related-test set"
 fi
 cp "$_runner_tmp/node_modules/.bin/vitest" "$_runner_tmp/node_modules/.bin/rstest"
-printf '{"scripts":{"test":"bun test"}}\n' > "$_runner_tmp/package.json"
+cp "$_runner_tmp/node_modules/.bin/vitest" "$_runner_tmp/node_modules/.bin/bun"
+printf '{"scripts":{"test":"cd shared && bun test hook-protocol.test.ts"}}\n' > "$_runner_tmp/package.json"
 _selected_runner=$(
   source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
   hook_select_test_runner "$_runner_tmp"
 )
-if [ "$_selected_runner" = "vitest" ]; then
-  echo "  PASS  ambiguous binary fallback preserves Vitest precedence"
+if [ "$_selected_runner" = "bun" ]; then
+  echo "  PASS  package test script selects Bun over installed Vitest"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  ambiguous binary fallback expected vitest, got ${_selected_runner:-none}"
+  echo "  FAIL  shared runner selection expected bun, got ${_selected_runner:-none}"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: Vitest binary precedence"
+  ERRORS="$ERRORS\n  FAIL: shared Bun runner selection"
+fi
+_related_args=$(
+  source "$REPO_ROOT/shared/hook-lib.sh" < /dev/null
+  hook_run_related_tests "$_runner_tmp" "src/button.ts"
+)
+if [ "$_related_args" = "run --cwd $_runner_tmp test" ]; then
+  echo "  PASS  shared Bun runner uses the project-owned test script"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared Bun test command incorrect: ${_related_args:-none}"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shared Bun test command"
 fi
 rm -rf "$_runner_tmp"
 
