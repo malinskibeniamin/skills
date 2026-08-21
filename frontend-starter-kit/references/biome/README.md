@@ -7,8 +7,11 @@
 
 ### 1. Install
 ```bash
-bun add -D @biomejs/biome ultracite --yarn
+bun add -D --exact @biomejs/biome@2.5.9 ultracite@7.10.6
 ```
+
+Keep React Compiler diagnostics single-owned: React Doctor runs them, so do
+not also enable Biome's nursery `useReactCompiler` rule.
 
 ### 2. Create `biome.jsonc`
 From [REFERENCE.md](REFERENCE.md). Extend `ultracite/biome/core` + `ultracite/biome/react`. VCS git on. Test files re-enable `noExplicitAny`.

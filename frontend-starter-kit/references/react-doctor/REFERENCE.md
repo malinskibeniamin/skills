@@ -2,21 +2,22 @@
 
 ## Released contract
 
-The pinned npm release is `react-doctor@0.9.2`. Its released registry contains
-781 rules: 776 active and 5 retired. All 112 design-tagged rules are opt-in.
+The pinned npm release is `react-doctor@0.9.12`. Its released registry contains
+884 rules: 879 active and 5 retired. All 112 design-tagged rules are opt-in.
 Use the tagged registry rather than the live rules website when changing the
 pin because the website can include unreleased rules.
 
 Primary references:
 
-- [0.9.2 release](https://github.com/millionco/react-doctor/releases/tag/react-doctor%400.9.2)
-- [0.9.2 rule registry](https://github.com/millionco/react-doctor/blob/react-doctor%400.9.2/packages/oxlint-plugin-react-doctor/src/plugin/rule-registry.ts)
+- [0.9.12 release](https://github.com/millionco/react-doctor/releases/tag/react-doctor%400.9.12)
+- [0.9.12 rule registry](https://github.com/millionco/react-doctor/blob/react-doctor%400.9.12/packages/oxlint-plugin-react-doctor/src/plugin/rule-registry.ts)
 - [configuration](https://www.react.doctor/docs/configuration/config-files)
 - [CLI](https://www.react.doctor/docs/reference/cli-reference)
 
 React Doctor runs on its bundled oxlint engine. That is an implementation
 detail, not a second project linter: Biome/Ultracite remains the lint and format
-owner.
+owner. Release 0.9.12 pins Oxlint 1.77 and `eslint-plugin-react-hooks` 7.1.1;
+do not add standalone Oxlint or Biome's `useReactCompiler` on top.
 
 ## Rule activation and diagnostic surfaces
 
@@ -32,16 +33,22 @@ surfaces and explicitly activates every design rule.
 
 | Policy | Count | Behavior |
 |---|---:|---|
-| Applicable catalog rules | 728 | Enabled; warnings and errors both fail changed scope |
+| Active browser rules | 829 | Enabled; warnings and errors both fail changed scope |
 | React Native rules | 42 | Excluded by tag because this is a browser starter |
 | Explicit conflicts / terminal opt-ins | 11 | Off; owned elsewhere or inapplicable |
-| Total registry | 781 | Pinned 0.9.2 catalog |
+| Total registry | 884 | Pinned 0.9.12 catalog; 5 entries are retired |
 
-The explicit rule map contains 183 entries: 42 errors, 130 warnings, and 11
+The explicit rule map contains 185 entries: 42 errors, 132 warnings, and 11
 off. All 112 design rules are active; the versioned
-[`design-rules-0.9.2.txt`](design-rules-0.9.2.txt) inventory makes omissions
+[`design-rules-0.9.12.txt`](design-rules-0.9.12.txt) inventory makes omissions
 testable. `blocking: "warning"` turns both configured severities into a strict
 changed-scope gate.
+
+This release adds 103 rules, mostly capability-gated Three.js and React Three
+Fiber checks. The two new general React opt-ins,
+`no-controlled-selection-focus-effect` and `no-passive-request-owner-ref`, are
+enabled. Upstream's replacement `no-multi-component-file` is enabled by
+default; its superseded `no-multi-comp` rule remains off.
 
 The 11 exclusions are intentional:
 

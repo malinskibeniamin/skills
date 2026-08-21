@@ -1,5 +1,15 @@
 # Biome + Ultracite Reference
 
+## React Compiler diagnostics
+
+Biome 2.5.9 includes the nursery `useReactCompiler` rule for React 19 projects.
+React Doctor already owns React Compiler diagnostics in this starter, so leave
+the rule out of the Biome template. Do not add Ultracite's Oxc preset or a
+standalone Oxlint config alongside it; that would create competing owners.
+
+Transfer ownership only as a deliberate migration with duplicate diagnostics
+disabled first. See the [Biome rule documentation](https://biomejs.dev/linter/rules/use-react-compiler/javascript/).
+
 ## biome.jsonc
 
 ```jsonc
