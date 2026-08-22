@@ -3,7 +3,7 @@
 
 _dp_tmp=$(mktemp -d /tmp/differential-XXXXXX)
 _dp_file="$_dp_tmp/page.ts"
-printf '// Copyright 2026 Redpanda Data, Inc.\nexport function bad(x: any) { return x; }\n' > "$_dp_file"
+printf 'export function bad(x: any) { return x; }\n' > "$_dp_file"
 
 _dp_percall=$(jq -n --arg f "$_dp_file" '{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export function bad(x: number) { return x; }",new_string:"export function bad(x: any) { return x; }"}}')
 _dp_batch=$(jq -n --arg f "$_dp_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export function bad(x: number) { return x; }",new_string:"export function bad(x: any) { return x; }"},tool_use_id:"a",tool_response:"{}"}]}')
@@ -28,7 +28,7 @@ else
 fi
 
 # Clean edit: both silent, both exit 0.
-printf '// Copyright 2026 Redpanda Data, Inc.\nexport function ok(x: number) { return x; }\n' > "$_dp_file"
+printf 'export function ok(x: number) { return x; }\n' > "$_dp_file"
 _dp_pc2=$(jq -n --arg f "$_dp_file" '{tool_name:"Edit",tool_input:{file_path:$f,old_string:"a",new_string:"export function ok(x: number) { return x; }"}}')
 _dp_b2=$(jq -n --arg f "$_dp_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"a",new_string:"export function ok(x: number) { return x; }"},tool_use_id:"a",tool_response:"{}"}]}')
 _dp_pc_exit=0; printf '%s' "$_dp_pc2" | CLAUDE_SESSION_ID=dp-pc2-$$ "$REPO_ROOT/.claude/hooks/ts-no-escape-hatches-check.sh" >/dev/null 2>&1 || _dp_pc_exit=$?
@@ -92,7 +92,7 @@ command rm -f "$_dp_ap_dir"/*.ts 2>/dev/null || true; rmdir "$_dp_ap_dir" 2>/dev
 # Relative-target apply_patch through the batch dispatcher (targets are
 # repo-root-relative in canonical Codex patches; regression: silently dropped).
 _dp_rel="$REPO_ROOT/.tmp-differential-rel.ts"
-printf '// Copyright 2026 Redpanda Data, Inc.\nexport const rel: any = 1;\n' > "$_dp_rel"
+printf 'export const rel: any = 1;\n' > "$_dp_rel"
 _dp_rel_patch=$(printf '*** Begin Patch\n*** Update File: .tmp-differential-rel.ts\n+export const rel: any = 1;\n*** End Patch')
 _dp_rel_b=$(jq -n --arg p "$_dp_rel_patch" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"apply_patch",tool_input:{command:["apply_patch",$p]}}]}')
 _dp_b_exit=0; printf '%s' "$_dp_rel_b" | "$REPO_ROOT/.claude/hooks/post-tool-batch.sh" >/dev/null 2>&1 || _dp_b_exit=$?
