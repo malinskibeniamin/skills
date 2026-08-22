@@ -26,8 +26,9 @@
 ### Native stop boundaries
 
 - Honor the endpoint-aware execution contract above. A well-scoped build/fix/implement
-  request continues after its concise plan and stops at verified local changes. Stop for plan
-  approval only when the user requested planning/grilling or a material reserved decision remains.
+  request continues after its concise plan through commit and push; an explicit local,
+  no-commit, or no-push instruction stops earlier. Stop for plan approval only when the user
+  requested planning/grilling or a material reserved decision remains.
 - A PR request ends after opening the PR and taking one CI status snapshot. `/go`, ship, or
   explicit babysitting owns any CI remediation loop. `/plow-ahead` is not delegation consent.
   Do not poll for later human feedback unless the user asks.

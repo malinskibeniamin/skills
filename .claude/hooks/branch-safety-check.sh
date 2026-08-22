@@ -9,9 +9,9 @@ set -eo pipefail
 # or open a PR against the wrong base. This hook denies the operation
 # and surfaces a remediation.
 #
-# Escape hatch: `CLAUDE_BRANCH_REBIND=1` on the failing Bash call — the
-# hook rebinds to the new current branch and passes. Intentionally noisy
-# so the user has to opt in each time.
+# Escape hatch for real branch drift: `CLAUDE_BRANCH_REBIND=1` on the failing
+# Bash call rebinds to the new current branch. A renamed or deleted bound branch
+# rebinds automatically because there is no competing live branch to protect.
 
 _shim="$(dirname "$0")/source-hook-lib.sh"; if [ -f "$_shim" ]; then . "$_shim" 2>/dev/null || true; fi
 
@@ -34,6 +34,15 @@ _current=$(git branch --show-current 2>/dev/null || echo "")
 
 # Same branch → fine.
 [ "$_bound" = "$_current" ] && exit 0
+
+# The session branch was renamed or deleted outside this hook (for example, by
+# the workspace host). With no live local branch at the old name, current HEAD
+# is the only viable continuation and can be rebound without another prompt.
+if ! git show-ref --verify --quiet "refs/heads/$_bound"; then
+  echo "$_current" > "$_bound_file" 2>/dev/null || true
+  echo "{\"suppressOutput\":true,\"systemMessage\":\"[branch-safety:auto-rebound] renamed or deleted branch: '$_bound' -> '$_current'\"}"
+  exit 0
+fi
 
 # Return-to-bound recovery is always safe and must remain executable even after drift.
 case "$command" in

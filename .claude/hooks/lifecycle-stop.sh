@@ -6,8 +6,8 @@ set -eo pipefail
 _sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
 
 
-# Stop hook: enforce only the external delivery endpoint the user requested.
-# Local build/fix/implement work never commits, pushes, or opens a PR.
+# Stop hook: enforce the delivery endpoint resolved from the user's request.
+# Ordinary action work defaults to push; explicit local/no-delivery intent stops locally.
 #
 # Lifecycle gates (sequential):
 #   commit → commit, stop

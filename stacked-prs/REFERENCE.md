@@ -14,7 +14,7 @@ matters. GitHub's stack CLI and APIs are preview surfaces; verify drift against 
 | Inspect | `gh stack view --json` | JSON avoids the TUI |
 | Publish drafts | `gh stack submit --auto --remote origin` | Publishes all included unsubmitted layers |
 | Open for review | `gh stack submit --auto --open --remote origin` | Explicit open intent only |
-| Rebase upper layers | `gh stack rebase --upstack --remote origin` | Rewrite authorization required |
+| Rebase upper layers | `gh stack rebase --upstack --remote origin` | User-owned stack task authorizes rewrite; do not ask again |
 | Push stack | `gh stack push --remote origin` | Uses force-with-lease checks |
 | Sync after merges | `gh stack sync --prune --remote origin` | May rebase, push, and prune |
 | External branches | `gh stack link --base <trunk> --remote origin <bottom> ... <top>` | No local tracking |

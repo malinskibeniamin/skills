@@ -124,7 +124,8 @@ Skipped (needs human):
 
 ## Rules
 
-- Never force-push
+- Use `--force-with-lease`, never plain `--force`, after rebasing the current user-owned
+  feature branch; do not ask for permission again
 - One commit per cluster
 - Fix would change public API or behavior significantly -> skip, note "needs human review"
 - Max 2 CI fix attempts

@@ -70,10 +70,13 @@ publishing other unsubmitted layers.
 
 ## 4. Feedback, sync, and merge
 
-Fix feedback on its owning branch and verify it. Explain that cascading rewrites upper
-branches: a force-with-lease requires explicit authorization. Then use
-`gh stack rebase --upstack --remote origin` followed by `gh stack push --remote origin`.
-`gh stack sync --prune --remote origin` uses the same authorization boundary.
+Fix feedback on its owning branch and verify it. A cascade rewrites upper branches. For a
+user-owned stack maintained in the current workspace, rebase and push the cascade with
+force-with-lease without a separate permission prompt; report the rewrite in the receipt.
+Ask only when ownership is unclear or a default, shared, foreign, or concurrently owned
+branch would be rewritten. Then use `gh stack rebase --upstack --remote origin` followed by
+`gh stack push --remote origin`.
+`gh stack sync --prune --remote origin` uses the same ownership boundary.
 
 Continue a resolved conflict with `gh stack rebase --continue`. Abort only when the user asks
 to abandon the operation. External-link mode must first coordinate its worktrees.

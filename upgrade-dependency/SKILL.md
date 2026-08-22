@@ -4,9 +4,9 @@ description: Upgrade a dependency and adapt every affected call site. Use for pa
 ---
 
 # Upgrade Dependency
-Move to the requested stable version; use latest stable if omitted. Adapt affected call sites.
-Honor the requested endpoint: `plan` is read-only; build/fix stops at verified local changes;
-commit, push, or PR happens only when requested.
+Move to requested stable version; use latest stable if omitted. Adapt calls.
+Honor requested endpoint: `plan` reads only; build/fix verifies, commits, and pushes unless user says local,
+no-commit, or no-push. PR only when requested.
 Read [REFERENCE.md](REFERENCE.md) for supply-chain checks and issue/PR templates when those
 branches fire.
 
@@ -22,7 +22,7 @@ Input: `$ARGUMENTS` = package/module, manifest path, target version, natural lan
    evidence and the required decision. `plan` -> report the path and risk in chat. Process
    packages sequentially; explicit delegation or `/swarm` may assign independent lanes.
 
-4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Keep separate verified groups; commit separately only when requested:
+4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Keep separate verified commits unless the user requested an earlier stop:
    a. **Bump**: `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` when `yarn.lock`/Snyk needs it. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit lockfiles.
    b. **Migrate**: official codemods; consolidate API/syntax/style/behavior changes across every touched call site. This upgrade's deprecation warnings are fixed NOW, not suppressed.
    c. **Benefit**: adopt changelog-highlighted APIs where they simplify existing code -- delete forced workarounds and obsolete polyfills; shrink or harden, never expand speculatively.

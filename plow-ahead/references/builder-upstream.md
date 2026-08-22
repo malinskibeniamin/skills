@@ -39,8 +39,10 @@ Stop and ask only for true blockers:
 - Required credentials, secrets, accounts, paid services, or private data are
   unavailable.
 - The next step would be destructive, irreversible, or production-mutating.
-- The task requires an explicit branch operation, history rewrite, force push, or
-  deletion that the user did not directly request.
+- The task requires rewriting a default, shared, foreign, or concurrently owned branch,
+  using plain `--force`, merging, or deleting something the user did not directly request.
+  The current user-owned feature branch permits commit, push, rebase, and a needed
+  `--force-with-lease` without another prompt.
 - Legal, safety, privacy, or security risk is high and cannot be reduced by a
   conservative local choice.
 - The user explicitly reserved a decision for themselves.

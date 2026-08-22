@@ -56,7 +56,8 @@ requested.
    - Bazel: update both manifests as applicable, then
      `bazel mod deps --lockfile_mode=update`; preserve mirror/FIPS/CMVP constraints.
 7. **Migrate and verify:** read changelogs and `BREAKING` notes; walk majors 7 -> 8 -> 9
-   as separate verified groups. Commit each group as `refactor(deps)` only when requested.
+   as separate verified groups. Commit each group as `refactor(deps)` unless the user
+   requested an earlier stop.
    Never defer a real vulnerability; escalate blockers.
    JS runs `bun run lint:fix`, `bun run type:check`, `bun test`, and build when present.
    Go runs `go build ./...`, `go test ./...`, `go vet ./...`, and `govulncheck ./...`.
