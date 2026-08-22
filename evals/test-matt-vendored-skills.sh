@@ -248,8 +248,47 @@ else
   PASS=$((PASS + 1))
 fi
 
+# Matt 2026-08 reconciliation: upstream a621cc4f..5b15a47f, adapted to this harness.
+run_file_eval "$REPO_ROOT/ask-ben/PHASE-BOUNDARIES.md" "ask-ben phase-boundary reference exists"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "PHASE-BOUNDARIES\.md" \
+  "ask-ben discloses phase-boundary guidance"
+run_content_eval "$REPO_ROOT/ask-ben/PHASE-BOUNDARIES.md" "[Ee]xplicit.*delegation|[Dd]elegation.*explicit" \
+  "phase boundaries preserve delegation consent"
+run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "^## Redact$" \
+  "diagnosing-bugs redacts secrets before sharing evidence"
+run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "<REDACTED>" \
+  "diagnosing-bugs names the redaction placeholder"
+run_content_eval "$REPO_ROOT/diagnosing-bugs/scripts/hitl-loop.template.sh" "capture.*terminal|terminal.*capture" \
+  "HITL capture warns that values are echoed"
+run_content_eval "$REPO_ROOT/domain-modeling/SKILL.md" \
+  "^description:.*codebase terminology.*CONTEXT\.md.*ADR" \
+  "domain-modeling triggers on terminology and context artifacts"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "\*\*Q2 --" \
+  "grilling demonstrates separated multi-question rounds"
+run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "CONTEXT-MAP\.md" \
+  "wait-what resolves the right bounded context"
+run_content_eval "$REPO_ROOT/wizard/SKILL.md" "stage-by-stage progress" \
+  "wizard reports stage progress without invented duration"
+
+if grep -qE 'TOTAL_MINUTES|_MINUTES_ELAPSED|time-remaining|min left|about [0-9]+ minutes' \
+  "$REPO_ROOT/wizard/SKILL.md" "$REPO_ROOT/wizard/template.sh"; then
+  echo "  FAIL  wizard still invents duration estimates"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: wizard still invents duration estimates"
+else
+  echo "  PASS  wizard uses stage counts instead of duration estimates"
+  PASS=$((PASS + 1))
+fi
+
+run_content_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" \
+  "[Ee]xplicit.*delegation|delegation.*[Ee]xplicit" \
+  "design-it-twice preserves explicit delegation consent"
+run_content_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" \
+  "[Ii]nline.*without.*delegation|[Ww]ithout.*delegation.*inline" \
+  "design-it-twice has an inline fallback"
+
 # Reviewed but intentionally omitted, superseded, or incompatible upstream surfaces.
-for excluded in batch-grill-me setup-ts-deep-modules spawn writing-great-skills; do
+for excluded in batch-grill-me implement-spec setup-ts-deep-modules spawn writing-great-skills; do
   if [ -e "$REPO_ROOT/$excluded/SKILL.md" ] || grep -q "\"./$excluded/\"" "$REPO_ROOT/.claude-plugin/plugin.json"; then
     echo "  FAIL  incompatible or superseded Matt skill stays unregistered: $excluded"
     FAIL=$((FAIL + 1))

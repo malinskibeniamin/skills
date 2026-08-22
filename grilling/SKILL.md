@@ -4,13 +4,11 @@ description: Explore and stress-test plans, decisions, ideas, brainstorming appr
 ---
 
 # Grilling
-
 Grilling discovers consequential unknowns; it does not demand certainty about every
 implementation detail. During grilling, no production code or implementation while a
 material user-reserved decision is open. Invocation does not authorize delegation.
 
 ## 1. Build the evidence packet
-
 Read the request, plan, repository, tests, docs, references, and recent decisions. Facts
 are the agent's job. Ask the user only for preferences, scope, risk appetite, and
 decisions that cannot be learned from evidence.
@@ -19,7 +17,6 @@ Name the blind spot most likely to invalidate the current direction. If seeing b
 would answer it faster than prose, build or request a disposable prototype first.
 
 ## 2. Explore mode
-
 When no direction exists, present 2-3 approaches with trade-offs, reversibility, and
 evidence. Recommend one. Competing plans go through `/plan-arbiter`.
 
@@ -44,6 +41,13 @@ Use this fixed **Question format** so the user can scan and answer by number:
 <question body or choices>
 
 **Recommended:** <answer>
+
+---
+
+**Q2 -- <question title>**
+<question body or choices>
+
+**Recommended:** <answer>
 ```
 
 An unsettled prerequisite delays only its branch while the rest of the frontier proceeds.
@@ -61,14 +65,12 @@ Useful challenges:
 - Scale or failure claim: the concrete input, timing, or system condition that proves it.
 
 ## 3. Exit with classified unknowns
-
 Architecture-changing decisions must be resolved or explicitly reserved for the user.
 Classify everything else: **lookup -> prototype -> reversible assumption -> pause trigger**.
 The interview ends when no unresolved item can silently invalidate the next slice, not
 when all future details are known.
 
 ## 4. Plan gate
-
 Gather one **Evidence packet**: request, plan, spec sources, standards sources, planned
 paths, repo facts, assumptions, and unresolved decisions.
 

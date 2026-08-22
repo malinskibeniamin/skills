@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+2026-08-22 -- Audit the five-week mattpocock/skills window from `9c326299` through
+`5b15a47f` and reconcile the missing post-`a621cc4f` guidance. Add harness-neutral
+phase-boundary routing, secret-safe diagnosis evidence, bounded-context lookup for
+`/wait-what`, separated grilling questions, stage-count wizard progress, and an inline
+fallback when design exploration lacks explicit delegation consent. Keep upstream's
+in-progress `/implement-spec` excluded because its mandatory recursive fan-out conflicts
+with this harness's delegation contract.
+
 2026-08-09 -- Adopt TraceDecay as the Codex/Conductor semantic exploration layer. Add
 user-level installation and worktree recovery guidance, preserve its local MCP server in
 the MCP policy, and document the measured token-first hook profile without treating
