@@ -28,6 +28,7 @@
     "./agent-watchdog/",
     "./aip/",
     "./ask-ben/",
+    "./brain-dump/",
     "./codebase-design/",
     "./codex-compat/",
     "./codex/",

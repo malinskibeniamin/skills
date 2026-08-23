@@ -15,6 +15,7 @@ Builder.io skills are both direct commands and under-the-hood helpers: `/visual-
 | `/agent-watchdog` | Audit and repair work from another coding agent. |
 | `/aip` | Design Google AIP-style protobuf resource APIs. |
 | `/ask-ben` | Route work through Ben's frontend skill harness. |
+| `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |
 | `/codex-compat` | Generate Codex hook and instruction parity. |
 | `/codex` | Delegate bounded work through the Codex CLI. |

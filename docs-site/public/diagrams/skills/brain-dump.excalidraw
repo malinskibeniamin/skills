@@ -1,0 +1,410 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "mcp-excalidraw-server",
+  "elements": [
+    {
+      "id": "canvas",
+      "type": "rectangle",
+      "x": 0,
+      "y": 0,
+      "width": 1400,
+      "height": 860,
+      "backgroundColor": "#121212",
+      "strokeColor": "#121212",
+      "strokeWidth": 1,
+      "roughness": 0,
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.404Z",
+      "updatedAt": "2026-08-23T08:45:29.404Z",
+      "version": 1
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "x": 72,
+      "y": 55,
+      "strokeColor": "#e9ecef",
+      "text": "/brain-dump",
+      "fontSize": 32,
+      "fontFamily": 5,
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "subtitle",
+      "type": "text",
+      "x": 72,
+      "y": 108,
+      "strokeColor": "#adb5bd",
+      "text": "Raw signal becomes several grounded opportunities \u2014 grilling asks only what remains unknown",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "raw-dump",
+      "type": "rectangle",
+      "x": 70,
+      "y": 280,
+      "width": 210,
+      "height": 110,
+      "backgroundColor": "#1c4f73",
+      "strokeColor": "#4dabf7",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Thoughts\nlinks + files"
+      },
+      "fontSize": 21,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "source-synthesis",
+      "type": "rectangle",
+      "x": 350,
+      "y": 280,
+      "width": 210,
+      "height": 110,
+      "backgroundColor": "#402f00",
+      "strokeColor": "#f08c00",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Source synthesis\nfacts + inference"
+      },
+      "fontSize": 20,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "answer-ledger",
+      "type": "rectangle",
+      "x": 630,
+      "y": 280,
+      "width": 210,
+      "height": 110,
+      "backgroundColor": "#0b4f1c",
+      "strokeColor": "#40c057",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Answer ledger\nsettled \u00b7 tentative \u00b7 unknown"
+      },
+      "fontSize": 18,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "opportunity-map",
+      "type": "rectangle",
+      "x": 910,
+      "y": 280,
+      "width": 210,
+      "height": 110,
+      "backgroundColor": "#1c4f73",
+      "strokeColor": "#4dabf7",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Opportunity map\nkeep real branches"
+      },
+      "fontSize": 20,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "grilling",
+      "type": "rectangle",
+      "x": 1180,
+      "y": 280,
+      "width": 170,
+      "height": 110,
+      "backgroundColor": "#6b3232",
+      "strokeColor": "#ff8787",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Grilling\nunresolved only"
+      },
+      "fontSize": 20,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "product-track",
+      "type": "rectangle",
+      "x": 755,
+      "y": 570,
+      "width": 220,
+      "height": 90,
+      "backgroundColor": "#0b4f1c",
+      "strokeColor": "#40c057",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Product + UX\nfeatures \u00b7 gaps"
+      },
+      "fontSize": 19,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "engineering-track",
+      "type": "rectangle",
+      "x": 1045,
+      "y": 570,
+      "width": 230,
+      "height": 90,
+      "backgroundColor": "#402f00",
+      "strokeColor": "#f08c00",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "Engineering\ntests \u00b7 docs \u00b7 CI"
+      },
+      "fontSize": 19,
+      "fontFamily": 5,
+      "roundness": {
+        "type": 3
+      },
+      "fillStyle": "solid",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "note",
+      "type": "text",
+      "x": 500,
+      "y": 455,
+      "strokeColor": "#adb5bd",
+      "text": "Settled answers move forward\nThe user does not repeat them",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:56.658Z",
+      "version": 2,
+      "originalText": "Settled answers move forward\nThe user does not repeat them"
+    },
+    {
+      "id": "raw-to-synthesis",
+      "type": "arrow",
+      "x": 288,
+      "y": 335,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "raw-dump"
+      },
+      "end": {
+        "id": "source-synthesis"
+      },
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "synthesis-to-ledger",
+      "type": "arrow",
+      "x": 568,
+      "y": 335,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "source-synthesis"
+      },
+      "end": {
+        "id": "answer-ledger"
+      },
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "ledger-to-map",
+      "type": "arrow",
+      "x": 848,
+      "y": 335,
+      "strokeColor": "#e9ecef",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "answer-ledger"
+      },
+      "end": {
+        "id": "opportunity-map"
+      },
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "map-to-grilling",
+      "type": "arrow",
+      "x": 1128,
+      "y": 335,
+      "strokeColor": "#ff8787",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          44,
+          0
+        ]
+      ],
+      "start": {
+        "id": "opportunity-map"
+      },
+      "end": {
+        "id": "grilling"
+      },
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "map-to-product",
+      "type": "arrow",
+      "x": 981.757942985591,
+      "y": 397.0518397602303,
+      "strokeColor": "#40c057",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -88.87302882832466,
+          165.8963204795395
+        ]
+      ],
+      "start": {
+        "id": "opportunity-map"
+      },
+      "end": {
+        "id": "product-track"
+      },
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    },
+    {
+      "id": "map-to-engineering",
+      "type": "arrow",
+      "x": 1047.1609768384344,
+      "y": 397.1039552742183,
+      "strokeColor": "#f08c00",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          85.85661775170274,
+          165.7920894515634
+        ]
+      ],
+      "start": {
+        "id": "opportunity-map"
+      },
+      "end": {
+        "id": "engineering-track"
+      },
+      "endArrowhead": "arrow",
+      "createdAt": "2026-08-23T08:45:29.405Z",
+      "updatedAt": "2026-08-23T08:45:29.405Z",
+      "version": 1
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": null
+  },
+  "diagramKind": "user-flow"
+}
