@@ -60,6 +60,7 @@ umiejętność odpowiada za otaczającą je *implementację* w Go.
 | Interfejsy konfiguracji, flagi, wycofywanie, usuwanie schematów i pól | [ROLLOUT.md](https://github.com/malinskibeniamin/skills/blob/main/golang/ROLLOUT.md) |
 | Granice pakietów, warstwy pamięci masowej, interfejsy | [STRUCTURE.md](https://github.com/malinskibeniamin/skills/blob/main/golang/STRUCTURE.md) |
 | Operatory i mechanizmy uzgadniania Kubernetes | [CONTROLLERS.md](https://github.com/malinskibeniamin/skills/blob/main/golang/CONTROLLERS.md) |
+| Metody generyczne w Go 1.27, zgodność publicznych zestawów SDK i bibliotek, profile wycieków goroutines | [GO-1.27.md](https://github.com/malinskibeniamin/skills/blob/main/golang/GO-1.27.md) |
 
 ## Hooki
 
