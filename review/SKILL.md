@@ -77,10 +77,10 @@ No performance finding without measurement or a structural bound. No edge-case f
 without credible risk. A reasoned decline with evidence is valid.
 
 ### Synthesize
-
-Deduplicate by root cause and keep the highest supported priority. Findings are the main
-output; do not pad a clean review with praise. For a re-review, mark each previous finding
-against the new tip as fixed, open, or no longer applicable.
+Lead with findings. Deduplicate by root cause and keep the highest supported priority.
+Each finding contains only the concrete path, impact, smallest correction, and
+verification. Do not restate the diff or code, praise the author, or narrate the review.
+For a re-review, mark each previous finding as fixed, open, or no longer applicable.
 
 ## Deep mode
 
@@ -92,9 +92,9 @@ changed public surface, and exact verification evidence. Read
 ## Output
 
 Read [REFERENCE.md](REFERENCE.md) for priority vocabulary and the comment-ready schema.
-Report the fixed point, diff command, mode, and dogfood receipt: `entrypoint, data, actions, observations, timing, limits`.
-Then report `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`, finding counts, and merge verdict.
+Report `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
+Then append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode,
+counts, verdict, and residual limits.
 
-If there are no findings, say so and list residual verification limits. Posting comments
-requires explicit user intent; otherwise return comment-ready text only.
+For a clean review, return only the verdict and residual limits. Posting comments requires
+explicit user intent; otherwise return comment-ready text.

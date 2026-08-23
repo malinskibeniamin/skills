@@ -25,12 +25,13 @@ investigating or dump the entire review into a PR.
 ## Comment shape
 
 ```md
-[P1 Major] <short title>
-What: <the defect and concrete execution path>
-Why: <user or contract consequence>
-Suggested fix: <smallest safe correction>
+[P1 Major] <specific defect>
+<Concrete execution path and consequence>. <Smallest safe correction>.
 Verify: <exact command or real-entrypoint replay>
 ```
+
+Use labels only when they improve scanning. Do not repeat the changed code, add praise,
+or explain the review process.
 
 ## Fowler smell baseline
 
@@ -53,13 +54,6 @@ standard always wins; skip anything deterministic tooling already owns.
 ## Report schema
 
 ```md
-## Review
-Fixed point: <commit>
-Diff: `git diff <fixed>...HEAD`
-Mode: standard | deep
-Applicability: <changed surfaces and evidence checked>
-Verification: <commands, real-entrypoint replay, and exact limits>
-
 ## Findings
 - [P0|P1|P2] <file:line> <title>
   Evidence: <reproduction or concrete path>
@@ -67,7 +61,9 @@ Verification: <commands, real-entrypoint replay, and exact limits>
   Correction: <smallest safe fix>
   Verify: <command or replay>
 
-## Summary
+## Receipt
+Fixed point: <commit> | Mode: standard | deep
+Verification: <commands and real-entrypoint replay>
 Counts: <P0/P1/P2>
 Verdict: approve | changes required | blocked by missing evidence
 Residual limits: <unverified external behavior or none>
@@ -77,8 +73,7 @@ Residual limits: <unverified external behavior or none>
 
 ```md
 [P1 Major] Save reports success before refresh
-What: The handler resolves before list invalidation, so navigation can show stale data.
-Why: A normal user can believe the saved change was lost.
-Suggested fix: Await invalidation before the success state.
+The handler resolves before list invalidation, so navigation can show stale data and make
+the saved change appear lost. Await invalidation before the success state.
 Verify: `bun test src/items/save.test.ts`
 ```

@@ -26,7 +26,8 @@ Exceptions: product names (Admin API, Schema Registry, HTTP Proxy, Dedicated Clo
 
 ## Toast Messages
 
-Completed tasks: subject + past tense verb. Long-running: gerund.
+Completed tasks: subject + past-tense verb. Long-running tasks: gerund. Remove helper
+phrases such as "has been" and "successfully."
 
 | Good | Bad |
 |------|-----|
@@ -54,6 +55,11 @@ State problem. Give solution. No blame.
 | Add tag | Add a new tag |
 
 CTA copy names the result or action, not the component event. Prefer "Save changes", "Create topic", or "Export report" over "Submit", "OK", or "Done". Own the ask; do not apologize for it.
+
+## Courtesy words
+
+Use please, sorry, and thank you sparingly, only when acknowledging a genuinely
+inconvenient interaction. Otherwise state the action directly.
 
 ## Copywriting Articulation
 
@@ -100,7 +106,10 @@ Brief. Period for full sentences, none for short phrases. No interactive element
 
 ## Links
 
-Descriptive text -- never "click here". "Learn more" after descriptive text only. External link icon for links leaving product. One link per sentence.
+Use descriptive text, never "click here" or bare "here." Place Learn more after
+descriptive text, without punctuation, and put nothing after the link. Do not place it in
+a tooltip or mid-sentence. For third-party resources, name the source instead. Hyperlink
+an external-link icon with its text. Use at most one link per sentence.
 
 ## Possessive Pronouns
 
@@ -108,7 +117,9 @@ Avoid "my"/"your" in page names, menus, titles. OK in instructional text. "Setti
 
 ## Language
 
-American English. Present tense, active voice. Natural contractions. Serial commas. No exclamation points. No idioms.
+American English. Prefer behavior, color, organization, and license over common British
+spellings. Use present tense, active voice, natural contractions, and serial commas. No
+exclamation points or idioms.
 
 ## Inclusive Terminology
 
@@ -141,7 +152,9 @@ No physical position -- layouts change. "See the Prerequisites section" not "See
 
 Descriptive lowercase-with-dashes in angle brackets: `<topic-name>`, `<cluster-id>`. Not `<value>`, `<my-cluster>`.
 
-Placeholders in inputs are hints or examples. They disappear during typing, so they cannot replace persistent labels or contextual help.
+An input placeholder shows the expected type or format. Do not italicize it or prefix it
+with Example or e.g. It disappears during typing, so it cannot replace a persistent label
+or contextual help.
 
 ## Em Dashes
 

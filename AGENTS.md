@@ -22,6 +22,12 @@ smallest obvious design for demonstrated requirements. Preserve user zoom, workt
 isolation, secrets, type safety, and generated files.
 Load one matching `exemplars/` file when it is a higher-fidelity reference than prose.
 
+## Human-facing text
+
+Lead with the decision, result, or action. Keep only evidence, impact, constraints,
+trade-offs, correction, verification, rollout, blockers, and next steps that change what
+the reader decides. Omit restatement, praise, narration, repetition, and obvious comments.
+
 ## Execution contract
 
 The requested endpoint owns scope:

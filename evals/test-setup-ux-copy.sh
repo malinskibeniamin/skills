@@ -27,6 +27,16 @@ else
   PASS=$((PASS + 1))
 fi
 
+_ux_description=$(awk '/^description:/{print; exit}' "$SKILL_DIR/SKILL.md")
+if echo "$_ux_description" | grep -qiE 'documentation|docs|RFC'; then
+  echo "  FAIL  SKILL.md keeps documentation prose out of UX-copy scope"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: SKILL.md keeps documentation prose out of UX-copy scope"
+else
+  echo "  PASS  SKILL.md keeps documentation prose out of UX-copy scope"
+  PASS=$((PASS + 1))
+fi
+
 # ── Hook: skip non-Edit/Write ───────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
@@ -110,6 +120,12 @@ echo "const msg = 'Topic created'" > "$tmpfile"
 run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: past tense without successfully"
+
+echo "const msg = 'Topic has been created'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: verbose completion toast" "past tense"
 
 # ── Check 3: "click here" ───────────────────────────────────────
 
@@ -367,6 +383,39 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: please mid-sentence (not imperative)"
 
+echo "const msg = 'Sorry for the interruption'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: sorry is reserved for real inconvenience" "sparingly"
+
+echo "const msg = 'Thank you for submitting'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: thank you is reserved for real inconvenience" "sparingly"
+
+tmpfile="$_ux_tmpdir/locale.ts"
+echo "const msg = 'Update the organisation colour'" > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: common British spelling" "American English"
+
+tmpfile="$_ux_tmpdir/placeholder.tsx"
+echo '<Input placeholder="Example: cluster-name" />' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: Example prefix in input placeholder" "placeholder"
+
+tmpfile="$_ux_tmpdir/learn-more.tsx"
+echo '<Link href="/docs">Learn more.</Link>' > "$tmpfile"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: Learn more trailing punctuation" "punctuation"
+
 # ── Check 16: Non-inclusive terminology ──────────────────────────
 
 tmpfile="$_ux_tmpdir/terms.ts"
@@ -558,6 +607,10 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "label.*helper.*placeholder" "REFEREN
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Stress-test copy" "REFERENCE has copy stress-test guidance"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "German titles.*500s.*offline" "REFERENCE stress-tests localization and failure copy"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Product naming" "REFERENCE covers product naming taste"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "please.*sorry.*thank you" "REFERENCE limits courtesy words"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "has been created" "REFERENCE rejects verbose completion toasts"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "input placeholder" "REFERENCE distinguishes input placeholders"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "nothing after.*link" "REFERENCE keeps Learn more links terminal"
 
 # ── GLOSSARY content ────────────────────────────────────────────
 
@@ -638,6 +691,36 @@ _inline_content=$(cat "$_inline_file")
 _inline_input=$(jq -nc --arg fp "$_inline_file" --arg c "$_inline_content" \
   '{tool_name:"Write", tool_input:{file_path:$fp, content:$c}}')
 run_hook_eval "$PROSE" "$_inline_input" 0 "prose: allow em dash in inline code"
+
+# Warn: non-descriptive links
+_link_file="$_ux_tmpdir/link.md"
+printf 'Read [here](/docs).\n' > "$_link_file"
+_link_content=$(cat "$_link_file")
+_link_input=$(jq -nc --arg fp "$_link_file" --arg c "$_link_content" \
+  '{tool_name:"Write", tool_input:{file_path:$fp, content:$c}}')
+run_hook_eval "$PROSE" "$_link_input" 0 "prose: warn bare here link" "descriptive link text"
+
+# Warn: non-inclusive terminology
+_term_file="$_ux_tmpdir/term.md"
+printf 'Add the address to the whitelist.\n' > "$_term_file"
+_term_content=$(cat "$_term_file")
+_term_input=$(jq -nc --arg fp "$_term_file" --arg c "$_term_content" \
+  '{tool_name:"Write", tool_input:{file_path:$fp, content:$c}}')
+run_hook_eval "$PROSE" "$_term_input" 0 "prose: warn non-inclusive term" "Inclusive terms"
+
+# Warn: title-case Markdown heading
+_heading_file="$_ux_tmpdir/heading.md"
+printf '# Configure Your First Cluster\n' > "$_heading_file"
+_heading_content=$(cat "$_heading_file")
+_heading_input=$(jq -nc --arg fp "$_heading_file" --arg c "$_heading_content" \
+  '{tool_name:"Write", tool_input:{file_path:$fp, content:$c}}')
+run_hook_eval "$PROSE" "$_heading_input" 0 "prose: warn title-case heading" "sentence case"
+
+printf '# Configure your first cluster\n' > "$_heading_file"
+_heading_content=$(cat "$_heading_file")
+_heading_input=$(jq -nc --arg fp "$_heading_file" --arg c "$_heading_content" \
+  '{tool_name:"Write", tool_input:{file_path:$fp, content:$c}}')
+run_hook_eval "$PROSE" "$_heading_input" 0 "prose: allow sentence-case heading"
 
 # Allow: escape hatch (HTML comment)
 _escape_file="$_ux_tmpdir/escape.md"

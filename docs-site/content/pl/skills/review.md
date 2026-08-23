@@ -86,9 +86,11 @@ bez wiarygodnego ryzyka. Uzasadnione odrzucenie poparte dowodami jest prawidłow
 
 ### Podsumuj
 
-Usuwaj duplikaty według głównej przyczyny i zachowuj najwyższy uzasadniony priorytet. Ustalenia są głównym
-wynikiem; nie uzupełniaj czystego przeglądu pochwałami. Przy ponownym przeglądzie oznacz każde wcześniejsze ustalenie
-względem nowego końca jako naprawione, otwarte lub już niemające zastosowania.
+Zacznij od ustaleń. Usuwaj duplikaty według głównej przyczyny i zachowuj najwyższy
+uzasadniony priorytet. Każde ustalenie zawiera tylko konkretną ścieżkę, wpływ, najmniejszą
+poprawkę i sposób weryfikacji. Nie powtarzaj różnic ani kodu, nie chwal autora i nie
+opisuj przebiegu przeglądu. Przy ponownym przeglądzie oznacz wcześniejsze ustalenia jako
+naprawione, otwarte lub już niemające zastosowania.
 
 ## Tryb szczegółowy
 
@@ -100,9 +102,10 @@ zmienioną powierzchnię publiczną oraz dokładne dowody weryfikacji. Przeczyta
 ## Wynik
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md), aby poznać słownictwo priorytetów i schemat gotowy do użycia w komentarzu.
-Podaj stały punkt, polecenie różnic, tryb oraz potwierdzenie samodzielnego testowania: `entrypoint, data, actions, observations, timing, limits`.
-Następnie zgłoś `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`, liczbę ustaleń oraz werdykt dotyczący scalenia.
+Zgłoś `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
+Następnie dodaj `entrypoint, data, actions, observations, timing, limits`, stały punkt,
+tryb, liczbę ustaleń, werdykt i pozostałe ograniczenia.
 
-Jeśli nie ma ustaleń, poinformuj o tym i wymień pozostałe ograniczenia weryfikacji. Publikowanie komentarzy
-wymaga wyraźnej intencji użytkownika; w przeciwnym razie zwróć wyłącznie tekst gotowy do użycia w komentarzu.
+Przy czystym przeglądzie zwróć tylko werdykt i pozostałe ograniczenia.
+Publikowanie komentarzy wymaga wyraźnej intencji użytkownika; w przeciwnym razie zwróć
+tekst gotowy do użycia w komentarzu.

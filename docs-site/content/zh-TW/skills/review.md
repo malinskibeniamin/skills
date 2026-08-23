@@ -81,8 +81,8 @@ git log "$BASE"..HEAD --oneline
 
 ### 統整
 
-依根本原因去除重複項目，並保留證據所支持的最高優先級。發現是主要
-輸出；不要用讚美填充沒有發現問題的檢閱。重新檢閱時，依新提交點將先前每項發現
+依根本原因去除重複項目，並保留證據所支持的最高優先級。發現應置於收件資訊之前，且是主要
+輸出；不要加入讚美、差異重述、要求重述或流程敘述。重新檢閱時，依新提交點將先前每項發現
 標記為已修正、未解決或不再適用。
 
 ## 深入模式
@@ -95,9 +95,9 @@ git log "$BASE"..HEAD --oneline
 ## 輸出
 
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md)，了解優先級用語與可直接用於留言的結構描述。
-回報固定點、差異指令、模式，以及實際試用紀錄：`entrypoint, data, actions, observations, timing, limits`。
-接著回報 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`、發現數量與合併判定。
+回報 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
+接著附上 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、
+發現數量、判定與剩餘限制。
 
-如果沒有任何發現，請明確說明，並列出剩餘的驗證限制。張貼留言
+若審查沒有發現，只回報判定與剩餘限制。張貼留言
 需要使用者明確表達意圖；否則只回傳可直接用於留言的文字。
