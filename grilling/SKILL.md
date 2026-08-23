@@ -13,11 +13,10 @@ Read the request, plan, repository, tests, docs, references, and recent decision
 are the agent's job. Ask the user only for preferences, scope, risk appetite, and
 decisions that cannot be learned from evidence.
 
-`/brain-dump` is an optional upstream discovery step, not a requirement for every grilling
-session. When its brief exists, preserve every opportunity track and start from its Answer
-ledger. Treat **Settled** entries as answered and do not ask them again unless contradictory
-evidence invalidates them. Challenge **Tentative** entries only when the downside matters; ask
-about **Unknown** entries only when they could invalidate or prioritize a track.
+`/brain-dump` is optional upstream discovery. When its brief exists, preserve every opportunity
+track and start from its Answer ledger. Do not ask **Settled** entries again unless evidence
+invalidates them. Challenge **Tentative** entries when downside matters; ask about **Unknown**
+entries only when they could invalidate or prioritize a track.
 
 Name the blind spot most likely to invalidate the current direction. If seeing behavior
 would answer it faster than prose, build or request a disposable prototype first.
@@ -45,14 +44,9 @@ Use this fixed **Question format** so the user can scan and answer by number:
 ```markdown
 **Q1 -- <question title>**
 <question body or choices>
-
 **Recommended:** <answer>
-
----
-
 **Q2 -- <question title>**
 <question body or choices>
-
 **Recommended:** <answer>
 ```
 
@@ -93,8 +87,7 @@ Axes: Spec -> `plan-product-hat`; Standards -> `plan-engineering-hat`; design/UX
 
 Deep-risk triggers: auth, migration, public API, destructive actions, concurrency, Temporal, cross-service changes, and one-way doors. Add `/resilience-review` and `/steelman`.
 
-**Specialist registry:** planned Go or `go.mod` work uses `/golang`; add another
-specialist only after repeated misses.
+**Specialist registry:** planned Go or `go.mod` work uses `/golang`; add another specialist only after repeated misses.
 
 For each applicable axis, report `APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED`
 with evidence; a skip needs a skip reason. Dedupe findings by root cause. Blocking user
@@ -102,5 +95,5 @@ decisions halt; facts trigger research or a prototype.
 
 Require confirmation only when the user requested a plan/grill endpoint. [ETHOS: Discover Before Commitment]
 
-Use `/domain-modeling` to capture domain terms in `CONTEXT.md`, and an ADR only when the
-decision is hard to reverse, surprising without context, and has a real trade-off.
+Use `/domain-modeling` for domain terms in `CONTEXT.md`; add an ADR only for hard-to-reverse,
+surprising decisions with a real trade-off.

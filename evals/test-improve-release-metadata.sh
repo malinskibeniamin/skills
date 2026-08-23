@@ -1,10 +1,10 @@
 # Evals for latest release metadata bump.
 
-run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.37\.0"' "skill manifest bumped to 4.37.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.37\.0"' "Claude plugin bumped to 4.37.0"
-run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.37\.0"' "Codex plugin bumped to 4.37.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.37\.0"' "Claude marketplace bumped to 4.37.0"
-run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.37\.0"' "Codex marketplace bumped to 4.37.0"
+run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.38\.0"' "skill manifest bumped to 4.38.0"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.38\.0"' "Claude plugin bumped to 4.38.0"
+run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.38\.0"' "Codex plugin bumped to 4.38.0"
+run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.38\.0"' "Claude marketplace bumped to 4.38.0"
+run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.38\.0"' "Codex marketplace bumped to 4.38.0"
 
 # Count strings were removed from metadata descriptions (PR #46 feedback:
 # hand-maintained counts drift). Assert their ABSENCE instead.
@@ -25,12 +25,12 @@ do
   fi
 done
 
-run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.37\.0$' "changelog has 4.37.0 section"
-run_content_eval "$REPO_ROOT/README.md" 'v4\.37\.0' "README pinned release example updated"
-run_content_eval "$REPO_ROOT/docs-site/blume.config.ts" 'id: "v4\.37\.0"' "docs archive registers v4.37.0"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.37.0/index.mdx" "docs archive includes the v4.37.0 landing page"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.37.0/skills/release.md" "docs archive includes v4.37.0 skill pages"
-if grep -Rq 'github.com/malinskibeniamin/skills/blob/main/' "$REPO_ROOT/docs-site/content/v4.37.0"; then
+run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.38\.0$' "changelog has 4.38.0 section"
+run_content_eval "$REPO_ROOT/README.md" 'v4\.38\.0' "README pinned release example updated"
+run_content_eval "$REPO_ROOT/docs-site/blume.config.ts" 'id: "v4\.38\.0"' "docs archive registers v4.38.0"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.38.0/index.mdx" "docs archive includes the v4.38.0 landing page"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.38.0/skills/release.md" "docs archive includes v4.38.0 skill pages"
+if grep -Rq 'github.com/malinskibeniamin/skills/blob/main/' "$REPO_ROOT/docs-site/content/v4.38.0"; then
   echo "  FAIL  archived docs still link to mutable main content"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: archived docs links are tag-pinned"
 else
