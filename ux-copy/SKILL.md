@@ -1,22 +1,25 @@
 ---
 name: ux-copy
-description: Write clear, inclusive UX copy. Use when changing UI strings, labels, actions, empty states, errors, documentation prose, or product terminology.
+description: Write clear, concise, inclusive interface copy. Use when changing UI strings, labels, buttons, empty states, errors, toasts, help text, or product terminology.
 ---
 
 <!-- allow: prose-style this file documents the rules and shows example violations -->
 
 # UX Copy
 
-Read [REFERENCE.md](REFERENCE.md) for capitalization, controls, errors, empty states,
-inclusive language, and prose rules.
+Read [REFERENCE.md](REFERENCE.md) for capitalization, controls, messages, links,
+placeholders, and inclusive language.
 
-## Product copy
+## Interface copy
 
 - Use sentence case and front-load the object or result.
+- Give each label, helper, placeholder, tooltip, and error a distinct job.
 - Buttons name the action and object; avoid Yes, No, Submit, OK, or Done.
 - Errors state the cause, constraint, and recovery.
 - Empty states explain why and provide one next step.
 - Labels persist; placeholders provide examples only.
+- Completion toasts use a subject and past-tense verb.
+- Use please, sorry, and thank you only for genuine inconvenience.
 - Destructive language names permanent loss directly.
 - Keep regex and validation messages adjacent.
 - Stress long localization, large numbers, offline/error states, truncation, and recovery.
@@ -24,12 +27,11 @@ inclusive language, and prose rules.
 Use the project's canonical product names and glossary when available.
 Code-string escape: `// allow: ux-copy [reason]`.
 
-## Prose
+## Markdown lint
 
-- Prefer direct sentences and concrete verbs.
-- Remove canned openings, AI-tell words, heavy transitions, Latin abbreviations, praise
-  triads, and em dashes.
-- Keep links descriptive and at the decision point.
+`prose-style-check.sh` provides narrow in-repo Markdown checks for filler, links,
+inclusive terms, and heading case. Follow the project's documentation standards as the
+source of truth.
 
 Prose escape: `<!-- allow: prose-style [reason] -->`.
 
@@ -46,6 +48,7 @@ Make them executable. Keep shared product terminology in project documentation.
 ## Completion
 
 Verify `ux-copy-check.sh` catches exclamation points, `successfully`, blame language,
-generic actions, and vague errors. Verify `prose-style-check.sh` catches canned AI prose,
-em dashes, and hard-banned words. Verify canonical product capitalization when the
-project defines it.
+generic actions, vague errors, verbose toasts, and placeholder mistakes. Verify
+`prose-style-check.sh` catches canned AI prose, em dashes, non-descriptive links,
+non-inclusive terms, and title-case headings. Verify canonical product capitalization
+when the project defines it.

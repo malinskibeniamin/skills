@@ -30,6 +30,10 @@ if echo "$added_lines" | grep -qiE "(['\"])[^'\"]*successfully[^'\"]*\1"; then
   hook_warn "Drop 'successfully'. Past-tense verb: 'Topic created' not 'Topic successfully created'."
 fi
 
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(has|have)[[:space:]]+been[[:space:]]+(created|updated|deleted|saved|added|removed|completed|configured|enabled|disabled)\b'; then
+  hook_warn "Use subject + past tense for completion copy: 'Topic created', not 'Topic has been created'."
+fi
+
 # ── Check 3: Ban "click here" / bare "here" link text ────────────
 
 case "$file_path" in
@@ -126,10 +130,18 @@ if echo "$added_lines" | grep -qE "(['\"])[^'\"]*\b(e\.g\.|i\.e\.)[^'\"]*\1"; th
   hook_warn "No Latin abbrevs in UI. 'for example'/'that is' not 'e.g.'/'i.e.'."
 fi
 
-# ── Check 15: Ban "Please ..." imperative pattern in UI strings ───
+# ── Check 15: Courtesy words ─────────────────────────────────────
 
 if echo "$added_lines" | grep -qE "(['\"])Please [^'\"]*\1"; then
-  hook_warn "No 'Please' prefix. Direct: 'Enter your email' not 'Please enter...'."
+  hook_warn "Use 'Please' sparingly, only for real inconvenience. Otherwise write the action directly."
+fi
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(sorry|thank you)\b'; then
+  hook_warn "Use 'sorry' and 'thank you' sparingly, only for real inconvenience."
+fi
+
+if [ -n "$_ux_ui_lines" ] && printf '%s\n' "$_ux_ui_lines" | grep -qiE '\b(behaviour|colour|organisation|licence)\b'; then
+  hook_warn "Use American English: behavior, color, organization, license."
 fi
 
 # ── Check 16: Ban non-inclusive terminology ───────────────────────
@@ -222,6 +234,14 @@ case "$file_path" in
   *.tsx)
     if printf '%s\n' "$added_lines" | grep -qiE '<(Button|button)\b[^>]*>[[:space:]]*(submit|ok|done)[[:space:]]*</(Button|button)>'; then
       hook_warn "generic CTA: name the action. Use 'Save changes' or 'Create topic', not 'Submit', 'OK', or 'Done'." "ux-copy-generic-cta"
+    fi
+
+    if printf '%s\n' "$added_lines" | grep -qiE "placeholder[[:space:]]*=[[:space:]]*['\"][^'\"]*(example[[:space:]]*:|e\.g\.)"; then
+      hook_warn "Input placeholder: show the format directly; omit 'Example' and 'e.g.'."
+    fi
+
+    if printf '%s\n' "$added_lines" | grep -qiE ">[^<]*learn more[.!?:;][[:space:]]*<|['\"][^'\"]*learn more[.!?:;][^'\"]*['\"]"; then
+      hook_warn "Learn more links use sentence case with no trailing punctuation."
     fi
     ;;
 esac

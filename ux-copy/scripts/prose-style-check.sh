@@ -78,4 +78,16 @@ if printf '%s' "$prose_lines" | grep -qiE ",[[:space:]]*$rot_words[[:space:]]*,[
   hook_warn "Possible rule-of-three (fast, efficient, and reliable). Pick the one that matters."
 fi
 
+if printf '%s\n' "$prose_lines" | grep -qiE '\[[[:space:]]*(click[[:space:]]+here|here)[[:space:]]*\]\(|\[[^]]+[[:space:]]+here[[:space:]]*\]\('; then
+  hook_warn "Use descriptive link text, not 'click here' or bare 'here'."
+fi
+
+if printf '%s\n' "$prose_lines" | grep -qiE '\b(whitelist|blacklist|master|slave)\b'; then
+  hook_warn "Inclusive terms: allowlist/denylist, leader/follower, primary/secondary."
+fi
+
+if printf '%s\n' "$prose_lines" | grep -qE '^\+?[[:space:]]*#{1,6}[[:space:]]+([A-Z][[:alnum:]-]*[[:space:]]+){2,}[A-Z][[:alnum:]-]*[[:space:]]*$'; then
+  hook_warn "Use sentence case for Markdown headings."
+fi
+
 exit 0

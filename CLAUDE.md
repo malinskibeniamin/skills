@@ -21,6 +21,24 @@ smallest obvious design for demonstrated requirements. Preserve user zoom, workt
 isolation, secrets, type safety, and generated files.
 Load one matching `exemplars/` file when it is a higher-fidelity reference than prose.
 
+## Human-facing text
+
+Lead with the decision, result, or requested action. Keep only detail that changes what
+the reader decides or does.
+
+- Do not restate the request, diff, or self-explanatory code. Skip praise, process
+  narration, canned openings, and repeated conclusions.
+- Reviews and comments name one root cause, its evidence and impact, the smallest
+  correction, and verification. Findings come before receipts or metadata.
+- Code comments preserve a non-obvious reason, constraint, invariant, or accepted
+  trade-off. Make unclear code clearer instead of narrating it.
+- RFCs and documentation start with the decision or task. Keep material constraints,
+  trade-offs, rollout, and verification; link to a source of truth instead of copying it.
+- Status updates contain the outcome, evidence, and any blocker or next action.
+
+Prefer short paragraphs or bullets when they improve scanning. Evidence and clarity win
+over arbitrary word counts.
+
 ## Execution contract
 
 The requested endpoint owns scope:

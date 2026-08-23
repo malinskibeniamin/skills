@@ -11,66 +11,46 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/writing-for-agents.excalidraw)
 
-Materiał referencyjny dotyczący każdego dokumentu używanego przez agenta: umiejętności, `AGENTS.md`, `CLAUDE.md` lub dokumentu wskazanego przez odnośnik. Sposób pakowania jest różny, ale zasady pisania pozostają takie same. Celem jest przewidywalny proces, a nie identyczny rezultat.
+Pisz instrukcje dla agentów, które zmieniają zachowanie przy minimalnym użyciu kontekstu.
+Dotyczy to umiejętności, plików `AGENTS.md`, `CLAUDE.md` i wskazanych materiałów.
 
 Podczas pisania umiejętności przeczytaj [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md), aby poznać zasady frontmatter, wyboru sposobu wywołania i routerów.
 
-## Wskaźniki kontekstu
+## Umieszczaj informacje na właściwym poziomie
 
-**Wskaźnik kontekstu** to wczytywany tekst, który wskazuje materiał spoza kontekstu i określa, kiedy należy do niego sięgnąć. Opis umiejętności i wiersz w `AGENTS.md` wskazujący inny dokument są tym samym obiektem. To sformułowanie, a nie cel, decyduje o tym, czy agent będzie niezawodnie korzystać ze wskazanego materiału.
+**Wskaźnik kontekstu** nazywa materiał poza wczytanym dokumentem i określa, kiedy go
+przeczytać. Wskaźnik zużywa kontekst; jego brak obciąża pamięć człowieka.
 
-Wskaźnik określa, czym jest materiał, oraz wskazuje odrębne **gałęzie**, które powodują jego wczytanie. Ponieważ zawsze wczytywany wskaźnik zużywa tokeny i uwagę w każdej turze:
+Używaj najpłytszego uzasadnionego poziomu:
 
-- Zacznij od mocnego słowa przewodniego.
-- Zachowaj jeden wyzwalacz na gałąź; synonimy dotyczące jednej gałęzi są powtórzeniem.
-- Usuń informacje identyfikacyjne zawarte już w dokumencie docelowym.
+1. Umieszczaj bezpośrednio kroki potrzebne w każdym wykonaniu.
+2. Umieszczaj bezpośrednio materiały potrzebne podczas tych kroków.
+3. Łącz materiały dotyczące wybranych gałęzi przez precyzyjny wskaźnik kontekstu.
+4. Pozostaw proste informacje środowisku, konfiguracji, układowi lub `--help`.
 
-Doprecyzuj słaby wskaźnik, zanim umieścisz jego cel bezpośrednio w dokumencie.
+Zacznij każdy wskaźnik od mocnego wyzwalacza. Nazwij każdą gałąź raz. Nie ukrywaj
+obowiązkowego kroku w materiale referencyjnym.
 
-## Dwa rodzaje obciążenia
+## Pisz instrukcje wykonywalne
 
-- **Obciążenie kontekstu** -- zawsze wczytywany materiał, który zużywa tokeny i uwagę w każdej turze.
-- **Obciążenie poznawcze** -- to, o czym człowiek musi pamiętać: co istnieje i kiedy należy to wywołać.
+- Używaj trybu rozkazującego i terminów repozytorium.
+- Kończ każdy krok obserwowalnym kryterium ukończenia.
+- Definiuj słowo przewodnie tylko wtedy, gdy zastępuje powtarzane wyjaśnienie i ułatwia zapamiętanie.
+- Wskazuj pozytywny cel. Zakaz zachowuj tylko dla bezwzględnej zasady ochronnej i podaj bezpieczne działanie.
+- Dziel sekwencję tylko wtedy, gdy widoczne późniejsze kroki powodują przedwczesne ukończenie.
 
-Materiał za wskaźnikiem nie powoduje obciążenia kontekstu na poziomie treści dokumentu, ale kosztem jest wiersz wskaźnika. Materiał bez wskaźnika opiera się całkowicie na ludzkiej pamięci. Obciążenie poznawcze jest ceną ludzkiej sprawczości, a nie wartością, którą należy bezrefleksyjnie minimalizować.
+## Skróć przed publikacją
 
-## Hierarchia informacji
+Przy każdym wierszu zapytaj, jakie zachowanie zmieni się po jego usunięciu. Jeśli żadne,
+usuń wiersz.
 
-Dokumenty łączą dwa typy treści: **kroki**, czyli uporządkowane działania wykonywane przez agenta, oraz **materiały referencyjne**, czyli reguły i fakty, z których korzysta. Umieść każdy element na najpłytszym uzasadnionym poziomie:
+- Zachowaj każde znaczenie w jednym źródle prawdy.
+- Usuń informacje identyfikacyjne zawarte już w pliku, celu lub nagłówku.
+- Usuń powtórzenia żądania, pochwały, opis procesu i powtórzone wnioski.
+- Zastąp wyjaśnienie precyzyjną regułą lub jednym rozstrzygającym przykładem.
+- Zachowaj uzasadnienie tylko wtedy, gdy zapobiega prawdopodobnemu błędnemu działaniu.
+- Uprość niejasny kod lub konfigurację zamiast opisywać oczywisty mechanizm.
+- Przenieś szczegóły gałęzi za wskaźnik; definicję, regułę i zastrzeżenia trzymaj razem.
 
-1. **Krok w pliku** -- podstawowe uporządkowane działanie.
-2. **Materiał referencyjny w pliku** -- bezpośrednio przydatny materiał pomocniczy.
-3. **Udostępniony materiał referencyjny** -- inny plik wczytywany przez wskaźnik kontekstu.
-
-**Stopniowe ujawnianie** przenosi materiał w dół tej drabiny. Umieść bezpośrednio to, czego potrzebuje każda gałąź; udostępniaj przez wskaźniki to, czego potrzebują tylko niektóre gałęzie. Materiał referencyjny, który ukrywa obowiązkowe kroki, jest źródłem rozbieżności, a nie tylko długim dokumentem.
-
-**Kolokacja** utrzymuje definicję pojęcia, jego reguły i zastrzeżenia razem po wybraniu odpowiedniego poziomu. Rozproszenie rozbija jedno znaczenie na fragmenty; duplikacja je powtarza.
-
-## Kroki i kryteria ukończenia
-
-Każdy krok kończy się **kryterium ukończenia**:
-
-- **Jasność** -- czy agent potrafi odróżnić stan ukończony od nieukończonego? Niejasne granice sprzyjają przedwczesnemu zakończeniu.
-- **Wymaganie** -- czy kryterium wymaga uwzględnienia każdego istotnego elementu, czy jedynie prosi o listę?
-
-Najpierw doprecyzuj granicę. Jeśli krok, którego nie da się precyzyjnie określić, nadal jest wykonywany zbyt pospiesznie, podziel sekwencję w rzeczywistym miejscu zmiany kontekstu, aby późniejsze kroki przestały odciągać uwagę do przodu. Wymaganie określa nakład pracy agenta bez potrzeby dodawania osobnej instrukcji „pracuj dokładnie”.
-
-## Kiedy dzielić
-
-Podziel sekwencję tylko wtedy, gdy widoczne kroki następujące po ukończeniu powodują przedwczesne kończenie pracy. Podziały wywołań specyficzne dla umiejętności opisano w [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md).
-
-## Słowa przewodnie
-
-**Słowo przewodnie** to zwarte, wstępnie wyuczone pojęcie, którym agent się posługuje, takie jak _tracer bullet_, _frontier_ lub _red_. Zastępuje ono powtarzające się objaśnienia i stanowi punkt odniesienia zarówno dla wykonania opisanego w treści, jak i wywołania przez wskaźnik. Preferuj istniejące słowo zamiast nowego terminu, który wymagałby własnej definicji.
-
-Wyszukuj powtarzające się frazy, które można zastąpić jednym mocnym słowem. Zyskiem jest mniejsza liczba tokenów i precyzyjniejszy mechanizm wyszukiwania.
-
-**Negacja** jest powiązanym źródłem błędów: zakaz aktywuje zachowanie, które nazywa. Zamiast tego wskaż **pozytywny** cel. Zachowaj zakaz tylko wtedy, gdy jest bezwzględnym zabezpieczeniem, którego nie da się sformułować pozytywnie, i połącz go ze wskazaniem właściwego działania.
-
-## Przycinanie
-
-- Zachowaj każde znaczenie w jednym źródle prawdy. Duplikacja zwiększa jego eksponowanie i koszt utrzymania.
-- Traktuj środowisko jako źródło prawdy: skrypty, konfiguracja, układ i `--help` już odpowiadają na proste pytania. Dokument jest pamięcią podręczną; zachowuj go tylko dla kosztownych wyszukiwań, niepisanych konwencji, uzasadnień i ukrytych pułapek.
-- Sprawdzaj każdy wiersz pod kątem istotności. Nieprzycinane dokumenty gromadzą nieaktualne osady.
-- Wyszukuj instrukcje bez efektu, zdanie po zdaniu. Jeśli instrukcja nie zmienia domyślnego zachowania modelu, usuń zdanie zamiast je dopracowywać.
-- Traktuj rozrost jako błąd hierarchii informacji: ujawniaj treść według gałęzi lub podziel rzeczywiście pospiesznie wykonywaną sekwencję.
+Zakończ, gdy najkrótsza wersja nadal wybiera właściwą gałąź, zachowuje każdą zasadę
+ochronną i umożliwia sprawdzenie ukończenia.

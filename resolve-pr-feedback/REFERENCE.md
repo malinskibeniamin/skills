@@ -57,9 +57,8 @@ gh pr view $pr_number --json reviews -q '.reviews[]'
 ```markdown
 ## Review feedback addressed
 
-- **[Thread 1 summary]**: [what was fixed]
-- **[Thread 2 summary]**: [what was fixed]
-- **[Cluster summary]**: [what was fixed across N files]
+- **[Root cause]**: [correction]. Verified: [evidence].
+- **[Root cause]**: [correction]. Verified: [evidence].
 
 All review threads resolved. CI is green.
 ```

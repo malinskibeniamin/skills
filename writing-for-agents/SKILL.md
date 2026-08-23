@@ -5,66 +5,47 @@ description: Writing documents for agents. Use when creating or editing skills, 
 
 # Writing for Agents
 
-Reference for any document an agent consumes: a skill, `AGENTS.md`, `CLAUDE.md`, or a document reached through a pointer. Packaging differs; the writing does not. The goal is a predictable process, not identical output.
+Write agent instructions that change behavior with the least context. This applies to
+skills, `AGENTS.md`, `CLAUDE.md`, and linked references.
 
 When writing a skill, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md) for frontmatter, invocation choice, and routers.
 
-## Context pointers
+## Put information at the right depth
 
-A **context pointer** is loaded text that names out-of-context material and encodes when to reach it. A skill description and an `AGENTS.md` line naming another document are the same object. Wording, not the target, determines whether the agent follows it reliably.
+A **context pointer** names material outside the loaded document and states when to read
+it. The pointer spends context; omitting it spends human recall.
 
-A pointer states what the material is and the distinct **branches** that trigger it. Because an always-loaded pointer spends tokens and attention every turn:
+Use the shallowest justified depth:
 
-- Front-load a strong leading word.
-- Keep one trigger per branch; synonyms for one branch are duplication.
-- Remove identity already carried by the target document.
+1. Inline steps every execution needs.
+2. Inline reference needed while performing those steps.
+3. Link branch-specific reference through a precise context pointer.
+4. Leave cheap lookups to the environment, configuration, layout, or `--help`.
 
-Sharpen a weak pointer before inlining its target.
+Front-load a strong trigger in each pointer. Name distinct branches once. Do not hide a
+mandatory step in a reference.
 
-## The two loads
+## Write executable instructions
 
-- **Context load** -- always-loaded material spending tokens and attention every turn.
-- **Cognitive load** -- what the human must remember exists and when to invoke it.
+- Use imperative language and the repository's terms.
+- End every step with an observable completion criterion.
+- Define a leading word only when it replaces repeated explanation and improves recall.
+- State the positive target. Keep a prohibition only for a hard guardrail, paired with
+  the safe action.
+- Split a sequence only when visible later steps cause premature completion.
 
-Material behind a pointer avoids body-level context load at the cost of the pointer line. Material without a pointer relies entirely on human memory. Cognitive load is the price of human agency, not a number to minimize blindly.
+## Compress before publishing
 
-## Information hierarchy
+For every line, ask what behavior changes if it is deleted. Delete the line when the
+answer is none.
 
-Documents mix two content types: **steps**, the ordered work an agent performs, and **reference**, the rules and facts it consults. Place each item on the shallowest justified rung:
+- Keep each meaning in one source of truth.
+- Remove identity already carried by the file, target, or heading.
+- Remove request restatements, praise, process narration, and repeated conclusions.
+- Replace explanation with a precise rule or one discriminating example.
+- Keep reasons only when they prevent a likely wrong action.
+- Make unclear code or configuration clearer instead of documenting obvious mechanics.
+- Move branch-only detail behind a pointer; co-locate its definition, rule, and caveats.
 
-1. **In-file step** -- primary ordered action.
-2. **In-file reference** -- immediately useful supporting material.
-3. **Disclosed reference** -- another file loaded through a context pointer.
-
-**Progressive disclosure** moves material down this ladder. Inline what every branch needs; disclose what only some branches need. Reference that buries mandatory steps is a variance bug, not merely a long document.
-
-**Co-location** keeps a concept's definition, rules, and caveats together once its rung is chosen. Scattering fragments one meaning; duplication repeats it.
-
-## Steps and completion criteria
-
-Every step ends on a **completion criterion**:
-
-- **Clarity** -- can the agent distinguish done from not done? Vague bounds invite premature completion.
-- **Demand** -- does the criterion require every relevant item, or merely request a list?
-
-Sharpen the bound first. If an irreducibly fuzzy step is still rushed, split the sequence across a real context boundary so later steps stop pulling attention forward. Demand drives the legwork an agent performs without needing a separate "be thorough" instruction.
-
-## When to split
-
-Split a sequence only when visible post-completion steps cause premature completion. Skill-specific invocation splits are in [SKILL-MECHANICS.md](SKILL-MECHANICS.md).
-
-## Leading words
-
-A **leading word** is a compact pretrained concept the agent thinks with, such as _tracer bullet_, _frontier_, or _red_. It compresses repeated explanation and anchors both execution in the body and invocation in a pointer. Prefer an existing word over a coined one that needs its own definition.
-
-Hunt repeated phrases that one strong word can replace. The gain is fewer tokens and a sharper retrieval hook.
-
-**Negation** is the adjacent failure mode: a prohibition activates the behavior it names. Prompt the **positive** target instead. Keep a prohibition only when it is a hard guardrail that cannot be stated positively, and pair it with what to do.
-
-## Pruning
-
-- Keep each meaning in one source of truth. Duplication inflates prominence and maintenance cost.
-- Treat the environment as a source of truth: scripts, config, layout, and `--help` already answer cheap lookups. A document is a cache; keep it only for expensive lookups, unwritten conventions, reasons, and hidden gotchas.
-- Check every line for relevance. Unpruned documents accumulate stale sediment.
-- Hunt no-ops sentence by sentence. If an instruction does not change behavior from the model's default, delete the sentence rather than polishing it.
-- Treat sprawl as an information-hierarchy failure: disclose by branch or split a genuinely rushed sequence.
+Stop when the shortest version still selects the right branch, preserves every guardrail,
+and makes completion testable.

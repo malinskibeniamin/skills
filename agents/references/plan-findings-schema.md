@@ -60,7 +60,8 @@ Emit one fenced JSON block:
 - `findings`: at most five high-signal root causes. Each needs a `section` (`spec |
   standards | product | engineering | design | adversarial-value | resilience |
   specialist:<name>`), evidence, user or delivery impact, a concrete recommendation,
-  `blocking`, and calibrated `confidence` from 0 to 1.
+  `blocking`, and calibrated `confidence` from 0 to 1. Keep each prose field to one
+  concrete sentence; omit praise and process narration.
 - `must_answer`: unresolved user decisions only. Deduplicate downstream decisions by root
   cause; do not put repository fact-finding here.
 - `test_first`: smallest public-contract RED tests implied by the axis; empty when none.

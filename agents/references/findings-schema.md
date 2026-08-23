@@ -71,3 +71,5 @@ Calibrated 0.0-1.0 per finding:
 4. `title` max 10 words -- it's a label, not an explanation
 5. `why_it_matters` explains impact, not symptom -- "Users see stale data after mutation" not "Missing cache invalidation"
 6. Deduplicate: if same issue appears in multiple files, report once with the most impactful instance
+7. Keep `why_it_matters` and `suggested_fix` to one concrete sentence each
+8. Omit praise, preambles, code walkthroughs, and repeated root causes

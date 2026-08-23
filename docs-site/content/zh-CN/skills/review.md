@@ -64,7 +64,9 @@ git log "$BASE"..HEAD --oneline
 
 ### 综合
 
-按根本原因去重，并保留有依据的最高优先级。发现是主要输出；不要用赞扬来填充没有问题的审查。对于重新审查，应针对新的分支顶端，将此前每项发现标记为已修复、仍待处理或不再适用。
+先列出发现。按根本原因去重，并保留有依据的最高优先级。每项发现只包含
+具体路径、影响、最小修正方案和验证方式。不要复述差异或代码、赞扬作者或
+叙述审查过程。重新审查时，将此前的发现标记为已修复、仍待处理或不再适用。
 
 ## 深度模式
 
@@ -75,8 +77,9 @@ git log "$BASE"..HEAD --oneline
 ## 输出
 
 阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md)，了解优先级术语和可直接用于评论的模式。
-报告固定点、差异命令、模式和实际试用记录：`entrypoint, data, actions, observations, timing, limits`。
-然后报告 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`、发现数量和合并结论。
+报告 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
+verify command>`。在发现之后附上固定点、模式、简明的实际试用记录、发现数量、
+结论和剩余限制。
 
-如果没有发现，请明确说明，并列出剩余的验证限制。发布评论需要用户明确表达意图；否则仅返回可直接用于评论的文本。
+如果没有发现，只返回结论和剩余的验证限制。发布评论需要用户明确表达意图；
+否则返回可直接用于评论的文本。
