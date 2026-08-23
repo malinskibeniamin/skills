@@ -1,76 +1,50 @@
 ---
 name: accessibility
-description: React accessibility for ARIA, keyboard behavior, focus, forms, and nested controls. Use when building interactive components or fixing a11y findings.
+description: Use for React ARIA, keyboard, focus, form, or nested-control accessibility.
 paths:
   - "src/components/**/*.tsx"
 ---
 
-# Accessibility Enforcement
-## What This Catches
+# Accessibility
 
-Enforcement is split across three owners -- one owner per rule:
+One owner per rule:
 
-- **Biome (ultracite preset)** -- single-element rules: `<img>` alt (`a11y/useAltText`), clickable `<div>`/`<span>` keyboard support (`a11y/useKeyWithClickEvents` and friends), combobox required ARIA (`a11y/useAriaPropsForRole`), label association (`a11y/noLabelWithoutControl`)
-- **React Doctor (Stop hook)** -- structural rules: dialog accessible name (`react-doctor/dialog-has-accessible-name`), nested interactives (`react-doctor/html-no-nested-interactive`), redundant name wording like `Search icon` (`react-doctor/img-redundant-alt`), placeholder-as-label (`react-doctor/label-has-associated-control`), and invalid controls without an error description (`react-doctor/no-aria-invalid-without-description`)
-- **This hook** -- only the cross-attribute pairings neither engine expresses: `role="tablist"` needs child `role="tab"`; `data-invalid` (CSS-only) needs `aria-invalid`
+- **Biome** owns element semantics: image `alt`, keyboard support for custom controls,
+  combobox ARIA, and label association.
+- **React Doctor** owns structure and naming: dialogs, nested controls, accessible
+  names, persistent labels, and described invalid fields.
+- **The local hook** only pairs `tablist` with child `tab` roles and `data-invalid` with
+  `aria-invalid`.
 
-Escape hatch: `// allow: a11y-skip [reason]`
+Do not duplicate checks. Escape hatch: `// allow: a11y-skip [reason]`.
 
-## No Nested Pressables
+## Interaction contracts
 
-Interactive components ONE pattern -- never both:
+- Prefer native controls and visible text. Custom clickable elements need a role,
+  `tabIndex`, and equivalent keyboard behavior.
+- Use either a clickable container without interactive descendants or a passive container
+  with interactive children. Never nest pressables.
+- Comboboxes expose `aria-expanded` and `aria-controls`; tablists contain tabs.
+- Use `aria-label` only without a visible name; it or `aria-labelledby` can replace
+  descendant text. Omit redundant words such as `icon` or `button`.
+- Form controls have persistent labels. Connect visible errors with `aria-invalid` and a
+  current `aria-describedby`; remove stale error IDs when validation clears.
+- Inspect the accessibility tree when naming is unclear. Follow the
+  [WAI-ARIA naming guidance](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
 
-**Pattern A: Container clickable** -- no interactive children.
-```tsx
-<ListCard onClick={handleSelect}>
-  <Avatar src={user.avatar} />
-  <Text>{user.name}</Text>
-  <ChevronRightIcon /> {/* visual indicator only, not a button */}
-</ListCard>
-```
+## Visual and focus checks
 
-**Pattern B: Children interactive** -- container not clickable.
-```tsx
-<ListCard>
-  <Avatar src={user.avatar} />
-  <Text>{user.name}</Text>
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" size="icon"><MoreVerticalIcon /></Button>
-    </DropdownMenuTrigger>
-  </DropdownMenu>
-</ListCard>
-```
-
-Why: ambiguous click targets, event bubbling bugs, screen readers can't convey interaction model, touch targets overlap on mobile.
-
-## Accessible names and descriptions
-
-- Prefer visible text and native naming (`<label>`, button/link content, captions) over
-  ARIA. Use `aria-label` only when no visible name exists, such as an icon-only button;
-  `aria-label` or `aria-labelledby` can replace descendant text in the accessibility tree.
-- Keep `aria-describedby` references current. Remove a stale error ID when validation
-  clears; referenced hidden content may still become the accessible description.
-- Inspect the computed accessibility tree when naming or description behavior is unclear.
-  Follow the [WAI-ARIA naming guidance](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
-
-## Visual Checklist
-
-- [ ] Focus rings visible on all interactive elements (min 2px, contrasting color)
-- [ ] Hover and focus styles match (no mouse-only affordances)
-- [ ] Color not sole means of conveying info
-- [ ] DOM order matches reading and tab order; visual CSS reordering has keyboard and screen reader evidence
-- [ ] Accessible names match visible intent and action; no "icon", "button", or "image" names
-- [ ] Form fields have persistent labels; placeholder only gives examples or formatting hints
-- [ ] Dialogs, sheets, and popovers trap focus, return focus on close, and make background inert when modal
-- [ ] Error, selected, warning, and success states never rely on color-only state; pair color with text, icon, or shape
-- [ ] Touch targets min 44x44 CSS pixels
-- [ ] `prefers-reduced-motion` respected for animations
-- [ ] reduced motion keeps essential feedback through opacity, color, text, or instant state changes instead of large movement
-- [ ] Hover-only effects are gated for touch devices with `@media (hover: hover) and (pointer: fine)`
-- [ ] Mobile drawers/sheets handle virtual keyboards with `visualViewport`, safe-area spacing, focus trap, focus return, and background inertness
-- [ ] High-risk mobile interactions have physical device or simulator evidence, especially drawers, sheets, swipe gestures, and destructive holds
-- [ ] `forced-colors` / high-contrast mode: use `currentcolor` for SVG fills
-- [ ] Text resizable to 200% without content loss
+- Keep a contrasting 2px focus indicator; expose hover actions to keyboard and touch users.
+- DOM order matches reading and tab order. Reordered layouts need keyboard and screen-reader
+  evidence.
+- Modal surfaces trap and restore focus and make the background inert.
+- Pair color state with text, icon, or shape and support forced colors with
+  `currentcolor`.
+- Keep touch targets at least 44 by 44 CSS pixels. Gate hover-only effects with
+  `@media (hover: hover) and (pointer: fine)`.
+- For reduced motion, preserve feedback through opacity, color, text, or instant state changes.
+- Support 200% text zoom without loss.
+- Verify high-risk mobile overlays on a physical device or simulator, including
+  `visualViewport`, safe areas, focus, and inertness.
 
 Initial setup (install, AXE fixture, hook config): see [SETUP.md](SETUP.md).
