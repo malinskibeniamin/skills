@@ -1,6 +1,6 @@
 ---
 name: accessibility
-description: Use for React ARIA, keyboard, focus, form, or nested-control accessibility.
+description: Use when React needs ARIA, keyboard, focus, form, or nested-control accessibility.
 paths:
   - "src/components/**/*.tsx"
 ---
@@ -38,7 +38,7 @@ Do not duplicate checks. Escape hatch: `// allow: a11y-skip [reason]`.
 - DOM order matches reading and tab order. Reordered layouts need keyboard and screen-reader
   evidence.
 - Modal surfaces trap and restore focus and make the background inert.
-- Pair color state with text, icon, or shape and support forced colors with
+- Avoid color-only state; pair color with text, icon, or shape and support forced colors with
   `currentcolor`.
 - Keep touch targets at least 44 by 44 CSS pixels. Gate hover-only effects with
   `@media (hover: hover) and (pointer: fine)`.

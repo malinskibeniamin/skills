@@ -1,10 +1,6 @@
 ---
 title: /dogfood
-description: >-
-  Testuj działające zmiany w rzeczywistym punkcie wejścia użytkownika. Stosuj po
-  każdym istotnym fragmencie zachowania oraz przed przekazaniem lub wydaniem
-  funkcji, poprawek, demonstracji, prototypów, hooków, umiejętności, CLI, API
-  lub interfejsu użytkownika.
+description: "Używaj po każdym istotnym wycinku zachowania i przed przekazaniem lub wysyłką, aby sprawdzić uruchamialną pracę przez prawdziwy punkt wejścia."
 type: skill
 sidebar:
   label: /dogfood
@@ -13,84 +9,69 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/dogfood.excalidraw)
 
-**Istotny działający przyrost** to fragment zachowania, który można sprawdzić przez rzeczywisty punkt wejścia użytkownika lub publiczny punkt wejścia. Przetestuj go samodzielnie przed rozpoczęciem kolejnego fragmentu i ponownie przed przekazaniem lub wydaniem. Testy nie są dogfoodingiem: potwierdzają asercje, a nie rzeczywiste doświadczenie.
+**Istotny uruchamialny wycinek** zmienia zachowanie dostępne przez prawdziwy punkt wejścia użytkownika lub publiczny punkt styku. Wykonuj dogfood po każdym wycinku i dla całego PR-a. Testy nie są dogfoodem: sprawdzają asercje, ale nie pokazują doświadczenia.
 
-## Sporządź wykaz działających zmian
+## Inwentaryzacja
 
-Przed użyciem implementacji określ pełny wykaz zachowań:
-
-1. Ustal cel za pomocą
+1. Ustal bazę porównania przez
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
-   Najpierw wybierze to gałąź nadrzędną bieżącego skumulowanego PR, a następnie, w razie potrzeby, domyślną gałąź zdalną.
-2. Sprawdź cały diff PR od jego bazy scalenia, uwzględniając zmiany zatwierdzone, przygotowane, nieprzygotowane i nieśledzone. Nie ograniczaj zakresu do plików zmienionych w bieżącej sesji.
-3. Przypisz każdy działający artefakt do zmienionego zachowania i rzeczywistego punktu wejścia. Umiejętność obejmuje `SKILL.md` wraz z przywoływanymi wytycznymi, zasobami i skryptami; hooki i automatyzacje uruchamiaj przez ich rzeczywiste zdarzenia. Wyklucz samodzielną dokumentację, testy i ewaluacje z wymaganej weryfikacji praktycznej.
+2. Sprawdź pełny PR od merge-base, łącznie z pracą zatwierdzoną, staged, unstaged i untracked.
+3. Przypisz każde zmienione zachowanie uruchamialne do prawdziwego punktu wejścia. Umiejętność obejmuje powiązane instrukcje, zasoby i skrypty; hook uruchamiaj przez rzeczywiste zdarzenie. Samodzielna dokumentacja, testy i ewaluacje nie wymagają pokrycia doświadczeniem.
 
-W zwykłej lokalnej turze wykonaj dogfooding, jeśli zmieniła ona działające zachowanie. Przed ukończeniem PR lub wydania przetestuj w ten sposób każde działające zachowanie w całym PR, nawet jeśli zaimplementowano je we wcześniejszej sesji.
+Dla pracy lokalnej pokryj zachowanie zmienione w tej turze. Przed PR-em lub wysyłką pokryj wszystkie zachowania na gałęzi, także z wcześniejszych sesji.
 
 ## Pętla
 
-Wykonaj cykl **użyj -> nadużyj -> napraw -> powtórz** na bieżącej implementacji.
+Uruchom **użyj -> nadużyj -> napraw -> odtwórz ponownie** na bieżącej implementacji.
 
-### 1. Użyj
+### Użyj
 
-Określ każde zmienione zachowanie i jego rzeczywisty punkt wejścia użytkownika. Uruchom właściwą implementację i samodzielnie przejdź zamierzoną ścieżkę. Sprawdź widoczne dane wyjściowe, przejścia stanów, skutki uboczne, logi i konsolę, zamiast wnioskować o powodzeniu na podstawie kodu lub testów.
+Wykonaj każdą zamierzoną ścieżkę przez rzeczywistą implementację. Obserwuj widoczny wynik, przejścia stanu, skutki uboczne, konsolę, sieć i logi zamiast wnioskować z kodu.
+Użyj reprezentatywnych danych o rzeczywistej skali i produkcyjnym kształcie. Porównaj liczby, kolejność, czas, stan i skutki; uruchom wystarczająco długo, aby ujawnić akumulację.
+Dla błędu najpierw odtwórz dokładne kroki zgłaszającego na wersji bez poprawki. Jeśli nie możesz odtworzyć, przerwij diagnozę i poproś o brakujące środowisko lub dowód.
 
-Użyj reprezentatywnych danych o skali odpowiadającej środowisku produkcyjnemu, zgodnych z nim pod względem struktury i liczności. Porównaj oczekiwane i zaobserwowane liczby, kolejność, czasy, stan oraz skutki uboczne; powtarzaj próbę wystarczająco długo, aby ujawnić zachowanie w stanie ustalonym lub skutki akumulacji.
+### Nadużyj
 
-W przypadku błędu najpierw wykonaj dokładne kroki zgłaszającego na niepoprawionej wersji i zarejestruj dokładny objaw. Jeśli nie możesz go odtworzyć, przerwij diagnozę, opisz wykonane próby i poproś o brakujące środowisko lub dowody. Nie naprawiaj błędu opartego na przypuszczeniach.
+Zastosuj każdy właściwy punkt widzenia i co najmniej jedną wiarygodną próbę uszkodzenia:
 
-**Ukończono, gdy:** każde zmienione zachowanie ma bezpośrednio zaobserwowany stan bazowy na swojej publicznej granicy.
+- Niedbałość: puste, nieprawidłowe, zbyt duże, zduplikowane lub przestawione wejście.
+- Niecierpliwość: powtórzenie, podwójne wysłanie, przeładowanie, odejście, anulowanie lub przerwanie.
+- Pech: nieaktualne lub brakujące dane, wolna albo uszkodzona zależność, częściowe zakończenie.
+- Dane rzeczywiste: rzadkie pola, duplikaty ID, mieszane wersje lub tenanty, długi tekst, Unicode, granice stref czasowych i realistyczna liczność.
+- Wydajność: zmierz czas odpowiedzi, sieć, renderowanie, CPU i pamięć względem bazy lub budżetu.
 
-### 2. Nadużyj
+Preferuj wiarygodne zachowanie użytkownika. Obserwuj błąd i odzyskiwanie bezpośrednio.
 
-Spróbuj zepsuć każde zmienione zachowanie tak, jak mógłby to zrobić rzeczywisty użytkownik:
+### Napraw
 
-- **Nieostrożny:** puste, nieprawidłowe, zbyt duże, zduplikowane lub podane w niewłaściwej kolejności dane wejściowe.
-- **Niecierpliwy:** powtórzenie, podwójne wysłanie, opuszczenie strony, ponowne wczytanie, anulowanie lub przerwanie.
-- **Pechowy:** nieaktualny stan, brakujące dane, awaria zależności, powolna odpowiedź lub częściowe ukończenie.
-- **Rzeczywiste dane:** brakujące pola, zduplikowane identyfikatory, różni dzierżawcy lub wersje, długi tekst, Unicode, granice stref czasowych i realistyczna liczność.
-- **Wydajność:** zmierz czas odpowiedzi, sieć, renderowanie, procesor i pamięć, gdy ma to znaczenie; porównaj wyniki z jawnym budżetem lub stanem bazowym.
+Zaobserwowany defekt oblewa checkpoint. Gdy można go zautomatyzować, dodaj RED test publicznego kontraktu, popraw przez `/tdd` i uruchom powiązane kontrole. Każda zmiana zachowania unieważnia wcześniejszy dowód.
 
-Zastosuj każdą odpowiednią perspektywę i co najmniej jedną wiarygodną próbę wywołania awarii dla każdego zmienionego zachowania. Preferuj prawdopodobne zachowania użytkowników zamiast arbitralnych przypadków.
+### Odtwórz ponownie
 
-**Ukończono, gdy:** zamierzone użycie oraz odpowiednie zachowanie w razie awarii lub podczas odzyskiwania zostały bezpośrednio zaobserwowane.
+Uruchom ponownie prawdziwy punkt wejścia i powtórz użycie oraz wszystkie próby uszkodzenia. Dla błędu powtórz identyczną pierwotną reprodukcję i sprawdź sąsiednie zachowanie. PASS dotyczy tylko bieżącego stanu uruchamialnego.
 
-### 3. Napraw
+## Punkty wejścia
 
-Traktuj każdą wykrytą usterkę jako niezaliczony punkt kontrolny. Jeśli można ją zautomatyzować, przekształć ją w regresyjny test RED, napraw przez `/tdd` i ponownie uruchom ukierunkowane kontrole automatyczne. Zmiana kodu unieważnia wcześniejsze dowody z dogfoodingu.
-
-**Ukończono, gdy:** żadna zaobserwowana usterka nie pozostaje nierozwiązana ani nie została po cichu odłożona.
-
-### 4. Powtórz
-
-Uruchom ponownie od rzeczywistego punktu wejścia i powtórz zamierzoną ścieżkę oraz każdą próbę wywołania awarii na bieżącej implementacji. W przypadku poprawki błędu powtórz identyczną procedurę odtworzenia sprzed poprawki i potwierdź, że zgłoszony objaw zniknął bez naruszenia sąsiednich zachowań.
-
-**Ukończono, gdy:** bieżący działający stan, a nie wcześniejsza kompilacja, przechodzi pełny cykl.
-
-## Wybierz rzeczywisty punkt wejścia
-
-| Zmiana | Sposób sprawdzenia |
+| Zmiana | Sprawdzenie |
 |---|---|
-| Aplikacja internetowa lub panel | Uruchom aplikację; nawiguj, klikaj, wpisuj, przeładowuj i sprawdzaj konsolę oraz sieć |
-| CLI lub TUI | Wywołaj zbudowane polecenie z realistycznymi, nieprawidłowymi i przerwanymi danymi wejściowymi |
-| API lub proces roboczy | Wyślij rzeczywiste żądania lub zdarzenia i sprawdź odpowiedź oraz skutki uboczne |
-| Biblioteka | Użyj jej publicznego API w minimalnym rzeczywistym kliencie |
-| Hook lub automatyzacja | Wyzwól rzeczywiste zdarzenie na reprezentatywnej próbce |
-| Umiejętność lub instrukcja agenta | Użyj jej w nowym, realistycznym zadaniu; sprawdź zachowanie, a nie treść |
-| Demonstracja lub prototyp | Korzystaj z działającego artefaktu, aż uzyskasz zaobserwowaną odpowiedź na badane pytanie |
+| Web/UI | Uruchom, nawiguj, działaj, przeładuj, sprawdź konsolę i sieć |
+| CLI/TUI | Wywołaj przepływ poprawny, błędny i przerwany |
+| API/worker | Wyślij prawdziwe żądania lub zdarzenia; sprawdź odpowiedź i skutki |
+| Biblioteka | Wywołaj publiczne API z minimalnego konsumenta |
+| Hook/automatyzacja | Wyzwól rzeczywiste zdarzenie na reprezentatywnych fixture'ach |
+| Umiejętność/agent | Użyj w świeżym realistycznym zadaniu i sprawdź zachowanie |
+| Demo/prototyp | Używaj do uzyskania zaobserwowanej odpowiedzi |
 
-Najpierw użyj narzędzi właściwych dla projektu. Używaj nowych agentów tylko wtedy, gdy użytkownik zezwolił na delegowanie.
+Używaj narzędzi projektu. Świeży agent wymaga jawnej delegacji.
 
-## Protokół
+## Potwierdzenie
 
-Powiąż punkt wejścia, działania i obserwacje z bieżącą implementacją. Zgłoś:
+Powiąż punkt wejścia, działania i obserwacje z bieżącą implementacją. Podaj `Verdict: PASS | FAIL | BLOCKED`, a następnie:
 
-`Verdict: PASS | FAIL | BLOCKED`
+- **Entrypoint:** dokładne polecenie, URL, zdarzenie lub konsument.
+- **Actions:** zamierzona ścieżka i próby uszkodzenia.
+- **Observations:** dane, wyniki, stan, skutki, konsola, sieć, logi i czas.
+- **Repairs:** defekty, testy RED, poprawki i wynik ponownego odtworzenia.
+- **Limits:** niesprawdzone zachowanie i powód.
 
-- **Punkt wejścia:** dokładne polecenie, adres URL, zdarzenie lub klient
-- **Działania:** zamierzona ścieżka i próby wywołania awarii
-- **Obserwacje:** struktura i skala danych, liczby, kolejność i czasy, dane wyjściowe, stan, skutki uboczne, konsola, sieć i logi
-- **Naprawy:** znalezione usterki, dodane testy, wprowadzone poprawki i wynik powtórzenia
-- **Ograniczenia:** niesprawdzone zachowania i przyczyny
-
-Dołącz kompletny ustrukturyzowany protokół w końcowej odpowiedzi. PASS wymaga praktycznych dowodów dla każdego zmienionego zachowania w bieżącej implementacji. FAIL oznacza, że zaobserwowana usterka pozostaje nierozwiązana. BLOCKED wskazuje brakujący dostęp, środowisko, sprzęt lub ograniczenie bezpieczeństwa oraz dowody potrzebne w następnym kroku.
+PASS wymaga bezpośredniego dowodu dla każdego zmienionego zachowania. FAIL pozostawia zaobserwowany defekt. BLOCKED nazywa brakujący dostęp, środowisko, sprzęt lub warunek bezpieczeństwa.

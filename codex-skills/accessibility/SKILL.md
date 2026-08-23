@@ -1,6 +1,6 @@
 ---
 name: accessibility
-description: Use when React UI needs ARIA, keyboard, focus, form, or nested-control accessibility.
+description: Use when React needs ARIA, keyboard, focus, form, or nested-control accessibility.
 paths:
   - "src/components/**/*.tsx"
 ---

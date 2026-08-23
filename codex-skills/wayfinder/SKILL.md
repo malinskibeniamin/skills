@@ -1,6 +1,6 @@
 ---
 name: wayfinder
-description: Map multi-session work through issue-tracker decision tickets.
+description: Use to map multi-session work through issue-tracker decision tickets.
 disable-model-invocation: true
 ---
 

@@ -57,6 +57,43 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
+# Keep the largest model-facing skills on explicit budgets. The aggregate cap
+# preserves the measured wave reduction while allowing small wording trades
+# between related instructions.
+lean_skill_total=0
+while read -r skill cap; do
+  bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
+  lean_skill_total=$((lean_skill_total + bytes))
+  if [ "$bytes" -le "$cap" ]; then
+    echo "  PASS  $skill SKILL.md under $cap bytes ($bytes)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $skill SKILL.md over budget: $bytes bytes (cap: $cap)"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
+  fi
+done <<'EOF'
+ask-ben 6800
+wayfinder 5000
+review 4300
+diagnosing-bugs 4200
+triage 4100
+dogfood 4000
+to-tickets 3900
+swarm 4000
+e2e-testing 4000
+resolve-pr-feedback 3800
+EOF
+
+if [ "$lean_skill_total" -le 42600 ]; then
+  echo "  PASS  top-10 skill wave under 42600 bytes ($lean_skill_total)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  top-10 skill wave over budget: $lean_skill_total bytes (cap: 42600)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: top-10 skill wave over 42600 bytes"
+fi
+
 # No Unicode punctuation in hot-path docs except the three user-visible
 # completion markers, whose em dash is part of the protocol.
 unicode_hits=$(python3 -c '

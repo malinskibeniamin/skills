@@ -1,100 +1,80 @@
 ---
 name: diagnosing-bugs
-description: Diagnosis loop for hard bugs and performance regressions. Use when asked to diagnose or debug, or when a hard bug needs a reproducible feedback loop.
+description: Use when a hard bug or performance regression needs a reproducible diagnosis loop.
 ---
 
 # Diagnosing Bugs
-Discipline for hard bugs. Skip a phase only with reason. Use the domain glossary and ADRs;
-for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
+
+Skip a phase only with a reason. Read the domain glossary and ADRs; use
+`/read-the-damn-docs` for third-party or version drift.
 
 ## Redact
-This skill shows commands, outputs, and captured artifacts. **Redact every secret first** --
-write `<REDACTED>` in its place. Build loops against environment variables so credentials stay
-out of files and quoted output. Captured artifacts can carry authentication headers; quote only
-the lines that carry the signal. If redacted evidence is insufficient, ask the user for a safer
-source.
-## Phase 1 -- Build a feedback loop
-**The feedback loop is the skill.** The rest is mechanical. Build a fast, deterministic,
-agent-runnable pass/fail signal for the reported bug; bisection, hypothesis tests, and
-instrumentation consume that signal. Spend most of the diagnosis effort here.
-### Strategies (try in roughly this order)
-1. **Failing test** at the highest seam that reaches the bug -- unit, integration, or e2e.
-2. **Curl / HTTP script** against running dev server.
-3. **CLI invocation** with fixture input, diff stdout vs known-good snapshot.
-4. **Headless browser script** (Playwright / Puppeteer) -- drive UI, assert DOM/console/network.
-5. **Replay captured trace.** Save real network request / payload / event log to disk; replay through code path isolated.
-6. **Throwaway harness.** Start the smallest system slice that reaches the bug with one call.
-7. **Property / fuzz loop.** If bug "sometimes wrong output", run 1000 random inputs, watch failure mode.
-8. **Bisection harness.** If the bug appeared between two known states, automate
-   "boot state X, check, repeat" so `git bisect run` works.
-9. **Differential loop.** Run same input through old-version vs new-version (or two configs), diff output.
-10. **HITL bash script.** Last resort. If a human must click, guide them with
-    `scripts/hitl-loop.template.sh`; feed the captured output back into the loop.
-### Iterate on the loop itself
-Treat the loop as a product: make it faster, sharpen the asserted symptom, and remove
-nondeterminism by pinning time, random seeds, filesystem state, and network inputs.
-### Non-deterministic bugs
-Target a **higher reproduction rate**. Run the loop repeatedly, add controlled stress, and
-narrow the timing window until the failure occurs often enough to distinguish hypotheses.
-### When you genuinely cannot build a loop
-Stop with the attempted loops and request the missing input: access to the reproducing
-environment, a captured artifact, or permission for temporary production instrumentation.
 
-Proceed to Phase 2 when the loop reliably signals the reported failure.
+Replace secrets with `<REDACTED>` before sharing commands, output, or artifacts. Keep
+credentials in environment variables and quote only signal-bearing lines. Ask for a safer
+source when redaction removes necessary evidence.
+
+## Phase 1 -- Build a feedback loop
+
+Build a fast, deterministic, agent-runnable pass/fail signal for the reported symptom.
+Improve its speed, precision, and determinism before debugging.
+
+Try the cheapest faithful seam:
+
+1. Failing test: unit, integration, or E2E.
+2. HTTP script against the running service.
+3. CLI fixture with stdout diff.
+4. Headless browser such as Playwright.
+5. Captured request, payload, trace, or event replay.
+6. Minimal throwaway harness.
+7. Property or fuzz loop for intermittent output.
+8. Automated harness for `git bisect run`.
+9. Differential old/new version or configuration run.
+10. HITL script from `scripts/hitl-loop.template.sh` only as a last resort.
+
+Pin time, seeds, filesystem state, and network input. For nondeterminism, repeat under
+controlled stress until the reproduction rate can distinguish hypotheses. If no loop is
+possible, stop with attempts and request the missing environment, artifact, or safe
+instrumentation access.
 
 ## Phase 2 -- Reproduce
-Run the loop, then `/dogfood` the reporter's real user entrypoint. Watch the same bug appear.
 
-- [ ] The loop produces the failure mode the **user** described, not a nearby failure.
-- [ ] The failure reproduces across multiple runs, or often enough to debug.
-- [ ] The loop captures the exact symptom so Phase 5 can prove the fix addresses it.
+Run the loop, then `/dogfood` the reporter's real entrypoint. Confirm the exact user-reported
+failure, across enough runs to debug, and capture a symptom Phase 5 can disprove.
 
-Proceed when the reported bug reproduces.
 ## Phase 3 -- Hypothesise
-Generate **3-5 ranked, falsifiable hypotheses** before testing any; single-hypothesis work
-anchors on the first plausible idea.
 
-> Format: "If <X> is the cause, then <changing Y> will make the bug disappear / <changing Z> will make it worse."
-
-Discard or sharpen any hypothesis that lacks a testable prediction.
-
-Show the ranked list before testing so available domain knowledge can rerank it. Continue with
-the evidence-based ranking when the user is unavailable.
+Write 3-5 ranked, falsifiable hypotheses before testing. Each predicts what change would
+remove or worsen the symptom. Show the list for reranking; discard claims without a testable
+prediction.
 
 ## Phase 4 -- Instrument
-Each probe must map to specific prediction from Phase 3. **Change one variable at a time.**
 
-1. **Debugger / REPL inspection** when the environment supports it. One breakpoint can replace ten logs.
-2. **Targeted logs** at boundaries that distinguish hypotheses.
-3. Never "log everything and grep".
+Map each probe to one prediction. Change one variable at a time.
 
-Tag every debug log with a unique prefix such as `[DEBUG-a4f2]`, then remove every match.
-
-**Perf branch.** Establish a measured baseline with a timing harness, profiler, or query plan,
-then bisect. Measure first, fix second.
+- Prefer debugger or REPL inspection, then targeted boundary logs; never log everything.
+- Prefix temporary logs, for example `[DEBUG-a4f2]`, so cleanup can grep the prefix.
+- For performance, measure a baseline with a timing harness, profiler, or query plan before
+  bisecting or fixing.
 
 ## Phase 5 -- Fix + regression test
-Write regression test **before fix** -- but only if **correct seam** for it.
 
-The correct seam exercises the **real bug pattern** as it occurs at the call site. A shallow
-unit that cannot reproduce the triggering chain gives false confidence. If no suitable seam
-exists, document that architectural gap for Phase 6. Otherwise:
+Create the regression test before the fix at the correct seam: it must reproduce the real
+call-site chain, not a nearby unit behavior. If no such seam exists, record the architecture
+gap. Otherwise:
 
-1. Turn minimised repro into failing test at that seam.
-2. Watch it fail.
-3. Apply fix.
-4. Watch it pass.
-5. Run `/dogfood` to replay the identical user reproduction, then re-run the original un-minimised Phase 1 loop.
+1. Minimize the reproduction into a failing test and observe RED.
+2. Apply the smallest root-cause fix and observe GREEN.
+3. Run related checks.
+4. `/dogfood` the identical user journey, then re-run the full Phase 1 loop.
 
 ## Phase 6 -- Cleanup + post-mortem
-Complete every item before declaring the diagnosis done:
 
-- [ ] `/dogfood` confirms the exact user repro no longer reproduces; Phase 1 loop also passes
-- [ ] Regression test passes (or absence of seam is documented)
-- [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
-- [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
-- [ ] The hypothesis that turned out correct is stated in the commit / PR message -- so the next debugger learns
+- Original repro no longer reproduces; re-run the original loop.
+- Regression test passes, or the missing seam is documented.
+- All debug instrumentation removed; grep the unique prefix.
+- Throwaway artifacts are deleted or clearly isolated.
+- Record the proven root cause in the commit or PR.
 
-Then ask what would prevent recurrence. If the answer is an architectural change, hand the
-specific seam or coupling problem to `/improve-codebase-architecture`. Recommend it after the root-cause
-fix, when the evidence is strongest.
+Ask what would prevent recurrence. After the root-cause fix, send a proven seam or coupling
+problem to `/improve-codebase-architecture`.

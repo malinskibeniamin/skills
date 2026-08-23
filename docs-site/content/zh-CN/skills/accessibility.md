@@ -1,6 +1,6 @@
 ---
 title: /accessibility
-description: 面向 ARIA、键盘行为、焦点、表单和嵌套控件的 React 无障碍指南。适用于构建交互式组件或修复无障碍问题。
+description: "当 React 需要 ARIA、键盘、焦点、表单或嵌套控件无障碍支持时使用。"
 type: skill
 sidebar:
   label: /accessibility
@@ -9,67 +9,32 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/accessibility.excalidraw)
 
-## 此规则可发现的问题
+每条规则只设一个执行方：
 
-检查由三个负责方分别执行——每条规则仅由一个负责方处理：
+- **Biome** 负责元素语义：图片 `alt`、自定义控件键盘操作、组合框 ARIA 和标签关联。
+- **React Doctor** 负责结构与命名：对话框、嵌套控件、无障碍名称、持久标签和带说明的无效字段。
+- **本地钩子** 只检查 `tablist` 与子级 `tab` 角色，以及 `data-invalid` 与 `aria-invalid` 的配对。
 
-- **Biome（ultracite 预设）**——单元素规则：`<img>` 替代文本（`a11y/useAltText`）、可点击 `<div>`/`<span>` 的键盘支持（`a11y/useKeyWithClickEvents` 及相关规则）、组合框必需的 ARIA 属性（`a11y/useAriaPropsForRole`）、标签关联（`a11y/noLabelWithoutControl`）
-- **React Doctor（Stop 钩子）**——结构规则：对话框的无障碍名称（`react-doctor/dialog-has-accessible-name`）、嵌套交互元素（`react-doctor/html-no-nested-interactive`）、类似 `Search icon` 的冗余名称措辞（`react-doctor/img-redundant-alt`）、使用占位符代替标签（`react-doctor/label-has-associated-control`），以及缺少错误描述的无效控件（`react-doctor/no-aria-invalid-without-description`）
-- **此钩子**——仅检查两个引擎均无法表达的跨属性配对：`role="tablist"` 需要包含具有 `role="tab"` 的子元素；`data-invalid`（仅用于 CSS）需要搭配 `aria-invalid`
+不要重复检查。豁免格式：`// allow: a11y-skip [reason]`。
 
-豁免方式：`// allow: a11y-skip [reason]`
+## 交互约定
 
-## 禁止嵌套可按压元素
+- 优先使用原生控件和可见文本。自定义可点击元素需要角色、`tabIndex` 和等效键盘行为。
+- 二选一：可点击容器不得包含交互子元素；被动容器可包含交互子元素。不要嵌套可按压控件。
+- 组合框公开 `aria-expanded` 和 `aria-controls`；选项卡列表包含选项卡。
+- 仅在没有可见名称时使用 `aria-label`；它或 `aria-labelledby` 可能替换后代文本。省略 `icon`、`button` 等冗余词。
+- 表单控件具有持久标签。用 `aria-invalid` 和当前的 `aria-describedby` 关联可见错误；验证通过后移除陈旧错误 ID。
+- 命名不明确时检查计算后的无障碍树，并遵循 [WAI-ARIA 命名指南](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/)。
 
-交互式组件只能采用一种模式——绝不能同时采用两种：
+## 视觉与焦点检查
 
-**模式 A：容器可点击**——不能包含交互式子元素。
-```tsx
-<ListCard onClick={handleSelect}>
-  <Avatar src={user.avatar} />
-  <Text>{user.name}</Text>
-  <ChevronRightIcon /> {/* visual indicator only, not a button */}
-</ListCard>
-```
+- 保留对比明显的 2px 焦点指示器；悬停操作也必须可由键盘和触摸完成。
+- DOM 顺序与阅读和 Tab 顺序一致。重新排序的布局需要键盘和屏幕阅读器证据。
+- 模态界面捕获并恢复焦点，同时使背景不可交互。
+- 不要仅用颜色表达状态；同时使用文本、图标或形状，并用 `currentcolor` 支持强制颜色。
+- 触摸目标至少为 44×44 CSS 像素。用 `@media (hover: hover) and (pointer: fine)` 限制仅悬停效果。
+- 减少动态效果时，通过透明度、颜色、文本或即时状态变化保留反馈。
+- 支持 200% 文本缩放且不丢失内容。
+- 在真机或模拟器上验证高风险移动端浮层，包括 `visualViewport`、安全区域、焦点和背景禁用。
 
-**模式 B：子元素可交互**——容器不可点击。
-```tsx
-<ListCard>
-  <Avatar src={user.avatar} />
-  <Text>{user.name}</Text>
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" size="icon"><MoreVerticalIcon /></Button>
-    </DropdownMenuTrigger>
-  </DropdownMenu>
-</ListCard>
-```
-
-原因：点击目标含糊不清、事件冒泡缺陷、屏幕阅读器无法传达交互模型，以及移动设备上的触控目标相互重叠。
-
-## 无障碍名称和描述
-
-- 相较于 ARIA，应优先使用可见文本和原生名称机制（`<label>`、按钮或链接内容、说明文字）。仅在不存在可见名称时（例如只有图标的按钮）使用 `aria-label`；`aria-label` 或 `aria-labelledby` 可能会在无障碍树中取代后代文本。
-- 确保 `aria-describedby` 引用始终有效。验证错误清除后，应移除已失效的错误 ID；被引用的隐藏内容仍可能成为无障碍描述。
-- 当名称或描述的行为不明确时，请检查计算后的无障碍树。请遵循 [WAI-ARIA 名称指南](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/)。
-
-## 视觉检查清单
-
-- [ ] 所有交互式元素上的焦点环均清晰可见（至少 2px，并使用对比色）
-- [ ] 悬停与焦点样式一致（不能仅为鼠标提供交互提示）
-- [ ] 不能仅通过颜色传达信息
-- [ ] DOM 顺序与阅读和 Tab 键导航顺序一致；通过 CSS 调整视觉顺序时，应提供键盘和屏幕阅读器的验证依据
-- [ ] 无障碍名称与可见意图和操作一致；名称中不得使用“图标”“按钮”或“图片”
-- [ ] 表单字段具有持续可见的标签；占位符仅用于提供示例或格式提示
-- [ ] 对话框、侧边面板和弹出框会限制焦点范围，在关闭时将焦点返回原处，并在以模态方式显示时使背景不可交互
-- [ ] 错误、选中、警告和成功状态绝不能只依赖颜色；应将颜色与文本、图标或形状搭配使用
-- [ ] 触控目标至少为 44x44 CSS 像素
-- [ ] 动画遵循 `prefers-reduced-motion`
-- [ ] 减少动态效果时，应通过不透明度、颜色、文本或即时状态变化保留必要反馈，而不是使用大幅移动
-- [ ] 仅悬停时生效的效果应使用 `@media (hover: hover) and (pointer: fine)`，仅在适用的触控设备条件下启用
-- [ ] 移动端抽屉式面板和侧边面板使用 `visualViewport`、安全区域间距、焦点限制、焦点返回和背景不可交互机制来处理虚拟键盘
-- [ ] 高风险移动端交互应提供实体设备或模拟器上的验证依据，尤其是抽屉式面板、侧边面板、滑动手势和长按破坏性操作
-- [ ] `forced-colors` / 高对比度模式：SVG 填充使用 `currentcolor`
-- [ ] 文本可放大至 200%，且不会丢失内容
-
-初始设置（安装、AXE 固定测试数据、钩子配置）：请参阅 [SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/accessibility/SETUP.md)。
+初始配置见 [SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/accessibility/SETUP.md)。

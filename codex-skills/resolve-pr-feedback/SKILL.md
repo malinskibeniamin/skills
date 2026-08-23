@@ -1,6 +1,6 @@
 ---
 name: resolve-pr-feedback
-description: "Resolve PR feedback through triage, fixes, replies, and thread closure. Use for unresolved comments, requested changes, or continuing an earlier review pass."
+description: Use to resolve PR comments, requested changes, replies, and thread closure.
 hooks:
   Stop:
     - hooks:
@@ -9,18 +9,11 @@ hooks:
           timeout: 90
           statusMessage: "Verifying every review thread was addressed"
           prompt: |
-            A session running the resolve-pr-feedback skill is stopping. Hook
-            input: $ARGUMENTS. Read the transcript file at transcript_path and
-            check the tail of the session: did the assistant enumerate PR
-            review threads earlier and then address EVERY one (a fix, a reply,
-            or an explicit skip with a reason)? Threads the transcript shows
-            as enumerated but never revisited are unaddressed. Respond
-            ok=false with the unaddressed thread list in reason ONLY when the
-            transcript clearly shows enumerated-but-dropped threads; if the
-            transcript is unavailable, ambiguous, or shows no thread work,
-            respond ok=true. The deterministic pr-feedback-completeness-stop
-            hook already enforces thread resolution state via the GitHub API --
-            you are the semantic layer catching resolved-without-substance.
+            Read transcript_path from $ARGUMENTS. If the session enumerated PR review
+            threads, verify each received a fix, reply, or reasoned skip. Return ok=false
+            with only the dropped threads when omission is clear. If evidence is absent or
+            ambiguous, return ok=true. The deterministic hook owns GitHub state; check
+            semantic substance only.
 ---
 
 Read and follow the complete [canonical skill instructions](../../resolve-pr-feedback/SKILL.md) before acting.

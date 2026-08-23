@@ -5,87 +5,76 @@ disable-model-invocation: true
 ---
 
 # Swarm
-Shard independent bulk work across isolated lanes, verify each, then merge the results. Swarm
-executes an existing goal; it does not replace planning or own the delivery endpoint.
 
-Use `/swarm <free-form goal>`. Infer lanes from the user's text. Do not ask for approval before launch unless required context is missing.
-Invoking `/swarm` or explicitly requesting parallel agents is the opt-in for native Codex
-subagents. No other skill activation grants that consent.
+Shard independent bulk work across lanes, verify each, then integrate. Swarm executes an
+existing goal; it does not replace planning or own delivery. Parallelism requires explicit opt-in
+through `/swarm` or a direct user request; no other skill grants consent.
 
-## Position
+`/work` owns lifecycle, `/grilling` resolves choices, and `/go` ships.
 
-- `/work` owns lifecycle.
-- `/grilling` settles plan and docs.
-- `/swarm` executes independent lanes faster.
-- `/go` verifies and ships.
+## Launch
 
-## Launch flow
-
-1. Prime fast: inspect current repo state, rules, docs, branch, PR, and active goal when present. Use `/prime` style brief internally.
-2. For long/high-cost swarms, apply `/efficient-frontier` usage-limit budgeting before the first wave and between waves. Default throttle: at most 3 parallel agents unless the user says otherwise.
-3. Use `/efficient-frontier` under the hood: keep orchestration, integration, and final review with the coordinator; delegate bounded repo search, implementation, test, and log-reduction lanes.
-4. Choose workspace policy from text:
+1. Inspect repository rules, state, branch/PR, relevant docs, and the active goal.
+2. For long or costly waves, use `/efficient-frontier` before launch and between waves.
+   Default to at most three parallel agents unless the user says otherwise.
+3. Keep orchestration, critical-path work, integration, and judgment with the coordinator.
+   Delegate only bounded search, implementation, test, or evidence-reduction work.
+4. Choose workspace policy:
    - Default: same branch/worktree/PR.
-   - If user asks separate, isolated, or per-agent worktrees: create one worktree/branch per lane.
-   - If conflict risk is high: split or serialize writes; say why in manifest.
-5. Draft a tiny swarm manifest, then launch immediately:
-   ```txt
+   - Requested isolation: one descriptive worktree and branch per lane.
+   - High conflict risk: separate scopes or serialize writes.
+5. Show a compact swarm manifest, then launch:
+
+   ```text
    Swarm manifest
    Policy: shared | worktrees | hybrid
-   - swarm-<lane-name>: <mission> | scope: <paths> | skills: </skill...>
+   - swarm-<lane>: <mission> | scope: <paths> | skills: </skill...>
    ```
-6. Spawn only distinct lanes. No duplicate or vague agents.
-7. Coordinator keeps critical path local, merges results, resolves conflicting findings, verifies, and closes agents.
 
-## Lane design
+6. Spawn only distinct lanes. The coordinator integrates results, resolves conflicting
+   findings, runs final verification, and closes agents.
 
-Every lane gets a Task packet:
+## Task packet
+
+Every lane receives:
 
 ```yaml
 agent_name: swarm-<area>-<mission>
 role: explorer | worker | reviewer | teacher
 mission: one concrete outcome
-skills: [/prime, /tdd, /review]
-context: docs, decisions, branch or PR, relevant paths
+skills: [only relevant skills]
+context: rules, decisions, branch or PR, paths
 workspace_policy: shared | worktree | hybrid
-write_scope: exact paths or "report-only"
-forbidden: duplicate lanes, unrelated files, commits, pushes unless asked
-termination: concrete deliverable and stop condition for this lane
-model_policy: inherit by default; override only when useful or user asks
+write_scope: exact paths or report-only
+forbidden: duplicate work, unrelated files, commits or pushes unless requested
+termination: deliverable and stop condition
+model_policy: inherit unless evidence or the user requires an override
 output schema: status, summary, changed_files, tests_run, findings, blockers, next_action
 ```
 
-Agents may read and write unless the packet says `report-only`. In shared policy, assign file ownership or serialize write-heavy lanes. In worktree policy, branch names should be descriptive and may follow `<owner>/<ticket>/<lane-desc>` when creating worktrees.
-Spawned lanes may not create descendants without separate authorization for nested delegation.
+Workers may write only within their scope. Shared lanes need distinct ownership; worktree
+lanes use descriptive branches; descendants require separate authorization.
 
-## Skill composition
+## Lane rules
 
-- Long/high-cost wave control: `/efficient-frontier` owns usage checks and pause/resume handoffs.
-- Before launching lanes and between waves: `/efficient-frontier`; use
-  `/stay-within-limits` only when a fresh host quota snapshot is available.
-- Lane model choice: use `config/model-routing.json`. Give each write scope one
-  implementation owner; do not duplicate an implementation as a model pair. Eval-gated
-  variants remain unavailable until promoted by the ablation suite.
-- Frontier-token discipline: `/efficient-frontier` owns what to delegate versus keep in the coordinator.
-- Worker lanes author the smallest clear solution from the start; reviewer lanes assess semantic density directly.
-- Architecture: fan out `/improve-codebase-architecture` by context, module, seam, or adapter.
-- TDD: split coverage by independent behavior or public interface. RED before production edits; require RED->GREEN or failing-test evidence in result.
-- Skill/harness work: assign eval ownership per lane. Each changed skill or hook needs matching evals in scope, owned by the lane or the coordinator.
-- Design/copy work: split `/visual-review`, `/ux-copy`, accessibility, and articulation lanes only when their write scopes do not overlap.
-- Review: split standards, spec, resilience, security, performance, tests, UX, and steelman axes.
-- Diagnose: split reproduction loops, hypotheses, instrumentation, and regression tests.
-- Product: combine `/grilling` explore mode, `/prototype`, and `/steelman` lanes for options and pushback.
-- Handoff: after grilling, create compact packets so each agent starts with current decisions.
-- Learning: split topic by theory, examples, repo usage, trade-offs, and pitfalls.
+- Use `config/model-routing.json`; do not duplicate one implementation across model pairs.
+- Assign one implementation owner per write scope and matching evals or eval ownership for
+  each changed skill or hook.
+- TDD lanes return RED -> GREEN or failing-test evidence before implementation evidence.
+- Split architecture by module or seam; tests by independent public behavior.
+- Split `/visual-review` and `/ux-copy` only when scopes do not overlap.
+- Review lanes may separate spec, standards, resilience, security, performance, tests, and UX.
+- Diagnosis lanes may separate reproduction, hypotheses, instrumentation, and regression proof.
+- Keep synthesis and user-reserved decisions with the coordinator.
 
 ## Merge protocol
 
-- Read every result; do not trust summaries blindly for write lanes.
-- Apply or keep changes intentionally; never accept overlapping edits blindly.
-- Conflicting recommendations: show options, evidence, and coordinator recommendation.
-- Run targeted checks after merge. For TDD lanes, require failing-test evidence before implementation evidence.
-- Final output: manifest recap, landed changes, rejected/deferred work, tests, blockers, next action.
+Read artifacts and changed files, not summaries alone. Reject or reconcile overlaps
+intentionally. For conflicting recommendations, show evidence, options, and the coordinator's
+choice. Run targeted checks after integration; TDD work needs RED evidence before GREEN.
+Report the manifest, landed and rejected work, tests, blockers, and next action.
 
 ## Compatibility
 
-Codex and Claude Code must work from prompts and artifacts, not hidden hooks. Use native subagents when available. If no subagent tool exists, emit Task packets as handoff files or commands for manual launch.
+Codex and Claude Code must operate from explicit prompts and artifacts. Without native
+subagents, emit Task packets for manual launch.

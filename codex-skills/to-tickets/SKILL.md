@@ -1,6 +1,6 @@
 ---
 name: to-tickets
-description: Split a plan or specification into tracer-bullet tickets with blocking edges.
+description: Split a plan into tracer-bullet tickets with explicit blocking edges.
 disable-model-invocation: true
 ---
 
