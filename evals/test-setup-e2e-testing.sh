@@ -29,12 +29,23 @@ run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "fixed.*allowance|fixed.*budget" "
 run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "heap snapshot|MemLab" "soak guidance includes leak localization"
 run_content_eval "$SKILL_DIR/SKILL.md" "generated action sequences|stateful property" "SKILL.md routes combinatorial browser flows to property testing"
 run_content_eval "$SKILL_DIR/SKILL.md" "PROPERTY-BASED-TESTING\\.md" "SKILL.md links to vendor-neutral property testing guidance"
+run_content_eval "$SKILL_DIR/SKILL.md" "Firefox.*WebKit" "SKILL.md requires secondary-browser evidence"
+run_content_eval "$SKILL_DIR/SKILL.md" "[Aa]utomated.*accessibility.*subset|axe-only" "SKILL.md treats automated accessibility as partial evidence"
+run_content_eval "$SKILL_DIR/SKILL.md" "Chromium.*full.*suite|full.*suite.*Chromium" "SKILL.md keeps the full PR suite on Chromium"
+run_content_eval "$SKILL_DIR/SKILL.md" "Firefox.*WebKit.*@cross-browser|@cross-browser.*Firefox.*WebKit" "SKILL.md scopes secondary browsers to critical journeys"
+run_content_eval "$SKILL_DIR/SKILL.md" "nightly|release gate" "SKILL.md reserves the full browser matrix for a slower lane"
 
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
 run_content_eval "$SKILL_DIR/SETUP.md" "playwright/test" "SETUP has Playwright install"
 run_content_eval "$SKILL_DIR/SETUP.md" "GenericContainer" "SETUP has Testcontainers setup"
 run_content_eval "$SKILL_DIR/SETUP.md" "AxeBuilder" "SETUP has axe-core fixture"
+run_content_eval "$SKILL_DIR/SETUP.md" "playwright install --with-deps chromium firefox webkit" "SETUP installs the default browser matrix"
+run_content_eval "$SKILL_DIR/SETUP.md" "Desktop Chrome" "SETUP configures a Chromium project"
+run_content_eval "$SKILL_DIR/SETUP.md" "Desktop Firefox" "SETUP configures a Firefox project"
+run_content_eval "$SKILL_DIR/SETUP.md" "Desktop Safari" "SETUP configures a WebKit project"
+run_content_eval "$SKILL_DIR/SETUP.md" "FULL_BROWSER_MATRIX" "SETUP exposes an explicit full-matrix lane"
+run_content_eval "$SKILL_DIR/SETUP.md" "@cross-browser" "SETUP scopes secondary browser projects by tag"
 
 
 _e2e_tmpdir=$(mktemp -d /tmp/e2e-route-hook-XXXXXX)

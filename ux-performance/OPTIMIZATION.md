@@ -75,9 +75,13 @@ A million-record table is a data-system workload, not a million-node render benc
 - Ship less JavaScript. Remove unused code, prefer direct imports, split by route or feature,
   and lazy-load heavy noncritical UI. Inspect the chunk graph: many sequential microchunks
   or a late giant dynamic import can be worse.
-- Make critical CSS, fonts, and LCP media discoverable early. Use priority hints, preload,
-  or preconnect only for measured critical resources. Size responsive images, reserve media
-  dimensions, subset fonts, and defer below-fold or optional assets.
+- Make critical CSS, fonts, and LCP media discoverable early.
+- Put an LCP image in initial HTML as `<img>` or `<picture>` so the preload scanner can find
+  it; do not lazy-load it. Use `fetchpriority`, preload, or preconnect only for measured
+  critical resources, including a CSS background image that cannot move into markup.
+- Give images `width` and `height`, provide accurate responsive source sizes, and lazy-load
+  below-fold assets. `sizes="auto"` is valid only with lazy loading; include a fallback
+  source-size value for browsers without support. Subset fonts and reserve media dimensions.
 - Start independent route data concurrently. Avoid component-created fetch waterfalls.
   Match loader, prefetch-on-intent, stale-time, and pending UI to the route's freshness and
   abandonment behavior. Keep skeleton geometry stable.
@@ -162,6 +166,7 @@ downstream, serialization, payload, and download.
 - [Off-main-thread work](https://web.dev/articles/off-main-thread)
 - [Service-worker and HTTP caching](https://web.dev/articles/service-worker-caching-and-http-caching)
 - [Optimizing LCP](https://web.dev/articles/optimize-lcp)
+- [Responsive image loading](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img)
 - [Optimizing TTFB](https://web.dev/articles/optimize-ttfb)
 - [React Doctor CLI](https://react.doctor/docs/reference/cli-reference)
 - [React Scan](https://github.com/aidenybai/react-scan)

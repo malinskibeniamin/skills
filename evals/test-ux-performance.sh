@@ -41,6 +41,8 @@ run_content_eval "$MEASUREMENT" "React.*Profiler|Profiler.*React" "measurement p
 run_content_eval "$MEASUREMENT" "heap|retained.*DOM|memory" "measurement detects sustained memory growth"
 run_content_eval "$MEASUREMENT" "warm.*cache|cold.*cache" "measurement distinguishes cache states"
 run_content_eval "$MEASUREMENT" "median.*spread|spread.*median" "measurement distinguishes wins from noise"
+run_content_eval "$MEASUREMENT" "reportSoftNavs|soft-navigation Core Web Vitals" "measurement uses supported soft-navigation Web Vitals"
+run_content_eval "$MEASUREMENT" "custom intent-to-useful-content|custom route milestone" "measurement keeps a cross-browser route metric"
 
 run_content_eval "$OPTIMIZATION" "virtuali" "optimization bounds rendered table rows"
 run_content_eval "$OPTIMIZATION" "million|1,000,000" "optimization addresses million-record workloads"
@@ -55,6 +57,8 @@ run_content_eval "$OPTIMIZATION" "code.?split|lazy" "optimization covers route a
 run_content_eval "$OPTIMIZATION" "TTFB|CDN|cache" "optimization follows frontend delay into delivery and backend"
 run_content_eval "$OPTIMIZATION" "p95|p99" "optimization covers backend tail latency"
 run_content_eval "$OPTIMIZATION" "upgrade" "optimization requires causal evidence before framework upgrades"
+run_content_eval "$OPTIMIZATION" "initial HTML.*<(img|picture)>" "optimization makes LCP images discoverable from HTML"
+run_content_eval "$OPTIMIZATION" "sizes=.auto.*lazy|lazy.*sizes=.auto" "optimization constrains responsive image auto sizing"
 
 run_content_eval "$CI" "pull request|per-PR|PR gate" "CI defines a pull-request performance lane"
 run_content_eval "$CI" "nightly" "CI moves expensive and noisy checks to a scheduled lane"

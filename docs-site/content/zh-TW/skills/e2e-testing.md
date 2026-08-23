@@ -35,6 +35,18 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 })
 ```
 
+自動化無障礙檢查只能偵測部分問題。針對關鍵流程，
+也要驗證鍵盤操作順序、焦點移動、無障礙名稱、縮放，以及目標
+輔助技術的行為；不得將僅通過 axe 的結果稱為無障礙。
+
+## 瀏覽器證據
+
+在 PR 中使用 Chromium 執行完整測試套件。在 Firefox 與 WebKit 中僅執行標記為 `@cross-browser` 的流程。
+完整的既定瀏覽器矩陣僅保留給夜間執行管線或發布閘門。
+標記關鍵流程、備援路徑及可信的特定引擎風險，而非每項測試。
+必要時限定需特定權限的規格範圍，但要在其他環境中測試同等行為。
+瀏覽器模擬無法證明所有品牌瀏覽器或實體裝置的風險。
+
 ## 確定性規則（從多年修正不穩定測試的經驗中歸納）
 
 - **等待原因，絕不等待固定時間**：點擊導覽後使用 `waitForURL()`；在斷言由 RPC 驅動的 UI 前使用 `waitForResponse()`/`waitForRequest()`；其餘情況等待元素狀態。不得使用 `waitForTimeout`；不得在 `toPass` 內使用 `expect.soft`（軟性失敗不會重試該區塊）。
@@ -50,15 +62,18 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 
 ## 產生式瀏覽器探索
 
-當可信的客戶合約橫跨組合式狀態轉換，且無法在成本更低的測試接縫加以證明時，使用範圍狹窄的產生式動作序列或具狀態的屬性。
+當可信的客戶合約橫跨組合式狀態轉換，且無法在成本更低的測試接縫加以證明時，
+使用範圍狹窄的產生式動作序列或具狀態的屬性。
 遵循不限定執行器的[屬性式測試指南](https://github.com/malinskibeniamin/skills/blob/main/tdd/PROPERTY-BASED-TESTING.md)：
-保留獨立的邊界預期結果判定機制、保存重播證據，並將每個實際發現轉化為確定性的迴歸測試。產生式探索是固定流程、
+保留獨立的邊界預期結果判定機制、保存重播證據，並將每個實際發現
+轉化為確定性的迴歸測試。產生式探索是固定流程、
 跨瀏覽器檢查、無障礙檢查、視覺審查與內部試用的補充；不會取代其中任何一項。
 
 ## 長期存續的 SPA 資源
 
 針對在單一瀏覽器執行環境中累積的監聽器、已脫離的 DOM、計時器、訂閱或堆積成長，
-請閱讀 [SOAK-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SOAK-TESTING.md)。將重複往返視為資源生命週期合約；一般彼此隔離的 E2E 測試無法證明這一點。
+請閱讀 [SOAK-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SOAK-TESTING.md)。將重複
+往返視為資源生命週期合約；一般彼此隔離的 E2E 測試無法證明這一點。
 
 ## E2E 監控器
 `Monitor: bun run test:e2e` -- 串流顯示結果，並在測試套件完成前對失敗作出反應。

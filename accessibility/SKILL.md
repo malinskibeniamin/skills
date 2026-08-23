@@ -44,6 +44,16 @@ Interactive components ONE pattern -- never both:
 
 Why: ambiguous click targets, event bubbling bugs, screen readers can't convey interaction model, touch targets overlap on mobile.
 
+## Accessible names and descriptions
+
+- Prefer visible text and native naming (`<label>`, button/link content, captions) over
+  ARIA. Use `aria-label` only when no visible name exists, such as an icon-only button;
+  `aria-label` or `aria-labelledby` can replace descendant text in the accessibility tree.
+- Keep `aria-describedby` references current. Remove a stale error ID when validation
+  clears; referenced hidden content may still become the accessible description.
+- Inspect the computed accessibility tree when naming or description behavior is unclear.
+  Follow the [WAI-ARIA naming guidance](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
+
 ## Visual Checklist
 
 - [ ] Focus rings visible on all interactive elements (min 2px, contrasting color)

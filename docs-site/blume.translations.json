@@ -6,9 +6,9 @@
       "zh-TW": "de00ed3ad502a219"
     },
     "content/skills/accessibility.md": {
-      "pl": "f26e309e7156eef5",
-      "zh-CN": "f26e309e7156eef5",
-      "zh-TW": "f26e309e7156eef5"
+      "pl": "563f8371823ba6c4",
+      "zh-CN": "563f8371823ba6c4",
+      "zh-TW": "563f8371823ba6c4"
     },
     "content/skills/agent-watchdog.md": {
       "pl": "5003509895e3d706",
@@ -81,9 +81,9 @@
       "zh-TW": "b2e7beacc94cefa9"
     },
     "content/skills/e2e-testing.md": {
-      "pl": "d456ace845af1c0f",
-      "zh-CN": "d456ace845af1c0f",
-      "zh-TW": "d456ace845af1c0f"
+      "pl": "59c4cc5307c3565e",
+      "zh-CN": "59c4cc5307c3565e",
+      "zh-TW": "59c4cc5307c3565e"
     },
     "content/skills/efficient-frontier.md": {
       "pl": "73338e63472cd6fc",
@@ -340,6 +340,11 @@
       "zh-CN": "2b58e35cbe5a1675",
       "zh-TW": "2b58e35cbe5a1675"
     },
+    "content/skills/ux-performance.md": {
+      "pl": "311528ff45db2345",
+      "zh-CN": "311528ff45db2345",
+      "zh-TW": "311528ff45db2345"
+    },
     "content/skills/video-research.md": {
       "pl": "068595609c820004",
       "zh-CN": "068595609c820004",
@@ -409,11 +414,6 @@
       "pl": "b6248f62fc35d3ea",
       "zh-CN": "b6248f62fc35d3ea",
       "zh-TW": "b6248f62fc35d3ea"
-    },
-    "content/skills/ux-performance.md": {
-      "pl": "311528ff45db2345",
-      "zh-CN": "311528ff45db2345",
-      "zh-TW": "311528ff45db2345"
     }
   },
   "version": 1

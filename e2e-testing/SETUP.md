@@ -6,7 +6,7 @@
 
 ```bash
 bun add -D @playwright/test @testcontainers/playwright @axe-core/playwright --yarn
-bunx playwright install --with-deps chromium
+bunx playwright install --with-deps chromium firefox webkit
 ```
 
 ### 2. Configure Playwright
@@ -15,6 +15,10 @@ Create `playwright.config.ts`:
 
 ```ts
 import { defineConfig, devices } from '@playwright/test'
+
+const secondaryBrowserFilter = process.env.FULL_BROWSER_MATRIX === '1'
+  ? {}
+  : { grep: /@cross-browser/ }
 
 export default defineConfig({
   testDir: './e2e',
@@ -30,9 +34,30 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'firefox',
+      ...secondaryBrowserFilter,
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      ...secondaryBrowserFilter,
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
 })
 ```
+
+Tag the smallest set of critical journeys and browser-risk regressions:
+
+```ts
+test('checkout completes @cross-browser', async ({ page }) => {
+  // ...
+})
+```
+
+The default run executes every test in Chromium and tagged tests in Firefox/WebKit.
+Set `FULL_BROWSER_MATRIX=1` in a nightly lane or release gate to run every test everywhere.
 
 ### 3. Add package.json scripts
 
@@ -40,6 +65,7 @@ export default defineConfig({
 {
   "scripts": {
     "test:e2e": "playwright test",
+    "test:e2e:full-matrix": "FULL_BROWSER_MATRIX=1 playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug"
   }
