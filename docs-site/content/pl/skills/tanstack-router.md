@@ -17,15 +17,42 @@ pakietem Router. Intent określa aktualną składnię API i zachowanie wersji. T
 zasady własności i stanu adresu URL. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/tanstack-router/REFERENCE.md), aby poznać lokalne wzorce kodu, oraz
 [SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/tanstack-router/SETUP.md), aby poznać instrukcję instalacji.
 
-## Własność
+## Router + Query
 
 - Loadery Routera rozpoczynają pobieranie danych z serwera po zainicjowaniu nawigacji.
 - TanStack Query odpowiada za pamięć podręczną, ponowne pobieranie, unieważnianie i usuwanie nieużywanych danych.
 - Komponenty obserwują Query za pomocą `useQuery` lub `useSuspenseQuery`.
 
-Używaj suspense dla kluczowych danych strony, które blokują jej wyświetlenie; dla danych odroczonych używaj zwykłych zapytań z
-lokalnymi stanami ładowania, braku danych i błędu. Loadery korzystające z Query ustawiają
-`defaultPreloadStaleTime: 0` i używają `createRootRouteWithContext`.
+Dane wejściowe Query znane trasie mają jeden potok: `validateSearch` -> `loaderDeps` -> jeden
+konstruktor `queryOptions` -> loader i obserwator komponentu. Zwracaj wyłącznie pola wyszukiwania używane przez
+zapytanie. Komponenty korzystają z `useLoaderDeps`, a nie z równoległego odczytu parametrów wyszukiwania
+sterujących zapytaniem. Jeśli wytyczne zainstalowanego Routera obsługują tworzenie opcji w `context`
+trasy, współdziel dokładnie tę samą wartość opcji; nigdy nie stosuj nieudokumentowanej składni z przykładu.
+
+- Kluczowe dane strony: oczekuj na `ensureQueryData`; obserwuj za pomocą `useSuspenseQuery`.
+- Odroczone dane znane trasie: rozpocznij ich pobieranie w loaderze; obserwuj za pomocą `useQuery` z widocznymi
+  stanami ładowania, braku danych i błędu.
+- Dane potrzebne wyłącznie do interakcji mogą być pobierane z komponentu.
+
+Loadery korzystające z Query ustawiają `defaultPreloadStaleTime: 0` i używają
+`createRootRouteWithContext`.
+
+## Cykle życia nawigacji
+
+Oddziel własność zasobu, nawigacji, wyniku i renderowania:
+
+- Zastąpiona nawigacja traci prawo do publikowania; współdzielona praca loadera lub Query może
+  nadal być użyteczna.
+- `beforeLoad` służy do bezpiecznego przy ponownym wykonaniu uwierzytelniania, przekierowania lub tworzenia kontekstu. Wstępne ładowanie
+  i nawigacja mogą uruchamiać je niezależnie; nie umieszczaj tam obserwowalnych efektów ubocznych ani zwykłego pobierania danych,
+  aby loadery zachowały równoległość.
+- Bezpośrednie żądania loadera przekazują `abortController.signal`. Funkcje Query przekazują
+  sygnał należący do Query. Nie anuluj globalnie współdzielonej pracy przy każdej nawigacji.
+- Przekierowania z `beforeLoad` lub loaderów używają `throw redirect(...)`, a nie imperatywnej
+  nawigacji.
+- Używaj `onResolved` do analityki i czyszczenia niezwiązanego z DOM. Używaj `onRendered` do zarządzania fokusem,
+  przewijania, pomiarów lub innych działań wymagających zatwierdzonej zawartości trasy.
+- Używaj interfejsu oczekiwania Routera i jego opcji czasowych zamiast własnych liczników czasu nawigacji.
 
 ## Reguły tras
 
@@ -50,7 +77,10 @@ Router odpowiada za typowanie parametrów wyszukiwania za pomocą `validateSearc
 ## Ukończenie
 
 - Typy potwierdzają zakres trasy i wyszukiwania.
+- Loader i obserwator używają tego samego konstruktora opcji Query oraz danych wejściowych należących do loadera.
 - Dane Query mają aktywnego obserwatora oraz kompletne, widoczne stany.
+- Szybka lub wstępnie załadowana nawigacja nie może opublikować nieaktualnego interfejsu trasy ani powielać pracy należącej do aplikacji.
+- Testy nawigacji sprawdzają wyróżnik wyrenderowanej trasy po zmianie adresu URL.
 - Nawigacja zachowuje semantykę historii przeglądarki.
 - Adresy URL wyszukiwania obsługują nieprawidłowe, nieaktualne i udostępnione wartości.
 - Drzewo tras, testy ukierunkowane, sprawdzanie typów i lintowanie przechodzą pomyślnie.

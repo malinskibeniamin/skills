@@ -51,7 +51,8 @@ Emulacja przeglądarki nie stanowi dowodu dla każdego ryzyka związanego z konk
 
 ## Zasady deterministyczności (wypracowane przez lata naprawiania niestabilnych testów)
 
-- **Czekaj na przyczynę, nigdy przez określony czas**: `waitForURL()` po kliknięciach powodujących nawigację, `waitForResponse()`/`waitForRequest()` przed sprawdzaniem interfejsu sterowanego przez RPC, a w pozostałych przypadkach oczekiwanie na stan elementu. Bez `waitForTimeout`; bez `expect.soft` wewnątrz `toPass` (miękkie błędy nigdy nie powodują ponowienia bloku).
+- **Czekaj na przyczynę, nigdy przez określony czas**: `waitForURL()` po kliknięciach powodujących nawigację, a następnie sprawdź charakterystyczny element strony docelowej, ponieważ zmiana adresu URL nie dowodzi, że DOM trasy został zatwierdzony. Użyj `waitForResponse()`/`waitForRequest()` przed sprawdzaniem interfejsu sterowanego przez RPC, a w pozostałych przypadkach oczekiwania na stan elementu. Bez `waitForTimeout`; bez `expect.soft` wewnątrz `toPass` (miękkie błędy nigdy nie powodują ponowienia bloku).
+- **Wyścigi nawigacji**: opóźnij trasę A, rozpocznij przejście do A, a następnie przejdź do B. Sprawdź, czy pojawiają się charakterystyczny element i skutki uboczne B, a A nigdy nie staje się widoczna. Rejestruj obietnice dotyczące sieci i wyrenderowanego stanu przed czynnościami, które je wyzwalają.
 - **Zachowania czasowe należy testować poniżej poziomu E2E**: terminy debounce/opóźnień i anulowanie sprawdzaj za pomocą fałszywych timerów w testach jednostkowych lub integracyjnych; E2E sprawdza widoczny rezultat bez usypiania.
 - **Bez kliknięć z `force: true`** -- jeśli element wymaga wymuszenia, coś go zasłania, a użytkownicy napotkają tę samą przeszkodę; usuń ją.
 - **Dopasowuj trasy RPC wyłącznie na podstawie `Service/Method`**, nigdy według przypiętej wersji (`v1alpha1` w regule dopasowania przestanie działać po kolejnym podniesieniu wersji API).

@@ -45,7 +45,8 @@ Browser emulation is not proof for every branded browser or physical device risk
 
 ## Determinism rules (mined from years of flake fixes)
 
-- **Wait for a cause, never a duration**: `waitForURL()` after navigation clicks, `waitForResponse()`/`waitForRequest()` before asserting UI the RPC drives, element-state waits otherwise. No `waitForTimeout`; no `expect.soft` inside `toPass` (soft failures never retry the block).
+- **Wait for a cause, never a duration**: `waitForURL()` after navigation clicks, then assert a destination landmark because URL publication does not prove route DOM committed. Use `waitForResponse()`/`waitForRequest()` before asserting UI the RPC drives, and element-state waits otherwise. No `waitForTimeout`; no `expect.soft` inside `toPass` (soft failures never retry the block).
+- **Navigation races**: delay route A, start A, then navigate to B. Assert B's landmark and side effects appear and A never becomes visible. Register network and rendered-state promises before the triggering actions.
 - **Timed behavior belongs below E2E**: prove debounce/delay deadlines and cancellation with fake timers in unit/integration tests; E2E asserts the visible outcome without sleeping.
 - **No `force: true` clicks** -- if the element needs forcing, something obstructs it and users hit the same wall; fix the obstruction.
 - **Match RPC routes on `Service/Method` only**, never version-pinned (`v1alpha1` in a matcher breaks on the next API bump).

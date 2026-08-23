@@ -1,0 +1,19 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "vitest run src/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "latest",
+    "@tanstack/react-router": "latest",
+    "react": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "latest",
+    "typescript": "latest",
+    "vitest": "^4.1.0"
+  }
+}

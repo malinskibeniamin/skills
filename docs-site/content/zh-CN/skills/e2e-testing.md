@@ -49,7 +49,8 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 
 ## 确定性规则（从多年修复不稳定测试的经验中总结）
 
-- **等待原因，绝不等待固定时长**：导航点击后使用 `waitForURL()`；在断言由 RPC 驱动的界面前使用 `waitForResponse()`/`waitForRequest()`；其他情况等待元素状态。不要使用 `waitForTimeout`；不要在 `toPass` 中使用 `expect.soft`（软失败不会重试该代码块）。
+- **等待原因，绝不等待固定时长**：导航点击后使用 `waitForURL()`，然后断言目标页面的标志性元素，因为 URL 已更新并不能证明路由 DOM 已完成提交。在断言由 RPC 驱动的界面前使用 `waitForResponse()`/`waitForRequest()`；其他情况等待元素状态。不要使用 `waitForTimeout`；不要在 `toPass` 中使用 `expect.soft`（软失败不会重试该代码块）。
+- **导航竞态**：延迟路由 A，开始导航到 A，然后导航到 B。断言 B 的标志性元素和副作用出现，并且 A 始终不可见。在触发操作之前注册网络和渲染状态 Promise。
 - **定时行为应在端到端测试以下的层级验证**：在单元测试或集成测试中使用模拟计时器验证防抖/延迟的时限和取消行为；端到端测试无需休眠，只断言可见结果。
 - **不要使用 `force: true` 点击** -- 如果元素需要强制点击，说明有东西遮挡了它，用户也会遇到同样的阻碍；应修复遮挡问题。
 - **仅按 `Service/Method` 匹配 RPC 路由**，绝不固定版本（匹配器中的 `v1alpha1` 会在下一次 API 版本升级时失效）。
