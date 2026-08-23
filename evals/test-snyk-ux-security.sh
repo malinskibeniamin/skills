@@ -116,6 +116,9 @@ run_content_eval "$REFERENCE_MD" "JS package manager stance" "REFERENCE.md docum
 run_content_eval "$REFERENCE_MD" 'Do not run `npm audit`|Do not.*npm audit' "REFERENCE.md forbids npm audit"
 run_content_eval "$REFERENCE_MD" "package-lock\.json.*stale|stale/wrong.*package-lock\.json" "REFERENCE.md treats package-lock as stale in bun projects"
 run_content_eval "$REFERENCE_MD" "False-positive bias for npm transitives" "REFERENCE.md defaults noisy npm transitives toward dismissal"
+run_content_eval "$REFERENCE_MD" "pull_request_target" "REFERENCE.md audits privileged pull-request workflows"
+run_content_eval "$REFERENCE_MD" "untrusted.*(cache|artifact)|(cache|artifact).*untrusted" "REFERENCE.md treats untrusted CI outputs as hostile"
+run_content_eval "$REFERENCE_MD" "staged publishing" "REFERENCE.md recommends staged package publishing"
 
 # Guardrail: bun-only for runtime (no npm/yarn/pnpm commands except `bun install --yarn`)
 if grep -qE "^\s*(npm (install|update|audit|view|why)|yarn (add|upgrade|audit|why)|pnpm (add|update|audit|why))" "$SKILL_MD"; then

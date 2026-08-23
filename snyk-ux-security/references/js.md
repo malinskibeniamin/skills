@@ -88,6 +88,31 @@ Reference docs checked while creating this gate:
   `npmPreapprovedPackages` bypasses package gates.
   https://yarnpkg.com/features/security#age-gate
 
+### CI and publishing supply-chain boundary
+
+When dependency or tooling work touches `.github/workflows`, package publishing, or action
+majors, audit the producer boundary as well as the consumer lockfile:
+
+1. Never checkout or execute untrusted pull-request code in a privileged
+   `pull_request_target` or `workflow_run` job. Keep permissions least-privilege and pass
+   only validated, non-executable data into a separate privileged job.
+2. Treat caches and artifacts produced by untrusted triggers as untrusted input. Do not
+   restore them into a secret-bearing publish or release job without isolation and
+   validation. Upgrade affected checkout actions to their current secure major after
+   reading the migration notes; a stale pin can preserve known unsafe behavior.
+3. Keep dependency install scripts disabled by default where the package manager supports
+   it. Explicitly allow only reviewed packages that require lifecycle scripts.
+4. Prefer trusted publishing with short-lived OIDC credentials, staged publishing, and a
+   human approval or 2FA step. Trusted publishing alone does not make a compromised build
+   workflow trustworthy.
+
+Primary guidance:
+
+- [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use)
+- [Safer `pull_request_target` checkout defaults](https://github.blog/changelog/2026-06-18-safer-pull_request_target-defaults-for-github-actions-checkout/)
+- [Read-only Actions caches for untrusted triggers](https://github.blog/changelog/2026-06-26-read-only-actions-cache-for-untrusted-triggers/)
+- [npm staged publishing](https://github.blog/changelog/2026-05-22-staged-publishing-and-new-install-time-controls-for-npm/)
+
 ### Socket.dev web check
 
 Use Socket.dev as an extra web-only supply-chain signal for JS package

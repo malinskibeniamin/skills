@@ -31,6 +31,18 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 })
 ```
 
+Automated accessibility checks detect only a subset of issues. For critical journeys,
+also verify keyboard order, focus movement, accessible names, zoom, and the target
+assistive-technology behavior; do not call an axe-only pass accessible.
+
+## Browser evidence
+
+Run the full suite in Chromium on PRs. Run only tagged `@cross-browser` journeys in Firefox and WebKit.
+Reserve the full declared browser matrix for a nightly lane or release gate.
+Tag critical journeys, fallbacks, and credible engine-specific risks rather than every test.
+Scope permission-specific specs when necessary, but exercise equivalent behavior elsewhere.
+Browser emulation is not proof for every branded browser or physical device risk.
+
 ## Determinism rules (mined from years of flake fixes)
 
 - **Wait for a cause, never a duration**: `waitForURL()` after navigation clicks, `waitForResponse()`/`waitForRequest()` before asserting UI the RPC drives, element-state waits otherwise. No `waitForTimeout`; no `expect.soft` inside `toPass` (soft failures never retry the block).

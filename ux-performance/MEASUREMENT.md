@@ -43,8 +43,13 @@ The stable Core Web Vitals are **LCP, INP, and CLS**. Judge field distributions 
 75th percentile (p75), segmented at least by mobile and desktop. Current "good" reference
 thresholds are LCP <= 2.5 s, INP <= 200 ms, and CLS <= 0.1; a product may need tighter
 budgets. FCP and TTFB explain loading; TBT is a lab proxy for main-thread blocking and
-cannot replace field INP. Core Web Vitals do not reset for ordinary SPA route changes, so
-instrument the route milestone explicitly.
+cannot replace field INP. By default, and in browsers without soft-navigation detection,
+Core Web Vitals do not reset for SPA route changes; instrument the route milestone
+explicitly. Chrome 151+ and `web-vitals` v6 can report
+soft-navigation Core Web Vitals when the browser supports detection and `reportSoftNavs`
+is enabled. Record the navigation URL or ID and separate hard from soft navigations in RUM.
+Keep a custom intent-to-useful-content route metric as the cross-browser product contract:
+soft-navigation detection is not universal and may not match every product transition.
 
 ## Read the waterfall
 
@@ -145,6 +150,8 @@ Limits: <what this setup cannot represent>
 ## Primary sources
 
 - [Web Vitals and field/lab measurement](https://web.dev/articles/vitals)
+- [Chrome soft-navigation measurement](https://developer.chrome.com/docs/web-platform/soft-navigations)
+- [`web-vitals` soft-navigation reporting](https://github.com/GoogleChrome/web-vitals#readme)
 - [User-centric and custom metrics](https://web.dev/articles/user-centric-performance-metrics)
 - [Chrome DevTools Performance reference](https://developer.chrome.com/docs/devtools/performance/reference)
 - [React Performance tracks](https://react.dev/reference/dev-tools/react-performance-tracks)
