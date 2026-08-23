@@ -16,19 +16,18 @@ szczegółu implementacji. Podczas grillowania nie należy tworzyć kodu produkc
 implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 
 ## 1. Przygotuj pakiet dowodów
+
 Przeczytaj zgłoszenie, plan, repozytorium, testy, dokumentację, materiały referencyjne i ostatnie decyzje. Ustalenie faktów
 należy do agenta. Pytaj użytkownika wyłącznie o preferencje, zakres, akceptowalny poziom ryzyka i
 decyzje, których nie można podjąć na podstawie dowodów.
 
-`/brain-dump` jest opcjonalnym wcześniejszym etapem odkrywania. Jeśli istnieje przygotowany w nim opis, zachowaj każdy kierunek
-możliwości i zacznij od jego rejestru odpowiedzi. Traktuj wpisy **Settled** jako rozstrzygnięte, chyba że dowody
-je unieważnią. Kwestionuj wpisy **Tentative**, gdy negatywne konsekwencje są istotne; pytaj o wpisy **Unknown**
-tylko wtedy, gdy mogą unieważnić kierunek lub zmienić jego priorytet.
+`/brain-dump` jest opcjonalnym wcześniejszym etapem odkrywania, a nie wymogiem każdej sesji grillowania. Gdy istnieje jego brief, zachowaj wszystkie ścieżki możliwości i zacznij od Rejestru odpowiedzi. Traktuj wpisy **Rozstrzygnięte** jako już wyjaśnione i nie pytaj o nie ponownie, chyba że sprzeczne dowody je podważą. Kwestionuj wpisy **Wstępne** tylko wtedy, gdy ryzyko ma znaczenie; pytaj o **Nieznane** wyłącznie wtedy, gdy mogą unieważnić ścieżkę lub zmienić jej priorytet.
 
 Wskaż lukę, która najprawdopodobniej może podważyć obecny kierunek. Jeśli obserwacja działania
 pozwoli wyjaśnić ją szybciej niż opis, najpierw zbuduj jednorazowy prototyp lub poproś o jego przygotowanie.
 
 ## 2. Tryb eksploracji
+
 Gdy nie wybrano jeszcze kierunku, przedstaw 2–3 podejścia wraz z kompromisami, odwracalnością i
 dowodami. Zarekomenduj jedno z nich. Konkurencyjne plany należy przekazać do `/plan-arbiter`.
 
@@ -51,9 +50,14 @@ Użyj tego stałego **formatu pytań**, aby użytkownik mógł je szybko przejrz
 ```markdown
 **Q1 -- <question title>**
 <question body or choices>
+
 **Recommended:** <answer>
+
+---
+
 **Q2 -- <question title>**
 <question body or choices>
+
 **Recommended:** <answer>
 ```
 
@@ -72,12 +76,14 @@ Przydatne pytania krytyczne:
 - Twierdzenie dotyczące skali lub awarii: konkretne dane wejściowe, czas lub stan systemu, które je potwierdzają.
 
 ## 3. Zakończ z klasyfikacją niewiadomych
+
 Decyzje zmieniające architekturę muszą zostać rozstrzygnięte lub wyraźnie zastrzeżone dla użytkownika.
 Sklasyfikuj wszystkie pozostałe: **wyszukanie -> prototyp -> odwracalne założenie -> wyzwalacz wstrzymania**.
 Rozmowa kończy się, gdy żadna nierozstrzygnięta kwestia nie może po cichu podważyć następnego etapu, a nie
 dopiero wtedy, gdy znane są wszystkie przyszłe szczegóły.
 
 ## 4. Bramka planu
+
 Zbierz jeden **pakiet dowodów**: zgłoszenie, plan, źródła specyfikacji, źródła standardów, planowane
 ścieżki, fakty z repozytorium, założenia i nierozstrzygnięte decyzje.
 
@@ -94,7 +100,8 @@ Osie: Specyfikacja -> `plan-product-hat`; Standardy -> `plan-engineering-hat`; p
 
 Czynniki podwyższonego ryzyka: uwierzytelnianie, migracja, publiczny interfejs API, działania destrukcyjne, współbieżność, Temporal, zmiany między usługami i decyzje jednokierunkowe. Dodaj `/resilience-review` oraz `/steelman`.
 
-**Rejestr specjalistów:** planowane prace w Go lub `go.mod` wymagają użycia `/golang`; dodaj kolejnego specjalistę dopiero po powtarzających się przeoczeniach.
+**Rejestr specjalistów:** planowane prace w Go lub `go.mod` wymagają użycia `/golang`; dodaj kolejnego
+specjalistę dopiero po powtarzających się przeoczeniach.
 
 Dla każdej odpowiedniej osi zgłoś `APPROVED`, `NEEDS_CHANGES`, `BLOCKED` lub `SKIPPED`
 wraz z dowodami; pominięcie wymaga podania przyczyny. Usuń duplikaty ustaleń wynikających z tej samej przyczyny źródłowej. Blokujące decyzje

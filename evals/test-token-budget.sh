@@ -111,6 +111,7 @@ while read -r skill cap; do
   fi
 done <<'EOF'
 aip 3825
+brain-dump 3200
 grilling 3650
 improve 3600
 golang 3525
@@ -160,6 +161,7 @@ to-questionnaire 1825
 ux-copy 1825
 hook-audit 1800
 demo 1800
+eli5 2850
 read-the-damn-docs 1775
 resilience-review 1750
 prototype 1775
