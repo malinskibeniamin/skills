@@ -35,6 +35,7 @@ Na granicy faz użyj [PHASE-BOUNDARIES.md](https://github.com/malinskibeniamin/s
 | `/domain-modeling` | Tworzenie wspólnego modelu domeny i słownictwa. |
 | `/e2e-testing` | Tworzenie odpornych testów end-to-end w Playwright. |
 | `/efficient-frontier` | Delegowanie ograniczonych zadań przy zachowaniu centralnej oceny. |
+| `/eli5` | Wyjaśnianie trudnych tematów całościowo i w kilku słowach. |
 | `/excalidraw-diagram` | Rysowanie edytowalnych diagramów Excalidraw na podstawie poleceń. |
 | `/extend-harness` | Rozszerzanie i debugowanie zestawu umiejętności frontendowych. |
 | `/frontend-invariants` | Ponadczasowe zasady frontendowe, które przetrwają zmiany stosu technologicznego. |

@@ -33,6 +33,7 @@ Builder.io 技能既可作為直接命令，也可作為底層輔助工具：`/v
 | `/domain-modeling` | 建立共用的領域模型與詞彙。 |
 | `/e2e-testing` | 建置具韌性的 Playwright 端對端測試。 |
 | `/efficient-frontier` | 委派範圍明確的工作，同時保留集中式判斷。 |
+| `/eli5` | 以宏觀圖像和精簡文字解釋艱深主題。 |
 | `/excalidraw-diagram` | 根據提示詞繪製可編輯的 Excalidraw 圖表。 |
 | `/extend-harness` | 擴充前端技能控制框架並進行除錯。 |
 | `/frontend-invariants` | 不受技術堆疊更迭影響的長青前端原則。 |

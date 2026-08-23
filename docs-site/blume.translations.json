@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "b03b88d061dbe289",
-      "zh-CN": "b03b88d061dbe289",
-      "zh-TW": "b03b88d061dbe289"
+      "pl": "8d7b20bfd5bf4302",
+      "zh-CN": "8d7b20bfd5bf4302",
+      "zh-TW": "8d7b20bfd5bf4302"
     },
     "content/skills/accessibility.md": {
       "pl": "563f8371823ba6c4",
@@ -21,9 +21,9 @@
       "zh-TW": "44bf6a6911b826e9"
     },
     "content/skills/ask-ben.md": {
-      "pl": "c1b416d7ddfe4994",
-      "zh-CN": "c1b416d7ddfe4994",
-      "zh-TW": "c1b416d7ddfe4994"
+      "pl": "610e2a6a777c9d71",
+      "zh-CN": "610e2a6a777c9d71",
+      "zh-TW": "610e2a6a777c9d71"
     },
     "content/skills/codebase-design.md": {
       "pl": "e8f946b051b569ae",
@@ -89,6 +89,11 @@
       "pl": "73338e63472cd6fc",
       "zh-CN": "73338e63472cd6fc",
       "zh-TW": "73338e63472cd6fc"
+    },
+    "content/skills/eli5.md": {
+      "pl": "2763d1754cd6f9ed",
+      "zh-CN": "2763d1754cd6f9ed",
+      "zh-TW": "2763d1754cd6f9ed"
     },
     "content/skills/excalidraw-diagram.md": {
       "pl": "50c5ce1c22a0cf8f",
