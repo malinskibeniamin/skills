@@ -77,7 +77,6 @@ No performance finding without measurement or a structural bound. No edge-case f
 without credible risk. A reasoned decline with evidence is valid.
 
 ### Synthesize
-
 Lead with findings. Deduplicate by root cause and keep the highest supported priority.
 Each finding contains only the concrete path, impact, smallest correction, and
 verification. Do not restate the diff or code, praise the author, or narrate the review.
@@ -93,9 +92,9 @@ changed public surface, and exact verification evidence. Read
 ## Output
 
 Read [REFERENCE.md](REFERENCE.md) for priority vocabulary and the comment-ready schema.
-Report `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`. After the findings, append the fixed point, mode, concise dogfood
-receipt, counts, verdict, and residual limits.
+Report `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
+Then append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode,
+counts, verdict, and residual limits.
 
-If there are no findings, return the verdict and residual verification limits only.
-Posting comments requires explicit user intent; otherwise return comment-ready text.
+For a clean review, return only the verdict and residual limits. Posting comments requires
+explicit user intent; otherwise return comment-ready text.

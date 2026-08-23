@@ -95,8 +95,9 @@ git log "$BASE"..HEAD --oneline
 ## 輸出
 
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md)，了解優先級用語與可直接用於留言的結構描述。
-先回報 `[P0|P1|P2] <file:line> <specific title> - <evidence and consequence; correction; verify command>`。
-每個根本原因只回報一次。接著簡短回報固定點、差異指令、模式、實際試用紀錄：`entrypoint, data, actions, observations, timing, limits`、發現數量與合併判定。
+回報 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
+接著附上 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、
+發現數量、判定與剩餘限制。
 
-如果沒有任何發現，只回報判定與剩餘的驗證限制。張貼留言
+若審查沒有發現，只回報判定與剩餘限制。張貼留言
 需要使用者明確表達意圖；否則只回傳可直接用於留言的文字。

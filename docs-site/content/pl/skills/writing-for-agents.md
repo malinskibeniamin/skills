@@ -19,14 +19,15 @@ Podczas pisania umiejętności przeczytaj [SKILL-MECHANICS.md](https://github.co
 ## Umieszczaj informacje na właściwym poziomie
 
 **Wskaźnik kontekstu** nazywa materiał poza wczytanym dokumentem i określa, kiedy go
-przeczytać. Wskaźnik zużywa kontekst; jego brak obciąża pamięć człowieka.
+przeczytać. Wskaźnik zużywa obciążenie kontekstu; jego brak obciąża pamięć człowieka.
 
-Używaj najpłytszego uzasadnionego poziomu:
+**Stopniowe ujawnianie** używa najpłytszego uzasadnionego poziomu:
 
 1. Umieszczaj bezpośrednio kroki potrzebne w każdym wykonaniu.
 2. Umieszczaj bezpośrednio materiały potrzebne podczas tych kroków.
 3. Łącz materiały dotyczące wybranych gałęzi przez precyzyjny wskaźnik kontekstu.
-4. Pozostaw proste informacje środowisku, konfiguracji, układowi lub `--help`.
+4. Traktuj środowisko jako źródło prawdy; zapisuj w dokumencie tylko kosztowne wyszukiwania.
+   Fakty pozostaw konfiguracji, układowi lub `--help`.
 
 Zacznij każdy wskaźnik od mocnego wyzwalacza. Nazwij każdą gałąź raz. Nie ukrywaj
 obowiązkowego kroku w materiale referencyjnym.
@@ -36,13 +37,13 @@ obowiązkowego kroku w materiale referencyjnym.
 - Używaj trybu rozkazującego i terminów repozytorium.
 - Kończ każdy krok obserwowalnym kryterium ukończenia.
 - Definiuj słowo przewodnie tylko wtedy, gdy zastępuje powtarzane wyjaśnienie i ułatwia zapamiętanie.
-- Wskazuj pozytywny cel. Zakaz zachowuj tylko dla bezwzględnej zasady ochronnej i podaj bezpieczne działanie.
+- Negacja aktywuje nazwane zachowanie. Wskazuj pozytywny cel; zakaz zachowuj tylko dla bezwzględnej zasady ochronnej i podaj bezpieczne działanie.
 - Dziel sekwencję tylko wtedy, gdy widoczne późniejsze kroki powodują przedwczesne ukończenie.
 
 ## Skróć przed publikacją
 
-Przy każdym wierszu zapytaj, jakie zachowanie zmieni się po jego usunięciu. Jeśli żadne,
-usuń wiersz.
+Szukaj instrukcji bez efektu: przy każdym wierszu zapytaj, jakie zachowanie zmieni się po
+jego usunięciu. Jeśli żadne, usuń wiersz.
 
 - Zachowaj każde znaczenie w jednym źródle prawdy.
 - Usuń informacje identyfikacyjne zawarte już w pliku, celu lub nagłówku.

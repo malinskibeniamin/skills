@@ -12,6 +12,14 @@ if hook_has_escape "ux-copy"; then
   exit 0
 fi
 
+# Plain code cannot contain interface copy. Skip unless the edit has a string, visible
+# JSX, interpolation, or a comment-level term this hook checks.
+case "$added_lines" in
+  *\"*|*"'"*|*'`'*|*'>'*'<'*|*'${'*|*[Mm][Aa][Kk][Ee]*[Pp][Oo][Pp]*) ;;
+  *[Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt]*|*[Bb][Ll][Aa][Cc][Kk][Ll][Ii][Ss][Tt]*|*[Mm][Aa][Ss][Tt][Ee][Rr]*|*[Ss][Ll][Aa][Vv][Ee]*) ;;
+  *) exit 0 ;;
+esac
+
 # UI-ish added lines only: TS/TSX string literals or visible JSX text.
 # Some slop directives are useful to catch in comments too; those checks
 # intentionally use all added lines and still honor the escape hatch above.

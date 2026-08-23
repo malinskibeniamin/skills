@@ -102,10 +102,10 @@ zmienioną powierzchnię publiczną oraz dokładne dowody weryfikacji. Przeczyta
 ## Wynik
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md), aby poznać słownictwo priorytetów i schemat gotowy do użycia w komentarzu.
-Zgłoś `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`. Po ustaleniach dodaj stały punkt, tryb, zwięzłe potwierdzenie
-samodzielnego testowania, liczbę ustaleń, werdykt i pozostałe ograniczenia.
+Zgłoś `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
+Następnie dodaj `entrypoint, data, actions, observations, timing, limits`, stały punkt,
+tryb, liczbę ustaleń, werdykt i pozostałe ograniczenia.
 
-Jeśli nie ma ustaleń, zwróć tylko werdykt i pozostałe ograniczenia weryfikacji.
+Przy czystym przeglądzie zwróć tylko werdykt i pozostałe ograniczenia.
 Publikowanie komentarzy wymaga wyraźnej intencji użytkownika; w przeciwnym razie zwróć
 tekst gotowy do użycia w komentarzu.

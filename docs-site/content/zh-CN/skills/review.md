@@ -77,9 +77,9 @@ git log "$BASE"..HEAD --oneline
 ## 输出
 
 阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md)，了解优先级术语和可直接用于评论的模式。
-报告 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction,
-verify command>`。在发现之后附上固定点、模式、简明的实际试用记录、发现数量、
-结论和剩余限制。
+报告 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
+然后附上 `entrypoint, data, actions, observations, timing, limits`、固定点、模式、
+发现数量、结论和剩余限制。
 
-如果没有发现，只返回结论和剩余的验证限制。发布评论需要用户明确表达意图；
+对于没有发现的审查，只返回结论和剩余限制。发布评论需要用户明确表达意图；
 否则返回可直接用于评论的文本。

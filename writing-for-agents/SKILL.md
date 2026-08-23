@@ -13,14 +13,15 @@ When writing a skill, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md) for frontmat
 ## Put information at the right depth
 
 A **context pointer** names material outside the loaded document and states when to read
-it. The pointer spends context; omitting it spends human recall.
+it. The pointer spends context load; omitting it spends human recall.
 
-Use the shallowest justified depth:
+**Progressive disclosure** uses the shallowest justified depth:
 
 1. Inline steps every execution needs.
 2. Inline reference needed while performing those steps.
 3. Link branch-specific reference through a precise context pointer.
-4. Leave cheap lookups to the environment, configuration, layout, or `--help`.
+4. Treat the environment as a source of truth; cache only expensive lookups. Leave facts
+   to configuration, layout, or `--help`.
 
 Front-load a strong trigger in each pointer. Name distinct branches once. Do not hide a
 mandatory step in a reference.
@@ -30,14 +31,14 @@ mandatory step in a reference.
 - Use imperative language and the repository's terms.
 - End every step with an observable completion criterion.
 - Define a leading word only when it replaces repeated explanation and improves recall.
-- State the positive target. Keep a prohibition only for a hard guardrail, paired with
-  the safe action.
+- Negation activates the behavior it names. Prompt the **positive** target; keep a
+  prohibition only for a hard guardrail, paired with the safe action.
 - Split a sequence only when visible later steps cause premature completion.
 
 ## Compress before publishing
 
-For every line, ask what behavior changes if it is deleted. Delete the line when the
-answer is none.
+Hunt no-ops: for every line, ask what behavior changes if it is deleted. Delete the line
+when the answer is none.
 
 - Keep each meaning in one source of truth.
 - Remove identity already carried by the file, target, or heading.
