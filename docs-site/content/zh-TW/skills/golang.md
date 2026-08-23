@@ -49,6 +49,7 @@ sidebar:
 | 設定介面、旗標、棄用、結構描述或欄位移除 | [ROLLOUT.md](https://github.com/malinskibeniamin/skills/blob/main/golang/ROLLOUT.md) |
 | 套件邊界、儲存層、介面 | [STRUCTURE.md](https://github.com/malinskibeniamin/skills/blob/main/golang/STRUCTURE.md) |
 | Kubernetes 運算子與協調器 | [CONTROLLERS.md](https://github.com/malinskibeniamin/skills/blob/main/golang/CONTROLLERS.md) |
+| Go 1.27 泛型方法、公開 SDK／程式庫相容性、goroutine 洩漏剖析 | [GO-1.27.md](https://github.com/malinskibeniamin/skills/blob/main/golang/GO-1.27.md) |
 
 ## 掛鉤
 

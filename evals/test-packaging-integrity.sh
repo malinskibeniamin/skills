@@ -70,27 +70,59 @@ else
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: Codex plugin skill index drift"
 fi
 
-_pi_bad=""
-while IFS= read -r _pi_file; do
-  _pi_dir=$(dirname "$_pi_file")
-  while IFS= read -r _pi_target; do
-    [ -z "$_pi_target" ] && continue
-    case "$_pi_target" in http*|\#*|mailto:*|\<*|link) continue ;; esac
-    _pi_clean="${_pi_target%%#*}"
-    _pi_clean="${_pi_clean%% *}"
-    if [ -e "$_pi_dir/$_pi_clean" ] || [ -e "$REPO_ROOT/$_pi_clean" ]; then
-      continue
-    fi
-    case "$_pi_file" in
-      "$REPO_ROOT/docs-site/content/"*)
-        case "$_pi_clean" in
-          /*) [ -e "$REPO_ROOT/docs-site/public$_pi_clean" ] && continue ;;
-        esac
-        ;;
-    esac
-    _pi_bad="$_pi_bad $_pi_file->$_pi_clean"
-  done < <(grep -oE '\]\(([^)]+)\)' "$_pi_file" 2>/dev/null | sed 's/^](//;s/)$//')
-done < <(find "$REPO_ROOT" -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' -not -path '*/deprecated/*' ! -name '*-FORMAT.md')
+# Ignore fenced code: generic signatures such as Foo[T any](data) are not links.
+_pi_bad=$(python3 - "$REPO_ROOT" <<'PY'
+import os
+import pathlib
+import re
+import sys
+
+repo = pathlib.Path(sys.argv[1])
+excluded_dirs = {"node_modules", ".git", "dist", "deprecated"}
+link_pattern = re.compile(r"\]\(([^)]+)\)")
+fence_pattern = re.compile(r"^[ \t]{0,3}((?:\x60){3,}|~{3,})")
+bad = []
+
+markdown_paths = []
+for root, dirs, files in os.walk(repo):
+    dirs[:] = [directory for directory in dirs if directory not in excluded_dirs]
+    markdown_paths.extend(
+        pathlib.Path(root) / name
+        for name in files
+        if name.endswith(".md") and not name.endswith("-FORMAT.md")
+    )
+
+for path in markdown_paths:
+    fence = None
+    for line in path.read_text().splitlines():
+        if fence is not None:
+            closing_pattern = re.compile(
+                rf"^[ \t]{{0,3}}{re.escape(fence[0])}{{{fence[1]},}}[ \t]*$"
+            )
+            if closing_pattern.match(line):
+                fence = None
+            continue
+
+        match = fence_pattern.match(line)
+        if match:
+            marker = match.group(1)
+            fence = (marker[0], len(marker))
+            continue
+
+        for target in link_pattern.findall(line):
+            if target.startswith(("http", "#", "mailto:", "<")) or target == "link":
+                continue
+            clean = target.split("#", 1)[0].split(" ", 1)[0]
+            if (path.parent / clean).exists() or (repo / clean).exists():
+                continue
+            if path.is_relative_to(repo / "docs-site/content") and clean.startswith("/"):
+                if (repo / "docs-site/public" / clean.lstrip("/")).exists():
+                    continue
+            bad.append(f" {path}->{clean}")
+
+print("".join(bad))
+PY
+)
 
 if [ -n "$_pi_bad" ]; then
   echo "  FAIL  dangling markdown links:$_pi_bad"

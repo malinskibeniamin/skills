@@ -56,6 +56,7 @@ skill owns the Go *implementation* around it.
 | Config surfaces, flags, deprecations, schema/field removal | [ROLLOUT.md](ROLLOUT.md) |
 | Package boundaries, storage layers, interfaces | [STRUCTURE.md](STRUCTURE.md) |
 | Kubernetes operators and reconcilers | [CONTROLLERS.md](CONTROLLERS.md) |
+| Go 1.27 generic methods, public SDK/library compatibility, goroutine leak profiles | [GO-1.27.md](GO-1.27.md) |
 
 ## Hooks
 

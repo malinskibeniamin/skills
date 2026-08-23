@@ -49,6 +49,7 @@ sidebar:
 | 配置接口、功能开关、弃用、模式或字段移除 | [ROLLOUT.md](https://github.com/malinskibeniamin/skills/blob/main/golang/ROLLOUT.md) |
 | 包边界、存储层、接口 | [STRUCTURE.md](https://github.com/malinskibeniamin/skills/blob/main/golang/STRUCTURE.md) |
 | Kubernetes Operator 和协调器 | [CONTROLLERS.md](https://github.com/malinskibeniamin/skills/blob/main/golang/CONTROLLERS.md) |
+| Go 1.27 泛型方法、公共 SDK/库兼容性、Goroutine 泄漏分析 | [GO-1.27.md](https://github.com/malinskibeniamin/skills/blob/main/golang/GO-1.27.md) |
 
 ## 钩子
 
