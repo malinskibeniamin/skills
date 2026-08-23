@@ -40,6 +40,7 @@
     "./dogfood/",
     "./domain-modeling/",
     "./e2e-testing/",
+    "./eli5/",
     "./efficient-frontier/",
     "./excalidraw-diagram/",
     "./extend-harness/",

@@ -18,7 +18,7 @@ import json, pathlib, re, shutil, sys
 repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
-ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "UI", "URL", "UX"}
+ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "UI", "URL", "UX"}
 BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "tanstack": "TanStack"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
@@ -38,6 +38,7 @@ SHORT_DESCRIPTIONS = {
     "dogfood": "Use and stress-test every runnable change",
     "domain-modeling": "Build a shared domain model and vocabulary",
     "e2e-testing": "Build resilient Playwright end-to-end tests",
+    "eli5": "Explain hard topics with big pictures and few words",
     "efficient-frontier": "Delegate bounded work while preserving central judgment",
     "excalidraw-diagram": "Draw editable Excalidraw diagrams from prompts",
     "extend-harness": "Extend and debug the frontend skill harness",

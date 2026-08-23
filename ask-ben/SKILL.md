@@ -29,6 +29,7 @@ At a phase boundary, use [PHASE-BOUNDARIES.md](PHASE-BOUNDARIES.md) to choose wh
 | `/domain-modeling` | Build a shared domain model and vocabulary. |
 | `/e2e-testing` | Build resilient Playwright end-to-end tests. |
 | `/efficient-frontier` | Delegate bounded work while preserving central judgment. |
+| `/eli5` | Explain hard topics with big pictures and few words. |
 | `/excalidraw-diagram` | Draw editable Excalidraw diagrams from prompts. |
 | `/extend-harness` | Extend and debug the frontend skill harness. |
 | `/frontend-invariants` | Timeless frontend principles that outlive stacks. |
