@@ -13,6 +13,12 @@ Read the request, plan, repository, tests, docs, references, and recent decision
 are the agent's job. Ask the user only for preferences, scope, risk appetite, and
 decisions that cannot be learned from evidence.
 
+`/brain-dump` is an optional upstream discovery step, not a requirement for every grilling
+session. When its brief exists, preserve every opportunity track and start from its Answer
+ledger. Treat **Settled** entries as answered and do not ask them again unless contradictory
+evidence invalidates them. Challenge **Tentative** entries only when the downside matters; ask
+about **Unknown** entries only when they could invalidate or prioritize a track.
+
 Name the blind spot most likely to invalidate the current direction. If seeing behavior
 would answer it faster than prose, build or request a disposable prototype first.
 
