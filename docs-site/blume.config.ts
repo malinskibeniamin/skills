@@ -101,4 +101,8 @@ export default defineConfig({
     radius: "lg",
   },
   title: "Agent skills",
+  versions: {
+    archived: [{ id: "v4.37.0" }],
+    current: { badge: "Latest", label: "main" },
+  },
 });

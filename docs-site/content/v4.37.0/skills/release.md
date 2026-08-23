@@ -1,11 +1,13 @@
 ---
-name: release
-description: Publish an immutable frontend-skills release across manifests, PR, tag, GitHub, Claude, and Codex.
-disable-model-invocation: true
-argument-hint: "[version]"
+title: "/release"
+description: "Publish an immutable frontend-skills release across manifests, PR, tag, GitHub, Claude, and Codex."
+type: skill
+sidebar:
+  label: "/release"
 ---
+![Diagram of the /release skill](/diagrams/skills/release.svg)
 
-# Release
+[Open the editable Excalidraw source](/diagrams/skills/release.excalidraw)
 
 Publish this repository without letting metadata, tags, or runtime caches diverge. The
 version argument must resolve to an exact stable SemVer such as `4.34.0`.
@@ -27,9 +29,7 @@ version argument must resolve to an exact stable SemVer such as `4.34.0`.
    changelog entries, `CHANGELOG.md`, and the README install pin together.
 4. If the skill surface changed, run the hook, catalog, and AGENTS generators. Never hand-edit
    generated Codex proxies.
-5. Freeze the release's docs with `bun run docs:version v<version>`. Commit the generated
-   snapshot and its new `versions.archived` entry; never edit an existing snapshot.
-6. Replay the focused release metadata and packaging evals to GREEN.
+5. Replay the focused release metadata and packaging evals to GREEN.
 
 ## 3. Verify the package
 

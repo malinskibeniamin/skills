@@ -13,13 +13,14 @@
     "check": "blume check --strict",
     "dev": "blume dev",
     "diagrams": "bun run generate-skill-diagrams.ts --render",
+    "docs:version": "bun run version-docs.ts",
     "translate": "blume translate --codex",
     "translate:check": "blume translate --check"
   },
   "devDependencies": {
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "blume": "1.4.3",
+    "blume": "1.5.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "typescript": "6.0.3",

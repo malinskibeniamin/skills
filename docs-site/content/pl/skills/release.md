@@ -30,7 +30,9 @@ Opublikuj to repozytorium, nie dopuszczając do rozbieżności metadanych, tagó
    wpisy dziennika zmian, `CHANGELOG.md` oraz przypiętą wersję instalacyjną w README.
 4. Jeśli powierzchnia umiejętności uległa zmianie, uruchom generatory hooków, katalogu i plików AGENTS. Nigdy nie edytuj ręcznie
    wygenerowanych proxy Codex.
-5. Ponownie uruchom ukierunkowane testy ewaluacyjne metadanych wydania i pakowania, aż osiągną stan GREEN.
+5. Zamroź dokumentację wydania poleceniem `bun run docs:version v<version>`. Zacommituj wygenerowaną
+   migawkę i jej nowy wpis `versions.archived`; nigdy nie edytuj istniejącej migawki.
+6. Ponownie uruchom ukierunkowane testy ewaluacyjne metadanych wydania i pakowania, aż osiągną stan GREEN.
 
 ## 3. Zweryfikuj pakiet
 

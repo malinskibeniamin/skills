@@ -27,6 +27,19 @@ done
 
 run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.37\.0$' "changelog has 4.37.0 section"
 run_content_eval "$REPO_ROOT/README.md" 'v4\.37\.0' "README pinned release example updated"
+run_content_eval "$REPO_ROOT/docs-site/blume.config.ts" 'id: "v4\.37\.0"' "docs archive registers v4.37.0"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.37.0/index.mdx" "docs archive includes the v4.37.0 landing page"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.37.0/skills/release.md" "docs archive includes v4.37.0 skill pages"
+if grep -Rq 'github.com/malinskibeniamin/skills/blob/main/' "$REPO_ROOT/docs-site/content/v4.37.0"; then
+  echo "  FAIL  archived docs still link to mutable main content"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: archived docs links are tag-pinned"
+else
+  echo "  PASS  archived docs links are tag-pinned"
+  PASS=$((PASS + 1))
+fi
+run_content_eval "$REPO_ROOT/package.json" '"docs:version":' "repository exposes the docs version command"
+run_content_eval "$REPO_ROOT/package.json" 'version-docs.test.ts' "repository test gate protects docs archives"
+run_content_eval "$REPO_ROOT/release/SKILL.md" 'bun run docs:version v<version>' "release workflow archives its docs"
 run_content_eval "$REPO_ROOT/README.md" 'codex features enable hooks' "README enables the stable Codex hooks feature"
 run_content_eval "$REPO_ROOT/README.md" 'codex plugin add frontend-skills@skills' "README installs the Codex plugin after adding its marketplace"
 

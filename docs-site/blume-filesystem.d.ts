@@ -38,7 +38,7 @@ export interface FilesystemSourceOptions {
   root: string;
 }
 
-/** Blume 1.4.2 omits declarations for its wildcard filesystem-source export. */
+/** Blume omits declarations for its wildcard filesystem-source export. */
 export declare const filesystemSource: (
   options: FilesystemSourceOptions,
 ) => FilesystemSource;
