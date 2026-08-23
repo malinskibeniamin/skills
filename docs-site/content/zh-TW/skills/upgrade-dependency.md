@@ -9,9 +9,9 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/upgrade-dependency.excalidraw)
 
-升級至指定的穩定版本；若未指定，則使用最新穩定版本。調整受影響的呼叫端。
-遵循指定的交付終點：`plan` 僅供唯讀；建置／修正會在本機變更通過驗證後停止；
-只有在明確要求時，才會提交、推送或建立 PR。
+升級至要求的穩定版本；若未指定，則使用最新穩定版本。調整呼叫端。
+遵循要求的交付終點：`plan` 僅供唯讀；建置／修正包含驗證、提交與推送，除非使用者要求僅保留於本機、
+不提交或不推送。只有在要求時才建立 PR。
 當觸發相關分支時，請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/upgrade-dependency/REFERENCE.md)，以取得供應鏈檢查及議題／PR 範本。
 
 輸入：`$ARGUMENTS` = 套件／模組、資訊清單路徑、目標版本、自然語言，或 `plan`。
@@ -25,7 +25,7 @@ sidebar:
    證據及所需決策。`plan` -> 在對話中回報路徑及風險。依序處理
    各套件；明確委派或 `/swarm` 可分派互相獨立的工作軌。
 
-4. **套用** -- 前置檢查：版本至少發布 7–30 天、停用指令碼／檢查 `trustedDependencies`、不得使用 git／tarball／原始 URL 相依套件、若有 Socket／npq 則執行、檢查鎖定檔、執行全新安裝。維持個別且已驗證的變更群組；僅在要求時分別提交：
+4. **套用** -- 前置檢查：版本至少發布 7–30 天、停用指令碼／檢查 `trustedDependencies`、不得使用 git／tarball／原始 URL 相依套件、若有 Socket／npq 則執行、檢查鎖定檔、執行全新安裝。維持個別且已驗證的提交，除非使用者要求提早停止：
    a. **升級版本**：`bun update <pkg>@<v>` -> `bun install` -> 當 `yarn.lock`／Snyk 需要時執行 `bun install --yarn`。Go：`go get -u <module>@<v>` -> `go mod tidy`。切勿手動編輯鎖定檔。
    b. **遷移**：使用官方 codemod；統整每個受影響呼叫端的 API／語法／樣式／行為變更。這次升級產生的棄用警告必須立即修正，不得壓制。
    c. **效益**：若變更日誌特別介紹的 API 可簡化既有程式碼，便予以採用 -- 刪除被迫採用的暫時解法及過時的 polyfill；精簡或強化程式碼，切勿在缺乏依據下擴充。

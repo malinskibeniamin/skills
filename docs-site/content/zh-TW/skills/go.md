@@ -49,8 +49,9 @@ sidebar:
 ## 交付
 
 依照 [commit-push-pr/REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) 進行明確的暫存、
-提交格式設定、推送、建立草稿 PR、審查者指引及撰寫 PR 內容。未經許可，絕不可合併或
-強制推送。
+提交格式設定、推送、建立草稿 PR、審查者指引及撰寫 PR 內容。對目前由使用者擁有的功能分支，可執行 rebase，並在需要時使用
+`--force-with-lease`，無須再次詢問許可。未經明確許可，絕不可合併、使用一般的 `--force`，或改寫預設、共用、
+他人擁有或正由他人並行使用的分支。
 
 如果 `gh stack view --json` 識別出堆疊，請以其父層為基準審查並驗證目前層。
 只有在透過 `/stacked-prs` 明確要求時，才發布整個堆疊；一般

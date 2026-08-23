@@ -9,9 +9,9 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/upgrade-dependency.excalidraw)
 
-升级到指定的稳定版本；如未指定，则使用最新稳定版本。调整受影响的调用点。
-遵循指定的交付终点：`plan` 为只读；构建或修复在本地变更验证通过后停止；
-仅在明确要求时才提交、推送或创建 PR。
+升级到请求的稳定版本；如未指定，则使用最新稳定版本。调整调用点。
+遵循请求的交付终点：`plan` 仅为只读；构建或修复包含验证、提交和推送，除非用户要求仅保留本地、
+不提交或不推送。仅在请求时创建 PR。
 当触发相关分支时，请阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/upgrade-dependency/REFERENCE.md)，了解供应链检查以及议题/PR 模板。
 
 输入：`$ARGUMENTS` = 软件包/模块、清单路径、目标版本、自然语言或 `plan`。
@@ -23,7 +23,7 @@ sidebar:
 
 3. **关卡**：有充分把握的补丁版本/次版本 -> 应用。已有文档说明的主版本 -> 每次应用一个主版本节点。非 SemVer、迁移方式不明确、影响范围大或安全性存在不确定性 -> 停止，并提供证据和需要作出的决策。`plan` -> 在聊天中报告升级路径和风险。按顺序处理软件包；明确委派或使用 `/swarm` 时，可分配相互独立的工作通道。
 
-4. **应用**——预检：最低发布时长为 7-30 天，禁用脚本/审查 `trustedDependencies`，不得使用 git/tarball/原始 URL 依赖，如存在则使用 Socket/npq，审查锁文件，执行全新安装。保持相互独立且已验证的变更组；仅在要求时分别提交：
+4. **应用**——预检：最低发布时长为 7-30 天，禁用脚本/审查 `trustedDependencies`，不得使用 git/tarball/原始 URL 依赖，如存在则使用 Socket/npq，审查锁文件，执行全新安装。保持相互独立且已验证的提交，除非用户要求提前停止：
    a. **升级版本**：`bun update <pkg>@<v>` -> `bun install` -> 当 `yarn.lock`/Snyk 需要时运行 `bun install --yarn`。Go：`go get -u <module>@<v>` -> `go mod tidy`。切勿手动编辑锁文件。
    b. **迁移**：使用官方代码迁移工具；统一处理每个受影响调用点中的 API/语法/样式/行为变更。本次升级产生的弃用警告必须立即修复，不得抑制。
    c. **获益**：在变更日志重点介绍的 API 能简化现有代码时采用它们——删除被迫添加的变通方案和过时的 polyfill；精简或加固代码，绝不进行推测性扩展。

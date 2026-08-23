@@ -62,7 +62,9 @@ sidebar:
 
 - 仅在涉及保留给用户的重要决策，或不可逆的生产、
   法律/隐私、破坏性或高安全性操作时询问。
-- 未经许可，绝不合并、强制推送、创建额外的 PR 或扩大终点范围。
+- 对当前用户拥有的功能分支，可直接提交、推送、执行变基，并在需要时使用 `--force-with-lease`，
+  无需再次请求许可。未经明确许可，绝不合并、使用普通 `--force`、创建额外的 PR，或重写默认分支、
+  共享分支、他人拥有或正被并行使用的分支。
 - 在 main/master/develop 分支上编写代码前，使用
   `scripts/mux-worktree.sh <type>/<branch-name>` 创建隔离的工作树。[ETHOS：工作树隔离]
 - 耗时较长或未知因素较多的工作，可以在已被 git 忽略的 `.context/implementation-notes.md` 中记录当前假设、证据、偏差和
@@ -71,5 +73,5 @@ sidebar:
 
 ## 完成
 
-在请求的终点停止：答复、已验证的本地改动、提交、推送、PR 或完整
+在请求的终点停止：答复；操作类工作默认提交并推送；明确要求的本地改动或仅提交；PR；或完整
 交付。不要仅仅因为计划中的某个步骤完成就停止。仅当具体的验证或交付分支需要详细命令时，才查看 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)。

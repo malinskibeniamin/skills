@@ -60,7 +60,7 @@ sidebar:
    - Bazel：視情況更新兩份資訊清單，接著執行
      `bazel mod deps --lockfile_mode=update`；保留鏡像/FIPS/CMVP 限制。
 7. **遷移與驗證：**閱讀變更記錄與 `BREAKING` 附註；將主要版本 7 -> 8 -> 9
-   分成獨立且經驗證的群組逐步升級。只有在要求時，才將每個群組以 `refactor(deps)` 提交。
+   分成獨立且經驗證的群組逐步升級。除非使用者要求提早停止，否則將每個群組以 `refactor(deps)` 提交。
    絕不可延後真正的弱點；遇到阻礙時應上報。
    JS 執行 `bun run lint:fix`、`bun run type:check`、`bun test`，並在有建置腳本時執行建置。
    Go 執行 `go build ./...`、`go test ./...`、`go vet ./...` 與 `govulncheck ./...`。

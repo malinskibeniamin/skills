@@ -50,8 +50,10 @@ Użycie innego modelu lub delegowanego toku pracy wymaga wyraźnej zgody użytko
 ## Dostarczenie
 
 Postępuj zgodnie z [commit-push-pr/REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) w zakresie jawnego dodawania zmian do obszaru przejściowego,
-formatu commita, wypychania zmian, tworzenia wersji roboczej PR-a, wskazówek dla recenzentów i treści PR-a. Nigdy nie scalaj ani
-nie wykonuj wymuszonego wypchnięcia bez zgody.
+formatu commita, wypychania zmian, tworzenia wersji roboczej PR-a, wskazówek dla recenzentów i treści PR-a. Na bieżącej,
+należącej do użytkownika gałęzi funkcji wykonuj rebase i w razie potrzeby używaj `--force-with-lease` bez ponownego
+pytania o zgodę. Nigdy nie scalaj, nie używaj zwykłego `--force` ani nie przepisuj gałęzi domyślnej, współdzielonej,
+należącej do kogoś innego lub równolegle używanej bez wyraźnej zgody.
 
 Jeśli `gh stack view --json` wykryje stos, przejrzyj i zweryfikuj bieżącą warstwę względem jej
 elementu nadrzędnego. Dostarcz cały stos tylko wtedy, gdy wyraźnie zażądano tego przez `/stacked-prs`; zwykły

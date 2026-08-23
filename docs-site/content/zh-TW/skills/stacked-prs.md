@@ -73,10 +73,11 @@ git log "$BASE"..HEAD --oneline
 
 ## 4. 意見回饋、同步與合併
 
-在意見所屬的分支修正回饋並加以驗證。說明連鎖變更會改寫上層
-分支：使用 force-with-lease 需要明確授權。接著依序使用
+在意見所屬的分支修正回饋並加以驗證。連鎖變更會改寫上層分支。對於目前工作區中由使用者擁有並維護的堆疊，
+可直接執行 rebase，並使用 `--force-with-lease` 推送整個連鎖變更，無須另行詢問許可；在回執中報告此次改寫。
+只有在歸屬不明，或將改寫預設、共用、他人擁有或正由他人並行使用的分支時才詢問。接著依序使用
 `gh stack rebase --upstack --remote origin` 與 `gh stack push --remote origin`。
-`gh stack sync --prune --remote origin` 適用相同的授權界線。
+`gh stack sync --prune --remote origin` 適用相同的歸屬界線。
 
 使用 `gh stack rebase --continue` 繼續已解決衝突的操作。只有當使用者要求
 放棄操作時才中止。外部連結模式必須先協調其工作樹。

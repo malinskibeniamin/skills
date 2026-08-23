@@ -52,7 +52,7 @@ git log "$BASE"..HEAD --oneline
 
 ## 4. 处理反馈、同步和合并
 
-在反馈所属的分支上修复问题并进行验证。说明级联操作会重写上层分支：使用带租约的强制推送需要明确授权。然后运行 `gh stack rebase --upstack --remote origin`，再运行 `gh stack push --remote origin`。`gh stack sync --prune --remote origin` 适用相同的授权边界。
+在反馈所属的分支上修复问题并进行验证。级联操作会重写上层分支。对于当前工作区中由用户拥有并维护的堆栈，可直接执行变基，并使用 `--force-with-lease` 推送整个级联，无需另行请求许可；在回执中报告此次重写。仅当归属不明确，或将重写默认分支、共享分支、他人拥有或正被并行使用的分支时才询问。然后运行 `gh stack rebase --upstack --remote origin`，再运行 `gh stack push --remote origin`。`gh stack sync --prune --remote origin` 适用相同的归属边界。
 
 使用 `gh stack rebase --continue` 继续已解决冲突的操作。仅当用户要求放弃操作时才中止。外部链接模式必须先协调其工作树。
 
