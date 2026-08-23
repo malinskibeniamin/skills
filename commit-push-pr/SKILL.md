@@ -34,7 +34,10 @@ template, screenshots, and dependency-upgrade sections.
    - keep lowercase, 5-72 characters, no trailing period
 3. Explicit commit-only intent stops here after a clean-tree check and commit summary.
 4. Push/PR only: show `origin/<branch>..HEAD`, then push with tracking.
-5. Use `--force-with-lease` only after an approved history rewrite.
+5. After rebasing or otherwise rewriting the current user-owned feature branch, use
+   `--force-with-lease` when needed without another permission prompt. Never use plain
+   `--force`; rewriting default, shared, foreign, or concurrently owned branches requires
+   explicit permission.
 
 ## Pull request
 
@@ -44,7 +47,9 @@ commit summary.
 Otherwise:
 
 1. Treat make/open/create PR as authorization for its prerequisites: verify, commit, and
-   push the current branch. It does not authorize merge, force-push, or unrelated fixes.
+   push the current branch. It also covers a needed `--force-with-lease` after rebasing the
+   current user-owned feature branch, but not merge, plain `--force`, shared-branch rewrites,
+   or unrelated fixes.
 2. Resolve the explicit base with
    `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse an existing branch PR or
    create one against that base with assignee, labels, and the reference body template.

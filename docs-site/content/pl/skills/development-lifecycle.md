@@ -65,7 +65,10 @@ implementacji upoważnia do działania: przedstaw zwięzły kontrakt i od razu k
 
 - Pytaj tylko o istotną decyzję zastrzeżoną dla użytkownika albo nieodwracalne działanie dotyczące środowiska produkcyjnego,
   prawa lub prywatności, usuwania danych bądź wysokiego poziomu bezpieczeństwa.
-- Nigdy nie scalaj zmian, nie wykonuj wymuszonego wypychania, nie twórz dodatkowych PR-ów ani nie rozszerzaj punktu końcowego bez zgody.
+- Bez ponownego pytania o zgodę twórz commity, wypychaj zmiany, wykonuj rebase i w razie potrzeby używaj
+  `--force-with-lease` na bieżącej, należącej do użytkownika gałęzi funkcji. Nigdy nie scalaj, nie używaj zwykłego
+  `--force`, nie twórz dodatkowych PR-ów ani nie przepisuj gałęzi domyślnych, współdzielonych, należących do kogoś
+  innego lub równolegle używanych bez wyraźnej zgody.
 - Przed zmianą kodu na gałęzi main/master/develop utwórz odizolowane drzewo robocze za pomocą
   `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Izolacja drzewa roboczego]
 - Przy długiej pracy lub wielu niewiadomych można zapisać bieżącą hipotezę, dowody, odstępstwa i
@@ -74,6 +77,6 @@ implementacji upoważnia do działania: przedstaw zwięzły kontrakt i od razu k
 
 ## Zakończenie
 
-Zatrzymaj się w żądanym punkcie końcowym: odpowiedź, zweryfikowana zmiana lokalna, commit, wypchnięcie zmian, PR lub pełne
-wdrożenie. Nie przerywaj tylko dlatego, że zaplanowany krok został ukończony. Zobacz [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)
+Zatrzymaj się w żądanym punkcie końcowym: odpowiedź; domyślnie commit i wypchnięcie zmian dla pracy wykonawczej; jawnie
+zażądana zmiana lokalna lub commit; PR; albo pełne wdrożenie. Nie przerywaj tylko dlatego, że zaplanowany krok został ukończony. Zobacz [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)
 wyłącznie wtedy, gdy konkretna ścieżka weryfikacji lub dostarczenia wymaga opisanych tam szczegółowych poleceń.

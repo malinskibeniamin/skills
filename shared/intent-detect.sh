@@ -44,16 +44,21 @@ _negated_push=false
 _negated_commit=false
 _negated_action=false
 _artifact_only=false
-_action_verbs='build|implement|fix|debug|refactor|update|change|add|remove|delete|write|wire|integrate|upgrade|migrate|correct|resolve|address'
+_delivery_override=false
+_action_verbs='build|implement|fix|debug|refactor|update|change|add|remove|delete|write|wire|integrate|upgrade|migrate|rebase|correct|resolve|address'
+echo "$prompt" | grep -qiE '(^|[.!?;][[:space:]]*|please[[:space:]]+)unblock yourself|((do not|don.t|dont|never|stop)[^.;]{0,60}(ask|request)[^.;]{0,60}(permission|approval|prompt)[^.;]{0,100}(commit|push|rebase))' && _delivery_override=true
 echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}((make|create|open)[[:space:]]+(a[[:space:]]+)?)?(pr|pull request)" && _negated_pr=true
 echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}push" && _negated_push=true
 echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}commit" && _negated_commit=true
 echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}($_action_verbs)" && _negated_action=true
+echo "$prompt" | grep -qiE 'unblock yourself[^.;]{0,100}(((do not|don.t|dont|never)[^.;]{0,40}push)|keep[^.;]{0,30}local)' && _delivery_override=false
 echo "$prompt" | grep -qiE "^[[:space:]]*(please[[:space:]]+)?((can|could|would)[[:space:]]+you[[:space:]]+)?(answer|explain|plan|review|analy[sz]e|summarize|inspect|audit|evaluate)([[:space:][:punct:]]|$)" && _artifact_only=true
 echo "$prompt" | grep -qiE "([,;][[:space:]]*(then[[:space:]]+)?|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+)?($_action_verbs)([^[:alnum:]_]|$)" && _artifact_only=false
 
 if echo "$prompt" | grep -qiE '^[[:space:]]*(stop|cancel|never mind|nevermind)([[:space:][:punct:]]|$)'; then
   [ -n "$_session_dir" ] && rm -f "$_session_dir/task-endpoint" 2>/dev/null || true
+elif [ "$_delivery_override" = true ] && [ "$_artifact_only" = false ]; then
+  _endpoint="push"
 elif echo "$prompt" | grep -qiE '(^|[[:space:]])(/go|ship( it)?|plow ahead|babysit|do not stop|keep going until done|use your best judgment)([[:space:][:punct:]]|$)' \
   && [ "$_negated_pr" = false ] && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="ship"
@@ -61,28 +66,27 @@ elif echo "$prompt" | grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:
   && ! echo "$prompt" | grep -qi -- '--no-pr' \
   && [ "$_negated_pr" = false ] && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="pr"
-elif { echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?push([[:space:][:punct:]]|$)' || echo "$prompt" | grep -qi -- '--no-pr'; } \
-  && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
+elif { echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?push([[:space:][:punct:]]|$)' \
+    || echo "$prompt" | grep -qiE 'commit[[:space:]]*/[[:space:]]*push|force-with-lease[[:space:]]+push' \
+    || echo "$prompt" | grep -qi -- '--no-pr'; } \
+  && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ] && [ "$_artifact_only" = false ]; then
   _endpoint="push"
 elif echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?commit([[:space:][:punct:]]|$)' \
   && [ "$_negated_commit" = false ]; then
   _endpoint="commit"
 elif echo "$prompt" | grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]|$)" \
   && [ "$_negated_action" = false ] && [ "$_artifact_only" = false ]; then
-  _endpoint="local"
+  if [ "$_negated_push" = true ] || [ "$_negated_commit" = true ]; then
+    _endpoint="local"
+  else
+    _endpoint="push"
+  fi
 fi
 
 if [ -n "$_endpoint" ] && [ -n "$_session_dir" ]; then
   printf '%s\n' "$_endpoint" > "$_session_dir/task-endpoint" 2>/dev/null || true
   rm -f "$_session_dir/task-completed" 2>/dev/null || true
 
-  _last_endpoint=""
-  [ -f "$_session_dir/last-injected-endpoint" ] \
-    && _last_endpoint=$(cat "$_session_dir/last-injected-endpoint" 2>/dev/null || true)
-  if [ "$_endpoint" != "$_last_endpoint" ]; then
-    directives="$directives\n[ENDPOINT:$_endpoint]"
-    printf '%s\n' "$_endpoint" > "$_session_dir/last-injected-endpoint" 2>/dev/null || true
-  fi
 fi
 
 # ── PR-number auto-context ───────────────────────────────────────
@@ -103,14 +107,14 @@ fi
 
 _current_branch=$(git branch --show-current 2>/dev/null || true)
 _scope_lock_prompt=false
-if echo "$prompt" | grep -qiE 'fix|debug|broken|refactor|extract|move|split|consolidate|clean.?up|write.*test|add|create|build|implement|wire|integrate|set.*up|open.*pr|pull request|push|deploy|delete|migration|ci'; then
+if echo "$prompt" | grep -qiE 'fix|debug|broken|refactor|extract|move|split|consolidate|clean.?up|write.*test|add|create|build|implement|wire|integrate|set.*up|open.*pr|pull request|push|rebase|deploy|delete|migration|ci'; then
   _scope_lock_prompt=true
 fi
 case "$_current_branch" in
   main|master|develop|"") ;;
   *)
     if [ "$_scope_lock_prompt" = true ]; then
-      directives="$directives\n[SCOPE-LOCK] Stay in feature branch '$_current_branch'. Do not create another branch or PR unless explicitly instructed; the endpoint directive controls commit and push."
+      directives="$directives\n[SCOPE-LOCK] Stay in feature branch '$_current_branch'. Do not create another branch or PR unless explicitly instructed."
     fi
     ;;
 esac

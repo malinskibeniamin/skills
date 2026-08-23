@@ -9,6 +9,12 @@ run_file_eval "$COMPLETION" "completion-contract-stop.sh exists"
 run_executable_eval "$COMPLETION" "completion-contract-stop.sh is executable"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "## Execution contract" "CLAUDE.md defines the execution contract"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "[Bb]uild, fix, implement" "ordinary implementation continues without approval"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "commit, push, or rebase" \
+  "standing git authorization covers routine delivery"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "without another permission prompt" \
+  "standing git authorization prevents repeated permission prompts"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Never ask the user to restart or reconfigure" \
+  "stale endpoint recovery stays inside the harness"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "🟢 done —" "CLAUDE.md defines visible done status"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "human.*browser|human-owned.*browser" "CLAUDE.md protects human browser sessions"
 if grep -q '\[BROWSER\]' "$INTENT"; then
@@ -34,6 +40,16 @@ run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Do not run `/visual-recap
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "do not block merely" "PR endpoint does not invent a review approval stop"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Commit-only skips remote and `gh` preflight' "commit endpoint has no push prerequisites"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "Explicit commit-only intent stops here" "commit endpoint does not push"
+run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "without another permission prompt" \
+  "feature-branch rebase updates do not ask twice"
+run_content_eval "$REPO_ROOT/go/SKILL.md" "without another permission prompt" \
+  "full delivery does not re-ask for routine branch updates"
+run_content_eval "$REPO_ROOT/plow-ahead/references/builder-upstream.md" \
+  "current user-owned feature branch" \
+  "autonomy contract permits routine current-branch git delivery"
+run_content_eval "$REPO_ROOT/upgrade-dependency/SKILL.md" \
+  "build/fix.*commit.*push" \
+  "dependency action work follows default delivery"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "commit\\|push\\|pr\\|ship" "lifecycle enforces only external endpoints"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Requested PR endpoint is complete" "PR endpoint does not start an unrequested CI fix loop"
 run_content_eval "$HOOKS_DIR/session-env.sh" 'CAPTURE_TYPECHECK_BASELINE:-0' "session start launches no default background typecheck"
@@ -48,13 +64,30 @@ _intent_out=$(
   printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-eval-'$$'","prompt":"implement the dark mode toggle"}' \
     | CLAUDE_SESSION_ID="$_cc_session" "$INTENT"
 )
-if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "local" ]; then
-  echo "  PASS  implementation prompt records local endpoint"
+if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "push" ] \
+  && ! printf '%s' "$_intent_out" | grep -q '\[ENDPOINT:'; then
+  echo "  PASS  implementation prompt records push only in lifecycle state"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  implementation prompt records local endpoint"
+  echo "  FAIL  implementation prompt records push endpoint"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: implementation endpoint missing"
+  ERRORS="$ERRORS\n  FAIL: implementation push endpoint missing"
+fi
+
+_upgrade_session="completion-contract-upgrade-eval-$$"
+_upgrade_dir="/tmp/hook-session-${_upgrade_session}"
+printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-upgrade-eval-'$$'","prompt":"fix locally; do not commit or push"}' \
+  | CLAUDE_SESSION_ID="$_upgrade_session" "$INTENT" >/dev/null
+_upgrade_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-upgrade-eval-'$$'","prompt":"I stopped without confirming commit/push. [ENDPOINT:local] blocked delivery. Please unblock yourself and force-with-lease push."}' \
+  | CLAUDE_SESSION_ID="$_upgrade_session" "$INTENT")
+if [ "$(cat "$_upgrade_dir/task-endpoint" 2>/dev/null)" = "push" ] \
+  && ! printf '%s' "$_upgrade_out" | grep -q '\[ENDPOINT:'; then
+  echo "  PASS  explicit delivery follow-up replaces a stale local endpoint"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  explicit delivery follow-up replaces a stale local endpoint"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Claude intent stale local endpoint upgrade"
 fi
 
 _plan_session="completion-contract-plan-eval-$$"
@@ -116,15 +149,16 @@ fi
 _negative_session="completion-contract-negative-eval-$$"
 _negative_dir="/tmp/hook-session-${_negative_session}"
 rm -rf "$_negative_dir"
-printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-negative-eval-'$$'","prompt":"fix the toggle locally; do not commit, push, or create a PR"}' \
-  | CLAUDE_SESSION_ID="$_negative_session" "$INTENT" >/dev/null
-if [ "$(cat "$_negative_dir/task-endpoint" 2>/dev/null)" = "local" ]; then
-  echo "  PASS  negated delivery verbs preserve local endpoint"
+_negative_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-negative-eval-'$$'","prompt":"fix the toggle locally; do not commit, push, or create a PR"}' \
+  | CLAUDE_SESSION_ID="$_negative_session" "$INTENT")
+if [ "$(cat "$_negative_dir/task-endpoint" 2>/dev/null)" = "local" ] \
+  && ! printf '%s' "$_negative_out" | jq -e '.hookSpecificOutput.additionalContext | contains("[ENDPOINT:local]")' >/dev/null 2>&1; then
+  echo "  PASS  negated delivery stays local without developer-context injection"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  negated delivery verbs preserve local endpoint"
+  echo "  FAIL  negated delivery becomes developer-context injection"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: negated delivery verb escalated endpoint"
+  ERRORS="$ERRORS\n  FAIL: local endpoint injected as developer context"
 fi
 
 _negative_plan_session="completion-contract-negative-plan-eval-$$"
@@ -241,7 +275,7 @@ _pr_out=$(
     | CLAUDE_SESSION_ID="$_cc_session" "$INTENT"
 )
 if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "pr" ] \
-  && printf '%s' "$_pr_out" | grep -q "ENDPOINT:pr" \
+  && ! printf '%s' "$_pr_out" | grep -q '\[ENDPOINT:' \
   && grep -qi "PR: verify, commit, push" "$REPO_ROOT/CLAUDE.md"; then
   echo "  PASS  make a PR authorizes commit and push prerequisites"
   PASS=$((PASS + 1))
@@ -292,4 +326,4 @@ else
   PASS=$((PASS + 1))
 fi
 
-rm -rf "$_cc_dir" "$_plan_dir" "$_plan_action_dir" "$_review_fix_dir" "$_plow_dir" "$_negative_dir" "$_negative_plan_dir" "$_conflict_dir" "$_history_dir" "$_review_dir" "$_agent_dir" "$_fresh_stop_dir" /tmp/completion-contract-out /tmp/completion-contract-err
+rm -rf "$_cc_dir" "$_upgrade_dir" "$_plan_dir" "$_plan_action_dir" "$_review_fix_dir" "$_plow_dir" "$_negative_dir" "$_negative_plan_dir" "$_conflict_dir" "$_history_dir" "$_review_dir" "$_agent_dir" "$_fresh_stop_dir" /tmp/completion-contract-out /tmp/completion-contract-err

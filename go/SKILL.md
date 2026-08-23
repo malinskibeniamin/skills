@@ -47,8 +47,10 @@ A different model or delegated lane requires explicit user authorization.
 ## Deliver
 
 Follow [commit-push-pr/REFERENCE.md](../commit-push-pr/REFERENCE.md) for explicit staging,
-commit format, push, draft PR creation, reviewer guidance, and the PR body. Never merge or
-force-push without permission.
+commit format, push, draft PR creation, reviewer guidance, and the PR body. Rebase and use
+`--force-with-lease` when needed without another permission prompt on the current user-owned
+feature branch. Never merge, use plain `--force`, or rewrite a default, shared, foreign,
+or concurrently owned branch without explicit permission.
 
 If `gh stack view --json` identifies a stack, review and verify the current layer against its
 parent. Ship the whole stack only when explicitly requested through `/stacked-prs`; an ordinary

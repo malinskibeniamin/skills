@@ -22,8 +22,8 @@ run_content_eval "$SKILL" 'gh stack submit --auto.*--remote origin' \
 run_content_eval "$SKILL" 'multiple remotes.*--remote origin|--remote origin.*multiple remotes' \
   "skill resolves multiple remotes without prompting"
 run_content_eval "$SKILL" 'draft' "stack submission defaults to draft PRs"
-run_content_eval "$SKILL" 'explicit.*(permission|authorization).*force|force.*explicit' \
-  "skill reserves cascading force-pushes for explicit authorization"
+run_content_eval "$SKILL" 'without (a )?(separate|another) permission prompt|do not ask.*force-with-lease' \
+  "skill does not repeatedly ask before safe cascading updates"
 run_content_eval "$SKILL" 'Never merge|merge.*explicit' \
   "skill never merges without explicit intent"
 run_content_eval "$SKILL" 'gh stack link' \

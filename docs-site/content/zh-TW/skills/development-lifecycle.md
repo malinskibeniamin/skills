@@ -63,7 +63,9 @@ sidebar:
 
 - 只有在涉及保留給使用者決定的實質事項，或不可逆的正式環境、
   法律／隱私、破壞性或高安全性操作時才詢問。
-- 未經許可，絕不合併、強制推送、建立額外的 PR，或擴大終點範圍。
+- 對目前由使用者擁有的功能分支，可直接提交、推送、執行 rebase，並在需要時使用
+  `--force-with-lease`，無須再次詢問許可。未經明確許可，絕不可合併、使用一般的 `--force`、
+  建立額外的 PR，或改寫預設、共用、他人擁有或正由他人並行使用的分支。
 - 在 main/master/develop 分支上編寫程式碼前，請使用
   `scripts/mux-worktree.sh <type>/<branch-name>` 建立隔離的 worktree。[精神：Worktree 隔離]
 - 耗時或高度未知的工作可將目前的假設、證據、偏差與
@@ -72,6 +74,6 @@ sidebar:
 
 ## 完成
 
-在要求的終點停止：回答、已驗證的本機變更、提交、推送、PR 或完整
+在要求的終點停止：回答；操作類工作預設提交並推送；明確要求的本機變更或僅提交；PR；或完整
 交付。不要僅因某個規劃步驟完成就停止。只有在具體的驗證或交付分支需要詳細指令時，
 才參閱 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)。

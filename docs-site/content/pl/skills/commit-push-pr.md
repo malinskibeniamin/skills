@@ -41,7 +41,10 @@ opisu, zrzuty ekranu i sekcje dotyczące aktualizacji zależności.
    - użyj małych liter, 5–72 znaków, bez kropki na końcu
 3. Jawne żądanie utworzenia wyłącznie commitu kończy działanie w tym miejscu po sprawdzeniu czystości drzewa i podsumowaniu commitu.
 4. Tylko wypchnięcie/PR: pokaż `origin/<branch>..HEAD`, a następnie wypchnij gałąź z ustawieniem śledzenia.
-5. Używaj `--force-with-lease` wyłącznie po zatwierdzeniu zmiany historii.
+5. Po wykonaniu rebase lub innego przepisania bieżącej, należącej do użytkownika gałęzi funkcji użyj
+   `--force-with-lease`, gdy jest to potrzebne, bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego
+   `--force`; przepisanie gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle
+   używanej wymaga wyraźnej zgody.
 
 ## Pull request
 
@@ -51,7 +54,9 @@ wypchniętego commitu.
 W przeciwnym razie:
 
 1. Traktuj żądanie przygotowania/otwarcia/utworzenia PR-a jako zgodę na wykonanie wymaganych czynności: weryfikację, utworzenie commitu i
-   wypchnięcie bieżącej gałęzi. Nie upoważnia ono do scalania, wymuszonego wypychania ani niezwiązanych poprawek.
+   wypchnięcie bieżącej gałęzi. Obejmuje to także potrzebne `--force-with-lease` po wykonaniu rebase bieżącej,
+   należącej do użytkownika gałęzi funkcji, ale nie scalanie, zwykłe `--force`, przepisywanie gałęzi współdzielonej
+   ani niezwiązane poprawki.
 2. Ustal jawną gałąź bazową za pomocą
    `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Użyj ponownie istniejącego PR-a gałęzi lub
    utwórz PR względem tej gałęzi bazowej, przypisując osobę, etykiety i korzystając z referencyjnego szablonu opisu.

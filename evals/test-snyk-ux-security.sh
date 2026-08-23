@@ -172,7 +172,7 @@ run_content_eval "$SKILL_MD" "gh workflow run.*only when" "SKILL.md triggers clo
 # ── Commit format ───────────────────────────────────────────────
 
 run_content_eval "$SKILL_MD" "commit.*fix\(deps\)" "SKILL.md uses fix(deps) when a commit was requested"
-run_content_eval "$SKILL_MD" "Commit.*refactor\(deps\).*only when requested" "SKILL.md scopes migration commits to the endpoint"
+run_content_eval "$SKILL_MD" "Commit.*refactor\(deps\).*unless" "SKILL.md honors explicit earlier stops for migration commits"
 
 # ── Explicit parallelism ────────────────────────────────────────
 

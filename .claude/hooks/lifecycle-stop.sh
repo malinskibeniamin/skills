@@ -6,8 +6,8 @@ set -eo pipefail
 _sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
 
 
-# Stop hook: enforce only the external delivery endpoint the user requested.
-# Local build/fix/implement work never commits, pushes, or opens a PR.
+# Stop hook: enforce the delivery endpoint resolved from the user's request.
+# Ordinary action work defaults to push; explicit local/no-delivery intent stops locally.
 #
 # Lifecycle gates (sequential):
 #   commit → commit, stop
@@ -62,6 +62,12 @@ fi
 
 unpushed=""
 if git rev-parse --verify "origin/$branch" &>/dev/null 2>&1; then
+  _divergence=$(git rev-list --left-right --count "origin/$branch...HEAD" 2>/dev/null || true)
+  _remote_only=$(printf '%s' "$_divergence" | awk '{print $1}')
+  _local_only=$(printf '%s' "$_divergence" | awk '{print $2}')
+  if [ "${_remote_only:-0}" -gt 0 ] && [ "${_local_only:-0}" -gt 0 ]; then
+    hook_stop_block "Branch '$branch' diverged: ahead $_local_only, behind $_remote_only. For current user-owned rewritten history, run: git push --force-with-lease origin $branch — then retry. If remote commits may be foreign or concurrent, reconcile instead of overwriting them."
+  fi
   unpushed=$(git log "origin/$branch..HEAD" --oneline 2>/dev/null || true)
 else
   # Branch never pushed — all commits since default branch are unpushed

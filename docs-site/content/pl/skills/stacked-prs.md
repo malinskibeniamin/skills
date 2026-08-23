@@ -56,7 +56,7 @@ Uruchom odpowiednią weryfikację i testy praktyczne dla bieżącej warstwy. Prz
 
 ## 4. Uwagi, synchronizacja i scalanie
 
-Popraw uwagi na gałęzi, do której należą, i zweryfikuj zmiany. Wyjaśnij, że kaskada przepisuje wyższe gałęzie: użycie force-with-lease wymaga wyraźnej zgody. Następnie użyj `gh stack rebase --upstack --remote origin`, a potem `gh stack push --remote origin`. Polecenie `gh stack sync --prune --remote origin` podlega tej samej granicy autoryzacji.
+Popraw uwagi na gałęzi, do której należą, i zweryfikuj zmiany. Kaskada przepisuje wyższe gałęzie. W przypadku stosu należącego do użytkownika i utrzymywanego w bieżącym obszarze roboczym wykonaj rebase i wypchnij kaskadę za pomocą `--force-with-lease` bez osobnego pytania o zgodę; odnotuj przepisanie w potwierdzeniu. Pytaj tylko wtedy, gdy własność jest niejasna albo miałaby zostać przepisana gałąź domyślna, współdzielona, należąca do kogoś innego lub równolegle używana. Następnie użyj `gh stack rebase --upstack --remote origin`, a potem `gh stack push --remote origin`. Polecenie `gh stack sync --prune --remote origin` podlega tej samej granicy własności.
 
 Kontynuuj po rozwiązaniu konfliktu za pomocą `gh stack rebase --continue`. Przerwij operację tylko wtedy, gdy użytkownik poprosi o jej porzucenie. W trybie linków zewnętrznych najpierw skoordynuj powiązane drzewa robocze.
 

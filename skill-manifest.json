@@ -56,6 +56,7 @@
     },
     "PreToolUse": {
       "Edit|Write|Bash": ["violation-nudge.sh"],
+      "Edit|Write": ["copyright-check.sh"],
       "Skill": ["skill-fire-log.sh"],
       "Bash": ["pre-bash.sh"],
       "mcp__.*": ["mcp-ban.sh"]

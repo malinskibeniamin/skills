@@ -104,10 +104,24 @@ _run_bs_in_repo "$_bs_repo" '{"tool_name":"Bash","tool_input":{"command":"git co
 _assert_bs "branch-safety: same branch passes" 0
 _teardown_bs
 
-# Drift → deny (exit 2)
-_setup_bs "feat/definitely-not-current-$RANDOM"
+# Drift to another existing branch → deny (exit 2)
+git -C "$_bs_repo" branch eval-other
+_setup_bs "eval-other"
 _run_bs_in_repo "$_bs_repo" '{"tool_name":"Bash","tool_input":{"command":"git commit -m foo"}}'
 _assert_bs "branch-safety: drift denies" 2 "Refusing this git call"
+_teardown_bs
+
+# A bound branch that no longer exists was renamed. Rebind automatically.
+_setup_bs "feat/renamed-away-$RANDOM"
+_run_bs_in_repo "$_bs_repo" '{"tool_name":"Bash","tool_input":{"command":"git commit -m foo"}}'
+_assert_bs "branch-safety: renamed branch auto-rebinds" 0 "auto-rebound"
+if [ "$(cat "$_BS_DIR/bound-branch" 2>/dev/null)" = "eval-current" ]; then
+  echo "  PASS  branch-safety: auto-rebind persists current branch"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  branch-safety: auto-rebind persists current branch"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: branch-safety auto-rebind persistence"
+fi
 _teardown_bs
 
 # Returning to the bound branch is the positive recovery path.

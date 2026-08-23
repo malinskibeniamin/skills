@@ -12,9 +12,9 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/upgrade-dependency.excalidraw)
 
-Przejdź do wskazanej stabilnej wersji; jeśli jej nie podano, użyj najnowszej stabilnej. Dostosuj miejsca użycia objęte zmianą.
-Przestrzegaj wskazanego punktu końcowego: `plan` działa tylko do odczytu; budowanie lub naprawianie kończy się na zweryfikowanych zmianach lokalnych;
-zatwierdzenie, wypchnięcie zmian lub utworzenie PR następuje tylko na żądanie.
+Przejdź do żądanej stabilnej wersji; jeśli jej nie podano, użyj najnowszej stabilnej. Dostosuj wywołania.
+Przestrzegaj żądanego punktu końcowego: `plan` działa tylko do odczytu; budowanie lub naprawianie obejmuje weryfikację,
+utworzenie commitu i wypchnięcie zmian, chyba że użytkownik zażąda pracy lokalnej, bez commitu lub bez wypychania. PR tylko na żądanie.
 Gdy odpowiednie gałęzie zostaną uruchomione, przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/upgrade-dependency/REFERENCE.md), aby poznać kontrole łańcucha dostaw oraz szablony zgłoszeń i PR.
 
 Dane wejściowe: `$ARGUMENTS` = pakiet/moduł, ścieżka manifestu, wersja docelowa, opis w języku naturalnym lub `plan`.
@@ -26,7 +26,7 @@ Dane wejściowe: `$ARGUMENTS` = pakiet/moduł, ścieżka manifestu, wersja docel
 
 3. **Brama decyzyjna**: pewna poprawka/wersja poboczna -> zastosuj. Udokumentowana wersja główna -> stosuj po jednym przeskoku wersji głównej naraz. Brak SemVer, niejasna migracja, duży zasięg wpływu lub niepewność dotycząca bezpieczeństwa -> zatrzymaj się, przedstaw dowody i wskaż wymaganą decyzję. `plan` -> przedstaw na czacie ścieżkę i ryzyko. Przetwarzaj pakiety sekwencyjnie; jawne delegowanie lub `/swarm` może przypisać niezależne zakresy prac.
 
-4. **Zastosowanie** -- kontrola wstępna: minimalny wiek wydania 7–30 dni, wyłączenie skryptów / przegląd `trustedDependencies`, brak zależności git/tarball/surowy URL, Socket/npq, jeśli są dostępne, przegląd pliku blokady, czysta instalacja. Zachowaj oddzielne zweryfikowane grupy; zatwierdzaj je osobno tylko na żądanie:
+4. **Zastosowanie** -- kontrola wstępna: minimalny wiek wydania 7–30 dni, wyłączenie skryptów / przegląd `trustedDependencies`, brak zależności git/tarball/surowy URL, Socket/npq, jeśli są dostępne, przegląd pliku blokady, czysta instalacja. Zachowaj oddzielne zweryfikowane commity, chyba że użytkownik zażądał wcześniejszego zatrzymania:
    a. **Aktualizacja wersji**: `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn`, gdy wymaga tego `yarn.lock`/Snyk. Go: `go get -u <module>@<v>` -> `go mod tidy`. Nigdy nie edytuj ręcznie plików blokad.
    b. **Migracja**: oficjalne codemody; ujednolić zmiany interfejsu API/składni/stylu/zachowania we wszystkich objętych nimi miejscach użycia. Ostrzeżenia o wycofaniu związane z tą aktualizacją są naprawiane TERAZ, a nie wyciszane.
    c. **Korzyść**: wdrażaj interfejsy API wyróżnione w dzienniku zmian, jeśli upraszczają istniejący kod -- usuń wymuszone obejścia i przestarzałe polyfille; zmniejszaj lub wzmacniaj kod, nigdy nie rozbudowuj go spekulacyjnie.

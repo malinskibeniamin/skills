@@ -59,7 +59,7 @@ sidebar:
    - Bazel：按需更新两个清单，然后运行
      `bazel mod deps --lockfile_mode=update`；保留镜像/FIPS/CMVP 约束。
 7. **迁移并验证：** 阅读变更日志和 `BREAKING` 说明；将主版本 7 -> 8 -> 9
-   分为独立的验证组逐步迁移。仅在用户请求时将每组提交为 `refactor(deps)`。
+   分为独立的验证组逐步迁移。除非用户要求提前停止，否则将每组提交为 `refactor(deps)`。
    绝不要推迟真实漏洞；上报阻塞项。
    JS 运行 `bun run lint:fix`、`bun run type:check`、`bun test`，并在存在构建脚本时执行构建。
    Go 运行 `go build ./...`、`go test ./...`、`go vet ./...` 和 `govulncheck ./...`。

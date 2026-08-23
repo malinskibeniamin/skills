@@ -85,15 +85,18 @@ schedule fixed review rounds or invoke other skills just to satisfy ceremony.
 | Requested endpoint | Required evidence before stopping |
 |---|---|
 | Answer/plan/review | Requested artifact only; no edits |
-| Build/fix/implement | Verified local changes; no commit or push |
+| Build/fix/implement | Verified changes committed and pushed unless an explicit local/no-delivery stop wins |
 | Commit | Verified requested changes committed |
 | Push | Verified changes committed and pushed |
 | PR | Verified, committed, pushed, PR opened, one CI snapshot |
 | Ship | PR opened, CI and requested feedback loop clean, human handoff |
 
-Use `../commit-push-pr/REFERENCE.md` for exact Git delivery commands. Never merge or
-force-push without permission. A normal PR request takes one CI snapshot; only `ship`, an
-explicit `/go`, or explicit babysitting authorizes active CI remediation.
+Use `../commit-push-pr/REFERENCE.md` for exact Git delivery commands. Commit, push, rebase,
+and use `--force-with-lease` when needed on the current user-owned feature branch without
+another permission prompt. Never merge, use plain `--force`, or rewrite default, shared,
+foreign, or concurrently owned branches without explicit permission. A normal PR request
+takes one CI snapshot; only `ship`, an explicit `/go`, or explicit babysitting authorizes
+active CI remediation.
 
 ## Isolation and long runs
 

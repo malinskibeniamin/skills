@@ -59,7 +59,10 @@ implementation request authorizes execution: state the compact contract and cont
 
 - Ask only for a material user-reserved decision or an irreversible production,
   legal/privacy, destructive, or high-security action.
-- Never merge, force-push, create extra PRs, or broaden the endpoint without permission.
+- Commit, push, rebase, and use `--force-with-lease` when needed on the current user-owned
+  feature branch without another permission prompt. Never merge, use plain `--force`, create
+  extra PRs, or rewrite default, shared, foreign, or concurrently owned branches without
+  explicit permission.
 - On main/master/develop before code, create an isolated worktree with
   `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Worktree Isolation]
 - Long or high-unknown work may record the current hypothesis, evidence, deviations, and
@@ -68,6 +71,7 @@ implementation request authorizes execution: state the compact contract and cont
 
 ## Completion
 
-Stop at the requested endpoint: answer, verified local change, commit, push, PR, or full
-ship. Do not stop merely because a planned step finished. See [REFERENCE.md](REFERENCE.md)
+Stop at the requested endpoint: answer; commit and push by default for action work; an
+explicitly requested local change or commit; PR; or full ship. Do not stop merely because a
+planned step finished. See [REFERENCE.md](REFERENCE.md)
 only when a concrete verification or delivery branch needs its detailed commands.

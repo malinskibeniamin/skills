@@ -62,7 +62,8 @@ zażądano PR-a.
    - Bazel: odpowiednio zaktualizuj oba manifesty, a następnie
      `bazel mod deps --lockfile_mode=update`; zachowaj ograniczenia dotyczące serwerów lustrzanych, FIPS i CMVP.
 7. **Migracja i weryfikacja:** przeczytaj dzienniki zmian oraz uwagi `BREAKING`; przechodź przez wersje główne 7 -> 8 -> 9
-   jako osobne, zweryfikowane grupy. Zatwierdzaj każdą grupę jako `refactor(deps)` tylko na żądanie.
+   jako osobne, zweryfikowane grupy. Zatwierdzaj każdą grupę jako `refactor(deps)`, chyba że użytkownik
+   zażądał wcześniejszego zatrzymania.
    Nigdy nie odkładaj rzeczywistej luki; eskaluj blokady.
    Dla JS uruchom `bun run lint:fix`, `bun run type:check`, `bun test` oraz kompilację, jeśli jest dostępna.
    Dla Go uruchom `go build ./...`, `go test ./...`, `go vet ./...` oraz `govulncheck ./...`.

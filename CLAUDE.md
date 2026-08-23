@@ -26,13 +26,22 @@ Load one matching `exemplars/` file when it is a higher-fidelity reference than 
 The requested endpoint owns scope:
 
 - Answer, explain, plan, review: return the artifact; do not edit.
-- Build, fix, implement: concise plan, continue, verify locally; no commit or push.
+- Build, fix, implement: concise plan, continue, verify, commit, and push the current
+  user-owned feature branch unless the user explicitly requests a local or earlier stop.
 - Commit: commit only. Push: commit if needed, then push. PR: verify, commit, push, open
   via `/commit-push-pr`, take one CI snapshot. Ship or `/go`: run the full delivery loop.
 
 An explicit earlier stop wins. Ask only for a material user-reserved decision or an
 irreversible production, legal/privacy, destructive, or high-security action. Otherwise
-make reversible assumptions and proceed. Never merge or force-push without permission.
+make reversible assumptions and proceed. Routine work may commit, push, or rebase the current
+user-owned feature branch without another permission prompt; after a rebase, use
+`--force-with-lease` when needed. Never merge, use plain `--force`, or rewrite a default,
+shared, foreign, or concurrently owned branch without explicit permission.
+An explicit delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
+a session merely to commit, push, or rebase the current user-owned feature branch; correct
+the endpoint state and continue.
+Record every inferred delivery endpoint only in lifecycle state; never inject mutable delivery
+intent as developer context.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.

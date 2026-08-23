@@ -55,7 +55,10 @@ Before delivery:
 - confirm the branch and target base;
 - review staged diff and secret scan;
 - include verification and real-use evidence in the PR body;
-- never merge or force-push without permission.
+- rebase and use `--force-with-lease` when needed on the current user-owned feature branch
+  without another permission prompt;
+- never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently
+  owned branch without explicit permission.
 
 For an explicit `/go`, monitor the PR checks in the foreground:
 

@@ -49,8 +49,9 @@ sidebar:
 ## 交付
 
 按照 [commit-push-pr/REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) 执行明确暂存、
-提交格式、推送、创建草稿 PR、审查者指引和 PR 正文相关操作。未经许可，绝不合并或
-强制推送。
+提交格式、推送、创建草稿 PR、审查者指引和 PR 正文相关操作。对当前用户拥有的功能分支，可执行变基并在需要时使用
+`--force-with-lease`，无需再次请求许可。未经明确许可，绝不合并、使用普通 `--force`，或重写默认分支、共享分支、
+他人拥有或正被并行使用的分支。
 
 如果 `gh stack view --json` 识别出堆栈，请以其父层为基准审查并验证当前层。
 仅当通过 `/stacked-prs` 明确提出请求时，才交付整个堆栈；普通
