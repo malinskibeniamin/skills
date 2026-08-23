@@ -7,25 +7,25 @@ paths:
   - "**/gen/**"
 ---
 
-# Connect Query Enforcement
-Run `/read-the-damn-docs` before pinning current ConnectRPC, Connect Query, or Protobuf API guidance.
-## What This Catches
+Run `/read-the-damn-docs` before current ConnectRPC/Connect Query/Protobuf API guidance.
 
-- **Ban raw `useQuery`/`useMutation`** from `@tanstack/react-query` when file use ConnectRPC -- use Connect Query (exception: `useTransport`/`callUnaryMethod` pattern)
-- **Ban `invalidateQueries()`** no args -- must specify query key
-- **Warn on `axios`/`fetch()`** -- prefer ConnectRPC transport
-- **Protobuf v2**: Ban `new Message()` -> use `create(Schema)`. Ban `PlainMessage`/`PartialMessage` -> use `MessageShape`/`MessageInitShape`. Ban manual `$typeName` literals.
+## Enforce
 
-Escape hatch: `// allow: direct-query [reason]`
+- In ConnectRPC files, ban raw TanStack `useQuery`/`useMutation`; use Connect Query, except `useTransport`/`callUnaryMethod`.
+- `invalidateQueries()` needs a query key.
+- Prefer ConnectRPC transport over `axios`/`fetch`.
+- Protobuf v2: `create(Schema)`, not `new Message()`; `MessageShape`/`MessageInitShape`, not `PlainMessage`/`PartialMessage`; no manual `$typeName`.
 
-## Query-layer discipline (mined from 4 years of review history)
+Escape: `// allow: direct-query [reason]`.
 
-- **Cache tiers, not magic numbers**: 2-3 semantic constants (`SHORT/MEDIUM/LONG_LIVED_CACHE_STALE_TIME`) in one file; `Infinity` only for data that changes exclusively via your own invalidation. Retry policy lives once on the QueryClient (retry 5xx/network, never 4xx).
-- **`transform`/`select` in the hook, never parsing in components** -- the component receives display-ready data; page sizes are enforced by the hook, not parsed at call sites.
-- **Invalidate, don't refetch; always await it** -- fire-and-forget invalidation races navigation and the next screen renders stale cache. Keys: broad by service/method (cardinality-aware for infinite queries), never over-specific.
-- **Loader <-> hook query-key parity** -- a route loader that prefetches with a slightly different key silently double-fetches. Assert key equality in a test.
-- **One hook per RPC; split multi-RPC pages** into one data hook per service call. Mutation hooks end in `Mutation` (`WithToast` when they own toasts).
-- **Validation direction**: client-side proto validation (protovalidate) applies to what you SEND. Responses are already server-validated -- don't re-validate reads.
-- **Proto optionals are `undefined`, never `null`**; unbounded lists get infinite query + "load more"; polling uses built-in `refetchInterval`, not hand-rolled timers.
+## Query discipline
 
-Protobuf gotchas (Timestamp, Duration, Any, cache patterns): [REFERENCE.md](REFERENCE.md). Setup: [SETUP.md](SETUP.md).
+- Define 2-3 semantic cache constants centrally; `Infinity` only when own invalidation is exclusive. QueryClient owns retry: retry network/5xx, never 4xx.
+- Hook `transform`/`select` returns display-ready data and enforces page size; components do not parse.
+- Invalidate rather than refetch and always await it. Keys are service/method broad but cardinality-aware.
+- Loader and hook use identical query keys; test parity to prevent double fetches.
+- One hook per RPC; split multi-RPC pages. Mutation names end `Mutation`, or `WithToast` when owning toasts.
+- Client protovalidate checks sent data, not server-validated responses.
+- Proto optionals use `undefined`, never `null`; unbounded lists use infinite query/load-more; polling uses `refetchInterval`.
+
+Timestamp, Duration, Any, caches: [REFERENCE.md](REFERENCE.md). Install: [SETUP.md](SETUP.md).

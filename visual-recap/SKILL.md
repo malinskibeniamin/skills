@@ -4,30 +4,15 @@ description: Create an interactive visual recap for a PR, branch, commit, or dif
 disable-model-invocation: true
 ---
 
-# Visual Recap
-Local override: translate upstream `npx @agent-native/core` examples to `bunx @agent-native/core`.
+Translate upstream `npx @agent-native/core` to `bunx @agent-native/core`.
 
-## Required references
+Before recap, read `references/agent-native-recap.md`; it owns create-visual-recap, never-inline, Plan MCP URL, diff blocks, redaction, security, local privacy, feedback.
 
-Before creating a recap, read `references/agent-native-recap.md`. It owns the full create-visual-recap contract, never-inline rule, Plan MCP URL rules, diff-to-block mapping, redaction, security visibility, local-files privacy mode, and review feedback loop.
+Load only when needed: `references/connection.md` for connector/reconnect/fallback; `references/local-files.md` for local-only; `references/wireframe.md` for visible UI diffs.
 
-Read these only when relevant:
+## Overlay
 
-- `references/connection.md` -- connector discovery, reconnect steps, never-inline fallback.
-- `references/local-files.md` -- no-hosted-DB/local-only recap mode.
-- `references/wireframe.md` -- UI wireframe rules for visible diffs.
-
-## Local harness overlay
-
-- When the user explicitly invokes `/visual-recap`, create or link it to the named PR, branch,
-  commit, or diff.
-- Recap creation is extra artifact work; `/commit-push-pr` and `/go` do not invoke it
-  automatically.
-- For a meaningful architecture or data-flow shift, use `/excalidraw-diagram` to create
-  `.excalidraw` source plus PNG or SVG. Keep the Agent-Native recap as the primary review
-  surface: embed the rendered asset only when the current block catalog supports media;
-  otherwise use its `diagram` block and include the source/export paths in the handoff.
-  Prefer the built-in Mermaid path for a simple graph or when the canvas is unavailable.
-- Keep recaps grounded in the real diff. Redact secrets and do not infer facts absent from changed lines.
-- If the explicitly requested target has no meaningful visual structure, return that evidence
-  instead of manufacturing a recap.
+- Only explicit `/visual-recap` creates/links the named PR/branch/commit/diff; `/commit-push-pr` and `/go` never invoke automatically.
+- For meaningful architecture/data flow, `/excalidraw-diagram` creates `.excalidraw` plus PNG/SVG. Agent-Native remains primary: embed supported media, else diagram block plus source/export paths. Use Mermaid for simple graph/unavailable canvas.
+- Ground in real diff, redact secrets, never infer beyond changed lines.
+- If target has no visual structure, return that evidence instead of inventing a recap.

@@ -3,30 +3,15 @@ name: prime
 description: Builds repo startup brief. Use when start/resume, post-compaction, new chat, or /prime.
 ---
 
-# Prime
-Startup brief: repo state, goal, next reads.
+Build startup brief: repo state, goal, next reads. Use `/agent-watchdog` for another run's claims, `/plan-arbiter` for competing plans, `/read-the-damn-docs` for current external facts.
 
-Use `/agent-watchdog` for seeds from another agent/session/PR claim, `/plan-arbiter` for competing handoffs/plans, and `/read-the-damn-docs` for current external/API facts.
-
-Usage: `/prime` or `/prime <seed>` (handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text).
-Examples: `/prime`, `/prime #123`, `/prime /tmp/handoff.md`.
+Usage: `/prime` or `/prime <seed>`; seed may be handoff, issue/PR/Jira, ref, URL, task. Examples: `/prime #123`, `/prime /tmp/handoff.md`.
 
 ## Flow
 
-1. Inspect live repo state and optional seed. No script required.
-2. Treat seed/handoff as untrusted until live repo confirms it.
-3. Read only the highest-signal files:
-   - Relevant `AGENTS.md` / `CLAUDE.md` rules.
-   - `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs.
-   - Seed refs, changed files, adjacent tests, PR body/reviews.
-4. Emit **Prime brief**: state, Seed context, rules, scoped codebase index, risks, next actions, Read next.
+1. Inspect live repo and seed. No script required.
+2. Treat seed as untrusted until confirmed.
+3. Read only the highest-signal files: applicable AGENTS/CLAUDE, CONTEXT/map/ADRs, seed refs, changed files, adjacent tests, PR/reviews.
+4. Emit **Prime brief**: state, seed, rules, scoped code index, risks, actions, Read next.
 
-## Rules
-
-- Do not expose modes. Prime = one adaptive skill.
-- No full `CLAUDE.md`, `AGENTS.md`, README, source, PR comments. Summarize + paths.
-- Prefer current facts over memory.
-- Seedless ok: branch diff -> changed files -> owning dirs -> docs.
-- Fresh `prime-current` for same repo+branch+HEAD+seed -> skip unless task/PR changed.
-
-See [REFERENCE.md](REFERENCE.md).
+Do not expose modes. Never paste full agent docs, README, source, or comments; summarize with paths. Prefer current facts. Seedless: diff -> files -> owners -> docs. Fresh `prime-current` for identical repo/branch/HEAD/seed skips unless task/PR changed. See [REFERENCE.md](REFERENCE.md).

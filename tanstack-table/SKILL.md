@@ -3,20 +3,12 @@ name: tanstack-table
 description: Apply repository-specific TanStack Table enforcement after loading installed-package guidance through TanStack Intent. Use when building, reviewing, or migrating tables and data grids.
 ---
 
-# TanStack Table
-
-Follow `/tanstack-intent` first. Discover the installed Table adapter and core packages,
-then load every task-matching `use` id. Intent owns current API syntax, version status,
-migration guidance, state semantics, and framework-specific patterns.
+Run `/tanstack-intent` first; discover installed Table adapter/core and load all matching `use` ids. Intent owns API syntax, version, migration, state, framework patterns.
 
 ## Local enforcement
 
-The `tanstack-table-check` hook is a version-gated regression floor, not API
-documentation. It resolves the nearest declared or installed package version and applies
-its V9 checks only to V9 projects. The installed Intent guidance remains authoritative.
+`tanstack-table-check` is a version-gated regression floor, not API docs. It resolves nearest package version and applies V9 checks only to V9 projects. Intent remains authoritative.
 
-If the hook conflicts with loaded package guidance, stop and fix the harness and its evals.
-Do not bypass the official API or preserve stale local prose merely to satisfy the hook.
+If hook conflicts, treat it as a hook defect: stop and fix the harness/evals; never bypass official API or preserve stale prose.
 
-Completion evidence includes the installed package version, loaded Intent `use` ids,
-focused Table tests, typecheck, and lint.
+Completion: installed version, loaded Intent ids, focused Table tests, typecheck, lint.

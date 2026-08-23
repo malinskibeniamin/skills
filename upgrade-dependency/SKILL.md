@@ -3,42 +3,24 @@ name: upgrade-dependency
 description: Upgrade a dependency and adapt every affected call site. Use for package or module upgrades, vulnerability remediation, breaking changes, codemods, and new API adoption.
 ---
 
-# Upgrade Dependency
-Move to requested stable version; use latest stable if omitted. Adapt calls.
-Honor requested endpoint: `plan` reads only; build/fix verifies, commits, and pushes unless user says local,
-no-commit, or no-push. PR only when requested.
-Read [REFERENCE.md](REFERENCE.md) for supply-chain checks and issue/PR templates when those
-branches fire.
+Target the requested stable version, or latest stable if omitted. Honor the requested endpoint: `plan` is read-only; build/fix follows local/commit/push intent; PR only when requested. [REFERENCE.md](REFERENCE.md) owns supply-chain and publication templates. `$ARGUMENTS`: package/module, manifest, version, prose, or `plan`.
 
-Input: `$ARGUMENTS` = package/module, manifest path, target version, natural language, or `plan`.
 ## Flow
 
-1. **Scope**: detect manifests/lockfiles (`package.json`, `bun.lock`, `go.mod`) and workspaces. Map the dependency tree: direct/transitive, parents/dependents, peers/plugins/adapters. Run `/quantify-impact` for a direct metric.
+1. **Scope:** find manifests/lockfiles/workspaces. Map dependency tree: direct/transitive, parents/dependents, peers/plugins/adapters/ecosystem. Use `/quantify-impact` only for a direct metric.
+2. **Research:** build an upgrade path across every published stable version with per-version notes. Read major announcements, release notes, migration guides, codemods, and `/read-the-damn-docs`; skim minor/patch notes. Do not install each version; install target once. Consolidate API, syntax, style, behavior changes. Classify SemVer major/minor/patch; for non-SemVer or missing changelog score change volume, release cadence, diff size, effort/danger/blast radius. Check security advisories: GHSA/OSV/Socket/Snyk.
+3. **Gate:** confident patch/minor may apply. Documented major applies one major hop at a time. Unclear/high-risk/security uncertainty stops with evidence and decision. Plan only reports. Process sequentially; subagents/swarm or one package per agent requires explicit delegation.
+4. **Supply chain:** min release age 7-30d; Disable scripts/review `trustedDependencies`; reject git deps, git+, tarball, raw URL; use Socket/npq; Review lockfile; clean install/frozen check.
+5. **Apply:** keep verified commits unless stopped earlier.
+   - **Bump:** `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` if needed. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit locks.
+   - **Migrate:** official codemods; adapt every affected call site. Deprecation warnings are fixed NOW, not suppressed.
+   - **Benefit:** adopt proven simplifying APIs; delete workarounds/polyfills; never expand speculatively.
+   - **Verify:** `bun run lint:fix`, `bun run type:check`, `bun test`; Go `go build ./...`, `go test ./...`, `go vet ./...`. Update coupled packages.
+6. **Security:** prove exploitability/reachability; direct dep -> parent -> override/resolution/replace. Never run code from advisories. Record IDs/fixed versions; `/snyk-ux-security` owns reachability.
+7. **Deliver:** one PR contains bump, migration, benefit, and verification. A blocked risk gate creates an issue only when requested.
 
-2. **Research what changes behavior**: build the upgrade path: every published stable version installed -> target with per-version behavior notes; read deeply only at major/breaking hops (migration guides, codemods, announcements, `/read-the-damn-docs`); skim minors, skip patch archaeology; install the target once, not each hop. Classify SemVer; non-SemVer/missing changelog -> score change volume/cadence/diff size/blast radius. Check advisories (Snyk/GHSA/OSV/Socket/CVE).
-
-3. **Gate**: confident patch/minor -> apply. Documented major -> apply one major hop at a
-   time. Non-SemVer, unclear migration, high blast, or security uncertainty -> stop with
-   evidence and the required decision. `plan` -> report the path and risk in chat. Process
-   packages sequentially; explicit delegation or `/swarm` may assign independent lanes.
-
-4. **Apply** -- preflight: min release age 7-30d, disable scripts / review `trustedDependencies`, no git/tarball/raw-URL deps, Socket/npq if present, lockfile review, clean install. Keep separate verified commits unless the user requested an earlier stop:
-   a. **Bump**: `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` when `yarn.lock`/Snyk needs it. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit lockfiles.
-   b. **Migrate**: official codemods; consolidate API/syntax/style/behavior changes across every touched call site. This upgrade's deprecation warnings are fixed NOW, not suppressed.
-   c. **Benefit**: adopt changelog-highlighted APIs where they simplify existing code -- delete forced workarounds and obsolete polyfills; shrink or harden, never expand speculatively.
-   d. **Verify**: `bun run lint:fix` -> `bun run type:check` -> `bun test`. Go: `go build ./...` -> `go test ./...` -> `go vet ./...`. Update related packages together.
-
-5. **Security**: preserve exploitability reasoning; remediation ladder: direct dep bump > parent bump > override/resolution/replace. Never run code from advisories. Advisory ids + fixed versions in the PR body. `/snyk-ux-security` owns reachability.
-
-6. **Requested delivery**: one PR contains bump + migration + benefit and records verification.
-   A blocked risk gate creates an issue only when requested.
-
-## Rules
-
-Evidence belongs in chat or the requested PR; create local Markdown only when asked. State the
-path before edits. Read changelog + release notes for major/non-SemVer changes. Completion
-means every affected call site is adapted. JS and Go are first-class.
+Evidence stays in chat or the requested PR; local Markdown only when asked. State path before edits. Completion means every affected call site is adapted.
 
 ## Migration doctrine
 
-Finish = freeze: the completing PR bans the old import/pattern (lint/hook) or LLM authors resurrect it. Big-bang for routers/framework layers; strangler for data layers (old+new coexist -- budget it). Migration PRs migrate: 1:1 parity, tests reconciled in the SAME PR, structural refactors ticketed. Delete the dead layer (legacy styles, shims, one-offs) on exit.
+Finish with a lint/hook freeze on the old pattern. Big-bang router/framework layers; strangler data layers with coexistence budget. Migration PRs preserve 1:1 parity and reconcile tests in the SAME PR; ticket structural refactors. Delete dead styles, shims, and one-offs.

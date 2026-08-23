@@ -3,50 +3,37 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
-# Quantify Impact
-
-Make value immediately obvious without benchmark theater. This is advisory, not a hard merge hook. Existing workflow skills call it automatically; users need not invoke it.
+Make value obvious without benchmark theater. Advisory only; workflow skills may call it automatically.
 
 ## Flow
 
-1. **Evidence opportunity scan**: ask whether a direct, decision-useful metric exists and is cheap enough for the change. A metric is decision-useful only when it can clear a predeclared minimum worthwhile delta and, for noisy measurements, normal variance. Benchmark only when the answer is yes. Tiny copy/style/test-only work gets one clear value sentence, not forced numbers. No benchmark theater.
-2. **Lock the claim before coding**: state the change thesis, primary metric, guardrail, scenario, and minimum worthwhile delta before implementation or edits. Do not choose the winning metric afterward.
-3. **Use two value lanes**:
-   Product lane + Codebase lane: one must improve; the other must not materially regress.
-   - **Product lane**: capability, task success, bug reproduction, errors, steps, latency, or resource cost.
-   - **Codebase lane**: maintenance surface, complexity, dependencies, warnings, leaks, bundle, build/test cost, or testability.
-   A code-health improvement is valid primary value.
-4. **Choose proportional rigor**:
-   - Tiny/obvious: value sentence only.
-   - Correctness or exact count: deterministic before/after repro or count.
-   - Runtime/performance: controlled paired benchmark from [REFERENCE.md](REFERENCE.md).
-   - Explicit performance claim: always measure.
-5. **Capture base**: measure before coding when feasible. Otherwise reconstruct the exact merge-base. Run base and candidate with the same scenario, fixture, configuration, and machine.
-6. **Compare honestly**: for metrics that clear the predeclared threshold, report raw before/after, absolute and percentage delta, method, environment, and noise. Suppress metrics below that threshold or within normal variance; measuring a number does not make it meaningful. Never turn an invariant test or proxy into a performance claim.
-7. **Decide**:
-   - Clear worthwhile gain: `Value proven`.
-   - Explicit performance claim with ambiguous, negligible, or no gain: `Value not proven`; omit the micro-deltas and do not metric-shop. Allow one evidence-driven revision, then recommend scrap or close the PR.
-   - No explicit performance claim and no worthwhile metric: omit quantified impact output and use a normal value summary.
+1. **Evidence opportunity scan:** benchmark only when a cheap direct metric could clear a predeclared worthwhile delta and normal variance. Tiny copy/style/test work gets a value sentence. No benchmark theater.
+2. **Lock claim before coding:** thesis, primary metric, guardrail, scenario, minimum worthwhile delta. Never pick the winner afterward.
+3. **Product lane + Codebase lane:** one must improve; the other must not materially regress.
+   - Product: capability, task success, repro, errors, steps, latency, resources.
+   - Codebase: maintenance surface, complexity, dependencies, warnings, leaks, bundle, build/test cost, testability.
+4. **Proportional rigor:** sentence for obvious value; deterministic repro/count for correctness; controlled paired [REFERENCE.md](REFERENCE.md) benchmark for runtime; always measure explicit performance claims.
+5. **Base:** measure before coding or reconstruct merge-base. Use the same scenario, fixture, config, and machine for base/candidate.
+6. **Compare:** only threshold-clearing metrics report raw before/after, absolute/percent delta, method, environment, and noise. Suppress below-threshold/within-variance numbers. Invariant tests/proxies are not performance claims.
+7. **Decide:**
+   - Worthwhile gain: `Value proven`.
+   - Ambiguous/negligible explicit performance claim: `Value not proven`; no micro-deltas or metric-shopping. Allow one evidence-driven revision, then scrap/close.
+   - No useful metric and no performance claim: normal value summary, no impact artifact.
    - Regression: fix, narrow, or stop.
 
-Apply the same filter to guardrails. Omit negligible guardrail movement entirely; do not display its raw values or add a `Guardrail held` line merely to account for it.
+Apply the same filter to guardrails; omit negligible movement.
 
 ## PR output
 
-When useful evidence clears the predeclared threshold, give `/make-pr-easy-to-review`:
+Only when evidence clears threshold:
 
 ```md
 ## Proven impact
-
 | Metric | Before | After | Delta |
 |---|---:|---:|---:|
 | <direct metric> | <base> | <candidate> | <absolute and %> |
-
 **Value proven:** <product or codebase benefit>
-
-Method: `<exact command, fixture, run count, environment>`.
+Method: `<command, fixture, runs, environment>`.
 ```
 
-Filter individual rows: include only decision-useful deltas. Keep suppressed raw measurements in the local evidence artifact when useful for reproducibility, not in the PR output.
-
-No meaningful evidence opportunity or no metric above threshold: use a normal value summary; do not emit an empty table. For an explicit performance claim, state `Value not proven` without publishing negligible numbers.
+Give this to `/make-pr-easy-to-review`. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.

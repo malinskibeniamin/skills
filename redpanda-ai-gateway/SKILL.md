@@ -4,48 +4,40 @@ description: Run Claude and Codex through the Redpanda AI Gateway with rpk ai.
 disable-model-invocation: true
 ---
 
-# Redpanda AI Gateway (`rpk ai`)
+Explicit `rpk ai` wrapper for Redpanda AI Gateway; desktop Claude/Codex/ChatGPT remain unchanged. Docs: https://docs.redpanda.com/agentic-data-plane/cli/
 
-Isolated wrapper for the Agentic Data Plane CLI: talk to LLM providers through the Redpanda AI Gateway instead of provider-direct APIs. The desktop apps (Claude/Codex/ChatGPT) keep working as-is -- this skill only covers explicit gateway invocations. Docs: https://docs.redpanda.com/agentic-data-plane/cli/
-
-## Setup (once per machine)
+## Setup once
 
 ```bash
-rpk ai install                 # install the ai plugin into rpk
-rpk cloud login --no-profile   # Redpanda Cloud auth (prerequisite)
-rpk ai auth login              # OAuth device flow; credentials cached at ~/.rpai/credentials
-rpk ai env list                # environments available to you
-rpk ai env use <environment>   # pick one (independent of rpk cloud sessions)
-rpk ai llm list                # verify: providers visible = auth works
+rpk ai install
+rpk cloud login --no-profile
+rpk ai auth login
+rpk ai env list
+rpk ai env use <environment>
+rpk ai llm list
 ```
 
-Local gateway (no cloud): `rpk ai env add local --ai-gateway-url http://localhost:8090 --auth-mode none`
+Local: `rpk ai env add local --ai-gateway-url http://localhost:8090 --auth-mode none`.
 
-## Run an AI CLI through the gateway
+## Run
 
-Everything after `--` passes through to the underlying tool untouched:
+Arguments after `--` pass through unchanged:
 
 ```bash
 rpk ai run claude --llmprovider claude-code-enterprise-local
-rpk ai run claude --llmprovider claude-code-enterprise-local -- --dangerously-skip-permissions   # ONLY in sandboxed/throwaway envs: this disables Claude Code approval prompts
-rpk ai run codex  --llmprovider <provider-name> -- exec -s read-only "<prompt>"
+rpk ai run claude --llmprovider claude-code-enterprise-local -- --dangerously-skip-permissions
+rpk ai run codex --llmprovider <provider> -- exec -s read-only "<prompt>"
 ```
 
-Pick `--llmprovider` from `rpk ai llm list` (`-o json|yaml|wide` for detail; `RPAI_FORMAT` sets a default). Cluster override when needed: `rpk ai --rpai-endpoint https://aigw.<cluster-id>.clusters.cloud.redpanda.com ...`
+Use `--dangerously-skip-permissions` only in sandboxed/throwaway environments. Choose providers from `rpk ai llm list` (`-o json|yaml|wide`; `RPAI_FORMAT` default). Cluster override: `rpk ai --rpai-endpoint https://aigw.<cluster-id>.clusters.cloud.redpanda.com ...`.
 
-## Provider and resource management
+## Resources
 
-`rpk ai llm|mcp|oauth-provider|oauth-client|agent` each support `create|get|list|update|delete`; `rpk ai model` is read-only catalog.
+`rpk ai llm|mcp|oauth-provider|oauth-client|agent` support create/get/list/update/delete; `model` is read-only. Create LLMs with secret references, for example `rpk ai llm create --name openai --type openai --api-key-ref OPENAI_API_KEY`. Never paste raw keys.
 
-```bash
-rpk ai llm create --name openai --type openai --api-key-ref OPENAI_API_KEY
-```
+## Triage
 
-Keys are always secret *references* -- the CLI never takes a raw API key. Never paste one.
-
-## Failure triage
-
-- `rpk ai` unknown command -> `rpk ai install`, then retry.
-- 401/expired -> `rpk ai auth login` again (gateway credentials are separate from `rpk cloud`).
-- Provider missing from `rpk ai llm list` -> wrong environment (`rpk ai env use`) or provider not created in this environment.
-- This skill does not change model-routing doctrine: a gateway-run claude/codex still counts as its underlying model for cross-model review purposes.
+- Unknown `rpk ai`: install then retry.
+- 401/expired: `rpk ai auth login`; gateway auth differs from cloud auth.
+- Missing provider: verify selected environment and its resources.
+- Gateway runs retain the underlying model identity for cross-model policy.

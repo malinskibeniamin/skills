@@ -4,93 +4,25 @@ disable-model-invocation: true
 description: "Configure Claude Code routines for PR review, codebase health, issue triage, and docs drift."
 ---
 
-# Setup Routines
-Configure [Claude Code routines](https://claude.ai/code/routines) -- cloud-hosted auto sessions triggered by schedule, GitHub events, or API. Routines clone repo, run as full Claude Code sessions. Hooks + CLAUDE.md rules enforce auto.
+Configure [Claude Code routines](https://claude.ai/code/routines): cloud sessions triggered by schedule, GitHub event, or API. **Enforcement model:** hooks and CLAUDE.md own standards; the prompt owns the task. Add `/agent-watchdog` for outputs; `/visual-recap` only when requested.
 
-## How it works
+## Templates
 
-```
-Routine fires -> clones repo -> SessionStart hooks -> CLAUDE.md loads
--> routine prompt executes -> PostToolUse hooks enforce on every edit
--> Stop hooks run quality gates -> session ends
-```
-
-### Enforcement model
-
-Hooks = enforcement layer | routine prompts = task layer. Standards evolve
-in repo (hooks + CLAUDE.md), routine prompts stay stable. Every routine
-session runs the same PostToolUse/Stop gates as an interactive dev session,
-so a routine cannot ship code that a developer could not ship locally.
-For routine outputs, add `/agent-watchdog` audit steps. Add `/visual-recap` only when the
-routine request explicitly includes that artifact.
-
-
-Routines are cloud-hosted sessions triggered by schedule/webhook/API --
-recurring automation that must survive your laptop closing.
-
-## Available templates
-
-| Template | Trigger | What it does |
+| Template | Trigger | Result |
 |---|---|---|
-| [pr-review](routines/pr-review.md) | `pull_request.opened` | Reviews PR vs standards, posts inline comments |
-| [pr-feedback-resolve](routines/pr-feedback-resolve.md) | `pull_request.review_submitted` | Reads unresolved threads, fixes code, replies, resolves |
-| [issue-triage](routines/issue-triage.md) | `issues.opened` | Explores codebase, classifies, labels, posts investigation |
-| [weekly-health](routines/weekly-health.md) | Schedule: weekly | Runs quality checks, measures drift, opens health report issue |
-| [docs-drift](routines/docs-drift.md) | Schedule: weekly | Detects stale docs from recent changes, opens fix PR or issue |
+| [pr-review](routines/pr-review.md) | `pull_request.opened` | Review and inline comments |
+| [pr-feedback-resolve](routines/pr-feedback-resolve.md) | `pull_request.review_submitted` | Fix/reply/resolve threads |
+| [issue-triage](routines/issue-triage.md) | `issues.opened` | Classify, label, investigate |
+| [weekly-health](routines/weekly-health.md) | weekly | Health report issue |
+| [docs-drift](routines/docs-drift.md) | weekly | Stale-doc PR/issue |
 
 ## Setup
 
-### 1. Prerequisites
+1. **Prerequisites:** Claude Code web access, GitHub connected through `/web-setup`, and eligible plan.
+2. **Pick:** hooks -> pr-review; feedback skill -> pr-feedback-resolve; triage -> issue-triage; quality gates -> weekly-health; reference docs -> docs-drift.
+3. **Web:** at [routines](https://claude.ai/code/routines), create; name; paste `routines/*.md` and fill `OWNER`/`REPO`; select repo/environment; choose event/schedule/API trigger; remove unused connectors; save.
+4. **CLI schedule only:** `/schedule daily codebase health check at 9am`. GitHub/API triggers use web.
+5. **Customize:** project checks, labels, scope, and connector actions. Keep stable prompts; repository rules evolve. See [REFERENCE.md](REFERENCE.md) for examples/API setup.
+6. **Test once manually:** Web **Run now** or `/schedule run`; watch the returned session, inspect output, and tighten drift. See the reference for enforcement, triggers, and troubleshooting.
 
-- Claude Code with web access ([claude.ai/code](https://claude.ai/code))
-- GitHub connected (`/web-setup` in CLI)
-- Pro, Max, Team, or Enterprise plan
-
-### 2. Pick routines
-
-| If you have | Recommended routines |
-|---|---|
-| Any hooks installed | pr-review |
-| resolve-pr-feedback skill | pr-feedback-resolve |
-| triage skill | issue-triage |
-| Quality gate hooks/scripts | weekly-health |
-| REFERENCE.md or other docs | docs-drift |
-
-### 3. Create via web (recommended)
-
-1. [claude.ai/code/routines](https://claude.ai/code/routines) -> **New routine**
-2. Name (example "PR Review -- [repo name]")
-3. Paste template from `routines/*.md` -- customize `OWNER`/`REPO` placeholders
-4. Pick repo + environment
-5. Add trigger (GitHub event | schedule | API)
-6. Check connectors -- drop unneeded
-7. Create
-
-### 4. Create via CLI
-
-```bash
-/schedule daily codebase health check at 9am
-```
-
-CLI = scheduled routines only. GitHub/API triggers -> use web UI.
-
-### 5. Customize prompts
-
-Templates = start point. Customize:
-
-- **Project-specific checks**: reference patterns hooks enforce
-- **Labels**: match issue label taxonomy
-- **Scope boundaries**: "only review `src/`" or "skip generated files"
-- **Connector actions**: "post summary to #engineering Slack"
-
-See [REFERENCE.md](REFERENCE.md) for customization examples + API trigger setup.
-
-### 6. Test
-
-Run once by hand before trusting triggers:
-
-1. Web: **Run now** on routine detail page
-2. CLI: `/schedule run`
-3. Watch session live at returned URL
-4. Check output -- tweak prompt if wandered
-See [REFERENCE.md](REFERENCE.md): enforcement model, trigger/API/customization setup, troubleshooting.
+Routines must survive a closed laptop and pass the same PostToolUse/Stop gates as interactive work.

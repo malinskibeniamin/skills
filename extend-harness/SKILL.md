@@ -4,53 +4,33 @@ description: Extend and debug the frontend-skills hook harness, rules, severity 
 disable-model-invocation: true
 ---
 
-# Extend the Harness
+Edit source manifests/libraries, never generated configs. [REFERENCE.md](REFERENCE.md) owns severities, options, parser contracts, debugging.
 
-Edit source manifests and libraries, never generated configs. Read
-[REFERENCE.md](REFERENCE.md) for severity tiers, manifest options, parser contracts, and
-debugging.
+## Add rule
 
-## Add a rule
-
-1. Ask whether Biome or Ultracite can express it. Use hooks only for cross-element,
-   cross-file, workflow, or agent-behavior rules.
-2. Start from a neighboring `.claude/hooks/checks/*.lib.sh`. Expose one `run_*` function
-   and add the matching thin `.claude/hooks/*.sh` wrapper.
-3. Register the wrapper in `skill-manifest.json`, usually under
-   `PostToolUse.Edit|Write`.
-4. Add a focused fixture under `evals/`; capture failing then passing evidence.
+1. Prefer Biome/Ultracite; hooks are for cross-element/file, workflow, or agent behavior.
+2. Copy a neighboring `.claude/hooks/checks/*.lib.sh`: one `run_*` function plus thin `.claude/hooks/*.sh` wrapper.
+3. Register in `skill-manifest.json`, usually `PostToolUse.Edit|Write`.
+4. Add focused `evals/` fixture; capture RED then GREEN.
 5. Regenerate and test:
 
 ```bash
 bash scripts/generate-hook-configs.sh --apply
-echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' |
-  bash .claude/hooks/my-check.sh
+echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' | bash .claude/hooks/my-check.sh
 ```
 
-Use `hook_warn` for style, `hook_block` for correctness, `hook_block_strict` for
-security-critical rules, and `hook_info` for observation. Prefer skill-scoped hooks when
-only one vertical needs the rule.
+Use `hook_warn` for style, `hook_block` correctness, `hook_block_strict` security, `hook_info` observation. Prefer skill-scoped hooks for one vertical.
 
-## Choose the implementation
+## Implementation
 
-- Permission-filtered or async entries use manifest objects; keep each script's stdin
-  guard because Codex drops Claude-only filters.
-- Mechanically provable structure belongs in Biome or an AST rule. Leave ambiguous
-  structural judgment to review; avoid fragile multiline grep.
-- Keep toolchain bans synchronized with `hooks/frontend-skills.rules`.
+- Permission-filtered/async entries use manifest objects; retain stdin guards because Codex drops Claude-only filters.
+- Provable structure belongs in Biome/AST; ambiguous judgment in review, not multiline grep.
+- Sync toolchain bans with `hooks/frontend-skills.rules`.
 
-## Audit or debug
+## Audit/debug
 
-- Run `/hook-audit --all` for latency, firing, and zero-fire candidates.
-- Start `HOOK_DEBUG=1 HOOKS_FAIL_CLOSED=1 claude` for a missing hook.
-- Use `claude --safe-mode` to isolate customizations.
-- Treat `/doctor` latency findings as P95 budget failures.
+`/hook-audit --all` for latency/firing/zero-fire; `HOOK_DEBUG=1 HOOKS_FAIL_CLOSED=1 claude` for missing hooks; `claude --safe-mode` to isolate customization. `/doctor` latency is a P95 budget failure.
 
-## Completion
+## Done
 
-- `skill-manifest.json` owns the rule and matcher.
-- The script is executable, sources `_hook-lib.sh`, parses stdin, filters paths, and
-  documents its escape hatch.
-- The focused fixture proves RED -> GREEN.
-- `bash scripts/generate-hook-configs.sh --check` passes.
-- `bash evals/run.sh` passes.
+Manifest owns matcher; executable script sources `_hook-lib.sh`, parses stdin, filters paths, documents escape; fixture proves RED -> GREEN; generator `--check` and `bash evals/run.sh` pass.

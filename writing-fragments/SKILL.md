@@ -4,20 +4,11 @@ description: Mine user conversation into raw writing fragments in one markdown f
 disable-model-invocation: true
 ---
 
-# Writing Fragments
-Interview relentlessly. Capture raw fragments. Do not impose outline/phases.
+Interview relentlessly; capture raw fragments without outline/phases. If path missing, ask once and remember. Re-read before every write to preserve edits. Capture from first prompt.
 
-If path missing, ask once. Remember it. Re-read before every write to preserve user edits.
+First write: one H1 working title, then fragments; no metadata/TOC/date.
 
-Capture from first user prompt too.
-
-First write: single H1 working title, then fragments. No metadata/TOC/date.
-
-## Fragment
-
-Readable by author; may not be self-contained for cold reader. Could be sharp sentence, claim, vignette, code snippet, analogy, half-thought, quote, complaint, punchline.
-
-Format:
+A fragment is author-readable, not necessarily self-contained: sentence, claim, vignette, code, analogy, half-thought, quote, complaint, punchline.
 
 ```md
 # Working title
@@ -29,6 +20,4 @@ Fragment one.
 Fragment two.
 ```
 
-Use `\n---\n` separators. No body headings/tags/order beyond capture order.
-
-Append silently. Mention briefly. User can cut/rewrite/merge anytime.
+Separate with `\n---\n`; no body headings/tags/reordering. Append silently, mention briefly. User may cut/rewrite/merge anytime.

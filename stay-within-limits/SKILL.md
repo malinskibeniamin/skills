@@ -4,18 +4,10 @@ description: Inspect Claude subscription-window evidence for an explicitly reque
 disable-model-invocation: true
 ---
 
-# Stay within limits
+explicit-use compatibility skill. Model quality/routing belongs to `/efficient-frontier` and `config/model-routing.json`; explicit delegation is still required.
 
-This explicit-use compatibility skill keeps the host-meter procedure. Model selection,
-quality gates, and wave routing now belong to `/efficient-frontier` and
-`config/model-routing.json`.
+Use `select-review-profile.sh` only with a fresh Claude Code host quota snapshot. `ccusage` is cost history, not subscription evidence. Missing/stale evidence means Claude capacity is unknown; do not guess reset time.
 
-Use `select-review-profile.sh` only when the host exposes a fresh Claude Code quota
-snapshot. `ccusage` is cost history, not subscription-capacity evidence. Missing or stale
-evidence means Claude capacity is unknown; do not guess a reset time.
+[REFERENCE.md](REFERENCE.md) owns capture/selection. Report observed windows/freshness; then `/efficient-frontier` chooses a qualified route. Invocation never grants delegation.
 
-Read [REFERENCE.md](REFERENCE.md) for snapshot capture and selector mechanics. Return the
-observed windows and freshness, then let `/efficient-frontier` choose a quality-qualified
-route. Explicit use never grants delegation permission.
-
-In this repository, run `bash stay-within-limits/select-review-profile.sh`.
+Run `bash stay-within-limits/select-review-profile.sh`.

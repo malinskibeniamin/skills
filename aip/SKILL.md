@@ -6,38 +6,34 @@ paths:
   - "**/*openapi*.{yaml,yml,json}"
 ---
 
-# Google AIP Design and Review
-
-Use the General AIPs as the source of truth. Approved AIPs are normative. AIP-162 (draft) and AIP-182 (reviewing) are advisory: consider and label them, but never present them as requirements.
+Approved General AIPs are normative. draft AIP-162 and reviewing AIP-182 are advisory; label them as such.
 
 ## Workflow
 
-1. Read the whole proposed surface and nearby established APIs. Classify management plane vs data plane.
-2. Walk all 72 `Use when` entries in [REFERENCE.md](REFERENCE.md) once to build an applicability ledger; use concept or `AIP-N` search for detail, not as the only discovery method. Record why each AIP is selected or excluded. Do not apply every AIP blindly.
-3. Open the exact official `https://google.aip.dev/{number}` page for every applicable AIP, including conforming and advisory rows. Never add an evidence row from the local index alone. After drafting, mechanically compare the applicable-row URLs with the research trace and fetch every gap before finalizing.
-4. Resolve conflicts in this order: current approved AIP, documented local compatibility requirement, precedent exception. Never copy a violation as precedent. Mark necessary exceptions `aip.dev/not-precedent` with rationale.
-5. Derive a change-specific checklist from the exact official guidance. Cover proto/HTTP shape, behavior, errors, lifecycle, compatibility, documentation, and client ergonomics, not syntax alone.
-6. Design or review the smallest conformant surface without silently deleting intended user capability. Preserve wire compatibility unless the version/stability policy permits a break.
-7. Run `api-linter` using the repository's existing command/config when available. Treat it as a floor: manually review applicable rules it cannot encode.
-8. Report one row per applicable AIP as `AIP | state | applicability | result | evidence/exception`; never combine AIPs in one row or omit conforming passes. Separately list excluded AIPs as not applicable, then verify the two sets account for all 72 published numbers exactly once. Separate normative failures from advisory suggestions.
+1. Read the proposed surface and nearby APIs; classify management versus data plane.
+2. Walk all 72 `Use when` entries in [REFERENCE.md](REFERENCE.md). Record each AIP as selected or excluded; never apply every AIP blindly.
+3. Open the official `https://google.aip.dev/{number}` page for every applicable AIP. Never cite the local index as evidence. Compare applicable-row URLs with the research trace and fetch every gap.
+4. Resolve conflicts by approved AIP, documented compatibility need, then precedent exception. Mark necessary exceptions `aip.dev/not-precedent` with rationale.
+5. Derive a change-specific checklist for proto/HTTP shape, behavior, errors, lifecycle, compatibility, docs, and client ergonomics.
+6. Preserve intended capability and wire compatibility unless version policy permits a break.
+7. Run the repository's `api-linter`; it is a floor, not proof of conformance.
+8. Report `AIP | state | applicability | result | evidence/exception` for each applicable AIP. List every exclusion separately and account for all 72 published numbers exactly once. Separate normative failures from advisory suggestions.
 
 ## Baseline
 
-- Model management APIs as named resources in an acyclic hierarchy with standard methods first.
-- Give resources a canonical relative resource `name` containing the complete service-relative path and a `(google.api.resource)` annotation; reserve display text for `display_name`.
-- Annotate existing-resource request `name` fields with `resource_reference.type`. Annotate nested List/Create `parent` with `resource_reference.child_type` when the parent type is not declared or may vary, otherwise with the parent's `type`; never point it at the child as `type`.
-- Make HTTP paths, request fields, method signatures, resource references, field behaviors, pagination, filtering, masks, errors, and LRO metadata agree.
-- Keep corrected schemas self-contained: add the defining import for every annotation or message introduced.
-- Preserve relative expiration capability: replace raw TTL numbers with `oneof expiration` containing input-capable `google.protobuf.Timestamp expire_time` and `google.protobuf.Duration ttl [(google.api.field_behavior) = INPUT_ONLY]`; do not keep only `expire_time`, and `expire_time` must not be `OUTPUT_ONLY` because clients may supply an exact time.
-- Validate behavior after mutations reaches the steady state promised by the method or operation.
-- Review every change for compatibility, not only field-number reuse: names, types, formats, semantics, HTTP bindings, resource patterns, requiredness, and client behavior matter.
-- Document user-visible semantics, validation, defaults, ordering, limits, side effects, errors, retention, and exceptions.
+- Model management APIs as named resources with standard methods.
+- Use a canonical relative resource `name` and `(google.api.resource)`; reserve display text for `display_name`.
+- Annotate request `name` with `resource_reference.type`. For List/Create, annotate `parent` with `resource_reference.child_type` when its type is undeclared or variable, otherwise the parent's `type`; never the child's `type`.
+- Align HTTP paths, request fields, signatures, references, field behaviors, pagination, filtering, masks, errors, and LRO metadata.
+- Import every introduced annotation or message.
+- Preserve relative expiration: `oneof expiration` contains input-capable `Timestamp expire_time` and `Duration ttl [(google.api.field_behavior) = INPUT_ONLY]`; `expire_time` must not be `OUTPUT_ONLY`.
+- Review compatibility beyond field numbers: names, types, formats, semantics, bindings, patterns, requiredness, and client behavior.
+- Document visible semantics, validation, defaults, ordering, limits, side effects, errors, retention, and exceptions.
 
 ## Guardrails
 
-- Do not invent guidance for unassigned numbers; the range contains 72 published General AIPs, not 236 documents.
-- Do not treat examples as universal requirements. Apply conditional AIPs only when their trigger holds.
-- Do not downgrade **must**/**must not** from an approved AIP. Distinguish **should** recommendations and documented exceptions.
-- Do not claim conformance from `api-linter` alone or from this checklist alone.
-- Recheck known traps: AIP-122 relative names and parent reference direction; AIP-127 and AIP-130 for HTTP-transcoded resource methods; AIP-134 optional update masks; AIP-154 unannotated resource etags; AIP-161 ignored output-only input; AIP-192 comments on every public declaration; AIP-203 `IDENTIFIER` names and request-field behaviors; `client.proto` for `method_signature`; and AIP-214's input-capable `expire_time` plus input-only `ttl` oneof.
-- For legacy surfaces, prefer an explicit compatibility adapter over extending a non-conformant pattern.
+- The catalog has 72 published General AIPs; never invent guidance for unassigned numbers.
+- Apply conditional AIPs only when their trigger holds. Do not turn examples into requirements.
+- Preserve approved **must**/**must not** language; distinguish **should** and exceptions.
+- Recheck AIP-122 relative names and parent direction; AIP-127 and AIP-130 for HTTP-transcoded resource methods; AIP-134 optional update masks; AIP-154 etags; AIP-161 output-only input; AIP-192 public comments; AIP-203 `IDENTIFIER`; `client.proto` signatures; and AIP-214 expiration.
+- Prefer an explicit compatibility adapter for legacy non-conformance.

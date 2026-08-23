@@ -6,77 +6,41 @@ paths:
   - "**/routes/**/*.ts"
 ---
 
-# TanStack Router
-
-Follow `/tanstack-intent` first and load the matching guidance shipped by the installed
-Router package. Intent owns current API syntax and version behavior. This skill adds local
-ownership and URL-state policy. Read [REFERENCE.md](REFERENCE.md) for local code shapes and
-[SETUP.md](SETUP.md) for installation.
+Run `/tanstack-intent` first for installed Router/Query API syntax. This skill owns local URL/data policy. See [REFERENCE.md](REFERENCE.md) for shapes and [SETUP.md](SETUP.md) for install.
 
 ## Router + Query
 
-- Router loaders start server fetches after navigation intent.
-- TanStack Query owns cache, refetch, invalidation, and garbage collection.
-- Components observe Query through `useQuery` or `useSuspenseQuery`.
+Router loaders start server fetches after navigation intent; Query owns cache/refetch/invalidation/GC; components observe with `useQuery`/`useSuspenseQuery`.
 
-Route-known Query inputs have one pipeline: `validateSearch` -> `loaderDeps` -> one
-`queryOptions` builder -> loader and component observer. Return only search fields used by
-the query. Components consume `useLoaderDeps`, not a parallel reading of query-driving
-search. If the installed Router guidance supports building options in route `context`,
-share that exact options value; never adopt undocumented syntax from an example.
+Route-known inputs use one pipeline: `validateSearch` -> `loaderDeps` -> one `queryOptions` builder -> loader and observer. Return only query-driving fields. Components use `useLoaderDeps`, not parallel search reads. Share route-context options only when installed Intent guidance supports it.
 
-- Page-critical data: await `ensureQueryData`; observe with `useSuspenseQuery`.
-- Route-known deferred data: start it in the loader; observe with `useQuery` and visible
-  loading, empty, and error states.
-- Interaction-only data may start from the component.
-
-Query-backed loaders set `defaultPreloadStaleTime: 0` and use
-`createRootRouteWithContext`.
+- Critical data: await `ensureQueryData`, observe with `useSuspenseQuery`.
+- Deferred route data: start in loader, observe with `useQuery` plus loading/empty/error.
+- Interaction-only data may start in components.
+- Query loaders use `defaultPreloadStaleTime: 0` and `createRootRouteWithContext`.
 
 ## Navigation lifetimes
 
-Keep resource, navigation, outcome, and render ownership separate:
-
-- A superseded navigation loses permission to publish; shared loader or Query work can
-  remain useful.
-- `beforeLoad` is replay-safe authentication, redirect, or context construction. Preloads
-  and navigations can each run it; keep observable side effects and ordinary data fetches
-  out so loaders retain parallelism.
-- Direct loader requests forward `abortController.signal`. Query functions forward the
-  signal owned by Query. Do not cancel shared work globally on every navigation.
-- Redirects from `beforeLoad` or loaders use `throw redirect(...)`, not imperative
-  navigation.
-- Use `onResolved` for analytics and non-DOM cleanup. Use `onRendered` for focus,
-  scrolling, measurement, or other work that requires committed route content.
-- Use Router pending UI and its timing options rather than hand-built navigation timers.
+- Superseded navigation cannot publish; shared loader/Query work may remain useful.
+- `beforeLoad` is replay-safe auth, redirect, or context construction. No observable side effects or ordinary fetches.
+- Direct loader requests forward `abortController.signal`; Query functions forward Query's signal. Never cancel shared work on each navigation.
+- Throw `redirect(...)`; never imperatively navigate from guards/loaders.
+- `onResolved` owns analytics/non-DOM cleanup; `onRendered` owns focus, scroll, measurement after commit.
+- Use Router pending UI/timing, not custom navigation timers.
 
 ## Route rules
 
-- Scope `useParams`, `useSearch`, `useLoaderData`, and `useRouteContext` with `{ from }` or
-  a route API; reject `strict: false`.
+- Scope `useParams`, `useSearch`, `useLoaderData`, `useRouteContext` with `{ from }` or route API; reject `strict: false`.
 - Query-backed components read Query, not `Route.useLoaderData`.
-- Route files export route configuration only; reusable components live elsewhere.
-- Navigation uses router APIs, not `window.location`.
+- Route files export config only; reusable components live elsewhere.
+- Use router navigation, not `window.location`.
 - `react-router-dom`, `URLSearchParams`, and nuqs are migration debt.
-- Route-tree changes trigger generation.
+- Regenerate route tree after changes.
 
-## Search parameters
+## Search
 
-The router owns search typing through `validateSearch`.
+`validateSearch` owns typing. URL holds shareable tabs/filters/sort/page; storage holds personal density/page size/collapse. Validate enums/dates/bounded numbers; clamp stale pages. Merge prior search and use `replace: true` within a section so Back exits it.
 
-- URL: shareable tabs, filters, sort, and page.
-- Storage: personal density, page size, and collapsed state.
-- Validate enums, dates, and bounded numbers; clamp stale page indexes.
-- Merge updates from prior search state.
-- Use `replace: true` inside a section so Back exits the section.
+## Done
 
-## Completion
-
-- Types prove route and search scope.
-- Loader and observer use the same Query options builder and loader-owned inputs.
-- Query data has an active observer and complete visible states.
-- Rapid or preloaded navigation cannot publish stale route UI or duplicate app-owned work.
-- Navigation tests assert the rendered route landmark after the URL changes.
-- Navigation preserves browser history semantics.
-- Search URLs survive malformed, stale, and shared values.
-- Route tree, focused tests, typecheck, and lint pass.
+Types prove scope; loader and observer share options/inputs; Query has an active observer and all visible states; rapid/preloaded navigation cannot publish stale UI or duplicate app work; tests assert rendered landmarks after URL changes; history semantics and malformed/stale/shared URLs pass; route tree, tests, typecheck, lint pass.

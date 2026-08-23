@@ -3,50 +3,37 @@ name: writing-for-agents
 description: Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.
 ---
 
-# Writing for Agents
+Change agent behavior with minimum context in skills, `AGENTS.md`, `CLAUDE.md`, and references. For skills, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md).
 
-Write agent instructions that change behavior with the least context. This applies to
-skills, `AGENTS.md`, `CLAUDE.md`, and linked references.
+## Depth
 
-When writing a skill, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md) for frontmatter, invocation choice, and routers.
+A **context pointer** names external material and when to read it; it spends context load. Progressive disclosure uses the shallowest depth:
 
-## Put information at the right depth
+1. Inline universal steps.
+2. Inline reference needed during them.
+3. Link branch-only detail with a precise trigger.
+4. Treat the environment as a source of truth; cache only expensive lookups.
 
-A **context pointer** names material outside the loaded document and states when to read
-it. The pointer spends context load; omitting it spends human recall.
+Front-load pointer triggers, name each branch once, and never hide mandatory steps in references.
 
-**Progressive disclosure** uses the shallowest justified depth:
+## Executable instructions
 
-1. Inline steps every execution needs.
-2. Inline reference needed while performing those steps.
-3. Link branch-specific reference through a precise context pointer.
-4. Treat the environment as a source of truth; cache only expensive lookups. Leave facts
-   to configuration, layout, or `--help`.
+- Use imperatives and repo terms.
+- Give each step an observable completion criterion.
+- Define a leading term only when it replaces repetition.
+- Negation activates the named behavior. Prompt the **positive** target; keep prohibitions only for hard guardrails and pair with safe action.
+- Split sequences only when later visible steps cause premature completion.
 
-Front-load a strong trigger in each pointer. Name distinct branches once. Do not hide a
-mandatory step in a reference.
+## Compress
 
-## Write executable instructions
+Hunt no-ops: delete every line whose removal changes no behavior.
 
-- Use imperative language and the repository's terms.
-- End every step with an observable completion criterion.
-- Define a leading word only when it replaces repeated explanation and improves recall.
-- Negation activates the behavior it names. Prompt the **positive** target; keep a
-  prohibition only for a hard guardrail, paired with the safe action.
-- Split a sequence only when visible later steps cause premature completion.
+- One meaning, one source of truth.
+- Remove identity already in filename/target/heading.
+- Remove request restatement, praise, narration, repeated conclusions.
+- Replace explanation with a rule or one discriminating example.
+- Keep rationale only when it prevents likely error.
+- Fix unclear code/config instead of documenting mechanics.
+- Move branch-only detail behind a pointer; co-locate rule, definition, caveats.
 
-## Compress before publishing
-
-Hunt no-ops: for every line, ask what behavior changes if it is deleted. Delete the line
-when the answer is none.
-
-- Keep each meaning in one source of truth.
-- Remove identity already carried by the file, target, or heading.
-- Remove request restatements, praise, process narration, and repeated conclusions.
-- Replace explanation with a precise rule or one discriminating example.
-- Keep reasons only when they prevent a likely wrong action.
-- Make unclear code or configuration clearer instead of documenting obvious mechanics.
-- Move branch-only detail behind a pointer; co-locate its definition, rule, and caveats.
-
-Stop when the shortest version still selects the right branch, preserves every guardrail,
-and makes completion testable.
+Stop at the shortest version that selects the right branch, preserves guardrails, and makes completion testable.

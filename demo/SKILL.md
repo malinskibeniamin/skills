@@ -5,36 +5,19 @@ disable-model-invocation: true
 argument-hint: "[branch, PR, feature, or path]"
 ---
 
-# Demo
-
-Turn finished work into customer proof, not a developer status update. Read
-[REFERENCE.md](REFERENCE.md) before creating the artifact.
+Turn finished work into customer proof. Read [REFERENCE.md](REFERENCE.md).
 
 ## Contract
 
-1. Resolve the requested target. Default to the whole current branch or PR from its
-   merge-base, including committed, staged, unstaged, and relevant untracked work.
-2. Choose the strongest customer-visible payoff supported by the change. Build one short
-   story around the customer's problem, action, and result.
-3. Create committed artifacts under `demos/<slug>/`. Reuse that directory when updating
-   the same demo; never scatter generated media across the repository.
-4. Prefer a Remotion composition and render `demos/<slug>/output/demo.mp4`. Reuse real
-   product captures when they make the result more credible.
-5. Fall back to a rendered sequence, state, flow, or architecture diagram only after a
-   concrete Remotion blocker or when motion would add no customer value. Use Mermaid for a
-   simple graph and `/excalidraw-diagram` for art-directed spatial explanation. Record the
-   reason.
-6. Inspect representative frames or the complete diagram, repair visible defects, and
-   verify that no secret, private data, or customer PII appears. Give every diagram fallback
-   a concise accessible description.
-7. Do not edit any README. Commit the demo, push the current branch, and create a draft PR
-   with the recording or fallback linked in its body. Update an existing PR without
-   changing its review state.
-8. On macOS, reveal the recording with `open -R`. Otherwise print its absolute path and
-   an exact `cd` command after showing `pwd` for the output directory.
+1. Resolve target; default whole current branch/PR from merge-base, including committed, staged, unstaged, relevant untracked work.
+2. Choose strongest visible payoff; tell one short problem -> action -> result story.
+3. Commit under `demos/<slug>/`; reuse for updates, never scatter media.
+4. Prefer Remotion and render `demos/<slug>/output/demo.mp4`; reuse real captures when more credible.
+5. Fall back only on concrete Remotion blocker or no motion value: rendered sequence/state/flow or architecture diagram; Mermaid for simple graph, `/excalidraw-diagram` for art-directed space. Record reason.
+6. Inspect frames/full diagram; repair defects; exclude secrets/private/customer PII. Diagram fallback needs concise accessible description.
+7. Never edit README. Commit, push current branch, create draft PR with linked artifact; update existing PR without changing review state.
+8. macOS: `open -R`; otherwise show `pwd`, absolute path, exact `cd`.
 
-## Completion
+## Done
 
-Return the customer story, artifact type, absolute artifact path, render or validation
-evidence, fallback reason when applicable, and draft PR URL. A local artifact without the
-requested PR is blocked delivery, not complete.
+Return customer story, artifact type/path, render/validation evidence, fallback reason, draft PR URL. Local-only artifact is blocked, not complete.
