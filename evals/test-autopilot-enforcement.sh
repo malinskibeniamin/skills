@@ -23,6 +23,46 @@ done
 # ── lifecycle-stop.sh: auto-remediation messages ────────────────
 
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Run:.*git push" "lifecycle-stop prescribes exact push command"
+_diverged_repo=$(mktemp -d /tmp/lifecycle-diverged-repo-XXXXXX)
+_diverged_remote=$(mktemp -d /tmp/lifecycle-diverged-remote-XXXXXX)
+git -C "$_diverged_remote" init --bare -q
+git -C "$_diverged_repo" init -q
+git -C "$_diverged_repo" config user.email eval@example.com
+git -C "$_diverged_repo" config user.name Eval
+printf 'base\n' > "$_diverged_repo/file.txt"
+git -C "$_diverged_repo" add file.txt
+git -C "$_diverged_repo" commit -qm base
+git -C "$_diverged_repo" branch -m feature/diverged
+git -C "$_diverged_repo" remote add origin "$_diverged_remote"
+git -C "$_diverged_repo" push -qu origin feature/diverged
+_diverged_base=$(git -C "$_diverged_repo" rev-parse HEAD)
+printf 'old\n' >> "$_diverged_repo/file.txt"
+git -C "$_diverged_repo" commit -qam old
+git -C "$_diverged_repo" push -q
+git -C "$_diverged_repo" reset -q --hard "$_diverged_base"
+printf 'rewritten\n' >> "$_diverged_repo/file.txt"
+git -C "$_diverged_repo" commit -qam rewritten
+_diverged_sid="lifecycle-diverged-eval-$$"
+_diverged_session="/tmp/hook-session-${_diverged_sid}"
+mkdir -p "$_diverged_session"
+: > "$_diverged_session/session-touched-files"
+printf 'push\n' > "$_diverged_session/task-endpoint"
+_diverged_out=$(mktemp)
+_diverged_err=$(mktemp)
+_diverged_exit=0
+(cd "$_diverged_repo" && printf '%s' '{"hook_event_name":"Stop","stop_hook_active":false}' \
+  | CLAUDE_SESSION_ID="$_diverged_sid" "$HOOKS_DIR/lifecycle-stop.sh" >"$_diverged_out" 2>"$_diverged_err") \
+  || _diverged_exit=$?
+if [ "$_diverged_exit" -eq 2 ] \
+  && grep -q -- '--force-with-lease' "$_diverged_out" "$_diverged_err"; then
+  echo "  PASS  lifecycle-stop prescribes force-with-lease for rewritten upstream history"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  lifecycle-stop misses force-with-lease for rewritten upstream history"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: diverged lifecycle push recovery"
+fi
+rm -rf "$_diverged_repo" "$_diverged_remote" "$_diverged_session" "$_diverged_out" "$_diverged_err"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Create one NOW" "lifecycle-stop prescribes PR creation"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Requested PR endpoint is complete" "PR endpoint stops after CI snapshot"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "explicit ship loop" "ship endpoint alone owns CI monitoring"

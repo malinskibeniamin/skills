@@ -13,6 +13,8 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "commit, push, or rebase" \
   "standing git authorization covers routine delivery"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "without another permission prompt" \
   "standing git authorization prevents repeated permission prompts"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Never ask the user to restart or reconfigure" \
+  "stale endpoint recovery stays inside the harness"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "🟢 done —" "CLAUDE.md defines visible done status"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "human.*browser|human-owned.*browser" "CLAUDE.md protects human browser sessions"
 if grep -q '\[BROWSER\]' "$INTENT"; then
@@ -62,8 +64,9 @@ _intent_out=$(
   printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-eval-'$$'","prompt":"implement the dark mode toggle"}' \
     | CLAUDE_SESSION_ID="$_cc_session" "$INTENT"
 )
-if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "push" ]; then
-  echo "  PASS  implementation prompt records push endpoint"
+if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "push" ] \
+  && ! printf '%s' "$_intent_out" | grep -q '\[ENDPOINT:'; then
+  echo "  PASS  implementation prompt records push only in lifecycle state"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  implementation prompt records push endpoint"
@@ -75,9 +78,10 @@ _upgrade_session="completion-contract-upgrade-eval-$$"
 _upgrade_dir="/tmp/hook-session-${_upgrade_session}"
 printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-upgrade-eval-'$$'","prompt":"fix locally; do not commit or push"}' \
   | CLAUDE_SESSION_ID="$_upgrade_session" "$INTENT" >/dev/null
-printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-upgrade-eval-'$$'","prompt":"switch endpoint permissions to allow commit and --force-with-lease push"}' \
-  | CLAUDE_SESSION_ID="$_upgrade_session" "$INTENT" >/dev/null
-if [ "$(cat "$_upgrade_dir/task-endpoint" 2>/dev/null)" = "push" ]; then
+_upgrade_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-upgrade-eval-'$$'","prompt":"I stopped without confirming commit/push. [ENDPOINT:local] blocked delivery. Please unblock yourself and force-with-lease push."}' \
+  | CLAUDE_SESSION_ID="$_upgrade_session" "$INTENT")
+if [ "$(cat "$_upgrade_dir/task-endpoint" 2>/dev/null)" = "push" ] \
+  && ! printf '%s' "$_upgrade_out" | grep -q '\[ENDPOINT:'; then
   echo "  PASS  explicit delivery follow-up replaces a stale local endpoint"
   PASS=$((PASS + 1))
 else
@@ -145,15 +149,16 @@ fi
 _negative_session="completion-contract-negative-eval-$$"
 _negative_dir="/tmp/hook-session-${_negative_session}"
 rm -rf "$_negative_dir"
-printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-negative-eval-'$$'","prompt":"fix the toggle locally; do not commit, push, or create a PR"}' \
-  | CLAUDE_SESSION_ID="$_negative_session" "$INTENT" >/dev/null
-if [ "$(cat "$_negative_dir/task-endpoint" 2>/dev/null)" = "local" ]; then
-  echo "  PASS  negated delivery verbs preserve local endpoint"
+_negative_out=$(printf '%s' '{"hook_event_name":"UserPromptSubmit","session_id":"completion-contract-negative-eval-'$$'","prompt":"fix the toggle locally; do not commit, push, or create a PR"}' \
+  | CLAUDE_SESSION_ID="$_negative_session" "$INTENT")
+if [ "$(cat "$_negative_dir/task-endpoint" 2>/dev/null)" = "local" ] \
+  && ! printf '%s' "$_negative_out" | jq -e '.hookSpecificOutput.additionalContext | contains("[ENDPOINT:local]")' >/dev/null 2>&1; then
+  echo "  PASS  negated delivery stays local without developer-context injection"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  negated delivery verbs preserve local endpoint"
+  echo "  FAIL  negated delivery becomes developer-context injection"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: negated delivery verb escalated endpoint"
+  ERRORS="$ERRORS\n  FAIL: local endpoint injected as developer context"
 fi
 
 _negative_plan_session="completion-contract-negative-plan-eval-$$"
@@ -270,7 +275,7 @@ _pr_out=$(
     | CLAUDE_SESSION_ID="$_cc_session" "$INTENT"
 )
 if [ "$(cat "$_cc_dir/task-endpoint" 2>/dev/null)" = "pr" ] \
-  && printf '%s' "$_pr_out" | grep -q "ENDPOINT:pr" \
+  && ! printf '%s' "$_pr_out" | grep -q '\[ENDPOINT:' \
   && grep -qi "PR: verify, commit, push" "$REPO_ROOT/CLAUDE.md"; then
   echo "  PASS  make a PR authorizes commit and push prerequisites"
   PASS=$((PASS + 1))

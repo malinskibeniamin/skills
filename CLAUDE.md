@@ -37,6 +37,11 @@ make reversible assumptions and proceed. Routine work may commit, push, or rebas
 user-owned feature branch without another permission prompt; after a rebase, use
 `--force-with-lease` when needed. Never merge, use plain `--force`, or rewrite a default,
 shared, foreign, or concurrently owned branch without explicit permission.
+An explicit delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
+a session merely to commit, push, or rebase the current user-owned feature branch; correct
+the endpoint state and continue.
+Record every inferred delivery endpoint only in lifecycle state; never inject mutable delivery
+intent as developer context.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
