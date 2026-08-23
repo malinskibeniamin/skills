@@ -50,6 +50,13 @@ Użyj tego stałego **formatu pytań**, aby użytkownik mógł je szybko przejrz
 <question body or choices>
 
 **Recommended:** <answer>
+
+---
+
+**Q2 -- <question title>**
+<question body or choices>
+
+**Recommended:** <answer>
 ```
 
 Nierozstrzygnięty warunek wstępny opóźnia tylko swoją gałąź, a pozostała część frontu jest kontynuowana.

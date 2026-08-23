@@ -1,9 +1,9 @@
 ---
 title: /domain-modeling
 description: >-
-  Zbuduj wspólny model domeny. Używaj podczas definiowania terminologii,
-  precyzowania wspólnego języka, uzgadniania kodu z pojęciami domenowymi lub
-  zapisywania trwałych decyzji architektonicznych.
+  Buduj i dopracowuj model domeny projektu. Używaj podczas omawiania
+  terminologii bazy kodu, pisania lub edytowania pliku CONTEXT.md albo
+  rejestrowania lub edytowania ADR-u.
 type: skill
 sidebar:
   label: /domain-modeling

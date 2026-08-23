@@ -9,9 +9,9 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/wizard.excalidraw)
 
-**精靈**是一個 Bash 指令碼，會逐步引導人工完成手動程序；這類程序不但手動操作繁瑣，每次都要重新向 AI 說明也很麻煩。它會開啟每個 URL、明確說明要點選和複製的內容、擷取值並寫入正確位置（`.env`、GitHub 密鑰），在每個階段要求確認，並顯示剩餘進度。它可以設定第三方服務、執行一次性遷移，或將專案從一種狀態切換至另一種狀態。
+**精靈**是一個 Bash 指令碼，會逐步引導人工完成手動程序；這類程序不但手動操作繁瑣，每次都要重新向 AI 說明也很麻煩。它會開啟每個 URL、明確說明要點選和複製的內容、擷取值並寫入正確位置（`.env`、GitHub 密鑰），在每個階段要求確認，並顯示還剩多少個階段。它可以設定第三方服務、執行一次性遷移，或將專案從一種狀態切換至另一種狀態。
 
-令人愉悅的使用者體驗已由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 完整處理，包括顯示剩餘時間的進度、確認關卡、跨平台開啟 URL（包含 WSL）、隱藏密鑰輸入、具冪等性的 `.env` 更新插入、寫入 `gh secret`/`gh variable`，以及結束摘要。**你的工作只有界定程序範圍並撰寫各階段。** `STAGES` 標記上方的程式庫在每個精靈中都完全相同；一致性正是重點，因此絕對不要手動編輯它。
+令人愉悅的使用者體驗已由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 完整處理，包括逐階段進度、確認關卡、跨平台開啟 URL（包含 WSL）、隱藏密鑰輸入、具冪等性的 `.env` 更新插入、寫入 `gh secret`/`gh variable`，以及結束摘要。**你的工作只有界定程序範圍並撰寫各階段。** `STAGES` 標記上方的程式庫在每個精靈中都完全相同；一致性正是重點，因此絕對不要手動編輯它。
 
 精靈預設是暫時性的：為單次執行而建立，儲存至暫存路徑或 `scripts/` 路徑，工作完成後便刪除。只有當使用者希望建立應保留在儲存庫中的可重複設定流程時，才提交精靈。
 
@@ -36,7 +36,7 @@ sidebar:
 
 ### 3. 撰寫精靈
 
-將 `template.sh` 複製到目標路徑。依照相依性順序，以每個步驟一個 `stage` 取代範例階段。使用程式庫輔助函式：`stage`、`say`/`step`、`open_url`、`ask`/`ask_secret`、`write_env`、`set_secret`/`set_var`、`pause`/`confirm`，並將 `TOTAL_STAGES` 與 `TOTAL_MINUTES` 設為如實的估計值（這會決定剩餘時間的顯示）。
+將 `template.sh` 複製到目標路徑。依照相依性順序，以每個步驟一個 `stage` 取代範例階段。使用程式庫輔助函式：`stage`、`say`/`step`、`open_url`、`ask`/`ask_secret`、`write_env`、`set_secret`/`set_var`、`pause`/`confirm`，並將 `TOTAL_STAGES` 設為所撰寫的階段數。
 
 維持範本所訂的標準：詢問值之前先開啟 URL、任何密鑰皆使用 `ask_secret`、每個需要保存的值皆使用 `write_env`、只有 CI 實際需要的值才使用 `set_secret`，並在任何不可逆操作前使用 `confirm`。每個 `stage` 都會清除畫面，因此只顯示目前步驟；請讓每個階段專注於單一任務，以免人工所需的內容捲動至畫面之外。不要更動標記上方的程式庫。
 

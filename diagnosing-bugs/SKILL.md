@@ -7,11 +7,16 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 Discipline for hard bugs. Skip a phase only with reason. Use the domain glossary and ADRs;
 for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
 
+## Redact
+This skill shows commands, outputs, and captured artifacts. **Redact every secret first** --
+write `<REDACTED>` in its place. Build loops against environment variables so credentials stay
+out of files and quoted output. Captured artifacts can carry authentication headers; quote only
+the lines that carry the signal. If redacted evidence is insufficient, ask the user for a safer
+source.
 ## Phase 1 -- Build a feedback loop
 **The feedback loop is the skill.** The rest is mechanical. Build a fast, deterministic,
 agent-runnable pass/fail signal for the reported bug; bisection, hypothesis tests, and
 instrumentation consume that signal. Spend most of the diagnosis effort here.
-
 ### Strategies (try in roughly this order)
 1. **Failing test** at the highest seam that reaches the bug -- unit, integration, or e2e.
 2. **Curl / HTTP script** against running dev server.
@@ -25,15 +30,12 @@ instrumentation consume that signal. Spend most of the diagnosis effort here.
 9. **Differential loop.** Run same input through old-version vs new-version (or two configs), diff output.
 10. **HITL bash script.** Last resort. If a human must click, guide them with
     `scripts/hitl-loop.template.sh`; feed the captured output back into the loop.
-
 ### Iterate on the loop itself
 Treat the loop as a product: make it faster, sharpen the asserted symptom, and remove
 nondeterminism by pinning time, random seeds, filesystem state, and network inputs.
-
 ### Non-deterministic bugs
 Target a **higher reproduction rate**. Run the loop repeatedly, add controlled stress, and
 narrow the timing window until the failure occurs often enough to distinguish hypotheses.
-
 ### When you genuinely cannot build a loop
 Stop with the attempted loops and request the missing input: access to the reproducing
 environment, a captured artifact, or permission for temporary production instrumentation.
@@ -48,7 +50,6 @@ Run the loop, then `/dogfood` the reporter's real user entrypoint. Watch the sam
 - [ ] The loop captures the exact symptom so Phase 5 can prove the fix addresses it.
 
 Proceed when the reported bug reproduces.
-
 ## Phase 3 -- Hypothesise
 Generate **3-5 ranked, falsifiable hypotheses** before testing any; single-hypothesis work
 anchors on the first plausible idea.
@@ -73,7 +74,6 @@ Tag every debug log with a unique prefix such as `[DEBUG-a4f2]`, then remove eve
 then bisect. Measure first, fix second.
 
 ## Phase 5 -- Fix + regression test
-
 Write regression test **before fix** -- but only if **correct seam** for it.
 
 The correct seam exercises the **real bug pattern** as it occurs at the call site. A shallow

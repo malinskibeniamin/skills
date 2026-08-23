@@ -9,9 +9,9 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/wizard.excalidraw)
 
-**向导**是一种 Bash 脚本，它会逐步引导人工完成一套手动流程。这类流程不仅手动操作起来繁琐，而且每次都重新向 AI 解释也很麻烦。它会打开每个 URL，准确说明要点击和复制什么，采集相应的值，将其写入正确的位置（`.env`、GitHub 密钥），在每个阶段请求确认，并显示剩余工作量。它可以配置第三方服务、执行一次性迁移，或将项目从一种状态切换到另一种状态。
+**向导**是一种 Bash 脚本，它会逐步引导人工完成一套手动流程。这类流程不仅手动操作起来繁琐，而且每次都重新向 AI 解释也很麻烦。它会打开每个 URL，准确说明要点击和复制什么，采集相应的值，将其写入正确的位置（`.env`、GitHub 密钥），在每个阶段请求确认，并显示还剩多少个阶段。它可以配置第三方服务、执行一次性迁移，或将项目从一种状态切换到另一种状态。
 
-出色的用户体验已经由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 实现——包括显示剩余时间的进度、确认关卡、跨平台打开 URL（包括 WSL）、隐藏式密钥输入、幂等的 `.env` 更新插入、写入 `gh secret`/`gh variable`，以及结束摘要。**你的工作仅仅是界定流程范围并编写各个阶段。** `STAGES` 标记上方的库代码在每个向导中都完全相同；保持一致正是其意义所在——切勿手动编辑。
+出色的用户体验已经由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 实现——包括逐阶段进度、确认关卡、跨平台打开 URL（包括 WSL）、隐藏式密钥输入、幂等的 `.env` 更新插入、写入 `gh secret`/`gh variable`，以及结束摘要。**你的工作仅仅是界定流程范围并编写各个阶段。** `STAGES` 标记上方的库代码在每个向导中都完全相同；保持一致正是其意义所在——切勿手动编辑。
 
 默认情况下，向导是临时性的——为单次运行而构建，保存到临时路径或 `scripts/` 路径，并在任务完成后删除。只有当用户需要一个应当保存在仓库中的可重复执行设置流程时，才提交它。
 
@@ -36,7 +36,7 @@ sidebar:
 
 ### 3. 编写向导
 
-将 `template.sh` 复制到目标路径。用按依赖关系排序的步骤替换示例阶段，每个步骤对应一个 `stage`。使用库中的辅助函数——`stage`、`say`/`step`、`open_url`、`ask`/`ask_secret`、`write_env`、`set_secret`/`set_var`、`pause`/`confirm`——并将 `TOTAL_STAGES` 和 `TOTAL_MINUTES` 设置为如实估算的值（它们用于驱动剩余时间显示）。
+将 `template.sh` 复制到目标路径。用按依赖关系排序的步骤替换示例阶段，每个步骤对应一个 `stage`。使用库中的辅助函数——`stage`、`say`/`step`、`open_url`、`ask`/`ask_secret`、`write_env`、`set_secret`/`set_var`、`pause`/`confirm`——并将 `TOTAL_STAGES` 设置为所编写的阶段数。
 
 保持模板设定的标准：先打开 URL，再请求输入其中的值；所有密钥都使用 `ask_secret`；每个需要持久化的值都使用 `write_env`；只有 CI 实际需要的值才使用 `set_secret`；在执行任何不可逆操作前使用 `confirm`。每个 `stage` 都会清空屏幕，因此只有当前步骤可见——每个阶段只处理一项专注的任务，确保人工所需的内容不会因滚动而消失。不要改动标记上方的库代码。
 
