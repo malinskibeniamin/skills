@@ -203,6 +203,16 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     ],
     relations: ["drives", "crosses", "observes"],
   },
+  eli5: {
+    kind: "transformation-map",
+    nodes: [
+      "Source evidence",
+      "One mental model",
+      "Big pictures + few words",
+      "Beginner understanding",
+    ],
+    relations: ["grounds", "simplifies", "explains"],
+  },
   "efficient-frontier": {
     kind: "decision-tree",
     nodes: [

@@ -376,6 +376,10 @@ Everything this harness uses from [mattpocock/skills](https://github.com/mattpoc
 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
+`/eli5` adapts the beginner-first visual artifact idea from
+[Anthropic's community ELI5 plugin](https://github.com/anthropics/claude-plugins-community/tree/main/eli5),
+authored by Thariq Shihipar.
+
 TanStack packages ship version-matched guidance through TanStack Intent. `/tanstack-intent`
 discovers and loads the installed framework's task-specific skills before any TanStack
 answer or change; the full starter kit runs `bunx @tanstack/intent@latest install --map`
