@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "8d7b20bfd5bf4302",
-      "zh-CN": "8d7b20bfd5bf4302",
-      "zh-TW": "8d7b20bfd5bf4302"
+      "pl": "97258a745be9fa83",
+      "zh-CN": "97258a745be9fa83",
+      "zh-TW": "97258a745be9fa83"
     },
     "content/skills/accessibility.md": {
       "pl": "563f8371823ba6c4",
@@ -21,9 +21,14 @@
       "zh-TW": "44bf6a6911b826e9"
     },
     "content/skills/ask-ben.md": {
-      "pl": "610e2a6a777c9d71",
-      "zh-CN": "610e2a6a777c9d71",
-      "zh-TW": "610e2a6a777c9d71"
+      "pl": "f1b039f3c2e74d08",
+      "zh-CN": "f1b039f3c2e74d08",
+      "zh-TW": "f1b039f3c2e74d08"
+    },
+    "content/skills/brain-dump.md": {
+      "pl": "45fed1a41e5405c7",
+      "zh-CN": "45fed1a41e5405c7",
+      "zh-TW": "45fed1a41e5405c7"
     },
     "content/skills/codebase-design.md": {
       "pl": "e8f946b051b569ae",
@@ -131,9 +136,9 @@
       "zh-TW": "e99929570d9fc7fa"
     },
     "content/skills/grilling.md": {
-      "pl": "717464e2d6991ed5",
-      "zh-CN": "717464e2d6991ed5",
-      "zh-TW": "717464e2d6991ed5"
+      "pl": "d2bfafd25760bcf5",
+      "zh-CN": "d2bfafd25760bcf5",
+      "zh-TW": "d2bfafd25760bcf5"
     },
     "content/skills/handoff.md": {
       "pl": "cde054ea54183f6c",

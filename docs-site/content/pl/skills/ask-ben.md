@@ -22,6 +22,7 @@ Na granicy faz użyj [PHASE-BOUNDARIES.md](https://github.com/malinskibeniamin/s
 | `/agent-watchdog` | Audytowanie i poprawianie pracy innego agenta programistycznego. |
 | `/aip` | Projektowanie interfejsów API zasobów protobuf w stylu Google AIP. |
 | `/ask-ben` | Kierowanie pracy przez zestaw umiejętności frontendowych Bena. |
+| `/brain-dump` | Przekształcanie surowych przemyśleń w praktyczne mapy możliwości. |
 | `/codebase-design` | Projektowanie głębszych modułów z przejrzystymi interfejsami. |
 | `/codex-compat` | Generowanie zgodnych hooków i instrukcji dla Codex. |
 | `/codex` | Delegowanie ograniczonych zadań przez CLI Codex. |

@@ -102,7 +102,7 @@ export default defineConfig({
   },
   title: "Agent skills",
   versions: {
-    archived: [{ id: "v4.37.0" }],
+    archived: [{ id: "v4.38.0" }, { id: "v4.37.0" }],
     current: { badge: "Latest", label: "main" },
   },
 });

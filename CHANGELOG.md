@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 4.38.0
+
+2026-08-24 -- Publish the post-4.37 Claude Code and Codex bundle. Add
+`/brain-dump` for turning unstructured material into a grounded opportunity map before
+`/grilling`, and `/eli5` for visual explanations. Add `/ux-performance`,
+`/tanstack-intent`, `/pr-shepherd`, Rstest support, Go 1.27 guidance, stronger TanStack
+Router navigation guidance, concise human-facing output rules, and searchable, versioned,
+multilingual Blume documentation. Tighten hook and delivery safeguards, refresh every
+manifest, marketplace, install pin, and immutable documentation snapshot, and repair the
+translation drift that blocked main CI.
+
 2026-08-22 -- Audit the five-week mattpocock/skills window from `9c326299` through
 `5b15a47f` and reconcile the missing post-`a621cc4f` guidance. Add harness-neutral
 phase-boundary routing, secret-safe diagnosis evidence, bounded-context lookup for
