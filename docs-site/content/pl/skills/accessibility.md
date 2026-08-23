@@ -50,6 +50,16 @@ Dla komponentów interaktywnych stosuj JEDEN wzorzec — nigdy oba:
 
 Dlaczego: niejednoznaczne cele kliknięć, błędy propagacji zdarzeń, brak możliwości przekazania modelu interakcji przez czytniki ekranu oraz nakładające się obszary dotykowe na urządzeniach mobilnych.
 
+## Dostępne nazwy i opisy
+
+- Preferuj widoczny tekst i natywne mechanizmy nadawania nazw (`<label>`, treść przycisku lub linku, podpisy) zamiast
+  ARIA. Używaj `aria-label` tylko wtedy, gdy nie ma widocznej nazwy, na przykład w przycisku zawierającym wyłącznie ikonę;
+  `aria-label` lub `aria-labelledby` mogą zastąpić tekst elementów potomnych w drzewie dostępności.
+- Dbaj o aktualność odwołań `aria-describedby`. Usuń nieaktualny identyfikator błędu po pomyślnym
+  przejściu walidacji; ukryta treść wskazywana przez odwołanie nadal może stać się dostępnym opisem.
+- Sprawdź obliczone drzewo dostępności, gdy zachowanie nazw lub opisów jest niejasne.
+  Postępuj zgodnie z [wytycznymi WAI-ARIA dotyczącymi nadawania nazw](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
+
 ## Lista kontrolna warstwy wizualnej
 
 - [ ] Wskaźniki fokusu są widoczne na wszystkich elementach interaktywnych (minimum 2 px, kontrastowy kolor)

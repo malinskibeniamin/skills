@@ -37,6 +37,18 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 })
 ```
 
+Automatyczne kontrole dostępności wykrywają tylko część problemów. W przypadku kluczowych ścieżek
+sprawdzaj również kolejność nawigacji klawiaturą, przenoszenie fokusu, dostępne nazwy, powiększenie
+oraz zachowanie docelowych technologii asystujących; pozytywnego wyniku samego axe nie uznawaj za potwierdzenie dostępności.
+
+## Materiał dowodowy z przeglądarek
+
+Uruchamiaj pełny zestaw w Chromium dla PR-ów. W Firefox i WebKit uruchamiaj tylko ścieżki oznaczone `@cross-browser`.
+Pełną zadeklarowaną macierz przeglądarek zarezerwuj dla nocnego przebiegu lub bramki wydania.
+Oznaczaj kluczowe ścieżki, rozwiązania awaryjne i wiarygodne ryzyka specyficzne dla silnika, a nie każdy test.
+W razie potrzeby ograniczaj specyfikacje zależne od uprawnień, ale sprawdzaj równoważne zachowanie w innych miejscach.
+Emulacja przeglądarki nie stanowi dowodu dla każdego ryzyka związanego z konkretną marką przeglądarki lub fizycznym urządzeniem.
+
 ## Zasady deterministyczności (wypracowane przez lata naprawiania niestabilnych testów)
 
 - **Czekaj na przyczynę, nigdy przez określony czas**: `waitForURL()` po kliknięciach powodujących nawigację, `waitForResponse()`/`waitForRequest()` przed sprawdzaniem interfejsu sterowanego przez RPC, a w pozostałych przypadkach oczekiwanie na stan elementu. Bez `waitForTimeout`; bez `expect.soft` wewnątrz `toPass` (miękkie błędy nigdy nie powodują ponowienia bloku).
