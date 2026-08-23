@@ -54,6 +54,12 @@ or blocked on an external dependency. It prevents silent model stops without inv
 semantic completion judge.
 _Avoid_: Progress update, background notification
 
+**Intent map**:
+A concise causal view of substantial human-facing work: objective, assumptions, decisions,
+references, implementation, verification, risks, and superseded choices. It progressively
+discloses evidence instead of reproducing prose, private reasoning, or raw diffs.
+_Avoid_: Chain of thought, exhaustive dependency graph, separate recap artifact
+
 **Human-owned application**:
 A browser or desktop-app session the person is actively using or has configured. Agent
 verification uses an isolated session and never closes or takes over the human-owned one.

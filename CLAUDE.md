@@ -23,9 +23,14 @@ Load one matching `exemplars/` file when it is a higher-fidelity reference than 
 
 ## Human-facing text
 
-Lead with the decision, result, or action. Keep only evidence, impact, constraints,
-trade-offs, correction, verification, rollout, blockers, and next steps that change what
-the reader decides. Omit restatement, praise, narration, repetition, and obvious comments.
+Lead with decision/result/action. Keep only evidence, impact, constraints, trade-offs,
+correction, verification, rollout, blockers, and next steps that change it; omit restatement,
+praise, narration, repetition, and obvious comments.
+
+Substantial plans, analyses, reviews, recaps, status, and handoffs use
+`shared/intent-map.md`: result/decision first; map objective, assumptions, references,
+risks, implementation, verification, superseded choices. Keep trivial/
+single-path output linear.
 
 ## Execution contract
 
@@ -37,17 +42,15 @@ The requested endpoint owns scope:
 - Commit: commit only. Push: commit if needed, then push. PR: verify, commit, push, open
   via `/commit-push-pr`, take one CI snapshot. Ship or `/go`: run the full delivery loop.
 
-An explicit earlier stop wins. Ask only for a material user-reserved decision or an
-irreversible production, legal/privacy, destructive, or high-security action. Otherwise
-make reversible assumptions and proceed. Routine work may commit, push, or rebase the current
-user-owned feature branch without another permission prompt; after a rebase, use
-`--force-with-lease` when needed. Never merge, use plain `--force`, or rewrite a default,
-shared, foreign, or concurrently owned branch without explicit permission.
-An explicit delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session merely to commit, push, or rebase the current user-owned feature branch; correct
-the endpoint state and continue.
-Record every inferred delivery endpoint only in lifecycle state; never inject mutable delivery
-intent as developer context.
+An earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
+legal/privacy, destructive, or high-security action; otherwise use reversible assumptions.
+Routine work may commit, push, or rebase the current user-owned
+feature branch without another permission prompt; after rebase, use `--force-with-lease` when needed.
+Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
+branch without explicit permission.
+A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
+a session to deliver that branch; correct endpoint state and continue. Store inferred delivery
+endpoints only in lifecycle state, never developer context.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
@@ -65,16 +68,14 @@ For action work, establish one outcome contract:
 - **Verification** -- tests, commands, or observable behavior that prove the result.
 - **Stop** -- the requested endpoint and conditions that genuinely block progress.
 
-Then inspect -> act -> verify -> repeat. Let evidence choose the plan, tools, and any
-specialist guidance. Continue immediately through reversible decisions; do not insert
-approval gates, fixed task durations, or skill ceremonies. Meaningful behavior starts with
-a failing public-contract test. Long or high-unknown work may record evidence, deviations,
-and pause triggers in gitignored `.context/implementation-notes.md`.
+Then inspect -> act -> verify -> repeat. Let evidence choose plans, tools, and guidance. Continue
+through reversible decisions; add no approval gates, fixed durations, or skill ceremonies.
+Meaningful behavior starts with a failing public-contract test. Long or high-unknown work may
+record evidence, deviations, and pause triggers in `.context/implementation-notes.md`.
 
-Model selection is data-driven in `config/model-routing.json`; `/efficient-frontier`
-applies it. Quality wins. Do not invent capability rankings or infer subscription usage
-from token counts. Promote context, effort, or model changes only through
-`agent-evals/context-ablation/`.
+`config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
+wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,
+or models only through `agent-evals/context-ablation/`.
 
 Run `bun run lint:fix` and `bun run type:check` before done. Generated files
 (`*.gen.*`, `*_pb.*`, `*_connectquery.*`, or an `@generated`/`DO NOT EDIT` header) are
