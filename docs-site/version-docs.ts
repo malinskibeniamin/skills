@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -18,8 +19,11 @@ export const pinSnapshotLinksInText = (
     `https://github.com/malinskibeniamin/skills/blob/${version}/`,
   );
 
-const pinSnapshotLinks = async (version: string): Promise<void> => {
-  const snapshotRoot = join(import.meta.dir, "content", version);
+const pinSnapshotLinks = async (
+  root: string,
+  version: string,
+): Promise<void> => {
+  const snapshotRoot = join(root, "content", version);
   const snapshotFiles = new Bun.Glob("**/*.{md,mdx}").scan({
     absolute: true,
     cwd: snapshotRoot,
@@ -34,16 +38,29 @@ const pinSnapshotLinks = async (version: string): Promise<void> => {
   }
 };
 
-const run = async (): Promise<void> => {
-  const arguments_ = Bun.argv.slice(2);
-  const blume = Bun.which("blume");
-  if (!blume) {
-    throw new Error("Blume executable not found. Run bun install first.");
+export const runVersionDocs = async ({
+  arguments_,
+  blume,
+  root,
+}: {
+  arguments_: string[];
+  blume: string;
+  root: string;
+}): Promise<number> => {
+  const version = versionIdFromArguments(arguments_);
+  const validVersion = version?.match(/^[A-Za-z][A-Za-z0-9._-]*$/u);
+
+  if (version && validVersion && existsSync(join(root, "content", version))) {
+    process.stderr.write(
+      '[docs:version] Snapshot already exists: "' +
+        version +
+        '". Archived docs are immutable; choose a new version.\n',
+    );
+    return 1;
   }
 
-  const version = versionIdFromArguments(arguments_);
   const child = Bun.spawn([blume, "version", ...arguments_], {
-    cwd: import.meta.dir,
+    cwd: root,
     env: Bun.env,
     stderr: "inherit",
     stdin: "inherit",
@@ -51,9 +68,22 @@ const run = async (): Promise<void> => {
   });
   const exitCode = await child.exited;
   if (exitCode === 0 && version) {
-    await pinSnapshotLinks(version);
+    await pinSnapshotLinks(root, version);
   }
-  process.exitCode = exitCode;
+  return exitCode;
+};
+
+const run = async (): Promise<void> => {
+  const blume = Bun.which("blume");
+  if (!blume) {
+    throw new Error("Blume executable not found. Run bun install first.");
+  }
+
+  process.exitCode = await runVersionDocs({
+    arguments_: Bun.argv.slice(2),
+    blume,
+    root: import.meta.dir,
+  });
 };
 
 if (import.meta.main) {

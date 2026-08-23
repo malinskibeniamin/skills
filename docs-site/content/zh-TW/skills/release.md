@@ -29,7 +29,9 @@ sidebar:
    變更記錄項目、`CHANGELOG.md`，以及 README 的安裝版本固定值。
 4. 若技能介面有所變更，請執行掛鉤、目錄與 AGENTS 產生器。絕不可手動編輯
    產生的 Codex 代理檔案。
-5. 重新執行聚焦的發布中繼資料與封裝評估，直到達到 GREEN。
+5. 使用 `bun run docs:version v<version>` 凍結該發行版本的文件。提交產生的快照及其新增的
+   `versions.archived` 項目；絕不可編輯現有快照。
+6. 重新執行聚焦的發布中繼資料與封裝評估，直到達到 GREEN。
 
 ## 3. 驗證套件
 

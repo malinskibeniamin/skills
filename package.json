@@ -19,7 +19,7 @@
     "lint": "biome lint --error-on-warnings .",
     "lint:fix": "biome lint --write --error-on-warnings .",
     "quality:gate": "bun run format:check && bun run lint && bun run type:check",
-    "test": "cd shared && bun test hook-protocol.test.ts",
+    "test": "cd shared && bun test hook-protocol.test.ts && cd ../docs-site && bun test version-docs.test.ts",
     "type:check": "tsc -p tsconfig.json"
   },
   "devDependencies": {

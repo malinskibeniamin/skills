@@ -38,6 +38,7 @@ else
   PASS=$((PASS + 1))
 fi
 run_content_eval "$REPO_ROOT/package.json" '"docs:version":' "repository exposes the docs version command"
+run_content_eval "$REPO_ROOT/package.json" 'version-docs.test.ts' "repository test gate protects docs archives"
 run_content_eval "$REPO_ROOT/release/SKILL.md" 'bun run docs:version v<version>' "release workflow archives its docs"
 run_content_eval "$REPO_ROOT/README.md" 'codex features enable hooks' "README enables the stable Codex hooks feature"
 run_content_eval "$REPO_ROOT/README.md" 'codex plugin add frontend-skills@skills' "README installs the Codex plugin after adding its marketplace"

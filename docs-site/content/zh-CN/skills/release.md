@@ -25,7 +25,8 @@ sidebar:
 2. 运行该脚本，并记录预期出现的 RED 发布元数据失败。
 3. 同时更新 `skill-manifest.json`、两个插件清单、两个市场清单、其中带日期的变更日志条目、`CHANGELOG.md` 以及 README 中固定的安装版本。
 4. 如果技能接口发生变化，运行钩子、目录和 AGENTS 生成器。切勿手动编辑生成的 Codex 代理。
-5. 重新运行针对发布元数据和打包的评估，直至变为 GREEN。
+5. 使用 `bun run docs:version v<version>` 冻结该版本的文档。提交生成的快照及其新增的 `versions.archived` 条目；切勿编辑现有快照。
+6. 重新运行针对发布元数据和打包的评估，直至变为 GREEN。
 
 ## 3. 验证软件包
 
