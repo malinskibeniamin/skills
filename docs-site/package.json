@@ -13,6 +13,7 @@
     "check": "blume check --strict",
     "dev": "blume dev",
     "diagrams": "bun run generate-skill-diagrams.ts --render",
+    "docs:version": "bun run version-docs.ts",
     "translate": "blume translate --codex",
     "translate:check": "blume translate --check"
   },
