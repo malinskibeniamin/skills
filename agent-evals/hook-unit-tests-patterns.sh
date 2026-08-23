@@ -696,12 +696,224 @@ _run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "useParams with from passes"
 _cleanup_test_file "$_f"
 
+echo "  typed route API useParams (pass):"
+_setup_test_file "$_f" "import { getRouteApi } from '@tanstack/react-router';
+const routeApi = getRouteApi('/users/\$userId');
+const params = routeApi.useParams();"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "typed route API useParams passes"
+_cleanup_test_file "$_f"
+
+echo "  mixed typed and unscoped useParams (block):"
+_setup_test_file "$_f" "import { getRouteApi, useParams } from '@tanstack/react-router';
+const routeApi = getRouteApi('/users/\$userId');
+const typed = routeApi.useParams();
+const unscoped = useParams();"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "unscoped hook is not hidden by typed route API use"
+_cleanup_test_file "$_f"
+
 echo "  clean TanStack file (pass):"
 _setup_test_file "$_f" "import { Link } from '@tanstack/react-router';
 const X = () => <Link to='/dashboard'>Go</Link>;"
 _run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
 _assert_exit 0 "clean TanStack usage passes"
 _cleanup_test_file "$_f"
+
+echo "  whole search object as loader deps (warn):"
+_f="/tmp/hook-test-routes/dashboard-$$.tsx"
+mkdir -p "$(dirname "$_f")"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/dashboard')({
+  validateSearch: (search) => search,
+  loaderDeps: ({ search }) => search,
+  loader: ({ deps }) => fetchDashboard(deps),
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "whole search loader deps is warn"
+_assert_stdout_contains "query-relevant|used search" "suggests narrow loader deps"
+_cleanup_test_file "$_f"
+
+echo "  query observer rebuilds options from search (warn):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+export const Route = createFileRoute('/dashboard')({
+  validateSearch: (search) => search,
+  loader: ({ context, deps }) =>
+    context.queryClient.ensureQueryData(dashboardQueryOptions(deps)),
+  component: Dashboard,
+});
+function Dashboard() {
+  const { asOf } = Route.useSearch();
+  return useSuspenseQuery(dashboardQueryOptions({ asOf })).data;
+}"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "query options from search is warn"
+_assert_stdout_contains "useLoaderDeps|loader dependencies" "suggests loader-owned query dependencies"
+_cleanup_test_file "$_f"
+
+echo "  interaction-only query reads search (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
+export const Route = createFileRoute('/search')({
+  validateSearch: (search) => search,
+  component: SearchResults,
+});
+function SearchResults() {
+  const { term } = Route.useSearch();
+  return useQuery(searchQueryOptions(term)).data;
+}"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "interaction-only query passes"
+_assert_stdout_not_contains "useLoaderDeps|loader dependencies" "does not invent loader ownership"
+_cleanup_test_file "$_f"
+
+echo "  query observer consumes loader deps (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+export const Route = createFileRoute('/dashboard')({
+  validateSearch: (search) => search,
+  loaderDeps: ({ search: { asOf } }) => ({ asOf }),
+  loader: ({ context, deps }) =>
+    context.queryClient.ensureQueryData(dashboardQueryOptions(deps)),
+  component: Dashboard,
+});
+function Dashboard() {
+  const deps = Route.useLoaderDeps();
+  return useSuspenseQuery(dashboardQueryOptions(deps)).data;
+}"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "loader dependency observer passes"
+_assert_stdout_not_contains "useLoaderDeps|loader dependencies" "does not warn for shared dependency pipeline"
+_cleanup_test_file "$_f"
+
+echo "  beforeLoad side effect (warn):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  beforeLoad: () => {
+    analytics.track('account preload');
+  },
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "beforeLoad side effect is warn"
+_assert_stdout_contains "beforeLoad.*side effect|side effect.*beforeLoad" "explains repeated beforeLoad execution"
+_cleanup_test_file "$_f"
+
+echo "  beforeLoad data fetch (warn):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  beforeLoad: ({ context }) =>
+    context.queryClient.ensureQueryData(accountQueryOptions()),
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "beforeLoad data fetch is warn"
+_assert_stdout_contains "beforeLoad.*data fetch|data fetch.*beforeLoad" "keeps ordinary fetches in loaders"
+_cleanup_test_file "$_f"
+
+echo "  beforeLoad redirect control flow (pass):"
+_setup_test_file "$_f" "import { createFileRoute, redirect } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  beforeLoad: ({ context }) => {
+    if (!context.user) throw redirect({ to: '/login' });
+  },
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "replay-safe beforeLoad passes"
+_assert_stdout_not_contains "side effect" "does not warn for redirect control flow"
+_cleanup_test_file "$_f"
+
+echo "  beforeLoad function reference ignores unrelated effects (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  beforeLoad: requireAccount,
+  component: AccountPage,
+});
+const reportMetric = () => analytics.track('component ready');"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "beforeLoad reference passes"
+_assert_stdout_not_contains "beforeLoad.*side effect|side effect.*beforeLoad" "does not scan past a referenced option"
+_cleanup_test_file "$_f"
+
+echo "  imperative navigation in loader (block):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  loader: ({ navigate }) => navigate({ to: '/login' }),
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "imperative loader navigation blocked"
+_assert_stderr_contains "redirect" "suggests redirect control flow"
+_cleanup_test_file "$_f"
+
+echo "  single-line imperative navigation in loader (block):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({ loader: ({ navigate }) => navigate({ to: '/login' }) });"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 2 "single-line loader navigation blocked"
+_assert_stderr_contains "redirect" "single-line loader suggests redirect control flow"
+_cleanup_test_file "$_f"
+
+echo "  loader function reference ignores component navigation (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  loader: loadAccount,
+  component: AccountPage,
+});
+const goHome = () => navigate({ to: '/' });"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "loader reference passes"
+_assert_stderr_not_contains "redirect" "does not scan past a referenced loader"
+_cleanup_test_file "$_f"
+
+echo "  direct loader fetch without signal (warn):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  loader: () => fetch('/api/account'),
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "loader fetch without signal is warn"
+_assert_stdout_contains "abortController.signal" "suggests loader-owned cancellation"
+_cleanup_test_file "$_f"
+
+echo "  direct loader fetch with signal (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  loader: ({ abortController }) => fetch('/api/account', {
+    signal: abortController.signal,
+  }),
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "loader fetch with signal passes"
+_assert_stdout_not_contains "abortController.signal" "does not warn when loader signal is forwarded"
+_cleanup_test_file "$_f"
+
+echo "  Query-backed loader owns its signal (pass):"
+_setup_test_file "$_f" "import { createFileRoute } from '@tanstack/react-router';
+export const Route = createFileRoute('/account')({
+  loader: ({ context }) => context.queryClient.ensureQueryData(accountQueryOptions()),
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "Query-backed loader passes"
+_assert_stdout_not_contains "abortController.signal" "does not replace Query cancellation ownership"
+_cleanup_test_file "$_f"
+
+echo "  DOM work on onResolved (warn):"
+_setup_test_file "$_f" "router.subscribe('onResolved', () => {
+  document.querySelector('h1')?.focus();
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "DOM work on onResolved is warn"
+_assert_stdout_contains "onRendered" "suggests render receipt event"
+_cleanup_test_file "$_f"
+
+echo "  DOM work on onRendered (pass):"
+_setup_test_file "$_f" "router.subscribe('onRendered', () => {
+  document.querySelector('h1')?.focus();
+});"
+_run_hook "tanstack-router-check.sh" "$(_edit_json "$_f")"
+_assert_exit 0 "DOM work on onRendered passes"
+_assert_stdout_not_contains "onRendered" "does not warn for rendered DOM work"
+_cleanup_test_file "$_f"
+_cleanup_test_dir "/tmp/hook-test-routes"
 
 _teardown_session
 

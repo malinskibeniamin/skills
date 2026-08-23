@@ -33,10 +33,16 @@ Add to hooks config: **PostToolUse** (matcher: `Edit|Write`):
 - [ ] Hook warns on `window.location.reload()`
 - [ ] Hook blocks `strict: false`
 - [ ] Hook blocks `useParams()` without `{ from }`
-- [ ] Hook allows `Route.useParams()`
+- [ ] Hook allows any typed route API such as `Route.useParams()` or `routeApi.useParams()`
 - [ ] Hook blocks `new URLSearchParams`
 - [ ] Hook warns on exported components from route files
 - [ ] Hook blocks `useSearch` without `validateSearch` in route files
+- [ ] Hook warns when `loaderDeps` returns the whole search object
+- [ ] Hook warns when a Query-backed route observer rebuilds inputs from `useSearch`
+- [ ] Hook warns on observable `beforeLoad` side effects
+- [ ] Hook blocks imperative navigation inside a loader
+- [ ] Hook warns when a direct loader fetch omits `abortController.signal`
+- [ ] Hook warns when DOM work subscribes to `onResolved` instead of `onRendered`
 
 ### 5. TanStack Intent (required)
 

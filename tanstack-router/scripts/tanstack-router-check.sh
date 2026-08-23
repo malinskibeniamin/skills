@@ -61,6 +61,60 @@ _has_sibling_route_test() {
   return 1
 }
 
+_route_primes_query() {
+  local candidate content seen
+  seen=""
+  while IFS= read -r candidate; do
+    [ -z "$candidate" ] && continue
+    case "
+$seen
+" in
+      *"
+$candidate
+"*) continue ;;
+    esac
+    seen="$seen
+$candidate"
+    [ -f "$candidate" ] || continue
+    content=$(cat "$candidate" 2>/dev/null || true)
+    if echo "$content" | grep -qE '\bloader[[:space:]]*:' && echo "$content" | grep -qE 'queryClient\.(prefetchQuery|ensureQueryData|fetchQuery)|queryOptions\('; then
+      return 0
+    fi
+  done < <(_route_candidate_files)
+  return 1
+}
+
+_route_option_body() {
+  local option="$1"
+  awk -v option="$option" '
+    BEGIN { active = 0; arrow = 0; body = 0; depth = 0; emitted = 0 }
+    !active && $0 ~ "(^|[{,])[[:space:]]*" option "[[:space:]]*:" { active = 1 }
+    active {
+      buffer = buffer $0 ORS
+      line = $0
+      if (!arrow && index(line, "=>")) {
+        arrow = 1
+        sub(/^.*=>/, "", line)
+      } else if (!arrow) {
+        if (line ~ /,[[:space:]]*$/ || line ~ /^[[:space:]]*}?[)][,;]?[[:space:]]*$/) exit
+        next
+      }
+
+      opens = gsub(/{/, "{", line)
+      closes = gsub(/}/, "}", line)
+      if (opens > 0) body = 1
+      depth += opens - closes
+
+      if ((body && depth <= 0) || (!body && line ~ /,[[:space:]]*$/)) {
+        printf "%s", buffer
+        emitted = 1
+        exit
+      }
+    }
+    END { if (arrow && !emitted) printf "%s", buffer }
+  ' <<< "$file_content"
+}
+
 # ── Check 1: Ban react-router-dom imports ─────────────────────────────
 
 if echo "$added_lines" | grep -qE "from\s+['\"]react-router-dom['\"/]"; then
@@ -131,13 +185,12 @@ fi
 
 # ── Check 7: Ban empty-args useParams/useSearch/useLoaderData/useRouteContext ─
 
-if echo "$added_lines" | grep -qE '\b(useParams|useSearch|useLoaderData|useRouteContext)\(\s*\)'; then
-  if ! echo "$added_lines" | grep -qE 'Route\.(useParams|useSearch|useLoaderData|useRouteContext)\(\s*\)'; then
-    file_content=$(cat "$file_path")
-    if echo "$file_content" | grep -qE "from\s+['\"]@tanstack/react-router"; then
-      match=$(echo "$added_lines" | grep -oE '\b(useParams|useSearch|useLoaderData|useRouteContext)\(\s*\)' | head -1)
-      hook_block "$match needs { from: '/route/\$param' } for type safety. Or use Route.$match."
-    fi
+unscoped_route_hooks=$(echo "$added_lines" | sed -E 's/[A-Za-z_$][A-Za-z0-9_$]*\.(useParams|useSearch|useLoaderData|useRouteContext)\([[:space:]]*\)//g' | grep -E '\b(useParams|useSearch|useLoaderData|useRouteContext)\(\s*\)' || true)
+if [ -n "$unscoped_route_hooks" ]; then
+  file_content=$(cat "$file_path")
+  if echo "$file_content" | grep -qE "from\s+['\"]@tanstack/react-router"; then
+    match=$(echo "$unscoped_route_hooks" | grep -oE '\b(useParams|useSearch|useLoaderData|useRouteContext)\(\s*\)' | head -1)
+    hook_block "$match needs { from: '/route/\$param' } for type safety. Or use a typed route API.$match."
   fi
 fi
 
@@ -218,6 +271,75 @@ if echo "$added_lines" | grep -qE 'createRootRoute\s*\(|context\s*:\s*\{[^}]*que
         hook_warn "Router passes queryClient context. Use createRootRouteWithContext<{ queryClient: QueryClient }>() so loaders get typed context. Escape: // allow: router-query-root-context [reason]"
       fi
     fi
+  fi
+fi
+
+# ── Check 13: Loader dependencies name only data inputs ──────────
+# Returning the full search object reruns loaders for unrelated URL state and
+# makes the component/loader Query identity easier to drift.
+
+file_content="${file_content:-$(cat "$file_path" 2>/dev/null || true)}"
+file_compact=$(printf '%s' "$file_content" | tr '\n' ' ')
+
+if echo "$file_compact" | grep -qE 'loaderDeps[[:space:]]*:[[:space:]]*\([[:space:]]*\{[[:space:]]*search[[:space:]]*\}[[:space:]]*\)[[:space:]]*=>[[:space:]]*search\b'; then
+  if ! hook_has_escape "router-loader-deps-search"; then
+    hook_warn "loaderDeps returns the whole search object. Return only query-relevant, used search fields so unrelated URL state does not reload data. Escape: // allow: router-loader-deps-search [reason]"
+  fi
+fi
+
+# ── Check 14: Query observers consume loader-owned dependencies ──
+# A component that rebuilds Query options from useSearch can silently diverge
+# from the loader. useLoaderDeps exposes the exact validated loader inputs.
+
+if echo "$file_content" | grep -qE '\b(useQuery|useSuspenseQuery)\b' && echo "$file_content" | grep -qE '\b(useSearch|Route\.useSearch|[A-Za-z_$][A-Za-z0-9_$]*\.useSearch)\b' && _route_primes_query; then
+  if ! echo "$file_content" | grep -qE '\b(useLoaderDeps|Route\.useLoaderDeps|[A-Za-z_$][A-Za-z0-9_$]*\.useLoaderDeps)\b'; then
+    if ! hook_has_escape "router-query-search-identity"; then
+      hook_warn "Query options are rebuilt from route search. For loader-prefetched data, derive options from loader dependencies with useLoaderDeps or consume version-supported shared options from route context. Escape: // allow: router-query-search-identity [reason]"
+    fi
+  fi
+fi
+
+# ── Check 15: beforeLoad remains replay-safe ──────────────────────
+# Preloads and navigations run their own beforeLoad chains. Observable effects
+# here can duplicate even when the underlying loader work is shared.
+
+before_load_body=$(_route_option_body "beforeLoad")
+if [ -n "$before_load_body" ] && echo "$before_load_body" | grep -qE '\b(analytics|telemetry)\.|\b(track|capture|identify)\s*\(|\btoast\.|\.mutate(Async)?\s*\(|\bfetch\s*\(|queryClient\.(prefetchQuery|ensureQueryData|fetchQuery|setQueryData|invalidateQueries|removeQueries|cancelQueries)\s*\('; then
+  if ! hook_has_escape "router-before-load-side-effect"; then
+    hook_warn "beforeLoad contains a side effect or data fetch and can run separately for preload and navigation. Keep it replay-safe: authentication, redirect, or context only. Escape: // allow: router-before-load-side-effect [reason]"
+  fi
+fi
+
+# ── Check 16: Redirects remain route control flow ─────────────────
+# The loader navigate argument is deprecated in current Router APIs, and an
+# imperative navigation can race the route attempt that started it.
+
+loader_body=$(_route_option_body "loader")
+if [ -n "$loader_body" ] && echo "$loader_body" | grep -qE '\bnavigate\s*\('; then
+  if ! hook_has_escape "router-loader-navigate"; then
+    hook_block "Do not navigate imperatively inside a loader. Throw redirect({ to: ... }) so Router reduces the route attempt as control flow. Escape only for version-matched legacy Router: // allow: router-loader-navigate [reason]"
+  fi
+fi
+
+# ── Check 17: Direct loader fetches use Router cancellation ───────
+# Query-backed loaders keep Query as resource owner. Direct fetches should use
+# the Router flight signal, which aborts only after its last consumer releases.
+
+if [ -n "$loader_body" ] && echo "$loader_body" | grep -qE '\bfetch\s*\(' && ! echo "$loader_body" | grep -qE '\b(queryClient|queryOptions)\b'; then
+  if ! echo "$loader_body" | grep -qF 'abortController.signal'; then
+    if ! hook_has_escape "router-loader-abort"; then
+      hook_warn "Direct loader fetch does not forward abortController.signal. Use the Router-owned signal so shared preload/navigation work stops only when unused. Escape: // allow: router-loader-abort [reason]"
+    fi
+  fi
+fi
+
+# ── Check 18: DOM effects wait for framework render ───────────────
+# onResolved owns navigation completion, but only onRendered proves the route
+# tree committed to the framework DOM.
+
+if echo "$added_lines" | grep -qE "subscribe\s*\([[:space:]]*['\"]onResolved['\"]" && echo "$added_lines" | grep -qE '\b(document\.|focus\s*\(|scrollIntoView\s*\(|getBoundingClientRect\s*\(|querySelector\s*\()'; then
+  if ! hook_has_escape "router-resolved-dom"; then
+    hook_warn "DOM-dependent work is subscribed to onResolved. Use onRendered for focus, scrolling, or measurement after the route tree commits. Escape: // allow: router-resolved-dom [reason]"
   fi
 fi
 

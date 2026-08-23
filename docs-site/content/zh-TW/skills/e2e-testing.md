@@ -49,7 +49,8 @@ test('page is accessible', async ({ page, makeAxeBuilder }) => {
 
 ## 確定性規則（從多年修正不穩定測試的經驗中歸納）
 
-- **等待原因，絕不等待固定時間**：點擊導覽後使用 `waitForURL()`；在斷言由 RPC 驅動的 UI 前使用 `waitForResponse()`/`waitForRequest()`；其餘情況等待元素狀態。不得使用 `waitForTimeout`；不得在 `toPass` 內使用 `expect.soft`（軟性失敗不會重試該區塊）。
+- **等待原因，絕不等待固定時間**：點擊導覽後使用 `waitForURL()`，接著斷言目的地的地標，因為 URL 發布並不代表路由 DOM 已完成提交。在斷言由 RPC 驅動的 UI 前使用 `waitForResponse()`/`waitForRequest()`；其餘情況等待元素狀態。不得使用 `waitForTimeout`；不得在 `toPass` 內使用 `expect.soft`（軟性失敗不會重試該區塊）。
+- **導覽競爭條件**：延遲路由 A、啟動 A，接著導覽至 B。斷言 B 的地標與副作用出現，且 A 絕不會顯示。請在觸發動作前註冊網路與渲染狀態的 Promise。
 - **計時行為應在 E2E 以下的層級測試**：使用單元／整合測試中的假計時器，驗證防抖／延遲期限與取消行為；E2E 不透過休眠，僅斷言可見結果。
 - **不得使用 `force: true` 點擊** -- 若元素需要強制點擊，代表有其他內容遮擋它，而使用者也會遇到相同阻礙；請修正遮擋問題。
 - **僅依 `Service/Method` 比對 RPC 路由**，絕不固定比對版本（比對器中的 `v1alpha1` 會在下次 API 升版時失效）。
