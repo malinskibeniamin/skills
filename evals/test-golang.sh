@@ -15,6 +15,52 @@ run_executable_eval "$IMAGE_HOOK" "go-test-image-pin-check.sh is executable"
 run_file_eval "$REPO_ROOT/golang/SKILL.md" "golang skill exists"
 run_file_eval "$REPO_ROOT/golang-review/SKILL.md" "golang-review skill exists"
 run_file_eval "$REPO_ROOT/golang-review/RULES.md" "golang-review rule catalog exists"
+run_file_eval "$REPO_ROOT/golang/GO-1.27.md" "Go 1.27 guidance exists"
+
+# Go 1.27 release contracts stay discoverable from both engineering and review.
+run_content_eval "$REPO_ROOT/golang/SKILL.md" \
+  "GO-1\\.27\\.md" \
+  "golang routes Go 1.27 work to release guidance"
+run_content_eval "$REPO_ROOT/golang-review/SKILL.md" \
+  "GO-1\\.27\\.md" \
+  "golang-review loads Go 1.27 release contracts"
+run_content_eval "$REPO_ROOT/golang-review/SKILL.md" \
+  "go\\.mod" \
+  "golang-review scopes the language-version owner"
+
+# Generic methods are versioned public API, not interchangeable interface methods.
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "generic-method-version-floor" \
+  "Go 1.27 guidance checks the supported consumer floor"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "generic-method-interface-boundary" \
+  "Go 1.27 guidance covers generic method interface limits"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "generic-method-reflection-boundary" \
+  "Go 1.27 guidance covers generic method reflection limits"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "SDK|library" \
+  "Go 1.27 guidance covers public SDK and library APIs"
+
+# The generally available leak profile has a usable workflow and honest limits.
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "runtime/pprof" \
+  "Go 1.27 guidance covers the runtime profile API"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "/debug/pprof/goroutineleak" \
+  "Go 1.27 guidance covers the HTTP leak profile"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "GOEXPERIMENT.*(deleted|removed)|no longer.*GOEXPERIMENT" \
+  "Go 1.27 guidance removes the old experiment flag"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "false negative|cannot prove|not proof" \
+  "Go 1.27 guidance states leak detection limits"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "goroutineleak-detection-boundary" \
+  "Go 1.27 guidance names the leak detection review contract"
+run_content_eval "$REPO_ROOT/golang/GO-1.27.md" \
+  "goroutineleak-endpoint-exposure" \
+  "Go 1.27 guidance names the pprof exposure review contract"
 
 # --- proto reserved-field hook ---
 

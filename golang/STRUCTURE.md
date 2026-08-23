@@ -26,3 +26,7 @@ Catalog: [rule catalog](../golang-review/RULES.md). For interface design depth, 
 - **prefer-official-maintained-protocol-clients** -- official SDKs, runtimes, and serde
   implementations over parallel custom or deprecated clients; wire compatibility and
   protocol evolution are exactly what local adapters lose.
+
+For Go 1.27 generic methods on exported SDK or library types, read
+[GO-1.27.md](GO-1.27.md) before choosing the receiver, interface seam, compatibility
+path, or supported consumer floor.

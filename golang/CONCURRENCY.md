@@ -51,6 +51,14 @@ Catalog: [rule catalog](../golang-review/RULES.md).
   attempted (bounded), order preserved, per-item failures returned. Fail-fast hides
   useful results; unbounded fan-out is the opposite failure.
 
+## Leak diagnosis
+
+For Go 1.27's `goroutineleak` profile, follow [GO-1.27.md](GO-1.27.md). Exercise a
+specific early-return, cancellation, or shutdown path, wait on its owned synchronization
+boundary, then collect the process-wide profile. Treat a clean profile as partial
+evidence because reachability-based detection has false negatives; keep HTTP pprof
+behind the repository's existing diagnostic access controls.
+
 ## Performance
 
 - **reconcile-only-semantic-state-changes** -- hash or diff desired state, skip no-op
