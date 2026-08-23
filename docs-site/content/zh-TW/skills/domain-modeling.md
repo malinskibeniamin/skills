@@ -1,6 +1,6 @@
 ---
 title: /domain-modeling
-description: 建立共享的領域模型。適用於定義術語、精煉通用語言、協調程式碼與領域概念，或記錄長期有效的架構決策。
+description: 建立並精煉專案的領域模型。適用於討論程式碼庫術語、撰寫或編輯 CONTEXT.md，或記錄或編輯 ADR。
 type: skill
 sidebar:
   label: /domain-modeling

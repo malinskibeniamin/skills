@@ -15,6 +15,12 @@ sidebar:
 Metodyczne podejście do trudnych błędów. Pomijaj fazę tylko z uzasadnieniem. Korzystaj z glosariusza domenowego i ADR-ów;
 w przypadku rozbieżności dotyczących zewnętrznych zależności, API lub wersji uruchom `/read-the-damn-docs` przed uszeregowaniem hipotez.
 
+## Usuń dane wrażliwe
+Ta umiejętność pokazuje polecenia, dane wyjściowe i przechwycone artefakty. **Najpierw usuń każdy sekret** --
+zastąp go znacznikiem `<REDACTED>`. Buduj pętle w oparciu o zmienne środowiskowe, aby dane uwierzytelniające nie trafiały
+do plików ani cytowanych danych wyjściowych. Przechwycone artefakty mogą zawierać nagłówki uwierzytelniania; cytuj tylko
+wiersze zawierające istotny sygnał. Jeśli dowody po usunięciu danych wrażliwych są niewystarczające, poproś użytkownika o bezpieczniejsze źródło.
+
 ## Faza 1 -- Zbuduj pętlę informacji zwrotnej
 **Pętla informacji zwrotnej jest istotą tej umiejętności.** Reszta to działania mechaniczne. Zbuduj szybki, deterministyczny
 i możliwy do uruchomienia przez agenta sygnał powodzenia lub niepowodzenia dla zgłoszonego błędu; bisekcja, testy hipotez i

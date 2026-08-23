@@ -10,4 +10,4 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/wait-what.excalidraw)
 
 
-Chwileczkę — nie rozumiem, do czego doszedłeś. Przedstaw to inaczej: dodaj nieco kontekstu, użyj uproszczonego angielskiego technicznego ASD-STE100 oraz powszechnego języka z pliku `CONTEXT.md`.
+Chwileczkę — nie rozumiem, do czego doszedłeś. Przedstaw to inaczej: dodaj nieco kontekstu, użyj uproszczonego angielskiego technicznego ASD-STE100 oraz powszechnego języka z pliku `CONTEXT.md` (gdy repozytorium zawiera więcej niż jeden taki plik, przejdź przez `CONTEXT-MAP.md` do właściwego).

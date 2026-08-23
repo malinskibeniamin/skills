@@ -1,6 +1,6 @@
 ---
 title: /domain-modeling
-description: 构建共享领域模型。适用于定义术语、完善通用语言、协调代码与领域概念，或记录持久的架构决策。
+description: 构建并完善项目的领域模型。适用于讨论代码库术语、编写或编辑 CONTEXT.md，或记录或编辑 ADR。
 type: skill
 sidebar:
   label: /domain-modeling

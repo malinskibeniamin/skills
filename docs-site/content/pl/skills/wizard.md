@@ -12,9 +12,9 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/wizard.excalidraw)
 
-**Kreator** to skrypt bash, który prowadzi człowieka krok po kroku przez ręczną procedurę, uciążliwą zarówno do samodzielnego wykonania, jak i do ponownego wyjaśniania AI za każdym razem. Otwiera każdy adres URL, precyzyjnie wskazuje, co kliknąć i skopiować, przechwytuje wartości, zapisuje je we właściwych miejscach (`.env`, sekrety GitHub), prosi o potwierdzenie na każdym etapie i pokazuje pozostały zakres pracy. Może konfigurować usługi zewnętrzne, wykonywać jednorazową migrację lub przenosić projekt z jednego stanu do drugiego.
+**Kreator** to skrypt bash, który prowadzi człowieka krok po kroku przez ręczną procedurę, uciążliwą zarówno do samodzielnego wykonania, jak i do ponownego wyjaśniania AI za każdym razem. Otwiera każdy adres URL, precyzyjnie wskazuje, co kliknąć i skopiować, przechwytuje wartości, zapisuje je we właściwych miejscach (`.env`, sekrety GitHub), prosi o potwierdzenie na każdym etapie i pokazuje, ile etapów pozostało. Może konfigurować usługi zewnętrzne, wykonywać jednorazową migrację lub przenosić projekt z jednego stanu do drugiego.
 
-Dopracowany UX zapewnia już [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) — postęp z pozostałym czasem, punkty potwierdzenia, otwieranie adresów URL na różnych platformach (w tym WSL), ukryte wprowadzanie sekretów, idempotentne aktualizacje `.env`, zapisy przez `gh secret`/`gh variable` oraz podsumowanie końcowe. **Twoim jedynym zadaniem jest określenie zakresu procedury i przygotowanie jej etapów.** Biblioteka powyżej znacznika `STAGES` jest identyczna w każdym kreatorze — ta spójność jest zamierzona, dlatego nigdy nie edytuj jej ręcznie.
+Dopracowany UX zapewnia już [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) — postęp etap po etapie, punkty potwierdzenia, otwieranie adresów URL na różnych platformach (w tym WSL), ukryte wprowadzanie sekretów, idempotentne aktualizacje `.env`, zapisy przez `gh secret`/`gh variable` oraz podsumowanie końcowe. **Twoim jedynym zadaniem jest określenie zakresu procedury i przygotowanie jej etapów.** Biblioteka powyżej znacznika `STAGES` jest identyczna w każdym kreatorze — ta spójność jest zamierzona, dlatego nigdy nie edytuj jej ręcznie.
 
 Domyślnie kreator jest tymczasowy — tworzony do jednorazowego uruchomienia, zapisywany w katalogu roboczym lub `scripts/` i usuwany po zakończeniu zadania. Zatwierdź go w repozytorium tylko wtedy, gdy użytkownik chce powtarzalnej ścieżki konfiguracji, która powinna pozostać w projekcie.
 
@@ -39,7 +39,7 @@ Dla każdego etapu opisz dokładną ścieżkę postępowania: który adres URL o
 
 ### 3. Utwórz kreator
 
-Skopiuj `template.sh` do ścieżki docelowej. Zastąp przykładowy etap jednym `stage` dla każdego kroku, zachowując kolejność zależności. Używaj funkcji pomocniczych biblioteki — `stage`, `say`/`step`, `open_url`, `ask`/`ask_secret`, `write_env`, `set_secret`/`set_var`, `pause`/`confirm` — i ustaw `TOTAL_STAGES` oraz `TOTAL_MINUTES` na realistyczne wartości szacunkowe (na ich podstawie wyświetlany jest pozostały czas).
+Skopiuj `template.sh` do ścieżki docelowej. Zastąp przykładowy etap jednym `stage` dla każdego kroku, zachowując kolejność zależności. Używaj funkcji pomocniczych biblioteki — `stage`, `say`/`step`, `open_url`, `ask`/`ask_secret`, `write_env`, `set_secret`/`set_var`, `pause`/`confirm` — i ustaw `TOTAL_STAGES` na liczbę napisanych etapów.
 
 Zachowaj standard wyznaczony przez szablon: otwieraj adres URL przed poproszeniem o jego wartość, używaj `ask_secret` dla wszystkich sekretów, zapisuj każdą utrwalaną wartość za pomocą `write_env`, a `set_secret` stosuj tylko do wartości rzeczywiście potrzebnych CI. Przed każdym nieodwracalnym działaniem używaj `confirm`. Każdy `stage` czyści ekran, aby widoczny był tylko bieżący krok — ogranicz etap do jednego konkretnego zadania, aby potrzebne informacje nie zniknęły poza ekranem. Nie modyfikuj biblioteki powyżej znacznika.
 

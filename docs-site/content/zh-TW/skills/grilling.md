@@ -34,6 +34,13 @@ Grilling 用於找出影響重大的未知事項；它不要求每項實作細�
 <question body or choices>
 
 **Recommended:** <answer>
+
+---
+
+**Q2 -- <question title>**
+<question body or choices>
+
+**Recommended:** <answer>
 ```
 
 尚未確定的先決條件只會延後其所屬分支，前緣其餘部分則繼續進行。每個回答回合後都重新計算前緣。
