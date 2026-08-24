@@ -230,7 +230,7 @@ total = 0
 offenders = []
 root = pathlib.Path(sys.argv[1])
 for p in list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")) + [root / "README.md", root / "AGENTS.md"]:
-    if "node_modules" in str(p) or ".original.md" in str(p) or "agent-evals/" in str(p):
+    if any(x in str(p) for x in ("node_modules", "/dist/", ".original.md", "agent-evals/")):
         continue
     try:
         t = p.read_text()
@@ -263,7 +263,7 @@ import pathlib, sys
 n = 0
 root = pathlib.Path(sys.argv[1])
 for p in list(root.glob("*.md")) + list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")):
-    if any(x in str(p) for x in ("node_modules", ".original.md", "agent-evals/")):
+    if any(x in str(p) for x in ("node_modules", "/dist/", ".original.md", "agent-evals/")):
         continue
     try:
         for line in p.read_text().splitlines():
