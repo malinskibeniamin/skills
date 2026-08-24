@@ -76,7 +76,7 @@ done <<'EOF'
 ask-ben 6800
 wayfinder 5000
 review 4300
-diagnosing-bugs 4200
+diagnosing-bugs 5600
 triage 4100
 dogfood 4000
 to-tickets 3900

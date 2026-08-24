@@ -33,6 +33,15 @@ run_content_eval "$SKILL_DIR/SKILL.md" "git bisect" "SKILL.md lists bisection ha
 run_content_eval "$SKILL_DIR/SKILL.md" "[Hh]eadless browser|Playwright|Puppeteer" "SKILL.md lists headless-browser strategy"
 run_content_eval "$SKILL_DIR/SKILL.md" "HITL" "SKILL.md mentions HITL bash script as last-resort"
 
+# ── Tight-loop gates from the upstream Matt Pocock workflow ─────────
+run_content_eval "$SKILL_DIR/SKILL.md" "[Tt]he feedback loop is the skill|[Tt]his is the skill" "SKILL.md makes the feedback loop primary"
+run_content_eval "$SKILL_DIR/SKILL.md" "Completion criterion.*tight loop.*red" "SKILL.md defines the tight red-loop completion gate"
+run_content_eval "$SKILL_DIR/SKILL.md" "already run at least once" "SKILL.md requires an observed feedback-loop command"
+run_content_eval "$SKILL_DIR/SKILL.md" "[Rr]ed-capable" "SKILL.md requires a red-capable signal"
+run_content_eval "$SKILL_DIR/SKILL.md" "No red-capable command, no Phase 2|[Dd]o not proceed.*hypothes" "SKILL.md blocks theory-first diagnosis"
+run_content_eval "$SKILL_DIR/SKILL.md" "Phase 2.*[Rr]eproduce.*minimi" "SKILL.md makes minimisation part of Phase 2"
+run_content_eval "$SKILL_DIR/SKILL.md" "every remaining element.*load-bearing" "SKILL.md defines a minimal reproduction"
+
 # ── Hypothesis discipline ────────────────────────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "3.{0,2}5.*hypothes" "SKILL.md requires 3-5 ranked hypotheses"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Ff]alsifiable" "SKILL.md requires falsifiable hypotheses"

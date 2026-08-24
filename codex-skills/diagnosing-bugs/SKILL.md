@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: Use when a hard bug or performance regression needs a reproducible diagnosis loop.
+description: Diagnosis loop for hard bugs and performance regressions. Use when asked to diagnose or debug, or when a hard bug needs a reproducible feedback loop.
 ---
 
 Read and follow the complete [canonical skill instructions](../../diagnosing-bugs/SKILL.md) before acting.
