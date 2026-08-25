@@ -28,6 +28,7 @@ sidebar:
 
 ## 本機作業環境覆寫
 
+- 對於重要計畫，請遵循 [`../shared/intent-map.md`](https://github.com/malinskibeniamin/skills/blob/main/shared/intent-map.md)。在既有的 Agent-Native 圖表或畫布介面中呈現首次閱讀圖，不要再建立第二個說明成果物。
 - 當多個計畫或代理程式意見不一致時，使用 `/plan-arbiter`。
 - 實作前若仍有未決事項，使用 `/grilling`。
 - 除非使用者明確核准實作，否則規劃作業僅限唯讀。

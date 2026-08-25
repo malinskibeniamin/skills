@@ -23,6 +23,7 @@ sidebar:
 
 ## 本地执行环境覆盖规则
 
+- 当差异具有重要的因果结构时，请遵循 [`../shared/intent-map.md`](https://github.com/malinskibeniamin/skills/blob/main/shared/intent-map.md)。每个节点和边都必须以实际变更为依据，标注推断，并使用回顾已有的图表界面，不要创建第二个产物。
 - 当用户明确调用 `/visual-recap` 时，为指定的 PR、分支、提交或差异创建回顾，或将回顾链接到该目标。
 - 创建回顾属于额外的产物工作；`/commit-push-pr` 和 `/go` 不会自动调用它。
 - 对于有实质意义的架构或数据流变更，使用 `/excalidraw-diagram` 创建 `.excalidraw` 源文件以及 PNG 或 SVG。将 Agent-Native 回顾作为主要审查界面：仅当当前块目录支持媒体时嵌入渲染后的资源；否则使用其 `diagram` 块，并在交付说明中包含源文件和导出文件的路径。对于简单图形或画布不可用的情况，优先使用内置的 Mermaid 方案。

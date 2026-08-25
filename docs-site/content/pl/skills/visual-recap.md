@@ -23,6 +23,7 @@ Poniższe dokumenty czytaj tylko wtedy, gdy są istotne:
 
 ## Lokalne rozszerzenie środowiska testowego
 
+- Stosuj [`../shared/intent-map.md`](https://github.com/malinskibeniamin/skills/blob/main/shared/intent-map.md), gdy diff ma istotną strukturę przyczynową. Oprzyj każdy węzeł i każdą krawędź na rzeczywistej zmianie, oznacz wnioski i użyj istniejącej powierzchni diagramu podsumowania zamiast tworzyć drugi artefakt.
 - Gdy użytkownik jawnie wywoła `/visual-recap`, utwórz podsumowanie lub połącz je ze wskazanym PR, gałęzią,
   commitem albo diffem.
 - Utworzenie podsumowania jest dodatkową pracą nad artefaktem; `/commit-push-pr` i `/go` nie wywołują go
