@@ -30,7 +30,7 @@ brew install rtk
 rtk trust            # approve .rtk/filters.toml per project
 ```
 
-Harness fail-open -- skip safe; SessionStart nudge remind if miss.
+Every non-empty Bash call is offered to RTK. Supported commands are rewritten before execution; unsupported commands and missing RTK pass through unchanged. Native Read/Grep tools do not cross the Bash hook.
 
 **Update** (refresh the catalog, then pull latest):
 
