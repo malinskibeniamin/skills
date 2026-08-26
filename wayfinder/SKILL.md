@@ -1,100 +1,94 @@
 ---
 name: wayfinder
-description: Map multi-session work through issue-tracker decision tickets.
+description: Use to map multi-session work through issue-tracker decision tickets.
 disable-model-invocation: true
 ---
 
 # Wayfinder
-Use when a goal is too large for one context window and the way to the **destination** is still foggy. Wayfinder finds the route through **decision tickets** -- questions whose resolution is a decision, not slices of a build to execute. The destination might be a spec, a decision, or a change whose path is unclear.
+
+Use when the destination is larger than one context window and the route is foggy. A
+**decision ticket** resolves a question, not a build slice.
 
 ## Plan, don't do
-Wayfinder is planning only. Each ticket resolves a decision, and the map is done when nothing is left to decide before someone goes and does the thing. The pull to execute signals that the edge of the map has been reached. Keep Notes for planning preferences and decision-support work; Notes do not authorize implementation or delivery.
+
+Wayfinder stops when nothing remains to decide.
+Notes hold planning preferences and do not authorize implementation or delivery.
 
 ## Invariants
-- Refer to maps and tickets by **name** (their title), not a bare id or slug. Link the name when needed.
-- The map is an **index**, not a store: decisions live in their ticket; the map keeps only a one-line gist and pointer.
-- Read `CLAUDE.md` first when it exists; otherwise read `AGENTS.md`. Follow that file's **Issue tracker** pointer, then read **Wayfinding operations**. Never assume a document path. If neither file or pointer exists, use the local-markdown fallback.
-- Claim a ticket before work by assigning it to the driving dev; this must be the session's first write. Open + unassigned means unclaimed.
-- Use the tracker's native blocking/dependency feature when available; fallback to an explicit `Blocked by:` line only when native blocking is unavailable.
-- Resolve at most one ticket per session in the primary context. Explicit delegation or
-  `/swarm` may authorize parallel ready research tickets; wayfinder invocation alone does not.
-- For an authorized parallel map, apply `/efficient-frontier` between ticket waves
-  and keep synthesis with the coordinator.
-- Use `/agent-watchdog` when auditing another session's resolved ticket, claim, branch, or frontier summary before trusting the map.
+
+- Refer to maps and tickets by **name**, not bare IDs.
+- The map is an **index**, not a store. Answers live in tickets; the map keeps a gist and link.
+- If `CLAUDE.md` exists, read `CLAUDE.md` first; otherwise read `AGENTS.md`. Follow its
+  **Issue tracker** pointer and Wayfinding operations. If absent, use the local-markdown fallback.
+- Claim a ticket by assigning it before work; this must be the first write. Open and
+  unassigned means unclaimed.
+- Prefer native blocking. Use `Blocked by:` only when native dependencies are absent.
+- Resolve at most one ticket per session in the primary context; explicit delegation or an
+  invoked `/swarm` may parallelize ready research. Otherwise do not resolve another ticket.
+- For authorized waves, `/efficient-frontier` budgets lanes and the coordinator synthesizes.
+- Audit another session's claims or resolved ticket with `/agent-watchdog`.
 
 ## Map shape
-The map is one issue or file labelled/marked `wayfinder:map`.
+
+Create one issue or file marked `wayfinder:map`:
 
 ```markdown
 ## Destination
-<what reaching the end of this map looks like -- the spec, decision, or change this effort is finding its way to>
+<the spec, decision, or change this map must reach>
 ## Notes
-<domain; skills every session should consult; standing planning preferences for this effort>
+<domain, required skills, standing planning preferences>
 ## Decisions so far
-- [<closed ticket title>](link) -- <one-line gist of the answer>
+- [<closed ticket name>](link) -- <one-line answer gist>
 ## Not yet specified
-<in-scope future questions or risks not sharp enough to ticket yet>
+<in-scope fog not sharp enough to assign>
 ## Out of scope
-<work ruled beyond this destination>
+<work beyond the destination>
 ```
 
-Open tickets are not listed in the map body; query the issue tracker for open children/frontier tickets.
+Query the tracker for open children; do not copy them into the map body.
 
 ## Tickets
-Each decision ticket is a child issue/file with a focused question sized to one 100K-token agent session:
 
-```markdown
-## Question
+Each child is one focused question sized to one 100K-token agent session. Mark it **HITL**
+(live human judgment) or **AFK** (agent-driven); HITL and AFK must not be conflated:
 
-<the decision or investigation this ticket resolves>
-```
+- **Research (AFK):** use `/research` against primary sources. Follow its artifact location;
+  parallel lanes require consent and each lane does not invent a root file or branch.
+- **Prototype (HITL):** create a cheap `/prototype` artifact and link it.
+- **Grilling (HITL):** Always invoke `/grilling` and `/domain-modeling`.
+- **Task:** manual work that unblocks a decision; never delivery for its own sake.
 
-Each ticket is either **HITL** -- human in the loop, worked with a human who speaks for themselves -- or **AFK**, driven by the agent alone. A HITL ticket only resolves through that live exchange; the agent must not answer its own grilling questions.
+The answer is not part of the body; record it on resolution. Assets are linked, not pasted.
 
-Ticket types:
+## Fog and scope
 
-- **Research** (AFK): read docs, APIs, specs, source, or other primary sources through
-  `/research` in the primary context. Link the cited Markdown summary. Use a research lane
-  only after explicit delegation or `/swarm`.
-- **Prototype** (HITL): make a cheap artifact to react to, including `/prototype` UI or logic code. Link the artifact.
-- **Grilling** (HITL): conversation. Always invoke `/grilling` and `/domain-modeling`. Default when the question is mostly judgment.
-- **Task** (HITL or AFK): manual work needed before a decision can continue. Automate where safe; otherwise hand the human a checklist. It earns its place by unblocking a decision, not by delivering the destination.
-
-The answer is not part of the body. Record it on resolution. Assets are linked, not pasted.
-
-## Fog of war
-Do not chart what you cannot yet see. **Not yet specified** is for suspected in-scope questions or risks that are not precise enough to assign. A ticket is for a sharp question, even if blocked. Not yet specified excludes what is already decided, what is already a ticket, and what is out of scope.
-
-## Out of scope
-
-Fog only gathers toward the destination. Work beyond the destination is **Out of scope**: it is not fog and it never graduates into tickets unless the destination is redrawn. If a ticket turns out to sit beyond the destination, close it, add one Out of scope line with the reason, and do not record it as a route decision.
+Do not chart what is invisible. Not yet specified excludes anything decided, already a ticket, or out of scope.
+A sharp but blocked question is a ticket.
+Fog points toward the Destination. Close a ticket discovered beyond it, explain one Out of
+scope line, and do not record it as a route decision.
 
 ## Chart the map
 
-1. Name the Destination. Run `/grilling` and `/domain-modeling` to pin down what this map is finding its way to.
-2. Map the frontier. Grill breadth-first across the whole space, surfacing open decisions and first steps. **If this surfaces no fog**, you don't need a map; stop and ask the user how to proceed.
-3. Create the map with Destination, Notes, empty Decisions so far, Not yet specified, and Out of scope.
-4. Create only the tickets you can specify now. Attach each through the tracker's native child/sub-issue relationship when available; use a body or task-list link only when native hierarchy is unavailable. Re-read the map and verify every ticket appears as a child, then wire blocking relationships in a second pass.
-5. Resolve one ready AFK Research ticket inline in the primary context. If the user explicitly
-   authorized delegation or invoked `/swarm`, launch distinct ready research lanes; each lane
-   claims its ticket first, follows `/research`'s artifact location, and does not invent a root
-   file or branch.
-6. Stop after that one ready research ticket; do not resolve another ticket in this session.
+1. Name the Destination with `/grilling` and `/domain-modeling`.
+2. Grill breadth-first for decisions and first steps. **If this surfaces no fog**, stop and
+   ask whether to proceed without a map.
+3. Create the map, then only currently specifiable tickets.
+4. Attach every ticket through the native child/sub-issue relationship when available;
+   otherwise link it. Re-read and verify every ticket appears as a child, then add blockers.
+5. Resolve one ready Research ticket inline. Authorized lanes claim first, follow `/research`,
+   and return cited artifacts.
+6. Stop after that ticket.
 
 ## Work through a map
 
-1. Load the map low-res; do not load every ticket body.
-2. Pick the ticket: use the named ticket, or choose the first open, unblocked, unclaimed frontier ticket. Claim it first.
-3. Resolve it, zooming into related/closed tickets only as needed. Invoke skills named in Notes; when unsure, use `/grilling` and `/domain-modeling`.
-4. Record the answer as a resolution comment or answer section, close/resolve the ticket, then append a context pointer to Decisions so far.
-5. Add newly surfaced tickets and blocking edges; clear graduated Not yet specified entries so each fact lives in one place. If a ticket sits beyond the Destination, rule it Out of scope rather than resolving it on the route.
-
-Expect other sessions to edit the tracker concurrently; read current tracker state before writing.
+1. Read the map at low resolution; select the named or first open, unblocked, unclaimed ticket.
+2. Claim first, then resolve it using only relevant related tickets and skills from Notes.
+3. Record the answer, resolve the ticket, and append its gist and link to Decisions so far.
+4. Add new tickets and blockers; remove graduated fog. Rule beyond-destination work Out of scope.
+5. Re-read tracker state before writes because other sessions may edit concurrently.
 
 ## Handoff
 
-When the map is clear, hand it to `/to-spec` to collapse the linked decisions into one buildable plan, then `/to-tickets`. Skip that collapse only when the effort proved genuinely small.
-
-Recheck your claims first. Before showing the frontier, reread the resolution answer, Decisions-so-far gist, linked assets, and tracker state. Fix any stale or unsupported claim before asking the human to act on the next tickets.
-
-End with copy-pasteable next steps: one command for the next recommended ticket, plus one pinned command per open, unblocked, unclaimed frontier ticket when parallel sessions are safe.
+When clear, send the map to `/to-spec` for one buildable plan, then `/to-tickets`.
+Recheck your claims first: reread answers, gists, assets, claims, and current tracker state.
+End with one command for the recommended ticket and one per safe parallel frontier ticket.

@@ -3,38 +3,27 @@ name: plan-arbiter
 description: Arbitrate competing plans. Use when choosing or merging proposals from agents, transcripts, visual plans, PR descriptions, files, or pasted strategies.
 ---
 
-# Plan Arbiter
-Read `references/builder-upstream.md` for the judging checklist.
-
-Turn competing plans into one executable direction. Preserve the best ideas, reject weak assumptions, and produce a clear handoff instead of a blended mush.
+Read `references/builder-upstream.md`. Turn competing plans into one executable direction, not blended mush.
 
 ## Workflow
 
-1. Collect source plans: pasted text, local files, session IDs, transcripts, PRs, comments, visual-plan links, or chat history.
-2. Normalize each plan: objective, scope, assumptions, unresolved questions, touched files, sequence, validation, rollback, complexity.
-3. Cross-review against the real codebase, docs, specs, tests, screenshots, or external systems when relevant.
-4. Decide: `Adopt`, `Hybrid`, or `Revise first`.
-5. Produce one execution handoff with verification gates and rejected alternatives.
+1. Collect pasted/local/session/transcript/PR/comment/visual/chat plans.
+2. Normalize objective, scope, assumptions, questions, files, sequence, validation, rollback, complexity.
+3. Cross-check real code, docs, specs, tests, visuals, systems.
+4. Decide `Adopt|Hybrid|Revise first`.
+5. Produce one handoff with gates and rejected alternatives.
 
-Planning is read-only unless the user explicitly asks implementation after the decision.
+Planning stays read-only unless implementation is explicitly requested.
 
-## Tie-breakers
-
-1. Correctness and fit to the user's request.
-2. Grounding in real files, APIs, tests, data, and UI behavior.
-3. Lower irreversible risk.
-4. Smaller shippable slice with stronger verification.
-5. Clearer executor handoff.
-
-## Output
+Tie-break: request fit/correctness; grounding; lower irreversible risk; smaller verified slice; clearer handoff.
 
 ```md
 ## Plan arbiter
-Sources: <plans inspected>
-Verdict: Adopt <plan>|Hybrid|Revise first
-Why: <evidence-backed reason>
-Execution plan: <ordered steps>
-Rejected alternatives: <what and why>
-Verification gates: <commands/checks>
-Open questions: <only blockers>
+Sources:
+Verdict: Adopt <plan> | Hybrid | Revise first
+Why:
+Execution plan:
+Rejected alternatives:
+Verification gates:
+Open questions: <blockers only>
 ```

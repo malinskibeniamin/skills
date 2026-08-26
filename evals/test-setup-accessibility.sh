@@ -21,6 +21,16 @@ run_content_eval "$SKILL_DIR/SKILL.md" "allow.*a11y-skip" "SKILL.md documents es
 run_content_eval "$SKILL_DIR/SKILL.md" "visible text.*native|native.*visible text" "SKILL.md prefers visible native accessible names"
 run_content_eval "$SKILL_DIR/SKILL.md" "aria-describedby.*(stale|current)|stale.*aria-describedby" "SKILL.md prevents stale error descriptions"
 
+skill_bytes=$(wc -c < "$SKILL_DIR/SKILL.md" | tr -d ' ')
+if [ "$skill_bytes" -le 2400 ]; then
+  echo "  PASS  SKILL.md stays within its 2400-byte prompt budget"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  SKILL.md exceeds its 2400-byte prompt budget ($skill_bytes bytes)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: SKILL.md exceeds its prompt budget"
+fi
+
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
 run_content_eval "$SKILL_DIR/SETUP.md" "axe-core/playwright" "SETUP has Playwright AXE install"

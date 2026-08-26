@@ -54,14 +54,31 @@ w którym można odtworzyć błąd, przechwycony artefakt lub zgodę na tymczaso
 
 Przejdź do fazy 2, gdy pętla niezawodnie sygnalizuje zgłoszoną awarię.
 
-## Faza 2 -- Odtwórz
+Nie przechodź do formułowania hipotez bez działającej pętli.
+
+### Kryterium ukończenia: ciasna pętla, która przechodzi na czerwono
+
+Faza 1 kończy się dopiero wtedy, gdy potrafisz wskazać jedno polecenie, uruchomione już co najmniej raz, wraz z ocenzurowanym wywołaniem i wynikiem, które jest:
+
+- [ ] **Zdolne do czerwieni:** wykonuje rzeczywistą ścieżkę błędu i sprawdza dokładny objaw użytkownika.
+- [ ] **Deterministyczne:** zwraca ten sam werdykt lub ustaloną wysoką częstość reprodukcji.
+- [ ] **Szybkie:** trwa sekundy, nie minuty.
+- [ ] **Uruchamialne przez agenta:** działa bez nadzoru, z wyjątkiem ustrukturyzowanego skryptu HITL.
+
+Bez polecenia zdolnego do czerwieni nie ma fazy 2.
+
+## Faza 2 -- Odtwórz i zminimalizuj
 Uruchom pętlę, a następnie `/dogfood` dla rzeczywistego punktu wejścia używanego przez zgłaszającego. Zaobserwuj ten sam błąd.
 
 - [ ] Pętla wywołuje tryb awarii opisany przez **użytkownika**, a nie podobną awarię.
 - [ ] Awaria powtarza się w wielu uruchomieniach lub wystarczająco często, aby ją debugować.
 - [ ] Pętla przechwytuje dokładny objaw, aby faza 5 mogła wykazać, że poprawka go usuwa.
 
-Przejdź dalej, gdy zgłoszony błąd daje się odtworzyć.
+### Minimalizuj
+
+Gdy pętla jest czerwona, usuwaj po jednym elemencie danych wejściowych, wywołań, konfiguracji, danych i kroków. Po każdym usunięciu ponownie uruchom pętlę. Zachowaj wyłącznie elementy niezbędne dla awarii i późniejszego testu regresji.
+
+Zakończ, gdy każdy pozostały element jest niezbędny: usunięcie któregokolwiek zmienia wynik pętli na zielony. Nie przechodź dalej, dopóki błąd nie zostanie odtworzony i zminimalizowany.
 
 ## Faza 3 -- Postaw hipotezy
 Przed rozpoczęciem testów sformułuj **3–5 uszeregowanych, falsyfikowalnych hipotez**; praca z jedną hipotezą

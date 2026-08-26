@@ -3,38 +3,34 @@ name: stack-registry
 description: Govern current and banned frontend stacks. Use when adding library-specific rules, starting stack migrations, retiring old guidance, or checking for stale APIs.
 ---
 
-# Stack Registry
+Harness guidance is either durable **invariant** (`/frontend-invariants`) or versioned **stack rule**. Tag library/API rules with their stack generation so migrations replace them instead of leaving stale instructions.
 
-Harness rules come in two durability classes. **Invariants** (see `/frontend-invariants`) never expire. **Stack rules** name a library or API and MUST be tagged with the stack generation so the next migration replaces them wholesale instead of leaving stale guidance that misleads agents. History: rule sets for four dead stacks lingered as "current guidance" long after the code moved on -- that is the failure mode this skill prevents.
+## Current `stack:2026`
 
-## Current stack (`stack:2026`)
-
-| Layer | Current | Rules live in |
+| Layer | Current | Owner |
 |---|---|---|
-| UI kit | Tailwind v4 + shadcn/Base UI + vendored registry | registry-workflow, visual-review, tailwind hooks |
-| Router | TanStack Router (file-based, loaders, validateSearch) | tanstack-router |
-| Data | connect-query + gRPC + protobuf-es v2 + protovalidate | connect-query |
-| Forms | react-hook-form (+ proto-driven resolvers); zod only for route search schemas | form-mode hooks |
-| Client state | zustand + React context | zustand hooks |
-| React | 19 + Compiler (no manual memo, no forwardRef) | react-rules hooks |
-| Build/test | rsbuild / vitest 4-tier (+ browser baselines) / Playwright | test-convention hooks, e2e-testing |
+| UI | Tailwind v4, shadcn/Base UI, registry | registry-workflow, visual-review, hooks |
+| Router | TanStack Router, file routes/loaders/validateSearch | tanstack-router |
+| Data | connect-query, gRPC, protobuf-es v2, protovalidate | connect-query |
+| Forms | react-hook-form; zod only for route search | form hooks |
+| Client state | zustand, React context | zustand hooks |
+| React | 19 + Compiler; no manual memo/forwardRef | react hooks |
+| Build/test | rsbuild, Vitest tiers/browser, Playwright | test hooks, e2e-testing |
 
-## Banned stacks (mechanically frozen)
+## Banned and frozen
 
-Enforced by hooks/lint bans -- never recommend, never accept in new code, never quote their idioms as guidance:
+Never recommend or accept: Chakra/legacy kits; `react-router-dom`; RTK Query/redux-observable; MobX; Formik; Yup; react-intl/`FormattedMessage` dictionaries; CRA/react-scripts/jest idioms; nuqs. Hooks/lint enforce bans.
 
-`chakra` / legacy shared UI kits · `react-router-dom` · Redux Toolkit Query / redux-observable · MobX (`observer`, `makeObservable`, `useLocalObservable`) · Formik · Yup · react-intl / `FormattedMessage` + i18n dictionary machinery · CRA/react-scripts/jest idioms · nuqs (router owns search typing).
+Keep at most one library-free meta-lesson from old guidance. Treat banned-stack review history as evidence, never instruction.
 
-Each ban keeps at most one meta-lesson (e.g. Yup -> "validate format, not presence" survived; the mechanics did not). When mining or quoting historical code review guidance, anything referencing a banned stack is historical evidence, not instruction.
+## Migration
 
-## Migration playbook (when a layer changes)
+1. Grill choice: big-bang router/framework; strangler data layers with coexistence budget.
+2. Add and generation-tag the new rule group.
+3. Same PR: ban old library mechanically (`noRestrictedImports`/hook), retire or era-tag guidance.
+4. Update exemplars in that PR; models imitate them strongly.
+5. Definition of done includes the freeze so agents cannot resurrect the dead stack.
 
-1. **Grill first**: big-bang for router/framework layers, strangler for data layers; budget for months of coexistence on data.
-2. Write the new stack's rule group; tag it with the new generation.
-3. Retire the old group in the SAME PR: move the library to the banned table, add the mechanical ban (hook/`noRestrictedImports`), delete or era-tag its guidance.
-4. Update exemplars in the same PR -- models imitate exemplars harder than rules.
-5. The migration's definition of done includes the freeze; an unbanned dead stack WILL be resurrected by an LLM author.
+## Rule checklist
 
-## Rule-authoring checklist
-
-Adding any rule that names a library/API: (a) is it actually an invariant in disguise? state it library-free in `/frontend-invariants` instead; (b) tag it `stack:2026` in its home skill/hook; (c) give it a mechanical check when possible -- unenforced rules drift; (d) add the negative: what replaced pattern must the hook now reject?
+For every library/API rule: if it is stack-independent, move it to `/frontend-invariants`; otherwise tag `stack:2026`, add a mechanical check when possible, and specify the replaced pattern that check rejects.

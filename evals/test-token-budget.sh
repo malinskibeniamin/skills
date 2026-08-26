@@ -57,6 +57,143 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
+# Keep the largest model-facing skills on explicit budgets. The aggregate cap
+# preserves the measured wave reduction while allowing small wording trades
+# between related instructions.
+lean_skill_total=0
+while read -r skill cap; do
+  bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
+  lean_skill_total=$((lean_skill_total + bytes))
+  if [ "$bytes" -le "$cap" ]; then
+    echo "  PASS  $skill SKILL.md under $cap bytes ($bytes)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $skill SKILL.md over budget: $bytes bytes (cap: $cap)"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
+  fi
+done <<'EOF'
+ask-ben 6800
+wayfinder 5000
+review 4300
+diagnosing-bugs 5600
+triage 4100
+dogfood 4000
+to-tickets 3900
+swarm 4000
+e2e-testing 4000
+resolve-pr-feedback 3800
+EOF
+
+if [ "$lean_skill_total" -le 42600 ]; then
+  echo "  PASS  top-10 skill wave under 42600 bytes ($lean_skill_total)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  top-10 skill wave over budget: $lean_skill_total bytes (cap: 42600)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: top-10 skill wave over 42600 bytes"
+fi
+
+# Keep every remaining canonical skill below its pre-pruning ceiling. These
+# skills are separate from the earlier top-10 wave above so either wave can
+# tighten without silently moving budget to the other.
+remaining_skill_total=0
+while read -r skill cap; do
+  bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
+  remaining_skill_total=$((remaining_skill_total + bytes))
+  if [ "$bytes" -le "$cap" ]; then
+    echo "  PASS  $skill SKILL.md under $cap bytes ($bytes)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $skill SKILL.md over budget: $bytes bytes (cap: $cap)"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
+  fi
+done <<'EOF'
+aip 3825
+brain-dump 3200
+grilling 3650
+improve 3600
+golang 3525
+pr-shepherd 3525
+stacked-prs 3500
+snyk-ux-security 3500
+tdd 3425
+visual-review 3400
+frontend-invariants 3350
+improve-codebase-architecture 3300
+ux-performance 3275
+wizard 3250
+go 3200
+revamp 3275
+commit-push-pr 3200
+tanstack-router 3200
+postgresql 3175
+golang-review 3125
+upgrade-dependency 3125
+excalidraw-diagram 3100
+codebase-design 3000
+quantify-impact 2975
+setup-routines 2975
+development-lifecycle 2900
+release 2850
+to-spec 2850
+frontend-starter-kit 2800
+deslop 2775
+domain-modeling 2750
+teach 2700
+stack-registry 2525
+codex-compat 2575
+work-automation-kit 2525
+make-pr-easy-to-review 2425
+codex 2375
+handoff 2375
+video-research 2250
+redpanda-ai-gateway 2200
+connect-query 2125
+writing-for-agents 2025
+registry-workflow 2000
+extend-harness 1925
+steelman 1875
+efficient-frontier 1875
+tanstack-intent 1875
+to-questionnaire 1825
+ux-copy 1825
+hook-audit 1800
+demo 1800
+eli5 2850
+read-the-damn-docs 1775
+resilience-review 1750
+prototype 1775
+agent-watchdog 1600
+visual-recap 1575
+plan-arbiter 1425
+plow-ahead 1400
+prime 1200
+research 1200
+visual-plan 1175
+resolving-merge-conflicts 1075
+what-did-i-get-done 1000
+tanstack-table 975
+setup-atlassian-workflow 925
+stay-within-limits 900
+writing-fragments 825
+writing-shape 800
+writing-beats 725
+thermo-nuclear-code-quality-review 500
+wait-what 400
+work 325
+EOF
+
+if [ "$remaining_skill_total" -le 162625 ]; then
+  echo "  PASS  remaining-skill wave under 162625 bytes ($remaining_skill_total)"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 162625)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 162625 bytes"
+fi
+
 # No Unicode punctuation in hot-path docs except the three user-visible
 # completion markers, whose em dash is part of the protocol.
 unicode_hits=$(python3 -c '
@@ -93,7 +230,7 @@ total = 0
 offenders = []
 root = pathlib.Path(sys.argv[1])
 for p in list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")) + [root / "README.md", root / "AGENTS.md"]:
-    if "node_modules" in str(p) or ".original.md" in str(p) or "agent-evals/" in str(p):
+    if any(x in str(p) for x in ("node_modules", "/dist/", ".original.md", "agent-evals/")):
         continue
     try:
         t = p.read_text()
@@ -126,7 +263,7 @@ import pathlib, sys
 n = 0
 root = pathlib.Path(sys.argv[1])
 for p in list(root.glob("*.md")) + list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")):
-    if any(x in str(p) for x in ("node_modules", ".original.md", "agent-evals/")):
+    if any(x in str(p) for x in ("node_modules", "/dist/", ".original.md", "agent-evals/")):
         continue
     try:
         for line in p.read_text().splitlines():

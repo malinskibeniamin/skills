@@ -4,61 +4,38 @@ description: Clean noisy PR history and add reviewer guidance without changing c
 disable-model-invocation: true
 ---
 
-# Make PR Easy to Review
-
-Prepare a PR so a reviewer can quickly understand the intent, important files, and risk. The default goal is reviewability without behavior changes.
+Target reviewability without behavior changes; prefer PR description/review notes over code edits.
 
 ## Workflow
 
-1. Resolve the target PR from the user-provided URL or current branch.
-2. Inspect commits, diff size, changed paths, generated files, and PR description.
-   For a stacked PR, compare with `baseRefName`, record its layer and adjacent PRs, and keep
-   history operations inside the owning branch.
-3. Identify reviewability issues: noisy commits, stale description, unrelated changes, mixed mechanical and logic changes, missing tests, or unclear reviewer entry points.
-4. Propose a plan before rewriting history or force-pushing. Reordering, folding, or
-   cascading a stack requires explicit whole-stack approval.
-5. Apply safe improvements, then verify the tree or diff still matches the intended code.
+1. Resolve PR from URL/current branch.
+2. Inspect commits, diff size, paths, generated files, and description. For stacks, compare `baseRefName`, record adjacent layers, and operate only on the owning branch.
+3. Find noise: stale description, unrelated changes, mixed mechanical/logic commits, missing tests, unclear entry points.
+4. Propose before history rewrite/force-push; reorder/fold/cascade needs explicit whole-stack approval.
+5. Apply safe improvements; prove tree/diff still matches intent.
 
-## History Cleanup
+## History
 
-Only rewrite history when the user asks for it or agrees to the plan. Before rewriting:
+Only rewrite history when the user asks or agrees to the plan. Capture identity first:
 
 ```bash
-gh pr view <PR> --json title,headRefName,baseRefName,state,commits
+gh pr view <PR> --json title,headRefName,baseRefName,state,commits --jq '{title,headRefName,baseRefName,state,commits}'
 git fetch origin <headRefName> <baseRefName>
 ORIGINAL_TREE=$(git rev-parse origin/<headRefName>^{tree})
 ```
 
-Good commit groupings usually follow dependency order:
+Prefer dependency order: schema/generated API -> core logic -> wiring -> UI -> tests.
 
-1. Schema/storage or generated API definitions.
-2. Core logic.
-3. Wiring and integration.
-4. UI or surface behavior.
-5. Tests.
+After rewrite print `Original tree: $ORIGINAL_TREE` and `Current tree: $(git rev-parse HEAD^{tree})`; inspect `git diff origin/<headRefName> --stat`. Never push unintended tree changes.
 
-After rewriting, verify content identity:
+## Guidance
 
-```bash
-echo "Original tree: $ORIGINAL_TREE"
-echo "Current tree:  $(git rev-parse HEAD^{tree})"
-git diff origin/<headRefName> --stat
-```
+Visual diagrams/file maps belong to `/visual-recap`; this skill edits PR text only.
 
-Do not push if the tree changed unintentionally.
-
-## Reviewer Guidance
-
-For visual context (diagrams, file maps, annotated walkthrough), run `/visual-recap` -- do not duplicate it here. This skill only tightens the PR text itself:
-
-- When `/quantify-impact` produced meaningful evidence, put its `## Proven impact` block (`Metric | Before | After | Delta`) first, followed by the exact command/environment. If measurement was not useful, keep the normal value summary; no fake empty table. If evidence missed its threshold, say `Value not proven` rather than hiding it.
-- Add a TL;DR that matches the actual diff.
-- Separate core files from generated or mechanical files.
-- Call out risky behavior changes, migration order, rollout plan, and test coverage.
-- Link issue trackers, dashboards, or design docs when they explain intent.
+- Put meaningful `/quantify-impact` `## Proven impact` (`Metric | Before | After | Delta`) first with command/environment. Otherwise use normal value summary; no fake empty table. Below threshold says `Value not proven`.
+- Add accurate TL;DR; separate core from generated/mechanical files.
+- Name risky behavior, migration order, rollout, tests, and useful issue/dashboard/design links.
 
 ## Guardrails
 
-- Never hide meaningful behavior changes inside "cleanup".
-- Do not bypass hooks unless the user explicitly asks.
-- If the PR is too large to make reviewable with notes, recommend splitting instead of polishing around the problem.
+Never hide behavior as cleanup or bypass hooks without explicit request. If notes cannot make the PR reviewable, recommend splitting it.

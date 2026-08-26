@@ -4,72 +4,43 @@ description: Commit, push, and open a reviewable PR. Use for commit-only, commit
 argument-hint: "[--no-pr]"
 ---
 
-# Commit, Push, and Open PR
-
-Read [REFERENCE.md](REFERENCE.md) for review prerequisites, commit types, labels, body
-template, screenshots, and dependency-upgrade sections.
+Read [REFERENCE.md](REFERENCE.md) for review gates, commit types, labels, body, screenshots, and upgrade sections.
 
 ## Preflight
 
-1. Run `git status -sb`, `git diff HEAD`, `git branch --show-current`,
-   `git log --oneline -5`, and inspect any PR already open from this branch.
-2. Resolve the requested endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
-3. Push/PR only: verify an accessible remote. PR only: resolve the default branch with
-   `gh repo view`, then verify `gh` is installed and authenticated.
-4. PR only: detect local stack membership with `gh stack view --json`; if a PR already exists, also
-   inspect its `baseRefName` and REST `stack` object. A normal PR endpoint owns the current
-   layer only. It never authorizes `gh stack submit`, which may publish other branches.
-5. PR only: run applicable review axes inline; do not block merely because a named review
-   skill was not invoked.
-6. PR only: runnable behavior needs a current `/dogfood` PASS. BLOCKED needs a user waiver.
-7. Group changed files by purpose. Stage requested paths only; ask about scope only when
-   ownership cannot be determined safely.
+1. Inspect `git status -sb`, `git diff HEAD`, current branch, recent log, and any branch PR.
+2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
+3. Push/PR requires an accessible remote; PR also requires authenticated `gh` and resolved default branch.
+4. For PR, run `gh stack view --json`; inspect an existing PR's base/stack. A normal PR owns only the current layer and never authorizes `gh stack submit`.
+5. Run applicable PR review axes inline; do not block merely because a named skill was not invoked.
+6. Runnable PR work requires current `/dogfood` PASS; BLOCKED needs user waiver.
+7. Group by purpose and stage requested paths only. Ask only when ownership is unsafe to infer.
 
 ## Commit
 
-1. Stay on the current feature branch. On the default branch, create `type/description`.
-2. For each coherent group:
-   - `git add <explicit paths>`
-   - commit `type(scope): terse description`
-   - keep lowercase, 5-72 characters, no trailing period
-3. Explicit commit-only intent stops here after a clean-tree check and commit summary.
-4. Push/PR only: show `origin/<branch>..HEAD`, then push with tracking.
-5. After rebasing or otherwise rewriting the current user-owned feature branch, use
-   `--force-with-lease` when needed without another permission prompt. Never use plain
-   `--force`; rewriting default, shared, foreign, or concurrently owned branches requires
-   explicit permission.
+1. Stay on the feature branch; on default, create `type/description`.
+2. Per coherent group, `git add <explicit paths>` then `type(scope): terse description`: lowercase, 5-72 chars, no period.
+3. Explicit commit-only intent stops here after clean-tree check and summary.
+4. Push/PR: show `origin/<branch>..HEAD`, then push with tracking.
+5. After rewriting the current user-owned feature branch, use `--force-with-lease` when needed without another permission prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
 
 ## Pull request
 
-`--no-pr` or an explicit commit-and-push request ends after a clean-tree check and pushed
-commit summary.
+`--no-pr` ends after push, clean-tree check, and summary.
 
-Otherwise:
+Otherwise make/open/create PR authorizes verify, commit, push, and any needed lease-protected rebase update on the current user branch. It does not authorize merge, plain force, shared rewrites, or unrelated fixes.
 
-1. Treat make/open/create PR as authorization for its prerequisites: verify, commit, and
-   push the current branch. It also covers a needed `--force-with-lease` after rebasing the
-   current user-owned feature branch, but not merge, plain `--force`, shared-branch rewrites,
-   or unrelated fixes.
-2. Resolve the explicit base with
-   `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse an existing branch PR or
-   create one against that base with assignee, labels, and the reference body template.
-   For explicit whole-stack publication, follow `/stacked-prs` instead.
-3. For customer-facing changes, include one screenshot/surface-review row per view.
-4. Include the current dogfood receipt for runnable changes.
-5. Print the PR URL.
+1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse the branch PR or create against that base with assignee, labels, and reference template. Whole-stack publication uses `/stacked-prs`.
+2. Customer-facing changes include one screenshot/surface-review row per view.
+3. Runnable changes include current dogfood receipt. Print the PR URL.
 
-Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests
-that extra artifact or history work.
+Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests that extra artifact/history work.
 
-## CI and completion
+## Completion
 
-1. Take one CI status snapshot with `gh pr checks <number>`. Note when no CI exists.
-2. If checks are already failing, report them; fixing and monitoring beyond this snapshot
-   requires `/go`, ship, explicit babysitting, or a follow-up request.
-3. Run `git status` and `git diff`; report uncommitted work.
-4. Summarize branch, commits, PR, CI, and remaining action.
-5. End with one status line: `🟢 done — PR opened; CI <state>`, `🟡 awaiting decision — <decision>`, or
-   `🔴 blocked — <external blocker and needed input>`.
+1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
+2. Report existing failures. Remediation/monitoring beyond this snapshot requires `/go`, ship, babysitting, or follow-up.
+3. Report `git status`, remaining diff, branch, commits, PR, CI, and next action.
+4. End with one status line: `done`, `awaiting decision`, or `blocked`, using the repository marker contract.
 
-Never stage unrelated changes, push mixed scope without confirmation, or hide a failed
-command. If `gh pr create` fails, show the error and recovery command.
+Never stage unrelated work, push mixed scope without confirmation, or hide failures. If `gh pr create` fails, show error and recovery command.

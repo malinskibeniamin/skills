@@ -3,43 +3,23 @@ name: efficient-frontier
 description: Apply eval-backed model routing and budget explicitly authorized agent waves without moving judgment away from the owner.
 ---
 
-# Efficient frontier
+`config/model-routing.json` is source of truth; never copy subjective scores into prompts.
 
-Read `config/model-routing.json`. It is the routing source of truth; do not reproduce
-subjective model scores in prompts or skills.
+1. Choose the best qualified primary owner/runtime.
+2. Default GPT-5.6 Sol `xhigh` for UI, code, plans, review, computer use.
+3. Use `max` only when context-ablation evidence or user selection supports it.
+4. Terra/Luna require versioned behavioral eval promotion for product code/review.
+5. Fable/Opus may own when qualified; the user explicitly authorizes a different-family pass.
+6. `ultra` is multi-agent and needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache are API-only unless exposed.
 
-Quality comes first:
-
-1. Choose the primary owner that best meets the task and available runtime.
-2. Default to GPT-5.6 Sol at `xhigh`; Sol is eligible to own UI, implementation, plans,
-   review, and computer use.
-3. Use `max` for difficult quality-first work only when the context ablation supports the
-   lift or the user explicitly selects it.
-4. Treat Terra and Luna as eval-gated. Do not route product code or review to them until a
-   versioned behavioral eval promotes that use.
-5. Fable or Opus may own work when available and quality-qualified. Keep review with the
-   primary owner unless the user explicitly authorizes a different-family pass.
-6. `ultra` means a multi-agent team and requires explicit delegation or `/swarm`.
-   Pro mode, persisted reasoning, programmatic tool calling, and explicit cache controls
-   are API-only unless the active harness exposes them.
-
-One owner implements. Without explicit delegation, execute any useful lanes inline.
-With delegation, give each lane one bounded objective, inputs, exclusions, evidence
-contract, and stop condition. Keep architecture, prioritization, risk, synthesis, and
-final acceptance with the coordinator.
+One owner implements. Without delegation, run useful lanes inline. Authorized lanes each get one bounded objective, inputs, exclusions, evidence, stop. Coordinator retains architecture, priority, risk, synthesis, acceptance.
 
 ## Capacity
 
-Claude subscription capacity may be checked through the explicit
-`/stay-within-limits` host-meter procedure. Unknown capacity is reported as unknown.
-Never infer it from local tokens or cost. Capacity can remove a route; it cannot lower the
-quality gate.
+Use explicit `/stay-within-limits` host meter for Claude capacity; otherwise say unknown. Never infer capacity from tokens/cost. Capacity removes routes, never lowers quality.
 
 ## Promotion
 
-Run `agent-evals/context-ablation/` before changing defaults. Compare one context group at
-a time, hold tasks and scoring constant, and prefer lower cost only among
-quality-equivalent results. Record the winning policy in `config/model-routing.json`.
+Before changing defaults run `agent-evals/context-ablation/`: vary one context group, hold tasks/scoring constant, and prefer lower cost only among quality-equivalent results. Record winner in routing config.
 
-Read [references/builder-upstream.md](references/builder-upstream.md) only when composing
-an authorized delegation packet.
+Read [references/builder-upstream.md](references/builder-upstream.md) only for an authorized delegation packet.

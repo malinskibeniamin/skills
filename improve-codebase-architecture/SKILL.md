@@ -8,75 +8,47 @@ metadata:
   vendored_from: https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture
 ---
 
-# Improve Codebase Architecture
+Make an error class impossible, not another check/test. Generic audit belongs to `/improve`; implementation to `/development-lifecycle`. Stay read-only.
 
-Find architectural changes that make a class of errors impossible. Deepen the design; do not
-merely add another check or regression test.
+## Vocabulary
 
-This skill is architecture-only. Generic audit, backlog, correctness, security, performance,
-dependency, or documentation work belongs to `/improve`. Implementation belongs to
-`/development-lifecycle`; this workflow stays read-only.
+Run `/codebase-design`; use its module, interface, implementation, depth, seam, adapter, leverage, and locality terms.
 
-## Vocabulary and bar
+- **Deletion test:** removing a deep module spreads hidden complexity into callers.
+- **Interface is the test surface:** verify design through its stable interface.
+- **Two adapters justify a seam:** one adapter is hypothetical.
+- **Single source of truth:** behavior follows one owned representation, not parallel lists, flags, registries, validators, or lifecycles.
+- **Structural invariant:** construction/transitions make invalid states impossible or unrepresentable.
 
-Run `/codebase-design`. Use **module**, **interface**, **implementation**, **depth**, **deep**,
-**shallow**, **seam**, **adapter**, **leverage**, and **locality** exactly.
+Read `CONTEXT.md` and relevant ADRs; domain language names modules and prevents needless re-litigation.
 
-- **Deletion test:** deleting a deep module spreads its hidden complexity into callers.
-- **Interface is the test surface:** tests verify the design through its stable interface.
-- **Two adapters justify a seam:** one adapter is a hypothetical abstraction.
-- **Single source of truth:** derived behavior follows the owned representation, not a parallel
-  list, flag, registry, validator, or lifecycle.
-- **Structural invariant:** construction and transitions make invalid states impossible or
-  unrepresentable downstream.
+## 1. Frame
 
-Read `CONTEXT.md` and relevant ADRs when present. Domain language names good modules and seams;
-ADRs prevent re-litigating durable choices without new evidence.
+**Scope before scanning -- YAGNI.** If the user names a module/error/pain point, take that scope. Otherwise use `git log --name-only --format=` for hot spots; widen only when history is scattered.
 
-## 1. Frame and explore
+Explore inline by default; delegation must be explicit. Prefer repo graph tools. Map interfaces, dependency graph or call graph, data ownership, writers, state transitions, failure paths, and interface tests.
 
-**Scope before scanning -- YAGNI.** If the user names a module, error pattern, or pain point, take
-that scope. Otherwise use `git log --name-only --format=` to find changing hot spots; widen only
-when history is scattered.
+## 2. Find opportunities
 
-Explore inline by default. Delegation requires explicit user consent. Prefer repository-native
-graph tools. Map module interfaces, dependency graph or call graph, data ownership, competing
-writers, state transitions, failure paths, and tests at the current interface.
+Read [REFERENCE.md](REFERENCE.md). Prefer one source of truth over parallel bookkeeping, validated construction over repeated checks, explicit states over illegal flag combinations, and one deep interface over caller choreography.
 
-## 2. Find structural opportunities
+For each candidate state the **error class**, permissive representation, proposed invariant, and why another caller cannot recreate it. Regression tests are not architecture; tests verify design.
 
-Read [REFERENCE.md](REFERENCE.md) for the architecture lenses and candidate rejection rules.
-Prioritize designs that replace parallel bookkeeping with one source of truth, repeated validation
-with validated construction, illegal flag combinations with explicit states, and caller-owned
-choreography with one deep module interface.
+## 3. Present
 
-For each suspect, name the **error class**, current permissive representation, proposed invariant,
-and why another caller cannot recreate the mistake. A regression test is not architecture by
-itself; tests verify the design after the target invariant exists.
+Write and open an **HTML report** at `$TMPDIR/architecture-review-<timestamp>.html` (fallback `/tmp` or `%TEMP%`); return its path. Follow [HTML-REPORT.md](HTML-REPORT.md). Use `/excalidraw-diagram` only when editable before/after evidence helps.
 
-## 3. Present candidates
+Each candidate needs files/evidence, error class, current/proposed invariant, ownership and module/interface/seam change, before/after view, locality/leverage/testing gain, migration slice, rollback, compatibility risk, and `Strong|Worth exploring|Speculative` confidence.
 
-Write a self-contained HTML report to the OS temp directory:
-`$TMPDIR/architecture-review-<timestamp>.html`, falling back to `/tmp` or `%TEMP%`. Open it and
-return the absolute path. Read [HTML-REPORT.md](HTML-REPORT.md); use `/excalidraw-diagram` when an
-editable before/after view carries the argument.
+End with **Top recommendation**; do not finalize interfaces. Ask which candidate to explore.
 
-Every candidate needs files and evidence, error class, current and proposed invariant, ownership
-change, module/interface/seam change, before/after visual, locality/leverage/testing benefit,
-migration slice, rollback, compatibility risk, and `Strong|Worth exploring|Speculative` confidence.
+## 4. Grill
 
-End with **Top recommendation**. Do not propose final interfaces yet. Ask which candidate to explore.
+Run `/grilling` on ownership, invariant, module shape, seam/adapters, dependency direction, states, migration, rollback, and observable tests.
 
-## 4. Grill the selected design
+- New domain term -> `/domain-modeling` updates `CONTEXT.md`; durable rejection -> offer ADR.
+- Competing interfaces -> design twice with `/codebase-design`.
+- Visual proposal -> `/visual-plan`; competing proposals -> `/plan-arbiter`.
+- Implementation -> reversible sequence for `/development-lifecycle`.
 
-Run `/grilling`. Resolve ownership, invariant, module shape, seam, adapters, dependency direction,
-transition states, migration, rollback, and observable tests.
-
-- New or sharpened domain term -> `/domain-modeling` updates `CONTEXT.md`.
-- Durable rejection -> offer an ADR.
-- Competing interfaces -> `/codebase-design` design-it-twice.
-- Reviewable visual proposal -> `/visual-plan`; competing proposals -> `/plan-arbiter`.
-- Implementation request -> reversible migration sequence handed to `/development-lifecycle`.
-
-Done means the selected invariant explains why the error class cannot reappear through an
-unmodified call path, with tests verifying that public contract.
+Done when the target invariant prevents recurrence through every unchanged call path and tests verify its public contract.

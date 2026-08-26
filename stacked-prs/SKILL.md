@@ -3,58 +3,37 @@ name: stacked-prs
 description: Create and manage dependent GitHub pull requests with gh stack. Use for stacked PRs, dependent branch chains, incremental review layers, or splitting a large change into ordered PRs.
 ---
 
-# Stacked pull requests
-
-Use GitHub's `gh stack` CLI while preserving harness review, worktree, and delivery
-contracts. Read [REFERENCE.md](REFERENCE.md) for the version-sensitive command matrix,
-external-link mode, recovery, and status receipt.
+Use `gh stack`; read [REFERENCE.md](REFERENCE.md) for versioned commands, external-link mode, recovery, and receipts.
 
 ## Contract
 
-- **Objective:** every layer is independently reviewable against the branch below it.
-- **Guardrails:** one Conductor workspace owns one stack; unrelated work uses another stack;
-  global installs, shared-branch rewrites, publication, and merge honor user intent.
-- **Verification:** test each layer, review `<parent>...HEAD`, then report
-  `gh stack view --json`.
-- **Stop:** respect the requested plan, local, push, draft, open, or merge endpoint.
+- Each layer is independently reviewable against its parent.
+- One Conductor workspace owns one stack; unrelated work uses another.
+- Test each layer, review `<parent>...HEAD`, and report `gh stack view --json`.
+- Honor the requested plan, local, push, draft, open, or merge endpoint.
 
-## 1. Establish the mode
+## Establish mode
 
-Check `gh`, authentication, repository support, the current branch, remotes, cleanliness, and
-`git worktree list --porcelain`. If the extension is absent, give
-`gh extension install github/gh-stack`; do not install it without permission. This harness
-pushes to `origin`; with multiple remotes, pass `--remote origin` to every supported command.
+Check `gh`, auth, repo support, branch, remotes, cleanliness, and `git worktree list --porcelain`. If missing, suggest `gh extension install github/gh-stack`; never install without permission. With multiple remotes, pass `--remote origin`.
 
-Default to **native mode**: one workspace owns the whole stack and switches branches. Before
-`add`, `checkout`, `rebase`, `sync`, `modify`, or `push`, run:
+Default to native mode: one workspace owns and switches the whole stack. Before structural commands run:
 
 ```bash
 "${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh"
 ```
 
-Exit 2 lists `branch<TAB>path` for stack branches owned by other worktrees. Report them; do
-not remove a worktree, steal its branch, or cascade locally.
+Exit 2 reports `branch<TAB>path`; do not steal branches, remove worktrees, or cascade. Use external-link mode only for deliberate worktree-per-layer setups:
+`gh stack link --base <trunk> --remote origin <bottom> ... <top>`. Coordinate those worktrees before cascades.
 
-Use **external-link mode** only for deliberate worktree-per-layer workflows. Publish with
-`gh stack link --base <trunk> --remote origin <bottom> ... <top>`. Coordinate or free those
-worktrees before any local cascade.
+## Plan and develop
 
-## 2. Plan and develop
+Show a bottom-to-top table with objective, branch, parent, scope, and verification. Dependencies belong at or below their consumer. Confirm only agent-proposed boundaries.
 
-Before code, show a bottom-to-top table: objective, branch, parent, allowed scope, and
-verification per layer. Dependencies belong in the same or a lower layer. Confirm boundaries
-proposed by the agent; explicit user-owned boundaries need no second approval.
+Require a clean tree for structural commands. Start with `gh stack init --base <trunk> <bottom>`. Implement RED -> GREEN -> REFACTOR, verify, and commit. Add one coherent concern with `gh stack add <next>`. Use explicit branches and file adds, not `git add -A`.
 
-Require a clean tree for structural commands. Adopt or create the bottom with
-`gh stack init --base <trunk> <bottom-branch>`. Implement through RED -> GREEN -> REFACTOR,
-verify, and commit deliberately. Add a coherent next concern with
-`gh stack add <next-branch>`. Use explicit branch names and standard `git add`/`git commit`;
-avoid `-A` shortcuts that blur layer ownership.
+Use `gh stack checkout <branch>` and `gh stack view --json`; avoid argumentless/TUI commands.
 
-Navigate with `gh stack checkout <branch>` and inspect with `gh stack view --json`.
-Argumentless commands and TUI output are not agent-safe.
-
-## 3. Review and publish
+## Review and publish
 
 ```bash
 BASE=$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")
@@ -62,29 +41,14 @@ git diff "$BASE"...HEAD
 git log "$BASE"..HEAD --oneline
 ```
 
-Run applicable verification and dogfood for the current layer. Inspect every branch before
-publication; stop if submission includes unintended or unfinished work. Explicit whole-stack
-submission creates drafts by default: `gh stack submit --auto --remote origin`. Add `--open`
-only when the user requested ready-for-review PRs. A single-PR request never authorizes
-publishing other unsubmitted layers.
+Verify and dogfood every layer before publication. Whole-stack submission defaults to drafts: `gh stack submit --auto --remote origin`; add `--open` only when requested. A single-PR request never publishes other layers.
 
-## 4. Feedback, sync, and merge
+## Feedback, sync, merge
 
-Fix feedback on its owning branch and verify it. A cascade rewrites upper branches. For a
-user-owned stack maintained in the current workspace, rebase and push the cascade with
-force-with-lease without a separate permission prompt; report the rewrite in the receipt.
-Ask only when ownership is unclear or a default, shared, foreign, or concurrently owned
-branch would be rewritten. Then use `gh stack rebase --upstack --remote origin` followed by
-`gh stack push --remote origin`.
-`gh stack sync --prune --remote origin` uses the same ownership boundary.
+Fix feedback on its owning branch and verify. Cascades rewrite upper branches. A user-owned stack in this workspace may rebase and force-with-lease without another permission prompt; report it. Ask when ownership is unclear or a default, shared, foreign, or concurrent branch would change. Use `gh stack rebase --upstack --remote origin`, then `gh stack push --remote origin`; `gh stack sync --prune --remote origin` has the same boundary.
 
-Continue a resolved conflict with `gh stack rebase --continue`. Abort only when the user asks
-to abandon the operation. External-link mode must first coordinate its worktrees.
+Continue conflicts with `gh stack rebase --continue`; abort only on request. External-link mode coordinates worktrees first.
 
-Never merge as a publication side effect. Explicit merge intent authorizes only the named
-contiguous range. Recheck approvals, checks, linear history, comments, and todos; then use
-`gh stack merge <stack-or-pr> --yes --merge-method <squash|rebase|merge>`, never
-`gh pr merge`.
+Never merge as a publish side effect. Explicit merge intent covers only the named contiguous range. Recheck approvals, checks, history, comments, and todos; use `gh stack merge <stack-or-pr> --yes --merge-method <squash|rebase|merge>`, never `gh pr merge`.
 
-Finish with trunk, ordered layers, current layer, PR URLs/states, per-layer verification,
-worktree conflicts, rewrites performed, and the next bottom-up action.
+Report trunk, ordered layers, current layer, PR states/URLs, verification, conflicts, rewrites, and next bottom-up action.

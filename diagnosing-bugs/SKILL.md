@@ -4,97 +4,97 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 ---
 
 # Diagnosing Bugs
-Discipline for hard bugs. Skip a phase only with reason. Use the domain glossary and ADRs;
-for third-party/API/version drift, run `/read-the-damn-docs` before ranking hypotheses.
+Discipline for hard bugs. Skip a phase only with reason. Use the domain glossary and ADRs; for third-party, API, or version drift, run `/read-the-damn-docs` before ranking hypotheses.
 
 ## Redact
-This skill shows commands, outputs, and captured artifacts. **Redact every secret first** --
-write `<REDACTED>` in its place. Build loops against environment variables so credentials stay
-out of files and quoted output. Captured artifacts can carry authentication headers; quote only
-the lines that carry the signal. If redacted evidence is insufficient, ask the user for a safer
-source.
+This skill exposes commands, output, and captured artifacts. Replace every secret with `<REDACTED>`.
+Keep credentials in environment variables and quote only signal-bearing lines; captured artifacts may contain authentication headers. If redaction removes necessary evidence, ask for a safer source.
+
 ## Phase 1 -- Build a feedback loop
-**The feedback loop is the skill.** The rest is mechanical. Build a fast, deterministic,
-agent-runnable pass/fail signal for the reported bug; bisection, hypothesis tests, and
-instrumentation consume that signal. Spend most of the diagnosis effort here.
-### Strategies (try in roughly this order)
-1. **Failing test** at the highest seam that reaches the bug -- unit, integration, or e2e.
-2. **Curl / HTTP script** against running dev server.
-3. **CLI invocation** with fixture input, diff stdout vs known-good snapshot.
-4. **Headless browser script** (Playwright / Puppeteer) -- drive UI, assert DOM/console/network.
-5. **Replay captured trace.** Save real network request / payload / event log to disk; replay through code path isolated.
-6. **Throwaway harness.** Start the smallest system slice that reaches the bug with one call.
-7. **Property / fuzz loop.** If bug "sometimes wrong output", run 1000 random inputs, watch failure mode.
-8. **Bisection harness.** If the bug appeared between two known states, automate
-   "boot state X, check, repeat" so `git bisect run` works.
-9. **Differential loop.** Run same input through old-version vs new-version (or two configs), diff output.
-10. **HITL bash script.** Last resort. If a human must click, guide them with
-    `scripts/hitl-loop.template.sh`; feed the captured output back into the loop.
-### Iterate on the loop itself
-Treat the loop as a product: make it faster, sharpen the asserted symptom, and remove
-nondeterminism by pinning time, random seeds, filesystem state, and network inputs.
-### Non-deterministic bugs
-Target a **higher reproduction rate**. Run the loop repeatedly, add controlled stress, and
-narrow the timing window until the failure occurs often enough to distinguish hypotheses.
-### When you genuinely cannot build a loop
-Stop with the attempted loops and request the missing input: access to the reproducing
-environment, a captured artifact, or permission for temporary production instrumentation.
+**The feedback loop is the skill.** Everything else consumes it. Build a tight, deterministic, agent-runnable pass/fail signal that goes red on the user's exact bug.
+Spend disproportionate effort here; code reading is for constructing the loop, not inventing an unsupported theory.
 
-Proceed to Phase 2 when the loop reliably signals the reported failure.
+### Strategies, roughly in order
+1. **Failing test** at the highest seam that reaches the bug: unit, integration, or E2E.
+2. **Curl or HTTP script** against the running service.
+3. **CLI invocation** with fixture input and a known-good stdout diff.
+4. **Headless browser script** that asserts DOM, console, or network behavior.
+5. **Captured trace replay:** request, payload, event log, or other real artifact.
+6. **Throwaway harness:** the smallest system slice that reaches the bug with one call.
+7. **Property or fuzz loop** for intermittent wrong output.
+8. **Bisection harness** suitable for `git bisect run`.
+9. **Differential loop** comparing old/new versions or configurations on the same input.
+10. **HITL script** from `scripts/hitl-loop.template.sh` only when a human must act.
 
-## Phase 2 -- Reproduce
-Run the loop, then `/dogfood` the reporter's real user entrypoint. Watch the same bug appear.
+### Tighten the loop
+Treat the loop as a product:
 
-- [ ] The loop produces the failure mode the **user** described, not a nearby failure.
-- [ ] The failure reproduces across multiple runs, or often enough to debug.
-- [ ] The loop captures the exact symptom so Phase 5 can prove the fix addresses it.
+- Make it faster by caching setup and skipping unrelated initialization.
+- Make the signal sharper by asserting the exact symptom, not merely "did not crash."
+- Make it deterministic by pinning time, seeds, filesystem state, and network inputs.
 
-Proceed when the reported bug reproduces.
+For nondeterministic bugs, raise the reproduction rate: repeat under controlled stress, parallelize, and narrow timing windows until the rate distinguishes hypotheses.
+
+If no loop is possible, stop, list attempts, and request the missing environment, redacted artifact, or permission for safe temporary instrumentation.
+Do not proceed to hypothesise without a loop.
+
+### Completion criterion: a tight loop that goes red
+Phase 1 ends only when you can name one command already run at least once, with redacted invocation and output, that is:
+
+- **Red-capable:** drives the actual path and asserts the user's exact symptom.
+- **Deterministic:** returns the same verdict, or a pinned high reproduction rate.
+- **Fast:** seconds rather than minutes.
+- **Agent-runnable:** unattended, except through the structured HITL script.
+
+No red-capable command, no Phase 2.
+
+## Phase 2 -- Reproduce + minimise
+Run the loop, then `/dogfood` the reporter's real entrypoint. Confirm:
+
+- The loop produces the failure the user described, not a nearby failure.
+- It reproduces across multiple runs, or often enough to debug.
+- It captures the exact symptom Phase 5 must disprove.
+
+Shrink the red reproduction by removing inputs, callers, configuration, data, and steps one
+at a time, rerunning after every cut. Keep only what is necessary for the failure and later
+regression test. Finish when every remaining element is load-bearing: removing any one makes
+the loop green. Do not proceed until the bug is reproduced and minimised.
+
 ## Phase 3 -- Hypothesise
-Generate **3-5 ranked, falsifiable hypotheses** before testing any; single-hypothesis work
-anchors on the first plausible idea.
-
-> Format: "If <X> is the cause, then <changing Y> will make the bug disappear / <changing Z> will make it worse."
-
-Discard or sharpen any hypothesis that lacks a testable prediction.
-
-Show the ranked list before testing so available domain knowledge can rerank it. Continue with
-the evidence-based ranking when the user is unavailable.
+Generate 3-5 ranked, falsifiable hypotheses before testing; one hypothesis anchors on the
+first plausible idea. Each must predict what change makes the symptom disappear or worsen.
+Show the list so domain knowledge can rerank it, but continue when the user is unavailable.
+Discard claims without a testable prediction.
 
 ## Phase 4 -- Instrument
-Each probe must map to specific prediction from Phase 3. **Change one variable at a time.**
+Map each probe to one prediction. Change one variable at a time.
 
-1. **Debugger / REPL inspection** when the environment supports it. One breakpoint can replace ten logs.
-2. **Targeted logs** at boundaries that distinguish hypotheses.
-3. Never "log everything and grep".
+1. Prefer debugger or REPL inspection when available.
+2. Add targeted logs only at boundaries that distinguish hypotheses.
+3. Never log everything and grep.
 
-Tag every debug log with a unique prefix such as `[DEBUG-a4f2]`, then remove every match.
-
-**Perf branch.** Establish a measured baseline with a timing harness, profiler, or query plan,
+Prefix temporary logs, for example `[DEBUG-a4f2]`, so cleanup can grep every match. For
+performance, establish a measured baseline with a timing harness, profiler, or query plan,
 then bisect. Measure first, fix second.
 
 ## Phase 5 -- Fix + regression test
-Write regression test **before fix** -- but only if **correct seam** for it.
+Write the regression test before the fix at the correct seam. It must exercise the real bug
+pattern and call chain; a nearby shallow unit gives false confidence. If no suitable seam
+exists, record that architecture gap. Otherwise:
 
-The correct seam exercises the **real bug pattern** as it occurs at the call site. A shallow
-unit that cannot reproduce the triggering chain gives false confidence. If no suitable seam
-exists, document that architectural gap for Phase 6. Otherwise:
-
-1. Turn minimised repro into failing test at that seam.
-2. Watch it fail.
-3. Apply fix.
-4. Watch it pass.
-5. Run `/dogfood` to replay the identical user reproduction, then re-run the original un-minimised Phase 1 loop.
+1. Turn the minimised reproduction into a failing test and observe RED.
+2. Apply the smallest root-cause fix and observe GREEN.
+3. Run related checks.
+4. `/dogfood` the identical user journey, then re-run the original unminimised Phase 1 loop.
 
 ## Phase 6 -- Cleanup + post-mortem
 Complete every item before declaring the diagnosis done:
 
-- [ ] `/dogfood` confirms the exact user repro no longer reproduces; Phase 1 loop also passes
-- [ ] Regression test passes (or absence of seam is documented)
-- [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
-- [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
-- [ ] The hypothesis that turned out correct is stated in the commit / PR message -- so the next debugger learns
+- `/dogfood` confirms the exact user reproduction no longer fails; the original loop passes.
+- The regression test passes, or the missing seam is documented.
+- All debug instrumentation is removed; grep the unique prefix.
+- Throwaway artifacts are deleted or clearly isolated.
+- The proven root cause is recorded in the commit or PR.
 
-Then ask what would prevent recurrence. If the answer is an architectural change, hand the
-specific seam or coupling problem to `/improve-codebase-architecture`. Recommend it after the root-cause
-fix, when the evidence is strongest.
+Ask what would prevent recurrence. After the root-cause fix, send a proven seam or coupling
+problem to `/improve-codebase-architecture`.

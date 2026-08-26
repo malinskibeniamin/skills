@@ -5,79 +5,34 @@ disable-model-invocation: true
 argument-hint: "What would you like to learn?"
 ---
 
-# Teach
+Stateful teaching workspace; current directory stores learning state.
 
-Stateful teaching workspace. Current dir stores learning state.
+## Files
 
-## Workspace files
+- `MISSION.md`: learning purpose; [MISSION-FORMAT.md](MISSION-FORMAT.md).
+- `RESOURCES.md`: trusted sources; [RESOURCES-FORMAT.md](RESOURCES-FORMAT.md).
+- `reference/*.html`: printable references.
+- `learning-records/*.md`: demonstrated/prior learning; [LEARNING-RECORD-FORMAT.md](LEARNING-RECORD-FORMAT.md).
+- `lessons/*.html`: one self-contained lesson each.
+- `assets/*`: reusable styles/widgets/simulators/diagrams.
+- `NOTES.md`: preferences and working notes.
 
-- `MISSION.md` -- why user learns topic. Format: [MISSION-FORMAT.md](MISSION-FORMAT.md).
-- `RESOURCES.md` -- trusted sources to ground teaching. Format: [RESOURCES-FORMAT.md](RESOURCES-FORMAT.md).
-- `reference/*.html` -- printable cheat sheets, glossaries, algorithms, syntax, routines.
-- `learning-records/*.md` -- demonstrated learning and prior knowledge. Format: [LEARNING-RECORD-FORMAT.md](LEARNING-RECORD-FORMAT.md).
-- `lessons/*.html` -- one self-contained lesson per file.
-- `assets/*` -- reusable components: stylesheets, quiz widgets, simulators, diagram helpers.
-- `NOTES.md` -- user preferences and working notes.
+## Mission and sources
 
-## Mission first
+If mission is missing/vague, interview before teaching: turn abstract goal into one concrete outcome. When mission changes, confirm, update `MISSION.md`, and write a learning record.
 
-If `MISSION.md` missing or vague, interview user before teaching. Push from abstract goal to concrete outcome. One mission per workspace.
-If mission changes, confirm first, update `MISSION.md`, and write learning record.
+Build `RESOURCES.md` from trusted resources before lessons. Never rely only on parametric memory; cite sources and deeper-study paths.
 
-## Source discipline
+## Lessons
 
-Before `RESOURCES.md` is strong, find high-trust resources. Never rely only on parametric memory. Lessons need citations and paths for deeper study.
+Each lesson teaches one mission-linked concept at the user's zone of proximal development, finishes quickly, gives a tangible win, and uses an interactive task/quiz/real-world steps with a tight feedback loop. Optimize storage strength through retrieval, spacing, interleaving, not fluency. Avoid answer tells: same number of words where possible and no formatting clues. Link related lessons and reference docs with HTML anchors; recommend one primary source; invite questions. Save `lessons/NNNN-dash-case.html`; keep it clean, printable, and easy to open.
 
-## Lesson rules
+Reuse `./assets/` first. Extract reusable code/styles rather than inline duplicates; usually start with shared stylesheet.
 
-A lesson:
+## Choose the next lesson
 
-- teaches one thing only
-- ties directly to mission
-- fits user's zone of proximal development
-- is quick to complete
-- gives tangible win
-- uses interactive task, quiz, or real-world step list
-- includes tight feedback loop, ideally automatic/immediate
-- optimizes storage strength over fluency: retrieval, spacing, interleaving
-- avoids quiz tells: same number of words where possible, no formatting clues
-- links related lessons and reference docs with HTML anchors
-- recommends one primary source for deeper study
-- reminds user to ask follow-up questions
-- saves as `lessons/NNNN-dash-case.html`
-- looks clean, readable, printable
+Read `learning-records/`, `NOTES.md`, and mission; choose the nearest useful challenge. Record learning only when the user demonstrates understanding, states prior knowledge, corrects a misconception, or changes mission. Coverage is not learning.
 
-Make lesson easy to open, ideally one CLI command.
+Create reference docs for compressed syntax, routines, algorithms, poses, exercises, or glossary. Use [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md); add terms after understanding.
 
-## Assets
-
-Reuse is default. Before authoring a lesson, read `./assets/` and build from existing components. If a lesson needs reusable code or style, extract it to `./assets/` and link it; never inline future duplicates. First component should usually be shared stylesheet.
-
-## Zone of proximal development
-
-Before choosing next lesson:
-
-1. read `learning-records/`
-2. read `NOTES.md`
-3. check mission
-4. pick nearest useful challenge
-
-If user says they already know something, record depth in learning record.
-
-## Learning records
-
-Write record only when user demonstrates understanding, discloses prior knowledge, corrects misconception, or mission shifts. Coverage is not learning.
-
-## Reference docs
-
-Create references when the topic benefits from compressed syntax, routines, algorithms,
-poses, exercises, or a glossary. Use [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md); add terms
-only after the user understands them.
-
-## Wisdom/community
-
-If question needs real-world judgment, answer provisionally then suggest high-reputation community, class, forum, or practitioner source. Respect user if they decline.
-
-## Notes
-
-Use `NOTES.md` for preferences: pace, examples, tone, accessibility needs, avoided formats, practice constraints. Read before future lessons.
+For real-world judgment, answer provisionally and suggest a reputable community/practitioner source; respect a decline. Use `NOTES.md` for pace, examples, tone, accessibility, avoided formats, and constraints.

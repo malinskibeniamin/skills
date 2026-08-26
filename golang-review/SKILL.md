@@ -3,65 +3,35 @@ name: golang-review
 description: "Review Go against evidence-backed rules for bounds, APIs, concurrency, errors, security, tests, and rollout. Use for Go diffs, PRs, branches, modules, or backend protos."
 ---
 
-# Golang Review
+Review one axis: whether a Go diff follows [RULES.md](RULES.md) and applicable language contracts. Catalog rules carry aggregate support; version findings cite `/golang` official contracts, not taste.
 
-One review axis: does this Go diff follow the evidence-backed conventions in
-[RULES.md](RULES.md) and the applicable versioned language contracts? Each catalog rule
-carries an anonymous aggregate support count. Version-specific findings cite the
-official contract in `/golang`, so neither relies on reviewer taste.
+Run standalone or inline as the **golang hat** in `/review`. Reviewer lanes still require explicit delegation or `/swarm`.
 
-Runs standalone on any Go diff, or inline as the **golang hat** inside `/review`. Explicit
-delegation or `/swarm` may use this skill as a bounded reviewer-lane contract.
+## Exclude
 
-## Non-goals
-
-- Anything `golangci-lint` already enforces in the target repo -- read its config first and skip those.
-- Generic Go style (gofmt, naming, comment grammar) with no RULES.md or official
-  version-contract backing.
-- Frontend, generated files (`*.pb.go`, `*_pb.go`, `*.connect.go`, `@generated`/`DO NOT EDIT`), vendored code.
-- Re-litigating the catalog: a rule you disagree with is feedback for the catalog, not a finding to invert.
+- Anything target `golangci-lint` config already enforces.
+- Generic style without catalog/version-contract backing.
+- Frontend, vendored, and generated `*.pb.go`, `*_pb.go`, `*.connect.go`, `@generated`/`DO NOT EDIT`.
+- Catalog debate; submit feedback rather than invert a rule.
 
 ## Procedure
 
-1. **Scope**: diff from fixed point to HEAD; inspect Go and proto files plus `go.mod` or
-   `go.work` when the language or toolchain version may change. Note the repo's
-   `.golangci.yml` enabled linters; anything they enforce is out of scope.
-2. **Classify** the diff into domains: proto/API surface, public SDK/library API,
-   service handlers, Temporal workflows/activities, Kubernetes controllers, tests,
-   config/rollout, tenant-facing security paths, concurrency/lifecycle.
-3. **Load** the matching sections of [RULES.md](RULES.md) and the matching `/golang`
-   domain files (PROTO-API, CONCURRENCY, ERRORS, TESTING, TEMPORAL, SECURITY, ROLLOUT,
-   STRUCTURE, CONTROLLERS). For Go 1.27 generic methods, SDK/library compatibility, or
-   goroutine leak profiling, also load [GO-1.27.md](../golang/GO-1.27.md). Apply every
-   S/A rule in scope; B on clear violation; C/D only when the diff plainly violates the
-   statement. Apply a release contract only when the module version and changed surface
-   put it in scope.
-4. **Check the tensions list** in RULES.md and `/golang` SKILL.md before writing a
-   finding -- positive-boolean vs fail-closed, enum-subset switches, keepalive,
-   filter objects vs strings are context-dependent, not violations.
-5. **Report** findings, each with: catalog rule id or release-contract id, file:line,
-   what the diff does, the required change, and priority. Max 400 words as a panel hat;
-   standalone runs may go longer but stay source-backed.
+1. **Scope:** diff fixed point to HEAD. Inspect Go/proto plus `go.mod`/`go.work` when toolchain may change. Read `.golangci.yml`; exclude enabled lint rules.
+2. **Classify:** proto/API, public SDK/library, handlers, Temporal, controllers, tests, config/rollout, tenant security, concurrency/lifecycle.
+3. **Load:** matching [RULES.md](RULES.md) and `/golang` domain files: PROTO-API, CONCURRENCY, ERRORS, TESTING, TEMPORAL, SECURITY, ROLLOUT, STRUCTURE, CONTROLLERS. For Go 1.27 generic methods, compatibility, or leak profiling, load [GO-1.27.md](../golang/GO-1.27.md). Apply in-scope S/A rules, clear B violations, and only plain C/D violations; gate release contracts by module version/surface.
+4. **Check tensions:** positive bool versus fail-closed, enum subset, keepalive, filters. Context decides.
+5. **Report:** rule/contract id, `file:line`, behavior, required change, priority. Hat limit 400 words; standalone stays concise and sourced.
 
 ## Severity
 
-- **P0**: fail-open security predicate, tenant egress bypassing safedial, plaintext
-  secret stored/returned/logged, progress committed before durable processing,
-  unversioned change breaking live Temporal histories.
-- **P1**: any other S/A violation -- unbounded tenant-controlled growth, raw internal
-  errors on the public surface, missing staged removal, integration claim on mocks;
-  Go 1.27 syntax that exceeds the declared or supported consumer floor.
-- **P2**: B violations; S/A cases needing a judgment call the author should answer;
-  generic methods that conflict with a demonstrated interface or reflection boundary,
-  or claims that a clean leak profile proves absence of leaks.
-- **P3**: C/D wording and polish.
+- **P0:** fail-open security, unsafe tenant egress, plaintext secret, progress before durable processing, unversioned live-Temporal break.
+- **P1:** other S/A violation: unbounded tenant growth, raw public errors, missing staged removal, mocked integration claim, or Go 1.27 syntax above supported floor.
+- **P2:** B violation; judgment-call S/A; generic-method interface/reflection conflict; clean leak profile claimed as proof.
+- **P3:** C/D wording/polish.
 
-Confirmed bugs stay P0/P1 regardless of fix size.
+Confirmed bugs remain P0/P1 regardless of effort.
 
 ## Output
 
-Standard hat contract: findings must be diff-introduced, user-impacting, actionable,
-each PR-comment-ready (What, Why tied to the catalog rule or release contract, Suggested
-fix, One-shot prompt).
-When no rule or release contract in scope is violated:
+Only diff-introduced, user-impacting, actionable, PR-ready findings: What, catalog/contract-backed Why, Suggested fix, One-shot prompt. If clean:
 `APPROVED -- <domains checked>, no catalog or version-contract violations.`

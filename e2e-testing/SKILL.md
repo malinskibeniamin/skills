@@ -1,89 +1,69 @@
 ---
 name: e2e-testing
-description: Playwright + Testcontainers + axe-core E2E patterns for forms, tables, and workflows. Use when writing or fixing e2e specs, fixtures, browser tests, or debugging flaky Playwright runs.
+description: Use when writing or fixing Playwright E2E specs, fixtures, browser tests, or flakes.
 paths:
   - "e2e/**/*.spec.ts"
   - "playwright.config.ts"
 ---
 
 # E2E Testing
-Run `/read-the-damn-docs` before pinning current Playwright, Testcontainers, axe-core, or browser-tooling APIs.
+
+Run `/read-the-damn-docs` before choosing current Playwright, Testcontainers, axe-core, or
+browser APIs. Setup belongs in [SETUP.md](SETUP.md).
+
 ## Conventions
 
-- `e2e/*.spec.ts` -- all e2e tests use `.spec.ts`
-- Name by feature: `login.spec.ts`, `create-topic.spec.ts`
-- Selectors: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS
-- Test IDs: `{feature}-{element}`, `{feature}-{element}-{index}`, `{feature}-{state}`
+- Put E2E tests in `e2e/*.spec.ts`; name files by feature.
+- Select with `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS.
+- Test IDs use `{feature}-{element}`, optional index, or state.
+- The route sibling hook runs nearby browser/integration tests after route edits.
+- The structural refactor hook requires a test for new pages or extracted components.
 
-## Edit-time Hooks
+## Accessibility and browsers
 
-- **route sibling test**: when a route or `*.page.tsx` changes, run sibling `*.browser.test.*` or `*.integration.test.*`; block if it fails.
-- **structural refactor test nudge**: new `*.page.tsx` or split component file needs accompanying `.test`, `.integration.test`, or `.browser.test`.
+Run axe on every page, but automated accessibility covers only a subset. An axe-only pass
+does not prove keyboard order, focus, names, zoom, or assistive-technology behavior.
 
-## Accessibility -- axe on every page
+On PRs, run the full suite in Chromium. Tag critical journeys and credible engine risks
+`@cross-browser`; run those in Firefox and WebKit. Reserve the full browser matrix for a
+nightly lane or release gate. Emulation cannot prove every branded browser or physical device.
 
-```ts
-import { test, expect } from '../fixtures/base'
-test('page is accessible', async ({ page, makeAxeBuilder }) => {
-  await page.goto('/topics/create')
-  const results = await makeAxeBuilder().analyze()
-  expect(results.violations).toEqual([])
-})
-```
+## Determinism
 
-Automated accessibility checks detect only a subset of issues. For critical journeys,
-also verify keyboard order, focus movement, accessible names, zoom, and the target
-assistive-technology behavior; do not call an axe-only pass accessible.
+- Wait for causes, never durations. Register response/request/render promises before the
+  action. After `waitForURL`, assert a destination landmark. Ban `waitForTimeout` and
+  `expect.soft` inside `toPass`.
+- Test navigation races by delaying A, starting A, navigating to B, then proving B's state
+  and effects while A stays absent.
+- Prove debounce deadlines and cancellation with fake timers below E2E; E2E asserts visible
+  outcomes without sleeping.
+- Never use `force: true`; fix the obstruction a user would hit.
+- Match RPC routes by `Service/Method`, never a versioned prefix.
+- Wrap logical actions in `test.step()` so CI identifies the failed step.
+- Keep ephemeral UI visible in test mode, but assert lasting side effects rather than toast text.
+- Run clipboard and permission-specific specs in Chromium; cover equivalent outcomes elsewhere.
+- Buffer backend/container logs through teardown and capture startup failures. Redact secrets.
+- Use one CI retry only as a stopgap and zero as the goal. Prefer compact local reporters.
+- Delete render-only specs; each journey exercises a user-caused side effect.
 
-## Browser evidence
+## Generated and long-lived exploration
 
-Run the full suite in Chromium on PRs. Run only tagged `@cross-browser` journeys in Firefox and WebKit.
-Reserve the full declared browser matrix for a nightly lane or release gate.
-Tag critical journeys, fallbacks, and credible engine-specific risks rather than every test.
-Scope permission-specific specs when necessary, but exercise equivalent behavior elsewhere.
-Browser emulation is not proof for every branded browser or physical device risk.
+For combinatorial customer contracts that cannot be proved cheaper, use narrow generated
+action sequences or a stateful property. Follow
+[PROPERTY-BASED-TESTING.md](../tdd/PROPERTY-BASED-TESTING.md): keep an independent oracle and
+replay seed, then convert real findings to deterministic regressions. This complements fixed
+journeys, cross-browser checks, accessibility, visual review, and dogfood.
 
-## Determinism rules (mined from years of flake fixes)
+For listener, DOM, timer, subscription, or heap growth within one browser context, use
+[SOAK-TESTING.md](SOAK-TESTING.md). Isolated E2E tests cannot prove resource lifetime.
 
-- **Wait for a cause, never a duration**: `waitForURL()` after navigation clicks, then assert a destination landmark because URL publication does not prove route DOM committed. Use `waitForResponse()`/`waitForRequest()` before asserting UI the RPC drives, and element-state waits otherwise. No `waitForTimeout`; no `expect.soft` inside `toPass` (soft failures never retry the block).
-- **Navigation races**: delay route A, start A, then navigate to B. Assert B's landmark and side effects appear and A never becomes visible. Register network and rendered-state promises before the triggering actions.
-- **Timed behavior belongs below E2E**: prove debounce/delay deadlines and cancellation with fake timers in unit/integration tests; E2E asserts the visible outcome without sleeping.
-- **No `force: true` clicks** -- if the element needs forcing, something obstructs it and users hit the same wall; fix the obstruction.
-- **Match RPC routes on `Service/Method` only**, never version-pinned (`v1alpha1` in a matcher breaks on the next API bump).
-- **`test.step()` around every logical action** -- CI failure output then names the exact step; the smaller the step, the faster the diagnosis.
-- **Ephemeral UI**: run the suite with a test-mode flag that keeps toasts from auto-dismissing; assert side effects (request fired, row appeared), not toast text.
-- **Clipboard/permission-dependent specs run Chromium-only** (Firefox/WebKit permission models differ).
-- **Debuggability is part of the test**: buffer backend/container logs so they survive teardown; on `start()` failure capture logs before bailing. Redact secrets/tokens from failure dumps.
-- Retries: 1 in CI as a stopgap, 0 as the goal; a spec that needs retries has a wait bug. Locally prefer the markdown reporter (LLM-token-friendly).
-- Quality over quantity: delete render-only specs; every spec must exercise a side effect a user can cause.
+## Evidence and tools
 
-## Generated browser exploration
+Monitor `bun run test:e2e`; react to failures before completion.
 
-When a credible customer contract spans combinatorial state transitions and cannot be
-proved at a cheaper seam, use narrow generated action sequences or a stateful property.
-Follow the runner-neutral [property-based testing guide](../tdd/PROPERTY-BASED-TESTING.md):
-keep an independent boundary oracle, preserve replay evidence, and turn each real finding
-into a deterministic regression. Generated exploration complements fixed journeys,
-cross-browser checks, accessibility, visual review, and dogfood; it replaces none of them.
-
-## Long-lived SPA resources
-
-For listeners, detached DOM, timers, subscriptions, or heap growth that accumulates
-within one browser context, read [SOAK-TESTING.md](SOAK-TESTING.md). Treat the repeated
-round trip as a resource-lifetime contract; ordinary isolated E2E tests cannot prove it.
-
-## Monitor for E2E
-`Monitor: bun run test:e2e` -- stream results, react fail before suite finish.
-
-## Agent-Browser vs Playwright
-
-| Task | Tool |
-|------|------|
-| Test suites | Playwright via `Monitor: bun run test:e2e` |
-| Generate selectors | `agent-browser snapshot` (a11y tree) |
-| Visual smoke test | `agent-browser screenshot --annotate` |
-| Interactive debug | Playwright UI mode |
-| CI | Playwright |
-| AI page inspection | agent-browser |
-
-Setup (install, config, fixtures, Testcontainers): see [SETUP.md](SETUP.md).
+| Need | Tool |
+|---|---|
+| CI/test suite | Playwright |
+| Selector or AI inspection | `agent-browser snapshot` |
+| Visual smoke evidence | `agent-browser screenshot --annotate` |
+| Interactive debugging | Playwright UI mode |

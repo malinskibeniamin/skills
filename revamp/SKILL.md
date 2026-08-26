@@ -4,54 +4,46 @@ description: Run a large rewrite, port, or migration with baselines and mechanic
 disable-model-invocation: true
 ---
 
-# Revamp -- large rewrites that survive contact
-
-Distilled from Bun's Zig-to-Rust 1.4 rewrite (https://bun.com/blog/bun-in-rust): 1,448 files, 64 parallel agents, 11 days, one coordinating human, zero deleted tests. The principles are language- and model-agnostic -- any executor model works (route per CLAUDE.md model routing; cross-model review applies as everywhere).
+Large rewrites preserve behavior by separating mechanical translation from redesign. Source: https://bun.com/blog/bun-in-rust. Any executor follows repository model routing; invocation alone authorizes no agents.
 
 ## 1. Baselines before any code
 
-- **Freeze a bug ledger**: enumerate known defects in the current system first. Post-rewrite triage needs to distinguish "regression" from "was always broken".
-- **Benchmark the incumbent**: throughput, memory, binary/bundle size, latency -- identical workload, identical hardware, recorded numbers. "Feels faster" is not evidence.
-- **Count the tests**: record total assertions now; the rewrite exit gate asserts none were skipped, weakened, or deleted.
+- Freeze known defects so regressions remain distinguishable from old bugs.
+- Benchmark throughput, memory, artifact size, and latency on the same workload/hardware.
+- Count assertions; exit with none skipped, weakened, or deleted.
 
-## 2. Tests are the contract, keep them implementation-independent
+## 2. Tests are implementation-independent
 
-The suite must NOT be written in/coupled to the thing being replaced. Language-independent tests (e.g. TypeScript tests against a CLI/API surface) let you swap the engine underneath with confidence. If the suite is coupled, decouple it FIRST -- that is phase 0, not overhead.
+Tests must target a language-independent CLI/API boundary, not the implementation being replaced. If coupled, decouple first as phase 0.
 
 ## 3. Mechanical first, idiomatic later
 
-Translate 1:1 -- "as if transpiled" -- preserving architecture, names, and structure. Refactor toward idiomatic patterns only AFTER parity is proven. Two transformations at once (port + redesign) makes every failure ambiguous. Big-bang beats incremental when temporary bridge code would outlive its welcome; incremental beats big-bang when the system must ship weekly -- pick deliberately and write the choice down.
+Translate 1:1, preserving architecture, names, and structure. Refactor only after parity. Port plus redesign makes failures ambiguous. Choose and record big-bang when bridges would linger; choose incremental when the system must keep shipping.
 
 ## 4. Trial run before fleet
 
-Port 3 representative files end-to-end with the FULL loop (translate -> compile -> adversarial review -> tests) before scaling to hundreds. The trial calibrates prompts, review checklists, and the work queue; scaling a broken loop scales the breakage.
+Port three representative files through translate -> compile -> adversarial review -> tests. Use the trial to calibrate prompts, checks, and queue before scaling.
 
-## 5. Compiler/typechecker as the work queue
+## 5. Mechanical work queue
 
-Drive the work from ranked mechanical signals such as `cargo check` or `tsc` errors.
-Without delegation, work sequentially under one owner. After explicit delegation or
-`/swarm`, isolate independent lanes in worktrees; each lane commits only its assigned scope
-and never stashes, resets, or edits another lane.
+Rank `cargo check`, `tsc`, or equivalent errors. Without delegation, work sequentially under one owner. With delegation or `/swarm`, isolate independent worktrees; each lane commits only its scope and never stashes, resets, or edits another.
 
 ## 6. Adversarial review with fresh context
 
-The implementer uses full codebase context; the review pass starts from the diff and its
-contract, assuming the translation may be wrong. At a non-trivial PR or ship endpoint, use
-the repository's permitted foreground cross-model review. Otherwise review inline with a
-fresh evidence pass.
+Review from diff and contract, assuming semantic drift. At a non-trivial PR or ship endpoint, use only repository-permitted foreground cross-model review; otherwise perform a fresh inline evidence pass.
 
 ## 7. Semantic-equivalence traps
 
-Identical-looking constructs differ across stacks. Hunt deliberately for: assertion/debug constructs that erase side effects in release builds, integer overflow and bounds-check differences, default copy-vs-reference semantics, recursion/stack limits (test pathologically nested inputs, thousands deep), locale/encoding defaults. Every trap found becomes a fixture, not a note.
+Probe release-erased assertions/side effects, integer overflow/bounds, copy-versus-reference defaults, recursion/stack limits with deeply nested fixtures, and locale/encoding defaults. Every discovered trap becomes a fixture.
 
-## 8. Fix the process, not the output
+## 8. Repair the process
 
-When an executor produces bad code, do not hand-fix it -- fix the prompt/checklist/queue that produced it and rerun. Hand-fixes don't scale past file ten; process fixes carry the remaining thousand. Human role: read validation reports, spot-check, verify tests weren't skipped in CI, press merge.
+When an executor fails, fix the prompt/checklist/queue and rerun rather than hand-fixing output. Humans inspect validation, spot-check, ensure CI kept tests, and own merge.
 
-## Exit gate
+## Exit
 
-- [ ] All pre-rewrite tests pass, zero skipped/deleted (compare assertion counts)
-- [ ] Benchmarks meet or beat the recorded baseline on the same workload/hardware
-- [ ] Bug ledger triaged: every pre-existing defect still tracked, no new class of regression
-- [ ] Adversarial review ran on every diff (cross-model per CLAUDE.md)
-- [ ] Rollback documented: the old implementation stays shippable until the gate passes
+- All prior tests pass; zero skipped/deleted; assertion count reconciled.
+- Same-workload/hardware benchmark meets the recorded baseline.
+- Bug ledger distinguishes pre-existing defects and new regressions.
+- Every diff receives adversarial review under repository policy.
+- Rollback is documented; old implementation stays shippable until exit.

@@ -2,17 +2,11 @@
 name: resolving-merge-conflicts
 description: "Resolve an in-progress Git merge or rebase conflict."
 ---
-Use `/agent-watchdog` when conflict context is another agent branch/claim; use `/plan-arbiter` when semantic conflict choices remain viable after source review.
 
-1. **See the current state** of the merge/rebase. Check git history, and the conflicting files.
+Use `/agent-watchdog` for another agent's branch/claim; `/plan-arbiter` when viable semantic choices remain.
 
-2. **Find the primary sources** for each conflict. Understand deeply why each change was made, and what the original intent was. Read the commit messages, check the PRs, check original issues/tickets.
-
-3. **Resolve each hunk.** Preserve both intents where possible. Where incompatible, pick the
-   one matching the merge's stated goal and note the trade-off. If primary sources show the
-   merge/rebase itself is wrong, or the intended result remains ambiguous, stop with the exact
-   conflict and ask whether to abort; never abort without approval.
-
-4. Discover the project's **automated checks** and run them -- typically typecheck, then tests, then format. Fix anything the merge broke.
-
-5. **Finish the merge/rebase.** Stage everything and commit. If rebasing, continue the rebase process until all commits are rebased.
+1. Inspect merge/rebase state, history, conflicts.
+2. Find primary intent sources: commits, PRs, issues/tickets, surrounding code.
+3. Resolve hunks preserving both intents. If incompatible, choose the merge goal and note trade-off. If operation is wrong or intent remains ambiguous, show exact conflict and ask whether to abort; never abort unasked.
+4. Run project checks, typically typecheck, tests, format; fix merge breakage.
+5. Stage and finish merge, or continue rebase through all commits.

@@ -3,24 +3,10 @@ name: visual-plan
 description: Create interactive Agent-Native visual plans with diagrams, file maps, annotated code, and UI review. Use when planning non-trivial product, UI, architecture, data, API, or competing options.
 ---
 
-# Visual Plan
-Local override: translate upstream `npx @agent-native/core` examples to `bunx @agent-native/core`.
+Translate upstream `npx @agent-native/core` to `bunx @agent-native/core`.
 
-## Required references
+Before create/update, read `references/agent-native-plan.md`; it owns Agent-Native contract, Plan MCP, block catalog, surface choice, comment loop, local privacy, quality.
 
-Before creating or updating a visual plan, read `references/agent-native-plan.md`. It owns the full Agent-Native plan contract, Plan MCP usage, block catalog requirement, visual surface choice, comment loop, local-files privacy mode, and document quality rules.
+Load only when relevant: `references/connection.md` for connector/fallback; `references/local-files.md` private/offline; `references/wireframe.md` HTML/CSS; `references/canvas.md` prototype surface; `references/document-quality.md` standalone gates; `references/exemplar.md` structure.
 
-Read these only when relevant:
-
-- `references/connection.md` -- connector discovery, never-inline fallback, reconnect steps.
-- `references/local-files.md` -- local/offline/private plan mode.
-- `references/wireframe.md` -- wireframe HTML/CSS rules.
-- `references/canvas.md` -- canvas/prototype review surface.
-- `references/document-quality.md` -- standalone plan quality gates.
-- `references/exemplar.md` -- example plan structure.
-
-## Local harness overlay
-
-- Use `/plan-arbiter` when multiple plans or agents disagree.
-- Use `/grilling` before implementation when decisions remain open.
-- Planning is read-only unless the user explicitly approves implementation.
+Use `/plan-arbiter` for disagreement and `/grilling` for open decisions. Planning is read-only until explicit implementation approval.

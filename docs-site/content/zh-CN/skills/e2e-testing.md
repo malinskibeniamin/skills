@@ -1,8 +1,6 @@
 ---
 title: /e2e-testing
-description: >-
-  适用于表单、表格和工作流的 Playwright + Testcontainers + axe-core
-  端到端测试模式。在编写或修复端到端测试规范、测试夹具、浏览器测试，或调试不稳定的 Playwright 运行时使用。
+description: "编写或修复 Playwright E2E 规范、夹具、浏览器测试或不稳定测试时使用。"
 type: skill
 sidebar:
   label: /e2e-testing
@@ -11,83 +9,51 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/e2e-testing.excalidraw)
 
-在固定当前 Playwright、Testcontainers、axe-core 或浏览器工具 API 的版本前，先运行 `/read-the-damn-docs`。
+# E2E 测试
+
+选择当前 Playwright、Testcontainers、axe-core 或浏览器 API 前，先运行 `/read-the-damn-docs`。初始设置见 [SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SETUP.md)。
+
 ## 约定
 
-- `e2e/*.spec.ts` -- 所有端到端测试都使用 `.spec.ts`
-- 按功能命名：`login.spec.ts`、`create-topic.spec.ts`
-- 选择器：`getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS
-- 测试 ID：`{feature}-{element}`、`{feature}-{element}-{index}`、`{feature}-{state}`
+- E2E 测试放在 `e2e/*.spec.ts`，文件按功能命名。
+- 选择器优先级：`getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS。
+- 测试 ID 使用 `{feature}-{element}`，可加索引或状态。
+- 路由兄弟钩子会在路由编辑后运行相邻浏览器或集成测试。
+- 结构重构钩子要求新页面或抽取组件配套测试。
 
-## 编辑时钩子
+## 无障碍和浏览器
 
-- **路由同级测试**：当路由或 `*.page.tsx` 发生更改时，运行同级的 `*.browser.test.*` 或 `*.integration.test.*`；如果失败则阻止继续。
-- **结构重构测试提醒**：新增 `*.page.tsx` 或拆分出的组件文件需要随附 `.test`、`.integration.test` 或 `.browser.test`。
+每个页面都运行 axe，但自动化无障碍检查只覆盖一部分。仅通过 axe 不能证明键盘顺序、焦点、名称、缩放或辅助技术行为。
 
-## 无障碍性 -- 每个页面都运行 axe
+PR 在 Chromium 中运行完整套件。将关键路径和可信引擎风险标记为 `@cross-browser`，并在 Firefox 与 WebKit 中运行。完整浏览器矩阵留给夜间通道或发布门禁。模拟不能证明所有品牌浏览器或实体设备。
 
-```ts
-import { test, expect } from '../fixtures/base'
-test('page is accessible', async ({ page, makeAxeBuilder }) => {
-  await page.goto('/topics/create')
-  const results = await makeAxeBuilder().analyze()
-  expect(results.violations).toEqual([])
-})
-```
+## 确定性
 
-自动化无障碍性检查只能检测部分问题。对于关键流程，
-还要验证键盘顺序、焦点移动、无障碍名称、缩放以及目标
-辅助技术的行为；不要将仅通过 axe 检查称为无障碍。
+- 等待原因，不等待时长。操作前注册响应、请求或渲染 Promise。`waitForURL` 后断言目标地标。禁止 `waitForTimeout`，也不要在 `toPass` 中使用 `expect.soft`。
+- 测试导航竞态：延迟 A、启动 A、导航到 B，再证明 B 的状态和副作用存在且 A 不出现。
+- 在 E2E 以下层级用假计时器证明防抖截止时间与取消；E2E 不睡眠，只断言可见结果。
+- 不使用 `force: true`；修复真实用户会遇到的遮挡。
+- RPC 路由按 `Service/Method` 匹配，不匹配版本前缀。
+- 用 `test.step()` 包裹逻辑操作，让 CI 指明失败步骤。
+- 测试模式下让短暂 UI 保持可见，但断言持久副作用而非 toast 文本。
+- 剪贴板和权限特定规范在 Chromium 运行；其他浏览器覆盖等价结果。
+- 缓冲后端或容器日志直到 teardown，并捕获启动失败。遮蔽秘密。
+- CI 只允许一次重试作为临时措施，目标为零；本地使用简洁 reporter。
+- 删除仅验证渲染的规范；每段旅程都要触发用户造成的副作用。
 
-## 浏览器证据
+## 生成式与长时间探索
 
-在 PR 中使用 Chromium 运行完整测试套件。在 Firefox 和 WebKit 中仅运行标记为 `@cross-browser` 的流程。
-将完整的已声明浏览器矩阵留给夜间流水线或发布门禁。
-应标记关键流程、回退路径和可信的引擎特有风险，而不是标记每个测试。
-必要时限制权限特定测试规范的范围，但要在其他环境中验证等效行为。
-浏览器模拟并不能证明覆盖了每种品牌浏览器或物理设备的风险。
+仅当组合式客户契约没有更便宜的证明方式时，使用窄范围生成动作序列或有状态属性。遵循[基于属性的测试](https://github.com/malinskibeniamin/skills/blob/main/tdd/PROPERTY-BASED-TESTING.md)：保留独立 oracle 和可重放 seed，再把真实发现转为确定性回归。它补充固定旅程、跨浏览器检查、无障碍、视觉审查和 dogfood。
 
-## 确定性规则（从多年修复不稳定测试的经验中总结）
+要检查同一浏览器上下文中的监听器、DOM、计时器、订阅或堆增长，使用[浸泡测试](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SOAK-TESTING.md)。相互隔离的 E2E 测试无法证明资源生命周期。
 
-- **等待原因，绝不等待固定时长**：导航点击后使用 `waitForURL()`，然后断言目标页面的标志性元素，因为 URL 已更新并不能证明路由 DOM 已完成提交。在断言由 RPC 驱动的界面前使用 `waitForResponse()`/`waitForRequest()`；其他情况等待元素状态。不要使用 `waitForTimeout`；不要在 `toPass` 中使用 `expect.soft`（软失败不会重试该代码块）。
-- **导航竞态**：延迟路由 A，开始导航到 A，然后导航到 B。断言 B 的标志性元素和副作用出现，并且 A 始终不可见。在触发操作之前注册网络和渲染状态 Promise。
-- **定时行为应在端到端测试以下的层级验证**：在单元测试或集成测试中使用模拟计时器验证防抖/延迟的时限和取消行为；端到端测试无需休眠，只断言可见结果。
-- **不要使用 `force: true` 点击** -- 如果元素需要强制点击，说明有东西遮挡了它，用户也会遇到同样的阻碍；应修复遮挡问题。
-- **仅按 `Service/Method` 匹配 RPC 路由**，绝不固定版本（匹配器中的 `v1alpha1` 会在下一次 API 版本升级时失效）。
-- **用 `test.step()` 包裹每个逻辑操作** -- 这样 CI 失败输出就能指出确切步骤；步骤越小，诊断越快。
-- **短暂显示的界面元素**：使用能阻止消息提示自动消失的测试模式标志运行测试套件；断言副作用（请求已发出、行已出现），而不是消息提示文本。
-- **依赖剪贴板/权限的测试规范仅在 Chromium 中运行**（Firefox/WebKit 的权限模型不同）。
-- **可调试性是测试的一部分**：缓冲后端/容器日志，使其在清理后仍然保留；当 `start()` 失败时，在退出前捕获日志。从失败信息转储中隐去密钥/令牌。
-- 重试：CI 中暂时设为 1 次，目标是 0 次；需要重试的测试规范存在等待逻辑缺陷。本地优先使用 Markdown 报告器（对大语言模型令牌更友好）。
-- 质量重于数量：删除仅验证渲染的测试规范；每个测试规范都必须触发用户可以执行的副作用。
+## 证据与工具
 
-## 生成式浏览器探索
+监控 `bun run test:e2e`，在完成前处理失败。
 
-当一个可信的客户契约涉及组合式状态转换，并且无法在成本更低的边界上
-得到验证时，使用范围有限的生成式操作序列或有状态属性。
-遵循与运行器无关的[基于属性的测试指南](https://github.com/malinskibeniamin/skills/blob/main/tdd/PROPERTY-BASED-TESTING.md)：
-保留独立的边界预言机，保存重放证据，并将每个真实发现
-转化为确定性回归测试。生成式探索是固定流程、
-跨浏览器检查、无障碍性检查、视觉审查和内部试用的补充；它不会取代其中任何一项。
-
-## 长期运行的 SPA 资源
-
-对于在同一浏览器上下文中持续累积的监听器、已分离的 DOM、计时器、订阅或堆增长，
-请阅读 [SOAK-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SOAK-TESTING.md)。将重复的
-往返过程视为资源生命周期契约；普通的隔离端到端测试无法验证这一点。
-
-## 端到端测试监控
-`Monitor: bun run test:e2e` -- 流式输出结果，在测试套件完成前对失败作出响应。
-
-## Agent-Browser 与 Playwright
-
-| 任务 | 工具 |
-|------|------|
-| 测试套件 | 通过 `Monitor: bun run test:e2e` 使用 Playwright |
-| 生成选择器 | `agent-browser snapshot`（无障碍树） |
-| 视觉冒烟测试 | `agent-browser screenshot --annotate` |
+| 需要 | 工具 |
+|---|---|
+| CI／测试套件 | Playwright |
+| 选择器或 AI 检查 | `agent-browser snapshot` |
+| 视觉冒烟证据 | `agent-browser screenshot --annotate` |
 | 交互式调试 | Playwright UI 模式 |
-| CI | Playwright |
-| AI 页面检查 | agent-browser |
-
-设置（安装、配置、测试夹具、Testcontainers）：请参阅 [SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SETUP.md)。

@@ -6,65 +6,44 @@ paths:
   - "**/go.mod"
 ---
 
-# Go engineering
+This core routes to domain guidance; `/golang-review` owns the aggregate [rule catalog](../golang-review/RULES.md). `/aip` owns resource design; this skill owns Go implementation.
 
-Conventions synthesized from two years of multi-repository review: 102 rules, each
-supported by at least three independent examples. This file holds the core; domain files
-hold the working guidance; anonymous aggregate support lives in the `/golang-review`
-[rule catalog](../golang-review/RULES.md). `/aip` owns proto resource *design*; this
-skill owns the Go *implementation* around it.
+## Non-negotiables
 
-## Non-negotiables (S grade)
+- Bound tenant-controlled memory, cardinality, fan-out, concurrency, and response size.
+- Traverse protos with generated getters: `a.GetB().GetC()`.
+- Proto annotations own field contracts; do not duplicate handler validation.
+- Use `optional` only for semantic presence; update intent belongs in masks.
+- Collections are paginated, filterable `List`; `Get` returns one resource.
+- At API boundaries, log internal causes and return structured Connect/gRPC errors with stable reasons and public paths. Preserve upstream per-item granularity.
+- Security fails closed; secrets are references, never plaintext input, storage, output, or logs.
+- Bound retry/backoff inside the owning timeout.
+- Reuse semantic config types, not strings or bool sets.
+- Feature-flag risky mixed-version rollout and remove flags after convergence.
+- Bootstrap files wire; packages own behavior.
+- Integration tests cross real boundaries; tests assert stable behavior, not paths or incidental text.
 
-- **Bound everything workload- or tenant-controlled**: memory, cardinality, fan-out, concurrency, response size. Unbounded input becomes OOM and cardinality failure.
-- **Traverse protos with generated getters** -- `a.GetB().GetC()`, never nil-check ladders.
-- **Proto annotations own field contracts** (behavior, requiredness, bounds); never duplicate validation in handlers.
-- **`optional` only for semantic presence**: if zero is a legitimate value, no `optional`; update intent lives in the mask.
-- **Collections are `List`** -- paginated and filterable; `Get` returns exactly one resource.
-- **Translate errors at the API boundary**: log the internal cause, return structured Connect/gRPC errors with stable reasons and public field paths. Preserve upstream protocol granularity (Kafka per-partition, per-item) on the way.
-- **Security predicates fail closed**: missing config, errored license/authz backend, partial policy state deny -- never default to allow.
-- **Secrets are references**: never accept, store, return, or log plaintext secret material.
-- **Retry/backoff fits the operation lifetime**: jitter, bounded max, cumulative horizon inside the owning timeout.
-- **Config uses semantic types**: reuse the repo's config structs (`config.TLS`, durations, enums), never bare strings and bool sets.
-- **Feature-flag risky mixed-version rollouts**; flags are migration tools, removed after the fleet converges.
-- **Server/bootstrap files wire; packages own behavior** -- construction and wiring only in `server.go`.
-- **Integration tests cross the real boundary**; mocks never prove provider, billing, or serialization compatibility.
-- **Tests assert stable observable behavior**, not path execution or incidental message text.
+## Contextual tensions
 
-## Tensions -- context decides, do not flatten
+- Prefer positive config booleans, except negative `disabled` when the zero value must fail closed.
+- Exhaustive enum switches reject unknowns; intentional subsets document ignored values.
+- gRPC keepalive depends on every intermediary.
+- New AIP surfaces use bounded filter strings; preserve established typed filters for compatibility.
+- Fakes suit unit tests, never claims of protocol, role, provider, or container compatibility.
 
-- Positive config booleans for readability -- **except** when the Go zero value must
-  fail closed on a security path; then a negative `disabled` field is correct.
-- Enum switches fail on unknown values only when they claim the full domain; an
-  intentional subset documents and ignores the rest.
-- gRPC keepalive depends on every intermediary acknowledging it; no universal setting.
-- AIP-compatible surfaces use bounded filter strings; established typed-filter APIs
-  preserve their object shape for compatibility.
-- Unit tests fake dependencies freely; the moment a test claims boundary compatibility
-  it must cross the real protocol, role, provider, or container.
+## Load by task
 
-## Domain files
-
-| Working on | Read |
+| Work | Read |
 |---|---|
-| Protos, handlers, Connect/gRPC surface, public errors | [PROTO-API.md](PROTO-API.md) |
-| Goroutines, channels, caches, shutdown, shared state | [CONCURRENCY.md](CONCURRENCY.md) |
-| Error wrapping/classification, logging, metrics | [ERRORS.md](ERRORS.md) |
-| Any `_test.go`, fixtures, CI behavior | [TESTING.md](TESTING.md) |
-| Temporal workflows, activities, signals | [TEMPORAL.md](TEMPORAL.md) |
+| Protos, handlers, Connect/gRPC, public errors | [PROTO-API.md](PROTO-API.md) |
+| Goroutines, caches, shutdown, shared state | [CONCURRENCY.md](CONCURRENCY.md) |
+| Errors, logging, metrics | [ERRORS.md](ERRORS.md) |
+| Tests and CI | [TESTING.md](TESTING.md) |
+| Temporal | [TEMPORAL.md](TEMPORAL.md) |
 | Tenant input, egress, authz, secrets, destructive ops | [SECURITY.md](SECURITY.md) |
-| Config surfaces, flags, deprecations, schema/field removal | [ROLLOUT.md](ROLLOUT.md) |
-| Package boundaries, storage layers, interfaces | [STRUCTURE.md](STRUCTURE.md) |
-| Kubernetes operators and reconcilers | [CONTROLLERS.md](CONTROLLERS.md) |
-| Go 1.27 generic methods, public SDK/library compatibility, goroutine leak profiles | [GO-1.27.md](GO-1.27.md) |
+| Flags, deprecation, schema removal | [ROLLOUT.md](ROLLOUT.md) |
+| Packages, storage, interfaces | [STRUCTURE.md](STRUCTURE.md) |
+| Operators and reconcilers | [CONTROLLERS.md](CONTROLLERS.md) |
+| Go 1.27 APIs and leak profiles | [GO-1.27.md](GO-1.27.md) |
 
-## Hooks
-
-Two mechanical checks run on edits; both warn, never block:
-
-- `go-proto-reserved`: removing a shipped proto field must add `reserved N;` and
-  `reserved "name";`; renumbering is never safe. Escape: `// allow: proto-unshipped [reason]`.
-- `go-test-image-pin`: test/container images pin a supported release tag, never
-  `:latest`/`:main`/`:master`. Escape: `// allow: floating-image [reason]`.
-
-Reviewing a diff instead of writing code? That is `/golang-review`.
+Hooks warn on unreserved shipped proto removals and floating test images. Review diffs with `/golang-review`.

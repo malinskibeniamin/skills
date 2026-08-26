@@ -5,65 +5,49 @@ disable-model-invocation: true
 argument-hint: "[version]"
 ---
 
-# Release
+Publish without metadata, tags, or caches diverging. Version must be exact stable SemVer such as `4.34.0`.
 
-Publish this repository without letting metadata, tags, or runtime caches diverge. The
-version argument must resolve to an exact stable SemVer such as `4.34.0`.
-
-## 1. Establish the release point
+## 1. Establish
 
 1. Fetch `origin/main`; require a clean worktree on a feature branch based on latest main.
-2. Read commits and merged PRs since the latest `v*` tag. Write release scope from evidence.
-3. Require green CI at `origin/main`; reproduce and fix any failure before version work.
-4. Prove the local tag, remote tag, and GitHub release are absent. Any collision stops.
-5. Confirm the request carries merge permission and publication permission. An explicit
-   `/release <version>` or "cut/publish <version>" does; planning or discussing a release does not.
+2. Derive scope from commits/merged PRs since latest `v*` tag.
+3. Require green `origin/main` CI; reproduce/fix failures before versioning.
+4. Prove local tag, remote tag, GitHub release absent; collision stops.
+5. Require merge and publication permission. `/release <version>` or `cut/publish <version>` grants it; discussion does not.
 
 ## 2. Prepare test-first
 
-1. Change `evals/test-improve-release-metadata.sh` to the target version first.
-2. Run it and record the expected RED release-metadata failures.
-3. Update `skill-manifest.json`, both plugin manifests, both marketplaces, their dated
-   changelog entries, `CHANGELOG.md`, and the README install pin together.
-4. If the skill surface changed, run the hook, catalog, and AGENTS generators. Never hand-edit
-   generated Codex proxies.
-5. Freeze the release's docs with `bun run docs:version v<version>`. Commit the generated
-   snapshot and its new `versions.archived` entry; never edit an existing snapshot.
-6. Replay the focused release metadata and packaging evals to GREEN.
+1. First change `evals/test-improve-release-metadata.sh`; record expected RED metadata failures.
+2. Update `skill-manifest.json`, plugin manifests, both marketplaces, dated changelogs, `CHANGELOG.md`, README pin together.
+3. For skill-surface changes run hook/catalog/AGENTS generators; never hand-edit generated Codex proxies.
+4. Freeze docs with `bun run docs:version v<version>`; commit new snapshot and `versions.archived`, never edit old snapshots.
+5. Replay release metadata/packaging evals GREEN.
 
-## 3. Verify the package
+## 3. Verify
 
-Run the repository quality gate, package tests, full shell eval suite, behavioral hook tests,
-generator drift checks, JSON parsing, and `git diff --check`. Require both real isolated CLI
-installers:
+Run quality gate, package tests, full shell evals, hook behavior, generator drift, JSON parsing, `git diff --check`, and real isolated installers:
 
 ```bash
 bash scripts/test-claude-plugin-install.sh
 bash scripts/test-codex-plugin-install.sh
 ```
 
-Run `/dogfood` against both packaged skill surfaces. Visual review is skipped when the diff has
-no rendered customer surface. Review the fixed-point diff for standards, value, resilience,
-packaging, and immutable-release risks.
+Run `/dogfood` on both packaged surfaces; skip visual review only without rendered customer surface. Review fixed-point diff for standards, value, resilience, packaging, immutable-release risk.
 
-## 4. Land before tagging
+## 4. Land then tag
 
-1. Commit, push, and open the release PR through `/go`; include the dogfood receipt and counts.
-2. Monitor every required PR check and resolve every existing review thread.
-3. Merge only under the merge permission established in step 1.
-4. Fetch main and wait for green main-branch CI on the merge commit.
-5. Create and push annotated `v<version>` at that merge commit, never at the feature commit.
+1. Commit/push/open release PR through `/go`; include dogfood receipt/counts.
+2. Resolve all checks and existing review threads.
+3. Merge only with established merge permission.
+4. Fetch main; require green main CI at merge commit.
+5. Create/push annotated `v<version>` at merge commit, never feature commit.
 
-## 5. Publish and replay
+## 5. Publish/replay
 
-1. Run `gh release create v<version> --verify-tag --latest` with scoped notes and comparison link.
-2. Verify the remote tag peels to the merge commit, its tree matches released main, and the
-   repository's latest release is the new tag.
-3. From fresh isolated Claude configuration, add the remote marketplace, install the plugin,
-   and verify its version plus the newly released skill surface.
-4. From fresh isolated Codex configuration, add the remote marketplace pinned to the new tag,
-   install the plugin, and verify the same. Claude and Codex fresh isolated installs must pass.
-5. Upgrade the user's live installations only when requested; both clients need restart/reload.
+1. `gh release create v<version> --verify-tag --latest` with scoped notes/comparison.
+2. Verify remote tag peels to merge commit, tree equals released main, and latest release is new tag.
+3. From fresh isolated Claude config: add remote marketplace, install, verify version/new skill surface.
+4. From fresh isolated Codex config: add marketplace pinned to tag, install, verify same. Both must pass.
+5. Upgrade live installs only when requested; clients require restart/reload.
 
-Finish with PR and release URLs, tag/merge identity, CI results, installer evidence, and one
-visible terminal status.
+Report PR/release URLs, tag/merge identity, CI, installer evidence, and one visible terminal status.

@@ -1,6 +1,6 @@
 ---
 name: ask-ben
-description: Router for Ben's frontend-skills harness and every local skill.
+description: Route Ben's frontend skills.
 disable-model-invocation: true
 ---
 
