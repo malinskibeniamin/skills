@@ -6,8 +6,8 @@
 # emits a Claude Code hookSpecificOutput with `updatedInput.command`
 # rewritten to `rtk <command>` when rtk has a filter for it.
 #
-# Fail-open: if rtk is not installed, exit 0 silently. rtk-install-check.sh
-# (SessionStart) nudges the user once per session.
+# Fail-open: if rtk is not installed, exit 0 silently and let the original
+# command run unchanged.
 #
 # Run LAST in the PreToolUse Bash chain so upstream hooks (deny rules,
 # bash-verbose-guard nudges) see the original command, not the rtk-wrapped

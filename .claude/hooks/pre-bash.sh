@@ -2,10 +2,10 @@
 set -uo pipefail
 
 # PreToolUse(Bash) dispatcher: one process decides which guards can possibly
-# fire before spawning any of them. Each child costs ~25-125ms (hook-lib init);
-# an innocent `ls` used to pay all seven. Now the dispatcher extracts the
-# command once and spawns only children whose trigger union matches -- the
-# innocent path is one jq call.
+# fire before spawning them. Each policy child costs ~25-125ms (hook-lib init);
+# an innocent `ls` used to pay all guards. Now the dispatcher extracts the
+# command once, spawns only matching policy children, then always delegates to
+# RTK so its upstream registry owns rewrite-versus-pass-through decisions.
 #
 # Contract: children run in order; first deny (exit 2) wins -- its output is
 # forwarded and the batch stops; otherwise all stderr (nudges) is forwarded
@@ -34,7 +34,8 @@ _hooks=(
   # (PR 72 review). The union below covers every shape the guard accepts.
   "snyk-project-create-guard.sh|snyk"
   "bash-verbose-guard.sh|git commit|gh |curl|wget|taskw|bun run|--json|--jq"
-  "rtk-rewrite.sh|git|gh |cargo|go |bun|vitest|npm|pnpm"
+  # Universal by design: RTK's registry is the command allowlist.
+  "rtk-rewrite.sh|.+"
 )
 
 _stdout_final=""
