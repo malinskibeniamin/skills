@@ -13,86 +13,46 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/tdd.excalidraw)
 
-TDD chroni istotne zachowanie; nie jest kosztem nakładanym na każdy zmieniony plik.
 
-Stosuj RED -> GREEN -> REFACTOR w przypadku błędów, regresji oraz nowych lub zmienionych
-kontraktów: reguł domenowych, rozgałęzień, przejść stanów, parsowania, walidacji,
-efektów asynchronicznych i zachowania integracji, których awaria ma znaczenie. Typy,
-reeksporty, deklaratywne połączenia, statyczne teksty i style oraz usuwanie
-niezmieniające zachowania mogą wymagać jedynie istniejącej, ukierunkowanej weryfikacji.
-
-Pokrycie może ujawnić podejrzewaną lukę. Nigdy nie jest celem ani powodem
-do wymyślania testów.
+TDD chroni istotne zachowanie. Stosuj RED -> GREEN -> REFACTOR w przypadku zmienionych reguł domenowych, rozgałęzień, stanów, parsowania, walidacji, efektów asynchronicznych i kontraktów integracji. Typy, reeksporty, połączenia, statyczne teksty i style oraz usuwanie niezmieniające zachowania mogą wymagać ukierunkowanej weryfikacji. Pokrycie może ujawnić przeoczenie, ale nigdy nie jest celem.
 
 ## Punkty styku do testów i antywzorce
 
-- **Punkty styku**: testuj na publicznych granicach. Przed napisaniem testu określ punkt styku i potwierdź z użytkownikiem wcześniej uzgodnione punkty, jeśli problem lub istniejąca konwencja nie wskazują ich jednoznacznie. Nie testuj niepotwierdzonych elementów wewnętrznych.
-- **Testy tautologiczne**: nie wyliczaj oczekiwanych wartości w taki sam sposób jak kod; użyj niezależnego źródła prawdy: sprawdzonego literału, rozwiązanego przykładu, danych testowych, specyfikacji lub zaobserwowanego zachowania.
-- **Przekroje poziome**: nie pisz najpierw wszystkich testów, a potem całej implementacji. Testy tworzone zbiorczo sprawdzają wyobrażone zachowanie. Poprawnie: przekroje pionowe — jeden test i implementacja RED->GREEN, a następnie powtórzenie cyklu.
-
-Jeśli sam publiczny punkt styku jest niejasny, użyj `/codebase-design`; nie wymyślaj
-wewnętrznego punktu styku dla wygody testowania.
+- **Punkty styku:** testuj na publicznych granicach. Najpierw nazwij punkt styku; potwierdź z użytkownikiem wcześniej uzgodnione punkty, jeśli problem i konwencja nie wskazują ich jednoznacznie. Nie testuj niepotwierdzonych elementów wewnętrznych. Użyj `/codebase-design`, zamiast wymyślać punkt styku dla wygody.
+- **Testy tautologiczne:** oczekiwane wartości wymagają niezależnego źródła prawdy: literału, rozwiązanego przykładu, danych testowych, specyfikacji lub obserwacji.
+- **Przybliżenia oparte na tekście źródłowym:** usuń testy, które odczytują kod implementacji, CSS, znaczniki lub konfigurację i traktują asercje dotyczące tokenów lub wyrażeń regularnych jako dowód zachowania w czasie działania. Zastąp je testami publicznego punktu styku, gdy zachowanie ma znaczenie; użyj analizy statycznej, gdy kontraktem jest składnia. Zachowaj asercje treści tylko wtedy, gdy plik lub zserializowany tekst sam jest publicznym wynikiem.
+- **Przekroje pionowe:** stosuj przekroje pionowe: za każdym razem jeden test RED i implementacja GREEN; testy tworzone zbiorczo utrwalają wyobrażone zachowanie.
 
 ## Przebieg pracy
 
-### 0. Kontrakt
+### Kontrakt
 
-- Nazwij obserwowalne zachowanie publicznego interfejsu. Stosuj słownik domenowy projektu i ADR-y.
-- Wybierz najmniejszy test, który zakończyłby się niepowodzeniem, gdyby to zachowanie przestało działać. Jeden test może obejmować wiele wierszy.
-- Dodaj kolejny przypadek tylko dla niezależnego, wiarygodnego ryzyka, a nie dla każdej możliwej sytuacji brzegowej.
-- Gdy jedna niezmiennicza reguła obejmuje wejścia o dużej liczbie możliwych wartości lub osiągalne sekwencje stanów, przeczytaj
-  [o testowaniu opartym na właściwościach](https://github.com/malinskibeniamin/skills/blob/main/tdd/PROPERTY-BASED-TESTING.md). Wymagaj niezależnej wyroczni i odtwarzalnych niepowodzeń.
-- Dla kontraktu czasu życia zasobu na długo działającej stronie przeglądarkowej użyj powtarzalnego
-  pełnego cyklu i przeczytaj [o testach długotrwałych SPA](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SOAK-TESTING.md). Nowy
-  kontekst przeglądarki nie ujawni kumulacji między interakcjami.
-- Jeśli zachowanie zewnętrznego rozwiązania definiuje kontrakt, użyj `/read-the-damn-docs`.
-- Przeczytaj [tests.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/tests.md), gdy punkt styku lub forma testu są niejasne.
+- Nazwij obserwowalne zachowanie publicznego interfejsu; stosuj słownik domenowy projektu i ADR-y.
+- Wybierz najmniejszy test, który zakończy się niepowodzeniem, gdy zachowanie przestanie działać. Dodawaj przypadki tylko dla niezależnych, wiarygodnych ryzyk.
+- Dla niezmienników obejmujących wejścia o dużej liczbie możliwych wartości lub sekwencje stanów przeczytaj [PROPERTY-BASED-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/PROPERTY-BASED-TESTING.md); wymagaj niezależnej wyroczni i możliwości odtworzenia.
+- Dla czasu życia zasobów na długo działających stronach przeglądarkowych użyj powtarzalnych pełnych cykli i przeczytaj [SOAK-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/SOAK-TESTING.md); nowe konteksty nie ujawnią kumulacji.
+- Użyj `/read-the-damn-docs` dla kontraktów zewnętrznych oraz [tests.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/tests.md), gdy forma testu jest niejasna.
 
-### 1. RED
+### RED
 
-- Napisz jeden test zachowania i sprawdź, czy kończy się niepowodzeniem z zamierzonego powodu.
-- Preferuj rzeczywiste publiczne interfejsy; stosuj atrapy tylko dla zewnętrznych granic, których nie można uruchomić lokalnie.
+Napisz jeden test zachowania i sprawdź, czy kończy się niepowodzeniem z zamierzonego powodu. Preferuj rzeczywiste publiczne interfejsy; stosuj atrapy tylko dla niedostępnych zewnętrznych granic.
 
-### 2. GREEN
+### GREEN
 
-- Napisz najmniejszą oczywistą implementację, która przechodzi test.
-- Najpierw usuń lub wykorzystaj ponownie; następnie wybieraj język, platformę lub zainstalowaną zależność zamiast własnych mechanizmów.
-- Naśladuj przejrzystość i konwencje odpowiedniego pliku w `exemplars/`, a nie jego rozmiar.
+Napisz najmniejszą implementację, która przechodzi test. Najpierw usuń lub wykorzystaj ponownie, a następnie wybieraj język, platformę lub zainstalowaną zależność. Naśladuj konwencje odpowiedniego pliku w `exemplars/`, a nie jego rozmiar.
 
-### 3. REFACTOR
+### REFACTOR
 
-- Poprawiaj nazwy i strukturę tylko wtedy, gdy znaczenie staje się wyraźniejsze lub znika rzeczywista duplikacja.
-- Utrzymuj stan zielony. Nigdy nie osłabiaj asercji zachowania tylko po to, aby test przeszedł.
-- Oznacz testy jednostkowe trwające ponad 500 ms i testy integracyjne trwające ponad 2 s; preferuj zbiorcze dane wejściowe zamiast symulowania każdego naciśnięcia klawisza.
-- Uruchom `/dogfood` dla istotnego zachowania, które można uruchomić; zaobserwowane usterki stają się kolejnym RED.
+Poprawiaj nazwy i strukturę tylko dla większej przejrzystości lub usunięcia rzeczywistej duplikacji. Utrzymuj stan zielony; nigdy nie osłabiaj asercji. Oznacz testy jednostkowe trwające ponad 500 ms i testy integracyjne trwające ponad 2 s; preferuj zbiorcze dane wejściowe zamiast symulowania każdego naciśnięcia klawisza. Uruchom `/dogfood` dla istotnych zielonych przekrojów; usterki stają się RED.
 
-### 4. POWTÓRZENIE
+### POWTÓRZENIE
 
-Powtórz tylko dla kolejnego wymaganego kontraktu lub niezależnego, wiarygodnego ryzyka.
+Powtórz tylko dla kolejnego kontraktu lub niezależnego, wiarygodnego ryzyka. Podczas aktywnej pracy używaj `vitest --watch`, oczekiwania opartego na warunkach oraz `--detectAsyncLeaks` dla nowych operacji asynchronicznych.
 
-Podczas aktywnej pracy monitoruj `vitest --watch`. Używaj oczekiwania opartego na warunkach oraz
-`--detectAsyncLeaks`, gdy zmiana tworzy pracę asynchroniczną.
+## Regresja wizualna
 
-## Klasyfikacja testów
-
-| Sufiks | Cel | DOM? |
-|--------|---------|------|
-| `.test.ts` | Jednostkowy — czysta logika | Nie |
-| `.test.tsx` / `.integration.tsx` | Integracyjny — renderowanie komponentów | Tak |
-| `e2e/*.spec.ts` | E2E — przeglądarka Playwright | Przeglądarka |
-
-## Testy regresji wizualnej
-
-Gdy trasa dodaje zachowanie widoczne dla klienta, które nie jest jeszcze objęte testami, a projekt
-używa `@vitest/browser`, dodaj najmniejszy użyteczny test `*.browser.test.tsx`. Pomiń
-trasy związane z układem, przekierowaniem i czysto deklaratywne.
+Gdy nieobjęte testami zachowanie trasy widoczne dla klienta używa `@vitest/browser`, dodaj najmniejszy użyteczny test `*.browser.test.tsx`; pomiń trasy związane z układem, przekierowaniem i czysto deklaratywne.
 
 ## Po zakończeniu
 
-- Odpowiednie testy przechodzą bez ostrzeżeń.
-- Zmiany asynchroniczne nie pozostawiają trwających operacji ani oczekiwania przez określony czas.
-- Testy pozostają poprawne po refaktoryzacji elementów wewnętrznych, ponieważ weryfikują zachowanie, a nie implementację.
-- Nie ma zbędnego przypadku istniejącego wyłącznie po to, aby zwiększyć pokrycie.
-
-Zobacz [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/REFERENCE.md), aby poznać oczekiwanie oparte na warunkach, selektory,
-portale, atrapy, diagnostykę i ukierunkowane przykłady odporności.
+Odpowiednie testy przechodzą bez ostrzeżeń; operacje asynchroniczne nie pozostawiają wycieków ani oczekiwania przez określony czas; testy pozostają poprawne po refaktoryzacji elementów wewnętrznych; żaden przypadek nie istnieje wyłącznie dla pokrycia. Zobacz [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/REFERENCE.md), aby poznać oczekiwanie oparte na warunkach, selektory, portale, atrapy, diagnostykę i przykłady odporności.

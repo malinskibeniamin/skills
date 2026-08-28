@@ -5,17 +5,17 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 
 # Review
 
-Review a fixed point through `HEAD`. Do not edit, commit, push, reply, resolve, or post.
-Posting comments requires explicit intent. Keep one owner in the primary context; delegation must be explicit.
+Review a fixed point through `HEAD`. Do not edit, commit, push, or post;
+Posting comments requires explicit intent. Keep one owner; delegation must be explicit.
 
 ## Review contract
 
 - **Objective**: decide whether the complete diff achieves its outcome without a credible defect.
-- **Guardrails**: report only diff-introduced findings; keep standards separate from product/spec
-  gaps; generated files are evidence, not edit targets.
-- **Verification**: trace claims to source. Dogfood every runnable change yourself at its
-  real entrypoint; tests support, but do not replace, experience.
-- **Stop**: every surface is accounted for; findings have evidence, consequence, priority,
+- **Guardrails**: diff-introduced only; keep standards separate from product/spec gaps;
+  generated files are evidence, not edit targets.
+- **Verification**: trace source. Dogfood every runnable change yourself at its real entrypoint;
+  tests do not replace experience.
+- **Stop**: account for every surface; findings need evidence, consequence, priority,
   correction, and verification.
 
 Ask if the fixed point is missing. Otherwise set
@@ -40,14 +40,12 @@ then inspect the complete diff and log through `HEAD`.
 
 ### Verify
 
-- Reproduce against source, schema, current primary docs, or the smallest executable check.
+- Reproduce from source, schema, primary docs, or the smallest executable check.
 - With representative live-scale data, exercise the intended path and one credible failure or recovery path.
   Observe console/network/logs and response time; if unsafe or unavailable, name the blocker.
-- Inspect test integrity: public behavior, RED before fix, meaningful assertions, coverage,
-  and no duration waits. Treat source-text assertions over implementation source, CSS,
-  markup, or config as no runtime coverage; require deletion, or public-seam replacement
-  when a credible behavior contract remains. Allow content assertions when the file or
-  serialized text is public output; use static analysis for syntax rules.
+- Inspect test integrity: public behavior, RED, assertions, coverage, no duration waits.
+  Source-text checks are no coverage unless text is public output; delete or replace at a
+  public seam. Use static analysis for syntax.
 - Challenge additions against required behavior, semantic density, domain clarity, credible
   risk, and demonstrated scale. Never optimize LOC or reward code golf.
 
