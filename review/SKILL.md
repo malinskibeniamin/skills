@@ -44,7 +44,10 @@ then inspect the complete diff and log through `HEAD`.
 - With representative live-scale data, exercise the intended path and one credible failure or recovery path.
   Observe console/network/logs and response time; if unsafe or unavailable, name the blocker.
 - Inspect test integrity: public behavior, RED before fix, meaningful assertions, coverage,
-  and no duration waits.
+  and no duration waits. Treat source-text assertions over implementation source, CSS,
+  markup, or config as no runtime coverage; require deletion, or public-seam replacement
+  when a credible behavior contract remains. Allow content assertions when the file or
+  serialized text is public output; use static analysis for syntax rules.
 - Challenge additions against required behavior, semantic density, domain clarity, credible
   risk, and demonstrated scale. Never optimize LOC or reward code golf.
 
