@@ -7,6 +7,7 @@
     "docs-site"
   ],
   "scripts": {
+    "audit:tests": "bash scripts/audit-tests.sh",
     "check:files": "biome check --error-on-warnings --no-errors-on-unmatched",
     "docs:build": "bun run --cwd docs-site build",
     "docs:check": "bun run --cwd docs-site check",

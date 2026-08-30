@@ -81,3 +81,31 @@ test("calculateTotal sums line items", () => {
   expect(calculateTotal([{ price: 10 }, { price: 5 }])).toBe(15);
 });
 ```
+
+## Source-Text Proxies
+
+Do not claim runtime behavior by searching implementation files. These tests pass for
+commented, dead, overridden, or unreachable code and fail on behavior-preserving refactors.
+
+```typescript
+// BAD: proves only that one CSS token exists
+test("theme follows the system dark preference", async () => {
+  const css = await Bun.file("src/app.css").text();
+  expect(css).toContain("@media (prefers-color-scheme: dark)");
+});
+
+// GOOD: observes the browser contract
+test("theme follows the system dark preference", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await expect(page.getByRole("main")).toHaveCSS(
+    "background-color",
+    "rgb(17, 24, 39)",
+  );
+});
+```
+
+Delete the proxy when no credible behavior needs protection. Replace it at a public seam
+when behavior matters. File-content assertions remain valid when the file or serialized
+text is public output, such as generator output; prefer parsing it when semantics matter.
+Use lint, type, schema, or AST checks for syntax-only repository rules.

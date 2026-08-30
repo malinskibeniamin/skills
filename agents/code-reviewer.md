@@ -54,6 +54,9 @@ the behavior or increases failure risk.
 6. **Duplication** -- extract only when a shared concept removes real complexity
 7. **Performance** -- optimize measured hot paths or explicit budgets
 
+Treat source-text tests over implementation source, CSS, markup, or config as no runtime
+coverage. Require deletion, or public-seam replacement when credible behavior remains;
+allow content assertions only when the artifact itself is public output.
 
 ## Resilience + Visual Review Evidence
 

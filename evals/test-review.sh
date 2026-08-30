@@ -24,6 +24,8 @@ run_content_eval "$SKILL" "formatter-owned style and pre-existing defects" "revi
 run_content_eval "$SKILL" "real entrypoint" "review exercises runnable behavior"
 run_content_eval "$SKILL" "intended path and one credible failure or recovery path" "review checks intended and unhappy paths"
 run_content_eval "$SKILL" "test integrity" "review checks behavior proof"
+run_content_eval "$SKILL" "[Ss]ource-text" "review treats source-text proxies as missing behavior coverage"
+run_content_eval "$SKILL" "public (output|artifact)" "review preserves public-artifact assertions"
 run_content_eval "$SKILL" "semantic density" "review challenges unjustified additions"
 run_content_eval "$SKILL" "reverse-trace.*authoritative" "review reverse-traces changed assumptions"
 run_content_eval "$SKILL" "Search by domain concept" "review searches beyond diff-local names"

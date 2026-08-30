@@ -14,6 +14,7 @@ TDD protects meaningful behavior. Use RED -> GREEN -> REFACTOR for changed domai
 
 - **Seams:** test public boundaries. Name the seam first; confirm pre-agreed seams with the user when issue and convention leave it unclear. No tests at unconfirmed internals. Use `/codebase-design` rather than inventing a seam for convenience.
 - **Tautological tests:** expected values need an independent source of truth: literal, worked example, fixture, spec, or observation.
+- **Source-text proxies:** delete tests that scan implementation, CSS, markup, or config for tokens or regexes as runtime proof. Replace at a public seam when behavior matters; use static analysis for syntax. Keep content assertions only when the file or serialized text is public output.
 - **Vertical slices:** use vertical slices: one RED test plus GREEN implementation at a time; bulk tests encode imagined behavior.
 
 ## Workflow

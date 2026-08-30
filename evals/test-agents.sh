@@ -31,6 +31,9 @@ for reviewer in self-reviewer adversarial-reviewer code-reviewer; do
   run_content_eval "$AGENTS_DIR/${reviewer}.md" "findings-schema" "${reviewer} references findings-schema"
 done
 
+run_content_eval "$AGENTS_DIR/code-reviewer.md" "[Ss]ource-text" \
+  "code-reviewer rejects source-text proxies for behavior"
+
 # ── self-reviewer has test/lint/type-check tools ─────────────────
 run_content_eval "$AGENTS_DIR/self-reviewer.md" "vitest" "self-reviewer has test runner tool"
 run_content_eval "$AGENTS_DIR/self-reviewer.md" "bun run lint" "self-reviewer has lint tool"
