@@ -62,7 +62,7 @@ run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "do not guess.*reset" 
 
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "reviewer hats inline|hats inline" \
   "grilling keeps every hat inline by default"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "one owner in the primary context" \
+run_content_eval "$REPO_ROOT/review/SKILL.md" "Keep one owner" \
   "review keeps diagnostic ownership in the primary context"
 run_content_eval "$REPO_ROOT/resilience-review/SKILL.md" "Codex.*inline" \
   "Codex resilience review keeps every axis inline by default"
