@@ -39,6 +39,7 @@ run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "waitForTimeou
 run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test.skip" "test-convention detects test.skip"
 run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test-magic-timeout" "test-convention detects { timeout: <n> } magic number"
 run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test-unawaited" "test-convention detects unawaited findBy/waitFor"
+run_content_eval "$HOOKS_DIR/checks/test-convention-check.lib.sh" "test-declarative-metadata" "test-convention detects declarative metadata assertions"
 
 # ── Warn: it() in test file ─────────────────────────────────────
 
@@ -104,6 +105,51 @@ printf "const el = await screen.findByRole('button')\n" > "$tmpfile"
 run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
   "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
   0 "allow: awaited findByRole"
+
+# ── Warn: package metadata assertion ───────────────────────────
+
+tmpfile="$_tc_tmpdir/package-metadata.test.ts"
+cat > "$tmpfile" <<'EOF'
+import { readFileSync } from "node:fs"
+
+const packageJson = JSON.parse(readFileSync("package.json", "utf8"))
+expect(packageJson.devDependencies.vitest).toBe("4.1.10")
+EOF
+
+run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "warn: package metadata assertion" "Declarative metadata"
+
+# ── Allow: dependency behavior without manifest assertion ─────
+
+tmpfile="$_tc_tmpdir/dependency-behavior.test.ts"
+cat > "$tmpfile" <<'EOF'
+import { expect, test } from "vitest"
+import { parseISO } from "date-fns"
+
+test("parses an ISO date", () => {
+  expect(parseISO("2026-08-30").getUTCFullYear()).toBe(2026)
+})
+EOF
+
+run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: dependency behavior test"
+
+# ── Allow: justified public manifest output ────────────────────
+
+tmpfile="$_tc_tmpdir/generated-manifest.test.ts"
+cat > "$tmpfile" <<'EOF'
+// allow: test-declarative-metadata public package.json is the generator contract
+import { readFileSync } from "node:fs"
+
+const packageJson = JSON.parse(readFileSync("package.json", "utf8"))
+expect(packageJson.scripts.build).toBe("vite build")
+EOF
+
+run_hook_eval "$HOOKS_DIR/test-convention-check.sh" \
+  "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$tmpfile\"}}" \
+  0 "allow: public manifest output escape"
 
 (cd /tmp && rm -r "$_tc_tmpdir" 2>/dev/null) || true
 

@@ -1,6 +1,8 @@
 #!/bin/bash
 # Extracted check logic for test-convention-check.sh. Source ../_hook-lib.sh before this file.
 
+source "$(dirname "${BASH_SOURCE[0]}")/declarative-metadata-test.lib.sh"
+
 run_test_convention_check() {
 case "$file_path" in
   */vitest.config.*|vitest.config.*) ;;  # allow vitest config files (any ext)
@@ -26,6 +28,12 @@ case "$file_path" in
 esac
 
 if [ "$_is_test_file" = true ] && [ -n "$added_lines" ]; then
+
+# ── Declarative repository metadata is not behavior ────────────
+
+if declarative_metadata_test_detect "$file_content" "$added_lines"; then
+  hook_warn "Declarative metadata assertion: package.json and lockfile dependency names, scripts, or exact versions restate repository configuration. Test observable behavior or enforce the invariant with the package manager, schema, policy, or lint. Escape only for a public generated manifest: // allow: test-declarative-metadata [reason]" "test-convention-declarative-metadata"
+fi
 
 # ── Browser visual assertions: use the Browser Mode matcher ─────
 
