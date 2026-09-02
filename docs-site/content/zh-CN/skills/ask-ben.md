@@ -47,6 +47,7 @@ Builder 辅助工具：`/visual-plan`、`/agent-watchdog`、`/read-the-damn-docs
 | `/hook-audit` | 审计钩子的有效性、延迟和偏移。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/install-anti-slop` | 为 Biome 或 Oxlint 安装 anti-slop 规则。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
 | `/plow-ahead` | 在常规的不确定情况下自主继续推进。 |

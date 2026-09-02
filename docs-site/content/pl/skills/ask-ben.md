@@ -47,6 +47,7 @@ Na granicach faz przeczytaj [PHASE-BOUNDARIES.md](https://github.com/malinskiben
 | `/hook-audit` | Audytowanie skuteczności, opóźnień i rozbieżności hooków. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
+| `/install-anti-slop` | Instalowanie reguł anti-slop dla Biome lub Oxlint. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |

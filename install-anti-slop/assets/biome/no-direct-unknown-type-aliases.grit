@@ -1,0 +1,18 @@
+language js(typescript)
+
+or {
+  `type $name = unknown` as $alias where {
+    register_diagnostic(span=$alias, message="anti-slop: This type alias hides unknown. Keep unknown visible at the parsing boundary.")
+  },
+  TsTypeAliasDeclaration(ty=TsParenthesizedType(ty=TsUnknownType())) as $alias where {
+    register_diagnostic(span=$alias, message="anti-slop: This type alias hides unknown. Keep unknown visible at the parsing boundary.")
+  },
+  TsTypeAliasDeclaration(ty=TsUnionType(types=$types)) as $alias where {
+    $types <: some TsUnknownType(),
+    register_diagnostic(span=$alias, message="anti-slop: This type alias directly unions unknown. Keep unknown visible at the parsing boundary.")
+  },
+  TsTypeAliasDeclaration(ty=TsUnionType(types=$types)) as $alias where {
+    $types <: some TsParenthesizedType(ty=TsUnknownType()),
+    register_diagnostic(span=$alias, message="anti-slop: This type alias directly unions unknown. Keep unknown visible at the parsing boundary.")
+  }
+}

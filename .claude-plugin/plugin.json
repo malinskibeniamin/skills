@@ -55,6 +55,7 @@
     "./hook-audit/",
     "./improve-codebase-architecture/",
     "./improve/",
+    "./install-anti-slop/",
     "./make-pr-easy-to-review/",
     "./plan-arbiter/",
     "./plow-ahead/",

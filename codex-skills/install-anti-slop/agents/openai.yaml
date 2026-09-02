@@ -1,0 +1,3 @@
+interface:
+  display_name: "Install Anti-Slop"
+  short_description: "Install anti-slop rules for Biome or Oxlint"
