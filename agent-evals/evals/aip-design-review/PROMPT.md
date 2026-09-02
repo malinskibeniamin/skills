@@ -30,5 +30,5 @@ Produce exactly two deliverables:
    designs.
 
 Run the repository linter, but do not claim that a clean linter result proves
-full conformance. Do not search for or install protobuf dependencies; this eval
-scores the design review, not compilation.
+full conformance. Do not search for or install protobuf dependencies; review the API
+design rather than repairing compilation.

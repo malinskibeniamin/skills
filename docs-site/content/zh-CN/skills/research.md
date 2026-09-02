@@ -1,6 +1,6 @@
 ---
 title: /research
-description: 研究一手资料并保存附有引用的研究结果。适用于需要形成持久化报告、文档调研、API 事实集或开展资料通读的场景。
+description: 研究一手资料并保存附有引用的研究结果。适用于长期保存的报告、文档调研、API 事实集、资料通读或设计依据考证。
 type: skill
 sidebar:
   label: /research
@@ -20,6 +20,7 @@ sidebar:
 ## 路由
 
 - 需要**立即**获取事实以继续编码（API 结构、当前标志、版本行为）-> 改为以内联方式使用 `/read-the-damn-docs`；不使用后台智能体，也不生成产物。
+- 需要了解代码或设计为何存在 -> 阅读 [DESIGN-RATIONALE.md](https://github.com/malinskibeniamin/skills/blob/main/research/DESIGN-RATIONALE.md)；追溯源代码历史和决策证据，不臆测意图。
 - 视频 URL 或附件 -> 先使用 `/video-research`；将其带时间戳的转录文本、OCR 结果和帧画面视为来源证据。
 - 需要经过对抗性验证的多来源事实核查**报告** -> 使用深度研究框架。
 - 此技能处于两者之间：开展聚焦的资料阅读工作，并生成附有引用的 Markdown 产物。
