@@ -24,7 +24,7 @@ run_executable_eval "$HOOKS_DIR/copyright-check.sh" "copyright-check.sh is execu
 run_content_eval "$HOOKS_DIR/checks/copyright-check.lib.sh" "spdx-license-identifier" "copyright-check catches license headers"
 _copyright_tmp=$(mktemp -d)
 _copyright_file="$_copyright_tmp/example.ts"
-_copyright_header='// Copy''right 2026 Redpanda Data, Inc.'
+_copyright_header='// Copy''right 2026 Example Corp.'
 
 _copyright_pre=$(jq -nc --arg f "$_copyright_file" --arg h "$_copyright_header" \
   '{hook_event_name:"PreToolUse",tool_name:"Write",tool_input:{file_path:$f,content:($h + "\nexport const value = 1;")}}')
