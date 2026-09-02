@@ -32,7 +32,7 @@ One skill owns bootstrap. Lazily read only requested `references/<tool>/README.m
 | `ci-pipeline` | Actions, coverage, cache |
 | `redpanda` | registry workflow/taxonomy |
 
-Runtime skills, not setup: `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Optional slash-only infra: `/setup-routines`, `/setup-atlassian-workflow`.
+Runtime skills, not setup: `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Optional slash-only infra: `/setup-routines`, `/setup-atlassian-workflow`. Existing Oxlint repositories can opt into type-evidence rules through `/install-anti-slop`.
 
 ## Steps
 

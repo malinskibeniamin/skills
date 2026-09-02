@@ -20,6 +20,7 @@ mode = sys.argv[2]
 
 ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "UI", "URL", "UX"}
 BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "tanstack": "TanStack"}
+DISPLAY_NAMES = {"install-anti-slop": "Install Anti-Slop"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
     "accessibility": "Build accessible React interactions and components",
@@ -53,6 +54,7 @@ SHORT_DESCRIPTIONS = {
     "hook-audit": "Audit hook effectiveness, latency, and drift",
     "improve-codebase-architecture": "Redesign architecture to eliminate classes of errors",
     "improve": "Audit codebases or write requested implementation plans",
+    "install-anti-slop": "Install the curated anti-slop core in Oxlint repositories",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
     "plan-arbiter": "Compare competing plans and choose a grounded direction",
     "plow-ahead": "Continue autonomously through routine ambiguity",
@@ -154,7 +156,7 @@ for entry in skills:
     if not 25 <= len(short) <= 64:
         print(f"MISSING or invalid Codex short description for registered skill: {skill_name}", file=sys.stderr)
         sys.exit(1)
-    title = display_name(skill_name)
+    title = DISPLAY_NAMES.get(skill_name, display_name(skill_name))
     metadata = (
         "interface:\n"
         f"  display_name: {yaml_quote(title)}\n"
