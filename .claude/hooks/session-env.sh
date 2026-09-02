@@ -3,6 +3,9 @@ set -euo pipefail
 
 # Guard: CLAUDE_ENV_FILE may not exist during /clear-triggered SessionStart
 CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-}"
+_input=$(cat 2>/dev/null || echo '{}')
+_input_model=$(printf '%s' "$_input" | jq -r '.model // empty' 2>/dev/null || true)
+_input_session=$(printf '%s' "$_input" | jq -r '.session_id // empty' 2>/dev/null || true)
 
 # ── Frontend project detection ───────────────────────────────────
 # These skills are for React/TypeScript frontend projects.
@@ -66,14 +69,9 @@ fi
 # Age by the newest file INSIDE each dir, not dir mtime -- appends don't
 # bump dir mtime, so -mmin on the dir deleted live sessions that were
 # merely quiet for an hour (issue #60 P2). 24h keeps overnight sessions.
-for _stale_dir in /tmp/hook-session-*; do
-  [ -d "$_stale_dir" ] || continue
-  # One find covers both liveness signals: depth 0 matches the dir itself
-  # (young empty dir) and deeper matches catch recent files.
-  if [ -z "$(find "$_stale_dir" -mmin -1440 2>/dev/null | head -1)" ]; then
-    rm -r "$_stale_dir" 2>/dev/null || true
-  fi
-done
+if [ "${HOOK_SESSION_SWEEP_DISABLED:-0}" != "1" ]; then
+  "$(dirname "$0")/session-state-sweep.sh" 2>/dev/null || true
+fi
 
 # ── Session directory for state tracking ──────────────────────────
 # Deterministic fallback when CLAUDE_SESSION_ID/CODEX_SESSION_ID unset:
@@ -83,6 +81,8 @@ if [ -n "${CLAUDE_SESSION_ID:-}" ]; then
   _session_id="$CLAUDE_SESSION_ID"
 elif [ -n "${CODEX_SESSION_ID:-}" ]; then
   _session_id="$CODEX_SESSION_ID"
+elif [ -n "$_input_session" ]; then
+  _session_id="$_input_session"
 else
   _wt_fallback=$(git rev-parse --show-toplevel 2>/dev/null || echo "/tmp")
   if command -v md5 >/dev/null 2>&1; then
@@ -96,6 +96,9 @@ else
 fi
 _session_dir="/tmp/hook-session-${_session_id}"
 mkdir -p "$_session_dir" 2>/dev/null || true
+if [ -n "$_input_model" ]; then
+  printf '%s\n' "$_input_model" > "$_session_dir/current-model" 2>/dev/null || true
+fi
 
 # ── Bind session to current worktree + branch ─────────────────────
 # Every hook asserts against this binding to prevent cross-worktree leakage

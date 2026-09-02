@@ -1,3 +1,4 @@
+// Copyright 2026 Redpanda Data, Inc.
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig } from "@vercel/agent-eval";
 
@@ -15,10 +16,11 @@ export const createExperiment = (source: ContextSource): ExperimentConfig => {
     process.env.ABLATION_AGENT === "claude-code" ? "claude-code" : "codex";
   const effort =
     process.env.ABLATION_EFFORT ?? (agent === "codex" ? "xhigh" : "high");
+  const baseModel =
+    process.env.ABLATION_MODEL ??
+    (agent === "codex" ? "gpt-5.6-sol" : "claude-fable-5-1");
   const model =
-    agent === "codex"
-      ? `gpt-5.6-sol?reasoningEffort=${effort}`
-      : (process.env.ABLATION_CLAUDE_MODEL ?? "fable");
+    agent === "codex" ? `${baseModel}?reasoningEffort=${effort}` : baseModel;
   const instructionFile = agent === "codex" ? "AGENTS.md" : "CLAUDE.md";
   const contextPath =
     source === null

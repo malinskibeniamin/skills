@@ -99,7 +99,9 @@ fi
 harness_version="${harness_version:-unknown}"
 run_kind="${HOOK_METRICS_RUN_KIND:-real}"
 input_model=$(printf '%s' "$_input" | jq -r '.model // .model_name // empty' 2>/dev/null || true)
-model="${CLAUDE_MODEL:-${CODEX_MODEL:-${input_model:-unknown}}}"
+session_model=""
+[ -f "$session_dir/current-model" ] && session_model=$(head -1 "$session_dir/current-model" 2>/dev/null || true)
+model="${input_model:-${session_model:-${CODEX_MODEL:-${ANTHROPIC_MODEL:-${CLAUDE_MODEL:-unknown}}}}}"
 source="claude"
 [ -n "${CODEX_SESSION_ID:-}" ] && source="codex"
 

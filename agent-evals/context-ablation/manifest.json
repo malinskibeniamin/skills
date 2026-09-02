@@ -1,10 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "purpose": "Measure quality before deleting or adding ambient context.",
   "release_trigger": "major-model-release",
-  "agents": ["codex", "claude-code"],
   "variants": ["bare", "guardrails", "lean", "current"],
-  "efforts": ["high", "xhigh", "max"],
   "metrics": [
     "task_success",
     "regressions",
@@ -24,12 +22,25 @@
   ],
   "capabilities": {
     "codex": {
-      "model": "gpt-5.6-sol",
-      "efforts": ["xhigh", "max"]
+      "models": [
+        {
+          "id": "gpt-5.6-sol",
+          "efforts": ["xhigh", "max"]
+        }
+      ]
     },
     "claude-code": {
-      "models": ["fable", "opus"],
-      "efforts": ["high", "xhigh"]
+      "minimum_cli_version": "2.1.257",
+      "models": [
+        {
+          "id": "claude-fable-5-1",
+          "efforts": ["low", "medium", "high", "xhigh", "max"]
+        },
+        {
+          "id": "claude-opus-5",
+          "efforts": ["high", "xhigh"]
+        }
+      ]
     }
   },
   "gate": {

@@ -16,19 +16,23 @@ Prompts state high-level outcomes and verification paths without copying the hid
 rules. Compare each group against the previous winner. Treat token and duration savings as
 tie-breakers only after quality is non-inferior.
 
-The manifest lists `max` because GPT-5.6 Sol exposes it. Fable and Opus run at their
-supported quality efforts, so family comparisons do not pretend that effort labels are portable.
+The manifest pins exact model IDs. Claude Fable 5.1 runs at `low`, `medium`, `high`,
+`xhigh`, and `max`; reusing a Fable 5 effort result is invalid because effort labels are
+not portable across releases. Claude Code 2.1.257 or newer is required. The runner checks
+this before starting any cell and points stale installations to `claude update`.
 Keep raw results out of git. On every major model release, record the decision with
 `scorecard-template.md`, promote only the winning policy into `config/model-routing.json`,
 and replace tasks that no longer discriminate between variants.
+
+Do not tune prompts or compaction from release notes alone. First capture the new model's
+baseline, then change one behavior at a time only where the scorecard shows a regression.
 
 This suite measures ambient context. Use `HOOK_SHADOW_RULES` plus version-qualified
 `/hook-audit` telemetry for hook holdouts. A skill is retained from observed, real-session
 use or a separate behavioral treatment; discovery metadata alone is not evidence.
 
 Motivation: [GPT-5.6](https://openai.com/index/gpt-5-6/) reports better coding
-efficiency from leaner instructions; the
-[Fable field guide](https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns)
-and [context-engineering notes](https://x.com/trq212/article/2080710971228918066)
-favor unknown-first planning and progressive disclosure. These are hypotheses for this
-repository until this suite measures them.
+efficiency from leaner instructions. Anthropic's
+[Fable 5.1 prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1)
+requires a fresh effort sweep and recommends `high` as the starting point. These are
+hypotheses for this repository until this suite measures them.

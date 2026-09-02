@@ -13,9 +13,12 @@ if jq -e '.policy == "quality-first"
   and .quality_first.default.effort == "xhigh"
   and (.quality_first.hard.efforts | index("max"))
   and (.quality_first.ui_owners | index("gpt-5.6-sol"))
+  and (.quality_first.ui_owners | index("claude-fable-5-1"))
   and .quality_first.ultra.requires_explicit_delegation
   and .models["gpt-5.6-terra"].status == "eval-gated"
   and .models["gpt-5.6-luna"].status == "eval-gated"
+  and .models["claude-fable-5-1"].status == "quality-alternative"
+  and (.models | has("claude-fable-5") | not)
   and .selection.single_owner
   and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then
   echo "  PASS  routing config encodes quality-first GPT-5.6 policy"

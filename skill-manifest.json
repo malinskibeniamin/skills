@@ -5,6 +5,12 @@
     "SessionStart": {
       "": ["session-env.sh", "llm-env.sh"]
     },
+    "PreModelSwitch": {
+      "": ["model-switch-telemetry.sh"]
+    },
+    "PostModelSwitch": {
+      "": ["model-switch-telemetry.sh"]
+    },
     "Setup": {
       "init|maintenance": ["setup-init.sh"]
     },

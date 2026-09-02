@@ -10,13 +10,14 @@ HOOK_METRICS_DIR=$(mktemp -d)
 # ── Scripts exist and are executable ─────────────────────────────
 for _s in setup-init.sh cwd-changed.sh config-change-guard.sh \
   task-completed-gate.sh stop-failure-telemetry.sh permission-denied-retry.sh \
-  notification-alert.sh codex-notify.sh; do
+  notification-alert.sh codex-notify.sh model-switch-telemetry.sh \
+  session-state-sweep.sh; do
   run_file_eval "$HOOKS_DIR/$_s" "$_s exists"
   run_executable_eval "$HOOKS_DIR/$_s" "$_s is executable"
 done
 
 # ── Manifest wires the new events ────────────────────────────────
-for _ev in Setup UserPromptExpansion CwdChanged ConfigChange TaskCompleted StopFailure PermissionDenied Notification; do
+for _ev in Setup UserPromptExpansion CwdChanged ConfigChange TaskCompleted StopFailure PermissionDenied Notification PreModelSwitch PostModelSwitch; do
   if jq -e ".hooks.$_ev" "$REPO_ROOT/skill-manifest.json" >/dev/null 2>&1; then
     echo "  PASS  manifest wires $_ev"
     PASS=$((PASS + 1))
@@ -32,6 +33,42 @@ _saved_session="${CLAUDE_SESSION_ID:-}"
 export CLAUDE_SESSION_ID="eval-new-events-$$"
 _eval_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID}"
 mkdir -p "$_eval_session_dir"
+
+# SessionStart is the only ordinary hook event that carries the active model.
+# Persist it so later skill/session telemetry stays model-qualified.
+_claude_env_file=$(mktemp)
+HOOK_SESSION_SWEEP_DISABLED=1 CLAUDE_ENV_FILE="$_claude_env_file" \
+  "$HOOKS_DIR/session-env.sh" <<'JSON' >/dev/null
+{"hook_event_name":"SessionStart","source":"startup","model":"claude-fable-5-1"}
+JSON
+if [ "$(cat "$_eval_session_dir/current-model" 2>/dev/null || true)" = "claude-fable-5-1" ]; then
+  echo "  PASS  session-env persists the SessionStart model"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  session-env did not persist the SessionStart model"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: SessionStart model persistence"
+fi
+rm -f "$_claude_env_file"
+
+_input_only_session="eval-new-events-input-only-$$"
+_input_only_dir="/tmp/hook-session-${_input_only_session}"
+_claude_env_file=$(mktemp)
+env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID \
+  HOOK_SESSION_SWEEP_DISABLED=1 CLAUDE_ENV_FILE="$_claude_env_file" \
+  "$HOOKS_DIR/session-env.sh" <<JSON >/dev/null
+{"hook_event_name":"SessionStart","session_id":"$_input_only_session","source":"startup","model":"claude-fable-5-1"}
+JSON
+if [ "$(cat "$_input_only_dir/current-model" 2>/dev/null || true)" = "claude-fable-5-1" ]; then
+  echo "  PASS  session-env adopts the provider session ID from stdin"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  session-env ignored the provider session ID from stdin"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: SessionStart stdin session adoption"
+fi
+rm -f "$_claude_env_file"
+rm -rf "$_input_only_dir"
 
 # TaskCompleted gate: FAIL status blocks, no status allows
 echo "FAIL" > "$_eval_session_dir/shared-test-status"
@@ -91,6 +128,63 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: skill-fire expansion telemetry"
 fi
+if jq -e 'select(.skill == "eval-fixture-skill") | .model == "claude-fable-5-1"' \
+  "$HOOK_METRICS_DIR/skill-fires.jsonl" >/dev/null 2>&1; then
+  echo "  PASS  skill-fire telemetry inherits the persisted session model"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  skill-fire telemetry lost the persisted session model"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: skill-fire model qualification"
+fi
+
+# Model switches are an observable state transition: log both sides and make
+# the successful model authoritative for subsequent hooks.
+if [ -x "$HOOKS_DIR/model-switch-telemetry.sh" ]; then
+  run_hook_eval "$HOOKS_DIR/model-switch-telemetry.sh" \
+    '{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"user","context_tokens":1234,"prompt_cache_warm":false,"cache_ttl":"5m","estimated_cache_write_usd":0.42}' \
+    0 "model-switch telemetry accepts PreModelSwitch"
+  run_hook_eval "$HOOKS_DIR/model-switch-telemetry.sh" \
+    '{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"user","context_tokens":1234,"prompt_cache_warm":false,"cache_ttl":"5m","estimated_cache_write_usd":0.42}' \
+    0 "model-switch telemetry accepts PostModelSwitch"
+  if jq -e 'select(.event == "PostModelSwitch")
+      | .from_model == "claude-fable-5-1"
+        and .to_model == "claude-opus-5"
+        and .requested_model == "opus"
+        and .context_tokens == 1234
+        and .prompt_cache_warm == false
+        and .session_id != "eval-new-events-'"$$"'"' \
+    "$HOOK_METRICS_DIR/model-switches.jsonl" >/dev/null 2>&1 \
+    && grep -q 'model-switches.jsonl' "$REPO_ROOT/hook-audit/"{SKILL,REFERENCE}.md \
+    && [ "$(cat "$_eval_session_dir/current-model" 2>/dev/null || true)" = "claude-opus-5" ]; then
+    echo "  PASS  PostModelSwitch logs a redacted transition and updates session model"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  PostModelSwitch telemetry or session state is wrong"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: model-switch telemetry"
+  fi
+fi
+
+# SessionEnd has no model field. It must resolve the final persisted model.
+printf '%s\n' \
+  '{"ts":100,"hook":"eval","rule":"eval","decision":"info"}' \
+  '{"ts":160,"hook":"eval","rule":"eval","decision":"info"}' \
+  > "$_eval_session_dir/structured.jsonl"
+run_hook_eval "$HOOKS_DIR/session-end.sh" \
+  '{"hook_event_name":"SessionEnd","reason":"other"}' 0 \
+  "session-end accepts a model-free payload"
+_claude_summary=$(find "$HOOK_METRICS_DIR" -maxdepth 1 -name '*.json' -type f \
+  -exec sh -c 'jq -e '\''.source == "claude"'\'' "$1" >/dev/null 2>&1' sh {} \; -print | head -1)
+if [ -n "$_claude_summary" ] \
+  && jq -e '.model == "claude-opus-5"' "$_claude_summary" >/dev/null 2>&1; then
+  echo "  PASS  session summary uses the final persisted model"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  session summary model is missing or stale"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: session summary model qualification"
+fi
 
 # CwdChanged rebinds the session worktree AND re-registers watches from the
 # new root (SessionStart watchPaths were absolute under the old PWD)
@@ -139,14 +233,15 @@ for _cat in rate_limit max_output_tokens; do
 done
 
 # Setup event dispatches on the runtime .trigger field
-_setup_stale="/tmp/hook-session-eval-setup-stale-$$"
-_setup_active="/tmp/hook-session-eval-setup-active-$$"
+_setup_root=$(mktemp -d)
+_setup_stale="$_setup_root/hook-session-eval-setup-stale-$$"
+_setup_active="$_setup_root/hook-session-eval-setup-active-$$"
 mkdir -p "$_setup_stale"
 mkdir -p "$_setup_active"
 echo "recent" > "$_setup_active/violations"
 touch -t 202601010000 "$_setup_stale"
 touch -t 202601010000 "$_setup_active"
-run_hook_eval "$HOOKS_DIR/setup-init.sh" '{"trigger":"maintenance"}' 0 \
+HOOK_SESSION_ROOT="$_setup_root" run_hook_eval "$HOOKS_DIR/setup-init.sh" '{"trigger":"maintenance"}' 0 \
   "setup-init maintenance exits 0"
 if [ ! -d "$_setup_stale" ]; then
   echo "  PASS  setup-init maintenance sweeps stale session dirs (trigger parsed)"
@@ -165,7 +260,7 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: setup-init recent session state"
 fi
-rm -rf "$_setup_active"
+rm -rf "$_setup_root"
 # init in a fixture with package.json + fake bun on PATH → install invoked
 _setup_fix=$(mktemp -d)
 _setup_bin=$(mktemp -d)
@@ -405,6 +500,7 @@ fi
 
 # ── Teardown ─────────────────────────────────────────────────────
 rm -rf "$_eval_session_dir"
+rm -rf "$HOOK_METRICS_DIR"
 if [ -n "$_saved_session" ]; then
   export CLAUDE_SESSION_ID="$_saved_session"
 else

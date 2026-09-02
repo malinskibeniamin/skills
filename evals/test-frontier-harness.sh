@@ -43,22 +43,25 @@ run_json_eval '.quality_first.default.model == "gpt-5.6-sol"
   "config/model-routing.json" "routing reflects quality-first GPT-5.6 capabilities"
 
 run_file_eval "agent-evals/context-ablation/manifest.json" "ablation matrix is versioned"
-run_json_eval '(.agents | index("codex"))
-  and (.agents | index("claude-code"))
+run_json_eval '.schema_version == 2
+  and (.capabilities | has("codex"))
+  and (.capabilities | has("claude-code"))
   and (.variants | index("current"))
   and (.variants | index("lean"))
-  and (.efforts | index("xhigh"))
-  and (.efforts | index("max"))
   and (.metrics | index("task_success"))
   and (.metrics | index("regressions"))
   and (.metrics | index("input_tokens"))
-  and (.capabilities["claude-code"].models | index("fable"))
-  and (.capabilities["claude-code"].models | index("opus"))' \
+  and any(.capabilities.codex.models[]; .id == "gpt-5.6-sol" and (.efforts | index("xhigh")) and (.efforts | index("max")))
+  and any(.capabilities["claude-code"].models[]; .id == "claude-fable-5-1")
+  and any(.capabilities["claude-code"].models[]; .id == "claude-opus-5")' \
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"
 run_executable_eval "agent-evals/context-ablation/run.sh" "ablation runner is executable"
-run_content_eval "agent-evals/context-ablation/run.sh" 'claude-code.*fable' \
-  "ablation includes Fable without making it the default"
-run_content_eval "agent-evals/context-ablation/run.sh" 'claude-code.*opus' \
+run_json_eval 'any(.capabilities["claude-code"].models[];
+  .id == "claude-fable-5-1" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
+  "agent-evals/context-ablation/manifest.json" "ablation includes every Fable 5.1 effort"
+run_json_eval 'any(.capabilities["claude-code"].models[];
+  .id == "claude-opus-5" and .efforts == ["high", "xhigh"])' \
+  "agent-evals/context-ablation/manifest.json" \
   "ablation includes Opus as a Claude alternative"
 
 run_content_eval "evals/run.sh" 'HOOK_METRICS_DISABLED=1' "fixture evals cannot pollute production telemetry"
