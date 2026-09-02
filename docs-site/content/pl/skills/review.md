@@ -11,22 +11,22 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
-Przeglądaj od ustalonego punktu do `HEAD`. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj;
-Publikowanie komentarzy wymaga jawnej intencji. Zachowaj jednego właściciela; delegacja musi być jawna.
+Przeglądaj do `HEAD`. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
+Publikowanie komentarzy wymaga jawnej intencji.
 
 ## Kontrakt przeglądu
 
-- **Cel**: ustal, czy pełny diff osiąga oczekiwany wynik bez wiarygodnego defektu.
+- **Cel**: ustal, czy diff osiąga oczekiwany wynik bez wiarygodnego defektu.
 - **Ograniczenia**: zgłaszaj tylko problemy wprowadzone przez diff; oddziel standardy od luk produktu/specyfikacji;
-  pliki generowane są dowodem, nie celem edycji.
+  pliki generowane są dowodem.
 - **Weryfikacja**: prześledź źródło. Samodzielnie użyj każdej uruchamialnej zmiany przez prawdziwy punkt wejścia;
   testy nie zastępują doświadczenia.
 - **Stop**: uwzględnij każdą powierzchnię; znaleziska wymagają dowodu, konsekwencji, priorytetu,
   poprawki i weryfikacji.
 
-Zapytaj, jeśli brakuje ustalonego punktu. W przeciwnym razie ustaw
+Zapytaj tylko, jeśli brakuje ustalonego punktu. W przeciwnym razie ustaw
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`,
-a następnie sprawdź pełny diff i log do `HEAD`.
+a następnie sprawdź pełny diff i log.
 
 ## Pętla dowodowa
 
@@ -46,7 +46,8 @@ a następnie sprawdź pełny diff i log do `HEAD`.
 
 ### Zweryfikuj
 
-- Odtwórz problem na podstawie źródła, schematu, dokumentacji pierwotnej albo najmniejszej wykonywalnej kontroli.
+- Odtwórz problem na podstawie źródła, schematu, dokumentacji pierwotnej albo wykonywalnej kontroli.
+- Gdy bezpieczeństwo zależy od jednego nielokalnego faktu, użyj `/blast-radius`; przekaż dowód, nie opis.
 - Na reprezentatywnych danych o rzeczywistej skali wykonaj ścieżkę poprawną i jedną wiarygodną ścieżkę błędu lub odzyskiwania.
   Obserwuj konsolę, sieć, logi i czas odpowiedzi; gdy jest to niebezpieczne lub niemożliwe, nazwij blokadę.
 - Sprawdź integralność testów: zachowanie publiczne, RED, asercje, pokrycie i brak oczekiwania przez czas.

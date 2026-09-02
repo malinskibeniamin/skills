@@ -50,3 +50,5 @@ Relationships: Module has one Interface; Depth is measured against it; Seam host
 Reject depth-by-line-count, interface-as-TypeScript-keyword, and vague boundary wording.
 
 Read [DEEPENING.md](DEEPENING.md) for dependency/seam/testing discipline and [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md) for parallel designs.
+For reader load, structural enforcement, and first-principles integration, use the shared
+[Poteto engineering rules](../shared/POTETO-ENGINEERING.md) instead of duplicating them here.

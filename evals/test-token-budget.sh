@@ -73,7 +73,7 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 6900
+ask-ben 7200
 wayfinder 5000
 review 4300
 diagnosing-bugs 5600
@@ -111,6 +111,7 @@ while read -r skill cap; do
   fi
 done <<'EOF'
 aip 3825
+blast-radius 2850
 brain-dump 3200
 grilling 3650
 improve 3600
@@ -133,6 +134,7 @@ golang-review 3125
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000
+create-verification-skill 3250
 quantify-impact 2975
 setup-routines 2975
 development-lifecycle 2900
@@ -146,6 +148,7 @@ stack-registry 2525
 codex-compat 2575
 work-automation-kit 2525
 make-pr-easy-to-review 2425
+maintain-verification-skill 3000
 codex 2375
 handoff 2375
 video-research 2250
@@ -185,13 +188,13 @@ wait-what 400
 work 325
 EOF
 
-if [ "$remaining_skill_total" -le 162625 ]; then
-  echo "  PASS  remaining-skill wave under 162625 bytes ($remaining_skill_total)"
+if [ "$remaining_skill_total" -le 171725 ]; then
+  echo "  PASS  remaining-skill wave under 171725 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 162625)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 171725)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 162625 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 171725 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible

@@ -5,22 +5,21 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 
 # Review
 
-Review a fixed point through `HEAD`. Do not edit, commit, push, or post;
-Posting comments requires explicit intent. Keep one owner; delegation must be explicit.
+Review to HEAD. Keep one owner; explicit delegation. Do not edit, commit, push, or post.
+Posting comments requires explicit intent.
 
 ## Review contract
 
-- **Objective**: decide whether the complete diff achieves its outcome without a credible defect.
+- **Objective**: decide whether the diff achieves its outcome without a credible defect.
 - **Guardrails**: diff-introduced only; keep standards separate from product/spec gaps;
-  generated files are evidence, not edit targets.
+  generated files are evidence.
 - **Verification**: trace source. Dogfood every runnable change yourself at its real entrypoint;
   tests do not replace experience.
-- **Stop**: account for every surface; findings need evidence, consequence, priority,
-  correction, and verification.
+- **Stop**: account for every surface; findings need evidence, impact, priority, fix, and verification.
 
-Ask if the fixed point is missing. Otherwise set
+Ask only if the fixed point is missing. Otherwise set
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`,
-then inspect the complete diff and log through `HEAD`.
+then inspect the complete diff and log.
 
 ## Evidence loop
 
@@ -40,7 +39,8 @@ then inspect the complete diff and log through `HEAD`.
 
 ### Verify
 
-- Reproduce from source, schema, primary docs, or the smallest executable check.
+- Reproduce from source, schema, primary docs or an executable check.
+- When safety hinges on one non-local fact, use `/blast-radius`; carry proof, not prose.
 - With representative live-scale data, exercise the intended path and one credible failure or recovery path.
   Observe console/network/logs and response time; if unsafe or unavailable, name the blocker.
 - Inspect test integrity: public behavior, RED, assertions, coverage, no duration waits.
@@ -70,7 +70,7 @@ and paired with the smallest safe fix.
 - Omit optional future work and polish from inline comments.
 
 No performance finding without measurement or a structural bound. No edge-case finding
-without credible risk. Evidence can support a reasoned decline.
+without credible risk. Evidence can support declining a candidate.
 
 ### Synthesize
 

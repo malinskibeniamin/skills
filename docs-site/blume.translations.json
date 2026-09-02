@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "4e48e6205ccb691a",
-      "zh-CN": "4e48e6205ccb691a",
-      "zh-TW": "4e48e6205ccb691a"
+      "pl": "d68c300dfe87e84a",
+      "zh-CN": "d68c300dfe87e84a",
+      "zh-TW": "d68c300dfe87e84a"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,14 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "894083c86ac14346",
-      "zh-CN": "894083c86ac14346",
-      "zh-TW": "894083c86ac14346"
+      "pl": "6a5d697e25871775",
+      "zh-CN": "6a5d697e25871775",
+      "zh-TW": "6a5d697e25871775"
+    },
+    "content/skills/blast-radius.md": {
+      "pl": "818c60a16996a001",
+      "zh-CN": "818c60a16996a001",
+      "zh-TW": "818c60a16996a001"
     },
     "content/skills/brain-dump.md": {
       "pl": "043342bc8b1289a3",
@@ -31,9 +36,9 @@
       "zh-TW": "043342bc8b1289a3"
     },
     "content/skills/codebase-design.md": {
-      "pl": "feeef484bda45e4e",
-      "zh-CN": "feeef484bda45e4e",
-      "zh-TW": "feeef484bda45e4e"
+      "pl": "b55062fb53e6b988",
+      "zh-CN": "b55062fb53e6b988",
+      "zh-TW": "b55062fb53e6b988"
     },
     "content/skills/codex-compat.md": {
       "pl": "eaf0f029fde8dd19",
@@ -55,6 +60,11 @@
       "zh-CN": "2fd5427919f5f0c1",
       "zh-TW": "2fd5427919f5f0c1"
     },
+    "content/skills/create-verification-skill.md": {
+      "pl": "b9ab508b25e98cbd",
+      "zh-CN": "b9ab508b25e98cbd",
+      "zh-TW": "b9ab508b25e98cbd"
+    },
     "content/skills/demo.md": {
       "pl": "4c0131c2849799a6",
       "zh-CN": "4c0131c2849799a6",
@@ -66,9 +76,9 @@
       "zh-TW": "80150bf59dfe1df5"
     },
     "content/skills/development-lifecycle.md": {
-      "pl": "284620e984601c58",
-      "zh-CN": "284620e984601c58",
-      "zh-TW": "284620e984601c58"
+      "pl": "5ed08ea89ae3ce6d",
+      "zh-CN": "5ed08ea89ae3ce6d",
+      "zh-TW": "5ed08ea89ae3ce6d"
     },
     "content/skills/diagnosing-bugs.md": {
       "pl": "27118aaed2f71edc",
@@ -76,9 +86,9 @@
       "zh-TW": "27118aaed2f71edc"
     },
     "content/skills/dogfood.md": {
-      "pl": "bc08b9497128dbf6",
-      "zh-CN": "bc08b9497128dbf6",
-      "zh-TW": "bc08b9497128dbf6"
+      "pl": "3cedbca0a7b9d224",
+      "zh-CN": "3cedbca0a7b9d224",
+      "zh-TW": "3cedbca0a7b9d224"
     },
     "content/skills/domain-modeling.md": {
       "pl": "53c7cccacabb5b75",
@@ -159,6 +169,11 @@
       "pl": "c1c49202f157a1b8",
       "zh-CN": "c1c49202f157a1b8",
       "zh-TW": "c1c49202f157a1b8"
+    },
+    "content/skills/maintain-verification-skill.md": {
+      "pl": "dc0ab7182b43101d",
+      "zh-CN": "dc0ab7182b43101d",
+      "zh-TW": "dc0ab7182b43101d"
     },
     "content/skills/make-pr-easy-to-review.md": {
       "pl": "acf6c280b1106d0a",
@@ -246,9 +261,9 @@
       "zh-TW": "32436a2cda6ca615"
     },
     "content/skills/review.md": {
-      "pl": "bfec4a8b6ace8055",
-      "zh-CN": "bfec4a8b6ace8055",
-      "zh-TW": "bfec4a8b6ace8055"
+      "pl": "b4ae682275c8850a",
+      "zh-CN": "b4ae682275c8850a",
+      "zh-TW": "b4ae682275c8850a"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "ad4f6ed8858e420c",
@@ -321,9 +336,9 @@
       "zh-TW": "a42afcaca0e369f8"
     },
     "content/skills/thermo-nuclear-code-quality-review.md": {
-      "pl": "513da0ae1abcf2ef",
-      "zh-CN": "513da0ae1abcf2ef",
-      "zh-TW": "513da0ae1abcf2ef"
+      "pl": "485d8fd0a02db57b",
+      "zh-CN": "485d8fd0a02db57b",
+      "zh-TW": "485d8fd0a02db57b"
     },
     "content/skills/to-questionnaire.md": {
       "pl": "fc72bf8a3cc640dd",

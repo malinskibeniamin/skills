@@ -376,6 +376,8 @@ Everything this harness uses from [mattpocock/skills](https://github.com/mattpoc
 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
+A curated [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) backport adds `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Shared reader-load, structural-enforcement, first-principles, and proof rules are interwoven through existing owners rather than registering Poteto's duplicate mode and workflow stack.
+
 `/eli5` adapts the beginner-first visual artifact idea from
 [Anthropic's community ELI5 plugin](https://github.com/anthropics/claude-plugins-community/tree/main/eli5),
 authored by Thariq Shihipar.

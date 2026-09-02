@@ -12,12 +12,14 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/agent-watchdog` | Audit and repair work from another coding agent. |
 | `/aip` | Design Google AIP-style protobuf resource APIs. |
 | `/ask-ben` | Route work through Ben's frontend skill harness. |
+| `/blast-radius` | Prove non-local change safety with executable evidence. |
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |
 | `/codex-compat` | Generate Codex hook and instruction parity. |
 | `/codex` | Delegate bounded work through the Codex CLI. |
 | `/commit-push-pr` | Commit, push, and publish a reviewable pull request. |
 | `/connect-query` | Build typed ConnectRPC data flows with Connect Query. |
+| `/create-verification-skill` | Create a project-local real-app verification harness. |
 | `/demo` | Create a customer-facing feature recording. |
 | `/deslop` | Audit already-bloated code and remove unjustified surface. |
 | `/development-lifecycle` | Run the full frontend development lifecycle. |
@@ -39,6 +41,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/hook-audit` | Audit hook effectiveness, latency, and drift. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
+| `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |

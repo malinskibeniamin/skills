@@ -5,21 +5,19 @@ description: Use after each material behavior slice and before handoff or shippi
 
 # Dogfood
 
-A **material runnable slice** changes behavior reachable through a real user entrypoint or public seam.
-Dogfood each slice and the final whole PR. Tests are not dogfood: they assert
-behavior but do not reveal the experience.
+A material runnable slice changes behavior at a real entrypoint or public seam.
+Dogfood each slice and final PR. Tests are not dogfood.
 
 ## Inventory
 
 1. Resolve the comparison base with
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
 2. Inspect the full PR from merge-base through committed, staged, unstaged, and untracked work.
-3. Map each changed runnable behavior to its real entrypoint. A skill includes referenced
-   guidance, assets, and scripts; a hook runs through its actual event. Standalone docs,
-   tests, and evals do not require experiential coverage.
+3. Map changed behavior to its real entrypoint. A skill includes references, assets, and
+   scripts; a hook runs through its actual event. Standalone docs, tests, and evals need no
+   experiential coverage.
 
-For local work, cover behavior changed this turn. Before PR or shipping, cover every
-runnable behavior in the branch, including earlier sessions.
+Locally, cover this turn. Before PR or shipping, cover every runnable branch behavior.
 
 ## Loop
 
@@ -74,6 +72,10 @@ the current runnable state.
 | Demo/prototype | Operate it until the question has observed evidence |
 
 Use project-native tools. Fresh agents require explicit delegation.
+
+If a project-local `verify-*` skill exists, use its doctor, drive, evidence, and cleanup.
+Verifier drift routes to `/maintain-verification-skill`; a recurring missing path routes to
+`/create-verification-skill` after proof.
 
 ## Receipt
 

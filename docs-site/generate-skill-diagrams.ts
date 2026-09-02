@@ -97,6 +97,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Review / ship",
     ],
   },
+  "blast-radius": {
+    kind: "evidence-funnel",
+    nodes: [
+      "Changed behavior",
+      "Non-local contracts",
+      "Decisive invariant",
+      "Executable proof",
+    ],
+  },
   "brain-dump": {
     kind: "user-flow",
     nodes: [
@@ -151,6 +160,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "RPC service",
     ],
     relations: ["subscribes", "calls", "returns typed data"],
+  },
+  "create-verification-skill": {
+    kind: "lifecycle",
+    nodes: [
+      "Real app entrypoint",
+      "Launch + doctor",
+      "Drive + evidence",
+      "Cleanup + replay",
+    ],
   },
   demo: {
     kind: "user-flow",
@@ -339,6 +357,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Owned invariant\n(error impossible)",
     ],
     relations: ["replaced by", "duplicates", "enforces"],
+  },
+  "maintain-verification-skill": {
+    kind: "feedback-loop",
+    nodes: [
+      "Verifier + feature map",
+      "Source reconciliation",
+      "Live coverage",
+      "Repair + replay",
+    ],
   },
   "make-pr-easy-to-review": {
     kind: "timeline",
