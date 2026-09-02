@@ -6,10 +6,10 @@
       "": ["session-env.sh", "llm-env.sh"]
     },
     "PreModelSwitch": {
-      "": ["model-switch-telemetry.sh"]
+      "": ["model-switch-router.sh"]
     },
     "PostModelSwitch": {
-      "": ["model-switch-telemetry.sh"]
+      "": ["model-switch-router.sh"]
     },
     "Setup": {
       "init|maintenance": ["setup-init.sh"]

@@ -17,6 +17,10 @@
       "use": "Independent lanes only; never silently create an agent team."
     }
   },
+  "model_switch": {
+    "deny_statuses": ["retired", "unsupported"],
+    "warm_cache_confirmation_usd": 1
+  },
   "models": {
     "gpt-5.6-sol": {
       "status": "primary",

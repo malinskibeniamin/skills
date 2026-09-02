@@ -30,7 +30,7 @@
             "command": "/bin/bash",
             "args": [
               "-c",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'model-switch-telemetry.sh'; exit 0"
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'model-switch-router.sh'; exit 0"
             ]
           }
         ]
@@ -44,7 +44,7 @@
             "command": "/bin/bash",
             "args": [
               "-c",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'model-switch-telemetry.sh'; exit 0"
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'model-switch-router.sh'; exit 0"
             ]
           }
         ]

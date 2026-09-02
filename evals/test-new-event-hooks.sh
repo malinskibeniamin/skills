@@ -10,7 +10,7 @@ HOOK_METRICS_DIR=$(mktemp -d)
 # ── Scripts exist and are executable ─────────────────────────────
 for _s in setup-init.sh cwd-changed.sh config-change-guard.sh \
   task-completed-gate.sh stop-failure-telemetry.sh permission-denied-retry.sh \
-  notification-alert.sh codex-notify.sh model-switch-telemetry.sh \
+  notification-alert.sh codex-notify.sh model-switch-router.sh \
   session-state-sweep.sh; do
   run_file_eval "$HOOKS_DIR/$_s" "$_s exists"
   run_executable_eval "$HOOKS_DIR/$_s" "$_s is executable"
@@ -140,11 +140,11 @@ fi
 
 # Model switches are an observable state transition: log both sides and make
 # the successful model authoritative for subsequent hooks.
-if [ -x "$HOOKS_DIR/model-switch-telemetry.sh" ]; then
-  run_hook_eval "$HOOKS_DIR/model-switch-telemetry.sh" \
+if [ -x "$HOOKS_DIR/model-switch-router.sh" ]; then
+  run_hook_eval "$HOOKS_DIR/model-switch-router.sh" \
     '{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"user","context_tokens":1234,"prompt_cache_warm":false,"cache_ttl":"5m","estimated_cache_write_usd":0.42}' \
     0 "model-switch telemetry accepts PreModelSwitch"
-  run_hook_eval "$HOOKS_DIR/model-switch-telemetry.sh" \
+  run_hook_eval "$HOOKS_DIR/model-switch-router.sh" \
     '{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"user","context_tokens":1234,"prompt_cache_warm":false,"cache_ttl":"5m","estimated_cache_write_usd":0.42}' \
     0 "model-switch telemetry accepts PostModelSwitch"
   if jq -e 'select(.event == "PostModelSwitch")
@@ -163,6 +163,116 @@ if [ -x "$HOOKS_DIR/model-switch-telemetry.sh" ]; then
     echo "  FAIL  PostModelSwitch telemetry or session state is wrong"
     FAIL=$((FAIL + 1))
     ERRORS="$ERRORS\n  FAIL: model-switch telemetry"
+  fi
+
+  _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"picker"}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      .hookSpecificOutput.hookEventName == "PostModelSwitch"
+      and (.hookSpecificOutput.additionalContext | contains("/efficient-frontier"))
+      and (.hookSpecificOutput.additionalContext | contains("claude-opus-5"))
+      and (.hookSpecificOutput.additionalContext | contains("quality-alternative"))
+      and (.hookSpecificOutput.additionalContext | contains("review"))
+      and (.hookSpecificOutput.additionalContext | contains("supersedes earlier model-switch notices"))' \
+    >/dev/null 2>&1; then
+    echo "  PASS  PostModelSwitch injects a current routing handoff"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  PostModelSwitch routing handoff is missing: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: PostModelSwitch routing handoff"
+  fi
+
+  _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"resume"}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      .hookSpecificOutput.hookEventName == "PostModelSwitch"
+      and (.hookSpecificOutput.additionalContext | contains("/prime"))
+      and (.hookSpecificOutput.additionalContext | contains("otherwise do not re-prime"))' \
+    >/dev/null 2>&1; then
+    echo "  PASS  resumed model switches conditionally offer prime"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  resumed model switch prime guidance is wrong: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: resumed model switch prime guidance"
+  fi
+
+  _routing_fixture=$(mktemp)
+  cat >"$_routing_fixture" <<'JSON'
+{"model_switch":{"deny_statuses":["retired","unsupported"]},"models":{"claude-retired":{"status":"unsupported"}}}
+JSON
+  _out=$(MODEL_ROUTING_FILE="$_routing_fixture" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-retired","requested_model":"claude-retired","source":"command"}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      .hookSpecificOutput.hookEventName == "PreModelSwitch"
+      and .hookSpecificOutput.permissionDecision == "deny"
+      and (.hookSpecificOutput.permissionDecisionReason | contains("unsupported"))' \
+    >/dev/null 2>&1; then
+    echo "  PASS  PreModelSwitch denies explicitly unsupported routes"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  PreModelSwitch unsupported-route decision is wrong: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: PreModelSwitch unsupported route"
+  fi
+  rm -f "$_routing_fixture"
+
+  _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"picker","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      .hookSpecificOutput.hookEventName == "PreModelSwitch"
+      and .hookSpecificOutput.permissionDecision == "ask"
+      and (.hookSpecificOutput.permissionDecisionReason | contains("$1.25"))' \
+    >/dev/null 2>&1; then
+    echo "  PASS  PreModelSwitch confirms expensive warm-cache switches"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  PreModelSwitch warm-cache confirmation is wrong: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: PreModelSwitch warm-cache confirmation"
+  fi
+
+  _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"command","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      (has("hookSpecificOutput") | not)
+      and (.systemMessage | contains("$1.25"))' >/dev/null 2>&1; then
+    echo "  PASS  non-picker warm-cache switches warn without blocking"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  non-picker warm-cache warning is wrong: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: PreModelSwitch non-picker warm-cache warning"
+  fi
+
+  _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"custom-gateway-model","requested_model":"custom-gateway-model","source":"sdk","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":2.5}
+JSON
+  )
+  if [ -z "$_out" ]; then
+    echo "  PASS  PreModelSwitch preserves unlisted SDK-selected models"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  PreModelSwitch blocked an unlisted SDK-selected model: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: PreModelSwitch unlisted SDK route"
   fi
 fi
 

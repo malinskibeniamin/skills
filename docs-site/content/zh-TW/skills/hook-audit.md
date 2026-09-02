@@ -23,7 +23,8 @@ sidebar:
 5. 比較規則與強制執行情況；區分未經測試的 Hook 與建議性規則。
 6. 回顧：PR 延遲、CI 首次通過率、審查輪次、意見回饋延遲及工作樹數量。
 7. 完整：檢查 `skill-fires.jsonl` 與 `model-switches.jsonl`；執行 `bash scripts/generate-hook-configs.sh --check`。
-8. 建議最多五項行動：`Prune` 無用途的零觸發規則；`Soften` 過於頻繁的阻擋；`Harden` 具風險的警告；`Add` 缺少的確定性規則。
+8. 模型切換政策：使用 `/quantify-impact`；以任務成功率或返工量為主要指標，以快取寫入成本為護欄指標。
+9. 建議最多五項行動：`Prune` 無用途的零觸發規則；`Soften` 過於頻繁的阻擋；`Harden` 具風險的警告；`Add` 缺少的確定性規則。
 
 刪除前，請在具代表性且已限定版本的試驗中，透過 `HOOK_SHADOW_RULES` 以影子模式執行；比較任務結果與違規情況。絕不可將嚴格的安全或權限規則設為影子模式。
 

@@ -16,7 +16,8 @@ Modes: default/`--hooks` activity; `--retro` adds flow; `--all` adds latency, sk
 5. Compare rules/enforcement; distinguish untested hooks from advisory rules.
 6. Retro: PR lag, CI first-pass, review rounds, feedback latency, worktrees.
 7. All: inspect `skill-fires.jsonl` and `model-switches.jsonl`; run `bash scripts/generate-hook-configs.sh --check`.
-8. Recommend at most five actions: `Prune` purposeless zero-fire; `Soften` noisy blocks; `Harden` risky warnings; `Add` missing deterministic rule.
+8. Model-switch policy: use `/quantify-impact`; success/rework is primary; cache-write cost a guardrail.
+9. Recommend at most five actions: `Prune` purposeless zero-fire; `Soften` noisy blocks; `Harden` risky warnings; `Add` missing deterministic rule.
 
 Before deletion, shadow via `HOOK_SHADOW_RULES` in a representative, version-qualified trial; compare outcomes/violations. Never shadow strict safety/permission.
 

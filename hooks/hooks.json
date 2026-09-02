@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/model-switch-telemetry.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/model-switch-router.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/model-switch-telemetry.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/model-switch-router.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

@@ -26,7 +26,8 @@ Tryby: domyślny/`--hooks` — aktywność; `--retro` dodaje przebieg sesji; `--
 5. Porównaj reguły z mechanizmami egzekwowania; odróżnij nieprzetestowane hooki od reguł doradczych.
 6. Retrospektywa: opóźnienie PR, odsetek CI zakończonych powodzeniem za pierwszym razem, liczba rund przeglądu, czas oczekiwania na informacje zwrotne i liczba drzew roboczych.
 7. Tryb pełny: sprawdź `skill-fires.jsonl` i `model-switches.jsonl`; uruchom `bash scripts/generate-hook-configs.sh --check`.
-8. Zaproponuj maksymalnie pięć działań: `Prune` — pozbawiona uzasadnienia reguła bez uruchomień; `Soften` — zbyt częste blokady; `Harden` — ryzykowne ostrzeżenia; `Add` — brakująca reguła deterministyczna.
+8. Zasady przełączania modeli: użyj `/quantify-impact`; powodzenie zadania lub ilość poprawek jest główną miarą, a koszt zapisu pamięci podręcznej — ograniczeniem.
+9. Zaproponuj maksymalnie pięć działań: `Prune` — pozbawiona uzasadnienia reguła bez uruchomień; `Soften` — zbyt częste blokady; `Harden` — ryzykowne ostrzeżenia; `Add` — brakująca reguła deterministyczna.
 
 Przed usunięciem uruchom regułę w trybie obserwacyjnym za pomocą `HOOK_SHADOW_RULES` w reprezentatywnej próbie z określoną wersją; porównaj wyniki i naruszenia. Nigdy nie uruchamiaj w trybie obserwacyjnym rygorystycznych reguł bezpieczeństwa ani uprawnień.
 

@@ -18,6 +18,8 @@ if jq -e '.policy == "quality-first"
   and .models["gpt-5.6-terra"].status == "eval-gated"
   and .models["gpt-5.6-luna"].status == "eval-gated"
   and .models["claude-fable-5-1"].status == "quality-alternative"
+  and .model_switch.deny_statuses == ["retired", "unsupported"]
+  and .model_switch.warm_cache_confirmation_usd == 1
   and (.models | has("claude-fable-5") | not)
   and .selection.single_owner
   and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then

@@ -67,6 +67,12 @@ run_json_eval 'any(.capabilities["claude-code"].models[];
 run_content_eval "evals/run.sh" 'HOOK_METRICS_DISABLED=1' "fixture evals cannot pollute production telemetry"
 run_content_eval ".claude/hooks/skill-fire-log.sh" 'HOOK_METRICS_DISABLED' "skill telemetry honors isolation"
 run_content_eval ".claude/hooks/session-end.sh" 'HOOK_METRICS_DISABLED' "session telemetry honors isolation"
+run_content_eval ".claude/hooks/model-switch-router.sh" '/efficient-frontier' \
+  "model switches revalidate the active route"
+run_content_eval ".claude/hooks/model-switch-router.sh" '/prime' \
+  "resumed model switches can refresh stale state"
+run_content_eval "hook-audit/SKILL.md" '/quantify-impact' \
+  "model-switch policy changes require measured impact"
 
 run_executable_eval ".claude/hooks/codex-edit-dispatch.sh" "Codex edit dispatcher is executable"
 run_executable_eval ".claude/hooks/stop-dispatch.sh" "endpoint-aware Stop dispatcher is executable"
