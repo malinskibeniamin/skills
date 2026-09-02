@@ -1,32 +1,38 @@
 ---
 name: install-anti-slop
-description: Install the curated anti-slop Oxlint plugin in TypeScript or JavaScript repositories that already use Oxlint. Use when asked to add anti-slop, prevent type-evidence laundering, or update an existing vendored anti-slop core.
+description: Install curated anti-slop checks in TypeScript or JavaScript repositories using Oxlint or Biome, including Ultracite with the Biome backend. Use when asked to add anti-slop, prevent type-evidence laundering, or update an existing local anti-slop profile.
 ---
 
 # Install anti-slop
 
-Vendor the three-rule anti-slop core into an existing Oxlint repository. Keep the
-repository's package manager, lint owner, configuration style, and unrelated work intact.
+Add the profile through the repository's existing linter. Preserve its package manager,
+lint owner, configuration style, and unrelated work. Never introduce a second linter only
+for anti-slop.
 
-## Install
+## Select the profile
 
-1. Read the repository instructions and `git status`. Find its package manager, direct
-   `oxlint` dependency, Oxlint or Vite+ configuration, and any existing anti-slop copy.
-2. Require an existing direct `oxlint` dependency. If absent, leave the repository
-   unchanged and explain that anti-slop alone does not justify adding a second linter.
-3. Resolve the installed Oxlint version from the package manager or lockfile. Install
+1. Read the repository instructions and `git status`. Inspect direct dependencies, the
+   lockfile, and existing Biome, Ultracite, Oxlint, or Vite+ configuration.
+2. Choose exactly one existing backend:
+   - **Oxlint:** install the curated three-rule semantic profile.
+   - **Biome or Ultracite with Biome:** install the two-rule structural profile. Biome's
+     [GritQL plugins](https://biomejs.dev/linter/plugins/) do not expose symbol or scope
+     analysis, so this profile intentionally omits `no-widen-then-assert`; its unknown-alias
+     check covers direct `unknown` and direct union members, not alias chains.
+3. If neither supported linter exists, leave the repository unchanged and explain why.
+
+## Oxlint
+
+1. Resolve the installed `oxlint` version from the package manager or lockfile. Install
    `@oxlint/plugins` at that exact version as a development dependency.
-4. From the target repository, copy the bundled plugin:
+2. Copy the bundled plugin from the target repository:
 
    ```bash
    node <skill-directory>/scripts/install.mjs
    ```
 
-   The default destination is `tools/oxlint/anti-slop/`. Pass another repository-relative
-   destination when local tooling uses a different layout. The installer refuses path
-   escapes and existing destinations. Use `--force` only after backing up and reviewing an
-   existing local fork.
-5. Merge the plugin into the existing configuration without replacing other entries:
+   The default destination is `tools/oxlint/anti-slop/`.
+3. Merge the plugin into the existing configuration without replacing other entries:
 
    ```ts
    {
@@ -44,16 +50,51 @@ repository's package manager, lint owner, configuration style, and unrelated wor
 
    For Vite+, merge the same entries under `lint` and add the vendored path to
    `fmt.ignorePatterns`.
-6. Run the repository's lint and typecheck commands. Treat an install request as migration
-   scope and fix resulting findings in owned code unless the user explicitly requested
-   config-only work. Never weaken rules or add suppressions to make checks pass.
-7. Review the diff and report the copied path, exact dependency versions, configuration
-   changes, verification, and unresolved findings.
+
+## Biome
+
+1. Require Biome 2.5.9 or newer. An Ultracite configuration extending
+   `ultracite/biome/*` qualifies.
+2. Copy the GritQL plugins:
+
+   ```bash
+   node <skill-directory>/scripts/install.mjs --biome
+   ```
+
+   The default destination is `tools/biome/anti-slop/`.
+3. Merge both paths into the existing `plugins` array:
+
+   ```json
+   {
+     "plugins": [
+       {
+         "path": "./tools/biome/anti-slop/no-chained-type-assertions.grit",
+         "includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"]
+       },
+       {
+         "path": "./tools/biome/anti-slop/no-direct-unknown-type-aliases.grit",
+         "includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"]
+       }
+     ]
+   }
+   ```
+
+## Finish
+
+The installer rejects path escapes and existing destinations. Pass a different
+repository-relative destination when needed. Use `--force` only after backing up and
+reviewing an existing anti-slop installation.
+
+Run the repository's lint and typecheck commands. Treat an install request as migration
+scope and fix resulting findings in owned code unless the user explicitly requested
+config-only work. Never weaken checks or add suppressions merely to pass. Report the
+profile, copied path, dependency and configuration changes, verification, and unresolved
+findings.
 
 ## Ownership
 
-The bundled core is a local fork of
+The Oxlint core is a local fork of
 [`dmmulroy/anti-slop` v0.1.2](https://github.com/dmmulroy/anti-slop/tree/e8c4880471b23ab7f216fba7b27d173a6ef07d4c).
-It intentionally includes only rules that reject type-evidence laundering. The copied
-`LICENSE` preserves the upstream MIT terms. Treat installed files as project-owned and
-review upstream changes before porting them.
+Its copied `LICENSE` preserves the upstream MIT terms. The Biome GritQL profile is a
+structural adaptation with the narrower contract documented above. Treat installed files
+as project-owned and review upstream or Biome changes before porting them.

@@ -41,7 +41,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/hook-audit` | Audit hook effectiveness, latency, and drift. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
-| `/install-anti-slop` | Install the curated anti-slop core in Oxlint repositories. |
+| `/install-anti-slop` | Install anti-slop rules for Biome or Oxlint. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |

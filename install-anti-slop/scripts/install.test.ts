@@ -20,6 +20,11 @@ const expectedRules = [
   "no-widen-then-assert.ts",
 ];
 
+const expectedBiomePlugins = [
+  "no-chained-type-assertions.grit",
+  "no-direct-unknown-type-aliases.grit",
+];
+
 function withTemporaryProject(run: (project: string) => void): void {
   const project = mkdtempSync(join(tmpdir(), "install-anti-slop-"));
   try {
@@ -42,6 +47,28 @@ describe("install-anti-slop", () => {
       expect(readFileSync(join(target, "LICENSE"), "utf8")).toContain(
         "MIT License",
       );
+    });
+  });
+
+  it("copies the structural profile for Biome repositories", () => {
+    withTemporaryProject((project) => {
+      installAntiSlop({ cwd: project, linter: "biome" });
+      const target = join(project, "tools/biome/anti-slop");
+
+      expect(readdirSync(target).sort()).toEqual(expectedBiomePlugins);
+    });
+  });
+
+  it("force-replaces stale Biome profile files", () => {
+    withTemporaryProject((project) => {
+      installAntiSlop({ cwd: project, linter: "biome" });
+      const target = join(project, "tools/biome/anti-slop");
+      writeFileSync(join(target, "stale-rule.grit"), "stale\n");
+
+      installAntiSlop({ cwd: project, force: true, linter: "biome" });
+
+      expect(existsSync(join(target, "stale-rule.grit"))).toBe(false);
+      expect(readdirSync(target).sort()).toEqual(expectedBiomePlugins);
     });
   });
 
