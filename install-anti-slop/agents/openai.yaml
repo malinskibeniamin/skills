@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Anti-Slop"
+  short_description: "Install the curated anti-slop Oxlint core"
+  default_prompt: "Use $install-anti-slop to add the curated anti-slop rules to this Oxlint repository."

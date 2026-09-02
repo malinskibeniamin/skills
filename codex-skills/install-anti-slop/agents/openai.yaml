@@ -1,0 +1,3 @@
+interface:
+  display_name: "Install Anti-Slop"
+  short_description: "Install the curated anti-slop core in Oxlint repositories"
