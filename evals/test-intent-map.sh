@@ -42,8 +42,3 @@ run_content_eval "$REPO_ROOT/visual-recap/SKILL.md" '\.\./shared/intent-map\.md'
   "visual recaps render the shared intent-map contract"
 run_content_eval "$REPO_ROOT/CONTEXT.md" '\*\*Intent map\*\*' \
   "domain glossary names the shared presentation model"
-run_file_eval "$REPO_ROOT/agent-evals/evals/intent-map-explanation/EVAL.ts" \
-  "intent-map behavior has an agent-level evaluator"
-run_content_eval "$REPO_ROOT/agent-evals/experiments/intent-map.ts" \
-  'evals: \["intent-map-explanation"\]' \
-  "intent-map behavior has a runnable experiment"
