@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "90b6f7f213c1f8ca",
-      "zh-CN": "90b6f7f213c1f8ca",
-      "zh-TW": "90b6f7f213c1f8ca"
+      "pl": "f0f824d5f58d256a",
+      "zh-CN": "f0f824d5f58d256a",
+      "zh-TW": "f0f824d5f58d256a"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "cd127908c0cb40f5",
-      "zh-CN": "cd127908c0cb40f5",
-      "zh-TW": "cd127908c0cb40f5"
+      "pl": "16c53a189bfc9c9e",
+      "zh-CN": "16c53a189bfc9c9e",
+      "zh-TW": "16c53a189bfc9c9e"
     },
     "content/skills/brain-dump.md": {
       "pl": "043342bc8b1289a3",
@@ -116,9 +116,9 @@
       "zh-TW": "fa46e8ba48453c73"
     },
     "content/skills/frontend-starter-kit.md": {
-      "pl": "0f22e03d912c7410",
-      "zh-CN": "0f22e03d912c7410",
-      "zh-TW": "0f22e03d912c7410"
+      "pl": "005528885d28cdcc",
+      "zh-CN": "005528885d28cdcc",
+      "zh-TW": "005528885d28cdcc"
     },
     "content/skills/go.md": {
       "pl": "ab7b7d56d6e0bf43",
@@ -159,6 +159,11 @@
       "pl": "c1c49202f157a1b8",
       "zh-CN": "c1c49202f157a1b8",
       "zh-TW": "c1c49202f157a1b8"
+    },
+    "content/skills/install-anti-slop.md": {
+      "pl": "4f2fbcb9e97c1e0f",
+      "zh-CN": "4f2fbcb9e97c1e0f",
+      "zh-TW": "4f2fbcb9e97c1e0f"
     },
     "content/skills/make-pr-easy-to-review.md": {
       "pl": "acf6c280b1106d0a",

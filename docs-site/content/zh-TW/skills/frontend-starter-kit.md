@@ -47,7 +47,7 @@ sidebar:
 
 執行階段指引技能（日常工作，非設定用途）：`/accessibility`、`/tanstack-router`、
 `/connect-query`、`/e2e-testing`、`/registry-workflow`、`/ux-copy`。選用基礎設施：
-`/setup-routines`、`/setup-atlassian-workflow`（僅限斜線指令）。
+`/setup-routines`、`/setup-atlassian-workflow`（僅限斜線指令）。已使用 Biome 或 Oxlint 的儲存庫可透過 `/install-anti-slop` 啟用型別證據規則。
 
 ## 步驟
 
