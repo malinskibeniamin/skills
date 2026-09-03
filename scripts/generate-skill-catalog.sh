@@ -73,6 +73,7 @@ SHORT_DESCRIPTIONS = {
     "review": "Review a diff with evidence-triggered specialist hats",
     "setup-atlassian-workflow": "Configure opt-in Jira and Atlassian workflows",
     "setup-routines": "Configure automated Claude Code maintenance routines",
+    "show-me": "Explain the current topic with concise visual artifacts",
     "snyk-ux-security": "Audit dependency security with Snyk and release gates",
     "stack-registry": "Current and banned stack governance for harness rules",
     "stacked-prs": "Create and manage dependent GitHub pull request stacks",

@@ -97,6 +97,16 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Review / ship",
     ],
   },
+  "brain-dump": {
+    kind: "user-flow",
+    nodes: [
+      "Raw signal",
+      "Opportunity tracks",
+      "Answer ledger",
+      "Grill unresolved choices",
+    ],
+    relations: ["captures", "classifies", "hands off"],
+  },
   "codebase-design": {
     kind: "architecture",
     nodes: ["Caller", "Small interface", "Deep module", "Adapters"],
@@ -508,6 +518,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Reports + notifications",
     ],
     relations: ["triggers", "runs in", "publishes"],
+  },
+  "show-me": {
+    kind: "mind-map",
+    nodes: [
+      "Current topic",
+      "Pseudocode + trees",
+      "Mermaid + diffs",
+      "Focused HTML",
+    ],
   },
   "snyk-ux-security": {
     kind: "evidence-funnel",

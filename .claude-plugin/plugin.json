@@ -75,6 +75,7 @@
     "./review/",
     "./setup-atlassian-workflow/",
     "./setup-routines/",
+    "./show-me/",
     "./snyk-ux-security/",
     "./stack-registry/",
     "./stacked-prs/",
