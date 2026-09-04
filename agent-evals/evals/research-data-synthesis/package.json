@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "vitest": "^4.1.0",
+    "zod": "^3.25.76"
+  }
+}

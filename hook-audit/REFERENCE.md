@@ -49,3 +49,8 @@ Schema v4 summaries carry a stable hashed `session_id`, requested `endpoint`, te
 `outcome`, harness version, model, and run kind. Group by the hash; never reconstruct or
 expose the raw provider session ID. Treat `unknown` qualifiers and `ended` outcomes as
 missing classification, not success.
+
+Read `model-switches.jsonl` before model comparisons. Join its hashed `session_id` to the
+summary, then use transition timestamps to split pre-switch and post-switch observations.
+When an outcome cannot be assigned to one side of the transition, exclude that session
+from single-model claims instead of attributing it to the initial or final model.

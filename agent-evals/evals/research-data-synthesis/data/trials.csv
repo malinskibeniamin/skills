@@ -1,0 +1,5 @@
+site,treatment,successes,total
+north,A,90,100
+north,B,19,20
+south,A,1,10
+south,B,80,100

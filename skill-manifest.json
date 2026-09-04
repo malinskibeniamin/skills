@@ -5,6 +5,12 @@
     "SessionStart": {
       "": ["session-env.sh", "llm-env.sh"]
     },
+    "PreModelSwitch": {
+      "": ["model-switch-router.sh"]
+    },
+    "PostModelSwitch": {
+      "": ["model-switch-router.sh"]
+    },
     "Setup": {
       "init|maintenance": ["setup-init.sh"]
     },

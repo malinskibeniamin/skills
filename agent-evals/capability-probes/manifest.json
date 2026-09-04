@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "purpose": "Test high-uncertainty model capabilities without changing default routing.",
+  "claim_status": "hypothesis",
+  "routing_effect": "none-until-gate",
+  "runs_per_cell": 3,
+  "minimum_claude_version": "2.1.257",
+  "automated_tasks": ["research-data-synthesis", "evergreen-project-recovery"],
+  "models": [
+    {
+      "agent": "codex",
+      "id": "gpt-6-astra",
+      "effort": "max",
+      "role": "candidate"
+    },
+    {
+      "agent": "codex",
+      "id": "gpt-5.6-sol",
+      "effort": "max",
+      "role": "current-codex-baseline"
+    },
+    {
+      "agent": "claude-code",
+      "id": "claude-fable-5-1",
+      "effort": "max",
+      "role": "cross-family-baseline"
+    }
+  ],
+  "probes": [
+    {
+      "id": "spatial-computer-use",
+      "execution": "manual",
+      "capabilities": ["computer_use", "vision", "spatial_3d"],
+      "protocol": "agent-evals/capability-probes/manual/spatial-computer-use.md"
+    },
+    {
+      "id": "research-data-synthesis",
+      "execution": "automated",
+      "capabilities": ["data_analysis", "scientific_research"]
+    },
+    {
+      "id": "owner-controlled-swarm-debugging",
+      "execution": "manual",
+      "capabilities": ["multi_agent_coordination", "debugging"],
+      "protocol": "agent-evals/capability-probes/manual/owner-controlled-swarm-debugging.md"
+    },
+    {
+      "id": "evergreen-project-recovery",
+      "execution": "automated",
+      "capabilities": ["debugging"]
+    }
+  ],
+  "gate": {
+    "quality": "No lower task success and no new high-severity regression versus both baselines.",
+    "evidence": "Automated tasks need reproducible artifacts; manual tasks need complete receipts and raw captures.",
+    "promotion": "A capability result may inform scoped routing only after repeated wins on representative project work."
+  }
+}

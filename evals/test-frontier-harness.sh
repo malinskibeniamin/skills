@@ -38,32 +38,45 @@ run_json_eval '.quality_first.default.model == "gpt-5.6-sol"
   and (.quality_first.hard.efforts | index("max"))
   and .quality_first.ultra.requires_explicit_delegation
   and (.quality_first.ui_owners | index("gpt-5.6-sol"))
+  and .models["gpt-6-astra"].status == "eval-gated"
   and .models["gpt-5.6-terra"].status == "eval-gated"
   and .models["gpt-5.6-luna"].status == "eval-gated"' \
-  "config/model-routing.json" "routing reflects quality-first GPT-5.6 capabilities"
+  "config/model-routing.json" "routing keeps GPT-6 Astra eval-gated"
 
 run_file_eval "agent-evals/context-ablation/manifest.json" "ablation matrix is versioned"
-run_json_eval '(.agents | index("codex"))
-  and (.agents | index("claude-code"))
+run_json_eval '.schema_version == 2
+  and (.capabilities | has("codex"))
+  and (.capabilities | has("claude-code"))
   and (.variants | index("current"))
   and (.variants | index("lean"))
-  and (.efforts | index("xhigh"))
-  and (.efforts | index("max"))
   and (.metrics | index("task_success"))
   and (.metrics | index("regressions"))
   and (.metrics | index("input_tokens"))
-  and (.capabilities["claude-code"].models | index("fable"))
-  and (.capabilities["claude-code"].models | index("opus"))' \
+  and any(.capabilities.codex.models[]; .id == "gpt-5.6-sol" and (.efforts | index("xhigh")) and (.efforts | index("max")))
+  and any(.capabilities["claude-code"].models[]; .id == "claude-fable-5-1")
+  and any(.capabilities["claude-code"].models[]; .id == "claude-opus-5")' \
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"
 run_executable_eval "agent-evals/context-ablation/run.sh" "ablation runner is executable"
-run_content_eval "agent-evals/context-ablation/run.sh" 'claude-code.*fable' \
-  "ablation includes Fable without making it the default"
-run_content_eval "agent-evals/context-ablation/run.sh" 'claude-code.*opus' \
+run_json_eval 'any(.capabilities.codex.models[];
+  .id == "gpt-6-astra" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
+  "agent-evals/context-ablation/manifest.json" "ablation includes every GPT-6 Astra effort"
+run_json_eval 'any(.capabilities["claude-code"].models[];
+  .id == "claude-fable-5-1" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
+  "agent-evals/context-ablation/manifest.json" "ablation includes every Fable 5.1 effort"
+run_json_eval 'any(.capabilities["claude-code"].models[];
+  .id == "claude-opus-5" and .efforts == ["high", "xhigh"])' \
+  "agent-evals/context-ablation/manifest.json" \
   "ablation includes Opus as a Claude alternative"
 
 run_content_eval "evals/run.sh" 'HOOK_METRICS_DISABLED=1' "fixture evals cannot pollute production telemetry"
 run_content_eval ".claude/hooks/skill-fire-log.sh" 'HOOK_METRICS_DISABLED' "skill telemetry honors isolation"
 run_content_eval ".claude/hooks/session-end.sh" 'HOOK_METRICS_DISABLED' "session telemetry honors isolation"
+run_content_eval ".claude/hooks/model-switch-router.sh" '/efficient-frontier' \
+  "model switches revalidate the active route"
+run_content_eval ".claude/hooks/model-switch-router.sh" '/prime' \
+  "resumed model switches can refresh stale state"
+run_content_eval "hook-audit/SKILL.md" '/quantify-impact' \
+  "model-switch policy changes require measured impact"
 
 run_executable_eval ".claude/hooks/codex-edit-dispatch.sh" "Codex edit dispatcher is executable"
 run_executable_eval ".claude/hooks/stop-dispatch.sh" "endpoint-aware Stop dispatcher is executable"

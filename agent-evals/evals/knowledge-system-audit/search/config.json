@@ -1,0 +1,4 @@
+{
+  "include": ["brain/research", "brain/policies", "brain/sessions"],
+  "exclude": ["brain/inbox", "brain/archive"]
+}

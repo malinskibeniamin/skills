@@ -11,13 +11,23 @@
       "efforts": ["xhigh", "max"],
       "selection": "Use the smallest effort that clears the context-ablation quality gate."
     },
-    "ui_owners": ["gpt-5.6-sol", "claude-fable-5", "claude-opus-5"],
+    "ui_owners": ["gpt-5.6-sol", "claude-fable-5-1", "claude-opus-5"],
     "ultra": {
       "requires_explicit_delegation": true,
       "use": "Independent lanes only; never silently create an agent team."
     }
   },
+  "model_switch": {
+    "deny_statuses": ["retired", "unsupported"],
+    "warm_cache_confirmation_usd": 1
+  },
   "models": {
+    "gpt-6-astra": {
+      "status": "eval-gated",
+      "work": ["planning", "implementation", "review", "ui", "computer-use"],
+      "starting_effort": "xhigh",
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
+    },
     "gpt-5.6-sol": {
       "status": "primary",
       "work": ["planning", "implementation", "review", "ui", "computer-use"]
@@ -30,9 +40,11 @@
       "status": "eval-gated",
       "work": ["low-risk-tool-loops"]
     },
-    "claude-fable-5": {
+    "claude-fable-5-1": {
       "status": "quality-alternative",
-      "work": ["planning", "implementation", "review", "ui"]
+      "work": ["planning", "implementation", "review", "ui"],
+      "starting_effort": "high",
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
     },
     "claude-opus-5": {
       "status": "quality-alternative",
@@ -51,7 +63,12 @@
     "explicit_prompt_cache": "Use only in API integrations that expose cache controls."
   },
   "sources": [
+    "https://openai.com/index/gpt-6-astra/",
+    "https://developers.openai.com/api/docs/models/gpt-6-astra",
+    "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra",
     "https://openai.com/index/gpt-5-6/",
-    "https://developers.openai.com/api/docs/guides/latest-model"
+    "https://developers.openai.com/api/docs/guides/latest-model",
+    "https://platform.claude.com/docs/en/models/fable-5-1/overview",
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1"
   ]
 }

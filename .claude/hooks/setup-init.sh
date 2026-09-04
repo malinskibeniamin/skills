@@ -23,12 +23,7 @@ case "$mode" in
   maintenance)
     # Appends do not update directory mtime. Keep any session with state
     # touched in the last 24 hours; remove only wholly stale directories.
-    for _stale_dir in /tmp/hook-session-*; do
-      [ -d "$_stale_dir" ] || continue
-      if [ -z "$(find "$_stale_dir" -mmin -1440 2>/dev/null | head -1)" ]; then
-        rm -r "$_stale_dir" 2>/dev/null || true
-      fi
-    done
+    "$(dirname "$0")/session-state-sweep.sh" 2>/dev/null || true
     if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
       # Rotate metric logs past 10MB; keep the newest half by line count.
       _metrics_dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"

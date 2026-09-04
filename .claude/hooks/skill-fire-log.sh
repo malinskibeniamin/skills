@@ -38,7 +38,11 @@ fi
 harness_version="${harness_version:-unknown}"
 run_kind="${HOOK_METRICS_RUN_KIND:-real}"
 input_model=$(printf '%s' "$input" | jq -r '.model // .model_name // empty' 2>/dev/null || true)
-model="${CLAUDE_MODEL:-${CODEX_MODEL:-${input_model:-unknown}}}"
+session_model=""
+if [ -n "$session" ] && [ -f "/tmp/hook-session-${session}/current-model" ]; then
+  session_model=$(head -1 "/tmp/hook-session-${session}/current-model" 2>/dev/null || true)
+fi
+model="${input_model:-${session_model:-${CODEX_MODEL:-${ANTHROPIC_MODEL:-${CLAUDE_MODEL:-unknown}}}}}"
 
 if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
   dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"

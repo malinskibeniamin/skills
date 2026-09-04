@@ -66,9 +66,12 @@ run_json_eval_local() {
 
 run_json_eval_local '(.variants == ["bare", "guardrails", "lean", "current"])
   and .release_trigger == "major-model-release"
-  and (.tasks | index("self-verifying-repair"))' \
+  and (.tasks | index("self-verifying-repair"))
+  and (.tasks | index("workflow-system-audit"))
+  and (.tasks | index("knowledge-system-audit"))
+  and (.tasks | index("evergreen-project-recovery"))' \
   "$REPO_ROOT/agent-evals/context-ablation/manifest.json" \
-  "ablation starts bare, rebuilds by group, and includes a hard verification task"
+  "ablation covers implementation, workflow, knowledge, and recovery tasks"
 run_json_eval_local '.selection.single_owner == true
   and .selection.cross_family_review_for_non_trivial_pr == false' \
   "$REPO_ROOT/config/model-routing.json" \
@@ -85,10 +88,20 @@ run_content_eval "$REPO_ROOT/agent-evals/context-ablation/scorecard-template.md"
 run_content_eval "$REPO_ROOT/agent-evals/context-ablation/scorecard-template.md" 'Skill retention' \
   "model-release scorecard records skill decisions"
 
+for task in workflow-system-audit knowledge-system-audit evergreen-project-recovery; do
+  run_file_eval "$REPO_ROOT/agent-evals/evals/$task/EVAL.ts" \
+    "$task has an executable grader"
+  run_file_eval "$REPO_ROOT/agent-evals/evals/$task/package.json" \
+    "$task declares its evaluator dependencies"
+done
+
 for prompt in \
   "$REPO_ROOT/agent-evals/evals/setup-accessibility/PROMPT.md" \
   "$REPO_ROOT/agent-evals/evals/setup-code-organization/PROMPT.md" \
-  "$REPO_ROOT/agent-evals/evals/violation-nudge/PROMPT.md"; do
+  "$REPO_ROOT/agent-evals/evals/violation-nudge/PROMPT.md" \
+  "$REPO_ROOT/agent-evals/evals/workflow-system-audit/PROMPT.md" \
+  "$REPO_ROOT/agent-evals/evals/knowledge-system-audit/PROMPT.md" \
+  "$REPO_ROOT/agent-evals/evals/evergreen-project-recovery/PROMPT.md"; do
   run_absent_pattern "$prompt" '^# Project Rules|This project enforces strict|MUST|NEVER' \
     "$(basename "$(dirname "$prompt")") prompt does not leak grader rules"
   run_content_eval "$prompt" "verify|verification" \
