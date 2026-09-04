@@ -1,6 +1,6 @@
 ---
 name: thermo-nuclear-code-quality-review
-description: Alias for /review --deep -- release-blocking cold PR audit.
+description: "Alias for /review --deep: cold release audit of behavior, feature exposure, devex, and structure."
 disable-model-invocation: true
 ---
 

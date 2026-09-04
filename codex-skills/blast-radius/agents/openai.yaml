@@ -1,0 +1,3 @@
+interface:
+  display_name: "Blast Radius"
+  short_description: "Prove non-local change safety with executable evidence"

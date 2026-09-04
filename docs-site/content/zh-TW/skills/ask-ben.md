@@ -17,12 +17,14 @@ sidebar:
 | `/agent-watchdog` | 稽核並修復另一個程式設計代理程式完成的工作。 |
 | `/aip` | 設計採用 Google AIP 風格的 protobuf 資源 API。 |
 | `/ask-ben` | 透過 Ben 的前端技能控制框架路由工作。 |
+| `/blast-radius` | 以可執行的實證證明非區域性變更的安全性。 |
 | `/brain-dump` | 將原始想法轉化為可執行的機會地圖。 |
 | `/codebase-design` | 設計具備清晰介面的深層模組。 |
 | `/codex-compat` | 產生 Codex 掛鉤與指令的對等實作。 |
 | `/codex` | 透過 Codex CLI 委派範圍明確的工作。 |
 | `/commit-push-pr` | 提交、推送並發布可供審查的提取要求。 |
 | `/connect-query` | 使用 Connect Query 建置型別化的 ConnectRPC 資料流程。 |
+| `/create-verification-skill` | 建立專案本機的真實應用程式驗證控制框架。 |
 | `/demo` | 建立面向客戶的功能錄製內容。 |
 | `/deslop` | 稽核已經過度膨脹的程式碼，並移除不合理的介面。 |
 | `/development-lifecycle` | 執行完整的前端開發生命週期。 |
@@ -44,6 +46,7 @@ sidebar:
 | `/hook-audit` | 稽核掛鉤的成效、延遲與偏移。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
+| `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |
 | `/plow-ahead` | 在例行的不確定情況下自主繼續推進。 |

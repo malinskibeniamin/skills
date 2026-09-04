@@ -17,12 +17,14 @@ sidebar:
 | `/agent-watchdog` | 审计并修复其他编码智能体的工作。 |
 | `/aip` | 设计 Google AIP 风格的 protobuf 资源 API。 |
 | `/ask-ben` | 通过 Ben 的前端技能框架路由工作。 |
+| `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |
 | `/codebase-design` | 设计具有清晰接口的深层模块。 |
 | `/codex-compat` | 生成与 Codex 钩子和指令的功能对等实现。 |
 | `/codex` | 通过 Codex CLI 委派范围明确的工作。 |
 | `/commit-push-pr` | 提交、推送并发布可供审查的拉取请求。 |
 | `/connect-query` | 使用 Connect Query 构建类型安全的 ConnectRPC 数据流。 |
+| `/create-verification-skill` | 创建项目本地的真实应用验证框架。 |
 | `/demo` | 创建面向客户的功能演示录像。 |
 | `/deslop` | 审计已经臃肿的代码，并移除缺乏合理依据的表层内容。 |
 | `/development-lifecycle` | 运行完整的前端开发生命周期。 |
@@ -44,6 +46,7 @@ sidebar:
 | `/hook-audit` | 审计钩子的有效性、延迟和偏移。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
 | `/plow-ahead` | 在常规的不确定情况下自主继续推进。 |

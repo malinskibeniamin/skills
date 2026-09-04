@@ -1,6 +1,6 @@
 ---
 title: /thermo-nuclear-code-quality-review
-description: /review --deep 的別名——會阻擋發布的冷態 PR 稽核。
+description: /review --deep 的別名：針對行為、功能開放、開發者體驗與結構進行冷態發布稽核。
 type: skill
 sidebar:
   label: /thermo-nuclear-code-quality-review
@@ -9,4 +9,7 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/thermo-nuclear-code-quality-review.excalidraw)
 
-對使用者指定的目標（PR、分支或固定點）執行 `/review --deep`。此技能僅為斜線指令別名——完整的冷態稽核程序（不得跳過的角色審查小組、測試框架完整性、最強論證、深度報告格式）位於 [review/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/review/SKILL.md) 與 [review/DEEP-AUDIT.md](https://github.com/malinskibeniamin/skills/blob/main/review/DEEP-AUDIT.md)。
+
+對指定的 PR、分支或固定點執行 `/review --deep`。將完整的稽核
+與輸出規範委派給
+[review/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/review/SKILL.md) 與 [review/DEEP-AUDIT.md](https://github.com/malinskibeniamin/skills/blob/main/review/DEEP-AUDIT.md)。

@@ -32,6 +32,8 @@ One primary model is the single owner; delegation/background work needs explicit
 
 Run applicable repo tests, types, lint, build, and static checks. Exercise material behavior at its real entrypoint plus one credible failure/recovery path. Review against objective, guardrails, and credible risk. A failure becomes the next action; repair and repeat.
 
+Missing repeatable entrypoint: prove with a disposable harness, then route the durable gap to `/create-verification-skill`.
+
 ## Boundaries
 
 Ask only for a material user-reserved decision or irreversible production, legal/privacy, destructive, or high-security action. On the current user-owned branch, commit, push, rebase, and `--force-with-lease` without another prompt. Never merge, plain-force, add PRs, or rewrite default/shared/foreign/concurrent branches without explicit permission.

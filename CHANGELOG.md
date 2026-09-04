@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-09-02 -- Reconcile `/review --deep` with Cursor Thermos release-risk coverage for
+developer setup, feature exposure, intended breakage, and structural ambition. Vendor the
+non-overlapping Poteto/pstack `/blast-radius`, `/create-verification-skill`, and
+`/maintain-verification-skill` workflows with a pinned source reference. Route review,
+codebase design, lifecycle, and dogfood through one shared set of reader-load,
+structural-enforcement, first-principles, and executable-proof rules. Skills 84 -> 87.
+
 ## 4.38.0
 
 2026-08-24 -- Publish the post-4.37 Claude Code and Codex bundle. Add

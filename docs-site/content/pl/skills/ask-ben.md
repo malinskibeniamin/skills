@@ -17,12 +17,14 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/agent-watchdog` | Audytowanie i poprawianie pracy innego agenta programistycznego. |
 | `/aip` | Projektowanie interfejsów API zasobów protobuf w stylu Google AIP. |
 | `/ask-ben` | Kierowanie pracy przez zestaw umiejętności frontendowych Bena. |
+| `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
 | `/codebase-design` | Projektowanie głębszych modułów z przejrzystymi interfejsami. |
 | `/codex-compat` | Generowanie zgodnych hooków i instrukcji dla Codex. |
 | `/codex` | Delegowanie ograniczonych zadań przez CLI Codex. |
 | `/commit-push-pr` | Zatwierdzanie zmian, wypychanie ich i publikowanie PR-a gotowego do przeglądu. |
 | `/connect-query` | Tworzenie typowanych przepływów danych ConnectRPC za pomocą Connect Query. |
+| `/create-verification-skill` | Tworzenie lokalnego dla projektu zestawu do weryfikacji rzeczywistej aplikacji. |
 | `/demo` | Tworzenie nagrania funkcji przeznaczonego dla klientów. |
 | `/deslop` | Audytowanie nadmiernie rozbudowanego kodu i usuwanie nieuzasadnionych elementów. |
 | `/development-lifecycle` | Przeprowadzanie pełnego cyklu tworzenia frontendu. |
@@ -44,6 +46,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/hook-audit` | Audytowanie skuteczności, opóźnień i rozbieżności hooków. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
+| `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |

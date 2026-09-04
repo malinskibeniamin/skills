@@ -12,87 +12,53 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/codebase-design.excalidraw)
 
-Projektuj **głębokie moduły**: dużo zachowań za małym interfejsem umieszczonym w dobrze dobranym szwie, możliwych do przetestowania przez ten interfejs. Cel: duża użyteczność dla wywołujących, lokalność dla osób utrzymujących kod oraz testowalność dla agentów i ludzi.
 
-Głębokość musi już teraz zwiększać gęstość semantyczną. Nie twórz modułu, szwu, adaptera
-ani interfejsu z myślą o hipotetycznym ponownym użyciu. Projekt jest udany tylko wtedy, gdy usuwa
-z kodu wywołującego więcej wiedzy i potrzeby koordynacji, niż sam wprowadza.
+Projektuj **głębokie moduły**: dużo zachowań za małym interfejsem umieszczonym w dobrze dobranym szwie, możliwych do przetestowania przez ten interfejs. Optymalizuj użyteczność dla wywołujących, lokalność dla osób utrzymujących kod oraz testowalność.
+
+Głębokość musi już teraz zwiększać gęstość semantyczną. Nie twórz modułów, szwów, adapterów ani interfejsów z myślą o hipotetycznym ponownym użyciu. Projekt jest udany tylko wtedy, gdy usuwa z kodu wywołującego więcej wiedzy i potrzeby koordynacji, niż sam wprowadza.
 
 ## Słownik
 
-Używaj dokładnie tych terminów; unikaj luźnych synonimów.
+Używaj dokładnie tych terminów:
 
-**Moduł** -- wszystko, co ma interfejs i implementację: funkcja, klasa, pakiet, wycinek. Unikaj: jednostka, komponent, usługa.
+**Moduł** -- interfejs wraz z implementacją: funkcja, klasa, pakiet, wycinek.
 
-**Interfejs** -- wszystko, co musi wiedzieć kod wywołujący: powierzchnia typów, niezmienniki, kolejność, błędy, konfiguracja, wydajność. Unikaj: API lub sygnatura, gdy masz na myśli pełny kontrakt.
+**Interfejs** -- wszystko, co musi wiedzieć kod wywołujący: typy, niezmienniki, kolejność, błędy, konfiguracja, wydajność; pojęcie szersze niż sygnatura.
 
-**Implementacja** -- to, co znajduje się wewnątrz modułu. Różni się od **Adaptera**: adapter jest konkretnym elementem wypełniającym szew.
+**Implementacja** -- wnętrze modułu.
 
-**Głębokość** -- użyteczność zapewniana przez interfejs. **Głęboki** = mały interfejs, dużo zachowań. **Płytki** = interfejs niemal tak złożony jak implementacja.
+**Głębokość** -- użyteczność zapewniana przez interfejs. **Głęboki** oznacza mały interfejs i dużo zachowań; **płytki** oznacza podobną złożoność interfejsu i implementacji.
 
-**Szew** -- miejsce, w którym zachowanie może się zmieniać bez edytowania tego miejsca; tam znajduje się interfejs modułu. Unikaj: granica, termin przeciążony znaczeniem ograniczonego kontekstu DDD.
+**Szew** -- miejsce, w którym zachowanie może się zmieniać bez edytowania kodu wywołującego; tam znajduje się jego interfejs. Unikaj: granica, chyba że masz na myśli ograniczony kontekst DDD.
 
-**Adapter** -- konkretna implementacja spełniająca interfejs w szwie; nazwa określa rolę, nie tworzywo.
+**Adapter** -- konkretna implementacja w szwie, nazwana według roli.
 
-**Użyteczność** -- kod wywołujący otrzymuje więcej możliwości na każdy poznany interfejs.
+**Użyteczność** -- możliwości na każdy poznany interfejs.
 
 **Lokalność** -- zmiany, błędy, wiedza i weryfikacja skupiają się w jednym miejscu.
 
-## Głębokie a płytkie
-
-Głęboki moduł:
-
-```
-Small Interface
-----------------
-Deep Implementation
-```
-
-Płytki moduł:
-
-```
-Large Interface
-----------------
-Thin Implementation
-```
-
-Zapytaj:
-
-- Czy można ograniczyć liczbę metod?
-- Czy można uprościć parametry?
-- Czy można ukryć więcej złożoności wewnątrz?
+Zapytaj, czy można ograniczyć liczbę metod i parametrów oraz ukryć więcej złożoności.
 
 ## Zasady
 
-- **Głębokość jest właściwością interfejsu, a nie rozmiaru implementacji.** Wnętrze może zawierać prywatne szwy; kod wywołujący nie musi ich znać.
-- **Test usunięcia.** Jeśli usunięcie modułu sprawia, że złożoność znika, moduł był tylko warstwą pośrednią. Jeśli złożoność pojawia się ponownie w kodzie wywołującym lub testach, moduł zasłużył na swoje miejsce.
-- **Interfejs jest powierzchnią testową.** Kod wywołujący i testy przekraczają ten sam szew. Testowanie poza nim zwykle oznacza niewłaściwą strukturę.
-- **Jeden adapter oznacza hipotetyczny szew. Dwa adaptery oznaczają rzeczywisty szew.** Nie dodawaj szwów dla wyobrażonej zmienności.
-- **Bezpośredniość to również projekt.** Małe lokalne wyrażenie jest lepsze niż abstrakcja, która jedynie przenosi kod.
+- Głębokość jest właściwością interfejsu, a nie stosunkiem liczby wierszy; prywatne szwy nie muszą być ujawniane.
+- **Test usunięcia:** jeśli usunięcie modułu sprawia, że złożoność znika, moduł był tylko warstwą pośrednią; jeśli złożoność rozprzestrzenia się na kod wywołujący lub testy, moduł zasłużył na swoje miejsce.
+- **Interfejs jest powierzchnią testową:** kod wywołujący i testy przekraczają ten sam szew. Testowanie poza nim wskazuje na niewłaściwą strukturę.
+- **Jeden adapter oznacza hipotetyczny szew; dwa adaptery oznaczają rzeczywisty szew.**
+- Bezpośredni kod lokalny jest lepszy niż abstrakcja, która jedynie przenosi kod.
 
-## Projektowanie pod kątem testowalności
+## Testowalność
 
 1. Przyjmuj zależności; nie twórz ich wewnątrz.
-2. Zwracaj wyniki, gdy jest to możliwe; ograniczaj niejawne efekty uboczne.
-3. Utrzymuj małą powierzchnię: mniej metod, mniej parametrów, jaśniejsze niezmienniki.
+2. Zwracaj wyniki; ograniczaj niejawne efekty uboczne.
+3. Utrzymuj niewiele metod i parametrów oraz jasne niezmienniki.
 
-Gdy dwa sensowne projekty modułu lub interfejsu przejdą test usunięcia, użyj `/plan-arbiter`, aby przed wyborem jednego z nich porównać głębokość, lokalność, powierzchnię testową i możliwość wycofania zmian.
+Gdy dwa projekty przejdą test usunięcia, użyj `/plan-arbiter`, aby porównać głębokość, lokalność, powierzchnię testową i możliwość wycofania zmian.
 
-## Relacje
+Relacje: Moduł ma jeden Interfejs; Głębokość mierzy się względem niego; Szew go zawiera; Adapter go spełnia; Głębokość tworzy Użyteczność i Lokalność.
 
-- Moduł ma jeden Interfejs.
-- Głębokość mierzy się względem Interfejsu.
-- Szew to miejsce, w którym znajduje się Interfejs.
-- Adapter znajduje się w Szwie i spełnia Interfejs.
-- Głębokość tworzy Użyteczność i Lokalność.
+Odrzuć głębokość mierzoną liczbą wierszy, interfejs rozumiany jako słowo kluczowe TypeScript oraz nieprecyzyjne użycie terminu granica.
 
-## Odrzucone ujęcia
-
-- Głębokość jako stosunek liczby wierszy implementacji do liczby wierszy interfejsu: premiuje sztuczne rozbudowywanie kodu.
-- Interfejs wyłącznie jako TypeScript `interface` lub metody publiczne: zbyt wąskie ujęcie.
-- Granica: używaj terminu szew lub interfejs, chyba że masz na myśli ograniczony kontekst DDD.
-
-## Materiały referencyjne
-
-- [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md) -- kategorie zależności, dyscyplina stosowania szwów, testowanie przez zastępowanie zamiast nakładania warstw.
-- [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md) -- równoległe projekty interfejsów, porównanie pod względem głębokości, lokalności i umiejscowienia szwów.
+Przeczytaj [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md), aby poznać zasady dotyczące zależności, szwów i testowania, oraz [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md), aby poznać równoległe projekty.
+W kwestiach obciążenia czytelnika, egzekwowania struktury i integracji opartej na pierwszych zasadach używaj wspólnych
+[reguł inżynieryjnych Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md), zamiast powielać je tutaj.

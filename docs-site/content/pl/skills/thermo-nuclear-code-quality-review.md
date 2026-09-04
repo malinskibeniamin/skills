@@ -1,6 +1,8 @@
 ---
 title: /thermo-nuclear-code-quality-review
-description: Alias dla /review --deep — blokującego wydanie audytu PR na chłodno.
+description: >-
+  Alias dla /review --deep: audytu na chłodno zachowania, ekspozycji funkcji,
+  ergonomii programistycznej i struktury przed wydaniem.
 type: skill
 sidebar:
   label: /thermo-nuclear-code-quality-review
@@ -9,4 +11,7 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/thermo-nuclear-code-quality-review.excalidraw)
 
-Uruchom `/review --deep` dla celu wskazanego przez użytkownika (PR, gałęzi lub stałego punktu). Ta umiejętność jest wyłącznie aliasem polecenia ukośnikowego — pełna procedura audytu na chłodno (obowiązkowy panel perspektyw, integralność środowiska testowego, analiza najmocniejszej wersji argumentów, format szczegółowego raportu) znajduje się w [review/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/review/SKILL.md) i [review/DEEP-AUDIT.md](https://github.com/malinskibeniamin/skills/blob/main/review/DEEP-AUDIT.md).
+
+Uruchom `/review --deep` dla wskazanego PR, gałęzi lub stałego punktu. Pełny audyt
+oraz wymagania dotyczące wyniku są określone w
+[review/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/review/SKILL.md) i [review/DEEP-AUDIT.md](https://github.com/malinskibeniamin/skills/blob/main/review/DEEP-AUDIT.md).
