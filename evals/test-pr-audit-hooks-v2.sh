@@ -24,16 +24,15 @@ run_executable_eval "$HOOKS_DIR/copyright-check.sh" "copyright-check.sh is execu
 run_content_eval "$HOOKS_DIR/checks/copyright-check.lib.sh" "spdx-license-identifier" "copyright-check catches license headers"
 _copyright_tmp=$(mktemp -d)
 _copyright_file="$_copyright_tmp/example.ts"
-_copyright_header='// Copy''right 2026 Redpanda Data, Inc.'
 
-_copyright_pre=$(jq -nc --arg f "$_copyright_file" --arg h "$_copyright_header" \
-  '{hook_event_name:"PreToolUse",tool_name:"Write",tool_input:{file_path:$f,content:($h + "\nexport const value = 1;")}}')
+_copyright_pre=$(jq -nc --arg f "$_copyright_file" \
+  '{hook_event_name:"PreToolUse",tool_name:"Write",tool_input:{file_path:$f,content:"// SPDX-License-Identifier: MIT\nexport const value = 1;"}}')
 run_hook_eval "$HOOKS_DIR/copyright-check.sh" "$_copyright_pre" 2 \
   "copyright-check denies copyright headers before creating files" "Copyright/license header comments are prohibited"
 
 printf 'export const value = 1;\n' > "$_copyright_file"
-_copyright_post=$(jq -nc --arg f "$_copyright_file" --arg h "$_copyright_header" \
-  '{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const value = 1;",new_string:($h + "\nexport const value = 1;")}}')
+_copyright_post=$(jq -nc --arg f "$_copyright_file" \
+  '{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const value = 1;",new_string:"// SPDX-License-Identifier: MIT\nexport const value = 1;"}}')
 run_hook_eval "$HOOKS_DIR/copyright-check.sh" "$_copyright_post" 2 \
   "copyright-check blocks copyright headers after edits" "Copyright/license header comments are prohibited"
 
