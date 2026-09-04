@@ -370,6 +370,16 @@ cd agent-evals && bun install --yarn && npx @vercel/agent-eval
 
 Run only the adversarial AIP design review with `npx @vercel/agent-eval aip`.
 
+Major model releases have two paid, opt-in gates. Context ablation measures how much ambient
+instruction the model needs. Capability probes separately compare specialized research,
+data-analysis, debugging, computer-use, vision/3D, and explicitly authorized coordination
+work without promoting release claims into routing policy:
+
+```
+agent-evals/context-ablation/run.sh --dry
+agent-evals/capability-probes/run.sh --dry
+```
+
 ## Credits and provenance
 
 Everything this harness uses from [mattpocock/skills](https://github.com/mattpocock/skills) is vendored locally -- nothing needs installing from the upstream repo. Vendored: `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `codebase-design`, `improve-codebase-architecture`, `domain-modeling`, `grilling`, `prototype`, `research` (v1.1.0 rewrite, restored on owner request), `teach` (slash-only, kept on owner request), `to-questionnaire`, `to-spec`, `to-tickets`, `wait-what`, `writing-for-agents`, `resolving-merge-conflicts`, `wayfinder`, `wizard`. Upstream skills judged dead, off-domain, superseded, or contradictory to this harness (obsidian-vault, scaffold-exercises, implement, loop-me, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code, edit-article, batch-grill-me, spawn) are not registered.
