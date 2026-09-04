@@ -1,0 +1,3 @@
+interface:
+  display_name: "Show Me"
+  short_description: "Explain the current topic with concise visual artifacts"

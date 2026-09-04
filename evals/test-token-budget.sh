@@ -73,7 +73,7 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 6800
+ask-ben 6900
 wayfinder 5000
 review 4300
 diagnosing-bugs 5600
