@@ -16,6 +16,20 @@ Prompts state high-level outcomes and verification paths without copying the hid
 rules. Compare each group against the previous winner. Treat token and duration savings as
 tie-breakers only after quality is non-inferior.
 
+The suite now includes three Astra-motivated review trials alongside implementation and
+policy tasks:
+
+- `workflow-system-audit` finds repeated prompts, manual release work, skill and instruction
+  candidates, schedule candidates, and recurring stop points across synthetic agent history.
+- `knowledge-system-audit` traces schema, ingestion, retrieval, duplication, conflict, and
+  apparent non-use evidence without treating a small access log as deletion authority.
+- `evergreen-project-recovery` runs green automated checks plus a failing real demo, then
+  grades the file-scoped recovery plan and its verification contract.
+
+They test the proposed workflows; they do not establish a general model ranking. A model may
+own planning or review only after it clears the recorded gate. Handoffs to a different model
+remain explicit owner-approved delegation, not automatic routing.
+
 The manifest pins exact model IDs. GPT-6 Astra and Claude Fable 5.1 run at `low`,
 `medium`, `high`, `xhigh`, and `max`; results from their predecessors do not determine
 the new effort frontier. Astra starts at the harness's current `xhigh` default while the

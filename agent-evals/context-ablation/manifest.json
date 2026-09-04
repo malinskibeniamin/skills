@@ -18,7 +18,10 @@
     "setup-accessibility",
     "violation-nudge",
     "aip-design-review",
-    "self-verifying-repair"
+    "self-verifying-repair",
+    "workflow-system-audit",
+    "knowledge-system-audit",
+    "evergreen-project-recovery"
   ],
   "capabilities": {
     "codex": {
