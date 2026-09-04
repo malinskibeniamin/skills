@@ -22,6 +22,12 @@
     "warm_cache_confirmation_usd": 1
   },
   "models": {
+    "gpt-6-astra": {
+      "status": "eval-gated",
+      "work": ["planning", "implementation", "review", "ui", "computer-use"],
+      "starting_effort": "xhigh",
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
+    },
     "gpt-5.6-sol": {
       "status": "primary",
       "work": ["planning", "implementation", "review", "ui", "computer-use"]
@@ -57,6 +63,9 @@
     "explicit_prompt_cache": "Use only in API integrations that expose cache controls."
   },
   "sources": [
+    "https://openai.com/index/gpt-6-astra/",
+    "https://developers.openai.com/api/docs/models/gpt-6-astra",
+    "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra",
     "https://openai.com/index/gpt-5-6/",
     "https://developers.openai.com/api/docs/guides/latest-model",
     "https://platform.claude.com/docs/en/models/fable-5-1/overview",

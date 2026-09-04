@@ -26,6 +26,10 @@
         {
           "id": "gpt-5.6-sol",
           "efforts": ["xhigh", "max"]
+        },
+        {
+          "id": "gpt-6-astra",
+          "efforts": ["low", "medium", "high", "xhigh", "max"]
         }
       ]
     },

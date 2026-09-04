@@ -34,6 +34,10 @@ fi
 _expected_cells="$_ablation_tmp/expected.log"
 : > "$_expected_cells"
 for _variant in bare guardrails lean current; do
+  for _effort in low medium high xhigh max; do
+    printf 'codex|gpt-6-astra|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
+      "$_effort" "$_variant" >> "$_expected_cells"
+  done
   for _effort in xhigh max; do
     printf 'codex|gpt-5.6-sol|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
@@ -84,6 +88,20 @@ else
   echo "  FAIL  experiment drops the runner's exact Claude model or effort"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: context-ablation experiment model propagation"
+fi
+
+if ABLATION_AGENT=codex ABLATION_MODEL=gpt-6-astra \
+  ABLATION_EFFORT=max bun -e '
+    const { createExperiment } = await import("./agent-evals/context-ablation/create-experiment.ts");
+    const config = createExperiment(null);
+    if (config.model !== "gpt-6-astra?reasoningEffort=max") process.exit(1);
+  ' >/dev/null 2>&1; then
+  echo "  PASS  experiment preserves the exact GPT-6 Astra model and effort"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  experiment drops the GPT-6 Astra model or effort"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: GPT-6 Astra experiment model propagation"
 fi
 
 rm -rf "$_ablation_tmp"

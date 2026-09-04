@@ -188,6 +188,23 @@ JSON
 
   _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PostModelSwitch","from_model":"gpt-5.6-sol","to_model":"gpt-6-astra","requested_model":"gpt-6-astra","source":"picker"}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      (.hookSpecificOutput.additionalContext | contains("Routing record: eval-gated; candidate work:"))
+      and (.hookSpecificOutput.additionalContext | contains("qualified work") | not)' \
+    >/dev/null 2>&1; then
+    echo "  PASS  eval-gated model switches label work as a candidate"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  eval-gated model switch claims qualification: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: eval-gated model switch qualification"
+  fi
+
+  _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
 {"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"resume"}
 JSON
   )

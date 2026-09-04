@@ -15,6 +15,8 @@ if jq -e '.policy == "quality-first"
   and (.quality_first.ui_owners | index("gpt-5.6-sol"))
   and (.quality_first.ui_owners | index("claude-fable-5-1"))
   and .quality_first.ultra.requires_explicit_delegation
+  and .models["gpt-6-astra"].status == "eval-gated"
+  and .models["gpt-6-astra"].starting_effort == "xhigh"
   and .models["gpt-5.6-terra"].status == "eval-gated"
   and .models["gpt-5.6-luna"].status == "eval-gated"
   and .models["claude-fable-5-1"].status == "quality-alternative"
@@ -23,10 +25,10 @@ if jq -e '.policy == "quality-first"
   and (.models | has("claude-fable-5") | not)
   and .selection.single_owner
   and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then
-  echo "  PASS  routing config encodes quality-first GPT-5.6 policy"
+  echo "  PASS  routing config keeps GPT-6 Astra behind the quality gate"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  routing config encodes quality-first GPT-5.6 policy"
+  echo "  FAIL  routing config keeps GPT-6 Astra behind the quality gate"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: model-routing quality policy"
 fi

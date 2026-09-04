@@ -121,7 +121,9 @@ fi
 if [ "$event" = "PostModelSwitch" ] && [ -n "$to_model" ]; then
   context="Active model changed from ${from_model:-unknown} to $to_model (source: $source). This supersedes earlier model-switch notices."
   if [ -n "$route_status" ]; then
-    context="$context Routing record: $route_status${route_work:+; qualified work: $route_work}."
+    work_label="qualified work"
+    [ "$route_status" = "eval-gated" ] && work_label="candidate work"
+    context="$context Routing record: $route_status${route_work:+; $work_label: $route_work}."
   else
     context="$context No routing record exists for this model; do not infer a ban."
   fi
