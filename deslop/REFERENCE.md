@@ -47,6 +47,23 @@ Never remove trust-boundary validation, visible error handling, security, access
 6. **Tests** -- Does each test protect a meaningful public contract?
 7. **Cost** -- Would you be comfortable owning this during an incident?
 
+## Repository slop audits
+
+Audit requests report candidates; explicit cleanup requests may apply verified cuts.
+Rank maintenance cost and confidence, not deletion volume. Inspect callers, public
+exports, dynamic registration, and history before calling a wrapper unused. A one-use
+function can still own a useful domain boundary.
+
+For each test candidate, name the public failure it catches. Delete duplicate coverage
+only after showing the retained test catches that same failure, using a temporary fault
+or an existing regression reproduction. A test that survives a representative fault may
+need repair, not deletion. Keep the fault out of the final diff. Mock count, age, green
+CI, and short implementation are not proof of uselessness.
+
+For each applied cut, record the removed responsibility, replacement or retained
+coverage, and focused checks. Verify the behavior before and after; preserve unique
+error, security, accessibility, and compatibility coverage.
+
 ## Block examples
 
 - New wrapper component only changes names around an existing component.
