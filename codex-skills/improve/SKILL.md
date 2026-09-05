@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Audit a codebase or write executor-ready plans. Use for improvement surveys, roadmap direction, plan review, explicit execution handoff, or backlog reconciliation.
+description: Audit codebases and open PRs/issues, or write executor-ready plans. Use for improvement surveys, performance wins, agent DX, plan review, execution handoff, or backlog reconciliation.
 license: MIT
 metadata:
   author: shadcn

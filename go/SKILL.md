@@ -31,6 +31,9 @@ Follow [commit-push-pr/REFERENCE.md](../commit-push-pr/REFERENCE.md) for staging
 
 If `gh stack view --json` finds a stack, verify the layer against its parent. Only explicit `/stacked-prs` intent ships the whole stack.
 
+When the user also explicitly authorizes merging, follow
+[the merge contract](../commit-push-pr/references/merge.md) after verification.
+
 - Bind evidence to current `HEAD`; edits invalidate it.
 - This explicit full-delivery endpoint monitors CI. Repair failures, replay evidence, push, continue.
 - Resolve every current human review thread; `pr-feedback-completeness-stop` enforces it. Human feedback has no cap. Do not poll after the current set.

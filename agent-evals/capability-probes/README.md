@@ -25,6 +25,10 @@ task. Keep raw results out of Git and complete `scorecard-template.md` before us
 
 Some claims cannot be inferred from code-generation output:
 
+- `manual/maintenance-workflows.md` covers slop, measured performance, cold-start agent
+  verification, backlog closure, authorized merges, and stuck-work takeover, including
+  stale evidence and mutation boundaries.
+
 - `manual/spatial-computer-use.md` requires an isolated browser, reference visuals, a real
   3D surface, interaction replay, screenshots, console/network evidence, and recovery tests.
 - `manual/owner-controlled-swarm-debugging.md` requires explicit delegation authorization,

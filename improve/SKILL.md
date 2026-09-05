@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Audit a codebase or write executor-ready plans. Use for improvement surveys, roadmap direction, plan review, explicit execution handoff, or backlog reconciliation.
+description: Audit codebases and open PRs/issues, or write executor-ready plans. Use for improvement surveys, performance wins, agent DX, plan review, execution handoff, or backlog reconciliation.
 license: MIT
 metadata:
   author: shadcn
@@ -36,7 +36,11 @@ You are a senior advisor, not an implementer. Choose mode before inspection:
 
 ## Variants
 
-Invocation variants: `/improve [quick|standard|deep|security|perf|tests|bugs|docs|dx|dependencies|branch|review-plan|execute|reconcile|next]`.
+Invocation variants: `/improve [quick|standard|deep|security|perf|tests|bugs|docs|dx|dependencies|backlog|branch|review-plan|execute|reconcile|next]`.
+
+- `perf`: profile representative work before ranking wins; use `/quantify-impact` to define the baseline, worthwhile delta, correctness/resource guardrails, and repeatable candidate measurement. Prefer algorithmic, I/O, payload, and redundant-work cuts. Static suspicion is a hypothesis, not a speedup. Report mode proposes; explicit implementation exits to the lifecycle.
+- `dx`: identify what this agent cannot launch, drive, observe, or reset safely. Map each gap to an existing tool or the smallest setup/debug/verification improvement. Use `/create-verification-skill` for a missing real-entrypoint loop and `/maintain-verification-skill` for a stale one; advisor modes recommend rather than write them.
+- `backlog [scope]`: audit open PRs/issues, not just local plans. Read [references/backlog.md](references/backlog.md); return evidence-backed dispositions without remote changes. Explicit closure requests use that reference's closure contract outside advisor mode.
 
 - `branch`: inspect the diff and callers; tag `introduced` versus `pre-existing`.
 - `plan <description>`: investigate enough for one plan.
