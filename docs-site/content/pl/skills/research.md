@@ -1,9 +1,9 @@
 ---
 title: /research
 description: >-
-  Zbadaj źródła pierwotne i zapisz ustalenia wraz z cytowaniami. Użyj, gdy
-  potrzebny jest trwały raport, przegląd dokumentacji, zestaw faktów o API lub
-  analiza materiałów.
+  Badaj źródła pierwotne i zapisuj ustalenia z cytowaniami. Używaj do trwałych
+  raportów, przeglądów dokumentacji, zestawów faktów o API, lektury materiałów
+  lub archeologii uzasadnień projektowych.
 type: skill
 sidebar:
   label: /research
@@ -23,6 +23,7 @@ Jego zadania:
 ## Wybór ścieżki
 
 - Potrzebujesz faktu **od razu**, aby kontynuować programowanie (kształt API, bieżąca flaga, zachowanie wersji) -> użyj bezpośrednio `/read-the-damn-docs`; bez agenta działającego w tle i bez tworzenia artefaktu.
+- Chcesz ustalić, dlaczego istnieje dany kod lub projekt -> przeczytaj [DESIGN-RATIONALE.md](https://github.com/malinskibeniamin/skills/blob/main/research/DESIGN-RATIONALE.md); prześledź historię źródła i dowody decyzji bez wymyślania intencji.
 - Adres URL filmu lub załącznik -> najpierw użyj `/video-research`; potraktuj transkrypcję ze znacznikami czasu, OCR i klatki jako materiał źródłowy.
 - Sprawdzony w wielu źródłach **raport** z rygorystyczną weryfikacją -> użyj narzędzia do pogłębionych badań.
 - Ta umiejętność stanowi rozwiązanie pośrednie: ukierunkowana analiza materiałów zakończona utworzeniem pliku Markdown z cytowaniami.

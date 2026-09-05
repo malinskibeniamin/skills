@@ -24,6 +24,12 @@ Front-load pointer triggers, name each branch once, and never hide mandatory ste
 - Negation activates the named behavior. Prompt the **positive** target; keep prohibitions only for hard guardrails and pair with safe action.
 - Split sequences only when later visible steps cause premature completion.
 
+## Behavioral evaluations
+
+Keep each candidate-facing prompt an organic request: hide grader, expected answer,
+evaluator/model identity, and baselines. Give outcomes and public verification, not recipes.
+Run the prompt-blinding preflight before paid evals.
+
 ## Compress
 
 Hunt no-ops: delete every line whose removal changes no behavior.

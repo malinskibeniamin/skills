@@ -40,6 +40,13 @@ obowiązkowego kroku w materiale referencyjnym.
 - Negacja aktywuje nazwane zachowanie. Wskazuj pozytywny cel; zakaz zachowuj tylko dla bezwzględnej zasady ochronnej i podaj bezpieczne działanie.
 - Dziel sekwencję tylko wtedy, gdy widoczne późniejsze kroki powodują przedwczesne ukończenie.
 
+## Ewaluacje behawioralne
+
+Każde polecenie skierowane do kandydata formułuj jako naturalne żądanie: ukryj reguły
+oceniającego, oczekiwaną odpowiedź, tożsamość oceniającego/modelu i wyniki bazowe. Podawaj
+rezultaty i publiczną ścieżkę weryfikacji, nie instrukcję implementacji. Przed płatnymi
+ewaluacjami uruchom kontrolę zaślepienia poleceń.
+
 ## Skróć przed publikacją
 
 Szukaj instrukcji bez efektu: przy każdym wierszu zapytaj, jakie zachowanie zmieni się po

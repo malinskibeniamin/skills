@@ -25,6 +25,7 @@ case "$mode" in
 esac
 
 export HOOK_METRICS_DISABLED=1
+bun agent-evals/check-prompt-blinding.ts agent-evals/evals
 
 version_at_least() {
   local current="$1"

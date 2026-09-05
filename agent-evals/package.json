@@ -3,9 +3,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "eval": "npx @vercel/agent-eval",
-    "eval:dry": "npx @vercel/agent-eval --dry",
-    "eval:playground": "npx @vercel/agent-eval playground"
+    "check:prompts": "bun check-prompt-blinding.ts",
+    "eval": "bun run check:prompts && npx @vercel/agent-eval",
+    "eval:dry": "bun run check:prompts && npx @vercel/agent-eval --dry",
+    "eval:playground": "bun run check:prompts && npx @vercel/agent-eval playground"
   },
   "devDependencies": {
     "@vercel/agent-eval": "latest",
