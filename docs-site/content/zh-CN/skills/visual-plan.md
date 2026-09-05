@@ -28,6 +28,7 @@ sidebar:
 
 ## 本地流程覆盖规则
 
+- 对于重要计划，请遵循 [`../shared/intent-map.md`](https://github.com/malinskibeniamin/skills/blob/main/shared/intent-map.md)。在已有的 Agent-Native 图表或画布界面中呈现首次阅读图，不要再创建第二个说明产物。
 - 当多个计划或智能体之间存在分歧时，使用 `/plan-arbiter`。
 - 如果在实施前仍有未决事项，使用 `/grilling`。
 - 除非用户明确批准实施，否则规划过程为只读。
