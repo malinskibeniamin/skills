@@ -1,10 +1,13 @@
 ---
 name: commit-push-pr
-description: Commit, push, and open a reviewable PR. Use for commit-only, commit-and-push, PR creation, or updating an existing branch; --no-pr stops after push.
+description: Commit, push, and open a reviewable PR, or execute an explicitly authorized merge. Use for delivery requests; --no-pr stops after push.
 argument-hint: "[--no-pr]"
 ---
 
 Read [REFERENCE.md](REFERENCE.md) for review gates, commit types, labels, body, screenshots, and upgrade sections.
+
+Explicit merge requests use [references/merge.md](references/merge.md), not the PR-creation
+flow below. Audit, commit, push, PR, `/go`, and ship alone do not authorize merging.
 
 ## Preflight
 

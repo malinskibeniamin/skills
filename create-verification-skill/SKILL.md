@@ -19,6 +19,13 @@ Discover before asking:
 
 A checkout that cannot run is a blocker, not a basis for invented instructions. Report the exact failing prerequisite.
 
+For agent-DX requests, return a capability-gap list: task blocked, missing control or
+observation, least-privilege remedy, and proof it works. Inspect worktree setup, copied
+configuration, generated artifacts, isolated test identity/data, debug access, and failure
+logs. Prefer existing tools; request only credentials or access the agent cannot obtain.
+Never copy secret values into evidence or broaden production access for convenience.
+For Conductor-specific setup, load its bundled skill before proposing configuration.
+
 ## Generate
 
 Write `SKILL.md` with matching `name: verify-<app>` frontmatter and concrete **Launch**, **Doctor**, **Drive**, **Evidence**, and **Cleanup** sections:
@@ -45,5 +52,10 @@ Map every real entrypoint separately; verifying a convenient path does not cover
 ## Prove the generated skill
 
 Execute the generated skill end to end: launch, doctor, drive one mapped feature through the real user path, capture evidence, and clean up. After cleanup, confirm the evidence still exists and no created process or state remains. Repair instructions that fail and replay the entire path. An unexecuted verifier is a draft.
+
+For setup/worktree improvements, also replay from a cold isolated environment without
+relying on an already-running app or warmed artifacts. Record setup-to-ready and
+failure-to-diagnosis evidence when claiming faster feedback. If isolation is unavailable,
+report that gap; do not disturb another workspace to simulate a cold start.
 
 Point later drift audits to `/maintain-verification-skill` and normal feature work to `/dogfood`.
