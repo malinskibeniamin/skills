@@ -8,9 +8,9 @@ set -uo pipefail
 # RTK so its upstream registry owns rewrite-versus-pass-through decisions.
 #
 # Contract: children run in order; first deny (exit 2) wins -- its output is
-# forwarded and the batch stops; otherwise all stderr (nudges) is forwarded
-# and the LAST non-empty stdout wins (rtk-rewrite runs last so its rewritten
-# input survives).
+# forwarded and the batch stops; otherwise all stderr is forwarded, model
+# context accumulates, and the LAST non-empty stdout owns other fields
+# (rtk-rewrite runs last so its rewritten input survives).
 #
 # When adding a rule to a child, extend its trigger union here -- the
 # differential evals catch a union that goes stale (deny stops firing).
@@ -34,11 +34,14 @@ _hooks=(
   # (PR 72 review). The union below covers every shape the guard accepts.
   "snyk-project-create-guard.sh|snyk"
   "bash-verbose-guard.sh|git commit|gh |curl|wget|taskw|bun run|--json|--jq"
+  "pr-evidence-nudge.sh|gh|git"
   # Universal by design: RTK's registry is the command allowlist.
   "rtk-rewrite.sh|.+"
 )
 
 _stdout_final=""
+_contexts=""
+_updated_command=""
 for _entry in "${_hooks[@]}"; do
   _h="${_entry%%|*}"
   _union="${_entry#*|}"
@@ -56,8 +59,14 @@ for _entry in "${_hooks[@]}"; do
   fi
   if [ -n "$_out" ]; then
     _stdout_final="$_out"
+    _context=$(printf '%s' "$_out" | jq -r '.hookSpecificOutput.additionalContext // empty | select(type == "string")' 2>/dev/null || true)
+    if [ -n "$_context" ]; then
+      _contexts="${_contexts:+$_contexts
+}$_context"
+    fi
     _upd=$(printf '%s' "$_out" | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null || true)
     if [ -n "$_upd" ]; then
+      _updated_command="$_upd"
       _cmd="$_upd"
       _cmd_norm=$(printf '%s' "$_cmd" | tr -d "\\\\\"'")
       _input=$(printf '%s' "$_input" | jq -c --arg c "$_upd" '.tool_input.command = $c' 2>/dev/null || printf '%s' "$_input")
@@ -65,5 +74,10 @@ for _entry in "${_hooks[@]}"; do
   fi
 done
 
+if [ -n "$_contexts$_updated_command" ]; then
+  _stdout_final=$(printf '%s' "$_stdout_final" | jq -c --arg context "$_contexts" --arg command "$_updated_command" '
+    if $context != "" then .hookSpecificOutput.additionalContext = $context else . end |
+    if $command != "" then .hookSpecificOutput.updatedInput.command = $command else . end')
+fi
 [ -n "$_stdout_final" ] && printf '%s\n' "$_stdout_final"
 exit 0

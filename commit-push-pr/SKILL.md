@@ -26,13 +26,16 @@ Read [REFERENCE.md](REFERENCE.md) for review gates, commit types, labels, body, 
 
 ## Pull request
 
-`--no-pr` ends after push, clean-tree check, and summary.
+`--no-pr` never creates a PR. If this branch already has an open PR, refresh its affected
+visual/impact evidence and body after push using the gate below; otherwise end after push,
+clean-tree check, and summary. Prepare local captures/tests before pushing visible changes.
 
 Otherwise make/open/create PR authorizes verify, commit, push, and any needed lease-protected rebase update on the current user branch. It does not authorize merge, plain force, shared rewrites, or unrelated fixes.
 
 1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse the branch PR or create against that base with assignee, labels, and reference template. Whole-stack publication uses `/stacked-prs`.
-2. Customer-facing changes include one screenshot/surface-review row per view.
-3. Runnable changes include current dogfood receipt. Print the PR URL.
+2. Every PR runs `/quantify-impact` automatically; include its concise value summary or proven before/after metrics in the body. No benchmark theater.
+3. Any end-user-visible change, however small, follows the reference's visual evidence gate: affected-surface inventory, fresh embedded before/after images, reviewed snapshot updates, and passing visual regression tests. Missing evidence blocks publication unless the user explicitly waives the named gap.
+4. Runnable changes include current dogfood receipt. Re-read the published body, verify images render for reviewers, and print the PR URL. Apply the same gate to updates/reopens; later changes invalidate affected evidence.
 
 Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests that extra artifact/history work.
 

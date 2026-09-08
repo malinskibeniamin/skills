@@ -125,7 +125,7 @@ fi
 
 run_content_eval "$REPO_ROOT/go/SKILL.md" "customer-facing surface" "go inspects changed visual surfaces"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Browser/UI" "go reference documents visual verification evidence"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'require `/visual-review` result or explicit skip reason' "commit-push-pr requires visual-review or skip reason for frontend PRs"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Only an explicit user waiver' "commit-push-pr requires user waiver for missing visual evidence"
 
 # ── Consolidated Web Weekly visual-review checklist ──────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Tab, Shift\+Tab, Enter, Space, Escape" "visual-review checks keyboard interaction path"
@@ -189,7 +189,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "can run standalone" "visual-review r
 run_content_eval "$SKILL_DIR/REFERENCE.md" "self-reviewer" "visual-review reference wires self-reviewer"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "code-reviewer" "visual-review reference wires code-reviewer"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/visual-review" "commit-push-pr wires visual-review for frontend changes"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Frontend or customer-facing surface diff -> `/visual-review` must run' "commit-push-pr review list requires visual-review for frontend/customer-facing diffs"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Frontend or customer-facing surface diff -> `/visual-review` and the visual evidence gate' "commit-push-pr review list requires visual-review and visual evidence for customer-facing diffs"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Visual Review Evidence" "self-reviewer checks visual-review evidence"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Visual Review Evidence" "code-reviewer checks visual-review evidence"
 
@@ -198,10 +198,10 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Standalone trigger OK" "visual-review ex
 run_content_eval "$SKILL_DIR/REFERENCE.md" "PR evidence contract" "visual-review reference defines PR evidence contract"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Environment fingerprint" "PR evidence contract includes environment fingerprint"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Checked matrix" "PR evidence contract includes checked matrix"
-run_content_eval "$SKILL_DIR/REFERENCE.md" "Skip reasons" "PR evidence contract includes skip reasons"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Every unrun applicable item requires an explicit user waiver" "PR evidence contract requires user-waived gaps"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Automation candidates" "PR evidence contract includes automation candidates"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "include verification and real-use evidence in the PR body" "go reference carries visual evidence into PR delivery"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "PR evidence contract" "commit-push-pr references visual review PR evidence contract"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Follow `visual-review/REFERENCE.md`' "commit-push-pr references deeper visual review evidence"
 run_content_eval "$REPO_ROOT/docs/DEMOS.md" "/visual-review" "demos document standalone visual-review usage"
 
 # ── Customer-facing surface expansion + HTML report ─────────────

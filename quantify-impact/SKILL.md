@@ -3,7 +3,7 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
-Make value obvious without benchmark theater. Advisory only; workflow skills may call it automatically.
+Make value obvious without benchmark theater. Every PR creation/update runs this assessment automatically through `/commit-push-pr` or `/stacked-prs`; measurement stays proportional.
 
 ## Flow
 
@@ -25,7 +25,7 @@ Apply the same filter to guardrails; omit negligible movement.
 
 ## PR output
 
-Only when evidence clears threshold:
+Always provide a concise impact bullet: what improved for the user or maintainer and the evidence. Tiny copy/style changes get a value sentence linked to visual before/after evidence, not an invented metric. Only when evidence clears threshold, replace that bullet with:
 
 ```md
 ## Proven impact
@@ -36,4 +36,4 @@ Only when evidence clears threshold:
 Method: `<command, fixture, runs, environment>`.
 ```
 
-Give this to `/make-pr-easy-to-review`. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.
+Give this directly to the PR body through `/commit-push-pr` or `/stacked-prs`; no separate reviewability request is needed. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.

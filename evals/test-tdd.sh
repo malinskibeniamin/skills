@@ -69,7 +69,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Never set a percentage target" "REFE
 
 # ── Visual regression test section ──────────────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Visual Regression|browser.test" "SKILL.md has visual regression test section"
-run_content_eval "$SKILL_DIR/SKILL.md" "@vitest/browser" "SKILL.md mentions vitest browser mode detection"
+run_content_eval "$SKILL_DIR/SKILL.md" "existing screenshot assertion runner" "SKILL.md uses the repository visual runner rather than restricting coverage to Vitest"
 
 # ── Performance optimization in REFACTOR step ────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "500ms|execution time" "SKILL.md has perf optimization in REFACTOR"

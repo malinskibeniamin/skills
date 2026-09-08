@@ -7,7 +7,7 @@ Review customer-facing surfaces with product, design, engineering, and QA hats. 
 
 ## Flow
 
-1. **Find:** use hints or `git diff --name-only HEAD`; map routes/components to URLs and CLI/reports to commands. Include shadcn/ui or `@/components/ui`.
+1. **Find:** resolve the PR base (stack parent when applicable) and inspect merge-base...HEAD plus staged, unstaged, and relevant untracked changes; `git diff --name-only HEAD` alone misses committed work. Map routes/components to URLs and CLI/reports to commands. Include shadcn/ui or `@/components/ui`, shared consumers, copy, styles, assets, and indirect data/config effects. No visible change is too small.
 2. **Context bootstrap:** read tokens/theme and one surface; classify brand versus product.
 3. **Collect:** use repo tools, `scripts/skills-browser.sh`, Playwright, fixtures, screenshots, and output. Use `/quantify-impact` only for direct metrics.
 4. Run **review lanes:** critique hierarchy/task flow; audit accessibility/performance; polish ship quality/system fit.
@@ -15,6 +15,8 @@ Review customer-facing surfaces with product, design, engineering, and QA hats. 
 6. **Trace UI lifecycle:** idle/unrequested -> pending/loading/submitting -> success/error -> settled/dismissed. Require side-effect success confirmed and failed side effects persistent.
 7. **Stress:** Chromium desktop and Chromium mobile; `Tab, Shift+Tab, Enter, Space, Escape`; loading, empty, error, dense-data; form submit path; notification/toast path; console/network. As risk warrants add Firefox desktop, WebKit, reduced motion, forced colors, text zoom, RTL/localized-long-text, slow network/media throttling, and themes.
 8. **Close:** cite evidence, name design handles, fix/accept P0-P1, and record deterministic Automation candidates.
+
+For implemented/release work, follow [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5): reconcile every affected surface/state with captures and visual tests, inspect snapshot diffs before updating intended baselines, rerun normally, and refresh evidence after edits. A screenshot alone is not a visual regression test; passing tests alone are not reviewer-visible before/after evidence.
 
 Check: safe-area/virtual keyboard; writing mode; captions/headers still explain tables; CSS shorthand/complex layout; ARIA only when needed, not on static/generic elements; password managers/autofill; `aria-disabled`; no surprise autofocus; buttons/links do not nest; `requestSubmit`; toasts not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images; smooth scrolling, scroll snapping, `scrollIntoView`; interaction blocking; native-control behaviour; feature detection; WebView/bfcache; responsive images and responsive video/media with stable aspect ratio; INP/long interaction; font loading; third-party embeds/scripts.
 

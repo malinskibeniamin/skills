@@ -226,20 +226,15 @@ Never set a percentage target for changed files.
 
 ## Visual Regression Tests (Route Files)
 
-Add `*.browser.test.tsx` for new route files when project uses `@vitest/browser`:
+Cover every changed visible surface, not only new routes or one browser-test framework.
+Use existing screenshot assertions and project configuration; DOM/text snapshots do not
+prove rendered appearance. In a Vitest browser project, co-locate `*.browser.test.tsx`;
+in other projects, follow the existing visual runner and its version-matched APIs.
 
-```ts
-// routes/oauth-providers/index.browser.test.tsx
-import { test, expect } from 'vitest'
-
-test('oauth providers list renders', async ({ page }) => {
-  await page.goto('/oauth-providers')
-  await expect(page.getByRole('heading', { name: /oauth providers/i })).toBeVisible()
-  await expect(page).toMatchSnapshot()
-})
-```
-
-Detection: existing `*.browser.test.*` files or `@vitest/browser` in package.json.
+Follow [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)
+for the affected-surface inventory, base capture, diff inspection, intentional baseline
+updates, normal rerun, and embedded reviewer evidence. Copy, layout, themes, assets,
+shared consumers, and conditional states count even when the edit is one line.
 
 ## Diagnostic Commands
 

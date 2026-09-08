@@ -45,7 +45,9 @@ Repeat only for another contract or independent credible risk. During active wor
 
 ## Visual Regression
 
-When uncovered customer-visible route behavior uses `@vitest/browser`, add the smallest useful `*.browser.test.tsx`; skip layout, redirects, and declarative routes.
+Any end-user-visible change needs visual regression coverage, including copy, styles, layout, assets, and visible states. Use the repository's existing screenshot assertion runner; add the smallest missing route/component case. Filename or diff size is not an exemption. Non-visible redirects/type-only edits need no screenshot test.
+
+Capture the base before changing visible output. Run against existing baselines first, inspect before/after/diff images, update only intended snapshots, then rerun without snapshot-update flags. Shared UI changes cover affected consumers, not just the edited component. Follow [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) for the coverage inventory, reproducibility, and publication gate.
 
 ## Done
 

@@ -17,7 +17,7 @@ Inspect -> verify -> repair -> repeat until verification passes.
 1. Inspect the whole branch and endpoint: committed, staged, unstaged, untracked. Exclude unrelated files.
 2. Run repository-native checks. Frontend normally includes focused tests, `bun run type:check`, `bun run lint:fix`; Go uses documented tests, vet, build.
 3. Exercise every material runnable change through its real user or public entrypoint, including one credible break or recovery path. Tests do not replace this.
-4. For a customer-facing surface, inspect the rendered or terminal result, states, accessibility, errors, and relevant viewports/platforms.
+4. For a customer-facing surface, inspect the rendered or terminal result, states, accessibility, errors, and relevant viewports/platforms. Apply the [PR visual evidence gate](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5), including tiny changes, fresh images, and visual regression tests.
 5. Review once for objective, guardrails, semantic density, and credible risk. Repair, invalidate, and replay affected evidence.
 6. If the change claims measurable impact, repeat the same baseline/candidate scenario; do not invent useless benchmarks.
 

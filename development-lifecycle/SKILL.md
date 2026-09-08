@@ -24,6 +24,8 @@ Do not predict code or write a ceremony. A scoped build/fix/implementation reque
 
 Find the blind spot most likely to invalidate the approach. Read code, tests, logs, current docs, and nearby examples; prefer executable evidence. Resolve the volatile unknown first; classify others as lookup, prototype, reversible assumption, or pause trigger. Match existing idiom and demonstrated scale; load specialist guidance only for its observed domain.
 
+For any end-user-visible change, inventory affected surfaces and capture the base before editing. Use [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5); tiny copy/style changes and indirect shared-UI effects count. Run `/quantify-impact`'s opportunity scan before edits so meaningful claims have a baseline.
+
 ### Act
 
 One primary model is the single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse before adding. Meaningful behavior uses TDD at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.

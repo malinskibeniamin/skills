@@ -43,6 +43,8 @@ git log "$BASE"..HEAD --oneline
 
 Verify and dogfood every layer before publication. Whole-stack submission defaults to drafts: `gh stack submit --auto --remote origin`; add `--open` only when requested. A single-PR request never publishes other layers.
 
+Apply [PR evidence](../commit-push-pr/REFERENCE.md) to every layer before submission: automatic `/quantify-impact`, and embedded before/after plus passing visual tests for any visible change. Compare each layer with its own parent; prepare each body before submit and verify/update the published bodies afterward. Cascades invalidate affected evidence.
+
 ## Feedback, sync, merge
 
 Fix feedback on its owning branch and verify. Cascades rewrite upper branches. A user-owned stack in this workspace may rebase and force-with-lease without another permission prompt; report it. Ask when ownership is unclear or a default, shared, foreign, or concurrent branch would change. Use `gh stack rebase --upstack --remote origin`, then `gh stack push --remote origin`; `gh stack sync --prune --remote origin` has the same boundary.
