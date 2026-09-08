@@ -1,6 +1,6 @@
 ---
 title: /agent-watchdog
-description: 根据原始请求和实时证据审计另一个智能体。适用于会话、转录记录、PR、分支、日志、比较或已获授权的修复。
+description: "根据原始请求和实时证据审计另一个智能体。适用于会话、PR、分支、比较、已获授权的修复或接管停滞工作。"
 type: skill
 sidebar:
   label: /agent-watchdog
@@ -17,10 +17,13 @@ sidebar:
 - **审计**：对比请求、转录记录、差异、测试、CI、评论、截图和最终声明。不要编辑。
 - **审计并修复**：先进行审计，然后针对明确且已获授权的缺漏进行小范围修复。
 - **比较**：根据同一个原始请求比较多个智能体或会话。
+- **接管**：明确请求接手停滞工作；遵循 [references/takeover.md](https://github.com/malinskibeniamin/skills/blob/main/agent-watchdog/references/takeover.md)，然后执行至请求的终点。不限于修补先前的方法。
 
 如果编辑权限不明确，默认仅进行审计。
 
 ## 工作流程
+
+接管模式使用其参考文档，而不是下面限定为小范围审计修复的步骤。
 
 1. 确定每个目标：会话 ID、转录记录、对话串 URL、PR、分支、提交、CI 运行、议题、Slack 链接或粘贴的摘要。
 2. 重建约定：原始请求、范围变更、约束、隐含的验收标准、最终声明和注意事项。

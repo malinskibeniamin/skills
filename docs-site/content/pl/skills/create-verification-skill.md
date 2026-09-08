@@ -27,6 +27,8 @@ Najpierw zbadaj, potem pytaj:
 
 Kopia robocza, której nie można uruchomić, jest przeszkodą, a nie podstawą do wymyślania instrukcji. Zgłoś dokładny niespełniony warunek wstępny.
 
+W przypadku ergonomii pracy agentów przedstaw listę brakujących możliwości: zablokowane zadanie, brakująca kontrola lub obserwacja, rozwiązanie o minimalnych uprawnieniach i dowód działania. Sprawdź konfigurację worktree, kopiowane ustawienia, generowane artefakty, odizolowaną tożsamość i dane testowe, dostęp do debugowania oraz logi błędów. Preferuj istniejące narzędzia; proś tylko o poświadczenia lub dostęp, których agent nie może uzyskać samodzielnie. Nigdy nie kopiuj wartości sekretów do dowodów ani nie rozszerzaj dostępu do produkcji dla wygody. Przed zaproponowaniem konfiguracji Conductor wczytaj jego dołączoną umiejętność.
+
 ## Wygeneruj
 
 Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` oraz konkretne sekcje **Uruchamianie**, **Diagnostyka**, **Sterowanie**, **Dowody** i **Czyszczenie**:
@@ -53,5 +55,7 @@ Mapuj każdy rzeczywisty punkt wejścia osobno; zweryfikowanie wygodnej ścieżk
 ## Udowodnij działanie wygenerowanej umiejętności
 
 Wykonaj wygenerowaną umiejętność od początku do końca: uruchom aplikację, przeprowadź diagnostykę, przetestuj jedną zmapowaną funkcję przez rzeczywistą ścieżkę użytkownika, zbierz dowody i posprzątaj. Po wyczyszczeniu potwierdź, że dowody nadal istnieją oraz że nie pozostał żaden utworzony proces ani stan. Popraw niedziałające instrukcje i powtórz całą ścieżkę. Niewykonany weryfikator jest jedynie wersją roboczą.
+
+W przypadku usprawnień konfiguracji lub worktree powtórz również przebieg w zimnym, odizolowanym środowisku, bez polegania na już uruchomionej aplikacji lub przygotowanych artefaktach. Deklarując szybszą pętlę informacji zwrotnej, zapisz dowody czasu od konfiguracji do gotowości i od awarii do diagnozy. Jeśli izolacja jest niedostępna, zgłoś ten brak; nie zakłócaj innego obszaru roboczego, aby zasymulować zimny start.
 
 W przypadku późniejszych audytów rozbieżności wskaż `/maintain-verification-skill`, a w przypadku zwykłej pracy nad funkcjami — `/dogfood`.

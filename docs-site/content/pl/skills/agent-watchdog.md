@@ -1,9 +1,6 @@
 ---
 title: /agent-watchdog
-description: >-
-  Przeprowadź audyt innego agenta pod kątem pierwotnego żądania i aktualnych
-  dowodów. Używaj w przypadku sesji, transkrypcji, PR-ów, gałęzi, logów,
-  porównań lub autoryzowanych poprawek.
+description: "Przeprowadź audyt innego agenta pod kątem pierwotnego żądania i aktualnych dowodów. Użyj do sesji, PR-ów, gałęzi, porównań, autoryzowanych poprawek lub przejmowania zablokowanej pracy."
 type: skill
 sidebar:
   label: /agent-watchdog
@@ -20,10 +17,13 @@ Przeczytaj `references/builder-upstream.md`, gdy audyt jest złożony lub artefa
 - **Audyt**: porównaj żądanie, transkrypcję, różnice, testy, CI, komentarze, zrzuty ekranu i końcowe deklaracje. Nie wprowadzaj zmian.
 - **Audyt i poprawki**: najpierw przeprowadź audyt, a następnie wprowadź niewielkie poprawki dotyczące wyraźnych, autoryzowanych braków.
 - **Porównanie**: porównaj wielu agentów lub wiele sesji pod kątem tego samego pierwotnego żądania.
+- **Przejęcie**: wyraźne żądanie przejęcia zablokowanej pracy; postępuj zgodnie z [references/takeover.md](https://github.com/malinskibeniamin/skills/blob/main/agent-watchdog/references/takeover.md), a następnie realizuj zadanie do żądanego punktu końcowego. Nie ogranicza się to do łatania poprzedniego podejścia.
 
 Jeśli uprawnienia do edycji są niejasne, domyślnie przeprowadź tylko audyt.
 
 ## Przebieg pracy
+
+W trybie przejęcia użyj jego dokumentu referencyjnego zamiast poniższych kroków audytu i niewielkich poprawek.
 
 1. Zidentyfikuj każdy cel: identyfikator sesji, transkrypcję, adres URL wątku, PR, gałąź, commit, przebieg CI, zgłoszenie, link do Slacka lub wklejone podsumowanie.
 2. Odtwórz ustalenia: pierwotne żądanie, zmiany zakresu, ograniczenia, domniemane kryteria akceptacji, końcowe deklaracje i zastrzeżenia.

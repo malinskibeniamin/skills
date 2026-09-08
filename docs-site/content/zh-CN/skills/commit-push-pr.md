@@ -1,6 +1,6 @@
 ---
 title: /commit-push-pr
-description: 提交、推送并创建便于审查的 PR。适用于仅提交、提交并推送、创建 PR 或更新现有分支；--no-pr 会在推送后停止。
+description: "提交、推送并创建便于审查的 PR，或执行明确授权的合并。适用于交付请求；--no-pr 会在推送后停止。"
 type: skill
 sidebar:
   label: /commit-push-pr
@@ -11,6 +11,8 @@ sidebar:
 
 
 阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)，了解审查前提条件、提交、标签、正文和证据。
+
+明确的合并请求使用 [references/merge.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)，而不是下面的 PR 创建流程。仅请求审计、提交、推送、PR、`/go` 或交付并不授权合并。
 
 ## 前置检查
 

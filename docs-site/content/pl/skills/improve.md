@@ -1,9 +1,6 @@
 ---
 title: /improve
-description: >-
-  Przeprowadź audyt bazy kodu lub napisz plany gotowe do realizacji. Użyj do
-  przeglądów usprawnień, wyznaczania kierunku rozwoju, weryfikacji planów,
-  jednoznacznego przekazania do realizacji lub uzgadniania backlogu.
+description: "Przeprowadź audyt baz kodu oraz otwartych PR-ów i zgłoszeń lub napisz plany gotowe do realizacji. Użyj do przeglądów usprawnień, poprawy wydajności, ergonomii pracy agentów, przeglądu planów, przekazania do realizacji lub uzgadniania backlogu."
 type: skill
 sidebar:
   label: /improve
@@ -50,6 +47,10 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
    `/to-tickets`.
 
 ## Warianty wywołania
+
+- `perf`: przed ustaleniem priorytetów profiluj reprezentatywne zadania; użyj `/quantify-impact`, aby określić punkt odniesienia, wartościowy przyrost, ograniczenia poprawności i zasobów oraz powtarzalny pomiar kandydata. Preferuj usprawnienia algorytmów, wejścia/wyjścia, rozmiaru danych i zbędnej pracy. Podejrzenie ze statycznej analizy jest hipotezą, nie dowodem przyspieszenia. Tryb raportu proponuje; jawna implementacja przechodzi do cyklu realizacji.
+- `dx`: ustal, czego agent nie potrafi bezpiecznie uruchomić, obsłużyć, zaobserwować lub zresetować. Przypisz każdemu brakowi istniejące narzędzie albo najmniejsze usprawnienie konfiguracji, debugowania lub weryfikacji. Użyj `/create-verification-skill`, gdy brakuje pętli weryfikacji rzeczywistego punktu wejścia, a `/maintain-verification-skill`, gdy jest nieaktualna; tryby doradcze zalecają, zamiast je zapisywać.
+- `backlog [scope]`: audytuj otwarte PR-y i zgłoszenia, nie tylko lokalne plany. Przeczytaj [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md); zwróć rozstrzygnięcia poparte dowodami bez zmian zdalnych. Jawne żądania zamknięcia korzystają z kontraktu zamykania w tym dokumencie, poza trybem doradczym.
 
 - `/improve`: standardowy audyt w trybie raportu.
 - `/improve quick` lub `/improve deep`: zmiana głębokości audytu.
