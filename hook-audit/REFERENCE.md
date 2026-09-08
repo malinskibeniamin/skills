@@ -67,6 +67,9 @@ adoption counts.
 
 ## Shadow trials
 
+Classify enforcement recommendations: `Prune` purposeless zero-fire rules; `Soften` noisy
+blocks; `Harden` risky warnings; `Add` missing deterministic checks.
+
 Set `HOOK_SHADOW_RULES` to a comma-separated list of non-strict rule labels. Shadowed
 rules log `shadow-block`, `shadow-warn`, or `shadow-nudge` without steering the model.
 Compare equivalent tasks on the same model and harness version, then retain the rule only
