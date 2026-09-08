@@ -11,6 +11,13 @@
 | `hook_info` | 0 | telemetry only |
 | `hook_emit_diagnostic` | 0 or 2 | ranged machine-readable finding |
 
+These exits describe standalone checks. The shared `post-tool-batch.sh` dispatcher
+collects all severities and returns exit 0 with model-visible `additionalContext`.
+Severity orders verification and repair, not permission to continue. Fix confirmed
+in-scope issues, dismiss false positives, then continue the task without user prompting.
+Codex's edit adapter preserves that contract. Keep pre-tool safety denials separate;
+post-edit heuristic findings must not become blocking batch errors.
+
 Stop hooks use `hook_stop_block` for bounded blocking and `hook_stop_context` for visible
 feedback that keeps the turn alive. Prose emitters truncate at 8,000 characters.
 

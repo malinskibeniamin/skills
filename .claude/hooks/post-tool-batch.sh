@@ -211,7 +211,11 @@ _findings_total=$(( $(wc -l < "$blocks_file" | tr -d '[:space:]') + $(wc -l < "$
 [ "$_findings_total" -gt 0 ] || exit 0
 
 context_file="$tmp_dir/context"
-: > "$context_file"
+cat > "$context_file" <<'EOF'
+Continue the current task. These automated edit checks are candidates to verify, not a request for user approval.
+Check each finding against the actual changed code and project configuration. Fix confirmed issues within scope, dismiss false positives, and continue without waiting for "carry on". Preserve pre-existing license headers; verify workspace packages and aliases before changing imports or dependencies.
+Pause only for a genuine blocker or a user-reserved decision, not merely because this hook reported findings.
+EOF
 remaining=40
 emitted=0
 
@@ -233,7 +237,7 @@ _emit_section() {
   emitted=$((emitted + take))
 }
 
-_emit_section "MUST FIX before proceeding:" "$blocks_file"
+_emit_section "Fix confirmed issues after verification:" "$blocks_file"
 _emit_section "Review:" "$review_file"
 
 if [ "$_findings_total" -gt "$emitted" ]; then
@@ -242,16 +246,8 @@ fi
 
 _context=$(cat "$context_file")
 
-# Hard tier: any block-severity finding turns the whole batch into a blocking
-# decision (exit 2 + systemMessage), never advisory additionalContext. Warn-only
-# batches stay advisory. Ordering is deterministic (file order, then check
-# order), dedup by rule+message happens in _add_collected_line, truncation is
-# the 40-line cap with an explicit "+N more" recovery hint.
-_block_count=$(wc -l < "$blocks_file" | tr -d '[:space:]')
-if [ "${_block_count:-0}" -gt 0 ]; then
-  jq -n --arg msg "$_context" '{suppressOutput:true,systemMessage:$msg}' >&2
-  exit 2
-fi
-
+# Edits have already completed. Severity orders remediation; it must not turn
+# regex candidates into a failed batch or a human approval gate. Pre-tool
+# safety denials remain separate. Codex adapts this same context to PostToolUse.
 jq -n --arg context "$_context" '{hookSpecificOutput:{hookEventName:"PostToolBatch",additionalContext:$context}}'
 exit 0
