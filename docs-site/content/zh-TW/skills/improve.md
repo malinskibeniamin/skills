@@ -37,8 +37,7 @@ sidebar:
 
 ## 呼叫變體
 
-- `perf`：排序前先剖析具代表性的工作；使用 `/quantify-impact` 定義基準、有價值的改善幅度、正確性與資源限制，以及可重複的候選方案量測。優先減少演算法、I/O、負載內容與重複工作的成本。靜態分析的懷疑只是推測，不是加速證明。報告模式提出建議；明確要求實作時轉入開發生命週期。
-- `dx`：辨識此代理無法安全啟動、操作、觀察或重設的內容。將每個缺口對應至既有工具或最小的設定、偵錯、驗證改善。缺少真實進入點驗證迴圈時使用 `/create-verification-skill`，迴圈過時時使用 `/maintain-verification-skill`；顧問模式僅建議，不寫入這些技能。
+- `perf|dx`：使用[聚焦證據檢查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)。量測效能聲明；提出工具建議前，先辨識代理缺少的控制能力。
 - `backlog [scope]`：稽核開啟中的 PR 與議題，而非僅本機計畫。閱讀 [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md)；回傳有證據支持的處置建議，不做遠端變更。明確的關閉要求在顧問模式之外遵循該參考文件的關閉契約。
 
 - `/improve`：標準報告模式稽核。

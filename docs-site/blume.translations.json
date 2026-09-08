@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "2b0787383dde3fb6",
-      "zh-CN": "2b0787383dde3fb6",
-      "zh-TW": "2b0787383dde3fb6"
+      "pl": "165c31baab9e3ff7",
+      "zh-CN": "165c31baab9e3ff7",
+      "zh-TW": "165c31baab9e3ff7"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -11,9 +11,9 @@
       "zh-TW": "7d21ef5e98b28c8c"
     },
     "content/skills/agent-watchdog.md": {
-      "pl": "6d92534c8bf8f0cd",
-      "zh-CN": "6d92534c8bf8f0cd",
-      "zh-TW": "6d92534c8bf8f0cd"
+      "pl": "9cafea66fdcfdb8d",
+      "zh-CN": "9cafea66fdcfdb8d",
+      "zh-TW": "9cafea66fdcfdb8d"
     },
     "content/skills/aip.md": {
       "pl": "1050b7a675dfc6e1",
@@ -51,9 +51,9 @@
       "zh-TW": "de89cb637c5d9d5c"
     },
     "content/skills/commit-push-pr.md": {
-      "pl": "1a6b523f938a1b8a",
-      "zh-CN": "1a6b523f938a1b8a",
-      "zh-TW": "1a6b523f938a1b8a"
+      "pl": "5b90e2c63cb71388",
+      "zh-CN": "5b90e2c63cb71388",
+      "zh-TW": "5b90e2c63cb71388"
     },
     "content/skills/connect-query.md": {
       "pl": "2fd5427919f5f0c1",
@@ -61,9 +61,9 @@
       "zh-TW": "2fd5427919f5f0c1"
     },
     "content/skills/create-verification-skill.md": {
-      "pl": "b9ab508b25e98cbd",
-      "zh-CN": "b9ab508b25e98cbd",
-      "zh-TW": "b9ab508b25e98cbd"
+      "pl": "9c9103f039fea85b",
+      "zh-CN": "9c9103f039fea85b",
+      "zh-TW": "9c9103f039fea85b"
     },
     "content/skills/demo.md": {
       "pl": "4c0131c2849799a6",
@@ -131,9 +131,9 @@
       "zh-TW": "0f22e03d912c7410"
     },
     "content/skills/go.md": {
-      "pl": "46249515f3dd378b",
-      "zh-CN": "46249515f3dd378b",
-      "zh-TW": "46249515f3dd378b"
+      "pl": "5d1450d3d71e1038",
+      "zh-CN": "5d1450d3d71e1038",
+      "zh-TW": "5d1450d3d71e1038"
     },
     "content/skills/golang-review.md": {
       "pl": "2bae8af222d1bf15",
@@ -166,9 +166,9 @@
       "zh-TW": "328e8ff66ffaaaf0"
     },
     "content/skills/improve.md": {
-      "pl": "c1c49202f157a1b8",
-      "zh-CN": "c1c49202f157a1b8",
-      "zh-TW": "c1c49202f157a1b8"
+      "pl": "65e6baf91be4f734",
+      "zh-CN": "65e6baf91be4f734",
+      "zh-TW": "65e6baf91be4f734"
     },
     "content/skills/maintain-verification-skill.md": {
       "pl": "dc0ab7182b43101d",

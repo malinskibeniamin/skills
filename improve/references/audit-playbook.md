@@ -37,6 +37,19 @@ Report only what's evidenced in the code. Do not generate exploit code in plans 
 
 ## 3. Performance
 
+### Performance and agent DX evidence
+
+For `perf`, profile representative work before ranking wins. Use `/quantify-impact` to
+define the baseline, worthwhile delta, correctness/resource guardrails, and repeatable
+candidate measurement. Prefer algorithmic, I/O, payload, and redundant-work cuts. Static
+suspicion is a hypothesis, not a speedup. Report mode proposes; explicit implementation
+exits to the lifecycle.
+
+For `dx`, identify what the agent cannot launch, drive, observe, or reset safely. Map each
+gap to an existing tool or the smallest setup/debug/verification improvement. Use
+`/create-verification-skill` for a missing real-entrypoint loop and
+`/maintain-verification-skill` for a stale one; advisor modes recommend rather than write.
+
 Look for the algorithmic and architectural wins, not micro-optimizations.
 
 - N+1 patterns: query/fetch per item inside loops or per list-row rendering; missing batching or dataloader.

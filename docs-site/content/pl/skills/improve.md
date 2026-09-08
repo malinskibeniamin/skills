@@ -48,8 +48,7 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
 
 ## Warianty wywołania
 
-- `perf`: przed ustaleniem priorytetów profiluj reprezentatywne zadania; użyj `/quantify-impact`, aby określić punkt odniesienia, wartościowy przyrost, ograniczenia poprawności i zasobów oraz powtarzalny pomiar kandydata. Preferuj usprawnienia algorytmów, wejścia/wyjścia, rozmiaru danych i zbędnej pracy. Podejrzenie ze statycznej analizy jest hipotezą, nie dowodem przyspieszenia. Tryb raportu proponuje; jawna implementacja przechodzi do cyklu realizacji.
-- `dx`: ustal, czego agent nie potrafi bezpiecznie uruchomić, obsłużyć, zaobserwować lub zresetować. Przypisz każdemu brakowi istniejące narzędzie albo najmniejsze usprawnienie konfiguracji, debugowania lub weryfikacji. Użyj `/create-verification-skill`, gdy brakuje pętli weryfikacji rzeczywistego punktu wejścia, a `/maintain-verification-skill`, gdy jest nieaktualna; tryby doradcze zalecają, zamiast je zapisywać.
+- `perf|dx`: użyj [ukierunkowanych kontroli dowodów](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence). Mierz deklarowane korzyści wydajnościowe; przed zaproponowaniem narzędzi ustal, jakich możliwości sterowania brakuje agentowi.
 - `backlog [scope]`: audytuj otwarte PR-y i zgłoszenia, nie tylko lokalne plany. Przeczytaj [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md); zwróć rozstrzygnięcia poparte dowodami bez zmian zdalnych. Jawne żądania zamknięcia korzystają z kontraktu zamykania w tym dokumencie, poza trybem doradczym.
 
 - `/improve`: standardowy audyt w trybie raportu.

@@ -27,12 +27,9 @@ Do not manufacture reviews, cleanup passes, skills, or agent calls. Keep a singl
 
 ## Deliver
 
-Follow [commit-push-pr/REFERENCE.md](../commit-push-pr/REFERENCE.md) for staging, commit, push, draft PR, reviewers, and body. On the current user-owned feature branch, rebase and `--force-with-lease` when needed without another permission prompt. Never merge, plain-force, or rewrite default/shared/foreign/concurrent branches without explicit permission.
+Follow [commit-push-pr/REFERENCE.md](../commit-push-pr/REFERENCE.md) for staging, commit, push, draft PR, reviewers, and body. On the current user-owned branch, rebase and `--force-with-lease` when needed without another prompt. Never [merge](../commit-push-pr/references/merge.md), plain-force, or rewrite default/shared/foreign/concurrent branches without explicit permission.
 
 If `gh stack view --json` finds a stack, verify the layer against its parent. Only explicit `/stacked-prs` intent ships the whole stack.
-
-When the user also explicitly authorizes merging, follow
-[the merge contract](../commit-push-pr/references/merge.md) after verification.
 
 - Bind evidence to current `HEAD`; edits invalidate it.
 - This explicit full-delivery endpoint monitors CI. Repair failures, replay evidence, push, continue.

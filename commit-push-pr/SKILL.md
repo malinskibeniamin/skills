@@ -4,10 +4,9 @@ description: Commit, push, and open a reviewable PR, or execute an explicitly au
 argument-hint: "[--no-pr]"
 ---
 
-Read [REFERENCE.md](REFERENCE.md) for review gates, commits, labels, body, and evidence.
+See [REFERENCE.md](REFERENCE.md) for gates, commits, labels, body, evidence.
 
-Explicit merge requests use [references/merge.md](references/merge.md), not the PR-creation
-flow below. Audit, commit, push, PR, `/go`, and ship alone do not authorize merging.
+Only explicit merge requests use [the merge contract](references/merge.md), not this PR flow.
 
 ## Preflight
 
@@ -25,7 +24,7 @@ flow below. Audit, commit, push, PR, `/go`, and ship alone do not authorize merg
 2. Per coherent group, `git add <explicit paths>` then `type(scope): terse description`: lowercase, 5-72 chars, no period.
 3. Explicit commit-only intent stops here after clean-tree check and summary.
 4. Push/PR: show `origin/<branch>..HEAD`, then push with tracking.
-5. After rewriting the current user-owned feature branch, use `--force-with-lease` when needed without another permission prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
+5. Current user-owned branch rewrites use `--force-with-lease` without another prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
 
 ## Pull request
 
@@ -43,7 +42,7 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 ## Completion
 
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
-2. Report existing failures. Remediation/monitoring beyond this snapshot requires `/go`, ship, babysitting, or follow-up.
+2. Report failures; further remediation/monitoring requires `/go`, ship, babysitting, or follow-up.
 3. Report `git status`, remaining diff, branch, commits, PR, CI, and next action.
 4. End with one status line: `done`, `awaiting decision`, or `blocked`, using the repository marker contract.
 
