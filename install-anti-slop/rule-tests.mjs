@@ -20,7 +20,7 @@ const project = mkdtempSync(join(tmpdir(), "anti-slop-rules-"));
 function runOxlint() {
   const result = spawnSync(
     oxlint,
-    ["--config", "oxlint.config.ts", "src/input.ts"],
+    ["--format=json", "--config", "oxlint.config.ts", "src/input.ts"],
     {
       cwd: project,
       encoding: "utf8",
@@ -28,8 +28,15 @@ function runOxlint() {
   );
   return {
     exitCode: result.status,
-    output: `${result.stdout}${result.stderr}`,
+    stderr: result.stderr,
+    stdout: result.stdout,
   };
+}
+
+function parseOxlintReport(stdout) {
+  const report = JSON.parse(stdout);
+  assert.ok(Array.isArray(report.diagnostics), stdout);
+  return report;
 }
 
 try {
@@ -66,11 +73,16 @@ export { restored, user, type Hidden };
   );
 
   const invalid = runOxlint();
-  assert.equal(invalid.exitCode, 1);
-  assert.equal(invalid.output.match(/error anti-slop\(/g)?.length, 3);
-  assert.match(invalid.output, /no-chained-type-assertions/);
-  assert.match(invalid.output, /no-unknown-type-aliases/);
-  assert.match(invalid.output, /no-widen-then-assert/);
+  assert.equal(invalid.exitCode, 1, invalid.stderr);
+  const invalidReport = parseOxlintReport(invalid.stdout);
+  assert.deepEqual(
+    invalidReport.diagnostics.map((diagnostic) => diagnostic.code).toSorted(),
+    [
+      "anti-slop(no-chained-type-assertions)",
+      "anti-slop(no-unknown-type-aliases)",
+      "anti-slop(no-widen-then-assert)",
+    ],
+  );
 
   writeFileSync(
     join(project, "src/input.ts"),
@@ -82,8 +94,8 @@ export { user, type User };
   );
 
   const valid = runOxlint();
-  assert.equal(valid.exitCode, 0);
-  assert.equal(valid.output, "");
+  assert.equal(valid.exitCode, 0, valid.stderr);
+  assert.deepEqual(parseOxlintReport(valid.stdout).diagnostics, []);
   console.log("anti-slop rule integration: pass");
 } finally {
   rmSync(project, { recursive: true, force: true });
