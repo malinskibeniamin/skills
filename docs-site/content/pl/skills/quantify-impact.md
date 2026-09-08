@@ -12,48 +12,38 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/quantify-impact.excalidraw)
 
-Natychmiast pokaż wartość, bez pozorowanych testów porównawczych. To wskazówka, a nie bezwzględny warunek scalenia. Istniejące umiejętności przepływu pracy wywołują ją automatycznie; użytkownicy nie muszą robić tego samodzielnie.
+
+Natychmiast pokaż wartość, bez pozorowanych testów porównawczych. Każde utworzenie lub zaktualizowanie PR automatycznie uruchamia tę ocenę za pośrednictwem `/commit-push-pr` lub `/stacked-prs`; zakres pomiarów pozostaje proporcjonalny.
 
 ## Przebieg
 
-1. **Ocena możliwości zebrania dowodów**: sprawdź, czy istnieje bezpośrednia metryka przydatna przy podejmowaniu decyzji i czy jej uzyskanie jest wystarczająco tanie dla danej zmiany. Metryka jest przydatna przy podejmowaniu decyzji tylko wtedy, gdy może przekroczyć zadeklarowaną wcześniej minimalną wartościową różnicę, a w przypadku pomiarów obarczonych szumem również normalną zmienność. Przeprowadzaj test porównawczy tylko wtedy, gdy odpowiedź brzmi „tak”. Drobne zmiany dotyczące wyłącznie treści, stylu lub testów wymagają jednego jasnego zdania o wartości, a nie wymuszonych liczb. Bez pozorowanych testów porównawczych.
-2. **Ustal tezę przed rozpoczęciem kodowania**: przed implementacją lub edycją określ tezę zmiany, główną metrykę, kryterium ochronne, scenariusz oraz minimalną wartościową różnicę. Nie wybieraj zwycięskiej metryki po fakcie.
-3. **Użyj dwóch obszarów wartości**:
-   Obszar produktu + obszar bazy kodu: jeden musi się poprawić, a drugi nie może ulec istotnemu pogorszeniu.
-   - **Obszar produktu**: możliwości, powodzenie zadania, odtworzenie błędu, błędy, liczba kroków, opóźnienie lub koszt zasobów.
-   - **Obszar bazy kodu**: zakres utrzymania, złożoność, zależności, ostrzeżenia, wycieki, rozmiar pakietu, koszt kompilacji lub testów albo testowalność.
-   Poprawa jakości kodu może być główną wartością.
-4. **Dobierz proporcjonalny rygor**:
-   - Drobna lub oczywista zmiana: tylko zdanie o wartości.
-   - Poprawność lub dokładna liczba: deterministyczne odtworzenie albo zliczenie przed zmianą i po niej.
-   - Czas działania lub wydajność: kontrolowany test porównawczy par według [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md).
-   - Jawna deklaracja poprawy wydajności: zawsze wykonaj pomiar.
-5. **Zbierz dane bazowe**: jeśli to możliwe, wykonaj pomiar przed rozpoczęciem kodowania. W przeciwnym razie dokładnie odtwórz stan punktu wspólnego scalania. Uruchom wersję bazową i kandydującą z tym samym scenariuszem, zestawem danych, konfiguracją i na tej samej maszynie.
-6. **Porównuj rzetelnie**: w przypadku metryk, które przekraczają zadeklarowany wcześniej próg, podaj surowe wartości przed zmianą i po niej, różnicę bezwzględną i procentową, metodę, środowisko oraz poziom szumu. Pomiń metryki poniżej tego progu lub mieszczące się w granicach normalnej zmienności; sam pomiar liczby nie czyni jej istotną. Nigdy nie przedstawiaj testu niezmienników ani wskaźnika zastępczego jako dowodu poprawy wydajności.
-7. **Podejmij decyzję**:
-   - Wyraźna, wartościowa poprawa: `Value proven`.
-   - Jawna deklaracja poprawy wydajności z niejednoznacznym, pomijalnym wynikiem lub bez poprawy: `Value not proven`; pomiń minimalne różnice i nie dobieraj metryk pod oczekiwany wynik. Dopuść jedną korektę opartą na dowodach, a następnie zaleć porzucenie zmian lub zamknięcie PR.
-   - Brak jawnej deklaracji poprawy wydajności i brak wartościowej metryki: pomiń ilościowe zestawienie wpływu i użyj zwykłego podsumowania wartości.
+1. **Ocena możliwości zebrania dowodów:** przeprowadzaj test porównawczy tylko wtedy, gdy tania bezpośrednia metryka może przekroczyć zadeklarowaną wcześniej minimalną wartościową różnicę i normalną zmienność. Drobne zmiany dotyczące wyłącznie treści, stylu lub testów wymagają zdania o wartości. Bez pozorowanych testów porównawczych.
+2. **Ustal tezę przed rozpoczęciem kodowania:** określ tezę, główną metrykę, kryterium ochronne, scenariusz oraz minimalną wartościową różnicę. Nie wybieraj zwycięskiej metryki po fakcie.
+3. **Obszar produktu + obszar bazy kodu:** jeden musi się poprawić, a drugi nie może ulec istotnemu pogorszeniu.
+   - Produkt: możliwości, powodzenie zadania, odtworzenie błędu, błędy, liczba kroków, opóźnienie, zasoby.
+   - Baza kodu: zakres utrzymania, złożoność, zależności, ostrzeżenia, wycieki, rozmiar pakietu, koszt kompilacji lub testów, testowalność.
+4. **Proporcjonalny rygor:** zdanie w przypadku oczywistej wartości; deterministyczne odtworzenie lub zliczenie w przypadku poprawności; kontrolowany test porównawczy par według [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md) w przypadku czasu działania; jawne deklaracje poprawy wydajności zawsze wymagają pomiaru.
+5. **Dane bazowe:** wykonaj pomiar przed rozpoczęciem kodowania lub odtwórz stan punktu wspólnego scalania. Użyj tego samego scenariusza, zestawu danych, konfiguracji i tej samej maszyny dla wersji bazowej i kandydującej.
+6. **Porównanie:** tylko metryki przekraczające próg obejmują surowe wartości przed zmianą i po niej, różnicę bezwzględną i procentową, metodę, środowisko oraz poziom szumu. Pomiń liczby poniżej progu lub mieszczące się w granicach normalnej zmienności. Testy niezmienników ani wskaźniki zastępcze nie są dowodami poprawy wydajności.
+7. **Decyzja:**
+   - Wartościowa poprawa: `Value proven`.
+   - Niejednoznaczna lub pomijalna jawna deklaracja poprawy wydajności: `Value not proven`; bez minimalnych różnic ani dobierania metryk pod oczekiwany wynik. Dopuść jedną korektę opartą na dowodach, a następnie porzuć zmiany lub zamknij PR.
+   - Brak przydatnej metryki i brak deklaracji poprawy wydajności: zwykłe podsumowanie wartości, bez artefaktu wpływu.
    - Pogorszenie: napraw, zawęź zakres lub zatrzymaj prace.
 
-Zastosuj ten sam filtr do kryteriów ochronnych. Całkowicie pomiń pomijalne zmiany kryteriów ochronnych; nie pokazuj ich surowych wartości ani nie dodawaj wiersza `Guardrail held` tylko po to, aby je uwzględnić.
+Zastosuj ten sam filtr do kryteriów ochronnych; pomiń pomijalne zmiany.
 
 ## Treść PR
 
-Gdy przydatne dowody przekraczają zadeklarowany wcześniej próg, przekaż `/make-pr-easy-to-review`:
+Zawsze podaj zwięzły punkt dotyczący wpływu: co poprawiło się dla użytkownika lub osoby utrzymującej kod oraz jakie są na to dowody. Drobne zmiany dotyczące treści lub stylu wymagają zdania o wartości powiązanego z wizualnymi dowodami stanu przed zmianą i po niej, a nie wymyślonej metryki. Tylko gdy dowody przekraczają próg, zastąp ten punkt następującą treścią:
 
 ```md
 ## Proven impact
-
 | Metric | Before | After | Delta |
 |---|---:|---:|---:|
 | <direct metric> | <base> | <candidate> | <absolute and %> |
-
 **Value proven:** <product or codebase benefit>
-
-Method: `<exact command, fixture, run count, environment>`.
+Method: `<command, fixture, runs, environment>`.
 ```
 
-Filtruj poszczególne wiersze: uwzględniaj tylko różnice przydatne przy podejmowaniu decyzji. Surowe wyniki pominiętych pomiarów zachowaj w lokalnym artefakcie dowodowym, jeśli są przydatne dla powtarzalności, a nie w treści PR.
-
-Brak możliwości zebrania istotnych dowodów lub brak metryki powyżej progu: użyj zwykłego podsumowania wartości; nie dodawaj pustej tabeli. W przypadku jawnej deklaracji poprawy wydajności podaj `Value not proven` bez publikowania pomijalnych liczb.
+Przekaż ją bezpośrednio do treści PR za pośrednictwem `/commit-push-pr` lub `/stacked-prs`; osobna prośba o ułatwienie przeglądu nie jest potrzebna. `/make-pr-easy-to-review` wykorzystuje ją ponownie, gdy zostanie jawnie wywołana. Pominięte surowe dane zachowaj wyłącznie w lokalnym artefakcie dowodowym, jeśli są potrzebne do zapewnienia powtarzalności. Nigdy nie dodawaj pustej tabeli; w przypadku jawnych, niepotwierdzonych deklaracji poprawy wydajności podaj `Value not proven` bez pomijalnych liczb.

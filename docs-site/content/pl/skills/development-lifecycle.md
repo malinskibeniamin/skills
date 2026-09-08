@@ -23,7 +23,7 @@ Przed rozpoczęciem edycji określ:
 - **Weryfikacja** -- kontrole lub obserwowalne zachowanie, które odróżniają ukończone rozwiązanie od rozwiązania jedynie pozornie poprawnego.
 - **Zatrzymanie** -- żądany punkt końcowy i warunki, które rzeczywiście wymagają udziału użytkownika.
 
-Nie przewiduj kodu ani nie twórz zbędnej procedury. Precyzyjnie określone żądanie utworzenia, naprawy lub implementacji upoważnia do działania: przedstaw zwięzły kontrakt i od razu kontynuuj.
+Żądanie utworzenia, naprawy lub implementacji upoważnia do działania: przedstaw kontrakt i od razu kontynuuj.
 
 ## Pętla
 
@@ -31,7 +31,9 @@ Nie przewiduj kodu ani nie twórz zbędnej procedury. Precyzyjnie określone ż�
 
 ### Sprawdź
 
-Znajdź niewiadomą, która najprawdopodobniej podważy przyjęte podejście. Przeczytaj kod, testy, logi, bieżącą dokumentację i sąsiednie przykłady; preferuj wykonywalne dowody. Najpierw rozstrzygnij najbardziej zmienną niewiadomą; pozostałe zaklasyfikuj jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy. Dopasuj się do istniejących wzorców i sprawdzonej skali; korzystaj ze specjalistycznych wskazówek tylko w ich potwierdzonej dziedzinie.
+Rozstrzygnij niewiadomą lub zmienną kwestię, która może podważyć przyjęte podejście, korzystając z kodu, testów, logów, dokumentacji i przykładów. Pozostałe zaklasyfikuj jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy. Dopasuj się do istniejących wzorców i sprawdzonej skali; korzystaj z odpowiednich wskazówek.
+
+Przed rozpoczęciem edycji sprawdź `/quantify-impact`. W przypadku każdej widocznej zmiany zarejestruj stan wyjściowy i zinwentaryzuj obszary za pomocą [wizualnych dowodów PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Dotyczy to również drobnych zmian tekstu lub stylu oraz wpływu na współdzielony interfejs użytkownika.
 
 ### Działaj
 
@@ -49,8 +51,8 @@ Pytaj tylko o istotną decyzję zastrzeżoną dla użytkownika albo nieodwracaln
 
 Przed zmianą kodu na gałęzi main/master/develop utwórz odizolowane drzewo robocze za pomocą `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Izolacja drzewa roboczego]
 
-Przy pracy z wieloma niewiadomymi można zapisać bieżącą hipotezę, dowody, odstępstwa i przesłanki do wstrzymania pracy w ignorowanym przez Git pliku `.context/implementation-notes.md`; krótkie zadania pozostają w rozmowie.
+Dowody z dłuższych prac i przesłanki do wstrzymania zapisuj w ignorowanym przez Git pliku `.context/implementation-notes.md`; krótkie zadania pozostają w rozmowie.
 
 ## Zakończenie
 
-Zatrzymaj się w żądanym punkcie końcowym — odpowiedź, zmiana lokalna, commit, wypchnięcie zmian, PR lub pełne wdrożenie — gdy wszystkie kryteria zakończenia zostaną spełnione, a nie po ukończeniu kroku planu. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md) wyłącznie wtedy, gdy wymaga tego aktywna ścieżka weryfikacji lub dostarczenia.
+Zatrzymaj się w żądanym punkcie końcowym — odpowiedź, zmiana lokalna, commit, wypchnięcie zmian, PR lub pełne wdrożenie — gdy wszystkie kryteria zakończenia zostaną spełnione, a nie po ukończeniu kroku planu. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md) wyłącznie dla aktywnej ścieżki weryfikacji lub dostarczenia.

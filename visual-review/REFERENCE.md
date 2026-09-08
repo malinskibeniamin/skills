@@ -13,6 +13,8 @@
 
 ## Surface stress checklist
 
+Check: safe-area/virtual keyboard; writing mode; captions/headers still explain tables; CSS shorthand/complex layout; ARIA only when needed, not on static/generic elements; password managers/autofill; `aria-disabled`; no surprise autofocus; buttons/links do not nest; `requestSubmit`; toasts not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images; smooth scrolling, scroll snapping, `scrollIntoView`; interaction blocking; native-control behaviour; feature detection; WebView/bfcache; responsive images and responsive video/media with stable aspect ratio; INP/long interaction; font loading; third-party embeds/scripts.
+
 Check safe areas, virtual keyboards, writing modes, clipping, sticky elements, viewport
 units, CLS, dense data, table semantics, complex CSS, accessible names, label association,
 native semantics, ARIA restraint, password managers, autofill, disabled semantics, focus
@@ -399,8 +401,8 @@ These belong here even when hooks exist:
 - `/visual-review` can run standalone.
 - `/development-lifecycle`: `plan` mode for customer-facing plans; `/go` handles implemented/release.
 - `/go`: auto-run for frontend diffs + customer-facing surface diffs before PR.
-- `/commit-push-pr`: require result or explicit skip reason for frontend/customer-facing surface PRs.
-- `/commit-push-pr --no-pr`: require before push unless skipped with reason.
+- `/commit-push-pr`: require current visual tests and embedded before/after evidence for every visible change; only the user can waive a named gap.
+- `/commit-push-pr --no-pr`: require local visual evidence before push; hosting/publication waits for a PR endpoint.
 - `/prototype`: compare alternatives pre-implementation.
 - `/triage`: use `regression` mode for user-visible bugs.
 - `self-reviewer` and `code-reviewer`: flag missing evidence for frontend/customer-facing surface diffs.
@@ -437,11 +439,11 @@ Start warn-only. Hard-block after low false positives + stable schema.
 Every frontend or customer-facing surface PR carries/links:
 - Environment fingerprint: browser, User agent, Platform, Viewport, visualViewport, DPR, media prefs, Locale/direction.
 - Checked matrix: browsers, viewports, states, keyboard path, console/network scan, a11y checks.
-- Screenshots/terminal captures: changed views/states, path or attachment.
+- Screenshots/terminal captures: changed views/states embedded as reviewer-accessible before/after images in the PR body. Local paths are working evidence only.
 - Design handles: hierarchy/density/rhythm findings include current read, desired read, and numbered callouts when screenshots exist.
 - Findings: P0/P1 fixed or accepted; P2/P3 noted.
-- Skip reasons: every unrun matrix item has reason.
-- HTML report: absolute temp path, uploaded artifact, or skip reason.
+- Coverage: reconcile final diff, shared consumers, affected states, captures, and passing visual regression tests per [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Every unrun applicable item requires an explicit user waiver; non-applicable items have reasons.
+- HTML report: optional reviewer-accessible artifact link; absolute temp paths are local handoff only.
 - Automation candidates: repeatable misses worth hook/eval/docs.
 
 ## HTML report format

@@ -3,7 +3,7 @@ name: stacked-prs
 description: Create and manage dependent GitHub pull requests with gh stack. Use for stacked PRs, dependent branch chains, incremental review layers, or splitting a large change into ordered PRs.
 ---
 
-Use `gh stack`; read [REFERENCE.md](REFERENCE.md) for versioned commands, external-link mode, recovery, and receipts.
+Use `gh stack`; [REFERENCE.md](REFERENCE.md) covers commands, external-link mode, and recovery.
 
 ## Contract
 
@@ -42,6 +42,8 @@ git log "$BASE"..HEAD --oneline
 ```
 
 Verify and dogfood every layer before publication. Whole-stack submission defaults to drafts: `gh stack submit --auto --remote origin`; add `--open` only when requested. A single-PR request never publishes other layers.
+
+Apply [PR evidence](../commit-push-pr/REFERENCE.md) per layer: `/quantify-impact`, embedded before/after, and passing visual tests for visible changes. Compare with its parent; prepare bodies before submit, verify afterward. Cascades invalidate evidence.
 
 ## Feedback, sync, merge
 

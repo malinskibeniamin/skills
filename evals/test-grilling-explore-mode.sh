@@ -54,7 +54,7 @@ fi
 # commit-push folded into commit-push-pr --no-pr.
 CPP="$REPO_ROOT/commit-push-pr/SKILL.md"
 run_content_eval "$CPP" "--no-pr" "commit-push-pr documents --no-pr flag"
-run_content_eval "$CPP" "--no-pr.*ends after|ends after.*push" "phase 5 stops the PR track under --no-pr"
+run_content_eval "$CPP" '--no-pr.*never creates a PR' "--no-pr prevents PR creation while allowing existing evidence refresh"
 run_content_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" "Commit the requested scope" "lifecycle-stop prescribes the surviving commit path"
 
 # No stale invocations of the dead names outside history.

@@ -4,17 +4,17 @@ description: Commit, push, and open a reviewable PR. Use for commit-only, commit
 argument-hint: "[--no-pr]"
 ---
 
-Read [REFERENCE.md](REFERENCE.md) for review gates, commit types, labels, body, screenshots, and upgrade sections.
+Read [REFERENCE.md](REFERENCE.md) for review gates, commits, labels, body, and evidence.
 
 ## Preflight
 
 1. Inspect `git status -sb`, `git diff HEAD`, current branch, recent log, and any branch PR.
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
-3. Push/PR requires an accessible remote; PR also requires authenticated `gh` and resolved default branch.
-4. For PR, run `gh stack view --json`; inspect an existing PR's base/stack. A normal PR owns only the current layer and never authorizes `gh stack submit`.
-5. Run applicable PR review axes inline; do not block merely because a named skill was not invoked.
+3. Push/PR needs a remote; PR also needs authenticated `gh` and the default branch.
+4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
+5. Run applicable review axes inline; do not block merely over named skill invocation.
 6. Runnable PR work requires current `/dogfood` PASS; BLOCKED needs user waiver.
-7. Group by purpose and stage requested paths only. Ask only when ownership is unsafe to infer.
+7. Stage by purpose; requested paths only. Ask if ownership is unclear.
 
 ## Commit
 
@@ -26,15 +26,16 @@ Read [REFERENCE.md](REFERENCE.md) for review gates, commit types, labels, body, 
 
 ## Pull request
 
-`--no-pr` ends after push, clean-tree check, and summary.
+`--no-pr` never creates a PR. Refresh an existing PR's evidence/body after push; otherwise end after push and clean-tree check. Prepare local visual evidence before push.
 
-Otherwise make/open/create PR authorizes verify, commit, push, and any needed lease-protected rebase update on the current user branch. It does not authorize merge, plain force, shared rewrites, or unrelated fixes.
+PR creation authorizes verification, commit, push, and lease-protected rebase on the current user branch; never merge or unrelated fixes.
 
 1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse the branch PR or create against that base with assignee, labels, and reference template. Whole-stack publication uses `/stacked-prs`.
-2. Customer-facing changes include one screenshot/surface-review row per view.
-3. Runnable changes include current dogfood receipt. Print the PR URL.
+2. Every PR runs `/quantify-impact`; include concise value or proven metrics, not benchmark theater.
+3. Every visible change, however small, requires the reference's inventory, embedded before/after, reviewed snapshots, and passing visual tests. Missing evidence blocks publication absent an explicit user waiver.
+4. Include current dogfood receipt. Re-read the body, verify reviewer image access, and print the URL. Updates/reopens use the same gate; edits invalidate affected evidence.
 
-Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests that extra artifact/history work.
+Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests.
 
 ## Completion
 
@@ -43,4 +44,4 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 3. Report `git status`, remaining diff, branch, commits, PR, CI, and next action.
 4. End with one status line: `done`, `awaiting decision`, or `blocked`, using the repository marker contract.
 
-Never stage unrelated work, push mixed scope without confirmation, or hide failures. If `gh pr create` fails, show error and recovery command.
+Never stage unrelated work, push unconfirmed mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.

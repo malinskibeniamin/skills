@@ -21,7 +21,7 @@ sidebar:
 - **驗證** -- 可執行的檢查或可觀察的行為，用以區分確實完成與看似可行。
 - **停止條件** -- 要求的終點，以及確實需要使用者介入的情況。
 
-不要預測程式碼或撰寫繁瑣程序。範圍明確的建置、修正或實作請求即代表已授權執行：簡要陳述契約後立即繼續。
+範圍明確的建置、修正或實作請求即代表已授權執行：簡要陳述契約後立即繼續。
 
 ## 執行迴圈
 
@@ -29,7 +29,9 @@ sidebar:
 
 ### 檢查
 
-找出最可能使做法失效的盲點。閱讀程式碼、測試、記錄、目前的文件與鄰近範例；優先採用可執行的證據。優先釐清變動性最高的未知事項；將其餘事項分類為查詢、原型、可逆假設或暫停觸發條件。遵循現有慣例與已展現的規模；只有在觀察到的任務進入特定領域時，才載入專業指引。
+從程式碼、測試、記錄、文件與範例中，釐清盲點或變動性高的未知事項。將其餘事項分類為查詢、原型、可逆假設或暫停觸發條件。遵循現有慣例與已展現的規模；載入相關指引。
+
+編輯前，先檢視 `/quantify-impact`。任何可見變更都應使用 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)擷取基準狀態並盤點各個介面。微小的文案／樣式變更及共用 UI 的影響也包含在內。
 
 ### 行動
 
@@ -47,7 +49,7 @@ sidebar:
 
 在 main/master/develop 分支上編寫程式碼前，請使用 `scripts/mux-worktree.sh <type>/<branch-name>` 建立隔離的 worktree。[精神：Worktree 隔離]
 
-高度未知的工作可將假設、證據、偏差與暫停觸發條件記錄於被 git 忽略的 `.context/implementation-notes.md`；短期工作則保留在對話中。
+將長期工作的證據與暫停觸發條件記錄於被 git 忽略的 `.context/implementation-notes.md`；短期工作則保留在對話中。
 
 ## 完成
 

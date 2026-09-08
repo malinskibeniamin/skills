@@ -26,7 +26,7 @@ run_absent_pattern() {
 run_absent_pattern "$REPO_ROOT/development-lifecycle/SKILL.md" '^### [0-9]|Bite-sized tasks|2-5 min' \
   "development lifecycle does not prescribe phase ceremony or task duration"
 run_absent_pattern "$REPO_ROOT/development-lifecycle/SKILL.md" \
-  'Run `/quantify-impact`|Run `/resilience-review`|Invoke `/grilling`|run `/dogfood`' \
+  'Run `/resilience-review`|Invoke `/grilling`|run `/dogfood`' \
   "development lifecycle does not chain optional skills"
 
 run_content_eval "$REPO_ROOT/go/SKILL.md" "exit contract|Exit contract" \
