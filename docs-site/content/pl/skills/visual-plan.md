@@ -30,6 +30,7 @@ Poniższe materiały przeczytaj tylko wtedy, gdy są istotne:
 
 ## Lokalne rozszerzenie środowiska testowego
 
+- W przypadku istotnego planu stosuj [`../shared/intent-map.md`](https://github.com/malinskibeniamin/skills/blob/main/shared/intent-map.md). Wyrenderuj graf pierwszego odczytu w już tworzonej natywnej dla agenta powierzchni diagramu lub kanwy; nie twórz drugiego artefaktu objaśniającego.
 - Użyj `/plan-arbiter`, gdy wiele planów lub agentów jest ze sobą sprzecznych.
 - Użyj `/grilling` przed implementacją, jeśli decyzje pozostają otwarte.
 - Planowanie jest tylko do odczytu, chyba że użytkownik wyraźnie zatwierdzi implementację.

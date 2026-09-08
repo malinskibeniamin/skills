@@ -23,6 +23,7 @@ sidebar:
 
 ## 本機測試框架覆寫
 
+- 當差異具有重要的因果結構時，請遵循 [`../shared/intent-map.md`](https://github.com/malinskibeniamin/skills/blob/main/shared/intent-map.md)。每個節點與邊都必須以實際變更為依據，標示推論，並使用摘要既有的圖表介面，不要建立第二個成果物。
 - 當使用者明確呼叫 `/visual-recap` 時，請建立摘要，或將其連結至指定的 PR、分支、
   提交或差異。
 - 摘要建立屬於額外的成果物工作；`/commit-push-pr` 和 `/go` 不會
