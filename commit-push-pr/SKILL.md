@@ -10,13 +10,13 @@ Only explicit merge requests use [the merge contract](references/merge.md), not 
 
 ## Preflight
 
-1. Inspect `git status -sb`, `git diff HEAD`, current branch, recent log, and any branch PR.
+1. Inspect `git status -sb`, `git diff HEAD`, branch, recent log, and branch PR.
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
 3. Push/PR needs a remote; PR also needs authenticated `gh` and the default branch.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
 5. Run applicable review axes inline; do not block merely over named skill invocation.
 6. Runnable PR work requires current `/dogfood` PASS; BLOCKED needs user waiver.
-7. Stage by purpose; requested paths only. Ask if ownership is unclear.
+7. Stage requested paths by purpose; ask if ownership is unclear.
 
 ## Commit
 
@@ -24,7 +24,7 @@ Only explicit merge requests use [the merge contract](references/merge.md), not 
 2. Per coherent group, `git add <explicit paths>` then `type(scope): terse description`: lowercase, 5-72 chars, no period.
 3. Explicit commit-only intent stops here after clean-tree check and summary.
 4. Push/PR: show `origin/<branch>..HEAD`, then push with tracking.
-5. Current user-owned branch rewrites use `--force-with-lease` without another prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
+5. Current user-owned branch rewrites use `--force-with-lease` without another permission prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
 
 ## Pull request
 
