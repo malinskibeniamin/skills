@@ -47,7 +47,7 @@ sidebar:
 
 运行时指导技能（日常工作，而非安装配置）：`/accessibility`、`/tanstack-router`、
 `/connect-query`、`/e2e-testing`、`/registry-workflow`、`/ux-copy`。可选基础设施：
-`/setup-routines`、`/setup-atlassian-workflow`（仅斜杠命令）。
+`/setup-routines`、`/setup-atlassian-workflow`（仅斜杠命令）。已使用 Biome 或 Oxlint 的仓库可以通过 `/install-anti-slop` 启用类型证据规则。
 
 ## 步骤
 

@@ -49,7 +49,7 @@ wtyczki („export harness”).
 
 Umiejętności ze wskazówkami dotyczącymi pracy bieżącej (codzienna praca, nie konfiguracja): `/accessibility`, `/tanstack-router`,
 `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Opcjonalna infrastruktura:
-`/setup-routines`, `/setup-atlassian-workflow` (tylko jako polecenia z ukośnikiem).
+`/setup-routines`, `/setup-atlassian-workflow` (tylko jako polecenia z ukośnikiem). Repozytoria korzystające już z Biome lub Oxlint mogą włączyć reguły chroniące dowody typów za pomocą `/install-anti-slop`.
 
 ## Kroki
 

@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "2b0787383dde3fb6",
-      "zh-CN": "2b0787383dde3fb6",
-      "zh-TW": "2b0787383dde3fb6"
+      "pl": "45bf6fa250d95e07",
+      "zh-CN": "45bf6fa250d95e07",
+      "zh-TW": "45bf6fa250d95e07"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "6a5d697e25871775",
-      "zh-CN": "6a5d697e25871775",
-      "zh-TW": "6a5d697e25871775"
+      "pl": "a51bd79872370491",
+      "zh-CN": "a51bd79872370491",
+      "zh-TW": "a51bd79872370491"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -126,9 +126,9 @@
       "zh-TW": "fa46e8ba48453c73"
     },
     "content/skills/frontend-starter-kit.md": {
-      "pl": "0f22e03d912c7410",
-      "zh-CN": "0f22e03d912c7410",
-      "zh-TW": "0f22e03d912c7410"
+      "pl": "005528885d28cdcc",
+      "zh-CN": "005528885d28cdcc",
+      "zh-TW": "005528885d28cdcc"
     },
     "content/skills/go.md": {
       "pl": "46249515f3dd378b",
@@ -169,6 +169,11 @@
       "pl": "c1c49202f157a1b8",
       "zh-CN": "c1c49202f157a1b8",
       "zh-TW": "c1c49202f157a1b8"
+    },
+    "content/skills/install-anti-slop.md": {
+      "pl": "4f2fbcb9e97c1e0f",
+      "zh-CN": "4f2fbcb9e97c1e0f",
+      "zh-TW": "4f2fbcb9e97c1e0f"
     },
     "content/skills/maintain-verification-skill.md": {
       "pl": "dc0ab7182b43101d",

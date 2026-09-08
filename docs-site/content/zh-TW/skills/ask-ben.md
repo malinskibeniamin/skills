@@ -46,6 +46,7 @@ sidebar:
 | `/hook-audit` | 稽核掛鉤的成效、延遲與偏移。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
+| `/install-anti-slop` | 為 Biome 或 Oxlint 安裝 anti-slop 規則。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |

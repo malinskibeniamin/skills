@@ -1,0 +1,29 @@
+language js(typescript)
+
+pattern inner_type_assertion($type) {
+  or {
+    TsAsExpression(ty=$type),
+    TsTypeAssertionExpression(ty=$type),
+    JsParenthesizedExpression(expression=TsAsExpression(ty=$type)),
+    JsParenthesizedExpression(expression=TsTypeAssertionExpression(ty=$type))
+  }
+}
+
+or {
+  TsAsExpression(expression=inner_type_assertion(type=$inner_type), ty=$outer_type) as $assertion where {
+    or { ! $inner_type <: r"^const$", ! $outer_type <: r"^const$" },
+    $assertion <: not within or {
+      TsAsExpression(expression=contains $assertion),
+      TsTypeAssertionExpression(expression=contains $assertion)
+    } ,
+    register_diagnostic(span=$assertion, message="anti-slop: This assertion chain discards type evidence. Keep the precise type or parse input before narrowing it.")
+  },
+  TsTypeAssertionExpression(expression=inner_type_assertion(type=$inner_type), ty=$outer_type) as $assertion where {
+    or { ! $inner_type <: r"^const$", ! $outer_type <: r"^const$" },
+    $assertion <: not within or {
+      TsAsExpression(expression=contains $assertion),
+      TsTypeAssertionExpression(expression=contains $assertion)
+    } ,
+    register_diagnostic(span=$assertion, message="anti-slop: This assertion chain discards type evidence. Keep the precise type or parse input before narrowing it.")
+  }
+}

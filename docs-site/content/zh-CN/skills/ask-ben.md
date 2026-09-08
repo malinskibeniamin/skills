@@ -46,6 +46,7 @@ sidebar:
 | `/hook-audit` | 审计钩子的有效性、延迟和偏移。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/install-anti-slop` | 为 Biome 或 Oxlint 安装 anti-slop 规则。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
