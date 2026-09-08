@@ -13,24 +13,22 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/hook-audit.excalidraw)
 
 
-Audytuj `~/.claude/hook-metrics/`. Tury Codex są uwzględniane w przebiegu sesji, ale puste mapy hooków nie świadczą o braku aktywności. Plik [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/hook-audit/REFERENCE.md) definiuje metryki i progi.
+Audytuj `~/.claude/hook-metrics/`, korzystając z [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/hook-audit/REFERENCE.md) w zakresie metryk, kohort i braków danych.
 
-Tryby: domyślny/`--hooks` — aktywność; `--retro` dodaje przebieg sesji; `--all` dodaje opóźnienia, uruchomienia umiejętności i rozbieżności.
+Tryby: domyślny/`--hooks` — aktywność; `--retro` dodaje przebieg sesji i wnioski dotyczące środowiska; `--all` obejmuje retrospektywę, opóźnienia, uruchomienia umiejętności i rozbieżności.
 
 ## Przebieg
 
-1. Sporządź wykaz hooków i zakresu dat; oddziel ewaluacje od rzeczywistych uruchomień i pogrupuj dane według wersji środowiska testowego i modelu. Rozdziel lub wyklucz sesje wymienione w `model-switches.jsonl`, zamiast przypisywać sesję z wieloma modelami do jednego modelu.
-2. Zagreguj blokady, ostrzeżenia, sugestie, odmowy, sesje i trend.
-3. Na żądanie oblicz P50/P95 oraz łączny czas rzeczywisty.
-4. Porównaj skrypty z zaobserwowanymi kluczami; oznacz rzeczywistych kandydatów bez uruchomień.
-5. Porównaj reguły z mechanizmami egzekwowania; odróżnij nieprzetestowane hooki od reguł doradczych.
-6. Retrospektywa: opóźnienie PR, odsetek CI zakończonych powodzeniem za pierwszym razem, liczba rund przeglądu, czas oczekiwania na informacje zwrotne i liczba drzew roboczych.
-7. Tryb pełny: sprawdź `skill-fires.jsonl` i `model-switches.jsonl`; uruchom `bash scripts/generate-hook-configs.sh --check`.
-8. Zasady przełączania modeli: użyj `/quantify-impact`; powodzenie zadania lub ilość poprawek jest główną miarą, a koszt zapisu pamięci podręcznej — ograniczeniem.
-9. Zaproponuj maksymalnie pięć działań: `Prune` — pozbawiona uzasadnienia reguła bez uruchomień; `Soften` — zbyt częste blokady; `Harden` — ryzykowne ostrzeżenia; `Add` — brakująca reguła deterministyczna.
+1. Sporządź wykaz hooków i zakresu dat; oddziel ewaluacje od rzeczywistych uruchomień. Grupuj według wersji środowiska i modelu; rozdziel lub wyklucz sesje z wieloma modelami na podstawie `model-switches.jsonl`.
+2. Zagreguj blokady, ostrzeżenia, sugestie, odmowy, sesje i trend; na żądanie oblicz P50/P95 oraz łączny czas rzeczywisty.
+3. Porównaj skrypty, zaobserwowane klucze i egzekwowanie reguł; odróżnij rzeczywistych kandydatów bez uruchomień, nieprzetestowane hooki i reguły doradcze.
+4. Retrospektywa: zastosuj [retrospektywę środowiska sesji](https://github.com/malinskibeniamin/skills/blob/main/hook-audit/REFERENCE.md#session-environment-retrospective); dodaj dostępne metryki retrospektywy. Brak telemetrii nie blokuje wniosków z transkrypcji.
+5. Tryb pełny: sprawdź `skill-fires.jsonl`; uruchom `bash scripts/generate-hook-configs.sh --check`.
+6. Zasady przełączania modeli: użyj `/quantify-impact`; powodzenie zadania lub ilość poprawek jest główną miarą, a koszt zapisu pamięci podręcznej — ograniczeniem.
+7. Uszereguj według wpływu maksymalnie pięć działań łącznie z telemetrii i wniosków z sesji. Przedstaw tylko rekomendacje, chyba że zlecono wdrożenie.
 
 Przed usunięciem uruchom regułę w trybie obserwacyjnym za pomocą `HOOK_SHADOW_RULES` w reprezentatywnej próbie z określoną wersją; porównaj wyniki i naruszenia. Nigdy nie uruchamiaj w trybie obserwacyjnym rygorystycznych reguł bezpieczeństwa ani uprawnień.
 
 ## Zakończenie
 
-Podaj metrykę, wartość, wielkość próby, trend z 7 dni i następne działanie. Przy mniej niż pięciu porównywalnych rzeczywistych sesjach oznacz wnioski jako wstępne. Dla rekomendacji usunięcia lub zmiany poziomu istotności wskaż pliki źródłowe oraz dokładną kohortę `harness_version` + `model`.
+Podaj dostępne metryki i wartości, wielkość próby, trend z 7 dni i następne działanie; oznacz braki jako niedostępne. Przy mniej niż pięciu porównywalnych rzeczywistych sesjach oznacz wnioski jako wstępne. Dla rekomendacji usunięcia lub zmiany poziomu istotności wskaż pliki źródłowe oraz dokładną kohortę `harness_version` + `model`.
