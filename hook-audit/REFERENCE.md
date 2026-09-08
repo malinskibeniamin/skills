@@ -17,6 +17,41 @@
 - Human comment to resolved-thread latency.
 - Active worktrees; sustained counts above four require inspection.
 
+## Session-environment retrospective
+
+For `--retro` and `--all`, read the selected session's primary transcript and relevant
+tool results through the host's supported session access. Use the current conversation
+when no session is specified. If the requested transcript is unavailable, report the
+missing source and request access or a redacted export; do not substitute another session.
+Report unavailable metrics separately from observed failures.
+
+Trace concrete friction to the environment:
+
+- **Navigation:** repeated searches or hidden dependencies; point to the owning file or doc.
+- **Automated checks:** a missed error that a deterministic lint, type, or test check could catch.
+- **Coding standards:** missed or ambiguous review guidance; clarify its existing owner.
+- **Ambient instructions:** bulky global or repo steering; move task-specific detail behind
+  a skill/reference pointer or into enforcement.
+- **Tool economy:** redundant calls or oversized output; narrow queries or reuse evidence.
+  Treat token savings as estimates, not subscription-quota evidence.
+- **No-ops:** instructions with no demonstrated behavioral effect; propose a bounded trial,
+  not deletion based on absence alone.
+- **Information access:** unavailable logs or service data; suggest scoped read-only access
+  or redacted log capture. Permission and privacy changes remain user-reserved.
+
+For each candidate, cite a sanitized source pointer (artifact and line range, turn, or
+timestamp), observed friction, likely impact, smallest proposed change, and a verification
+scenario. Separate observation from inference; one session supports a preliminary
+candidate, not a retention or model-performance claim. Redact secrets and personal data
+from excerpts; preserve hashed session IDs rather than exposing raw provider IDs.
+
+Fold candidates into the skill's five-action limit. Prefer existing docs, skills, and
+checks over new ambient rules. Keep findings read-only until implementation is requested;
+reviewers still need relevant code and dependency context, not merely a diff.
+
+Adapted from Matt Pocock's [retro skill](https://github.com/mattpocock/skills/blob/6654f6b60c/skills/in-progress/retro/SKILL.md)
+(August 24, 2026); integrated here rather than registered as a separate skill.
+
 ## Skill firing
 
 Read `~/.claude/hook-metrics/skill-fires.jsonl`. A model-invoked skill with no firing

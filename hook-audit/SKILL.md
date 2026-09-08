@@ -5,7 +5,7 @@ description: Analyze hook effectiveness and session telemetry. Use when auditing
 
 Audit `~/.claude/hook-metrics/`. Codex turns count toward flow, but empty hook maps do not prove silence. [REFERENCE.md](REFERENCE.md) defines metrics/thresholds.
 
-Modes: default/`--hooks` activity; `--retro` adds flow; `--all` adds latency, skill firing, drift.
+Modes: default/`--hooks` activity; `--retro` adds flow and session-environment findings; `--all` includes retro plus latency, skill firing, drift.
 
 ## Flow
 
@@ -14,13 +14,13 @@ Modes: default/`--hooks` activity; `--retro` adds flow; `--all` adds latency, sk
 3. When requested compute P50/P95 and wall time.
 4. Compare scripts to observed keys; flag true zero-fire candidates.
 5. Compare rules/enforcement; distinguish untested hooks from advisory rules.
-6. Retro: PR lag, CI first-pass, review rounds, feedback latency, worktrees.
+6. Retro: follow [Session-environment retrospective](REFERENCE.md#session-environment-retrospective) for the requested session, or current session by default. Add available PR lag, CI first-pass, review rounds, feedback latency, and worktree metrics; missing telemetry does not block transcript-backed findings.
 7. All: inspect `skill-fires.jsonl` and `model-switches.jsonl`; run `bash scripts/generate-hook-configs.sh --check`.
 8. Model-switch policy: use `/quantify-impact`; success/rework is primary; cache-write cost a guardrail.
-9. Recommend at most five actions: `Prune` purposeless zero-fire; `Soften` noisy blocks; `Harden` risky warnings; `Add` missing deterministic rule.
+9. Rank at most five actions across telemetry and session findings by impact. For enforcement actions: `Prune` purposeless zero-fire; `Soften` noisy blocks; `Harden` risky warnings; `Add` missing deterministic rule. Recommendations only unless implementation is requested.
 
 Before deletion, shadow via `HOOK_SHADOW_RULES` in a representative, version-qualified trial; compare outcomes/violations. Never shadow strict safety/permission.
 
 ## Done
 
-Report metric, value, sample size, 7-day trend, next action. Below five comparable real sessions is preliminary. Cite source files and exact `harness_version` + `model` cohort for prune/severity changes.
+For available telemetry, report metric, value, sample size, 7-day trend, next action; mark gaps unavailable. Retro findings use the reference's evidence format. Below five comparable real sessions is preliminary. Cite source files and exact `harness_version` + `model` cohort for prune/severity changes.
