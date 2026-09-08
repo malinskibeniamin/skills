@@ -9,74 +9,45 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/go.excalidraw)
 
-Wywoływany przez użytkownika punkt końcowy pełnego dostarczenia. Kontynuuj pracę, aż żądany artefakt zostanie dostarczony
-i pomyślnie przejdzie weryfikację albo zostanie wykazana rzeczywista zewnętrzna blokada.
+
+Wywoływany przez użytkownika punkt końcowy pełnego dostarczenia: kontynuuj pracę, aż zakończy się pomyślną weryfikacją albo wystąpi zewnętrzna blokada.
 
 ## Kryteria zakończenia
 
-Ustal poniższe elementy na podstawie żądania i bieżącego stanu repozytorium:
-
-- **Cel**: dostarczone zachowanie lub zmiana.
-- **Ograniczenia**: granice dotyczące gałęzi, prywatności, działań destrukcyjnych i obszarów zastrzeżonych przez użytkownika.
-- **Weryfikacja**: kontrole repozytorium oraz obserwowalne zachowanie w rzeczywistym punkcie wejścia.
-- **Dostarczenie**: stan commita, zdalnej gałęzi, PR-a i CI wymagany przez żądanie.
-- **Zatrzymanie**: wszystkie kryteria są spełnione albo zewnętrzna zależność uniemożliwia dalszy postęp.
+Ustal cel, niemożliwe do wywnioskowania ograniczenia, kontrole repozytorium wraz z zachowaniem w rzeczywistym punkcie wejścia, wymagany stan commita, zdalnej gałęzi, PR-a i CI oraz warunek zatrzymania.
 
 ## Pętla
 
-**Sprawdź -> zweryfikuj -> napraw -> powtórz**, aż weryfikacja zakończy się powodzeniem.
+Sprawdź -> zweryfikuj -> napraw -> powtórz, aż weryfikacja zakończy się powodzeniem.
 
-1. Sprawdź pełny diff gałęzi i żądany punkt końcowy. Uwzględnij zmiany zatwierdzone, dodane do obszaru przejściowego,
-   niedodane oraz nieśledzone; nie dostarczaj niepowiązanych plików.
-2. Uruchom wszystkie mające zastosowanie kontrole zdefiniowane w repozytorium. Prace frontendowe zwykle obejmują ukierunkowane
-   testy, `bun run type:check` i `bun run lint:fix`; prace w Go obejmują udokumentowane testy,
-   vet i kontrole kompilacji.
-3. Sprawdź każdą istotną, uruchamialną zmianę przez jej rzeczywisty punkt wejścia dla użytkownika lub publiczny interfejs.
-   Zweryfikuj zamierzone użycie oraz jeden wiarygodny scenariusz awarii lub przywracania działania. Testy tego nie zastępują.
-4. W przypadku interfejsu dla klienta sprawdź wyrenderowany wynik lub wynik w terminalu, ważne
-   stany, dostępność, konsolę i błędy oraz istotne ryzyka związane z obszarem wyświetlania lub platformą.
-5. Przeprowadź jeden przegląd pod kątem celu, ograniczeń, gęstości semantycznej i wiarygodnego ryzyka.
-   Napraw konkretne problemy, a następnie unieważnij i ponownie zgromadź dowody, których dotyczą zmiany.
-6. Jeśli zmiana deklaruje mierzalny wpływ, powtórz ten sam scenariusz bazowy i porównawczy.
-   Nie twórz sztucznego benchmarku, jeśli nie istnieje miara przydatna przy podejmowaniu decyzji.
+1. Sprawdź całą gałąź i punkt końcowy: zmiany zatwierdzone, dodane do obszaru przejściowego, niedodane oraz nieśledzone. Wyklucz niepowiązane pliki.
+2. Uruchom kontrole zdefiniowane w repozytorium. Prace frontendowe zwykle obejmują ukierunkowane testy, `bun run type:check` i `bun run lint:fix`; prace w Go — udokumentowane testy, vet i kompilację.
+3. Sprawdź każdą istotną, uruchamialną zmianę przez jej rzeczywisty punkt wejścia dla użytkownika lub publiczny interfejs, w tym jeden wiarygodny scenariusz awarii lub przywracania działania. Testy tego nie zastępują.
+4. W przypadku interfejsu dla klienta sprawdź wyrenderowany wynik lub wynik w terminalu, stany, dostępność, błędy oraz istotne obszary wyświetlania i platformy. Dla wszystkich widocznych zmian zastosuj [kryterium wizualnych dowodów w PR-ze](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+5. Przeprowadź jeden przegląd pod kątem celu, ograniczeń, gęstości semantycznej i wiarygodnego ryzyka. Napraw problemy, unieważnij dotyczące ich dowody i zgromadź je ponownie.
+6. Jeśli zmiana deklaruje mierzalny wpływ, powtórz ten sam scenariusz bazowy i porównawczy; nie twórz bezużytecznych benchmarków.
 
-W przypadku aktualizacji wersji zależności zweryfikuj plik blokady, czystą instalację i kompilację oraz każde
-miejsce użycia objęte zmianą na podstawie aktualnej dokumentacji źródłowej.
+W przypadku aktualizacji wersji zależności zweryfikuj plik blokady, czystą instalację i kompilację oraz każde objęte zmianą miejsce użycia na podstawie aktualnej dokumentacji źródłowej.
 
-Nie twórz sztucznie drugiego przeglądu, etapu porządkowania, wywołania umiejętności ani wywołania agenta. Zachowaj
-jednego właściciela w głównym kontekście.
-Użycie innego modelu lub delegowanego toku pracy wymaga wyraźnej zgody użytkownika.
+Nie twórz sztucznie przeglądów, etapów porządkowania, wywołań umiejętności ani agentów. Zachowaj jednego właściciela w głównym kontekście; użycie innego modelu wymaga wyraźnej zgody użytkownika.
 
 ## Dostarczenie
 
-Postępuj zgodnie z [commit-push-pr/REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) w zakresie jawnego dodawania zmian do obszaru przejściowego,
-formatu commita, wypychania zmian, tworzenia wersji roboczej PR-a, wskazówek dla recenzentów i treści PR-a. Na bieżącej,
-należącej do użytkownika gałęzi funkcji wykonuj rebase i w razie potrzeby używaj `--force-with-lease` bez ponownego
-pytania o zgodę. Nigdy nie scalaj, nie używaj zwykłego `--force` ani nie przepisuj gałęzi domyślnej, współdzielonej,
-należącej do kogoś innego lub równolegle używanej bez wyraźnej zgody.
+Postępuj zgodnie z [commit-push-pr/REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) w zakresie dodawania zmian do obszaru przejściowego, commita, wypychania zmian, wersji roboczej PR-a, recenzentów i treści. Na bieżącej, należącej do użytkownika gałęzi funkcji wykonuj rebase i w razie potrzeby używaj `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie scalaj, nie używaj zwykłego wymuszenia ani nie przepisuj gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle używanej bez wyraźnej zgody.
 
-Jeśli `gh stack view --json` wykryje stos, przejrzyj i zweryfikuj bieżącą warstwę względem jej
-elementu nadrzędnego. Dostarcz cały stos tylko wtedy, gdy wyraźnie zażądano tego przez `/stacked-prs`; zwykły
-punkt końcowy PR-a nie może publikować innych niewysłanych warstw.
+Jeśli `gh stack view --json` wykryje stos, zweryfikuj bieżącą warstwę względem jej elementu nadrzędnego. Dostarcz cały stos tylko wtedy, gdy wyraźnie zażądano tego przez `/stacked-prs`.
 
-- Powiąż przegląd i weryfikację z bieżącym `HEAD`; późniejsze zmiany unieważniają te dowody.
-- Monitoruj CI tylko dlatego, że to polecenie jest jawnym punktem końcowym pełnego dostarczenia. Napraw
-  błąd, ponów odpowiednią weryfikację, wypchnij zmiany i kontynuuj.
-- Rozwiąż każdy istniejący wątek przeglądu prowadzonego przez człowieka; `pr-feedback-completeness-stop` wymusza
-  brak nierozwiązanych wątków. Opinie ludzi nie mają limitu. Nie sprawdzaj nowych opinii
-  po rozwiązaniu bieżącego zestawu.
-- Zakończ samodzielny przegląd, gdy tylko nie wykaże problemów. Powtarzające się nieistotne uwagi są podstawą do przekazania zadania,
-  a nie powodem do wykonywania arbitralnych rund.
-- Dodatkowe podsumowanie, porządkowanie historii lub artefakty uzupełniające wymagają wyraźnego żądania.
+- Powiąż dowody z bieżącym `HEAD`; zmiany je unieważniają.
+- Ten jawny punkt końcowy pełnego dostarczenia monitoruje CI. Napraw błędy, ponownie zgromadź dowody, wypchnij zmiany i kontynuuj.
+- Rozwiąż każdy bieżący wątek przeglądu prowadzonego przez człowieka; `pr-feedback-completeness-stop` wymusza to. Opinie ludzi nie mają limitu. Nie sprawdzaj ponownie po rozwiązaniu bieżącego zestawu.
+- Zakończ samodzielny przegląd, gdy tylko nie wykaże problemów. Powtarzające się nieistotne uwagi są podstawą do przekazania zadania, a nie do przeprowadzania arbitralnych rund.
+- Dodatkowe podsumowanie, artefakty uzupełniające i porządkowanie historii wymagają wyraźnego żądania.
 
 ## Gotowe
 
-- Żądane zachowanie zaobserwowano w jego rzeczywistym punkcie wejścia albo odnotowano powód, dla którego nie można go uruchomić.
+- Zaobserwowano zachowanie w rzeczywistym punkcie wejścia albo odnotowano powód, dla którego nie można go uruchomić.
 - Odpowiednie kontrole przechodzą bez ostrzeżeń na bieżącym `HEAD`.
-- Bieżące uwagi ludzi zostały uwzględnione.
-- Istnieje żądany commit, wypchnięcie zmian, PR i punkt końcowy CI.
-- Żadne niezatwierdzone ani nieśledzone zmiany nie są ukryte.
-- Odpowiedź końcowa zawiera dowody i kończy się dokładnie jednym wierszem statusu.
+- Bieżące uwagi ludzi zostały uwzględnione; istnieje żądany commit, wypchnięcie zmian, PR i punkt końcowy CI.
+- Żadna praca nie jest ukryta; odpowiedź końcowa zawiera dowody i dokładnie jeden wiersz statusu.
 
-Na domyślnej gałęzi przed dostarczeniem utwórz odizolowane drzewo robocze za pomocą
-`scripts/mux-worktree.sh <type>/<name>`. [ETHOS: Izolacja drzewa roboczego]
+Na domyślnej gałęzi przed dostarczeniem utwórz odizolowane drzewo robocze za pomocą `scripts/mux-worktree.sh <type>/<name>`. [ETHOS: Izolacja drzewa roboczego]

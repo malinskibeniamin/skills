@@ -13,6 +13,8 @@
 
 ## Surface stress checklist
 
+Check: safe-area/virtual keyboard; writing mode; captions/headers still explain tables; CSS shorthand/complex layout; ARIA only when needed, not on static/generic elements; password managers/autofill; `aria-disabled`; no surprise autofocus; buttons/links do not nest; `requestSubmit`; toasts not sole carrier for critical actions; strikethrough, emoji, generated content; SVG/icons/images; smooth scrolling, scroll snapping, `scrollIntoView`; interaction blocking; native-control behaviour; feature detection; WebView/bfcache; responsive images and responsive video/media with stable aspect ratio; INP/long interaction; font loading; third-party embeds/scripts.
+
 Check safe areas, virtual keyboards, writing modes, clipping, sticky elements, viewport
 units, CLS, dense data, table semantics, complex CSS, accessible names, label association,
 native semantics, ARIA restraint, password managers, autofill, disabled semantics, focus

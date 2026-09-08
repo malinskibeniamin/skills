@@ -3,7 +3,7 @@ name: development-lifecycle
 description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
-Own one outcome until evidence proves it or a real blocker appears.
+Own one outcome until proven or blocked.
 
 ## Outcome contract
 
@@ -14,7 +14,7 @@ Before editing state:
 - **Verification** -- checks or observable behavior that distinguish done from plausible.
 - **Stop** -- requested endpoint and true user blockers.
 
-Do not predict code or write a ceremony. A scoped build/fix/implementation request authorizes execution: give the concise contract and continue immediately.
+Build/fix/implementation authorizes execution: state the contract; continue immediately.
 
 ## Loop
 
@@ -22,9 +22,9 @@ Do not predict code or write a ceremony. A scoped build/fix/implementation reque
 
 ### Inspect
 
-Find the blind spot most likely to invalidate the approach. Read code, tests, logs, current docs, and nearby examples; prefer executable evidence. Resolve the volatile unknown first; classify others as lookup, prototype, reversible assumption, or pause trigger. Match existing idiom and demonstrated scale; load specialist guidance only for its observed domain.
+Resolve the blind spot/volatile unknown from code, tests, logs, docs, and examples. Classify others: lookup, prototype, reversible assumption, pause trigger. Match existing idiom and demonstrated scale; load relevant guidance.
 
-For any end-user-visible change, inventory affected surfaces and capture the base before editing. Use [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5); tiny copy/style changes and indirect shared-UI effects count. Run `/quantify-impact`'s opportunity scan before edits so meaningful claims have a baseline.
+Before edits, scan `/quantify-impact`. For any visible change, capture the base and inventory surfaces using [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Tiny copy/style and shared-UI effects count.
 
 ### Act
 
@@ -42,7 +42,7 @@ Ask only for a material user-reserved decision or irreversible production, legal
 
 Before code on main/master/develop, create an isolated worktree with `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Worktree Isolation]
 
-High-unknown work may record hypothesis, evidence, deviations, and pause triggers in ignored `.context/implementation-notes.md`; short work stays in conversation.
+Record long-running evidence and pause triggers in ignored `.context/implementation-notes.md`; short work stays in conversation.
 
 ## Completion
 

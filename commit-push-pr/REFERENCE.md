@@ -148,7 +148,7 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    an isolated detached worktree or existing base deployment; never switch the active tree
    or fabricate a before image. New/removed views show the real prior/replacement flow;
    if none exists, use a visible `New view`/`Removed view` label with reason and the available
-   real capture. Reuse earlier evidence only when revision and scenario still match.
+   real capture. Reuse `/triage` or earlier review evidence only when revision and scenario still match.
 3. **Run visual regression:** use the repository's existing screenshot assertion runner,
    not DOM/text snapshots. Add missing cases for uncovered visible changes. Run against
    existing baselines first; inspect before/after/diff images for every mismatch, fix

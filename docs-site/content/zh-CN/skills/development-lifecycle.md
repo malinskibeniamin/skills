@@ -21,7 +21,7 @@ sidebar:
 - **验证** -- 能够区分真正完成与表面可行的检查或可观察行为。
 - **停止条件** -- 请求的终点，以及确实需要用户介入的阻碍。
 
-不要预测代码或编写繁琐的流程。范围明确的构建、修复或实现请求即授权执行：简要说明契约，然后立即继续。
+范围明确的构建、修复或实现请求即授权执行：简要说明契约，然后立即继续。
 
 ## 执行循环
 
@@ -29,7 +29,9 @@ sidebar:
 
 ### 检查
 
-找出最可能导致方案失效的盲点。阅读代码、测试、日志、当前文档和相邻示例；优先采用可执行的证据。首先解决变化可能性最高的未知项；将其余项分类为查阅、原型验证、可逆假设或暂停触发条件。遵循现有惯用方式和已验证的规模；只有当观察到的任务进入某个独立领域时，才加载相应的专业指导。
+通过代码、测试、日志、文档和示例，解决盲点或最可能发生变化的未知项。将其余项分类为查阅、原型验证、可逆假设或暂停触发条件。遵循现有惯用方式和已验证的规模；加载相关指导。
+
+编辑前，查看 `/quantify-impact`。对于任何可见改动，使用 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) 捕获基准状态并盘点影响面。细微的文案、样式改动以及共享 UI 的影响也包括在内。
 
 ### 操作
 
@@ -47,8 +49,8 @@ sidebar:
 
 在 main/master/develop 分支上编写代码前，使用 `scripts/mux-worktree.sh <type>/<branch-name>` 创建隔离的工作树。[ETHOS：工作树隔离]
 
-未知因素较多的工作，可以在已被 git 忽略的 `.context/implementation-notes.md` 中记录假设、证据、偏差和暂停触发条件；简短工作保留在对话中。
+将长期运行过程中收集的证据和暂停触发条件记录在已被 git 忽略的 `.context/implementation-notes.md` 中；简短工作保留在对话中。
 
 ## 完成
 
-当所有退出条件均通过时，在请求的答复、本地改动、提交、推送、PR 或完整交付终点停止；不要仅仅因为计划中的某个步骤完成就停止。仅当具体的验证或交付分支需要时，才查看 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)。
+当所有退出条件均通过时，在请求的答复、本地改动、提交、推送、PR 或完整交付终点停止；不要仅仅因为计划中的某个步骤完成就停止。仅当存在正在进行的验证或交付分支时，才查看 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)。
