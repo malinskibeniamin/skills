@@ -605,7 +605,9 @@ hook_get_added_lines() {
     else
       content=$(cat "$file_path" 2>/dev/null || true)
     fi
-    head_content=$(git show "HEAD:./$file_path" 2>/dev/null || true)
+    # Tool paths are commonly absolute; HEAD:.//absolute/path never resolves.
+    # Anchor at the target directory so retained headers are not new additions.
+    head_content=$(git -C "$(dirname "$file_path")" show "HEAD:./$(basename "$file_path")" 2>/dev/null || true)
     if [ -n "$head_content" ]; then
       added_lines=$(diff <(printf '%s\n' "$head_content") <(printf '%s\n' "$content") 2>/dev/null \
         | grep '^>' | sed 's/^> //' || true)

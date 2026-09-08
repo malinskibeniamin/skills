@@ -59,8 +59,20 @@ printf 'export function bad(x: any) { return x; }\n' > "$_bad_file"
 printf 'export function clean(x: number) { return x; }\n' > "$_clean_file"
 _bad_json=$(jq -n --arg bad "$_bad_file" --arg clean "$_clean_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$bad,old_string:"export function bad(x: number) { return x; }",new_string:"export function bad(x: any) { return x; }"},tool_use_id:"bad",tool_response:"{}"},{tool_name:"Edit",tool_input:{file_path:$clean,old_string:"export function clean(x: string) { return x; }",new_string:"export function clean(x: number) { return x; }"},tool_use_id:"clean",tool_response:"{}"}]}')
 _run_batch "$_bad_json"
-_assert_batch "batch blocks on hard finding for bad file only" 2 "MUST FIX before proceeding:" "clean.ts"
-_assert_batch "batch mentions ': any' escape hatch" 2 ": any" ""
+_assert_batch "batch returns actionable findings without blocking" 0 "Fix confirmed issues" "clean.ts"
+_assert_batch "batch mentions ': any' escape hatch" 0 ": any" "MUST FIX before proceeding"
+if [ -z "$_batch_stderr" ] && printf '%s' "$_batch_stdout" | jq -e '
+  .hookSpecificOutput.hookEventName == "PostToolBatch" and
+  (.hookSpecificOutput.additionalContext | contains("Continue the current task")) and
+  (.hookSpecificOutput.additionalContext | contains("false positives")) and
+  (has("systemMessage") | not) and (has("decision") | not)
+' >/dev/null; then
+  echo "  PASS  findings use model-visible continuation context, not a hook error"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  findings must use model-visible continuation context"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: batch continuation envelope"
+fi
 
 # (b) Same file edited twice: duplicate drops payloads and re-diffs SURVIVING
 # final state -- the transient ": any" was reverted by the second edit, so no
@@ -77,7 +89,7 @@ _pers_file="$_batch_tmp/persist.ts"
 printf 'export const v: any = 1;\nexport const w = 2;\n' > "$_pers_file"
 _pers_json=$(jq -n --arg f "$_pers_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const v: number = 1;",new_string:"export const v: any = 1;"},tool_use_id:"first",tool_response:"{}"},{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export const w = 1;",new_string:"export const w = 2;"},tool_use_id:"second",tool_response:"{}"}]}')
 _run_batch "$_pers_json"
-_assert_batch "duplicate-file batch catches persistent violation from earlier call" 2 ": any" ""
+_assert_batch "duplicate-file batch catches persistent violation from earlier call" 0 ": any" ""
 
 # (c) All-clean batch is silent and exit 0.
 _clean_batch=$(jq -n --arg f "$_clean_file" '{hook_event_name:"PostToolBatch",tool_calls:[{tool_name:"Edit",tool_input:{file_path:$f,old_string:"export function clean(x: string) { return x; }",new_string:"export function clean(x: number) { return x; }"},tool_use_id:"clean",tool_response:"{}"}]}')
@@ -102,6 +114,33 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: non-Edit tools ignored"
 fi
+
+# Reported false-positive classes must never become a failed batch.
+_noise_file="$_batch_tmp/noise.ts"
+printf '%s\n' 'export const example = `JSON.parse(raw)`;' > "$_noise_file"
+_noise_json=$(jq -n --arg f "$_noise_file" --rawfile content "$_noise_file" '{tool_calls:[{tool_name:"Write",tool_input:{file_path:$f,content:$content}}]}')
+_run_batch "$_noise_json"
+_assert_batch "template-literal candidate requests verification without blocking" 0 "false positives" "MUST FIX before proceeding"
+
+printf '%s\n' '{"name":"fixture","imports":{"#shared":"./shared.ts"}}' > "$_batch_tmp/package.json"
+printf '%s\n' 'import { shared } from "#shared";' > "$_noise_file"
+_noise_json=$(jq -n --arg f "$_noise_file" --rawfile content "$_noise_file" '{tool_calls:[{tool_name:"Write",tool_input:{file_path:$f,content:$content}}]}')
+_run_batch "$_noise_json"
+_assert_batch "alias warning preserves continuation and asks to verify resolution" 0 "verify workspace packages and aliases" "MUST FIX before proceeding"
+
+# Strict findings remain visible, without a post-edit approval gate.
+printf '%s\n' '// Copyright 2026 Fixture' 'export const value = 1;' > "$_noise_file"
+_noise_json=$(jq -n --arg f "$_noise_file" --rawfile content "$_noise_file" '{tool_calls:[{tool_name:"Write",tool_input:{file_path:$f,content:$content}}]}')
+_run_batch "$_noise_json"
+_assert_batch "strict copyright finding stays visible without blocking" 0 "Copyright/license" "MUST FIX before proceeding"
+
+# A tracked header retained by a full-file Write is not newly added.
+git -C "$_batch_tmp" add noise.ts
+git -C "$_batch_tmp" -c user.name=Fixture -c user.email=fixture@example.com commit -qm baseline
+printf '%s\n' '// Copyright 2026 Fixture' 'export const value = 2;' > "$_noise_file"
+_noise_json=$(jq -n --arg f "$_noise_file" --rawfile content "$_noise_file" '{tool_calls:[{tool_name:"Write",tool_input:{file_path:$f,content:$content}}]}')
+_run_batch "$_noise_json"
+_assert_batch "full-file write preserves existing copyright header without a finding" 0 "" "Copyright/license"
 
 # (e) Codex adapts each edit into the shared batch protocol in one process.
 _codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.command | select(test("codex-edit-dispatch\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
