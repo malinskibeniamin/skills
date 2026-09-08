@@ -37,6 +37,8 @@ Postępuj zgodnie z [commit-push-pr/REFERENCE.md](https://github.com/malinskiben
 
 Jeśli `gh stack view --json` wykryje stos, zweryfikuj bieżącą warstwę względem jej elementu nadrzędnego. Dostarcz cały stos tylko wtedy, gdy wyraźnie zażądano tego przez `/stacked-prs`.
 
+Jeśli użytkownik dodatkowo wyraźnie upoważnia do scalenia, po weryfikacji postępuj zgodnie z [kontraktem scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md).
+
 - Powiąż dowody z bieżącym `HEAD`; zmiany je unieważniają.
 - Ten jawny punkt końcowy pełnego dostarczenia monitoruje CI. Napraw błędy, ponownie zgromadź dowody, wypchnij zmiany i kontynuuj.
 - Rozwiąż każdy bieżący wątek przeglądu prowadzonego przez człowieka; `pr-feedback-completeness-stop` wymusza to. Opinie ludzi nie mają limitu. Nie sprawdzaj ponownie po rozwiązaniu bieżącego zestawu.

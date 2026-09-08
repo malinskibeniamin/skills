@@ -23,6 +23,8 @@ sidebar:
 
 無法執行的簽出版本是阻礙，不是編造操作說明的依據。回報確切失敗的先決條件。
 
+針對代理開發體驗或工作樹設定要求，使用[能力缺口與冷啟動檢查](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/agent-dx.md)。
+
 ## 產生
 
 撰寫 `SKILL.md`，其 frontmatter 使用相符的 `name: verify-<app>`，並包含具體的 **啟動**、**診斷**、**操作**、**證據**和**清理**章節：

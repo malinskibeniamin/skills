@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Audit a codebase or write executor-ready plans. Use for improvement surveys, roadmap direction, plan review, explicit execution handoff, or backlog reconciliation.
+description: Audit codebases and open PRs/issues, or write executor-ready plans. Use for improvement surveys, performance wins, agent DX, plan review, execution handoff, or backlog reconciliation.
 license: MIT
 metadata:
   author: shadcn
@@ -36,7 +36,10 @@ You are a senior advisor, not an implementer. Choose mode before inspection:
 
 ## Variants
 
-Invocation variants: `/improve [quick|standard|deep|security|perf|tests|bugs|docs|dx|dependencies|branch|review-plan|execute|reconcile|next]`.
+Use `/improve [quick|standard|deep|security|perf|tests|bugs|docs|dx|dependencies|backlog|branch|review-plan|execute|reconcile|next]`.
+
+- `perf|dx`: use [the focused evidence checks](references/audit-playbook.md#performance-and-agent-dx-evidence). Measure performance claims; identify missing agent controls before proposing tools.
+- `backlog [scope]`: [audit open PRs/issues](references/backlog.md); return evidence-backed dispositions without remote changes. Explicit closure exits advisor mode for that reference's closure contract.
 
 - `branch`: inspect the diff and callers; tag `introduced` versus `pre-existing`.
 - `plan <description>`: investigate enough for one plan.

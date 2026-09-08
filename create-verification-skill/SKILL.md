@@ -19,6 +19,8 @@ Discover before asking:
 
 A checkout that cannot run is a blocker, not a basis for invented instructions. Report the exact failing prerequisite.
 
+For agent-DX or worktree setup requests, use [the capability-gap and cold-start checks](references/agent-dx.md).
+
 ## Generate
 
 Write `SKILL.md` with matching `name: verify-<app>` frontmatter and concrete **Launch**, **Doctor**, **Drive**, **Evidence**, and **Cleanup** sections:

@@ -1,6 +1,6 @@
 ---
 title: /improve
-description: 稽核程式碼庫或撰寫可供執行者直接採用的計畫。適用於改善調查、產品路線圖方向、計畫審查、明確的執行交接或待辦事項核對。
+description: "稽核程式碼庫及開啟中的 PR 與議題，或撰寫可供執行者直接採用的計畫。適用於改善調查、效能提升、代理開發體驗、計畫審查、執行交接或待辦事項核對。"
 type: skill
 sidebar:
   label: /improve
@@ -36,6 +36,9 @@ sidebar:
 8. **規劃**：僅在計畫模式中讀取 `references/plan-template.md`；撰寫所要求的編號計畫，並更新 `plans/README.md`。若指定 `--issues`，將所選計畫交給 `/to-tickets`。
 
 ## 呼叫變體
+
+- `perf|dx`：使用[聚焦證據檢查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)。量測效能聲明；提出工具建議前，先辨識代理缺少的控制能力。
+- `backlog [scope]`：稽核開啟中的 PR 與議題，而非僅本機計畫。閱讀 [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md)；回傳有證據支持的處置建議，不做遠端變更。明確的關閉要求在顧問模式之外遵循該參考文件的關閉契約。
 
 - `/improve`：標準報告模式稽核。
 - `/improve quick` 或 `/improve deep`：變更稽核深度。

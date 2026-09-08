@@ -37,6 +37,8 @@ sidebar:
 
 如果 `gh stack view --json` 发现堆栈，请以其父层为基准验证当前层。仅当通过 `/stacked-prs` 明确提出请求时，才交付整个堆栈。
 
+用户还明确授权合并时，在验证后遵循[合并约定](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)。
+
 - 将证据绑定到当前 `HEAD`；后续编辑会使其失效。
 - 此明确的完整交付端点会监控 CI。修复失败，重新执行验证，推送，然后继续。
 - 解决所有当前的人工审查线程；`pr-feedback-completeness-stop` 会强制执行此要求。人工反馈不设上限。当前反馈全部解决后，不要继续轮询。

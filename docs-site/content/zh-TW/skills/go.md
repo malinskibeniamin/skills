@@ -37,6 +37,8 @@ sidebar:
 
 如果 `gh stack view --json` 識別出堆疊，請以其父層為基準驗證目前層。只有明確要求 `/stacked-prs` 時，才發布整個堆疊。
 
+使用者也明確授權合併時，請在驗證後遵循[合併契約](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)。
+
 - 將證據綁定至目前的 `HEAD`；後續編輯會使其失效。
 - 此明確的完整交付端點會監控 CI。修復失敗項目、重新執行驗證、推送，然後繼續。
 - 解決所有目前的人工作業審查討論串；`pr-feedback-completeness-stop` 會強制要求完成。人工回饋沒有數量上限。解決目前這批回饋後，請勿繼續輪詢。

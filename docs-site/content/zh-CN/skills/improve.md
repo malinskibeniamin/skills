@@ -1,6 +1,6 @@
 ---
 title: /improve
-description: 审计代码库或编写可供执行者直接使用的计划。适用于改进调研、路线图方向、计划审查、明确的执行交接或待办事项核对。
+description: "审计代码库及开放的 PR 和议题，或编写可供执行者直接使用的计划。适用于改进调研、性能提升、智能体开发体验、计划审查、执行交接或待办事项核对。"
 type: skill
 sidebar:
   label: /improve
@@ -36,6 +36,9 @@ sidebar:
 8. **制定计划**：仅在计划模式下，读取 `references/plan-template.md`；编写所请求的编号计划并更新 `plans/README.md`。如果使用 `--issues`，则将选定计划交给 `/to-tickets`。
 
 ## 调用变体
+
+- `perf|dx`：使用[专项证据检查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)。测量性能声明；在建议工具之前识别缺失的智能体控制能力。
+- `backlog [scope]`：审计开放的 PR 和议题，而非仅本地计划。阅读 [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md)；返回有证据支持的处置建议，不做远程更改。明确的关闭请求在顾问模式之外遵循该参考文档的关闭约定。
 
 - `/improve`：标准报告模式审计。
 - `/improve quick` 或 `/improve deep`：更改审计深度。

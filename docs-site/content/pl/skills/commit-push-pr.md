@@ -1,10 +1,6 @@
 ---
 title: /commit-push-pr
-description: >-
-  Utwórz commit, wypchnij zmiany i otwórz PR gotowy do przeglądu. Użyj do
-  utworzenia samego commitu, utworzenia commitu i wypchnięcia zmian, utworzenia
-  PR-a lub aktualizacji istniejącej gałęzi; --no-pr kończy działanie po
-  wypchnięciu.
+description: "Utwórz commit, wypchnij zmiany i otwórz PR gotowy do przeglądu albo wykonaj jawnie autoryzowane scalenie. Użyj przy żądaniach dostarczenia; --no-pr kończy działanie po wypchnięciu."
 type: skill
 sidebar:
   label: /commit-push-pr
@@ -15,6 +11,8 @@ sidebar:
 
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać wymagania wstępne przeglądu, commity, etykiety, opis i dowody.
+
+Wyraźne żądania scalenia obsługuje [references/merge.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md), a nie poniższy przepływ tworzenia PR-a. Sam audyt, commit, push, PR, `/go` ani żądanie dostarczenia nie upoważniają do scalenia.
 
 ## Kontrola wstępna
 

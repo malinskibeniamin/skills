@@ -27,6 +27,8 @@ Najpierw zbadaj, potem pytaj:
 
 Kopia robocza, której nie można uruchomić, jest przeszkodą, a nie podstawą do wymyślania instrukcji. Zgłoś dokładny niespełniony warunek wstępny.
 
+W przypadku ergonomii pracy agentów lub konfiguracji worktree użyj [kontroli brakujących możliwości i zimnego startu](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/agent-dx.md).
+
 ## Wygeneruj
 
 Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` oraz konkretne sekcje **Uruchamianie**, **Diagnostyka**, **Sterowanie**, **Dowody** i **Czyszczenie**:

@@ -23,6 +23,8 @@ sidebar:
 
 无法运行的检出版本属于阻塞问题，不能作为编造说明的依据。报告导致失败的确切前置条件。
 
+对于智能体开发体验或工作树设置请求，使用[能力缺口和冷启动检查](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/agent-dx.md)。
+
 ## 生成
 
 编写 `SKILL.md`，使用匹配的 `name: verify-<app>` 前置元数据，并包含具体的 **启动**、**诊断**、**驱动**、**证据**和**清理**章节：

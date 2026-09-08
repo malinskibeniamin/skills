@@ -1,6 +1,6 @@
 ---
 title: /commit-push-pr
-description: 提交、推送並開啟可供審查的 PR。適用於僅提交、提交並推送、建立 PR，或更新現有分支；--no-pr 會在推送後停止。
+description: "提交、推送並開啟可供審查的 PR，或執行明確授權的合併。適用於交付要求；--no-pr 會在推送後停止。"
 type: skill
 sidebar:
   label: /commit-push-pr
@@ -11,6 +11,8 @@ sidebar:
 
 
 請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)，以瞭解審查關卡、提交、標籤、內文及證明。
+
+明確的合併要求使用 [references/merge.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)，而不是下方的 PR 建立流程。僅要求稽核、提交、推送、PR、`/go` 或交付並不授權合併。
 
 ## 前置檢查
 
