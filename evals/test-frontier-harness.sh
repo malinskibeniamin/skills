@@ -33,15 +33,15 @@ run_json_eval() {
 }
 
 run_file_eval "config/model-routing.json" "model routing is data, not ambient prose"
-run_json_eval '.quality_first.default.model == "gpt-5.6-sol"
+run_json_eval '.quality_first.default.model == "gpt-6-astra"
   and .quality_first.default.effort == "xhigh"
+  and .quality_first.hard.model == "gpt-6-astra"
   and (.quality_first.hard.efforts | index("max"))
   and .quality_first.ultra.requires_explicit_delegation
-  and (.quality_first.ui_owners | index("gpt-5.6-sol"))
-  and .models["gpt-6-astra"].status == "eval-gated"
-  and .models["gpt-5.6-terra"].status == "eval-gated"
-  and .models["gpt-5.6-luna"].status == "eval-gated"' \
-  "config/model-routing.json" "routing keeps GPT-6 Astra eval-gated"
+  and (.quality_first.ui_owners | index("gpt-6-astra"))
+  and .models["gpt-6-astra"].status == "primary"
+  and ([.models | keys[] | select(startswith("gpt-"))] == ["gpt-6-astra"])' \
+  "config/model-routing.json" "routing uses GPT-6 Astra as the only GPT route"
 
 run_file_eval "agent-evals/context-ablation/manifest.json" "ablation matrix is versioned"
 run_json_eval '.schema_version == 2
@@ -52,7 +52,7 @@ run_json_eval '.schema_version == 2
   and (.metrics | index("task_success"))
   and (.metrics | index("regressions"))
   and (.metrics | index("input_tokens"))
-  and any(.capabilities.codex.models[]; .id == "gpt-5.6-sol" and (.efforts | index("xhigh")) and (.efforts | index("max")))
+  and any(.capabilities.codex.models[]; .id == "gpt-6-astra" and (.efforts | index("xhigh")) and (.efforts | index("max")))
   and any(.capabilities["claude-code"].models[]; .id == "claude-fable-5-1")
   and any(.capabilities["claude-code"].models[]; .id == "claude-opus-5")' \
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"

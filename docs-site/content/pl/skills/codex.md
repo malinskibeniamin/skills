@@ -1,7 +1,7 @@
 ---
 title: /codex
 description: >-
-  Deleguj zadania do GPT-5.6 za pomocą Codex CLI. Używaj do implementacji na
+  Deleguj zadania do GPT-6 Astra za pomocą Codex CLI. Używaj do implementacji na
   podstawie jasnej specyfikacji, niezależnych przeglądów, obsługi komputera,
   analizy problemów i danych oraz mechanicznych prac wymagających dużej liczby
   tokenów.
@@ -20,19 +20,16 @@ zachowaj wybrany model i poziom wnioskowania; nie zmieniaj konfiguracji Codex.
 Sprawdź dostępność funkcji raz na sesję:
 
 ```bash
-codex exec -m gpt-5.6-sol "reply OK"
+codex exec -m gpt-6-astra "reply OK"
 ```
 
-Jeśli funkcja jest niedostępna, użyj najsilniejszego dostępnego modelu GPT i wyraźnie go oznacz. Brak CLI powoduje pominięcie
-tej ścieżki i zapisanie przyczyny.
+Jeśli model jest niedostępny, zgłoś blokadę tej ścieżki; nie zastępuj go innym modelem GPT.
 
 ## Warianty routingu
 
 | Wariant | Poziom | Zastosowanie |
 |---|---|---|
-| Sol | `xhigh`; `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, interfejs użytkownika, przegląd, planowanie, obsługa komputera |
-| Terra | zależny od możliwości | pętle narzędziowe poza kodem, dopuszczone na podstawie ewaluacji |
-| Luna | zależny od możliwości | pętle narzędziowe niskiego ryzyka, dopuszczone na podstawie ewaluacji |
+| Astra | `xhigh`; `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, interfejs użytkownika, przegląd, planowanie, obsługa komputera |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny
 ani nazwy. Informacje o mechanizmach CLI i warunkach użycia między dostawcami znajdziesz w dokumencie [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md).
@@ -48,10 +45,10 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 
 ## Tryby
 
-- **Implementacja:** `codex exec -m gpt-5.6-sol -c 'model_reasoning_effort="xhigh"'`;
+- **Implementacja:** `codex exec -m gpt-6-astra -c 'model_reasoning_effort="xhigh"'`;
   izoluj równoległe zapisy w osobnych drzewach roboczych.
-- **Przegląd:** preferuj inną rodzinę modeli niż ta użyta przez autora. Prace utworzone przez Sol mogą
-  zostać sprawdzone przez wysokiej jakości alternatywę Claude; rozwiązaniem zapasowym jest oznaczony przebieg Sol z czystym kontekstem. Używaj
+- **Przegląd:** preferuj inną rodzinę modeli niż ta użyta przez autora. Prace utworzone przez Astra mogą
+  zostać sprawdzone przez wysokiej jakości alternatywę Claude; rozwiązaniem zapasowym jest oznaczony przebieg Astra z czystym kontekstem. Używaj
   trybu `-s read-only` i dowodów P0–P3.
 - **Wymiana kontradyktoryjna (automatyczna w przepływach pracy hostowanych przez Claude):** jeśli jest to dozwolone, użyj innej rodziny
   modeli; traktuj wynik jako jedną ze ścieżek, a nie ostateczny werdykt.
@@ -67,5 +64,5 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 5. Przed integracją zweryfikuj wskazane pliki, polecenia i wnioski wysokiego ryzyka.
 
 Decyzje architektoniczne wymagające znacznego osądu, synteza, kwestie produktowe i bezpieczeństwa oraz końcowy przegląd pozostają po stronie
-koordynatora klasy frontier. Sol może odpowiadać za treści przeznaczone dla użytkowników i musi spełniać te same
+koordynatora klasy frontier. Astra może odpowiadać za treści przeznaczone dla użytkowników i musi spełniać te same
 wymagania dotyczące dowodów wizualnych.

@@ -51,8 +51,7 @@ Motivation: [GPT-6 Astra](https://openai.com/index/gpt-6-astra/) and its
 [model guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra)
 report stronger instruction sensitivity, initiative, and verification behavior. Existing
 task-success, quality, token, duration, and verification metrics test those claims without
-duplicating release guidance into ambient context. [GPT-5.6](https://openai.com/index/gpt-5-6/)
-reports better coding efficiency from leaner instructions. Anthropic's
+duplicating release guidance into ambient context. Anthropic's
 [Fable 5.1 prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1)
 requires a fresh effort sweep and recommends `high` as the starting point. These are
 hypotheses for this repository until this suite measures them.

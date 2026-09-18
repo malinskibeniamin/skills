@@ -186,9 +186,12 @@ JSON
     ERRORS="$ERRORS\n  FAIL: PostModelSwitch routing handoff"
   fi
 
-  _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+  _routing_fixture=$(mktemp)
+  jq '.models["gpt-6-astra"].status = "eval-gated"' \
+    "$REPO_ROOT/config/model-routing.json" > "$_routing_fixture"
+  _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$_routing_fixture" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PostModelSwitch","from_model":"gpt-5.6-sol","to_model":"gpt-6-astra","requested_model":"gpt-6-astra","source":"picker"}
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"gpt-6-astra","requested_model":"gpt-6-astra","source":"picker"}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -202,6 +205,8 @@ JSON
     FAIL=$((FAIL + 1))
     ERRORS="$ERRORS\n  FAIL: eval-gated model switch qualification"
   fi
+
+  rm -f "$_routing_fixture"
 
   _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
