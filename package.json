@@ -34,8 +34,5 @@
   },
   "patchedDependencies": {
     "blume@1.7.1": "patches/blume@1.7.1.patch"
-  },
-  "overrides": {
-    "lodash-es": "4.18.1"
   }
 }
