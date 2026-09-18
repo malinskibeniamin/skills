@@ -31,5 +31,11 @@
     "typescript": "7.0.2",
     "vitest": "4.1.10",
     "zod": "3.25.76"
+  },
+  "patchedDependencies": {
+    "blume@1.7.1": "patches/blume@1.7.1.patch"
+  },
+  "overrides": {
+    "lodash-es": "4.18.1"
   }
 }
