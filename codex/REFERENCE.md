@@ -29,15 +29,14 @@ structured results:
 2. Run `codex exec`.
 3. Map the report into the requested schema.
 
-Label wrappers `GPT-5.6-sol: <task>`. Parallel implementation requires
+Label wrappers `gpt-6-astra: <task>`. Parallel implementation requires
 `isolation: "worktree"`. Workflow budgets count Claude wrapper tokens; Codex work is
 invisible to them.
 
 ## Routing notes
 
-Read `config/model-routing.json`. Sol defaults to `xhigh`; `max` is eligible for difficult
-quality-first work and must be explicit or eval-backed. Terra and Luna remain eval-gated
-until the behavioral suite promotes a use. Sol is eligible to own UI, copy, API, and
+Read `config/model-routing.json`. Astra defaults to `high`; `max` is eligible for difficult
+quality-first work and must be explicit or eval-backed. Astra is eligible to own UI, copy, API, and
 computer-use work. Name any fallback model in the result.
 
 `ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
@@ -47,4 +46,4 @@ harness exposes them.
 ## Adversarial exchange
 
 Adversarial exchange uses a different family whenever authorized. The fallback is a
-labeled clean-context Sol pass, not an eval-gated cheaper variant.
+labeled clean-context Astra pass, not a different GPT variant.

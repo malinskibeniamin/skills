@@ -61,9 +61,8 @@ chmod +x "$_probe_bin/claude" "$_probe_bin/bunx"
 _probe_output="$_probe_tmp/output"
 if PATH="$_probe_bin:$PATH" CELL_LOG="$_probe_log" \
   FAKE_CLAUDE_VERSION=2.1.258 "$PROBE_RUNNER" --dry >"$_probe_output" 2>&1 \
-  && [ "$(wc -l < "$_probe_log" | tr -d ' ')" -eq 3 ] \
+  && [ "$(wc -l < "$_probe_log" | tr -d ' ')" -eq 2 ] \
   && grep -q '^codex|gpt-6-astra|max|' "$_probe_log" \
-  && grep -q '^codex|gpt-5.6-sol|max|' "$_probe_log" \
   && grep -q '^claude-code|claude-fable-5-1|max|' "$_probe_log"; then
   echo "  PASS  capability runner compares Astra with exact current baselines"
   PASS=$((PASS + 1))

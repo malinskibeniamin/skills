@@ -11,12 +11,6 @@
       "agent": "codex",
       "id": "gpt-6-astra",
       "effort": "max",
-      "role": "candidate"
-    },
-    {
-      "agent": "codex",
-      "id": "gpt-5.6-sol",
-      "effort": "max",
       "role": "current-codex-baseline"
     },
     {
@@ -51,7 +45,7 @@
     }
   ],
   "gate": {
-    "quality": "No lower task success and no new high-severity regression versus both baselines.",
+    "quality": "No lower task success and no new high-severity regression versus the recorded current baseline and cross-family baseline.",
     "evidence": "Automated tasks need reproducible artifacts; manual tasks need complete receipts and raw captures.",
     "promotion": "A capability result may inform scoped routing only after repeated wins on representative project work."
   }

@@ -6,9 +6,9 @@ description: Apply eval-backed model routing and budget explicitly authorized ag
 `config/model-routing.json` is source of truth; never copy subjective scores into prompts.
 
 1. Choose the best qualified primary owner/runtime.
-2. Default GPT-5.6 Sol `xhigh` for UI, code, plans, review, computer use.
+2. Default GPT-6 Astra `high` for UI, code, plans, review, computer use.
 3. Use `max` only when context-ablation evidence or user selection supports it.
-4. Terra/Luna require versioned behavioral eval promotion for product code/review.
+4. Use Astra for every GPT route; if unavailable, report the blocker rather than substitute another GPT model.
 5. Fable/Opus may own when qualified; the user explicitly authorizes a different-family pass.
 6. `ultra` is multi-agent and needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache are API-only unless exposed.
 

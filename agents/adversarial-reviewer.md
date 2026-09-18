@@ -23,7 +23,7 @@ This agent is expensive. Run only when at least one trigger fires.
    ```
 
 4. Decision:
-   - If the orchestrator marked this dispatch `cross_model: true` (the diff was authored by a codex/GPT executor, so this Claude agent IS the cross-model reviewer) -- PROCEED. Cheap adversarial coverage for Claude-authored diffs is the `GPT-5.6: adversarial` codex lane, not this agent.
+   - If the orchestrator marked this dispatch `cross_model: true` (the diff was authored by a codex/GPT executor, so this Claude agent IS the cross-model reviewer) -- PROCEED. Cheap adversarial coverage for Claude-authored diffs is the `GPT-6 Astra: adversarial` codex lane, not this agent.
    - If `diff_lines > 200` -- PROCEED.
    - If any prior reviewer returned `severity: "CRITICAL"` -- PROCEED.
    - Else -- EMIT the skip block below and STOP.

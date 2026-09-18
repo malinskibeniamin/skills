@@ -18,12 +18,11 @@ subiektywnych ocen modeli w promptach ani umiejętnościach.
 Jakość jest najważniejsza:
 
 1. Wybierz głównego właściciela, który najlepiej odpowiada zadaniu i dostępnym możliwościom środowiska uruchomieniowego.
-2. Domyślnie używaj GPT-5.6 Sol z ustawieniem `xhigh`; Sol może odpowiadać za interfejs użytkownika, implementację, plany,
+2. Domyślnie używaj GPT-6 Astra z ustawieniem `high`; Astra może odpowiadać za interfejs użytkownika, implementację, plany,
    przegląd i obsługę komputera.
 3. Używaj `max` wyłącznie do trudnych zadań, w których jakość jest priorytetem, gdy ablacja kontekstu potwierdza
    korzyść lub użytkownik wyraźnie wybierze to ustawienie.
-4. Traktuj Terra i Luna jako modele dopuszczane na podstawie ewaluacji. Nie kieruj do nich kodu produktu ani przeglądu, dopóki
-   wersjonowana ewaluacja zachowania nie zatwierdzi takiego zastosowania.
+4. Używaj Astra dla każdej ścieżki GPT. Jeśli model jest niedostępny, zgłoś blokadę zamiast wybierać inny model GPT.
 5. Fable lub Opus mogą odpowiadać za pracę, gdy są dostępne i spełniają wymagania jakościowe. Przegląd pozostaw
    głównemu właścicielowi, chyba że użytkownik wyraźnie zatwierdzi przebieg z użyciem innej rodziny modeli.
 6. `ultra` oznacza zespół wielu agentów i wymaga wyraźnej delegacji lub `/swarm`.
