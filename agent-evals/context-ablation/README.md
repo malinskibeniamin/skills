@@ -32,7 +32,7 @@ remain explicit owner-approved delegation, not automatic routing.
 
 The manifest pins exact model IDs. GPT-6 Astra and Claude Fable 5.1 run at `low`,
 `medium`, `high`, `xhigh`, and `max`; results from their predecessors do not determine
-the new effort frontier. Astra starts at the harness's current `xhigh` default while the
+the new effort frontier. Astra starts at the harness's current `high` default while the
 suite measures the lowest quality-equivalent effort. Claude Code 2.1.257 or newer is
 required. The runner checks this before starting any cell and points stale installations
 to `claude update`.

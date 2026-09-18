@@ -14,8 +14,7 @@ const manifest = JSON.parse(
 export const createExperiment = (source: ContextSource): ExperimentConfig => {
   const agent =
     process.env.ABLATION_AGENT === "claude-code" ? "claude-code" : "codex";
-  const effort =
-    process.env.ABLATION_EFFORT ?? (agent === "codex" ? "xhigh" : "high");
+  const effort = process.env.ABLATION_EFFORT ?? "high";
   const baseModel =
     process.env.ABLATION_MODEL ??
     (agent === "codex" ? "gpt-6-astra" : "claude-fable-5-1");

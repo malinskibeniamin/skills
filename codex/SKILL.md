@@ -11,7 +11,7 @@ Capability-check once: `codex exec -m gpt-6-astra "reply OK"`. If unavailable, r
 
 | Variant | Use |
 |---|---|
-| Astra, `xhigh` (`max` only eval-backed/explicit) | code, UI, review, planning, computer use |
+| Astra, `high` (`max` only eval-backed/explicit) | code, UI, review, planning, computer use |
 
 Read `config/model-routing.json`; never infer quality from name/price. [REFERENCE.md](REFERENCE.md) owns provider gates and CLI mechanics.
 
@@ -21,7 +21,7 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 
 ## Modes
 
-- **Implement:** `codex exec -m gpt-6-astra -c 'model_reasoning_effort="xhigh"'`; concurrent writes use isolated worktrees.
+- **Implement:** `codex exec -m gpt-6-astra -c 'model_reasoning_effort="high"'`; concurrent writes use isolated worktrees.
 - **Review:** different model family when permitted; otherwise labeled clean-context Astra, `-s read-only`, P0-P3 evidence.
 - **Adversarial:** Claude-hosted and authorized only; one lane, never verdict.
 - **Computer use:** name app/URL, states, evidence.

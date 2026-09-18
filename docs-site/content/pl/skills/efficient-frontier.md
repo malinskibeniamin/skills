@@ -18,7 +18,7 @@ subiektywnych ocen modeli w promptach ani umiejętnościach.
 Jakość jest najważniejsza:
 
 1. Wybierz głównego właściciela, który najlepiej odpowiada zadaniu i dostępnym możliwościom środowiska uruchomieniowego.
-2. Domyślnie używaj GPT-6 Astra z ustawieniem `xhigh`; Astra może odpowiadać za interfejs użytkownika, implementację, plany,
+2. Domyślnie używaj GPT-6 Astra z ustawieniem `high`; Astra może odpowiadać za interfejs użytkownika, implementację, plany,
    przegląd i obsługę komputera.
 3. Używaj `max` wyłącznie do trudnych zadań, w których jakość jest priorytetem, gdy ablacja kontekstu potwierdza
    korzyść lub użytkownik wyraźnie wybierze to ustawienie.

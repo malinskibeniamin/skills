@@ -23,7 +23,7 @@ codex exec -m gpt-6-astra "reply OK"
 
 | 变体 | 强度 | 用途 |
 |---|---|---|
-| Astra | `xhigh`；有评测依据或明确选择时使用 `max` | 代码、UI、审查、规划、计算机操作 |
+| Astra | `high`；有评测依据或明确选择时使用 `max` | 代码、UI、审查、规划、计算机操作 |
 
 选择之前请阅读 `config/model-routing.json`。不要根据价格或名称推断变体质量。有关跨提供商门控和 CLI 机制，请阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md)。
 
@@ -35,7 +35,7 @@ Codex 看不到本次对话的任何内容。每个提示词都应注明仓库�
 
 ## 模式
 
-- **实现：**`codex exec -m gpt-6-astra -c 'model_reasoning_effort="xhigh"'`；在工作树中隔离并发写入。
+- **实现：**`codex exec -m gpt-6-astra -c 'model_reasoning_effort="high"'`；在工作树中隔离并发写入。
 - **审查：**优先使用与作者不同的模型系列。由 Astra 编写的工作可以使用 Claude 的高质量替代模型；后备方案是明确标注的、使用干净上下文的 Astra 审查。使用 `-s read-only` 模式和 P0-P3 级别的证据。
 - **对抗式交流（在 Claude 托管的工作流中自动进行）：**获得授权时使用不同的模型系列；将结果视为一条评估路径，而非最终裁决。
 - **计算机操作：**注明 URL/应用、状态和证据。

@@ -34,7 +34,7 @@ run_json_eval() {
 
 run_file_eval "config/model-routing.json" "model routing is data, not ambient prose"
 run_json_eval '.quality_first.default.model == "gpt-6-astra"
-  and .quality_first.default.effort == "xhigh"
+  and .quality_first.default.effort == "high"
   and .quality_first.hard.model == "gpt-6-astra"
   and (.quality_first.hard.efforts | index("max"))
   and .quality_first.ultra.requires_explicit_delegation

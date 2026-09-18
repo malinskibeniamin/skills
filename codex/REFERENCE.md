@@ -35,7 +35,7 @@ invisible to them.
 
 ## Routing notes
 
-Read `config/model-routing.json`. Astra defaults to `xhigh`; `max` is eligible for difficult
+Read `config/model-routing.json`. Astra defaults to `high`; `max` is eligible for difficult
 quality-first work and must be explicit or eval-backed. Astra is eligible to own UI, copy, API, and
 computer-use work. Name any fallback model in the result.
 

@@ -4,7 +4,7 @@
   "quality_first": {
     "default": {
       "model": "gpt-6-astra",
-      "effort": "xhigh"
+      "effort": "high"
     },
     "hard": {
       "model": "gpt-6-astra",
@@ -25,7 +25,7 @@
     "gpt-6-astra": {
       "status": "primary",
       "work": ["planning", "implementation", "review", "ui", "computer-use"],
-      "starting_effort": "xhigh",
+      "starting_effort": "high",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
     },
     "claude-fable-5-1": {

@@ -10,14 +10,14 @@ run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "context-ablation" "ro
 
 if jq -e '.policy == "quality-first"
   and .quality_first.default.model == "gpt-6-astra"
-  and .quality_first.default.effort == "xhigh"
+  and .quality_first.default.effort == "high"
   and .quality_first.hard.model == "gpt-6-astra"
   and (.quality_first.hard.efforts | index("max"))
   and (.quality_first.ui_owners | index("gpt-6-astra"))
   and (.quality_first.ui_owners | index("claude-fable-5-1"))
   and .quality_first.ultra.requires_explicit_delegation
   and .models["gpt-6-astra"].status == "primary"
-  and .models["gpt-6-astra"].starting_effort == "xhigh"
+  and .models["gpt-6-astra"].starting_effort == "high"
   and ([.models | keys[] | select(startswith("gpt-"))] == ["gpt-6-astra"])
   and .models["claude-fable-5-1"].status == "quality-alternative"
   and .model_switch.deny_statuses == ["retired", "unsupported"]
@@ -58,7 +58,7 @@ fi
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "codex exec" "codex skill uses codex exec"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "-s read-only" "codex documents read-only mode"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "self-contained" "codex requires self-contained prompts"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" 'model_reasoning_effort="xhigh"' "codex gives an executable xhigh override"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" 'model_reasoning_effort="high"' "codex gives an executable high override"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "max.*eval-backed|eval-backed.*max" "codex gates max on evidence"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Astra may own user-facing" "Astra can own visible work"
 run_content_eval "$REPO_ROOT/codex/REFERENCE.md" "ultra.*explicit delegation" "ultra requires delegation"

@@ -29,7 +29,7 @@ Jeśli model jest niedostępny, zgłoś blokadę tej ścieżki; nie zastępuj go
 
 | Wariant | Poziom | Zastosowanie |
 |---|---|---|
-| Astra | `xhigh`; `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, interfejs użytkownika, przegląd, planowanie, obsługa komputera |
+| Astra | `high`; `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, interfejs użytkownika, przegląd, planowanie, obsługa komputera |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny
 ani nazwy. Informacje o mechanizmach CLI i warunkach użycia między dostawcami znajdziesz w dokumencie [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md).
@@ -45,7 +45,7 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 
 ## Tryby
 
-- **Implementacja:** `codex exec -m gpt-6-astra -c 'model_reasoning_effort="xhigh"'`;
+- **Implementacja:** `codex exec -m gpt-6-astra -c 'model_reasoning_effort="high"'`;
   izoluj równoległe zapisy w osobnych drzewach roboczych.
 - **Przegląd:** preferuj inną rodzinę modeli niż ta użyta przez autora. Prace utworzone przez Astra mogą
   zostać sprawdzone przez wysokiej jakości alternatywę Claude; rozwiązaniem zapasowym jest oznaczony przebieg Astra z czystym kontekstem. Używaj
