@@ -116,4 +116,4 @@ never hand-edited.
 - A PR request ends after opening the PR and taking one CI status snapshot. `/go`, ship, or
   explicit babysitting owns any CI remediation loop. `/plow-ahead` is not delegation consent.
   Do not poll for later human feedback unless the user asks.
-- `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Astra high review/plan checks remain ungated; other unknown-usage agent waves checkpoint after one explicitly requested wave.
+- `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Sol medium review/plan checks remain ungated; other unknown-usage agent waves checkpoint after one explicitly requested wave.

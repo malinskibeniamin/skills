@@ -17,7 +17,7 @@ export const createExperiment = (source: ContextSource): ExperimentConfig => {
   const effort = process.env.ABLATION_EFFORT ?? "high";
   const baseModel =
     process.env.ABLATION_MODEL ??
-    (agent === "codex" ? "gpt-6-astra" : "claude-fable-5-1");
+    (agent === "codex" ? "gpt-6-sol" : "claude-opus-5-5");
   const model =
     agent === "codex" ? `${baseModel}?reasoningEffort=${effort}` : baseModel;
   const instructionFile = agent === "codex" ? "AGENTS.md" : "CLAUDE.md";

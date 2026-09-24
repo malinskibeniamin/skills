@@ -39,11 +39,15 @@ for _variant in bare guardrails lean current; do
       "$_effort" "$_variant" >> "$_expected_cells"
   done
   for _effort in low medium high xhigh max; do
+    printf 'codex|gpt-6-sol|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
+      "$_effort" "$_variant" >> "$_expected_cells"
+  done
+  for _effort in low medium high xhigh max; do
     printf 'claude-code|claude-fable-5-1|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
   done
-  for _effort in high xhigh; do
-    printf 'claude-code|claude-opus-5|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
+  for _effort in low medium high xhigh max; do
+    printf 'claude-code|claude-opus-5-5|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
   done
 done

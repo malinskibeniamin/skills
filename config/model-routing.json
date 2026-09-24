@@ -3,15 +3,20 @@
   "policy": "quality-first",
   "quality_first": {
     "default": {
-      "model": "gpt-6-astra",
+      "model": "claude-opus-5-5",
       "effort": "high"
     },
+    "secondary": {
+      "model": "gpt-6-sol",
+      "effort": "medium",
+      "use": "Codex lane for clear-spec execution, independent review, computer use, and token-heavy mechanical work."
+    },
     "hard": {
-      "model": "gpt-6-astra",
+      "model": "claude-opus-5-5",
       "efforts": ["xhigh", "max"],
       "selection": "Use the smallest effort that clears the context-ablation quality gate."
     },
-    "ui_owners": ["gpt-6-astra", "claude-fable-5-1", "claude-opus-5"],
+    "ui_owners": ["claude-opus-5-5", "claude-fable-5-1", "gpt-6-astra"],
     "ultra": {
       "requires_explicit_delegation": true,
       "use": "Independent lanes only; never silently create an agent team."
@@ -22,8 +27,21 @@
     "warm_cache_confirmation_usd": 1
   },
   "models": {
-    "gpt-6-astra": {
+    "claude-opus-5-5": {
       "status": "primary",
+      "work": ["planning", "implementation", "review", "ui"],
+      "starting_effort": "high",
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
+    },
+    "gpt-6-sol": {
+      "status": "secondary",
+      "work": ["implementation", "review", "computer-use", "investigation"],
+      "starting_effort": "medium",
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
+      "unavailable": "Use gpt-6-astra at high and name the fallback; never a cheaper GPT model."
+    },
+    "gpt-6-astra": {
+      "status": "quality-alternative",
       "work": ["planning", "implementation", "review", "ui", "computer-use"],
       "starting_effort": "high",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
@@ -33,10 +51,6 @@
       "work": ["planning", "implementation", "review", "ui"],
       "starting_effort": "high",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
-    },
-    "claude-opus-5": {
-      "status": "quality-alternative",
-      "work": ["planning", "implementation", "review", "ui"]
     }
   },
   "selection": {

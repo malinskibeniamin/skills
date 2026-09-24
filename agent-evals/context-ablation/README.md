@@ -30,10 +30,11 @@ They test the proposed workflows; they do not establish a general model ranking.
 own planning or review only after it clears the recorded gate. Handoffs to a different model
 remain explicit owner-approved delegation, not automatic routing.
 
-The manifest pins exact model IDs. GPT-6 Astra and Claude Fable 5.1 run at `low`,
-`medium`, `high`, `xhigh`, and `max`; results from their predecessors do not determine
-the new effort frontier. Astra starts at the harness's current `high` default while the
-suite measures the lowest quality-equivalent effort. Claude Code 2.1.257 or newer is
+The manifest pins exact model IDs. Claude Opus 5.5, GPT-6 Sol, GPT-6 Astra, and Claude
+Fable 5.1 run at `low`, `medium`, `high`, `xhigh`, and `max`; results from their
+predecessors do not determine the new effort frontier. The owner-selected drivers start at
+Opus 5.5 `high` and Sol `medium` while the suite measures the lowest quality-equivalent
+effort. Claude Code 2.1.257 or newer is
 required. The runner checks this before starting any cell and points stale installations
 to `claude update`.
 Keep raw results out of git. On every major model release, record the decision with

@@ -29,15 +29,16 @@ structured results:
 2. Run `codex exec`.
 3. Map the report into the requested schema.
 
-Label wrappers `gpt-6-astra: <task>`. Parallel implementation requires
+Label wrappers `gpt-6-sol: <task>` (or `gpt-6-astra: <task>` on fallback). Parallel implementation requires
 `isolation: "worktree"`. Workflow budgets count Claude wrapper tokens; Codex work is
 invisible to them.
 
 ## Routing notes
 
-Read `config/model-routing.json`. Astra defaults to `high`; `max` is eligible for difficult
-quality-first work and must be explicit or eval-backed. Astra is eligible to own UI, copy, API, and
-computer-use work. Name any fallback model in the result.
+Read `config/model-routing.json`. Sol defaults to `medium` and is the second lane behind
+Opus 5.5 `high`; higher efforts must be explicit or eval-backed. Astra `high` is the Sol
+fallback and is eligible to own UI, copy, API, and computer-use work. Name any fallback model
+in the result.
 
 `ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
 programmatic tool calling, and explicit cache controls are API-only unless the current
@@ -46,4 +47,4 @@ harness exposes them.
 ## Adversarial exchange
 
 Adversarial exchange uses a different family whenever authorized. The fallback is a
-labeled clean-context Astra pass, not a different GPT variant.
+labeled clean-context Sol pass (Astra on fallback), not a cheaper GPT variant.

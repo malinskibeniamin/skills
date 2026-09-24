@@ -18,12 +18,11 @@ subiektywnych ocen modeli w promptach ani umiejętnościach.
 Jakość jest najważniejsza:
 
 1. Wybierz głównego właściciela, który najlepiej odpowiada zadaniu i dostępnym możliwościom środowiska uruchomieniowego.
-2. Domyślnie używaj GPT-6 Astra z ustawieniem `high`; Astra może odpowiadać za interfejs użytkownika, implementację, plany,
-   przegląd i obsługę komputera.
-3. Używaj `max` wyłącznie do trudnych zadań, w których jakość jest priorytetem, gdy ablacja kontekstu potwierdza
-   korzyść lub użytkownik wyraźnie wybierze to ustawienie.
-4. Używaj Astra dla każdej ścieżki GPT. Jeśli model jest niedostępny, zgłoś blokadę zamiast wybierać inny model GPT.
-5. Fable lub Opus mogą odpowiadać za pracę, gdy są dostępne i spełniają wymagania jakościowe. Przegląd pozostaw
+2. Domyślny właściciel: Claude Opus 5.5 z ustawieniem `high` dla interfejsu użytkownika, kodu, planów i przeglądu.
+3. Druga ścieżka: GPT-6 Sol z ustawieniem `medium` przez `/codex` do wykonania według jasnej specyfikacji, niezależnego
+   przeglądu, obsługi komputera i analizy problemów. Jeśli Sol jest niedostępny, użyj Astra `high` i wskaż zapas; nigdy tańszego modelu GPT.
+4. Używaj `xhigh`/`max` wyłącznie wtedy, gdy ablacja kontekstu potwierdza korzyść lub użytkownik wyraźnie wybierze to ustawienie.
+5. Fable 5.1 lub Astra mogą odpowiadać za pracę, gdy są dostępne i spełniają wymagania jakościowe. Przegląd pozostaw
    głównemu właścicielowi, chyba że użytkownik wyraźnie zatwierdzi przebieg z użyciem innej rodziny modeli.
 6. `ultra` oznacza zespół wielu agentów i wymaga wyraźnej delegacji lub `/swarm`.
    Tryb Pro, utrwalone rozumowanie, programowe wywoływanie narzędzi i jawna kontrola pamięci podręcznej
