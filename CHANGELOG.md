@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+2026-09-24 -- Vendor the mattpocock/skills v1.3 graduation (upstream PR #1120, pinned at
+`a600ef4b25`). Add user-invoked `/implement-spec`, which works a spec's tickets as a task
+graph across parallel implementer worktrees onto one integration branch; invoking it is the
+explicit delegation request, and it resolves the tracker from agent instructions and closes
+with `/review`. Add model-invoked `/pr` for PR-body shape (summary view, before/after
+evidence, merge danger), which the `/commit-push-pr` template now builds on. Add
+user-invoked `/retro` for session-environment retrospectives beside `/hook-audit --retro`.
+Retire upstream-removed `/resolving-merge-conflicts`; released docs snapshots keep its
+page. Skills 88 -> 90.
+
 2026-09-02 -- Reconcile `/review --deep` with Cursor Thermos release-risk coverage for
 developer setup, feature exposure, intended breakage, and structural ambition. Vendor the
 non-overlapping Poteto/pstack `/blast-radius`, `/create-verification-skill`, and

@@ -69,7 +69,6 @@ run_content_eval "$REPO_ROOT/codex-compat/SKILL.md" "/read-the-damn-docs.*/plan-
 run_content_eval "$REPO_ROOT/hook-audit/SKILL.md" "version-qualified trial" "hook audit qualifies retention evidence"
 run_content_eval "$REPO_ROOT/hook-audit/SKILL.md" "at most five actions" "hook audit keeps recommendations bounded"
 run_content_eval "$REPO_ROOT/hook-audit/SKILL.md" "Cite source files" "hook audit grounds recommendations in source"
-run_content_eval "$REPO_ROOT/resolving-merge-conflicts/SKILL.md" "/agent-watchdog.*/plan-arbiter" "merge conflicts watchdog agent branches and arbitrate semantic choices"
 run_content_eval "$REPO_ROOT/frontend-starter-kit/references/ci-pipeline/README.md" "/read-the-damn-docs" "setup-ci-pipeline reads current GitHub Actions docs"
 run_content_eval "$REPO_ROOT/e2e-testing/SKILL.md" "/read-the-damn-docs" "setup-e2e-testing reads current Playwright docs"
 run_content_eval "$REPO_ROOT/frontend-starter-kit/references/react-compiler/README.md" "/read-the-damn-docs" "setup-react-compiler reads current compiler docs"

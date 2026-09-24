@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "165c31baab9e3ff7",
-      "zh-CN": "165c31baab9e3ff7",
-      "zh-TW": "165c31baab9e3ff7"
+      "pl": "8cd2ad02ec7dc331",
+      "zh-CN": "8cd2ad02ec7dc331",
+      "zh-TW": "8cd2ad02ec7dc331"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "6a5d697e25871775",
-      "zh-CN": "6a5d697e25871775",
-      "zh-TW": "6a5d697e25871775"
+      "pl": "b3a740d2d4e08977",
+      "zh-CN": "b3a740d2d4e08977",
+      "zh-TW": "b3a740d2d4e08977"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -46,9 +46,9 @@
       "zh-TW": "eaf0f029fde8dd19"
     },
     "content/skills/codex.md": {
-      "pl": "de89cb637c5d9d5c",
-      "zh-CN": "de89cb637c5d9d5c",
-      "zh-TW": "de89cb637c5d9d5c"
+      "pl": "91cad5c4857fabd6",
+      "zh-CN": "91cad5c4857fabd6",
+      "zh-TW": "91cad5c4857fabd6"
     },
     "content/skills/commit-push-pr.md": {
       "pl": "5080f898c9ce7efd",
@@ -101,9 +101,9 @@
       "zh-TW": "d76d4fa895c4a7d4"
     },
     "content/skills/efficient-frontier.md": {
-      "pl": "335c1e8f5f8212d5",
-      "zh-CN": "335c1e8f5f8212d5",
-      "zh-TW": "335c1e8f5f8212d5"
+      "pl": "e165453401f9e761",
+      "zh-CN": "e165453401f9e761",
+      "zh-TW": "e165453401f9e761"
     },
     "content/skills/eli5.md": {
       "pl": "00749b33ee52da77",
@@ -160,6 +160,11 @@
       "zh-CN": "52a119d254298f87",
       "zh-TW": "52a119d254298f87"
     },
+    "content/skills/implement-spec.md": {
+      "pl": "f03b758a02c588ed",
+      "zh-CN": "f03b758a02c588ed",
+      "zh-TW": "f03b758a02c588ed"
+    },
     "content/skills/improve-codebase-architecture.md": {
       "pl": "328e8ff66ffaaaf0",
       "zh-CN": "328e8ff66ffaaaf0",
@@ -199,6 +204,11 @@
       "pl": "559e62a4a34d63b9",
       "zh-CN": "559e62a4a34d63b9",
       "zh-TW": "559e62a4a34d63b9"
+    },
+    "content/skills/pr.md": {
+      "pl": "1c90b8eaffce6210",
+      "zh-CN": "1c90b8eaffce6210",
+      "zh-TW": "1c90b8eaffce6210"
     },
     "content/skills/prime.md": {
       "pl": "63c23b46cdd15388",
@@ -250,10 +260,10 @@
       "zh-CN": "f1b720f4013c1dd4",
       "zh-TW": "f1b720f4013c1dd4"
     },
-    "content/skills/resolving-merge-conflicts.md": {
-      "pl": "8244385df02c6aa3",
-      "zh-CN": "8244385df02c6aa3",
-      "zh-TW": "8244385df02c6aa3"
+    "content/skills/retro.md": {
+      "pl": "07679f5823c112b0",
+      "zh-CN": "07679f5823c112b0",
+      "zh-TW": "07679f5823c112b0"
     },
     "content/skills/revamp.md": {
       "pl": "32436a2cda6ca615",
@@ -276,9 +286,9 @@
       "zh-TW": "1b3d6df9b3ee66fe"
     },
     "content/skills/show-me.md": {
-      "pl": "cb316ac488e6b0f1",
-      "zh-CN": "cb316ac488e6b0f1",
-      "zh-TW": "cb316ac488e6b0f1"
+      "pl": "b055865b79b68119",
+      "zh-CN": "b055865b79b68119",
+      "zh-TW": "b055865b79b68119"
     },
     "content/skills/snyk-ux-security.md": {
       "pl": "3e5f307173c2000e",

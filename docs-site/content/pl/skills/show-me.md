@@ -29,7 +29,7 @@ submitForm
   navigateToSession
 ```
 - Przedstaw strukturę interfejsu jako drzewo komponentów, uwzględniając istotne granice stanu i modułów:
-```tsx
+```text
 <SessionPage> (apps/example/src/routes/session.tsx)
   useSessionEvents()
   <SessionToolbar>

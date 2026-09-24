@@ -35,7 +35,8 @@ while IFS= read -r skill; do
     long_descriptions="$long_descriptions $skill($description_length>$max_description)"
   fi
 
-  line_count=$(wc -l < "$skill_file" | tr -d ' ')
+  # Generated catalog rows grow with the registry; the prose budget excludes them.
+  line_count=$(awk '/<!-- catalog:start/{skip=1} !skip{n++} /<!-- catalog:end -->/{skip=0} END{print n+0}' "$skill_file")
   if [ "$line_count" -gt 100 ]; then
     long_skills="$long_skills $skill($line_count)"
   fi

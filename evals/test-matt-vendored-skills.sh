@@ -8,9 +8,11 @@ VENDORED=(
   grilling
   handoff
   improve-codebase-architecture
+  implement-spec
+  pr
   prototype
   research
-  resolving-merge-conflicts
+  retro
   review
   tdd
   teach
@@ -296,7 +298,7 @@ run_content_eval "$REPO_ROOT/codebase-design/DESIGN-IT-TWICE.md" \
   "design-it-twice has an inline fallback"
 
 # Reviewed but intentionally omitted, superseded, or incompatible upstream surfaces.
-for excluded in batch-grill-me implement-spec setup-ts-deep-modules spawn writing-great-skills; do
+for excluded in batch-grill-me setup-ts-deep-modules spawn writing-great-skills; do
   if [ -e "$REPO_ROOT/$excluded/SKILL.md" ] || grep -q "\"./$excluded/\"" "$REPO_ROOT/.claude-plugin/plugin.json"; then
     echo "  FAIL  incompatible or superseded Matt skill stays unregistered: $excluded"
     FAIL=$((FAIL + 1))

@@ -339,6 +339,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Actionable audit",
     ],
   },
+  "implement-spec": {
+    kind: "dependency-graph",
+    nodes: [
+      "Spec + tickets",
+      "Ready frontier",
+      "Implementer worktrees",
+      "Integration branch",
+    ],
+  },
   improve: {
     kind: "transformation-map",
     nodes: [
@@ -403,6 +412,10 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Observability + rollout",
     ],
     relations: ["shapes", "protects", "measures"],
+  },
+  pr: {
+    kind: "pipeline",
+    nodes: ["Primary source", "Summary view", "Before + after", "Merge danger"],
   },
   "pr-shepherd": {
     kind: "state-machine",
@@ -499,13 +512,13 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "state-machine",
     nodes: ["Open thread", "Actionable?", "Fix + verify", "Reply + resolve"],
   },
-  "resolving-merge-conflicts": {
-    kind: "dependency-graph",
+  retro: {
+    kind: "feedback-loop",
     nodes: [
-      "Base intent",
-      "Current branch intent",
-      "Conflicting hunks",
-      "Verified merged result",
+      "Session transcript",
+      "Friction candidates",
+      "Checks + standards",
+      "Better next run",
     ],
   },
   revamp: {

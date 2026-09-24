@@ -11,13 +11,7 @@ sidebar:
 
 **宿主环境门控：**此路径由 Claude 托管。在原生 Codex 中，除非用户明确要求委派或使用并行智能体，否则应直接在当前上下文中工作。不要递归启动 `codex exec`；保留所选模型和推理强度；不要重写 Codex 配置。
 
-每个会话检测一次能力：
-
-```bash
-codex exec -m gpt-6-astra "reply OK"
-```
-
-如果不可用，请报告此路径受阻；不要替换为其他 GPT 模型。
+每个会话检测一次能力：`codex exec -m gpt-6-astra "reply OK"`。如果不可用，请报告此路径受阻；不要替换为其他 GPT 模型。
 
 ## 路由变体
 

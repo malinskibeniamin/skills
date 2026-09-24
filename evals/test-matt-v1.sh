@@ -8,7 +8,6 @@ MATT_V1_SKILLS=(
   domain-modeling
   grilling
   improve-codebase-architecture
-  resolving-merge-conflicts
   wayfinder
   writing-for-agents
 )
@@ -20,7 +19,7 @@ for skill in "${MATT_V1_SKILLS[@]}"; do
 done
 
 # Renamed/removed upstream surfaces should not remain slash-invocable.
-for removed in diagnose write-a-skill caveman zoom-out writing-great-skills; do
+for removed in diagnose write-a-skill caveman zoom-out writing-great-skills resolving-merge-conflicts; do
   if [ ! -e "$REPO_ROOT/$removed/SKILL.md" ]; then
     echo "  PASS  upstream-removed skill not present: $removed"
     PASS=$((PASS + 1))
@@ -45,7 +44,7 @@ for skill in ask-ben handoff improve-codebase-architecture to-questionnaire to-t
 done
 
 # Model-invoked reusable skills omit disable-model-invocation.
-for skill in codebase-design diagnosing-bugs domain-modeling grilling prototype resolving-merge-conflicts tdd writing-for-agents; do
+for skill in codebase-design diagnosing-bugs domain-modeling grilling prototype tdd writing-for-agents; do
   if grep -q "^disable-model-invocation:" "$REPO_ROOT/$skill/SKILL.md" 2>/dev/null; then
     echo "  FAIL  $skill should be model-invoked"
     FAIL=$((FAIL + 1))

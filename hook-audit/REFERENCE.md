@@ -50,7 +50,8 @@ checks over new ambient rules. Keep findings read-only until implementation is r
 reviewers still need relevant code and dependency context, not merely a diff.
 
 Adapted from Matt Pocock's [retro skill](https://github.com/mattpocock/skills/blob/6654f6b60c/skills/in-progress/retro/SKILL.md)
-(August 24, 2026); integrated here rather than registered as a separate skill.
+(August 24, 2026). The standalone `/retro` skill vendors the graduated upstream version; this
+mode adds telemetry, sanitization, and the five-action limit.
 
 ## Skill firing
 

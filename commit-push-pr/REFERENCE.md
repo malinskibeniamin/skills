@@ -57,6 +57,7 @@ logs/matrices in reviewer-accessible evidence links; keep before/after images in
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
 ## Summary
 - <observable behavior change and why it matters; 1-3 bullets>
+<optional: the smallest `/pr` summary view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
 
 ## Impact
 - <automatic /quantify-impact value assessment; replace with Proven impact below when measured>
@@ -75,8 +76,12 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 ## Stack context
 - <stacked PR only: parent, layer position, dependent PRs, draft/ready>
 
+## Merge danger
+- Door: <one-way or two-way: can this be rolled back cheaply? destructive or hard-to-reverse effects are one-way>
+- Blast radius: <who or what breaks if wrong: consumers, layout, data, deploys>
+
 ## Reviewer guide
-- <non-trivial diffs only: entry point, risk, deliberate limitation>
+- <non-trivial diffs only: entry point, deliberate limitation>
 
 ## Screenshots / surface review
 <omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>
@@ -111,6 +116,7 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 
 ## Tests
 - <command and actual result; short checklist for remaining manual review only>
+- <changed behavior without visuals: the test that failed before and passes after>
 EOF
 )"
 ```
@@ -126,6 +132,9 @@ publishes only the current layer; `gh stack submit` belongs to an explicit `/sta
 endpoint because it can publish every unsubmitted branch.
 
 **Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.
+
+Summary, evidence, and merge danger follow `/pr` (vendored from Matt Pocock); this template
+adds the harness's impact, visual, dogfood, dependency, and test sections.
 
 ## Frontend/customer-facing detection + screenshot table (Phase 5)
 
