@@ -10,7 +10,6 @@ VENDORED=(
   improve-codebase-architecture
   prototype
   research
-  resolving-merge-conflicts
   review
   tdd
   teach

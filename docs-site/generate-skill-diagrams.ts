@@ -499,15 +499,6 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "state-machine",
     nodes: ["Open thread", "Actionable?", "Fix + verify", "Reply + resolve"],
   },
-  "resolving-merge-conflicts": {
-    kind: "dependency-graph",
-    nodes: [
-      "Base intent",
-      "Current branch intent",
-      "Conflicting hunks",
-      "Verified merged result",
-    ],
-  },
   revamp: {
     kind: "transformation-map",
     nodes: [

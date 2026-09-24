@@ -27,7 +27,7 @@ submitForm
   navigateToSession
 ```
 - 以元件樹呈現 UI 結構，包括重要的狀態與模組邊界：
-```tsx
+```text
 <SessionPage> (apps/example/src/routes/session.tsx)
   useSessionEvents()
   <SessionToolbar>

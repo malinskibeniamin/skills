@@ -175,7 +175,6 @@ plow-ahead 1400
 prime 1200
 research 1200
 visual-plan 1175
-resolving-merge-conflicts 1075
 what-did-i-get-done 1000
 tanstack-table 975
 setup-atlassian-workflow 925
@@ -188,13 +187,13 @@ wait-what 400
 work 325
 EOF
 
-if [ "$remaining_skill_total" -le 171725 ]; then
-  echo "  PASS  remaining-skill wave under 171725 bytes ($remaining_skill_total)"
+if [ "$remaining_skill_total" -le 171010 ]; then
+  echo "  PASS  remaining-skill wave under 171010 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 171725)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 171010)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 171725 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 171010 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible

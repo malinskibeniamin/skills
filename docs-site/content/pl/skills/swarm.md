@@ -63,6 +63,14 @@ Agenci zapisują tylko w swoim zakresie. Wspólne tory wymagają rozłącznej w�
 - Tory diagnozy mogą rozdzielać reprodukcję, hipotezy, instrumentację i dowód regresji.
 - Syntezę i decyzje zastrzeżone dla użytkownika zachowaj u koordynatora.
 
+## Graf zgłoszeń
+
+Dla specyfikacji, której zgłoszenia deklarują blokady, uruchom gotowy front prac i uruchamiaj
+kolejne tory, gdy scalenia odblokowują zgłoszenia. Każdy tor worktree potwierdza, że bazuje na
+gałęzi integracyjnej, buduje przez `/tdd` i przed raportem scala najnowszy stan gałęzi
+integracyjnej, aby integracja była przewinięciem (fast-forward). Przejrzyj zintegrowaną gałąź
+raz; `/go` odpowiada za ewentualny PR lub zamknięcie zgłoszeń.
+
 ## Protokół scalania
 
 Czytaj artefakty i zmienione pliki, nie tylko podsumowania. Odrzucaj lub świadomie uzgadniaj nakładanie. Przy sprzecznych rekomendacjach pokaż dowody, opcje i wybór koordynatora. Po integracji uruchom kontrole; TDD wymaga dowodu RED przed GREEN.

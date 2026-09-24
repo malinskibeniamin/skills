@@ -20,7 +20,7 @@ submitForm
   navigateToSession
 ```
 - Show UI structure as a component tree, including state and module boundaries that matter:
-```tsx
+```text
 <SessionPage> (apps/example/src/routes/session.tsx)
   useSessionEvents()
   <SessionToolbar>

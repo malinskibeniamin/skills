@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "165c31baab9e3ff7",
-      "zh-CN": "165c31baab9e3ff7",
-      "zh-TW": "165c31baab9e3ff7"
+      "pl": "6e8c088e5a04ddcf",
+      "zh-CN": "6e8c088e5a04ddcf",
+      "zh-TW": "6e8c088e5a04ddcf"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "6a5d697e25871775",
-      "zh-CN": "6a5d697e25871775",
-      "zh-TW": "6a5d697e25871775"
+      "pl": "32d8480e50fad4bb",
+      "zh-CN": "32d8480e50fad4bb",
+      "zh-TW": "32d8480e50fad4bb"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -250,11 +250,6 @@
       "zh-CN": "f1b720f4013c1dd4",
       "zh-TW": "f1b720f4013c1dd4"
     },
-    "content/skills/resolving-merge-conflicts.md": {
-      "pl": "8244385df02c6aa3",
-      "zh-CN": "8244385df02c6aa3",
-      "zh-TW": "8244385df02c6aa3"
-    },
     "content/skills/revamp.md": {
       "pl": "32436a2cda6ca615",
       "zh-CN": "32436a2cda6ca615",
@@ -276,9 +271,9 @@
       "zh-TW": "1b3d6df9b3ee66fe"
     },
     "content/skills/show-me.md": {
-      "pl": "cb316ac488e6b0f1",
-      "zh-CN": "cb316ac488e6b0f1",
-      "zh-TW": "cb316ac488e6b0f1"
+      "pl": "b055865b79b68119",
+      "zh-CN": "b055865b79b68119",
+      "zh-TW": "b055865b79b68119"
     },
     "content/skills/snyk-ux-security.md": {
       "pl": "3e5f307173c2000e",
@@ -306,9 +301,9 @@
       "zh-TW": "9cde1999d9d17317"
     },
     "content/skills/swarm.md": {
-      "pl": "3b8de7118cdb75ea",
-      "zh-CN": "3b8de7118cdb75ea",
-      "zh-TW": "3b8de7118cdb75ea"
+      "pl": "cf978426881e32c7",
+      "zh-CN": "cf978426881e32c7",
+      "zh-TW": "cf978426881e32c7"
     },
     "content/skills/tanstack-intent.md": {
       "pl": "656769bcfbbc2299",

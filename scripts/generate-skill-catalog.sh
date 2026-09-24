@@ -71,7 +71,6 @@ SHORT_DESCRIPTIONS = {
     "research": "Research primary sources and save cited findings",
     "resilience-review": "Review credible high-impact failures with Murphy law",
     "resolve-pr-feedback": "Resolve pull request feedback and review threads",
-    "resolving-merge-conflicts": "Resolve an in-progress Git merge or rebase conflict",
     "revamp": "Run a large rewrite with baseline-driven translation",
     "review": "Review a diff with evidence-triggered specialist hats",
     "setup-atlassian-workflow": "Configure opt-in Jira and Atlassian workflows",

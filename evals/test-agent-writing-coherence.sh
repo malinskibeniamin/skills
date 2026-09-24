@@ -94,8 +94,6 @@ assert_present 'one story per|Completion' \
   "to-spec defines story completion" "$REPO_ROOT/to-spec/SKILL.md"
 assert_absent 'run `/work-automation-kit` if not|publish `/visual-plan` as the review artifact' \
   "to-spec does not imply unrelated setup or publication" "$REPO_ROOT/to-spec/SKILL.md"
-assert_absent 'Always resolve; never `--abort`' \
-  "merge conflict guidance allows safe escalation" "$REPO_ROOT/resolving-merge-conflicts/SKILL.md"
 assert_absent 'Security review is intentionally absent|ALL hats with no skips permitted' \
   "review has no stale or contradictory hat policy" "$REPO_ROOT/review/SKILL.md"
 assert_present 'stay-within-limits/select-review-profile\.sh' \
