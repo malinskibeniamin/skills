@@ -11,13 +11,7 @@ sidebar:
 
 **主機閘門：**此路徑由 Claude 託管。在原生 Codex 中，除非使用者明確要求委派或使用平行代理程式，否則請直接處理。請勿啟動遞迴的 `codex exec`；保留所選的模型與推理強度；請勿重寫 Codex 設定。
 
-每個工作階段偵測一次功能支援：
-
-```bash
-codex exec -m gpt-6-astra "reply OK"
-```
-
-若無法使用，請回報此路徑受阻；不要改用其他 GPT 模型。
+每個工作階段偵測一次功能支援：`codex exec -m gpt-6-astra "reply OK"`。若無法使用，請回報此路徑受阻；不要改用其他 GPT 模型。
 
 ## 路由變體
 

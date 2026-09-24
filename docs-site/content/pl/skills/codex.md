@@ -17,13 +17,7 @@ sidebar:
 wyraźnie poprosi o delegowanie lub równoległych agentów. Nie uruchamiaj rekurencyjnie `codex exec`;
 zachowaj wybrany model i poziom wnioskowania; nie zmieniaj konfiguracji Codex.
 
-Sprawdź dostępność funkcji raz na sesję:
-
-```bash
-codex exec -m gpt-6-astra "reply OK"
-```
-
-Jeśli model jest niedostępny, zgłoś blokadę tej ścieżki; nie zastępuj go innym modelem GPT.
+Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-astra "reply OK"`. Jeśli model jest niedostępny, zgłoś blokadę tej ścieżki; nie zastępuj go innym modelem GPT.
 
 ## Warianty routingu
 
