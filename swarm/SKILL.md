@@ -67,13 +67,6 @@ lanes use descriptive branches; descendants require separate authorization.
 - Diagnosis lanes may separate reproduction, hypotheses, instrumentation, and regression proof.
 - Keep synthesis and user-reserved decisions with the coordinator.
 
-## Ticket graph
-
-For a spec whose tickets declare blockers, launch the ready frontier and relaunch as merges
-unblock tickets. Each worktree lane confirms it is based on the integration branch, builds
-through `/tdd`, and merges the integration tip before reporting, so integration
-fast-forwards. Review the integrated branch once; `/go` owns any PR or ticket closure.
-
 ## Merge protocol
 
 Read artifacts and changed files, not summaries alone. Reject or reconcile overlaps

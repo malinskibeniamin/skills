@@ -57,7 +57,7 @@ logs/matrices in reviewer-accessible evidence links; keep before/after images in
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
 ## Summary
 - <observable behavior change and why it matters; 1-3 bullets>
-<optional: the smallest `/show-me` view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
+<optional: the smallest `/pr` summary view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
 
 ## Impact
 - <automatic /quantify-impact value assessment; replace with Proven impact below when measured>
@@ -133,9 +133,8 @@ endpoint because it can publish every unsubmitted branch.
 
 **Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.
 
-Summary views, the door call, and before/after test evidence adapt Matt Pocock's
-[pr skill](https://github.com/mattpocock/skills/blob/a600ef4b25/skills/engineering/pr/SKILL.md);
-the view menu lives in `/show-me`, so no separate `/pr` skill is registered.
+Summary, evidence, and merge danger follow `/pr` (vendored from Matt Pocock); this template
+adds the harness's impact, visual, dogfood, dependency, and test sections.
 
 ## Frontend/customer-facing detection + screenshot table (Phase 5)
 

@@ -2,15 +2,15 @@
 
 ## Unreleased
 
-2026-09-24 -- Apply the mattpocock/skills v1.3 graduation (upstream PR #1120, pinned at
-`a600ef4b25`). Fold `implement-spec` into a `/swarm` ticket graph: launch the ready
-frontier, verify each lane's integration base, merge the integration tip before reporting,
-and leave PR or ticket closure to `/go`; parallel consent still comes only from `/swarm`.
-Fold `pr` into the `/commit-push-pr` body template with a `/show-me` summary view, a
-merge-danger door and blast-radius call, and before/after test evidence. Extend
-`/hook-audit --retro` so mechanical standards findings become deterministic checks and a
-repository without guardrails is a finding. Retire upstream-removed
-`/resolving-merge-conflicts`; released docs snapshots keep its page. Skills 88 -> 87.
+2026-09-24 -- Vendor the mattpocock/skills v1.3 graduation (upstream PR #1120, pinned at
+`a600ef4b25`). Add user-invoked `/implement-spec`, which works a spec's tickets as a task
+graph across parallel implementer worktrees onto one integration branch; invoking it is the
+explicit delegation request, and it resolves the tracker from agent instructions and closes
+with `/review`. Add model-invoked `/pr` for PR-body shape (summary view, before/after
+evidence, merge danger), which the `/commit-push-pr` template now builds on. Add
+user-invoked `/retro` for session-environment retrospectives beside `/hook-audit --retro`.
+Retire upstream-removed `/resolving-merge-conflicts`; released docs snapshots keep its
+page. Skills 88 -> 90.
 
 2026-09-02 -- Reconcile `/review --deep` with Cursor Thermos release-risk coverage for
 developer setup, feature exposure, intended breakage, and structural ambition. Vendor the

@@ -29,13 +29,7 @@ Trace concrete friction to the environment:
 
 - **Navigation:** repeated searches or hidden dependencies; point to the owning file or doc.
 - **Automated checks:** a missed error that a deterministic lint, type, or test check could catch.
-  Read the repository's own check scripts and CI workflow first; an existing check that is
-  unwired or silently broken is the finding. A repository with no guardrail (no pre-commit
-  hook and no CI lint, type, or test job) is a finding in its own right.
-- **Coding standards:** missed or ambiguous review guidance. Classify first: a mechanical
-  violation (fixed syntax, banned API, import shape, file location) gets a deterministic
-  check wherever cheapest (repository linter rule, pre-commit hook, or CI job); keep written
-  standards for judgment calls no check can replace, and clarify their existing owner.
+- **Coding standards:** missed or ambiguous review guidance; clarify its existing owner.
 - **Ambient instructions:** bulky global or repo steering; move task-specific detail behind
   a skill/reference pointer or into enforcement.
 - **Tool economy:** redundant calls or oversized output; narrow queries or reuse evidence.
@@ -55,8 +49,9 @@ Fold candidates into the skill's five-action limit. Prefer existing docs, skills
 checks over new ambient rules. Keep findings read-only until implementation is requested;
 reviewers still need relevant code and dependency context, not merely a diff.
 
-Adapted from Matt Pocock's [retro skill](https://github.com/mattpocock/skills/blob/a600ef4b25/skills/engineering/retro/SKILL.md)
-(v1.3 graduation, September 24, 2026); integrated here rather than registered as a separate skill.
+Adapted from Matt Pocock's [retro skill](https://github.com/mattpocock/skills/blob/6654f6b60c/skills/in-progress/retro/SKILL.md)
+(August 24, 2026). The standalone `/retro` skill vendors the graduated upstream version; this
+mode adds telemetry, sanitization, and the five-action limit.
 
 ## Skill firing
 
