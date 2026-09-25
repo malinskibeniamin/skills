@@ -3,10 +3,13 @@
 ## Unreleased
 
 2026-09-24 -- Route the owner-selected drivers: Claude Opus 5.5 `high` is the primary
-owner and GPT-6 Sol `medium` is the second, Codex-delegated lane. Astra `high` becomes the
-named Sol fallback and a UI-qualified alternative beside Fable 5.1; Sol does not own
-user-facing UI, copy, or API design. Opus 5 leaves routing. The context-ablation matrix
-sweeps every effort for Opus 5.5 and Sol.
+owner and GPT-6 Sol `medium` is the second, Codex-delegated lane; Astra `high` is the named
+Sol fallback. User-facing work needs taste >= 8 and stays with Claude, with Astra only as a
+named fallback. Fable 5.1 is reserved for explicit extraordinary work, and GPT-6 Luna `high`
+takes chores such as tiny edits, clean rebases, mechanical CI fixes, and read-only listing.
+Routing records owner-scored cost, intelligence, speed, and taste backed by Artificial
+Analysis measurements. Opus 5 leaves routing. The context-ablation matrix sweeps every
+effort for Opus 5.5 and Sol.
 
 ## 4.39.0
 

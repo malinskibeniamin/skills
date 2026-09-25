@@ -37,8 +37,9 @@ invisible to them.
 
 Read `config/model-routing.json`. Sol defaults to `medium` and is the second lane behind
 Opus 5.5 `high`; higher efforts must be explicit or eval-backed. Astra `high` is the Sol
-fallback and is eligible to own UI, copy, API, and computer-use work. Name any fallback model
-in the result.
+fallback. User-facing UI, copy, and API work stays with Claude; Astra takes it only when no
+Claude owner is available. Luna `high` handles chores and escalates to Sol on judgment. Name
+any fallback model in the result.
 
 `ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
 programmatic tool calling, and explicit cache controls are API-only unless the current

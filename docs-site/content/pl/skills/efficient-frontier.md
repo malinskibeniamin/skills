@@ -21,10 +21,14 @@ Jakość jest najważniejsza:
 2. Domyślny właściciel: Claude Opus 5.5 z ustawieniem `high` dla interfejsu użytkownika, kodu, planów i przeglądu.
 3. Druga ścieżka: GPT-6 Sol z ustawieniem `medium` przez `/codex` do wykonania według jasnej specyfikacji, niezależnego
    przeglądu, obsługi komputera i analizy problemów. Jeśli Sol jest niedostępny, użyj Astra `high` i wskaż zapas; nigdy tańszego modelu GPT.
-4. Używaj `xhigh`/`max` wyłącznie wtedy, gdy ablacja kontekstu potwierdza korzyść lub użytkownik wyraźnie wybierze to ustawienie.
-5. Fable 5.1 lub Astra mogą odpowiadać za pracę, gdy są dostępne i spełniają wymagania jakościowe. Przegląd pozostaw
-   głównemu właścicielowi, chyba że użytkownik wyraźnie zatwierdzi przebieg z użyciem innej rodziny modeli.
-6. `ultra` oznacza zespół wielu agentów i wymaga wyraźnej delegacji lub `/swarm`.
+4. Praca widoczna dla użytkowników (interfejs, teksty, projekt API) wymaga oceny gustu (taste >= 8) i właściciela Claude;
+   Astra jest wskazanym zapasem tylko wtedy, gdy żaden właściciel Claude nie jest dostępny.
+5. Drobne prace trafiają do GPT-6 Luna z ustawieniem `high`: małe zmiany, czyste rebase, mechaniczne poprawki CI,
+   odczyt lub wylistowanie danych tylko do odczytu. Przy konfliktach, diagnozie lub decyzjach przekaż zadanie do Sol.
+6. Fable 5.1 (maksymalnie `high`) tylko na wyraźną prośbę użytkownika przy wyjątkowej pracy. Używaj `xhigh`/`max`
+   wyłącznie wtedy, gdy ablacja kontekstu potwierdza korzyść lub użytkownik wyraźnie wybierze to ustawienie.
+7. Przegląd pozostaw głównemu właścicielowi, chyba że użytkownik wyraźnie zatwierdzi przebieg z użyciem innej rodziny modeli.
+8. `ultra` oznacza zespół wielu agentów i wymaga wyraźnej delegacji lub `/swarm`.
    Tryb Pro, utrwalone rozumowanie, programowe wywoływanie narzędzi i jawna kontrola pamięci podręcznej
    są dostępne tylko przez API, chyba że aktywne środowisko je udostępnia.
 

@@ -12,7 +12,8 @@ Capability-check once: `codex exec -m gpt-6-sol "reply OK"`. If unavailable, fal
 | Variant | Use |
 |---|---|
 | Sol, `medium` (`high`+ only eval-backed/explicit) | clear-spec code, review, computer use, investigation |
-| Astra, `high` (Sol fallback; `max` only eval-backed/explicit) | code, UI, review, planning, computer use |
+| Astra, `high` (Sol fallback; `max` only eval-backed/explicit) | code, review, planning, computer use; UI only if no Claude owner |
+| Luna, `high` (`gpt-6-luna`) | chores: tiny edits, clean rebases, mechanical CI fixes, read-only listing; judgment goes to Sol |
 
 Read `config/model-routing.json`; never infer quality from name/price. [REFERENCE.md](REFERENCE.md) owns provider gates and CLI mechanics.
 
@@ -36,4 +37,4 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 4. Run with timeout/reference background pattern.
 5. Verify citations, commands, and high-risk conclusions before integrating.
 
-Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Sol does not own user-facing UI, copy, or API design; Astra may, and meets the same visual evidence gate.
+Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Codex models do not own user-facing UI, copy, or API design while a Claude owner exists; an Astra fallback meets the visual evidence gate.

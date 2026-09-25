@@ -24,7 +24,8 @@ Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-sol "reply OK
 | Wariant | Poziom | Zastosowanie |
 |---|---|---|
 | Sol | `medium`; `high` i wyżej, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod na podstawie jasnej specyfikacji, przegląd, obsługa komputera, analiza problemów |
-| Astra | `high` (zapas dla Sol); `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, interfejs użytkownika, przegląd, planowanie, obsługa komputera |
+| Astra | `high` (zapas dla Sol); `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, przegląd, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
+| Luna (`gpt-6-luna`) | `high` | drobne prace: małe zmiany, czyste rebase, mechaniczne poprawki CI, odczyt lub wylistowanie danych; przy decyzjach przekaż do Sol |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny
 ani nazwy. Informacje o mechanizmach CLI i warunkach użycia między dostawcami znajdziesz w dokumencie [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md).
@@ -59,5 +60,5 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 5. Przed integracją zweryfikuj wskazane pliki, polecenia i wnioski wysokiego ryzyka.
 
 Decyzje architektoniczne wymagające znacznego osądu, synteza, kwestie produktowe i bezpieczeństwa oraz końcowy przegląd pozostają po stronie
-koordynatora klasy frontier. Sol nie odpowiada za interfejs użytkownika, teksty ani projekt API; Astra może i musi spełniać te same
+koordynatora klasy frontier. Modele Codex nie odpowiadają za interfejs użytkownika, teksty ani projekt API, gdy dostępny jest właściciel Claude; zapasowy przebieg Astra musi spełniać te same
 wymagania dotyczące dowodów wizualnych.

@@ -16,10 +16,22 @@
       "efforts": ["xhigh", "max"],
       "selection": "Use the smallest effort that clears the context-ablation quality gate."
     },
-    "ui_owners": ["claude-opus-5-5", "claude-fable-5-1", "gpt-6-astra"],
+    "ui_owners": ["claude-opus-5-5", "claude-fable-5-1"],
     "ultra": {
       "requires_explicit_delegation": true,
       "use": "Independent lanes only; never silently create an agent team."
+    },
+    "ui_policy": {
+      "min_taste": 8,
+      "prefer_family": "anthropic",
+      "non_claude_fallback": "gpt-6-astra",
+      "fallback_rule": "Use Astra for user-facing work only when no Claude owner is available, and name the fallback."
+    },
+    "chores": {
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "use": "Tiny edits, clean rebases, mechanical CI fixes, and read-only retrieval or listing such as email or daily task lists.",
+      "escalate": "Move to Sol on rebase conflicts, CI failures that need diagnosis, or any judgment call; if Luna is unavailable, run the chore inline on the owner at low effort."
     }
   },
   "model_switch": {
@@ -31,26 +43,61 @@
       "status": "primary",
       "work": ["planning", "implementation", "review", "ui"],
       "starting_effort": "high",
-      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
+      "scores": {
+        "cost": 2,
+        "intelligence": 10,
+        "speed": 7,
+        "taste": 9
+      }
     },
     "gpt-6-sol": {
       "status": "secondary",
       "work": ["implementation", "review", "computer-use", "investigation"],
       "starting_effort": "medium",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
-      "unavailable": "Use gpt-6-astra at high and name the fallback; never a cheaper GPT model."
+      "unavailable": "Use gpt-6-astra at high and name the fallback; never a cheaper GPT model.",
+      "scores": {
+        "cost": 6,
+        "intelligence": 7,
+        "speed": 8,
+        "taste": 7
+      }
     },
     "gpt-6-astra": {
       "status": "quality-alternative",
-      "work": ["planning", "implementation", "review", "ui", "computer-use"],
+      "work": ["planning", "implementation", "review", "computer-use"],
       "starting_effort": "high",
-      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
+      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
+      "scores": {
+        "cost": 2,
+        "intelligence": 8,
+        "speed": 4,
+        "taste": 8
+      }
     },
     "claude-fable-5-1": {
-      "status": "quality-alternative",
+      "status": "reserve",
       "work": ["planning", "implementation", "review", "ui"],
       "starting_effort": "high",
-      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate."
+      "use": "Only on explicit user request for extraordinary work, such as powering through a hard feature. Never above high effort.",
+      "scores": {
+        "cost": 1,
+        "intelligence": 8,
+        "speed": 4,
+        "taste": 8
+      }
+    },
+    "gpt-6-luna": {
+      "status": "utility",
+      "work": ["chores"],
+      "starting_effort": "high",
+      "scores": {
+        "cost": 10,
+        "intelligence": 3,
+        "speed": 10,
+        "taste": 3
+      }
     }
   },
   "selection": {
@@ -65,11 +112,26 @@
     "explicit_prompt_cache": "Use only in API integrations that expose cache controls."
   },
   "sources": [
+    "https://artificialanalysis.ai/models/releases/comparisons/claude-opus-5-5-vs-gpt-6-astra",
+    "https://artificialanalysis.ai/models/releases/gpt-6-sol",
+    "https://artificialanalysis.ai/models/releases/gpt-6-luna",
+    "https://platform.claude.com/docs/en/about-claude/pricing",
+    "https://developers.openai.com/api/docs/models/gpt-6-sol",
+    "https://developers.openai.com/api/docs/models/gpt-6-luna",
     "https://openai.com/index/gpt-6-astra/",
     "https://developers.openai.com/api/docs/models/gpt-6-astra",
     "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra",
     "https://developers.openai.com/api/docs/guides/latest-model",
     "https://platform.claude.com/docs/en/models/fable-5-1/overview",
     "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1"
-  ]
+  ],
+  "scoring": {
+    "scale": "1-10, higher is better.",
+    "cost": "Artificial Analysis cost per Intelligence Index task at the routed effort, log scale; cheapest is 10.",
+    "intelligence": "Peak Artificial Analysis Intelligence Index; 58 is 10 and 30 is 1.",
+    "speed": "Median output tokens per second relative to the fastest model.",
+    "taste": "Owner judgment for UI/UX, code quality, API design, and copy.",
+    "measured": "2026-09-25",
+    "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties."
+  }
 }
