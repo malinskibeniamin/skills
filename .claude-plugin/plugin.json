@@ -58,6 +58,7 @@
     "./improve-codebase-architecture/",
     "./improve/",
     "./implement-spec/",
+    "./jb/",
     "./maintain-verification-skill/",
     "./make-pr-easy-to-review/",
     "./plan-arbiter/",

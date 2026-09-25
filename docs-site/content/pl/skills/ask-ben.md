@@ -47,6 +47,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
+| `/jb` | Sprawdzanie, czy PR uzasadnia poświęcony mu czas i zawiera dowody ukończenia pracy. |
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |

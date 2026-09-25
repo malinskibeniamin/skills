@@ -339,6 +339,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Actionable audit",
     ],
   },
+  jb: {
+    kind: "decision-tree",
+    nodes: [
+      "PR + ticket + diff",
+      "Which lane earns the time?",
+      "Caller, done, rollout evidence",
+      "jb verdict line",
+    ],
+  },
   "implement-spec": {
     kind: "dependency-graph",
     nodes: [

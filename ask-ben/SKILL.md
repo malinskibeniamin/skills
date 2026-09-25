@@ -42,6 +42,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/implement-spec` | Implement a whole spec on one integration branch. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
+| `/jb` | Check that a PR earns its time and proves it is done. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
