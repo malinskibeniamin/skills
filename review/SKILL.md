@@ -76,6 +76,7 @@ without credible risk. Evidence can support declining a candidate.
 
 Lead with findings. Deduplicate by root cause. State path, impact, correction, and verify
 step; omit praise and narration. For a re-review, mark each prior finding's state.
+Every review also applies `/ss` inline; report its Value line apart from defects.
 
 ## Deep mode
 

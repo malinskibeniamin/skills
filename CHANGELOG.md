@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/ss`, a business-value review lens mined from four years of
+product-engineering history on a cloud data platform and its agentic data plane (authored
+PRs, review comments, scope replies, and tickets, recency-weighted toward current practice).
+Every PR is classified into one bucket (keep the lights on, quality of life, feature, design
+bet) and checked for beneficiary, trigger, measured evidence, reachability, cost to own, and
+slice size against an anonymous graded rule catalog. `/review` applies it inline on every
+diff, the PR-review routine posts a Value comment only when justification is missing, and
+the `/commit-push-pr` body template declares the bucket up front. Skills 91 -> 92.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add

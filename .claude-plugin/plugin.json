@@ -82,6 +82,7 @@
     "./setup-routines/",
     "./show-me/",
     "./snyk-ux-security/",
+    "./ss/",
     "./stack-registry/",
     "./stacked-prs/",
     "./stay-within-limits/",

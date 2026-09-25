@@ -66,6 +66,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
 | `/snyk-ux-security` | Audit dependency security with Snyk and release gates. |
+| `/ss` | Review whether a change earns our limited time. |
 | `/stack-registry` | Current and banned stack governance for harness rules. |
 | `/stacked-prs` | Create and manage dependent GitHub pull request stacks. |
 | `/stay-within-limits` | Budget long-running agent work around usage limits. |
