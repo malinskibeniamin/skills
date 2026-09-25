@@ -38,6 +38,12 @@ For the plan presented, answer:
 - **Prior-art check**: did we try this before? (`git log --grep` for similar keywords -- cite commits if found)
 - **Sequencing**: is there a cheaper wedge that proves the thesis first?
 
+## Pass 3: Value lane
+
+Apply [av/SKILL.md](../av/SKILL.md) to the plan: one lane, its evidence verdict, missing
+acceptance scenarios, and any money-path risk. Report each as a finding with
+`section: "adversarial-value"` and the rule id as `id`; an `unjustified` lane is blocking.
+
 ## Output
 
 One JSON block per

@@ -60,6 +60,7 @@ SHORT_DESCRIPTIONS = {
     "maintain-verification-skill": "Audit a project verifier against source and live behavior",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
     "mm": "Judge whether a change earns its cost before it ships",
+    "av": "Check that a change earns its time and lands safely",
     "plan-arbiter": "Compare competing plans and choose a grounded direction",
     "plow-ahead": "Continue autonomously through routine ambiguity",
     "pr": "Write a PR body that is fast to review",

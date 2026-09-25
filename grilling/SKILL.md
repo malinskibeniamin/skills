@@ -47,7 +47,7 @@ Build one **Evidence packet**: request, plan, spec and standards sources, planne
 
 Axes: Spec -> `plan-product-hat`; Standards -> `plan-engineering-hat`; design/UX -> `plan-design-hat`; plus adversarial/value. Deep-risk triggers: auth, migration, public API, destructive action, concurrency, Temporal, cross-service work, and one-way doors.
 
-**Specialist registry:** planned Go or `go.mod` work uses `/golang`; add specialists only after repeated misses. Each axis reports `APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED` with evidence and any skip reason. Dedupe by root cause; research facts and stop on blocking user decisions.
+**Specialist registry:** value uses `/av`; planned Go or `go.mod` work uses `/golang`; add specialists only after repeated misses. Each axis reports `APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED` with evidence and any skip reason. Dedupe by root cause; research facts and stop on blocking user decisions.
 
 Require confirmation only when the user requested a plan/grill endpoint. [ETHOS: Discover Before Commitment]
 
