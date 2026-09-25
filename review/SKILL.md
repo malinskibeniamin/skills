@@ -59,6 +59,8 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
+Every PR or branch review also applies the **jb hat** inline: [jb/SKILL.md](../jb/SKILL.md).
+
 ### Classify
 
 A finding is diff-introduced, impactful, reproducible or concrete, placed on the tightest changed line,
@@ -87,4 +89,4 @@ For `--deep`, use the same loop with a complete applicability ledger. Read
 Read [REFERENCE.md](REFERENCE.md) for vocabulary and schema. Report
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
-verdict, and residual limits. A clean review returns only verdict and residual limits.
+the `jb:` verdict line, verdict, and residual limits. A clean review returns only the `jb:` line, verdict, and residual limits.

@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "641b07c182696206",
-      "zh-CN": "641b07c182696206",
-      "zh-TW": "641b07c182696206"
+      "pl": "c1a1320668ff36bd",
+      "zh-CN": "c1a1320668ff36bd",
+      "zh-TW": "c1a1320668ff36bd"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "b16c94d01aea7cab",
-      "zh-CN": "b16c94d01aea7cab",
-      "zh-TW": "b16c94d01aea7cab"
+      "pl": "56bf4ec56540c840",
+      "zh-CN": "56bf4ec56540c840",
+      "zh-TW": "56bf4ec56540c840"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -175,6 +175,11 @@
       "zh-CN": "65e6baf91be4f734",
       "zh-TW": "65e6baf91be4f734"
     },
+    "content/skills/jb.md": {
+      "pl": "bc51c786cc7884d0",
+      "zh-CN": "bc51c786cc7884d0",
+      "zh-TW": "bc51c786cc7884d0"
+    },
     "content/skills/maintain-verification-skill.md": {
       "pl": "dc0ab7182b43101d",
       "zh-CN": "dc0ab7182b43101d",
@@ -271,9 +276,9 @@
       "zh-TW": "32436a2cda6ca615"
     },
     "content/skills/review.md": {
-      "pl": "b4ae682275c8850a",
-      "zh-CN": "b4ae682275c8850a",
-      "zh-TW": "b4ae682275c8850a"
+      "pl": "4c3b9cbf21a1d399",
+      "zh-CN": "4c3b9cbf21a1d399",
+      "zh-TW": "4c3b9cbf21a1d399"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "ad4f6ed8858e420c",

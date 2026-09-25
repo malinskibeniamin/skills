@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/jb`, a value-lane review axis mined from one senior
+engineer's 2022-2026 work: 7,445 pull requests across 42 repositories (3,179 authored,
+4,266 reviewed) and 148 design documents, recency weighted toward the agentic data-plane
+years. Each PR gets one lane (`ktlo`, `qol`, `growth`, `taste`), a justified/thin/unjustified
+verdict, and at most three findings; P1 covers no beneficiary, speculative scope with no
+caller, missing falsifiable acceptance criteria, and unguarded one-way doors, while the
+default stays approve. `jb/RULES.md` carries 54 graded rules (Scope, Evidence, Delivery,
+Contracts, Taste, Cost) with anonymous weighted counts that `evals/test-jb.sh` keeps
+mechanical. `/review` applies the jb hat on every PR and records its verdict in the receipt;
+the PR review routine applies it too. Skills 91 -> 92.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add

@@ -11,28 +11,27 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
-Przeglądaj do `HEAD`. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
+Przeglądaj do HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
 Publikowanie komentarzy wymaga jawnej intencji.
 
-## Kontrakt przeglądu
+## Kontrakt przeglądu [#review-contract]
 
 - **Cel**: ustal, czy diff osiąga oczekiwany wynik bez wiarygodnego defektu.
 - **Ograniczenia**: zgłaszaj tylko problemy wprowadzone przez diff; oddziel standardy od luk produktu/specyfikacji;
   pliki generowane są dowodem.
 - **Weryfikacja**: prześledź źródło. Samodzielnie użyj każdej uruchamialnej zmiany przez prawdziwy punkt wejścia;
   testy nie zastępują doświadczenia.
-- **Stop**: uwzględnij każdą powierzchnię; znaleziska wymagają dowodu, konsekwencji, priorytetu,
-  poprawki i weryfikacji.
+- **Stop**: uwzględnij każdą powierzchnię; znaleziska wymagają dowodu, konsekwencji, priorytetu, poprawki i weryfikacji.
 
 Zapytaj tylko, jeśli brakuje ustalonego punktu. W przeciwnym razie ustaw
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`,
 a następnie sprawdź pełny diff i log.
 
-## Pętla dowodowa
+## Pętla dowodowa [#evidence-loop]
 
 **sprawdź -> zweryfikuj -> sklasyfikuj -> zsyntetyzuj.**
 
-### Sprawdź
+### Sprawdź [#inspect]
 
 1. Przeczytaj żądanie/specyfikację, zasady, pełny diff, miejsca użycia i zachowanie. Nie ufaj opisowi PR bardziej niż kodowi.
 2. Dla każdej zmienionej przesłanki prześledź ją wstecz do autorytatywnych producentów, schematów,
@@ -44,7 +43,7 @@ a następnie sprawdź pełny diff i log.
    powierzchnie; pomiń styl należący do formatera i wcześniejsze defekty.
 5. Zapytaj, co nadal może być błędne, jeśli testy przechodzą.
 
-### Zweryfikuj
+### Zweryfikuj [#verify]
 
 - Odtwórz problem na podstawie źródła, schematu, dokumentacji pierwotnej albo wykonywalnej kontroli.
 - Gdy bezpieczeństwo zależy od jednego nielokalnego faktu, użyj `/blast-radius`; przekaż dowód, nie opis.
@@ -66,7 +65,9 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Go/współbieżność/workflow | Własność, anulowanie, wyścigi, ponowienia, idempotencja |
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
-### Sklasyfikuj
+Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** bezpośrednio w ramach przeglądu: [jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md).
+
+### Sklasyfikuj [#classify]
 
 Znalezisko jest wprowadzone przez diff, ma wpływ, jest odtwarzalne lub konkretne, wskazuje najściślejszą zmienioną linię
 i jest połączone z najmniejszą bezpieczną poprawką.
@@ -79,19 +80,19 @@ i jest połączone z najmniejszą bezpieczną poprawką.
 Nie zgłaszaj wydajności bez pomiaru lub granicy strukturalnej. Nie zgłaszaj przypadku brzegowego
 bez wiarygodnego ryzyka. Dowód może uzasadniać odrzucenie uwagi.
 
-### Zsyntetyzuj
+### Zsyntetyzuj [#synthesize]
 
 Zacznij od znalezisk. Deduplikuj według przyczyny źródłowej. Podaj ścieżkę, wpływ, poprawkę i krok
 weryfikacji; pomiń pochwały i narrację. Przy ponownym przeglądzie oznacz stan każdej wcześniejszej uwagi.
 
-## Tryb głęboki
+## Tryb głęboki [#deep-mode]
 
 Dla `--deep` użyj tej samej pętli z pełnym rejestrem zastosowania. Przeczytaj
 [DEEP-AUDIT.md](https://github.com/malinskibeniamin/skills/blob/main/review/DEEP-AUDIT.md); uwzględnij wszystkie powierzchnie i nie dodawaj automatycznych agentów.
 
-## Wynik
+## Wynik [#output]
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md), aby poznać słownictwo i schemat. Zgłaszaj
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Dodaj `entrypoint, data, actions, observations, timing, limits`, ustalony punkt, tryb, liczby,
-werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko werdykt i pozostałe ograniczenia.
+wiersz werdyktu `jb:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko wiersz `jb:`, werdykt i pozostałe ograniczenia.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Jb"
+  short_description: "Check that a PR earns its time and proves it is done"
