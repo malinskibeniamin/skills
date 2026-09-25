@@ -330,6 +330,14 @@
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'copyright-check.sh'; exit 0"
             ]
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'bend-laws-guard.sh'; exit 0"
+            ]
           }
         ]
       },

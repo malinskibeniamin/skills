@@ -35,6 +35,7 @@ _hooks=(
   "snyk-project-create-guard.sh|snyk"
   "bash-verbose-guard.sh|git commit|gh |curl|wget|taskw|bun run|--json|--jq"
   "pr-evidence-nudge.sh|gh|git"
+  "bend-laws-guard.sh|\.bend"
   # Universal by design: RTK's registry is the command allowlist.
   "rtk-rewrite.sh|.+"
 )
