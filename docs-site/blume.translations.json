@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "8cd2ad02ec7dc331",
-      "zh-CN": "8cd2ad02ec7dc331",
-      "zh-TW": "8cd2ad02ec7dc331"
+      "pl": "641b07c182696206",
+      "zh-CN": "641b07c182696206",
+      "zh-TW": "641b07c182696206"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "b3a740d2d4e08977",
-      "zh-CN": "b3a740d2d4e08977",
-      "zh-TW": "b3a740d2d4e08977"
+      "pl": "b16c94d01aea7cab",
+      "zh-CN": "b16c94d01aea7cab",
+      "zh-TW": "b16c94d01aea7cab"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -336,14 +336,19 @@
       "zh-TW": "c7833fba591cbece"
     },
     "content/skills/tdd.md": {
-      "pl": "3ea614ea318e16d4",
-      "zh-CN": "3ea614ea318e16d4",
-      "zh-TW": "3ea614ea318e16d4"
+      "pl": "47f5e7111625031e",
+      "zh-CN": "47f5e7111625031e",
+      "zh-TW": "47f5e7111625031e"
     },
     "content/skills/teach.md": {
       "pl": "a42afcaca0e369f8",
       "zh-CN": "a42afcaca0e369f8",
       "zh-TW": "a42afcaca0e369f8"
+    },
+    "content/skills/test-audit.md": {
+      "pl": "470daa79d13df961",
+      "zh-CN": "470daa79d13df961",
+      "zh-TW": "470daa79d13df961"
     },
     "content/skills/thermo-nuclear-code-quality-review.md": {
       "pl": "485d8fd0a02db57b",

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-09-25 -- Vendor OpenClaw's `test-audit` (pinned at `80930af448`) as model-invoked
+`/test-audit`: one value bar with an authoring gate, junk-pattern checklist, retention bar,
+and candidate evidence, plus audit and whole-subsystem campaign modes with per-declaration
+ledgers and mutation-proven keepers. `/tdd` routes new or changed tests through the gate.
+OpenClaw tooling maps onto `/review` and `/commit-push-pr`; parallel lanes need explicit
+delegation. Skills 90 -> 91.
+
 2026-09-24 -- Vendor the mattpocock/skills v1.3 graduation (upstream PR #1120, pinned at
 `a600ef4b25`). Add user-invoked `/implement-spec`, which works a spec's tickets as a task
 graph across parallel implementer worktrees onto one integration branch; invoking it is the

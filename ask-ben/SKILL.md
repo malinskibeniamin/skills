@@ -76,6 +76,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/tanstack-table` | Apply local Table checks after loading official guidance. |
 | `/tdd` | Develop meaningful behavior through red-green-refactor. |
 | `/teach` | Teach a workspace concept through durable practice. |
+| `/test-audit` | Audit tests for value and prune low-value coverage. |
 | `/thermo-nuclear-code-quality-review` | Run a release-blocking deep code quality review. |
 | `/to-questionnaire` | Create focused discovery questionnaires for stakeholders. |
 | `/to-spec` | Turn the conversation into a tracker-ready spec. |

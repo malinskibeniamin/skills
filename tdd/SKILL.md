@@ -22,7 +22,7 @@ TDD protects meaningful behavior. RED -> GREEN -> REFACTOR for domain rules, bra
 ### Contract
 
 - Name public behavior; follow the domain glossary and ADRs.
-- Choose the smallest test that fails if it breaks. Add cases only for independent credible risks.
+- Choose the smallest test that fails if it breaks; new or changed tests pass the [authoring gate](../test-audit/SKILL.md#authoring-gate).
 - For high-cardinality/state-sequence invariants, read [PROPERTY-BASED-TESTING.md](PROPERTY-BASED-TESTING.md); require an independent oracle and replay.
 - For long-lived browser resource lifetimes, use repeatable round trips and [SOAK-TESTING.md](../e2e-testing/SOAK-TESTING.md); fresh contexts cannot reveal accumulation.
 - Use `/read-the-damn-docs` for external contracts and [tests.md](tests.md) when shape is unclear.
@@ -49,4 +49,4 @@ For any visible change, including copy, styles, layout, assets, and states, use 
 
 ## Done
 
-Tests pass without warnings, async leaks, or duration waits; survive refactors; never exist only for coverage. See [REFERENCE.md](REFERENCE.md) for waits, selectors, portals, mocks, diagnostics, and resilience examples.
+Tests pass without warnings, async leaks, or duration waits; survive refactors. See [REFERENCE.md](REFERENCE.md) for waits, selectors, portals, mocks, diagnostics, and resilience examples.

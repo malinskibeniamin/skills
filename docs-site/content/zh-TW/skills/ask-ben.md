@@ -81,6 +81,7 @@ sidebar:
 | `/tanstack-table` | 載入官方指引後，套用本機 Table 檢查。 |
 | `/tdd` | 透過紅燈—綠燈—重構流程開發有意義的行為。 |
 | `/teach` | 透過可長期留存的實作方式教授工作區概念。 |
+| `/test-audit` | 稽核測試的價值，並刪減低價值的測試涵蓋範圍。 |
 | `/thermo-nuclear-code-quality-review` | 執行會阻擋發布的深度程式碼品質審查。 |
 | `/to-questionnaire` | 為利害關係人建立聚焦的需求探索問卷。 |
 | `/to-spec` | 將對話轉換為可放入追蹤系統的規格。 |

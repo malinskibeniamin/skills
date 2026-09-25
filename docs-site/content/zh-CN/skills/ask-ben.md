@@ -81,6 +81,7 @@ sidebar:
 | `/tanstack-table` | 加载官方指南后应用本地 Table 检查。 |
 | `/tdd` | 通过红灯—绿灯—重构开发有意义的行为。 |
 | `/teach` | 通过可持续的实践讲授工作区概念。 |
+| `/test-audit` | 审计测试的价值，并精简低价值的测试覆盖。 |
 | `/thermo-nuclear-code-quality-review` | 执行阻止发布的深度代码质量审查。 |
 | `/to-questionnaire` | 为利益相关者创建聚焦的调研问卷。 |
 | `/to-spec` | 将对话转换为可录入跟踪系统的规格。 |
