@@ -1,0 +1,56 @@
+---
+title: /development-lifecycle
+description: 从高级目标出发，完成 React、TypeScript 和 UI 实现，并进行自我验证。
+type: skill
+sidebar:
+  label: /development-lifecycle
+---
+![/development-lifecycle 技能示意图](/diagrams/skills/development-lifecycle.svg)
+
+[打开可编辑的 Excalidraw 源文件](/diagrams/skills/development-lifecycle.excalidraw)
+
+
+负责一个结果，并持续推进，直到证据证明目标已实现，或出现真正的阻碍。
+
+## 结果契约
+
+编辑状态前：
+
+- **目标** -- 高级最终状态。
+- **约束** -- 无法推断的限制、保留给用户的决策、不可逆的边界。
+- **验证** -- 能够区分真正完成与表面可行的检查或可观察行为。
+- **停止条件** -- 请求的终点，以及确实需要用户介入的阻碍。
+
+范围明确的构建、修复或实现请求即授权执行：简要说明契约，然后立即继续。
+
+## 执行循环
+
+**检查 -> 操作 -> 验证 -> 重复**
+
+### 检查
+
+通过代码、测试、日志、文档和示例，解决盲点或最可能发生变化的未知项。将其余项分类为查阅、原型验证、可逆假设或暂停触发条件。遵循现有惯用方式和已验证的规模；加载相关指导。
+
+编辑前，查看 `/quantify-impact`。对于任何可见改动，使用 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/v4.39.0/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) 捕获基准状态并盘点影响面。细微的文案、样式改动以及共享 UI 的影响也包括在内。
+
+### 操作
+
+由一个主模型全权负责；委派和后台工作需要用户明确授权。从最小且显而易见的改动开始；优先删除或复用，再考虑增加机制。对于重要行为，在公开契约层面使用 TDD：RED -> 最小 GREEN -> REFACTOR；静态连接或保持行为不变的删除可以只进行针对性验证。证据发生变化时，重新规划受影响的部分。除非相邻清理工作会阻碍验证，否则仅将其作为问题报告。
+
+### 验证
+
+运行仓库中适用的测试、类型检查、代码检查、构建和静态检查。通过实际入口验证关键行为，并检查一个可信的失败或恢复路径。根据目标、约束和可信风险审查结果。每次失败都会成为下一步操作；修复并重复。
+
+缺少可重复的入口：使用一次性验证工具证明行为，然后将长期存在的缺口交由 `/create-verification-skill` 处理。
+
+## 边界
+
+仅在涉及保留给用户的重要决策，或不可逆的生产、法律/隐私、破坏性或高安全性操作时询问。对当前用户拥有的分支，可直接提交、推送、执行变基，并在需要时使用 `--force-with-lease`，无需再次请求许可。未经明确许可，绝不合并、使用普通强制推送、创建额外的 PR，或重写默认分支、共享分支、他人拥有或正被并行使用的分支。
+
+在 main/master/develop 分支上编写代码前，使用 `scripts/mux-worktree.sh <type>/<branch-name>` 创建隔离的工作树。[ETHOS：工作树隔离]
+
+将长期运行过程中收集的证据和暂停触发条件记录在已被 git 忽略的 `.context/implementation-notes.md` 中；简短工作保留在对话中。
+
+## 完成
+
+当所有退出条件均通过时，在请求的答复、本地改动、提交、推送、PR 或完整交付终点停止；不要仅仅因为计划中的某个步骤完成就停止。仅当存在正在进行的验证或交付分支时，才查看 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/development-lifecycle/REFERENCE.md)。

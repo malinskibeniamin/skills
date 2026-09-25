@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 4.39.0
+
+2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add
+`/test-audit` with authoring, audit, and campaign modes; `/implement-spec`, `/pr`,
+and `/retro`; Poteto and Cursor review guidance; and refreshed model and harness
+behavior. Refresh manifests, marketplaces, install pin, and immutable documentation
+snapshot together.
+
 2026-09-25 -- Vendor OpenClaw's `test-audit` (pinned at `80930af448`) as model-invoked
 `/test-audit`: one value bar with an authoring gate, junk-pattern checklist, retention bar,
 and candidate evidence, plus audit and whole-subsystem campaign modes with per-declaration
