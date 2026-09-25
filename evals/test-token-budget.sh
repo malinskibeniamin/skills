@@ -65,7 +65,7 @@ fi
 # preserves the measured wave reduction while allowing small wording trades
 # between related instructions. review 4300 -> 4400 (2026-09-25) for the
 # always-on /ss value line (4450 -> 4550 alongside /jb); ask-ben 7450 -> 7500 for the /ss catalog row.
-# The aggregate cap is unchanged.
+# The aggregate cap is unchanged. /ms hat: review +50 -> 4700.
 lean_skill_total=0
 while read -r skill cap; do
   bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
@@ -81,7 +81,7 @@ while read -r skill cap; do
 done <<'EOF'
 ask-ben 7675
 wayfinder 5000
-review 4650
+review 4700
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -157,6 +157,7 @@ stack-registry 2525
 codex-compat 2575
 work-automation-kit 2525
 make-pr-easy-to-review 2425
+ms 2900
 maintain-verification-skill 3000
 codex 2375
 handoff 2375

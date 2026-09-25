@@ -407,6 +407,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Thin: blocking question",
     ],
   },
+  ms: {
+    kind: "decision-tree",
+    nodes: [
+      "PR or ticket",
+      "Value earned?",
+      "Ship smallest slice",
+      "Split, park, or add evidence",
+    ],
+  },
   "plan-arbiter": {
     kind: "decision-tree",
     nodes: [

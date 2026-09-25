@@ -60,7 +60,8 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
 Every PR or branch review also applies the **jb hat** ([jb/SKILL.md](../jb/SKILL.md)), **mm hat**
-([mm/SKILL.md](../mm/SKILL.md)), and **av hat** ([av/SKILL.md](../av/SKILL.md)) inline.
+([mm/SKILL.md](../mm/SKILL.md)), **av hat** ([av/SKILL.md](../av/SKILL.md)), and **ms hat**
+([ms/SKILL.md](../ms/SKILL.md)) inline.
 
 ### Classify
 

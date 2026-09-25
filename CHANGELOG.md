@@ -8,6 +8,11 @@ flagged only such files. All 62 stops predate 4.39.0 and came from the old `exit
 which 4.39.0 already replaced with `additionalContext`. Findings stay advisory context:
 per the Claude Code docs, `decision: "block"` on PostToolBatch stops the agentic loop.
 
+2026-09-25 -- Add `/ms`, a business-value review axis with 31 graded rules. Every PR
+declares one lane (keep the lights on, quality of life, new value, taste), a named
+beneficiary, and evidence; `/review` applies it as the always-on ms hat and the
+`/commit-push-pr` body template gains a `Lane:` line. Skills 95 -> 96.
+
 2026-09-25 -- Add model-invoked `/mm`, a value hat that asks whether a change earns its
 cost: one lane per PR (keep the lights on, quality of life, new capability, design taste),
 payoff, revenue likelihood, confidence, and a fixed verdict. `RULES.md` carries 16 graded
