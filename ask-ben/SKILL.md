@@ -12,6 +12,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/agent-watchdog` | Audit and repair work from another coding agent. |
 | `/aip` | Design Google AIP-style protobuf resource APIs. |
 | `/ask-ben` | Route work through Ben's frontend skill harness. |
+| `/av` | Check that a change earns its time and lands safely. |
 | `/blast-radius` | Prove non-local change safety with executable evidence. |
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |

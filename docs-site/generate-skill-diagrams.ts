@@ -398,6 +398,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "evidence-funnel",
     nodes: ["PR claim", "Lane + payoff", "Value rules V1-V16", "Ship verdict"],
   },
+  av: {
+    kind: "decision-tree",
+    nodes: [
+      "PR, plan, or ticket",
+      "Lane evidence holds?",
+      "Justified: verdict line",
+      "Thin: blocking question",
+    ],
+  },
   "plan-arbiter": {
     kind: "decision-tree",
     nodes: [

@@ -62,6 +62,7 @@
     "./maintain-verification-skill/",
     "./make-pr-easy-to-review/",
     "./mm/",
+    "./av/",
     "./plan-arbiter/",
     "./plow-ahead/",
     "./postgresql/",

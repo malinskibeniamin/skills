@@ -17,6 +17,7 @@ sidebar:
 | `/agent-watchdog` | 稽核並修復另一個程式設計代理程式完成的工作。 |
 | `/aip` | 設計採用 Google AIP 風格的 protobuf 資源 API。 |
 | `/ask-ben` | 透過 Ben 的前端技能控制框架路由工作。 |
+| `/av` | 確認變更值得投入時間，並能安全交付。 |
 | `/blast-radius` | 以可執行的實證證明非區域性變更的安全性。 |
 | `/brain-dump` | 將原始想法轉化為可執行的機會地圖。 |
 | `/codebase-design` | 設計具備清晰介面的深層模組。 |

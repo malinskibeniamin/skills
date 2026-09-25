@@ -17,6 +17,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/agent-watchdog` | Audytowanie i poprawianie pracy innego agenta programistycznego. |
 | `/aip` | Projektowanie interfejsów API zasobów protobuf w stylu Google AIP. |
 | `/ask-ben` | Kierowanie pracy przez zestaw umiejętności frontendowych Bena. |
+| `/av` | Sprawdzanie, czy zmiana uzasadnia poświęcony jej czas i jest bezpiecznie wdrażana. |
 | `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
 | `/codebase-design` | Projektowanie głębszych modułów z przejrzystymi interfejsami. |

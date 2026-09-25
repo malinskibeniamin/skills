@@ -53,9 +53,9 @@ sidebar:
 - 按必要行為、語意密度、領域清晰度、可信
   風險和已證規模質疑新增內容。絕不以 LOC 為最佳化目標，也不鼓勵程式碼高爾夫。
 
-僅在差異提供證據時新增表面專項審查：
+僅在差異提供證據時新增面向專項審查：
 
-| 表面 | 檢查 |
+| 面向 | 檢查 |
 |---|---|
 | 面向客戶的 UI/CLI/報告 | 呈現、狀態、文案、鍵盤/a11y、主控台、可視區域 |
 | 安全/隱私/資料遺失 | 信任、授權、機密資料、注入、恢復 |
@@ -64,7 +64,8 @@ sidebar:
 | 相依套件/外部 API | 第一手文件、版本、鎖定檔、安全通告 |
 
 每次 PR 或分支審查也都會在同一流程中套用 **jb 角色**：[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)，
-以及 **mm 角色**：[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)。
+以及 **mm 角色**：[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)，
+以及 **av 角色**：[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)。
 
 ### 分類 [#classify]
 
@@ -74,7 +75,7 @@ sidebar:
 - **P0**：暴露、資料遺失、中斷或核心流程不可用。
 - **P1**：使用者迴歸、契約破壞、錯誤成功或嚴重 a11y 缺陷。
 - **P2**：影響較低但有用且範圍明確的修正。
-- 行內評論中省略未來可選工作和潤色。
+- 行內評論中省略未來可選工作和潤飾。
 
 沒有測量或結構邊界，不報告效能。沒有可信風險，不報告邊緣情況。
 證據也可以支持有理拒絕。
@@ -95,4 +96,4 @@ sidebar:
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 以了解術語和結構。報告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、計數、
-`jb:` 和 `mm:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
+`jb:`、`mm:` 和 `av:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。

@@ -50,6 +50,14 @@ GitHub `user-attachments` asset from an isolated signed-in agent-browser profile
 plays inline; `publish` hosts screenshots and fallback GIFs on a `pr-evidence` branch.
 `/commit-push-pr`, `/pr`, and the PR-entrypoint reminder require it.
 
+2026-09-25 -- Add model-invoked `/av`, a business-value review axis. Every PR, plan, or
+ticket gets one lane (`ktlo`, `qol`, `growth`, `taste`), a justified/thin/unjustified
+verdict, and at most three findings; unjustified work and money-path risk (lost billable
+usage, double billing, channel leaks, unguarded destructive automation, false
+customer-facing numbers) are P1. `RULES.md` carries 43 graded, recency-weighted rules.
+`/review` applies it as an always-on av hat and records the `av:` verdict in its receipt;
+`/grilling` and the product hat use it as the value axis for plans. Skills 94 -> 95.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add

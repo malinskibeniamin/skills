@@ -59,6 +59,8 @@ fi
 
 # review 4300 -> 4450 (2026-09-25) for the always-on /jb value-hat pointer and its
 # receipt line; ask-ben 7400 -> 7450 for its generated /jb catalog row.
+# grilling 3650 -> 3675 for the /av value-axis pointer; ask-ben 7600 -> 7675 and review
+# 4600 -> 4650 for the /av catalog row and hat pointer.
 # Keep the largest model-facing skills on explicit budgets. The aggregate cap
 # preserves the measured wave reduction while allowing small wording trades
 # between related instructions. review 4300 -> 4400 (2026-09-25) for the
@@ -77,9 +79,9 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7600
+ask-ben 7675
 wayfinder 5000
-review 4600
+review 4650
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -117,7 +119,7 @@ done <<'EOF'
 aip 3825
 blast-radius 2850
 brain-dump 3200
-grilling 3650
+grilling 3675
 improve 3600
 golang 3525
 pr-shepherd 3525
@@ -137,6 +139,7 @@ tanstack-router 3200
 postgresql 3175
 golang-review 3125
 jb 4000
+av 3625
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000
