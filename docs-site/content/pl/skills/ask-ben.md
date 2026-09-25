@@ -52,6 +52,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
 | `/mm` | Ocenianie przed wdrożeniem, czy zmiana jest warta swojego kosztu. |
+| `/ms` | Sprawdzanie, czy PR uzasadnia poświęcony mu czas i dostarcza wartość biznesową. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |
 | `/postgresql` | Projektowanie i obsługiwanie PostgreSQL na podstawie danych o obciążeniu. |

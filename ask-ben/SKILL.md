@@ -47,6 +47,7 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
 | `/mm` | Judge whether a change earns its cost before it ships. |
+| `/ms` | Check that a PR earns its time and business value. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |
 | `/postgresql` | Engineer and operate PostgreSQL from workload evidence. |
