@@ -1,0 +1,3 @@
+interface:
+  display_name: "Test Audit"
+  short_description: "Audit tests for value and prune low-value coverage"

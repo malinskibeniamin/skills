@@ -655,6 +655,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "hierarchy",
     nodes: ["Mission", "Concepts", "Guided practice", "Independent mastery"],
   },
+  "test-audit": {
+    kind: "pipeline",
+    nodes: [
+      "Test + owner",
+      "Junk patterns",
+      "Candidate evidence",
+      "Keeper proof",
+    ],
+  },
   "thermo-nuclear-code-quality-review": {
     kind: "evidence-funnel",
     nodes: [

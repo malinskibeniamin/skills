@@ -81,6 +81,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/tanstack-table` | Stosowanie lokalnych kontroli Table po wczytaniu oficjalnych wskazówek. |
 | `/tdd` | Tworzenie istotnych zachowań w cyklu czerwony-zielony-refaktoryzacja. |
 | `/teach` | Nauczanie koncepcji obszaru roboczego poprzez trwałą praktykę. |
+| `/test-audit` | Audytowanie przydatności testów i usuwanie mało wartościowych testów. |
 | `/thermo-nuclear-code-quality-review` | Przeprowadzanie dogłębnego przeglądu jakości kodu blokującego wydanie. |
 | `/to-questionnaire` | Tworzenie ukierunkowanych kwestionariuszy rozpoznawczych dla interesariuszy. |
 | `/to-spec` | Przekształcanie rozmowy w specyfikację gotową do umieszczenia w systemie śledzenia. |
