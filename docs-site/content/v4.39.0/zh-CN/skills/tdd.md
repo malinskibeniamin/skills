@@ -1,0 +1,54 @@
+---
+title: /tdd
+description: 通过红灯—绿灯—重构进行开发。适用于编写测试、创建功能、修复错误、设计测试接缝、防止异步泄漏或替换固定时长等待。
+type: skill
+sidebar:
+  label: /tdd
+---
+![“/tdd”技能示意图](/diagrams/skills/tdd.svg)
+
+[打开可编辑的 Excalidraw 源文件](/diagrams/skills/tdd.excalidraw)
+
+
+TDD 保护有意义的行为。对于领域规则、分支、状态、验证、异步副作用和集成契约，请使用红灯 -> 绿灯 -> 重构。类型、连接、文案和样式，以及保持行为不变的删除，可能只需运行针对性验证。覆盖率绝不是目标。
+
+## 测试接缝与反模式 [#test-seams-and-anti-patterns]
+
+- **接缝：**在公共边界进行测试。先明确接缝的名称；如果问题本身和现有约定未能清楚表明接缝，请与用户确认预先商定的接缝。不要针对未经确认的内部实现编写测试。请使用 `/codebase-design`，不要为了方便而凭空设计接缝。
+- **同义反复的测试：**预期值需要独立的事实来源：字面值、完整推导的示例、夹具、规范或观测结果。
+- **源文本代理：**删除那些扫描实现、CSS、标记或配置，并将其中的标记或正则表达式作为运行时证明的测试。如果行为很重要，请在公共接缝处替换这些测试；对于语法，请使用静态分析。仅当内容属于公共输出时，才保留内容断言。
+- **垂直切片：**使用垂直切片：每次完成一个红灯测试及其绿灯实现；批量测试编码的是想象中的行为。
+
+## 工作流 [#workflow]
+
+### 契约 [#contract]
+
+- 明确公共行为的名称；遵循领域术语表和 ADR。
+- 选择一旦该行为失效就会失败的最小测试；让每个新增或修改的测试通过[编写检查关卡](https://github.com/malinskibeniamin/skills/blob/v4.39.0/test-audit/SKILL.md#authoring-gate)。
+- 对于高基数或状态序列的不变量，请阅读 [PROPERTY-BASED-TESTING.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/tdd/PROPERTY-BASED-TESTING.md)；必须使用独立的判定依据，并确保失败可以重放。
+- 对于长期运行的浏览器资源生命周期，请使用可重复的往返操作，并阅读 [SOAK-TESTING.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/e2e-testing/SOAK-TESTING.md)；全新的浏览器上下文无法暴露累积问题。
+- 对于外部契约，请使用 `/read-the-damn-docs`；当测试形式不明确时，请阅读 [tests.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/tdd/tests.md)。
+
+### 红灯 [#red]
+
+编写一个行为测试，并确认它因预期原因而失败。使用公共接口；仅模拟无法使用的外部边界。
+
+### 绿灯 [#green]
+
+编写能够通过测试的最小实现。优先删除或复用，然后优先使用语言、平台或已安装的依赖项。遵循相关 `exemplars/` 文件的约定，而不是它的规模。
+
+### 重构 [#refactor]
+
+仅当含义变得更清晰或真正的重复得以消除时，才改进命名和结构。始终保持绿灯；绝不能削弱断言。标记耗时超过 500ms 的单元测试和超过 2s 的集成测试；优先使用批量输入，而不是逐次模拟按键。对实质性的绿灯切片执行 `/dogfood`；发现的缺陷将成为红灯。
+
+### 重复 [#repeat]
+
+仅在存在另一个契约或独立且可信的风险时重复。进行开发时，请使用 `vitest --watch`、基于条件的等待，并对新增的异步工作使用 `--detectAsyncLeaks`。
+
+## 视觉回归测试 [#visual-regression]
+
+对于任何可见变更，包括文案、样式、布局、资源和状态，请使用现有的截图断言运行器。遵循 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/v4.39.0/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：基准分支截图、共享使用方、经过审查的快照更新、正常重新运行、嵌入图片。不可见的编辑无需截图测试。
+
+## 完成标准 [#done]
+
+测试通过且没有警告、异步泄漏或固定时长等待；能够经受重构。有关等待、选择器、传送门、模拟、诊断和韧性示例，请参阅 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/tdd/REFERENCE.md)。

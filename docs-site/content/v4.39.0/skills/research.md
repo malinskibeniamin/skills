@@ -1,0 +1,26 @@
+---
+title: "/research"
+description: "Research primary sources and save cited findings. Use when durable reports, documentation surveys, API fact sets, reading passes, or design-rationale archaeology are required."
+type: skill
+sidebar:
+  label: "/research"
+---
+![Diagram of the /research skill](/diagrams/skills/research.svg)
+
+[Open the editable Excalidraw source](/diagrams/skills/research.excalidraw)
+
+
+Research inline by default; background work requires explicit delegation or `/swarm`.
+
+1. Trace every claim to **primary sources**: official docs, source, specs, first-party APIs.
+2. Write one Markdown artifact, citing each claim.
+3. Use the repo's notes convention and report path. In this repo, surveys stay scratch/memory; only decision-ready findings enter `docs/`.
+
+## Routing
+
+- Immediate API/version fact -> `/read-the-damn-docs` inline, no artifact.
+- Why code or design exists -> read [DESIGN-RATIONALE.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/research/DESIGN-RATIONALE.md); trace
+  source history and decision evidence without inventing intent.
+- Video -> `/video-research`; use timestamped transcript/OCR/frames as evidence.
+- Adversarial multi-source report -> deep-research harness.
+- This skill -> focused reading with cited Markdown.

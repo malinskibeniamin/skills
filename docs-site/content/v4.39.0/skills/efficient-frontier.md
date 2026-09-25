@@ -1,0 +1,32 @@
+---
+title: "/efficient-frontier"
+description: "Apply eval-backed model routing and budget explicitly authorized agent waves without moving judgment away from the owner."
+type: skill
+sidebar:
+  label: "/efficient-frontier"
+---
+![Diagram of the /efficient-frontier skill](/diagrams/skills/efficient-frontier.svg)
+
+[Open the editable Excalidraw source](/diagrams/skills/efficient-frontier.excalidraw)
+
+
+`config/model-routing.json` is source of truth; never copy subjective scores into prompts.
+
+1. Choose the best qualified primary owner/runtime.
+2. Default GPT-6 Astra `high` for UI, code, plans, review, computer use.
+3. Use `max` only when context-ablation evidence or user selection supports it.
+4. Use Astra for every GPT route; if unavailable, report the blocker rather than substitute another GPT model.
+5. Fable/Opus may own when qualified; the user explicitly authorizes a different-family pass.
+6. `ultra` is multi-agent and needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache are API-only unless exposed.
+
+One owner implements. Without delegation, run useful lanes inline. Authorized lanes each get one bounded objective, inputs, exclusions, evidence, stop. Coordinator retains architecture, priority, risk, synthesis, acceptance.
+
+## Capacity
+
+Use explicit `/stay-within-limits` host meter for Claude capacity; otherwise say unknown. Never infer capacity from tokens/cost. Capacity removes routes, never lowers quality.
+
+## Promotion
+
+Before changing defaults run `agent-evals/context-ablation/`: vary one context group, hold tasks/scoring constant, and prefer lower cost only among quality-equivalent results. Record winner in routing config.
+
+Read [references/builder-upstream.md](https://github.com/malinskibeniamin/skills/blob/v4.39.0/efficient-frontier/references/builder-upstream.md) only for an authorized delegation packet.
