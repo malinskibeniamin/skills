@@ -12,7 +12,7 @@ sidebar:
 审查直到 HEAD。保留唯一所有者；委派必须明确授权。不要编辑、提交、推送或发布。
 评论发布需要明确意图。
 
-## 审查约定
+## 审查约定 [#review-contract]
 
 - **目标**：判断差异是否实现预期结果且没有可信缺陷。
 - **约束**：只报告差异引入的问题；将标准问题与产品/规格缺口分开；
@@ -25,11 +25,11 @@ sidebar:
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`，
 再检查完整差异和日志。
 
-## 证据循环
+## 证据循环 [#evidence-loop]
 
 **检查 -> 验证 -> 分类 -> 综合。**
 
-### 检查
+### 检查 [#inspect]
 
 1. 阅读请求或规格、规则、完整差异、调用点和行为。不要让 PR 摘要凌驾于代码。
 2. 对每个变化的假设，反向追踪权威生产者、模式、
@@ -41,7 +41,7 @@ sidebar:
    表面；跳过格式化工具负责的样式和既有缺陷。
 5. 询问：即使测试通过，仍可能错在哪里？
 
-### 验证
+### 验证 [#verify]
 
 - 对照源码、模式、第一手文档或可执行检查复现。
 - 当安全性取决于一个非本地事实时，使用 `/blast-radius`；携带证据，而非描述。
@@ -63,7 +63,9 @@ sidebar:
 | Go/并发/工作流 | 所有权、取消、竞态、重试、幂等 |
 | 依赖/外部 API | 第一手文档、版本、锁文件、安全通告 |
 
-### 分类
+每次 PR 或分支审查还需在审查过程中应用 **av 视角**：[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)。
+
+### 分类 [#classify]
 
 发现必须由差异引入、有实际影响、可复现或有具体路径，定位到最精确的变更行，
 并配最小安全修复。
@@ -76,19 +78,19 @@ sidebar:
 没有测量或结构边界，不报告性能。没有可信风险，不报告边缘情况。
 证据也可以支持有理拒绝。
 
-### 综合
+### 综合 [#synthesize]
 
 以发现开头，按根因去重。只给出路径、影响、修正和验证
 步骤；省略赞美与叙述。重新审查时标记每条旧发现的状态。
 
-## 深度模式
+## 深度模式 [#deep-mode]
 
 使用 `--deep` 时沿用同一循环并建立完整适用性清单。阅读
 [DEEP-AUDIT.md](https://github.com/malinskibeniamin/skills/blob/main/review/DEEP-AUDIT.md)；覆盖全部表面，不自动增加智能体。
 
-## 输出
+## 输出 [#output]
 
 阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 了解术语和结构。报告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定点、模式、计数、
-结论和剩余限制。无发现时只返回结论和剩余限制。
+`av:` 结论行、结论和剩余限制。无发现时只返回 `av:` 行、结论和剩余限制。

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/av`, a business-value review axis mined from four years
+of recency-weighted pull requests, review comments, tickets, and RFCs on billing,
+control-plane, and agentic data-plane work. Every PR, plan, or ticket gets one lane
+(`ktlo`, `qol`, `growth`, `taste`), a justified/thin/unjustified verdict, and at most three
+findings; unjustified work and money-path risk (lost billable usage, double billing,
+channel leaks, unguarded destructive automation, false customer-facing numbers) are P1.
+`RULES.md` carries 43 graded rules with anonymous weighted support. `/review` applies it
+as an always-on av hat and records the `av:` verdict in its receipt; `/grilling` and the
+product hat use it as the value axis for plans. Skills 90 -> 91.
+
 2026-09-24 -- Vendor the mattpocock/skills v1.3 graduation (upstream PR #1120, pinned at
 `a600ef4b25`). Add user-invoked `/implement-spec`, which works a spec's tickets as a task
 graph across parallel implementer worktrees onto one integration branch; invoking it is the

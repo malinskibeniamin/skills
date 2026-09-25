@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "8cd2ad02ec7dc331",
-      "zh-CN": "8cd2ad02ec7dc331",
-      "zh-TW": "8cd2ad02ec7dc331"
+      "pl": "edf9344e92d3e4c7",
+      "zh-CN": "edf9344e92d3e4c7",
+      "zh-TW": "edf9344e92d3e4c7"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "b3a740d2d4e08977",
-      "zh-CN": "b3a740d2d4e08977",
-      "zh-TW": "b3a740d2d4e08977"
+      "pl": "6ed590c108e45f21",
+      "zh-CN": "6ed590c108e45f21",
+      "zh-TW": "6ed590c108e45f21"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -146,9 +146,9 @@
       "zh-TW": "386f39b296c29f95"
     },
     "content/skills/grilling.md": {
-      "pl": "d1858f9efea098c4",
-      "zh-CN": "d1858f9efea098c4",
-      "zh-TW": "d1858f9efea098c4"
+      "pl": "52519d30ea5662a5",
+      "zh-CN": "52519d30ea5662a5",
+      "zh-TW": "52519d30ea5662a5"
     },
     "content/skills/handoff.md": {
       "pl": "e048eeb80bd46d23",
@@ -184,6 +184,11 @@
       "pl": "acf6c280b1106d0a",
       "zh-CN": "acf6c280b1106d0a",
       "zh-TW": "acf6c280b1106d0a"
+    },
+    "content/skills/av.md": {
+      "pl": "787fbc9b2cc0ed92",
+      "zh-CN": "787fbc9b2cc0ed92",
+      "zh-TW": "787fbc9b2cc0ed92"
     },
     "content/skills/plan-arbiter.md": {
       "pl": "10578fada7519b04",
@@ -271,9 +276,9 @@
       "zh-TW": "32436a2cda6ca615"
     },
     "content/skills/review.md": {
-      "pl": "b4ae682275c8850a",
-      "zh-CN": "b4ae682275c8850a",
-      "zh-TW": "b4ae682275c8850a"
+      "pl": "3d3957209f78aafe",
+      "zh-CN": "3d3957209f78aafe",
+      "zh-TW": "3d3957209f78aafe"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "ad4f6ed8858e420c",

@@ -57,6 +57,9 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
+# review 4300 -> 4450 and grilling 3650 -> 3675 (2026-09-25) for the /av value-hat
+# pointer; ask-ben 7300 -> 7400 for its generated /av catalog row. Both waves keep
+# their aggregate caps.
 # Keep the largest model-facing skills on explicit budgets. The aggregate cap
 # preserves the measured wave reduction while allowing small wording trades
 # between related instructions.
@@ -73,9 +76,9 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7300
+ask-ben 7400
 wayfinder 5000
-review 4300
+review 4450
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -113,7 +116,7 @@ done <<'EOF'
 aip 3825
 blast-radius 2850
 brain-dump 3200
-grilling 3650
+grilling 3675
 improve 3600
 golang 3525
 pr-shepherd 3525
@@ -131,6 +134,7 @@ commit-push-pr 3200
 tanstack-router 3200
 postgresql 3175
 golang-review 3125
+av 3625
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000

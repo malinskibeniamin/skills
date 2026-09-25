@@ -65,6 +65,7 @@ standard always wins; skip anything deterministic tooling already owns.
 Fixed point: <commit> | Mode: standard | deep
 Verification: <commands and real-entrypoint replay>
 Counts: <P0/P1/P2>
+Value: av: <ktlo|qol|growth|taste> -- <justified|thin|unjustified> -- <beneficiary and why>
 Verdict: approve | changes required | blocked by missing evidence
 Residual limits: <unverified external behavior or none>
 ```

@@ -11,103 +11,53 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/grilling.excalidraw)
 
-Grilling pozwala odkryć niewiadome o istotnych konsekwencjach; nie wymaga pewności co do każdego
-szczegółu implementacji. Podczas grillowania nie należy tworzyć kodu produkcyjnego ani rozpoczynać
-implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 
-## 1. Przygotuj pakiet dowodów
+Grilling pozwala wyjaśnić niewiadome o istotnych konsekwencjach, a nie każdy szczegół. Nie należy tworzyć kodu produkcyjnego ani rozpoczynać implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 
-Przeczytaj zgłoszenie, plan, repozytorium, testy, dokumentację, materiały referencyjne i ostatnie decyzje. Ustalenie faktów
-należy do agenta. Pytaj użytkownika wyłącznie o preferencje, zakres, akceptowalny poziom ryzyka i
-decyzje, których nie można podjąć na podstawie dowodów.
+## 1. Przygotuj pakiet dowodów [#1-build-evidence]
 
-`/brain-dump` jest opcjonalnym wcześniejszym etapem odkrywania, a nie wymogiem każdej sesji grillowania. Gdy istnieje jego brief, zachowaj wszystkie ścieżki możliwości i zacznij od Rejestru odpowiedzi. Traktuj wpisy **Rozstrzygnięte** jako już wyjaśnione i nie pytaj o nie ponownie, chyba że sprzeczne dowody je podważą. Kwestionuj wpisy **Wstępne** tylko wtedy, gdy ryzyko ma znaczenie; pytaj o **Nieznane** wyłącznie wtedy, gdy mogą unieważnić ścieżkę lub zmienić jej priorytet.
+Przeczytaj zgłoszenie, plan, repozytorium, testy, dokumentację, materiały referencyjne i decyzje. Ustalenie faktów należy do agenta; pytaj wyłącznie o preferencje, zakres, akceptowalny poziom ryzyka i decyzje, których nie można podjąć na podstawie dowodów. Wskaż lukę, która najprawdopodobniej może podważyć obecny kierunek. Zbuduj prototyp, gdy obserwacja działania pozwoli wyjaśnić ją szybciej niż opis.
 
-Wskaż lukę, która najprawdopodobniej może podważyć obecny kierunek. Jeśli obserwacja działania
-pozwoli wyjaśnić ją szybciej niż opis, najpierw zbuduj jednorazowy prototyp lub poproś o jego przygotowanie.
+`/brain-dump` jest opcjonalny. Zachowaj wszystkie ścieżki możliwości i zacznij od jego **Rejestru odpowiedzi**: nigdy nie pytaj ponownie o wpisy **Rozstrzygnięte**; kwestionuj wpisy **Wstępne** tylko wtedy, gdy ryzyko ma znaczenie; pytaj o **Nieznane** wyłącznie wtedy, gdy mogą unieważnić ścieżkę lub zmienić jej priorytet.
 
-## 2. Tryb eksploracji
+## 2. Tryb eksploracji [#2-explore-mode]
 
-Gdy nie wybrano jeszcze kierunku, przedstaw 2–3 podejścia wraz z kompromisami, odwracalnością i
-dowodami. Zarekomenduj jedno z nich. Konkurencyjne plany należy przekazać do `/plan-arbiter`.
+Gdy nie wybrano jeszcze kierunku, przedstaw 2–3 podejścia wraz z kompromisami, odwracalnością, dowodami i rekomendacją. Konkurencyjne plany należy przekazać do `/plan-arbiter`. **Wariant krytyczny:** gdy kierunek już istnieje, przedstaw najsilniejsze argumenty za najlepszą alternatywą i wskaż, co mogłoby dowieść, że obecny wybór jest błędny.
 
-W przypadku decyzji dotyczących interfejsu dla klientów umieść **makietę ASCII** przed serią pytań.
-Naszkicuj każdy istotnie różniący się proponowany układ w ogrodzonym bloku `text`, używając drukowalnych
-znaków ASCII. Wyrównaj obramowania i zachowaj szerokość ułatwiającą szybkie przeglądanie. Użyj rzeczywistych etykiet,
-kontrolek, grupowania, kolejności oraz obszarów stałych lub przewijanych z propozycji zamiast ogólnych symboli zastępczych.
-Traktuj szkic jako odwzorowanie struktury, a nie dokładności pikselowej; oznacz treści ustalone na podstawie wnioskowania.
-Pokaż wersję komputerową i mobilną tylko wtedy, gdy kompozycja zmienia się w punkcie przełamania. Jeśli podejścia mają wspólny
-układ, naszkicuj go raz i opisz różnice wizualne lub behawioralne.
+W przypadku interfejsu dla klientów umieść **makietę ASCII** przed pytaniami. Naszkicuj każdy istotnie różniący się układ w ogrodzonym bloku `text`, używając rzeczywistych etykiet, kontrolek, grupowania, kolejności oraz obszarów stałych lub przewijanych. Wyrównaj obramowania; traktuj szkic jako odwzorowanie struktury, a nie dokładności pikselowej. Pokaż wersję komputerową i mobilną tylko wtedy, gdy kompozycja się zmienia. Wspólne układy wymagają jednego szkicu i opisu różnic.
 
-**Wariant krytyczny:** gdy kierunek już istnieje, przedstaw najsilniejsze argumenty za najlepszą alternatywą i
-wskaż, co mogłoby dowieść, że obecny wybór jest błędny.
-
-Opracuj drzewo decyzyjne. Jego front obejmuje wszystkie decyzje, które można obecnie podjąć. Zapytaj o cały front
-w jednej numerowanej serii, podając rekomendację dla każdej decyzji.
-
-Użyj tego stałego **formatu pytań**, aby użytkownik mógł je szybko przejrzeć i odpowiedzieć według numerów:
+Opracuj drzewo decyzyjne i wyznacz jego front obejmujący decyzje, które można obecnie podjąć. Zapytaj o cały front w jednej numerowanej serii, używając tego **formatu pytań**:
 
 ```markdown
 **Q1 -- <question title>**
-<question body or choices>
+<question or choices>
 
 **Recommended:** <answer>
 
 ---
 
 **Q2 -- <question title>**
-<question body or choices>
-
-**Recommended:** <answer>
+<question or choices>
 ```
 
-Nierozstrzygnięty warunek wstępny opóźnia tylko swoją gałąź, a pozostała część frontu jest kontynuowana.
-Po każdej serii odpowiedzi wyznacz front ponownie.
+Nierozstrzygnięty warunek wstępny opóźnia tylko swoją gałąź, a pozostała część frontu jest kontynuowana. Po każdej serii odpowiedzi wyznacz front ponownie. Ustalaj fakty na bieżąco, chyba że użytkownik wyraźnie zezwoli na delegowanie; przeszukuj środowisko, system plików, narzędzia i źródła. Decyzje użytkownika należą do niego.
 
-Ustalaj fakty na bieżąco, chyba że użytkownik wyraźnie zezwoli na delegowanie. Przeszukuj
-środowisko, system plików, narzędzia i źródła. Decyzje użytkownika należą do niego.
+## 3. Zakończ [#3-exit]
 
-Przydatne pytania krytyczne:
+Rozstrzygnij decyzje zmieniające architekturę lub zastrzeż je dla użytkownika. Sklasyfikuj pozostałe jako **wyszukanie -> prototyp -> odwracalne założenie -> wyzwalacz wstrzymania**. Zakończ, gdy żadna nierozstrzygnięta kwestia nie może po cichu podważyć następnego etapu.
 
-- Ryzykowna wymiana interfejsu: ścieżka wycofania, osoba odpowiedzialna i warunek usunięcia.
-- Zależność: dowody, że przewyższa kod lokalny i przetrwa planowaną migrację.
-- Abstrakcja: potwierdzone drugie miejsce użycia.
-- Mechanizm awaryjny: czy następna sesja go skopiuje.
-- Twierdzenie dotyczące skali lub awarii: konkretne dane wejściowe, czas lub stan systemu, które je potwierdzają.
+## 4. Bramka planu [#4-plan-gate]
 
-## 3. Zakończ z klasyfikacją niewiadomych
+Zbierz jeden **pakiet dowodów**: zgłoszenie, plan, źródła specyfikacji i standardów, planowane ścieżki, fakty z repozytorium, założenia i nierozstrzygnięte decyzje.
 
-Decyzje zmieniające architekturę muszą zostać rozstrzygnięte lub wyraźnie zastrzeżone dla użytkownika.
-Sklasyfikuj wszystkie pozostałe: **wyszukanie -> prototyp -> odwracalne założenie -> wyzwalacz wstrzymania**.
-Rozmowa kończy się, gdy żadna nierozstrzygnięta kwestia nie może po cichu podważyć następnego etapu, a nie
-dopiero wtedy, gdy znane są wszystkie przyszłe szczegóły.
-
-## 4. Bramka planu
-
-Zbierz jeden **pakiet dowodów**: zgłoszenie, plan, źródła specyfikacji, źródła standardów, planowane
-ścieżki, fakty z repozytorium, założenia i nierozstrzygnięte decyzje.
-
-Użyj najmniejszej bramki odpowiadającej poziomowi ryzyka:
-
-- **Szybka**: trywialny błąd, mniej niż trzy zadania, brak istotnych decyzji dotyczących architektury, produktu lub UX.
-  Sprawdź na bieżąco specyfikację, standardy i wartość.
+- **Szybka**: mniej niż trzy zadania i brak istotnych decyzji dotyczących architektury, produktu lub UX; sprawdź na bieżąco specyfikację, standardy i wartość.
 - **Standardowa**: uwzględnij na bieżąco perspektywy produktu/specyfikacji, inżynierii/standardów oraz projektu/UX.
-- **Podwyższonego ryzyka**: bramka standardowa wraz z przeglądem odporności i najsilniejszymi argumentami dotyczącymi wiarygodnego
-  założenia o dużym wpływie lub trudnego do odwrócenia.
+- **Podwyższonego ryzyka**: bramka standardowa wraz z `/resilience-review` oraz `/steelman` dla wiarygodnego założenia o dużym wpływie lub trudnego do odwrócenia.
 
-Osie: Specyfikacja -> `plan-product-hat`; Standardy -> `plan-engineering-hat`; projekt/UX ->
-`plan-design-hat`; dodatkowo perspektywa krytyczna/wartości. Przeprowadź je na bieżąco.
+Osie: Specyfikacja -> `plan-product-hat`; Standardy -> `plan-engineering-hat`; projekt/UX -> `plan-design-hat`; dodatkowo perspektywa krytyczna/wartości. Czynniki podwyższonego ryzyka: uwierzytelnianie, migracja, publiczny interfejs API, działania destrukcyjne, współbieżność, Temporal, zmiany między usługami i decyzje jednokierunkowe.
 
-Czynniki podwyższonego ryzyka: uwierzytelnianie, migracja, publiczny interfejs API, działania destrukcyjne, współbieżność, Temporal, zmiany między usługami i decyzje jednokierunkowe. Dodaj `/resilience-review` oraz `/steelman`.
-
-**Rejestr specjalistów:** planowane prace w Go lub `go.mod` wymagają użycia `/golang`; dodaj kolejnego
-specjalistę dopiero po powtarzających się przeoczeniach.
-
-Dla każdej odpowiedniej osi zgłoś `APPROVED`, `NEEDS_CHANGES`, `BLOCKED` lub `SKIPPED`
-wraz z dowodami; pominięcie wymaga podania przyczyny. Usuń duplikaty ustaleń wynikających z tej samej przyczyny źródłowej. Blokujące decyzje
-użytkownika wstrzymują pracę; braki w faktach wymagają badań lub prototypu.
+**Rejestr specjalistów:** ocena wartości wymaga użycia `/av`; planowane prace w Go lub `go.mod` wymagają użycia `/golang`; dodawaj specjalistów dopiero po powtarzających się przeoczeniach. Dla każdej osi zgłoś `APPROVED`, `NEEDS_CHANGES`, `BLOCKED` lub `SKIPPED` wraz z dowodami i przyczyną ewentualnego pominięcia. Usuń duplikaty ustaleń wynikających z tej samej przyczyny źródłowej; ustalaj fakty i wstrzymaj pracę przy blokujących decyzjach użytkownika.
 
 Wymagaj potwierdzenia tylko wtedy, gdy użytkownik zażądał zakończenia na etapie planowania lub grillowania. [ETHOS: Odkrywaj przed podjęciem zobowiązania]
 
-Użyj `/domain-modeling`, aby zapisać terminy domenowe w `CONTEXT.md`, a ADR tylko wtedy, gdy
-decyzję trudno odwrócić, bez kontekstu jest zaskakująca i wiąże się z rzeczywistym kompromisem.
+Użyj `/domain-modeling`, aby zapisać terminy domenowe w `CONTEXT.md`; dodaj ADR tylko dla trudnego do odwrócenia, zaskakującego kompromisu.

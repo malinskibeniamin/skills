@@ -17,6 +17,7 @@ sidebar:
 | `/agent-watchdog` | 审计并修复其他编码智能体的工作。 |
 | `/aip` | 设计 Google AIP 风格的 protobuf 资源 API。 |
 | `/ask-ben` | 通过 Ben 的前端技能框架路由工作。 |
+| `/av` | 检查变更是否值得投入时间，并能安全落地。 |
 | `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |
 | `/codebase-design` | 设计具有清晰接口的深层模块。 |

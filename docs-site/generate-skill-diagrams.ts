@@ -385,6 +385,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Fast review",
     ],
   },
+  av: {
+    kind: "decision-tree",
+    nodes: [
+      "PR, plan, or ticket",
+      "Lane evidence holds?",
+      "Justified: verdict line",
+      "Thin: blocking question",
+    ],
+  },
   "plan-arbiter": {
     kind: "decision-tree",
     nodes: [
