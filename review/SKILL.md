@@ -59,6 +59,9 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
+Every PR review also applies the **ms hat** from [ms/SKILL.md](../ms/SKILL.md): one lane,
+named beneficiary, value evidence.
+
 ### Classify
 
 A finding is diff-introduced, impactful, reproducible or concrete, placed on the tightest changed line,

@@ -49,6 +49,7 @@ sidebar:
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
+| `/ms` | 檢查提取要求是否值得投入時間，並具備商業價值。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |
 | `/plow-ahead` | 在例行的不確定情況下自主繼續推進。 |
 | `/postgresql` | 根據工作負載實證設計並操作 PostgreSQL。 |

@@ -18,7 +18,7 @@ import json, pathlib, re, shutil, sys
 repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
-ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "UI", "URL", "UX"}
+ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "MS", "PDF", "PM", "PR", "TDD", "UI", "URL", "UX"}
 BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "tanstack": "TanStack"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
@@ -58,6 +58,7 @@ SHORT_DESCRIPTIONS = {
     "implement-spec": "Implement a whole spec on one integration branch",
     "maintain-verification-skill": "Audit a project verifier against source and live behavior",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
+    "ms": "Check that a PR earns its time and business value",
     "plan-arbiter": "Compare competing plans and choose a grounded direction",
     "plow-ahead": "Continue autonomously through routine ambiguity",
     "pr": "Write a PR body that is fast to review",

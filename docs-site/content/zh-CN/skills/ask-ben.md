@@ -49,6 +49,7 @@ sidebar:
 | `/improve` | 审计代码库或编写请求的实施计划。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
+| `/ms` | 检查 PR 是否值得投入时间并带来业务价值。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
 | `/plow-ahead` | 在常规的不确定情况下自主继续推进。 |
 | `/postgresql` | 根据工作负载证据设计和运维 PostgreSQL。 |

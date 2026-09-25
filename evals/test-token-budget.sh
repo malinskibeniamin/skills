@@ -59,7 +59,8 @@ fi
 
 # Keep the largest model-facing skills on explicit budgets. The aggregate cap
 # preserves the measured wave reduction while allowing small wording trades
-# between related instructions.
+# between related instructions. review 4300 -> 4450 (2026-09-25) for the
+# always-on ms hat; ask-ben 7300 -> 7350 for its catalog row.
 lean_skill_total=0
 while read -r skill cap; do
   bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
@@ -73,9 +74,9 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7300
+ask-ben 7350
 wayfinder 5000
-review 4300
+review 4450
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -148,6 +149,7 @@ stack-registry 2525
 codex-compat 2575
 work-automation-kit 2525
 make-pr-easy-to-review 2425
+ms 2900
 maintain-verification-skill 3000
 codex 2375
 handoff 2375

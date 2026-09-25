@@ -5,6 +5,7 @@
 Before the PR endpoint, run the applicable review axes inline:
 
 - `/review` -- correctness, value, and semantic density
+- `/ms` -- one lane, named beneficiary, cost or revenue evidence (the ms hat inside `/review`)
 - `/improve-codebase-architecture` -- deep-module and invariant redesigns that remove error classes
 - `/prototype` -- redesign module or layout
 - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs
@@ -56,6 +57,7 @@ logs/matrices in reviewer-accessible evidence links; keep before/after images in
 ```
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
 ## Summary
+- Lane: <Keep the lights on | Quality of life | New value | Taste> -- <who benefits and how; see `/ms`>
 - <observable behavior change and why it matters; 1-3 bullets>
 <optional: the smallest `/pr` summary view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
 

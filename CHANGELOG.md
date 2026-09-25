@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-09-25 -- Add `/ms`, a business-value review axis built from four years of
+recency-weighted product-owner PRs, reviews, and tickets (31 graded rules). Every PR
+declares one lane (keep the lights on, quality of life, new value, taste), a named
+beneficiary, and evidence; `/review` applies it as the always-on ms hat and the
+`/commit-push-pr` body template gains a `Lane:` line. Skills 90 -> 91.
+
 2026-09-24 -- Vendor the mattpocock/skills v1.3 graduation (upstream PR #1120, pinned at
 `a600ef4b25`). Add user-invoked `/implement-spec`, which works a spec's tickets as a task
 graph across parallel implementer worktrees onto one integration branch; invoking it is the
