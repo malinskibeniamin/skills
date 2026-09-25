@@ -71,6 +71,7 @@ sidebar:
 | `/setup-routines` | 設定自動化的 Claude Code 維護例行作業。 |
 | `/show-me` | 使用精簡的視覺成品解釋目前的主題。 |
 | `/snyk-ux-security` | 使用 Snyk 與發布關卡稽核相依套件安全性。 |
+| `/ss` | 審查一項變更是否值得投入我們有限的時間。 |
 | `/stack-registry` | 控制框架規則中目前採用與禁止使用的技術堆疊治理。 |
 | `/stacked-prs` | 建立並管理相互依賴的 GitHub 提取要求堆疊。 |
 | `/stay-within-limits` | 配額規劃長時間執行的代理程式工作，以避免超出用量限制。 |
