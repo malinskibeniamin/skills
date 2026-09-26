@@ -1,7 +1,7 @@
 # Evals for resilience-review resilience skill + lifecycle/hook wiring.
 
 SKILL_DIR="$REPO_ROOT/resilience-review"
-INTENT_SCRIPT="$REPO_ROOT/shared/intent-detect.sh"
+INTENT_SCRIPT="$REPO_ROOT/.claude/hooks/intent-detect.sh"
 
 run_file_eval "$SKILL_DIR/SKILL.md" "resilience-review SKILL.md exists"
 run_file_eval "$SKILL_DIR/REFERENCE.md" "resilience-review REFERENCE.md exists"

@@ -28,9 +28,8 @@ correction, verification, rollout, blockers, and next steps that change it; omit
 praise, narration, repetition, and obvious comments.
 
 Substantial plans, analyses, reviews, recaps, status, and handoffs use
-`shared/intent-map.md`: result/decision first; map objective, assumptions, references,
-risks, implementation, verification, superseded choices. Keep trivial/
-single-path output linear.
+`shared/intent-map.md`: map objective, assumptions, references, risks,
+implementation, verification, superseded choices. Keep trivial/single-path output linear.
 
 ## Execution contract
 
@@ -49,8 +48,7 @@ feature branch without another permission prompt; after rebase, use `--force-wit
 Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
 branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session to deliver that branch; correct endpoint state and continue. Store inferred delivery
-endpoints only in lifecycle state, never developer context.
+a session to deliver that branch; correct endpoint state and continue.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
@@ -69,9 +67,10 @@ For action work, establish one outcome contract:
 - **Stop** -- the requested endpoint and conditions that genuinely block progress.
 
 Then inspect -> act -> verify -> repeat. Let evidence choose plans, tools, and guidance. Continue
-through reversible decisions; add no approval gates, fixed durations, or skill ceremonies.
-Meaningful behavior starts with a failing public-contract test. Long or high-unknown work may
-record evidence, deviations, and pause triggers in `.context/implementation-notes.md`.
+through reversible decisions; put status notes beside the next action, not in a stop that recaps
+it, offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or
+skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps
+its task checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
 wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,

@@ -31,12 +31,12 @@ assert_absent() {
 assert_present 'agents/references/findings-schema\.md' \
   "delegated review pointers use the canonical findings schema" \
   "$REPO_ROOT/development-lifecycle/REFERENCE.md" \
-  "$REPO_ROOT/shared/subagent-start.sh" \
-  "$REPO_ROOT/shared/subagent-stop.sh"
+  "$REPO_ROOT/.claude/hooks/subagent-start.sh" \
+  "$REPO_ROOT/.claude/hooks/subagent-stop.sh"
 assert_absent 'agents/findings-schema\.md' \
   "stale findings-schema paths are gone" \
   "$REPO_ROOT/development-lifecycle/REFERENCE.md" \
-  "$REPO_ROOT/shared/subagent-start.sh"
+  "$REPO_ROOT/.claude/hooks/subagent-start.sh"
 run_executable_eval "$REPO_ROOT/snyk-ux-security/scripts/codeowners-teams.sh" \
   "Snyk CODEOWNERS reviewer command exists"
 

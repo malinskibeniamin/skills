@@ -6,7 +6,7 @@ description: Research primary sources and save cited findings. Use when durable 
 Research inline by default; background work requires explicit delegation or `/swarm`.
 
 1. Trace every claim to **primary sources**: official docs, source, specs, first-party APIs.
-2. Write one Markdown artifact, citing each claim.
+2. Write one Markdown artifact, citing each claim. Mark anything you could not confirm and say where you looked.
 3. Use the repo's notes convention and report path. In this repo, surveys stay scratch/memory; only decision-ready findings enter `docs/`.
 
 ## Routing

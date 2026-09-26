@@ -70,5 +70,5 @@ run_content_eval "$REPO_ROOT/go/SKILL.md" "single owner in the primary context" 
   "go keeps delivery ownership in the primary context"
 
 # A hook cannot prevent a spawn after admission; keep the enforcement surface honest.
-run_content_eval "$REPO_ROOT/shared/subagent-start.sh" "Cannot block subagent creation" \
+run_content_eval "$REPO_ROOT/.claude/hooks/subagent-start.sh" "Cannot block subagent creation" \
   "SubagentStart remains context-only"

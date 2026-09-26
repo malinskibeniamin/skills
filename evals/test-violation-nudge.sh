@@ -1,7 +1,6 @@
 # Violation nudge: mid-session feedback loop tests
 
-SHARED_DIR="$REPO_ROOT/shared"
-NUDGE_SCRIPT="$SHARED_DIR/violation-nudge.sh"
+NUDGE_SCRIPT="$REPO_ROOT/.claude/hooks/violation-nudge.sh"
 
 run_file_eval "$NUDGE_SCRIPT" "violation-nudge.sh exists"
 run_executable_eval "$NUDGE_SCRIPT" "violation-nudge.sh is executable"

@@ -1,6 +1,6 @@
 # Intent detection records endpoint and repository facts without workflow coaching.
 
-INTENT_SCRIPT="$REPO_ROOT/shared/intent-detect.sh"
+INTENT_SCRIPT="$REPO_ROOT/.claude/hooks/intent-detect.sh"
 
 run_file_eval "$INTENT_SCRIPT" "intent-detect.sh exists"
 run_executable_eval "$INTENT_SCRIPT" "intent-detect.sh is executable"
