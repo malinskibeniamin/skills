@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-09-26 -- Frontend PRs lead with a before/after video of the real UI plus the
+screenshot table, directly under Summary. `scripts/pr-video.sh compose` combines
+agent-browser or Playwright recordings side by side (MP4 plus inline GIF, 10 MB guard);
+`publish` pushes evidence to a `pr-evidence` branch through git plumbing and prints
+SHA-pinned Markdown, because `gh` cannot upload PR attachments. `/commit-push-pr`, `/pr`,
+and the PR-entrypoint reminder require it.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add
