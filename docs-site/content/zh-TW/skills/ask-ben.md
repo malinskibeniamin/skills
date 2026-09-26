@@ -47,6 +47,7 @@ sidebar:
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
+| `/jb` | 檢查 PR 是否值得投入時間，並提供已完成的證明。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |

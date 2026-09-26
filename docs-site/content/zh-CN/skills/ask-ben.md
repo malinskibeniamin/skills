@@ -47,6 +47,7 @@ sidebar:
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/jb` | 检查 PR 是否值得投入时间，并证明工作已完成。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
