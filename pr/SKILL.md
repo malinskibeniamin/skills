@@ -18,7 +18,7 @@ Use this template for writing the PR body:
 
 ## Evidence
 
-<frontend: before/after video GIF + MP4 link, then screenshot table>
+<frontend: before/after flow video playing inline (user-attachments URL), then screenshot table>
 
 - **Before:** <screenshot/output/failing test run>
   **After:** <screenshot/output/passing test run>
@@ -54,7 +54,7 @@ You may use one of these, you may use several, it is unlikely you will use all o
 
 Concrete evidence that the change works. Show a before and after.
 
-For any frontend change, a before/after video of the real UI plus screenshots is S-tier and required. Put it right after the summary so reviewers see the change before reading about it. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the summary so reviewers see the change before reading about it. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 

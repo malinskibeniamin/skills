@@ -64,11 +64,11 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 ## Before / after
 <omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>
 
-**Video** (before left, after right): <one line naming the flow>
+**Video** (before left, after right): <the flow, as steps: open X -> type Y -> submit -> see Z>
 
-![before-after](<pinned gif url>)
+https://github.com/user-attachments/assets/<id from pr-video.sh attach>
 
-[Full-resolution MP4](<pinned mp4 url>)
+<fallback only when attach is blocked: ![before-after flow](<pinned gif url>)>
 
 | View | Before | After | Notes |
 |------|--------|-------|-------|
@@ -166,13 +166,16 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    or fabricate a before image. New/removed views show the real prior/replacement flow;
    if none exists, use a visible `New view`/`Removed view` label with reason and the available
    real capture. Reuse `/triage` or earlier review evidence only when revision and scenario still match.
-   Also record one before/after video of the changed flow from real UI: the same scripted
-   route, clicks, and typing against base and candidate, in the same browser and viewport.
-   Record each side with `agent-browser record start <side>.webm <url>` ... `record stop`
-   (or Playwright `recordVideo`), drive the interaction, keep each take under 20 seconds,
-   and show the changed state on screen before stopping. Static-only changes still get the
-   video: load, scroll to the change, and hover/focus it. Combine the takes with
-   `scripts/pr-video.sh compose before.webm after.webm <out-dir>`.
+   Also record one before/after video of the changed flow in real UI. The video shows the
+   flow happening, never a still page: navigate, click, type, open/submit, and land on the
+   changed result (success, error, or new state). Write one flow file (one agent-browser
+   command per line: `open`, `click`, `type`, `press`, `scroll`, `wait --text`) and replay
+   it on base and candidate with `scripts/pr-video.sh record <url> flow.txt <side>.webm`;
+   it draws a visible cursor and paces steps. Prefer `type` over `fill` so keystrokes show.
+   A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
+   Keep each take under 20 seconds. `record` refuses flows with fewer than two interaction
+   steps, and `scripts/pr-video.sh compose before.webm after.webm <out-dir>` refuses static
+   takes (under 8 distinct frames); re-record the flow, never pad or loop a still.
 3. **Run visual regression:** use the repository's existing screenshot assertion runner,
    not DOM/text snapshots. Add missing cases for uncovered visible changes. Run against
    existing baselines first; inspect before/after/diff images for every mismatch, fix
@@ -193,17 +196,23 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    row per affected view/state (group identical cases with a coverage note). Link diff images
    and the full visual-test report when available. Use repository-approved, reviewer-accessible
    image hosting or committed snapshot raw URLs pinned to immutable SHAs. Without other
-   hosting, `scripts/pr-video.sh publish <files>` pushes screenshots, GIF, and MP4 to the
-   `pr-evidence` branch without touching the PR branch and prints SHA-pinned Markdown. Embed
-   the GIF inline and link the MP4; GitHub plays inline video only for browser-uploaded
-   attachments, which `gh` cannot create. Review captures
+   hosting, `scripts/pr-video.sh publish <files>` pushes screenshots and GIF to the
+   `pr-evidence` branch without touching the PR branch and prints SHA-pinned Markdown.
+   Embed the MP4 so it plays in the PR: GitHub renders a player only for its own
+   `https://github.com/user-attachments/assets/<id>` uploads (it strips `<video>` tags and
+   links repository MP4s as downloads). `scripts/pr-video.sh attach before-after.mp4` makes
+   that upload from an isolated, signed-in agent-browser profile and prints the URL; put
+   it alone on its own line. Exit 3 means the profile needs a one-time sign-in by the user.
+   Until then, the inline GIF is the video and the body states the missing player; never
+   link a downloadable MP4 as the video. Review captures
    for secrets/personal data before upload; use sanitized fixtures, never public hosting for
    private evidence without authorization. Local paths are not reviewer-visible evidence.
    Neither are localhost, expiring session URLs, or artifact ZIP links. `gh pr comment` does not upload
    local image files. Missing capture/test/hosting blocks publication unless the user
    explicitly waives the named gap; put that waiver and limitation in the body, never PASS.
 6. **Verify publication:** Re-read the actual PR body after create/edit/reopen/stack submit.
-   Verify the images and GIF render in an isolated browser with reviewer-equivalent access; an agent
+   Verify the images render and the video plays inline (a `<video>` element, not a link)
+   in an isolated browser with reviewer-equivalent access; an agent
    download alone does not prove access. Check the revision pair and concise impact/test
    bullets. Do not overwrite unrelated reviewer notes. Omit the visual section only when the
    inventory establishes no user-visible effect; keep that rationale in verification evidence.
