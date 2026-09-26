@@ -18,7 +18,7 @@ sidebar:
 | 變體 | 強度 | 用途 |
 |---|---|---|
 | Sol | `medium`；有評估依據或明確選用時使用 `high` 以上 | 規格明確的程式碼、電腦操作、調查 |
-| Astra | `high`（Sol 的備援）；有評估依據或明確選用時使用 `max` | 優先負責 PR 審查；程式碼、規劃、電腦操作；僅在沒有 Claude 負責人時處理 UI |
+| Astra | `high`（Sol 的備援）；絕不使用 `max` | 優先負責 PR 審查；程式碼、規劃、電腦操作；僅在沒有 Claude 負責人時處理 UI |
 | Luna（`gpt-6-luna`） | `high` | 瑣碎工作：小幅修改、無衝突的 rebase、機械式 CI 修正、唯讀的擷取或列表；需要判斷時升級至 Sol |
 
 選擇前請閱讀 `config/model-routing.json`。請勿根據價格或名稱推斷變體品質。請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md)，瞭解跨供應商閘門與 CLI 運作機制。

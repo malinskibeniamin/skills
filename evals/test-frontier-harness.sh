@@ -38,7 +38,7 @@ run_json_eval '.quality_first.default.model == "claude-opus-5-5"
   and .quality_first.secondary.model == "gpt-6-sol"
   and .quality_first.secondary.effort == "medium"
   and .quality_first.hard.model == "claude-opus-5-5"
-  and (.quality_first.hard.efforts | index("max"))
+  and (.quality_first.hard.efforts | index("max") | not)
   and .quality_first.ultra.requires_explicit_delegation
   and (.quality_first.ui_owners | index("claude-opus-5-5"))
   and .models["claude-opus-5-5"].status == "primary"

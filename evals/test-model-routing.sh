@@ -14,7 +14,9 @@ if jq -e '.policy == "quality-first"
   and .quality_first.secondary.model == "gpt-6-sol"
   and .quality_first.secondary.effort == "medium"
   and .quality_first.hard.model == "claude-opus-5-5"
-  and (.quality_first.hard.efforts | index("max"))
+  and .quality_first.hard.efforts == ["xhigh"]
+  and .efforts.never == ["max"]
+  and ([.. | strings | select(. == "max")] | length == 1)
   and .quality_first.ui_owners == ["claude-opus-5-5", "claude-fable-5-1"]
   and .quality_first.ui_policy.min_taste == 8
   and .quality_first.ui_policy.non_claude_fallback == "gpt-6-astra"
@@ -81,7 +83,8 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" "codex exec" "codex skill uses code
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "-s read-only" "codex documents read-only mode"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "self-contained" "codex requires self-contained prompts"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" 'gpt-6-sol -c .model_reasoning_effort="medium"' "codex gives an executable Sol medium command"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "max.*eval-backed|eval-backed.*max" "codex gates max on evidence"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "never .max." "codex never routes max effort"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "never .max." "efficient-frontier never routes max effort"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Codex models do not own user-facing" "codex leaves visible work to Claude"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "gpt-6-luna" "codex routes chores to Luna"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Review:.*Astra" "codex reviews with Astra"

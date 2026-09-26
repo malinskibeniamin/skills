@@ -13,7 +13,7 @@
     },
     "hard": {
       "model": "claude-opus-5-5",
-      "efforts": ["xhigh", "max"],
+      "efforts": ["xhigh"],
       "selection": "Use the smallest effort that clears the context-ablation quality gate."
     },
     "ui_owners": ["claude-opus-5-5", "claude-fable-5-1"],
@@ -49,6 +49,10 @@
         "rule": "Raise Astra to xhigh for PR reviews only when a host meter or the user shows at least 50% Codex usage remaining; unknown usage stays at high."
       }
     }
+  },
+  "efforts": {
+    "never": ["max"],
+    "reason": "Owner rule: max is for benchmarking only; the benchmark suites may still sweep it, routing never selects it."
   },
   "model_switch": {
     "deny_statuses": ["retired", "unsupported"],

@@ -24,7 +24,7 @@ Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-sol "reply OK
 | Wariant | Poziom | Zastosowanie |
 |---|---|---|
 | Sol | `medium`; `high` i wyżej, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod na podstawie jasnej specyfikacji, obsługa komputera, analiza problemów |
-| Astra | `high` (zapas dla Sol); `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | najpierw przegląd PR; kod, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
+| Astra | `high` (zapas dla Sol); nigdy `max` | najpierw przegląd PR; kod, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
 | Luna (`gpt-6-luna`) | `high` | drobne prace: małe zmiany, czyste rebase, mechaniczne poprawki CI, odczyt lub wylistowanie danych; przy decyzjach przekaż do Sol |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny

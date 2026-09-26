@@ -11,7 +11,7 @@ description: Apply eval-backed model routing and budget explicitly authorized ag
 4. Astra `high` reviews PRs, Opus 5.5 `high` if needed; `xhigh` if >=50% Codex usage left.
 5. UI, copy, API design: taste >= 8 and a Claude owner, else a named Astra fallback.
 6. Chores: Luna `high` (tiny edits, clean rebases, mechanical CI fixes, read-only listing); conflicts, diagnosis, judgment -> Sol.
-7. Fable 5.1 (`high` max): explicit ask, extraordinary work only. `xhigh`/`max` need context-ablation evidence or user selection.
+7. Fable 5.1 (`high` max): explicit ask, extraordinary work only. `xhigh`: context-ablation evidence or user pick; never `max`.
 8. The user explicitly authorizes a different-family pass.
 9. `ultra` needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache: API-only unless exposed.
 

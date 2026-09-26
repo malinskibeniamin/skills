@@ -12,7 +12,7 @@ Capability-check once: `codex exec -m gpt-6-sol "reply OK"`. If unavailable, fal
 | Variant | Use |
 |---|---|
 | Sol, `medium` (`high`+ only eval-backed/explicit) | clear-spec code, computer use, investigation |
-| Astra, `high` (Sol fallback; `max` only eval-backed/explicit) | PR review first; code, planning, computer use; UI only if no Claude owner |
+| Astra, `high` (Sol fallback; never `max`) | PR review first; code, planning, computer use; UI only if no Claude owner |
 | Luna, `high` (`gpt-6-luna`) | chores: tiny edits, clean rebases, mechanical CI fixes, read-only listing; judgment goes to Sol |
 
 Read `config/model-routing.json`; never infer quality from name/price. [REFERENCE.md](REFERENCE.md) owns provider gates and CLI mechanics.
