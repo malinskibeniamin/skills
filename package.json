@@ -33,6 +33,6 @@
     "zod": "3.25.76"
   },
   "patchedDependencies": {
-    "blume@1.7.1": "patches/blume@1.7.1.patch"
+    "blume@2.0.3": "patches/blume@2.0.3.patch"
   }
 }

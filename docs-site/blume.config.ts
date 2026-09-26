@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url";
 
 import { defineConfig, type ComponentMarkdown } from "blume";
+import { custom } from "blume/sources";
 
 import { serializeSkillSearchMarkdown } from "./skill-search.ts";
 import { createSkillSource } from "./skill-source.ts";
@@ -17,7 +18,7 @@ const skillSearchMarkdown: ComponentMarkdown = ({ lossy, props }) => {
 };
 
 export default defineConfig({
-  ai: {
+  agents: {
     llmsTxt: true,
     markdownComponents: {
       SkillSearch: skillSearchMarkdown,
@@ -25,17 +26,15 @@ export default defineConfig({
     skills: "..",
   },
   content: {
-    root: "./content",
     sources: [
-      {
-        source: createSkillSource({
+      custom(
+        createSkillSource({
           branch: "main",
           contentRoot,
           repositoryRoot,
           repositoryUrl: "https://github.com/malinskibeniamin/skills",
         }),
-        type: "custom",
-      },
+      ),
     ],
   },
   description:
