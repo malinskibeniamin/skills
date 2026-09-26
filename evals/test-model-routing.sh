@@ -21,6 +21,14 @@ if jq -e '.policy == "quality-first"
   and ([.quality_first.ui_owners[] as $m | .models[$m].scores.taste >= 8] | all)
   and ([.models | to_entries[] | select(.value.scores.taste < 8) | .key] | sort == ["gpt-6-luna", "gpt-6-sol"])
   and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste")] | all)
+  and ([.models | to_entries[] | select(.key != "gpt-6-luna") | .value.scores.review] | all(type == "number"))
+  and ([.models | to_entries[] | select(.value.scores.review != null)] | max_by(.value.scores.review) | .key) == "gpt-6-astra"
+  and .quality_first.review.primary == {"model": "gpt-6-astra", "effort": "high"}
+  and .quality_first.review.secondary == {"model": "claude-opus-5-5", "effort": "high"}
+  and .quality_first.review.escalation.effort == "xhigh"
+  and .quality_first.review.escalation.min_codex_remaining_pct == 50
+  and (.models["gpt-6-sol"].work | index("review") | not)
+  and (.models["gpt-6-astra"].work | index("review"))
   and .quality_first.ultra.requires_explicit_delegation
   and .models["claude-opus-5-5"].status == "primary"
   and .models["claude-opus-5-5"].starting_effort == "high"
@@ -76,6 +84,9 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" 'gpt-6-sol -c .model_reasoning_effo
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "max.*eval-backed|eval-backed.*max" "codex gates max on evidence"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Codex models do not own user-facing" "codex leaves visible work to Claude"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "gpt-6-luna" "codex routes chores to Luna"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Review:.*Astra" "codex reviews with Astra"
+run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Astra .high. reviews" "efficient-frontier routes PR review to Astra"
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Astra" "reviewer routing names Astra"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "taste >= 8" "efficient-frontier gates UI on taste"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Opus 5.5 .high." "efficient-frontier names the primary driver"
 run_content_eval "$REPO_ROOT/codex/REFERENCE.md" "ultra.*explicit delegation" "ultra requires delegation"

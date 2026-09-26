@@ -23,8 +23,8 @@ Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-sol "reply OK
 
 | Wariant | Poziom | Zastosowanie |
 |---|---|---|
-| Sol | `medium`; `high` i wyżej, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod na podstawie jasnej specyfikacji, przegląd, obsługa komputera, analiza problemów |
-| Astra | `high` (zapas dla Sol); `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, przegląd, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
+| Sol | `medium`; `high` i wyżej, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod na podstawie jasnej specyfikacji, obsługa komputera, analiza problemów |
+| Astra | `high` (zapas dla Sol); `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | najpierw przegląd PR; kod, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
 | Luna (`gpt-6-luna`) | `high` | drobne prace: małe zmiany, czyste rebase, mechaniczne poprawki CI, odczyt lub wylistowanie danych; przy decyzjach przekaż do Sol |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny
@@ -43,8 +43,7 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 
 - **Implementacja:** `codex exec -m gpt-6-sol -c 'model_reasoning_effort="medium"'`;
   izoluj równoległe zapisy w osobnych drzewach roboczych.
-- **Przegląd:** preferuj inną rodzinę modeli niż ta użyta przez autora. Prace utworzone przez Sol mogą
-  zostać sprawdzone przez wysokiej jakości alternatywę Claude; rozwiązaniem zapasowym jest oznaczony przebieg Sol z czystym kontekstem. Używaj
+- **Przegląd:** Astra `high` (`xhigh` przy co najmniej 50% pozostałego limitu Codex). Używaj
   trybu `-s read-only` i dowodów P0–P3.
 - **Wymiana kontradyktoryjna (automatyczna w przepływach pracy hostowanych przez Claude):** jeśli jest to dozwolone, użyj innej rodziny
   modeli; traktuj wynik jako jedną ze ścieżek, a nie ostateczny werdykt.

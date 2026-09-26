@@ -21,8 +21,9 @@ and include any coordinator-supplied independent findings under
 `cross_model_findings`. Call out meaningful divergence in `divergence_notes`.
 
 Routing follows `config/model-routing.json`: a quality-qualified Claude alternative can
-review Sol work, Sol can review Claude work, and the unavailable-family fallback is a
-labeled clean-context Sol pass.
+review GPT work, Astra `high` reviews Claude work (`xhigh` when at least 50% Codex usage is
+known to remain), and the unavailable-family fallback is a labeled clean-context Opus 5.5
+`high` pass.
 
 ## Stage 1: Spec Compliance
 

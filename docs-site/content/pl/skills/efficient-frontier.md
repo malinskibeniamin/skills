@@ -18,9 +18,10 @@ subiektywnych ocen modeli w promptach ani umiejętnościach.
 Jakość jest najważniejsza:
 
 1. Wybierz głównego właściciela, który najlepiej odpowiada zadaniu i dostępnym możliwościom środowiska uruchomieniowego.
-2. Domyślny właściciel: Claude Opus 5.5 z ustawieniem `high` dla interfejsu użytkownika, kodu, planów i przeglądu.
-3. Druga ścieżka: GPT-6 Sol z ustawieniem `medium` przez `/codex` do wykonania według jasnej specyfikacji, niezależnego
-   przeglądu, obsługi komputera i analizy problemów. Jeśli Sol jest niedostępny, użyj Astra `high` i wskaż zapas; nigdy tańszego modelu GPT.
+2. Domyślny właściciel: Claude Opus 5.5 z ustawieniem `high` dla interfejsu użytkownika, kodu i planów.
+3. Druga ścieżka: GPT-6 Sol z ustawieniem `medium` przez `/codex` do wykonania według jasnej specyfikacji, obsługi
+   komputera i analizy problemów. Jeśli Sol jest niedostępny, użyj Astra `high` i wskaż zapas; nigdy tańszego modelu GPT.
+3a. Przeglądy PR: Astra `high`, a w razie potrzeby dodatkowo Opus 5.5 `high`; `xhigh` tylko przy co najmniej 50% pozostałego limitu Codex.
 4. Praca widoczna dla użytkowników (interfejs, teksty, projekt API) wymaga oceny gustu (taste >= 8) i właściciela Claude;
    Astra jest wskazanym zapasem tylko wtedy, gdy żaden właściciel Claude nie jest dostępny.
 5. Drobne prace trafiają do GPT-6 Luna z ustawieniem `high`: małe zmiany, czyste rebase, mechaniczne poprawki CI,

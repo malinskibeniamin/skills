@@ -32,6 +32,22 @@
       "effort": "high",
       "use": "Tiny edits, clean rebases, mechanical CI fixes, and read-only retrieval or listing such as email or daily task lists.",
       "escalate": "Move to Sol on rebase conflicts, CI failures that need diagnosis, or any judgment call; if Luna is unavailable, run the chore inline on the owner at low effort."
+    },
+    "review": {
+      "primary": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "secondary": {
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "secondary_use": "Add an Opus pass when Astra is unavailable or the PR needs evidence-heavy, actionable findings.",
+      "escalation": {
+        "effort": "xhigh",
+        "min_codex_remaining_pct": 50,
+        "rule": "Raise Astra to xhigh for PR reviews only when a host meter or the user shows at least 50% Codex usage remaining; unknown usage stays at high."
+      }
     }
   },
   "model_switch": {
@@ -48,12 +64,13 @@
         "cost": 2,
         "intelligence": 10,
         "speed": 7,
-        "taste": 9
+        "taste": 9,
+        "review": 9
       }
     },
     "gpt-6-sol": {
       "status": "secondary",
-      "work": ["implementation", "review", "computer-use", "investigation"],
+      "work": ["implementation", "computer-use", "investigation"],
       "starting_effort": "medium",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
       "unavailable": "Use gpt-6-astra at high and name the fallback; never a cheaper GPT model.",
@@ -61,19 +78,21 @@
         "cost": 6,
         "intelligence": 7,
         "speed": 8,
-        "taste": 7
+        "taste": 7,
+        "review": 6
       }
     },
     "gpt-6-astra": {
       "status": "quality-alternative",
-      "work": ["planning", "implementation", "review", "computer-use"],
+      "work": ["review", "planning", "implementation", "computer-use"],
       "starting_effort": "high",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
       "scores": {
         "cost": 2,
         "intelligence": 8,
         "speed": 4,
-        "taste": 8
+        "taste": 8,
+        "review": 10
       }
     },
     "claude-fable-5-1": {
@@ -85,7 +104,8 @@
         "cost": 1,
         "intelligence": 8,
         "speed": 4,
-        "taste": 8
+        "taste": 8,
+        "review": 9
       }
     },
     "gpt-6-luna": {
@@ -96,7 +116,8 @@
         "cost": 10,
         "intelligence": 3,
         "speed": 10,
-        "taste": 3
+        "taste": 3,
+        "review": null
       }
     }
   },
@@ -132,6 +153,7 @@
     "speed": "Median output tokens per second relative to the fastest model.",
     "taste": "Owner judgment for UI/UX, code quality, API design, and copy.",
     "measured": "2026-09-25",
-    "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties."
+    "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties.",
+    "review": "Orchestrator V2 audit panel (T3 Code PR #2829, 2026-09-24) weighted mean relative to the leader (Astra 8.22 = 10); Luna was not measured and does not review."
   }
 }

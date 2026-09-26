@@ -11,8 +11,8 @@ Capability-check once: `codex exec -m gpt-6-sol "reply OK"`. If unavailable, fal
 
 | Variant | Use |
 |---|---|
-| Sol, `medium` (`high`+ only eval-backed/explicit) | clear-spec code, review, computer use, investigation |
-| Astra, `high` (Sol fallback; `max` only eval-backed/explicit) | code, review, planning, computer use; UI only if no Claude owner |
+| Sol, `medium` (`high`+ only eval-backed/explicit) | clear-spec code, computer use, investigation |
+| Astra, `high` (Sol fallback; `max` only eval-backed/explicit) | PR review first; code, planning, computer use; UI only if no Claude owner |
 | Luna, `high` (`gpt-6-luna`) | chores: tiny edits, clean rebases, mechanical CI fixes, read-only listing; judgment goes to Sol |
 
 Read `config/model-routing.json`; never infer quality from name/price. [REFERENCE.md](REFERENCE.md) owns provider gates and CLI mechanics.
@@ -24,7 +24,7 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 ## Modes
 
 - **Implement:** `codex exec -m gpt-6-sol -c 'model_reasoning_effort="medium"'`; concurrent writes use isolated worktrees.
-- **Review:** different model family when permitted; otherwise labeled clean-context Sol, `-s read-only`, P0-P3 evidence.
+- **Review:** Astra `high` (`xhigh` at >=50% Codex usage left), `-s read-only`, P0-P3 evidence.
 - **Adversarial:** Claude-hosted and authorized only; one lane, never verdict.
 - **Computer use:** name app/URL, states, evidence.
 - **Investigate/analyze:** read-only compact report.

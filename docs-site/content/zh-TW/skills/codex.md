@@ -17,8 +17,8 @@ sidebar:
 
 | 變體 | 強度 | 用途 |
 |---|---|---|
-| Sol | `medium`；有評估依據或明確選用時使用 `high` 以上 | 規格明確的程式碼、審查、電腦操作、調查 |
-| Astra | `high`（Sol 的備援）；有評估依據或明確選用時使用 `max` | 程式碼、審查、規劃、電腦操作；僅在沒有 Claude 負責人時處理 UI |
+| Sol | `medium`；有評估依據或明確選用時使用 `high` 以上 | 規格明確的程式碼、電腦操作、調查 |
+| Astra | `high`（Sol 的備援）；有評估依據或明確選用時使用 `max` | 優先負責 PR 審查；程式碼、規劃、電腦操作；僅在沒有 Claude 負責人時處理 UI |
 | Luna（`gpt-6-luna`） | `high` | 瑣碎工作：小幅修改、無衝突的 rebase、機械式 CI 修正、唯讀的擷取或列表；需要判斷時升級至 Sol |
 
 選擇前請閱讀 `config/model-routing.json`。請勿根據價格或名稱推斷變體品質。請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md)，瞭解跨供應商閘門與 CLI 運作機制。
@@ -33,7 +33,7 @@ Codex 看不到這段對話的任何內容。每個提示詞都必須指明儲�
 
 - **實作：**`codex exec -m gpt-6-sol -c 'model_reasoning_effort="medium"'`；
   將並行寫入隔離於個別工作樹中。
-- **審查：**優先使用與作者不同的模型系列。由 Sol 撰寫的工作可以使用 Claude 的高品質替代方案；備援方案是加以標示、使用乾淨脈絡的 Sol 審查。使用 `-s read-only` 模式與 P0-P3 證據。
+- **審查：**`high` 的 Astra（Codex 剩餘用量至少 50% 時使用 `xhigh`）。使用 `-s read-only` 模式與 P0-P3 證據。
 - **對抗式交流（在 Claude 託管的工作流程中自動進行）：**獲得授權時使用不同的模型系列；將結果視為其中一條評估路徑，而非最終裁決。
 - **電腦操作：**指明 URL／應用程式、狀態與證據。
 - **調查／分析：**使用 `-s read-only` 並產出精簡報告。
