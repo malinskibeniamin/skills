@@ -5,18 +5,21 @@ description: Apply eval-backed model routing and budget explicitly authorized ag
 
 `config/model-routing.json` is source of truth; never copy subjective scores into prompts.
 
-1. Choose the best qualified primary owner/runtime.
-2. Default GPT-6 Astra `high` for UI, code, plans, review, computer use.
-3. Use `max` only when context-ablation evidence or user selection supports it.
-4. Use Astra for every GPT route; if unavailable, report the blocker rather than substitute another GPT model.
-5. Fable/Opus may own when qualified; the user explicitly authorizes a different-family pass.
-6. `ultra` is multi-agent and needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache are API-only unless exposed.
+1. Choose the best qualified owner/runtime.
+2. Owner: Opus 5.5 `high` (UI, code, plans).
+3. Lane 2: Sol `medium` via `/codex` (clear-spec execution, computer use, investigation); unavailable -> named Astra `high`, never a cheaper GPT.
+4. Astra `high` reviews PRs, Opus 5.5 `high` if needed; `xhigh` if >=50% Codex usage left.
+5. UI, copy, API design: taste >= 8 and a Claude owner, else a named Astra fallback.
+6. Chores: Luna `high` (tiny edits, clean rebases, mechanical CI fixes, read-only listing); conflicts, diagnosis, judgment -> Sol.
+7. Fable 5.1 (`high` max): explicit ask, extraordinary work only. `xhigh`: context-ablation evidence or user pick; never `max`.
+8. The user explicitly authorizes a different-family pass.
+9. `ultra` needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache: API-only unless exposed.
 
 One owner implements. Without delegation, run useful lanes inline. Authorized lanes each get one bounded objective, inputs, exclusions, evidence, stop. Coordinator retains architecture, priority, risk, synthesis, acceptance.
 
 ## Capacity
 
-Use explicit `/stay-within-limits` host meter for Claude capacity; otherwise say unknown. Never infer capacity from tokens/cost. Capacity removes routes, never lowers quality.
+Use the `/stay-within-limits` host meter for capacity; otherwise say unknown. Never infer capacity from tokens/cost. Capacity removes routes, never lowers quality.
 
 ## Promotion
 

@@ -167,14 +167,14 @@ if [ -x "$HOOKS_DIR/model-switch-router.sh" ]; then
 
   _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"picker"}
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","requested_model":"opus","source":"picker"}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
       .hookSpecificOutput.hookEventName == "PostModelSwitch"
       and (.hookSpecificOutput.additionalContext | contains("/efficient-frontier"))
-      and (.hookSpecificOutput.additionalContext | contains("claude-opus-5"))
-      and (.hookSpecificOutput.additionalContext | contains("quality-alternative"))
+      and (.hookSpecificOutput.additionalContext | contains("claude-opus-5-5"))
+      and (.hookSpecificOutput.additionalContext | contains("primary"))
       and (.hookSpecificOutput.additionalContext | contains("review"))
       and (.hookSpecificOutput.additionalContext | contains("supersedes earlier model-switch notices"))' \
     >/dev/null 2>&1; then

@@ -71,7 +71,7 @@ run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "never starts a recursive 
   "code-reviewer leaves dispatch to the coordinator"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "karpathy-failure-modes" \
   "code-reviewer references karpathy"
-run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "clean-context Sol" \
+run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "clean-context Opus 5.5" \
   "code-reviewer documents the unavailable-family fallback"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "karpathy-failure-modes" \
   "self-reviewer references karpathy"

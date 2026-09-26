@@ -1,7 +1,7 @@
 ---
 title: /codex
 description: >-
-  Deleguj zadania do GPT-6 Astra za pomocą Codex CLI. Używaj do implementacji na
+  Deleguj zadania do GPT-6 Sol za pomocą Codex CLI. Używaj do implementacji na
   podstawie jasnej specyfikacji, niezależnych przeglądów, obsługi komputera,
   analizy problemów i danych oraz mechanicznych prac wymagających dużej liczby
   tokenów.
@@ -17,13 +17,15 @@ sidebar:
 wyraźnie poprosi o delegowanie lub równoległych agentów. Nie uruchamiaj rekurencyjnie `codex exec`;
 zachowaj wybrany model i poziom wnioskowania; nie zmieniaj konfiguracji Codex.
 
-Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-astra "reply OK"`. Jeśli model jest niedostępny, zgłoś blokadę tej ścieżki; nie zastępuj go innym modelem GPT.
+Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-sol "reply OK"`. Jeśli model jest niedostępny, przejdź na Astra `high` i wskaż to w wyniku; jeśli oba zawiodą, zgłoś blokadę tej ścieżki. Nigdy nie zastępuj go tańszym modelem GPT.
 
 ## Warianty routingu
 
 | Wariant | Poziom | Zastosowanie |
 |---|---|---|
-| Astra | `high`; `max`, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod, interfejs użytkownika, przegląd, planowanie, obsługa komputera |
+| Sol | `medium`; `high` i wyżej, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod na podstawie jasnej specyfikacji, obsługa komputera, analiza problemów |
+| Astra | `high` (zapas dla Sol); nigdy `max` | najpierw przegląd PR; kod, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
+| Luna (`gpt-6-luna`) | `high` | drobne prace: małe zmiany, czyste rebase, mechaniczne poprawki CI, odczyt lub wylistowanie danych; przy decyzjach przekaż do Sol |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny
 ani nazwy. Informacje o mechanizmach CLI i warunkach użycia między dostawcami znajdziesz w dokumencie [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md).
@@ -39,10 +41,9 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 
 ## Tryby
 
-- **Implementacja:** `codex exec -m gpt-6-astra -c 'model_reasoning_effort="high"'`;
+- **Implementacja:** `codex exec -m gpt-6-sol -c 'model_reasoning_effort="medium"'`;
   izoluj równoległe zapisy w osobnych drzewach roboczych.
-- **Przegląd:** preferuj inną rodzinę modeli niż ta użyta przez autora. Prace utworzone przez Astra mogą
-  zostać sprawdzone przez wysokiej jakości alternatywę Claude; rozwiązaniem zapasowym jest oznaczony przebieg Astra z czystym kontekstem. Używaj
+- **Przegląd:** Astra `high` (`xhigh` przy co najmniej 50% pozostałego limitu Codex). Używaj
   trybu `-s read-only` i dowodów P0–P3.
 - **Wymiana kontradyktoryjna (automatyczna w przepływach pracy hostowanych przez Claude):** jeśli jest to dozwolone, użyj innej rodziny
   modeli; traktuj wynik jako jedną ze ścieżek, a nie ostateczny werdykt.
@@ -58,5 +59,5 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 5. Przed integracją zweryfikuj wskazane pliki, polecenia i wnioski wysokiego ryzyka.
 
 Decyzje architektoniczne wymagające znacznego osądu, synteza, kwestie produktowe i bezpieczeństwa oraz końcowy przegląd pozostają po stronie
-koordynatora klasy frontier. Astra może odpowiadać za treści przeznaczone dla użytkowników i musi spełniać te same
+koordynatora klasy frontier. Modele Codex nie odpowiadają za interfejs użytkownika, teksty ani projekt API, gdy dostępny jest właściciel Claude; zapasowy przebieg Astra musi spełniać te same
 wymagania dotyczące dowodów wizualnych.

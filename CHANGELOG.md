@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+2026-09-24 -- Route the owner-selected drivers: Claude Opus 5.5 `high` is the primary
+owner and GPT-6 Sol `medium` is the second, Codex-delegated lane; Astra `high` is the named
+Sol fallback. User-facing work needs taste >= 8 and stays with Claude, with Astra only as a
+named fallback. Fable 5.1 is reserved for explicit extraordinary work, and GPT-6 Luna `high`
+takes chores such as tiny edits, clean rebases, mechanical CI fixes, and read-only listing.
+PR review routes to GPT-6 Astra `high`, with Opus 5.5 `high` as a second pass when needed
+and Astra `xhigh` only when at least 50% Codex usage is known to remain. Routing never selects `max`
+effort; only the benchmark suites sweep it. Routing records
+owner-scored cost, intelligence, speed, taste, review, and plan allowance, backed by Artificial Analysis
+measurements and a four-judge PR audit panel. Opus 5 leaves routing. The context-ablation matrix sweeps every
+effort for Opus 5.5 and Sol.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add
