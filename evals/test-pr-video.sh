@@ -37,6 +37,11 @@ else
     'compose keeps the longer recording instead of truncating it'
   pr_video_check '! "$PR_VIDEO" compose "$work/missing.webm" "$work/after.webm" "$work/bad" >/dev/null 2>&1' \
     'compose rejects a missing recording'
+  ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=white:size=320x200:rate=10:duration=5 \
+    -c:v libvpx "$work/static.webm"
+  static_err=$("$PR_VIDEO" compose "$work/static.webm" "$work/after.webm" "$work/static-out" 2>&1 >/dev/null || true)
+  pr_video_check '[ ! -e "$work/static-out/before-after.gif" ] && printf "%s" "$static_err" | grep -qi "static"' \
+    'compose rejects a recording where nothing moves'
 
   # Publish to an evidence branch without touching the active tree or index.
   git init -q --bare "$work/remote.git"
@@ -62,6 +67,38 @@ else
   second=$(git -C "$work/remote.git" rev-parse --verify -q refs/heads/pr-evidence || true)
   pr_video_check '[ "$(git -C "$work/remote.git" rev-parse "$second^")" = "$evidence" ] && git -C "$work/remote.git" cat-file -e "$second:feature/before-after.gif"' \
     'publish appends to existing evidence instead of replacing it'
+
+  if command -v agent-browser >/dev/null 2>&1; then
+    cat > "$work/app.html" <<'HTML'
+<html><body style="font:20px sans-serif;padding:40px">
+<input id="name" placeholder="Name"><button id="save" onclick="document.getElementById('msg').textContent='Saved ' + document.getElementById('name').value">Save</button>
+<p id="msg"></p></body></html>
+HTML
+    cat > "$work/flow.txt" <<'FLOW'
+# Real interaction, replayed identically on base and candidate.
+fill "#name" "Ada Lovelace"
+click "#save"
+wait --text "Saved Ada"
+FLOW
+    pr_video_check 'PR_VIDEO_STEP_MS=300 "$PR_VIDEO" record "file://$work/app.html" "$work/flow.txt" "$work/flow.webm" >/dev/null 2>&1 && [ -s "$work/flow.webm" ]' \
+      'record replays a flow file into a video'
+    pr_video_check '"$PR_VIDEO" compose "$work/flow.webm" "$work/flow.webm" "$work/flow-out" >/dev/null 2>&1' \
+      'a recorded flow passes the motion gate'
+    printf 'hover "#save"\nwait 2000\n' > "$work/hover.txt"
+    pr_video_check '! "$PR_VIDEO" record "file://$work/app.html" "$work/hover.txt" "$work/hover.webm" >/dev/null 2>&1 && [ ! -e "$work/hover.webm" ]' \
+      'record rejects a hover-only flow before recording'
+    printf 'click "#name"\nclick "#does-not-exist"\n' > "$work/broken.txt"
+    pr_video_check '! PR_VIDEO_STEP_TIMEOUT_MS=2000 "$PR_VIDEO" record "file://$work/app.html" "$work/broken.txt" "$work/broken.webm" >/dev/null 2>&1' \
+      'record fails when a flow step fails'
+    attach_status=0
+    PR_VIDEO_PR_URL="file://$work/app.html" PR_VIDEO_PROFILE="$work/profile" \
+      "$PR_VIDEO" attach "$work/flow-out/before-after.mp4" >/dev/null 2>"$work/attach.err" || attach_status=$?
+    pr_video_check '[ "$attach_status" = 3 ] && grep -q "github.com/login" "$work/attach.err"' \
+      'attach stops with a one-time login instruction when the profile is signed out'
+  else
+    echo "  SKIP  pr-video record and attach need agent-browser"
+    SKIP=$((SKIP + 1))
+  fi
   rm -rf "$work"
 fi
 
@@ -75,3 +112,7 @@ run_content_eval "$REPO_ROOT/pr/SKILL.md" 'video' \
   'pr body guidance ranks video evidence'
 run_content_eval "$REPO_ROOT/.claude/hooks/pr-evidence-nudge.sh" 'video' \
   'PR entrypoint reminder mentions the video'
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'user-attachments' \
+  'PR reference embeds the MP4 as a native GitHub attachment player'
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'flow file' \
+  'PR reference requires a scripted interaction flow, not a static take'
