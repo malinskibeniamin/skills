@@ -12,7 +12,7 @@ Read `references/builder-upstream.md` for full triggers. This is a quick officia
 3. For external/fast-moving behavior, search current official docs and open the relevant API reference, migration guide, changelog, release notes, SDK source, or types.
 4. Extract only needed imports, options, lifecycle/defaults, breaking changes, limits, permissions, examples.
 5. Apply facts to repo patterns; never cargo-cult examples.
-6. Cite sources when facts affect notes or answer.
+6. Cite sources when facts affect notes or answer. Mark anything you could not confirm and say where you looked.
 
 ## Strong triggers
 

@@ -5,7 +5,6 @@
 set -euo pipefail
 
 HOOKS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.claude/hooks" && pwd)"
-SHARED_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../shared" && pwd)"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PASS=0
 FAIL=0
@@ -124,20 +123,6 @@ _run_hook_with_env() {
   local exit_code=0
   local stdout_file="/tmp/hook-test-stdout-$$-$RANDOM"
   echo "$input" | env "$@" bash "$HOOKS_DIR/$hook" >"$stdout_file" 2>"$stderr_file" || exit_code=$?
-  _last_stderr=$(cat "$stderr_file")
-  _last_stdout=$(cat "$stdout_file")
-  _last_exit=$exit_code
-  rm -f "$stderr_file" "$stdout_file"
-}
-
-# Run hook from shared/ directory
-_run_shared_hook() {
-  local hook="$1"
-  local input="$2"
-  local stderr_file="/tmp/hook-test-stderr-$$-$RANDOM"
-  local exit_code=0
-  local stdout_file="/tmp/hook-test-stdout-$$-$RANDOM"
-  echo "$input" | bash "$SHARED_DIR/$hook" >"$stdout_file" 2>"$stderr_file" || exit_code=$?
   _last_stderr=$(cat "$stderr_file")
   _last_stdout=$(cat "$stdout_file")
   _last_exit=$exit_code

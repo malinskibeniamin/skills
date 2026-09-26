@@ -23,7 +23,7 @@ Nie zgaduj, jeśli odpowiedź można znaleźć w wiarygodnej dokumentacji. To sz
 3. W przypadku zewnętrznych lub szybko zmieniających się rozwiązań przeszukaj aktualną oficjalną dokumentację i otwórz odpowiednią dokumentację API, przewodnik migracji, dziennik zmian, informacje o wydaniu, kod źródłowy SDK lub definicje typów.
 4. Wyodrębnij tylko potrzebne informacje: nazwy opcji, importy, reguły cyklu życia, wartości domyślne, zmiany niezgodne wstecznie, limity, uprawnienia i przykłady.
 5. Zastosuj dokumentację do kodu. Nie kopiuj bezrefleksyjnie przykładów sprzecznych ze wzorcami repozytorium.
-6. Cytuj źródła w notatkach badawczych lub odpowiedzi końcowej, gdy istotne są informacje z dokumentacji.
+6. Cytuj źródła w notatkach badawczych lub odpowiedzi końcowej, gdy istotne są informacje z dokumentacji. Oznacz wszystko, czego nie udało się potwierdzić, i wskaż, gdzie szukano.
 
 ## Wyraźne warunki uruchomienia
 
