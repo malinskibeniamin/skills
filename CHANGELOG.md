@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+2026-09-26 -- Frontend PRs lead with a before/after video of the real UI flow plus the
+screenshot table, directly under Summary. `scripts/pr-video.sh record` replays one flow
+file (two or more interaction steps) on base and candidate with a visible cursor;
+`compose` lays the takes side by side and rejects static takes; `attach` uploads the MP4 as a
+GitHub `user-attachments` asset from an isolated signed-in agent-browser profile so it
+plays inline; `publish` hosts screenshots and fallback GIFs on a `pr-evidence` branch.
+`/commit-push-pr`, `/pr`, and the PR-entrypoint reminder require it.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add
