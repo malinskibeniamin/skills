@@ -68,9 +68,10 @@ Action work uses one outcome contract:
 - **Stop** -- the requested endpoint and conditions that genuinely block progress.
 
 Then inspect -> act -> verify -> repeat. Let evidence choose plans, tools, and guidance. Continue
-through reversible decisions; add no approval gates, fixed durations, or skill ceremonies.
-Meaningful behavior starts with a failing public-contract test. Long or high-unknown work may
-record evidence, deviations, and pause triggers in `.context/implementation-notes.md`.
+through reversible decisions; put status notes beside the next action, not in a stop that recaps
+it, offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or
+skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps
+its task checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
 wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,

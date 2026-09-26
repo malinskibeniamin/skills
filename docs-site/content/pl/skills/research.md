@@ -17,7 +17,7 @@ Domyślnie prowadź badania bezpośrednio w bieżącym kontekście. Agent dział
 Jego zadania:
 
 1. Zbadaj zagadnienie na podstawie **źródeł pierwotnych** — oficjalnej dokumentacji, kodu źródłowego, specyfikacji i własnych API dostawców — a nie ich wtórnych opracowań. Prześledź każde twierdzenie do źródła, które jest za nie odpowiedzialne.
-2. Zapisz ustalenia w jednym pliku Markdown, podając źródło każdego twierdzenia.
+2. Zapisz ustalenia w jednym pliku Markdown, podając źródło każdego twierdzenia. Oznacz wszystko, czego nie udało się potwierdzić, i wskaż, gdzie szukano.
 3. Zapisz plik tam, gdzie repozytorium przechowuje już takie notatki. Zachowaj istniejącą konwencję, a jeśli jej nie ma, wybierz rozsądne miejsce i wskaż je. W tym repozytorium umiejętności przeglądy eksploracyjne pozostają w katalogu roboczym lub pamięci — do `docs/` trafiają wyłącznie ustalenia gotowe do wykorzystania przy podejmowaniu decyzji.
 
 ## Wybór ścieżki

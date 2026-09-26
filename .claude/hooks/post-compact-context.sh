@@ -30,7 +30,7 @@ if [ -f "$session_dir/last-stop" ]; then
 fi
 
 if [ -f ".context/implementation-notes.md" ]; then
-  context="$context\nWorking notes: .context/implementation-notes.md"
+  context="$context\nWorking notes: .context/implementation-notes.md -- reread its checklist before continuing"
 fi
 
 escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
