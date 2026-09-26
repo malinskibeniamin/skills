@@ -69,7 +69,8 @@
         "intelligence": 10,
         "speed": 7,
         "taste": 9,
-        "review": 9
+        "review": 9,
+        "allowance": 9
       }
     },
     "gpt-6-sol": {
@@ -83,7 +84,8 @@
         "intelligence": 7,
         "speed": 8,
         "taste": 7,
-        "review": 6
+        "review": 6,
+        "allowance": 7
       }
     },
     "gpt-6-astra": {
@@ -96,7 +98,8 @@
         "intelligence": 8,
         "speed": 4,
         "taste": 8,
-        "review": 10
+        "review": 10,
+        "allowance": 4
       }
     },
     "claude-fable-5-1": {
@@ -109,7 +112,8 @@
         "intelligence": 8,
         "speed": 4,
         "taste": 8,
-        "review": 9
+        "review": 9,
+        "allowance": 3
       }
     },
     "gpt-6-luna": {
@@ -121,7 +125,8 @@
         "intelligence": 3,
         "speed": 10,
         "taste": 3,
-        "review": null
+        "review": null,
+        "allowance": 10
       }
     }
   },
@@ -148,7 +153,9 @@
     "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra",
     "https://developers.openai.com/api/docs/guides/latest-model",
     "https://platform.claude.com/docs/en/models/fable-5-1/overview",
-    "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1"
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1",
+    "https://learn.chatgpt.com/docs/pricing",
+    "https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan"
   ],
   "scoring": {
     "scale": "1-10, higher is better.",
@@ -158,6 +165,7 @@
     "taste": "Owner judgment for UI/UX, code quality, API design, and copy.",
     "measured": "2026-09-25",
     "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties.",
-    "review": "Orchestrator V2 audit panel (T3 Code PR #2829, 2026-09-24) weighted mean relative to the leader (Astra 8.22 = 10); Luna was not measured and does not review."
+    "review": "Orchestrator V2 audit panel (T3 Code PR #2829, 2026-09-24) weighted mean relative to the leader (Astra 8.22 = 10); Luna was not measured and does not review.",
+    "allowance": "How long the $200 plan lasts before a limit hits (Claude Max 20x, ChatGPT Pro 20x). Codex: published per-5-hour Pro 20x ranges (Astra 100-900, Sol 300-3,000, Luna 7,000-56,000), log scale. Claude publishes no counts: Opus 5.5 is the owner's observed most generous; Fable 5.1 draws limits faster (list price 2.5x Opus 5.5) and is capped at 50% of the weekly limit."
   }
 }

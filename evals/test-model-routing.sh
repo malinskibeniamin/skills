@@ -22,7 +22,10 @@ if jq -e '.policy == "quality-first"
   and .quality_first.ui_policy.non_claude_fallback == "gpt-6-astra"
   and ([.quality_first.ui_owners[] as $m | .models[$m].scores.taste >= 8] | all)
   and ([.models | to_entries[] | select(.value.scores.taste < 8) | .key] | sort == ["gpt-6-luna", "gpt-6-sol"])
-  and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste")] | all)
+  and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste") and has("allowance")] | all)
+  and ([.models | to_entries[] | select(.key | startswith("claude-")) | .value.scores.allowance] | max) == .models["claude-opus-5-5"].scores.allowance
+  and .models["claude-fable-5-1"].scores.allowance < .models["claude-opus-5-5"].scores.allowance
+  and (.scoring.allowance | test("\\$200"))
   and ([.models | to_entries[] | select(.key != "gpt-6-luna") | .value.scores.review] | all(type == "number"))
   and ([.models | to_entries[] | select(.value.scores.review != null)] | max_by(.value.scores.review) | .key) == "gpt-6-astra"
   and .quality_first.review.primary == {"model": "gpt-6-astra", "effort": "high"}

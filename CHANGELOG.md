@@ -10,7 +10,7 @@ takes chores such as tiny edits, clean rebases, mechanical CI fixes, and read-on
 PR review routes to GPT-6 Astra `high`, with Opus 5.5 `high` as a second pass when needed
 and Astra `xhigh` only when at least 50% Codex usage is known to remain. Routing never selects `max`
 effort; only the benchmark suites sweep it. Routing records
-owner-scored cost, intelligence, speed, taste, and review, backed by Artificial Analysis
+owner-scored cost, intelligence, speed, taste, review, and plan allowance, backed by Artificial Analysis
 measurements and a four-judge PR audit panel. Opus 5 leaves routing. The context-ablation matrix sweeps every
 effort for Opus 5.5 and Sol.
 
