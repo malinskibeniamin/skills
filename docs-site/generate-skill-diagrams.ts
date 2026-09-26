@@ -385,6 +385,10 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Fast review",
     ],
   },
+  mm: {
+    kind: "evidence-funnel",
+    nodes: ["PR claim", "Lane + payoff", "Value rules V1-V16", "Ship verdict"],
+  },
   "plan-arbiter": {
     kind: "decision-tree",
     nodes: [

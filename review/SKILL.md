@@ -15,6 +15,7 @@ Posting comments requires explicit intent.
   generated files are evidence.
 - **Verification**: trace source. Dogfood every runnable change yourself at its real entrypoint;
   tests do not replace experience.
+- **Value**: every PR gets the `/mm` hat (lane, payoff, verdict).
 - **Stop**: account for every surface; findings need evidence, impact, priority, fix, and verification.
 
 Ask only if the fixed point is missing. Otherwise set

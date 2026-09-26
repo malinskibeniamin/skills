@@ -60,6 +60,7 @@
     "./implement-spec/",
     "./maintain-verification-skill/",
     "./make-pr-easy-to-review/",
+    "./mm/",
     "./plan-arbiter/",
     "./plow-ahead/",
     "./postgresql/",

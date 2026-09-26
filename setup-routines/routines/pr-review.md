@@ -10,8 +10,9 @@ Repo has hooks enforcing style, patterns, conventions at edit time. DO NOT comme
 - **Design issues**: wrong abstraction, coupling, API contract violations
 - **Security**: injection, auth bypass, secret exposure, unsafe deserialization
 - **Missing behavior**: untested paths, unhandled errors, incomplete state machines
+- **Value**: `/mm` lane, payoff, and verdict; flags unproven or unjustified work
 
-PR clean on all four fronts -> approve silently. No "looks good" comment. No summary of what checked. Silence = approval.
+PR clean on all five fronts -> approve silently. No "looks good" comment. No summary of what checked. Silence = approval.
 
 ## Steps
 
@@ -57,6 +58,11 @@ For each changed file, read full file (not just diff) to understand context. The
 **Testing gaps:**
 - New logic covered by tests?
 - Edge cases in tests, not just happy path?
+
+### 4b. Value hat
+
+Apply `/mm` to the PR body, linked tickets, and diff. Include its `mm:` line in the review
+body and its P1/P2 findings inline. A clean value check adds nothing.
 
 ### 5. Post findings (only if issues found)
 

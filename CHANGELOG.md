@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/mm`, a value hat that asks whether a change earns its
+cost: one lane per PR (keep the lights on, quality of life, new capability, design taste),
+payoff, revenue likelihood, confidence, and a fixed verdict. `RULES.md` carries 16 graded
+value rules (V1-V16) mined from about 1,600 pull requests, 150 tickets, and the RFCs behind
+them, weighted toward 2026 agentic platform work. `/review` and the PR-review routine now run
+it on every PR. Skills 91 -> 92.
+
 ## 4.39.0
 
 2026-09-25 -- Publish the post-4.38 Claude Code and Codex bundle. Add
