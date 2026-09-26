@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "641b07c182696206",
-      "zh-CN": "641b07c182696206",
-      "zh-TW": "641b07c182696206"
+      "pl": "f42377bd7c2de8f3",
+      "zh-CN": "f42377bd7c2de8f3",
+      "zh-TW": "f42377bd7c2de8f3"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "b16c94d01aea7cab",
-      "zh-CN": "b16c94d01aea7cab",
-      "zh-TW": "b16c94d01aea7cab"
+      "pl": "72865db63c8dc4e4",
+      "zh-CN": "72865db63c8dc4e4",
+      "zh-TW": "72865db63c8dc4e4"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -271,9 +271,9 @@
       "zh-TW": "32436a2cda6ca615"
     },
     "content/skills/review.md": {
-      "pl": "b4ae682275c8850a",
-      "zh-CN": "b4ae682275c8850a",
-      "zh-TW": "b4ae682275c8850a"
+      "pl": "c3a1e4cfe8720406",
+      "zh-CN": "c3a1e4cfe8720406",
+      "zh-TW": "c3a1e4cfe8720406"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "ad4f6ed8858e420c",
@@ -294,6 +294,11 @@
       "pl": "3e5f307173c2000e",
       "zh-CN": "3e5f307173c2000e",
       "zh-TW": "3e5f307173c2000e"
+    },
+    "content/skills/ss.md": {
+      "pl": "f3ac0e401bb23b15",
+      "zh-CN": "f3ac0e401bb23b15",
+      "zh-TW": "f3ac0e401bb23b15"
     },
     "content/skills/stack-registry.md": {
       "pl": "d582b8292b00a0de",

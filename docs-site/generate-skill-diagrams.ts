@@ -577,6 +577,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Upgrade + release gate",
     ],
   },
+  ss: {
+    kind: "decision-tree",
+    nodes: [
+      "Which bucket?",
+      "Beneficiary + trigger",
+      "Evidence + reachability",
+      "Justified / needs justification / unlikely",
+    ],
+  },
   "stack-registry": {
     kind: "hierarchy",
     nodes: [

@@ -60,6 +60,7 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 <optional: the smallest `/pr` summary view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
 
 ## Impact
+- Value: <one /ss bucket: keep the lights on | quality of life | feature | design bet> for <beneficiary>; trigger: <why now>
 - <automatic /quantify-impact value assessment; replace with Proven impact below when measured>
 
 ## Proven impact

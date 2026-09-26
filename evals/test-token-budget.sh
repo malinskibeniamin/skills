@@ -59,7 +59,9 @@ fi
 
 # Keep the largest model-facing skills on explicit budgets. The aggregate cap
 # preserves the measured wave reduction while allowing small wording trades
-# between related instructions.
+# between related instructions. review 4300 -> 4400 (2026-09-25) for the
+# always-on /ss value line; ask-ben 7400 -> 7450 for its generated catalog row.
+# The aggregate cap is unchanged.
 lean_skill_total=0
 while read -r skill cap; do
   bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
@@ -73,9 +75,9 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7400
+ask-ben 7450
 wayfinder 5000
-review 4300
+review 4400
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -119,6 +121,7 @@ golang 3525
 pr-shepherd 3525
 stacked-prs 3500
 snyk-ux-security 3500
+ss 4000
 tdd 3425
 visual-review 3400
 frontend-invariants 3350
@@ -187,13 +190,13 @@ wait-what 400
 work 325
 EOF
 
-if [ "$remaining_skill_total" -le 171010 ]; then
-  echo "  PASS  remaining-skill wave under 171010 bytes ($remaining_skill_total)"
+if [ "$remaining_skill_total" -le 175010 ]; then
+  echo "  PASS  remaining-skill wave under 175010 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 171010)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 175010)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 171010 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 175010 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible
