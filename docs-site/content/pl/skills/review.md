@@ -66,9 +66,8 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
 Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** ([jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)), **perspektywę mm**
-([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)) oraz **perspektywę ms**
-([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) bezpośrednio w ramach przeglądu.
-Każdy przegląd diffu stosuje też **perspektywę lie-detector**: [lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md).
+([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)), **perspektywę ms**
+([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) oraz **perspektywę lie-detector** ([lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)) bezpośrednio w ramach przeglądu.
 
 ### Sklasyfikuj [#classify]
 

@@ -64,9 +64,8 @@ sidebar:
 | 依赖/外部 API | 第一手文档、版本、锁文件、安全通告 |
 
 每次 PR 或分支审查也都在当前流程中应用 **jb 视角**（[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)）、**mm 视角**
-（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 视角**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)），以及 **ms 视角**
-（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)）。
-每个差异审查也会应用 **lie-detector 视角**：[lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)。
+（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 视角**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)）、**ms 视角**
+（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)），以及 **lie-detector 视角**（[lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)）。
 
 ### 分类 [#classify]
 
