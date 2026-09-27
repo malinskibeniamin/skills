@@ -136,6 +136,27 @@ _display_path() {
   fi
 }
 
+# Throwaway files never ship, so findings there are noise: perf probes in
+# node_modules, agent scratch in .context, /tmp outside the worktree, and
+# zz-dogfood-* specs. /tmp is compared physically (macOS /tmp -> /private/tmp).
+_is_scratch_path() {
+  local target="$1" rel root dir
+  rel=$(_display_path "$target")
+  case "$rel" in
+    node_modules/*|*/node_modules/*|.context/*|*/.context/*) return 0 ;;
+    zz-dogfood-*|*/zz-dogfood-*) return 0 ;;
+  esac
+  case "$target" in
+    /tmp/*|/private/tmp/*)
+      root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+      dir=$(cd "$(dirname "$target")" 2>/dev/null && pwd -P) || return 0
+      [ -n "$root" ] && case "$dir/" in "$root"/*) return 1 ;; esac
+      return 0
+      ;;
+  esac
+  return 1
+}
+
 _add_collected_line() {
   local display="$1" line="$2" severity rest rule message item key sink
   [ -z "$line" ] && return 0
@@ -168,6 +189,7 @@ while IFS= read -r call; do
   # (vendor-file-check) must still see them.
   _pb_deleted=$(printf '%s' "$tool_input" | jq -r '.deleted // false' 2>/dev/null || echo false)
   [ -f "$file_path" ] || [ "$_pb_deleted" = "true" ] || continue
+  _is_scratch_path "$file_path" && continue
 
   _hook_input=$(jq -nc --arg tool_name "$tool_name" --argjson tool_input "$tool_input" '{tool_name:$tool_name,tool_input:$tool_input}')
   _hook_tool_name="$tool_name"

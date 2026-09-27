@@ -95,13 +95,15 @@ run_json_eval '([.hooks.PostToolUse[]?.hooks[]?.command | select(test("codex-edi
   and ([.hooks.Stop[]?.hooks[]?.command | select(test("stop-dispatch"))] | length) == 1' \
   ".codex/hooks.json" "generated Codex hooks stay consolidated"
 
-_edit_tmp=$(mktemp /tmp/frontier-edit-XXXXXX)
-_edit_file="${_edit_tmp}.tsx"
+# A git repo run from inside: the dispatcher skips bare /tmp files as scratch.
+_edit_tmp=$(mktemp -d /tmp/frontier-edit-XXXXXX)
+git init -q "$_edit_tmp"
+_edit_file="$_edit_tmp/x.tsx"
 printf '%s\n' 'const X = () => <div className="bg-red-500">x</div>;' >"$_edit_file"
 _edit_output=$(jq -nc --arg f "$_edit_file" \
   --arg content 'const X = () => <div className="bg-red-500">x</div>;' \
   '{tool_name:"Write",tool_input:{file_path:$f,content:$content}}' \
-  | ".claude/hooks/codex-edit-dispatch.sh")
+  | (cd "$_edit_tmp" && "$REPO_ROOT/.claude/hooks/codex-edit-dispatch.sh"))
 if jq -e '.hookSpecificOutput.hookEventName == "PostToolUse"
   and (.hookSpecificOutput.additionalContext | contains("semantic tokens"))' \
   <<<"$_edit_output" >/dev/null; then
@@ -112,7 +114,7 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: Codex edit adapter protocol"
 fi
-rm -f "$_edit_tmp" "$_edit_file"
+rm -rf "$_edit_tmp"
 
 _stop_root=$(mktemp -d)
 mkdir -p "$_stop_root/.claude/hooks"
