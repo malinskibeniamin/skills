@@ -12,23 +12,22 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/read-the-damn-docs.excalidraw)
 
-Przeczytaj `references/builder-upstream.md`, aby poznać pełną listę warunków uruchomienia podejścia opartego najpierw na dokumentacji.
 
-Nie zgaduj, jeśli odpowiedź można znaleźć w wiarygodnej dokumentacji. To szybka ścieżka weryfikacji oficjalnych informacji, zazwyczaj bez tworzenia materiału badawczego. Gdy użytkownik potrzebuje trwałego raportu z cytowaniami lub syntezy wielu źródeł, przekaż zadanie wbudowanej umiejętności deep-research, a następnie zapisz ustalenia w pliku Markdown w miejscu, w którym repozytorium przechowuje już takie notatki (lub w sensownej lokalizacji, wskazując ją).
+Przeczytaj `references/builder-upstream.md`, aby poznać pełną listę warunków uruchomienia. To szybka ścieżka weryfikacji oficjalnych informacji bez tworzenia materiału badawczego. Do trwałych raportów opartych na wielu źródłach używaj wbudowanej umiejętności deep-research i zapisuj Markdown z cytowaniami w miejscu, w którym repozytorium przechowuje takie notatki.
 
-## Wymagany proces
+## Proces [#workflow]
 
-1. Określ dokładny obszar: pakiet, wersję, punkt końcowy, CLI, konfigurację, lokalną funkcję pomocniczą, schemat lub działanie produktu.
-2. Najpierw przeczytaj lokalną dokumentację repozytorium, specyfikacje, ADR-y i wygenerowane typy, jeśli definiują kontrakt.
-3. W przypadku zewnętrznych lub szybko zmieniających się rozwiązań przeszukaj aktualną oficjalną dokumentację i otwórz odpowiednią dokumentację API, przewodnik migracji, dziennik zmian, informacje o wydaniu, kod źródłowy SDK lub definicje typów.
-4. Wyodrębnij tylko potrzebne informacje: nazwy opcji, importy, reguły cyklu życia, wartości domyślne, zmiany niezgodne wstecznie, limity, uprawnienia i przykłady.
-5. Zastosuj dokumentację do kodu. Nie kopiuj bezrefleksyjnie przykładów sprzecznych ze wzorcami repozytorium.
-6. Cytuj źródła w notatkach badawczych lub odpowiedzi końcowej, gdy istotne są informacje z dokumentacji. Oznacz wszystko, czego nie udało się potwierdzić, i wskaż, gdzie szukano.
+1. Określ dokładny pakiet, wersję, punkt końcowy, CLI, konfigurację, funkcję pomocniczą, schemat lub obszar produktu.
+2. Najpierw przeczytaj lokalną dokumentację, specyfikacje, ADR-y i wygenerowane typy, jeśli definiują kontrakt.
+3. W przypadku zewnętrznych lub szybko zmieniających się rozwiązań przeszukaj aktualną oficjalną dokumentację; otwórz dokumentację API, przewodnik migracji, informacje o wydaniu, dziennik zmian, kod źródłowy SDK lub definicje typów.
+4. Wyodrębnij importy, opcje, wartości domyślne, zmiany niezgodne wstecznie, limity, uprawnienia i przykłady.
+5. Zastosuj ustalenia zgodnie ze wzorcami repozytorium; nigdy nie kopiuj bezrefleksyjnie przykładów.
+6. Cytuj źródła informacji wpływających na notatki lub odpowiedzi. Oznacz wszystko, czego nie udało się potwierdzić, i wskaż, gdzie szukano.
 
-## Wyraźne warunki uruchomienia
+## Wyraźne warunki uruchomienia [#strong-triggers]
 
-- Użytkownik mówi: najnowsze, aktualne, oficjalne, obsługiwane, najlepsza praktyka, dzisiaj, teraz lub sprawdź to.
-- Dodawanie, aktualizowanie, konfigurowanie lub importowanie pakietów, SDK, modeli, dostawców, wtyczek lub narzędzi CLI.
-- Błędy wskazują na wycofane funkcje, nieznane opcje, brakujące eksporty, nieprawidłową konfigurację, nieobsługiwane pola lub niezgodność wersji.
-- Decyzje są kosztowne do odwrócenia: publiczne formaty komunikacji, schemat bazy danych, trwałe identyfikatory, nazwy zdarzeń, działanie widoczne dla klientów, zewnętrzna automatyzacja.
-- Zadanie dotyczy uwierzytelniania, zakresów OAuth, sekretów, webhooków, danych osobowych, szyfrowania, przechowywania danych, migracji, ponownych prób, limitów częstotliwości, przydziałów, rozliczeń lub działania wdrożeń.
+- Najnowsze, aktualne, oficjalne, obsługiwane, najlepsza praktyka, dzisiaj, sprawdź to.
+- Instalowanie, aktualizowanie, konfigurowanie lub importowanie pakietów, SDK, modeli, dostawców, wtyczek lub narzędzi CLI.
+- Wycofane funkcje, nieznana opcja, brakujący eksport, nieprawidłowa konfiguracja, nieobsługiwane pole, niezgodność wersji.
+- Trudne do zmiany formaty komunikacji, schematy, trwałe identyfikatory, zdarzenia, działanie widoczne dla klientów, automatyzacja.
+- Uwierzytelnianie/OAuth, sekrety, webhooki, dane osobowe, szyfrowanie, przechowywanie danych, migracje, ponowne próby, limity częstotliwości i przydziały, rozliczenia, wdrożenia.
