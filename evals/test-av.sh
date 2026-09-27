@@ -57,6 +57,10 @@ else
 fi
 
 # The skill routes to these catalog sections.
-for section in Scope Money Trust Delivery Taste; do
+for section in Scope Money Trust Delivery Taste Craft; do
   run_content_eval "$AV_RULES" "^## $section " "av catalog has the $section section"
 done
+
+# Code changes route to Craft, which judges how the change is built and proven.
+run_content_eval "$AV_SKILL" '\*\*Code\*\*.*load Craft' "av routes code changes to Craft"
+run_content_eval "$AV_RULES" '`test-refusal-and-no-op-paths`' "av Craft tests refusal and no-op paths"

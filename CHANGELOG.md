@@ -28,6 +28,12 @@ green CI), code (names, proto-owned contracts, layered config, generate the thir
 silent substitution, lifecycle you can reason about), and review voice. `/jb` now also
 applies them when drafting a PR, not only when reviewing one.
 
+2026-09-27 -- `/av` gains a Craft section for code changes: tests that grow with the code
+and cover refusal and no-op paths, comments that carry the why, test plans that name what
+ran and where, measurement before optimization, phased API changes, titles that state the
+guarantee, and one reviewable slice per PR. Craft grades come from measured PR and commit
+counts. The av verdict now names anything the review could not verify.
+
 2026-09-27 -- The PostToolBatch dispatcher skips scratch files: `node_modules/`, `.context/`,
 `/tmp` outside the current worktree, and `zz-dogfood-*` specs; 7 of 62 recorded turn stops
 flagged only such files. All 62 stops predate 4.39.0 and came from the old `exit 2` path,

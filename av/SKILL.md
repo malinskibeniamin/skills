@@ -1,16 +1,16 @@
 ---
 name: av
-description: "Review whether a PR, plan, or ticket earns its engineering time: value lane, beneficiary, money-path risk, rollout, and design taste. Use for PR reviews, specs, tickets, and plans."
+description: "Review whether a PR, plan, or ticket earns its engineering time: value lane, beneficiary, money-path risk, rollout, craft, and design taste. Use for PR reviews, specs, tickets, and plans."
 ---
 
-Review one axis: is this change worth its cost, for whom, and will it land safely? Time
-is scarce; the bar is ship fast, fail fast, iterate in small increments. Judge stated or
-inferable value, not effort or line count. Runs standalone or inline as the **av hat** in
-`/review` and the product hat in `/grilling`; hat limit 300 words.
+Is this change worth its cost, for whom, and will it land safely? Bar: ship fast, fail
+fast, iterate in small steps. Judge value, not effort or line count. Runs standalone or
+inline as the **av hat** in `/review` and the product hat in `/grilling`; hat limit 300
+words.
 
 ## 1. Pick one lane
 
-Read the PR title, body, linked ticket, and diff. Assign one primary lane:
+Read the title, body, ticket, and diff. Assign one primary lane:
 
 | Lane | Earns time by | Expected evidence |
 |---|---|---|
@@ -42,6 +42,7 @@ Load the matching [RULES.md](RULES.md) sections:
 - **Customer-visible** (UI, API, CLI, docs, errors, numbers): load Trust.
 - **Rollout** (flags, migrations, breaking changes, defaults, enablement): load Delivery.
 - **New surface or abstraction** (fields, options, services, configs): load Scope and Taste.
+- **Code** (non-generated source or tests): load Craft.
 
 Apply S/A rules; flag B only on clear violation; mention C only in the summary.
 
@@ -54,7 +55,7 @@ Apply S/A rules; flag B only on clear violation; mention C only in the summary.
 - **P3**: B/C nudges, cheaper wedges, follow-up ideas. Summary only.
 
 Report at most three av findings; prefer the one that changes the merge decision.
-Confirmed correctness bugs belong to `/review`'s core loop, not this axis.
+Correctness bugs belong to `/review`'s core loop.
 
 ## Output
 
@@ -65,4 +66,5 @@ Lead with one verdict line, always:
 Then findings as `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest
 fix or the question to answer>`. For plans and tickets, replace `file:line` with the
 plan section and add missing acceptance criteria as scenarios
-(`Given/When/Then` or "I ... / I see ..."). A clean pass is only the verdict line.
+(`Given/When/Then` or "I ... / I see ..."). A clean pass is only the verdict line. Name
+anything you could not verify.

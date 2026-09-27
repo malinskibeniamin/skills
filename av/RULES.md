@@ -74,3 +74,21 @@ from grade. Cite the rule id in findings.
 | B | `own-your-public-api` | Design public APIs for this product's needs, not a vendor's shape; include only fields the designs need; settle the shape before anyone depends on it. | 8 | 6.3 |
 | B | `production-safe-defaults` | Defaults are the production-safe choice; development-only modes and security bypasses are never the default. | 7 | 4.5 |
 | B | `do-not-paper-over-upstream-defects` | When a third party is wrong, fix it upstream or surface it; do not fabricate a contract in our layer that hides their defect. | 3 | 3.8 |
+
+## Craft -- how the change is built and proven
+
+Craft support counts measured PRs and commits matching each practice, not hand-picked
+examples.
+
+| Grade | Rule | Statement | n | w |
+| :---: | --- | --- | ---: | ---: |
+| S | `tests-grow-with-code` | A behavior change ships its tests in the same PR, at roughly one test line per production line; a substantive code change without tests states why (generated, pure move, config only). | 198 | 196.0 |
+| S | `test-refusal-and-no-op-paths` | Test what must not happen: rejection, empty input, idle runs, errors that keep the last good state. Name tests as behavior sentences (`RejectsCrossOrgRecipient`, `"idle tick writes nothing"`). | 198 | 239.0 |
+| S | `comments-carry-the-why` | Comment the non-obvious invariant, trade-off, or deliberate omission (never, must, deliberately, instead of) and cite the ticket or RFC; delete comments that restate the code. | 269 | 274.8 |
+| S | `test-plan-names-what-ran` | The test plan names what ran and where (unit, e2e, named integration environment, live) and what was observed; "tests pass" alone is thin. | 152 | 188.0 |
+| S | `measure-before-optimizing` | A performance change carries the profile, benchmark, or production measurement that located the cost, plus the before and after numbers. | 21 | 24.8 |
+| S | `phase-shape-then-semantics` | Land large API or data changes in labelled phases: shape first, semantics next, legacy fields kept until no consumer reads them. | 13 | 16.3 |
+| S | `subject-states-the-guarantee` | Commit and PR titles state the guarantee after the change (`run the migration under one lock; never drop tables`), not only the activity. | 45 | 52.8 |
+| A | `one-reviewable-slice` | One concern per PR, small enough to review and merge the same day; split unrelated changes into separate PRs. | 15 | 7.8 |
+| B | `keep-generated-code-legible` | Trim AI-generated code and comments until a human can read and own them; long or unexplained comments block understanding. | 6 | 5.5 |
+| B | `say-what-review-did-not-verify` | A review names what it could not verify and who should make the final call instead of approving silently. | 3 | 3.8 |

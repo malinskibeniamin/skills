@@ -2,8 +2,8 @@
 title: /av
 description: >-
   Oceń, czy PR, plan lub zgłoszenie są warte czasu inżynierskiego: kategoria
-  wartości, beneficjent, ryzyko dla przychodów, wdrożenie i jakość projektu. Do
-  przeglądów PR-ów, specyfikacji, zgłoszeń i planów.
+  wartości, beneficjent, ryzyko dla przychodów, wdrożenie, jakość kodu i
+  projektu. Do przeglądów PR-ów, specyfikacji, zgłoszeń i planów.
 type: skill
 sidebar:
   label: /av
@@ -13,10 +13,10 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/av.excalidraw)
 
 
-Oceń jeden aspekt: czy ta zmiana jest warta swojego kosztu, dla kogo i czy zostanie bezpiecznie wdrożona? Czas
-jest ograniczony, a standardem jest szybkie dostarczanie, szybkie wykrywanie niepowodzeń i iterowanie małymi krokami. Oceniaj
-wartość zadeklarowaną lub możliwą do wywnioskowania, nie nakład pracy ani liczbę linii. Uruchamiaj samodzielnie lub w ramach **roli av** w
-`/review` i roli produktowej w `/grilling`; limit dla roli: 300 słów.
+Czy ta zmiana jest warta swojego kosztu, dla kogo i czy zostanie bezpiecznie wdrożona? Standardem jest szybkie dostarczanie, szybkie
+wykrywanie niepowodzeń i iterowanie małymi krokami. Oceniaj wartość, nie nakład pracy ani liczbę linii. Uruchamiaj samodzielnie lub
+w ramach **roli av** w `/review` i roli produktowej w `/grilling`; limit dla roli: 300
+słów.
 
 ## 1. Wybierz jedną kategorię [#1-pick-one-lane]
 
@@ -52,6 +52,7 @@ Wczytaj odpowiednie sekcje [RULES.md](https://github.com/malinskibeniamin/skills
 - **Elementy widoczne dla klienta** (UI, API, CLI, dokumentacja, błędy, liczby): wczytaj Trust.
 - **Wdrożenie** (flagi, migracje, zmiany niekompatybilne wstecz, ustawienia domyślne, włączanie funkcji): wczytaj Delivery.
 - **Nowe elementy interfejsu lub abstrakcje** (pola, opcje, usługi, konfiguracje): wczytaj Scope i Taste.
+- **Kod** (niewygenerowany kod źródłowy lub testy): wczytaj Craft.
 
 Stosuj reguły S/A; zgłaszaj B tylko przy wyraźnym naruszeniu; o C wspominaj wyłącznie w podsumowaniu.
 
@@ -64,7 +65,7 @@ Stosuj reguły S/A; zgłaszaj B tylko przy wyraźnym naruszeniu; o C wspominaj w
 - **P3**: sugestie B/C, tańsze punkty wejścia, pomysły na dalsze działania. Tylko w podsumowaniu.
 
 Zgłoś najwyżej trzy uwagi av; wybierz przede wszystkim tę, która wpływa na decyzję o scaleniu.
-Potwierdzone błędy poprawności należą do głównego procesu `/review`, nie do tego aspektu oceny.
+Błędy poprawności należą do głównego procesu `/review`.
 
 ## Wynik [#output]
 
@@ -75,4 +76,5 @@ Zawsze zaczynaj od jednego wiersza z werdyktem:
 Następnie podaj uwagi w formacie `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest
 fix or the question to answer>`. W przypadku planów i zgłoszeń zastąp `file:line`
 sekcją planu i dodaj brakujące kryteria akceptacji jako scenariusze
-(`Given/When/Then` lub „Ja ... / Widzę ...”). Jeśli nie ma uwag, podaj wyłącznie wiersz z werdyktem.
+(`Given/When/Then` lub „Ja ... / Widzę ...”). Jeśli nie ma uwag, podaj wyłącznie wiersz z werdyktem. Wskaż
+wszystko, czego nie udało się zweryfikować.
