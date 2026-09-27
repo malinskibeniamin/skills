@@ -142,6 +142,39 @@ _noise_json=$(jq -n --arg f "$_noise_file" --rawfile content "$_noise_file" '{to
 _run_batch "$_noise_json"
 _assert_batch "full-file write preserves existing copyright header without a finding" 0 "" "Copyright/license"
 
+# Scratch paths from real stop reports carry no findings: throwaway scripts in
+# node_modules/.perf-scripts, .context, /tmp, and zz-dogfood specs.
+_tmp_scratch_dir=$(mktemp -d /tmp/pb-scratch.XXXXXX)
+mkdir -p "$_batch_tmp/apps/web/node_modules/.perf-scripts" "$_batch_tmp/.context/test-audit" "$_batch_tmp/apps/web/e2e/tests"
+for _scratch in \
+  "$_batch_tmp/apps/web/node_modules/.perf-scripts/route-bench.ts" \
+  "$_batch_tmp/.context/test-audit/perfile.ts" \
+  "$_batch_tmp/apps/web/e2e/tests/zz-dogfood-chunks.spec.ts" \
+  "$_tmp_scratch_dir/probe.ts"; do
+  case "$_scratch" in
+    *.spec.ts) printf '%s\n' 'test.skip("flaky", () => {});' > "$_scratch" ;;
+    *) printf 'export function bad(x: any) { return x; }\n' > "$_scratch" ;;
+  esac
+  _scratch_json=$(jq -n --arg f "$_scratch" --rawfile content "$_scratch" '{tool_calls:[{tool_name:"Write",tool_input:{file_path:$f,content:$content}}]}')
+  _run_batch "$_scratch_json"
+  if [ "$_batch_exit" -eq 0 ] && [ -z "$_batch_stdout$_batch_stderr" ]; then
+    echo "  PASS  scratch path skipped: ${_scratch##*/}"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  scratch path skipped: $_scratch (stdout=${_batch_stdout:0:160})"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: scratch path skipped ${_scratch##*/}"
+  fi
+done
+rm -rf "$_tmp_scratch_dir"
+
+# A real spec beside the dogfood one still gets checked.
+_real_spec="$_batch_tmp/apps/web/e2e/tests/chunks.spec.ts"
+printf '%s\n' 'test.skip("flaky", () => {});' > "$_real_spec"
+_real_json=$(jq -n --arg f "$_real_spec" --rawfile content "$_real_spec" '{tool_calls:[{tool_name:"Write",tool_input:{file_path:$f,content:$content}}]}')
+_run_batch "$_real_json"
+_assert_batch "non-scratch spec still reports findings" 0 "No test.skip" "MUST FIX before proceeding"
+
 # (e) Codex adapts each edit into the shared batch protocol in one process.
 _codex_count=$(jq '[.hooks.PostToolUse[]? | select(.matcher == "Edit|Write|apply_patch") | .hooks[]?.command | select(test("codex-edit-dispatch\\.sh"))] | length' "$CODEX_HOOKS" 2>/dev/null || echo 0)
 if [ "$_codex_count" = "1" ] && ! grep -q 'vendor-file-check.sh' "$CODEX_HOOKS" 2>/dev/null; then
