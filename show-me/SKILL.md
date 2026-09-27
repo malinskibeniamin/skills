@@ -91,10 +91,10 @@ function expandSkill(command: string): string {
   return `use the ${skillName} skill`
 }
 ```
-- For a visual UI, layout, state comparison, or concept too dense for Mermaid, write one focused HTML file - a diagram, an infographic, or a short slide deck, whichever fits the point. Match the product's colors, type, spacing, and components; use real labels and data; support desktop and mobile. Use the host HTML artifact surface or a temporary directory such as `mktemp -d "${TMPDIR:-/tmp}/show-me.XXXXXX"`; never add one-shot visuals to the repo. Then open it for the user:
+- For visual UI, layout, states, or a concept too dense for Mermaid, write one focused HTML file: diagram, infographic, or short slide deck. Match product colors, type, spacing, and components; use real labels and data; support desktop and mobile. Use the host HTML artifact surface or a temp directory (`mktemp -d "${TMPDIR:-/tmp}/show-me.XXXXXX"`); never add one-shot visuals to the repo. Open it for the user:
 ```
 Bash(open /absolute/path/to/show-me-{description}.html)
 ```
 ### guidance
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
-Use only the views needed; avoid overwhelming the user. Beginner picture explainer -> `/eli5`; interactive plan -> `/visual-plan`; PR or branch recap -> `/visual-recap`.
+Use only needed views. Beginner explainer -> `/eli5`; interactive plan -> `/visual-plan`; PR recap -> `/visual-recap`.

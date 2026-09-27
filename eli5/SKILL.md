@@ -42,4 +42,4 @@ Open it in an isolated browser or host preview. Check comprehension, clipping, n
 
 Return the artifact or absolute path, one-sentence takeaway, and material uncertainty. Do not repeat the full explanation in chat.
 
-Reader already knows the domain and needs a quick in-chat view -> `/show-me`.
+Know the domain? For quick in-chat views, use `/show-me`.
