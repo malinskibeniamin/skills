@@ -41,7 +41,7 @@ sidebar:
    审查负担。删除和简化也算价值。
 7. **切片：**采用能验证主张的最小可逆增量；默认关闭；后续工作
    单独建工单，不并入当前变更；从设计上保障现有付费客户不受影响。
-8. **应用规则：**检查 RULES.md 中与该类别和涉及范围相符的条目。
+8. **应用规则：**检查 RULES.md 中该类别的条目，以及工程实践条目。
 
 ## 结论 [#verdict]
 
@@ -77,4 +77,4 @@ Verdict: justified | needs justification | unlikely to pay off
 - [P1|P2 Value] <rule id> <gap> - <consequence> - <smallest fix>
 ```
 
-本审查角色的输出上限为 250 词。没有问题时，只输出前两行。
+上限为 250 词。没有问题时，只输出前两行。

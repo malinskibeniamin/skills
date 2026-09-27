@@ -34,7 +34,7 @@ Every PR serves exactly one primary bucket. Mixed purposes split into separate P
    review load. Deletions and simplifications count as value.
 7. **Slice:** smallest reversible increment that proves the claim; default off; follow-ups
    ticketed, not folded in; existing paying customers protected by construction.
-8. **Apply rules:** check the RULES.md entries that match the bucket and surface.
+8. **Apply rules:** the bucket's RULES.md rows plus Engineering practice rows.
 
 ## Verdict
 
@@ -60,7 +60,7 @@ visible. A deadline can justify a rough slice when the PR names the follow-up.
 
 In an auto-review routine: post one top-level Value comment only when the verdict is not
 **justified**, at most three findings, each with the missing fact and a one-line fix.
-Silence means the value case is clear. Never restate the PR back to the author.
+Silence means the value case is clear. Never restate the PR.
 
 ## Output
 
@@ -70,4 +70,4 @@ Verdict: justified | needs justification | unlikely to pay off
 - [P1|P2 Value] <rule id> <gap> - <consequence> - <smallest fix>
 ```
 
-Hat limit 250 words. A clean result is the first two lines only.
+Limit 250 words. A clean result is the first two lines only.

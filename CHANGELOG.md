@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-09-27 -- Extend `/ss` with an Engineering practice section: eleven graded rules for how
+a change is built, tested, and shipped (guard the mistake class, test the real seam, verify
+the stored write, numbered stacks, boundary validation, fast follow-ups, finding triage,
+experiment verdicts, one owner per resource). `/ss` applies them to every diff alongside
+the value bucket rules.
+
 2026-09-27 -- The PostToolBatch dispatcher skips scratch files: `node_modules/`, `.context/`,
 `/tmp` outside the current worktree, and `zz-dogfood-*` specs; 7 of 62 recorded turn stops
 flagged only such files. All 62 stops predate 4.39.0 and came from the old `exit 2` path,
