@@ -10,11 +10,11 @@ Only explicit merge requests use [the merge contract](references/merge.md), not 
 
 ## Preflight
 
-1. Inspect `git status -sb`, `git diff HEAD`, branch, recent log, and branch PR.
+1. Inspect status, diff, branch, log, and branch PR.
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
 3. Push/PR needs a remote; PR also needs authenticated `gh` and the default branch.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
-5. Run applicable review axes inline; do not block merely over named skill invocation.
+5. Review inline; do not block merely over named skill invocation.
 6. Runnable PR work requires current `/dogfood` PASS; BLOCKED needs user waiver.
 7. Stage requested paths by purpose; ask if ownership is unclear.
 
@@ -30,20 +30,20 @@ Only explicit merge requests use [the merge contract](references/merge.md), not 
 
 `--no-pr` never creates a PR. Refresh an existing PR's evidence/body after push; otherwise end after push and clean-tree check. Prepare local visual evidence before push.
 
-PR creation authorizes verification, commit, push, and lease-protected rebase on the current user branch; never merge or unrelated fixes.
+PR authorizes verification, commit, push, and lease-protected rebase on the current user branch; never merge or fix unrelated work.
 
-1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR; create one against that base only if none exists, with assignee, labels, and reference template. Draft PR creation at this endpoint proceeds without separate approval. Whole-stack publication uses `/stacked-prs`.
+1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR; otherwise create with assignee, labels, and template. Draft PR creation proceeds without separate approval. Whole-stack publication uses `/stacked-prs`.
 2. Every PR runs `/quantify-impact`; include concise value or proven metrics, not benchmark theater.
-3. Every visible change, however small, needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without explicit user waiver.
-4. Include current dogfood receipt. Re-read the body, verify reviewer image access, and print the URL. Updates/reopens use the same gate; edits invalidate affected evidence.
+3. Every visible change needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without user waiver.
+4. Include dogfood receipt. Re-read body, check reviewer image access, and print URL. Updates/reopens use same gate; edits invalidate affected evidence.
 
 Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests.
 
 ## Completion
 
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
-2. Report failures; further remediation/monitoring requires `/go`, ship, babysitting, or follow-up.
-3. Report `git status`, remaining diff, branch, commits, PR, CI, and next action.
-4. End with one status line: `done`, `awaiting decision`, or `blocked`, using the repository marker contract. Include the full PR URL on that final status line whenever a PR exists, for new and updated PRs alike.
+2. Report failures; CI remediation needs `/go`, ship, babysitting, or follow-up.
+3. Report status, remaining diff, branch, commits, PR, CI, and next action.
+4. End with one repository-marker status line: `done`, `awaiting decision`, or `blocked`. Include the full PR URL on the final status line whenever a PR exists, including updates.
 
-Never stage unrelated work, push unconfirmed mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.
+Never stage unrelated work, push mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.
