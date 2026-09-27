@@ -1,9 +1,10 @@
 ---
 title: /jb
 description: >-
-  Oceń, czy PR, plan lub zgłoszenie są warte czasu: kategoria wartości, odbiorca
-  zablokowany dziś, falsyfikowalne kryteria ukończenia, odwracalne wdrożenie i
-  jakość projektu. Używaj przy przeglądach PR-ów i planów.
+  Oceń lub przygotuj PR, plan lub zgłoszenie tak, by były warte czasu i dobrze
+  wdrożone: kategoria wartości, odbiorca zablokowany dziś, falsyfikowalne
+  kryteria ukończenia, odwracalne wdrożenie, warsztat i jakość projektu. Używaj
+  przy PR-ach i planach.
 type: skill
 sidebar:
   label: /jb
@@ -30,9 +31,8 @@ Przeczytaj tytuł i opis PR-a, zgłoszenie oraz diff. Przypisz jedną główną 
 | `growth` | Nową funkcjonalność potrzebną klientowi, do zawarcia umowy lub premiery; generowanie przychodów | Odbiorca zablokowany dziś, jego możliwości po scaleniu, warunek dopuszczenia, scenariusz akceptacyjny |
 | `taste` | Usuwanie, ujednolicanie lub generowanie, dzięki którym kolejna zmiana będzie tania | Co usuwa lub uniemożliwia i któremu kolejnemu odbiorcy odblokowuje pracę |
 
-Mechaniczne PR-y (aktualizacje wersji, synchronizacja wygenerowanych plików, wycofania zmian, poprawki literówek w dokumentacji) należą do `ktlo` i nie wymagają
-opisowego uzasadnienia. Prace przygotowawcze przyjmują kategorię zmiany dla użytkownika, której służą, i wskazują ją wprost.
-Niepowiązane kategorie w jednym PR-ze są podstawą do prośby o podział. Porównaj z wytycznymi w sekcji **Lanes** pliku RULES.md.
+Mechaniczne PR-y (aktualizacje wersji, synchronizacja wygenerowanych plików, wycofania zmian) są uzasadnionym `ktlo`. Prace przygotowawcze przyjmują
+kategorię zmiany, której służą. Niepowiązane kategorie są podstawą do prośby o podział. Porównaj z wytycznymi w sekcji **Lanes** pliku RULES.md.
 
 ## 2. Sprawdź dowody dla kategorii [#2-test-the-lanes-evidence]
 
@@ -52,10 +52,15 @@ Wczytaj odpowiednie sekcje [RULES.md](https://github.com/malinskibeniamin/skills
 naruszeniu, a C wspominaj wyłącznie w podsumowaniu:
 
 - **Zawsze**: zakres, dowody oraz listy zatwierdzeń i decyzji właściciela.
-- **Wdrożenie** (flagi, migracje, wartości domyślne, wdrożenia, publiczne API, nieodwracalne działania): dostarczanie.
+- **Wdrożenie** (flagi, migracje, wartości domyślne, wdrożenia, publiczne API): dostarczanie.
 - **Wynik używany przez odbiorców** (API, UI, CLI, wynik narzędzia, błąd, metryka): kontrakty.
 - **Nowy element interfejsu lub abstrakcja** (pole, opcja, tryb, usługa, generator): jakość projektu.
-- **Wydatki** (tokeny modelu, moc obliczeniowa, minuty CI, limit dostawcy, żmudna praca): koszt.
+- **Wydatki** (tokeny, moc obliczeniowa, minuty CI, limit, żmudna praca): koszt.
+
+## 4. Sprawdź warsztat [#4-check-craft]
+
+Wczytaj [CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/jb/CRAFT.md): zawsze sekcje Ship i Verify; Code dla Go, proto lub SQL; Review
+voice dla komentarzy. Ustalenia dotyczące warsztatu mają wagę najwyżej P2. Przy tworzeniu treści najpierw zastosuj te zasady do wersji roboczej.
 
 ## Waga problemu [#severity]
 
@@ -65,10 +70,9 @@ naruszeniu, a C wspominaj wyłącznie w podsumowaniu:
   nieodwracalny krok bez flagi, możliwości wycofania lub udokumentowanej decyzji właściciela.
 - **P2**: dowody dla kategorii ocenione jako `thin`, z konkretną konsekwencją; naruszenie reguły S/A. Dodatki domyślnie wyłączone,
   wymagające świadomego włączenia lub dostępne tylko w środowisku deweloperskim obniżają wagę braków w dowodach do P3.
-- **P3**: sugestie B/C, mniejsze i tańsze etapy, dalsze działania; tylko w podsumowaniu.
+- **P3**: sugestie B/C, tańsze etapy, dalsze działania; tylko w podsumowaniu.
 
-Zgłoś najwyżej trzy ustalenia, zaczynając od tych, które decydują o scaleniu. Eskalacje do właściciela wskazują niekorzystny
-scenariusz i potrzebną decyzję.
+Zgłoś najwyżej trzy ustalenia, zaczynając od tych, które decydują o scaleniu. Eskalacje wskazują scenariusz i potrzebną decyzję.
 
 ## Wynik [#output]
 
@@ -76,6 +80,5 @@ Zawsze zaczynaj od jednego wiersza z werdyktem:
 
 `jb: <lane> -- <justified|thin|unjustified> -- <beneficiary and evidence, at most 20 words>`
 
-Następnie `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest fix, or the
-sentence the PR body is missing>`. W przypadku planów wskaż sekcję i zapisz brakujące kryteria
-akceptacji jako falsyfikowalne scenariusze. Jeśli nie ma zastrzeżeń, podaj tylko wiersz z werdyktem.
+Następnie `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest fix>`. W przypadku
+planów wskaż sekcję i zapisz brakujące kryteria jako falsyfikowalne scenariusze. Jeśli nie ma zastrzeżeń, podaj tylko wiersz z werdyktem.

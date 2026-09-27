@@ -1,6 +1,8 @@
 ---
 title: /jb
-description: 審查 PR、計畫或工單是否值得投入時間：價值類別、目前受阻的呼叫端、可證偽的完成條件、可逆的推出方式，以及設計品味。適用於 PR 審查與計畫。
+description: >-
+  審查或草擬 PR、計畫或工單，判斷是否值得投入時間並妥善交付：價值類別、目前受阻的呼叫端、可證偽的完成條件、可逆的推出方式、實作品質，以及設計品味。適用於
+  PR 與計畫。
 type: skill
 sidebar:
   label: /jb
@@ -27,9 +29,8 @@ sidebar:
 | `growth` | 由客戶、交易或產品推出需求驅動的新能力；創造收入 | 目前受阻的呼叫端、合併後能做什麼、通過條件、驗收情境 |
 | `taste` | 透過刪除、統一或產生內容，降低下次變更的成本 | 刪除了什麼或杜絕了什麼，以及為下一個使用端排除了什麼阻礙 |
 
-機械式 PR（版本更新、產生檔案同步、還原變更、文件錯字修正）歸為 `ktlo`，無須
-文字說明即可視為有充分依據。前置工作應歸入其所支援的使用者可見變更類別，並明確指出該變更。
-同一個 PR 若包含互不相關的類別，應要求拆分。對照 RULES.md 的 **Lanes** 判斷依據。
+機械式 PR（版本更新、產生檔案同步、還原變更）歸為有充分依據的 `ktlo`。前置工作應歸入
+其所支援的類別。同一個 PR 若包含互不相關的類別，應要求拆分。對照 RULES.md 的 **Lanes** 判斷依據。
 
 ## 2. 檢驗該類別的證據 [#2-test-the-lanes-evidence]
 
@@ -49,10 +50,15 @@ sidebar:
 違反 B 時才標示，C 則僅在摘要中提及：
 
 - **一律檢查**：Scope、Evidence，以及核准與負責人決策清單。
-- **推出**（功能旗標、遷移、預設值、部署、公開 API、不可逆操作）：Delivery。
+- **推出**（功能旗標、遷移、預設值、部署、公開 API）：Delivery。
 - **供使用端取用的輸出**（API、UI、CLI、工具結果、錯誤、指標）：Contracts。
 - **新增介面或抽象概念**（欄位、選項、模式、服務、產生器）：Taste。
-- **支出**（模型 token、運算資源、CI 分鐘數、供應商配額、繁瑣作業）：Cost。
+- **支出**（token、運算資源、CI 分鐘數、配額、繁瑣作業）：Cost。
+
+## 4. 檢查實作品質 [#4-check-craft]
+
+載入 [CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/jb/CRAFT.md)：一律檢查 Ship 與 Verify；涉及 Go、proto 或 SQL 時檢查 Code；撰寫
+評論時檢查 Review voice。實作品質的發現最高列為 P2。撰寫時，先將這些規則套用到草稿。
 
 ## 嚴重程度 [#severity]
 
@@ -64,8 +70,7 @@ sidebar:
   需主動啟用或僅供開發使用的新增項目，其證據缺口降為 P3。
 - **P3**：B/C 提醒、成本更低的拆分方式、後續工作；僅列於摘要。
 
-最多回報三項發現，影響合併決策的項目優先。需上呈負責人的事項，應指明不利
-情境與需要做出的決策。
+最多回報三項發現，影響合併決策的項目優先。需上呈負責人的事項，應指明情境與需要做出的決策。
 
 ## 輸出 [#output]
 
@@ -73,6 +78,5 @@ sidebar:
 
 `jb: <lane> -- <justified|thin|unjustified> -- <beneficiary and evidence, at most 20 words>`
 
-接著輸出 `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest fix, or the
-sentence the PR body is missing>`。對於計畫，請引用章節，並將缺少的驗收
-條件寫成可證偽的情境。若審查通過且沒有問題，只輸出判定行。
+接著輸出 `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest fix>`。對於
+計畫，請引用章節，並將缺少的條件寫成可證偽的情境。若審查通過且沒有問題，只輸出判定行。
