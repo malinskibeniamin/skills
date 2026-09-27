@@ -46,3 +46,22 @@ fi
 run_content_eval "$REPO_ROOT/review/SKILL.md" "\*\*mm hat\*\*" "review runs the mm value hat on every PR"
 run_content_eval "$REPO_ROOT/setup-routines/routines/pr-review.md" "apply the \`/mm\` skill" "PR-review routine runs the mm value hat"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"\./mm/\"" "mm is registered in the Claude plugin"
+
+CRAFT="$REPO_ROOT/mm/CRAFT.md"
+run_file_eval "$CRAFT" "mm CRAFT.md exists"
+run_content_eval "$SKILL" "CRAFT.md" "mm points builders at its craft guide"
+missing_craft=""
+for n in 1 2 3 4 5 6 7; do
+  grep -qE "^## C$n\. " "$CRAFT" || missing_craft="$missing_craft C$n"
+done
+if [ -z "$missing_craft" ]; then
+  echo "  PASS  mm CRAFT.md defines C1-C7"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  mm CRAFT.md missing:$missing_craft"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: mm CRAFT.md missing:$missing_craft"
+fi
+run_content_eval "$CRAFT" "[Dd]ifferential" "mm craft prefers oracle tests"
+run_content_eval "$CRAFT" "escape hatch" "mm craft keeps optimizations reversible"
+run_content_eval "$CRAFT" "hashes rot" "mm craft keeps PR prose rebase-safe"
