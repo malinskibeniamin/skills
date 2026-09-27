@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "2a75bee4b8b567b1",
-      "zh-CN": "2a75bee4b8b567b1",
-      "zh-TW": "2a75bee4b8b567b1"
+      "pl": "7d23078a529f4580",
+      "zh-CN": "7d23078a529f4580",
+      "zh-TW": "7d23078a529f4580"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "3071ac48c3dd1565",
-      "zh-CN": "3071ac48c3dd1565",
-      "zh-TW": "3071ac48c3dd1565"
+      "pl": "dedd9e824c780d4d",
+      "zh-CN": "dedd9e824c780d4d",
+      "zh-TW": "dedd9e824c780d4d"
     },
     "content/skills/blast-radius.md": {
       "pl": "818c60a16996a001",
@@ -190,6 +190,11 @@
       "zh-CN": "acf6c280b1106d0a",
       "zh-TW": "acf6c280b1106d0a"
     },
+    "content/skills/mm.md": {
+      "pl": "9df6dd5b48b2bd76",
+      "zh-CN": "9df6dd5b48b2bd76",
+      "zh-TW": "9df6dd5b48b2bd76"
+    },
     "content/skills/plan-arbiter.md": {
       "pl": "10578fada7519b04",
       "zh-CN": "10578fada7519b04",
@@ -276,9 +281,9 @@
       "zh-TW": "32436a2cda6ca615"
     },
     "content/skills/review.md": {
-      "pl": "8241f0984be1d47a",
-      "zh-CN": "8241f0984be1d47a",
-      "zh-TW": "8241f0984be1d47a"
+      "pl": "f349d2d61d80dc05",
+      "zh-CN": "f349d2d61d80dc05",
+      "zh-TW": "f349d2d61d80dc05"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "ad4f6ed8858e420c",

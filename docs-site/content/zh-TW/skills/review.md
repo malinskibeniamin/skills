@@ -63,7 +63,8 @@ sidebar:
 | Go/並行/工作流程 | 所有權、取消、競態、重試、冪等 |
 | 相依套件/外部 API | 第一手文件、版本、鎖定檔、安全通告 |
 
-每次 PR 或分支審查也都會在同一流程中套用 **jb 角色**：[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)。
+每次 PR 或分支審查也都會在同一流程中套用 **jb 角色**：[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)，
+以及 **mm 角色**：[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)。
 
 ### 分類 [#classify]
 
@@ -94,4 +95,4 @@ sidebar:
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 以了解術語和結構。報告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、計數、
-`jb:` 結論行、結論和剩餘限制。無發現時只傳回 `jb:` 行、結論和剩餘限制。
+`jb:` 和 `mm:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
