@@ -41,7 +41,7 @@ Tylko wyraźne żądania scalenia obsługuje [kontrakt scalania](https://github.
 
 Utworzenie PR-a upoważnia do weryfikacji, utworzenia commitu, wypchnięcia zmian i wykonania rebase bieżącej gałęzi użytkownika z ochroną dzierżawy; nigdy do scalania ani niezwiązanych poprawek.
 
-1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Użyj ponownie PR-a gałęzi lub utwórz go względem tej bazy, przypisując osobę, etykiety i korzystając z referencyjnego szablonu. Publikacja całego stosu używa `/stacked-prs`.
+1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kolejne etapy pracy dodawaj do bieżącego PR-a; utwórz PR względem tej bazy tylko wtedy, gdy jeszcze nie istnieje, przypisując osobę, etykiety i korzystając z referencyjnego szablonu. Utworzenie roboczego PR-a na tym etapie nie wymaga osobnej zgody. Publikacja całego stosu używa `/stacked-prs`.
 2. Każdy PR uruchamia `/quantify-impact`; uwzględnij zwięzły opis wartości lub potwierdzone wskaźniki, bez pozorowanych benchmarków.
 3. Każda widoczna zmiana, nawet najmniejsza, wymaga inwentaryzacji opisanej w dokumencie referencyjnym, zrzutów ekranu i nagrań wideo przed i po zmianie, sprawdzonych migawek oraz przechodzących testów wizualnych. Brak dowodów blokuje publikację bez wyraźnej zgody użytkownika na odstępstwo.
 4. Uwzględnij aktualne potwierdzenie dogfood. Przeczytaj ponownie opis, sprawdź dostęp recenzenta do obrazów i wyświetl adres URL. Aktualizacje i ponowne otwarcia podlegają tym samym wymaganiom; edycje unieważniają dowody, których dotyczą.
@@ -53,6 +53,6 @@ Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkow
 1. Pobierz pojedynczy stan CI za pomocą `gh pr checks <number>`; odnotuj brak CI.
 2. Zgłoś niepowodzenia. Dalsze naprawianie i monitorowanie wymaga `/go`, polecenia wysyłki, prośby o nadzorowanie lub kolejnego żądania.
 3. Zgłoś `git status`, pozostałe różnice, gałąź, commity, PR, CI i następne działanie.
-4. Zakończ jednym wierszem stanu: `done`, `awaiting decision` lub `blocked`, zgodnie z kontraktem znaczników repozytorium.
+4. Zakończ jednym wierszem stanu: `done`, `awaiting decision` lub `blocked`, zgodnie z kontraktem znaczników repozytorium. Jeśli PR istnieje, umieść jego pełny adres URL w tym ostatnim wierszu — zarówno dla nowego, jak i zaktualizowanego PR-a.
 
 Nigdy nie dodawaj do poczekalni niezwiązanych zmian, nie wypychaj mieszanego zakresu bez potwierdzenia ani nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i polecenie naprawcze.
