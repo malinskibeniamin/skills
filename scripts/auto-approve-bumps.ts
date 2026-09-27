@@ -1,6 +1,7 @@
-// Approves vbotbuildovich image-bump PRs as the gh-authenticated user.
-// A PR is approved only when every changed line is the family's tag line;
-// anything else is logged and raised as a macOS notification once per head.
+// Approves vbotbuildovich image-bump and ADP release PRs as the
+// gh-authenticated user. A PR is approved only when every changed line fits
+// its rule; anything else is logged and raised as a macOS notification once
+// per head.
 //
 //   bun scripts/auto-approve-bumps.ts            # dry run
 //   bun scripts/auto-approve-bumps.ts --approve  # approve matches
@@ -15,29 +16,116 @@ import { z } from "zod";
 const BOT = "vbotbuildovich";
 const INSTALL_PACK = /^install-pack\/[\w.-]+\.yml$/;
 const SHA = "[0-9a-f]{7,40}";
+const SEMVER = String.raw`\d+\.\d+\.\d+`;
+// A single-quoted TypeScript literal; escapes cannot end it early.
+const STRING = String.raw`'(?:[^'\\]|\\.)*'`;
+const PACKAGE_VERSION = new RegExp(`^  "version": "(${SEMVER})",$`);
 
-type Rule = { repo: string; branch: string; file: RegExp; line: RegExp };
+type FileRule = {
+  path: string | RegExp;
+  line: RegExp;
+  // Additive files only gain lines; others swap each line one for one.
+  additive?: boolean;
+  // Captures a version that every added match must equal the branch's.
+  version?: RegExp;
+};
+
+type Rule = {
+  repo: string;
+  // A capture group, when present, is the release version.
+  branch: RegExp;
+  files: readonly FileRule[];
+  // Every file rule must appear in the diff.
+  exact?: boolean;
+  approval: string;
+};
+
+const IMAGE_TAG_APPROVAL = "Auto-approved: only the image tag changed.";
 
 const RULES: readonly Rule[] = [
   {
     repo: "redpanda-data/cloudv2",
-    branch: "auto/bump-console-image",
-    file: INSTALL_PACK,
-    line: new RegExp(`^\\s*console_image_tag: master-${SHA}$`),
+    branch: /^auto\/bump-console-image$/,
+    files: [
+      {
+        path: INSTALL_PACK,
+        line: new RegExp(`^\\s*console_image_tag: master-${SHA}$`),
+      },
+    ],
+    approval: IMAGE_TAG_APPROVAL,
   },
   {
     repo: "redpanda-data/cloudv2",
-    branch: "auto/bump-ai-gateway-version",
-    file: INSTALL_PACK,
-    line: new RegExp(`^\\s*ai_gateway_version: nightly-\\d{8}-${SHA}$`),
+    branch: /^auto\/bump-ai-gateway-version$/,
+    files: [
+      {
+        path: INSTALL_PACK,
+        line: new RegExp(`^\\s*ai_gateway_version: nightly-\\d{8}-${SHA}$`),
+      },
+    ],
+    approval: IMAGE_TAG_APPROVAL,
   },
   {
     repo: "redpanda-data/serverless",
-    branch: "auto/bump-console-image",
-    file: /^infra\/terraform\/config\/[\w-]+\/[\w-]+\/tags\.yaml$/,
-    line: new RegExp(`^\\s*console_image_tag: "master-${SHA}"$`),
+    branch: /^auto\/bump-console-image$/,
+    files: [
+      {
+        path: /^infra\/terraform\/config\/[\w-]+\/[\w-]+\/tags\.yaml$/,
+        line: new RegExp(`^\\s*console_image_tag: "master-${SHA}"$`),
+      },
+    ],
+    approval: IMAGE_TAG_APPROVAL,
+  },
+  {
+    repo: "redpanda-data/cloudv2",
+    branch: new RegExp(`^adp-release/v(${SEMVER})$`),
+    exact: true,
+    files: [
+      {
+        path: "apps/adp-ui/package.json",
+        line: PACKAGE_VERSION,
+        version: PACKAGE_VERSION,
+      },
+      {
+        path: "adp/RELEASE_NOTES.md",
+        line: /^/,
+        additive: true,
+        version: new RegExp(`^## v(${SEMVER})\\b`),
+      },
+      {
+        // Generated data only, so no added line can smuggle in code.
+        path: "apps/adp-ui/src/lib/release-notes.generated.ts",
+        line: new RegExp(
+          `^(?:${[
+            " {2}\\{",
+            " {2}\\},",
+            ` {4}version: '${SEMVER}',`,
+            " {4}date: '\\d{4}-\\d{2}-\\d{2}',",
+            " {4}sections: \\[",
+            " {4}\\],",
+            " {6}\\{",
+            " {6}\\},",
+            " {8}kind: '(?:feature|improvement|fix)',",
+            " {8}items: \\[",
+            " {8}\\],",
+            ` {10}\\{ headline: ${STRING}, (?:tag: '(?:UI|CLI)', )?body: ${STRING} \\},`,
+          ].join("|")})$`,
+        ),
+        additive: true,
+        version: new RegExp(`^ {4}version: '(${SEMVER})',$`),
+      },
+    ],
+    approval: "Auto-approved: version bump and additive release notes only.",
   },
 ];
+
+function matches(pattern: string | RegExp, path: string): boolean {
+  return typeof pattern === "string" ? pattern === path : pattern.test(path);
+}
+
+function findRule(repo: string, branch: string): Rule | undefined {
+  return RULES.find((r) => r.repo === repo && r.branch.test(branch));
+}
 
 export type BumpPr = {
   repo: string;
@@ -87,9 +175,7 @@ export function parseDiff(diff: string): FileDiff[] {
 }
 
 export function checkBump(pr: BumpPr, diff: string): Verdict {
-  const rule = RULES.find(
-    (r) => r.repo === pr.repo && r.branch === pr.headRefName,
-  );
+  const rule = findRule(pr.repo, pr.headRefName);
   if (!rule) return { ok: false, reason: `unknown branch ${pr.headRefName}` };
   if (pr.author !== BOT) return { ok: false, reason: `author ${pr.author}` };
   if (pr.isDraft) return { ok: false, reason: "draft" };
@@ -103,17 +189,22 @@ export function checkBump(pr: BumpPr, diff: string): Verdict {
     return { ok: false, reason: "commit not authored by the bot" };
   }
 
+  const version = rule.branch.exec(pr.headRefName)?.[1];
   const files = parseDiff(diff);
   if (files.length === 0) return { ok: false, reason: "empty diff" };
   for (const file of files) {
-    if (!rule.file.test(file.path)) {
+    const fileRule = rule.files.find((f) => matches(f.path, file.path));
+    if (!fileRule) {
       return { ok: false, reason: `unexpected file ${file.path}` };
     }
     if (file.structural) {
       return { ok: false, reason: `structural change in ${file.path}` };
     }
+    if (fileRule.additive && file.removed.length > 0) {
+      return { ok: false, reason: `removed lines in ${file.path}` };
+    }
     const unexpected = [...file.removed, ...file.added].find(
-      (line) => !rule.line.test(line),
+      (line) => !fileRule.line.test(line),
     );
     if (unexpected !== undefined) {
       return {
@@ -121,10 +212,28 @@ export function checkBump(pr: BumpPr, diff: string): Verdict {
         reason: `unexpected change in ${file.path}: ${unexpected.trim()}`,
       };
     }
-    if (file.added.length === 0 || file.added.length !== file.removed.length) {
+    if (
+      file.added.length === 0 ||
+      (!fileRule.additive && file.added.length !== file.removed.length)
+    ) {
       return { ok: false, reason: `unbalanced change in ${file.path}` };
     }
+    if (fileRule.version) {
+      const pattern = fileRule.version;
+      const found = file.added.flatMap((line) => pattern.exec(line)?.[1] ?? []);
+      const wrong = found.find((v) => v !== version);
+      if (found.length === 0 || wrong !== undefined) {
+        return {
+          ok: false,
+          reason: `version ${wrong ?? "missing"} in ${file.path}, expected ${version}`,
+        };
+      }
+    }
   }
+  const missing = rule.exact
+    ? rule.files.find((f) => !files.some((file) => matches(f.path, file.path)))
+    : undefined;
+  if (missing) return { ok: false, reason: `missing file ${missing.path}` };
   return { ok: true };
 }
 
@@ -200,11 +309,8 @@ function run(approve: boolean): void {
       ),
     );
     for (const item of listed) {
-      if (
-        !RULES.some((r) => r.repo === repo && r.branch === item.headRefName)
-      ) {
-        continue;
-      }
+      const rule = findRule(repo, item.headRefName);
+      if (!rule) continue;
       const pr = `${repo}#${item.number}`;
       if (
         item.latestReviews.some(
@@ -257,7 +363,7 @@ function run(approve: boolean): void {
         "-f",
         "event=APPROVE",
         "-f",
-        "body=Auto-approved: only the image tag changed.",
+        `body=${rule.approval}`,
       ]);
       log("info", { pr, head: item.headRefOid, approved: true });
     }

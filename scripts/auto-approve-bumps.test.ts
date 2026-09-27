@@ -105,7 +105,7 @@ describe("checkBump", () => {
     ["another author", { author: "someone" }, /author/],
     ["a draft", { isDraft: true }, /draft/],
     ["a non-main base", { baseRefName: "preprod" }, /base/],
-    ["an unknown branch", { headRefName: "adp-release/v0.2.66" }, /branch/],
+    ["an unknown branch", { headRefName: "auto/bump-operator" }, /branch/],
     ["a human commit", { commitAuthors: ["vbotbuildovich", "a"] }, /commit/],
     ["no commit authors", { commitAuthors: [] }, /commit/],
     ["an unknown repo", { repo: "redpanda-data/console" }, /branch/],
@@ -161,5 +161,131 @@ describe("checkBump", () => {
       reason: "structural change in install-pack/27.1.yml",
     });
     expect(checkBump(pr(), "")).toEqual({ ok: false, reason: "empty diff" });
+  });
+});
+
+// Shape of cloudv2 #30318: version bump plus additive release notes.
+const ADP_RELEASE_DIFF = `diff --git a/adp/RELEASE_NOTES.md b/adp/RELEASE_NOTES.md
+--- a/adp/RELEASE_NOTES.md
++++ b/adp/RELEASE_NOTES.md
+@@ -2,6 +2,12 @@
+ User-facing changes to the Redpanda Agentic Data Plane, by release.
+ 
++## v0.2.67 (2026-09-25)
++
++### ✨ Improvements
++
++#### Interface \`[UI]\`
++Numeric input fields now use plus and minus steppers.
+diff --git a/apps/adp-ui/package.json b/apps/adp-ui/package.json
+--- a/apps/adp-ui/package.json
++++ b/apps/adp-ui/package.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "0.2.66",
++  "version": "0.2.67",
+diff --git a/apps/adp-ui/src/lib/release-notes.generated.ts b/apps/adp-ui/src/lib/release-notes.generated.ts
+--- a/apps/adp-ui/src/lib/release-notes.generated.ts
++++ b/apps/adp-ui/src/lib/release-notes.generated.ts
+@@ -22,6 +22,18 @@ export interface ReleaseNote {
+ export const RELEASE_NOTES: ReleaseNote[] = [
++  {
++    version: '0.2.67',
++    date: '2026-09-25',
++    sections: [
++      {
++        kind: 'improvement',
++        items: [
++          { headline: 'Interface', tag: 'UI', body: 'The product\\'s inputs use steppers.' },
++          { headline: 'MCP Servers', body: 'Queries no longer truncate.' },
++        ],
++      },
++    ],
++  },
+`;
+
+const GENERATED = "apps/adp-ui/src/lib/release-notes.generated.ts";
+
+describe("checkBump for ADP releases", () => {
+  const release = pr({ number: 30318, headRefName: "adp-release/v0.2.67" });
+
+  test("approves a version bump with additive release notes", () => {
+    expect(checkBump(release, ADP_RELEASE_DIFF)).toEqual({ ok: true });
+  });
+
+  test("rejects a release whose files disagree with the branch version", () => {
+    const other = pr({ headRefName: "adp-release/v0.2.68" });
+    expect(checkBump(other, ADP_RELEASE_DIFF)).toEqual({
+      ok: false,
+      reason: "version 0.2.67 in adp/RELEASE_NOTES.md, expected 0.2.68",
+    });
+  });
+
+  test("rejects generated notes for a different version", () => {
+    const diff = ADP_RELEASE_DIFF.replace(
+      "version: '0.2.67'",
+      "version: '0.2.9'",
+    );
+    expect(checkBump(release, diff)).toEqual({
+      ok: false,
+      reason: `version 0.2.9 in ${GENERATED}, expected 0.2.67`,
+    });
+  });
+
+  test("rejects markdown without the release heading", () => {
+    const diff = ADP_RELEASE_DIFF.replace("## v0.2.67", "## v0.2.66");
+    expect(checkBump(release, diff)).toEqual({
+      ok: false,
+      reason: "version 0.2.66 in adp/RELEASE_NOTES.md, expected 0.2.67",
+    });
+  });
+
+  test.each([
+    ["a code statement", "+  console.log(document.cookie),"],
+    [
+      "an escaped string concatenation",
+      "+          { headline: 'a' + fetch('x') + '', body: 'b' },",
+    ],
+    ["an unknown kind", "+        kind: 'breaking',"],
+    ["an unknown tag", "+          { headline: 'a', tag: 'API', body: 'b' },"],
+  ])("rejects generated notes containing %s", (_label, line) => {
+    const diff = `${ADP_RELEASE_DIFF}${line}\n`;
+    const result = checkBump(release, diff);
+    expect(result.ok ? "" : result.reason).toMatch(
+      `unexpected change in ${GENERATED}`,
+    );
+  });
+
+  test("rejects removed release-note lines", () => {
+    const diff = ADP_RELEASE_DIFF.replace(
+      " User-facing changes",
+      "-User-facing changes",
+    );
+    expect(checkBump(release, diff)).toEqual({
+      ok: false,
+      reason: "removed lines in adp/RELEASE_NOTES.md",
+    });
+  });
+
+  test("rejects a release that skips one of the three files", () => {
+    const withoutMarkdown = ADP_RELEASE_DIFF.slice(
+      ADP_RELEASE_DIFF.indexOf("diff --git a/apps/adp-ui/package.json"),
+    );
+    expect(checkBump(release, withoutMarkdown)).toEqual({
+      ok: false,
+      reason: "missing file adp/RELEASE_NOTES.md",
+    });
+  });
+
+  test("rejects a release that also edits other files", () => {
+    const diff = `${ADP_RELEASE_DIFF}diff --git a/.claude/skills/adp-release/SKILL.md b/.claude/skills/adp-release/SKILL.md
+--- a/.claude/skills/adp-release/SKILL.md
++++ b/.claude/skills/adp-release/SKILL.md
++new step
+`;
+    expect(checkBump(release, diff)).toEqual({
+      ok: false,
+      reason: "unexpected file .claude/skills/adp-release/SKILL.md",
+    });
   });
 });
