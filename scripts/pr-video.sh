@@ -105,7 +105,10 @@ attach() {
   pr_url=${PR_VIDEO_PR_URL:-$(gh pr view --json url --jq .url)}
   mkdir -p "$profile"
   trap 'agent-browser --session "'"$session"'" close >/dev/null 2>&1 || true' EXIT
-  agent-browser --session "$session" --profile "$profile" open "$pr_url" >/dev/null
+  if ! agent-browser --session "$session" --profile "$profile" open "$pr_url" >/dev/null; then
+    echo "pr-video: could not open $profile; close any window still using it (such as the sign-in window), then rerun" >&2
+    exit 1
+  fi
   if [ -z "$(browser_eval "$session" "document.querySelector('meta[name=user-login]')?.content || ''")" ]; then
     echo "pr-video: sign in to GitHub once in the isolated profile, then rerun:" >&2
     echo "  agent-browser --profile '$profile' --headed open https://github.com/login" >&2
