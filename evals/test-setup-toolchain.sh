@@ -154,6 +154,22 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx biome check ."}}' \
   2 "block: bunx biome" "via bunx banned"
 
+_tc_pkg=$(mktemp -d "${TMPDIR:-/tmp}/toolchain-evals-XXXXXX")
+printf '%s' '{"scripts":{"lint":"biome lint .","lint:fix":"biome lint --write .","lint:file":"biome check --write --no-errors-on-unmatched","doctor":"react-doctor ."}}' > "$_tc_pkg/package.json"
+
+run_hook_eval "$SCRIPT" \
+  "{\"cwd\":\"$_tc_pkg\",\"tool_input\":{\"command\":\"bunx biome check --write src/a.ts src/b.ts && bun run type:check\"}}" \
+  2 "block: bunx biome names the per-file script and keeps the chain" "bun run lint:file src/a.ts src/b.ts && bun run type:check"
+
+run_hook_eval "$SCRIPT" \
+  "{\"cwd\":\"$_tc_pkg\",\"tool_input\":{\"command\":\"bunx biome lint --write .\"}}" \
+  2 "block: bunx biome on the whole repo names lint:fix" "bun run lint:fix"
+
+run_hook_eval "$SCRIPT" \
+  "{\"cwd\":\"$_tc_pkg\",\"tool_input\":{\"command\":\"bunx react-doctor .\"}}" \
+  2 "block: bunx react-doctor names the script that runs it" "bun run doctor"
+rm -rf "$_tc_pkg"
+
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bunx ultracite fix"}}' \
   2 "block: bunx ultracite" "via bunx banned"
@@ -306,6 +322,39 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -rf node_modules/.cache"}}' \
   0 "allow: rm -rf node_modules/.cache"
 
+# rstest cache trap: the documented fix must run, including inside a chain.
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf node_modules/.cache/rstest-unit && bun run test"}}' \
+  0 "allow: rm -rf node_modules/.cache/<tool> chained with tests"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf /tmp/hook-fixture-123; ls"}}' \
+  0 "allow: rm -rf /tmp/*"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf \"$TMPDIR/scratch\" \"${TMPDIR}/other\""}}' \
+  0 "allow: rm -rf \$TMPDIR/*"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf /tmp"}}' \
+  2 "block: rm -rf /tmp itself" "rm -r blocked"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf node_modules/../src"}}' \
+  2 "block: rm -rf path escaping a safe target" "rm -r blocked"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf dist && rm -rf src"}}' \
+  2 "block: unsafe rm in a later chain segment" "rm -r blocked"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf distribution"}}' \
+  2 "block: rm -rf name that only prefixes a safe target" "rm -r blocked"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"rm -rf src/generated"}}' \
+  2 "block: rm -r names git rm and scratch replacements" "git rm -r src/generated"
+
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"rm -rf .claude/skills"}}' \
   0 "allow: rm -rf .claude/skills (skill infrastructure)"
@@ -338,13 +387,22 @@ run_hook_eval "$SCRIPT" \
 
 # ── git push --force ──────────────────────────────────────────
 
+# Safe rewrite, not deny: a deny discards every step chained after the push.
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"git push --force"}}' \
-  2 "block: git push --force" "force"
+  0 "rewrite: git push --force -> --force-with-lease" '"command":"git push --force-with-lease"'
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"git push origin main -f"}}' \
-  2 "block: git push origin main -f"
+  0 "rewrite: git push origin main -f" '"command":"git push origin main --force-with-lease"'
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun run lint && git push --force origin feat/x && gh pr view"}}' \
+  0 "rewrite: --force inside a chain keeps the chain" '"command":"bun run lint && git push --force-with-lease origin feat/x && gh pr view"'
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git push --force-if-includes --force"}}' \
+  0 "rewrite: --force next to --force-if-includes" '"command":"git push --force-if-includes --force-with-lease"'
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"git push --force-with-lease"}}' \
@@ -354,11 +412,50 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"git push origin main"}}' \
   0 "allow: git push origin main"
 
+# ── sleep ─────────────────────────────────────────────────────
+
+# A leading delay only postpones the real command: drop it, run the rest.
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"sleep 30 && gh pr checks 12 && bun run lint"}}' \
+  0 "rewrite: leading sleep dropped from chain" '"command":"gh pr checks 12 && bun run lint"'
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"sleep 5; sleep 2s; git status"}}' \
+  0 "rewrite: repeated leading sleeps dropped" '"command":"git status"'
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"sleep 5"}}' \
+  2 "block: bare sleep names a wait primitive" "gh pr checks <n> --watch"
+
+# Mid-chain sleep may pace a loop; dropping it could busy-spin, so deny with
+# the exact chain minus the sleep.
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bun run build && sleep 3 && bun run test"}}' \
+  2 "block: mid-chain sleep names the chain without it" "bun run build && bun run test"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"while true; do sleep 1; done"}}' \
+  2 "block: sleep inside a loop" "sleep banned"
+
+# ── --no-verify ───────────────────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git commit --no-verify -m \"fix(x): y\" && git push"}}' \
+  2 "block: --no-verify names the command without it" 'rerun: git commit -m \"fix(x): y\" && git push'
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git commit -F - <<EOF\nfix(x): explain the flag\n\nMentions --no-verify in the body.\nEOF"}}' \
+  0 "allow: --no-verify mentioned only in a commit message body"
+
 # ── git reset --hard ──────────────────────────────────────────
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"git reset --hard"}}' \
-  2 "block: git reset --hard" "reset"
+  2 "block: git reset --hard" "git reset --keep"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"git fetch && git reset --hard origin/main && bun run test"}}' \
+  2 "block: reset --hard names the full keep replacement" "git fetch && git reset --keep origin/main && bun run test"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"git reset --soft HEAD~1"}}' \
@@ -470,7 +567,9 @@ rm -rf "$_ll_tmpdir"
 # Test that session-env.sh writes expected env vars
 CLAUDE_ENV_FILE=$(mktemp)
 export CLAUDE_ENV_FILE
-"$SESSION_SCRIPT"
+# session-env reads its hook payload from stdin; an inherited open stdin
+# (background or piped runner) would block that read forever.
+"$SESSION_SCRIPT" </dev/null
 session_exit=$?
 
 if [ $session_exit -eq 0 ]; then

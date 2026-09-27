@@ -4,41 +4,88 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 
 hook_parse_bash
 
-# Check if this is a git commit command with -m flag
-if ! echo "$command" | grep -qE 'git\s+commit\b.*\s+-m\s'; then
-  exit 0
-fi
+# The subject is the FIRST -m (git turns later -m flags into body paragraphs)
+# or the first line of the -F file. git rejects -m together with -F, so
+# whichever message flag comes first after `git commit` owns the subject.
+_commit_re='git[[:space:]]+((-C|-c)[[:space:]]+[^[:space:]]+[[:space:]]+)*commit([[:space:]].*)$'
+[[ $command =~ $_commit_re ]] || exit 0
+_after="${BASH_REMATCH[3]}"
+# POSIX ERE takes the leftmost match, so this lands on the first message flag.
+_flag_re='(^|[[:space:]])(-[a-zA-Z]*[mF]|--message|--file)(=|[[:space:]]*)(.*)$'
+[[ $_after =~ $_flag_re ]] || exit 0
+_flag="${BASH_REMATCH[2]}"
+_val="${BASH_REMATCH[4]}"
 
-# Extract the commit message from various formats
+# Read one shell word from $_val: "double" (backslash escapes), 'single', or bare.
+_first_word() {
+  local v="$1" q out="" i c
+  q="${v:0:1}"
+  case "$q" in
+    \"|\')
+      for ((i = 1; i < ${#v}; i++)); do
+        c="${v:i:1}"
+        if [ "$q" = '"' ] && [ "$c" = '\' ]; then out+="${v:i+1:1}"; i=$((i + 1)); continue; fi
+        [ "$c" = "$q" ] && break
+        out+="$c"
+      done
+      ;;
+    *) out="${v%%[[:space:]]*}" ;;
+  esac
+  printf '%s' "$out"
+}
+
 msg=""
+case "$_flag" in
+  *F|--file)
+    _path=$(_first_word "$_val")
+    { [ -z "$_path" ] || [ "$_path" = "-" ]; } && exit 0
+    _cwd=$(printf '%s' "${_hook_input:-}" | jq -r '.cwd // empty' 2>/dev/null || true)
+    case "$_path" in /*) ;; *) _path="${_cwd:-$PWD}/$_path" ;; esac
+    [ -r "$_path" ] || exit 0
+    msg=$(sed '/^#/d' "$_path")
+    ;;
+  *)
+    # -m "$(cat <<'EOF' ... EOF)": the message is the heredoc body.
+    if [[ $_val =~ ^\"\$\(cat[[:space:]]+\<\<-?[\'\"]?([A-Za-z_]+) ]]; then
+      _delim="${BASH_REMATCH[1]}"
+      msg=$(printf '%s\n' "$_val" | awk -v d="$_delim" 'NR > 1 { if ($0 ~ "^[[:space:]]*" d "[[:space:]]*$") exit; print }')
+    else
+      # \"... or $var: an escaped or expanded value, not a literal message
+      # (for example, a commit command quoted inside another command).
+      case "$_val" in \\*|\$*) exit 0 ;; esac
+      msg=$(_first_word "$_val")
+      case "$msg" in \$*) exit 0 ;; esac
+    fi
+    ;;
+esac
 
-# Try simple quoted extraction first
-msg=$(echo "$command" | sed -n 's/.*-m[[:space:]]*"\([^"]*\)".*/\1/p')
-if [ -z "$msg" ]; then
-  msg=$(echo "$command" | sed -n "s/.*-m[[:space:]]*'\\([^']*\\)'.*/\\1/p")
-fi
-
-# Try heredoc/multi-line — match both type(scope): and type: patterns
-if [ -z "$msg" ]; then
-  conventional_line=$(echo "$command" | grep -E '^\s*(feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert)(\(|:)' | head -1 | sed 's/^[[:space:]]*//')
-  if [ -n "$conventional_line" ]; then
-    msg="$conventional_line"
-  else
-    exit 0
-  fi
-fi
+msg=$(printf '%s\n' "$msg" | sed '/./,$!d')
+[ -z "$msg" ] && exit 0
 
 # Split into subject line
-subject=$(echo "$msg" | head -1)
+subject=$(printf '%s\n' "$msg" | head -1 | sed 's/^[[:space:]]*//')
 
 # ── Validate type ──────────────────────────────────────────────
 valid_types="feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert"
 
 if ! echo "$subject" | grep -qE "^($valid_types)\("; then
   if echo "$subject" | grep -qE "^($valid_types):"; then
-    hook_deny "Missing scope. Use: type(scope): description."
+    hook_deny "Missing scope in \"$subject\". Use: type(scope): description, for example $(echo "$subject" | sed -E 's/^([a-z]+):/\1(<scope>):/')."
   fi
-  hook_deny "Invalid commit type. Use: feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert."
+  # Common near-miss types map 1:1, so name the exact subject to rerun with.
+  _typo=$(echo "$subject" | sed -nE 's/^([A-Za-z]+)[(:].*/\1/p' | tr '[:upper:]' '[:lower:]')
+  case "$_typo" in
+    feature|features|add) _fixed=feat ;;
+    bugfix|hotfix|bug|fixes) _fixed=fix ;;
+    doc) _fixed=docs ;;
+    tests) _fixed="test" ;;
+    chores) _fixed=chore ;;
+    *) _fixed="" ;;
+  esac
+  if [ -n "$_fixed" ] && echo "$subject" | grep -qE '^[A-Za-z]+\('; then
+    hook_deny "Invalid commit type in \"$subject\". Rerun with: $(echo "$subject" | sed -E "s/^[A-Za-z]+/$_fixed/")"
+  fi
+  hook_deny "Invalid commit type in \"$subject\". Use: type(scope): description with type feat|fix|refactor|style|test|docs|chore|perf|ci|build|revert."
 fi
 
 # ── Validate scope ─────────────────────────────────────────────

@@ -48,7 +48,7 @@ _reg_tmpdir=$(mktemp -d /tmp/registry-eval-XXXXXX)
 cd "$_reg_tmpdir"
 git init -q && git commit --allow-empty -m "init" -q
 actual_exit=0
-"$SCRIPT" > /dev/null 2>&1 || actual_exit=$?
+"$SCRIPT" </dev/null > /dev/null 2>&1 || actual_exit=$?
 cd "$REPO_ROOT"
 rm -rf "$_reg_tmpdir"
 

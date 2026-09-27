@@ -66,7 +66,7 @@ actual_exit=0
 (
   cd "$_e2e_tmpdir"
   PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
-    "$ROUTE_SIBLING_SCRIPT"
+    "$ROUTE_SIBLING_SCRIPT" </dev/null
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
 {"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
 JSON
@@ -84,7 +84,7 @@ actual_exit=0
 (
   cd "$_e2e_tmpdir"
   PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" ROUTE_SIBLING_TEST_EXIT=1 \
-    "$ROUTE_SIBLING_SCRIPT"
+    "$ROUTE_SIBLING_SCRIPT" </dev/null
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
 {"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
 JSON
