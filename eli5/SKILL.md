@@ -41,3 +41,5 @@ Use the host HTML artifact surface or a temporary directory such as `mktemp -d "
 Open it in an isolated browser or host preview. Check comprehension, clipping, narrow-screen legibility, and claims; repair defects.
 
 Return the artifact or absolute path, one-sentence takeaway, and material uncertainty. Do not repeat the full explanation in chat.
+
+Know the domain? For quick in-chat views, use `/show-me`.

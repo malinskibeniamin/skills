@@ -84,3 +84,5 @@ przyczynowe jest zgodne z materiałem źródłowym. Przed zwróceniem wyniku pop
 
 Zwróć artefakt lub jego ścieżkę bezwzględną, jednozdaniowe podsumowanie oraz wszelkie istotne
 obszary niepewności. Nie powtarzaj pełnego wyjaśnienia na czacie.
+
+Czytelnik zna już domenę i potrzebuje szybkiej wizualizacji na czacie -> `/show-me`.

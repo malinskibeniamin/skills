@@ -34,3 +34,5 @@ Poniższe materiały przeczytaj tylko wtedy, gdy są istotne:
 - Użyj `/plan-arbiter`, gdy wiele planów lub agentów jest ze sobą sprzecznych.
 - Użyj `/grilling` przed implementacją, jeśli decyzje pozostają otwarte.
 - Planowanie jest tylko do odczytu, chyba że użytkownik wyraźnie zatwierdzi implementację.
+
+- Użyj `/show-me`, gdy jedna wizualizacja na czacie wystarczy do rozstrzygnięcia pytania.

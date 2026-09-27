@@ -54,8 +54,9 @@ Progressively disclose:
 5. superseded decisions and their change triggers.
 
 Raw diffs and long code excerpts are evidence behind an Implementation node, not the explanation's
-primary structure. Link existing plans, issues, ADRs, commits, and reports instead of reproducing
-them.
+primary structure. Render an Implementation node with the smallest `/show-me` view: call tree,
+component tree, file tree, or focused diff. Link existing plans, issues, ADRs, commits, and reports
+instead of reproducing them.
 
 Summarize rationale as alternatives, choice, evidence, and change trigger. Never expose or invent
 chain of thought, hidden deliberation, confidence scores, or private reasoning.

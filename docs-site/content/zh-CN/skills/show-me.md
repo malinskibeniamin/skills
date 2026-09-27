@@ -1,6 +1,6 @@
 ---
 title: /show-me
-description: 通过简洁的图表、代码结构草图和重点明确的 HTML 产物，帮助用户直观理解当前主题。
+description: 通过简洁的图表、代码结构草图和重点明确的 HTML 产物，帮助用户直观理解当前主题。当用户要求展示或勾画代码结构、流程或变更时使用。
 type: skill
 sidebar:
   label: /show-me
@@ -98,10 +98,11 @@ function expandSkill(command: string): string {
   return `use the ${skillName} skill`
 }
 ```
-- 对于可视化 UI、布局、状态对比或复杂到不适合使用 Mermaid 的概念，编写一个聚焦单一主题的 HTML 文件——可以是图表、信息图或简短的幻灯片，选择最适合表达要点的形式。匹配产品的颜色、字体、间距和组件；使用真实的标签和数据；同时支持桌面端和移动端。然后为用户打开该文件：
+- 对于可视化 UI、布局、状态对比或复杂到不适合使用 Mermaid 的概念，编写一个聚焦单一主题的 HTML 文件——可以是图表、信息图或简短的幻灯片，选择最适合表达要点的形式。匹配产品的颜色、字体、间距和组件；使用真实的标签和数据；同时支持桌面端和移动端。使用宿主提供的 HTML 产物界面，或使用临时目录，例如 `mktemp -d "${TMPDIR:-/tmp}/show-me.XXXXXX"`；不要将一次性可视化文件加入仓库。然后为用户打开该文件：
 ```
-Bash(open path/to/show-me-{description}.html)
+Bash(open /absolute/path/to/show-me-{description}.html)
 ```
 ### 指南
 将每个可视化内容放在其所支持的简短文字旁边。只保留回答用户当前问题或解决当前讨论点的选项所需的调用、文件、属性、状态和边界。
 你可以使用其中一种，也可以使用多种，但不太可能全部使用。请自行判断，不要让过多信息淹没用户。
+面向初学者的图解 -> `/eli5`；交互式计划 -> `/visual-plan`；PR 或分支回顾 -> `/visual-recap`。
