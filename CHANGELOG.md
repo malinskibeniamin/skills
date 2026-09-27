@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-09-27 -- Extend `/ss` with an Engineering practice section: eleven graded rules for how
+a change is built, tested, and shipped (guard the mistake class, test the real seam, verify
+the stored write, numbered stacks, boundary validation, fast follow-ups, finding triage,
+experiment verdicts, one owner per resource). `/ss` applies them to every diff alongside
+the value bucket rules.
+
 2026-09-27 -- Extend `/mm` with `CRAFT.md` (C1-C7) for planning and building, not only
 review: compounding work selection, stacked dark-launch milestones, differential-oracle and
 pinning tests, honest benchmarks, intent-carrying types and errors, reviewable PR bodies and

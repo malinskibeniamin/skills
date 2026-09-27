@@ -30,6 +30,11 @@ for rule in evidence-over-assertion reachable-by-user no-silent-no-op one-primar
   protect-paying-customers; do
   run_content_eval "$SS_RULES" "^\\| [SAB] \\| \`$rule\` \\|" "ss catalog grades $rule"
 done
+for rule in guard-the-mistake-class test-the-real-seam verify-the-stored-write numbered-stack \
+  validate-at-the-boundary follow-up-lands-fast; do
+  run_content_eval "$SS_RULES" "^\\| [SAB] \\| \`$rule\` \\|" "ss practice rule grades $rule"
+done
+run_content_eval "$SS_SKILL" "Engineering practice" "ss applies engineering practice rules"
 run_content_eval "$SS_RULES" "recency-weighted" "ss catalog states its weighting"
 
 # The catalog is anonymous: no handles, ticket keys, PR or issue refs, or repo URLs.

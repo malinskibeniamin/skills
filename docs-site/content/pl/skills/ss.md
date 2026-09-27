@@ -44,7 +44,7 @@ Każdy PR ma dokładnie jedną główną kategorię. Różne cele rozdziel na os
    nakład pracy na przeglądy. Usuwanie i upraszczanie też stanowią wartość.
 7. **Zakres:** najmniejszy odwracalny przyrost, który potwierdza deklarowaną korzyść; domyślnie wyłączony; dalsze prace
    w osobnych zgłoszeniach, bez rozszerzania zakresu; ochrona obecnych płacących klientów zapewniona już w projekcie.
-8. **Zastosuj reguły:** sprawdź wpisy w RULES.md pasujące do kategorii i obszaru zmiany.
+8. **Zastosuj reguły:** sprawdź wpisy w RULES.md pasujące do kategorii oraz wpisy dotyczące praktyk inżynierskich.
 
 ## Werdykt [#verdict]
 
@@ -80,4 +80,4 @@ Verdict: justified | needs justification | unlikely to pay off
 - [P1|P2 Value] <rule id> <gap> - <consequence> - <smallest fix>
 ```
 
-Limit dla tej roli: 250 słów. Wynik bez zastrzeżeń zawiera tylko dwa pierwsze wiersze.
+Limit: 250 słów. Wynik bez zastrzeżeń zawiera tylko dwa pierwsze wiersze.

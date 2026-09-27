@@ -41,7 +41,7 @@ sidebar:
    審查負擔。刪除與簡化也算是價值。
 7. **變更範圍：** 能驗證主張的最小可還原增量；預設停用；後續工作
    另開工作單，不併入本次變更；從設計上保障既有付費客戶。
-8. **套用規則：** 檢查 RULES.md 中符合該類別與介面或管道的條目。
+8. **套用規則：** 檢查 RULES.md 中符合該類別的條目，以及工程實務條目。
 
 ## 判定 [#verdict]
 
@@ -77,4 +77,4 @@ Verdict: justified | needs justification | unlikely to pay off
 - [P1|P2 Value] <rule id> <gap> - <consequence> - <smallest fix>
 ```
 
-此審查角色的輸出上限為 250 詞。沒有問題時，結果僅包含前兩行。
+上限為 250 詞。沒有問題時，結果僅包含前兩行。
