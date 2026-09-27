@@ -79,7 +79,7 @@ _biome_tmpdir=$(mktemp -d /tmp/biome-eval-XXXXXX)
 cd "$_biome_tmpdir"
 git init -q && git commit --allow-empty -m "init" -q
 actual_exit=0
-"$SCRIPT" > /dev/null 2>&1 || actual_exit=$?
+"$SCRIPT" </dev/null > /dev/null 2>&1 || actual_exit=$?
 cd "$REPO_ROOT"
 rm -rf "$_biome_tmpdir"
 

@@ -79,6 +79,61 @@ run_hook_eval "$SCRIPT" \
   "{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"git commit -m 'refactor(api): extract validation utility'\"}}" \
   0 "allow: single-quoted commit message"
 
+# ── Hook: subject comes from the FIRST -m (later -m are body paragraphs) ──
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -m \"fix(hooks): parse the first message flag\" -m \"Body paragraph. Ends with period.\""}}' \
+  0 "allow: body -m after a valid subject"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -m \"Bad subject\" -m \"fix(hooks): looks valid\""}}' \
+  2 "block: invalid first -m even when a later -m looks valid" "Bad subject"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -am \"docs(readme): explain hook rewrites\""}}' \
+  0 "allow: -am combined flag"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -am \"Update stuff\""}}' \
+  2 "block: -am combined flag is validated" "Invalid commit type"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit --message=\"feat(ui): add avatar upload\""}}' \
+  0 "allow: --message= form"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -m \"$(cat <<'"'"'EOF'"'"'\nfix(hooks): read heredoc subject\n\nBody line. With period.\nEOF\n)\""}}' \
+  0 "allow: heredoc subject"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -m \"$(cat <<'"'"'EOF'"'"'\nUpdated the hooks\n\nfix(hooks): body mention\nEOF\n)\""}}' \
+  2 "block: heredoc subject is the first line, not any conventional line" "Updated the hooks"
+
+# ── Hook: -F reads the message file ──────────────────────────────
+
+_cc_dir=$(mktemp -d "${TMPDIR:-/tmp}/cc-evals-XXXXXX")
+printf 'fix(hooks): read the message file\n\nBody.\n' > "$_cc_dir/good.txt"
+printf 'WIP\n' > "$_cc_dir/bad.txt"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Bash\",\"cwd\":\"$_cc_dir\",\"tool_input\":{\"command\":\"git commit -F good.txt\"}}" \
+  0 "allow: -F relative file with valid subject"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"git commit -F $_cc_dir/bad.txt\"}}" \
+  2 "block: -F file with invalid subject" "WIP"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"git commit --file=$_cc_dir/good.txt -m ignored\"}}" \
+  0 "allow: first flag -F wins over a later -m"
+rm -rf "$_cc_dir"
+
+# ── Hook: deny names the exact replacement subject ───────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"git commit -m \"feature(ui): add avatar upload\""}}' \
+  2 "block: common type typo suggests the fixed subject" "feat(ui): add avatar upload"
+
 # ── Script content ──────────────────────────────────────────────
 
 run_content_eval "$SCRIPT" "feat|fix|refactor" "hook validates commit types"

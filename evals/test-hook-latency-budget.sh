@@ -56,7 +56,7 @@ else
 fi
 
 # Guard evasion: backslash-escaped commands must still deny (Sol P1).
-_ge=$(printf '{"tool_name":"Bash","tool_input":{"command":"r\\\\m -rf /tmp/x"}}' | bash "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>&1 || true)
+_ge=$(printf '{"tool_name":"Bash","tool_input":{"command":"r\\\\m -rf src/x"}}' | bash "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>&1 || true)
 if printf '%s' "$_ge" | grep -q "rm -r blocked"; then
   echo "  PASS  backslash-escaped rm still denied through the dispatcher"
   PASS=$((PASS + 1))

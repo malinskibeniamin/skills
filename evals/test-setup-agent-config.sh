@@ -25,7 +25,7 @@ run_content_eval "$SKILL_DIR/README.md" "Rstest" "SKILL.md documents Rstest opti
 
 CLAUDE_ENV_FILE=$(mktemp)
 export CLAUDE_ENV_FILE
-"$ENV_SCRIPT"
+"$ENV_SCRIPT" </dev/null
 
 for var in AI_AGENT CLAUDECODE; do
   if grep -qF "$var" "$CLAUDE_ENV_FILE"; then

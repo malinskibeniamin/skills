@@ -164,7 +164,8 @@ _assert_exit 2 "sleep 5 denied"
 _assert_stderr_contains "sleep banned" "stderr mentions sleep banned"
 
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"sleep 60 && gh pr checks 123"}}'
-_assert_exit 2 "sleep in chain denied"
+_assert_exit 0 "leading sleep in chain rewritten, not denied"
+_assert_stdout_contains '"command":"gh pr checks 123"' "rewrite drops the leading sleep"
 
 echo "  allowed commands pass:"
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint:fix"}}'
