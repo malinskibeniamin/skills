@@ -18,7 +18,7 @@ sidebar:
    - 事实性 -> 先验证；
    - 因果性 -> 测试其作用机制；
    - 架构性 -> 探查现有用法；
-   - 合并前提（“此 PR 应该合并”）-> 依据 `jb:` 裁决、[lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#5-steelman-gate) 证据和审查发现进行论证；
+   - 合并前提（“此 PR 应该合并”）-> 依据 `jb:` 裁决、[lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#6-steelman-gate) 证据和审查发现进行论证；
    - 偏好/目标/范围 -> 返回 `noise`；由用户决定。
 2. **证据优先：**搜索符号/模式，阅读引用的文件，运行成本较低的检查，查阅最新文档。不要基于泛泛而谈的理由进行论证。
 3. **相反观点：**写出 2-4 个要点，引用 `file:line` 或命令输出。说明用户的主张需要满足什么条件才会是错的、支持其主张错误的仓库证据、未考虑到的故障模式，以及与其主张相矛盾的先例/历史记录。

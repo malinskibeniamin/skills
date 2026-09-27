@@ -46,7 +46,7 @@ sidebar:
 - 名稱或測試資料承諾的範圍超出輸入實際驗證的範圍，例如名為「停用視窗」的測試，卻只斷言視窗未被清除；
 - UI 斷言檢查的是不論變更的分支為何都會轉譯的元素、模擬子元件的替代輸出，或從元件用來轉譯的同一常數匯入的文案；以直接呼叫處理函式或設定狀態取代互動；
 - 在修改標記的同一次變更中，撰寫或重新產生用來固定該標記的快照；
-- 未等待完成的非同步斷言、不含預期結果檢查的 `waitFor` 回呼，或放在條件式、catch 區塊或可能永遠不會執行的回呼中的預期結果檢查；在讓斷言通過的同一次變更中，放寬、跳過或縮小斷言範圍。對於使用者可見的行為，請證明測試確實會失敗，如 [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#1-tests-that-cannot-fail) 所述。
+- 未等待完成的非同步斷言、不含預期結果檢查的 `waitFor` 回呼，或放在條件式、catch 區塊或可能永遠不會執行的回呼中的預期結果檢查；在讓斷言通過的同一次變更中，放寬、跳過或縮小斷言範圍。請證明測試確實會失敗，如 [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#3-tests-that-cannot-fail) 所述。
 
 ## 價值標準 [#value-bar]
 

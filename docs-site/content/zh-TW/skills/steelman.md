@@ -18,7 +18,7 @@ sidebar:
    - 事實性 -> 驗證；
    - 因果性 -> 測試其作用機制；
    - 架構性 -> 探查現有用法；
-   - 合併前提（「這個 PR 應該合併」）-> 依據 `jb:` 判定、[lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#5-steelman-gate) 證據與審查發現提出論證；
+   - 合併前提（「這個 PR 應該合併」）-> 依據 `jb:` 判定、[lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#6-steelman-gate) 證據與審查發現提出論證；
    - 偏好／目標／範圍 -> 返回 `noise`；由使用者決定。
 2. **證據優先：**搜尋符號／模式、閱讀所引用的檔案、執行成本低的檢查、查閱最新文件。不要根據泛泛而談的問題跡象提出論證。
 3. **反方論證：**2 至 4 個項目符號，附上 `file:line` 或命令輸出。說明必須有哪些條件成立，主張才會不成立，並列出支持此情況的儲存庫證據、未考慮到的失敗模式，以及與主張矛盾的先例／歷史紀錄。

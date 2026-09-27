@@ -141,8 +141,12 @@ tanstack-router 3200
 postgresql 3175
 golang-review 3125
 jb 4000
+<<<<<<< HEAD
 av 3625
-lie-detector 4400
+lie-detector 5050
+=======
+lie-detector 5050
+>>>>>>> bc9da68f (feat(lie-detector): cover claims and code, not only tests)
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000

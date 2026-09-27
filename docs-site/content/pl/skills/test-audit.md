@@ -50,7 +50,7 @@ Wspólna lista kontrolna dla wszystkich trybów: kwalifikacja odrzuca nowe testy
 - nazwy lub fixtury obiecujące więcej, niż sprawdzają dane wejściowe, na przykład test „wycofuje okno” sprawdzający, że okno nie zostało wyczyszczone;
 - asercje interfejsu użytkownika dotyczące elementów renderowanych niezależnie od zmienionej gałęzi, wyniku zwracanego przez atrapę komponentu podrzędnego lub tekstu importowanego ze stałej, którą renderuje komponent; interakcje zastąpione wywołaniem funkcji obsługi lub bezpośrednim ustawieniem stanu;
 - snapshoty zapisane lub wygenerowane ponownie w tej samej zmianie co kod znaczników, który utrwalają;
-- asercje asynchroniczne, na które nikt nie czeka, funkcje wywołania zwrotnego `waitFor` bez asercji lub asercje wewnątrz warunków, bloków catch albo funkcji wywołania zwrotnego, które mogą nigdy się nie wykonać; asercje złagodzone, pominięte lub zawężone w tej samej zmianie, dzięki której zaczęły przechodzić. W przypadku zachowania widocznego dla użytkownika udowodnij, że test może nie przejść, jak opisano w [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#1-tests-that-cannot-fail).
+- asercje asynchroniczne, na które nikt nie czeka, funkcje wywołania zwrotnego `waitFor` bez asercji lub asercje wewnątrz warunków, bloków catch albo funkcji wywołania zwrotnego, które mogą nigdy się nie wykonać; asercje złagodzone, pominięte lub zawężone w tej samej zmianie, dzięki której zaczęły przechodzić. Udowodnij, że test może nie przejść, jak opisano w [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#3-tests-that-cannot-fail).
 
 ## Próg wartości [#value-bar]
 

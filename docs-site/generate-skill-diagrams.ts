@@ -351,8 +351,8 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
   "lie-detector": {
     kind: "evidence-funnel",
     nodes: [
-      "Consumer-facing diff + claims",
-      "Break behavior, check claims",
+      "Diff + every claim",
+      "Claims, code, tests that lie",
       "Unrequested + copyable changes",
       "Steelman merge gate",
     ],

@@ -11,7 +11,7 @@ Counter sycophancy with evidence. Skip preferences/goals/scope, trivial actions,
    - factual -> verify;
    - causal -> test mechanism;
    - architectural -> inspect actual usage;
-   - merge premise ("this PR should merge") -> argue from the `jb:` verdict, [lie-detector](../lie-detector/SKILL.md#5-steelman-gate) evidence, and review findings;
+   - merge premise ("this PR should merge") -> argue from the `jb:` verdict, [lie-detector](../lie-detector/SKILL.md#6-steelman-gate) evidence, and review findings;
    - preference/goal/scope -> return `noise`; user's call.
 2. **Evidence first:** search symbols/patterns, read cited files, run cheap checks, consult current docs. Never argue from generic smells.
 3. **Opposite:** 2-4 bullets with `file:line` or command output. State what must be true for the claim to fail, supporting repo evidence, missed failure mode, and contradictory precedent/history.

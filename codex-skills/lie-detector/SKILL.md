@@ -1,6 +1,6 @@
 ---
 name: lie-detector
-description: "Catch what a diff claims but does not do: tests that cannot fail, hallucinated APIs, unrequested changes, copyable anti-patterns. Use on consumer-facing diffs and before calling a PR mergeable."
+description: "Catch what a change claims but does not do: hallucinated APIs or claims, code that fakes success, tests that cannot fail, unrequested changes, copyable anti-patterns. Use on every PR."
 ---
 
 Read and follow the complete [canonical skill instructions](../../lie-detector/SKILL.md) before acting.

@@ -39,7 +39,7 @@ The shared checklist for every mode: the authoring gate rejects a new test that 
 - names or fixtures that promise more than the input exercises, such as a "retires the window" test asserting the window was not cleared;
 - UI assertions on elements that render regardless of the changed branch, on a mocked child's stub output, or on copy imported from the constant the component renders; interactions replaced by calling the handler or setting state directly;
 - snapshots written or regenerated in the same change as the markup they pin;
-- async assertions never awaited, `waitFor` callbacks with no expectation, or expectations inside conditionals, catch blocks, or callbacks that may never run; assertions loosened, skipped, or narrowed in the same change that made them pass. For consumer-facing behavior, prove the test can fail as in [lie-detector](../lie-detector/SKILL.md#1-tests-that-cannot-fail).
+- async assertions never awaited, `waitFor` callbacks with no expectation, or expectations inside conditionals, catch blocks, or callbacks that may never run; assertions loosened, skipped, or narrowed in the same change that made them pass. Prove the test can fail as in [lie-detector](../lie-detector/SKILL.md#3-tests-that-cannot-fail).
 
 ## Value bar
 

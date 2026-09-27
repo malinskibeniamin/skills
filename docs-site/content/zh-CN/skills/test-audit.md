@@ -46,7 +46,7 @@ sidebar:
 - 名称或测试夹具承诺的范围超出输入实际覆盖的范围，例如名为“停用窗口”的测试却在断言窗口未被清除；
 - 针对无论修改的分支如何都会渲染的元素、被模拟的子组件的桩输出，或从组件渲染所用的同一常量中导入的文案进行 UI 断言；用直接调用处理函数或设置状态来替代交互；
 - 在修改标记的同一次变更中编写或重新生成用于固定该标记的快照；
-- 未等待完成的异步断言、不含断言的 `waitFor` 回调，或位于可能永远不会执行的条件分支、catch 块或回调中的断言；在使断言通过的同一次变更中放宽、跳过断言或缩小其范围。对于面向使用者的行为，应证明测试确实能够失败，具体参见 [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#1-tests-that-cannot-fail)。
+- 未等待完成的异步断言、不含断言的 `waitFor` 回调，或位于可能永远不会执行的条件分支、catch 块或回调中的断言；在使断言通过的同一次变更中放宽、跳过断言或缩小其范围。应证明测试确实能够失败，具体参见 [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#3-tests-that-cannot-fail)。
 
 ## 价值标准 [#value-bar]
 

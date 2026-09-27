@@ -46,8 +46,8 @@
       "fontSize": 18,
       "height": 49,
       "strokeColor": "#adb5bd",
-      "text": "Catch what a change claims but does not do: tests that cannot fail,\nhallucinated APIs or claims, unrequested regressions, and",
-      "width": 748,
+      "text": "Catch what a change claims but does not do: hallucinated APIs or claims,\ncode that fakes success, tests that cannot",
+      "width": 804,
       "x": 60,
       "y": 100
     },
@@ -78,7 +78,7 @@
       "fontSize": 18,
       "height": 60,
       "label": {
-        "text": "Consumer-facing\ndiff + claims"
+        "text": "Diff + every claim"
       },
       "roughness": 1,
       "roundness": {
@@ -103,7 +103,7 @@
       "fontSize": 18,
       "height": 60,
       "label": {
-        "text": "Break behavior,\ncheck claims"
+        "text": "Claims, code,\ntests that lie"
       },
       "roughness": 1,
       "roundness": {
