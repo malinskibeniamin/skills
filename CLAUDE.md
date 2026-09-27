@@ -51,6 +51,8 @@ branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
 a session to deliver that branch; correct endpoint state and continue. Store inferred delivery
 endpoints only in lifecycle state, never developer context.
+When a PR exists for the current branch, put follow-up waves into the current PR by default.
+Creating a draft PR at the requested PR endpoint needs no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
@@ -58,6 +60,8 @@ Use isolated browser automation; never take over a human-owned browser or deskto
 End action turns with exactly one status line:
 `🟢 done — <evidence>`, `🟡 awaiting decision — <decision>`, or
 `🔴 blocked — <external blocker and needed input>`.
+When a PR exists, include its full PR URL on the final status line, including after updates
+and when awaiting a decision or blocked.
 
 ## Work
 

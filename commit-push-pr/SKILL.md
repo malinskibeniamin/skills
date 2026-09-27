@@ -32,7 +32,7 @@ Only explicit merge requests use [the merge contract](references/merge.md), not 
 
 PR creation authorizes verification, commit, push, and lease-protected rebase on the current user branch; never merge or unrelated fixes.
 
-1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse the branch PR or create against that base with assignee, labels, and reference template. Whole-stack publication uses `/stacked-prs`.
+1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR; create one against that base only if none exists, with assignee, labels, and reference template. Draft PR creation at this endpoint proceeds without separate approval. Whole-stack publication uses `/stacked-prs`.
 2. Every PR runs `/quantify-impact`; include concise value or proven metrics, not benchmark theater.
 3. Every visible change, however small, needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without explicit user waiver.
 4. Include current dogfood receipt. Re-read the body, verify reviewer image access, and print the URL. Updates/reopens use the same gate; edits invalidate affected evidence.
@@ -44,6 +44,6 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
 2. Report failures; further remediation/monitoring requires `/go`, ship, babysitting, or follow-up.
 3. Report `git status`, remaining diff, branch, commits, PR, CI, and next action.
-4. End with one status line: `done`, `awaiting decision`, or `blocked`, using the repository marker contract.
+4. End with one status line: `done`, `awaiting decision`, or `blocked`, using the repository marker contract. Include the full PR URL on that final status line whenever a PR exists, for new and updated PRs alike.
 
 Never stage unrelated work, push unconfirmed mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.
