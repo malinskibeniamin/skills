@@ -181,7 +181,7 @@ Gesture details: confirm swipe dismissal has a velocity threshold, boundary damp
 
 ## Slop catalog expansion
 
-Priority catalog: flat type hierarchy, AI color palette, layout property animation, gradient text, glassmorphism, side-stripe accent borders, ghost-card border plus large shadow, extreme radius, repeated icon tiles, repeated section kickers, fake metric heroes, nested cards, too-long measure, bounce easing, overlong duration, marketing buzzwords, aphoristic cadence, and placeholder imagery.
+Priority catalog: flat type hierarchy, AI color palette, layout property animation, gradient text, glassmorphism, side-stripe accent borders, ghost-card border plus large shadow, extreme radius, repeated icon tiles, repeated section kickers, fake metric heroes, nested cards, too-long measure, bounce easing, overlong duration, marketing buzzwords, aphoristic cadence, placeholder imagery, plus AI defaults: cream/off-white, italic accent headings, numbered 01 / 02 / 03 section labels, monospace labels, pill buttons.
 
 Use the catalog as a detector. Still write the finding as evidence:
 

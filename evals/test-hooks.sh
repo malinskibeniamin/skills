@@ -3,11 +3,32 @@
 HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 SHARED_DIR="$REPO_ROOT/shared"
 
+# shared/ holds libraries; hook entrypoints live only in .claude/hooks/, so
+# tests and installs cannot pass against a stale copy. The source-hook-lib shim
+# is a library that skill-script symlinks load, so it must stay byte-identical.
+_dup_hooks=""
+for _shared_hook in "$SHARED_DIR"/*.sh; do
+  _name=$(basename "$_shared_hook")
+  [ -f "$HOOKS_DIR/$_name" ] || continue
+  if [ "$_name" = "source-hook-lib.sh" ] && cmp -s "$_shared_hook" "$HOOKS_DIR/$_name"; then
+    continue
+  fi
+  _dup_hooks="$_dup_hooks $_name"
+done
+if [ -z "$_dup_hooks" ]; then
+  echo "  PASS  shared/ duplicates no .claude/hooks entrypoint"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared/ duplicates .claude/hooks entrypoints:$_dup_hooks"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: stale hook copies in shared/"
+fi
+
 # ── Hook scripts exist and are executable ────────────────────────
-run_file_eval "$SHARED_DIR/subagent-start.sh" "subagent-start.sh exists"
-run_executable_eval "$SHARED_DIR/subagent-start.sh" "subagent-start.sh is executable"
-run_file_eval "$SHARED_DIR/subagent-stop.sh" "subagent-stop.sh exists"
-run_executable_eval "$SHARED_DIR/subagent-stop.sh" "subagent-stop.sh is executable"
+run_file_eval "$HOOKS_DIR/subagent-start.sh" "subagent-start.sh exists"
+run_executable_eval "$HOOKS_DIR/subagent-start.sh" "subagent-start.sh is executable"
+run_file_eval "$HOOKS_DIR/subagent-stop.sh" "subagent-stop.sh exists"
+run_executable_eval "$HOOKS_DIR/subagent-stop.sh" "subagent-stop.sh is executable"
 
 # ── Real files in .claude/hooks (no symlinks — 2.2.1 dereferenced) ──
 # Plugin packager resolves relative symlinks to absolute paths at
@@ -62,53 +83,53 @@ run_content_eval "$REPO_ROOT/.claude/settings.json" "SubagentStart" "settings.js
 run_content_eval "$REPO_ROOT/.claude/settings.json" "SubagentStop" "settings.json has SubagentStop hook"
 
 # ── SubagentStop: non-reviewer agent passes through (exit 0) ────
-run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   '{"agent_type":"verifier","session_id":"test-eval","last_assistant_message":"all good"}' \
   0 \
   "subagent-stop passes through non-reviewer agents"
 
 # ── SubagentStop: valid findings JSON accepted (exit 0) ──────────
 VALID_FINDINGS='{"agent_type":"code-reviewer","session_id":"test-eval","last_assistant_message":"```json\n{\"reviewer\":\"code-reviewer\",\"status\":\"APPROVED\",\"findings\":[],\"testing_gaps\":[],\"simplification_opportunities\":[]}\n```"}'
-run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "$VALID_FINDINGS" \
   0 \
   "subagent-stop accepts valid findings JSON"
 
 # ── SubagentStop: missing JSON block rejected (exit 2) ───────────
-run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   '{"agent_type":"self-reviewer","session_id":"test-eval","last_assistant_message":"Looks good, no issues found."}' \
   2 \
   "subagent-stop rejects reviewer output without JSON block"
 
 # ── SubagentStop: invalid status enum rejected (exit 2) ──────────
 INVALID_STATUS='{"agent_type":"code-reviewer","session_id":"test-eval","last_assistant_message":"```json\n{\"reviewer\":\"code-reviewer\",\"status\":\"LGTM\",\"findings\":[]}\n```"}'
-run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "$INVALID_STATUS" \
   2 \
   "subagent-stop rejects invalid status enum"
 
 # ── SubagentStop: missing required finding fields rejected (exit 2)
 MISSING_FIELDS='{"agent_type":"code-reviewer","session_id":"test-eval","last_assistant_message":"```json\n{\"reviewer\":\"code-reviewer\",\"status\":\"NEEDS_CHANGES\",\"findings\":[{\"title\":\"bug\"}]}\n```"}'
-run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "$MISSING_FIELDS" \
   2 \
   "subagent-stop rejects findings with missing required fields"
 
 # ── SubagentStart: emits context on stderr (exit 0) ─────────────
-run_hook_eval "$SHARED_DIR/subagent-start.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-start.sh" \
   '{"agent_type":"self-reviewer","session_id":"test-eval"}' \
   0 \
   "subagent-start exits 0 for reviewer agent"
 
 # ── SubagentStart: emits context with branch info ────────────────
-run_hook_eval "$SHARED_DIR/subagent-start.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-start.sh" \
   '{"agent_type":"code-reviewer","session_id":"test-eval"}' \
   0 \
   "subagent-start exits 0 for code-reviewer" \
   "Branch Context"
 
 rm -rf /tmp/hook-session-test-agent-tracking
-run_hook_eval "$SHARED_DIR/subagent-start.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-start.sh" \
   '{"agent_id":"agent-track-1","agent_type":"Explore","session_id":"test-agent-tracking"}' \
   0 \
   "subagent-start tracks active agent"
@@ -120,7 +141,7 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: active subagent marker missing"
 fi
-run_hook_eval "$SHARED_DIR/subagent-stop.sh" \
+run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   '{"agent_id":"agent-track-1","agent_type":"Explore","session_id":"test-agent-tracking","last_assistant_message":"done"}' \
   0 \
   "subagent-stop accepts completed non-reviewer"
@@ -145,13 +166,12 @@ else
 fi
 
 # A linked worktree has a .git file, not a directory. Stop hooks must still run.
-for hook in "$HOOKS_DIR/orchestration-stop.sh" "$SHARED_DIR/orchestration-stop.sh"; do
-  if grep -q "git rev-parse --is-inside-work-tree" "$hook"; then
-    echo "  PASS  $(basename "$hook") recognizes linked worktrees"
-    PASS=$((PASS + 1))
-  else
-    echo "  FAIL  $(basename "$hook") exits early in linked worktrees"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: $(basename "$hook") exits early in linked worktrees"
-  fi
-done
+hook="$HOOKS_DIR/orchestration-stop.sh"
+if grep -q "git rev-parse --is-inside-work-tree" "$hook"; then
+  echo "  PASS  $(basename "$hook") recognizes linked worktrees"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  $(basename "$hook") exits early in linked worktrees"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: $(basename "$hook") exits early in linked worktrees"
+fi

@@ -49,13 +49,16 @@ run_content_eval "$SKILL_DIR/SETUP.md" "@cross-browser" "SETUP scopes secondary 
 
 
 _e2e_tmpdir=$(mktemp -d /tmp/e2e-route-hook-XXXXXX)
-mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin"
+git -C "$_e2e_tmpdir" init -q
+mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin" "$_e2e_tmpdir/node_modules/.bin"
 cat > "$_e2e_tmpdir/bin/vitest" << 'EOF'
 #!/bin/bash
 echo "$*" > "$ROUTE_SIBLING_TEST_CAPTURE"
 exit "${ROUTE_SIBLING_TEST_EXIT:-0}"
 EOF
 chmod +x "$_e2e_tmpdir/bin/vitest"
+# Isolate the repo-local runner override too; CI installs a real Vitest binary.
+cp "$_e2e_tmpdir/bin/vitest" "$_e2e_tmpdir/node_modules/.bin/vitest"
 route_file="$_e2e_tmpdir/src/routes/users.page.tsx"
 test_file="$_e2e_tmpdir/src/routes/users.browser.test.tsx"
 printf "export function UsersPage() { return <div /> }\n" > "$route_file"
@@ -65,17 +68,19 @@ capture="$_e2e_tmpdir/capture.txt"
 actual_exit=0
 (
   cd "$_e2e_tmpdir"
-  PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
-    "$ROUTE_SIBLING_SCRIPT" </dev/null
+  PATH="$_e2e_tmpdir/bin:$PATH" CLAUDE_SESSION_ID="e2e-route-hook-$$" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
+    "$ROUTE_SIBLING_SCRIPT"
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
-{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+{"tool_name":"Write","session_id":"e2e-route-hook-$$","tool_input":{"file_path":"$route_file"}}
 JSON
 
 if [ "$actual_exit" -eq 0 ] && grep -q "users.browser.test.tsx" "$capture" 2>/dev/null; then
   echo "  PASS  route sibling hook runs browser test for .page.tsx route"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  route sibling hook did not run browser test"
+  echo "  FAIL  route sibling hook did not run browser test (exit=$actual_exit)"
+  cat /tmp/e2e-route-stderr 2>/dev/null || true
+  cat "$_e2e_tmpdir/capture.txt" 2>/dev/null || true
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: route sibling hook did not run browser test"
 fi
@@ -84,16 +89,17 @@ actual_exit=0
 (
   cd "$_e2e_tmpdir"
   PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" ROUTE_SIBLING_TEST_EXIT=1 \
-    "$ROUTE_SIBLING_SCRIPT" </dev/null
+    "$ROUTE_SIBLING_SCRIPT"
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
-{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+{"tool_name":"Write","session_id":"e2e-route-hook-$$","tool_input":{"file_path":"$route_file"}}
 JSON
 
 if [ "$actual_exit" -eq 2 ] && grep -q "Sibling route test failed" /tmp/e2e-route-stderr; then
   echo "  PASS  route sibling hook blocks failing sibling test"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  route sibling hook did not block failing sibling test"
+  echo "  FAIL  route sibling hook did not block failing sibling test (exit=$actual_exit)"
+  cat /tmp/e2e-route-stderr 2>/dev/null || true
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: route sibling hook did not block failing sibling test"
 fi
@@ -129,7 +135,7 @@ else
   ERRORS="$ERRORS\n  FAIL: structural test hook warned despite sibling test"
 fi
 
-rm -rf "$_e2e_tmpdir" /tmp/e2e-route-stdout /tmp/e2e-route-stderr /tmp/e2e-structural-stdout /tmp/e2e-structural-stderr
+rm -rf "$_e2e_tmpdir" "/tmp/hook-session-e2e-route-hook-$$" /tmp/e2e-route-stdout /tmp/e2e-route-stderr /tmp/e2e-structural-stdout /tmp/e2e-structural-stderr
 
 # ── Description length ──────────────────────────────────────────
 

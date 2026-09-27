@@ -50,6 +50,7 @@ Draft each variant. Hold each one to:
 - The page's purpose and the data it has access to.
 - The project's component library / styling system (TailwindCSS, shadcn, MUI, plain CSS, whatever).
 - A clear exported component name, e.g. `VariantA`, `VariantB`, `VariantC`.
+- A named exclusion list when the request gives no design direction. "Avoid a generic look" only swaps one model default for another; name the patterns instead, starting with: cream or off-white background, italic accent words in headings, numbered `01 / 02 / 03` section labels, monospace labels, and pill-shaped buttons. After rendering, add any replacement default you also reject to the list and regenerate.
 
 Variants must be **structurally different** -- different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
 

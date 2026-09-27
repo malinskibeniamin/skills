@@ -44,6 +44,13 @@ acceptance criteria, and unguarded one-way doors, while the default stays approv
 `jb/RULES.md` carries 54 graded rules (Scope, Evidence, Delivery, Contracts, Taste, Cost)
 whose grades `evals/test-jb.sh` keeps mechanical. `/review` applies the jb hat on every PR
 and records its verdict in the receipt; the PR review routine applies it too. Skills 91 -> 92.
+2026-09-26 -- Adopt Anthropic's Opus 5.5 playbook where it changes harness behavior.
+CLAUDE.md keeps long runs moving and keeps the task checklist in
+`.context/implementation-notes.md`, which the PostCompact hook points back to. Prototypes and visual review name concrete
+model-default styles, research marks unconfirmed claims, and an eval rejects
+think-hard or reasoning-extraction prompts. Offsetting cuts delete nine unwired
+`shared/` hook copies that several evals tested instead of the running hooks, and drop a
+hook-enforced CLAUDE.md sentence so the ambient budget stays at 4.5 KB.
 
 2026-09-24 -- Route the owner-selected drivers: Claude Opus 5.5 `high` is the primary
 owner and GPT-6 Sol `medium` is the second, Codex-delegated lane; Astra `high` is the named

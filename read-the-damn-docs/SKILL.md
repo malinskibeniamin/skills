@@ -9,10 +9,10 @@ Read `references/builder-upstream.md` for full triggers. This is a quick officia
 
 1. Identify exact package/version/endpoint/CLI/config/helper/schema/product surface.
 2. Read local docs/specs/ADRs/generated types first when they own the contract.
-3. For external/fast-moving behavior, search current official docs and open the relevant API reference, migration guide, changelog, release notes, SDK source, or types.
-4. Extract only needed imports, options, lifecycle/defaults, breaking changes, limits, permissions, examples.
+3. For external/fast-moving behavior, search current official docs; open the API reference, migration guide, release notes, changelog, SDK source, or types.
+4. Extract imports, options, defaults, breaking changes, limits, permissions, examples.
 5. Apply facts to repo patterns; never cargo-cult examples.
-6. Cite sources when facts affect notes or answer.
+6. Cite facts affecting notes or answers. Flag what you could not confirm and where you looked.
 
 ## Strong triggers
 
