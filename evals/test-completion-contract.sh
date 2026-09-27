@@ -16,6 +16,10 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "without another permission prompt" \
 run_content_eval "$REPO_ROOT/CLAUDE.md" "Never ask the user to restart or reconfigure" \
   "stale endpoint recovery stays inside the harness"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "🟢 done —" "CLAUDE.md defines visible done status"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "full PR URL.*final status line" \
+  "completion contract puts the full PR URL on the final status line"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "follow-up.*current PR" \
+  "delivery follow-ups stay in the current PR"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "human.*browser|human-owned.*browser" "CLAUDE.md protects human browser sessions"
 if grep -q '\[BROWSER\]' "$INTENT"; then
   echo "  FAIL  intent hook coaches browser workflow"
@@ -36,6 +40,12 @@ run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "single owner" "lif
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "continue immediately" "lifecycle does not pause ordinary implementation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "inline" "grilling runs plan hats inline"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "one CI status snapshot" "PR endpoint takes one CI snapshot"
+run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "full PR URL.*final status line" \
+  "PR workflow reports the full URL on the final status line"
+run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "[Dd]raft PR.*without.*approval" \
+  "draft PR creation does not need approval"
+run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "follow-up.*current PR" \
+  "PR workflow keeps follow-up waves in the current PR"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests' "PR endpoint avoids unsolicited review artifacts"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "do not block merely" "PR endpoint does not invent a review approval stop"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Commit-only skips remote and `gh` preflight' "commit endpoint has no push prerequisites"
