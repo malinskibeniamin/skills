@@ -58,7 +58,7 @@ else
 fi
 
 # review 4600 -> 4725 (2026-09-27) for the /av and /lie-detector hat pointers and receipt
-# lines; ask-ben is 7675 for generated /av and /lie-detector catalog rows.
+# lines; ask-ben 7675 -> 7700 for the lie-detector catalog row alongside /av.
 # review 4300 -> 4450 (2026-09-25) for the always-on /jb value-hat pointer and its
 # receipt line; ask-ben 7400 -> 7450 for its generated /jb catalog row.
 # grilling 3650 -> 3675 for the /av value-axis pointer; ask-ben 7600 -> 7675 and review
@@ -81,7 +81,7 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7675
+ask-ben 7700
 wayfinder 5000
 review 4725
 diagnosing-bugs 5600
@@ -141,12 +141,8 @@ tanstack-router 3200
 postgresql 3175
 golang-review 3125
 jb 4000
-<<<<<<< HEAD
 av 3625
 lie-detector 5050
-=======
-lie-detector 5050
->>>>>>> bc9da68f (feat(lie-detector): cover claims and code, not only tests)
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000
