@@ -4,14 +4,17 @@ set -euo pipefail
 # Before/after PR video evidence.
 #
 #   scripts/pr-video.sh record <url> <flow-file> <out.webm>
-#     Replays one agent-browser command per flow-file line (# comments allowed)
-#     with a visible cursor, pausing PR_VIDEO_STEP_MS (default 700) per step.
+#     Replays one agent-browser command per flow-file line with a visible cursor,
+#     pausing PR_VIDEO_STEP_MS (default 700) per step. The first `# ` line is the
+#     title; a `## ` line captions the next step. Writes <out.webm>.steps.json.
 #     Needs 2+ interaction steps (hover or wait alone is not a flow). Run the
 #     same flow file against base and candidate. A failed step fails.
 #
 #   scripts/pr-video.sh compose <before-video> <after-video> <out-dir>
-#     Side-by-side (before left, after right) at one height. The shorter take
-#     freezes on its last frame. Rejects static takes (under 8 distinct frames).
+#     Before left, after right; the shorter take freezes on its last frame.
+#     Rejects static takes (under 8 distinct frames). PR_VIDEO_RENDERER=auto
+#     (default) frames the takes in HyperFrames with labels and step captions,
+#     falling back to ffmpeg; `hyperframes` or `ffmpeg` forces one.
 #     Writes before-after.mp4 and before-after.gif.
 #
 #   scripts/pr-video.sh attach <file.mp4>...
@@ -26,7 +29,7 @@ set -euo pipefail
 #     PR_VIDEO_REPO_URL overrides the https://github.com/<owner>/<repo> base.
 
 usage() {
-  sed -n '6,25p' "$0" | sed 's/^# \{0,1\}//' >&2
+  sed -n '6,28p' "$0" | sed 's/^# \{0,1\}//' >&2
   exit 2
 }
 
@@ -36,6 +39,9 @@ MIN_INTERACTIONS=2
 INTERACTION_RE='^(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
 
 GIF_LIMIT_BYTES=$((10 * 1024 * 1024))
+HYPERFRAMES=hyperframes@0.8.79
+
+now() { perl -MTime::HiRes=time -e 'printf "%.3f\n", time'; }
 
 duration_of() {
   local seconds
@@ -79,10 +85,21 @@ record() {
   agent-browser --session "$session" open --init-script "$SCRIPT_DIR/pr-video-cursor.js" about:blank >/dev/null
   agent-browser --session "$session" set viewport 1280 720 >/dev/null
   agent-browser --session "$session" record start "$out" "$url" >/dev/null
+  local started title="" caption="" steps='[]'
+  started=$(now)
   agent-browser --session "$session" wait "$step_ms" >/dev/null
   local line
   while IFS= read -r line || [ -n "$line" ]; do
-    case "$line" in '' | '#'*) continue ;; esac
+    case "$line" in
+      '## '*) caption=${line#'## '}; continue ;;
+      '# '*) [ -n "$title" ] || title=${line#'# '}; continue ;;
+      '' | '#'*) continue ;;
+    esac
+    if [ -n "$caption" ]; then
+      steps=$(jq -c --arg caption "$caption" --argjson at "$(awk -v a="$(now)" -v b="$started" 'BEGIN { printf "%.3f", a - b }')" \
+        '. + [{at: $at, caption: $caption}]' <<< "$steps")
+      caption=""
+    fi
     eval "set -- $line"
     if ! agent-browser --session "$session" "$@" >/dev/null; then
       agent-browser --session "$session" record stop >/dev/null 2>&1 || true
@@ -94,6 +111,7 @@ record() {
   # Hold the end state long enough to read, short of the still-frame gate.
   agent-browser --session "$session" wait 1500 >/dev/null
   agent-browser --session "$session" record stop >/dev/null
+  jq -n --arg title "$title" --argjson steps "$steps" '{title: $title, steps: $steps}' > "$out.steps.json"
   printf '%s\n' "$out"
 }
 
@@ -144,6 +162,51 @@ attach() {
   done
 }
 
+frame_ffmpeg() {
+  local side='fps=15,scale=-2:720,setsar=1,tpad=stop_mode=clone:stop_duration=3600'
+  ffmpeg -hide_banner -loglevel error -y -i "$1" -i "$2" -filter_complex \
+    "[0:v]${side},pad=iw+8:ih:0:0:color=gray[b];[1:v]${side}[a];[b][a]hstack=inputs=2,scale=trunc(iw/2)*2:720[v]" \
+    -map '[v]' -t "$4" -c:v libx264 -pix_fmt yuv420p -crf 28 -movflags +faststart \
+    "$3/before-after.mp4"
+}
+
+# Captions for one side from its record sidecar, as HyperFrames clips.
+side_captions() {
+  local side=$1 video=$2 duration=$3 left=$4
+  [ -s "$video.steps.json" ] || { printf '[]'; return; }
+  jq -c --arg side "$side" --argjson end "$duration" --argjson left "$left" '
+    .steps as $s | [range(0; $s | length) as $i | {
+      id: "\($side)-cap-\($i)", at: $s[$i].at, caption: $s[$i].caption, left: $left,
+      duration: ((if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $s[$i].at)
+    } | select(.duration > 0)]' "$video.steps.json"
+}
+
+# Frame the real takes: labels, title, and per-side step captions. Never runs
+# `hyperframes init`, which installs global agent skills.
+frame_hyperframes() {
+  local before=$1 after=$2 out=$3 duration=$4 project="$3/hyperframes"
+  mkdir -p "$project/assets"
+  local side input
+  for side in before after; do
+    [ "$side" = before ] && input=$before || input=$after
+    ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "fps=30,tpad=stop_mode=clone:stop_duration=3600" \
+      -t "$duration" -an -c:v libx264 -pix_fmt yuv420p "$project/assets/$side.mp4" || return 1
+  done
+  local title captions
+  title=$(jq -r '.title // empty' "$after.steps.json" 2>/dev/null || true)
+  captions=$(jq -c -s 'add' <(side_captions before "$before" "$duration" 40) <(side_captions after "$after" "$duration" 980))
+  printf '%s\n' '{"paths":{"assets":"assets"},"media":{"autoProxy":true}}' > "$project/hyperframes.json"
+  HF_TITLE=$(jq -rn --arg t "${PR_VIDEO_TITLE:-${title:-Before and after}}" '$t | @html') \
+    HF_DURATION=$duration \
+    HF_CAPTIONS=$(jq -r '.[] | "      <div id=\"\(.id)\" class=\"caption clip\" style=\"left: \(.left)px\" data-start=\"\(.at)\" data-duration=\"\(.duration)\"><span id=\"\(.id)-text\">\(.caption | @html)</span></div>"' <<< "$captions") \
+    HF_TWEENS=$(jq -c '[.[] | ["#\(.id)-text", .at]]' <<< "$captions") \
+    perl -pe 's/<!-- __(\w+)__ -->|"__(\w+)__"|__(\w+)__/$ENV{"HF_" . ($1 || $2 || $3)}/g' \
+    "$SCRIPT_DIR/pr-video-frame.html" > "$project/index.html"
+
+  (cd "$project" && bunx "$HYPERFRAMES" check >&2 &&
+    bunx "$HYPERFRAMES" render --quality standard --output ../before-after.mp4 >&2) || return 1
+}
+
 compose() {
   [ $# -eq 3 ] || usage
   command -v ffmpeg >/dev/null 2>&1 || { echo "pr-video: needs ffmpeg (brew install ffmpeg)" >&2; exit 127; }
@@ -157,11 +220,20 @@ compose() {
     'BEGIN { print (a > b ? a : b) }')
   mkdir -p "$out"
 
-  local side='fps=15,scale=-2:720,setsar=1,tpad=stop_mode=clone:stop_duration=3600'
-  ffmpeg -hide_banner -loglevel error -y -i "$before" -i "$after" -filter_complex \
-    "[0:v]${side},pad=iw+8:ih:0:0:color=gray[b];[1:v]${side}[a];[b][a]hstack=inputs=2,scale=trunc(iw/2)*2:720[v]" \
-    -map '[v]' -t "$longest" -c:v libx264 -pix_fmt yuv420p -crf 28 -movflags +faststart \
-    "$out/before-after.mp4"
+  local renderer=${PR_VIDEO_RENDERER:-auto}
+  case "$renderer" in
+    hyperframes) frame_hyperframes "$before" "$after" "$out" "$longest" ;;
+    ffmpeg) frame_ffmpeg "$before" "$after" "$out" "$longest" ;;
+    auto)
+      if command -v bunx >/dev/null 2>&1 && frame_hyperframes "$before" "$after" "$out" "$longest"; then
+        :
+      else
+        echo "pr-video: HyperFrames unavailable or failed; composing with ffmpeg (no labels or captions)" >&2
+        frame_ffmpeg "$before" "$after" "$out" "$longest"
+      fi
+      ;;
+    *) echo "pr-video: PR_VIDEO_RENDERER must be auto, hyperframes, or ffmpeg" >&2; exit 2 ;;
+  esac
   ffmpeg -hide_banner -loglevel error -y -i "$out/before-after.mp4" -filter_complex \
     '[0:v]fps=10,scale=min(1200\,iw):-2:flags=lanczos,split[x][y];[x]palettegen=stats_mode=diff[p];[y][p]paletteuse=dither=bayer:bayer_scale=4' \
     "$out/before-after.gif"

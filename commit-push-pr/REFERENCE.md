@@ -173,9 +173,16 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    it on base and candidate with `scripts/pr-video.sh record <url> flow.txt <side>.webm`;
    it draws a visible cursor and paces steps. Prefer `type` over `fill` so keystrokes show.
    A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
-   Keep each take under 20 seconds. `record` refuses flows with fewer than two interaction
-   steps, and `scripts/pr-video.sh compose before.webm after.webm <out-dir>` refuses static
-   takes (under 8 distinct frames); re-record the flow, never pad or loop a still.
+   Start the flow file with a `# <flow title>` line and put a `## <caption>` line before
+   each step reviewers should read. Keep each take under 20 seconds. `record` refuses flows
+   with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm
+   after.webm <out-dir>` refuses static takes (under 8 distinct frames); re-record the
+   flow, never pad or loop a still. `compose` frames the real takes with HyperFrames
+   (pinned, run through `bunx`): Before/After labels, the title, and step captions timed per
+   side. It falls back to plain ffmpeg side by side when HyperFrames is unavailable. It
+   never runs `hyperframes init`, which installs global agent skills. Do not substitute
+   `/pr-to-video` or other HyperFrames creation workflows: they build synthetic explainers
+   from the diff, not the real UI.
 3. **Run visual regression:** use the repository's existing screenshot assertion runner,
    not DOM/text snapshots. Add missing cases for uncovered visible changes. Run against
    existing baselines first; inspect before/after/diff images for every mismatch, fix
