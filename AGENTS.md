@@ -46,8 +46,7 @@ feature branch without another permission prompt; after rebase, use `--force-wit
 Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
 branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session to deliver that branch; correct endpoint state and continue. Store inferred delivery
-endpoints only in lifecycle state, never developer context.
+a session to deliver that branch; correct endpoint state and continue.
 When a PR exists for the current branch, put follow-up waves into the current PR by default.
 Creating a draft PR at the requested PR endpoint needs no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
