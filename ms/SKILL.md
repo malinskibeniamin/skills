@@ -7,7 +7,8 @@ Review one axis: is this change worth shipping now, for whom, and is it the smal
 reversible slice that proves it. Rules live in [RULES.md](RULES.md).
 
 Run standalone on a PR, branch, plan, or ticket, or inline as the **ms hat** in `/review`
-on every PR review. Spawns no agents.
+on every PR review. Spawns no agents. When writing a change rather than reviewing one,
+follow the author playbook in [REFERENCE.md](REFERENCE.md).
 
 ## Lanes
 
@@ -31,7 +32,10 @@ Split mixed lanes unless one change strictly enables the other.
    What is the smallest reversible slice, and what is deliberately out?
 4. **Load:** matching [RULES.md](RULES.md) sections. Apply S/A rules, clear B violations,
    and only plain C violations.
-5. **Rate revenue likelihood:** High, Medium, Low, or None with one reason. None is fine for
+5. **Check craft:** PR shape and body (size, riskiest hunk, not fixed here), tests through
+   real wiring, and whether a fixed bug class is now impossible. Use the Craft, Testing,
+   and PR shape sections; a clean diff never needs a craft finding.
+6. **Rate revenue likelihood:** High, Medium, Low, or None with one reason. None is fine for
    maintenance, quality of life, or taste when their evidence exists. Unknown stays unknown;
    never invent figures.
 
@@ -40,8 +44,10 @@ Split mixed lanes unless one change strictly enables the other.
 - **P1:** false success, health, or price; unknown usage billed as free; free users locked
   out or wrongly gated; customer data beyond expectation; contract break without rollout.
 - **P2:** no beneficiary or lane; mixed lanes; unmeasured performance or CI claim;
-  speculative generality; no observable done-when; docs contradict behavior.
-- **P3:** wording, naming, or an obvious lane left undeclared.
+  speculative generality; no observable done-when; docs contradict behavior; test that
+  bypasses the real wiring; bug fix with no class-preventing check.
+- **P3:** wording, naming, readability, an obvious lane left undeclared, or a PR body
+  missing its riskiest hunk or not-fixed-here list.
 
 Value findings never block a confirmed correctness or security fix.
 

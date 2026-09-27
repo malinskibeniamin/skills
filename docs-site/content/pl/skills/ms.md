@@ -17,7 +17,8 @@ Oceń jeden aspekt: czy warto teraz wdrożyć tę zmianę, dla kogo i czy jej za
 odwracalny i wystarczający, by wykazać wartość. Reguły znajdziesz w [RULES.md](https://github.com/malinskibeniamin/skills/blob/main/ms/RULES.md).
 
 Uruchamiaj samodzielnie dla PR-a, gałęzi, planu lub zgłoszenia albo jako **rolę ms** w `/review`
-przy każdym przeglądzie PR-a. Nie uruchamia agentów.
+przy każdym przeglądzie PR-a. Nie uruchamia agentów. Gdy tworzysz zmianę zamiast ją przeglądać,
+postępuj zgodnie z instrukcjami dla autorów w [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ms/REFERENCE.md).
 
 ## Kategorie [#lanes]
 
@@ -41,7 +42,10 @@ Rozdziel zmiany z różnych kategorii, chyba że jedna jest niezbędna do realiz
    Jaki jest najmniejszy odwracalny zakres i co świadomie z niego wyłączono?
 4. **Wczytaj:** odpowiednie sekcje [RULES.md](https://github.com/malinskibeniamin/skills/blob/main/ms/RULES.md). Stosuj reguły S/A, jednoznaczne naruszenia B
    i tylko oczywiste naruszenia C.
-5. **Oceń prawdopodobieństwo przychodu:** wysokie, średnie, niskie lub żadne, z jednym uzasadnieniem. Brak jest dopuszczalny
+5. **Sprawdź jakość wykonania:** zakres i opis PR-a (rozmiar, najbardziej ryzykowny fragment zmian, czego tu nie naprawiono), testy obejmujące
+   rzeczywiste połączenia między komponentami oraz to, czy wyeliminowano całą klasę naprawianego błędu. Korzystaj z sekcji dotyczących jakości wykonania, testowania
+   i zakresu PR-a; jeśli diff nie budzi zastrzeżeń, nie trzeba zgłaszać uwag dotyczących jakości wykonania.
+6. **Oceń prawdopodobieństwo przychodu:** wysokie, średnie, niskie lub żadne, z jednym uzasadnieniem. Brak jest dopuszczalny
    przy utrzymaniu, komforcie pracy lub wyczuciu projektowym, jeśli istnieją dowody ich wartości. Niewiadome pozostają niewiadomymi;
    nigdy nie wymyślaj liczb.
 
@@ -50,8 +54,10 @@ Rozdziel zmiany z różnych kategorii, chyba że jedna jest niezbędna do realiz
 - **P1:** fałszywa informacja o powodzeniu, stanie działania lub cenie; nieznane zużycie rozliczane jako bezpłatne; użytkownicy darmowej wersji pozbawieni
   dostępu lub objęci błędnymi ograniczeniami; wykorzystanie danych klientów wykraczające poza oczekiwania; naruszenie kontraktu bez stopniowego wdrożenia.
 - **P2:** brak beneficjenta lub kategorii; mieszanie kategorii; twierdzenia o wydajności lub CI bez pomiarów;
-  uogólnienia na zapas; brak obserwowalnych kryteriów ukończenia; dokumentacja sprzeczna z zachowaniem.
-- **P3:** sformułowania, nazewnictwo lub brak wskazania oczywistej kategorii.
+  uogólnienia na zapas; brak obserwowalnych kryteriów ukończenia; dokumentacja sprzeczna z zachowaniem; test, który
+  omija rzeczywiste połączenia między komponentami; poprawka błędu bez mechanizmu zapobiegającego całej klasie takich błędów.
+- **P3:** sformułowania, nazewnictwo, czytelność, brak wskazania oczywistej kategorii lub opis PR-a,
+  w którym brakuje najbardziej ryzykownego fragmentu zmian albo listy rzeczy, których tu nie naprawiono.
 
 Uwagi dotyczące wartości nigdy nie blokują potwierdzonej poprawki błędu działania lub bezpieczeństwa.
 

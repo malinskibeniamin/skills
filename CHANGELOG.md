@@ -13,6 +13,13 @@ review: compounding work selection, stacked dark-launch milestones, differential
 pinning tests, honest benchmarks, intent-carrying types and errors, reviewable PR bodies and
 history, and principal-level review habits. Reviews may cite a `C<n>` beside its `V<n>`.
 
+2026-09-27 -- `/ms` now covers how changes are built, not only why. `RULES.md` gains Craft,
+Testing and QA, and PR shape and review sections (16 graded rules), the review step checks
+PR shape, real-wiring tests, and class-preventing checks, and a new `ms/REFERENCE.md` author
+playbook covers work selection, PR sizing, the PR body, the flake protocol, review tone,
+and AI output ownership. The `/commit-push-pr` reviewer guide gains Riskiest hunk and Not
+fixed here lines.
+
 2026-09-27 -- The PostToolBatch dispatcher skips scratch files: `node_modules/`, `.context/`,
 `/tmp` outside the current worktree, and `zz-dogfood-*` specs; 7 of 62 recorded turn stops
 flagged only such files. All 62 stops predate 4.39.0 and came from the old `exit 2` path,

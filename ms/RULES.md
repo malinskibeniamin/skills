@@ -71,3 +71,34 @@ Cite the rule id in findings. n = independent evidence count.
 | :---: | --- | --- | ---: |
 | S | `accept-done-when` | Define done as observable outcomes (numbers, states, user-visible behavior), list invariants that must not change, and name non-goals; the requirement is the problem, not a prescribed implementation. | 14 |
 | S | `accept-repro-first` | Each defect carries a reproduction that fails today and becomes the acceptance test; state mitigating factors and blast radius up front. | 10 |
+
+## Craft: how code is written
+
+| Grade | Rule | Statement | n |
+| :---: | --- | --- | ---: |
+| A | `craft-dependency-ration` | Every dependency is a maintenance commitment: write the small helper instead of importing a library for it, prefer upstream fixes over forks, and pin versions instead of floating tags. | 9 |
+| A | `craft-narrow-surface` | Export and expose the minimum: keep symbols, fields, and endpoints private until a caller needs them; narrow and strict can widen later, the reverse is a break. | 9 |
+| A | `craft-errors-by-layer` | Design errors: build wire errors once at the service edge, make reasons only as granular as the caller can act on, validate config at load with the field named, and have partial results say which items failed. | 9 |
+| A | `craft-readable-conditions` | Code reads without decoding: no double negatives, complex conditions split into named variables, positive booleans, and comments that explain intent without ticket references or change history. | 8 |
+| A | `craft-simplest-shape` | Pick the representation reality needs, not the most typed one: strings for provider-owned vocabularies, text over database enums, attribute maps over ever-growing fields, one enum over correlated booleans. | 8 |
+| A | `craft-log-actionable` | Log levels follow actionability: warn only when someone must act, identify the caller after authentication, never log payload content, and pre-create metric series so absence is visible. | 9 |
+
+## Testing and QA
+
+| Grade | Rule | Statement | n |
+| :---: | --- | --- | ---: |
+| A | `test-prevent-class` | After fixing a bug, add the check that makes its class impossible: a startup assertion, a lint rule, a drift test pinning two sources together, or a compile-time break via shared constants. | 9 |
+| A | `test-flake-data` | Treat flakes with data: measure the rate, rerun per test so the report names the flaky one, fix the root cause or remove the assertion deliberately, and watch the gate after merge. | 7 |
+| A | `test-real-wiring` | Tests exercise real wiring and production-shaped data: no test that constructs the state the code under test should build, round-trip serialization for new fields, fixtures copied from real stored shapes. | 7 |
+| A | `test-repro-fast` | Make the failure cheap to reproduce before fixing it: shrink the trigger until it runs in milliseconds, and show the check failing on the base branch and passing on the change. | 6 |
+| A | `test-cost-aware` | Test cost is design: scale timeouts to real work, make paid or vendor-flaky suites opt-in, pin test images, and create prerequisites with lower-level clients so one failure does not cascade. | 7 |
+
+## PR shape and review
+
+| Grade | Rule | Statement | n |
+| :---: | --- | --- | ---: |
+| A | `pr-small-steady` | Ship a steady stream of small PRs; a large change is a numbered series where each step lands on main with zero behavior change and names what comes next. | 8 |
+| A | `pr-body-answers` | The body answers review questions before they are asked: why, what, verification, rollout and rollback, the riskiest hunk to push back on, and what was deliberately not fixed here. | 8 |
+| A | `review-ask-first` | Review with questions and suggestion blocks, not prescriptions: ask whether it needs to exist, offer the one-click fix, approve fast, and block only on contract, security, or release-safety breaks. | 7 |
+| A | `review-own-ai-output` | AI output is yours: review generated code before opening a PR, ask the model to argue against your change, and question AI-produced conventions before following them. | 6 |
+| B | `pr-split-blast-radius` | Split by blast radius: a change that affects every caller ships alone, unrelated fixes move to their own PR, and a fix is never blocked on an adjacent improvement. | 5 |
