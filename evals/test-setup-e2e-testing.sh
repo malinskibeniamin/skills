@@ -49,6 +49,7 @@ run_content_eval "$SKILL_DIR/SETUP.md" "@cross-browser" "SETUP scopes secondary 
 
 
 _e2e_tmpdir=$(mktemp -d /tmp/e2e-route-hook-XXXXXX)
+git -C "$_e2e_tmpdir" init -q
 mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin" "$_e2e_tmpdir/node_modules/.bin"
 cat > "$_e2e_tmpdir/bin/vitest" << 'EOF'
 #!/bin/bash
@@ -77,7 +78,9 @@ if [ "$actual_exit" -eq 0 ] && grep -q "users.browser.test.tsx" "$capture" 2>/de
   echo "  PASS  route sibling hook runs browser test for .page.tsx route"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  route sibling hook did not run browser test"
+  echo "  FAIL  route sibling hook did not run browser test (exit=$actual_exit)"
+  cat /tmp/e2e-route-stderr 2>/dev/null || true
+  cat "$_e2e_tmpdir/capture.txt" 2>/dev/null || true
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: route sibling hook did not run browser test"
 fi
@@ -95,7 +98,8 @@ if [ "$actual_exit" -eq 2 ] && grep -q "Sibling route test failed" /tmp/e2e-rout
   echo "  PASS  route sibling hook blocks failing sibling test"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  route sibling hook did not block failing sibling test"
+  echo "  FAIL  route sibling hook did not block failing sibling test (exit=$actual_exit)"
+  cat /tmp/e2e-route-stderr 2>/dev/null || true
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: route sibling hook did not block failing sibling test"
 fi
