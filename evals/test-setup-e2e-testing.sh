@@ -49,13 +49,15 @@ run_content_eval "$SKILL_DIR/SETUP.md" "@cross-browser" "SETUP scopes secondary 
 
 
 _e2e_tmpdir=$(mktemp -d /tmp/e2e-route-hook-XXXXXX)
-mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin"
+mkdir -p "$_e2e_tmpdir/src/routes" "$_e2e_tmpdir/bin" "$_e2e_tmpdir/node_modules/.bin"
 cat > "$_e2e_tmpdir/bin/vitest" << 'EOF'
 #!/bin/bash
 echo "$*" > "$ROUTE_SIBLING_TEST_CAPTURE"
 exit "${ROUTE_SIBLING_TEST_EXIT:-0}"
 EOF
 chmod +x "$_e2e_tmpdir/bin/vitest"
+# Isolate the repo-local runner override too; CI installs a real Vitest binary.
+cp "$_e2e_tmpdir/bin/vitest" "$_e2e_tmpdir/node_modules/.bin/vitest"
 route_file="$_e2e_tmpdir/src/routes/users.page.tsx"
 test_file="$_e2e_tmpdir/src/routes/users.browser.test.tsx"
 printf "export function UsersPage() { return <div /> }\n" > "$route_file"
