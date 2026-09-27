@@ -1,6 +1,9 @@
 ---
 title: /commit-push-pr
-description: "Utwórz commit, wypchnij zmiany i otwórz PR gotowy do przeglądu albo wykonaj jawnie autoryzowane scalenie. Użyj przy żądaniach dostarczenia; --no-pr kończy działanie po wypchnięciu."
+description: >-
+  Utwórz commit, wypchnij zmiany i otwórz PR gotowy do przeglądu albo wykonaj
+  jawnie autoryzowane scalenie. Użyj przy żądaniach dostarczenia; --no-pr kończy
+  działanie po wypchnięciu.
 type: skill
 sidebar:
   label: /commit-push-pr
@@ -12,9 +15,9 @@ sidebar:
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać wymagania wstępne przeglądu, commity, etykiety, opis i dowody.
 
-Wyraźne żądania scalenia obsługuje [references/merge.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md), a nie poniższy przepływ tworzenia PR-a. Sam audyt, commit, push, PR, `/go` ani żądanie dostarczenia nie upoważniają do scalenia.
+Tylko wyraźne żądania scalenia obsługuje [kontrakt scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md), a nie poniższy przepływ tworzenia PR-a.
 
-## Kontrola wstępna
+## Kontrola wstępna [#preflight]
 
 1. Sprawdź `git status -sb`, `git diff HEAD`, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi.
 2. Ustal żądany punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Wariant z samym commitem pomija kontrolę zdalnego repozytorium i `gh`.
@@ -30,7 +33,7 @@ Wyraźne żądania scalenia obsługuje [references/merge.md](https://github.com/
 2. Dla każdej spójnej grupy wykonaj `git add <explicit paths>`, a następnie utwórz commit `type(scope): terse description`: małymi literami, 5–72 znaki, bez kropki.
 3. Jawne żądanie utworzenia wyłącznie commitu kończy działanie w tym miejscu po sprawdzeniu czystości drzewa i podsumowaniu.
 4. Wypchnięcie/PR: pokaż `origin/<branch>..HEAD`, a następnie wypchnij gałąź z ustawieniem śledzenia.
-5. Po przepisaniu bieżącej, należącej do użytkownika gałęzi funkcji użyj w razie potrzeby `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego wymuszenia; przepisanie gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle używanej wymaga wyraźnej zgody.
+5. Po przepisaniu bieżącej, należącej do użytkownika gałęzi użyj `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego wymuszenia; przepisanie gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle używanej wymaga wyraźnej zgody.
 
 ## Pull request
 
@@ -40,15 +43,15 @@ Utworzenie PR-a upoważnia do weryfikacji, utworzenia commitu, wypchnięcia zmia
 
 1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Użyj ponownie PR-a gałęzi lub utwórz go względem tej bazy, przypisując osobę, etykiety i korzystając z referencyjnego szablonu. Publikacja całego stosu używa `/stacked-prs`.
 2. Każdy PR uruchamia `/quantify-impact`; uwzględnij zwięzły opis wartości lub potwierdzone wskaźniki, bez pozorowanych benchmarków.
-3. Każda widoczna zmiana, nawet najmniejsza, wymaga inwentaryzacji opisanej w dokumencie referencyjnym, osadzonych materiałów przed i po zmianie, sprawdzonych migawek oraz przechodzących testów wizualnych. Brak dowodów blokuje publikację bez wyraźnej zgody użytkownika na odstępstwo.
+3. Każda widoczna zmiana, nawet najmniejsza, wymaga inwentaryzacji opisanej w dokumencie referencyjnym, zrzutów ekranu i nagrań wideo przed i po zmianie, sprawdzonych migawek oraz przechodzących testów wizualnych. Brak dowodów blokuje publikację bez wyraźnej zgody użytkownika na odstępstwo.
 4. Uwzględnij aktualne potwierdzenie dogfood. Przeczytaj ponownie opis, sprawdź dostęp recenzenta do obrazów i wyświetl adres URL. Aktualizacje i ponowne otwarcia podlegają tym samym wymaganiom; edycje unieważniają dowody, których dotyczą.
 
 Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkownik wyraźnie o to poprosi.
 
-## Zakończenie
+## Zakończenie [#completion]
 
 1. Pobierz pojedynczy stan CI za pomocą `gh pr checks <number>`; odnotuj brak CI.
-2. Zgłoś istniejące niepowodzenia. Naprawianie i monitorowanie wykraczające poza ten pojedynczy stan wymaga `/go`, polecenia wysyłki, prośby o nadzorowanie lub kolejnego żądania.
+2. Zgłoś niepowodzenia. Dalsze naprawianie i monitorowanie wymaga `/go`, polecenia wysyłki, prośby o nadzorowanie lub kolejnego żądania.
 3. Zgłoś `git status`, pozostałe różnice, gałąź, commity, PR, CI i następne działanie.
 4. Zakończ jednym wierszem stanu: `done`, `awaiting decision` lub `blocked`, zgodnie z kontraktem znaczników repozytorium.
 

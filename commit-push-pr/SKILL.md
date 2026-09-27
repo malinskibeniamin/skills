@@ -34,7 +34,7 @@ PR creation authorizes verification, commit, push, and lease-protected rebase on
 
 1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Reuse the branch PR or create against that base with assignee, labels, and reference template. Whole-stack publication uses `/stacked-prs`.
 2. Every PR runs `/quantify-impact`; include concise value or proven metrics, not benchmark theater.
-3. Every visible change, however small, requires the reference's inventory, embedded before/after, reviewed snapshots, and passing visual tests. Missing evidence blocks publication absent an explicit user waiver.
+3. Every visible change, however small, needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without explicit user waiver.
 4. Include current dogfood receipt. Re-read the body, verify reviewer image access, and print the URL. Updates/reopens use the same gate; edits invalidate affected evidence.
 
 Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests.
