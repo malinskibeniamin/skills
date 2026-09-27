@@ -68,8 +68,8 @@ capture="$_e2e_tmpdir/capture.txt"
 actual_exit=0
 (
   cd "$_e2e_tmpdir"
-  PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
-    "$ROUTE_SIBLING_SCRIPT" </dev/null
+  PATH="$_e2e_tmpdir/bin:$PATH" CLAUDE_SESSION_ID="e2e-route-hook-$$" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
+    "$ROUTE_SIBLING_SCRIPT"
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
 {"tool_name":"Write","session_id":"e2e-route-hook-$$","tool_input":{"file_path":"$route_file"}}
 JSON
@@ -89,7 +89,7 @@ actual_exit=0
 (
   cd "$_e2e_tmpdir"
   PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" ROUTE_SIBLING_TEST_EXIT=1 \
-    "$ROUTE_SIBLING_SCRIPT" </dev/null
+    "$ROUTE_SIBLING_SCRIPT"
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
 {"tool_name":"Write","session_id":"e2e-route-hook-$$","tool_input":{"file_path":"$route_file"}}
 JSON
@@ -135,7 +135,7 @@ else
   ERRORS="$ERRORS\n  FAIL: structural test hook warned despite sibling test"
 fi
 
-rm -rf "$_e2e_tmpdir" /tmp/e2e-route-stdout /tmp/e2e-route-stderr /tmp/e2e-structural-stdout /tmp/e2e-structural-stderr
+rm -rf "$_e2e_tmpdir" "/tmp/hook-session-e2e-route-hook-$$" /tmp/e2e-route-stdout /tmp/e2e-route-stderr /tmp/e2e-structural-stdout /tmp/e2e-structural-stderr
 
 # ── Description length ──────────────────────────────────────────
 
