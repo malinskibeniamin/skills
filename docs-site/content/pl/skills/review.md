@@ -84,6 +84,7 @@ bez wiarygodnego ryzyka. Dowód może uzasadniać odrzucenie uwagi.
 
 Zacznij od znalezisk. Deduplikuj według przyczyny źródłowej. Podaj ścieżkę, wpływ, poprawkę i krok
 weryfikacji; pomiń pochwały i narrację. Przy ponownym przeglądzie oznacz stan każdej wcześniejszej uwagi.
+Każdy przegląd stosuje też `/ss` bezpośrednio w ramach przeglądu; podaj jego wiersz Value oddzielnie od defektów.
 
 ## Tryb głęboki [#deep-mode]
 
