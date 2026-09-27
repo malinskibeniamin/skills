@@ -40,6 +40,10 @@ Opracuj drzewo decyzyjne i wyznacz jego front obejmujący decyzje, które można
 <question or choices>
 ```
 
+Odpowiedź **Rekomendacja:**, co do której masz pewność i którą można odwrócić, jest założeniem, a nie pytaniem: przedstaw ją w jednym wierszu i kontynuuj. Pytaj wyłącznie o kwestie, których nie można rozstrzygnąć na podstawie dowodów i które należą do użytkownika.
+
+**Sygnał zakończenia pytań:** „koniec pytań”, „po prostu zrób to”, „nie pytaj” lub samo wskazanie punktu końcowego („szkic PR”) kończy zadawanie pytań do końca sesji. Przyjmij wszystkie nierozstrzygnięte rekomendacje, wymień je jako założenia i kontynuuj aż do wskazanego punktu; wstrzymaj pracę tylko przy decyzji nieodwracalnej lub zastrzeżonej dla użytkownika.
+
 Nierozstrzygnięty warunek wstępny opóźnia tylko swoją gałąź, a pozostała część frontu jest kontynuowana. Po każdej serii odpowiedzi wyznacz front ponownie. Ustalaj fakty na bieżąco, chyba że użytkownik wyraźnie zezwoli na delegowanie; przeszukuj środowisko, system plików, narzędzia i źródła. Decyzje użytkownika należą do niego.
 
 ## 3. Zakończ [#3-exit]
