@@ -2,7 +2,7 @@
 title: /show-me
 description: >-
   Pomóż użytkownikowi zrozumieć bieżący temat za pomocą zwięzłych diagramów,
-  szkiców struktury kodu i ukierunkowanych artefaktów HTML.
+  szkiców struktury kodu i ukierunkowanych artefaktów HTML. Użyj, gdy użytkownik prosi o pokazanie lub naszkicowanie struktury kodu, przepływu albo zmiany.
 type: skill
 sidebar:
   label: /show-me
@@ -100,10 +100,11 @@ function expandSkill(command: string): string {
   return `use the ${skillName} skill`
 }
 ```
-- W przypadku wizualnego interfejsu, układu, porównania stanów lub koncepcji zbyt złożonej dla Mermaid utwórz jeden ukierunkowany plik HTML — diagram, infografikę lub krótki zestaw slajdów, zależnie od tego, co najlepiej pasuje. Dopasuj kolory, typografię, odstępy i komponenty produktu; użyj rzeczywistych etykiet i danych; zapewnij obsługę komputerów i urządzeń mobilnych. Następnie otwórz go dla użytkownika:
+- W przypadku wizualnego interfejsu, układu, porównania stanów lub koncepcji zbyt złożonej dla Mermaid utwórz jeden ukierunkowany plik HTML — diagram, infografikę lub krótki zestaw slajdów, zależnie od tego, co najlepiej pasuje. Dopasuj kolory, typografię, odstępy i komponenty produktu; użyj rzeczywistych etykiet i danych; zapewnij obsługę komputerów i urządzeń mobilnych. Użyj powierzchni artefaktów HTML hosta lub katalogu tymczasowego, na przykład `mktemp -d "${TMPDIR:-/tmp}/show-me.XXXXXX"`; nie dodawaj jednorazowych wizualizacji do repozytorium. Następnie otwórz go dla użytkownika:
 ```
-Bash(open path/to/show-me-{description}.html)
+Bash(open /absolute/path/to/show-me-{description}.html)
 ```
 ### wskazówki
 Umieść każdą wizualizację obok krótkiego tekstu, który wspiera. Uwzględnij tylko wywołania, pliki, właściwości, stany i granice niezbędne do udzielenia odpowiedzi na bieżące pytanie użytkownika lub przedstawienia opcji rozwiązania omawianej kwestii.
 Możesz użyć jednego z tych sposobów albo kilku; najprawdopodobniej nie użyjesz wszystkich. Kieruj się własnym osądem i nie przytłaczaj użytkownika.
+Wyjaśnienie obrazkowe dla początkujących -> `/eli5`; interaktywny plan -> `/visual-plan`; podsumowanie PR-a lub gałęzi -> `/visual-recap`.

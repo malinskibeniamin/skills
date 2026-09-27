@@ -1,6 +1,6 @@
 ---
 title: /show-me
-description: 透過精簡的圖表、程式碼結構草圖與聚焦的 HTML 成品，協助使用者以視覺方式理解目前的主題。
+description: 透過精簡的圖表、程式碼結構草圖與聚焦的 HTML 成品，協助使用者以視覺方式理解目前的主題。當使用者要求展示或描繪程式碼結構、流程或變更時使用。
 type: skill
 sidebar:
   label: /show-me
@@ -98,10 +98,11 @@ function expandSkill(command: string): string {
   return `use the ${skillName} skill`
 }
 ```
-- 針對視覺化 UI、版面配置、狀態比較，或內容密集到不適合使用 Mermaid 的概念，撰寫一個聚焦的 HTML 檔案——依照最適合呈現重點的形式，製作圖表、資訊圖表或簡短投影片。配合產品的色彩、字體、間距與元件；使用真實的標籤與資料；同時支援桌面與行動裝置。接著為使用者開啟該檔案：
+- 針對視覺化 UI、版面配置、狀態比較，或內容密集到不適合使用 Mermaid 的概念，撰寫一個聚焦的 HTML 檔案——依照最適合呈現重點的形式，製作圖表、資訊圖表或簡短投影片。配合產品的色彩、字體、間距與元件；使用真實的標籤與資料；同時支援桌面與行動裝置。使用主機提供的 HTML 成品介面，或使用暫存目錄，例如 `mktemp -d "${TMPDIR:-/tmp}/show-me.XXXXXX"`；不要將一次性視覺化檔案加入儲存庫。接著為使用者開啟該檔案：
 ```
-Bash(open path/to/show-me-{description}.html)
+Bash(open /absolute/path/to/show-me-{description}.html)
 ```
 ### 指引
 將每個視覺內容放在其所支援的簡短文字旁。只保留回答使用者目前問題，或解決目前討論重點所需的呼叫、檔案、屬性、狀態與邊界。
 你可以使用其中一種，也可以使用數種，但不太可能全部用上。請自行判斷，不要讓過多資訊造成使用者負擔。
+適合初學者的圖解 -> `/eli5`；互動式計畫 -> `/visual-plan`；PR 或分支回顧 -> `/visual-recap`。
