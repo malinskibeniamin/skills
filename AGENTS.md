@@ -1,8 +1,7 @@
 <!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->
 # Project rules
 
-Lean by design. Keep here only purpose, safety boundaries, and choices a capable model
-cannot infer. Hooks teach mechanical violations; path-scoped skills hold deep guidance.
+Keep only non-inferable choices and safety boundaries here; hooks and skills teach details.
 
 ## Toolchain and local choices
 
@@ -17,21 +16,18 @@ cannot infer. Hooks teach mechanical violations; path-scoped skills hold deep gu
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - External services use the repository's existing CLI integration.
 
-Match surrounding code: its idiom, naming, comment density, and abstractions. Prefer the
-smallest obvious design for demonstrated requirements. Preserve user zoom, worktree
-isolation, secrets, type safety, and generated files.
-Load one matching `exemplars/` file when it is a higher-fidelity reference than prose.
+Match surrounding idiom and use the smallest obvious design. Preserve
+user zoom, worktree isolation, secrets, type safety, and generated files. Load a matching
+`exemplars/` file when more useful than prose.
 
 ## Human-facing text
 
-Lead with decision/result/action. Keep only evidence, impact, constraints, trade-offs,
-correction, verification, rollout, blockers, and next steps that change it; omit restatement,
-praise, narration, repetition, and obvious comments.
+Lead with decision/result/action. Include only evidence, impact, constraints, trade-offs,
+verification, rollout, blockers, and relevant next steps; omit repetition and narration.
 
 Substantial plans, analyses, reviews, recaps, status, and handoffs use
-`shared/intent-map.md`: result/decision first; map objective, assumptions, references,
-risks, implementation, verification, superseded choices. Keep trivial/
-single-path output linear.
+`shared/intent-map.md`: map objective, assumptions, references, risks,
+implementation, verification, superseded choices. Keep trivial/single-path output linear.
 
 ## Execution contract
 
@@ -61,12 +57,11 @@ Use isolated browser automation; never take over a human-owned browser or deskto
 End action turns with exactly one status line:
 `🟢 done — <evidence>`, `🟡 awaiting decision — <decision>`, or
 `🔴 blocked — <external blocker and needed input>`.
-When a PR exists, include its full PR URL on the final status line, including after updates
-and when awaiting a decision or blocked.
+For any PR, include its full PR URL on the final status line for every status.
 
 ## Work
 
-For action work, establish one outcome contract:
+Action work uses one outcome contract:
 
 - **Objective** -- the end state, stated at a high level.
 - **Guardrails** -- only non-inferable constraints and reserved decisions.
