@@ -63,9 +63,14 @@ sidebar:
 | Go/并发/工作流 | 所有权、取消、竞态、重试、幂等 |
 | 依赖/外部 API | 第一手文档、版本、锁文件、安全通告 |
 
+<<<<<<< HEAD
+每次 PR 或分支审查也都在当前流程中应用 **jb 视角**（[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)）、**mm 视角**
+（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 视角**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)），以及 **ms 视角**
+（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)）。 [#-headevery-pr-or-branch-review-also-applies-the-jb-hat-jbskillmd-mm-hatmmskillmd-av-hat-avskillmd-and-ms-hatmsskillmd-inline]
+=======
 每次 PR 或分支审查也都在当前流程中应用 **jb 视角**：[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)，
-以及 **mm 视角**：[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)，
-以及 **av 视角**：[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)。
+以及 **mm 视角**：[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)，以及 **ms 视角**：[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)。
+>>>>>>> f76cd3d8 (fix(review): keep jb and mm hat wording beside ms)
 
 ### 分类 [#classify]
 
