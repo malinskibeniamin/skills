@@ -1,8 +1,8 @@
 ---
 title: /mm
 description: >-
-  Oceń, czy PR, plan lub zgłoszenie uzasadnia swój koszt: kategoria, użytkownik,
-  dowody, kryteria akceptacji, wdrożenie.
+  Oceniaj lub realizuj prace, które uzasadniają swój koszt: kategoria,
+  użytkownik, dowody, testy, wdrożenie i kształt PR-a.
 type: skill
 sidebar:
   label: /mm
@@ -15,6 +15,10 @@ Oceniaj jeden aspekt: czy ta zmiana jest warta naszego ograniczonego czasu — t
 Pełni **rolę oceny wartości** przy każdym `/review` i przeglądzie PR-a; działa też samodzielnie
 dla planów, RFC i zgłoszeń. Nie edytuj, nie twórz commitów ani niczego nie publikuj. Inne role
 odpowiadają za poprawność kodu; ta odpowiada na pytanie „czy powinniśmy to wdrożyć i czy mamy na to dowody?”.
+
+Gdy planujesz lub implementujesz zamiast przeprowadzać przegląd, stosuj [CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/mm/CRAFT.md) (C1-C7):
+wybór prac, podział na kolejne kamienie milowe, testy z niezależnym wzorcem poprawności, rzetelne pomiary, kod wyrażający intencję
+i PR-y łatwe do przeglądu.
 
 Podejście: wdrażaj szybko, szybko wykrywaj porażki, usprawniaj małymi krokami. Blokuj tylko
 marnotrawstwo, ryzyko bez uzasadnienia lub niezauważalne szkody; nigdy nie spowalniaj taniej, odwracalnej próby.
@@ -81,4 +85,4 @@ verdict: ship | ship after fixes | rethink scope | not now
 ```
 
 Bez uwag: `mm: <lane> | <payoff> | verdict: ship` i nic więcej. W `/review` dołącz
-uwagi do przeglądu wraz z ich identyfikatorami `V<n>`; o scaleniu decyduje werdykt przeglądu.
+uwagi do przeglądu wraz z ich identyfikatorami `V<n>` (oraz pomocniczym `C<n>`, gdy wskazuje poprawkę); o scaleniu decyduje werdykt przeglądu.
