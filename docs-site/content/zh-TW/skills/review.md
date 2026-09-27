@@ -66,6 +66,7 @@ sidebar:
 每次 PR 或分支審查也都會在同一流程中套用 **jb 角色**（[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)）、**mm 角色**
 （[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 角色**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)），以及 **ms 角色**
 （[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)）。
+每個差異審查也會套用 **lie-detector 角色**：[lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)。
 
 ### 分類 [#classify]
 
@@ -96,4 +97,4 @@ sidebar:
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 以了解術語和結構。報告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、計數、
-`jb:`、`mm:` 和 `av:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
+`jb:`、`mm:`、`av:` 和 `lie-detector:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
