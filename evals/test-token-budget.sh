@@ -57,6 +57,8 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
+# review 4600 -> 4725 (2026-09-27) for the /av and /lie-detector hat pointers and receipt
+# lines; ask-ben is 7675 for generated /av and /lie-detector catalog rows.
 # review 4300 -> 4450 (2026-09-25) for the always-on /jb value-hat pointer and its
 # receipt line; ask-ben 7400 -> 7450 for its generated /jb catalog row.
 # grilling 3650 -> 3675 for the /av value-axis pointer; ask-ben 7600 -> 7675 and review
@@ -81,7 +83,7 @@ while read -r skill cap; do
 done <<'EOF'
 ask-ben 7675
 wayfinder 5000
-review 4700
+review 4725
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -140,6 +142,7 @@ postgresql 3175
 golang-review 3125
 jb 4000
 av 3625
+lie-detector 4400
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000

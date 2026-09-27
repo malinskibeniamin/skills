@@ -60,8 +60,8 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
 Every PR or branch review also applies the **jb hat** ([jb/SKILL.md](../jb/SKILL.md)), **mm hat**
-([mm/SKILL.md](../mm/SKILL.md)), **av hat** ([av/SKILL.md](../av/SKILL.md)), and **ms hat**
-([ms/SKILL.md](../ms/SKILL.md)) inline.
+([mm/SKILL.md](../mm/SKILL.md)), **av hat** ([av/SKILL.md](../av/SKILL.md)), **ms hat**
+([ms/SKILL.md](../ms/SKILL.md)), and **lie-detector hat** ([lie-detector/SKILL.md](../lie-detector/SKILL.md)) inline.
 
 ### Classify
 
@@ -92,4 +92,4 @@ For `--deep`, use the same loop with a complete applicability ledger. Read
 Read [REFERENCE.md](REFERENCE.md) for vocabulary and schema. Report
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
-the `jb:`, `mm:`, and `av:` lines, verdict, and residual limits. A clean review returns only those lines, verdict, and residual limits.
+the `jb:`, `mm:`, `av:`, and `lie-detector:` lines, verdict, and residual limits. A clean review returns only those lines, verdict, and residual limits.

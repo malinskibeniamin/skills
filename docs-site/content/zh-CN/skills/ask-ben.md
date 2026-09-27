@@ -49,6 +49,7 @@ sidebar:
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
 | `/jb` | 检查 PR 是否值得投入时间，并证明工作已完成。 |
+| `/lie-detector` | 发现不会失败的测试和缺乏差异支持的声明。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/mm` | 在交付前判断一项变更是否值得付出相应成本。 |

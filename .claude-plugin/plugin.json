@@ -59,6 +59,7 @@
     "./improve/",
     "./implement-spec/",
     "./jb/",
+    "./lie-detector/",
     "./maintain-verification-skill/",
     "./make-pr-easy-to-review/",
     "./mm/",
