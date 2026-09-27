@@ -64,8 +64,8 @@ sidebar:
 | 依赖/外部 API | 第一手文档、版本、锁文件、安全通告 |
 
 每次 PR 或分支审查也都在当前流程中应用 **jb 视角**（[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)）、**mm 视角**
-（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 视角**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)），以及 **ms 视角**
-（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)）。
+（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 视角**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)）、**ms 视角**
+（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)），以及 **lie-detector 视角**（[lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)）。
 
 ### 分类 [#classify]
 
@@ -96,4 +96,4 @@ sidebar:
 阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 了解术语和结构。报告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定点、模式、计数、
-`jb:`、`mm:` 和 `av:` 结论行、结论和剩余限制。无发现时只返回这些结论行、结论和剩余限制。
+`jb:`、`mm:`、`av:` 和 `lie-detector:` 结论行、结论和剩余限制。无发现时只返回这些结论行、结论和剩余限制。

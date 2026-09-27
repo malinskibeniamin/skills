@@ -57,6 +57,9 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
+# review 4600 -> 4725 (2026-09-27) for the /av and /lie-detector hat pointers and receipt
+# lines; ask-ben 7675 -> 7700 for the lie-detector catalog row alongside /av.
+# /ms adds a review hat and catalog row: review 4725 -> 4775; ask-ben 7700 -> 7800.
 # review 4300 -> 4450 (2026-09-25) for the always-on /jb value-hat pointer and its
 # receipt line; ask-ben 7400 -> 7450 for its generated /jb catalog row.
 # grilling 3650 -> 3675 for the /av value-axis pointer; ask-ben 7600 -> 7675 and review
@@ -65,7 +68,8 @@ fi
 # preserves the measured wave reduction while allowing small wording trades
 # between related instructions. review 4300 -> 4400 (2026-09-25) for the
 # always-on /ss value line (4450 -> 4550 alongside /jb); ask-ben 7450 -> 7500 for the /ss catalog row.
-# The aggregate cap is unchanged. /ms hat: review +50 -> 4700.
+# The top-10 cap is unchanged. The /ms skill adds 292 bytes beyond the remaining-skill
+# cap, so raise it from 175010 to 175350 with 48 bytes of headroom.
 lean_skill_total=0
 while read -r skill cap; do
   bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
@@ -79,9 +83,9 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7675
+ask-ben 7800
 wayfinder 5000
-review 4700
+review 4775
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -140,6 +144,7 @@ postgresql 3175
 golang-review 3125
 jb 4000
 av 3625
+lie-detector 5050
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000
@@ -197,13 +202,13 @@ wait-what 400
 work 325
 EOF
 
-if [ "$remaining_skill_total" -le 175010 ]; then
-  echo "  PASS  remaining-skill wave under 175010 bytes ($remaining_skill_total)"
+if [ "$remaining_skill_total" -le 175350 ]; then
+  echo "  PASS  remaining-skill wave under 175350 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 175010)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 175350)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 175010 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 175350 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible

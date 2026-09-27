@@ -49,6 +49,7 @@ sidebar:
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
 | `/jb` | 檢查 PR 是否值得投入時間，並提供已完成的證明。 |
+| `/lie-detector` | 找出不可能失敗的測試，以及差異內容無法支持的主張。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
 | `/mm` | 在交付變更前，判斷其效益是否值得付出成本。 |

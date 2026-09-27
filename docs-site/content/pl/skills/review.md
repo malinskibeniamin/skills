@@ -66,8 +66,8 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
 Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** ([jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)), **perspektywę mm**
-([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)) oraz **perspektywę ms**
-([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) bezpośrednio w ramach przeglądu.
+([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)), **perspektywę ms**
+([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) oraz **perspektywę lie-detector** ([lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)) bezpośrednio w ramach przeglądu.
 
 ### Sklasyfikuj [#classify]
 
@@ -98,4 +98,4 @@ Dla `--deep` użyj tej samej pętli z pełnym rejestrem zastosowania. Przeczytaj
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md), aby poznać słownictwo i schemat. Zgłaszaj
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Dodaj `entrypoint, data, actions, observations, timing, limits`, ustalony punkt, tryb, liczby,
-wiersze `jb:`, `mm:` i `av:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko te wiersze, werdykt i pozostałe ograniczenia.
+wiersze `jb:`, `mm:`, `av:` i `lie-detector:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko te wiersze, werdykt i pozostałe ograniczenia.

@@ -13,8 +13,9 @@ Repo has hooks enforcing style, patterns, conventions at edit time. DO NOT comme
 - **Value**: apply the `/jb` skill; unjustified lane, speculative scope, or missing acceptance criteria
 - **Value lens**: run `/ss`; flag work whose bucket, beneficiary, trigger, evidence, or reachability is missing
 - **Worth**: apply the `/mm` skill; lane, payoff, and verdict for unproven or unjustified work
+- **Truth**: apply the `/lie-detector` skill; hallucinated claims, code that fakes success, tests that cannot fail, unrequested changes, copyable anti-patterns
 
-PR clean on all seven fronts -> approve with only the `jb:` and `mm:` verdict lines as the body. No "looks good" comment. No summary of what checked.
+PR clean on all eight fronts -> approve with only the `jb:`, `mm:`, and `lie-detector:` verdict lines as the body. No "looks good" comment. No summary of what checked.
 
 ## Steps
 
@@ -73,6 +74,10 @@ For each changed file, read full file (not just diff) to understand context. The
 
 **Worth (`/mm`):**
 - Add the `mm:` line after the `jb:` line; post only `/mm` P1/P2 findings inline.
+
+**Truth (`/lie-detector`, every PR):**
+- Add the `lie-detector:` verdict line after the `jb:` line.
+- Post only P1/P2 findings, each with the command that proved the lie.
 
 ### 5. Post findings (only if issues found)
 

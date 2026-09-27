@@ -67,6 +67,7 @@ Verification: <commands and real-entrypoint replay>
 Counts: <P0/P1/P2>
 Value: jb: <ktlo|qol|growth|taste> -- <justified|thin|unjustified> -- <beneficiary and evidence>
 Value: av: <ktlo|qol|growth|taste> -- <justified|thin|unjustified> -- <beneficiary and why>
+Truth: lie-detector: <truthful|suspect|lying> -- merge <ready|not proven> -- <evidence>
 Verdict: approve | changes required | blocked by missing evidence
 Residual limits: <unverified external behavior or none>
 ```

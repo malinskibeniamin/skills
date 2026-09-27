@@ -57,6 +57,7 @@ SHORT_DESCRIPTIONS = {
     "improve": "Audit codebases or write requested implementation plans",
     "implement-spec": "Implement a whole spec on one integration branch",
     "jb": "Check that a PR earns its time and proves it is done",
+    "lie-detector": "Catch tests that cannot fail and claims the diff does not back",
     "maintain-verification-skill": "Audit a project verifier against source and live behavior",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
     "mm": "Judge whether a change earns its cost before it ships",

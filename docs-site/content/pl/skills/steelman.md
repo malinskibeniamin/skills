@@ -12,55 +12,24 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/steelman.excalidraw)
 
-Przeciwdziałanie bezkrytycznemu przytakiwaniu. Modele LLM domyślnie się zgadzają. Ta umiejętność wymusza przedstawienie przeciwnego stanowiska.
-Pomiń preferencje, cele, trywialne operacje, twierdzenia udowodnione przez użytkownika i prace implementacyjne,
-chyba że sprzeciw jest konieczny ze względu na bezpieczeństwo, utratę danych lub nieodwracalność.
 
-## Procedura
+Przeciwdziałaj bezkrytycznemu przytakiwaniu za pomocą dowodów. Pomiń preferencje/cele/zakres, trywialne operacje, udowodnione twierdzenia i prace implementacyjne, chyba że sprzeciw jest konieczny ze względu na bezpieczeństwo, utratę danych lub nieodwracalność.
 
-### Krok 1: Określ twierdzenie
+## Procedura [#procedure]
 
-Przeformułuj twierdzenie użytkownika w jednym zdaniu. Oznacz jego typ:
-- **Faktyczne** (możliwe do zweryfikowania: grep, dokumentacja, uruchomienie) -> najpierw zweryfikuj
-- **Przyczynowe** ("X nie działa z powodu Y") -> przetestuj mechanizm
-- **Architektoniczne** ("wzorzec Z nie będzie się skalować") -> sprawdź istniejące użycia
-- **Preferencja/cel/zakres** -> odmów zastosowania steelman. Zarejestruj `noise`. Zakończ.
+1. **Twierdzenie:** przeformułuj je raz i określ jego typ:
+   - faktyczne -> zweryfikuj;
+   - przyczynowe -> przetestuj mechanizm;
+   - architektoniczne -> sprawdź istniejące użycia;
+   - założenie dotyczące scalenia ("ten PR powinien zostać scalony") -> oprzyj argumentację na werdykcie `jb:`, dowodach z [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#6-steelman-gate) i ustaleniach z przeglądu;
+   - preferencja/cel/zakres -> zwróć `noise`; decyzja należy do użytkownika.
+2. **Najpierw dowody:** wyszukaj symbole/wzorce, przeczytaj wskazane pliki, przeprowadź niedrogie kontrole, sprawdź aktualną dokumentację. Nigdy nie argumentuj na podstawie ogólników.
+3. **Przeciwne stanowisko:** 2–4 punkty z odwołaniami do `file:line` lub wyników poleceń. Wskaż, co musiałoby być prawdą, aby twierdzenie było błędne, dowody z repozytorium wspierające tę tezę, pominięty scenariusz awarii i sprzeczny precedens lub wcześniejsze zdarzenia.
+4. **Werdykt:**
+   - **Potwierdzone:** dowody potwierdzają stanowisko użytkownika; kontynuuj.
+   - **Obalone:** przedstaw dowody i pozwól użytkownikowi pozostać przy swoim lub zmienić stanowisko; nigdy nie blokuj.
+   - **Mieszane:** wskaż, które elementy są potwierdzone, a które nie.
 
-Preferencje i cele należą do decyzji użytkownika. Nie stosuj steelman.
-
-### Krok 2: Zbierz dowody
-
-Przeprowadź równolegle kontrole *przed* rozpoczęciem argumentacji:
-- Wyszukaj wymienione symbole / wzorce za pomocą grep
-- Przeczytaj wskazane pliki
-- Uruchom testy/polecenia, jeśli jest to niedrogie
-- Sprawdź dokumentację/internet w przypadku twierdzeń dotyczących wersji lub narzędzi
-
-NIE argumentuj na podstawie ogólników ("wzorzec wygląda podejrzanie"). Opieraj argumenty na dowodach z repozytorium.
-
-### Krok 3: Przedstaw najsilniejszą wersję przeciwnego stanowiska
-
-Napisz najsilniejszy kontrargument z konkretnymi odniesieniami:
-- Co musiałoby być prawdą, aby użytkownik się mylił?
-- Jakie dowody w repozytorium wspierają tezę, że użytkownik się myli?
-- Jakiego scenariusza awarii użytkownik nie bierze pod uwagę?
-- Jaki precedens temu przeczy (git blame, wcześniejsze commity, powiązane pliki)?
-
-Format: 2–4 punkty. Każdy zawiera odwołanie do pliku i wiersza lub wyniku polecenia.
-
-### Krok 4: Werdykt
-
-Trzy możliwe wyniki:
-- **Potwierdzone**: dowody potwierdzają stanowisko użytkownika. Powiedz to, podając odniesienia. Kontynuuj zgodnie z planem użytkownika.
-- **Obalone**: dowody przeczą stanowisku użytkownika. Przedstaw je wraz z odniesieniami. Pozwól użytkownikowi zdecydować (pozostać przy swoim lub zmienić stanowisko). NIE blokuj.
-- **Mieszane**: częściowe potwierdzenie. Wskaż, które elementy są trafne, a które nie.
-
-## Antywzorzec
-
-Nie:
-- Pytaj "czy na pewno?" -- zweryfikuj bez informowania o tym, przedstaw tylko dowody
-- Wcielaj się w adwokata diabła bez odniesień -- opieraj się wyłącznie na repozytorium
-- Blokuj użytkownika. Przedstawiaj, nie ograniczaj.
-- Stosuj steelman przy każdej turze -- sygnał traci na wartości. Zachowaj tę metodę dla decyzji wysokiego ryzyka i wyraźnych próśb.
+Nigdy nie pytaj "czy na pewno?", nie wcielaj się w adwokata diabła bez dowodów, nie blokuj użytkownika ani nie stosuj steelman przy każdej turze. Zachowaj tę metodę dla wyraźnych próśb lub decyzji wysokiego ryzyka.
 
 [ETOS: Użytkownik może się mylić. Weryfikuj przed działaniem. Przedstawiaj dowody, nie wątpliwości.]

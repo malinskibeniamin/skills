@@ -1,0 +1,3 @@
+interface:
+  display_name: "Lie Detector"
+  short_description: "Catch tests that cannot fail and claims the diff does not back"

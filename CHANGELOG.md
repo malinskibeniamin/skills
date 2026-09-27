@@ -10,8 +10,19 @@ per the Claude Code docs, `decision: "block"` on PostToolBatch stops the agentic
 
 2026-09-25 -- Add `/ms`, a business-value review axis with 31 graded rules. Every PR
 declares one lane (keep the lights on, quality of life, new value, taste), a named
-beneficiary, and evidence; `/review` applies it as the always-on ms hat and the
+beneficiary, and evidence; `/review` applies it as the always-on ms hat, and the
 `/commit-push-pr` body template gains a `Lane:` line. Skills 95 -> 96.
+
+2026-09-27 -- Add model-invoked `/lie-detector`, a truth axis for every diff. It checks
+PR, commit, comment, and summary claims against the diff, installed code, or primary docs;
+flags code that pretends (success before the work completes, swallowed errors, shipped
+stubs, unread flags, names or types that disagree with the code); proves tests can fail by
+breaking the behavior they protect; flags hunks nobody asked for; and ranks anti-patterns by
+copy reach so one bad example does not spread. Its steelman gate calls a PR merge-ready only
+when the `jb:` lane is justified, no truth P1 remains, and `/review` has no P0/P1. `/review`
+applies the hat with a `Truth:` receipt line, the PR review routine adds a truth front,
+`/steelman` tests the merge premise, and `/test-audit` junk patterns gain frontend
+can-it-fail cases. Skills 96 -> 97.
 
 2026-09-25 -- Add model-invoked `/mm`, a value hat that asks whether a change earns its
 cost: one lane per PR (keep the lights on, quality of life, new capability, design taste),

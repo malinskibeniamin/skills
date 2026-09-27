@@ -1,9 +1,9 @@
 {
   "files": {
     "content/index.mdx": {
-      "pl": "817af16078907b97",
-      "zh-CN": "817af16078907b97",
-      "zh-TW": "817af16078907b97"
+      "pl": "60f20416af815673",
+      "zh-CN": "60f20416af815673",
+      "zh-TW": "60f20416af815673"
     },
     "content/skills/accessibility.md": {
       "pl": "7d21ef5e98b28c8c",
@@ -21,9 +21,9 @@
       "zh-TW": "1050b7a675dfc6e1"
     },
     "content/skills/ask-ben.md": {
-      "pl": "3b943040bcc93726",
-      "zh-CN": "3b943040bcc93726",
-      "zh-TW": "3b943040bcc93726"
+      "pl": "acae3e08af80f3bd",
+      "zh-CN": "acae3e08af80f3bd",
+      "zh-TW": "acae3e08af80f3bd"
     },
     "content/skills/av.md": {
       "pl": "787fbc9b2cc0ed92",
@@ -185,6 +185,11 @@
       "zh-CN": "1dc753869c8de92e",
       "zh-TW": "1dc753869c8de92e"
     },
+    "content/skills/lie-detector.md": {
+      "pl": "3ef0fb550721e4eb",
+      "zh-CN": "3ef0fb550721e4eb",
+      "zh-TW": "3ef0fb550721e4eb"
+    },
     "content/skills/maintain-verification-skill.md": {
       "pl": "dc0ab7182b43101d",
       "zh-CN": "dc0ab7182b43101d",
@@ -291,9 +296,9 @@
       "zh-TW": "32436a2cda6ca615"
     },
     "content/skills/review.md": {
-      "pl": "019582ac8f4d1355",
-      "zh-CN": "019582ac8f4d1355",
-      "zh-TW": "019582ac8f4d1355"
+      "pl": "7ee00d3b638a4696",
+      "zh-CN": "7ee00d3b638a4696",
+      "zh-TW": "7ee00d3b638a4696"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "ad4f6ed8858e420c",
@@ -336,9 +341,9 @@
       "zh-TW": "24fcae2a01daf37e"
     },
     "content/skills/steelman.md": {
-      "pl": "9cde1999d9d17317",
-      "zh-CN": "9cde1999d9d17317",
-      "zh-TW": "9cde1999d9d17317"
+      "pl": "4b3a9f1bf5e7320c",
+      "zh-CN": "4b3a9f1bf5e7320c",
+      "zh-TW": "4b3a9f1bf5e7320c"
     },
     "content/skills/swarm.md": {
       "pl": "3b8de7118cdb75ea",
@@ -371,9 +376,9 @@
       "zh-TW": "a42afcaca0e369f8"
     },
     "content/skills/test-audit.md": {
-      "pl": "470daa79d13df961",
-      "zh-CN": "470daa79d13df961",
-      "zh-TW": "470daa79d13df961"
+      "pl": "98ec1199042882e6",
+      "zh-CN": "98ec1199042882e6",
+      "zh-TW": "98ec1199042882e6"
     },
     "content/skills/thermo-nuclear-code-quality-review.md": {
       "pl": "485d8fd0a02db57b",

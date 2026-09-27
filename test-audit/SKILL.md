@@ -36,7 +36,10 @@ The shared checklist for every mode: the authoring gate rejects a new test that 
 - fixtures that supply the receipt, admission, or callback ordering the owner should produce, or persistence asserted against a store the path never writes;
 - capability tests that restate declared flags instead of exercising the delivery or acknowledgement the flag promises;
 - negative controls that pass for an unrelated reason, such as a denial from a different guard or a rejection the production path never reaches;
-- names or fixtures that promise more than the input exercises, such as a "retires the window" test asserting the window was not cleared.
+- names or fixtures that promise more than the input exercises, such as a "retires the window" test asserting the window was not cleared;
+- UI assertions on elements that render regardless of the changed branch, on a mocked child's stub output, or on copy imported from the constant the component renders; interactions replaced by calling the handler or setting state directly;
+- snapshots written or regenerated in the same change as the markup they pin;
+- async assertions never awaited, `waitFor` callbacks with no expectation, or expectations inside conditionals, catch blocks, or callbacks that may never run; assertions loosened, skipped, or narrowed in the same change that made them pass. Prove the test can fail as in [lie-detector](../lie-detector/SKILL.md#3-tests-that-cannot-fail).
 
 ## Value bar
 

@@ -348,6 +348,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "jb verdict line",
     ],
   },
+  "lie-detector": {
+    kind: "evidence-funnel",
+    nodes: [
+      "Diff + every claim",
+      "Claims, code, tests that lie",
+      "Unrequested + copyable changes",
+      "Steelman merge gate",
+    ],
+  },
   "implement-spec": {
     kind: "dependency-graph",
     nodes: [
