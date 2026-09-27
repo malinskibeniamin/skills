@@ -71,7 +71,7 @@ actual_exit=0
   PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
     "$ROUTE_SIBLING_SCRIPT" </dev/null
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
-{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+{"tool_name":"Write","session_id":"e2e-route-hook-$$","tool_input":{"file_path":"$route_file"}}
 JSON
 
 if [ "$actual_exit" -eq 0 ] && grep -q "users.browser.test.tsx" "$capture" 2>/dev/null; then
@@ -91,7 +91,7 @@ actual_exit=0
   PATH="$_e2e_tmpdir/bin:$PATH" ROUTE_SIBLING_TEST_CAPTURE="$capture" ROUTE_SIBLING_TEST_EXIT=1 \
     "$ROUTE_SIBLING_SCRIPT" </dev/null
 ) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
-{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
+{"tool_name":"Write","session_id":"e2e-route-hook-$$","tool_input":{"file_path":"$route_file"}}
 JSON
 
 if [ "$actual_exit" -eq 2 ] && grep -q "Sibling route test failed" /tmp/e2e-route-stderr; then
