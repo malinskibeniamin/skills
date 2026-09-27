@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/mm`, a value hat that asks whether a change earns its
+cost: one lane per PR (keep the lights on, quality of life, new capability, design taste),
+payoff, revenue likelihood, confidence, and a fixed verdict. `RULES.md` carries 16 graded
+value rules (V1-V16), each with its question, passing evidence, finding, and examples.
+`/review` and the PR-review routine run it beside `/jb` and `/ss` on every PR. Skills 93 -> 94.
+
 2026-09-25 -- Add model-invoked `/ss`, a business-value review lens. Every PR is classified
 into one bucket (keep the lights on, quality of life, feature, design bet) and checked for
 beneficiary, trigger, measured evidence, reachability, cost to own, and slice size against a

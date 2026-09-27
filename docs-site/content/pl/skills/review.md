@@ -65,7 +65,8 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Go/współbieżność/workflow | Własność, anulowanie, wyścigi, ponowienia, idempotencja |
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
-Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** bezpośrednio w ramach przeglądu: [jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md).
+Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** bezpośrednio w ramach przeglądu: [jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md),
+oraz **perspektywę mm**: [mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md).
 
 ### Sklasyfikuj [#classify]
 
@@ -96,4 +97,4 @@ Dla `--deep` użyj tej samej pętli z pełnym rejestrem zastosowania. Przeczytaj
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md), aby poznać słownictwo i schemat. Zgłaszaj
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Dodaj `entrypoint, data, actions, observations, timing, limits`, ustalony punkt, tryb, liczby,
-wiersz werdyktu `jb:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko wiersz `jb:`, werdykt i pozostałe ograniczenia.
+wiersze `jb:` i `mm:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko te wiersze, werdykt i pozostałe ograniczenia.
