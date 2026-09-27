@@ -1,6 +1,6 @@
 ---
 title: /mm
-description: 判断 PR、计划或工单是否值得投入成本：类别、用户、证据、验收、发布。
+description: 评判或构建值得投入成本的工作：类别、用户、证据、测试、发布和 PR 组织方式。
 type: skill
 sidebar:
   label: /mm
@@ -13,6 +13,10 @@ sidebar:
 **价值评审角色**；也可独立用于计划、RFC 和
 工单。不要编辑、提交或发布内容。其他评审角色负责代码正确性；本角色负责
 “我们是否应该交付这项变更，以及是否有证据支持？”
+
+在规划或实施而非评审时，遵循 [CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/mm/CRAFT.md)（C1-C7）：
+工作选择、分层里程碑、以可靠判定依据为基础的测试、如实测量、体现意图的代码，
+以及便于评审的 PR。
 
 倾向：快速交付、快速试错，以小步改进持续迭代。只阻止浪费、未经验证的风险或
 隐性损害；绝不拖慢成本低且可逆的尝试。
@@ -79,4 +83,4 @@ verdict: ship | ship after fixes | rethink scope | not now
 ```
 
 无问题时：仅输出 `mm: <lane> | <payoff> | verdict: ship`。在 `/review` 中，将
-发现的问题及其 `V<n>` 标识追加到评审中；是否合并由评审结论决定。
+发现的问题及其 `V<n>` 标识追加到评审中（如果某条 `C<n>` 指明了修复方式，也附上该标识作为依据）；是否合并由评审结论决定。

@@ -1,6 +1,6 @@
 ---
 name: mm
-description: Judge whether a PR, plan, or ticket earns its cost: lane, user, evidence, acceptance, rollout.
+description: Judge or build work that earns its cost: lane, user, evidence, tests, rollout, and PR shape.
 ---
 
 # mm
@@ -9,6 +9,10 @@ Review one axis: is this change worth our limited time, now, in this shape? Runs
 **value hat** on every `/review` and PR-review routine; standalone for plans, RFCs, and
 tickets. Do not edit, commit, or post. Other hats own code correctness; this hat owns
 "should we ship this, and is it proven?"
+
+When planning or implementing instead of reviewing, follow [CRAFT.md](CRAFT.md) (C1-C7):
+work selection, milestone stacks, oracle tests, honest measurement, intent-carrying code,
+and reviewable PRs.
 
 Bias: ship fast, fail fast, iterate in small gains. Block only waste, unproven risk, or
 silent harm; never slow a cheap reversible bet.
@@ -75,4 +79,4 @@ verdict: ship | ship after fixes | rethink scope | not now
 ```
 
 Clean: `mm: <lane> | <payoff> | verdict: ship` and nothing else. In `/review`, append the
-findings to the review with their `V<n>` ids; the review verdict owns merge.
+findings to the review with their `V<n>` ids (and a supporting `C<n>` when it names the fix); the review verdict owns merge.
