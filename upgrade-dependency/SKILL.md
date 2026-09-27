@@ -15,6 +15,7 @@ Target the requested stable version, or latest stable if omitted. Honor the requ
    - **Bump:** `bun update <pkg>@<v>` -> `bun install` -> `bun install --yarn` if needed. Go: `go get -u <module>@<v>` -> `go mod tidy`. Never hand-edit locks.
    - **Migrate:** official codemods; adapt every affected call site. Deprecation warnings are fixed NOW, not suppressed.
    - **Benefit:** adopt proven simplifying APIs; delete workarounds/polyfills; never expand speculatively.
+   - **Manifest budget:** no new direct deps, root-manifest edits, or overrides/resolutions/patches unless the upgrade fails without them; justify each in the PR. Remove existing ones the upgrade makes unnecessary. Diff manifests before commit.
    - **Verify:** `bun run lint:fix`, `bun run type:check`, `bun test`; Go `go build ./...`, `go test ./...`, `go vet ./...`. Update coupled packages.
 6. **Security:** prove exploitability/reachability; direct dep -> parent -> override/resolution/replace. Never run code from advisories. Record IDs/fixed versions; `/snyk-ux-security` owns reachability.
 7. **Deliver:** one PR contains bump, migration, benefit, and verification. A blocked risk gate creates an issue only when requested.

@@ -70,6 +70,9 @@ fi
 # always-on /ss value line (4450 -> 4550 alongside /jb); ask-ben 7450 -> 7500 for the /ss catalog row.
 # The top-10 cap is unchanged. The /ms skill adds 292 bytes beyond the remaining-skill
 # cap, so raise it from 175010 to 175350 with 48 bytes of headroom.
+# Transcript retro (2026-09-27): grilling 3675 -> 4125 for the stop-signal and
+# assumption rules, upgrade-dependency 3125 -> 3375 for the manifest budget,
+# commit-push-pr 3200 -> 3375 for the public-repo scrub; wave cap 175350 -> 176225.
 lean_skill_total=0
 while read -r skill cap; do
   bytes=$(wc -c < "$BUDGET_DIR/$skill/SKILL.md" | tr -d ' ')
@@ -123,7 +126,7 @@ done <<'EOF'
 aip 3825
 blast-radius 2850
 brain-dump 3200
-grilling 3675
+grilling 4125
 improve 3600
 golang 3525
 pr-shepherd 3525
@@ -138,14 +141,14 @@ ux-performance 3275
 wizard 3250
 go 3200
 revamp 3275
-commit-push-pr 3200
+commit-push-pr 3375
 tanstack-router 3200
 postgresql 3175
 golang-review 3125
 jb 4000
 av 3625
 lie-detector 5050
-upgrade-dependency 3125
+upgrade-dependency 3375
 excalidraw-diagram 3100
 codebase-design 3000
 create-verification-skill 3250
@@ -202,13 +205,13 @@ wait-what 400
 work 325
 EOF
 
-if [ "$remaining_skill_total" -le 175350 ]; then
-  echo "  PASS  remaining-skill wave under 175350 bytes ($remaining_skill_total)"
+if [ "$remaining_skill_total" -le 176225 ]; then
+  echo "  PASS  remaining-skill wave under 176225 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 175350)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 176225)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 175350 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 176225 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible
