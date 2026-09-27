@@ -57,6 +57,8 @@ else
   ERRORS="$ERRORS\n  FAIL: skill descriptions over budget"
 fi
 
+# review 4300 -> 4450 (2026-09-25) for the always-on /jb value-hat pointer and its
+# receipt line; ask-ben 7400 -> 7450 for its generated /jb catalog row.
 # Keep the largest model-facing skills on explicit budgets. The aggregate cap
 # preserves the measured wave reduction while allowing small wording trades
 # between related instructions.
@@ -73,9 +75,9 @@ while read -r skill cap; do
     ERRORS="$ERRORS\n  FAIL: $skill SKILL.md over $cap bytes"
   fi
 done <<'EOF'
-ask-ben 7400
+ask-ben 7450
 wayfinder 5000
-review 4300
+review 4450
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -131,6 +133,7 @@ commit-push-pr 3200
 tanstack-router 3200
 postgresql 3175
 golang-review 3125
+jb 4000
 upgrade-dependency 3125
 excalidraw-diagram 3100
 codebase-design 3000

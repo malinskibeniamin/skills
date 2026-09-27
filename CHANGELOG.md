@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/jb`, a value-lane review axis. Each PR gets one lane
+(`ktlo`, `qol`, `growth`, `taste`), a justified/thin/unjustified verdict, and at most three
+findings; P1 covers no beneficiary, speculative scope with no caller, missing falsifiable
+acceptance criteria, and unguarded one-way doors, while the default stays approve.
+`jb/RULES.md` carries 54 graded rules (Scope, Evidence, Delivery, Contracts, Taste, Cost)
+whose grades `evals/test-jb.sh` keeps mechanical. `/review` applies the jb hat on every PR
+and records its verdict in the receipt; the PR review routine applies it too. Skills 91 -> 92.
+
 2026-09-24 -- Route the owner-selected drivers: Claude Opus 5.5 `high` is the primary
 owner and GPT-6 Sol `medium` is the second, Codex-delegated lane; Astra `high` is the named
 Sol fallback. User-facing work needs taste >= 8 and stays with Claude, with Astra only as a
