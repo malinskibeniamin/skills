@@ -11,4 +11,4 @@ Load only when relevant: `references/connection.md` for connector/fallback; `ref
 
 For substantial plans, follow [`../shared/intent-map.md`](../shared/intent-map.md); render its first-read graph in the existing Agent-Native diagram/canvas, not a second artifact.
 
-Disagreement -> `/plan-arbiter`; open decisions -> `/grilling`; one in-chat view -> `/show-me`. Planning is read-only until explicit implementation approval.
+Disagreement: `/plan-arbiter`; open decisions: `/grilling`; one in-chat view: `/show-me`. Planning is read-only until explicit approval.
