@@ -17,8 +17,7 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/product.excalidraw)
 
-每个计划、PR 和审查都要回答一个问题：这项变更是否值得投入这些时间，
-它能否触达目标受益者？这里只关注价值：代码缺陷交给 `/review`，主张
+这项变更是否值得投入成本，能否触达受益者？代码缺陷交给 `/review`，主张
 与证据的核对交给 `/lie-detector`。可独立运行，也可在
 `/review` 和 `/grilling` 中作为**产品视角**嵌入使用，还可用于自动审查流程。[RULES.md](https://github.com/malinskibeniamin/skills/blob/main/product/RULES.md) 根据
 多少组独立证据共同支持每条规则来划分等级；[CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/product/CRAFT.md) 则是
@@ -62,7 +61,8 @@ type: skill
    保护现有使用方，将不可逆决策留给其负责人。
 8. **规则：**始终应用 RULES.md 中的 Justification、Scope 和 Evidence 部分，以及
    对应类别的章节；当差异涉及发布、客户可见输出或
-   计费时，还要应用 Delivery、Trust 或 Money。严格执行 S 和 A；差异明确符合时应用 B；仅在被要求时应用 C。
+   计费时，还要应用 Delivery、Trust 或 Money。非生成源代码或测试发生变更时，加载 CRAFT.md。
+   严格执行 S 和 A；差异明确符合时应用 B；仅在被要求时应用 C。
 
 跟踪模式将分支与其声明的结果进行比较：超出类别的工作标为
 `drifting`（指出要削减的内容或后续 PR）；暂时无法落地的价值标为 `park`
@@ -102,3 +102,4 @@ product: <ktlo|qol|feature|taste> (<declared|inferred>) -- <justified|thin|unjus
 
 计划模式还会补充验收场景和成本最低的证伪方法。跟踪模式将
 `on track`、`drifting` 或 `park` 放在结论位置。
+说明此次审查未能验证哪些内容，以及应由谁做出最终决定。
