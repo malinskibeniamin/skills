@@ -11,8 +11,9 @@ Repo has hooks enforcing style, patterns, conventions at edit time. DO NOT comme
 - **Security**: injection, auth bypass, secret exposure, unsafe deserialization
 - **Missing behavior**: untested paths, unhandled errors, incomplete state machines
 - **Value**: apply the `/jb` skill; unjustified lane, speculative scope, or missing acceptance criteria
+- **Value lens**: run `/ss`; flag work whose bucket, beneficiary, trigger, evidence, or reachability is missing
 
-PR clean on all five fronts -> approve with only the `jb:` verdict line as the body. No "looks good" comment. No summary of what checked.
+PR clean on all six fronts -> approve with only the `jb:` verdict line as the body. No "looks good" comment. No summary of what checked.
 
 ## Steps
 
@@ -63,6 +64,12 @@ For each changed file, read full file (not just diff) to understand context. The
 - Start every review body with the `jb:` verdict line.
 - Post only `/jb` P1/P2 findings; P3 nudges stay out of inline comments.
 
+**Value (`/ss`, every PR):**
+- One primary bucket: keep the lights on, quality of life, feature, or design bet?
+- Named beneficiary and trigger (why now)? Evidence measured, not asserted?
+- Can the beneficiary reach it today? Standing cost stated in dollars?
+- Smallest reversible slice, default off, follow-ups ticketed?
+
 ### 5. Post findings (only if issues found)
 
 Post inline comments on specific lines. Each comment must include:
@@ -78,6 +85,8 @@ gh api repos/{owner}/{repo}/pulls/{number}/reviews \
 
 [Only P0/P1 issues listed. Style and pattern issues are caught by project hooks at edit time.]
 
+[Value section only when the /ss verdict is not justified: Value line, verdict, at most three findings.]
+
 ---
 *Automated review by Claude Code routine.*"
 ```
@@ -86,6 +95,7 @@ gh api repos/{owner}/{repo}/pulls/{number}/reviews \
 
 - **No significant issues**: approve (POST with `event=APPROVE`); body is the `jb:` verdict line only.
 - **Issues found**: request changes. Be specific.
+- **Value only** (`needs justification` or `unlikely to pay off`, no defects): comment, do not request changes; the owner decides.
 - **PR is draft**: leave comments but do not request changes.
 
 ## Rules

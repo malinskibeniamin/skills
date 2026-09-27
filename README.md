@@ -235,7 +235,7 @@ an explicit artifact command.
 
 | Category | What it covers | Representative skills |
 |---|---|---|
-| Workflow | Build, ship, review, debug | `/development-lifecycle`, `/go`, `/review`, `/diagnosing-bugs` |
+| Workflow | Build, ship, review, value-check, debug | `/development-lifecycle`, `/go`, `/review`, `/ss`, `/diagnosing-bugs` |
 | Kits | Bundles that install groups | `/frontend-starter-kit` (profiles: `full`, `minimal`, `redpanda`, per-tool), `/work-automation-kit`, `/codex-compat` |
 | Guidance | Auto-load on matching files | `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy` |
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |

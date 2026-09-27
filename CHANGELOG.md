@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-09-25 -- Add model-invoked `/ss`, a business-value review lens. Every PR is classified
+into one bucket (keep the lights on, quality of life, feature, design bet) and checked for
+beneficiary, trigger, measured evidence, reachability, cost to own, and slice size against a
+graded, recency-weighted rule catalog. `/review` applies it inline on every diff, the
+PR-review routine posts a Value comment only when justification is missing, and the
+`/commit-push-pr` body template declares the bucket up front. Skills 92 -> 93.
+
 2026-09-25 -- Add model-invoked `/jb`, a value-lane review axis. Each PR gets one lane
 (`ktlo`, `qol`, `growth`, `taste`), a justified/thin/unjustified verdict, and at most three
 findings; P1 covers no beneficiary, speculative scope with no caller, missing falsifiable
