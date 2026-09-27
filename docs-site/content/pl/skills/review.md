@@ -65,14 +65,9 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Go/współbieżność/workflow | Własność, anulowanie, wyścigi, ponowienia, idempotencja |
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
-<<<<<<< HEAD
 Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** ([jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)), **perspektywę mm**
-([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)) i **perspektywę ms**
-([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) bezpośrednio w ramach przeglądu. [#-headevery-pr-or-branch-review-also-applies-the-jb-hat-jbskillmd-mm-hatmmskillmd-av-hat-avskillmd-and-ms-hatmsskillmd-inline]
-=======
-Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** bezpośrednio w ramach przeglądu: [jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md),
-**perspektywę mm**: [mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md) i **perspektywę ms**: [ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md).
->>>>>>> f76cd3d8 (fix(review): keep jb and mm hat wording beside ms)
+([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)) oraz **perspektywę ms**
+([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) bezpośrednio w ramach przeglądu.
 
 ### Sklasyfikuj [#classify]
 
