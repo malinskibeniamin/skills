@@ -31,6 +31,10 @@ Map a decision tree to its currently answerable frontier. Ask the whole frontier
 <question or choices>
 ```
 
+A confident, reversible **Recommended:** answer is an assumption, not a question: state it in one line and continue. Ask only what evidence cannot settle and the user owns.
+
+**Stop signal:** "no more questions", "just do it", "don't ask", or a bare endpoint ("draft PR") ends asking for the rest of the session. Adopt every open recommendation, list them as assumptions, and continue to the endpoint; pause only for an irreversible or user-reserved decision.
+
 An unsettled prerequisite delays only its branch while the rest of the frontier proceeds. Recompute the frontier after every round. Keep fact-finding inline unless the user explicitly authorizes delegation; search the environment, filesystem, tools, and sources. The user's decisions are theirs.
 
 ## 3. Exit
