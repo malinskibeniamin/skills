@@ -165,7 +165,7 @@ stack-registry 2525
 codex-compat 2575
 work-automation-kit 2525
 make-pr-easy-to-review 2425
-ms 2900
+ms 3400
 maintain-verification-skill 3000
 codex 2375
 handoff 2375
@@ -205,13 +205,14 @@ wait-what 400
 work 325
 EOF
 
-if [ "$remaining_skill_total" -le 176225 ]; then
-  echo "  PASS  remaining-skill wave under 176225 bytes ($remaining_skill_total)"
+# Main's 176225-byte cap plus 550 for /ms craft, testing, and PR-shape checks.
+if [ "$remaining_skill_total" -le 176775 ]; then
+  echo "  PASS  remaining-skill wave under 176775 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 176225)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 176775)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 176225 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 176775 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible

@@ -105,6 +105,8 @@ https://github.com/user-attachments/assets/<id from pr-video.sh attach>
 
 ## Reviewer guide
 - <non-trivial diffs only: entry point, deliberate limitation>
+- Riskiest hunk: <the file or hunk to push back on, and the assumption behind it>
+- Not fixed here: <adjacent problems found and deliberately left; omit if none>
 
 ## Dogfood evidence
 <omit only when no runnable behavior changed; otherwise copy the current /dogfood receipt>
