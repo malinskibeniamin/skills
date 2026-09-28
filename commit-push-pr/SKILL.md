@@ -18,6 +18,8 @@ Only explicit merge requests use [the merge contract](references/merge.md), not 
 6. Runnable PR work requires current `/dogfood` PASS; BLOCKED needs user waiver.
 7. Stage requested paths by purpose; ask if ownership is unclear.
 
+Before a rebase, resolve the PR base and run the bundled `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (this repository root when developing the skill). Treat repeated files as a coarse prompt to inspect fixup commits, not proof of conflicts or token savings. Squash only coherent fixups on the current user-owned branch; preserve meaningful commits and branch topology. The script is read-only; never let it rewrite history.
+
 ## Commit
 
 1. Stay on the feature branch; on default, create `type/description`.
