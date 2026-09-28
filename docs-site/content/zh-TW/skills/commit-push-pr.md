@@ -10,21 +10,19 @@ sidebar:
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/commit-push-pr.excalidraw)
 
 
-請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)，以瞭解審查關卡、提交、標籤、內文及證明。
+請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)，瞭解 PR 的詳細要求。
 
-僅明確的合併要求使用[合併規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)，而不是此 PR 流程。
+僅在明確要求時合併：[合併規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)。
 
 ## 前置檢查 [#preflight]
 
-1. 檢查狀態、差異、目前分支、近期記錄，以及此分支上的任何 PR。
+1. 檢查狀態、差異、目前分支、近期記錄，以及此分支上的任何 PR；執行 rebase 前先做[變基前檢查](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check)。
 2. 確認終點：僅提交、推送（`--no-pr`）或 PR。僅提交會略過遠端與 `gh` 前置檢查。
 3. 推送／PR 需要遠端；PR 還需要已完成驗證的 `gh` 及預設分支。
 4. 對 PR 執行 `gh stack view --json`；檢查基底／堆疊。一般 PR 僅涵蓋一個層級，絕不執行 `gh stack submit`。
 5. 直接執行審查；不要僅因未叫用某個具名技能而阻擋流程。
 6. 可執行的 PR 工作需要目前有效的 `/dogfood` PASS；BLOCKED 需要使用者豁免。
 7. 依用途暫存要求的路徑；如果歸屬不明，請先詢問。
-
-執行 rebase 前，先確認 PR 的基底，再執行隨附的 `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>`（開發此技能時，外掛根目錄就是本儲存庫根目錄）。多個 commit 修改同一檔案，只是提醒你檢查修補 commit 的粗略訊號，並非衝突或節省 token 的證據。只在目前由使用者擁有的分支上合併內聚的修補 commit；保留有意義的 commit 與分支拓撲。此腳本唯讀，不得讓它改寫歷史。
 
 ## 提交 [#commit]
 

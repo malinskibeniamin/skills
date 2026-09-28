@@ -13,21 +13,19 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/commit-push-pr.excalidraw)
 
 
-Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać wymagania wstępne przeglądu, commity, etykiety, opis i dowody.
+Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać szczegóły PR-a.
 
-Tylko wyraźne żądania scalenia obsługuje [kontrakt scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md), a nie poniższy przepływ tworzenia PR-a.
+Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md).
 
 ## Kontrola wstępna [#preflight]
 
-1. Sprawdź stan, różnice, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi.
+1. Sprawdź stan, różnice, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi; przed rebase'em wykonaj [kontrolę przed rebase'em](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check).
 2. Ustal żądany punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Wariant z samym commitem pomija kontrolę zdalnego repozytorium i `gh`.
 3. Wypchnięcie/PR wymaga zdalnego repozytorium; PR wymaga również uwierzytelnionego `gh` i domyślnej gałęzi.
 4. W przypadku PR-a uruchom `gh stack view --json`; sprawdź bazę i stos. Zwykły PR obejmuje jedną warstwę; nigdy nie używaj `gh stack submit`.
 5. Przeprowadź przegląd bezpośrednio; nie blokuj działania wyłącznie z powodu niewywołania wskazanej umiejętności.
 6. Uruchamialne zmiany w PR-ze wymagają aktualnego wyniku PASS z `/dogfood`; wynik BLOCKED wymaga zgody użytkownika na odstępstwo.
 7. Dodawaj do poczekalni według celu i tylko żądane ścieżki. Zapytaj, jeśli własność zmian jest niejasna.
-
-Przed rebase'em ustal bazę PR-a i uruchom dołączony `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (podczas pracy nad umiejętnością: katalog główny tego repozytorium). Pliki zmienione w wielu commitach traktuj jako przybliżoną wskazówkę do sprawdzenia commitów poprawkowych, a nie dowód konfliktów czy oszczędności tokenów. Scalaj tylko spójne poprawki na bieżącej gałęzi należącej do użytkownika; zachowaj istotne commity i topologię gałęzi. Skrypt działa tylko do odczytu i nie może przepisywać historii.
 
 ## Commit
 

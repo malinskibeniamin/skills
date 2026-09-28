@@ -4,21 +4,19 @@ description: Commit, push, and open a reviewable PR, or execute an explicitly au
 argument-hint: "[--no-pr]"
 ---
 
-See [REFERENCE.md](REFERENCE.md) for gates, commits, labels, body, evidence.
+See [REFERENCE.md](REFERENCE.md) for PR details.
 
-Only explicit merge requests use [the merge contract](references/merge.md), not this PR flow.
+Merge only on explicit request: [contract](references/merge.md).
 
 ## Preflight
 
-1. Inspect status, diff, branch, log, and branch PR.
+1. Inspect status, diff, branch, log, and branch PR; before rebasing use the [pre-rebase check](REFERENCE.md#pre-rebase-check).
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
 3. Push/PR needs a remote; PR also needs authenticated `gh` and the default branch.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
 5. Review inline; do not block merely over named skill invocation.
 6. Runnable PR work requires current `/dogfood` PASS; BLOCKED needs user waiver.
 7. Stage requested paths by purpose; ask if ownership is unclear.
-
-Before a rebase, resolve the PR base and run the bundled `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (this repository root when developing the skill). Treat repeated files as a coarse prompt to inspect fixup commits, not proof of conflicts or token savings. Squash only coherent fixups on the current user-owned branch; preserve meaningful commits and branch topology. The script is read-only; never let it rewrite history.
 
 ## Commit
 
