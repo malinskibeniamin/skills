@@ -27,6 +27,8 @@ Tylko wyraźne żądania scalenia obsługuje [kontrakt scalania](https://github.
 6. Uruchamialne zmiany w PR-ze wymagają aktualnego wyniku PASS z `/dogfood`; wynik BLOCKED wymaga zgody użytkownika na odstępstwo.
 7. Dodawaj do poczekalni według celu i tylko żądane ścieżki. Zapytaj, jeśli własność zmian jest niejasna.
 
+Przed rebase'em ustal bazę PR-a i uruchom dołączony `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (podczas pracy nad umiejętnością: katalog główny tego repozytorium). Pliki zmienione w wielu commitach traktuj jako przybliżoną wskazówkę do sprawdzenia commitów poprawkowych, a nie dowód konfliktów czy oszczędności tokenów. Scalaj tylko spójne poprawki na bieżącej gałęzi należącej do użytkownika; zachowaj istotne commity i topologię gałęzi. Skrypt działa tylko do odczytu i nie może przepisywać historii.
+
 ## Commit
 
 1. Pozostań na gałęzi funkcji; jeśli jesteś na gałęzi domyślnej, utwórz `type/description`.

@@ -24,6 +24,8 @@ sidebar:
 6. 可執行的 PR 工作需要目前有效的 `/dogfood` PASS；BLOCKED 需要使用者豁免。
 7. 依用途暫存要求的路徑；如果歸屬不明，請先詢問。
 
+執行 rebase 前，先確認 PR 的基底，再執行隨附的 `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>`（開發此技能時，外掛根目錄就是本儲存庫根目錄）。多個 commit 修改同一檔案，只是提醒你檢查修補 commit 的粗略訊號，並非衝突或節省 token 的證據。只在目前由使用者擁有的分支上合併內聚的修補 commit；保留有意義的 commit 與分支拓撲。此腳本唯讀，不得讓它改寫歷史。
+
 ## 提交 [#commit]
 
 1. 留在功能分支上；若位於預設分支，請建立 `type/description`。
