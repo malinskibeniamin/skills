@@ -13,13 +13,13 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/commit-push-pr.excalidraw)
 
 
-Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać wymagania wstępne przeglądu, commity, etykiety, opis i dowody.
+Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać szczegóły PR-a.
 
-Tylko wyraźne żądania scalenia obsługuje [kontrakt scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md), a nie poniższy przepływ tworzenia PR-a.
+Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md).
 
 ## Kontrola wstępna [#preflight]
 
-1. Sprawdź stan, różnice, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi.
+1. Sprawdź stan, różnice, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi; przed rebase'em wykonaj [kontrolę przed rebase'em](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check).
 2. Ustal żądany punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Wariant z samym commitem pomija kontrolę zdalnego repozytorium i `gh`.
 3. Wypchnięcie/PR wymaga zdalnego repozytorium; PR wymaga również uwierzytelnionego `gh` i domyślnej gałęzi.
 4. W przypadku PR-a uruchom `gh stack view --json`; sprawdź bazę i stos. Zwykły PR obejmuje jedną warstwę; nigdy nie używaj `gh stack submit`.

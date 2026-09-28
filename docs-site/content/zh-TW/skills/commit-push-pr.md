@@ -10,13 +10,13 @@ sidebar:
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/commit-push-pr.excalidraw)
 
 
-請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)，以瞭解審查關卡、提交、標籤、內文及證明。
+請閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)，瞭解 PR 的詳細要求。
 
-僅明確的合併要求使用[合併規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)，而不是此 PR 流程。
+僅在明確要求時合併：[合併規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md)。
 
 ## 前置檢查 [#preflight]
 
-1. 檢查狀態、差異、目前分支、近期記錄，以及此分支上的任何 PR。
+1. 檢查狀態、差異、目前分支、近期記錄，以及此分支上的任何 PR；執行 rebase 前先做[變基前檢查](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check)。
 2. 確認終點：僅提交、推送（`--no-pr`）或 PR。僅提交會略過遠端與 `gh` 前置檢查。
 3. 推送／PR 需要遠端；PR 還需要已完成驗證的 `gh` 及預設分支。
 4. 對 PR 執行 `gh stack view --json`；檢查基底／堆疊。一般 PR 僅涵蓋一個層級，絕不執行 `gh stack submit`。
