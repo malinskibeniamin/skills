@@ -20,6 +20,14 @@ playbook covers work selection, PR sizing, the PR body, the flake protocol, revi
 and AI output ownership. The `/commit-push-pr` reviewer guide gains Riskiest hunk and Not
 fixed here lines.
 
+2026-09-27 -- Add `jb/CRAFT.md` and a craft step to `/jb`: 28 citable practices for
+shipping (same-day merges, stacked slices, a fixed What/Why/Implementation
+details/References body, draft-to-learn PRs, bots before humans), verification (revert
+test, two-way controls, real dependencies, read-back after write, released artifact over
+green CI), code (names, proto-owned contracts, layered config, generate the third copy, no
+silent substitution, lifecycle you can reason about), and review voice. `/jb` now also
+applies them when drafting a PR, not only when reviewing one.
+
 2026-09-27 -- The PostToolBatch dispatcher skips scratch files: `node_modules/`, `.context/`,
 `/tmp` outside the current worktree, and `zz-dogfood-*` specs; 7 of 62 recorded turn stops
 flagged only such files. All 62 stops predate 4.39.0 and came from the old `exit 2` path,

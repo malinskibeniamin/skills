@@ -1,6 +1,6 @@
 ---
 name: jb
-description: "Review whether a PR, plan, or ticket earns its time: value lane, a caller blocked today, falsifiable done, reversible rollout, and design taste. Use for PR reviews and plans."
+description: "Review or draft whether a PR, plan, or ticket earns its time and lands well: value lane, a caller blocked today, falsifiable done, reversible rollout, craft, and taste. Use for PRs and plans."
 ---
 
 Review one axis: does this change serve a real caller now, prove it works where users run
@@ -20,9 +20,8 @@ Read the PR title, body, ticket, and diff. Assign one primary lane:
 | `growth` | New capability a customer, deal, or launch pulls for; makes money | The caller blocked today, what they can do after merge, the gate, the acceptance scenario |
 | `taste` | Deleting, unifying, or generating so the next change is cheap | What it deletes or makes impossible, and the next consumer it unblocks |
 
-Mechanical PRs (bumps, generated sync, reverts, typo docs) are `ktlo`, justified without
-prose. Enabling work takes the lane of the user-facing change it serves and names it.
-Unrelated lanes in one PR are a split request. Compare with the RULES.md **Lanes** signals.
+Mechanical PRs (bumps, generated sync, reverts) are justified `ktlo`. Enabling work takes
+the lane it serves. Unrelated lanes are a split request. Compare with RULES.md **Lanes**.
 
 ## 2. Test the lane's evidence
 
@@ -41,11 +40,16 @@ for (model, identity, region, value) or leaving the standard contract; that is t
 Load the matching [RULES.md](RULES.md) sections; apply S/A, flag B only on clear
 violation, mention C only in the summary:
 
-- **Always**: Scope, Evidence, and the approve and owner-decision lists.
-- **Rollout** (flags, migrations, defaults, deploys, public API, irreversible actions): Delivery.
+- **Always**: Scope, Evidence, approve and owner-decision lists.
+- **Rollout** (flags, migrations, defaults, deploys, public API): Delivery.
 - **Consumed output** (API, UI, CLI, tool result, error, metric): Contracts.
 - **New surface or abstraction** (field, option, mode, service, generator): Taste.
-- **Spend** (model tokens, compute, CI minutes, vendor quota, toil): Cost.
+- **Spend** (tokens, compute, CI minutes, quota, toil): Cost.
+
+## 4. Check craft
+
+Load [CRAFT.md](CRAFT.md): Ship and Verify always; Code for Go, proto, or SQL; Review
+voice for comments. Craft findings cap at P2. When authoring, apply them to the draft first.
 
 ## Severity
 
@@ -57,8 +61,7 @@ violation, mention C only in the summary:
   opt-in, or dev-only additions drop evidence gaps to P3.
 - **P3**: B/C nudges, cheaper slices, follow-ups; summary only.
 
-Report at most three findings, merge-deciding first. Owner escalations name the adverse
-scenario and the decision needed.
+At most three findings, merge-deciding first. Escalations name the scenario and decision.
 
 ## Output
 
@@ -66,6 +69,5 @@ Always lead with one verdict line:
 
 `jb: <lane> -- <justified|thin|unjustified> -- <beneficiary and evidence, at most 20 words>`
 
-Then `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest fix, or the
-sentence the PR body is missing>`. For plans, cite the section and write missing acceptance
-criteria as falsifiable scenarios. A clean pass is only the verdict line.
+Then `[P1|P2|P3] <file:line or PR body> <rule-id> -- <consequence>; <smallest fix>`. For
+plans, cite the section and write missing criteria as falsifiable scenarios. Clean pass: the verdict line only.

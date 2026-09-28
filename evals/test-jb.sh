@@ -2,9 +2,11 @@
 
 JB_SKILL="$REPO_ROOT/jb/SKILL.md"
 JB_RULES="$REPO_ROOT/jb/RULES.md"
+JB_CRAFT="$REPO_ROOT/jb/CRAFT.md"
 
 run_file_eval "$JB_SKILL" "jb skill exists"
 run_file_eval "$JB_RULES" "jb rule catalog exists"
+run_file_eval "$JB_CRAFT" "jb craft catalog exists"
 run_file_eval "$REPO_ROOT/codex-skills/jb/SKILL.md" "jb Codex wrapper exists"
 
 # Every review states a lane and verdict, even when clean.
@@ -29,7 +31,7 @@ run_content_eval "$REPO_ROOT/setup-routines/routines/pr-review.md" '/jb' \
 
 # The catalog stays anonymous: aggregate counts only, no people or customers. The denylist
 # is stored as truncated SHA-256 hashes so this check does not publish the names it guards.
-named=$(python3 - "$JB_SKILL" "$JB_RULES" <<'PY'
+named=$(python3 - "$JB_SKILL" "$JB_RULES" "$JB_CRAFT" <<'PY'
 import hashlib, re, sys
 deny = {"8c431d6a56286376", "1d4b41c9db9172e5", "0f2d4cb0963c29ec", "78c4544269d9e516",
         "e0088c4805a2684d", "47679f81beb4cebd", "d530e674d548f1a5", "abcc9e6038121f4e"}
@@ -78,4 +80,14 @@ fi
 for section in Scope Evidence Delivery Contracts Taste Cost; do
   run_content_eval "$JB_RULES" "^## $section " "jb catalog has the $section section"
   run_content_eval "$JB_SKILL" "$section" "jb skill routes to the $section section"
+done
+
+# Craft: shipping, verification, code, and review-voice practices load from CRAFT.md.
+run_content_eval "$JB_SKILL" 'CRAFT\.md' "jb skill loads the craft catalog"
+run_content_eval "$JB_SKILL" 'authoring' "jb applies craft when drafting a PR"
+for section in Ship Verify Code "Review voice"; do
+  run_content_eval "$JB_CRAFT" "^## $section" "jb craft catalog has the $section section"
+done
+for rule in fixed-pr-body revert-test read-back-after-write no-silent-substitution generate-the-third-copy; do
+  run_content_eval "$JB_CRAFT" "\`$rule\`" "jb craft catalog defines $rule"
 done
