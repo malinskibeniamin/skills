@@ -57,6 +57,7 @@ run_suite "Channel Contracts" "hook-unit-tests-channels.sh"
 run_suite "Pattern-Check Hooks" "hook-unit-tests-patterns.sh"
 run_suite "Integration" "hook-unit-tests-integration.sh"
 run_suite "Resilience" "hook-unit-tests-resilience.sh"
+run_suite "test-perf-stop" "hook-unit-tests-test-perf-stop.sh"
 
 echo ""
 echo -e "${BOLD}═══════════════════════════════════════════════════════════${NC}"
