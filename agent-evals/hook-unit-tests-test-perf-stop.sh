@@ -73,6 +73,14 @@ Timeout leaking in src/widget.test.ts
  ❯ src/widget.test.ts:1:34
 OUT
 
+_esc=$(printf '\033')
+_colored="$_stub_root/colored.txt"
+{
+  printf '%s[31m⎯⎯⎯⎯⎯⎯⎯%s[39m%s[1m%s[41m Async Leaks 2 %s[49m\n\n' "$_esc" "$_esc" "$_esc" "$_esc" "$_esc"
+  printf '%s[31mCustomGC leaking in src/a.integration.test.tsx%s[39m\n\n' "$_esc" "$_esc"
+  printf '%s[31mTimeout leaking in src/widget.test.ts%s[39m\n' "$_esc" "$_esc"
+} > "$_colored"
+
 for _hook in $_PERF_HOOKS; do
   _label="${_hook#"$REPO_ROOT"/}"
   _setup_session
@@ -87,6 +95,11 @@ for _hook in $_PERF_HOOKS; do
   _assert_stdout_contains "Async leak detected" "real leak still reported"
   _assert_stdout_contains "Timeout leaking in src/widget.test.ts" "names the leaking handle and file"
   _assert_stdout_not_contains "CustomGC" "omits CustomGC entries"
+
+  echo "  [$_label] colored output (vitest under CI) → still parsed:"
+  _leak_run "$_stub_root" "$_hook" "$_colored"
+  _assert_stdout_contains "Timeout leaking in src/widget.test.ts" "names the leak despite ANSI codes"
+  _assert_stdout_not_contains "CustomGC" "still omits colored CustomGC entries"
 
   _teardown_session
 done
@@ -138,7 +151,7 @@ test('leaves a timer running', () => {
 EOF
 
   _vitest_leaks=$(cd "$_native_root" && ./node_modules/.bin/vitest run --detectAsyncLeaks 2>&1 || true)
-  if echo "$_vitest_leaks" | grep -q '^CustomGC leaking in native.test.ts'; then
+  if echo "$_vitest_leaks" | sed "s/${_esc}\[[0-9;]*m//g" | grep -q '^CustomGC leaking in native.test.ts'; then
     PASS=$((PASS + 1))
     echo -e "  ${GREEN}✓${NC} fixture: vitest reports CustomGC for a native addon"
   else

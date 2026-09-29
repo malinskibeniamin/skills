@@ -147,7 +147,10 @@ if command -v "$_vitest_bin" &>/dev/null || [ -x "$_vitest_bin" ]; then
   # (@rspack/binding via @rstest/core, for example). It lives for the
   # process and no test can close it, so it is not a leak. Report only the
   # entries a test owns, never the "Async Leaks N" header that counts both.
+  # vitest colors its report under CI; strip ANSI so the line anchors match.
+  _esc=$(printf '\033')
   leak_warnings=$(echo "$leak_output" \
+    | sed "s/${_esc}\[[0-9;]*m//g" \
     | grep -iE '^[A-Za-z][A-Za-z0-9_]* leaking in |open handle|did not close' \
     | grep -v '^CustomGC leaking in ' || true)
 
