@@ -6,6 +6,21 @@ for (const scenario of [
   { name: "homepage", path: "/", heading: "Agent skills" },
   { name: "directory", path: "/skills", heading: "Skill directory" },
   {
+    name: "directory-polish",
+    path: "/pl/skills",
+    heading: "Katalog umiejętności",
+  },
+  {
+    name: "directory-simplified-chinese",
+    path: "/zh-CN/skills",
+    heading: "技能目录",
+  },
+  {
+    name: "directory-traditional-chinese",
+    path: "/zh-TW/skills",
+    heading: "技能目錄",
+  },
+  {
     name: "onboarding-claude",
     path: "/getting-started",
     heading: "Install in Claude Code",
@@ -38,6 +53,11 @@ for (const scenario of [
     await expect(
       page.getByRole("heading", { name: scenario.heading }).first(),
     ).toBeVisible();
+    if (scenario.name.startsWith("directory-")) {
+      await expect(
+        page.getByRole("link", { name: /^\/tdd/ }).last(),
+      ).toHaveAttribute("href", `${scenario.path}/tdd`);
+    }
     await expect(page).toHaveScreenshot(`${scenario.name}.png`);
   });
 }
