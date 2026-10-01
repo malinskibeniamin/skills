@@ -1,0 +1,14 @@
+# Discover Effect migration guidance
+set media dark
+wait --fn '!document.querySelector("astro-island[ssr]")'
+scroll down 400
+## Search the skill catalog
+click 'main input[type="search"]'
+type 'main input[type="search"]' effect-v3-to-v4
+press Tab
+## Open the routing catalog
+fill 'main input[type="search"]' ask-ben
+click 'main a[href="/skills/ask-ben"]'
+scroll down 600
+scroll down 600
+scroll down 600
