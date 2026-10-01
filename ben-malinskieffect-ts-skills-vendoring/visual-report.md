@@ -21,7 +21,7 @@ Base snapshots were captured first. All 34 intended differences were inspected t
 - Docs checks include HTTP 200, working search hydration, expected catalog/route entries, visible loaded diagrams/source links, and no page exceptions.
 - Real flow: scroll to search → type `effect-ts` → inspect results → search `ask-ben` → open routing catalog → scroll its entries. Before is left; after is right.
 - Each take is under 10 seconds. The repository recording/composition helper accepted both takes as moving UI, not still-image video.
-- GitHub MP4 attachment upload timed out; the published GIF is the inline moving fallback. No attachment completion is claimed.
+- Initial attachment helper timed out. A scoped upload then returned the native GitHub video attachment used inline in the PR: https://github.com/user-attachments/assets/33d18ad0-a0fe-4443-ad96-6a789f887c0e. The GIF remains an archival fallback.
 - Actual consumer Effect migration was not performed; this change distributes instructions.
 
 ## Paired captures
