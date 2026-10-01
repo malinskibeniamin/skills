@@ -16,7 +16,7 @@ if jq -e '.policy == "quality-first"
   and .quality_first.hard.model == "claude-opus-5-5"
   and .quality_first.hard.efforts == ["xhigh"]
   and .efforts.never == ["max"]
-  and ([.. | strings | select(. == "max")] | length == 1)
+  and ([del(.models[].score_evidence) | .. | strings | select(. == "max")] | length == 1)
   and .quality_first.ui_owners == ["claude-opus-5-5", "claude-fable-5-1"]
   and .quality_first.ui_policy.min_taste == 8
   and .quality_first.ui_policy.non_claude_fallback == "gpt-6-astra"
@@ -73,17 +73,35 @@ if jq -e '.models["gpt-6.1-sol"] as $sol
   | $sol.status == "secondary"
   and $sol.work == ["implementation", "computer-use", "investigation"]
   and $sol.starting_effort == "medium"
-  and $sol.scores == {"cost": null, "intelligence": null, "speed": null, "taste": null, "review": null, "allowance": null}
+  and $sol.scores == {"cost": 6, "intelligence": 8, "speed": null, "taste": null, "review": null, "allowance": null}
+  and $sol.score_evidence.measured == "2026-10-01"
+  and $sol.score_evidence.source == "https://artificialanalysis.ai/models/releases/gpt-6-1-sol"
+  and $sol.score_evidence.cost.effort == $sol.starting_effort
+  and $sol.score_evidence.cost.usd_per_task == 0.21
+  and $sol.score_evidence.cost.min_usd_per_task == 0.03
+  and $sol.score_evidence.cost.max_usd_per_task == 3.91
+  and ($sol.score_evidence.cost as $cost
+    | $sol.scores.cost == ([1, ([10,
+      (10 - 9 * (($cost.usd_per_task / $cost.min_usd_per_task) | log)
+        / (($cost.max_usd_per_task / $cost.min_usd_per_task) | log) | floor)
+    ] | min)] | max))
+  and $sol.score_evidence.intelligence.effort == "max"
+  and $sol.score_evidence.intelligence.index == 52
+  and $sol.scores.intelligence == ((1 + 9 * (52 - 30) / (58 - 30)) | round)
+  and ($sol.score_evidence.taste | contains("awaiting owner judgment"))
+  and (.scoring.cost | contains("floor"))
+  and (.scoring.intelligence | contains("round"))
+  and (.sources | index($sol.score_evidence.source))
   and ($sol.effort_selection | contains("context-ablation"))
   and (.sources | index("https://developers.openai.com/api/docs/models/gpt-6.1-sol"))
   and .quality_first.secondary.model == "gpt-6.1-sol"
   and (.models | has("gpt-6-sol") | not)
   and ([.. | strings | select(contains("gpt-6-sol"))] | length == 0)
   and ($sol.unavailable | contains("gpt-6-astra"))' "$ROUTING" >/dev/null; then
-  echo "  PASS  GPT-6.1 Sol replaces legacy Sol without invented scores"
+  echo "  PASS  GPT-6.1 Sol records derived benchmark scores without guessing taste"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  GPT-6.1 Sol replaces legacy Sol without invented scores"
+  echo "  FAIL  GPT-6.1 Sol records derived benchmark scores without guessing taste"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: GPT-6.1 Sol catalog entry"
 fi
