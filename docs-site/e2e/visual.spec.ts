@@ -149,6 +149,7 @@ for (const scenario of [
 }
 
 for (const scenario of [
+  { locale: "en", heading: "Completion" },
   { locale: "pl", heading: "Zakończenie" },
   { locale: "zh-CN", heading: "完成" },
   { locale: "zh-TW", heading: "完成作業" },
@@ -164,7 +165,9 @@ for (const scenario of [
         width: viewport.width,
         height: viewport.height,
       });
-      await page.goto(`/${scenario.locale}/skills/commit-push-pr`);
+      await page.goto(
+        `${scenario.locale === "en" ? "" : `/${scenario.locale}`}/skills/commit-push-pr`,
+      );
       const completion = page.getByRole("heading", {
         name: `${scenario.heading}#`,
         exact: true,
