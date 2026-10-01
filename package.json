@@ -9,6 +9,8 @@
   "scripts": {
     "audit:tests": "bash scripts/audit-tests.sh",
     "check:files": "biome check --error-on-warnings --no-errors-on-unmatched",
+    "docs:audit": "bun run --cwd docs-site audit",
+    "docs:test:browser": "bun run --cwd docs-site test:browser",
     "docs:build": "bun run --cwd docs-site build",
     "docs:check": "bun run --cwd docs-site check",
     "docs:dev": "bun run --cwd docs-site dev",
@@ -33,6 +35,6 @@
     "zod": "3.25.76"
   },
   "patchedDependencies": {
-    "blume@2.0.3": "patches/blume@2.0.3.patch"
+    "blume@2.1.0": "patches/blume@2.1.0.patch"
   }
 }

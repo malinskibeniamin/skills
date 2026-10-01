@@ -1,8 +1,8 @@
-diff --git a/dist/cli/chunk-pv29h0wf.js b/dist/cli/chunk-pv29h0wf.js
-index 80b7dd7838613662cf5bf7c8872b0ce1afeb1c2e..865cb1670876a895b8f290b559d525ef17005c9d 100644
---- a/dist/cli/chunk-pv29h0wf.js
-+++ b/dist/cli/chunk-pv29h0wf.js
-@@ -4326,6 +4326,14 @@ var sourcesOfKind = (config, kind) => config.content.sources.filter((source) =>
+diff --git a/dist/cli/chunk-xkz5xbtv.js b/dist/cli/chunk-xkz5xbtv.js
+index f54f62c32c27aa1ee40587d149f26d1970e3c43d..fbe33f6093b5025051308972a2d418542f35395b 100644
+--- a/dist/cli/chunk-xkz5xbtv.js
++++ b/dist/cli/chunk-xkz5xbtv.js
+@@ -5875,6 +5875,14 @@ var sourcesOfKind = (config, kind) => config.content.sources.filter((source) =>
  var resolveDocsCollection = (config, projectRoot) => {
    const [first, ...rest] = sourcesOfKind(config, "filesystem");
    if (!first) {
@@ -18,15 +18,14 @@ index 80b7dd7838613662cf5bf7c8872b0ce1afeb1c2e..865cb1670876a895b8f290b559d525ef
        base: resolveSourceRoot(projectRoot, "docs"),
        exclude: DEFAULT_CONTENT_EXCLUDE,
 diff --git a/src/core/sources/collection.ts b/src/core/sources/collection.ts
-index feafcc9ec67fd0fe32d07cb22bbcd85fec6c6aa2..618cb36397ca4703dc9677b9f02c23be2b549d72 100644
+index feafcc9ec67fd0fe32d07cb22bbcd85fec6c6aa2..3aeb46c7ef93115387e89ba6fdd3651cb1997fa5 100644
 --- a/src/core/sources/collection.ts
 +++ b/src/core/sources/collection.ts
-@@ -47,6 +47,18 @@ export const resolveDocsCollection = (
+@@ -47,6 +47,17 @@ export const resolveDocsCollection = (
  ): DocsCollection => {
    const [first, ...rest] = sourcesOfKind(config, "filesystem");
    if (!first) {
-+    // A non-staged custom source reads local files like filesystem(), so its
-+    // own root anchors the collection (the Blume 1 `content.root` behavior).
++    // Non-staged custom sources use their local root as the collection base.
 +    const local = sourcesOfKind(config, "custom").find(
 +      ({ options }) => !options.staged && options.contentRoot
 +    )?.options;

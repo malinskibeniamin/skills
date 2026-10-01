@@ -1,0 +1,45 @@
+---
+title: Pierwsze kroki
+description: Zainstaluj zestaw umiejętności, wybierz agenta programistycznego i zacznij od celu oraz sprawdzalnego wyniku.
+related: [/skills/development-lifecycle, /skills/tdd, /skills/review]
+search:
+  boost: 4
+  keywords: [instalacja, konfiguracja, początek]
+sidebar:
+  order: 0
+  icon: download
+---
+
+Wybierz agenta poniżej. Zestaw zapewnia wyspecjalizowane umiejętności i deterministyczne hooki. Nie zastępuje agenta ani nie podejmuje za Ciebie decyzji dotyczących środowiska produkcyjnego.
+
+Przed instalacją przeczytaj [wymagania i instrukcje weryfikacji]({{repository-url}}#install). Polecenia śledzą gałąź `main`. Użyj opublikowanego tagu wydania, jeśli potrzebujesz przypiętej wersji.
+
+<View title="Claude Code" icon="terminal">
+
+## Instalacja w Claude Code
+
+Uruchom polecenia w sesji Claude Code, nie w powłoce:
+
+<include>/_snippets/claude-install.md</include>
+
+Po instalacji przeładuj wtyczki. Po aktualizacji uruchom sesję ponownie, aby hooki korzystały z nowej pamięci podręcznej.
+
+</View>
+
+<View title="Codex" icon="terminal">
+
+## Instalacja w Codex
+
+Sprawdź [wymagania dla Codex]({{repository-url}}#install), a następnie uruchom polecenia w powłoce:
+
+<include ref="main">/_snippets/codex-install.md</include>
+
+Po dodaniu lub aktualizacji wtyczki uruchom Codex ponownie. Instrukcja instalacji opisuje także opcjonalną konfigurację TraceDecay i weryfikację instalacji.
+
+</View>
+
+## Zacznij od celu
+
+Określ cel, ograniczenia, weryfikację i punkt zakończenia. Do implementacji użyj [cyklu rozwoju](/skills/development-lifecycle), do testowalnej zmiany zachowania — [TDD](/skills/tdd), a do oceny opartej na dowodach — [przeglądu](/skills/review).
+
+Sprawdź wynik przez rzeczywisty punkt wejścia aplikacji. Nie umieszczaj sekretów w opisie zadania, zachowaj istniejącą pracę i wyraźnie wskaż działania produkcyjne lub destrukcyjne wymagające Twojej decyzji.

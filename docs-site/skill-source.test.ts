@@ -103,8 +103,8 @@ describe("skill docs source", () => {
     });
 
     const { diagnostics, entries } = await source.load();
-    const skillEntries = entries.filter((entry) =>
-      entry.ref.startsWith("skills/"),
+    const skillEntries = entries.filter(
+      (entry) => entry.ref.startsWith("skills/") && entry.data.type === "skill",
     );
     const diagramKinds = new Set<string>();
     const diagramLayouts = new Map<string, number>();
@@ -215,10 +215,14 @@ Read [REFERENCE.md](REFERENCE.md) before acting.
         repositoryUrl: REPOSITORY_URL,
       });
       const { entries } = await source.load();
-      const page = entries.find((entry) => entry.ref !== "index.mdx");
+      const page = entries.find(
+        (entry) => entry.ref === "skills/sample-skill.md",
+      );
 
       expect(page?.data).toEqual({
         description: 'Use it when a plan needs "proof".',
+        related: [],
+        search: { boost: 1, keywords: ["sample skill"] },
         sidebar: { label: "/sample-skill" },
         title: "/sample-skill",
         type: "skill",
@@ -238,6 +242,79 @@ Read [REFERENCE.md](REFERENCE.md) before acting.
       expect(page?.editUrl).toBe(
         `${REPOSITORY_URL}/edit/next/sample-skill/SKILL.md`,
       );
+    } finally {
+      await rm(repositoryRoot, { force: true, recursive: true });
+    }
+  });
+
+  test("keeps shared include snippets out of published pages", async () => {
+    const repositoryRoot = await mkdtemp(join(tmpdir(), "skill-partials-"));
+    const contentRoot = join(repositoryRoot, "docs-site", "content");
+    try {
+      await mkdir(join(repositoryRoot, "sample-skill"));
+      await writeFile(
+        join(repositoryRoot, "sample-skill", "SKILL.md"),
+        "---\nname: sample-skill\ndescription: Sample guidance.\n---\n# Sample\n\nGuidance.\n",
+      );
+      await mkdir(join(contentRoot, "_snippets"), { recursive: true });
+      await writeFile(
+        join(contentRoot, "_snippets", "install.md"),
+        "Shared commands.\n",
+      );
+      const { entries } = await createSkillSource({
+        branch: "main",
+        contentRoot,
+        repositoryRoot,
+        repositoryUrl: REPOSITORY_URL,
+      }).load();
+
+      expect(entries.map((entry) => entry.ref)).not.toContain(
+        "_snippets/install.md",
+      );
+      expect(
+        await Bun.file(join(contentRoot, "_snippets", "install.md")).text(),
+      ).toBe("Shared commands.\n");
+    } finally {
+      await rm(repositoryRoot, { force: true, recursive: true });
+    }
+  });
+
+  test("publishes useful search terms and only existing related skills", async () => {
+    const repositoryRoot = await mkdtemp(join(tmpdir(), "skill-discovery-"));
+    try {
+      for (const name of ["tdd", "review"]) {
+        await mkdir(join(repositoryRoot, name));
+        await writeFile(
+          join(repositoryRoot, name, "SKILL.md"),
+          `---\nname: ${name}\ndescription: Guidance for ${name}.\n---\n# ${name}\n\nCanonical ${name} guidance.\n`,
+        );
+      }
+      const source = createSkillSource({
+        branch: "main",
+        contentRoot: join(repositoryRoot, "docs-site", "content"),
+        repositoryRoot,
+        repositoryUrl: REPOSITORY_URL,
+      });
+      const { entries, diagnostics } = await source.load();
+      const page = entries.find((entry) => entry.ref === "skills/tdd.md");
+
+      expect(diagnostics).toEqual([]);
+      expect(page?.data.search).toEqual({
+        boost: 3,
+        keywords: ["tdd", "test driven development", "red green refactor"],
+      });
+      expect(page?.data.related).toEqual(["/skills/review"]);
+      expect(page?.raw).toContain('related: ["/skills/review"]');
+      expect(page?.body.text).toContain("Canonical tdd guidance.");
+      const directory = entries.find(
+        (entry) => entry.ref === "skills/index.mdx",
+      );
+      expect(directory?.editUrl).toBe(
+        `${REPOSITORY_URL}/edit/main/docs-site/skill-source.ts`,
+      );
+      expect(directory?.data.mode).toBe("wide");
+      expect(directory?.body.text).toContain("filter skills by name and task");
+      expect(page?.data.related).not.toContain("/skills/development-lifecycle");
     } finally {
       await rm(repositoryRoot, { force: true, recursive: true });
     }

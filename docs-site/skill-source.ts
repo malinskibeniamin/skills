@@ -38,10 +38,22 @@ interface SourceEntry {
 interface PageData {
   [key: string]: unknown;
   description: string;
+  mode?: "wide";
+  related?: string[];
+  search?: { boost?: number; exclude?: boolean; keywords?: string[] };
   sidebar?: { label: string };
   title: string;
   type: "doc" | "skill";
 }
+
+const FEATURED_SKILLS = ["development-lifecycle", "tdd", "review"];
+const SEARCH_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
+  "development-lifecycle": ["work", "implementation", "development workflow"],
+  "diagnosing-bugs": ["debug", "diagnose", "bug investigation"],
+  "resolve-pr-feedback": ["review comments", "requested changes"],
+  review: ["code review", "pull request", "pr"],
+  tdd: ["test driven development", "red green refactor"],
+};
 
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 const HEADING = /^\s*#\s+[^\n]+\r?\n+/;
@@ -124,14 +136,10 @@ const rewriteRelativeLinks = (
 };
 
 const serializePage = (data: PageData, body: string): string => `---
-title: ${JSON.stringify(data.title)}
-description: ${JSON.stringify(data.description)}
-type: ${data.type}
-${
-  data.sidebar
-    ? `sidebar:\n  label: ${JSON.stringify(data.sidebar.label)}\n`
-    : ""
-}---
+${Object.entries(data)
+  .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
+  .join("\n")}
+---
 ${body}`;
 
 const skillDiagram = (skillName: string): string => {
@@ -196,6 +204,11 @@ const createEntries = async (
   const landingData: PageData = {
     description:
       "Practical skills for planning, building, testing, reviewing, and shipping software with coding agents.",
+    mode: "wide",
+    related: FEATURED_SKILLS.filter((name) =>
+      skills.some((skill) => skill.name === name),
+    ).map((name) => `/skills/${name}`),
+    search: { boost: 2, keywords: ["skills", "coding agents", "harness"] },
     title: "Agent skills",
     type: "doc",
   };
@@ -210,9 +223,35 @@ const createEntries = async (
 
   return [
     landingEntry,
+    {
+      body: {
+        format: "mdx",
+        text: "Browse the guides below, or [filter skills by name and task](/).\n",
+      },
+      data: {
+        description:
+          "All agent skills, with descriptions and links to their canonical guidance.",
+        mode: "wide",
+        search: { exclude: true },
+        title: "Skill directory",
+        type: "doc",
+      },
+      ref: "skills/index.mdx",
+    },
     ...skills.map((skill): SourceEntry => {
       const data: PageData = {
         description: skill.description,
+        related: FEATURED_SKILLS.filter(
+          (name) =>
+            name !== skill.name && skills.some((item) => item.name === name),
+        ).map((name) => `/skills/${name}`),
+        search: {
+          boost: FEATURED_SKILLS.includes(skill.name) ? 3 : 1,
+          keywords: [
+            skill.name.replaceAll("-", " "),
+            ...(SEARCH_KEYWORDS[skill.name] ?? []),
+          ],
+        },
         sidebar: { label: `/${skill.name}` },
         title: `/${skill.name}`,
         type: "skill",
@@ -263,17 +302,18 @@ const materializeDefaultContent = async (
   const expectedSkillFiles = new Set<string>();
 
   for (const entry of entries) {
-    if (!entry.raw) {
-      throw new Error(
-        `Generated docs entry ${entry.ref} requires raw Markdown.`,
-      );
-    }
+    const raw = entry.raw ?? serializePage(entry.data, entry.body.text);
     const targetPath = join(options.contentRoot, entry.ref);
-    await atomicWriteIfChanged(targetPath, entry.raw);
+    await atomicWriteIfChanged(targetPath, raw);
     if (entry.ref.startsWith("skills/")) {
       expectedSkillFiles.add(basename(targetPath));
     }
   }
+
+  await atomicWriteIfChanged(
+    join(options.contentRoot, "skills", "meta.ts"),
+    'import { defineMeta } from "blume";\n\nexport default defineMeta({ directory: "card", title: "Skills" });\n',
+  );
 
   const skillsDirectory = join(options.contentRoot, "skills");
   for (const entry of await readdir(skillsDirectory, { withFileTypes: true })) {
@@ -293,7 +333,7 @@ const editUrlFor = (ref: string, options: SkillSourceOptions): string => {
   if (defaultSkill) {
     return `${options.repositoryUrl}/edit/${options.branch}/${defaultSkill[1]}/SKILL.md`;
   }
-  if (normalizedRef === "index.mdx") {
+  if (normalizedRef === "index.mdx" || normalizedRef === "skills/index.mdx") {
     return `${options.repositoryUrl}/edit/${options.branch}/docs-site/skill-source.ts`;
   }
 
@@ -310,8 +350,8 @@ const localizeSkillSearch = async (
   >["entries"],
   options: SkillSourceOptions,
 ): Promise<boolean> => {
-  const defaultSkillCount = entries.filter((entry) =>
-    entry.ref.startsWith("skills/"),
+  const defaultSkillCount = entries.filter(
+    (entry) => entry.ref.startsWith("skills/") && entry.data.type === "skill",
   ).length;
   const skillsByLocale = new Map<
     string,
@@ -368,7 +408,7 @@ export const createSkillSource = (
     repositoryUrl: sourceOptions.repositoryUrl.replace(/\/$/, ""),
   };
   const filesystem = filesystemSource({
-    exclude: [],
+    exclude: ["**/_*", "**/.*"],
     include: ["**/*.md", "**/*.mdx"],
     name: "skills-harness",
     projectRoot: options.repositoryRoot,

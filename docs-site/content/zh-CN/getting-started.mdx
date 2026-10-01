@@ -1,0 +1,45 @@
+---
+title: 开始使用
+description: 安装智能体技能工具集，选择编程智能体，并明确目标与可验证的结果。
+related: [/skills/development-lifecycle, /skills/tdd, /skills/review]
+search:
+  boost: 4
+  keywords: [安装, 配置, 快速开始]
+sidebar:
+  order: 0
+  icon: download
+---
+
+在下方选择编程智能体。工具集提供专门的技能指导和确定性的钩子，不会取代智能体，也不会代你作出生产环境的决策。
+
+安装前，请阅读[安装要求与验证步骤]({{repository-url}}#install)。以下命令跟踪 `main` 分支。如果需要固定版本，请改用已发布的版本标签。
+
+<View title="Claude Code" icon="terminal">
+
+## 在 Claude Code 中安装
+
+在 Claude Code 会话中运行这些命令，而不是在终端中运行：
+
+<include>/_snippets/claude-install.md</include>
+
+安装后重新加载插件。升级后重启会话，让钩子从新的缓存中加载。
+
+</View>
+
+<View title="Codex" icon="terminal">
+
+## 在 Codex 中安装
+
+先确认仓库中的 [Codex 安装要求]({{repository-url}}#install)，再在终端中运行这些命令：
+
+<include ref="main">/_snippets/codex-install.md</include>
+
+添加或升级插件后重启 Codex，以重新加载插件信息。安装指南还提供可选的 TraceDecay 配置及安装验证方法。
+
+</View>
+
+## 从目标开始
+
+明确目标、约束、验证方法和结束条件。实现功能时使用[开发生命周期](/skills/development-lifecycle)，修改可测试的行为时使用 [TDD](/skills/tdd)，需要基于证据的评估时使用[代码审查](/skills/review)。
+
+通过应用的真实入口验证结果。不要在任务说明中放入密钥，保留已有工作，并明确指出需要你决策的生产操作或破坏性操作。

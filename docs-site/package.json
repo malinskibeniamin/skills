@@ -9,7 +9,9 @@
     }
   },
   "scripts": {
+    "audit": "blume audit --only accessibility --fail-on warning",
     "build": "blume build",
+    "test:browser": "playwright test --config playwright.config.ts",
     "check": "blume check --strict",
     "dev": "blume dev",
     "diagrams": "bun run generate-skill-diagrams.ts --render",
@@ -20,7 +22,7 @@
   "devDependencies": {
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "blume": "2.0.3",
+    "blume": "2.1.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "typescript": "6.0.3",
