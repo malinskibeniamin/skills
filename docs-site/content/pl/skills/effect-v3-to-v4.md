@@ -1,6 +1,6 @@
 ---
 title: "/effect-v3-to-v4"
-description: "Używaj podczas migracji kodu z Effect v3 do v4 lub aktualizacji `effect` albo dowolnego pakietu `@effect/*` między tymi wersjami."
+description: "Migracja kodu z Effect v3 do v4 na podstawie materiałów migracyjnych upstream."
 type: skill
 sidebar:
   label: "/effect-v3-to-v4"

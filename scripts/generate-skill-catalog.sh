@@ -41,7 +41,7 @@ SHORT_DESCRIPTIONS = {
     "dogfood": "Use and stress-test every runnable change",
     "domain-modeling": "Build a shared domain model and vocabulary",
     "e2e-testing": "Build resilient Playwright end-to-end tests",
-    "effect-ts": "Set up repositories with Effect TypeScript guidance",
+    "effect-ts": "Set up repositories for Effect",
     "effect-v3-to-v4": "Migrate Effect v3 codebases to v4 from upstream references",
     "eli5": "Explain hard topics with big pictures and few words",
     "efficient-frontier": "Delegate bounded work while preserving central judgment",

@@ -1,6 +1,6 @@
 ---
 title: "/effect-v3-to-v4"
-description: "将代码库从 Effect v3 迁移到 v4，或跨越 v3/v4 边界升级 `effect` 或任意 `@effect/*` 包时使用。"
+description: "依据上游迁移资料将 Effect v3 代码库迁移到 v4。"
 type: skill
 sidebar:
   label: "/effect-v3-to-v4"
