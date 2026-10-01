@@ -19,6 +19,13 @@ bun run docs:test:browser
 The browser suite exercises onboarding views, shared snippets and Markdown, the
 skill directory, related links, search, locale choice, narration, and mobile layout.
 Device speech is stubbed in the playback test; it does not verify audible quality.
+The suite also checks reviewed Chromium/macOS screenshot baselines for current and
+archived pages, all onboarding locales, light/dark layouts, mobile, empty search,
+related links, footer, and narration. Baselines are platform-specific; another OS
+needs separately reviewed snapshots, not copied or renamed macOS images. For an
+intentional visual change, inspect the expected/actual/diff images, update only the
+matching test with `bun run docs:test:browser --grep '<test name>' --update-snapshots`,
+then rerun the full suite without update flags.
 Run the full offline site-health report with `bun run --cwd docs-site blume audit`.
 
 ## Canonical origin and agent discovery

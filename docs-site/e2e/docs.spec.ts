@@ -112,6 +112,7 @@ test("narration controls play, pause, change speed, and stop without an audio pr
   await expect(
     page.getByRole("button", { name: "Play", exact: true }),
   ).toBeVisible();
+  await expect(page).toHaveScreenshot("narration-paused.png");
   await page.getByRole("combobox", { name: /speed/i }).selectOption("1.5");
   await page.getByRole("button", { name: "Play", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-spoken-rate", "1.5");
