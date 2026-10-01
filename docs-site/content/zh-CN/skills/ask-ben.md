@@ -33,6 +33,8 @@ sidebar:
 | `/dogfood` | 使用并压力测试每项可运行的变更。 |
 | `/domain-modeling` | 构建共享的领域模型和词汇表。 |
 | `/e2e-testing` | 构建具有韧性的 Playwright 端到端测试。 |
+| `/effect-ts` | 依据 Effect TypeScript 指南配置仓库。 |
+| `/effect-v3-to-v4` | 依据上游参考资料将 Effect v3 代码库迁移到 v4。 |
 | `/efficient-frontier` | 委派范围明确的工作，同时保留核心判断权。 |
 | `/eli5` | 用宏观图景和寥寥数语解释晦涩主题。 |
 | `/excalidraw-diagram` | 根据提示绘制可编辑的 Excalidraw 图表。 |

@@ -390,6 +390,12 @@ A curated [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) ba
 
 `/test-audit` is vendored from [openclaw/openclaw](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit) (MIT, notice in `test-audit/CREDITS.md`): an authoring gate `/tdd` routes new tests through, plus audit and subsystem-campaign modes for pruning low-value tests and their test-only production seams.
 
+`/effect-ts` and `/effect-v3-to-v4` are vendored from
+[Effect-TS/skills](https://github.com/Effect-TS/skills). They cover repository setup
+and explicitly invoked v3-to-v4 migrations. Upstream revision, refresh sources,
+local adaptations, and the MIT notice live in
+[shared/EFFECT-SKILLS-CREDITS.md](shared/EFFECT-SKILLS-CREDITS.md).
+
 `/eli5` adapts the beginner-first visual artifact idea from
 [Anthropic's community ELI5 plugin](https://github.com/anthropics/claude-plugins-community/tree/main/eli5),
 authored by Thariq Shihipar.

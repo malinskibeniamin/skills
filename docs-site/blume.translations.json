@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "5014f5cf88510e4a",
-      "zh-CN": "5014f5cf88510e4a",
-      "zh-TW": "5014f5cf88510e4a"
+      "pl": "a0414776e59f246a",
+      "zh-CN": "a0414776e59f246a",
+      "zh-TW": "a0414776e59f246a"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -36,9 +36,9 @@
       "zh-TW": "1120d133871b8399"
     },
     "content/skills/ask-ben.md": {
-      "pl": "7912af79e364b6ff",
-      "zh-CN": "7912af79e364b6ff",
-      "zh-TW": "7912af79e364b6ff"
+      "pl": "03980670a4634e6a",
+      "zh-CN": "03980670a4634e6a",
+      "zh-TW": "03980670a4634e6a"
     },
     "content/skills/av.md": {
       "pl": "23242b5552e4430e",
@@ -119,6 +119,16 @@
       "pl": "c91fa822e21f09b1",
       "zh-CN": "c91fa822e21f09b1",
       "zh-TW": "c91fa822e21f09b1"
+    },
+    "content/skills/effect-ts.md": {
+      "pl": "ca0fa300f8f6f6d0",
+      "zh-CN": "ca0fa300f8f6f6d0",
+      "zh-TW": "ca0fa300f8f6f6d0"
+    },
+    "content/skills/effect-v3-to-v4.md": {
+      "pl": "7e79ac2070980372",
+      "zh-CN": "7e79ac2070980372",
+      "zh-TW": "7e79ac2070980372"
     },
     "content/skills/efficient-frontier.md": {
       "pl": "739e6b4e15b1b1fd",

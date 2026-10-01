@@ -1,0 +1,3 @@
+interface:
+  display_name: "Effect TS"
+  short_description: "Set up repositories with Effect TypeScript guidance"

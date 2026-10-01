@@ -33,6 +33,8 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go oraz powierzch
 | `/dogfood` | Używanie i intensywne testowanie każdej uruchamialnej zmiany. |
 | `/domain-modeling` | Tworzenie wspólnego modelu domeny i słownictwa. |
 | `/e2e-testing` | Tworzenie odpornych testów end-to-end w Playwright. |
+| `/effect-ts` | Konfiguracja repozytoriów zgodnie ze wskazówkami Effect dla TypeScript. |
+| `/effect-v3-to-v4` | Migracja kodu z Effect v3 do v4 na podstawie materiałów upstream. |
 | `/efficient-frontier` | Delegowanie ograniczonych zadań przy zachowaniu centralnej oceny. |
 | `/eli5` | Wyjaśnianie trudnych tematów całościowo i w kilku słowach. |
 | `/excalidraw-diagram` | Rysowanie edytowalnych diagramów Excalidraw na podstawie poleceń. |

@@ -231,6 +231,24 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     ],
     relations: ["drives", "crosses", "observes"],
   },
+  "effect-ts": {
+    kind: "pipeline",
+    nodes: [
+      "Choose Effect version",
+      "Install + verify sources",
+      "Update agent instructions",
+      "Read installed guidance",
+    ],
+  },
+  "effect-v3-to-v4": {
+    kind: "feedback-loop",
+    nodes: [
+      "Validate v3 + v4 sources",
+      "Align packages",
+      "Map errors + migrate",
+      "Type-check + project gates",
+    ],
+  },
   eli5: {
     kind: "transformation-map",
     nodes: [

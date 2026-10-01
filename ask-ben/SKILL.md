@@ -28,6 +28,8 @@ frontend/React/TypeScript/Go skills repo and installable plugin surfaces. Build 
 | `/dogfood` | Use and stress-test every runnable change. |
 | `/domain-modeling` | Build a shared domain model and vocabulary. |
 | `/e2e-testing` | Build resilient Playwright end-to-end tests. |
+| `/effect-ts` | Set up repositories with Effect TypeScript guidance. |
+| `/effect-v3-to-v4` | Migrate Effect v3 codebases to v4 from upstream references. |
 | `/efficient-frontier` | Delegate bounded work while preserving central judgment. |
 | `/eli5` | Explain hard topics with big pictures and few words. |
 | `/excalidraw-diagram` | Draw editable Excalidraw diagrams from prompts. |

@@ -33,6 +33,8 @@ sidebar:
 | `/dogfood` | 使用每項可執行的變更，並對其進行壓力測試。 |
 | `/domain-modeling` | 建立共用的領域模型與詞彙。 |
 | `/e2e-testing` | 建置具韌性的 Playwright 端對端測試。 |
+| `/effect-ts` | 依照 Effect TypeScript 指引設定儲存庫。 |
+| `/effect-v3-to-v4` | 依據上游參考資料將 Effect v3 程式碼庫遷移至 v4。 |
 | `/efficient-frontier` | 委派範圍明確的工作，同時保留集中式判斷。 |
 | `/eli5` | 以宏觀圖像和精簡文字解釋艱深主題。 |
 | `/excalidraw-diagram` | 根據提示詞繪製可編輯的 Excalidraw 圖表。 |
