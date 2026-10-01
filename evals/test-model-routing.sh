@@ -21,12 +21,12 @@ if jq -e '.policy == "quality-first"
   and .quality_first.ui_policy.min_taste == 8
   and .quality_first.ui_policy.non_claude_fallback == "gpt-6-astra"
   and ([.quality_first.ui_owners[] as $m | .models[$m].scores.taste >= 8] | all)
-  and ([.models | to_entries[] | select(.value.scores.taste < 8) | .key] | sort == ["gpt-6-luna", "gpt-6-sol"])
+  and ([.models | to_entries[] | select(.value.scores.taste != null and .value.scores.taste < 8) | .key] | sort == ["gpt-6-luna", "gpt-6-sol"])
   and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste") and has("allowance")] | all)
   and ([.models | to_entries[] | select(.key | startswith("claude-")) | .value.scores.allowance] | max) == .models["claude-opus-5-5"].scores.allowance
   and .models["claude-fable-5-1"].scores.allowance < .models["claude-opus-5-5"].scores.allowance
   and (.scoring.allowance | test("\\$200"))
-  and ([.models | to_entries[] | select(.key != "gpt-6-luna") | .value.scores.review] | all(type == "number"))
+  and ([.models | to_entries[] | select(.key != "gpt-6-luna" and .value.status != "eval-gated") | .value.scores.review] | all(type == "number"))
   and ([.models | to_entries[] | select(.value.scores.review != null)] | max_by(.value.scores.review) | .key) == "gpt-6-astra"
   and .quality_first.review.primary == {"model": "gpt-6-astra", "effort": "high"}
   and .quality_first.review.secondary == {"model": "claude-opus-5-5", "effort": "high"}
@@ -40,7 +40,7 @@ if jq -e '.policy == "quality-first"
   and .models["gpt-6-sol"].status == "secondary"
   and .models["gpt-6-sol"].starting_effort == "medium"
   and ([.models[] | select(.status == "primary")] | length == 1)
-  and ([.models | keys[] | select(startswith("gpt-"))] | sort == ["gpt-6-astra", "gpt-6-luna", "gpt-6-sol"])
+  and ([.models | keys[] | select(startswith("gpt-"))] | sort == ["gpt-6-astra", "gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol"])
   and .models["gpt-6-luna"].status == "utility"
   and (.models["gpt-6-luna"].work | index("chores"))
   and .models["gpt-6-astra"].status == "quality-alternative"
@@ -67,6 +67,22 @@ else
   echo "  FAIL  routing config does not encode a review panel"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: review panel remains in model routing"
+fi
+
+if jq -e '.models["gpt-6.1-sol"] as $sol
+  | $sol.status == "eval-gated"
+  and $sol.work == ["implementation", "computer-use", "investigation"]
+  and $sol.starting_effort == "medium"
+  and $sol.scores == {"cost": null, "intelligence": null, "speed": null, "taste": null, "review": null, "allowance": null}
+  and ($sol.effort_selection | contains("context-ablation"))
+  and (.sources | index("https://developers.openai.com/api/docs/models/gpt-6.1-sol"))
+  and ([.quality_first | .. | strings | select(. == "gpt-6.1-sol")] | length == 0)' "$ROUTING" >/dev/null; then
+  echo "  PASS  GPT-6.1 Sol is cataloged without invented scores or automatic promotion"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  GPT-6.1 Sol is cataloged without invented scores or automatic promotion"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: GPT-6.1 Sol catalog entry"
 fi
 
 run_content_eval "$REPO_ROOT/review/SKILL.md" "do not add automatic agents" "review keeps one owner"

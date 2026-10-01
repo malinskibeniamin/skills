@@ -88,6 +88,20 @@
         "allowance": 7
       }
     },
+    "gpt-6.1-sol": {
+      "status": "eval-gated",
+      "work": ["implementation", "computer-use", "investigation"],
+      "starting_effort": "medium",
+      "effort_selection": "Keep automatic routes unchanged until this model passes the versioned context-ablation quality gate.",
+      "scores": {
+        "cost": null,
+        "intelligence": null,
+        "speed": null,
+        "taste": null,
+        "review": null,
+        "allowance": null
+      }
+    },
     "gpt-6-astra": {
       "status": "quality-alternative",
       "work": ["review", "planning", "implementation", "computer-use"],
@@ -147,6 +161,7 @@
     "https://artificialanalysis.ai/models/releases/gpt-6-luna",
     "https://platform.claude.com/docs/en/about-claude/pricing",
     "https://developers.openai.com/api/docs/models/gpt-6-sol",
+    "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
     "https://developers.openai.com/api/docs/models/gpt-6-luna",
     "https://openai.com/index/gpt-6-astra/",
     "https://developers.openai.com/api/docs/models/gpt-6-astra",
@@ -158,7 +173,7 @@
     "https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan"
   ],
   "scoring": {
-    "scale": "1-10, higher is better.",
+    "scale": "1-10, higher is better; null means unmeasured.",
     "cost": "Artificial Analysis cost per Intelligence Index task at the routed effort, log scale; cheapest is 10.",
     "intelligence": "Peak Artificial Analysis Intelligence Index; 58 is 10 and 30 is 1.",
     "speed": "Median output tokens per second relative to the fastest model.",
