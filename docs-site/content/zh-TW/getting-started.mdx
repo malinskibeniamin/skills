@@ -1,0 +1,45 @@
+---
+title: 開始使用
+description: 安裝代理技能工具集、選擇程式開發代理，並明確訂定目標與可驗證的結果。
+related: [/skills/development-lifecycle, /skills/tdd, /skills/review]
+search:
+  boost: 4
+  keywords: [安裝, 設定, 快速開始]
+sidebar:
+  order: 0
+  icon: download
+---
+
+在下方選擇程式開發代理。工具集提供專門的技能指引與確定性的 hook，不會取代代理，也不會代你做出正式環境的決策。
+
+安裝前，請閱讀[安裝需求與驗證步驟]({{repository-url}}#install)。以下指令追蹤 `main` 分支。如需固定版本，請改用已發布的版本標籤。
+
+<View title="Claude Code" icon="terminal">
+
+## 在 Claude Code 中安裝
+
+在 Claude Code 工作階段中執行這些指令，而不是在終端機中執行：
+
+<include>/_snippets/claude-install.md</include>
+
+安裝後重新載入外掛。升級後重新啟動工作階段，讓 hook 從新的快取中載入。
+
+</View>
+
+<View title="Codex" icon="terminal">
+
+## 在 Codex 中安裝
+
+先確認儲存庫中的 [Codex 安裝需求]({{repository-url}}#install)，再於終端機中執行這些指令：
+
+<include ref="main">/_snippets/codex-install.md</include>
+
+新增或升級外掛後重新啟動 Codex，以重新載入外掛資訊。安裝指南也提供選用的 TraceDecay 設定與安裝驗證方式。
+
+</View>
+
+## 從目標開始
+
+明確訂定目標、限制、驗證方法與結束條件。實作功能時使用[開發生命週期](/skills/development-lifecycle)，變更可測試的行為時使用 [TDD](/skills/tdd)，需要以證據為基礎的評估時使用[程式碼審查](/skills/review)。
+
+透過應用程式的實際入口驗證結果。不要在任務說明中放入機密資料，保留既有工作，並明確指出需要你決策的正式環境操作或破壞性操作。

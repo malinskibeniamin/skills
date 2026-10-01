@@ -1,0 +1,48 @@
+---
+title: Get started
+description: Install the agent-skills harness, choose your coding agent, and start with an outcome and observable verification.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 4
+  keywords: [install, setup, quickstart, onboarding]
+sidebar:
+  order: 0
+  icon: download
+---
+
+Choose your coding agent below. The harness provides focused skills and deterministic hooks; it does not replace your agent or make production decisions for you.
+
+[Read the installation requirements and verification steps]({{repository-url}}#install) before installing. Commands below track the current `main` branch. Use a published release tag instead when you need a pinned version.
+
+<View title="Claude Code" icon="terminal">
+
+## Install in Claude Code
+
+Run these commands inside a Claude Code session, not in your shell:
+
+<include>/_snippets/claude-install.md</include>
+
+Reload plugins after installation. Restart the session after an upgrade so hooks reload from the new cache.
+
+</View>
+
+<View title="Codex" icon="terminal">
+
+## Install in Codex
+
+Follow the repository's [Codex prerequisites]({{repository-url}}#install), then run these commands in your shell:
+
+<include ref="main">/_snippets/codex-install.md</include>
+
+Restart Codex after adding or upgrading the plugin so its metadata reloads. The repository's install guide covers optional TraceDecay setup and installation verification.
+
+</View>
+
+## Start with an outcome
+
+State the objective, guardrails, verification, and stopping point. Use [development lifecycle](/skills/development-lifecycle) for implementation, [TDD](/skills/tdd) for a testable behavior change, and [review](/skills/review) for an evidence-backed assessment.
+
+Check the result through the application's real entrypoint. Keep secrets out of task briefs, preserve existing work, and explicitly name any production or destructive action that needs your decision.

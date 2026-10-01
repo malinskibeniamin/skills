@@ -8,6 +8,8 @@ import { createSkillSource } from "./skill-source.ts";
 
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 const contentRoot = fileURLToPath(new URL("./content", import.meta.url));
+// Optional canonical origin; Blume validates the URL before building.
+const siteUrl = process.env.BLUME_SITE_URL;
 const skillSearchMarkdown: ComponentMarkdown = ({ lossy, props }) => {
   if (lossy) {
     return null;
@@ -18,6 +20,7 @@ const skillSearchMarkdown: ComponentMarkdown = ({ lossy, props }) => {
 };
 
 export default defineConfig({
+  ...(siteUrl ? { deployment: { site: siteUrl } } : {}),
   agents: {
     llmsTxt: true,
     markdownComponents: {
@@ -44,8 +47,31 @@ export default defineConfig({
     owner: "malinskibeniamin",
     repo: "skills",
   },
+  footer: {
+    links: [
+      {
+        href: "/getting-started",
+        label: {
+          en: "Get started",
+          "zh-CN": "开始使用",
+          "zh-TW": "開始使用",
+          pl: "Pierwsze kroki",
+        },
+      },
+      {
+        href: "https://github.com/malinskibeniamin/skills/issues",
+        label: {
+          en: "Report an issue",
+          "zh-CN": "报告问题",
+          "zh-TW": "回報問題",
+          pl: "Zgłoś problem",
+        },
+      },
+    ],
+  },
   i18n: {
     defaultLocale: "en",
+    routeByBrowserLanguage: true,
     locales: [
       { code: "en", label: "English" },
       {
@@ -71,7 +97,20 @@ export default defineConfig({
   logo: {
     text: "Agent skills",
   },
+  markdown: {
+    code: { wrap: true },
+  },
+  narration: true,
   navigation: {
+    cta: {
+      href: "/getting-started",
+      label: {
+        en: "Get started",
+        "zh-CN": "开始使用",
+        "zh-TW": "開始使用",
+        pl: "Pierwsze kroki",
+      },
+    },
     sidebar: {
       display: "page",
     },
@@ -95,11 +134,18 @@ export default defineConfig({
       },
     ],
   },
+  seo: {
+    metatags: { "application-name": "Agent skills" },
+  },
   theme: {
     accent: "green",
     radius: "lg",
   },
   title: "Agent skills",
+  variables: {
+    marketplace: "malinskibeniamin/skills",
+    "repository-url": "https://github.com/malinskibeniamin/skills",
+  },
   versions: {
     archived: [{ id: "v4.39.0" }, { id: "v4.38.0" }, { id: "v4.37.0" }],
     current: { badge: "Latest", label: "main" },

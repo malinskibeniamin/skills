@@ -1,494 +1,519 @@
 {
   "files": {
+    "content/_snippets/claude-install.md": {
+      "pl": "f91965844131f68e",
+      "zh-CN": "f91965844131f68e",
+      "zh-TW": "f91965844131f68e"
+    },
+    "content/_snippets/codex-install.md": {
+      "pl": "300b31f8d3dc974f",
+      "zh-CN": "300b31f8d3dc974f",
+      "zh-TW": "300b31f8d3dc974f"
+    },
+    "content/getting-started.mdx": {
+      "pl": "8185f820f83a1b8d",
+      "zh-CN": "8185f820f83a1b8d",
+      "zh-TW": "8185f820f83a1b8d"
+    },
     "content/index.mdx": {
-      "pl": "7965b2b1864e572d",
-      "zh-CN": "7965b2b1864e572d",
-      "zh-TW": "7965b2b1864e572d"
+      "pl": "5014f5cf88510e4a",
+      "zh-CN": "5014f5cf88510e4a",
+      "zh-TW": "5014f5cf88510e4a"
     },
     "content/skills/accessibility.md": {
-      "pl": "7d21ef5e98b28c8c",
-      "zh-CN": "7d21ef5e98b28c8c",
-      "zh-TW": "7d21ef5e98b28c8c"
+      "pl": "cb10d2eb86ed7636",
+      "zh-CN": "cb10d2eb86ed7636",
+      "zh-TW": "cb10d2eb86ed7636"
     },
     "content/skills/agent-watchdog.md": {
-      "pl": "9cafea66fdcfdb8d",
-      "zh-CN": "9cafea66fdcfdb8d",
-      "zh-TW": "9cafea66fdcfdb8d"
+      "pl": "15c156be112c84c6",
+      "zh-CN": "15c156be112c84c6",
+      "zh-TW": "15c156be112c84c6"
     },
     "content/skills/aip.md": {
-      "pl": "1050b7a675dfc6e1",
-      "zh-CN": "1050b7a675dfc6e1",
-      "zh-TW": "1050b7a675dfc6e1"
+      "pl": "1120d133871b8399",
+      "zh-CN": "1120d133871b8399",
+      "zh-TW": "1120d133871b8399"
     },
     "content/skills/ask-ben.md": {
-      "pl": "acae3e08af80f3bd",
-      "zh-CN": "acae3e08af80f3bd",
-      "zh-TW": "acae3e08af80f3bd"
+      "pl": "7912af79e364b6ff",
+      "zh-CN": "7912af79e364b6ff",
+      "zh-TW": "7912af79e364b6ff"
     },
     "content/skills/av.md": {
-      "pl": "787fbc9b2cc0ed92",
-      "zh-CN": "787fbc9b2cc0ed92",
-      "zh-TW": "787fbc9b2cc0ed92"
+      "pl": "23242b5552e4430e",
+      "zh-CN": "23242b5552e4430e",
+      "zh-TW": "23242b5552e4430e"
     },
     "content/skills/blast-radius.md": {
-      "pl": "818c60a16996a001",
-      "zh-CN": "818c60a16996a001",
-      "zh-TW": "818c60a16996a001"
+      "pl": "c9f9b7cafc821403",
+      "zh-CN": "c9f9b7cafc821403",
+      "zh-TW": "c9f9b7cafc821403"
     },
     "content/skills/brain-dump.md": {
-      "pl": "043342bc8b1289a3",
-      "zh-CN": "043342bc8b1289a3",
-      "zh-TW": "043342bc8b1289a3"
+      "pl": "2c53edd285bfa731",
+      "zh-CN": "2c53edd285bfa731",
+      "zh-TW": "2c53edd285bfa731"
     },
     "content/skills/codebase-design.md": {
-      "pl": "b55062fb53e6b988",
-      "zh-CN": "b55062fb53e6b988",
-      "zh-TW": "b55062fb53e6b988"
+      "pl": "9ee9a924d31a7fe8",
+      "zh-CN": "9ee9a924d31a7fe8",
+      "zh-TW": "9ee9a924d31a7fe8"
     },
     "content/skills/codex-compat.md": {
-      "pl": "eaf0f029fde8dd19",
-      "zh-CN": "eaf0f029fde8dd19",
-      "zh-TW": "eaf0f029fde8dd19"
+      "pl": "d47c7b3fe926aa46",
+      "zh-CN": "d47c7b3fe926aa46",
+      "zh-TW": "d47c7b3fe926aa46"
     },
     "content/skills/codex.md": {
-      "pl": "b2964e05b3c340fa",
-      "zh-CN": "b2964e05b3c340fa",
-      "zh-TW": "b2964e05b3c340fa"
+      "pl": "a21255f3ca04539e",
+      "zh-CN": "a21255f3ca04539e",
+      "zh-TW": "a21255f3ca04539e"
     },
     "content/skills/commit-push-pr.md": {
-      "pl": "f457c19c7b07e980",
-      "zh-CN": "f457c19c7b07e980",
-      "zh-TW": "f457c19c7b07e980"
+      "pl": "12a0412eb3a4627b",
+      "zh-CN": "12a0412eb3a4627b",
+      "zh-TW": "12a0412eb3a4627b"
     },
     "content/skills/connect-query.md": {
-      "pl": "2fd5427919f5f0c1",
-      "zh-CN": "2fd5427919f5f0c1",
-      "zh-TW": "2fd5427919f5f0c1"
+      "pl": "f585adaa5abbd48a",
+      "zh-CN": "f585adaa5abbd48a",
+      "zh-TW": "f585adaa5abbd48a"
     },
     "content/skills/create-verification-skill.md": {
-      "pl": "9c9103f039fea85b",
-      "zh-CN": "9c9103f039fea85b",
-      "zh-TW": "9c9103f039fea85b"
+      "pl": "ee598e1b375ea4fc",
+      "zh-CN": "ee598e1b375ea4fc",
+      "zh-TW": "ee598e1b375ea4fc"
     },
     "content/skills/demo.md": {
-      "pl": "4c0131c2849799a6",
-      "zh-CN": "4c0131c2849799a6",
-      "zh-TW": "4c0131c2849799a6"
+      "pl": "4fc6a74cd108e132",
+      "zh-CN": "4fc6a74cd108e132",
+      "zh-TW": "4fc6a74cd108e132"
     },
     "content/skills/deslop.md": {
-      "pl": "80150bf59dfe1df5",
-      "zh-CN": "80150bf59dfe1df5",
-      "zh-TW": "80150bf59dfe1df5"
+      "pl": "4e56868ac0f8645e",
+      "zh-CN": "4e56868ac0f8645e",
+      "zh-TW": "4e56868ac0f8645e"
     },
     "content/skills/development-lifecycle.md": {
-      "pl": "c9009054fb869f0f",
-      "zh-CN": "c9009054fb869f0f",
-      "zh-TW": "c9009054fb869f0f"
+      "pl": "17ccf9f2c2741cea",
+      "zh-CN": "17ccf9f2c2741cea",
+      "zh-TW": "17ccf9f2c2741cea"
     },
     "content/skills/diagnosing-bugs.md": {
-      "pl": "27118aaed2f71edc",
-      "zh-CN": "27118aaed2f71edc",
-      "zh-TW": "27118aaed2f71edc"
+      "pl": "fbe94bead27e9b8c",
+      "zh-CN": "fbe94bead27e9b8c",
+      "zh-TW": "fbe94bead27e9b8c"
     },
     "content/skills/dogfood.md": {
-      "pl": "3cedbca0a7b9d224",
-      "zh-CN": "3cedbca0a7b9d224",
-      "zh-TW": "3cedbca0a7b9d224"
+      "pl": "f895b69898b195ec",
+      "zh-CN": "f895b69898b195ec",
+      "zh-TW": "f895b69898b195ec"
     },
     "content/skills/domain-modeling.md": {
-      "pl": "53c7cccacabb5b75",
-      "zh-CN": "53c7cccacabb5b75",
-      "zh-TW": "53c7cccacabb5b75"
+      "pl": "b4b42364b7157549",
+      "zh-CN": "b4b42364b7157549",
+      "zh-TW": "b4b42364b7157549"
     },
     "content/skills/e2e-testing.md": {
-      "pl": "d76d4fa895c4a7d4",
-      "zh-CN": "d76d4fa895c4a7d4",
-      "zh-TW": "d76d4fa895c4a7d4"
+      "pl": "c91fa822e21f09b1",
+      "zh-CN": "c91fa822e21f09b1",
+      "zh-TW": "c91fa822e21f09b1"
     },
     "content/skills/efficient-frontier.md": {
-      "pl": "6b5bc134f98e8fff",
-      "zh-CN": "6b5bc134f98e8fff",
-      "zh-TW": "6b5bc134f98e8fff"
+      "pl": "739e6b4e15b1b1fd",
+      "zh-CN": "739e6b4e15b1b1fd",
+      "zh-TW": "739e6b4e15b1b1fd"
     },
     "content/skills/eli5.md": {
-      "pl": "01d9981ae23213a2",
-      "zh-CN": "01d9981ae23213a2",
-      "zh-TW": "01d9981ae23213a2"
+      "pl": "fc5b1b4bb3286c4c",
+      "zh-CN": "fc5b1b4bb3286c4c",
+      "zh-TW": "fc5b1b4bb3286c4c"
     },
     "content/skills/excalidraw-diagram.md": {
-      "pl": "7ae33a87432896e3",
-      "zh-CN": "7ae33a87432896e3",
-      "zh-TW": "7ae33a87432896e3"
+      "pl": "5164da4774423485",
+      "zh-CN": "5164da4774423485",
+      "zh-TW": "5164da4774423485"
     },
     "content/skills/extend-harness.md": {
-      "pl": "ce4b8fb7008a651e",
-      "zh-CN": "ce4b8fb7008a651e",
-      "zh-TW": "ce4b8fb7008a651e"
+      "pl": "82ce7f7b1e2be427",
+      "zh-CN": "82ce7f7b1e2be427",
+      "zh-TW": "82ce7f7b1e2be427"
     },
     "content/skills/frontend-invariants.md": {
-      "pl": "fa46e8ba48453c73",
-      "zh-CN": "fa46e8ba48453c73",
-      "zh-TW": "fa46e8ba48453c73"
+      "pl": "7fdbc766d9e55b25",
+      "zh-CN": "7fdbc766d9e55b25",
+      "zh-TW": "7fdbc766d9e55b25"
     },
     "content/skills/frontend-starter-kit.md": {
-      "pl": "0f22e03d912c7410",
-      "zh-CN": "0f22e03d912c7410",
-      "zh-TW": "0f22e03d912c7410"
+      "pl": "2f6b21c0c545e477",
+      "zh-CN": "2f6b21c0c545e477",
+      "zh-TW": "2f6b21c0c545e477"
     },
     "content/skills/go.md": {
-      "pl": "dd9c0233721d8ab9",
-      "zh-CN": "dd9c0233721d8ab9",
-      "zh-TW": "dd9c0233721d8ab9"
+      "pl": "b0982dc11201ba58",
+      "zh-CN": "b0982dc11201ba58",
+      "zh-TW": "b0982dc11201ba58"
     },
     "content/skills/golang-review.md": {
-      "pl": "2bae8af222d1bf15",
-      "zh-CN": "2bae8af222d1bf15",
-      "zh-TW": "2bae8af222d1bf15"
+      "pl": "34d8e1ce9e1acf95",
+      "zh-CN": "34d8e1ce9e1acf95",
+      "zh-TW": "34d8e1ce9e1acf95"
     },
     "content/skills/golang.md": {
-      "pl": "386f39b296c29f95",
-      "zh-CN": "386f39b296c29f95",
-      "zh-TW": "386f39b296c29f95"
+      "pl": "58ada51b75bb54ac",
+      "zh-CN": "58ada51b75bb54ac",
+      "zh-TW": "58ada51b75bb54ac"
     },
     "content/skills/grilling.md": {
-      "pl": "89fe82a5eea9579d",
-      "zh-CN": "89fe82a5eea9579d",
-      "zh-TW": "89fe82a5eea9579d"
+      "pl": "8ee53664f6626930",
+      "zh-CN": "8ee53664f6626930",
+      "zh-TW": "8ee53664f6626930"
     },
     "content/skills/handoff.md": {
-      "pl": "e048eeb80bd46d23",
-      "zh-CN": "e048eeb80bd46d23",
-      "zh-TW": "e048eeb80bd46d23"
+      "pl": "9044b030029f78d8",
+      "zh-CN": "9044b030029f78d8",
+      "zh-TW": "9044b030029f78d8"
     },
     "content/skills/hook-audit.md": {
-      "pl": "52a119d254298f87",
-      "zh-CN": "52a119d254298f87",
-      "zh-TW": "52a119d254298f87"
+      "pl": "3f4fc523da7aae2c",
+      "zh-CN": "3f4fc523da7aae2c",
+      "zh-TW": "3f4fc523da7aae2c"
     },
     "content/skills/implement-spec.md": {
-      "pl": "f03b758a02c588ed",
-      "zh-CN": "f03b758a02c588ed",
-      "zh-TW": "f03b758a02c588ed"
+      "pl": "da4569ebce13b11d",
+      "zh-CN": "da4569ebce13b11d",
+      "zh-TW": "da4569ebce13b11d"
     },
     "content/skills/improve-codebase-architecture.md": {
-      "pl": "328e8ff66ffaaaf0",
-      "zh-CN": "328e8ff66ffaaaf0",
-      "zh-TW": "328e8ff66ffaaaf0"
+      "pl": "afeab9a475129538",
+      "zh-CN": "afeab9a475129538",
+      "zh-TW": "afeab9a475129538"
     },
     "content/skills/improve.md": {
-      "pl": "65e6baf91be4f734",
-      "zh-CN": "65e6baf91be4f734",
-      "zh-TW": "65e6baf91be4f734"
+      "pl": "6adf18a08778ac05",
+      "zh-CN": "6adf18a08778ac05",
+      "zh-TW": "6adf18a08778ac05"
+    },
+    "content/skills/index.mdx": {
+      "pl": "c4e30023b068d1cc",
+      "zh-CN": "c4e30023b068d1cc",
+      "zh-TW": "c4e30023b068d1cc"
     },
     "content/skills/jb.md": {
-      "pl": "f7f69b01e7154553",
-      "zh-CN": "f7f69b01e7154553",
-      "zh-TW": "f7f69b01e7154553"
+      "pl": "5b061c04f998bfc4",
+      "zh-CN": "5b061c04f998bfc4",
+      "zh-TW": "5b061c04f998bfc4"
     },
     "content/skills/lie-detector.md": {
-      "pl": "3ef0fb550721e4eb",
-      "zh-CN": "3ef0fb550721e4eb",
-      "zh-TW": "3ef0fb550721e4eb"
+      "pl": "8973216873eb1dbf",
+      "zh-CN": "8973216873eb1dbf",
+      "zh-TW": "8973216873eb1dbf"
     },
     "content/skills/maintain-verification-skill.md": {
-      "pl": "dc0ab7182b43101d",
-      "zh-CN": "dc0ab7182b43101d",
-      "zh-TW": "dc0ab7182b43101d"
+      "pl": "4c991d6b2e018a16",
+      "zh-CN": "4c991d6b2e018a16",
+      "zh-TW": "4c991d6b2e018a16"
     },
     "content/skills/make-pr-easy-to-review.md": {
-      "pl": "acf6c280b1106d0a",
-      "zh-CN": "acf6c280b1106d0a",
-      "zh-TW": "acf6c280b1106d0a"
+      "pl": "60f032cb9bb0f981",
+      "zh-CN": "60f032cb9bb0f981",
+      "zh-TW": "60f032cb9bb0f981"
+    },
+    "content/skills/meta.ts": {
+      "pl": "80bd709e07ad337d",
+      "zh-CN": "80bd709e07ad337d",
+      "zh-TW": "80bd709e07ad337d"
     },
     "content/skills/mm.md": {
-      "pl": "85c9f322bc122fc8",
-      "zh-CN": "85c9f322bc122fc8",
-      "zh-TW": "85c9f322bc122fc8"
+      "pl": "c32035b60b17a788",
+      "zh-CN": "c32035b60b17a788",
+      "zh-TW": "c32035b60b17a788"
     },
     "content/skills/ms.md": {
-      "pl": "1c57fad2e383771a",
-      "zh-CN": "1c57fad2e383771a",
-      "zh-TW": "1c57fad2e383771a"
+      "pl": "71eaef882076ac21",
+      "zh-CN": "71eaef882076ac21",
+      "zh-TW": "71eaef882076ac21"
     },
     "content/skills/plan-arbiter.md": {
-      "pl": "10578fada7519b04",
-      "zh-CN": "10578fada7519b04",
-      "zh-TW": "10578fada7519b04"
+      "pl": "9c83755af0bff887",
+      "zh-CN": "9c83755af0bff887",
+      "zh-TW": "9c83755af0bff887"
     },
     "content/skills/plow-ahead.md": {
-      "pl": "9aea7495e2651a8c",
-      "zh-CN": "9aea7495e2651a8c",
-      "zh-TW": "9aea7495e2651a8c"
+      "pl": "64971376fc30f08a",
+      "zh-CN": "64971376fc30f08a",
+      "zh-TW": "64971376fc30f08a"
     },
     "content/skills/postgresql.md": {
-      "pl": "27d8c6299cb1f008",
-      "zh-CN": "27d8c6299cb1f008",
-      "zh-TW": "27d8c6299cb1f008"
+      "pl": "fc27275a8a66c66c",
+      "zh-CN": "fc27275a8a66c66c",
+      "zh-TW": "fc27275a8a66c66c"
     },
     "content/skills/pr-shepherd.md": {
-      "pl": "559e62a4a34d63b9",
-      "zh-CN": "559e62a4a34d63b9",
-      "zh-TW": "559e62a4a34d63b9"
+      "pl": "6c0879351471e9e3",
+      "zh-CN": "6c0879351471e9e3",
+      "zh-TW": "6c0879351471e9e3"
     },
     "content/skills/pr.md": {
-      "pl": "f64647a5efc35873",
-      "zh-CN": "f64647a5efc35873",
-      "zh-TW": "f64647a5efc35873"
+      "pl": "fb72ebfbb57891bc",
+      "zh-CN": "fb72ebfbb57891bc",
+      "zh-TW": "fb72ebfbb57891bc"
     },
     "content/skills/prime.md": {
-      "pl": "63c23b46cdd15388",
-      "zh-CN": "63c23b46cdd15388",
-      "zh-TW": "63c23b46cdd15388"
+      "pl": "3530629f22b66360",
+      "zh-CN": "3530629f22b66360",
+      "zh-TW": "3530629f22b66360"
     },
     "content/skills/prototype.md": {
-      "pl": "d882322b0915b6cf",
-      "zh-CN": "d882322b0915b6cf",
-      "zh-TW": "d882322b0915b6cf"
+      "pl": "4884299012f907d3",
+      "zh-CN": "4884299012f907d3",
+      "zh-TW": "4884299012f907d3"
     },
     "content/skills/quantify-impact.md": {
-      "pl": "a1dfdbabbfe07a16",
-      "zh-CN": "a1dfdbabbfe07a16",
-      "zh-TW": "a1dfdbabbfe07a16"
+      "pl": "f0945770e46af352",
+      "zh-CN": "f0945770e46af352",
+      "zh-TW": "f0945770e46af352"
     },
     "content/skills/read-the-damn-docs.md": {
-      "pl": "9b57889163aa820a",
-      "zh-CN": "9b57889163aa820a",
-      "zh-TW": "9b57889163aa820a"
+      "pl": "3bc8ed3cdce4dc3e",
+      "zh-CN": "3bc8ed3cdce4dc3e",
+      "zh-TW": "3bc8ed3cdce4dc3e"
     },
     "content/skills/redpanda-ai-gateway.md": {
-      "pl": "8a3ed8b0dae3a336",
-      "zh-CN": "8a3ed8b0dae3a336",
-      "zh-TW": "8a3ed8b0dae3a336"
+      "pl": "426da091747e927d",
+      "zh-CN": "426da091747e927d",
+      "zh-TW": "426da091747e927d"
     },
     "content/skills/registry-workflow.md": {
-      "pl": "f7d97891c11e9f45",
-      "zh-CN": "f7d97891c11e9f45",
-      "zh-TW": "f7d97891c11e9f45"
+      "pl": "2835c392a7fd3e36",
+      "zh-CN": "2835c392a7fd3e36",
+      "zh-TW": "2835c392a7fd3e36"
     },
     "content/skills/release.md": {
-      "pl": "1fc8312f6c046694",
-      "zh-CN": "1fc8312f6c046694",
-      "zh-TW": "1fc8312f6c046694"
+      "pl": "ff05d5a87fec18ce",
+      "zh-CN": "ff05d5a87fec18ce",
+      "zh-TW": "ff05d5a87fec18ce"
     },
     "content/skills/research.md": {
-      "pl": "87e13ee0e8c4edfd",
-      "zh-CN": "87e13ee0e8c4edfd",
-      "zh-TW": "87e13ee0e8c4edfd"
+      "pl": "fac20adab406cbf1",
+      "zh-CN": "fac20adab406cbf1",
+      "zh-TW": "fac20adab406cbf1"
     },
     "content/skills/resilience-review.md": {
-      "pl": "6cce92eafa85c650",
-      "zh-CN": "6cce92eafa85c650",
-      "zh-TW": "6cce92eafa85c650"
+      "pl": "a669871d6b90e99c",
+      "zh-CN": "a669871d6b90e99c",
+      "zh-TW": "a669871d6b90e99c"
     },
     "content/skills/resolve-pr-feedback.md": {
-      "pl": "f1b720f4013c1dd4",
-      "zh-CN": "f1b720f4013c1dd4",
-      "zh-TW": "f1b720f4013c1dd4"
+      "pl": "6bd7523aee87f24f",
+      "zh-CN": "6bd7523aee87f24f",
+      "zh-TW": "6bd7523aee87f24f"
     },
     "content/skills/retro.md": {
-      "pl": "07679f5823c112b0",
-      "zh-CN": "07679f5823c112b0",
-      "zh-TW": "07679f5823c112b0"
+      "pl": "2832a4befb99a1bd",
+      "zh-CN": "2832a4befb99a1bd",
+      "zh-TW": "2832a4befb99a1bd"
     },
     "content/skills/revamp.md": {
-      "pl": "32436a2cda6ca615",
-      "zh-CN": "32436a2cda6ca615",
-      "zh-TW": "32436a2cda6ca615"
+      "pl": "b7b6f14365183424",
+      "zh-CN": "b7b6f14365183424",
+      "zh-TW": "b7b6f14365183424"
     },
     "content/skills/review.md": {
-      "pl": "7ee00d3b638a4696",
-      "zh-CN": "7ee00d3b638a4696",
-      "zh-TW": "7ee00d3b638a4696"
+      "pl": "135c97577e780a61",
+      "zh-CN": "135c97577e780a61",
+      "zh-TW": "135c97577e780a61"
     },
     "content/skills/setup-atlassian-workflow.md": {
-      "pl": "ad4f6ed8858e420c",
-      "zh-CN": "ad4f6ed8858e420c",
-      "zh-TW": "ad4f6ed8858e420c"
+      "pl": "fc957e8f7398dbcc",
+      "zh-CN": "fc957e8f7398dbcc",
+      "zh-TW": "fc957e8f7398dbcc"
     },
     "content/skills/setup-routines.md": {
-      "pl": "1b3d6df9b3ee66fe",
-      "zh-CN": "1b3d6df9b3ee66fe",
-      "zh-TW": "1b3d6df9b3ee66fe"
+      "pl": "d131b41aed857f1e",
+      "zh-CN": "d131b41aed857f1e",
+      "zh-TW": "d131b41aed857f1e"
     },
     "content/skills/show-me.md": {
-      "pl": "825ba892654ee529",
-      "zh-CN": "825ba892654ee529",
-      "zh-TW": "825ba892654ee529"
+      "pl": "7395d02b9aca63b1",
+      "zh-CN": "7395d02b9aca63b1",
+      "zh-TW": "7395d02b9aca63b1"
     },
     "content/skills/snyk-ux-security.md": {
-      "pl": "3e5f307173c2000e",
-      "zh-CN": "3e5f307173c2000e",
-      "zh-TW": "3e5f307173c2000e"
+      "pl": "d41085c49843ed53",
+      "zh-CN": "d41085c49843ed53",
+      "zh-TW": "d41085c49843ed53"
     },
     "content/skills/ss.md": {
-      "pl": "53d38e08e87f3730",
-      "zh-CN": "53d38e08e87f3730",
-      "zh-TW": "53d38e08e87f3730"
+      "pl": "29598a812a71cf15",
+      "zh-CN": "29598a812a71cf15",
+      "zh-TW": "29598a812a71cf15"
     },
     "content/skills/stack-registry.md": {
-      "pl": "d582b8292b00a0de",
-      "zh-CN": "d582b8292b00a0de",
-      "zh-TW": "d582b8292b00a0de"
+      "pl": "6acfe0c8a546022f",
+      "zh-CN": "6acfe0c8a546022f",
+      "zh-TW": "6acfe0c8a546022f"
     },
     "content/skills/stacked-prs.md": {
-      "pl": "78296868cb2a67f8",
-      "zh-CN": "78296868cb2a67f8",
-      "zh-TW": "78296868cb2a67f8"
+      "pl": "155424e84bc2295a",
+      "zh-CN": "155424e84bc2295a",
+      "zh-TW": "155424e84bc2295a"
     },
     "content/skills/stay-within-limits.md": {
-      "pl": "24fcae2a01daf37e",
-      "zh-CN": "24fcae2a01daf37e",
-      "zh-TW": "24fcae2a01daf37e"
+      "pl": "9696579b43e29af5",
+      "zh-CN": "9696579b43e29af5",
+      "zh-TW": "9696579b43e29af5"
     },
     "content/skills/steelman.md": {
-      "pl": "4b3a9f1bf5e7320c",
-      "zh-CN": "4b3a9f1bf5e7320c",
-      "zh-TW": "4b3a9f1bf5e7320c"
+      "pl": "466d9aebf75d0a0f",
+      "zh-CN": "466d9aebf75d0a0f",
+      "zh-TW": "466d9aebf75d0a0f"
     },
     "content/skills/swarm.md": {
-      "pl": "3b8de7118cdb75ea",
-      "zh-CN": "3b8de7118cdb75ea",
-      "zh-TW": "3b8de7118cdb75ea"
+      "pl": "a7c8aa0c1e337391",
+      "zh-CN": "a7c8aa0c1e337391",
+      "zh-TW": "a7c8aa0c1e337391"
     },
     "content/skills/tanstack-intent.md": {
-      "pl": "656769bcfbbc2299",
-      "zh-CN": "656769bcfbbc2299",
-      "zh-TW": "656769bcfbbc2299"
+      "pl": "b5a38bc822957d22",
+      "zh-CN": "b5a38bc822957d22",
+      "zh-TW": "b5a38bc822957d22"
     },
     "content/skills/tanstack-router.md": {
-      "pl": "504184b5e460a6ca",
-      "zh-CN": "504184b5e460a6ca",
-      "zh-TW": "504184b5e460a6ca"
+      "pl": "ba53739c558e53e0",
+      "zh-CN": "ba53739c558e53e0",
+      "zh-TW": "ba53739c558e53e0"
     },
     "content/skills/tanstack-table.md": {
-      "pl": "c7833fba591cbece",
-      "zh-CN": "c7833fba591cbece",
-      "zh-TW": "c7833fba591cbece"
+      "pl": "335d641321ce3991",
+      "zh-CN": "335d641321ce3991",
+      "zh-TW": "335d641321ce3991"
     },
     "content/skills/tdd.md": {
-      "pl": "47f5e7111625031e",
-      "zh-CN": "47f5e7111625031e",
-      "zh-TW": "47f5e7111625031e"
+      "pl": "7327ee9a950b34c3",
+      "zh-CN": "7327ee9a950b34c3",
+      "zh-TW": "7327ee9a950b34c3"
     },
     "content/skills/teach.md": {
-      "pl": "a42afcaca0e369f8",
-      "zh-CN": "a42afcaca0e369f8",
-      "zh-TW": "a42afcaca0e369f8"
+      "pl": "1d63630352f2dc59",
+      "zh-CN": "1d63630352f2dc59",
+      "zh-TW": "1d63630352f2dc59"
     },
     "content/skills/test-audit.md": {
-      "pl": "98ec1199042882e6",
-      "zh-CN": "98ec1199042882e6",
-      "zh-TW": "98ec1199042882e6"
+      "pl": "cb51dc2603464264",
+      "zh-CN": "cb51dc2603464264",
+      "zh-TW": "cb51dc2603464264"
     },
     "content/skills/thermo-nuclear-code-quality-review.md": {
-      "pl": "485d8fd0a02db57b",
-      "zh-CN": "485d8fd0a02db57b",
-      "zh-TW": "485d8fd0a02db57b"
+      "pl": "23e2730c27c07c9d",
+      "zh-CN": "23e2730c27c07c9d",
+      "zh-TW": "23e2730c27c07c9d"
     },
     "content/skills/to-questionnaire.md": {
-      "pl": "fc72bf8a3cc640dd",
-      "zh-CN": "fc72bf8a3cc640dd",
-      "zh-TW": "fc72bf8a3cc640dd"
+      "pl": "757b2ab6385c3130",
+      "zh-CN": "757b2ab6385c3130",
+      "zh-TW": "757b2ab6385c3130"
     },
     "content/skills/to-spec.md": {
-      "pl": "95b07119d2b7c324",
-      "zh-CN": "95b07119d2b7c324",
-      "zh-TW": "95b07119d2b7c324"
+      "pl": "c010c62e3c3a8411",
+      "zh-CN": "c010c62e3c3a8411",
+      "zh-TW": "c010c62e3c3a8411"
     },
     "content/skills/to-tickets.md": {
-      "pl": "9356296859412940",
-      "zh-CN": "9356296859412940",
-      "zh-TW": "9356296859412940"
+      "pl": "4c6cd4bcfa228b4b",
+      "zh-CN": "4c6cd4bcfa228b4b",
+      "zh-TW": "4c6cd4bcfa228b4b"
     },
     "content/skills/triage.md": {
-      "pl": "f15b9c17c7f2bf33",
-      "zh-CN": "f15b9c17c7f2bf33",
-      "zh-TW": "f15b9c17c7f2bf33"
+      "pl": "57db4d1b299db491",
+      "zh-CN": "57db4d1b299db491",
+      "zh-TW": "57db4d1b299db491"
     },
     "content/skills/upgrade-dependency.md": {
-      "pl": "6584ffc567a34bbf",
-      "zh-CN": "6584ffc567a34bbf",
-      "zh-TW": "6584ffc567a34bbf"
+      "pl": "64d1f140d0dcaa25",
+      "zh-CN": "64d1f140d0dcaa25",
+      "zh-TW": "64d1f140d0dcaa25"
     },
     "content/skills/ux-copy.md": {
-      "pl": "c6fb12bb6cf2acbc",
-      "zh-CN": "c6fb12bb6cf2acbc",
-      "zh-TW": "c6fb12bb6cf2acbc"
+      "pl": "8696ba75863eab7e",
+      "zh-CN": "8696ba75863eab7e",
+      "zh-TW": "8696ba75863eab7e"
     },
     "content/skills/ux-performance.md": {
-      "pl": "6851b3a68047ddcf",
-      "zh-CN": "6851b3a68047ddcf",
-      "zh-TW": "6851b3a68047ddcf"
+      "pl": "6d778bc11e38649f",
+      "zh-CN": "6d778bc11e38649f",
+      "zh-TW": "6d778bc11e38649f"
     },
     "content/skills/video-research.md": {
-      "pl": "b3e46c5963837c64",
-      "zh-CN": "b3e46c5963837c64",
-      "zh-TW": "b3e46c5963837c64"
+      "pl": "281675873b0df4ae",
+      "zh-CN": "281675873b0df4ae",
+      "zh-TW": "281675873b0df4ae"
     },
     "content/skills/visual-plan.md": {
-      "pl": "a7336e77bcf65625",
-      "zh-CN": "a7336e77bcf65625",
-      "zh-TW": "a7336e77bcf65625"
+      "pl": "ae679e8ec96871d1",
+      "zh-CN": "ae679e8ec96871d1",
+      "zh-TW": "ae679e8ec96871d1"
     },
     "content/skills/visual-recap.md": {
-      "pl": "faaa55653ce90239",
-      "zh-CN": "faaa55653ce90239",
-      "zh-TW": "faaa55653ce90239"
+      "pl": "b9354c046f64f8e9",
+      "zh-CN": "b9354c046f64f8e9",
+      "zh-TW": "b9354c046f64f8e9"
     },
     "content/skills/visual-review.md": {
-      "pl": "aa34e034bbe35dfc",
-      "zh-CN": "aa34e034bbe35dfc",
-      "zh-TW": "aa34e034bbe35dfc"
+      "pl": "70c7a36f228fa1b4",
+      "zh-CN": "70c7a36f228fa1b4",
+      "zh-TW": "70c7a36f228fa1b4"
     },
     "content/skills/wait-what.md": {
-      "pl": "dfe384c085f32107",
-      "zh-CN": "dfe384c085f32107",
-      "zh-TW": "dfe384c085f32107"
+      "pl": "2e02c238feb080c4",
+      "zh-CN": "2e02c238feb080c4",
+      "zh-TW": "2e02c238feb080c4"
     },
     "content/skills/wayfinder.md": {
-      "pl": "c862fad5d43bf8ab",
-      "zh-CN": "c862fad5d43bf8ab",
-      "zh-TW": "c862fad5d43bf8ab"
+      "pl": "99f5efce8c4c0295",
+      "zh-CN": "99f5efce8c4c0295",
+      "zh-TW": "99f5efce8c4c0295"
     },
     "content/skills/what-did-i-get-done.md": {
-      "pl": "f5a256b55e1e732b",
-      "zh-CN": "f5a256b55e1e732b",
-      "zh-TW": "f5a256b55e1e732b"
+      "pl": "92e8f861daef944e",
+      "zh-CN": "92e8f861daef944e",
+      "zh-TW": "92e8f861daef944e"
     },
     "content/skills/wizard.md": {
-      "pl": "aee0c7ae008d3402",
-      "zh-CN": "aee0c7ae008d3402",
-      "zh-TW": "aee0c7ae008d3402"
+      "pl": "49afdfcce7f5faed",
+      "zh-CN": "49afdfcce7f5faed",
+      "zh-TW": "49afdfcce7f5faed"
     },
     "content/skills/work-automation-kit.md": {
-      "pl": "e27a07ba0a175436",
-      "zh-CN": "e27a07ba0a175436",
-      "zh-TW": "e27a07ba0a175436"
+      "pl": "22462a7fae48735d",
+      "zh-CN": "22462a7fae48735d",
+      "zh-TW": "22462a7fae48735d"
     },
     "content/skills/work.md": {
-      "pl": "b95a9c5a3a004d85",
-      "zh-CN": "b95a9c5a3a004d85",
-      "zh-TW": "b95a9c5a3a004d85"
+      "pl": "bd26670e6f4383d2",
+      "zh-CN": "bd26670e6f4383d2",
+      "zh-TW": "bd26670e6f4383d2"
     },
     "content/skills/writing-beats.md": {
-      "pl": "b3d204eb3795c5c4",
-      "zh-CN": "b3d204eb3795c5c4",
-      "zh-TW": "b3d204eb3795c5c4"
+      "pl": "39da8b79d2e70157",
+      "zh-CN": "39da8b79d2e70157",
+      "zh-TW": "39da8b79d2e70157"
     },
     "content/skills/writing-for-agents.md": {
-      "pl": "f4538d1716a41044",
-      "zh-CN": "f4538d1716a41044",
-      "zh-TW": "f4538d1716a41044"
+      "pl": "f437d32445b46b98",
+      "zh-CN": "f437d32445b46b98",
+      "zh-TW": "f437d32445b46b98"
     },
     "content/skills/writing-fragments.md": {
-      "pl": "945a717929528289",
-      "zh-CN": "945a717929528289",
-      "zh-TW": "945a717929528289"
+      "pl": "55172301dd57981c",
+      "zh-CN": "55172301dd57981c",
+      "zh-TW": "55172301dd57981c"
     },
     "content/skills/writing-shape.md": {
-      "pl": "130c578ff7f9af46",
-      "zh-CN": "130c578ff7f9af46",
-      "zh-TW": "130c578ff7f9af46"
+      "pl": "3595ac301b84d872",
+      "zh-CN": "3595ac301b84d872",
+      "zh-TW": "3595ac301b84d872"
     }
   },
   "version": 1
