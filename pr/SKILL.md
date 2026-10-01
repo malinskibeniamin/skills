@@ -9,12 +9,14 @@ metadata:
     url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
 ---
 
-Use this template for writing the PR body:
+Read [the reader-attention contract](../shared/communication.md). Use this template for the PR body:
 
 ```markdown
 ## Summary
 
-<diagram, diff-sketch, or tree>
+<outcome and why it matters to the affected user or caller>
+<reviewer focus or specific question; say if no special input is needed>
+<smallest useful diagram, diff-sketch, or tree>
 
 ## Evidence
 
@@ -29,9 +31,9 @@ Use this template for writing the PR body:
 
 <optional: description>
 
-**Blast Radius:** <one-word description>
+**Blast Radius:** <affected users, callers, or contracts>
 
-<optional: potential ramifications of merge>
+<rollback path and unresolved risks, when applicable>
 ```
 
 ## Sections
@@ -40,19 +42,21 @@ Skip all preambles and keep prose brief. Use the user's domain language from `CO
 
 ### Summary
 
-Pick the smallest view that makes the key point clear.
+Lead with value and reviewer focus, not a changelog. Distinguish observed results from expectations.
+Then pick the smallest view that makes the key point clear; omit a visual that adds no understanding.
 
-Choose from the views in [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md): pseudocode, call trees, component trees, file trees, Mermaid, diffs, or the whole block.
+Choose the smallest view from [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md).
 
 #### Guidance
 
-Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
+Place visuals beside their supporting text. Show only load-bearing calls, files, props, states, and boundaries.
 
-You may use one of these, you may use several, it is unlikely you will use all of them. Use your judgement and don't overwhelm the user.
+Use only views that change understanding.
 
 ### Evidence
 
-Concrete evidence that the change works. Show a before and after.
+Concrete evidence that the change works. Show a before and after. Name checks not run and
+remaining uncertainty; passing tests are not evidence of human review or consensus.
 
 For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the summary so reviewers see the change before reading about it. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 
@@ -60,6 +64,6 @@ Execution-based evidence is A-tier. Test results, console output. Show the exact
 
 ### Merge Danger
 
-Describe whether it's a one-way or two-way door. You can walk back through two-way doors, but not one-way doors. A PR that is cheap to roll back is lower risk. Changes that involve destructive actions or hard-to-reverse decisions are one-way doors.
+Name the rollback path. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
 
-The blast radius is the potential impact or scope of the changes introduced by this PR. Consider all possibilities. Examples are layout shift, breakages for consumers, mobile responsiveness, etc.
+Name affected users, callers, contracts, and credible failure modes, including shared consumers.

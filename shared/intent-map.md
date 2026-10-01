@@ -41,9 +41,10 @@ flowchart LR
 
 ## First read
 
-Lead with the decision, result, or status, then show the map. The first read contains only the
-objective, current decisions, active risks, and their shortest causal path. Prefer at most 9 visible
-nodes and 120 words before drill-down; split by decision when the map exceeds that budget.
+For substantial human-facing output, read [communication.md](communication.md) first.
+Lead with the decision, value, risk, and reader's ask, then show the map. The first read contains
+only the objective, current decisions, active risks, and their shortest causal path. Prefer
+at most 9 visible nodes and 120 words across the brief and map together; split by decision when needed.
 
 Progressively disclose:
 

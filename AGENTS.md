@@ -22,8 +22,10 @@ user zoom, worktree isolation, secrets, type safety, and generated files. Load a
 
 ## Human-facing text
 
-Lead with decision/result/action. Include only evidence, impact, constraints, trade-offs,
-verification, rollout, blockers, and relevant next steps; omit repetition and narration.
+Lead with decision/result/action, why it matters, and the reader's ask. Own claims; preserve
+author intent and uncertainty. For human-facing documents, PRs, reviews, replies, and status,
+use `shared/communication.md`: above 200 words, a <=120-word first read, then evidence/detail.
+Count explicit word limits with a tool; never invent human endorsement.
 
 Substantial plans, analyses, reviews, recaps, status, and handoffs use
 `shared/intent-map.md`: map objective, assumptions, references, risks,
@@ -67,6 +69,8 @@ Action work uses one outcome contract:
 - **Verification** -- tests, commands, or observable behavior that prove the result.
 - **Stop** -- the requested endpoint and conditions that genuinely block progress.
 
+Use deterministic scripts/CLIs for repeatable work; reserve agent judgment for uncertainty.
+Improve feedback loops before adding concurrency; delegation remains opt-in.
 Then inspect -> act -> verify -> repeat. Let evidence choose plans, tools, and guidance. Continue
 through reversible decisions; put status notes beside the next action, not in a stop that recaps
 it, offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or

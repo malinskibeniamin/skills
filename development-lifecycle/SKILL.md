@@ -3,11 +3,12 @@ name: development-lifecycle
 description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
-Own one outcome until proven or blocked.
+Own one outcome until proven or blocked. Read [communication](../shared/communication.md)
+for updates/handoffs/tool choice.
 
 ## Outcome contract
 
-Before editing state:
+Before editing:
 
 - **Objective** -- high-level end state.
 - **Guardrails** -- non-inferable constraints, reserved decisions, irreversible boundaries.
@@ -28,7 +29,7 @@ Before edits, scan `/quantify-impact`. For any visible change, capture the base 
 
 ### Act
 
-One primary model is the single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse before adding. Meaningful behavior uses TDD at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
+A single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse before adding. Meaningful behavior uses TDD at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
 
 ### Verify
 
@@ -46,4 +47,4 @@ Record long-running evidence and pause triggers in ignored `.context/implementat
 
 ## Completion
 
-Stop at the requested answer, local, commit, push, PR, or ship endpoint when every exit criterion passes; not when a plan step ends. Read [REFERENCE.md](REFERENCE.md) only for an active verification/delivery branch.
+Stop at the requested endpoint only when all exit criteria pass; not at a plan step. Read [REFERENCE.md](REFERENCE.md) only for an active verification/delivery branch.
