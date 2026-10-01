@@ -2,7 +2,13 @@
 // cloudv2 #30145 (console), cloudv2 #25405 (AI gateway), serverless #3323.
 
 import { describe, expect, test } from "bun:test";
-import { type BumpPr, checkBump, parseDiff } from "./auto-approve-bumps.ts";
+import {
+  type BumpPr,
+  checkBump,
+  checkPromotion,
+  parseDiff,
+  reviewAction,
+} from "./auto-approve-bumps.ts";
 
 const CLOUDV2_CONSOLE_DIFF = `diff --git a/install-pack/26.1.yml b/install-pack/26.1.yml
 index 543a136a1443..0317c5ceea36 100644
@@ -287,5 +293,86 @@ describe("checkBump for ADP releases", () => {
       ok: false,
       reason: "unexpected file .claude/skills/adp-release/SKILL.md",
     });
+  });
+});
+
+describe("checkPromotion", () => {
+  // Shape of cloudv2 #30533, opened by release-promotion.yml.
+  const promotion = pr({
+    number: 30533,
+    baseRefName: "preprod",
+    headRefName: "ux/3885-main-to-preprod",
+    commitAuthors: ["frenchfrywpepper"],
+  });
+
+  test.each(["behind", "identical"])(
+    "approves a head that is %s main",
+    (status) => {
+      expect(checkPromotion(promotion, status)).toEqual({ ok: true });
+    },
+  );
+
+  test.each(["ahead", "diverged"])("rejects a head %s of main", (status) => {
+    expect(checkPromotion(promotion, status)).toEqual({
+      ok: false,
+      reason: `head is ${status} main, so it has commits not on main`,
+    });
+  });
+
+  test.each([
+    ["another author", { author: "someone" }, /author/],
+    ["a draft", { isDraft: true }, /draft/],
+    ["a production base", { baseRefName: "production" }, /base/],
+    [
+      "a production promotion",
+      { headRefName: "ux/3885-preprod-to-production" },
+      /branch/,
+    ],
+  ])("rejects %s", (_label, overrides, reason) => {
+    const result = checkPromotion({ ...promotion, ...overrides }, "behind");
+    expect(result.ok ? "" : result.reason).toMatch(reason);
+  });
+
+  test("does not treat a promotion as a diff-checked bump", () => {
+    expect(checkBump(promotion, "")).toEqual({
+      ok: false,
+      reason: "unknown branch ux/3885-main-to-preprod",
+    });
+  });
+});
+
+describe("reviewAction", () => {
+  const HEAD = "b".repeat(40);
+  const OLD = "a".repeat(40);
+  const approved = (commitId: string) => ({ state: "APPROVED", commitId });
+
+  test.each([
+    ["no review yet", [], "check"],
+    ["an approval of this head", [approved(HEAD)], "skip"],
+    ["an approval of an older head", [approved(OLD)], "recheck"],
+    [
+      "a comment after approving (cloudv2 #30515)",
+      [approved(HEAD), { state: "COMMENTED", commitId: HEAD }],
+      "skip",
+    ],
+    [
+      "an approval of an older head, then a comment",
+      [approved(OLD), { state: "COMMENTED", commitId: OLD }],
+      "recheck",
+    ],
+    [
+      "requested changes",
+      [{ state: "CHANGES_REQUESTED", commitId: OLD }],
+      "skip",
+    ],
+    [
+      "requested changes after approving",
+      [approved(OLD), { state: "CHANGES_REQUESTED", commitId: HEAD }],
+      "skip",
+    ],
+    ["only a comment", [{ state: "COMMENTED", commitId: HEAD }], "skip"],
+    ["a dismissed approval", [{ state: "DISMISSED", commitId: OLD }], "check"],
+  ] as const)("returns %s → %s", (_label, reviews, action) => {
+    expect(reviewAction(reviews, HEAD)).toBe(action);
   });
 });
