@@ -3,6 +3,90 @@ import { expect, test } from "@playwright/test";
 // Keep these captures comparable: the preview contains the same checked-in
 // skills, Chromium uses reduced motion, and each case gets a fresh context.
 for (const scenario of [
+  {
+    name: "communication-en-development-lifecycle",
+    path: "/skills/development-lifecycle",
+    heading: "/development-lifecycle",
+  },
+  {
+    name: "communication-en-efficient-frontier",
+    path: "/skills/efficient-frontier",
+    heading: "/efficient-frontier",
+  },
+  {
+    name: "communication-en-grilling",
+    path: "/skills/grilling",
+    heading: "/grilling",
+  },
+  { name: "communication-en-pr", path: "/skills/pr", heading: "/pr" },
+  {
+    name: "communication-en-review",
+    path: "/skills/review",
+    heading: "/review",
+  },
+  {
+    name: "communication-pl-development-lifecycle",
+    path: "/pl/skills/development-lifecycle",
+    heading: "/development-lifecycle",
+  },
+  {
+    name: "communication-pl-efficient-frontier",
+    path: "/pl/skills/efficient-frontier",
+    heading: "/efficient-frontier",
+  },
+  {
+    name: "communication-pl-grilling",
+    path: "/pl/skills/grilling",
+    heading: "/grilling",
+  },
+  { name: "communication-pl-pr", path: "/pl/skills/pr", heading: "/pr" },
+  {
+    name: "communication-pl-review",
+    path: "/pl/skills/review",
+    heading: "/review",
+  },
+  {
+    name: "communication-zh-CN-development-lifecycle",
+    path: "/zh-CN/skills/development-lifecycle",
+    heading: "/development-lifecycle",
+  },
+  {
+    name: "communication-zh-CN-efficient-frontier",
+    path: "/zh-CN/skills/efficient-frontier",
+    heading: "/efficient-frontier",
+  },
+  {
+    name: "communication-zh-CN-grilling",
+    path: "/zh-CN/skills/grilling",
+    heading: "/grilling",
+  },
+  { name: "communication-zh-CN-pr", path: "/zh-CN/skills/pr", heading: "/pr" },
+  {
+    name: "communication-zh-CN-review",
+    path: "/zh-CN/skills/review",
+    heading: "/review",
+  },
+  {
+    name: "communication-zh-TW-development-lifecycle",
+    path: "/zh-TW/skills/development-lifecycle",
+    heading: "/development-lifecycle",
+  },
+  {
+    name: "communication-zh-TW-efficient-frontier",
+    path: "/zh-TW/skills/efficient-frontier",
+    heading: "/efficient-frontier",
+  },
+  {
+    name: "communication-zh-TW-grilling",
+    path: "/zh-TW/skills/grilling",
+    heading: "/grilling",
+  },
+  { name: "communication-zh-TW-pr", path: "/zh-TW/skills/pr", heading: "/pr" },
+  {
+    name: "communication-zh-TW-review",
+    path: "/zh-TW/skills/review",
+    heading: "/review",
+  },
   { name: "homepage", path: "/", heading: "Agent skills" },
   { name: "directory", path: "/skills", heading: "Skill directory" },
   {
@@ -58,7 +142,9 @@ for (const scenario of [
         page.getByRole("link", { name: /^\/tdd/ }).last(),
       ).toHaveAttribute("href", `${scenario.path}/tdd`);
     }
-    await expect(page).toHaveScreenshot(`${scenario.name}.png`);
+    await expect(page).toHaveScreenshot(`${scenario.name}.png`, {
+      fullPage: scenario.name.startsWith("communication-"),
+    });
   });
 }
 
