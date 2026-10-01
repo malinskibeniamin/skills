@@ -1,0 +1,5 @@
+interface:
+  display_name: "Effect V3 to V4"
+  short_description: "Migrate Effect v3 codebases to v4 from upstream references"
+policy:
+  allow_implicit_invocation: false

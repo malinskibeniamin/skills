@@ -43,6 +43,8 @@
     "./dogfood/",
     "./domain-modeling/",
     "./e2e-testing/",
+    "./effect-ts/",
+    "./effect-v3-to-v4/",
     "./eli5/",
     "./efficient-frontier/",
     "./excalidraw-diagram/",
