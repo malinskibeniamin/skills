@@ -89,7 +89,9 @@ test("visual: global search opens, finds guidance, and dismisses", async ({
   // Chromium's native search input consumes the first Escape to clear text;
   // the next Escape dismisses the modal dialog.
   await page.getByRole("combobox", { name: "Search docs" }).press("Escape");
-  await expect(page.getByRole("combobox", { name: "Search docs" })).toHaveValue("");
+  await expect(page.getByRole("combobox", { name: "Search docs" })).toHaveValue(
+    "",
+  );
   await page.getByRole("combobox", { name: "Search docs" }).press("Escape");
   await expect(
     page.getByRole("dialog", { name: "Search docs" }),
