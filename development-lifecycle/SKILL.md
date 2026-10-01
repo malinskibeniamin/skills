@@ -47,4 +47,4 @@ Record long-running evidence and pause triggers in ignored `.context/implementat
 
 ## Completion
 
-Stop at the requested endpoint only when all exit criteria pass; not at a plan step. Read [REFERENCE.md](REFERENCE.md) only for an active verification/delivery branch.
+Stop at the requested endpoint when every exit criterion passes; not at a plan step. Read [REFERENCE.md](REFERENCE.md) only for an active verification/delivery branch.
