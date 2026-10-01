@@ -3,7 +3,7 @@ set -eo pipefail
 
 # Stop hook: action turns may not end silently or leave subagents behind.
 # Semantic completion stays the model's responsibility; this hook enforces
-# only the visible status contract and one deterministic cleanup checkpoint.
+# only the visible intent/impact + status contract and cleanup checkpoint.
 
 input=$(cat 2>/dev/null || echo '{}')
 
@@ -39,27 +39,40 @@ fi
 
 last_message=$(printf '%s' "$input" | jq -r '.last_assistant_message // empty' 2>/dev/null)
 last_line=$(printf '%s\n' "$last_message" | awk 'NF { line=$0 } END { print line }')
+reminder_line=$(printf '%s\n' "$last_message" | awk 'NF { previous=line; line=$0 } END { print previous }')
 
 has_visible_detail() {
   printf '%s' "$1" | grep -q '[^[:space:]]'
 }
 
+reminder_valid=false
+case "$reminder_line" in
+  "Intent: "*" | Impact: "*)
+    intent=${reminder_line#"Intent: "}
+    impact=${intent#*" | Impact: "}
+    intent=${intent%%" | Impact: "*}
+    if has_visible_detail "$intent" && has_visible_detail "$impact"; then
+      reminder_valid=true
+    fi
+    ;;
+esac
+
 case "$last_line" in
   "🟢 done — "*)
     detail=${last_line#"🟢 done — "}
-    if has_visible_detail "$detail"; then
+    if [ "$reminder_valid" = true ] && has_visible_detail "$detail"; then
       touch "$_hook_session_dir/task-completed" 2>/dev/null || true
       exit 0
     fi
     ;;
   "🟡 awaiting decision — "*)
     detail=${last_line#"🟡 awaiting decision — "}
-    has_visible_detail "$detail" && exit 0
+    [ "$reminder_valid" = true ] && has_visible_detail "$detail" && exit 0
     ;;
   "🔴 blocked — "*)
     detail=${last_line#"🔴 blocked — "}
-    has_visible_detail "$detail" && exit 0
+    [ "$reminder_valid" = true ] && has_visible_detail "$detail" && exit 0
     ;;
 esac
 
-hook_stop_block "Silent or ambiguous stop rejected. Reread the active request and continue if work remains. Otherwise end with exactly one evidence-bearing status line: 🟢 done — <evidence>, 🟡 awaiting decision — <specific decision>, or 🔴 blocked — <external blocker and needed input>."
+hook_stop_block "Silent or ambiguous stop rejected. Reread the active request and continue if work remains. Otherwise put Intent: <outcome> | Impact: <why it matters> immediately before exactly one evidence-bearing status line: 🟢 done — <evidence>, 🟡 awaiting decision — <specific decision>, or 🔴 blocked — <external blocker and needed input>. Keep the user's goal; use Impact: not established when unknown, never invent business claims or metrics."

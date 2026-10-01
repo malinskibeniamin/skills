@@ -1,9 +1,9 @@
 <!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->
 # Project rules
 
-Keep non-inferable choices/safety boundaries; hooks/skills teach details.
+Non-inferable choices/safety here; details in hooks/skills.
 
-## Toolchain and local choices
+## Toolchain
 
 `bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
@@ -13,20 +13,20 @@ Keep non-inferable choices/safety boundaries; hooks/skills teach details.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
-- External services use the repository's existing CLI integration.
+- External services: existing repo CLI integration.
 
-Match surrounding idiom; use the smallest obvious design. Preserve user zoom, worktree
+Match local idiom; use the smallest obvious design. Preserve user zoom, worktree
 isolation, secrets, types, generated files. Use useful `exemplars/`.
 
 ## Human-facing text
 
-Human-facing documents/PRs/reviews/replies/status use `shared/communication.md`: decision,
-value, ask first; own claims, intent, uncertainty. Above 200 words: <=120-word first read,
+Documents/PRs/reviews/replies/status: use `shared/communication.md`: decision,
+value, ask first; own claims/intent/uncertainty. Above 200 words: <=120-word first read,
 then evidence/detail. Count explicit word limits with a tool; never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs use `shared/intent-map.md`:
-map objective, assumptions, references, risks, implementation, verification, superseded choices.
-Trivial/single-path output stays linear.
+map objective/assumptions/references/risks/implementation/verification/superseded choices.
+Trivial/single-path output: linear.
 
 ## Execution contract
 
@@ -38,7 +38,7 @@ The requested endpoint owns scope:
 - Commit: commit only. Push: commit if needed, then push. PR: verify, commit, push, open
   via `/commit-push-pr`, take one CI snapshot. Ship or `/go`: run the full delivery loop.
 
-An earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
+Earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
 legal/privacy, destructive, or high-security action; otherwise use reversible assumptions.
 Routine work may commit, push, or rebase the current user-owned feature branch
 without another permission prompt; use `--force-with-lease` after rebase when needed.
@@ -46,24 +46,26 @@ Never merge, use plain `--force`, or rewrite a default, shared, foreign, or conc
 branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
 a session to deliver that branch; correct endpoint state and continue.
-When a PR exists for the current branch, put follow-up waves into the current PR by default.
-Creating a draft PR at the requested PR endpoint needs no separate approval.
+Current branch has a PR? Put follow-up waves there by default.
+Draft PR at the requested endpoint needs no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
 
-End action turns with exactly one status line:
+End action turns with one status line:
 `🟢 done — <evidence>`, `🟡 awaiting decision — <decision>`, or
 `🔴 blocked — <external blocker and needed input>`.
+Immediately before each: `Intent: <outcome> | Impact: <value>`.
+Keep user's goal; known/expected user/business value or `not established`; invent no claims/metrics.
 For any PR, include its full PR URL on the final status line.
 
 ## Work
 
-Action work uses one outcome contract:
+Use one outcome contract:
 
 - **Objective** -- high-level end state.
-- **Guardrails** -- only non-inferable constraints and reserved decisions.
-- **Verification** -- checks or observable behavior proving the result.
+- **Guardrails** -- non-inferable constraints and reserved decisions.
+- **Verification** -- checks/behavior proving the result.
 - **Stop** -- requested endpoint and genuine blockers.
 
 Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.

@@ -45,6 +45,6 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
 2. Report failures; CI remediation needs `/go`, ship, babysitting, or follow-up.
 3. Report status, remaining diff, branch, commits, PR, CI, and next action.
-4. End with one repository-marker status line: `done`, `awaiting decision`, or `blocked`. Include the full PR URL on the final status line whenever a PR exists, including updates.
+4. Use CLAUDE.md's status and intent/impact contract. Include the full PR URL on the final status line whenever a PR exists, including updates.
 
 Never stage unrelated work, push mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.

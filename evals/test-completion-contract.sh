@@ -262,13 +262,58 @@ else
   ERRORS="$ERRORS\n  FAIL: fresh session silent-stop block exited $_fresh_stop_exit without guidance"
 fi
 
-run_hook_eval "$COMPLETION" \
-  '{"session_id":"completion-contract-eval-'$$'","last_assistant_message":"Summary.\n\n🟢 done — focused tests pass"}' \
+for _status in \
+  "🟢 done — focused tests pass" \
+  "🟡 awaiting decision — choose the checkout policy" \
+  "🔴 blocked — payment sandbox unavailable; restore access"; do
+  CLAUDE_SESSION_ID="$_cc_session" run_hook_eval "$COMPLETION" \
+    "$(jq -nc --arg sid "$_cc_session" --arg last "$_status" \
+      '{session_id:$sid,last_assistant_message:$last}')" \
+    2 \
+    "status without intent and impact is rejected: $_status" \
+    "Intent: <outcome> | Impact: <why it matters>"
+  CLAUDE_SESSION_ID="$_cc_session" run_hook_eval "$COMPLETION" \
+    "$(jq -nc --arg sid "$_cc_session" \
+      --arg last $'Summary.\n\nIntent: make checkout reliable | Impact: expected fewer failed purchases\n\n'"$_status"$'\n\n' \
+      '{session_id:$sid,last_assistant_message:$last}')" \
+    0 \
+    "status accepts intent, expected impact, and detail: $_status"
+done
+
+for _reminder in \
+  'Intent:  | Impact: expected fewer failed purchases' \
+  $'Intent: \t | Impact: expected fewer failed purchases' \
+  'Intent: make checkout reliable | Impact:   ' \
+  'Intent: make checkout reliable' \
+  'Impact: expected fewer failed purchases' \
+  'Impact: expected fewer failed purchases | Intent: make checkout reliable' \
+  $'Intent: make checkout reliable | Impact: expected fewer failed purchases\nUnrelated closing sentence.'; do
+  CLAUDE_SESSION_ID="$_cc_session" run_hook_eval "$COMPLETION" \
+    "$(jq -nc --arg sid "$_cc_session" \
+      --arg last "$_reminder"$'\n🟢 done — focused tests pass' \
+      '{session_id:$sid,last_assistant_message:$last}')" \
+    2 \
+    "incomplete or misplaced intent reminder is rejected: $_reminder" \
+    "Intent: <outcome> | Impact: <why it matters>"
+done
+
+CLAUDE_SESSION_ID="$_cc_session" run_hook_eval "$COMPLETION" \
+  '{"session_id":"completion-contract-eval-'$$'","last_assistant_message":"Intent: investigate checkout failures | Impact: not established\n🟢 done — reproduction verified"}' \
   0 \
-  "action turn accepts done status with evidence"
+  "unknown impact remains explicit without blocking completion"
+
+CLAUDE_SESSION_ID="$_review_session" run_hook_eval "$COMPLETION" \
+  '{"session_id":"completion-contract-review-eval-'$$'","last_assistant_message":"Here are the requested review findings."}' \
+  0 \
+  "artifact-only turn needs neither a status nor an intent reminder"
+
+CLAUDE_SESSION_ID="$_cc_session" run_hook_eval "$COMPLETION" \
+  '{"session_id":"completion-contract-eval-'$$'","stop_hook_active":true,"last_assistant_message":"🟢 done — focused tests pass"}' \
+  0 \
+  "intent reminder correction never creates a repeated Stop loop"
 
 _empty_status_exit=0
-printf '%s' '{"session_id":"completion-contract-eval-'$$'","last_assistant_message":"🟢 done —  "}' \
+printf '%s' '{"session_id":"completion-contract-eval-'$$'","last_assistant_message":"Intent: make checkout reliable | Impact: expected fewer failed purchases\n🟢 done —  "}' \
   | CLAUDE_SESSION_ID="$_cc_session" "$COMPLETION" >/tmp/completion-contract-out 2>/tmp/completion-contract-err \
   || _empty_status_exit=$?
 if [ "$_empty_status_exit" -eq 2 ]; then
@@ -298,14 +343,14 @@ fi
 mkdir -p "$_cc_dir/active-subagents"
 printf 'Explore\n' > "$_cc_dir/active-subagents/agent-eval"
 _active_exit=0
-printf '%s' '{"session_id":"completion-contract-eval-'$$'","last_assistant_message":"🟢 done — tests pass"}' \
+printf '%s' '{"session_id":"completion-contract-eval-'$$'","stop_hook_active":true,"last_assistant_message":"Intent: make checkout reliable | Impact: expected fewer failed purchases\n🟢 done — tests pass"}' \
   | CLAUDE_SESSION_ID="$_cc_session" "$COMPLETION" >/tmp/completion-contract-out 2>/tmp/completion-contract-err \
   || _active_exit=$?
 if [ "$_active_exit" -eq 2 ] && grep -qi "active.*subagent" /tmp/completion-contract-out /tmp/completion-contract-err; then
-  echo "  PASS  active subagent prevents final completion"
+  echo "  PASS  active subagent prevents even a corrected final completion"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  active subagent prevents final completion"
+  echo "  FAIL  active subagent prevents even a corrected final completion"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: active subagent survived final completion"
 fi
