@@ -12,7 +12,7 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/development-lifecycle.excalidraw)
 
 
-Weź odpowiedzialność za jeden rezultat i pracuj, dopóki dowody go nie potwierdzą lub nie pojawi się rzeczywista przeszkoda.
+Weź odpowiedzialność za jeden rezultat i pracuj, dopóki dowody go nie potwierdzą lub nie pojawi się rzeczywista przeszkoda. Przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) dotyczące aktualizacji, przekazywania wyników i wyboru narzędzi.
 
 ## Kontrakt rezultatu
 

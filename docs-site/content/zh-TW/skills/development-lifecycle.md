@@ -10,7 +10,7 @@ sidebar:
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/development-lifecycle.excalidraw)
 
 
-負責一項成果並持續推進，直到有證據證明成果已達成，或出現真正的阻礙。
+負責一項成果並持續推進，直到有證據證明成果已達成，或出現真正的阻礙。 閱讀[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)，用於進度更新、交接及工具選擇。
 
 ## 成果契約
 

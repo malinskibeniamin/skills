@@ -14,6 +14,8 @@ sidebar:
 
 Grilling pozwala wyjaśnić niewiadome o istotnych konsekwencjach, a nie każdy szczegół. Nie należy tworzyć kodu produkcyjnego ani rozpoczynać implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 
+W przypadku planów, RFC i odpowiedzi przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md).
+
 ## 1. Przygotuj pakiet dowodów [#1-build-evidence]
 
 Przeczytaj zgłoszenie, plan, repozytorium, testy, dokumentację, materiały referencyjne i decyzje. Ustalenie faktów należy do agenta; pytaj wyłącznie o preferencje, zakres, akceptowalny poziom ryzyka i decyzje, których nie można podjąć na podstawie dowodów. Wskaż lukę, która najprawdopodobniej może podważyć obecny kierunek. Zbuduj prototyp, gdy obserwacja działania pozwoli wyjaśnić ją szybciej niż opis.

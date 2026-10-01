@@ -10,11 +10,11 @@ sidebar:
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/development-lifecycle.excalidraw)
 
 
-负责一个结果，并持续推进，直到证据证明目标已实现，或出现真正的阻碍。
+负责一个结果，并持续推进，直到证据证明目标已实现，或出现真正的阻碍。 阅读[沟通规则](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)，用于进度更新、交接和工具选择。
 
 ## 结果契约
 
-编辑状态前：
+编辑前：
 
 - **目标** -- 高级最终状态。
 - **约束** -- 无法推断的限制、保留给用户的决策、不可逆的边界。

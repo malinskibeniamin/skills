@@ -9,26 +9,24 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/efficient-frontier.excalidraw)
 
-讀取 `config/model-routing.json`。它是路由設定的唯一事實來源；請勿在提示詞或技能中重述主觀的模型評分。
+選擇模型前，閱讀[工具選擇規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#protect-attention-while-working)。
 
-品質優先：
+`config/model-routing.json` 決定路由；不要將主觀評分複製到提示詞中。
 
-1. 選擇最符合任務需求與可用執行環境的主要負責人。
-2. 預設負責人：`high` 的 Claude Opus 5.5，負責使用者介面、程式碼及規劃。
-3. 第二路徑：透過 `/codex` 使用 `medium` 的 GPT-6 Sol，負責規格明確的執行、電腦操作及調查。若 Sol 無法使用，請改用 `high` 的 Astra 並註明備援；切勿使用更便宜的 GPT 模型。
-3a. PR 審查：`high` 的 Astra，必要時再加上 `high` 的 Opus 5.5；只有在 Codex 剩餘用量至少 50% 時才使用 `xhigh`。
-4. 面向使用者的工作（UI、文案、API 設計）需要品味評分 taste >= 8 且由 Claude 負責；只有在沒有可用的 Claude 負責人時，才使用明確註明的 Astra 作為備援。
-5. 瑣碎工作交給 `high` 的 GPT-6 Luna：小幅修改、無衝突的 rebase、機械式 CI 修正、唯讀的擷取或列表。遇到衝突、需要診斷或判斷時，升級至 Sol。
-6. Fable 5.1（最高 `high`）僅在使用者明確要求處理特殊工作時使用。只有在情境消融實驗支持，或使用者明確選用時，才使用 `xhigh`；絕不使用 `max`。
-7. 除非使用者明確授權由不同模型系列進行檢查，否則審查工作應由主要負責人執行。
-8. `ultra` 代表多代理程式團隊，且需要明確委派或使用 `/swarm`。
-   Pro 模式、持久化推理、程式化工具呼叫及明確的快取控制僅適用於 API，除非目前使用的執行框架有提供這些功能。
+1. 負責人：Opus 5.5 `high`（UI、程式碼、計畫）。
+2. 第二路徑：透過 `/codex` 使用 Sol `medium`（規格明確的執行、電腦操作、調查）；無法使用 -> 明確標註的 Astra `high`，絕不使用更便宜的 GPT。
+3. Astra `high` 審查 PR，必要時使用 Opus 5.5 `high`；Codex 剩餘用量 >=50% 時才使用 `xhigh`。
+4. UI、文案、API 設計：taste >= 8 且由 Claude 負責，否則使用明確標註的 Astra 備援。
+5. 瑣碎工作：Luna `high`（小幅修改、無衝突的 rebase、機械式 CI 修正、唯讀列表）；衝突、診斷、判斷 -> Sol。
+6. Fable 5.1（最高 `high`）：明確要求，僅限特殊工作。`xhigh`：情境消融證據或使用者選擇；絕不使用 `max`。
+7. 由使用者明確授權不同模型系列的檢查。
+8. `ultra` 需要明確委派或 `/swarm`。Pro 模式、持久化推理、程式化工具、明確快取：僅限 API，除非環境已提供。
 
-由一位負責人進行實作。在未明確委派的情況下，直接依序執行任何有用的工作軌。若已委派，請為每個工作軌提供一個範圍明確的目標、輸入、排除事項、證據約定及停止條件。架構、優先順序、風險、整合及最終驗收仍由協調者負責。
+由一位負責人實作；未委派時自行執行各路徑。已授權路徑有範圍明確的目標、輸入、排除事項、證據及停止條件。負責人保留架構、優先順序、風險、整合及驗收責任。
 
 ## 容量
 
-可透過明確的 `/stay-within-limits` 主機計量程序檢查 Claude 訂閱容量。容量未知時應回報為未知。切勿根據本機權杖或成本推斷容量。容量可以排除某條路由，但不能降低品質門檻。
+容量以 `/stay-within-limits` 主機計量為準；否則未知。絕不根據 token 或成本推斷。容量只能排除路徑，不能降低品質。
 
 ## 晉升
 
