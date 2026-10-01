@@ -148,6 +148,36 @@ for (const scenario of [
   });
 }
 
+for (const scenario of [
+  { locale: "pl", heading: "Zakończenie" },
+  { locale: "zh-CN", heading: "完成" },
+  { locale: "zh-TW", heading: "完成作業" },
+]) {
+  for (const viewport of [
+    { name: "desktop", width: 1440, height: 1000 },
+    { name: "mobile", width: 390, height: 844 },
+  ]) {
+    test(`visual: delivery completion ${scenario.locale} ${viewport.name}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({
+        width: viewport.width,
+        height: viewport.height,
+      });
+      await page.goto(`/${scenario.locale}/skills/commit-push-pr`);
+      const completion = page.getByRole("heading", {
+        name: `${scenario.heading}#`,
+        exact: true,
+      });
+      await completion.scrollIntoViewIfNeeded();
+      await expect(completion).toBeVisible();
+      await expect(page).toHaveScreenshot(
+        `delivery-completion-${scenario.locale}-${viewport.name}.png`,
+      );
+    });
+  }
+}
+
 test("visual: dark homepage and directory", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
