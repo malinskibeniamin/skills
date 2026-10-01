@@ -27,7 +27,7 @@
     "codex": {
       "models": [
         {
-          "id": "gpt-6-sol",
+          "id": "gpt-6.1-sol",
           "efforts": ["low", "medium", "high", "xhigh", "max"]
         },
         {

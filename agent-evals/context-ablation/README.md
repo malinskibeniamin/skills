@@ -30,7 +30,7 @@ They test the proposed workflows; they do not establish a general model ranking.
 own planning or review only after it clears the recorded gate. Handoffs to a different model
 remain explicit owner-approved delegation, not automatic routing.
 
-The manifest pins exact model IDs. Claude Opus 5.5, GPT-6 Sol, GPT-6 Astra, and Claude
+The manifest pins exact model IDs. Claude Opus 5.5, GPT-6.1 Sol, GPT-6 Astra, and Claude
 Fable 5.1 run at `low`, `medium`, `high`, `xhigh`, and `max`; results from their
 predecessors do not determine the new effort frontier. The owner-selected drivers start at
 Opus 5.5 `high` and Sol `medium` while the suite measures the lowest quality-equivalent

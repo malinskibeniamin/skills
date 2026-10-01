@@ -18,7 +18,7 @@ run_content_eval "$REPO_ROOT/AGENTS.md" "config/model-routing.json" \
 for query in \
   '.policy == "quality-first"' \
   '.quality_first.default.model == "claude-opus-5-5"' \
-  '.quality_first.secondary.model == "gpt-6-sol"' \
+  '.quality_first.secondary.model == "gpt-6.1-sol"' \
   '.selection.single_owner == true' \
   '.selection.cross_family_review_for_non_trivial_pr == false'; do
   if jq -e "$query" "$ROUTING" >/dev/null; then

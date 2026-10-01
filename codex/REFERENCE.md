@@ -29,7 +29,7 @@ structured results:
 2. Run `codex exec`.
 3. Map the report into the requested schema.
 
-Label wrappers `gpt-6-sol: <task>` (or `gpt-6-astra: <task>` on fallback). Parallel implementation requires
+Label wrappers `gpt-6.1-sol: <task>` (or `gpt-6-astra: <task>` on fallback). Parallel implementation requires
 `isolation: "worktree"`. Workflow budgets count Claude wrapper tokens; Codex work is
 invisible to them.
 

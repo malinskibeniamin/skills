@@ -11,7 +11,7 @@ run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "context-ablation" "ro
 if jq -e '.policy == "quality-first"
   and .quality_first.default.model == "claude-opus-5-5"
   and .quality_first.default.effort == "high"
-  and .quality_first.secondary.model == "gpt-6-sol"
+  and .quality_first.secondary.model == "gpt-6.1-sol"
   and .quality_first.secondary.effort == "medium"
   and .quality_first.hard.model == "claude-opus-5-5"
   and .quality_first.hard.efforts == ["xhigh"]
@@ -21,26 +21,26 @@ if jq -e '.policy == "quality-first"
   and .quality_first.ui_policy.min_taste == 8
   and .quality_first.ui_policy.non_claude_fallback == "gpt-6-astra"
   and ([.quality_first.ui_owners[] as $m | .models[$m].scores.taste >= 8] | all)
-  and ([.models | to_entries[] | select(.value.scores.taste != null and .value.scores.taste < 8) | .key] | sort == ["gpt-6-luna", "gpt-6-sol"])
+  and ([.models | to_entries[] | select(.value.scores.taste != null and .value.scores.taste < 8) | .key] | sort == ["gpt-6-luna"])
   and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste") and has("allowance")] | all)
   and ([.models | to_entries[] | select(.key | startswith("claude-")) | .value.scores.allowance] | max) == .models["claude-opus-5-5"].scores.allowance
   and .models["claude-fable-5-1"].scores.allowance < .models["claude-opus-5-5"].scores.allowance
   and (.scoring.allowance | test("\\$200"))
-  and ([.models | to_entries[] | select(.key != "gpt-6-luna" and .value.status != "eval-gated") | .value.scores.review] | all(type == "number"))
+  and ([.models | to_entries[] | select(.key != "gpt-6-luna" and .key != "gpt-6.1-sol") | .value.scores.review] | all(type == "number"))
   and ([.models | to_entries[] | select(.value.scores.review != null)] | max_by(.value.scores.review) | .key) == "gpt-6-astra"
   and .quality_first.review.primary == {"model": "gpt-6-astra", "effort": "high"}
   and .quality_first.review.secondary == {"model": "claude-opus-5-5", "effort": "high"}
   and .quality_first.review.escalation.effort == "xhigh"
   and .quality_first.review.escalation.min_codex_remaining_pct == 50
-  and (.models["gpt-6-sol"].work | index("review") | not)
+  and (.models["gpt-6.1-sol"].work | index("review") | not)
   and (.models["gpt-6-astra"].work | index("review"))
   and .quality_first.ultra.requires_explicit_delegation
   and .models["claude-opus-5-5"].status == "primary"
   and .models["claude-opus-5-5"].starting_effort == "high"
-  and .models["gpt-6-sol"].status == "secondary"
-  and .models["gpt-6-sol"].starting_effort == "medium"
+  and .models["gpt-6.1-sol"].status == "secondary"
+  and .models["gpt-6.1-sol"].starting_effort == "medium"
   and ([.models[] | select(.status == "primary")] | length == 1)
-  and ([.models | keys[] | select(startswith("gpt-"))] | sort == ["gpt-6-astra", "gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol"])
+  and ([.models | keys[] | select(startswith("gpt-"))] | sort == ["gpt-6-astra", "gpt-6-luna", "gpt-6.1-sol"])
   and .models["gpt-6-luna"].status == "utility"
   and (.models["gpt-6-luna"].work | index("chores"))
   and .models["gpt-6-astra"].status == "quality-alternative"
@@ -52,10 +52,10 @@ if jq -e '.policy == "quality-first"
   and (.models | has("claude-opus-5") | not)
   and .selection.single_owner
   and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then
-  echo "  PASS  routing config drives Opus 5.5 high, then GPT-6 Sol medium, with Claude-only UI"
+  echo "  PASS  routing config drives Opus 5.5 high, then GPT-6.1 Sol medium, with Claude-only UI"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  routing config drives Opus 5.5 high, then GPT-6 Sol medium, with Claude-only UI"
+  echo "  FAIL  routing config drives Opus 5.5 high, then GPT-6.1 Sol medium, with Claude-only UI"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: model-routing quality policy"
 fi
@@ -70,17 +70,20 @@ else
 fi
 
 if jq -e '.models["gpt-6.1-sol"] as $sol
-  | $sol.status == "eval-gated"
+  | $sol.status == "secondary"
   and $sol.work == ["implementation", "computer-use", "investigation"]
   and $sol.starting_effort == "medium"
   and $sol.scores == {"cost": null, "intelligence": null, "speed": null, "taste": null, "review": null, "allowance": null}
   and ($sol.effort_selection | contains("context-ablation"))
   and (.sources | index("https://developers.openai.com/api/docs/models/gpt-6.1-sol"))
-  and ([.quality_first | .. | strings | select(. == "gpt-6.1-sol")] | length == 0)' "$ROUTING" >/dev/null; then
-  echo "  PASS  GPT-6.1 Sol is cataloged without invented scores or automatic promotion"
+  and .quality_first.secondary.model == "gpt-6.1-sol"
+  and (.models | has("gpt-6-sol") | not)
+  and ([.. | strings | select(contains("gpt-6-sol"))] | length == 0)
+  and ($sol.unavailable | contains("gpt-6-astra"))' "$ROUTING" >/dev/null; then
+  echo "  PASS  GPT-6.1 Sol replaces legacy Sol without invented scores"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  GPT-6.1 Sol is cataloged without invented scores or automatic promotion"
+  echo "  FAIL  GPT-6.1 Sol replaces legacy Sol without invented scores"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: GPT-6.1 Sol catalog entry"
 fi
@@ -101,7 +104,7 @@ fi
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "codex exec" "codex skill uses codex exec"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "-s read-only" "codex documents read-only mode"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "self-contained" "codex requires self-contained prompts"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" 'gpt-6-sol -c .model_reasoning_effort="medium"' "codex gives an executable Sol medium command"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" 'gpt-6.1-sol -c .model_reasoning_effort="medium"' "codex gives an executable Sol medium command"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "never .max." "codex never routes max effort"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "never .max." "efficient-frontier never routes max effort"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Codex models do not own user-facing" "codex leaves visible work to Claude"

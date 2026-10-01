@@ -1,11 +1,11 @@
 ---
 name: codex
-description: Delegate to GPT-6 Sol through the Codex CLI. Use for clear-spec implementation, independent review, computer use, investigation, data analysis, or token-heavy mechanical work.
+description: Delegate to GPT-6.1 Sol through the Codex CLI. Use for clear-spec implementation, independent review, computer use, investigation, data analysis, or token-heavy mechanical work.
 ---
 
 **Host gate:** Claude-hosted only. In native Codex, work inline unless the user explicitly requests delegation/parallel agents. Never start recursive `codex exec`; preserve selected model/reasoning and Codex config.
 
-Capability-check once: `codex exec -m gpt-6-sol "reply OK"`. If unavailable, fall back to Astra `high` and name it; if both fail, report the lane blocked. Never substitute a cheaper GPT model.
+Capability-check once: `codex exec -m gpt-6.1-sol "reply OK"`. If unavailable, fall back to Astra `high` and name it; if both fail, report the lane blocked. Never substitute a cheaper GPT model.
 
 ## Route
 
@@ -23,7 +23,7 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 
 ## Modes
 
-- **Implement:** `codex exec -m gpt-6-sol -c 'model_reasoning_effort="medium"'`; concurrent writes use isolated worktrees.
+- **Implement:** `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="medium"'`; concurrent writes use isolated worktrees.
 - **Review:** Astra `high` (`xhigh` at >=50% Codex usage left), `-s read-only`, P0-P3 evidence.
 - **Adversarial:** Claude-hosted and authorized only; one lane, never verdict.
 - **Computer use:** name app/URL, states, evidence.

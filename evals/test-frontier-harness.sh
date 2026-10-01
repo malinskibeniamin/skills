@@ -35,15 +35,15 @@ run_json_eval() {
 run_file_eval "config/model-routing.json" "model routing is data, not ambient prose"
 run_json_eval '.quality_first.default.model == "claude-opus-5-5"
   and .quality_first.default.effort == "high"
-  and .quality_first.secondary.model == "gpt-6-sol"
+  and .quality_first.secondary.model == "gpt-6.1-sol"
   and .quality_first.secondary.effort == "medium"
   and .quality_first.hard.model == "claude-opus-5-5"
   and (.quality_first.hard.efforts | index("max") | not)
   and .quality_first.ultra.requires_explicit_delegation
   and (.quality_first.ui_owners | index("claude-opus-5-5"))
   and .models["claude-opus-5-5"].status == "primary"
-  and .models["gpt-6-sol"].status == "secondary"' \
-  "config/model-routing.json" "routing drives Opus 5.5 first and GPT-6 Sol second"
+  and .models["gpt-6.1-sol"].status == "secondary"' \
+  "config/model-routing.json" "routing drives Opus 5.5 first and GPT-6.1 Sol second"
 
 run_file_eval "agent-evals/context-ablation/manifest.json" "ablation matrix is versioned"
 run_json_eval '.schema_version == 2
@@ -56,7 +56,7 @@ run_json_eval '.schema_version == 2
   and (.metrics | index("input_tokens"))
   and any(.capabilities.codex.models[]; .id == "gpt-6-astra" and (.efforts | index("xhigh")) and (.efforts | index("max")))
   and any(.capabilities["claude-code"].models[]; .id == "claude-fable-5-1")
-  and any(.capabilities.codex.models[]; .id == "gpt-6-sol")
+  and any(.capabilities.codex.models[]; .id == "gpt-6.1-sol")
   and any(.capabilities["claude-code"].models[]; .id == "claude-opus-5-5")' \
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"
 run_executable_eval "agent-evals/context-ablation/run.sh" "ablation runner is executable"
@@ -67,8 +67,8 @@ run_json_eval 'any(.capabilities["claude-code"].models[];
   .id == "claude-fable-5-1" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
   "agent-evals/context-ablation/manifest.json" "ablation includes every Fable 5.1 effort"
 run_json_eval 'any(.capabilities.codex.models[];
-  .id == "gpt-6-sol" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
-  "agent-evals/context-ablation/manifest.json" "ablation includes every GPT-6 Sol effort"
+  .id == "gpt-6.1-sol" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
+  "agent-evals/context-ablation/manifest.json" "ablation includes every GPT-6.1 Sol effort"
 run_json_eval 'any(.capabilities["claude-code"].models[];
   .id == "claude-opus-5-5" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
   "agent-evals/context-ablation/manifest.json" "ablation includes every Opus 5.5 effort"
