@@ -54,6 +54,6 @@ Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkow
 1. Pobierz pojedynczy stan CI za pomocą `gh pr checks <number>`; odnotuj brak CI.
 2. Zgłoś niepowodzenia. Naprawianie CI wymaga `/go`, polecenia wysyłki, prośby o nadzorowanie lub kolejnego żądania.
 3. Zgłoś stan, pozostałe różnice, gałąź, commity, PR, CI i następne działanie.
-4. Zakończ jednym wierszem stanu: `done`, `awaiting decision` lub `blocked`, zgodnie z kontraktem znaczników repozytorium. Jeśli PR istnieje, umieść jego pełny adres URL w tym ostatnim wierszu — zarówno dla nowego, jak i zaktualizowanego PR-a.
+4. Stosuj kontrakt stanu oraz celu i wpływu z CLAUDE.md. Jeśli PR istnieje, umieść jego pełny adres URL w ostatnim wierszu stanu, także przy aktualizacjach.
 
 Nigdy nie dodawaj do poczekalni niezwiązanych zmian, nie wypychaj mieszanego zakresu ani nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i polecenie naprawcze.
