@@ -1,0 +1,23 @@
+# Discover Effect setup guidance
+set media dark
+wait --fn '!document.querySelector("astro-island[ssr]")'
+scroll down 400
+## Search the skill catalog
+click 'main input[type="search"]'
+type 'main input[type="search"]' e
+type 'main input[type="search"]' f
+type 'main input[type="search"]' f
+type 'main input[type="search"]' e
+type 'main input[type="search"]' c
+type 'main input[type="search"]' t
+type 'main input[type="search"]' -
+type 'main input[type="search"]' t
+type 'main input[type="search"]' s
+## Inspect matching results
+press Tab
+## Open the routing catalog
+fill 'main input[type="search"]' ask-ben
+click 'main a[href="/skills/ask-ben"]'
+scroll down 600
+scroll down 600
+scroll down 600
