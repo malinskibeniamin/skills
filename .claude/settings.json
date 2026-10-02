@@ -18,6 +18,14 @@
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'llm-env.sh'; exit 0"
             ]
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pr-review-auto-hook.sh'; exit 0"
+            ]
           }
         ]
       }
@@ -82,6 +90,14 @@
             "args": [
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'intent-detect.sh'; exit 0"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pr-review-auto-hook.sh'; exit 0"
             ]
           }
         ]
@@ -302,6 +318,14 @@
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'session-end.sh'; exit 0"
             ]
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pr-review-auto-hook.sh'; exit 0"
+            ]
           }
         ]
       }
@@ -379,6 +403,18 @@
             ]
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pr-review-auto-hook.sh'; exit 0"
+            ]
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -408,6 +444,19 @@
             "args": [
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'test-warning-check.sh'; exit 0"
+            ]
+          }
+        ]
+      },
+      {
+        "continueOnBlock": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'pr-review-auto-hook.sh'; exit 0"
             ]
           }
         ]
