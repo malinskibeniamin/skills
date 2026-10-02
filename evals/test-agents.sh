@@ -63,3 +63,5 @@ else
   echo "  PASS  verifier does not reference findings-schema (correct)"
   PASS=$((PASS + 1))
 fi
+
+run_content_eval "$AGENTS_DIR/verifier.md" "^model: inherit" "verifier preserves the selected daily driver"

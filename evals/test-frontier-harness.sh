@@ -34,9 +34,9 @@ run_json_eval() {
 
 run_file_eval "config/model-routing.json" "model routing is data, not ambient prose"
 run_json_eval '.quality_first.default.model == "claude-opus-5-5"
-  and .quality_first.default.effort == "high"
+  and .quality_first.default.effort == "xhigh"
   and .quality_first.secondary.model == "gpt-6.1-sol"
-  and .quality_first.secondary.effort == "medium"
+  and .quality_first.secondary.effort == "xhigh"
   and .quality_first.hard.model == "claude-opus-5-5"
   and (.quality_first.hard.efforts | index("max") | not)
   and .quality_first.ultra.requires_explicit_delegation

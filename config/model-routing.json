@@ -4,19 +4,19 @@
   "quality_first": {
     "default": {
       "model": "claude-opus-5-5",
-      "effort": "high"
+      "effort": "xhigh"
     },
     "secondary": {
       "model": "gpt-6.1-sol",
-      "effort": "medium",
-      "use": "Codex lane for clear-spec execution, independent review, computer use, and token-heavy mechanical work."
+      "effort": "xhigh",
+      "use": "GPT-6.1 Sol xhigh for reviews; clear-spec execution, computer use, and investigation only when the user chooses the Codex lane."
     },
     "hard": {
       "model": "claude-opus-5-5",
       "efforts": ["xhigh"],
-      "selection": "Use the smallest effort that clears the context-ablation quality gate."
+      "selection": "Keep the owner-selected xhigh default; validate unrequested changes with context-ablation."
     },
-    "ui_owners": ["claude-opus-5-5", "claude-fable-5-1"],
+    "ui_owners": ["claude-opus-5-5"],
     "ultra": {
       "requires_explicit_delegation": true,
       "use": "Independent lanes only; never silently create an agent team."
@@ -24,30 +24,23 @@
     "ui_policy": {
       "min_taste": 8,
       "prefer_family": "anthropic",
-      "non_claude_fallback": "gpt-6-astra",
-      "fallback_rule": "Use Astra for user-facing work only when no Claude owner is available, and name the fallback."
+      "fallback_rule": "Opus owns user-facing UI, copy, and API design. If unavailable, report the UI lane blocked; use another model only on explicit user request."
     },
     "chores": {
-      "model": "gpt-6-luna",
-      "effort": "high",
-      "use": "Tiny edits, clean rebases, mechanical CI fixes, and read-only retrieval or listing such as email or daily task lists.",
-      "escalate": "Move to Sol on rebase conflicts, CI failures that need diagnosis, or any judgment call; if Luna is unavailable, run the chore inline on the owner at low effort."
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "use": "Keep tiny edits, clean rebases, mechanical CI fixes, and read-only listing inline on the daily driver."
     },
     "review": {
       "primary": {
-        "model": "gpt-6-astra",
-        "effort": "high"
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh"
       },
       "secondary": {
         "model": "claude-opus-5-5",
-        "effort": "high"
+        "effort": "xhigh"
       },
-      "secondary_use": "Add an Opus pass when Astra is unavailable or the PR needs evidence-heavy, actionable findings.",
-      "escalation": {
-        "effort": "xhigh",
-        "min_codex_remaining_pct": 50,
-        "rule": "Raise Astra to xhigh for PR reviews only when a host meter or the user shows at least 50% Codex usage remaining; unknown usage stays at high."
-      }
+      "secondary_use": "If Sol is unavailable, use a labeled clean-context Opus xhigh review and disclose the missing different-family coverage; do not automatically add a second pass."
     }
   },
   "efforts": {
@@ -62,25 +55,32 @@
     "claude-opus-5-5": {
       "status": "primary",
       "work": ["planning", "implementation", "review", "ui"],
-      "starting_effort": "high",
-      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
+      "starting_effort": "xhigh",
+      "effort_selection": "Explicit owner choice: xhigh for the daily driver, plans, implementation, and UI. Validate unrequested changes with context-ablation.",
       "scores": {
-        "cost": 2,
+        "cost": null,
         "intelligence": 10,
         "speed": 7,
         "taste": 9,
         "review": 9,
         "allowance": 9
+      },
+      "score_evidence": {
+        "cost": {
+          "effort": "high",
+          "score": 2,
+          "status": "Historical high-effort rating; xhigh task cost is unmeasured."
+        }
       }
     },
     "gpt-6.1-sol": {
       "status": "secondary",
-      "work": ["implementation", "computer-use", "investigation"],
-      "starting_effort": "medium",
-      "effort_selection": "Use medium for the explicitly requested Sol replacement; validate effort changes with the versioned context-ablation quality gate.",
-      "unavailable": "Use gpt-6-astra at high and name the fallback; never a cheaper GPT model.",
+      "work": ["review", "implementation", "computer-use", "investigation"],
+      "starting_effort": "xhigh",
+      "effort_selection": "Explicit owner choice: xhigh for reviews and the requested Codex lane. Validate unrequested changes with context-ablation.",
+      "unavailable": "Use claude-opus-5-5 at xhigh for a labeled clean-context review; disclose unavailable different-family coverage. Other models require explicit user selection.",
       "scores": {
-        "cost": 6,
+        "cost": null,
         "intelligence": 8,
         "speed": null,
         "taste": null,
@@ -94,14 +94,20 @@
           "effort": "medium",
           "usd_per_task": 0.21,
           "min_usd_per_task": 0.03,
-          "max_usd_per_task": 3.91
+          "max_usd_per_task": 3.91,
+          "score": 6,
+          "status": "Historical medium-effort measurement; xhigh task cost is unmeasured."
         },
-        "intelligence": { "effort": "max", "index": 52 },
-        "taste": "Unmeasured for GPT-6.1 Sol; awaiting owner judgment."
+        "intelligence": {
+          "effort": "max",
+          "index": 52
+        },
+        "taste": "Owner prefers Opus 5.5 for UI; no numeric GPT-6.1 Sol taste rating supplied.",
+        "review": "Owner prefers GPT-6.1 Sol xhigh for reviews; no numeric GPT-6.1 Sol audit rating supplied."
       }
     },
     "gpt-6-astra": {
-      "status": "quality-alternative",
+      "status": "reserve",
       "work": ["review", "planning", "implementation", "computer-use"],
       "starting_effort": "high",
       "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
@@ -112,13 +118,14 @@
         "taste": 8,
         "review": 10,
         "allowance": 4
-      }
+      },
+      "use": "Reference catalog only; use this model only on explicit user request, never as an automatic route or fallback."
     },
     "claude-fable-5-1": {
       "status": "reserve",
       "work": ["planning", "implementation", "review", "ui"],
       "starting_effort": "high",
-      "use": "Only on explicit user request for extraordinary work, such as powering through a hard feature. Never above high effort.",
+      "use": "Reference catalog only; use this model only on explicit user request, never as an automatic route or fallback.",
       "scores": {
         "cost": 1,
         "intelligence": 8,
@@ -129,7 +136,7 @@
       }
     },
     "gpt-6-luna": {
-      "status": "utility",
+      "status": "reserve",
       "work": ["chores"],
       "starting_effort": "high",
       "scores": {
@@ -139,14 +146,17 @@
         "taste": 3,
         "review": null,
         "allowance": 10
-      }
+      },
+      "use": "Reference catalog only; use this model only on explicit user request, never as an automatic route or fallback."
     }
   },
   "selection": {
     "single_owner": true,
     "cross_family_review_for_non_trivial_pr": false,
-    "fallback": "Keep one owner. A different-family pass requires explicit delegation.",
-    "promotion_rule": "Promote a model, effort, or context variant only after it passes the versioned ablation gate."
+    "fallback": "Keep one owner within the preferred pair. Sol reviews fall back to a labeled clean-context Opus xhigh pass; unavailable Opus UI is blocked. A different-family agent pass still requires explicit delegation.",
+    "promotion_rule": "These xhigh routes are explicit owner choices, not benchmark promotions. Promote unrequested model, effort, or context changes only after the versioned ablation gate.",
+    "preferred_models": ["claude-opus-5-5", "gpt-6.1-sol"],
+    "owner_preference": "Opus 5.5 xhigh is the daily driver and better for UI; GPT-6.1 Sol xhigh is preferred for reviews. Other models require explicit user request."
   },
   "api_only": {
     "pro_mode": "Available through the API; do not imply that a local CLI session uses it.",
@@ -171,13 +181,13 @@
   ],
   "scoring": {
     "scale": "1-10, higher is better; null means unmeasured.",
-    "cost": "Artificial Analysis cost per Intelligence Index task at the routed effort. Log bands: floor(10 - 9 * ln(cost / 0.03) / ln(3.91 / 0.03)), clamped to 1-10; Luna high ($0.03/task) is 10, Fable 5.1 high ($3.91/task) is 1.",
+    "cost": "Artificial Analysis cost per Intelligence Index task at the routed effort. Log bands: floor(10 - 9 * ln(cost / 0.03) / ln(3.91 / 0.03)), clamped to 1-10; Luna high ($0.03/task) is 10, Fable 5.1 high ($3.91/task) is 1. Current scores match starting effort; historical measurements at other efforts stay in score_evidence.",
     "intelligence": "Peak Artificial Analysis Intelligence Index: round(1 + 9 * (index - 30) / (58 - 30)), clamped to 1-10; 58 is 10 and 30 is 1. Benchmark effort is not routing authorization.",
     "speed": "Median output tokens per second relative to the fastest model.",
     "taste": "Owner judgment for UI/UX, code quality, API design, and copy.",
     "measured": "2026-09-25",
     "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties.",
-    "review": "Orchestrator V2 audit panel (T3 Code PR #2829, 2026-09-24) weighted mean relative to the leader (Astra 8.22 = 10); Luna was not measured and does not review.",
+    "review": "Historical Orchestrator V2 audit panel (T3 Code PR #2829, 2026-09-24) weighted mean relative to Astra 8.22 = 10. This panel did not measure GPT-6.1 Sol; current review routing follows the explicit owner preference, not this historical ranking.",
     "allowance": "How long the $200 plan lasts before a limit hits (Claude Max 20x, ChatGPT Pro 20x). Codex: published per-5-hour Pro 20x ranges (Astra 100-900, Luna 7,000-56,000), log scale. GPT-6.1 Sol allowance is unmeasured. Claude publishes no counts: Opus 5.5 is the owner's observed most generous; Fable 5.1 draws limits faster (list price 2.5x Opus 5.5) and is capped at 50% of the weekly limit."
   }
 }

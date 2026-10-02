@@ -8,8 +8,8 @@
   conversation, secrets, or unrelated files.
 - **Budget:** Claude and Codex quotas are separate. Unknown capacity is not a reason to
   guess or lower the quality gate; never substitute `ccusage` or session tokens.
-- **Diversity:** the author never solely reviews its own work. Prefer another model family;
-  record unavailable cross-family coverage.
+- **Diversity:** for an authorized independent review, prefer Sol for Opus work and Opus
+  for Sol work. Label clean-context fallbacks and disclose missing different-family coverage.
 
 ## Background execution
 
@@ -22,24 +22,26 @@ than sleeping.
 
 ## Claude wrapper
 
-Use a thin wrapper with `model: sonnet` and `effort: low` only when a workflow needs
-structured results:
+Use a thin wrapper inheriting the Opus owner and its `xhigh` effort only when a workflow
+needs structured results:
 
 1. Compose the self-contained prompt.
 2. Run `codex exec`.
 3. Map the report into the requested schema.
 
-Label wrappers `gpt-6.1-sol: <task>` (or `gpt-6-astra: <task>` on fallback). Parallel implementation requires
+Label wrappers `gpt-6.1-sol: <task>`; label unavailable-family review fallbacks
+`claude-opus-5-5: <task>`. Parallel implementation requires
 `isolation: "worktree"`. Workflow budgets count Claude wrapper tokens; Codex work is
 invisible to them.
 
 ## Routing notes
 
-Read `config/model-routing.json`. Sol defaults to `medium` and is the second lane behind
-Opus 5.5 `high`; higher efforts must be explicit or eval-backed. Astra `high` is the Sol
-fallback. User-facing UI, copy, and API work stays with Claude; Astra takes it only when no
-Claude owner is available. Luna `high` handles chores and escalates to Sol on judgment. Name
-any fallback model in the result.
+Read `config/model-routing.json`. Opus 5.5 `xhigh` is the daily/UI owner; Sol `xhigh`
+is the preferred reviewer and explicitly selected Codex execution lane. Keep chores on
+Opus. If Sol is unavailable, use a labeled clean-context Opus `xhigh` review and disclose
+missing different-family coverage. If Opus is unavailable for UI, report the lane blocked.
+Other models require explicit user selection; never silently lower effort or substitute
+Astra, Fable, or Luna. The owner's preference does not authorize delegation.
 
 `ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
 programmatic tool calling, and explicit cache controls are API-only unless the current
@@ -48,4 +50,4 @@ harness exposes them.
 ## Adversarial exchange
 
 Adversarial exchange uses a different family whenever authorized. The fallback is a
-labeled clean-context Sol pass (Astra on fallback), not a cheaper GPT variant.
+labeled clean-context pass within the Opus/Sol pair, with missing different-family coverage disclosed.

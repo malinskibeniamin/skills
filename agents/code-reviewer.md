@@ -13,17 +13,17 @@ Fresh-eyes review. Haven't seen implementation. Verify by reading actual code, n
 
 Before producing findings, walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against the diff. Include `karpathy_checks` object in your output JSON (pass/fail per check).
 
-## Mandatory Cross-Model Review
+## Authorized Cross-Model Review
 
-The coordinator owns the one bounded different-family pass required for non-trivial PR
-work. This reviewer never starts a recursive model call. Review the supplied evidence,
+When the user authorizes delegation, the coordinator owns one bounded different-family
+pass. This reviewer never starts a recursive model call. Review the supplied evidence,
 and include any coordinator-supplied independent findings under
 `cross_model_findings`. Call out meaningful divergence in `divergence_notes`.
 
-Routing follows `config/model-routing.json`: a quality-qualified Claude alternative can
-review GPT work, Astra `high` reviews Claude work (`xhigh` when at least 50% Codex usage is
-known to remain), and the unavailable-family fallback is a labeled clean-context Opus 5.5
-`high` pass.
+Routing follows `config/model-routing.json`: Sol `xhigh` is preferred for reviews;
+Opus 5.5 `xhigh` reviews GPT work or supplies a labeled clean-context fallback when Sol is
+unavailable. Disclose missing different-family coverage; other models require explicit
+user selection. Keep the owner-selected effort without a guessed usage threshold.
 
 ## Stage 1: Spec Compliance
 

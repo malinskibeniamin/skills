@@ -33,7 +33,7 @@ remain explicit owner-approved delegation, not automatic routing.
 The manifest pins exact model IDs. Claude Opus 5.5, GPT-6.1 Sol, GPT-6 Astra, and Claude
 Fable 5.1 run at `low`, `medium`, `high`, `xhigh`, and `max`; results from their
 predecessors do not determine the new effort frontier. The owner-selected drivers start at
-Opus 5.5 `high` and Sol `medium` while the suite measures the lowest quality-equivalent
+Opus 5.5 `xhigh` and Sol `xhigh` while the suite measures the lowest quality-equivalent
 effort. Claude Code 2.1.257 or newer is
 required. The runner checks this before starting any cell and points stale installations
 to `claude update`.

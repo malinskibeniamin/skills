@@ -5,15 +5,14 @@ description: Delegate to GPT-6.1 Sol through the Codex CLI. Use for clear-spec i
 
 **Host gate:** Claude-hosted only. In native Codex, work inline unless the user explicitly requests delegation/parallel agents. Never start recursive `codex exec`; preserve selected model/reasoning and Codex config.
 
-Capability-check once: `codex exec -m gpt-6.1-sol "reply OK"`. If unavailable, fall back to Astra `high` and name it; if both fail, report the lane blocked. Never substitute a cheaper GPT model.
+Capability-check once when delegation is authorized: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Other models require an explicit user request.
 
 ## Route
 
 | Variant | Use |
 |---|---|
-| Sol, `medium` (`high`+ only eval-backed/explicit) | clear-spec code, computer use, investigation |
-| Astra, `high` (Sol fallback; never `max`) | PR review first; code, planning, computer use; UI only if no Claude owner |
-| Luna, `high` (`gpt-6-luna`) | chores: tiny edits, clean rebases, mechanical CI fixes, read-only listing; judgment goes to Sol |
+| Sol, `xhigh` (`gpt-6.1-sol`; never `max`) | preferred PR reviewer; explicitly selected execution, computer use, investigation |
+| Opus 5.5, `xhigh` (`claude-opus-5-5`) | daily driver, UI, plans, code, chores; labeled clean-context review fallback |
 
 Read `config/model-routing.json`; never infer quality from name/price. [REFERENCE.md](REFERENCE.md) owns provider gates and CLI mechanics.
 
@@ -23,8 +22,8 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 
 ## Modes
 
-- **Implement:** `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="medium"'`; concurrent writes use isolated worktrees.
-- **Review:** Astra `high` (`xhigh` at >=50% Codex usage left), `-s read-only`, P0-P3 evidence.
+- **Implement:** `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`; concurrent writes use isolated worktrees.
+- **Review:** Sol `xhigh`: `codex exec -s read-only -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`; P0-P3 evidence. No guessed usage threshold changes the owner-selected effort.
 - **Adversarial:** Claude-hosted and authorized only; one lane, never verdict.
 - **Computer use:** name app/URL, states, evidence.
 - **Investigate/analyze:** read-only compact report.
@@ -37,4 +36,4 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 4. Run with timeout/reference background pattern.
 5. Verify citations, commands, and high-risk conclusions before integrating.
 
-Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Codex models do not own user-facing UI, copy, or API design while a Claude owner exists; an Astra fallback meets the visual evidence gate.
+Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Codex models do not own user-facing UI, copy, or API design by default. Opus 5.5 owns those surfaces; if unavailable, report the lane blocked unless the user explicitly selects another model.

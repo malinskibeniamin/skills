@@ -104,4 +104,25 @@ else
   ERRORS="$ERRORS\n  FAIL: GPT-6 Astra experiment model propagation"
 fi
 
+if env -u ABLATION_MODEL -u ABLATION_EFFORT ABLATION_AGENT=codex bun -e '
+    const { createExperiment: ablation } = await import("./agent-evals/context-ablation/create-experiment.ts");
+    const { createExperiment: retrieval } = await import("./agent-evals/retrieval-policy/create-experiment.ts");
+    const { strict: assert } = await import("node:assert");
+    assert.equal(ablation(null).model, "gpt-6.1-sol?reasoningEffort=xhigh");
+    process.env.ABLATION_AGENT = "claude-code";
+    const owner = ablation(null);
+    assert.equal(owner.model, "claude-opus-5-5");
+    assert.equal(owner.agentOptions?.effort, "xhigh");
+    for (const variant of ["baseline", "selective"]) {
+      assert.equal(retrieval(variant).model, "gpt-6.1-sol?reasoningEffort=xhigh");
+    }
+  ' >/dev/null 2>&1; then
+  echo "  PASS  experiment defaults preserve the owner's Opus/Sol xhigh choices"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  experiment defaults lower the owner's Opus/Sol xhigh choices"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: owner-selected experiment defaults"
+fi
+
 rm -rf "$_ablation_tmp"
