@@ -1,9 +1,17 @@
 ---
-title: /ask-ben
 description: 路由 Ben 的前端技能。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ask ben
 sidebar:
   label: /ask-ben
+title: /ask-ben
+type: skill
 ---
 ![「/ask-ben」技能的圖表](/diagrams/skills/ask-ben.svg)
 
@@ -59,6 +67,56 @@ sidebar:
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |
 | `/plow-ahead` | 在例行的不確定情況下自主繼續推進。 |
 | `/postgresql` | 根據工作負載實證設計並操作 PostgreSQL。 |
+| `/poteto-architect` | Poteto：設計呼叫方式、型別與模組邊界。 |
+| `/poteto-arena` | Poteto：比較不同實作並結合各自的優點。 |
+| `/poteto-automate-me` | Poteto：根據觀察到的工作模式草擬個人模式。 |
+| `/poteto-blast-radius` | Poteto：執行關鍵檢查，證明跨模組變更的安全性。 |
+| `/poteto-bro` | Poteto：用淺白的語言重述上一則訊息。 |
+| `/poteto-create-verification-skill` | Poteto：建立專案本機的真實應用程式驗證技能。 |
+| `/poteto-figure-it-out` | Poteto：為不熟悉的任務設計可驗證的操作流程。 |
+| `/poteto-how` | Poteto：依據原始碼實證說明子系統的行為。 |
+| `/poteto-interrogate` | Poteto：透過對抗式審查質疑程式碼差異。 |
+| `/poteto-maintain-verification-skill` | Poteto：根據原始碼與實際行為更新驗證器。 |
+| `/poteto-make-bot-ui` | Poteto：建立透過 webhook 喚醒機器人的儀表板。 |
+| `/poteto-mode` | Poteto：透過 Poteto 操作流程執行嚴謹的工作。 |
+| `/poteto-no-comments` | Poteto：以結構性保證取代多餘的註解。 |
+| `/poteto-principle-attack-the-premise` | Poteto：質疑前提。 |
+| `/poteto-principle-boundary-discipline` | Poteto：嚴格遵守邊界。 |
+| `/poteto-principle-build-the-lever` | Poteto：建立可重複執行或驗證工作的工具。 |
+| `/poteto-principle-encode-lessons-in-structure` | Poteto：將經驗教訓編入結構中。 |
+| `/poteto-principle-exhaust-the-design-space` | Poteto：窮盡設計方案。 |
+| `/poteto-principle-experience-first` | Poteto：優先考量使用者體驗，而非實作便利。 |
+| `/poteto-principle-fix-root-causes` | Poteto：重現症狀並修復根本原因。 |
+| `/poteto-principle-foundational-thinking` | Poteto：從基礎原理出發思考。 |
+| `/poteto-principle-guard-the-context-window` | Poteto：保護上下文視窗。 |
+| `/poteto-principle-laziness-protocol` | Poteto：遵循省力協定。 |
+| `/poteto-principle-make-operations-idempotent` | Poteto：讓操作具有冪等性。 |
+| `/poteto-principle-migrate-callers-then-delete-legacy-apis` | Poteto：先遷移呼叫端，再刪除舊 API。 |
+| `/poteto-principle-minimize-reader-load` | Poteto：減輕讀者負擔。 |
+| `/poteto-principle-model-the-domain` | Poteto：以明確的資料結構編入領域規則。 |
+| `/poteto-principle-never-block-on-the-human` | Poteto：不要因等待人工輸入而阻塞工作。 |
+| `/poteto-principle-outcome-oriented-execution` | Poteto：以結果為導向執行工作。 |
+| `/poteto-principle-prove-it-works` | Poteto：驗證真實行為，而非依賴間接指標。 |
+| `/poteto-principle-redesign-from-first-principles` | Poteto：從第一性原理重新設計。 |
+| `/poteto-principle-separate-before-serializing-shared-state` | Poteto：先隔離共用狀態，再序列化存取。 |
+| `/poteto-principle-sequence-verifiable-units` | Poteto：以可驗證的單元安排工作順序。 |
+| `/poteto-principle-subtract-before-you-add` | Poteto：先做減法，再做加法。 |
+| `/poteto-principle-test-behavior-not-implementation` | Poteto：測試行為，而非實作細節。 |
+| `/poteto-principle-type-system-discipline` | Poteto：嚴格遵守型別系統規則。 |
+| `/poteto-recall` | Poteto：根據歷史紀錄與目前狀態重建近期脈絡。 |
+| `/poteto-reflect` | Poteto：將觀察到的工作經驗轉化為技能改進。 |
+| `/poteto-reproduce-and-fix-issues` | Poteto：重現回報的問題並驗證限定範圍內的修復。 |
+| `/poteto-setup-benny` | Poteto：設定 Benny 問題分類與重現工具包。 |
+| `/poteto-setup-pstack` | Poteto：設定 pstack 模型角色與推理預算。 |
+| `/poteto-show-me-your-work` | Poteto：保留可審查的決策與實證紀錄。 |
+| `/poteto-swarm` | Poteto：協調使用者明確要求的平行工作。 |
+| `/poteto-tdd` | Poteto：實作修復之前，先以可執行測試重現錯誤。 |
+| `/poteto-teach` | Poteto：說明改了什麼、如何運作以及原因。 |
+| `/poteto-technical-writing` | Poteto：撰寫層次清晰的工程文件。 |
+| `/poteto-triage-issue-reports` | Poteto：分類並去除討論串內重複的問題回報。 |
+| `/poteto-typescript-best-practices` | Poteto：遵循 TypeScript 型別系統規則。 |
+| `/poteto-unslop` | Poteto：去除 AI 寫作模式，同時保留原意。 |
+| `/poteto-why` | Poteto：根據引用的實證研究設計依據。 |
 | `/pr-shepherd` | 接續已有變更的提取要求，並引導目前工作區完成修復。 |
 | `/pr` | 撰寫便於快速審查的 PR 說明。 |
 | `/prime` | 建立精簡的儲存庫啟動簡報。 |
