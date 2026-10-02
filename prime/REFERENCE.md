@@ -42,20 +42,18 @@
 
 ## Context hygiene
 
-- Use [repo navigation](../shared/repo-navigation.md) for current owners, command
-  precedence, missing scoped docs, and stalled retrieval. Keep verified task pointers
-  in Read next, not a copied command inventory.
+- Use [repo navigation](../shared/repo-navigation.md); Read next keeps verified pointers, not copied recipes.
 - No PRIME.md. Derive live from repo/git/PR/docs, no stale summaries.
 - On resume, use the [continuation checkpoint](../shared/progress-evidence.md#continuation):
   reconcile explicit follow-ups; summaries do not replace endpoints. Re-observe hosted gates.
 - Do not paste full CLAUDE.md or AGENTS.md. Avoid duplicate context.
-- Read relevant sections only: quick ref, lifecycle, toolchain, tests, repo warnings.
+- Read task-relevant rule sections only.
 - Summarize rule implications; read only changed, task-referenced or scout-picked source.
 
 ## Integration
 
 - `/prime`: repo-led brief.
-- `/prime <seed>`: seed = handoff file, GitHub issue/PR, Jira key, branch/ref, URL, task text.
+- `/prime <seed>`: handoff, GitHub issue/PR, Jira key, ref, URL, task.
 - Manual only by default: user chooses `/prime`; no prompt nudge.
 - SessionStart: optional deterministic scout only; poor for AI reads. Never source dump.
 
@@ -67,9 +65,9 @@ Gather facts:
 - Rule docs: `AGENTS.md`, `CLAUDE.md`, copilot instructions.
 - Domain docs: `GLOSSARY.md`, `GLOSSARY-MAP.md`, ADRs.
 - Stack/commands from configs.
-- Seed context via local file, `gh issue view`, `gh pr view`, `acli jira workitem view`, branch diff/log.
+- Seed: file, `gh issue view`, `gh pr view`, `acli jira workitem view`, diff/log.
 - Current PR via `gh pr view` if available.
-- Candidate next reads.
+- Next reads.
 
 Network fail-open. Never print secrets/env.
 

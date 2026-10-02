@@ -4,9 +4,8 @@
 
 `bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
-Local scripts/configs/component policy own commands/paths; these are defaults, not
-migration instructions. For unfamiliar code/conflicts, read
-[repo navigation](shared/repo-navigation.md).
+Local scripts/configs/UI policy outrank defaults.
+Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
 
 - UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
   Functional React components; React Compiler owns memoization.
@@ -16,14 +15,14 @@ migration instructions. For unfamiliar code/conflicts, read
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Match local idiom and the smallest obvious design. Preserve zoom, worktree isolation,
+Use local idiom/smallest obvious design. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
 ## Human-facing text
 
-Human-facing text: `shared/communication.md` -- decision/value/ask first; own claims,
-intent, uncertainty. Above 200 words: <=120-word brief, then detail.
-Count explicit word limits with a tool; never invent human endorsement.
+`shared/communication.md`: decision/value/ask first; own claims, intent,
+uncertainty. Above 200 words: <=120-word brief, then detail.
+Count word limits with a tool; never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs: `shared/intent-map.md` maps
 objective/assumptions/references/risks/implementation/verification/superseded choices.
@@ -70,17 +69,17 @@ One outcome contract:
 
 - **Objective** -- end state.
 - **Guardrails** -- non-inferable constraints/reserved decisions.
-- **Verification** -- checks/behavior proving success.
+- **Verification** -- observable proof.
 - **Stop** -- requested endpoint/genuine blockers.
 
-Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
+Repeatable work: deterministic scripts/CLIs; uncertainty: agent judgment.
 Improve feedback loops before concurrency; delegation stays opt-in.
 inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance. Continue reversible
 decisions; pair status with the next action, not recaps/offers/non-blocking options.
 Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps checklist/evidence/pause triggers in `.context/implementation-notes.md`.
 
-`config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
-wins. Never invent rankings or infer usage from tokens. Promote context, effort,
+`config/model-routing.json` selects models; `/efficient-frontier` applies it. Quality wins.
+Never invent rankings or infer usage from tokens. Promote context, effort,
 or models only through `agent-evals/context-ablation/`.
 
 Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generated files
