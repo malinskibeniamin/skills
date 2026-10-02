@@ -11,6 +11,7 @@ import {
 import { basename, dirname, join, relative } from "node:path";
 
 import { filesystemSource } from "#blume-filesystem";
+import { gitLastModifiedTimes } from "#blume-last-modified";
 
 interface SkillSourceOptions {
   branch: string;
@@ -327,20 +328,30 @@ const materializeDefaultContent = async (
   }
 };
 
-const editUrlFor = (ref: string, options: SkillSourceOptions): string => {
+const canonicalSourcePath = (
+  ref: string,
+  options: SkillSourceOptions,
+): string => {
   const normalizedRef = ref.replaceAll("\\", "/");
   const defaultSkill = normalizedRef.match(/^skills\/([^/]+)\.md$/);
   if (defaultSkill) {
-    return `${options.repositoryUrl}/edit/${options.branch}/${defaultSkill[1]}/SKILL.md`;
+    return join(options.repositoryRoot, defaultSkill[1] ?? "", "SKILL.md");
   }
   if (normalizedRef === "index.mdx" || normalizedRef === "skills/index.mdx") {
-    return `${options.repositoryUrl}/edit/${options.branch}/docs-site/skill-source.ts`;
+    return join(options.repositoryRoot, "docs-site", "skill-source.ts");
   }
 
-  const contentPath = relative(
-    options.repositoryRoot,
-    join(options.contentRoot, ref),
-  ).replaceAll("\\", "/");
+  return join(options.contentRoot, ref);
+};
+
+const editUrlFor = (
+  sourcePath: string,
+  options: SkillSourceOptions,
+): string => {
+  const contentPath = relative(options.repositoryRoot, sourcePath).replaceAll(
+    "\\",
+    "/",
+  );
   return `${options.repositoryUrl}/edit/${options.branch}/${contentPath}`;
 };
 
@@ -423,12 +434,27 @@ export const createSkillSource = (
       if (await localizeSkillSearch(result.entries, options)) {
         result = await filesystem.load();
       }
+      // Materialized current pages are ignored files. Date the canonical
+      // source instead, without changing the path Astro uses for rendering.
+      const sourcePaths = result.entries.map((entry) =>
+        canonicalSourcePath(entry.ref, options),
+      );
+      const gitTimes = gitLastModifiedTimes(
+        options.repositoryRoot,
+        [...new Set(sourcePaths.map(dirname))],
+        sourcePaths,
+      );
       return {
         ...result,
-        entries: result.entries.map((entry) => ({
-          ...entry,
-          editUrl: editUrlFor(entry.ref, options),
-        })),
+        entries: result.entries.map((entry) => {
+          const sourcePath = canonicalSourcePath(entry.ref, options);
+          const lastModified = entry.lastModified ?? gitTimes.get(sourcePath);
+          return {
+            ...entry,
+            editUrl: editUrlFor(sourcePath, options),
+            ...(lastModified ? { lastModified } : {}),
+          };
+        }),
       };
     },
     validate: () => {

@@ -148,6 +148,7 @@ test.describe("browser language", () => {
 
   test("routes new readers and respects their manual language choice", async ({
     page,
+    context,
   }) => {
     await page.goto("/");
     await expect(page).toHaveURL(/\/pl\/?$/);
@@ -173,5 +174,10 @@ test.describe("browser language", () => {
     await expect(page).toHaveURL(/\/getting-started\/?$/);
     await page.goto("/");
     await expect(page).toHaveURL("/");
+    await page.reload();
+    await expect(page).toHaveURL("/");
+    const nextVisit = await context.newPage();
+    await nextVisit.goto("/");
+    await expect(nextVisit).toHaveURL("/");
   });
 });

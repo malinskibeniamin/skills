@@ -42,6 +42,8 @@ export default defineConfig({
   },
   description:
     "Practical skills for planning, building, testing, reviewing, and shipping software with coding agents.",
+  export: true,
+  lastModified: "git",
   github: {
     branch: "main",
     owner: "malinskibeniamin",
