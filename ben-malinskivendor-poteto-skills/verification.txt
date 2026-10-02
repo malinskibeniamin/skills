@@ -1,48 +1,40 @@
-Complete Poteto vendoring: verification receipt
+Base: 0490ae875b893578f25b2138eefc2e705bab32d2
+Candidate: 2ed820a8a0e470964a73df08f22102c8735e9419
+Source pin: pstack 0.15.5 / 7022c81efb48d8b5eb15498ce6043a3bd74b694c
 
-Base: a073f90de70e3b4f7ce9323fec069f36be8b078f
-Candidate: ea297556effe5d0ec847a1c93c852ff81ab25622
-Upstream: cursor/plugins pstack 0.15.5 at 7022c81efb48d8b5eb15498ce6043a3bd74b694c
+CI defect: ask-ben pl/zh-CN/zh-TW catalogs stale (3 stale / 312 current).
+Repair: all 50 Poteto descriptions translated per locale; preserve 99 original rows.
+Validated source metadata + translation ledger; freshness 315 current.
 
-Inventory: all 50 SKILL.md files (47 plugin skills, 3 Benny operational/setup
-skills); all 158 upstream files; support assets and 23 playbooks preserved.
-Namespaced Poteto registrations: 0 -> 50. Total registrations: 99 -> 149.
-Source bytes, SHA-256 digests, modes, generated metadata, relative links checked.
+Native browser contract and screenshot runner:
+ bunx --no-install playwright test --config .context/poteto-static.config.ts poteto-catalog.spec.ts --max-failures=3
+12 passed, no snapshot-update flags: en/pl/zh-CN/zh-TW x desktop light/dark + mobile light.
+Static build served via Python because normal Blume preview exceeded local startup timeout; repository screenshot runner and assertions unchanged.
+Before locale RED: expected 50 Poteto rows, got 0 in all 3 translated routes.
+New localized snapshots reviewed; inherited main export/chat controls account for intended English baseline refresh.
+Chinese router narration absent on exact base and candidate, unrelated to catalog rows.
+24 equivalent before/after captures: 0 -> 50 Poteto rows; all have zero page errors.
+Real paired video: type ask-ben -> open router -> language switch to Traditional Chinese -> scroll catalog.
+Playwright recording fallback after prior agent-browser daemon failures; HyperFrames composition + motion gate passed. Inline GIF fallback: signed-in GitHub video attachment unavailable.
 
-PASS: Poteto evals 35/35, including 7 real vendoring CLI tests.
-PASS: packaging integrity 11/11; three generated-file guards.
-PASS: real isolated Claude and Codex plugin installations, 149 skills each.
-PASS: install pinned source -> check -> repeated refresh, preserve native TDD;
-refuse locally altered source and unmanaged files without discarding edits.
-PASS: bun run lint:fix; bun run type:check; bun run format:check.
-PASS: hook-protocol unit tests (20) with 60000ms timeout; version docs tests (4).
+bun install --frozen-lockfile: PASS
+bun run lint:fix: PASS
+bun run type:check: PASS
+bun run format:check: PASS
+bun run test: 20 protocol + 4 docs version tests PASS (normal timeout)
+bun run docs:check: zero errors/warnings/hints
+bun run docs:build: PASS (candidate and exact isolated base)
+bun run docs:translate:check: 315 current
+All three generation guards: PASS
+python3 scripts/vendor-poteto.py --check: PASS
+/bin/bash evals/run.sh poteto-vendored-skills: 35 passed, includes 7 real CLI tests
+/bin/bash evals/run.sh packaging-integrity: 11 passed
+Initial real isolated Claude/Codex installations expose all 149 registered skills.
+CLI dogfood: full snapshot install -> check -> idempotent refresh -> retain native TDD -> reject local drift without data loss: PASS; affected CLI evals replayed after rebase.
 
-Visible change: /skills/ask-ben table gains 50 rows. Nested adapters and vendor
-sources are excluded from the hosted route directory. Other routes/locales and
-archived source are unchanged. No new loading, error, role or interactive state.
+Scope: 50 upstream skills, 158 files, 23 playbooks with preserved hashes/modes/license.
+No native owner overwritten. No live Benny automation/delegation/model switch enabled.
+Nested adapters/vendor add no hosted skill routes; archived catalogs unchanged.
 
-RED: complete Poteto catalog assertions on real base: expected 50 rows, received 0.
-GREEN: bun run docs:test:browser poteto-catalog.spec.ts --max-failures=3:
-3 passed, desktop 1440x1000 light/dark and mobile 390x844 light.
-All new snapshots reviewed; normal rerun did not update snapshots.
-Paired captures: same Chromium, en-US, reduced motion, route and viewport.
-Each of six base/candidate capture states has zero page errors.
-
-Broad visual run: 23 passed, 3 failed, 13 skipped at fail-fast. Existing homepage,
-directory and directory-polish snapshots also fail against the detached main
-base. Inspected baseline diffs: stale skill count (98 versus 99), sidebar and
-existing directory copy/layout. Unrelated snapshots intentionally not updated.
-Default unit runner's 5s compiler-test timeout and optional docs SVG-title test
-mismatch are pre-existing; unchanged source compared with main.
-
-Real flow video: homepage -> type ask-ben -> open router -> scroll catalog.
-Agent-browser recording helper failed with daemon resource/unresponsive errors.
-Equivalent isolated Playwright flow captured actual UI, using the repository's
-cursor script; both takes under 8 seconds, zero page errors, 0/50 rows asserted.
-pr-video.sh compose (ffmpeg) accepted both motion checks, generated 7.4s paired
-video and inline GIF. No static image padding or synthetic explainer used.
-Native GitHub player upload unavailable on this host; live-flow GIF fallback.
-
-Limits: no live Cursor/Benny integrations, automations, Slack, tracker, background
-work, merges or deployments enabled or exercised. Inline review, no delegation.
-Dependency files under vendor are unmodified upstream source, not harness upgrades.
+Unrelated broad visual drift was proven on older base in previous PR evidence, not bulk-updated. This receipt reports the 12 affected views, not the whole site.
+Final-head hosted checks: https://github.com/malinskibeniamin/skills/actions/runs/37053917455 (see current run result).

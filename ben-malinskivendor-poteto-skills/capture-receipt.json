@@ -1,0 +1,170 @@
+[
+  {
+    "side": "before",
+    "locale": "en",
+    "scenario": "desktop",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "en",
+    "scenario": "dark",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "en",
+    "scenario": "mobile",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "pl",
+    "scenario": "desktop",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "pl",
+    "scenario": "dark",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "pl",
+    "scenario": "mobile",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "zh-CN",
+    "scenario": "desktop",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "zh-CN",
+    "scenario": "dark",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "zh-CN",
+    "scenario": "mobile",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "zh-TW",
+    "scenario": "desktop",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "zh-TW",
+    "scenario": "dark",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "before",
+    "locale": "zh-TW",
+    "scenario": "mobile",
+    "potetoRows": 0,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "en",
+    "scenario": "desktop",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "en",
+    "scenario": "dark",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "en",
+    "scenario": "mobile",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "pl",
+    "scenario": "desktop",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "pl",
+    "scenario": "dark",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "pl",
+    "scenario": "mobile",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "zh-CN",
+    "scenario": "desktop",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "zh-CN",
+    "scenario": "dark",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "zh-CN",
+    "scenario": "mobile",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "zh-TW",
+    "scenario": "desktop",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "zh-TW",
+    "scenario": "dark",
+    "potetoRows": 50,
+    "errors": []
+  },
+  {
+    "side": "after",
+    "locale": "zh-TW",
+    "scenario": "mobile",
+    "potetoRows": 50,
+    "errors": []
+  }
+]
