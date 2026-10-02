@@ -30,9 +30,9 @@ With Changesets, load [changesets](../t3code-skills/changesets/SKILL.md) after c
 
 ## Pull request
 
-`--no-pr` never creates a PR; refresh existing PR evidence/body after push, otherwise stop at push and clean-tree check. Prepare visuals before push.
+`--no-pr` never creates a PR; refresh existing PR evidence/body after push, otherwise stop at push and clean-tree check. Prepare visuals first.
 
-1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-ups in the current PR; otherwise create with assignee, labels and template. Draft PRs proceed without approval. Whole stacks use `/stacked-prs`.
+1. Resolve base: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up in current PR; apply [repo metadata](references/metadata.md), including drafts. Template; draft PRs open without approval. Stacks use `/stacked-prs`.
 2. Every PR: load [quantify-impact](../quantify-impact/SKILL.md) and [pr](../pr/SKILL.md) separately; include value or proven metrics.
 3. Visible changes: inventory, before/after screenshots/video, reviewed snapshots and passing visual tests per reference. Missing evidence needs user waiver before publication.
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.

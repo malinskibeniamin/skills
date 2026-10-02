@@ -44,7 +44,7 @@ type: skill
 
 `--no-pr` 绝不会创建 PR。推送后刷新现有 PR 的证据/正文；否则在推送并检查工作树是否干净后结束。推送前准备本地视觉证据。
 
-1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 确定目标分支。后续工作继续提交到当前 PR；否则创建 PR，并设置负责人、标签及模板。创建草稿 PR 无需另行征求批准。若要发布整个堆栈，请使用 `/stacked-prs`。
+1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 确定目标分支。复用当前 PR；创建和更新时均应用[仓库元数据规则](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿。使用模板；创建草稿无需另行批准。堆栈使用 `/stacked-prs`。
 2. 每个 PR 都应分别加载 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) 和 [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；包含价值说明或经验证的指标。
 3. 每项可见更改都需要参考资料中规定的清单、前后对比截图和视频、已审查的快照以及通过的视觉测试。如缺少证据，则阻止发布，除非用户明确豁免。
 4. 公开仓库（`gh repo view --json visibility`）：推送前，从提交、标题、正文和证据中清除内部组织、仓库、产品、人员名称及私有链接。

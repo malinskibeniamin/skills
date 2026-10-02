@@ -47,7 +47,7 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 
 `--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu odśwież dowody i opis istniejącego PR-a; w przeciwnym razie zakończ po wypchnięciu i sprawdzeniu czystości drzewa. Przygotuj lokalne dowody wizualne przed wypchnięciem.
 
-1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kolejne etapy pracy dodawaj do bieżącego PR-a; w przeciwnym razie utwórz PR, przypisując osobę, etykiety i korzystając z szablonu. Utworzenie roboczego PR-a na tym etapie nie wymaga osobnej zgody. Publikacja całego stosu używa `/stacked-prs`.
+1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kontynuuj pracę w bieżącym PR-ze; przy tworzeniu i aktualizacji, także wersji roboczych, stosuj [metadane repozytorium](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md). Korzystaj z szablonu; wersje robocze nie wymagają osobnej zgody. Dla stosów używaj `/stacked-prs`.
 2. Dla każdego PR-a załaduj osobno [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); uwzględnij wartość lub potwierdzone wskaźniki.
 3. Każda widoczna zmiana wymaga inwentaryzacji opisanej w dokumencie referencyjnym, zrzutów ekranu i nagrań wideo przed i po zmianie, sprawdzonych migawek oraz przechodzących testów wizualnych. Brak dowodów blokuje publikację bez zgody użytkownika na odstępstwo.
 4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów i produktów, imiona i nazwiska osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.

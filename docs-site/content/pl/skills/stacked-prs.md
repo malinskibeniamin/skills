@@ -1,13 +1,21 @@
 ---
-title: /stacked-prs
 description: >-
   Tworzenie zależnych pull requestów GitHub i zarządzanie nimi za pomocą gh
   stack. Używaj w przypadku stosów PR-ów, łańcuchów zależnych gałęzi,
   przyrostowych warstw przeglądu lub dzielenia dużej zmiany na uporządkowane
   PR-y.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - stacked prs
 sidebar:
   label: /stacked-prs
+title: /stacked-prs
+type: skill
 ---
 ![Diagram umiejętności /stacked-prs](/diagrams/skills/stacked-prs.svg)
 
@@ -16,14 +24,14 @@ sidebar:
 
 Używaj `gh stack`; plik [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/stacked-prs/REFERENCE.md) opisuje polecenia, tryb linków zewnętrznych i odzyskiwanie.
 
-## Kontrakt
+## Kontrakt [#contract]
 
 - Każdą warstwę można niezależnie przeglądać względem jej rodzica.
 - Jeden obszar roboczy Conductor zarządza jednym stosem; niepowiązane prace korzystają z innego.
 - Przetestuj każdą warstwę, przejrzyj `<parent>...HEAD` i zgłoś wynik `gh stack view --json`.
 - Przestrzegaj żądanego punktu końcowego: planu, pracy lokalnej, wypchnięcia, wersji roboczej, otwarcia lub scalenia.
 
-## Ustal tryb
+## Ustal tryb [#establish-mode]
 
 Sprawdź `gh`, uwierzytelnienie, obsługę repozytorium, bieżącą gałąź, zdalne repozytoria, czystość drzewa oraz wynik `git worktree list --porcelain`. Jeśli brakuje rozszerzenia, zaproponuj `gh extension install github/gh-stack`; nigdy nie instaluj go bez pozwolenia. W przypadku wielu zdalnych repozytoriów przekazuj `--remote origin`.
 
@@ -36,7 +44,7 @@ Domyślnie używaj trybu natywnego: jeden obszar roboczy zarządza całym stosem
 Kod wyjścia 2 zgłasza wpisy `branch<TAB>path`; nie przejmuj gałęzi, nie usuwaj drzew roboczych ani nie wykonuj kaskady. Używaj trybu linków zewnętrznych tylko w celowych konfiguracjach z osobnym drzewem roboczym dla każdej warstwy:
 `gh stack link --base <trunk> --remote origin <bottom> ... <top>`. Przed kaskadami skoordynuj te drzewa robocze.
 
-## Zaplanuj i opracuj
+## Zaplanuj i opracuj [#plan-and-develop]
 
 Przedstaw tabelę od najniższej do najwyższej warstwy z celem, gałęzią, rodzicem, zakresem i weryfikacją. Zależności powinny znajdować się w tej samej lub niższej warstwie niż ich element zależny. Potwierdź tylko granice zaproponowane przez agenta.
 
@@ -44,7 +52,7 @@ Wymagaj czystego drzewa dla poleceń strukturalnych. Rozpocznij za pomocą `gh s
 
 Używaj `gh stack checkout <branch>` i `gh stack view --json`; unikaj poleceń bez argumentów i interfejsu TUI.
 
-## Przejrzyj i opublikuj
+## Przejrzyj i opublikuj [#review-and-publish]
 
 ```bash
 BASE=$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")
@@ -54,9 +62,9 @@ git log "$BASE"..HEAD --oneline
 
 Przed publikacją zweryfikuj i przetestuj praktycznie każdą warstwę. Przesłanie całego stosu domyślnie tworzy wersje robocze: `gh stack submit --auto --remote origin`; dodaj `--open` tylko na żądanie. Prośba dotycząca pojedynczego PR-a nigdy nie publikuje innych warstw.
 
-Zastosuj [materiał dowodowy PR-a](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) do każdej warstwy: `/quantify-impact`, osadzone porównanie przed i po oraz zaliczone testy wizualne dla widocznych zmian. Porównaj ją z rodzicem; przygotuj treści przed przesłaniem i zweryfikuj je później. Kaskady unieważniają materiał dowodowy.
+Zastosuj [materiał dowodowy PR-a](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) i [metadane repozytorium](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md) do każdej warstwy, także wersji roboczych: `/quantify-impact` i wymogi dowodów wizualnych względem rodzica. Przygotuj treści przed przesłaniem; sprawdź wynik wypchnięcia. Kaskady unieważniają materiał dowodowy.
 
-## Uwagi, synchronizacja i scalanie
+## Uwagi, synchronizacja i scalanie [#feedback-sync-merge]
 
 Popraw uwagi na gałęzi, do której należą, i zweryfikuj zmiany. Kaskady przepisują wyższe gałęzie. Stos należący do użytkownika i utrzymywany w tym obszarze roboczym można poddać rebase'owi i wypchnąć za pomocą force-with-lease bez ponownego pytania o zgodę; odnotuj to. Zapytaj, gdy własność jest niejasna albo zmianie podlegałaby gałąź domyślna, współdzielona, należąca do kogoś innego lub równolegle używana. Użyj `gh stack rebase --upstack --remote origin`, a następnie `gh stack push --remote origin`; polecenie `gh stack sync --prune --remote origin` podlega tej samej granicy.
 

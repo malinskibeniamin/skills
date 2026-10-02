@@ -43,7 +43,7 @@ git log "$BASE"..HEAD --oneline
 
 Verify and dogfood every layer before publication. Whole-stack submission defaults to drafts: `gh stack submit --auto --remote origin`; add `--open` only when requested. A single-PR request never publishes other layers.
 
-Apply [PR evidence](../commit-push-pr/REFERENCE.md) per layer: `/quantify-impact`, embedded before/after, and passing visual tests for visible changes. Compare with its parent; prepare bodies before submit, verify afterward. Cascades invalidate evidence.
+Apply [PR evidence](../commit-push-pr/REFERENCE.md) and [repo metadata](../commit-push-pr/references/metadata.md) per layer, including drafts: `/quantify-impact` and visual gates against its parent. Prepare bodies pre-submit; reconcile pushes. Cascades void evidence.
 
 ## Feedback, sync, merge
 
