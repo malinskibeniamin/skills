@@ -7,9 +7,17 @@
 //   bun scripts/auto-approve-bumps.ts            # dry run
 //   bun scripts/auto-approve-bumps.ts --approve  # approve matches
 //
-// scripts/install-auto-approve-bumps.sh schedules it every 2 minutes.
+// scripts/install-auto-approve-bumps.sh schedules it every 30 seconds. Each
+// run is one 1-point GraphQL search; a PR costs REST calls only when its head
+// is new, because decisions are cached per head.
 
-import { appendFileSync, mkdirSync, readFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  writeFileSync,
+} from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
@@ -369,17 +377,69 @@ export function reviewAction(
   return mine.some((r) => r.state === "COMMENTED") ? "skip" : "check";
 }
 
-const ListedPrs = z.array(
-  z.object({
-    number: z.number(),
-    author: z.object({ login: z.string() }),
-    baseRefName: z.string(),
-    headRefName: z.string(),
-    headRefOid: z.string().regex(/^[0-9a-f]{40}$/),
-    isDraft: z.boolean(),
-    url: z.string(),
-  }),
-);
+const PR_FIELDS =
+  "number url isDraft baseRefName headRefName headRefOid author { __typename login } repository { nameWithOwner }";
+
+// One search per PR author across its repos, sent as a single query.
+export function searchQuery(): string {
+  const reposByAuthor = new Map<string, string[]>();
+  for (const rule of RULES) {
+    const author = rule.author ?? BOT;
+    const repos = reposByAuthor.get(author) ?? [];
+    if (!repos.includes(rule.repo)) repos.push(rule.repo);
+    reposByAuthor.set(author, repos);
+  }
+  const searches = [...reposByAuthor].map(([author, repos], i) => {
+    const query = [
+      "is:pr is:open",
+      `author:${author}`,
+      ...repos.map((repo) => `repo:${repo}`),
+    ].join(" ");
+    return `s${i}: search(query: ${JSON.stringify(query)}, type: ISSUE, first: 100) { nodes { ... on PullRequest { ${PR_FIELDS} } } }`;
+  });
+  return `query { ${searches.join(" ")} }`;
+}
+
+// Decisions are keyed by head, so a PR is evaluated again only after a push.
+export function pendingPrs<T extends { key: string; head: string }>(
+  open: readonly T[],
+  decided: Readonly<Record<string, string>>,
+): { pending: T[]; decided: Record<string, string> } {
+  const kept: Record<string, string> = {};
+  for (const pr of open) {
+    const head = decided[pr.key];
+    if (head !== undefined) kept[pr.key] = head;
+  }
+  return {
+    pending: open.filter((pr) => decided[pr.key] !== pr.head),
+    decided: kept,
+  };
+}
+
+const SearchResults = z.object({
+  data: z.record(
+    z.object({
+      nodes: z.array(
+        z.object({
+          number: z.number(),
+          url: z.string(),
+          isDraft: z.boolean(),
+          baseRefName: z.string(),
+          headRefName: z.string(),
+          headRefOid: z.string().regex(/^[0-9a-f]{40}$/),
+          // gh shows GitHub App authors as app/<login>; match that.
+          author: z
+            .object({ __typename: z.string(), login: z.string() })
+            .nullable()
+            .transform((a) =>
+              a?.__typename === "Bot" ? `app/${a.login}` : (a?.login ?? ""),
+            ),
+          repository: z.object({ nameWithOwner: z.string() }),
+        }),
+      ),
+    }),
+  ),
+});
 const Reviews = z.array(
   z.object({
     user: z.object({ login: z.string() }).nullable(),
@@ -410,16 +470,28 @@ function log(level: "info" | "warn" | "error", fields: object): void {
 }
 
 const STATE_DIR = join(homedir(), ".local", "state", "auto-approve-bumps");
-const NOTIFIED = join(STATE_DIR, "notified");
+const STATE_FILE = join(STATE_DIR, "state.json");
+// decided maps "<repo>#<number>" to the head already approved, rejected, or
+// left to a human.
+const State = z.object({
+  viewer: z.string().optional(),
+  decided: z.record(z.string()),
+});
+type State = z.infer<typeof State>;
 
-function notifyOnce(key: string, message: string): void {
+function loadState(): State {
+  if (!existsSync(STATE_FILE)) return { decided: {} };
+  return State.parse(JSON.parse(readFileSync(STATE_FILE, "utf8")));
+}
+
+function saveState(state: State): void {
   mkdirSync(STATE_DIR, { recursive: true });
-  let seen = "";
-  try {
-    seen = readFileSync(NOTIFIED, "utf8");
-  } catch {}
-  if (seen.split("\n").includes(key)) return;
-  appendFileSync(NOTIFIED, `${key}\n`);
+  const temp = `${STATE_FILE}.tmp`;
+  writeFileSync(temp, `${JSON.stringify(state, null, 2)}\n`);
+  renameSync(temp, STATE_FILE);
+}
+
+function notify(message: string): void {
   Bun.spawnSync([
     "osascript",
     "-e",
@@ -432,113 +504,125 @@ function notifyOnce(key: string, message: string): void {
   ]);
 }
 
+// A dry run reads state but never writes it, so it cannot hide a real run.
 function run(approve: boolean): void {
-  const viewer = gh(["api", "user", "--jq", ".login"]).trim();
-  const sources = new Set(RULES.map((r) => `${r.repo} ${r.author ?? BOT}`));
-  for (const source of sources) {
-    const [repo = "", author = ""] = source.split(" ");
-    const listed = ListedPrs.parse(
+  const state = loadState();
+  state.viewer ??= gh(["api", "user", "--jq", ".login"]).trim();
+  const viewer = state.viewer;
+  const results = SearchResults.parse(
+    ghJson(["api", "graphql", "-f", `query=${searchQuery()}`]),
+  );
+  const open = Object.values(results.data)
+    .flatMap((search) => search.nodes)
+    .flatMap((node) => {
+      const repo = node.repository.nameWithOwner;
+      const rule = findRule(repo, node.headRefName);
+      return rule
+        ? [
+            {
+              key: `${repo}#${node.number}`,
+              head: node.headRefOid,
+              repo,
+              rule,
+              node,
+            },
+          ]
+        : [];
+    });
+  const { pending, decided } = pendingPrs(open, state.decided);
+  state.decided = decided;
+  if (approve) saveState(state);
+
+  for (const { key: pr, head, repo, rule, node } of pending) {
+    const decide = () => {
+      if (!approve) return;
+      state.decided[pr] = head;
+      saveState(state);
+    };
+    const mine = Reviews.parse(
       ghJson([
-        "pr",
-        "list",
-        "-R",
-        repo,
-        "--author",
-        author,
-        "--state",
-        "open",
-        "--json",
-        "number,author,baseRefName,headRefName,headRefOid,isDraft,url",
+        "api",
+        `repos/${repo}/pulls/${node.number}/reviews?per_page=100`,
       ]),
+    ).flatMap((r) =>
+      r.user?.login === viewer
+        ? [{ state: r.state, commitId: r.commit_id ?? "" }]
+        : [],
     );
-    for (const item of listed) {
-      const rule = findRule(repo, item.headRefName);
-      if (!rule) continue;
-      const pr = `${repo}#${item.number}`;
-      const head = item.headRefOid;
-      const mine = Reviews.parse(
+    const action = reviewAction(mine, head);
+    if (action === "skip") {
+      decide();
+      continue;
+    }
+
+    const facts: BumpPr = {
+      repo,
+      number: node.number,
+      author: node.author,
+      baseRefName: node.baseRefName,
+      headRefName: node.headRefName,
+      isDraft: node.isDraft,
+      commitAuthors: [],
+    };
+    // Pin the check and the approval to the same head so a later push is
+    // never approved unseen.
+    let verdict: Verdict;
+    if (rule.kind === "promotion") {
+      const status = gh([
+        "api",
+        `repos/${repo}/compare/${rule.source}...${head}`,
+        "--jq",
+        ".status",
+      ]).trim();
+      verdict = checkPromotion(facts, status);
+    } else {
+      facts.commitAuthors = Commits.parse(
         ghJson([
           "api",
-          `repos/${repo}/pulls/${item.number}/reviews?per_page=100`,
+          `repos/${repo}/pulls/${node.number}/commits?per_page=100`,
         ]),
-      ).flatMap((r) =>
-        r.user?.login === viewer
-          ? [{ state: r.state, commitId: r.commit_id ?? "" }]
-          : [],
-      );
-      const action = reviewAction(mine, head);
-      if (action === "skip") continue;
-
-      const facts: BumpPr = {
-        repo,
-        number: item.number,
-        author: item.author.login,
-        baseRefName: item.baseRefName,
-        headRefName: item.headRefName,
-        isDraft: item.isDraft,
-        commitAuthors: [],
-      };
-      // Pin the check and the approval to the same head so a later push is
-      // never approved unseen.
-      let verdict: Verdict;
-      if (rule.kind === "promotion") {
-        const status = gh([
-          "api",
-          `repos/${repo}/compare/${rule.source}...${head}`,
-          "--jq",
-          ".status",
-        ]).trim();
-        verdict = checkPromotion(facts, status);
-      } else {
-        facts.commitAuthors = Commits.parse(
-          ghJson([
-            "api",
-            `repos/${repo}/pulls/${item.number}/commits?per_page=100`,
-          ]),
-        ).map((c) => c.author?.login ?? "");
-        const diff = gh([
-          "api",
-          "-H",
-          "Accept: application/vnd.github.diff",
-          `repos/${repo}/compare/${item.baseRefName}...${head}`,
-        ]);
-        verdict = checkBump(facts, diff);
-      }
-      if (!verdict.ok) {
-        const stale =
-          action === "recheck"
-            ? " (your approval of an older commit still counts)"
-            : "";
-        log("warn", {
-          pr,
-          head,
-          skipped: verdict.reason,
-          staleApproval: stale !== "",
-        });
-        notifyOnce(
-          `${pr}@${head}`,
-          `${pr}: ${verdict.reason}${stale} — ${item.url}`,
-        );
-        continue;
-      }
-      if (!approve) {
-        log("info", { pr, head, wouldApprove: true });
-        continue;
-      }
-      gh([
+      ).map((c) => c.author?.login ?? "");
+      const diff = gh([
         "api",
-        "--method",
-        "POST",
-        `repos/${repo}/pulls/${item.number}/reviews`,
-        "-f",
-        `commit_id=${head}`,
-        "-f",
-        "event=APPROVE",
-        "-f",
-        `body=${rule.approval}`,
+        "-H",
+        "Accept: application/vnd.github.diff",
+        `repos/${repo}/compare/${node.baseRefName}...${head}`,
       ]);
-      log("info", { pr, head, approved: true });
+      verdict = checkBump(facts, diff);
     }
+    if (!verdict.ok) {
+      const stale =
+        action === "recheck"
+          ? " (your approval of an older commit still counts)"
+          : "";
+      log("warn", {
+        pr,
+        head,
+        skipped: verdict.reason,
+        staleApproval: stale !== "",
+      });
+      if (approve) notify(`${pr}: ${verdict.reason}${stale} — ${node.url}`);
+      decide();
+      continue;
+    }
+    if (!approve) {
+      log("info", { pr, head, wouldApprove: true });
+      continue;
+    }
+    gh([
+      "api",
+      "--method",
+      "POST",
+      `repos/${repo}/pulls/${node.number}/reviews`,
+      "-f",
+      `commit_id=${head}`,
+      "-f",
+      "event=APPROVE",
+      "-f",
+      `body=${rule.approval}`,
+    ]);
+    log("info", { pr, head, approved: true });
+    decide();
   }
 }
 

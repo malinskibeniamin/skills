@@ -7,7 +7,9 @@ import {
   checkBump,
   checkPromotion,
   parseDiff,
+  pendingPrs,
   reviewAction,
+  searchQuery,
 } from "./auto-approve-bumps.ts";
 
 const CLOUDV2_CONSOLE_DIFF = `diff --git a/install-pack/26.1.yml b/install-pack/26.1.yml
@@ -542,6 +544,48 @@ describe("checkBump for ui-registry version packages", () => {
     expect(checkBump(versionPackages, diff)).toEqual({
       ok: false,
       reason: "removed lines in packages/docs/data/changelog.json",
+    });
+  });
+});
+
+describe("searchQuery", () => {
+  test("searches every rule's repos once per PR author", () => {
+    const query = searchQuery();
+    expect(query).toContain(
+      'search(query: "is:pr is:open author:vbotbuildovich repo:redpanda-data/cloudv2 repo:redpanda-data/serverless"',
+    );
+    expect(query).toContain(
+      'search(query: "is:pr is:open author:app/github-actions repo:redpanda-data/ui-registry"',
+    );
+    expect(query.match(/search\(/g)).toHaveLength(2);
+  });
+});
+
+describe("pendingPrs", () => {
+  const open = [
+    { key: "redpanda-data/cloudv2#1", head: "a" },
+    { key: "redpanda-data/cloudv2#2", head: "b" },
+    { key: "redpanda-data/serverless#3", head: "c" },
+  ];
+
+  test("returns PRs whose head has no decision yet", () => {
+    const decided = {
+      "redpanda-data/cloudv2#1": "a",
+      "redpanda-data/cloudv2#2": "old",
+    };
+    expect(pendingPrs(open, decided).pending.map((p) => p.key)).toEqual([
+      "redpanda-data/cloudv2#2",
+      "redpanda-data/serverless#3",
+    ]);
+  });
+
+  test("forgets decisions for PRs that are no longer open", () => {
+    const decided = {
+      "redpanda-data/cloudv2#1": "a",
+      "redpanda-data/x#9": "z",
+    };
+    expect(pendingPrs(open, decided).decided).toEqual({
+      "redpanda-data/cloudv2#1": "a",
     });
   });
 });

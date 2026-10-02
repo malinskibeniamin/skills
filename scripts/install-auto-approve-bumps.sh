@@ -2,7 +2,7 @@
 set -eu
 
 # Bundle scripts/auto-approve-bumps.ts into ~/.local/libexec and run it every
-# 2 minutes as a LaunchAgent, so it survives worktree cleanup. Rerun after
+# 30 seconds as a LaunchAgent, so it survives worktree cleanup. Rerun after
 # changing the script; pass --uninstall to remove it.
 
 label="com.malinskibeniamin.auto-approve-bumps"
@@ -40,7 +40,7 @@ cat >"$plist" <<EOF
 	</array>
 	<key>EnvironmentVariables</key>
 	<dict><key>PATH</key><string>$gh_dir:/usr/bin:/bin</string></dict>
-	<key>StartInterval</key><integer>120</integer>
+	<key>StartInterval</key><integer>30</integer>
 	<key>RunAtLoad</key><true/>
 	<key>StandardOutPath</key><string>$log</string>
 	<key>StandardErrorPath</key><string>$log</string>
