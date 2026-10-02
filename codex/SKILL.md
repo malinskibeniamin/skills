@@ -28,6 +28,9 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 - **Computer use:** name app/URL, states, evidence.
 - **Investigate/analyze:** read-only compact report.
 
+For PR reviews, use [PR report and posting](REFERENCE.md#pr-report-and-posting).
+Default to a local report; publishing needs explicit user intent, separate from review authorization.
+
 ## Workflow
 
 1. Pass host/authorization gate.
