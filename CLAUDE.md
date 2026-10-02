@@ -4,6 +4,10 @@
 
 `bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
+Local scripts/configs/component policy own commands/paths; these are defaults, not
+migration instructions. For unfamiliar code/conflicts, read
+[repo navigation](shared/repo-navigation.md).
+
 - UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
   Functional React components; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.

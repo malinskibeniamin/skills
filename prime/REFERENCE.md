@@ -42,6 +42,9 @@
 
 ## Context hygiene
 
+- Use [repo navigation](../shared/repo-navigation.md) for current owners, command
+  precedence, missing scoped docs, and stalled retrieval. Keep verified task pointers
+  in Read next, not a copied command inventory.
 - No PRIME.md. Derive live from repo/git/PR/docs, no stale summaries.
 - On resume, use the [continuation checkpoint](../shared/progress-evidence.md#continuation):
   reconcile explicit follow-ups; summaries do not replace endpoints. Re-observe hosted gates.

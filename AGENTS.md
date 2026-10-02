@@ -5,6 +5,10 @@
 
 `bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
+Local scripts/configs/component policy own commands/paths; these are defaults, not
+migration instructions. For unfamiliar code/conflicts, read
+[repo navigation](shared/repo-navigation.md).
+
 - UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
   Functional React components; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.
@@ -97,9 +101,7 @@ Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generate
 
 ### Code exploration
 
-- Use the TraceDecay graph before broad shell search or whole-file reads. For unfamiliar behavior, ask a scoped context question; for a known path or symbol, use a narrow lookup. Read returned excerpts before further discovery, without re-reading the same ranges.
-- Treat file locations and role labels as leads, verbatim source as evidence. Mark incomplete, pruned, or failed retrieval as unknown; widen only for a named missing behavior, caller, or test. Use callers, callees, affected tests, or test maps for relationships.
-- Use `tracedecay tool` as the CLI fallback when MCP is unavailable. Fall back to scoped `rg` and file reads only when the index is unavailable or stale, or when generated and ignored artifacts are outside the graph.
+- Follow repo-root `shared/repo-navigation.md` for source precedence, TraceDecay exploration, and bounded fallback.
 - Treat TraceDecay savings as local estimates, not Codex usage, quota, or billing evidence. In linked worktrees, confirm the active project and branch before relying on graph results.
 
 ### Native delegation
