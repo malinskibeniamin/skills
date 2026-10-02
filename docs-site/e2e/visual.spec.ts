@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
 
+for (const locale of ["pl", "zh-CN", "zh-TW"]) {
+  test(`visual: status-update-${locale}`, async ({ page }) => {
+    await page.goto(`/${locale}/skills`);
+    await page
+      .getByRole("link", { name: /^\/what-did-i-get-done/ })
+      .last()
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "/what-did-i-get-done", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("What did you work on since the last update?", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("What are you going to work on next?", { exact: true }),
+    ).toBeVisible();
+    await expect(page.getByRole("main")).toContainText(
+      "Next work not specified.",
+    );
+    await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(page).toHaveScreenshot(`status-update-${locale}.png`, {
+      fullPage: true,
+    });
+  });
+}
+
 // Keep these captures comparable: the preview contains the same checked-in
 // skills, Chromium uses reduced motion, and each case gets a fresh context.
 for (const scenario of [
