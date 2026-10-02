@@ -45,6 +45,11 @@ Verify and dogfood every layer before publication. Whole-stack submission defaul
 
 Apply [PR evidence](../commit-push-pr/REFERENCE.md) per layer: `/quantify-impact`, embedded before/after, and passing visual tests for visible changes. Compare with its parent; prepare bodies before submit, verify afterward. Cascades invalidate evidence.
 
+Reconcile [repository metadata](../commit-push-pr/references/metadata.md) on every submitted
+layer: repo-correct labels and `@me` assignee immediately, team-first CODEOWNERS from its
+parent's diff, deferred review routing while draft. On ready publication, request missing
+reviewers; preserve existing human metadata and verify each PR's actual fields.
+
 ## Feedback, sync, merge
 
 Fix feedback on its owning branch and verify. Cascades rewrite upper branches. A user-owned stack in this workspace may rebase and force-with-lease without another permission prompt; report it. Ask when ownership is unclear or a default, shared, foreign, or concurrent branch would change. Use `gh stack rebase --upstack --remote origin`, then `gh stack push --remote origin`; `gh stack sync --prune --remote origin` has the same boundary.

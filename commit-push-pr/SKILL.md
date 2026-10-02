@@ -32,7 +32,7 @@ Merge only on explicit request: [contract](references/merge.md).
 
 PR authorizes verification, commit, push, and lease-protected rebase on the current user branch; never merge or fix unrelated work.
 
-1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR; otherwise create with assignee, labels, and template. Draft PR creation proceeds without separate approval. Whole-stack publication uses `/stacked-prs`.
+1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR. On every creation, including drafts, apply [repository metadata](references/metadata.md): repo-correct labels, `@me` assignee, and touched-file CODEOWNERS reviewers with teams first; drafts defer review requests until ready. Verify metadata on create/update; preserve manual additions. Draft PR creation proceeds without separate approval. Whole-stack publication uses `/stacked-prs`.
 2. Every PR runs `/quantify-impact`; include concise value or proven metrics, not benchmark theater.
 3. Every visible change needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without user waiver.
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.

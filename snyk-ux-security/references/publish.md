@@ -4,23 +4,36 @@ Read only when the requested endpoint includes a commit, pull request, cloud rev
 
 ### 2i. Open PR
 
+Apply the shared [repository metadata contract](../../commit-push-pr/references/metadata.md)
+on every creation, including drafts: resolve exact repo labels and the triggering human,
+route the complete base-to-head diff to CODEOWNERS teams first, and read back actual fields.
+The Snyk team-review requirement below is stricter than the generic individual fallback.
+For drafts, omit `--reviewer` from creation and record deferred routing; GitHub notifies
+CODEOWNERS on readiness. Never mark a draft ready just to notify reviewers.
+
 ```bash
 # Resolve metadata
 triggerer=$(gh api user --jq .login)
-team_reviewers=$(bash "$SKILL_DIR/scripts/codeowners-teams.sh" "<path>")
+BASE=$("$SKILL_DIR/../scripts/resolve-pr-base.sh")
+set -o pipefail
+team_reviewers=$(git diff --name-only --no-renames -z "$BASE"...HEAD |
+  python3 "$SKILL_DIR/../scripts/codeowners-reviewers.py" --base "$BASE" --teams-only --stdin0 |
+  paste -sd, -)
 # team_reviewers must be non-empty; if empty, fall back to path-prefix
 # -> team map (documented below). Never open a PR with only individual
 # reviewers -- require >=1 team group.
 labels="security,dependencies,snyk,lang/<ts|go>"
+# Resolve these semantic labels to verified repository names before passing them to gh.
 # Add team-domain labels resolved from CODEOWNERS (e.g. team/ux,
 # team/ai, team/console-ui). Add status labels based on state.
 [ -s .snyk_diff ]            && labels="$labels,dismissals"
 [ -s .overrides-added ]      && labels="$labels,overrides-added"
 [ -s .react19-blocked ]      && labels="$labels,react19-blocked"
 
-# Always add security team group when .snyk touched or overrides added.
-security_team="@<org>/security"
+# Resolve an eligible security team from repository policy when .snyk or overrides changed.
+security_team="<verified-org/verified-security-team>"
 
+# Ready PR example. For draft publication, omit --reviewer and record deferred routing.
 gh pr create \
   --title "fix(deps): snyk sweep <path> -- $(date +%Y-%m-%d)" \
   --body-file .pr-body.md \

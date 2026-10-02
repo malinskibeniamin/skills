@@ -40,16 +40,9 @@ File fit multiple -> pick most specific.
 
 ## Auto-label map (Phase 5)
 
-Map commit types to GitHub labels. Verify label exist first: `gh label list --search "<name>" --json name --jq '.[0].name'` -- only add existing labels.
-
-| Commit type | Label |
-|-------------|-------|
-| `feat` | `enhancement` |
-| `fix` | `bug` |
-| `docs` | `documentation` |
-| `perf` | `performance` |
-| `ci` | `ci` |
-| `test` | `testing` |
+Use the [repository metadata contract](references/metadata.md) for every PR, including
+drafts: repository conventions before generic type labels, self-assignment, and team-first
+CODEOWNERS review routing. It also owns draft deferral and metadata readback/recovery.
 
 ## PR body template (Phase 5)
 
@@ -141,7 +134,8 @@ EOF
 Use a body file for long bodies rather than fragile shell quoting. Updates use `gh pr edit
 <number> --body-file <file>`; preserve user-authored context outside the evidence sections.
 
-Append `--label <label1> --label <label2>` per verified label.
+Append `--label <label1> --label <label2>` per repo-verified label. For non-drafts, append
+verified team-first `--reviewer <org/team>` handles; drafts record deferred routing instead.
 
 Resolve `<base>` with `scripts/resolve-pr-base.sh` from the plugin root. For a stack layer,
 this is the branch immediately below it, not the stack trunk. Ordinary `/commit-push-pr`
