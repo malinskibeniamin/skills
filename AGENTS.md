@@ -46,7 +46,7 @@ Never merge, use plain `--force`, or rewrite a default, shared, foreign, or conc
 branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
 a session to deliver that branch; correct endpoint state and continue.
-Current branch has a PR? Put follow-up waves there by default.
+When branch has a PR, keep follow-up waves in the current PR.
 Draft PR at the requested endpoint needs no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
