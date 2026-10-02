@@ -9,7 +9,7 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/review.excalidraw)
 
-審查直到 HEAD。保留唯一所有者；委派必須明確授權。不要編輯、提交、推送或發布。
+審查 HEAD。保留唯一所有者；委派必須明確授權。不要編輯、提交、推送或發布。
 發布評論需要明確意圖。
 
 ## 審查約定 [#review-contract]
@@ -82,8 +82,8 @@ sidebar:
 
 ### 綜合 [#synthesize]
 
-以發現開頭，按根因去重。只給出路徑、影響、修正和驗證
-步驟；省略讚美與敘述。重新審查時標記每條舊發現的狀態。
+閱讀[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)；保留輸出格式。
+先報告發現，按根因去重。省略讚美與過程敘述。重新審查時標明每條先前發現的狀態。
 每次審查也都會在同一流程中套用 `/ss`；將其價值行與缺陷分開報告。
 
 ## 深度模式 [#deep-mode]

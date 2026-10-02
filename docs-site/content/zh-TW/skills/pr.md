@@ -10,12 +10,14 @@ sidebar:
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/pr.excalidraw)
 
 
-使用此範本撰寫 PR 說明：
+閱讀[保護讀者注意力的契約](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)。使用以下範本撰寫 PR 說明：
 
 ```markdown
 ## Summary
 
-<diagram, diff-sketch, or tree>
+<outcome and why it matters to the affected user or caller>
+<reviewer focus or specific question; say if no special input is needed>
+<smallest useful diagram, diff-sketch, or tree>
 
 ## Evidence
 
@@ -30,9 +32,9 @@ sidebar:
 
 <optional: description>
 
-**Blast Radius:** <one-word description>
+**Blast Radius:** <affected users, callers, or contracts>
 
-<optional: potential ramifications of merge>
+<rollback path and unresolved risks, when applicable>
 ```
 
 ## 各區段 [#sections]
@@ -41,19 +43,20 @@ sidebar:
 
 ### 摘要 [#summary]
 
-選擇能清楚呈現重點的最小視圖。
+先說明價值與審查重點，而不是羅列變更。區分已觀察到的結果和預期。
+接著選擇能說明要點的最小視圖；省略無法增進理解的視覺內容。
 
-從 [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md) 中的視圖挑選：虛擬碼、呼叫樹、元件樹、檔案樹、Mermaid、diff 或完整區塊。
+從 [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md) 中選擇最小視圖。
 
 #### 指引 [#guidance]
 
-將每個視覺內容放在其所支援的簡短文字旁。只保留回答使用者目前問題，或解決目前討論重點所需的呼叫、檔案、屬性、狀態與邊界。
+將視覺內容放在其支持的文字旁。只顯示關鍵呼叫、檔案、屬性、狀態與邊界。
 
-你可以使用其中一種，也可以使用數種，但不太可能全部用上。請自行判斷，不要讓過多資訊造成使用者負擔。
+僅使用能增進理解的視圖。
 
 ### 證據 [#evidence]
 
-證明變更有效的具體證據。呈現變更前後的對照。
+提供變更有效的具體證據，呈現變更前後對照。列明未執行的檢查與剩餘不確定性；測試通過不代表人工審查或共識。
 
 對於任何前端變更，可直接在頁面內播放的實際 UI 流程前後對照影片（包含點擊、輸入及操作後的狀態，絕不能只是靜止頁面）搭配截圖，是最高等級且必備的證據。將其放在摘要正下方，讓審查者在閱讀說明前先看到變更。依照 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)的指引錄製、編排並託管。
 
@@ -61,6 +64,6 @@ sidebar:
 
 ### 合併風險 [#merge-danger]
 
-說明這是單向門還是雙向門。雙向門可以退回，單向門則不行。容易回復的 PR 風險較低。涉及破壞性操作或難以逆轉之決策的變更屬於單向門。
+說明回復路徑。雙向門容易退回；破壞性或難以逆轉的決策屬於單向門。
 
-影響範圍是此 PR 所引入變更的潛在影響或波及面。考慮所有可能性，例如版面位移、對使用端造成的破壞、行動裝置響應式呈現等。
+列明受影響的使用者、呼叫端、契約及可信的失敗模式，包括共用的使用端。

@@ -3,11 +3,13 @@ name: grilling
 description: Explore and stress-test plans, decisions, ideas, brainstorming approaches, and UI layouts when a material choice remains open.
 ---
 
-Grilling resolves consequential unknowns, not every detail. Allow no production code or implementation while a material user-reserved decision is open. Invocation does not authorize delegation.
+Resolve consequential unknowns, not every detail. Allow no production code or implementation while a material user-reserved decision is open. Invocation does not authorize delegation.
+
+Plans/RFCs/replies: read [communication](../shared/communication.md).
 
 ## 1. Build evidence
 
-Read the request, plan, repo, tests, docs, references, and decisions. Facts are the agent's job; ask only for preferences, scope, risk appetite, or decisions evidence cannot answer. Name the blind spot most likely to invalidate the direction. Prototype when behavior answers faster than prose.
+Read request, plan, repo, tests, docs, references, and decisions. Ask only for preferences, scope, risk appetite, or decisions evidence cannot answer. Name the blind spot most likely to invalidate the direction. Prototype when behavior beats prose.
 
 `/brain-dump` is optional. Preserve every opportunity track and start from its **Answer ledger**: never re-ask **Settled** entries; challenge **Tentative** only when downside matters; ask **Unknown** only when it could invalidate or prioritize a track.
 
@@ -35,7 +37,7 @@ A confident, reversible **Recommended:** answer is an assumption, not a question
 
 **Stop signal:** "no more questions", "just do it", "don't ask", or a bare endpoint ("draft PR") ends asking for the rest of the session. Adopt every open recommendation, list them as assumptions, and continue to the endpoint; pause only for an irreversible or user-reserved decision.
 
-An unsettled prerequisite delays only its branch while the rest of the frontier proceeds. Recompute the frontier after every round. Keep fact-finding inline unless the user explicitly authorizes delegation; search the environment, filesystem, tools, and sources. The user's decisions are theirs.
+An unsettled prerequisite delays only its branch while the rest of the frontier proceeds. Recompute the frontier each round. Keep fact-finding inline unless the user explicitly authorizes delegation; search environment, filesystem, tools, sources. User decisions are theirs.
 
 ## 3. Exit
 

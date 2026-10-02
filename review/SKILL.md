@@ -5,12 +5,12 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 
 # Review
 
-Review to HEAD. Keep one owner; explicit delegation. Do not edit, commit, push, or post.
-Posting comments requires explicit intent.
+Review HEAD. Keep one owner; explicit delegation. Do not edit, commit, push, or post.
+Posting comments needs explicit intent.
 
 ## Review contract
 
-- **Objective**: decide whether the diff achieves its outcome without a credible defect.
+- **Objective**: does the diff achieve its outcome without a credible defect?
 - **Guardrails**: diff-introduced only; keep standards separate from product/spec gaps;
   generated files are evidence.
 - **Verification**: trace source. Dogfood every runnable change yourself at its real entrypoint;
@@ -31,8 +31,8 @@ then inspect the complete diff and log.
 2. For each changed assumption, reverse-trace it to authoritative producers, schemas,
    storage, consumers, and public surfaces. Search by domain concept, field, and emitted
    value, not only the changed symbol.
-3. Test surprises against independent artifacts in relevant unchanged code, the base,
-   recent history, runtime evidence, and fixtures. Compare fixtures with production shape.
+3. Check surprises against independent artifacts in relevant unchanged code, base,
+   recent history, runtime evidence, and fixtures. Match fixtures to production shape.
 4. Build one behavioral counterexample for a plausible collision. Map permissions and visible
    surfaces; skip formatter-owned style and pre-existing defects.
 5. Ask what could still be wrong if tests pass.
@@ -78,8 +78,8 @@ without credible risk. Evidence can support declining a candidate.
 
 ### Synthesize
 
-Lead with findings. Deduplicate by root cause. State path, impact, correction, and verify
-step; omit praise and narration. For a re-review, mark each prior finding's state.
+Read [communication](../shared/communication.md); keep the output schema.
+Lead with findings. Deduplicate by root cause. Omit praise and narration. For a re-review, mark each prior finding's state.
 Every review also applies `/ss` inline; report its Value line apart from defects.
 
 ## Deep mode

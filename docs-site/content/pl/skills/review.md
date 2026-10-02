@@ -11,7 +11,7 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
-Przeglądaj do HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
+Przeglądaj HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
 Publikowanie komentarzy wymaga jawnej intencji.
 
 ## Kontrakt przeglądu [#review-contract]
@@ -84,8 +84,8 @@ bez wiarygodnego ryzyka. Dowód może uzasadniać odrzucenie uwagi.
 
 ### Zsyntetyzuj [#synthesize]
 
-Zacznij od znalezisk. Deduplikuj według przyczyny źródłowej. Podaj ścieżkę, wpływ, poprawkę i krok
-weryfikacji; pomiń pochwały i narrację. Przy ponownym przeglądzie oznacz stan każdej wcześniejszej uwagi.
+Przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md); zachowaj schemat wyniku.
+Zacznij od znalezisk. Deduplikuj według przyczyny źródłowej. Pomiń pochwały i narrację. Przy ponownym przeglądzie oznacz stan każdej wcześniejszej uwagi.
 Każdy przegląd stosuje też `/ss` bezpośrednio w ramach przeglądu; podaj jego wiersz Value oddzielnie od defektów.
 
 ## Tryb głęboki [#deep-mode]

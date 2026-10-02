@@ -10,12 +10,14 @@ sidebar:
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/pr.excalidraw)
 
 
-使用此模板撰写 PR 描述：
+阅读[保护读者注意力的约定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)。使用以下模板编写 PR 描述：
 
 ```markdown
 ## Summary
 
-<diagram, diff-sketch, or tree>
+<outcome and why it matters to the affected user or caller>
+<reviewer focus or specific question; say if no special input is needed>
+<smallest useful diagram, diff-sketch, or tree>
 
 ## Evidence
 
@@ -30,9 +32,9 @@ sidebar:
 
 <optional: description>
 
-**Blast Radius:** <one-word description>
+**Blast Radius:** <affected users, callers, or contracts>
 
-<optional: potential ramifications of merge>
+<rollback path and unresolved risks, when applicable>
 ```
 
 ## 各部分 [#sections]
@@ -41,19 +43,20 @@ sidebar:
 
 ### 摘要 [#summary]
 
-选择能清晰表达要点的最小视图。
+先说明价值和审阅重点，而不是罗列变更。区分已观察到的结果和预期。
+然后选择能说明要点的最小视图；省略无法增进理解的可视化。
 
-从 [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md) 中的视图里选择：伪代码、调用树、组件树、文件树、Mermaid、diff 或完整代码块。
+从 [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md) 中选择最小视图。
 
 #### 指南 [#guidance]
 
-将每个可视化内容放在其所支持的简短文字旁边。只保留回答用户当前问题或解决当前讨论点的选项所需的调用、文件、属性、状态和边界。
+将可视化放在其支持的文字旁。只显示关键调用、文件、属性、状态和边界。
 
-你可以使用其中一种，也可以使用多种，但不太可能全部使用。请自行判断，不要让过多信息淹没用户。
+仅使用能增进理解的视图。
 
 ### 证据 [#evidence]
 
-证明变更有效的具体证据。展示变更前后的对比。
+提供变更有效的具体证据，展示变更前后对比。列明未运行的检查和剩余不确定性；测试通过不代表人工审查或共识。
 
 对于任何前端变更，内嵌播放的真实 UI 流程变更前后对比视频（包含点击、输入和最终状态，绝不能只是静止页面）加上截图，是最高等级的证据，且必须提供。将其放在摘要之后，让审阅者在阅读变更说明前就能看到变更。按照 [commit-push-pr 可视化证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) 中的说明录制、合成并托管视频。
 
@@ -61,6 +64,6 @@ sidebar:
 
 ### 合并风险 [#merge-danger]
 
-说明这是单向门还是双向门。双向门可以退回，单向门不能。易于回滚的 PR 风险更低。涉及破坏性操作或难以逆转的决策的变更属于单向门。
+说明回滚路径。双向门容易退回；破坏性或难以逆转的决策属于单向门。
 
-影响范围是此 PR 所引入变更的潜在影响或波及面。考虑所有可能性，例如布局偏移、对使用方造成的破坏、移动端适配等。
+列明受影响的用户、调用方、契约和可信的故障模式，包括共享使用方。
