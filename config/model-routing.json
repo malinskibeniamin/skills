@@ -24,7 +24,7 @@
     "ui_policy": {
       "min_taste": 8,
       "prefer_family": "anthropic",
-      "fallback_rule": "Opus owns user-facing UI, copy, and API design. If unavailable, report the UI lane blocked; use another model only on explicit user request."
+      "fallback_rule": "Opus owns user-facing UI, copy, and API design. If unavailable, report the UI lane blocked."
     },
     "chores": {
       "model": "claude-opus-5-5",
@@ -78,7 +78,7 @@
       "work": ["review", "implementation", "computer-use", "investigation"],
       "starting_effort": "xhigh",
       "effort_selection": "Explicit owner choice: xhigh for reviews and the requested Codex lane. Validate unrequested changes with context-ablation.",
-      "unavailable": "Use claude-opus-5-5 at xhigh for a labeled clean-context review; disclose unavailable different-family coverage. Other models require explicit user selection.",
+      "unavailable": "Use claude-opus-5-5 at xhigh for a labeled clean-context review; disclose unavailable different-family coverage. If neither preferred model is available, report the lane blocked.",
       "scores": {
         "cost": null,
         "intelligence": 8,
@@ -105,49 +105,6 @@
         "taste": "Owner prefers Opus 5.5 for UI; no numeric GPT-6.1 Sol taste rating supplied.",
         "review": "Owner prefers GPT-6.1 Sol xhigh for reviews; no numeric GPT-6.1 Sol audit rating supplied."
       }
-    },
-    "gpt-6-astra": {
-      "status": "reserve",
-      "work": ["review", "planning", "implementation", "computer-use"],
-      "starting_effort": "high",
-      "effort_selection": "Use the lowest effort that clears the versioned context-ablation quality gate.",
-      "scores": {
-        "cost": 2,
-        "intelligence": 8,
-        "speed": 4,
-        "taste": 8,
-        "review": 10,
-        "allowance": 4
-      },
-      "use": "Reference catalog only; use this model only on explicit user request, never as an automatic route or fallback."
-    },
-    "claude-fable-5-1": {
-      "status": "reserve",
-      "work": ["planning", "implementation", "review", "ui"],
-      "starting_effort": "high",
-      "use": "Reference catalog only; use this model only on explicit user request, never as an automatic route or fallback.",
-      "scores": {
-        "cost": 1,
-        "intelligence": 8,
-        "speed": 4,
-        "taste": 8,
-        "review": 9,
-        "allowance": 3
-      }
-    },
-    "gpt-6-luna": {
-      "status": "reserve",
-      "work": ["chores"],
-      "starting_effort": "high",
-      "scores": {
-        "cost": 10,
-        "intelligence": 3,
-        "speed": 10,
-        "taste": 3,
-        "review": null,
-        "allowance": 10
-      },
-      "use": "Reference catalog only; use this model only on explicit user request, never as an automatic route or fallback."
     }
   },
   "selection": {
@@ -156,7 +113,7 @@
     "fallback": "Keep one owner within the preferred pair. Sol reviews fall back to a labeled clean-context Opus xhigh pass; unavailable Opus UI is blocked. A different-family agent pass still requires explicit delegation.",
     "promotion_rule": "These xhigh routes are explicit owner choices, not benchmark promotions. Promote unrequested model, effort, or context changes only after the versioned ablation gate.",
     "preferred_models": ["claude-opus-5-5", "gpt-6.1-sol"],
-    "owner_preference": "Opus 5.5 xhigh is the daily driver and better for UI; GPT-6.1 Sol xhigh is preferred for reviews. Other models require explicit user request."
+    "owner_preference": "Opus 5.5 xhigh is the daily driver and better for UI; GPT-6.1 Sol xhigh is preferred for reviews. These are the only catalog models."
   },
   "api_only": {
     "pro_mode": "Available through the API; do not imply that a local CLI session uses it.",
@@ -164,30 +121,21 @@
     "explicit_prompt_cache": "Use only in API integrations that expose cache controls."
   },
   "sources": [
-    "https://artificialanalysis.ai/models/releases/comparisons/claude-opus-5-5-vs-gpt-6-astra",
-    "https://artificialanalysis.ai/models/releases/gpt-6-luna",
     "https://artificialanalysis.ai/models/releases/gpt-6-1-sol",
     "https://platform.claude.com/docs/en/about-claude/pricing",
     "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
-    "https://developers.openai.com/api/docs/models/gpt-6-luna",
-    "https://openai.com/index/gpt-6-astra/",
-    "https://developers.openai.com/api/docs/models/gpt-6-astra",
-    "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra",
     "https://developers.openai.com/api/docs/guides/latest-model",
-    "https://platform.claude.com/docs/en/models/fable-5-1/overview",
-    "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1",
-    "https://learn.chatgpt.com/docs/pricing",
-    "https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan"
+    "https://learn.chatgpt.com/docs/pricing"
   ],
   "scoring": {
     "scale": "1-10, higher is better; null means unmeasured.",
-    "cost": "Artificial Analysis cost per Intelligence Index task at the routed effort. Log bands: floor(10 - 9 * ln(cost / 0.03) / ln(3.91 / 0.03)), clamped to 1-10; Luna high ($0.03/task) is 10, Fable 5.1 high ($3.91/task) is 1. Current scores match starting effort; historical measurements at other efforts stay in score_evidence.",
+    "cost": "Artificial Analysis cost per Intelligence Index task at the routed effort. Historical log bands: floor(10 - 9 * ln(cost / 0.03) / ln(3.91 / 0.03)), clamped to 1-10. Current xhigh costs are unmeasured; historical measurements at other efforts stay in score_evidence.",
     "intelligence": "Peak Artificial Analysis Intelligence Index: round(1 + 9 * (index - 30) / (58 - 30)), clamped to 1-10; 58 is 10 and 30 is 1. Benchmark effort is not routing authorization.",
     "speed": "Median output tokens per second relative to the fastest model.",
     "taste": "Owner judgment for UI/UX, code quality, API design, and copy.",
     "measured": "2026-09-25",
     "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties.",
-    "review": "Historical Orchestrator V2 audit panel (T3 Code PR #2829, 2026-09-24) weighted mean relative to Astra 8.22 = 10. This panel did not measure GPT-6.1 Sol; current review routing follows the explicit owner preference, not this historical ranking.",
-    "allowance": "How long the $200 plan lasts before a limit hits (Claude Max 20x, ChatGPT Pro 20x). Codex: published per-5-hour Pro 20x ranges (Astra 100-900, Luna 7,000-56,000), log scale. GPT-6.1 Sol allowance is unmeasured. Claude publishes no counts: Opus 5.5 is the owner's observed most generous; Fable 5.1 draws limits faster (list price 2.5x Opus 5.5) and is capped at 50% of the weekly limit."
+    "review": "Historical audit rating for Opus 5.5; GPT-6.1 Sol has no numeric audit rating. Current review routing follows the explicit owner preference, not historical rankings.",
+    "allowance": "How long the $200 plan lasts before a limit hits (Claude Max 20x, ChatGPT Pro 20x). GPT-6.1 Sol allowance is unmeasured. Claude publishes no counts: the Opus 5.5 rating is owner-observed, not inferred from tokens."
   }
 }

@@ -23,7 +23,7 @@ chmod +x "$_ablation_bin/claude" "$_ablation_bin/bunx"
 _ablation_output="$_ablation_tmp/output"
 if PATH="$_ablation_bin:$PATH" CELL_LOG="$_ablation_log" \
   FAKE_CLAUDE_VERSION=2.1.258 "$RUNNER" --dry >"$_ablation_output" 2>&1; then
-  echo "  PASS  context-ablation runner accepts a Fable 5.1-capable Claude Code"
+  echo "  PASS  context-ablation runner accepts a supported Claude Code"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  context-ablation runner rejected compatible Claude Code: $(cat "$_ablation_output")"
@@ -35,15 +35,7 @@ _expected_cells="$_ablation_tmp/expected.log"
 : > "$_expected_cells"
 for _variant in bare guardrails lean current; do
   for _effort in low medium high xhigh max; do
-    printf 'codex|gpt-6-astra|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
-      "$_effort" "$_variant" >> "$_expected_cells"
-  done
-  for _effort in low medium high xhigh max; do
     printf 'codex|gpt-6.1-sol|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
-      "$_effort" "$_variant" >> "$_expected_cells"
-  done
-  for _effort in low medium high xhigh max; do
-    printf 'claude-code|claude-fable-5-1|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
   done
   for _effort in low medium high xhigh max; do
@@ -76,11 +68,11 @@ else
   ERRORS="$ERRORS\n  FAIL: context-ablation version preflight"
 fi
 
-if ABLATION_AGENT=claude-code ABLATION_MODEL=claude-fable-5-1 \
+if ABLATION_AGENT=claude-code ABLATION_MODEL=claude-opus-5-5 \
   ABLATION_EFFORT=medium bun -e '
     const { createExperiment } = await import("./agent-evals/context-ablation/create-experiment.ts");
     const config = createExperiment(null);
-    if (config.model !== "claude-fable-5-1" || config.agentOptions?.effort !== "medium") process.exit(1);
+    if (config.model !== "claude-opus-5-5" || config.agentOptions?.effort !== "medium") process.exit(1);
   ' >/dev/null 2>&1; then
   echo "  PASS  experiment receives the runner's exact Claude model and effort"
   PASS=$((PASS + 1))
@@ -90,18 +82,18 @@ else
   ERRORS="$ERRORS\n  FAIL: context-ablation experiment model propagation"
 fi
 
-if ABLATION_AGENT=codex ABLATION_MODEL=gpt-6-astra \
+if ABLATION_AGENT=codex ABLATION_MODEL=gpt-6.1-sol \
   ABLATION_EFFORT=max bun -e '
     const { createExperiment } = await import("./agent-evals/context-ablation/create-experiment.ts");
     const config = createExperiment(null);
-    if (config.model !== "gpt-6-astra?reasoningEffort=max") process.exit(1);
+    if (config.model !== "gpt-6.1-sol?reasoningEffort=max") process.exit(1);
   ' >/dev/null 2>&1; then
-  echo "  PASS  experiment preserves the exact GPT-6 Astra model and effort"
+  echo "  PASS  experiment preserves the exact GPT-6.1 Sol model and effort"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  experiment drops the GPT-6 Astra model or effort"
+  echo "  FAIL  experiment drops the GPT-6.1 Sol model or effort"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: GPT-6 Astra experiment model propagation"
+  ERRORS="$ERRORS\n  FAIL: GPT-6.1 Sol experiment model propagation"
 fi
 
 if env -u ABLATION_MODEL -u ABLATION_EFFORT ABLATION_AGENT=codex bun -e '

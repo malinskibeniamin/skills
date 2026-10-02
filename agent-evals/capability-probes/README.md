@@ -17,7 +17,8 @@ agent-evals/capability-probes/run.sh --smoke
 agent-evals/capability-probes/run.sh --force
 ```
 
-The runner holds effort at `max` and compares exact Astra and Fable model IDs. It runs
+The runner holds benchmark effort at `max` and compares only GPT-6.1 Sol and Opus 5.5.
+This does not change their owner-selected `xhigh` routing. It runs
 three repetitions of the research/data synthesis task and the existing evergreen debugging
 task. Keep raw results out of Git and complete `scorecard-template.md` before using a result.
 

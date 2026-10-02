@@ -62,9 +62,9 @@ _probe_output="$_probe_tmp/output"
 if PATH="$_probe_bin:$PATH" CELL_LOG="$_probe_log" \
   FAKE_CLAUDE_VERSION=2.1.258 "$PROBE_RUNNER" --dry >"$_probe_output" 2>&1 \
   && [ "$(wc -l < "$_probe_log" | tr -d ' ')" -eq 2 ] \
-  && grep -q '^codex|gpt-6-astra|max|' "$_probe_log" \
-  && grep -q '^claude-code|claude-fable-5-1|max|' "$_probe_log"; then
-  echo "  PASS  capability runner compares Astra with exact current baselines"
+  && grep -q '^codex|gpt-6.1-sol|max|' "$_probe_log" \
+  && grep -q '^claude-code|claude-opus-5-5|max|' "$_probe_log"; then
+  echo "  PASS  capability runner compares only Sol and Opus"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  capability runner model matrix is incomplete or aliased"
@@ -99,9 +99,9 @@ else
   ERRORS="$ERRORS\n  FAIL: capability-probe Claude preflight"
 fi
 
-if CAPABILITY_AGENT=codex CAPABILITY_MODEL=gpt-6-astra CAPABILITY_EFFORT=max bun -e '
+if CAPABILITY_AGENT=codex CAPABILITY_MODEL=gpt-6.1-sol CAPABILITY_EFFORT=max bun -e '
   const config = (await import("./agent-evals/capability-probes/create-experiment.ts")).default;
-  if (config.model !== "gpt-6-astra?reasoningEffort=max") process.exit(1);
+  if (config.model !== "gpt-6.1-sol?reasoningEffort=max") process.exit(1);
   if (config.runs !== 3) process.exit(1);
   if (JSON.stringify(config.evals) !== JSON.stringify(["research-data-synthesis", "evergreen-project-recovery"])) process.exit(1);
 ' >/dev/null 2>&1; then
@@ -138,3 +138,20 @@ import sys
 
 shutil.rmtree(sys.argv[1])
 PY
+
+for _agent in codex claude-code; do
+  if env -u CAPABILITY_MODEL -u CAPABILITY_EFFORT CAPABILITY_AGENT="$_agent" bun -e '
+    const { strict: assert } = await import("node:assert");
+    const config = (await import("./agent-evals/capability-probes/create-experiment.ts")).default;
+    const expected = process.env.CAPABILITY_AGENT === "codex" ? "gpt-6.1-sol?reasoningEffort=max" : "claude-opus-5-5";
+    assert.equal(config.model, expected);
+    if (config.agent === "claude-code") assert.equal(config.agentOptions?.effort, "max");
+  ' >/dev/null 2>&1; then
+    echo "  PASS  $_agent capability defaults use the preferred pair"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $_agent capability defaults use another model"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $_agent capability defaults"
+  fi
+done

@@ -22,8 +22,8 @@ and include any coordinator-supplied independent findings under
 
 Routing follows `config/model-routing.json`: Sol `xhigh` is preferred for reviews;
 Opus 5.5 `xhigh` reviews GPT work or supplies a labeled clean-context fallback when Sol is
-unavailable. Disclose missing different-family coverage; other models require explicit
-user selection. Keep the owner-selected effort without a guessed usage threshold.
+unavailable. Disclose missing different-family coverage; if neither is available, report
+the review lane blocked. Keep the owner-selected effort without a guessed usage threshold.
 
 ## Stage 1: Spec Compliance
 

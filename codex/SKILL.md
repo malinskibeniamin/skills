@@ -5,7 +5,7 @@ description: Delegate to GPT-6.1 Sol through the Codex CLI. Use for clear-spec i
 
 **Host gate:** Claude-hosted only. In native Codex, work inline unless the user explicitly requests delegation/parallel agents. Never start recursive `codex exec`; preserve selected model/reasoning and Codex config.
 
-Capability-check once when delegation is authorized: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Other models require an explicit user request.
+Capability-check once when delegation is authorized: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5 and GPT-6.1 Sol; if neither is available, report the lane blocked.
 
 ## Route
 
@@ -36,4 +36,4 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 4. Run with timeout/reference background pattern.
 5. Verify citations, commands, and high-risk conclusions before integrating.
 
-Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Codex models do not own user-facing UI, copy, or API design by default. Opus 5.5 owns those surfaces; if unavailable, report the lane blocked unless the user explicitly selects another model.
+Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Codex models do not own user-facing UI, copy, or API design by default. Opus 5.5 owns those surfaces; if unavailable, report the lane blocked.

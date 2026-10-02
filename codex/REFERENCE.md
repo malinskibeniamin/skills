@@ -40,8 +40,8 @@ Read `config/model-routing.json`. Opus 5.5 `xhigh` is the daily/UI owner; Sol `x
 is the preferred reviewer and explicitly selected Codex execution lane. Keep chores on
 Opus. If Sol is unavailable, use a labeled clean-context Opus `xhigh` review and disclose
 missing different-family coverage. If Opus is unavailable for UI, report the lane blocked.
-Other models require explicit user selection; never silently lower effort or substitute
-Astra, Fable, or Luna. The owner's preference does not authorize delegation.
+Route only the Opus/Sol pair; never silently lower effort or substitute another model.
+If neither is available, report the lane blocked. The owner's preference does not authorize delegation.
 
 `ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
 programmatic tool calling, and explicit cache controls are API-only unless the current

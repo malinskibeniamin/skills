@@ -8,7 +8,7 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "config/model-routing.json" "ambient con
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "config/model-routing.json" "efficient-frontier reads the routing source"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "context-ablation" "routing promotion is eval-backed"
 
-if jq -e '. as $routing | .policy == "quality-first"
+if jq -e '.policy == "quality-first"
   and .quality_first.default == {"model": "claude-opus-5-5", "effort": "xhigh"}
   and .quality_first.secondary.model == "gpt-6.1-sol"
   and .quality_first.secondary.effort == "xhigh"
@@ -36,31 +36,31 @@ if jq -e '. as $routing | .policy == "quality-first"
   and .models["gpt-6.1-sol"].starting_effort == "xhigh"
   and (.models["gpt-6.1-sol"].work | index("review"))
   and ([.models[] | select(.status == "primary")] | length == 1)
-  and ([.models | keys[] | select(startswith("gpt-"))] | sort == ["gpt-6-astra", "gpt-6-luna", "gpt-6.1-sol"])
-  and (["gpt-6-astra", "claude-fable-5-1", "gpt-6-luna"]
-    | all(. as $m | $routing.models[$m].status == "reserve"
-      and $routing.models[$m].starting_effort == "high"
-      and ($routing.models[$m].use | contains("only on explicit user request"))))
+  and (.models | keys) == ["claude-opus-5-5", "gpt-6.1-sol"]
   and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste") and has("allowance")] | all)
-  and ([.models | to_entries[] | select(.value.scores.taste != null and .value.scores.taste < 8) | .key] | sort == ["gpt-6-luna"])
-  and ([.models | to_entries[] | select(.key | startswith("claude-")) | .value.scores.allowance] | max) == .models["claude-opus-5-5"].scores.allowance
-  and .models["claude-fable-5-1"].scores.allowance < .models["claude-opus-5-5"].scores.allowance
+  and .models["claude-opus-5-5"].scores.allowance == 9
   and (.scoring.allowance | contains("$200"))
-  and ([.models | to_entries[] | select(.key != "gpt-6-luna" and .key != "gpt-6.1-sol") | .value.scores.review] | all(type == "number"))
-  and ([.models | to_entries[] | select(.value.scores.review != null)] | max_by(.value.scores.review) | .key) == "gpt-6-astra"
+  and .models["claude-opus-5-5"].scores.review == 9
   and .quality_first.ultra.requires_explicit_delegation
   and .model_switch.deny_statuses == ["retired", "unsupported"]
   and .model_switch.warm_cache_confirmation_usd == 1
-  and (.models | has("claude-fable-5") | not)
-  and (.models | has("claude-opus-5") | not)
   and .selection.single_owner
   and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then
-  echo "  PASS  owner-selected Opus and Sol xhigh are the only automatic routes"
+  echo "  PASS  Opus and Sol xhigh are the entire model catalog and automatic routes"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  owner-selected Opus and Sol xhigh are the only automatic routes"
+  echo "  FAIL  Opus and Sol xhigh are the entire model catalog and automatic routes"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: owner-selected two-model routing"
+fi
+
+if jq -e '[.. | strings | select(test("astra|fable|luna|gpt-6-sol"; "i"))] | length == 0' "$ROUTING" >/dev/null; then
+  echo "  PASS  routing metadata and sources contain only the preferred models"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  removed models remain in routing metadata or sources"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: removed model metadata remains"
 fi
 
 if jq -e 'has("review") | not' "$ROUTING" >/dev/null; then
@@ -130,7 +130,7 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" 'gpt-6.1-sol -c .model_reasoning_ef
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "never .max." "codex never routes max effort"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "never .max." "efficient-frontier never routes max effort"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Codex models do not own user-facing" "codex leaves visible work to Claude"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "Other models require an explicit user request" "codex has no automatic third-model fallback"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Route only Opus 5.5 and GPT-6.1 Sol" "codex has no third-model catalog or fallback"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Review:.*Sol.*xhigh" "codex reviews with Sol xhigh"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Sol .xhigh. reviews" "efficient-frontier routes PR review to Sol xhigh"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Sol .xhigh." "reviewer routing names Sol xhigh"

@@ -11,7 +11,7 @@ Read [tool choice](../shared/communication.md#protect-attention-while-working) b
 2. Sol `xhigh` reviews PRs via `/codex`; if unavailable, use a labeled clean-context Opus `xhigh` pass and disclose missing different-family coverage.
 3. UI, copy, API design: Opus owns the work, with taste >= 8. If unavailable, report the UI lane blocked instead of switching silently.
 4. Keep chores inline on the Opus daily driver. Use Sol `xhigh` for execution, computer use, or investigation when the user chooses Codex.
-5. Other models require an explicit user request; never `max`. Historical scores do not override the owner's preferred pair.
+5. Route only the Opus/Sol pair; never `max`. If neither is available, report the lane blocked. Historical scores do not override the owner's preference.
 6. The user explicitly authorizes a different-family pass; model preference alone does not authorize spawning agents.
 7. `ultra` needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache: API-only unless exposed.
 

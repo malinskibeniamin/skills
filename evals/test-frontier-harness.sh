@@ -54,18 +54,10 @@ run_json_eval '.schema_version == 2
   and (.metrics | index("task_success"))
   and (.metrics | index("regressions"))
   and (.metrics | index("input_tokens"))
-  and any(.capabilities.codex.models[]; .id == "gpt-6-astra" and (.efforts | index("xhigh")) and (.efforts | index("max")))
-  and any(.capabilities["claude-code"].models[]; .id == "claude-fable-5-1")
-  and any(.capabilities.codex.models[]; .id == "gpt-6.1-sol")
-  and any(.capabilities["claude-code"].models[]; .id == "claude-opus-5-5")' \
+  and [.capabilities.codex.models[].id] == ["gpt-6.1-sol"]
+  and [.capabilities["claude-code"].models[].id] == ["claude-opus-5-5"]' \
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"
 run_executable_eval "agent-evals/context-ablation/run.sh" "ablation runner is executable"
-run_json_eval 'any(.capabilities.codex.models[];
-  .id == "gpt-6-astra" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
-  "agent-evals/context-ablation/manifest.json" "ablation includes every GPT-6 Astra effort"
-run_json_eval 'any(.capabilities["claude-code"].models[];
-  .id == "claude-fable-5-1" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
-  "agent-evals/context-ablation/manifest.json" "ablation includes every Fable 5.1 effort"
 run_json_eval 'any(.capabilities.codex.models[];
   .id == "gpt-6.1-sol" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
   "agent-evals/context-ablation/manifest.json" "ablation includes every GPT-6.1 Sol effort"
