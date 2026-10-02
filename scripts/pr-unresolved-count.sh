@@ -21,6 +21,7 @@ pr=""
 for arg in "$@"; do
   case "$arg" in
     -v|--verbose) verbose=true ;;
+    --include-bots) export PR_FEEDBACK_INCLUDE_BOTS=1 ;;
     *) pr="$arg" ;;
   esac
 done
@@ -37,19 +38,19 @@ owner_repo=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)
 owner="${owner_repo%/*}"
 repo="${owner_repo#*/}"
 
-resp=$(gh api graphql \
-  -f query='query($o:String!,$r:String!,$n:Int!){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved isOutdated comments(first:1){nodes{author{login} body path line}}}}}}}' \
+resp=$(gh api graphql --paginate --slurp \
+  -f query='query($o:String!,$r:String!,$n:Int!,$endCursor:String){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){pageInfo{hasNextPage endCursor} nodes{isResolved isOutdated comments(first:100){nodes{author{login} body path line}}}}}}}' \
   -f o="$owner" -f r="$repo" -F n="$pr")
 
 if [ "$verbose" = true ]; then
   echo "$resp" | jq -r '
-    .data.repository.pullRequest.reviewThreads.nodes[]
+    .[].data.repository.pullRequest.reviewThreads.nodes[]
     | select(.isResolved==false and .isOutdated!=true)
-    | select([.comments.nodes[]|select((.author.login//"")|test("\\[bot\\]$")|not)]|length>0)
+    | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]|select((.author.login//"")|test("\\[bot\\]$")|not)]|length>0))
     | "  • \(.comments.nodes[0].path):\(.comments.nodes[0].line // "?") — \(.comments.nodes[0].author.login): \(.comments.nodes[0].body[:100])"' >&2
 fi
 
-echo "$resp" | jq '[.data.repository.pullRequest.reviewThreads.nodes[]
+echo "$resp" | jq '[.[].data.repository.pullRequest.reviewThreads.nodes[]
   | select(.isResolved==false and .isOutdated!=true)
-  | select([.comments.nodes[]|select((.author.login//"")|test("\\[bot\\]$")|not)]|length>0)]
+  | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]|select((.author.login//"")|test("\\[bot\\]$")|not)]|length>0))]
   | length'

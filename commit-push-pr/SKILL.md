@@ -38,6 +38,12 @@ PR authorizes verification, commit, push, and lease-protected rebase on the curr
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Include dogfood receipt. Re-read body, check reviewer image access, and print URL. Updates/reopens use same gate; edits invalidate affected evidence.
 
+If local auto-review was explicitly enabled, bind the published PR to this original
+session using [AUTO-REVIEW.md](../resolve-pr-feedback/AUTO-REVIEW.md). Hooks handle
+ordinary `gh pr create`; for opaque tool wrappers run the binding command explicitly
+with the current native session UUID. Never guess an ID, use `--last`, replace an
+existing owner, or enable the watcher merely because a PR was requested.
+
 Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests.
 
 ## Completion

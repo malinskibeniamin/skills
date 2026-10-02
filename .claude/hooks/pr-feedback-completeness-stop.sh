@@ -42,7 +42,12 @@ if [ "${PR_FEEDBACK_SCOPE:-0}" != "1" ] \
 fi
 
 # ── Prereqs ──────────────────────────────────────────────────────
-command -v jq &>/dev/null || exit 0
+verification_failed() {
+  if [ "${PR_FEEDBACK_INCLUDE_BOTS:-0}" = "1" ]; then
+    hook_stop_block "Could not verify PR feedback completeness. Restore GitHub access and retry; do not claim all findings are fixed."
+  fi
+}
+command -v jq &>/dev/null || { verification_failed; exit 0; }
 
 # ── PR detection (mockable) ──────────────────────────────────────
 if [ -n "${PR_FEEDBACK_MOCK_PR:-}" ]; then
@@ -51,46 +56,52 @@ if [ -n "${PR_FEEDBACK_MOCK_PR:-}" ]; then
   owner="mock"
   repo="mock"
 else
-  command -v gh &>/dev/null || exit 0
+  command -v gh &>/dev/null || { verification_failed; exit 0; }
   branch=$(git branch --show-current 2>/dev/null || true)
   case "$branch" in
-    main|master|develop|"") exit 0 ;;
+    main|master|develop|"") verification_failed; exit 0 ;;
   esac
-  git remote get-url origin &>/dev/null 2>&1 || exit 0
-  pr_number=$(gh pr list --head "$branch" --json number --jq '.[0].number' 2>/dev/null || true)
-  [ -z "$pr_number" ] && exit 0
-  owner_repo=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)
+  git remote get-url origin &>/dev/null 2>&1 || { verification_failed; exit 0; }
+  pr_number=$(gh pr list --head "$branch" --json number --jq '.[0].number' 2>/dev/null) || { verification_failed; exit 0; }
+  [ -z "$pr_number" ] && { verification_failed; exit 0; }
+  owner_repo=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null) || { verification_failed; exit 0; }
   owner="${owner_repo%/*}"
   repo="${owner_repo#*/}"
-  { [ -z "$owner" ] || [ -z "$repo" ]; } && exit 0
+  { [ -z "$owner" ] || [ -z "$repo" ]; } && { verification_failed; exit 0; }
 fi
 
 # ── Fetch review threads (mockable) ──────────────────────────────
 if [ -n "${PR_FEEDBACK_MOCK_THREADS:-}" ]; then
   threads_json="$PR_FEEDBACK_MOCK_THREADS"
 else
-  threads_json=$(gh api graphql \
-    -f query='query($o:String!,$r:String!,$n:Int!){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved isOutdated comments(first:5){nodes{author{login} body}}}}}}}' \
-    -f o="$owner" -f r="$repo" -F n="$pr_number" 2>/dev/null || echo "")
+  threads_json=$(gh api graphql --paginate --slurp \
+    -f query='query($o:String!,$r:String!,$n:Int!,$endCursor:String){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){pageInfo{hasNextPage endCursor} nodes{isResolved isOutdated comments(first:100){nodes{author{login} body}}}}}}}' \
+    -f o="$owner" -f r="$repo" -F n="$pr_number" 2>/dev/null) || { verification_failed; threads_json=""; }
+fi
+
+if [ "${PR_FEEDBACK_INCLUDE_BOTS:-0}" = "1" ] && ! printf '%s' "$threads_json" | jq -e '
+  (if type == "array" then . else [.] end) | length > 0 and all(.[]; (.data.repository.pullRequest.reviewThreads.nodes | type) == "array")
+' >/dev/null 2>&1; then
+  verification_failed
 fi
 
 unresolved_count=0
 unresolved_summary=""
 if [ -n "$threads_json" ]; then
   unresolved_count=$(echo "$threads_json" | jq -r '
-    [.data.repository.pullRequest.reviewThreads.nodes[]?
+    [(if type == "array" then .[] else . end) | .data.repository.pullRequest.reviewThreads.nodes[]?
      | select(.isResolved == false)
      | select(.isOutdated != true)
-     | select([.comments.nodes[]? | select(((.author.login // "") | test("\\[bot\\]$")) | not)] | length > 0)]
+     | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]? | select(((.author.login // "") | test("\\[bot\\]$")) | not)] | length > 0))]
     | length' 2>/dev/null || echo "0")
   unresolved_count=${unresolved_count:-0}
 
   if [ "$unresolved_count" -gt 0 ]; then
     unresolved_summary=$(echo "$threads_json" | jq -r '
-      [.data.repository.pullRequest.reviewThreads.nodes[]?
+      [(if type == "array" then .[] else . end) | .data.repository.pullRequest.reviewThreads.nodes[]?
        | select(.isResolved == false)
        | select(.isOutdated != true)
-       | select([.comments.nodes[]? | select(((.author.login // "") | test("\\[bot\\]$")) | not)] | length > 0)
+       | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]? | select(((.author.login // "") | test("\\[bot\\]$")) | not)] | length > 0))
        | "  • " + ((.comments.nodes[0].author.login // "?")) + ": " + ((.comments.nodes[0].body // "") | gsub("\\n"; " ") | gsub("\\r"; "") | .[:120])]
       | .[:10] | join("\n")' 2>/dev/null || echo "")
   fi
@@ -100,7 +111,9 @@ fi
 if [ -n "${PR_FEEDBACK_MOCK_REVIEWS:-}" ]; then
   reviews_json="$PR_FEEDBACK_MOCK_REVIEWS"
 else
-  reviews_json=$(gh pr view "$pr_number" --json reviews 2>/dev/null || echo "")
+  reviews_json=$(gh api "repos/$owner/$repo/pulls/$pr_number/reviews" --paginate --slurp 2>/dev/null \
+    | jq '{reviews: [.[][] | {author: .user, state, submittedAt: .submitted_at}]}') \
+    || { verification_failed; reviews_json=""; }
 fi
 
 pending_changes_count=0

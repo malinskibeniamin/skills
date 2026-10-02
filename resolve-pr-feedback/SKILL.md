@@ -41,7 +41,12 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 |---|---|
 | New, no reply | Process |
 | Addressed or pending decision | Skip |
-| Bot, approval, or CI-only | Drop |
+| Actionable automated review finding | Process like human feedback |
+| Approval, CI-only, or non-actionable summary | Drop |
+
+Author type is not an applicability test. Inspect every finding, including bot-only
+threads. Fetch all pages of threads, comments, and reviews; a bounded first page is
+not proof of completeness. Answer non-applicable findings with evidence, not a silent skip.
 
 If no new item remains, post `All feedback addressed` and stop.
 
@@ -66,13 +71,14 @@ the summary when the requested endpoint owns remediation.
 
 ### 6. Completeness Verification
 
-Before stopping, require zero unresolved non-bot, non-outdated threads and no stale
+Before stopping, require zero unresolved applicable, non-outdated threads and no stale
 `CHANGES_REQUESTED`. Any remainder loops back to triage. The
 `pr-feedback-completeness-stop` hook enforces this state.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
+bash scripts/pr-unresolved-count.sh --include-bots  # automated review repair
 ```
 
 The first command must print `0`. The wrapper hides GraphQL-only thread resolution details.
@@ -86,3 +92,10 @@ Post one bullet per resolved root cause plus thread and CI state; consolidate du
 - AI self-review: stop when the inline review axis is approved or empty; cap at two rounds.
 - Human, cloud, or Copilot feedback: NO iteration cap. Address every thread before handoff;
   the completeness hook blocks unresolved threads or pending change requests.
+
+## Automatic wake-up
+
+When the user asks for unattended future review repair, follow
+[local auto-review setup](AUTO-REVIEW.md). One opt-in watcher resumes the exact
+feature session; PR creation hooks register future PRs. Ordinary feedback resolution
+does not enable persistent watching. A draft PR stays draft; no automatic merge.
