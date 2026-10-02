@@ -61,7 +61,7 @@ For any PR, include its full PR URL on the final status line.
 
 ## Work
 
-Action work uses one contract:
+Actions use one outcome contract:
 
 - **Objective** -- end state.
 - **Guardrails** -- non-inferable constraints/reserved decisions.
