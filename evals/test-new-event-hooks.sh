@@ -187,11 +187,11 @@ JSON
   fi
 
   _routing_fixture=$(mktemp)
-  jq '.models["gpt-6-astra"].status = "eval-gated"' \
+  jq '.models["gpt-6.1-sol"].status = "eval-gated"' \
     "$REPO_ROOT/config/model-routing.json" > "$_routing_fixture"
   _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$_routing_fixture" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"gpt-6-astra","requested_model":"gpt-6-astra","source":"picker"}
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"gpt-6.1-sol","requested_model":"gpt-6.1-sol","source":"picker"}
 JSON
   )
   if printf '%s' "$_out" | jq -e '

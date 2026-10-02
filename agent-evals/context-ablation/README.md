@@ -16,7 +16,7 @@ Prompts state high-level outcomes and verification paths without copying the hid
 rules. Compare each group against the previous winner. Treat token and duration savings as
 tie-breakers only after quality is non-inferior.
 
-The suite now includes three Astra-motivated review trials alongside implementation and
+The suite includes three review trials alongside implementation and
 policy tasks:
 
 - `workflow-system-audit` finds repeated prompts, manual release work, skill and instruction
@@ -26,14 +26,15 @@ policy tasks:
 - `evergreen-project-recovery` runs green automated checks plus a failing real demo, then
   grades the file-scoped recovery plan and its verification contract.
 
-They test the proposed workflows; they do not establish a general model ranking. A model may
-own planning or review only after it clears the recorded gate. Handoffs to a different model
-remain explicit owner-approved delegation, not automatic routing.
+They test the proposed workflows; they do not establish a general model ranking.
+Unrequested planning or review promotions must clear the recorded gate. The current pair
+is owner-selected, not benchmark-promoted. Handoffs to a different model remain explicit
+owner-approved delegation, not automatic routing.
 
-The manifest pins exact model IDs. Claude Opus 5.5, GPT-6 Sol, GPT-6 Astra, and Claude
-Fable 5.1 run at `low`, `medium`, `high`, `xhigh`, and `max`; results from their
+The manifest pins only Claude Opus 5.5 and GPT-6.1 Sol. Both run at `low`, `medium`,
+`high`, `xhigh`, and `max`; results from their
 predecessors do not determine the new effort frontier. The owner-selected drivers start at
-Opus 5.5 `high` and Sol `medium` while the suite measures the lowest quality-equivalent
+Opus 5.5 `xhigh` and Sol `xhigh` while the suite measures the lowest quality-equivalent
 effort. Claude Code 2.1.257 or newer is
 required. The runner checks this before starting any cell and points stale installations
 to `claude update`.
@@ -47,12 +48,3 @@ baseline, then change one behavior at a time only where the scorecard shows a re
 This suite measures ambient context. Use `HOOK_SHADOW_RULES` plus version-qualified
 `/hook-audit` telemetry for hook holdouts. A skill is retained from observed, real-session
 use or a separate behavioral treatment; discovery metadata alone is not evidence.
-
-Motivation: [GPT-6 Astra](https://openai.com/index/gpt-6-astra/) and its
-[model guide](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra)
-report stronger instruction sensitivity, initiative, and verification behavior. Existing
-task-success, quality, token, duration, and verification metrics test those claims without
-duplicating release guidance into ambient context. Anthropic's
-[Fable 5.1 prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1)
-requires a fresh effort sweep and recommends `high` as the starting point. These are
-hypotheses for this repository until this suite measures them.

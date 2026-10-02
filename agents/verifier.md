@@ -1,7 +1,7 @@
 ---
 name: verifier
 description: Verifies that changes work correctly via tests and browser inspection. Dispatch after implementation.
-model: sonnet
+model: inherit
 allowed-tools: Read, Bash, Glob, Grep
 ---
 

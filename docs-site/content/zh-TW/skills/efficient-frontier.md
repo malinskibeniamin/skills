@@ -13,14 +13,13 @@ sidebar:
 
 `config/model-routing.json` 決定路由；不要將主觀評分複製到提示詞中。
 
-1. 負責人：Opus 5.5 `high`（UI、程式碼、計畫）。
-2. 第二路徑：透過 `/codex` 使用 Sol `medium`（規格明確的執行、電腦操作、調查）；無法使用 -> 明確標註的 Astra `high`，絕不使用更便宜的 GPT。
-3. Astra `high` 審查 PR，必要時使用 Opus 5.5 `high`；Codex 剩餘用量 >=50% 時才使用 `xhigh`。
-4. UI、文案、API 設計：taste >= 8 且由 Claude 負責，否則使用明確標註的 Astra 備援。
-5. 瑣碎工作：Luna `high`（小幅修改、無衝突的 rebase、機械式 CI 修正、唯讀列表）；衝突、診斷、判斷 -> Sol。
-6. Fable 5.1（最高 `high`）：明確要求，僅限特殊工作。`xhigh`：情境消融證據或使用者選擇；絕不使用 `max`。
-7. 由使用者明確授權不同模型系列的檢查。
-8. `ultra` 需要明確委派或 `/swarm`。Pro 模式、持久化推理、程式化工具、明確快取：僅限 API，除非環境已提供。
+1. 擁有者：Opus 5.5 `xhigh`，負責日常工作、計畫、程式碼與 UI。
+2. Sol `xhigh` 透過 `/codex` 審查 PR；若無法使用，採用明確標示、使用乾淨上下文的 Opus `xhigh` 審查，並說明缺少跨模型家族覆蓋。
+3. UI、文案與 API 設計由 Opus 負責，taste >= 8。若無法使用，回報 UI 路徑受阻，不要默默替換模型。
+4. 瑣碎工作由日常模型 Opus 直接處理。使用者選用 Codex 時，由 Sol `xhigh` 執行工作、操作電腦或調查。
+5. 僅選用 Opus/Sol 組合；絕不使用 `max`。若兩者都無法使用，回報此路徑受阻。歷史評分不能覆寫擁有者的偏好。
+6. 跨模型家族審查需要明確授權；模型偏好本身不允許啟動代理。
+7. `ultra` 需要明確委派或 `/swarm`。Pro 模式、持久化推理、程式化工具與顯式快取僅限 API，除非執行環境開放這些功能。
 
 由一位負責人實作；未委派時自行執行各路徑。已授權路徑有範圍明確的目標、輸入、排除事項、證據及停止條件。負責人保留架構、優先順序、風險、整合及驗收責任。
 
@@ -30,6 +29,7 @@ sidebar:
 
 ## 晉升
 
-變更預設值之前，請先執行 `agent-evals/context-ablation/`。一次比較一個情境群組，保持任務與評分方式不變，且僅在品質相當的結果中優先選擇成本較低者。將勝出的策略記錄於 `config/model-routing.json`。
+目前的 `xhigh` 預設值是擁有者的明確選擇，不是依據基準測試的晉升。
+在未經要求的預設值變更前執行 `agent-evals/context-ablation/`：每次改變一個上下文群組，保持工作與評分不變，只在品質相當的結果中選擇更低成本。將勝出策略記錄到 `config/model-routing.json`。
 
 僅在撰寫已獲授權的委派套件時，才讀取 [references/builder-upstream.md](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md)。

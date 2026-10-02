@@ -17,7 +17,7 @@ const agent =
 const effort = process.env.CAPABILITY_EFFORT ?? "max";
 const baseModel =
   process.env.CAPABILITY_MODEL ??
-  (agent === "codex" ? "gpt-6-astra" : "claude-fable-5-1");
+  (agent === "codex" ? "gpt-6.1-sol" : "claude-opus-5-5");
 const model =
   agent === "codex" ? `${baseModel}?reasoningEffort=${effort}` : baseModel;
 
