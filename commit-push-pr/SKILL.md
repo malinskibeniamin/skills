@@ -23,7 +23,7 @@ Merge only on explicit request: [contract](references/merge.md).
 1. Stay on the feature branch; on default, create `type/description`.
 2. Per coherent group, `git add <explicit paths>` then `type(scope): terse description`: lowercase, 5-72 chars, no period.
 3. Explicit commit-only intent stops here after clean-tree check and summary.
-4. Push/PR: show `origin/<branch>..HEAD`, then push with tracking.
+4. Push/PR, any CI fix or rebase: show `origin/<branch>..HEAD`, then push with tracking.
 5. Current user-owned branch rewrites use `--force-with-lease` without another permission prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
 
 ## Pull request
@@ -45,6 +45,6 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
 2. Report failures; CI remediation needs `/go`, ship, babysitting, or follow-up.
 3. Report status, remaining diff, branch, commits, PR, CI, and next action.
-4. End with one repository-marker status line: `done`, `awaiting decision`, or `blocked`. Include the full PR URL on the final status line whenever a PR exists, including updates.
+4. End with one repository-marker status line: `done`, `awaiting decision`, or `blocked`. Include the full PR URL on the final status line whenever a PR exists.
 
 Never stage unrelated work, push mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.

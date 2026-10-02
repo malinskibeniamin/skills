@@ -12,7 +12,7 @@ Keep non-inferable choices/safety boundaries; hooks/skills teach details.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
-- External services use the repository's existing CLI integration.
+- External services: use the repo's existing CLI.
 
 Match surrounding idiom; use the smallest obvious design. Preserve user zoom, worktree
 isolation, secrets, types, generated files. Use useful `exemplars/`.
@@ -40,11 +40,12 @@ The requested endpoint owns scope:
 An earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
 legal/privacy, destructive, or high-security action; otherwise use reversible assumptions.
 Routine work may commit, push, or rebase the current user-owned feature branch
-without another permission prompt; use `--force-with-lease` after rebase when needed.
+without another permission prompt; push each CI fix or rebase at once
+(`--force-with-lease` after rebase).
 Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
 branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session to deliver that branch; correct endpoint state and continue.
+a session to deliver that branch; fix endpoint state and continue.
 When a PR exists for the current branch, put follow-up waves into the current PR by default.
 Creating a draft PR at the requested PR endpoint needs no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
