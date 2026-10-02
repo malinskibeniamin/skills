@@ -3,7 +3,14 @@
   "version": "4.39.0",
   "hooks": {
     "SessionStart": {
-      "": ["session-env.sh", "llm-env.sh"]
+      "": [
+        "session-env.sh",
+        "llm-env.sh",
+        {
+          "script": "pr-review-auto-hook.sh",
+          "codex_script": "codex-pr-review-auto-hook.sh"
+        }
+      ]
     },
     "PreModelSwitch": {
       "": ["model-switch-router.sh"]
@@ -15,7 +22,14 @@
       "init|maintenance": ["setup-init.sh"]
     },
     "UserPromptSubmit": {
-      "": ["user-prompt-context.sh", "intent-detect.sh"]
+      "": [
+        "user-prompt-context.sh",
+        "intent-detect.sh",
+        {
+          "script": "pr-review-auto-hook.sh",
+          "codex_script": "codex-pr-review-auto-hook.sh"
+        }
+      ]
     },
     "UserPromptExpansion": {
       "": ["skill-fire-log.sh"]
@@ -58,20 +72,38 @@
       ]
     },
     "SessionEnd": {
-      "": ["session-end.sh"]
+      "": [
+        "session-end.sh",
+        {
+          "script": "pr-review-auto-hook.sh",
+          "codex_script": "codex-pr-review-auto-hook.sh"
+        }
+      ]
     },
     "PreToolUse": {
       "Edit|Write|Bash": ["violation-nudge.sh"],
       "Edit|Write": ["copyright-check.sh", "bend-laws-guard.sh"],
       "Skill": ["skill-fire-log.sh"],
       "Bash": ["pre-bash.sh"],
-      "mcp__.*": ["mcp-ban.sh"]
+      "mcp__.*": ["mcp-ban.sh"],
+      "": [
+        {
+          "script": "pr-review-auto-hook.sh",
+          "codex_script": "codex-pr-review-auto-hook.sh"
+        }
+      ]
     },
     "PostToolUse": {
       "Bash": [
         "llm-truncate.sh",
         "consecutive-failure-check.sh",
         "test-warning-check.sh"
+      ],
+      "": [
+        {
+          "script": "pr-review-auto-hook.sh",
+          "codex_script": "codex-pr-review-auto-hook.sh"
+        }
       ]
     },
     "SubagentStart": {
