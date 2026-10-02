@@ -25,6 +25,10 @@ For dependency version upgrades, verify lockfile, clean install/build, and every
 
 Do not manufacture reviews, cleanup passes, skills, or agent calls. Keep a single owner in the primary context; a different model requires explicit user authorization.
 
+When a Codex second opinion is explicitly authorized, use [codex-review](../codex-review/SKILL.md)
+after commit; publishing its consolidated PR comment needs explicit intent. Fix verified
+findings, then rerun on the new HEAD within the authorized scope. Otherwise review inline.
+
 ## Deliver
 
 Follow [commit-push-pr/REFERENCE.md](../commit-push-pr/REFERENCE.md) for staging, commit, push, draft PR, reviewers, and body. On the current user-owned branch, rebase and `--force-with-lease` when needed without another permission prompt. Never [merge](../commit-push-pr/references/merge.md), plain-force, or rewrite default/shared/foreign/concurrent branches without explicit permission.

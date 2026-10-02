@@ -17,6 +17,7 @@ frontend/React/TypeScript/Go skills repo; installable plugin surfaces. `/work` -
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |
 | `/codex-compat` | Generate Codex hook and instruction parity. |
+| `/codex-review` | Run authorized Codex reviews with optional PR comments. |
 | `/codex` | Delegate bounded work through the Codex CLI. |
 | `/commit-push-pr` | Commit, push, and publish a reviewable pull request. |
 | `/connect-query` | Build typed ConnectRPC data flows with Connect Query. |

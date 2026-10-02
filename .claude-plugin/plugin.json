@@ -33,6 +33,7 @@
     "./codebase-design/",
     "./codex-compat/",
     "./codex/",
+    "./codex-review/",
     "./commit-push-pr/",
     "./connect-query/",
     "./create-verification-skill/",

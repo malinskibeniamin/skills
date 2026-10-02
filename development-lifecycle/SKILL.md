@@ -35,6 +35,10 @@ A single owner; delegation/background work needs explicit authorization. Make th
 
 Run applicable repo tests, types, lint, build, and static checks. Exercise material behavior at its real entrypoint plus one credible failure/recovery path. Review against objective, guardrails, and credible risk. A failure becomes the next action; repair and repeat.
 
+Explicitly authorized Codex second opinions use [codex-review](../codex-review/SKILL.md)
+on the committed snapshot; optional PR posting needs explicit publishing intent.
+Otherwise keep review inline. Fixes invalidate the prior SHA-bound report.
+
 Missing repeatable entrypoint: prove with a disposable harness, then route the durable gap to `/create-verification-skill`.
 
 ## Boundaries

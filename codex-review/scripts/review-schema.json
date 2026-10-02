@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["summary", "findings"],
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "Concise review conclusion and limitations. Do not claim tests ran unless observed."
+    },
+    "findings": {
+      "type": "array",
+      "description": "Only actionable, diff-introduced regressions; empty when none found.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["priority", "title", "body", "file", "line"],
+        "properties": {
+          "priority": { "type": "integer", "enum": [0, 1, 2, 3] },
+          "title": { "type": "string" },
+          "body": {
+            "type": "string",
+            "description": "Concrete evidence, consequence, and smallest correction."
+          },
+          "file": {
+            "type": "string",
+            "description": "Repository-relative file path."
+          },
+          "line": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,10 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 Review HEAD. Keep one owner; explicit delegation. Do not edit, commit, push, or post.
 Posting comments needs explicit intent.
 
+For an explicitly requested Codex second opinion, use [codex-review](../codex-review/SKILL.md).
+Keep the review-only endpoint; its optional PR comment still needs explicit publishing intent.
+Native Codex stays inline unless another-model/recursive CLI execution is explicitly authorized.
+
 ## Review contract
 
 - **Objective**: does the diff achieve its outcome without a credible defect?

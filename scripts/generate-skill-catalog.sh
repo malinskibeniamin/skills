@@ -31,6 +31,7 @@ SHORT_DESCRIPTIONS = {
     "codebase-design": "Design deeper modules with clear interfaces",
     "codex-compat": "Generate Codex hook and instruction parity",
     "codex": "Delegate bounded work through the Codex CLI",
+    "codex-review": "Run authorized Codex reviews with optional PR comments",
     "commit-push-pr": "Commit, push, and publish a reviewable pull request",
     "connect-query": "Build typed ConnectRPC data flows with Connect Query",
     "create-verification-skill": "Create a project-local real-app verification harness",
