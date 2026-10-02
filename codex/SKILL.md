@@ -5,7 +5,7 @@ description: Delegate to GPT-6.1 Sol through the Codex CLI. Use for clear-spec i
 
 **Host gate:** Claude-hosted only. In native Codex, work inline unless the user explicitly requests delegation/parallel agents. Never start recursive `codex exec`; preserve selected model/reasoning and Codex config.
 
-Capability-check once when delegation is authorized: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5 and GPT-6.1 Sol; if neither is available, report the lane blocked.
+When delegation is authorized, check once: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5 and GPT-6.1 Sol; if neither is available, report the lane blocked.
 
 ## Route
 
@@ -23,7 +23,7 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 ## Modes
 
 - **Implement:** `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`; concurrent writes use isolated worktrees.
-- **Review:** Sol `xhigh`: `codex exec -s read-only -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`; P0-P3 evidence. No guessed usage threshold changes the owner-selected effort.
+- **Review:** Sol `xhigh`: `codex exec -s read-only -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`; P0-P3 evidence. No guessed quota-based effort changes.
 - **Adversarial:** Claude-hosted and authorized only; one lane, never verdict.
 - **Computer use:** name app/URL, states, evidence.
 - **Investigate/analyze:** read-only compact report.
@@ -33,7 +33,7 @@ Codex lacks this conversation. Name repo/branch, objective, scope/exclusions, cr
 1. Pass host/authorization gate.
 2. Select quality-qualified config route.
 3. Write self-contained contract.
-4. Run with timeout/reference background pattern.
-5. Verify citations, commands, and high-risk conclusions before integrating.
+4. Use timeout/reference background pattern.
+5. Verify citations, commands, and high-risk conclusions.
 
-Architecture, synthesis, product, safety, and final judgment stay with the coordinator. Codex models do not own user-facing UI, copy, or API design by default. Opus 5.5 owns those surfaces; if unavailable, report the lane blocked.
+Coordinator owns architecture, synthesis, product, safety, final judgment. Codex models do not own user-facing UI, copy, or API design by default. Opus owns them; if unavailable, report the lane blocked.

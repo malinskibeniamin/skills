@@ -21,7 +21,7 @@ and include any coordinator-supplied independent findings under
 `cross_model_findings`. Call out meaningful divergence in `divergence_notes`.
 
 Routing follows `config/model-routing.json`: Sol `xhigh` is preferred for reviews;
-Opus 5.5 `xhigh` reviews GPT work or supplies a labeled clean-context fallback when Sol is
+use clean-context Opus 5.5 `xhigh` for GPT work or a labeled fallback when Sol is
 unavailable. Disclose missing different-family coverage; if neither is available, report
 the review lane blocked. Keep the owner-selected effort without a guessed usage threshold.
 

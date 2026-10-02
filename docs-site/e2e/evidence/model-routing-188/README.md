@@ -7,3 +7,5 @@
 - Video: `flow.gif`, before left / after right. Actual skill search → Codex route table → frontier policy. Playwright recorded isolated contexts after the agent-browser recorder failed; repository ffmpeg composition used. GIF fallback, not a GitHub MP4 player.
 - Verification: 13 Playwright cases / 14 screenshot assertions passed without update flags. New routing/search/mobile cases and the four existing frontier cases first failed against base snapshots; only reviewed changes were accepted.
 - Coverage: Codex and frontier pages plus Codex search result in English, Polish, Simplified Chinese, and Traditional Chinese; mobile Codex and dark mobile search. No shared layout, form, loading/error, or archived-page behavior changed.
+
+- CI follow-up: compressed redundant English Codex/frontier prose without changing routing or safety contracts. Reviewed the three affected snapshots; reran the complete 13-case visual slice and re-recorded the actual flow. Clean-tree budget checks retain their existing caps.

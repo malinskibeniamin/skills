@@ -67,7 +67,7 @@ fi
 # the friction outweighed the signal.
 
 # -- Test D: agent model frontmatter guards routing policy ----------
-# Review and planning agents inherit the quota-selected per-invocation profile.
+# Verification, review, and planning inherit the selected per-invocation model.
 
 agents_dir="$SKILLS_ROOT/agents"
 declare_agent_model() {
@@ -86,7 +86,7 @@ declare_agent_model() {
   fi
 }
 
-declare_agent_model "$agents_dir/verifier.md" "sonnet"
+declare_agent_model "$agents_dir/verifier.md" "inherit"
 declare_agent_model "$agents_dir/self-reviewer.md" "inherit"
 declare_agent_model "$agents_dir/code-reviewer.md" "inherit"
 declare_agent_model "$agents_dir/adversarial-reviewer.md" "inherit"
