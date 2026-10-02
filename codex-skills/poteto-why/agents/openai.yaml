@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Why"
+  short_description: "Poteto: Research design rationale from cited evidence"
+policy:
+  allow_implicit_invocation: false

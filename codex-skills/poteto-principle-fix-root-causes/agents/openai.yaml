@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Fix Root Causes"
+  short_description: "Poteto: Reproduce symptoms and repair their underlying cause"
+policy:
+  allow_implicit_invocation: false

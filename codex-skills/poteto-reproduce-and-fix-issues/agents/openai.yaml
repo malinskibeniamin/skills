@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Reproduce and Fix Issues"
+  short_description: "Poteto: Reproduce issue reports and verify bounded fixes"
+policy:
+  allow_implicit_invocation: false

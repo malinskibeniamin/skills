@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Technical Writing"
+  short_description: "Poteto: Write layered, clear engineering documentation"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Swarm"
+  short_description: "Poteto: Coordinate explicitly requested parallel workers"
+policy:
+  allow_implicit_invocation: false

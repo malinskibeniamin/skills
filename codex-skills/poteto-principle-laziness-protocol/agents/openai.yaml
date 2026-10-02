@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Laziness Protocol"
+  short_description: "Poteto: Laziness protocol"
+policy:
+  allow_implicit_invocation: false

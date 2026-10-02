@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Interrogate"
+  short_description: "Poteto: Challenge a diff with adversarial review"
+policy:
+  allow_implicit_invocation: false

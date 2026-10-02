@@ -113,6 +113,10 @@ installed_skill_count="$(
 [ "$installed_skill_count" -eq "$expected_skill_count" ] ||
   fail "installed Codex skill count does not match the source"
 
+# Check upstream bytes and every proxy dependency inside the actual plugin cache.
+python3 "$installed_path/scripts/vendor-poteto.py" --check
+bash "$installed_path/scripts/generate-skill-catalog.sh" --check
+
 for skill in development-lifecycle tdd review; do
   [ -f "$installed_path/codex-skills/$skill/SKILL.md" ] ||
     fail "installed plugin is missing the $skill skill"

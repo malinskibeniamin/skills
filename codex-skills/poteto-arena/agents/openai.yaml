@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Arena"
+  short_description: "Poteto: Compare competing implementations and combine the best"
+policy:
+  allow_implicit_invocation: false

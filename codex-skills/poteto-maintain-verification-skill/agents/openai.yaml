@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Maintain Verification Skill"
+  short_description: "Poteto: Refresh a verifier from source and live behavior"
+policy:
+  allow_implicit_invocation: false

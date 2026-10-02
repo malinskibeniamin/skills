@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Minimize Reader Load"
+  short_description: "Poteto: Minimize reader load"
+policy:
+  allow_implicit_invocation: false

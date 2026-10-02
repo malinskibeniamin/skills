@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Model The Domain"
+  short_description: "Poteto: Encode domain rules in explicit data structures"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Setup Benny"
+  short_description: "Poteto: Configure the Benny triage and reproduction pack"
+policy:
+  allow_implicit_invocation: false
