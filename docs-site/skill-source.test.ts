@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { execFileSync } from "node:child_process";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -85,6 +86,112 @@ const diagramArrowsStartAtOrigin = (source: string): boolean => {
 };
 
 describe("skill docs source", () => {
+  test("dates generated pages from canonical git history, preserving authored dates", async () => {
+    const repositoryRoot = await mkdtemp(join(tmpdir(), "skill-history-"));
+    const contentRoot = join(repositoryRoot, "docs-site", "content");
+    let committedDate = "2026-01-15T12:00:00Z";
+    const git = (...args: string[]) =>
+      execFileSync("git", ["-C", repositoryRoot, ...args], {
+        env: {
+          ...Object.fromEntries(
+            Object.entries(process.env).filter(
+              ([key]) =>
+                ![
+                  "GIT_COMMON_DIR",
+                  "GIT_DIR",
+                  "GIT_INDEX_FILE",
+                  "GIT_OBJECT_DIRECTORY",
+                  "GIT_PREFIX",
+                  "GIT_WORK_TREE",
+                ].includes(key),
+            ),
+          ),
+          GIT_AUTHOR_DATE: committedDate,
+          GIT_COMMITTER_DATE: committedDate,
+          GIT_AUTHOR_NAME: "Docs test",
+          GIT_AUTHOR_EMAIL: "docs@example.com",
+          GIT_COMMITTER_NAME: "Docs test",
+          GIT_COMMITTER_EMAIL: "docs@example.com",
+        },
+        stdio: "pipe",
+      });
+
+    try {
+      await mkdir(join(repositoryRoot, "sample-skill"));
+      await mkdir(join(contentRoot, "pl", "skills"), { recursive: true });
+      await writeFile(
+        join(repositoryRoot, "sample-skill", "SKILL.md"),
+        "---\nname: sample-skill\ndescription: Sample guidance.\n---\n# Sample\n\nGuidance.\n",
+      );
+      await writeFile(
+        join(repositoryRoot, "docs-site", "skill-source.ts"),
+        "// Canonical landing and directory source.\n",
+      );
+      await writeFile(
+        join(contentRoot, "pl", "skills", "sample-skill.md"),
+        '---\ntitle: Sample\ndescription: Translated guidance.\nlastModified: "2025-12-01"\n---\nGuidance.\n',
+      );
+      git("init", "--quiet");
+      git("add", ".");
+      git(
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "--quiet",
+        "-m",
+        "fixture",
+      );
+      committedDate = "2026-02-02T12:00:00Z";
+      await writeFile(
+        join(repositoryRoot, "sample-skill", "SKILL.md"),
+        "---\nname: sample-skill\ndescription: Updated guidance.\n---\n# Sample\n\nUpdated guidance.\n",
+      );
+      git("add", "sample-skill/SKILL.md");
+      git(
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "--quiet",
+        "-m",
+        "update",
+      );
+      await writeFile(
+        join(contentRoot, "untracked.md"),
+        "---\ntitle: Untracked\n---\nNot committed yet.\n",
+      );
+
+      const source = createSkillSource({
+        branch: "main",
+        contentRoot,
+        repositoryRoot,
+        repositoryUrl: REPOSITORY_URL,
+      });
+      const { entries } = await source.load();
+      expect(
+        entries.find((entry) => entry.ref === "skills/sample-skill.md")
+          ?.lastModified,
+      ).toBe(committedDate);
+      for (const ref of ["index.mdx", "skills/index.mdx"]) {
+        expect(entries.find((entry) => entry.ref === ref)?.lastModified).toBe(
+          "2026-01-15T12:00:00Z",
+        );
+      }
+      expect(
+        entries.find((entry) => entry.ref === "pl/skills/sample-skill.md")?.data
+          .lastModified,
+      ).toBe("2025-12-01");
+      expect(
+        entries.find((entry) => entry.ref === "untracked.md")?.lastModified,
+      ).toBeUndefined();
+      expect(
+        entries.find((entry) => entry.ref === "skills/sample-skill.md")
+          ?.sourcePath,
+      ).toBe(join(contentRoot, "skills", "sample-skill.md"));
+    } finally {
+      await rm(repositoryRoot, { force: true, recursive: true });
+    }
+  });
+
   test("keeps the ux-copy skill product-neutral", async () => {
     const source = await Bun.file(
       join(import.meta.dir, "..", "ux-copy", "SKILL.md"),

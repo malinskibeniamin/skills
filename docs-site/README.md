@@ -18,11 +18,16 @@ bun run docs:test:browser
 `docs:audit` gates the built site's accessibility checks, including theme contrast.
 The browser suite exercises onboarding views, shared snippets and Markdown, the
 skill directory, related links, search, locale choice, narration, and mobile layout.
-Device speech is stubbed in the playback test; it does not verify audible quality.
+PDF dispatch and EPUB ZIP/content validation use browser print and `unzip`.
+Set `BLUME_PREVIEW_PORT=4328` when another workspace owns the default port.
+Device speech and voice availability are stubbed in playback/visual tests; these
+do not verify audible quality.
 The suite also checks reviewed Chromium/macOS screenshot baselines for current and
 archived pages, all onboarding locales, light/dark layouts, mobile, empty search,
-related links, footer, and narration. Baselines are platform-specific; another OS
-needs separately reviewed snapshots, not copied or renamed macOS images. For an
+related links, footer, and narration. Screenshot-only dates use a fixed localized
+fixture; functional tests compare the unmodified page dates with canonical git history.
+Baselines are platform-specific; another OS needs separately reviewed snapshots,
+not copied or renamed macOS images. For an
 intentional visual change, inspect the expected/actual/diff images, update only the
 matching test with `bun run docs:test:browser --grep '<test name>' --update-snapshots`,
 then rerun the full suite without update flags.
@@ -44,6 +49,11 @@ Do not commit localhost as the production origin.
 ## Features adopted
 
 - Browser narration: no API key, paid synthesis, or narration server.
+- Page exports: PDF through the browser's print dialog; EPUB downloaded client-side.
+- GitHub edit links point to canonical skills, translated pages, and archived sources.
+- Git-derived update dates use canonical `SKILL.md` history, not generated file times.
+  Translations and archives use their own tracked history; frontmatter dates take precedence.
+  CI fetches full history. Builds without git omit unavailable dates rather than inventing them.
 - Agent-specific onboarding views, shared include snippets with props, and config variables.
 - Wide landing/directory layouts and automatically generated skill-directory cards.
 - Search keywords and boosts, and related links that only name existing canonical skills.
@@ -65,7 +75,13 @@ directory instead of the materialized `content` tree. This fix was not included 
 ## Features not enabled
 
 API pages, OpenAPI overlays/samples/webhooks/callbacks need an actual API, not demo
-endpoints. Pattern redirects need moved routes. Hosted assistants, synthesized voices,
+endpoints. Blume supports 18 sample languages via each API adapter's `codeSamples`:
+`curl`, `python`, `js`, `node`, `typescript`, `php`, `go`, `java`, `ruby`,
+`powershell`, `swift`, `csharp`, `dotnet`, `c`, `cpp`, `kotlin`, `rust`, and `dart`.
+This site has no API spec/reference or existing two-language configuration to expand;
+provide the real spec before enabling samples.
+
+Pattern redirects need moved routes. Hosted assistants, synthesized voices,
 bot protection, and rate limiting need a provider/server configuration. Analytics,
 written feedback, and consent need a real collection destination and privacy policy;
 this upgrade introduces no reader tracking or provider credentials.

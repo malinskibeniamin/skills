@@ -31,7 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 2
+          # Git-derived page dates need the complete history.
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Select macOS coverage

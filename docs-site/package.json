@@ -6,6 +6,10 @@
     "#blume-filesystem": {
       "types": "./blume-filesystem.d.ts",
       "default": "blume/sources/filesystem.ts"
+    },
+    "#blume-last-modified": {
+      "types": "./blume-last-modified.d.ts",
+      "default": "blume/core/last-modified.ts"
     }
   },
   "scripts": {

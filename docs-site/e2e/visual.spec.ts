@@ -1,4 +1,12 @@
 import { expect, test } from "@playwright/test";
+import {
+  installScreenshotVoices,
+  stabilizeScreenshotDate,
+} from "./screenshot-date";
+
+test.beforeEach(async ({ page }) => {
+  await installScreenshotVoices(page);
+});
 
 // Keep these captures comparable: the preview contains the same checked-in
 // skills, Chromium uses reduced motion, and each case gets a fresh context.
@@ -142,6 +150,7 @@ for (const scenario of [
         page.getByRole("link", { name: /^\/tdd/ }).last(),
       ).toHaveAttribute("href", `${scenario.path}/tdd`);
     }
+    await stabilizeScreenshotDate(page, !scenario.name.startsWith("directory"));
     await expect(page).toHaveScreenshot(`${scenario.name}.png`, {
       fullPage: scenario.name.startsWith("communication-"),
     });
@@ -154,11 +163,13 @@ test("visual: dark homepage and directory", async ({ page }) => {
   await expect(
     page.getByRole("searchbox", { name: "Search skills" }),
   ).toBeVisible();
+  await stabilizeScreenshotDate(page);
   await expect(page).toHaveScreenshot("homepage-dark.png");
   await page.goto("/skills");
   await expect(
     page.getByRole("heading", { name: "Skill directory", exact: true }),
   ).toBeVisible();
+  await stabilizeScreenshotDate(page, false);
   await expect(page).toHaveScreenshot("directory-dark.png");
 });
 
@@ -170,11 +181,13 @@ test("visual: filter miss and related-page recovery", async ({ page }) => {
   await expect(
     page.getByText("No skills found", { exact: true }),
   ).toBeVisible();
+  await stabilizeScreenshotDate(page);
   await expect(page).toHaveScreenshot("filter-empty.png");
   await page.goto("/skills/tdd");
   await page
     .getByRole("heading", { name: "Related pages", exact: true })
     .scrollIntoViewIfNeeded();
+  await stabilizeScreenshotDate(page);
   await expect(page).toHaveScreenshot("related-and-footer.png");
   await page
     .getByRole("link", { name: "Report an issue", exact: true })
@@ -191,6 +204,7 @@ test("visual: global search opens, finds guidance, and dismisses", async ({
   await expect(
     page.getByRole("option").filter({ hasText: "/tdd" }).first(),
   ).toBeVisible();
+  await stabilizeScreenshotDate(page);
   await expect(page).toHaveScreenshot("global-search.png");
   // Chromium's native search input consumes the first Escape to clear text;
   // the next Escape dismisses the modal dialog.
@@ -210,6 +224,7 @@ test("visual: mobile onboarding and directory", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Install in Codex" }),
   ).toBeVisible();
+  await stabilizeScreenshotDate(page);
   await expect(page).toHaveScreenshot("onboarding-mobile.png", {
     fullPage: true,
   });
@@ -217,5 +232,6 @@ test("visual: mobile onboarding and directory", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Skill directory", exact: true }),
   ).toBeVisible();
+  await stabilizeScreenshotDate(page, false);
   await expect(page).toHaveScreenshot("directory-mobile.png");
 });
