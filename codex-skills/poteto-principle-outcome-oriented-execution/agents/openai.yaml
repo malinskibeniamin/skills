@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Outcome Oriented Execution"
+  short_description: "Poteto: Outcome oriented execution"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Mode"
+  short_description: "Poteto: Route rigorous work through Poteto playbooks"
+policy:
+  allow_implicit_invocation: false

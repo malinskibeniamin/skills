@@ -2,7 +2,7 @@
 
 This is the harness's canonical adaptation of the Poteto/pstack principles that change existing design and review decisions. Source reviewed at Cursor plugins commit [`efa2a531985e0a8084d36ff3cf87233be8a9f34b`](https://github.com/cursor/plugins/tree/efa2a531985e0a8084d36ff3cf87233be8a9f34b/pstack).
 
-Do not register one skill per principle. Apply these rules through the existing owners named below.
+This curated adaptation remains the guidance for the existing owners below. The complete upstream stack, including every standalone principle, is also available through the `poteto-*` adapters; see [compatibility rules](POTETO-COMPATIBILITY.md) and the [full source inventory](../vendor/pstack.lock.json).
 
 ## Minimize reader load
 

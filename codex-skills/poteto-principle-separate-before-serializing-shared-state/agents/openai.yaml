@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Separate Before Serializing Shared State"
+  short_description: "Poteto: Separate before serializing shared state"
+policy:
+  allow_implicit_invocation: false

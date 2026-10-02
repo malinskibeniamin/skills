@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Bro"
+  short_description: "Poteto: Restate the last message in plain human language"
+policy:
+  allow_implicit_invocation: false

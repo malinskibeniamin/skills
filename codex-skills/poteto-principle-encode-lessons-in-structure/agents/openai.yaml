@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Encode Lessons In Structure"
+  short_description: "Poteto: Encode lessons in structure"
+policy:
+  allow_implicit_invocation: false

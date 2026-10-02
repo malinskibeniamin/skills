@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Foundational Thinking"
+  short_description: "Poteto: Foundational thinking"
+policy:
+  allow_implicit_invocation: false

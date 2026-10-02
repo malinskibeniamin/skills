@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Make Bot UI"
+  short_description: "Poteto: Build a dashboard that wakes a bot through a webhook"
+policy:
+  allow_implicit_invocation: false

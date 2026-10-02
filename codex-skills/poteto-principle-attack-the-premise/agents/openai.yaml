@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Attack The Premise"
+  short_description: "Poteto: Attack the premise"
+policy:
+  allow_implicit_invocation: false

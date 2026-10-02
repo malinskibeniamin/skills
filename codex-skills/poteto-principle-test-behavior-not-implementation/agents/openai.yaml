@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Test Behavior Not Implementation"
+  short_description: "Poteto: Test behavior not implementation"
+policy:
+  allow_implicit_invocation: false

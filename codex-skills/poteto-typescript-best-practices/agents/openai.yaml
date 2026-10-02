@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Typescript Best Practices"
+  short_description: "Poteto: Apply TypeScript type-system discipline"
+policy:
+  allow_implicit_invocation: false

@@ -123,6 +123,15 @@ SHORT_DESCRIPTIONS = {
     "writing-shape": "Shape raw Markdown into a coherent article draft",
 }
 
+# Full Poteto inventory feeds both registration adapters and Codex metadata.
+poteto_lock = repo / "vendor/pstack.lock.json"
+if poteto_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(poteto_lock.read_text())["skills"]
+    })
+
+
 def yaml_quote(value):
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
 

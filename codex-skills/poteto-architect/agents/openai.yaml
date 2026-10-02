@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Architect"
+  short_description: "Poteto: Design caller usage, types, and module boundaries"
+policy:
+  allow_implicit_invocation: false

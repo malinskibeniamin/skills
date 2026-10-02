@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Build The Lever"
+  short_description: "Poteto: Build the repeatable tool that does or proves the work"
+policy:
+  allow_implicit_invocation: false

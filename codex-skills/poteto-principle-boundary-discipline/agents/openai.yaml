@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Boundary Discipline"
+  short_description: "Poteto: Boundary discipline"
+policy:
+  allow_implicit_invocation: false
