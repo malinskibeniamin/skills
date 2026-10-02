@@ -1,13 +1,13 @@
 <!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->
 # Project rules
 
-Keep non-inferable choices/safety boundaries; hooks/skills teach details.
+Keep non-inferable choices/safety boundaries; hooks/skills own details.
 
 ## Toolchain and local choices
 
-Repository-local scripts, configs, and component policy own commands and paths;
-the choices below are defaults, not migration instructions. For unfamiliar code or
-conflicting guidance, read [repo navigation](shared/repo-navigation.md).
+Local scripts/configs/component policy own commands/paths; defaults below are not
+migration instructions. For unfamiliar code or conflicts, read
+[repo navigation](shared/repo-navigation.md).
 
 `bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
@@ -24,13 +24,13 @@ isolation, secrets, types, generated files. Use useful `exemplars/`.
 
 ## Human-facing text
 
-Human-facing documents/PRs/reviews/replies/status use `shared/communication.md`: decision,
+Human-facing text uses `shared/communication.md`: decision,
 value, ask first; own claims, intent, uncertainty. Above 200 words: <=120-word first read,
 then evidence/detail. Count explicit word limits with a tool; never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs use `shared/intent-map.md`:
 map objective, assumptions, references, risks, implementation, verification, superseded choices.
-Trivial/single-path output stays linear.
+Single-path output stays linear.
 
 ## Execution contract
 
@@ -42,19 +42,18 @@ The requested endpoint owns scope:
 - Commit: commit only. Push: commit if needed, then push. PR: verify, commit, push, open
   via `/commit-push-pr`, take one CI snapshot. Ship or `/go`: run the full delivery loop.
 
-An earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
-legal/privacy, destructive, or high-security action; otherwise use reversible assumptions.
-Routine work may commit, push, or rebase the current user-owned feature branch
-without another permission prompt; use `--force-with-lease` after rebase when needed.
+An earlier stop wins. Ask only for material user-reserved decisions or irreversible production,
+legal/privacy, destructive, or high-security actions. Otherwise use reversible assumptions;
+commit, push, or rebase the current user-owned feature branch without another prompt.
+Use `--force-with-lease` after rebase when needed.
 Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
 branch without explicit permission.
-A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session to deliver that branch; correct endpoint state and continue.
-When a PR exists for the current branch, put follow-up waves into the current PR by default.
-Creating a draft PR at the requested PR endpoint needs no separate approval.
+A delivery follow-up replaces a prior local stop; correct endpoint state and continue,
+never ask the user to restart/reconfigure. Follow-ups use the current branch's PR by default.
+Draft PRs at the requested PR endpoint need no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
-Use isolated browser automation; never take over a human-owned browser or desktop app.
+Isolate browser automation; never take over human-owned browsers/desktop apps.
 
 End action turns with exactly one status line:
 `🟢 done — <evidence>`, `🟡 awaiting decision — <decision>`, or
@@ -65,17 +64,17 @@ For any PR, include its full PR URL on the final status line.
 
 Action work uses one outcome contract:
 
-- **Objective** -- high-level end state.
-- **Guardrails** -- only non-inferable constraints and reserved decisions.
-- **Verification** -- checks or observable behavior proving the result.
-- **Stop** -- requested endpoint and genuine blockers.
+- **Objective** -- end state.
+- **Guardrails** -- non-inferable constraints/reserved decisions.
+- **Verification** -- observable proof.
+- **Stop** -- requested endpoint/genuine blockers.
 
-Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
+Repeatable work uses deterministic scripts/CLIs; uncertainty uses agent judgment.
 Improve feedback loops before concurrency; delegation stays opt-in.
 inspect -> act -> verify -> repeat. Let evidence choose plans/tools/guidance. Continue through
 reversible decisions; put status notes beside the next action, not a stop that recaps work,
 offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps
-its task checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
+checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
 wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,
