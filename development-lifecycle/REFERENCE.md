@@ -96,7 +96,7 @@ and use `--force-with-lease` when needed on the current user-owned feature branc
 another permission prompt. Never merge, use plain `--force`, or rewrite default, shared,
 foreign, or concurrently owned branches without explicit permission. A normal PR request
 takes one CI snapshot; only `ship`, an explicit `/go`, or explicit babysitting authorizes
-active CI remediation.
+active CI remediation. Every local CI fix or rebase is pushed immediately, whatever the endpoint.
 
 ## Isolation and long runs
 

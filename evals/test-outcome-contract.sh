@@ -202,3 +202,8 @@ else
   ERRORS="$ERRORS\n  FAIL: session telemetry JSON contract"
 fi
 rm -rf "$_session_metrics_tmp" "$_session_metrics_dir" 2>/dev/null || true
+
+for file in CLAUDE.md commit-push-pr/SKILL.md development-lifecycle/REFERENCE.md pr-shepherd/SKILL.md resolve-pr-feedback/SKILL.md; do
+  run_content_eval "$REPO_ROOT/$file" "[Pp]ush.*CI fix or rebase|CI fix or rebase.*push" \
+    "$file pushes every local CI fix or rebase"
+done
