@@ -16,3 +16,13 @@ Split a model-invoked skill when it has a distinct leading word that should trig
 ## Router skills
 
 When user-invoked skills exceed what a human can remember, add one user-invoked router that names them and explains when to use each. The router can recommend but cannot autonomously invoke another user-invoked skill.
+
+## Navigation pointers
+
+For repo guidance, use [repo navigation](../shared/repo-navigation.md). Put task ->
+owning entry point -> adjacent test links in the existing maintained architecture
+doc. A scoped `AGENTS.md`/`CLAUDE.md` is a small front door, not another rulebook.
+Link repository-owned command scripts/configs instead of copying recipes into
+memory or handoffs. Keep durable rationale; correct stale advice in place rather
+than appending contradictory updates. Label historical snapshots/proposals with
+date, status, and the current-policy pointer. Verify every referenced path exists.
