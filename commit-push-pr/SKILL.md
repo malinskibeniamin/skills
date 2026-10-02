@@ -23,7 +23,7 @@ Merge only on explicit request: [contract](references/merge.md).
 1. Stay on the feature branch; on default, create `type/description`.
 2. Per coherent group, `git add <explicit paths>` then `type(scope): terse description`: lowercase, 5-72 chars, no period.
 3. Explicit commit-only intent stops here after clean-tree check.
-4. Push/PR: show `origin/<branch>..HEAD`, then push with tracking.
+4. Push/PR, any CI fix or rebase: show `origin/<branch>..HEAD`, then push with tracking.
 5. Current user-owned branch rewrites use `--force-with-lease` without another permission prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
 
 ## Pull request

@@ -40,13 +40,14 @@ The requested endpoint owns scope:
 Earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
 legal/privacy, destructive, or high-security action; otherwise use reversible assumptions.
 Routine work may commit, push, or rebase the current user-owned feature branch
-without another permission prompt; use `--force-with-lease` after rebase when needed.
+without another permission prompt; push each CI fix or rebase now
+(rebase: `--force-with-lease`).
 Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
 branch without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session to deliver that branch; correct endpoint state and continue.
+a session to deliver that branch; fix endpoint state and continue.
 When branch has a PR, keep follow-up waves in the current PR.
-Draft PR at the requested endpoint needs no separate approval.
+Draft PRs at the requested endpoint need no approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
