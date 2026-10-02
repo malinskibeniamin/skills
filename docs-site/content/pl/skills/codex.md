@@ -1,7 +1,7 @@
 ---
 title: /codex
 description: >-
-  Deleguj zadania do GPT-6 Sol za pomocą Codex CLI. Używaj do implementacji na
+  Deleguj zadania do GPT-6.1 Sol za pomocą Codex CLI. Używaj do implementacji na
   podstawie jasnej specyfikacji, niezależnych przeglądów, obsługi komputera,
   analizy problemów i danych oraz mechanicznych prac wymagających dużej liczby
   tokenów.
@@ -17,18 +17,16 @@ sidebar:
 wyraźnie poprosi o delegowanie lub równoległych agentów. Nie uruchamiaj rekurencyjnie `codex exec`;
 zachowaj wybrany model i poziom wnioskowania; nie zmieniaj konfiguracji Codex.
 
-Sprawdź dostępność funkcji raz na sesję: `codex exec -m gpt-6-sol "reply OK"`. Jeśli model jest niedostępny, przejdź na Astra `high` i wskaż to w wyniku; jeśli oba zawiodą, zgłoś blokadę tej ścieżki. Nigdy nie zastępuj go tańszym modelem GPT.
+Sprawdź dostępność tylko po zatwierdzeniu delegacji: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. Jeśli Sol jest niedostępny, użyj wyraźnie oznaczonego przeglądu Opus 5.5 `xhigh` z czystym kontekstem i ujawnij brak sprawdzenia przez inną rodzinę modeli. Wybieraj tylko Opus 5.5 i GPT-6.1 Sol; jeśli oba są niedostępne, zgłoś blokadę tej ścieżki.
 
 ## Warianty routingu
 
-| Wariant | Poziom | Zastosowanie |
-|---|---|---|
-| Sol | `medium`; `high` i wyżej, gdy wybór jest oparty na ewaluacji lub został dokonany jawnie | kod na podstawie jasnej specyfikacji, obsługa komputera, analiza problemów |
-| Astra | `high` (zapas dla Sol); nigdy `max` | najpierw przegląd PR; kod, planowanie, obsługa komputera; interfejs użytkownika tylko bez właściciela Claude |
-| Luna (`gpt-6-luna`) | `high` | drobne prace: małe zmiany, czyste rebase, mechaniczne poprawki CI, odczyt lub wylistowanie danych; przy decyzjach przekaż do Sol |
+| Wariant | Zastosowanie |
+|---|---|
+| Sol, `xhigh` (`gpt-6.1-sol`; nigdy `max`) | preferowany recenzent PR; wykonanie, obsługa komputera i analiza po jawnym wyborze |
+| Opus 5.5, `xhigh` (`claude-opus-5-5`) | codzienna praca, UI, plany, kod, drobne prace; oznaczony przegląd zapasowy z czystym kontekstem |
 
-Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości wariantu na podstawie ceny
-ani nazwy. Informacje o mechanizmach CLI i warunkach użycia między dostawcami znajdziesz w dokumencie [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md).
+Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości na podstawie ceny ani nazwy. [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md) określa warunki użycia między dostawcami i mechanizmy CLI.
 
 ## Kontrakt promptu
 
@@ -41,12 +39,10 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 
 ## Tryby
 
-- **Implementacja:** `codex exec -m gpt-6-sol -c 'model_reasoning_effort="medium"'`;
+- **Implementacja:** `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`;
   izoluj równoległe zapisy w osobnych drzewach roboczych.
-- **Przegląd:** Astra `high` (`xhigh` przy co najmniej 50% pozostałego limitu Codex). Używaj
-  trybu `-s read-only` i dowodów P0–P3.
-- **Wymiana kontradyktoryjna (automatyczna w przepływach pracy hostowanych przez Claude):** jeśli jest to dozwolone, użyj innej rodziny
-  modeli; traktuj wynik jako jedną ze ścieżek, a nie ostateczny werdykt.
+- **Przegląd:** Sol `xhigh`: `codex exec -s read-only -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`; dowody P0–P3. Nie zmieniaj wybranego poziomu na podstawie zgadywanego progu zużycia.
+- **Wymiana kontradyktoryjna:** tylko w środowisku Claude i po zatwierdzeniu; jedna ścieżka, nie ostateczny werdykt.
 - **Obsługa komputera:** określ adres URL lub aplikację, stany i dowody.
 - **Badanie/analiza:** użyj `-s read-only` i przygotuj zwięzły raport.
 
@@ -58,6 +54,4 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 4. Uruchom zadanie z jawnym limitem czasu lub zgodnie z referencyjnym wzorcem działania w tle.
 5. Przed integracją zweryfikuj wskazane pliki, polecenia i wnioski wysokiego ryzyka.
 
-Decyzje architektoniczne wymagające znacznego osądu, synteza, kwestie produktowe i bezpieczeństwa oraz końcowy przegląd pozostają po stronie
-koordynatora klasy frontier. Modele Codex nie odpowiadają za interfejs użytkownika, teksty ani projekt API, gdy dostępny jest właściciel Claude; zapasowy przebieg Astra musi spełniać te same
-wymagania dotyczące dowodów wizualnych.
+Architektura, synteza, produkt, bezpieczeństwo i ostateczna ocena pozostają po stronie koordynatora. Domyślnie modele Codex nie odpowiadają za UI, teksty ani projekt API. Te obszary należą do Opus 5.5; jeśli jest niedostępny, zgłoś blokadę tej ścieżki.
