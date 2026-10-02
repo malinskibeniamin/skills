@@ -5,9 +5,8 @@ Keep non-inferable choices/safety boundaries; hooks/skills own details.
 
 ## Toolchain and local choices
 
-Local scripts/configs/component policy own commands/paths; defaults below are not
-migration instructions. For unfamiliar code or conflicts, read
-[repo navigation](shared/repo-navigation.md).
+Local scripts/configs/component policy own commands/paths. Below are defaults, not
+migration instructions; read [repo navigation](shared/repo-navigation.md) for unfamiliar code/conflicts.
 
 `bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
@@ -19,8 +18,8 @@ migration instructions. For unfamiliar code or conflicts, read
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - External services use the repository's existing CLI integration.
 
-Match surrounding idiom; use the smallest obvious design. Preserve user zoom, worktree
-isolation, secrets, types, generated files. Use useful `exemplars/`.
+Match local idiom; use the smallest obvious design. Preserve user zoom, worktree
+isolation, secrets, types, generated files. Use `exemplars/`.
 
 ## Human-facing text
 
@@ -30,11 +29,11 @@ then evidence/detail. Count explicit word limits with a tool; never invent human
 
 Substantial plans/analyses/reviews/recaps/status/handoffs use `shared/intent-map.md`:
 map objective, assumptions, references, risks, implementation, verification, superseded choices.
-Single-path output stays linear.
+Trivial/single-path output stays linear.
 
 ## Execution contract
 
-The requested endpoint owns scope:
+Requested endpoint owns scope:
 
 - Answer, explain, plan, review: return the artifact; do not edit.
 - Build, fix, implement: concise plan, continue, verify, commit, and push the current
@@ -44,12 +43,13 @@ The requested endpoint owns scope:
 
 An earlier stop wins. Ask only for material user-reserved decisions or irreversible production,
 legal/privacy, destructive, or high-security actions. Otherwise use reversible assumptions;
-commit, push, or rebase the current user-owned feature branch without another prompt.
+commit, push, or rebase the current user-owned feature branch without another permission prompt.
 Use `--force-with-lease` after rebase when needed.
 Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
 branch without explicit permission.
-A delivery follow-up replaces a prior local stop; correct endpoint state and continue,
-never ask the user to restart/reconfigure. Follow-ups use the current branch's PR by default.
+A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
+a session to deliver that branch; correct endpoint state and continue.
+Put follow-up waves in the current PR by default.
 Draft PRs at the requested PR endpoint need no separate approval.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
@@ -62,7 +62,7 @@ For any PR, include its full PR URL on the final status line.
 
 ## Work
 
-Action work uses one outcome contract:
+Action work uses one contract:
 
 - **Objective** -- end state.
 - **Guardrails** -- non-inferable constraints/reserved decisions.
@@ -74,7 +74,7 @@ Improve feedback loops before concurrency; delegation stays opt-in.
 inspect -> act -> verify -> repeat. Let evidence choose plans/tools/guidance. Continue through
 reversible decisions; put status notes beside the next action, not a stop that recaps work,
 offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps
-checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
+its task checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
 wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,
