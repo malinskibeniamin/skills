@@ -8,9 +8,9 @@ test.beforeEach(async ({ page }) => {
   await installScreenshotVoices(page);
 });
 
-for (const locale of ["pl", "zh-CN", "zh-TW"]) {
+for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
   test(`visual: status-update-${locale}`, async ({ page }) => {
-    await page.goto(`/${locale}/skills`);
+    await page.goto(`${locale === "en" ? "" : `/${locale}`}/skills`);
     await page
       .getByRole("link", { name: /^\/what-did-i-get-done/ })
       .last()

@@ -21,24 +21,20 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/what-did-i-get-done.excalidraw)
 
-## Przebieg pracy [#workflow]
-
-1. Ustal konkretny zakres dat; jeśli znasz datę ostatniej aktualizacji, użyj jej jako początku zakresu.
-2. Odczytaj commity utworzone w tym okresie przez użytkownika o adresie e-mail skonfigurowanym obecnie w Git.
-3. Pomiń commity scalające i niezatwierdzone zmiany.
-4. Zbierz najważniejsze wdrożone zmiany w zwięzłą aktualizację statusu.
-5. Oprzyj dalszą pracę na podanych planach lub wyraźnych zobowiązaniach; jeśli żadnych nie znasz, napisz „Next work not specified.”.
-
-- Pisz wyjątkowo zwięźle i treściwie.
-- Priorytetowo traktuj istotne zmiany zachowania lub architektury.
-- Pomijaj zmiany wyłącznie kosmetyczne (formatowanie, importy, drobne zmiany nazw).
-- Nie wyciągaj wniosków o intencjach ani motywacji. Opisuj zmiany pod kątem funkcjonalnym.
+Odczytaj commity utworzone w danym zakresie dat przez użytkownika o adresie e-mail
+skonfigurowanym obecnie w Git; jeśli znasz datę ostatniej aktualizacji, użyj jej jako
+początku zakresu. Pomiń commity scalające i niezatwierdzone zmiany. Priorytetowo
+traktuj wdrożone zmiany zachowania lub architektury; pomijaj formatowanie, importy
+i drobne zmiany nazw. Opisuj funkcjonalność, nie motywację.
 
 ## Wynik [#output]
 
-Zawsze odpowiadaj w dwóch sekcjach, używając dokładnie tych nagłówków:
+Zawsze używaj wyłącznie tych dwóch dokładnych nagłówków:
 
 - `What did you work on since the last update?`
 - `What are you going to work on next?`
 
-W każdej sekcji użyj maksymalnie pięciu zwięzłych punktów. Umieść całą treść w tych dwóch sekcjach; wybierz najważniejsze informacje zamiast zapełniać limit. W pierwszej sekcji podaj rzeczywisty zakres dat. W przeglądach tygodniowych i retrospektywach dodaj krótką klasyfikację (prawdopodobne poprawki błędów / dług techniczny / nowe funkcje) w punktach dotyczących wykonanej pracy.
+W każdej sekcji użyj maksymalnie pięciu zwięzłych punktów. Pierwsza sekcja: rzeczywisty
+zakres dat oraz, przy przeglądach tygodniowych lub retrospektywach, prawdopodobna
+klasyfikacja (poprawki błędów / dług techniczny / nowe funkcje). Dalsza praca: wyłącznie
+podane plany lub zobowiązania; w przeciwnym razie napisz "Next work not specified.".
