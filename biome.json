@@ -10,6 +10,7 @@
       "!**/.blume-verify",
       "!**/dist",
       "!exemplars",
+      "!vendor",
       "!**/*.gen.ts",
       "!**/*.gen.tsx",
       "!**/*_pb.ts",

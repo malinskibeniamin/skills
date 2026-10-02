@@ -78,7 +78,7 @@ import re
 import sys
 
 repo = pathlib.Path(sys.argv[1])
-excluded_dirs = {"node_modules", ".git", "dist", "deprecated"}
+excluded_dirs = {"node_modules", ".git", ".context", "dist", "deprecated"}
 link_pattern = re.compile(r"\]\(([^)]+)\)")
 fence_pattern = re.compile(r"^[ \t]{0,3}((?:\x60){3,}|~{3,})")
 bad = []
@@ -110,7 +110,7 @@ for path in markdown_paths:
             continue
 
         for target in link_pattern.findall(line):
-            if target.startswith(("http", "#", "mailto:", "<")) or target == "link":
+            if target.startswith(("http", "#", "mailto:", "<")) or target in {"link", "url"}:
                 continue
             clean = target.split("#", 1)[0].split(" ", 1)[0]
             if (path.parent / clean).exists() or (repo / clean).exists():
@@ -132,7 +132,7 @@ else
   PASS=$((PASS + 1))
 fi
 
-_pi_symbad=$(find "$REPO_ROOT" -type l ! -exec test -e {} \; -print 2>/dev/null | grep -v node_modules || true)
+_pi_symbad=$(find "$REPO_ROOT" \( -name node_modules -o -name .git -o -name .context \) -prune -o -type l ! -exec test -e {} \; -print 2>/dev/null || true)
 if [ -n "$_pi_symbad" ]; then
   echo "  FAIL  broken symlinks: $_pi_symbad"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: broken symlinks"

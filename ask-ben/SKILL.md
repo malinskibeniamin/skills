@@ -54,6 +54,56 @@ frontend/React/TypeScript/Go skills repo; installable plugin surfaces. `/work` -
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |
 | `/postgresql` | Engineer and operate PostgreSQL from workload evidence. |
+| `/poteto-architect` | Poteto: Design caller usage, types, and module boundaries. |
+| `/poteto-arena` | Poteto: Compare competing implementations and combine the best. |
+| `/poteto-automate-me` | Poteto: Draft a personal mode from observed working patterns. |
+| `/poteto-blast-radius` | Poteto: Prove non-local safety by executing the decisive check. |
+| `/poteto-bro` | Poteto: Restate the last message in plain human language. |
+| `/poteto-create-verification-skill` | Poteto: Create a project-local real-app verifier. |
+| `/poteto-figure-it-out` | Poteto: Design a verifiable playbook for an unfamiliar task. |
+| `/poteto-how` | Poteto: Explain subsystem behavior from source evidence. |
+| `/poteto-interrogate` | Poteto: Challenge a diff with adversarial review. |
+| `/poteto-maintain-verification-skill` | Poteto: Refresh a verifier from source and live behavior. |
+| `/poteto-make-bot-ui` | Poteto: Build a dashboard that wakes a bot through a webhook. |
+| `/poteto-mode` | Poteto: Route rigorous work through Poteto playbooks. |
+| `/poteto-no-comments` | Poteto: Replace redundant comments with structural guarantees. |
+| `/poteto-principle-attack-the-premise` | Poteto: Attack the premise. |
+| `/poteto-principle-boundary-discipline` | Poteto: Boundary discipline. |
+| `/poteto-principle-build-the-lever` | Poteto: Build the repeatable tool that does or proves the work. |
+| `/poteto-principle-encode-lessons-in-structure` | Poteto: Encode lessons in structure. |
+| `/poteto-principle-exhaust-the-design-space` | Poteto: Exhaust the design space. |
+| `/poteto-principle-experience-first` | Poteto: Choose user experience over implementation convenience. |
+| `/poteto-principle-fix-root-causes` | Poteto: Reproduce symptoms and repair their underlying cause. |
+| `/poteto-principle-foundational-thinking` | Poteto: Foundational thinking. |
+| `/poteto-principle-guard-the-context-window` | Poteto: Guard the context window. |
+| `/poteto-principle-laziness-protocol` | Poteto: Laziness protocol. |
+| `/poteto-principle-make-operations-idempotent` | Poteto: Make operations idempotent. |
+| `/poteto-principle-migrate-callers-then-delete-legacy-apis` | Poteto: Migrate callers then delete legacy apis. |
+| `/poteto-principle-minimize-reader-load` | Poteto: Minimize reader load. |
+| `/poteto-principle-model-the-domain` | Poteto: Encode domain rules in explicit data structures. |
+| `/poteto-principle-never-block-on-the-human` | Poteto: Never block on the human. |
+| `/poteto-principle-outcome-oriented-execution` | Poteto: Outcome oriented execution. |
+| `/poteto-principle-prove-it-works` | Poteto: Verify real behavior rather than relying on proxies. |
+| `/poteto-principle-redesign-from-first-principles` | Poteto: Redesign from first principles. |
+| `/poteto-principle-separate-before-serializing-shared-state` | Poteto: Separate before serializing shared state. |
+| `/poteto-principle-sequence-verifiable-units` | Poteto: Sequence verifiable units. |
+| `/poteto-principle-subtract-before-you-add` | Poteto: Subtract before you add. |
+| `/poteto-principle-test-behavior-not-implementation` | Poteto: Test behavior not implementation. |
+| `/poteto-principle-type-system-discipline` | Poteto: Type system discipline. |
+| `/poteto-recall` | Poteto: Rebuild recent context from history and live state. |
+| `/poteto-reflect` | Poteto: Turn observed workflow lessons into skill improvements. |
+| `/poteto-reproduce-and-fix-issues` | Poteto: Reproduce issue reports and verify bounded fixes. |
+| `/poteto-setup-benny` | Poteto: Configure the Benny triage and reproduction pack. |
+| `/poteto-setup-pstack` | Poteto: Configure pstack model roles and reasoning budgets. |
+| `/poteto-show-me-your-work` | Poteto: Keep a reviewable decision and evidence trail. |
+| `/poteto-swarm` | Poteto: Coordinate explicitly requested parallel workers. |
+| `/poteto-tdd` | Poteto: Make a bug executable before implementing its fix. |
+| `/poteto-teach` | Poteto: Explain what changed, how it works, and why. |
+| `/poteto-technical-writing` | Poteto: Write layered, clear engineering documentation. |
+| `/poteto-triage-issue-reports` | Poteto: Classify and deduplicate thread-scoped issue reports. |
+| `/poteto-typescript-best-practices` | Poteto: Apply TypeScript type-system discipline. |
+| `/poteto-unslop` | Poteto: Remove AI writing patterns while preserving meaning. |
+| `/poteto-why` | Poteto: Research design rationale from cited evidence. |
 | `/pr-shepherd` | Resume changed PRs and shepherd current workspace repairs. |
 | `/pr` | Write a PR body that is fast to review. |
 | `/prime` | Build a concise repository startup brief. |

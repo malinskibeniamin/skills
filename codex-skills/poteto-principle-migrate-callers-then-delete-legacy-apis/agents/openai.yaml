@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Migrate Callers Then Delete Legacy Apis"
+  short_description: "Poteto: Migrate callers then delete legacy apis"
+policy:
+  allow_implicit_invocation: false

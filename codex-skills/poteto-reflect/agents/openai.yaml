@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Reflect"
+  short_description: "Poteto: Turn observed workflow lessons into skill improvements"
+policy:
+  allow_implicit_invocation: false

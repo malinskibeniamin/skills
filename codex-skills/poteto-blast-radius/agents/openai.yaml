@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Blast Radius"
+  short_description: "Poteto: Prove non-local safety by executing the decisive check"
+policy:
+  allow_implicit_invocation: false

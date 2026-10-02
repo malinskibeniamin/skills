@@ -1,9 +1,17 @@
 ---
-title: /ask-ben
 description: 路由 Ben 的前端技能。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ask ben
 sidebar:
   label: /ask-ben
+title: /ask-ben
+type: skill
 ---
 ![`/ask-ben` 技能示意图](/diagrams/skills/ask-ben.svg)
 
@@ -59,6 +67,56 @@ sidebar:
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
 | `/plow-ahead` | 在常规的不确定情况下自主继续推进。 |
 | `/postgresql` | 根据工作负载证据设计和运维 PostgreSQL。 |
+| `/poteto-architect` | Poteto：设计调用方式、类型和模块边界。 |
+| `/poteto-arena` | Poteto：比较不同实现并结合各自的优势。 |
+| `/poteto-automate-me` | Poteto：根据观察到的工作模式起草个人模式。 |
+| `/poteto-blast-radius` | Poteto：执行决定性检查，证明跨模块变更的安全性。 |
+| `/poteto-bro` | Poteto：用通俗语言重述上一条消息。 |
+| `/poteto-create-verification-skill` | Poteto：创建项目本地的真实应用验证技能。 |
+| `/poteto-figure-it-out` | Poteto：为不熟悉的任务设计可验证的操作流程。 |
+| `/poteto-how` | Poteto：依据源码证据解释子系统的行为。 |
+| `/poteto-interrogate` | Poteto：通过对抗式审查质疑代码差异。 |
+| `/poteto-maintain-verification-skill` | Poteto：根据源码和实际行为更新验证器。 |
+| `/poteto-make-bot-ui` | Poteto：构建通过 webhook 唤醒机器人的仪表板。 |
+| `/poteto-mode` | Poteto：通过 Poteto 操作流程执行严谨的工作。 |
+| `/poteto-no-comments` | Poteto：用结构性保证取代冗余注释。 |
+| `/poteto-principle-attack-the-premise` | Poteto：质疑前提。 |
+| `/poteto-principle-boundary-discipline` | Poteto：严格遵守边界。 |
+| `/poteto-principle-build-the-lever` | Poteto：构建可重复执行或验证工作的工具。 |
+| `/poteto-principle-encode-lessons-in-structure` | Poteto：将经验教训编码到结构中。 |
+| `/poteto-principle-exhaust-the-design-space` | Poteto：穷尽设计方案。 |
+| `/poteto-principle-experience-first` | Poteto：优先考虑用户体验，而非实现便利。 |
+| `/poteto-principle-fix-root-causes` | Poteto：复现症状并修复根本原因。 |
+| `/poteto-principle-foundational-thinking` | Poteto：从基础原理出发思考。 |
+| `/poteto-principle-guard-the-context-window` | Poteto：保护上下文窗口。 |
+| `/poteto-principle-laziness-protocol` | Poteto：遵循省力协议。 |
+| `/poteto-principle-make-operations-idempotent` | Poteto：让操作具有幂等性。 |
+| `/poteto-principle-migrate-callers-then-delete-legacy-apis` | Poteto：先迁移调用方，再删除旧 API。 |
+| `/poteto-principle-minimize-reader-load` | Poteto：减轻读者负担。 |
+| `/poteto-principle-model-the-domain` | Poteto：用明确的数据结构编码领域规则。 |
+| `/poteto-principle-never-block-on-the-human` | Poteto：不要因等待人工输入而阻塞工作。 |
+| `/poteto-principle-outcome-oriented-execution` | Poteto：以结果为导向执行工作。 |
+| `/poteto-principle-prove-it-works` | Poteto：验证真实行为，而非依赖间接指标。 |
+| `/poteto-principle-redesign-from-first-principles` | Poteto：从第一性原理重新设计。 |
+| `/poteto-principle-separate-before-serializing-shared-state` | Poteto：先隔离共享状态，再串行化访问。 |
+| `/poteto-principle-sequence-verifiable-units` | Poteto：按可验证的单元安排工作顺序。 |
+| `/poteto-principle-subtract-before-you-add` | Poteto：先做减法，再做加法。 |
+| `/poteto-principle-test-behavior-not-implementation` | Poteto：测试行为，而非实现细节。 |
+| `/poteto-principle-type-system-discipline` | Poteto：严格遵守类型系统规则。 |
+| `/poteto-recall` | Poteto：根据历史记录和当前状态重建近期上下文。 |
+| `/poteto-reflect` | Poteto：将观察到的工作经验转化为技能改进。 |
+| `/poteto-reproduce-and-fix-issues` | Poteto：复现问题报告并验证限定范围内的修复。 |
+| `/poteto-setup-benny` | Poteto：配置 Benny 问题分类与复现工具包。 |
+| `/poteto-setup-pstack` | Poteto：配置 pstack 模型角色和推理预算。 |
+| `/poteto-show-me-your-work` | Poteto：保留可审查的决策和证据记录。 |
+| `/poteto-swarm` | Poteto：协调用户明确请求的并行工作。 |
+| `/poteto-tdd` | Poteto：实现修复之前，先用可执行测试重现错误。 |
+| `/poteto-teach` | Poteto：解释改了什么、如何运行以及原因。 |
+| `/poteto-technical-writing` | Poteto：编写层次清晰的工程文档。 |
+| `/poteto-triage-issue-reports` | Poteto：分类并去重线程内的问题报告。 |
+| `/poteto-typescript-best-practices` | Poteto：遵循 TypeScript 类型系统规则。 |
+| `/poteto-unslop` | Poteto：去除 AI 写作模式，同时保留原意。 |
+| `/poteto-why` | Poteto：根据引用的证据研究设计依据。 |
 | `/pr-shepherd` | 恢复已变更的 PR，并跟进当前工作区的修复。 |
 | `/pr` | 撰写便于快速审查的 PR 描述。 |
 | `/prime` | 构建简明的仓库启动说明。 |

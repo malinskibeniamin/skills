@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Automate Me"
+  short_description: "Poteto: Draft a personal mode from observed working patterns"
+policy:
+  allow_implicit_invocation: false

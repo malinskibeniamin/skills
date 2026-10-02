@@ -1,0 +1,3 @@
+interface:
+  display_name: "Poteto Setup Pstack"
+  short_description: "Poteto: Configure pstack model roles and reasoning budgets"
