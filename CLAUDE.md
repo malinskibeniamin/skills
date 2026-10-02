@@ -4,6 +4,10 @@ Keep non-inferable choices/safety boundaries; hooks/skills teach details.
 
 ## Toolchain and local choices
 
+Repository-local scripts, configs, and component policy own commands and paths;
+the choices below are defaults, not migration instructions. For unfamiliar code or
+conflicting guidance, read [repo navigation](shared/repo-navigation.md).
+
 `bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
 - UI: `@/components/ui/` first; buttons use `<Button>`, variants, design tokens.

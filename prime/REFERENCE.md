@@ -40,6 +40,9 @@
 
 ## Context hygiene
 
+- Use [repo navigation](../shared/repo-navigation.md) for current owners, command
+  precedence, missing scoped docs, and stalled retrieval. Keep verified task pointers
+  in Read next, not a copied command inventory.
 - No PRIME.md. Derive live from repo/git/PR/docs, no stale summaries.
 - Do not paste full CLAUDE.md or AGENTS.md. Avoid duplicate context.
 - Read relevant sections only: quick ref, lifecycle, toolchain, tests, repo warnings.
