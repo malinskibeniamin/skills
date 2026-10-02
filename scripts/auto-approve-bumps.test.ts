@@ -63,22 +63,44 @@ describe("parseDiff", () => {
       {
         path: "install-pack/26.1.yml",
         structural: false,
+        deleted: false,
         removed: ["  console_image_tag: master-7c97ba0"],
         added: ["  console_image_tag: master-2cf6ee1"],
       },
       {
         path: "install-pack/26.2.yml",
         structural: false,
+        deleted: false,
         removed: ["  console_image_tag: master-7c97ba0"],
         added: ["  console_image_tag: master-2cf6ee1"],
       },
     ]);
   });
 
-  test("flags new, deleted, renamed, and binary files as structural", () => {
+  test("reads hunk lines that look like file headers as content", () => {
+    const [file] = parseDiff(
+      "diff --git a/x.yml b/x.yml\n--- a/x.yml\n+++ b/x.yml\n@@ -1 +1 @@\n--- hidden: true\n+++ shown: true\n",
+    );
+    expect(file?.removed).toEqual(["-- hidden: true"]);
+    expect(file?.added).toEqual(["++ shown: true"]);
+  });
+
+  test("marks deleted files", () => {
+    const [file] = parseDiff(
+      "diff --git a/.changeset/x.md b/.changeset/x.md\ndeleted file mode 100644\n--- a/.changeset/x.md\n+++ /dev/null\n@@ -1 +0,0 @@\n-note\n",
+    );
+    expect(file).toEqual({
+      path: ".changeset/x.md",
+      structural: false,
+      deleted: true,
+      removed: ["note"],
+      added: [],
+    });
+  });
+
+  test("flags new, renamed, and binary files as structural", () => {
     for (const marker of [
       "new file mode 100644",
-      "deleted file mode 100644",
       "rename from x",
       "Binary files a/x and b/x differ",
     ]) {
@@ -151,11 +173,21 @@ describe("checkBump", () => {
     const diff = `diff --git a/install-pack/26.1.yml b/install-pack/26.1.yml
 --- a/install-pack/26.1.yml
 +++ b/install-pack/26.1.yml
+@@ -1,0 +1,1 @@
 +  console_image_tag: master-2cf6ee1
 `;
     expect(checkBump(pr(), diff)).toEqual({
       ok: false,
       reason: "unbalanced change in install-pack/26.1.yml",
+    });
+  });
+
+  test("rejects a deleted install-pack file", () => {
+    const deleted =
+      "diff --git a/install-pack/26.1.yml b/install-pack/26.1.yml\ndeleted file mode 100644\n@@ -1 +0,0 @@\n-  console_image_tag: master-7c97ba0\n";
+    expect(checkBump(pr(), deleted)).toEqual({
+      ok: false,
+      reason: "deleted install-pack/26.1.yml",
     });
   });
 
@@ -287,6 +319,7 @@ describe("checkBump for ADP releases", () => {
     const diff = `${ADP_RELEASE_DIFF}diff --git a/.claude/skills/adp-release/SKILL.md b/.claude/skills/adp-release/SKILL.md
 --- a/.claude/skills/adp-release/SKILL.md
 +++ b/.claude/skills/adp-release/SKILL.md
+@@ -1,0 +1,1 @@
 +new step
 `;
     expect(checkBump(release, diff)).toEqual({
@@ -374,5 +407,141 @@ describe("reviewAction", () => {
     ["a dismissed approval", [{ state: "DISMISSED", commitId: OLD }], "check"],
   ] as const)("returns %s → %s", (_label, reviews, action) => {
     expect(reviewAction(reviews, HEAD)).toBe(action);
+  });
+});
+
+// Shape of ui-registry #316: a Changesets "version packages" PR.
+const UI_REGISTRY_DIFF = `diff --git a/.changeset/fix-loading-animation-destroy-order.md b/.changeset/fix-loading-animation-destroy-order.md
+deleted file mode 100644
+index 1d2c3b4..0000000
+--- a/.changeset/fix-loading-animation-destroy-order.md
++++ /dev/null
+@@ -1,5 +0,0 @@
+----
+-"@redpanda-data/registry": patch
+----
+-
+-Stop unmounting a Lottie animation from crashing the React tree.
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,8 @@
+ # Changelog
+ 
++## 3.6.0
++
++### Patch Changes
++
++- ef9acfd: Stop unmounting a Lottie animation from crashing the React tree.
+diff --git a/bun.lock b/bun.lock
+--- a/bun.lock
++++ b/bun.lock
+@@ -10,7 +10,7 @@
+     "packages/registry": {
+       "name": "@redpanda-data/registry",
+-      "version": "3.5.0",
++      "version": "3.6.0",
+diff --git a/packages/docs/data/changelog.json b/packages/docs/data/changelog.json
+--- a/packages/docs/data/changelog.json
++++ b/packages/docs/data/changelog.json
+@@ -1,6 +1,20 @@
+ [
++  {
++    "id": "3.5.0-ef9acfd",
++    "version": "3.5.0",
++    "pr": 315,
++    "components": [
++      "loading-animation"
++    ],
++    "summary": "Stop unmounting a Lottie animation from crashing the React tree."
++  },
+   {
+     "id": "3.4.0-a1b2c3d",
+-      "components": ["tabs", "dialog"],
++      "components": [
++        "tabs",
++        "dialog"
++      ],
+diff --git a/packages/registry/package.json b/packages/registry/package.json
+--- a/packages/registry/package.json
++++ b/packages/registry/package.json
+@@ -1,4 +1,4 @@
+ {
+   "name": "@redpanda-data/registry",
+-  "version": "3.5.0",
++  "version": "3.6.0",
+`;
+
+describe("checkBump for ui-registry version packages", () => {
+  const versionPackages = pr({
+    repo: "redpanda-data/ui-registry",
+    number: 316,
+    author: "app/github-actions",
+    headRefName: "changeset-release/main",
+    commitAuthors: ["github-actions[bot]"],
+  });
+
+  test("approves a Changesets version PR", () => {
+    expect(checkBump(versionPackages, UI_REGISTRY_DIFF)).toEqual({ ok: true });
+  });
+
+  test.each([
+    ["another author", { author: "vbotbuildovich" }, /author/],
+    [
+      "a human commit",
+      { commitAuthors: ["github-actions[bot]", "a"] },
+      /commit/,
+    ],
+  ])("rejects %s", (_label, overrides, reason) => {
+    const result = checkBump(
+      { ...versionPackages, ...overrides },
+      UI_REGISTRY_DIFF,
+    );
+    expect(result.ok ? "" : result.reason).toMatch(reason);
+  });
+
+  test.each([".changeset/config.json", ".changeset/README.md"])(
+    "rejects deleting %s",
+    (path) => {
+      const diff = UI_REGISTRY_DIFF.replaceAll(
+        ".changeset/fix-loading-animation-destroy-order.md",
+        path,
+      );
+      expect(checkBump(versionPackages, diff)).toEqual({
+        ok: false,
+        reason: `unexpected file ${path}`,
+      });
+    },
+  );
+
+  test("rejects editing a changeset instead of consuming it", () => {
+    const diff = UI_REGISTRY_DIFF.replace("deleted file mode 100644\n", "");
+    expect(checkBump(versionPackages, diff)).toEqual({
+      ok: false,
+      reason:
+        "expected .changeset/fix-loading-animation-destroy-order.md to be deleted",
+    });
+  });
+
+  test("rejects a bun.lock change beyond a version line", () => {
+    const diff = UI_REGISTRY_DIFF.replace(
+      '+      "version": "3.6.0",',
+      '+      "version": "3.6.0",\n-    "zod": "^4.5.0",\n+    "zod": "^4.6.0",',
+    );
+    expect(checkBump(versionPackages, diff)).toEqual({
+      ok: false,
+      reason: 'unexpected change in bun.lock: "zod": "^4.5.0",',
+    });
+  });
+
+  test("rejects removing a changelog.json entry", () => {
+    const diff = UI_REGISTRY_DIFF.replace(
+      '     "id": "3.4.0-a1b2c3d",',
+      '-    "id": "3.4.0-a1b2c3d",',
+    );
+    expect(checkBump(versionPackages, diff)).toEqual({
+      ok: false,
+      reason: "removed lines in packages/docs/data/changelog.json",
+    });
   });
 });

@@ -1,5 +1,5 @@
-// Approves vbotbuildovich image-bump, ADP release, and UI main -> preprod
-// promotion PRs as the gh-authenticated user. A bump is approved only when
+// Approves bot image-bump, ADP release, ui-registry version, and UI
+// main -> preprod promotion PRs as the gh-authenticated user. A bump is approved only when
 // every changed line fits its rule, a promotion only when its head is already
 // on main; anything else is logged and raised as a macOS notification once
 // per head.
@@ -27,11 +27,18 @@ type FileRule = {
   line: RegExp;
   // Additive files only gain lines; others swap each line one for one.
   additive?: boolean;
+  // Lines an additive file may still drop, such as a reformatted array.
+  removable?: RegExp;
+  // The file must be deleted outright, such as a consumed changeset.
+  deleted?: boolean;
   // Captures a version that every added match must equal the branch's.
   version?: RegExp;
 };
 
-type DiffRule = {
+// PRs and commits default to vbotbuildovich.
+type Authors = { author?: string; committer?: string };
+
+type DiffRule = Authors & {
   kind: "diff";
   repo: string;
   // A capture group, when present, is the release version.
@@ -43,7 +50,7 @@ type DiffRule = {
 };
 
 // Promotes already-reviewed commits, so the head must be on the source branch.
-type PromotionRule = {
+type PromotionRule = Authors & {
   kind: "promotion";
   repo: string;
   branch: RegExp;
@@ -136,6 +143,37 @@ const RULES: readonly Rule[] = [
     approval: "Auto-approved: version bump and additive release notes only.",
   },
   {
+    // Changesets "version packages" PRs, built from already-merged changesets.
+    kind: "diff",
+    repo: "redpanda-data/ui-registry",
+    author: "app/github-actions",
+    committer: "github-actions[bot]",
+    branch: /^changeset-release\/main$/,
+    files: [
+      {
+        path: /^\.changeset\/(?!README\.md$)[\w-]+\.md$/,
+        line: /^/,
+        deleted: true,
+      },
+      {
+        path: /^(?:packages\/[\w-]+\/)?CHANGELOG\.md$/,
+        line: /^/,
+        additive: true,
+      },
+      { path: /^packages\/[\w-]+\/package\.json$/, line: PACKAGE_VERSION },
+      { path: "bun.lock", line: new RegExp(`^ {6}"version": "${SEMVER}",$`) },
+      {
+        // JSON data rendered by the docs site; only the components arrays
+        // are reflowed from one line to many.
+        path: "packages/docs/data/changelog.json",
+        line: /^/,
+        additive: true,
+        removable: /^ {6}"components": \[(?:"[\w*-]+"(?:, "[\w*-]+")*)?\],$/,
+      },
+    ],
+    approval: "Auto-approved: Changesets version bump from merged changesets.",
+  },
+  {
     // Opened by cloudv2 release-promotion.yml for the Cloud and Admin UIs.
     kind: "promotion",
     repo: "redpanda-data/cloudv2",
@@ -167,6 +205,7 @@ export type BumpPr = {
 type FileDiff = {
   path: string;
   structural: boolean;
+  deleted: boolean;
   removed: string[];
   added: string[];
 };
@@ -174,24 +213,31 @@ type FileDiff = {
 type Verdict = { ok: true } | { ok: false; reason: string };
 
 const STRUCTURAL =
-  /^(new file mode|deleted file mode|rename from|copy from|old mode|Binary files|GIT binary patch)/;
+  /^(new file mode|rename from|copy from|old mode|Binary files|GIT binary patch)/;
 
 export function parseDiff(diff: string): FileDiff[] {
   const files: FileDiff[] = [];
   let current: FileDiff | undefined;
+  // Only lines inside a hunk are content; before it, "--- a/x" is a header.
+  let inHunk = false;
   for (const line of diff.split("\n")) {
     const header = /^diff --git a\/(.+) b\/(.+)$/.exec(line);
     if (header) {
       current = {
         path: header[2] ?? "",
         structural: header[1] !== header[2],
+        deleted: false,
         removed: [],
         added: [],
       };
       files.push(current);
-    } else if (!current || line.startsWith("+++ ") || line.startsWith("--- ")) {
-    } else if (STRUCTURAL.test(line)) {
-      current.structural = true;
+      inHunk = false;
+    } else if (!current) {
+    } else if (line.startsWith("@@")) {
+      inHunk = true;
+    } else if (!inHunk) {
+      if (line.startsWith("deleted file mode")) current.deleted = true;
+      if (STRUCTURAL.test(line)) current.structural = true;
     } else if (line.startsWith("-")) {
       current.removed.push(line.slice(1));
     } else if (line.startsWith("+")) {
@@ -201,8 +247,10 @@ export function parseDiff(diff: string): FileDiff[] {
   return files;
 }
 
-function checkOpener(pr: BumpPr, base: string): Verdict {
-  if (pr.author !== BOT) return { ok: false, reason: `author ${pr.author}` };
+function checkOpener(pr: BumpPr, rule: Rule, base: string): Verdict {
+  if (pr.author !== (rule.author ?? BOT)) {
+    return { ok: false, reason: `author ${pr.author}` };
+  }
   if (pr.isDraft) return { ok: false, reason: "draft" };
   if (pr.baseRefName !== base) {
     return { ok: false, reason: `base ${pr.baseRefName}` };
@@ -216,7 +264,7 @@ export function checkPromotion(pr: BumpPr, status: string): Verdict {
   if (rule?.kind !== "promotion") {
     return { ok: false, reason: `unknown branch ${pr.headRefName}` };
   }
-  const opener = checkOpener(pr, rule.base);
+  const opener = checkOpener(pr, rule, rule.base);
   if (!opener.ok) return opener;
   if (status !== "behind" && status !== "identical") {
     return {
@@ -232,11 +280,11 @@ export function checkBump(pr: BumpPr, diff: string): Verdict {
   if (rule?.kind !== "diff") {
     return { ok: false, reason: `unknown branch ${pr.headRefName}` };
   }
-  const opener = checkOpener(pr, "main");
+  const opener = checkOpener(pr, rule, "main");
   if (!opener.ok) return opener;
   if (
     pr.commitAuthors.length === 0 ||
-    pr.commitAuthors.some((a) => a !== BOT)
+    pr.commitAuthors.some((a) => a !== (rule.committer ?? BOT))
   ) {
     return { ok: false, reason: "commit not authored by the bot" };
   }
@@ -252,12 +300,26 @@ export function checkBump(pr: BumpPr, diff: string): Verdict {
     if (file.structural) {
       return { ok: false, reason: `structural change in ${file.path}` };
     }
-    if (fileRule.additive && file.removed.length > 0) {
+    if (file.deleted !== Boolean(fileRule.deleted)) {
+      return {
+        ok: false,
+        reason: file.deleted
+          ? `deleted ${file.path}`
+          : `expected ${file.path} to be deleted`,
+      };
+    }
+    if (file.deleted) continue;
+    const removable = fileRule.removable;
+    if (
+      fileRule.additive &&
+      file.removed.some((line) => !removable?.test(line))
+    ) {
       return { ok: false, reason: `removed lines in ${file.path}` };
     }
-    const unexpected = [...file.removed, ...file.added].find(
-      (line) => !fileRule.line.test(line),
-    );
+    const checked = fileRule.additive
+      ? file.added
+      : [...file.removed, ...file.added];
+    const unexpected = checked.find((line) => !fileRule.line.test(line));
     if (unexpected !== undefined) {
       return {
         ok: false,
@@ -372,7 +434,9 @@ function notifyOnce(key: string, message: string): void {
 
 function run(approve: boolean): void {
   const viewer = gh(["api", "user", "--jq", ".login"]).trim();
-  for (const repo of new Set(RULES.map((r) => r.repo))) {
+  const sources = new Set(RULES.map((r) => `${r.repo} ${r.author ?? BOT}`));
+  for (const source of sources) {
+    const [repo = "", author = ""] = source.split(" ");
     const listed = ListedPrs.parse(
       ghJson([
         "pr",
@@ -380,7 +444,7 @@ function run(approve: boolean): void {
         "-R",
         repo,
         "--author",
-        BOT,
+        author,
         "--state",
         "open",
         "--json",
