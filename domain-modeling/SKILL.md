@@ -1,19 +1,19 @@
 ---
 name: domain-modeling
-description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR.
+description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR.
 ---
 
-Actively challenge, resolve, and record domain terms/decisions while designing. Merely reading `CONTEXT.md` is not domain modeling.
+Actively challenge, resolve, and record domain terms/decisions while designing. Merely reading `GLOSSARY.md` is not domain modeling.
 
 ## Files
 
-Use root `CONTEXT.md` and `docs/adr/` for one context. If root `CONTEXT-MAP.md` exists, follow it to context-local `CONTEXT.md` and ADRs; system-wide ADRs stay under root docs. Create files only when the first real term/decision exists.
+Use root `GLOSSARY.md` and `docs/adr/` for one context. If root `GLOSSARY-MAP.md` exists, follow it to context-local `GLOSSARY.md` and ADRs; system-wide ADRs stay under root docs. Create files only when the first real term/decision exists.
 
 ## During the session
 
 ### Challenge the glossary
 
-When user language conflicts with `CONTEXT.md`, quote the mismatch and ask which meaning wins.
+When user language conflicts with `GLOSSARY.md`, quote the mismatch and ask which meaning wins.
 
 ### Sharpen language
 
@@ -27,9 +27,9 @@ Probe relationships and boundaries with concrete edge cases until terms are prec
 
 Check stated behavior against code; surface contradictions for resolution.
 
-### Update CONTEXT.md inline
+### Update GLOSSARY.md inline
 
-Record resolved terms immediately using [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md). Do not batch. `CONTEXT.md` is a glossary only: no implementation detail, spec, scratch notes, or implementation decisions.
+Record resolved terms immediately using [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md). Do not batch. `GLOSSARY.md` is a glossary only: no implementation detail, spec, scratch notes, or implementation decisions.
 
 ### Offer ADRs sparingly
 

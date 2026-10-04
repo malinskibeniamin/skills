@@ -25,7 +25,7 @@ Uruchom `/codebase-design`. Używaj terminów **moduł**, **interfejs**, **imple
 - **Jedno źródło prawdy:** zachowanie pochodne wynika z reprezentacji należącej do właściciela, a nie z równoległej listy, flagi, rejestru, walidatora ani cyklu życia.
 - **Niezmiennik strukturalny:** konstrukcja i przejścia sprawiają, że nieprawidłowe stany są niemożliwe lub niereprezentowalne w dalszej części systemu.
 
-Przeczytaj `CONTEXT.md` i odpowiednie ADR-y, jeśli istnieją. Język domeny nazywa dobre moduły i granice; ADR-y zapobiegają ponownemu rozstrzyganiu trwałych decyzji bez nowych dowodów.
+Przeczytaj `GLOSSARY.md` i odpowiednie ADR-y, jeśli istnieją. Język domeny nazywa dobre moduły i granice; ADR-y zapobiegają ponownemu rozstrzyganiu trwałych decyzji bez nowych dowodów.
 
 ## 1. Określ zakres i zbadaj
 
@@ -51,7 +51,7 @@ Zakończ sekcją **Najważniejsza rekomendacja**. Nie proponuj jeszcze ostateczn
 
 Uruchom `/grilling`. Rozstrzygnij własność, niezmiennik, kształt modułu, granicę, adaptery, kierunek zależności, stany przejściowe, migrację, wycofanie i obserwowalne testy.
 
-- Nowy lub doprecyzowany termin domenowy -> `/domain-modeling` aktualizuje `CONTEXT.md`.
+- Nowy lub doprecyzowany termin domenowy -> `/domain-modeling` aktualizuje `GLOSSARY.md`.
 - Trwałe odrzucenie -> zaproponuj ADR.
 - Konkurencyjne interfejsy -> zastosuj projektowanie dwóch wariantów z `/codebase-design`.
 - Propozycja wizualna gotowa do przeglądu -> `/visual-plan`; konkurencyjne propozycje -> `/plan-arbiter`.

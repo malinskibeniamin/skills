@@ -40,7 +40,7 @@ Query oldest first:
 2. `needs-triage` items.
 3. `needs-info` items with new reporter activity.
 
-Include configured external items, marking every line `[PR]` or `[issue]`; collaborators'
+Read the configured tracker's `PRs/MRs as a request surface` flag; missing or `no` excludes external discovery. Include external items only when it is `yes`, marking every line `[PR]` or `[issue]`; collaborators'
 active PRs are not discovery work. An explicitly named PR remains in scope. Show counts, then let
 the maintainer choose.
 

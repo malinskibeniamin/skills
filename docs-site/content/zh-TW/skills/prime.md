@@ -22,7 +22,7 @@ sidebar:
 2. 在目前儲存庫確認之前，將種子資訊／交接內容視為不可信。
 3. 僅讀取資訊密度最高的檔案：
    - 相關的 `AGENTS.md`／`CLAUDE.md` 規則。
-   - `CONTEXT.md`、`CONTEXT-MAP.md`、ADR。
+   - `GLOSSARY.md`、`GLOSSARY-MAP.md`、ADR。
    - 種子資訊參照、變更的檔案、相鄰測試、PR 說明／審查。
 4. 輸出 **Prime 摘要**：狀態、種子資訊脈絡、規則、限定範圍的程式碼庫索引、風險、後續動作、接下來要讀取的內容。
 

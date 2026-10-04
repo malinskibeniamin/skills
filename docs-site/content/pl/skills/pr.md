@@ -39,7 +39,7 @@ Przeczytaj [kontrakt ochrony uwagi czytelnika](https://github.com/malinskibeniam
 
 ## Sekcje [#sections]
 
-Pomiń wszelkie wstępy i ogranicz opis do minimum. Używaj języka domeny użytkownika z `CONTEXT.md`.
+Pomiń wszelkie wstępy i ogranicz opis do minimum. Używaj języka domeny użytkownika z `GLOSSARY.md`.
 
 ### Podsumowanie [#summary]
 

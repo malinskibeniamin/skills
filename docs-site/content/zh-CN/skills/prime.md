@@ -22,7 +22,7 @@ sidebar:
 2. 在实时仓库确认之前，将线索或交接内容视为不可信。
 3. 仅阅读信息价值最高的文件：
    - 相关的 `AGENTS.md` / `CLAUDE.md` 规则。
-   - `CONTEXT.md`、`CONTEXT-MAP.md`、ADR。
+   - `GLOSSARY.md`、`GLOSSARY-MAP.md`、ADR。
    - 线索引用、已更改文件、相邻测试、PR 正文或审查意见。
 4. 输出 **Prime 简报**：状态、线索上下文、规则、限定范围的代码库索引、风险、后续操作、接下来阅读的内容。
 

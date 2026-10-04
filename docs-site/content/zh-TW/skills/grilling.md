@@ -64,4 +64,4 @@ Grilling 用於解決影響重大的未知事項，而非每項細節。只要�
 
 只有當使用者要求以計畫／grill 為終點時，才要求確認。[ETHOS: 承諾前先探索]
 
-使用 `/domain-modeling` 將領域術語記錄於 `CONTEXT.md`；只有當取捨難以逆轉，且缺少背景時會令人意外，才建立 ADR。
+使用 `/domain-modeling` 將領域術語記錄於 `GLOSSARY.md`；只有當取捨難以逆轉，且缺少背景時會令人意外，才建立 ADR。

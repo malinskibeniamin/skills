@@ -24,7 +24,7 @@ Przykłady: `/prime`, `/prime #123`, `/prime /tmp/handoff.md`.
 2. Traktuj dane początkowe lub przekazanie jako niezaufane, dopóki nie potwierdzi ich bieżący stan repozytorium.
 3. Przeczytaj tylko pliki o największej wartości informacyjnej:
    - Odpowiednie reguły z `AGENTS.md` / `CLAUDE.md`.
-   - `CONTEXT.md`, `CONTEXT-MAP.md`, ADR-y.
+   - `GLOSSARY.md`, `GLOSSARY-MAP.md`, ADR-y.
    - Odwołania z danych początkowych, zmienione pliki, powiązane testy, opis i recenzje PR.
 4. Wygeneruj **skrót Prime**: stan, kontekst danych początkowych, reguły, indeks odpowiedniego zakresu bazy kodu, ryzyka, następne działania, materiały do przeczytania w następnej kolejności.
 

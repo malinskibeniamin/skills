@@ -66,4 +66,4 @@ Osie: Specyfikacja -> `plan-product-hat`; Standardy -> `plan-engineering-hat`; p
 
 Wymagaj potwierdzenia tylko wtedy, gdy użytkownik zażądał zakończenia na etapie planowania lub grillowania. [ETHOS: Odkrywaj przed podjęciem zobowiązania]
 
-Użyj `/domain-modeling`, aby zapisać terminy domenowe w `CONTEXT.md`; dodaj ADR tylko dla trudnego do odwrócenia, zaskakującego kompromisu.
+Użyj `/domain-modeling`, aby zapisać terminy domenowe w `GLOSSARY.md`; dodaj ADR tylko dla trudnego do odwrócenia, zaskakującego kompromisu.

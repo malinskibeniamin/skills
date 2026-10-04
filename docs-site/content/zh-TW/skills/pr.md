@@ -39,7 +39,7 @@ sidebar:
 
 ## 各區段 [#sections]
 
-省略所有開場白並保持文字精簡。使用 `CONTEXT.md` 中使用者的領域語言。
+省略所有開場白並保持文字精簡。使用 `GLOSSARY.md` 中使用者的領域語言。
 
 ### 摘要 [#summary]
 

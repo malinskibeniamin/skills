@@ -13,14 +13,14 @@ sidebar:
 
 - 问题跟踪器：GitHub、GitLab、本地 Markdown、Jira/Atlassian 或其他工具。
 - 分类标签：用于规范角色的项目字符串。
-- 领域文档：`CONTEXT.md`、`CONTEXT-MAP.md`、ADR 布局。
+- 领域文档：`GLOSSARY.md`、`GLOSSARY-MAP.md`、ADR 布局。
 
 由提示词驱动。探索 -> 展示 -> 确认 -> 写入。
 
 ## 包含的工作流
 
 依次安装一次以下规划技能：`grilling`、`domain-modeling`、`triage`、
-`diagnosing-bugs`、`prototype`、`to-questionnaire`、`to-spec`、`to-tickets`、`handoff`、
+`diagnosing-bugs`、`prototype`、`implement-spec`、`pr`、`retro`、`tdd`、`codebase-design`、`review`、`to-questionnaire`、`to-spec`、`to-tickets`、`handoff`、
 `writing-for-agents`、`visual-plan`、`visual-recap`、`plan-arbiter`、`agent-watchdog`、
 `read-the-damn-docs` 和 `efficient-frontier`。
 
@@ -30,7 +30,8 @@ sidebar:
 
 ```bash
 for skill in \
-  grilling domain-modeling triage diagnosing-bugs prototype to-questionnaire to-spec \
+  grilling domain-modeling triage diagnosing-bugs prototype \
+  implement-spec pr retro tdd codebase-design review to-questionnaire to-spec \
   to-tickets handoff writing-for-agents visual-plan visual-recap plan-arbiter \
   agent-watchdog read-the-damn-docs efficient-frontier
 do

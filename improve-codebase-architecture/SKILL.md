@@ -20,7 +20,7 @@ Run `/codebase-design`; use its module, interface, implementation, depth, seam, 
 - **Single source of truth:** behavior follows one owned representation, not parallel lists, flags, registries, validators, or lifecycles.
 - **Structural invariant:** construction/transitions make invalid states impossible or unrepresentable.
 
-Read `CONTEXT.md` and relevant ADRs; domain language names modules and prevents needless re-litigation.
+Read `GLOSSARY.md` and relevant ADRs; domain language names modules and prevents re-litigation.
 
 ## 1. Frame
 
@@ -46,7 +46,7 @@ End with **Top recommendation**; do not finalize interfaces. Ask which candidate
 
 Run `/grilling` on ownership, invariant, module shape, seam/adapters, dependency direction, states, migration, rollback, and observable tests.
 
-- New domain term -> `/domain-modeling` updates `CONTEXT.md`; durable rejection -> offer ADR.
+- New domain term -> `/domain-modeling` updates `GLOSSARY.md`; durable rejection -> offer ADR.
 - Competing interfaces -> design twice with `/codebase-design`.
 - Visual proposal -> `/visual-plan`; competing proposals -> `/plan-arbiter`.
 - Implementation -> reversible sequence for `/development-lifecycle`.

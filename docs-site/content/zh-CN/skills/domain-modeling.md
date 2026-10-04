@@ -1,6 +1,6 @@
 ---
 title: /domain-modeling
-description: 构建并完善项目的领域模型。适用于讨论代码库术语、编写或编辑 CONTEXT.md，或记录或编辑 ADR。
+description: 构建并完善项目的领域模型。适用于讨论代码库术语、编写或编辑 GLOSSARY.md，或记录或编辑 ADR。
 type: skill
 sidebar:
   label: /domain-modeling
@@ -9,7 +9,7 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/domain-modeling.excalidraw)
 
-在设计过程中主动构建并完善项目的领域模型。这是一项*主动的*工作规范——质疑术语、构造边界场景，并在术语表和决策一经明确时立即将其记录下来。（仅仅为了查阅词汇而*阅读* `CONTEXT.md` 并不算使用这项技能——那只是任何技能都能做到的一行式习惯。这项技能用于变更模型，而不仅仅是使用模型。）
+在设计过程中主动构建并完善项目的领域模型。这是一项*主动的*工作规范——质疑术语、构造边界场景，并在术语表和决策一经明确时立即将其记录下来。（仅仅为了查阅词汇而*阅读* `GLOSSARY.md` 并不算使用这项技能——那只是任何技能都能做到的一行式习惯。这项技能用于变更模型，而不仅仅是使用模型。）
 
 ## 文件结构
 
@@ -17,7 +17,7 @@ sidebar:
 
 ```
 /
-├── CONTEXT.md
+├── GLOSSARY.md
 ├── docs/
 │   └── adr/
 │       ├── 0001-event-sourced-orders.md
@@ -25,29 +25,29 @@ sidebar:
 └── src/
 ```
 
-如果根目录中存在 `CONTEXT-MAP.md`，则该仓库包含多个上下文。该映射文件会指明每个上下文所在的位置：
+如果根目录中存在 `GLOSSARY-MAP.md`，则该仓库包含多个上下文。该映射文件会指明每个上下文所在的位置：
 
 ```
 /
-├── CONTEXT-MAP.md
+├── GLOSSARY-MAP.md
 ├── docs/
 │   └── adr/                          <- system-wide decisions
 ├── src/
 │   ├── ordering/
-│   │   ├── CONTEXT.md
+│   │   ├── GLOSSARY.md
 │   │   └── docs/adr/                 <- context-specific decisions
 │   └── billing/
-│       ├── CONTEXT.md
+│       ├── GLOSSARY.md
 │       └── docs/adr/
 ```
 
-按需创建文件——仅在有内容需要写入时才创建。如果不存在 `CONTEXT.md`，就在第一个术语得到明确时创建。如果不存在 `docs/adr/`，就在需要编写第一份 ADR 时创建。
+按需创建文件——仅在有内容需要写入时才创建。如果不存在 `GLOSSARY.md`，就在第一个术语得到明确时创建。如果不存在 `docs/adr/`，就在需要编写第一份 ADR 时创建。
 
 ## 会话期间
 
 ### 根据术语表检查用词
 
-当用户使用的术语与 `CONTEXT.md` 中的现有语言冲突时，立即指出。“你的术语表将‘取消’定义为 X，但你想表达的似乎是 Y——究竟是哪一个？”
+当用户使用的术语与 `GLOSSARY.md` 中的现有语言冲突时，立即指出。“你的术语表将‘取消’定义为 X，但你想表达的似乎是 Y——究竟是哪一个？”
 
 ### 明确模糊语言
 
@@ -61,11 +61,11 @@ sidebar:
 
 当用户说明某项机制的工作方式时，检查代码是否与之相符。如果发现矛盾，应将其指出：“你的代码会取消整个订单，但你刚才说可以部分取消——哪一种才是正确的？”
 
-### 即时更新 CONTEXT.md
+### 即时更新 GLOSSARY.md
 
-术语一经明确，就立即更新 `CONTEXT.md`。不要集中到最后处理——应在术语明确时随即记录。使用 [CONTEXT-FORMAT.md](https://github.com/malinskibeniamin/skills/blob/main/domain-modeling/CONTEXT-FORMAT.md) 中的格式。
+术语一经明确，就立即更新 `GLOSSARY.md`。不要集中到最后处理——应在术语明确时随即记录。使用 [GLOSSARY-FORMAT.md](https://github.com/malinskibeniamin/skills/blob/main/domain-modeling/GLOSSARY-FORMAT.md) 中的格式。
 
-`CONTEXT.md` 应完全不包含实现细节。不要将 `CONTEXT.md` 当作规范、草稿本或实现决策的存放处。它只是术语表，不作他用。
+`GLOSSARY.md` 应完全不包含实现细节。不要将 `GLOSSARY.md` 当作规范、草稿本或实现决策的存放处。它只是术语表，不作他用。
 
 ### 谨慎建议编写 ADR
 

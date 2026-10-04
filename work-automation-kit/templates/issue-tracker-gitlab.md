@@ -14,6 +14,12 @@ Specs and tickets for this repo live as GitLab issues. Use the [`glab`](https://
 
 Infer the repo from `git remote -v` -- `glab` does this automatically when run inside a clone.
 
+## Merge requests as a triage surface
+
+**MRs as a request surface: no.** Set to `yes` only when external MRs should enter the triage queue. Missing or `no` excludes MR discovery, not an explicitly named MR.
+
+When enabled, use `glab mr view`, `glab mr diff`, and `glab mr list -F json`; exclude project members and owners. Comment, label, and close through `glab mr` equivalents. GitLab numbers issues and MRs separately; choose the named surface.
+
 ## When a skill says "publish to the issue tracker"
 
 Create a GitLab issue.

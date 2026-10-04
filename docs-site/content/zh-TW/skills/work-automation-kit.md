@@ -13,14 +13,14 @@ sidebar:
 
 - 議題追蹤器：GitHub、GitLab、本機 Markdown、Jira/Atlassian 或其他工具。
 - 分流標籤：用於標準角色的專案字串。
-- 領域文件：`CONTEXT.md`、`CONTEXT-MAP.md`、ADR 配置。
+- 領域文件：`GLOSSARY.md`、`GLOSSARY-MAP.md`、ADR 配置。
 
 由提示詞驅動。探索 -> 呈現 -> 確認 -> 寫入。
 
 ## 內含的工作流程
 
 各安裝一次以下規劃技能組：`grilling`、`domain-modeling`、`triage`、
-`diagnosing-bugs`、`prototype`、`to-questionnaire`、`to-spec`、`to-tickets`、`handoff`、
+`diagnosing-bugs`、`prototype`、`implement-spec`、`pr`、`retro`、`tdd`、`codebase-design`、`review`、`to-questionnaire`、`to-spec`、`to-tickets`、`handoff`、
 `writing-for-agents`、`visual-plan`、`visual-recap`、`plan-arbiter`、`agent-watchdog`、
 `read-the-damn-docs` 和 `efficient-frontier`。
 
@@ -30,7 +30,8 @@ sidebar:
 
 ```bash
 for skill in \
-  grilling domain-modeling triage diagnosing-bugs prototype to-questionnaire to-spec \
+  grilling domain-modeling triage diagnosing-bugs prototype \
+  implement-spec pr retro tdd codebase-design review to-questionnaire to-spec \
   to-tickets handoff writing-for-agents visual-plan visual-recap plan-arbiter \
   agent-watchdog read-the-damn-docs efficient-frontier
 do

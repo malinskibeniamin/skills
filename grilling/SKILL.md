@@ -57,4 +57,4 @@ Axes: Spec -> `plan-product-hat`; Standards -> `plan-engineering-hat`; design/UX
 
 Require confirmation only when the user requested a plan/grill endpoint. [ETHOS: Discover Before Commitment]
 
-Use `/domain-modeling` for terms in `CONTEXT.md`; add an ADR only for a hard-to-reverse, surprising trade-off.
+Use `/domain-modeling` for terms in `GLOSSARY.md`; add an ADR only for a hard-to-reverse, surprising trade-off.

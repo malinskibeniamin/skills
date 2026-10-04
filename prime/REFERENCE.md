@@ -59,7 +59,7 @@ Gather facts:
 
 - Git state, branch, dirty/changed files, commits.
 - Rule docs: `AGENTS.md`, `CLAUDE.md`, copilot instructions.
-- Domain docs: `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs.
+- Domain docs: `GLOSSARY.md`, `GLOSSARY-MAP.md`, ADRs.
 - Stack/commands from configs.
 - Seed context via local file, `gh issue view`, `gh pr view`, `acli jira workitem view`, branch diff/log.
 - Current PR via `gh pr view` if available.

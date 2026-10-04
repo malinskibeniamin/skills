@@ -15,14 +15,14 @@ Instaluje umiejętności obsługujące przepływy pracy i tworzy kontekst dla ka
 
 - Tracker zgłoszeń: GitHub, GitLab, lokalne pliki Markdown, Jira/Atlassian lub inne rozwiązanie.
 - Etykiety triage: ciągi znaków projektu odpowiadające standardowym rolom.
-- Dokumentacja domeny: `CONTEXT.md`, `CONTEXT-MAP.md`, układ ADR.
+- Dokumentacja domeny: `GLOSSARY.md`, `GLOSSARY-MAP.md`, układ ADR.
 
 Sterowanie za pomocą promptów. Analiza -> prezentacja -> potwierdzenie -> zapis.
 
 ## Dostępne przepływy pracy
 
 Zainstaluj po jednym egzemplarzu każdego elementu zestawu do planowania: `grilling`, `domain-modeling`, `triage`,
-`diagnosing-bugs`, `prototype`, `to-questionnaire`, `to-spec`, `to-tickets`, `handoff`,
+`diagnosing-bugs`, `prototype`, `implement-spec`, `pr`, `retro`, `tdd`, `codebase-design`, `review`, `to-questionnaire`, `to-spec`, `to-tickets`, `handoff`,
 `writing-for-agents`, `visual-plan`, `visual-recap`, `plan-arbiter`, `agent-watchdog`,
 `read-the-damn-docs` i `efficient-frontier`.
 
@@ -32,7 +32,8 @@ Zainstaluj po jednym egzemplarzu każdego elementu zestawu do planowania: `grill
 
 ```bash
 for skill in \
-  grilling domain-modeling triage diagnosing-bugs prototype to-questionnaire to-spec \
+  grilling domain-modeling triage diagnosing-bugs prototype \
+  implement-spec pr retro tdd codebase-design review to-questionnaire to-spec \
   to-tickets handoff writing-for-agents visual-plan visual-recap plan-arbiter \
   agent-watchdog read-the-damn-docs efficient-frontier
 do

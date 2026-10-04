@@ -40,5 +40,5 @@ run_content_eval "$REPO_ROOT/visual-plan/SKILL.md" '\.\./shared/intent-map\.md' 
   "visual plans render the shared intent-map contract"
 run_content_eval "$REPO_ROOT/visual-recap/SKILL.md" '\.\./shared/intent-map\.md' \
   "visual recaps render the shared intent-map contract"
-run_content_eval "$REPO_ROOT/CONTEXT.md" '\*\*Intent map\*\*' \
+run_content_eval "$REPO_ROOT/GLOSSARY.md" '\*\*Intent map\*\*' \
   "domain glossary names the shared presentation model"

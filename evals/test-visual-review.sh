@@ -261,8 +261,8 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Start warn-only" "visual-review reco
 run_content_eval "$REPO_ROOT/go/SKILL.md" "rendered or terminal result" "go verifies customer-facing surfaces directly"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "customer-facing surface diff" "commit-push-pr requires visual-review for customer-facing surfaces"
 run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "customer-facing surface" "shared evidence reference covers customer-facing surfaces"
-run_content_eval "$REPO_ROOT/CONTEXT.md" "Customer-facing surface" "CONTEXT documents customer-facing surface term"
-run_content_eval "$REPO_ROOT/CONTEXT.md" "Surface review" "CONTEXT documents surface review term"
+run_content_eval "$REPO_ROOT/GLOSSARY.md" "Customer-facing surface" "glossary documents customer-facing surface term"
+run_content_eval "$REPO_ROOT/GLOSSARY.md" "Surface review" "glossary documents surface review term"
 run_content_eval "$REPO_ROOT/docs/DEMOS.md" "customer-facing" "demos document customer-facing visual-review usage"
 
 # ── UI lifecycle + deterministic hook candidates ────────────────
