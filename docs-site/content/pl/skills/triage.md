@@ -39,7 +39,7 @@ Pobieraj od najstarszych:
 2. Elementy `needs-triage`.
 3. Elementy `needs-info` z nową aktywnością zgłaszającego.
 
-Uwzględniaj skonfigurowane elementy zewnętrzne i oznaczaj każdą linię `[PR]` albo `[issue]`; aktywne PR-y współpracowników nie są pracą odkrywania. Jawnie nazwany PR pozostaje w zakresie. Pokaż liczby i pozwól maintainerowi wybrać.
+Sprawdź flagę `PRs/MRs as a request surface` skonfigurowanego trackera; brak flagi lub `no` wyklucza zewnętrzne odkrywanie. Uwzględniaj zewnętrzne elementy tylko przy `yes` i oznaczaj każdą linię `[PR]` albo `[issue]`; aktywne PR-y współpracowników nie są pracą odkrywania. Jawnie nazwany PR pozostaje w zakresie. Pokaż liczby i pozwól maintainerowi wybrać.
 
 ## Triage jednego elementu
 

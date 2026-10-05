@@ -5,7 +5,7 @@ import {
 } from "./screenshot-date";
 
 // Current pages only. Released snapshots deliberately retain their old vocabulary.
-const glossarySkills = [
+const releaseSkills = [
   "domain-modeling",
   "grilling",
   "improve-codebase-architecture",
@@ -13,17 +13,17 @@ const glossarySkills = [
   "prime",
   "wait-what",
   "work-automation-kit",
+  "triage",
+  "development-lifecycle",
+  "commit-push-pr",
+  "implement-spec",
 ];
 const routes = [
   "/skills",
-  ...glossarySkills.map((skill) => `/skills/${skill}`),
-  "/skills/triage",
-  "/skills/development-lifecycle",
-  "/skills/commit-push-pr",
-  "/skills/implement-spec",
+  ...releaseSkills.map((skill) => `/skills/${skill}`),
   ...["pl", "zh-CN", "zh-TW"].flatMap((locale) => [
     `/${locale}`,
-    ...glossarySkills.map((skill) => `/${locale}/skills/${skill}`),
+    ...releaseSkills.map((skill) => `/${locale}/skills/${skill}`),
   ]),
 ];
 
@@ -39,7 +39,10 @@ for (const route of routes) {
       await expect(page.locator("main h1")).toBeVisible();
       if (route === "/skills") {
         await expect(
-          page.locator("main").getByRole("link", { name: /^\/tdd/ }).last(),
+          page
+            .locator("main")
+            .getByRole("link", { name: /^\/tdd/ })
+            .last(),
         ).toBeVisible();
       }
       // Directory cards and short Chinese pages have no narratable body;

@@ -33,7 +33,30 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Review depth" "reference scales revi
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Endpoint evidence" "reference defines delivery completion"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "schedule fixed review rounds" "reference rejects review ceremony"
 
-if grep -qE '^## Phase|^### Phase|2-5 min|/grilling|/dogfood|/resilience-review|self-reviewer|adversarial-reviewer|different-family' \
+# Dependency file links are guidance, not mandatory slash-command ceremonies.
+_lifecycle_ceremony='^## Phase|^### Phase|2-5 min|(^|[^[:alnum:]_./-])/(grilling|dogfood|resilience-review)([^[:alnum:]_/-]|$)|self-reviewer|adversarial-reviewer|different-family'
+_check_lifecycle_ceremony_fixture() {
+  local fixture="$1" expected="$2" actual=false
+  if printf '%s\n' "$fixture" | grep -qE "$_lifecycle_ceremony"; then actual=true; fi
+  if [ "$actual" = "$expected" ]; then
+    echo "  PASS  lifecycle ceremony fixture: $fixture"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  lifecycle ceremony fixture: $fixture"
+    FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: ceremony fixture: $fixture"
+  fi
+}
+_check_lifecycle_ceremony_fixture '[dogfood](../dogfood/SKILL.md)' false
+_check_lifecycle_ceremony_fixture 'Load /dogfood now' true
+_check_lifecycle_ceremony_fixture 'Run /dogfood, then review' true
+_check_lifecycle_ceremony_fixture '[/resilience-review](link)' true
+_check_lifecycle_ceremony_fixture '## Phase 1' true
+_check_lifecycle_ceremony_fixture '2-5 min' true
+_check_lifecycle_ceremony_fixture 'self-reviewer' true
+_check_lifecycle_ceremony_fixture 'adversarial-reviewer' true
+_check_lifecycle_ceremony_fixture 'different-family' true
+
+if grep -qE "$_lifecycle_ceremony" \
   "$SKILL_DIR/SKILL.md" "$SKILL_DIR/REFERENCE.md"; then
   echo "  FAIL  lifecycle retains phase, skill, or model ceremony"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: lifecycle ceremony remains"

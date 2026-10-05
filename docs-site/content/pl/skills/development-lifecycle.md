@@ -11,10 +11,9 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/development-lifecycle.excalidraw)
 
+Weź odpowiedzialność za jeden rezultat. Korzystaj z [zasad komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) i [zasad ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
-Weź odpowiedzialność za jeden rezultat i pracuj, dopóki dowody go nie potwierdzą lub nie pojawi się rzeczywista przeszkoda. Przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) dotyczące aktualizacji, przekazywania wyników i wyboru narzędzi.
-
-## Kontrakt rezultatu
+## Kontrakt rezultatu [#outcome-contract]
 
 Przed rozpoczęciem edycji określ:
 
@@ -23,36 +22,36 @@ Przed rozpoczęciem edycji określ:
 - **Weryfikacja** -- kontrole lub obserwowalne zachowanie, które odróżniają ukończone rozwiązanie od rozwiązania jedynie pozornie poprawnego.
 - **Zatrzymanie** -- żądany punkt końcowy i warunki, które rzeczywiście wymagają udziału użytkownika.
 
-Żądanie utworzenia, naprawy lub implementacji upoważnia do działania: przedstaw kontrakt i od razu kontynuuj.
+Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj.
 
-## Pętla
+## Pętla [#loop]
 
 **sprawdź -> działaj -> zweryfikuj -> powtórz**
 
-### Sprawdź
+### Sprawdź [#inspect]
 
-Rozstrzygnij niewiadomą lub zmienną kwestię, która może podważyć przyjęte podejście, korzystając z kodu, testów, logów, dokumentacji i przykładów. Pozostałe zaklasyfikuj jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy. Dopasuj się do istniejących wzorców i sprawdzonej skali; korzystaj z odpowiednich wskazówek.
+Rozstrzygnij przeoczony obszar lub zmienną niewiadomą na podstawie dowodów źródłowych. Dopasuj się do istniejących wzorców i sprawdzonej skali; zaklasyfikuj kwestie jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy.
 
-Przed rozpoczęciem edycji sprawdź `/quantify-impact`. W przypadku każdej widocznej zmiany zarejestruj stan wyjściowy i zinwentaryzuj obszary za pomocą [wizualnych dowodów PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Dotyczy to również drobnych zmian tekstu lub stylu oraz wpływu na współdzielony interfejs użytkownika.
+Przed edycją załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i sprawdź, jakie dowody będą użyteczne. Dla każdej widocznej zmiany zarejestruj stan wyjściowy i zinwentaryzuj obszary za pomocą [wizualnych dowodów PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Dotyczy to również drobnych zmian tekstu lub stylu oraz wpływu na współdzielony interfejs użytkownika.
 
-### Działaj
+### Działaj [#act]
 
-Jeden model główny jest jedynym właścicielem zadania; delegowanie i praca w tle wymagają wyraźnej zgody. Zacznij od najmniejszej oczywistej zmiany; najpierw usuwaj lub wykorzystuj ponownie, zanim dodasz nowe mechanizmy. W przypadku istotnego zachowania stosuj TDD na poziomie publicznego kontraktu: RED -> najmniejsze GREEN -> REFACTOR; statyczne okablowanie lub usuwanie, które nie zmienia zachowania, może wymagać tylko ukierunkowanej weryfikacji. Gdy ustalenia się zmienią, ponownie zaplanuj odpowiedni fragment. Poboczne porządki zgłoś, chyba że blokują weryfikację.
+Jeden właściciel zadania; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowadź najmniejszą oczywistą zmianę; najpierw usuwaj lub wykorzystuj ponownie, zanim dodasz nowe mechanizmy. Dla istotnego zachowania załaduj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) i pracuj na poziomie publicznego kontraktu: RED -> najmniejsze GREEN -> REFACTOR; statyczne okablowanie lub usuwanie, które nie zmienia zachowania, może wymagać tylko ukierunkowanej weryfikacji. Gdy ustalenia się zmienią, ponownie zaplanuj odpowiedni fragment. Poboczne porządki zgłoś, chyba że blokują weryfikację.
 
-### Zweryfikuj
+### Zweryfikuj [#verify]
 
-Uruchom odpowiednie dla repozytorium testy, sprawdzanie typów, lintowanie, kompilację i kontrole statyczne. Sprawdź istotne zachowanie przez jego rzeczywisty punkt wejścia oraz jedną wiarygodną ścieżkę błędu lub odzyskiwania. Oceń rezultat względem celu, ograniczeń i wiarygodnego ryzyka. Każde niepowodzenie wyznacza kolejne działanie; naprawiaj i powtarzaj.
+Uruchom odpowiednie dla repozytorium testy, sprawdzanie typów, lintowanie, kompilację i kontrole statyczne. Dla istotnego, uruchamialnego zachowania załaduj [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md); sprawdź rzeczywisty punkt wejścia oraz jedną wiarygodną ścieżkę błędu lub odzyskiwania. Oceń rezultat względem celu, ograniczeń i wiarygodnego ryzyka. Niepowodzenie wyznacza następne działanie; naprawiaj i powtarzaj.
 
 Jeśli brakuje powtarzalnego punktu wejścia, potwierdź działanie za pomocą tymczasowego środowiska testowego, a następnie skieruj trwałą lukę do `/create-verification-skill`.
 
-## Granice
+## Granice [#boundaries]
 
-Pytaj tylko o istotną decyzję zastrzeżoną dla użytkownika albo nieodwracalne działanie dotyczące środowiska produkcyjnego, prawa lub prywatności, usuwania danych bądź wysokiego poziomu bezpieczeństwa. Na bieżącej, należącej do użytkownika gałęzi wykonuj commity, wypychaj zmiany, wykonuj rebase i używaj `--force-with-lease` bez ponownego pytania. Nigdy nie scalaj, nie używaj zwykłego wymuszenia, nie twórz dodatkowych PR-ów ani nie przepisuj gałęzi domyślnych, współdzielonych, należących do kogoś innego lub równolegle używanych bez wyraźnej zgody.
+Pytaj tylko o decyzje zastrzeżone dla użytkownika albo nieodwracalne działanie dotyczące środowiska produkcyjnego, prawa lub prywatności, usuwania danych bądź wysokiego poziomu bezpieczeństwa. Na bieżącej, należącej do użytkownika gałęzi wykonuj commity, wypychaj zmiany, wykonuj rebase i używaj `--force-with-lease` bez ponownego pytania. Nigdy nie scalaj, nie używaj zwykłego wymuszenia, nie twórz dodatkowych PR-ów ani nie przepisuj gałęzi domyślnych, współdzielonych, należących do kogoś innego lub równolegle używanych bez wyraźnej zgody.
 
 Przed zmianą kodu na gałęzi main/master/develop utwórz odizolowane drzewo robocze za pomocą `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Izolacja drzewa roboczego]
 
-Dowody z dłuższych prac i przesłanki do wstrzymania zapisuj w ignorowanym przez Git pliku `.context/implementation-notes.md`; krótkie zadania pozostają w rozmowie.
+Dowody z dłuższych prac i przesłanki do wstrzymania zapisuj w ignorowanym przez Git pliku `.context/implementation-notes.md`.
 
-## Zakończenie
+## Zakończenie [#completion]
 
-Zatrzymaj się w żądanym punkcie końcowym — odpowiedź, zmiana lokalna, commit, wypchnięcie zmian, PR lub pełne wdrożenie — gdy wszystkie kryteria zakończenia zostaną spełnione, a nie po ukończeniu kroku planu. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md) wyłącznie dla aktywnej ścieżki weryfikacji lub dostarczenia.
+Zatrzymaj się w żądanym punkcie końcowym gdy wszystkie kryteria zakończenia są spełnione. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md) dla weryfikacji lub dostarczenia; dla żądanego dostarczenia przez Git załaduj [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md).

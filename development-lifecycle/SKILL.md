@@ -14,7 +14,7 @@ Before editing:
 - **Verification** -- checks or observable behavior that distinguish done from plausible.
 - **Stop** -- requested endpoint and true user blockers.
 
-State the contract; build/fix/implementation continues immediately.
+State contract; build/fix/implementation: continue immediately.
 
 ## Loop
 
@@ -22,17 +22,17 @@ State the contract; build/fix/implementation continues immediately.
 
 ### Inspect
 
-Resolve decisive unknowns from source evidence. Match existing idiom and demonstrated scale; classify lookup, prototype, reversible assumption, or pause trigger.
+Resolve the blind spot/volatile unknown from source evidence. Classify lookup, prototype, reversible assumption, or pause trigger; match existing idiom and demonstrated scale.
 
-Before edits, load [quantify-impact](../quantify-impact/SKILL.md) and scan for useful evidence. For any visible change, capture the base and inventory surfaces using [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Tiny copy/style and shared-UI effects count.
+Before edits, load [quantify-impact](../quantify-impact/SKILL.md) for useful evidence. For visible changes, capture base/surfaces using [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Tiny copy/shared-UI effects count.
 
 ### Act
 
-One owner; delegation/background work needs explicit authorization. Delete/reuse before adding. Load [tdd](../tdd/SKILL.md) for meaningful behavior at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
+A single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse before adding. Load [tdd](../tdd/SKILL.md) for meaningful behavior at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
 
 ### Verify
 
-Run applicable repo tests, types, lint, build, and static checks. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior; exercise its real entrypoint plus one credible failure/recovery path. Review against objective, guardrails, and credible risk. Repair failures; repeat.
+Run repo tests, types, lint, build, and static checks. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior; exercise its real entrypoint plus one credible failure/recovery path. Review objective, guardrails, credible risk. A failure becomes the next action; repair and repeat.
 
 Missing repeatable entrypoint: prove with a disposable harness, then route the durable gap to `/create-verification-skill`.
 
@@ -42,8 +42,8 @@ Ask only for user-reserved decisions or irreversible production, legal/privacy, 
 
 Before code on main/master/develop, create an isolated worktree with `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Worktree Isolation]
 
-Keep long-run evidence/pause triggers in ignored `.context/implementation-notes.md`.
+Keep evidence/pause triggers in ignored `.context/implementation-notes.md`.
 
 ## Completion
 
-Stop at the requested endpoint with exit criteria proven. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for requested Git delivery.
+Stop at the requested endpoint when every exit criterion passes. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for requested Git delivery.

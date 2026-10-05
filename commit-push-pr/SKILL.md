@@ -14,7 +14,7 @@ Merge only on explicit request: [contract](references/merge.md).
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
 3. Push/PR needs a remote; PR needs authenticated `gh` and base.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
-5. Review inline; named invocation is not an approval gate.
+5. Review inline; do not block merely over named skill invocation.
 6. Load [dogfood](../dogfood/SKILL.md) for runnable PR work; require current PASS. BLOCKED needs user waiver.
 7. Stage requested paths by purpose; ask if ownership is unclear.
 
@@ -22,7 +22,7 @@ Merge only on explicit request: [contract](references/merge.md).
 
 1. Stay on the feature branch; on default, create `type/description`.
 2. Per coherent group, `git add <explicit paths>` then `type(scope): terse description`: lowercase, 5-72 chars, no period.
-3. Commit-only stops after clean-tree check.
+3. Explicit commit-only intent stops here after clean-tree check.
 4. Push/PR: show `origin/<branch>..HEAD`, then push with tracking.
 5. Current user-owned branch rewrites use `--force-with-lease` without another permission prompt. Never plain-force; default/shared/foreign/concurrent rewrites need explicit permission.
 
@@ -31,7 +31,7 @@ Merge only on explicit request: [contract](references/merge.md).
 `--no-pr` never creates a PR. Refresh an existing PR's evidence/body after push; otherwise end after push and clean-tree check. Prepare local visual evidence before push.
 
 1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR; otherwise create with assignee, labels, and template. Draft PR creation proceeds without separate approval. Whole-stack publication uses `/stacked-prs`.
-2. Load [quantify-impact](../quantify-impact/SKILL.md) and [pr](../pr/SKILL.md) separately; include value or proven metrics.
+2. Every PR: load [quantify-impact](../quantify-impact/SKILL.md) and [pr](../pr/SKILL.md) separately; include value or proven metrics.
 3. Every visible change needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without user waiver.
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Include dogfood receipt. Re-read body, check reviewer image access, and print URL. Updates/reopens use same gate; edits invalidate affected evidence.

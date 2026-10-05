@@ -10,7 +10,7 @@ run_content_eval "$MECHANICS" 'already loaded.*current context' "loading reuses 
 run_content_eval "$MECHANICS" 'user-invoked.*recommend.*human' "dependency loading preserves human-only skills"
 run_content_eval "$LIFECYCLE" 'SKILL-MECHANICS.md#loading-dependencies' "lifecycle loads its invocation contract"
 run_content_eval "$LIFECYCLE" 'Load.*tdd/SKILL.md' "meaningful behavior explicitly loads TDD"
-run_content_eval "$DELIVERY" 'Load.*quantify-impact/SKILL.md.*pr/SKILL.md' "PR publication explicitly loads impact and PR guidance"
+run_content_eval "$DELIVERY" '[Ll]oad.*quantify-impact/SKILL.md.*pr/SKILL.md' "PR publication explicitly loads impact and PR guidance"
 run_content_eval "$REPO_ROOT/implement-spec/SKILL.md" 'approved spec.*blocker edges.*independently verifiable' "whole-spec delegation has a selective fit"
 run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" '[Ss]uggest.*retro.*review-heavy' "retro is suggested at an evidence-triggered boundary"
 run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" 'next similar task.*same.*failure' "retro measures a concrete follow-up rather than assumed gains"
