@@ -134,7 +134,7 @@
     "speed": "Median output tokens per second relative to the fastest model.",
     "taste": "Owner judgment for UI/UX, code quality, API design, and copy.",
     "measured": "2026-09-25",
-    "order": "Shipped work weighs intelligence, then taste, then cost; cost only breaks ties.",
+    "order": "First satisfy the requested outcome, guardrails, endpoint, and verified completion. Among intent-equivalent choices, weigh intelligence, then taste, then observed cost; cost only breaks ties. Use the context-ablation scorecard's manual review, not subjective model rankings, for unrequested promotions.",
     "review": "Historical audit rating for Opus 5.5; GPT-6.1 Sol has no numeric audit rating. Current review routing follows the explicit owner preference, not historical rankings.",
     "allowance": "How long the $200 plan lasts before a limit hits (Claude Max 20x, ChatGPT Pro 20x). GPT-6.1 Sol allowance is unmeasured. Claude publishes no counts: the Opus 5.5 rating is owner-observed, not inferred from tokens."
   }

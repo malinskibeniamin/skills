@@ -12,6 +12,12 @@
     "duration_seconds",
     "verification_behavior"
   ],
+  "manual_metrics": [
+    "first_pass_intent_success",
+    "verified_completion",
+    "scope_endpoint_violations",
+    "readability"
+  ],
   "runs_per_cell": 3,
   "tasks": [
     "setup-code-organization",
@@ -43,7 +49,7 @@
     }
   },
   "gate": {
-    "quality": "No lower task success, no new high-severity regression, and median human-quality score no lower than current.",
+    "quality": "No lower task success, first-pass intent success, or verified completion per task; no new high-severity regression or scope/endpoint violation; median human-quality score and readability no lower than current. Missing manual evidence leaves promotion undecided.",
     "efficiency": "Among quality-equivalent cells, prefer fewer input tokens and shorter duration.",
     "method": "Start from the bare model and restore guardrails, lean repository context, then current context. Change one group at a time."
   },
@@ -52,7 +58,13 @@
     "required_fields": [
       "model_version",
       "harness_commit",
+      "effort_speed_mode",
+      "outcome_contracts",
       "task_pass_rates",
+      "first_pass_intent_success",
+      "verified_completion",
+      "scope_endpoint_violations",
+      "readability",
       "quality_verdict",
       "winning_variant",
       "hook_retention_decisions",
