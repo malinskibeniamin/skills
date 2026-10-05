@@ -1,8 +1,8 @@
 {
   "repository": "https://github.com/cursor/plugins",
   "subdirectory": "pstack",
-  "revision": "7022c81efb48d8b5eb15498ce6043a3bd74b694c",
-  "version": "0.15.5",
+  "revision": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a",
+  "version": "0.15.9",
   "skills": [
     {
       "name": "poteto-reproduce-and-fix-issues",
@@ -47,6 +47,13 @@
       "explicit_only": true
     },
     {
+      "name": "poteto-benchmark-checklist",
+      "source": "skills/benchmark-checklist/SKILL.md",
+      "description": "Poteto: Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured.",
+      "short_description": "Poteto: Vet performance measurements before acting on them",
+      "explicit_only": true
+    },
+    {
       "name": "poteto-blast-radius",
       "source": "skills/blast-radius/SKILL.md",
       "description": "Poteto: Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust.",
@@ -58,6 +65,13 @@
       "source": "skills/bro/SKILL.md",
       "description": "Poteto: Restate the last message in plain human language, with no jargon.",
       "short_description": "Poteto: Restate the last message in plain human language",
+      "explicit_only": true
+    },
+    {
+      "name": "poteto-correct",
+      "source": "skills/correct/SKILL.md",
+      "description": "Poteto: Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.",
+      "short_description": "Poteto: Make repeated agent mistakes impossible by design",
       "explicit_only": true
     },
     {
@@ -156,6 +170,13 @@
       "source": "skills/principle-experience-first/SKILL.md",
       "description": "Poteto: Apply when product, UX, or feature-scope tradeoffs come up. Choose user delight over implementation convenience; ship fewer polished features over more rough ones.",
       "short_description": "Poteto: Choose user experience over implementation convenience",
+      "explicit_only": true
+    },
+    {
+      "name": "poteto-principle-explain-the-number",
+      "source": "skills/principle-explain-the-number/SKILL.md",
+      "description": "Poteto: Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
+      "short_description": "Poteto: Find the limiter and validate measured numbers",
       "explicit_only": true
     },
     {
@@ -357,7 +378,7 @@
   ],
   "files": {
     ".cursor-plugin/plugin.json": {
-      "sha256": "0fc91a08dab312d166a11f2c2cb8b699f19627415f001e641fcfa7aea9ba5836",
+      "sha256": "c17868a6a39a8f7c109fdedf5df7ebcc4d8cde127a10f40c663a8c46adc4087e",
       "mode": 420
     },
     ".gitignore": {
@@ -369,7 +390,7 @@
       "mode": 420
     },
     "README.md": {
-      "sha256": "16262f32aa041d857f2936f3ad6c589648f8e7b5d23e03c3c0a8c76ef99fd08c",
+      "sha256": "850eea901004b9ef4633e17c1bd9932863046a021242b4e043907ae534b21fa8",
       "mode": 420
     },
     "agents/comment-sicko.md": {
@@ -377,7 +398,7 @@
       "mode": 420
     },
     "agents/poteto-agent.md": {
-      "sha256": "c3850be1b97bc97cec0568ed8b26d04e7693c4e07868137c58fe546d37f288e9",
+      "sha256": "abe41c169ecbfe65641f1725f4188d568e046c0dec7fd2dc271abb594c299201",
       "mode": 420
     },
     "assets/logo.png": {
@@ -461,7 +482,7 @@
       "mode": 420
     },
     "docs/guide/08-principles.md": {
-      "sha256": "3ede7c9cf74d9631142aec016a01843d97c1e20469387144b70c2660d50fa96f",
+      "sha256": "a103e293dd6d9513f425feac39547f0c2c049300f36704d80b6d49c958e5a4bb",
       "mode": 420
     },
     "docs/guide/09-make-it-yours.md": {
@@ -473,7 +494,7 @@
       "mode": 420
     },
     "docs/guide/README.md": {
-      "sha256": "0db8dd72e832c06638ca2f43489e8597d44dc0ea8da3b5088e4382ea26d904c5",
+      "sha256": "125f870a93bf830d45bda187f585cec4508cc9ca5121271af58adbe937bbe54f",
       "mode": 420
     },
     "docs/guide/images/design.jpg": {
@@ -501,11 +522,11 @@
       "mode": 420
     },
     "skills/architect/SKILL.md": {
-      "sha256": "691cd39f52c7b613866e6baf9ea0b05451ffa21a6a9b4102f166418b89178fde",
+      "sha256": "741901140ee382ebf93263a7ed03c6ee3719e578416d81afcd195876fa16c496",
       "mode": 420
     },
     "skills/architect/references/design-red-flags.md": {
-      "sha256": "905066f9bbac81c573c2b325be47751d2c0f9325e0a0772bd4384e82dafe9336",
+      "sha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce",
       "mode": 420
     },
     "skills/architect/references/rationale-template.md": {
@@ -524,12 +545,20 @@
       "sha256": "1510979b0b71b54284427a19c09918f8b1fdfc168f9b7f9e30098793a5ec88ef",
       "mode": 420
     },
+    "skills/benchmark-checklist/SKILL.md": {
+      "sha256": "6a767e788a60428fa14e645ee10fe2e49896e514ff654f668b1d824deb9038e8",
+      "mode": 420
+    },
     "skills/blast-radius/SKILL.md": {
       "sha256": "5f02db9101ccf26c20254718f0fcd5c2c7ac5d4292b0e0923d0944ac47237aff",
       "mode": 420
     },
     "skills/bro/SKILL.md": {
       "sha256": "aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb",
+      "mode": 420
+    },
+    "skills/correct/SKILL.md": {
+      "sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
       "mode": 420
     },
     "skills/create-verification-skill/SKILL.md": {
@@ -597,7 +626,7 @@
       "mode": 420
     },
     "skills/poteto-mode/SKILL.md": {
-      "sha256": "7645c9ee27ef9798c48a84060b6df409f8593d1058c7c25cbec28dce976195f9",
+      "sha256": "404c0ef4a78e93451b2ab555ca532e7197b5cf87de29205b6f7109dbee5d9c4d",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/authoring-a-skill.md": {
@@ -609,11 +638,11 @@
       "mode": 420
     },
     "skills/poteto-mode/playbooks/autopilot-full.md": {
-      "sha256": "975439613b9073b637a88c6df762b474dbd745f0e86150bb07d2121e32eb48e7",
+      "sha256": "05ca30a16242c19d0c78ba1e88cca66f858d75252cb154fd740099fe292de802",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/autopilot-stack.md": {
-      "sha256": "f626f4ed17725de5ea96ac22597a1c298c46c36015e844bf86a68f6d38d57fbf",
+      "sha256": "007c0a3b12011954a224f54773ef4ad7b75918be0a311914c1b51ad4e794c1e5",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/babysit.md": {
@@ -633,7 +662,7 @@
       "mode": 420
     },
     "skills/poteto-mode/playbooks/hillclimb.md": {
-      "sha256": "41980da135de2579bb38570e4b3373e015029148734ab5dc7d6103417b499af6",
+      "sha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/investigation.md": {
@@ -641,11 +670,11 @@
       "mode": 420
     },
     "skills/poteto-mode/playbooks/multi-phase-plan.md": {
-      "sha256": "8f8603f97aa57bce07a4c29e83e24e84db62a1fbd1fa5b3f639e1e74ea3c9da9",
+      "sha256": "27d310e3fc3937a60b8fcbe1318f9d249a7477a722907bf85b3e4eb3dc436b11",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/opening-a-pr.md": {
-      "sha256": "1c0281f84348aa5dc6f10defbcdd8357f4b0786d874f340ba34bfc169dc6c26f",
+      "sha256": "ab40de7163c1c6e274f46ee559b2e53ef45673703f601f13f4931c199e6fb90f",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/orchestrate.md": {
@@ -657,7 +686,7 @@
       "mode": 420
     },
     "skills/poteto-mode/playbooks/perf-issue.md": {
-      "sha256": "bb957907426666b7aa599aed3f6ddebf423364a1428f93790b5cb9e15c878e7e",
+      "sha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a",
       "mode": 420
     },
     "skills/poteto-mode/playbooks/prototype.md": {
@@ -705,7 +734,7 @@
       "mode": 420
     },
     "skills/poteto-mode/scripts/check-plan.mjs": {
-      "sha256": "1f9e788ce90a13a9973e35e8c3a52737857c375e057bdccc13c8510a9af30f04",
+      "sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
       "mode": 493
     },
     "skills/poteto-mode/scripts/orch/orch.test.ts": {
@@ -798,6 +827,10 @@
     },
     "skills/principle-experience-first/SKILL.md": {
       "sha256": "58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b",
+      "mode": 420
+    },
+    "skills/principle-explain-the-number/SKILL.md": {
+      "sha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c",
       "mode": 420
     },
     "skills/principle-fix-root-causes/SKILL.md": {
@@ -909,7 +942,7 @@
       "mode": 493
     },
     "skills/swarm/SKILL.md": {
-      "sha256": "e28057fbbd1113257b2e953c6e891c41f535dbb01400b6bfd3eb9a85a2ab861f",
+      "sha256": "bdcee4168e22428036e93d7cdeec3f391dbc4132f927f6db2540328c22db0273",
       "mode": 420
     },
     "skills/tdd/SKILL.md": {
@@ -921,7 +954,7 @@
       "mode": 420
     },
     "skills/technical-writing/SKILL.md": {
-      "sha256": "10c74685e1639cc4f8ff096007e5405b25ca0e824b65aaa17105c238faf6a1e8",
+      "sha256": "f5c512ffeec70bc4e0dee50f7bb4c26742e1be77967a6e8b15d1921e1c209ceb",
       "mode": 420
     },
     "skills/typescript-best-practices/SKILL.md": {
@@ -929,7 +962,7 @@
       "mode": 420
     },
     "skills/typescript-best-practices/references/patterns.md": {
-      "sha256": "62e9cd32d2fa066a35d0d1349aac22dce31a48ad7d5eaf142570770cfe707384",
+      "sha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18",
       "mode": 420
     },
     "skills/unslop/SKILL.md": {

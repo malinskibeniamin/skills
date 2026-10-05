@@ -122,6 +122,30 @@ class PotetoSyncTest(unittest.TestCase):
         self.assertIn("disable-model-invocation: true", adapter)
         self.assertEqual((self.repo / "vendor/pstack/skills/tdd/SKILL.md").read_bytes(), original)
 
+    def test_refresh_includes_measurement_and_correction_skills(self):
+        additions = ["benchmark-checklist", "correct", "principle-explain-the-number"]
+        for name in additions:
+            self.write_source(
+                f"skills/{name}/SKILL.md",
+                f'---\nname: {name}\ndescription: "An explicit upstream workflow."\n'
+                "disable-model-invocation: true\n---\nUnchanged upstream instructions.\n",
+            )
+        self.install()
+        manifest = json.loads((self.repo / ".claude-plugin/plugin.json").read_text())
+        for name in additions:
+            with self.subTest(skill=name):
+                self.assertEqual(manifest["skills"].count(f"./poteto-skills/poteto-{name}/"), 1)
+                adapter = (self.repo / f"poteto-skills/poteto-{name}/SKILL.md").read_text()
+                description = json.loads(adapter.split("description: ", 1)[1].splitlines()[0])
+                self.assertTrue(25 <= len(description) <= 64)
+                self.assertTrue(description.isascii())
+                self.assertIn("disable-model-invocation: true\n", adapter)
+                self.assertEqual(
+                    (self.repo / f"vendor/pstack/skills/{name}/SKILL.md").read_bytes(),
+                    (self.source / f"skills/{name}/SKILL.md").read_bytes(),
+                )
+        self.assertEqual(self.sync("--check").returncode, 0)
+
     def test_check_detects_modified_support_files_and_missing_registration(self):
         self.install()
         copied = self.repo / "vendor/pstack/skills/tdd/references/example.md"

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Benchmark Checklist"
+  short_description: "Poteto: Vet performance measurements before acting on them"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Correct"
+  short_description: "Poteto: Make repeated agent mistakes impossible by design"
+policy:
+  allow_implicit_invocation: false

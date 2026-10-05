@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Explain The Number"
+  short_description: "Poteto: Find the limiter and validate measured numbers"
+policy:
+  allow_implicit_invocation: false
