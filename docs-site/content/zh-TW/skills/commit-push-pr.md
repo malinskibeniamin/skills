@@ -50,6 +50,11 @@ type: skill
 4. 公開儲存庫（`gh repo view --json visibility`）：推送前，請從提交、標題、內文及證明中移除內部組織、儲存庫、產品、人員名稱及私人連結。
 5. 附上 dogfood 執行證明。重新閱讀內文、確認審查者可存取圖片，並輸出網址。更新／重新開啟也適用相同關卡；編輯會使受影響的證明失效。
 
+如果已明確啟用本機自動審查，請依照 [AUTO-REVIEW.md](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+將已發布的 PR 綁定到目前這個原始工作階段。鉤子會處理一般的 `gh pr create`；對於不透明的工具封裝，
+請明確執行綁定指令，並使用目前原生工作階段的 UUID。絕不猜測 ID、使用 `--last`、取代現有擁有者，
+也不要只因使用者要求建立 PR 就啟用監看程序。
+
 除非使用者明確要求，否則不要執行 `/visual-recap` 或 `/make-pr-easy-to-review`。
 
 ## 完成作業 [#completion]

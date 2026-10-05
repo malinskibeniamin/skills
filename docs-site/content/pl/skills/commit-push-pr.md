@@ -53,6 +53,13 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów i produktów, imiona i nazwiska osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.
 5. Uwzględnij potwierdzenie dogfood. Przeczytaj ponownie opis, sprawdź dostęp recenzenta do obrazów i wyświetl adres URL. Aktualizacje i ponowne otwarcia podlegają tym samym wymaganiom; edycje unieważniają dowody, których dotyczą.
 
+Jeśli lokalny automatyczny przegląd został jawnie włączony, powiąż opublikowany PR z tą
+pierwotną sesją zgodnie z [AUTO-REVIEW.md](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md).
+Hooki obsługują zwykłe `gh pr create`; w przypadku nieprzejrzystych wrapperów narzędzi
+uruchom polecenie powiązania jawnie, podając UUID bieżącej sesji natywnej. Nigdy nie zgaduj
+identyfikatora, nie używaj `--last`, nie zastępuj istniejącego właściciela ani nie włączaj
+watchera tylko dlatego, że zażądano PR-a.
+
 Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkownik wyraźnie o to poprosi.
 
 ## Zakończenie [#completion]

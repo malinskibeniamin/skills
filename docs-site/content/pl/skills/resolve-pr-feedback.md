@@ -42,7 +42,13 @@ Przeczytaj GraphQL `reviewThreads`, komentarze główne i treści przeglądów w
 |---|---|
 | Nowe, bez odpowiedzi | Przetwórz |
 | Obsłużone lub oczekujące na decyzję | Pomiń |
-| Bot, zatwierdzenie lub tylko CI | Odrzuć |
+| Uwaga z automatycznego przeglądu wymagająca działania | Przetwórz jak uwagi człowieka |
+| Zatwierdzenie, tylko CI lub podsumowanie niewymagające działania | Odrzuć |
+
+Typ autora nie rozstrzyga, czy uwaga dotyczy zmian. Sprawdź każdą uwagę, w tym wątki
+złożone wyłącznie z komentarzy botów. Pobierz wszystkie strony wątków, komentarzy i
+przeglądów; ograniczona pierwsza strona nie dowodzi kompletności. Na uwagi niedotyczące
+zmian odpowiedz dowodami, zamiast pomijać je bez wyjaśnienia.
 
 Gdy nie ma nowych elementów, opublikuj `All feedback addressed` i zakończ.
 
@@ -60,11 +66,12 @@ Dla zwykłego PR-a wypchnij każdą poprawkę CI lub wynik rebase i wykonaj żą
 
 ### 6. Weryfikacja kompletności [#6-completeness-verification]
 
-Przed zakończeniem wymagaj zera nierozwiązanych, aktualnych wątków innych niż boty oraz braku nieaktualnego `CHANGES_REQUESTED`. Pozostałości wracają do triage. Hook `pr-feedback-completeness-stop` wymusza ten stan.
+Przed zakończeniem wymagaj zera nierozwiązanych, nieprzestarzałych wątków dotyczących zmian oraz braku nieaktualnego `CHANGES_REQUESTED`. Pozostałości wracają do triage. Hook `pr-feedback-completeness-stop` wymusza ten stan.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
+bash scripts/pr-unresolved-count.sh --include-bots  # naprawa uwag z automatycznego przeglądu
 ```
 
 Pierwsze polecenie musi wypisać `0`. Wrapper ukrywa szczegóły stanu wątków dostępne tylko w GraphQL.
@@ -77,3 +84,11 @@ Opublikuj jeden punkt na rozwiązaną przyczynę źródłową oraz stan wątków
 
 - Samoprzegląd AI: zakończ, gdy oś przeglądu w kodzie jest zatwierdzona lub pusta; najwyżej dwie rundy.
 - Uwagi człowieka, chmury lub Copilot: bez limitu iteracji. Obsłuż każdy wątek przed przekazaniem; hook kompletności blokuje nierozwiązane wątki i oczekujące żądania zmian.
+
+## Automatyczne wznowienie [#automatic-wake-up]
+
+Gdy użytkownik prosi o automatyczne naprawianie przyszłych uwag bez nadzoru, zastosuj
+[konfigurację lokalnego automatycznego przeglądu](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md).
+Jeden jawnie włączony watcher wznawia dokładnie tę sesję, która pracowała nad funkcją;
+hooki tworzenia PR-ów rejestrują przyszłe PR-y. Zwykłe rozwiązywanie uwag nie włącza
+stałego monitorowania. Roboczy PR pozostaje roboczy; bez automatycznego scalania.
