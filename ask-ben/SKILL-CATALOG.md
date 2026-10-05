@@ -49,8 +49,10 @@
 | `/poteto-architect` | Poteto: Design caller usage, types, and module boundaries. |
 | `/poteto-arena` | Poteto: Compare competing implementations and combine the best. |
 | `/poteto-automate-me` | Poteto: Draft a personal mode from observed working patterns. |
+| `/poteto-benchmark-checklist` | Poteto: Vet performance measurements before acting on them. |
 | `/poteto-blast-radius` | Poteto: Prove non-local safety by executing the decisive check. |
 | `/poteto-bro` | Poteto: Restate the last message in plain human language. |
+| `/poteto-correct` | Poteto: Make repeated agent mistakes impossible by design. |
 | `/poteto-create-verification-skill` | Poteto: Create a project-local real-app verifier. |
 | `/poteto-figure-it-out` | Poteto: Design a verifiable playbook for an unfamiliar task. |
 | `/poteto-how` | Poteto: Explain subsystem behavior from source evidence. |
@@ -65,6 +67,7 @@
 | `/poteto-principle-encode-lessons-in-structure` | Poteto: Encode lessons in structure. |
 | `/poteto-principle-exhaust-the-design-space` | Poteto: Exhaust the design space. |
 | `/poteto-principle-experience-first` | Poteto: Choose user experience over implementation convenience. |
+| `/poteto-principle-explain-the-number` | Poteto: Find the limiter and validate measured numbers. |
 | `/poteto-principle-fix-root-causes` | Poteto: Reproduce symptoms and repair their underlying cause. |
 | `/poteto-principle-foundational-thinking` | Poteto: Foundational thinking. |
 | `/poteto-principle-guard-the-context-window` | Poteto: Guard the context window. |

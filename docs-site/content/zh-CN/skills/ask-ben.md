@@ -70,8 +70,10 @@ type: skill
 | `/poteto-architect` | Poteto：设计调用方式、类型和模块边界。 |
 | `/poteto-arena` | Poteto：比较不同实现并结合各自的优势。 |
 | `/poteto-automate-me` | Poteto：根据观察到的工作模式起草个人模式。 |
+| `/poteto-benchmark-checklist` | Poteto：在采取行动前验证性能测量结果。 |
 | `/poteto-blast-radius` | Poteto：执行决定性检查，证明跨模块变更的安全性。 |
 | `/poteto-bro` | Poteto：用通俗语言重述上一条消息。 |
+| `/poteto-correct` | Poteto：通过设计消除代理反复犯的错误。 |
 | `/poteto-create-verification-skill` | Poteto：创建项目本地的真实应用验证技能。 |
 | `/poteto-figure-it-out` | Poteto：为不熟悉的任务设计可验证的操作流程。 |
 | `/poteto-how` | Poteto：依据源码证据解释子系统的行为。 |
@@ -86,6 +88,7 @@ type: skill
 | `/poteto-principle-encode-lessons-in-structure` | Poteto：将经验教训编码到结构中。 |
 | `/poteto-principle-exhaust-the-design-space` | Poteto：穷尽设计方案。 |
 | `/poteto-principle-experience-first` | Poteto：优先考虑用户体验，而非实现便利。 |
+| `/poteto-principle-explain-the-number` | Poteto：找出限制因素并验证测量结果。 |
 | `/poteto-principle-fix-root-causes` | Poteto：复现症状并修复根本原因。 |
 | `/poteto-principle-foundational-thinking` | Poteto：从基础原理出发思考。 |
 | `/poteto-principle-guard-the-context-window` | Poteto：保护上下文窗口。 |

@@ -70,8 +70,10 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go; instalowalne 
 | `/poteto-architect` | Poteto: Zaprojektuj sposób użycia przez kod wywołujący, typy i granice modułów. |
 | `/poteto-arena` | Poteto: Porównaj konkurencyjne implementacje i połącz najlepsze rozwiązania. |
 | `/poteto-automate-me` | Poteto: Opracuj własny tryb na podstawie obserwowanych wzorców pracy. |
+| `/poteto-benchmark-checklist` | Poteto: Sprawdź pomiary wydajności przed podjęciem działań. |
 | `/poteto-blast-radius` | Poteto: Udowodnij bezpieczeństwo zmian wykraczających poza lokalny zakres, wykonując rozstrzygającą kontrolę. |
 | `/poteto-bro` | Poteto: Przedstaw ostatnią wiadomość prostym, zrozumiałym językiem. |
+| `/poteto-correct` | Poteto: Wyeliminuj powtarzające się błędy agentów przez projektowanie. |
 | `/poteto-create-verification-skill` | Poteto: Utwórz lokalną dla projektu umiejętność weryfikacji rzeczywistej aplikacji. |
 | `/poteto-figure-it-out` | Poteto: Zaprojektuj weryfikowalny scenariusz działania dla nieznanego zadania. |
 | `/poteto-how` | Poteto: Wyjaśnij działanie podsystemu na podstawie kodu źródłowego. |
@@ -86,6 +88,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go; instalowalne 
 | `/poteto-principle-encode-lessons-in-structure` | Poteto: Utrwalaj wnioski w strukturze kodu. |
 | `/poteto-principle-exhaust-the-design-space` | Poteto: Przeanalizuj wszystkie warianty projektu. |
 | `/poteto-principle-experience-first` | Poteto: Wybieraj wygodę użytkownika zamiast wygody implementacji. |
+| `/poteto-principle-explain-the-number` | Poteto: Znajdź ograniczenie i zweryfikuj wyniki pomiarów. |
 | `/poteto-principle-fix-root-causes` | Poteto: Odtwórz objawy i napraw ich przyczynę. |
 | `/poteto-principle-foundational-thinking` | Poteto: Myśl od podstaw. |
 | `/poteto-principle-guard-the-context-window` | Poteto: Chroń okno kontekstu. |
