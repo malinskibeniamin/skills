@@ -1,0 +1,11 @@
+{
+  "repository": "flightrules",
+  "revision": "14b0652079bc5b1de4ef97a991be17193709a973",
+  "license": null,
+  "files": {
+    "skills/docs/SKILL.md": {
+      "blob_sha": "4d954610986a1ada3f1e833d624581880e6206c9",
+      "sha256": "1ca8ada59dd6618eaf325a889d7b3afba41804fdff803d9c243cdf8969a9fe7f"
+    }
+  }
+}

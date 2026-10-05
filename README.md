@@ -125,6 +125,20 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 
 Want proof and examples? Demo scripts, featured skill moments, and starter prompts live in [docs/DEMOS.md](docs/DEMOS.md); comparisons, measurement methodology, and common questions live in [docs/FAQ.md](docs/FAQ.md).
 
+## Factual technical writing
+
+Use `/docs` to write or review READMEs, design specs, research notes, and runbooks with
+sourced claims, reproducible results, and link verification. It works in Claude Code and
+Codex. [Upstream provenance](vendor/flightrules/NOTICE.md) and
+[host adaptations](shared/FLIGHTRULES-COMPATIBILITY.md) keep the docs-only snapshot separate
+from this harness's workflows.
+
+For the same communication principles throughout a Claude Code session, open `/config`,
+choose **Output style**, and select the plugin's `factual-docs` style. It is opt-in and keeps
+coding instructions. Installing the plugin does not select it or change your settings.
+The workflow remains `/docs`; the style does not impose document sections or filenames on
+ordinary chat. [Claude output-style reference](https://code.claude.com/docs/en/output-styles).
+
 ## Browse the docs
 
 The Blume site turns every canonical `SKILL.md` into a searchable page without a

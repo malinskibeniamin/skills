@@ -40,6 +40,7 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go; instalowalne 
 | `/deslop` | Audytowanie nadmiernie rozbudowanego kodu i usuwanie nieuzasadnionych elementów. |
 | `/development-lifecycle` | Przeprowadzanie pełnego cyklu tworzenia frontendu. |
 | `/diagnosing-bugs` | Diagnozowanie trudnych błędów w krótkiej pętli informacji zwrotnej. |
+| `/docs` | Pisanie i recenzowanie dokumentów technicznych opartych na faktach. |
 | `/dogfood` | Używanie i intensywne testowanie każdej uruchamialnej zmiany. |
 | `/domain-modeling` | Tworzenie wspólnego modelu domeny i słownictwa. |
 | `/e2e-testing` | Tworzenie odpornych testów end-to-end w Playwright. |

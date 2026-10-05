@@ -40,6 +40,7 @@ type: skill
 | `/deslop` | 审计已经臃肿的代码，并移除缺乏合理依据的表层内容。 |
 | `/development-lifecycle` | 运行完整的前端开发生命周期。 |
 | `/diagnosing-bugs` | 通过紧密的反馈循环诊断棘手缺陷。 |
+| `/docs` | 撰写和审查基于事实的技术文档。 |
 | `/dogfood` | 使用并压力测试每项可运行的变更。 |
 | `/domain-modeling` | 构建共享的领域模型和词汇表。 |
 | `/e2e-testing` | 构建具有韧性的 Playwright 端到端测试。 |

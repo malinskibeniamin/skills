@@ -40,6 +40,7 @@ SHORT_DESCRIPTIONS = {
     "diagnosing-bugs": "Diagnose hard bugs with a tight feedback loop",
     "dogfood": "Use and stress-test every runnable change",
     "domain-modeling": "Build a shared domain model and vocabulary",
+    "docs": "Write and review factual technical documents",
     "e2e-testing": "Build resilient Playwright end-to-end tests",
     "effect-ts": "Set up repositories for Effect",
     "effect-v3-to-v4": "Migrate Effect v3 codebases to v4 from upstream references",

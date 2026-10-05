@@ -210,6 +210,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Observation + receipt",
     ],
   },
+  docs: {
+    kind: "evidence-funnel",
+    nodes: [
+      "Reader + outcome",
+      "Sources + claims",
+      "Clear document",
+      "Verified links + results",
+    ],
+  },
   "domain-modeling": {
     fields: [
       ["name", "definition"],

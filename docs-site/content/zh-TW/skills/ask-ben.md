@@ -40,6 +40,7 @@ type: skill
 | `/deslop` | 稽核已經過度膨脹的程式碼，並移除不合理的介面。 |
 | `/development-lifecycle` | 執行完整的前端開發生命週期。 |
 | `/diagnosing-bugs` | 透過緊密的回饋迴圈診斷棘手的錯誤。 |
+| `/docs` | 撰寫與審查以事實為依據的技術文件。 |
 | `/dogfood` | 使用每項可執行的變更，並對其進行壓力測試。 |
 | `/domain-modeling` | 建立共用的領域模型與詞彙。 |
 | `/e2e-testing` | 建置具韌性的 Playwright 端對端測試。 |

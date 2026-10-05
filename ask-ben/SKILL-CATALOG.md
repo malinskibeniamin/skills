@@ -17,6 +17,7 @@
 | `/deslop` | Audit already-bloated code and remove unjustified surface. |
 | `/development-lifecycle` | Run the full frontend development lifecycle. |
 | `/diagnosing-bugs` | Diagnose hard bugs with a tight feedback loop. |
+| `/docs` | Write and review factual technical documents. |
 | `/dogfood` | Use and stress-test every runnable change. |
 | `/domain-modeling` | Build a shared domain model and vocabulary. |
 | `/e2e-testing` | Build resilient Playwright end-to-end tests. |
