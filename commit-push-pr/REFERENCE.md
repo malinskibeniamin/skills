@@ -191,7 +191,7 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm
    after.webm <out-dir>` refuses static takes (under 8 distinct frames); re-record the
    flow, never pad or loop a still. `compose` frames the real takes with HyperFrames
-   (pinned, run through `bunx`): Before/After labels, the title, and step captions timed per
+   (exact pin from root `package.json`, locked local CLI or pinned `bunx` fallback): Before/After labels, the title, and step captions timed per
    side. It falls back to plain ffmpeg side by side when HyperFrames is unavailable. It
    never runs `hyperframes init`, which installs global agent skills. Do not substitute
    `/pr-to-video` or other HyperFrames creation workflows: they build synthetic explainers
@@ -252,6 +252,46 @@ The PR-entrypoint hook is an advisory reminder, not a completeness detector or a
 gate. This workflow owns semantic detection and evidence collection on every supported
 host, including hosts without hooks. Follow `visual-review/REFERENCE.md` for deeper review
 evidence; local HTML reports are supplementary, never a substitute for embedded images.
+
+## HyperFrames updates and recording quality
+
+Keep the engine upstream, not vendored. Root `package.json` owns the exact stable
+`hyperframes` renderer version; `bun.lock` owns its transitive versions. Install
+with `bun install --frozen-lockfile`. `compose` prefers that installed version and
+uses exact-version `bunx` only when it is absent or mismatched. Never use `@latest`
+in a deliverable or maintain a second pin in the shell script.
+
+`.github/dependabot.yml` checks HyperFrames daily and opens at most one update PR.
+The `PR video canary` workflow must pass: real Chromium typing, save, service
+failure, retry -> forced HyperFrames render -> decoded-frame comparisons with
+source recordings and visible title/label/caption checks. Review its MP4 and PNG
+artifacts plus upstream release notes before merging; no automatic merge. It is a
+pipeline fixture, not a substitute for the changed application's own demo.
+
+```bash
+bun install --frozen-lockfile
+bunx --no-install playwright install chromium
+node_modules/.bin/hyperframes browser ensure
+bun run test:pr-video
+```
+
+Canary artifacts live under `.context/pr-video-canary/`. ffmpeg, ffprobe, and jq
+are required. `PR_VIDEO_RENDERER=hyperframes` fails closed; `auto` may fall back
+to plain ffmpeg without labels/captions. Use the forced renderer for quality
+checks and final demos where framing is required.
+
+MP4 is the primary review artifact; GIF is only a lightweight inline preview.
+Rendering uses `delivery` quality and lossless PNG source-frame extraction to
+avoid adding JPEG artifacts to UI text. The GIF remains 10 fps and at most 1200
+pixels wide; judge text/motion in the MP4. Rendering cannot restore detail or
+frames missing from the original capture. Keep real app footage, not synthetic
+explainers, as the evidence.
+
+Official authoring skills update separately through the upstream
+[HyperFrames plugin](https://github.com/heygen-com/hyperframes/blob/main/skills/hyperframes/references/plugin-installation.md).
+Let its plugin manager own updates; do not copy all upstream skills into this
+repository or run initialization just to refresh them. Review new upstream
+workflows when a recording needs them; renderer updates do not update skills.
 
 ## Dependency upgrade section
 

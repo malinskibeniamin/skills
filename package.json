@@ -23,6 +23,7 @@
     "lint:fix": "biome lint --write --error-on-warnings .",
     "quality:gate": "bun run format:check && bun run lint && bun run type:check",
     "test": "bun test ./scripts/pr-review-auto.test.ts ./scripts/pr-video.test.ts && cd shared && bun test hook-protocol.test.ts && cd ../docs-site && bun test version-docs.test.ts",
+    "test:pr-video": "bun run scripts/pr-video-canary.ts",
     "type:check": "tsc -p tsconfig.json"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "@playwright/test": "1.61.1",
     "@types/bun": "1.3.14",
     "@vercel/agent-eval": "1.4.0",
+    "hyperframes": "0.8.134",
     "typescript": "7.0.2",
     "vitest": "4.1.10",
     "zod": "3.25.76"

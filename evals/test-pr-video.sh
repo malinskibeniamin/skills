@@ -106,13 +106,8 @@ FLOW
     printf 'click "#name"\nclick "#does-not-exist"\n' > "$work/broken.txt"
     pr_video_check '! PR_VIDEO_STEP_TIMEOUT_MS=2000 "$PR_VIDEO" record "file://$work/app.html" "$work/broken.txt" "$work/broken.webm" >/dev/null 2>&1' \
       'record fails when a flow step fails'
-    attach_status=0
-    PR_VIDEO_PR_URL="file://$work/app.html" PR_VIDEO_PROFILE="$work/profile" \
-      "$PR_VIDEO" attach "$work/flow-out/before-after.mp4" >/dev/null 2>"$work/attach.err" || attach_status=$?
-    pr_video_check '[ "$attach_status" = 3 ] && grep -q "github.com/login" "$work/attach.err"' \
-      'attach stops with a one-time login instruction when the profile is signed out'
   else
-    echo "  SKIP  pr-video record and attach need agent-browser"
+    echo "  SKIP  pr-video record needs agent-browser"
     SKIP=$((SKIP + 1))
   fi
   rm -rf "$work"

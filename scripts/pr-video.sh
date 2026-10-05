@@ -40,7 +40,23 @@ MIN_INTERACTIONS=2
 INTERACTION_RE='^(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
 
 GIF_LIMIT_BYTES=$((10 * 1024 * 1024))
-HYPERFRAMES=hyperframes@0.8.79
+
+# The manifest owns the only renderer pin. Installed plugin copies can use bunx
+# without repository node_modules; CI uses the frozen-lockfile installation.
+hyperframes_command() {
+  local root="$SCRIPT_DIR/.." version installed
+  version=$(jq -er '.devDependencies.hyperframes | select(type == "string") |
+    select(test("^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"))' "$root/package.json") || {
+    echo "pr-video: package.json must pin hyperframes to an exact stable version" >&2
+    return 1
+  }
+  installed=$(jq -r '.version' "$root/node_modules/hyperframes/package.json" 2>/dev/null || true)
+  if [ "$installed" = "$version" ] && [ -x "$root/node_modules/.bin/hyperframes" ]; then
+    HYPERFRAMES_CMD=("$root/node_modules/.bin/hyperframes")
+  else
+    HYPERFRAMES_CMD=(bunx "hyperframes@$version")
+  fi
+}
 
 now() { perl -MTime::HiRes=time -e 'printf "%.3f\n", time'; }
 
@@ -184,8 +200,8 @@ frame_hyperframes() {
     perl -pe 's/<!-- __(\w+)__ -->|"__(\w+)__"|__(\w+)__/$ENV{"HF_" . ($1 || $2 || $3)}/g' \
     "$SCRIPT_DIR/pr-video-frame.html" > "$project/index.html"
 
-  (cd "$project" && bunx "$HYPERFRAMES" check >&2 &&
-    bunx "$HYPERFRAMES" render --quality standard --output ../before-after.mp4 >&2) || return 1
+  (cd "$project" && "${HYPERFRAMES_CMD[@]}" check >&2 &&
+    "${HYPERFRAMES_CMD[@]}" render --quality delivery --video-frame-format png --output ../before-after.mp4 >&2) || return 1
 }
 
 compose() {
@@ -202,11 +218,14 @@ compose() {
   mkdir -p "$out"
 
   local renderer=${PR_VIDEO_RENDERER:-auto}
+  if [ "$renderer" = hyperframes ] || [ "$renderer" = auto ]; then
+    hyperframes_command || return 1
+  fi
   case "$renderer" in
     hyperframes) frame_hyperframes "$before" "$after" "$out" "$longest" ;;
     ffmpeg) frame_ffmpeg "$before" "$after" "$out" "$longest" ;;
     auto)
-      if command -v bunx >/dev/null 2>&1 && frame_hyperframes "$before" "$after" "$out" "$longest"; then
+      if frame_hyperframes "$before" "$after" "$out" "$longest"; then
         :
       else
         echo "pr-video: HyperFrames unavailable or failed; composing with ffmpeg (no labels or captions)" >&2

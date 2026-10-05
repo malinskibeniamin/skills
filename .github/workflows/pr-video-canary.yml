@@ -1,0 +1,50 @@
+name: PR video canary
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-video-canary-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Install recording and rendering prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg jq
+          bunx --no-install playwright install --with-deps chromium
+          node_modules/.bin/hyperframes browser ensure
+      - name: Compose contract tests
+        run: bun test ./scripts/pr-video.test.ts
+      - name: Record interactions and verify the real render
+        run: bun run test:pr-video
+      - name: Upload recordings, renders, and decoded frames
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pr-video-canary
+          path: .context/pr-video-canary/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14

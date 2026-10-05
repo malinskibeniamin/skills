@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import {
+  copyFileSync,
   mkdtempSync,
   mkdirSync,
   readFileSync,
@@ -177,4 +178,149 @@ test.each([
 
   expect(result.exitCode).toBe(2);
   expect(commands()).toEqual([]);
+});
+
+function composeFixture(version: string) {
+  const root = mkdtempSync(join(tmpdir(), "pr-video-contract-"));
+  directories.push(root);
+  const scripts = join(root, "scripts");
+  const bin = join(root, "bin");
+  mkdirSync(scripts);
+  mkdirSync(bin);
+  for (const name of ["pr-video.sh", "pr-video-frame.html"]) {
+    copyFileSync(new URL(name, import.meta.url), join(scripts, name));
+  }
+  writeFileSync(
+    join(root, "package.json"),
+    JSON.stringify({ devDependencies: { hyperframes: version } }),
+  );
+  for (const side of ["before", "after"]) {
+    writeFileSync(join(root, `${side}.webm`), "recording");
+    writeFileSync(
+      join(root, `${side}.webm.steps.json`),
+      JSON.stringify({
+        title: "Save a name",
+        steps: [{ at: 0, caption: "Save" }],
+      }),
+    );
+  }
+  // Only external tools are substituted. Exercise the real compose entrypoint.
+  const fake = `#!${process.execPath}
+import { appendFileSync, writeFileSync } from "node:fs";
+import { basename } from "node:path";
+const tool = basename(process.argv[1]);
+const args = process.argv.slice(2);
+if (tool === "ffprobe") console.log("2");
+else if (tool === "ffmpeg") {
+  if (args.at(-1) === "-") console.error("frame= 12");
+  else writeFileSync(args.at(-1), "video");
+} else {
+  appendFileSync(process.env.CALLS, JSON.stringify(args) + "\\n");
+  if (process.env.FAIL_RENDER === "1" && args.includes("render")) process.exit(1);
+  const output = args.indexOf("--output");
+  if (output !== -1) writeFileSync(args[output + 1], "video");
+}
+`;
+  for (const tool of ["ffmpeg", "ffprobe", "bunx"]) {
+    writeFileSync(join(bin, tool), fake, { mode: 0o755 });
+  }
+  const calls = join(root, "calls.jsonl");
+  const run = (failRender = false) =>
+    Bun.spawnSync(
+      [
+        "bash",
+        join(scripts, "pr-video.sh"),
+        "compose",
+        join(root, "before.webm"),
+        join(root, "after.webm"),
+        join(root, "out"),
+      ],
+      {
+        env: {
+          ...Bun.env,
+          PATH: `${bin}:${Bun.env.PATH}`,
+          CALLS: calls,
+          FAIL_RENDER: failRender ? "1" : "0",
+          PR_VIDEO_RENDERER: "hyperframes",
+        },
+      },
+    );
+  return { root, run, calls };
+}
+
+test("compose uses the manifest pin and delivery quality, returning MP4 first", () => {
+  const { root, run, calls } = composeFixture("0.8.123");
+  const result = run();
+  expect(result.exitCode).toBe(0);
+  expect(
+    readFileSync(calls, "utf8")
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line)),
+  ).toEqual([
+    ["hyperframes@0.8.123", "check"],
+    [
+      "hyperframes@0.8.123",
+      "render",
+      "--quality",
+      "delivery",
+      "--video-frame-format",
+      "png",
+      "--output",
+      "../before-after.mp4",
+    ],
+  ]);
+  expect(result.stdout.toString().trim().split("\n")).toEqual([
+    join(root, "out/before-after.mp4"),
+    join(root, "out/before-after.gif"),
+  ]);
+});
+
+test.each(["^0.8.123", "latest", "0.8.123-beta.1", "01.8.123", ""])(
+  "rejects the non-stable renderer pin %j before rendering",
+  (version) => {
+    const { run } = composeFixture(version);
+    const result = run();
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr.toString()).toContain("exact stable version");
+  },
+);
+
+test("a forced HyperFrames failure never becomes an uncaptioned successful fallback", () => {
+  const { root, run } = composeFixture("0.8.123");
+  const result = run(true);
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stdout.toString()).not.toContain("before-after.mp4");
+  expect(() => readFileSync(join(root, "out/before-after.gif"))).toThrow();
+});
+
+test("uses the matching installed renderer without fetching another CLI", () => {
+  const { root, run } = composeFixture("0.8.123");
+  const modules = join(root, "node_modules");
+  mkdirSync(join(modules, "hyperframes"), { recursive: true });
+  mkdirSync(join(modules, ".bin"));
+  writeFileSync(
+    join(modules, "hyperframes/package.json"),
+    '{"version":"0.8.123"}',
+  );
+  copyFileSync(join(root, "bin/bunx"), join(modules, ".bin/hyperframes"));
+  const result = run();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  expect(
+    readFileSync(join(root, "calls.jsonl"), "utf8")
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line)),
+  ).toEqual([
+    ["check"],
+    [
+      "render",
+      "--quality",
+      "delivery",
+      "--video-frame-format",
+      "png",
+      "--output",
+      "../before-after.mp4",
+    ],
+  ]);
 });
