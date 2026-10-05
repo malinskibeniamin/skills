@@ -1,0 +1,1059 @@
+{
+  "head": "aa8ad5a5145ea6068ae1bb3484361c299452aa49",
+  "base": "5afa36171641321cc55e1897e1c7e67ec1e1f9ee",
+  "captures": [
+    {
+      "name": "pl-desktop",
+      "before": "pl-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-desktop-darwin.png",
+      "diff": "pl-desktop-diff.png",
+      "box": [
+        523,
+        2909,
+        654,
+        2921
+      ],
+      "excerpt": {
+        "before": "pl-desktop-excerpt-before.png",
+        "after": "pl-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          2106,
+          1440,
+          2956
+        ],
+        "route": "/pl"
+      }
+    },
+    {
+      "name": "pl-mobile",
+      "before": "pl-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-mobile-darwin.png",
+      "diff": "pl-mobile-diff.png",
+      "box": [
+        46,
+        4629,
+        295,
+        4643
+      ]
+    },
+    {
+      "name": "pl-skills-domain-modeling-desktop",
+      "before": "pl-skills-domain-modeling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-domain-modeling-desktop-darwin.png",
+      "diff": "pl-skills-domain-modeling-desktop-diff.png",
+      "box": [
+        384,
+        219,
+        1424,
+        2597
+      ]
+    },
+    {
+      "name": "pl-skills-domain-modeling-mobile",
+      "before": "pl-skills-domain-modeling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-domain-modeling-mobile-darwin.png",
+      "diff": "pl-skills-domain-modeling-mobile-diff.png",
+      "box": [
+        0,
+        332,
+        390,
+        4018
+      ]
+    },
+    {
+      "name": "pl-skills-grilling-desktop",
+      "before": "pl-skills-grilling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-grilling-desktop-darwin.png",
+      "diff": "pl-skills-grilling-desktop-diff.png",
+      "box": [
+        785,
+        3086,
+        1007,
+        3106
+      ]
+    },
+    {
+      "name": "pl-skills-grilling-mobile",
+      "before": "pl-skills-grilling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-grilling-mobile-darwin.png",
+      "diff": "pl-skills-grilling-mobile-diff.png",
+      "box": [
+        121,
+        4328,
+        343,
+        4348
+      ]
+    },
+    {
+      "name": "pl-skills-improve-codebase-architecture-desktop",
+      "before": "pl-skills-improve-codebase-architecture-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-improve-codebase-architecture-desktop-darwin.png",
+      "diff": "pl-skills-improve-codebase-architecture-desktop-diff.png",
+      "box": [
+        462,
+        1353,
+        1036,
+        2598
+      ]
+    },
+    {
+      "name": "pl-skills-improve-codebase-architecture-mobile",
+      "before": "pl-skills-improve-codebase-architecture-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-improve-codebase-architecture-mobile-darwin.png",
+      "diff": "pl-skills-improve-codebase-architecture-mobile-diff.png",
+      "box": [
+        102,
+        1573,
+        363,
+        3464
+      ]
+    },
+    {
+      "name": "pl-skills-pr-desktop",
+      "before": "pl-skills-pr-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-pr-desktop-darwin.png",
+      "diff": "pl-skills-pr-desktop-diff.png",
+      "box": [
+        388,
+        1366,
+        477,
+        1386
+      ]
+    },
+    {
+      "name": "pl-skills-pr-mobile",
+      "before": "pl-skills-pr-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-pr-mobile-darwin.png",
+      "diff": "pl-skills-pr-mobile-diff.png",
+      "box": [
+        28,
+        1286,
+        117,
+        1306
+      ]
+    },
+    {
+      "name": "pl-skills-prime-desktop",
+      "before": "pl-skills-prime-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-prime-desktop-darwin.png",
+      "diff": "pl-skills-prime-desktop-diff.png",
+      "box": [
+        444,
+        1198,
+        710,
+        1217
+      ]
+    },
+    {
+      "name": "pl-skills-prime-mobile",
+      "before": "pl-skills-prime-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-prime-mobile-darwin.png",
+      "diff": "pl-skills-prime-mobile-diff.png",
+      "box": [
+        84,
+        1387,
+        350,
+        1407
+      ]
+    },
+    {
+      "name": "pl-skills-wait-what-desktop",
+      "before": "pl-skills-wait-what-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-wait-what-desktop-darwin.png",
+      "diff": "pl-skills-wait-what-desktop-diff.png",
+      "box": [
+        384,
+        772,
+        1047,
+        814
+      ]
+    },
+    {
+      "name": "pl-skills-wait-what-mobile",
+      "before": "pl-skills-wait-what-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-wait-what-mobile-darwin.png",
+      "diff": "pl-skills-wait-what-mobile-diff.png",
+      "box": [
+        28,
+        659,
+        364,
+        702
+      ]
+    },
+    {
+      "name": "pl-skills-work-automation-kit-desktop",
+      "before": "pl-skills-work-automation-kit-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-work-automation-kit-desktop-darwin.png",
+      "diff": "pl-skills-work-automation-kit-desktop-diff.png",
+      "box": [
+        0,
+        854,
+        1440,
+        2956
+      ]
+    },
+    {
+      "name": "pl-skills-work-automation-kit-mobile",
+      "before": "pl-skills-work-automation-kit-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/pl-skills-work-automation-kit-mobile-darwin.png",
+      "diff": "pl-skills-work-automation-kit-mobile-diff.png",
+      "box": [
+        0,
+        863,
+        390,
+        3956
+      ]
+    },
+    {
+      "name": "skills-commit-push-pr-desktop",
+      "before": "skills-commit-push-pr-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-commit-push-pr-desktop-darwin.png",
+      "diff": "skills-commit-push-pr-desktop-diff.png",
+      "box": [
+        0,
+        757,
+        1440,
+        3181
+      ],
+      "excerpt": {
+        "before": "skills-commit-push-pr-desktop-excerpt-before.png",
+        "after": "skills-commit-push-pr-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          1638,
+          1440,
+          2488
+        ],
+        "route": "/skills/commit-push-pr"
+      }
+    },
+    {
+      "name": "skills-commit-push-pr-mobile",
+      "before": "skills-commit-push-pr-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-commit-push-pr-mobile-darwin.png",
+      "diff": "skills-commit-push-pr-mobile-diff.png",
+      "box": [
+        0,
+        694,
+        390,
+        4112
+      ]
+    },
+    {
+      "name": "skills-desktop",
+      "before": "skills-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-desktop-darwin.png",
+      "diff": "skills-desktop-diff.png",
+      "box": [
+        624,
+        1656,
+        829,
+        1670
+      ],
+      "excerpt": {
+        "before": "skills-desktop-excerpt-before.png",
+        "after": "skills-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          855,
+          1440,
+          1705
+        ],
+        "route": "/skills"
+      }
+    },
+    {
+      "name": "skills-development-lifecycle-desktop",
+      "before": "skills-development-lifecycle-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-development-lifecycle-desktop-darwin.png",
+      "diff": "skills-development-lifecycle-desktop-diff.png",
+      "box": [
+        0,
+        757,
+        1440,
+        2962
+      ],
+      "excerpt": {
+        "before": "skills-development-lifecycle-desktop-excerpt-before.png",
+        "after": "skills-development-lifecycle-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          1332,
+          1440,
+          2182
+        ],
+        "route": "/skills/development-lifecycle"
+      }
+    },
+    {
+      "name": "skills-development-lifecycle-mobile",
+      "before": "skills-development-lifecycle-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-development-lifecycle-mobile-darwin.png",
+      "diff": "skills-development-lifecycle-mobile-diff.png",
+      "box": [
+        0,
+        705,
+        390,
+        3666
+      ]
+    },
+    {
+      "name": "skills-domain-modeling-desktop",
+      "before": "skills-domain-modeling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-domain-modeling-desktop-darwin.png",
+      "diff": "skills-domain-modeling-desktop-diff.png",
+      "box": [
+        0,
+        219,
+        1440,
+        2651
+      ],
+      "excerpt": {
+        "before": "skills-domain-modeling-desktop-excerpt-before.png",
+        "after": "skills-domain-modeling-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          188,
+          1440,
+          1038
+        ],
+        "route": "/skills/domain-modeling"
+      }
+    },
+    {
+      "name": "skills-domain-modeling-mobile",
+      "before": "skills-domain-modeling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-domain-modeling-mobile-darwin.png",
+      "diff": "skills-domain-modeling-mobile-diff.png",
+      "box": [
+        0,
+        332,
+        390,
+        3004
+      ]
+    },
+    {
+      "name": "skills-grilling-desktop",
+      "before": "skills-grilling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-grilling-desktop-darwin.png",
+      "diff": "skills-grilling-desktop-diff.png",
+      "box": [
+        628,
+        2777,
+        1048,
+        2797
+      ],
+      "excerpt": {
+        "before": "skills-grilling-desktop-excerpt-before.png",
+        "after": "skills-grilling-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          1982,
+          1440,
+          2832
+        ],
+        "route": "/skills/grilling"
+      }
+    },
+    {
+      "name": "skills-grilling-mobile",
+      "before": "skills-grilling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-grilling-mobile-darwin.png",
+      "diff": "skills-grilling-mobile-diff.png",
+      "box": [
+        268,
+        3535,
+        357,
+        3555
+      ]
+    },
+    {
+      "name": "skills-implement-spec-desktop",
+      "before": "skills-implement-spec-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-implement-spec-desktop-darwin.png",
+      "diff": "skills-implement-spec-desktop-diff.png",
+      "box": [
+        0,
+        820,
+        1440,
+        2823
+      ],
+      "excerpt": {
+        "before": "skills-implement-spec-desktop-excerpt-before.png",
+        "after": "skills-implement-spec-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          785,
+          1440,
+          1635
+        ],
+        "route": "/skills/implement-spec"
+      }
+    },
+    {
+      "name": "skills-implement-spec-mobile",
+      "before": "skills-implement-spec-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-implement-spec-mobile-darwin.png",
+      "diff": "skills-implement-spec-mobile-diff.png",
+      "box": [
+        0,
+        753,
+        390,
+        3609
+      ]
+    },
+    {
+      "name": "skills-improve-codebase-architecture-desktop",
+      "before": "skills-improve-codebase-architecture-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-improve-codebase-architecture-desktop-darwin.png",
+      "diff": "skills-improve-codebase-architecture-desktop-diff.png",
+      "box": [
+        0,
+        1218,
+        1440,
+        3207
+      ],
+      "excerpt": {
+        "before": "skills-improve-codebase-architecture-desktop-excerpt-before.png",
+        "after": "skills-improve-codebase-architecture-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          1587,
+          1440,
+          2437
+        ],
+        "route": "/skills/improve-codebase-architecture"
+      }
+    },
+    {
+      "name": "skills-improve-codebase-architecture-mobile",
+      "before": "skills-improve-codebase-architecture-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-improve-codebase-architecture-mobile-darwin.png",
+      "diff": "skills-improve-codebase-architecture-mobile-diff.png",
+      "box": [
+        25,
+        1319,
+        363,
+        2763
+      ]
+    },
+    {
+      "name": "skills-mobile",
+      "before": "skills-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-mobile-darwin.png",
+      "diff": "skills-mobile-diff.png",
+      "box": [
+        173,
+        3306,
+        293,
+        3320
+      ]
+    },
+    {
+      "name": "skills-pr-desktop",
+      "before": "skills-pr-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-pr-desktop-darwin.png",
+      "diff": "skills-pr-desktop-diff.png",
+      "box": [
+        908,
+        1343,
+        996,
+        1362
+      ],
+      "excerpt": {
+        "before": "skills-pr-desktop-excerpt-before.png",
+        "after": "skills-pr-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          547,
+          1440,
+          1397
+        ],
+        "route": "/skills/pr"
+      }
+    },
+    {
+      "name": "skills-pr-mobile",
+      "before": "skills-pr-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-pr-mobile-darwin.png",
+      "diff": "skills-pr-mobile-diff.png",
+      "box": [
+        224,
+        1262,
+        312,
+        1282
+      ]
+    },
+    {
+      "name": "skills-prime-desktop",
+      "before": "skills-prime-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-prime-desktop-darwin.png",
+      "diff": "skills-prime-desktop-diff.png",
+      "box": [
+        412,
+        1043,
+        1051,
+        1081
+      ],
+      "excerpt": {
+        "before": "skills-prime-desktop-excerpt-before.png",
+        "after": "skills-prime-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          266,
+          1440,
+          1116
+        ],
+        "route": "/skills/prime"
+      }
+    },
+    {
+      "name": "skills-prime-mobile",
+      "before": "skills-prime-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-prime-mobile-darwin.png",
+      "diff": "skills-prime-mobile-diff.png",
+      "box": [
+        0,
+        1039,
+        390,
+        2242
+      ]
+    },
+    {
+      "name": "skills-triage-desktop",
+      "before": "skills-triage-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-triage-desktop-darwin.png",
+      "diff": "skills-triage-desktop-diff.png",
+      "box": [
+        0,
+        1662,
+        1440,
+        3292
+      ],
+      "excerpt": {
+        "before": "skills-triage-desktop-excerpt-before.png",
+        "after": "skills-triage-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          1630,
+          1440,
+          2480
+        ],
+        "route": "/skills/triage"
+      }
+    },
+    {
+      "name": "skills-triage-mobile",
+      "before": "skills-triage-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-triage-mobile-darwin.png",
+      "diff": "skills-triage-mobile-diff.png",
+      "box": [
+        0,
+        1755,
+        390,
+        4015
+      ]
+    },
+    {
+      "name": "skills-wait-what-desktop",
+      "before": "skills-wait-what-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-wait-what-desktop-darwin.png",
+      "diff": "skills-wait-what-desktop-diff.png",
+      "box": [
+        384,
+        749,
+        1043,
+        788
+      ],
+      "excerpt": {
+        "before": "skills-wait-what-desktop-excerpt-before.png",
+        "after": "skills-wait-what-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          0,
+          1440,
+          823
+        ],
+        "route": "/skills/wait-what"
+      }
+    },
+    {
+      "name": "skills-wait-what-mobile",
+      "before": "skills-wait-what-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-wait-what-mobile-darwin.png",
+      "diff": "skills-wait-what-mobile-diff.png",
+      "box": [
+        24,
+        635,
+        365,
+        677
+      ]
+    },
+    {
+      "name": "skills-work-automation-kit-desktop",
+      "before": "skills-work-automation-kit-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-work-automation-kit-desktop-darwin.png",
+      "diff": "skills-work-automation-kit-desktop-diff.png",
+      "box": [
+        0,
+        886,
+        1440,
+        2672
+      ],
+      "excerpt": {
+        "before": "skills-work-automation-kit-desktop-excerpt-before.png",
+        "after": "skills-work-automation-kit-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          875,
+          1440,
+          1725
+        ],
+        "route": "/skills/work-automation-kit"
+      }
+    },
+    {
+      "name": "skills-work-automation-kit-mobile",
+      "before": "skills-work-automation-kit-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/skills-work-automation-kit-mobile-darwin.png",
+      "diff": "skills-work-automation-kit-mobile-diff.png",
+      "box": [
+        0,
+        810,
+        390,
+        3281
+      ]
+    },
+    {
+      "name": "zh-CN-desktop",
+      "before": "zh-CN-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-desktop-darwin.png",
+      "diff": "zh-CN-desktop-diff.png",
+      "box": [
+        535,
+        2268,
+        690,
+        2283
+      ]
+    },
+    {
+      "name": "zh-CN-mobile",
+      "before": "zh-CN-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-mobile-darwin.png",
+      "diff": "zh-CN-mobile-diff.png",
+      "box": [
+        161,
+        3586,
+        344,
+        3601
+      ]
+    },
+    {
+      "name": "zh-CN-skills-domain-modeling-desktop",
+      "before": "zh-CN-skills-domain-modeling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-domain-modeling-desktop-darwin.png",
+      "diff": "zh-CN-skills-domain-modeling-desktop-diff.png",
+      "box": [
+        384,
+        191,
+        1346,
+        2424
+      ]
+    },
+    {
+      "name": "zh-CN-skills-domain-modeling-mobile",
+      "before": "zh-CN-skills-domain-modeling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-domain-modeling-mobile-darwin.png",
+      "diff": "zh-CN-skills-domain-modeling-mobile-diff.png",
+      "box": [
+        0,
+        275,
+        390,
+        3433
+      ]
+    },
+    {
+      "name": "zh-CN-skills-grilling-desktop",
+      "before": "zh-CN-skills-grilling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-grilling-desktop-darwin.png",
+      "diff": "zh-CN-skills-grilling-desktop-diff.png",
+      "box": [
+        638,
+        2587,
+        1020,
+        2606
+      ]
+    },
+    {
+      "name": "zh-CN-skills-grilling-mobile",
+      "before": "zh-CN-skills-grilling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-grilling-mobile-darwin.png",
+      "diff": "zh-CN-skills-grilling-mobile-diff.png",
+      "box": [
+        278,
+        3198,
+        364,
+        3218
+      ]
+    },
+    {
+      "name": "zh-CN-skills-improve-codebase-architecture-desktop",
+      "before": "zh-CN-skills-improve-codebase-architecture-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-improve-codebase-architecture-desktop-darwin.png",
+      "diff": "zh-CN-skills-improve-codebase-architecture-desktop-diff.png",
+      "box": [
+        448,
+        1229,
+        1051,
+        2261
+      ]
+    },
+    {
+      "name": "zh-CN-skills-improve-codebase-architecture-mobile",
+      "before": "zh-CN-skills-improve-codebase-architecture-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-improve-codebase-architecture-mobile-darwin.png",
+      "diff": "zh-CN-skills-improve-codebase-architecture-mobile-diff.png",
+      "box": [
+        88,
+        1330,
+        364,
+        2731
+      ]
+    },
+    {
+      "name": "zh-CN-skills-pr-desktop",
+      "before": "zh-CN-skills-pr-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-pr-desktop-darwin.png",
+      "diff": "zh-CN-skills-pr-desktop-diff.png",
+      "box": [
+        630,
+        1343,
+        837,
+        1362
+      ]
+    },
+    {
+      "name": "zh-CN-skills-pr-mobile",
+      "before": "zh-CN-skills-pr-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-pr-mobile-darwin.png",
+      "diff": "zh-CN-skills-pr-mobile-diff.png",
+      "box": [
+        24,
+        1239,
+        365,
+        1279
+      ]
+    },
+    {
+      "name": "zh-CN-skills-prime-desktop",
+      "before": "zh-CN-skills-prime-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-prime-desktop-darwin.png",
+      "diff": "zh-CN-skills-prime-desktop-diff.png",
+      "box": [
+        444,
+        1122,
+        711,
+        1142
+      ]
+    },
+    {
+      "name": "zh-CN-skills-prime-mobile",
+      "before": "zh-CN-skills-prime-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-prime-mobile-darwin.png",
+      "diff": "zh-CN-skills-prime-mobile-diff.png",
+      "box": [
+        84,
+        1141,
+        351,
+        1161
+      ]
+    },
+    {
+      "name": "zh-CN-skills-wait-what-desktop",
+      "before": "zh-CN-skills-wait-what-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-wait-what-desktop-darwin.png",
+      "diff": "zh-CN-skills-wait-what-desktop-diff.png",
+      "box": [
+        384,
+        693,
+        1055,
+        733
+      ]
+    },
+    {
+      "name": "zh-CN-skills-wait-what-mobile",
+      "before": "zh-CN-skills-wait-what-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-wait-what-mobile-darwin.png",
+      "diff": "zh-CN-skills-wait-what-mobile-diff.png",
+      "box": [
+        24,
+        555,
+        365,
+        623
+      ]
+    },
+    {
+      "name": "zh-CN-skills-work-automation-kit-desktop",
+      "before": "zh-CN-skills-work-automation-kit-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-work-automation-kit-desktop-darwin.png",
+      "diff": "zh-CN-skills-work-automation-kit-desktop-diff.png",
+      "box": [
+        383,
+        826,
+        1044,
+        1369
+      ]
+    },
+    {
+      "name": "zh-CN-skills-work-automation-kit-mobile",
+      "before": "zh-CN-skills-work-automation-kit-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-CN-skills-work-automation-kit-mobile-darwin.png",
+      "diff": "zh-CN-skills-work-automation-kit-mobile-diff.png",
+      "box": [
+        0,
+        759,
+        390,
+        3387
+      ]
+    },
+    {
+      "name": "zh-TW-desktop",
+      "before": "zh-TW-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-desktop-darwin.png",
+      "diff": "zh-TW-desktop-diff.png",
+      "box": [
+        549,
+        2288,
+        690,
+        2302
+      ]
+    },
+    {
+      "name": "zh-TW-mobile",
+      "before": "zh-TW-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-mobile-darwin.png",
+      "diff": "zh-TW-mobile-diff.png",
+      "box": [
+        175,
+        3586,
+        344,
+        3600
+      ]
+    },
+    {
+      "name": "zh-TW-skills-domain-modeling-desktop",
+      "before": "zh-TW-skills-domain-modeling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-domain-modeling-desktop-darwin.png",
+      "diff": "zh-TW-skills-domain-modeling-desktop-diff.png",
+      "box": [
+        384,
+        218,
+        1346,
+        2423
+      ]
+    },
+    {
+      "name": "zh-TW-skills-domain-modeling-mobile",
+      "before": "zh-TW-skills-domain-modeling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-domain-modeling-mobile-darwin.png",
+      "diff": "zh-TW-skills-domain-modeling-mobile-diff.png",
+      "box": [
+        24,
+        276,
+        366,
+        2705
+      ]
+    },
+    {
+      "name": "zh-TW-skills-grilling-desktop",
+      "before": "zh-TW-skills-grilling-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-grilling-desktop-darwin.png",
+      "diff": "zh-TW-skills-grilling-desktop-diff.png",
+      "box": [
+        666,
+        2634,
+        1045,
+        2654
+      ]
+    },
+    {
+      "name": "zh-TW-skills-grilling-mobile",
+      "before": "zh-TW-skills-grilling-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-grilling-mobile-darwin.png",
+      "diff": "zh-TW-skills-grilling-mobile-diff.png",
+      "box": [
+        28,
+        3246,
+        365,
+        3265
+      ]
+    },
+    {
+      "name": "zh-TW-skills-improve-codebase-architecture-desktop",
+      "before": "zh-TW-skills-improve-codebase-architecture-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-improve-codebase-architecture-desktop-darwin.png",
+      "diff": "zh-TW-skills-improve-codebase-architecture-desktop-diff.png",
+      "box": [
+        420,
+        1229,
+        1051,
+        2261
+      ]
+    },
+    {
+      "name": "zh-TW-skills-improve-codebase-architecture-mobile",
+      "before": "zh-TW-skills-improve-codebase-architecture-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-improve-codebase-architecture-mobile-darwin.png",
+      "diff": "zh-TW-skills-improve-codebase-architecture-mobile-diff.png",
+      "box": [
+        60,
+        1330,
+        364,
+        2731
+      ]
+    },
+    {
+      "name": "zh-TW-skills-pr-desktop",
+      "before": "zh-TW-skills-pr-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-pr-desktop-darwin.png",
+      "diff": "zh-TW-skills-pr-desktop-diff.png",
+      "box": [
+        630,
+        1343,
+        855,
+        1362
+      ]
+    },
+    {
+      "name": "zh-TW-skills-pr-mobile",
+      "before": "zh-TW-skills-pr-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-pr-mobile-darwin.png",
+      "diff": "zh-TW-skills-pr-mobile-diff.png",
+      "box": [
+        24,
+        1239,
+        365,
+        1279
+      ]
+    },
+    {
+      "name": "zh-TW-skills-prime-desktop",
+      "before": "zh-TW-skills-prime-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-prime-desktop-darwin.png",
+      "diff": "zh-TW-skills-prime-desktop-diff.png",
+      "box": [
+        444,
+        1122,
+        714,
+        1142
+      ]
+    },
+    {
+      "name": "zh-TW-skills-prime-mobile",
+      "before": "zh-TW-skills-prime-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-prime-mobile-darwin.png",
+      "diff": "zh-TW-skills-prime-mobile-diff.png",
+      "box": [
+        84,
+        1165,
+        354,
+        1185
+      ]
+    },
+    {
+      "name": "zh-TW-skills-wait-what-desktop",
+      "before": "zh-TW-skills-wait-what-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-wait-what-desktop-darwin.png",
+      "diff": "zh-TW-skills-wait-what-desktop-diff.png",
+      "box": [
+        384,
+        693,
+        1055,
+        733
+      ]
+    },
+    {
+      "name": "zh-TW-skills-wait-what-mobile",
+      "before": "zh-TW-skills-wait-what-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-wait-what-mobile-darwin.png",
+      "diff": "zh-TW-skills-wait-what-mobile-diff.png",
+      "box": [
+        24,
+        555,
+        366,
+        620
+      ]
+    },
+    {
+      "name": "zh-TW-skills-work-automation-kit-desktop",
+      "before": "zh-TW-skills-work-automation-kit-desktop-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-work-automation-kit-desktop-darwin.png",
+      "diff": "zh-TW-skills-work-automation-kit-desktop-diff.png",
+      "box": [
+        383,
+        826,
+        1048,
+        1369
+      ]
+    },
+    {
+      "name": "zh-TW-skills-work-automation-kit-mobile",
+      "before": "zh-TW-skills-work-automation-kit-mobile-before.png",
+      "after": "docs-site/e2e/matt-v1-3.spec.ts-snapshots/zh-TW-skills-work-automation-kit-mobile-darwin.png",
+      "diff": "zh-TW-skills-work-automation-kit-mobile-diff.png",
+      "box": [
+        0,
+        759,
+        390,
+        3411
+      ]
+    },
+    {
+      "name": "global-search",
+      "before": "global-search-before.png",
+      "after": "global-search-after.png",
+      "diff": "global-search-diff.png",
+      "box": [
+        259,
+        569,
+        534,
+        598
+      ],
+      "excerpt": {
+        "before": "global-search-excerpt-before.png",
+        "after": "global-search-excerpt-after.png",
+        "crop": [
+          0,
+          0,
+          1440,
+          815
+        ],
+        "route": "/"
+      }
+    },
+    {
+      "name": "delivery-completion-en-desktop",
+      "before": "delivery-completion-en-desktop-before.png",
+      "after": "delivery-completion-en-desktop-after.png",
+      "diff": "delivery-completion-en-desktop-diff.png",
+      "box": [
+        372,
+        0,
+        1056,
+        1000
+      ],
+      "excerpt": {
+        "before": "delivery-completion-en-desktop-excerpt-before.png",
+        "after": "delivery-completion-en-desktop-excerpt-after.png",
+        "crop": [
+          0,
+          0,
+          1440,
+          815
+        ],
+        "route": "/skills/commit-push-pr"
+      }
+    }
+  ]
+}

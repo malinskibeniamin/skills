@@ -1,0 +1,987 @@
+[
+  {
+    "upstream": "ask-matt",
+    "category": "engineering",
+    "registered": true,
+    "local": "ask-ben",
+    "upstream_path": "skills/engineering/ask-matt/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "PHASE-BOUNDARIES.md",
+        "local": "ask-ben/PHASE-BOUNDARIES.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "ask-ben/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/ask-ben/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 95,
+    "local_lines": 110
+  },
+  {
+    "upstream": "code-review",
+    "category": "engineering",
+    "registered": true,
+    "local": "review",
+    "upstream_path": "skills/engineering/code-review/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "review/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/review/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "review/DEEP-AUDIT.md",
+      "review/REFERENCE.md"
+    ],
+    "upstream_lines": 87,
+    "local_lines": 95
+  },
+  {
+    "upstream": "codebase-design",
+    "category": "engineering",
+    "registered": true,
+    "local": "codebase-design",
+    "upstream_path": "skills/engineering/codebase-design/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "DEEPENING.md",
+        "local": "codebase-design/DEEPENING.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "DESIGN-IT-TWICE.md",
+        "local": "codebase-design/DESIGN-IT-TWICE.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "codebase-design/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/codebase-design/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 114,
+    "local_lines": 54
+  },
+  {
+    "upstream": "diagnosing-bugs",
+    "category": "engineering",
+    "registered": true,
+    "local": "diagnosing-bugs",
+    "upstream_path": "skills/engineering/diagnosing-bugs/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "diagnosing-bugs/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/diagnosing-bugs/agents/openai.yaml",
+        "status": "adapted"
+      },
+      {
+        "upstream": "scripts/hitl-loop.template.sh",
+        "local": "diagnosing-bugs/scripts/hitl-loop.template.sh",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 138,
+    "local_lines": 100
+  },
+  {
+    "upstream": "domain-modeling",
+    "category": "engineering",
+    "registered": true,
+    "local": "domain-modeling",
+    "upstream_path": "skills/engineering/domain-modeling/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "ADR-FORMAT.md",
+        "local": "domain-modeling/ADR-FORMAT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "GLOSSARY-FORMAT.md",
+        "local": "domain-modeling/GLOSSARY-FORMAT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "domain-modeling/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/domain-modeling/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 74,
+    "local_lines": 42
+  },
+  {
+    "upstream": "grill-with-docs",
+    "category": "engineering",
+    "registered": true,
+    "local": "grilling",
+    "upstream_path": "skills/engineering/grill-with-docs/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "grilling/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/grilling/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 7,
+    "local_lines": 60
+  },
+  {
+    "upstream": "implement",
+    "category": "engineering",
+    "registered": true,
+    "local": "development-lifecycle",
+    "upstream_path": "skills/engineering/implement/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "development-lifecycle/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/development-lifecycle/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "development-lifecycle/REFERENCE.md"
+    ],
+    "upstream_lines": 15,
+    "local_lines": 49
+  },
+  {
+    "upstream": "implement-spec",
+    "category": "engineering",
+    "registered": true,
+    "local": "implement-spec",
+    "upstream_path": "skills/engineering/implement-spec/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "implement-spec/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/implement-spec/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 40,
+    "local_lines": 42
+  },
+  {
+    "upstream": "improve-codebase-architecture",
+    "category": "engineering",
+    "registered": true,
+    "local": "improve-codebase-architecture",
+    "upstream_path": "skills/engineering/improve-codebase-architecture/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "HTML-REPORT.md",
+        "local": "improve-codebase-architecture/HTML-REPORT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "improve-codebase-architecture/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/improve-codebase-architecture/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "improve-codebase-architecture/REFERENCE.md"
+    ],
+    "upstream_lines": 71,
+    "local_lines": 54
+  },
+  {
+    "upstream": "pr",
+    "category": "engineering",
+    "registered": true,
+    "local": "pr",
+    "upstream_path": "skills/engineering/pr/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "CREDITS.md",
+        "local": "pr/CREDITS.md",
+        "status": "identical"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "pr/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/pr/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "pr/SUMMARY-VIEWS.md"
+    ],
+    "upstream_lines": 170,
+    "local_lines": 69
+  },
+  {
+    "upstream": "prototype",
+    "category": "engineering",
+    "registered": true,
+    "local": "prototype",
+    "upstream_path": "skills/engineering/prototype/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "LOGIC.md",
+        "local": "prototype/LOGIC.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "prototype/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "UI.md",
+        "local": "prototype/UI.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/prototype/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 26,
+    "local_lines": 29
+  },
+  {
+    "upstream": "research",
+    "category": "engineering",
+    "registered": true,
+    "local": "research",
+    "upstream_path": "skills/engineering/research/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "research/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/research/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "research/DESIGN-RATIONALE.md"
+    ],
+    "upstream_lines": 12,
+    "local_lines": 19
+  },
+  {
+    "upstream": "retro",
+    "category": "engineering",
+    "registered": true,
+    "local": "retro",
+    "upstream_path": "skills/engineering/retro/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "retro/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/retro/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 44,
+    "local_lines": 44
+  },
+  {
+    "upstream": "setup-matt-pocock-skills",
+    "category": "engineering",
+    "registered": true,
+    "local": "work-automation-kit",
+    "upstream_path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "work-automation-kit/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/work-automation-kit/agents/openai.yaml",
+        "status": "adapted"
+      },
+      {
+        "upstream": "domain.md",
+        "local": "work-automation-kit/templates/domain.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "issue-tracker-github.md",
+        "local": "work-automation-kit/templates/issue-tracker-github.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "issue-tracker-gitlab.md",
+        "local": "work-automation-kit/templates/issue-tracker-gitlab.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "issue-tracker-local.md",
+        "local": "work-automation-kit/templates/issue-tracker-local.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "triage-labels.md",
+        "local": "work-automation-kit/templates/triage-labels.md",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "work-automation-kit/REFERENCE.md"
+    ],
+    "upstream_lines": 116,
+    "local_lines": 39
+  },
+  {
+    "upstream": "tdd",
+    "category": "engineering",
+    "registered": true,
+    "local": "tdd",
+    "upstream_path": "skills/engineering/tdd/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "tdd/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/tdd/agents/openai.yaml",
+        "status": "adapted"
+      },
+      {
+        "upstream": "mocking.md",
+        "local": "tdd/mocking.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "tests.md",
+        "local": "tdd/tests.md",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "tdd/PROPERTY-BASED-TESTING.md",
+      "tdd/REFERENCE.md"
+    ],
+    "upstream_lines": 38,
+    "local_lines": 52
+  },
+  {
+    "upstream": "to-spec",
+    "category": "engineering",
+    "registered": true,
+    "local": "to-spec",
+    "upstream_path": "skills/engineering/to-spec/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "to-spec/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/to-spec/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 75,
+    "local_lines": 52
+  },
+  {
+    "upstream": "to-tickets",
+    "category": "engineering",
+    "registered": true,
+    "local": "to-tickets",
+    "upstream_path": "skills/engineering/to-tickets/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "to-tickets/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/to-tickets/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 105,
+    "local_lines": 65
+  },
+  {
+    "upstream": "triage",
+    "category": "engineering",
+    "registered": true,
+    "local": "triage",
+    "upstream_path": "skills/engineering/triage/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "AGENT-BRIEF.md",
+        "local": "triage/AGENT-BRIEF.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "OUT-OF-SCOPE.md",
+        "local": "triage/OUT-OF-SCOPE.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "triage/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/triage/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [
+      "triage/REFERENCE.md",
+      "triage/tracker-github.md",
+      "triage/tracker-jira.md"
+    ],
+    "upstream_lines": 112,
+    "local_lines": 71
+  },
+  {
+    "upstream": "wayfinder",
+    "category": "engineering",
+    "registered": true,
+    "local": "wayfinder",
+    "upstream_path": "skills/engineering/wayfinder/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "wayfinder/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/wayfinder/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 128,
+    "local_lines": 94
+  },
+  {
+    "upstream": "wizard",
+    "category": "engineering",
+    "registered": true,
+    "local": "wizard",
+    "upstream_path": "skills/engineering/wizard/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "wizard/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/wizard/agents/openai.yaml",
+        "status": "adapted"
+      },
+      {
+        "upstream": "template.sh",
+        "local": "wizard/template.sh",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 44,
+    "local_lines": 35
+  },
+  {
+    "upstream": "claude-handoff",
+    "category": "in-progress",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/in-progress/claude-handoff/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "loop-me",
+    "category": "in-progress",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/in-progress/loop-me/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "setup-ts-deep-modules",
+    "category": "in-progress",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "dependency-cruiser.config.cjs",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "writing-beats",
+    "category": "in-progress",
+    "registered": false,
+    "local": "writing-beats",
+    "upstream_path": "skills/in-progress/writing-beats/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "writing-beats/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/writing-beats/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 67,
+    "local_lines": 16
+  },
+  {
+    "upstream": "writing-fragments",
+    "category": "in-progress",
+    "registered": false,
+    "local": "writing-fragments",
+    "upstream_path": "skills/in-progress/writing-fragments/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "writing-fragments/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/writing-fragments/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 79,
+    "local_lines": 23
+  },
+  {
+    "upstream": "writing-shape",
+    "category": "in-progress",
+    "registered": false,
+    "local": "writing-shape",
+    "upstream_path": "skills/in-progress/writing-shape/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "writing-shape/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/writing-shape/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 79,
+    "local_lines": 18
+  },
+  {
+    "upstream": "git-guardrails-claude-code",
+    "category": "misc",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/misc/git-guardrails-claude-code/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "scripts/block-dangerous-git.sh",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "migrate-to-shoehorn",
+    "category": "misc",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/misc/migrate-to-shoehorn/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "scaffold-exercises",
+    "category": "misc",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/misc/scaffold-exercises/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "setup-pre-commit",
+    "category": "misc",
+    "registered": false,
+    "local": null,
+    "upstream_path": "skills/misc/setup-pre-commit/SKILL.md",
+    "status": "not vendored",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": null,
+        "status": "upstream-only"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": null,
+        "status": "upstream-only"
+      }
+    ]
+  },
+  {
+    "upstream": "grill-me",
+    "category": "productivity",
+    "registered": true,
+    "local": "grilling",
+    "upstream_path": "skills/productivity/grill-me/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "grilling/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/grilling/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 7,
+    "local_lines": 60
+  },
+  {
+    "upstream": "grilling",
+    "category": "productivity",
+    "registered": true,
+    "local": "grilling",
+    "upstream_path": "skills/productivity/grilling/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "grilling/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/grilling/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 28,
+    "local_lines": 60
+  },
+  {
+    "upstream": "handoff",
+    "category": "productivity",
+    "registered": true,
+    "local": "handoff",
+    "upstream_path": "skills/productivity/handoff/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "handoff/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/handoff/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 16,
+    "local_lines": 44
+  },
+  {
+    "upstream": "teach",
+    "category": "productivity",
+    "registered": true,
+    "local": "teach",
+    "upstream_path": "skills/productivity/teach/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "GLOSSARY-FORMAT.md",
+        "local": "teach/GLOSSARY-FORMAT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "LEARNING-RECORD-FORMAT.md",
+        "local": "teach/LEARNING-RECORD-FORMAT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "MISSION-FORMAT.md",
+        "local": "teach/MISSION-FORMAT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "RESOURCES-FORMAT.md",
+        "local": "teach/RESOURCES-FORMAT.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "teach/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/teach/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 140,
+    "local_lines": 38
+  },
+  {
+    "upstream": "to-questionnaire",
+    "category": "productivity",
+    "registered": true,
+    "local": "to-questionnaire",
+    "upstream_path": "skills/productivity/to-questionnaire/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "to-questionnaire/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/to-questionnaire/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 54,
+    "local_lines": 33
+  },
+  {
+    "upstream": "wait-what",
+    "category": "productivity",
+    "registered": true,
+    "local": "wait-what",
+    "upstream_path": "skills/productivity/wait-what/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL.md",
+        "local": "wait-what/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/wait-what/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 7,
+    "local_lines": 7
+  },
+  {
+    "upstream": "writing-for-agents",
+    "category": "productivity",
+    "registered": true,
+    "local": "writing-for-agents",
+    "upstream_path": "skills/productivity/writing-for-agents/SKILL.md",
+    "status": "adapted",
+    "files": [
+      {
+        "upstream": "SKILL-MECHANICS.md",
+        "local": "writing-for-agents/SKILL-MECHANICS.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "SKILL.md",
+        "local": "writing-for-agents/SKILL.md",
+        "status": "adapted"
+      },
+      {
+        "upstream": "agents/openai.yaml",
+        "local": "codex-skills/writing-for-agents/agents/openai.yaml",
+        "status": "adapted"
+      }
+    ],
+    "local_only_support": [],
+    "upstream_lines": 81,
+    "local_lines": 45
+  }
+]

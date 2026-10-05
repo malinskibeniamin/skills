@@ -1,0 +1,63 @@
+{
+  "base": "5afa36171641321cc55e1897e1c7e67ec1e1f9ee",
+  "head": "aa8ad5a5145ea6068ae1bb3484361c299452aa49",
+  "routes": [
+    "/skills",
+    "/skills/domain-modeling",
+    "/skills/grilling",
+    "/skills/improve-codebase-architecture",
+    "/skills/pr",
+    "/skills/prime",
+    "/skills/wait-what",
+    "/skills/work-automation-kit",
+    "/skills/triage",
+    "/skills/development-lifecycle",
+    "/skills/commit-push-pr",
+    "/skills/implement-spec",
+    "/pl",
+    "/pl/skills/domain-modeling",
+    "/pl/skills/grilling",
+    "/pl/skills/improve-codebase-architecture",
+    "/pl/skills/pr",
+    "/pl/skills/prime",
+    "/pl/skills/wait-what",
+    "/pl/skills/work-automation-kit",
+    "/zh-CN",
+    "/zh-CN/skills/domain-modeling",
+    "/zh-CN/skills/grilling",
+    "/zh-CN/skills/improve-codebase-architecture",
+    "/zh-CN/skills/pr",
+    "/zh-CN/skills/prime",
+    "/zh-CN/skills/wait-what",
+    "/zh-CN/skills/work-automation-kit",
+    "/zh-TW",
+    "/zh-TW/skills/domain-modeling",
+    "/zh-TW/skills/grilling",
+    "/zh-TW/skills/improve-codebase-architecture",
+    "/zh-TW/skills/pr",
+    "/zh-TW/skills/prime",
+    "/zh-TW/skills/wait-what",
+    "/zh-TW/skills/work-automation-kit"
+  ],
+  "states": [
+    "desktop 1440x1000 light",
+    "mobile 390x844 light"
+  ],
+  "test": "docs-site/e2e/matt-v1-3.spec.ts",
+  "flow": "directory -> setup recipe -> scroll -> keyboard focus",
+  "scope": "Current docs copy only. No layout, style, interactive logic, role, loading/error/empty state changes. Existing visual suite covers dark/search/empty/focus flows; current docs pages receive desktop/mobile full-page comparisons. Frozen release pages preserved. Translation freshness not certified. Includes directory card metadata and search excerpts; no runtime implementation changes. Base regenerated metadata before final comparison.",
+  "additional_states": [
+    "global search: tdd query",
+    "delivery completion en desktop"
+  ],
+  "normal_command": "bun run docs:test:browser --grep 'matt v1.3|communication-(en|pl|zh-CN|zh-TW)-(grilling|pr)|communication-en-development-lifecycle|global search opens|delivery completion en desktop'",
+  "results": {
+    "focused_passed": 83,
+    "full_head_passed": 95,
+    "full_head_failed": 38,
+    "original_base_passed": 17,
+    "original_base_failed": 44,
+    "candidate_only_failures": 0,
+    "failing_actuals_identical_to_base": 38
+  }
+}

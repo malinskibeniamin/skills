@@ -1,0 +1,173 @@
+{
+  "base": {
+    "passed": 17,
+    "failed": 44
+  },
+  "head": {
+    "passed": 95,
+    "failed": 38
+  },
+  "candidate_only_failures": [],
+  "base_only_failures": [
+    "e2e/visual.spec.ts:143:3 \u203a visual: communication-en-development-lifecycle",
+    "e2e/visual.spec.ts:143:3 \u203a visual: communication-en-grilling",
+    "e2e/visual.spec.ts:143:3 \u203a visual: communication-en-pr",
+    "e2e/visual.spec.ts:143:3 \u203a visual: communication-pl-grilling",
+    "e2e/visual.spec.ts:143:3 \u203a visual: communication-pl-pr",
+    "e2e/visual.spec.ts:170:5 \u203a visual: delivery completion en desktop"
+  ],
+  "actual_comparisons": [
+    {
+      "image": "visual-visual-onboarding-simplified-chinese/onboarding-simplified-chinese-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-zh-TW-skill-search/model-search-zh-TW-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-zh-TW-codex/model-codex-zh-TW-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-en-efficient-frontier/communication-en-efficient-frontier-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-delivery-completion-zh-TW-desktop/delivery-completion-zh-TW-desktop-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-pl-codex/model-codex-pl-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-zh-CN-review/communication-zh-CN-review-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-filter-miss-and-related-page-recovery/filter-empty-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-delivery-completion-zh-CN-desktop/delivery-completion-zh-CN-desktop-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-pl-skill-search/model-search-pl-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-onboarding-codex/onboarding-codex-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-dark-homepage-and-directory/homepage-dark-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-onboarding-traditional-chinese/onboarding-traditional-chinese-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-directory-traditional-chinese/directory-traditional-chinese-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-pl-development-lifecycle/communication-pl-development-lifecycle-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-onboarding-polish/onboarding-polish-actual.png",
+      "same": true
+    },
+    {
+      "image": "key-free-visual-export-actions-and-source-update-date/exports-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-directory-polish/directory-polish-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-mobile-codex-and-dark-search/model-codex-mobile-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-onboarding-claude/onboarding-claude-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-zh-TW-efficient-frontier/communication-zh-TW-efficient-frontier-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-zh-CN-efficient-frontier/communication-zh-CN-efficient-frontier-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-archived-skill/archived-skill-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-skill/skill-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-delivery-completion-pl-desktop/delivery-completion-pl-desktop-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-homepage/homepage-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-zh-CN-codex/model-codex-zh-CN-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-en-skill-search/model-search-en-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-en-codex/model-codex-en-actual.png",
+      "same": true
+    },
+    {
+      "image": "docs-narration-controls-pl-8d3ae-p-without-an-audio-provider/narration-paused-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-directory/directory-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-zh-TW-review/communication-zh-TW-review-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-en-review/communication-en-review-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-mobile-onboarding-and-directory/onboarding-mobile-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-pl-review/communication-pl-review-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-communication-pl-efficient-frontier/communication-pl-efficient-frontier-actual.png",
+      "same": true
+    },
+    {
+      "image": "model-routing-model-routes-zh-CN-skill-search/model-search-zh-CN-actual.png",
+      "same": true
+    },
+    {
+      "image": "visual-visual-directory-simplified-chinese/directory-simplified-chinese-actual.png",
+      "same": true
+    }
+  ]
+}
