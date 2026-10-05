@@ -1,12 +1,20 @@
 ---
-title: /commit-push-pr
 description: >-
   Utwórz commit, wypchnij zmiany i otwórz PR gotowy do przeglądu albo wykonaj
   jawnie autoryzowane scalenie. Użyj przy żądaniach dostarczenia; --no-pr kończy
   działanie po wypchnięciu.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - commit push pr
 sidebar:
   label: /commit-push-pr
+title: /commit-push-pr
+type: skill
 ---
 ![Diagram umiejętności /commit-push-pr](/diagrams/skills/commit-push-pr.svg)
 
@@ -32,7 +40,7 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 1. Pozostań na gałęzi funkcji; jeśli jesteś na gałęzi domyślnej, utwórz `type/description`.
 2. Dla każdej spójnej grupy wykonaj `git add <explicit paths>`, a następnie utwórz commit `type(scope): terse description`: małymi literami, 5–72 znaki, bez kropki.
 3. Wyraźne żądanie samego commita kończy się tutaj po sprawdzeniu czystości drzewa.
-4. Wypchnięcie/PR: pokaż `origin/<branch>..HEAD`, a następnie wypchnij gałąź z ustawieniem śledzenia.
+4. Wypchnięcie/PR, każda poprawka CI lub rebase: pokaż `origin/<branch>..HEAD`, a następnie wypchnij gałąź z ustawieniem śledzenia.
 5. Po przepisaniu bieżącej, należącej do użytkownika gałęzi użyj `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego wymuszenia; przepisanie gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle używanej wymaga wyraźnej zgody.
 
 ## Pull request
