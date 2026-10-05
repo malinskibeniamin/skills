@@ -30,17 +30,25 @@ function fixture() {
   const root = mkdtempSync(join(tmpdir(), "pr-review-auto-"));
   directories.push(root);
   const bin = join(root, "bin");
-  Bun.spawnSync(["mkdir", bin]);
+  mkdirSync(bin);
   const calls = join(root, "calls.jsonl");
   const data = join(root, "github.json");
   const git = (args: string[]) => {
-    const result = Bun.spawnSync(["git", ...args], { cwd: root });
+    const result = Bun.spawnSync(
+      [
+        "git",
+        "-c",
+        "user.name=Test",
+        "-c",
+        "user.email=test@example.com",
+        ...args,
+      ],
+      { cwd: root },
+    );
     expect(result.exitCode).toBe(0);
     return result.stdout.toString().trim();
   };
   git(["init", "-b", "ben-malinski/T-1/feature"]);
-  git(["config", "user.name", "Test"]);
-  git(["config", "user.email", "test@example.com"]);
   git(["commit", "--allow-empty", "-m", "feat(test): initial"]);
   git(["remote", "add", "origin", "git@github.com:example/project.git"]);
   const head = git(["rev-parse", "HEAD"]);
@@ -89,31 +97,38 @@ function fixture() {
   };
   const save = () => writeFileSync(data, JSON.stringify(snapshot));
   save();
-  const fake = `#!/usr/bin/env python3
-import json, os, sys, subprocess
-args = sys.argv[1:]
-tool = os.path.basename(sys.argv[0])
-text = "" if tool == "gh" else sys.stdin.read()
-with open(os.environ["CALLS"], "a") as f:
-    f.write(json.dumps({"tool":tool,"args":args,"input":text,"cwd":os.getcwd()}) + "\\n")
-with open(os.environ["DATA"]) as f:
-    data=json.load(f)
-if tool != "gh": sys.exit(1 if data["failAgent"] else 0)
-if data["failGh"]: sys.exit(1)
-if args[0] == "repo": print("example/project" if "-q" in args else json.dumps({"nameWithOwner":"example/project","defaultBranchRef":{"name":"main"}}))
-elif args[0] == "pr": print(json.dumps(data["pr"]))
-elif args[0] == "api":
-    endpoint=args[1]
-    if endpoint == "graphql":
-        page=lambda nodes: {"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":nodes}}}}}
-        pages=[page([]),page(data["threads"])] if data["laterPage"] else [page(data["threads"])]
-        print(json.dumps(pages if "--slurp" in args else pages[0]))
-        sys.exit(0)
-    if data["unbindDuringFetch"] and endpoint.endswith("/reviews"):
-        subprocess.run([os.environ["BUN"], os.environ["ENTRY"], "unbind", "--session", "11111111-1111-4111-8111-111111111111"], check=True, stdout=sys.stderr)
-    items=data["comments"] if "/issues/" in endpoint else data["reviews"] if endpoint.endswith("/reviews") else data["inline"]
-    print(json.dumps([[], items] if data["laterPage"] else [items]))
-else: sys.exit(2)
+  const fake = `#!${process.execPath}
+import { appendFileSync, readFileSync } from "node:fs";
+import { basename } from "node:path";
+const args = process.argv.slice(2);
+const tool = basename(process.argv[1]);
+const input = tool === "gh" ? "" : readFileSync(0, "utf8");
+appendFileSync(process.env.CALLS, JSON.stringify({ tool, args, input, cwd: process.cwd() }) + "\\n");
+const data = JSON.parse(readFileSync(process.env.DATA, "utf8"));
+if (tool !== "gh") process.exit(data.failAgent ? 1 : 0);
+if (data.failGh) process.exit(1);
+if (args[0] === "repo") {
+  console.log(args.includes("-q") ? "example/project" : JSON.stringify({ nameWithOwner: "example/project", defaultBranchRef: { name: "main" } }));
+} else if (args[0] === "pr") {
+  console.log(JSON.stringify(data.pr));
+} else if (args[0] === "api") {
+  const endpoint = args[1];
+  if (endpoint === "graphql") {
+    const page = (nodes) => ({ data: { repository: { pullRequest: { reviewThreads: { nodes } } } } });
+    const pages = data.laterPage ? [page([]), page(data.threads)] : [page(data.threads)];
+    console.log(JSON.stringify(args.includes("--slurp") ? pages : pages[0]));
+    process.exit(0);
+  }
+  if (data.unbindDuringFetch && endpoint.endsWith("/reviews")) {
+    const result = Bun.spawnSync([process.env.BUN, process.env.ENTRY, "unbind", "--session", "11111111-1111-4111-8111-111111111111"], { stderr: "inherit" });
+    process.stderr.write(result.stdout);
+    if (result.exitCode !== 0) process.exit(result.exitCode ?? 1);
+  }
+  const items = endpoint.includes("/issues/") ? data.comments : endpoint.endsWith("/reviews") ? data.reviews : data.inline;
+  console.log(JSON.stringify(data.laterPage ? [[], items] : [items]));
+} else {
+  process.exit(2);
+}
 `;
   for (const tool of ["gh", "codex", "claude"]) {
     writeFileSync(join(bin, tool), fake, { mode: 0o755 });
@@ -170,6 +185,12 @@ else: sys.exit(2)
 
 test("trusted auto review resumes the bound feature session once, using gh", () => {
   const f = fixture();
+  // Fixture tools must use the configured Bun runtime, not an undeclared Python dependency.
+  writeFileSync(
+    join(f.bin, "python3"),
+    '#!/bin/sh\nprintf "Unexpected Python dependency in CLI fixture\\n" >&2\nexit 1\n',
+    { mode: 0o755 },
+  );
   f.bind();
   expect(f.run(["tick"]).code).toBe(0);
   expect(f.run(["tick"]).code).toBe(0);
@@ -435,17 +456,21 @@ test("enable and disable are repeatable without duplicate launchd jobs", () => {
   const f = fixture();
   writeFileSync(
     join(f.bin, "launchctl"),
-    `#!/usr/bin/env python3
-import os, sys
-from pathlib import Path
-marker=Path(os.environ["HOME"]) / "loaded"
-if sys.argv[1] == "print": sys.exit(0 if marker.exists() else 1)
-if sys.argv[1] == "bootstrap":
-    if marker.exists(): sys.exit(5)
-    marker.parent.mkdir(parents=True, exist_ok=True)
-    marker.touch()
-elif sys.argv[1] == "bootout": marker.unlink(missing_ok=True)
-else: sys.exit(2)
+    `#!${process.execPath}
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+const marker = join(process.env.HOME, "loaded");
+const command = process.argv[2];
+if (command === "print") process.exit(existsSync(marker) ? 0 : 1);
+if (command === "bootstrap") {
+  if (existsSync(marker)) process.exit(5);
+  mkdirSync(dirname(marker), { recursive: true });
+  writeFileSync(marker, "");
+} else if (command === "bootout") {
+  rmSync(marker, { force: true });
+} else {
+  process.exit(2);
+}
 `,
     { mode: 0o755 },
   );
