@@ -1,0 +1,211 @@
+{
+  "base": "5afa36171641321cc55e1897e1c7e67ec1e1f9ee",
+  "normal_command": "BLUME_PREVIEW_PORT=4340 bun run docs:test:browser --grep 'matt v1.3'",
+  "passed": 96,
+  "captures": [
+    {
+      "name": "skills-development-lifecycle-desktop",
+      "before": "ci-skills-development-lifecycle-desktop-before.png",
+      "after": "ci-skills-development-lifecycle-desktop-after.png",
+      "diff": "ci-skills-development-lifecycle-desktop-diff.png"
+    },
+    {
+      "name": "skills-development-lifecycle-mobile",
+      "before": "ci-skills-development-lifecycle-mobile-before.png",
+      "after": "ci-skills-development-lifecycle-mobile-after.png",
+      "diff": "ci-skills-development-lifecycle-mobile-diff.png"
+    },
+    {
+      "name": "skills-commit-push-pr-desktop",
+      "before": "ci-skills-commit-push-pr-desktop-before.png",
+      "after": "ci-skills-commit-push-pr-desktop-after.png",
+      "diff": "ci-skills-commit-push-pr-desktop-diff.png"
+    },
+    {
+      "name": "skills-commit-push-pr-mobile",
+      "before": "ci-skills-commit-push-pr-mobile-before.png",
+      "after": "ci-skills-commit-push-pr-mobile-after.png",
+      "diff": "ci-skills-commit-push-pr-mobile-diff.png"
+    },
+    {
+      "name": "pl-skills-development-lifecycle-desktop",
+      "before": "ci-pl-skills-development-lifecycle-desktop-before.png",
+      "after": "ci-pl-skills-development-lifecycle-desktop-after.png",
+      "diff": "ci-pl-skills-development-lifecycle-desktop-diff.png"
+    },
+    {
+      "name": "pl-skills-development-lifecycle-mobile",
+      "before": "ci-pl-skills-development-lifecycle-mobile-before.png",
+      "after": "ci-pl-skills-development-lifecycle-mobile-after.png",
+      "diff": "ci-pl-skills-development-lifecycle-mobile-diff.png"
+    },
+    {
+      "name": "pl-skills-commit-push-pr-desktop",
+      "before": "ci-pl-skills-commit-push-pr-desktop-before.png",
+      "after": "ci-pl-skills-commit-push-pr-desktop-after.png",
+      "diff": "ci-pl-skills-commit-push-pr-desktop-diff.png"
+    },
+    {
+      "name": "pl-skills-commit-push-pr-mobile",
+      "before": "ci-pl-skills-commit-push-pr-mobile-before.png",
+      "after": "ci-pl-skills-commit-push-pr-mobile-after.png",
+      "diff": "ci-pl-skills-commit-push-pr-mobile-diff.png"
+    },
+    {
+      "name": "pl-skills-work-automation-kit-desktop",
+      "before": "ci-pl-skills-work-automation-kit-desktop-before.png",
+      "after": "ci-pl-skills-work-automation-kit-desktop-after.png",
+      "diff": "ci-pl-skills-work-automation-kit-desktop-diff.png"
+    },
+    {
+      "name": "pl-skills-work-automation-kit-mobile",
+      "before": "ci-pl-skills-work-automation-kit-mobile-before.png",
+      "after": "ci-pl-skills-work-automation-kit-mobile-after.png",
+      "diff": "ci-pl-skills-work-automation-kit-mobile-diff.png"
+    },
+    {
+      "name": "pl-skills-triage-desktop",
+      "before": "ci-pl-skills-triage-desktop-before.png",
+      "after": "ci-pl-skills-triage-desktop-after.png",
+      "diff": "ci-pl-skills-triage-desktop-diff.png"
+    },
+    {
+      "name": "pl-skills-triage-mobile",
+      "before": "ci-pl-skills-triage-mobile-before.png",
+      "after": "ci-pl-skills-triage-mobile-after.png",
+      "diff": "ci-pl-skills-triage-mobile-diff.png"
+    },
+    {
+      "name": "pl-skills-implement-spec-desktop",
+      "before": "ci-pl-skills-implement-spec-desktop-before.png",
+      "after": "ci-pl-skills-implement-spec-desktop-after.png",
+      "diff": "ci-pl-skills-implement-spec-desktop-diff.png"
+    },
+    {
+      "name": "pl-skills-implement-spec-mobile",
+      "before": "ci-pl-skills-implement-spec-mobile-before.png",
+      "after": "ci-pl-skills-implement-spec-mobile-after.png",
+      "diff": "ci-pl-skills-implement-spec-mobile-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-development-lifecycle-desktop",
+      "before": "ci-zh-CN-skills-development-lifecycle-desktop-before.png",
+      "after": "ci-zh-CN-skills-development-lifecycle-desktop-after.png",
+      "diff": "ci-zh-CN-skills-development-lifecycle-desktop-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-development-lifecycle-mobile",
+      "before": "ci-zh-CN-skills-development-lifecycle-mobile-before.png",
+      "after": "ci-zh-CN-skills-development-lifecycle-mobile-after.png",
+      "diff": "ci-zh-CN-skills-development-lifecycle-mobile-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-commit-push-pr-desktop",
+      "before": "ci-zh-CN-skills-commit-push-pr-desktop-before.png",
+      "after": "ci-zh-CN-skills-commit-push-pr-desktop-after.png",
+      "diff": "ci-zh-CN-skills-commit-push-pr-desktop-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-commit-push-pr-mobile",
+      "before": "ci-zh-CN-skills-commit-push-pr-mobile-before.png",
+      "after": "ci-zh-CN-skills-commit-push-pr-mobile-after.png",
+      "diff": "ci-zh-CN-skills-commit-push-pr-mobile-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-work-automation-kit-desktop",
+      "before": "ci-zh-CN-skills-work-automation-kit-desktop-before.png",
+      "after": "ci-zh-CN-skills-work-automation-kit-desktop-after.png",
+      "diff": "ci-zh-CN-skills-work-automation-kit-desktop-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-work-automation-kit-mobile",
+      "before": "ci-zh-CN-skills-work-automation-kit-mobile-before.png",
+      "after": "ci-zh-CN-skills-work-automation-kit-mobile-after.png",
+      "diff": "ci-zh-CN-skills-work-automation-kit-mobile-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-triage-desktop",
+      "before": "ci-zh-CN-skills-triage-desktop-before.png",
+      "after": "ci-zh-CN-skills-triage-desktop-after.png",
+      "diff": "ci-zh-CN-skills-triage-desktop-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-triage-mobile",
+      "before": "ci-zh-CN-skills-triage-mobile-before.png",
+      "after": "ci-zh-CN-skills-triage-mobile-after.png",
+      "diff": "ci-zh-CN-skills-triage-mobile-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-implement-spec-desktop",
+      "before": "ci-zh-CN-skills-implement-spec-desktop-before.png",
+      "after": "ci-zh-CN-skills-implement-spec-desktop-after.png",
+      "diff": "ci-zh-CN-skills-implement-spec-desktop-diff.png"
+    },
+    {
+      "name": "zh-CN-skills-implement-spec-mobile",
+      "before": "ci-zh-CN-skills-implement-spec-mobile-before.png",
+      "after": "ci-zh-CN-skills-implement-spec-mobile-after.png",
+      "diff": "ci-zh-CN-skills-implement-spec-mobile-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-development-lifecycle-desktop",
+      "before": "ci-zh-TW-skills-development-lifecycle-desktop-before.png",
+      "after": "ci-zh-TW-skills-development-lifecycle-desktop-after.png",
+      "diff": "ci-zh-TW-skills-development-lifecycle-desktop-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-development-lifecycle-mobile",
+      "before": "ci-zh-TW-skills-development-lifecycle-mobile-before.png",
+      "after": "ci-zh-TW-skills-development-lifecycle-mobile-after.png",
+      "diff": "ci-zh-TW-skills-development-lifecycle-mobile-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-commit-push-pr-desktop",
+      "before": "ci-zh-TW-skills-commit-push-pr-desktop-before.png",
+      "after": "ci-zh-TW-skills-commit-push-pr-desktop-after.png",
+      "diff": "ci-zh-TW-skills-commit-push-pr-desktop-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-commit-push-pr-mobile",
+      "before": "ci-zh-TW-skills-commit-push-pr-mobile-before.png",
+      "after": "ci-zh-TW-skills-commit-push-pr-mobile-after.png",
+      "diff": "ci-zh-TW-skills-commit-push-pr-mobile-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-work-automation-kit-desktop",
+      "before": "ci-zh-TW-skills-work-automation-kit-desktop-before.png",
+      "after": "ci-zh-TW-skills-work-automation-kit-desktop-after.png",
+      "diff": "ci-zh-TW-skills-work-automation-kit-desktop-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-work-automation-kit-mobile",
+      "before": "ci-zh-TW-skills-work-automation-kit-mobile-before.png",
+      "after": "ci-zh-TW-skills-work-automation-kit-mobile-after.png",
+      "diff": "ci-zh-TW-skills-work-automation-kit-mobile-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-triage-desktop",
+      "before": "ci-zh-TW-skills-triage-desktop-before.png",
+      "after": "ci-zh-TW-skills-triage-desktop-after.png",
+      "diff": "ci-zh-TW-skills-triage-desktop-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-triage-mobile",
+      "before": "ci-zh-TW-skills-triage-mobile-before.png",
+      "after": "ci-zh-TW-skills-triage-mobile-after.png",
+      "diff": "ci-zh-TW-skills-triage-mobile-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-implement-spec-desktop",
+      "before": "ci-zh-TW-skills-implement-spec-desktop-before.png",
+      "after": "ci-zh-TW-skills-implement-spec-desktop-after.png",
+      "diff": "ci-zh-TW-skills-implement-spec-desktop-diff.png"
+    },
+    {
+      "name": "zh-TW-skills-implement-spec-mobile",
+      "before": "ci-zh-TW-skills-implement-spec-mobile-before.png",
+      "after": "ci-zh-TW-skills-implement-spec-mobile-after.png",
+      "diff": "ci-zh-TW-skills-implement-spec-mobile-diff.png"
+    }
+  ]
+}
