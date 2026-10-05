@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Prove It Works"
+  short_description: "Poteto: Verify real behavior rather than relying on proxies"
+policy:
+  allow_implicit_invocation: false

@@ -86,6 +86,40 @@ const diagramArrowsStartAtOrigin = (source: string): boolean => {
 };
 
 describe("skill docs source", () => {
+  test("renders the disclosed catalog and refreshes changed rows without loading it into SKILL.md", async () => {
+    const repositoryRoot = await mkdtemp(join(tmpdir(), "skill-catalog-"));
+    const directory = join(repositoryRoot, "ask-ben");
+    await mkdir(directory);
+    const pointer =
+      "For skill discovery, read the [complete skill catalog](SKILL-CATALOG.md).";
+    await writeFile(
+      join(directory, "SKILL.md"),
+      `---\nname: ask-ben\ndescription: Route work.\n---\n# Ask Ben\n${pointer}\n`,
+    );
+    const source = createSkillSource({
+      branch: "main",
+      contentRoot: join(repositoryRoot, "content"),
+      repositoryRoot,
+      repositoryUrl: REPOSITORY_URL,
+    });
+    try {
+      for (const name of ["poteto-tdd", "poteto-setup-benny"]) {
+        const catalog = `| Skill | Use for |\n|---|---|\n| \`/${name}\` | Complete instructions. |\n`;
+        await writeFile(join(directory, "SKILL-CATALOG.md"), catalog);
+        const { entries } = await source.load();
+        const router = entries.find(
+          (entry) => entry.ref === "skills/ask-ben.md",
+        );
+        expect(router?.body.text).toContain(catalog);
+        expect(router?.body.text).not.toContain(pointer);
+      }
+      await rm(join(directory, "SKILL-CATALOG.md"));
+      await expect(source.load()).rejects.toThrow();
+    } finally {
+      await rm(repositoryRoot, { recursive: true, force: true });
+    }
+  });
+
   test("dates generated pages from canonical git history, preserving authored dates", async () => {
     const repositoryRoot = await mkdtemp(join(tmpdir(), "skill-history-"));
     const contentRoot = join(repositoryRoot, "docs-site", "content");
@@ -118,6 +152,17 @@ describe("skill docs source", () => {
 
     try {
       await mkdir(join(repositoryRoot, "sample-skill"));
+      await mkdir(join(repositoryRoot, "ask-ben"));
+      const routerSource =
+        "---\nname: ask-ben\ndescription: Route work.\n---\n# Ask Ben\nFor skill discovery, read the [complete skill catalog](SKILL-CATALOG.md).\n";
+      await writeFile(
+        join(repositoryRoot, "ask-ben", "SKILL.md"),
+        routerSource,
+      );
+      await writeFile(
+        join(repositoryRoot, "ask-ben", "SKILL-CATALOG.md"),
+        "Original catalog.\n",
+      );
       await mkdir(join(contentRoot, "pl", "skills"), { recursive: true });
       await writeFile(
         join(repositoryRoot, "sample-skill", "SKILL.md"),
@@ -146,7 +191,11 @@ describe("skill docs source", () => {
         join(repositoryRoot, "sample-skill", "SKILL.md"),
         "---\nname: sample-skill\ndescription: Updated guidance.\n---\n# Sample\n\nUpdated guidance.\n",
       );
-      git("add", "sample-skill/SKILL.md");
+      await writeFile(
+        join(repositoryRoot, "ask-ben", "SKILL-CATALOG.md"),
+        "Updated catalog.\n",
+      );
+      git("add", "sample-skill/SKILL.md", "ask-ben/SKILL-CATALOG.md");
       git(
         "-c",
         "core.hooksPath=/dev/null",
@@ -171,6 +220,10 @@ describe("skill docs source", () => {
         entries.find((entry) => entry.ref === "skills/sample-skill.md")
           ?.lastModified,
       ).toBe(committedDate);
+      expect(
+        entries.find((entry) => entry.ref === "skills/ask-ben.md")
+          ?.lastModified,
+      ).toBe(committedDate);
       for (const ref of ["index.mdx", "skills/index.mdx"]) {
         expect(entries.find((entry) => entry.ref === ref)?.lastModified).toBe(
           "2026-01-15T12:00:00Z",
@@ -187,6 +240,25 @@ describe("skill docs source", () => {
         entries.find((entry) => entry.ref === "skills/sample-skill.md")
           ?.sourcePath,
       ).toBe(join(contentRoot, "skills", "sample-skill.md"));
+      committedDate = "2026-03-03T12:00:00Z";
+      await writeFile(
+        join(repositoryRoot, "ask-ben", "SKILL.md"),
+        `${routerSource}\nNew router guidance.\n`,
+      );
+      git("add", "ask-ben/SKILL.md");
+      git(
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "--quiet",
+        "-m",
+        "router update",
+      );
+      const refreshed = await source.load();
+      expect(
+        refreshed.entries.find((entry) => entry.ref === "skills/ask-ben.md")
+          ?.lastModified,
+      ).toBe(committedDate);
     } finally {
       await rm(repositoryRoot, { force: true, recursive: true });
     }

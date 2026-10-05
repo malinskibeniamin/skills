@@ -1,4 +1,14 @@
-# Evals for the curated Poteto/pstack backport and harness composition.
+# Evals for complete Poteto vendoring and the retained curated harness owners.
+
+if python3 "$REPO_ROOT/evals/test-poteto-sync.py" &&
+   python3 "$REPO_ROOT/scripts/vendor-poteto.py" --check; then
+  echo "  PASS  complete Poteto snapshot and vendoring CLI contract"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  complete Poteto snapshot and vendoring CLI contract"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: complete Poteto snapshot or sync contract"
+fi
 
 POTETO_SHA="efa2a531985e0a8084d36ff3cf87233be8a9f34b"
 POTETO_SKILLS=(
@@ -57,20 +67,11 @@ run_content_eval "$REPO_ROOT/codebase-design/SKILL.md" "POTETO-ENGINEERING.md" "
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "/create-verification-skill" "lifecycle can close a missing real-entrypoint harness gap"
 run_content_eval "$REPO_ROOT/dogfood/SKILL.md" "verify-\\*|verify-<app>" "dogfood prefers a project-local verification skill"
 run_content_eval "$REPO_ROOT/dogfood/SKILL.md" "/maintain-verification-skill" "dogfood routes verifier drift to its maintenance owner"
-run_content_eval "$REPO_ROOT/README.md" "pstack.*blast-radius.*create-verification-skill.*maintain-verification-skill" "README documents the curated Poteto backport"
+run_content_eval "$REPO_ROOT/README.md" "/blast-radius.*create-verification-skill.*maintain-verification-skill" "README preserves curated owners alongside the complete stack"
 
-# Poteto's global mode, duplicate owners, and automatic-agent workflows conflict
-# with this harness's single-owner execution contract and stay unregistered.
-for excluded in architect how no-comments poteto-mode technical-writing unslop why; do
-  if [ -e "$REPO_ROOT/$excluded/SKILL.md" ] || grep -q "\"./$excluded/\"" "$REPO_ROOT/.claude-plugin/plugin.json"; then
-    echo "  FAIL  duplicate or incompatible Poteto skill stays unregistered: $excluded"
-    FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: excluded Poteto skill registered: $excluded"
-  else
-    echo "  PASS  duplicate or incompatible Poteto skill stays unregistered: $excluded"
-    PASS=$((PASS + 1))
-  fi
-done
+# All upstream owners are exposed through namespaced adapters, not by replacing
+# existing harness owners. Completeness and byte integrity are checked by the CLI
+# above; generic packaging evals cover every Claude/Codex adapter.
 
 if rg -n "Spawn|subagent_type|one .*subagent|Task.*subagent" \
   "$REPO_ROOT/blast-radius/SKILL.md" \

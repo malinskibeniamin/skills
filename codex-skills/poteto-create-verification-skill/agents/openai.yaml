@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Create Verification Skill"
+  short_description: "Poteto: Create a project-local real-app verifier"
+policy:
+  allow_implicit_invocation: false

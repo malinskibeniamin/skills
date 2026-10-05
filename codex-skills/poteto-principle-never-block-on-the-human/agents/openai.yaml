@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Never Block On The Human"
+  short_description: "Poteto: Never block on the human"
+policy:
+  allow_implicit_invocation: false

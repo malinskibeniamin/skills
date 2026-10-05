@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Redesign From First Principles"
+  short_description: "Poteto: Redesign from first principles"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Unslop"
+  short_description: "Poteto: Remove AI writing patterns while preserving meaning"
+policy:
+  allow_implicit_invocation: false

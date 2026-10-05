@@ -34,7 +34,7 @@ run_file_eval "$REPO_ROOT/codex-skills/pr-shepherd/SKILL.md" \
   "generated Codex pr-shepherd proxy exists"
 run_file_eval "$REPO_ROOT/codex-skills/pr-shepherd/agents/openai.yaml" \
   "generated Codex pr-shepherd metadata exists"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" '/pr-shepherd' \
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" '/pr-shepherd' \
   "generated catalog lists pr-shepherd"
 
 if [ -x "$STATE_HELPER" ]; then

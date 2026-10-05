@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Make Operations Idempotent"
+  short_description: "Poteto: Make operations idempotent"
+policy:
+  allow_implicit_invocation: false

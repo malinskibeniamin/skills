@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Triage Issue Reports"
+  short_description: "Poteto: Classify and deduplicate thread-scoped issue reports"
+policy:
+  allow_implicit_invocation: false

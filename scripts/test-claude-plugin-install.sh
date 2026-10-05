@@ -112,6 +112,10 @@ done < <(jq -r '.skills[]' "$manifest")
 [ "$installed_skill_count" -eq "$expected_skill_count" ] ||
   fail "installed Claude skill count does not match the manifest"
 
+# Check upstream bytes and every adapter dependency inside the actual plugin cache.
+python3 "$installed_path/scripts/vendor-poteto.py" --check
+bash "$installed_path/scripts/generate-skill-catalog.sh" --check
+
 hooks_manifest="$installed_path/hooks/hooks.json"
 [ -f "$hooks_manifest" ] || fail "installed Claude hooks manifest is missing"
 

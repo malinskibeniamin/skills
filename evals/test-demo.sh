@@ -54,5 +54,5 @@ run_file_eval "$REPO_ROOT/codex-skills/demo/SKILL.md" \
   "generated Codex demo proxy exists"
 run_file_eval "$REPO_ROOT/codex-skills/demo/agents/openai.yaml" \
   "generated Codex demo metadata exists"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/demo" \
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" "/demo" \
   "generated catalog lists demo"

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Type System Discipline"
+  short_description: "Poteto: Type system discipline"
+policy:
+  allow_implicit_invocation: false

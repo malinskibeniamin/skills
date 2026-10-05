@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Teach"
+  short_description: "Poteto: Explain what changed, how it works, and why"
+policy:
+  allow_implicit_invocation: false

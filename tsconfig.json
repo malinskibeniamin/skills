@@ -17,6 +17,7 @@
   "exclude": [
     "agent-evals/evals/tanstack-router-navigation-lifetimes/src",
     "exemplars",
+    "vendor",
     "**/*.gen.ts",
     "**/*.gen.tsx",
     "**/*_pb.ts",

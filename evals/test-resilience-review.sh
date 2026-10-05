@@ -70,4 +70,4 @@ else
   PASS=$((PASS+1))
 fi
 
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/resilience-review" "generated catalog documents resilience-review"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" "/resilience-review" "generated catalog documents resilience-review"

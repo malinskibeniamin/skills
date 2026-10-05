@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto How"
+  short_description: "Poteto: Explain subsystem behavior from source evidence"
+policy:
+  allow_implicit_invocation: false

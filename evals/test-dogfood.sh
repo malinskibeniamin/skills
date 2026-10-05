@@ -71,7 +71,7 @@ run_file_eval "$REPO_ROOT/codex-skills/dogfood/SKILL.md" \
   "generated Codex dogfood proxy exists"
 run_file_eval "$REPO_ROOT/codex-skills/dogfood/agents/openai.yaml" \
   "generated Codex dogfood metadata exists"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/dogfood" \
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" "/dogfood" \
   "generated catalog lists dogfood"
 run_content_eval "$REPO_ROOT/skill-manifest.json" "dogfood-stop.sh" \
   "hook manifest registers dogfood completion gate"

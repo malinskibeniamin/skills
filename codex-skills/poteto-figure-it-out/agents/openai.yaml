@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Figure It Out"
+  short_description: "Poteto: Design a verifiable playbook for an unfamiliar task"
+policy:
+  allow_implicit_invocation: false

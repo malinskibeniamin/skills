@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Recall"
+  short_description: "Poteto: Rebuild recent context from history and live state"
+policy:
+  allow_implicit_invocation: false

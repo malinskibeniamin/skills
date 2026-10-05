@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Experience First"
+  short_description: "Poteto: Choose user experience over implementation convenience"
+policy:
+  allow_implicit_invocation: false

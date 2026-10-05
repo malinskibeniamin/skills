@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Exhaust The Design Space"
+  short_description: "Poteto: Exhaust the design space"
+policy:
+  allow_implicit_invocation: false

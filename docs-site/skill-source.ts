@@ -60,6 +60,8 @@ const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 const HEADING = /^\s*#\s+[^\n]+\r?\n+/;
 const MARKDOWN_LINK = /(!?\[[^\]]*\]\()([^\s)]+)([^)]*\))/g;
 const REMOTE_OR_ROOT_LINK = /^(?:[a-z][a-z\d+.-]*:|#|\/)/i;
+const CATALOG_POINTER =
+  "For skill discovery, read the [complete skill catalog](SKILL-CATALOG.md).\n";
 
 const readYamlString = (frontmatter: string, field: string): string => {
   const match = frontmatter.match(new RegExp(`^${field}:[\\t ]*(.+)$`, "m"));
@@ -165,9 +167,18 @@ const loadSkills = async (
     .filter((path) => existsSync(path));
 
   const skills = await Promise.all(
-    skillFiles.map(async (sourcePath) =>
-      parseSkill(await readFile(sourcePath, "utf8"), sourcePath),
-    ),
+    skillFiles.map(async (sourcePath) => {
+      const skill = parseSkill(await readFile(sourcePath, "utf8"), sourcePath);
+      // Agents disclose the catalog on demand; readers see the same full table.
+      if (skill.body.includes(CATALOG_POINTER)) {
+        const catalog = await readFile(
+          join(dirname(sourcePath), "SKILL-CATALOG.md"),
+          "utf8",
+        );
+        skill.body = skill.body.replace(CATALOG_POINTER, catalog);
+      }
+      return skill;
+    }),
   );
   skills.sort((left, right) => left.name.localeCompare(right.name));
 
@@ -439,6 +450,15 @@ export const createSkillSource = (
       const sourcePaths = result.entries.map((entry) =>
         canonicalSourcePath(entry.ref, options),
       );
+      const routerPath = join(options.repositoryRoot, "ask-ben", "SKILL.md");
+      const catalogPath = join(
+        options.repositoryRoot,
+        "ask-ben",
+        "SKILL-CATALOG.md",
+      );
+      if (sourcePaths.includes(routerPath) && existsSync(catalogPath)) {
+        sourcePaths.push(catalogPath);
+      }
       const gitTimes = gitLastModifiedTimes(
         options.repositoryRoot,
         [...new Set(sourcePaths.map(dirname))],
@@ -448,7 +468,15 @@ export const createSkillSource = (
         ...result,
         entries: result.entries.map((entry) => {
           const sourcePath = canonicalSourcePath(entry.ref, options);
-          const lastModified = entry.lastModified ?? gitTimes.get(sourcePath);
+          const sourceDate = gitTimes.get(sourcePath);
+          const catalogDate =
+            sourcePath === routerPath ? gitTimes.get(catalogPath) : undefined;
+          const latestDate =
+            catalogDate &&
+            (!sourceDate || Date.parse(catalogDate) > Date.parse(sourceDate))
+              ? catalogDate
+              : sourceDate;
+          const lastModified = entry.lastModified ?? latestDate;
           return {
             ...entry,
             editUrl: editUrlFor(sourcePath, options),
@@ -474,7 +502,10 @@ export const createSkillSource = (
         options.repositoryRoot,
         { recursive: true },
         (_event, filename) => {
-          if (!filename?.toString().endsWith("SKILL.md")) {
+          const name = filename?.toString();
+          if (
+            !(name?.endsWith("SKILL.md") || name?.endsWith("SKILL-CATALOG.md"))
+          ) {
             return;
           }
           notify();

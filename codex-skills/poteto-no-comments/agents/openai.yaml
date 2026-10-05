@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto No Comments"
+  short_description: "Poteto: Replace redundant comments with structural guarantees"
+policy:
+  allow_implicit_invocation: false

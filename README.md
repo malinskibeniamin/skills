@@ -241,7 +241,7 @@ an explicit artifact command.
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |
 | Agents | Optional, explicit delegation | `code-reviewer` (PR correctness), `verifier` (read-only verification) |
 
-The generated authoritative catalog with every skill and its trigger lives in [ask-ben/SKILL.md](ask-ben/SKILL.md).
+The router [ask-ben/SKILL.md](ask-ben/SKILL.md) discloses the generated [complete skill catalog](ask-ben/SKILL-CATALOG.md) on demand.
 
 ## How it works
 
@@ -386,7 +386,18 @@ Everything this harness uses from [mattpocock/skills](https://github.com/mattpoc
 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
-A curated [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) backport adds `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Shared reader-load, structural-enforcement, first-principles, rationale-research, evaluator-blinding, and proof rules are interwoven through existing owners rather than registering Poteto's duplicate mode and workflow stack.
+The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **50 skills** from pstack **0.15.5** (47 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`7022c81efb48d8b5eb15498ce6043a3bd74b694c`](https://github.com/cursor/plugins/tree/7022c81efb48d8b5eb15498ce6043a3bd74b694c/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json).
+
+Use `/poteto-mode`, `/poteto-how`, `/poteto-architect`, `/poteto-interrogate`, or any `/poteto-<upstream-folder>` skill through Claude or Codex. Every upstream `SKILL.md`, including the Benny automation pack, has a registered adapter in `poteto-skills/`; none are excluded. The complete inventory is linked above; authored-skill docs stay separate from imported source. The prefix avoids replacing this harness's `/tdd`, `/swarm`, `/teach`, `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Upstream invocation policies are preserved. [Compatibility rules](shared/POTETO-COMPATIBILITY.md) keep the requested endpoint, selected model, host tools, and explicit delegation/automation authorization intact. Installation activates no automation or upstream agent.
+
+Verify the snapshot with `python3 scripts/vendor-poteto.py --check`. Refresh from a separate checkout of `cursor/plugins` at a reviewed full SHA:
+
+```bash
+python3 scripts/vendor-poteto.py --source /path/to/plugins/pstack --revision <full-commit-sha>
+bash scripts/generate-skill-catalog.sh
+```
+
+The command discovers every skill recursively, copies the complete source tree unchanged, records file hashes and executable permissions, and generates namespaced adapters and Claude registrations. The catalog generator then derives Codex proxies and router entries from that inventory. Vendored Cursor runtime code is not reformatted or checked against this repository's toolchain.
 
 `/test-audit` is vendored from [openclaw/openclaw](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit) (MIT, notice in `test-audit/CREDITS.md`): an authoring gate `/tdd` routes new tests through, plus audit and subsystem-campaign modes for pruning low-value tests and their test-only production seams.
 

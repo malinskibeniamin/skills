@@ -61,7 +61,7 @@ run_file_eval "$REPO_ROOT/codex-skills/eli5/agents/openai.yaml" \
   "generated Codex eli5 metadata exists"
 run_content_eval "$REPO_ROOT/codex-skills/eli5/agents/openai.yaml" \
   'display_name: "ELI5"' "Codex preserves the ELI5 initialism"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/eli5" \
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" "/eli5" \
   "generated catalog lists eli5"
 run_content_eval "$REPO_ROOT/docs-site/generate-skill-diagrams.ts" 'eli5:' \
   "eli5 has a semantic docs diagram"

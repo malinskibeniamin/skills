@@ -1,9 +1,17 @@
 ---
-title: /ask-ben
 description: Router dla umiejętności frontendowych Bena.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ask ben
 sidebar:
   label: /ask-ben
+title: /ask-ben
+type: skill
 ---
 ![Diagram umiejętności /ask-ben](/diagrams/skills/ask-ben.svg)
 
@@ -59,6 +67,56 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go; instalowalne 
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |
 | `/postgresql` | Projektowanie i obsługiwanie PostgreSQL na podstawie danych o obciążeniu. |
+| `/poteto-architect` | Poteto: Zaprojektuj sposób użycia przez kod wywołujący, typy i granice modułów. |
+| `/poteto-arena` | Poteto: Porównaj konkurencyjne implementacje i połącz najlepsze rozwiązania. |
+| `/poteto-automate-me` | Poteto: Opracuj własny tryb na podstawie obserwowanych wzorców pracy. |
+| `/poteto-blast-radius` | Poteto: Udowodnij bezpieczeństwo zmian wykraczających poza lokalny zakres, wykonując rozstrzygającą kontrolę. |
+| `/poteto-bro` | Poteto: Przedstaw ostatnią wiadomość prostym, zrozumiałym językiem. |
+| `/poteto-create-verification-skill` | Poteto: Utwórz lokalną dla projektu umiejętność weryfikacji rzeczywistej aplikacji. |
+| `/poteto-figure-it-out` | Poteto: Zaprojektuj weryfikowalny scenariusz działania dla nieznanego zadania. |
+| `/poteto-how` | Poteto: Wyjaśnij działanie podsystemu na podstawie kodu źródłowego. |
+| `/poteto-interrogate` | Poteto: Sprawdź zmiany w kodzie poprzez krytyczną analizę. |
+| `/poteto-maintain-verification-skill` | Poteto: Zaktualizuj weryfikator na podstawie kodu źródłowego i rzeczywistego działania. |
+| `/poteto-make-bot-ui` | Poteto: Zbuduj panel, który uruchamia bota przez webhook. |
+| `/poteto-mode` | Poteto: Prowadź wymagające zadania przez scenariusze działania Poteto. |
+| `/poteto-no-comments` | Poteto: Zastąp zbędne komentarze gwarancjami wynikającymi ze struktury kodu. |
+| `/poteto-principle-attack-the-premise` | Poteto: Zakwestionuj założenie. |
+| `/poteto-principle-boundary-discipline` | Poteto: Przestrzegaj granic modułów. |
+| `/poteto-principle-build-the-lever` | Poteto: Zbuduj powtarzalne narzędzie, które wykonuje pracę lub potwierdza jej wynik. |
+| `/poteto-principle-encode-lessons-in-structure` | Poteto: Utrwalaj wnioski w strukturze kodu. |
+| `/poteto-principle-exhaust-the-design-space` | Poteto: Przeanalizuj wszystkie warianty projektu. |
+| `/poteto-principle-experience-first` | Poteto: Wybieraj wygodę użytkownika zamiast wygody implementacji. |
+| `/poteto-principle-fix-root-causes` | Poteto: Odtwórz objawy i napraw ich przyczynę. |
+| `/poteto-principle-foundational-thinking` | Poteto: Myśl od podstaw. |
+| `/poteto-principle-guard-the-context-window` | Poteto: Chroń okno kontekstu. |
+| `/poteto-principle-laziness-protocol` | Poteto: Stosuj protokół oszczędzania wysiłku. |
+| `/poteto-principle-make-operations-idempotent` | Poteto: Zapewnij idempotentność operacji. |
+| `/poteto-principle-migrate-callers-then-delete-legacy-apis` | Poteto: Przenieś kod wywołujący, a następnie usuń stare API. |
+| `/poteto-principle-minimize-reader-load` | Poteto: Ogranicz obciążenie czytelnika. |
+| `/poteto-principle-model-the-domain` | Poteto: Zapisz reguły domeny w jawnych strukturach danych. |
+| `/poteto-principle-never-block-on-the-human` | Poteto: Nie wstrzymuj pracy w oczekiwaniu na człowieka. |
+| `/poteto-principle-outcome-oriented-execution` | Poteto: Realizuj zadania z naciskiem na rezultat. |
+| `/poteto-principle-prove-it-works` | Poteto: Weryfikuj rzeczywiste działanie zamiast polegać na wskaźnikach zastępczych. |
+| `/poteto-principle-redesign-from-first-principles` | Poteto: Przeprojektuj rozwiązanie od podstawowych zasad. |
+| `/poteto-principle-separate-before-serializing-shared-state` | Poteto: Rozdziel współdzielony stan przed szeregowaniem dostępu. |
+| `/poteto-principle-sequence-verifiable-units` | Poteto: Układaj pracę w kolejność weryfikowalnych jednostek. |
+| `/poteto-principle-subtract-before-you-add` | Poteto: Najpierw usuwaj, potem dodawaj. |
+| `/poteto-principle-test-behavior-not-implementation` | Poteto: Testuj zachowanie, nie implementację. |
+| `/poteto-principle-type-system-discipline` | Poteto: Przestrzegaj zasad systemu typów. |
+| `/poteto-recall` | Poteto: Odtwórz ostatni kontekst na podstawie historii i aktualnego stanu. |
+| `/poteto-reflect` | Poteto: Przekształć wnioski z obserwacji pracy w ulepszenia umiejętności. |
+| `/poteto-reproduce-and-fix-issues` | Poteto: Odtwarzaj zgłoszone problemy i weryfikuj poprawki o określonym zakresie. |
+| `/poteto-setup-benny` | Poteto: Skonfiguruj pakiet Benny do klasyfikacji i odtwarzania zgłoszeń. |
+| `/poteto-setup-pstack` | Poteto: Skonfiguruj role modeli i budżety rozumowania w pstack. |
+| `/poteto-show-me-your-work` | Poteto: Zachowuj możliwą do przejrzenia historię decyzji i dowodów. |
+| `/poteto-swarm` | Poteto: Koordynuj równoległą pracę wyłącznie na wyraźne żądanie użytkownika. |
+| `/poteto-tdd` | Poteto: Przed naprawą zapisz błąd jako wykonywalny test. |
+| `/poteto-teach` | Poteto: Wyjaśnij, co się zmieniło, jak działa i dlaczego. |
+| `/poteto-technical-writing` | Poteto: Pisz przejrzystą dokumentację techniczną o warstwowej strukturze. |
+| `/poteto-triage-issue-reports` | Poteto: Klasyfikuj zgłoszenia w obrębie wątków i usuwaj duplikaty. |
+| `/poteto-typescript-best-practices` | Poteto: Stosuj zasady systemu typów TypeScript. |
+| `/poteto-unslop` | Poteto: Usuń schematy pisania typowe dla AI, zachowując znaczenie. |
+| `/poteto-why` | Poteto: Badaj uzasadnienie projektu na podstawie cytowanych źródeł. |
 | `/pr-shepherd` | Wznawianie zmienionych PR-ów i doprowadzanie bieżących poprawek obszaru roboczego do końca. |
 | `/pr` | Pisanie opisu PR, który szybko się przegląda. |
 | `/prime` | Tworzenie zwięzłego wprowadzenia do repozytorium. |

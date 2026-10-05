@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Guard The Context Window"
+  short_description: "Poteto: Guard the context window"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Principle Subtract Before You Add"
+  short_description: "Poteto: Subtract before you add"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto TDD"
+  short_description: "Poteto: Make a bug executable before implementing its fix"
+policy:
+  allow_implicit_invocation: false
