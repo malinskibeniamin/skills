@@ -32,11 +32,6 @@ fi
 endpoint_file="$_hook_session_dir/task-endpoint"
 [ -s "$endpoint_file" ] || exit 0
 
-# Reject an ambiguous final message at most once, but never waive cleanup.
-if printf '%s' "$input" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then
-  exit 0
-fi
-
 last_message=$(printf '%s' "$input" | jq -r '.last_assistant_message // empty' 2>/dev/null)
 last_line=$(printf '%s\n' "$last_message" | awk 'NF { line=$0 } END { print line }')
 reminder_line=$(printf '%s\n' "$last_message" | awk 'NF { previous=line; line=$0 } END { print previous }')
@@ -95,5 +90,11 @@ case "$last_line" in
     [ "$reminder_valid" = true ] && has_visible_detail "$detail" && exit 0
     ;;
 esac
+
+# Corrected valid statuses above still record completion. Avoid a repeated
+# formatting-only block, without discarding a successful delivery retry.
+if printf '%s' "$input" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then
+  exit 0
+fi
 
 hook_stop_block "Silent or ambiguous stop rejected. Reread the active request and continue if work remains. Otherwise put Intent: <outcome> | Impact: <why it matters> immediately before exactly one evidence-bearing status line: 🟢 done — <evidence>, 🟡 awaiting decision — <specific decision>, or 🔴 blocked — <external blocker and needed input>. Keep the user's goal; use Impact: not established when unknown, never invent business claims or metrics."
