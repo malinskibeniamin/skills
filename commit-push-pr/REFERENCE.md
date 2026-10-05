@@ -72,7 +72,7 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 
 **Video** (before left, after right): <the flow, as steps: open X -> type Y -> submit -> see Z>
 
-https://github.com/user-attachments/assets/<id from pr-video.sh attach>
+![](<local MP4 path also passed to gh --attach>)
 
 <fallback only when attach is blocked: ![before-after flow](<pinned gif url>)>
 
@@ -138,8 +138,12 @@ EOF
 )"
 ```
 
-Use a body file for long bodies rather than fragile shell quoting. Updates use `gh pr edit
-<number> --body-file <file>`; preserve user-authored context outside the evidence sections.
+Use a body file for long bodies rather than fragile shell quoting. For native media, pass
+each referenced local file with `--attach <path>` on create or edit. GitHub CLI rewrites
+those references to uploaded assets; keep the video image reference alone in its paragraph
+to render a player. Updates use `gh pr edit <number> --body-file <file> --attach <media>`;
+preserve user-authored context outside the evidence sections. Without a body flag,
+`gh pr edit <number> --attach <media>` appends media and preserves the existing body.
 
 Append `--label <label1> --label <label2>` per verified label.
 
@@ -212,25 +216,36 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    row per affected view/state (group identical cases with a coverage note). Link diff images
    and the full visual-test report when available. Use repository-approved, reviewer-accessible
    image hosting or committed snapshot raw URLs pinned to immutable SHAs. Without other
-   hosting, `scripts/pr-video.sh publish <files>` pushes screenshots and GIF to the
+   hosting, prefer [native GitHub CLI attachments](https://docs.github.com/en/github-cli/github-cli/attaching-files-with-github-cli)
+   for inline MP4 players: `gh pr create --body-file <body> --attach <media>` or
+   `gh pr edit <number> --body-file <body> --attach <media>`. Put `![](<local MP4 path>)`
+   alone in its paragraph in the body; gh replaces it with a user-attachments URL.
+   `scripts/pr-video.sh attach [--body-file <body>] before-after.mp4` edits the current
+   PR (override with `PR_VIDEO_PR_URL`), appending without replacing its body by default,
+   and prints the **PR URL**, not asset URLs. It uses existing gh authentication and
+   needs repository push access, no browser, profile, cookie extraction, or UI edits.
+   Exit 3 means upgrade gh for `--attach` support; never fall back to browser uploads.
+   When native upload is unavailable, use the published inline GIF and state the missing
+   player; `scripts/pr-video.sh publish <files>` pushes screenshots and GIF to the
    `pr-evidence` branch without touching the PR branch and prints SHA-pinned Markdown.
-   Embed the MP4 so it plays in the PR: GitHub renders a player only for its own
-   `https://github.com/user-attachments/assets/<id>` uploads (it strips `<video>` tags and
-   links repository MP4s as downloads). `scripts/pr-video.sh attach before-after.mp4` makes
-   that upload from an isolated, signed-in agent-browser profile and prints the URL; put
-   it alone on its own line. Exit 3 means the profile needs a one-time sign-in by the user.
-   Until then, the inline GIF is the video and the body states the missing player; never
-   link a downloadable MP4 as the video. Review captures
+   Do not present a downloadable MP4 as an inline video. On upload failure, read
+   the PR body before retrying only missing files: gh can save successful attachments
+   even when it exits nonzero. Review captures
    for secrets/personal data before upload; use sanitized fixtures, never public hosting for
    private evidence without authorization. Local paths are not reviewer-visible evidence.
-   Neither are localhost, expiring session URLs, or artifact ZIP links. `gh pr comment` does not upload
-   local image files. Missing capture/test/hosting blocks publication unless the user
-   explicitly waives the named gap; put that waiver and limitation in the body, never PASS.
+   Neither are localhost, expiring session URLs, or artifact ZIP links. `gh pr comment --attach`
+   uploads media to a comment, not the PR body. Missing capture/test/hosting blocks
+   publication unless the user explicitly waives the named gap; put that waiver and
+   limitation in the body, never PASS.
 6. **Verify publication:** Re-read the actual PR body after create/edit/reopen/stack submit.
-   Verify the images render and the video plays inline (a `<video>` element, not a link)
-   in an isolated browser with reviewer-equivalent access; an agent
-   download alone does not prove access. Check the revision pair and concise impact/test
-   bullets. Do not overwrite unrelated reviewer notes. Omit the visual section only when the
+   Use `gh pr view <number> --json body,url` to verify the uploaded media references and
+   body placement, revision pair, and concise impact/test bullets. Confirm native video
+   URLs occupy their own paragraph and no attached local paths remain. CLI readback
+   proves publication, not playback or every reviewer's access; name any unverified
+   access limits. Do not launch a browser merely to upload, edit, or verify publication.
+   If the user explicitly requests rendered playback/access verification, use one
+   isolated session, close it afterward, and never take over a human-owned browser.
+   Do not overwrite unrelated reviewer notes. Omit the visual section only when the
    inventory establishes no user-visible effect; keep that rationale in verification evidence.
 
 The PR-entrypoint hook is an advisory reminder, not a completeness detector or a hard CI

@@ -17,10 +17,11 @@ set -euo pipefail
 #     falling back to ffmpeg; `hyperframes` or `ffmpeg` forces one.
 #     Writes before-after.mp4 and before-after.gif.
 #
-#   scripts/pr-video.sh attach <file.mp4>...
-#     Uploads to GitHub PR attachments from an isolated agent-browser profile
-#     (PR_VIDEO_PROFILE) and prints user-attachments URLs, which GitHub plays
-#     inline. The comment box is cleared, never submitted. Exit 3: sign in once.
+#   scripts/pr-video.sh attach [--body-file <markdown>] <file.mp4>...
+#     Uploads native media with gh pr edit --attach, no browser. Appends to the
+#     current PR body, or rewrites local media references in the supplied body.
+#     PR_VIDEO_PR_URL selects another PR. Prints the PR URL, not asset URLs.
+#     Exit 3: upgrade gh for --attach support. Requires gh auth and push access.
 #
 #   scripts/pr-video.sh publish <file>...
 #     Commits files to the `pr-evidence` branch under <current-branch>/ with git
@@ -29,7 +30,7 @@ set -euo pipefail
 #     PR_VIDEO_REPO_URL overrides the https://github.com/<owner>/<repo> base.
 
 usage() {
-  sed -n '6,28p' "$0" | sed 's/^# \{0,1\}//' >&2
+  sed -n '6,30p' "$0" | sed 's/^# \{0,1\}//' >&2
   exit 2
 }
 
@@ -64,11 +65,6 @@ require_motion() {
     echo "pr-video: $1 is static (${distinct:-0} distinct frames, need $MIN_DISTINCT_FRAMES); record the flow (clicks, typing, navigation) with pr-video.sh record" >&2
     exit 1
   fi
-}
-
-browser_eval() {
-  # agent-browser prints eval results as JSON; unwrap strings.
-  agent-browser --session "$1" eval "$2" | jq -r 'if type == "string" then . else tostring end'
 }
 
 record() {
@@ -116,50 +112,35 @@ record() {
 }
 
 attach() {
-  [ $# -ge 1 ] || usage
-  command -v agent-browser >/dev/null 2>&1 || { echo "pr-video: needs agent-browser" >&2; exit 127; }
-  local profile=${PR_VIDEO_PROFILE:-${XDG_STATE_HOME:-$HOME/.local/state}/pr-video/github-profile}
-  local session="pr-video-attach-$$" pr_url
-  pr_url=${PR_VIDEO_PR_URL:-$(gh pr view --json url --jq .url)}
-  mkdir -p "$profile"
-  trap 'agent-browser --session "'"$session"'" close >/dev/null 2>&1 || true' EXIT
-  if ! agent-browser --session "$session" --profile "$profile" open "$pr_url" >/dev/null; then
-    echo "pr-video: could not open $profile; close any window still using it (such as the sign-in window), then rerun" >&2
-    exit 1
+  local body=""
+  if [ "${1:-}" = --body-file ]; then
+    [ $# -ge 3 ] || usage
+    body=$2
+    [ -f "$body" ] && [ -r "$body" ] || { echo "pr-video: unreadable body file: $body" >&2; exit 1; }
+    shift 2
   fi
-  if [ -z "$(browser_eval "$session" "document.querySelector('meta[name=user-login]')?.content || ''")" ]; then
-    echo "pr-video: sign in to GitHub once in the isolated profile, then rerun:" >&2
-    echo "  agent-browser --profile '$profile' --headed open https://github.com/login" >&2
+  [ $# -ge 1 ] || usage
+  command -v gh >/dev/null 2>&1 || { echo "pr-video: needs GitHub CLI (gh)" >&2; exit 127; }
+  local file help
+  for file in "$@"; do
+    [ -f "$file" ] && [ -s "$file" ] || { echo "pr-video: missing or empty file: $file" >&2; exit 1; }
+  done
+  help=$(gh pr edit --help)
+  if ! printf '%s\n' "$help" | grep -q -- '--attach'; then
+    echo "pr-video: gh pr edit needs --attach support; upgrade GitHub CLI (brew upgrade gh on macOS), then rerun. Browser upload is not used." >&2
     exit 3
   fi
-  local file tagged
-  for file in "$@"; do
-    [ -s "$file" ] || { echo "pr-video: missing file: $file" >&2; exit 1; }
-    # Tag the new-comment textarea and its attachment input; never submit.
-    tagged=$(browser_eval "$session" "(() => {
-      const box = [...document.querySelectorAll('textarea')].reverse()
-        .find((t) => t.offsetParent && /comment|body|markdown/i.test(t.name + t.id + t.className));
-      let node = box;
-      while (node && !node.querySelector?.('input[type=file]')) node = node.parentElement;
-      const input = node?.querySelector('input[type=file]');
-      if (!box || !input) return '';
-      box.setAttribute('data-pr-video-box', '');
-      input.setAttribute('data-pr-video-upload', '');
-      return 'ok';
-    })()")
-    [ "$tagged" = ok ] || { echo "pr-video: no comment box with attachments on $pr_url" >&2; exit 1; }
-    agent-browser --session "$session" upload '[data-pr-video-upload]' "$file" >/dev/null
-    AGENT_BROWSER_DEFAULT_TIMEOUT=120000 agent-browser --session "$session" wait --fn \
-      "document.querySelector('[data-pr-video-box]').value.includes('/user-attachments/assets/')" >/dev/null
-    browser_eval "$session" "(() => {
-      const box = document.querySelector('[data-pr-video-box]');
-      const url = box.value.match(/https:\\/\\/github\\.com\\/user-attachments\\/assets\\/[\\w-]+/)[0];
-      const setValue = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
-      setValue.call(box, '');
-      box.dispatchEvent(new Event('input', { bubbles: true }));
-      return url;
-    })()"
-  done
+  local args=(pr edit)
+  [ -z "${PR_VIDEO_PR_URL:-}" ] || args+=("$PR_VIDEO_PR_URL")
+  [ -z "$body" ] || args+=(--body-file "$body")
+  for file in "$@"; do args+=(--attach "$file"); done
+  # With no body flag, gh preserves the current body and appends native media.
+  local status=0
+  gh "${args[@]}" || status=$?
+  if [ "$status" -ne 0 ]; then
+    echo "pr-video: attachment command failed; some uploads may have succeeded. Use gh pr view to read the PR body before retrying only missing attachments." >&2
+    return "$status"
+  fi
 }
 
 frame_ffmpeg() {
