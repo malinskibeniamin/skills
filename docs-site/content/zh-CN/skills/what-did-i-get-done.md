@@ -1,32 +1,32 @@
 ---
-title: /what-did-i-get-done
 description: 将一段时间内由当前用户提交的 Git 提交汇总为简洁的状态更新。适用于准备周度回顾、复盘、已交付工作总结或任意指定日期范围的总结。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - what did i get done
 sidebar:
   label: /what-did-i-get-done
+title: /what-did-i-get-done
+type: skill
 ---
 ![“/what-did-i-get-done”技能示意图](/diagrams/skills/what-did-i-get-done.svg)
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/what-did-i-get-done.excalidraw)
 
-## 工作流程
+读取指定日期范围内由当前 Git 用户邮箱对应用户提交的提交记录；如果知道上次更新的时间，以此作为起点。
+排除合并提交和未提交的更改。优先呈现已交付的行为或架构变更，忽略格式调整、导入调整和小幅重命名。
+描述功能，不推断动机。
 
-1. 将请求的时间窗口解析为具体日期。
-2. 读取该日期范围内由当前 Git 用户邮箱对应用户提交的提交记录。
-3. 排除合并提交和未提交的更改。
-4. 将最重要的已交付变更整合为简洁的状态更新。
-5. 在最终总结中包含实际使用的日期范围。
+## 输出 [#output]
 
-## 约束条件
+始终只使用以下两个原样标题：
 
-- 极度简洁且信息密集。
-- 优先呈现实质性的行为或架构变更。
-- 忽略仅涉及外观的变更（格式调整、导入调整、小幅重命名）。
-- 不要推断意图或动机。以功能角度描述变更。
+- `What did you work on since the last update?`
+- `What are you going to work on next?`
 
-## 输出
-
-- 一段适合作为状态更新的简短总结
-- 实际日期范围
-- 可选的 2-5 个要点，仅列出重大变更
-- 对于周度回顾或复盘：添加一段简短的分类说明（可能属于缺陷修复、技术债务或全新功能）
+每个部分最多五个简洁要点。第一部分注明实际日期范围；周度回顾或复盘时，简短标明可能的分类（缺陷修复、技术债务或全新功能）。
+接下来的工作只依据已说明的计划或承诺；否则写出 "Next work not specified."。

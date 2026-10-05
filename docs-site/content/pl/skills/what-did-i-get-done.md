@@ -1,36 +1,40 @@
 ---
-title: /what-did-i-get-done
 description: >-
   Podsumowuje commity Git utworzone w określonym przedziale czasu w formie
   zwięzłej aktualizacji statusu. Używaj podczas przygotowywania przeglądów
   tygodniowych, retrospektyw, podsumowań wdrożonych prac lub zestawień dla
   dowolnego wskazanego zakresu dat.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - what did i get done
 sidebar:
   label: /what-did-i-get-done
+title: /what-did-i-get-done
+type: skill
 ---
 ![Diagram umiejętności /what-did-i-get-done](/diagrams/skills/what-did-i-get-done.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/what-did-i-get-done.excalidraw)
 
-## Przebieg pracy
+Odczytaj commity utworzone w danym zakresie dat przez użytkownika o adresie e-mail
+skonfigurowanym obecnie w Git; jeśli znasz datę ostatniej aktualizacji, użyj jej jako
+początku zakresu. Pomiń commity scalające i niezatwierdzone zmiany. Priorytetowo
+traktuj wdrożone zmiany zachowania lub architektury; pomijaj formatowanie, importy
+i drobne zmiany nazw. Opisuj funkcjonalność, nie motywację.
 
-1. Przekształć wskazany przedział czasu w konkretne daty.
-2. Odczytaj commity utworzone w tym okresie przez użytkownika o adresie e-mail skonfigurowanym obecnie w Git.
-3. Pomiń commity scalające i niezatwierdzone zmiany.
-4. Zbierz najważniejsze wdrożone zmiany w zwięzłą aktualizację statusu.
-5. Uwzględnij w końcowym podsumowaniu faktycznie użyty zakres dat.
+## Wynik [#output]
 
-## Zasady
+Zawsze używaj wyłącznie tych dwóch dokładnych nagłówków:
 
-- Pisz wyjątkowo zwięźle i treściwie.
-- Priorytetowo traktuj istotne zmiany zachowania lub architektury.
-- Pomijaj zmiany wyłącznie kosmetyczne (formatowanie, importy, drobne zmiany nazw).
-- Nie wyciągaj wniosków o intencjach ani motywacji. Opisuj zmiany pod kątem funkcjonalnym.
+- `What did you work on since the last update?`
+- `What are you going to work on next?`
 
-## Wynik
-
-- Jedno krótkie podsumowanie odpowiednie do aktualizacji statusu
-- Rzeczywisty zakres dat
-- Opcjonalnie 2–5 punktów wyłącznie dla najważniejszych zmian
-- W przypadku przeglądów tygodniowych i retrospektyw: krótki akapit klasyfikujący zmiany (prawdopodobne poprawki błędów / dług techniczny / nowe funkcje)
+W każdej sekcji użyj maksymalnie pięciu zwięzłych punktów. Pierwsza sekcja: rzeczywisty
+zakres dat oraz, przy przeglądach tygodniowych lub retrospektywach, prawdopodobna
+klasyfikacja (poprawki błędów / dług techniczny / nowe funkcje). Dalsza praca: wyłącznie
+podane plany lub zobowiązania; w przeciwnym razie napisz "Next work not specified.".

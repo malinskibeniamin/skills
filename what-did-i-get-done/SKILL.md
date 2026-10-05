@@ -3,14 +3,17 @@ name: what-did-i-get-done
 description: Summarize authored git commits over a time period into a concise status update. Use when preparing weekly reviews, retrospectives, shipped-work recaps, or any requested date range.
 ---
 
-## Workflow
+Read current Git email's authored commits in range; start at known last update.
+Exclude merges/uncommitted work. Summarize shipped behavior/architecture, not
+cosmetics or motives.
 
-1. Resolve concrete date range.
-2. Read commits by current git user email in range.
-3. Exclude merges and uncommitted work.
-4. Synthesize important shipped changes.
-5. State actual range.
+## Output
 
-Be concise and dense. Prioritize substantial behavior/architecture; omit formatting/import/minor rename. Never infer motive; describe functionally.
+Always use these two exact headings:
 
-Output one short status summary, real range, optional 2-5 major bullets. Weekly/retro adds brief likely bug-fix/tech-debt/net-new classification.
+- `What did you work on since the last update?`
+- `What are you going to work on next?`
+
+Max five concise bullets each. First: actual date range; weekly/retro:
+likely bug-fix/tech-debt/net-new classification. Next: stated plans/commitments
+only, else "Next work not specified."
