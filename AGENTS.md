@@ -42,6 +42,8 @@ Earlier stop wins. Ask only for user-reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
 Routine work may commit, push, or rebase the current user-owned feature branch
 without another permission prompt; push each CI fix or rebase now (`--force-with-lease`).
+When that PR falls behind its base, automatically fetch, rebase, resolve routine conflicts,
+verify, and lease-push; do not wait for a human rebase request or approval.
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure

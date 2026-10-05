@@ -31,6 +31,9 @@ Use `/agent-watchdog` first when another agent, cloud run, or prior session clai
 
 Resolve the PR and base with `gh pr view`. Read the REST `stack` object when present. If its
 branch belongs to another worktree, report that workspace rather than stealing it.
+If this user-owned branch lacks base commits, perform the
+[automatic rebase](../commit-push-pr/REFERENCE.md#automatic-rebase) before the no-feedback
+exit. Routine conflict resolution, verification, and lease-push require no human prompt.
 
 ### 2. Fetch and triage
 
@@ -47,7 +50,7 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 Inspect bot-only threads too; author type does not prove applicability. Paginate
 threads, comments, and reviews. Reply to non-applicable findings with evidence.
 
-If no new item remains, post `All feedback addressed` and stop.
+If no new item remains, finish any required rebase, then post `All feedback addressed` and stop.
 
 ### 3. Repair clusters
 

@@ -49,6 +49,8 @@ function fixture() {
     return result.stdout.toString().trim();
   };
   git(["init", "-b", "ben-malinski/T-1/feature"]);
+  git(["config", "user.name", "Test"]);
+  git(["config", "user.email", "test@example.com"]);
   git(["commit", "--allow-empty", "-m", "feat(test): initial"]);
   git(["remote", "add", "origin", "git@github.com:example/project.git"]);
   const head = git(["rev-parse", "HEAD"]);
@@ -62,6 +64,7 @@ function fixture() {
       headRefName: "ben-malinski/T-1/feature",
       baseRefName: "main",
       headRefOid: head,
+      baseRefOid: head,
       isCrossRepository: false,
     },
     comments: [
@@ -75,7 +78,12 @@ function fixture() {
     reviews,
     inline,
     failAgent: false,
+    rebaseAgent: false,
     failGh: false,
+    failCompare: false,
+    invalidCompare: false,
+    advanceDuringAgent: false,
+    publishRebase: true,
     unbindDuringFetch: false,
     laterPage: false,
     threads: [
@@ -98,14 +106,30 @@ function fixture() {
   const save = () => writeFileSync(data, JSON.stringify(snapshot));
   save();
   const fake = `#!${process.execPath}
-import { appendFileSync, readFileSync } from "node:fs";
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { basename } from "node:path";
 const args = process.argv.slice(2);
 const tool = basename(process.argv[1]);
 const input = tool === "gh" ? "" : readFileSync(0, "utf8");
 appendFileSync(process.env.CALLS, JSON.stringify({ tool, args, input, cwd: process.cwd() }) + "\\n");
 const data = JSON.parse(readFileSync(process.env.DATA, "utf8"));
-if (tool !== "gh") process.exit(data.failAgent ? 1 : 0);
+if (tool !== "gh") {
+  if (data.failAgent) process.exit(1);
+  if (data.rebaseAgent) {
+    const result = Bun.spawnSync(["git", "rebase", data.pr.baseRefOid]);
+    process.stderr.write(result.stderr);
+    if (result.exitCode !== 0) process.exit(result.exitCode ?? 1);
+    if (data.publishRebase) data.pr.headRefOid = Bun.spawnSync(["git", "rev-parse", "HEAD"]).stdout.toString().trim();
+    if (data.advanceDuringAgent) {
+      Bun.spawnSync(["git", "switch", "--detach", data.pr.baseRefOid]);
+      Bun.spawnSync(["git", "commit", "--allow-empty", "-m", "feat(base): concurrent advance"]);
+      data.pr.baseRefOid = Bun.spawnSync(["git", "rev-parse", "HEAD"]).stdout.toString().trim();
+      Bun.spawnSync(["git", "switch", data.pr.headRefName]);
+    }
+    writeFileSync(process.env.DATA, JSON.stringify(data));
+  }
+  process.exit(0);
+}
 if (data.failGh) process.exit(1);
 if (args[0] === "repo") {
   console.log(args.includes("-q") ? "example/project" : JSON.stringify({ nameWithOwner: "example/project", defaultBranchRef: { name: "main" } }));
@@ -113,6 +137,15 @@ if (args[0] === "repo") {
   console.log(JSON.stringify(data.pr));
 } else if (args[0] === "api") {
   const endpoint = args[1];
+  if (endpoint.includes("/compare/")) {
+    if (data.failCompare) process.exit(1);
+    if (data.invalidCompare) { console.log(JSON.stringify({ behind_by: "unknown" })); process.exit(0); }
+    const [base, head] = endpoint.split("/compare/")[1].split("?")[0].split("...");
+    const result = Bun.spawnSync(["git", "rev-list", "--count", head + ".." + base]);
+    if (result.exitCode !== 0) process.exit(result.exitCode ?? 1);
+    console.log(JSON.stringify({ behind_by: Number(result.stdout.toString().trim()) }));
+    process.exit(0);
+  }
   if (endpoint === "graphql") {
     const page = (nodes) => ({ data: { repository: { pullRequest: { reviewThreads: { nodes } } } } });
     const pages = data.laterPage ? [page([]), page(data.threads)] : [page(data.threads)];
@@ -180,8 +213,134 @@ if (args[0] === "repo") {
       ]).code,
     ).toBe(0);
   };
-  return { root, bin, env, run, recorded, snapshot, save, bind, git };
+  const advanceBase = () => {
+    snapshot.pr.headRefOid = git(["rev-parse", "HEAD"]);
+    git(["switch", "--detach", snapshot.pr.baseRefOid]);
+    git(["commit", "--allow-empty", "-m", "feat(base): advance"]);
+    snapshot.pr.baseRefOid = git(["rev-parse", "HEAD"]);
+    git(["switch", snapshot.pr.headRefName]);
+    save();
+  };
+  return {
+    root,
+    bin,
+    env,
+    run,
+    recorded,
+    snapshot,
+    save,
+    bind,
+    git,
+    advanceBase,
+  };
 }
+
+test("base advances rebase the bound feature session without review feedback", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.rebaseAgent = true;
+  f.git(["commit", "--allow-empty", "-m", "feat(test): feature"]);
+  f.snapshot.pr.headRefOid = f.git(["rev-parse", "HEAD"]);
+  f.advanceBase();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  expect(f.git(["merge-base", "HEAD", f.snapshot.pr.baseRefOid])).toBe(
+    f.snapshot.pr.baseRefOid,
+  );
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("an agent exit zero without a published rebase pauses instead of claiming success", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.advanceBase();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(1);
+  const binding = JSON.parse(f.run(["status"]).out).bindings[0];
+  expect(binding.paused).toBe(true);
+  expect(binding.seen).toEqual({});
+  expect(binding.last).toContain("rebase not verified");
+  expect(f.run(["tick"]).out).toContain("paused");
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("later base advances wake again; current PRs and dry runs never resume", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.rebaseAgent = true;
+  f.save();
+  f.bind("claude");
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().some((call) => call.tool === "claude")).toBe(false);
+  for (const iteration of [1, 2]) {
+    f.advanceBase();
+    expect(f.run(["tick", "--dry-run"]).out).toContain("rebase");
+    expect(f.recorded().filter((call) => call.tool === "claude")).toHaveLength(
+      iteration - 1,
+    );
+    expect(f.run(["tick"]).code).toBe(0);
+    expect(f.git(["merge-base", "HEAD", f.snapshot.pr.baseRefOid])).toBe(
+      f.snapshot.pr.baseRefOid,
+    );
+    expect(f.run(["tick"]).code).toBe(0);
+    expect(f.recorded().filter((call) => call.tool === "claude")).toHaveLength(
+      iteration,
+    );
+  }
+});
+
+test("failed or malformed base comparisons defer without consuming maintenance", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.rebaseAgent = true;
+  f.advanceBase();
+  f.bind();
+  for (const fault of ["failCompare", "invalidCompare"] as const) {
+    f.snapshot[fault] = true;
+    f.save();
+    expect(f.run(["tick"]).code).toBe(1);
+    expect(JSON.parse(f.run(["status"]).out).bindings[0].seen).toEqual({});
+    expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
+    f.snapshot[fault] = false;
+  }
+  f.save();
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("unpublished rebases cannot acknowledge maintenance", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.rebaseAgent = true;
+  f.snapshot.publishRebase = false;
+  f.advanceBase();
+  f.bind();
+  expect(f.run(["tick"]).err).toContain("Local HEAD differs");
+  const binding = JSON.parse(f.run(["status"]).out).bindings[0];
+  expect(binding.paused).toBe(true);
+  expect(binding.seen).toEqual({});
+});
+
+test("a concurrent base advance does not invalidate the completed target rebase", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.rebaseAgent = true;
+  f.snapshot.advanceDuringAgent = true;
+  f.advanceBase();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(false);
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  current.advanceDuringAgent = false;
+  writeFileSync(join(f.root, "github.json"), JSON.stringify(current));
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.git(["merge-base", "HEAD", current.pr.baseRefOid])).toBe(
+    current.pr.baseRefOid,
+  );
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(2);
+});
 
 test("trusted auto review resumes the bound feature session once, using gh", () => {
   const f = fixture();

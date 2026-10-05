@@ -1,7 +1,7 @@
-# Local auto-review wake-up
+# Local PR maintenance wake-up
 
-Trusted GitHub review comments -> local `gh` polling -> original feature session ->
-`/resolve-pr-feedback` -> fixes, verification, push, and evidence-backed replies.
+Trusted GitHub review comments or missing PR base commits -> local `gh` polling -> original
+feature session -> automatic rebase/feedback repair -> verification, lease-push, and replies.
 
 Configure once on a Mac with this harness installed at a **stable path**, `bun`,
 authenticated `gh`, and the feature agent's authenticated CLI. This uses native
@@ -21,7 +21,11 @@ bun <plugin-root>/scripts/pr-review-auto.ts enable \
 The user-local launchd job polls once per minute, while the Mac is awake and online.
 It reads inline comments, review bodies, and issue comments with `gh api --paginate
 --slurp`. New/edited trusted feedback triggers one repair; unchanged feedback and
-the repair's own push do not. `configure` writes consent/settings without installing
+the repair's own push do not. It also compares immutable PR base/head SHAs using
+[GitHub's commit comparison](https://docs.github.com/en/rest/commits/commits#compare-two-commits).
+Missing base commits wake the original session without comments or another approval,
+including conflict resolution and drafts, independent of strict branch protection.
+`configure` writes consent/settings without installing
 the job; `tick` runs one sweep, useful with another scheduler.
 
 Enabled Claude/Codex hooks bind newly created PRs to the creating session. Existing
@@ -48,11 +52,18 @@ will not replace another session's ownership.
   trigger. Review text stays untrusted; prompts contain IDs, not comment bodies.
   Replies/resolution need fix or non-applicability evidence. Draft status stays
   unchanged; never merge, approve, reset, stash, bypass permissions, or delegate.
+- Rebase runs follow the [automatic rebase contract](../commit-push-pr/REFERENCE.md#automatic-rebase).
+  The dispatcher verifies a clean worktree, local/published HEAD agreement, and inclusion
+  of the original target base after the runner exits. A later base advance triggers another
+  pass. Exit zero without a published base update pauses with visible failure, not success
+  or an endless paid retry loop. Routine conflicts are agent-owned; genuinely ambiguous
+  owner-reserved decisions and access/ownership failures remain blockers.
 - Existing model/config/auth/permission settings remain in effect. Configure the
   original CLI for unattended edits and `gh`/git access before enabling. Permission
   denial must be reported, not converted into a successful repair claim.
 - `status` and user-only logs distinguish **delivered** from **fixed**. CLI exit zero
-  acknowledges delivery, not semantic completion. Failed CLI runs pause paid retries:
+  acknowledges delivery, not semantic feedback completion; rebase acknowledgement also
+  requires published ancestry verification. Failed CLI runs pause paid retries:
   inspect `run-*.log`, fix the cause, then `retry --session UUID`.
 - Hook activity tracking requires enabled hooks in every session using that worktree.
   This is not an atomic Conductor/UI lock. Do not use the same feature session

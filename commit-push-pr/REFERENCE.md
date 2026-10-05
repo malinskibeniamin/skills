@@ -4,6 +4,33 @@
 
 Resolve the PR base, then run the bundled `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (this repository root while developing the skill). Files touched by multiple commits are a prompt to inspect fixups, not proof of conflicts or token savings. Squash only coherent fixups on the current user-owned branch; preserve meaningful commits and branch topology. The script is read-only and never rewrites history.
 
+## Automatic rebase
+
+During delivery, feedback repair, or authorized monitoring, inspect the current PR's real
+base, not an assumed default. Missing base commits trigger rebasing even when branch
+protection does not report `BEHIND`, and even with no new review feedback.
+
+1. Confirm ownership of the current non-default feature branch, a clean worktree, no active
+   git operation or concurrent owner, and local HEAD equal to the published PR HEAD. Record
+   that published SHA for the push lease. Defer unsafe ownership/worktree states visibly;
+   never stash, reset, or switch another worktree to make them eligible.
+2. Fetch origin, run the pre-rebase check, and rebase onto the fetched PR base. Preserve
+   meaningful commits and merge topology. Resolve routine conflicts from feature intent,
+   tests, and current base behavior, not blanket `ours`/`theirs`. Continue without asking
+   the human to click Update branch or approve a routine rebase. Only a genuine access,
+   ownership, or material owner-reserved semantic decision blocks this work.
+3. Rerun affected tests and repository checks; refresh invalidated review/visual evidence.
+   Push immediately with `git push --force-with-lease=refs/heads/<branch>:<observed-pr-head>
+   origin HEAD:refs/heads/<branch>`. A rejected lease means remote work changed: inspect it,
+   never retry with plain force or silently refresh the lease.
+4. Re-read the PR; verify published HEAD matches local HEAD and includes the target base.
+   Keep draft state and the same PR; take the endpoint's CI action. A later base advance
+   becomes the next maintenance pass, not proof that the completed rebase failed.
+
+Enabled [local PR maintenance](../resolve-pr-feedback/AUTO-REVIEW.md) also wakes the original
+bound session for base advances. Ordinary delivery does not install or enable a watcher.
+Stack descendants remain outside the current branch's authorization.
+
 ## Review evidence (Phase 0 pre-flight)
 
 Before the PR endpoint, run the applicable review axes inline:
