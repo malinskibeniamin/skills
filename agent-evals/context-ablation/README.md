@@ -16,6 +16,34 @@ Prompts state high-level outcomes and verification paths without copying the hid
 rules. Compare each group against the previous winner. Treat token and duration savings as
 tie-breakers only after quality is non-inferior.
 
+## Intent and completion review
+
+Freeze each task's requested outcome, guardrails, verification, and endpoint before running
+the matrix. Review each original run against that contract and record these manual metrics
+per task in the scorecard:
+
+- **First-pass intent success:** accepted runs / all runs, with no corrective user prompt.
+  A justified pause for a reserved decision can satisfy a contract; unnecessary scope changes
+  or stopping before the requested endpoint cannot.
+- **Verified completion:** runs satisfying the contract with observed verification / all runs.
+  Green checks for the wrong outcome and unsupported claims of success do not count.
+- **Scope/endpoint violations:** count runs that change excluded behavior or cross the stop boundary.
+- **Readability:** clear runs / all runs, with a concrete example of any unclear output.
+  A run is clear when the owner can identify the result, evidence, uncertainty, and any needed
+  decision without reconstructing the transcript.
+
+Hold tasks, run counts, and harness fixed; name each model/version, effort, and speed mode
+(or note that the harness does not expose one).
+For context comparisons, also hold model, effort, and mode fixed. Keep failed original runs
+in the denominator; record corrective follow-ups separately if observed, otherwise mark them
+not observed. Neither readability nor aggregate pass rates can hide a per-task intent or
+completion regression. The runner does not calculate these manual metrics or enforce the
+promotion verdict; missing review evidence leaves it undecided.
+
+Subjective rankings and impressions of subscription allowance motivate trials, not results.
+Record provider task cost only when observed at the compared effort/mode; unknown cost stays
+unknown. Token counts, API spend, and these trials do not establish subscription capacity.
+
 The suite includes three review trials alongside implementation and
 policy tasks:
 

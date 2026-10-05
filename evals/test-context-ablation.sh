@@ -2,6 +2,24 @@
 # and a fail-fast Claude Code compatibility check.
 
 RUNNER="$REPO_ROOT/agent-evals/context-ablation/run.sh"
+
+# This checks the published manual-review protocol, not model performance.
+if jq -e '
+  .manual_metrics == ["first_pass_intent_success", "verified_completion",
+    "scope_endpoint_violations", "readability"]
+  and (.manual_metrics - .promotion_record.required_fields | length == 0)
+  and (.promotion_record.required_fields | index("outcome_contracts"))
+  and (.promotion_record.required_fields | index("effort_speed_mode"))
+  and ((.manual_metrics - .metrics | length) == (.manual_metrics | length))
+' "$REPO_ROOT/agent-evals/context-ablation/manifest.json" >/dev/null 2>&1; then
+  echo "  PASS  ablation records intent and completion separately from automated metrics"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  ablation is missing the manual intent/completion review contract"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: manual intent/completion review contract"
+fi
+
 _ablation_tmp=$(mktemp -d)
 _ablation_bin="$_ablation_tmp/bin"
 _ablation_log="$_ablation_tmp/cells.log"
