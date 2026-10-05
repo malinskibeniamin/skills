@@ -1,9 +1,17 @@
 ---
-title: /commit-push-pr
 description: 提交、推送並開啟可供審查的 PR，或執行明確授權的合併。適用於交付要求；--no-pr 會在推送後停止。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - commit push pr
 sidebar:
   label: /commit-push-pr
+title: /commit-push-pr
+type: skill
 ---
 ![／commit-push-pr 技能圖解](/diagrams/skills/commit-push-pr.svg)
 
@@ -29,7 +37,7 @@ sidebar:
 1. 留在功能分支上；若位於預設分支，請建立 `type/description`。
 2. 對每個內聚的群組，先執行 `git add <explicit paths>`，再使用 `type(scope): terse description`：小寫、5 至 72 個字元，結尾不加句號。
 3. 明確要求僅提交時，檢查工作目錄乾淨後在此停止。
-4. 推送／PR：顯示 `origin/<branch>..HEAD`，然後設定追蹤並推送。
+4. 推送／PR、任何 CI 修正或變基：顯示 `origin/<branch>..HEAD`，然後設定追蹤並推送。
 5. 改寫目前由使用者擁有的分支時，使用 `--force-with-lease`，無須再次詢問許可。絕不可使用一般的強制推送；改寫預設、共用、他人擁有或正由他人並行使用的分支，需要明確許可。
 
 ## 提取要求 [#pull-request]

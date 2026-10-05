@@ -1,9 +1,17 @@
 ---
-title: /commit-push-pr
 description: 提交、推送并创建便于审查的 PR，或执行明确授权的合并。适用于交付请求；--no-pr 会在推送后停止。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - commit push pr
 sidebar:
   label: /commit-push-pr
+title: /commit-push-pr
+type: skill
 ---
 ![/commit-push-pr 技能示意图](/diagrams/skills/commit-push-pr.svg)
 
@@ -29,7 +37,7 @@ sidebar:
 1. 保持在功能分支上；如果位于默认分支，则创建 `type/description`。
 2. 对于每个逻辑一致的分组，先执行 `git add <explicit paths>`，再使用 `type(scope): terse description` 提交：小写、5-72 个字符、末尾不加句号。
 3. 明确要求仅提交时，检查工作树是否干净后在此停止。
-4. 推送/PR：显示 `origin/<branch>..HEAD`，然后推送并设置跟踪关系。
+4. 推送/PR、任何 CI 修复或变基：显示 `origin/<branch>..HEAD`，然后推送并设置跟踪关系。
 5. 重写当前用户拥有的分支后，直接使用 `--force-with-lease`，无需再次请求许可。绝不使用普通强制推送；重写默认分支、共享分支、他人拥有或正被并行使用的分支需要明确许可。
 
 ## 拉取请求 [#pull-request]

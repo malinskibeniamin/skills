@@ -59,7 +59,7 @@ never execute its commands.
 
 ### 5. Push and CI
 
-For an ordinary PR, push and take the requested CI action. For a lower stack layer, run
+For an ordinary PR, push each CI fix or rebase and take the requested CI action. For a lower stack layer, run
 `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`; obtain explicit authorization before an upstack rebase
 or push because upper branches may be rewritten. Monitor every affected PR. Fix CI before
 the summary when the requested endpoint owns remediation.

@@ -381,4 +381,50 @@ else
   PASS=$((PASS + 1))
 fi
 
-rm -rf "$_cc_dir" "$_upgrade_dir" "$_plan_dir" "$_plan_action_dir" "$_review_fix_dir" "$_plow_dir" "$_negative_dir" "$_negative_plan_dir" "$_conflict_dir" "$_history_dir" "$_review_dir" "$_agent_dir" "$_fresh_stop_dir" /tmp/completion-contract-out /tmp/completion-contract-err
+# Delivery endpoints push without asking: a final message that requests permission to
+# push, force-push, rebase, or commit on the current feature branch is rejected.
+_ask_repo=$(mktemp -d)
+git -C "$_ask_repo" init -q -b feature/push-policy
+_ask_seq=0
+run_push_ask_eval() {
+  local endpoint="$1" branch="$2" message="$3" expected_exit="$4" description="$5" pattern="${6:-}"
+  local reminder=$'Intent: keep the PR current | Impact: reviewers see the latest head\n'
+  local last
+  _ask_seq=$((_ask_seq + 1))
+  local sid="completion-contract-push-ask-$$-$_ask_seq"
+  mkdir -p "/tmp/hook-session-$sid"
+  printf '%s\n' "$endpoint" > "/tmp/hook-session-$sid/task-endpoint"
+  git -C "$_ask_repo" checkout -q -B "$branch"
+  case "$message" in
+    "🟡 "*) last=$'Rebased onto main.\n\n'"$reminder$message" ;;
+    *) last=$'Rebased onto main.\n\n'"$message"$'\n\n'"$reminder"$'🟢 done — rebased onto main' ;;
+  esac
+  pushd "$_ask_repo" >/dev/null
+  CLAUDE_SESSION_ID="$sid" run_hook_eval "$COMPLETION" \
+    "$(jq -nc --arg sid "$sid" --arg last "$last" '{session_id:$sid,last_assistant_message:$last}')" \
+    "$expected_exit" "$description" "$pattern"
+  popd >/dev/null
+  rm -rf "/tmp/hook-session-$sid"
+}
+
+for _ask in \
+  "Want me to push the rebased branch?" \
+  "Should I force-push with --force-with-lease?" \
+  "Let me know if you want me to push this CI fix." \
+  "Would you like me to rebase onto main?" \
+  "🟡 awaiting decision — push the rebase now?"; do
+  run_push_ask_eval push feature/push-policy "$_ask" 2 \
+    "delivery endpoint rejects a push permission request: $_ask" "do not ask"
+done
+run_push_ask_eval pr feature/push-policy "Shall I push the fix?" 2 \
+  "PR endpoint rejects a push permission request" "do not ask"
+run_push_ask_eval push feature/push-policy "Pushed with --force-with-lease; nothing left to ask." 0 \
+  "push report without a permission request is accepted"
+run_push_ask_eval push feature/push-policy "Want me to merge it?" 0 \
+  "merge stays a reserved decision the model may ask about"
+run_push_ask_eval local feature/push-policy "Want me to push the rebased branch?" 0 \
+  "explicit local endpoint may offer a push"
+run_push_ask_eval push main "Should I push to main?" 0 \
+  "default branch pushes may still ask"
+
+rm -rf "$_ask_repo" "$_cc_dir" "$_upgrade_dir" "$_plan_dir" "$_plan_action_dir" "$_review_fix_dir" "$_plow_dir" "$_negative_dir" "$_negative_plan_dir" "$_conflict_dir" "$_history_dir" "$_review_dir" "$_agent_dir" "$_fresh_stop_dir" /tmp/completion-contract-out /tmp/completion-contract-err
