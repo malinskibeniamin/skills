@@ -47,7 +47,7 @@ run_content_eval "$WAYFINDER" "Issue tracker.*pointer|issue tracker.*pointer" "w
 run_content_eval "$WAYFINDER" "local-markdown fallback" "wayfinder retains a local tracker fallback"
 run_content_eval "$WAYFINDER" "native child/sub-issue|native.*child.*sub-issue" "wayfinder attaches every ticket through native hierarchy"
 run_content_eval "$WAYFINDER" "verify every ticket appears|verify.*ticket.*child" "wayfinder verifies child attachment"
-run_content_eval "$WAYFINDER" "Grilling.*Always invoke.*/grilling.*/domain-modeling" "wayfinder grilling tickets always invoke both skills"
+run_content_eval "$WAYFINDER" 'Grilling.*Skill tool twice.*"grilling".*"domain-modeling"' "wayfinder grilling tickets always invoke both skills"
 
 if grep -q 'docs/agents/issue-tracker\.md' "$WAYFINDER"; then
   echo "  FAIL  wayfinder does not hardcode the tracker document path"

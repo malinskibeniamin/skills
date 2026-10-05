@@ -8,6 +8,7 @@ disable-model-invocation: true
 
 Use when the destination is larger than one context window and the route is foggy. A
 **decision ticket** resolves a question, not a build slice.
+Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Plan, don't do
 
@@ -52,10 +53,10 @@ Query the tracker for open children; do not copy them into the map body.
 Each child is one focused question sized to one 100K-token agent session. Mark it **HITL**
 (live human judgment) or **AFK** (agent-driven); HITL and AFK must not be conflated:
 
-- **Research (AFK):** use `/research` against primary sources. Follow its artifact location;
+- **Research (AFK):** Call the Skill tool with "research" against primary sources. Follow its artifact location;
   parallel lanes require consent and each lane does not invent a root file or branch.
-- **Prototype (HITL):** create a cheap `/prototype` artifact and link it.
-- **Grilling (HITL):** Always invoke `/grilling` and `/domain-modeling`.
+- **Prototype (HITL):** Call the Skill tool with "prototype" and link the artifact.
+- **Grilling (HITL):** Call the Skill tool twice, for "grilling" and "domain-modeling".
 - **Task:** manual work that unblocks a decision; never delivery for its own sake.
 
 The answer is not part of the body; record it on resolution. Assets are linked, not pasted.
@@ -69,7 +70,7 @@ scope line, and do not record it as a route decision.
 
 ## Chart the map
 
-1. Name the Destination with `/grilling` and `/domain-modeling`.
+1. Name the Destination with separate Skill tool calls for "grilling" and "domain-modeling".
 2. Grill breadth-first for decisions and first steps. **If this surfaces no fog**, stop and
    ask whether to proceed without a map.
 3. Create the map, then only currently specifiable tickets.
@@ -89,6 +90,6 @@ scope line, and do not record it as a route decision.
 
 ## Handoff
 
-When clear, send the map to `/to-spec` for one buildable plan, then `/to-tickets`.
+When clear, tell the human to run `/to-spec` for one buildable plan, then `/to-tickets`.
 Recheck your claims first: reread answers, gists, assets, claims, and current tracker state.
 End with one command for the recommended ticket and one per safe parallel frontier ticket.

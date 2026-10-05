@@ -11,6 +11,7 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/grilling.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
 
 Grilling pozwala wyjaśnić niewiadome o istotnych konsekwencjach, a nie każdy szczegół. Nie należy tworzyć kodu produkcyjnego ani rozpoczynać implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 

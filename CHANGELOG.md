@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-10-06 -- Complete the mattpocock/skills v1.3.1 reconciliation: explicit Skill tool
+dependency calls with Codex fallbacks, cleanup-only diagnosis, post-fix retro routing,
+selection-before-edit retrospectives, draft endpoint preservation, and remaining glossary
+pointers. Preserve the local skill names, opt-in delegation, and released docs snapshots;
+refresh current translations and public-contract checks.
+
 2026-10-05 -- Apply the v1.3 workflow recommendations on the lifecycle/delivery flow:
 load model-invoked dependencies explicitly per host, follow Codex proxies to complete
 canonical guidance, and retain human-only retro/spec/setup boundaries. Suggest one

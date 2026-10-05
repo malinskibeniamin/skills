@@ -9,6 +9,7 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/implement-spec.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
 
 Otrzymujesz specyfikację. Powinny być z nią powiązane zgłoszenia opisujące, jak ją zaimplementować.
 
@@ -34,15 +35,15 @@ Komunikacja z subagentami i od nich powinna być oszczędna. Komunikuj się gł�
 
 4. Użyj **subagentów implementujących** do zaimplementowania każdego zgłoszenia, każdy we własnym worktree na własnej gałęzi. Każdy subagent implementujący:
    - przed rozpoczęciem potwierdza, że jego worktree bazuje na gałęzi integracyjnej, a jeśli nie, przestawia się na nią;
-   - buduje zgłoszenie za pomocą `/tdd`;
+   - wywołuje narzędzie Skill z "tdd", aby zbudować zgłoszenie;
    - przed zgłoszeniem ukończenia scala najnowszy stan gałęzi integracyjnej do własnej gałęzi, aby krok 5 był przewinięciem (fast-forward).
 
 5. Gdy **subagent implementujący** skończy, scal jego pracę do gałęzi integracyjnej za pomocą **subagenta scalającego**.
 
 6. Jeśli zmienia to **front** dostępnych zgłoszeń, uruchom kolejnych **subagentów implementujących** dla nowych zgłoszeń. Pozwala to osiągnąć maksymalną współbieżność.
 
-7. Gdy wszystkie zgłoszenia są ukończone, uruchom `/review` na gałęzi integracyjnej. Napraw wszystkie problemy zgłoszone w przeglądzie kodu w jednym **subagencie implementującym**.
+7. Gdy wszystkie zgłoszenia są ukończone, wywołaj narzędzie Skill z "review" na gałęzi integracyjnej. Napraw wszystkie problemy zgłoszone w przeglądzie kodu w jednym **subagencie implementującym**.
 
-8. Jeśli istnieje szkic PR, oznacz go jako gotowy do przeglądu. W przeciwnym razie zamknij każde zgłoszenie w sposób, w jaki system zgłoszeń zamyka pracę, i podaj gałąź integracyjną.
+8. Jeśli istnieje szkic PR, pozostaw go szkicem, gdy taki jest żądany etap końcowy; w przeciwnym razie oznacz go jako gotowy do przeglądu. Bez PR zamknij każde zgłoszenie zgodnie z zasadami systemu zgłoszeń i podaj gałąź integracyjną.
 
 9. Usuń wszystkie worktree **subagentów implementujących**.

@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/wayfinder.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
 当目标超过一个上下文窗口且路径仍不清晰时使用。**决策工单**用于解决问题，而不是实现产品切片。
 
 ## 只规划，不执行

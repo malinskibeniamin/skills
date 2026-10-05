@@ -11,6 +11,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
 Przeglądaj HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
 Publikowanie komentarzy wymaga jawnej intencji.
 

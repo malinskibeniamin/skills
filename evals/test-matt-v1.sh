@@ -56,15 +56,15 @@ for skill in codebase-design diagnosing-bugs domain-modeling grilling prototype 
 done
 
 # Shared v1 skills are composed by the existing harness entrypoints.
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling updates docs through domain-modeling"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/codebase-design" "architecture skill uses codebase-design vocabulary"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" "/domain-modeling" "architecture skill uses domain-modeling for side effects"
-run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/codebase-design" "TDD uses codebase-design for interface design"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" 'Skill tool with "domain-modeling"' "grilling updates docs through domain-modeling"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'Skill tool with "codebase-design"' "architecture skill uses codebase-design vocabulary"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'Skill tool with "domain-modeling"' "architecture skill uses domain-modeling for side effects"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" 'Skill tool with "codebase-design"' "TDD uses codebase-design for interface design"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grilling" "ask-ben routes planning through grilling"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/diagnosing-bugs" "ask-ben routes hard bugs to diagnosing-bugs"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "confirmation only when.*requested" "grilling confirms only at the requested endpoint"
-run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams" "TDD requires agreed test seams"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "confirmation only when.*requested|Confirm only for a requested plan/grill endpoint" "grilling confirms only at the requested endpoint"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams|Name the seam; confirm with the user" "TDD requires agreed test seams"
 run_content_eval "$REPO_ROOT/wayfinder/SKILL.md" "Claim.*assigning" "wayfinder claims tickets by assignment"
 run_content_eval "$REPO_ROOT/writing-for-agents/SKILL.md" "Hunt.*no-ops|No-op|no-ops" "writing-for-agents includes no-op hunting guidance"
 run_file_eval "$REPO_ROOT/writing-for-agents/SKILL-MECHANICS.md" "writing-for-agents skill mechanics exist"

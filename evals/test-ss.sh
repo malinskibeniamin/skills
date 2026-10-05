@@ -50,7 +50,7 @@ else
 fi
 
 # Review surfaces apply the lens automatically.
-run_content_eval "$REPO_ROOT/review/SKILL.md" "/ss" "review applies the ss value lens"
+run_content_eval "$REPO_ROOT/review/SKILL.md" 'Call the Skill tool.*"ss"' "review applies the ss value lens"
 run_content_eval "$REPO_ROOT/setup-routines/routines/pr-review.md" "/ss" "PR review routine runs the ss lens"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "Value: <one /ss bucket" "PR body template declares the ss bucket"
 

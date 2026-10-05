@@ -36,9 +36,9 @@
       "zh-TW": "1120d133871b8399"
     },
     "content/skills/ask-ben.md": {
-      "pl": "934ff6b24f5d7393",
-      "zh-CN": "934ff6b24f5d7393",
-      "zh-TW": "934ff6b24f5d7393"
+      "pl": "877a3cbada5dde4d",
+      "zh-CN": "877a3cbada5dde4d",
+      "zh-TW": "877a3cbada5dde4d"
     },
     "content/skills/av.md": {
       "pl": "23242b5552e4430e",
@@ -56,9 +56,9 @@
       "zh-TW": "2c53edd285bfa731"
     },
     "content/skills/codebase-design.md": {
-      "pl": "9ee9a924d31a7fe8",
-      "zh-CN": "9ee9a924d31a7fe8",
-      "zh-TW": "9ee9a924d31a7fe8"
+      "pl": "1b6bfd8007bd323d",
+      "zh-CN": "1b6bfd8007bd323d",
+      "zh-TW": "1b6bfd8007bd323d"
     },
     "content/skills/codex-compat.md": {
       "pl": "d47c7b3fe926aa46",
@@ -101,9 +101,9 @@
       "zh-TW": "92130f009604d32e"
     },
     "content/skills/diagnosing-bugs.md": {
-      "pl": "fbe94bead27e9b8c",
-      "zh-CN": "fbe94bead27e9b8c",
-      "zh-TW": "fbe94bead27e9b8c"
+      "pl": "2d02c33057de1efb",
+      "zh-CN": "2d02c33057de1efb",
+      "zh-TW": "2d02c33057de1efb"
     },
     "content/skills/dogfood.md": {
       "pl": "f895b69898b195ec",
@@ -176,14 +176,14 @@
       "zh-TW": "58ada51b75bb54ac"
     },
     "content/skills/grilling.md": {
-      "pl": "ff8582fc3d232379",
-      "zh-CN": "ff8582fc3d232379",
-      "zh-TW": "ff8582fc3d232379"
+      "pl": "f0df53842ee90d1d",
+      "zh-CN": "f0df53842ee90d1d",
+      "zh-TW": "f0df53842ee90d1d"
     },
     "content/skills/handoff.md": {
-      "pl": "9044b030029f78d8",
-      "zh-CN": "9044b030029f78d8",
-      "zh-TW": "9044b030029f78d8"
+      "pl": "5da6e586df8cbfa2",
+      "zh-CN": "5da6e586df8cbfa2",
+      "zh-TW": "5da6e586df8cbfa2"
     },
     "content/skills/hook-audit.md": {
       "pl": "3f4fc523da7aae2c",
@@ -191,14 +191,14 @@
       "zh-TW": "3f4fc523da7aae2c"
     },
     "content/skills/implement-spec.md": {
-      "pl": "bb559f98d922a75b",
-      "zh-CN": "bb559f98d922a75b",
-      "zh-TW": "bb559f98d922a75b"
+      "pl": "d77f87d87c73a895",
+      "zh-CN": "d77f87d87c73a895",
+      "zh-TW": "d77f87d87c73a895"
     },
     "content/skills/improve-codebase-architecture.md": {
-      "pl": "07d0e467e1bb5964",
-      "zh-CN": "07d0e467e1bb5964",
-      "zh-TW": "07d0e467e1bb5964"
+      "pl": "ece8aedc5c68ce47",
+      "zh-CN": "ece8aedc5c68ce47",
+      "zh-TW": "ece8aedc5c68ce47"
     },
     "content/skills/improve.md": {
       "pl": "6adf18a08778ac05",
@@ -321,9 +321,9 @@
       "zh-TW": "879db958130df059"
     },
     "content/skills/retro.md": {
-      "pl": "2832a4befb99a1bd",
-      "zh-CN": "2832a4befb99a1bd",
-      "zh-TW": "2832a4befb99a1bd"
+      "pl": "df7b06116c0c59a8",
+      "zh-CN": "df7b06116c0c59a8",
+      "zh-TW": "df7b06116c0c59a8"
     },
     "content/skills/revamp.md": {
       "pl": "b7b6f14365183424",
@@ -331,9 +331,9 @@
       "zh-TW": "b7b6f14365183424"
     },
     "content/skills/review.md": {
-      "pl": "d02f25b9d65b39aa",
-      "zh-CN": "d02f25b9d65b39aa",
-      "zh-TW": "d02f25b9d65b39aa"
+      "pl": "ac8d442cee4291d4",
+      "zh-CN": "ac8d442cee4291d4",
+      "zh-TW": "ac8d442cee4291d4"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "fc957e8f7398dbcc",
@@ -401,9 +401,9 @@
       "zh-TW": "335d641321ce3991"
     },
     "content/skills/tdd.md": {
-      "pl": "7327ee9a950b34c3",
-      "zh-CN": "7327ee9a950b34c3",
-      "zh-TW": "7327ee9a950b34c3"
+      "pl": "e9f3c5287faee412",
+      "zh-CN": "e9f3c5287faee412",
+      "zh-TW": "e9f3c5287faee412"
     },
     "content/skills/teach.md": {
       "pl": "1d63630352f2dc59",
@@ -426,19 +426,19 @@
       "zh-TW": "757b2ab6385c3130"
     },
     "content/skills/to-spec.md": {
-      "pl": "c010c62e3c3a8411",
-      "zh-CN": "c010c62e3c3a8411",
-      "zh-TW": "c010c62e3c3a8411"
+      "pl": "cbc7743ba3350e27",
+      "zh-CN": "cbc7743ba3350e27",
+      "zh-TW": "cbc7743ba3350e27"
     },
     "content/skills/to-tickets.md": {
-      "pl": "4c6cd4bcfa228b4b",
-      "zh-CN": "4c6cd4bcfa228b4b",
-      "zh-TW": "4c6cd4bcfa228b4b"
+      "pl": "5cc66468e040796f",
+      "zh-CN": "5cc66468e040796f",
+      "zh-TW": "5cc66468e040796f"
     },
     "content/skills/triage.md": {
-      "pl": "07d6d6c9023a7071",
-      "zh-CN": "07d6d6c9023a7071",
-      "zh-TW": "07d6d6c9023a7071"
+      "pl": "ef643f7ea0be2e5d",
+      "zh-CN": "ef643f7ea0be2e5d",
+      "zh-TW": "ef643f7ea0be2e5d"
     },
     "content/skills/upgrade-dependency.md": {
       "pl": "2b8fce260656dfd8",
@@ -481,9 +481,9 @@
       "zh-TW": "d3b792d1f3a48c9d"
     },
     "content/skills/wayfinder.md": {
-      "pl": "99f5efce8c4c0295",
-      "zh-CN": "99f5efce8c4c0295",
-      "zh-TW": "99f5efce8c4c0295"
+      "pl": "990563339da9484e",
+      "zh-CN": "990563339da9484e",
+      "zh-TW": "990563339da9484e"
     },
     "content/skills/what-did-i-get-done.md": {
       "pl": "dd47f74421cc3154",
@@ -491,9 +491,9 @@
       "zh-TW": "dd47f74421cc3154"
     },
     "content/skills/wizard.md": {
-      "pl": "49afdfcce7f5faed",
-      "zh-CN": "49afdfcce7f5faed",
-      "zh-TW": "49afdfcce7f5faed"
+      "pl": "6d52d1f80153ee89",
+      "zh-CN": "6d52d1f80153ee89",
+      "zh-TW": "6d52d1f80153ee89"
     },
     "content/skills/work-automation-kit.md": {
       "pl": "48f3b98e19521e87",

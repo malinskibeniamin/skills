@@ -9,6 +9,10 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/to-spec.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
+
 此技能根据已达成共识的对话上下文和代码库证据生成规格说明（有时称为 PRD）。进行综合整理时，不要重新讨论已经确定的决策。对于任何尚未确定且影响重大的决策，应在“补充说明”中明确标注，而不是悄然作出假设。
 
 如果 `docs/agents/` 中存在问题跟踪系统和分类标签的术语，请使用这些术语。如果不存在，请在聊天中返回规格说明，并注明可选择后续运行 `/work-automation-kit` 进行设置。

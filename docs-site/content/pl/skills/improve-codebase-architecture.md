@@ -11,6 +11,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/improve-codebase-architecture.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
 Znajduj zmiany architektoniczne, które uniemożliwiają całą klasę błędów. Pogłębiaj projekt; nie dodawaj jedynie kolejnej kontroli ani testu regresji.
 
 Ta umiejętność dotyczy wyłącznie architektury. Ogólny audyt, backlog, poprawność, bezpieczeństwo, wydajność, zależności lub dokumentacja należą do `/improve`. Implementacja należy do `/development-lifecycle`; ten przepływ pozostaje tylko do odczytu.

@@ -9,6 +9,7 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/grilling.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
 
 Grilling 用於解決影響重大的未知事項，而非每項細節。只要仍有保留給使用者決定的重大決策尚未定案，就不得撰寫正式環境程式碼或進行實作。呼叫此技能並不代表授權委派。
 

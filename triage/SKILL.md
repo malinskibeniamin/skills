@@ -8,8 +8,10 @@ disable-model-invocation: true
 
 Move issues through a small role state machine. For configured external pull requests, a
 PR is an issue with attached code; resolve bare numbers through the tracker.
-Use the domain glossary and relevant ADRs. Read current external docs with
-`/read-the-damn-docs`; use `/plan-arbiter` for competing plans and `/visual-plan` for large epics.
+Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and relevant ADRs.
+Call the Skill tool separately with "read-the-damn-docs" for current external docs,
+"plan-arbiter" for competing plans, and "visual-plan" for large epics.
+Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies) on other hosts.
 
 ## Comment invariant
 
@@ -54,7 +56,7 @@ the maintainer choose.
 4. **Verify the claim.** Reproduce a bug or check out and test a PR. Report confirmed, failed, or
    insufficient evidence. For root-cause and RED/GREEN planning, follow
    [REFERENCE.md#tdd-fix-plan-mode](REFERENCE.md#tdd-fix-plan-mode).
-5. **Grill if needed.** Use `/grilling` for unresolved judgment or domain language.
+5. **Grill if needed.** Call the Skill tool with "grilling" for unresolved judgment; call it separately with "domain-modeling" for domain language.
 6. **Apply.** Use [AGENT-BRIEF.md](AGENT-BRIEF.md) for ready states and
    [REFERENCE.md](REFERENCE.md) for `needs-info` notes. For `wontfix`:
    - already implemented: link it and close; do not add rejection history.

@@ -9,6 +9,9 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/tdd.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
+使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
 
 TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、非同步副作用及整合契約，使用 RED -> GREEN -> REFACTOR。型別、串接、文案／樣式，以及不改變行為的刪除，可能只需要執行聚焦驗證。涵蓋率絕不是目標。
 

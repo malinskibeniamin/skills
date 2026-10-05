@@ -59,9 +59,8 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
-Every PR or branch review also applies the **jb hat** ([jb/SKILL.md](../jb/SKILL.md)), **mm hat**
-([mm/SKILL.md](../mm/SKILL.md)), **av hat** ([av/SKILL.md](../av/SKILL.md)), **ms hat**
-([ms/SKILL.md](../ms/SKILL.md)), and **lie-detector hat** ([lie-detector/SKILL.md](../lie-detector/SKILL.md)) inline.
+Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+Call the Skill tool separately for "jb", "mm", "av", "ms", "lie-detector", and "ss"; apply their hats inline.
 
 ### Classify
 
@@ -80,7 +79,7 @@ without credible risk. Evidence can support declining a candidate.
 
 Read [communication](../shared/communication.md); keep the output schema.
 Lead with findings. Deduplicate by root cause. Omit praise and narration. For a re-review, mark each prior finding's state.
-Every review also applies `/ss` inline; report its Value line apart from defects.
+Report the ss Value line apart from defects.
 
 ## Deep mode
 

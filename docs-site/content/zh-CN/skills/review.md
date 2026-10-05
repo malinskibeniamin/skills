@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/review.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
 审查 HEAD。保留唯一所有者；委派必须明确授权。不要编辑、提交、推送或发布。
 评论发布需要明确意图。
 

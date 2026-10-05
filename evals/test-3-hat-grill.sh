@@ -101,9 +101,9 @@ run_content_eval "$REPO_ROOT/grilling/SKILL.md" "Specialist registry" \
   "/grilling defines conditional specialist routing"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "go\\.mod|planned Go" \
   "/grilling detects planned Go work"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/golang" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" 'Skill tool.*"golang"|separately.*"golang"' \
   "/grilling routes planned Go work through golang guidance"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/resilience-review" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/?resilience-review" \
   "/grilling deep-risk plans receive a resilience pass"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/steelman" \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/?steelman" \
   "/grilling deep-risk plans steelman the highest-risk assumption"

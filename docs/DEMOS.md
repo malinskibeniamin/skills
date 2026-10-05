@@ -59,7 +59,7 @@ Featured skill moments -- each from an actual session:
 - **`/development-lifecycle`** -- adp-ui-llm-provider-cards: 4 waves, 13 phases, shipped end-to-end. No scope creep.
 - **`/tdd`** -- applied to `codex/autoform-v2-foundation` refactor. RED -> GREEN -> REFACTOR across the full PR surface.
 - **`/simplify`** -- three iterative passes on MCP marketplace PR. Caught 15% redundant code reviewers missed.
-- **`/grilling`** -- stress-tested plans, updated CONTEXT.md + ADRs inline. Institutional memory captured mid-design.
+- **`/grilling`** -- stress-tested plans, updated GLOSSARY.md + ADRs inline. Institutional memory captured mid-design.
 - **`/resilience-review`** -- Murphy-law pass for edge cases, error handling, fallback, observability, and feature polish before PR.
 - **Force-push to main blocked** -- hook redirected to feature branch + PR flow every time.
 - **Dogfooding** -- 12 skills + 60 hooks + 263 unit tests + 9 agent evals shipped using the harness itself.

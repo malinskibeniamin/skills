@@ -13,6 +13,9 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/tdd.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
 
 TDD chroni istotne zachowanie. Stosuj RED -> GREEN -> REFACTOR w przypadku reguł domenowych, rozgałęzień, stanów, walidacji, efektów asynchronicznych i kontraktów integracji. Typy, połączenia, teksty i style oraz usuwanie niezmieniające zachowania mogą wymagać ukierunkowanej weryfikacji. Pokrycie nigdy nie jest celem.
 

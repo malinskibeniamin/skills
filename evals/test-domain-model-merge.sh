@@ -23,8 +23,8 @@ run_content_eval "$CBD_DIR/SKILL.md" "One adapter.*hypothetical seam.*Two adapte
 run_content_eval "$CBD_DIR/SKILL.md" "Boundary: use seam|Avoid: boundary" "codebase-design rejects boundary as overloaded"
 
 # ── consumers invoke shared design skill ──────────────────────────
-run_content_eval "$ICA_DIR/SKILL.md" "/codebase-design" "architecture skill invokes codebase-design"
-run_content_eval "$TDD_DIR/SKILL.md" "/codebase-design" "tdd invokes codebase-design"
+run_content_eval "$ICA_DIR/SKILL.md" "/?codebase-design" "architecture skill invokes codebase-design"
+run_content_eval "$TDD_DIR/SKILL.md" "/?codebase-design" "tdd invokes codebase-design"
 run_content_eval "$TDD_DIR/tests.md" "Good Tests" "tests.md keeps Good Tests section"
 run_content_eval "$TDD_DIR/tests.md" "Bad Tests" "tests.md keeps Bad Tests section"
 run_content_eval "$TDD_DIR/tests.md" "[Ii]ntegration-style" "tests.md prefers integration-style tests"
@@ -37,8 +37,8 @@ run_file_eval "$DM_DIR/ADR-FORMAT.md" "ADR-FORMAT.md exists in domain-modeling/"
 run_file_eval "$DM_DIR/GLOSSARY-FORMAT.md" "GLOSSARY-FORMAT.md exists in domain-modeling/"
 run_content_eval "$DM_DIR/SKILL.md" "Update GLOSSARY.md inline" "domain-modeling updates GLOSSARY.md inline"
 run_content_eval "$DM_DIR/SKILL.md" "Offer ADRs sparingly" "domain-modeling offers ADRs sparingly"
-run_content_eval "$ICA_DIR/SKILL.md" "/domain-modeling" "ICA invokes domain-modeling for side effects"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling invokes domain-modeling"
+run_content_eval "$ICA_DIR/SKILL.md" "/?domain-modeling" "ICA invokes domain-modeling for side effects"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/?domain-modeling" "grilling invokes domain-modeling"
 
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Aa]rchitectural shape" "ADR-FORMAT lists architectural shape"
 run_content_eval "$DM_DIR/ADR-FORMAT.md" "[Ii]ntegration patterns" "ADR-FORMAT lists integration patterns"

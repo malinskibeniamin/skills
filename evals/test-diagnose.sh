@@ -25,7 +25,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Phase 2.*[Rr]eproduce" "SKILL.md has Pha
 run_content_eval "$SKILL_DIR/SKILL.md" "Phase 3.*[Hh]ypothesise" "SKILL.md has Phase 3 (hypothesise)"
 run_content_eval "$SKILL_DIR/SKILL.md" "Phase 4.*[Ii]nstrument" "SKILL.md has Phase 4 (instrument)"
 run_content_eval "$SKILL_DIR/SKILL.md" "Phase 5.*[Ff]ix" "SKILL.md has Phase 5 (fix + regression test)"
-run_content_eval "$SKILL_DIR/SKILL.md" "Phase 6.*[Cc]leanup" "SKILL.md has Phase 6 (cleanup + post-mortem)"
+run_content_eval "$SKILL_DIR/SKILL.md" "Phase 6.*[Cc]leanup" "SKILL.md has Phase 6 (cleanup)"
 
 # ── Phase 1 substance: feedback-loop ranked strategies ───────────
 run_content_eval "$SKILL_DIR/SKILL.md" "[Ff]ailing test" "SKILL.md lists failing-test feedback-loop strategy"
@@ -58,11 +58,10 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Original repro no longer reproduces|re-r
 run_content_eval "$SKILL_DIR/SKILL.md" "instrumentation removed|grep.*prefix" "SKILL.md cleans up debug instrumentation"
 
 # ── Vague-prose domain glossary + ADR awareness ──────────────────
-run_content_eval "$SKILL_DIR/SKILL.md" "domain glossary" "SKILL.md references project domain glossary"
+run_content_eval "$SKILL_DIR/SKILL.md" "GLOSSARY\.md" "SKILL.md references the published project glossary"
 run_content_eval "$SKILL_DIR/SKILL.md" "ADRs" "SKILL.md references ADRs"
 
-# ── Hand-off to architecture skill ───────────────────────────────
-run_content_eval "$SKILL_DIR/SKILL.md" "/improve-codebase-architecture" "SKILL.md hands off to the architecture skill for architectural fixes"
+# v1.3 removes the user-invoked architecture handoff; completion owns cleanup only.
 
 # ── HITL template substance ──────────────────────────────────────
 run_content_eval "$SKILL_DIR/scripts/hitl-loop.template.sh" "^step\\(\\)" "hitl-loop has step() helper"

@@ -55,7 +55,7 @@ run_content_eval "$VISUAL_RECAP" 'Agent-Native.*primary|primary.*Agent-Native' \
   "visual recap keeps the Agent-Native recap as the primary review surface"
 run_content_eval "$VISUAL_RECAP" '\.excalidraw.*(PNG|SVG)|PNG.*\.excalidraw|SVG.*\.excalidraw' \
   "visual recap preserves editable source beside its rendered diagram"
-run_content_eval "$IMPROVE" '/excalidraw-diagram' \
+run_content_eval "$IMPROVE" 'Skill tool with "excalidraw-diagram"' \
   "architecture improvement can create editable before-and-after diagrams"
 run_content_eval "$IMPROVE" '\$TMPDIR/architecture-review|OS temp directory' \
   "architecture improvement keeps report artifacts outside the repository"

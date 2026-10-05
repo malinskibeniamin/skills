@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/wizard.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
 **向导**是一种 Bash 脚本，它会逐步引导人工完成一套手动流程。这类流程不仅手动操作起来繁琐，而且每次都重新向 AI 解释也很麻烦。它会打开每个 URL，准确说明要点击和复制什么，采集相应的值，将其写入正确的位置（`.env`、GitHub 密钥），在每个阶段请求确认，并显示还剩多少个阶段。它可以配置第三方服务、执行一次性迁移，或将项目从一种状态切换到另一种状态。
 
 出色的用户体验已经由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 实现——包括逐阶段进度、确认关卡、跨平台打开 URL（包括 WSL）、隐藏式密钥输入、幂等的 `.env` 更新插入、写入 `gh secret`/`gh variable`，以及结束摘要。**你的工作仅仅是界定流程范围并编写各个阶段。** `STAGES` 标记上方的库代码在每个向导中都完全相同；保持一致正是其意义所在——切勿手动编辑。

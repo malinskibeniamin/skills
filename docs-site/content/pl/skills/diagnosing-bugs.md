@@ -12,6 +12,10 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/diagnosing-bugs.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
+
 Metodyczne podejście do trudnych błędów. Pomijaj fazę tylko z uzasadnieniem. Korzystaj z glosariusza domenowego i ADR-ów;
 w przypadku rozbieżności dotyczących zewnętrznych zależności, API lub wersji uruchom `/read-the-damn-docs` przed uszeregowaniem hipotez.
 
@@ -117,7 +121,7 @@ nie istnieje, udokumentuj tę lukę architektoniczną na potrzeby fazy 6. W prze
 4. Zaobserwuj jego powodzenie.
 5. Uruchom `/dogfood`, aby odtworzyć identyczny scenariusz użytkownika, a następnie ponownie uruchom pierwotną, niezminimalizowaną pętlę z fazy 1.
 
-## Faza 6 -- Porządki + analiza po incydencie
+## Faza 6 -- Porządki
 Wykonaj wszystkie punkty przed uznaniem diagnozy za zakończoną:
 
 - [ ] `/dogfood` potwierdza, że dokładnego scenariusza użytkownika nie można już odtworzyć; pętla z fazy 1 również kończy się powodzeniem
@@ -125,7 +129,3 @@ Wykonaj wszystkie punkty przed uznaniem diagnozy za zakończoną:
 - [ ] Usunięto całą instrumentację `[DEBUG-...]` (`grep` prefiksu)
 - [ ] Usunięto jednorazowe prototypy (lub przeniesiono je do wyraźnie oznaczonej lokalizacji debugowania)
 - [ ] Hipoteza, która okazała się prawidłowa, została podana w komunikacie commita / PR -- aby pomóc kolejnej osobie debugującej
-
-Następnie zapytaj, co zapobiegłoby ponownemu wystąpieniu problemu. Jeśli odpowiedzią jest zmiana architektoniczna, przekaż
-konkretny problem dotyczący punktu testowania lub powiązań do `/improve-codebase-architecture`. Zarekomenduj ją po usunięciu pierwotnej
-przyczyny, gdy dowody są najsilniejsze.

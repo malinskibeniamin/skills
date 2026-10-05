@@ -47,7 +47,7 @@ else
   PASS=$((PASS + 1))
 fi
 
-run_content_eval "$REPO_ROOT/tdd/SKILL.md" "/dogfood" "TDD dogfoods material green slices"
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" 'Skill tool with "dogfood"' "TDD dogfoods material green slices"
 run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "/dogfood" \
   "bug diagnosis dogfoods before and after"
 run_content_eval "$REPO_ROOT/prototype/SKILL.md" "/dogfood" \

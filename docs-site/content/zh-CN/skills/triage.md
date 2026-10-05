@@ -9,6 +9,10 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/triage.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
+
 通过小型角色状态机移动问题。对于已配置的外部 PR，PR 是附带代码的问题；通过跟踪器解析裸编号。
 使用领域词汇表和相关 ADR。通过 `/read-the-damn-docs` 阅读当前外部文档；用 `/plan-arbiter` 仲裁竞争方案，用 `/visual-plan` 展示大型史诗。
 

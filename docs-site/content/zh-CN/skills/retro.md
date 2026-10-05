@@ -9,12 +9,15 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/retro.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+在用户选择候选改进之前，复盘仅进行只读分析。之后只应用用户选中的修改；不要安排或自动执行复盘修改。
 
 用户请求进行一次**复盘**。你要为编码智能体的**环境**提出改进建议，以改善未来的运行。
 
 ## 步骤
 
-1. 使用 `/writing-for-agents` 作为写作风格指南。如需结合会话查看钩子遥测数据，请使用 `/hook-audit --retro`。
+1. 调用 Skill 工具并传入 "writing-for-agents"，加载写作风格指南。如需结合会话查看钩子遥测数据，请单独传入 "hook-audit" 和 `--retro` 参数调用该工具。
 
 2. 阅读用户指定会话的一手资料。这可能意味着需要搜索本机上的会话日志。如果用户未指定会话，默认使用当前会话。
 

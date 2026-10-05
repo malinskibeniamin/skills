@@ -9,6 +9,10 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/to-tickets.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
+
 Przekształć zatwierdzony plan, specyfikację lub rozmowę w niezależnie weryfikowalne pionowe wycinki.
 Jeśli istnieje `CLAUDE.md`, przeczytaj go przed `AGENTS.md`; w przeciwnym razie przeczytaj `AGENTS.md`. Użyj wskaźnika Issue tracker. Gdy go brak, użyj `/work-automation-kit` lub lokalnego rozwiązania.
 

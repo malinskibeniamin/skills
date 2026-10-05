@@ -18,11 +18,11 @@ run_content_eval "$AV_SKILL" 'P1\*\*: non-trivial change with no identifiable be
 run_content_eval "$AV_SKILL" 'money-path risk' "av escalates money-path risk"
 
 # Auto-invocation: every PR review and every plan gate applies the hat.
-run_content_eval "$REPO_ROOT/review/SKILL.md" 'av hat.*av/SKILL\.md' \
+run_content_eval "$REPO_ROOT/review/SKILL.md" 'Skill tool separately.*"av".*hats inline' \
   "review applies the av hat on every PR"
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" '^Value: av:' \
   "review receipt carries the av verdict"
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" 'value uses `/av`' \
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" 'Skill tool separately.*"av" for value' \
   "grilling routes the value axis to av"
 run_content_eval "$REPO_ROOT/agents/plan-product-hat.md" 'av/SKILL\.md' \
   "product hat applies the av value lane"

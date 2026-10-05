@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/handoff.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
 如果交接是為了稽核另一個代理程式的執行結果，請轉至 `/agent-watchdog`。如果交接內容包含相互競爭的計畫，請將 `/plan-arbiter` 納入下一個要使用的技能。
 建立一份簡潔的交接文件，供另一個代理程式或工作階段從目前進度繼續作業。
 

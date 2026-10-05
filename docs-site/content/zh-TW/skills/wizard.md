@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/wizard.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
 **精靈**是一個 Bash 指令碼，會逐步引導人工完成手動程序；這類程序不但手動操作繁瑣，每次都要重新向 AI 說明也很麻煩。它會開啟每個 URL、明確說明要點選和複製的內容、擷取值並寫入正確位置（`.env`、GitHub 密鑰），在每個階段要求確認，並顯示還剩多少個階段。它可以設定第三方服務、執行一次性遷移，或將專案從一種狀態切換至另一種狀態。
 
 令人愉悅的使用者體驗已由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 完整處理，包括逐階段進度、確認關卡、跨平台開啟 URL（包含 WSL）、隱藏密鑰輸入、具冪等性的 `.env` 更新插入、寫入 `gh secret`/`gh variable`，以及結束摘要。**你的工作只有界定程序範圍並撰寫各階段。** `STAGES` 標記上方的程式庫在每個精靈中都完全相同；一致性正是重點，因此絕對不要手動編輯它。

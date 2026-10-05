@@ -9,6 +9,10 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/to-spec.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
+使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
+
 此技能會根據已定案的對話脈絡與程式碼庫證據產出規格（有時稱為 PRD）。請統整資訊，不要重新討論已定案的決策。若缺少任何重大決策，請在「補充說明」中標示，而不要自行默認假設。
 
 若 `docs/agents/` 中有議題追蹤系統與分流標籤的詞彙，請使用這些詞彙。若沒有，請在對話中回傳規格，並註明可選擇以 `/work-automation-kit` 作為後續設定步驟。

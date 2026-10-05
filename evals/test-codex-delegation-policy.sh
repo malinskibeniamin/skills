@@ -35,7 +35,7 @@ for file in \
   resilience-review/SKILL.md \
   review/SKILL.md \
   stay-within-limits/SKILL.md; do
-  run_content_eval "$REPO_ROOT/$file" "[Ee]xplicit.*delegation|[Ee]xplicit.*agents|[Ss]ingle owner|primary context" \
+  run_content_eval "$REPO_ROOT/$file" "[Ee]xplicit.*delegation|delegation is explicitly authorized|[Ee]xplicit.*agents|[Ss]ingle owner|primary context" \
     "$file has a runtime-safe ownership rule"
 done
 

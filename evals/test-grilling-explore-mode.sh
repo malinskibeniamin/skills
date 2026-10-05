@@ -24,7 +24,7 @@ run_content_eval "$GRILL" "Explore mode" "grilling has explore mode"
 run_content_eval "$GRILL" "2-3 approaches with trade-offs" "explore mode proposes approaches with trade-offs"
 run_content_eval "$GRILL" "Challenge variant" "explore mode keeps challenge variant"
 run_content_eval "$GRILL" "no production code or implementation while a" "hard gate applies while a material decision is open"
-run_content_eval "$GRILL" "/plan-arbiter" "explore mode routes competing plans to plan-arbiter"
+run_content_eval "$GRILL" "/?plan-arbiter" "explore mode routes competing plans to plan-arbiter"
 run_content_eval "$GRILL" "frontier" "grilling maps the currently answerable frontier"
 run_content_eval "$GRILL" "whole frontier" "grilling asks the whole frontier each round"
 run_content_eval "$GRILL" "Recompute the frontier" "grilling recomputes after each answer round"
@@ -39,7 +39,7 @@ run_content_eval "$GRILL" "[Dd]esktop.*mobile.*composition" \
   "UI grilling adds responsive sketches only for composition changes"
 run_content_eval "$GRILL" "structure, not pixel" \
   "UI grilling states the fidelity of ASCII wireframes"
-run_content_eval "$GRILL" "[Kk]eep.*borders aligned" \
+run_content_eval "$GRILL" "[Kk]eep.*borders aligned|Align borders" \
   "UI grilling keeps ASCII wireframes scannable"
 
 if grep -q "Ask the questions one at a time" "$GRILL"; then

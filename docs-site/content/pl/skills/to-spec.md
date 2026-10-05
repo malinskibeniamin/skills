@@ -11,6 +11,10 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/to-spec.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
+
 Ta umiejętność tworzy specyfikację (czasem nazywaną PRD) na podstawie uzgodnionego kontekstu rozmowy i informacji z bazy kodu. Syntetyzuj informacje bez ponownego otwierania rozstrzygniętych decyzji. Każdą istotną brakującą decyzję oznacz w sekcji Dalsze uwagi zamiast przyjmować ją bez wyjaśnienia.
 
 Używaj słownictwa systemu śledzenia zadań i etykiet klasyfikacji z `docs/agents/`, jeśli jest dostępne. Jeśli go brakuje, zwróć specyfikację na czacie i wskaż `/work-automation-kit` jako opcjonalny kolejny krok konfiguracji.

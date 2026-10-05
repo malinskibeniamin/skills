@@ -9,6 +9,10 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/diagnosing-bugs.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
+
 用于诊断棘手错误的严谨流程。仅在有明确理由时跳过阶段。使用领域术语表和 ADR；
 对于第三方/API/版本漂移问题，请在对假设排序前运行 `/read-the-damn-docs`。
 
@@ -112,7 +116,7 @@ sidebar:
 4. 确认测试通过。
 5. 运行 `/dogfood` 重放完全相同的用户复现步骤，然后重新运行阶段 1 中未经最小化的原始循环。
 
-## 阶段 6 -- 清理 + 事后分析
+## 阶段 6 -- 清理
 在宣布诊断完成前完成每一项：
 
 - [ ] `/dogfood` 确认已无法再通过完全相同的用户复现步骤触发问题；阶段 1 的循环也已通过
@@ -120,6 +124,3 @@ sidebar:
 - [ ] 已移除所有 `[DEBUG-...]` 插桩（使用 `grep` 搜索该前缀）
 - [ ] 已删除一次性原型（或将其移至有明确标记的调试位置）
 - [ ] 已在提交/PR 消息中说明最终得到验证的正确假设 -- 让下一位调试者能够从中学习
-
-然后思考什么措施能够防止问题再次发生。如果答案是架构变更，请将具体的接缝或耦合问题交给
-`/improve-codebase-architecture`。在完成根本原因修复后、证据最充分时推荐此操作。
