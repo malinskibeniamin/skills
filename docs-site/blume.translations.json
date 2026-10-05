@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "c670b378c747330e",
-      "zh-CN": "c670b378c747330e",
-      "zh-TW": "c670b378c747330e"
+      "pl": "995af895a7279bc2",
+      "zh-CN": "995af895a7279bc2",
+      "zh-TW": "995af895a7279bc2"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -71,9 +71,9 @@
       "zh-TW": "1aa30ee71da48365"
     },
     "content/skills/commit-push-pr.md": {
-      "pl": "28d83e0499b7c946",
-      "zh-CN": "28d83e0499b7c946",
-      "zh-TW": "28d83e0499b7c946"
+      "pl": "b384d1b677d865b0",
+      "zh-CN": "b384d1b677d865b0",
+      "zh-TW": "b384d1b677d865b0"
     },
     "content/skills/connect-query.md": {
       "pl": "f585adaa5abbd48a",
@@ -96,9 +96,9 @@
       "zh-TW": "4e56868ac0f8645e"
     },
     "content/skills/development-lifecycle.md": {
-      "pl": "8f2fa6309957aa22",
-      "zh-CN": "8f2fa6309957aa22",
-      "zh-TW": "8f2fa6309957aa22"
+      "pl": "92130f009604d32e",
+      "zh-CN": "92130f009604d32e",
+      "zh-TW": "92130f009604d32e"
     },
     "content/skills/diagnosing-bugs.md": {
       "pl": "fbe94bead27e9b8c",
@@ -111,9 +111,9 @@
       "zh-TW": "f895b69898b195ec"
     },
     "content/skills/domain-modeling.md": {
-      "pl": "b4b42364b7157549",
-      "zh-CN": "b4b42364b7157549",
-      "zh-TW": "b4b42364b7157549"
+      "pl": "952a4d188d4a0338",
+      "zh-CN": "952a4d188d4a0338",
+      "zh-TW": "952a4d188d4a0338"
     },
     "content/skills/e2e-testing.md": {
       "pl": "c91fa822e21f09b1",
@@ -176,9 +176,9 @@
       "zh-TW": "58ada51b75bb54ac"
     },
     "content/skills/grilling.md": {
-      "pl": "07afaa1f2c9f386c",
-      "zh-CN": "07afaa1f2c9f386c",
-      "zh-TW": "07afaa1f2c9f386c"
+      "pl": "ff8582fc3d232379",
+      "zh-CN": "ff8582fc3d232379",
+      "zh-TW": "ff8582fc3d232379"
     },
     "content/skills/handoff.md": {
       "pl": "9044b030029f78d8",
@@ -191,14 +191,14 @@
       "zh-TW": "3f4fc523da7aae2c"
     },
     "content/skills/implement-spec.md": {
-      "pl": "da4569ebce13b11d",
-      "zh-CN": "da4569ebce13b11d",
-      "zh-TW": "da4569ebce13b11d"
+      "pl": "bb559f98d922a75b",
+      "zh-CN": "bb559f98d922a75b",
+      "zh-TW": "bb559f98d922a75b"
     },
     "content/skills/improve-codebase-architecture.md": {
-      "pl": "afeab9a475129538",
-      "zh-CN": "afeab9a475129538",
-      "zh-TW": "afeab9a475129538"
+      "pl": "07d0e467e1bb5964",
+      "zh-CN": "07d0e467e1bb5964",
+      "zh-TW": "07d0e467e1bb5964"
     },
     "content/skills/improve.md": {
       "pl": "6adf18a08778ac05",
@@ -266,14 +266,14 @@
       "zh-TW": "6c0879351471e9e3"
     },
     "content/skills/pr.md": {
-      "pl": "48a39e01173aed3c",
-      "zh-CN": "48a39e01173aed3c",
-      "zh-TW": "48a39e01173aed3c"
+      "pl": "6fb35bed1932aafc",
+      "zh-CN": "6fb35bed1932aafc",
+      "zh-TW": "6fb35bed1932aafc"
     },
     "content/skills/prime.md": {
-      "pl": "3530629f22b66360",
-      "zh-CN": "3530629f22b66360",
-      "zh-TW": "3530629f22b66360"
+      "pl": "40056460a655c153",
+      "zh-CN": "40056460a655c153",
+      "zh-TW": "40056460a655c153"
     },
     "content/skills/prototype.md": {
       "pl": "4884299012f907d3",
@@ -436,9 +436,9 @@
       "zh-TW": "4c6cd4bcfa228b4b"
     },
     "content/skills/triage.md": {
-      "pl": "57db4d1b299db491",
-      "zh-CN": "57db4d1b299db491",
-      "zh-TW": "57db4d1b299db491"
+      "pl": "07d6d6c9023a7071",
+      "zh-CN": "07d6d6c9023a7071",
+      "zh-TW": "07d6d6c9023a7071"
     },
     "content/skills/upgrade-dependency.md": {
       "pl": "64d1f140d0dcaa25",
@@ -476,9 +476,9 @@
       "zh-TW": "70c7a36f228fa1b4"
     },
     "content/skills/wait-what.md": {
-      "pl": "2e02c238feb080c4",
-      "zh-CN": "2e02c238feb080c4",
-      "zh-TW": "2e02c238feb080c4"
+      "pl": "d3b792d1f3a48c9d",
+      "zh-CN": "d3b792d1f3a48c9d",
+      "zh-TW": "d3b792d1f3a48c9d"
     },
     "content/skills/wayfinder.md": {
       "pl": "99f5efce8c4c0295",
@@ -496,9 +496,9 @@
       "zh-TW": "49afdfcce7f5faed"
     },
     "content/skills/work-automation-kit.md": {
-      "pl": "22462a7fae48735d",
-      "zh-CN": "22462a7fae48735d",
-      "zh-TW": "22462a7fae48735d"
+      "pl": "48f3b98e19521e87",
+      "zh-CN": "48f3b98e19521e87",
+      "zh-TW": "48f3b98e19521e87"
     },
     "content/skills/work.md": {
       "pl": "bd26670e6f4383d2",

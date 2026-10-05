@@ -8,10 +8,11 @@ Install workflow skills and scaffold tracker labels, domain context, and ADR lay
 
 ## Install
 
-Install once: `grilling`, `domain-modeling`, `triage`, `diagnosing-bugs`, `prototype`, `to-questionnaire`, `to-spec`, `to-tickets`, `handoff`, `writing-for-agents`, `visual-plan`, `visual-recap`, `plan-arbiter`, `agent-watchdog`, `read-the-damn-docs`, `efficient-frontier`.
+Install once:
 
 ```bash
 for skill in grilling domain-modeling triage diagnosing-bugs prototype \
+  implement-spec pr retro tdd codebase-design review \
   to-questionnaire to-spec to-tickets handoff writing-for-agents visual-plan \
   visual-recap plan-arbiter agent-watchdog read-the-damn-docs efficient-frontier
 do
@@ -25,7 +26,7 @@ Jira optionally adds `setup-atlassian-workflow` via `acli`.
 
 Read [REFERENCE.md](REFERENCE.md), then:
 
-1. Inspect remotes, agent rules, `docs/agents/`, context/ADRs, whether triage is installed, and monorepo signals.
+1. Inspect remotes, agent rules, `docs/agents/`, glossary/ADRs, whether triage is installed, and monorepo signals.
 2. Recommend tracker first; ask only if choice branches.
 3. With triage installed, ask whether to keep default five canonical role labels (yes recommended); only collect overrides if the user says no. Otherwise skip labels.
 4. Default non-monorepos to single-context without asking. Offer multi-context only for a monorepo, then confirm layout.

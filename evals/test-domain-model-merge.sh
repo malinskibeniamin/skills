@@ -1,7 +1,7 @@
 # Validates mattpocock/skills v1 shared design/domain model split:
 #   - codebase-design owns architecture vocabulary
 #   - tdd and improve-codebase-architecture invoke codebase-design
-#   - domain-modeling owns active CONTEXT.md/ADR updates
+#   - domain-modeling owns active GLOSSARY.md/ADR updates
 
 CBD_DIR="$REPO_ROOT/codebase-design"
 TDD_DIR="$REPO_ROOT/tdd"
@@ -34,8 +34,8 @@ run_content_eval "$TDD_DIR/SKILL.md" "tests\\.md" "tdd SKILL.md references tests
 # ── domain-modeling active docs discipline ────────────────────────
 run_file_eval "$DM_DIR/SKILL.md" "domain-modeling SKILL.md exists"
 run_file_eval "$DM_DIR/ADR-FORMAT.md" "ADR-FORMAT.md exists in domain-modeling/"
-run_file_eval "$DM_DIR/CONTEXT-FORMAT.md" "CONTEXT-FORMAT.md exists in domain-modeling/"
-run_content_eval "$DM_DIR/SKILL.md" "Update CONTEXT.md inline" "domain-modeling updates CONTEXT.md inline"
+run_file_eval "$DM_DIR/GLOSSARY-FORMAT.md" "GLOSSARY-FORMAT.md exists in domain-modeling/"
+run_content_eval "$DM_DIR/SKILL.md" "Update GLOSSARY.md inline" "domain-modeling updates GLOSSARY.md inline"
 run_content_eval "$DM_DIR/SKILL.md" "Offer ADRs sparingly" "domain-modeling offers ADRs sparingly"
 run_content_eval "$ICA_DIR/SKILL.md" "/domain-modeling" "ICA invokes domain-modeling for side effects"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "/domain-modeling" "grilling invokes domain-modeling"

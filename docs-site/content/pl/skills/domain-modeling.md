@@ -2,7 +2,7 @@
 title: /domain-modeling
 description: >-
   Buduj i dopracowuj model domeny projektu. Używaj podczas omawiania
-  terminologii bazy kodu, pisania lub edytowania pliku CONTEXT.md albo
+  terminologii bazy kodu, pisania lub edytowania pliku GLOSSARY.md albo
   rejestrowania lub edytowania ADR-u.
 type: skill
 sidebar:
@@ -12,7 +12,7 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/domain-modeling.excalidraw)
 
-Podczas projektowania aktywnie buduj i precyzuj model domeny projektu. To *aktywna* praktyka — kwestionowanie terminów, tworzenie scenariuszy przypadków brzegowych oraz zapisywanie glosariusza i decyzji, gdy tylko nabiorą ostatecznego kształtu. (Samo *czytanie* `CONTEXT.md`, aby poznać słownictwo, nie jest tą umiejętnością — to prosty nawyk, który można stosować przy każdej umiejętności. Ta umiejętność służy do zmieniania modelu, a nie tylko korzystania z niego).
+Podczas projektowania aktywnie buduj i precyzuj model domeny projektu. To *aktywna* praktyka — kwestionowanie terminów, tworzenie scenariuszy przypadków brzegowych oraz zapisywanie glosariusza i decyzji, gdy tylko nabiorą ostatecznego kształtu. (Samo *czytanie* `GLOSSARY.md`, aby poznać słownictwo, nie jest tą umiejętnością — to prosty nawyk, który można stosować przy każdej umiejętności. Ta umiejętność służy do zmieniania modelu, a nie tylko korzystania z niego).
 
 ## Struktura plików
 
@@ -20,7 +20,7 @@ Większość repozytoriów ma jeden kontekst:
 
 ```
 /
-├── CONTEXT.md
+├── GLOSSARY.md
 ├── docs/
 │   └── adr/
 │       ├── 0001-event-sourced-orders.md
@@ -28,29 +28,29 @@ Większość repozytoriów ma jeden kontekst:
 └── src/
 ```
 
-Jeśli w katalogu głównym istnieje plik `CONTEXT-MAP.md`, repozytorium ma wiele kontekstów. Mapa wskazuje lokalizację każdego z nich:
+Jeśli w katalogu głównym istnieje plik `GLOSSARY-MAP.md`, repozytorium ma wiele kontekstów. Mapa wskazuje lokalizację każdego z nich:
 
 ```
 /
-├── CONTEXT-MAP.md
+├── GLOSSARY-MAP.md
 ├── docs/
 │   └── adr/                          <- system-wide decisions
 ├── src/
 │   ├── ordering/
-│   │   ├── CONTEXT.md
+│   │   ├── GLOSSARY.md
 │   │   └── docs/adr/                 <- context-specific decisions
 │   └── billing/
-│       ├── CONTEXT.md
+│       ├── GLOSSARY.md
 │       └── docs/adr/
 ```
 
-Twórz pliki dopiero wtedy, gdy są potrzebne — tylko gdy masz coś do zapisania. Jeśli `CONTEXT.md` nie istnieje, utwórz go po uzgodnieniu pierwszego terminu. Jeśli `docs/adr/` nie istnieje, utwórz ten katalog, gdy potrzebny będzie pierwszy ADR.
+Twórz pliki dopiero wtedy, gdy są potrzebne — tylko gdy masz coś do zapisania. Jeśli `GLOSSARY.md` nie istnieje, utwórz go po uzgodnieniu pierwszego terminu. Jeśli `docs/adr/` nie istnieje, utwórz ten katalog, gdy potrzebny będzie pierwszy ADR.
 
 ## Podczas sesji
 
 ### Konfrontuj z glosariuszem
 
-Gdy użytkownik używa terminu sprzecznego z językiem zapisanym w `CONTEXT.md`, od razu zwróć na to uwagę. „Glosariusz definiuje «anulowanie» jako X, ale wygląda na to, że masz na myśli Y — o które znaczenie chodzi?”
+Gdy użytkownik używa terminu sprzecznego z językiem zapisanym w `GLOSSARY.md`, od razu zwróć na to uwagę. „Glosariusz definiuje «anulowanie» jako X, ale wygląda na to, że masz na myśli Y — o które znaczenie chodzi?”
 
 ### Precyzuj niejasny język
 
@@ -64,11 +64,11 @@ Podczas omawiania relacji w domenie sprawdzaj je za pomocą konkretnych scenariu
 
 Gdy użytkownik opisuje sposób działania czegoś, sprawdź, czy kod jest z tym zgodny. Jeśli znajdziesz sprzeczność, wskaż ją: „Kod anuluje całe Zamówienia, ale przed chwilą była mowa o możliwości częściowego anulowania — która wersja jest prawidłowa?”
 
-### Aktualizuj CONTEXT.md na bieżąco
+### Aktualizuj GLOSSARY.md na bieżąco
 
-Po uzgodnieniu terminu od razu zaktualizuj `CONTEXT.md`. Nie odkładaj takich zmian na później — zapisuj je na bieżąco. Użyj formatu opisanego w [CONTEXT-FORMAT.md](https://github.com/malinskibeniamin/skills/blob/main/domain-modeling/CONTEXT-FORMAT.md).
+Po uzgodnieniu terminu od razu zaktualizuj `GLOSSARY.md`. Nie odkładaj takich zmian na później — zapisuj je na bieżąco. Użyj formatu opisanego w [GLOSSARY-FORMAT.md](https://github.com/malinskibeniamin/skills/blob/main/domain-modeling/GLOSSARY-FORMAT.md).
 
-Plik `CONTEXT.md` nie powinien zawierać żadnych szczegółów implementacyjnych. Nie traktuj `CONTEXT.md` jako specyfikacji, notatnika roboczego ani miejsca do przechowywania decyzji implementacyjnych. To wyłącznie glosariusz.
+Plik `GLOSSARY.md` nie powinien zawierać żadnych szczegółów implementacyjnych. Nie traktuj `GLOSSARY.md` jako specyfikacji, notatnika roboczego ani miejsca do przechowywania decyzji implementacyjnych. To wyłącznie glosariusz.
 
 ### Proponuj ADR-y oszczędnie
 

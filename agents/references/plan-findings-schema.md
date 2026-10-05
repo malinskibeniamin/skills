@@ -13,7 +13,7 @@ axis:
 {
   "plan_summary": "Exact proposed behavior and delivery steps",
   "spec_sources": ["Issue, path, URL, or quoted user decision"],
-  "standards_sources": ["AGENTS.md", "scoped CONTEXT.md", "relevant ADR"],
+  "standards_sources": ["AGENTS.md", "scoped GLOSSARY.md", "relevant ADR"],
   "planned_paths": ["src/example.ts"],
   "assumptions": ["Claim not yet established by a source"],
   "tier": "quick | standard | deep-risk",

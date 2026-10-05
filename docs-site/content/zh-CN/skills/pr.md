@@ -39,7 +39,7 @@ sidebar:
 
 ## 各部分 [#sections]
 
-省略所有开场白并保持文字简短。使用 `CONTEXT.md` 中用户的领域语言。
+省略所有开场白并保持文字简短。使用 `GLOSSARY.md` 中用户的领域语言。
 
 ### 摘要 [#summary]
 

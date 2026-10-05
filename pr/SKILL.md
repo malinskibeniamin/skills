@@ -38,7 +38,7 @@ Read [the reader-attention contract](../shared/communication.md). Use this templ
 
 ## Sections
 
-Skip all preambles and keep prose brief. Use the user's domain language from `CONTEXT.md`.
+Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`.
 
 ### Summary
 

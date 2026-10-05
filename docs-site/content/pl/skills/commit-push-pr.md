@@ -13,7 +13,7 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/commit-push-pr.excalidraw)
 
 
-Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md), aby poznać szczegóły PR-a.
+Korzystaj z [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) i [zasad ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/merge.md).
 
@@ -21,17 +21,17 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 
 1. Sprawdź stan, różnice, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi; przed rebase'em wykonaj [kontrolę przed rebase'em](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check).
 2. Ustal żądany punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Wariant z samym commitem pomija kontrolę zdalnego repozytorium i `gh`.
-3. Wypchnięcie/PR wymaga zdalnego repozytorium; PR wymaga również uwierzytelnionego `gh` i domyślnej gałęzi.
+3. Wypchnięcie/PR wymaga zdalnego repozytorium; PR wymaga uwierzytelnionego `gh` i gałęzi bazowej.
 4. W przypadku PR-a uruchom `gh stack view --json`; sprawdź bazę i stos. Zwykły PR obejmuje jedną warstwę; nigdy nie używaj `gh stack submit`.
-5. Przeprowadź przegląd bezpośrednio; nie blokuj działania wyłącznie z powodu niewywołania wskazanej umiejętności.
-6. Uruchamialne zmiany w PR-ze wymagają aktualnego wyniku PASS z `/dogfood`; wynik BLOCKED wymaga zgody użytkownika na odstępstwo.
+5. Przeprowadź przegląd bezpośrednio; wywołanie wskazanej umiejętności nie jest bramką zatwierdzania.
+6. Dla uruchamialnych zmian w PR-ze załaduj [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md); wymagaj aktualnego wyniku PASS. BLOCKED wymaga zgody użytkownika na odstępstwo.
 7. Dodawaj do poczekalni według celu i tylko żądane ścieżki. Zapytaj, jeśli własność zmian jest niejasna.
 
 ## Commit
 
 1. Pozostań na gałęzi funkcji; jeśli jesteś na gałęzi domyślnej, utwórz `type/description`.
 2. Dla każdej spójnej grupy wykonaj `git add <explicit paths>`, a następnie utwórz commit `type(scope): terse description`: małymi literami, 5–72 znaki, bez kropki.
-3. Jawne żądanie utworzenia wyłącznie commitu kończy działanie w tym miejscu po sprawdzeniu czystości drzewa i podsumowaniu.
+3. Wyraźne żądanie samego commita kończy się tutaj po sprawdzeniu czystości drzewa.
 4. Wypchnięcie/PR: pokaż `origin/<branch>..HEAD`, a następnie wypchnij gałąź z ustawieniem śledzenia.
 5. Po przepisaniu bieżącej, należącej do użytkownika gałęzi użyj `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego wymuszenia; przepisanie gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle używanej wymaga wyraźnej zgody.
 
@@ -39,10 +39,8 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 
 `--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu odśwież dowody i opis istniejącego PR-a; w przeciwnym razie zakończ po wypchnięciu i sprawdzeniu czystości drzewa. Przygotuj lokalne dowody wizualne przed wypchnięciem.
 
-Utworzenie PR-a upoważnia do weryfikacji, utworzenia commitu, wypchnięcia zmian i wykonania rebase bieżącej gałęzi użytkownika z ochroną dzierżawy; nigdy do scalania ani niezwiązanych poprawek.
-
 1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kolejne etapy pracy dodawaj do bieżącego PR-a; w przeciwnym razie utwórz PR, przypisując osobę, etykiety i korzystając z szablonu. Utworzenie roboczego PR-a na tym etapie nie wymaga osobnej zgody. Publikacja całego stosu używa `/stacked-prs`.
-2. Każdy PR uruchamia `/quantify-impact`; uwzględnij zwięzły opis wartości lub potwierdzone wskaźniki, bez pozorowanych benchmarków.
+2. Dla każdego PR-a załaduj osobno [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); uwzględnij wartość lub potwierdzone wskaźniki.
 3. Każda widoczna zmiana wymaga inwentaryzacji opisanej w dokumencie referencyjnym, zrzutów ekranu i nagrań wideo przed i po zmianie, sprawdzonych migawek oraz przechodzących testów wizualnych. Brak dowodów blokuje publikację bez zgody użytkownika na odstępstwo.
 4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów i produktów, imiona i nazwiska osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.
 5. Uwzględnij potwierdzenie dogfood. Przeczytaj ponownie opis, sprawdź dostęp recenzenta do obrazów i wyświetl adres URL. Aktualizacje i ponowne otwarcia podlegają tym samym wymaganiom; edycje unieważniają dowody, których dotyczą.

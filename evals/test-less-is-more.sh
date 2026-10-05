@@ -4,11 +4,11 @@ run_content_eval "$REPO_ROOT/ETHOS.md" "Less Code, More Meaning" \
   "ETHOS makes less code more meaning a permanent principle"
 run_content_eval "$REPO_ROOT/ETHOS.md" "Deletion is delivery|deletion is delivery" \
   "ETHOS treats deletion as delivery"
-run_content_eval "$REPO_ROOT/CONTEXT.md" "Semantic density" \
+run_content_eval "$REPO_ROOT/GLOSSARY.md" "Semantic density" \
   "domain glossary defines semantic density"
-run_content_eval "$REPO_ROOT/CONTEXT.md" "Credible risk" \
+run_content_eval "$REPO_ROOT/GLOSSARY.md" "Credible risk" \
   "domain glossary defines credible risk"
-run_content_eval "$REPO_ROOT/CONTEXT.md" "Demonstrated scale" \
+run_content_eval "$REPO_ROOT/GLOSSARY.md" "Demonstrated scale" \
   "domain glossary defines demonstrated scale"
 
 run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious|smallest clear" \

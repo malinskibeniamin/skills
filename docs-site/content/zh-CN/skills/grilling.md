@@ -64,4 +64,4 @@ sidebar:
 
 仅当用户请求以计划或盘问作为终点时，才要求确认。[ETHOS: Discover Before Commitment]
 
-使用 `/domain-modeling` 将术语记录到 `CONTEXT.md` 中；只有当权衡难以逆转且令人意外时，才编写 ADR。
+使用 `/domain-modeling` 将术语记录到 `GLOSSARY.md` 中；只有当权衡难以逆转且令人意外时，才编写 ADR。

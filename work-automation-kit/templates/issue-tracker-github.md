@@ -13,6 +13,12 @@ Specs and tickets for this repo live as GitHub issues. Use the `gh` CLI for all 
 
 Infer the repo from `git remote -v` -- `gh` does this automatically when run inside a clone.
 
+## Pull requests as a triage surface
+
+**PRs as a request surface: no.** Set to `yes` only when external PRs should enter the triage queue. Missing or `no` excludes PR discovery, not an explicitly named PR.
+
+When enabled, use `gh pr view`, `gh pr diff`, and `gh pr list`; keep external contributors, excluding owners, members, and collaborators. Comment, label, and close through `gh pr` equivalents. GitHub shares issue/PR numbers; resolve a bare number before choosing the surface.
+
 ## When a skill says "publish to the issue tracker"
 
 Create a GitHub issue.

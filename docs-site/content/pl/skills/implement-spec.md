@@ -12,7 +12,7 @@ sidebar:
 
 Otrzymujesz specyfikację. Powinny być z nią powiązane zgłoszenia opisujące, jak ją zaimplementować.
 
-Wywołanie tej umiejętności jest wyraźną prośbą użytkownika o delegowanie i równoległych agentów.
+Wybierz tę umiejętność dla zatwierdzonej specyfikacji z rzeczywistymi zależnościami blokującymi i zgłoszeniami, które można niezależnie zweryfikować, nie dla zwykłego pojedynczego zgłoszenia. Wywołanie tej umiejętności jest wyraźną prośbą użytkownika o delegowanie i równoległych agentów; jej załadowanie lub wspomnienie nie oznacza zgody.
 
 Jeśli istnieje `CLAUDE.md`, najpierw przeczytaj `CLAUDE.md`; w przeciwnym razie przeczytaj `AGENTS.md`. Postępuj zgodnie ze wskazaniem na system zgłoszeń. Jeśli go brak, poproś użytkownika o uruchomienie `/work-automation-kit`.
 

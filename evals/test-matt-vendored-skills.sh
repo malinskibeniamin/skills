@@ -58,7 +58,7 @@ else
   echo "  PASS  to-tickets removes combined-file and hardcoded-tracker instructions"
   PASS=$((PASS + 1))
 fi
-run_content_eval "$REPO_ROOT/grilling/SKILL.md" "CONTEXT\.md|ADR" "grilling keeps docs sync intent"
+run_content_eval "$REPO_ROOT/grilling/SKILL.md" "GLOSSARY\.md|ADR" "grilling keeps docs sync intent"
 
 for retired_skill in to-prd to-issues setup-matt-pocock-skills; do
   if [ -e "$REPO_ROOT/$retired_skill/SKILL.md" ]; then
@@ -83,6 +83,8 @@ done
 if grep -RInE '/to-prd|/to-issues|to-prd|to-issues' \
   "$REPO_ROOT" \
   --exclude-dir=.git \
+  --exclude-dir=.context \
+  --exclude-dir=node_modules \
   --exclude='CHANGELOG.md' \
   --exclude='*.json' \
   --exclude='test-matt-vendored-skills.sh' \
@@ -237,7 +239,7 @@ run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./to-questionnaire/"'
 # Matt v1.2 completion: concise repair and model-invoked human-only setup.
 run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "ASD-STE100 Simplified Technical English" \
   "wait-what re-pitches with simplified English"
-run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "CONTEXT\.md" \
+run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "GLOSSARY\.md" \
   "wait-what uses the project vocabulary"
 run_content_eval "$REPO_ROOT/wizard/SKILL.md" "human-only" \
   "wizard names its human-only boundary"
@@ -271,11 +273,11 @@ run_content_eval "$REPO_ROOT/diagnosing-bugs/SKILL.md" "<REDACTED>" \
 run_content_eval "$REPO_ROOT/diagnosing-bugs/scripts/hitl-loop.template.sh" "capture.*terminal|terminal.*capture" \
   "HITL capture warns that values are echoed"
 run_content_eval "$REPO_ROOT/domain-modeling/SKILL.md" \
-  "^description:.*codebase terminology.*CONTEXT\.md.*ADR" \
+  "^description:.*codebase terminology.*GLOSSARY\.md.*ADR" \
   "domain-modeling triggers on terminology and context artifacts"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "\*\*Q2 --" \
   "grilling demonstrates separated multi-question rounds"
-run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "CONTEXT-MAP\.md" \
+run_content_eval "$REPO_ROOT/wait-what/SKILL.md" "GLOSSARY-MAP\.md" \
   "wait-what resolves the right bounded context"
 run_content_eval "$REPO_ROOT/wizard/SKILL.md" "stage-by-stage progress" \
   "wizard reports stage progress without invented duration"

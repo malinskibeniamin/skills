@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+2026-10-05 -- Apply the v1.3 workflow recommendations on the lifecycle/delivery flow:
+load model-invoked dependencies explicitly per host, follow Codex proxies to complete
+canonical guidance, and retain human-only retro/spec/setup boundaries. Suggest one
+review-heavy retrospective trial and reserve whole-spec delegation for approved ticket graphs.
+
+
+2026-10-04 -- Re-check mattpocock/skills v1.3.0 at `984a2c023c9fb42bb6ea40c70a652284a109dc05`.
+Rename the domain glossary and its format/map references to `GLOSSARY.md`, update active
+consumers and current localized docs, and preserve released snapshots. `/work-automation-kit`
+adds the graduated implementation/PR/retro skills and their core prerequisites, names
+`/domain-modeling` as the lazy glossary producer, and defaults external request triage off.
+
 2026-09-27 -- Extend `/ss` with an Engineering practice section: eleven graded rules for how
 a change is built, tested, and shipped (guard the mistake class, test the real seam, verify
 the stored write, numbered stacks, boundary validation, fast follow-ups, finding triage,

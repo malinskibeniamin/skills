@@ -9,50 +9,36 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/work-automation-kit.excalidraw)
 
-安裝工作流程技能，並為各個儲存庫建立情境架構：
+安裝工作流程技能，並建立追蹤器標籤、領域情境與 ADR 配置。提示詞迴圈：探索 -> 呈現 -> 確認 -> 寫入。
 
-- 議題追蹤器：GitHub、GitLab、本機 Markdown、Jira/Atlassian 或其他工具。
-- 分流標籤：用於標準角色的專案字串。
-- 領域文件：`CONTEXT.md`、`CONTEXT-MAP.md`、ADR 配置。
+## 安裝 [#install]
 
-由提示詞驅動。探索 -> 呈現 -> 確認 -> 寫入。
-
-## 內含的工作流程
-
-各安裝一次以下規劃技能組：`grilling`、`domain-modeling`、`triage`、
-`diagnosing-bugs`、`prototype`、`to-questionnaire`、`to-spec`、`to-tickets`、`handoff`、
-`writing-for-agents`、`visual-plan`、`visual-recap`、`plan-arbiter`、`agent-watchdog`、
-`read-the-damn-docs` 和 `efficient-frontier`。
-
-透過 `acli` 使用 Jira 時，可選擇安裝 `setup-atlassian-workflow`。
-
-## 安裝
+安裝一次：
 
 ```bash
-for skill in \
-  grilling domain-modeling triage diagnosing-bugs prototype to-questionnaire to-spec \
-  to-tickets handoff writing-for-agents visual-plan visual-recap plan-arbiter \
-  agent-watchdog read-the-damn-docs efficient-frontier
+for skill in grilling domain-modeling triage diagnosing-bugs prototype \
+  implement-spec pr retro tdd codebase-design review \
+  to-questionnaire to-spec to-tickets handoff writing-for-agents visual-plan \
+  visual-recap plan-arbiter agent-watchdog read-the-damn-docs efficient-frontier
 do
   bunx skills@latest add "malinskibeniamin/skills/$skill" --agent claude-code -y
 done
 ```
 
-## 選用：Atlassian/Jira
-如果團隊使用 Jira，請執行 `setup-atlassian-workflow`。
+使用 Jira 時，可透過 `acli` 選用 `setup-atlassian-workflow`。
 
-## 專案情境設定
+## 專案情境 [#project-context]
 
-詳情請參閱 `REFERENCE.md`。
+閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/work-automation-kit/REFERENCE.md)，接著：
 
-1. 探索 `git remote -v`、代理程式文件、現有的 `docs/agents/`、情境文件、ADR、是否已安裝 `triage`，以及單一儲存庫多套件架構的跡象（`pnpm-workspace.yaml`、套件工作區，或已有內容的 `packages/*/src`）。
-2. 先呈現建議的追蹤器；僅在選擇確實會導致不同流程時才詢問。
-3. 如果已安裝 `triage`，請詢問一個問題：「保留預設的分流標籤嗎？」（建議：**是**）。如果回答是，請使用五個標準角色名稱。只有在使用者回答否時，才收集覆寫值。若未安裝 `triage`，請略過標籤設定。
-4. 若沒有單一儲存庫多套件架構的跡象，請**不經詢問直接選擇單一情境**。僅針對單一儲存庫多套件架構提供**多重情境**選項，然後確認配置。
-5. 寫入前先確認文件草稿。重複使用 `templates/`。
-6. 以確定性方式選擇代理程式指示檔案：若 `CLAUDE.md` 存在，優先編輯該檔案；否則編輯 `AGENTS.md`；如果兩者都不存在，請詢問要建立哪一個。只更新選定的檔案，然後寫入已核准的文件：
-   - 安裝 `/wayfinder` 時，`docs/agents/issue-tracker.md` 須包含 `## Wayfinding operations`
-   - 僅在已安裝 `triage` 時建立 `docs/agents/triage-labels.md`
-   - `docs/agents/domain.md`
-   - 在選定的代理程式指示檔案中加入 `## Agent skills` 區塊；其中必須包含 `### Issue tracker`，並附上一行摘要及指向 `docs/agents/issue-tracker.md` 的連結，以及依條件加入的分流標籤與領域文件指引
-7. 驗證代理程式指示區塊中存在 `### Issue tracker`，且其連結指向所選的追蹤器文件；同時也要驗證所有必要標籤、Wayfinding 操作及領域配置。
+1. 檢查遠端儲存庫、代理程式規則、`docs/agents/`、詞彙表/ADR、是否已安裝 triage，以及 monorepo 跡象。
+2. 先建議追蹤器；僅在選擇會導致不同流程時才詢問。
+3. 已安裝 triage 時，詢問是否保留五個預設標準角色標籤（建議：是）；只有在使用者回答否時才收集覆寫值。否則略過標籤。
+4. 非 monorepo 預設採用單一情境，無須詢問。僅對 monorepo 提供多重情境選項，接著確認配置。
+5. 寫入前確認文件草稿；重複使用 `templates/`。
+6. 選擇一個指示檔案：若 `CLAUDE.md` 存在，優先編輯該檔案；否則編輯 `AGENTS.md`；兩者皆不存在時，詢問要建立哪一個。寫入已核准的：
+   - `docs/agents/issue-tracker.md`，存在 `/wayfinder` 時包含 `## Wayfinding operations`；
+   - 僅在有 triage 時寫入 `docs/agents/triage-labels.md`；
+   - `docs/agents/domain.md`；
+   - 所選檔案的 `## Agent skills` 區塊，包含 `### Issue tracker`、摘要/連結，以及依條件加入的標籤與領域指引。
+7. 寫入後驗證 `### Issue tracker` 及其連結，以及標籤、Wayfinding 操作與情境配置。

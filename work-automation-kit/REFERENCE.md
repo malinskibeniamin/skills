@@ -4,20 +4,22 @@
 
 ```
 Feature idea
-  -> /to-spec (community) -- interactive spec creation
+  -> /to-spec -- interactive spec creation
   -> /development-lifecycle -- plan phase
-  -> /grilling -- stress-test plan + update CONTEXT.md/ADRs
-  -> /to-tickets (community) -- break into GitHub/Jira tickets
-  -> implement (use /tdd skill)
-  -> code review (development-lifecycle review phase)
-  -> merge
+  -> /grilling -- stress-test plan + update GLOSSARY.md/ADRs
+  -> /to-tickets -- break into GitHub/Jira tickets
+  -> /development-lifecycle with /tdd -- implement a ticket
+     or /implement-spec -- integrate the spec (delegation only when requested)
+  -> /review -> /pr -- review and write the PR body
+  -> merge only when explicitly authorized
+  -> /retro (optional) -- improve the feedback loop from session evidence
 
 Bug report
   -> /diagnosing-bugs -- feedback-loop-first, 6-phase debugging
   -> /triage -- explore codebase, find root cause, TDD fix plan, file ticket
   -> implement fix (/tdd: failing test -> fix -> verify)
   -> code review (development-lifecycle review phase)
-  -> merge
+  -> merge only when explicitly authorized
 
 Issue management
   -> /triage -- triage via state machine (GitHub via gh, Jira via acli)
@@ -34,21 +36,23 @@ Quick question (on a specific decision)
   -> /grilling -- lightweight stress-test (no DDD docs)
 ```
 
-## Owned vs Community Skills
+## Local workflow skills
 
-| Category | Owned | Community (mattpocock) |
-|---|---|---|
-| Testing | tdd | -- |
-| Debugging | diagnosing-bugs | -- |
-| Triage | triage | -- |
-| Planning | development-lifecycle (plan phase) | to-spec, to-tickets |
-| Review | development-lifecycle (review phase) | -- |
-| Design | grilling (explore mode), prototype | -- |
-| Architecture | improve (architecture mode) | -- |
-| DDD | grilling, domain-modeling | -- |
-| Meta | writing-for-agents, grilling, ask-ben | to-questionnaire |
+| Category | Skills |
+|---|---|
+| Testing | tdd |
+| Debugging | diagnosing-bugs |
+| Triage | triage |
+| Planning | development-lifecycle, to-spec, to-tickets, to-questionnaire |
+| Implementation | development-lifecycle, implement-spec |
+| Review and delivery | review, pr |
+| Design | grilling, prototype, codebase-design |
+| Architecture | improve (architecture mode) |
+| Domain model | domain-modeling |
+| Session improvement | retro |
+| Meta | writing-for-agents, ask-ben |
 
-Owned skills ship with repo. "Community" skills install from mattpocock/skills.
+These skills ship with this repo, including local adaptations of Matt Pocock's skills. Install the local versions; keep their harness and delegation guardrails.
 
 ## Project Context Setup Protocol
 
@@ -58,7 +62,7 @@ Read existing state. Do not assume.
 
 - `git remote -v`, `.git/config`
 - `AGENTS.md`, `CLAUDE.md`; existing `## Agent skills`
-- `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, nested ADR dirs
+- `GLOSSARY.md`, `GLOSSARY-MAP.md`, `docs/adr/`, nested ADR dirs
 - `docs/agents/`
 - `.scratch/`
 - Whether `triage` is installed, either as an available skill or a sibling skill folder
@@ -86,12 +90,14 @@ Default from remote. Choices:
 
 Only if the user says no, collect overrides so existing project labels are reused instead of duplicated.
 
+**External request triage:** the GitHub/GitLab templates default this off; do not ask another setup question. Users can opt in later by editing the flag.
+
 **Domain docs:** glossary + ADRs feed tdd/diagnosing-bugs/triage/architecture. Without monorepo signals, select single-context without asking. Offer multi-context only for a monorepo, then confirm the choice.
 
 Choose:
 
-- Single context: root `CONTEXT.md` + `docs/adr/`
-- Multi-context: root `CONTEXT-MAP.md` points to per-context docs
+- Single context: root `GLOSSARY.md` + `docs/adr/`
+- Multi-context: root `GLOSSARY-MAP.md` points to per-context docs
 
 ### Confirm and write
 
