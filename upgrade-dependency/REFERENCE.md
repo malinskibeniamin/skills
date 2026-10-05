@@ -136,7 +136,7 @@ Security ladder: direct/top-level dep -> parent dep -> override/resolution/repla
 ## Supply-chain gate
 
 Before apply, check:
-- Min release age: npm `min-release-age`, pnpm/Yarn/Bun `minimumReleaseAge` where supported; default 7-30d unless security fix overrides.
+- Release age: bypass blocking `min-release-age` / `minimumReleaseAge` filters per [age-only overrides](../shared/dependency-release-age.md).
 - Disable scripts: no lifecycle scripts. Bun disables postinstall by default; review `trustedDependencies`.
 - Block git deps: fail on `git+`, tarball, raw URL deps in manifest/lock.
 - Scan deps: Snyk + `bun audit`; optional `npq`/Socket Firewall (`sfw`) if installed.

@@ -212,6 +212,9 @@ run_content_eval "$REFERENCE_MD" "native/in-house|in-house code|dependency surfa
 # ── Minimum release age gates ────────────────────────────────────
 
 run_content_eval "$SKILL_MD" "minimum release age gate audit" "SKILL.md requires release age gate audit"
+run_content_eval "$SKILL_MD" "automatically override.*without.*prompt" "Snyk entrypoint authorizes age overrides without prompting"
+run_content_eval "$REFERENCE_MD" "shared/dependency-release-age\\.md" "Snyk uses the same age-only override procedure as ordinary upgrades"
+run_content_eval "$REFERENCE_MD" "release age.*overrid.*record|record.*release age.*overrid" "Snyk publication records automatic age overrides"
 run_content_eval "$REFERENCE_MD" "Minimum release age gate audit" "REFERENCE.md documents release age gate audit"
 run_content_eval "$REFERENCE_MD" "bunfig\\.toml.*minimumReleaseAge|minimumReleaseAge.*bunfig\\.toml" "REFERENCE.md covers Bun release gate config"
 run_content_eval "$REFERENCE_MD" "\\.npmrc.*min-release-age|min-release-age.*\\.npmrc" "REFERENCE.md covers npm release gate config"
@@ -234,7 +237,7 @@ run_content_eval "$SKILL_MD" "/to-tickets.*only when ticket publication" "SKILL.
 run_content_eval "$SKILL_MD" "/review" "SKILL.md runs review before requested delivery"
 run_content_eval "$REFERENCE_MD" "Automatic internal skill gates" "REFERENCE.md documents automatic internal skill gates"
 run_content_eval "$REFERENCE_MD" "resilience-review.*before PR|before PR.*resilience-review" "REFERENCE.md runs resilience-review before PR"
-run_content_eval "$REFERENCE_MD" "to-tickets.*missing release age|missing release age.*to-tickets" "REFERENCE.md sends release gate debt to to-tickets"
+run_content_eval "$REFERENCE_MD" "no age-policy follow-up" "REFERENCE.md keeps release age informational instead of requiring policy-hardening tickets"
 run_content_eval "$REFERENCE_MD" "review.*package\\.json admission gate|package\\.json admission gate.*review" "REFERENCE.md review checks admission gate"
 
 # ── lockfile-sync-check.sh hook behavior ────────────────────────

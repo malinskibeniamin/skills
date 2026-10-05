@@ -35,17 +35,17 @@ Rules:
 
 ### Minimum release age gate audit (JS)
 
-For Node.js / TypeScript / UI repos, treat dependency installation as a
-supply-chain boundary. A lockfile helps reproducibility, but it does not
-stop a fresh malicious version from entering the lockfile during an
-upgrade. Audit the detected package manager before applying a JS bump.
+Audit the detected package manager's age policy before a JS bump. Apply
+[age-only overrides](../../shared/dependency-release-age.md) automatically when the
+target is filtered; continue without a human prompt. Age is evidence, not a blocker.
+Other supply-chain checks remain required.
 
 Detection:
 
 | Package manager signal | Config to check | Expected gate |
 |---|---|---|
 | `bun.lock` or bun toolchain | `bunfig.toml` | `minimumReleaseAge = <seconds>` |
-| `package-lock.json` or npm toolchain | `.npmrc` | npm-only exception; otherwise warn and do not touch `package-lock.json` |
+| `package-lock.json` or npm toolchain | `.npmrc` | `min-release-age = <days>`; npm-only exception still applies |
 | `pnpm-lock.yaml` | `pnpm-workspace.yaml` or `.npmrc` | `minimumReleaseAge: <minutes>` |
 | `.yarnrc.yml` / modern Yarn | `.yarnrc.yml` | `npmMinimalAgeGate: "<duration>"` |
 
@@ -54,14 +54,12 @@ If the detected package manager has no gate, add this PR warning:
 ```markdown
 ## Supply-chain gate warnings
 - WARN: release age gate missing for <bun|npm|pnpm|yarn>.
-  Configure the package-manager-native minimum release age gate before
-  broad dependency churn. This sweep continued because it fixes a Snyk
-  issue, but future upgrades should not silently accept fresh releases.
+  Informational only; continue the upgrade without adding a gate.
 ```
 
 Do not invent config in the Snyk PR unless the user asked for policy
-hardening. The warning is enough for a vuln sweep; a separate follow-up
-can set org-wide policy.
+hardening. Record any automatic age override with its original requirement,
+selected version, and command; no age-policy approval or follow-up is required.
 
 If `package-lock.json` is present in a bun repo, add this PR warning
 instead of using npm:
@@ -85,7 +83,7 @@ Reference docs checked while creating this gate:
   transitive deps, and has exclusions.
   https://pnpm.io/settings#minimumreleaseage
 - Yarn: `npmMinimalAgeGate` delays installing newly published packages;
-  `npmPreapprovedPackages` bypasses package gates.
+  use its age-only override, not `npmPreapprovedPackages` (bypasses all package gates).
   https://yarnpkg.com/features/security#age-gate
 
 ### CI and publishing supply-chain boundary
@@ -168,7 +166,7 @@ internally instead of relying on the user to remember them.
    - `.snyk` write succeeded, expiry exists, rescan shows `Ignored`;
    - existing-project Snyk IO monitor pushed or skipped with reason;
    - package manager detection is correct;
-   - missing release age gate warning is visible;
+   - release age gate status and automatic override are recorded;
    - Socket.dev web check result is recorded;
    - override has removal issue and rollback path;
    - ambiguous workspace or multi-lockfile cases have guards.
@@ -177,7 +175,6 @@ internally instead of relying on the user to remember them.
 
 2. **`/to-tickets` for security debt.**
    Create or draft issues whenever the sweep leaves follow-up work:
-   - missing release age gate;
    - override / resolution / Go replace added;
    - React 19 blocked;
    - upstream has no parent fix;

@@ -50,7 +50,7 @@ sidebar:
      暴露面，最后才使用 `resolutions`/`overrides`/`replace`。
      覆盖项列表不断增长是一种代码异味，因为它会导致锁文件膨胀且难以扩展。
 6. **应用生态系统门禁：**
-   - JS：审计最低发布时长门禁、执行 Socket.dev 网页检查，并针对 React 18 运行
+   - JS：审计最低发布时长门禁；按照[仅针对发布时长的覆盖规则](https://github.com/malinskibeniamin/skills/blob/main/shared/dependency-release-age.md)，自动覆盖阻止升级的发布时长过滤规则，无需询问用户。执行 Socket.dev 网页检查，并针对 React 18 运行
      `bun info <pkg>@<v> peerDependencies.react`；记录 `react19-blocked`。
      使用 `bun update`，然后运行 `bun install && bun install --yarn`。同时提交
      `bun.lock` 和 `yarn.lock`；Snyk IO 需要 `yarn.lock`。

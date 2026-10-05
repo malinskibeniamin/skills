@@ -53,7 +53,7 @@ zażądano PR-a.
      powierzchni zależności, a na końcu `resolutions`/`overrides`/`replace`.
      Rosnąca lista nadpisań to niepokojący sygnał, ponieważ powiększa pliki blokad i słabo się skaluje.
 6. **Zastosowanie bramek ekosystemu:**
-   - JS: audyt bramki minimalnego wieku wydania, kontrola internetowa Socket.dev, React 18
+   - JS: audyt bramki minimalnego wieku wydania; automatycznie nadpisuj blokujące filtry wieku bez pytania o zgodę, zgodnie z [nadpisaniami dotyczącymi wyłącznie wieku wydania](https://github.com/malinskibeniamin/skills/blob/main/shared/dependency-release-age.md). Kontrola internetowa Socket.dev, React 18
      `bun info <pkg>@<v> peerDependencies.react`; zapisz `react19-blocked`.
      Użyj `bun update`, a następnie `bun install && bun install --yarn`. Zatwierdź zarówno
      `bun.lock`, jak i `yarn.lock`; operacje wejścia-wyjścia Snyk wymagają `yarn.lock`.
