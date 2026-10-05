@@ -57,6 +57,27 @@ case "$reminder_line" in
     ;;
 esac
 
+# Delivery endpoints already authorize routine git on the current feature branch.
+# Asking permission to push, rebase, or commit there stalls hands-free work.
+endpoint=$(tr -d '[:space:]' < "$endpoint_file" 2>/dev/null || true)
+case "$endpoint" in
+  push|pr|ship)
+    branch=$(git branch --show-current 2>/dev/null || true)
+    default_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
+    case "$branch" in
+      ""|main|master|develop|"${default_branch#origin/}") ;;
+      *)
+        ask_re='(want me to|should i|shall i|would you like( me)? to|do you want( me)? to|may i|can i|ok(ay)? to|let me know if|if you( would|.d)? like|if you want|happy to)[^.?!]{0,80}(force-push|push|rebase|commit)([^a-z]|$)'
+        decision_re='^🟡 awaiting decision — .*(push|rebase|commit)([^a-z]|$)'
+        if printf '%s\n' "$last_message" | grep -qiE "$ask_re" \
+          || printf '%s\n' "$last_line" | grep -qiE "$decision_re"; then
+          hook_stop_block "Push permission request rejected: endpoint '$endpoint' already authorizes commit, push, rebase, and --force-with-lease on '$branch'; do not ask. Run the git step now, verify, and end with the evidence-bearing status line."
+        fi
+        ;;
+    esac
+    ;;
+esac
+
 case "$last_line" in
   "🟢 done — "*)
     detail=${last_line#"🟢 done — "}
