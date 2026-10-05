@@ -44,9 +44,8 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 | Actionable automated review finding | Process like human feedback |
 | Approval, CI-only, or non-actionable summary | Drop |
 
-Author type is not an applicability test. Inspect every finding, including bot-only
-threads. Fetch all pages of threads, comments, and reviews; a bounded first page is
-not proof of completeness. Answer non-applicable findings with evidence, not a silent skip.
+Inspect bot-only threads too; author type does not prove applicability. Paginate
+threads, comments, and reviews. Reply to non-applicable findings with evidence.
 
 If no new item remains, post `All feedback addressed` and stop.
 
@@ -71,9 +70,8 @@ the summary when the requested endpoint owns remediation.
 
 ### 6. Completeness Verification
 
-Before stopping, require zero unresolved applicable, non-outdated threads and no stale
-`CHANGES_REQUESTED`. Any remainder loops back to triage. The
-`pr-feedback-completeness-stop` hook enforces this state.
+Before stopping: zero unresolved applicable, non-outdated threads; no stale
+`CHANGES_REQUESTED`. Triage any remainder. Enforced by `pr-feedback-completeness-stop`.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
@@ -95,7 +93,6 @@ Post one bullet per resolved root cause plus thread and CI state; consolidate du
 
 ## Automatic wake-up
 
-When the user asks for unattended future review repair, follow
-[local auto-review setup](AUTO-REVIEW.md). One opt-in watcher resumes the exact
-feature session; PR creation hooks register future PRs. Ordinary feedback resolution
-does not enable persistent watching. A draft PR stays draft; no automatic merge.
+Unattended future repair: [opt-in setup](AUTO-REVIEW.md) resumes the original
+feature session and binds future PRs through hooks. Ordinary resolution never enables
+watching. Keep drafts draft; never auto-merge.

@@ -45,9 +45,8 @@ type: skill
 | 需要處理的自動審查發現 | 比照人工回饋處理 |
 | 核准、僅 CI 或不需處理的摘要 | 丟棄 |
 
-作者類型不能決定回饋是否適用。檢查每項發現，包括只有機器人留言的討論串。
-取得討論串、留言及審查的所有分頁；只取得有限的第一頁無法證明完整性。
-對於不適用的發現，應以證據回覆，而不是直接略過。
+也要檢查只有機器人留言的討論串；作者類型不能證明回饋適用。
+取得討論串、留言及審查的所有分頁。對於不適用的發現，應以證據回覆。
 
 沒有新項目時，發布 `All feedback addressed` 並停止。
 
@@ -93,7 +92,6 @@ bash scripts/pr-unresolved-count.sh --include-bots  # 修正自動審查回饋
 
 ## 自動喚醒 [#automatic-wake-up]
 
-當使用者要求自動處理日後的審查回饋、不需人工介入時，請依照
-[本機自動審查設定](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md) 操作。
-一個由使用者主動啟用的監看程序會恢復處理該功能的確切工作階段；PR 建立鉤子會登錄日後的 PR。
-一般回饋處理不會啟用持續監看。草稿 PR 保持草稿狀態；不會自動合併。
+自動處理日後的回饋、不需人工介入：[主動啟用設定](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+會恢復原始功能工作階段，並透過鉤子綁定日後的 PR。一般回饋處理絕不會啟用監看。
+保持草稿狀態；絕不自動合併。

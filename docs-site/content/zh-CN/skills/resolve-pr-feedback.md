@@ -43,9 +43,8 @@ type: skill
 | 需要处理的自动审查发现 | 像人工反馈一样处理 |
 | 批准、仅 CI 或无需处理的摘要 | 丢弃 |
 
-作者类型不能决定反馈是否适用。检查每条发现，包括只有机器人评论的线程。
-获取线程、评论和审查的所有分页；仅获取有限的第一页不能证明完整性。
-对于不适用的发现，应以证据回复，而不是静默跳过。
+也要检查只有机器人评论的线程；作者类型不能证明反馈适用。
+获取线程、评论和审查的所有分页。对于不适用的发现，应以证据回复。
 
 没有新项目时，发布 `All feedback addressed` 并停止。
 
@@ -84,7 +83,6 @@ bash scripts/pr-unresolved-count.sh --include-bots  # 修复自动审查反馈
 
 ## 自动唤醒 [#automatic-wake-up]
 
-当用户请求无人值守地修复今后的审查反馈时，请按照
-[本地自动审查设置](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md) 操作。
-一个经用户主动启用的监视器会恢复处理该功能的确切会话；PR 创建钩子会注册今后的 PR。
-普通反馈处理不会启用持续监视。草稿 PR 保持草稿状态；不会自动合并。
+无人值守地修复今后的反馈：[主动启用设置](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+会恢复原始功能会话，并通过钩子绑定今后的 PR。普通反馈处理绝不会启用监视。
+保持草稿状态；绝不自动合并。

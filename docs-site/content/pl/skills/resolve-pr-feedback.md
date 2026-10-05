@@ -45,10 +45,9 @@ Przeczytaj GraphQL `reviewThreads`, komentarze główne i treści przeglądów w
 | Uwaga z automatycznego przeglądu wymagająca działania | Przetwórz jak uwagi człowieka |
 | Zatwierdzenie, tylko CI lub podsumowanie niewymagające działania | Odrzuć |
 
-Typ autora nie rozstrzyga, czy uwaga dotyczy zmian. Sprawdź każdą uwagę, w tym wątki
-złożone wyłącznie z komentarzy botów. Pobierz wszystkie strony wątków, komentarzy i
-przeglądów; ograniczona pierwsza strona nie dowodzi kompletności. Na uwagi niedotyczące
-zmian odpowiedz dowodami, zamiast pomijać je bez wyjaśnienia.
+Sprawdź też wątki złożone wyłącznie z komentarzy botów; typ autora nie dowodzi, że uwaga
+dotyczy zmian. Pobierz wszystkie strony wątków, komentarzy i przeglądów. Na uwagi
+niedotyczące zmian odpowiedz dowodami.
 
 Gdy nie ma nowych elementów, opublikuj `All feedback addressed` i zakończ.
 
@@ -87,8 +86,6 @@ Opublikuj jeden punkt na rozwiązaną przyczynę źródłową oraz stan wątków
 
 ## Automatyczne wznowienie [#automatic-wake-up]
 
-Gdy użytkownik prosi o automatyczne naprawianie przyszłych uwag bez nadzoru, zastosuj
-[konfigurację lokalnego automatycznego przeglądu](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md).
-Jeden jawnie włączony watcher wznawia dokładnie tę sesję, która pracowała nad funkcją;
-hooki tworzenia PR-ów rejestrują przyszłe PR-y. Zwykłe rozwiązywanie uwag nie włącza
-stałego monitorowania. Roboczy PR pozostaje roboczy; bez automatycznego scalania.
+Naprawianie przyszłych uwag bez nadzoru: [jawnie włączona konfiguracja](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+wznawia pierwotną sesję funkcji i wiąże przyszłe PR-y przez hooki. Zwykłe rozwiązywanie
+uwag nigdy nie włącza monitorowania. Zachowaj roboczy status PR-a; nigdy nie scalaj automatycznie.
