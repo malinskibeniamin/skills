@@ -93,6 +93,6 @@ Post one bullet per resolved root cause plus thread and CI state; consolidate du
 
 ## Automatic wake-up
 
-Unattended future repair: [opt-in setup](AUTO-REVIEW.md) resumes the original
-feature session and binds future PRs through hooks. Ordinary resolution never enables
-watching. Keep drafts draft; never auto-merge.
+Unattended repair: [opt-in setup](AUTO-REVIEW.md) resumes the original feature
+session; hooks bind future PRs. Ordinary resolution never enables watching.
+Keep drafts draft; never auto-merge.
