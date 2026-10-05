@@ -103,7 +103,7 @@ assert_absent 'cat .*handoff_file.*>/dev/null' \
 assert_absent 'Repo/code changes:' \
   "teach contains only teaching guidance" "$REPO_ROOT/teach/SKILL.md"
 assert_absent '\.\.\. \|' \
-  "ask-ben router descriptions end at complete words" "$REPO_ROOT/ask-ben/SKILL.md"
+  "ask-ben router descriptions end at complete words" "$REPO_ROOT/ask-ben/SKILL-CATALOG.md"
 assert_present 'for skill in' \
   "work automation installs its declared workflow set from one source" \
   "$REPO_ROOT/work-automation-kit/SKILL.md"

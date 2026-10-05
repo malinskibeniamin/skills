@@ -1,6 +1,6 @@
 ---
 name: poteto-bro
-description: "Poteto: Restate the last message in plain human language, with no jargon."
+description: "Poteto: Restate the last message in plain human language"
 disable-model-invocation: true
 ---
 

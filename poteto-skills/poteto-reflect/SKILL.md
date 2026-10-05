@@ -1,6 +1,6 @@
 ---
 name: poteto-reflect
-description: "Poteto: Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect."
+description: "Poteto: Turn observed workflow lessons into skill improvements"
 disable-model-invocation: true
 ---
 

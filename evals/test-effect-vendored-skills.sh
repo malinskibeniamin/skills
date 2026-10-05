@@ -10,7 +10,7 @@ for skill in effect-ts effect-v3-to-v4; do
   run_file_eval "$REPO_ROOT/codex-skills/$skill/agents/openai.yaml" "Codex interface exists: $skill"
   run_file_eval "$REPO_ROOT/$skill/LICENSE" "standalone Effect skill includes its license: $skill"
   run_content_eval "$REPO_ROOT/$skill/LICENSE" 'Copyright \(c\) 2023 Effectful Technologies Inc' "standalone Effect skill preserves the MIT notice: $skill"
-  run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/$skill" "router lists Effect skill: $skill"
+  run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" "/$skill" "router lists Effect skill: $skill"
 done
 
 run_content_eval "$REPO_ROOT/effect-v3-to-v4/SKILL.md" '^disable-model-invocation: true$' "migration remains explicitly invoked"

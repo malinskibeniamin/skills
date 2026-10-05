@@ -251,6 +251,8 @@ total = 0
 offenders = []
 root = pathlib.Path(sys.argv[1])
 for p in list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")) + [root / "README.md", root / "AGENTS.md"]:
+    if p.is_relative_to(root / "vendor/pstack") or p.is_relative_to(root / ".context"):
+        continue  # Immutable upstream bytes have a separate provenance gate.
     if any(x in str(p) for x in ("node_modules", "/dist/", ".original.md", "agent-evals/")):
         continue
     try:
@@ -284,6 +286,8 @@ import pathlib, sys
 n = 0
 root = pathlib.Path(sys.argv[1])
 for p in list(root.glob("*.md")) + list(root.glob("*/*.md")) + list(root.glob("*/*/*.md")):
+    if p.is_relative_to(root / "vendor/pstack") or p.is_relative_to(root / ".context"):
+        continue  # Immutable upstream bytes have a separate provenance gate.
     if any(x in str(p) for x in ("node_modules", "/dist/", ".original.md", "agent-evals/")):
         continue
     try:

@@ -1,6 +1,6 @@
 ---
 name: poteto-unslop
-description: "Poteto: Cut AI tells from any writing. Must always apply."
+description: "Poteto: Remove AI writing patterns while preserving meaning"
 disable-model-invocation: true
 ---
 

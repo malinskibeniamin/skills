@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-fix-root-causes
-description: "Poteto: Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes."
+description: "Poteto: Reproduce symptoms and repair their underlying cause"
 disable-model-invocation: true
 ---
 

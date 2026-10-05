@@ -106,6 +106,22 @@ class PotetoSyncTest(unittest.TestCase):
         after = {p.relative_to(self.repo): p.read_bytes() for p in self.repo.rglob("*") if p.is_file()}
         self.assertEqual(before, after)
 
+    def test_adapter_metadata_is_bounded_without_rewriting_upstream(self):
+        source = self.write_source(
+            "skills/tdd/SKILL.md",
+            '---\nname: tdd\ndescription: "Use when writing tests — ' + "detail " * 50
+            + '"\ndisable-model-invocation: true\n---\nFull instructions.\n',
+        )
+        original = source.read_bytes()
+        self.install()
+        adapter = (self.repo / "poteto-skills/poteto-tdd/SKILL.md").read_text()
+        description = json.loads(adapter.split("description: ", 1)[1].splitlines()[0])
+        self.assertLessEqual(len(description), 100)
+        self.assertTrue(description.isascii())
+        self.assertNotIn("Use when", description)
+        self.assertIn("disable-model-invocation: true", adapter)
+        self.assertEqual((self.repo / "vendor/pstack/skills/tdd/SKILL.md").read_bytes(), original)
+
     def test_check_detects_modified_support_files_and_missing_registration(self):
         self.install()
         copied = self.repo / "vendor/pstack/skills/tdd/references/example.md"

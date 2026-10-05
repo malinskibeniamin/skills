@@ -49,7 +49,7 @@ run_file_eval "$REPO_ROOT/codex-skills/stacked-prs/agents/openai.yaml" \
   "generated Codex stacked-prs metadata exists"
 run_content_eval "$REPO_ROOT/codex-skills/stacked-prs/agents/openai.yaml" 'Stacked PRs' \
   "Codex displays the PR acronym correctly"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" '/stacked-prs' \
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" '/stacked-prs' \
   "generated catalog lists stacked-prs"
 
 if [ -x "$BASE_RESOLVER" ]; then

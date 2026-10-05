@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-laziness-protocol
-description: "Poteto: Apply when refactoring, evaluating diff size, or tempted to add abstractions, layers, or signal threading. Bias toward deletion and the smallest change that solves the problem."
+description: "Poteto: Laziness protocol"
 disable-model-invocation: true
 ---
 

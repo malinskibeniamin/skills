@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-make-operations-idempotent
-description: "Poteto: Apply when designing commands, lifecycle steps, or processing loops that run amid crashes, restarts, and retries. Converge to the same end state regardless of partial prior runs."
+description: "Poteto: Make operations idempotent"
 disable-model-invocation: true
 ---
 

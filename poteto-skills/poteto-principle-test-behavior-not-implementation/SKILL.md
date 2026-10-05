@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-test-behavior-not-implementation
-description: "Poteto: Apply when you write, change, or keep a test. Call the code the way its users do and assert the result they observe against a literal expected value. If the test would still pass when every imported function returns undefined, rewrite the assertion or delete the test."
+description: "Poteto: Test behavior not implementation"
 disable-model-invocation: true
 ---
 

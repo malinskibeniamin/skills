@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-outcome-oriented-execution
-description: "Poteto: Apply during planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture; don't preserve smooth intermediate states with throwaway compatibility code."
+description: "Poteto: Outcome oriented execution"
 disable-model-invocation: true
 ---
 

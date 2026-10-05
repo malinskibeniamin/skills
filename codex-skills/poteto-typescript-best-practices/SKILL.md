@@ -1,6 +1,6 @@
 ---
 name: poteto-typescript-best-practices
-description: "Poteto: TypeScript best practices. Use when reading or editing any .ts or .tsx file."
+description: "Poteto: Apply TypeScript type-system discipline"
 disable-model-invocation: true
 ---
 

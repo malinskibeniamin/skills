@@ -48,7 +48,7 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Do not edit, commit, push" "revie
 run_content_eval "$REPO_ROOT/resolve-pr-feedback/SKILL.md" "/agent-watchdog" "resolve-pr-feedback can watchdog completeness"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "reversible assumption" "development lifecycle continues through reversible uncertainty"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "status line" "commit-push-pr ends with a status line"
-run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/visual-plan.*Builder|/agent-watchdog.*Builder|/read-the-damn-docs" "ask-ben routes Builder skills"
+run_content_eval "$REPO_ROOT/ask-ben/SKILL-CATALOG.md" "/visual-plan.*Builder|/agent-watchdog.*Builder|/read-the-damn-docs" "ask-ben routes Builder skills"
 run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "/visual-plan" "visual-review can publish visual plans for planned surfaces"
 run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "/visual-recap" "visual-review can feed visual recaps for implemented surfaces"
 run_content_eval "$REPO_ROOT/visual-review/REFERENCE.md" "/plan-arbiter" "visual-review arbitrates competing visual directions"

@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-experience-first
-description: "Poteto: Apply when product, UX, or feature-scope tradeoffs come up. Choose user delight over implementation convenience; ship fewer polished features over more rough ones."
+description: "Poteto: Choose user experience over implementation convenience"
 disable-model-invocation: true
 ---
 

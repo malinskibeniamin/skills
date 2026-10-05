@@ -1,6 +1,6 @@
 ---
 name: poteto-arena
-description: "Poteto: Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
+description: "Poteto: Compare competing implementations and combine the best"
 disable-model-invocation: true
 ---
 

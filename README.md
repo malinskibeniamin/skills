@@ -241,7 +241,7 @@ an explicit artifact command.
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |
 | Agents | Optional, explicit delegation | `code-reviewer` (PR correctness), `verifier` (read-only verification) |
 
-The generated authoritative catalog with every skill and its trigger lives in [ask-ben/SKILL.md](ask-ben/SKILL.md).
+The router [ask-ben/SKILL.md](ask-ben/SKILL.md) discloses the generated [complete skill catalog](ask-ben/SKILL-CATALOG.md) on demand.
 
 ## How it works
 

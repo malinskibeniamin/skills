@@ -1,6 +1,6 @@
 ---
 name: poteto-make-bot-ui
-description: "Poteto: >-"
+description: "Poteto: Build a dashboard that wakes a bot through a webhook"
 disable-model-invocation: true
 ---
 

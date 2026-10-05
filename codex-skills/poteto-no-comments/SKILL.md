@@ -1,6 +1,6 @@
 ---
 name: poteto-no-comments
-description: "Poteto: Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
+description: "Poteto: Replace redundant comments with structural guarantees"
 disable-model-invocation: true
 ---
 

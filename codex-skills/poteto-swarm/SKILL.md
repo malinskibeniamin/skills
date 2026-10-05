@@ -1,6 +1,6 @@
 ---
 name: poteto-swarm
-description: "Poteto: Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration."
+description: "Poteto: Coordinate explicitly requested parallel workers"
 disable-model-invocation: true
 ---
 

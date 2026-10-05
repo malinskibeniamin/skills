@@ -109,7 +109,7 @@ def adapter(skill):
     policy = "disable-model-invocation: true\n" if skill["explicit_only"] else ""
     return (
         f'---\nname: {skill["name"]}\n'
-        f'description: {json.dumps(skill["description"], ensure_ascii=False)}\n'
+        f'description: {json.dumps(skill["short_description"])}\n'
         f"{policy}---\n\n"
         "Read [harness compatibility rules](../../shared/POTETO-COMPATIBILITY.md) first.\n"
         f'Read and follow the complete [upstream skill](../../vendor/pstack/{skill["source"]}), '

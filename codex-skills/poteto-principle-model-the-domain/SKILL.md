@@ -1,6 +1,6 @@
 ---
 name: poteto-principle-model-the-domain
-description: "Poteto: Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files. Encode the domain in a structure instead of scattered conditionals."
+description: "Poteto: Encode domain rules in explicit data structures"
 disable-model-invocation: true
 ---
 
