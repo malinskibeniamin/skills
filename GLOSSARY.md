@@ -4,6 +4,21 @@ Skills + hooks for agentic dev. Goal: safer, more reviewable, consistently high-
 
 ## Language
 
+**Skill**:
+Specialist instructions expanded into an agent's context when invoked or selected.
+Instructions guide behavior; their presence does not prove they were followed.
+_Avoid_: Runtime extension, enforcement
+
+**Settings hook**:
+An event-triggered command configured by the harness for deterministic checks or
+workflow signals. Separate from a mod's typed middleware hook.
+_Avoid_: Mod, skill
+
+**Mod**:
+A Claude Code plugin's TypeScript runtime extension for session behavior, commands,
+or interface rendering. It runs with the host's machine access, not a security boundary.
+_Avoid_: Skill, shell hook, sandbox
+
 **Customer-facing surface**:
 Any screen, command output, generated report, interface, or flow an end user sees or acts on. Includes web, mobile, CLI, TUI, desktop, rendered docs, reports.
 _Avoid_: UI when not graphical; web page when non-web.

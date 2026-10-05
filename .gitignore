@@ -12,3 +12,6 @@ redpanda-evals/**/*.sh
 
 # macOS finder metadata
 .DS_Store
+
+# Claude Code emits version-specific mod SDK declarations on load.
+plugins/*/.claude-plugin/types/

@@ -18,6 +18,7 @@
     "agent-evals/evals/tanstack-router-navigation-lifetimes/src",
     "exemplars",
     "vendor",
+    "plugins/frontend-skills-mods",
     "**/*.gen.ts",
     "**/*.gen.tsx",
     "**/*_pb.ts",

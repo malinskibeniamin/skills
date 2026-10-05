@@ -1,10 +1,12 @@
 ---
 name: extend-harness
-description: Extend and debug the frontend-skills hook harness, rules, severity tiers, and analytics.
+description: "Extend the harness: shell rules, Claude Code mods, severity tiers, and analytics."
 disable-model-invocation: true
 ---
 
 Edit source manifests/libraries, never generated configs. [REFERENCE.md](REFERENCE.md) owns severities, options, parser contracts, debugging.
+
+Claude mods: [MODS.md](MODS.md). Keep cross-runtime enforcement in the settings hooks below.
 
 ## Add rule
 
