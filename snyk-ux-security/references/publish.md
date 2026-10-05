@@ -80,14 +80,14 @@ expired). Triggered by @<triggerer>.
 
 ## Internal skill gates
 - `/resilience-review`: PASS / NEEDS_GUARDS / BLOCKED -- <summary>
-- `/to-tickets`: <n> issue(s) created or drafted for missing release age gate / overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
+- `/to-tickets`: <n> issue(s) created or drafted for dependency overrides / React 19 / upstream no fix / Snyk project ambiguity / Socket.dev critical vector
 - `/review`: PASS / BLOCKED -- package.json admission gate, `/steelman`, `/diagnosing-bugs`, and `.snyk` evidence checked
 
 ## Supply-chain gate warnings
 - WARN: release age gate missing for `<package-manager>` (if absent).
-  Follow-up: configure the package-manager-native minimum release age
-  gate (`bunfig.toml`, `.npmrc`, `pnpm-workspace.yaml`, or
-  `.yarnrc.yml`) before broad dependency churn.
+  Informational only; no age-policy follow-up required.
+- Automatic release age override (if used): `<requirement> -> <selected version>`;
+  command: `<age-only override>`; persistent policy restored.
 
 ## Socket.dev web check
 No Socket CLI was installed or required.
@@ -151,7 +151,7 @@ JS:
 - [x] `bun run lint:fix`
 - [x] `bun run type:check`
 - [x] `bun test`
-- [x] Minimum release age gate audit completed; warnings recorded if missing
+- [x] Minimum release age gate audit completed; status and automatic overrides recorded
 - [x] Socket.dev web check completed for JS packages; no Socket CLI used
 - [x] Snyk rescan clean for addressed CVEs
 - [x] `.snyk` committed with <n> new ignore entries
@@ -183,7 +183,7 @@ labels applied, `.snyk` revisited count, `.snyk` cleaned-up count
 (CVE + reason + snyk ignore id + expiry), existing-project
 `snyk monitor` status (pushed/skipped + reason), bumped list,
 overrides-added list (CVE + blocker), JS release-age gate status
-(configured/missing + package manager), Socket.dev findings
+(configured/missing/overridden + package manager, original requirement, target, command), Socket.dev findings
 (package + highest alert + decision impact),
 skipped list (reason), CI status.
 
@@ -196,6 +196,6 @@ Main agent gathers reports. Summary table:
 
 Show React-19-blocked pkgs -- candidates for the React 18 -> 19
 migration plan. Show overrides-added as a follow-up backlog --
-remove each once upstream ships a fix. Show release-age gate missing
-warnings and Socket.dev high/critical alerts as supply-chain follow-up
-items.
+remove each once upstream ships a fix. Show release-age status and automatic
+overrides as evidence, not follow-up blockers. Socket.dev high/critical alerts
+remain supply-chain follow-up items.
