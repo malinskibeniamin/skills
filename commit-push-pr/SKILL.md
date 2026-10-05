@@ -10,7 +10,7 @@ Merge only on explicit request: [contract](references/merge.md).
 
 ## Preflight
 
-1. Inspect status, diff, branch, log, and branch PR; before rebasing use the [pre-rebase check](REFERENCE.md#pre-rebase-check).
+1. Inspect status/diff/branch/log/PR; before rebase use [pre-rebase check](REFERENCE.md#pre-rebase-check).
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
 3. Push/PR needs a remote; PR needs authenticated `gh` and base.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
@@ -36,6 +36,8 @@ Merge only on explicit request: [contract](references/merge.md).
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Include dogfood receipt. Re-read body, check reviewer image access, and print URL. Updates/reopens use same gate; edits invalidate affected evidence.
 
+Enabled auto-review: [bind original session](../resolve-pr-feedback/AUTO-REVIEW.md).
+
 Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicitly requests.
 
 ## Completion
@@ -43,6 +45,6 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
 2. Report failures; CI remediation needs `/go`, ship, babysitting, or follow-up.
 3. Report status, remaining diff, branch, commits, PR, CI, and next action.
-4. Use CLAUDE.md's status and intent/impact contract. Include the full PR URL on the final status line whenever a PR exists, including updates.
+4. Follow CLAUDE.md's status/intent/impact contract; put full PR URL on final status line when present, including updates.
 
 Never stage unrelated work, push mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.

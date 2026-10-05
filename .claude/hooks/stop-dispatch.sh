@@ -47,7 +47,7 @@ while IFS= read -r script; do
 
   case "$script" in
     pr-feedback-completeness-stop.sh)
-      if [ "$endpoint" != "pr" ] && [ "$endpoint" != "ship" ] \
+      if [ "${PR_FEEDBACK_SCOPE:-0}" != "1" ] && [ "$endpoint" != "pr" ] && [ "$endpoint" != "ship" ] \
         && { [ -z "$session_dir" ] || [ ! -f "$session_dir/pr-feedback-active" ]; }; then
         continue
       fi
@@ -88,4 +88,9 @@ if [ -s "$notes" ]; then
   message=$(cat "$notes")
   jq -n --arg message "$message" \
     '{hookSpecificOutput:{hookEventName:"Stop",additionalContext:$message}}'
+fi
+
+# Release activity only after every blocking Stop check passed.
+if [ -x "$script_dir/pr-review-auto-hook.sh" ]; then
+  printf '%s' "$input" | "$script_dir/pr-review-auto-hook.sh"
 fi

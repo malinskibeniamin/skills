@@ -121,7 +121,7 @@ _build_codex() {
   local prefix="$1"
   local close_quote="${2:-}"
   jq --arg prefix "$prefix" --arg close "$close_quote" --argjson events "$CODEX_EVENTS" '
-    def entry_script($e): if ($e|type) == "object" then $e.script else $e end;
+    def entry_script($e): if ($e|type) == "object" then ($e.codex_script // $e.script) else $e end;
     def command_hook($entry): {
       type: "command",
       command: ("f=" + $prefix + "/" + entry_script($entry) + $close + "; [ -x \"$f\" ] && exec \"$f\"; exit 0")

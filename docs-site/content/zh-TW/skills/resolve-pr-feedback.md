@@ -42,7 +42,11 @@ type: skill
 |---|---|
 | 新回饋，無回覆 | 處理 |
 | 已處理或等待決定 | 跳過 |
-| Bot、批准或僅 CI | 丟棄 |
+| 需要處理的自動審查發現 | 比照人工回饋處理 |
+| 核准、僅 CI 或不需處理的摘要 | 丟棄 |
+
+也要檢查只有機器人留言的討論串；作者類型不能證明回饋適用。
+取得討論串、留言及審查的所有分頁。對於不適用的發現，應以證據回覆。
 
 沒有新項目時，發布 `All feedback addressed` 並停止。
 
@@ -67,13 +71,12 @@ type: skill
 
 ### 6. 完整性驗證 [#6-completeness-verification]
 
-停止前必須沒有未解決的非 Bot、非過期執行緒，且不存在陳舊
-`CHANGES_REQUESTED`。任何剩餘項都回到分類。
-`pr-feedback-completeness-stop` 鉤子會強制此狀態。
+停止前必須沒有未解決的適用且未過期的討論串，且不存在陳舊 `CHANGES_REQUESTED`。任何剩餘項都回到分類。`pr-feedback-completeness-stop` 鉤子會強制此狀態。
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
+bash scripts/pr-unresolved-count.sh --include-bots  # 修正自動審查回饋
 ```
 
 第一條命令必須輸出 `0`。該封裝隱藏僅 GraphQL 可見的執行緒解決細節。
@@ -85,5 +88,10 @@ bash scripts/pr-unresolved-count.sh --verbose
 ## 迭代策略 [#iteration-policy]
 
 - AI 自審：行內審查軸獲批或為空時停止，最多兩輪。
-- 人工、雲端或 Copilot 回饋：不設輪次上限。交接前處理每個執行緒；
-  完整性鉤子阻止遺留執行緒或待處理變更請求。
+- 人工、雲端或 Copilot 反饋：不設輪次上限。交接前處理每個執行緒；完整性鉤子阻止遺留執行緒或待處理變更請求。
+
+## 自動喚醒 [#automatic-wake-up]
+
+自動處理日後的回饋、不需人工介入：[主動啟用設定](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+會恢復原始功能工作階段，並透過鉤子綁定日後的 PR。一般回饋處理絕不會啟用監看。
+保持草稿狀態；絕不自動合併。

@@ -42,7 +42,12 @@ Przeczytaj GraphQL `reviewThreads`, komentarze główne i treści przeglądów w
 |---|---|
 | Nowe, bez odpowiedzi | Przetwórz |
 | Obsłużone lub oczekujące na decyzję | Pomiń |
-| Bot, zatwierdzenie lub tylko CI | Odrzuć |
+| Uwaga z automatycznego przeglądu wymagająca działania | Przetwórz jak uwagi człowieka |
+| Zatwierdzenie, tylko CI lub podsumowanie niewymagające działania | Odrzuć |
+
+Sprawdź też wątki złożone wyłącznie z komentarzy botów; typ autora nie dowodzi, że uwaga
+dotyczy zmian. Pobierz wszystkie strony wątków, komentarzy i przeglądów. Na uwagi
+niedotyczące zmian odpowiedz dowodami.
 
 Gdy nie ma nowych elementów, opublikuj `All feedback addressed` i zakończ.
 
@@ -60,11 +65,12 @@ Dla zwykłego PR-a wypchnij każdą poprawkę CI lub wynik rebase i wykonaj żą
 
 ### 6. Weryfikacja kompletności [#6-completeness-verification]
 
-Przed zakończeniem wymagaj zera nierozwiązanych, aktualnych wątków innych niż boty oraz braku nieaktualnego `CHANGES_REQUESTED`. Pozostałości wracają do triage. Hook `pr-feedback-completeness-stop` wymusza ten stan.
+Przed zakończeniem wymagaj zera nierozwiązanych, nieprzestarzałych wątków dotyczących zmian oraz braku nieaktualnego `CHANGES_REQUESTED`. Pozostałości wracają do triage. Hook `pr-feedback-completeness-stop` wymusza ten stan.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
+bash scripts/pr-unresolved-count.sh --include-bots  # naprawa uwag z automatycznego przeglądu
 ```
 
 Pierwsze polecenie musi wypisać `0`. Wrapper ukrywa szczegóły stanu wątków dostępne tylko w GraphQL.
@@ -77,3 +83,9 @@ Opublikuj jeden punkt na rozwiązaną przyczynę źródłową oraz stan wątków
 
 - Samoprzegląd AI: zakończ, gdy oś przeglądu w kodzie jest zatwierdzona lub pusta; najwyżej dwie rundy.
 - Uwagi człowieka, chmury lub Copilot: bez limitu iteracji. Obsłuż każdy wątek przed przekazaniem; hook kompletności blokuje nierozwiązane wątki i oczekujące żądania zmian.
+
+## Automatyczne wznowienie [#automatic-wake-up]
+
+Naprawianie przyszłych uwag bez nadzoru: [jawnie włączona konfiguracja](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+wznawia pierwotną sesję funkcji i wiąże przyszłe PR-y przez hooki. Zwykłe rozwiązywanie
+uwag nigdy nie włącza monitorowania. Zachowaj roboczy status PR-a; nigdy nie scalaj automatycznie.

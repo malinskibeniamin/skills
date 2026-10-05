@@ -50,6 +50,8 @@ type: skill
 4. 公开仓库（`gh repo view --json visibility`）：推送前，从提交、标题、正文和证据中清除内部组织、仓库、产品、人员名称及私有链接。
 5. 包含实际使用验证回执。重新阅读正文，验证审查者能否访问图片，并输出 URL。更新/重新打开 PR 时遵循相同的前置条件；编辑会使受影响的证据失效。
 
+若已启用自动审查，请[绑定原始会话](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)。
+
 除非用户明确要求，否则不要运行 `/visual-recap` 或 `/make-pr-easy-to-review`。
 
 ## 完成 [#completion]

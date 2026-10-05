@@ -41,7 +41,11 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 |---|---|
 | New, no reply | Process |
 | Addressed or pending decision | Skip |
-| Bot, approval, or CI-only | Drop |
+| Actionable automated review finding | Process like human feedback |
+| Approval, CI-only, or non-actionable summary | Drop |
+
+Inspect bot-only threads too; author type does not prove applicability. Paginate
+threads, comments, and reviews. Reply to non-applicable findings with evidence.
 
 If no new item remains, post `All feedback addressed` and stop.
 
@@ -66,13 +70,13 @@ the summary when the requested endpoint owns remediation.
 
 ### 6. Completeness Verification
 
-Before stopping, require zero unresolved non-bot, non-outdated threads and no stale
-`CHANGES_REQUESTED`. Any remainder loops back to triage. The
-`pr-feedback-completeness-stop` hook enforces this state.
+Before stopping: zero unresolved applicable, non-outdated threads; no stale
+`CHANGES_REQUESTED`. Triage any remainder. Enforced by `pr-feedback-completeness-stop`.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
+bash scripts/pr-unresolved-count.sh --include-bots  # automated review repair
 ```
 
 The first command must print `0`. The wrapper hides GraphQL-only thread resolution details.
@@ -86,3 +90,9 @@ Post one bullet per resolved root cause plus thread and CI state; consolidate du
 - AI self-review: stop when the inline review axis is approved or empty; cap at two rounds.
 - Human, cloud, or Copilot feedback: NO iteration cap. Address every thread before handoff;
   the completeness hook blocks unresolved threads or pending change requests.
+
+## Automatic wake-up
+
+Unattended repair: [opt-in setup](AUTO-REVIEW.md) resumes the original feature
+session; hooks bind future PRs. Ordinary resolution never enables watching.
+Keep drafts draft; never auto-merge.

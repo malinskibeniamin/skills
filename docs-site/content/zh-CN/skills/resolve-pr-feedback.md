@@ -40,7 +40,11 @@ type: skill
 |---|---|
 | 新反馈，无回复 | 处理 |
 | 已处理或等待决定 | 跳过 |
-| Bot、批准或仅 CI | 丢弃 |
+| 需要处理的自动审查发现 | 像人工反馈一样处理 |
+| 批准、仅 CI 或无需处理的摘要 | 丢弃 |
+
+也要检查只有机器人评论的线程；作者类型不能证明反馈适用。
+获取线程、评论和审查的所有分页。对于不适用的发现，应以证据回复。
 
 没有新项目时，发布 `All feedback addressed` 并停止。
 
@@ -58,11 +62,12 @@ type: skill
 
 ### 6. 完整性验证 [#6-completeness-verification]
 
-停止前必须没有未解决的非 Bot、非过期线程，且不存在陈旧 `CHANGES_REQUESTED`。任何剩余项都回到分类。`pr-feedback-completeness-stop` 钩子会强制此状态。
+停止前必须没有未解决的适用且未过期的线程，且不存在陈旧 `CHANGES_REQUESTED`。任何剩余项都回到分类。`pr-feedback-completeness-stop` 钩子会强制此状态。
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
+bash scripts/pr-unresolved-count.sh --include-bots  # 修复自动审查反馈
 ```
 
 第一条命令必须输出 `0`。该封装隐藏仅 GraphQL 可见的线程解决细节。
@@ -75,3 +80,9 @@ bash scripts/pr-unresolved-count.sh --verbose
 
 - AI 自审：行内审查轴获批或为空时停止，最多两轮。
 - 人工、云端或 Copilot 反馈：不设轮次上限。交接前处理每个线程；完整性钩子阻止遗留线程或待处理变更请求。
+
+## 自动唤醒 [#automatic-wake-up]
+
+无人值守地修复今后的反馈：[主动启用设置](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
+会恢复原始功能会话，并通过钩子绑定今后的 PR。普通反馈处理绝不会启用监视。
+保持草稿状态；绝不自动合并。

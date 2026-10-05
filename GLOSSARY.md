@@ -65,6 +65,17 @@ A browser or desktop-app session the person is actively using or has configured.
 verification uses an isolated session and never closes or takes over the human-owned one.
 _Avoid_: Browser automation session
 
+**PR review binding**:
+An opt-in, user-local association from a same-repository PR to its feature worktree,
+provider, and exact native session UUID. Automated review arrival resumes that owner;
+delivery is not proof that its findings were fixed.
+_Avoid_: Fresh repair agent, latest session, automatic merge
+
+**Trusted review trigger**:
+A new or edited comment/review by an explicitly allowed GitHub login. It wakes the
+owner to inspect all applicable feedback, not merely that author's findings.
+_Avoid_: Every bot, applicability verdict
+
 ## Example dialogue
 
 Dev: "CLI-only PR. Need visual review?"
