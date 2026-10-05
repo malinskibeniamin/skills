@@ -108,6 +108,13 @@ active CI remediation.
 - Keep deviations, current evidence, and pause triggers in
   `.context/implementation-notes.md` only for long or high-unknown work.
 
+## Selective workflow branches
+
+Keep ordinary tickets on the lifecycle -> TDD -> inline review -> requested delivery path. Suggest `/implement-spec` only for an approved multi-ticket spec with real blocker edges and independently verifiable work; the human must explicitly request delegation. Skill graduation and loading do not authorize parallel agents.
+
+Suggest `/retro` to the human when a review-heavy session exposes an environment gap, not as an automatic completion step. Trial one session: identify one missing or broken check, navigation pointer, or tool-access problem. On the next similar task, compare the same concrete failure or recovery steps; claim no improvement until observed. Existing checks win over new steering prose.
+
+
 ## Durable learning
 
 Add a path-scoped rule or regression eval only for a recurring, repository-specific

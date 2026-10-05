@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 You have been provided a spec. This spec should have tickets associated with it, describing how to implement the spec.
 
-Invoking this skill is the user's explicit request for delegation and parallel agents.
+Choose this for an approved spec with real blocker edges and independently verifiable tickets, not an ordinary single-ticket task. Invoking this skill is the user's explicit request for delegation and parallel agents; loading or mentioning it is not consent.
 
 If `CLAUDE.md` exists, read `CLAUDE.md` first; otherwise read `AGENTS.md`. Follow its Issue tracker pointer. If absent, tell the user to run `/work-automation-kit`.
 
