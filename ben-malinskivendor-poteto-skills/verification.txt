@@ -1,40 +1,60 @@
-Base: 0490ae875b893578f25b2138eefc2e705bab32d2
-Candidate: 2ed820a8a0e470964a73df08f22102c8735e9419
-Source pin: pstack 0.15.5 / 7022c81efb48d8b5eb15498ce6043a3bd74b694c
+Poteto vendoring verification — PR #193
+Base: 59988dc9a1107aeed41c77584de280d8e7df3a7f
+Candidate: b3b1b1a3cfd14fd53a2b7228ee663247fa5fdf38
+Upstream: cursor/plugins pstack 0.15.5 at 7022c81efb48d8b5eb15498ce6043a3bd74b694c
 
-CI defect: ask-ben pl/zh-CN/zh-TW catalogs stale (3 stale / 312 current).
-Repair: all 50 Poteto descriptions translated per locale; preserve 99 original rows.
-Validated source metadata + translation ledger; freshness 315 current.
+Scope / invariants
+50 skills, including Benny's three skills; 158 byte-exact upstream files;
+23 playbooks. Harness registrations: 99 -> 149. Native owners unchanged.
+Catalog: every locale 0 -> 50 Poteto rows. Router discloses full catalog
+on demand; no context budgets raised, no imports skipped.
+No automation, delegation, or host model/config changes activated.
 
-Native browser contract and screenshot runner:
- bunx --no-install playwright test --config .context/poteto-static.config.ts poteto-catalog.spec.ts --max-failures=3
-12 passed, no snapshot-update flags: en/pl/zh-CN/zh-TW x desktop light/dark + mobile light.
-Static build served via Python because normal Blume preview exceeded local startup timeout; repository screenshot runner and assertions unchanged.
-Before locale RED: expected 50 Poteto rows, got 0 in all 3 translated routes.
-New localized snapshots reviewed; inherited main export/chat controls account for intended English baseline refresh.
-Chinese router narration absent on exact base and candidate, unrelated to catalog rows.
-24 equivalent before/after captures: 0 -> 50 Poteto rows; all have zero page errors.
-Real paired video: type ask-ben -> open router -> language switch to Traditional Chinese -> scroll catalog.
-Playwright recording fallback after prior agent-browser daemon failures; HyperFrames composition + motion gate passed. Inline GIF fallback: signed-in GitHub video attachment unavailable.
+Browser evidence
+24 paired captures: en/pl/zh-CN/zh-TW x desktop light/dark + mobile light.
+Chromium, en-US, reduced motion, stable screenshot dates and voice fixture;
+1440x1000 desktop, 390x844 mobile. Every capture: expected row count and
+zero page errors. Reviewed English desktop, Polish mobile, Traditional
+Chinese dark; earlier paired review covered remaining affected states.
 
-bun install --frozen-lockfile: PASS
-bun run lint:fix: PASS
+Native regression command:
+bun run docs:test:browser --config ../.context/poteto-static.config.ts poteto-catalog.spec.ts
+Result: 12/12 pass, no snapshot-update flags. Uses actual built output
+served by Python because native Blume preview exceeded startup timeout.
+An initial Polish mobile narration-readiness failure passed on focused and
+full replay; no assertions or thresholds weakened.
+
+Live paired recording: search ask-ben -> open router -> Traditional Chinese
+-> scroll. Before 0 rows, after 50; both zero page errors. Isolated Playwright
+used after native agent-browser daemon failures; pr-video.sh compose passed
+motion/check gates and produced a 6.6-second MP4 + animated inline GIF.
+Signed-in GitHub attachment upload unavailable; GIF is the inline fallback.
+
+Verification
+bun run lint:fix: PASS, no fixes
 bun run type:check: PASS
-bun run format:check: PASS
-bun run test: 20 protocol + 4 docs version tests PASS (normal timeout)
-bun run docs:check: zero errors/warnings/hints
-bun run docs:build: PASS (candidate and exact isolated base)
-bun run docs:translate:check: 315 current
-All three generation guards: PASS
-python3 scripts/vendor-poteto.py --check: PASS
-/bin/bash evals/run.sh poteto-vendored-skills: 35 passed, includes 7 real CLI tests
-/bin/bash evals/run.sh packaging-integrity: 11 passed
-Initial real isolated Claude/Codex installations expose all 149 registered skills.
-CLI dogfood: full snapshot install -> check -> idempotent refresh -> retain native TDD -> reject local drift without data loss: PASS; affected CLI evals replayed after rebase.
+python3 scripts/vendor-poteto.py --check: PASS, all 158 hashes/modes
+python3 evals/test-poteto-sync.py: 8/8 PASS
+Three generation guards: hook configs, skill catalog, AGENTS
+Translation freshness: all 315 current
+Format check, docs check/build: PASS
+Protocol + docs-version tests: 20 + 4 PASS, normal timeout
+Docs source API tests: 2 PASS, covering disclosure and router/catalog dates
+Focused ask-ben / hygiene / writing / token budgets: 11 / 9 / 4 / 107 PASS
+Real isolated full-source install/check/idempotent refresh: PASS; native TDD
+unchanged, bounded descriptors, local drift rejected without data loss.
+Claude/Codex packaging installs expose 149 registered skills.
 
-Scope: 50 upstream skills, 158 files, 23 playbooks with preserved hashes/modes/license.
-No native owner overwritten. No live Benny automation/delegation/model switch enabled.
-Nested adapters/vendor add no hosted skill routes; archived catalogs unchanged.
+Local full shell suite: 5194 passed, 3 failed with native host variables.
+All affected inherited new-event-hooks + snyk-ux-security cases replayed with
+env -u CODEX_SESSION_ID -u CODEX_THREAD_ID: 201/201 PASS; no code changes.
+Hosted Linux full shell + behavioral suite: PASS on candidate SHA.
+macOS CI was still running at evidence publication; see final hosted checks:
+https://github.com/malinskibeniamin/skills/actions/runs/37257133625
 
-Unrelated broad visual drift was proven on older base in previous PR evidence, not bulk-updated. This receipt reports the 12 affected views, not the whole site.
-Final-head hosted checks: https://github.com/malinskibeniamin/skills/actions/runs/37053917455 (see current run result).
+Limits / merge contract
+Only affected catalogs covered visually, not the entire docs site.
+Live Benny/Cursor setup and automation integrations not enabled/exercised.
+User explicitly approved merging after hosted green CI using GitHub's
+expected-head SHA guard, accepting main's remaining unprotected base race.
+No admin bypass, branch deletion, policy changes, or production deployment.
