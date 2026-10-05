@@ -9,6 +9,9 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/tdd.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
 
 TDD 保护有意义的行为。对于领域规则、分支、状态、验证、异步副作用和集成契约，请使用红灯 -> 绿灯 -> 重构。类型、连接、文案和样式，以及保持行为不变的删除，可能只需运行针对性验证。覆盖率绝不是目标。
 

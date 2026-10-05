@@ -43,7 +43,7 @@ else
   ERRORS="$ERRORS\n  FAIL: mm rules missing fields: $incomplete"
 fi
 
-run_content_eval "$REPO_ROOT/review/SKILL.md" "\*\*mm hat\*\*" "review runs the mm value hat on every PR"
+run_content_eval "$REPO_ROOT/review/SKILL.md" 'Skill tool separately.*"mm".*hats inline' "review runs the mm value hat on every PR"
 run_content_eval "$REPO_ROOT/setup-routines/routines/pr-review.md" "apply the \`/mm\` skill" "PR-review routine runs the mm value hat"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"\./mm/\"" "mm is registered in the Claude plugin"
 

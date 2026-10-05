@@ -7,6 +7,7 @@ disable-model-invocation: true
 You have been provided a spec. This spec should have tickets associated with it, describing how to implement the spec.
 
 Choose this for an approved spec with real blocker edges and independently verifiable tickets, not an ordinary single-ticket task. Invoking this skill is the user's explicit request for delegation and parallel agents; loading or mentioning it is not consent.
+Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 If `CLAUDE.md` exists, read `CLAUDE.md` first; otherwise read `AGENTS.md`. Follow its Issue tracker pointer. If absent, tell the user to run `/work-automation-kit`.
 
@@ -28,15 +29,15 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
-   - builds the ticket with `/tdd`;
+   - Calls the Skill tool with "tdd" to build the ticket;
    - merges the integration branch tip into its own branch before reporting done, so step 5 is a fast-forward.
 
 5. Once an **implementer subagent** completes, merge its work to the integration branch with a **merger subagent**.
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once all tickets are complete, run `/review` on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
+7. Once all tickets are complete, Call the Skill tool with "review" on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
 
-8. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
+8. If a draft PR exists, keep it draft when that is the requested endpoint; otherwise mark it ready for review. Without a PR, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
 9. Clean up all **implementer subagent** worktrees.

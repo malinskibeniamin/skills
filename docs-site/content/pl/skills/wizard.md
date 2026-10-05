@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/wizard.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
 **Kreator** to skrypt bash, który prowadzi człowieka krok po kroku przez ręczną procedurę, uciążliwą zarówno do samodzielnego wykonania, jak i do ponownego wyjaśniania AI za każdym razem. Otwiera każdy adres URL, precyzyjnie wskazuje, co kliknąć i skopiować, przechwytuje wartości, zapisuje je we właściwych miejscach (`.env`, sekrety GitHub), prosi o potwierdzenie na każdym etapie i pokazuje, ile etapów pozostało. Może konfigurować usługi zewnętrzne, wykonywać jednorazową migrację lub przenosić projekt z jednego stanu do drugiego.
 
 Dopracowany UX zapewnia już [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) — postęp etap po etapie, punkty potwierdzenia, otwieranie adresów URL na różnych platformach (w tym WSL), ukryte wprowadzanie sekretów, idempotentne aktualizacje `.env`, zapisy przez `gh secret`/`gh variable` oraz podsumowanie końcowe. **Twoim jedynym zadaniem jest określenie zakresu procedury i przygotowanie jej etapów.** Biblioteka powyżej znacznika `STAGES` jest identyczna w każdym kreatorze — ta spójność jest zamierzona, dlatego nigdy nie edytuj jej ręcznie.

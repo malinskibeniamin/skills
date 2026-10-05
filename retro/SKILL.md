@@ -5,10 +5,12 @@ disable-model-invocation: true
 ---
 
 The user has asked for a **retrospective**. You are suggesting improvements to the coding agent's **environment** to improve future runs.
+Keep the retrospective read-only until the user selects candidates. Then apply only their selections; do not schedule or automate retrospective changes.
+Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies) on hosts without the Skill tool.
 
 ## Steps
 
-1. Use `/writing-for-agents` for the writing style guide. For hook telemetry alongside the session, use `/hook-audit --retro`.
+1. Call the Skill tool with "writing-for-agents" for the writing style guide. For hook telemetry alongside the session, call it separately with "hook-audit" and the `--retro` argument.
 
 2. Read the primary sources for the session the user specifies. This may mean searching through session logs on this machine. If the user doesn't specify a session, default to the current one.
 

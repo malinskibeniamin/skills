@@ -9,6 +9,10 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/triage.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
+使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
+
 透過小型角色狀態機移動問題。對於已配置的外部 PR，PR 是附帶程式碼的問題；透過跟蹤器解析裸編號。
 使用領域詞彙表和相關 ADR。透過 `/read-the-damn-docs` 閱讀當前外部文件；用 `/plan-arbiter` 仲裁競爭方案，用 `/visual-plan` 展示大型史詩。
 

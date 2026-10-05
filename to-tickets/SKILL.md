@@ -8,13 +8,14 @@ disable-model-invocation: true
 
 Turn an approved plan, spec, or conversation into independently verifiable vertical slices.
 If `CLAUDE.md` exists, read `CLAUDE.md` first; otherwise read `AGENTS.md`. Follow its Issue
-tracker pointer. If absent, use `/work-automation-kit` or its local fallback.
+tracker pointer. If absent, recommend `/work-automation-kit` to the human or use the local fallback.
+Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## 1. Gather
 
 Use existing conversation context. Fetch a supplied spec, issue, or URL with its complete
 body and comments. Explore only when current code and domain vocabulary are still unclear;
-respect the project glossary and ADRs. Prefer making the change easy before the easy change.
+respect `GLOSSARY.md` (via `GLOSSARY-MAP.md` when present) and ADRs. Make the change easy before the easy change.
 
 ## 2. Draft slices
 
@@ -30,8 +31,8 @@ the old; move callers in independently green batches; then delete the old form. 
 The contract is blocked by every migrate batch. If batches cannot
 stay green alone, use an integration branch and final integrate-and-verify ticket.
 
-Use `/plan-arbiter` when multiple graphs survive. Use `/visual-plan` for a large graph whose
-frontier or blockers need inspection.
+Call the Skill tool separately with "plan-arbiter" for competing graphs, "visual-plan" for large
+graphs whose frontier or blockers need inspection.
 
 ## 3. Confirm
 

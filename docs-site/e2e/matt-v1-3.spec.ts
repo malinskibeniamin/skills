@@ -17,6 +17,17 @@ const releaseSkills = [
   "development-lifecycle",
   "commit-push-pr",
   "implement-spec",
+  "retro",
+  "diagnosing-bugs",
+  "ask-ben",
+  "review",
+  "tdd",
+  "to-spec",
+  "to-tickets",
+  "wayfinder",
+  "codebase-design",
+  "wizard",
+  "handoff",
 ];
 const routes = [
   "/skills",
@@ -45,10 +56,11 @@ for (const route of routes) {
             .last(),
         ).toBeVisible();
       }
-      // Directory cards and short Chinese pages have no narratable body;
+      // Directory cards and table-only/short Chinese pages have no narratable body;
       // preserve their hidden playback state instead of forcing controls.
       const narratable =
-        route !== "/skills" && !/^\/zh-(CN|TW)\/skills\/wait-what$/.test(route);
+        route !== "/skills" &&
+        !/^\/zh-(CN|TW)\/skills\/(wait-what|ask-ben)$/.test(route);
       await stabilizeScreenshotDate(page, narratable);
       await expect(page).toHaveScreenshot(
         `${route.slice(1).replaceAll("/", "-")}-${viewport.name}.png`,

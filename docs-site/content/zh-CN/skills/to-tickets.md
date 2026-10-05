@@ -9,6 +9,10 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/to-tickets.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
+
 将已批准的计划、规格或对话变成可独立验证的纵向切片。
 若存在 `CLAUDE.md`，先读它；否则读 `AGENTS.md`。遵循其中的 Issue tracker 指针。缺失时使用 `/work-automation-kit` 或本地后备方案。
 

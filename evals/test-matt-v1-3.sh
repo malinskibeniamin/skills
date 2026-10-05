@@ -21,11 +21,11 @@ run_content_eval "$IMPLEMENT_SPEC" "single \*\*integration branch\*\*" "implemen
 run_content_eval "$IMPLEMENT_SPEC" "\*\*task graph\*\*.*\*\*frontier\*\*" "implement-spec works the ticket frontier"
 run_content_eval "$IMPLEMENT_SPEC" "after the first merge" "implement-spec opens a draft PR only after the first merge"
 run_content_eval "$IMPLEMENT_SPEC" "based on the integration branch" "implementers verify their integration base"
-run_content_eval "$IMPLEMENT_SPEC" "builds the ticket with \`/tdd\`" "implementers build through tdd"
+run_content_eval "$IMPLEMENT_SPEC" 'Calls? the Skill tool with "tdd"' "implementers build through tdd"
 run_content_eval "$IMPLEMENT_SPEC" "merges the integration branch tip" "implementers merge the integration tip first"
-run_content_eval "$IMPLEMENT_SPEC" "run \`/review\` on the integration branch" "implement-spec closes with review"
+run_content_eval "$IMPLEMENT_SPEC" 'Call the Skill tool with "review"' "implement-spec closes with review"
 run_content_eval "$IMPLEMENT_SPEC" "Follow its Issue tracker pointer" "implement-spec resolves the tracker from agent instructions"
-if grep -q "setup-matt-pocock-skills\|code-review\|Skill tool" "$IMPLEMENT_SPEC"; then
+if grep -q "setup-matt-pocock-skills\|code-review" "$IMPLEMENT_SPEC"; then
   echo "  FAIL  implement-spec uses harness skill names"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: implement-spec references upstream-only skills"
@@ -64,7 +64,7 @@ fi
 run_content_eval "$RETRO" "^disable-model-invocation: true$" "retro is user-invoked"
 run_content_eval "$RETRO" "Classify the violation first" "retro classifies mechanical versus judgement findings"
 run_content_eval "$RETRO" "no \*\*guardrail\*\*" "retro flags a repository without guardrails"
-run_content_eval "$RETRO" "/hook-audit --retro" "retro points to hook telemetry"
+run_content_eval "$RETRO" '"hook-audit".*`--retro`' "retro points to hook telemetry"
 run_content_eval "$REPO_ROOT/hook-audit/REFERENCE.md" "standalone \`/retro\` skill" "hook-audit retro points to the vendored skill"
 
 run_content_eval "$ASK_BEN" "/to-tickets\` \\(parallel: \`/implement-spec\`\\)" "ask-ben routes parallel ticket work"

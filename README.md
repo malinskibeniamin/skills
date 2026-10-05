@@ -382,7 +382,12 @@ agent-evals/capability-probes/run.sh --dry
 
 ## Credits and provenance
 
-Everything this harness uses from [mattpocock/skills](https://github.com/mattpocock/skills) is vendored locally -- nothing needs installing from the upstream repo. Vendored: `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `codebase-design`, `improve-codebase-architecture`, `domain-modeling`, `grilling`, `prototype`, `research` (v1.1.0 rewrite, restored on owner request), `teach` (slash-only, kept on owner request), `to-questionnaire`, `to-spec`, `to-tickets`, `wait-what`, `writing-for-agents`, `wayfinder`, `wizard`, and the v1.3 graduations `implement-spec`, `pr` (credited to Dex Horthy's `show-me`), and `retro`. Upstream-removed `resolving-merge-conflicts` is retired. Upstream skills judged dead, off-domain, superseded, or contradictory to this harness (obsidian-vault, scaffold-exercises, implement, loop-me, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code, edit-article, batch-grill-me, spawn) are not registered.
+Everything this harness uses from [mattpocock/skills](https://github.com/mattpocock/skills) is vendored locally -- nothing needs installing from the upstream repo. Vendored: `ask-ben`, `tdd`, `triage`, `diagnosing-bugs`, `handoff`, `codebase-design`, `improve-codebase-architecture`, `domain-modeling`, `grilling`, `prototype`, `research` (v1.1.0 rewrite, restored on owner request), `teach` (slash-only, kept on owner request), `to-questionnaire`, `to-spec`, `to-tickets`, `wait-what`, `writing-for-agents`, `wayfinder`, `wizard`, and the v1.3 graduations `implement-spec`, `pr` (credited to Dex Horthy's `show-me`), and `retro`. Reconciled against [v1.3.1](https://github.com/mattpocock/skills/releases/tag/v1.3.1), including explicit dependency loading and human-selected retrospectives. Upstream-removed `resolving-merge-conflicts` is retired. Upstream skills judged dead, off-domain, superseded, or contradictory to this harness (obsidian-vault, scaffold-exercises, implement, loop-me, migrate-to-shoehorn, setup-pre-commit, git-guardrails-claude-code, edit-article, batch-grill-me, spawn) are not registered.
+
+Existing domain docs must move with the skills update: `git mv CONTEXT.md GLOSSARY.md`
+and, when present, `git mv CONTEXT-MAP.md GLOSSARY-MAP.md`. Coordinate one commit across
+the team to avoid creating a second, empty glossary. Released documentation snapshots retain
+their historical filenames.
 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 

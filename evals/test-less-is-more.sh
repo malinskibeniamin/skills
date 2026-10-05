@@ -15,7 +15,7 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious|smallest clear" \
   "project rules require the smallest clear design from the start"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "demonstrated scale|current scale" \
   "lifecycle designs for known scale"
-run_content_eval "$REPO_ROOT/tdd/SKILL.md" "meaningful behavior|meaningful contract" \
+run_content_eval "$REPO_ROOT/tdd/SKILL.md" "meaningful behavior|meaningful contract|protects domain rules.*integration contracts" \
   "TDD protects meaningful behavior"
 run_content_eval "$REPO_ROOT/deslop/SKILL.md" "[Ff]allback" \
   "deslop is an explicit fallback"

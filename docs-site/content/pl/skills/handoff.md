@@ -11,6 +11,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/handoff.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
 Jeśli przekazanie służy do audytu pracy innego agenta, skieruj zadanie do `/agent-watchdog`. Jeśli przekazuje konkurencyjne plany, wskaż `/plan-arbiter` jako następną umiejętność.
 Utwórz zwięzły dokument przekazania, aby inny agent lub sesja mogli kontynuować pracę od tego miejsca.
 

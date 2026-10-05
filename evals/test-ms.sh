@@ -19,7 +19,7 @@ run_content_eval "$MS_DIR/RULES.md" "^\\| S \\| \`value-beneficiary\`" "ms catal
 run_content_eval "$MS_DIR/RULES.md" "accept-done-when" "ms catalog covers acceptance criteria"
 
 # Auto-review: /review and the PR pre-flight apply the ms hat on every PR.
-run_content_eval "$REPO_ROOT/review/SKILL.md" "ms/SKILL\\.md" "review applies the ms hat"
+run_content_eval "$REPO_ROOT/review/SKILL.md" 'Skill tool separately.*"ms".*hats inline' "review applies the ms hat"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "\`/ms\`" "PR pre-flight lists the ms axis"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "^- Lane:" "PR body template declares a lane"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"\\./ms/\"" "ms ships in the Claude plugin"

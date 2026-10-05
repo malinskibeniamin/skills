@@ -44,7 +44,7 @@ run_content_eval "$LD_SKILL" 'no P0/P1' "merge-ready requires a clean implementa
 
 # Auto-invocation: customer-facing reviews apply the hat, steelman knows the merge premise,
 # and the test-audit gate carries the frontend can-it-fail patterns.
-run_content_eval "$REPO_ROOT/review/SKILL.md" 'lie-detector hat.*lie-detector/SKILL\.md' \
+run_content_eval "$REPO_ROOT/review/SKILL.md" 'Skill tool separately.*"lie-detector".*hats inline' \
   "review applies the lie-detector hat"
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" '^Truth: lie-detector:' \
   "review receipt carries the lie-detector verdict"

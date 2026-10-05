@@ -22,7 +22,7 @@ run_content_eval "$JB_SKILL" 'falsifiable' "jb escalates missing acceptance crit
 run_content_eval "$JB_SKILL" '[Dd]efault to approv' "jb keeps an approve-by-default posture"
 
 # Auto-invocation: every PR review and the PR review routine apply the hat.
-run_content_eval "$REPO_ROOT/review/SKILL.md" 'jb hat.*jb/SKILL\.md' \
+run_content_eval "$REPO_ROOT/review/SKILL.md" 'Skill tool separately.*"jb".*hats inline' \
   "review applies the jb hat on every PR"
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" '^Value: jb:' \
   "review receipt carries the jb verdict"

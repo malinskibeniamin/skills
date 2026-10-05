@@ -4,6 +4,7 @@ description: Design deep modules with small interfaces. Use when choosing seams,
 ---
 
 Design **deep modules**: substantial behavior behind a small interface at a clean seam, testable through that interface. Optimize caller leverage, maintainer locality, and testability.
+Use `GLOSSARY.md` terms, via `GLOSSARY-MAP.md` when present; respect ADRs.
 
 Depth must improve semantic density now. No modules, seams, adapters, or interfaces for hypothetical reuse. A design wins only when it removes more caller knowledge/coordination than it adds.
 
@@ -43,7 +44,7 @@ Ask whether methods/parameters can shrink and more complexity can hide.
 2. Return results; minimize ambient side effects.
 3. Keep methods/parameters few and invariants clear.
 
-When two designs survive deletion, use `/plan-arbiter` on depth, locality, test surface, and rollback.
+When two designs survive deletion, Call the Skill tool with "plan-arbiter": depth, locality, test surface, rollback. Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 Relationships: Module has one Interface; Depth is measured against it; Seam hosts it; Adapter satisfies it; Depth creates Leverage and Locality.
 

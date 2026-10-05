@@ -11,7 +11,7 @@ Default to an ephemeral scratch or `scripts/` file deleted after use. Commit onl
 
 ## 1. Scope
 
-Read the repo before asking. For third-party UI, URLs, scopes, secrets, or commands, run `/read-the-damn-docs`.
+Read the repo before asking. For third-party UI, URLs, scopes, secrets, commands: Call the Skill tool with "read-the-damn-docs". Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 - Setup: inspect `.env*`, README, compose files, framework config, and every `.github/workflows/*` `secrets.*`/`vars.*` reference.
 - Migration/cutover: map current state, target state, and irreversible actions.

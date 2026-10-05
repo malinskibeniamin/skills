@@ -5,7 +5,7 @@ argument-hint: What should the next session focus on?
 disable-model-invocation: true
 ---
 
-For auditing another run use `/agent-watchdog`; for competing plans suggest `/plan-arbiter`. Create only continuation context.
+Call the Skill tool separately: "agent-watchdog" audits another run; "plan-arbiter" compares plans. Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Continuation context only.
 
 ## Procedure
 

@@ -9,6 +9,10 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/diagnosing-bugs.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
+使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
+
 針對疑難錯誤的嚴謹方法。只有在說明理由時才能略過階段。使用領域詞彙表與 ADR；
 若涉及第三方/API/版本漂移，請先執行 `/read-the-damn-docs`，再排列假設的優先順序。
 
@@ -113,7 +117,7 @@ sidebar:
 4. 確認測試通過。
 5. 執行 `/dogfood` 以重播完全相同的使用者重現流程，再重新執行階段 1 原始且未最小化的迴圈。
 
-## 階段 6 -- 清理 + 事後檢討
+## 階段 6 -- 清理
 在宣布診斷完成前，完成每一項：
 
 - [ ] `/dogfood` 確認完全相同的使用者重現流程不再重現問題；階段 1 的迴圈也通過
@@ -121,7 +125,3 @@ sidebar:
 - [ ] 已移除所有 `[DEBUG-...]` 檢測程式碼（使用 `grep` 搜尋前綴）
 - [ ] 已刪除拋棄式原型（或移至明確標示的偵錯位置）
 - [ ] 在提交 / PR 訊息中陳述最終證實正確的假設 -- 讓下一位偵錯人員能從中學習
-
-接著詢問如何避免問題再次發生。如果答案是架構變更，請將
-具體的接縫或耦合問題交給 `/improve-codebase-architecture`。在根本原因
-修正後、證據最充分時提出建議。

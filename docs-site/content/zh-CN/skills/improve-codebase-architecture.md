@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/improve-codebase-architecture.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
 寻找能让整类错误无法发生的架构变更。深化设计，而不是仅仅增加另一项检查或回归测试。
 
 此技能仅适用于架构。通用审计、待办事项、正确性、安全性、性能、依赖项或文档工作属于 `/improve`。实现工作属于 `/development-lifecycle`；此工作流保持只读。

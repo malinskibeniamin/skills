@@ -9,12 +9,15 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/retro.excalidraw)
 
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Retrospektywa pozostaje tylko do odczytu, dopóki użytkownik nie wybierze propozycji. Następnie zastosuj tylko wybrane zmiany; nie planuj ani nie automatyzuj zmian z retrospektywy.
 
 Użytkownik poprosił o **retrospektywę**. Proponujesz ulepszenia **środowiska** agenta programistycznego, aby usprawnić przyszłe przebiegi.
 
 ## Kroki
 
-1. Użyj `/writing-for-agents` jako przewodnika stylu pisania. Aby uzyskać telemetrię hooków obok sesji, użyj `/hook-audit --retro`.
+1. Wywołaj narzędzie Skill z "writing-for-agents", aby załadować przewodnik stylu pisania. Dla telemetrii hooków wywołaj je osobno z "hook-audit" i argumentem `--retro`.
 
 2. Przeczytaj źródła pierwotne sesji wskazanej przez użytkownika. Może to oznaczać przeszukanie logów sesji na tym komputerze. Jeśli użytkownik nie wskaże sesji, domyślnie użyj bieżącej.
 

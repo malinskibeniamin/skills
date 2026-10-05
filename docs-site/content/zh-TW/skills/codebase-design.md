@@ -9,6 +9,9 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/codebase-design.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
+使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
 
 設計**深層模組**：在清楚的接縫上，以小型介面封裝大量行為，並可透過該介面進行測試。目標是為呼叫端提供槓桿效益、為維護者提升局部性，並提高可測試性。
 

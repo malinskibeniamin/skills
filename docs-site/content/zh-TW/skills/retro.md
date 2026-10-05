@@ -9,12 +9,15 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/retro.excalidraw)
 
+當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
+
+在使用者選擇候選改善項目之前，回顧僅進行唯讀分析。之後只套用使用者選中的修改；不要排程或自動執行回顧修改。
 
 使用者要求進行一次**回顧**。你要為程式開發代理程式的**環境**提出改進建議，以改善未來的執行。
 
 ## 步驟
 
-1. 使用 `/writing-for-agents` 作為寫作風格指南。若要搭配工作階段查看鉤子遙測資料，請使用 `/hook-audit --retro`。
+1. 呼叫 Skill 工具並傳入 "writing-for-agents"，載入寫作風格指南。若要搭配工作階段查看鉤子遙測資料，請單獨傳入 "hook-audit" 和 `--retro` 引數呼叫該工具。
 
 2. 閱讀使用者指定工作階段的第一手資料。這可能需要搜尋本機上的工作階段記錄。若使用者未指定工作階段，預設使用目前的工作階段。
 

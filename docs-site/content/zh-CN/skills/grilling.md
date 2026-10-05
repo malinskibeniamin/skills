@@ -9,6 +9,7 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/grilling.excalidraw)
 
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
 
 盘问旨在解决影响重大的未知因素，而不是要求明确每个细节。在盘问期间，只要存在由用户保留决定权的重大决策，就不得编写生产代码或进行实现。调用此技能并不代表授权委派任务。
 

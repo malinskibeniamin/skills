@@ -30,7 +30,7 @@ run_file_eval "$SKILL_DIR/tests.md" "tests.md exists (good vs bad test philosoph
 run_file_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "property-based testing guide exists"
 run_content_eval "$SKILL_DIR/SKILL.md" "tests\\.md" "SKILL.md links to tests.md"
 run_content_eval "$SKILL_DIR/SKILL.md" "PROPERTY-BASED-TESTING\\.md" "SKILL.md routes high-leverage properties to the guide"
-run_content_eval "$SKILL_DIR/SKILL.md" "domain glossary" "SKILL.md references project domain glossary"
+run_content_eval "$SKILL_DIR/SKILL.md" "GLOSSARY\.md" "SKILL.md references the published project glossary"
 run_content_eval "$SKILL_DIR/SKILL.md" "ADRs" "SKILL.md references ADRs"
 run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN.*REFACTOR" "SKILL.md has TDD cycle"
 run_content_eval "$SKILL_DIR/SKILL.md" "language.*platform.*installed dependency|installed dependency.*platform" "GREEN phase prefers existing capabilities"

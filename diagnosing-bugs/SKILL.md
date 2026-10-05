@@ -4,7 +4,8 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 ---
 
 # Diagnosing Bugs
-Discipline for hard bugs. Skip a phase only with reason. Use the domain glossary and ADRs; for third-party, API, or version drift, run `/read-the-damn-docs` before ranking hypotheses.
+Discipline for hard bugs. Skip a phase only with reason. Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and ADRs; for third-party, API, or version drift, Call the Skill tool with "read-the-damn-docs" before ranking hypotheses.
+Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Redact
 This skill exposes commands, output, and captured artifacts. Replace every secret with `<REDACTED>`.
@@ -49,7 +50,7 @@ Phase 1 ends only when you can name one command already run at least once, with 
 No red-capable command, no Phase 2.
 
 ## Phase 2 -- Reproduce + minimise
-Run the loop, then `/dogfood` the reporter's real entrypoint. Confirm:
+Run the loop; Call the Skill tool with "dogfood" at the reporter's real entrypoint. Confirm:
 
 - The loop produces the failure the user described, not a nearby failure.
 - It reproduces across multiple runs, or often enough to debug.
@@ -85,9 +86,9 @@ exists, record that architecture gap. Otherwise:
 1. Turn the minimised reproduction into a failing test and observe RED.
 2. Apply the smallest root-cause fix and observe GREEN.
 3. Run related checks.
-4. `/dogfood` the identical user journey, then re-run the original unminimised Phase 1 loop.
+4. Call the Skill tool with "dogfood" for the identical user journey, then re-run the original unminimised Phase 1 loop.
 
-## Phase 6 -- Cleanup + post-mortem
+## Phase 6 -- Cleanup
 Complete every item before declaring the diagnosis done:
 
 - `/dogfood` confirms the exact user reproduction no longer fails; the original loop passes.
@@ -95,6 +96,3 @@ Complete every item before declaring the diagnosis done:
 - All debug instrumentation is removed; grep the unique prefix.
 - Throwaway artifacts are deleted or clearly isolated.
 - The proven root cause is recorded in the commit or PR.
-
-Ask what would prevent recurrence. After the root-cause fix, send a proven seam or coupling
-problem to `/improve-codebase-architecture`.
