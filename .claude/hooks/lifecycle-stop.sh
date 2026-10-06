@@ -1,10 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-# Escape hatch: when Claude is already responding to a Stop block, do not
-# block again -- prevents infinite hostage loops (audit cluster 1).
-_sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then exit 0; fi
-
+input=$(cat)
 
 # Stop hook: enforce the delivery endpoint resolved from the user's request.
 # Ordinary action work defaults to push; explicit local/no-delivery intent stops locally.
@@ -17,19 +14,28 @@ _sha_in=$(cat); if printf '%s' "$_sha_in" | jq -e '.stop_hook_active == true' >/
 #   All pass → allow finish
 
 source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
+_hook_input="$input"
+hook_adopt_stdin_session
 
 # ── Quick exits (most sessions hit one of these) ────────────────
-
-# Need session tracking to know what we changed
-if ! hook_has_session_tracking 2>/dev/null; then
-  exit 0
-fi
 
 endpoint=$(cat "$_hook_session_dir/task-endpoint" 2>/dev/null | tr -d '[:space:]')
 case "$endpoint" in
   commit|push|pr|ship) ;;
   *) exit 0 ;;
 esac
+
+# A real blocker or reserved decision may end an incomplete turn. A corrected
+# Stop event still owes delivery; stop_hook_active alone is not proof of it.
+last_line=$(printf '%s' "$input" | jq -r '.last_assistant_message // empty' 2>/dev/null \
+  | awk 'NF { line=$0 } END { print line }' || true)
+case "$last_line" in
+  "🔴 blocked — "*|"🟡 awaiting decision — "*) exit 0 ;;
+esac
+
+# Missing delivery is a hard completion failure, not a soft quality reminder.
+# The explicit incomplete statuses above remain the escape for real blockers.
+HOOK_STOP_BLOCK_CAP_GUARD=0
 
 branch=$(git branch --show-current 2>/dev/null || true)
 case "$branch" in
@@ -46,6 +52,9 @@ esac
 _session_dirty=$(hook_session_changed_files)
 if [ -n "$_session_dirty" ]; then
   _dirty_count=$(echo "$_session_dirty" | wc -l | tr -d ' ')
+  if ! hook_has_session_tracking; then
+    hook_stop_block "${_dirty_count} uncommitted file(s) without ownership tracking. Identify and commit only the requested scope; preserve unrelated work. If ownership is unclear, report the reserved decision instead of completion."
+  fi
   hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Commit the requested scope, then retry."
 fi
 
@@ -82,6 +91,25 @@ fi
 if [ -n "$unpushed" ]; then
   _count=$(echo "$unpushed" | wc -l | tr -d ' ')
   hook_stop_block "${_count} unpushed on '$branch'. Run: git push -u origin $branch — then retry."
+fi
+
+# Cached origin refs can survive a failed push or remote branch deletion.
+# Confirm the actual remote head before treating delivery as complete.
+remote_status=0
+remote_ref=$(git ls-remote --exit-code origin "refs/heads/$branch" 2>/dev/null) \
+  || remote_status=$?
+case "$remote_status" in
+  0) ;;
+  2)
+    hook_stop_block "Branch '$branch' is not published. Run: git push -u origin $branch — then retry."
+    ;;
+  *)
+    hook_stop_block "Cannot verify origin for '$branch'. Resolve remote access and retry, or report the external blocker with 🔴 blocked —; do not claim delivery complete."
+    ;;
+esac
+remote_head=$(printf '%s' "$remote_ref" | awk '{print $1}')
+if [ "$remote_head" != "$(git rev-parse HEAD)" ]; then
+  hook_stop_block "Remote head for '$branch' does not match HEAD. Fetch and reconcile the current feature branch, then push the requested scope and retry. Preserve foreign or concurrent remote commits."
 fi
 
 if [ "$endpoint" = "push" ]; then

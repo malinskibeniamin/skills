@@ -33,22 +33,23 @@ Trivial/single-path output: linear.
 The requested endpoint owns scope:
 
 - Answer, explain, plan, review: return the artifact; do not edit.
-- Build, fix, implement: concise plan, continue, verify, commit, and push the current
-  user-owned feature branch unless the user explicitly requests a local or earlier stop.
+- Build, fix, implement: plan, continue, verify, commit, push the current user-owned
+  feature branch unless explicitly told to stop earlier.
 - Commit: commit only. Push: commit if needed, then push. PR: verify, commit, push, open
   via `/commit-push-pr`, take one CI snapshot. Ship or `/go`: run the full delivery loop.
 
-Earlier stop wins. Ask only for a material user-reserved decision or irreversible production,
-legal/privacy, destructive, or high-security action; otherwise use reversible assumptions.
+Earlier stop wins. Ask only for user-reserved or irreversible production,
+legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
 Routine work may commit, push, or rebase the current user-owned feature branch
-without another permission prompt; push each CI fix or rebase now
-(rebase: `--force-with-lease`).
-Never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently owned
-branch without explicit permission.
+without another permission prompt; push each CI fix or rebase now (`--force-with-lease`).
+Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
+without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session to deliver that branch; fix endpoint state and continue.
+a session; recover endpoint state and continue.
 When branch has a PR, keep follow-up waves in the current PR.
-Draft PRs at the requested endpoint need no approval.
+Draft PRs need no approval.
+For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
+origin, or report a genuine external blocker.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.

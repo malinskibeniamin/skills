@@ -46,6 +46,12 @@ while IFS= read -r script; do
   [ -n "$script" ] || continue
 
   case "$script" in
+    lifecycle-stop.sh)
+      case "$endpoint" in
+        commit|push|pr|ship) ;;
+        *) continue ;;
+      esac
+      ;;
     pr-feedback-completeness-stop.sh)
       if [ "${PR_FEEDBACK_SCOPE:-0}" != "1" ] && [ "$endpoint" != "pr" ] && [ "$endpoint" != "ship" ] \
         && { [ -z "$session_dir" ] || [ ! -f "$session_dir/pr-feedback-active" ]; }; then
@@ -54,7 +60,7 @@ while IFS= read -r script; do
       ;;
     biome-autofix.sh | typecheck-stop.sh | react-doctor-stop.sh | registry-check.sh | \
       orchestration-stop.sh | test-perf-stop.sh | quality-gate-stop.sh | dogfood-stop.sh | \
-      lifecycle-stop.sh | suppression-gate-stop.sh)
+      suppression-gate-stop.sh)
       [ "$has_changes" = "1" ] || continue
       ;;
   esac
@@ -79,6 +85,9 @@ while IFS= read -r script; do
 done < <(jq -r '."x-stop-dispatch"[] | if type == "object" then .script else . end' "$manifest")
 
 if [ -s "$blocks" ]; then
+  # Completion runs alongside the other checks; a status line cannot release
+  # the endpoint while another check still rejects the turn.
+  [ -n "$session_dir" ] && rm -f "$session_dir/task-completed"
   message=$(cat "$blocks")
   jq -n --arg message "$message" '{suppressOutput:true,systemMessage:$message}' >&2
   exit 2
