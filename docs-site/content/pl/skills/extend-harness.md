@@ -1,11 +1,19 @@
 ---
-title: /extend-harness
 description: >-
-  Rozszerzaj i debuguj infrastrukturę hooków frontend-skills, reguły, poziomy
-  istotności oraz analitykę.
-type: skill
+  Rozszerzaj mechanizm: reguły powłoki, mody Claude Code, poziomy istotności i
+  analityka.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - extend harness
 sidebar:
   label: /extend-harness
+title: /extend-harness
+type: skill
 ---
 ![Diagram umiejętności /extend-harness](/diagrams/skills/extend-harness.svg)
 
@@ -15,7 +23,9 @@ Edytuj manifesty i biblioteki źródłowe, nigdy wygenerowane konfiguracje. Prze
 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/REFERENCE.md), aby poznać poziomy istotności, opcje manifestu, kontrakty parserów oraz
 sposoby debugowania.
 
-## Dodawanie reguły
+Mody Claude Code: [MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md). Reguły egzekwowane we wszystkich środowiskach pozostają w hookach ustawień.
+
+## Dodawanie reguły [#add-rule]
 
 1. Sprawdź, czy można ją wyrazić za pomocą Biome lub Ultracite. Używaj hooków tylko do reguł obejmujących wiele elementów,
    plików lub przepływów pracy oraz reguł zachowania agentów.
@@ -28,15 +38,14 @@ sposoby debugowania.
 
 ```bash
 bash scripts/generate-hook-configs.sh --apply
-echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' |
-  bash .claude/hooks/my-check.sh
+echo '{"hook_event_name":"PostToolUse","tool_name":"Edit","tool_input":{"file_path":"/tmp/x.ts"}}' | bash .claude/hooks/my-check.sh
 ```
 
 Używaj `hook_warn` dla reguł stylistycznych, `hook_block` dla poprawności, `hook_block_strict` dla
 reguł krytycznych dla bezpieczeństwa, a `hook_info` do obserwacji. Preferuj hooki ograniczone do umiejętności, gdy
 reguła jest potrzebna tylko w jednym obszarze funkcjonalnym.
 
-## Wybór implementacji
+## Wybór implementacji [#implementation]
 
 - Wpisy filtrowane według uprawnień lub asynchroniczne definiuj jako obiekty manifestu; zachowaj kontrolę standardowego wejścia
   w każdym skrypcie, ponieważ Codex pomija filtry przeznaczone wyłącznie dla Claude.
@@ -44,14 +53,14 @@ reguła jest potrzebna tylko w jednym obszarze funkcjonalnym.
   ocenę strukturalną pozostaw do przeglądu; unikaj zawodnego wielowierszowego wyszukiwania za pomocą grep.
 - Synchronizuj zakazy dotyczące narzędzi z `hooks/frontend-skills.rules`.
 
-## Audyt lub debugowanie
+## Audyt lub debugowanie [#auditdebug]
 
 - Uruchom `/hook-audit --all`, aby sprawdzić opóźnienia, uruchamianie hooków i kandydatów z zerową liczbą uruchomień.
 - W przypadku brakującego hooka uruchom `HOOK_DEBUG=1 HOOKS_FAIL_CLOSED=1 claude`.
 - Użyj `claude --safe-mode`, aby odizolować rozszerzenia.
 - Uznawaj wykryte przez `/doctor` opóźnienia za przekroczenia budżetu P95.
 
-## Kryteria ukończenia
+## Kryteria ukończenia [#done]
 
 - `skill-manifest.json` definiuje regułę i mechanizm dopasowania.
 - Skrypt jest wykonywalny, ładuje `_hook-lib.sh`, analizuje standardowe wejście, filtruje ścieżki oraz
