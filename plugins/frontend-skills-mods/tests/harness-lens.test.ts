@@ -25,6 +25,7 @@ describe("harness lens", () => {
   test("context updates after a main-loop turn on both surfaces", async ($, on) => {
     let tokens = 36_000;
     on("session.start", (_$, e) => ({ cwd: e.cwd }));
+    on("command.register", (_$, e) => ({ value: { command: e.name } }));
     on("session.usage", () => ({
       value: {
         startedAt: 0,
@@ -71,6 +72,7 @@ describe("harness lens", () => {
   });
   test("only successful main-loop Skill calls change the readout", async ($, on) => {
     on("session.start", (_$, e) => ({ cwd: e.cwd }));
+    on("command.register", (_$, e) => ({ value: { command: e.name } }));
     on("session.usage", () => ({
       value: {
         startedAt: 0,
@@ -144,6 +146,7 @@ describe("harness lens", () => {
     let available = true;
     let tokens: number | undefined = 40_000;
     on("session.start", (_$, e) => ({ cwd: e.cwd }));
+    on("command.register", (_$, e) => ({ value: { command: e.name } }));
     on("session.usage", () =>
       available
         ? {

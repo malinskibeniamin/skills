@@ -61,10 +61,13 @@ On **Claude Code 2.1.287 or later**, add the separate `frontend-skills-mods` plu
 /reload-plugins
 ```
 
-**Harness lens** adds context usage and the latest successful main-loop `Skill` tool
-call above the prompt in the CLI and Desktop app. It reports observations, not an
-"active skill" or proof that Claude followed a skill. Missing usage is visibly
-unavailable; surveys, narrow bands and subagent views keep their existing output.
+**Harness desk** adds `/harness proof` (check receipts), `/harness skills` (Skill
+Flight Recorder) and `/harness replay` (successful returned edit patches) in one
+native pane. Context and last-skill readouts remain above the prompt. Observations
+are not skill adherence or release certification; stale/unavailable comparisons
+and missing dogfood/visual evidence stay explicit. Git comparison is read-only;
+replay is bounded session memory with best-effort secret exclusions, not undo.
+Live terminal/Desktop painting and before/after captures remain unverified.
 
 Existing `frontend-skills` shell hooks and Codex installs stay unchanged. Mods have
 Claude Code's access to your machine: install only trusted code, including when a

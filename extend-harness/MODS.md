@@ -3,7 +3,7 @@
 Use for Claude-native session behavior, commands or interface rendering. Keep
 cross-runtime enforcement in existing settings hooks; a mod is not a portable
 replacement for them. The opt-in `frontend-skills-mods` plugin demonstrates the
-boundary with Harness lens. Tested host: **Claude Code 2.1.287**; older versions
+boundary with Harness desk and its context lens. Tested host: **Claude Code 2.1.287**; older versions
 cannot load mods. Early-access API drift requires checking the target build.
 
 ## Contract -> implementation -> proof
@@ -44,3 +44,29 @@ allowed, unsupported and recovery-path tests before replacing a guard.
 [test-kit](https://code.claude.com/docs/en/plugins/mods/test) docs are the authoring
 references. Browse [official samples](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods)
 for inspiration, not as authority over your generated host types.
+
+## First-wave ownership
+
+One `/harness` command and pane own proof, skills and replay; keep the context
+band small rather than stacking competing sample bands. The shipped implementations
+observe downstream results, never approve or rewrite tools.
+
+- Proof receipts recognize exact foreground main-loop checks. Read-only Git
+  comparisons are bounded and explicitly stale/unverified when insufficient;
+  they do not certify a release or infer visual/dogfood evidence.
+- Skill history records tool outcomes and provenance, not adherence, installed
+  versions or reference reads. A background fork is launch evidence only.
+- Replay consumes successful, non-staged returned `Edit`/`Write` patches, not
+  pre-tool snapshots. Retention and control-character handling are bounded;
+  sensitive exclusion is best effort, not a secret-security guarantee. No undo.
+
+This is repo-owned code inspired by the samples, not a vendored upstream copy.
+If copying sample code later, pin its commit and retain its license/notices.
+The [mod README](../plugins/frontend-skills-mods/README.md) owns operational
+limits and rollback. Add $-using helpers inside the registered hooks module:
+passing `$` to a helper imported from another module is unsupported by this host.
+Pure helpers may be shared. The manifest's types contract must be self-contained:
+no imports or re-exports; host types such as `StateFamily` resolve inside its
+`declare module "claude-code"` block. Register each event/matcher once; extend an existing
+handler rather than duplicating it. Native op mocks return `{ value: ... }`;
+tests must exercise the generated target-build contract, not a guessed adapter.

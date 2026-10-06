@@ -66,8 +66,8 @@
     },
     {
       "name": "frontend-skills-mods",
-      "description": "Opt-in Claude Code mods: context usage and latest successful main-loop skill call above the prompt. Requires Claude Code 2.1.287 or later; keeps shell enforcement and Codex unchanged.",
-      "version": "0.1.0",
+      "description": "Opt-in Claude Code harness desk: verification receipts, Skill flight recorder, safe edit replay and context readout. Requires Claude Code 2.1.287 or later; shell enforcement and Codex unchanged.",
+      "version": "0.2.0",
       "source": "./plugins/frontend-skills-mods"
     }
   ]

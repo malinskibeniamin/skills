@@ -1,8 +1,10 @@
 {
   "name": "frontend-skills-mods",
-  "version": "0.1.0",
-  "description": "Opt-in Claude Code session readout for context usage and observed skill calls. Requires Claude Code 2.1.287 or later.",
-  "author": { "name": "Beniamin Malinski" },
+  "version": "0.2.0",
+  "description": "Opt-in Claude Code harness desk: verification receipts, Skill flight recorder, safe edit replay and context readout. Requires Claude Code 2.1.287 or later.",
+  "author": {
+    "name": "Beniamin Malinski"
+  },
   "license": "MIT",
   "types": "./types/index.d.ts"
 }
