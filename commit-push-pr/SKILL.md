@@ -10,7 +10,7 @@ Merge only on explicit request: [contract](references/merge.md).
 
 ## Preflight
 
-1. Inspect status/diff/branch/log/PR; before rebase use [pre-rebase check](REFERENCE.md#pre-rebase-check).
+1. Check status/diff/branch/log/PR; push/PR [auto-rebase](REFERENCE.md#automatic-rebase) behind owned PRs.
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
 3. Push/PR needs a remote; PR needs authenticated `gh` and base.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
