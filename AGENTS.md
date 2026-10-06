@@ -64,7 +64,7 @@ For any PR, include its full PR URL on the final status line.
 
 ## Work
 
-Outcome contract:
+One outcome contract:
 
 - **Objective** -- high-level end state.
 - **Guardrails** -- non-inferable constraints and reserved decisions.
