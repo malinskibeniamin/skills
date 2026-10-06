@@ -14,7 +14,7 @@
       .panel video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; }
       .left { left: 40px; }
       .right { left: 980px; }
-      .chip { position: absolute; top: 124px; padding: 8px 20px; border-radius: 999px; font-size: 28px; font-weight: 700; }
+      .chip { position: absolute; top: 116px; width: 900px; box-sizing: border-box; padding: 8px 20px; border-radius: 12px; font-size: 26px; line-height: 28px; font-weight: 700; word-break: break-all; }
       #before-chip { left: 40px; background: #475569; }
       #after-chip { left: 980px; background: #2563eb; }
       .caption { position: absolute; top: 720px; width: 900px; height: 96px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: #111827; font-size: 36px; font-weight: 600; }
@@ -24,8 +24,8 @@
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="880" data-duration="__DURATION__">
       <div id="title">__TITLE__</div>
-      <div id="before-chip" class="chip">Before</div>
-      <div id="after-chip" class="chip">After</div>
+      <div id="before-chip" class="chip">__BEFORE_LABEL__</div>
+      <div id="after-chip" class="chip">__AFTER_LABEL__</div>
       <div class="panel left">
         <video id="before-video" src="assets/before.mp4" data-start="0" data-duration="__DURATION__" muted playsinline></video>
       </div>

@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import {
   copyFileSync,
+  existsSync,
   mkdtempSync,
   mkdirSync,
   readFileSync,
@@ -195,7 +196,7 @@ function composeFixture(version: string) {
     JSON.stringify({ devDependencies: { hyperframes: version } }),
   );
   for (const side of ["before", "after"]) {
-    writeFileSync(join(root, `${side}.webm`), "recording");
+    writeFileSync(join(root, `${side}.webm`), `${side} recording`);
     writeFileSync(
       join(root, `${side}.webm.steps.json`),
       JSON.stringify({
@@ -206,13 +207,15 @@ function composeFixture(version: string) {
   }
   // Only external tools are substituted. Exercise the real compose entrypoint.
   const fake = `#!${process.execPath}
-import { appendFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { basename } from "node:path";
 const tool = basename(process.argv[1]);
 const args = process.argv.slice(2);
 if (tool === "ffprobe") console.log("2");
 else if (tool === "ffmpeg") {
-  if (args.at(-1) === "-") console.error("frame= 12");
+  if (args.includes("hash")) console.log("SHA256=" + createHash("sha256").update(readFileSync(args[args.indexOf("-i") + 1])).digest("hex"));
+  else if (args.at(-1) === "-") console.error("frame= 12");
   else writeFileSync(args.at(-1), "video");
 } else {
   appendFileSync(process.env.CALLS, JSON.stringify(args) + "\\n");
@@ -225,7 +228,7 @@ else if (tool === "ffmpeg") {
     writeFileSync(join(bin, tool), fake, { mode: 0o755 });
   }
   const calls = join(root, "calls.jsonl");
-  const run = (failRender = false) =>
+  const run = (failRender = false, overrides: Record<string, string> = {}) =>
     Bun.spawnSync(
       [
         "bash",
@@ -242,6 +245,10 @@ else if (tool === "ffmpeg") {
           CALLS: calls,
           FAIL_RENDER: failRender ? "1" : "0",
           PR_VIDEO_RENDERER: "hyperframes",
+          PR_VIDEO_BEFORE_LABEL: "Previous: save silently",
+          PR_VIDEO_AFTER_LABEL: "New: confirmation shown",
+          PR_VIDEO_FOCUS: "",
+          ...overrides,
         },
       },
     );
@@ -274,6 +281,64 @@ test("compose uses the manifest pin and delivery quality, returning MP4 first", 
     join(root, "out/before-after.mp4"),
     join(root, "out/before-after.gif"),
   ]);
+});
+
+test("rejects duplicate recordings instead of presenting them as a change", () => {
+  const { root, run } = composeFixture("0.8.123");
+  copyFileSync(join(root, "before.webm"), join(root, "after.webm"));
+
+  const result = run();
+
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain("duplicate");
+  expect(existsSync(join(root, "out/before-after.mp4"))).toBe(false);
+});
+
+test("frames the concrete previous and new behavior, safely escaping labels", () => {
+  const { root, run } = composeFixture("0.8.123");
+  const result = run(false, {
+    PR_VIDEO_BEFORE_LABEL: "Previous: <silent> save",
+    PR_VIDEO_AFTER_LABEL: "New: confirmation & retry",
+  });
+
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  const composition = readFileSync(
+    join(root, "out/hyperframes/index.html"),
+    "utf8",
+  );
+  expect(composition).toContain("Previous: &lt;silent&gt; save</div>");
+  expect(composition).toContain("New: confirmation &amp; retry</div>");
+});
+
+test.each([
+  { PR_VIDEO_BEFORE_LABEL: "" },
+  { PR_VIDEO_AFTER_LABEL: "  " },
+  { PR_VIDEO_BEFORE_LABEL: "Before", PR_VIDEO_AFTER_LABEL: "After" },
+  { PR_VIDEO_BEFORE_LABEL: "Same", PR_VIDEO_AFTER_LABEL: "Same" },
+  { PR_VIDEO_BEFORE_LABEL: " Same ", PR_VIDEO_AFTER_LABEL: "same" },
+  { PR_VIDEO_BEFORE_LABEL: "Previous\nUnsafe line" },
+  { PR_VIDEO_AFTER_LABEL: "W".repeat(61) },
+])("requires distinct behavior labels before rendering: %j", (labels) => {
+  const { root, run } = composeFixture("0.8.123");
+  const result = run(false, labels);
+
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain("behavior labels");
+  expect(existsSync(join(root, "out/before-after.mp4"))).toBe(false);
+});
+
+test.each([
+  "10:10:0:200",
+  "10:10:201:100",
+  "10:10:200:101",
+  "-1:0:200:100",
+  "0:0:200:100,scale=2:2",
+])("rejects invalid focus geometry %j before rendering", (focus) => {
+  const { root, run } = composeFixture("0.8.123");
+  const result = run(false, { PR_VIDEO_FOCUS: focus });
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain("PR_VIDEO_FOCUS");
+  expect(existsSync(join(root, "out/before-after.mp4"))).toBe(false);
 });
 
 test.each(["^0.8.123", "latest", "0.8.123-beta.1", "01.8.123", ""])(

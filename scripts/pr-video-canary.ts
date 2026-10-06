@@ -46,6 +46,7 @@ const server = Bun.serve({
 });
 
 type Sample = { state: string; at: number };
+const focus = { x: 184, y: 128, width: 912, height: 392 };
 const samples: Record<string, Sample[]> = {};
 const browser = await chromium.launch().catch((cause: unknown) => {
   server.stop(true);
@@ -74,23 +75,26 @@ try {
       await page
         .getByLabel("Task name")
         .pressSequentially("Review demo", { delay: 90 });
-      mark("Save and see the result");
-      await page.getByRole("button", { name: "Save task" }).click();
-      await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
-      await capture("success");
-      mark("Service fails; keep the task");
-      await page.getByLabel("Simulate unavailable service").check();
-      await page.getByRole("button", { name: "Save task" }).click();
-      await expect(page.getByRole("alert")).toHaveText(
-        "Service unavailable. Try again.",
-      );
-      await expect(page.getByLabel("Task name")).toHaveValue("Review demo");
-      await capture("error");
-      mark("Retry successfully");
-      await page.getByLabel("Simulate unavailable service").uncheck();
-      await page.getByRole("button", { name: "Save task" }).click();
-      await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
-      await capture("recovery");
+      if (side === "before") {
+        mark("Save the task");
+        await page.getByRole("button", { name: "Save task" }).click();
+        await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
+        await capture("success");
+      } else {
+        mark("Service fails; keep the task");
+        await page.getByLabel("Simulate unavailable service").check();
+        await page.getByRole("button", { name: "Save task" }).click();
+        await expect(page.getByRole("alert")).toHaveText(
+          "Service unavailable. Try again.",
+        );
+        await expect(page.getByLabel("Task name")).toHaveValue("Review demo");
+        await capture("error");
+        mark("Retry the save");
+        await page.getByLabel("Simulate unavailable service").uncheck();
+        await page.getByRole("button", { name: "Save task" }).click();
+        await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
+        await capture("recovery");
+      }
       const video = page.video();
       assert(video, "Browser recording missing");
       await context.close();
@@ -115,7 +119,13 @@ try {
       join(out, "after.webm"),
       out,
     ],
-    { PR_VIDEO_RENDERER: "hyperframes" },
+    {
+      PR_VIDEO_RENDERER: "hyperframes",
+      PR_VIDEO_TITLE: "Render canary: save vs failure and recovery",
+      PR_VIDEO_BEFORE_LABEL: "Success path (fixture): saved task",
+      PR_VIDEO_AFTER_LABEL: "Recovery path (fixture): error then retry",
+      PR_VIDEO_FOCUS: `${focus.x}:${focus.y}:${focus.width}:${focus.height}`,
+    },
   );
   const metadata = JSON.parse(
     await command([
@@ -153,6 +163,29 @@ try {
   );
 
   const page = await browser.newPage();
+  // Exercise the allowed 60-character labels against the real output layout.
+  await page.setContent(
+    readFileSync(join(out, "hyperframes/index.html"), "utf8").replace(
+      /<script[\s\S]*?<\/script>/g,
+      "",
+    ),
+  );
+  for (const [id, text] of [
+    ["before-chip", `Previous: ${"W".repeat(50)}`],
+    ["after-chip", `New: ${"W".repeat(55)}`],
+  ]) {
+    assert(id && text);
+    const layout = await page.locator(`#${id}`).evaluate((element, text) => {
+      element.textContent = text;
+      return {
+        bottom: element.getBoundingClientRect().bottom,
+        width: element.clientWidth,
+        scrollWidth: element.scrollWidth,
+      };
+    }, text);
+    assert(layout.bottom <= 190, `${id}: label overlaps the recorded UI`);
+    assert(layout.scrollWidth <= layout.width, `${id}: label overflows`);
+  }
   const metrics = [];
   for (const [side, states] of Object.entries(samples)) {
     for (const { state, at } of states) {
@@ -165,6 +198,7 @@ try {
         frame,
         source,
         side === "before" ? 40 : 980,
+        focus,
       );
       // Raw recording is the independent oracle. Blank video and plain ffmpeg
       // fallback cannot satisfy both the panel and visible-text checks.
@@ -186,6 +220,7 @@ try {
         renderer: JSON.parse(readFileSync(join(root, "package.json"), "utf8"))
           .devDependencies.hyperframes,
         metadata,
+        focus,
         metrics,
       },
       null,
@@ -193,7 +228,7 @@ try {
     ),
   );
   console.log(
-    `PASS: six decoded-frame checks (UI, title, labels, captions); success/error/recovery; ${out}`,
+    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions); success/error/recovery; ${out}`,
   );
 } finally {
   try {
@@ -224,11 +259,12 @@ async function compare(
   frame: string,
   source: string,
   left: number,
+  focus: { x: number; y: number; width: number; height: number },
 ) {
   const image = (path: string) =>
     `data:image/png;base64,${readFileSync(path).toString("base64")}`;
   return page.evaluate(
-    async ({ frame, source, left }) => {
+    async ({ frame, source, left, focus }) => {
       const decode = async (url: string) => {
         const img = new Image();
         img.src = url;
@@ -262,11 +298,26 @@ async function compare(
       };
       const text = {
         title: lightPixels(40, 36, 1800, 60),
-        label: lightPixels(left, 124, 180, 50),
+        label: lightPixels(left, 116, 900, 64),
         caption: lightPixels(left, 720, 900, 96),
       };
       context.clearRect(0, 0, 1920, 880);
-      context.drawImage(await decode(source), left, 190, 900, 506);
+      context.fillStyle = "white";
+      context.fillRect(left, 190, 900, 506);
+      const scale = Math.min(900 / focus.width, 506 / focus.height);
+      const width = focus.width * scale;
+      const height = focus.height * scale;
+      context.drawImage(
+        await decode(source),
+        focus.x,
+        focus.y,
+        focus.width,
+        focus.height,
+        left + (900 - width) / 2,
+        190 + (506 - height) / 2,
+        width,
+        height,
+      );
       const expected = context.getImageData(left + 8, 198, 884, 490).data;
       let difference = 0;
       for (let i = 0; i < actual.length; i += 4) {
@@ -277,6 +328,6 @@ async function compare(
       }
       return { panelError: difference / (884 * 490 * 3), ...text };
     },
-    { frame: image(frame), source: image(source), left },
+    { frame: image(frame), source: image(source), left, focus },
   );
 }

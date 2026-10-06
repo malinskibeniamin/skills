@@ -3,6 +3,9 @@
 PR_VIDEO="$REPO_ROOT/scripts/pr-video.sh"
 # Fast default for the geometry checks; the HyperFrames renderer has its own case.
 export PR_VIDEO_RENDERER=ffmpeg
+export PR_VIDEO_BEFORE_LABEL='Previous: unframed recording'
+export PR_VIDEO_AFTER_LABEL='New: focused comparison'
+export PR_VIDEO_FOCUS=''
 
 pr_video_check() {
   if eval "$1"; then
@@ -39,6 +42,20 @@ else
     'compose keeps the longer recording instead of truncating it'
   pr_video_check '! "$PR_VIDEO" compose "$work/missing.webm" "$work/after.webm" "$work/bad" >/dev/null 2>&1' \
     'compose rejects a missing recording'
+  ffmpeg -hide_banner -loglevel error -i "$work/before.webm" -c copy \
+    -metadata title=repacked "$work/repacked.webm"
+  duplicate_err=$("$PR_VIDEO" compose "$work/before.webm" "$work/repacked.webm" "$work/duplicate-out" 2>&1 >/dev/null || true)
+  pr_video_check '[ ! -e "$work/duplicate-out/before-after.mp4" ] && printf "%s" "$duplicate_err" | grep -qi "duplicate"' \
+    'compose rejects identical decoded footage even with different container bytes'
+  ffmpeg -hide_banner -loglevel error -i "$work/before.webm" \
+    -vf 'drawbox=x=1:y=1:w=2:h=2:color=red:t=fill' -c:v ffv1 "$work/subtle.mkv"
+  pr_video_check '"$PR_VIDEO" compose "$work/before.webm" "$work/subtle.mkv" "$work/subtle-out" >/dev/null 2>&1' \
+    'compose preserves a small genuine pixel change, without a similarity threshold'
+  pr_video_check 'PR_VIDEO_FOCUS=10:10:200:100 "$PR_VIDEO" compose "$work/before.webm" "$work/after.webm" "$work/focus-out" >/dev/null 2>&1 && [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$work/focus-out/before-after.mp4")" = "2888,720" ]' \
+    'compose applies the same focus crop to both recordings'
+  focus_err=$(PR_VIDEO_FOCUS=300:0:200:100 "$PR_VIDEO" compose "$work/before.webm" "$work/after.webm" "$work/bounds-out" 2>&1 >/dev/null || true)
+  pr_video_check '[ ! -e "$work/bounds-out/before-after.mp4" ] && printf "%s" "$focus_err" | grep -qi "outside"' \
+    'compose rejects an out-of-bounds crop instead of silently shifting it'
   ffmpeg -hide_banner -loglevel error -f lavfi -i color=c=white:size=320x200:rate=10:duration=5 \
     -c:v libvpx "$work/static.webm"
   static_err=$("$PR_VIDEO" compose "$work/static.webm" "$work/after.webm" "$work/static-out" 2>&1 >/dev/null || true)
@@ -86,15 +103,15 @@ wait --text "Saved Ada"
 FLOW
     pr_video_check 'PR_VIDEO_STEP_MS=300 "$PR_VIDEO" record "file://$work/app.html" "$work/flow.txt" "$work/flow.webm" >/dev/null 2>&1 && [ -s "$work/flow.webm" ]' \
       'record replays a flow file into a video'
-    pr_video_check '"$PR_VIDEO" compose "$work/flow.webm" "$work/flow.webm" "$work/flow-out" >/dev/null 2>&1' \
+    pr_video_check '"$PR_VIDEO" compose "$work/flow.webm" "$work/after.webm" "$work/flow-out" >/dev/null 2>&1' \
       'a recorded flow passes the motion gate'
     pr_video_check 'jq -e ".title == \"Save a display name\" and ([.steps[].caption] == [\"Type the name\", \"Click Save\"]) and (.steps[0].at > 0) and (.steps[1].at > .steps[0].at)" "$work/flow.webm.steps.json" >/dev/null' \
       'record writes the title and timed step captions beside the video'
     if command -v bunx >/dev/null 2>&1 && [ "${PR_VIDEO_EVAL_HYPERFRAMES:-1}" = 1 ]; then
-      pr_video_check 'PR_VIDEO_RENDERER=hyperframes "$PR_VIDEO" compose "$work/flow.webm" "$work/flow.webm" "$work/hf-out" >/dev/null 2>&1 && [ -s "$work/hf-out/before-after.gif" ]' \
+      pr_video_check 'PR_VIDEO_RENDERER=hyperframes "$PR_VIDEO" compose "$work/flow.webm" "$work/after.webm" "$work/hf-out" >/dev/null 2>&1 && [ -s "$work/hf-out/before-after.gif" ]' \
         'hyperframes renderer composes the takes'
       hf_size=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$work/hf-out/before-after.mp4" 2>/dev/null || true)
-      pr_video_check '[ "$hf_size" = "1920,880" ] && grep -q ">Before<" "$work/hf-out/hyperframes/index.html" && grep -q ">Click Save<" "$work/hf-out/hyperframes/index.html"' \
+      pr_video_check '[ "$hf_size" = "1920,880" ] && grep -q ">Previous: unframed recording<" "$work/hf-out/hyperframes/index.html" && grep -q ">Click Save<" "$work/hf-out/hyperframes/index.html"' \
         'hyperframes frame labels both sides and captions each step'
     else
       echo "  SKIP  hyperframes renderer needs bunx"

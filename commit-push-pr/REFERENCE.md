@@ -70,13 +70,15 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 ## Before / after
 <omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>
 
-**Video** (before left, after right): <the flow, as steps: open X -> type Y -> submit -> see Z>
+**What changed:** <previous behavior> → <new behavior>. Look at <region/state/timestamp>.
+
+**Video** (previous left, new right): <flow reaching the changed result>
 
 ![](<local MP4 path also passed to gh --attach>)
 
 <fallback only when attach is blocked: ![before-after flow](<pinned gif url>)>
 
-| View | Before | After | Notes |
+| Changed region/state | Previous: <old behavior> | New: <new behavior> | Look here |
 |------|--------|-------|-------|
 | <route/component> | ![before](<url>) | ![after](<url>) | <what changed> |
 
@@ -179,6 +181,10 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    or fabricate a before image. New/removed views show the real prior/replacement flow;
    if none exists, use a visible `New view`/`Removed view` label with reason and the available
    real capture. Reuse `/triage` or earlier review evidence only when revision and scenario still match.
+   Write one observable **previous → new** claim before recording. Keep unchanged setup
+   brief; show the changed result at matched steps. If the difference is small, crop both
+   sides to the same region, retain a full-view context link, and name the exact control,
+   state, or timestamp to inspect. Captions explain old/new behavior, not only clicks.
    Also record one before/after video of the changed flow in real UI. The video shows the
    flow happening, never a still page: navigate, click, type, open/submit, and land on the
    changed result (success, error, or new state). Write one flow file (one agent-browser
@@ -189,13 +195,28 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    Start the flow file with a `# <flow title>` line and put a `## <caption>` line before
    each step reviewers should read. Keep each take under 20 seconds. `record` refuses flows
    with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm
-   after.webm <out-dir>` refuses static takes (under 8 distinct frames); re-record the
+   after.webm <out-dir>` refuses static takes (under 8 distinct frames), duplicate files,
+   and identical decoded footage (including remuxed copies); re-record the
    flow, never pad or loop a still. `compose` frames the real takes with HyperFrames
-   (exact pin from root `package.json`, locked local CLI or pinned `bunx` fallback): Before/After labels, the title, and step captions timed per
+   (exact pin from root `package.json`, locked local CLI or pinned `bunx` fallback): concrete behavior labels, the title, and step captions timed per
    side. It falls back to plain ffmpeg side by side when HyperFrames is unavailable. It
    never runs `hyperframes init`, which installs global agent skills. Do not substitute
    `/pr-to-video` or other HyperFrames creation workflows: they build synthetic explainers
    from the diff, not the real UI.
+
+   ```bash
+   PR_VIDEO_TITLE='Saving now shows confirmation' \
+   PR_VIDEO_BEFORE_LABEL='Previous (base SHA): silent save' \
+   PR_VIDEO_AFTER_LABEL='New (head SHA): saved notice' \
+   PR_VIDEO_FOCUS=200:160:880:440 \
+   PR_VIDEO_RENDERER=hyperframes \
+     scripts/pr-video.sh compose before.webm after.webm .context/demo
+   ```
+
+   Labels are required, distinct, single-line behavior descriptions (up to 60 characters).
+   Optional focus is `x:y:width:height` in source pixels, in bounds for both takes, with
+   positive even dimensions. Omit it for a useful full view. No similarity threshold:
+   a tiny real change must survive; semantic duplication still needs human inspection.
 3. **Run visual regression:** use the repository's existing screenshot assertion runner,
    not DOM/text snapshots. Add missing cases for uncovered visible changes. Run against
    existing baselines first; inspect before/after/diff images for every mismatch, fix
@@ -212,8 +233,19 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    limits. New edits, rebases, base changes, or failed CI invalidate affected evidence;
    refresh the tests, captures, and PR body before declaring it current. A green suite alone
    does not prove the inventory complete; never claim exhaustive coverage from filenames.
-5. **Publish visible evidence:** embed real before/after images in the PR body table, one
-   row per affected view/state (group identical cases with a coverage note). Link diff images
+5. **Publish visible evidence:** put **What changed: previous → new; look here** directly
+   above the video and focused screenshot pair. Each row owns a distinct observable delta;
+   group unchanged states in a coverage note instead of repeating nearly identical images.
+   Put behavior and revision labels on the media, not just the table headers. Keep a
+   full-view context link when cropping. Check the comparison at PR display size: the
+   reviewer must identify the old/new result without searching the page. If not, focus
+   framing or clarify the claim before publishing. Exact-file/frame checks cannot detect
+   differently timed recordings of unchanged UI.
+
+   When no visible delta exists, say **No visible UI change**, show one labeled verification
+   capture if useful, and prove the actual change with tests/output. Renderer fixtures are
+   pipeline demonstrations, not product before/after evidence. Never alter fixture data,
+   theme, zoom, or state to manufacture a product difference. Link diff images
    and the full visual-test report when available. Use repository-approved, reviewer-accessible
    image hosting or committed snapshot raw URLs pinned to immutable SHAs. Without other
    hosting, prefer [native GitHub CLI attachments](https://docs.github.com/en/github-cli/github-cli/attaching-files-with-github-cli)
@@ -267,6 +299,9 @@ failure, retry -> forced HyperFrames render -> decoded-frame comparisons with
 source recordings and visible title/label/caption checks. Review its MP4 and PNG
 artifacts plus upstream release notes before merging; no automatic merge. It is a
 pipeline fixture, not a substitute for the changed application's own demo.
+Its panels exercise distinct success and recovery journeys, explicitly labeled as fixture
+paths rather than previous/new product versions. Matched cropping is checked against the
+original recordings; duplicated source takes must not be used to test a comparison.
 
 ```bash
 bun install --frozen-lockfile
