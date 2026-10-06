@@ -27,7 +27,7 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 
 ## Kontrola wstępna [#preflight]
 
-1. Sprawdź stan, różnice, bieżącą gałąź, ostatnie wpisy dziennika i ewentualny PR gałęzi; przed rebase'em wykonaj [kontrolę przed rebase'em](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check).
+1. Sprawdź stan, różnice, gałąź, dziennik i PR. Przy wypchnięciu lub PR-ze, jeśli bieżący PR na gałęzi użytkownika nie zawiera commitów bazy, automatycznie wykonaj [rebase i wypchnięcie z zabezpieczeniem lease](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase). Rutynowy rebase nie wymaga pytania użytkownika.
 2. Ustal żądany punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Wariant z samym commitem pomija kontrolę zdalnego repozytorium i `gh`.
 3. Wypchnięcie/PR wymaga zdalnego repozytorium; PR wymaga uwierzytelnionego `gh` i gałęzi bazowej.
 4. W przypadku PR-a uruchom `gh stack view --json`; sprawdź bazę i stos. Zwykły PR obejmuje jedną warstwę; nigdy nie używaj `gh stack submit`.

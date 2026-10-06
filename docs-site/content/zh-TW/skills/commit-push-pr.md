@@ -24,7 +24,7 @@ type: skill
 
 ## 前置檢查 [#preflight]
 
-1. 檢查狀態、差異、目前分支、近期記錄，以及此分支上的任何 PR；執行 rebase 前先做[變基前檢查](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#pre-rebase-check)。
+1. 檢查狀態、差異、分支、記錄及 PR。對於推送或 PR，如果目前使用者擁有的 PR 缺少基底分支提交，自動執行[變基並使用 lease 保護推送](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase)；例行變基無須詢問使用者。
 2. 確認終點：僅提交、推送（`--no-pr`）或 PR。僅提交會略過遠端與 `gh` 前置檢查。
 3. 推送／PR 需要遠端；PR 需要已完成驗證的 `gh` 及基底分支。
 4. 對 PR 執行 `gh stack view --json`；檢查基底／堆疊。一般 PR 僅涵蓋一個層級，絕不執行 `gh stack submit`。

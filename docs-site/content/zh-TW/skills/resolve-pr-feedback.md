@@ -32,6 +32,9 @@ type: skill
 
 用 `gh pr view` 確定 PR 和基底分支。存在 REST `stack` 物件時讀取它。如果分支
 屬於另一個工作樹，回報該工作區而不是佔用它。
+如果這個使用者擁有的分支缺少基底分支提交，在因沒有回饋而退出前執行
+[自動變基](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase)。
+例行衝突解決、驗證及使用 lease 保護的推送無須詢問使用者。
 
 ### 2. 取得並分類 [#2-fetch-and-triage]
 
@@ -48,7 +51,7 @@ type: skill
 也要檢查只有機器人留言的討論串；作者類型不能證明回饋適用。
 取得討論串、留言及審查的所有分頁。對於不適用的發現，應以證據回覆。
 
-沒有新項目時，發布 `All feedback addressed` 並停止。
+沒有新項目時，先完成所需的變基，再發布 `All feedback addressed` 並停止。
 
 ### 3. 修復叢集 [#3-repair-clusters]
 

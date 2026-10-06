@@ -1,7 +1,7 @@
 <!-- GENERATED from CLAUDE.md + .agents/codex-appendix.md by scripts/generate-agents-md.sh -- do not edit by hand -->
 # Project rules
 
-Non-inferable choices/safety here; details in hooks/skills.
+Choices/safety here; details in hooks/skills.
 
 ## Toolchain
 
@@ -30,7 +30,7 @@ Trivial/single-path output: linear.
 
 ## Execution contract
 
-The requested endpoint owns scope:
+Endpoint owns scope:
 
 - Answer, explain, plan, review: return the artifact; do not edit.
 - Build, fix, implement: plan, continue, verify, commit, push the current user-owned
@@ -40,15 +40,14 @@ The requested endpoint owns scope:
 
 Earlier stop wins. Ask only for user-reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
-Routine work may commit, push, or rebase the current user-owned feature branch
-without another permission prompt; push each CI fix or rebase now (`--force-with-lease`).
-When that PR falls behind its base, automatically fetch, rebase, resolve routine conflicts,
-verify, and lease-push; do not wait for a human rebase request or approval.
+Owned-feature work: commit, push, or rebase without another permission prompt.
+Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push automatically.
+Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
 A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
 a session; recover endpoint state and continue.
-When branch has a PR, keep follow-up waves in the current PR.
+Keep follow-up waves in the current PR.
 Draft PRs need no approval.
 For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
 origin, or report a genuine external blocker.
@@ -65,7 +64,7 @@ For any PR, include its full PR URL on the final status line.
 
 ## Work
 
-Use one outcome contract:
+Outcome contract:
 
 - **Objective** -- high-level end state.
 - **Guardrails** -- non-inferable constraints and reserved decisions.

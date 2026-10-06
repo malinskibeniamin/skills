@@ -31,6 +31,9 @@ type: skill
 ### 1. 检测并绑定 [#1-detect-and-bind]
 
 用 `gh pr view` 确定 PR 和基分支。存在 REST `stack` 对象时读取它。如果分支属于另一个工作树，报告该工作区而不是占用它。
+如果这个用户拥有的分支缺少基分支提交，在因没有反馈而退出前执行
+[自动变基](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase)。
+常规冲突解决、验证以及使用 lease 保护的推送无需询问用户。
 
 ### 2. 获取并分类 [#2-fetch-and-triage]
 
@@ -46,7 +49,7 @@ type: skill
 也要检查只有机器人评论的线程；作者类型不能证明反馈适用。
 获取线程、评论和审查的所有分页。对于不适用的发现，应以证据回复。
 
-没有新项目时，发布 `All feedback addressed` 并停止。
+没有新项目时，先完成所需的变基，再发布 `All feedback addressed` 并停止。
 
 ### 3. 修复集群 [#3-repair-clusters]
 

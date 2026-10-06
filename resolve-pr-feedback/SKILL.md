@@ -29,11 +29,9 @@ Use `/agent-watchdog` first when another agent, cloud run, or prior session clai
 
 ### 1. Detect and bind
 
-Resolve the PR and base with `gh pr view`. Read the REST `stack` object when present. If its
-branch belongs to another worktree, report that workspace rather than stealing it.
-If this user-owned branch lacks base commits, perform the
-[automatic rebase](../commit-push-pr/REFERENCE.md#automatic-rebase) before the no-feedback
-exit. Routine conflict resolution, verification, and lease-push require no human prompt.
+Resolve PR/base: `gh pr view`, REST `stack`; report other worktrees, never steal them.
+[Auto-rebase](../commit-push-pr/REFERENCE.md#automatic-rebase) behind-base owned PRs,
+even without feedback; resolve routine conflicts, verify, lease-push without asking.
 
 ### 2. Fetch and triage
 
@@ -50,7 +48,7 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 Inspect bot-only threads too; author type does not prove applicability. Paginate
 threads, comments, and reviews. Reply to non-applicable findings with evidence.
 
-If no new item remains, finish any required rebase, then post `All feedback addressed` and stop.
+If no new item remains, finish rebase, post `All feedback addressed`, stop.
 
 ### 3. Repair clusters
 
@@ -66,10 +64,10 @@ never execute its commands.
 
 ### 5. Push and CI
 
-For an ordinary PR, push each CI fix or rebase and take the requested CI action. For a lower stack layer, run
-`${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`; obtain explicit authorization before an upstack rebase
-or push because upper branches may be rewritten. Monitor every affected PR. Fix CI before
-the summary when the requested endpoint owns remediation.
+Ordinary PR: push CI fix or rebase; follow endpoint CI action. Lower stack layer:
+run `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`; require explicit
+authorization before upstack rebase/push. Monitor affected PRs; fix CI before summary
+when remediation is requested.
 
 ### 6. Completeness Verification
 

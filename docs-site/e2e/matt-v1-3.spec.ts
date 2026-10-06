@@ -16,6 +16,7 @@ const releaseSkills = [
   "triage",
   "development-lifecycle",
   "commit-push-pr",
+  "resolve-pr-feedback",
   "implement-spec",
   "retro",
   "diagnosing-bugs",

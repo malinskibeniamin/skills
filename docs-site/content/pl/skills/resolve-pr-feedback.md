@@ -33,6 +33,10 @@ Najpierw użyj `/agent-watchdog`, gdy inny agent, przebieg chmurowy lub wcześni
 ### 1. Wykryj i powiąż [#1-detect-and-bind]
 
 Rozwiąż PR i bazę przez `gh pr view`. Odczytaj obiekt REST `stack`, gdy istnieje. Jeśli gałąź należy do innego worktree, wskaż tę przestrzeń zamiast ją przejmować.
+Jeśli ta gałąź użytkownika nie zawiera commitów bazy, wykonaj
+[automatyczny rebase](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase)
+przed zakończeniem z powodu braku uwag. Rutynowe rozwiązywanie konfliktów, weryfikacja
+i wypchnięcie z zabezpieczeniem lease nie wymagają pytania użytkownika.
 
 ### 2. Pobierz i sklasyfikuj [#2-fetch-and-triage]
 
@@ -49,7 +53,7 @@ Sprawdź też wątki złożone wyłącznie z komentarzy botów; typ autora nie d
 dotyczy zmian. Pobierz wszystkie strony wątków, komentarzy i przeglądów. Na uwagi
 niedotyczące zmian odpowiedz dowodami.
 
-Gdy nie ma nowych elementów, opublikuj `All feedback addressed` i zakończ.
+Gdy nie ma nowych elementów, dokończ wymagany rebase, a następnie opublikuj `All feedback addressed` i zakończ.
 
 ### 3. Napraw klastry [#3-repair-clusters]
 
