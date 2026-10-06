@@ -4,16 +4,16 @@ description: "Extend the harness: shell rules, Claude Code mods, severity tiers,
 disable-model-invocation: true
 ---
 
-Edit source manifests/libraries, never generated configs. [REFERENCE.md](REFERENCE.md) owns severities, options, parser contracts, debugging.
+Edit manifests/libraries, not generated configs. [REFERENCE.md](REFERENCE.md): severities, options, parser contracts, debugging.
 
-Claude mods: [MODS.md](MODS.md). Keep cross-runtime enforcement in the settings hooks below.
+Claude mods: [MODS.md](MODS.md). Cross-runtime enforcement stays in settings hooks.
 
 ## Add rule
 
-1. Prefer Biome/Ultracite; hooks are for cross-element/file, workflow, or agent behavior.
-2. Copy a neighboring `.claude/hooks/checks/*.lib.sh`: one `run_*` function plus thin `.claude/hooks/*.sh` wrapper.
+1. Prefer Biome/Ultracite; hooks cover cross-element/file, workflow, agent behavior.
+2. Copy `.claude/hooks/checks/*.lib.sh`: one `run_*` function and thin `.claude/hooks/*.sh` wrapper.
 3. Register in `skill-manifest.json`, usually `PostToolUse.Edit|Write`.
-4. Add focused `evals/` fixture; capture RED then GREEN.
+4. Add focused `evals/` fixture; prove RED -> GREEN.
 5. Regenerate and test:
 
 ```bash
@@ -25,13 +25,13 @@ Use `hook_warn` for style, `hook_block` correctness, `hook_block_strict` securit
 
 ## Implementation
 
-- Permission-filtered/async entries use manifest objects; retain stdin guards because Codex drops Claude-only filters.
-- Provable structure belongs in Biome/AST; ambiguous judgment in review, not multiline grep.
+- Manifest objects carry permission/async filters; retain stdin guards: Codex drops Claude-only filters.
+- Structure: Biome/AST. Ambiguous judgment: review, not multiline grep.
 - Sync toolchain bans with `hooks/frontend-skills.rules`.
 
 ## Audit/debug
 
-`/hook-audit --all` for latency/firing/zero-fire; `HOOK_DEBUG=1 HOOKS_FAIL_CLOSED=1 claude` for missing hooks; `claude --safe-mode` to isolate customization. `/doctor` latency is a P95 budget failure.
+`/hook-audit --all`: latency/firing/zero-fire; `HOOK_DEBUG=1 HOOKS_FAIL_CLOSED=1 claude`: missing hooks; `claude --safe-mode`: isolate customization. `/doctor` latency is a P95 budget failure.
 
 ## Done
 
