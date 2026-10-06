@@ -70,7 +70,7 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 ## Before / after
 <omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>
 
-**What changed:** <previous behavior> → <new behavior>. Look at <region/state/timestamp>.
+**What changed:** <previous behavior> -> <new behavior>. Look at <region/state/timestamp>.
 
 **Video** (previous left, new right): <flow reaching the changed result>
 
@@ -181,7 +181,7 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    or fabricate a before image. New/removed views show the real prior/replacement flow;
    if none exists, use a visible `New view`/`Removed view` label with reason and the available
    real capture. Reuse `/triage` or earlier review evidence only when revision and scenario still match.
-   Write one observable **previous → new** claim before recording. Keep unchanged setup
+   Write one observable **previous -> new** claim before recording. Keep unchanged setup
    brief; show the changed result at matched steps. If the difference is small, crop both
    sides to the same region, retain a full-view context link, and name the exact control,
    state, or timestamp to inspect. Captions explain old/new behavior, not only clicks.
@@ -233,7 +233,7 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    limits. New edits, rebases, base changes, or failed CI invalidate affected evidence;
    refresh the tests, captures, and PR body before declaring it current. A green suite alone
    does not prove the inventory complete; never claim exhaustive coverage from filenames.
-5. **Publish visible evidence:** put **What changed: previous → new; look here** directly
+5. **Publish visible evidence:** put **What changed: previous -> new; look here** directly
    above the video and focused screenshot pair. Each row owns a distinct observable delta;
    group unchanged states in a coverage note instead of repeating nearly identical images.
    Put behavior and revision labels on the media, not just the table headers. Keep a
