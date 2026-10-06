@@ -12,7 +12,10 @@ set -euo pipefail
 #
 #   scripts/pr-video.sh compose <before-video> <after-video> <out-dir>
 #     Before left, after right; the shorter take freezes on its last frame.
-#     Rejects static takes (under 8 distinct frames). PR_VIDEO_RENDERER=auto
+#     Set PR_VIDEO_BEFORE_LABEL / PR_VIDEO_AFTER_LABEL to concrete behavior
+#     descriptions (for example "Previous: save silently" / "New: saved notice").
+#     PR_VIDEO_FOCUS=x:y:width:height crops both takes to the changed region.
+#     Rejects static and duplicate takes. PR_VIDEO_RENDERER=auto
 #     (default) frames the takes in HyperFrames with labels and step captions,
 #     falling back to ffmpeg; `hyperframes` or `ffmpeg` forces one.
 #     Writes before-after.mp4 and before-after.gif.
@@ -40,7 +43,23 @@ MIN_INTERACTIONS=2
 INTERACTION_RE='^(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
 
 GIF_LIMIT_BYTES=$((10 * 1024 * 1024))
-HYPERFRAMES=hyperframes@0.8.79
+
+# The manifest owns the only renderer pin. Installed plugin copies can use bunx
+# without repository node_modules; CI uses the frozen-lockfile installation.
+hyperframes_command() {
+  local root="$SCRIPT_DIR/.." version installed
+  version=$(jq -er '.devDependencies.hyperframes | select(type == "string") |
+    select(test("^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"))' "$root/package.json") || {
+    echo "pr-video: package.json must pin hyperframes to an exact stable version" >&2
+    return 1
+  }
+  installed=$(jq -r '.version' "$root/node_modules/hyperframes/package.json" 2>/dev/null || true)
+  if [ "$installed" = "$version" ] && [ -x "$root/node_modules/.bin/hyperframes" ]; then
+    HYPERFRAMES_CMD=("$root/node_modules/.bin/hyperframes")
+  else
+    HYPERFRAMES_CMD=(bunx "hyperframes@$version")
+  fi
+}
 
 now() { perl -MTime::HiRes=time -e 'printf "%.3f\n", time'; }
 
@@ -65,6 +84,13 @@ require_motion() {
     echo "pr-video: $1 is static (${distinct:-0} distinct frames, need $MIN_DISTINCT_FRAMES); record the flow (clicks, typing, navigation) with pr-video.sh record" >&2
     exit 1
   fi
+}
+
+# Hash decoded pixels, not container metadata or audio. No similarity threshold:
+# a small real UI change must remain eligible for a focused comparison.
+video_hash() {
+  ffmpeg -v error -i "$1" -map 0:v:0 -an -vf "${FOCUS_FILTER}null" -c:v rawvideo -pix_fmt rgb24 \
+    -f hash -hash sha256 -
 }
 
 record() {
@@ -144,7 +170,7 @@ attach() {
 }
 
 frame_ffmpeg() {
-  local side='fps=15,scale=-2:720,setsar=1,tpad=stop_mode=clone:stop_duration=3600'
+  local side="${FOCUS_FILTER}fps=15,scale=-2:720,setsar=1,tpad=stop_mode=clone:stop_duration=3600"
   ffmpeg -hide_banner -loglevel error -y -i "$1" -i "$2" -filter_complex \
     "[0:v]${side},pad=iw+8:ih:0:0:color=gray[b];[1:v]${side}[a];[b][a]hstack=inputs=2,scale=trunc(iw/2)*2:720[v]" \
     -map '[v]' -t "$4" -c:v libx264 -pix_fmt yuv420p -crf 28 -movflags +faststart \
@@ -170,7 +196,7 @@ frame_hyperframes() {
   local side input
   for side in before after; do
     [ "$side" = before ] && input=$before || input=$after
-    ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "fps=30,tpad=stop_mode=clone:stop_duration=3600" \
+    ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "${FOCUS_FILTER}fps=30,tpad=stop_mode=clone:stop_duration=3600" \
       -t "$duration" -an -c:v libx264 -pix_fmt yuv420p "$project/assets/$side.mp4" || return 1
   done
   local title captions
@@ -178,35 +204,81 @@ frame_hyperframes() {
   captions=$(jq -c -s 'add' <(side_captions before "$before" "$duration" 40) <(side_captions after "$after" "$duration" 980))
   printf '%s\n' '{"paths":{"assets":"assets"},"media":{"autoProxy":true}}' > "$project/hyperframes.json"
   HF_TITLE=$(jq -rn --arg t "${PR_VIDEO_TITLE:-${title:-Before and after}}" '$t | @html') \
+    HF_BEFORE_LABEL=$(jq -rn --arg t "$PR_VIDEO_BEFORE_LABEL" '$t | @html') \
+    HF_AFTER_LABEL=$(jq -rn --arg t "$PR_VIDEO_AFTER_LABEL" '$t | @html') \
     HF_DURATION=$duration \
     HF_CAPTIONS=$(jq -r '.[] | "      <div id=\"\(.id)\" class=\"caption clip\" style=\"left: \(.left)px\" data-start=\"\(.at)\" data-duration=\"\(.duration)\"><span id=\"\(.id)-text\">\(.caption | @html)</span></div>"' <<< "$captions") \
     HF_TWEENS=$(jq -c '[.[] | ["#\(.id)-text", .at]]' <<< "$captions") \
     perl -pe 's/<!-- __(\w+)__ -->|"__(\w+)__"|__(\w+)__/$ENV{"HF_" . ($1 || $2 || $3)}/g' \
     "$SCRIPT_DIR/pr-video-frame.html" > "$project/index.html"
 
-  (cd "$project" && bunx "$HYPERFRAMES" check >&2 &&
-    bunx "$HYPERFRAMES" render --quality standard --output ../before-after.mp4 >&2) || return 1
+  (cd "$project" && "${HYPERFRAMES_CMD[@]}" check >&2 &&
+    "${HYPERFRAMES_CMD[@]}" render --quality delivery --video-frame-format png --output ../before-after.mp4 >&2) || return 1
 }
 
 compose() {
   [ $# -eq 3 ] || usage
   command -v ffmpeg >/dev/null 2>&1 || { echo "pr-video: needs ffmpeg (brew install ffmpeg)" >&2; exit 127; }
   local before=$1 after=$2 out=$3
+  if ! jq -en --arg before "${PR_VIDEO_BEFORE_LABEL:-}" --arg after "${PR_VIDEO_AFTER_LABEL:-}" '
+    def behavior_label: length > 0 and length <= 60 and test("\\S") and
+      (test("[[:cntrl:]]") | not) and
+      (ascii_downcase | test("^\\s*(before|after|previous|new)\\s*$") | not);
+    ($before | behavior_label) and ($after | behavior_label) and
+      (($before | ascii_downcase | gsub("^\\s+|\\s+$"; "")) != ($after | ascii_downcase | gsub("^\\s+|\\s+$"; "")))
+  ' >/dev/null; then
+    echo "pr-video: set distinct PR_VIDEO_BEFORE_LABEL and PR_VIDEO_AFTER_LABEL behavior labels (1-60 characters; explain previous vs new, not bare Before/After)." >&2
+    return 2
+  fi
+  FOCUS_FILTER=""
+  if [ -n "${PR_VIDEO_FOCUS:-}" ]; then
+    if ! [[ "$PR_VIDEO_FOCUS" =~ ^([0-9]+):([0-9]+):([1-9][0-9]*):([1-9][0-9]*)$ ]]; then
+      echo "pr-video: PR_VIDEO_FOCUS must be x:y:width:height (nonnegative origin, positive even dimensions)." >&2
+      return 2
+    fi
+    local x=${BASH_REMATCH[1]} y=${BASH_REMATCH[2]} width=${BASH_REMATCH[3]} height=${BASH_REMATCH[4]}
+    if [ "$((width % 2))" -ne 0 ] || [ "$((height % 2))" -ne 0 ]; then
+      echo "pr-video: PR_VIDEO_FOCUS width and height must be even." >&2
+      return 2
+    fi
+    FOCUS_FILTER="crop=$width:$height:$x:$y:exact=1,"
+  fi
   for input in "$before" "$after"; do
     [ -s "$input" ] || { echo "pr-video: missing recording: $input" >&2; exit 1; }
+    if [ -n "$FOCUS_FILTER" ]; then
+      local dimensions
+      dimensions=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of json "$input") || return 1
+      if ! jq -e --arg focus "$PR_VIDEO_FOCUS" '
+        .streams[0] as $video | ($focus | split(":") | map(tonumber)) as $r |
+        $r[0] + $r[2] <= $video.width and $r[1] + $r[3] <= $video.height
+      ' <<< "$dimensions" >/dev/null; then
+        echo "pr-video: PR_VIDEO_FOCUS is outside $input; use the same in-bounds region on both takes." >&2
+        return 2
+      fi
+    fi
     require_motion "$input"
   done
+  local before_hash after_hash
+  before_hash=$(video_hash "$before") || return 1
+  after_hash=$(video_hash "$after") || return 1
+  if cmp -s "$before" "$after" || [ "$before_hash" = "$after_hash" ]; then
+    echo "pr-video: duplicate recordings; capture the actual previous and new behavior. If unchanged, publish one labeled verification take, not a comparison." >&2
+    return 1
+  fi
   local longest
   longest=$(awk -v a="$(duration_of "$before")" -v b="$(duration_of "$after")" \
     'BEGIN { print (a > b ? a : b) }')
   mkdir -p "$out"
 
   local renderer=${PR_VIDEO_RENDERER:-auto}
+  if [ "$renderer" = hyperframes ] || [ "$renderer" = auto ]; then
+    hyperframes_command || return 1
+  fi
   case "$renderer" in
     hyperframes) frame_hyperframes "$before" "$after" "$out" "$longest" ;;
     ffmpeg) frame_ffmpeg "$before" "$after" "$out" "$longest" ;;
     auto)
-      if command -v bunx >/dev/null 2>&1 && frame_hyperframes "$before" "$after" "$out" "$longest"; then
+      if frame_hyperframes "$before" "$after" "$out" "$longest"; then
         :
       else
         echo "pr-video: HyperFrames unavailable or failed; composing with ffmpeg (no labels or captions)" >&2
