@@ -4,7 +4,15 @@ export type ContextReading = {
   percent: number;
 } | null;
 
-export type DeskView = "proof" | "skills" | "replay";
+export type DeskView = "proof" | "skills" | "replay" | "brief";
+
+export type WorkflowBrief = {
+  objective: string;
+  guardrails: string;
+  verification: string;
+  stop: string;
+  enabled: boolean;
+};
 
 export type CheckKind = "types" | "lint" | "tests" | "mods";
 export type ProofReceipt = {
@@ -54,6 +62,7 @@ declare module "claude-code" {
       skills: SkillsState;
       turn: string;
       replay: ReplayState;
+      brief: WorkflowBrief;
     };
   }
 }

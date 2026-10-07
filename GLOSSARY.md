@@ -23,6 +23,12 @@ _Avoid_: Skill, shell hook, sandbox
 Any screen, command output, generated report, interface, or flow an end user sees or acts on. Includes web, mobile, CLI, TUI, desktop, rendered docs, reports.
 _Avoid_: UI when not graphical; web page when non-web.
 
+**Workflow brief**:
+User-configured objective, guardrails, verification and stop condition that a mod
+can add beside future prompts when explicitly enabled. Guidance, not a permission
+grant, proof of adherence or persistent project memory.
+_Avoid_: System prompt, enforcement, automatic skill selection
+
 **Surface review**:
 Multi-hat review of a customer-facing surface: product clarity, design quality, interaction quality, engineering resilience, backed by evidence. Broader than screenshot diff; narrower than code review.
 _Avoid_: Visual QA, pixel check, vibe check.

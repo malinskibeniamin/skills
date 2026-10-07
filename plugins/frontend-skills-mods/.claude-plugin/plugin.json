@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills-mods",
-  "version": "0.2.0",
-  "description": "Opt-in Claude Code harness desk: verification receipts, Skill flight recorder, safe edit replay and context readout. Requires Claude Code 2.1.287 or later.",
+  "version": "0.3.0",
+  "description": "Opt-in Claude Code harness desk: verification receipts, Skill flight recorder, bounded edit replay, context readout and user-controlled prompt briefing. Requires Claude Code 2.1.287 or later.",
   "author": {
     "name": "Beniamin Malinski"
   },

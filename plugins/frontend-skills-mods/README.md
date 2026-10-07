@@ -1,8 +1,9 @@
 # Harness desk
 
 Opt-in Claude Code mods, tested with **2.1.287**. Inspect check receipts, Skill
-calls and successful edit patches in one native pane. Harness lens keeps its
-context/last-skill readout above the prompt. Existing shell enforcement and
+calls, successful edit patches and a user-controlled workflow brief in one native
+pane. Harness lens keeps its context/last-skill readout above the prompt, with a
+Brief on indicator while prompt enrichment is enabled. Existing shell enforcement and
 Codex behavior stay unchanged.
 
 Review before installing: mods have Claude Code's machine access. This plugin
@@ -23,16 +24,56 @@ After adding `malinskibeniamin/skills` as a marketplace:
 Disable with `claude plugin disable frontend-skills-mods@skills`, or remove with
 `claude plugin uninstall frontend-skills-mods@skills`, then reload plugins.
 
-## One pane, three views
+## One pane, four views
 
 ```text
 /harness proof    Check receipts and repo comparison
 /harness skills   Skill Flight Recorder
 /harness replay   Step through returned edit patches
+/harness brief    Preview or configure prompt enrichment
 ```
 
 Commands run without a model turn. Tabs, refresh, previous/next, clear and close
 use native buttons. If a pane cannot be placed, the command still returns text.
+
+### Workflow brief
+
+Default **off**. Configure every field, inspect the exact injected block in the
+Brief tab, then enable it with the command or native button:
+
+```text
+/harness brief objective Add pagination
+/harness brief guardrails Keep the public API
+/harness brief verification Run the pagination tests
+/harness brief stop Commit only
+/harness brief on
+```
+
+The mod adds this user-configured guidance to `prompt.submit`'s model-only
+`context`, without changing user text, attachments, queue flags or origin.
+Existing context from other mods is preserved; an identical block is not added
+twice. Only composer, Remote Control bridge and SDK submissions qualify, not
+slash commands, plugin messages (even `asUser`), peers, schedules or notifications.
+These origins may also configure the brief; other origins can only view it.
+
+Editing a field pauses enrichment until explicitly re-enabled. **Pause brief**
+or `/harness brief off` stops future injection. **Clear brief** or
+`/harness brief clear` also erases the mod's copy. Session end, including clear,
+resume or switching conversations, resets it; hot reload retains session state.
+Overlapping field commands preserve both updates. A state-read failure passes the
+prompt unchanged and logs an unavailable notice. Downstream prompt blocks stay blocked.
+
+Each field is 1 nonempty line, at most 1024 UTF-8 bytes, without control or hidden
+format characters. Invalid inputs leave the brief unchanged. Nothing is inferred
+from repository files or complete prompts. The brief is guidance, not skill
+selection, adherence proof, new permission or a tool rewrite; current prompts
+and higher-priority instructions take precedence.
+
+**Privacy:** these fields are retained in session memory and, when enabled, sent
+to the model with each eligible prompt. Command output and injected context may
+remain in Claude's conversation/logs. Clearing cannot retract prior context;
+do not put secrets in the brief. Extra context consumes tokens. The mod itself
+makes no model/network calls; normal prompt submission still does.
 
 ### Proof Desk
 

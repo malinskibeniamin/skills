@@ -13,6 +13,7 @@ import type {
   ReplayEntry,
   ReplayState,
   SkillsState,
+  WorkflowBrief,
 } from "../types";
 
 import {
@@ -23,6 +24,13 @@ import {
   returnedPatch,
   skillObservation,
 } from "./observations";
+import {
+  briefContext,
+  canEnableBrief,
+  changeBrief,
+  emptyBrief,
+  isBriefOrigin,
+} from "./workflow-brief";
 
 const contextState = {
   plugin: "frontend-skills-mods",
@@ -76,7 +84,9 @@ export const register: Register = (on) => {
     }
     const { value: usage } = await $.state.get(contextState);
     const { value: lastSkill } = await $.state.get(skillState);
+    const { value: brief } = await $.state.get(briefState);
     const context = usage ? `Context ${usage.percent}%` : "Context unavailable";
+    const briefing = brief?.enabled ? " · Brief on" : "";
     const skill = lastSkill ? ` · Last skill ${displayLabel(lastSkill)}` : "";
     const { Box, Text } = $.ui.resolve(e);
     return Box({
@@ -85,7 +95,10 @@ export const register: Register = (on) => {
         await next(e),
         Text({
           dimColor: true,
-          children: `${context}${skill}`.slice(0, e.props.bodyColumns),
+          children: `${context}${briefing}${skill}`.slice(
+            0,
+            e.props.bodyColumns,
+          ),
         }),
       ],
     });
@@ -117,6 +130,7 @@ const viewState = { plugin: "frontend-skills-mods", key: "deskView" } as const;
 
 function registerDesk(on: On): void {
   registerReplay(on);
+  registerBrief(on);
   on("tool.call", async ($, e, next) => {
     // Any tool may mutate repo state, including MCP tools. Require a fresh comparison.
     await $.state.set(repositoryState, null);
@@ -187,9 +201,32 @@ function registerDesk(on: On): void {
     return result;
   });
   on("command.run", { command: "harness" }, async ($, e) => {
-    const view = e.args.trim() || "proof";
-    if (view !== "proof" && view !== "skills" && view !== "replay") {
-      return { text: "Usage: /harness [proof|skills|replay]" };
+    const args = e.args.trim();
+    const briefCommand = /^brief(?:\s+([\s\S]*))?$/.exec(args);
+    const view = briefCommand ? "brief" : args || "proof";
+    if (
+      view !== "proof" &&
+      view !== "skills" &&
+      view !== "replay" &&
+      view !== "brief"
+    ) {
+      return { text: "Usage: /harness [proof|skills|replay|brief]" };
+    }
+    if (briefCommand?.[1]) {
+      if (!isBriefOrigin(e.origin)) {
+        return {
+          text: "Workflow brief not changed: use a composer, bridge or SDK command.",
+        };
+      }
+      const briefArgs = briefCommand[1];
+      let error: string | undefined;
+      await update($, briefState, (current): WorkflowBrief => {
+        const state = current ?? emptyBrief();
+        const changed = changeBrief(state, briefArgs);
+        error = "error" in changed ? changed.error : undefined;
+        return "state" in changed ? changed.state : state;
+      });
+      if (error) return { text: `Workflow brief not changed: ${error}` };
     }
     if (view === "proof") await refreshRepository($);
     await $.state.set(viewState, view);
@@ -208,20 +245,48 @@ function registerDesk(on: On): void {
   on("ui.render", { component: "Pane" }, async ($, e, next) => {
     if (e.requestId !== "harness") return next(e);
     const { value: view = "proof" } = await $.state.get(viewState);
+    const { value: brief = emptyBrief() } = await $.state.get(briefState);
     const { Box, Text, Button } = $.ui.resolve(e);
     return Box({
       flexDirection: "column",
       children: [
         Box({
-          children: (["proof", "skills", "replay"] as const).map((tab) =>
-            Button({
-              key: tab,
-              label: tab.charAt(0).toUpperCase() + tab.slice(1),
-              onPress: () => $.state.set(viewState, tab),
-            }),
+          children: (["proof", "skills", "replay", "brief"] as const).map(
+            (tab) =>
+              Button({
+                key: tab,
+                label: tab.charAt(0).toUpperCase() + tab.slice(1),
+                onPress: () => $.state.set(viewState, tab),
+              }),
           ),
         }),
         Text({ children: await deskText($, view) }),
+        ...(view === "brief"
+          ? [
+              ...(brief.enabled || canEnableBrief(brief)
+                ? [
+                    Button({
+                      key: "toggle-brief",
+                      label: brief.enabled ? "Pause brief" : "Enable brief",
+                      onPress: () =>
+                        update($, briefState, (current): WorkflowBrief => {
+                          const state = current ?? emptyBrief();
+                          const changed = changeBrief(
+                            state,
+                            state.enabled ? "off" : "on",
+                          );
+                          return "state" in changed ? changed.state : state;
+                        }),
+                    }),
+                  ]
+                : []),
+              Button({
+                key: "clear-brief",
+                label: "Clear brief",
+                onPress: () => $.state.set(briefState, emptyBrief()),
+              }),
+            ]
+          : []),
         ...(view === "replay"
           ? [
               Button({
@@ -322,6 +387,17 @@ function proofOutcome(result: ToolCallResult<"Bash">): ProofReceipt["outcome"] {
 
 async function deskText($: EngineInterface, view: DeskView): Promise<string> {
   if (view === "proof") return proofText($);
+  if (view === "brief") {
+    const { value: brief = emptyBrief() } = await $.state.get(briefState);
+    return [
+      `Workflow brief: ${brief.enabled ? "enabled" : "disabled"}`,
+      "Future composer/bridge/SDK non-command prompts only. All 4 fields required.",
+      "Edit with /harness brief <field> <text>; enable with /harness brief on.",
+      "Disable with off; clear erases this mod's copy, not prior conversation context.",
+      "Injected block preview:",
+      briefContext(brief),
+    ].join("\n");
+  }
   if (view === "skills") {
     const { value: history } = await $.state.get(skillsState);
     return [
@@ -345,8 +421,32 @@ async function deskText($: EngineInterface, view: DeskView): Promise<string> {
 async function startDesk($: EngineInterface): Promise<void> {
   await $.command.register({
     name: "harness",
-    description: "Inspect verification, skill calls and edit replay.",
-    argumentHint: "[proof|skills|replay]",
+    description: "Inspect evidence or configure an opt-in workflow brief.",
+    argumentHint: "[proof|skills|replay|brief]",
+  });
+}
+
+const briefState = { plugin: "frontend-skills-mods", key: "brief" } as const;
+
+function registerBrief(on: On): void {
+  on("prompt.submit", async ($, e, next) => {
+    if (!isBriefOrigin(e.origin) || e.text.trimStart().startsWith("/"))
+      return next(e);
+    let brief: WorkflowBrief | undefined;
+    try {
+      brief = (await $.state.get(briefState)).value;
+    } catch {
+      $.ui.log("Workflow brief unavailable; prompt passed unchanged.");
+      return next(e);
+    }
+    if (!brief?.enabled) return next(e);
+    const context = briefContext(brief);
+    if (e.context?.includes(context)) return next(e);
+    return next({ ...e, context: [...(e.context ?? []), context] });
+  });
+  on("session.end", async ($, e, next) => {
+    await $.state.set(briefState, emptyBrief());
+    return next(e);
   });
 }
 

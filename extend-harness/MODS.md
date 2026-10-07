@@ -45,11 +45,13 @@ allowed, unsupported and recovery-path tests before replacing a guard.
 references. Browse [official samples](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods)
 for inspiration, not as authority over your generated host types.
 
-## First-wave ownership
+## Harness desk ownership
 
-One `/harness` command and pane own proof, skills and replay; keep the context
+One `/harness` command and pane own proof, skills, replay and brief; keep the context
 band small rather than stacking competing sample bands. The shipped implementations
-observe downstream results, never approve or rewrite tools.
+observe downstream tool results, never approve or rewrite tools. Workflow brief
+is the explicit opt-in exception to observation: it enriches model-only prompt
+context with user-configured guidance, preserving the submitted text.
 
 - Proof receipts recognize exact foreground main-loop checks. Read-only Git
   comparisons are bounded and explicitly stale/unverified when insufficient;
@@ -59,6 +61,10 @@ observe downstream results, never approve or rewrite tools.
 - Replay consumes successful, non-staged returned `Edit`/`Write` patches, not
   pre-tool snapshots. Retention and control-character handling are bounded;
   sensitive exclusion is best effort, not a secret-security guarantee. No undo.
+- Brief starts off; require all fields and explicit enable. Preserve incoming
+  context and provenance, skip commands/autonomous origins, and show the exact
+  injected block. Editing pauses it; session end resets it. User text sent in
+  context is not revoked by clearing local state. No automatic rule/skill loading.
 
 This is repo-owned code inspired by the samples, not a vendored upstream copy.
 If copying sample code later, pin its commit and retain its license/notices.
