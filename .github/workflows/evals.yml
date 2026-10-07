@@ -119,8 +119,11 @@ jobs:
 
       - name: Install Claude Code for plugin integration
         run: |
-          bun add --global @anthropic-ai/claude-code@2.1.220
+          bun add --global @anthropic-ai/claude-code@2.1.287
           claude --version
+
+      - name: Claude mods (isolated install, generated types, runtime tests)
+        run: bun run test:mods
 
       - name: Shell eval suite
         if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'

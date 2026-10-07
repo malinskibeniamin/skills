@@ -51,6 +51,31 @@ CLAUDE_PLUGIN_ROOT="$(
 bash "$CLAUDE_PLUGIN_ROOT/scripts/verify-install.sh" --remote origin
 ```
 
+### Optional Claude Code mods
+
+On **Claude Code 2.1.287 or later**, add the separate `frontend-skills-mods` plugin:
+
+```bash
+/plugin marketplace update skills
+/plugin install frontend-skills-mods@skills
+/reload-plugins
+```
+
+**Harness desk** adds `/harness proof` (check receipts), `/harness skills` (Skill
+Flight Recorder) and `/harness replay` (successful returned edit patches) in one
+native pane. Context and last-skill readouts remain above the prompt. Observations
+are not skill adherence or release certification; stale/unavailable comparisons
+and missing dogfood/visual evidence stay explicit. Git comparison is read-only;
+replay is bounded session memory with best-effort secret exclusions, not undo.
+Live terminal/Desktop painting and before/after captures remain unverified.
+
+Existing `frontend-skills` shell hooks and Codex installs stay unchanged. Mods have
+Claude Code's access to your machine: install only trusted code, including when a
+mod appears read-only. Disable with `claude plugin disable frontend-skills-mods@skills`;
+remove with `claude plugin uninstall frontend-skills-mods@skills`, then reload plugins.
+See the [mod README](plugins/frontend-skills-mods/README.md) for verification and
+[mod authoring](extend-harness/MODS.md) when extending the harness.
+
 **Codex (OpenAI)** -- install as a Codex plugin from the repo's marketplace manifest:
 
 ```bash
