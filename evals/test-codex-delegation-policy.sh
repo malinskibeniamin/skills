@@ -53,6 +53,20 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" "recursive.*codex exec" \
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "preserve.*selected model.*reasoning" \
   "codex skill does not lower interactive reasoning"
 
+# Public agent instructions, not proof of live model execution or GitHub posting.
+run_content_eval "$REPO_ROOT/codex/SKILL.md" 'REFERENCE.md#pr-report-and-posting' \
+  "existing codex skill owns the PR report contract"
+run_content_eval "$REPO_ROOT/codex/REFERENCE.md" 'P0=<n>.*P1=<n>.*P2=<n>.*P3=<n>' \
+  "PR report template exposes all priority counts"
+run_content_eval "$REPO_ROOT/codex/REFERENCE.md" 'Model:.*Effort:.*HEAD:.*Base:' \
+  "PR report template identifies the model and reviewed snapshot"
+run_content_eval "$REPO_ROOT/codex/REFERENCE.md" 'Keep the report local unless the user explicitly requests publishing' \
+  "PR report publishing has a separate explicit-intent gate"
+run_content_eval "$REPO_ROOT/codex/REFERENCE.md" 'Incomplete, empty, or failed reviews are not clean reviews' \
+  "PR reporting distinguishes failure from zero findings"
+run_content_eval "$REPO_ROOT/codex/REFERENCE.md" 'PR must be OPEN and its head/base SHAs must match' \
+  "PR publishing requires a matching open snapshot"
+
 run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "ccusage.*not subscription" \
   "ccusage is rejected as subscription-capacity evidence"
 run_content_eval "$REPO_ROOT/stay-within-limits/SKILL.md" "Claude capacity is unknown" \
