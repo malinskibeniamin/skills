@@ -1,8 +1,8 @@
-diff --git a/dist/cli/chunk-xkz5xbtv.js b/dist/cli/chunk-xkz5xbtv.js
-index f54f62c32c27aa1ee40587d149f26d1970e3c43d..fbe33f6093b5025051308972a2d418542f35395b 100644
---- a/dist/cli/chunk-xkz5xbtv.js
-+++ b/dist/cli/chunk-xkz5xbtv.js
-@@ -5875,6 +5875,14 @@ var sourcesOfKind = (config, kind) => config.content.sources.filter((source) =>
+diff --git a/dist/cli/chunk-r5nm9w0c.js b/dist/cli/chunk-r5nm9w0c.js
+index dd0953c8fe6916c345a1de5347da3d41d7c5580a..274c11d58c51ed1305398018b704d4387645a18f 100644
+--- a/dist/cli/chunk-r5nm9w0c.js
++++ b/dist/cli/chunk-r5nm9w0c.js
+@@ -6019,6 +6019,14 @@ var sourcesOfKind = (config, kind) => config.content.sources.filter((source) =>
  var resolveDocsCollection = (config, projectRoot) => {
    const [first, ...rest] = sourcesOfKind(config, "filesystem");
    if (!first) {
