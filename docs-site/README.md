@@ -1,6 +1,7 @@
 # Documentation site
 
-Blume 2.1.0 renders canonical repository skills, translations, and archived releases.
+Blume 2.2.1 renders canonical repository skills, translations, and archived releases.
+Node.js 22.19 or newer is required.
 
 ## Verify
 
@@ -67,10 +68,11 @@ Do not rewrite archived content when adopting a current-version feature.
 
 ## Upgrade patch
 
-`patches/blume@2.1.0.patch` preserves the non-staged custom source's collection root
+`patches/blume@2.2.1.patch` preserves the non-staged custom source's collection root
 in both Blume's source and compiled CLI. Without it, Astro reads the default `docs`
 directory instead of the materialized `content` tree. This fix was not included in
-2.1.0. Remove the patch only after a future version builds this site without it.
+2.2.1: an unpatched build fails with `BLUME_ENTRY_ID_MISMATCH`. Remove the patch
+only after a future version builds this site without it.
 
 ## Features not enabled
 
