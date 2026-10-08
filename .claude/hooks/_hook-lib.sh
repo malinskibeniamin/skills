@@ -628,7 +628,8 @@ hook_get_added_lines() {
 # ── Session-scoped changed files (for Stop hooks) ────────────────
 # Returns files that: (a) are in current git diff, (b) were touched
 # by this session via Edit/Write, and (c) were NOT dirty at session
-# start. Falls back to full git diff if tracking data unavailable.
+# start. Delivery can include touched baseline files via the second argument.
+# Falls back to full git diff if tracking data unavailable.
 #
 # Usage in Stop hooks:
 #   source "path/to/hook-lib.sh"
@@ -637,6 +638,9 @@ hook_get_added_lines() {
 
 hook_session_changed_files() {
   local ext_filter="${1:-}"
+  # Delivery must also resolve pre-existing files the session touched/adopted.
+  # Other quality checks retain their new-changes-only scope.
+  local include_touched_baseline="${2:-false}"
 
   # Get current tracked changes plus untracked files. Session-touch
   # intersection and the start baseline below prevent unrelated untracked
@@ -666,7 +670,7 @@ hook_session_changed_files() {
   local baseline_file="$_hook_session_dir/dirty-files-baseline"
 
   # Mode 1: Both touched-files and baseline exist (Claude Code normal)
-  # Formula: (current_diff ∩ touched) - baseline
+  # Formula: (current_diff ∩ touched) - baseline, unless delivery includes it.
   if [ -f "$touched_file" ]; then
     local repo_root
     repo_root=$(cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && pwd -P)
@@ -680,7 +684,7 @@ hook_session_changed_files() {
     local intersected
     intersected=$(comm -12 <(echo "$current_diff" | sort) <(echo "$touched_normalized") 2>/dev/null || true)
 
-    if [ -f "$baseline_file" ] && [ -s "$baseline_file" ]; then
+    if [ "$include_touched_baseline" != true ] && [ -f "$baseline_file" ] && [ -s "$baseline_file" ]; then
       intersected=$(comm -23 <(echo "$intersected" | sort) <(sort "$baseline_file") 2>/dev/null || echo "$intersected")
     fi
 

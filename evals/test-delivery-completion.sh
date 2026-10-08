@@ -115,6 +115,11 @@ printf 'requested.txt\n' > "$_delivery_session/dirty-files-baseline"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
   "pre-existing unrelated dirty work remains outside the requested scope"
+printf '%s\n' "$_delivery_repo/requested.txt" > "$_delivery_session/session-touched-files"
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "adopting a pre-existing dirty file still requires committing it" "uncommitted"
+rm "$_delivery_session/session-touched-files"
 : > "$_delivery_session/dirty-files-baseline"
 printf 'local\n' > "$_delivery_session/task-endpoint"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
@@ -126,6 +131,26 @@ printf 'commit\n' > "$_delivery_session/task-endpoint"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
   "an explicit commit-only endpoint does not require a push"
+printf '%s\n' "$_delivery_repo/requested.txt" > "$_delivery_session/session-touched-files"
+printf 'unrelated local work\n' > unrelated.txt
+printf 'unrelated.txt\n' > "$_delivery_session/dirty-files-baseline"
+printf 'push\n' > "$_delivery_session/task-endpoint"
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "recovered work cannot stop after a local commit" "unpushed"
+git push -q origin feature/delivery-completion
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
+  "recovered commit permits completion only after remote publication"
+if [ "$(git --git-dir="$_delivery_remote" rev-parse refs/heads/feature/delivery-completion)" = "$(git rev-parse HEAD)" ] \
+  && [ "$(cat unrelated.txt)" = 'unrelated local work' ] \
+  && [ -z "$(git ls-files unrelated.txt)" ]; then
+  echo "  PASS  recovery reaches the actual remote without staging unrelated work"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  recovery loses remote evidence or unrelated work"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: scoped recovery publication"
+fi
 popd >/dev/null
 
 printf 'local\n' > "$_delivery_session/task-endpoint"

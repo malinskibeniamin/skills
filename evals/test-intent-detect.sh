@@ -142,6 +142,56 @@ else
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: review artifact endpoint"
 fi
 
+_remote_sid="intent-remote-recovery-eval-$$"
+_remote_dir="/tmp/hook-session-${_remote_sid}"
+mkdir -p "$_remote_dir"
+printf 'local\n' > "$_remote_dir/task-endpoint"
+printf '%s' "$(jq -nc --arg sid "$_remote_sid" \
+  --arg prompt 'The agent finished with changes uncommitted. Please make sure it is all propagated to the remote/upstream.' \
+  '{hook_event_name:"UserPromptSubmit",session_id:$sid,prompt:$prompt}')" \
+  | CLAUDE_SESSION_ID="$_remote_sid" "$INTENT_SCRIPT" >/dev/null
+if [ "$(cat "$_remote_dir/task-endpoint" 2>/dev/null)" = push ]; then
+  echo "  PASS  remote recovery request replaces a stale local endpoint"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  remote recovery request leaves work local"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: remote recovery endpoint"
+fi
+printf '%s' "$(jq -nc --arg sid "$_remote_sid" \
+  --arg prompt 'Do not sync these changes to the remote.' \
+  '{hook_event_name:"UserPromptSubmit",session_id:$sid,prompt:$prompt}')" \
+  | CLAUDE_SESSION_ID="$_remote_sid" "$INTENT_SCRIPT" >/dev/null
+if [ "$(cat "$_remote_dir/task-endpoint" 2>/dev/null)" = local ]; then
+  echo "  PASS  explicit publication stop replaces a prior push endpoint"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  explicit publication stop leaves a prior push endpoint"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: publication stop endpoint"
+fi
+rm -rf "$_remote_dir"
+
+while IFS='|' read -r _remote_expected _remote_prompt; do
+  rm -rf "$_remote_dir"
+  printf '%s' "$(jq -nc --arg sid "$_remote_sid" --arg prompt "$_remote_prompt" \
+    '{hook_event_name:"UserPromptSubmit",session_id:$sid,prompt:$prompt}')" \
+    | CLAUDE_SESSION_ID="$_remote_sid" "$INTENT_SCRIPT" >/dev/null
+  _remote_actual=$(cat "$_remote_dir/task-endpoint" 2>/dev/null || true)
+  if [ "${_remote_actual:-none}" = "$_remote_expected" ]; then
+    echo "  PASS  remote recovery intent: $_remote_prompt"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  remote recovery intent: $_remote_prompt (expected $_remote_expected, got ${_remote_actual:-none})"
+    FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: remote recovery intent $_remote_prompt"
+  fi
+done <<'REMOTE_INTENTS'
+push|Please publish the agent's finished commits to the remote.
+pr|Please sync the finished work to upstream and open a draft PR.
+local|Please sync the changes to the remote, but do not push yet.
+none|Review this agent report: changes uncommitted; publish them to the remote.
+local|Do not sync these changes to the remote.
+REMOTE_INTENTS
+rm -rf "$_remote_dir"
+
 run_hook_eval "$INTENT_SCRIPT" \
   '{"hook_event_name":"PostToolUse","prompt":"fix the bug"}' 0 \
   "non-UserPromptSubmit event exits cleanly"

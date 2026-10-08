@@ -45,17 +45,15 @@ case "$branch" in
 esac
 
 # ── Step 0: Uncommitted changes → commit ───────────────────────
-# Session-scoped: only block on dirty files this session actually touched.
-# Pre-existing dirty work (dep-bumps, WIP from prior sessions, untracked
-# scratch files) must not hostage-hold the Stop hook — that was the
-# original "hook is super noisy" bug.
-_session_dirty=$(hook_session_changed_files)
+# Include pre-existing dirty files touched/adopted by this session; untouched
+# unrelated work stays outside delivery. Resolve mixed ownership before staging.
+_session_dirty=$(hook_session_changed_files "" true)
 if [ -n "$_session_dirty" ]; then
   _dirty_count=$(echo "$_session_dirty" | wc -l | tr -d ' ')
   if ! hook_has_session_tracking; then
     hook_stop_block "${_dirty_count} uncommitted file(s) without ownership tracking. Identify and commit only the requested scope; preserve unrelated work. If ownership is unclear, report the reserved decision instead of completion."
   fi
-  hook_stop_block "${_dirty_count} uncommitted file(s) from this session. Commit the requested scope, then retry."
+  hook_stop_block "${_dirty_count} uncommitted file(s) touched by this session, including adopted work. Inspect ownership, commit only the requested scope, then retry; preserve unrelated hunks."
 fi
 
 if [ "$endpoint" = "commit" ]; then

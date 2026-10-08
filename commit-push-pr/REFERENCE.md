@@ -1,5 +1,8 @@
 # Commit-push-pr reference
 
+When finishing or recovering another agent's local-only work, follow
+[remote completion](../shared/remote-completion.md) before reporting delivery.
+
 ## Pre-rebase check
 
 Resolve the PR base, then run the bundled `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (this repository root while developing the skill). Files touched by multiple commits are a prompt to inspect fixups, not proof of conflicts or token savings. Squash only coherent fixups on the current user-owned branch; preserve meaningful commits and branch topology. The script is read-only and never rewrites history.
