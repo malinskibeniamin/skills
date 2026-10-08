@@ -33,6 +33,7 @@ _hooks=(
   # missed bunx/npx/env-prefixed invocations and curl calls to api.snyk.io
   # (PR 72 review). The union below covers every shape the guard accepts.
   "snyk-project-create-guard.sh|snyk"
+  "launchdarkly-cli-guard.sh|[Ll][Aa][Uu][Nn][Cc][Hh][Dd][Aa][Rr][Kk][Ll][Yy]"
   "bash-verbose-guard.sh|git commit|gh |curl|wget|taskw|bun run|--json|--jq"
   "pr-evidence-nudge.sh|gh|git"
   "bend-laws-guard.sh|\.bend"

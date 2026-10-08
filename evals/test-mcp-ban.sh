@@ -58,6 +58,12 @@ _assert_denied "mcp__claude_ai_Buildkite_read-only__list" "bk" "Buildkite -> bk"
 _assert_denied "mcp__claude_ai_Box__files_list" "box" "Box -> box"
 _assert_denied "mcp__claude_ai_Microsoft_365__teams" "m365" "M365 -> m365"
 
+# LaunchDarkly reads and writes use ldcli across host naming conventions.
+_assert_denied "mcp__launchdarkly__get_feature_flag" "ldcli" "LaunchDarkly read -> ldcli"
+_assert_denied "mcp__LaunchDarkly__update_feature_flag" "ldcli" "LaunchDarkly write -> ldcli"
+_assert_denied "mcp__claude_ai_LaunchDarkly__list_flags" "ldcli" "Claude LaunchDarkly -> ldcli"
+_assert_denied "mcp__codex_apps__launchdarkly_get_flag" "ldcli" "Codex LaunchDarkly -> ldcli"
+
 # JSON validity on every deny — prevent regressions from unescaped quotes
 _run_mcp "mcp__claude_ai_Gmail__gmail_search_messages"
 if echo "$_last_stderr" | python3 -c "import json,sys; json.loads(sys.stdin.read())" 2>/dev/null; then
