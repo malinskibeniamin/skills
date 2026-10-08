@@ -49,6 +49,9 @@ Keep follow-up waves in the current PR.
 Draft PRs need no approval.
 For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
 origin, or report a genuine external blocker.
+When a finished agent reports uncommitted/unpushed work, or Git shows it, treat
+that as incomplete delivery. Use `shared/remote-completion.md` to recover verified
+in-scope work; preserve explicit local stops, unrelated work, and active owners.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.

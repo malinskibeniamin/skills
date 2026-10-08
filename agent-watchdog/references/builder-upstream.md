@@ -9,6 +9,11 @@ Watch another agent's work like a reviewer with a pager: wait for completion
 when needed, reconstruct the request, verify the evidence, and close the gap
 between what was asked and what actually happened.
 
+For completed worktrees, check pending files and actual remote HEAD even when
+an agent claims success. Follow [remote completion](../../shared/remote-completion.md):
+read-only modes report the delivery gap; authorized recovery verifies, commits,
+and pushes the original scope before declaring it delivered.
+
 ## Choose The Mode
 
 Infer the mode from the user's wording:

@@ -24,3 +24,5 @@ repair and redesign, not unrelated deletion, branch replacement, delegation, or 
 6. Replay original acceptance criteria, preserved behavior, and a credible failure path.
    Report what was retained/replaced, verification, residual risk, and delivered endpoint.
    Continue through authorized commit/push/PR work; merging still needs explicit permission.
+   Apply [remote completion](../../shared/remote-completion.md) to inherited dirty
+   files and unpushed commits; a prior agent's local-only report is not delivery.

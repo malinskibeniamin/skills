@@ -74,6 +74,16 @@ elif { echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)
 elif echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?commit([[:space:][:punct:]]|$)' \
   && [ "$_negated_commit" = false ]; then
   _endpoint="commit"
+# Remote-publication recovery is delivery even without a literal "push" verb.
+elif echo "$prompt" | grep -qiE '(propagat(e|ed|ing)|publish|sync)[^.;]{0,100}(remote|upstream)' \
+  && [ "$_artifact_only" = false ]; then
+  if [ "$_negated_push" = true ] || [ "$_negated_commit" = true ]; then
+    _endpoint="local"
+  elif ! echo "$prompt" | grep -qiE "(do not|don.t|dont|never)[^.;]{0,80}(propagat(e|ed|ing)|publish|sync)"; then
+    _endpoint="push"
+  else
+    _endpoint="local"
+  fi
 elif echo "$prompt" | grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]|$)" \
   && [ "$_negated_action" = false ] && [ "$_artifact_only" = false ]; then
   if [ "$_negated_push" = true ] || [ "$_negated_commit" = true ]; then
