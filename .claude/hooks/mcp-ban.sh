@@ -5,7 +5,7 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 # PreToolUse: deny-list ONLY the token-expensive MCP servers that have a
 # cheap CLI equivalent (Atlassian->acli, Gmail/Calendar/Drive->gog,
 # browser->agent-browser, Blacksmith->gh, Buildkite->bk, Box->box,
-# M365->m365). Every other MCP server is ALLOWED (default case exits 0)
+# M365->m365, LaunchDarkly->ldcli). Every other MCP server is ALLOWED (default case exits 0)
 # -- including the Builder.io Plan server used by /visual-plan and the local
 # TraceDecay graph used for code exploration.
 #
@@ -17,6 +17,11 @@ _hook_input=$(cat)
 tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
 case "$tool_name" in
+  # LaunchDarkly flag management always uses the official CLI, reads included.
+  mcp__*[Ll]aunch[Dd]arkly*__*|mcp__codex_apps__launchdarkly_*)
+    msg='LaunchDarkly MCP blocked. Use ldcli flags get --project <project-key> --flag <flag-key> --env <environment-key> --output json. For changes: ldcli flags update --help; verify scope and read back afterward. Missing CLI: brew tap launchdarkly/homebrew-tap && brew install ldcli. Auth: ldcli login. No MCP, direct HTTP, or browser fallback. Read shared/ldcli.md.'
+    ;;
+
   # ── Atlassian / Jira ───────────────────────────────────────────
   mcp__claude_ai_Atlassian__editJiraIssue)
     msg='Jira MCP banned. Use: acli jira workitem edit --key KEY-123 --summary ... --description .... 23x smaller output. Install: brew install atlassian/cli/acli. Auth: acli jira auth login.'

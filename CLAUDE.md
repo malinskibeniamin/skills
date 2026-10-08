@@ -1,7 +1,5 @@
 # Project rules
 
-Choices/safety here; details in hooks/skills.
-
 ## Toolchain
 
 `bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
@@ -12,7 +10,7 @@ Choices/safety here; details in hooks/skills.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
-- External services: existing repo CLI integration.
+- Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
 Match local idiom; use the smallest obvious design. Preserve user zoom, worktree
 isolation, secrets, types, generated files. Use useful `exemplars/`.
