@@ -1,11 +1,12 @@
 // Approves bot image-bump, ADP release, ui-registry version, and UI
-// main -> preprod promotion PRs as the gh-authenticated user. A bump is approved only when
+// main -> preprod promotion PRs as the gh-authenticated user, and merges the
+// ui-registry version PRs once their checks pass. A bump is approved only when
 // every changed line fits its rule, a promotion only when its head is already
 // on main; anything else is logged and raised as a macOS notification once
 // per head.
 //
 //   bun scripts/auto-approve-bumps.ts            # dry run
-//   bun scripts/auto-approve-bumps.ts --approve  # approve matches
+//   bun scripts/auto-approve-bumps.ts --approve  # approve and merge matches
 //
 // scripts/install-auto-approve-bumps.sh schedules it every 30 seconds. Each
 // run is one 1-point GraphQL search; a PR costs REST calls only when its head
@@ -55,6 +56,8 @@ type DiffRule = Authors & {
   // Every file rule must appear in the diff.
   exact?: boolean;
   approval: string;
+  // Merge after approving, once every check on the head has passed.
+  merge?: "squash" | "merge" | "rebase";
 };
 
 // Promotes already-reviewed commits, so the head must be on the source branch.
@@ -180,6 +183,8 @@ const RULES: readonly Rule[] = [
       },
     ],
     approval: "Auto-approved: Changesets version bump from merged changesets.",
+    // Merging tags vX.Y.Z and creates a GitHub Release; it does not publish.
+    merge: "squash",
   },
   {
     // Opened by cloudv2 release-promotion.yml for the Cloud and Admin UIs.
@@ -366,19 +371,31 @@ export type Review = { state: string; commitId: string };
 export function reviewAction(
   mine: readonly Review[],
   head: string,
-): "check" | "recheck" | "skip" {
+): "check" | "recheck" | "approved" | "skip" {
   const standing = mine.findLast(
     (r) => r.state !== "COMMENTED" && r.state !== "PENDING",
   );
   if (standing?.state === "APPROVED") {
-    return standing.commitId === head ? "skip" : "recheck";
+    return standing.commitId === head ? "approved" : "recheck";
   }
   if (standing?.state === "CHANGES_REQUESTED") return "skip";
   return mine.some((r) => r.state === "COMMENTED") ? "skip" : "check";
 }
 
+// `checks` is GitHub's combined state of every check run and status on a commit.
+export function mergeReadiness(
+  checks: string | null,
+): "ready" | "failed" | "wait" {
+  if (checks === "SUCCESS") return "ready";
+  return checks === "FAILURE" || checks === "ERROR" ? "failed" : "wait";
+}
+
 const PR_FIELDS =
-  "number url isDraft baseRefName headRefName headRefOid author { __typename login } repository { nameWithOwner }";
+  "number title url isDraft baseRefName headRefName headRefOid author { __typename login } repository { nameWithOwner } commits(last: 1) { nodes { commit { oid statusCheckRollup { state } } } }";
+
+// Keeps the query at 1 point; GitHub prices the nested commits connection
+// by this page size.
+const SEARCH_LIMIT = 40;
 
 // One search per PR author across its repos, sent as a single query.
 export function searchQuery(): string {
@@ -395,7 +412,7 @@ export function searchQuery(): string {
       `author:${author}`,
       ...repos.map((repo) => `repo:${repo}`),
     ].join(" ");
-    return `s${i}: search(query: ${JSON.stringify(query)}, type: ISSUE, first: 100) { nodes { ... on PullRequest { ${PR_FIELDS} } } }`;
+    return `s${i}: search(query: ${JSON.stringify(query)}, type: ISSUE, first: ${SEARCH_LIMIT}) { issueCount nodes { ... on PullRequest { ${PR_FIELDS} } } }`;
   });
   return `query { ${searches.join(" ")} }`;
 }
@@ -419,9 +436,11 @@ export function pendingPrs<T extends { key: string; head: string }>(
 const SearchResults = z.object({
   data: z.record(
     z.object({
+      issueCount: z.number(),
       nodes: z.array(
         z.object({
           number: z.number(),
+          title: z.string(),
           url: z.string(),
           isDraft: z.boolean(),
           baseRefName: z.string(),
@@ -435,6 +454,16 @@ const SearchResults = z.object({
               a?.__typename === "Bot" ? `app/${a.login}` : (a?.login ?? ""),
             ),
           repository: z.object({ nameWithOwner: z.string() }),
+          commits: z.object({
+            nodes: z.array(
+              z.object({
+                commit: z.object({
+                  oid: z.string(),
+                  statusCheckRollup: z.object({ state: z.string() }).nullable(),
+                }),
+              }),
+            ),
+          }),
         }),
       ),
     }),
@@ -512,11 +541,25 @@ function run(approve: boolean): void {
   const results = SearchResults.parse(
     ghJson(["api", "graphql", "-f", `query=${searchQuery()}`]),
   );
+  for (const search of Object.values(results.data)) {
+    if (search.issueCount > search.nodes.length) {
+      log("warn", {
+        truncated: search.issueCount,
+        fetched: search.nodes.length,
+      });
+    }
+  }
   const open = Object.values(results.data)
     .flatMap((search) => search.nodes)
     .flatMap((node) => {
       const repo = node.repository.nameWithOwner;
       const rule = findRule(repo, node.headRefName);
+      const last = node.commits.nodes[0]?.commit;
+      // Checks only count when they ran on the head we would merge.
+      const checks =
+        last?.oid === node.headRefOid
+          ? (last.statusCheckRollup?.state ?? null)
+          : null;
       return rule
         ? [
             {
@@ -525,6 +568,7 @@ function run(approve: boolean): void {
               repo,
               rule,
               node,
+              checks,
             },
           ]
         : [];
@@ -533,12 +577,16 @@ function run(approve: boolean): void {
   state.decided = decided;
   if (approve) saveState(state);
 
-  for (const { key: pr, head, repo, rule, node } of pending) {
+  for (const { key: pr, head, repo, rule, node, checks } of pending) {
     const decide = () => {
       if (!approve) return;
       state.decided[pr] = head;
       saveState(state);
     };
+    const merge = rule.kind === "diff" ? rule.merge : undefined;
+    // Wait for CI before spending REST calls on a PR this job will merge.
+    const readiness = merge ? mergeReadiness(checks) : undefined;
+    if (readiness === "wait") continue;
     const mine = Reviews.parse(
       ghJson([
         "api",
@@ -550,7 +598,7 @@ function run(approve: boolean): void {
         : [],
     );
     const action = reviewAction(mine, head);
-    if (action === "skip") {
+    if (action === "skip" || (action === "approved" && !merge)) {
       decide();
       continue;
     }
@@ -606,22 +654,57 @@ function run(approve: boolean): void {
       continue;
     }
     if (!approve) {
-      log("info", { pr, head, wouldApprove: true });
+      log("info", {
+        pr,
+        head,
+        wouldApprove: action !== "approved",
+        wouldMerge: readiness === "ready",
+      });
       continue;
     }
-    gh([
-      "api",
-      "--method",
-      "POST",
-      `repos/${repo}/pulls/${node.number}/reviews`,
-      "-f",
-      `commit_id=${head}`,
-      "-f",
-      "event=APPROVE",
-      "-f",
-      `body=${rule.approval}`,
-    ]);
-    log("info", { pr, head, approved: true });
+    if (action !== "approved") {
+      gh([
+        "api",
+        "--method",
+        "POST",
+        `repos/${repo}/pulls/${node.number}/reviews`,
+        "-f",
+        `commit_id=${head}`,
+        "-f",
+        "event=APPROVE",
+        "-f",
+        `body=${rule.approval}`,
+      ]);
+      log("info", { pr, head, approved: true });
+    }
+    if (merge) {
+      if (readiness === "failed") {
+        log("warn", { pr, head, notMerged: `checks ${checks}` });
+        notify(
+          `${pr}: approved, but checks ${checks} so not merged — ${node.url}`,
+        );
+      } else {
+        try {
+          // sha makes GitHub refuse the merge if the head moved since the check.
+          gh([
+            "api",
+            "--method",
+            "PUT",
+            `repos/${repo}/pulls/${node.number}/merge`,
+            "-f",
+            `sha=${head}`,
+            "-f",
+            `merge_method=${merge}`,
+            "-f",
+            `commit_title=${node.title} (#${node.number})`,
+          ]);
+          log("info", { pr, head, merged: true });
+        } catch (error) {
+          log("warn", { pr, head, notMerged: String(error) });
+          notify(`${pr}: approved, but the merge failed — ${node.url}`);
+        }
+      }
+    }
     decide();
   }
 }

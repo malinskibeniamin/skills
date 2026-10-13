@@ -6,6 +6,7 @@ import {
   type BumpPr,
   checkBump,
   checkPromotion,
+  mergeReadiness,
   parseDiff,
   pendingPrs,
   reviewAction,
@@ -383,12 +384,12 @@ describe("reviewAction", () => {
 
   test.each([
     ["no review yet", [], "check"],
-    ["an approval of this head", [approved(HEAD)], "skip"],
+    ["an approval of this head", [approved(HEAD)], "approved"],
     ["an approval of an older head", [approved(OLD)], "recheck"],
     [
       "a comment after approving (cloudv2 #30515)",
       [approved(HEAD), { state: "COMMENTED", commitId: HEAD }],
-      "skip",
+      "approved",
     ],
     [
       "an approval of an older head, then a comment",
@@ -587,5 +588,18 @@ describe("pendingPrs", () => {
     expect(pendingPrs(open, decided).decided).toEqual({
       "redpanda-data/cloudv2#1": "a",
     });
+  });
+});
+
+describe("mergeReadiness", () => {
+  test.each([
+    ["SUCCESS", "ready"],
+    ["FAILURE", "failed"],
+    ["ERROR", "failed"],
+    ["PENDING", "wait"],
+    ["EXPECTED", "wait"],
+    [null, "wait"],
+  ] as const)("treats checks %s as %s", (checks, readiness) => {
+    expect(mergeReadiness(checks)).toBe(readiness);
   });
 });
