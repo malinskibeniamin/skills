@@ -88,7 +88,7 @@ while read -r skill cap; do
 done <<'EOF'
 ask-ben 7800
 wayfinder 5000
-review 4775
+review 4900
 diagnosing-bugs 5600
 triage 4100
 dogfood 4000
@@ -126,7 +126,7 @@ done <<'EOF'
 aip 3825
 blast-radius 2850
 brain-dump 3200
-grilling 4125
+grilling 4200
 improve 3600
 golang 3525
 pr-shepherd 3525
@@ -154,7 +154,7 @@ codebase-design 3000
 create-verification-skill 3250
 quantify-impact 2975
 setup-routines 2975
-development-lifecycle 2900
+development-lifecycle 3025
 release 2850
 to-spec 2850
 frontend-starter-kit 2800
@@ -205,14 +205,16 @@ wait-what 400
 work 325
 EOF
 
-# Main's 176225-byte cap plus 550 for /ms craft, testing, and PR-shape checks.
-if [ "$remaining_skill_total" -le 176775 ]; then
-  echo "  PASS  remaining-skill wave under 176775 bytes ($remaining_skill_total)"
+# Main's 176225-byte cap plus 550 for /ms checks. The post-v1.3.1 refresh
+# adds 200 bytes of bounded room for ticket identity, seam trade-offs, affirmative
+# recommendations, and explicit host paths; descriptions/catalog are unchanged.
+if [ "$remaining_skill_total" -le 176975 ]; then
+  echo "  PASS  remaining-skill wave under 176975 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 176775)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 176975)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 176775 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 176975 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible

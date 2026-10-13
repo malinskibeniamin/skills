@@ -60,7 +60,8 @@ The frontier is every ticket whose blockers are complete.
 - [ ] <observable criterion>
 ```
 
-For tracker issues, add `## Parent` when a parent exists, followed by `## What to build`,
-`## Acceptance criteria`, and `## Blocked by`.
+For tracker issues, add `## Parent` when a parent exists, followed by `## What to build`
+and `## Acceptance criteria`. Omit `## Blocked by` when native blocker edges are set;
+include it only for the fallback, so dependencies have one source of truth.
 
 Do not inline implementation detail. For `/prototype` code, add a context pointer to its durable location.

@@ -62,7 +62,7 @@ run_content_eval "$GITHUB_TRACKER" "issue_dependencies_summary\.blocked_by" "Git
 run_content_eval "$GITHUB_TRACKER" "database id.*not.*#number.*node_id|not.*#number.*node_id" "GitHub blocking uses database id not display ids"
 run_content_eval "$GITHUB_TRACKER" "--add-assignee @me" "GitHub wayfinding claims by assignment"
 run_content_eval "$GITHUB_TRACKER" "verify every.*ticket.*child|verify.*child.*count" "GitHub wayfinding verifies native sub-issues"
-run_content_eval "$GITLAB_TRACKER" "glab api projects/:id/issues/:iid/links" "GitLab wayfinding checks native blocker links"
+run_content_eval "$GITLAB_TRACKER" "glab api projects/:id/issues/<child-iid>/links" "GitLab wayfinding checks native blocker links"
 run_content_eval "$GITLAB_TRACKER" "Premium/Ultimate|free tier" "GitLab wayfinding documents blocking fallback tier"
 run_content_eval "$GITLAB_TRACKER" "--assignee @me" "GitLab wayfinding claims by assignment"
 run_content_eval "$GITLAB_TRACKER" "native child|native parent" "GitLab wayfinding prefers native hierarchy"

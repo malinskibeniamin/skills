@@ -38,6 +38,8 @@ A confident, reversible **Recommended:** answer is an assumption, not a question
 
 **Stop signal:** "no more questions", "just do it", "don't ask", or a bare endpoint ("draft PR") ends asking for the rest of the session. Adopt every open recommendation, list them as assumptions, and continue to the endpoint; pause only for an irreversible or user-reserved decision.
 
+Word questions so yes accepts the recommendation.
+
 An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline unless delegation is explicitly authorized; search environment, filesystem, tools, sources. User decisions stay theirs.
 
 ## 3. Exit
