@@ -30,6 +30,10 @@ done
 
 # ── Session-scoped fixtures ──────────────────────────────────────
 _saved_session="${CLAUDE_SESSION_ID:-}"
+# This Claude fixture must not inherit the invoking Codex host's source tag.
+# evals/run.sh isolates each file in a subshell; later Codex fixtures set their own IDs.
+unset CODEX_SESSION_ID
+
 export CLAUDE_SESSION_ID="eval-new-events-$$"
 _eval_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID}"
 mkdir -p "$_eval_session_dir"

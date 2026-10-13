@@ -38,20 +38,18 @@ Endpoint owns scope:
 
 Earlier stop wins. Ask only for user-reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
-Owned-feature work: commit, push, or rebase without another permission prompt.
-Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push automatically.
-Push CI fix or rebase now (`--force-with-lease`).
+Owned-feature commits, pushes, and rebases need no extra approval. Fetch/rebase behind-base
+PRs, resolve routine conflicts, verify, then push CI fixes/rebases now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
-a session; recover endpoint state and continue.
+Delivery follow-ups replace local stops. Recover endpoint state without session restart
+or reconfiguration; continue.
 Keep follow-up waves in the current PR.
 Draft PRs need no approval.
 For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
 origin, or report a genuine external blocker.
-When a finished agent reports uncommitted/unpushed work, or Git shows it, treat
-that as incomplete delivery. Use `shared/remote-completion.md` to recover verified
-in-scope work; preserve explicit local stops, unrelated work, and active owners.
+Uncommitted/unpushed finished-agent work is incomplete. Recover verified scope via
+`shared/remote-completion.md`; preserve explicit local stops, unrelated work, active owners.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
@@ -74,13 +72,14 @@ One outcome contract:
 
 Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
 Improve feedback loops before concurrency; delegation stays opt-in.
-inspect -> act -> verify -> repeat. Let evidence choose plans/tools/guidance. Continue through
-reversible decisions; put status notes beside the next action, not a stop that recaps work,
-offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps
-its task checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
+inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance; continue
+reversibly. Put status beside the next action, not a stopping recap or offer. Add no
+approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with
+a failing public-contract test. Long work tracks checklist, evidence, pause triggers
+in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
-wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,
+wins. Never invent rankings or infer usage from tokens. Promote context, effort,
 or models only through `agent-evals/context-ablation/`.
 
 Before done: `bun run lint:fix` and `bun run type:check`. Never hand-edit generated files
