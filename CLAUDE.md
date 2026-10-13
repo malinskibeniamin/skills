@@ -5,15 +5,15 @@
 `bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
 - UI: `@/components/ui/` first; buttons use `<Button>`, variants/tokens.
-  Functional React; React Compiler owns memoization.
+  Functional React components; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Match local idiom; smallest obvious design. Preserve user zoom, worktree
-isolation, secrets, types, generated files. Use useful `exemplars/`.
+Match local idiom; smallest clear design. Preserve user zoom, worktree
+isolation, secrets, types, generated files. Use `exemplars/`.
 
 ## Human-facing text
 
