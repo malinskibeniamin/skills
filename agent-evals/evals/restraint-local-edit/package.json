@@ -1,0 +1,15 @@
+{
+  "name": "restraint-local-edit",
+  "type": "module",
+  "scripts": {
+    "test": "bun test src/message.test.ts",
+    "lint:fix": "biome lint src",
+    "type:check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.9",
+    "@types/bun": "1.3.14",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}
