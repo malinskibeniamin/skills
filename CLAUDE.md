@@ -2,24 +2,24 @@
 
 ## Toolchain
 
-`bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
+`bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
-- UI: `@/components/ui/` first; buttons use `<Button>`, variants, design tokens.
-  Functional React components; React Compiler owns memoization.
+- UI: `@/components/ui/` first; buttons use `<Button>`, variants/tokens.
+  Functional React; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Match local idiom; use the smallest obvious design. Preserve user zoom, worktree
+Match local idiom; smallest obvious design. Preserve user zoom, worktree
 isolation, secrets, types, generated files. Use useful `exemplars/`.
 
 ## Human-facing text
 
-Documents/PRs/reviews/replies/status: use `shared/communication.md`: decision,
-value, ask first; own claims/intent/uncertainty. Above 200 words: <=120-word first read,
-then evidence/detail. Count explicit word limits with a tool; never invent human endorsement.
+Human text: use `shared/communication.md` -- decision/value/ask first; own claims/intent/uncertainty.
+Above 200 words: <=120-word first read, then evidence/detail. Tool-count explicit word limits;
+never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs use `shared/intent-map.md`:
 map objective/assumptions/references/risks/implementation/verification/superseded choices.
@@ -37,12 +37,13 @@ Endpoint owns scope:
 
 Earlier stop wins. Ask only for user-reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
-Owned-feature commits, pushes, and rebases need no extra approval. Fetch/rebase behind-base
-PRs, resolve routine conflicts, verify, then push CI fixes/rebases now (`--force-with-lease`).
+Owned-feature work: commit, push, or rebase without another permission prompt.
+Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push automatically.
+Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-Delivery follow-ups replace local stops. Recover endpoint state without session restart
-or reconfiguration; continue.
+Delivery follow-ups replace local stops. Never ask the user to restart or reconfigure
+a session; recover endpoint state and continue.
 Keep follow-up waves in the current PR.
 Draft PRs need no approval.
 For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
@@ -72,9 +73,9 @@ One outcome contract:
 Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
 Improve feedback loops before concurrency; delegation stays opt-in.
 inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance; continue
-reversibly. Put status beside the next action, not a stopping recap or offer. Add no
-approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with
-a failing public-contract test. Long work tracks checklist, evidence, pause triggers
+reversibly. Put status notes beside the next action; no stopping recaps or offers to continue.
+Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with
+a failing public-contract test. Long work keeps its task checklist, evidence, and pause triggers
 in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
