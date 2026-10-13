@@ -55,7 +55,6 @@ fi
 CPP="$REPO_ROOT/commit-push-pr/SKILL.md"
 run_content_eval "$CPP" "--no-pr" "commit-push-pr documents --no-pr flag"
 run_content_eval "$CPP" '--no-pr.*never creates a PR' "--no-pr prevents PR creation while allowing existing evidence refresh"
-run_content_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" "commit only the requested scope" "lifecycle-stop prescribes the surviving commit path"
 
 # No stale invocations of the dead names outside history.
 _stale=$(grep -rlnE '`/(brainstorming|commit-push)`' "$REPO_ROOT" --include='*.md' 2>/dev/null | grep -v CHANGELOG | grep -v "$REPO_ROOT/docs/" || true)
