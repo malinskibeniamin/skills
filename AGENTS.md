@@ -13,18 +13,18 @@
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Match local idiom; smallest obvious design. Preserve user zoom, worktree
-isolation, secrets, types, generated files. Use `exemplars/`.
+Match local idiom and the smallest obvious design. Preserve zoom, worktree isolation,
+secrets, types, generated files; use `exemplars/`.
 
 ## Human-facing text
 
-Human text: use `shared/communication.md` -- decision/value/ask first; own claims/intent/uncertainty.
-Above 200 words: <=120-word first read, then evidence/detail. Tool-count explicit word limits;
-never invent human endorsement.
+Human-facing text: `shared/communication.md` -- decision/value/ask first; own claims,
+intent, uncertainty. Above 200 words: <=120-word brief, then detail.
+Count explicit word limits with a tool; never invent human endorsement.
 
-Substantial plans/analyses/reviews/recaps/status/handoffs use `shared/intent-map.md`:
-map objective/assumptions/references/risks/implementation/verification/superseded choices.
-Trivial/single-path output: linear.
+Substantial plans/analyses/reviews/recaps/status/handoffs: `shared/intent-map.md` maps
+objective/assumptions/references/risks/implementation/verification/superseded choices.
+Trivial/single-path output stays linear.
 
 ## Execution contract
 
@@ -38,24 +38,23 @@ Endpoint owns scope:
 
 Earlier stop wins. Ask only for user-reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
-Owned-feature work: commit, push, or rebase without another permission prompt.
+Commit/push/rebase owned features without another permission prompt.
 Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push automatically.
 Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-Delivery follow-ups replace local stops. Never ask the user to restart or reconfigure
-a session; recover endpoint state and continue.
-Keep follow-up waves in the current PR.
-Draft PRs need no approval.
-For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
-origin, or report a genuine external blocker.
-Uncommitted/unpushed finished-agent work is incomplete. Recover verified scope via
-`shared/remote-completion.md`; preserve explicit local stops, unrelated work, active owners.
+Delivery follow-ups replace prior local stops. Recover endpoint state; never request a
+session restart/reconfiguration. Keep follow-ups in the current PR. Drafts need no approval.
+For push/PR/ship, verify committed scope and HEAD on origin; local-only is incomplete.
+Report genuine external blockers.
+Finished-agent reports or Git showing uncommitted/unpushed work mean incomplete delivery.
+Recover verified scope via `shared/remote-completion.md`; preserve explicit local stops,
+unrelated work, and active owners.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
-Use isolated browser automation; never take over a human-owned browser or desktop app.
+Isolate browser automation; never take over human-owned browsers/desktop apps.
 
-End action turns with one status line:
+End actions with one status line:
 `🟢 done — <evidence>`, `🟡 awaiting decision — <decision>`, or
 `🔴 blocked — <external blocker and needed input>`.
 Immediately before each: `Intent: <outcome> | Impact: <value>`.
@@ -66,24 +65,22 @@ For any PR, include its full PR URL on the final status line.
 
 One outcome contract:
 
-- **Objective** -- high-level end state.
-- **Guardrails** -- non-inferable constraints and reserved decisions.
-- **Verification** -- checks/behavior proving the result.
-- **Stop** -- requested endpoint and genuine blockers.
+- **Objective** -- end state.
+- **Guardrails** -- non-inferable constraints/reserved decisions.
+- **Verification** -- checks/behavior proving success.
+- **Stop** -- requested endpoint/genuine blockers.
 
 Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
 Improve feedback loops before concurrency; delegation stays opt-in.
-inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance; continue
-reversibly. Put status notes beside the next action; no stopping recaps or offers to continue.
-Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with
-a failing public-contract test. Long work keeps its task checklist, evidence, and pause triggers
-in `.context/implementation-notes.md`.
+inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance. Continue reversible
+decisions; pair status with the next action, not recaps/offers/non-blocking options.
+Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps checklist/evidence/pause triggers in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
 wins. Never invent rankings or infer usage from tokens. Promote context, effort,
 or models only through `agent-evals/context-ablation/`.
 
-Before done: `bun run lint:fix` and `bun run type:check`. Never hand-edit generated files
+Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generated files
 (`*.gen.*`, `*_pb.*`, `*_connectquery.*`, or an `@generated`/`DO NOT EDIT` header).
 
 ## Codex-specific

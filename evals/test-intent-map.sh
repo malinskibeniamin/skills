@@ -9,7 +9,7 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" 'shared/intent-map\.md' \
   "ambient instructions route relevant outputs through the intent-map contract"
 run_content_eval "$REPO_ROOT/CLAUDE.md" 'Substantial plans.*analyses.*reviews.*recaps.*status.*handoffs' \
   "intent-map trigger is output-shaped rather than a manual skill list"
-run_content_eval "$REPO_ROOT/CLAUDE.md" 'map objective.*assumptions.*references' \
+run_content_eval "$REPO_ROOT/CLAUDE.md" 'objective.*assumptions.*references' \
   "ambient instructions carry the usable map shape without a skill-specific load"
 run_content_eval "$REPO_ROOT/CLAUDE.md" 'implementation.*verification' \
   "ambient intent maps connect decisions to implementation evidence"

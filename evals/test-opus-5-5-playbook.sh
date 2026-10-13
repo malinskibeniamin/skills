@@ -1,13 +1,13 @@
 # Opus 5.5 playbook: keep long runs moving, keep task state in a file, name design
 # exclusions, and mark unconfirmed research.
 
-run_content_eval "$REPO_ROOT/CLAUDE.md" "offers to continue" \
+run_content_eval "$REPO_ROOT/CLAUDE.md" "not recaps/offers/non-blocking options" \
   "ambient contract rejects non-blocking continuation offers"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "status notes beside the next action" \
+run_content_eval "$REPO_ROOT/CLAUDE.md" "pair status with the next action" \
   "status notes ride with the next action"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "task checklist, evidence, and pause triggers" \
+run_content_eval "$REPO_ROOT/CLAUDE.md" "checklist/evidence/pause triggers" \
   "long runs keep their task checklist in a file"
-run_content_eval "$REPO_ROOT/AGENTS.md" "offers to continue" \
+run_content_eval "$REPO_ROOT/AGENTS.md" "not recaps/offers/non-blocking options" \
   "Codex parity carries the continuation rule"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "evidence, stop.*acceptance" \
   "delegated lanes return evidence and the coordinator owns acceptance"

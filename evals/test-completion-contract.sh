@@ -9,11 +9,13 @@ run_file_eval "$COMPLETION" "completion-contract-stop.sh exists"
 run_executable_eval "$COMPLETION" "completion-contract-stop.sh is executable"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "## Execution contract" "CLAUDE.md defines the execution contract"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "[Bb]uild, fix, implement" "ordinary implementation continues without approval"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "commit, push, or rebase" \
+run_content_eval "$REPO_ROOT/CLAUDE.md" "[Cc]ommit[/, ].*push[/, ].*rebase" \
   "standing git authorization covers routine delivery"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "without another permission prompt" \
   "standing git authorization prevents repeated permission prompts"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "Never ask the user to restart or reconfigure" \
+run_content_eval "$REPO_ROOT/CLAUDE.md" "never request a" \
+  "stale endpoint recovery forbids restart requests"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "session restart/reconfiguration" \
   "stale endpoint recovery stays inside the harness"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "🟢 done —" "CLAUDE.md defines visible done status"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "full PR URL.*final status line" \
