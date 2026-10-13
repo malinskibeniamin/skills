@@ -428,6 +428,8 @@ and, when present, `git mv CONTEXT-MAP.md GLOSSARY-MAP.md`. Coordinate one commi
 the team to avoid creating a second, empty glossary. Released documentation snapshots retain
 their historical filenames.
 
+Six focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) are adapted locally: `/animate`, `/animation-performance`, `/animation-vocabulary`, `/mobile-native`, `/break-ui`, and `/ask-sonner`. Motion review, audit, and opportunity searches share `/animate`; existing design/prototype workflows remain owners. The fixed library picker and native Swift/Expo skills are not installed. [Selection, pinned sources, compatibility changes, and refresh steps](shared/EMIL-SKILLS-CREDITS.md).
+
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
 The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **55 skills** from pstack **0.15.21** (52 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`1dcc2bacde73ddd284803b7af28164d0436198fc`](https://github.com/cursor/plugins/tree/1dcc2bacde73ddd284803b7af28164d0436198fc/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json).
