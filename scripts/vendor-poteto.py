@@ -23,9 +23,11 @@ SHORT_DESCRIPTIONS = {
     "figure-it-out": "Design a verifiable playbook for an unfamiliar task",
     "how": "Explain subsystem behavior from source evidence",
     "interrogate": "Challenge a diff with adversarial review",
+    "ketchup": "Catch up on this chat and pending user decisions",
     "maintain-verification-skill": "Refresh a verifier from source and live behavior",
     "make-bot-ui": "Build a dashboard that wakes a bot through a webhook",
     "no-comments": "Replace redundant comments with structural guarantees",
+    "poteto-help": "Find pstack skills, setup, and troubleshooting guidance",
     "poteto-mode": "Route rigorous work through Poteto playbooks",
     "principle-build-the-lever": "Build the repeatable tool that does or proves the work",
     "principle-experience-first": "Choose user experience over implementation convenience",
@@ -106,6 +108,56 @@ def discover(source, files):
     if not skills or "LICENSE" not in files or ".cursor-plugin/plugin.json" not in files:
         raise ValueError("Expected a complete pstack package with skills, LICENSE, and plugin metadata")
     return skills
+
+
+def model_rule(repo):
+    config = json.loads((repo / "config/model-routing.json").read_text())
+    allowed = {"claude-opus-5-5", "gpt-6.1-sol"}
+    preferred = config["selection"]["preferred_models"]
+    if set(config["models"]) != allowed or set(preferred) != allowed or len(preferred) != 2:
+        raise ValueError("Only Opus 5.5 and GPT-6.1 Sol are allowed in pstack routing")
+    policy = config["quality_first"]
+
+    def route(value):
+        if not isinstance(value, dict) or value.get("model") not in allowed or value.get("effort") != "xhigh":
+            raise ValueError("Unsupported pstack model route; use the host's Opus 5.5 / GPT-6.1 Sol xhigh routes")
+        return f'{value["model"]}-{value["effort"]}'
+
+    default = route(policy["default"])
+    hard_policy = policy["hard"]
+    if hard_policy["efforts"] != ["xhigh"]:
+        raise ValueError("Unsupported pstack model route; hardest tasks must use xhigh")
+    hard = route({"model": hard_policy["model"], "effort": "xhigh"})
+    review = route(policy["review"]["primary"])
+    fallback = route(policy["review"]["secondary"])
+    panel = f"{review}, {fallback}"
+    roles = [
+        ("feature, refactoring", default),
+        ("bug-fix", default),
+        ("perf-issue", default),
+        ("hillclimb", default),
+        ("judgment and prose", default),
+        ("hardest tasks", hard),
+        ("how explorer", default),
+        ("how explainer", default),
+        ("why investigators", default),
+        ("why synthesizer", default),
+        ("reflect tooling", review),
+        ("reflect judgment, divergent, synthesizer", default),
+        ("arena runners", panel),
+        ("arena cross-judge pool", panel),
+        ("swarm workers", default),
+        ("architect runners", panel),
+        ("interrogate reviewers", panel),
+    ]
+    return "\n".join([
+        "---", "alwaysApply: true", "---",
+        "# Generated from config/model-routing.json; rerun vendor-poteto.py --model-rule.",
+        "# budget: large (xhigh)",
+        "# Every role overrides upstream defaults. No other models or aliases are allowed.",
+        "# A model rule grants no permission to delegate or call models recursively.",
+        *[f"{name}: {model}" for name, model in roles],
+    ])
 
 
 def adapter(skill):
@@ -203,9 +255,15 @@ def main():
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--source", type=Path, help="pstack directory from the pinned upstream checkout")
     parser.add_argument("--revision", help="full upstream commit SHA")
-    parser.add_argument("--check", action="store_true", help="check the local snapshot and complete registrations")
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument("--check", action="store_true", help="check the local snapshot and complete registrations")
+    actions.add_argument("--model-rule", action="store_true", help="print a pstack rule using only the host's Opus/Sol routes; write nothing")
     args = parser.parse_args()
-    if args.check:
+    if args.model_rule:
+        if args.source or args.revision:
+            parser.error("--model-rule reads host routing; omit --source and --revision")
+        print(model_rule(args.repo_root.resolve()))
+    elif args.check:
         if args.source or args.revision:
             parser.error("--check reads local state; omit --source and --revision")
         check(args.repo_root.resolve())

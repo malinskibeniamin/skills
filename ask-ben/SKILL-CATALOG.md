@@ -56,8 +56,10 @@
 | `/poteto-correct` | Poteto: Make repeated agent mistakes impossible by design. |
 | `/poteto-create-verification-skill` | Poteto: Create a project-local real-app verifier. |
 | `/poteto-figure-it-out` | Poteto: Design a verifiable playbook for an unfamiliar task. |
+| `/poteto-help` | Poteto: Find pstack skills, setup, and troubleshooting guidance. |
 | `/poteto-how` | Poteto: Explain subsystem behavior from source evidence. |
 | `/poteto-interrogate` | Poteto: Challenge a diff with adversarial review. |
+| `/poteto-ketchup` | Poteto: Catch up on this chat and pending user decisions. |
 | `/poteto-maintain-verification-skill` | Poteto: Refresh a verifier from source and live behavior. |
 | `/poteto-make-bot-ui` | Poteto: Build a dashboard that wakes a bot through a webhook. |
 | `/poteto-mode` | Poteto: Route rigorous work through Poteto playbooks. |

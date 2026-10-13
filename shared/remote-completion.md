@@ -1,6 +1,6 @@
 # Recover local-only agent work
 
-Treat a finished agent's “Changes uncommitted”, “not pushed”, or similar report as
+Treat a finished agent's "Changes uncommitted", "not pushed", or similar report as
 incomplete delivery, not a handoff. Git state is decisive even when the message
 claims success. Apply this when finishing action work or inspecting another
 agent's completed worktree.

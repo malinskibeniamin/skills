@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Ketchup"
+  short_description: "Poteto: Catch up on this chat and pending user decisions"
+policy:
+  allow_implicit_invocation: false

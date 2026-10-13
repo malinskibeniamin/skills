@@ -19,13 +19,28 @@ keep their current behavior. [Inventory and source pin](../vendor/pstack.lock.js
   workflow. Do not accidentally substitute this harness's unqualified skill with
   the same name. Resolve references, playbooks, scripts, and agent definitions from
   the upstream file's directory, not the adapter's directory.
-- Discover available tools and model identifiers instead of copying Cursor-only
-  defaults. If a required tool, control skill, automation editor, or agent role is
+- Discover available tools and the host identifiers for the permitted models instead
+  of copying Cursor-only defaults. If a required tool, control skill, automation editor, or agent role is
   unavailable, state the limitation. Use an available equivalent only when it
   preserves the contract; never claim unperformed verification or delegation.
-- Keep model configuration in the host's existing owner (`config/model-routing.json`
-  here). `/poteto-setup-pstack` supports explicitly requested Cursor setup; reading
-  it in Codex does not authorize writing Cursor rules or changing Codex settings.
+- Keep model configuration in `config/model-routing.json`. Before applying any
+  upstream role or setup workflow, run
+  `python3 <plugin-root>/scripts/vendor-poteto.py --model-rule` and use its generated
+  role assignments, not upstream defaults.
+  This read-only command rejects unsupported models and reasoning budgets.
+- Only **Opus 5.5** (`claude-opus-5-5`) and **GPT-6.1 Sol** (`gpt-6.1-sol`), at
+  `xhigh`, may execute work. Grok and every other model are forbidden across defaults,
+  panels, fallbacks, automation workers, and bots. Ignore incompatible upstream or
+  existing Cursor role rules; `auto` and `inherit-parent` cannot bypass this limit.
+  If the permitted host model is unavailable, follow the canonical routing policy's
+  two-model fallback or report the lane blocked. Never fall back to an upstream model.
+- `/poteto-setup-pstack` may write the generated rule only during explicitly requested
+  Cursor setup, without offering upstream model/budget choices. Reading a skill in
+  Codex does not authorize writing Cursor rules or changing Codex settings. Model
+  assignments do not authorize delegation; all existing consent rules still apply.
+- For each authorized delegate or automation, pass this compatibility file's absolute
+  path and the permitted role assignments. Require compatibility loading before
+  upstream instructions so a cold delegate cannot resume upstream Grok defaults.
 - Benny's source pack, templates, and setup flow are included. Only set up or
   enable live automation when requested, with its required integrations and
   upstream readiness checks. Vendoring does not install or enable automations.
