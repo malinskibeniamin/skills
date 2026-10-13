@@ -1,9 +1,9 @@
 // Approves bot image-bump, ADP release, ui-registry version, and UI
-// main -> preprod promotion PRs as the gh-authenticated user, and merges the
-// ui-registry version PRs once their checks pass. A bump is approved only when
-// every changed line fits its rule, a promotion only when its head is already
-// on main; anything else is logged and raised as a macOS notification once
-// per head.
+// main -> preprod -> production promotion PRs as the gh-authenticated user,
+// and merges only the ui-registry version PRs once their checks pass. A bump
+// is approved only when every changed line fits its rule, a promotion only
+// when its head is already on its source branch; anything else is logged and
+// raised as a macOS notification once per head.
 //
 //   bun scripts/auto-approve-bumps.ts            # dry run
 //   bun scripts/auto-approve-bumps.ts --approve  # approve and merge matches
@@ -194,6 +194,16 @@ const RULES: readonly Rule[] = [
     base: "preprod",
     source: "main",
     approval: "Auto-approved: every commit is already on main.",
+  },
+  {
+    // Opened by the same workflow only after preprod synthetics pass, at
+    // origin/preprod. Approve only: a human still merges to production.
+    kind: "promotion",
+    repo: "redpanda-data/cloudv2",
+    branch: /^ux\/\d+-preprod-to-production$/,
+    base: "production",
+    source: "preprod",
+    approval: "Auto-approved: every commit is already on preprod.",
   },
 ];
 

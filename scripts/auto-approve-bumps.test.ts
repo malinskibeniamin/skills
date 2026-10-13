@@ -359,14 +359,39 @@ describe("checkPromotion", () => {
     ["another author", { author: "someone" }, /author/],
     ["a draft", { isDraft: true }, /draft/],
     ["a production base", { baseRefName: "production" }, /base/],
-    [
-      "a production promotion",
-      { headRefName: "ux/3885-preprod-to-production" },
-      /branch/,
-    ],
   ])("rejects %s", (_label, overrides, reason) => {
     const result = checkPromotion({ ...promotion, ...overrides }, "behind");
     expect(result.ok ? "" : result.reason).toMatch(reason);
+  });
+
+  // Shape of cloudv2 #30978: pushed at origin/preprod after preprod synthetics.
+  const production = pr({
+    number: 30978,
+    baseRefName: "production",
+    headRefName: "ux/3921-preprod-to-production",
+    commitAuthors: ["frenchfrywpepper"],
+  });
+
+  test.each(["behind", "identical"])(
+    "approves a production promotion whose head is %s preprod",
+    (status) => {
+      expect(checkPromotion(production, status)).toEqual({ ok: true });
+    },
+  );
+
+  test("rejects a production promotion with commits not on preprod", () => {
+    expect(checkPromotion(production, "ahead")).toEqual({
+      ok: false,
+      reason: "head is ahead preprod, so it has commits not on preprod",
+    });
+  });
+
+  test("rejects a production promotion aimed at preprod", () => {
+    const misdirected = { ...production, baseRefName: "preprod" };
+    expect(checkPromotion(misdirected, "behind")).toEqual({
+      ok: false,
+      reason: "base preprod",
+    });
   });
 
   test("does not treat a promotion as a diff-checked bump", () => {
