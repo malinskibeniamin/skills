@@ -110,7 +110,7 @@ CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
 rm "$_delivery_session/dirty-files-baseline"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
-  "missing ownership tracking cannot claim uncommitted work is delivered" "uncommitted"
+  "missing ownership tracking cannot claim uncommitted work is delivered" "commit only the requested scope"
 printf 'requested.txt\n' > "$_delivery_session/dirty-files-baseline"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
@@ -118,7 +118,7 @@ CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
 printf '%s\n' "$_delivery_repo/requested.txt" > "$_delivery_session/session-touched-files"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
-  "adopting a pre-existing dirty file still requires committing it" "uncommitted"
+  "adopting a pre-existing dirty file still requires committing it" "commit only the requested scope"
 rm "$_delivery_session/session-touched-files"
 : > "$_delivery_session/dirty-files-baseline"
 printf 'local\n' > "$_delivery_session/task-endpoint"
