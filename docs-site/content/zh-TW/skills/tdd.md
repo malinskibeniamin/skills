@@ -1,9 +1,18 @@
 ---
-title: /tdd
 description: 透過紅燈—綠燈—重構進行開發。適用於撰寫測試、建立功能、修正錯誤、設計測試接縫、防止非同步洩漏，或取代以持續時間為基礎的等待。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/review
+search:
+  boost: 3
+  keywords:
+    - tdd
+    - test driven development
+    - red green refactor
 sidebar:
   label: /tdd
+title: /tdd
+type: skill
 ---
 ![／tdd 技能示意圖](/diagrams/skills/tdd.svg)
 
@@ -14,6 +23,8 @@ sidebar:
 使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
 
 TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、非同步副作用及整合契約，使用 RED -> GREEN -> REFACTOR。型別、串接、文案／樣式，以及不改變行為的刪除，可能只需要執行聚焦驗證。涵蓋率絕不是目標。
+
+針對每個建議的測試接縫，說明它能捕捉什麼，以及會漏掉什麼。
 
 ## 測試接縫與反模式 [#test-seams-and-anti-patterns]
 

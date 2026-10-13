@@ -1,9 +1,17 @@
 ---
-title: /wayfinder
-description: "用于通过问题跟踪器中的决策工单规划跨会话工作。"
-type: skill
+description: 用于通过问题跟踪器中的决策工单规划跨会话工作。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - wayfinder
 sidebar:
   label: /wayfinder
+title: /wayfinder
+type: skill
 ---
 ![/wayfinder 技能示意图](/diagrams/skills/wayfinder.svg)
 
@@ -13,11 +21,13 @@ sidebar:
 
 当目标超过一个上下文窗口且路径仍不清晰时使用。**决策工单**用于解决问题，而不是实现产品切片。
 
-## 只规划，不执行
+仅使用 `wayfinder:map` / `wayfinder:<type>` 标签，不使用 `ready-for-agent`；按类型标签选择流程。创建地图时，使用真实 ID 添加阻塞关系和交叉引用；占位符可能链接到无关工单。
+
+## 只规划，不执行 [#plan-dont-do]
 
 当不再有待决事项时，Wayfinder 即完成。Notes 只保存规划偏好，不授权实现或交付。
 
-## 不变量
+## 不变量 [#invariants]
 
 - 用**名称**引用地图和工单，不要只用 ID。
 - 地图是**索引**，不是存储。答案留在工单中；地图只保留摘要和链接。
@@ -28,7 +38,7 @@ sidebar:
 - 对获准的批次，用 `/efficient-frontier` 控制预算，由协调者综合结果。
 - 使用 `/agent-watchdog` 审计其他会话的认领、结论或已解决工单。
 
-## 地图结构
+## 地图结构 [#map-shape]
 
 创建一个标记为 `wayfinder:map` 的问题或文件：
 
@@ -47,7 +57,7 @@ sidebar:
 
 从跟踪器查询开放子项；不要把它们复制到地图正文。
 
-## 工单
+## 工单 [#tickets]
 
 每个子工单只含一个聚焦问题，规模适合一次 100K-token 智能体会话。标记为 **HITL**（需要实时人工判断）或 **AFK**（智能体主导）：
 
@@ -58,12 +68,12 @@ sidebar:
 
 答案不属于工单正文；在解决时记录。资产只链接，不粘贴。
 
-## 迷雾与范围
+## 迷雾与范围 [#fog-and-scope]
 
 不要绘制尚不可见的内容。“尚未明确”不包括已决定、已有工单或范围之外的事项。明确但被阻塞的问题应成为工单。
 迷雾只朝向目的地。若工单位于目的地之外，关闭它，写一行“范围之外”及原因，不要记录为路径决策。
 
-## 绘制地图
+## 绘制地图 [#chart-the-map]
 
 1. 用 `/grilling` 和 `/domain-modeling` 明确目的地。
 2. 广度优先梳理决策和第一步。若没有发现迷雾，停止并询问是否不使用地图继续。
@@ -72,7 +82,7 @@ sidebar:
 5. 在主上下文中解决一个就绪的 Research 工单。获准的通道先认领，遵循 `/research`，并返回带引用的产物。
 6. 完成该工单后停止。
 
-## 使用地图
+## 使用地图 [#work-through-a-map]
 
 1. 低分辨率读取地图；选择指定工单，或第一个开放、未阻塞、未认领的工单。
 2. 先认领，再仅使用必要的相关工单和 Notes 中的技能解决它。
@@ -80,7 +90,7 @@ sidebar:
 4. 添加新工单和阻塞关系；删除已明确的迷雾。目的地之外的工作归入范围之外。
 5. 写入前重新读取跟踪器，因为其他会话可能同时修改。
 
-## 交接
+## 交接 [#handoff]
 
 地图清晰后，交给 `/to-spec` 生成一个可构建计划，再交给 `/to-tickets`。
 先重新核对所有主张：答案、摘要、资产、认领和当前跟踪器状态。

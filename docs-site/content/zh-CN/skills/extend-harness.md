@@ -23,6 +23,8 @@ type: skill
 
 Claude mods：[MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md)。跨运行时的规则强制执行仍由设置钩子负责。
 
+添加技能前，先组合现有技能。用真实故障或未满足的契约证明规则有必要；验证干净 -> 违规 -> 干净的过程。
+
 ## 添加规则 [#add-rule]
 
 1. 首先确认 Biome 或 Ultracite 是否能够表达该规则。仅对跨元素、

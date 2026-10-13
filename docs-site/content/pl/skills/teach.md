@@ -1,15 +1,25 @@
 ---
-title: /teach
 description: Naucz użytkownika nowej umiejętności lub koncepcji w tym obszarze roboczym.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - teach
 sidebar:
   label: /teach
+title: /teach
+type: skill
 ---
 ![Diagram umiejętności /teach](/diagrams/skills/teach.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/teach.excalidraw)
 
 Obszar roboczy do nauki z zachowaniem stanu. Bieżący katalog przechowuje stan nauki.
+
+Ścieżki nauki rozwiązuj względem obszaru roboczego, z którego wywołano umiejętność; tylko linki `*-FORMAT.md` są względne wobec umiejętności. Zmieniaj pozycję poprawnej odpowiedzi w quizach, aby nie stanowiła podpowiedzi.
 
 ## Pliki obszaru roboczego
 

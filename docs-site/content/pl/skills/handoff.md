@@ -1,11 +1,19 @@
 ---
-title: /handoff
 description: >-
   Kompaktowo podsumuj bieżącą sesję w dokumencie przekazania dla innego agenta
   lub nowej sesji.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - handoff
 sidebar:
   label: /handoff
+title: /handoff
+type: skill
 ---
 ![Diagram umiejętności /handoff](/diagrams/skills/handoff.svg)
 
@@ -15,6 +23,8 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 
 Jeśli przekazanie służy do audytu pracy innego agenta, skieruj zadanie do `/agent-watchdog`. Jeśli przekazuje konkurencyjne plany, wskaż `/plan-arbiter` jako następną umiejętność.
 Utwórz zwięzły dokument przekazania, aby inny agent lub sesja mogli kontynuować pracę od tego miejsca.
+
+Używaj katalogu tymczasowego hosta (`$TMPDIR`, w przeciwnym razie `/tmp`; `%TEMP%` w Windows), nigdy obszaru roboczego.
 
 ## Kiedy używać
 
@@ -26,10 +36,7 @@ Użyj, gdy użytkownik chce:
 
 ## Procedura
 
-1. Utwórz plik tymczasowy:
-   ```bash
-   handoff_file=$(mktemp -t handoff-XXXXXX.md)
-   ```
+1. Utwórz plik tymczasowy: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
 2. Zapisz przekazanie pod tą ścieżką.
 3. Zachowaj zwięzłość. Nie powielaj artefaktów już ujętych w specyfikacjach, planach, ADR-ach, zgłoszeniach, commitach, diffach ani dokumentacji. Odwołuj się do nich za pomocą ścieżki lub adresu URL.
 4. Jeśli użytkownik podał argumenty, potraktuj je jako zakres prac w następnej sesji i dostosuj do niego przekazanie.

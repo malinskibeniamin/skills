@@ -1,9 +1,19 @@
 ---
-title: /review
 description: 用於基於證據審查分支、PR、WIP 或釋出中由差異引入的缺陷。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+search:
+  boost: 3
+  keywords:
+    - review
+    - code review
+    - pull request
+    - pr
 sidebar:
   label: /review
+title: /review
+type: skill
 ---
 ![「/review」技能示意圖](/diagrams/skills/review.svg)
 
@@ -13,6 +23,8 @@ sidebar:
 
 審查 HEAD。保留唯一所有者；委派必須明確授權。不要編輯、提交、推送或發布。
 發布評論需要明確意圖。
+
+檢查時，閱讀適用的 `CODING_STANDARDS.md` 與 `CONTRIBUTING.md`（若存在）。經授權的審查面向應一起在前景執行；彙整每份報告。
 
 ## 審查約定 [#review-contract]
 

@@ -1,9 +1,17 @@
 ---
-title: /wizard
 description: 為僅能由人工處理的基礎架構、憑證或 CI 密鑰、第三方儀表板、遷移與切換作業產生互動式 Bash 精靈。若代理程式能執行該工作，請勿呼叫此技能。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - wizard
 sidebar:
   label: /wizard
+title: /wizard
+type: skill
 ---
 ![「/wizard」技能示意圖](/diagrams/skills/wizard.svg)
 
@@ -16,6 +24,8 @@ sidebar:
 令人愉悅的使用者體驗已由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 完整處理，包括逐階段進度、確認關卡、跨平台開啟 URL（包含 WSL）、隱藏密鑰輸入、具冪等性的 `.env` 更新插入、寫入 `gh secret`/`gh variable`，以及結束摘要。**你的工作只有界定程序範圍並撰寫各階段。** `STAGES` 標記上方的程式庫在每個精靈中都完全相同；一致性正是重點，因此絕對不要手動編輯它。
 
 精靈預設是暫時性的：為單次執行而建立，儲存至暫存路徑或 `scripts/` 路徑，工作完成後便刪除。只有當使用者希望建立應保留在儲存庫中的可重複設定流程時，才提交精靈。
+
+撰寫精靈時，在 `run_wizard` 內替換階段，並保留末尾的 `run_wizard "$@"; exit`，確保首次提問前完成程序解析。以外部命令替身驗證成功、EOF 失敗與重跑預設值。使用專案實際載入器驗證 `.env`；shell 引號規則並非通用 dotenv 格式。
 
 ## 流程
 

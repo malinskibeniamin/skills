@@ -1,9 +1,19 @@
 ---
-title: /swarm
-description: "Równoległy wykonawca niezależnej pracy masowej w odizolowanych torach drzewa roboczego."
-type: skill
+description: >-
+  Równoległy wykonawca niezależnej pracy masowej w odizolowanych torach drzewa
+  roboczego.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - swarm
 sidebar:
   label: /swarm
+title: /swarm
+type: skill
 ---
 ![Diagram umiejętności /swarm](/diagrams/skills/swarm.svg)
 
@@ -13,7 +23,9 @@ Podziel niezależną pracę masową na tory, zweryfikuj każdy i zintegruj wynik
 
 `/work` jest właścicielem cyklu, `/grilling` rozstrzyga wybory, a `/go` dostarcza.
 
-## Uruchomienie
+Oddziel bieżące dostarczenie rezultatu od strategicznych ustaleń; dodatkowa praca i harmonogramy wymagają wyraźnej prośby. Linkuj artefakty. Koordynator zachowuje odpowiedzialność za orkiestrację, ścieżkę krytyczną, integrację i ocenę.
+
+## Uruchomienie [#launch]
 
 1. Sprawdź zasady repozytorium, stan, gałąź lub PR, dokumentację i aktywny cel.
 2. Dla długich lub kosztownych fal użyj `/efficient-frontier` przed startem i między falami. Domyślnie uruchamiaj najwyżej trzech agentów równolegle.
@@ -32,7 +44,7 @@ Podziel niezależną pracę masową na tory, zweryfikuj każdy i zintegruj wynik
 
 6. Uruchamiaj tylko różne tory. Koordynator integruje wyniki, rozstrzyga sprzeczne znaleziska, wykonuje końcową weryfikację i zamyka agentów.
 
-## Pakiet zadania
+## Pakiet zadania [#task-packet]
 
 Każdy tor otrzymuje:
 
@@ -52,7 +64,7 @@ output schema: status, summary, changed_files, tests_run, findings, blockers, ne
 
 Agenci zapisują tylko w swoim zakresie. Wspólne tory wymagają rozłącznej własności; tory worktree używają opisowych gałęzi. Agenci potomni wymagają osobnej autoryzacji.
 
-## Zasady torów
+## Zasady torów [#lane-rules]
 
 - Użyj `config/model-routing.json`; nie duplikuj jednej implementacji między parami modeli.
 - Przypisz jednego właściciela implementacji do zakresu zapisu i właściciela pasujących ewaluacji dla każdej zmienionej umiejętności lub hooka.
@@ -63,11 +75,11 @@ Agenci zapisują tylko w swoim zakresie. Wspólne tory wymagają rozłącznej w�
 - Tory diagnozy mogą rozdzielać reprodukcję, hipotezy, instrumentację i dowód regresji.
 - Syntezę i decyzje zastrzeżone dla użytkownika zachowaj u koordynatora.
 
-## Protokół scalania
+## Protokół scalania [#merge-protocol]
 
 Czytaj artefakty i zmienione pliki, nie tylko podsumowania. Odrzucaj lub świadomie uzgadniaj nakładanie. Przy sprzecznych rekomendacjach pokaż dowody, opcje i wybór koordynatora. Po integracji uruchom kontrole; TDD wymaga dowodu RED przed GREEN.
 Zgłoś manifest, przyjętą i odrzuconą pracę, testy, blokery i następną akcję.
 
-## Zgodność
+## Zgodność [#compatibility]
 
 Codex i Claude Code muszą działać z jawnych promptów i artefaktów. Bez natywnych subagentów wygeneruj pakiety zadań do ręcznego uruchomienia.

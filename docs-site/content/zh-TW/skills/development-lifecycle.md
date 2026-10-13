@@ -1,15 +1,27 @@
 ---
-title: /development-lifecycle
 description: 將 React、TypeScript 與 UI 實作從高階成果一路推進至自行驗證。
-type: skill
+related:
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 3
+  keywords:
+    - development lifecycle
+    - work
+    - implementation
+    - development workflow
 sidebar:
   label: /development-lifecycle
+title: /development-lifecycle
+type: skill
 ---
 ![「/development-lifecycle」技能的流程圖](/diagrams/skills/development-lifecycle.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/development-lifecycle.excalidraw)
 
 負責一項成果。使用[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)及[相依指引載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
+
+檢查階段應取得指定工單的內容、標籤與留言，並說明標題。釐清有歧義的引用。
 
 ## 成果契約 [#outcome-contract]
 

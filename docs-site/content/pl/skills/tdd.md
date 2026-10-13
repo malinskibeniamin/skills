@@ -1,13 +1,22 @@
 ---
-title: /tdd
 description: >-
   Programuj w cyklu czerwony–zielony–refaktoryzacja. Używaj podczas pisania
   testów, tworzenia funkcji, naprawiania błędów, projektowania punktów styku do
   testów, zapobiegania wyciekom operacji asynchronicznych lub zastępowania
   oczekiwania przez określony czas.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/review
+search:
+  boost: 3
+  keywords:
+    - tdd
+    - test driven development
+    - red green refactor
 sidebar:
   label: /tdd
+title: /tdd
+type: skill
 ---
 ![Diagram umiejętności /tdd](/diagrams/skills/tdd.svg)
 
@@ -18,6 +27,8 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
 
 TDD chroni istotne zachowanie. Stosuj RED -> GREEN -> REFACTOR w przypadku reguł domenowych, rozgałęzień, stanów, walidacji, efektów asynchronicznych i kontraktów integracji. Typy, połączenia, teksty i style oraz usuwanie niezmieniające zachowania mogą wymagać ukierunkowanej weryfikacji. Pokrycie nigdy nie jest celem.
+
+Przy każdym proponowanym punkcie testowania podaj, jakie błędy wykrywa i jakie pomija.
 
 ## Punkty styku do testów i antywzorce [#test-seams-and-anti-patterns]
 

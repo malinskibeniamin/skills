@@ -1,9 +1,17 @@
 ---
-title: "/retro"
-description: "對一次程式開發工作階段進行回顧。"
-type: skill
+description: 對一次程式開發工作階段進行回顧。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - retro
 sidebar:
-  label: "/retro"
+  label: /retro
+title: /retro
+type: skill
 ---
 ![/retro 技能的示意圖](/diagrams/skills/retro.svg)
 
@@ -15,7 +23,9 @@ sidebar:
 
 使用者要求進行一次**回顧**。你要為程式開發代理程式的**環境**提出改進建議，以改善未來的執行。
 
-## 步驟
+將目前任務的戰術性交付與環境改善的策略性建議分開。
+
+## 步驟 [#steps]
 
 1. 呼叫 Skill 工具並傳入 "writing-for-agents"，載入寫作風格指南。若要搭配工作階段查看鉤子遙測資料，請單獨傳入 "hook-audit" 和 `--retro` 引數呼叫該工具。
 
@@ -33,9 +43,9 @@ sidebar:
 
 4. 依嚴重程度排序，向使用者呈現這些候選項目。
 
-## 參考
+## 參考 [#reference]
 
-### 實作與審查
+### 實作與審查 [#implementation-vs-review]
 
 請記住，所有工作都要經過兩個階段：實作與審查。實作代理程式承受的**脈絡壓力**最大。它負責探索、撰寫程式碼與偵錯失敗。
 
@@ -43,7 +53,7 @@ sidebar:
 
 這表示應由審查代理程式負責執行程式碼規範，而不是實作代理程式。
 
-### 檔案
+### 檔案 [#files]
 
 你可以存取儲存庫中的數個檔案：
 

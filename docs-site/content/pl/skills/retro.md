@@ -1,9 +1,17 @@
 ---
-title: "/retro"
-description: "Przeprowadź retrospektywę sesji programistycznej."
-type: skill
+description: Przeprowadź retrospektywę sesji programistycznej.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - retro
 sidebar:
-  label: "/retro"
+  label: /retro
+title: /retro
+type: skill
 ---
 ![Diagram umiejętności /retro](/diagrams/skills/retro.svg)
 
@@ -15,7 +23,9 @@ Retrospektywa pozostaje tylko do odczytu, dopóki użytkownik nie wybierze propo
 
 Użytkownik poprosił o **retrospektywę**. Proponujesz ulepszenia **środowiska** agenta programistycznego, aby usprawnić przyszłe przebiegi.
 
-## Kroki
+Oddziel bieżące dostarczenie rezultatu od strategicznych propozycji usprawnienia środowiska.
+
+## Kroki [#steps]
 
 1. Wywołaj narzędzie Skill z "writing-for-agents", aby załadować przewodnik stylu pisania. Dla telemetrii hooków wywołaj je osobno z "hook-audit" i argumentem `--retro`.
 
@@ -33,9 +43,9 @@ Użytkownik poprosił o **retrospektywę**. Proponujesz ulepszenia **środowiska
 
 4. Przedstaw tych kandydatów użytkownikowi w kolejności od najpoważniejszych.
 
-## Materiały referencyjne
+## Materiały referencyjne [#reference]
 
-### Implementacja a przegląd
+### Implementacja a przegląd [#implementation-vs-review]
 
 Pamiętaj, że cała praca przechodzi przez dwa etapy: implementację i przegląd. Agent implementujący ma największą **presję kontekstu**. Odpowiada za eksplorację, pisanie kodu i debugowanie niepowodzeń.
 
@@ -43,7 +53,7 @@ Agent przeglądający ma najmniejszą presję kontekstu – otrzymuje diff, wię
 
 Oznacza to, że to agent przeglądający, a nie implementujący, powinien odpowiadać za egzekwowanie standardów kodowania.
 
-### Pliki
+### Pliki [#files]
 
 Masz dostęp do kilku plików w repozytorium:
 

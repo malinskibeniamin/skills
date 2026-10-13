@@ -1,9 +1,17 @@
 ---
-title: /swarm
-description: "通过工作树通道并行执行相互独立的批量工作。"
-type: skill
+description: 通过工作树通道并行执行相互独立的批量工作。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - swarm
 sidebar:
   label: /swarm
+title: /swarm
+type: skill
 ---
 ![／swarm 技能示意图](/diagrams/skills/swarm.svg)
 
@@ -14,6 +22,8 @@ sidebar:
 把相互独立的批量工作拆分到多个通道，逐一验证后再集成。Swarm 执行已有目标；它不替代规划，也不负责交付。并行工作必须由用户通过 `/swarm` 或直接请求明确选择；其他技能不构成授权。
 
 `/work` 负责生命周期，`/grilling` 解决选择，`/go` 负责发布。
+
+将战术性交付与战略性发现分开；额外工作或计划任务需要明确请求。链接已有产物。协调者继续负责调度、关键路径、集成和判断。
 
 ## 启动
 

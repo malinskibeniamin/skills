@@ -1,11 +1,21 @@
 ---
-title: /review
 description: >-
   Używaj do opartego na dowodach przeglądu defektów wprowadzonych przez diff w
   gałęziach, PR-ach, WIP lub wydaniach.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+search:
+  boost: 3
+  keywords:
+    - review
+    - code review
+    - pull request
+    - pr
 sidebar:
   label: /review
+title: /review
+type: skill
 ---
 ![Diagram umiejętności /review](/diagrams/skills/review.svg)
 
@@ -15,6 +25,8 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 
 Przeglądaj HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
 Publikowanie komentarzy wymaga jawnej intencji.
+
+Podczas sprawdzania uwzględnij obowiązujące `CODING_STANDARDS.md` i `CONTRIBUTING.md`, jeśli istnieją. Autoryzowane osie przeglądu uruchamiaj razem na pierwszym planie; zbierz wszystkie raporty.
 
 ## Kontrakt przeglądu [#review-contract]
 

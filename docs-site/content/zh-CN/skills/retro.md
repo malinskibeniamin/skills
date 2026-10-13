@@ -1,9 +1,17 @@
 ---
-title: "/retro"
-description: "对一次编码会话进行复盘。"
-type: skill
+description: 对一次编码会话进行复盘。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - retro
 sidebar:
-  label: "/retro"
+  label: /retro
+title: /retro
+type: skill
 ---
 ![展示 /retro 技能的图表](/diagrams/skills/retro.svg)
 
@@ -15,7 +23,9 @@ sidebar:
 
 用户请求进行一次**复盘**。你要为编码智能体的**环境**提出改进建议，以改善未来的运行。
 
-## 步骤
+将当前任务的战术性交付与环境改进的战略性建议分开。
+
+## 步骤 [#steps]
 
 1. 调用 Skill 工具并传入 "writing-for-agents"，加载写作风格指南。如需结合会话查看钩子遥测数据，请单独传入 "hook-audit" 和 `--retro` 参数调用该工具。
 
@@ -33,9 +43,9 @@ sidebar:
 
 4. 按严重程度排序，向用户呈现这些候选项。
 
-## 参考
+## 参考 [#reference]
 
-### 实现与审查
+### 实现与审查 [#implementation-vs-review]
 
 请记住，所有工作都要经过两个阶段：实现和审查。实现智能体承受的**上下文压力**最大。它负责探索、编写代码和调试失败。
 
@@ -43,7 +53,7 @@ sidebar:
 
 这意味着应由审查智能体负责执行编码规范，而不是实现智能体。
 
-### 文件
+### 文件 [#files]
 
 你可以访问仓库中的若干文件：
 

@@ -1,9 +1,17 @@
 ---
-title: /grilling
 description: 當仍有重大選擇尚未決定時，探索並嚴格檢驗計畫、決策、構想、腦力激盪方法與 UI 版面配置。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - grilling
 sidebar:
   label: /grilling
+title: /grilling
+type: skill
 ---
 ![／grilling 技能示意圖](/diagrams/skills/grilling.svg)
 
@@ -14,6 +22,8 @@ sidebar:
 Grilling 用於解決影響重大的未知事項，而非每項細節。只要仍有保留給使用者決定的重大決策尚未定案，就不得撰寫正式環境程式碼或進行實作。呼叫此技能並不代表授權委派。
 
 撰寫計畫、RFC 或回覆時，閱讀[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)。
+
+提問時，讓「是」表示接受建議方案。
 
 ## 1. 建立證據 [#1-build-evidence]
 

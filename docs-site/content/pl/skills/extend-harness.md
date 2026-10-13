@@ -25,6 +25,8 @@ sposoby debugowania.
 
 Mody Claude Code: [MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md). Reguły egzekwowane we wszystkich środowiskach pozostają w hookach ustawień.
 
+Najpierw łącz istniejące umiejętności, zanim dodasz nową. Uzasadnij reguły rzeczywistym błędem lub niespełnionym kontraktem; potwierdź przejście czysto -> naruszenie -> czysto.
+
 ## Dodawanie reguły [#add-rule]
 
 1. Sprawdź, czy można ją wyrazić za pomocą Biome lub Ultracite. Używaj hooków tylko do reguł obejmujących wiele elementów,

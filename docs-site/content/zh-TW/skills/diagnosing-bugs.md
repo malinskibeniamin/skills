@@ -1,9 +1,20 @@
 ---
-title: /diagnosing-bugs
 description: 疑難錯誤與效能衰退的診斷迴圈。當使用者要求診斷或偵錯，或疑難錯誤需要可重現的回饋迴圈時使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - diagnosing bugs
+    - debug
+    - diagnose
+    - bug investigation
 sidebar:
   label: /diagnosing-bugs
+title: /diagnosing-bugs
+type: skill
 ---
 ![/diagnosing-bugs 技能示意圖](/diagrams/skills/diagnosing-bugs.svg)
 
@@ -15,6 +26,8 @@ sidebar:
 
 針對疑難錯誤的嚴謹方法。只有在說明理由時才能略過階段。使用領域詞彙表與 ADR；
 若涉及第三方/API/版本漂移，請先執行 `/read-the-damn-docs`，再排列假設的優先順序。
+
+第 5 階段若透過修改來強制觸發 RED，應將該修改與未更動的副本比較；測試修正前恢復原始狀態。
 
 ## 遮蔽敏感資訊
 此技能會顯示命令、輸出與擷取的成品。**先遮蔽所有密鑰** --

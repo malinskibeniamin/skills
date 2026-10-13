@@ -1,9 +1,19 @@
 ---
-title: /to-tickets
-description: "Podziel plan na zgłoszenia typu tracer bullet z jawnymi krawędziami blokującymi."
-type: skill
+description: >-
+  Podziel plan na zgłoszenia typu tracer bullet z jawnymi krawędziami
+  blokującymi.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - to tickets
 sidebar:
   label: /to-tickets
+title: /to-tickets
+type: skill
 ---
 ![Diagram umiejętności /to-tickets](/diagrams/skills/to-tickets.svg)
 
@@ -16,11 +26,11 @@ Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.
 Przekształć zatwierdzony plan, specyfikację lub rozmowę w niezależnie weryfikowalne pionowe wycinki.
 Jeśli istnieje `CLAUDE.md`, przeczytaj go przed `AGENTS.md`; w przeciwnym razie przeczytaj `AGENTS.md`. Użyj wskaźnika Issue tracker. Gdy go brak, użyj `/work-automation-kit` lub lokalnego rozwiązania.
 
-## 1. Zbierz
+## 1. Zbierz [#1-gather]
 
 Użyj kontekstu rozmowy. Pobierz przekazaną specyfikację, zgłoszenie lub URL z pełną treścią i komentarzami. Eksploruj tylko wtedy, gdy bieżący kod i słownictwo domeny są niejasne; respektuj słownik i ADR-y. Najpierw ułatw zmianę, potem wykonaj łatwą zmianę.
 
-## 2. Opracuj wycinki
+## 2. Opracuj wycinki [#2-draft-slices]
 
 Każde zgłoszenie:
 
@@ -33,11 +43,11 @@ Każde zgłoszenie:
 
 Użyj `/plan-arbiter`, gdy pozostaje kilka grafów. Użyj `/visual-plan` dla dużego grafu wymagającego kontroli granicy lub blokad.
 
-## 3. Potwierdź
+## 3. Potwierdź [#3-confirm]
 
 Pokaż numerowaną listę z **Tytułem**, **Blokowane przez** i **Co dostarcza**. Zapytaj o ziarnistość, krawędzie oraz łączenie lub dzielenie. Iteruj do zatwierdzenia.
 
-## 4. Opublikuj
+## 4. Opublikuj [#4-publish]
 
 Publikuj jeden element na zgłoszenie, najpierw blokery. Nie modyfikuj ani nie zamykaj rodzica.
 
@@ -55,5 +65,5 @@ Granica obejmuje każde zgłoszenie, którego blokery są zakończone.
 - [ ] <obserwowalne kryterium>
 ```
 
-Dla zgłoszeń trackera dodaj `## Parent`, gdy istnieje rodzic, potem `## What to build`, `## Acceptance criteria` i `## Blocked by`.
+Dla zgłoszeń trackera dodaj `## Parent`, gdy istnieje rodzic, następnie `## What to build` i `## Acceptance criteria`. Pomiń `## Blocked by`, jeśli ustawiono natywne krawędzie blokujące; używaj tej sekcji tylko w wariancie zastępczym, aby zależności miały jedno źródło prawdy.
 Nie wklejaj szczegółów implementacji. Dla kodu `/prototype` dodaj wskaźnik kontekstu do trwałej lokalizacji.

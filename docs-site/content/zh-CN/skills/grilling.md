@@ -1,9 +1,17 @@
 ---
-title: /grilling
 description: 当仍有重大选择尚未确定时，探索并压力测试计划、决策、想法、头脑风暴方法和 UI 布局。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - grilling
 sidebar:
   label: /grilling
+title: /grilling
+type: skill
 ---
 ![/grilling 技能示意图](/diagrams/skills/grilling.svg)
 
@@ -14,6 +22,8 @@ sidebar:
 盘问旨在解决影响重大的未知因素，而不是要求明确每个细节。在盘问期间，只要存在由用户保留决定权的重大决策，就不得编写生产代码或进行实现。调用此技能并不代表授权委派任务。
 
 编写计划、RFC 或回复时，阅读[沟通规则](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)。
+
+提问时，让“是”表示接受推荐方案。
 
 ## 1. 构建证据 [#1-build-evidence]
 

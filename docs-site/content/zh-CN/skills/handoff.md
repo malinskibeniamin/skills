@@ -1,9 +1,17 @@
 ---
-title: /handoff
 description: 将当前会话压缩为交接文档，供其他代理或新会话使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - handoff
 sidebar:
   label: /handoff
+title: /handoff
+type: skill
 ---
 ![／handoff 技能示意图](/diagrams/skills/handoff.svg)
 
@@ -13,6 +21,8 @@ sidebar:
 
 如果此次交接用于审查其他代理的运行过程，请转至 `/agent-watchdog`。如果交接的是相互竞争的方案，请将 `/plan-arbiter` 列为下一个技能。
 创建一份简洁的交接文档，供其他代理或会话从当前进度继续工作。
+
+使用宿主的临时目录（`$TMPDIR`，否则 `/tmp`；Windows 使用 `%TEMP%`），不要写入工作区。
 
 ## 何时使用
 
@@ -24,10 +34,7 @@ sidebar:
 
 ## 操作流程
 
-1. 创建临时文件：
-   ```bash
-   handoff_file=$(mktemp -t handoff-XXXXXX.md)
-   ```
+1. 创建临时文件：`handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`。
 2. 将交接内容写入该路径。
 3. 保持内容精简。不要重复规格、计划、ADR、议题、提交、差异或文档中已记录的产物。通过路径或 URL 引用它们。
 4. 如果用户提供了参数，将其视为下一会话的工作重点，并据此调整交接内容。
