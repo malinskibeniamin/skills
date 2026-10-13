@@ -1,0 +1,45 @@
+---
+name: break-ui
+description: "Stress-test a component with realistic worst-case data, narrow containers, zoom, Unicode, empty states, and large collections. Use for explicit UI edge-case or break-it requests."
+---
+
+Test the real component against unkind but valid data. Adapted from Emil Kowalski;
+[provenance](../shared/EMIL-SKILLS-CREDITS.md). This is a targeted data/layout audit,
+not a replacement for lifecycle dogfood or general visual critique.
+
+## Endpoint
+
+An audit returns evidence and proposed fixes, without editing production components.
+Use existing stories/fixtures/mocks first. Create a dev-only toggle or isolated harness
+only when the request includes building one; keep scratch artifacts in `.context/`.
+An explicit fix request authorizes repairing confirmed defects through TDD and delivery;
+do not force another approval step for routine in-scope fixes.
+
+## Loop
+
+1. Map rendered fields, their source/type, schema limit, optionality, and collection bounds.
+   A missing bound means unknown, not permission to invent one or change the API.
+2. Read [CATALOG.md](CATALOG.md). Choose realistic values within the actual contract;
+   introduce invalid/null values only at a boundary expected to validate them.
+   Keep shape, component code, tokens, and rendering path unchanged.
+3. Feed fixtures through the real props/mock/API boundary. Mix long/short/Unicode data,
+   missing optional fields, all valid statuses, and counts 0/1/many. Compare normal data,
+   worst case, empty, one item, and the supported cardinality limit.
+4. Render in the real container plus the narrowest/widest supported layout, at 200% zoom,
+   and in supported themes/directions. Exercise overflowed actions with keyboard/touch.
+   Capture screenshots/state; when browser access is missing, label CSS inference.
+5. Report the value, visible failure, location, impact, proposed fix, and what held up.
+   Identify genuine product choices (wrap/truncate, pagination/virtualization); preserve
+   existing conventions rather than turning every edge into a redesign.
+6. For requested fixes, start with a failing public-contract regression, repair, then
+   replay every affected fixture and normal data. Keep regression fixtures test/dev-only.
+
+## Failure handles
+
+Check fixed-size flex siblings, `min-width: 0`/`minmax(0, 1fr)`, unbreakable strings,
+multiline glyph clipping, grapheme-safe initials, locale/plurals, image fallback,
+and full-value access after truncation. Never hide numbers the user must compare.
+
+Fixtures use reserved example domains and synthetic data. Never call real customers,
+render fixture HTML as executable markup, or mutate production records to make a test.
+Report-only requests stop at the report; no gratuitous persistent process or demo switch.
