@@ -79,8 +79,10 @@ Repozytorium umiejętności frontendowych, React, TypeScript i Go; instalowalne 
 | `/poteto-correct` | Poteto: Wyeliminuj powtarzające się błędy agentów przez projektowanie. |
 | `/poteto-create-verification-skill` | Poteto: Utwórz lokalną dla projektu umiejętność weryfikacji rzeczywistej aplikacji. |
 | `/poteto-figure-it-out` | Poteto: Zaprojektuj weryfikowalny scenariusz działania dla nieznanego zadania. |
+| `/poteto-help` | Poteto: Znajdź umiejętności pstack, instrukcje konfiguracji i pomoc w rozwiązywaniu problemów. |
 | `/poteto-how` | Poteto: Wyjaśnij działanie podsystemu na podstawie kodu źródłowego. |
 | `/poteto-interrogate` | Poteto: Sprawdź zmiany w kodzie poprzez krytyczną analizę. |
+| `/poteto-ketchup` | Poteto: Podsumuj ten czat i decyzje oczekujące na użytkownika. |
 | `/poteto-maintain-verification-skill` | Poteto: Zaktualizuj weryfikator na podstawie kodu źródłowego i rzeczywistego działania. |
 | `/poteto-make-bot-ui` | Poteto: Zbuduj panel, który uruchamia bota przez webhook. |
 | `/poteto-mode` | Poteto: Prowadź wymagające zadania przez scenariusze działania Poteto. |

@@ -79,8 +79,10 @@ type: skill
 | `/poteto-correct` | Poteto：透過設計消除代理反覆犯的錯誤。 |
 | `/poteto-create-verification-skill` | Poteto：建立專案本機的真實應用程式驗證技能。 |
 | `/poteto-figure-it-out` | Poteto：為不熟悉的任務設計可驗證的操作流程。 |
+| `/poteto-help` | Poteto：尋找 pstack 技能、設定和疑難排解指南。 |
 | `/poteto-how` | Poteto：依據原始碼實證說明子系統的行為。 |
 | `/poteto-interrogate` | Poteto：透過對抗式審查質疑程式碼差異。 |
+| `/poteto-ketchup` | Poteto：回顧目前對話和等待使用者決定的事項。 |
 | `/poteto-maintain-verification-skill` | Poteto：根據原始碼與實際行為更新驗證器。 |
 | `/poteto-make-bot-ui` | Poteto：建立透過 webhook 喚醒機器人的儀表板。 |
 | `/poteto-mode` | Poteto：透過 Poteto 操作流程執行嚴謹的工作。 |

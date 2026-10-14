@@ -115,6 +115,7 @@ installed_skill_count="$(
 
 # Check upstream bytes and every proxy dependency inside the actual plugin cache.
 python3 "$installed_path/scripts/vendor-poteto.py" --check
+python3 "$installed_path/scripts/vendor-poteto.py" --model-rule >"$test_root/pstack-models.mdc"
 bash "$installed_path/scripts/generate-skill-catalog.sh" --check
 
 for skill in development-lifecycle tdd review; do

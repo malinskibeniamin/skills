@@ -2,9 +2,9 @@
 
 ## Toolchain
 
-`bun` package manager | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
+`bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
-- UI: `@/components/ui/` first; buttons use `<Button>`, variants, design tokens.
+- UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
   Functional React components; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
@@ -12,14 +12,14 @@
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Match local idiom; use the smallest obvious design. Preserve user zoom, worktree
-isolation, secrets, types, generated files. Use useful `exemplars/`.
+Match local idiom; smallest obvious design. Preserve user zoom, worktree
+isolation, secrets, types, generated files. Use `exemplars/`.
 
 ## Human-facing text
 
-Documents/PRs/reviews/replies/status: use `shared/communication.md`: decision,
-value, ask first; own claims/intent/uncertainty. Above 200 words: <=120-word first read,
-then evidence/detail. Count explicit word limits with a tool; never invent human endorsement.
+Human text: use `shared/communication.md` -- decision/value/ask first; own claims/intent/uncertainty.
+Above 200 words: <=120-word first read, then evidence/detail. Tool-count explicit word limits;
+never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs use `shared/intent-map.md`:
 map objective/assumptions/references/risks/implementation/verification/superseded choices.
@@ -42,15 +42,14 @@ Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push aut
 Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-A delivery follow-up replaces a prior local stop. Never ask the user to restart or reconfigure
+Delivery follow-ups replace local stops. Never ask the user to restart or reconfigure
 a session; recover endpoint state and continue.
 Keep follow-up waves in the current PR.
 Draft PRs need no approval.
 For push/PR/ship, local-only is not done: verify committed scope and HEAD on actual
 origin, or report a genuine external blocker.
-When a finished agent reports uncommitted/unpushed work, or Git shows it, treat
-that as incomplete delivery. Use `shared/remote-completion.md` to recover verified
-in-scope work; preserve explicit local stops, unrelated work, and active owners.
+Uncommitted/unpushed finished-agent work is incomplete. Recover verified scope via
+`shared/remote-completion.md`; preserve explicit local stops, unrelated work, active owners.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless
 the user explicitly requests delegation or `/swarm`.
 Use isolated browser automation; never take over a human-owned browser or desktop app.
@@ -73,13 +72,14 @@ One outcome contract:
 
 Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
 Improve feedback loops before concurrency; delegation stays opt-in.
-inspect -> act -> verify -> repeat. Let evidence choose plans/tools/guidance. Continue through
-reversible decisions; put status notes beside the next action, not a stop that recaps work,
-offers to continue, or lists non-blocking options. Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps
-its task checklist, evidence, and pause triggers in `.context/implementation-notes.md`.
+inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance; continue
+reversibly. Put status notes beside the next action; no stopping recaps or offers to continue.
+Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with
+a failing public-contract test. Long work keeps its task checklist, evidence, and pause triggers
+in `.context/implementation-notes.md`.
 
 `config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
-wins. Never invent rankings or infer subscription usage from tokens. Promote context, effort,
+wins. Never invent rankings or infer usage from tokens. Promote context, effort,
 or models only through `agent-evals/context-ablation/`.
 
 Before done: `bun run lint:fix` and `bun run type:check`. Never hand-edit generated files

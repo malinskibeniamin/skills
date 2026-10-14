@@ -1,7 +1,8 @@
 # Evals for complete Poteto vendoring and the retained curated harness owners.
 
 if python3 "$REPO_ROOT/evals/test-poteto-sync.py" &&
-   python3 "$REPO_ROOT/scripts/vendor-poteto.py" --check; then
+   python3 "$REPO_ROOT/scripts/vendor-poteto.py" --check &&
+   python3 "$REPO_ROOT/scripts/vendor-poteto.py" --model-rule >/dev/null; then
   echo "  PASS  complete Poteto snapshot and vendoring CLI contract"
   PASS=$((PASS + 1))
 else
@@ -54,6 +55,11 @@ run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "Launch.*Doctor
 run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "run.*instructions.*end to end|[Ee]xecute.*generated skill" "verification skill must prove generated instructions"
 run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "evidence.*survives.*cleanup|cleanup.*evidence" "verification cleanup preserves proof"
 run_file_eval "$REPO_ROOT/create-verification-skill/references/feature-map-example/README.md" "verification feature-map reference exists"
+
+run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "usable app from empty data.*migrations and seed data" "verification readiness includes a usable cold launch"
+run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "Missing seed-data prerequisites fail the journey" "verification never weakens journeys around missing prerequisites"
+run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "stand-in.*target|unverified.*real target" "verification discloses stand-in setup gaps"
+
 
 # Maintenance distinguishes docs/harness drift from product defects.
 run_content_eval "$REPO_ROOT/maintain-verification-skill/SKILL.md" "clean.*changed.*blocked" "verification maintenance has explicit outcomes"

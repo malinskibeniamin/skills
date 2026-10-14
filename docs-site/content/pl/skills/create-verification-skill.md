@@ -1,13 +1,21 @@
 ---
-title: /create-verification-skill
 description: >-
   Utwórz lokalną dla projektu umiejętność, która uruchamia rzeczywistą
   aplikację, steruje nią, obserwuje ją i po sobie sprząta. Użyj, gdy
   repozytorium nie zapewnia powtarzalnego sposobu weryfikacji działania
   interfejsu użytkownika, CLI, API lub usługi.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - create verification skill
 sidebar:
   label: /create-verification-skill
+title: /create-verification-skill
+type: skill
 ---
 ![Diagram umiejętności /create-verification-skill](/diagrams/skills/create-verification-skill.svg)
 
@@ -15,7 +23,7 @@ sidebar:
 
 Wygeneruj jeden lokalny dla projektu weryfikator, który następny agent będzie mógł uruchomić bez wcześniejszego kontekstu. Użyj istniejącego w repozytorium kanonicznego katalogu głównego umiejętności; w przeciwnym razie użyj domyślnie `.agents/skills/verify-<app>/`. Nigdy nie kopiuj umiejętności do kilku katalogów głównych przeznaczonych dla konkretnych hostów.
 
-## Zbadaj repozytorium
+## Zbadaj repozytorium [#interview-the-repository]
 
 Najpierw zbadaj, potem pytaj:
 
@@ -29,11 +37,11 @@ Kopia robocza, której nie można uruchomić, jest przeszkodą, a nie podstawą 
 
 W przypadku ergonomii pracy agentów lub konfiguracji worktree użyj [kontroli brakujących możliwości i zimnego startu](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/agent-dx.md).
 
-## Wygeneruj
+## Wygeneruj [#generate]
 
 Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` oraz konkretne sekcje **Uruchamianie**, **Diagnostyka**, **Sterowanie**, **Dowody** i **Czyszczenie**:
 
-- **Uruchamianie:** dokładne polecenia uruchamiania i zamykania oraz możliwy do zaobserwowania warunek gotowości.
+- **Uruchamianie:** dokładne polecenia uruchamiania i zamykania, które prowadzą od pustych danych do użytecznej aplikacji, wraz z migracjami i danymi początkowymi. Sam nasłuchujący port lub sprawna baza danych nie oznaczają gotowości.
 - **Diagnostyka:** jedna kontrola tylko do odczytu obejmująca tożsamość aplikacji, kompilację, właściciela procesu lub portu, izolację danych i uwierzytelnianie.
 - **Sterowanie:** dosłowne polecenia i stabilne uchwyty z tego repozytorium. Preferuj role, dostępne nazwy, trasy, teksty monitów i publiczne interfejsy API zamiast współrzędnych lub elementów wewnętrznych.
 - **Dowody:** zarejestruj działanie i wynikowy stan. Zweryfikuj skutki uboczne za pomocą drugiego publicznego widoku. Atrapy są dozwolone wyłącznie na istniejącej granicy produkcyjnej.
@@ -41,7 +49,7 @@ Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` or
 
 Udokumentuj sposób uruchamiania każdego dołączonego narzędzia pomocniczego i nadaj wykonywalnym narzędziom pomocniczym uprawnienia do wykonywania.
 
-## Przygotuj mapę funkcji
+## Przygotuj mapę funkcji [#seed-the-feature-map]
 
 Utwórz `features/README.md` oraz po jednym pliku dla każdej z 3–5 najważniejszych funkcji dostępnych dla użytkownika. Zacznij od [przykładu mapy funkcji](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/feature-map-example/README.md), a następnie zastąp każdy przykład dowodami z repozytorium. Każda funkcja zawiera:
 
@@ -50,10 +58,12 @@ Utwórz `features/README.md` oraz po jednym pliku dla każdej z 3–5 najważnie
 3. `Sterowanie za pomocą <harness>`
 4. `Pułapki`
 
-Mapuj każdy rzeczywisty punkt wejścia osobno; zweryfikowanie wygodnej ścieżki nie obejmuje innej ścieżki.
+Mapuj każdy rzeczywisty punkt wejścia osobno; zweryfikowanie wygodnej ścieżki nie obejmuje innej ścieżki. Brak wymaganych danych początkowych oznacza niepowodzenie ścieżki i należy go opisać w `Pułapkach`; nigdy nie osłabiaj ścieżki, aby uzyskać pozytywny wynik.
 
-## Udowodnij działanie wygenerowanej umiejętności
+## Udowodnij działanie wygenerowanej umiejętności [#prove-the-generated-skill]
 
-Wykonaj wygenerowaną umiejętność od początku do końca: uruchom aplikację, przeprowadź diagnostykę, przetestuj jedną zmapowaną funkcję przez rzeczywistą ścieżkę użytkownika, zbierz dowody i posprzątaj. Po wyczyszczeniu potwierdź, że dowody nadal istnieją oraz że nie pozostał żaden utworzony proces ani stan. Popraw niedziałające instrukcje i powtórz całą ścieżkę. Niewykonany weryfikator jest jedynie wersją roboczą.
+Wykonaj wygenerowaną umiejętność od początku do końca: uruchom aplikację, przeprowadź diagnostykę, przetestuj jedną zmapowaną funkcję przez rzeczywistą ścieżkę użytkownika, zbierz dowody i posprzątaj. Po wyczyszczeniu potwierdź, że dowody nadal istnieją oraz że nie pozostał żaden utworzony proces ani stan. Posprzątaj po każdej nieudanej próbie, popraw instrukcje i powtórz całą ścieżkę. Niewykonany weryfikator jest jedynie wersją roboczą.
+
+Jeśli używasz środowiska zastępczego, wymień kroki konfiguracji, których brakuje w docelowym środowisku. Pozostają niezweryfikowane do czasu odtworzenia ich w rzeczywistym środowisku docelowym.
 
 W przypadku późniejszych audytów rozbieżności wskaż `/maintain-verification-skill`, a w przypadku zwykłej pracy nad funkcjami — `/dogfood`.

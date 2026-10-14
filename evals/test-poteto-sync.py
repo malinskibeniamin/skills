@@ -146,6 +146,71 @@ class PotetoSyncTest(unittest.TestCase):
                 )
         self.assertEqual(self.sync("--check").returncode, 0)
 
+    def test_model_rule_uses_only_host_routes_without_writes(self):
+        config = self.repo / "config/model-routing.json"
+        config.parent.mkdir()
+        config.write_text(json.dumps({
+            "models": {"claude-opus-5-5": {}, "gpt-6.1-sol": {}},
+            "selection": {"preferred_models": ["claude-opus-5-5", "gpt-6.1-sol"]},
+            "quality_first": {
+                "default": {"model": "claude-opus-5-5", "effort": "xhigh"},
+                "hard": {"model": "claude-opus-5-5", "efforts": ["xhigh"]},
+                "review": {
+                    "primary": {"model": "gpt-6.1-sol", "effort": "xhigh"},
+                    "secondary": {"model": "claude-opus-5-5", "effort": "xhigh"},
+                },
+            },
+        }))
+        before = config.read_bytes()
+        result = self.sync("--model-rule")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("alwaysApply: true\n", result.stdout)
+        self.assertIn("feature, refactoring: claude-opus-5-5-xhigh\n", result.stdout)
+        self.assertIn("reflect tooling: gpt-6.1-sol-xhigh\n", result.stdout)
+        self.assertIn("interrogate reviewers: gpt-6.1-sol-xhigh, claude-opus-5-5-xhigh\n", result.stdout)
+        self.assertNotIn("grok", result.stdout.lower())
+        self.assertEqual(config.read_bytes(), before)
+        self.assertEqual(sorted(p.name for p in self.repo.iterdir()), [".claude-plugin", "config", "tdd"])
+        for location, value in [
+            ("default", {"model": "grok-4.7", "effort": "xhigh"}),
+            ("default", {"model": "auto", "effort": "xhigh"}),
+            ("default", {"model": "claude-opus-5-5", "effort": "max"}),
+            ("review", {"primary": {"model": "grok-4.7", "effort": "xhigh"}}),
+        ]:
+            with self.subTest(route=location, value=value):
+                routing = json.loads(before)
+                routing["quality_first"][location] = value
+                config.write_text(json.dumps(routing))
+                result = self.sync("--model-rule")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertIn("Unsupported pstack model route", result.stderr)
+        config.write_bytes(before)
+        routing = json.loads(before)
+        routing["models"]["grok-4.7"] = {}
+        config.write_text(json.dumps(routing))
+        result = self.sync("--model-rule")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, "")
+        self.assertIn("Only Opus 5.5 and GPT-6.1 Sol", result.stderr)
+
+
+    def test_refresh_includes_help_and_catchup(self):
+        for name in ["poteto-help", "ketchup"]:
+            self.write_source(
+                f"skills/{name}/SKILL.md",
+                f'---\nname: {name}\ndescription: "A user-requested upstream workflow."\n'
+                "disable-model-invocation: true\n---\nFull upstream instructions.\n",
+            )
+        self.install()
+        manifest = json.loads((self.repo / ".claude-plugin/plugin.json").read_text())
+        for name in ["poteto-help", "poteto-ketchup"]:
+            self.assertEqual(manifest["skills"].count(f"./poteto-skills/{name}/"), 1)
+            adapter = (self.repo / f"poteto-skills/{name}/SKILL.md").read_text()
+            self.assertIn("disable-model-invocation: true\n", adapter)
+        self.assertEqual(self.sync("--check").returncode, 0)
+
+
     def test_check_detects_modified_support_files_and_missing_registration(self):
         self.install()
         copied = self.repo / "vendor/pstack/skills/tdd/references/example.md"

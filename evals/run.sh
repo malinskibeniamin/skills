@@ -158,7 +158,8 @@ for eval_file in "$EVALS_DIR"/test-*.sh; do
   # and exported session ids cannot poison later files. Counters cross the
   # boundary via a marker line on fd 3.
   cd "$REPO_ROOT"
-  unset CLAUDE_SESSION_ID
+  # Every fixture owns its session identity, regardless of the invoking host.
+  unset CLAUDE_SESSION_ID CODEX_SESSION_ID
 
   _counts=$(
     (

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Help"
+  short_description: "Poteto: Find pstack skills, setup, and troubleshooting guidance"
+policy:
+  allow_implicit_invocation: false
