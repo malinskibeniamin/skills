@@ -37,6 +37,30 @@ for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
   });
 }
 
+for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
+  for (const viewport of [
+    { name: "desktop", width: 1440, height: 1000 },
+    { name: "mobile", width: 390, height: 844 },
+  ]) {
+    test(`visual: full-send ${locale} ${viewport.name}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto(
+        `${locale === "en" ? "" : `/${locale}`}/skills/full-send`,
+      );
+      await expect(
+        page.getByRole("heading", { name: "/full-send", exact: true }),
+      ).toBeVisible();
+      await expect(page.locator("#close-the-loop")).toBeAttached();
+      await expect(page.locator('img[src$="full-send.svg"]')).toBeVisible();
+      await stabilizeScreenshotDate(page);
+      await expect(page).toHaveScreenshot(
+        `full-send-${locale}-${viewport.name}.png`,
+        { fullPage: true },
+      );
+    });
+  }
+}
+
 // Keep these captures comparable: the preview contains the same checked-in
 // skills, Chromium uses reduced motion, and each case gets a fresh context.
 for (const scenario of [
