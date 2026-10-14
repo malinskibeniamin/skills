@@ -52,6 +52,7 @@ type: skill
 | `/extend-harness` | 扩展并调试前端技能框架。 |
 | `/frontend-invariants` | 不随技术栈变化而过时的前端恒久原则。 |
 | `/frontend-starter-kit` | 初始化标准前端工具链和质量门禁。 |
+| `/full-send` | 负责修复、PR 检查、审查与已授权合并。 |
 | `/go` | 验证、审查并交付已完成的工作。 |
 | `/golang-review` | 根据有证据支持的约定审查 Go 差异。 |
 | `/golang` | 按照有证据支持的工程约定编写 Go。 |

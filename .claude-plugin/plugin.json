@@ -52,6 +52,7 @@
     "./extend-harness/",
     "./frontend-invariants/",
     "./frontend-starter-kit/",
+    "./full-send/",
     "./go/",
     "./golang-review/",
     "./golang/",
