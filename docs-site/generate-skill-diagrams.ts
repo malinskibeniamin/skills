@@ -47,7 +47,7 @@ const REPOSITORY_ROOT = join(import.meta.dir, "..");
 const OUTPUT_DIRECTORY = join(import.meta.dir, "public", "diagrams", "skills");
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 const CREATED_AT = "2026-08-05T00:00:00.000Z";
-const CLI = ["bunx", "mcp-excalidraw-server@1.1.0"];
+const CLI = ["bunx", "mcp-excalidraw-server@2.1.2"];
 const DEFAULT_PALETTE: Palette = { fill: "#1c4f73", stroke: "#4dabf7" };
 const PALETTES: Palette[] = [
   DEFAULT_PALETTE,
@@ -278,13 +278,13 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     ],
   },
   "excalidraw-diagram": {
-    actors: ["Agent", "Canvas server", "Browser"],
+    actors: ["Agent", "Git files", "Official CLI"],
     kind: "sequence",
     nodes: [
-      "Describe visual",
-      "Create elements",
-      "Render + inspect",
-      "Export source + SVG",
+      "Edit native scene",
+      "Render local PNG",
+      "Return PNG preview",
+      "Inspect + maintain docs",
     ],
   },
   "extend-harness": {
@@ -2084,6 +2084,22 @@ const renderScenes = async (skills: Skill[]): Promise<void> => {
         throw new Error(`Choose a semantic diagram for /${skill.name}.`);
       }
       await addSvgTitle(`${base}.svg`, skill.name, spec.kind);
+      await runCli("export", "--out", `${base}.excalidraw`);
+      const nativeScene: unknown = JSON.parse(
+        await readFile(`${base}.excalidraw`, "utf8"),
+      );
+      if (
+        typeof nativeScene !== "object" ||
+        nativeScene === null ||
+        !("elements" in nativeScene) ||
+        !Array.isArray(nativeScene.elements)
+      ) {
+        throw new Error(`Invalid native scene for /${skill.name}.`);
+      }
+      await writeFile(
+        `${base}.excalidraw`,
+        `${JSON.stringify({ ...nativeScene, diagramKind: spec.kind }, null, 2)}\n`,
+      );
       console.log(`[${index + 1}/${skills.length}] /${skill.name}`);
     }
   } finally {
@@ -2112,6 +2128,6 @@ if (Bun.argv.includes("--render")) {
   await renderScenes(skills);
 } else {
   console.log(
-    `Wrote ${skills.length} editable scenes. Pass --render with the Excalidraw canvas open to refresh SVGs.`,
+    `Wrote ${skills.length} canvas drafts. Pass --render to export native scenes and refresh SVGs.`,
   );
 }

@@ -3,36 +3,34 @@ name: excalidraw-diagram
 description: Generate, refine, and export editable Excalidraw diagrams from prompts or Mermaid. Use for hand-drawn architecture, component anatomy, flows, and annotated technical illustrations.
 ---
 
-Create real Excalidraw elements with one editable source of truth. Read [REFERENCE.md](REFERENCE.md) for Mermaid conversion, direct elements, and visual language.
+Create editable native elements. Read [REFERENCE.md](REFERENCE.md) for scene format, canvas/SVG, and visual language; [PR-WORKFLOW.md](PR-WORKFLOW.md) for backend PRs and maintained docs.
 
-## Canvas
+## Local default
 
-All commands use the pinned CLI:
+Author or update a native `.excalidraw` file, then render with the pinned official CLI:
 
 ```bash
-export EXPRESS_SERVER_URL="http://127.0.0.1:${CONDUCTOR_PORT:-3000}"
-bunx mcp-excalidraw-server@1.1.0 <command>
+EXCALIDRAW_NO_UPDATE_NOTIFIER=1 bunx @excalidraw/cli@0.2.0 render diagram.excalidraw --out diagram.png
 ```
 
-Use `bunx` cache; never add it to the consumer repo. Run `start`, open the URL in an isolated browser, keep it open, and require `status` to show a client. If isolation is unavailable, ask the user to open the URL once.
+Node 22+, installed Chrome/Chromium/Edge/Firefox; temporary browser profile, no account or API key. PNG only, no layout. Use `bunx` cache, not consumer dependencies; Mermaid, live editing, and SVG use the optional canvas reference.
 
 ## Workflow
 
 1. Choose destination: disposable `.context/excalidraw/<slug>/` or requested durable path. Never overwrite silently.
-2. Before clear/replace, preserve the canvas with `snapshot save <name>` or `export --out <file>`.
+2. Preserve source before replacement; on canvas use `snapshot save <name>` or `export --out <file>` before clear/replace.
 3. Choose authority: `.mmd` for Mermaid deliverables; `.excalidraw` after direct editing. Validate Mermaid in its target renderer.
 4. Mermaid owns standard flow/sequence/state/relationships; direct elements own exact placement, anatomy, logos, zones, and callouts.
-5. Create the first complete slice in one `mermaid`, `add`, or `apply`; give mutable elements stable IDs.
+5. Give mutable elements stable IDs. Author native elements locally; canvas shorthand uses one `mermaid`, `add`, or `apply` for the first slice.
 6. After Mermaid, `describe` elements before export/correction. If screenshot renders but scene is empty, keep `.mmd` authoritative or rebuild direct; never claim an empty `.excalidraw` is editable.
-7. `describe`, then `screenshot --out <check.png>` -> view -> fix collisions, clipping, contrast, crossed arrows with one `apply`. Repeat until clean.
-8. Synchronized canvases export non-empty `.excalidraw` plus PNG or SVG. Otherwise export `.mmd` plus render. Keep editable source beside durable render unless flat-only was requested.
+7. Render PNG, or canvas `describe` then `screenshot` -> view -> fix collisions, clipping, contrast, and crossed arrows. Repeat until clean.
+8. Verify non-empty native elements and visible labels; keep `.excalidraw` plus PNG or SVG together. Mermaid-only fallback stays `.mmd` plus render, not an editable Excalidraw claim.
 9. Report paths, mode, canonical source, accessible description, and manual browser work.
-
-Core commands: `mermaid diagram.mmd`; `add elements.json`; `apply patch.json`; `describe`; `screenshot --out check.png`; `export --out diagram.excalidraw`; `screenshot --format svg --out diagram.svg`.
 
 ## Safety
 
 - `clear --yes`, `import --replace`, and restoration are destructive; preserve first.
 - `share` uploads the scene; use only for a requested public link.
+- Excalidraw+ sync is opt-in; Git stays authoritative. Backend diagram failures are nonblocking; report missing evidence and continue delivery.
 - Use SVG/imported brand assets for exact logos; never approximate protected marks.
-- Run `stop` after export when editing is done.
+- Stop only canvas servers you started.

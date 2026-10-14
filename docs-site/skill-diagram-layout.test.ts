@@ -43,6 +43,41 @@ const absoluteArrowPoints = (
 };
 
 describe("skill diagram layout regressions", () => {
+  test("editable Excalidraw overview retains native bound labels", async () => {
+    const scene = await loadScene("excalidraw-diagram");
+
+    for (const id of [
+      "sequence-actor-1",
+      "sequence-actor-2",
+      "sequence-actor-3",
+    ]) {
+      expect(
+        scene.elements.some(
+          (element) => "containerId" in element && element.containerId === id,
+        ),
+      ).toBe(true);
+    }
+  });
+
+  test("Excalidraw overview documents the official local-render workflow", async () => {
+    const source = await readFile(
+      join(diagramDirectory, "excalidraw-diagram.svg"),
+      "utf8",
+    );
+
+    for (const label of [
+      "Git files",
+      "Official CLI",
+      "Edit native scene",
+      "Render local PNG",
+      "Return PNG preview",
+      "Inspect + maintain docs",
+    ]) {
+      expect(source).toContain(label);
+    }
+    expect(source).not.toContain("Canvas server");
+  });
+
   test.each(["efficient-frontier", "steelman"])(
     "%s decision-tree edges visibly overlap their connected node borders",
     async (name) => {
