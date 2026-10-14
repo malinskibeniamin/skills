@@ -3,7 +3,7 @@
 ## Full stop
 
 Use `/full-send --no-merge <task or PR>` to reach verified PR readiness while retaining
-the human merge decision. “Full stop” means this endpoint, not permission to merge.
+the human merge decision. "Full stop" means this endpoint, not permission to merge.
 Local-only, no-push and draft-only stops remain narrower. Loading a skill grants no action.
 
 ## Read-only hosted checkpoint
@@ -57,7 +57,7 @@ Open run/thread IDs and finding dispositions:
 Next action / blocker / notification / answer still needed:
 ```
 
-Recover the original contract before interpreting an intermediate instruction. “Fix this”
+Recover the original contract before interpreting an intermediate instruction. "Fix this"
 does not erase the delivery endpoint or narrower stops; an explicit new delivery endpoint
 can replace an earlier local stop. Inspect actual remote state, not a prior completion
 paragraph. For a historical revert, locate the introducing commit/diff and original feature
@@ -69,7 +69,7 @@ separate consent and the existing [auto-review controller](../resolve-pr-feedbac
 Reuse its ownership, deduplication, pagination, stale-event recheck and failed-dispatch pause;
 dispatch success is not proof that a repair landed or feedback was resolved.
 
-## Sol loop — only with explicit delegation
+## Sol loop -- only with explicit delegation
 
 This composes [codex](../codex/SKILL.md) and [review](../review/SKILL.md), not another model
 router. Read both when independent Sol review is explicitly requested. In native Codex,

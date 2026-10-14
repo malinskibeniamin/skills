@@ -60,9 +60,7 @@ sidebar:
 
 ### 重放
 
-從真實入口重啟，重複預期使用和全部破壞嘗試。修復缺陷時，
-重放完全相同的原始復現並驗證相鄰行為。對於有狀態缺陷或反覆出現的重現缺口，使用[重放資料包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
-PASS 只繫結目前可執行狀態。
+從真實入口重啟；重複預期使用和每項破壞嘗試。對於缺陷，重放完全相同的原始步驟並驗證相鄰行為。對於有狀態缺陷或反覆出現的重現缺口，使用[重放資料包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。PASS 繫結目前可執行狀態。
 
 ## 入口
 
@@ -84,8 +82,7 @@ PASS 只繫結目前可執行狀態。
 
 ## 回執
 
-將入口、操作和觀察繫結到當前實現。
-報告 `Verdict: PASS | FAIL | BLOCKED`，然後包含：
+報告目前進入點、操作和觀察：`Verdict: PASS | FAIL | BLOCKED`，然後包含：
 
 - **入口：** 精確命令、URL、事件或消費者。
 - **操作：** 預期路徑和破壞嘗試。

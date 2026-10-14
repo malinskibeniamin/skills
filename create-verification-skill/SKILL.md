@@ -17,7 +17,7 @@ Discover before asking:
 - **Observe:** screenshots, accessibility snapshots, transcripts, responses, logs, exit codes, and durable side effects.
 - **Isolate:** per-run ports, profiles, data, fixtures. Never drive a shared human instance.
 
-If the checkout cannot run, report the failing prerequisite; do not invent launch instructions.
+If the checkout cannot run, report its failing prerequisite, not invented launch instructions.
 
 For agent-DX or worktree setup requests, use [the capability-gap and cold-start checks](references/agent-dx.md).
 
@@ -31,9 +31,7 @@ Write matching `name: verify-<app>` frontmatter and concrete **Launch**, **Docto
 - **Evidence:** capture action and result. Verify side effects through a second public view; mock only existing production boundaries.
 - **Cleanup:** stop only processes and scratch state this run created. Never kill by process name. Evidence survives cleanup.
 
-Make helpers executable and document each invocation. For stateful bugs or recurring
-reproduction gaps, implement and prove [capture/replay](../shared/verification-replay.md)
-through existing project-native fixture/debug APIs.
+Make helpers executable; document use. For stateful bugs or recurring repro gaps, prove [capture/replay](../shared/verification-replay.md) via native fixture/debug APIs.
 
 ## Seed the feature map
 
@@ -44,12 +42,12 @@ Create `features/README.md` and files for the top 3-5 user-facing features. Grou
 3. `Driving it with <harness>`
 4. `Gotchas`
 
-Map each real entrypoint; one path does not cover another. Missing seed-data prerequisites fail the journey and belong in `Gotchas`; never weaken the journey to make it pass.
+Map every entrypoint. Missing seed-data prerequisites fail the journey: record them in `Gotchas`, never weaken the journey.
 
 ## Prove the generated skill
 
-Execute the generated skill end to end: launch, doctor, one mapped feature through its real user path, evidence, cleanup. After cleanup, confirm evidence survives and no created process/state remains. Clean each failed attempt, fix instructions, and replay. Unexecuted verifiers are drafts.
+Execute generated skill: launch, doctor, one mapped real user journey, evidence and cleanup. Confirm evidence survives and no created process/state remains. Clean failed attempts, fix instructions and replay. Unexecuted verifiers are drafts.
 
-For a stand-in, list setup steps absent from the target. They remain unverified until replayed on the real target.
+List stand-in setup gaps; leave them unverified until replayed on the target.
 
-Point later drift audits to `/maintain-verification-skill` and normal feature work to `/dogfood`.
+Route drift audits to `/maintain-verification-skill` and feature work to `/dogfood`.
