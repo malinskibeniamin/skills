@@ -47,7 +47,7 @@ Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` or
 - **Dowody:** zarejestruj działanie i wynikowy stan. Zweryfikuj skutki uboczne za pomocą drugiego publicznego widoku. Atrapy są dozwolone wyłącznie na istniejącej granicy produkcyjnej.
 - **Czyszczenie:** zatrzymaj tylko procesy i usuń tylko dane tymczasowe utworzone w tym uruchomieniu. Nigdy nie kończ procesów na podstawie ich nazwy. Dowody muszą przetrwać czyszczenie.
 
-Udokumentuj sposób uruchamiania każdego dołączonego narzędzia pomocniczego i nadaj wykonywalnym narzędziom pomocniczym uprawnienia do wykonywania.
+Udokumentuj sposób uruchamiania każdego dołączonego narzędzia pomocniczego i nadaj wykonywalnym narzędziom pomocniczym uprawnienia do wykonywania. Dla błędów zależnych od stanu lub powtarzających się luk reprodukcji zaimplementuj i udowodnij [zapis i odtwarzanie](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md) przez istniejące, natywne dla projektu interfejsy danych testowych i debugowania.
 
 ## Przygotuj mapę funkcji [#seed-the-feature-map]
 

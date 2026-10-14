@@ -1,6 +1,6 @@
 ---
 name: full-send
-description: Own a bounded task or PR through fixes, verification, CI, reviews, and an explicitly authorized merge. Use when the user says full send or asks to offload PR babysitting through completion.
+description: Own fixes, verification, CI and review babysitting through an authorized endpoint. Use for full send; full stop or --no-merge retains the merge decision.
 ---
 
 Own the outcome, not just the diff. Keep going through routine repairs; return only when
@@ -24,6 +24,8 @@ the requested endpoint is confirmed or an external blocker needs the user.
   tools, accounts, and isolated browser sessions; any means necessary is not a bypass.
 
 Load dependencies through [skill mechanics](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+For full stop, hosted checkpoints, blocker notification, resume recovery or an explicitly
+requested Sol loop, read [REFERENCE.md](REFERENCE.md).
 
 ## Fix and prove
 
@@ -56,7 +58,9 @@ its single CI snapshot. Confirm the committed scope and remote head match local 
 - Require completed required checks and reviews, no applicable unresolved feedback,
   and no outstanding change requests on the candidate. Do not self-approve or invent
   endorsement. If a reviewer/permission/service remains unavailable with no agent
-  action possible, report the external blocker and exact needed input.
+  action possible, notify through a supported question/input tool; if unavailable, end
+  with a conspicuous blocked receipt and exact needed input. Never substitute identity,
+  credentials or permission while waiting.
 - Rebase a behind-base owned branch when required; verify and `--force-with-lease`.
   Keep follow-ups in this PR. Persist head/base, pending run/thread IDs, evidence, and
   next action in an untracked checkpoint before context limits; no surprise daemon,

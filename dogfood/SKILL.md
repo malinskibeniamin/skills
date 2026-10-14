@@ -56,8 +56,9 @@ fix through `/tdd`, and rerun focused checks. Any behavior edit invalidates prio
 ### Replay
 
 Restart at the real entrypoint and repeat intended use plus every break attempt. For a bug,
-replay the identical original reproduction and verify adjacent behavior. PASS binds only to
-the current runnable state.
+replay the identical original reproduction and verify adjacent behavior. For stateful bugs
+or recurring reproduction gaps, use [the replay packet](../shared/verification-replay.md).
+PASS binds only to the current runnable state.
 
 ## Entrypoints
 

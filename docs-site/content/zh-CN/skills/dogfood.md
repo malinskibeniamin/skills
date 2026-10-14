@@ -61,8 +61,8 @@ sidebar:
 ### 重放
 
 从真实入口重启，重复正常使用和全部破坏尝试。修复缺陷时，
-重放完全相同的原始复现并检查相邻行为。PASS 只绑定
-当前可运行状态。
+重放完全相同的原始复现并检查相邻行为。对于有状态缺陷或反复出现的复现缺口，使用[重放数据包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
+PASS 只绑定当前可运行状态。
 
 ## 入口
 

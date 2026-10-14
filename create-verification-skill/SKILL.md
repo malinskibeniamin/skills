@@ -31,7 +31,9 @@ Write matching `name: verify-<app>` frontmatter and concrete **Launch**, **Docto
 - **Evidence:** capture action and result. Verify side effects through a second public view; mock only existing production boundaries.
 - **Cleanup:** stop only processes and scratch state this run created. Never kill by process name. Evidence survives cleanup.
 
-Make helpers executable and document each invocation.
+Make helpers executable and document each invocation. For stateful bugs or recurring
+reproduction gaps, implement and prove [capture/replay](../shared/verification-replay.md)
+through existing project-native fixture/debug APIs.
 
 ## Seed the feature map
 

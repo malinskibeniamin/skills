@@ -11,7 +11,10 @@ repair and redesign, not unrelated deletion, branch replacement, delegation, or 
    prerequisite to repair, not a reason to keep expanding the plan.
 3. Compare repairing the approach with replacing it. Choose the smallest design that
    satisfies the original contract; preserve useful code, tests, and learned constraints.
-   Prior effort is not a reason to keep a failed architecture.
+   Prior effort is not a reason to keep a failed architecture. Credit only sources actually
+   inspected or reused; name what was retained, adapted or discarded. For historical revert
+   requests, identify the introducing commit and original feature contract before repair.
+   Track [progress evidence](../../shared/progress-evidence.md), not growing diff size.
 4. Before replacing authorized in-scope work, preserve a recoverable checkpoint of owned
    changes and identify exactly what will be replaced. Keep unrelated/unknown dirty work
    untouched. Starting from scratch means implementing a replacement, not `reset --hard`,

@@ -1,6 +1,6 @@
 ---
 name: full-send
-description: Own a bounded task or PR through fixes, verification, CI, reviews, and an explicitly authorized merge. Use when the user says full send or asks to offload PR babysitting through completion.
+description: Own fixes, verification, CI and review babysitting through an authorized endpoint. Use for full send; full stop or --no-merge retains the merge decision.
 ---
 
 Read and follow the complete [canonical skill instructions](../../full-send/SKILL.md) before acting.

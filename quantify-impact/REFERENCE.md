@@ -67,6 +67,11 @@ Run the smallest repeatable scenario. Counts such as requests, errors, warnings,
 
 Use paired inputs and the same scenario. Separate cold-start and warm-cache claims. For networked dependencies, prefer a controlled local fixture; otherwise record service region, response variability, and limitations.
 
+For optimization, define [feature-fidelity assertions](../shared/verification-replay.md)
+before measuring; dropping intended behavior is a regression, not a faster equivalent.
+For repeated attempts, retain [progress evidence](../shared/progress-evidence.md) with the
+best verified result, failed hypothesis and next discriminating experiment.
+
 ## Interpretation
 
 - Primary clears minimum worthwhile delta and guardrail holds: **Value proven**.
