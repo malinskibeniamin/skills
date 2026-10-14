@@ -1,9 +1,17 @@
 ---
-title: /to-tickets
-description: "将计划拆分为具有明确阻塞边的贯穿式工单。"
-type: skill
+description: 将计划拆分为具有明确阻塞边的贯穿式工单。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - to tickets
 sidebar:
   label: /to-tickets
+title: /to-tickets
+type: skill
 ---
 ![`/to-tickets` 技能示意图](/diagrams/skills/to-tickets.svg)
 
@@ -16,11 +24,11 @@ sidebar:
 将已批准的计划、规格或对话变成可独立验证的纵向切片。
 若存在 `CLAUDE.md`，先读它；否则读 `AGENTS.md`。遵循其中的 Issue tracker 指针。缺失时使用 `/work-automation-kit` 或本地后备方案。
 
-## 1. 收集
+## 1. 收集 [#1-gather]
 
 使用现有对话上下文。获取传入规格、问题或 URL 的完整正文和评论。仅在当前代码或领域词汇仍不清楚时探索；遵循项目词汇表和 ADR。先让变更变容易，再做容易的变更。
 
-## 2. 起草切片
+## 2. 起草切片 [#2-draft-slices]
 
 每个工单：
 
@@ -33,11 +41,11 @@ sidebar:
 
 若多个工单图仍成立，使用 `/plan-arbiter`。若大型图的前沿或阻塞关系需要检查，使用 `/visual-plan`。
 
-## 3. 确认
+## 3. 确认 [#3-confirm]
 
 用编号列表展示**标题**、**阻塞于**和**交付内容**。询问粒度、边关系以及是否拆分或合并。迭代到用户批准。
 
-## 4. 发布
+## 4. 发布 [#4-publish]
 
 每个工单发布一个事项，阻塞者优先。不要修改或关闭父事项。
 
@@ -55,5 +63,5 @@ sidebar:
 - [ ] <可观察标准>
 ```
 
-跟踪器问题存在父项时添加 `## Parent`，之后是 `## What to build`、`## Acceptance criteria` 和 `## Blocked by`。
+对于跟踪器中的工单，存在父工单时添加 `## Parent`，然后添加 `## What to build` 和 `## Acceptance criteria`。已设置原生阻塞关系时省略 `## Blocked by`；仅在回退方案中使用它，保证依赖关系只有一个事实来源。
 不要内联实现细节。对于 `/prototype` 代码，添加指向其持久位置的上下文指针。

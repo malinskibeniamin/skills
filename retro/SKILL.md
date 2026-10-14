@@ -5,6 +5,7 @@ disable-model-invocation: true
 ---
 
 The user has asked for a **retrospective**. You are suggesting improvements to the coding agent's **environment** to improve future runs.
+Keep tactical delivery separate from strategic proposals.
 Keep the retrospective read-only until the user selects candidates. Then apply only their selections; do not schedule or automate retrospective changes.
 Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies) on hosts without the Skill tool.
 

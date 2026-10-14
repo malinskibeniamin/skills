@@ -121,11 +121,11 @@ _hook_log_entry() {
   if [ -n "$ms" ]; then
     printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s","ms":%d}\n' \
       "$(date +%s)" "$hook" "$rule" "$decision" "$target" "$ms" \
-      >> "$_hook_log_file" 2>/dev/null || true
+      2>/dev/null >> "$_hook_log_file" || true
   else
     printf '{"ts":%d,"hook":"%s","rule":"%s","decision":"%s","file":"%s"}\n' \
       "$(date +%s)" "$hook" "$rule" "$decision" "$target" \
-      >> "$_hook_log_file" 2>/dev/null || true
+      2>/dev/null >> "$_hook_log_file" || true
   fi
 }
 

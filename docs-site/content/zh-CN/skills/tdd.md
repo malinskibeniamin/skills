@@ -1,9 +1,18 @@
 ---
-title: /tdd
 description: 通过红灯—绿灯—重构进行开发。适用于编写测试、创建功能、修复错误、设计测试接缝、防止异步泄漏或替换固定时长等待。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/review
+search:
+  boost: 3
+  keywords:
+    - tdd
+    - test driven development
+    - red green refactor
 sidebar:
   label: /tdd
+title: /tdd
+type: skill
 ---
 ![“/tdd”技能示意图](/diagrams/skills/tdd.svg)
 
@@ -14,6 +23,8 @@ sidebar:
 使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
 
 TDD 保护有意义的行为。对于领域规则、分支、状态、验证、异步副作用和集成契约，请使用红灯 -> 绿灯 -> 重构。类型、连接、文案和样式，以及保持行为不变的删除，可能只需运行针对性验证。覆盖率绝不是目标。
+
+对每个建议的测试接缝，说明它能捕获什么，以及会漏掉什么。
 
 ## 测试接缝与反模式 [#test-seams-and-anti-patterns]
 

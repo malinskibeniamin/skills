@@ -9,14 +9,14 @@ Call the Skill tool separately: "agent-watchdog" audits another run; "plan-arbit
 
 ## Procedure
 
-1. `handoff_file=$(mktemp -t handoff-XXXXXX.md)`.
+1. Use host temp (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows), never the workspace. Unix: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
 2. Do not duplicate artifacts. Link specs, plans, ADRs, issues, commits, diffs, and docs.
 3. Treat arguments as next-session focus.
-4. Redact credentials, secrets, personal/customer data; note redaction only when continuation is affected.
+4. Redact sensitive data (credentials, secrets, personal/customer data); note redaction only when continuation is affected.
 5. Suggest useful next skills.
 6. Return only path plus 1-2 sentence summary.
 
-If the user explicitly wants a fresh background agent now, do not save a file: check `command -v claude`, then run `claude --bg --name "<descriptive name>" "<handoff summary>"`. On failure/unavailability, never claim it started; return exact command and summary. Include `/agent-watchdog` when its claims need verification.
+For an explicitly requested background agent, skip the file. Check `command -v claude`, then `claude --bg --name "<descriptive name>" "<handoff summary>"`. Failure: return command and summary, never claim a launch. Include `/agent-watchdog` for claim verification.
 
 ## Template
 
@@ -41,4 +41,4 @@ If the user explicitly wants a fresh background agent now, do not save a file: c
 
 ## Guardrails
 
-Do not summarize everything. Prefer references over pasted text, redact sensitive data, and label uncertainty. If no useful work happened, write a short starter brief.
+Label uncertainty. If no useful work happened, write a short starter brief.

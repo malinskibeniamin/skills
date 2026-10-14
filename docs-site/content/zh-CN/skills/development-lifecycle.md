@@ -1,15 +1,27 @@
 ---
-title: /development-lifecycle
 description: 从高级目标出发，完成 React、TypeScript 和 UI 实现，并进行自我验证。
-type: skill
+related:
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 3
+  keywords:
+    - development lifecycle
+    - work
+    - implementation
+    - development workflow
 sidebar:
   label: /development-lifecycle
+title: /development-lifecycle
+type: skill
 ---
 ![/development-lifecycle 技能示意图](/diagrams/skills/development-lifecycle.svg)
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/development-lifecycle.excalidraw)
 
 负责一个结果。使用[沟通规则](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)和[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
+
+检查阶段应获取指定工单的正文、标签和评论，并说明标题。澄清有歧义的引用。
 
 ## 结果契约 [#outcome-contract]
 

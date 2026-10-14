@@ -1,9 +1,20 @@
 ---
-title: /diagnosing-bugs
 description: 针对棘手错误和性能回退的诊断循环。在收到诊断或调试请求时使用，或在棘手错误需要可复现的反馈循环时使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - diagnosing bugs
+    - debug
+    - diagnose
+    - bug investigation
 sidebar:
   label: /diagnosing-bugs
+title: /diagnosing-bugs
+type: skill
 ---
 ![／diagnosing-bugs 技能示意图](/diagrams/skills/diagnosing-bugs.svg)
 
@@ -15,6 +26,8 @@ sidebar:
 
 用于诊断棘手错误的严谨流程。仅在有明确理由时跳过阶段。使用领域术语表和 ADR；
 对于第三方/API/版本漂移问题，请在对假设排序前运行 `/read-the-damn-docs`。
+
+第 5 阶段若通过修改来强制触发 RED，应将该修改与未改动的副本比较；测试修复前恢复原始状态。
 
 ## 脱敏
 此技能会展示命令、输出和捕获的工件。**首先对所有密钥进行脱敏** --

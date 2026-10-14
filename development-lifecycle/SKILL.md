@@ -22,19 +22,20 @@ State contract; build/fix/implementation: continue immediately.
 
 ### Inspect
 
+Fetch named tickets (body, labels, comments); state the title. Clarify ambiguous references.
 Resolve the blind spot/volatile unknown from source evidence. Classify lookup, prototype, reversible assumption, or pause trigger; match existing idiom and demonstrated scale.
 
-Before edits, load [quantify-impact](../quantify-impact/SKILL.md) for useful evidence. For visible changes, capture base/surfaces using [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Tiny copy/shared-UI effects count.
+Before edits, load [quantify-impact](../quantify-impact/SKILL.md). For visible changes, capture base/surfaces using [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Tiny copy/shared-UI effects count.
 
 ### Act
 
-A single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse before adding. Load [tdd](../tdd/SKILL.md) for meaningful behavior at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
+A single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse. Load [tdd](../tdd/SKILL.md) for meaningful behavior at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
 
 ### Verify
 
 Run repo tests, types, lint, build, and static checks. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior; exercise its real entrypoint plus one credible failure/recovery path. Review objective, guardrails, credible risk. A failure becomes the next action; repair and repeat.
 
-Missing repeatable entrypoint: prove with a disposable harness, then route the durable gap to `/create-verification-skill`.
+No repeatable entrypoint: prove with a disposable harness; route durable gaps to `/create-verification-skill`.
 
 ## Boundaries
 

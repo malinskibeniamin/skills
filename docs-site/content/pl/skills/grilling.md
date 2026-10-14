@@ -1,11 +1,19 @@
 ---
-title: /grilling
 description: >-
   Analizuj i poddawaj próbie plany, decyzje, pomysły, metody burzy mózgów oraz
   układy interfejsu, gdy istotna kwestia pozostaje otwarta.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - grilling
 sidebar:
   label: /grilling
+title: /grilling
+type: skill
 ---
 ![Diagram umiejętności /grilling](/diagrams/skills/grilling.svg)
 
@@ -16,6 +24,8 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 Grilling pozwala wyjaśnić niewiadome o istotnych konsekwencjach, a nie każdy szczegół. Nie należy tworzyć kodu produkcyjnego ani rozpoczynać implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 
 W przypadku planów, RFC i odpowiedzi przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md).
+
+Formułuj pytania tak, aby odpowiedź „tak” oznaczała przyjęcie rekomendacji.
 
 ## 1. Przygotuj pakiet dowodów [#1-build-evidence]
 

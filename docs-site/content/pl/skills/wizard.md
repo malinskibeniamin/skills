@@ -1,12 +1,20 @@
 ---
-title: /wizard
 description: >-
   Wygeneruj interaktywny kreator bash dla infrastruktury wymagającej udziału
   człowieka, poświadczeń lub sekretów CI, zewnętrznych paneli, migracji i
   przełączeń. Nie używaj go do zadań, które agent może wykonać samodzielnie.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - wizard
 sidebar:
   label: /wizard
+title: /wizard
+type: skill
 ---
 ![Diagram umiejętności /wizard](/diagrams/skills/wizard.svg)
 
@@ -19,6 +27,8 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 Dopracowany UX zapewnia już [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) — postęp etap po etapie, punkty potwierdzenia, otwieranie adresów URL na różnych platformach (w tym WSL), ukryte wprowadzanie sekretów, idempotentne aktualizacje `.env`, zapisy przez `gh secret`/`gh variable` oraz podsumowanie końcowe. **Twoim jedynym zadaniem jest określenie zakresu procedury i przygotowanie jej etapów.** Biblioteka powyżej znacznika `STAGES` jest identyczna w każdym kreatorze — ta spójność jest zamierzona, dlatego nigdy nie edytuj jej ręcznie.
 
 Domyślnie kreator jest tymczasowy — tworzony do jednorazowego uruchomienia, zapisywany w katalogu roboczym lub `scripts/` i usuwany po zakończeniu zadania. Zatwierdź go w repozytorium tylko wtedy, gdy użytkownik chce powtarzalnej ścieżki konfiguracji, która powinna pozostać w projekcie.
+
+Przy tworzeniu kreatora zastąp etapy wewnątrz `run_wizard` i zachowaj końcowe `run_wizard "$@"; exit`, aby procedura była analizowana przed pierwszym pytaniem. Ze stubami poleceń zewnętrznych potwierdź sukces, błąd EOF i zachowanie domyślnych wartości przy ponownym uruchomieniu. Zweryfikuj `.env` rzeczywistym loaderem projektu; cytowanie powłoki nie jest uniwersalnym formatem dotenv.
 
 ## Proces
 

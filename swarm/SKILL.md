@@ -17,7 +17,8 @@ through `/swarm` or a direct user request; no other skill grants consent.
 1. Inspect repository rules, state, branch/PR, relevant docs, and the active goal.
 2. For long or costly waves, use `/efficient-frontier` before launch and between waves.
    Default to at most three parallel agents unless the user says otherwise.
-3. Keep orchestration, critical-path work, integration, and judgment with the coordinator.
+3. Separate tactical delivery from strategic findings; extra work/schedules need explicit requests. Link artifacts.
+   Keep orchestration, critical-path work, integration, and judgment with the coordinator.
    Delegate only bounded search, implementation, test, or evidence-reduction work.
 4. Choose workspace policy:
    - Default: same branch/worktree/PR.

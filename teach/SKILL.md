@@ -5,7 +5,7 @@ disable-model-invocation: true
 argument-hint: "What would you like to learn?"
 ---
 
-Stateful teaching workspace; current directory stores learning state.
+Learning paths resolve from the invocation workspace; only `*-FORMAT.md` links are skill-relative.
 
 ## Files
 
@@ -25,7 +25,7 @@ Build `RESOURCES.md` from trusted resources before lessons. Never rely only on p
 
 ## Lessons
 
-Each lesson teaches one mission-linked concept at the user's zone of proximal development, finishes quickly, gives a tangible win, and uses an interactive task/quiz/real-world steps with a tight feedback loop. Optimize storage strength through retrieval, spacing, interleaving, not fluency. Avoid answer tells: same number of words where possible and no formatting clues. Link related lessons and reference docs with HTML anchors; recommend one primary source; invite questions. Save `lessons/NNNN-dash-case.html`; keep it clean, printable, and easy to open.
+Teach one mission-linked concept at the user's zone of proximal development: quick, tangible win through interactive practice and tight feedback. Build storage strength through retrieval, spacing, interleaving, not fluency. Avoid answer tells: same number of words where possible, no formatting clues, varied correct-answer positions. Link lessons and reference docs with HTML anchors; recommend one primary source and invite questions. Save clean, printable `lessons/NNNN-dash-case.html`.
 
 Reuse `./assets/` first. Extract reusable code/styles rather than inline duplicates; usually start with shared stylesheet.
 

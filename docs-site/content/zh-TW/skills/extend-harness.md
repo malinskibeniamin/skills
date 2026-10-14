@@ -23,6 +23,8 @@ type: skill
 
 Claude mods：[MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md)。跨執行環境的規則強制執行仍由設定 hook 負責。
 
+新增技能前，先組合現有技能。以實際故障或未滿足的契約證明規則有必要；驗證乾淨 -> 違規 -> 乾淨的過程。
+
 ## 新增規則 [#add-rule]
 
 1. 先確認 Biome 或 Ultracite 是否能表達該規則。只有跨元素、跨檔案、工作流程或代理程式行為的規則才使用 hook。

@@ -129,6 +129,7 @@ The block must expose the pointers consumers resolve. Use this shape, omitting *
 ```
 
 Write only approved files. Preserve existing docs. If block exists, update in place.
+When triage was configured on GitHub/GitLab, read existing labels and create only missing configured labels (`gh label create` / `glab label create`); preserve existing metadata. Re-read labels to verify success before relying on them.
 
 ### Verify
 

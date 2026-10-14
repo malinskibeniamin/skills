@@ -1,12 +1,23 @@
 ---
-title: /diagnosing-bugs
 description: >-
   Pętla diagnostyczna dla trudnych błędów i regresji wydajności. Używaj na
   prośbę o diagnozę lub debugowanie albo gdy trudny błąd wymaga powtarzalnej
   pętli informacji zwrotnej.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - diagnosing bugs
+    - debug
+    - diagnose
+    - bug investigation
 sidebar:
   label: /diagnosing-bugs
+title: /diagnosing-bugs
+type: skill
 ---
 ![Diagram umiejętności /diagnosing-bugs](/diagrams/skills/diagnosing-bugs.svg)
 
@@ -18,6 +29,8 @@ Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.
 
 Metodyczne podejście do trudnych błędów. Pomijaj fazę tylko z uzasadnieniem. Korzystaj z glosariusza domenowego i ADR-ów;
 w przypadku rozbieżności dotyczących zewnętrznych zależności, API lub wersji uruchom `/read-the-damn-docs` przed uszeregowaniem hipotez.
+
+W fazie 5, jeśli wymuszasz RED, porównaj celową zmianę z nienaruszoną kopią; przywróć oryginał przed testowaniem poprawki.
 
 ## Usuń dane wrażliwe
 Ta umiejętność pokazuje polecenia, dane wyjściowe i przechwycone artefakty. **Najpierw usuń każdy sekret** --

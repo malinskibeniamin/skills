@@ -1,9 +1,17 @@
 ---
-title: /handoff
 description: 將目前的工作階段精簡成一份交接文件，供另一個代理程式或新的工作階段使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - handoff
 sidebar:
   label: /handoff
+title: /handoff
+type: skill
 ---
 ![「/handoff」技能示意圖](/diagrams/skills/handoff.svg)
 
@@ -13,6 +21,8 @@ sidebar:
 
 如果交接是為了稽核另一個代理程式的執行結果，請轉至 `/agent-watchdog`。如果交接內容包含相互競爭的計畫，請將 `/plan-arbiter` 納入下一個要使用的技能。
 建立一份簡潔的交接文件，供另一個代理程式或工作階段從目前進度繼續作業。
+
+使用主機的暫存目錄（`$TMPDIR`，否則 `/tmp`；Windows 使用 `%TEMP%`），不要寫入工作區。
 
 ## 使用時機
 
@@ -24,10 +34,7 @@ sidebar:
 
 ## 程序
 
-1. 建立暫存檔：
-   ```bash
-   handoff_file=$(mktemp -t handoff-XXXXXX.md)
-   ```
+1. 建立暫存檔：`handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`。
 2. 將交接內容寫入該路徑。
 3. 保持精簡。不要重複已記錄於規格、計畫、ADR、議題、提交、差異或文件中的成果。請透過路徑或 URL 引用它們。
 4. 如果使用者提供了引數，請將其視為下一個工作階段的重點，並以該工作為核心調整交接內容。

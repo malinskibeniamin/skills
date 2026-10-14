@@ -1,9 +1,19 @@
 ---
-title: /wayfinder
-description: "Używaj do mapowania pracy wielosesyjnej za pomocą zgłoszeń decyzyjnych w systemie śledzenia."
-type: skill
+description: >-
+  Używaj do mapowania pracy wielosesyjnej za pomocą zgłoszeń decyzyjnych w
+  systemie śledzenia.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - wayfinder
 sidebar:
   label: /wayfinder
+title: /wayfinder
+type: skill
 ---
 ![Diagram umiejętności /wayfinder](/diagrams/skills/wayfinder.svg)
 
@@ -13,11 +23,13 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 
 Używaj, gdy cel przekracza jedno okno kontekstu, a droga jest niejasna. **Zgłoszenie decyzyjne** rozstrzyga pytanie, a nie implementuje wycinek produktu.
 
-## Planuj, nie wykonuj
+Używaj wyłącznie etykiet `wayfinder:map` / `wayfinder:<type>`, nigdy `ready-for-agent`; wybieraj procedurę według etykiety typu. Podczas tworzenia mapy dodawaj blokady i odwołania z rzeczywistymi identyfikatorami; placeholdery mogą połączyć niezwiązane zgłoszenia.
+
+## Planuj, nie wykonuj [#plan-dont-do]
 
 Wayfinder kończy pracę, gdy nie pozostała żadna decyzja. Notes przechowuje preferencje planistyczne i nie upoważnia do implementacji ani dostarczenia.
 
-## Niezmienniki
+## Niezmienniki [#invariants]
 
 - Odwołuj się do map i zgłoszeń **nazwą**, nie samym identyfikatorem.
 - Mapa jest **indeksem**, nie magazynem. Odpowiedzi są w zgłoszeniach; mapa zawiera skrót i link.
@@ -28,7 +40,7 @@ Wayfinder kończy pracę, gdy nie pozostała żadna decyzja. Notes przechowuje p
 - Przy zatwierdzonych falach `/efficient-frontier` ustala budżet, a koordynator syntetyzuje.
 - Roszczenia lub wyniki innej sesji audytuj przez `/agent-watchdog`.
 
-## Kształt mapy
+## Kształt mapy [#map-shape]
 
 Utwórz jedno zgłoszenie lub plik oznaczony `wayfinder:map`:
 
@@ -47,7 +59,7 @@ Utwórz jedno zgłoszenie lub plik oznaczony `wayfinder:map`:
 
 Otwarte elementy potomne pobieraj z trackera; nie kopiuj ich do treści mapy.
 
-## Zgłoszenia
+## Zgłoszenia [#tickets]
 
 Każde zgłoszenie potomne zawiera jedno pytanie na jedną sesję agenta o budżecie 100 tys. tokenów. Oznacz je **HITL** (ocena człowieka na żywo) lub **AFK** (prowadzi agent):
 
@@ -58,12 +70,12 @@ Każde zgłoszenie potomne zawiera jedno pytanie na jedną sesję agenta o budż
 
 Odpowiedź nie należy do treści zgłoszenia; zapisz ją przy rozwiązaniu. Artefakty linkuj, nie wklejaj.
 
-## Niejasność i zakres
+## Niejasność i zakres [#fog-and-scope]
 
 Nie mapuj tego, czego jeszcze nie widać. „Jeszcze nieokreślone” wyklucza elementy już rozstrzygnięte, istniejące zgłoszenia i pracę poza zakresem. Ostre, ale zablokowane pytanie jest zgłoszeniem.
 Niejasność prowadzi do Celu. Zamknij zgłoszenie odkryte poza nim, dopisz powód do „Poza zakresem” i nie zapisuj go jako decyzji trasy.
 
-## Tworzenie mapy
+## Tworzenie mapy [#chart-the-map]
 
 1. Nazwij Cel przez `/grilling` i `/domain-modeling`.
 2. Przejdź wszerz po decyzjach i pierwszych krokach. Jeśli nie ma niejasności, zatrzymaj się i zapytaj, czy kontynuować bez mapy.
@@ -72,7 +84,7 @@ Niejasność prowadzi do Celu. Zamknij zgłoszenie odkryte poza nim, dopisz pow�
 5. Rozwiąż jedno gotowe zgłoszenie Research w głównym kontekście. Zatwierdzone tory najpierw przypisują pracę, stosują `/research` i zwracają cytowane artefakty.
 6. Zatrzymaj się po tym zgłoszeniu.
 
-## Praca z mapą
+## Praca z mapą [#work-through-a-map]
 
 1. Przeczytaj mapę ogólnie; wybierz nazwane albo pierwsze otwarte, odblokowane i nieprzypisane zgłoszenie.
 2. Najpierw je przypisz, potem rozwiąż, używając tylko potrzebnych powiązań i umiejętności z Notes.
@@ -80,7 +92,7 @@ Niejasność prowadzi do Celu. Zamknij zgłoszenie odkryte poza nim, dopisz pow�
 4. Dodaj nowe zgłoszenia i blokady; usuń doprecyzowane niejasności. Pracę poza celem oznacz jako poza zakresem.
 5. Przed zapisem ponownie odczytaj tracker, bo inne sesje mogą go zmieniać.
 
-## Przekazanie
+## Przekazanie [#handoff]
 
 Gdy mapa jest jasna, przekaż ją do `/to-spec`, aby powstał jeden wykonalny plan, a potem do `/to-tickets`.
 Najpierw ponownie sprawdź roszczenia: odpowiedzi, skróty, artefakty i aktualny stan trackera.

@@ -5,7 +5,7 @@ For GitHub-hosted repos, use the `gh` CLI. Infer the repo from `git remote -v`; 
 ## Conventions
 
 - **Create**: `gh issue create --title "..." --body "..."` (heredoc for multi-line bodies)
-- **Read**: `gh issue view <number> --comments`
+- **Read**: `gh issue view <number> --json number,title,body,labels,comments`
 - **List**:
   ```sh
   gh issue list --state open --json number,title,body,labels,comments \
@@ -26,4 +26,4 @@ Create a GitHub issue.
 
 ## When the skill says "fetch the relevant ticket"
 
-`gh issue view <number> --comments`.
+Use the structured **Read** command above.

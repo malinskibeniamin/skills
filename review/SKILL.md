@@ -27,7 +27,7 @@ then inspect the complete diff and log.
 
 ### Inspect
 
-1. Read the request/spec, rules, complete diff, call sites, and behavior. Do not trust a PR summary over code.
+1. Read the request/spec, rules, complete diff, call sites, and behavior. Do not trust a PR summary over code. Include applicable `CODING_STANDARDS.md` and `CONTRIBUTING.md` when present.
 2. For each changed assumption, reverse-trace it to authoritative producers, schemas,
    storage, consumers, and public surfaces. Search by domain concept, field, and emitted
    value, not only the changed symbol.
@@ -61,6 +61,7 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 
 Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 Call the Skill tool separately for "jb", "mm", "av", "ms", "lie-detector", and "ss"; apply their hats inline.
+Authorized reviewer axes run together in the foreground; aggregate every report.
 
 ### Classify
 

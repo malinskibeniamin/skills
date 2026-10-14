@@ -1,15 +1,25 @@
 ---
-title: /teach
 description: 在此工作區中教導使用者一項新技能或概念。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - teach
 sidebar:
   label: /teach
+title: /teach
+type: skill
 ---
 ![「/teach」技能示意圖](/diagrams/skills/teach.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/teach.excalidraw)
 
 具狀態的教學工作區。目前的目錄會儲存學習狀態。
+
+學習路徑以呼叫技能的工作區為基準；只有 `*-FORMAT.md` 連結以技能目錄為基準。測驗中應變換正確答案的位置，避免位置暗示答案。
 
 ## 工作區檔案
 

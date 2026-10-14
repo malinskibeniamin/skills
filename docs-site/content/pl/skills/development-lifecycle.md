@@ -1,17 +1,29 @@
 ---
-title: /development-lifecycle
 description: >-
   Prowadź implementację w React, TypeScript i interfejsie użytkownika od
   ogólnego celu aż po samodzielną weryfikację.
-type: skill
+related:
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 3
+  keywords:
+    - development lifecycle
+    - work
+    - implementation
+    - development workflow
 sidebar:
   label: /development-lifecycle
+title: /development-lifecycle
+type: skill
 ---
 ![Diagram umiejętności /development-lifecycle](/diagrams/skills/development-lifecycle.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/development-lifecycle.excalidraw)
 
 Weź odpowiedzialność za jeden rezultat. Korzystaj z [zasad komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) i [zasad ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+
+W fazie sprawdzania pobierz wskazane zgłoszenia wraz z treścią, etykietami i komentarzami; podaj tytuł. Wyjaśnij niejednoznaczne odwołania.
 
 ## Kontrakt rezultatu [#outcome-contract]
 

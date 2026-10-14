@@ -8,8 +8,7 @@ Discipline for hard bugs. Skip a phase only with reason. Use `GLOSSARY.md` (foll
 Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Redact
-This skill exposes commands, output, and captured artifacts. Replace every secret with `<REDACTED>`.
-Keep credentials in environment variables and quote only signal-bearing lines; captured artifacts may contain authentication headers. If redaction removes necessary evidence, ask for a safer source.
+Replace every secret with `<REDACTED>`. Keep credentials in environment variables; quote only signal-bearing lines. Artifacts may contain auth headers. If redaction hides evidence, ask for a safer source.
 
 ## Phase 1 -- Build a feedback loop
 **The feedback loop is the skill.** Everything else consumes it. Build a tight, deterministic, agent-runnable pass/fail signal that goes red on the user's exact bug.
@@ -83,7 +82,7 @@ Write the regression test before the fix at the correct seam. It must exercise t
 pattern and call chain; a nearby shallow unit gives false confidence. If no suitable seam
 exists, record that architecture gap. Otherwise:
 
-1. Turn the minimised reproduction into a failing test and observe RED.
+1. Turn the minimised reproduction into a failing test and observe RED. For forced RED, diff the mutation against a pristine copy; restore before testing the fix.
 2. Apply the smallest root-cause fix and observe GREEN.
 3. Run related checks.
 4. Call the Skill tool with "dogfood" for the identical user journey, then re-run the original unminimised Phase 1 loop.

@@ -8,6 +8,10 @@ Edit manifests/libraries, not generated configs. [REFERENCE.md](REFERENCE.md): s
 
 Claude mods: [MODS.md](MODS.md). Cross-runtime enforcement stays in settings hooks.
 
+## Evidence bar
+
+Compose existing skills before adding. Justify rules with a real failure or unmet contract; prove clean -> violation -> clean.
+
 ## Add rule
 
 1. Prefer Biome/Ultracite; hooks cover cross-element/file, workflow, agent behavior.
@@ -26,7 +30,7 @@ Use `hook_warn` for style, `hook_block` correctness, `hook_block_strict` securit
 ## Implementation
 
 - Manifest objects carry permission/async filters; retain stdin guards: Codex drops Claude-only filters.
-- Structure: Biome/AST. Ambiguous judgment: review, not multiline grep.
+- Structure: Biome/AST; judgment: review.
 - Sync toolchain bans with `hooks/frontend-skills.rules`.
 
 ## Audit/debug

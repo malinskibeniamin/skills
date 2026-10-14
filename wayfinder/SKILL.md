@@ -23,6 +23,7 @@ Notes hold planning preferences and do not authorize implementation or delivery.
   **Issue tracker** pointer and Wayfinding operations. If absent, use the local-markdown fallback.
 - Claim a ticket by assigning it before work; this must be the first write. Open and
   unassigned means unclaimed.
+- Use only `wayfinder:map` / `wayfinder:<type>` labels, never `ready-for-agent`; dispatch by the type label.
 - Prefer native blocking. Use `Blocked by:` only when native dependencies are absent.
 - Resolve at most one ticket per session in the primary context; explicit delegation or an
   invoked `/swarm` may parallelize ready research. Otherwise do not resolve another ticket.
@@ -75,7 +76,8 @@ scope line, and do not record it as a route decision.
    ask whether to proceed without a map.
 3. Create the map, then only currently specifiable tickets.
 4. Attach every ticket through the native child/sub-issue relationship when available;
-   otherwise link it. Re-read and verify every ticket appears as a child, then add blockers.
+   otherwise link it. Re-read and verify every ticket appears as a child, then add blockers and
+   cross-references using real IDs; placeholders can link unrelated issues.
 5. Resolve one ready Research ticket inline. Authorized lanes claim first, follow `/research`,
    and return cited artifacts.
 6. Stop after that ticket.

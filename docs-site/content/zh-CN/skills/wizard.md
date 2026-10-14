@@ -1,9 +1,17 @@
 ---
-title: /wizard
 description: 为只能由人工完成的基础设施、凭据或 CI 密钥、第三方控制台、迁移和切换流程生成交互式 Bash 向导。对于代理能够执行的工作，请勿调用此技能。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - wizard
 sidebar:
   label: /wizard
+title: /wizard
+type: skill
 ---
 ![展示 /wizard 技能的示意图](/diagrams/skills/wizard.svg)
 
@@ -16,6 +24,8 @@ sidebar:
 出色的用户体验已经由 [template.sh](https://github.com/malinskibeniamin/skills/blob/main/wizard/template.sh) 实现——包括逐阶段进度、确认关卡、跨平台打开 URL（包括 WSL）、隐藏式密钥输入、幂等的 `.env` 更新插入、写入 `gh secret`/`gh variable`，以及结束摘要。**你的工作仅仅是界定流程范围并编写各个阶段。** `STAGES` 标记上方的库代码在每个向导中都完全相同；保持一致正是其意义所在——切勿手动编辑。
 
 默认情况下，向导是临时性的——为单次运行而构建，保存到临时路径或 `scripts/` 路径，并在任务完成后删除。只有当用户需要一个应当保存在仓库中的可重复执行设置流程时，才提交它。
+
+编写向导时，在 `run_wizard` 内替换阶段，并保留末尾的 `run_wizard "$@"; exit`，确保首次提问前完成过程解析。用外部命令桩验证成功、EOF 失败和重跑默认值。通过项目实际加载器验证 `.env`；shell 引号规则并非通用 dotenv 格式。
 
 ## 流程
 
