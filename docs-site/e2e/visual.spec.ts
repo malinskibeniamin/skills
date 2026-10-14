@@ -321,3 +321,26 @@ test("visual: mobile onboarding and directory", async ({ page }) => {
   await stabilizeScreenshotDate(page, false);
   await expect(page).toHaveScreenshot("directory-mobile.png");
 });
+
+for (const viewport of [
+  { name: "desktop", width: 1440, height: 1000 },
+  { name: "mobile", width: 390, height: 844 },
+]) {
+  test(`visual: Excalidraw local workflow ${viewport.name}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/skills/excalidraw-diagram");
+    await expect(
+      page.getByRole("heading", { name: "/excalidraw-diagram", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.locator('img[src$="excalidraw-diagram.svg"]'),
+    ).toBeVisible();
+    await stabilizeScreenshotDate(page);
+    await expect(page).toHaveScreenshot(
+      `excalidraw-local-workflow-${viewport.name}.png`,
+      { fullPage: true },
+    );
+  });
+}
