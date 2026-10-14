@@ -52,6 +52,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/extend-harness` | Rozszerzanie i debugowanie zestawu umiejętności frontendowych. |
 | `/frontend-invariants` | Ponadczasowe zasady frontendowe, które przetrwają zmiany stosu technologicznego. |
 | `/frontend-starter-kit` | Inicjalizowanie standardowego zestawu narzędzi frontendowych i bramek jakości. |
+| `/full-send` | Samodzielne naprawy, kontrole PR-a, przeglądy i autoryzowany merge. |
 | `/go` | Weryfikowanie, przeglądanie i dostarczanie ukończonej pracy. |
 | `/golang-review` | Przeglądanie zmian w Go zgodnie z konwencjami opartymi na dowodach. |
 | `/golang` | Pisanie kodu Go zgodnie z konwencjami inżynierskimi opartymi na dowodach. |

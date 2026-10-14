@@ -315,6 +315,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Specialist skills",
     ],
   },
+  "full-send": {
+    kind: "pipeline",
+    nodes: [
+      "Fix + verify",
+      "PR + CI + reviews",
+      "Final evidence pass",
+      "Authorized merge",
+    ],
+  },
   go: {
     kind: "lifecycle",
     nodes: ["Verify", "Review", "Deliver", "CI or done"],

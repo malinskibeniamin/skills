@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "b8dff910d31dd1b5",
-      "zh-CN": "b8dff910d31dd1b5",
-      "zh-TW": "b8dff910d31dd1b5"
+      "pl": "404da9e280fbcc50",
+      "zh-CN": "404da9e280fbcc50",
+      "zh-TW": "404da9e280fbcc50"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -36,9 +36,9 @@
       "zh-TW": "1120d133871b8399"
     },
     "content/skills/ask-ben.md": {
-      "pl": "ce42a1527196756b",
-      "zh-CN": "ce42a1527196756b",
-      "zh-TW": "ce42a1527196756b"
+      "pl": "6731612f42ccf61a",
+      "zh-CN": "6731612f42ccf61a",
+      "zh-TW": "6731612f42ccf61a"
     },
     "content/skills/av.md": {
       "pl": "23242b5552e4430e",
@@ -164,6 +164,11 @@
       "pl": "2f6b21c0c545e477",
       "zh-CN": "2f6b21c0c545e477",
       "zh-TW": "2f6b21c0c545e477"
+    },
+    "content/skills/full-send.md": {
+      "pl": "39e16fa88d87d410",
+      "zh-CN": "39e16fa88d87d410",
+      "zh-TW": "39e16fa88d87d410"
     },
     "content/skills/go.md": {
       "pl": "b0982dc11201ba58",

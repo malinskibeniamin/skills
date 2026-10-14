@@ -50,6 +50,7 @@ SHORT_DESCRIPTIONS = {
     "extend-harness": "Extend and debug the frontend skill harness",
     "frontend-invariants": "Timeless frontend principles that outlive stacks",
     "frontend-starter-kit": "Bootstrap the standard frontend toolchain and gates",
+    "full-send": "Own fixes, PR checks, reviews, and authorized merge",
     "go": "Verify, review, and ship completed work",
     "golang": "Write Go with evidence-backed engineering conventions",
     "golang-review": "Review Go diffs against evidence-backed conventions",
