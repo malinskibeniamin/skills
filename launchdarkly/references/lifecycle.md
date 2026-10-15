@@ -20,7 +20,7 @@ environment `lastModified` are Unix milliseconds. Default list responses omit fu
 targeting: missing arrays do not prove no rules/targets. Follow list `_links.next`
 offsets through the same CLI command; reject incomplete/changing inventories.
 
-For “any change since cutoff?”, limit 1 is enough: any entry disqualifies; empty
+For "any change since cutoff?", limit 1 is enough: any entry disqualifies; empty
 items must also have no next link. Use resource specifiers, not name searches or
 only targeting `lastModified`. The 14-day window fits the documented 30-day
 minimum change history; if account retention/access cannot cover it, mark unknown.

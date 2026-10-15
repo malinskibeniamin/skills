@@ -5,7 +5,7 @@ description: "Audit LaunchDarkly flags with ldcli: existence, audiences, blast r
 
 Use the official `ldcli` only for LaunchDarkly operations. Read
 [CLI preflight](../shared/ldcli.md); reuse authentication without printing tokens or
-config. Audit requests are read-only: “can we kill it?” asks for a recommendation,
+config. Audit requests are read-only: "can we kill it?" asks for a recommendation,
 not a targeting change, deprecation, archive, deletion, or code removal.
 
 ## Scope
@@ -29,7 +29,7 @@ and the values actually served. Distinguish missing flags from authentication,
 permission, project, and environment failures. Missing does not authorize creation;
 follow [CLI changes](../shared/ldcli.md#change) only when requested.
 
-For “who can see it?”, trace default variation, individual/context targets, ordered
+For "who can see it?", trace default variation, individual/context targets, ordered
 rules, segments, percentage/experiment rollouts, and prerequisites. `on: true`
 alone does not mean everyone receives the feature. Resolve indexes against
 `variations[].value`; never assume index zero means enabled. Describe audiences
@@ -65,8 +65,8 @@ Count each non-archived flag once when all hold at UTC `auditedAt`:
 Unresolved prerequisites, non-boolean enabled values, malformed/missing targeting,
 and inaccessible history are **unknown**, not verified candidates. Resolve them
 before claiming an exact total. Matching means **candidate for removing the flag
-check while preserving the released feature**, not “turn the feature off” or
-“safe to archive now”.
+check while preserving the released feature**, not "turn the feature off" or
+"safe to archive now".
 
 ## Return evidence
 
