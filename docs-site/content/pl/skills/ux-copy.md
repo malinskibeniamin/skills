@@ -11,7 +11,8 @@ sidebar:
 
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md), aby poznać wzorce, zapis wielkich liter, limity elementów i przykłady.
-Podawaj każdy fakt raz. Zachowaj informacje o bezpieczeństwie, limitach i niepewności oraz dostępne etykiety.
+Każde zdanie ma przekazywać jedną przydatną informację wprost. Usuń zbędne słowa i powtórzenia.
+Zachowaj informacje o bezpieczeństwie, limitach i niepewności oraz dostępne etykiety.
 Stosuj glosariusz projektu i kanoniczne nazwy produktów; [GLOSSARY.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/GLOSSARY.md) dotyczy konkretnego produktu.
 
 ## Pisanie

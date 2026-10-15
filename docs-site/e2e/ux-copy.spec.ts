@@ -17,6 +17,9 @@ for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
 
       await page.goto(`${prefix}/`);
       await page.getByRole("main").getByRole("searchbox").fill("ux-copy");
+      await expect(page.locator('main [aria-live="polite"]')).toContainText(
+        "ux-copy",
+      );
       const card = page
         .getByRole("main")
         .getByRole("link", { name: /^\/ux-copy\s/ });

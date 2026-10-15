@@ -7,8 +7,8 @@ verified behavior outrank illustrative examples below.
 
 ## Sentence-level concision
 
-Make each sentence state one useful point directly. Lead with the fact or action; put
-necessary conditions before their effects. Use direct verbs and the shortest natural wording.
+Lead with the fact or action; put necessary conditions before their effects.
+Use direct verbs and the shortest natural wording.
 Cut preambles, filler, roundabout phrases, redundant clauses, and repeated conclusions.
 Delete sentences that add no distinct fact or needed action.
 
