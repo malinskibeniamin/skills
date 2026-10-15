@@ -298,6 +298,7 @@ describe("skill docs source", () => {
     expect(diagnostics).toEqual([]);
     expect(skillNames).toContain("/accessibility");
     expect(skillNames).toContain("/writing-for-agents");
+    expect(skillNames).not.toContain("/resolving-merge-conflicts");
     expect(skillNames).toHaveLength(canonicalSkillFiles.length);
     expect(new Set(skillNames).size).toBe(skillNames.length);
 

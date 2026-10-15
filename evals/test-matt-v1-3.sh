@@ -70,16 +70,17 @@ run_content_eval "$REPO_ROOT/hook-audit/REFERENCE.md" "standalone \`/retro\` ski
 run_content_eval "$ASK_BEN" "/to-tickets\` \\(parallel: \`/implement-spec\`\\)" "ask-ben routes parallel ticket work"
 run_content_eval "$ASK_BEN" "retro \`/retro\`" "ask-ben routes retrospectives"
 
-# resolving-merge-conflicts removed upstream; versioned docs snapshots keep its page.
+# resolving-merge-conflicts removed upstream; versioned docs keep its page and
+# shared diagram assets. Diagram metadata is not an active skill registration.
 if [ -e "$REPO_ROOT/resolving-merge-conflicts" ] || [ -e "$REPO_ROOT/codex-skills/resolving-merge-conflicts" ] ||
   grep -q '"\./resolving-merge-conflicts/"' "$REPO_ROOT/.claude-plugin/plugin.json" ||
   grep -q "resolving-merge-conflicts" "$ASK_BEN" \
-    "$REPO_ROOT/scripts/generate-skill-catalog.sh" "$REPO_ROOT/docs-site/generate-skill-diagrams.ts"; then
-  echo "  FAIL  resolving-merge-conflicts is unregistered everywhere"
+    "$REPO_ROOT/scripts/generate-skill-catalog.sh"; then
+  echo "  FAIL  resolving-merge-conflicts is absent from active skill registrations"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: resolving-merge-conflicts still registered"
 else
-  echo "  PASS  resolving-merge-conflicts is unregistered everywhere"
+  echo "  PASS  resolving-merge-conflicts is absent from active skill registrations"
   PASS=$((PASS + 1))
 fi
 run_file_eval "$REPO_ROOT/docs-site/content/v4.38.0/skills/resolving-merge-conflicts.md" \
