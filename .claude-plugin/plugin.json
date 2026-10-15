@@ -63,6 +63,7 @@
     "./improve/",
     "./implement-spec/",
     "./jb/",
+    "./launchdarkly/",
     "./lie-detector/",
     "./maintain-verification-skill/",
     "./make-pr-easy-to-review/",

@@ -19,7 +19,7 @@ repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
 ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "MS", "PDF", "PM", "PR", "SS", "TDD", "TS", "UI", "URL", "UX"}
-BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "tanstack": "TanStack"}
+BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "launchdarkly": "LaunchDarkly", "tanstack": "TanStack"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
     "accessibility": "Build accessible React interactions and components",
@@ -61,6 +61,7 @@ SHORT_DESCRIPTIONS = {
     "improve": "Audit codebases or write requested implementation plans",
     "implement-spec": "Implement a whole spec on one integration branch",
     "jb": "Check that a PR earns its time and proves it is done",
+    "launchdarkly": "Audit flag audiences and retirement with LaunchDarkly CLI",
     "lie-detector": "Catch tests that cannot fail and claims the diff does not back",
     "maintain-verification-skill": "Audit a project verifier against source and live behavior",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",
