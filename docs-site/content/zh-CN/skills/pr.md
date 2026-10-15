@@ -1,9 +1,17 @@
 ---
-title: /pr
 description: 在撰写 PR 描述时使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - pr
 sidebar:
   label: /pr
+title: /pr
+type: skill
 ---
 ![展示 /pr 技能的图表](/diagrams/skills/pr.svg)
 
@@ -57,6 +65,8 @@ sidebar:
 ### 证据 [#evidence]
 
 提供变更有效的具体证据，展示变更前后对比。列明未运行的检查和剩余不确定性；测试通过不代表人工审查或共识。
+
+对于后端架构、数据流、API 契约或工作流变更，请遵循[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)指南并调用 `excalidraw-diagram`。提供聚焦的前后对比和可编辑源文件链接；更新相关的持续维护图表。图表失败时报告警告并继续，绝不阻塞 PR，也不能替代测试证据。
 
 对于任何前端变更，内嵌播放的真实 UI 流程变更前后对比视频（包含点击、输入和最终状态，绝不能只是静止页面）加上截图，是最高等级的证据，且必须提供。将其放在摘要之后，让审阅者在阅读变更说明前就能看到变更。按照 [commit-push-pr 可视化证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) 中的说明录制、合成并托管视频。
 

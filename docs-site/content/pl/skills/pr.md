@@ -1,9 +1,17 @@
 ---
-title: /pr
 description: Używaj podczas pisania opisu PR.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - pr
 sidebar:
   label: /pr
+title: /pr
+type: skill
 ---
 ![Diagram umiejętności /pr](/diagrams/skills/pr.svg)
 
@@ -57,6 +65,8 @@ Używaj wyłącznie widoków, które pomagają zrozumieć zmianę.
 ### Dowody [#evidence]
 
 Konkretne dowody, że zmiana działa. Pokaż stan przed i po. Wymień niewykonane kontrole i pozostałe niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
+
+Przy zmianach architektury backendu, przepływu danych, kontraktów API lub przebiegu pracy postępuj zgodnie z [diagramami backendowymi](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) i wywołaj `excalidraw-diagram`. Dodaj zwięzłe porównanie stanu przed i po oraz link do edytowalnego źródła; odśwież odpowiednie utrzymywane diagramy. Błędy diagramów zgłaszaj i kontynuuj pracę; nigdy nie blokują PR ani nie zastępują dowodów z testów.
 
 Przy każdej zmianie we frontendzie nagranie rzeczywistego przebiegu interakcji z interfejsem przed zmianą i po niej (kliknięcia, wpisywanie tekstu, stan wynikowy; nigdy nieruchoma strona), odtwarzane bezpośrednio w opisie, wraz ze zrzutami ekranu stanowi najwyższą klasę dowodów i jest wymagane. Umieść je tuż po podsumowaniu, aby osoby przeglądające PR zobaczyły zmianę, zanim o niej przeczytają. Nagraj, zmontuj i udostępnij je zgodnie z [instrukcjami dotyczącymi dowodów wizualnych w commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 
