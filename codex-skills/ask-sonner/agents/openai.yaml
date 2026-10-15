@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ask Sonner"
+  short_description: "Integrate and troubleshoot Sonner notifications"

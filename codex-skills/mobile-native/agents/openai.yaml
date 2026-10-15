@@ -1,0 +1,3 @@
+interface:
+  display_name: "Mobile Native"
+  short_description: "Fix mobile web viewport, touch, and keyboard behavior"
