@@ -16,7 +16,26 @@ if [ "$hook_event" != "UserPromptSubmit" ]; then
   exit 0
 fi
 
-prompt=$(echo "$input" | jq -r '.prompt // empty' | tr '[:upper:]' '[:lower:]')
+# Host setup and hook retries are context, not fresh delivery authorization.
+prompt=$(printf '%s' "$input" | jq -r '
+  .prompt // empty
+  | gsub("(?s)<(system_instruction|hook_prompt)\\b[^>]*>.*?</(system_instruction|hook_prompt)>"; "")
+' | awk '
+  {
+    line=$0
+    sub(/^[[:space:]]*/, "", line)
+    if (match(line, /^```+|^~~~+/)) {
+      marker=substr(line, 1, 1)
+      width=RLENGTH
+      if (!fence) { fence=marker; fence_width=width; next }
+      if (marker == fence && width >= fence_width && substr(line, width+1) ~ /^[[:space:]]*$/) {
+        fence=""
+        next
+      }
+    }
+    if (!fence && line !~ /^>/) print
+  }
+' | tr '[:upper:]' '[:lower:]')
 
 if [ -z "$prompt" ]; then
   exit 0
@@ -46,45 +65,72 @@ _negated_action=false
 _artifact_only=false
 _delivery_override=false
 _action_verbs='build|implement|fix|debug|refactor|update|change|add|remove|delete|write|wire|integrate|upgrade|migrate|rebase|correct|resolve|address'
-echo "$prompt" | grep -qiE '(^|[.!?;][[:space:]]*|please[[:space:]]+)unblock yourself|((do not|don.t|dont|never|stop)[^.;]{0,60}(ask|request)[^.;]{0,60}(permission|approval|prompt)[^.;]{0,100}(commit|push|rebase))' && _delivery_override=true
-echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}((make|create|open)[[:space:]]+(a[[:space:]]+)?)?(pr|pull request)" && _negated_pr=true
-echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}push" && _negated_push=true
-echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}commit" && _negated_commit=true
-echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}($_action_verbs)" && _negated_action=true
-echo "$prompt" | grep -qiE 'unblock yourself[^.;]{0,100}(((do not|don.t|dont|never)[^.;]{0,40}push)|keep[^.;]{0,30}local)' && _delivery_override=false
-echo "$prompt" | grep -qiE "^[[:space:]]*(please[[:space:]]+)?((can|could|would)[[:space:]]+you[[:space:]]+)?(answer|explain|plan|review|analy[sz]e|summarize|inspect|audit|evaluate)([[:space:][:punct:]]|$)" && _artifact_only=true
-echo "$prompt" | grep -qiE "([,;][[:space:]]*(then[[:space:]]+)?|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+)?($_action_verbs)([^[:alnum:]_]|$)" && _artifact_only=false
+_artifact_verbs='answer|explain|plan|review|analy[sz]e|summarize|inspect|audit|evaluate'
+_delivery_verbs='push|commit|ship|/go|/commit-push-pr|(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)'
+_first_line=$(awk 'NF { print; exit }' <<< "$prompt")
+grep -qiE '(^|[.!?;][[:space:]]*|please[[:space:]]+)unblock yourself|((do not|don.t|dont|never|stop)[^.;]{0,60}(ask|request)[^.;]{0,60}(permission|approval|prompt)[^.;]{0,100}(commit|push|rebase))' <<< "$prompt" && _delivery_override=true
+grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}((make|create|open)[[:space:]]+(a[[:space:]]+)?)?(pr|pull request)" <<< "$prompt" && _negated_pr=true
+grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}push" <<< "$prompt" && _negated_push=true
+grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}commit" <<< "$prompt" && _negated_commit=true
+grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}($_action_verbs)" <<< "$prompt" && _negated_action=true
+grep -qiE 'unblock yourself[^.;]{0,100}(((do not|don.t|dont|never)[^.;]{0,40}push)|keep[^.;]{0,30}local)' <<< "$prompt" && _delivery_override=false
+grep -qiE "^[[:space:]]*(please[[:space:]]+)?((can|could|would)[[:space:]]+you[[:space:]]+)?($_artifact_verbs)([[:space:][:punct:]]|$)" <<< "$_first_line" && _artifact_only=true
+# Explanations of how to deliver are still explanations. Otherwise preserve
+# explicit compound commands such as "review this, then open a draft PR".
+_compound_action=false
+if [ "$_artifact_only" = true ]; then
+  _compound_prompt=$prompt
+  _compound_prefix='([,;][[:space:]]*(then[[:space:]]+)?|[[:space:]]+(and|then)[[:space:]]+)'
+  if grep -qiE '(transcript|report|prompt|instructions|example)[[:space:]]*:' <<< "$_first_line"; then
+    _compound_prompt=${_first_line%%:*}
+  elif grep -qiE "^[[:space:]]*(please[[:space:]]+)?((can|could|would)[[:space:]]+you[[:space:]]+)?($_artifact_verbs)[[:space:]]+(how|why|what|whether)([[:space:][:punct:]]|$)" <<< "$_first_line"; then
+    _compound_prefix='[,;][[:space:]]*(then[[:space:]]+)?'
+  fi
+  if grep -qiE "$_compound_prefix(please[[:space:]]+)?($_action_verbs|$_delivery_verbs)([^[:alnum:]_]|$)" <<< "$_compound_prompt"; then
+    _artifact_only=false
+    _compound_action=true
+  fi
+fi
+# A proposal ending in a feasibility question is not an implementation request.
+# Preserve an explicit action at the start, even when it ends with a question.
+if printf '%s\n' "$prompt" | awk 'NF { line=$0 } END { print line }' \
+  | grep -qiE '(^|[.!?][[:space:]]+)[[:space:]]*(can we do (this|that)|is (this|that) (possible|feasible)|would (this|that) work)[[:space:]]*\?[[:space:]]*$' \
+  && [ "$_compound_action" = false ] \
+  && ! grep -qiE "^[[:space:]]*(please[[:space:]]+)?((can|could|would)[[:space:]]+you[[:space:]]+)?($_action_verbs|$_delivery_verbs)([[:space:][:punct:]]|$)" <<< "$_first_line"; then
+  _artifact_only=true
+fi
 
-if echo "$prompt" | grep -qiE '^[[:space:]]*(stop|cancel|never mind|nevermind)([[:space:][:punct:]]|$)'; then
-  [ -n "$_session_dir" ] && rm -f "$_session_dir/task-endpoint" 2>/dev/null || true
+if [ "$_artifact_only" = true ] \
+  || grep -qiE '^[[:space:]]*(stop|cancel|never mind|nevermind)([[:space:][:punct:]]|$)' <<< "$prompt"; then
+  [ -n "$_session_dir" ] && rm -f "$_session_dir/task-endpoint" "$_session_dir/last-injected-endpoint" 2>/dev/null || true
 elif [ "$_delivery_override" = true ] && [ "$_artifact_only" = false ]; then
   _endpoint="push"
-elif echo "$prompt" | grep -qiE '(^|[[:space:]])(/go|ship( it)?|plow ahead|babysit|do not stop|keep going until done|use your best judgment)([[:space:][:punct:]]|$)' \
+elif grep -qiE '(^|[[:space:]])(/go|ship( it)?|plow ahead|babysit|do not stop|keep going until done|use your best judgment)([[:space:][:punct:]]|$)' <<< "$prompt" \
   && [ "$_negated_pr" = false ] && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="ship"
-elif echo "$prompt" | grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)([^[:alnum:]_]|$)|(^|[.;!?][[:space:]]*)draft[[:space:]]+((a|the)[[:space:]]+)?(pr|pull request)([^[:alnum:]_]|$)|/commit-push-pr([^[:alnum:]]|$)' \
-  && ! echo "$prompt" | grep -qi -- '--no-pr' \
+elif grep -qiE '(make|create|open)[[:space:]]+((a|the)[[:space:]]+)?(new[[:space:]]+|draft[[:space:]]+)?(pr|pull request)([^[:alnum:]_]|$)|(^|[.;!?][[:space:]]*)draft[[:space:]]+((a|the)[[:space:]]+)?(pr|pull request)([^[:alnum:]_]|$)|/commit-push-pr([^[:alnum:]]|$)' <<< "$prompt" \
+  && ! grep -qi -- '--no-pr' <<< "$prompt" \
   && [ "$_negated_pr" = false ] && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ]; then
   _endpoint="pr"
-elif { echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?push([[:space:][:punct:]]|$)' \
-    || echo "$prompt" | grep -qiE 'commit[[:space:]]*/[[:space:]]*push|force-with-lease[[:space:]]+push' \
-    || echo "$prompt" | grep -qi -- '--no-pr'; } \
+elif { grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?push([[:space:][:punct:]]|$)' <<< "$prompt" \
+    || grep -qiE 'commit[[:space:]]*/[[:space:]]*push|force-with-lease[[:space:]]+push' <<< "$prompt" \
+    || grep -qi -- '--no-pr' <<< "$prompt"; } \
   && [ "$_negated_push" = false ] && [ "$_negated_commit" = false ] && [ "$_artifact_only" = false ]; then
   _endpoint="push"
-elif echo "$prompt" | grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?commit([[:space:][:punct:]]|$)' \
+elif grep -qiE '(^|[,.;!?][[:space:]]*|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+|can you[[:space:]]+|could you[[:space:]]+|would you[[:space:]]+)?commit([[:space:][:punct:]]|$)' <<< "$prompt" \
   && [ "$_negated_commit" = false ]; then
   _endpoint="commit"
 # Remote-publication recovery is delivery even without a literal "push" verb.
-elif echo "$prompt" | grep -qiE '(propagat(e|ed|ing)|publish|sync)[^.;]{0,100}(remote|upstream)' \
+elif grep -qiE '(propagat(e|ed|ing)|publish|sync)[^.;]{0,100}(remote|upstream)' <<< "$prompt" \
   && [ "$_artifact_only" = false ]; then
   if [ "$_negated_push" = true ] || [ "$_negated_commit" = true ]; then
     _endpoint="local"
-  elif ! echo "$prompt" | grep -qiE "(do not|don.t|dont|never)[^.;]{0,80}(propagat(e|ed|ing)|publish|sync)"; then
+  elif ! grep -qiE "(do not|don.t|dont|never)[^.;]{0,80}(propagat(e|ed|ing)|publish|sync)" <<< "$prompt"; then
     _endpoint="push"
   else
     _endpoint="local"
   fi
-elif echo "$prompt" | grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]|$)" \
+elif grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]|$)" <<< "$prompt" \
   && [ "$_negated_action" = false ] && [ "$_artifact_only" = false ]; then
   if [ "$_negated_push" = true ] || [ "$_negated_commit" = true ]; then
     _endpoint="local"
@@ -121,7 +167,7 @@ fi
 _pr_number=$(echo "$prompt" | grep -oiE '(pr|pull request)[^#]*#([0-9]+)' | grep -oE '#[0-9]+' | head -1 | tr -d '#' || true)
 
 if [ -n "$_pr_number" ]; then
-  if [ -z "$_endpoint" ] && echo "$prompt" | grep -qiE 'review|analy[sz]e|summarize|inspect|explain'; then
+  if [ -z "$_endpoint" ] && grep -qiE 'review|analy[sz]e|summarize|inspect|explain' <<< "$prompt"; then
     directives="$directives\n[PR-CONTEXT] Review PR #$_pr_number read-only with: gh pr view $_pr_number and gh pr diff $_pr_number. Do not checkout, edit, push, or comment unless asked."
   else
     directives="$directives\n[PR-CONTEXT] Explicit PR #$_pr_number. First verify it with gh pr view $_pr_number. For requested write work, checkout only after that succeeds; otherwise keep the current branch and report the artifact mismatch."
@@ -133,7 +179,7 @@ fi
 
 _current_branch=$(git branch --show-current 2>/dev/null || true)
 _scope_lock_prompt=false
-if echo "$prompt" | grep -qiE 'fix|debug|broken|refactor|extract|move|split|consolidate|clean.?up|write.*test|add|create|build|implement|wire|integrate|set.*up|open.*pr|pull request|push|rebase|deploy|delete|migration|ci'; then
+if grep -qiE 'fix|debug|broken|refactor|extract|move|split|consolidate|clean.?up|write.*test|add|create|build|implement|wire|integrate|set.*up|open.*pr|pull request|push|rebase|deploy|delete|migration|ci' <<< "$prompt"; then
   _scope_lock_prompt=true
 fi
 case "$_current_branch" in
