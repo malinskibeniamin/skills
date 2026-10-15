@@ -1,5 +1,25 @@
 # Progress without moving the target
 
+## Continuation
+
+On handoff/resume, preserve the original objective, requested endpoint, explicit narrower
+stops and reserved decisions with their source request. A new explicit delivery instruction
+may replace an earlier local stop; summaries, tool errors and intermediate work do not.
+Record repository/worktree/branch, local and published HEAD/base, dirty scope, checks and
+review/replay receipts, next action and missing prerequisites. Link existing artifacts;
+redact state using [verification replay](verification-replay.md).
+
+Re-read git and hosted state before trusting inherited receipts. Match their revision,
+fixture and environment; invalidate affected receipts after edits, pushes, rebases or base
+movement. Distinguish locally fixed, committed, pushed, reviewed, merged and deployed.
+An unchanged HEAD cannot freeze CI/reviews; a dispatched worker is not delivery.
+
+Retain identity and permission boundaries. Missing credentials, owner decisions or
+production authority need a self-contained host question or conspicuous blocked receipt,
+not another identity, guessed approval or a success claim. Continue safe independent work.
+
+## Repeated attempts
+
 When work plateaus or tool failures repeat, keep a compact untracked attempt ledger:
 
 ```md

@@ -64,6 +64,15 @@ gh api "repos/OWNER/REPO/pulls/$pr_number/reviews" --paginate --slurp
 
 ## Summary Comment Template
 
+Record `finding | fixed/rejected/blocked | proof | candidate SHA`. Fixed findings need a
+regression check; rejected findings need a counterexample or authoritative source; blocked
+findings stay open with the exact missing evidence/owner decision.
+A pending decision is not complete. Re-read hosted state after push; changes invalidate verification.
+Repetition without new evidence routes to [progress evidence](../shared/progress-evidence.md),
+not more identical patches or review rounds. Use a supported host question for the genuine
+boundary; never turn routine repair into an approval request.
+
+
 ```markdown
 ## Review feedback addressed
 

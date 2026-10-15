@@ -11,14 +11,15 @@ Large rewrites preserve behavior by separating mechanical translation from redes
 - Freeze known defects so regressions remain distinguishable from old bugs.
 - Benchmark throughput, memory, artifact size, and latency on the same workload/hardware.
 - Count assertions; exit with none skipped, weakened, or deleted.
+- Freeze [feature-fidelity assertions](../shared/verification-replay.md); preserve intended branding, motion, interaction and data semantics.
 
 ## 2. Tests are implementation-independent
 
-Tests must target a language-independent CLI/API boundary, not the implementation being replaced. If coupled, decouple first as phase 0.
+Tests target the language-independent CLI/API, not the replaced implementation; decouple first if needed. Add held-out representative consumers/projects. Known corpus parity proves that corpus, not complete compatibility.
 
 ## 3. Mechanical first, idiomatic later
 
-Translate 1:1, preserving architecture, names, and structure. Refactor only after parity. Port plus redesign makes failures ambiguous. Choose and record big-bang when bridges would linger; choose incremental when the system must keep shipping.
+Translate 1:1: preserve architecture/names/structure; refactor after parity. Mixing port/redesign obscures failures. Record big-bang when bridges would linger, incremental when shipping must continue.
 
 ## 4. Trial run before fleet
 
@@ -26,7 +27,7 @@ Port three representative files through translate -> compile -> adversarial revi
 
 ## 5. Mechanical work queue
 
-Rank `cargo check`, `tsc`, or equivalent errors. Without delegation, work sequentially under one owner. With delegation or `/swarm`, isolate independent worktrees; each lane commits only its scope and never stashes, resets, or edits another.
+Rank compile errors. Without delegation, work sequentially under one owner. Authorized delegates use isolated worktrees, commit only owned scope, and never stash/reset/edit another.
 
 ## 6. Adversarial review with fresh context
 

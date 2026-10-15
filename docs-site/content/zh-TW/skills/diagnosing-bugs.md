@@ -82,6 +82,7 @@ type: skill
 沒有能夠變紅的命令，就不能進入階段 2。
 
 ## 階段 2 -- 重現並最小化
+對於有狀態缺陷，在最小化之前擷取[原始重放資料包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
 執行迴圈，接著使用 `/dogfood` 測試回報者實際使用的進入點。確認同一個錯誤出現。
 
 - [ ] 迴圈產生的是**使用者**所描述的失敗模式，而非相近的其他失敗。

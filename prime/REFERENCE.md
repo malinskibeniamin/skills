@@ -10,6 +10,8 @@
 - Worktree:
 - Branch:
 - PR/CI:
+- Observed HEAD/base and dirty paths:
+- Original objective / requested endpoint / narrower stops / reserved decisions:
 
 ## Working rules
 - <Task-relevant rules only>
@@ -41,10 +43,11 @@
 ## Context hygiene
 
 - No PRIME.md. Derive live from repo/git/PR/docs, no stale summaries.
+- On resume, use the [continuation checkpoint](../shared/progress-evidence.md#continuation):
+  reconcile explicit follow-ups; summaries do not replace endpoints. Re-observe hosted gates.
 - Do not paste full CLAUDE.md or AGENTS.md. Avoid duplicate context.
 - Read relevant sections only: quick ref, lifecycle, toolchain, tests, repo warnings.
-- Compress rules -> task implications.
-- Read source only if changed, seed/task-referenced, or scout-picked.
+- Summarize rule implications; read only changed, task-referenced or scout-picked source.
 
 ## Integration
 

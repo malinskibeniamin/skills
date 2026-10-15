@@ -85,6 +85,7 @@ Faza 1 kończy się dopiero wtedy, gdy potrafisz wskazać jedno polecenie, uruch
 Bez polecenia zdolnego do czerwieni nie ma fazy 2.
 
 ## Faza 2 -- Odtwórz i zminimalizuj
+Dla błędów zależnych od stanu zapisz [pierwotny pakiet odtwarzania](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md) przed minimalizacją.
 Uruchom pętlę, a następnie `/dogfood` dla rzeczywistego punktu wejścia używanego przez zgłaszającego. Zaobserwuj ten sam błąd.
 
 - [ ] Pętla wywołuje tryb awarii opisany przez **użytkownika**, a nie podobną awarię.
