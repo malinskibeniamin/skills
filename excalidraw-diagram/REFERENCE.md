@@ -1,8 +1,69 @@
 # Excalidraw scene reference
 
-## Element shorthand
+## Native local scenes
 
-The CLI accepts an agent-friendly element schema:
+The [official CLI](https://github.com/excalidraw/cli#render-to-png) renders existing
+scene JSON locally; it is not a drawing DSL. Write native elements or export them
+from the optional canvas. This small editable scene can be saved as `diagram.excalidraw`
+and rendered with the command in the skill:
+
+```json
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {"id":"api","type":"rectangle","x":40,"y":40,"width":180,"height":80,"backgroundColor":"#dbeafe","fillStyle":"solid","boundElements":[{"id":"api-label","type":"text"},{"id":"request","type":"arrow"}]},
+    {"id":"api-label","type":"text","x":60,"y":67.5,"width":140,"height":25,"text":"API","originalText":"API","fontSize":20,"fontFamily":5,"textAlign":"center","verticalAlign":"middle","containerId":"api","lineHeight":1.25},
+    {"id":"store","type":"rectangle","x":340,"y":40,"width":180,"height":80,"backgroundColor":"#dcfce7","fillStyle":"solid","boundElements":[{"id":"store-label","type":"text"},{"id":"request","type":"arrow"}]},
+    {"id":"store-label","type":"text","x":360,"y":67.5,"width":140,"height":25,"text":"Store","originalText":"Store","fontSize":20,"fontFamily":5,"textAlign":"center","verticalAlign":"middle","containerId":"store","lineHeight":1.25},
+    {"id":"request","type":"arrow","x":224,"y":80,"width":112,"height":0,"points":[[0,0],[112,0]],"startBinding":{"elementId":"api","focus":0,"gap":4},"endBinding":{"elementId":"store","focus":0,"gap":4},"endArrowhead":"arrow"}
+  ],
+  "appState": {"viewBackgroundColor":"#ffffff"},
+  "files": {}
+}
+```
+
+Native labels are separate text elements bound through `containerId` and reciprocal
+`boundElements`; native arrows use `startBinding`/`endBinding`. Use numeric native font
+IDs (`5` is Excalifont), not canvas font names. Preserve unrelated elements, IDs, and
+embedded `files` on edits. Keep before/after renders at the same theme, scale, and framing.
+The renderer ignores external images/embeds; embed image bytes in `files` instead.
+If browser discovery fails, pass `--browser-path <executable>` or set
+`EXCALIDRAW_BROWSER_PATH`; use an isolated browser binary/profile, not a person's session.
+
+## Optional live canvas and SVG
+
+For Mermaid conversion, spatial editing, or SVG export, use the existing third-party
+canvas CLI, distinct from the official renderer:
+
+```bash
+export EXPRESS_SERVER_URL="http://127.0.0.1:${CONDUCTOR_PORT:-3000}"
+bunx mcp-excalidraw-server@2.1.2 <command>
+```
+
+SVG renders without a browser or canvas server:
+
+```bash
+bunx mcp-excalidraw-server@2.1.2 render diagram.excalidraw --format svg --out diagram.svg
+```
+
+For canvas editing, run `start`; preserve existing content before replacement and use a
+task-owned port. Only Mermaid conversion or live viewing needs an isolated browser;
+require `status` to show a client before Mermaid. If isolation is unavailable, author
+native JSON and render locally without blocking delivery. Stop only servers you started.
+The [v2.1.2 release](https://github.com/yctimlin/mcp_excalidraw/releases/tag/v2.1.2)
+fixes native export labels, atomic imports, and text sizing; do not retain the old v1 export path.
+
+Commands: `mermaid diagram.mmd`; `add elements.json`; `apply patch.json`; `describe`;
+`screenshot --out check.png`; `export --out diagram.excalidraw`;
+`screenshot --format svg --out diagram.svg`. Inspect the exported scene for native
+elements, then use the official CLI for PNG. Keep the same scene authoritative for SVG
+and PNG, not independently recreated diagrams. Stop only your server when done.
+
+### Canvas element shorthand
+
+The canvas CLI accepts an agent-friendly schema; this is not native `.excalidraw` JSON:
 
 ```json
 [

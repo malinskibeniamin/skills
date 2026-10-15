@@ -1,83 +1,53 @@
 ---
-title: /excalidraw-diagram
 description: >-
   Generuj, udoskonalaj i eksportuj edytowalne diagramy Excalidraw na podstawie
   poleceń lub Mermaid. Używaj do odręcznie stylizowanych diagramów architektury,
   anatomii komponentów, przepływów i technicznych ilustracji z adnotacjami.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - excalidraw diagram
 sidebar:
   label: /excalidraw-diagram
+title: /excalidraw-diagram
+type: skill
 ---
 ![Diagram umiejętności /excalidraw-diagram](/diagrams/skills/excalidraw-diagram.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/excalidraw-diagram.excalidraw)
 
-Generuj rzeczywiste elementy Excalidraw, a nie ich bitmapową imitację. Utrzymuj jedno edytowalne źródło
-prawdy i twórz na jego podstawie zasoby prezentacyjne.
+Twórz edytowalne elementy w natywnym formacie. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/REFERENCE.md), aby poznać format sceny, obszar roboczy/SVG i język wizualny, oraz [PR-WORKFLOW.md](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) dla PR-ów backendowych i utrzymywanych diagramów dokumentacji.
 
-Przed konwersją Mermaid, bezpośrednim tworzeniem elementów lub
-odwzorowywaniem języka wizualnego w stylu Shadcn przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/REFERENCE.md).
+## Domyślnie lokalnie [#local-default]
 
-## Obszar roboczy
-
-Uruchamiaj każde polecenie obszaru roboczego za pomocą CLI w przypiętej wersji:
+Utwórz lub zaktualizuj natywny plik `.excalidraw`, a następnie wyrenderuj go oficjalnym CLI w przypiętej wersji:
 
 ```bash
-export EXPRESS_SERVER_URL="http://127.0.0.1:${CONDUCTOR_PORT:-3000}"
-bunx mcp-excalidraw-server@1.1.0 <command>
+EXCALIDRAW_NO_UPDATE_NOTIFIER=1 bunx @excalidraw/cli@0.2.0 render diagram.excalidraw --out diagram.png
 ```
 
-Pozwól, aby `bunx` korzystał ze współdzielonej pamięci podręcznej; nie dodawaj CLI do repozytorium, które z niego korzysta.
-Środowisko wybiera przydzielony port Conductor, jeśli jest dostępny, a w przeciwnym razie używa portu 3000.
-Uruchom `start`, otwórz `$EXPRESS_SERVER_URL` w izolowanej przeglądarce, pozostaw kartę otwartą, a następnie
-potwierdź, że `status` zgłasza klienta przeglądarki. Jeśli automatyzacja izolowanej przeglądarki jest niedostępna,
-poproś użytkownika o jednorazowe otwarcie podanego adresu URL.
+Node 22 lub nowszy, zainstalowany Chrome/Chromium/Edge/Firefox; tymczasowy profil przeglądarki, bez konta i klucza API. Tylko PNG, bez układania elementów. Używaj pamięci podręcznej `bunx`, nie zależności repozytorium korzystającego z CLI. Mermaid, edycja na żywo i SVG korzystają z opcjonalnego obszaru roboczego opisanego w materiale referencyjnym.
 
-## Przebieg pracy
+## Przebieg pracy [#workflow]
 
-1. Wybierz miejsce docelowe. Używaj `.context/excalidraw/<slug>/` do prac tymczasowych, a
-   wskazanej ścieżki projektu do trwałych zasobów. Unikaj nadpisywania istniejących plików.
-2. Przed wyczyszczeniem istniejącego obszaru roboczego lub importem z użyciem `--replace` zachowaj go za pomocą `snapshot save <name>` albo `export --out <file>`.
-3. Wybierz jedno źródło kanoniczne. W przypadku wyniku Mermaid zachowaj `.mmd` jako źródło nadrzędne i
-   sprawdź je w docelowym mechanizmie renderującym. W przypadku wyniku Excalidraw Mermaid służy jako szkielet
-   importu; po bezpośrednich edycjach źródłem nadrzędnym jest `.excalidraw`.
-4. Standardowe przepływy, sekwencje, stany i struktury relacji twórz za pomocą Mermaid; używaj bezpośrednich elementów
-   do precyzyjnego rozmieszczania, przedstawiania anatomii komponentów, logo, stref i swobodnych objaśnień.
-5. Utwórz cały pierwszy wariant jednym wywołaniem `mermaid`, `add` lub `apply`. Nadaj znaczące
-   identyfikatory wszystkim elementom, które prawdopodobnie będą przenoszone lub zmieniane.
-6. Po użyciu `mermaid` uruchom `describe` i przed eksportem lub bezpośrednią
-   korektą upewnij się, że przekonwertowane elementy istnieją. Jeśli zrzut ekranu jest renderowany, ale opisana scena pozostaje pusta, zachowaj `.mmd`
-   jako źródło kanoniczne albo odtwórz diagram za pomocą bezpośrednich elementów; nigdy nie przedstawiaj pustego pliku `.excalidraw` jako edytowalnego.
-7. Uruchom `describe`, następnie `screenshot --out <check.png>` -> obejrzyj obraz -> popraw kolizje,
-   przycięcia, słaby kontrast i krzyżujące się strzałki za pomocą jednej poprawki `apply`. Powtarzaj, aż wynik będzie poprawny.
-8. Dla zsynchronizowanego obszaru roboczego wyeksportuj niepusty plik `.excalidraw` oraz PNG lub SVG. W przeciwnym razie
-   wyeksportuj `.mmd` wraz z wyrenderowanym zasobem, zachowując Mermaid jako źródło nadrzędne. W przypadku
-   zasobów projektu przechowuj edytowalne źródło obok renderu, chyba że użytkownik poprosi o pojedynczy plik wynikowy.
-9. Podaj końcowe ścieżki, tryb diagramu, źródło kanoniczne, lokalizację opisu dostępności oraz
-   wszystkie nadal wymagane ręczne edycje w przeglądarce.
+1. Wybierz miejsce docelowe: tymczasowe `.context/excalidraw/<slug>/` lub wskazaną trwałą ścieżkę. Nigdy nie nadpisuj plików bez uprzedzenia.
+2. Zachowaj źródło przed zastąpieniem. W obszarze roboczym użyj `snapshot save <name>` lub `export --out <file>` przed wyczyszczeniem lub zastąpieniem.
+3. Wybierz źródło nadrzędne: `.mmd` dla wyników Mermaid, `.excalidraw` po bezpośredniej edycji. Sprawdź Mermaid w docelowym mechanizmie renderującym.
+4. Mermaid obsługuje standardowe przepływy, sekwencje, stany i relacje; bezpośrednie elementy obsługują dokładne rozmieszczenie, anatomię komponentów, logo, strefy i objaśnienia.
+5. Nadaj zmienianym elementom stabilne ID. Twórz natywne elementy lokalnie. Skrócony schemat obszaru roboczego używa jednego wywołania `mermaid`, `add` lub `apply` dla pierwszego wariantu.
+6. Po Mermaid wykonaj `describe` przed eksportem lub korektą. Jeśli zrzut ekranu jest renderowany, ale scena pozostaje pusta, zachowaj `.mmd` jako źródło nadrzędne lub odtwórz ją bezpośrednio; nigdy nie przedstawiaj pustego `.excalidraw` jako edytowalnego.
+7. Wyrenderuj PNG albo w obszarze roboczym wykonaj `describe`, następnie `screenshot` -> obejrzyj obraz -> popraw kolizje, przycięcia, kontrast i krzyżujące się strzałki. Powtarzaj do uzyskania poprawnego wyniku.
+8. Sprawdź, czy istnieją natywne elementy i widoczne etykiety; zachowaj `.excalidraw` oraz PNG lub SVG razem. Wariant zastępczy oparty tylko na Mermaid pozostaje `.mmd` wraz z renderem, a nie deklaracją edytowalnego Excalidraw.
+9. Podaj ścieżki, tryb, źródło kanoniczne, opis dostępności i ręczne czynności w przeglądarce.
 
-## Polecenia
+## Bezpieczeństwo [#safety]
 
-```bash
-# Mermaid
-bunx mcp-excalidraw-server@1.1.0 mermaid diagram.mmd
-
-# Direct scene or atomic correction
-bunx mcp-excalidraw-server@1.1.0 add elements.json
-bunx mcp-excalidraw-server@1.1.0 apply patch.json
-
-# Inspect and export
-bunx mcp-excalidraw-server@1.1.0 describe
-bunx mcp-excalidraw-server@1.1.0 screenshot --out check.png
-bunx mcp-excalidraw-server@1.1.0 export --out diagram.excalidraw
-bunx mcp-excalidraw-server@1.1.0 screenshot --format svg --out diagram.svg
-```
-
-## Bezpieczeństwo
-
-- Traktuj `clear --yes`, `import --replace` i przywracanie migawki jako destrukcyjne operacje na obszarze
-  roboczym; najpierw zachowaj bieżącą scenę.
-- Używaj `share` tylko wtedy, gdy użytkownik poprosi o publiczny link Excalidraw, ponieważ powoduje to przesłanie
-  sceny.
-- W przypadku dokładnych logo używaj plików SVG lub importowanych zasobów marki; nie twórz przybliżonych wersji chronionych znaków.
-- Po wyeksportowaniu plików zatrzymaj serwer lokalny za pomocą `stop`, jeśli nie przewidujesz dalszych edycji.
+- `clear --yes`, `import --replace` i przywracanie są destrukcyjne; najpierw zachowaj źródło.
+- `share` przesyła scenę; używaj tylko na prośbę o publiczny link.
+- Synchronizacja Excalidraw+ wymaga świadomego włączenia; Git pozostaje źródłem nadrzędnym. Błędy diagramów backendowych nie blokują pracy; zgłoś brakujące dowody i kontynuuj dostarczenie.
+- Używaj SVG lub importowanych zasobów marki do dokładnych logo; nigdy nie twórz przybliżonych wersji chronionych znaków.
+- Zatrzymuj tylko serwery obszaru roboczego uruchomione przez siebie.

@@ -49,6 +49,11 @@ Frontend or customer-facing surface diff -> `/visual-review` and the visual evid
 A named review skill is not a separate approval gate. Use `/review` only when requested;
 frontend/customer-facing changes still need visual evidence, not an agent-authored skip.
 
+For backend architecture, data flow, API contract, or workflow changes, follow
+[backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`.
+Prepare editable source and render before committing; include the focused comparison in
+the PR. Diagram failures warn and continue; this does not weaken the frontend visual gate.
+
 ## Conventional commit types (Phase 3)
 
 Group changed files by purpose:

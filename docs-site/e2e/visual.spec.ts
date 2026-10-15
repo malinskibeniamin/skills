@@ -321,3 +321,50 @@ test("visual: mobile onboarding and directory", async ({ page }) => {
   await stabilizeScreenshotDate(page, false);
   await expect(page).toHaveScreenshot("directory-mobile.png");
 });
+
+for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
+  for (const viewport of [
+    { name: "desktop", width: 1440, height: 1000 },
+    { name: "mobile", width: 390, height: 844 },
+  ]) {
+    test(`visual: Excalidraw local workflow ${locale} ${viewport.name}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await page.goto(
+        `${locale === "en" ? "" : `/${locale}`}/skills/excalidraw-diagram`,
+      );
+      await expect(
+        page.getByRole("heading", { name: "/excalidraw-diagram", exact: true }),
+      ).toBeVisible();
+      await expect(page.locator("pre")).toContainText(
+        "EXCALIDRAW_NO_UPDATE_NOTIFIER=1 bunx @excalidraw/cli@0.2.0 render diagram.excalidraw --out diagram.png",
+      );
+      await expect(page.locator("#local-default")).toBeAttached();
+      await expect(
+        page.locator('img[src$="excalidraw-diagram.svg"]'),
+      ).toBeVisible();
+      await stabilizeScreenshotDate(page);
+      await expect(page).toHaveScreenshot(
+        `excalidraw-local-workflow-${locale === "en" ? "" : `${locale}-`}${viewport.name}.png`,
+        { fullPage: true },
+      );
+    });
+  }
+}
+
+for (const locale of ["pl", "zh-CN", "zh-TW"]) {
+  test(`visual: backend PR evidence ${locale} mobile`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}/skills/pr`);
+    const workflow = page.locator(
+      'main a[href$="/excalidraw-diagram/PR-WORKFLOW.md"]',
+    );
+    await workflow.scrollIntoViewIfNeeded();
+    await expect(workflow).toBeVisible();
+    await stabilizeScreenshotDate(page);
+    await expect(page).toHaveScreenshot(
+      `pr-backend-evidence-${locale}-mobile.png`,
+    );
+  });
+}

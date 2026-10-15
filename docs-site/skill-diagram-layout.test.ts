@@ -1,90 +1,130 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-
 import { describe, expect, test } from "bun:test";
 
 interface DiagramElement {
-  height?: number;
   id: string;
+  type: string;
+  height: number;
+  width: number;
+  x: number;
+  y: number;
   points?: Array<[number, number]>;
-  width?: number;
-  x?: number;
-  y?: number;
+  startBinding?: { elementId: string; gap: number } | null;
+  endBinding?: { elementId: string; gap: number } | null;
+  containerId?: string | null;
 }
-
 interface DiagramScene {
   elements: DiagramElement[];
 }
-
 const diagramDirectory = join(import.meta.dir, "public", "diagrams", "skills");
-
 const loadScene = async (name: string): Promise<DiagramScene> =>
   JSON.parse(
     await readFile(join(diagramDirectory, `${name}.excalidraw`), "utf8"),
-  ) as DiagramScene;
-
+  );
 const requireElement = (scene: DiagramScene, id: string): DiagramElement => {
   const element = scene.elements.find((candidate) => candidate.id === id);
-  if (!element) {
-    throw new Error(`Missing diagram element: ${id}`);
-  }
+  if (!element) throw new Error(`Missing diagram element: ${id}`);
   return element;
 };
-
 const absoluteArrowPoints = (
   element: DiagramElement,
 ): Array<[number, number]> => {
-  if (element.x === undefined || element.y === undefined || !element.points) {
-    throw new Error(`${element.id} is not a positioned arrow.`);
-  }
-  const originX = element.x;
-  const originY = element.y;
-  return element.points.map(([x, y]) => [originX + x, originY + y]);
+  if (!element.points) throw new Error(`${element.id} is not an arrow.`);
+  return element.points.map(([x, y]) => [element.x + x, element.y + y]);
+};
+
+// Independent contour oracle: the endpoint must sit just outside the visible
+// outline. A binding alone could pass with a disconnected or crossing arrow.
+const expectContourContact = (
+  shape: DiagramElement,
+  point: [number, number],
+) => {
+  const dx = Math.abs(point[0] - shape.x - shape.width / 2);
+  const dy = Math.abs(point[1] - shape.y - shape.height / 2);
+  const x = dx / (shape.width / 2);
+  const y = dy / (shape.height / 2);
+  const contour =
+    shape.type === "diamond"
+      ? x + y
+      : shape.type === "ellipse"
+        ? Math.hypot(x, y)
+        : Math.max(x, y);
+  expect(contour).toBeGreaterThanOrEqual(1);
+  expect(contour).toBeLessThanOrEqual(
+    1 + 12 / Math.min(shape.width, shape.height),
+  );
+};
+const expectConnection = (
+  scene: DiagramScene,
+  id: string,
+  from: string,
+  to: string,
+) => {
+  const arrow = requireElement(scene, id);
+  const points = absoluteArrowPoints(arrow);
+  expect(arrow.startBinding?.elementId).toBe(from);
+  expect(arrow.endBinding?.elementId).toBe(to);
+  expectContourContact(requireElement(scene, from), points[0] ?? [NaN, NaN]);
+  expectContourContact(requireElement(scene, to), points.at(-1) ?? [NaN, NaN]);
 };
 
 describe("skill diagram layout regressions", () => {
-  test.each(["efficient-frontier", "steelman"])(
-    "%s decision-tree edges visibly overlap their connected node borders",
-    async (name) => {
-      const scene = await loadScene(name);
-      const input = requireElement(scene, "branch-input");
-      const decision = requireElement(scene, "branch-decision");
-      const firstOutcome = requireElement(scene, "branch-outcome-1");
-      const secondOutcome = requireElement(scene, "branch-outcome-2");
-      const inputArrow = absoluteArrowPoints(
-        requireElement(scene, "branch-arrow-input"),
-      );
-      const firstBranch = absoluteArrowPoints(
-        requireElement(scene, "branch-arrow-1"),
-      );
-      const secondBranch = absoluteArrowPoints(
-        requireElement(scene, "branch-arrow-2"),
-      );
-
-      expect(inputArrow[0]?.[0]).toBeLessThan(
-        (input.x ?? 0) + (input.width ?? 0),
-      );
-      expect(inputArrow.at(-1)?.[0]).toBeGreaterThan(decision.x ?? 0);
-      expect(firstBranch[0]?.[0]).toBeLessThan(
-        (decision.x ?? 0) + (decision.width ?? 0),
-      );
-      expect(firstBranch.at(-1)?.[0]).toBeGreaterThan(firstOutcome.x ?? 0);
-      expect(secondBranch.at(-1)?.[0]).toBeGreaterThan(secondOutcome.x ?? 0);
-    },
-  );
-
-  test("sequence message labels stay clear of their arrows", async () => {
-    const scene = await loadScene("handoff");
-
-    for (const index of [1, 2, 3, 4]) {
-      const arrow = requireElement(scene, `sequence-message-${index}`);
-      const label = requireElement(scene, `sequence-message-label-${index}`);
-      expect((label.y ?? 0) + (label.height ?? 0)).toBeLessThanOrEqual(
-        (arrow.y ?? 0) - 8,
+  test("editable Excalidraw overview retains native bound labels", async () => {
+    const scene = await loadScene("excalidraw-diagram");
+    for (const id of [
+      "sequence-actor-1",
+      "sequence-actor-2",
+      "sequence-actor-3",
+    ]) {
+      expect(scene.elements.some((element) => element.containerId === id)).toBe(
+        true,
       );
     }
   });
-
+  test("Excalidraw overview documents the official local-render workflow", async () => {
+    const source = await readFile(
+      join(diagramDirectory, "excalidraw-diagram.svg"),
+      "utf8",
+    );
+    for (const label of [
+      "Git files",
+      "Official CLI",
+      "Edit native scene",
+      "Render local PNG",
+      "Return PNG preview",
+      "Inspect + maintain docs",
+    ])
+      expect(source).toContain(label);
+    expect(source).not.toContain("Canvas server");
+  });
+  test.each(["efficient-frontier", "steelman"])(
+    "%s decision edges bind to visible contours",
+    async (name) => {
+      const scene = await loadScene(name);
+      expectConnection(
+        scene,
+        "branch-arrow-input",
+        "branch-input",
+        "branch-decision",
+      );
+      for (const i of [1, 2])
+        expectConnection(
+          scene,
+          `branch-arrow-${i}`,
+          "branch-decision",
+          `branch-outcome-${i}`,
+        );
+    },
+  );
+  test("sequence message labels stay clear of their arrows", async () => {
+    const scene = await loadScene("handoff");
+    for (const i of [1, 2, 3, 4]) {
+      const arrow = requireElement(scene, `sequence-message-${i}`);
+      const label = requireElement(scene, `sequence-message-label-${i}`);
+      expect(label.y + label.height).toBeLessThanOrEqual(arrow.y - 8);
+    }
+  });
   test.each([
     "plow-ahead",
     "resolve-pr-feedback",
@@ -92,66 +132,46 @@ describe("skill diagram layout regressions", () => {
     "tdd",
     "triage",
   ])(
-    "%s retry arrow connects the third state back to the second",
+    "%s retry connects state three to two without crossing them",
     async (name) => {
       const scene = await loadScene(name);
-      const source = requireElement(scene, "state-3");
-      const target = requireElement(scene, "state-2");
+      expectConnection(scene, "state-retry", "state-3", "state-2");
       const points = absoluteArrowPoints(requireElement(scene, "state-retry"));
-      const first = points[0];
-      const last = points.at(-1);
-
       expect(points.length).toBeGreaterThanOrEqual(4);
-      expect(first?.[1]).toBeGreaterThanOrEqual((source.y ?? 0) + 12);
-      expect(first?.[1]).toBeLessThan((source.y ?? 0) + (source.height ?? 0));
-      expect(first?.[0]).toBeGreaterThan(source.x ?? 0);
-      expect(first?.[0]).toBeLessThan((source.x ?? 0) + (source.width ?? 0));
-      expect(last?.[1]).toBeGreaterThanOrEqual((target.y ?? 0) + 12);
-      expect(last?.[1]).toBeLessThan((target.y ?? 0) + (target.height ?? 0));
-      expect(last?.[0]).toBeGreaterThan(target.x ?? 0);
-      expect(last?.[0]).toBeLessThan((target.x ?? 0) + (target.width ?? 0));
-      expect(points.slice(1, -1).every(([, y]) => y < (target.y ?? 0))).toBe(
-        true,
-      );
+      expect(
+        points.every(([, y]) => y < requireElement(scene, "state-2").y),
+      ).toBe(true);
     },
   );
-
-  test("state-machine transitions visibly overlap both connected nodes", async () => {
+  test("state transitions touch each connected node contour", async () => {
     const scene = await loadScene("tanstack-router");
-    const connections = [
-      ["state-initial", "state-1", "state-transition-start"],
-      ["state-1", "state-2", "state-transition-1"],
-      ["state-2", "state-3", "state-transition-2"],
-      ["state-3", "state-4", "state-transition-3"],
-    ] as const;
-
-    for (const [sourceId, targetId, arrowId] of connections) {
-      const source = requireElement(scene, sourceId);
-      const target = requireElement(scene, targetId);
-      const points = absoluteArrowPoints(requireElement(scene, arrowId));
-      const firstX = points[0]?.[0] ?? 0;
-      const lastX = points.at(-1)?.[0] ?? 0;
-
-      expect(firstX).toBeGreaterThan(source.x ?? 0);
-      expect(firstX).toBeLessThan((source.x ?? 0) + (source.width ?? 0));
-      expect(lastX).toBeGreaterThan(target.x ?? 0);
-      expect(lastX).toBeLessThan((target.x ?? 0) + (target.width ?? 0));
-    }
+    expectConnection(
+      scene,
+      "state-transition-start",
+      "state-initial",
+      "state-1",
+    );
+    for (const i of [1, 2, 3])
+      expectConnection(
+        scene,
+        `state-transition-${i}`,
+        `state-${i}`,
+        `state-${i + 1}`,
+      );
   });
-
-  test("user-flow edges visibly overlap both sides of the diamond node", async () => {
+  test("user-flow arrows touch the diamond contour", async () => {
     const scene = await loadScene("visual-review");
-    const decision = requireElement(scene, "user-flow-decision");
-    const incoming = absoluteArrowPoints(
-      requireElement(scene, "user-flow-arrow-2"),
+    expectConnection(
+      scene,
+      "user-flow-arrow-2",
+      "user-flow-action",
+      "user-flow-decision",
     );
-    const outgoing = absoluteArrowPoints(
-      requireElement(scene, "user-flow-arrow-3"),
-    );
-
-    expect(incoming.at(-1)?.[0]).toBeGreaterThanOrEqual((decision.x ?? 0) + 10);
-    expect(outgoing[0]?.[0]).toBeLessThanOrEqual(
-      (decision.x ?? 0) + (decision.width ?? 0) - 10,
+    expectConnection(
+      scene,
+      "user-flow-arrow-3",
+      "user-flow-decision",
+      "user-flow-outcome",
     );
   });
 });

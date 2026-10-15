@@ -1,9 +1,17 @@
 ---
-title: /pr
 description: 在撰寫 PR 說明時使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - pr
 sidebar:
   label: /pr
+title: /pr
+type: skill
 ---
 ![/pr 技能的示意圖](/diagrams/skills/pr.svg)
 
@@ -57,6 +65,8 @@ sidebar:
 ### 證據 [#evidence]
 
 提供變更有效的具體證據，呈現變更前後對照。列明未執行的檢查與剩餘不確定性；測試通過不代表人工審查或共識。
+
+對於後端架構、資料流程、API 契約或工作流程變更，請遵循[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)指引並呼叫 `excalidraw-diagram`。提供聚焦的前後對照與可編輯原始檔連結；更新相關的持續維護圖表。圖表失敗時回報警告並繼續，絕不阻擋 PR，也不能取代測試證據。
 
 對於任何前端變更，可直接在頁面內播放的實際 UI 流程前後對照影片（包含點擊、輸入及操作後的狀態，絕不能只是靜止頁面）搭配截圖，是最高等級且必備的證據。將其放在摘要正下方，讓審查者在閱讀說明前先看到變更。依照 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)的指引錄製、編排並託管。
 
