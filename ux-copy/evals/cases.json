@@ -32,6 +32,10 @@
     "prompt": "Improve 'You do not have access to this report. Ask an administrator to grant you access.' The server identifies the missing permission as reports.read. There is no request-access workflow in the app."
   },
   {
+    "id": "sentence-concision",
+    "prompt": "Shorten this download-panel help without changing its meaning. Return only the revised text: 'It is important to note that backup downloads remain available for a period of 24 hours after the backup is created. This means that the download link expires 24 hours after backup creation. In the event that a backup exceeds 2 GB, its notification email may take longer to arrive. Backups larger than 2 GB may have delayed notification emails.' All facts are verified."
+  },
+  {
     "id": "prose-boundary",
     "prompt": "Using ux-copy, review the style of docs/retention-guide.md, a prose documentation page. No file contents are attached."
   },

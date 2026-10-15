@@ -5,6 +5,20 @@ what task is happening, what each element contributes, and what the product actu
 Prefer precise facts over brevity that hides a consequence. Local product requirements and
 verified behavior outrank illustrative examples below.
 
+## Sentence-level concision
+
+Make each sentence state one useful point directly. Lead with the fact or action; put
+necessary conditions before their effects. Use direct verbs and the shortest natural wording.
+Cut preambles, filler, roundabout phrases, redundant clauses, and repeated conclusions.
+Delete sentences that add no distinct fact or needed action.
+
+Preserve conditions, uncertainty, safety facts, and natural grammar. Concise does not mean
+cryptic fragments or an arbitrary word cap.
+
+Before: "It is important to note that audit logs are retained for a period of 30 days. This
+means audit logs are stored for 30 days."
+After: "Audit logs are retained for 30 days."
+
 ## Patterns to remove
 
 These names make review findings actionable. A word or punctuation match is a clue, not a

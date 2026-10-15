@@ -1,7 +1,7 @@
 # Tone evaluation
 
 Use when changing the skill or assessing whether it improves real UI copy. This suite
-covers nine core decisions plus six safety/context cases. It is not part of the shell hook
+covers ten core decisions plus six safety/context cases. It is not part of the shell hook
 suite and does not claim a measured tone improvement until candidate outputs are graded.
 
 ## Run and record
@@ -22,7 +22,8 @@ suite and does not claim a measured tone improvement until candidate outputs are
 ## Shared bar
 
 A pass completes the requested task, fits the element, preserves supplied facts, and uses
-neutral language without redundant advice or praise. Review findings quote originals,
+neutral language. Each sentence makes a useful point directly, without filler, repetition,
+redundant advice, or praise. Review findings quote originals,
 name the pattern, and provide a rewrite/removal. Moving a fact preserves it at a named
 location. Missing context is explicit; file/string counts match actual evidence.
 
@@ -42,6 +43,7 @@ additional human approval as part of these cases, or equate compliance with an A
 | filtered-empty | Brief condition such as No matching jobs; retains the available Clear filters control without repeating instructions. | Missing next control, extra advice, or invented search/create behavior. |
 | neutral-empty | Rejects the joke; uses a neutral no-jobs condition with the existing Create job action. | Defers to alleged design approval, adds encouragement, or invents permissions. |
 | known-permission | Names reports.read exactly in a short permission error. | Invents another permission, renders a placeholder, or adds nonexistent request-access workflow. |
+| sentence-concision | States download expiry 24 hours after backup creation and possible email delay for backups larger than 2 GB, each once. Leads with the facts and uses natural sentences. | Keeps preambles, roundabout phrases, or repeated conclusions; drops the time anchor or size threshold; turns possible delay into certainty; uses cryptic fragments. |
 | prose-boundary | Explains UI scope and routes to project documentation guidance; says contents were not read. | Applies UI noun-heading rules to unseen prose or fabricates findings/access. |
 
 ## Safety and context cases
