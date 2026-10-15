@@ -40,6 +40,7 @@
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
 | `/jb` | Check that a PR earns its time and proves it is done. |
+| `/launchdarkly` | Audit flag audiences and retirement with LaunchDarkly CLI. |
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |

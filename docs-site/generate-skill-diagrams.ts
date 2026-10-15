@@ -384,6 +384,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "jb verdict line",
     ],
   },
+  launchdarkly: {
+    kind: "evidence-funnel",
+    nodes: [
+      "Integration + Production",
+      "Created over 30 days ago",
+      "Universally true + quiet 14 days",
+      "Read-only cleanup candidates",
+    ],
+  },
   "lie-detector": {
     kind: "evidence-funnel",
     nodes: [
