@@ -1,6 +1,6 @@
 ---
 title: /ux-copy
-description: 编写清晰、简洁、包容的界面文案。适用于修改界面字符串、标签、按钮、空状态、错误消息、通知、帮助文本或产品术语。
+description: 编写或审查产品界面文案。适用于修改标题、标签、按钮、帮助、消息、导航、i18n 字符串或产品术语。
 type: skill
 sidebar:
   label: /ux-copy
@@ -10,50 +10,30 @@ sidebar:
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/ux-copy.excalidraw)
 
 
-<!-- allow: prose-style this file documents the rules and shows example violations -->
+阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md)，了解问题模式、大小写、元素长度预算和示例。
+每个事实只说一次。保留安全信息、限制、不确定性和无障碍标签。
+使用项目术语表和规范产品名称；[GLOSSARY.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/GLOSSARY.md) 仅适用于特定产品。
 
-# 用户体验文案
+## 编写
 
-阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md)，了解大小写、控件、消息、链接、
-占位符和包容性语言。
+为每个元素拟出最短且准确的文案。检查整个视图，包括相邻元素。
+仅返回或应用请求的修改。指出未经核实的事实；不得编造行为、权限、原因或恢复方法。
+不得暗示已经获得人工批准。
 
-## 界面文案
+## 审查
 
-- 使用句首字母大写，并将对象或结果放在句首。
-- 让每个标签、帮助文本、占位符、工具提示和错误承担不同作用。
-- 按钮应明确操作及其对象；避免使用“是”“否”“提交”“确定”或“完成”。
-- 错误消息应说明原因、限制条件和恢复方法。
-- 空状态应解释原因，并提供一个后续步骤。
-- 标签应始终显示；占位符仅用于提供示例。
-- 完成通知使用主语和过去时动词。
-- 仅在确实造成不便时使用“请”“抱歉”和“谢谢”。
-- 描述破坏性操作时，应直接说明永久性损失。
-- 将正则表达式与验证消息相邻放置。
-- 重点测试较长的本地化文本、大数值、离线和错误状态、文本截断以及恢复流程。
+结合上下文阅读变更的文案。提供位置、原文引用、问题模式名称以及改写或删除建议。
+将有用事实移至合适位置。无问题的审查须列出读过的文件和检查过的不同 UI 字符串数量。
+说明缺失的上下文；不能依据源码声称已进行视觉检查。审查不修改文件。
 
-如有可用的项目规范产品名称和术语表，请遵循它们。
-代码字符串豁免：`// allow: ux-copy [reason]`。
+## 范围和检查
 
-## Markdown 检查
+涵盖 TSX/JSX、导航、i18n 和聊天周边 UI。不涵盖说明性文档、生成的参考描述或对话回复。
+项目的明确规则优先。
 
-`prose-style-check.sh` 只对仓库内 Markdown 的冗余内容、链接、包容性术语和
-标题大小写执行有限检查。项目的文档标准仍是事实来源。
+从 `scripts/` 安装可执行的 PostToolUse `Edit|Write` 钩子：`ux-copy-check.sh`、
+`prose-style-check.sh` 和 `_hook-lib.sh`。保留宿主配置。UX 检查仅对选定的 TS/TSX 模式发出警告；
+JSX/i18n 仍需审查。须确认宿主中的激活配置。
+例外须注明理由：`// allow: ux-copy [reason]`、`<!-- allow: prose-style [reason] -->`。
 
-正文豁免：`<!-- allow: prose-style [reason] -->`。
-
-## 钩子设置
-
-复制并注册以下 PostToolUse `Edit|Write` 钩子：
-
-- `scripts/ux-copy-check.sh`
-- `scripts/prose-style-check.sh`
-- `scripts/_hook-lib.sh`
-
-为它们添加可执行权限。将共用的产品术语保存在项目文档中。
-
-## 完成
-
-验证 `ux-copy-check.sh` 能检测感叹号、`successfully`、归咎性措辞、
-宽泛的操作名称、含糊的错误消息、冗长的通知和占位符错误。验证
-`prose-style-check.sh` 能检测人工智能常用套话、长破折号、非描述性链接、
-非包容性术语和标题式大小写。当项目已定义产品名称的规范大小写时，验证其是否得到遵循。
+评估此技能的语气时，使用 [evals/RUBRIC.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/evals/RUBRIC.md)。钩子通过不代表语气合格。

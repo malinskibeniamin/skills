@@ -163,7 +163,7 @@ type: skill
 | `/to-tickets` | 将计划拆分为带阻塞关系的曳光弹式工单。 |
 | `/triage` | 整理问题，使智能体或人员能够可靠执行。 |
 | `/upgrade-dependency` | 升级依赖项并调整每个受影响的调用位置。 |
-| `/ux-copy` | 以 Redpanda 风格编写清晰、包容的产品文案。 |
+| `/ux-copy` | 编写和审查简洁、客观的产品界面文案。 |
 | `/ux-performance` | 审计并优化真实 Web 用户体验性能。 |
 | `/video-research` | 将视频转换为带时间戳的研究证据。 |
 | `/visual-plan` | 将计划转换为交互式可视化产物。 |

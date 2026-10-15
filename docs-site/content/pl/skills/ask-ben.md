@@ -163,7 +163,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/to-tickets` | Dzielenie planu na zadania typu tracer bullet z określonymi blokadami. |
 | `/triage` | Przygotowywanie zgłoszeń do niezawodnej realizacji przez agenta lub człowieka. |
 | `/upgrade-dependency` | Aktualizowanie zależności i dostosowywanie wszystkich miejsc jej użycia. |
-| `/ux-copy` | Pisanie jasnych, inkluzywnych tekstów produktowych w stylu Redpanda. |
+| `/ux-copy` | Pisanie i recenzja zwięzłych, rzeczowych tekstów interfejsu produktu. |
 | `/ux-performance` | Audytowanie i optymalizowanie rzeczywistej wydajności UX aplikacji internetowych. |
 | `/video-research` | Przekształcanie filmów w materiały badawcze ze znacznikami czasu. |
 | `/visual-plan` | Przekształcanie planu w interaktywny artefakt wizualny. |

@@ -1,172 +1,240 @@
-# UX Copy Reference
+# UX copy reference
 
-## ux-copy-check.sh
+Use for product UI, not prose documentation or chat responses. Start with the whole view:
+what task is happening, what each element contributes, and what the product actually does.
+Prefer precise facts over brevity that hides a consequence. Local product requirements and
+verified behavior outrank illustrative examples below.
 
-> Script: [`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh)
+## Sentence-level concision
 
-## Escape Hatch
+Make each sentence state one useful point directly. Lead with the fact or action; put
+necessary conditions before their effects. Use direct verbs and the shortest natural wording.
+Cut preambles, filler, roundabout phrases, redundant clauses, and repeated conclusions.
+Delete sentences that add no distinct fact or needed action.
 
-```tsx
-// allow: ux-copy -- legacy string from external API
-const message = "Operation completed successfully!"
-```
+Preserve conditions, uncertainty, safety facts, and natural grammar. Concise does not mean
+cryptic fragments or an arbitrary word cap.
 
-Check `// allow: ux-copy` anywhere in file. Reason required. Legacy format `// allow-ux-copy:` work too.
+Before: "It is important to note that audit logs are retained for a period of 30 days. This
+means audit logs are stored for 30 days."
+After: "Audit logs are retained for 30 days."
 
-## Capitalization
+## Patterns to remove
 
-Sentence case all UI text. Capitalize first word only.
+These names make review findings actionable. A word or punctuation match is a clue, not a
+verdict about authorship or quality. Fix the missing fact, not just the flagged word.
 
-| Good | Bad |
-|------|-----|
-| Maximum number of topics | Maximum Number of Topics |
-| Enable mTLS for Schema Registry | Enable mTLS for Schema registry |
-
-Exceptions: product names (Admin API, Schema Registry, HTTP Proxy, Dedicated Cloud, BYOC), acronyms (ID, TLS, mTLS, SASL, OIDC, VPC, CIDR), side pane nav items.
-
-## Toast Messages
-
-Completed tasks: subject + past-tense verb. Long-running tasks: gerund. Remove helper
-phrases such as "has been" and "successfully."
-
-| Good | Bad |
-|------|-----|
-| Topic created | Topic has been created |
-| Client deleted | Client deleted successfully |
-| Creating cluster | Cluster setup in progress |
-
-## Error Messages
-
-State problem. Give solution. No blame.
-
-| Good | Bad |
-|------|-----|
-| Choose a password with at least 8 characters. | Oops! That password is too short. |
-| Could not save changes. Check your connection. | Something went wrong! |
-
-## Button Labels
-
-1-4 words max. Start with verb if >1 word. No "Yes"/"No" -- use action verbs. No articles.
-
-| Good | Bad |
-|------|-----|
-| Delete cluster | Yes |
-| Save changes | OK |
-| Add tag | Add a new tag |
-
-CTA copy names the result or action, not the component event. Prefer "Save changes", "Create topic", or "Export report" over "Submit", "OK", or "Done". Own the ask; do not apologize for it.
-
-## Courtesy words
-
-Use please, sorry, and thank you sparingly, only when acknowledging a genuinely
-inconvenient interaction. Otherwise state the action directly.
-
-## Copywriting Articulation
-
-Use precise copywriting terms in reviews so taste becomes actionable.
-
-| Term | Rule | Better direction |
+| Pattern | Direction | Before -> after |
 |---|---|---|
-| Microcopy | Small UI text carries trust: labels, tooltips, errors, placeholders, toasts. | Replace vague helper copy with one sentence that removes uncertainty. |
-| CTA | The primary action label should name the action or outcome. | "Save changes" beats "Submit". |
-| front-loading | Put the scannable word first. | "Export ready" beats "Your export is complete and available". |
-| Voice and tone | Voice stays consistent; tone adjusts to risk and emotion. | Neutral in settings, careful for destructive actions, encouraging in onboarding. |
-| Success message | Confirm the completed action specifically and briefly. | "Topic created", not "Done" or "Created successfully". |
-| destructive language | Use explicit verbs for irreversible actions. | "Delete cluster" or "Revoke key", not "Clear" when data is lost. |
-| contextual help | Put help next to the control at the moment of need. | One sentence near the field beats a tooltip or docs detour. |
-| numeric formatting | Match the user's locale and keep number style consistent. | Format counts, money, time, and units deliberately. |
-| truncation strategy | Decide how titles, labels, IDs, and descriptions shorten. | Avoid mid-word or mid-identifier cuts; preserve the differentiating part. |
+| 1. Heading as phrase | Name the thing with a noun phrase. | What to watch -> Input; How readily it fires -> Sensitivity |
+| 2. Subtitle scaffolding | Remove section/card/step subtitles; move useful facts into body or field help. | Input / The signal this policy monitors, and the shape of trouble it looks for. -> Input |
+| 3. Advice instead of facts | Describe behavior in descriptions; keep instructions where the task needs them. | Start in Observe; promote once the backtest looks right. -> Describe each mode's verified effect. |
+| 4. Personality or reassurance | State the condition without jokes, encouragement, or sales language. | That's normal for a new agent. -> Remove, or state a verified prerequisite. |
+| 5. Staccato punchlines | Use a plain sentence or label, not fragments for effect. | Twitchy on purpose. Catches incidents fast. -> Faster detection produces more false positives on bursty traffic. |
+| 6. Rhetorical construction | Replace slogans and clause pairs joined by semicolons, colons, or em dashes with direct facts. | Fast, not reckless. -> State the actual detection interval. |
+| 7. Repetition | Keep each fact once per view, where needed. | Heading, helper, and tooltip repeat the same definition -> Keep the useful instance. |
+| 8. Explanation in label | Name in the label, explain in help. | Burst · sudden spike -> Burst; help: Detects sudden spikes. |
+| 9. Vague empty state or error | Name the condition, known cause, or required permission. | Something went wrong -> A specific known failure; do not guess its cause. |
+| 10. Inflated vocabulary | Replace generic praise with a concrete fact, or remove it. | Robust, seamless governance -> Policies apply to every request (only if verified). |
+| 11. Cheerful status | Confirm the actual result. | You're all set! -> Topic created |
+| 12. Copula avoidance | Prefer a direct relationship or verb. | Serves as a control point -> Applies policies |
+| 13. Trailing benefit claim | Remove unsupported "ensuring..." or "helping teams..." tails. | Stores events, ensuring reliability -> State the verified retention or durability property. |
+| 14. Vague relationship | Name how objects relate. | Key associated with agent -> Agent uses this key |
+| 15. Empty disclaimer | Drop "Note that" and unnamed "in some cases"; preserve real conditions and uncertainty. | Note that limits may vary -> Name the plan-dependent limits, if known. |
+| 16. Chat language | Keep the interface out of conversation mode. | Here's how to get started -> Task-specific control or instruction |
+| 17. Template residue | Replace scaffolding before shipping. | [Feature name], TBD, Add description here -> Verified copy |
 
-## Empty States
+Do not turn these into blind bans. A factual contrast can be essential to a safety warning.
+"API key" is a domain noun, not inflated "key features". A colon in a timestamp is not
+rhetorical copy. Literal identifiers, user content, and third-party names are not rewritten
+to satisfy tone rules. Examples involving product behavior require verification before reuse.
 
-Explain why empty, what user do next. Include button/link to next step. Running tasks: gerund ("Creating cluster" not "Cluster creation in progress").
+### Words to question
 
-## Redundant UX writing
+- Generic emphasis: additionally, crucial, pivotal, valuable, key (adjective), highlight,
+  underscore, enhance, bolster, foster, delve, intricate, landscape, tapestry.
+- Marketing: robust, seamless, powerful, effortless, cutting-edge, unlock, empower, leverage.
+- Minimizers: easily, just, simply. They can hide effort or make a failure sound like blame.
 
-Redundant UX writing makes a UI feel generated. A label, helper, placeholder, tooltip, and error message should each do different work; do not let a label repeat the helper or placeholder. Cut duplicated nouns ("configuration and settings"), duplicated verbs ("manage and configure"), and component-event copy ("Submit") when the user needs an outcome ("Save changes").
+Several in one view warrant a context review. Do not replace them mechanically or treat
+membership in a frozen word list as the test. "Optimize" is useful when it names a real
+operation; "robust" without a concrete property is not.
+
+## Where text belongs
+
+Budgets guide editing, not truncation or deletion of critical facts. If a string needs more
+room, improve placement or design. Keep safety and task-critical help visible.
+
+| Element | Job | Default budget |
+|---|---|---|
+| Heading, navigation item | Name the thing, noun phrase, no period | 1-3 words |
+| Field/value label | Persistent accessible name, no inline explanation | 1-3 words |
+| Button | Specific action + object, no period | 1-2 words; usually at most 4 |
+| Toggle/checkbox label | Action enabled, verb first | As short as the object name permits |
+| Page subtitle | Optional new limit, effect, or prerequisite | At most 1 sentence |
+| Field help | Format, restriction, dependency, or effect of leaving blank | Usually 1 sentence |
+| Placeholder | Example value or expected format | A value, not an instruction |
+| Tooltip | Supplemental meaning only | 1 short sentence |
+| Empty state | Condition and an available next action | 1 sentence + optional control |
+| Error | Known cause and supported recovery | Usually 1-2 sentences |
+| Toast | Result or actual progress | Short phrase |
+
+Section/card/step subtitles are not a second help layer. For example, keep "Limits apply
+per API key and reset every 60 seconds" as body text or field help, not a card subtitle.
+Never delete its scope or interval just to shorten the card.
+
+## Capitalization, grammar, and tone
+
+- Sentence case everywhere, including side-pane navigation. Preserve proper names and
+  approved acronyms: API, ID, TLS, mTLS. Match the project glossary and API spelling.
+- Descriptions state third-person facts about the object. Avoid "we", "our", and "let's".
+  Instructions, confirmation dialogs, and actionable errors may use "you" or "your".
+  Titles/menu names omit possessives: "Settings", not "My settings".
+- Use American English unless the project specifies otherwise. Present tense, active
+  voice, natural contractions, and serial commas. Front-load the object/result
+  (front-loading): "Export ready", not "Your export is complete and available".
+- Complete sentences take periods; labels/short status phrases do not. Real confirmation
+  questions can use question marks. Keep parallel items grammatically consistent.
+- Use "and", not "&", except in proper names or exact external labels. Replace "and/or"
+  with the intended "and", "or", or "A, B, or both". Put conditions before their effects.
+- No exclamation points, emoji, idioms, slang, or emphasis through bold, italics, or all caps.
+  Do not add code font as decoration. Identify technical terms by role when needed.
+- Em dashes: avoid in UI copy. Use commas, parentheses, or separate sentences. Do not
+  replace one rhetorical punctuation pattern with another.
+- Courtesy words (please, sorry, thank you) acknowledge real inconvenience, not routine actions.
+  Calm precision also applies to onboarding; the UI does not need to cheerlead.
+
+## Product naming and terminology
+
+One term per concept across UI, API, and docs. Use the project's canonical product names
+and glossary. The bundled [GLOSSARY.md](GLOSSARY.md) is product-specific, not a universal
+vocabulary. Surface contradictions rather than silently renaming API concepts or changing
+domain behavior. Product naming should reveal purpose or scope; avoid cute names for
+security, billing, destructive actions, and recovery.
+
+## Button labels and controls
+
+Name the action, not the component event: "Save changes", "Create topic", "Export report".
+Use "Delete cluster", not "Yes"; "Cancel", not an ambiguous "No". Avoid generic
+"Submit", "OK", and "Done" when a specific action fits. Omit articles and trailing ellipses.
+Toggle/checkbox labels are the noun-label exception: "Require TLS", "Enable audit logging".
+Do not rename controls without checking the action they actually trigger.
+
+## Help, tooltips, and placeholders
+
+Keep contextual help next to its control. A label, helper, placeholder, tooltip, and error
+each do different work; essential instructions cannot live only in a disappearing
+placeholder or hover-only tooltip. Keep validation rules and their errors near the input.
+Tooltips contain no links, buttons, or other interactive elements and do not repeat labels.
+
+An input placeholder shows realistic format, without "Example" or "e.g.". For template
+identifiers in instructions, use meaningful angle-bracket tokens: `<topic-name>`,
+`<cluster-id>`, not `<value>` or `<my-cluster>`. Replace explanatory placeholders before
+shipping; never render `<permission>` in a real error.
+
+## Empty states
+
+Distinguish no resources, no filter matches, loading, missing access, and failed loading.
+"No matching providers" with an existing "Clear filters" control is enough for a filtered
+list. "No agents" can accompany "Create agent" only if creation is available and allowed.
+Do not invent controls, make loading failures look empty, or repeat control text as advice.
+No humor, reassurance, taglines, or "Try again shortly" without an established recovery.
+
+## Error messages
+
+State the known problem without blame. Give a supported correction or action; use visible
+help or a descriptive documentation link if recovery needs several steps.
+
+| Context | Copy |
+|---|---|
+| Verified minimum length | Choose a password with at least 8 characters. |
+| Verified missing permission | Access to this policy requires the policies.read permission. |
+| Save failed; cause unavailable | Could not save changes. |
+
+The permission name above is illustrative. Use the actual identifier from the contract.
+Do not infer a permission, network failure, retry interval, administrator role, or successful
+retry from generic failure text. If needed, flag missing error metadata outside the UI draft.
+Preserve request/error IDs when useful for support, without exposing secrets. Offer retry
+only when supported and safe; a retried non-idempotent action may duplicate work.
+
+## Confirmations and destructive language
+
+Use explicit verbs for irreversible loss: "Delete", "Revoke", not euphemistic "Clear".
+Name the target, scope, permanent effect, dependencies, and recovery limit when established.
+Keep critical facts even if that exceeds normal length budgets. "Delete cluster" is not
+a substitute for explaining permanent loss of its data. Do not claim deletion is reversible
+or permanent without checking. A factual safety distinction is not a rhetorical violation.
+
+## Toast messages
+
+Completed tasks: subject + past-tense verb. Include the differentiating object name when
+helpful: "Client payments-etl deleted". Prefer "Topic created" to "Topic has been created".
+Remove "has been" and "successfully".
+Long-running tasks: actual progress, such as "Creating cluster". Accepted/queued does not
+mean completed. Do not emit completion copy for an operation still running or a failed call.
+
+## Numbers, measurements, dates, and times
+
+- Use numerals, including 0-9. Follow the user's locale/preferences for rendered numbers
+  and dates; do not hardcode English separators or 12-hour time over those settings.
+- Exact values stay exact: 1,024 partitions in US English. Use K/M/B without a space only
+  for deliberately rounded summaries, such as 33K. Never round a limit, price, or ID silently.
+- Separate number and unit: 10 MB, 75 MBps. Preserve precision and distinguish MB from MiB,
+  bits from bytes, and amounts from rates. Do not change units as a copy edit.
+- Static US-English examples may use May 19, 2023 and 2:30 PM. Include an unambiguous time
+  zone when needed; do not guess it. Dynamic dates follow the existing locale formatter.
+
+## Links and directional language
+
+Use descriptive destinations/actions, not "click here" or bare "here". A Learn more link
+can follow related explanatory text, not interrupt a sentence or live in a tooltip.
+Place nothing after the link within its related help block. Give
+repeated generic links distinct accessible names. For external sources, name the source;
+link an external-link icon with its text. Prefer at most one link per sentence.
+
+Directional language: name the control or section, not "above", "below", "on the right",
+or "click". Layout, input method, and reading order vary.
+
+## Inclusive, plain language
+
+Use gender-neutral, non-ableist wording. Replace exclusionary terminology when it is not
+an exact external identifier: allowlist/denylist; leader/follower or primary/secondary.
+Use "for example", "that is", and "through/using" instead of Latin abbreviations. Prefer
+"configuration" over "config" in ordinary UI, and meaningful examples over foo/bar/baz.
+Do not rewrite literal API fields or user data to match a style preference.
+
+## Redundant UX writing: whole-view review
+
+Read the heading, subtitle, label, helper, placeholder, tooltip, and error together.
+Keep each fact in the place it is needed; remove duplicated definitions, "configuration
+and settings", and "manage and configure" when they describe one action. Preserve
+accessible names and repeated warnings needed in separate task contexts.
+
+Report `location | "exact string" | pattern | rewrite/removal`. Say where a retained fact
+moves. Example: `PolicyEditor.tsx: mode help | "Best kept in Observe" | Advice instead of
+facts | "Observe records firings. Enforce engages the kill switch."` That rewrite is valid
+only after verifying both mode behaviors. Quote deletion candidates too.
+
+A clean review states files read, distinct strings checked, and context coverage. Pasted
+excerpts count as excerpts, not files read. Never invent counts or claim rendered/visual
+verification from source alone.
 
 ## Stress-test copy
 
-Stress-test copy before visual approval: German titles, 60-character names, long IDs, huge prices, zero counts, 500s, offline states, loading states, destructive actions, and narrow mobile widths. Copy that only works with short English happy-path strings is not ready.
+Check German titles, long names/IDs, huge prices, zero counts, 500s, offline and loading
+states, missing permissions, destructive actions, and narrow widths. Check plural forms
+and interpolation; keep existing translation keys and placeholders unless a migration is
+requested. Decide truncation deliberately: keep differentiating identifier text accessible;
+never truncate an essential warning or rely on color alone to convey an error.
 
-## Product naming
+## Hook boundary and escape hatch
 
-Product naming can create taste when it helps memory or trust, but clarity wins. User-facing names should reveal purpose, scope, or outcome. Internal primitive names can stay boring and literal. Avoid cute names for destructive actions, security, billing, errors, or recovery.
+[`scripts/ux-copy-check.sh`](scripts/ux-copy-check.sh) provides warning-only pattern checks
+for selected TS/TSX strings, not a tone verdict. Review JSX and translation catalogs manually;
+generic JSON is intentionally not linted as UI. Installation/host activation must be verified
+separately. Do not promise an upstream review bot will read this skill merely because it exists.
 
-## Tooltips
-
-Brief. Period for full sentences, none for short phrases. No interactive elements. No redundant text ("Click to..." on button).
-
-## Numbers and Measurements
-
-- Numerals always, incl 0-9 ("3 topics" not "three topics")
-- Thousands: K, millions: M, billions: B, no space (33K)
-- Measurements: abbreviations with space (10 MB, 75 MBps)
-- Time: 12-hour clock, AM/PM caps (2:30 PM)
-
-## Links
-
-Use descriptive text, never "click here" or bare "here." Place Learn more after
-descriptive text, without punctuation, and put nothing after the link. Do not place it in
-a tooltip or mid-sentence. For third-party resources, name the source instead. Hyperlink
-an external-link icon with its text. Use at most one link per sentence.
-
-## Possessive Pronouns
-
-Avoid "my"/"your" in page names, menus, titles. OK in instructional text. "Settings" not "My Settings".
-
-## Language
-
-American English. Prefer behavior, color, organization, and license over common British
-spellings. Use present tense, active voice, natural contractions, and serial commas. No
-exclamation points or idioms.
-
-## Inclusive Terminology
-
-| Banned | Use Instead |
-|--------|-------------|
-| whitelist/blacklist | allowlist/denylist |
-| master/slave | leader/follower, primary/secondary |
-
-## Directional Language
-
-No physical position -- layouts change. "See the Prerequisites section" not "See above".
-
-## Sentence Structure
-
-- **Subject first** -- "3 options are available" not "There are 3 options"
-- **Conditional phrases first** -- "If using Kubernetes, configure..."
-- **Present tense** -- "The cluster restarts" not "will restart"
-- **No "and/or"** -- use "and", "or", or "A, B, or both"
-
-## Words to Avoid
-
-| Avoid | Use Instead |
-|-------|-------------|
-| etc., e.g., i.e., via | specific items, for example, that is, through/using |
-| please | omit (use only for significant inconvenience) |
-| config | configuration |
-| foo, bar, baz | contextual meaningful names |
-
-## Placeholders
-
-Descriptive lowercase-with-dashes in angle brackets: `<topic-name>`, `<cluster-id>`. Not `<value>`, `<my-cluster>`.
-
-An input placeholder shows the expected type or format. Do not italicize it or prefix it
-with Example or e.g. It disappears during typing, so it cannot replace a persistent label
-or contextual help.
-
-## Em Dashes
-
-No use. Use parentheses, commas, or separate sentences.
-
-## Common Agent Excuses
-
-| Excuse | Counter |
-|---|---|
-| "The exclamation adds energy" | Adds noise. Product UI stay calm. |
-| "'successfully' confirms the action" | Toast confirms. "Topic created" enough. |
-| "'click here' is clear" | Meaningless without context. Describe destination. |
-| "'Oops' is friendly" | Patronizing. State problem + solution direct. |
-| "Title Case looks professional" | Inconsistent, harder scan. Sentence case standard. |
-| "'My Settings' is user-centric" | Ambiguous in multi-user contexts. Just "Settings". |
+`// allow: ux-copy [reason]` anywhere in a file exempts the file; legacy
+`// allow-ux-copy: [reason]` is also supported. Keep a specific reason and use only when
+needed (for example, an exact external message). File-wide exemption does not waive review
+of other strings. Markdown has `<!-- allow: prose-style [reason] -->` for the prose hook.
