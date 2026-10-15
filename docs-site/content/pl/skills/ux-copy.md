@@ -1,9 +1,6 @@
 ---
 title: /ux-copy
-description: >-
-  Twórz jasne, zwięzłe i inkluzywne teksty interfejsu. Używaj podczas zmiany
-  tekstów interfejsu, etykiet, przycisków, pustych stanów, błędów, powiadomień,
-  tekstów pomocy lub terminologii produktu.
+description: Pisz lub recenzuj teksty interfejsu produktu. Używaj przy zmianie nagłówków, etykiet, przycisków, pomocy, komunikatów, nawigacji, tłumaczeń lub terminologii produktu.
 type: skill
 sidebar:
   label: /ux-copy
@@ -13,52 +10,30 @@ sidebar:
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/ux-copy.excalidraw)
 
 
-<!-- allow: prose-style ten plik dokumentuje reguły i przedstawia przykłady naruszeń -->
+Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md), aby poznać wzorce, zapis wielkich liter, limity elementów i przykłady.
+Podawaj każdy fakt raz. Zachowaj informacje o bezpieczeństwie, limitach i niepewności oraz dostępne etykiety.
+Stosuj glosariusz projektu i kanoniczne nazwy produktów; [GLOSSARY.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/GLOSSARY.md) dotyczy konkretnego produktu.
 
-# Teksty interfejsu
+## Pisanie
 
-Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md), aby poznać reguły dotyczące wielkości liter, elementów sterujących, komunikatów, linków,
-tekstów zastępczych i języka inkluzywnego.
+Przygotuj najkrótszy poprawny tekst dla każdego elementu. Sprawdź cały widok wraz z sąsiednimi elementami.
+Zwróć lub wprowadź tylko zamówione zmiany. Wskaż niezweryfikowane fakty; nie wymyślaj zachowania,
+uprawnień, przyczyn ani sposobów naprawy. Nie sugeruj zatwierdzenia przez człowieka.
 
-## Teksty interfejsu
+## Recenzja
 
-- Stosuj zapis zdaniowy i umieszczaj obiekt lub rezultat na początku.
-- Każda etykieta, podpowiedź, tekst zastępczy, etykietka i błąd powinny pełnić inną funkcję.
-- Przyciski powinny określać działanie i obiekt; unikaj słów Tak, Nie, Prześlij, OK i Gotowe.
-- Komunikaty o błędach powinny podawać przyczynę, ograniczenie i sposób rozwiązania problemu.
-- Puste stany powinny wyjaśniać przyczynę i wskazywać jeden kolejny krok.
-- Etykiety powinny być stale widoczne; teksty zastępcze służą wyłącznie do podawania przykładów.
-- Powiadomienia o zakończeniu używają podmiotu i czasownika w czasie przeszłym.
-- Słów proszę, przepraszam i dziękuję używaj tylko przy rzeczywistej niedogodności.
-- Ostrzeżenia o działaniach destrukcyjnych powinny bezpośrednio informować o trwałej utracie danych.
-- Wyrażenia regularne i komunikaty walidacji umieszczaj obok siebie.
-- Testuj długie tłumaczenia, duże liczby, stany offline i błędów, obcinanie tekstu oraz możliwość odzyskania danych.
+Czytaj zmienione teksty w kontekście. Podaj lokalizację, dokładny cytat, nazwę wzorca i poprawkę lub usunięcie.
+Przenieś przydatne fakty. Recenzja bez uwag wymienia przeczytane pliki i liczbę sprawdzonych odrębnych tekstów UI.
+Zgłoś brakujący kontekst; kod źródłowy nie dowodzi sprawdzenia wyglądu. Recenzja nie zmienia plików.
 
-Używaj przyjętych w projekcie nazw produktów i glosariusza, jeśli są dostępne.
-Wyjątek dla tekstu w kodzie: `// allow: ux-copy [reason]`.
+## Zakres i kontrole
 
-## Kontrola Markdown
+Obejmuje TSX/JSX, nawigację, i18n oraz UI otaczający czat. Nie obejmuje prozy dokumentacji,
+generowanych opisów referencyjnych ani odpowiedzi konwersacyjnych. Jawne zasady projektu mają pierwszeństwo.
 
-`prose-style-check.sh` zapewnia wąskie kontrole Markdown w repozytorium dotyczące
-zbędnych treści, linków, terminów inkluzywnych i zapisu nagłówków. Standardy
-dokumentacji projektu pozostają źródłem prawdy.
+Zainstaluj wykonywalne hooki PostToolUse `Edit|Write` z `scripts/`: `ux-copy-check.sh`,
+`prose-style-check.sh`, `_hook-lib.sh`. Zachowaj konfigurację hosta. Kontrole UX ostrzegają tylko o
+wybranych wzorcach TS/TSX; JSX/i18n wymagają recenzji. Sprawdź aktywację w hoście.
+Wyjątki wymagają uzasadnienia: `// allow: ux-copy [reason]`, `<!-- allow: prose-style [reason] -->`.
 
-Wyjątek dla stylu tekstu: `<!-- allow: prose-style [reason] -->`.
-
-## Konfiguracja hooków
-
-Skopiuj i zarejestruj następujące hooki PostToolUse `Edit|Write`:
-
-- `scripts/ux-copy-check.sh`
-- `scripts/prose-style-check.sh`
-- `scripts/_hook-lib.sh`
-
-Nadaj im uprawnienia do wykonywania. Wspólną terminologię produktu przechowuj w dokumentacji projektu.
-
-## Zakończenie
-
-Sprawdź, czy `ux-copy-check.sh` wykrywa wykrzykniki, `successfully`, język obwiniający,
-ogólne nazwy działań, nieprecyzyjne błędy, rozwlekłe powiadomienia i błędne teksty
-zastępcze. Sprawdź, czy `prose-style-check.sh` wykrywa szablonowy styl tekstów AI,
-półpauzy, nieopisowe linki, terminy nieinkluzywne i nagłówki zapisane jak tytuły.
-Sprawdź poprawność zapisu przyjętych nazw produktów, jeśli zdefiniowano je w projekcie.
+Do oceny tonu umiejętności użyj [evals/RUBRIC.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/evals/RUBRIC.md). Zaliczone kontrole hooków nie dowodzą jakości tonu.

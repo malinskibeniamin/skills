@@ -1,31 +1,32 @@
 ---
 name: ux-copy
-description: Write clear, concise, inclusive interface copy. Use when changing UI strings, labels, buttons, empty states, errors, toasts, help text, or product terminology.
+description: Write or review product UI copy. Use when changing headings, labels, buttons, help, messages, navigation, i18n strings, or product terminology.
 ---
 
-<!-- allow: prose-style this file documents the rules -->
+Read [REFERENCE.md](REFERENCE.md) for tone, capitalization, budgets, and examples.
+State facts once. Preserve safety, limits, uncertainty, and accessible labels.
+Use the project glossary and canonical product names; [GLOSSARY.md](GLOSSARY.md) is product-specific.
 
-[REFERENCE.md](REFERENCE.md) owns capitalization, controls, messages, links, placeholders, inclusion.
+## Write
 
-## Copy
+Draft the shortest accurate string per element. Check the whole view and neighbors.
+Make only requested changes. Identify unverified facts; never invent behavior,
+permissions, causes, or recovery. Do not imply human approval.
 
-- Sentence case; front-load object/result.
-- Labels, helpers, placeholders, tooltips, errors each have one job.
-- Buttons name action+object, not Yes/No/Submit/OK/Done.
-- Errors give cause, constraint, recovery; empty states give reason and one next step.
-- Labels persist; placeholders are examples only.
-- Completion toasts use subject + past-tense verb.
-- Use please/sorry/thanks only for real inconvenience.
-- Name permanent destructive loss directly.
-- Keep regex and validation messages adjacent.
-- Stress localization length, numbers, offline/error, truncation, recovery.
+## Review
 
-Use project glossary and canonical product names. Code escape: `// allow: ux-copy [reason]`.
+Read changed strings in context. Give location, exact quote, named pattern, rewrite/removal.
+Relocate useful facts. A clean review names files read and distinct UI strings checked.
+Report missing context; do not claim visual checks from source. Review does not edit.
 
-## Lint/hooks
+## Scope and checks
 
-`prose-style-check.sh` checks Markdown filler, links, inclusive terms, heading case; repo docs standards win. Escape: `<!-- allow: prose-style [reason] -->`.
+Include TSX/JSX, navigation, i18n, and UI around chat. Exclude prose documentation,
+generated reference descriptions, and conversational replies. Explicit project rules win.
 
-Install executable PostToolUse `Edit|Write` hooks: `scripts/ux-copy-check.sh`, `scripts/prose-style-check.sh`, `scripts/_hook-lib.sh`.
+Install executable PostToolUse `Edit|Write` hooks from `scripts/`: `ux-copy-check.sh`,
+`prose-style-check.sh`, `_hook-lib.sh`. Preserve host configuration. UX checks warn on
+selected TS/TSX patterns only; JSX/i18n need review. Verify host activation.
+Escapes need reasons: `// allow: ux-copy [reason]`, `<!-- allow: prose-style [reason] -->`.
 
-Verify UX hook catches exclamation, `successfully`, blame, generic actions, vague errors, verbose toasts, placeholders. Verify prose hook catches canned AI prose, em dashes, vague links, exclusionary terms, title-case headings, and canonical capitalization.
+For tone evals, use [evals/RUBRIC.md](evals/RUBRIC.md). Hook passes do not prove tone.
