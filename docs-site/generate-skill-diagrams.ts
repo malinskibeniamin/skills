@@ -1,4 +1,4 @@
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 interface Skill {
@@ -41,11 +41,15 @@ interface DiagramSpec {
   relations?: string[];
 }
 
-type SceneElement = Record<string, unknown>;
-
 const REPOSITORY_ROOT = join(import.meta.dir, "..");
 const OUTPUT_DIRECTORY = join(import.meta.dir, "public", "diagrams", "skills");
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
+// Published archives still link these shared assets after a skill is retired.
+// Read their description from the immutable release, not a second prose copy.
+const ARCHIVED_SKILL_SOURCES: Record<string, string> = {
+  "resolving-merge-conflicts":
+    "docs-site/content/v4.38.0/skills/resolving-merge-conflicts.md",
+};
 const CREATED_AT = "2026-08-05T00:00:00.000Z";
 const CLI = ["bunx", "mcp-excalidraw-server@2.1.2"];
 const DEFAULT_PALETTE: Palette = { fill: "#1c4f73", stroke: "#4dabf7" };
@@ -53,8 +57,6 @@ const PALETTES: Palette[] = [
   DEFAULT_PALETTE,
   { fill: "#0b4f1c", stroke: "#40c057" },
   { fill: "#402f00", stroke: "#f08c00" },
-  { fill: "#2d1b69", stroke: "#9775fa" },
-  { fill: "#134e4a", stroke: "#38d9a9" },
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
@@ -588,6 +590,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "state-machine",
     nodes: ["Open thread", "Actionable?", "Fix + verify", "Reply + resolve"],
   },
+  "resolving-merge-conflicts": {
+    kind: "dependency-graph",
+    nodes: [
+      "Base intent",
+      "Current branch intent",
+      "Conflicting hunks",
+      "Verified merged result",
+    ],
+  },
   retro: {
     kind: "feedback-loop",
     nodes: [
@@ -999,24 +1010,31 @@ const loadSkills = async (): Promise<Skill[]> => {
       }),
   );
 
-  return skills
-    .filter((skill): skill is Skill => skill !== undefined)
-    .sort((left, right) => left.name.localeCompare(right.name));
+  const current = skills.filter((skill): skill is Skill => skill !== undefined);
+  const currentNames = new Set(current.map((skill) => skill.name));
+  const archived = await Promise.all(
+    Object.entries(ARCHIVED_SKILL_SOURCES)
+      .filter(([name]) => !currentNames.has(name))
+      .map(async ([name, path]): Promise<Skill> => {
+        const source = await readFile(join(REPOSITORY_ROOT, path), "utf8");
+        const frontmatter = source.match(FRONTMATTER)?.[1];
+        if (!frontmatter) throw new Error(`${path} requires YAML frontmatter.`);
+        return {
+          name,
+          description: readFrontmatterField(frontmatter, "description"),
+        };
+      }),
+  );
+  return [...current, ...archived].sort((left, right) =>
+    left.name.localeCompare(right.name),
+  );
 };
 
-const conciseLabel = (value: string): string => {
-  const clause = value.split(/\s+--\s+|[.;]\s+/)[0] ?? value;
-  return clause.split(/\s+/).slice(0, 7).join(" ");
-};
-
-const wrapText = (
-  value: string,
-  lineLength: number,
-  maximumLines: number,
-): string => {
-  const words = value.split(/\s+/);
+// Native output is the authority. No mutable canvas, browser, or account is
+// needed to author scenes or render SVGs.
+const wrapText = (value: string, lineLength: number): string => {
   const lines: string[] = [];
-  for (const word of words) {
+  for (const word of value.split(/\s+/)) {
     const current = lines.at(-1);
     if (!current || current.length + word.length + 1 > lineLength) {
       lines.push(word);
@@ -1024,20 +1042,88 @@ const wrapText = (
       lines[lines.length - 1] = `${current} ${word}`;
     }
   }
-  if (lines.length > maximumLines) {
-    const retained = lines.slice(0, maximumLines);
-    retained[maximumLines - 1] = conciseLabel(retained[maximumLines - 1] ?? "");
-    return retained.join("\n");
-  }
   return lines.join("\n");
 };
 
-const elementBase = (id: string, type: string): SceneElement => ({
-  createdAt: CREATED_AT,
+type Point = [number, number];
+interface NativeElement {
+  id: string;
+  type: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  angle: number;
+  strokeColor: string;
+  backgroundColor: string;
+  fillStyle: string;
+  strokeWidth: number;
+  strokeStyle: string;
+  roughness: number;
+  opacity: number;
+  groupIds: string[];
+  frameId: null;
+  roundness: { type: number } | null;
+  seed: number;
+  version: number;
+  versionNonce: number;
+  isDeleted: boolean;
+  boundElements: Array<{ id: string; type: string }>;
+  updated: number;
+  link: null;
+  locked: boolean;
+  text?: string;
+  originalText?: string;
+  fontFamily?: number;
+  fontSize?: number;
+  textAlign?: string;
+  verticalAlign?: string;
+  containerId?: string | null;
+  lineHeight?: number;
+  autoResize?: boolean;
+  points?: Point[];
+  startBinding?: { elementId: string; focus: number; gap: number } | null;
+  endBinding?: { elementId: string; focus: number; gap: number } | null;
+  startArrowhead?: null;
+  endArrowhead?: "arrow" | null;
+}
+
+type SceneElement = NativeElement;
+const CANVAS_WIDTH = 1480;
+const FOREGROUND = "#e9ecef";
+const SECONDARY = "#adb5bd";
+
+const elementBase = (id: string, type: string): NativeElement => ({
   id,
   type,
-  updatedAt: CREATED_AT,
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  angle: 0,
+  strokeColor: FOREGROUND,
+  backgroundColor: "transparent",
+  fillStyle: "solid",
+  strokeWidth: 2,
+  strokeStyle: "solid",
+  roughness: 1,
+  opacity: 100,
+  groupIds: [],
+  frameId: null,
+  roundness: null,
+  // Stable seeds avoid noisy regeneration diffs and preserve the hand-drawn look.
+  seed:
+    Array.from(id).reduce(
+      (hash, character) => (hash * 31 + (character.codePointAt(0) ?? 0)) >>> 0,
+      1,
+    ) % 2147483647,
   version: 1,
+  versionNonce: 1,
+  isDeleted: false,
+  boundElements: [],
+  updated: Date.parse(CREATED_AT),
+  link: null,
+  locked: false,
 });
 
 const textElement = (
@@ -1045,24 +1131,28 @@ const textElement = (
   text: string,
   x: number,
   y: number,
-  fontSize: number,
-  strokeColor: string,
-): SceneElement => {
-  const lines = text.split("\n");
-  return {
-    ...elementBase(id, "text"),
-    fontFamily: "excalifont",
-    fontSize,
-    height: Math.ceil(lines.length * fontSize * 1.35),
-    strokeColor,
-    text,
-    width: Math.ceil(
-      Math.max(...lines.map((line) => line.length)) * fontSize * 0.62,
-    ),
-    x,
-    y,
-  };
-};
+  fontSize = 20,
+  strokeColor = FOREGROUND,
+): SceneElement => ({
+  ...elementBase(id, "text"),
+  strokeColor,
+  x,
+  y,
+  // Conservative bounds, verified in both the headless and official renderers.
+  width: Math.ceil(
+    Math.max(...text.split("\n").map((line) => line.length)) * fontSize * 0.65,
+  ),
+  height: text.split("\n").length * fontSize * 1.25,
+  text,
+  originalText: text,
+  fontSize,
+  fontFamily: 5,
+  lineHeight: 1.25,
+  textAlign: "left",
+  verticalAlign: "top",
+  containerId: null,
+  autoResize: true,
+});
 
 const paletteAt = (offset: number, index: number): Palette =>
   PALETTES[(offset + index) % PALETTES.length] ?? DEFAULT_PALETTE;
@@ -1076,957 +1166,926 @@ const shapeElement = (
   width: number,
   height: number,
   palette: Palette,
-  options: { fontSize?: number; strokeStyle?: "dashed" | "solid" } = {},
+): SceneElement[] => {
+  const shape: SceneElement = {
+    ...elementBase(id, type),
+    x,
+    y,
+    width,
+    height,
+    backgroundColor: palette.fill,
+    strokeColor: palette.stroke,
+    roundness: type === "rectangle" ? { type: 3 } : null,
+  };
+  if (!label) return [shape];
+  const columns =
+    type === "diamond"
+      ? 15
+      : Math.floor((width * (type === "ellipse" ? 0.78 : 1) - 40) / 13);
+  const text = wrapText(label, columns);
+  const caption = textElement(`${id}-label`, text, 0, 0);
+  caption.x = x + (width - caption.width) / 2;
+  caption.y = y + (height - caption.height) / 2;
+  caption.textAlign = "center";
+  caption.verticalAlign = "middle";
+  caption.containerId = id;
+  shape.boundElements.push({ id: caption.id, type: "text" });
+  return [shape, caption];
+};
+
+const zone = (
+  id: string,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
 ): SceneElement => ({
-  ...elementBase(id, type),
-  backgroundColor: palette.fill,
-  fillStyle: "solid",
-  fontFamily: "excalifont",
-  fontSize: options.fontSize ?? 20,
-  height,
-  label: { text: wrapText(label, 18, 3) },
-  roughness: 1,
-  roundness: type === "rectangle" ? { type: 3 } : undefined,
-  strokeColor: palette.stroke,
-  strokeStyle: options.strokeStyle ?? "solid",
-  strokeWidth: 2,
-  width,
+  ...elementBase(id, "rectangle"),
   x,
   y,
+  width,
+  height,
+  strokeColor: "#495057",
+  strokeStyle: "dashed",
+  roundness: { type: 3 },
 });
 
 const arrowElement = (
   id: string,
-  start: [number, number],
-  end: [number, number],
+  start: Point,
+  end: Point,
   options: {
+    via?: Point[];
+    dashed?: boolean;
     endArrowhead?: "arrow" | null;
-    strokeStyle?: "dashed" | "solid";
-    via?: Array<[number, number]>;
+    type?: "arrow" | "line";
   } = {},
 ): SceneElement => {
-  const points = [start, ...(options.via ?? []), end].map(
-    ([x, y]): [number, number] => [x - start[0], y - start[1]],
-  );
-  const xCoordinates = points.map(([x]) => x);
-  const yCoordinates = points.map(([, y]) => y);
+  const points: Point[] = [start, ...(options.via ?? []), end].map(([x, y]) => [
+    x - start[0],
+    y - start[1],
+  ]);
   return {
-    ...elementBase(id, "arrow"),
-    endArrowhead:
-      options.endArrowhead === undefined ? "arrow" : options.endArrowhead,
-    height: Math.max(...yCoordinates) - Math.min(...yCoordinates),
-    points,
-    roughness: 1,
-    roundness: { type: 2 },
-    strokeColor: "#e9ecef",
-    strokeStyle: options.strokeStyle ?? "solid",
-    strokeWidth: 2,
-    width: Math.max(...xCoordinates) - Math.min(...xCoordinates),
+    ...elementBase(id, options.type ?? "arrow"),
     x: start[0],
     y: start[1],
+    points,
+    width:
+      Math.max(...points.map(([x]) => x)) - Math.min(...points.map(([x]) => x)),
+    height:
+      Math.max(...points.map(([, y]) => y)) -
+      Math.min(...points.map(([, y]) => y)),
+    roundness: { type: 2 },
+    strokeStyle: options.dashed ? "dashed" : "solid",
+    startBinding: null,
+    endBinding: null,
+    startArrowhead: null,
+    endArrowhead:
+      options.endArrowhead === undefined ? "arrow" : options.endArrowhead,
   };
+};
+
+const center = (element: SceneElement): Point => [
+  element.x + element.width / 2,
+  element.y + element.height / 2,
+];
+const requireShape = (elements: SceneElement[], id: string): SceneElement => {
+  const element = elements.find((candidate) => candidate.id === id);
+  if (!element) throw new Error(`Missing diagram node ${id}.`);
+  return element;
+};
+
+// Intersect the actual rectangle/ellipse/diamond contour, not its bounding box.
+const borderPoint = (element: SceneElement, toward: Point): Point => {
+  const [cx, cy] = center(element);
+  const dx = toward[0] - cx;
+  const dy = toward[1] - cy;
+  const rx = element.width / 2;
+  const ry = element.height / 2;
+  const normalized =
+    element.type === "ellipse"
+      ? Math.hypot(dx / rx, dy / ry)
+      : element.type === "diamond"
+        ? Math.abs(dx / rx) + Math.abs(dy / ry)
+        : Math.max(Math.abs(dx / rx), Math.abs(dy / ry));
+  if (!normalized) throw new Error(`Coincident connector at ${element.id}.`);
+  const distance = Math.hypot(dx, dy);
+  return [
+    cx + dx / normalized + (dx / distance) * 4,
+    cy + dy / normalized + (dy / distance) * 4,
+  ];
+};
+
+const connect = (
+  elements: SceneElement[],
+  id: string,
+  from: string,
+  to: string,
+  options: {
+    via?: Point[];
+    dashed?: boolean;
+    endArrowhead?: "arrow" | null;
+  } = {},
+): SceneElement => {
+  const source = requireShape(elements, from);
+  const target = requireShape(elements, to);
+  const arrow = arrowElement(
+    id,
+    borderPoint(source, options.via?.[0] ?? center(target)),
+    borderPoint(target, options.via?.at(-1) ?? center(source)),
+    options,
+  );
+  arrow.startBinding = { elementId: from, focus: 0, gap: 4 };
+  arrow.endBinding = { elementId: to, focus: 0, gap: 4 };
+  source.boundElements.push({ id, type: "arrow" });
+  target.boundElements.push({ id, type: "arrow" });
+  return arrow;
 };
 
 type LayoutRenderer = (
   stages: string[],
   paletteOffset: number,
 ) => SceneElement[];
-
-const renderLinear: LayoutRenderer = (stages, paletteOffset) => {
-  const gap = 50;
-  const width = (1080 - gap * (stages.length - 1)) / stages.length;
-  const shapes = stages.map((stage, index) =>
-    shapeElement(
-      `linear-stage-${index + 1}`,
-      "rectangle",
-      stage,
-      60 + index * (width + gap),
-      245,
-      width,
-      185,
-      paletteAt(paletteOffset, index),
-    ),
-  );
-  const arrows = stages.slice(1).map((_stage, index) => {
-    const x = 60 + (index + 1) * width + index * gap;
-    return arrowElement(`linear-arrow-${index + 1}`, [x, 338], [x + gap, 338]);
-  });
-  return [...shapes, ...arrows];
-};
-
-const renderTimeline: LayoutRenderer = (stages, paletteOffset) => {
-  const startX = 150;
-  const step = 900 / (stages.length - 1);
-  const line = arrowElement("timeline-line", [110, 345], [1090, 345]);
-  const nodes = stages.flatMap((stage, index) => {
-    const centerX = startX + index * step;
-    const labelY = index % 2 === 0 ? 220 : 405;
-    return [
-      shapeElement(
-        `timeline-node-${index + 1}`,
-        "ellipse",
-        String(index + 1).padStart(2, "0"),
-        centerX - 42,
-        303,
-        84,
-        84,
-        paletteAt(paletteOffset, index),
-        { fontSize: 18 },
-      ),
-      textElement(
-        `timeline-label-${index + 1}`,
-        wrapText(stage, 18, 3),
-        centerX - 88,
-        labelY,
-        18,
-        paletteAt(paletteOffset, index).stroke,
-      ),
-    ];
-  });
-  return [line, ...nodes];
-};
-
-const renderCycle: LayoutRenderer = (stages, paletteOffset) => {
-  const positions =
-    stages.length === 3
-      ? [
-          { x: 470, y: 180 },
-          { x: 770, y: 385 },
-          { x: 170, y: 385 },
-        ]
-      : [
-          { x: 470, y: 175 },
-          { x: 820, y: 300 },
-          { x: 470, y: 425 },
-          { x: 120, y: 300 },
-        ];
-  const shapes = stages.map((stage, index) => {
-    const position = positions[index] ?? { x: 470, y: 180 };
-    return shapeElement(
-      `cycle-stage-${index + 1}`,
-      "ellipse",
-      stage,
-      position.x,
-      position.y,
-      260,
-      88,
-      paletteAt(paletteOffset, index),
-      { fontSize: 18 },
-    );
-  });
-  const arrows =
-    stages.length === 3
-      ? [
-          arrowElement("cycle-arrow-1", [730, 220], [770, 410]),
-          arrowElement("cycle-arrow-2", [770, 470], [430, 470]),
-          arrowElement("cycle-arrow-3", [300, 410], [470, 220]),
-        ]
-      : [
-          arrowElement("cycle-arrow-1", [730, 220], [820, 335]),
-          arrowElement("cycle-arrow-2", [820, 365], [730, 465]),
-          arrowElement("cycle-arrow-3", [470, 465], [380, 365]),
-          arrowElement("cycle-arrow-4", [380, 335], [470, 220]),
-        ];
-  return [...shapes, ...arrows];
-};
-
-const renderFunnel: LayoutRenderer = (stages, paletteOffset) => {
-  const shapes = stages.map((stage, index) => {
-    const width = 900 - index * 180;
-    return shapeElement(
-      `funnel-stage-${index + 1}`,
-      "rectangle",
-      stage,
-      (1200 - width) / 2,
-      180 + index * 84,
-      width,
-      60,
-      paletteAt(paletteOffset, index),
-      { fontSize: 18 },
-    );
-  });
-  const arrows = stages
-    .slice(1)
-    .map((_stage, index) =>
-      arrowElement(
-        `funnel-arrow-${index + 1}`,
-        [600, 240 + index * 84],
-        [600, 264 + index * 84],
-      ),
-    );
-  return [...shapes, ...arrows];
-};
-
-const renderLayers: LayoutRenderer = (stages, paletteOffset) =>
-  stages.map((stage, index) =>
-    shapeElement(
-      `layer-${index + 1}`,
-      "rectangle",
-      stage,
-      100 + index * 45,
-      180 + index * 82,
-      1000 - index * 90,
-      66,
-      paletteAt(paletteOffset, index),
-      { fontSize: 18 },
-    ),
-  );
-
-const renderBranch: LayoutRenderer = (stages, paletteOffset) => {
-  const root = shapeElement(
-    "branch-input",
-    "rectangle",
-    stages[0] ?? "Input",
-    70,
-    300,
-    240,
-    105,
-    paletteAt(paletteOffset, 0),
-    { fontSize: 18 },
-  );
-  const decision = shapeElement(
-    "branch-decision",
-    "diamond",
-    stages[1] ?? "Decision",
-    420,
-    280,
-    220,
-    145,
-    paletteAt(paletteOffset, 1),
-    { fontSize: 17 },
-  );
-  const outcomes = stages
-    .slice(2)
-    .map((stage, index) =>
-      shapeElement(
-        `branch-outcome-${index + 1}`,
-        "rectangle",
-        stage,
-        800,
-        stages.length === 3 ? 300 : 210 + index * 190,
-        300,
-        105,
-        paletteAt(paletteOffset, index + 2),
-        { fontSize: 18 },
-      ),
-    );
-  const arrows = [
-    arrowElement("branch-arrow-input", [307, 352], [423, 352]),
-    ...outcomes.map((_outcome, index) =>
-      arrowElement(
-        `branch-arrow-${index + 1}`,
-        [637, 352],
-        [803, stages.length === 3 ? 352 : 262 + index * 190],
-      ),
-    ),
-  ];
-  return [root, decision, ...outcomes, ...arrows];
-};
-
-const renderMatrix: LayoutRenderer = (stages, paletteOffset) => {
-  const positions =
-    stages.length === 3
-      ? [
-          { x: 130, y: 190 },
-          { x: 650, y: 190 },
-          { x: 390, y: 370 },
-        ]
-      : [
-          { x: 130, y: 190 },
-          { x: 650, y: 190 },
-          { x: 130, y: 370 },
-          { x: 650, y: 370 },
-        ];
-  return stages.map((stage, index) => {
-    const position = positions[index] ?? { x: 130, y: 190 };
-    return shapeElement(
-      `matrix-cell-${index + 1}`,
-      "rectangle",
-      stage,
-      position.x,
-      position.y,
-      420,
-      120,
-      paletteAt(paletteOffset, index),
-      { fontSize: 19 },
-    );
-  });
-};
-
-const renderBeforeAfter: LayoutRenderer = (stages, paletteOffset) => {
-  const split = Math.ceil(stages.length / 2);
-  const left = stages.slice(0, split);
-  const right = stages.slice(split);
-  const zonePalette = { fill: "transparent", stroke: "#495057" };
-  const zones = [
-    shapeElement(
-      "before-zone",
-      "rectangle",
-      "",
-      70,
-      185,
-      450,
-      320,
-      zonePalette,
-      {
-        strokeStyle: "dashed",
-      },
-    ),
-    shapeElement(
-      "after-zone",
-      "rectangle",
-      "",
-      680,
-      185,
-      450,
-      320,
-      zonePalette,
-      {
-        strokeStyle: "dashed",
-      },
-    ),
-    textElement("before-label", "BEFORE", 95, 205, 17, "#adb5bd"),
-    textElement("after-label", "AFTER", 705, 205, 17, "#adb5bd"),
-  ];
-  const leftShapes = left.map((stage, index) =>
-    shapeElement(
-      `before-stage-${index + 1}`,
-      "rectangle",
-      stage,
-      110,
-      260 + index * 125,
-      370,
-      90,
-      paletteAt(paletteOffset, index),
-      { fontSize: 18 },
-    ),
-  );
-  const rightShapes = right.map((stage, index) =>
-    shapeElement(
-      `after-stage-${index + 1}`,
-      "rectangle",
-      stage,
-      720,
-      260 + index * 125,
-      370,
-      90,
-      paletteAt(paletteOffset, index + split),
-      { fontSize: 18 },
-    ),
-  );
-  return [
-    ...zones,
-    ...leftShapes,
-    ...rightShapes,
-    arrowElement("transformation-arrow", [520, 345], [680, 345]),
-  ];
-};
-
-const renderStaircase: LayoutRenderer = (stages, paletteOffset) => {
-  const shapes = stages.map((stage, index) =>
-    shapeElement(
-      `stair-${index + 1}`,
-      "rectangle",
-      stage,
-      90 + index * 260,
-      420 - index * 68,
-      220,
-      78,
-      paletteAt(paletteOffset, index),
-      { fontSize: 17 },
-    ),
-  );
-  const arrows = stages
-    .slice(1)
-    .map((_stage, index) =>
-      arrowElement(
-        `stair-arrow-${index + 1}`,
-        [310 + index * 260, 450 - index * 68],
-        [350 + index * 260, 420 - index * 68],
-      ),
-    );
-  return [...shapes, ...arrows];
-};
-
 type DiagramRenderer = (
   spec: DiagramSpec,
   paletteOffset: number,
 ) => SceneElement[];
 
-const renderArchitecture: DiagramRenderer = (spec, paletteOffset) => {
-  const positions = [
-    { x: 130, y: 215 },
-    { x: 710, y: 215 },
-    { x: 130, y: 385 },
-    { x: 710, y: 385 },
-  ];
-  const boundary = shapeElement(
-    "architecture-boundary",
-    "rectangle",
-    "",
-    80,
-    175,
-    1040,
-    340,
-    { fill: "transparent", stroke: "#495057" },
-    { strokeStyle: "dashed" },
-  );
-  const components = spec.nodes.map((node, index) => {
-    const position = positions[index] ?? { x: 130, y: 215 };
-    return shapeElement(
-      `component-${index + 1}`,
+const renderLinear: LayoutRenderer = (stages, offset) => {
+  const nodes = stages.flatMap((stage, i) =>
+    shapeElement(
+      `linear-stage-${i + 1}`,
       "rectangle",
-      node,
-      position.x,
-      position.y,
-      360,
-      88,
-      paletteAt(paletteOffset, index),
-      { fontSize: 18 },
-    );
-  });
-  const connections = [
-    arrowElement("component-link-1", [490, 259], [710, 259]),
-    arrowElement("component-link-2", [310, 303], [310, 385]),
-    arrowElement("component-link-3", [890, 303], [890, 385]),
-    arrowElement("component-link-4", [490, 429], [710, 429]),
-  ];
-  const relationLabels = (spec.relations ?? []).map((relation, index) =>
-    textElement(
-      `component-relation-${index + 1}`,
-      relation,
-      [555, 325, 920][index] ?? 555,
-      [230, 330, 330][index] ?? 230,
-      15,
-      "#adb5bd",
+      stage,
+      60 + i * 350,
+      340,
+      280,
+      120,
+      paletteAt(offset, i),
     ),
   );
-  return [boundary, ...components, ...connections, ...relationLabels];
-};
-
-const renderHierarchy: DiagramRenderer = (spec, paletteOffset) => {
-  const root = shapeElement(
-    "hierarchy-root",
-    "rectangle",
-    spec.nodes[0] ?? "Root",
-    440,
-    185,
-    320,
-    88,
-    paletteAt(paletteOffset, 0),
-  );
-  const children = spec.nodes
-    .slice(1)
-    .map((node, index) =>
-      shapeElement(
-        `hierarchy-child-${index + 1}`,
-        "rectangle",
-        node,
-        90 + index * 360,
-        385,
-        300,
-        100,
-        paletteAt(paletteOffset, index + 1),
-        { fontSize: 18 },
+  return [
+    ...nodes,
+    ...stages
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `linear-arrow-${i + 1}`,
+          `linear-stage-${i + 1}`,
+          `linear-stage-${i + 2}`,
+        ),
       ),
-    );
-  const trunk = arrowElement("hierarchy-trunk", [600, 273], [600, 330], {
-    endArrowhead: null,
-  });
-  const branches = children.map((_child, index) =>
-    arrowElement(
-      `hierarchy-branch-${index + 1}`,
-      [600, 330],
-      [240 + index * 360, 385],
-      { endArrowhead: null },
-    ),
-  );
-  return [root, ...children, trunk, ...branches];
+  ];
 };
 
-const renderUserFlow: DiagramRenderer = (spec, paletteOffset) => {
-  const nodes = [
-    shapeElement(
-      "user-flow-entry",
+const renderTimeline: LayoutRenderer = (stages, offset) => {
+  const nodes = stages.flatMap((stage, i) => [
+    ...shapeElement(
+      `timeline-node-${i + 1}`,
       "ellipse",
-      spec.nodes[0] ?? "Entry",
-      45,
-      300,
-      220,
-      105,
-      paletteAt(paletteOffset, 0),
-      { fontSize: 17 },
+      String(i + 1).padStart(2, "0"),
+      90 + i * 350,
+      360,
+      120,
+      60,
+      paletteAt(offset, i),
     ),
-    shapeElement(
-      "user-flow-action",
+    textElement(
+      `timeline-label-${i + 1}`,
+      wrapText(stage, 23),
+      70 + i * 350,
+      i % 2 === 0 ? 280 : 470,
+      20,
+    ),
+  ]);
+  return [
+    ...nodes,
+    ...stages
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `timeline-line-${i + 1}`,
+          `timeline-node-${i + 1}`,
+          `timeline-node-${i + 2}`,
+        ),
+      ),
+  ];
+};
+
+const renderCycle: LayoutRenderer = (stages, offset) => {
+  const positions: Point[] =
+    stages.length === 3
+      ? [
+          [590, 250],
+          [1020, 510],
+          [160, 510],
+        ]
+      : [
+          [590, 250],
+          [1040, 460],
+          [590, 670],
+          [140, 460],
+        ];
+  const nodes = stages.flatMap((stage, i) => {
+    const [x, y] = positions[i] ?? [590, 250];
+    return shapeElement(
+      `cycle-stage-${i + 1}`,
+      "ellipse",
+      stage,
+      x,
+      y,
+      280,
+      120,
+      paletteAt(offset, i),
+    );
+  });
+  return [
+    ...nodes,
+    ...stages.map((_, i) =>
+      connect(
+        nodes,
+        `cycle-arrow-${i + 1}`,
+        `cycle-stage-${i + 1}`,
+        `cycle-stage-${((i + 1) % stages.length) + 1}`,
+      ),
+    ),
+  ];
+};
+
+const renderFunnel: LayoutRenderer = (stages, offset) => {
+  const nodes = stages.flatMap((stage, i) => {
+    const width = 1000 - i * 180;
+    return shapeElement(
+      `funnel-stage-${i + 1}`,
       "rectangle",
-      spec.nodes[1] ?? "Action",
-      330,
-      300,
-      240,
-      105,
-      paletteAt(paletteOffset, 1),
-      { fontSize: 17 },
-    ),
+      stage,
+      (CANVAS_WIDTH - width) / 2,
+      240 + i * 140,
+      width,
+      80,
+      paletteAt(offset, i),
+    );
+  });
+  return [
+    ...nodes,
+    ...stages
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `funnel-arrow-${i + 1}`,
+          `funnel-stage-${i + 1}`,
+          `funnel-stage-${i + 2}`,
+        ),
+      ),
+  ];
+};
+
+const renderLayers: LayoutRenderer = (stages, offset) =>
+  stages.flatMap((stage, i) =>
     shapeElement(
-      "user-flow-decision",
+      `layer-${i + 1}`,
+      "rectangle",
+      stage,
+      140 + i * 50,
+      240 + i * 140,
+      1200 - i * 100,
+      80,
+      paletteAt(offset, i),
+    ),
+  );
+
+const renderBranch: LayoutRenderer = (stages, offset) => {
+  const nodes = [
+    ...shapeElement(
+      "branch-input",
+      "rectangle",
+      stages[0] ?? "Input",
+      80,
+      390,
+      280,
+      120,
+      paletteAt(offset, 0),
+    ),
+    ...shapeElement(
+      "branch-decision",
       "diamond",
-      spec.nodes[2] ?? "Decision",
-      645,
-      285,
-      210,
-      135,
-      paletteAt(paletteOffset, 2),
-      { fontSize: 16 },
-    ),
-    shapeElement(
-      "user-flow-outcome",
-      "ellipse",
-      spec.nodes[3] ?? "Outcome",
-      930,
-      300,
+      stages[1] ?? "Decision",
+      490,
+      340,
+      360,
       220,
-      105,
-      paletteAt(paletteOffset, 3),
-      { fontSize: 17 },
+      paletteAt(offset, 1),
+    ),
+    ...stages
+      .slice(2)
+      .flatMap((stage, i) =>
+        shapeElement(
+          `branch-outcome-${i + 1}`,
+          "rectangle",
+          stage,
+          1080,
+          stages.length === 3 ? 390 : 270 + i * 280,
+          300,
+          120,
+          paletteAt(offset, i + 2),
+        ),
+      ),
+  ];
+  return [
+    ...nodes,
+    connect(nodes, "branch-arrow-input", "branch-input", "branch-decision"),
+    ...stages
+      .slice(2)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `branch-arrow-${i + 1}`,
+          "branch-decision",
+          `branch-outcome-${i + 1}`,
+        ),
+      ),
+  ];
+};
+
+const renderMatrix: LayoutRenderer = (stages, offset) =>
+  stages.flatMap((stage, i) =>
+    shapeElement(
+      `matrix-cell-${i + 1}`,
+      "rectangle",
+      stage,
+      180 + (i % 2) * 640,
+      260 + Math.floor(i / 2) * 220,
+      480,
+      140,
+      paletteAt(offset, i),
+    ),
+  );
+
+const renderBeforeAfter: LayoutRenderer = (stages, offset) => {
+  const split = Math.ceil(stages.length / 2);
+  const nodes = [
+    zone("before-zone", 60, 240, 560, 420),
+    zone("after-zone", 860, 240, 560, 420),
+    textElement("before-label", "BEFORE", 110, 265, 20, SECONDARY),
+    textElement("after-label", "AFTER", 910, 265, 20, SECONDARY),
+    ...stages.flatMap((stage, i) =>
+      shapeElement(
+        `${i < split ? "before" : "after"}-stage-${(i % split) + 1}`,
+        "rectangle",
+        stage,
+        i < split ? 110 : 910,
+        340 + (i % split) * 150,
+        460,
+        100,
+        paletteAt(offset, i),
+      ),
     ),
   ];
   return [
     ...nodes,
-    arrowElement("user-flow-arrow-1", [255, 352], [340, 352]),
-    arrowElement("user-flow-arrow-2", [560, 352], [655, 352]),
-    arrowElement("user-flow-arrow-3", [845, 352], [940, 352]),
-    textElement("user-flow-yes", "continue", 865, 325, 14, "#adb5bd"),
+    connect(nodes, "transformation-arrow", "before-zone", "after-zone"),
   ];
 };
 
-const renderSequence: DiagramRenderer = (spec, paletteOffset) => {
-  const actors = spec.actors ?? ["Caller", "System", "Evidence"];
-  const actorX = [150, 500, 850];
-  const actorShapes = actorX.map((x, index) =>
+const renderStaircase: LayoutRenderer = (stages, offset) => {
+  const nodes = stages.flatMap((stage, i) =>
     shapeElement(
-      `sequence-actor-${index + 1}`,
+      `stair-${i + 1}`,
       "rectangle",
-      actors[index] ?? `Actor ${index + 1}`,
+      stage,
+      60 + i * 350,
+      600 - i * 100,
+      280,
+      110,
+      paletteAt(offset, i),
+    ),
+  );
+  return [
+    ...nodes,
+    ...stages
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `stair-arrow-${i + 1}`,
+          `stair-${i + 1}`,
+          `stair-${i + 2}`,
+        ),
+      ),
+  ];
+};
+
+const renderArchitecture: DiagramRenderer = (spec, offset) => {
+  const nodeWidth = Math.min(
+    380,
+    Math.max(320, ...spec.nodes.map((node) => node.length * 12)),
+  );
+  const nodes = [
+    zone("architecture-boundary", 80, 240, 1320, 540),
+    ...spec.nodes.flatMap((node, i) =>
+      shapeElement(
+        `component-${i + 1}`,
+        "rectangle",
+        node,
+        140 + (i % 2) * 820,
+        300 + Math.floor(i / 2) * 300,
+        nodeWidth,
+        120,
+        paletteAt(offset, i),
+      ),
+    ),
+  ];
+  const links = [
+    [1, 2],
+    [1, 3],
+    [2, 4],
+    [3, 4],
+  ];
+  return [
+    ...nodes,
+    ...links.map(([from, to], i) =>
+      connect(
+        nodes,
+        `component-link-${i + 1}`,
+        `component-${from}`,
+        `component-${to}`,
+      ),
+    ),
+    ...(spec.relations ?? []).map((relation, i) =>
+      textElement(
+        `component-relation-${i + 1}`,
+        wrapText(relation, 18),
+        [600, 350, 1170][i] ?? 600,
+        [325, 475, 475][i] ?? 325,
+        18,
+        SECONDARY,
+      ),
+    ),
+  ];
+};
+
+const renderHierarchy: DiagramRenderer = (spec, offset) => {
+  const nodes = [
+    ...shapeElement(
+      "hierarchy-root",
+      "rectangle",
+      spec.nodes[0] ?? "Root",
+      580,
+      250,
+      320,
+      110,
+      paletteAt(offset, 0),
+    ),
+    ...spec.nodes
+      .slice(1)
+      .flatMap((node, i) =>
+        shapeElement(
+          `hierarchy-child-${i + 1}`,
+          "rectangle",
+          node,
+          80 + i * 500,
+          550,
+          320,
+          120,
+          paletteAt(offset, i + 1),
+        ),
+      ),
+  ];
+  return [
+    ...nodes,
+    ...spec.nodes
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `hierarchy-branch-${i + 1}`,
+          "hierarchy-root",
+          `hierarchy-child-${i + 1}`,
+          { endArrowhead: null },
+        ),
+      ),
+  ];
+};
+
+const renderUserFlow: DiagramRenderer = (spec, offset) => {
+  const ids = ["entry", "action", "decision", "outcome"];
+  const nodes = spec.nodes.flatMap((node, i) =>
+    shapeElement(
+      `user-flow-${ids[i]}`,
+      i === 2 ? "diamond" : i === 1 ? "rectangle" : "ellipse",
+      node,
+      60 + i * 350,
+      i === 2 ? 310 : 350,
+      280,
+      i === 2 ? 200 : 120,
+      paletteAt(offset, i),
+    ),
+  );
+  return [
+    ...nodes,
+    ...spec.nodes
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `user-flow-arrow-${i + 1}`,
+          `user-flow-${ids[i]}`,
+          `user-flow-${ids[i + 1]}`,
+        ),
+      ),
+  ];
+};
+
+const renderSequence: DiagramRenderer = (spec, offset) => {
+  const actorX = [100, 600, 1100];
+  const nodes = actorX.flatMap((x, i) => [
+    ...shapeElement(
+      `sequence-actor-${i + 1}`,
+      "rectangle",
+      spec.actors?.[i] ?? ["Caller", "System", "Evidence"][i] ?? "Actor",
       x,
-      175,
-      200,
-      60,
-      paletteAt(paletteOffset, index),
-      { fontSize: 17 },
+      250,
+      280,
+      80,
+      paletteAt(offset, i),
     ),
-  );
-  const lifelines = actorX.map((x, index) =>
-    arrowElement(
-      `sequence-lifeline-${index + 1}`,
-      [x + 100, 235],
-      [x + 100, 500],
-      { endArrowhead: null, strokeStyle: "dashed" },
-    ),
-  );
-  const messagePairs: Array<[number, number]> = [
+    // Thin native activation bars support real endpoint bindings at each message.
+    {
+      ...zone(`sequence-lifeline-${i + 1}`, x + 134, 354, 12, 430),
+      strokeStyle: "solid",
+    },
+  ]);
+  const pairs: Array<[number, number]> = [
     [0, 1],
     [1, 2],
     [2, 1],
     [1, 0],
   ];
-  const messages = spec.nodes.flatMap((message, index) => {
-    const pair = messagePairs[index] ?? [0, 1];
-    const startX = (actorX[pair[0]] ?? 150) + 100;
-    const endX = (actorX[pair[1]] ?? 500) + 100;
-    const y = 270 + index * 62;
-    const label = wrapText(message, 24, 2);
-    const labelHeight = Math.ceil(label.split("\n").length * 15 * 1.35);
-    return [
-      arrowElement(`sequence-message-${index + 1}`, [startX, y], [endX, y], {
-        strokeStyle: index >= 2 ? "dashed" : "solid",
-      }),
-      textElement(
-        `sequence-message-label-${index + 1}`,
-        label,
-        Math.min(startX, endX) + 35,
-        y - labelHeight - 8,
-        15,
-        "#e9ecef",
-      ),
-    ];
+  const messages = spec.nodes.flatMap((message, i) => {
+    const [from, to] = pairs[i] ?? [0, 1];
+    const y = 430 + i * 105;
+    const startX = (actorX[from] ?? 100) + 140;
+    const endX = (actorX[to] ?? 600) + 140;
+    const direction = Math.sign(endX - startX);
+    const arrow = arrowElement(
+      `sequence-message-${i + 1}`,
+      [startX + direction * 10, y],
+      [endX - direction * 10, y],
+      { dashed: i >= 2 },
+    );
+    const source = requireShape(nodes, `sequence-lifeline-${from + 1}`);
+    const target = requireShape(nodes, `sequence-lifeline-${to + 1}`);
+    for (const [side, node] of [
+      ["startBinding", source],
+      ["endBinding", target],
+    ] as const) {
+      arrow[side] = {
+        elementId: node.id,
+        focus: (y - (node.y + node.height / 2)) / (node.height / 2),
+        gap: 4,
+      };
+      node.boundElements.push({ id: arrow.id, type: "arrow" });
+    }
+    const label = textElement(
+      `sequence-message-label-${i + 1}`,
+      wrapText(message, 32),
+      Math.min(startX, endX) + 40,
+      0,
+      18,
+    );
+    label.y = y - label.height - 12;
+    return [arrow, label];
   });
-  return [...actorShapes, ...lifelines, ...messages];
+  return [...nodes, ...messages];
 };
 
-const renderEntityRelationship: DiagramRenderer = (spec, paletteOffset) => {
-  const positions = [
-    { x: 120, y: 190 },
-    { x: 740, y: 190 },
-    { x: 120, y: 380 },
-    { x: 740, y: 380 },
-  ];
-  const entities = spec.nodes.flatMap((node, index) => {
-    const position = positions[index] ?? { x: 120, y: 190 };
-    const palette = paletteAt(paletteOffset, index);
+const renderEntityRelationship: DiagramRenderer = (spec, offset) => {
+  const nodes = spec.nodes.flatMap((node, i) => {
+    const x = 140 + (i % 2) * 820;
+    const y = 250 + Math.floor(i / 2) * 350;
+    const title = textElement(
+      `entity-title-${i + 1}`,
+      wrapText(node, 25),
+      x + 25,
+      y + 20,
+      22,
+    );
+    const fields = textElement(
+      `entity-fields-${i + 1}`,
+      (spec.fields?.[i] ?? ["key", "relationship"]).join("\n"),
+      x + 25,
+      y + 100,
+      18,
+      SECONDARY,
+    );
     return [
-      shapeElement(
-        `entity-${index + 1}`,
+      ...shapeElement(
+        `entity-${i + 1}`,
         "rectangle",
         "",
-        position.x,
-        position.y,
-        340,
-        120,
-        palette,
+        x,
+        y,
+        380,
+        210,
+        paletteAt(offset, i),
       ),
-      textElement(
-        `entity-title-${index + 1}`,
-        node,
-        position.x + 22,
-        position.y + 18,
-        19,
-        palette.stroke,
-      ),
+      title,
       arrowElement(
-        `entity-divider-${index + 1}`,
-        [position.x + 18, position.y + 52],
-        [position.x + 322, position.y + 52],
-        { endArrowhead: null },
+        `entity-divider-${i + 1}`,
+        [x + 20, y + 80],
+        [x + 360, y + 80],
+        { type: "line", endArrowhead: null },
       ),
-      textElement(
-        `entity-fields-${index + 1}`,
-        (spec.fields?.[index] ?? ["key", "relationship"]).join("\n"),
-        position.x + 22,
-        position.y + 64,
-        14,
-        "#adb5bd",
-      ),
+      fields,
     ];
   });
   const links = [
-    arrowElement("entity-link-1", [460, 250], [740, 250], {
-      endArrowhead: null,
-    }),
-    arrowElement("entity-link-2", [290, 310], [290, 380], {
-      endArrowhead: null,
-    }),
-    arrowElement("entity-link-3", [910, 310], [910, 380], {
-      endArrowhead: null,
-    }),
+    [1, 2],
+    [1, 3],
+    [2, 4],
   ];
-  const relationLabels = (spec.relations ?? []).map((relation, index) =>
-    textElement(
-      `entity-relation-${index + 1}`,
-      relation,
-      [555, 305, 925][index] ?? 555,
-      [225, 330, 330][index] ?? 225,
-      14,
-      "#adb5bd",
+  return [
+    ...nodes,
+    ...links.map(([from, to], i) =>
+      connect(nodes, `entity-link-${i + 1}`, `entity-${from}`, `entity-${to}`, {
+        endArrowhead: null,
+      }),
     ),
-  );
-  return [...entities, ...links, ...relationLabels];
+    ...(spec.relations ?? []).map((relation, i) =>
+      textElement(
+        `entity-relation-${i + 1}`,
+        wrapText(relation, 22),
+        [600, 355, 1175][i] ?? 600,
+        [325, 490, 490][i] ?? 325,
+        18,
+        SECONDARY,
+      ),
+    ),
+  ];
 };
 
-const renderStateMachine: DiagramRenderer = (spec, paletteOffset) => {
-  const start = shapeElement("state-initial", "ellipse", "", 45, 325, 34, 34, {
-    fill: "#e9ecef",
-    stroke: "#e9ecef",
-  });
-  const states = spec.nodes.map((node, index) =>
-    shapeElement(
-      `state-${index + 1}`,
-      index === spec.nodes.length - 1 ? "ellipse" : "rectangle",
-      node,
-      130 + index * 260,
-      290,
-      210,
-      105,
-      paletteAt(paletteOffset, index),
-      { fontSize: 17 },
+const renderStateMachine: DiagramRenderer = (spec, offset) => {
+  const nodes = [
+    ...shapeElement("state-initial", "ellipse", "", 25, 438, 30, 30, {
+      fill: FOREGROUND,
+      stroke: FOREGROUND,
+    }),
+    ...spec.nodes.flatMap((node, i) =>
+      shapeElement(
+        `state-${i + 1}`,
+        i === spec.nodes.length - 1 ? "ellipse" : "rectangle",
+        node,
+        120 + i * 340,
+        400,
+        260,
+        110,
+        paletteAt(offset, i),
+      ),
     ),
-  );
-  const transitions = [
-    arrowElement("state-transition-start", [76, 342], [133, 342]),
+  ];
+  return [
+    ...nodes,
+    connect(nodes, "state-transition-start", "state-initial", "state-1"),
     ...spec.nodes
       .slice(1)
-      .map((_node, index) =>
-        arrowElement(
-          `state-transition-${index + 1}`,
-          [337 + index * 260, 342],
-          [393 + index * 260, 342],
+      .map((_, i) =>
+        connect(
+          nodes,
+          `state-transition-${i + 1}`,
+          `state-${i + 1}`,
+          `state-${i + 2}`,
         ),
       ),
-    arrowElement("state-retry", [755, 305], [495, 305], {
-      strokeStyle: "dashed",
+    connect(nodes, "state-retry", "state-3", "state-2", {
+      dashed: true,
       via: [
-        [720, 235],
-        [530, 235],
+        [930, 290],
+        [590, 290],
       ],
     }),
-    textElement("state-retry-label", "retry / revise", 585, 200, 14, "#adb5bd"),
+    textElement("state-retry-label", "retry / revise", 660, 250, 18, SECONDARY),
   ];
-  return [start, ...states, ...transitions];
 };
 
-const renderDependencyGraph: DiagramRenderer = (spec, paletteOffset) => {
-  const positions = [
-    { x: 150, y: 185 },
-    { x: 750, y: 185 },
-    { x: 450, y: 330 },
-    { x: 450, y: 450 },
+const renderDependencyGraph: DiagramRenderer = (spec, offset) => {
+  const positions: Point[] = [
+    [140, 250],
+    [1040, 250],
+    [590, 500],
+    [590, 700],
   ];
-  const nodes = spec.nodes.map((node, index) => {
-    const position = positions[index] ?? { x: 450, y: 330 };
+  const nodes = spec.nodes.flatMap((node, i) => {
+    const [x, y] = positions[i] ?? [590, 500];
     return shapeElement(
-      `dependency-node-${index + 1}`,
+      `dependency-node-${i + 1}`,
       "rectangle",
       node,
-      position.x,
-      position.y,
+      x,
+      y,
       300,
-      72,
-      paletteAt(paletteOffset, index),
-      { fontSize: 17 },
+      120,
+      paletteAt(offset, i),
     );
   });
   return [
     ...nodes,
-    arrowElement("dependency-edge-1", [300, 257], [540, 330]),
-    arrowElement("dependency-edge-2", [900, 257], [660, 330]),
-    arrowElement("dependency-edge-3", [600, 402], [600, 450]),
+    connect(
+      nodes,
+      "dependency-edge-1",
+      "dependency-node-1",
+      "dependency-node-3",
+    ),
+    connect(
+      nodes,
+      "dependency-edge-2",
+      "dependency-node-2",
+      "dependency-node-3",
+    ),
+    connect(
+      nodes,
+      "dependency-edge-3",
+      "dependency-node-3",
+      "dependency-node-4",
+    ),
   ];
 };
 
-const renderSwimlane: DiagramRenderer = (spec, paletteOffset) => {
-  const actors = spec.actors ?? ["Actor", "System", "Evidence"];
-  const laneY = [175, 285, 395];
-  const lanes = laneY.flatMap((y, index) => [
-    shapeElement(
-      `swimlane-${index + 1}`,
-      "rectangle",
-      "",
-      80,
-      y,
-      1040,
-      95,
-      { fill: "transparent", stroke: "#495057" },
-      { strokeStyle: "dashed" },
-    ),
+const renderSwimlane: DiagramRenderer = (spec, offset) => {
+  const nodes = [0, 1, 2].flatMap((i) => [
+    zone(`swimlane-${i + 1}`, 60, 240 + i * 260, 1360, 220),
     textElement(
-      `swimlane-label-${index + 1}`,
-      actors[index] ?? `Lane ${index + 1}`,
-      95,
-      y + 12,
-      16,
-      "#adb5bd",
+      `swimlane-label-${i + 1}`,
+      spec.actors?.[i] ?? ["Actor", "System", "Evidence"][i] ?? "Actor",
+      110,
+      260 + i * 260,
+      18,
+      SECONDARY,
     ),
   ]);
-  const taskPositions = [
-    { lane: 0, x: 275 },
-    { lane: 1, x: 470 },
-    { lane: 1, x: 690 },
-    { lane: 2, x: 900 },
+  const positions: Point[] = [
+    [180, 320],
+    [540, 580],
+    [900, 580],
+    [1080, 840],
   ];
-  const tasks = spec.nodes.map((node, index) => {
-    const position = taskPositions[index] ?? { lane: 1, x: 470 };
-    return shapeElement(
-      `swimlane-task-${index + 1}`,
-      "rectangle",
-      node,
-      position.x,
-      (laneY[position.lane] ?? 285) + 30,
-      180,
-      52,
-      paletteAt(paletteOffset, index),
-      { fontSize: 14 },
-    );
-  });
-  const arrows = spec.nodes.slice(1).map((_node, index) => {
-    const from = taskPositions[index] ?? { lane: 0, x: 275 };
-    const to = taskPositions[index + 1] ?? { lane: 1, x: 470 };
-    return arrowElement(
-      `swimlane-flow-${index + 1}`,
-      [from.x + 180, (laneY[from.lane] ?? 285) + 56],
-      [to.x, (laneY[to.lane] ?? 285) + 56],
-    );
-  });
-  return [...lanes, ...tasks, ...arrows];
-};
-
-const renderSystemContext: DiagramRenderer = (spec, paletteOffset) => {
-  const system = shapeElement(
-    "context-system",
-    "rectangle",
-    spec.nodes[0] ?? "System",
-    445,
-    300,
-    310,
-    115,
-    paletteAt(paletteOffset, 0),
+  nodes.push(
+    ...spec.nodes.flatMap((node, i) => {
+      const [x, y] = positions[i] ?? [540, 580];
+      return shapeElement(
+        `swimlane-task-${i + 1}`,
+        "rectangle",
+        node,
+        x,
+        y,
+        280,
+        90,
+        paletteAt(offset, i),
+      );
+    }),
   );
-  const externals = spec.nodes.slice(1).map((node, index) => {
-    const positions = [
-      { x: 445, y: 175 },
-      { x: 80, y: 310 },
-      { x: 880, y: 310 },
-    ];
-    const position = positions[index] ?? { x: 80, y: 310 };
-    return shapeElement(
-      `context-external-${index + 1}`,
-      "ellipse",
-      node,
-      position.x,
-      position.y,
-      240,
-      85,
-      paletteAt(paletteOffset, index + 1),
-      { fontSize: 16 },
-    );
-  });
   return [
-    system,
-    ...externals,
-    arrowElement("context-link-1", [565, 260], [565, 300], {
-      endArrowhead: null,
-    }),
-    arrowElement("context-link-2", [320, 352], [445, 352], {
-      endArrowhead: null,
-    }),
-    arrowElement("context-link-3", [755, 352], [880, 352], {
-      endArrowhead: null,
-    }),
+    ...nodes,
+    ...spec.nodes
+      .slice(1)
+      .map((_, i) =>
+        connect(
+          nodes,
+          `swimlane-flow-${i + 1}`,
+          `swimlane-task-${i + 1}`,
+          `swimlane-task-${i + 2}`,
+        ),
+      ),
   ];
 };
 
-const renderMindMap: DiagramRenderer = (spec, paletteOffset) => {
-  const center = shapeElement(
-    "mind-map-center",
-    "ellipse",
-    spec.nodes[0] ?? "Concept",
-    450,
-    295,
-    300,
-    120,
-    paletteAt(paletteOffset, 0),
-  );
-  const positions = [
-    { x: 450, y: 175 },
-    { x: 90, y: 330 },
-    { x: 870, y: 330 },
+const renderRadial = (
+  spec: DiagramSpec,
+  offset: number,
+  prefix: "context" | "mind-map",
+): SceneElement[] => {
+  const root = prefix === "context" ? "context-system" : "mind-map-center";
+  const child = prefix === "context" ? "context-external" : "mind-map-branch";
+  const positions: Point[] = [
+    [580, 240],
+    [120, 510],
+    [1040, 510],
   ];
-  const branches = spec.nodes.slice(1).map((node, index) => {
-    const position = positions[index] ?? { x: 90, y: 330 };
-    return shapeElement(
-      `mind-map-branch-${index + 1}`,
-      "ellipse",
-      node,
-      position.x,
-      position.y,
-      240,
-      82,
-      paletteAt(paletteOffset, index + 1),
-      { fontSize: 16 },
-    );
-  });
+  const nodes = [
+    ...shapeElement(
+      root,
+      prefix === "context" ? "rectangle" : "ellipse",
+      spec.nodes[0] ?? "System",
+      580,
+      500,
+      320,
+      140,
+      paletteAt(offset, 0),
+    ),
+    ...spec.nodes.slice(1).flatMap((node, i) => {
+      const [x, y] = positions[i] ?? [120, 510];
+      return shapeElement(
+        `${child}-${i + 1}`,
+        "ellipse",
+        node,
+        x,
+        y,
+        320,
+        120,
+        paletteAt(offset, i + 1),
+      );
+    }),
+  ];
   return [
-    center,
-    ...branches,
-    arrowElement("mind-map-link-1", [570, 257], [570, 295], {
-      endArrowhead: null,
-    }),
-    arrowElement("mind-map-link-2", [330, 371], [450, 355], {
-      endArrowhead: null,
-    }),
-    arrowElement("mind-map-link-3", [750, 355], [870, 371], {
-      endArrowhead: null,
-    }),
+    ...nodes,
+    ...spec.nodes.slice(1).map((_, i) =>
+      connect(nodes, `${prefix}-link-${i + 1}`, `${child}-${i + 1}`, root, {
+        endArrowhead: null,
+      }),
+    ),
   ];
 };
 
 const DIAGRAM_RENDERERS: Record<DiagramKind, DiagramRenderer> = {
   architecture: renderArchitecture,
-  "concern-matrix": (spec, paletteOffset) =>
-    renderMatrix(spec.nodes, paletteOffset),
-  "decision-tree": (spec, paletteOffset) =>
-    renderBranch(spec.nodes, paletteOffset),
+  "concern-matrix": (spec, offset) => renderMatrix(spec.nodes, offset),
+  "decision-tree": (spec, offset) => renderBranch(spec.nodes, offset),
   "dependency-graph": renderDependencyGraph,
   "entity-relationship": renderEntityRelationship,
-  "evidence-funnel": (spec, paletteOffset) =>
-    renderFunnel(spec.nodes, paletteOffset),
-  "feedback-loop": (spec, paletteOffset) =>
-    renderCycle(spec.nodes, paletteOffset),
+  "evidence-funnel": (spec, offset) => renderFunnel(spec.nodes, offset),
+  "feedback-loop": (spec, offset) => renderCycle(spec.nodes, offset),
   hierarchy: renderHierarchy,
-  "layered-architecture": (spec, paletteOffset) =>
-    renderLayers(spec.nodes, paletteOffset),
-  lifecycle: (spec, paletteOffset) => renderCycle(spec.nodes, paletteOffset),
-  "mind-map": renderMindMap,
-  pipeline: (spec, paletteOffset) => renderLinear(spec.nodes, paletteOffset),
-  progression: (spec, paletteOffset) =>
-    renderStaircase(spec.nodes, paletteOffset),
+  "layered-architecture": (spec, offset) => renderLayers(spec.nodes, offset),
+  lifecycle: (spec, offset) => renderCycle(spec.nodes, offset),
+  "mind-map": (spec, offset) => renderRadial(spec, offset, "mind-map"),
+  pipeline: (spec, offset) => renderLinear(spec.nodes, offset),
+  progression: (spec, offset) => renderStaircase(spec.nodes, offset),
   sequence: renderSequence,
   "state-machine": renderStateMachine,
   swimlane: renderSwimlane,
-  "system-context": renderSystemContext,
-  timeline: (spec, paletteOffset) => renderTimeline(spec.nodes, paletteOffset),
-  "transformation-map": (spec, paletteOffset) =>
-    renderBeforeAfter(spec.nodes, paletteOffset),
+  "system-context": (spec, offset) => renderRadial(spec, offset, "context"),
+  timeline: (spec, offset) => renderTimeline(spec.nodes, offset),
+  "transformation-map": (spec, offset) => renderBeforeAfter(spec.nodes, offset),
   "user-flow": renderUserFlow,
 };
 
 const createScene = (skill: Skill): Record<string, unknown> => {
   const spec = SKILL_DIAGRAMS[skill.name];
-  if (!spec) {
-    throw new Error(`Choose a semantic diagram for /${skill.name}.`);
-  }
-  const paletteOffset = Array.from(skill.name).reduce(
-    (total, character) => total + (character.codePointAt(0) ?? 0),
-    0,
-  );
-  const elements: SceneElement[] = [
-    {
-      ...elementBase("canvas", "rectangle"),
-      backgroundColor: "#121212",
-      fillStyle: "solid",
-      height: 630,
-      locked: true,
-      roughness: 0,
-      strokeColor: "#121212",
-      strokeWidth: 1,
-      width: 1200,
-      x: 0,
-      y: 0,
-    },
-    textElement("title", `/${skill.name}`, 60, 45, 34, "#e9ecef"),
-    textElement(
-      "description",
-      wrapText(skill.description, 76, 2),
-      60,
-      100,
-      18,
-      "#adb5bd",
-    ),
-    textElement("map-label", DIAGRAM_LABELS[spec.kind], 900, 58, 17, "#adb5bd"),
-    ...DIAGRAM_RENDERERS[spec.kind](spec, paletteOffset),
-  ];
-
-  elements.push(
-    textElement(
-      "footer",
-      "canonical guidance → focused action → observable proof",
-      60,
-      535,
-      20,
-      "#e9ecef",
-    ),
-    textElement(
-      "source-note",
-      "Editable Excalidraw source included with this page",
-      60,
-      575,
-      16,
-      "#adb5bd",
-    ),
-  );
-
+  if (!spec) throw new Error(`Choose a semantic diagram for /${skill.name}.`);
+  const body = DIAGRAM_RENDERERS[spec.kind](spec, 0);
+  const bottom = Math.max(...body.map((element) => element.y + element.height));
+  const footerY = Math.max(700, bottom + 60);
+  const canvas = {
+    ...zone("canvas", 0, 0, CANVAS_WIDTH, footerY + 120),
+    backgroundColor: "#121212",
+    strokeColor: "#121212",
+    strokeStyle: "solid",
+    roughness: 0,
+    roundness: null,
+    locked: true,
+  };
   return {
-    appState: { gridSize: null, viewBackgroundColor: "#ffffff" },
-    elements,
+    appState: { gridSize: null, viewBackgroundColor: "#121212" },
+    elements: [
+      canvas,
+      textElement("title", `/${skill.name}`, 60, 40, 30),
+      textElement(
+        "map-label",
+        DIAGRAM_LABELS[spec.kind],
+        60,
+        95,
+        18,
+        SECONDARY,
+      ),
+      textElement(
+        "description",
+        wrapText(skill.description, 112),
+        60,
+        140,
+        18,
+        SECONDARY,
+      ),
+      ...body,
+      textElement(
+        "footer",
+        "canonical guidance / focused action / observable proof",
+        60,
+        footerY,
+        20,
+      ),
+      textElement(
+        "source-note",
+        "Editable Excalidraw source included with this page",
+        60,
+        footerY + 45,
+        16,
+        SECONDARY,
+      ),
+    ],
+    files: {},
+    diagramDescription: `${DIAGRAM_LABELS[spec.kind].toLowerCase()} covering ${spec.nodes.join("; ")}.`,
     diagramKind: spec.kind,
     source: "frontend-skills/docs-site/generate-skill-diagrams.ts",
     type: "excalidraw",
@@ -2034,100 +2093,92 @@ const createScene = (skill: Skill): Record<string, unknown> => {
   };
 };
 
-const runCli = async (...arguments_: string[]): Promise<void> => {
-  const process = Bun.spawn([...CLI, ...arguments_], {
-    cwd: REPOSITORY_ROOT,
-    env: {
-      ...Bun.env,
-      EXPRESS_SERVER_URL:
-        Bun.env.EXPRESS_SERVER_URL ??
-        `http://127.0.0.1:${Bun.env.CONDUCTOR_PORT ?? "3000"}`,
-    },
-    stderr: "pipe",
-    stdout: "pipe",
-  });
-  const [exitCode, stdout, stderr] = await Promise.all([
-    process.exited,
-    new Response(process.stdout).text(),
-    new Response(process.stderr).text(),
-  ]);
-  if (exitCode !== 0) {
-    throw new Error(
-      `Excalidraw CLI failed: ${arguments_.join(" ")}\n${stdout}\n${stderr}`,
-    );
-  }
-};
-
+const escapeXml = (text: string): string =>
+  text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const addSvgTitle = async (
   path: string,
   skillName: string,
-  kind: DiagramKind,
+  spec: DiagramSpec,
 ): Promise<void> => {
   const svg = await readFile(path, "utf8");
-  const titled = svg.replace(
-    /^(<svg[^>]*>)/,
-    `$1<title>${kind.replaceAll("-", " ")} diagram for the /${skillName} skill</title>`,
+  const title = `${spec.kind.replaceAll("-", " ")} diagram for the /${skillName} skill`;
+  const description = `${DIAGRAM_LABELS[spec.kind].toLowerCase()} covering ${spec.nodes.join("; ")}.`;
+  await writeFile(
+    path,
+    svg.replace(
+      /^(<svg[^>]*>)/,
+      `$1<title>${escapeXml(title)}</title><desc>${escapeXml(description)}</desc>`,
+    ),
   );
-  await writeFile(path, titled);
-};
-
-const renderScenes = async (skills: Skill[]): Promise<void> => {
-  const snapshot = `before-skill-diagrams-${Date.now()}`;
-  await runCli("snapshot", "save", snapshot);
-  try {
-    for (const [index, skill] of skills.entries()) {
-      const base = join(OUTPUT_DIRECTORY, skill.name);
-      await runCli("import", `${base}.excalidraw`, "--replace");
-      await runCli("screenshot", "--format", "svg", "--out", `${base}.svg`);
-      const spec = SKILL_DIAGRAMS[skill.name];
-      if (!spec) {
-        throw new Error(`Choose a semantic diagram for /${skill.name}.`);
-      }
-      await addSvgTitle(`${base}.svg`, skill.name, spec.kind);
-      await runCli("export", "--out", `${base}.excalidraw`);
-      const nativeScene: unknown = JSON.parse(
-        await readFile(`${base}.excalidraw`, "utf8"),
-      );
-      if (
-        typeof nativeScene !== "object" ||
-        nativeScene === null ||
-        !("elements" in nativeScene) ||
-        !Array.isArray(nativeScene.elements)
-      ) {
-        throw new Error(`Invalid native scene for /${skill.name}.`);
-      }
-      await writeFile(
-        `${base}.excalidraw`,
-        `${JSON.stringify({ ...nativeScene, diagramKind: spec.kind }, null, 2)}\n`,
-      );
-      console.log(`[${index + 1}/${skills.length}] /${skill.name}`);
-    }
-  } finally {
-    await runCli("snapshot", "restore", snapshot);
-  }
 };
 
 const skills = await loadSkills();
 const skillNames = new Set(skills.map((skill) => skill.name));
 const unmappedSkills = skills.filter((skill) => !SKILL_DIAGRAMS[skill.name]);
 const staleDiagrams = Object.keys(SKILL_DIAGRAMS).filter(
-  (skillName) => !skillNames.has(skillName),
+  (name) => !skillNames.has(name),
 );
-if (unmappedSkills.length > 0 || staleDiagrams.length > 0) {
+if (unmappedSkills.length || staleDiagrams.length) {
   throw new Error(
     `Semantic diagram map drifted. Missing: ${unmappedSkills.map((skill) => skill.name).join(", ") || "none"}. Stale: ${staleDiagrams.join(", ") || "none"}.`,
   );
 }
 await mkdir(OUTPUT_DIRECTORY, { recursive: true });
 for (const skill of skills) {
-  const output = join(OUTPUT_DIRECTORY, `${skill.name}.excalidraw`);
-  await writeFile(output, `${JSON.stringify(createScene(skill), null, 2)}\n`);
-}
-
-if (Bun.argv.includes("--render")) {
-  await renderScenes(skills);
-} else {
-  console.log(
-    `Wrote ${skills.length} canvas drafts. Pass --render to export native scenes and refresh SVGs.`,
+  await writeFile(
+    join(OUTPUT_DIRECTORY, `${skill.name}.excalidraw`),
+    `${JSON.stringify(createScene(skill), null, 2)}\n`,
   );
 }
+const renderSkill = async (skill: Skill): Promise<void> => {
+  const base = join(OUTPUT_DIRECTORY, skill.name);
+  const temporary = `${base}.pending.svg`;
+  const process = Bun.spawn(
+    [
+      ...CLI,
+      "render",
+      `${base}.excalidraw`,
+      "--format",
+      "svg",
+      "--padding",
+      "0",
+      "--out",
+      temporary,
+    ],
+    { cwd: REPOSITORY_ROOT, stdout: "pipe", stderr: "pipe" },
+  );
+  const [status, stdout, stderr] = await Promise.all([
+    process.exited,
+    new Response(process.stdout).text(),
+    new Response(process.stderr).text(),
+  ]);
+  if (status !== 0)
+    throw new Error(
+      `SVG export failed for /${skill.name}: ${stdout}\n${stderr}`,
+    );
+  const spec = SKILL_DIAGRAMS[skill.name];
+  if (!spec) throw new Error(`Missing diagram spec for /${skill.name}.`);
+  await addSvgTitle(temporary, skill.name, spec);
+  // Atomic sibling replacement preserves a valid SVG if its export fails.
+  await rename(temporary, `${base}.svg`);
+  console.log(`Rendered /${skill.name}`);
+};
+if (Bun.argv.includes("--render")) {
+  // Independent native files need no shared canvas. Bound local renderer work;
+  // settle each batch before reporting failure so nothing outlives the command.
+  for (let start = 0; start < skills.length; start += 4) {
+    const results = await Promise.allSettled(
+      skills.slice(start, start + 4).map(renderSkill),
+    );
+    const failures = results.filter((result) => result.status === "rejected");
+    if (failures.length)
+      throw new AggregateError(
+        failures.map((result) => result.reason),
+        "Skill diagram export failed; previous valid SVGs preserved.",
+      );
+  }
+}
+
+console.log(
+  `Wrote ${skills.length} native scenes${Bun.argv.includes("--render") ? " and SVGs" : "; pass --render to refresh SVGs"}.`,
+);
