@@ -10,9 +10,9 @@ Call the Skill tool separately: "agent-watchdog" for another run's claims; "plan
 ## Procedure
 
 1. Use host temp (`$TMPDIR`, else `/tmp`; Windows `%TEMP%`), never workspace. Unix: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
-2. Preserve the endpoint via [continuation](../shared/progress-evidence.md#continuation). Arguments set next-step focus, not task or authority.
-3. Link artifacts; redact sensitive data. Label uncertainty and replay-relevant omissions.
-4. Return path plus 1-2 sentences. With no useful work, write a starter brief.
+2. Keep the endpoint via [continuation](../shared/progress-evidence.md#continuation). Arguments set focus, not task or authority.
+3. Do not duplicate artifacts; link them. Redact sensitive data. Label uncertainty and replay omissions.
+4. Return path and 1-2 sentences. No useful work: write a starter brief.
 
 Explicit background-agent request: check `command -v claude`, then `claude --bg --name "<name>" "<summary>"` instead of a file. Include `/agent-watchdog`. Failure: return command/summary, not a launch claim.
 

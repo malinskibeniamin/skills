@@ -23,7 +23,7 @@ type: skill
 
 1. 使用宿主临时目录（`$TMPDIR`，否则 `/tmp`；Windows `%TEMP%`），不要写入工作区。Unix：`handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`。
 2. 按[继续执行契约](https://github.com/malinskibeniamin/skills/blob/main/shared/progress-evidence.md#continuation)保留请求的终点。参数只聚焦下一步，不替换任务或授予权限。
-3. 链接现有产物；遮蔽敏感数据。标明不确定性及影响复现的省略内容。
+3. 不要复制现有产物；改用链接。遮蔽敏感数据。标明不确定性及影响复现的省略内容。
 4. 返回路径和 1-2 句摘要。尚无有效进展时，写一份简短的起始说明。
 
 仅当用户明确请求后台代理时：检查 `command -v claude`，再用 `claude --bg --name "<name>" "<summary>"` 代替文件，并包含 `/agent-watchdog`。失败时返回命令和摘要，不声称已启动。
