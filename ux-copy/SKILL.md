@@ -4,13 +4,14 @@ description: Write or review product UI copy. Use when changing headings, labels
 ---
 
 Read [REFERENCE.md](REFERENCE.md) for tone, capitalization, budgets, and examples.
-State facts once. Preserve safety, limits, uncertainty, and accessible labels.
-Use the project glossary and canonical product names; [GLOSSARY.md](GLOSSARY.md) is product-specific.
+State one useful point per sentence. Cut filler and repetition.
+Preserve safety, limits, uncertainty, and accessible labels.
+Use project glossary and canonical product names; [GLOSSARY.md](GLOSSARY.md) is product-specific.
 
 ## Write
 
-Draft the shortest accurate string per element. Check the whole view and neighbors.
-Make only requested changes. Identify unverified facts; never invent behavior,
+Draft the shortest accurate string per element. Check the whole view.
+Make only requested changes. Flag unverified facts; never invent behavior,
 permissions, causes, or recovery. Do not imply human approval.
 
 ## Review
@@ -29,4 +30,4 @@ Install executable PostToolUse `Edit|Write` hooks from `scripts/`: `ux-copy-chec
 selected TS/TSX patterns only; JSX/i18n need review. Verify host activation.
 Escapes need reasons: `// allow: ux-copy [reason]`, `<!-- allow: prose-style [reason] -->`.
 
-For tone evals, use [evals/RUBRIC.md](evals/RUBRIC.md). Hook passes do not prove tone.
+Tone evals: [evals/RUBRIC.md](evals/RUBRIC.md). Hook passes do not prove tone.

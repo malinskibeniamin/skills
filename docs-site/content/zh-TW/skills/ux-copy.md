@@ -11,7 +11,8 @@ sidebar:
 
 
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md)，了解問題模式、大小寫、元素長度預算與範例。
-每個事實只說一次。保留安全資訊、限制、不確定性與無障礙標籤。
+每句話直接表達一個有用的重點。刪去贅詞和重複內容。
+保留安全資訊、限制、不確定性與無障礙標籤。
 使用專案術語表與標準產品名稱；[GLOSSARY.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/GLOSSARY.md) 僅適用於特定產品。
 
 ## 撰寫
