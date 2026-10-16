@@ -17,70 +17,24 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/handoff.excalidraw)
 
-当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+分别调用 Skill 工具："agent-watchdog" 用于其他执行的声明；"plan-arbiter" 用于竞争方案。其他宿主：[加载依赖](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
 
-如果此次交接用于审查其他代理的运行过程，请转至 `/agent-watchdog`。如果交接的是相互竞争的方案，请将 `/plan-arbiter` 列为下一个技能。
-创建一份简洁的交接文档，供其他代理或会话从当前进度继续工作。
+## 步骤
 
-使用宿主的临时目录（`$TMPDIR`，否则 `/tmp`；Windows 使用 `%TEMP%`），不要写入工作区。
+1. 使用宿主临时目录（`$TMPDIR`，否则 `/tmp`；Windows `%TEMP%`），不要写入工作区。Unix：`handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`。
+2. 按[继续执行契约](https://github.com/malinskibeniamin/skills/blob/main/shared/progress-evidence.md#continuation)保留请求的终点。参数只聚焦下一步，不替换任务或授予权限。
+3. 不要复制现有产物；改用链接。遮蔽敏感数据。标明不确定性及影响复现的省略内容。
+4. 返回路径和 1-2 句摘要。尚无有效进展时，写一份简短的起始说明。
 
-## 何时使用
+仅当用户明确请求后台代理时：检查 `command -v claude`，再用 `claude --bg --name "<name>" "<summary>"` 代替文件，并包含 `/agent-watchdog`。失败时返回命令和摘要，不声称已启动。
 
-当用户希望执行以下操作时使用：
-- 在新会话中继续工作
-- 将工作交给其他代理
-- 在其他位置开展原型验证或并行工作
-- 在不携带完整对话记录的情况下保留可执行的上下文
-
-## 操作流程
-
-1. 创建临时文件：`handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`。
-2. 将交接内容写入该路径。
-3. 保持内容精简。不要重复规格、计划、ADR、议题、提交、差异或文档中已记录的产物。通过路径或 URL 引用它们。
-4. 如果用户提供了参数，将其视为下一会话的工作重点，并据此调整交接内容。
-5. 隐去敏感信息：API 密钥、密码、令牌、机密信息、个人数据、客户数据以及其他任何保密值。仅当隐去内容会影响后续工作时才提及。
-6. 如有适用技能，建议下一会话使用。
-7. 仅返回交接文件路径以及 1-2 句摘要。
-8. **后台代理模式**——用户希望新代理立即接手工作：
-   不保存文件，而是启动 `claude --bg --name "<descriptive name>" "<handoff summary>"`
-   （先检查 `command -v claude`；如果不可用或启动失败，不要声称代理
-   已启动——请输出确切命令和摘要，以便用户运行）。始终传入描述性的
-   `--name`；当下一会话必须验证此代理的声明时，在建议技能中包含
-   `/agent-watchdog`。
-
-## 交接模板
+## 模板
 
 ```markdown
 # Handoff
-
-## Next session focus
-<What the next agent/session should do first.>
-
-## Current state
-<Only facts needed to resume. Include branch, cwd, PR/issue links if relevant.>
-
-## Decisions made
-<Bullets. Link to ADRs/plans/issues instead of restating them.>
-
-## Open questions
-<Bullets, or "None".>
-
-## Next actions
-1. <First concrete action>
-2. <Second concrete action>
-3. <Verification or shipping step>
-
-## Relevant artifacts
-- <path or URL>: <why it matters>
-
-## Suggested skills
-- </skill-name>: <why>
+契约：<原始目标、请求的终点/停止限制、保留的决策>
+状态：<仓库/工作树/分支、HEAD/基准、未提交范围、PR/议题、检查证据>
+决策/产物：<链接、证据限制、重放数据包/命令>
+下一步：<重点、操作、未决事项、验证/交付>
+建议技能：<后续技能及原因>
 ```
-
-## 注意事项
-
-- 不要将交接文档用作囊括一切的隐藏摘要。仅包含继续工作所需的上下文。
-- 优先使用路径和 URL，而非粘贴内容。
-- 隐去机密信息和个人数据。
-- 明确指出不确定之处。
-- 如果尚未开展任何有用的工作，请如实说明，并编写一份简短的启动说明。

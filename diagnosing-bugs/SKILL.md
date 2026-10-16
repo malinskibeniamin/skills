@@ -11,8 +11,7 @@ Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loadi
 Replace every secret with `<REDACTED>`. Keep credentials in environment variables; quote only signal-bearing lines. Artifacts may contain auth headers. If redaction hides evidence, ask for a safer source.
 
 ## Phase 1 -- Build a feedback loop
-**The feedback loop is the skill.** Everything else consumes it. Build a tight, deterministic, agent-runnable pass/fail signal that goes red on the user's exact bug.
-Spend disproportionate effort here; code reading is for constructing the loop, not inventing an unsupported theory.
+**The feedback loop is the skill.** Build a deterministic, agent-runnable pass/fail loop that goes red on the user's exact bug. Read code to construct it, not to invent unsupported theories.
 
 ### Strategies, roughly in order
 1. **Failing test** at the highest seam that reaches the bug: unit, integration, or E2E.
@@ -49,6 +48,7 @@ Phase 1 ends only when you can name one command already run at least once, with 
 No red-capable command, no Phase 2.
 
 ## Phase 2 -- Reproduce + minimise
+For stateful bugs, capture the [original replay packet](../shared/verification-replay.md) before minimization.
 Run the loop; Call the Skill tool with "dogfood" at the reporter's real entrypoint. Confirm:
 
 - The loop produces the failure the user described, not a nearby failure.

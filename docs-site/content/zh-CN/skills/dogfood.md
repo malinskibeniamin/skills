@@ -60,9 +60,7 @@ sidebar:
 
 ### 重放
 
-从真实入口重启，重复正常使用和全部破坏尝试。修复缺陷时，
-重放完全相同的原始复现并检查相邻行为。PASS 只绑定
-当前可运行状态。
+从真实入口重启；重复正常使用和每项破坏尝试。对于缺陷，重放完全相同的原始步骤并检查相邻行为。对于有状态缺陷或反复出现的复现缺口，使用[重放数据包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。PASS 绑定当前可运行状态。
 
 ## 入口
 
@@ -84,8 +82,7 @@ sidebar:
 
 ## 回执
 
-将入口、操作和观察绑定到当前实现。
-报告 `Verdict: PASS | FAIL | BLOCKED`，然后包含：
+报告当前入口、操作和观察：`Verdict: PASS | FAIL | BLOCKED`，然后包含：
 
 - **Entrypoint：** 精确命令、URL、事件或消费者。
 - **Actions：** 正常路径和破坏尝试。

@@ -32,8 +32,8 @@ Use representative live-scale data with production-like shape and cardinality. C
 expected and observed counts, ordering, timing, state, and side effects; run long enough to
 expose accumulation.
 
-For a bug, first replay the reporter's exact steps on the unfixed behavior. If you cannot reproduce it,
-stop diagnosis and request the missing environment or evidence.
+For bugs, replay the reporter's exact steps unfixed. If you cannot reproduce it,
+request missing environment or evidence before diagnosis.
 
 ### Abuse
 
@@ -55,9 +55,9 @@ fix through `/tdd`, and rerun focused checks. Any behavior edit invalidates prio
 
 ### Replay
 
-Restart at the real entrypoint and repeat intended use plus every break attempt. For a bug,
-replay the identical original reproduction and verify adjacent behavior. PASS binds only to
-the current runnable state.
+Restart at the real entrypoint; repeat intended use and every break attempt. For bugs,
+replay identical original steps and adjacent behavior. For stateful bugs or recurring repro gaps,
+use [replay packets](../shared/verification-replay.md). PASS binds to the current runnable state.
 
 ## Entrypoints
 
@@ -79,8 +79,7 @@ Verifier drift routes to `/maintain-verification-skill`; a recurring missing pat
 
 ## Receipt
 
-Bind entrypoint, actions, and observations to the current implementation.
-Report `Verdict: PASS | FAIL | BLOCKED`, then:
+Report current entrypoint, actions and observations: `Verdict: PASS | FAIL | BLOCKED`, then:
 
 - **Entrypoint:** exact command, URL, event, or consumer.
 - **Actions:** intended journey and break attempts.

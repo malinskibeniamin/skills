@@ -1,5 +1,5 @@
 ---
-description: 負責有明確範圍的任務或 PR，完成修復、驗證、CI、審查及明確授權的合併。使用者說 full send，或希望把 PR 跟進工作交給代理直到完成時使用。
+description: 負責修復、驗證、CI 和審查跟進，直到達到已授權的終點。用於 full send；full stop 或 --no-merge 保留人工合併決定。
 related: ["/skills/development-lifecycle", "/skills/tdd", "/skills/review"]
 search: {"boost": 1, "keywords": ["full send"]}
 sidebar: {"label": "/full-send"}
@@ -21,6 +21,7 @@ type: skill
 - 除非使用者明確授權委派，否則在主要上下文內執行。僅使用已授權的工具、帳戶和隔離瀏覽器工作階段；「任何必要手段」不是繞過限制的許可。
 
 依[技能機制](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)載入相依項目。
+需要 full stop、託管狀態檢查、阻礙通知、復原上下文，或明確要求的 Sol loop 時，閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/REFERENCE.md)。
 
 ## 修復並證明 [#fix-and-prove]
 
@@ -37,7 +38,7 @@ type: skill
 - 在目前前景工作階段中監控此 PR 的檢查與已請求的審查。等待中代表繼續等待，不是完成。缺少 CI 不等於 CI 通過；依儲存庫政策確定必要檢查，不要編造全綠證明。
 - 查看失敗工作的紀錄，重現、修復、驗證、commit、push，然後監控新 head。僅在有證據時重試基礎設施故障；重複且不變的失敗需要診斷，不是無限重跑。不要為變綠而削弱關卡。
 - 使用 [resolve-pr-feedback](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/SKILL.md) 處理人工回饋與可執行的自動回饋。分頁取得全部討論串、留言和審查；修復或用證據反駁，回覆並重新讀取解決狀態。舊核准與機器人的沉默不是新審查。
-- 要求必要檢查和審查已完成，候選版本沒有適用的未解決回饋或尚未撤銷的修改要求。不要自行核准或捏造認可。若審查者、權限或服務無法使用，且代理已無可執行動作，回報外部阻礙與所需的具體輸入。
+- 要求必要檢查和審查已完成，候選版本沒有適用的未解決回饋或尚未撤銷的修改要求。不要自行核准或捏造認可。若審查者、權限或服務無法使用，且代理已無可執行動作，透過支援的提問或輸入工具通知；若無法使用，以醒目的受阻執行記錄與所需的確切輸入結束。等待時不得替換身分、憑證或權限。
 - 必要時對落後於基準、自己負責的分支執行 rebase，驗證並使用 `--force-with-lease`。後續改動保持在本 PR 內。上下文達到限制前，把 head／基準、待處理執行／討論串 ID、證據與下一步寫入未追蹤的檢查點；不要悄悄啟動常駐程式、cron、auto-review 設定，或承諾工作階段結束後繼續工作。
 
 ## 最終驗證與信心 [#final-verification-and-confidence]

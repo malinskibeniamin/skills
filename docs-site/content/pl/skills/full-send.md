@@ -1,5 +1,5 @@
 ---
-description: Prowadź ograniczone zadanie lub PR przez naprawy, weryfikację, CI, przeglądy i wyraźnie autoryzowany merge. Użyj, gdy użytkownik mówi full send lub chce przekazać agentowi opiekę nad PR-em aż do zakończenia.
+description: Prowadź naprawy, weryfikację, CI i opiekę nad przeglądami do autoryzowanego punktu końcowego. Użyj dla full send; full stop lub --no-merge pozostawia decyzję o merge użytkownikowi.
 related: ["/skills/development-lifecycle", "/skills/tdd", "/skills/review"]
 search: {"boost": 1, "keywords": ["full send"]}
 sidebar: {"label": "/full-send"}
@@ -21,6 +21,7 @@ Odpowiadaj za rezultat, nie tylko diff. Kontynuuj rutynowe naprawy; wróć dopie
 - Pracuj w głównym kontekście, chyba że użytkownik wyraźnie autoryzuje delegowanie. Korzystaj wyłącznie z autoryzowanych narzędzi, kont i izolowanych sesji przeglądarki; „wszelkimi środkami” nie oznacza obchodzenia zabezpieczeń.
 
 Wczytuj zależności zgodnie z [mechaniką umiejętności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+Dla full stop, kontroli stanu na serwerze, powiadomienia o blokadzie, wznowienia pracy lub wyraźnie zamówionej pętli Sol przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/REFERENCE.md).
 
 ## Napraw i udowodnij [#fix-and-prove]
 
@@ -37,7 +38,7 @@ Publikuj przez [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/
 - Obserwuj kontrole bieżącego PR-a i zamówione przeglądy w tej aktywnej sesji. Stan oczekujący oznacza dalsze czekanie, nie koniec. Brak CI nie oznacza zielonego CI; ustal wymagane kontrole z polityki repozytorium zamiast wymyślać dowód sukcesu.
 - Sprawdź logi nieudanego zadania, odtwórz problem, napraw, zweryfikuj, wykonaj commit/push i obserwuj nowy head. Powtarzaj awarię infrastruktury tylko na podstawie dowodów; niezmienne powtarzające się awarie wymagają diagnozy, nie nieskończonych ponowień. Nie osłabiaj bramek dla zielonego wyniku.
 - Użyj [resolve-pr-feedback](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/SKILL.md) dla uwag ludzi i konkretnych uwag automatów. Pobierz wszystkie strony wątków, komentarzy i przeglądów; napraw albo odrzuć z dowodami, odpowiedz i ponownie odczytaj stan rozwiązania. Stare akceptacje i milczenie botów nie są aktualnymi przeglądami.
-- Wymagaj zakończonych obowiązkowych kontroli i przeglądów, braku zasadnych nierozwiązanych uwag oraz aktywnych żądań zmian dotyczących kandydata. Nie zatwierdzaj własnego PR-a ani nie wymyślaj poparcia. Gdy recenzent, uprawnienia lub usługa pozostają niedostępne i agent nie może już działać, zgłoś zewnętrzną blokadę oraz dokładnie potrzebne działanie.
+- Wymagaj zakończonych obowiązkowych kontroli i przeglądów, braku zasadnych nierozwiązanych uwag oraz aktywnych żądań zmian dotyczących kandydata. Nie zatwierdzaj własnego PR-a ani nie wymyślaj poparcia. Gdy recenzent, uprawnienia lub usługa pozostają niedostępne i agent nie może już działać, powiadom przez obsługiwane narzędzie pytań lub danych wejściowych; jeśli jest niedostępne, zakończ wyraźnym potwierdzeniem blokady i dokładnie potrzebnym działaniem. W oczekiwaniu nie zastępuj tożsamości, danych uwierzytelniających ani uprawnień.
 - Jeśli jest to wymagane, wykonaj rebase posiadanej gałęzi pozostającej za bazą, zweryfikuj i użyj `--force-with-lease`. Kontynuuj w tym samym PR-ze. Przed limitem kontekstu zapisz head/bazę, ID oczekujących uruchomień/wątków, dowody i następny krok w nieśledzonym punkcie kontrolnym; bez niespodziewanego demona, cron, konfiguracji auto-review ani obietnic pracy po zakończeniu sesji.
 
 ## Ostatnia weryfikacja i pewność [#final-verification-and-confidence]

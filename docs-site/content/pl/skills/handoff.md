@@ -19,70 +19,24 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/handoff.excalidraw)
 
-Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
-
-Jeśli przekazanie służy do audytu pracy innego agenta, skieruj zadanie do `/agent-watchdog`. Jeśli przekazuje konkurencyjne plany, wskaż `/plan-arbiter` jako następną umiejętność.
-Utwórz zwięzły dokument przekazania, aby inny agent lub sesja mogli kontynuować pracę od tego miejsca.
-
-Używaj katalogu tymczasowego hosta (`$TMPDIR`, w przeciwnym razie `/tmp`; `%TEMP%` w Windows), nigdy obszaru roboczego.
-
-## Kiedy używać
-
-Użyj, gdy użytkownik chce:
-- kontynuować pracę w nowej sesji
-- przekazać pracę innemu agentowi
-- uruchomić prototyp lub równoległy tok prac w innym miejscu
-- zachować kontekst potrzebny do działania bez przenoszenia całego zapisu rozmowy
+Wywołaj narzędzie Skill osobno: "agent-watchdog" dla twierdzeń innego przebiegu; "plan-arbiter" dla konkurencyjnych planów. Inne hosty: [ładowanie zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Procedura
 
-1. Utwórz plik tymczasowy: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
-2. Zapisz przekazanie pod tą ścieżką.
-3. Zachowaj zwięzłość. Nie powielaj artefaktów już ujętych w specyfikacjach, planach, ADR-ach, zgłoszeniach, commitach, diffach ani dokumentacji. Odwołuj się do nich za pomocą ścieżki lub adresu URL.
-4. Jeśli użytkownik podał argumenty, potraktuj je jako zakres prac w następnej sesji i dostosuj do niego przekazanie.
-5. Usuń informacje poufne: klucze API, hasła, tokeny, sekrety, dane osobowe, dane klientów i wszelkie inne wartości poufne. Wspomnij o redakcji tylko wtedy, gdy wpływa ona na możliwość kontynuowania pracy.
-6. W razie potrzeby zasugeruj umiejętności, których należy użyć w następnej sesji.
-7. Zwróć wyłącznie ścieżkę do przekazania oraz podsumowanie w 1–2 zdaniach.
-8. **Tryb agenta w tle** — użytkownik chce, aby nowy agent natychmiast przejął pracę:
-   zamiast zapisywać plik, uruchom `claude --bg --name "<descriptive name>" "<handoff summary>"`
-   (najpierw sprawdź `command -v claude`; jeśli polecenie jest niedostępne lub uruchomienie się nie powiedzie, nie twierdź, że agent
-   został uruchomiony — wyświetl dokładne polecenie wraz z podsumowaniem, aby użytkownik mógł je wykonać). Zawsze podawaj
-   opisową wartość `--name`; uwzględnij `/agent-watchdog` w sugerowanych umiejętnościach, gdy następna
-   sesja musi zweryfikować twierdzenia tego agenta.
+1. Używaj katalogu tymczasowego hosta (`$TMPDIR`, w przeciwnym razie `/tmp`; Windows `%TEMP%`), nigdy obszaru roboczego. Unix: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
+2. Zachowaj żądany punkt końcowy według [kontraktu kontynuacji](https://github.com/malinskibeniamin/skills/blob/main/shared/progress-evidence.md#continuation). Argumenty wskazują następny krok, nie zastępują zadania ani nie udzielają uprawnień.
+3. Nie duplikuj artefaktów; linkuj je. Usuń wrażliwe dane. Wskaż niepewności i pominięcia wpływające na odtworzenie.
+4. Zwróć ścieżkę i 1-2 zdania. Jeśli nie wykonano użytecznej pracy, napisz krótki opis startowy.
 
-## Szablon przekazania
+Tylko przy wyraźnym żądaniu agenta w tle: sprawdź `command -v claude`, a następnie zamiast pliku użyj `claude --bg --name "<name>" "<summary>"`. Uwzględnij `/agent-watchdog`. Przy niepowodzeniu zwróć polecenie i podsumowanie, nie deklaruj uruchomienia.
+
+## Szablon
 
 ```markdown
 # Handoff
-
-## Next session focus
-<What the next agent/session should do first.>
-
-## Current state
-<Only facts needed to resume. Include branch, cwd, PR/issue links if relevant.>
-
-## Decisions made
-<Bullets. Link to ADRs/plans/issues instead of restating them.>
-
-## Open questions
-<Bullets, or "None".>
-
-## Next actions
-1. <First concrete action>
-2. <Second concrete action>
-3. <Verification or shipping step>
-
-## Relevant artifacts
-- <path or URL>: <why it matters>
-
-## Suggested skills
-- </skill-name>: <why>
+Kontrakt: <pierwotny cel, żądany punkt końcowy/ograniczenia, zastrzeżone decyzje>
+Stan: <repozytorium/worktree/gałąź, HEAD/baza, niezapisany zakres, PR/zgłoszenie, dowody kontroli>
+Decyzje/artefakty: <linki, ograniczenia dowodów, pakiet/polecenie odtwarzania>
+Dalej: <priorytet, działania, otwarte decyzje, weryfikacja/dostarczenie>
+Sugerowane umiejętności: <następne umiejętności i uzasadnienie>
 ```
-
-## Zasady bezpieczeństwa
-
-- Nie używaj przekazania jako ukrytego podsumowania wszystkiego. Uwzględnij wyłącznie kontekst potrzebny do kontynuacji.
-- Preferuj ścieżki i adresy URL zamiast wklejonej treści.
-- Usuń sekrety i dane osobowe.
-- Wyraźnie wskaż wszelkie niepewności.
-- Jeśli nie wykonano jeszcze żadnej użytecznej pracy, poinformuj o tym i napisz krótki opis startowy.

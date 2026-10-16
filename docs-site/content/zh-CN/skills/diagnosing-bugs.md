@@ -81,6 +81,7 @@ type: skill
 没有能够变红的命令，就不能进入阶段 2。
 
 ## 阶段 2 -- 复现并最小化
+对于有状态缺陷，在最小化之前捕获[原始重放数据包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
 运行循环，然后通过 `/dogfood` 使用报告者的真实用户入口。观察同一错误出现。
 
 - [ ] 循环产生的是**用户**描述的失败模式，而非相近的其他失败。

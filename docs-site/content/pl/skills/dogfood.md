@@ -61,9 +61,7 @@ popraw przez `/tdd` i uruchom ponownie powiązane kontrole. Każda zmiana zachow
 
 ### Odtwórz ponownie
 
-Uruchom ponownie prawdziwy punkt wejścia i powtórz zamierzone użycie oraz wszystkie próby uszkodzenia. Dla błędu
-powtórz identyczną pierwotną reprodukcję i sprawdź sąsiednie zachowanie. PASS dotyczy tylko
-bieżącego stanu uruchamialnego.
+Uruchom ponownie rzeczywisty punkt wejścia; powtórz zamierzone użycie i każdą próbę uszkodzenia. Dla błędów odtwórz identyczne pierwotne kroki i sąsiednie zachowanie. Dla błędów zależnych od stanu lub powtarzających się luk reprodukcji użyj [pakietów odtwarzania](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md). PASS dotyczy bieżącego stanu uruchamialnego.
 
 ## Punkty wejścia
 
@@ -85,8 +83,7 @@ Rozbieżność weryfikatora kieruj do `/maintain-verification-skill`; powtarzaj�
 
 ## Potwierdzenie
 
-Powiąż punkt wejścia, działania i obserwacje z bieżącą implementacją.
-Podaj `Verdict: PASS | FAIL | BLOCKED`, a następnie:
+Podaj bieżący punkt wejścia, działania i obserwacje: `Verdict: PASS | FAIL | BLOCKED`, a następnie:
 
 - **Entrypoint:** dokładne polecenie, URL, zdarzenie lub konsument.
 - **Actions:** zamierzona ścieżka i próby uszkodzenia.

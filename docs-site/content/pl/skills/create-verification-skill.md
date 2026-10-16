@@ -33,7 +33,7 @@ Najpierw zbadaj, potem pytaj:
 - **Obserwacja:** zrzuty ekranu, migawki dostępności, transkrypcje, odpowiedzi, dzienniki, kody zakończenia i trwałe skutki uboczne.
 - **Izolacja:** osobne dla każdego uruchomienia porty, profile, katalogi danych i dane testowe. Odmów sterowania współdzieloną instancją używaną przez człowieka.
 
-Kopia robocza, której nie można uruchomić, jest przeszkodą, a nie podstawą do wymyślania instrukcji. Zgłoś dokładny niespełniony warunek wstępny.
+Jeśli kopii roboczej nie można uruchomić, zgłoś niespełniony warunek wstępny zamiast wymyślać instrukcje uruchamiania.
 
 W przypadku ergonomii pracy agentów lub konfiguracji worktree użyj [kontroli brakujących możliwości i zimnego startu](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/agent-dx.md).
 
@@ -47,7 +47,7 @@ Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` or
 - **Dowody:** zarejestruj działanie i wynikowy stan. Zweryfikuj skutki uboczne za pomocą drugiego publicznego widoku. Atrapy są dozwolone wyłącznie na istniejącej granicy produkcyjnej.
 - **Czyszczenie:** zatrzymaj tylko procesy i usuń tylko dane tymczasowe utworzone w tym uruchomieniu. Nigdy nie kończ procesów na podstawie ich nazwy. Dowody muszą przetrwać czyszczenie.
 
-Udokumentuj sposób uruchamiania każdego dołączonego narzędzia pomocniczego i nadaj wykonywalnym narzędziom pomocniczym uprawnienia do wykonywania.
+Nadaj narzędziom pomocniczym uprawnienia do wykonywania; opisz użycie. Dla błędów zależnych od stanu lub powtarzających się luk reprodukcji udowodnij [zapis i odtwarzanie](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md) przez natywne interfejsy danych testowych i debugowania.
 
 ## Przygotuj mapę funkcji [#seed-the-feature-map]
 
@@ -58,12 +58,12 @@ Utwórz `features/README.md` oraz po jednym pliku dla każdej z 3–5 najważnie
 3. `Sterowanie za pomocą <harness>`
 4. `Pułapki`
 
-Mapuj każdy rzeczywisty punkt wejścia osobno; zweryfikowanie wygodnej ścieżki nie obejmuje innej ścieżki. Brak wymaganych danych początkowych oznacza niepowodzenie ścieżki i należy go opisać w `Pułapkach`; nigdy nie osłabiaj ścieżki, aby uzyskać pozytywny wynik.
+Mapuj każdy punkt wejścia. Brak wymaganych danych początkowych oblewa ścieżkę: zapisz go w `Pułapkach`, nigdy nie osłabiaj ścieżki.
 
 ## Udowodnij działanie wygenerowanej umiejętności [#prove-the-generated-skill]
 
-Wykonaj wygenerowaną umiejętność od początku do końca: uruchom aplikację, przeprowadź diagnostykę, przetestuj jedną zmapowaną funkcję przez rzeczywistą ścieżkę użytkownika, zbierz dowody i posprzątaj. Po wyczyszczeniu potwierdź, że dowody nadal istnieją oraz że nie pozostał żaden utworzony proces ani stan. Posprzątaj po każdej nieudanej próbie, popraw instrukcje i powtórz całą ścieżkę. Niewykonany weryfikator jest jedynie wersją roboczą.
+Wykonaj wygenerowaną umiejętność: uruchamianie, diagnostykę, jedną zmapowaną rzeczywistą ścieżkę użytkownika, dowody i czyszczenie. Potwierdź, że dowody przetrwały, a utworzone procesy i stan nie pozostały. Posprzątaj po nieudanych próbach, popraw instrukcje i odtwórz ścieżkę. Niewykonany weryfikator jest wersją roboczą.
 
-Jeśli używasz środowiska zastępczego, wymień kroki konfiguracji, których brakuje w docelowym środowisku. Pozostają niezweryfikowane do czasu odtworzenia ich w rzeczywistym środowisku docelowym.
+Wymień luki konfiguracji środowiska zastępczego; pozostają niezweryfikowane do odtworzenia w środowisku docelowym.
 
-W przypadku późniejszych audytów rozbieżności wskaż `/maintain-verification-skill`, a w przypadku zwykłej pracy nad funkcjami — `/dogfood`.
+Kieruj audyty rozbieżności do `/maintain-verification-skill`, a pracę nad funkcjami do `/dogfood`.

@@ -5,40 +5,24 @@ argument-hint: What should the next session focus on?
 disable-model-invocation: true
 ---
 
-Call the Skill tool separately: "agent-watchdog" audits another run; "plan-arbiter" compares plans. Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Continuation context only.
+Call the Skill tool separately: "agent-watchdog" for another run's claims; "plan-arbiter" for competing plans. Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Procedure
 
-1. Use host temp (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows), never the workspace. Unix: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
-2. Do not duplicate artifacts. Link specs, plans, ADRs, issues, commits, diffs, and docs.
-3. Treat arguments as next-session focus.
-4. Redact sensitive data (credentials, secrets, personal/customer data); note redaction only when continuation is affected.
-5. Suggest useful next skills.
-6. Return only path plus 1-2 sentence summary.
+1. Use host temp (`$TMPDIR`, else `/tmp`; Windows `%TEMP%`), never workspace. Unix: `handoff_file=$(mktemp "${TMPDIR:-/tmp}/handoff-XXXXXX")`.
+2. Keep the endpoint via [continuation](../shared/progress-evidence.md#continuation). Arguments set focus, not task or authority.
+3. Do not duplicate artifacts; link them. Redact sensitive data. Label uncertainty and replay omissions.
+4. Return path and 1-2 sentences. No useful work: write a starter brief.
 
-For an explicitly requested background agent, skip the file. Check `command -v claude`, then `claude --bg --name "<descriptive name>" "<handoff summary>"`. Failure: return command and summary, never claim a launch. Include `/agent-watchdog` for claim verification.
+Explicit background-agent request: check `command -v claude`, then `claude --bg --name "<name>" "<summary>"` instead of a file. Include `/agent-watchdog`. Failure: return command/summary, not a launch claim.
 
 ## Template
 
 ```markdown
 # Handoff
-## Next session focus
-<first objective>
-## Current state
-<branch, cwd, PR/issue, required facts>
-## Decisions made
-<linked bullets>
-## Open questions
-<bullets or None>
-## Next actions
-1. <action>
-2. <verification/shipping>
-## Relevant artifacts
-- <path/URL>: <purpose>
-## Suggested skills
-- </skill>: <why>
+Contract: <original objective, requested endpoint/stops, reserved decisions>
+State: <repo/worktree/branch, HEAD/base, dirty scope, PR/issue, gate receipts>
+Decisions/artifacts: <links, evidence limits, replay packet/command>
+Next: <focus, actions, open decisions, verification/delivery>
+Suggested skills: <next skills and why>
 ```
-
-## Guardrails
-
-Label uncertainty. If no useful work happened, write a short starter brief.

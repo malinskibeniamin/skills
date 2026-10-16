@@ -11,52 +11,47 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/revamp.excalidraw)
 
-Wnioski z przepisania Bun 1.4 z Zig na Rust (https://bun.com/blog/bun-in-rust): 1448 plików, 64 równolegle działających agentów, 11 dni, jedna osoba koordynująca, zero usuniętych testów. Zasady są niezależne od języka i modelu — działa dowolny model wykonawczy (wybieraj zgodnie z regułami doboru modeli w CLAUDE.md; przegląd między modelami obowiązuje jak wszędzie).
+Duże przebudowy zachowują zachowanie przez oddzielenie mechanicznego przeniesienia od przeprojektowania. Źródło: https://bun.com/blog/bun-in-rust. Wykonawca przestrzega reguł doboru modeli repozytorium; samo wywołanie nie upoważnia do uruchamiania agentów.
 
 ## 1. Pomiary bazowe przed napisaniem kodu
 
-- **Zamroź rejestr błędów**: najpierw wyszczególnij znane usterki obecnego systemu. Klasyfikacja problemów po przebudowie musi odróżniać „regresję” od „to zawsze było zepsute”.
-- **Zmierz wydajność obecnego rozwiązania**: przepustowość, pamięć, rozmiar pliku binarnego lub pakietu, opóźnienia — identyczne obciążenie, identyczny sprzęt, zapisane wyniki. „Wydaje się szybsze” nie jest dowodem.
-- **Policz testy**: zapisz obecną łączną liczbę asercji; warunek zakończenia przebudowy musi potwierdzać, że żadnej nie pominięto, nie osłabiono ani nie usunięto.
+- Zamroź znane usterki, aby odróżnić regresje od wcześniejszych błędów.
+- Zmierz przepustowość, pamięć, rozmiar artefaktu i opóźnienie przy tym samym obciążeniu i sprzęcie.
+- Policz asercje; na końcu żadna nie może być pominięta, osłabiona ani usunięta.
+- Zamroź [asercje zgodności funkcji](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md); zachowaj zamierzony branding, ruch, interakcje i semantykę danych.
 
-## 2. Testy są kontraktem — zachowaj ich niezależność od implementacji
+## 2. Testy są niezależne od implementacji
 
-Zestaw testów NIE może być napisany w zastępowanym rozwiązaniu ani z nim ściśle powiązany. Testy niezależne od języka (na przykład testy TypeScript korzystające z interfejsu CLI/API) pozwalają bezpiecznie wymienić silnik działający pod spodem. Jeśli zestaw jest ściśle powiązany, NAJPIERW go rozdziel — to faza 0, a nie zbędny narzut.
+Testy sprawdzają niezależną od języka granicę CLI/API, a nie zastępowaną implementację; w razie potrzeby najpierw usuń zależności. Dodaj reprezentatywne aplikacje lub projekty spoza znanego korpusu testowego. Zgodność ze znanym korpusem dowodzi zgodności z tym korpusem, nie pełnej kompatybilności.
 
 ## 3. Najpierw mechanicznie, później idiomatycznie
 
-Tłumacz 1:1 — „jak po transpilacji” — zachowując architekturę, nazwy i strukturę. Refaktoryzuj w kierunku idiomatycznych wzorców dopiero PO potwierdzeniu równoważności. Dwie transformacje naraz (portowanie i przeprojektowanie) sprawiają, że przyczyna każdej awarii jest niejednoznaczna. Jednorazowa pełna migracja jest lepsza od stopniowej, gdy tymczasowy kod pomostowy pozostałby zbyt długo; migracja stopniowa jest lepsza, gdy system musi być wydawany co tydzień — wybierz świadomie i zapisz decyzję.
+Przenoś 1:1, zachowując architekturę, nazwy i strukturę. Refaktoryzuj dopiero po potwierdzeniu zgodności. Jednoczesne przeniesienie i przeprojektowanie utrudnia wyjaśnienie błędów. Wybierz i zapisz pełne przełączenie, gdy mosty zgodności pozostałyby zbyt długo; migrację stopniową, gdy system musi być stale wydawany.
 
-## 4. Próba przed uruchomieniem na dużą skalę
+## 4. Próba przed rozszerzeniem zakresu
 
-Przeportuj od początku do końca 3 reprezentatywne pliki, wykonując PEŁNY cykl (tłumaczenie -> kompilacja -> krytyczny przegląd -> testy), zanim przejdziesz do setek. Próba pozwala skalibrować polecenia, listy kontrolne przeglądu i kolejkę pracy; skalowanie wadliwego procesu skaluje liczbę błędów.
+Przenieś trzy reprezentatywne pliki: przeniesienie -> kompilacja -> krytyczny przegląd -> testy. Skalibruj prompt, kontrole i kolejkę przed skalowaniem.
 
-## 5. Kompilator lub kontroler typów jako kolejka pracy
+## 5. Kolejka pracy mechanicznej
 
-Kieruj pracą na podstawie uszeregowanych sygnałów mechanicznych, takich jak błędy `cargo check` lub `tsc`.
-Bez delegowania pracuj sekwencyjnie pod nadzorem jednej osoby. Po jawnym delegowaniu lub
-`/swarm` wydziel niezależne ścieżki w osobnych drzewach roboczych; każda ścieżka zatwierdza wyłącznie przypisany jej zakres
-i nigdy nie odkłada zmian na stos, nie resetuje ani nie edytuje innej ścieżki.
+Uporządkuj błędy `cargo check`, `tsc` lub odpowiednika. Bez zgody na delegowanie pracuj kolejno jako jeden właściciel. Za zgodą na delegowanie lub `/swarm` izoluj niezależne worktree; każda ścieżka commituje tylko własny zakres i nie wykonuje stash, reset ani edycji cudzej ścieżki.
 
 ## 6. Krytyczny przegląd ze świeżym kontekstem
 
-Osoba wdrażająca korzysta z pełnego kontekstu bazy kodu; przegląd rozpoczyna się od różnic i ich
-kontraktu, przy założeniu, że translacja może być błędna. W przypadku nietrywialnego PR-u lub końcowego etapu wydania użyj
-dozwolonego w repozytorium przeglądu między modelami na pierwszym planie. W przeciwnym razie wykonaj przegląd bezpośrednio,
-ponownie zbierając dowody od początku.
+Sprawdź diff i kontrakt, zakładając możliwość dryfu semantycznego. Na istotnym etapie PR lub dostarczenia używaj tylko dozwolonego przez repozytorium przeglądu między modelami na pierwszym planie; w innych przypadkach wykonaj świeży przegląd dowodów samodzielnie.
 
 ## 7. Pułapki równoważności semantycznej
 
-Konstrukcje wyglądające identycznie różnią się między stosami technologicznymi. Celowo szukaj: konstrukcji asercji i debugowania, które usuwają efekty uboczne w kompilacjach produkcyjnych, różnic w przepełnieniu liczb całkowitych i sprawdzaniu granic, domyślnej semantyki kopiowania względem referencji, limitów rekurencji i stosu (testuj patologicznie zagnieżdżone dane wejściowe o głębokości tysięcy poziomów) oraz domyślnych ustawień regionalnych i kodowania. Każda znaleziona pułapka staje się przypadkiem testowym, a nie notatką.
+Sprawdź asercje i efekty uboczne znikające w wydaniu, przepełnienia i granice liczb, domyślne kopiowanie zamiast referencji, rekursję i stos przy głęboko zagnieżdżonych danych oraz ustawienia języka i kodowania. Każda wykryta pułapka staje się danymi testowymi.
 
-## 8. Naprawiaj proces, nie wynik
+## 8. Napraw proces
 
-Gdy wykonawca tworzy wadliwy kod, nie poprawiaj go ręcznie — popraw polecenie, listę kontrolną lub kolejkę, które do tego doprowadziły, i uruchom proces ponownie. Ręczne poprawki przestają się skalować po dziesiątym pliku; poprawki procesu pomagają przy pozostałym tysiącu. Rola człowieka: czytać raporty walidacji, wykonywać kontrole wyrywkowe, sprawdzać, czy testy nie zostały pominięte w CI, i zatwierdzić scalenie.
+Gdy wykonawca zawodzi, popraw prompt, listę kontroli lub kolejkę i powtórz, zamiast ręcznie poprawiać wynik. Ludzie sprawdzają walidację i próbki, pilnują zachowania testów CI i decydują o scaleniu.
 
-## Warunki zakończenia
+## Zakończenie
 
-- [ ] Wszystkie testy sprzed przebudowy przechodzą, zero pominiętych lub usuniętych (porównaj liczbę asercji)
-- [ ] Wyniki testów wydajności dorównują zapisanym pomiarom bazowym lub je przewyższają przy tym samym obciążeniu i sprzęcie
-- [ ] Rejestr błędów został sklasyfikowany: każda istniejąca wcześniej usterka jest nadal śledzona, brak nowych klas regresji
-- [ ] Każda różnica przeszła krytyczny przegląd (między modelami zgodnie z CLAUDE.md)
-- [ ] Procedura wycofania jest udokumentowana: stara implementacja pozostaje gotowa do wydania do czasu spełnienia warunków
+- Wszystkie wcześniejsze testy przechodzą; zero pominiętych lub usuniętych; liczba asercji uzgodniona.
+- Pomiar przy tym samym obciążeniu i sprzęcie spełnia zapisany poziom bazowy.
+- Rejestr błędów odróżnia wcześniejsze usterki od regresji.
+- Każdy diff otrzymuje krytyczny przegląd zgodny z polityką repozytorium.
+- Wycofanie jest udokumentowane; stara implementacja pozostaje gotowa do wydania do zakończenia.

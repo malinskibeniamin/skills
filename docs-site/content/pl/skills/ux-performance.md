@@ -23,6 +23,7 @@ Przed implementacją określ:
   optymistyczny scenariusz.
 - **Kamień milowy**: rezultat widoczny dla użytkownika, taki jak użyteczna treść, wyniki
   filtrowania lub następna narysowana klatka. Dodaj zabezpieczenia poprawności i dostępności.
+  Zachowaj zamierzone animacje, branding, interakcje i semantykę danych za pomocą [asercji zgodności funkcji](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md).
 - **Metrykę główną**: bezpośredni czas lub ograniczenie zasobów dla tego kamienia milowego.
 - **Minimalną wartościową zmianę**: powtarzalna poprawa o 100 ms jest wartościowa; zmiana
   mieszcząca się w szumie nie jest. Przed edycją ustal jedną metrykę główną.
