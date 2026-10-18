@@ -5,6 +5,9 @@
 
 `bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
 
+Local scripts/configs/UI policy outrank defaults.
+Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
+
 - UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
   Functional React components; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.
@@ -13,14 +16,14 @@
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Match local idiom and the smallest obvious design. Preserve zoom, worktree isolation,
+Use local idiom/smallest obvious design. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
 ## Human-facing text
 
-Human-facing text: `shared/communication.md` -- decision/value/ask first; own claims,
-intent, uncertainty. Above 200 words: <=120-word brief, then detail.
-Count explicit word limits with a tool; never invent human endorsement.
+`shared/communication.md`: decision/value/ask first; own claims, intent,
+uncertainty. Above 200 words: <=120-word brief, then detail.
+Count word limits with a tool; never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs: `shared/intent-map.md` maps
 objective/assumptions/references/risks/implementation/verification/superseded choices.
@@ -67,17 +70,17 @@ One outcome contract:
 
 - **Objective** -- end state.
 - **Guardrails** -- non-inferable constraints/reserved decisions.
-- **Verification** -- checks/behavior proving success.
+- **Verification** -- observable proof.
 - **Stop** -- requested endpoint/genuine blockers.
 
-Use deterministic scripts/CLIs for repeatable work; agent judgment for uncertainty.
+Repeatable work: deterministic scripts/CLIs; uncertainty: agent judgment.
 Improve feedback loops before concurrency; delegation stays opt-in.
 inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance. Continue reversible
 decisions; pair status with the next action, not recaps/offers/non-blocking options.
 Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work keeps checklist/evidence/pause triggers in `.context/implementation-notes.md`.
 
-`config/model-routing.json` owns model selection; `/efficient-frontier` applies it. Quality
-wins. Never invent rankings or infer usage from tokens. Promote context, effort,
+`config/model-routing.json` selects models; `/efficient-frontier` applies it. Quality wins.
+Never invent rankings or infer usage from tokens. Promote context, effort,
 or models only through `agent-evals/context-ablation/`.
 
 Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generated files
@@ -97,9 +100,7 @@ Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generate
 
 ### Code exploration
 
-- Use the TraceDecay graph before broad shell search or whole-file reads. For unfamiliar behavior, ask a scoped context question; for a known path or symbol, use a narrow lookup. Read returned excerpts before further discovery, without re-reading the same ranges.
-- Treat file locations and role labels as leads, verbatim source as evidence. Mark incomplete, pruned, or failed retrieval as unknown; widen only for a named missing behavior, caller, or test. Use callers, callees, affected tests, or test maps for relationships.
-- Use `tracedecay tool` as the CLI fallback when MCP is unavailable. Fall back to scoped `rg` and file reads only when the index is unavailable or stale, or when generated and ignored artifacts are outside the graph.
+- Follow repo-root `shared/repo-navigation.md` for source precedence, TraceDecay exploration, and bounded fallback.
 - Treat TraceDecay savings as local estimates, not Codex usage, quota, or billing evidence. In linked worktrees, confirm the active project and branch before relying on graph results.
 
 ### Native delegation
