@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "6e78c65bfa01bba4",
-      "zh-CN": "6e78c65bfa01bba4",
-      "zh-TW": "6e78c65bfa01bba4"
+      "pl": "15d6a5aecf7ca5be",
+      "zh-CN": "15d6a5aecf7ca5be",
+      "zh-TW": "15d6a5aecf7ca5be"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -35,10 +35,30 @@
       "zh-CN": "1120d133871b8399",
       "zh-TW": "1120d133871b8399"
     },
+    "content/skills/animate.md": {
+      "pl": "4859f6a8db96585c",
+      "zh-CN": "4859f6a8db96585c",
+      "zh-TW": "4859f6a8db96585c"
+    },
+    "content/skills/animation-performance.md": {
+      "pl": "9947e1cf357a2d25",
+      "zh-CN": "9947e1cf357a2d25",
+      "zh-TW": "9947e1cf357a2d25"
+    },
+    "content/skills/animation-vocabulary.md": {
+      "pl": "a0a86f307c61715f",
+      "zh-CN": "a0a86f307c61715f",
+      "zh-TW": "a0a86f307c61715f"
+    },
     "content/skills/ask-ben.md": {
-      "pl": "ce8f23f4187974a0",
-      "zh-CN": "ce8f23f4187974a0",
-      "zh-TW": "ce8f23f4187974a0"
+      "pl": "c09775ead85b05d2",
+      "zh-CN": "c09775ead85b05d2",
+      "zh-TW": "c09775ead85b05d2"
+    },
+    "content/skills/ask-sonner.md": {
+      "pl": "c112e65dfef02e57",
+      "zh-CN": "c112e65dfef02e57",
+      "zh-TW": "c112e65dfef02e57"
     },
     "content/skills/av.md": {
       "pl": "23242b5552e4430e",
@@ -54,6 +74,11 @@
       "pl": "2c53edd285bfa731",
       "zh-CN": "2c53edd285bfa731",
       "zh-TW": "2c53edd285bfa731"
+    },
+    "content/skills/break-ui.md": {
+      "pl": "fdb7b9b29bb7f074",
+      "zh-CN": "fdb7b9b29bb7f074",
+      "zh-TW": "fdb7b9b29bb7f074"
     },
     "content/skills/codebase-design.md": {
       "pl": "1b6bfd8007bd323d",
@@ -101,9 +126,9 @@
       "zh-TW": "527900ee431589bf"
     },
     "content/skills/diagnosing-bugs.md": {
-      "pl": "32416e493e567e60",
-      "zh-CN": "32416e493e567e60",
-      "zh-TW": "32416e493e567e60"
+      "pl": "8f22475acae0fde5",
+      "zh-CN": "8f22475acae0fde5",
+      "zh-TW": "8f22475acae0fde5"
     },
     "content/skills/docs.md": {
       "pl": "f52674d5315b7d7d",
@@ -111,9 +136,9 @@
       "zh-TW": "f52674d5315b7d7d"
     },
     "content/skills/dogfood.md": {
-      "pl": "f74ffea53263eb0d",
-      "zh-CN": "f74ffea53263eb0d",
-      "zh-TW": "f74ffea53263eb0d"
+      "pl": "50d9dbd1f6c2af16",
+      "zh-CN": "50d9dbd1f6c2af16",
+      "zh-TW": "50d9dbd1f6c2af16"
     },
     "content/skills/domain-modeling.md": {
       "pl": "952a4d188d4a0338",
@@ -254,6 +279,11 @@
       "pl": "c32035b60b17a788",
       "zh-CN": "c32035b60b17a788",
       "zh-TW": "c32035b60b17a788"
+    },
+    "content/skills/mobile-native.md": {
+      "pl": "71b924e1c4c00c6e",
+      "zh-CN": "71b924e1c4c00c6e",
+      "zh-TW": "71b924e1c4c00c6e"
     },
     "content/skills/ms.md": {
       "pl": "71eaef882076ac21",
@@ -486,9 +516,9 @@
       "zh-TW": "b9354c046f64f8e9"
     },
     "content/skills/visual-review.md": {
-      "pl": "70c7a36f228fa1b4",
-      "zh-CN": "70c7a36f228fa1b4",
-      "zh-TW": "70c7a36f228fa1b4"
+      "pl": "5e1d964d6b66a992",
+      "zh-CN": "5e1d964d6b66a992",
+      "zh-TW": "5e1d964d6b66a992"
     },
     "content/skills/wait-what.md": {
       "pl": "d3b792d1f3a48c9d",

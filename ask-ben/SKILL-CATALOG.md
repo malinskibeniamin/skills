@@ -3,10 +3,15 @@
 | `/accessibility` | Build accessible React interactions and components. |
 | `/agent-watchdog` | Audit and repair work from another coding agent. |
 | `/aip` | Design Google AIP-style protobuf resource APIs. |
+| `/animate` | Build and assess purposeful web UI motion. |
+| `/animation-performance` | Diagnose animation frame and rendering bottlenecks. |
+| `/animation-vocabulary` | Name motion effects and distinguish close animation terms. |
 | `/ask-ben` | Route work through Ben's frontend skill harness. |
+| `/ask-sonner` | Integrate and troubleshoot Sonner notifications. |
 | `/av` | Check that a change earns its time and lands safely. |
 | `/blast-radius` | Prove non-local change safety with executable evidence. |
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
+| `/break-ui` | Stress-test UI with realistic worst-case data. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |
 | `/codex-compat` | Generate Codex hook and instruction parity. |
 | `/codex` | Delegate bounded work through the Codex CLI. |
@@ -45,6 +50,7 @@
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
 | `/mm` | Judge whether a change earns its cost before it ships. |
+| `/mobile-native` | Fix mobile web viewport, touch, and keyboard behavior. |
 | `/ms` | Check that a PR earns its time and business value. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |

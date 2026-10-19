@@ -99,29 +99,23 @@ for (const locale of [
 for (const locale of [
   {
     code: "pl",
-    generate: "Wygeneruj",
-    prove: "Udowodnij działanie wygenerowanej umiejętności",
     readiness:
       "Sam nasłuchujący port lub sprawna baza danych nie oznaczają gotowości.",
-    seeds: "Brak wymaganych danych początkowych oznacza niepowodzenie ścieżki",
+    seeds: "Brak wymaganych danych początkowych oblewa ścieżkę",
     standIn:
-      "Pozostają niezweryfikowane do czasu odtworzenia ich w rzeczywistym środowisku docelowym.",
+      "pozostają niezweryfikowane do odtworzenia w środowisku docelowym.",
   },
   {
     code: "zh-CN",
-    generate: "生成",
-    prove: "验证生成的技能",
     readiness: "仅有端口监听或数据库正常并不代表应用已就绪。",
-    seeds: "缺少所需种子数据时，该用户流程必须判为失败",
-    standIn: "在真实目标环境中重新执行前，这些步骤仍未经过验证。",
+    seeds: "缺少所需种子数据会使流程失败",
+    standIn: "在目标环境重放前，仍未经过验证。",
   },
   {
     code: "zh-TW",
-    generate: "產生",
-    prove: "證明產生的技能可用",
     readiness: "僅有連接埠監聽或資料庫正常不代表應用程式已就緒。",
-    seeds: "缺少所需種子資料時，該使用者流程必須判定為失敗",
-    standIn: "在實際目標環境重新執行前，這些步驟仍未經驗證。",
+    seeds: "缺少所需種子資料會使流程失敗",
+    standIn: "在目標環境重放前，仍未經驗證。",
   },
 ]) {
   for (const viewport of [
@@ -137,20 +131,21 @@ for (const locale of [
       });
       await page.goto(`/${locale.code}/skills/create-verification-skill`);
       await stabilizeScreenshotDate(page, false);
-      await page
-        .getByRole("link", { name: `${locale.generate}#`, exact: true })
-        .click();
+      await page.getByRole("heading").locator('a[href="#generate"]').click();
       await expect(page).toHaveURL(/#generate$/);
       await expect(page.getByRole("main")).toContainText(locale.readiness);
       await expect(page.getByRole("main")).toContainText(locale.seeds);
+      await page.mouse.move(0, 0);
       await expect(page).toHaveScreenshot(
         `poteto-verifier-readiness-${locale.code}-${viewport.name}.png`,
       );
       await page
-        .getByRole("link", { name: `${locale.prove}#`, exact: true })
+        .getByRole("heading")
+        .locator('a[href="#prove-the-generated-skill"]')
         .click();
       await expect(page).toHaveURL(/#prove-the-generated-skill$/);
       await expect(page.getByRole("main")).toContainText(locale.standIn);
+      await page.mouse.move(0, 0);
       await expect(page).toHaveScreenshot(
         `poteto-verifier-proof-${locale.code}-${viewport.name}.png`,
       );

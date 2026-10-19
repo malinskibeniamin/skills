@@ -27,6 +27,9 @@ Przeglądaj powierzchnie widoczne dla klientów z perspektywy produktu, projekto
 7. **Przetestuj skrajne przypadki:** Chromium na komputerze i urządzeniu mobilnym; `Tab, Shift+Tab, Enter, Space, Escape`; ładowanie, brak danych, błąd, duża ilość danych; ścieżka wysyłania formularza; ścieżka powiadomienia/toastu; konsola/sieć. Gdy ryzyko tego wymaga, dodaj Firefox na komputerze, WebKit, ograniczenie ruchu, wymuszone kolory, powiększenie tekstu, RTL/zlokalizowany długi tekst, wolną sieć/ograniczenie przepustowości multimediów oraz motywy.
 8. **Zamknij:** przytocz materiały, nazwij uchwyty projektowe, napraw lub zaakceptuj P0–P1 oraz zapisz deterministycznych kandydatów do automatyzacji.
 
+Testowanie treści/układu: wywołaj narzędzie Skill z "break-ui". Wykorzystuj bieżące dane i zrzuty z dogfood;
+testuj tylko niepokryte przypadki. Zachowaj zakres tylko do odczytu lub jawnie dozwolonych poprawek.
+
 W trybach implementacji i wydania postępuj zgodnie z dokumentem [materiały wizualne PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5): zestaw każdą zmienioną powierzchnię i każdy stan ze zrzutami oraz testami wizualnymi, sprawdź różnice migawek przed aktualizacją zamierzonych wartości bazowych, ponownie uruchom testy w zwykłym trybie i odśwież materiały po edycjach. Zrzuty ekranu nie są testami wizualnymi; zaliczone testy nie są osadzonym materiałem „przed” i „po”.
 
 Najpierw HTML. Cykl życia jest ważniejszy niż zrzut ekranu. Stan jest ważniejszy niż ścieżka sukcesu. Ruch jest interakcją. Testowanie treścią wygrywa. Automatyzacja dostępności jest częściowa. Wydajność jest widoczna. Jeśli coś wystąpiło dwa razy, zautomatyzuj to.

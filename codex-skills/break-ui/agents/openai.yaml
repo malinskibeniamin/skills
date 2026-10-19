@@ -1,0 +1,3 @@
+interface:
+  display_name: "Break UI"
+  short_description: "Stress-test UI with realistic worst-case data"

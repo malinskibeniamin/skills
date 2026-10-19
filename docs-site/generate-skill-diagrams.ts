@@ -90,6 +90,61 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     nodes: ["Resource", "Parent collection", "Standard methods", "Operation"],
     relations: ["belongs to", "exposes", "may return"],
   },
+  animate: {
+    kind: "decision-tree",
+    nodes: [
+      "Motion request",
+      "Clear purpose?",
+      "Build + verify",
+      "Instant feedback",
+    ],
+  },
+  "animation-performance": {
+    kind: "feedback-loop",
+    nodes: [
+      "Trace frames",
+      "Locate cost",
+      "Change one cause",
+      "Replay + compare",
+    ],
+  },
+  "animation-vocabulary": {
+    kind: "transformation-map",
+    nodes: [
+      "Observed effect",
+      "Closest term",
+      "Distinguish alternatives",
+      "Name, not code",
+    ],
+  },
+  "mobile-native": {
+    kind: "concern-matrix",
+    nodes: [
+      "Viewport + keyboard",
+      "Touch + scroll",
+      "Zoom + safe areas",
+      "Phone verification",
+    ],
+  },
+  "break-ui": {
+    kind: "evidence-funnel",
+    nodes: [
+      "Schema + limits",
+      "Worst-case fixture",
+      "Real layout stress",
+      "Evidence + fixes",
+    ],
+  },
+  "ask-sonner": {
+    actors: ["Operation", "Sonner", "User"],
+    kind: "sequence",
+    nodes: [
+      "Start loading",
+      "Resolve or reject",
+      "Update same toast",
+      "Keep error recovery",
+    ],
+  },
   "ask-ben": {
     kind: "hierarchy",
     nodes: [

@@ -5,19 +5,18 @@ description: Use after each material behavior slice and before handoff or shippi
 
 # Dogfood
 
-A material runnable slice changes behavior at a real entrypoint or public seam.
+A material runnable slice changes a real entrypoint or public seam.
 Dogfood each slice and final PR. Tests are not dogfood.
 
 ## Inventory
 
 1. Resolve the comparison base with
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
-2. Inspect the full PR from merge-base through committed, staged, unstaged, and untracked work.
-3. Map changed behavior to its real entrypoint. A skill includes references, assets, and
-   scripts; a hook runs through its actual event. Standalone docs, tests, and evals need no
-   experiential coverage.
+2. Inspect the full PR: merge-base through committed, staged, unstaged, and untracked work.
+3. Map behavior to its real entrypoint, including skill references/assets/scripts and actual
+   hook events. Standalone docs, tests, and evals need no experiential coverage.
 
-Locally, cover this turn. Before PR or shipping, cover every runnable branch behavior.
+Cover this turn locally; every runnable branch behavior before PR or shipping.
 
 ## Loop
 
@@ -25,19 +24,18 @@ Run **use -> abuse -> repair -> replay** on the current implementation.
 
 ### Use
 
-Perform each intended journey through the actual implementation. Inspect visible output,
-state transitions, side effects, console, network, and logs rather than inferring from code.
+Perform intended journeys through the implementation; inspect output, state transitions,
+side effects, console, network, and logs directly.
 
-Use representative live-scale data with production-like shape and cardinality. Compare
-expected and observed counts, ordering, timing, state, and side effects; run long enough to
-expose accumulation.
+Use representative live-scale data: production-like shape/cardinality. Compare expected
+and observed counts, ordering, timing, state, side effects; run to expose accumulation.
 
 For bugs, replay the reporter's exact steps unfixed. If you cannot reproduce it,
 request missing environment or evidence before diagnosis.
 
 ### Abuse
 
-Apply each relevant lens and at least one plausible break attempt:
+Apply relevant lenses and one plausible break attempt:
 
 - Careless: empty, invalid, oversized, duplicate, or reordered input.
 - Impatient: repeat, double-submit, reload, navigate away, cancel, or interrupt.
@@ -46,12 +44,15 @@ Apply each relevant lens and at least one plausible break attempt:
   timezone boundaries, realistic cardinality.
 - Performance: measure response time, network, render, CPU, and memory against a baseline or budget.
 
-Prefer credible user behavior over arbitrary cases. Observe failure and recovery directly.
+Prefer credible user behavior; observe failure and recovery.
+
+UI content/layout risks: Call the Skill tool with "break-ui". Reuse schema-valid fixtures
+and evidence in replay/receipt; test only uncovered cases. Keep invalid-input validation separate.
 
 ### Repair
 
 An observed defect fails the checkpoint. When automatable, add a RED public-contract test,
-fix through `/tdd`, and rerun focused checks. Any behavior edit invalidates prior evidence.
+fix through `/tdd`, and rerun focused checks. Behavior edits invalidate evidence.
 
 ### Replay
 
@@ -71,7 +72,7 @@ use [replay packets](../shared/verification-replay.md). PASS binds to the curren
 | Skill/agent | Use on a fresh realistic task and inspect behavior |
 | Demo/prototype | Operate it until the question has observed evidence |
 
-Use project-native tools. Fresh agents require explicit delegation.
+Use repo tools. Fresh agents require explicit delegation.
 
 If a project-local `verify-*` skill exists, use its doctor, drive, evidence, and cleanup.
 Verifier drift routes to `/maintain-verification-skill`; a recurring missing path routes to
@@ -79,7 +80,7 @@ Verifier drift routes to `/maintain-verification-skill`; a recurring missing pat
 
 ## Receipt
 
-Report current entrypoint, actions and observations: `Verdict: PASS | FAIL | BLOCKED`, then:
+Report entrypoint, actions and observations: `Verdict: PASS | FAIL | BLOCKED`, then:
 
 - **Entrypoint:** exact command, URL, event, or consumer.
 - **Actions:** intended journey and break attempts.

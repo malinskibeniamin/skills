@@ -23,6 +23,9 @@ sidebar:
 7. **压力测试：**Chromium 桌面端和 Chromium 移动端；`Tab, Shift+Tab, Enter, Space, Escape`；加载、空数据、错误、密集数据；表单提交路径；通知/toast 路径；控制台/网络。根据风险增加 Firefox 桌面端、WebKit、减少动态效果、强制颜色、文本缩放、RTL/本地化长文本、慢速网络/媒体限速，以及主题。
 8. **收尾：**引用证据，明确设计调整抓手，修复或接受 P0-P1，并记录可确定性复现的自动化候选项。
 
+内容/布局压力测试：使用 Skill 工具调用 "break-ui"。复用当前 dogfood 测试数据和截图；
+只测试尚未覆盖的情况。保留只读或已获授权修复的执行边界。
+
 对于已实现/发布模式：遵循 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：将每个受影响的界面/状态与截图和视觉测试逐一核对，在更新预期基线前检查快照差异，按常规方式重新运行，并在编辑后刷新证据。截图不是视觉测试；通过的测试也不是嵌入式的变更前后证据。
 
 HTML 优先。生命周期胜过截图。状态胜过顺利路径。动态效果就是交互。内容压力测试更有效。无障碍自动化只能覆盖一部分。性能具有视觉表现。同一问题出现两次，就将其自动化。

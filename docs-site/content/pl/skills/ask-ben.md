@@ -26,10 +26,15 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/accessibility` | Tworzenie dostępnych interakcji i komponentów React. |
 | `/agent-watchdog` | Audytowanie i poprawianie pracy innego agenta programistycznego. |
 | `/aip` | Projektowanie interfejsów API zasobów protobuf w stylu Google AIP. |
+| `/animate` | Tworzenie i ocena celowego ruchu w interfejsie WWW. |
+| `/animation-performance` | Diagnozowanie wąskich gardeł klatek i renderowania animacji. |
+| `/animation-vocabulary` | Nazywanie efektów ruchu i rozróżnianie bliskich terminów animacji. |
 | `/ask-ben` | Kierowanie pracy przez zestaw umiejętności frontendowych Bena. |
+| `/ask-sonner` | Integracja i diagnozowanie powiadomień Sonner. |
 | `/av` | Sprawdzanie, czy zmiana uzasadnia poświęcony jej czas i jest bezpiecznie wdrażana. |
 | `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
+| `/break-ui` | Testowanie UI na realistycznych danych najgorszego przypadku. |
 | `/codebase-design` | Projektowanie głębszych modułów z przejrzystymi interfejsami. |
 | `/codex-compat` | Generowanie zgodnych hooków i instrukcji dla Codex. |
 | `/codex` | Delegowanie ograniczonych zadań przez CLI Codex. |
@@ -68,6 +73,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
 | `/mm` | Ocenianie przed wdrożeniem, czy zmiana jest warta swojego kosztu. |
+| `/mobile-native` | Naprawianie mobilnego viewportu, dotyku i klawiatury w WWW. |
 | `/ms` | Sprawdzanie, czy PR uzasadnia poświęcony mu czas i dostarcza wartość biznesową. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |

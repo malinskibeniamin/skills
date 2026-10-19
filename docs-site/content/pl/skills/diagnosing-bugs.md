@@ -57,6 +57,9 @@ instrumentacja korzystają z tego sygnału. Poświęć temu większość wysiłk
 10. **Skrypt bash z udziałem człowieka.** Ostateczność. Jeśli człowiek musi wykonać kliknięcie, poprowadź go za pomocą
     `scripts/hitl-loop.template.sh`; przekaż przechwycone dane wyjściowe z powrotem do pętli.
 
+Błędy treści/układu UI: wywołaj narzędzie Skill z "break-ui", aby przygotować dane testowe zgodne ze schematem.
+Przypnij wadliwe dane przez rzeczywisty komponent do tej pętli; zachowaj oryginalne wejście do odtworzenia po poprawce.
+
 ### Ulepszaj samą pętlę
 Traktuj pętlę jak produkt: przyspieszaj ją, doprecyzowuj sprawdzany objaw i eliminuj
 niedeterminizm przez ustalenie czasu, ziaren losowości, stanu systemu plików i danych wejściowych z sieci.

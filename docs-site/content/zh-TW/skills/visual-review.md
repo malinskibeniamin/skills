@@ -23,6 +23,9 @@ sidebar:
 7. **壓力測試：** Chromium 桌面版與 Chromium 行動版；`Tab, Shift+Tab, Enter, Space, Escape`；載入、空白、錯誤、密集資料；表單提交路徑；通知／快顯通知路徑；主控台／網路。當風險需要時，加入 Firefox 桌面版、WebKit、減少動態效果、強制色彩、文字縮放、RTL／在地化長文字、慢速網路／媒體節流，以及各種主題。
 8. **結案：** 引用證據、指出設計調整點、修正或接受 P0-P1，並記錄可確定重現的自動化候選項目。
 
+內容／版面配置壓力測試：使用 Skill 工具呼叫 "break-ui"。重用目前 dogfood 測試資料與螢幕截圖；
+只測試尚未涵蓋的情況。保留唯讀或已獲授權修復的執行邊界。
+
 已實作／發布：遵循 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：以擷取畫面與視覺測試核對每個受影響的介面／狀態，在更新預期的基準前檢查快照差異，依正常方式重新執行，並在編輯後更新證據。螢幕截圖不是視覺測試；通過的測試也不是嵌入式的前後對照證據。
 
 HTML 優先。生命週期勝過螢幕截圖。狀態勝過順利路徑。動態效果就是互動。內容壓力測試更有價值。無障礙自動化只能涵蓋部分情況。效能是可見的。若出現兩次，就將其自動化。
