@@ -1,0 +1,3 @@
+interface:
+  display_name: "AI Docs"
+  short_description: "Maintain Effect's generated AI documentation"

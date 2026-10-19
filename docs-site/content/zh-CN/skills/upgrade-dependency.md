@@ -1,9 +1,17 @@
 ---
-title: /upgrade-dependency
 description: 升级依赖项并调整所有受影响的调用点。适用于软件包或模块升级、漏洞修复、破坏性变更、代码迁移工具以及新 API 的采用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - upgrade dependency
 sidebar:
   label: /upgrade-dependency
+title: /upgrade-dependency
+type: skill
 ---
 ![展示 /upgrade-dependency 技能的示意图](/diagrams/skills/upgrade-dependency.svg)
 
@@ -32,3 +40,5 @@ sidebar:
 ## 迁移准则 [#migration-doctrine]
 
 完成时通过 lint/钩子禁止旧模式。路由器/框架层采用一次性整体迁移；数据层采用绞杀者模式，并为新旧并存安排预算。迁移 PR 保持 1:1 功能对等，在同一个 PR 中协调测试；结构性重构另行创建工单。删除已废弃的样式、垫片和一次性特殊处理。
+
+处理清单条目的角色，或协调编译器、运行时、镜像和补丁的兼容性时，加载[依赖维护](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/dependency-maintenance/SKILL.md)。版本选择、升级顺序与交付仍由此技能负责；应区分有意不同的 peer 范围和引擎最低版本，而非机械统一。

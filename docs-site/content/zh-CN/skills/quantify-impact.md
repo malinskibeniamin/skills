@@ -1,9 +1,17 @@
 ---
-title: /quantify-impact
 description: 衡量某项变更是否让产品或代码库获得了有意义的改进。适用于可复现的证据能够帮助判断某项功能、修复、重构或升级是否值得合并的情况。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - quantify impact
 sidebar:
   label: /quantify-impact
+title: /quantify-impact
+type: skill
 ---
 ![「/quantify-impact」技能示意图](/diagrams/skills/quantify-impact.svg)
 
@@ -12,7 +20,7 @@ sidebar:
 
 让价值一目了然，同时避免为了基准测试而基准测试。每次创建或更新 PR 时，都会通过 `/commit-push-pr` 或 `/stacked-prs` 自动运行此评估；测量的严谨程度与变更相称。
 
-## 流程
+## 流程 [#flow]
 
 1. **证据机会扫描：**仅当某项成本较低的直接指标能够超过预先声明的最低有价值变化幅度及正常波动时，才进行基准测试。对于微小的文案、样式或仅测试变更，只需用一句话说明其价值。不要为了基准测试而基准测试。
 2. **编码前锁定主张：**明确变更论点、主要指标、护栏指标、场景和最低有价值的变化幅度。不要事后选择表现最好的指标。
@@ -30,7 +38,7 @@ sidebar:
 
 对护栏指标应用相同的筛选规则；省略可忽略的变化。
 
-## PR 输出
+## PR 输出 [#pr-output]
 
 始终提供一条简洁的影响说明：为用户或维护者带来了什么改进，以及相应证据。对于微小的文案或样式变更，只需提供一句价值说明并附上变更前后的视觉证据，不要杜撰指标。仅当证据超过阈值时，才将该说明替换为：
 
@@ -44,3 +52,5 @@ Method: `<command, fixture, runs, environment>`.
 ```
 
 通过 `/commit-push-pr` 或 `/stacked-prs` 将其直接写入 PR 正文；无需单独发起可审查性请求。显式请求 `/make-pr-easy-to-review` 时，它会复用这些内容。仅在复现需要时，才将被隐藏的原始数据保留在本地证据中。绝不要输出空表格；对于未证实的明确性能主张，说明 `Value not proven`，但不要公布可忽略的数字。
+
+测量库的运行性能或 TypeScript 编译器开销时，加载[性能分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/performance-analysis/SKILL.md)。它负责针对性的测量工具；此技能仍负责论点与价值判断。

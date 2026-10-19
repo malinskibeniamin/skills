@@ -40,3 +40,5 @@ type: skill
    支援時驗證片段錨點。絕不宣稱未執行的指令已成功。
 5. 回報結果、實際觀察到的驗證情況與尚未解決的證據缺口。遵守
    要求的終點；此技能不授權無關的發布或設定操作。
+
+撰寫公開 TypeScript API 的 JSDoc、可執行範例或交叉連結時，載入 [JSDoc 指南](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/jsdocs/SKILL.md)。一般技術文件仍由此技能負責。

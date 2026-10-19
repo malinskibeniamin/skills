@@ -26,6 +26,8 @@ for (const viewport of [
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto("/");
+    // Narration extracts once on idle; initialize before filtering changes its input.
+    await expect(page.locator("[data-narration-start]")).toBeVisible();
     const search = page.getByRole("searchbox", { name: "Search skills" });
     await search.fill("docs");
     const card = page
@@ -86,6 +88,7 @@ for (const { locale, searchLabel, heading } of [
     page,
   }) => {
     await page.goto(`/${locale}`);
+    await expect(page.locator("[data-narration-start]")).toBeVisible();
     await page.getByRole("searchbox", { name: searchLabel }).fill("docs");
     await stabilizeScreenshotDate(page, false);
     await expect(page).toHaveScreenshot(`docs-search-${locale}.png`);

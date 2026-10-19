@@ -66,3 +66,5 @@ TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、�
 ## 完成條件 [#done]
 
 測試通過且沒有警告、非同步洩漏或以持續時間為基礎的等待；測試能承受重構。如需條件式等待、選擇器、Portal、模擬、診斷，以及韌性範例，請參閱 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/REFERENCE.md)。
+
+當驗收條件涉及型別推斷、可指派性、多載或型別顯示時，載入[測試開發](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-development/SKILL.md)。執行階段回歸仍需執行階段測試；一般宣告只需型別檢查。

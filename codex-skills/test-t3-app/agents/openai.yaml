@@ -1,0 +1,3 @@
+interface:
+  display_name: "Test T3 App"
+  short_description: "Verify T3 Code web and desktop in isolated state"

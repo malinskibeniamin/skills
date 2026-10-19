@@ -1,12 +1,20 @@
 ---
-title: /upgrade-dependency
 description: >-
   Uaktualnij zależność i dostosuj wszystkie miejsca jej użycia. Używaj przy
   aktualizacjach pakietów lub modułów, usuwaniu luk w zabezpieczeniach, zmianach
   niezgodnych wstecznie, codemodach i wdrażaniu nowych interfejsów API.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - upgrade dependency
 sidebar:
   label: /upgrade-dependency
+title: /upgrade-dependency
+type: skill
 ---
 ![Diagram umiejętności /upgrade-dependency](/diagrams/skills/upgrade-dependency.svg)
 
@@ -35,3 +43,5 @@ Dowody umieszczaj na czacie lub w żądanym PR; lokalny plik Markdown twórz tyl
 ## Doktryna migracji [#migration-doctrine]
 
 Na zakończenie zablokuj stary wzorzec za pomocą linta/hooka. Migracja jednorazowa dla routerów/warstw frameworka; migracja dusząca dla warstw danych z budżetem na współistnienie. PR-y migracyjne zachowują zgodność 1:1 i dostosowują testy w TYM SAMYM PR; refaktoryzacje strukturalne rejestruj jako zgłoszenia. Usuń martwe style, warstwy zgodności i jednorazowe rozwiązania.
+
+Dla ról wpisów w manifestach lub skoordynowanej zgodności kompilatora, środowiska wykonawczego, obrazów i łatek wczytaj [utrzymanie zależności](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/dependency-maintenance/SKILL.md). Wybór wersji, kolejność aktualizacji i dostarczenie pozostają tutaj; klasyfikuj celowo różne zakresy peer i minimalne wersje silników zamiast mechanicznie je zrównywać.

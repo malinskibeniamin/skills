@@ -1,15 +1,25 @@
 ---
-title: "/effect-ts"
-description: "Używaj podczas konfiguracji repozytorium korzystającego z biblioteki Effect dla TypeScript."
-type: skill
+description: >-
+  Używaj podczas konfiguracji repozytorium korzystającego z biblioteki Effect
+  dla TypeScript.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - effect ts
 sidebar:
-  label: "/effect-ts"
+  label: /effect-ts
+title: /effect-ts
+type: skill
 ---
 ![Diagram umiejętności /effect-ts](/diagrams/skills/effect-ts.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/effect-ts.excalidraw)
 
-## Instalacja Effect
+## Instalacja Effect [#install-effect]
 
 Użyj menedżera pakietów repozytorium. Przy nowej konfiguracji v4 upstream korzysta z kanału wydań kandydujących:
 
@@ -27,7 +37,7 @@ bun add -D effect@rc
 
 Zachowaj zależności uruchomieniowe w pakietach importujących Effect. Przed dodaniem poniższej instrukcji sprawdź istnienie `node_modules/effect/AGENTS.md` i `node_modules/effect/src`. Jeśli ich brakuje, zgłoś zainstalowaną wersję i brakujące pliki.
 
-## Aktualizacja instrukcji dla agentów
+## Aktualizacja instrukcji dla agentów [#update-agent-instructions]
 
 Dodaj poniższy blok do kanonicznego źródła instrukcji dla agentów. Wygeneruj ponownie pochodne pliki `AGENTS.md` lub `CLAUDE.md`; nie edytuj wygenerowanych instrukcji ręcznie.
 
@@ -42,3 +52,5 @@ i w razie potrzeby przejdź do wskazanych w nim odnośników.
 W przypadku API i koncepcji nieopisanych w przewodniku przeszukaj zainstalowane
 źródła w `node_modules/effect/src`.
 ```
+
+Podczas późniejszego tworzenia lub przeglądu kompozycji Effect wczytaj [programowanie w Effect](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/effect-development/SKILL.md). Konfiguracja pozostaje tutaj; zainstalowana zależność nadal wyznacza właściwą wersję.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Contribution Triage"
+  short_description: "Assess contributions against trusted repository policy"

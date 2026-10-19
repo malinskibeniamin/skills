@@ -44,3 +44,7 @@ and follow its links when required.
 For APIs and concepts not covered by that guide, search the installed source in
 `node_modules/effect/src`.
 ```
+
+For subsequent Effect composition or review, load
+[Effect development](../t3code-skills/effect-development/SKILL.md). Setup stays
+here; the installed dependency remains the version authority.

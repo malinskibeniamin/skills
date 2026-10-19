@@ -159,6 +159,21 @@ type: skill
 | `/stay-within-limits` | 围绕用量限制规划长期运行的智能体工作。 |
 | `/steelman` | 构建有最强证据支持的反方论点。 |
 | `/swarm` | 在并行工作树通道中执行相互独立的工作。 |
+| `/ai-docs` | 维护 Effect 生成的 AI 文档. |
+| `/bundle-analysis` | 测量构建产物体积并解释包含的依赖. |
+| `/changesets` | 完成面向使用者的发布说明与破坏性变更说明. |
+| `/ci-maintenance` | 审计 GitHub Actions 作业及其信任边界. |
+| `/contribution-triage` | 按照可信的仓库政策评估贡献. |
+| `/dependency-maintenance` | 协调依赖角色与工具链兼容性. |
+| `/effect-development` | 查找与版本匹配的 Effect 开发指南. |
+| `/jsdocs` | 用经过验证的可运行示例记录公共 API. |
+| `/migration-guidance` | 维护 Effect 生成的 API 迁移参考. |
+| `/package-development` | 注册并验证可发布的工作区包. |
+| `/performance-analysis` | 测量运行时与 TypeScript 编译器的性能回归. |
+| `/test-development` | 验证运行时行为与公共编译器契约. |
+| `/test-t3-app` | 在隔离状态下验证 T3 Code Web 和桌面端. |
+| `/test-t3-mobile` | 通过 Device 面板验证 T3 Code 原生客户端. |
+| `/vendored-assets` | 在固定来源与保留许可证的前提下更新纳入仓库的资源. |
 | `/tanstack-intent` | 为每个 TanStack 软件包加载版本匹配的指南。 |
 | `/tanstack-router` | 应用类型安全的 TanStack Router 数据和搜索模式。 |
 | `/tanstack-table` | 加载官方指南后应用本地 Table 检查。 |

@@ -44,3 +44,5 @@ Pisz dokumenty, które czytelnicy mogą zrozumieć, zweryfikować i wykorzystać
    i powiązane odsyłacze. Sprawdzaj fragmenty, gdy jest to obsługiwane. Nigdy nie twierdź, że niewykonane polecenia zakończyły się powodzeniem.
 5. Podaj wynik, zaobserwowaną weryfikację i nierozstrzygnięte braki w dowodach. Przestrzegaj
    żądanego punktu końcowego; ta umiejętność nie upoważnia do niezwiązanego publikowania ani konfiguracji.
+
+Dla publicznego API TypeScript, jego JSDoc, wykonywalnych przykładów i odsyłaczy wczytaj [wskazówki JSDoc](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/jsdocs/SKILL.md). Ogólna dokumentacja techniczna pozostaje tutaj.

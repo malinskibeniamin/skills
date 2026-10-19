@@ -40,3 +40,5 @@ type: skill
    支持时验证片段锚点。绝不声称未运行的命令已成功执行。
 5. 报告结果、观察到的验证情况和未解决的证据缺口。遵守
    请求的最终目标；此技能不授权无关的发布或配置操作。
+
+编写公共 TypeScript API 的 JSDoc、可运行示例或交叉链接时，加载 [JSDoc 指南](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/jsdocs/SKILL.md)。一般技术文档仍由此技能负责。

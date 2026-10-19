@@ -136,6 +136,21 @@
 | `/stay-within-limits` | Budget long-running agent work around usage limits. |
 | `/steelman` | Build the strongest evidence-backed counterargument. |
 | `/swarm` | Execute independent work across parallel worktree lanes. |
+| `/ai-docs` | Maintain Effect's generated AI documentation. |
+| `/bundle-analysis` | Measure bundle size and explain included dependencies. |
+| `/changesets` | Finalize consumer release notes and breaking changes. |
+| `/ci-maintenance` | Audit GitHub Actions jobs and their trust boundaries. |
+| `/contribution-triage` | Assess contributions against trusted repository policy. |
+| `/dependency-maintenance` | Coordinate dependency roles and toolchain compatibility. |
+| `/effect-development` | Find version-matched Effect development guidance. |
+| `/jsdocs` | Document public APIs with checked runnable examples. |
+| `/migration-guidance` | Maintain Effect's generated API migration reference. |
+| `/package-development` | Register and verify publishable workspace packages. |
+| `/performance-analysis` | Measure runtime and TypeScript compiler regressions. |
+| `/test-development` | Verify runtime behavior and public compiler contracts. |
+| `/test-t3-app` | Verify T3 Code web and desktop in isolated state. |
+| `/test-t3-mobile` | Verify T3 Code native clients through its Device panel. |
+| `/vendored-assets` | Update vendored assets with pinned provenance and licenses. |
 | `/tanstack-intent` | Load version-matched guidance for every TanStack package. |
 | `/tanstack-router` | Apply typed TanStack Router data and search patterns. |
 | `/tanstack-table` | Apply local Table checks after loading official guidance. |

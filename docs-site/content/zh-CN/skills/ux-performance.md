@@ -1,9 +1,19 @@
 ---
-title: "/ux-performance"
-description: "审计并优化真实 Web 用户体验性能。适用于缓慢的 SPA 页面、路由、交互、超大表格、加载、缓存、内存、Web Vitals、Lighthouse、性能预算或 CI 回归。"
-type: skill
+description: >-
+  审计并优化真实 Web 用户体验性能。适用于缓慢的 SPA 页面、路由、交互、超大表格、加载、缓存、内存、Web
+  Vitals、Lighthouse、性能预算或 CI 回归。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ux performance
 sidebar:
-  label: "/ux-performance"
+  label: /ux-performance
+title: /ux-performance
+type: skill
 ---
 ![/ux-performance 技能示意图](/diagrams/skills/ux-performance.svg)
 
@@ -13,7 +23,7 @@ sidebar:
 昂贵的代码。默认按客户端 Web 应用处理；只有证据表明交付层或后端延误用户旅程时，
 才继续追查这些层。
 
-## 建立性能契约
+## 建立性能契约 [#contract]
 
 实施前明确：
 
@@ -28,7 +38,7 @@ sidebar:
 - **终点**：审计、优化或安装回归检查。审计只返回发现，不编辑代码；优化持续到本地
   变更验证完成；CI 工作只安装校准过的检查。
 
-## 执行循环
+## 执行循环 [#loop]
 
 1. **盘点**真实技术栈、生产构建路径、现有遥测、分析器、测试、预算和已安装包版本。
    更改框架或库语法前，先阅读当前的第一方文档。
@@ -51,7 +61,7 @@ sidebar:
 当性能主张涉及规模、突发负载、资源争用或长会话时，使用
 [STRESS.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/STRESS.md) 找到容量拐点，并验证压力下的正确性。
 
-## 输出
+## 输出 [#output]
 
 首先给出用户结果和最慢区段：
 
@@ -69,3 +79,5 @@ Artifacts: <路径或链接>
 
 区分测量事实、推断和未经测试的机会。绝不能仅凭 Lighthouse 分数、静态警告、
 看似更少的代码或依赖升级就声称速度提升。
+
+比较构建产物体积或调查意外引入的模块时，加载[构建产物分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/bundle-analysis/SKILL.md)。将探索性样例与稳定预算分开，并使用实际生产构建。

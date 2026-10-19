@@ -65,3 +65,5 @@ Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkow
 4. Stosuj kontrakt stanu oraz celu i wpływu z CLAUDE.md. Jeśli PR istnieje, umieść jego pełny adres URL w ostatnim wierszu stanu, także przy aktualizacjach.
 
 Nigdy nie dodawaj do poczekalni niezwiązanych zmian, nie wypychaj mieszanego zakresu ani nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i polecenie naprawcze.
+
+Jeśli repozytorium docelowe używa Changesets, po ukierunkowanej weryfikacji, a przed commitem, wczytaj [finalizację changesetu](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/changesets/SKILL.md). Aktualizuj istniejącą notatkę bieżącego PR zamiast tworzyć nową przy każdym poleceniu.

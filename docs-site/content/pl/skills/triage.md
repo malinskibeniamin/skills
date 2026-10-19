@@ -1,9 +1,17 @@
 ---
-title: /triage
-description: "Przenoś zgłoszenia między rolami triage i przygotowuj pracę gotową dla agenta."
-type: skill
+description: Przenoś zgłoszenia między rolami triage i przygotowuj pracę gotową dla agenta.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - triage
 sidebar:
   label: /triage
+title: /triage
+type: skill
 ---
 ![Diagram umiejętności /triage](/diagrams/skills/triage.svg)
 
@@ -16,7 +24,7 @@ Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.
 Przenoś zgłoszenia przez małą maszynę stanów ról. Dla skonfigurowanych zewnętrznych PR-ów PR jest zgłoszeniem z dołączonym kodem; gołe numery rozwiązuj przez tracker.
 Używaj słownika domeny i odpowiednich ADR-ów. Aktualną dokumentację zewnętrzną czytaj przez `/read-the-damn-docs`; konkurencyjne plany rozstrzygaj przez `/plan-arbiter`, a duże epiki pokazuj przez `/visual-plan`.
 
-## Niezmiennik komentarza
+## Niezmiennik komentarza [#comment-invariant]
 
 Każdy publikowany komentarz triage zaczynaj od:
 
@@ -24,7 +32,7 @@ Każdy publikowany komentarz triage zaczynaj od:
 > *To zostało wygenerowane przez AI podczas triage.*
 ```
 
-## Tracker i role
+## Tracker i role [#tracker-and-roles]
 
 Wykryj tracker z instrukcji repozytorium i zdalnych adresów:
 
@@ -35,7 +43,7 @@ Wykryj tracker z instrukcji repozytorium i zdalnych adresów:
 Każdy element ma dokładnie jedną kategorię (`bug` albo `enhancement`) i jeden stan: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human` lub `wontfix`.
 Mapuj role kanoniczne na istniejące etykiety lub stany trackera. Sprzeczne stany wymagają decyzji przed modyfikacją.
 
-## Kolejka uwagi
+## Kolejka uwagi [#show-attention-queue]
 
 Pobieraj od najstarszych:
 
@@ -45,7 +53,7 @@ Pobieraj od najstarszych:
 
 Sprawdź flagę `PRs/MRs as a request surface` skonfigurowanego trackera; brak flagi lub `no` wyklucza zewnętrzne odkrywanie. Uwzględniaj zewnętrzne elementy tylko przy `yes` i oznaczaj każdą linię `[PR]` albo `[issue]`; aktywne PR-y współpracowników nie są pracą odkrywania. Jawnie nazwany PR pozostaje w zakresie. Pokaż liczby i pozwól maintainerowi wybrać.
 
-## Triage jednego elementu
+## Triage jednego elementu [#triage-one-item]
 
 1. **Zbierz.** Przeczytaj treść, komentarze, etykiety lub stan, autora, daty, wcześniejsze notatki i diff PR-a. Nie powtarzaj pytań z odpowiedzią.
 2. **Eksploruj.** Wykonaj wyszukiwanie redundancji po pojęciu domenowym. Sprawdź `.out-of-scope/` pod kątem wcześniejszego odrzucenia.
@@ -58,9 +66,11 @@ Sprawdź flagę `PRs/MRs as a request surface` skonfigurowanego trackera; brak f
    - ulepszenie: zapisz według [OUT-OF-SCOPE.md](https://github.com/malinskibeniamin/skills/blob/main/triage/OUT-OF-SCOPE.md), podaj link i zamknij.
    Zastosuj `needs-triage` bez komentarza, chyba że trzeba zapisać częściową pracę.
 
-## Nadpisanie i wznowienie
+## Nadpisanie i wznowienie [#overrides-and-resume]
 
 Dla jawnego nadpisania stanu opisz zmiany i działaj bez grillowania. Zapytaj o brief agenta tylko przy przejściu do `ready-for-agent` bez briefu.
 Przy wznowieniu przeczytaj wcześniejsze notatki i nowe odpowiedzi, a następnie pokaż aktualny stan bez ponawiania pytań.
 
 Pełne szablony i przejścia stanów: [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/triage/REFERENCE.md).
+
+Dla oceny zgodności z zasadami przyjmowania wkładu lub autoryzowanej moderacji PR wczytaj [triage wkładu](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/contribution-triage/SKILL.md). Gotowość zgłoszeń pozostaje tutaj; o kwalifikacji decydują zaufane zasady repozytorium docelowego, a nie T3.

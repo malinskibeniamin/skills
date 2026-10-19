@@ -1,9 +1,20 @@
 ---
-title: "/ux-performance"
-description: "Audytuj i optymalizuj rzeczywistą wydajność UX aplikacji internetowych. Używaj w przypadku wolnych stron SPA, tras, interakcji, ogromnych tabel, ładowania, buforowania, pamięci, Web Vitals, Lighthouse, budżetów lub regresji CI."
-type: skill
+description: >-
+  Audytuj i optymalizuj rzeczywistą wydajność UX aplikacji internetowych. Używaj
+  w przypadku wolnych stron SPA, tras, interakcji, ogromnych tabel, ładowania,
+  buforowania, pamięci, Web Vitals, Lighthouse, budżetów lub regresji CI.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ux performance
 sidebar:
-  label: "/ux-performance"
+  label: /ux-performance
+title: /ux-performance
+type: skill
 ---
 ![Diagram umiejętności /ux-performance](/diagrams/skills/ux-performance.svg)
 
@@ -14,7 +25,7 @@ Pozwól użytkownikowi szybciej osiągnąć użyteczny, responsywny stan. Optyma
 jako klientową aplikację internetową; przechodź do warstwy dostarczania lub backendu tylko
 wtedy, gdy dowody wskazują, że opóźniają one podróż użytkownika.
 
-## Ustal kontrakt wydajności
+## Ustal kontrakt wydajności [#contract]
 
 Przed implementacją określ:
 
@@ -31,7 +42,7 @@ Przed implementacją określ:
   ustalenia bez edycji; optymalizacja trwa do zweryfikowanych zmian lokalnych; praca CI
   instaluje wyłącznie skalibrowane kontrole.
 
-## Wykonaj pętlę
+## Wykonaj pętlę [#loop]
 
 1. **Zinwentaryzuj** rzeczywisty stos, ścieżkę kompilacji produkcyjnej, istniejącą telemetrię,
    profilery, testy, budżety i wersje zainstalowanych pakietów. Przed zmianą składni frameworka
@@ -65,7 +76,7 @@ Przed implementacją określ:
 Gdy twierdzenie dotyczy skali, skoku obciążenia, rywalizacji o zasoby lub długiej sesji,
 użyj [STRESS.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/STRESS.md), aby znaleźć punkt załamania pojemności i zweryfikować poprawność pod presją.
 
-## Wynik
+## Wynik [#output]
 
 Zacznij od rezultatu użytkownika i najwolniejszego odcinka:
 
@@ -84,3 +95,5 @@ Artifacts: <ścieżki lub linki>
 Oddziel zmierzone fakty, wnioski i niesprawdzone możliwości. Nigdy nie deklaruj przyspieszenia
 wyłącznie na podstawie wyniku Lighthouse, ostrzeżenia statycznego, pozornie mniejszego kodu
 lub zaktualizowanej zależności.
+
+Dla porównań paczek wynikowych lub nieoczekiwanych modułów wczytaj [analizę paczki wynikowej](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/bundle-analysis/SKILL.md). Oddzielaj dane do badań od stałych limitów i używaj rzeczywistej kompilacji produkcyjnej.

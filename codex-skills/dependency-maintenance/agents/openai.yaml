@@ -1,0 +1,3 @@
+interface:
+  display_name: "Dependency Maintenance"
+  short_description: "Coordinate dependency roles and toolchain compatibility"

@@ -159,6 +159,21 @@ type: skill
 | `/stay-within-limits` | 配額規劃長時間執行的代理程式工作，以避免超出用量限制。 |
 | `/steelman` | 建構有實證支持且最有力的反方論點。 |
 | `/swarm` | 在平行的工作樹作業線中執行彼此獨立的工作。 |
+| `/ai-docs` | 維護 Effect 產生的 AI 文件. |
+| `/bundle-analysis` | 測量建置產物大小並說明包含的相依套件. |
+| `/changesets` | 完成面向使用者的版本說明與破壞性變更說明. |
+| `/ci-maintenance` | 稽核 GitHub Actions 作業及其信任邊界. |
+| `/contribution-triage` | 按照可信的儲存庫政策評估貢獻. |
+| `/dependency-maintenance` | 協調相依套件角色與工具鏈相容性. |
+| `/effect-development` | 查找符合版本的 Effect 開發指南. |
+| `/jsdocs` | 以經過驗證的可執行範例記錄公開 API. |
+| `/migration-guidance` | 維護 Effect 產生的 API 遷移參考. |
+| `/package-development` | 註冊並驗證可發布的工作區套件. |
+| `/performance-analysis` | 測量執行階段與 TypeScript 編譯器的效能回歸. |
+| `/test-development` | 驗證執行階段行為與公開編譯器契約. |
+| `/test-t3-app` | 在隔離狀態下驗證 T3 Code Web 與桌面端. |
+| `/test-t3-mobile` | 透過 Device 面板驗證 T3 Code 原生用戶端. |
+| `/vendored-assets` | 在固定來源並保留授權的前提下更新納入儲存庫的資源. |
 | `/tanstack-intent` | 載入每個 TanStack 套件與版本相符的指引。 |
 | `/tanstack-router` | 套用型別化的 TanStack Router 資料與搜尋模式。 |
 | `/tanstack-table` | 載入官方指引後，套用本機 Table 檢查。 |

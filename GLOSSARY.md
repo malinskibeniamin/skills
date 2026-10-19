@@ -9,6 +9,17 @@ Specialist instructions expanded into an agent's context when invoked or selecte
 Instructions guide behavior; their presence does not prove they were followed.
 _Avoid_: Runtime extension, enforcement
 
+**Skill snapshot**:
+An immutable copy of upstream skill instructions and their supporting resources,
+with source revision, licenses, file digests and executable modes. A snapshot is
+reference material, not an installed runtime or proof of behavior.
+_Avoid_: Live upstream, runnable checkout
+
+**Skill adapter**:
+The local discoverable entrypoint that loads a skill snapshot under host-specific
+scope, tooling and permission rules. Keep adaptations separate from upstream bytes.
+_Avoid_: Upstream fork, permission grant
+
 **Settings hook**:
 An event-triggered command configured by the harness for deterministic checks or
 workflow signals. Separate from a mod's typed middleware hook.

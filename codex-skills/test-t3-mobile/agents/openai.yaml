@@ -1,0 +1,3 @@
+interface:
+  display_name: "Test T3 Mobile"
+  short_description: "Verify T3 Code native clients through its Device panel"
