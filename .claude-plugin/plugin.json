@@ -94,6 +94,7 @@
     "./retro/",
     "./revamp/",
     "./review/",
+    "./security-audit/",
     "./setup-atlassian-workflow/",
     "./setup-routines/",
     "./show-me/",

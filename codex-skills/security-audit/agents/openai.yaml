@@ -1,0 +1,3 @@
+interface:
+  display_name: "Security Audit"
+  short_description: "Review source trust boundaries with Cloudflare's audit workflow"

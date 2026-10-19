@@ -450,6 +450,14 @@ The command discovers every skill recursively, copies the complete source tree u
 
 `/test-audit` is vendored from [openclaw/openclaw](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit) (MIT, notice in `test-audit/CREDITS.md`): an authoring gate `/tdd` routes new tests through, plus audit and subsystem-campaign modes for pruning low-value tests and their test-only production seams.
 
+`/security-audit` vendors the complete
+[Cloudflare security-audit-skill](https://github.com/cloudflare/security-audit-skill)
+package: source-first guidance, domain companions, report schema, and findings and
+coverage validators. The [host adapter](security-audit/SKILL.md) keeps focused
+questions in guidance mode; full audits require explicit delegation consent and
+upstream sandbox controls. No automatic security-review hook is restored.
+[Pinned source and MIT attribution](security-audit/CREDITS.md).
+
 `/effect-ts` and `/effect-v3-to-v4` are vendored from
 [Effect-TS/skills](https://github.com/Effect-TS/skills). They cover repository setup
 and explicitly invoked v3-to-v4 migrations. Upstream revision, refresh sources,
@@ -466,6 +474,6 @@ answer or change; the full starter kit runs `bunx @tanstack/intent@latest instal
 and installs the official Claude/Codex hooks. Lifecycle patterns (TDD red/green, grilling,
 writing-for-agents) are inspired by or vendored from [obra/superpowers](https://github.com/obra/superpowers); this harness adds mechanical enforcement on top.
 
-## Security review: intentionally absent
+## Automatic security review: intentionally absent
 
-Model-driven security review (per-edit security-audit hook, the review security hat, auth-path adversarial triggers) was removed by owner decision on 2026-07-10 after persistent false-positive flagging of legitimate cybersecurity work. Deterministic scanning (`/snyk-ux-security`, Biome) remains. Do not assume security coverage from this harness; restore from git history when model precision improves.
+Automatic model-driven security review (per-edit security-audit hook, the review security hat, auth-path adversarial triggers) was removed by owner decision on 2026-07-10 after persistent false-positive flagging of legitimate cybersecurity work. Deterministic scanning (`/snyk-ux-security`, Biome) remains; `/security-audit` supplies task-scoped guidance and explicitly requested audits, not automatic coverage. Do not assume security coverage from this harness.
