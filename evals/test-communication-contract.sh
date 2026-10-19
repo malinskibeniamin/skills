@@ -36,3 +36,20 @@ run_content_eval "$CONTRACT" 'latency|concurrency' \
   "agent concurrency is not the default answer to latency"
 run_content_eval "$CONTRACT" 'schema|safety' \
   "brevity preserves owning output schemas and safety evidence"
+
+# The PR prompt is the public artifact here, not proof of model compliance.
+PR_CONTRACT="$REPO_ROOT/pr/SKILL.md"
+run_content_eval "$PR_CONTRACT" 'scope, contracts, verification, or rollout risk' \
+  "PR decision context is limited to consequential departures"
+run_content_eval "$PR_CONTRACT" 'prior choice -> new evidence -> current choice -> review consequence' \
+  "PR guidance carries decision changes from existing records to review"
+run_content_eval "$PR_CONTRACT" 'self-contained.*empty.*never invent' \
+  "PR rationale stands alone without empty or invented history"
+run_content_eval "$PR_CONTRACT" 'authorized, redacted.*accessible to reviewers' \
+  "optional session context preserves authorization and reviewer access"
+run_content_eval "$PR_CONTRACT" 'otherwise give safe standalone rationale' \
+  "unavailable session context has a safe prose fallback"
+run_content_eval "$PR_CONTRACT" 'neither correctness nor diligence' \
+  "session activity is not a quality certificate"
+run_content_eval "$PR_CONTRACT" 'current diff and execution evidence' \
+  "session claims remain subject to current implementation evidence"

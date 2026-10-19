@@ -56,6 +56,15 @@ Następnie wybierz najmniejszy widok wyjaśniający sedno; pomiń wizualizację,
 
 Wybierz najmniejszy widok z [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md).
 
+#### Zmienione decyzje [#changed-decisions]
+
+Opisz istotne odstępstwa od zapisanego planu lub kontraktu rezultatu, jeśli zmieniają zakres, kontrakty, weryfikację lub ryzyko wdrożenia. Wykorzystaj istniejące notatki lub mapy intencji:
+poprzedni wybór -> nowe dowody -> obecny wybór -> konsekwencje dla przeglądu.
+Opis PR musi być samowystarczalny; pomijaj puste historie zmian i nigdy nie wymyślaj wcześniejszego planu ani uzgodnień.
+
+Fragmenty sesji są opcjonalnym kontekstem. Używaj tylko istotnych fragmentów, dopuszczonych do udostępnienia, z usuniętymi danymi wrażliwymi i dostępnych dla recenzentów; w przeciwnym razie podaj bezpieczne, samodzielne uzasadnienie.
+Nie rozszerzaj zakresu udostępniania ani uprawnień do wykonywania działań tylko po to, by podać link. Długość sesji lub liczba tur nie dowodzi poprawności ani staranności; sprawdzaj twierdzenia na podstawie bieżącego diffu i dowodów z wykonania.
+
 #### Wskazówki [#guidance]
 
 Umieść wizualizacje obok tekstu, który wspierają. Pokaż tylko kluczowe wywołania, pliki, właściwości, stany i granice.

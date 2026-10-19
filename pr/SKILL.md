@@ -47,6 +47,18 @@ Then pick the smallest view that makes the key point clear; omit a visual that a
 
 Choose the smallest view from [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md).
 
+#### Changed decisions
+
+Surface material departures from a recorded plan or outcome contract when
+scope, contracts, verification, or rollout risk changes. Reuse existing notes or intent maps:
+prior choice -> new evidence -> current choice -> review consequence.
+Keep the PR self-contained; omit empty histories and never invent a prior plan or agreement.
+
+Session excerpts are optional context. Use only relevant,
+authorized, redacted excerpts accessible to reviewers; otherwise give safe standalone rationale.
+Do not widen sharing or execution access just to provide a link. Session length or turn count proves
+neither correctness nor diligence; verify claims against the current diff and execution evidence.
+
 #### Guidance
 
 Place visuals beside their supporting text. Show only load-bearing calls, files, props, states, and boundaries.
