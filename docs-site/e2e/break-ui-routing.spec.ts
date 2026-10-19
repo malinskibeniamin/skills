@@ -14,21 +14,28 @@ for (const appearance of ["desktop-light", "mobile-dark"]) {
       colorScheme: appearance === "desktop-light" ? "light" : "dark",
     });
 
-    for (const workflow of ["diagnosing-bugs", "dogfood", "visual-review"]) {
-      test(`read ${workflow} content stress handoff`, async ({ page }) => {
-        await installScreenshotVoices(page);
-        await page.goto(`/skills/${workflow}`);
-        await expect(
-          page.getByRole("heading", { name: `/${workflow}`, exact: true }),
-        ).toBeVisible();
-        const handoff = page
-          .getByRole("main")
-          .getByText(/Call the Skill tool with [“"]break-ui[”"]/);
-        await expect(handoff).toBeVisible();
-        await stabilizeScreenshotDate(page);
-        await handoff.scrollIntoViewIfNeeded();
-        await expect(page).toHaveScreenshot(`${workflow}-${appearance}.png`);
-      });
+    for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
+      for (const workflow of ["diagnosing-bugs", "dogfood", "visual-review"]) {
+        test(`${locale === "en" ? "" : `${locale}: `}read ${workflow} content stress handoff`, async ({
+          page,
+        }) => {
+          await installScreenshotVoices(page);
+          const prefix = locale === "en" ? "" : `/${locale}`;
+          await page.goto(`${prefix}/skills/${workflow}`);
+          await expect(
+            page.getByRole("heading", { name: `/${workflow}`, exact: true }),
+          ).toBeVisible();
+          const handoff = page
+            .getByRole("main")
+            .getByText(/Skill.*[“"]break-ui[”"]/);
+          await expect(handoff).toBeVisible();
+          await stabilizeScreenshotDate(page);
+          await handoff.scrollIntoViewIfNeeded();
+          await expect(page).toHaveScreenshot(
+            `${locale === "en" ? "" : `${locale}-`}${workflow}-${appearance}.png`,
+          );
+        });
+      }
     }
   });
 }

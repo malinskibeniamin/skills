@@ -26,10 +26,15 @@ type: skill
 | `/accessibility` | 构建无障碍的 React 交互和组件。 |
 | `/agent-watchdog` | 审计并修复其他编码智能体的工作。 |
 | `/aip` | 设计 Google AIP 风格的 protobuf 资源 API。 |
+| `/animate` | 构建和评估有明确目的的网页 UI 动效。 |
+| `/animation-performance` | 诊断动画帧和渲染瓶颈。 |
+| `/animation-vocabulary` | 为动效命名并区分相近动画术语。 |
 | `/ask-ben` | 通过 Ben 的前端技能框架路由工作。 |
+| `/ask-sonner` | 集成和排查 Sonner 通知。 |
 | `/av` | 检查变更是否值得投入时间，并能安全落地。 |
 | `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |
+| `/break-ui` | 使用真实可信的最坏情况数据压力测试 UI。 |
 | `/codebase-design` | 设计具有清晰接口的深层模块。 |
 | `/codex-compat` | 生成与 Codex 钩子和指令的功能对等实现。 |
 | `/codex` | 通过 Codex CLI 委派范围明确的工作。 |
@@ -68,6 +73,7 @@ type: skill
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
 | `/mm` | 在交付前判断一项变更是否值得付出相应成本。 |
+| `/mobile-native` | 修复手机网页的视口、触摸和键盘行为。 |
 | `/ms` | 检查 PR 是否值得投入时间，并带来相应的业务价值。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
 | `/plow-ahead` | 在常规的不确定情况下自主继续推进。 |

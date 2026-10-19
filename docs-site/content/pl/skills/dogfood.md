@@ -54,6 +54,9 @@ Zastosuj każdy właściwy punkt widzenia i co najmniej jedną wiarygodną prób
 
 Preferuj wiarygodne zachowanie użytkownika zamiast arbitralnych przypadków. Obserwuj błąd i odzyskiwanie bezpośrednio.
 
+Ryzyka treści/układu UI: wywołaj narzędzie Skill z "break-ui". Wykorzystuj ponownie dane zgodne ze schematem
+i dowody przy odtwarzaniu oraz w potwierdzeniu; testuj tylko niepokryte przypadki. Walidację niepoprawnych danych sprawdzaj osobno.
+
 ### Napraw
 
 Zaobserwowany defekt oblewa checkpoint. Gdy można go zautomatyzować, dodaj RED test publicznego kontraktu,
