@@ -1,0 +1,66 @@
+diff --git a/src/activity/filter.test.ts b/src/activity/filter.test.ts
+new file mode 100644
+--- /dev/null
++++ b/src/activity/filter.test.ts
+@@ -0,0 +1,27 @@
++import { expect, test } from "vitest";
++import { matchesActivity, type ActivityRecord } from "./filter";
++
++const record: ActivityRecord = {
++  summary: "shared-42 changed service/other-99",
++  actor: { id: "shared-42" },
++  target: { kind: "service", id: "other-99" },
++  rule: { name: "maintainers" },
++};
++
++test("structured filters use their own fields, not unrelated text", () => {
++  expect(matchesActivity(record, { targetId: "shared-42" })).toBe(false);
++  expect(matchesActivity(record, { ruleName: "changed" })).toBe(false);
++  expect(
++    matchesActivity(record, {
++      targetKind: "service",
++      targetId: "other-99",
++      ruleName: "maintainers",
++    }),
++  ).toBe(true);
++});
++
++test("free text is trimmed and case insensitive; empty filters impose no restriction", () => {
++  expect(matchesActivity(record, { text: " CHANGED " })).toBe(true);
++  expect(matchesActivity(record, { text: "missing" })).toBe(false);
++  expect(matchesActivity(record, { targetId: "", text: "" })).toBe(true);
++});
+diff --git a/src/activity/filter.ts b/src/activity/filter.ts
+new file mode 100644
+--- /dev/null
++++ b/src/activity/filter.ts
+@@ -0,0 +1,29 @@
++export type ActivityRecord = {
++  summary: string;
++  actor: { id: string };
++  target: { kind: string; id: string };
++  rule: { name: string };
++};
++
++export type ActivityFilter = {
++  targetKind?: string;
++  targetId?: string;
++  ruleName?: string;
++  text?: string;
++};
++
++export function matchesActivity(
++  record: ActivityRecord,
++  filter: ActivityFilter,
++): boolean {
++  if (filter.targetKind && record.target.kind !== filter.targetKind)
++    return false;
++  if (filter.targetId && record.target.id !== filter.targetId) return false;
++  if (filter.ruleName && record.rule.name !== filter.ruleName) return false;
++  if (
++    filter.text &&
++    !record.summary.toLowerCase().includes(filter.text.trim().toLowerCase())
++  )
++    return false;
++  return true;
++}

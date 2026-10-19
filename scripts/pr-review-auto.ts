@@ -24,6 +24,7 @@ interface Binding {
   seen: Record<string, string>;
   paused: boolean;
   last: string;
+  repairRounds?: number;
 }
 interface State {
   version: 1;
@@ -81,7 +82,11 @@ function isBinding(value: unknown): value is Binding {
     positive(value.pr) &&
     ["codex", "claude"].includes(String(value.agent)) &&
     strings(value.seen) &&
-    typeof value.paused === "boolean"
+    typeof value.paused === "boolean" &&
+    (value.repairRounds === undefined ||
+      (typeof value.repairRounds === "number" &&
+        Number.isInteger(value.repairRounds) &&
+        value.repairRounds >= 0))
   );
 }
 function isState(value: unknown): value is State {
@@ -456,9 +461,7 @@ async function tick(dryRun: boolean) {
         );
         if (!fresh.enabled || !current) continue;
         if (current.paused) {
-          console.log(
-            `${current.repo}#${current.pr}: paused after runner failure; inspect log, then retry`,
-          );
+          console.log(`${current.repo}#${current.pr}: paused; ${current.last}`);
           continue;
         }
         if (
@@ -477,7 +480,10 @@ async function tick(dryRun: boolean) {
         if (!ids.length) continue;
         if (dryRun) {
           console.log(
-            `Would resume ${current.agent} session ${current.session} for ${current.repo}#${current.pr}: ${ids.join(", ")}`,
+            (current.repairRounds ?? 0) >= 3 &&
+              ids.some((id) => id !== "rebase")
+              ? `Would pause ${current.repo}#${current.pr}: review repair limit reached (3)`
+              : `Would resume ${current.agent} session ${current.session} for ${current.repo}#${current.pr}: ${ids.join(", ")}`,
           );
           continue;
         }
@@ -506,6 +512,28 @@ async function tick(dryRun: boolean) {
           beforePr.baseRefOid !== pr.baseRefOid
         )
           continue;
+        if (ids.some((id) => id !== "rebase")) {
+          const limit = (owner.repairRounds ?? 0) >= 3;
+          update((latest) => {
+            const target = latest.bindings.find(
+              (item) =>
+                item.repo === current.repo &&
+                item.pr === current.pr &&
+                item.session === current.session,
+            );
+            if (!target) throw new Error("Review ownership changed");
+            target.repairRounds = (target.repairRounds ?? 0) + (limit ? 0 : 1);
+            if (limit) {
+              target.paused = true;
+              target.last =
+                "Review repair limit reached (3); reassess the approach, then retry explicitly";
+            }
+          });
+          if (limit)
+            throw new Error(
+              "Review repair limit reached (3); reassess the approach, then retry explicitly",
+            );
+        }
         const log = join(home, `run-${key}.log`);
         const args =
           current.agent === "codex"
@@ -750,6 +778,8 @@ async function main() {
     }
     case "retry":
     case "unbind": {
+      if (action === "retry" && Bun.env.PR_REVIEW_AUTO_RUN === "1")
+        throw new Error("Automatic repair cannot reset its own review budget");
       const sid = parseSession(option("--session"));
       update((state) => {
         if (action === "unbind")
@@ -759,8 +789,10 @@ async function main() {
         else
           for (const binding of state.bindings.filter(
             (item) => item.session === sid,
-          ))
+          )) {
             binding.paused = false;
+            binding.repairRounds = 0;
+          }
       });
       break;
     }

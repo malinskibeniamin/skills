@@ -64,12 +64,11 @@ type: skill
 
 ### 6. 完整性验证 [#6-completeness-verification]
 
-声明完成前必须没有未解决的适用且未过期的线程，且不存在陈旧 `CHANGES_REQUESTED`。任何剩余项都回到分类。`pr-feedback-completeness-stop` 钩子会强制此状态。
+声明完成前必须没有未解决的讨论串，包括机器人反馈和定位到过期代码行的讨论串，且不存在陈旧 `CHANGES_REQUESTED`。任何剩余项都回到分类。`pr-feedback-completeness-stop` 钩子会强制此状态。
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
-bash scripts/pr-unresolved-count.sh --include-bots  # 修复自动审查反馈
 ```
 
 第一条命令必须输出 `0`。该封装隐藏仅 GraphQL 可见的线程解决细节。
@@ -81,7 +80,10 @@ bash scripts/pr-unresolved-count.sh --include-bots  # 修复自动审查反馈
 ## 迭代策略 [#iteration-policy]
 
 - AI 自审：行内审查轴获批或为空时停止，最多两轮。
-- 人工、云端或 Copilot 反馈：不设轮次上限。交接前处理每个线程；完整性钩子阻止遗留线程或待处理变更请求。
+- 人工反馈：交接前必须处理每个讨论串，这项义务不设轮次上限。
+- 自动修复派发 3 轮反馈处理后暂停。显式运行 `retry` 前重新评估方案；暂停不代表完成。仅更新基准分支不消耗此预算。
+- 首次完整审查后，只复查新增差异和已有发现。按根因去重；解决已有讨论串，不重复发布同一发现。
+  完整性钩子阻止未解决的讨论串或待处理变更请求。
 
 ## 自动唤醒 [#automatic-wake-up]
 

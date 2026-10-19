@@ -68,12 +68,11 @@ type: skill
 
 ### 6. 完整性驗證 [#6-completeness-verification]
 
-宣告完成前必須沒有未解決的適用且未過期的討論串，且不存在陳舊 `CHANGES_REQUESTED`。任何剩餘項都回到分類。`pr-feedback-completeness-stop` 鉤子會強制此狀態。
+宣告完成前必須沒有未解決的討論串，包括機器人回饋與定位到過期程式碼行的討論串，且不存在陳舊 `CHANGES_REQUESTED`。任何剩餘項都回到分類。`pr-feedback-completeness-stop` 鉤子會強制此狀態。
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
-bash scripts/pr-unresolved-count.sh --include-bots  # 修正自動審查回饋
 ```
 
 第一條命令必須輸出 `0`。該封裝隱藏僅 GraphQL 可見的執行緒解決細節。
@@ -85,7 +84,10 @@ bash scripts/pr-unresolved-count.sh --include-bots  # 修正自動審查回饋
 ## 迭代策略 [#iteration-policy]
 
 - AI 自審：行內審查軸獲批或為空時停止，最多兩輪。
-- 人工、雲端或 Copilot 反饋：不設輪次上限。交接前處理每個執行緒；完整性鉤子阻止遺留執行緒或待處理變更請求。
+- 人工回饋：交接前必須處理每個討論串，這項義務不設輪次上限。
+- 自動修正派送 3 輪回饋處理後暫停。明確執行 `retry` 前重新評估方案；暫停不代表完成。僅更新基準分支不消耗此預算。
+- 首次完整審查後，只複查新增差異與既有發現。依根因去重；解決既有討論串，不重複發布同一發現。
+  完整性鉤子阻止未解決的討論串或待處理變更請求。
 
 ## 自動喚醒 [#automatic-wake-up]
 

@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: evals-${{ github.event_name }}-${{ github.ref }}
@@ -135,6 +136,20 @@ jobs:
       - name: Behavioral hook unit tests
         if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'
         run: bash agent-evals/hook-unit-tests-all.sh
+
+      - name: Observe review effort on existing nightly and manual runs
+        if: runner.os == 'Linux' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REVIEW_REPOSITORY: ${{ github.repository }}
+        run: |
+          bun run review:metrics "$REVIEW_REPOSITORY" 30 > "$RUNNER_TEMP/review-metrics.json"
+          {
+            echo '## Observed review effort (quality guardrails remain unknown)'
+            echo '```json'
+            cat "$RUNNER_TEMP/review-metrics.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: macOS portability suite
         if: runner.os == 'macOS' && steps.macos-scope.outputs.full != 'true'

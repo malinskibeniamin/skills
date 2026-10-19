@@ -26,7 +26,7 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 Przeglądaj HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
 Publikowanie komentarzy wymaga jawnej intencji.
 
-Podczas sprawdzania uwzględnij obowiązujące `CODING_STANDARDS.md` i `CONTRIBUTING.md`, jeśli istnieją. Autoryzowane osie przeglądu uruchamiaj razem na pierwszym planie; zbierz wszystkie raporty.
+Podczas sprawdzania uwzględnij obowiązujące `REVIEW.md`, `CODING_STANDARDS.md` i `CONTRIBUTING.md`, jeśli istnieją. Autoryzowane osie przeglądu uruchamiaj razem na pierwszym planie; zbierz wszystkie raporty.
 
 ## Kontrakt przeglądu [#review-contract]
 

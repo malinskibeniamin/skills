@@ -289,7 +289,7 @@ test("later base advances wake again; current PRs and dry runs never resume", ()
       iteration,
     );
   }
-});
+}, 15_000);
 
 test("failed or malformed base comparisons defer without consuming maintenance", () => {
   const f = fixture();
@@ -308,7 +308,7 @@ test("failed or malformed base comparisons defer without consuming maintenance",
   f.save();
   expect(f.run(["tick"]).code).toBe(0);
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
-});
+}, 15_000);
 
 test("unpublished rebases cannot acknowledge maintenance", () => {
   const f = fixture();
@@ -657,7 +657,7 @@ test("missing provider executable pauses dispatch instead of retrying forever", 
   expect(binding.seen).toEqual({});
 });
 
-test("Stop dispatcher enforces bot findings only in the scoped automatic repair", () => {
+test("scoped Stop dispatcher requires bot findings even without automatic repair", () => {
   const f = fixture();
   const root = join(f.root, "harness");
   const hooks = join(root, ".claude/hooks");
@@ -713,7 +713,7 @@ test("Stop dispatcher enforces bot findings only in the scoped automatic repair"
       env: { ...env, PR_FEEDBACK_INCLUDE_BOTS: includeBots },
       stdin: Buffer.from("{}"),
     });
-  expect(run("0").exitCode).toBe(0);
+  expect(run("0").exitCode).toBe(2);
   const blocked = run("1");
   expect(blocked.exitCode).toBe(2);
   expect(blocked.stderr.toString()).toContain("unresolved review thread");
@@ -724,13 +724,42 @@ test("bot completeness counts later GraphQL pages", () => {
   f.snapshot.laterPage = true;
   f.save();
   const script = new URL("./pr-unresolved-count.sh", import.meta.url).pathname;
-  const result = Bun.spawnSync(["bash", script, "42", "--include-bots"], {
+  const result = Bun.spawnSync(["bash", script, "42"], {
     cwd: f.root,
     env: f.env,
   });
   expect(result.exitCode).toBe(0);
   expect(result.stdout.toString().trim()).toBe("1");
 });
+
+test("automatic feedback pauses after three repairs until explicit reassessment", () => {
+  const f = fixture();
+  f.bind();
+  const event = f.snapshot.comments[0];
+  if (!event) throw new Error("Missing review fixture");
+  for (let round = 0; round < 3; round++) {
+    event.body = `New review round ${round}`;
+    f.save();
+    expect(f.run(["tick"]).code).toBe(0);
+  }
+  event.body = "Another finding";
+  f.save();
+  expect(f.run(["tick", "--dry-run"]).out).toContain("Would pause");
+  expect(f.run(["tick"]).err).toContain("Review repair limit");
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(3);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(true);
+  expect(f.run(["tick"]).out).toContain("Review repair limit");
+  expect(
+    f.run(["retry", "--session", "11111111-1111-4111-8111-111111111111"], "", {
+      PR_REVIEW_AUTO_RUN: "1",
+    }).code,
+  ).toBe(1);
+  expect(
+    f.run(["retry", "--session", "11111111-1111-4111-8111-111111111111"]).code,
+  ).toBe(0);
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(4);
+}, 15_000);
 
 test("automatic completeness fails visibly when GitHub is unavailable", () => {
   const f = fixture();

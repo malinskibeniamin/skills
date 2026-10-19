@@ -67,12 +67,11 @@ Dla zwykłego PR-a wypchnij każdą poprawkę CI lub wynik rebase i wykonaj żą
 
 ### 6. Weryfikacja kompletności [#6-completeness-verification]
 
-Przed deklaracją zakończenia wymagaj zera nierozwiązanych, nieprzestarzałych wątków dotyczących zmian oraz braku nieaktualnego `CHANGES_REQUESTED`. Pozostałości wracają do triage. Hook `pr-feedback-completeness-stop` wymusza ten stan.
+Przed deklaracją zakończenia wymagaj zera nierozwiązanych wątków, także uwag botów i wątków przy nieaktualnych liniach oraz braku nieaktualnego `CHANGES_REQUESTED`. Pozostałości wracają do triage. Hook `pr-feedback-completeness-stop` wymusza ten stan.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
-bash scripts/pr-unresolved-count.sh --include-bots  # naprawa uwag z automatycznego przeglądu
 ```
 
 Pierwsze polecenie musi wypisać `0`. Wrapper ukrywa szczegóły stanu wątków dostępne tylko w GraphQL.
@@ -84,7 +83,10 @@ Opublikuj jeden punkt na przyczynę źródłową i jej rozstrzygnięcie oraz akt
 ## Polityka iteracji [#iteration-policy]
 
 - Samoprzegląd AI: zakończ, gdy oś przeglądu w kodzie jest zatwierdzona lub pusta; najwyżej dwie rundy.
-- Uwagi człowieka, chmury lub Copilot: bez limitu iteracji. Obsłuż każdy wątek przed przekazaniem; hook kompletności blokuje nierozwiązane wątki i oczekujące żądania zmian.
+- Uwagi człowieka: obowiązek rozstrzygnięcia każdego wątku przed przekazaniem nie ma limitu iteracji.
+- Automatyczna naprawa zatrzymuje się po 3 rundach obsługi uwag. Przed jawnym `retry` ponownie oceń podejście; zatrzymanie nie oznacza zakończenia. Same aktualizacje gałęzi bazowej nie zużywają tego budżetu.
+- Po pierwszym pełnym przeglądzie sprawdzaj nowy diff i wcześniejsze ustalenia. Łącz uwagi według przyczyny źródłowej; rozwiązuj istniejący wątek zamiast publikować go ponownie.
+  Hook kompletności blokuje nierozwiązane wątki i oczekujące żądania zmian.
 
 ## Automatyczne wznowienie [#automatic-wake-up]
 
