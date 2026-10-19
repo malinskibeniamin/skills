@@ -43,12 +43,8 @@ requested Sol loop, read [REFERENCE.md](REFERENCE.md).
 
 ## Publish and babysit
 
-Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication, then continue past
-its single CI snapshot. Confirm the committed scope and remote head match local HEAD.
-
-Run the [consumer hosted checkpoint](../shared/review-enforcement.md) before claiming
-readiness. Restore missing prerequisites in the consuming repo; preserve its native
-check names, stronger protections, and approval count. Unknown policy is not green.
+Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication; require a fresh [consumer hosted checkpoint](../shared/review-enforcement.md) for readiness.
+Continue past its single CI snapshot; confirm committed scope and remote HEAD match local HEAD.
 
 - Watch the current PR's checks and requested reviews in this foreground session.
   Pending means continue waiting, not done. Missing CI is not green CI; resolve

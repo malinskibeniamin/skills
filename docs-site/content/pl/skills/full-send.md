@@ -43,9 +43,7 @@ Dla full stop, kontroli stanu na serwerze, powiadomienia o blokadzie, wznowienia
 
 ## Opublikuj i pilnuj [#publish-and-babysit]
 
-Publikuj przez [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md), następnie kontynuuj po pojedynczym sprawdzeniu CI. Potwierdź zakres commitów i zgodność zdalnego head z lokalnym HEAD.
-
-Przed ogłoszeniem gotowości uruchom [kontrolę bramek repozytorium korzystającego z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md). Przywróć brakujące warunki wstępne w tym repozytorium; zachowaj jego nazwy kontroli, silniejsze zabezpieczenia i wymaganą liczbę akceptacji. Nieznana polityka nie oznacza zielonego wyniku.
+Publikuj przez [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md); gotowość wymaga aktualnej [kontroli bramek repozytorium korzystającego z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md). Kontynuuj po pojedynczym sprawdzeniu CI; potwierdź zakres commitów i zgodność zdalnego HEAD z lokalnym HEAD.
 
 - Obserwuj kontrole bieżącego PR-a i zamówione przeglądy w tej aktywnej sesji. Stan oczekujący oznacza dalsze czekanie, nie koniec. Brak CI nie oznacza zielonego CI; ustal wymagane kontrole z polityki repozytorium zamiast wymyślać dowód sukcesu.
 - Sprawdź logi nieudanego zadania, odtwórz problem, napraw, zweryfikuj, wykonaj commit/push i obserwuj nowy head. Powtarzaj awarię infrastruktury tylko na podstawie dowodów; niezmienne powtarzające się awarie wymagają diagnozy, nie nieskończonych ponowień. Nie osłabiaj bramek dla zielonego wyniku.
