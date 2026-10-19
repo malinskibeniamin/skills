@@ -11,7 +11,7 @@ Before editing:
 
 - **Objective** -- high-level end state.
 - **Guardrails** -- non-inferable constraints, reserved decisions, irreversible boundaries.
-- **Verification** -- observable proof of the outcome.
+- **Verification** -- checks or observable behavior proving the outcome.
 - **Stop** -- requested endpoint and true user blockers.
 
 State contract; build/fix/implementation: continue immediately.
@@ -48,4 +48,4 @@ Keep evidence/pause triggers in ignored `.context/implementation-notes.md`.
 
 ## Completion
 
-Meet exit criteria at the requested endpoint. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for requested Git delivery.
+Stop at the requested endpoint when every exit criterion passes. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for Git delivery.
