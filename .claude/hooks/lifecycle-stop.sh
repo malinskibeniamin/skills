@@ -127,16 +127,41 @@ if [ -z "$pr_number" ]; then
   hook_stop_block "No PR for '$branch'. Create one NOW: gh pr create --fill — then retry."
 fi
 
-# ── Step 3 & 4: CI status ───────────────────────────────────────
+# Ship owns readiness, not merely a CI snapshot. Resolve the consumer from origin;
+# the checker lives in the installed plugin, while git/gh stay in the consumer cwd.
+if [ "$endpoint" = "ship" ]; then
+  command -v bun >/dev/null 2>&1 || hook_stop_block "Ship verification needs Bun; restore the runtime before claiming readiness."
+  origin=$(git config --get remote.origin.url)
+  case "$origin" in
+    https://github.com/*) repo=${origin#https://github.com/} ;;
+    git@github.com:*) repo=${origin#git@github.com:} ;;
+    *) hook_stop_block "Ship verification has no supported hosted policy reader for this origin. Use the provider's native protections and report the verification limit; do not claim hosted-gates-pass." ;;
+  esac
+  repo=${repo%.git}
+  if ! [[ "$repo" =~ ^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$ ]]; then
+    hook_stop_block "Cannot identify the consuming GitHub repository from origin. Restore its identity before claiming readiness."
+  fi
+  base=$(gh pr view "$pr_number" --repo "github.com/$repo" --json baseRefOid --jq .baseRefOid 2>/dev/null) || base=""
+  checker="$(dirname "$0")/../../scripts/full-send-check.ts"
+  [ -f "$checker" ] || hook_stop_block "Installed review verifier is missing; repair the harness installation before claiming readiness."
+  receipt=""; status=0
+  receipt=$(bun --no-install "$checker" --repo "$repo" --pr "$pr_number" \
+    --head "$(git rev-parse HEAD)" --base "$base") || status=$?
+  if [ "$status" -ne 0 ]; then
+    reasons=$(printf '%s' "$receipt" | jq -r '.reasons | join("; ")' 2>/dev/null) || reasons="Hosted verification unavailable"
+    reasons=${reasons:-Hosted verification unavailable}
+    hook_stop_block "The explicit ship loop has not verified PR #$pr_number: $reasons. Follow shared/review-enforcement.md; restore prerequisites or report a genuine blocker. Preserve approval policy and required checks."
+  fi
+  exit 0
+fi
+
+# ── PR-only CI snapshot; ship readiness was verified above ──────
 
 pr_data=$(gh pr view "$pr_number" --json statusCheckRollup 2>/dev/null || true)
 ci_states=$(echo "$pr_data" | jq -r '.statusCheckRollup[]?.state // empty' 2>/dev/null || true)
 
 if [ -n "$ci_states" ]; then
   if echo "$ci_states" | grep -qi "FAILURE\|ERROR"; then
-    if [ "$endpoint" = "ship" ]; then
-      hook_stop_block "CI FAILING on PR #$pr_number. Read failures with: gh pr checks $pr_number — fix, commit, push, and re-monitor until green."
-    fi
     hook_warn "CI snapshot is failing on PR #$pr_number. Requested PR endpoint is complete; report failures without starting an unrequested fix loop."
   fi
 
@@ -144,11 +169,7 @@ if [ -n "$ci_states" ]; then
   # warning instead of hostage-holding an ordinary PR request.
   if echo "$ci_states" | grep -qi "PENDING\|EXPECTED\|QUEUED\|IN_PROGRESS"; then
     if ! echo "$ci_states" | grep -qi "SUCCESS"; then
-      if [ "$endpoint" = "ship" ]; then
-        hook_stop_block "CI still running on PR #$pr_number. Continue the explicit ship loop with: gh pr checks $pr_number --watch."
-      else
-        hook_warn "CI snapshot is pending on PR #$pr_number. Report it and stop; do not leave a monitor running."
-      fi
+      hook_warn "CI snapshot is pending on PR #$pr_number. Report it and stop; do not leave a monitor running."
     fi
   fi
 fi

@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from "bun:test";
+import { afterEach, expect, setDefaultTimeout, test } from "bun:test";
 import {
   mkdtempSync,
   readFileSync,
@@ -10,6 +10,9 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+
+// Real git and CLI subprocesses exceed Bun's 5-second default on loaded hosts.
+setDefaultTimeout(15_000);
 
 const entry = new URL("./pr-review-auto.ts", import.meta.url).pathname;
 const directories: string[] = [];

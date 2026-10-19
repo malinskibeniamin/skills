@@ -1,13 +1,17 @@
-import { afterEach, expect, test } from "bun:test";
+import { afterEach, expect, setDefaultTimeout, test } from "bun:test";
 import {
   mkdtempSync,
   mkdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
+  copyFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+
+// Real git repos and CLI subprocesses: keep a bounded integration deadline under load.
+setDefaultTimeout(15_000);
 
 const entry = new URL("./full-send-check.ts", import.meta.url).pathname;
 const directories: string[] = [];
@@ -16,7 +20,7 @@ afterEach(() => {
     rmSync(directory, { recursive: true, force: true });
 });
 
-function fixture() {
+function fixture(dependencyReview = false) {
   const root = mkdtempSync(join(tmpdir(), "full-send-check-"));
   directories.push(root);
   const worktree = join(root, "worktree");
@@ -31,6 +35,14 @@ function fixture() {
   git("init", "-b", "ben-malinski/T-1/feature");
   git("config", "user.name", "Fixture");
   git("config", "user.email", "fixture@example.com");
+  if (dependencyReview) {
+    mkdirSync(join(worktree, ".github/workflows"), { recursive: true });
+    writeFileSync(
+      join(worktree, ".github/workflows/security.yml"),
+      "name: Consumer dependencies\non: pull_request\njobs:\n  audit:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/dependency-review-action@v5\n",
+    );
+    git("add", ".github");
+  }
   git("commit", "--allow-empty", "-m", "feat(test): initial");
   git("init", "--bare", join(root, "remote.git"));
   git(
@@ -62,6 +74,20 @@ function fixture() {
         pageInfo: { hasNextPage: false, endCursor: "last" },
       },
     ],
+    protection: {
+      enforce_admins: { enabled: true },
+      required_status_checks: { strict: true, contexts: ["test"] },
+      required_pull_request_reviews: {
+        required_approving_review_count: 1,
+        dismiss_stale_reviews: true,
+      },
+      required_conversation_resolution: { enabled: true },
+      allow_force_pushes: { enabled: false },
+      allow_deletions: { enabled: false },
+    } as Record<string, unknown> | null,
+    rules: [] as Record<string, unknown>[],
+    rulesets: {} as Record<string, Record<string, unknown>>,
+    dependencyGraphUnavailable: false,
     failGh: false,
     absentChecks: false,
     changeOnRead: "",
@@ -81,7 +107,7 @@ appendFileSync(process.env.CALLS, JSON.stringify(args) + "\\n");
 const d = JSON.parse(readFileSync(process.env.DATA, "utf8"));
 if (d.failGh) process.exit(1);
 if (args[0] === "pr" && args[1] === "view") {
-  console.log(JSON.stringify(d.pr));
+  console.log(args.includes("--jq") ? d.pr.baseRefOid : JSON.stringify(d.pr));
   d.viewReads += 1;
   if (d.detachOnRead === d.viewReads) Bun.spawnSync(["git", "switch", "--detach"]);
   writeFileSync(process.env.DATA, JSON.stringify(d));
@@ -92,19 +118,32 @@ if (args[0] === "pr" && args[1] === "view") {
   console.log(JSON.stringify(checks));
   if (checks.some(c => c.bucket === "fail")) process.exit(1);
   if (checks.some(c => c.bucket === "pending")) process.exit(8);
+} else if (args[0] === "pr" && args[1] === "list") {
+  console.log("42");
 } else if (args[0] === "api" && args[1] === "graphql") {
   const cursor = args.find(a => a.startsWith("cursor="));
   const page = cursor ? d.pages[1] : d.pages[0];
   console.log(JSON.stringify({ data: { repository: { pullRequest: { reviewThreads: page } } } }));
+} else if (args[0] === "api" && args[1].includes("/rules/branches/")) {
+  console.log(JSON.stringify([d.rules]));
+} else if (args[0] === "api" && args[1].includes("/rulesets/")) {
+  console.log(JSON.stringify(d.rulesets[args[1].split("/").at(-1)]));
+} else if (args[0] === "api" && args[1].endsWith("/protection")) {
+  if (!d.protection) { console.log(JSON.stringify({ status: "404", message: "Branch not protected" })); process.exit(1); }
+  console.log(JSON.stringify(d.protection));
+} else if (args[0] === "api" && args[1].includes("/dependency-graph/compare/")) {
+  if (d.dependencyGraphUnavailable) { console.log(JSON.stringify({ status: "403", message: "Forbidden" })); process.exit(1); }
+  console.log("[]");
 } else { process.exit(2); }
 `,
     { mode: 0o755 },
   );
-  const run = () => {
+  const run = (checker = entry, cwd = worktree) => {
     const result = Bun.spawnSync(
       [
         process.execPath,
-        entry,
+        "--no-install",
+        checker,
         "--repo",
         "example/project",
         "--pr",
@@ -115,7 +154,7 @@ if (args[0] === "pr" && args[1] === "view") {
         head,
       ],
       {
-        cwd: worktree,
+        cwd,
         env: {
           ...Bun.env,
           PATH: `${bin}:${Bun.env.PATH}`,
@@ -126,14 +165,51 @@ if (args[0] === "pr" && args[1] === "view") {
     );
     return {
       code: result.exitCode,
-      receipt: JSON.parse(result.stdout.toString()) as {
+      receipt: (result.stdout.length
+        ? JSON.parse(result.stdout.toString())
+        : {
+            status: "unavailable",
+            reasons: [result.stderr.toString()],
+          }) as {
         status: string;
         reasons: string[];
         head?: string;
       },
     };
   };
-  return { git, run, snapshot, save, calls, worktree, head };
+  const runHook = (endpoint: string) => {
+    const sid = `consumer-${root.split("/").at(-1)}`;
+    const session = join("/tmp", `hook-session-${sid}`);
+    directories.push(session);
+    mkdirSync(session, { recursive: true });
+    writeFileSync(join(session, "task-endpoint"), endpoint);
+    const result = Bun.spawnSync(
+      [
+        "bash",
+        new URL("../.claude/hooks/lifecycle-stop.sh", import.meta.url).pathname,
+      ],
+      {
+        cwd: worktree,
+        env: {
+          ...Bun.env,
+          PATH: `${bin}:${Bun.env.PATH}`,
+          DATA: data,
+          CALLS: calls,
+          CLAUDE_SESSION_ID: sid,
+          HOOK_METRICS_DISABLED: "1",
+        },
+        stdin: Buffer.from(
+          JSON.stringify({
+            session_id: sid,
+            last_assistant_message:
+              "Intent: deliver | Impact: tested\n🟢 done — checks pass",
+          }),
+        ),
+      },
+    );
+    return { code: result.exitCode, error: result.stderr.toString() };
+  };
+  return { git, run, runHook, snapshot, save, calls, worktree, head };
 }
 
 test("observes a published candidate without performing any hosted mutation", () => {
@@ -153,7 +229,9 @@ test("observes a published candidate without performing any hosted mutation", ()
     calls.every(
       (args) =>
         (args[0] === "pr" && ["view", "checks"].includes(args[1] ?? "")) ||
-        (args[0] === "api" && args[1] === "graphql"),
+        (args[0] === "api" &&
+          !args.includes("--method") &&
+          !args.includes("-X")),
     ),
   ).toBe(true);
 });
@@ -344,4 +422,200 @@ test("incomplete or cyclic pagination cannot produce a green receipt", () => {
       reasons: ["Incomplete thread pagination"],
     }),
   });
+});
+
+test("a green consuming PR cannot be ready without hosted review protections", () => {
+  const f = fixture();
+  f.snapshot.protection = null;
+  f.save();
+  expect(f.run()).toEqual({
+    code: 2,
+    receipt: expect.objectContaining({
+      status: "blocked",
+      reasons: expect.arrayContaining([
+        "review-policy:required-checks-missing",
+      ]),
+    }),
+  });
+});
+
+test("a declared required check absent from the observed checks cannot silently pass", () => {
+  const f = fixture();
+  if (!f.snapshot.protection) throw new Error("Missing fixture protection");
+  f.snapshot.protection.required_status_checks = {
+    strict: true,
+    contexts: ["test", "consumer-build"],
+  };
+  f.save();
+  expect(f.run()).toEqual({
+    code: 1,
+    receipt: expect.objectContaining({
+      reasons: ["required-check-not-observed:consumer-build"],
+    }),
+  });
+});
+
+test("the shipped Stop hook rejects a green but unprotected consuming repo", () => {
+  const f = fixture();
+  f.snapshot.protection = null;
+  f.save();
+  expect(f.runHook("ship")).toEqual({
+    code: 2,
+    error: expect.stringContaining("review-policy:required-checks-missing"),
+  });
+});
+
+test("the shipped Stop hook allows protected consumers and preserves the PR-only endpoint", () => {
+  const f = fixture();
+  expect(f.runHook("ship").code).toBe(0);
+  f.snapshot.protection = null;
+  f.snapshot.checks = [{ name: "test", bucket: "pending", state: "PENDING" }];
+  f.save();
+  expect(f.runHook("ship").code).toBe(2);
+  expect(f.runHook("pr").code).toBe(0);
+});
+
+test("zero required approvals does not invent an independent reviewer", () => {
+  const f = fixture();
+  if (!f.snapshot.protection) throw new Error("Missing fixture protection");
+  f.snapshot.protection.required_pull_request_reviews = {
+    required_approving_review_count: 0,
+    dismiss_stale_reviews: false,
+  };
+  f.snapshot.pr.reviewDecision = "";
+  f.save();
+  expect(f.run().code).toBe(0);
+  f.snapshot.protection.required_pull_request_reviews = {
+    required_approving_review_count: 2,
+    dismiss_stale_reviews: true,
+  };
+  f.save();
+  expect(f.run()).toEqual({
+    code: 1,
+    receipt: expect.objectContaining({
+      reasons: ["reviews-pending-or-policy-unknown"],
+    }),
+  });
+});
+
+for (const [field, value, reason] of [
+  ["enforce_admins", { enabled: false }, "required-checks-missing"],
+  [
+    "required_status_checks",
+    { strict: false, contexts: ["consumer-build"] },
+    "strict-base-or-queue-missing",
+  ],
+  [
+    "required_conversation_resolution",
+    { enabled: false },
+    "thread-resolution-not-enforced",
+  ],
+  [
+    "required_pull_request_reviews",
+    { required_approving_review_count: 2, dismiss_stale_reviews: false },
+    "stale-approvals-not-dismissed",
+  ],
+  ["allow_force_pushes", { enabled: true }, "force-pushes-not-blocked"],
+  ["allow_deletions", { enabled: true }, "branch-deletion-not-blocked"],
+] as const) {
+  test(`consumer policy blocks ${reason} without rewriting it`, () => {
+    const f = fixture();
+    if (!f.snapshot.protection) throw new Error("Missing fixture protection");
+    f.snapshot.protection[field] = value;
+    f.save();
+    expect(f.run()).toEqual({
+      code: 2,
+      receipt: expect.objectContaining({
+        reasons: expect.arrayContaining([`review-policy:${reason}`]),
+      }),
+    });
+  });
+}
+
+test("native rulesets and merge queues satisfy the same consumer contract without classic protection", () => {
+  const f = fixture();
+  f.snapshot.protection = null;
+  f.snapshot.rules = [
+    {
+      type: "required_status_checks",
+      ruleset_id: 9,
+      parameters: {
+        strict_required_status_checks_policy: false,
+        required_status_checks: [{ context: "test" }],
+      },
+    },
+    {
+      type: "pull_request",
+      ruleset_id: 9,
+      parameters: {
+        required_approving_review_count: 1,
+        dismiss_stale_reviews_on_push: true,
+        required_review_thread_resolution: true,
+      },
+    },
+    ...["merge_queue", "non_fast_forward", "deletion"].map((type) => ({
+      type,
+      ruleset_id: 9,
+    })),
+  ];
+  f.snapshot.rulesets["9"] = { enforcement: "active", bypass_actors: [] };
+  f.snapshot.pr.baseRefName = "release/stable";
+  f.save();
+  expect(f.run().code).toBe(0);
+  const calls = readFileSync(f.calls, "utf8");
+  expect(calls).toContain("rules/branches/release%2Fstable");
+  f.snapshot.rulesets["9"] = {
+    enforcement: "active",
+    bypass_actors: [
+      { actor_type: "RepositoryRole", actor_id: 5, bypass_mode: "always" },
+    ],
+  };
+  f.save();
+  expect(f.run().code).toBe(2);
+  f.snapshot.rulesets["9"] = { enforcement: "active" };
+  f.save();
+  expect(f.run().code).toBe(2);
+});
+
+test("a consuming dependency-review workflow requires a working dependency-graph comparison", () => {
+  const f = fixture(true);
+  f.snapshot.dependencyGraphUnavailable = true;
+  f.save();
+  expect(f.run()).toEqual({
+    code: 2,
+    receipt: expect.objectContaining({
+      reasons: [
+        `Review policy unavailable: repos/example/project/dependency-graph/compare/${f.head}...${f.head}`,
+      ],
+    }),
+  });
+  f.snapshot.dependencyGraphUnavailable = false;
+  f.save();
+  expect(f.run().code).toBe(0);
+});
+
+test("an installed verifier runs without this repository's node_modules or automatic package installation", () => {
+  const f = fixture();
+  const plugin = join(f.worktree, "..", "installed-plugin");
+  mkdirSync(plugin);
+  for (const file of [
+    "full-send-check.ts",
+    "review-policy.ts",
+    "github-evidence.ts",
+  ]) {
+    copyFileSync(new URL(`./${file}`, import.meta.url), join(plugin, file));
+  }
+  expect(f.run(join(plugin, "full-send-check.ts"))).toEqual({
+    code: 0,
+    receipt: expect.objectContaining({ status: "hosted-gates-pass" }),
+  });
+});
+
+test("consumer security prerequisites are checked from worktree subdirectories", () => {
+  const f = fixture(true);
+  const nested = join(f.worktree, "packages");
+  mkdirSync(nested);
+  f.snapshot.dependencyGraphUnavailable = true;
+  f.save();
+  expect(f.run(entry, nested).code).toBe(2);
 });

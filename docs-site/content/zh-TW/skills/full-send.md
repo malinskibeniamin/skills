@@ -1,8 +1,15 @@
 ---
 description: 負責修復、驗證、CI 和審查跟進，直到達到已授權的終點。用於 full send；full stop 或 --no-merge 保留人工合併決定。
-related: ["/skills/development-lifecycle", "/skills/tdd", "/skills/review"]
-search: {"boost": 1, "keywords": ["full send"]}
-sidebar: {"label": "/full-send"}
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - full send
+sidebar:
+  label: /full-send
 title: /full-send
 type: skill
 ---
@@ -34,6 +41,8 @@ type: skill
 ## 發布並跟進 [#publish-and-babysit]
 
 透過 [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md) 發布，然後繼續執行，而不止於一次 CI 快照。確認提交範圍及遠端 head 與本機 HEAD 一致。
+
+宣告已就緒前，執行[使用端儲存庫的託管檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。在使用端儲存庫中恢復缺少的前置條件；保留其原有檢查名稱、更嚴格的保護政策與核准數量。未知政策不代表檢查通過。
 
 - 在目前前景工作階段中監控此 PR 的檢查與已請求的審查。等待中代表繼續等待，不是完成。缺少 CI 不等於 CI 通過；依儲存庫政策確定必要檢查，不要編造全綠證明。
 - 查看失敗工作的紀錄，重現、修復、驗證、commit、push，然後監控新 head。僅在有證據時重試基礎設施故障；重複且不變的失敗需要診斷，不是無限重跑。不要為變綠而削弱關卡。

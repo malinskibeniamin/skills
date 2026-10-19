@@ -1,5 +1,10 @@
 # Review gates
 
+These settings belong to this repository. Installed consumers use the shared
+[review-enforcement contract](../shared/review-enforcement.md) and shipped lifecycle
+hook to verify their own hosted protections and security prerequisites. Installing
+the plugin does not copy this workflow/payload or mutate another repository's policy.
+
 The hosted `main` protection requires the existing Linux, macOS, and render checks
 from GitHub Actions, an up-to-date branch, and resolved conversations. Admins have
 the same gates. Force pushes and branch deletion are disabled.

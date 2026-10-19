@@ -46,6 +46,10 @@ requested Sol loop, read [REFERENCE.md](REFERENCE.md).
 Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication, then continue past
 its single CI snapshot. Confirm the committed scope and remote head match local HEAD.
 
+Run the [consumer hosted checkpoint](../shared/review-enforcement.md) before claiming
+readiness. Restore missing prerequisites in the consuming repo; preserve its native
+check names, stronger protections, and approval count. Unknown policy is not green.
+
 - Watch the current PR's checks and requested reviews in this foreground session.
   Pending means continue waiting, not done. Missing CI is not green CI; resolve
   required checks from repository policy rather than inventing an all-green receipt.
