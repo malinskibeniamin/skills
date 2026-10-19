@@ -148,6 +148,7 @@ type: skill
 | `/retro` | 對一次程式開發工作階段進行回顧。 |
 | `/revamp` | 透過以基準為依據的轉換執行大型重寫。 |
 | `/review` | 使用由實證觸發的專業角色審查差異。 |
+| `/security-audit` | 以固定版本的 Cloudflare 稽核技能指引安全問題與審查。 |
 | `/setup-atlassian-workflow` | 設定可選用的 Jira 與 Atlassian 工作流程。 |
 | `/setup-routines` | 設定自動化的 Claude Code 維護例行作業。 |
 | `/show-me` | 使用精簡的視覺成品解釋目前的主題。 |

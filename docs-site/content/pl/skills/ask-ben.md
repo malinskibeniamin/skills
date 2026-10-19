@@ -148,6 +148,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/retro` | Retrospektywa sesji programistycznej. |
 | `/revamp` | Przeprowadzanie dużej przebudowy z wykorzystaniem translacji opartej na stanie bazowym. |
 | `/review` | Przeglądanie zmian z użyciem specjalistycznych perspektyw dobieranych na podstawie dowodów. |
+| `/security-audit` | Kierowanie pytaniami i przeglądami bezpieczeństwa do przypiętej umiejętności audytu Cloudflare. |
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |
 | `/setup-routines` | Konfigurowanie automatycznych procedur utrzymaniowych Claude Code. |
 | `/show-me` | Wyjaśnianie bieżącego tematu za pomocą zwięzłych artefaktów wizualnych. |
