@@ -148,6 +148,7 @@ type: skill
 | `/retro` | 对一次编码会话进行复盘。 |
 | `/revamp` | 通过基线驱动的转换执行大规模重写。 |
 | `/review` | 使用由证据触发的专家视角审查差异。 |
+| `/security-audit` | 将安全问题和审查交由固定版本的 Cloudflare 审计技能指导。 |
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |

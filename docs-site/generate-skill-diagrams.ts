@@ -690,6 +690,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Prioritized findings",
     ],
   },
+  "security-audit": {
+    kind: "evidence-funnel",
+    nodes: [
+      "Map source + boundaries",
+      "Hunt scoped candidates",
+      "Validate + verify independently",
+      "Validated records + report",
+    ],
+  },
   "setup-atlassian-workflow": {
     actors: ["Repository", "Atlassian CLI", "Jira"],
     kind: "sequence",

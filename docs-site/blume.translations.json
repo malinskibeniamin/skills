@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "15d6a5aecf7ca5be",
-      "zh-CN": "15d6a5aecf7ca5be",
-      "zh-TW": "15d6a5aecf7ca5be"
+      "pl": "bf14b9a28e8ce4dd",
+      "zh-CN": "bf14b9a28e8ce4dd",
+      "zh-TW": "bf14b9a28e8ce4dd"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "c09775ead85b05d2",
-      "zh-CN": "c09775ead85b05d2",
-      "zh-TW": "c09775ead85b05d2"
+      "pl": "f1b33086d1c047c3",
+      "zh-CN": "f1b33086d1c047c3",
+      "zh-TW": "f1b33086d1c047c3"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -379,6 +379,11 @@
       "pl": "da425f95ba0f7a6a",
       "zh-CN": "da425f95ba0f7a6a",
       "zh-TW": "da425f95ba0f7a6a"
+    },
+    "content/skills/security-audit.md": {
+      "pl": "89121c75ade5709b",
+      "zh-CN": "89121c75ade5709b",
+      "zh-TW": "89121c75ade5709b"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "fc957e8f7398dbcc",

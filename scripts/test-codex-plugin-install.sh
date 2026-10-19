@@ -117,6 +117,7 @@ installed_skill_count="$(
 python3 "$installed_path/scripts/vendor-poteto.py" --check
 python3 "$installed_path/scripts/vendor-poteto.py" --model-rule >"$test_root/pstack-models.mdc"
 bash "$installed_path/scripts/generate-skill-catalog.sh" --check
+bash "$installed_path/evals/run.sh" security-audit-vendored-skill
 
 for skill in development-lifecycle tdd review; do
   [ -f "$installed_path/codex-skills/$skill/SKILL.md" ] ||

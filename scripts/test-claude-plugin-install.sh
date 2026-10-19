@@ -176,6 +176,7 @@ done < <(jq -r '.skills[]' "$manifest")
 
 # Check upstream bytes and every adapter dependency inside the actual plugin cache.
 python3 "$installed_path/scripts/vendor-poteto.py" --check
+bash "$installed_path/evals/run.sh" security-audit-vendored-skill
 bash "$installed_path/scripts/generate-skill-catalog.sh" --check
 
 hooks_manifest="$installed_path/hooks/hooks.json"

@@ -125,6 +125,7 @@
 | `/retro` | Conduct a retrospective on a coding session. |
 | `/revamp` | Run a large rewrite with baseline-driven translation. |
 | `/review` | Review a diff with evidence-triggered specialist hats. |
+| `/security-audit` | Review source trust boundaries with Cloudflare's audit workflow. |
 | `/setup-atlassian-workflow` | Configure opt-in Jira and Atlassian workflows. |
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
