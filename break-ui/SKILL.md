@@ -1,6 +1,6 @@
 ---
 name: break-ui
-description: "Stress-test a component with realistic worst-case data, narrow containers, zoom, Unicode, empty states, and large collections. Use for explicit UI edge-case or break-it requests."
+description: "Stress-test UI data/layout: long text, Unicode, zoom, narrow containers, empty states, and large collections. Use during diagnosis, dogfood, visual review, or explicit break-it requests."
 ---
 
 Test the real component against unkind but valid data. Adapted from Emil Kowalski;

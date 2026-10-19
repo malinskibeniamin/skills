@@ -4,14 +4,14 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 ---
 
 # Diagnosing Bugs
-Discipline for hard bugs. Skip a phase only with reason. Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and ADRs; for third-party, API, or version drift, Call the Skill tool with "read-the-damn-docs" before ranking hypotheses.
+Skip a phase only with reason. Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and ADRs; for third-party, API, or version drift, Call the Skill tool with "read-the-damn-docs" before ranking hypotheses.
 Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Redact
 Replace every secret with `<REDACTED>`. Keep credentials in environment variables; quote only signal-bearing lines. Artifacts may contain auth headers. If redaction hides evidence, ask for a safer source.
 
 ## Phase 1 -- Build a feedback loop
-**The feedback loop is the skill.** Build a deterministic, agent-runnable pass/fail loop that goes red on the user's exact bug. Read code to construct it, not to invent unsupported theories.
+**The feedback loop is the skill.** Build a deterministic, agent-runnable pass/fail loop for the exact bug. Read code to construct it, not invent theories.
 
 ### Strategies, roughly in order
 1. **Failing test** at the highest seam that reaches the bug: unit, integration, or E2E.
@@ -25,16 +25,17 @@ Replace every secret with `<REDACTED>`. Keep credentials in environment variable
 9. **Differential loop** comparing old/new versions or configurations on the same input.
 10. **HITL script** from `scripts/hitl-loop.template.sh` only when a human must act.
 
-### Tighten the loop
-Treat the loop as a product:
+UI content/layout failures: Call the Skill tool with "break-ui" for schema-valid fixtures.
+Pin the failing fixture through the real component into this loop; retain original input for post-fix replay.
 
+### Tighten the loop
 - Make it faster by caching setup and skipping unrelated initialization.
 - Make the signal sharper by asserting the exact symptom, not merely "did not crash."
 - Make it deterministic by pinning time, seeds, filesystem state, and network inputs.
 
 For nondeterministic bugs, raise the reproduction rate: repeat under controlled stress, parallelize, and narrow timing windows until the rate distinguishes hypotheses.
 
-If no loop is possible, stop, list attempts, and request the missing environment, redacted artifact, or permission for safe temporary instrumentation.
+Without a loop, stop, list attempts, and request the missing environment, redacted artifact, or safe temporary instrumentation permission.
 Do not proceed to hypothesise without a loop.
 
 ### Completion criterion: a tight loop that goes red
@@ -55,10 +56,9 @@ Run the loop; Call the Skill tool with "dogfood" at the reporter's real entrypoi
 - It reproduces across multiple runs, or often enough to debug.
 - It captures the exact symptom Phase 5 must disprove.
 
-Shrink the red reproduction by removing inputs, callers, configuration, data, and steps one
-at a time, rerunning after every cut. Keep only what is necessary for the failure and later
-regression test. Finish when every remaining element is load-bearing: removing any one makes
-the loop green. Do not proceed until the bug is reproduced and minimised.
+Minimise inputs, callers, configuration, data, and steps one at a time; rerun after each cut.
+Finish when every remaining element is load-bearing: removing any one makes the loop green.
+Retain this reproduction for the regression test; only then proceed.
 
 ## Phase 3 -- Hypothesise
 Generate 3-5 ranked, falsifiable hypotheses before testing; one hypothesis anchors on the
