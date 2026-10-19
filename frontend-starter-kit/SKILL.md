@@ -5,11 +5,11 @@ disable-model-invocation: true
 argument-hint: "[profile: full | minimal | redpanda | <tool name>]"
 ---
 
-One skill owns bootstrap. Lazily read only requested `references/<tool>/README.md` plus linked setup/reference. Steps are idempotent. Plugin hook copies are no-ops. Bare repos need export-harness copies.
+Bootstrap idempotently. Read only requested `references/<tool>/README.md` and linked guides. Hook copies are no-ops in plugins; bare repos need export-harness copies.
 
 ## Profiles
 
-- **full** default: ordered canonical stack from [REFERENCE.md](REFERENCE.md): React 19, Rsbuild, Tailwind, TanStack Router/Query, Connect Query, shadcn/Base UI, Vitest/Playwright, Biome/Ultracite, TypeScript 7 `tsc`.
+- **full** default: canonical stack in [REFERENCE.md](REFERENCE.md), using the order below.
 - **minimal:** toolchain, biome, quality gate, env validation, conventional commits.
 - **redpanda:** full plus `references/redpanda/README.md`, taxonomy, `REDPANDA_KIT=1`.
 - **`<tool>`:** only that reference.
@@ -38,7 +38,7 @@ Runtime skills, not setup: `/accessibility`, `/tanstack-router`, `/connect-query
 
 1. Confirm profile; for full, process the table sequentially and lazily.
 2. Set `REACT_RULES_BAN_USEEFFECT=1` only for repos choosing strict effects.
-3. [Automatically set up consumer review safeguards](../shared/review-enforcement.md) within the authorized endpoint, including existing repositories and skills-only installs.
+3. [Auto-setup safeguards](../shared/review-enforcement.md) in every consumer; honor the endpoint.
 4. Workflow skills already ship in the plugin; install nothing extra.
 
 ## Verify

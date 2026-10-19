@@ -11,11 +11,11 @@ Before editing:
 
 - **Objective** -- high-level end state.
 - **Guardrails** -- non-inferable constraints, reserved decisions, irreversible boundaries.
-- **Verification** -- checks or observable behavior that distinguish done from plausible.
+- **Verification** -- observable proof of the outcome.
 - **Stop** -- requested endpoint and true user blockers.
 
 State contract; build/fix/implementation: continue immediately.
-[Automatically reconcile consumer review safeguards](../shared/review-enforcement.md) within that endpoint.
+[Auto-setup consumer safeguards](../shared/review-enforcement.md) within the endpoint.
 
 ## Loop
 
@@ -48,4 +48,4 @@ Keep evidence/pause triggers in ignored `.context/implementation-notes.md`.
 
 ## Completion
 
-Stop at the requested endpoint when every exit criterion passes. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for requested Git delivery.
+Meet exit criteria at the requested endpoint. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for requested Git delivery.
