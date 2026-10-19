@@ -15,6 +15,7 @@ Before editing:
 - **Stop** -- requested endpoint and true user blockers.
 
 State contract; build/fix/implementation: continue immediately.
+[Automatically reconcile consumer review safeguards](../shared/review-enforcement.md) within that endpoint.
 
 ## Loop
 

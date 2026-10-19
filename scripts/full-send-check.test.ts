@@ -6,6 +6,7 @@ import {
   rmSync,
   writeFileSync,
   copyFileSync,
+  existsSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -211,6 +212,45 @@ if (args[0] === "pr" && args[1] === "view") {
   };
   return { git, run, runHook, snapshot, save, calls, worktree, head };
 }
+
+test("startup routes both hosts to automatic setup in the installed harness without hosted writes", () => {
+  const f = fixture();
+  for (const provider of ["CLAUDE_SESSION_ID", "CODEX_SESSION_ID"]) {
+    const sid = `bootstrap-${provider}-${f.head.slice(0, 12)}`;
+    directories.push(join("/tmp", `hook-session-${sid}`));
+    const result = Bun.spawnSync(
+      [
+        "bash",
+        new URL("../.claude/hooks/session-env.sh", import.meta.url).pathname,
+      ],
+      {
+        cwd: f.worktree,
+        env: {
+          ...Bun.env,
+          PATH: `${join(f.worktree, "../bin")}:${Bun.env.PATH}`,
+          DATA: join(f.worktree, "../github.json"),
+          CALLS: f.calls,
+          CLAUDE_SESSION_ID: "",
+          CODEX_SESSION_ID: "",
+          CLAUDE_ENV_FILE: join(f.worktree, "../session.env"),
+          [provider]: sid,
+          HOOK_SESSION_SWEEP_DISABLED: "1",
+          HOOK_METRICS_DISABLED: "1",
+        },
+        stdin: Buffer.from(JSON.stringify({ session_id: sid })),
+      },
+    );
+    expect(result.exitCode).toBe(0);
+    const context = JSON.parse(result.stdout.toString()).hookSpecificOutput
+      .additionalContext;
+    expect(context).toContain("Automatically set up");
+    expect(context).toContain(
+      new URL("../shared/review-enforcement.md", import.meta.url).pathname,
+    );
+    expect(context).toContain("read-only/local-only");
+    expect(existsSync(f.calls)).toBe(false);
+  }
+});
 
 test("observes a published candidate without performing any hosted mutation", () => {
   const f = fixture();
@@ -459,10 +499,10 @@ test("the shipped Stop hook rejects a green but unprotected consuming repo", () 
   const f = fixture();
   f.snapshot.protection = null;
   f.save();
-  expect(f.runHook("ship")).toEqual({
-    code: 2,
-    error: expect.stringContaining("review-policy:required-checks-missing"),
-  });
+  const result = f.runHook("ship");
+  expect(result.code).toBe(2);
+  expect(result.error).toContain("review-policy:required-checks-missing");
+  expect(result.error).toContain("automatic setup");
 });
 
 test("the shipped Stop hook allows protected consumers and preserves the PR-only endpoint", () => {

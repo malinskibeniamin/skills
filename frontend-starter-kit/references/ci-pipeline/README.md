@@ -10,6 +10,8 @@ GitHub Actions tuned for React/TypeScript. Run `/read-the-damn-docs` before copy
 
 See [REFERENCE.md](REFERENCE.md) for workflow templates + Blacksmith tuning.
 
+Before CI edits, [automatically reconcile consumer review safeguards](../../../shared/review-enforcement.md).
+
 ## Steps
 
 1. Write `.github/workflows/quality-gate.yml` from [REFERENCE.md](REFERENCE.md)

@@ -33,6 +33,7 @@ type: skill
 - **停止條件** -- 要求的終點，以及確實需要使用者介入的情況。
 
 陳述契約；建置、修正或實作請求應立即繼續。
+在該終點範圍內[自動補齊使用端儲存庫的審查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。
 
 ## 執行迴圈 [#loop]
 

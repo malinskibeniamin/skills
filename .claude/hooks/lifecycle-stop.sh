@@ -150,7 +150,7 @@ if [ "$endpoint" = "ship" ]; then
   if [ "$status" -ne 0 ]; then
     reasons=$(printf '%s' "$receipt" | jq -r '.reasons | join("; ")' 2>/dev/null) || reasons="Hosted verification unavailable"
     reasons=${reasons:-Hosted verification unavailable}
-    hook_stop_block "The explicit ship loop has not verified PR #$pr_number: $reasons. Follow shared/review-enforcement.md; restore prerequisites or report a genuine blocker. Preserve approval policy and required checks."
+    hook_stop_block "The explicit ship loop has not verified PR #$pr_number: $reasons. Run automatic setup in shared/review-enforcement.md; repair missing safeguards or report a genuine blocker. Preserve approval policy and required checks."
   fi
   exit 0
 fi

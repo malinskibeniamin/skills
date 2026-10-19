@@ -48,7 +48,7 @@ Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent b
 without explicit permission.
 Delivery follow-ups replace prior local stops. Recover endpoint state; never request a
 session restart/reconfiguration. Keep follow-ups in the current PR. Drafts need no approval.
-Push/PR/ship: verify origin HEAD/scope; merge-ready: `shared/review-enforcement.md`.
+Push/PR/ship: verify origin HEAD/scope; auto-setup: `shared/review-enforcement.md`.
 Report genuine external blockers.
 Finished-agent reports or Git showing uncommitted/unpushed work mean incomplete delivery.
 Recover verified scope via `shared/remote-completion.md`; preserve explicit local stops,

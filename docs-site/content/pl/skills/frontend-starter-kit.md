@@ -1,11 +1,19 @@
 ---
-title: /frontend-starter-kit
 description: >-
   Skonfiguruj narzędzia frontendowe, linting, bramki jakości, stos React, stos
   danych i CI.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - frontend starter kit
 sidebar:
   label: /frontend-starter-kit
+title: /frontend-starter-kit
+type: skill
 ---
 ![Diagram umiejętności /frontend-starter-kit](/diagrams/skills/frontend-starter-kit.svg)
 
@@ -19,7 +27,7 @@ Użytkownicy wtyczki mają już dostarczone i skonfigurowane wszystkie hooki -- 
 nie wykonują żadnych operacji; uruchom tylko kroki konfiguracji i narzędzi. Pełne kopiowanie jest istotne w przypadku repozytoriów bez
 wtyczki („export harness”).
 
-## Profile
+## Profile [#profiles]
 
 - **full** (domyślny): wszystkie poniższe narzędzia, w podanej kolejności, dla kanonicznego stosu opisanego w
   [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/frontend-starter-kit/REFERENCE.md) (React 19 + Rsbuild + Tailwind + TanStack Router/Query +
@@ -29,7 +37,7 @@ wtyczki („export harness”).
   `REDPANDA_KIT=1`).
 - **`<tool>`**: tylko dokumentacja danego narzędzia.
 
-## Narzędzia (kolejno dla profilu full)
+## Narzędzia (kolejno dla profilu full) [#full-order]
 
 | Narzędzie | Dokumentacja | Co konfiguruje |
 |---|---|---|
@@ -51,14 +59,15 @@ Umiejętności ze wskazówkami dotyczącymi pracy bieżącej (codzienna praca, n
 `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Opcjonalna infrastruktura:
 `/setup-routines`, `/setup-atlassian-workflow` (tylko jako polecenia z ukośnikiem).
 
-## Kroki
+## Kroki [#steps]
 
 1. Potwierdź profil (domyślnie full). Czytaj dokumentację każdego narzędzia dopiero po przejściu do jego konfiguracji.
 2. Ustaw `REACT_RULES_BAN_USEEFFECT=1` w session-env.sh, jeśli repozytorium wymaga ścisłych reguł efektów.
-3. Umiejętności dotyczące przepływu pracy (development-lifecycle, tdd, grilling, triage,
+3. [Automatycznie skonfiguruj zabezpieczenia przeglądu w repozytorium korzystającym z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w granicach upoważnionego punktu końcowego, również w istniejących repozytoriach i instalacjach samych umiejętności.
+4. Umiejętności dotyczące przepływu pracy (development-lifecycle, tdd, grilling, triage,
    diagnosing-bugs, prototype, domain-modeling) są dostarczane z tą wtyczką -- nie trzeba niczego instalować.
 
-## Weryfikacja
+## Weryfikacja [#verify]
 
 - [ ] `.claude/settings.json` zawiera wszystkie hooki, w tym TanStack Intent, gdy zainstalowane są pakiety TanStack; istnieją `biome.jsonc` + `src/env.ts`
 - [ ] Skrypty: lint, lint:fix, type:check, test, quality:gate

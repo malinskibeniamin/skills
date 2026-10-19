@@ -40,7 +40,7 @@ type: skill
 
 ## 发布并跟进 [#publish-and-babysit]
 
-通过 [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md) 发布；声明已就绪前必须有最新的[使用方仓库托管检查](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。不要止于一次 CI 快照；确认提交范围及远程 HEAD 与本地 HEAD 一致。
+通过 [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md) 发布；[自动配置使用方仓库的审查保障并验证就绪状态](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。不要止于一次 CI 快照；确认提交范围及远程 HEAD 与本地 HEAD 一致。
 
 - 在当前前台会话中监控此 PR 的检查与已请求的审查。等待中意味着继续等待，不是完成。缺少 CI 不等于 CI 通过；根据仓库策略确定必需检查，不要编造全绿证明。
 - 查看失败任务的日志，复现、修复、验证、commit、push，然后监控新 head。仅在有证据时重试基础设施故障；重复且不变的失败需要诊断，不是无限重跑。不要为变绿而削弱门禁。

@@ -33,6 +33,7 @@ type: skill
 - **停止条件** -- 请求的终点，以及确实需要用户介入的阻碍。
 
 说明契约；构建、修复或实现请求应立即继续。
+在该终点范围内[自动补齐使用方仓库的审查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。
 
 ## 执行循环 [#loop]
 

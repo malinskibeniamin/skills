@@ -151,6 +151,13 @@ if command -v jq >/dev/null 2>&1; then
   fi
 fi
 
+# Route setup in the installed harness; startup itself stays local/read-only.
+if [ -n "$_current_root" ]; then
+  _harness_root=$(cd "$(dirname "$0")/../.." && pwd -P)
+  _ctx="${_ctx:+$_ctx
+}[harness-setup] Automatically set up/reconcile review safeguards for each consuming repo during authorized build/fix or push/PR/ship work: read $_harness_root/shared/review-enforcement.md (Automatic setup). Preserve read-only/local-only and narrower endpoints; startup alone authorizes no hosted writes."
+fi
+
 # ── Capture typecheck baseline (opt-in, background) ──────────────
 # Used by typecheck-stop.sh to distinguish pre-existing errors from
 # errors introduced by this session. Default off: SessionStart must not

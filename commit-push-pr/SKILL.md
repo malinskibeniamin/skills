@@ -12,7 +12,7 @@ Merge only on explicit request: [contract](references/merge.md).
 
 1. Check status/diff/branch/log/PR; push/PR [auto-rebase](REFERENCE.md#automatic-rebase) behind owned PRs.
 2. Resolve endpoint: commit only, push (`--no-pr`), or PR. Commit-only skips remote and `gh` preflight.
-3. PRs: [verify consumer gates](../shared/review-enforcement.md).
+3. Push/PR: [automatically set up consumer safeguards](../shared/review-enforcement.md); preserve narrower endpoints.
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
 5. Review inline; do not block merely over named skill invocation.
 6. Load [dogfood](../dogfood/SKILL.md) for runnable PR work; require current PASS. BLOCKED needs user waiver.

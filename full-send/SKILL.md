@@ -43,7 +43,7 @@ requested Sol loop, read [REFERENCE.md](REFERENCE.md).
 
 ## Publish and babysit
 
-Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication; require a fresh [consumer hosted checkpoint](../shared/review-enforcement.md) for readiness.
+Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication; [auto-setup consumer safeguards and verify readiness](../shared/review-enforcement.md).
 Continue past its single CI snapshot; confirm committed scope and remote HEAD match local HEAD.
 
 - Watch the current PR's checks and requested reviews in this foreground session.

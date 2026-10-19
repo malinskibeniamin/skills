@@ -38,7 +38,8 @@ Runtime skills, not setup: `/accessibility`, `/tanstack-router`, `/connect-query
 
 1. Confirm profile; for full, process the table sequentially and lazily.
 2. Set `REACT_RULES_BAN_USEEFFECT=1` only for repos choosing strict effects.
-3. Workflow skills already ship in the plugin; install nothing extra.
+3. [Automatically set up consumer review safeguards](../shared/review-enforcement.md) within the authorized endpoint, including existing repositories and skills-only installs.
+4. Workflow skills already ship in the plugin; install nothing extra.
 
 ## Verify
 
