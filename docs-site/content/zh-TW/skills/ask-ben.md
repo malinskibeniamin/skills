@@ -41,6 +41,7 @@ type: skill
 | `/commit-push-pr` | 提交、推送並發布可供審查的提取要求。 |
 | `/connect-query` | 使用 Connect Query 建置型別化的 ConnectRPC 資料流程。 |
 | `/create-verification-skill` | 建立專案本機的真實應用程式驗證控制框架。 |
+| `/cli-for-agents` | 設計非互動、可組合且適合代理使用的命令列介面。 |
 | `/demo` | 建立面向客戶的功能錄製內容。 |
 | `/deslop` | 稽核已經過度膨脹的程式碼，並移除不合理的介面。 |
 | `/development-lifecycle` | 執行完整的前端開發生命週期。 |
