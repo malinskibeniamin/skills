@@ -1,24 +1,29 @@
 #!/bin/bash
 # Extracted check logic for bend-laws-guard.sh. Source ../_hook-lib.sh before this file.
 #
-# Law-driven development: a human owns LAWS.bend (the acceptance criteria); the
-# agent owns the model and PROOF.bend, and `bend PROOF.bend` is the gate. Two
-# moves would make that gate meaningless, so both are denied before they land:
-# editing the laws, and `@unsafe` / `def f?` defs, which skip Bend's
-# termination check and can "prove" anything. `?TODO` stays allowed because
-# the gate already fails on it. Shell detection is best effort; CODEOWNERS on
-# LAWS.bend and the CI gate remain the real enforcement.
+# Law-driven development (bend-laws skill): a human owns LAWS.bend (the
+# acceptance criteria); the agent owns the model and PROOF.bend, and
+# `bend PROOF.bend` is the gate. Three moves would hollow out that gate, so each is
+# denied before it lands: editing the laws; `@unsafe` / `def f?` defs, which
+# skip the termination check (since 2.0.32 the gate refuses them too, so this
+# is earlier feedback); and a bare capitalised pattern on an imported type, which
+# binds every value and lets a law pass vacuously (bendlang/bend#1328, which the
+# gate accepts). `?TODO` stays allowed because the gate fails on it. Shell
+# detection is best effort; CODEOWNERS on LAWS.bend and laws/check.sh in CI
+# remain the real enforcement.
 
 _BEND_LAWS_MSG="LAWS.bend is human-owned: it states the acceptance criteria the proofs must meet. Propose the law change to the user instead of editing it. A human can opt a session in with BEND_LAWS_AUTHOR=1."
 _BEND_ESCAPE_MSG="Bend proof escape hatch blocked: @unsafe and def f? skip the termination check, so a proof beside LAWS.bend could prove anything. Write a terminating def (count down a Nat fuel argument for loops bounded by the outside world)."
 _BEND_ESCAPE_RE='(^|[^[:alnum:]_])@unsafe([^[:alnum:]_]|$)|^[[:space:]]*def[[:space:]]+[A-Za-z0-9_.]+[?][[:space:]]*\('
+_BEND_BARE_MSG="Bare constructor pattern blocked: in a file that imports the type, case Name: binds every value instead of matching the constructor, so a law can pass vacuously (bendlang/bend#1328). Write the constructor qualified and braced, like case P.Name{}:"
+_BEND_BARE_RE='^[[:space:]]*case([[:space:]]+[^[:space:]]+)*[[:space:]]+[A-Z][A-Za-z0-9_]*([[:space:]]+[^[:space:]]+)*[[:space:]]*:[[:space:]]*(#.*)?$'
 
 _bend_is_law_file() {
   case "$(basename "$1")" in
-    *.bend) ;;
+    LAWS.bend | PROOF.bend) return 0 ;;
+    *.bend) [ -f "$(dirname "$1")/LAWS.bend" ] ;;
     *) return 1 ;;
   esac
-  [ "$(basename "$1")" = "PROOF.bend" ] || [ -f "$(dirname "$1")/LAWS.bend" ]
 }
 
 run_bend_laws_edit_check() {
@@ -32,6 +37,9 @@ run_bend_laws_edit_check() {
   hook_get_added_lines || return 0
   if printf '%s\n' "$added_lines" | grep -qE "$_BEND_ESCAPE_RE"; then
     hook_deny "$_BEND_ESCAPE_MSG" "bend-proof-escape-hatch"
+  fi
+  if printf '%s\n' "$added_lines" | grep -qE "$_BEND_BARE_RE"; then
+    hook_deny "$_BEND_BARE_MSG" "bend-bare-constructor"
   fi
   return 0
 }
@@ -53,8 +61,12 @@ run_bend_laws_bash_check() {
     hook_deny "$_BEND_LAWS_MSG" "bend-laws-human-owned"
   fi
 
-  if _bend_shell_writes '\.bend' && printf '%s\n' "$_bend_cmd" | grep -qE "$_BEND_ESCAPE_RE"; then
+  _bend_shell_writes '\.bend' || return 0
+  if printf '%s\n' "$_bend_cmd" | grep -qE "$_BEND_ESCAPE_RE"; then
     hook_deny "$_BEND_ESCAPE_MSG" "bend-proof-escape-hatch"
+  fi
+  if printf '%s\n' "$_bend_cmd" | grep -qE "$_BEND_BARE_RE"; then
+    hook_deny "$_BEND_BARE_MSG" "bend-bare-constructor"
   fi
   return 0
 }

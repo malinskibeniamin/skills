@@ -57,6 +57,25 @@ run_hook_eval "$_bend_hook" "$(_bend_write "$_bend_loose" "@unsafe def serve(n: 
 run_hook_eval "$_bend_hook" "$(_bend_write "$_bend_tmp/laws/mcp/README.md" "Never use @unsafe here.")" 0 \
   "ignores non-Bend files that mention @unsafe"
 
+# A bare constructor pattern on an imported type binds every value (bendlang/bend#1328).
+run_hook_eval "$_bend_hook" "$(_bend_write "$_bend_proof" $'def Laws.x(h):\n  match h:\n    case Yes:\n      {==}')" 2 \
+  "denies a bare constructor pattern in PROOF.bend" "bendlang/bend#1328"
+run_hook_eval "$_bend_hook" "$(_bend_edit "$_bend_model" "  spin(n)" $'  match h:\n    case Yes _:\n      True{}')" 2 \
+  "denies a bare constructor in a multi-column pattern" "bendlang/bend#1328"
+run_hook_eval "$_bend_hook" "$(_bend_write "$_bend_proof" $'def Laws.x(h):\n  match h:\n    case P.Yes{}:\n      {==}\n    case _:\n      {==}\n    case h <> t:\n      {==}')" 0 \
+  "allows qualified, braced constructors, wildcards and binders"
+_bend_fresh="$_bend_tmp/laws/fresh/LAWS.bend"
+mkdir -p "$(dirname "$_bend_fresh")"
+_bend_out=$(_bend_write "$_bend_fresh" $'def yes(h: P.Hint) -> Bool:\n  match h:\n    case Yes:\n      True{}' | BEND_LAWS_AUTHOR=1 "$_bend_hook" 2>&1) && _bend_code=0 || _bend_code=$?
+if [ "$_bend_code" -eq 2 ] && printf '%s' "$_bend_out" | grep -q 'bendlang/bend#1328'; then
+  echo "  PASS  checks a human-authored LAWS.bend in a new law directory"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  checks a human-authored LAWS.bend in a new law directory (exit $_bend_code: $_bend_out)"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: checks a human-authored LAWS.bend in a new law directory"
+fi
+
 # Shell writes.
 run_hook_eval "$_bend_hook" "$(_bend_bash "sed -i '' 's/Mode/Hint/' laws/mcp/LAWS.bend")" 2 \
   "denies sed -i on LAWS.bend" "LAWS.bend is human-owned"
@@ -71,6 +90,8 @@ run_hook_eval "$_bend_hook" "$(_bend_bash "cat > laws/mcp/PROOF.bend <<'EOF'
   Laws.manual_asks(a)
 EOF")" 2 \
   "denies heredoc writing @unsafe into a Bend file" "@unsafe"
+run_hook_eval "$_bend_hook" "$(_bend_bash $'cat > laws/mcp/PROOF.bend <<\'EOF\'\ndef Laws.x(h):\n  match h:\n    case Yes:\n      {==}\nEOF')" 2 \
+  "denies heredoc writing a bare constructor pattern into a Bend file" "bendlang/bend#1328"
 run_hook_eval "$_bend_hook" "$(_bend_bash "cat laws/mcp/LAWS.bend")" 0 \
   "allows reading LAWS.bend"
 run_hook_eval "$_bend_hook" "$(_bend_bash "cp laws/mcp/LAWS.bend /tmp/laws-backup.bend")" 0 \
