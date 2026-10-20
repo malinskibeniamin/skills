@@ -139,7 +139,7 @@ run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Opus 5.5 .xhigh." "ef
 run_content_eval "$REPO_ROOT/codex/REFERENCE.md" "ultra.*explicit delegation" "ultra requires delegation"
 run_content_eval "$REPO_ROOT/codex/REFERENCE.md" "API-only" "API-only features are labeled"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "inspect -> verify -> classify -> synthesize" "review stays with one evidence loop"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "different model.*explicit user authorization" "shipping does not silently change models"
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "different model.*explicit user authorization" "shipping does not silently change models"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "never starts a recursive model call" "reviewer leaves model dispatch to coordinator"
 
 # No agent definition may use the retired cheap reviewer.

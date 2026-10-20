@@ -123,7 +123,7 @@ else
   PASS=$((PASS + 1))
 fi
 
-run_content_eval "$REPO_ROOT/go/SKILL.md" "customer-facing surface" "go inspects changed visual surfaces"
+run_content_eval "$REPO_ROOT/shared/change-evidence.md" "Customer-facing surface" "go inspects changed visual surfaces"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Browser/UI" "go reference documents visual verification evidence"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Only an explicit user waiver' "commit-push-pr requires user waiver for missing visual evidence"
 
@@ -258,7 +258,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "asymmetric enter/exit timing" "visua
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Slop catalog expansion" "visual-review includes expanded slop catalog"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "flat type hierarchy.*AI color palette.*layout property animation" "visual-review slop catalog covers type color and motion smells"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Start warn-only" "visual-review recommends warn-only hook rollout"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "rendered or terminal result" "go verifies customer-facing surfaces directly"
+run_content_eval "$REPO_ROOT/shared/change-evidence.md" "rendered states" "go verifies customer-facing surfaces directly"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "customer-facing surface diff" "commit-push-pr requires visual-review for customer-facing surfaces"
 run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "customer-facing surface" "shared evidence reference covers customer-facing surfaces"
 run_content_eval "$REPO_ROOT/GLOSSARY.md" "Customer-facing surface" "glossary documents customer-facing surface term"

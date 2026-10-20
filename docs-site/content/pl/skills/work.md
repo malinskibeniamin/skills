@@ -1,8 +1,6 @@
 ---
 title: /work
-description: >-
-  Alias dla /development-lifecycle do punktu końcowego wskazanego przez
-  użytkownika.
+description: "Twórz i dostarczaj pracę do żądanego punktu końcowego; /review służy do oceny bez zmian."
 type: skill
 sidebar:
   label: /work
@@ -11,6 +9,4 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/work.excalidraw)
 
-Alias dla `/development-lifecycle`. Szczegóły znajdziesz w [development-lifecycle/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md).
-
-Uruchom teraz `/development-lifecycle` i zatrzymaj się w punkcie końcowym wskazanym przez użytkownika.
+Przeczytaj i wykonaj [przepływ autora](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md) do żądanego punktu końcowego.

@@ -82,21 +82,10 @@ schedule fixed review rounds or invoke other skills just to satisfy ceremony.
 
 ## Endpoint evidence
 
-| Requested endpoint | Required evidence before stopping |
-|---|---|
-| Answer/plan/review | Requested artifact only; no edits |
-| Build/fix/implement | Verified changes committed and pushed unless an explicit local/no-delivery stop wins |
-| Commit | Verified requested changes committed |
-| Push | Verified changes committed and pushed |
-| PR | Verified, committed, pushed, PR opened, one CI snapshot |
-| Ship | PR opened, CI and requested feedback loop clean, human handoff |
-
-Use `../commit-push-pr/REFERENCE.md` for exact Git delivery commands. Commit, push, rebase,
-and use `--force-with-lease` when needed on the current user-owned feature branch without
-another permission prompt. Never merge, use plain `--force`, or rewrite default, shared,
-foreign, or concurrently owned branches without explicit permission. A normal PR request
-takes one CI snapshot; only `ship`, an explicit `/go`, or explicit babysitting authorizes
-active CI remediation. Every local CI fix or rebase is pushed immediately, whatever the endpoint.
+The [author delivery workflow](../shared/delivery-workflow.md#exit-contract) owns endpoint
+selection, self-review, publication, CI/feedback follow-through and authorized merge. Reuse
+its table; do not maintain a parallel definition here. A normal PR request ends after one CI
+snapshot. Ship owns active CI remediation; merge still requires explicit authorization.
 
 ## Isolation and long runs
 

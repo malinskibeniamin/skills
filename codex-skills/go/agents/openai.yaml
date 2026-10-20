@@ -1,5 +1,5 @@
 interface:
   display_name: "Go"
-  short_description: "Verify, review, and ship completed work"
+  short_description: "Author delivery preset for verified PR readiness"
 policy:
   allow_implicit_invocation: false

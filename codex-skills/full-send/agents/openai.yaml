@@ -1,3 +1,3 @@
 interface:
   display_name: "Full Send"
-  short_description: "Own fixes, PR checks, reviews, and authorized merge"
+  short_description: "Author delivery preset through an authorized merge"

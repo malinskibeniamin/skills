@@ -5,7 +5,7 @@
 HOOK="$REPO_ROOT/.claude/hooks/pr-feedback-completeness-stop.sh"
 SKILL="$REPO_ROOT/resolve-pr-feedback/SKILL.md"
 REF="$REPO_ROOT/resolve-pr-feedback/REFERENCE.md"
-GO_SKILL="$REPO_ROOT/go/SKILL.md"
+GO_SKILL="$REPO_ROOT/shared/delivery-workflow.md"
 LC_SKILL="$REPO_ROOT/development-lifecycle/SKILL.md"
 HOOKS_JSON="$REPO_ROOT/hooks/hooks.json"
 SETTINGS_JSON="$REPO_ROOT/.claude/settings.json"

@@ -66,7 +66,7 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Keep one owner" \
   "review keeps diagnostic ownership in the primary context"
 run_content_eval "$REPO_ROOT/resilience-review/SKILL.md" "Codex.*inline" \
   "Codex resilience review keeps every axis inline by default"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "single owner in the primary context" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "single owner in the primary context" \
   "go keeps delivery ownership in the primary context"
 
 # A hook cannot prevent a spawn after admission; keep the enforcement surface honest.

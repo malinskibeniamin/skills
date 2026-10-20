@@ -54,7 +54,7 @@ run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Commit-only skips remote 
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "Explicit commit-only intent stops here" "commit endpoint does not push"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "without another permission prompt" \
   "feature-branch rebase updates do not ask twice"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "without another permission prompt" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "need no extra prompt" \
   "full delivery does not re-ask for routine branch updates"
 run_content_eval "$REPO_ROOT/plow-ahead/references/builder-upstream.md" \
   "current user-owned feature branch" \

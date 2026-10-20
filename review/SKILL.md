@@ -5,8 +5,8 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 
 # Review
 
-Review HEAD. Keep one owner; explicit delegation. Do not edit, commit, push, or post.
-Posting comments needs explicit intent.
+Review existing work. Keep one owner; explicit delegation. Do not edit, commit, push or post without explicit intent. Requested repairs enter
+[author delivery](../shared/delivery-workflow.md) for the named scope. Posting comments needs explicit intent.
 
 ## Review contract
 
@@ -27,15 +27,16 @@ then inspect the complete diff and log.
 
 ### Inspect
 
-1. Read the request/spec, rules, complete diff, call sites, and behavior. Do not trust a PR summary over code. Include applicable `REVIEW.md`, `CODING_STANDARDS.md`, and `CONTRIBUTING.md` when present.
+1. Read request/spec, rules, complete diff, callers and behavior. Do not trust a PR summary over code. Include applicable `REVIEW.md`, `CODING_STANDARDS.md` and `CONTRIBUTING.md`.
 2. For each changed assumption, reverse-trace it to authoritative producers, schemas,
    storage, consumers, and public surfaces. Search by domain concept, field, and emitted
    value, not only the changed symbol.
-3. Check surprises against independent artifacts in relevant unchanged code, base,
+3. Load applicable owners from [change evidence](../shared/change-evidence.md); reuse current artifacts.
+4. Check surprises against independent artifacts in relevant unchanged code, base,
    recent history, runtime evidence, and fixtures. Match fixtures to production shape.
-4. Build one behavioral counterexample for a plausible collision. Map permissions and visible
+5. Build one behavioral counterexample for a plausible collision. Map permissions and visible
    surfaces; skip formatter-owned style and pre-existing defects.
-5. Ask what could still be wrong if tests pass.
+6. Ask what could still be wrong if tests pass.
 
 ### Verify
 
@@ -65,8 +66,7 @@ Authorized reviewer axes run together in the foreground; aggregate every report.
 
 ### Classify
 
-A finding is diff-introduced, impactful, reproducible or concrete, placed on the tightest changed line,
-and paired with the smallest safe fix.
+Place concrete, impactful, diff-introduced findings on the tightest changed line with the smallest safe fix.
 
 - **P0**: exposure, data loss, outage, or impossible core flow.
 - **P1**: user regression, broken contract, false success, or major a11y defect.
@@ -74,13 +74,13 @@ and paired with the smallest safe fix.
 - Omit optional future work and polish from inline comments.
 
 No performance finding without measurement or a structural bound. No edge-case finding
-without credible risk. Evidence can support declining a candidate.
+without credible risk.
 
 ### Synthesize
 
 Read [communication](../shared/communication.md); keep the output schema.
 Lead with findings. Deduplicate by root cause. Omit praise and narration. For a re-review, mark each prior finding's state.
-Report the product line apart from defects.
+Separate value from defects.
 
 ## Deep mode
 

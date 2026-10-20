@@ -52,7 +52,7 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "criteriaMode.*all|all validation err
 
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "credible risk" "development lifecycle scales review to evidence"
 run_content_eval "$REPO_ROOT/development-lifecycle/REFERENCE.md" "Trust boundary, data loss" "lifecycle reference names credible resilience triggers"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "credible break or recovery path" "go requires resilience evidence when applicable"
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "credible failure/recovery path" "go requires resilience evidence when applicable"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Security, privacy" "go reference documents resilience surfaces"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "failure or recovery path" "go asks for real recovery evidence"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "review-evidence.md" "self-reviewer applies shared evidence reference"

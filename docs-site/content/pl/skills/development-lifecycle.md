@@ -21,9 +21,7 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/development-lifecycle.excalidraw)
 
-Weź odpowiedzialność za jeden rezultat. Korzystaj z [zasad komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) i [zasad ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
-
-W fazie sprawdzania pobierz wskazane zgłoszenia wraz z treścią, etykietami i komentarzami; podaj tytuł. Wyjaśnij niejednoznaczne odwołania.
+Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat; dobieraj pomocnicze umiejętności automatycznie. Przed edycją przeczytaj [dostarczanie autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) dla własności, izolacji i punktów końcowych. Korzystaj z [komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) i [ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Kontrakt rezultatu [#outcome-contract]
 
@@ -45,7 +43,7 @@ Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj
 
 Rozstrzygnij przeoczony obszar lub zmienną niewiadomą na podstawie dowodów źródłowych. Dopasuj się do istniejących wzorców i sprawdzonej skali; zaklasyfikuj kwestie jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy.
 
-Przed edycją załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i sprawdź, jakie dowody będą użyteczne. Dla każdej widocznej zmiany zarejestruj stan wyjściowy i zinwentaryzuj obszary za pomocą [wizualnych dowodów PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Dotyczy to również drobnych zmian tekstu lub stylu oraz wpływu na współdzielony interfejs użytkownika.
+Przed edycją załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wpływ proporcjonalnie; przed zmianą widocznego zachowania zarejestruj bazę, także dla drobnego tekstu lub współdzielonego UI.
 
 ### Działaj [#act]
 
@@ -59,12 +57,8 @@ Jeśli brakuje powtarzalnego punktu wejścia, potwierdź działanie za pomocą t
 
 ## Granice [#boundaries]
 
-Pytaj tylko o decyzje zastrzeżone dla użytkownika albo nieodwracalne działanie dotyczące środowiska produkcyjnego, prawa lub prywatności, usuwania danych bądź wysokiego poziomu bezpieczeństwa. Na bieżącej, należącej do użytkownika gałęzi wykonuj commity, wypychaj zmiany, wykonuj rebase i używaj `--force-with-lease` bez ponownego pytania. Nigdy nie scalaj, nie używaj zwykłego wymuszenia, nie twórz dodatkowych PR-ów ani nie przepisuj gałęzi domyślnych, współdzielonych, należących do kogoś innego lub równolegle używanych bez wyraźnej zgody.
-
-Przed zmianą kodu na gałęzi main/master/develop utwórz odizolowane drzewo robocze za pomocą `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Izolacja drzewa roboczego]
-
-Dowody z dłuższych prac i przesłanki do wstrzymania zapisuj w ignorowanym przez Git pliku `.context/implementation-notes.md`.
+Pytaj tylko o decyzje zastrzeżone dla użytkownika albo nieodwracalne działania produkcyjne, prawne, dotyczące prywatności, usuwania danych lub wysokiego bezpieczeństwa. Dowody i przesłanki wstrzymania zapisuj w ignorowanym `.context/implementation-notes.md`.
 
 ## Zakończenie [#completion]
 
-Zatrzymaj się w żądanym punkcie końcowym gdy wszystkie kryteria zakończenia są spełnione. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md) dla weryfikacji lub dostarczenia; dla żądanego dostarczenia przez Git załaduj [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md).
+Przeczytaj i wykonaj [dostarczanie autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md): samodzielny przegląd inline, właściwe dowody, publikacja oraz żądana obsługa CI i uwag. Wykorzystaj aktualną weryfikację; zatrzymaj się w żądanym punkcie końcowym po spełnieniu wszystkich kryteriów. [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md) zawiera próby specyficzne dla zadania.

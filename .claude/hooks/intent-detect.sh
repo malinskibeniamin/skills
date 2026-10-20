@@ -41,6 +41,19 @@ if [ -z "$prompt" ]; then
   exit 0
 fi
 
+# Normalize only leading public workflow commands, after quoted/setup text is removed.
+# Work supplies author intent; review must stay an artifact even when its subject
+# contains action words such as "fix missing invalidation".
+_work_request=false
+prompt=$(printf '%s\n' "$prompt" | sed '/[^[:space:]]/,$!d')
+_workflow_line=${prompt%%$'\n'*}
+if grep -qE '^[[:space:]]*/(frontend-skills:)?work([[:space:]]|$)' <<< "$_workflow_line"; then
+  _work_request=true
+  prompt=$(printf '%s\n' "$prompt" | sed -E '1s#^[[:space:]]*/(frontend-skills:)?work([[:space:]]+|$)##')
+elif grep -qE '^[[:space:]]*/(frontend-skills:)?review([[:space:]]|$)' <<< "$_workflow_line"; then
+  prompt=$(printf '%s\n' "$prompt" | sed -E '1s#^[[:space:]]*/(frontend-skills:)?review#review#')
+fi
+
 directives=""
 
 # ── Requested endpoint + turn completion state ──────────────────
@@ -137,6 +150,12 @@ elif grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]|$)" <<< "$prompt
   else
     _endpoint="push"
   fi
+elif [ "$_work_request" = true ]; then
+  if [ "$_negated_push" = true ] || [ "$_negated_commit" = true ]; then
+    _endpoint="local"
+  else
+    _endpoint="push"
+  fi
 fi
 
 if [ -n "$_endpoint" ] && [ -n "$_session_dir" ]; then
@@ -178,7 +197,7 @@ fi
 # Auto-detected from branch state, not prompt keywords.
 
 _current_branch=$(git branch --show-current 2>/dev/null || true)
-_scope_lock_prompt=false
+_scope_lock_prompt=$_work_request
 if grep -qiE 'fix|debug|broken|refactor|extract|move|split|consolidate|clean.?up|write.*test|add|create|build|implement|wire|integrate|set.*up|open.*pr|pull request|push|rebase|deploy|delete|migration|ci' <<< "$prompt"; then
   _scope_lock_prompt=true
 fi

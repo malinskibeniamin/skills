@@ -19,9 +19,7 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/development-lifecycle.excalidraw)
 
-負責一項成果。使用[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)及[相依指引載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
-
-檢查階段應取得指定工單的內容、標籤與留言，並說明標題。釐清有歧義的引用。
+作者入口：`/work`。負責一個結果；自動選擇輔助技能。編輯前閱讀[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，明確歸屬、隔離和端點。遵循[溝通約定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)及[相依載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
 
 ## 成果契約 [#outcome-contract]
 
@@ -43,7 +41,7 @@ type: skill
 
 根據來源證據釐清盲點或易變的未知事項。遵循現有慣例與已展現的規模；將事項分類為查詢、原型、可逆假設或暫停觸發條件。
 
-編輯前，載入 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)並尋找有用的證據。任何可見變更都應使用 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)擷取基準狀態並盤點各個介面。微小的文案／樣式變更及共用 UI 的影響也包含在內。
+編輯前載入[變更證據路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及適用的負責技能。按比例評估影響；可見編輯前先擷取基準，包括細小文案和共用 UI 的影響。
 
 ### 行動 [#act]
 
@@ -57,12 +55,8 @@ type: skill
 
 ## 界線 [#boundaries]
 
-只有在涉及保留給使用者決定的事項，或不可逆的正式環境、法律／隱私、破壞性或高安全性操作時才詢問。對目前由使用者擁有的分支，可直接提交、推送、執行 rebase，並使用 `--force-with-lease`，無須再次詢問許可。未經明確許可，絕不可合併、使用一般的強制推送、建立額外的 PR，或改寫預設、共用、他人擁有或正由他人並行使用的分支。
-
-在 main/master/develop 分支上編寫程式碼前，請使用 `scripts/mux-worktree.sh <type>/<branch-name>` 建立隔離的 worktree。[ETHOS：Worktree 隔離]
-
-將長期工作的證據與暫停觸發條件記錄於被 git 忽略的 `.context/implementation-notes.md`。
+僅對使用者保留的決定，或不可逆的正式環境、法律/隱私、破壞性、高安全風險操作詢問。將證據和暫停條件保存在已忽略的 `.context/implementation-notes.md`。
 
 ## 完成 [#completion]
 
-所有退出條件通過後，在要求的終點停止。驗證或交付時參閱 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)；要求透過 Git 交付時載入 [commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/SKILL.md)。
+閱讀並執行[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)：內嵌自我審查、適用證據、發布以及要求的 CI/回饋跟進。重用目前驗證；所有退出條件滿足後，在要求的端點停止。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)包含針對任務的探查。

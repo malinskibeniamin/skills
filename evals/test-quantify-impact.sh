@@ -48,7 +48,7 @@ run_content_eval "$REFERENCE" "exact command|environment" "reference makes PR ev
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "observable behavior" "lifecycle asks for observable success evidence"
 run_content_eval "$REPO_ROOT/upgrade-dependency/SKILL.md" "/quantify-impact" "dependency upgrades seek measurable value"
 run_content_eval "$REPO_ROOT/visual-review/SKILL.md" "/quantify-impact" "visual review collects relevant before/after evidence"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "claims measurable impact" "shipping reruns claimed impact comparisons"
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "claims measurable impact" "shipping reruns claimed impact comparisons"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No performance finding without measurement" "review verifies measurable impact claims"
 run_content_eval "$REPO_ROOT/make-pr-easy-to-review/SKILL.md" "## Proven impact" "reviewability skill puts impact first"
 run_content_eval "$REPO_ROOT/make-pr-easy-to-review/SKILL.md" "Metric.*Before.*After.*Delta" "reviewability skill uses a scannable impact table"

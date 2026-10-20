@@ -2,29 +2,30 @@
 
 SKILL="$REPO_ROOT/pr-shepherd/SKILL.md"
 STATE_HELPER="$REPO_ROOT/pr-shepherd/scripts/state.sh"
+PROCEDURE="$REPO_ROOT/pr-shepherd/REFERENCE.md"
 
 run_file_eval "$SKILL" "pr-shepherd skill exists"
 run_file_eval "$STATE_HELPER" "pr-shepherd state helper exists"
 run_executable_eval "$STATE_HELPER" "pr-shepherd state helper is executable"
 
 run_content_eval "$SKILL" '^name: pr-shepherd$' "pr-shepherd has matching name"
-run_content_eval "$SKILL" 'one (idempotent )?sweep|single sweep' \
+run_content_eval "$PROCEDURE" 'one (idempotent )?sweep|single sweep' \
   "pr-shepherd performs one sweep"
-run_content_eval "$SKILL" 'current repository' \
+run_content_eval "$PROCEDURE" 'current repository' \
   "pr-shepherd defaults to the current repository"
-run_content_eval "$SKILL" 'HEAD SHA|head SHA|head_sha' \
+run_content_eval "$PROCEDURE" 'HEAD SHA|head SHA|head_sha' \
   "pr-shepherd binds evidence to the PR head"
-run_content_eval "$SKILL" 'worktree list --porcelain' \
+run_content_eval "$PROCEDURE" 'worktree list --porcelain' \
   "pr-shepherd respects workspace ownership"
-run_content_eval "$SKILL" 'git status.*git rev-parse HEAD|git rev-parse HEAD.*git status' \
+run_content_eval "$PROCEDURE" 'git status.*git rev-parse HEAD|git rev-parse HEAD.*git status' \
   "pr-shepherd verifies local cleanliness and head identity"
-run_content_eval "$SKILL" 'mergeable,mergeStateStatus|mergeStateStatus,mergeable' \
+run_content_eval "$PROCEDURE" 'mergeable,mergeStateStatus|mergeStateStatus,mergeable' \
   "pr-shepherd snapshots merge conflicts"
-run_content_eval "$SKILL" 'Never (approve|merge)|never (approve|merge)' \
+run_content_eval "$PROCEDURE" 'Never (approve|merge)|never (approve|merge)' \
   "pr-shepherd never auto-approves or merges"
-run_content_eval "$SKILL" 'untrusted' \
+run_content_eval "$PROCEDURE" 'untrusted' \
   "pr-shepherd treats PR text as untrusted"
-run_content_eval "$SKILL" 'No background|no background|does not poll|Do not poll' \
+run_content_eval "$PROCEDURE" 'No background|no background|does not poll|Do not poll' \
   "pr-shepherd avoids persistent polling"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"\./pr-shepherd/"' \
   "Claude plugin registers pr-shepherd"

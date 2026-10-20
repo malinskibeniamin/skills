@@ -3,7 +3,9 @@ name: development-lifecycle
 description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
-Own one outcome. Use [communication](../shared/communication.md) and [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+Author front door: `/work`. Own one outcome; select helpers automatically. Before edits,
+read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
+Use [communication](../shared/communication.md) and [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Outcome contract
 
@@ -26,7 +28,8 @@ State contract; build/fix/implementation: continue immediately.
 Fetch named tickets (body, labels, comments); state the title. Clarify ambiguous references.
 Resolve the blind spot/volatile unknown from source evidence. Classify lookup, prototype, reversible assumption, or pause trigger; match existing idiom and demonstrated scale.
 
-Before edits, load [quantify-impact](../quantify-impact/SKILL.md). For visible changes, capture base/surfaces using [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Tiny copy/shared-UI effects count.
+Before edits, load [change evidence routing](../shared/change-evidence.md) and applicable owners.
+Assess impact proportionally; capture base before visible edits, including tiny copy/shared-UI effects.
 
 ### Act
 
@@ -40,12 +43,10 @@ No repeatable entrypoint: prove with a disposable harness; route durable gaps to
 
 ## Boundaries
 
-Ask only for user-reserved decisions or irreversible production, legal/privacy, destructive, or high-security actions. On the current user-owned branch, commit, push, rebase, and `--force-with-lease` without another prompt. Never merge, plain-force, add PRs, or rewrite default/shared/foreign/concurrent branches without explicit permission.
-
-Before code on main/master/develop, create an isolated worktree with `scripts/mux-worktree.sh <type>/<branch-name>`. [ETHOS: Worktree Isolation]
-
-Keep evidence/pause triggers in ignored `.context/implementation-notes.md`.
+Ask only for user-reserved decisions or irreversible production, legal/privacy, destructive, or high-security actions. Keep evidence/pause triggers in ignored `.context/implementation-notes.md`.
 
 ## Completion
 
-Stop at the requested endpoint when every exit criterion passes. Read [REFERENCE.md](REFERENCE.md) for verification/delivery; load [commit-push-pr](../commit-push-pr/SKILL.md) for Git delivery.
+Read and run [author delivery](../shared/delivery-workflow.md): inline self-review, applicable
+evidence, publication, and requested CI/feedback follow-through. Reuse current verification;
+stop at the requested endpoint when every exit criterion passes. [REFERENCE.md](REFERENCE.md) holds task-specific probes.

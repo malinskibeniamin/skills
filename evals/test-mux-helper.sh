@@ -16,11 +16,11 @@ run_content_eval "$SCRIPT" "session-hint" "writes session-hint for bind"
 run_content_eval "$SCRIPT" "settings.local.json" "copies settings.local.json if present"
 
 # Integration: /development-lifecycle and /go invoke the helper
-run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "mux-worktree.sh" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "mux-worktree.sh" \
   "development-lifecycle invokes mux-worktree"
-run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "ETHOS: Worktree Isolation" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "ETHOS: Worktree Isolation" \
   "development-lifecycle cross-refs ETHOS"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "mux-worktree.sh" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "mux-worktree.sh" \
   "go invokes mux-worktree on default branch"
 
 # Invalid-branch exit path

@@ -196,6 +196,38 @@ You: "Build feature X" or "Fix these 5 issues overnight"
                               └── PR review, triage, health checks, docs drift
 ```
 
+### Two everyday entry points
+
+- **`/work <outcome>`** authors or finishes work through the requested endpoint. It selects
+  tests, dogfood, inline review, impact evidence, useful visuals and PR presentation itself.
+- **`/review <branch or PR>`** assesses existing work, including your own, and returns
+  evidence-backed findings. Editing, posting and delivery require explicit intent.
+
+```text
+/work   -> implement/repair -> verify + self-review -> requested delivery
+/review -> inspect + verify -> findings only
+                            -> author repair loop only when explicitly requested
+```
+
+Say the endpoint once: local, commit, push, draft PR, verified readiness, or explicitly
+merged. Ordinary implementation defaults to push; draft PR stops after publication and
+one CI snapshot. Ship/readiness owns CI and feedback repairs, not automatic merge.
+
+[Evidence routing](shared/change-evidence.md) selects real screenshots/video for visible
+changes, diagrams for changed relationships, and measurements for performance claims.
+Product motion uses `animate`; synthetic explainers never replace real UI recordings.
+Specialists load when applicable, not as a fixed checklist for every change.
+
+Existing commands remain compatible: `/development-lifecycle` implements the author path,
+`/go` selects readiness, `/full-send` selects authorized merge unless narrowed, and
+`/commit-push-pr` handles publication. `/pr-shepherd` or `/work maintain all my open PRs`
+runs one repository sweep, repairs only this workspace and routes other owners. These
+are presets/helpers, not extra commands to chain. History cleanup and unattended jobs
+remain explicit opt-ins.
+
+Delivery ownership: [diagram](docs/architecture/author-delivery.png) and
+[editable source](docs/architecture/author-delivery.excalidraw).
+
 ### Outcome contract
 
 Most work needs four fields, not a prescribed workflow:
@@ -274,7 +306,7 @@ an explicit artifact command.
 
 | Category | What it covers | Representative skills |
 |---|---|---|
-| Workflow | Build, ship, review, value-check, debug | `/development-lifecycle`, `/go`, `/review`, `/product`, `/diagnosing-bugs` |
+| Workflow | Build, ship, review, value-check, debug | `/work`, `/review` (specialists and delivery presets selected as needed) |
 | Kits | Bundles that install groups | `/frontend-starter-kit` (profiles: `full`, `minimal`, `redpanda`, per-tool), `/work-automation-kit`, `/codex-compat` |
 | Guidance | Auto-load on matching files | `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy` |
 | Infra | Slash-only setup | `/setup-routines` (cloud automation), `/setup-atlassian-workflow` (Jira via acli) |
