@@ -30,6 +30,7 @@ SHORT_DESCRIPTIONS = {
     "animation-vocabulary": "Name motion effects and distinguish close animation terms",
     "ask-ben": "Route work through Ben's frontend skill harness",
     "ask-sonner": "Integrate and troubleshoot Sonner notifications",
+    "bend-laws": "Prove business rules with Bend laws and check shipped code",
     "blast-radius": "Prove non-local change safety with executable evidence",
     "brain-dump": "Turn raw thoughts into actionable opportunity maps",
     "break-ui": "Stress-test UI with realistic worst-case data",

@@ -31,6 +31,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/animation-vocabulary` | Nazywanie efektów ruchu i rozróżnianie bliskich terminów animacji. |
 | `/ask-ben` | Kierowanie pracy przez zestaw umiejętności frontendowych Bena. |
 | `/ask-sonner` | Integracja i diagnozowanie powiadomień Sonner. |
+| `/bend-laws` | Udowadnianie reguł biznesowych prawami Bend i sprawdzanie wdrożonego kodu. |
 | `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
 | `/break-ui` | Testowanie UI na realistycznych danych najgorszego przypadku. |
