@@ -60,7 +60,7 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
 Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
-Call the Skill tool separately for "jb", "mm", "av", "ms", "lie-detector", and "ss"; apply their hats inline.
+Call the Skill tool separately for "product" and "lie-detector"; apply their hats inline.
 Authorized reviewer axes run together in the foreground; aggregate every report.
 
 ### Classify
@@ -80,7 +80,7 @@ without credible risk. Evidence can support declining a candidate.
 
 Read [communication](../shared/communication.md); keep the output schema.
 Lead with findings. Deduplicate by root cause. Omit praise and narration. For a re-review, mark each prior finding's state.
-Report the ss Value line apart from defects.
+Report the product line apart from defects.
 
 ## Deep mode
 
@@ -92,4 +92,4 @@ For `--deep`, use the same loop with a complete applicability ledger. Read
 Read [REFERENCE.md](REFERENCE.md) for vocabulary and schema. Report
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
-the `jb:`, `mm:`, `av:`, and `lie-detector:` lines, verdict, and residual limits. A clean review returns only those lines, verdict, and residual limits.
+the `product:` and `lie-detector:` lines, verdict, and residual limits. A clean review returns only those lines, verdict, and residual limits.

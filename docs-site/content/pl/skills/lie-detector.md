@@ -1,12 +1,20 @@
 ---
-title: /lie-detector
 description: >-
   Wykrywaj rozbieżności między deklaracjami a działaniem zmiany: zmyślone API
   lub twierdzenia, kod pozorujący sukces, testy, które nie mogą zawieść,
   niezamówione zmiany i antywzorce, które łatwo powielić. Stosuj przy każdym PR.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - lie detector
 sidebar:
   label: /lie-detector
+title: /lie-detector
+type: skill
 ---
 ![Diagram umiejętności /lie-detector](/diagrams/skills/lie-detector.svg)
 
@@ -16,7 +24,7 @@ sidebar:
 Traktuj zmianę jako nieudowodnioną. Przedstaw najmocniejsze argumenty za tym, że „tego nie należy scalać”, a następnie pozwól, by diff obalił je
 dowodami. Działa samodzielnie lub jako **rola wykrywacza kłamstw** w `/review` przy każdym
 diffie; największą wagę przypisuj elementom widocznym dla użytkowników (interfejs, treści, wyniki CLI, publiczne API, raport).
-Błędy kodu pozostają w `/review`; wartość — w `/jb`. Pracuj na drzewie zapisanym w commicie; ustaw `BASE`
+Błędy kodu pozostają w `/review`; wartość — w `/product`. Pracuj na drzewie zapisanym w commicie; ustaw `BASE`
 na wspólnego przodka scalanych gałęzi.
 
 ## 1. Twierdzenia bez dowodów [#1-claims-without-evidence]
@@ -79,10 +87,10 @@ wzorzec lub zaktualizuj regułę w tym samym PR i wyjaśnij dlaczego. Współist
 ## 6. Weryfikacja najmocniejszych kontrargumentów [#6-steelman-gate]
 
 Postępuj zgodnie z [steelman/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/steelman/SKILL.md), przyjmując tezę „ten PR należy scalić”.
-Przedstaw najmocniejsze argumenty przeciw niej na podstawie werdyktu [jb](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md), powyższych
+Przedstaw najmocniejsze argumenty przeciw niej na podstawie werdyktu [product](https://github.com/malinskibeniamin/skills/blob/main/product/SKILL.md), powyższych
 ustaleń i ustaleń `/review`. **Gotowy do scalenia** tylko wtedy, gdy spełnione są wszystkie trzy warunki:
 
-- wartość: werdykt `jb:` to `justified`;
+- wartość: werdykt `product:` to `justified`;
 - prawdziwość: brak P1 w tej analizie, a każde zmienione zachowanie ma test, który najpierw zawiódł, a potem przeszedł, lub
   zostało odtworzone przez rzeczywisty punkt wejścia;
 - implementacja: `/review` nie zgłasza P0/P1.

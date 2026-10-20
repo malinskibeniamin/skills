@@ -21,12 +21,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
-Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
-
 Przeglądaj HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
 Publikowanie komentarzy wymaga jawnej intencji.
-
-Podczas sprawdzania uwzględnij obowiązujące `REVIEW.md`, `CODING_STANDARDS.md` i `CONTRIBUTING.md`, jeśli istnieją. Autoryzowane osie przeglądu uruchamiaj razem na pierwszym planie; zbierz wszystkie raporty.
 
 ## Kontrakt przeglądu [#review-contract]
 
@@ -47,7 +43,7 @@ a następnie sprawdź pełny diff i log.
 
 ### Sprawdź [#inspect]
 
-1. Przeczytaj żądanie/specyfikację, zasady, pełny diff, miejsca użycia i zachowanie. Nie ufaj opisowi PR bardziej niż kodowi.
+1. Przeczytaj żądanie/specyfikację, zasady, pełny diff, miejsca użycia i zachowanie. Nie ufaj opisowi PR bardziej niż kodowi. Uwzględnij obowiązujące `REVIEW.md`, `CODING_STANDARDS.md` i `CONTRIBUTING.md`, jeśli istnieją.
 2. Dla każdej zmienionej przesłanki prześledź ją wstecz do autorytatywnych producentów, schematów,
    zapisu, konsumentów i powierzchni publicznych. Szukaj po pojęciu domenowym, polu i emitowanej
    wartości, nie tylko zmienionym symbolu.
@@ -79,9 +75,9 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Go/współbieżność/workflow | Własność, anulowanie, wyścigi, ponowienia, idempotencja |
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
-Każdy przegląd PR-a lub gałęzi uwzględnia też **perspektywę jb** ([jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)), **perspektywę mm**
-([mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)), **perspektywę av** ([av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)), **perspektywę ms**
-([ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)) oraz **perspektywę lie-detector** ([lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)) bezpośrednio w ramach przeglądu.
+Ładuj umiejętności zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+Wywołaj narzędzie Skill osobno dla „product” i „lie-detector”; zastosuj ich perspektywy bezpośrednio w ramach przeglądu.
+Autoryzowane osie przeglądu uruchamiaj razem na pierwszym planie; zbierz wszystkie raporty.
 
 ### Sklasyfikuj [#classify]
 
@@ -100,7 +96,7 @@ bez wiarygodnego ryzyka. Dowód może uzasadniać odrzucenie uwagi.
 
 Przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md); zachowaj schemat wyniku.
 Zacznij od znalezisk. Deduplikuj według przyczyny źródłowej. Pomiń pochwały i narrację. Przy ponownym przeglądzie oznacz stan każdej wcześniejszej uwagi.
-Każdy przegląd stosuje też `/ss` bezpośrednio w ramach przeglądu; podaj jego wiersz Value oddzielnie od defektów.
+Podaj wiersz product oddzielnie od defektów.
 
 ## Tryb głęboki [#deep-mode]
 
@@ -112,4 +108,4 @@ Dla `--deep` użyj tej samej pętli z pełnym rejestrem zastosowania. Przeczytaj
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md), aby poznać słownictwo i schemat. Zgłaszaj
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Dodaj `entrypoint, data, actions, observations, timing, limits`, ustalony punkt, tryb, liczby,
-wiersze `jb:`, `mm:`, `av:` i `lie-detector:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko te wiersze, werdykt i pozostałe ograniczenia.
+wiersze `product:` i `lie-detector:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko te wiersze, werdykt i pozostałe ograniczenia.

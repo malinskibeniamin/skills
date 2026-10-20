@@ -127,12 +127,12 @@ aip 3825
 blast-radius 2850
 brain-dump 3200
 grilling 4200
+product 5250
 improve 3600
 golang 3525
 pr-shepherd 3525
 stacked-prs 3500
 snyk-ux-security 3500
-ss 4000
 tdd 3425
 visual-review 3400
 frontend-invariants 3350
@@ -145,8 +145,6 @@ commit-push-pr 3375
 tanstack-router 3200
 postgresql 3175
 golang-review 3125
-jb 4000
-av 3625
 lie-detector 5050
 upgrade-dependency 3375
 excalidraw-diagram 3100
@@ -165,7 +163,6 @@ stack-registry 2525
 codex-compat 2575
 work-automation-kit 2525
 make-pr-easy-to-review 2425
-ms 3400
 maintain-verification-skill 3000
 codex 2375
 handoff 2375
@@ -208,13 +205,15 @@ EOF
 # Main's 176225-byte cap plus 550 for /ms checks. The post-v1.3.1 refresh
 # adds 200 bytes of bounded room for ticket identity, seam trade-offs, affirmative
 # recommendations, and explicit host paths; descriptions/catalog are unchanged.
-if [ "$remaining_skill_total" -le 176975 ]; then
-  echo "  PASS  remaining-skill wave under 176975 bytes ($remaining_skill_total)"
+# 2026-10-20: /product replaces /ss, /mm, /ms, /jb, and /av (14801 -> 5205 bytes);
+# lock in the saving, 176975 -> 167600.
+if [ "$remaining_skill_total" -le 167600 ]; then
+  echo "  PASS  remaining-skill wave under 167600 bytes ($remaining_skill_total)"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 176975)"
+  echo "  FAIL  remaining-skill wave over budget: $remaining_skill_total bytes (cap: 167600)"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 176975 bytes"
+  ERRORS="$ERRORS\n  FAIL: remaining-skill wave over 167600 bytes"
 fi
 
 # No Unicode punctuation in hot-path docs except the three user-visible

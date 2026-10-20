@@ -1,9 +1,17 @@
 ---
-title: /lie-detector
 description: 揪出變更宣稱做到卻未做到的事：憑空捏造的 API 或宣稱、假裝成功的程式碼、不可能失敗的測試、未經要求的變更，以及容易被複製的反模式。適用於每個 PR。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - lie detector
 sidebar:
   label: /lie-detector
+title: /lie-detector
+type: skill
 ---
 ![/lie-detector 技能示意圖](/diagrams/skills/lie-detector.svg)
 
@@ -13,7 +21,7 @@ sidebar:
 將變更視為尚未獲得證實。為「這不應該合併」建立最強論點，再讓差異中的
 證據反駁它。可獨立執行，也可在 `/review` 中以 **lie-detector 角色**檢查每一份
 差異；優先關注面向客戶的介面（UI、文案、CLI 輸出、公開 API、報告）。
-程式碼缺陷由 `/review` 處理；價值由 `/jb` 評估。在已提交的工作樹上操作；將 `BASE`
+程式碼缺陷由 `/review` 處理；價值由 `/product` 評估。在已提交的工作樹上操作；將 `BASE`
 設為合併基準。
 
 ## 1. 缺乏證據的宣稱 [#1-claims-without-evidence]
@@ -75,10 +83,10 @@ sidebar:
 ## 6. 最強反方論證關卡 [#6-steelman-gate]
 
 以「這個 PR 應該合併」為前提，遵循 [steelman/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/steelman/SKILL.md)。
-根據 [jb](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md) 的判定、上述問題
+根據 [product](https://github.com/malinskibeniamin/skills/blob/main/product/SKILL.md) 的判定、上述問題
 及 `/review` 的問題，提出最有力的反對論證。只有同時滿足以下三項，才算**可合併**：
 
-- 價值：`jb:` 判定為 `justified`；
+- 價值：`product:` 判定為 `justified`；
 - 真實性：此處沒有 P1，且每個變更的行為都有先失敗再通過的測試，或
   從實際進入點重播驗證；
 - 實作：`/review` 未回報 P0/P1。

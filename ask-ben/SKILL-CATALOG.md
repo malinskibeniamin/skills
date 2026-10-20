@@ -8,7 +8,6 @@
 | `/animation-vocabulary` | Name motion effects and distinguish close animation terms. |
 | `/ask-ben` | Route work through Ben's frontend skill harness. |
 | `/ask-sonner` | Integrate and troubleshoot Sonner notifications. |
-| `/av` | Check that a change earns its time and lands safely. |
 | `/blast-radius` | Prove non-local change safety with executable evidence. |
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/break-ui` | Stress-test UI with realistic worst-case data. |
@@ -44,14 +43,11 @@
 | `/implement-spec` | Implement a whole spec on one integration branch. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
-| `/jb` | Check that a PR earns its time and proves it is done. |
 | `/launchdarkly` | Audit flag audiences and retirement with LaunchDarkly CLI. |
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
-| `/mm` | Judge whether a change earns its cost before it ships. |
 | `/mobile-native` | Fix mobile web viewport, touch, and keyboard behavior. |
-| `/ms` | Check that a PR earns its time and business value. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |
 | `/postgresql` | Engineer and operate PostgreSQL from workload evidence. |
@@ -113,6 +109,7 @@
 | `/pr-shepherd` | Resume changed PRs and shepherd current workspace repairs. |
 | `/pr` | Write a PR body that is fast to review. |
 | `/prime` | Build a concise repository startup brief. |
+| `/product` | Check that work earns its time and ships business value. |
 | `/prototype` | Build a throwaway artifact to answer a design question. |
 | `/quantify-impact` | Prove meaningful product and codebase improvements. |
 | `/read-the-damn-docs` | Research current behavior from primary documentation. |
@@ -130,7 +127,6 @@
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
 | `/snyk-ux-security` | Audit dependency security with Snyk and release gates. |
-| `/ss` | Review whether a change earns our limited time. |
 | `/stack-registry` | Current and banned stack governance for harness rules. |
 | `/stacked-prs` | Create and manage dependent GitHub pull request stacks. |
 | `/stay-within-limits` | Budget long-running agent work around usage limits. |

@@ -1,9 +1,17 @@
 ---
-title: /lie-detector
 description: 揪出变更中声称做到却未做到的内容：凭空捏造的 API 或声明、假装成功的代码、无法失败的测试、未经要求引入的变更，以及容易被照搬的反模式。用于每个 PR。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - lie detector
 sidebar:
   label: /lie-detector
+title: /lie-detector
+type: skill
 ---
 ![/lie-detector 技能示意图](/diagrams/skills/lie-detector.svg)
 
@@ -13,7 +21,7 @@ sidebar:
 将变更视为尚未得到证实。为“此变更不应合并”构建最有力的论证，再让差异中的证据
 反驳它。可独立运行，也可在 `/review` 中作为**测谎审查角色**，审查每一项
 差异；优先关注面向客户的部分（UI、文案、CLI 输出、公共 API、报告）。
-代码缺陷由 `/review` 负责；价值判断由 `/jb` 负责。在已提交的工作树上操作；将 `BASE`
+代码缺陷由 `/review` 负责；价值判断由 `/product` 负责。在已提交的工作树上操作；将 `BASE`
 设为合并基点。
 
 ## 1. 缺乏证据的声明 [#1-claims-without-evidence]
@@ -75,10 +83,10 @@ sidebar:
 ## 6. 最强反方论证关卡 [#6-steelman-gate]
 
 以“此 PR 应当合并”为前提，遵循 [steelman/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/steelman/SKILL.md)。
-根据 [jb](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md) 的结论、上述问题
+根据 [product](https://github.com/malinskibeniamin/skills/blob/main/product/SKILL.md) 的结论、上述问题
 以及 `/review` 的发现，构建最有力的反对论证。只有以下三项都成立时，才算**可以合并**：
 
-- 价值：`jb:` 的结论为 `justified`；
+- 价值：`product:` 的结论为 `justified`；
 - 真实性：此处没有 P1，且每项变更的行为都有先失败后通过的测试，或
   通过真实入口重放验证；
 - 实现：`/review` 未报告 P0/P1。
@@ -104,5 +112,4 @@ sidebar:
 `lie-detector: <truthful|suspect|lying> -- merge <ready|not proven> -- <evidence, at most 20 words>`
 
 `truthful`：未发现问题。`suspect`：仅有 P2。`lying`：存在任何 P1。随后使用
-`[P1|P2|P3] <file:line> <section> -- <lie and proof>; <smallest fix>`。没有发现问题时，
-只输出结论行。
+`[P1|P2|P3] <file:line> <section> -- <lie and proof>; <smallest fix>`。没有发现问题时，只输出结论行。

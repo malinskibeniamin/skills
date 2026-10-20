@@ -37,9 +37,9 @@ run_content_eval "$LD_SKILL" 'installed version' "lie-detector checks phantom AP
 run_content_eval "$LD_SKILL" 'exemplar' "lie-detector weighs copy reach of anti-patterns"
 
 # Merge-ready needs value, truth, and implementation together.
-run_content_eval "$LD_SKILL" 'jb/SKILL\.md' "steelman gate reads the jb value verdict"
+run_content_eval "$LD_SKILL" 'product/SKILL\.md' "steelman gate reads the product value verdict"
 run_content_eval "$LD_SKILL" 'steelman/SKILL\.md' "steelman gate follows the steelman procedure"
-run_content_eval "$LD_SKILL" '`justified`' "merge-ready requires a justified jb lane"
+run_content_eval "$LD_SKILL" '`justified`' "merge-ready requires a justified product lane"
 run_content_eval "$LD_SKILL" 'no P0/P1' "merge-ready requires a clean implementation review"
 
 # Auto-invocation: customer-facing reviews apply the hat, steelman knows the merge premise,

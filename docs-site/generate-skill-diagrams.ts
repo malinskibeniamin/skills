@@ -432,15 +432,6 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Actionable audit",
     ],
   },
-  jb: {
-    kind: "decision-tree",
-    nodes: [
-      "PR + ticket + diff",
-      "Which lane earns the time?",
-      "Caller, done, rollout evidence",
-      "jb verdict line",
-    ],
-  },
   launchdarkly: {
     kind: "evidence-funnel",
     nodes: [
@@ -505,28 +496,6 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Fast review",
     ],
   },
-  mm: {
-    kind: "evidence-funnel",
-    nodes: ["PR claim", "Lane + payoff", "Value rules V1-V16", "Ship verdict"],
-  },
-  av: {
-    kind: "decision-tree",
-    nodes: [
-      "PR, plan, or ticket",
-      "Lane evidence holds?",
-      "Justified: verdict line",
-      "Thin: blocking question",
-    ],
-  },
-  ms: {
-    kind: "decision-tree",
-    nodes: [
-      "PR or ticket",
-      "Value earned?",
-      "Ship smallest slice",
-      "Split, park, or add evidence",
-    ],
-  },
   "plan-arbiter": {
     kind: "decision-tree",
     nodes: [
@@ -575,6 +544,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Rules + docs",
       "Build + test entrypoints",
       "Current branch state",
+    ],
+  },
+  product: {
+    kind: "decision-tree",
+    nodes: [
+      "Plan, PR, or branch",
+      "Which lane earns the time?",
+      "Beneficiary, trigger, evidence, reach",
+      "Justified, thin, or unjustified",
     ],
   },
   prototype: {
@@ -735,15 +713,6 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Snyk findings",
       "Exploitability triage",
       "Upgrade + release gate",
-    ],
-  },
-  ss: {
-    kind: "decision-tree",
-    nodes: [
-      "Which bucket?",
-      "Beneficiary + trigger",
-      "Evidence + reachability",
-      "Justified / needs justification / unlikely",
     ],
   },
   "stack-registry": {

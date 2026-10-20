@@ -1,12 +1,20 @@
 ---
-title: /steelman
 description: >-
   Przedstaw najsilniejsze, poparte dowodami argumenty przeciwko założeniu.
   Używaj, gdy użytkownik prosi o steelman, krytyczną ocenę lub drugą opinię albo
   gdy decyzja wysokiego ryzyka zależy od niepewnego założenia.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - steelman
 sidebar:
   label: /steelman
+title: /steelman
+type: skill
 ---
 ![Diagram umiejętności /steelman](/diagrams/skills/steelman.svg)
 
@@ -21,7 +29,7 @@ Przeciwdziałaj bezkrytycznemu przytakiwaniu za pomocą dowodów. Pomiń prefere
    - faktyczne -> zweryfikuj;
    - przyczynowe -> przetestuj mechanizm;
    - architektoniczne -> sprawdź istniejące użycia;
-   - założenie dotyczące scalenia ("ten PR powinien zostać scalony") -> oprzyj argumentację na werdykcie `jb:`, dowodach z [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#6-steelman-gate) i ustaleniach z przeglądu;
+   - założenie dotyczące scalenia ("ten PR powinien zostać scalony") -> oprzyj argumentację na werdykcie `product:`, dowodach z [lie-detector](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md#6-steelman-gate) i ustaleniach z przeglądu;
    - preferencja/cel/zakres -> zwróć `noise`; decyzja należy do użytkownika.
 2. **Najpierw dowody:** wyszukaj symbole/wzorce, przeczytaj wskazane pliki, przeprowadź niedrogie kontrole, sprawdź aktualną dokumentację. Nigdy nie argumentuj na podstawie ogólników.
 3. **Przeciwne stanowisko:** 2–4 punkty z odwołaniami do `file:line` lub wyników poleceń. Wskaż, co musiałoby być prawdą, aby twierdzenie było błędne, dowody z repozytorium wspierające tę tezę, pominięty scenariusz awarii i sprzeczny precedens lub wcześniejsze zdarzenia.
