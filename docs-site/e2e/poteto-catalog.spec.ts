@@ -54,7 +54,7 @@ for (const locale of [
       ).toBeVisible();
       await expect(
         page.getByRole("row").filter({ hasText: /\/poteto-/ }),
-      ).toHaveCount(55);
+      ).toHaveCount(59);
       for (const name of [
         "/poteto-help",
         "/poteto-ketchup",
@@ -64,6 +64,10 @@ for (const locale of [
         "/poteto-benchmark-checklist",
         "/poteto-correct",
         "/poteto-principle-explain-the-number",
+        "/poteto-create-formal-verification-skill",
+        "/poteto-maintain-formal-verification-skill",
+        "/poteto-in-your-own-words",
+        "/poteto-sharpen",
       ]) {
         await expect(page.getByRole("cell", { name, exact: true })).toHaveCount(
           1,

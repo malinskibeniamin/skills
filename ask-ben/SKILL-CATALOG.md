@@ -58,12 +58,15 @@
 | `/poteto-blast-radius` | Poteto: Prove non-local safety by executing the decisive check. |
 | `/poteto-bro` | Poteto: Restate the last message in plain human language. |
 | `/poteto-correct` | Poteto: Make repeated agent mistakes impossible by design. |
+| `/poteto-create-formal-verification-skill` | Poteto: Create a project-local formal verifier. |
 | `/poteto-create-verification-skill` | Poteto: Create a project-local real-app verifier. |
 | `/poteto-figure-it-out` | Poteto: Design a verifiable playbook for an unfamiliar task. |
 | `/poteto-help` | Poteto: Find pstack skills, setup, and troubleshooting guidance. |
 | `/poteto-how` | Poteto: Explain subsystem behavior from source evidence. |
+| `/poteto-in-your-own-words` | Poteto: Restate the user's goals and problem. |
 | `/poteto-interrogate` | Poteto: Challenge a diff with adversarial review. |
 | `/poteto-ketchup` | Poteto: Catch up on this chat and pending user decisions. |
+| `/poteto-maintain-formal-verification-skill` | Poteto: Refresh formal checks against changed code. |
 | `/poteto-maintain-verification-skill` | Poteto: Refresh a verifier from source and live behavior. |
 | `/poteto-make-bot-ui` | Poteto: Build a dashboard that wakes a bot through a webhook. |
 | `/poteto-mode` | Poteto: Route rigorous work through Poteto playbooks. |
@@ -97,6 +100,7 @@
 | `/poteto-reproduce-and-fix-issues` | Poteto: Reproduce issue reports and verify bounded fixes. |
 | `/poteto-setup-benny` | Poteto: Configure the Benny triage and reproduction pack. |
 | `/poteto-setup-pstack` | Poteto: Configure pstack model roles and reasoning budgets. |
+| `/poteto-sharpen` | Poteto: Deepen a task and return its rewritten prompt. |
 | `/poteto-show-me-your-work` | Poteto: Keep a reviewable decision and evidence trail. |
 | `/poteto-swarm` | Poteto: Coordinate explicitly requested parallel workers. |
 | `/poteto-tdd` | Poteto: Make a bug executable before implementing its fix. |

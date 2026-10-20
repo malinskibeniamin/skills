@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Maintain Formal Verification Skill"
+  short_description: "Poteto: Refresh formal checks against changed code"
+policy:
+  allow_implicit_invocation: false

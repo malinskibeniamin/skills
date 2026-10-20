@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Sharpen"
+  short_description: "Poteto: Deepen a task and return its rewritten prompt"
+policy:
+  allow_implicit_invocation: false

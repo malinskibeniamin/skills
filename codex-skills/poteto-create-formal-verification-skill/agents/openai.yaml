@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Create Formal Verification Skill"
+  short_description: "Poteto: Create a project-local formal verifier"
+policy:
+  allow_implicit_invocation: false

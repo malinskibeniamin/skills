@@ -81,12 +81,15 @@ type: skill
 | `/poteto-blast-radius` | Poteto：執行關鍵檢查，證明跨模組變更的安全性。 |
 | `/poteto-bro` | Poteto：用淺白的語言重述上一則訊息。 |
 | `/poteto-correct` | Poteto：透過設計消除代理反覆犯的錯誤。 |
+| `/poteto-create-formal-verification-skill` | Poteto：建立專案本機的形式化驗證工具。 |
 | `/poteto-create-verification-skill` | Poteto：建立專案本機的真實應用程式驗證技能。 |
 | `/poteto-figure-it-out` | Poteto：為不熟悉的任務設計可驗證的操作流程。 |
 | `/poteto-help` | Poteto：尋找 pstack 技能、設定和疑難排解指南。 |
 | `/poteto-how` | Poteto：依據原始碼實證說明子系統的行為。 |
+| `/poteto-in-your-own-words` | Poteto：用自己的話重述使用者的目標與問題。 |
 | `/poteto-interrogate` | Poteto：透過對抗式審查質疑程式碼差異。 |
 | `/poteto-ketchup` | Poteto：回顧目前對話和等待使用者決定的事項。 |
+| `/poteto-maintain-formal-verification-skill` | Poteto：依據程式碼變更更新形式化驗證。 |
 | `/poteto-maintain-verification-skill` | Poteto：根據原始碼與實際行為更新驗證器。 |
 | `/poteto-make-bot-ui` | Poteto：建立透過 webhook 喚醒機器人的儀表板。 |
 | `/poteto-mode` | Poteto：透過 Poteto 操作流程執行嚴謹的工作。 |
@@ -120,6 +123,7 @@ type: skill
 | `/poteto-reproduce-and-fix-issues` | Poteto：重現回報的問題並驗證限定範圍內的修復。 |
 | `/poteto-setup-benny` | Poteto：設定 Benny 問題分類與重現工具包。 |
 | `/poteto-setup-pstack` | Poteto：設定 pstack 模型角色與推理預算。 |
+| `/poteto-sharpen` | Poteto：深化任務並回傳改寫後的提示詞。 |
 | `/poteto-show-me-your-work` | Poteto：保留可審查的決策與實證紀錄。 |
 | `/poteto-swarm` | Poteto：協調使用者明確要求的平行工作。 |
 | `/poteto-tdd` | Poteto：實作修復之前，先以可執行測試重現錯誤。 |
