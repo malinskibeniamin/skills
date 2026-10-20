@@ -53,7 +53,7 @@ echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}commit" 
 echo "$prompt" | grep -qiE "(do not|don.t|dont|never|without)[^.;]{0,80}($_action_verbs)" && _negated_action=true
 echo "$prompt" | grep -qiE 'unblock yourself[^.;]{0,100}(((do not|don.t|dont|never)[^.;]{0,40}push)|keep[^.;]{0,30}local)' && _delivery_override=false
 echo "$prompt" | grep -qiE "^[[:space:]]*(please[[:space:]]+)?((can|could|would)[[:space:]]+you[[:space:]]+)?(answer|explain|plan|review|analy[sz]e|summarize|inspect|audit|evaluate)([[:space:][:punct:]]|$)" && _artifact_only=true
-echo "$prompt" | grep -qiE "([,;][[:space:]]*(then[[:space:]]+)?|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+)?($_action_verbs)([^[:alnum:]_]|$)" && _artifact_only=false
+echo "$prompt" | grep -qiE "([,;][[:space:]]*(then[[:space:]]+)?|[[:space:]]+(and|then)[[:space:]]+)(please[[:space:]]+)?($_action_verbs|commit|push)([^[:alnum:]_]|$)" && _artifact_only=false
 
 if echo "$prompt" | grep -qiE '^[[:space:]]*(stop|cancel|never mind|nevermind)([[:space:][:punct:]]|$)'; then
   [ -n "$_session_dir" ] && rm -f "$_session_dir/task-endpoint" 2>/dev/null || true
@@ -91,6 +91,12 @@ elif echo "$prompt" | grep -qiE "(^|[^[:alnum:]_])($_action_verbs)([^[:alnum:]_]
   else
     _endpoint="push"
   fi
+fi
+
+# A read-only follow-up replaces even an unfinished action endpoint. Otherwise
+# Stop can demand delivery or an action status while the user only asked for review.
+if [ "$_artifact_only" = true ] && [ -z "$_endpoint" ] && [ -n "$_session_dir" ]; then
+  rm -f "$_session_dir/task-endpoint" 2>/dev/null || true
 fi
 
 if [ -n "$_endpoint" ] && [ -n "$_session_dir" ]; then

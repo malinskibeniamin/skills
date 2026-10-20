@@ -7,7 +7,7 @@ HOOKS_DIR="$REPO_ROOT/.claude/hooks"
 
 run_file_eval "$HOOKS_DIR/lifecycle-stop.sh" "lifecycle-stop.sh exists"
 run_executable_eval "$HOOKS_DIR/lifecycle-stop.sh" "lifecycle-stop.sh is executable"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "commit only the requested scope" "lifecycle-stop prescribes scoped commit for external endpoints"
+# Scoped commit recovery is exercised at the Stop entrypoint in test-delivery-completion.sh.
 
 for pattern in "coverage-summary.json" "SOURCE CHANGED WITHOUT TEST CHANGE" "NEW SOURCE WITHOUT TEST"; do
   if grep -Rq -- "$pattern" "$HOOKS_DIR/lifecycle-stop.sh" "$HOOKS_DIR/orchestration-stop.sh"; then

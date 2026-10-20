@@ -110,7 +110,7 @@ CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
 rm "$_delivery_session/dirty-files-baseline"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
-  "missing ownership tracking cannot claim uncommitted work is delivered" "uncommitted"
+  "missing ownership tracking cannot claim uncommitted work is delivered" "commit only the requested scope"
 printf 'requested.txt\n' > "$_delivery_session/dirty-files-baseline"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
@@ -118,7 +118,7 @@ CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
 printf '%s\n' "$_delivery_repo/requested.txt" > "$_delivery_session/session-touched-files"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
-  "adopting a pre-existing dirty file still requires committing it" "uncommitted"
+  "adopting a pre-existing dirty file still requires committing it" "commit only the requested scope"
 rm "$_delivery_session/session-touched-files"
 : > "$_delivery_session/dirty-files-baseline"
 printf 'local\n' > "$_delivery_session/task-endpoint"
@@ -150,6 +150,60 @@ if [ "$(git --git-dir="$_delivery_remote" rev-parse refs/heads/feature/delivery-
 else
   echo "  FAIL  recovery loses remote evidence or unrelated work"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: scoped recovery publication"
+fi
+# Replay actual prompt/Stop events in one session, not a flattened follow-up prompt.
+# An interrupted local edit must not turn a later read-only review into delivery.
+_delivery_prompt() {
+  jq -nc --arg sid "$_delivery_sid" --arg prompt "$1" \
+    '{hook_event_name:"UserPromptSubmit",session_id:$sid,prompt:$prompt}' \
+    | CLAUDE_SESSION_ID="$_delivery_sid" "$REPO_ROOT/.claude/hooks/intent-detect.sh" >/dev/null
+}
+_delivery_review_payload=$(jq -nc --arg sid "$_delivery_sid" \
+  '{hook_event_name:"Stop",session_id:$sid,last_assistant_message:"The change still needs verification; no files changed during review."}')
+_delivery_prompt 'fix requested.txt locally; do not commit or push'
+printf 'local requested edit\n' >> requested.txt
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
+  "local-only work can finish without committing or pushing"
+_delivery_prompt 'push this fix now'
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "authorized follow-up blocks stopping with the existing fix still dirty" "uncommitted"
+_delivery_prompt 'continue'
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "an ambiguous continuation preserves the pending delivery endpoint" "uncommitted"
+_delivery_prompt 'review this fix and report findings'
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_review_payload" 0 \
+  "read-only review supersedes pending delivery without requiring an action status"
+_delivery_prompt 'review this fix, then update requested.txt'
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "review plus an explicit edit still owes scoped delivery" "uncommitted"
+_delivery_prompt 'review this fix, then push it'
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "review plus an explicit push still owes scoped delivery" "uncommitted"
+_delivery_prompt 'push this fix now'
+git add requested.txt
+git commit -qm 'fix(fixtures): deliver requested follow-up'
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
+  "review does not waive a later authorized push" "unpushed"
+git push -q origin feature/delivery-completion
+CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
+  "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 0 \
+  "same-session follow-up completes after the actual remote receives the fix"
+if [ "$(git --git-dir="$_delivery_remote" rev-parse refs/heads/feature/delivery-completion)" = "$(git rev-parse HEAD)" ] \
+  && [ "$(git show --format= --name-only HEAD)" = requested.txt ] \
+  && [ "$(cat unrelated.txt)" = 'unrelated local work' ] \
+  && [ -z "$(git ls-files unrelated.txt)" ]; then
+  echo "  PASS  multi-turn delivery commits only the fix and preserves the unrelated draft"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  multi-turn delivery changed scope or missed the actual remote"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: multi-turn scoped delivery"
 fi
 popd >/dev/null
 
