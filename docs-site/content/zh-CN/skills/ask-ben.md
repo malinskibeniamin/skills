@@ -31,6 +31,7 @@ type: skill
 | `/animation-vocabulary` | 为动效命名并区分相近动画术语。 |
 | `/ask-ben` | 通过 Ben 的前端技能框架路由工作。 |
 | `/ask-sonner` | 集成和排查 Sonner 通知。 |
+| `/bazel` | 构建、测试和诊断 Bazel 单体仓库的变更。 |
 | `/bend-laws` | 用 Bend 定律证明业务规则并检查已发布的代码。 |
 | `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |

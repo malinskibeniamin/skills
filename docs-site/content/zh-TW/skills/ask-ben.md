@@ -31,6 +31,7 @@ type: skill
 | `/animation-vocabulary` | 為動效命名並區分相近動畫術語。 |
 | `/ask-ben` | 透過 Ben 的前端技能控制框架路由工作。 |
 | `/ask-sonner` | 整合並排查 Sonner 通知。 |
+| `/bazel` | 建置、測試與診斷 Bazel 單一儲存庫的變更。 |
 | `/bend-laws` | 以 Bend 定律證明商業規則並檢查已發布的程式碼。 |
 | `/blast-radius` | 以可執行的實證證明非區域性變更的安全性。 |
 | `/brain-dump` | 將原始想法轉化為可執行的機會地圖。 |

@@ -60,6 +60,15 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  bazel: {
+    kind: "dependency-graph",
+    nodes: [
+      "Sources + schemas",
+      "Tools + config",
+      "Apps + tests",
+      "Release artifacts",
+    ],
+  },
   accessibility: {
     kind: "concern-matrix",
     nodes: [
