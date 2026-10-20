@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto In Your Own Words"
+  short_description: "Poteto: Restate the user's goals and problem"
+policy:
+  allow_implicit_invocation: false

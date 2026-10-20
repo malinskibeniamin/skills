@@ -81,12 +81,15 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/poteto-blast-radius` | Poteto: Udowodnij bezpieczeństwo zmian wykraczających poza lokalny zakres, wykonując rozstrzygającą kontrolę. |
 | `/poteto-bro` | Poteto: Przedstaw ostatnią wiadomość prostym, zrozumiałym językiem. |
 | `/poteto-correct` | Poteto: Wyeliminuj powtarzające się błędy agentów przez projektowanie. |
+| `/poteto-create-formal-verification-skill` | Poteto: Utwórz lokalny dla projektu weryfikator formalny. |
 | `/poteto-create-verification-skill` | Poteto: Utwórz lokalną dla projektu umiejętność weryfikacji rzeczywistej aplikacji. |
 | `/poteto-figure-it-out` | Poteto: Zaprojektuj weryfikowalny scenariusz działania dla nieznanego zadania. |
 | `/poteto-help` | Poteto: Znajdź umiejętności pstack, instrukcje konfiguracji i pomoc w rozwiązywaniu problemów. |
 | `/poteto-how` | Poteto: Wyjaśnij działanie podsystemu na podstawie kodu źródłowego. |
+| `/poteto-in-your-own-words` | Poteto: Opisz własnymi słowami cele i problem osoby korzystającej z narzędzia. |
 | `/poteto-interrogate` | Poteto: Sprawdź zmiany w kodzie poprzez krytyczną analizę. |
 | `/poteto-ketchup` | Poteto: Podsumuj ten czat i decyzje oczekujące na użytkownika. |
+| `/poteto-maintain-formal-verification-skill` | Poteto: Dostosuj weryfikację formalną do zmian w kodzie. |
 | `/poteto-maintain-verification-skill` | Poteto: Zaktualizuj weryfikator na podstawie kodu źródłowego i rzeczywistego działania. |
 | `/poteto-make-bot-ui` | Poteto: Zbuduj panel, który uruchamia bota przez webhook. |
 | `/poteto-mode` | Poteto: Prowadź wymagające zadania przez scenariusze działania Poteto. |
@@ -120,6 +123,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/poteto-reproduce-and-fix-issues` | Poteto: Odtwarzaj zgłoszone problemy i weryfikuj poprawki o określonym zakresie. |
 | `/poteto-setup-benny` | Poteto: Skonfiguruj pakiet Benny do klasyfikacji i odtwarzania zgłoszeń. |
 | `/poteto-setup-pstack` | Poteto: Skonfiguruj role modeli i budżety rozumowania w pstack. |
+| `/poteto-sharpen` | Poteto: Pogłęb zadanie i zwróć jego przeformułowany prompt. |
 | `/poteto-show-me-your-work` | Poteto: Zachowuj możliwą do przejrzenia historię decyzji i dowodów. |
 | `/poteto-swarm` | Poteto: Koordynuj równoległą pracę wyłącznie na wyraźne żądanie użytkownika. |
 | `/poteto-tdd` | Poteto: Przed naprawą zapisz błąd jako wykonywalny test. |

@@ -195,8 +195,12 @@ class PotetoSyncTest(unittest.TestCase):
         self.assertIn("Only Opus 5.5 and GPT-6.1 Sol", result.stderr)
 
 
-    def test_refresh_includes_help_and_catchup(self):
-        for name in ["poteto-help", "ketchup"]:
+    def test_refresh_includes_prompt_and_verification_skills(self):
+        additions = [
+            "poteto-help", "ketchup", "sharpen", "in-your-own-words",
+            "create-formal-verification-skill", "maintain-formal-verification-skill",
+        ]
+        for name in additions:
             self.write_source(
                 f"skills/{name}/SKILL.md",
                 f'---\nname: {name}\ndescription: "A user-requested upstream workflow."\n'
@@ -204,9 +208,13 @@ class PotetoSyncTest(unittest.TestCase):
             )
         self.install()
         manifest = json.loads((self.repo / ".claude-plugin/plugin.json").read_text())
-        for name in ["poteto-help", "poteto-ketchup"]:
-            self.assertEqual(manifest["skills"].count(f"./poteto-skills/{name}/"), 1)
-            adapter = (self.repo / f"poteto-skills/{name}/SKILL.md").read_text()
+        for name in additions:
+            registered = name if name.startswith("poteto-") else f"poteto-{name}"
+            self.assertEqual(manifest["skills"].count(f"./poteto-skills/{registered}/"), 1)
+            adapter = (self.repo / f"poteto-skills/{registered}/SKILL.md").read_text()
+            description = json.loads(adapter.split("description: ", 1)[1].splitlines()[0])
+            self.assertTrue(25 <= len(description) <= 64)
+            self.assertTrue(description.isascii())
             self.assertIn("disable-model-invocation: true\n", adapter)
         self.assertEqual(self.sync("--check").returncode, 0)
 
