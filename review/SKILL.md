@@ -27,7 +27,7 @@ then inspect the complete diff and log.
 
 ### Inspect
 
-1. Read the request/spec, rules, complete diff, call sites, and behavior. Do not trust a PR summary over code. Include applicable `CODING_STANDARDS.md` and `CONTRIBUTING.md` when present.
+1. Read the request/spec, rules, complete diff, call sites, and behavior. Do not trust a PR summary over code. Include applicable `REVIEW.md`, `CODING_STANDARDS.md`, and `CONTRIBUTING.md` when present.
 2. For each changed assumption, reverse-trace it to authoritative producers, schemas,
    storage, consumers, and public surfaces. Search by domain concept, field, and emitted
    value, not only the changed symbol.

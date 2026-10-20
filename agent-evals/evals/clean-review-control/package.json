@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "vitest run repo/src"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.0"
+  }
+}

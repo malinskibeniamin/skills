@@ -18,7 +18,7 @@ hooks:
 
 # Resolve PR Feedback
 
-Triage feedback against source, repair applicable defects, and verify hosted state.
+Repair applicable feedback and verify hosted state.
 Use `/agent-watchdog` for another run's completion claims.
 
 ## Input
@@ -49,7 +49,7 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 Inspect bot-only threads too; author type does not prove applicability. Paginate
 threads, comments, and reviews. Reply to non-applicable findings with evidence.
 
-If no new item remains, finish rebase and report observed dispositions; pending decisions are not completion.
+If clean, finish rebase and report dispositions. Pending decisions are incomplete.
 
 ### 3. Repair clusters
 
@@ -70,16 +70,15 @@ when remediation is requested.
 
 ### 6. Completeness Verification
 
-Before declaring complete: zero unresolved applicable, non-outdated threads; no stale
-`CHANGES_REQUESTED`. Triage any remainder. Enforced by `pr-feedback-completeness-stop`.
+Before declaring complete: zero unresolved threads, including bot findings and outdated lines; no stale
+`CHANGES_REQUESTED`. Enforced by `pr-feedback-completeness-stop`.
 
 ```bash
 bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
-bash scripts/pr-unresolved-count.sh --include-bots  # automated review repair
 ```
 
-The first command must print `0`. The wrapper hides GraphQL-only thread resolution details.
+The counter must print `0`.
 
 ### 7. Summary
 
@@ -87,9 +86,12 @@ Post one bullet per root cause/disposition plus hosted thread and CI state.
 
 ## Iteration policy
 
-- AI self-review: stop when the inline review axis is approved or empty; cap at two rounds.
-- Human, cloud, or Copilot feedback: NO iteration cap. Address every thread before handoff;
-  the completeness hook blocks unresolved threads or pending change requests.
+- AI self-review: stop when approved or empty; cap at two rounds.
+- Human feedback: NO iteration cap on dispositions; address every thread before handoff.
+- Automatic repair: pause after 3 feedback rounds; reassess before explicit `retry`.
+  Base-only updates do not count. Paused is not complete.
+- After the first full review, check only changed diff and prior findings.
+  Deduplicate root causes; resolve existing threads instead of reposting.
 
 ## Automatic wake-up
 

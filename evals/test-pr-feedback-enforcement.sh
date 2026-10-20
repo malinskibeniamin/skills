@@ -119,15 +119,20 @@ if [ -x "$HOOK" ] && command -v jq &>/dev/null; then
   _assert "blocks (exit 2) on unresolved non-bot thread" 2 "unresolved review thread"
   _assert "prescribes /resolve-pr-feedback" 2 "/resolve-pr-feedback"
 
-  # Bot-only thread → pass (bots should not block humans)
+  # Authors must disposition bot findings too; author type is not applicability.
   bot_thread='{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[{"isResolved":false,"isOutdated":false,"comments":{"nodes":[{"author":{"login":"copilot[bot]"},"body":"nit"}]}}]}}}}}'
   _run_hook_with_env "$HOOK" "PR_FEEDBACK_MOCK_PR=42" "PR_FEEDBACK_MOCK_THREADS=$bot_thread" "PR_FEEDBACK_MOCK_REVIEWS=$clean_reviews"
-  _assert "exits 0 for bot-only unresolved threads" 0
+  _assert "blocks bot-only unresolved threads" 2 "unresolved review thread"
 
-  # Outdated thread → pass
+  # Moving the line does not prove the finding was addressed.
   outdated='{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[{"isResolved":false,"isOutdated":true,"comments":{"nodes":[{"author":{"login":"alice"},"body":"old"}]}}]}}}}}'
   _run_hook_with_env "$HOOK" "PR_FEEDBACK_MOCK_PR=42" "PR_FEEDBACK_MOCK_THREADS=$outdated" "PR_FEEDBACK_MOCK_REVIEWS=$clean_reviews"
-  _assert "exits 0 for outdated unresolved threads" 0
+  _assert "blocks outdated unresolved threads" 2 "unresolved review thread"
+
+  for invalid in '{"errors":[{"message":"unavailable"}]}' '{"data":{"repository":null}}' '{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[{"isResolved":null}]}}}}}'; do
+    _run_hook_with_env "$HOOK" "PR_FEEDBACK_MOCK_PR=42" "PR_FEEDBACK_MOCK_THREADS=$invalid" "PR_FEEDBACK_MOCK_REVIEWS=$clean_reviews"
+    _assert "missing or malformed thread evidence blocks completeness" 2 "Could not verify"
+  done
 
   # Resolved thread → pass
   resolved='{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[{"isResolved":true,"isOutdated":false,"comments":{"nodes":[{"author":{"login":"alice"},"body":"fixed"}]}}]}}}}}'

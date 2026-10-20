@@ -65,6 +65,10 @@ will not replace another session's ownership.
   acknowledges delivery, not semantic feedback completion; rebase acknowledgement also
   requires published ancestry verification. Failed CLI runs pause paid retries:
   inspect `run-*.log`, fix the cause, then `retry --session UUID`.
+- A binding dispatches at most 3 feedback-repair rounds before pausing for approach
+  reassessment. The counter persists across polls, restarts, changed HEADs and
+  edited findings. Pure base updates do not consume it. Explicit `retry` resets
+  the budget; it does not resolve findings or certify a repair.
 - Hook activity tracking requires enabled hooks in every session using that worktree.
   This is not an atomic Conductor/UI lock. Do not use the same feature session
   interactively during repair. Crashed sessions or killed jobs fail closed: after

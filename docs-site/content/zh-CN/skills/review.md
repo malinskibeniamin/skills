@@ -24,7 +24,7 @@ type: skill
 审查 HEAD。保留唯一所有者；委派必须明确授权。不要编辑、提交、推送或发布。
 评论发布需要明确意图。
 
-检查时，读取适用的 `CODING_STANDARDS.md` 和 `CONTRIBUTING.md`（若存在）。获授权的审查维度应一起在前台运行；汇总每份报告。
+检查时，读取适用的 `REVIEW.md`、`CODING_STANDARDS.md` 和 `CONTRIBUTING.md`（若存在）。获授权的审查维度应一起在前台运行；汇总每份报告。
 
 ## 审查约定 [#review-contract]
 

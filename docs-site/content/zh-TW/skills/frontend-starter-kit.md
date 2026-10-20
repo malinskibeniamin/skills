@@ -1,9 +1,17 @@
 ---
-title: /frontend-starter-kit
 description: 啟動前端工具鏈、程式碼檢查、品質關卡、React 技術棧、資料技術棧與 CI。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - frontend starter kit
 sidebar:
   label: /frontend-starter-kit
+title: /frontend-starter-kit
+type: skill
 ---
 ![「/frontend-starter-kit」技能示意圖](/diagrams/skills/frontend-starter-kit.svg)
 
@@ -17,7 +25,7 @@ sidebar:
 不會執行任何操作；只需執行設定與工具配置步驟。對於未安裝此外掛的純儲存庫
 （「匯出工具套件」），完整複製則很重要。
 
-## 設定檔
+## 設定檔 [#profiles]
 
 - **完整**（預設）：依下列順序安裝所有工具，並以
   [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/frontend-starter-kit/REFERENCE.md) 中的標準技術棧為目標（React 19 + Rsbuild + Tailwind + TanStack Router/Query +
@@ -27,7 +35,7 @@ sidebar:
   分類法、`REDPANDA_KIT=1`）。
 - **`<tool>`**：僅使用該工具的參考文件。
 
-## 工具（完整設定依序執行）
+## 工具（完整設定依序執行） [#full-order]
 
 | 工具 | 參考文件 | 設定內容 |
 |---|---|---|
@@ -49,14 +57,15 @@ sidebar:
 `/connect-query`、`/e2e-testing`、`/registry-workflow`、`/ux-copy`。選用基礎設施：
 `/setup-routines`、`/setup-atlassian-workflow`（僅限斜線指令）。
 
-## 步驟
+## 步驟 [#steps]
 
 1. 確認設定檔（預設為完整）。執行到各工具時，再視需要讀取其參考文件。
 2. 當儲存庫需要嚴格的 effect 規則時，在 session-env.sh 中設定 `REACT_RULES_BAN_USEEFFECT=1`。
-3. 工作流程技能（development-lifecycle、tdd、grilling、triage、
+3. 在獲授權的終點範圍內[自動設定使用端儲存庫的審查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)，包含既有儲存庫與僅安裝技能的情況。
+4. 工作流程技能（development-lifecycle、tdd、grilling、triage、
    diagnosing-bugs、prototype、domain-modeling）已隨此外掛提供——無須安裝任何項目。
 
-## 驗證
+## 驗證 [#verify]
 
 - [ ] `.claude/settings.json` 包含所有 hook；安裝 TanStack 套件時也包含 TanStack Intent；`biome.jsonc` + `src/env.ts` 均存在
 - [ ] 指令碼：lint、lint:fix、type:check、test、quality:gate

@@ -35,6 +35,7 @@ Przed rozpoczęciem edycji określ:
 - **Zatrzymanie** -- żądany punkt końcowy i warunki, które rzeczywiście wymagają udziału użytkownika.
 
 Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj.
+[Automatycznie uzupełnij zabezpieczenia przeglądu w repozytorium korzystającym z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w granicach tego punktu końcowego.
 
 ## Pętla [#loop]
 

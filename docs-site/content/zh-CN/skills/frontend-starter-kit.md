@@ -1,9 +1,17 @@
 ---
-title: /frontend-starter-kit
 description: 引导搭建前端工具链、代码检查、质量门禁、React 技术栈、数据技术栈和 CI。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - frontend starter kit
 sidebar:
   label: /frontend-starter-kit
+title: /frontend-starter-kit
+type: skill
 ---
 ![展示 /frontend-starter-kit 技能的示意图](/diagrams/skills/frontend-starter-kit.svg)
 
@@ -17,7 +25,7 @@ sidebar:
 无需执行；只运行配置和工具相关步骤即可。对于未安装插件的纯净仓库
 （“导出工具集”），则需要完整复制。
 
-## 配置方案
+## 配置方案 [#profiles]
 
 - **完整**（默认）：按以下顺序安装下面的所有工具，目标为
   [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/frontend-starter-kit/REFERENCE.md) 中的标准技术栈（React 19 + Rsbuild + Tailwind + TanStack Router/Query +
@@ -27,7 +35,7 @@ sidebar:
   分类体系、`REDPANDA_KIT=1`）。
 - **`<tool>`**：仅安装该工具对应的参考配置。
 
-## 工具（完整配置按顺序执行）
+## 工具（完整配置按顺序执行） [#full-order]
 
 | 工具 | 参考资料 | 配置内容 |
 |---|---|---|
@@ -49,14 +57,15 @@ sidebar:
 `/connect-query`、`/e2e-testing`、`/registry-workflow`、`/ux-copy`。可选基础设施：
 `/setup-routines`、`/setup-atlassian-workflow`（仅斜杠命令）。
 
-## 步骤
+## 步骤 [#steps]
 
 1. 确认配置方案（默认为完整配置）。执行到每个工具时，再按需读取其参考资料。
 2. 当仓库要求严格限制副作用时，在 session-env.sh 中设置 `REACT_RULES_BAN_USEEFFECT=1`。
-3. 工作流技能（development-lifecycle、tdd、grilling、triage、
+3. 在获授权的终点范围内[自动配置使用方仓库的审查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)，包括现有仓库和仅安装技能的情况。
+4. 工作流技能（development-lifecycle、tdd、grilling、triage、
    diagnosing-bugs、prototype、domain-modeling）随此插件提供——无需安装任何内容。
 
-## 验证
+## 验证 [#verify]
 
 - [ ] `.claude/settings.json` 包含所有钩子；安装 TanStack 包时还应包含 TanStack Intent；`biome.jsonc` + `src/env.ts` 均存在
 - [ ] 脚本：lint、lint:fix、type:check、test、quality:gate

@@ -24,7 +24,7 @@ type: skill
 審查 HEAD。保留唯一所有者；委派必須明確授權。不要編輯、提交、推送或發布。
 發布評論需要明確意圖。
 
-檢查時，閱讀適用的 `CODING_STANDARDS.md` 與 `CONTRIBUTING.md`（若存在）。經授權的審查面向應一起在前景執行；彙整每份報告。
+檢查時，閱讀適用的 `REVIEW.md`、`CODING_STANDARDS.md` 與 `CONTRIBUTING.md`（若存在）。經授權的審查面向應一起在前景執行；彙整每份報告。
 
 ## 審查約定 [#review-contract]
 

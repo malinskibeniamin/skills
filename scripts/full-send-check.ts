@@ -1,23 +1,7 @@
 #!/usr/bin/env bun
 // Read-only observations, never merge authorization or proof of product correctness.
-type ObjectValue = Record<string, unknown>;
-function object(value: unknown): ObjectValue {
-  if (!value || typeof value !== "object" || Array.isArray(value))
-    throw new Error("Malformed provider response");
-  return value as ObjectValue;
-}
-function text(value: unknown): string {
-  if (typeof value !== "string") throw new Error("Missing provider string");
-  return value;
-}
-function flag(value: unknown): boolean {
-  if (typeof value !== "boolean") throw new Error("Missing provider boolean");
-  return value;
-}
-function list(value: unknown): unknown[] {
-  if (!Array.isArray(value)) throw new Error("Missing provider list");
-  return value;
-}
+import { reviewPolicy } from "./review-policy";
+import { object, text, flag, list } from "./github-evidence";
 function command(args: string[], allowed = [0]): string {
   const result = Bun.spawnSync(args, { timeout: 30_000 });
   if (!allowed.includes(result.exitCode ?? -1))
@@ -223,8 +207,17 @@ try {
   if (command(["git", "status", "--porcelain"])) note("uncommitted-work", 3);
   if (localHead() !== head || publishedHead(before.branch) !== head)
     note("unpublished-or-stale-head", 3);
+  const policy = reviewPolicy(repo, before.baseBranch, base, head);
+  for (const reason of policy.reasons) note(reason, 2);
   const allChecks = checks(repo, pr, false);
   const requiredChecks = checks(repo, pr, true);
+  for (const name of policy.requiredChecks) {
+    if (
+      requiredChecks.length &&
+      !requiredChecks.some((check) => check.name === name)
+    )
+      note(`required-check-not-observed:${name}`, 1);
+  }
   if (!allChecks.length || !requiredChecks.length)
     note("required-checks-missing-or-policy-unknown", 1);
   for (const check of [...allChecks, ...requiredChecks]) {
@@ -234,7 +227,16 @@ try {
         check.bucket === "pending" ? 1 : 2,
       );
   }
-  if (before.review !== "APPROVED")
+  if (
+    !["", "APPROVED", "CHANGES_REQUESTED", "REVIEW_REQUIRED"].includes(
+      before.review,
+    )
+  )
+    throw new Error("Unknown provider review decision");
+  if (
+    before.review !== "APPROVED" &&
+    (policy.requiredApprovals > 0 || before.review !== "")
+  )
     note(
       before.review === "CHANGES_REQUESTED"
         ? "changes-requested"
@@ -264,6 +266,7 @@ try {
       reasons: [...new Set(reasons)],
       checks: allChecks,
       requiredChecks,
+      policy,
       unresolvedThreads: unresolved,
       next:
         code === 3

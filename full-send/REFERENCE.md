@@ -16,7 +16,8 @@ bun <plugin-root>/scripts/full-send-check.ts \
 ```
 
 Use observed full SHAs, not branch names. The script only reads. It confirms local/origin/PR
-identity, clean tree, CI buckets, discovered required checks, aggregate review decision,
+identity, clean tree, [consumer policy/prerequisites](../shared/review-enforcement.md),
+CI buckets, discovered required checks, native review decision,
 paginated unresolved threads and mergeability, then rechecks candidate/checkout identity.
 Exit `0` means **hosted-gates-pass**, `1` pending, `2` blocked, `3` stale. JSON includes
 reasons and next action. Missing/unknown policy, skipped checks and outdated-but-unresolved

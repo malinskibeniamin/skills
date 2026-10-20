@@ -17,8 +17,7 @@ fi
 # actionable thread before stopping.
 #
 # Checks (in order):
-#   1. Unresolved, non-outdated review threads with at least one
-#      non-bot comment → block with remediation prompt.
+#   1. Every unresolved review thread, including bots and outdated lines, blocks.
 #   2. Reviews in CHANGES_REQUESTED state newer than the last push →
 #      block with remediation prompt.
 #
@@ -43,9 +42,8 @@ fi
 
 # ── Prereqs ──────────────────────────────────────────────────────
 verification_failed() {
-  if [ "${PR_FEEDBACK_INCLUDE_BOTS:-0}" = "1" ]; then
-    hook_stop_block "Could not verify PR feedback completeness. Restore GitHub access and retry; do not claim all findings are fixed."
-  fi
+  hook_stop_block "Could not verify PR feedback completeness. Restore GitHub access and retry; do not claim all findings are fixed."
+  exit 2
 }
 command -v jq &>/dev/null || { verification_failed; exit 0; }
 
@@ -79,8 +77,8 @@ else
     -f o="$owner" -f r="$repo" -F n="$pr_number" 2>/dev/null) || { verification_failed; threads_json=""; }
 fi
 
-if [ "${PR_FEEDBACK_INCLUDE_BOTS:-0}" = "1" ] && ! printf '%s' "$threads_json" | jq -e '
-  (if type == "array" then . else [.] end) | length > 0 and all(.[]; (.data.repository.pullRequest.reviewThreads.nodes | type) == "array")
+if ! printf '%s' "$threads_json" | jq -e '
+  (if type == "array" then . else [.] end) | length > 0 and all(.[]; .errors == null and (.data.repository.pullRequest.reviewThreads.nodes | type) == "array" and all(.data.repository.pullRequest.reviewThreads.nodes[]; (.isResolved | type) == "boolean"))
 ' >/dev/null 2>&1; then
   verification_failed
 fi
@@ -90,9 +88,7 @@ unresolved_summary=""
 if [ -n "$threads_json" ]; then
   unresolved_count=$(echo "$threads_json" | jq -r '
     [(if type == "array" then .[] else . end) | .data.repository.pullRequest.reviewThreads.nodes[]?
-     | select(.isResolved == false)
-     | select(.isOutdated != true)
-     | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]? | select(((.author.login // "") | test("\\[bot\\]$")) | not)] | length > 0))]
+     | select(.isResolved == false)]
     | length' 2>/dev/null || echo "0")
   unresolved_count=${unresolved_count:-0}
 
@@ -100,8 +96,6 @@ if [ -n "$threads_json" ]; then
     unresolved_summary=$(echo "$threads_json" | jq -r '
       [(if type == "array" then .[] else . end) | .data.repository.pullRequest.reviewThreads.nodes[]?
        | select(.isResolved == false)
-       | select(.isOutdated != true)
-       | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]? | select(((.author.login // "") | test("\\[bot\\]$")) | not)] | length > 0))
        | "  • " + ((.comments.nodes[0].author.login // "?")) + ": " + ((.comments.nodes[0].body // "") | gsub("\\n"; " ") | gsub("\\r"; "") | .[:120])]
       | .[:10] | join("\n")' 2>/dev/null || echo "")
   fi
@@ -114,6 +108,14 @@ else
   reviews_json=$(gh api "repos/$owner/$repo/pulls/$pr_number/reviews" --paginate --slurp 2>/dev/null \
     | jq '{reviews: [.[][] | {author: .user, state, submittedAt: .submitted_at}]}') \
     || { verification_failed; reviews_json=""; }
+fi
+
+if ! printf '%s' "$reviews_json" | jq -e '
+  (.reviews | type) == "array" and all(.reviews[];
+    (.author.login | type) == "string" and (.submittedAt | type) == "string" and
+    (.state | IN("APPROVED", "CHANGES_REQUESTED", "COMMENTED", "DISMISSED", "PENDING")))
+' >/dev/null 2>&1; then
+  verification_failed
 fi
 
 pending_changes_count=0

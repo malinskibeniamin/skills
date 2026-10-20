@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-# Count unresolved PR review threads (non-bot, non-outdated).
+# Count every unresolved PR review thread, including bots and outdated lines.
 # Wraps the one GraphQL call that `gh pr view` cannot replace:
 # GitHub's REST API exposes review comments but NOT thread-level
 # isResolved state. GraphQL reviewThreads is the only source of truth.
@@ -42,15 +42,22 @@ resp=$(gh api graphql --paginate --slurp \
   -f query='query($o:String!,$r:String!,$n:Int!,$endCursor:String){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){pageInfo{hasNextPage endCursor} nodes{isResolved isOutdated comments(first:100){nodes{author{login} body path line}}}}}}}' \
   -f o="$owner" -f r="$repo" -F n="$pr")
 
+if ! printf '%s' "$resp" | jq -e '
+  type == "array" and length > 0 and all(.[];
+    .errors == null and (.data.repository.pullRequest.reviewThreads.nodes | type) == "array" and
+    all(.data.repository.pullRequest.reviewThreads.nodes[]; (.isResolved | type) == "boolean"))
+' >/dev/null 2>&1; then
+  echo "Could not verify PR feedback completeness" >&2
+  exit 2
+fi
+
 if [ "$verbose" = true ]; then
   echo "$resp" | jq -r '
     .[].data.repository.pullRequest.reviewThreads.nodes[]
-    | select(.isResolved==false and .isOutdated!=true)
-    | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]|select((.author.login//"")|test("\\[bot\\]$")|not)]|length>0))
+    | select(.isResolved==false)
     | "  • \(.comments.nodes[0].path):\(.comments.nodes[0].line // "?") — \(.comments.nodes[0].author.login): \(.comments.nodes[0].body[:100])"' >&2
 fi
 
 echo "$resp" | jq '[.[].data.repository.pullRequest.reviewThreads.nodes[]
-  | select(.isResolved==false and .isOutdated!=true)
-  | select(env.PR_FEEDBACK_INCLUDE_BOTS == "1" or ([.comments.nodes[]|select((.author.login//"")|test("\\[bot\\]$")|not)]|length>0))]
+  | select(.isResolved==false)]
   | length'

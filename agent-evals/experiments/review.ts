@@ -23,7 +23,11 @@ export default {
   timeout: 600,
   sandbox: "docker",
   copyFiles: "changed",
-  evals: ["contract-tracing-review", "dogfood-review-live-data"],
+  evals: [
+    "contract-tracing-review",
+    "dogfood-review-live-data",
+    "clean-review-control",
+  ],
   setup: async (sandbox: Sandbox) => {
     await sandbox.writeFiles({
       ".claude/skills/review/SKILL.md": skill,

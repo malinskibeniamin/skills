@@ -43,8 +43,8 @@ requested Sol loop, read [REFERENCE.md](REFERENCE.md).
 
 ## Publish and babysit
 
-Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication, then continue past
-its single CI snapshot. Confirm the committed scope and remote head match local HEAD.
+Use [commit-push-pr](../commit-push-pr/SKILL.md) for publication; [auto-setup consumer safeguards and verify readiness](../shared/review-enforcement.md).
+Continue past its single CI snapshot; confirm committed scope and remote HEAD match local HEAD.
 
 - Watch the current PR's checks and requested reviews in this foreground session.
   Pending means continue waiting, not done. Missing CI is not green CI; resolve

@@ -86,13 +86,13 @@ boundary; never turn routine repair into an approval request.
 
 Stop hook `pr-feedback-completeness-stop.sh` re-fetch threads + reviews. Block session exit if any true:
 
-- Any `reviewThread` with `isResolved=false` AND `isOutdated!=true` AND ≥1 non-`[bot]` comment.
+- Any `reviewThread` with `isResolved=false`, including bot-only findings and outdated lines.
 - Any reviewer latest `review` state `CHANGES_REQUESTED` (no later `APPROVED`/`DISMISSED` same author).
 
-Automatic repair sets `PR_FEEDBACK_INCLUDE_BOTS=1`: every unresolved, non-outdated
-thread counts, including bot-only findings. Reply with evidence and resolve findings
+Every scoped resolution run counts all unresolved threads. `--include-bots` remains
+a compatible no-op; bot findings already count. Reply with evidence and resolve findings
 that are not applicable. Thread and review pages are fetched with pagination;
-GitHub fetch failures block automatic completeness instead of claiming success.
+Missing, malformed, or failed GitHub responses block completeness instead of claiming success.
 
 Escape hatches (use sparingly, document why):
 
