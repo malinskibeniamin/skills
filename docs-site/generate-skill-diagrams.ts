@@ -154,6 +154,16 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Review / ship",
     ],
   },
+  "bend-laws": {
+    actors: ["Human", "Agent", "CI"],
+    kind: "swimlane",
+    nodes: [
+      "Write LAWS.bend",
+      "Model + prove",
+      "Mutate + compare",
+      "Prove + check table",
+    ],
+  },
   "blast-radius": {
     kind: "evidence-funnel",
     nodes: [

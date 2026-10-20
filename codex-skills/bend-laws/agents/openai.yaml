@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bend Laws"
+  short_description: "Prove business rules with Bend laws and check shipped code"
