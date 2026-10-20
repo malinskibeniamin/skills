@@ -42,6 +42,7 @@
     "./commit-push-pr/",
     "./connect-query/",
     "./create-verification-skill/",
+    "./cursor-skills/cli-for-agents/",
     "./demo/",
     "./deslop/",
     "./development-lifecycle/",

@@ -41,6 +41,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/commit-push-pr` | Zatwierdzanie zmian, wypychanie ich i publikowanie PR-a gotowego do przeglądu. |
 | `/connect-query` | Tworzenie typowanych przepływów danych ConnectRPC za pomocą Connect Query. |
 | `/create-verification-skill` | Tworzenie lokalnego dla projektu zestawu do weryfikacji rzeczywistej aplikacji. |
+| `/cli-for-agents` | Projektowanie nieinteraktywnych, komponowalnych interfejsów CLI dla agentów. |
 | `/demo` | Tworzenie nagrania funkcji przeznaczonego dla klientów. |
 | `/deslop` | Audytowanie nadmiernie rozbudowanego kodu i usuwanie nieuzasadnionych elementów. |
 | `/development-lifecycle` | Przeprowadzanie pełnego cyklu tworzenia frontendu. |

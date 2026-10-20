@@ -41,6 +41,7 @@ type: skill
 | `/commit-push-pr` | 提交、推送并发布可供审查的拉取请求。 |
 | `/connect-query` | 使用 Connect Query 构建类型安全的 ConnectRPC 数据流。 |
 | `/create-verification-skill` | 创建项目本地的真实应用验证框架。 |
+| `/cli-for-agents` | 设计非交互、可组合且适合代理使用的命令行界面。 |
 | `/demo` | 创建面向客户的功能演示录像。 |
 | `/deslop` | 审计已经臃肿的代码，并移除缺乏合理依据的表层内容。 |
 | `/development-lifecycle` | 运行完整的前端开发生命周期。 |
