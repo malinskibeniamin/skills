@@ -1,9 +1,17 @@
 ---
-title: /upgrade-dependency
 description: 升級相依套件並調整所有受影響的呼叫端。適用於套件或模組升級、漏洞修復、破壞性變更、codemod，以及採用新 API。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - upgrade dependency
 sidebar:
   label: /upgrade-dependency
+title: /upgrade-dependency
+type: skill
 ---
 ![「/upgrade-dependency」技能的圖表](/diagrams/skills/upgrade-dependency.svg)
 
@@ -32,3 +40,5 @@ sidebar:
 ## 遷移原則 [#migration-doctrine]
 
 完成時透過 lint／hook 禁止舊模式。路由器／框架層採用一次性全面遷移；資料層採用絞殺者模式，並為新舊並存編列預算。遷移 PR 維持 1:1 功能對等，並在同一個 PR 中協調並修正測試；結構性重構則另行建立議題。刪除已無用途的樣式、shim 及一次性解法。
+
+處理套件清單項目的角色，或協調編譯器、執行環境、映像檔和修補程式的相容性時，載入[相依套件維護](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/dependency-maintenance/SKILL.md)。版本選擇、升級順序與交付仍由此技能負責；應區分刻意不同的 peer 範圍和引擎最低版本，而非機械式統一。

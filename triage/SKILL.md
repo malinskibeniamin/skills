@@ -71,3 +71,7 @@ write an agent brief only when moving to `ready-for-agent` without one.
 On resume, read prior notes and new replies, then present the updated state without re-asking.
 
 Full templates and state transitions: [REFERENCE.md](REFERENCE.md).
+
+For contribution-policy eligibility or authorized PR moderation, load
+[contribution triage](../t3code-skills/contribution-triage/SKILL.md). Tracker
+readiness stays here; the target's trusted policy, not T3's, owns eligibility.

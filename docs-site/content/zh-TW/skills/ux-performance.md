@@ -1,9 +1,19 @@
 ---
-title: "/ux-performance"
-description: "稽核並最佳化真實的 Web 使用者體驗效能。適用於緩慢的 SPA 頁面、路由、互動、超大型表格、載入、快取、記憶體、Web Vitals、Lighthouse、效能預算或 CI 退步。"
-type: skill
+description: >-
+  稽核並最佳化真實的 Web 使用者體驗效能。適用於緩慢的 SPA 頁面、路由、互動、超大型表格、載入、快取、記憶體、Web
+  Vitals、Lighthouse、效能預算或 CI 退步。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ux performance
 sidebar:
-  label: "/ux-performance"
+  label: /ux-performance
+title: /ux-performance
+type: skill
 ---
 ![/ux-performance 技能示意圖](/diagrams/skills/ux-performance.svg)
 
@@ -13,7 +23,7 @@ sidebar:
 昂貴的程式碼。預設以客戶端 Web 應用程式處理；只有證據顯示交付層或後端延誤使用者
 旅程時，才繼續追查那些層。
 
-## 建立效能契約
+## 建立效能契約 [#contract]
 
 實作前先明確定義：
 
@@ -28,7 +38,7 @@ sidebar:
 - **終點**：稽核、最佳化或安裝退步檢查。稽核只回傳發現而不編輯；最佳化持續到
   本機變更驗證完成；CI 工作只安裝經過校準的檢查。
 
-## 執行循環
+## 執行循環 [#loop]
 
 1. **盤點**真實技術堆疊、正式環境建置路徑、現有遙測、分析工具、測試、預算及已安裝
    套件版本。變更框架或函式庫語法前，先閱讀目前的第一方文件。
@@ -51,7 +61,7 @@ sidebar:
 當效能主張涉及規模、突發負載、資源競爭或長時間工作階段時，請使用
 [STRESS.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/STRESS.md) 找出容量轉折點，並驗證壓力下的正確性。
 
-## 輸出
+## 輸出 [#output]
 
 先提供使用者結果與最慢區段：
 
@@ -69,3 +79,5 @@ Artifacts: <路徑或連結>
 
 區分測量事實、推論與未經測試的機會。絕不能只憑 Lighthouse 分數、靜態警告、
 看似更少的程式碼或相依套件升級，就宣稱速度提升。
+
+比較建置產物大小或調查意外引入的模組時，載入[建置產物分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/bundle-analysis/SKILL.md)。將探索性範例與穩定預算分開，並使用實際正式環境建置。

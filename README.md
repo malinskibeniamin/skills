@@ -464,6 +464,23 @@ and explicitly invoked v3-to-v4 migrations. Upstream revision, refresh sources,
 local adaptations, and the MIT notice live in
 [shared/EFFECT-SKILLS-CREDITS.md](shared/EFFECT-SKILLS-CREDITS.md).
 
+All **15 skills from T3 Code's reviewed checkout** ship as local adapters with
+unchanged upstream instructions, references, helpers and MIT licenses. The source
+is pinned at [`1451e7c`](https://github.com/pingdotgg/t3code/tree/1451e7cb23034d29774338608368a15d8845df36)
+in [the snapshot lock](vendor/t3code-skills.lock.json).
+
+- CI and imports: `/ci-maintenance`, `/vendored-assets`.
+- Library/toolchain work: `/test-development`, `/bundle-analysis`, `/changesets`,
+  `/package-development`, `/performance-analysis`, `/dependency-maintenance`, `/jsdocs`.
+- Effect: `/effect-development`, `/migration-guidance`, `/ai-docs`. The latter two
+  maintain Effect's own generated references, not application migrations or prose.
+- T3-specific work: `/contribution-triage`, `/test-t3-app`, `/test-t3-mobile`.
+
+The [host contract](shared/T3CODE-SKILLS.md) keeps existing TDD, upgrade, performance,
+release and review owners. Browser/Device tools remain T3-only, and moderation requires
+the target's trusted policy and authorized scope. Importing skills enables no runtime
+hooks, tooling or automations. [Sources, licenses and refresh](vendor/t3code-NOTICE.md).
+
 `/eli5` adapts the beginner-first visual artifact idea from
 [Anthropic's community ELI5 plugin](https://github.com/anthropics/claude-plugins-community/tree/main/eli5),
 authored by Thariq Shihipar.

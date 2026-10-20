@@ -1,0 +1,3 @@
+interface:
+  display_name: "Migration Guidance"
+  short_description: "Maintain Effect's generated API migration reference"

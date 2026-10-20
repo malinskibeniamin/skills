@@ -159,6 +159,21 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/stay-within-limits` | Planowanie długotrwałej pracy agentów z uwzględnieniem limitów użycia. |
 | `/steelman` | Tworzenie najsilniejszego kontrargumentu opartego na dowodach. |
 | `/swarm` | Wykonywanie niezależnych zadań w równoległych obszarach roboczych. |
+| `/ai-docs` | Utrzymuj generowaną dokumentację AI projektu Effect. |
+| `/bundle-analysis` | Mierz rozmiar paczki wynikowej i wyjaśniaj dołączone zależności. |
+| `/changesets` | Finalizuj informacje o wydaniu dla odbiorców i zmiany niezgodne wstecznie. |
+| `/ci-maintenance` | Audytuj zadania GitHub Actions i ich granice zaufania. |
+| `/contribution-triage` | Oceniaj wkład według zaufanych zasad repozytorium. |
+| `/dependency-maintenance` | Koordynuj role zależności i zgodność narzędzi. |
+| `/effect-development` | Znajduj wskazówki programowania w Effect zgodne z wersją. |
+| `/jsdocs` | Dokumentuj publiczne API sprawdzonymi, wykonywalnymi przykładami. |
+| `/migration-guidance` | Utrzymuj generowaną dokumentację migracji API Effect. |
+| `/package-development` | Rejestruj i weryfikuj publikowalne pakiety workspace. |
+| `/performance-analysis` | Mierz regresje wykonania i kompilatora TypeScript. |
+| `/test-development` | Weryfikuj zachowanie wykonania i publiczne kontrakty kompilatora. |
+| `/test-t3-app` | Weryfikuj web i desktop T3 Code w odizolowanym stanie. |
+| `/test-t3-mobile` | Weryfikuj natywnych klientów T3 Code przez panel Device. |
+| `/vendored-assets` | Aktualizuj dołączone zasoby z ustalonym pochodzeniem i licencjami. |
 | `/tanstack-intent` | Wczytywanie wskazówek dopasowanych do wersji każdego pakietu TanStack. |
 | `/tanstack-router` | Stosowanie typowanych wzorców danych i wyszukiwania TanStack Router. |
 | `/tanstack-table` | Stosowanie lokalnych kontroli Table po wczytaniu oficjalnych wskazówek. |

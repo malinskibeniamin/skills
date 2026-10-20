@@ -1,0 +1,3 @@
+interface:
+  display_name: "Bundle Analysis"
+  short_description: "Measure bundle size and explain included dependencies"

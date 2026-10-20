@@ -1,0 +1,3 @@
+interface:
+  display_name: "CI Maintenance"
+  short_description: "Audit GitHub Actions jobs and their trust boundaries"

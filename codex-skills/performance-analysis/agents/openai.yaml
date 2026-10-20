@@ -1,0 +1,3 @@
+interface:
+  display_name: "Performance Analysis"
+  short_description: "Measure runtime and TypeScript compiler regressions"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Changesets"
+  short_description: "Finalize consumer release notes and breaking changes"

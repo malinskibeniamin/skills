@@ -70,3 +70,5 @@ Dla każdej widocznej zmiany, w tym tekstów, stylów, układu, zasobów i stan�
 ## Po zakończeniu [#done]
 
 Testy przechodzą bez ostrzeżeń, wycieków operacji asynchronicznych ani oczekiwania przez określony czas; pozostają poprawne po refaktoryzacji. Zobacz [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/REFERENCE.md), aby poznać oczekiwanie, selektory, portale, atrapy, diagnostykę i przykłady odporności.
+
+Gdy kryteria akceptacji obejmują inferencję, przypisywalność, przeciążenia lub sposób wyświetlania typów, wczytaj [tworzenie testów](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-development/SKILL.md). Regresje wykonania nadal wymagają testów wykonania; zwykłe deklaracje wymagają sprawdzenia typów.

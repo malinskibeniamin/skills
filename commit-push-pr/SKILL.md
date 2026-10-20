@@ -16,9 +16,11 @@ Merge only on explicit request: [contract](references/merge.md).
 4. For PR, run `gh stack view --json`; inspect base/stack. A normal PR owns one layer, never `gh stack submit`.
 5. Review inline; do not block merely over named skill invocation.
 6. Load [dogfood](../dogfood/SKILL.md) for runnable PR work; require current PASS. BLOCKED needs user waiver.
-7. Stage requested paths by purpose; ask if ownership is unclear.
+7. Stage by purpose; ask on unclear ownership.
 
 ## Commit
+
+With Changesets, load [changesets](../t3code-skills/changesets/SKILL.md) after checks.
 
 1. Stay on the feature branch; on default, create `type/description`.
 2. Per coherent group, `git add <explicit paths>` then `type(scope): description`: lowercase, 5-72 chars, no period.
@@ -28,12 +30,12 @@ Merge only on explicit request: [contract](references/merge.md).
 
 ## Pull request
 
-`--no-pr` never creates a PR. Refresh an existing PR's evidence/body after push; otherwise end after push and clean-tree check. Prepare local visual evidence before push.
+`--no-pr` never creates a PR; refresh existing PR evidence/body after push, otherwise stop at push and clean-tree check. Prepare visuals before push.
 
-1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up waves in the current PR; otherwise create with assignee, labels, and template. Draft PRs open without approval. Whole-stack publication uses `/stacked-prs`.
+1. Resolve base with `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-ups in the current PR; otherwise create with assignee, labels and template. Draft PRs proceed without approval. Whole stacks use `/stacked-prs`.
 2. Every PR: load [quantify-impact](../quantify-impact/SKILL.md) and [pr](../pr/SKILL.md) separately; include value or proven metrics.
-3. Every visible change needs the reference's inventory, before/after screenshots and video, reviewed snapshots, and passing visual tests. Missing evidence blocks publication without user waiver.
-4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names/private links from commits, title, body, and evidence before push.
+3. Visible changes: inventory, before/after screenshots/video, reviewed snapshots and passing visual tests per reference. Missing evidence needs user waiver before publication.
+4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Include dogfood receipt. Re-read body, check reviewer image access, and print URL. Updates/reopens use same gate; edits invalidate affected evidence.
 
 Enabled auto-review: [bind original session](../resolve-pr-feedback/AUTO-REVIEW.md).
@@ -45,6 +47,6 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
 2. Report failures; CI remediation needs `/go`, ship, babysitting, or follow-up.
 3. Report status, remaining diff, branch, commits, PR, CI, and next action.
-4. Follow CLAUDE.md's status/intent/impact contract; put full PR URL on final status line when present, including updates.
+4. Follow CLAUDE.md's status/intent/impact contract; include full PR URL on final status line, including updates.
 
-Never stage unrelated work, push mixed scope, or hide failures. If `gh pr create` fails, show error and recovery command.
+Never stage unrelated work, push mixed scope, or hide failures. `gh pr create` failure: show error and recovery.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vendored Assets"
+  short_description: "Update vendored assets with pinned provenance and licenses"

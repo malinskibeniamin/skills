@@ -31,23 +31,25 @@ Write matching `name: verify-<app>` frontmatter and concrete **Launch**, **Docto
 - **Evidence:** capture action and result. Verify side effects through a second public view; mock only existing production boundaries.
 - **Cleanup:** stop only processes and scratch state this run created. Never kill by process name. Evidence survives cleanup.
 
-Make helpers executable; document use. For stateful bugs or recurring repro gaps, prove [capture/replay](../shared/verification-replay.md) via native fixture/debug APIs.
+Make/document executable helpers. For stateful bugs or recurring repro gaps, prove [capture/replay](../shared/verification-replay.md) via native fixture/debug APIs.
 
 ## Seed the feature map
 
-Create `features/README.md` and files for the top 3-5 user-facing features. Ground [the feature-map example](references/feature-map-example/README.md) in repository evidence. Each file owns:
+Create `features/README.md` and top 3-5 feature files. Ground [the example](references/feature-map-example/README.md) in repo evidence. Each owns:
 
 1. `Sub-features`
 2. `How to get to it (user POV)`
 3. `Driving it with <harness>`
 4. `Gotchas`
 
-Map every entrypoint. Missing seed-data prerequisites fail the journey: record them in `Gotchas`, never weaken the journey.
+Map every entrypoint. Missing seed-data prerequisites fail the journey: record in `Gotchas`, never weaken it.
 
 ## Prove the generated skill
 
-Execute generated skill: launch, doctor, one mapped real user journey, evidence and cleanup. Confirm evidence survives and no created process/state remains. Clean failed attempts, fix instructions and replay. Unexecuted verifiers are drafts.
+Execute generated skill: launch, doctor, one mapped real journey, evidence and cleanup. Preserve evidence; leave no created process/state. Clean failed attempts, fix and replay. Unexecuted verifiers are drafts.
 
 List stand-in setup gaps; leave them unverified until replayed on the target.
 
 Route drift audits to `/maintain-verification-skill` and feature work to `/dogfood`.
+
+T3 checkouts only: load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or [mobile](../t3code-skills/test-t3-mobile/SKILL.md).

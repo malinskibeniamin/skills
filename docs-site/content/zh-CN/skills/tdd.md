@@ -66,3 +66,5 @@ TDD 保护有意义的行为。对于领域规则、分支、状态、验证、�
 ## 完成标准 [#done]
 
 测试通过且没有警告、异步泄漏或固定时长等待；能够经受重构。有关等待、选择器、传送门、模拟、诊断和韧性示例，请参阅 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/REFERENCE.md)。
+
+当验收标准涉及类型推断、可赋值性、重载或类型显示时，加载[测试开发](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-development/SKILL.md)。运行时回归仍需运行时测试；普通声明只需类型检查。

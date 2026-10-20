@@ -1,0 +1,289 @@
+{
+  "repository": "https://github.com/pingdotgg/t3code",
+  "revision": "1451e7cb23034d29774338608368a15d8845df36",
+  "skills": [
+    {
+      "name": "contribution-triage",
+      "source": ".agents/skills/contribution-triage/SKILL.md",
+      "description": "Use for contribution eligibility and authorized PR moderation against the target repository's policy. Not full code review or support diagnostics.",
+      "short_description": "Assess contributions against trusted repository policy",
+      "explicit_only": false
+    },
+    {
+      "name": "test-t3-app",
+      "source": ".agents/skills/test-t3-app/SKILL.md",
+      "description": "Use only in a T3 Code checkout for web or desktop verification through its built-in Browser panel, pairing recovery, and SQLite fixtures.",
+      "short_description": "Verify T3 Code web and desktop in isolated state",
+      "explicit_only": false
+    },
+    {
+      "name": "test-t3-mobile",
+      "source": ".agents/skills/test-t3-mobile/SKILL.md",
+      "description": "Use only in a T3 Code checkout for native iOS or Android verification through its Device panel and returned AgentDevice command.",
+      "short_description": "Verify T3 Code native clients through its Device panel",
+      "explicit_only": false
+    },
+    {
+      "name": "ai-docs",
+      "source": ".repos/effect-smol/.agents/skills/ai-docs/SKILL.md",
+      "description": "Use when editing Effect's ai-docs/src or regenerating its LLMS.md. Not general documentation authoring.",
+      "short_description": "Maintain Effect's generated AI documentation",
+      "explicit_only": false
+    },
+    {
+      "name": "bundle-analysis",
+      "source": ".repos/effect-smol/.agents/skills/bundle-analysis/SKILL.md",
+      "description": "Use when comparing production bundles, inspecting module composition, or maintaining bundle fixtures.",
+      "short_description": "Measure bundle size and explain included dependencies",
+      "explicit_only": false
+    },
+    {
+      "name": "changesets",
+      "source": ".repos/effect-smol/.agents/skills/changesets/SKILL.md",
+      "description": "Use when finalizing release impact in a repository that uses Changesets. Not release publication.",
+      "short_description": "Finalize consumer release notes and breaking changes",
+      "explicit_only": false
+    },
+    {
+      "name": "ci-maintenance",
+      "source": ".repos/effect-smol/.agents/skills/ci-maintenance/SKILL.md",
+      "description": "Use when authoring or reviewing GitHub Actions workflows, composite actions, permissions, events, artifacts, or concurrency.",
+      "short_description": "Audit GitHub Actions jobs and their trust boundaries",
+      "explicit_only": false
+    },
+    {
+      "name": "dependency-maintenance",
+      "source": ".repos/effect-smol/.agents/skills/dependency-maintenance/SKILL.md",
+      "description": "Use when adding or moving dependencies or coordinating runtime, compiler, package-manager, image, patch, and native-build compatibility.",
+      "short_description": "Coordinate dependency roles and toolchain compatibility",
+      "explicit_only": false
+    },
+    {
+      "name": "effect-development",
+      "source": ".repos/effect-smol/.agents/skills/effect-development/SKILL.md",
+      "description": "Use when implementing or reviewing Effect compositions and patterns. For installation use effect-ts; for app migration use effect-v3-to-v4.",
+      "short_description": "Find version-matched Effect development guidance",
+      "explicit_only": false
+    },
+    {
+      "name": "jsdocs",
+      "source": ".repos/effect-smol/.agents/skills/jsdocs/SKILL.md",
+      "description": "Use when authoring or reviewing public TypeScript API JSDoc, examples, links, or documentation diagnostics.",
+      "short_description": "Document public APIs with checked runnable examples",
+      "explicit_only": false
+    },
+    {
+      "name": "migration-guidance",
+      "source": ".repos/effect-smol/.agents/skills/migration-guidance/SKILL.md",
+      "description": "Use when maintaining Effect's v3-to-v4 migration annotations or generated reference. Not migrating an application.",
+      "short_description": "Maintain Effect's generated API migration reference",
+      "explicit_only": false
+    },
+    {
+      "name": "package-development",
+      "source": ".repos/effect-smol/.agents/skills/package-development/SKILL.md",
+      "description": "Use when adding, renaming, moving, or publishing JavaScript workspace packages, including exports, dependencies, and packed contents.",
+      "short_description": "Register and verify publishable workspace packages",
+      "explicit_only": false
+    },
+    {
+      "name": "performance-analysis",
+      "source": ".repos/effect-smol/.agents/skills/performance-analysis/SKILL.md",
+      "description": "Use for library runtime benchmarks or TypeScript compiler-cost measurements and regression thresholds. Not web interaction profiling.",
+      "short_description": "Measure runtime and TypeScript compiler regressions",
+      "explicit_only": false
+    },
+    {
+      "name": "test-development",
+      "source": ".repos/effect-smol/.agents/skills/test-development/SKILL.md",
+      "description": "Use when selecting runtime versus compiler-contract coverage, including inference, assignability, overloads, or displayed TypeScript types.",
+      "short_description": "Verify runtime behavior and public compiler contracts",
+      "explicit_only": false
+    },
+    {
+      "name": "vendored-assets",
+      "source": ".repos/effect-smol/.agents/skills/vendored-assets/SKILL.md",
+      "description": "Use when importing or updating checked-in third-party code, skills, assets, registries, schemas, or generated snapshots.",
+      "short_description": "Update vendored assets with pinned provenance and licenses",
+      "explicit_only": false
+    }
+  ],
+  "files": {
+    ".agents/skills/contribution-triage/SKILL.md": {
+      "sha256": "4ee421e997e4a792a057fc26c56bbdca10dbdc85047d5ac22ee0c2fcbbaee7d8",
+      "mode": 420
+    },
+    ".agents/skills/test-t3-app/SKILL.md": {
+      "sha256": "7ebcf3fdcf746dab873a55ed0bc58842ae4b3da4f283f41e2825cb88b073cf1e",
+      "mode": 420
+    },
+    ".agents/skills/test-t3-app/agents/openai.yaml": {
+      "sha256": "faf40a1776478ac13c74d3f7fad9905b4b29947d8c433a9a8ac75eaa6c2fe67b",
+      "mode": 420
+    },
+    ".agents/skills/test-t3-app/references/sqlite-fixtures.md": {
+      "sha256": "0cdb3c302d6ca373b5ed8951446d8e3aaccb98177c2080d9cae2cf15e2aaea01",
+      "mode": 420
+    },
+    ".agents/skills/test-t3-mobile/SKILL.md": {
+      "sha256": "6bb361594faa351de30ccea1972fb1e49485d8670054170f7494adc0208dfdeb",
+      "mode": 420
+    },
+    ".agents/skills/test-t3-mobile/agents/openai.yaml": {
+      "sha256": "cbc885e6fe0bbf85a671af45aa0a9682d1cdcb900b765ebf39796cb8dc2ff905",
+      "mode": 420
+    },
+    ".agents/skills/test-t3-mobile/scripts/pair-client.sh": {
+      "sha256": "6a61ad51659bcae3d08a589f2e4de7fca28830a659c7610d7407161bd1a74076",
+      "mode": 493
+    },
+    ".github/TRIAGE_EXEMPTIONS.td": {
+      "sha256": "9de7044cba1b2323ca27dbc1ab1d6cceca492efcdc6860a9a412b6b3f337545f",
+      "mode": 420
+    },
+    ".github/triage/PLAYBOOK.md": {
+      "sha256": "bf08fbf9e0232b3dcac71ac80dabaf9a55bcb455e7b71c0f9670262337c82c64",
+      "mode": 420
+    },
+    ".github/triage/PLAYBOOK.md.upstream": {
+      "sha256": "6a5c1617f3cc9ed195fbee5cc748a237c4fa1d1c89ccc5dd24a0a85a8419b7c6",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/ai-docs/SKILL.md": {
+      "sha256": "5e9137c15ebe04bd01fc6317fb049129d7ee5781abe94716480d0282acee4825",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/bundle-analysis/SKILL.md": {
+      "sha256": "94ab06b3b070befff12124879107138a3a8d468f52d674b8ce9530f870604df7",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/changesets/SKILL.md": {
+      "sha256": "c28b2a72be12d71c38482b05bd9c7a1312c83dcb5af768c648fd172f2e9cc1e7",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/changesets/authoring.md": {
+      "sha256": "a3ba40accf2c1b40c49ce3f7f65241ccbd2756e26717ffad54a9c1dd2865c5df",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/ci-maintenance/SKILL.md": {
+      "sha256": "d71bcff1665847563165e7827117c056d65161164aa82268f18ac407aedb8ecf",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/ci-maintenance/privileged-workflows.md": {
+      "sha256": "280fb77d01fc7c6d13fc357edc00b8ecb73a58fe82ccb665d76b34dfffc8322e",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/dependency-maintenance/SKILL.md": {
+      "sha256": "70d61f542ecd9391b945f6d0e6c170936cd2059d1a7bb7608d95a88fb7211b7c",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/dependency-maintenance/coordinated-upgrades.md": {
+      "sha256": "54dc17ad6aa50df79f9234437ff03da51064a5251ec0226b7c4ab54aac55d4bf",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/dependency-maintenance/manifest-roles.md": {
+      "sha256": "0e427313371cbc7c8e2e7d24389c30838d17359f34ae36fa5bbe3140fb54874c",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/effect-development/SKILL.md": {
+      "sha256": "2e674e3f30c89e610d8527ee3514c7b46d5d04f2023f5bd36db976879eced74f",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/jsdocs/SKILL.md": {
+      "sha256": "e85aa3674aa4561e4ae6b224264023dc474e285a67fdfa790b901d926d6fb195",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/jsdocs/categories.md": {
+      "sha256": "e4c0aed7b53576eb38c1ec6712bfe16891a0dfb2dbcd311f6246deedf7b184d7",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/jsdocs/declarations.md": {
+      "sha256": "d646a7a1bce2fb4cdca87c82d9a9986e69aad36b6d6dc4e3441156a23ad07f73",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/jsdocs/examples.md": {
+      "sha256": "41738abf96afcbf7838f598d3ad529449358f1e6379e87d5f78b2155f28b5aab",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/migration-guidance/SKILL.md": {
+      "sha256": "90976b6b5b39271db952e0230377cf30d13380d9526466bc889614552cce6cd4",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/migration-guidance/annotations.md": {
+      "sha256": "d3b8cf4deb0f1d4200c3272ad9ae0780916c0a73f8cad02a19c9c3a44f3a1a8a",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/migration-guidance/generation.md": {
+      "sha256": "e26ec6ae0f35a31b584214a02d689a866e50f32d3cbdccc73bb1c4f4c4daa83c",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/package-development/SKILL.md": {
+      "sha256": "0778f74bc4973d88fc48fec480a2ddb8040e17747655fd2d031e69452d4d3c95",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/package-development/dependencies.md": {
+      "sha256": "7dac9aa6d80ba68ce77b34898247a3d633568e156393be4b9325bbdd28cd688b",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/package-development/publishing.md": {
+      "sha256": "d3b182773b5a6b8af83dcb608c9c21e86c3649f1a58d1d300f7b9a26e1a6e4e5",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/package-development/registration.md": {
+      "sha256": "669f33743bc54e1f83b3e97c3952614ab80fb051cade90caee07c5986550a95f",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/performance-analysis/SKILL.md": {
+      "sha256": "b95416d184a909759a0c5d742641f1c6c52286673b7dfdcb3857442d2ac9fb8b",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/performance-analysis/runtime.md": {
+      "sha256": "288bbebd87ff6845f65810ddd7006c739fd077e033da78a1319348418309933a",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/performance-analysis/types.md": {
+      "sha256": "58ab5db8b06891f317e3fb60a7807008a6059276f1bb0e6a7617f474c9436671",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/test-development/SKILL.md": {
+      "sha256": "b9eeb39cf3eaa003c9712b0b82f96cde6f2d39ce2dfafd6de93de9584ffb2496",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/test-development/displayed-types.md": {
+      "sha256": "ff926c4443b35f921585278e3c243840fa848e0af35cca94362384144cfd82ad",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/test-development/runtime.md": {
+      "sha256": "25fd43fa46325e5f834d2cb63436727dfb3d2bb0a200236df34e7500afa30b4d",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/test-development/types.md": {
+      "sha256": "deae8a4c397c771ba416486a08c13f635b72eb4d3c7139edb04ee3c0697aef83",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/vendored-assets/SKILL.md": {
+      "sha256": "b45cfc17cce23c78943e476ce2b94b697b10828b588ea23f1ccc94b3deaf5d92",
+      "mode": 420
+    },
+    ".repos/effect-smol/.agents/skills/vendored-assets/browser-assets.md": {
+      "sha256": "5bf59bbf273149c4b4c0e04dfabb9fd8a3c02b71b9e107ce643659fa4843ddb5",
+      "mode": 420
+    },
+    ".repos/effect-smol/LICENSE": {
+      "sha256": "774c3bc5924ad8ae6c5a75f1c53db13feb238ade15989625c513d07b60dedf30",
+      "mode": 420
+    },
+    "CONTRIBUTING.md": {
+      "sha256": "ffb4823d8590a1d05871da1383812b3cb9da06ed30f0dd252c0a337f59650446",
+      "mode": 420
+    },
+    "CONTRIBUTING.md.upstream": {
+      "sha256": "4d7aaa3bc857e49c8d1ecc962e9532e06d8e1f997eaf2a7737c656ab1706f657",
+      "mode": 420
+    },
+    "LICENSE": {
+      "sha256": "935d8f2af0c703f9c39517ee57cc4930b19d02d533be930b63f0e82f93614b43",
+      "mode": 420
+    }
+  }
+}

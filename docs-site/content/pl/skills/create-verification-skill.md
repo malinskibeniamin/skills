@@ -67,3 +67,5 @@ Wykonaj wygenerowaną umiejętność: uruchamianie, diagnostykę, jedną zmapowa
 Wymień luki konfiguracji środowiska zastępczego; pozostają niezweryfikowane do odtworzenia w środowisku docelowym.
 
 Kieruj audyty rozbieżności do `/maintain-verification-skill`, a pracę nad funkcjami do `/dogfood`.
+
+Przykłady dla repozytorium T3 Code: [web i desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md) oraz [natywne aplikacje mobilne](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md). Ich narzędzia Browser/Device i skrypt parowania są specyficzne dla T3, nie są wymaganiami dla innych aplikacji.

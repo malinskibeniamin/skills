@@ -1,0 +1,3 @@
+interface:
+  display_name: "Jsdocs"
+  short_description: "Document public APIs with checked runnable examples"

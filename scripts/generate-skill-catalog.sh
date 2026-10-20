@@ -141,6 +141,13 @@ if poteto_lock.exists():
         for skill in json.loads(poteto_lock.read_text())["skills"]
     })
 
+t3code_lock = repo / "vendor/t3code-skills.lock.json"
+if t3code_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(t3code_lock.read_text())["skills"]
+    })
+
 
 def yaml_quote(value):
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'

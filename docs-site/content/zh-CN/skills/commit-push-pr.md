@@ -62,3 +62,5 @@ type: skill
 4. 遵循 CLAUDE.md 中的状态及意图/影响约定。只要 PR 已存在，就在最后的状态行中附上完整的 PR URL，包括更新时。
 
 绝不要暂存无关工作、推送混合范围的更改，也不要隐瞒失败。如果 `gh pr create` 失败，请显示错误和恢复命令。
+
+如果目标仓库已使用 Changesets，在完成针对性验证后、提交之前，加载 [changeset 收尾](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/changesets/SKILL.md)。更新当前 PR 的现有说明，不要每次提示都新增一份。

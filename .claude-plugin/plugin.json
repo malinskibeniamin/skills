@@ -187,7 +187,22 @@
     "./poteto-skills/poteto-technical-writing/",
     "./poteto-skills/poteto-typescript-best-practices/",
     "./poteto-skills/poteto-unslop/",
-    "./poteto-skills/poteto-why/"
+    "./poteto-skills/poteto-why/",
+    "./t3code-skills/contribution-triage/",
+    "./t3code-skills/test-t3-app/",
+    "./t3code-skills/test-t3-mobile/",
+    "./t3code-skills/ai-docs/",
+    "./t3code-skills/bundle-analysis/",
+    "./t3code-skills/changesets/",
+    "./t3code-skills/ci-maintenance/",
+    "./t3code-skills/dependency-maintenance/",
+    "./t3code-skills/effect-development/",
+    "./t3code-skills/jsdocs/",
+    "./t3code-skills/migration-guidance/",
+    "./t3code-skills/package-development/",
+    "./t3code-skills/performance-analysis/",
+    "./t3code-skills/test-development/",
+    "./t3code-skills/vendored-assets/"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",

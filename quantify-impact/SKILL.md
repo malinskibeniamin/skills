@@ -3,11 +3,11 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
-Make value obvious without benchmark theater. Every PR creation/update runs this assessment automatically through `/commit-push-pr` or `/stacked-prs`; measurement stays proportional.
+Every PR creation/update runs this assessment through `/commit-push-pr` or `/stacked-prs`; measure proportionally, without benchmark theater.
 
 ## Flow
 
-1. **Evidence opportunity scan:** benchmark only when a cheap direct metric could clear a predeclared worthwhile delta and normal variance. Tiny copy/style/test work gets a value sentence. No benchmark theater.
+1. **Evidence opportunity scan:** benchmark only when a cheap direct metric could clear a predeclared worthwhile delta and normal variance. Tiny copy/style/test work gets a value sentence.
 2. **Lock claim before coding:** thesis, primary metric, guardrail, scenario, minimum worthwhile delta. Never pick the winner afterward.
 3. **Product lane + Codebase lane:** one must improve; the other must not materially regress.
    - Product: capability, task success, repro, errors, steps, latency, resources.
@@ -21,11 +21,13 @@ Make value obvious without benchmark theater. Every PR creation/update runs this
    - No useful metric and no performance claim: normal value summary, no impact artifact.
    - Regression: fix, narrow, or stop.
 
-Apply the same filter to guardrails; omit negligible movement.
+Filter guardrails likewise; omit negligible movement.
+
+For library-runtime/compiler-cost measurement, load [performance analysis](../t3code-skills/performance-analysis/SKILL.md).
 
 ## PR output
 
-Always provide a concise impact bullet: what improved for the user or maintainer and the evidence. Tiny copy/style changes get a value sentence linked to visual before/after evidence, not an invented metric. Only when evidence clears threshold, replace that bullet with:
+Provide an impact bullet: user/maintainer improvement and evidence. Tiny copy/style changes get value linked to visual before/after, not invented metrics. Only threshold-clearing evidence replaces it with:
 
 ```md
 ## Proven impact
@@ -36,4 +38,4 @@ Always provide a concise impact bullet: what improved for the user or maintainer
 Method: `<command, fixture, runs, environment>`.
 ```
 
-Give this directly to the PR body through `/commit-push-pr` or `/stacked-prs`; no separate reviewability request is needed. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.
+Put this in the PR body through `/commit-push-pr` or `/stacked-prs`; no separate reviewability request is needed. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.

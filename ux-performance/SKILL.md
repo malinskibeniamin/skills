@@ -17,16 +17,18 @@ Name before edits:
 
 ## Loop
 
-1. Inventory the real stack, production build, telemetry, profilers, tests, budgets, and package versions. Read current first-party docs before framework/library syntax changes.
+1. Inventory stack/versions, production build, telemetry, profilers, tests and budgets. Read current first-party docs before framework/library syntax changes.
 2. Measure the baseline before changing code with one production-like scenario/fixture. Save raw traces under ignored `.context/ux-performance/<journey>/`; use [MEASUREMENT.md](MEASUREMENT.md) for field/lab evidence.
 3. Build intent-to-paint waterfall. Mark serial, parallel/off-path, cache state, and critical segments: queue, network/TTFB, download, parse/evaluate, app, React render/commit, layout, paint.
 4. Rank bottlenecks. Form 3-5 falsifiable hypotheses and change one causal variable at a time. Delete work, shrink input, or remove serialization before optimizing work.
-5. Choose the narrowest evidence-backed [OPTIMIZATION.md](OPTIMIZATION.md) option. Wrappers, contexts, caches, workers, compilers, upgrades, prefetch, and SSR are candidates, never presumed wins.
+5. Choose the narrowest evidence-backed [optimization](OPTIMIZATION.md). Wrappers, contexts, caches, workers, compilers, upgrades, prefetch, and SSR are candidates, never presumed wins.
 6. Pair base/candidate on the same scenario, fixture, machine, browser, build, and cache. Report median/spread; verify fidelity, accessibility, memory, bundle, and errors.
 7. Keep a worthwhile gain. If within variance, displaced, or guardrail-regressing, report `Value not proven - inconclusive` and revert speculative complexity. Never metric-shop.
 8. Prevent recurrence only when requested or CI is the endpoint. [CI.md](CI.md): cheap stable PR checks, noisy/deep nightly checks, real-user monitoring after deploy. Hooks remain advisory until calibrated.
 
-For scale, burst, contention, or long-session claims, use [STRESS.md](STRESS.md) to find the capacity knee and verify correctness under pressure.
+For scale/burst/contention/long-session claims, use [STRESS.md](STRESS.md): capacity knee and correctness under pressure.
+
+For bundle comparisons/composition, load [bundle analysis](../t3code-skills/bundle-analysis/SKILL.md).
 
 ## Output
 

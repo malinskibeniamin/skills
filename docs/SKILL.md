@@ -26,3 +26,6 @@ Write documents that readers can understand, verify, and use.
    with a tool. Validate fragments when supported. Never claim unrun commands succeeded.
 5. Report the result, observed verification, and unresolved evidence gaps. Follow the
    requested endpoint; this skill does not authorize unrelated publishing or configuration.
+
+For public TypeScript API JSDoc, runnable examples and cross-links, load
+[JSDoc guidance](../t3code-skills/jsdocs/SKILL.md). General technical prose stays here.

@@ -63,3 +63,5 @@ type: skill
 列出替代环境的设置缺口；在目标环境重放前，仍未经过验证。
 
 漂移审计交由 `/maintain-verification-skill`，功能工作交由 `/dogfood`。
+
+T3 Code 仓库示例：[Web/桌面端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)和[原生移动端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。其中的 Browser/Device 工具和配对脚本仅适用于 T3，不是其他应用的必需项。

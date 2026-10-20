@@ -1,9 +1,17 @@
 ---
-title: /quantify-impact
 description: 衡量一項變更是否讓產品或程式碼庫獲得實質改善。當可重現的證據有助於判斷功能、修正、重構或升級是否值得合併時使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - quantify impact
 sidebar:
   label: /quantify-impact
+title: /quantify-impact
+type: skill
 ---
 ![「/quantify-impact」技能圖解](/diagrams/skills/quantify-impact.svg)
 
@@ -12,7 +20,7 @@ sidebar:
 
 無須上演基準測試的戲碼，就能讓價值一目了然。每次建立或更新 PR 時，都會透過 `/commit-push-pr` 或 `/stacked-prs` 自動執行這項評估；衡量方式會維持相稱。
 
-## 流程
+## 流程 [#flow]
 
 1. **掃描證據機會：**只有當取得成本低的直接指標可能超過預先宣告的最低實質改善幅度與正常變異時，才執行基準測試。微小的文案、樣式或純測試變更只需用一句話清楚說明價值。不要上演基準測試的戲碼。
 2. **在撰寫程式碼前鎖定主張：**說明變更論點、主要指標、護欄指標、情境，以及最低的實質改善幅度。不要事後才挑選勝出的指標。
@@ -30,7 +38,7 @@ sidebar:
 
 對護欄指標套用相同的篩選條件；省略微不足道的變動。
 
-## PR 輸出
+## PR 輸出 [#pr-output]
 
 一律提供簡潔的影響重點：使用者或維護者獲得了哪些改善，以及相關證據。微小的文案或樣式變更只需提供一句價值說明，並連結至變更前後的視覺證據，不要捏造指標。只有當證據超過門檻時，才將該重點替換為：
 
@@ -44,3 +52,5 @@ Method: `<command, fixture, runs, environment>`.
 ```
 
 透過 `/commit-push-pr` 或 `/stacked-prs` 直接將此內容加入 PR 本文；不需要另行要求提高可審查性。明確要求使用 `/make-pr-easy-to-review` 時，它會重複使用此內容。只有在重現需要時，才將省略的原始資料保留在本機證據中。絕不輸出空白表格；未證實的明確效能主張應註明 `Value not proven`，但不要公布微不足道的數字。
+
+測量函式庫的執行效能或 TypeScript 編譯器成本時，載入[效能分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/performance-analysis/SKILL.md)。它負責針對性的測量工具；此技能仍負責論點與價值判斷。

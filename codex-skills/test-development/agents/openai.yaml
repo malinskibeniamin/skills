@@ -1,0 +1,3 @@
+interface:
+  display_name: "Test Development"
+  short_description: "Verify runtime behavior and public compiler contracts"

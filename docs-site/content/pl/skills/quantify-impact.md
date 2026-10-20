@@ -1,12 +1,20 @@
 ---
-title: /quantify-impact
 description: >-
   Zmierz, czy zmiana znacząco ulepszyła produkt lub bazę kodu. Użyj, gdy
   powtarzalne dowody pomogą ocenić, czy warto scalić funkcję, poprawkę,
   refaktoryzację lub aktualizację.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - quantify impact
 sidebar:
   label: /quantify-impact
+title: /quantify-impact
+type: skill
 ---
 ![Diagram umiejętności /quantify-impact](/diagrams/skills/quantify-impact.svg)
 
@@ -15,7 +23,7 @@ sidebar:
 
 Natychmiast pokaż wartość, bez pozorowanych testów porównawczych. Każde utworzenie lub zaktualizowanie PR automatycznie uruchamia tę ocenę za pośrednictwem `/commit-push-pr` lub `/stacked-prs`; zakres pomiarów pozostaje proporcjonalny.
 
-## Przebieg
+## Przebieg [#flow]
 
 1. **Ocena możliwości zebrania dowodów:** przeprowadzaj test porównawczy tylko wtedy, gdy tania bezpośrednia metryka może przekroczyć zadeklarowaną wcześniej minimalną wartościową różnicę i normalną zmienność. Drobne zmiany dotyczące wyłącznie treści, stylu lub testów wymagają zdania o wartości. Bez pozorowanych testów porównawczych.
 2. **Ustal tezę przed rozpoczęciem kodowania:** określ tezę, główną metrykę, kryterium ochronne, scenariusz oraz minimalną wartościową różnicę. Nie wybieraj zwycięskiej metryki po fakcie.
@@ -33,7 +41,7 @@ Natychmiast pokaż wartość, bez pozorowanych testów porównawczych. Każde ut
 
 Zastosuj ten sam filtr do kryteriów ochronnych; pomiń pomijalne zmiany.
 
-## Treść PR
+## Treść PR [#pr-output]
 
 Zawsze podaj zwięzły punkt dotyczący wpływu: co poprawiło się dla użytkownika lub osoby utrzymującej kod oraz jakie są na to dowody. Drobne zmiany dotyczące treści lub stylu wymagają zdania o wartości powiązanego z wizualnymi dowodami stanu przed zmianą i po niej, a nie wymyślonej metryki. Tylko gdy dowody przekraczają próg, zastąp ten punkt następującą treścią:
 
@@ -47,3 +55,5 @@ Method: `<command, fixture, runs, environment>`.
 ```
 
 Przekaż ją bezpośrednio do treści PR za pośrednictwem `/commit-push-pr` lub `/stacked-prs`; osobna prośba o ułatwienie przeglądu nie jest potrzebna. `/make-pr-easy-to-review` wykorzystuje ją ponownie, gdy zostanie jawnie wywołana. Pominięte surowe dane zachowaj wyłącznie w lokalnym artefakcie dowodowym, jeśli są potrzebne do zapewnienia powtarzalności. Nigdy nie dodawaj pustej tabeli; w przypadku jawnych, niepotwierdzonych deklaracji poprawy wydajności podaj `Value not proven` bez pomijalnych liczb.
+
+Dla pomiarów wykonania bibliotek lub kosztu kompilatora TypeScript wczytaj [analizę wydajności](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/performance-analysis/SKILL.md). Odpowiada ona za ukierunkowane narzędzia pomiarowe; ta umiejętność nadal odpowiada za tezę i ocenę wartości.
