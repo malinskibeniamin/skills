@@ -74,3 +74,9 @@ Claude registrations. Catalog generation owns Codex proxies and router discovery
 The compatibility contract stays hand-maintained. Refresh refuses modified or
 unmanaged output rather than overwriting local work. Do not refresh from inside
 the managed snapshot. A clean repeated import must produce identical files.
+
+## Upstream monitoring
+
+The [T3 harness watcher](../shared/T3CODE-HARNESS-WATCH.md) detects broader harness changes
+and proposes draft reviews. Its baseline is not an import pin; adoption still uses the
+trusted importer above. Automatic publication needs explicit authentication setup.
