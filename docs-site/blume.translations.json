@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "bf14b9a28e8ce4dd",
-      "zh-CN": "bf14b9a28e8ce4dd",
-      "zh-TW": "bf14b9a28e8ce4dd"
+      "pl": "54a2056c450e6273",
+      "zh-CN": "54a2056c450e6273",
+      "zh-TW": "54a2056c450e6273"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -51,19 +51,14 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "8c6c69a29cdc5db6",
-      "zh-CN": "8c6c69a29cdc5db6",
-      "zh-TW": "8c6c69a29cdc5db6"
+      "pl": "e002e875d99f2103",
+      "zh-CN": "e002e875d99f2103",
+      "zh-TW": "e002e875d99f2103"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
       "zh-CN": "c112e65dfef02e57",
       "zh-TW": "c112e65dfef02e57"
-    },
-    "content/skills/av.md": {
-      "pl": "23242b5552e4430e",
-      "zh-CN": "23242b5552e4430e",
-      "zh-TW": "23242b5552e4430e"
     },
     "content/skills/blast-radius.md": {
       "pl": "c9f9b7cafc821403",
@@ -211,9 +206,9 @@
       "zh-TW": "58ada51b75bb54ac"
     },
     "content/skills/grilling.md": {
-      "pl": "79ba824882d62463",
-      "zh-CN": "79ba824882d62463",
-      "zh-TW": "79ba824882d62463"
+      "pl": "5449d81b11f5114e",
+      "zh-CN": "5449d81b11f5114e",
+      "zh-TW": "5449d81b11f5114e"
     },
     "content/skills/handoff.md": {
       "pl": "2c9d0bb2ef198341",
@@ -245,20 +240,15 @@
       "zh-CN": "c4e30023b068d1cc",
       "zh-TW": "c4e30023b068d1cc"
     },
-    "content/skills/jb.md": {
-      "pl": "5b061c04f998bfc4",
-      "zh-CN": "5b061c04f998bfc4",
-      "zh-TW": "5b061c04f998bfc4"
-    },
     "content/skills/launchdarkly.md": {
       "pl": "8dcb988fff86c0a3",
       "zh-CN": "8dcb988fff86c0a3",
       "zh-TW": "8dcb988fff86c0a3"
     },
     "content/skills/lie-detector.md": {
-      "pl": "8973216873eb1dbf",
-      "zh-CN": "8973216873eb1dbf",
-      "zh-TW": "8973216873eb1dbf"
+      "pl": "16a42b69d0fbf70b",
+      "zh-CN": "16a42b69d0fbf70b",
+      "zh-TW": "16a42b69d0fbf70b"
     },
     "content/skills/maintain-verification-skill.md": {
       "pl": "be8f33a99d950f71",
@@ -275,20 +265,10 @@
       "zh-CN": "80bd709e07ad337d",
       "zh-TW": "80bd709e07ad337d"
     },
-    "content/skills/mm.md": {
-      "pl": "c32035b60b17a788",
-      "zh-CN": "c32035b60b17a788",
-      "zh-TW": "c32035b60b17a788"
-    },
     "content/skills/mobile-native.md": {
       "pl": "71b924e1c4c00c6e",
       "zh-CN": "71b924e1c4c00c6e",
       "zh-TW": "71b924e1c4c00c6e"
-    },
-    "content/skills/ms.md": {
-      "pl": "71eaef882076ac21",
-      "zh-CN": "71eaef882076ac21",
-      "zh-TW": "71eaef882076ac21"
     },
     "content/skills/plan-arbiter.md": {
       "pl": "9c83755af0bff887",
@@ -319,6 +299,11 @@
       "pl": "40056460a655c153",
       "zh-CN": "40056460a655c153",
       "zh-TW": "40056460a655c153"
+    },
+    "content/skills/product.md": {
+      "pl": "bfb2a38cc820f8fa",
+      "zh-CN": "bfb2a38cc820f8fa",
+      "zh-TW": "bfb2a38cc820f8fa"
     },
     "content/skills/prototype.md": {
       "pl": "4884299012f907d3",
@@ -376,9 +361,9 @@
       "zh-TW": "6c8f66d36ccc2e87"
     },
     "content/skills/review.md": {
-      "pl": "30ea62bd3683854b",
-      "zh-CN": "30ea62bd3683854b",
-      "zh-TW": "30ea62bd3683854b"
+      "pl": "74248520be341356",
+      "zh-CN": "74248520be341356",
+      "zh-TW": "74248520be341356"
     },
     "content/skills/security-audit.md": {
       "pl": "89121c75ade5709b",
@@ -405,11 +390,6 @@
       "zh-CN": "54031f842082270e",
       "zh-TW": "54031f842082270e"
     },
-    "content/skills/ss.md": {
-      "pl": "29598a812a71cf15",
-      "zh-CN": "29598a812a71cf15",
-      "zh-TW": "29598a812a71cf15"
-    },
     "content/skills/stack-registry.md": {
       "pl": "6acfe0c8a546022f",
       "zh-CN": "6acfe0c8a546022f",
@@ -426,9 +406,9 @@
       "zh-TW": "9696579b43e29af5"
     },
     "content/skills/steelman.md": {
-      "pl": "466d9aebf75d0a0f",
-      "zh-CN": "466d9aebf75d0a0f",
-      "zh-TW": "466d9aebf75d0a0f"
+      "pl": "a2c2edc06a6b9870",
+      "zh-CN": "a2c2edc06a6b9870",
+      "zh-TW": "a2c2edc06a6b9870"
     },
     "content/skills/swarm.md": {
       "pl": "2aa56822b2e2a721",

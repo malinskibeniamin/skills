@@ -31,7 +31,6 @@ type: skill
 | `/animation-vocabulary` | 为动效命名并区分相近动画术语。 |
 | `/ask-ben` | 通过 Ben 的前端技能框架路由工作。 |
 | `/ask-sonner` | 集成和排查 Sonner 通知。 |
-| `/av` | 检查变更是否值得投入时间，并能安全落地。 |
 | `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |
 | `/break-ui` | 使用真实可信的最坏情况数据压力测试 UI。 |
@@ -67,14 +66,11 @@ type: skill
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
-| `/jb` | 检查 PR 是否值得投入时间，并证明工作已完成。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 审计标志受众和清理条件。 |
 | `/lie-detector` | 发现不会失败的测试和缺乏差异支持的声明。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |
-| `/mm` | 在交付前判断一项变更是否值得付出相应成本。 |
 | `/mobile-native` | 修复手机网页的视口、触摸和键盘行为。 |
-| `/ms` | 检查 PR 是否值得投入时间，并带来相应的业务价值。 |
 | `/plan-arbiter` | 比较相互竞争的计划，并选择有依据的方向。 |
 | `/plow-ahead` | 在常规的不确定情况下自主继续推进。 |
 | `/postgresql` | 根据工作负载证据设计和运维 PostgreSQL。 |
@@ -136,6 +132,7 @@ type: skill
 | `/pr-shepherd` | 恢复已变更的 PR，并跟进当前工作区的修复。 |
 | `/pr` | 撰写便于快速审查的 PR 描述。 |
 | `/prime` | 构建简明的仓库启动说明。 |
+| `/product` | 检查工作是否值得投入时间，并带来相应的业务价值。 |
 | `/prototype` | 构建一次性产物来回答设计问题。 |
 | `/quantify-impact` | 证明有意义的产品和代码库改进。 |
 | `/read-the-damn-docs` | 根据主要文档研究当前行为。 |
@@ -148,12 +145,11 @@ type: skill
 | `/retro` | 对一次编码会话进行复盘。 |
 | `/revamp` | 通过基线驱动的转换执行大规模重写。 |
 | `/review` | 使用由证据触发的专家视角审查差异。 |
-| `/security-audit` | 将安全问题和审查交由固定版本的 Cloudflare 审计技能指导。 |
+| `/security-audit` | 使用 Cloudflare 的审计工作流审查源码信任边界。 |
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
-| `/ss` | 审查一项变更是否值得投入我们有限的时间。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
 | `/stacked-prs` | 创建和管理相互依赖的 GitHub 拉取请求栈。 |
 | `/stay-within-limits` | 围绕用量限制规划长期运行的智能体工作。 |

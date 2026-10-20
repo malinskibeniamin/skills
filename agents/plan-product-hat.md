@@ -40,9 +40,10 @@ For the plan presented, answer:
 
 ## Pass 3: Value lane
 
-Apply [av/SKILL.md](../av/SKILL.md) to the plan: one lane, its evidence verdict, missing
-acceptance scenarios, and any money-path risk. Report each as a finding with
-`section: "adversarial-value"` and the rule id as `id`; an `unjustified` lane is blocking.
+Apply [product/SKILL.md](../product/SKILL.md) in plan mode: one lane, its verdict,
+missing acceptance scenarios, the cheapest disproof, and any money-path risk. Report each
+as a finding with `section: "adversarial-value"` and the rule id as `id`; an
+`unjustified` lane is blocking.
 
 ## Output
 

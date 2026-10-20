@@ -56,7 +56,7 @@ Build one **Evidence packet**: request, plan, spec/standards sources, paths, rep
 
 Axes: Spec -> `plan-product-hat`; Standards -> `plan-engineering-hat`; design/UX -> `plan-design-hat`; plus adversarial/value. Deep-risk triggers: auth, migration, public API, destructive action, concurrency, Temporal, cross-service work, and one-way doors.
 
-**Specialist registry:** Call the Skill tool separately with "av" for value and "golang" for planned Go or `go.mod` work; add specialists after repeated misses. Axes report `APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED` with evidence/skip reason. Dedupe root causes; research facts; stop on blocking user decisions.
+**Specialist registry:** Call the Skill tool separately with "product" for value and "golang" for planned Go or `go.mod` work; add specialists after repeated misses. Axes report `APPROVED`, `NEEDS_CHANGES`, `BLOCKED`, or `SKIPPED` with evidence/skip reason. Dedupe root causes; research facts; stop on blocking user decisions.
 
 Confirm only for a requested plan/grill endpoint. [ETHOS: Discover Before Commitment]
 

@@ -6,7 +6,7 @@ description: "Catch what a change claims but does not do: hallucinated APIs or c
 Treat the change as unproven. Steelman "this should not merge", then let the diff refute it
 with evidence. Runs standalone or inline as the **lie-detector hat** in `/review` on
 every diff; weight customer-facing surfaces (UI, copy, CLI output, public API, report)
-highest. Code defects stay in `/review`; value stays in `/jb`. Work on a committed tree
+highest. Code defects stay in `/review`; value stays in `/product`. Work on a committed tree
 with `BASE` set to the merge base.
 
 ## 1. Claims without evidence
@@ -68,10 +68,10 @@ pattern, or update the rule in the same PR and say why. Two live styles is the d
 ## 6. Steelman gate
 
 Follow [steelman/SKILL.md](../steelman/SKILL.md) on the premise "this PR should merge".
-Argue the strongest case against it from the [jb](../jb/SKILL.md) verdict, the findings
+Argue the strongest case against it from the [product](../product/SKILL.md) verdict, the findings
 above, and `/review` findings. **Merge-ready** only when all three hold:
 
-- value: the `jb:` verdict is `justified`;
+- value: the `product:` verdict is `justified`;
 - truth: no P1 here, and every changed behavior has a red-then-green test or a
   real-entrypoint replay;
 - implementation: `/review` reports no P0/P1.

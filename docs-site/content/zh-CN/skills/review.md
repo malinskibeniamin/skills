@@ -19,12 +19,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/review.excalidraw)
 
-当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
-
 审查 HEAD。保留唯一所有者；委派必须明确授权。不要编辑、提交、推送或发布。
 评论发布需要明确意图。
-
-检查时，读取适用的 `REVIEW.md`、`CODING_STANDARDS.md` 和 `CONTRIBUTING.md`（若存在）。获授权的审查维度应一起在前台运行；汇总每份报告。
 
 ## 审查约定 [#review-contract]
 
@@ -45,7 +41,7 @@ type: skill
 
 ### 检查 [#inspect]
 
-1. 阅读请求或规格、规则、完整差异、调用点和行为。不要让 PR 摘要凌驾于代码。
+1. 阅读请求或规格、规则、完整差异、调用点和行为。不要让 PR 摘要凌驾于代码。读取适用的 `REVIEW.md`、`CODING_STANDARDS.md` 和 `CONTRIBUTING.md`（若存在）。
 2. 对每个变化的假设，反向追踪权威生产者、模式、
    存储、消费者和公共表面。按领域概念、字段和输出
    值搜索，不只搜索变更符号。
@@ -77,9 +73,9 @@ type: skill
 | Go/并发/工作流 | 所有权、取消、竞态、重试、幂等 |
 | 依赖/外部 API | 第一手文档、版本、锁文件、安全通告 |
 
-每次 PR 或分支审查也都在当前流程中应用 **jb 视角**（[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)）、**mm 视角**
-（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 视角**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)）、**ms 视角**
-（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)），以及 **lie-detector 视角**（[lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)）。
+按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)加载技能。
+分别为“product”和“lie-detector”调用 Skill 工具；在当前流程中应用它们的视角。
+获授权的审查维度应一起在前台运行；汇总每份报告。
 
 ### 分类 [#classify]
 
@@ -98,7 +94,7 @@ type: skill
 
 阅读[沟通规则](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)；保留输出格式。
 先报告发现，按根因去重。省略赞美和过程叙述。重新审查时标明每条先前发现的状态。
-每次审查也都在当前流程中应用 `/ss`；将其价值行与缺陷分开报告。
+将产品结论行与缺陷分开报告。
 
 ## 深度模式 [#deep-mode]
 
@@ -110,4 +106,4 @@ type: skill
 阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 了解术语和结构。报告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定点、模式、计数、
-`jb:`、`mm:`、`av:` 和 `lie-detector:` 结论行、结论和剩余限制。无发现时只返回这些结论行、结论和剩余限制。
+`product:` 和 `lie-detector:` 结论行、结论和剩余限制。无发现时只返回这些结论行、结论和剩余限制。

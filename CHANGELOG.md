@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+2026-10-20 -- Consolidate the five value skills (/ss, /mm, /ms, /jb, /av) into one
+`/product` skill: one lane table (keep the lights on, quality of life, feature, taste),
+one verdict scale (justified, thin, unjustified), one severity ladder, one `product:`
+output line, and plan, author, review, and track modes. RULES.md merges the five
+catalogs into 46 deduplicated rules graded by how many independent evidence sets converge
+on each; CRAFT.md merges the author playbooks. /review, the PR review routine,
+/commit-push-pr, /grilling, /lie-detector, /steelman, and the plan product hat now call
+/product; evals guard that the retired skills stay unregistered and unreferenced. Skills
+109 -> 105; model-facing SKILL.md bytes for the value lane 18774 -> 5205.
+
 2026-10-19 -- Accept tsrs as a TypeScript 7 type checker alongside `tsc`; the project's
 `type:check` script is the contract. The retired `tsgo` CLI stays banned only where it runs
 as a command: file names, arguments and data heredocs (`ln -s ... tsgo`, `python3 - <<EOF`)

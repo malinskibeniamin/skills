@@ -31,7 +31,6 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/animation-vocabulary` | Nazywanie efektów ruchu i rozróżnianie bliskich terminów animacji. |
 | `/ask-ben` | Kierowanie pracy przez zestaw umiejętności frontendowych Bena. |
 | `/ask-sonner` | Integracja i diagnozowanie powiadomień Sonner. |
-| `/av` | Sprawdzanie, czy zmiana uzasadnia poświęcony jej czas i jest bezpiecznie wdrażana. |
 | `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
 | `/break-ui` | Testowanie UI na realistycznych danych najgorszego przypadku. |
@@ -67,14 +66,11 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
-| `/jb` | Sprawdzanie, czy PR uzasadnia poświęcony mu czas i zawiera dowody ukończenia pracy. |
 | `/launchdarkly` | Audyt odbiorców i gotowości do usunięcia flag przez LaunchDarkly CLI. |
 | `/lie-detector` | Wykrywanie testów, które nie mogą zakończyć się niepowodzeniem, i twierdzeń niepopartych zmianami w kodzie. |
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
-| `/mm` | Ocenianie przed wdrożeniem, czy zmiana jest warta swojego kosztu. |
 | `/mobile-native` | Naprawianie mobilnego viewportu, dotyku i klawiatury w WWW. |
-| `/ms` | Sprawdzanie, czy PR uzasadnia poświęcony mu czas i dostarcza wartość biznesową. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |
 | `/postgresql` | Projektowanie i obsługiwanie PostgreSQL na podstawie danych o obciążeniu. |
@@ -136,6 +132,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/pr-shepherd` | Wznawianie zmienionych PR-ów i doprowadzanie bieżących poprawek obszaru roboczego do końca. |
 | `/pr` | Pisanie opisu PR, który szybko się przegląda. |
 | `/prime` | Tworzenie zwięzłego wprowadzenia do repozytorium. |
+| `/product` | Sprawdzanie, czy praca uzasadnia poświęcony jej czas i dostarcza wartość biznesową. |
 | `/prototype` | Tworzenie jednorazowego artefaktu w celu rozstrzygnięcia kwestii projektowej. |
 | `/quantify-impact` | Wykazywanie istotnych ulepszeń produktu i bazy kodu. |
 | `/read-the-damn-docs` | Badanie bieżącego działania na podstawie dokumentacji źródłowej. |
@@ -148,12 +145,11 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/retro` | Retrospektywa sesji programistycznej. |
 | `/revamp` | Przeprowadzanie dużej przebudowy z wykorzystaniem translacji opartej na stanie bazowym. |
 | `/review` | Przeglądanie zmian z użyciem specjalistycznych perspektyw dobieranych na podstawie dowodów. |
-| `/security-audit` | Kierowanie pytaniami i przeglądami bezpieczeństwa do przypiętej umiejętności audytu Cloudflare. |
+| `/security-audit` | Przeglądanie granic zaufania w kodzie źródłowym zgodnie z procedurą audytu Cloudflare. |
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |
 | `/setup-routines` | Konfigurowanie automatycznych procedur utrzymaniowych Claude Code. |
 | `/show-me` | Wyjaśnianie bieżącego tematu za pomocą zwięzłych artefaktów wizualnych. |
 | `/snyk-ux-security` | Audytowanie bezpieczeństwa zależności za pomocą Snyk i bramek wydania. |
-| `/ss` | Ocenianie, czy zmiana jest warta naszego ograniczonego czasu. |
 | `/stack-registry` | Zarządzanie bieżącym i zabronionym stosem technologicznym w regułach zestawu. |
 | `/stacked-prs` | Tworzenie i zarządzanie stosami zależnych pull requestów GitHub. |
 | `/stay-within-limits` | Planowanie długotrwałej pracy agentów z uwzględnieniem limitów użycia. |

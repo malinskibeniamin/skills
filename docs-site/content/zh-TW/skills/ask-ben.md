@@ -31,7 +31,6 @@ type: skill
 | `/animation-vocabulary` | 為動效命名並區分相近動畫術語。 |
 | `/ask-ben` | 透過 Ben 的前端技能控制框架路由工作。 |
 | `/ask-sonner` | 整合並排查 Sonner 通知。 |
-| `/av` | 確認變更值得投入時間，並能安全交付。 |
 | `/blast-radius` | 以可執行的實證證明非區域性變更的安全性。 |
 | `/brain-dump` | 將原始想法轉化為可執行的機會地圖。 |
 | `/break-ui` | 使用真實可信的最壞情況資料壓力測試 UI。 |
@@ -67,14 +66,11 @@ type: skill
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
-| `/jb` | 檢查 PR 是否值得投入時間，並提供已完成的證明。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 稽核旗標受眾與清理條件。 |
 | `/lie-detector` | 找出不可能失敗的測試，以及差異內容無法支持的主張。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
-| `/mm` | 在交付變更前，判斷其效益是否值得付出成本。 |
 | `/mobile-native` | 修復手機網頁的檢視區、觸控和鍵盤行為。 |
-| `/ms` | 檢查 PR 是否值得投入時間，並具有商業價值。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |
 | `/plow-ahead` | 在例行的不確定情況下自主繼續推進。 |
 | `/postgresql` | 根據工作負載實證設計並操作 PostgreSQL。 |
@@ -136,6 +132,7 @@ type: skill
 | `/pr-shepherd` | 接續已有變更的提取要求，並引導目前工作區完成修復。 |
 | `/pr` | 撰寫便於快速審查的 PR 說明。 |
 | `/prime` | 建立精簡的儲存庫啟動簡報。 |
+| `/product` | 確認工作值得投入時間，並能交付商業價值。 |
 | `/prototype` | 建立一次性成品，以回答設計問題。 |
 | `/quantify-impact` | 證明對產品與程式碼庫具有實質意義的改善。 |
 | `/read-the-damn-docs` | 從第一手文件研究目前的行為。 |
@@ -148,12 +145,11 @@ type: skill
 | `/retro` | 對一次程式開發工作階段進行回顧。 |
 | `/revamp` | 透過以基準為依據的轉換執行大型重寫。 |
 | `/review` | 使用由實證觸發的專業角色審查差異。 |
-| `/security-audit` | 以固定版本的 Cloudflare 稽核技能指引安全問題與審查。 |
+| `/security-audit` | 使用 Cloudflare 的稽核工作流程審查原始碼的信任邊界。 |
 | `/setup-atlassian-workflow` | 設定可選用的 Jira 與 Atlassian 工作流程。 |
 | `/setup-routines` | 設定自動化的 Claude Code 維護例行作業。 |
 | `/show-me` | 使用精簡的視覺成品解釋目前的主題。 |
 | `/snyk-ux-security` | 使用 Snyk 與發布關卡稽核相依套件安全性。 |
-| `/ss` | 審查一項變更是否值得投入我們有限的時間。 |
 | `/stack-registry` | 控制框架規則中目前採用與禁止使用的技術堆疊治理。 |
 | `/stacked-prs` | 建立並管理相互依賴的 GitHub 提取要求堆疊。 |
 | `/stay-within-limits` | 配額規劃長時間執行的代理程式工作，以避免超出用量限制。 |

@@ -19,12 +19,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/review.excalidraw)
 
-當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
-
 審查 HEAD。保留唯一所有者；委派必須明確授權。不要編輯、提交、推送或發布。
 發布評論需要明確意圖。
-
-檢查時，閱讀適用的 `REVIEW.md`、`CODING_STANDARDS.md` 與 `CONTRIBUTING.md`（若存在）。經授權的審查面向應一起在前景執行；彙整每份報告。
 
 ## 審查約定 [#review-contract]
 
@@ -45,7 +41,7 @@ type: skill
 
 ### 檢查 [#inspect]
 
-1. 閱讀請求/規格、規則、完整差異、呼叫點和行為。不要讓 PR 摘要凌駕於程式碼。
+1. 閱讀請求/規格、規則、完整差異、呼叫點和行為。不要讓 PR 摘要凌駕於程式碼。納入適用的 `REVIEW.md`、`CODING_STANDARDS.md` 與 `CONTRIBUTING.md`（若存在）。
 2. 對每個變化的假設，反向追蹤權威生產者、結構描述、
    儲存、消費者和公開表面。按領域概念、欄位和輸出
    值搜尋，不只搜尋變更符號。
@@ -77,9 +73,9 @@ type: skill
 | Go/並行/工作流程 | 所有權、取消、競態、重試、冪等 |
 | 相依套件/外部 API | 第一手文件、版本、鎖定檔、安全通告 |
 
-每次 PR 或分支審查也都會在同一流程中套用 **jb 角色**（[jb/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/jb/SKILL.md)）、**mm 角色**
-（[mm/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/mm/SKILL.md)）、**av 角色**（[av/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/av/SKILL.md)）、**ms 角色**
-（[ms/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/ms/SKILL.md)），以及 **lie-detector 角色**（[lie-detector/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/lie-detector/SKILL.md)）。
+依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)載入技能。
+分別為「product」和「lie-detector」呼叫 Skill 工具；在同一流程中套用其角色。
+經授權的審查面向應一起在前景執行；彙整每份報告。
 
 ### 分類 [#classify]
 
@@ -98,7 +94,7 @@ type: skill
 
 閱讀[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)；保留輸出格式。
 先報告發現，按根因去重。省略讚美與過程敘述。重新審查時標明每條先前發現的狀態。
-每次審查也都會在同一流程中套用 `/ss`；將其價值行與缺陷分開報告。
+將產品結論行與缺陷分開報告。
 
 ## 深度模式 [#deep-mode]
 
@@ -110,4 +106,4 @@ type: skill
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md) 以了解術語和結構。報告
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、計數、
-`jb:`、`mm:`、`av:` 和 `lie-detector:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
+`product:` 和 `lie-detector:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
