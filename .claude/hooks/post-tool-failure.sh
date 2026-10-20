@@ -30,7 +30,7 @@ case "$command" in
       _hint="bun install failed. Read stderr — likely peer dep conflict or registry issue."
     fi
     ;;
-  *"tsgo"*|*"type:check"*|*"tsc"*)
+  *"tsgo"*|*"type:check"*|*"tsc"*|*"tsrs"*)
     _rule="typecheck-fail"
     _hint="Type errors. Fix with type guards/generics/schema — no as any, no @ts-ignore."
     ;;

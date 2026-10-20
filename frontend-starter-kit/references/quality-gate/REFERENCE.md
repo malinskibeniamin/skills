@@ -52,7 +52,7 @@ jobs:
 |--------|-------------|---------------|
 | `lint` | `biome check .` | ~1s |
 | `lint:fix` | `biome check --write .` | ~1s |
-| `type:check` | `tsc` | ~2s |
+| `type:check` | `tsc`, or `tsrs --noEmit -p tsconfig.json` | ~2s (tsrs: well under 1s) |
 | `test` | `vitest --run` | varies |
 | `test:related` | `vitest related --run --passWithNoTests` | ~1-3s |
 | `quality:gate` | lint + type:check + related tests | <5s target |

@@ -25,7 +25,7 @@ exit_code=$(echo "$input" | jq -r '.tool_response.exit_code // .tool_result.exit
 # config filename, grep pattern, or loop variable. `cat vitest.config.ts`,
 # `ls hooks | grep lint`, and `for f in *test*` must NOT match.
 if ! printf '%s\n' "$command" | grep -qE \
-  '(^|[;&|][[:space:]]*)(vitest|rstest|playwright|tsgo|tsc|biome)([[:space:]]|$)|(^|[;&|][[:space:]]*)(bun|bunx|npx)[[:space:]]+(run[[:space:]]+)?(vitest|rstest|playwright|tsgo|tsc|biome|test([[:space:]]|$)|[a-z:-]*(test|lint|type:check)[a-z:-]*([[:space:]]|$))'; then
+  '(^|[;&|][[:space:]]*)(vitest|rstest|playwright|tsgo|tsrs|tsc|biome)([[:space:]]|$)|(^|[;&|][[:space:]]*)(bun|bunx|npx)[[:space:]]+(run[[:space:]]+)?(vitest|rstest|playwright|tsgo|tsrs|tsc|biome|test([[:space:]]|$)|[a-z:-]*(test|lint|type:check)[a-z:-]*([[:space:]]|$))'; then
   exit 0
 fi
 

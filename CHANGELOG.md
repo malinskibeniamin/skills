@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-10-19 -- Accept tsrs as a TypeScript 7 type checker alongside `tsc`; the project's
+`type:check` script is the contract. The retired `tsgo` CLI stays banned only where it runs
+as a command: file names, arguments and data heredocs (`ln -s ... tsgo`, `python3 - <<EOF`)
+pass, and the deny names the project's checker (`bun run type:check`, `tsc` or tsrs). Fix
+`bunx tsrs` being read as `bunx tsr`. Failure, retry and warning hooks classify tsrs runs as
+type checks. Refresh the starter-kit translations.
+
 2026-10-06 -- Complete the mattpocock/skills v1.3.1 reconciliation: explicit Skill tool
 dependency calls with Codex fallbacks, cleanup-only diagnosis, post-fix retro routing,
 selection-before-edit retrospectives, draft endpoint preservation, and remaining glossary

@@ -152,11 +152,17 @@ _assert_stderr_contains "bunx vitest run" "stderr includes exact bunx replacemen
 echo "  tsgo → tsc rewrite:"
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"tsgo --noEmit"}}'
 _assert_exit 2 "tsgo denied"
-_assert_stderr_contains "TypeScript 7 Go compiler" "stderr explains tsc is the Go compiler"
+_assert_stderr_contains "retired TypeScript 7 preview CLI" "stderr explains tsgo is retired"
 _assert_stderr_contains "tsc --noEmit" "stderr includes exact tsc replacement"
 
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"tsc --noEmit"}}'
 _assert_exit 0 "tsc allowed"
+
+_run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit -p tsconfig.json"}}'
+_assert_exit 0 "tsrs allowed"
+
+_run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"bunx tsrs --noEmit"}}'
+_assert_exit 0 "bunx tsrs is not mistaken for bunx tsr"
 
 echo "  sleep ban:"
 _run_hook "enforce-toolchain.sh" '{"tool_name":"Bash","tool_input":{"command":"sleep 5"}}'
@@ -371,6 +377,12 @@ _assert_stdout_contains "failed.*3x|Fix ALL" "3rd consecutive failure triggers g
 echo "  lint success (resets counter):"
 _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'
 _assert_exit 0 "success resets counter"
+
+echo "  third tsrs failure counts as a type-check failure:"
+for _attempt in 1 2 3; do
+  _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"},"tool_result":{"exit_code":1}}'
+done
+_assert_stdout_contains "typecheck.*3x|failed.*3x|Fix ALL" "3rd consecutive tsrs failure triggers guidance"
 
 _teardown_session
 

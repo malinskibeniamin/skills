@@ -25,7 +25,7 @@ rg -n "export (function|const|class) <symbol>" src/ node_modules/<pkg>/
 
 **Problem**: Types compile in head but runtime shape differs. Stale API version. Off-by-one in enum or index. Optional treated as required.
 
-**Mitigation**: Run `tsc` every edit. Run actual test, not mental simulation. If type inferred from schema, re-fetch schema.
+**Mitigation**: Run the type checker (`bun run type:check`: `tsc` or tsrs) every edit. Run actual test, not mental simulation. If type inferred from schema, re-fetch schema.
 
 **Verify**:
 ```

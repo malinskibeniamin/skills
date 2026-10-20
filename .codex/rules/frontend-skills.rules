@@ -39,7 +39,7 @@ prefix_rule(
 prefix_rule(
     pattern = ["tsgo"],
     decision = "forbidden",
-    justification = "tsgo is banned. TypeScript 7 ships the Go compiler as tsc — use tsc.",
+    justification = "tsgo is the retired TypeScript 7 preview CLI. Use the project's type checker: bun run type:check, tsc or tsrs.",
 )
 
 prefix_rule(

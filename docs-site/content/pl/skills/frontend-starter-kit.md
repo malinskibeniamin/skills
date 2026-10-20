@@ -19,56 +19,45 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/frontend-starter-kit.excalidraw)
 
-Jedna umiejętność odpowiada za całą konfigurację początkową. Instrukcje instalacji każdego narzędzia znajdują się w
-`references/<tool>/README.md` (oraz w `SETUP.md`/`REFERENCE.md`, jeśli są dostępne) -- czytaj je
-dopiero wtedy, gdy są potrzebne dla wybranego profilu. Wszystkie kroki są idempotentne.
 
-Użytkownicy wtyczki mają już dostarczone i skonfigurowane wszystkie hooki -- w ich przypadku kroki kopiowania hooków
-nie wykonują żadnych operacji; uruchom tylko kroki konfiguracji i narzędzi. Pełne kopiowanie jest istotne w przypadku repozytoriów bez
-wtyczki („export harness”).
+Przeprowadź idempotentną konfigurację początkową. Czytaj tylko potrzebne `references/<tool>/README.md` i powiązane przewodniki. Kopiowanie hooków we wtyczkach nie wykonuje żadnych operacji; repozytoria bez wtyczki wymagają kopii z export-harness.
 
 ## Profile [#profiles]
 
-- **full** (domyślny): wszystkie poniższe narzędzia, w podanej kolejności, dla kanonicznego stosu opisanego w
-  [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/frontend-starter-kit/REFERENCE.md) (React 19 + Rsbuild + Tailwind + TanStack Router/Query +
-  Connect Query + shadcn/Base UI + Vitest/Playwright + Biome/Ultracite + TypeScript 7 `tsc`).
-- **minimal**: toolchain, biome, quality-gate, env-validation, conventional-commits.
-- **redpanda**: full + `references/redpanda/README.md` (przepływ pracy rejestru, taksonomia komponentów Redpanda,
-  `REDPANDA_KIT=1`).
-- **`<tool>`**: tylko dokumentacja danego narzędzia.
+- **full** (domyślny): kanoniczny stos opisany w [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/frontend-starter-kit/REFERENCE.md), w podanej poniżej kolejności.
+- **minimal:** toolchain, biome, quality-gate, env-validation, conventional-commits.
+- **redpanda:** full + `references/redpanda/README.md`, taksonomia, `REDPANDA_KIT=1`.
+- **`<tool>`:** tylko dokumentacja danego narzędzia.
 
-## Narzędzia (kolejno dla profilu full) [#full-order]
+## Kolejność dla profilu full [#full-order]
 
-| Narzędzie | Dokumentacja | Co konfiguruje |
-|---|---|---|
-| toolchain | `references/toolchain/` | bun + wymuszanie TypeScript 7 `tsc`, zabezpieczenia przed destrukcyjnymi poleceniami |
-| tanstack-intent | `references/tanstack-intent/` | wskazówki dotyczące pakietów TanStack dopasowanych do wersji + oficjalne bramki edycji |
-| biome | `references/biome/` | Biome + Ultracite, hook automatycznych poprawek |
-| quality-gate | `references/quality-gate/` | skrypt quality:gate, przepływ pracy CI, hook Stop, kontrola rozmiaru paczki |
-| agent-config | `references/agent-config/` | AI_AGENT=1, skracanie danych wyjściowych |
-| react-compiler | `references/react-compiler/` | React Compiler + kontrola memoizacji |
-| zustand | `references/zustand/` | create z podwójnymi nawiasami, useShallow, persist |
-| react-rules | `references/react-rules/` | zakaz surowego HTML, obchodzenia typów TS, XSS i importów zbiorczych |
-| env-validation | `references/env-validation/` | t3-env + zod; zakaz process.env przez Biome noProcessEnv |
-| conventional-commits | `references/conventional-commits/` | wymuszanie formatu type(scope): description |
-| react-doctor | `references/react-doctor/` | bramka zmienionych diagnostyk + hook Stop |
-| ci-pipeline | `references/ci-pipeline/` | CI w GitHub Actions, progi pokrycia, buforowanie |
-| redpanda | `references/redpanda/` | przepływ pracy rejestru Redpanda + taksonomia komponentów |
+| Narzędzie | Przeznaczenie |
+|---|---|
+| `toolchain` | `references/toolchain/`: bun, TypeScript 7 `tsc`/tsrs, zabezpieczenia przed destrukcyjnymi poleceniami |
+| `tanstack-intent` | wskazówki dopasowane do wersji i bramki edycji |
+| `biome` | Biome, Ultracite, hook automatycznych poprawek |
+| `quality-gate` | skrypt, CI, hook Stop, kontrola rozmiaru paczki |
+| `agent-config` | `AI_AGENT=1`, skracanie danych wyjściowych |
+| `react-compiler` | Compiler, kontrola memoizacji |
+| `zustand` | `create<T>()()`, `useShallow`, persist |
+| `react-rules` | zakaz surowego HTML, obchodzenia typów TS, XSS i importów zbiorczych |
+| `env-validation` | t3-env/zod, `noProcessEnv` |
+| `conventional-commits` | `type(scope): description` |
+| `react-doctor` | bramka zmienionych diagnostyk, hook Stop |
+| `ci-pipeline` | Actions, pokrycie, buforowanie |
+| `redpanda` | przepływ pracy rejestru i taksonomia |
 
-Umiejętności ze wskazówkami dotyczącymi pracy bieżącej (codzienna praca, nie konfiguracja): `/accessibility`, `/tanstack-router`,
-`/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Opcjonalna infrastruktura:
-`/setup-routines`, `/setup-atlassian-workflow` (tylko jako polecenia z ukośnikiem).
+Umiejętności ze wskazówkami dotyczącymi pracy bieżącej, nie konfiguracji: `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Opcjonalna infrastruktura dostępna tylko jako polecenia z ukośnikiem: `/setup-routines`, `/setup-atlassian-workflow`.
 
 ## Kroki [#steps]
 
-1. Potwierdź profil (domyślnie full). Czytaj dokumentację każdego narzędzia dopiero po przejściu do jego konfiguracji.
-2. Ustaw `REACT_RULES_BAN_USEEFFECT=1` w session-env.sh, jeśli repozytorium wymaga ścisłych reguł efektów.
-3. [Automatycznie skonfiguruj zabezpieczenia przeglądu w repozytorium korzystającym z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w granicach upoważnionego punktu końcowego, również w istniejących repozytoriach i instalacjach samych umiejętności.
-4. Umiejętności dotyczące przepływu pracy (development-lifecycle, tdd, grilling, triage,
-   diagnosing-bugs, prototype, domain-modeling) są dostarczane z tą wtyczką -- nie trzeba niczego instalować.
+1. Potwierdź profil; dla full przetwarzaj tabelę kolejno, czytając dokumentację dopiero wtedy, gdy jest potrzebna.
+2. Ustaw `REACT_RULES_BAN_USEEFFECT=1` tylko w repozytoriach, które wybierają ścisłe reguły efektów.
+3. [Automatycznie skonfiguruj zabezpieczenia](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w każdym repozytorium korzystającym z harnessu; przestrzegaj granic upoważnionego punktu końcowego.
+4. Umiejętności dotyczące przepływu pracy są już dostarczane z wtyczką; nie instaluj niczego dodatkowego.
 
 ## Weryfikacja [#verify]
 
-- [ ] `.claude/settings.json` zawiera wszystkie hooki, w tym TanStack Intent, gdy zainstalowane są pakiety TanStack; istnieją `biome.jsonc` + `src/env.ts`
-- [ ] Skrypty: lint, lint:fix, type:check, test, quality:gate
-- [ ] Istnieje `.github/workflows/quality-gate.yml`, wszystkie hooki są wykonywalne
+- `.claude/settings.json` zawiera hooki, w tym TanStack Intent, gdy zainstalowane są pakiety TanStack; istnieją `biome.jsonc` i `src/env.ts`.
+- Skrypty: lint, lint:fix, type:check, test, quality:gate.
+- Istnieje `.github/workflows/quality-gate.yml`; hooki są wykonywalne.

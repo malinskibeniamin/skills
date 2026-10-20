@@ -82,11 +82,11 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun run tsc"}}' \
   0 "allow: bun run tsc"
 
-# ── tsgo blocked ────────────────────────────────────────────────
+# ── tsgo: the retired preview CLI is blocked only where it runs ──
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsgo --noEmit"}}' \
-  2 "block: tsgo --noEmit" "TypeScript 7 Go compiler"
+  2 "block: tsgo --noEmit" "retired TypeScript 7 preview CLI"
 
 run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"tsgo"}}' \
@@ -100,21 +100,83 @@ run_hook_eval "$SCRIPT" \
   '{"tool_input":{"command":"bun run tsgo"}}' \
   2 "block: bun run tsgo" "tsc"
 
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"cd app && tsgo --noEmit"}}' \
+  2 "block: tsgo after &&" "tsgo banned"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_input\":{\"command\":\"bash <<'EOF'\\ntsgo --noEmit\\nEOF\"}}" \
+  2 "block: tsgo in a heredoc a shell runs" "tsgo banned"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"ln -sfn \"$bin\" node_modules/.cache/tsrs-tsdk/tsgo"}}' \
+  0 "allow: tsgo as a file name (editor server link)"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"ln -sf ./tsrs tsgo"}}' \
+  0 "allow: tsgo as a plain argument"
+
+run_hook_eval "$SCRIPT" \
+  "{\"tool_input\":{\"command\":\"python3 - <<'EOF'\\nstarts tsgo --lsp\\nEOF\"}}" \
+  0 "allow: tsgo inside a data heredoc"
+
+_tc_tsrs=$(mktemp -d "${TMPDIR:-/tmp}/toolchain-tsrs-XXXXXX")
+printf '%s' '{"scripts":{"type:check":"bash ./scripts/typecheck-tsrs.sh"},"devDependencies":{"tsrs":"0.15.0"}}' > "$_tc_tsrs/package.json"
+run_hook_eval "$SCRIPT" \
+  "{\"cwd\":\"$_tc_tsrs\",\"tool_input\":{\"command\":\"tsgo --noEmit\"}}" \
+  2 "block: tsgo names the project's type:check script" "bun run type:check"
+printf '%s' '{"devDependencies":{"tsrs":"0.15.0"}}' > "$_tc_tsrs/package.json"
+run_hook_eval "$SCRIPT" \
+  "{\"cwd\":\"$_tc_tsrs\",\"tool_input\":{\"command\":\"tsgo --noEmit\"}}" \
+  2 "block: tsgo rewrites to tsrs in a tsrs project" "tsrs --noEmit"
+rm -rf "$_tc_tsrs"
+
+# ── tsrs allowed ─────────────────────────────────────────────────
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"tsrs --noEmit -p tsconfig.json"}}' \
+  0 "allow: tsrs --noEmit -p tsconfig.json"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"node_modules/.bin/tsrs --noEmit"}}' \
+  0 "allow: node_modules/.bin/tsrs"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_input":{"command":"bunx tsrs --noEmit"}}' \
+  0 "allow: bunx tsrs --noEmit"
+
 run_hook_eval "$TEMPLATE_SCRIPT" \
   '{"tool_input":{"command":"tsgo --noEmit"}}' \
-  2 "template block: tsgo --noEmit" "TypeScript 7 Go compiler"
+  2 "template block: tsgo --noEmit" "retired TypeScript 7 preview CLI"
 
 run_hook_eval "$TEMPLATE_SCRIPT" \
   '{"tool_input":{"command":"tsc --noEmit"}}' \
   0 "template allow: tsc --noEmit"
 
+run_hook_eval "$TEMPLATE_SCRIPT" \
+  '{"tool_input":{"command":"tsrs --noEmit"}}' \
+  0 "template allow: tsrs --noEmit"
+
+run_hook_eval "$TEMPLATE_SCRIPT" \
+  '{"tool_input":{"command":"ln -sf ./tsrs tsgo"}}' \
+  0 "template allow: tsgo as a plain argument"
+
 run_hook_eval "$PRE_BASH_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"tsgo --noEmit"}}' \
-  2 "dispatcher block: tsgo --noEmit" "TypeScript 7 Go compiler"
+  2 "dispatcher block: tsgo --noEmit" "retired TypeScript 7 preview CLI"
 
 run_hook_eval "$PRE_BASH_SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"tsc --noEmit"}}' \
   0 "dispatcher allow: tsc --noEmit"
+
+run_hook_eval "$PRE_BASH_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"}}' \
+  0 "dispatcher allow: tsrs --noEmit"
+
+run_hook_eval "$PRE_BASH_SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"ln -sf ./tsrs tsgo"}}' \
+  0 "dispatcher allow: tsgo as a plain argument"
+
 
 # ── global install blocked ──────────────────────────────────────
 
