@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "23822552c2c5c123",
-      "zh-CN": "23822552c2c5c123",
-      "zh-TW": "23822552c2c5c123"
+      "pl": "ff280f477425c762",
+      "zh-CN": "ff280f477425c762",
+      "zh-TW": "ff280f477425c762"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -51,14 +51,19 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "92787dd73cc0010c",
-      "zh-CN": "92787dd73cc0010c",
-      "zh-TW": "92787dd73cc0010c"
+      "pl": "e04a4ceac53db908",
+      "zh-CN": "e04a4ceac53db908",
+      "zh-TW": "e04a4ceac53db908"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
       "zh-CN": "c112e65dfef02e57",
       "zh-TW": "c112e65dfef02e57"
+    },
+    "content/skills/bazel.md": {
+      "pl": "4633bbe7eb4584b5",
+      "zh-CN": "4633bbe7eb4584b5",
+      "zh-TW": "4633bbe7eb4584b5"
     },
     "content/skills/bend-laws.md": {
       "pl": "2675471f3a644cfa",

@@ -32,6 +32,7 @@
     "./animation-vocabulary/",
     "./ask-ben/",
     "./ask-sonner/",
+    "./bazel/",
     "./bend-laws/",
     "./blast-radius/",
     "./brain-dump/",
