@@ -2,7 +2,7 @@
 name: plan-engineering-hat
 description: Engineering-perspective plan review. Architecture, perf, security, tests, and dependency risk. Applied inline by /grilling; dispatch requires explicit delegation.
 model: inherit
-allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *), Bash(tsc *)
+allowed-tools: Read, Grep, Glob, Bash(git log *), Bash(git diff *), Bash(bun *), Bash(tsc *), Bash(tsrs *)
 ---
 
 # Engineering Hat
@@ -49,7 +49,7 @@ Assume the plan ships and something goes wrong within a week. Name the single mo
 
 - **Test strategy**: name the smallest public-contract test. Add cases only for independent credible risks.
 - **Dependencies**: new deps? Pin or not? Peer-dep collisions?
-- **Toolchain**: matches bun/TypeScript 7 `tsc`/Biome/Vitest?
+- **Toolchain**: matches bun/TypeScript 7 (`tsc` or tsrs)/Biome/Vitest?
 - **Migration**: forward-compatible? Data backfill required? Feature flag?
 
 ## Output

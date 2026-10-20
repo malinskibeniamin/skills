@@ -34,6 +34,18 @@ run_hook_eval "$SCRIPT" \
   '{"tool_name":"Bash","tool_input":{"command":"bun run type:check"},"tool_response":{"exit_code":0,"stdout":"","stderr":"npm WARN deprecated old-package@1.0.0"}}' \
   2 "block: npm WARN deprecated in green command" "Warnings are errors"
 
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit -p tsconfig.json"},"tool_response":{"exit_code":0,"stdout":"","stderr":"DeprecationWarning: old api"}}' \
+  2 "block: green tsrs run with deprecation warning" "Warnings are errors"
+
+run_hook_eval "$SCRIPT" \
+  '{"tool_name":"Bash","tool_input":{"command":"bunx tsrs --noEmit"},"tool_response":{"exit_code":0,"stdout":"","stderr":"DeprecationWarning: old api"}}' \
+  2 "block: green bunx tsrs run with deprecation warning" "Warnings are errors"
+
+run_hook_eval "$HOOKS_DIR/post-tool-failure.sh" \
+  '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"},"error":"src/a.ts(1,7): error TS2322"}' \
+  0 "post-tool-failure: tsrs failure gets the type-error hint" "Type errors"
+
 _tw_tmpdir=$(mktemp -d /tmp/test-warning-evals-XXXXXX)
 _tw_file="$_tw_tmpdir/example.test.ts"
 printf '// allow: test-warning legacy library\n' > "$_tw_file"

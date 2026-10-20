@@ -15,9 +15,11 @@
 | `npm install` | Yes | `bun install --yarn` |
 | `npm run build` | Yes | `bun run build` |
 | `npx some-tool` | Yes | `bunx some-tool` or `bun run <script>` |
-| `tsgo` | Yes | `tsc` |
-| `tsgo --noEmit` | Yes | `tsc --noEmit` |
+| `tsgo` | Yes | `bun run type:check`, `tsc` or tsrs |
+| `tsgo --noEmit` | Yes | `tsc --noEmit`, or `tsrs --noEmit` in a tsrs project |
 | `tsc --noEmit` | No | Allowed (TypeScript 7 Go compiler) |
+| `tsrs --noEmit` | No | Allowed (Rust port of the TypeScript 7 checker) |
+| `ln -s ... tsgo`, `tsgo` in file text | No | Allowed: only running `tsgo` is blocked |
 | `bun add -g pkg` | Yes | `bun add -D pkg --yarn` |
 | `bun install` | Yes | `bun install --yarn` |
 | `bun add lodash` | Yes | `bun add lodash --yarn` |

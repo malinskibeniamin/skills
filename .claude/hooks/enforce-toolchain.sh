@@ -102,10 +102,39 @@ if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)npx\s'; then
   exit 2
 fi
 
-# Block tsgo commands — TypeScript 7 ships the Go compiler as tsc
-if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)tsgo(\s|$)'; then
-  _rewritten=$(echo "$command" | sed -E 's/(^|[[:space:]]|&&|\|\||;)tsgo([[:space:]]|$)/\1tsc\2/g')
-  echo "{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\"},\"systemMessage\":\"tsgo banned. tsc is now the TypeScript 7 Go compiler. Rerun with tsc: ${_rewritten}\"}" >&2
+# tsgo is the retired TypeScript 7 preview CLI. The type checker is the
+# project's choice (tsc, tsrs, ...), so block tsgo only where it runs as a
+# command: never as a file name, an argument or heredoc data.
+_strip_data_heredocs() {
+  printf '%s\n' "$1" | awk -v q="'" -v dq='"' '
+    delim != "" { if ($0 ~ "^[ \t]*" delim "[ \t]*$") delim = ""; next }
+    {
+      if (match($0, "(^|[^<])<<-?[ \t]*[" q dq "]?[A-Za-z_][A-Za-z0-9_]*")) {
+        start = RSTART + index(substr($0, RSTART), "<<") - 1
+        tok = substr($0, start, RLENGTH - (start - RSTART))
+        sub("^<<-?[ \t]*[" q dq "]?", "", tok)
+        n = split(substr($0, 1, start - 1), parts, /[;&|(]/)
+        seg = parts[n]
+        sub(/^[ \t]+/, "", seg)
+        split(seg, words, /[ \t]+/)
+        reader = words[1]
+        sub(/.*\//, "", reader)
+        if (reader !~ /^(bash|sh|zsh|dash|ksh|eval|source|\.)$/) delim = tok
+      }
+      print
+    }'
+}
+_tsgo_check=$(_strip_data_heredocs "$_cmd_for_check" | sed 's/"[^"]*"//g' | sed "s/'[^']*'//g" | tr -d '\\')
+if printf '%s\n' "$_tsgo_check" | grep -qE '(^|[;&|(])[[:space:]]*([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*((bunx|bun[[:space:]]+(x|run)|npx)[[:space:]]+)?tsgo([[:space:]]|$)'; then
+  _checker=tsc
+  if [ -f "$_cwd/package.json" ] && jq -e '(.dependencies // {}) + (.devDependencies // {}) | has("tsrs")' "$_cwd/package.json" >/dev/null 2>&1; then
+    _checker=tsrs
+  fi
+  _rewritten=$(printf '%s' "$command" | sed -E "s/(^|[[:space:]]|&&|\|\||;)tsgo([[:space:]]|$)/\1${_checker}\2/g")
+  _hint="Rerun with ${_checker}: ${_rewritten}"
+  _has_script type:check && _hint="Use the project's type checker: bun run type:check. Or rerun with ${_checker}: ${_rewritten}"
+  hook_msg=$(jq -cn --arg m "tsgo banned: it is the retired TypeScript 7 preview CLI. $_hint" '{hookSpecificOutput:{permissionDecision:"deny"},systemMessage:$m}')
+  echo "$hook_msg" >&2
   exit 2
 fi
 
@@ -134,7 +163,7 @@ if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)prettier(\s|$)'; then
 fi
 
 # Block direct bunx for tools that have package.json scripts
-if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)bunx\s+(ultracite|biome|@biomejs/biome|react-doctor|tsr|@tanstack/router-cli|eslint|prettier)'; then
+if echo "$_cmd_stripped" | grep -qE '(^|\s|&&|\|\||;)bunx\s+(ultracite|biome|@biomejs/biome|react-doctor|tsr|@tanstack/router-cli|eslint|prettier)(\s|$)'; then
   _bunx_seg=$(printf '%s' "$command" | grep -oE 'bunx[[:space:]]+[^;&|]*' | head -1 | sed -E 's/[[:space:]]+$//')
   tool=$(printf '%s' "$_bunx_seg" | awk '{print $2}')
   _script="" _paths="" _write=false

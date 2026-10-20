@@ -3,7 +3,7 @@
 
 - `quality:gate` script -- lint + type check + related tests in <5s
 - GitHub Actions workflow w/ formatting integrity (`git diff --exit-code`)
-- Stop hook: TypeScript 7 `tsc` + related tests before finish
+- Stop hook: the project's `type:check` (`tsc` or tsrs) + related tests before finish
 - Bundle guard hook: warn on heavy deps (moment, lodash, jquery, core-js, classnames)
 - Test perf audit hook: surface duration regressions >30%
 - CI status check + `@claude review` trigger

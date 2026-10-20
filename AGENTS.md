@@ -3,7 +3,7 @@
 
 ## Toolchain
 
-`bun` | TypeScript 7 `tsc` | Biome | Vitest | React Doctor
+`bun` | TS 7 `tsc`/tsrs | Biome | Vitest | React Doctor
 
 Local scripts/configs/UI policy outrank defaults.
 Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).

@@ -2,7 +2,7 @@
 
 This project enforces strict toolchain rules:
 - **bun** is the ONLY allowed package manager. npm and npx are BANNED.
-- TypeScript 7 **tsc** is the ONLY allowed TypeScript compiler. tsgo is BANNED.
+- TypeScript 7 type checking runs through **tsc** or **tsrs**, behind the project's `type:check` script. tsgo (the retired preview CLI) is BANNED.
 - All `bun install` and `bun add` commands MUST include the `--yarn` flag for Snyk compatibility.
 - Global package installs (`-g` or `--global`) are BANNED.
 - Never use bunx for tools that have package.json scripts.

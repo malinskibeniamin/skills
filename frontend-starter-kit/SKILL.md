@@ -18,7 +18,7 @@ Bootstrap idempotently. Read only requested `references/<tool>/README.md` and li
 
 | Tool | Purpose |
 |---|---|
-| `toolchain` | `references/toolchain/`: bun, TypeScript 7 `tsc`, destructive-command guards |
+| `toolchain` | `references/toolchain/`: bun, TS 7 `tsc`/tsrs, destructive-command guards |
 | `tanstack-intent` | version-matched guidance/edit gates |
 | `biome` | Biome, Ultracite, auto-fix hook |
 | `quality-gate` | script, CI, Stop hook, bundle guard |
