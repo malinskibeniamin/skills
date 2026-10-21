@@ -16,7 +16,7 @@ Dogfood each slice and final PR. Tests are not dogfood.
 3. Map behavior to real entrypoints, including skill resources/scripts and hook events.
    Standalone docs, tests and evals need no experiential coverage.
 
-Cover changed runnable branches locally before PR/shipping.
+Cover changed runnable branches before PR/shipping.
 
 ## Loop
 
@@ -24,9 +24,9 @@ Run **use -> abuse -> repair -> replay**.
 
 ### Use
 
-Exercise intended journeys; inspect output, transitions, effects, console, network and logs.
+Exercise intended paths; inspect output, transitions, effects, console, network and logs.
 
-Use live-scale data (production-like shape/cardinality); compare expected/observed
+Use representative live-scale data (production-like shape/cardinality); compare expected/observed
 counts, ordering, timing, state and effects; expose accumulation.
 
 For bugs, replay the reporter's exact steps unfixed. If you cannot reproduce it,
@@ -34,7 +34,7 @@ request missing environment or evidence before diagnosis.
 
 ### Abuse
 
-Make one credible break attempt:
+Try one credible break:
 
 - Careless: empty, invalid, oversized, duplicate, or reordered input.
 - Impatient: repeat, double-submit, reload, navigate away, cancel, or interrupt.
@@ -50,7 +50,7 @@ and evidence in replay/receipt; test only uncovered cases. Keep invalid-input va
 
 ### Repair
 
-Defects fail the checkpoint. When automatable, add a RED public-contract test,
+Defects fail. When automatable, add a RED public-contract test,
 fix via `/tdd`, and rerun focused checks. Edits invalidate evidence.
 
 ### Replay
@@ -82,7 +82,7 @@ Verifier drift routes to `/maintain-verification-skill`; a recurring missing pat
 
 ## Receipt
 
-`Verdict: PASS | FAIL | BLOCKED`; include:
+`Verdict: PASS | FAIL | BLOCKED`; entrypoint, actions, observations:
 
 - **Entrypoint:** exact command, URL, event, or consumer.
 - **Actions:** intended journey and break attempts.
