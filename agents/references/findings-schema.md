@@ -18,6 +18,7 @@ not recorded as completed coverage. Schema validity proves shape, not truth.
   "status": "NEEDS_CHANGES",
   "findings": [
     {
+      "id": "user-response-1",
       "title": "Profile crashes when the user is missing",
       "severity": "P1",
       "file": "src/components/UserProfile.tsx",
@@ -68,6 +69,24 @@ extension fields remain allowed for cross-model notes and checklists.
 An introduced P0/P1 finding or failed critical Karpathy check requires
 `NEEDS_CHANGES`; `APPROVED`/`CONCERNS` cannot hide it. All present
 `karpathy_checks` values must be `pass`, `fail`, or `n/a`.
+
+## Gate receipts
+
+[Review gates](../../review/GATES.md) use the same versioned jq validator through
+[the typed adapter](../../scripts/review-results.ts), not a second event contract.
+The adapter selects gate mode to validate the configured gate id and require a
+non-empty `sufficiency` for clean gate reviews. Native reviewer events retain their
+existing identity, required fields, incomplete statuses and strict verdict checks.
+An approval contradicting introduced blockers, testing gaps or critical checks is
+rejected, not silently relabeled. Re-emit a consistent report.
+
+`cross_model_findings`, when present, use the same finding fields and participate
+in blocking validation. Native events preserve that context; gate receipts also
+merge it into findings without dropping the original field. Gate ids remain stable
+across rounds: when omitted, the adapter derives them from category, file and title.
+Duplicate/conflicting ids fail gate collection. Relative paths cannot escape the repo.
+Additional domain categories: correctness, compatibility, dependency, license,
+product, claims and operations. Applicable gates cannot pass incomplete coverage.
 
 ## Field Reference
 

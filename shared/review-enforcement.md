@@ -79,6 +79,11 @@ threads, and mergeability. It also reads classic protection and active inherited
   Missing access to bypass policy is unknown, not an empty allowlist.
 - Preserve the native human approval count, including 0. A zero-approval policy is
   not evidence of independent review; positive counts require fresh approval policy.
+- For a consumer opted into [review gates](../review/GATES.md), or with an existing
+  default gate plan, require current passing gate evidence on the same head/base.
+  `--review-plan <file>` selects explicit evidence. Missing, stale, invalid and blocking
+  results fail visibly; `not-configured` supplies no semantic-review evidence. Keep
+  this opt-in separate from hosted approval policy and delegation authorization.
 - For a committed workflow using `actions/dependency-review-action`, replay the
   dependency-graph comparison for the exact base/head. A disabled graph, unsupported
   plan, malformed response, or unavailable access cannot become a pass.

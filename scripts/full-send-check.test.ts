@@ -21,7 +21,7 @@ afterEach(() => {
     rmSync(directory, { recursive: true, force: true });
 });
 
-function fixture(dependencyReview = false) {
+function fixture(dependencyReview = false, gates = false) {
   const root = mkdtempSync(join(tmpdir(), "full-send-check-"));
   directories.push(root);
   const worktree = join(root, "worktree");
@@ -36,6 +36,14 @@ function fixture(dependencyReview = false) {
   git("init", "-b", "ben-malinski/T-1/feature");
   git("config", "user.name", "Fixture");
   git("config", "user.email", "fixture@example.com");
+  if (gates) {
+    writeFileSync(join(worktree, ".gitignore"), ".context/\n");
+    writeFileSync(
+      join(worktree, ".review-gates.json"),
+      JSON.stringify({ version: 1, gates: [] }),
+    );
+    git("add", ".review-gates.json", ".gitignore");
+  }
   if (dependencyReview) {
     mkdirSync(join(worktree, ".github/workflows"), { recursive: true });
     writeFileSync(
@@ -139,7 +147,7 @@ if (args[0] === "pr" && args[1] === "view") {
 `,
     { mode: 0o755 },
   );
-  const run = (checker = entry, cwd = worktree) => {
+  const run = (checker = entry, cwd = worktree, base = head) => {
     const result = Bun.spawnSync(
       [
         process.execPath,
@@ -152,7 +160,7 @@ if (args[0] === "pr" && args[1] === "view") {
         "--head",
         head,
         "--base",
-        head,
+        base,
       ],
       {
         cwd,
@@ -642,6 +650,8 @@ test("an installed verifier runs without this repository's node_modules or autom
     "full-send-check.ts",
     "review-policy.ts",
     "github-evidence.ts",
+    "review-gates.ts",
+    "review-results.ts",
   ]) {
     copyFileSync(new URL(`./${file}`, import.meta.url), join(plugin, file));
   }
@@ -658,4 +668,95 @@ test("consumer security prerequisites are checked from worktree subdirectories",
   f.snapshot.dependencyGraphUnavailable = true;
   f.save();
   expect(f.run(entry, nested).code).toBe(2);
+});
+
+test("hosted readiness cannot pass an opted-in consumer without its gate plan", () => {
+  const f = fixture(false, true);
+  const result = f.run();
+  expect(result.code).toBe(1);
+  expect(result.receipt.reasons).toContain("review-gates:plan-missing");
+});
+
+test("hosted readiness consumes passing, invalid and mismatched gate evidence", () => {
+  const f = fixture(false, true);
+  const cli = new URL("./review-gates.ts", import.meta.url).pathname;
+  const invoke = (...args: string[]) => {
+    const result = Bun.spawnSync([process.execPath, cli, ...args], {
+      cwd: f.worktree,
+    });
+    if (result.exitCode !== 0) throw new Error(result.stderr.toString());
+    return JSON.parse(result.stdout.toString());
+  };
+  mkdirSync(join(f.worktree, ".context"));
+  const classifications = join(f.worktree, ".context", "classifications.json");
+  const catalogue = JSON.parse(
+    readFileSync(
+      new URL("../config/review-gates.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  writeFileSync(
+    classifications,
+    JSON.stringify(
+      catalogue.gates.map((gate: { id: string }) => ({
+        gate: gate.id,
+        relevant: false,
+        reason: "Empty fixture change has no domain-specific impact",
+      })),
+    ),
+  );
+  const plan = invoke(
+    "plan",
+    "--base",
+    f.head,
+    "--classifications",
+    classifications,
+  );
+  const input = join(f.worktree, ".context", "result.json");
+  for (const gate of plan.gates) {
+    if (!gate.applicable) continue;
+    writeFileSync(
+      input,
+      JSON.stringify({
+        schema_version: 1,
+        testing_gaps: [],
+        simplification_opportunities: [],
+        reviewer: gate.id,
+        status: "APPROVED",
+        findings: [],
+        sufficiency:
+          "The fixture has no changed behavior or affected contracts.",
+      }),
+    );
+    invoke(
+      "record",
+      "--gate",
+      gate.id,
+      "--executor",
+      "fixture",
+      "--mode",
+      "inline",
+      "--input",
+      input,
+    );
+  }
+  expect(f.run().code).toBe(0);
+  const result = join(plan.directory, "results", "correctness.json");
+  const original = readFileSync(result, "utf8");
+  writeFileSync(result, "{}");
+  expect(f.run().receipt.reasons).toContain("review-gates:correctness:error");
+  writeFileSync(result, original);
+  const base = f.git(
+    "commit-tree",
+    f.git("rev-parse", "HEAD^{tree}"),
+    "-p",
+    f.head,
+    "-m",
+    "test(review): advance base",
+  );
+  f.snapshot.pr.baseRefOid = base;
+  f.save();
+  const changed = f.run(entry, f.worktree, base);
+  expect(changed.code).toBe(3);
+  expect(changed.receipt.reasons).toContain("review-gates:candidate-mismatch");
 });

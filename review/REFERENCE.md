@@ -29,6 +29,12 @@ priority vocabulary, smell baseline, and comment shape out of the default contex
 
 These are review instructions, not an automatic sandbox. Hook-schema tests do not
 prove a model followed them; model adherence needs a separate behavioral trial.
+## Gate coverage
+
+For requested multi-gate coverage, an opted-in consumer, or an existing gate plan,
+follow [review gates](GATES.md) before returning the receipt. Keep source read-only;
+local review artifacts go in ignored scratch. Gate preparation grants neither
+delegation nor publication permission. Ordinary reviews remain inline.
 
 ## Priority and comment policy
 

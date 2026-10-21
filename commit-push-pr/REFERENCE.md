@@ -36,6 +36,12 @@ Stack descendants remain outside the current branch's authorization.
 
 ## Review evidence (Phase 0 pre-flight)
 
+For an existing review-gate plan or opted-in consumer, refresh [gate evidence and its
+generated PR block](../review/GATES.md) on the published candidate. Use the validated
+state, not a hand-written approval table. Preserve human context and expose actual
+executor/model, skips and missing/stale evidence. Do not enable agents or a new review
+profile as a publication side effect. An agent result never implies human sign-off.
+
 Before the PR endpoint, run the applicable review axes inline:
 
 - `/review` -- correctness, value (`/product` hat), and semantic density

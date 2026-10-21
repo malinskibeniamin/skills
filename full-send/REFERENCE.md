@@ -1,5 +1,10 @@
 # Delivery evidence and recovery
 
+For configured [review gates](../review/GATES.md), refresh the candidate's plan/results
+and generated PR block. The hosted checkpoint reads the same state; missing or stale
+gate evidence remains incomplete. Keep inline versus agent provenance honest, and
+preserve the requested endpoint and native GitHub approval policy.
+
 ## Full stop
 
 Use `/full-send --no-merge <task or PR>` to reach verified PR readiness while retaining

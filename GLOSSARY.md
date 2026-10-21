@@ -25,6 +25,21 @@ An event-triggered command configured by the harness for deterministic checks or
 workflow signals. Separate from a mod's typed middleware hook.
 _Avoid_: Mod, skill
 
+**Review gate**:
+A named review responsibility with applicability, evidence and blocking rules. A skill
+supplies guidance; a gate records whether that responsibility was actually reviewed.
+_Avoid_: Extra agent, installed skill, human approval
+
+**Gate plan**:
+The discovered gate set and routing reasons bound to one candidate and its review inputs.
+Missing applicability decisions require review rather than an unexplained skip.
+_Avoid_: General implementation plan, permission to delegate
+
+**Gate result**:
+A validated review receipt with executor provenance and findings for a gate plan.
+Its presence proves neither that its claims are true nor that a human approved the work.
+_Avoid_: Sign-off, merge authorization, release certification
+
 **Mod**:
 A Claude Code plugin's TypeScript runtime extension for session behavior, commands,
 or interface rendering. It runs with the host's machine access, not a security boundary.
