@@ -13,7 +13,7 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 
 ## Test seams and anti-patterns
 
-- **Seams:** test public boundaries; name what each catches and misses. Confirm unclear seams with the user. Call the Skill tool with "codebase-design"; do not invent or test unconfirmed internals.
+- **Seams:** test public boundaries. Name the seam; confirm with the user when unclear. No tests at unconfirmed internals. Call the Skill tool with "codebase-design"; state what it catches and misses.
 - **Tautological tests:** expected values need an independent source of truth: literal, worked example, fixture, spec, or observation.
 - **Source-text proxies:** delete implementation/CSS/markup/config token scans posing as runtime proof. Test behavior at a public seam; use static analysis for syntax. Content assertions are for public output only.
 - Use vertical slices: one RED test plus GREEN implementation; bulk tests encode imagined behavior.
