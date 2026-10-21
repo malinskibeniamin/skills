@@ -47,7 +47,7 @@ def completed:
     and (.testing_gaps | length == 0) then .sufficiency | nonempty
   else true end);
 
-length == 1 and (.[0] |
+. as $reports | (length == 1 and (.[0] |
   type == "object"
   and .schema_version == 1
   and .reviewer == $reviewer
@@ -60,4 +60,7 @@ length == 1 and (.[0] |
     .findings == [] and ((.cross_model_findings // []) == [])
     and ((.testing_gaps // []) == []) and (.reason | nonempty)
   else false end)
-)
+)) as $valid
+| if $valid and gate_report then
+  $reports[0] + {critical_checks_failed: ($reports[0] | critical_failure)}
+else $valid end

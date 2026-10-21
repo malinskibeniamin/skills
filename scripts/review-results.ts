@@ -21,6 +21,7 @@ export type ReviewFinding = {
 
 export type ReviewResult = {
   schema_version: 1;
+  critical_checks_failed: boolean;
   reviewer: string;
   status:
     | "APPROVED"
@@ -183,6 +184,11 @@ export function reviewResult(value: unknown, reviewer: string): ReviewResult {
     throw new Error(
       "Invalid version 1 reviewer contract, evidence or verdict; use findings-schema.md",
     );
+  const critical_checks_failed = object(
+    JSON.parse(validation.stdout.toString()),
+  ).critical_checks_failed;
+  if (typeof critical_checks_failed !== "boolean")
+    throw new Error("Review contract did not return critical-check evidence");
   const input = object(value);
   if (input.reviewer !== reviewer)
     throw new Error("Reviewer does not match the dispatched identity");
@@ -250,6 +256,7 @@ export function reviewResult(value: unknown, reviewer: string): ReviewResult {
   return {
     ...input,
     schema_version: 1,
+    critical_checks_failed,
     reviewer,
     status,
     findings,

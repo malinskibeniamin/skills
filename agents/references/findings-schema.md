@@ -87,6 +87,8 @@ across rounds: when omitted, the adapter derives them from category, file and ti
 Duplicate/conflicting ids fail gate collection. Relative paths cannot escape the repo.
 Additional domain categories: correctness, compatibility, dependency, license,
 product, claims and operations. Applicable gates cannot pass incomplete coverage.
+Gate mode also derives critical-check failure from the canonical check list; it
+cannot be hidden or cleared by refuting an unrelated finding.
 
 ## Field Reference
 

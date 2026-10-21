@@ -658,6 +658,7 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
           (finding) => !refuted.has(finding.id),
         );
         const failed =
+          record.result.critical_checks_failed ||
           remaining.some(blocks) ||
           record.result.testing_gaps.length > 0 ||
           (record.result.status === "NEEDS_CHANGES" &&

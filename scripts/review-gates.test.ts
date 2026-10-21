@@ -563,6 +563,46 @@ test("gate recording shares the installed versioned reviewer contract", () => {
   ).toBe(2);
   expect(
     f.record("correctness", {
+      status: "NEEDS_CHANGES",
+      findings: [{ ...finding, severity: "P2" }],
+      critical_checks_failed: false,
+      karpathy_checks: { "hallucinated-api": "fail" },
+    }).code,
+  ).toBe(0);
+  expect(
+    JSON.parse(f.run("check").text).rows.find(
+      (row: { gate: string }) => row.gate === "correctness",
+    ).status,
+  ).toBe("NEEDS_CHANGES");
+  expect(
+    f.run(
+      "verify",
+      "--gate",
+      "correctness",
+      "--executor",
+      "fixture-verifier",
+      "--mode",
+      "agent",
+      "--input",
+      f.input("critical-verification.json", {
+        verdicts: [
+          {
+            finding_id: finding.id,
+            refuted: true,
+            reason: "The minor fixture finding was refuted",
+            evidence: "Fixture source counterexample",
+          },
+        ],
+      }),
+    ).code,
+  ).toBe(0);
+  expect(
+    JSON.parse(f.run("check").text).rows.find(
+      (row: { gate: string }) => row.gate === "correctness",
+    ).status,
+  ).toBe("NEEDS_CHANGES");
+  expect(
+    f.record("correctness", {
       schema_version: 1,
       status: "UNAVAILABLE",
       reason: "Source access is unavailable",
