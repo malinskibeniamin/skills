@@ -37,7 +37,7 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    repository naming rules. [ETHOS: Worktree Isolation]
    Preserve feature branch names and unrelated work. On an owned feature, routine repairs,
    rebases, commits, pushes and `--force-with-lease` need no extra prompt. Preserve default/shared/foreign/concurrent branches unless explicitly authorized.
-2. For new behavior or repairs, use [TDD](../tdd/SKILL.md). Run repository-native focused
+2. For new behavior or repairs, use [TDD](../tdd/SKILL.md) and [check loops](check-loop.md). Run repository-native focused
    tests, lint, types, build/integration checks; retain warnings, skips and limits.
 3. Load [change evidence](change-evidence.md) and applicable specialist instructions.
    Exercise runnable work with [dogfood](../dogfood/SKILL.md): real user or public entrypoint, intended use and
