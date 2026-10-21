@@ -226,7 +226,12 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    it draws a visible cursor and paces steps. Prefer `type` over `fill` so keystrokes show.
    A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
    Start the flow file with a `# <flow title>` line and put a `## <caption>` line before
-   each step reviewers should read. Keep each take under 20 seconds. `record` refuses flows
+   each step reviewers should read. Target **5-30 seconds** per take so humans can follow;
+   1-2 second demos are not acceptable. Hold each action long enough to read its caption
+   and result: `record` defaults to 1500 ms between steps (minimum `PR_VIDEO_STEP_MS=1000`)
+   and a 2 second final hold. Split longer flows at meaningful outcomes; never speed them
+   up to fit. `compose` slows each take shorter than 5 seconds, including its captions,
+   rather than merely appending a frozen result; it preserves longer footage. `record` refuses flows
    with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm
    after.webm <out-dir>` refuses static takes (under 8 distinct frames), duplicate files,
    and identical decoded footage (including remuxed copies); re-record the

@@ -158,8 +158,9 @@ try {
     ),
   );
   assert(
-    Math.abs(Number(metadata.format.duration) - Math.max(...durations)) < 0.15,
-    "Rendered duration must preserve the longer recording",
+    Math.abs(Number(metadata.format.duration) - Math.max(5, ...durations)) <
+      0.15,
+    "Rendered duration must be at least 5 seconds and preserve longer recordings",
   );
 
   const page = await browser.newPage();
@@ -188,10 +189,13 @@ try {
   }
   const metrics = [];
   for (const [side, states] of Object.entries(samples)) {
+    const duration = durations[side === "before" ? 0 : 1];
+    assert(duration && duration > 0, `${side}: recording duration missing`);
     for (const { state, at } of states) {
+      const renderedAt = at * Math.max(1, 5 / duration);
       const frame = join(out, `${side}-${state}-frame.png`);
       const source = join(out, `${side}-${state}-source.png`);
-      await extract(join(out, "before-after.mp4"), at, frame);
+      await extract(join(out, "before-after.mp4"), renderedAt, frame);
       await extract(join(out, `${side}.webm`), at, source);
       const metric = await compare(
         page,
@@ -209,7 +213,7 @@ try {
       assert(metric.title > 500, `${side}/${state}: title missing`);
       assert(metric.label > 100, `${side}/${state}: side label missing`);
       assert(metric.caption > 100, `${side}/${state}: step caption missing`);
-      metrics.push({ side, state, at, ...metric });
+      metrics.push({ side, state, at, renderedAt, ...metric });
     }
   }
   await page.close();

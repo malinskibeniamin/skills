@@ -201,7 +201,10 @@ function composeFixture(version: string) {
       join(root, `${side}.webm.steps.json`),
       JSON.stringify({
         title: "Save a name",
-        steps: [{ at: 0, caption: "Save" }],
+        steps: [
+          { at: 0, caption: "Type a name" },
+          { at: 0.8, caption: "Save" },
+        ],
       }),
     );
   }
@@ -212,7 +215,7 @@ import { createHash } from "node:crypto";
 import { basename } from "node:path";
 const tool = basename(process.argv[1]);
 const args = process.argv.slice(2);
-if (tool === "ffprobe") console.log("2");
+if (tool === "ffprobe") console.log(args.at(-1).endsWith("before.webm") ? process.env.BEFORE_DURATION : process.env.AFTER_DURATION);
 else if (tool === "ffmpeg") {
   if (args.includes("hash")) console.log("SHA256=" + createHash("sha256").update(readFileSync(args[args.indexOf("-i") + 1])).digest("hex"));
   else if (args.at(-1) === "-") console.error("frame= 12");
@@ -248,12 +251,220 @@ else if (tool === "ffmpeg") {
           PR_VIDEO_BEFORE_LABEL: "Previous: save silently",
           PR_VIDEO_AFTER_LABEL: "New: confirmation shown",
           PR_VIDEO_FOCUS: "",
+          BEFORE_DURATION: "2",
+          AFTER_DURATION: "2",
           ...overrides,
         },
       },
     );
   return { root, run, calls };
 }
+
+test.each([
+  { step: "", expected: 1500 },
+  { step: "1000", expected: 1000 },
+  { step: "700", expected: null },
+  { step: "no", expected: null },
+])(
+  "record uses readable step holds and rejects unsafe pacing: $step",
+  ({ step, expected }) => {
+    const { root, commands } = fixture();
+    writeFileSync(
+      join(root, "agent-browser"),
+      `#!${process.execPath}
+import { appendFileSync } from "node:fs";
+appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n");
+`,
+      { mode: 0o755 },
+    );
+    const flow = join(root, "flow.txt");
+    writeFileSync(
+      flow,
+      '# Save a name\n## Type a name\ntype "#name" "Ada"\n## Save\nclick "#save"\n',
+    );
+    const result = Bun.spawnSync(
+      [
+        "bash",
+        entry,
+        "record",
+        "http://localhost:3000",
+        flow,
+        join(root, "take.webm"),
+      ],
+      {
+        env: {
+          ...Bun.env,
+          PATH: `${root}:${Bun.env.PATH}`,
+          CALLS: join(root, "calls.jsonl"),
+          PR_VIDEO_STEP_MS: step,
+        },
+      },
+    );
+    if (expected === null) {
+      expect(result.exitCode).not.toBe(0);
+      expect(result.stderr.toString()).toContain("PR_VIDEO_STEP_MS");
+      expect(commands()).toEqual([]);
+    } else {
+      expect(result.exitCode, result.stderr.toString()).toBe(0);
+      expect(
+        commands()
+          .filter((args) => args[2] === "wait")
+          .map((args) => Number(args[3])),
+      ).toEqual([expected, expected, expected, 2000]);
+    }
+  },
+);
+
+test.each([
+  {
+    before: "2",
+    after: "2",
+    duration: 5,
+    beforeCaption: [2, 3],
+    afterCaption: [2, 3],
+  },
+  {
+    before: "1",
+    after: "2",
+    duration: 5,
+    beforeCaption: [4, 1],
+    afterCaption: [2, 3],
+  },
+  {
+    before: "6",
+    after: "8",
+    duration: 8,
+    beforeCaption: [0.8, 7.2],
+    afterCaption: [0.8, 7.2],
+  },
+  {
+    before: "35",
+    after: "40",
+    duration: 40,
+    beforeCaption: [0.8, 39.2],
+    afterCaption: [0.8, 39.2],
+  },
+])(
+  "compose keeps readable duration and synchronized captions: $before/$after seconds",
+  ({ before, after, duration, beforeCaption, afterCaption }) => {
+    const { root, run } = composeFixture("0.8.123");
+    const result = run(false, {
+      BEFORE_DURATION: before,
+      AFTER_DURATION: after,
+    });
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    // The composition is a public output consumed by HyperFrames.
+    const composition = readFileSync(
+      join(root, "out/hyperframes/index.html"),
+      "utf8",
+    );
+    expect(
+      Number(
+        composition.match(
+          /data-composition-id="main"[^>]*data-duration="?([\d.]+)/,
+        )?.[1],
+      ),
+    ).toBe(duration);
+    for (const [side, expected] of [
+      ["before", beforeCaption],
+      ["after", afterCaption],
+    ] as const) {
+      expect(
+        composition
+          .match(
+            new RegExp(
+              `id="${side}-cap-1"[^>]*data-start="([^"]+)" data-duration="([^"]+)"`,
+            ),
+          )
+          ?.slice(1)
+          .map(Number),
+      ).toEqual([...expected]);
+    }
+  },
+);
+
+test("ffmpeg slows the action itself, rather than padding a two-second take", () => {
+  const { root, run } = composeFixture("0.8.123");
+  const ffmpeg = Bun.which("ffmpeg");
+  const ffprobe = Bun.which("ffprobe");
+  expect(ffmpeg).not.toBeNull();
+  expect(ffprobe).not.toBeNull();
+  if (!ffmpeg || !ffprobe)
+    throw new Error("Video tests require ffmpeg/ffprobe");
+  for (const side of ["before", "after"]) {
+    const source = Bun.spawnSync([
+      ffmpeg,
+      "-v",
+      "error",
+      "-y",
+      "-f",
+      "lavfi",
+      "-i",
+      "testsrc2=size=160x90:rate=30:duration=2",
+      "-vf",
+      `drawbox=x=0:y=0:w=40:h=40:color=${side === "before" ? "red" : "green"}:t=fill:enable='lt(t,1)',drawbox=x=0:y=0:w=40:h=40:color=blue:t=fill:enable='gte(t,1)'`,
+      "-c:v",
+      "libvpx",
+      join(root, `${side}.webm`),
+    ]);
+    expect(source.exitCode, source.stderr.toString()).toBe(0);
+  }
+  // Replace only the external executables in the fixture with the real tools.
+  for (const [name, executable] of [
+    ["ffmpeg", ffmpeg],
+    ["ffprobe", ffprobe],
+  ] as const) {
+    writeFileSync(
+      join(root, "bin", name),
+      `#!/bin/sh\nexec "${executable}" "$@"\n`,
+      { mode: 0o755 },
+    );
+  }
+  const result = run(false, { PR_VIDEO_RENDERER: "ffmpeg" });
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  for (const extension of ["mp4", "gif"]) {
+    const metadata = Bun.spawnSync([
+      ffprobe,
+      "-v",
+      "error",
+      "-show_entries",
+      "format=duration",
+      "-of",
+      "csv=p=0",
+      join(root, `out/before-after.${extension}`),
+    ]);
+    expect(metadata.exitCode, metadata.stderr.toString()).toBe(0);
+    expect(Number(metadata.stdout.toString())).toBeCloseTo(5, 1);
+  }
+  const frame = (at: string) => {
+    const result = Bun.spawnSync([
+      ffmpeg,
+      "-v",
+      "error",
+      "-ss",
+      at,
+      "-i",
+      join(root, "out/before-after.mp4"),
+      "-vf",
+      "crop=2:2:20:20",
+      "-frames:v",
+      "1",
+      "-pix_fmt",
+      "rgb24",
+      "-f",
+      "rawvideo",
+      "-",
+    ]);
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    return [...result.stdout.subarray(0, 3)];
+  };
+  const early = frame("1.5");
+  const late = frame("3.5");
+  expect(early[0]).toBeGreaterThan(200);
+  expect(early[2]).toBeLessThan(40);
+  expect(late[0]).toBeLessThan(40);
+  expect(late[2]).toBeGreaterThan(200);
+}, 20000);
 
 test("compose uses the manifest pin and delivery quality, returning MP4 first", () => {
   const { root, run, calls } = composeFixture("0.8.123");
