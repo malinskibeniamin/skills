@@ -1,9 +1,17 @@
 ---
-title: /improve
-description: "审计代码库及开放的 PR 和议题，或编写可供执行者直接使用的计划。适用于改进调研、性能提升、智能体开发体验、计划审查、执行交接或待办事项核对。"
-type: skill
+description: 审计代码库及开放的 PR 和议题，或编写可供执行者直接使用的计划。适用于改进调研、性能提升、智能体开发体验、计划审查、执行交接或待办事项核对。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - improve
 sidebar:
   label: /improve
+title: /improve
+type: skill
 ---
 ![/improve 技能示意图](/diagrams/skills/improve.svg)
 
@@ -37,7 +45,7 @@ sidebar:
 
 ## 调用变体
 
-- `perf|dx`：使用[专项证据检查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)。测量性能声明；在建议工具之前识别缺失的智能体控制能力。
+- `perf|dx`：使用[专项证据检查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)和[检查循环审计](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#agent-check-loop)。测量延迟、规则的有效信号和绕过路径；在建议工具之前识别缺失的控制措施。
 - `backlog [scope]`：审计开放的 PR 和议题，而非仅本地计划。阅读 [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md)；返回有证据支持的处置建议，不做远程更改。明确的关闭请求在顾问模式之外遵循该参考文档的关闭约定。
 
 - `/improve`：标准报告模式审计。

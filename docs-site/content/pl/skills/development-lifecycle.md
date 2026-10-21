@@ -43,6 +43,8 @@ Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj
 
 Rozstrzygnij przeoczony obszar lub zmienną niewiadomą na podstawie dowodów źródłowych. Dopasuj się do istniejących wzorców i sprawdzonej skali; zaklasyfikuj kwestie jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy.
 
+Przed pisaniem przeczytaj zasady właściwe dla danego zakresu i ustal natywne polecenia repozytorium do formatowania, lintowania, sprawdzania typów i testów dotkniętych zmianą na podstawie skryptów, konfiguracji i CI. Zapisz istotne błędy stanu wyjściowego; korzystaj z zainstalowanego zestawu narzędzi.
+
 Dla checkoutów T3 lub pracy z Effect ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) z punktem wejścia `work`; w całej pętli używaj zwróconych wskazówek projektu i kontroli dla zmienionego zakresu.
 
 Przed edycją załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wpływ proporcjonalnie; przed zmianą widocznego zachowania zarejestruj bazę, także dla drobnego tekstu lub współdzielonego UI.
@@ -51,9 +53,13 @@ Przed edycją załaduj [dobór dowodów zmiany](https://github.com/malinskibenia
 
 Jeden właściciel zadania; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowadź najmniejszą oczywistą zmianę; najpierw usuwaj lub wykorzystuj ponownie, zanim dodasz nowe mechanizmy. Dla istotnego zachowania załaduj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) i pracuj na poziomie publicznego kontraktu: RED -> najmniejsze GREEN -> REFACTOR; statyczne okablowanie lub usuwanie, które nie zmienia zachowania, może wymagać tylko ukierunkowanej weryfikacji. Gdy ustalenia się zmienią, ponownie zaplanuj odpowiedni fragment. Poboczne porządki zgłoś, chyba że blokują weryfikację.
 
+Po każdej spójnej partii zmian uruchom formatowanie lub automatyczne poprawki i lintowanie w odpowiednim zakresie, a następnie właściwe kontrole typów i testy. Wyniki zakończonych hooków wykorzystuj ponownie tylko przy identycznej zawartości plików i zakresie kontroli. Sprawdź diff automatycznych poprawek; napraw błędy i uruchom kontrole ponownie. Zachowaj sprawdzanie typów całego projektu, gdy ograniczenie do plików nie jest poprawne.
+
 ### Zweryfikuj [#verify]
 
-Uruchom odpowiednie dla repozytorium testy, sprawdzanie typów, lintowanie, kompilację i kontrole statyczne. Dla istotnego, uruchamialnego zachowania załaduj [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md); sprawdź rzeczywisty punkt wejścia oraz jedną wiarygodną ścieżkę błędu lub odzyskiwania. Oceń rezultat względem celu, ograniczeń i wiarygodnego ryzyka. Niepowodzenie wyznacza następne działanie; naprawiaj i powtarzaj.
+Przed zakończeniem tury implementacji uruchom wymagane przez repozytorium kontrole formatowania, lintowania, typów, testów, kompilacji i analizy statycznej dla dotkniętego zakresu; kontrole wąskiego zakresu w wewnętrznej pętli nigdy nie zastępują wymaganych kontroli końcowych. Dla istotnego, uruchamialnego zachowania załaduj [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md); sprawdź rzeczywisty punkt wejścia oraz jedną wiarygodną ścieżkę błędu lub odzyskiwania. Oceń cel, ograniczenia i wiarygodne ryzyko: pomyślne kontrole nie dowodzą, że zbudowano właściwą rzecz. Niepowodzenie wyznacza następne działanie; naprawiaj i powtarzaj. Niezwiązane błędy stanu wyjściowego zgłaszaj osobno, nigdy jako pełne powodzenie.
+
+Naprawiaj przyczynę, nie bramkę. Nigdy nie uzyskuj zielonego wyniku przez obejścia typowania, wyciszenia, pomijanie lub osłabianie testów, rozszerzanie wykluczeń, łagodzenie rygoru ani ukrywanie kodów zakończenia oznaczających błąd. Wadliwa kontrola wymaga dowodów i jawnego uzasadnienia zmiany narzędzia, wraz z przypadkami odrzucanymi i akceptowanymi, które potwierdzają, że poprawiona reguła nadal wykrywa zamierzony defekt.
 
 Jeśli brakuje powtarzalnego punktu wejścia, potwierdź działanie za pomocą tymczasowego środowiska testowego, a następnie skieruj trwałą lukę do `/create-verification-skill`.
 

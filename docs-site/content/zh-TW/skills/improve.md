@@ -1,9 +1,17 @@
 ---
-title: /improve
-description: "稽核程式碼庫及開啟中的 PR 與議題，或撰寫可供執行者直接採用的計畫。適用於改善調查、效能提升、代理開發體驗、計畫審查、執行交接或待辦事項核對。"
-type: skill
+description: 稽核程式碼庫及開啟中的 PR 與議題，或撰寫可供執行者直接採用的計畫。適用於改善調查、效能提升、代理開發體驗、計畫審查、執行交接或待辦事項核對。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - improve
 sidebar:
   label: /improve
+title: /improve
+type: skill
 ---
 ![「/improve」技能的圖表](/diagrams/skills/improve.svg)
 
@@ -37,7 +45,7 @@ sidebar:
 
 ## 呼叫變體
 
-- `perf|dx`：使用[聚焦證據檢查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)。量測效能聲明；提出工具建議前，先辨識代理缺少的控制能力。
+- `perf|dx`：使用[聚焦證據檢查](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence)及[檢查迴圈稽核](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#agent-check-loop)。量測延遲、規則的有效訊號與繞過路徑；提出工具建議前，先辨識缺少的控制措施。
 - `backlog [scope]`：稽核開啟中的 PR 與議題，而非僅本機計畫。閱讀 [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md)；回傳有證據支持的處置建議，不做遠端變更。明確的關閉要求在顧問模式之外遵循該參考文件的關閉契約。
 
 - `/improve`：標準報告模式稽核。

@@ -1,18 +1,28 @@
 ---
-title: /frontend-invariants
 description: >-
   Stosuj niezależne od stosu niezmienniki frontendu. Używaj podczas pisania lub
   przeglądania kodu React, TypeScript lub interfejsu użytkownika w obszarach
   routingu, stanu, danych i systemów projektowych.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - frontend invariants
 sidebar:
   label: /frontend-invariants
+title: /frontend-invariants
+type: skill
 ---
 ![Diagram umiejętności /frontend-invariants](/diagrams/skills/frontend-invariants.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/frontend-invariants.excalidraw)
 
 Te zasady przetrwały każdą migrację stosu (zestawy UI, routery, warstwy danych oraz biblioteki formularzy i zarządzania stanem odchodziły; one pozostały). Gdy niezmiennik jest sprzeczny z regułą właściwą dla stosu, pierwszeństwo ma niezmiennik; mechanizmy stosu znajdują się w `/stack-registry`.
+
+Przy asercjach TypeScript lub poszerzaniu kontraktów korzystaj z [kontroli anti-slop](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md), aby zachować informacje o typach; sam komentarz o bezpieczeństwie nie uzasadnia rzutowania.
 
 ## Zasada amplifikacji
 Każdy tolerowany antywzorzec, mechanizm obejścia lub wyciszenie to przykład, który kolejna sesja LLM naśladuje i rozpowszechnia. Naprawiaj u źródła; wyciszaj tylko z uzasadnieniem w tym samym wierszu; nigdy nie dopuszczaj „tylko ten jeden raz”.

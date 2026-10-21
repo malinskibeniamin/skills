@@ -1,9 +1,21 @@
 ---
-title: /improve
-description: "Przeprowadź audyt baz kodu oraz otwartych PR-ów i zgłoszeń lub napisz plany gotowe do realizacji. Użyj do przeglądów usprawnień, poprawy wydajności, ergonomii pracy agentów, przeglądu planów, przekazania do realizacji lub uzgadniania backlogu."
-type: skill
+description: >-
+  Przeprowadź audyt baz kodu oraz otwartych PR-ów i zgłoszeń lub napisz plany
+  gotowe do realizacji. Użyj do przeglądów usprawnień, poprawy wydajności,
+  ergonomii pracy agentów, przeglądu planów, przekazania do realizacji lub
+  uzgadniania backlogu.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - improve
 sidebar:
   label: /improve
+title: /improve
+type: skill
 ---
 ![Diagram umiejętności /improve](/diagrams/skills/improve.svg)
 
@@ -48,7 +60,7 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
 
 ## Warianty wywołania
 
-- `perf|dx`: użyj [ukierunkowanych kontroli dowodów](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence). Mierz deklarowane korzyści wydajnościowe; przed zaproponowaniem narzędzi ustal, jakich możliwości sterowania brakuje agentowi.
+- `perf|dx`: użyj [ukierunkowanych kontroli dowodów](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#performance-and-agent-dx-evidence) oraz [audytu pętli kontroli](https://github.com/malinskibeniamin/skills/blob/main/improve/references/audit-playbook.md#agent-check-loop). Mierz opóźnienia, użyteczność sygnału reguł i ścieżki obejścia; przed zaproponowaniem narzędzi ustal, jakich mechanizmów brakuje.
 - `backlog [scope]`: audytuj otwarte PR-y i zgłoszenia, nie tylko lokalne plany. Przeczytaj [references/backlog.md](https://github.com/malinskibeniamin/skills/blob/main/improve/references/backlog.md); zwróć rozstrzygnięcia poparte dowodami bez zmian zdalnych. Jawne żądania zamknięcia korzystają z kontraktu zamykania w tym dokumencie, poza trybem doradczym.
 
 - `/improve`: standardowy audyt w trybie raportu.
