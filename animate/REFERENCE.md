@@ -28,6 +28,8 @@ When a project has no motion tokens, these upstream curves are candidates:
 
 Prefer a quick initial response over slow ease-in entrances. Match the established
 personality; a custom curve is not inherently better than a well-chosen built-in.
+Use asymmetric enter/exit timing when justified: deliberate holds can take longer;
+release and cancellation stay snappy without delaying input.
 
 ## Component recipes
 

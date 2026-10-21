@@ -51,6 +51,11 @@ A million-record table is a data-system workload, not a million-node render benc
 
 ## Reduce React and main-thread work
 
+For measured animation jank or dropped frames, load
+[animation-performance](../animation-performance/SKILL.md) to isolate the frame driver,
+style/layout invalidation and layer cost. Keep the journey metric and fidelity checks
+from [SKILL.md](SKILL.md); a compositor-friendly declaration is not measured smoothness.
+
 - Use React Performance tracks or the Profiler to identify the update, components, effects,
   and cascading work that consume the interaction. Use React Doctor and React Scan to find
   static and runtime candidates; verify both in a browser trace.

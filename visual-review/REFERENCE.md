@@ -136,39 +136,28 @@ Use Impeccable-style taste work as an operating loop, not as a replacement for e
 
 ## Motion decision framework
 
-For every animation, ask frequency, purpose, easing, duration before implementation. High-frequency or keyboard-triggered actions should often be instant. Motion needs a job: spatial continuity, state feedback, attention guidance, explanation, or rare delight. Default to ease-out for entry/exit, ease-in-out for morphing or movement, ease for simple hover/color transitions, and linear for progress. Keep common UI motion under 300ms unless distance, platform convention, or large surface size justifies more.
+For changed or requested web UI motion, load [animate](../animate/SKILL.md) through
+[dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+It owns purpose/frequency, easing/timing, driver choice, interruption, origins and
+reduced-motion recipes. Apply its review mode for critique; keep suggestions separate
+from reproduced defects and leave source unchanged unless fixes were requested.
 
-Implementation rules:
+For measured dropped frames, load [animation-performance](../animation-performance/SKILL.md);
+for a naming-only question, load [animation-vocabulary](../animation-vocabulary/SKILL.md)
+and return the term without starting implementation. Static CSS inspection cannot
+approve perceived feel or establish frame rate.
 
-- Animate `transform` and `opacity` first. Avoid layout property animation such as width, height, top, left, margin, and padding.
-- Prefer transitions for dynamic, interruptible UI. Use keyframes for predetermined sequences only.
-- Avoid `transition-all`; name the property so unrelated state changes do not animate.
-- Do not animate from `scale(0)`. Start near the final size so text and edges stay credible.
-- Active press feedback should be subtle, often around `scale(0.97)`, and immediate.
-- Popovers, menus, and sheets should animate from their trigger or natural edge through `transform-origin`.
-- Reduced motion should remove movement and large transforms while preserving essential opacity, color, or instant state feedback.
-- Debug motion with slow motion, frame-by-frame, physical device or simulator evidence, and next-day fresh eyes for non-trivial polish.
-
-When reviewing UI code, include a design-engineering patch table for concrete motion/component fixes:
-
-| Before | After | Why |
-|---|---|---|
-| `transition-all duration-500` | `transition-transform duration-200 ease-out` | Exact property, shorter duration, faster perceived response |
-| `scale(0)` entry | `scale(0.95) + opacity` | Entry keeps physical continuity |
-| Center-origin popover | Trigger-origin popover | Motion follows the user's mental model |
-
-Advanced motion checks:
-
-- Spring motion belongs on interruptible gesture work, drag momentum, and decorative living surfaces; avoid springs on dense functional dashboards where movement hides data.
-- `@starting-style` is the preferred CSS entry pattern when supported; use mounted data attributes only as fallback.
-- CSS variables are inheritable, so changing a parent variable during drag can recalculate all children. Update `transform` on the moving element instead.
-- WAAPI is useful when programmatic control needs CSS-level animation performance.
-- Stagger can help multi-item entry, but keep stagger 30-80ms and never block interaction while items finish.
-- Use asymmetric enter/exit timing: deliberate holds can be slow, but release and cancellation should be snappy.
+For concrete motion/component defects, show Before -> After -> Why tied to the
+observed state and existing tokens, then replay the affected interaction.
 
 ## Component craft heuristics
 
-Toast, Drawer, Hold-to-delete, and clip-path components need interaction review, not screenshot review:
+Toast, Drawer, Hold-to-delete, and clip-path components need interaction review, not screenshot review.
+For Sonner-specific setup, styling or lifecycle problems, load
+[ask-sonner](../ask-sonner/SKILL.md) and keep the installed wrapper/API as owner;
+other toast libraries do not trigger a Sonner migration. For mobile-web viewport,
+keyboard or gesture symptoms, load [mobile-native](../mobile-native/SKILL.md).
+Reuse current fixtures/captures and retain the review or authorized-fix endpoint:
 
 | Component | Review heuristics |
 |---|---|
