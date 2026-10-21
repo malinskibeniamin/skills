@@ -3,7 +3,7 @@
 import { strict as assert } from "node:assert";
 import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { chromium, expect, type Page } from "@playwright/test";
+import { chromium, expect, type Locator, type Page } from "@playwright/test";
 
 const root = resolve(import.meta.dir, "..");
 const out = resolve(Bun.argv[2] ?? join(root, ".context/pr-video-canary"));
@@ -45,7 +45,8 @@ const server = Bun.serve({
   },
 });
 
-type Sample = { state: string; at: number };
+type Box = { x: number; y: number; width: number; height: number };
+type Sample = { state: string; at: number; target: Box; pulse?: boolean };
 const focus = { x: 184, y: 128, width: 912, height: 392 };
 const samples: Record<string, Sample[]> = {};
 const browser = await chromium.launch().catch((cause: unknown) => {
@@ -59,31 +60,58 @@ try {
       recordVideo: { dir: out, size: { width: 1280, height: 720 } },
     });
     try {
+      await context.addInitScript({
+        path: join(root, "scripts/pr-video-cursor.js"),
+      });
       const page = await context.newPage();
       const started = performance.now();
       const steps = [{ at: 0, caption: "Type a task name" }];
       const states: Sample[] = [];
       const mark = (caption: string) =>
         steps.push({ at: (performance.now() - started) / 1000, caption });
-      const capture = async (state: string) => {
+      const clickSample = async (state: string) => {
+        const target = await page
+          .getByRole("button", { name: "Save task" })
+          .boundingBox();
+        assert(target, `${state}: clicked control missing`);
+        states.push({
+          state: `${state}-click`,
+          at: (performance.now() - started) / 1000 + 0.2,
+          target,
+          pulse: true,
+        });
+      };
+      const capture = async (
+        state: string,
+        control: Locator = page.getByRole("button", { name: "Save task" }),
+      ) => {
         // Assert readiness before holding readable evidence; not a test wait.
-        await Bun.sleep(800);
-        states.push({ state, at: (performance.now() - started) / 1000 - 0.3 });
+        await Bun.sleep(1300);
+        const target = await control.boundingBox();
+        assert(target, `${state}: action target missing`);
+        states.push({
+          state,
+          at: (performance.now() - started) / 1000 - 0.3,
+          target,
+        });
         await page.screenshot({ path: join(out, `${side}-${state}-ui.png`) });
       };
       await page.goto(server.url.href);
       await page
         .getByLabel("Task name")
         .pressSequentially("Review demo", { delay: 90 });
+      await capture("typing", page.getByLabel("Task name"));
       if (side === "before") {
         mark("Save the task");
         await page.getByRole("button", { name: "Save task" }).click();
+        await clickSample("success");
         await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
         await capture("success");
       } else {
         mark("Service fails; keep the task");
         await page.getByLabel("Simulate unavailable service").check();
         await page.getByRole("button", { name: "Save task" }).click();
+        await clickSample("error");
         await expect(page.getByRole("alert")).toHaveText(
           "Service unavailable. Try again.",
         );
@@ -92,6 +120,7 @@ try {
         mark("Retry the save");
         await page.getByLabel("Simulate unavailable service").uncheck();
         await page.getByRole("button", { name: "Save task" }).click();
+        await clickSample("recovery");
         await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
         await capture("recovery");
       }
@@ -191,7 +220,7 @@ try {
   for (const [side, states] of Object.entries(samples)) {
     const duration = durations[side === "before" ? 0 : 1];
     assert(duration && duration > 0, `${side}: recording duration missing`);
-    for (const { state, at } of states) {
+    for (const { state, at, target, pulse } of states) {
       const renderedAt = at * Math.max(1, 5 / duration);
       const frame = join(out, `${side}-${state}-frame.png`);
       const source = join(out, `${side}-${state}-source.png`);
@@ -203,6 +232,7 @@ try {
         source,
         side === "before" ? 40 : 980,
         focus,
+        target,
       );
       // Raw recording is the independent oracle. Blank video and plain ffmpeg
       // fallback cannot satisfy both the panel and visible-text checks.
@@ -213,6 +243,19 @@ try {
       assert(metric.title > 500, `${side}/${state}: title missing`);
       assert(metric.label > 100, `${side}/${state}: side label missing`);
       assert(metric.caption > 100, `${side}/${state}: step caption missing`);
+      assert(
+        metric.targetOutline > 200,
+        `${side}/${state}: action target highlight missing (${metric.targetOutline})`,
+      );
+      assert(
+        metric.cursor > 40,
+        `${side}/${state}: visible cursor missing (${metric.cursor})`,
+      );
+      if (pulse)
+        assert(
+          metric.clickRing > 15,
+          `${side}/${state}: readable click ring missing (${metric.clickRing})`,
+        );
       metrics.push({ side, state, at, renderedAt, ...metric });
     }
   }
@@ -232,7 +275,7 @@ try {
     ),
   );
   console.log(
-    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions); success/error/recovery; ${out}`,
+    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions, cursor, action target); typing/success/error/recovery; ${out}`,
   );
 } finally {
   try {
@@ -264,11 +307,12 @@ async function compare(
   source: string,
   left: number,
   focus: { x: number; y: number; width: number; height: number },
+  target: Box,
 ) {
   const image = (path: string) =>
     `data:image/png;base64,${readFileSync(path).toString("base64")}`;
   return page.evaluate(
-    async ({ frame, source, left, focus }) => {
+    async ({ frame, source, left, focus, target }) => {
       const decode = async (url: string) => {
         const img = new Image();
         img.src = url;
@@ -305,10 +349,57 @@ async function compare(
         label: lightPixels(left, 116, 900, 64),
         caption: lightPixels(left, 720, 900, 96),
       };
+      const scale = Math.min(900 / focus.width, 506 / focus.height);
+      const origin = {
+        x: left + (900 - focus.width * scale) / 2,
+        y: 190 + (506 - focus.height * scale) / 2,
+      };
+      const bounds = {
+        x: origin.x + (target.x - focus.x) * scale,
+        y: origin.y + (target.y - focus.y) * scale,
+        width: target.width * scale,
+        height: target.height * scale,
+      };
+      const pixels = context.getImageData(0, 0, 1920, 880).data;
+      let targetOutline = 0;
+      let cursor = 0;
+      let clickRing = 0;
+      for (
+        let y = Math.floor(bounds.y - 10);
+        y < bounds.y + bounds.height + 10;
+        y++
+      ) {
+        for (
+          let x = Math.floor(bounds.x - 10);
+          x < bounds.x + bounds.width + 10;
+          x++
+        ) {
+          const i = (y * 1920 + x) * 4;
+          if (
+            (pixels[i] ?? 0) < 180 ||
+            (pixels[i + 1] ?? 255) > 110 ||
+            (pixels[i + 2] ?? 255) > 110
+          )
+            continue;
+          const inside =
+            x > bounds.x + 4 &&
+            x < bounds.x + bounds.width - 4 &&
+            y > bounds.y + 4 &&
+            y < bounds.y + bounds.height - 4;
+          if (inside) cursor++;
+          else targetOutline++;
+          // The left arc is separate from the arrow, control border, and text.
+          if (
+            x > bounds.x + bounds.width / 2 - 42 &&
+            x < bounds.x + bounds.width / 2 - 12 &&
+            Math.abs(y - bounds.y - bounds.height / 2) < 10
+          )
+            clickRing++;
+        }
+      }
       context.clearRect(0, 0, 1920, 880);
       context.fillStyle = "white";
       context.fillRect(left, 190, 900, 506);
-      const scale = Math.min(900 / focus.width, 506 / focus.height);
       const width = focus.width * scale;
       const height = focus.height * scale;
       context.drawImage(
@@ -330,8 +421,14 @@ async function compare(
             (actual[i + channel] ?? 0) - (expected[i + channel] ?? 0),
           );
       }
-      return { panelError: difference / (884 * 490 * 3), ...text };
+      return {
+        panelError: difference / (884 * 490 * 3),
+        targetOutline,
+        cursor,
+        clickRing,
+        ...text,
+      };
     },
-    { frame: image(frame), source: image(source), left, focus },
+    { frame: image(frame), source: image(source), left, focus, target },
   );
 }

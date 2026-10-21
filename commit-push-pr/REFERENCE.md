@@ -223,7 +223,14 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    changed result (success, error, or new state). Write one flow file (one agent-browser
    command per line: `open`, `click`, `type`, `press`, `scroll`, `wait --text`) and replay
    it on base and candidate with `scripts/pr-video.sh record <url> flow.txt <side>.webm`;
-   it draws a visible cursor and paces steps. Prefer `type` over `fill` so keystrokes show.
+   it draws an arrow cursor, outlines the active control in red, and leaves a readable
+   click ring, including for keyboard activation. Prefer `type` over `fill` so keystrokes show.
+   Make each action easy to locate at PR display size: keep the cursor and target cue
+   visible through the action and its result. For small or dense UI, use matched
+   `PR_VIDEO_FOCUS` crops to zoom both takes into the interaction and retain a full-view
+   context link. Frame the control and its resulting feedback together; avoid cropping
+   away the cursor, error, or success state. Red circles, arrows, or drawn callouts may
+   clarify a real action, but must not cover important text or invent UI behavior.
    A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
    Start the flow file with a `# <flow title>` line and put a `## <caption>` line before
    each step reviewers should read. Target **5-30 seconds** per take so humans can follow;
@@ -340,6 +347,8 @@ pipeline fixture, not a substitute for the changed application's own demo.
 Its panels exercise distinct success and recovery journeys, explicitly labeled as fixture
 paths rather than previous/new product versions. Matched cropping is checked against the
 original recordings; duplicated source takes must not be used to test a comparison.
+The canary also decodes the recorded cursor and active-control outline during typing,
+save, failure, and retry, so DOM-only overlays cannot count as captured evidence.
 
 ```bash
 bun install --frozen-lockfile
