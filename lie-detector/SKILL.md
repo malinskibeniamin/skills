@@ -52,8 +52,14 @@ For each added or changed test:
 Compare every hunk with the stated scope. Flag each unexplained hunk that changes observable
 behavior or weakens a guard: deleted, skipped, or loosened tests; regenerated snapshots;
 `@ts-ignore` or lint suppressions; changed defaults, copy, routes, flags, error handling,
-retries, or timeouts; lockfile or config churn; hand-edited generated files; a visual change
-with no screenshot.
+retries, or timeouts; widened exclusions, relaxed compiler/lint rules, or shell/CI failure
+exits turned into success; lockfile or config churn; hand-edited generated files; a visual
+change with no screenshot. Review changed checks/configs separately from the implementation
+they judge; a justified rule correction needs known-bad and valid cases through its real command.
+
+For authorization proof types, trace creation to the trusted checking module. A cast,
+exported unchecked constructor, or comment claiming safety cannot replace the authorization
+check; green types alone do not establish that the trusted module is sound.
 
 ## 5. Patterns that will spread
 

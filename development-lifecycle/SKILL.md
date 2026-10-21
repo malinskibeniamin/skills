@@ -9,15 +9,14 @@ Use [communication](../shared/communication.md) and [dependency loading](../writ
 
 ## Outcome contract
 
-Before editing:
+State:
 
-- **Objective** -- high-level end state.
-- **Guardrails** -- non-inferable constraints, reserved decisions, irreversible boundaries.
-- **Verification** -- checks or observable behavior proving the outcome.
-- **Stop** -- requested endpoint and true user blockers.
+- **Objective** -- outcome.
+- **Guardrails** -- reserved decisions/non-inferable bounds.
+- **Verification** -- observable behavior.
+- **Stop** -- requested endpoint and true blockers.
 
-State contract; build/fix/implementation: continue immediately.
-[Auto-setup consumer safeguards](../shared/review-enforcement.md) within the endpoint.
+Build/fix/implement: continue immediately; [auto-setup](../shared/review-enforcement.md) within the endpoint.
 
 ## Loop
 
@@ -25,8 +24,9 @@ State contract; build/fix/implementation: continue immediately.
 
 ### Inspect
 
-Fetch named tickets (body, labels, comments); state the title. Clarify ambiguous references.
-Resolve the blind spot/volatile unknown from source evidence. Classify lookup, prototype, reversible assumption, or pause trigger; match existing idiom and demonstrated scale.
+Read tickets/body/labels/comments; clarify refs. Resolve volatile unknowns via lookup/probe/reversible assumption/pause; match repo idiom/scale.
+
+Read rules/scripts/configs/CI; record baseline failures; retain tools.
 
 T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
 (`work`); use target guidance and scoped checks throughout.
@@ -36,13 +36,15 @@ Assess impact proportionally; capture base before visible edits, including tiny 
 
 ### Act
 
-A single owner; delegation/background work needs explicit authorization. Make the smallest obvious change; delete/reuse. Load [tdd](../tdd/SKILL.md) for meaningful behavior at the public contract: RED -> smallest GREEN -> REFACTOR; static wiring or behavior-preserving deletion may use focused verification only. Re-plan the affected slice when evidence changes. Adjacent cleanup is a report unless it blocks verification.
+One owner; consent for delegation/background work. Smallest obvious change; delete/reuse. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; static wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence. Report adjacent cleanup unless verification needs it.
+
+Each edit batch: scoped format/fix + lint -> relevant types/tests. Inspect fixes; repair/rerun. Reuse hook results only for identical inputs/coverage; keep sound project-wide types.
 
 ### Verify
 
-Run repo tests, types, lint, build, and static checks. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior; exercise its real entrypoint plus one credible failure/recovery path. Review objective, guardrails, credible risk. A failure becomes the next action; repair and repeat.
+Handoff: repo final gates; scoped checks never replace them. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior: real entrypoint + credible failure/recovery. Review objective/guardrails/credible risk; green checks do not prove intent. Failure: repair/repeat. Unrelated baseline failures: report, never claim a pass.
 
-No repeatable entrypoint: prove with a disposable harness; route durable gaps to `/create-verification-skill`.
+Fix causes, not gates: never weaken checks/tests/strictness to pass. Bad rules need a tooling rationale and known-bad/valid cases. Missing entrypoint: disposable harness; durable gap: `/create-verification-skill`.
 
 ## Boundaries
 

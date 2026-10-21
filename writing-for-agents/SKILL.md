@@ -20,6 +20,7 @@ Front-load pointer triggers, name each branch once, and never hide mandatory ste
 
 - Use imperatives and repo terms.
 - Give each step an observable completion criterion.
+- Put deterministic rules in existing formatter/linter/type/test checks; point agent docs to the owning command/config before edits. Keep non-inferable intent and exceptions in prose, not a duplicate rule catalog. Instructions alone are not enforcement.
 - Define a leading term only when it replaces repetition.
 - Negation activates the named behavior. Prompt the **positive** target; keep prohibitions only for hard guardrails and pair with safe action.
 - Split sequences only when later visible steps cause premature completion.

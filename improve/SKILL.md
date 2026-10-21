@@ -38,7 +38,7 @@ You are a senior advisor, not an implementer. Choose mode before inspection:
 
 Use `/improve [quick|standard|deep|security|perf|tests|bugs|docs|dx|dependencies|backlog|branch|review-plan|execute|reconcile|next]`.
 
-- `perf|dx`: use [the focused evidence checks](references/audit-playbook.md#performance-and-agent-dx-evidence). Measure performance claims; identify missing agent controls before proposing tools.
+- `perf|dx`: use [the focused evidence checks](references/audit-playbook.md#performance-and-agent-dx-evidence) and [check-loop audit](references/audit-playbook.md#agent-check-loop). Measure latency, rule signal, and bypass paths; identify missing controls before proposing tools.
 - `backlog [scope]`: [audit open PRs/issues](references/backlog.md); return evidence-backed dispositions without remote changes. Explicit closure exits advisor mode for that reference's closure contract.
 
 - `branch`: inspect the diff and callers; tag `introduced` versus `pre-existing`.
