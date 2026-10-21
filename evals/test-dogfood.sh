@@ -54,7 +54,7 @@ run_content_eval "$REPO_ROOT/prototype/SKILL.md" "/dogfood" \
   "prototypes are dogfooded before verdict"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "real entrypoint" \
   "development lifecycle exercises material behavior during implementation"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "real user or public entrypoint" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "real user or public entrypoint" \
   "go has a final real-use gate"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "real entrypoint and one credible failure" \
   "go reference preserves experiential evidence without a skill chain"

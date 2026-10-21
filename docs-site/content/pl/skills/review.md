@@ -21,8 +21,7 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
-Przeglądaj HEAD. Zachowaj jednego właściciela; delegacja musi być jawna. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj.
-Publikowanie komentarzy wymaga jawnej intencji.
+Przeglądaj istniejącą pracę. Zachowaj jednego właściciela; delegowanie wymaga jawnej zgody. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj bez jawnej intencji. Żądane naprawy przechodzą do [dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) w nazwanym zakresie.
 
 ## Kontrakt przeglądu [#review-contract]
 
@@ -47,11 +46,12 @@ a następnie sprawdź pełny diff i log.
 2. Dla każdej zmienionej przesłanki prześledź ją wstecz do autorytatywnych producentów, schematów,
    zapisu, konsumentów i powierzchni publicznych. Szukaj po pojęciu domenowym, polu i emitowanej
    wartości, nie tylko zmienionym symbolu.
-3. Sprawdź zaskakujące wyniki w niezależnych artefaktach odpowiedniego niezmienionego kodu, bazie,
+3. Załaduj właściwych właścicieli z [dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md); wykorzystaj aktualne artefakty.
+4. Sprawdź zaskakujące wyniki w niezależnych artefaktach odpowiedniego niezmienionego kodu, bazie,
    najnowszej historii, dowodach ze środowiska uruchomieniowego i fixture'ach. Porównaj fixture'y z produkcyjnym kształtem danych.
-4. Zbuduj jeden behawioralny kontrprzykład dla prawdopodobnej kolizji. Zmapuj uprawnienia i widoczne
+5. Zbuduj jeden behawioralny kontrprzykład dla prawdopodobnej kolizji. Zmapuj uprawnienia i widoczne
    powierzchnie; pomiń styl należący do formatera i wcześniejsze defekty.
-5. Zapytaj, co nadal może być błędne, jeśli testy przechodzą.
+6. Zapytaj, co nadal może być błędne, jeśli testy przechodzą.
 
 ### Zweryfikuj [#verify]
 

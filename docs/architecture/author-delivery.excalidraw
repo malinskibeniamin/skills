@@ -1,0 +1,371 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "title",
+      "type": "text",
+      "x": 40,
+      "y": 25,
+      "width": 940,
+      "height": 45,
+      "text": "After: presets share one delivery owner",
+      "originalText": "After: presets share one delivery owner",
+      "fontSize": 28,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a"
+    },
+    {
+      "id": "revision",
+      "type": "text",
+      "x": 40,
+      "y": 72,
+      "width": 940,
+      "height": 26,
+      "text": "Current: author and review routes",
+      "originalText": "Current: author and review routes",
+      "fontSize": 15,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a"
+    },
+    {
+      "id": "entry-0",
+      "type": "rectangle",
+      "x": 50,
+      "y": 130,
+      "width": 290,
+      "height": 85,
+      "backgroundColor": "#dbeafe",
+      "strokeColor": "#334155",
+      "fillStyle": "solid",
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "entry-0-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "entry-0-label",
+      "type": "text",
+      "x": 60,
+      "y": 142.5,
+      "width": 270,
+      "height": 60,
+      "text": "/work + lifecycle",
+      "originalText": "/work + lifecycle",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a",
+      "containerId": "entry-0"
+    },
+    {
+      "id": "route-0",
+      "type": "arrow",
+      "x": 350,
+      "y": 172,
+      "width": 105,
+      "height": 93,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          105,
+          93
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569",
+      "roughness": 0
+    },
+    {
+      "id": "entry-1",
+      "type": "rectangle",
+      "x": 50,
+      "y": 265,
+      "width": 290,
+      "height": 85,
+      "backgroundColor": "#dbeafe",
+      "strokeColor": "#334155",
+      "fillStyle": "solid",
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "entry-1-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "entry-1-label",
+      "type": "text",
+      "x": 60,
+      "y": 277.5,
+      "width": 270,
+      "height": 60,
+      "text": "/go",
+      "originalText": "/go",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a",
+      "containerId": "entry-1"
+    },
+    {
+      "id": "route-1",
+      "type": "arrow",
+      "x": 350,
+      "y": 307,
+      "width": 105,
+      "height": 42,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          105,
+          -42
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569",
+      "roughness": 0
+    },
+    {
+      "id": "entry-2",
+      "type": "rectangle",
+      "x": 50,
+      "y": 400,
+      "width": 290,
+      "height": 85,
+      "backgroundColor": "#dbeafe",
+      "strokeColor": "#334155",
+      "fillStyle": "solid",
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "entry-2-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "entry-2-label",
+      "type": "text",
+      "x": 60,
+      "y": 412.5,
+      "width": 270,
+      "height": 60,
+      "text": "/full-send",
+      "originalText": "/full-send",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a",
+      "containerId": "entry-2"
+    },
+    {
+      "id": "route-2",
+      "type": "arrow",
+      "x": 350,
+      "y": 442,
+      "width": 105,
+      "height": 177,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          105,
+          -177
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569",
+      "roughness": 0
+    },
+    {
+      "id": "delivery",
+      "type": "rectangle",
+      "x": 465,
+      "y": 165,
+      "width": 490,
+      "height": 220,
+      "backgroundColor": "#dcfce7",
+      "strokeColor": "#334155",
+      "fillStyle": "solid",
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "delivery-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "delivery-label",
+      "type": "text",
+      "x": 475,
+      "y": 245.0,
+      "width": 470,
+      "height": 60,
+      "text": "Shared author delivery\nChecks / review / evidence / publish\nStop at the requested endpoint",
+      "originalText": "Shared author delivery\nChecks / review / evidence / publish\nStop at the requested endpoint",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a",
+      "containerId": "delivery"
+    },
+    {
+      "id": "review",
+      "type": "rectangle",
+      "x": 50,
+      "y": 545,
+      "width": 290,
+      "height": 70,
+      "backgroundColor": "#dbeafe",
+      "strokeColor": "#334155",
+      "fillStyle": "solid",
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "review-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "review-label",
+      "type": "text",
+      "x": 60,
+      "y": 550.0,
+      "width": 270,
+      "height": 60,
+      "text": "/review",
+      "originalText": "/review",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a",
+      "containerId": "review"
+    },
+    {
+      "id": "readonly",
+      "type": "rectangle",
+      "x": 465,
+      "y": 525,
+      "width": 490,
+      "height": 110,
+      "backgroundColor": "#e0e7ff",
+      "strokeColor": "#334155",
+      "fillStyle": "solid",
+      "roughness": 0,
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "readonly-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "readonly-label",
+      "type": "text",
+      "x": 475,
+      "y": 550.0,
+      "width": 470,
+      "height": 60,
+      "text": "Read-only assessment + evidence\nRepairs only when explicitly requested",
+      "originalText": "Read-only assessment + evidence\nRepairs only when explicitly requested",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a",
+      "containerId": "readonly"
+    },
+    {
+      "id": "review-route",
+      "type": "arrow",
+      "x": 350,
+      "y": 580,
+      "width": 105,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          105,
+          0
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569",
+      "roughness": 0
+    },
+    {
+      "id": "caption",
+      "type": "text",
+      "x": 40,
+      "y": 663,
+      "width": 940,
+      "height": 32,
+      "text": "Guidance selects specialists; hooks check delivery state. Merge remains explicit.",
+      "originalText": "Guidance selects specialists; hooks check delivery state. Merge remains explicit.",
+      "fontSize": 17,
+      "fontFamily": 2,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#0f172a"
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}

@@ -1,6 +1,6 @@
 ---
 title: /work
-description: 作為 /development-lifecycle 的別名，執行至使用者要求的端點。
+description: "撰寫並交付工作，直到要求的端點；使用 /review 進行唯讀評估。"
 type: skill
 sidebar:
   label: /work
@@ -9,6 +9,4 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/work.excalidraw)
 
-`/development-lifecycle` 的別名。詳細資訊請參閱 [development-lifecycle/SKILL.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md)。
-
-立即執行 `/development-lifecycle`，並在要求的端點停止。
+閱讀並執行[作者工作流程](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md)，直到要求的端點。

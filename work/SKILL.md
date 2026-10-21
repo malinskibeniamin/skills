@@ -1,7 +1,7 @@
 ---
 name: work
-description: "Alias for /development-lifecycle through the user's requested endpoint."
+description: Author and deliver work through the requested endpoint; use /review for read-only assessment.
 disable-model-invocation: true
 ---
 
-Run `/development-lifecycle` now through the requested endpoint. Details: [development-lifecycle/SKILL.md](../development-lifecycle/SKILL.md).
+Read and run the [author workflow](../development-lifecycle/SKILL.md) through the requested endpoint.

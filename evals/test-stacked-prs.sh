@@ -37,7 +37,7 @@ run_content_eval "$REPO_ROOT/resolve-pr-feedback/SKILL.md" 'upstack|stack' \
   "PR feedback accounts for affected upper layers"
 run_content_eval "$REPO_ROOT/dogfood/SKILL.md" 'resolve-pr-base\.sh' \
   "dogfood inventories only the current PR layer"
-run_content_eval "$REPO_ROOT/go/SKILL.md" '/stacked-prs' \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" 'stacked-prs/SKILL.md' \
   "shipping routes explicit stack delivery through stacked-prs"
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"\./stacked-prs/"' \
   "Claude plugin registers stacked-prs"

@@ -24,5 +24,5 @@ else
 fi
 
 # The wrapper stays available; /go states the observable browser outcome instead of a tool chain.
-run_content_eval "$REPO_ROOT/go/SKILL.md" "real user or public entrypoint" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "real user or public entrypoint" \
   "/go smoke-tests material changes at the real entrypoint"

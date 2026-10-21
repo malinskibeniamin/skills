@@ -51,6 +51,8 @@ Pomiń wszelkie wstępy i ogranicz opis do minimum. Używaj języka domeny użyt
 
 ### Podsumowanie [#summary]
 
+Oddziel zmiany główne od plików generowanych lub mechanicznych; wskaż przydatne punkty wejścia do przeglądu bez inwentarza wszystkich plików.
+
 Zacznij od wartości i kwestii wymagających uwagi recenzenta, a nie od listy zmian. Oddziel zaobserwowane wyniki od oczekiwań.
 Następnie wybierz najmniejszy widok wyjaśniający sedno; pomiń wizualizację, która niczego nie wyjaśnia.
 

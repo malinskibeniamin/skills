@@ -19,8 +19,7 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/review.excalidraw)
 
-审查 HEAD。保留唯一所有者；委派必须明确授权。不要编辑、提交、推送或发布。
-评论发布需要明确意图。
+审查现有工作。保持唯一负责人；委派需要明确授权。没有明确意图时不编辑、提交、推送或发布。请求的修复仅在指定范围内进入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
 ## 审查约定 [#review-contract]
 
@@ -45,11 +44,12 @@ type: skill
 2. 对每个变化的假设，反向追踪权威生产者、模式、
    存储、消费者和公共表面。按领域概念、字段和输出
    值搜索，不只搜索变更符号。
-3. 用相关未变代码中的独立产物、基线、
+3. 从[变更证据](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)加载适用的负责技能；复用当前产物。
+4. 用相关未变代码中的独立产物、基线、
    近期历史、运行时证据和夹具检验意外主张。比较夹具与生产数据形状。
-4. 为一种可信碰撞构造行为反例。映射权限和可见
+5. 为一种可信碰撞构造行为反例。映射权限和可见
    表面；跳过格式化工具负责的样式和既有缺陷。
-5. 询问：即使测试通过，仍可能错在哪里？
+6. 询问：即使测试通过，仍可能错在哪里？
 
 ### 验证 [#verify]
 

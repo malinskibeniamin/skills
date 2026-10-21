@@ -1,5 +1,5 @@
 interface:
   display_name: "Work"
-  short_description: "Run the lifecycle through the requested endpoint"
+  short_description: "Author, verify, and deliver through the requested endpoint"
 policy:
   allow_implicit_invocation: false

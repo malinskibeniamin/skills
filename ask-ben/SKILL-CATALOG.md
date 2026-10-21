@@ -22,7 +22,7 @@
 | `/cli-for-agents` | Design non-interactive, composable agent-friendly CLIs. |
 | `/demo` | Create a customer-facing feature recording. |
 | `/deslop` | Audit already-bloated code and remove unjustified surface. |
-| `/development-lifecycle` | Run the full frontend development lifecycle. |
+| `/development-lifecycle` | Author work through its requested delivery endpoint. |
 | `/diagnosing-bugs` | Diagnose hard bugs with a tight feedback loop. |
 | `/docs` | Write and review factual technical documents. |
 | `/dogfood` | Use and stress-test every runnable change. |
@@ -36,8 +36,8 @@
 | `/extend-harness` | Extend and debug the frontend skill harness. |
 | `/frontend-invariants` | Timeless frontend principles that outlive stacks. |
 | `/frontend-starter-kit` | Bootstrap the standard frontend toolchain and gates. |
-| `/full-send` | Own fixes, PR checks, reviews, and authorized merge. |
-| `/go` | Verify, review, and ship completed work. |
+| `/full-send` | Author delivery preset through an authorized merge. |
+| `/go` | Author delivery preset for verified PR readiness. |
 | `/golang-review` | Review Go diffs against evidence-backed conventions. |
 | `/golang` | Write Go with evidence-backed engineering conventions. |
 | `/grilling` | Stress-test plans, decisions, and ideas. |
@@ -177,7 +177,7 @@
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
 | `/work-automation-kit` | Install planning, ticketing, and triage workflows. |
-| `/work` | Run the lifecycle through the requested endpoint. |
+| `/work` | Author, verify, and deliver through the requested endpoint. |
 | `/writing-beats` | Build an article beat by beat with user pivots. |
 | `/writing-for-agents` | Write predictable skills and agent instruction files. |
 | `/writing-fragments` | Mine conversation into reusable writing fragments. |

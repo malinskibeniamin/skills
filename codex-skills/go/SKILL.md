@@ -1,6 +1,6 @@
 ---
 name: go
-description: "Ship completed work through verification, review, PR, and CI."
+description: Author delivery preset through verified PR readiness, without merging.
 disable-model-invocation: true
 ---
 

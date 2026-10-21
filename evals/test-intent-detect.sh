@@ -258,6 +258,20 @@ while IFS= read -r _case; do
     FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: $_name"
   fi
 done <<'ENDPOINT_TRANSITIONS'
+{"name":"a command listed below prose does not grant author intent","expected":"none","prompt":"The menu contains:\n/work"}
+{"name":"setup whitespace does not hide the author command","expected":"pr","prompt":"<system_instruction>Current workspace.</system_instruction>\n\n  /work draft PR"}
+{"name":"leading whitespace does not hide read-only review","prior":"pr","expected":"none","prompt":"\n  /review fix missing invalidation"}
+{"name":"author entry point resumes current work through push","expected":"push","prompt":"/work"}
+{"name":"author entry point accepts a requested draft PR","expected":"pr","prompt":"/work draft PR"}
+{"name":"namespaced author entry point accepts a draft PR","expected":"pr","prompt":"/frontend-skills:work draft PR"}
+{"name":"author entry point preserves a local stop","expected":"local","prompt":"/work fix the cache, do not commit or push"}
+{"name":"author entry point preserves commit-only","expected":"commit","prompt":"/work commit"}
+{"name":"author entry point preserves full delivery","expected":"ship","prompt":"/work ship it"}
+{"name":"review entry point clears stale delivery","prior":"push","expected":"none","prompt":"/review the cache fix"}
+{"name":"deep review does not execute a defect description","expected":"none","prompt":"/review --deep fix missing cache invalidation"}
+{"name":"namespaced review remains read-only","prior":"pr","expected":"none","prompt":"/frontend-skills:review fix missing cache invalidation"}
+{"name":"review entry point can explicitly authorize repair","expected":"push","prompt":"/review this, then fix the regression"}
+{"name":"explaining the author command remains read-only","expected":"none","prompt":"Explain /work and how to push"}
 {"name":"explanation clears a stale PR endpoint","prior":"pr","expected":"none","prompt":"can you explain what happened here? why are we stuck"}
 {"name":"planning a PR is not creating one","prior":"pr","expected":"none","prompt":"Plan how to create a draft PR"}
 {"name":"reviewing ship instructions is read-only","prior":"ship","expected":"none","prompt":"Review this transcript: ship it; create a PR"}

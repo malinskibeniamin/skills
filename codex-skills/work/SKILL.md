@@ -1,6 +1,6 @@
 ---
 name: work
-description: "Alias for /development-lifecycle through the user's requested endpoint."
+description: Author and deliver work through the requested endpoint; use /review for read-only assessment.
 disable-model-invocation: true
 ---
 

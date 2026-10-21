@@ -42,7 +42,8 @@ Skip all preambles and keep prose brief. Use the user's domain language from `GL
 
 ### Summary
 
-Lead with value and reviewer focus, not a changelog. Distinguish observed results from expectations.
+Lead with value and reviewer focus, not a changelog. Separate core changes from generated
+or mechanical files; name useful review entry points without a file-by-file inventory. Distinguish observed results from expectations.
 Then pick the smallest view that makes the key point clear; omit a visual that adds no understanding.
 
 Choose the smallest view from [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md).

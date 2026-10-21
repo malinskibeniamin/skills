@@ -5,7 +5,7 @@
 SKILL_DIR="$REPO_ROOT/upgrade-dependency"
 SKILL_MD="$SKILL_DIR/SKILL.md"
 REFERENCE_MD="$SKILL_DIR/REFERENCE.md"
-GO_SKILL="$REPO_ROOT/go/SKILL.md"
+GO_SKILL="$REPO_ROOT/shared/delivery-workflow.md"
 COMMIT_PUSH_PR_REF="$REPO_ROOT/commit-push-pr/REFERENCE.md"
 DEPS_HOOK="$REPO_ROOT/.claude/hooks/file-changed-deps.sh"
 MANIFEST="$REPO_ROOT/skill-manifest.json"

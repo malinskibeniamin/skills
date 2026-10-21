@@ -74,6 +74,16 @@ Removing code, configuration, dependencies, or tests while preserving required
 behavior and making the system clearer.
 _Avoid_: Negative LOC as a goal
 
+**Author workflow**:
+One owner implements or repairs an outcome, selects applicable verification and evidence,
+and continues through the requested endpoint. The `/work` front door selects this path.
+_Avoid_: Manual skill chain, automatic merge
+
+**Review workflow**:
+Read-only assessment of existing changes, regardless of who authored them. Explicit repair
+or posting intent grants only the named additional actions.
+_Avoid_: Pulling code, automatic repair, authorship-based permission
+
 **Requested endpoint**:
 The externally visible stopping point named by the user: answer, local implementation,
 commit, push, PR, or full ship. Prerequisites logically required by that endpoint are

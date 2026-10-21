@@ -11,16 +11,14 @@ Real prompts, demo scripts, and recorded moments from this harness. Everything h
 
 **Feature work:**
 ```
-/development-lifecycle -- add dark mode toggle to settings page.
+/work add dark mode toggle to settings page.
 Read src/routes/settings.tsx first. Propose approach, wait for my approval.
 ```
 
-**Bug fix (skip plan phase):**
+**Bug fix through a draft PR:**
 ```
-/development-lifecycle -- users report form submits twice on double-click.
-Reproduce, find root cause, fix with test.
-/visual-review -- review changed customer-facing surfaces before opening a PR.
-/review --deep -- release-blocking cold PR audit across code quality, frontend harness, resilience, visual UX, security, tests, perf, and steelman axes.
+/work users report form submits twice on double-click.
+Reproduce, fix with a regression test, verify the real flow, and open a draft PR.
 ```
 
 **Swarm execution:**
@@ -28,11 +26,19 @@ Reproduce, find root cause, fix with test.
 /swarm improve URL parameter handling fast. Split tests, implementation, resilience review, and docs across subagents; stay on this branch.
 ```
 
-**Address PR review:**
+For customer-facing changes, `/work` selects `/visual-review` and captures evidence automatically.
+Use `/visual-review` alone only for a standalone surface review.
+
+**Review existing work:**
 ```
-/resolve-pr-feedback
+/review the current PR. Verify behavior and report findings; do not edit or post.
 ```
-Auto-detects current branch PR, triages, fixes, replies to threads.
+
+**Address PR feedback:**
+```
+/work address the current PR feedback and reach verified readiness, without merging.
+```
+Resumes the current PR, verifies fixes, replies to threads and handles CI.
 
 </details>
 

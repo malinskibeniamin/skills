@@ -29,11 +29,11 @@ run_absent_pattern "$REPO_ROOT/development-lifecycle/SKILL.md" \
   'Run `/resilience-review`|Invoke `/grilling`|run `/dogfood`' \
   "development lifecycle does not chain optional skills"
 
-run_content_eval "$REPO_ROOT/go/SKILL.md" "exit contract|Exit contract" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "exit contract|Exit contract" \
   "go is an exit contract"
-run_content_eval "$REPO_ROOT/go/SKILL.md" "verify.*repair.*repeat|verification.*passes" \
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" "verify.*repair.*repeat|Verify.*repair.*repeat|verification.*passes" \
   "go keeps shipping until evidence is clean"
-run_absent_pattern "$REPO_ROOT/go/SKILL.md" '^## Phase|^### Phase|Max 2 refine rounds|Run `/visual-review`|Run `/commit-push-pr`' \
+run_absent_pattern "$REPO_ROOT/shared/delivery-workflow.md" '^## Phase|^### Phase|Max 2 refine rounds|Run `/visual-review`|Run `/commit-push-pr`' \
   "go avoids phase ceremony and mandatory skill chaining"
 
 run_content_eval "$REPO_ROOT/review/SKILL.md" 'inspect.*verify.*classify.*synthesize' \
@@ -203,7 +203,7 @@ else
 fi
 rm -rf "$_session_metrics_tmp" "$_session_metrics_dir" 2>/dev/null || true
 
-for file in CLAUDE.md commit-push-pr/SKILL.md development-lifecycle/REFERENCE.md pr-shepherd/SKILL.md resolve-pr-feedback/SKILL.md; do
+for file in CLAUDE.md commit-push-pr/SKILL.md shared/delivery-workflow.md pr-shepherd/REFERENCE.md resolve-pr-feedback/SKILL.md; do
   run_content_eval "$REPO_ROOT/$file" "[Pp]ush.*CI fix or rebase|CI fix or rebase.*push" \
     "$file pushes every local CI fix or rebase"
 done

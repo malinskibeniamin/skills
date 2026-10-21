@@ -43,7 +43,7 @@ run_content_eval "$REPO_ROOT/swarm/SKILL.md" "/efficient-frontier" "swarm uses e
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-arbiter|competing plans" "brainstorming routes competing plans through plan-arbiter"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "plan-arbiter|competing plans" "grilling routes competing plans through plan-arbiter"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Do not run `/visual-recap`.*unless the user explicitly requests' "commit-push-pr keeps visual recap opt-in"
-run_content_eval "$REPO_ROOT/go/SKILL.md" 'Extra recap.*explicit request' "go keeps extra review artifacts opt-in"
+run_content_eval "$REPO_ROOT/shared/delivery-workflow.md" 'Extra recap.*explicit request' "go keeps extra review artifacts opt-in"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Do not edit, commit, push" "review remains diagnostic instead of chaining watchdog work"
 run_content_eval "$REPO_ROOT/resolve-pr-feedback/SKILL.md" "/agent-watchdog" "resolve-pr-feedback can watchdog completeness"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "reversible assumption" "development lifecycle continues through reversible uncertainty"
