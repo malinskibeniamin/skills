@@ -3,10 +3,9 @@ name: lie-detector
 description: "Catch what a change claims but does not do: hallucinated APIs or claims, code that fakes success, tests that cannot fail, unrequested changes, copyable anti-patterns. Use on every PR."
 ---
 
-Treat change as unproven; steelman "this should not merge", then demand evidence.
-Run standalone or as the **lie-detector hat** in `/review` on every diff; prioritize
-customer-facing UI, copy, CLI output, public APIs and reports. Code defects stay
-in `/review`; value in `/product`. Use pinned scope, including captured WIP.
+Treat changes as unproven; steelman "this should not merge". Standalone or inline
+**lie-detector hat** in `/review` on every diff; prioritize customer-facing surfaces.
+Defects: `/review`; value: `/product`. Pin scope, including captured WIP.
 
 ## 1. Claims without evidence
 
@@ -20,8 +19,7 @@ Require diff lines, command output or primary docs for claims in PRs, commits, c
 
 ## 2. Code that pretends
 
-Trace each changed path to what the user or caller actually gets. Flag code that reports
-work it did not do:
+Trace changed paths to caller-visible output; flag unperformed work:
 
 - success before the work completes: a toast, redirect, or `200` before the mutation,
   write, or invalidation resolves;
@@ -54,10 +52,9 @@ exits turned into success; lockfile or config churn; hand-edited generated files
 change with no screenshot. Review changed checks/configs separately from the implementation
 they judge; a justified rule correction needs known-bad and valid cases through its real command.
 
-For auth proof types, trace trusted creation: casts, unchecked constructors and comments
-cannot replace authorization. Green types do not prove the trusted module sound. For chained
-assertions, lost type evidence or proposed rules, use [anti-slop](../shared/anti-slop.md);
-taste alone is not a defect.
+Trace auth-proof creation: casts, unchecked constructors and comments cannot authorize.
+Green types do not prove a trusted module sound. For assertions/type evidence/rules, use
+[anti-slop](../shared/anti-slop.md); taste is not a defect.
 
 ## 5. Patterns that will spread
 
@@ -77,7 +74,7 @@ above, and `/review` findings. **Merge-ready** only when all three hold:
   real-entrypoint replay;
 - implementation: `/review` reports no P0/P1.
 
-Otherwise **not proven**; name one proof that would flip it. Drop counterarguments without
+Otherwise **not proven**; name the missing proof. Drop counterarguments without
 file:line or command output. Never block on preference.
 
 ## Severity
