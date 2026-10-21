@@ -22,7 +22,7 @@ Front-load triggers; name branches once. Keep mandatory steps inline.
 - Give steps observable completion criteria.
 - Enforce deterministic rules in existing checks; link owning commands/configs before edits. Prose carries intent/exceptions, not duplicate rule catalogs. Instructions are not enforcement.
 - Define a leading term only when it replaces repetition.
-- Negation activates behavior. Prefer **positive** targets; reserve prohibitions for hard guardrails and pair with safe action.
+- Negation activates behavior. Prompt the **positive** target; reserve prohibitions for hard guardrails and pair with safe action.
 - Split sequences only when later visible steps cause premature completion.
 
 ## Behavioral evaluations
