@@ -41,6 +41,8 @@ type: skill
 
 根據來源證據釐清盲點或易變的未知事項。遵循現有慣例與已展現的規模；將事項分類為查詢、原型、可逆假設或暫停觸發條件。
 
+處理 T3 簽出或 Effect 程式碼時，以 `work` 為入口解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；在整個循環中使用回傳的目標專案指南和範圍檢查。
+
 編輯前載入[變更證據路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及適用的負責技能。按比例評估影響；可見編輯前先擷取基準，包括細小文案和共用 UI 的影響。
 
 ### 行動 [#act]

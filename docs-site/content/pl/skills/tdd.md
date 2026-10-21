@@ -26,6 +26,9 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 
 Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
 
+Dla testów T3 lub Effect ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) z punktem wejścia `tdd`; przestrzegaj kontraktów projektu dotyczących zegara, procesów roboczych i cyklu życia renderowania.
+
+
 TDD chroni istotne zachowanie. Stosuj RED -> GREEN -> REFACTOR w przypadku reguł domenowych, rozgałęzień, stanów, walidacji, efektów asynchronicznych i kontraktów integracji. Typy, połączenia, teksty i style oraz usuwanie niezmieniające zachowania mogą wymagać ukierunkowanej weryfikacji. Pokrycie nigdy nie jest celem.
 
 Przy każdym proponowanym punkcie testowania podaj, jakie błędy wykrywa i jakie pomija.

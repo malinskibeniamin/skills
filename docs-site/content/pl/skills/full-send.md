@@ -24,3 +24,5 @@ Wcześniejsze ograniczenia mają pierwszeństwo: lokalnie, bez pushu, tylko szki
 Przeczytaj i wykonaj wspólny przepływ, zamiast drugiej implementacji full-send. Dla niedokończonego kodu załaduj [development-lifecycle](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md); istniejące PR-y zaczynają od aktualnych dowodów. Używaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/REFERENCE.md) tylko dla żądanego checkpointu, powiadomienia, wznowienia lub jawnie delegowanego przeglądu. Bez automatycznej zmiany modelu i agentów.
 
 Inspiracje i ograniczenia badań: [SOURCES.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/SOURCES.md). Ten lokalny przepływ nie jest skopiowaną ani popieraną przez Theo umiejętnością.
+
+Wspólny przepływ wybiera [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) dla autoryzowanego monitorowania; zachowaj jedną pętlę dostarczania, nie osobny przepływ T3.

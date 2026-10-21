@@ -79,6 +79,8 @@ UI 內容／版面配置風險：使用 Skill 工具呼叫 "break-ui"。在重�
 
 優先使用專案原生工具。全新智慧體需要明確授權委派。
 
+在 T3 簽出中，以 `dogfood` 為入口並指定受影響的介面，解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；直接載入所選驗證技能，無須使用者再次呼叫。缺少原生工具仍是驗證缺口，不能聲稱已涵蓋瀏覽器或原生應用程式。
+
 如果存在專案本地的 `verify-*` 技能，使用其檢查、驅動、證據和清理功能。
 在 T3 Code 簽出目錄中驗證 UI 時，依受影響的介面載入 [Web／桌面驗證](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
 或[原生行動端驗證](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。

@@ -23,6 +23,8 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 ### Contract
 
 - Name public behavior; follow `GLOSSARY.md`, its `GLOSSARY-MAP.md` when present, and ADRs.
+- For T3 or Effect tests, resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
+  with entrypoint `tdd`; follow the target's clock, worker and render-lifecycle contracts.
 - Choose the smallest failing test; Call the Skill tool with "test-audit" for the [authoring gate](../test-audit/SKILL.md#authoring-gate) on new/changed tests.
 - For inference/assignability/overload/displayed-type contracts, load [test development](../t3code-skills/test-development/SKILL.md).
 - For high-cardinality/state-sequence invariants, read [PROPERTY-BASED-TESTING.md](PROPERTY-BASED-TESTING.md); require an independent oracle and replay.

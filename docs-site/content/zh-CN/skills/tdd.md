@@ -22,6 +22,9 @@ type: skill
 
 使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
 
+处理 T3 或 Effect 测试时，以 `tdd` 为入口解析[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；遵循目标项目的时钟、工作器和渲染生命周期契约。
+
+
 TDD 保护有意义的行为。对于领域规则、分支、状态、验证、异步副作用和集成契约，请使用红灯 -> 绿灯 -> 重构。类型、连接、文案和样式，以及保持行为不变的删除，可能只需运行针对性验证。覆盖率绝不是目标。
 
 对每个建议的测试接缝，说明它能捕获什么，以及会漏掉什么。

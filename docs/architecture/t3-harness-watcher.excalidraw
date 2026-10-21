@@ -26,8 +26,8 @@
       "y": 60,
       "width": 600,
       "height": 20.0,
-      "text": "Base ae7ce9e1: no T3 watcher",
-      "originalText": "Base ae7ce9e1: no T3 watcher",
+      "text": "Base 61d68abd: no T3 watcher",
+      "originalText": "Base 61d68abd: no T3 watcher",
       "fontSize": 16,
       "fontFamily": 5,
       "textAlign": "left",
@@ -445,6 +445,212 @@
       "text": "No import, vendor-lock changes, branch overwrite, approval or merge.\nDefault: detect only until authentication and publication are enabled.",
       "originalText": "No import, vendor-lock changes, branch overwrite, approval or merge.\nDefault: detect only until authentication and publication are enabled.",
       "fontSize": 19,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b"
+    },
+    {
+      "id": "native-title",
+      "type": "text",
+      "x": 40,
+      "y": 660,
+      "width": 1100,
+      "height": 32.5,
+      "text": "New: existing workflows select native guidance",
+      "originalText": "New: existing workflows select native guidance",
+      "fontSize": 26,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b"
+    },
+    {
+      "id": "native-before",
+      "type": "text",
+      "x": 40,
+      "y": 700,
+      "width": 1100,
+      "height": 22.5,
+      "text": "Before: partial specialist links; native path selection left to the agent.",
+      "originalText": "Before: partial specialist links; native path selection left to the agent.",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b"
+    },
+    {
+      "id": "entrypoints",
+      "type": "rectangle",
+      "x": 40,
+      "y": 755,
+      "width": 300,
+      "height": 85,
+      "backgroundColor": "#dbeafe",
+      "fillStyle": "solid",
+      "strokeColor": "#334155",
+      "boundElements": [
+        {
+          "id": "entrypoints-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "entrypoints-label",
+      "type": "text",
+      "x": 52,
+      "y": 770,
+      "width": 276,
+      "height": 47.5,
+      "text": "Existing /work, /tdd\n/dogfood, /full-send",
+      "originalText": "Existing /work, /tdd\n/dogfood, /full-send",
+      "fontSize": 19,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b",
+      "containerId": "entrypoints"
+    },
+    {
+      "id": "context",
+      "type": "rectangle",
+      "x": 440,
+      "y": 755,
+      "width": 300,
+      "height": 85,
+      "backgroundColor": "#fef3c7",
+      "fillStyle": "solid",
+      "strokeColor": "#334155",
+      "boundElements": [
+        {
+          "id": "context-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "context-label",
+      "type": "text",
+      "x": 452,
+      "y": 770,
+      "width": 276,
+      "height": 47.5,
+      "text": "Read-only context\ncheckout + exposed tools",
+      "originalText": "Read-only context\ncheckout + exposed tools",
+      "fontSize": 19,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b",
+      "containerId": "context"
+    },
+    {
+      "id": "native-route",
+      "type": "rectangle",
+      "x": 840,
+      "y": 755,
+      "width": 300,
+      "height": 85,
+      "backgroundColor": "#dcfce7",
+      "fillStyle": "solid",
+      "strokeColor": "#334155",
+      "boundElements": [
+        {
+          "id": "native-route-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "native-route-label",
+      "type": "text",
+      "x": 852,
+      "y": 770,
+      "width": 276,
+      "height": 47.5,
+      "text": "Target guide + specialist\nor explicit fallback / gap",
+      "originalText": "Target guide + specialist\nor explicit fallback / gap",
+      "fontSize": 19,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b",
+      "containerId": "native-route"
+    },
+    {
+      "id": "native-edge-one",
+      "type": "arrow",
+      "x": 350,
+      "y": 796,
+      "width": 70,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          0
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "native-edge-two",
+      "type": "arrow",
+      "x": 750,
+      "y": 796,
+      "width": 70,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          0
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "native-guard",
+      "type": "text",
+      "x": 40,
+      "y": 880,
+      "width": 1100,
+      "height": 22.5,
+      "text": "Host capability is separate from checkout identity. Selection is not execution or permission.",
+      "originalText": "Host capability is separate from checkout identity. Selection is not execution or permission.",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "lineHeight": 1.25,
+      "strokeColor": "#1e293b"
+    },
+    {
+      "id": "native-proof",
+      "type": "text",
+      "x": 40,
+      "y": 913,
+      "width": 1100,
+      "height": 22.5,
+      "text": "Proof: public CLI route contracts + negative controls; live native tool delivery remains host-dependent.",
+      "originalText": "Proof: public CLI route contracts + negative controls; live native tool delivery remains host-dependent.",
+      "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",

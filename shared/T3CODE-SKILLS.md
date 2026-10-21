@@ -4,6 +4,9 @@ All 15 skills from the reviewed T3 Code checkout are available through local
 adapters. Three belong to T3; twelve come from its Effect reference checkout.
 [Provenance and refresh](../vendor/t3code-NOTICE.md) own the source pin and licenses.
 
+[Native composition](T3CODE-NATIVE.md) connects existing workflow entrypoints to target
+guidance and exposed host capabilities; it does not require another user-invoked stack.
+
 ## Host contract
 
 These rules override conflicting source instructions:

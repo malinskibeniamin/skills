@@ -76,7 +76,9 @@ it accurately. Push every local CI fix or rebase after verification, then refres
 
 Continue past publication's single CI snapshot for ship, `/go`, babysitting or authorized merge:
 
-- Watch the current candidate's required checks. Missing CI is not green CI. Inspect failed
+- Resolve [native context](T3CODE-NATIVE.md#resolve-context) with entrypoint `full-send`
+  and authorized babysitting. Use its host-watch checkpoint/wake contract when selected;
+  otherwise watch the current candidate's required checks in the foreground. Missing CI is not green CI. Inspect failed
   logs, reproduce, repair, verify, commit, push and refresh the watched head. Retry transient
   infrastructure failures only with evidence; never weaken gates to get green.
 - Human feedback has no cap; `pr-feedback-completeness-stop` enforces hosted completeness.
