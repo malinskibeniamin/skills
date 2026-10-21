@@ -3,6 +3,33 @@
 Detailed output rules for `/review`. The skill owns the evidence loop; this file keeps the
 priority vocabulary, smell baseline, and comment shape out of the default context.
 
+## Source snapshots and mutation tests
+
+- Freeze the reviewed head and merge-base as full SHAs; use their diff and matching
+  source, not moving branch names. A PR review uses the supplied PR head, not an
+  unrelated local checkout. Record dirty exclusions for committed-only reviews.
+- WIP reviews also freeze the staged/unstaged patch and selected untracked inputs.
+  Capture a reproducible manifest or fingerprints; avoid ignored credentials and
+  unrelated work. A dirty filename cannot establish defect provenance: compare
+  the failing behavior/hunk with the original baseline.
+- Mutation testing changes a disposable, reviewer-owned snapshot only. Allocate a
+  unique empty directory, add a detached worktree at the frozen head, and apply
+  only the captured WIP delta when applicable. Use absolute bundled guidance
+  paths. Keep the original checkout's files, index, and branch untouched.
+- Run the test once on the snapshot, then change the behavior it claims to protect
+  there and rerun it. Assertion failure is RED; setup/import failure is not.
+  Preserve evidence, then remove only the worktree you created. Never reuse or
+  force-remove an existing worktree, stash/reset the original, or restore its files.
+- A worktree isolates edits, not executable code. Untrusted builds/tests need a
+  restrictive execution sandbox without production credentials or services. If
+  unavailable, inspect source and report the runtime evidence gap; do not run
+  untrusted repository commands on the host to complete a review.
+- Recheck head/base and WIP fingerprints before reporting. Drift requires a new
+  snapshot and replay of affected evidence, not approval of a different candidate.
+
+These are review instructions, not an automatic sandbox. Hook-schema tests do not
+prove a model followed them; model adherence needs a separate behavioral trial.
+
 ## Priority and comment policy
 
 Use one priority label on every finding:
@@ -32,6 +59,9 @@ Verify: <exact command or real-entrypoint replay>
 
 Use labels only when they improve scanning. Do not repeat the changed code, add praise,
 or explain the review process.
+For authorized delegated reviews, recheck serious claims against the frozen source.
+Retain fixed, rejected, duplicate, or blocked dispositions with proof. Missing or
+skipped lanes remain explicit; agreement between reviewers is not verification.
 
 ## Fowler smell baseline
 

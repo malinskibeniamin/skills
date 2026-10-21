@@ -21,8 +21,8 @@ type: skill
 將變更視為尚未獲得證實。為「這不應該合併」建立最強論點，再讓差異中的
 證據反駁它。可獨立執行，也可在 `/review` 中以 **lie-detector 角色**檢查每一份
 差異；優先關注面向客戶的介面（UI、文案、CLI 輸出、公開 API、報告）。
-程式碼缺陷由 `/review` 處理；價值由 `/product` 評估。在已提交的工作樹上操作；將 `BASE`
-設為合併基準。
+程式碼缺陷由 `/review` 處理；價值由 `/product` 評估。使用固定的審查範圍，
+若請求包含 WIP，則納入明確擷取的 WIP。
 
 ## 1. 缺乏證據的宣稱 [#1-claims-without-evidence]
 
@@ -54,11 +54,12 @@ type: skill
 
 針對每個新增或修改的測試：
 
-1. 破壞它宣稱保護的行為：執行 `git diff "$BASE" -- <src> | git apply -R`、
-   反轉變更的條件、移除算繪出的元素，或變更使用者
-   看到的值（文案、計數、狀態）；只破壞串接關係，會漏掉必然成立的斷言。執行測試，然後執行
-   `git checkout HEAD -- <src>`。仍通過：這個測試在說謊。測試失敗必須
-   來自斷言，而非匯入、編譯或設定錯誤。記錄指令與測試失敗訊息。
+1. 依[審查隔離](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests)在可丟棄的快照中
+   破壞測試宣稱保護的行為：反轉變更條件、移除算繪元素或改變使用者可見的值。
+   只破壞串接關係會漏掉恆真斷言。在快照中重新執行測試；保持原始檔案、
+   索引和分支不變。仍然通過：測試在說謊。RED 必須來自斷言失敗，
+   而非環境設定失敗。記錄指令與失敗；無法隔離時應明確報告證據缺口，
+   而不是修改目前的工作目錄。
 2. 對照 [test-audit 垃圾測試模式](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#junk-patterns)，檢查其餘通過上述檢驗的測試。
 3. 行為變更若沒有曾經失敗的測試，也沒有從實際進入點重播驗證（`/dogfood`），
    就尚未獲得證實。

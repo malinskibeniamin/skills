@@ -3,15 +3,14 @@ name: lie-detector
 description: "Catch what a change claims but does not do: hallucinated APIs or claims, code that fakes success, tests that cannot fail, unrequested changes, copyable anti-patterns. Use on every PR."
 ---
 
-Treat the change as unproven. Steelman "this should not merge", then let the diff refute it
-with evidence. Runs standalone or inline as the **lie-detector hat** in `/review` on
-every diff; weight customer-facing surfaces (UI, copy, CLI output, public API, report)
-highest. Code defects stay in `/review`; value stays in `/product`. Work on a committed tree
-with `BASE` set to the merge base.
+Treat change as unproven; steelman "this should not merge", then demand evidence.
+Run standalone or as the **lie-detector hat** in `/review` on every diff; prioritize
+customer-facing UI, copy, CLI output, public APIs and reports. Code defects stay
+in `/review`; value in `/product`. Use pinned scope, including captured WIP.
 
 ## 1. Claims without evidence
 
-List every claim in the PR title, body, commits, code comments, docs, and agent summary.
+List claims in the PR title, body, commits, comments, docs, and agent summary.
 Each needs a diff line, command output, or primary doc:
 
 - Phantom surface: an imported symbol, prop, hook, CLI flag, config key, env var, design
@@ -39,11 +38,11 @@ work it did not do:
 
 For each added or changed test:
 
-1. Break the behavior it claims to protect: `git diff "$BASE" -- <src> | git apply -R`,
-   invert the changed condition, drop the rendered element, or change the value the user
-   sees (copy, count, state); wiring-only breaks miss tautologies. Run the test, then
-   `git checkout HEAD -- <src>`. Still green: the test lies. Count red only from an
-   assertion, not an import, compile, or setup error. Record the command and failure.
+1. In a disposable snapshot per [review isolation](../review/REFERENCE.md#source-snapshots-and-mutation-tests), break the behavior it claims to protect:
+   invert the changed condition, drop the rendered element, or change the user-visible value; wiring-only breaks miss tautologies.
+   Rerun there; leave original files, index, and branch untouched. Still green: the test lies.
+   Count RED only from an assertion, not setup failure. Record the command and failure.
+   Unavailable isolation is a named evidence gap, not permission to mutate the active checkout.
 2. Check survivors against the [test-audit junk patterns](../test-audit/SKILL.md#junk-patterns).
 3. A behavior change with no test that went red and no real-entrypoint replay (`/dogfood`)
    is unproven.
@@ -92,9 +91,9 @@ Report at most five findings, merge-deciding first.
 
 ## Output
 
-Always lead with one verdict line:
+Lead with one verdict line:
 
 `lie-detector: <truthful|suspect|lying> -- merge <ready|not proven> -- <evidence, at most 20 words>`
 
 `truthful`: no findings. `suspect`: P2 only. `lying`: any P1. Then
-`[P1|P2|P3] <file:line> <section> -- <lie and proof>; <smallest fix>`. A clean pass is only the verdict line.
+`[P1|P2|P3] <file:line> <section> -- <lie and proof>; <smallest fix>`. Clean pass: verdict only.

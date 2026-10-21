@@ -36,7 +36,7 @@ fi
 baseline_file="$session_dir/dirty-files-baseline"
 if [ -f "$baseline_file" ] && [ -s "$baseline_file" ]; then
   baseline_list=$(cat "$baseline_file" | head -50)
-  context_parts+=("## Pre-Existing Changes (Dirty Baseline)\nThese files were already modified before this session started. Issues in these files should be marked \`pre_existing: true\`:\n\`\`\`\n${baseline_list}\n\`\`\`")
+  context_parts+=("## Pre-Existing Changes (Dirty Baseline)\nThese files were already modified before this session started. A dirty filename is not defect provenance. Compare the cited behavior with the supplied baseline; mark \`pre_existing: true\` only when the defect itself predates this change. New defects in these files remain in scope:\n\`\`\`\n${baseline_list}\n\`\`\`")
 fi
 
 # ── Branch/PR context ────────────────────────────────────────────
@@ -53,10 +53,10 @@ fi
 context_parts+=("$branch_context")
 
 # ── Reviewer-specific context ────────────────────────────────────
-repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+harness_root=$(cd "$(dirname "$0")/../.." && pwd)
 case "$agent_type" in
   self-reviewer|code-reviewer|adversarial-reviewer)
-    context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per \`${repo_root}/agents/references/findings-schema.md\`. Read that file for the exact format.")
+    context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per \`${harness_root}/agents/references/findings-schema.md\`. Read that file for the exact format.")
     ;;
 esac
 

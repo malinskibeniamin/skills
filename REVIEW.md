@@ -17,6 +17,14 @@ boundary, misroutes a task, or claims success without current evidence.
   Deterministic prompt assertions are not evidence of reviewer accuracy.
 - Keep generated files and versioned documentation snapshots as evidence. Change
   their source and regenerate through the owning command.
+- For security claims, name the attacker and starting access, trace untrusted
+  review/skill/tool text to command execution or secret-bearing logs, and show
+  reachable impact. Check both host adapters; path names alone do not bound risk.
+- For changed public behavior, verify discovery, defaults, omission, installation,
+  and migration/release guidance against the executable path. Internal refactors
+  owe no release note; changed generated guidance must match its canonical source.
+- Validate real reviewer events, including skipped/unavailable lanes and malformed
+  evidence. Approval needs the reviewed candidate, not a successful parse or votes.
 
 Report diff-introduced, concrete defects with file, line, consequence, smallest
 correction, and verification. Deduplicate root causes and prior findings. Skip

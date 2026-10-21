@@ -2,22 +2,33 @@
 
 All reviewer agents (`self-reviewer`, `code-reviewer`, `adversarial-reviewer`) MUST output findings as a single JSON block. This enables programmatic triage, autofix routing, and cross-reviewer deduplication.
 
+The executable contract is [findings-schema.jq](findings-schema.jq), version 1.
+The bundled SubagentStop hook validates it in either host when the host supplies
+a recognized reviewer event. Native agent output enforcement remains best effort;
+the coordinator must validate reports when no matching hook event is available.
+Old/unversioned reports must be re-emitted; invalid output stays retryable and is
+not recorded as completed coverage. Schema validity proves shape, not truth.
+
 ## Output Format
 
 ```json
 {
-  "reviewer": "self-reviewer | code-reviewer | adversarial-reviewer",
-  "status": "APPROVED | CONCERNS | NEEDS_CHANGES",
+  "schema_version": 1,
+  "reviewer": "code-reviewer",
+  "status": "NEEDS_CHANGES",
   "findings": [
     {
-      "title": "Missing null check on API response",
-      "severity": "P0 | P1 | P2 | P3",
+      "title": "Profile crashes when the user is missing",
+      "severity": "P1",
       "file": "src/components/UserProfile.tsx",
       "line": 42,
-      "category": "security | type-safety | error-handling | accessibility | testing | maintainability | performance | simplification",
-      "why_it_matters": "Impact description -- not symptom, not fix. Why this matters to production.",
-      "autofix_class": "safe_auto | gated_auto | manual | advisory",
-      "suggested_fix": "Concrete code change, or null if manual",
+      "category": "error-handling",
+      "why_it_matters": "Users cannot open their profile after account deletion.",
+      "scenario": "The API returns user: null and the component reads user.name.",
+      "evidence": "src/components/UserProfile.tsx:42 dereferences user without a guard.",
+      "verification": "Return user: null and render the empty state without crashing.",
+      "autofix_class": "gated_auto",
+      "suggested_fix": "Handle a missing user before rendering the profile.",
       "pre_existing": false,
       "confidence": 0.85
     }
@@ -32,9 +43,37 @@ All reviewer agents (`self-reviewer`, `code-reviewer`, `adversarial-reviewer`) M
 }
 ```
 
+### Incomplete coverage
+
+Use `SKIPPED` for a non-applicable lane, `UNAVAILABLE` for missing access/tooling or
+scope, and `FAILED` for an attempted review that did not complete. Each requires
+a non-empty reason and empty findings; none counts as approval:
+
+```json
+{
+  "schema_version": 1,
+  "reviewer": "adversarial-reviewer",
+  "status": "UNAVAILABLE",
+  "reason": "The pinned source snapshot is unavailable.",
+  "findings": []
+}
+```
+
+Completed statuses are `APPROVED`, `CONCERNS`, and `NEEDS_CHANGES`.
+Completed reviews require `findings`, `testing_gaps`, and
+`simplification_opportunities` arrays. Every finding requires all documented
+fields, a positive integer line, boolean `pre_existing`, confidence in [0, 1],
+and defined enum values. The reviewer must match the dispatched role. Unknown
+extension fields remain allowed for cross-model notes and checklists.
+An introduced P0/P1 finding or failed critical Karpathy check requires
+`NEEDS_CHANGES`; `APPROVED`/`CONCERNS` cannot hide it. All present
+`karpathy_checks` values must be `pass`, `fail`, or `n/a`.
+
 ## Field Reference
 
 ### severity
+
+Values: `P0 | P1 | P2 | P3`.
 
 | Level | Meaning | Action |
 |-------|---------|--------|
@@ -45,16 +84,20 @@ All reviewer agents (`self-reviewer`, `code-reviewer`, `adversarial-reviewer`) M
 
 ### autofix_class
 
+Values: `safe_auto | gated_auto | manual | advisory`.
+
 | Class | Meaning | Handling |
 |-------|---------|----------|
 | `safe_auto` | Trivial fix, no behavior change (missing import, typo, formatting) | Apply without asking |
-| `gated_auto` | Likely correct but changes behavior (error handling, edge case fix) | Show to user, apply on confirmation |
+| `gated_auto` | Likely correct but changes behavior (error handling, edge case fix) | Apply only inside an authorized fix endpoint; pause for reserved decisions |
 | `manual` | Needs human judgment (architecture, trade-offs) | Report only |
 | `advisory` | Informational, no action needed now | Log for compound phase |
 
 ### pre_existing
 
 `true` if the issue existed before this session's changes (found in dirty baseline). Pre-existing findings are reported but NEVER block merge -- they're logged for future cleanup.
+Compare the cited behavior/hunk against the supplied baseline; a dirty file list
+alone cannot establish provenance.
 
 ### confidence
 
@@ -67,9 +110,13 @@ Calibrated 0.0-1.0 per finding:
 
 1. Output MUST be a single fenced JSON code block (` ```json ... ``` `)
 2. `findings` array MAY be empty (when status is APPROVED)
-3. Every finding MUST have all fields -- use `null` for `suggested_fix` when manual
+3. Every finding MUST have all fields -- `suggested_fix` may be `null` only for manual/advisory
 4. `title` max 10 words -- it's a label, not an explanation
 5. `why_it_matters` explains impact, not symptom -- "Users see stale data after mutation" not "Missing cache invalidation"
 6. Deduplicate: if same issue appears in multiple files, report once with the most impactful instance
 7. Keep `why_it_matters` and `suggested_fix` to one concrete sentence each
 8. Omit praise, preambles, code walkthroughs, and repeated root causes
+9. Review-only reports never authorize edits, regardless of `autofix_class`
+10. The coordinator rechecks serious claims against the pinned source and records
+    fixed, rejected, duplicate, or blocked dispositions with proof. Agreement
+    between reviewers is not proof; unavailable evidence stays explicit.

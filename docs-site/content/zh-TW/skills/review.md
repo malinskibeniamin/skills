@@ -19,7 +19,7 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/review.excalidraw)
 
-審查現有工作。保持唯一負責人；委派需要明確授權。沒有明確意圖時不編輯、提交、推送或發布。要求的修復僅在指定範圍內進入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
+審查固定範圍。保持唯一負責人；委派需要明確授權。沒有明確意圖時不編輯、提交、推送或發布。要求的修復僅在指定範圍內進入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
 ## 審查約定 [#review-contract]
 
@@ -30,9 +30,12 @@ type: skill
   測試不能替代體驗。
 - **停止**：涵蓋每個表面；發現必須包含證據、影響、優先順序、修正和驗證方法。
 
-僅在缺少固定點時詢問。否則設定
+僅在缺少固定點時提問。否則解析
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`，
-再檢查完整差異和日誌。
+固定頭部與合併基準的 SHA，再檢查這些版本的完整差異和日誌。
+審查 WIP 時，納入已暫存、未暫存及相關未追蹤內容；說明排除項目。
+執行變異測試或並行讀取前，使用[原始碼快照](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests)。
+給出結論前重新核對快照識別資訊；輸入變動會使相關證據失效。
 
 ## 證據迴圈 [#evidence-loop]
 
@@ -68,7 +71,8 @@ type: skill
 | 面向 | 檢查 |
 |---|---|
 | 面向客戶的 UI/CLI/報告 | 呈現、狀態、文案、鍵盤/a11y、主控台、可視區域 |
-| 安全/隱私/資料遺失 | 信任、授權、機密資料、注入、恢復 |
+| 安全/隱私/資料遺失 | 攻擊者/起始權限、信任邊界、憑證從來源到使用位置的流向、可達影響、恢復 |
+| 文件/公開行為 | 可發現性、預設值、省略行為、遷移/發行指引；純內部變更不需發行說明 |
 | API/結構描述/SQL/PostgreSQL | 相容性、遷移、產生的輸出、實際方言 |
 | Go/並行/工作流程 | 所有權、取消、競態、重試、冪等 |
 | 相依套件/外部 API | 第一手文件、版本、鎖定檔、安全通告 |

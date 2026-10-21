@@ -24,8 +24,8 @@ type: skill
 Traktuj zmianę jako nieudowodnioną. Przedstaw najmocniejsze argumenty za tym, że „tego nie należy scalać”, a następnie pozwól, by diff obalił je
 dowodami. Działa samodzielnie lub jako **rola wykrywacza kłamstw** w `/review` przy każdym
 diffie; największą wagę przypisuj elementom widocznym dla użytkowników (interfejs, treści, wyniki CLI, publiczne API, raport).
-Błędy kodu pozostają w `/review`; wartość — w `/product`. Pracuj na drzewie zapisanym w commicie; ustaw `BASE`
-na wspólnego przodka scalanych gałęzi.
+Błędy kodu pozostają w `/review`; wartość — w `/product`. Użyj przypiętego zakresu
+przeglądu, w tym jawnie utrwalonego WIP, jeśli go zażądano.
 
 ## 1. Twierdzenia bez dowodów [#1-claims-without-evidence]
 
@@ -57,12 +57,13 @@ wykonanie pracy, której nie wykonał:
 
 Dla każdego dodanego lub zmienionego testu:
 
-1. Zepsuj zachowanie, które test ma chronić: `git diff "$BASE" -- <src> | git apply -R`,
-   odwróć zmieniony warunek, usuń renderowany element lub zmień wartość widoczną dla
-   użytkownika (treść, liczbę, stan); psucie samych połączeń między elementami nie wykrywa tautologii. Uruchom test, a następnie
-   `git checkout HEAD -- <src>`. Nadal przechodzi mimo zepsutego kodu? Test kłamie. Niepowodzenie musi
-   wynikać z asercji, a nie z błędu importu, kompilacji lub przygotowania testu. Zapisz polecenie i
-   komunikat o niepowodzeniu testu.
+1. W jednorazowej migawce zgodnie z [izolacją przeglądu](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests)
+   zepsuj zachowanie, które test ma chronić: odwróć zmieniony warunek, usuń
+   renderowany element lub zmień wartość widoczną dla użytkownika. Samo przerwanie
+   połączeń nie wykrywa tautologii. Uruchom test ponownie tam; pozostaw oryginalne
+   pliki, indeks i gałąź bez zmian. Nadal zielono: test kłamie. RED licz tylko
+   przy błędzie asercji, nie konfiguracji. Zapisz polecenie i błąd; brak izolacji
+   to nazwana luka dowodowa, nie zgoda na zmianę aktywnego checkoutu.
 2. Sprawdź testy, które przeszły tę weryfikację, pod kątem [bezwartościowych wzorców z test-audit](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#junk-patterns).
 3. Zmiana zachowania bez testu, który zakończył się niepowodzeniem, i bez odtworzenia przez rzeczywisty punkt wejścia (`/dogfood`)
    pozostaje nieudowodniona.

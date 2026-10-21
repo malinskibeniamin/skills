@@ -28,7 +28,9 @@ else
 fi
 
 # A test is proven only by going red on broken behavior, not by reading it.
-run_content_eval "$LD_SKILL" 'git apply -R' "lie-detector breaks the behavior to prove a test can fail"
+run_content_eval "$LD_SKILL" 'break the behavior it claims to protect' "lie-detector breaks the behavior to prove a test can fail"
+run_content_eval "$LD_SKILL" 'disposable snapshot' "lie-detector isolates mutation tests"
+run_content_eval "$LD_SKILL" 'untouched' "lie-detector preserves the original checkout"
 run_content_eval "$LD_SKILL" 'test-audit/SKILL\.md#junk-patterns' \
   "lie-detector reuses the test-audit junk patterns"
 # Hallucinated surfaces are checked against installed code or primary docs, not memory.
