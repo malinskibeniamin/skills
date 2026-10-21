@@ -1,4 +1,5 @@
-// Real browser recordings -> public compose CLI -> decoded pixels.
+// Media-only checks: short ffmpeg takes and real browser recordings -> compose
+// CLI -> decoded pixels. The canary job installs ffmpeg/ffprobe; protocol CI does not.
 // This fixture checks the pipeline, never replaces product-specific evidence.
 import { strict as assert } from "node:assert";
 import { mkdirSync, readFileSync } from "node:fs";
@@ -54,6 +55,7 @@ const browser = await chromium.launch().catch((cause: unknown) => {
   throw cause;
 });
 try {
+  const shortTakePacing = await verifyShortTakePacing();
   for (const side of ["before", "after"]) {
     const context = await browser.newContext({
       viewport: { width: 1280, height: 720 },
@@ -302,13 +304,14 @@ try {
         metadata,
         focus,
         metrics,
+        shortTakePacing,
       },
       null,
       2,
     ),
   );
   console.log(
-    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions, cursor, action target); typing/success/error/recovery; ${out}`,
+    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions, cursor, action target); typing/success/error/recovery; short-take MP4/GIF timing and motion; ${out}`,
   );
 } finally {
   try {
@@ -316,6 +319,99 @@ try {
   } finally {
     server.stop(true);
   }
+}
+
+async function verifyShortTakePacing() {
+  const directory = join(out, "short-take-pacing");
+  mkdirSync(directory, { recursive: true });
+  for (const side of ["before", "after"]) {
+    await command([
+      "ffmpeg",
+      "-v",
+      "error",
+      "-y",
+      "-f",
+      "lavfi",
+      "-i",
+      "testsrc2=size=160x90:rate=30:duration=2",
+      "-vf",
+      `drawbox=x=0:y=0:w=40:h=40:color=${side === "before" ? "red" : "green"}:t=fill:enable='lt(t,1)',drawbox=x=0:y=0:w=40:h=40:color=blue:t=fill:enable='gte(t,1)'`,
+      "-c:v",
+      "libvpx",
+      join(directory, `${side}.webm`),
+    ]);
+  }
+  await command(
+    [
+      "bash",
+      join(root, "scripts/pr-video.sh"),
+      "compose",
+      join(directory, "before.webm"),
+      join(directory, "after.webm"),
+      directory,
+    ],
+    {
+      PR_VIDEO_RENDERER: "ffmpeg",
+      PR_VIDEO_BEFORE_LABEL: "Fixture: red then blue",
+      PR_VIDEO_AFTER_LABEL: "Fixture: green then blue",
+      PR_VIDEO_FOCUS: "",
+    },
+  );
+  const durations: Record<string, number> = {};
+  for (const extension of ["mp4", "gif"]) {
+    const duration = Number(
+      await command([
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "csv=p=0",
+        join(directory, `before-after.${extension}`),
+      ]),
+    );
+    assert(
+      Math.abs(duration - 5) < 0.05,
+      `${extension}: short take must last 5s, got ${duration}`,
+    );
+    durations[extension] = duration;
+  }
+  const frame = async (at: number) => {
+    const path = join(directory, `${at}.rgb`);
+    await command([
+      "ffmpeg",
+      "-v",
+      "error",
+      "-y",
+      "-ss",
+      String(at),
+      "-i",
+      join(directory, "before-after.mp4"),
+      "-vf",
+      "crop=2:2:20:20",
+      "-frames:v",
+      "1",
+      "-pix_fmt",
+      "rgb24",
+      "-f",
+      "rawvideo",
+      path,
+    ]);
+    const pixels = readFileSync(path);
+    return { red: pixels.readUInt8(0), blue: pixels.readUInt8(2) };
+  };
+  const early = await frame(1.5);
+  const late = await frame(3.5);
+  assert(
+    early.red > 200 && early.blue < 40,
+    "Action must still show red at 1.5s; padding alone is not slowdown",
+  );
+  assert(
+    late.red < 40 && late.blue > 200,
+    "Action must progress to blue by 3.5s",
+  );
+  return { durations, early, late };
 }
 
 async function extract(video: string, at: number, output: string) {
