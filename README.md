@@ -150,6 +150,18 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 
 Want proof and examples? Demo scripts, featured skill moments, and starter prompts live in [docs/DEMOS.md](docs/DEMOS.md); comparisons, measurement methodology, and common questions live in [docs/FAQ.md](docs/FAQ.md).
 
+## Review evidence
+
+Optional [review gates](review/GATES.md) connect existing specialist skills to a
+candidate-bound coverage plan, validated findings, safe reruns and a generated PR table.
+The same state feeds readiness checks; missing, stale and invalid results remain visible.
+Use inline review or explicitly authorized specialists. Planning never dispatches agents,
+changes models or grants merge permission. Consumer-specific gates add to the shared
+catalogue without replacing its responsibilities.
+
+Run `bun run review:gates --help` in this checkout, or the installed
+`scripts/review-gates.ts` from a consuming repository. No extra runtime dependencies.
+
 ## Factual technical writing
 
 Use `/docs` to write or review READMEs, design specs, research notes, and runbooks with

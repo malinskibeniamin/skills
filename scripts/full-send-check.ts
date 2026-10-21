@@ -2,6 +2,7 @@
 // Read-only observations, never merge authorization or proof of product correctness.
 import { reviewPolicy } from "./review-policy";
 import { object, text, flag, list } from "./github-evidence";
+import { reviewCheckpoint } from "./review-gates";
 function command(args: string[], allowed = [0]): string {
   const result = Bun.spawnSync(args, { timeout: 30_000 });
   if (!allowed.includes(result.exitCode ?? -1))
@@ -161,11 +162,11 @@ try {
     if (
       !key ||
       !value ||
-      !["--repo", "--pr", "--head", "--base"].includes(key) ||
+      !["--repo", "--pr", "--head", "--base", "--review-plan"].includes(key) ||
       options.has(key)
     )
       throw new Error(
-        "Usage: full-send-check.ts --repo owner/repo --pr number --head SHA --base SHA",
+        "Usage: full-send-check.ts --repo owner/repo --pr number --head SHA --base SHA [--review-plan FILE]",
       );
     options.set(key, value);
   }
@@ -247,6 +248,24 @@ try {
   if (unresolved.length) note("unresolved-review-threads", 1);
   if (before.mergeable !== "MERGEABLE" || before.mergeState !== "CLEAN")
     note("mergeability-not-clean", 1);
+  const reviewGates = reviewCheckpoint(
+    process.cwd(),
+    options.get("--review-plan"),
+  );
+  for (const reason of reviewGates.reasons)
+    note(
+      reason,
+      reviewGates.status === "stale"
+        ? 3
+        : reviewGates.status === "blocked"
+          ? 2
+          : 1,
+    );
+  if (
+    (reviewGates.head && reviewGates.head !== head) ||
+    (reviewGates.base && reviewGates.base !== base)
+  )
+    note("review-gates:candidate-mismatch", 3);
   const after = candidate(repo, pr);
   if (
     JSON.stringify(before) !== JSON.stringify(after) ||
@@ -268,6 +287,7 @@ try {
       requiredChecks,
       policy,
       unresolvedThreads: unresolved,
+      reviewGates,
       next:
         code === 3
           ? "Refresh identity and replay affected verification."

@@ -96,7 +96,7 @@ HTML
     cat > "$work/flow.txt" <<'FLOW'
 # Save a display name
 ## Type the name
-fill "#name" "Ada Lovelace"
+type "#name" "Ada Lovelace"
 ## Click Save
 click "#save"
 wait --text "Saved Ada"
@@ -120,8 +120,8 @@ FLOW
     printf 'hover "#save"\nwait 2000\n' > "$work/hover.txt"
     pr_video_check '! "$PR_VIDEO" record "file://$work/app.html" "$work/hover.txt" "$work/hover.webm" >/dev/null 2>&1 && [ ! -e "$work/hover.webm" ]' \
       'record rejects a hover-only flow before recording'
-    printf 'click "#name"\nclick "#does-not-exist"\n' > "$work/broken.txt"
-    pr_video_check '! PR_VIDEO_STEP_TIMEOUT_MS=2000 "$PR_VIDEO" record "file://$work/app.html" "$work/broken.txt" "$work/broken.webm" >/dev/null 2>&1' \
+    printf '## Focus the name\nclick "#name"\n## Click a missing control\nclick "#does-not-exist"\n' > "$work/broken.txt"
+    pr_video_check '! PR_VIDEO_STEP_TIMEOUT_MS=2000 "$PR_VIDEO" record "file://$work/app.html" "$work/broken.txt" "$work/broken.webm" >"$work/broken.log" 2>&1 && grep -qF "flow step failed: click" "$work/broken.log"' \
       'record fails when a flow step fails'
   else
     echo "  SKIP  pr-video record needs agent-browser"
