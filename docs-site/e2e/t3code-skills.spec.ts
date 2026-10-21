@@ -22,6 +22,7 @@ const routes = [
   ["commit-push-pr", "changesets"],
   ["create-verification-skill", "test-t3-app", "test-t3-mobile"],
   ["docs", "jsdocs"],
+  ["dogfood", "test-t3-app", "test-t3-mobile"],
   ["effect-ts", "effect-development"],
   ["quantify-impact", "performance-analysis"],
   ["tdd", "test-development"],
@@ -71,6 +72,10 @@ for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
       const row = page.getByRole("row").filter({
         has: page.getByRole("cell", { name: "/ci-maintenance", exact: true }),
       });
+      await page.evaluate(() => document.fonts.ready);
+      await row.evaluate((element) =>
+        element.scrollIntoView({ block: "center", behavior: "instant" }),
+      );
       await expect(row).toHaveScreenshot(
         `catalog-${locale}-${viewport.name}.png`,
       );
