@@ -13,7 +13,7 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 
 ## Test seams and anti-patterns
 
-- **Seams:** test public boundaries. Name the seam; confirm with the user when issue/convention leave it unclear. No tests at unconfirmed internals. Call the Skill tool with "codebase-design"; never invent a convenient seam. State what each proposed seam catches and misses.
+- **Seams:** test public boundaries; name what each catches and misses. Confirm unclear seams with the user. Call the Skill tool with "codebase-design"; do not invent or test unconfirmed internals.
 - **Tautological tests:** expected values need an independent source of truth: literal, worked example, fixture, spec, or observation.
 - **Source-text proxies:** delete implementation/CSS/markup/config token scans posing as runtime proof. Test behavior at a public seam; use static analysis for syntax. Content assertions are for public output only.
 - Use vertical slices: one RED test plus GREEN implementation; bulk tests encode imagined behavior.
@@ -23,8 +23,7 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 ### Contract
 
 - Name public behavior; follow `GLOSSARY.md`, its `GLOSSARY-MAP.md` when present, and ADRs.
-- For T3 or Effect tests, resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
-  with entrypoint `tdd`; follow the target's clock, worker and render-lifecycle contracts.
+- T3/Effect tests: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context) (`tdd`).
 - Choose the smallest failing test; Call the Skill tool with "test-audit" for the [authoring gate](../test-audit/SKILL.md#authoring-gate) on new/changed tests.
 - For inference/assignability/overload/displayed-type contracts, load [test development](../t3code-skills/test-development/SKILL.md).
 - For high-cardinality/state-sequence invariants, read [PROPERTY-BASED-TESTING.md](PROPERTY-BASED-TESTING.md); require an independent oracle and replay.

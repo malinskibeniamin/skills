@@ -7,14 +7,14 @@ The bot proposes review work, not autonomous skill adoption. No model/API key re
 ![Manual inventory becomes daily detection, then an opt-in draft and separate human adoption.](../docs/architecture/t3-harness-watcher.png)
 
 [Editable architecture](../docs/architecture/t3-harness-watcher.excalidraw). Before: no
-T3 watcher at the comparison base. New path: trusted workflow → immutable inventory →
-optional two-file draft → human adoption. Sources: the workflow and watcher CLI; verified
+T3 watcher at the comparison base. New path: trusted workflow -> immutable inventory ->
+optional two-file draft -> human adoption. Sources: the workflow and watcher CLI; verified
 by public CLI contracts below. The diagram describes behavior, not proven hosted activation.
 
 ## Detection and scope
 
 [`watch-t3code-harness.py`](../scripts/watch-t3code-harness.py) compares two immutable
-commits. “Meaningful” is conservative path/blob/mode change, **not** AI judgment of
+commits. "Meaningful" is conservative path/blob/mode change, **not** AI judgment of
 semantic value. Whitespace counts; application-only commits do not. Added/deleted files,
 executable bits and symlink targets count; symlinks are never followed.
 

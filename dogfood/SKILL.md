@@ -73,10 +73,6 @@ stateful bugs or recurring repro gaps. PASS binds to the current runnable state.
 
 Fresh agents require explicit delegation.
 
-In a T3 checkout, resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
-with entrypoint `dogfood` and the affected surfaces; load the selected verification skills
-without another human invocation. Missing native tools stay a gap, not browser/native coverage.
-
 If a project-local `verify-*` skill exists, use its doctor, drive, evidence, and cleanup.
 T3 Code checkout UI only: load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
 [native mobile](../t3code-skills/test-t3-mobile/SKILL.md). Missing Browser/Device tools mean
