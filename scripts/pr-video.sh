@@ -5,13 +5,16 @@ set -euo pipefail
 #
 #   scripts/pr-video.sh record <url> <flow-file> <out.webm>
 #     Replays one agent-browser command per flow-file line with a visible cursor,
-#     pausing PR_VIDEO_STEP_MS (default 700) per step. The first `# ` line is the
-#     title; a `## ` line captions the next step. Writes <out.webm>.steps.json.
+#     pausing PR_VIDEO_STEP_MS (default 1500, minimum 1000) per step. The first `# ` line is the
+#     title; `## ` narration is required before each interaction, even without
+#     voiceover. Holds subtitles at least 2s, longer for more words, and writes
+#     <out.webm>.steps.json.
 #     Needs 2+ interaction steps (hover or wait alone is not a flow). Run the
 #     same flow file against base and candidate. A failed step fails.
 #
 #   scripts/pr-video.sh compose <before-video> <after-video> <out-dir>
-#     Before left, after right; the shorter take freezes on its last frame.
+#     Before left, after right; slow short takes to 5s, then freeze the shorter
+#     take on its last frame. Target 5-30s; split long flows instead of speeding up.
 #     Set PR_VIDEO_BEFORE_LABEL / PR_VIDEO_AFTER_LABEL to concrete behavior
 #     descriptions (for example "Previous: save silently" / "New: saved notice").
 #     PR_VIDEO_FOCUS=x:y:width:height crops both takes to the changed region.
@@ -40,7 +43,7 @@ usage() {
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 MIN_DISTINCT_FRAMES=8
 MIN_INTERACTIONS=2
-INTERACTION_RE='^(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
+INTERACTION_RE='^[[:space:]]*(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
 
 GIF_LIMIT_BYTES=$((10 * 1024 * 1024))
 
@@ -96,11 +99,27 @@ video_hash() {
 record() {
   [ $# -eq 3 ] || usage
   command -v agent-browser >/dev/null 2>&1 || { echo "pr-video: needs agent-browser" >&2; exit 127; }
-  local url=$1 flow=$2 out=$3 session="pr-video-$$" step_ms=${PR_VIDEO_STEP_MS:-700}
+  local url=$1 flow=$2 out=$3 session="pr-video-$$" step_ms=${PR_VIDEO_STEP_MS:-1500}
+  if ! [[ "$step_ms" =~ ^[1-9][0-9]*$ ]] || [ "$step_ms" -lt 1000 ]; then
+    echo "pr-video: PR_VIDEO_STEP_MS must be an integer of at least 1000 milliseconds; target readable 5-30 second takes." >&2
+    return 2
+  fi
   [ -s "$flow" ] || { echo "pr-video: missing flow file: $flow" >&2; exit 1; }
   if [ "$(grep -cE "$INTERACTION_RE" "$flow" || true)" -lt "$MIN_INTERACTIONS" ]; then
     echo "pr-video: $flow needs $MIN_INTERACTIONS+ interaction steps (click, type, press, scroll, open); hover and wait alone do not show a flow" >&2
     exit 1
+  fi
+  if ! awk -v interaction="$INTERACTION_RE" '
+    /^## / { caption = substr($0, 4); next }
+    /^#/ || /^[[:space:]]*$/ { next }
+    $0 ~ interaction && caption !~ /[^[:space:]]/ {
+      printf "pr-video: flow line %d needs ## narration before the interaction, even without voiceover.\n", NR > "/dev/stderr"
+      invalid = 1
+    }
+    { caption = "" }
+    END { exit invalid }
+  ' "$flow"; then
+    return 2
   fi
   export AGENT_BROWSER_DEFAULT_TIMEOUT=${PR_VIDEO_STEP_TIMEOUT_MS:-15000}
   trap 'agent-browser --session "'"$session"'" close >/dev/null 2>&1 || true' EXIT
@@ -110,14 +129,18 @@ record() {
   local started title="" caption="" steps='[]'
   started=$(now)
   agent-browser --session "$session" wait "$step_ms" >/dev/null
-  local line
+  local line hold_ms
   while IFS= read -r line || [ -n "$line" ]; do
+    [[ "$line" =~ ^[[:space:]]*$ ]] && continue
     case "$line" in
       '## '*) caption=${line#'## '}; continue ;;
       '# '*) [ -n "$title" ] || title=${line#'# '}; continue ;;
       '' | '#'*) continue ;;
     esac
+    hold_ms=$step_ms
     if [ -n "$caption" ]; then
+      hold_ms=$(jq -rn --arg caption "$caption" --argjson minimum "$step_ms" \
+        '[$minimum, 2000, (1000 + (($caption | [scan("\\S+")] | length) * 300))] | max')
       steps=$(jq -c --arg caption "$caption" --argjson at "$(awk -v a="$(now)" -v b="$started" 'BEGIN { printf "%.3f", a - b }')" \
         '. + [{at: $at, caption: $caption}]' <<< "$steps")
       caption=""
@@ -128,10 +151,10 @@ record() {
       echo "pr-video: flow step failed: $line" >&2
       exit 1
     fi
-    agent-browser --session "$session" wait "$step_ms" >/dev/null
+    agent-browser --session "$session" wait "$hold_ms" >/dev/null
   done < "$flow"
-  # Hold the end state long enough to read, short of the still-frame gate.
-  agent-browser --session "$session" wait 1500 >/dev/null
+  # Hold the result for reading; motion is checked separately from still time.
+  agent-browser --session "$session" wait 2000 >/dev/null
   agent-browser --session "$session" record stop >/dev/null
   jq -n --arg title "$title" --argjson steps "$steps" '{title: $title, steps: $steps}' > "$out.steps.json"
   printf '%s\n' "$out"
@@ -172,17 +195,17 @@ attach() {
 frame_ffmpeg() {
   local side="${FOCUS_FILTER}fps=15,scale=-2:720,setsar=1,tpad=stop_mode=clone:stop_duration=3600"
   ffmpeg -hide_banner -loglevel error -y -i "$1" -i "$2" -filter_complex \
-    "[0:v]${side},pad=iw+8:ih:0:0:color=gray[b];[1:v]${side}[a];[b][a]hstack=inputs=2,scale=trunc(iw/2)*2:720[v]" \
+    "[0:v]setpts=$5*(PTS-STARTPTS),${side},pad=iw+8:ih:0:0:color=gray[b];[1:v]setpts=$6*(PTS-STARTPTS),${side}[a];[b][a]hstack=inputs=2,scale=trunc(iw/2)*2:720[v]" \
     -map '[v]' -t "$4" -c:v libx264 -pix_fmt yuv420p -crf 28 -movflags +faststart \
     "$3/before-after.mp4"
 }
 
 # Captions for one side from its record sidecar, as HyperFrames clips.
 side_captions() {
-  local side=$1 video=$2 duration=$3 left=$4
+  local side=$1 video=$2 duration=$3 left=$4 scale=$5
   [ -s "$video.steps.json" ] || { printf '[]'; return; }
-  jq -c --arg side "$side" --argjson end "$duration" --argjson left "$left" '
-    .steps as $s | [range(0; $s | length) as $i | {
+  jq -c --arg side "$side" --argjson end "$duration" --argjson left "$left" --argjson scale "$scale" '
+    [.steps[] | .at *= $scale] as $s | [range(0; $s | length) as $i | {
       id: "\($side)-cap-\($i)", at: $s[$i].at, caption: $s[$i].caption, left: $left,
       duration: ((if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $s[$i].at)
     } | select(.duration > 0)]' "$video.steps.json"
@@ -193,15 +216,15 @@ side_captions() {
 frame_hyperframes() {
   local before=$1 after=$2 out=$3 duration=$4 project="$3/hyperframes"
   mkdir -p "$project/assets"
-  local side input
+  local side input scale
   for side in before after; do
-    [ "$side" = before ] && input=$before || input=$after
-    ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "${FOCUS_FILTER}fps=30,tpad=stop_mode=clone:stop_duration=3600" \
+    if [ "$side" = before ]; then input=$before; scale=$5; else input=$after; scale=$6; fi
+    ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "setpts=$scale*(PTS-STARTPTS),${FOCUS_FILTER}fps=30,tpad=stop_mode=clone:stop_duration=3600" \
       -t "$duration" -an -c:v libx264 -pix_fmt yuv420p "$project/assets/$side.mp4" || return 1
   done
   local title captions
   title=$(jq -r '.title // empty' "$after.steps.json" 2>/dev/null || true)
-  captions=$(jq -c -s 'add' <(side_captions before "$before" "$duration" 40) <(side_captions after "$after" "$duration" 980))
+  captions=$(jq -c -s 'add' <(side_captions before "$before" "$duration" 40 "$5") <(side_captions after "$after" "$duration" 980 "$6"))
   printf '%s\n' '{"paths":{"assets":"assets"},"media":{"autoProxy":true}}' > "$project/hyperframes.json"
   HF_TITLE=$(jq -rn --arg t "${PR_VIDEO_TITLE:-${title:-Before and after}}" '$t | @html') \
     HF_BEFORE_LABEL=$(jq -rn --arg t "$PR_VIDEO_BEFORE_LABEL" '$t | @html') \
@@ -265,9 +288,17 @@ compose() {
     echo "pr-video: duplicate recordings; capture the actual previous and new behavior. If unchanged, publish one labeled verification take, not a comparison." >&2
     return 1
   fi
-  local longest
-  longest=$(awk -v a="$(duration_of "$before")" -v b="$(duration_of "$after")" \
-    'BEGIN { print (a > b ? a : b) }')
+  local before_duration after_duration before_scale after_scale longest
+  before_duration=$(duration_of "$before") || return 1
+  after_duration=$(duration_of "$after") || return 1
+  if ! awk -v a="$before_duration" -v b="$after_duration" 'BEGIN { exit !(a > 0 && b > 0) }'; then
+    echo "pr-video: recordings need a positive duration; re-record the flow." >&2
+    return 1
+  fi
+  before_scale=$(awk -v d="$before_duration" 'BEGIN { print (d < 5 ? 5 / d : 1) }')
+  after_scale=$(awk -v d="$after_duration" 'BEGIN { print (d < 5 ? 5 / d : 1) }')
+  longest=$(awk -v a="$before_duration" -v b="$after_duration" \
+    'BEGIN { d = (a > b ? a : b); print (d < 5 ? 5 : d) }')
   mkdir -p "$out"
 
   local renderer=${PR_VIDEO_RENDERER:-auto}
@@ -275,14 +306,14 @@ compose() {
     hyperframes_command || return 1
   fi
   case "$renderer" in
-    hyperframes) frame_hyperframes "$before" "$after" "$out" "$longest" ;;
-    ffmpeg) frame_ffmpeg "$before" "$after" "$out" "$longest" ;;
+    hyperframes) frame_hyperframes "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale" ;;
+    ffmpeg) frame_ffmpeg "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale" ;;
     auto)
-      if frame_hyperframes "$before" "$after" "$out" "$longest"; then
+      if frame_hyperframes "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale"; then
         :
       else
         echo "pr-video: HyperFrames unavailable or failed; composing with ffmpeg (no labels or captions)" >&2
-        frame_ffmpeg "$before" "$after" "$out" "$longest"
+        frame_ffmpeg "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale"
       fi
       ;;
     *) echo "pr-video: PR_VIDEO_RENDERER must be auto, hyperframes, or ffmpeg" >&2; exit 2 ;;

@@ -223,10 +223,42 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    changed result (success, error, or new state). Write one flow file (one agent-browser
    command per line: `open`, `click`, `type`, `press`, `scroll`, `wait --text`) and replay
    it on base and candidate with `scripts/pr-video.sh record <url> flow.txt <side>.webm`;
-   it draws a visible cursor and paces steps. Prefer `type` over `fill` so keystrokes show.
+   it draws an arrow cursor, outlines the active control in red, and leaves a readable
+   click ring, including for keyboard activation. Prefer `type` over `fill` so keystrokes show.
+   Make each action easy to locate at PR display size: keep the cursor and target cue
+   visible through the action and its result. For small or dense UI, use matched
+   `PR_VIDEO_FOCUS` crops to zoom both takes into the interaction and retain a full-view
+   context link. Frame the control and its resulting feedback together; avoid cropping
+   away the cursor, error, or success state. Red circles, arrows, or drawn callouts may
+   clarify a real action, but must not cover important text or invent UI behavior.
    A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
-   Start the flow file with a `# <flow title>` line and put a `## <caption>` line before
-   each step reviewers should read. Keep each take under 20 seconds. `record` refuses flows
+   Start the flow file with a `# <flow title>` line. Add **on-screen narration subtitles,
+   even without voiceover**: put a `## <narration>` line before every interaction.
+   Explain what we do and what changes, not raw commands or selectors: "We enter a task
+   name", "We save the task", "The error keeps our input intact". Use short sentences
+   that fit within 2 lines. Never infer a successful result or expose secrets in subtitles.
+   A final caption plus `wait --text` can narrate the verified outcome:
+
+   ```text
+   # Save a task
+   ## We enter a task name.
+   type "#name" "Review demo"
+   ## We save the task.
+   click "button[type=submit]"
+   ## The task is saved with confirmation.
+   wait --text "Saved: Review demo"
+   ```
+
+   `record` rejects missing narration before opening the browser. Captions hold for at
+   least 2 seconds, or 1 second plus 300 ms per word, respecting longer configured pauses.
+   HyperFrames burns them into the MP4 and GIF; no audio track is needed. Use the forced
+   HyperFrames renderer below for final evidence; the plain ffmpeg fallback has no subtitles.
+   Target **5-30 seconds** per take so humans can follow;
+   1-2 second demos are not acceptable. Hold each action long enough to read its caption
+   and result: `record` defaults to 1500 ms between uncaptioned setup steps (minimum
+   `PR_VIDEO_STEP_MS=1000`) and a 2 second final hold. Split longer flows at meaningful outcomes; never speed them
+   up to fit. `compose` slows each take shorter than 5 seconds, including its captions,
+   rather than merely appending a frozen result; it preserves longer footage. `record` refuses flows
    with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm
    after.webm <out-dir>` refuses static takes (under 8 distinct frames), duplicate files,
    and identical decoded footage (including remuxed copies); re-record the
@@ -335,6 +367,8 @@ pipeline fixture, not a substitute for the changed application's own demo.
 Its panels exercise distinct success and recovery journeys, explicitly labeled as fixture
 paths rather than previous/new product versions. Matched cropping is checked against the
 original recordings; duplicated source takes must not be used to test a comparison.
+The canary also decodes the recorded cursor and active-control outline during typing,
+save, failure, and retry, so DOM-only overlays cannot count as captured evidence.
 
 ```bash
 bun install --frozen-lockfile

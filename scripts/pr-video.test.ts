@@ -201,7 +201,10 @@ function composeFixture(version: string) {
       join(root, `${side}.webm.steps.json`),
       JSON.stringify({
         title: "Save a name",
-        steps: [{ at: 0, caption: "Save" }],
+        steps: [
+          { at: 0, caption: "Type a name" },
+          { at: 0.8, caption: "Save" },
+        ],
       }),
     );
   }
@@ -212,7 +215,7 @@ import { createHash } from "node:crypto";
 import { basename } from "node:path";
 const tool = basename(process.argv[1]);
 const args = process.argv.slice(2);
-if (tool === "ffprobe") console.log("2");
+if (tool === "ffprobe") console.log(args.at(-1).endsWith("before.webm") ? process.env.BEFORE_DURATION : process.env.AFTER_DURATION);
 else if (tool === "ffmpeg") {
   if (args.includes("hash")) console.log("SHA256=" + createHash("sha256").update(readFileSync(args[args.indexOf("-i") + 1])).digest("hex"));
   else if (args.at(-1) === "-") console.error("frame= 12");
@@ -248,12 +251,183 @@ else if (tool === "ffmpeg") {
           PR_VIDEO_BEFORE_LABEL: "Previous: save silently",
           PR_VIDEO_AFTER_LABEL: "New: confirmation shown",
           PR_VIDEO_FOCUS: "",
+          BEFORE_DURATION: "2",
+          AFTER_DURATION: "2",
           ...overrides,
         },
       },
     );
   return { root, run, calls };
 }
+
+function recordFixture(flowText: string) {
+  const { root, commands } = fixture();
+  writeFileSync(
+    join(root, "agent-browser"),
+    `#!${process.execPath}
+import { appendFileSync } from "node:fs";
+appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n");
+`,
+    { mode: 0o755 },
+  );
+  const flow = join(root, "flow.txt");
+  writeFileSync(flow, flowText);
+  const run = (step = "") =>
+    Bun.spawnSync(
+      [
+        "bash",
+        entry,
+        "record",
+        "http://localhost:3000",
+        flow,
+        join(root, "take.webm"),
+      ],
+      {
+        env: {
+          ...Bun.env,
+          PATH: `${root}:${Bun.env.PATH}`,
+          CALLS: join(root, "calls.jsonl"),
+          PR_VIDEO_STEP_MS: step,
+        },
+      },
+    );
+  return { root, run, commands };
+}
+
+test.each([
+  { step: "", expected: 1500 },
+  { step: "1000", expected: 1000 },
+  { step: "5000", expected: 5000 },
+  { step: "700", expected: null },
+  { step: "no", expected: null },
+])(
+  "record uses readable subtitle holds and rejects unsafe pacing: $step",
+  ({ step, expected }) => {
+    const { run, commands } = recordFixture(
+      '# Save a name\n## Type a name\n  \ntype "#name" "Ada"\n## Save\nclick "#save"\n',
+    );
+    const result = run(step);
+    if (expected === null) {
+      expect(result.exitCode).not.toBe(0);
+      expect(result.stderr.toString()).toContain("PR_VIDEO_STEP_MS");
+      expect(commands()).toEqual([]);
+    } else {
+      expect(result.exitCode, result.stderr.toString()).toBe(0);
+      expect(
+        commands()
+          .filter((args) => args[2] === "wait")
+          .map((args) => Number(args[3])),
+      ).toEqual([
+        expected,
+        Math.max(expected, 2000),
+        Math.max(expected, 2000),
+        2000,
+      ]);
+    }
+  },
+);
+
+test("silent narration preserves authored text and gets enough reading time", () => {
+  const { root, run, commands } = recordFixture(
+    '# Save a name\n## We enter a task name so the viewer can follow.\ntype "#name" "Ada"\n## We save the task.\nclick "#save"\n',
+  );
+  const result = run();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  expect(
+    commands()
+      .filter((args) => args[2] === "wait")
+      .map((args) => Number(args[3])),
+  ).toEqual([1500, 4000, 2200, 2000]);
+  expect(
+    JSON.parse(
+      readFileSync(join(root, "take.webm.steps.json"), "utf8"),
+    ).steps.map((step: { caption: string }) => step.caption),
+  ).toEqual([
+    "We enter a task name so the viewer can follow.",
+    "We save the task.",
+  ]);
+});
+
+test.each([
+  'type "#name" "Ada"\n## We save the task.\nclick "#save"\n',
+  '##   \ntype "#name" "Ada"\n## We save the task.\nclick "#save"\n',
+  '## We enter a name.\ntype "#name" "Ada"\nclick "#save"\n',
+  '## We enter a name.\ntype "#name" "Ada"\n## We save the task.\nclick "#save"\n  click "#retry"\n',
+])("missing action narration fails before opening a browser: %j", (flow) => {
+  const { run, commands } = recordFixture(flow);
+  const result = run();
+  expect(result.exitCode).toBe(2);
+  expect(result.stderr.toString()).toContain("## narration");
+  expect(commands()).toEqual([]);
+});
+
+test.each([
+  {
+    before: "2",
+    after: "2",
+    duration: 5,
+    beforeCaption: [2, 3],
+    afterCaption: [2, 3],
+  },
+  {
+    before: "1",
+    after: "2",
+    duration: 5,
+    beforeCaption: [4, 1],
+    afterCaption: [2, 3],
+  },
+  {
+    before: "6",
+    after: "8",
+    duration: 8,
+    beforeCaption: [0.8, 7.2],
+    afterCaption: [0.8, 7.2],
+  },
+  {
+    before: "35",
+    after: "40",
+    duration: 40,
+    beforeCaption: [0.8, 39.2],
+    afterCaption: [0.8, 39.2],
+  },
+])(
+  "compose keeps readable duration and synchronized captions: $before/$after seconds",
+  ({ before, after, duration, beforeCaption, afterCaption }) => {
+    const { root, run } = composeFixture("0.8.123");
+    const result = run(false, {
+      BEFORE_DURATION: before,
+      AFTER_DURATION: after,
+    });
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    // The composition is a public output consumed by HyperFrames.
+    const composition = readFileSync(
+      join(root, "out/hyperframes/index.html"),
+      "utf8",
+    );
+    expect(
+      Number(
+        composition.match(
+          /data-composition-id="main"[^>]*data-duration="?([\d.]+)/,
+        )?.[1],
+      ),
+    ).toBe(duration);
+    for (const [side, expected] of [
+      ["before", beforeCaption],
+      ["after", afterCaption],
+    ] as const) {
+      expect(
+        composition
+          .match(
+            new RegExp(
+              `id="${side}-cap-1"[^>]*data-start="([^"]+)" data-duration="([^"]+)"`,
+            ),
+          )
+          ?.slice(1)
+          .map(Number),
+      ).toEqual([...expected]);
+    }
+  },
+);
 
 test("compose uses the manifest pin and delivery quality, returning MP4 first", () => {
   const { root, run, calls } = composeFixture("0.8.123");
