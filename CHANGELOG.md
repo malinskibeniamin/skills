@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+2026-10-21 -- Complete native T3 composition: check existing verification before generation,
+audit native verifiers without a naming requirement, route Effect work through shared
+evidence, and retain target-owned delivery commands. Preserve native-tool authorization,
+source pins, and explicit verification gaps.
+
 2026-10-20 -- Consolidate the five value skills (/ss, /mm, /ms, /jb, /av) into one
 `/product` skill: one lane table (keep the lights on, quality of life, feature, taste),
 one verdict scale (justified, thin, unjustified), one severity ladder, one `product:`

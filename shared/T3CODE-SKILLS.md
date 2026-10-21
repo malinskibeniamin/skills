@@ -114,7 +114,24 @@ maintainer protections, and read back uncertain outcomes before retrying. The ho
 [triage comment disclosure](../triage/SKILL.md#comment-invariant) applies to posted comments.
 Use [review](../review/SKILL.md) for correctness, not eligibility moderation.
 
+## Native verification
+
+Confirm T3 Code identity from the target's source and manifests, not its directory name
+or a shared dependency. Prefer its current repository-owned `test-t3-app` and
+`test-t3-mobile` skills over this snapshot; otherwise use the matching adapter. Read its
+current instructions and check tools and authorization before driving any surface.
+Routing grants no browser/device use, builds, fixture access or installation permission.
+Cover every affected surface; a missing tool blocks that coverage without a substitute
+automation system.
+
+Reuse native verifier names and structure. A missing `verify-*` name or generated-verifier
+section is not a reason to create a second skill. For maintenance without a feature map,
+report the missing map as a coverage gap and stop the full-map audit; do not claim
+`clean` or edit the managed snapshot to manufacture one. Preserve unrelated task work.
+
 ## test-t3-app
+
+Apply [native verification](#native-verification).
 
 Enter only in a T3 Code checkout with its Browser panel tools available. Use its actual
 runner output, pairing flow, isolated state and bundled SQLite fixture reference. A
@@ -127,6 +144,8 @@ and [dogfood](../dogfood/SKILL.md); do not install T3's tooling there. Retain a 
 environment while the person is inspecting it, then stop only owned processes and state.
 
 ## test-t3-mobile
+
+Apply [native verification](#native-verification).
 
 Enter only in a T3 Code checkout with the selected Device host and device available.
 Follow returned executable/target arguments exactly. The copied pairing helper requires

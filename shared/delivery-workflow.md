@@ -39,6 +39,10 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    rebases, commits, pushes and `--force-with-lease` need no extra prompt. Preserve default/shared/foreign/concurrent branches unless explicitly authorized.
 2. For new behavior or repairs, use [TDD](../tdd/SKILL.md) and [check loops](check-loop.md). Run repository-native focused
    tests, lint, types, build/integration checks; retain warnings, skips and limits.
+   Resolve commands and scope from the target's current instructions and scripts using
+   [repo navigation](repo-navigation.md). Its package manager, checker and test
+   runner outrank harness defaults; preserve documented changed-files gates rather than
+   expanding them into prohibited repo-wide checks.
 3. Load [change evidence](change-evidence.md) and applicable specialist instructions.
    Exercise runnable work with [dogfood](../dogfood/SKILL.md): real user or public entrypoint, intended use and
    a credible failure/recovery path. Static docs/config use the relevant consumer/validator instead.

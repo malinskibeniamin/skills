@@ -17,7 +17,9 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/create-verification-skill.excalidraw)
 
-生成一个项目本地验证器，供下一个智能体在无预备上下文的情况下运行。使用仓库现有的规范技能根目录；否则默认使用 `.agents/skills/verify-<app>/`。切勿将该技能复制到多个特定于宿主的根目录中。
+首先从目标项目的说明和技能中确定现有验证方式，不受名称限制。复用它来验证已覆盖的流程；漂移交由 `/maintain-verification-skill`。在 T3 Code 仓库中，为每个受影响的界面加载[Web/桌面端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)或[原生移动端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)技能，并应用[原生验证约定](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-SKILLS.md#native-verification)。缺少工具不能成为创建替代验证器的理由。
+
+只有在已证实存在覆盖缺口时，才在仓库的规范技能根目录中编写一个可从零启动的验证器；若无此目录，则使用 `.agents/skills/verify-<app>/`。不要复制到各个宿主专用目录，也不要重复已被覆盖的原生流程。
 
 ## 调研仓库 [#interview-the-repository]
 
@@ -63,5 +65,3 @@ type: skill
 列出替代环境的设置缺口；在目标环境重放前，仍未经过验证。
 
 漂移审计交由 `/maintain-verification-skill`，功能工作交由 `/dogfood`。
-
-T3 Code 仓库示例：[Web/桌面端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)和[原生移动端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。其中的 Browser/Device 工具和配对脚本仅适用于 T3，不是其他应用的必需项。

@@ -9,8 +9,8 @@ import sys
 repo = pathlib.Path(sys.argv[1]).resolve()
 shared = repo / "shared/change-evidence.md"
 routes = {
-    "development-lifecycle": ("ci-maintenance", "package-development", "vendored-assets"),
-    "review": ("ci-maintenance", "package-development", "vendored-assets"),
+    "development-lifecycle": ("ci-maintenance", "package-development", "vendored-assets", "effect-development"),
+    "review": ("ci-maintenance", "package-development", "vendored-assets", "effect-development"),
     "dogfood": ("test-t3-app", "test-t3-mobile"),
 }
 missing = []

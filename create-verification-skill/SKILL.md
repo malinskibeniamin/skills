@@ -5,7 +5,13 @@ description: Create a project-local skill that launches, drives, observes, and c
 
 # Create a verification skill
 
-Write one cold-start verifier in the repository's canonical skill root, otherwise `.agents/skills/verify-<app>/`. Never mirror it into host-specific roots.
+Reuse existing verifiers regardless of name. T3 Code: load
+[web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
+[mobile](../t3code-skills/test-t3-mobile/SKILL.md) per affected surface;
+their adapters own native rules.
+
+Only uncovered flows need a cold-start verifier: canonical skill root, else
+`.agents/skills/verify-<app>/`. Never mirror host roots or duplicate covered flows.
 
 ## Interview the repository
 
@@ -17,7 +23,7 @@ Discover before asking:
 - **Observe:** screenshots, accessibility snapshots, transcripts, responses, logs, exit codes, and durable side effects.
 - **Isolate:** per-run ports, profiles, data, fixtures. Never drive a shared human instance.
 
-If the checkout cannot run, report its failing prerequisite, not invented launch instructions.
+If launch fails, report its failing prerequisite, not invented instructions.
 
 For agent-DX or worktree setup requests, use [the capability-gap and cold-start checks](references/agent-dx.md).
 
@@ -31,7 +37,7 @@ Write matching `name: verify-<app>` frontmatter and concrete **Launch**, **Docto
 - **Evidence:** capture action and result. Verify side effects through a second public view; mock only existing production boundaries.
 - **Cleanup:** stop only processes and scratch state this run created. Never kill by process name. Evidence survives cleanup.
 
-Make/document executable helpers. For stateful bugs or recurring repro gaps, prove [capture/replay](../shared/verification-replay.md) via native fixture/debug APIs.
+Make/document executable helpers. For stateful bugs/recurring repro gaps, prove [capture/replay](../shared/verification-replay.md) via native fixture/debug APIs.
 
 ## Seed the feature map
 
@@ -51,5 +57,3 @@ Execute generated skill: launch, doctor, one mapped real journey, evidence and c
 List stand-in setup gaps; leave them unverified until replayed on the target.
 
 Route drift audits to `/maintain-verification-skill` and feature work to `/dogfood`.
-
-T3 checkouts only: load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or [mobile](../t3code-skills/test-t3-mobile/SKILL.md).
