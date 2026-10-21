@@ -17,7 +17,9 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/create-verification-skill.excalidraw)
 
-產生一個專案本機驗證器，讓下一個代理程式能從全新狀態執行。使用儲存庫既有的標準技能根目錄；否則預設使用 `.agents/skills/verify-<app>/`。絕不要將技能複製到多個主機專用根目錄。
+先從目標專案的說明與技能找出既有驗證方式，不受名稱限制。對已涵蓋的流程重用它；漂移交由 `/maintain-verification-skill`。在 T3 Code 儲存庫中，針對每個受影響的介面載入[Web/桌面端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)或[原生行動端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)技能，並套用[原生驗證約定](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-SKILLS.md#native-verification)。缺少工具不能成為建立替代驗證器的理由。
+
+只有在已證實存在涵蓋缺口時，才在儲存庫的標準技能根目錄編寫一個可從零啟動的驗證器；若無此目錄，則使用 `.agents/skills/verify-<app>/`。不要複製到各主機專用目錄，也不要重複已涵蓋的原生流程。
 
 ## 探查儲存庫 [#interview-the-repository]
 
@@ -63,5 +65,3 @@ type: skill
 列出替代環境的設定缺口；在目標環境重放前，仍未經驗證。
 
 將漂移稽核交由 `/maintain-verification-skill`，功能工作交由 `/dogfood`。
-
-T3 Code 儲存庫範例：[Web/桌面端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)和[原生行動端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。其中的 Browser/Device 工具和配對腳本僅適用於 T3，不是其他應用程式的必要項目。

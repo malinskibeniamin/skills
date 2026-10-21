@@ -13,7 +13,7 @@ Edit only the verification skill directory: its `SKILL.md`, feature map, and own
 
 ## Pass
 
-1. **Locate.** Use the one project-local `verify-*` skill with Launch, Doctor, Drive, Evidence, Cleanup, and a feature map. If none exists, route to `/create-verification-skill`. If several exist and scope does not identify one, ask which verifier owns the run.
+1. **Locate.** Resolve the project-local verifier by capability, not a `verify-*` prefix. T3 Code's app/mobile skills follow [native verification](../shared/T3CODE-SKILLS.md#native-verification). Use actual launch, readiness, drive, evidence and cleanup instructions. Uncovered flows route to `/create-verification-skill`. Map each affected surface to its owner; ask only when ownership remains ambiguous.
 2. **Reconcile the index.** Compare `features/README.md` with sibling feature files. Remove dead entries and add missing concrete user surfaces found in routes, commands, menus, or public docs.
 3. **Source coverage.** For every feature, trace current entrypoints, stable handles, prerequisites, and observable outcomes. Record likely drift with source pointers and one live recipe. Inspect sequentially unless the user explicitly authorizes delegation.
 4. **Live coverage.** Run the verifier's doctor, then drive every feature at least once. Use one isolated long-lived instance for UI/services or a fresh isolated session per short-lived CLI, as the verifier specifies. Capture evidence before cleanup.

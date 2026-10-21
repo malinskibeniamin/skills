@@ -10,6 +10,7 @@ An author request owns implementation and publication only through its requested
 |---|---|
 | Product or maintainer improvement | [quantify-impact](../quantify-impact/SKILL.md): value sentence for obvious value; paired measurements for explicit performance claims, no benchmark theater |
 | Runnable behavior | [dogfood](../dogfood/SKILL.md): actual entrypoint, intended use and a credible failure/recovery path |
+| Effect compositions | [Effect development](../t3code-skills/effect-development/SKILL.md): match affected APIs and patterns to the installed version's guidance; existing application work needs no setup or migration task |
 | GitHub Actions jobs, actions, permissions or events | [CI maintenance](../t3code-skills/ci-maintenance/SKILL.md): trigger, checkout, credentials, untrusted inputs and least-privilege checks |
 | JavaScript workspace-package registration, exports or publication status | [Package development](../t3code-skills/package-development/SKILL.md): repo-native registration, focused tests and intended packed contents |
 | Checked-in third-party code, skills, assets or generated snapshots | [Vendored assets](../t3code-skills/vendored-assets/SKILL.md): pinned provenance, retained licenses, deterministic regeneration and consumer checks |

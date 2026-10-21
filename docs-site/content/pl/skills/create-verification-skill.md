@@ -21,7 +21,9 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/create-verification-skill.excalidraw)
 
-Wygeneruj jeden lokalny dla projektu weryfikator, który następny agent będzie mógł uruchomić bez wcześniejszego kontekstu. Użyj istniejącego w repozytorium kanonicznego katalogu głównego umiejętności; w przeciwnym razie użyj domyślnie `.agents/skills/verify-<app>/`. Nigdy nie kopiuj umiejętności do kilku katalogów głównych przeznaczonych dla konkretnych hostów.
+Najpierw znajdź istniejącą weryfikację w instrukcjach i umiejętnościach projektu, niezależnie od nazwy. Użyj jej dla objętych nią przepływów; rozbieżności kieruj do `/maintain-verification-skill`. W repozytoriach T3 Code załaduj [web/desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md) lub [natywne aplikacje mobilne](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md) dla każdej zmienianej powierzchni i zastosuj [weryfikację natywną](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-SKILLS.md#native-verification). Brak narzędzi nie uzasadnia zastępczego weryfikatora.
+
+Tylko dla wykazanej luki pokrycia utwórz jeden weryfikator uruchamialny bez wcześniejszego kontekstu w kanonicznym katalogu umiejętności repozytorium, a jeśli go brak, w `.agents/skills/verify-<app>/`. Nie kopiuj go do katalogów poszczególnych hostów ani nie powielaj objętego weryfikacją przepływu natywnego.
 
 ## Zbadaj repozytorium [#interview-the-repository]
 
@@ -67,5 +69,3 @@ Wykonaj wygenerowaną umiejętność: uruchamianie, diagnostykę, jedną zmapowa
 Wymień luki konfiguracji środowiska zastępczego; pozostają niezweryfikowane do odtworzenia w środowisku docelowym.
 
 Kieruj audyty rozbieżności do `/maintain-verification-skill`, a pracę nad funkcjami do `/dogfood`.
-
-Przykłady dla repozytorium T3 Code: [web i desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md) oraz [natywne aplikacje mobilne](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md). Ich narzędzia Browser/Device i skrypt parowania są specyficzne dla T3, nie są wymaganiami dla innych aplikacji.

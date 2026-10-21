@@ -30,6 +30,24 @@ const routes = [
   ["upgrade-dependency", "dependency-maintenance"],
   ["ux-performance", "bundle-analysis"],
 ];
+const workflowRoutes = [
+  {
+    route: "maintain-verification-skill",
+    links: [
+      {
+        name: "native-verification",
+        path: "/shared/T3CODE-SKILLS.md#native-verification",
+      },
+    ],
+  },
+  ...routes.map(([route, ...targets]) => ({
+    route,
+    links: targets.map((name) => ({
+      name,
+      path: `/t3code-skills/${name}/SKILL.md`,
+    })),
+  })),
+];
 
 for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
   for (const viewport of [
@@ -42,21 +60,19 @@ for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
       const prefix = locale === "en" ? "" : `/${locale}`;
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
-      for (const [route, ...targets] of routes) {
+      for (const { route, links } of workflowRoutes) {
         const response = await page.goto(`${prefix}/skills/${route}`);
         expect(response?.status()).toBe(200);
         const main = page.getByRole("main");
-        for (const target of targets) {
-          const link = main.locator(
-            `a[href$="/t3code-skills/${target}/SKILL.md"]`,
-          );
+        for (const { name, path } of links) {
+          const link = main.locator(`a[href$="${path}"]`);
           await expect(link).toHaveCount(1);
           await link.scrollIntoViewIfNeeded();
           await link.focus();
           await expect(link).toBeFocused();
           // Capture the new routing paragraph, not unrelated historical page prose.
           await expect(link.locator("..")).toHaveScreenshot(
-            `${route}-${target}-${locale}-${viewport.name}.png`,
+            `${route}-${name}-${locale}-${viewport.name}.png`,
           );
         }
         expect(
