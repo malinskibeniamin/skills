@@ -50,6 +50,12 @@ Zapytaj, czy można ograniczyć liczbę metod i parametrów oraz ukryć więcej 
 - **Jeden adapter oznacza hipotetyczny szew; dwa adaptery oznaczają rzeczywisty szew.**
 - Bezpośredni kod lokalny jest lepszy niż abstrakcja, która jedynie przenosi kod.
 
+## Szkic od strony wywołującego [#caller-first-sketch]
+
+Dla nowego lub zmienianego interfejsu napisz reprezentatywny kod wywołujący przed typami i sygnaturami: jeden sukces oraz jedną wiarygodną porażkę lub odmowę. Wskaż właściciela stanu, chroniony niezmiennik i to, co kod wywołujący obserwuje przy błędzie. Wykorzystaj istniejące typy domenowe; wyprowadź najmniejszy interfejs z tych wywołań, zamiast ujawniać wewnętrzne etapy.
+
+Przed wyborem struktury sprawdź wobec szkicu [najkrótszą błędną zmianę](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit). Przy małej zmianie wystarczy szkic w bieżącym opisie; mechaniczne przeniesienia nie wymagają ćwiczenia projektowego. Porównuj całe alternatywne struktury tylko wtedy, gdy pozostaje istotna decyzja lub użytkownik tego zażąda. Nie dodaje to przerwy przed implementacją.
+
 ## Testowalność
 
 1. Przyjmuj zależności; nie twórz ich wewnątrz.
@@ -63,5 +69,3 @@ Relacje: Moduł ma jeden Interfejs; Głębokość mierzy się względem niego; S
 Odrzuć głębokość mierzoną liczbą wierszy, interfejs rozumiany jako słowo kluczowe TypeScript oraz nieprecyzyjne użycie terminu granica.
 
 Przeczytaj [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md), aby poznać zasady dotyczące zależności, szwów i testowania, oraz [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md), aby poznać równoległe projekty.
-W kwestiach obciążenia czytelnika, egzekwowania struktury i integracji opartej na pierwszych zasadach używaj wspólnych
-[reguł inżynieryjnych Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md), zamiast powielać je tutaj.

@@ -9,6 +9,7 @@ An author request owns implementation and publication only through its requested
 | Changed behavior / needed explanation | Owner and completion evidence |
 |---|---|
 | Product or maintainer improvement | [quantify-impact](../quantify-impact/SKILL.md): value sentence for obvious value; paired measurements for explicit performance claims, no benchmark theater |
+| New or changed interface, state owner, or structural invariant | [codebase-design](../codebase-design/SKILL.md): author a caller-first sketch before types; use the [curated structural probe](POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit) in review against paths the diff already permits. Skip relationship-preserving mechanical moves |
 | Runnable behavior | [dogfood](../dogfood/SKILL.md): actual entrypoint, intended use and a credible failure/recovery path |
 | Effect compositions | [Effect development](../t3code-skills/effect-development/SKILL.md): match affected APIs and patterns to the installed version's guidance; existing application work needs no setup or migration task |
 | GitHub Actions jobs, actions, permissions or events | [CI maintenance](../t3code-skills/ci-maintenance/SKILL.md): trigger, checkout, credentials, untrusted inputs and least-privilege checks |

@@ -47,6 +47,12 @@ sidebar:
 - **一個轉接器代表假想的接縫；兩個轉接器代表真實的接縫。**
 - 簡短的區域程式碼，勝過只是搬移程式碼的抽象層。
 
+## 從呼叫端開始的草圖 [#caller-first-sketch]
+
+對新增或變更的介面，先寫出具代表性的呼叫端程式碼，再定義型別或簽章：一個成功情境，以及一個可信的失敗或拒絕情境。指出狀態擁有者、它保護的不變條件，以及呼叫端在失敗時觀察到的結果。重用既有領域型別；從這些呼叫推導出最小介面，而非暴露內部階段。
+
+選定設計形狀前，針對草圖嘗試[最短的錯誤修改](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit)。小幅變更的草圖可直接寫在目前的說明中；機械式搬移不需要設計練習。只有在仍有實質分歧或使用者要求時，才比較整體形狀的替代方案。這不會新增實作前的暫停關卡。
+
 ## 可測試性
 
 1. 接受相依項目；不要在內部建立它們。
@@ -60,5 +66,3 @@ sidebar:
 不採用以行數衡量深度、將介面視為 TypeScript 關鍵字，以及含糊的邊界措辭。
 
 請閱讀 [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md)，了解相依性、接縫與測試規範；並閱讀 [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md)，了解平行設計。
-關於讀者負擔、結構性強制措施與第一原理整合，請使用共通的
-[Poteto 工程規則](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md)，不要在此重複。

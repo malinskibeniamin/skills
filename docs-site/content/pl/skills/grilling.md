@@ -33,6 +33,8 @@ Przeczytaj zgłoszenie, plan, repozytorium, testy, dokumentację, materiały ref
 
 ## 2. Tryb eksploracji [#2-explore-mode]
 
+Gdy decyzja dotyczy interfejsu lub własności stanu, załaduj "codebase-design" i oprzyj alternatywy na szkicu od strony wywołującego. Zachowaj je jako materiały decyzyjne, nie kod produkcyjny.
+
 Gdy nie wybrano jeszcze kierunku, przedstaw 2–3 podejścia wraz z kompromisami, odwracalnością, dowodami i rekomendacją. W przypadku konkurencyjnych planów wywołaj narzędzie Skill z "plan-arbiter". **Wariant krytyczny:** gdy kierunek już istnieje, przedstaw najsilniejsze argumenty za najlepszą alternatywą i wskaż, co mogłoby dowieść, że jest błędna.
 
 W przypadku interfejsu dla klientów umieść **makietę ASCII** przed pytaniami: każdy istotnie różniący się układ w ogrodzonym bloku `text`, z rzeczywistymi etykietami, kontrolkami, grupowaniem, kolejnością oraz obszarami stałymi lub przewijanymi. Wyrównaj obramowania; pokaż strukturę, a nie dokładność pikselową. Pokaż wersję komputerową i mobilną tylko wtedy, gdy kompozycja się zmienia; wspólne układy wymagają jednego szkicu i opisu różnic.
