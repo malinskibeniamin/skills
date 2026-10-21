@@ -36,7 +36,7 @@ Assess impact; capture base before visible edits, even tiny copy/shared-UI.
 
 ### Act
 
-Single owner; explicit consent for delegation/background work. Make the smallest obvious change; delete/reuse. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; static wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence. Report adjacent cleanup unless verification needs it.
+A single owner; explicit consent for delegation/background work. Make the smallest obvious change; delete/reuse. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; static wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence. Report adjacent cleanup unless verification needs it.
 
 Each edit batch: scoped format/fix + lint -> relevant types/tests. Inspect fixes; repair/rerun. Reuse hook results only for identical inputs/coverage; keep sound project-wide types.
 
