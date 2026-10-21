@@ -232,11 +232,31 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    away the cursor, error, or success state. Red circles, arrows, or drawn callouts may
    clarify a real action, but must not cover important text or invent UI behavior.
    A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
-   Start the flow file with a `# <flow title>` line and put a `## <caption>` line before
-   each step reviewers should read. Target **5-30 seconds** per take so humans can follow;
+   Start the flow file with a `# <flow title>` line. Add **on-screen narration subtitles,
+   even without voiceover**: put a `## <narration>` line before every interaction.
+   Explain what we do and what changes, not raw commands or selectors: "We enter a task
+   name", "We save the task", "The error keeps our input intact". Use short sentences
+   that fit within 2 lines. Never infer a successful result or expose secrets in subtitles.
+   A final caption plus `wait --text` can narrate the verified outcome:
+
+   ```text
+   # Save a task
+   ## We enter a task name.
+   type "#name" "Review demo"
+   ## We save the task.
+   click "button[type=submit]"
+   ## The task is saved with confirmation.
+   wait --text "Saved: Review demo"
+   ```
+
+   `record` rejects missing narration before opening the browser. Captions hold for at
+   least 2 seconds, or 1 second plus 300 ms per word, respecting longer configured pauses.
+   HyperFrames burns them into the MP4 and GIF; no audio track is needed. Use the forced
+   HyperFrames renderer below for final evidence; the plain ffmpeg fallback has no subtitles.
+   Target **5-30 seconds** per take so humans can follow;
    1-2 second demos are not acceptable. Hold each action long enough to read its caption
-   and result: `record` defaults to 1500 ms between steps (minimum `PR_VIDEO_STEP_MS=1000`)
-   and a 2 second final hold. Split longer flows at meaningful outcomes; never speed them
+   and result: `record` defaults to 1500 ms between uncaptioned setup steps (minimum
+   `PR_VIDEO_STEP_MS=1000`) and a 2 second final hold. Split longer flows at meaningful outcomes; never speed them
    up to fit. `compose` slows each take shorter than 5 seconds, including its captions,
    rather than merely appending a frozen result; it preserves longer footage. `record` refuses flows
    with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm

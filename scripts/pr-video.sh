@@ -6,7 +6,9 @@ set -euo pipefail
 #   scripts/pr-video.sh record <url> <flow-file> <out.webm>
 #     Replays one agent-browser command per flow-file line with a visible cursor,
 #     pausing PR_VIDEO_STEP_MS (default 1500, minimum 1000) per step. The first `# ` line is the
-#     title; a `## ` line captions the next step. Writes <out.webm>.steps.json.
+#     title; `## ` narration is required before each interaction, even without
+#     voiceover. Holds subtitles at least 2s, longer for more words, and writes
+#     <out.webm>.steps.json.
 #     Needs 2+ interaction steps (hover or wait alone is not a flow). Run the
 #     same flow file against base and candidate. A failed step fails.
 #
@@ -41,7 +43,7 @@ usage() {
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 MIN_DISTINCT_FRAMES=8
 MIN_INTERACTIONS=2
-INTERACTION_RE='^(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
+INTERACTION_RE='^[[:space:]]*(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
 
 GIF_LIMIT_BYTES=$((10 * 1024 * 1024))
 
@@ -107,6 +109,18 @@ record() {
     echo "pr-video: $flow needs $MIN_INTERACTIONS+ interaction steps (click, type, press, scroll, open); hover and wait alone do not show a flow" >&2
     exit 1
   fi
+  if ! awk -v interaction="$INTERACTION_RE" '
+    /^## / { caption = substr($0, 4); next }
+    /^#/ || /^[[:space:]]*$/ { next }
+    $0 ~ interaction && caption !~ /[^[:space:]]/ {
+      printf "pr-video: flow line %d needs ## narration before the interaction, even without voiceover.\n", NR > "/dev/stderr"
+      invalid = 1
+    }
+    { caption = "" }
+    END { exit invalid }
+  ' "$flow"; then
+    return 2
+  fi
   export AGENT_BROWSER_DEFAULT_TIMEOUT=${PR_VIDEO_STEP_TIMEOUT_MS:-15000}
   trap 'agent-browser --session "'"$session"'" close >/dev/null 2>&1 || true' EXIT
   agent-browser --session "$session" open --init-script "$SCRIPT_DIR/pr-video-cursor.js" about:blank >/dev/null
@@ -115,14 +129,18 @@ record() {
   local started title="" caption="" steps='[]'
   started=$(now)
   agent-browser --session "$session" wait "$step_ms" >/dev/null
-  local line
+  local line hold_ms
   while IFS= read -r line || [ -n "$line" ]; do
+    [[ "$line" =~ ^[[:space:]]*$ ]] && continue
     case "$line" in
       '## '*) caption=${line#'## '}; continue ;;
       '# '*) [ -n "$title" ] || title=${line#'# '}; continue ;;
       '' | '#'*) continue ;;
     esac
+    hold_ms=$step_ms
     if [ -n "$caption" ]; then
+      hold_ms=$(jq -rn --arg caption "$caption" --argjson minimum "$step_ms" \
+        '[$minimum, 2000, (1000 + (($caption | [scan("\\S+")] | length) * 300))] | max')
       steps=$(jq -c --arg caption "$caption" --argjson at "$(awk -v a="$(now)" -v b="$started" 'BEGIN { printf "%.3f", a - b }')" \
         '. + [{at: $at, caption: $caption}]' <<< "$steps")
       caption=""
@@ -133,7 +151,7 @@ record() {
       echo "pr-video: flow step failed: $line" >&2
       exit 1
     fi
-    agent-browser --session "$session" wait "$step_ms" >/dev/null
+    agent-browser --session "$session" wait "$hold_ms" >/dev/null
   done < "$flow"
   # Hold the result for reading; motion is checked separately from still time.
   agent-browser --session "$session" wait 2000 >/dev/null

@@ -260,29 +260,20 @@ else if (tool === "ffmpeg") {
   return { root, run, calls };
 }
 
-test.each([
-  { step: "", expected: 1500 },
-  { step: "1000", expected: 1000 },
-  { step: "700", expected: null },
-  { step: "no", expected: null },
-])(
-  "record uses readable step holds and rejects unsafe pacing: $step",
-  ({ step, expected }) => {
-    const { root, commands } = fixture();
-    writeFileSync(
-      join(root, "agent-browser"),
-      `#!${process.execPath}
+function recordFixture(flowText: string) {
+  const { root, commands } = fixture();
+  writeFileSync(
+    join(root, "agent-browser"),
+    `#!${process.execPath}
 import { appendFileSync } from "node:fs";
 appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n");
 `,
-      { mode: 0o755 },
-    );
-    const flow = join(root, "flow.txt");
-    writeFileSync(
-      flow,
-      '# Save a name\n## Type a name\ntype "#name" "Ada"\n## Save\nclick "#save"\n',
-    );
-    const result = Bun.spawnSync(
+    { mode: 0o755 },
+  );
+  const flow = join(root, "flow.txt");
+  writeFileSync(flow, flowText);
+  const run = (step = "") =>
+    Bun.spawnSync(
       [
         "bash",
         entry,
@@ -300,6 +291,22 @@ appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n")
         },
       },
     );
+  return { root, run, commands };
+}
+
+test.each([
+  { step: "", expected: 1500 },
+  { step: "1000", expected: 1000 },
+  { step: "5000", expected: 5000 },
+  { step: "700", expected: null },
+  { step: "no", expected: null },
+])(
+  "record uses readable subtitle holds and rejects unsafe pacing: $step",
+  ({ step, expected }) => {
+    const { run, commands } = recordFixture(
+      '# Save a name\n## Type a name\n  \ntype "#name" "Ada"\n## Save\nclick "#save"\n',
+    );
+    const result = run(step);
     if (expected === null) {
       expect(result.exitCode).not.toBe(0);
       expect(result.stderr.toString()).toContain("PR_VIDEO_STEP_MS");
@@ -310,10 +317,49 @@ appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n")
         commands()
           .filter((args) => args[2] === "wait")
           .map((args) => Number(args[3])),
-      ).toEqual([expected, expected, expected, 2000]);
+      ).toEqual([
+        expected,
+        Math.max(expected, 2000),
+        Math.max(expected, 2000),
+        2000,
+      ]);
     }
   },
 );
+
+test("silent narration preserves authored text and gets enough reading time", () => {
+  const { root, run, commands } = recordFixture(
+    '# Save a name\n## We enter a task name so the viewer can follow.\ntype "#name" "Ada"\n## We save the task.\nclick "#save"\n',
+  );
+  const result = run();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  expect(
+    commands()
+      .filter((args) => args[2] === "wait")
+      .map((args) => Number(args[3])),
+  ).toEqual([1500, 4000, 2200, 2000]);
+  expect(
+    JSON.parse(
+      readFileSync(join(root, "take.webm.steps.json"), "utf8"),
+    ).steps.map((step: { caption: string }) => step.caption),
+  ).toEqual([
+    "We enter a task name so the viewer can follow.",
+    "We save the task.",
+  ]);
+});
+
+test.each([
+  'type "#name" "Ada"\n## We save the task.\nclick "#save"\n',
+  '##   \ntype "#name" "Ada"\n## We save the task.\nclick "#save"\n',
+  '## We enter a name.\ntype "#name" "Ada"\nclick "#save"\n',
+  '## We enter a name.\ntype "#name" "Ada"\n## We save the task.\nclick "#save"\n  click "#retry"\n',
+])("missing action narration fails before opening a browser: %j", (flow) => {
+  const { run, commands } = recordFixture(flow);
+  const result = run();
+  expect(result.exitCode).toBe(2);
+  expect(result.stderr.toString()).toContain("## narration");
+  expect(commands()).toEqual([]);
+});
 
 test.each([
   {

@@ -65,7 +65,7 @@ try {
       });
       const page = await context.newPage();
       const started = performance.now();
-      const steps = [{ at: 0, caption: "Type a task name" }];
+      const steps = [{ at: 0, caption: "We enter a task name." }];
       const states: Sample[] = [];
       const mark = (caption: string) =>
         steps.push({ at: (performance.now() - started) / 1000, caption });
@@ -86,7 +86,7 @@ try {
         control: Locator = page.getByRole("button", { name: "Save task" }),
       ) => {
         // Assert readiness before holding readable evidence; not a test wait.
-        await Bun.sleep(1300);
+        await Bun.sleep(4000);
         const target = await control.boundingBox();
         assert(target, `${state}: action target missing`);
         states.push({
@@ -102,13 +102,13 @@ try {
         .pressSequentially("Review demo", { delay: 90 });
       await capture("typing", page.getByLabel("Task name"));
       if (side === "before") {
-        mark("Save the task");
+        mark("We save the task and check its confirmation.");
         await page.getByRole("button", { name: "Save task" }).click();
         await clickSample("success");
         await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
         await capture("success");
       } else {
-        mark("Service fails; keep the task");
+        mark("We submit the task; the error keeps our input intact.");
         await page.getByLabel("Simulate unavailable service").check();
         await page.getByRole("button", { name: "Save task" }).click();
         await clickSample("error");
@@ -117,7 +117,7 @@ try {
         );
         await expect(page.getByLabel("Task name")).toHaveValue("Review demo");
         await capture("error");
-        mark("Retry the save");
+        mark("We retry the save and confirm the task is saved.");
         await page.getByLabel("Simulate unavailable service").uncheck();
         await page.getByRole("button", { name: "Save task" }).click();
         await clickSample("recovery");
@@ -216,6 +216,39 @@ try {
     assert(layout.bottom <= 190, `${id}: label overlaps the recorded UI`);
     assert(layout.scrollWidth <= layout.width, `${id}: label overflows`);
   }
+  const subtitleLayout = await page
+    .locator(".caption")
+    .first()
+    .evaluate((element) => {
+      const text = element.querySelector("span");
+      if (!text) throw new Error("Subtitle text missing");
+      text.textContent =
+        "We save this task, then check the confirmation without losing the text we entered.";
+      const box = element.getBoundingClientRect();
+      const content = text.getBoundingClientRect();
+      return {
+        inset: content.left - box.left,
+        bottom: content.bottom,
+        top: content.top,
+        height: content.height,
+        lineHeight: Number.parseFloat(getComputedStyle(text).lineHeight),
+        boxTop: box.top,
+        boxBottom: box.bottom,
+      };
+    });
+  assert(
+    subtitleLayout.inset >= 24,
+    "Narration subtitles need horizontal padding",
+  );
+  assert(
+    subtitleLayout.top >= subtitleLayout.boxTop &&
+      subtitleLayout.bottom <= subtitleLayout.boxBottom,
+    "Narration subtitle overflows its background",
+  );
+  assert(
+    subtitleLayout.height <= subtitleLayout.lineHeight * 2 + 1,
+    "Keep narration readable within 2 lines",
+  );
   const metrics = [];
   for (const [side, states] of Object.entries(samples)) {
     const duration = durations[side === "before" ? 0 : 1];
