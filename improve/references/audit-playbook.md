@@ -100,6 +100,8 @@ The goal is not a percentage -- it's *which untested code is dangerous*.
 
 Audit **fast, useful, hard-to-bypass** checks before recommending more agent instructions.
 Apply [Hayden Bleasel's loop principles](https://haydenbleasel.com/writing/ultracite), not a wholesale preset or tool migration.
+For concrete TypeScript/JavaScript checks or requested plugin setup, use the
+[anti-slop rule-selection guide](../../shared/anti-slop.md).
 
 - **Fast:** trace edit -> formatter/lint -> types/tests -> handoff/CI. Measure representative
   changed-file and full-gate commands on the same revision/environment, separating startup

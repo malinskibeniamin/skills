@@ -60,6 +60,8 @@ they judge; a justified rule correction needs known-bad and valid cases through 
 For authorization proof types, trace creation to the trusted checking module. A cast,
 exported unchecked constructor, or comment claiming safety cannot replace the authorization
 check; green types alone do not establish that the trusted module is sound.
+For chained assertions, discarded type evidence, or proposed anti-slop rules, use the
+[anti-slop checklist](../shared/anti-slop.md); upstream taste alone is not a finding.
 
 ## 5. Patterns that will spread
 
