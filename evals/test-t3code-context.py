@@ -1,7 +1,9 @@
 """Public selection contracts; no source-text assertions or native-tool execution claims."""
 
 import json
+import shlex
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -41,6 +43,10 @@ class ContextTest(unittest.TestCase):
 
     def test_normal_entrypoints_select_target_native_verification_without_running_it(self):
         self.t3()
+        marker = self.root / "executed"
+        command = self.write("scripts/check-changed.py", f"from pathlib import Path\nPath({str(marker)!r}).write_text('unexpected execution')\n")
+        self.manifest["scripts"]["check:changed"] = shlex.join([sys.executable, str(command)])
+        self.write("package.json", json.dumps(self.manifest))
         for entrypoint in ("work", "tdd", "dogfood", "full-send"):
             with self.subTest(entrypoint=entrypoint):
                 result = self.result(entrypoint)
@@ -48,9 +54,7 @@ class ContextTest(unittest.TestCase):
                 self.assertEqual(result["verification_script"], "check:changed")
                 self.assertEqual(result["references"], [str(self.root / "AGENTS.md")])
                 self.assertEqual(result["skills"], [])
-        # This target command would fail if the resolver executed it.
-        self.write("scripts/check-changed.ts", "throw new Error('must not execute')")
-        self.assertEqual(self.result("work")["verification_script"], "check:changed")
+                self.assertFalse(marker.exists(), "Selection executed target code")
 
     def test_dogfood_selects_each_surface_and_reports_missing_tools(self):
         self.t3()
@@ -93,7 +97,8 @@ class ContextTest(unittest.TestCase):
                 self.t3()
             self.assertEqual(self.result("full-send", "--tool", "watch_pull_request")["pr_watch"], "not-requested")
             self.assertEqual(self.result("full-send", "--babysit")["pr_watch"], "foreground")
-            self.assertEqual(self.result("full-send", "--babysit", "--tool", "watch_pull_request")["pr_watch"], "native")
+            self.assertEqual(self.result("full-send", "--babysit", "--tool", "watch_pull_request")["pr_watch"], "foreground")
+            self.assertEqual(self.result("full-send", "--babysit", "--allow-wake", "--tool", "watch_pull_request")["pr_watch"], "native")
 
     def test_missing_native_check_does_not_invent_a_command(self):
         self.t3()
@@ -114,6 +119,9 @@ class ContextTest(unittest.TestCase):
         result = self.cli("tdd", "--babysit")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("full-send", result.stderr)
+        result = self.cli("full-send", "--allow-wake")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("requires --babysit", result.stderr)
 
     def test_root_must_be_a_directory(self):
         process = subprocess.run(["python3", str(SCRIPT), "--root", str(self.root / "package.json"),

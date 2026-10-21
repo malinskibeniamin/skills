@@ -80,10 +80,8 @@ Uruchom ponownie rzeczywisty punkt wejścia; powtórz zamierzone użycie i każd
 
 Używaj narzędzi projektu. Świeży agent wymaga jawnej delegacji.
 
-W checkoucie T3 ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) z punktem wejścia `dogfood` i zmienianymi powierzchniami; załaduj wybrane umiejętności weryfikacji bez kolejnego wywołania przez człowieka. Brak narzędzi natywnych pozostaje luką, nie dowodem pokrycia przeglądarki lub aplikacji natywnej.
-
 Jeśli istnieje lokalna dla projektu umiejętność `verify-*`, użyj jej mechanizmów doctor, drive, evidence i cleanup.
-Podczas weryfikacji UI w checkoutcie T3 Code załaduj [weryfikację web/desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
+Podczas weryfikacji UI w checkoutcie T3 Code najpierw ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context), a następnie załaduj [weryfikację web/desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
 lub [weryfikację natywnej aplikacji mobilnej](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md), zależnie od obszaru.
 Wymagaj odpowiednich narzędzi Browser lub Device; ich brak oznacza weryfikację BLOCKED,
 a nie instalację ani przejście na inny harness. Inne repozytoria zachowują własne punkty wejścia.

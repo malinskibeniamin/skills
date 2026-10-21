@@ -16,7 +16,7 @@ Dogfood each slice and final PR. Tests are not dogfood.
 3. Map behavior to real entrypoints, including skill resources/scripts and hook events.
    Standalone docs, tests and evals need no experiential coverage.
 
-Cover this turn locally; every runnable branch behavior before PR or shipping.
+Cover changed runnable branches locally before PR/shipping.
 
 ## Loop
 
@@ -26,7 +26,7 @@ Run **use -> abuse -> repair -> replay**.
 
 Exercise intended journeys; inspect output, transitions, effects, console, network and logs.
 
-Use representative live-scale data (production-like shape/cardinality). Compare expected/observed
+Use live-scale data (production-like shape/cardinality); compare expected/observed
 counts, ordering, timing, state and effects; expose accumulation.
 
 For bugs, replay the reporter's exact steps unfixed. If you cannot reproduce it,
@@ -74,7 +74,7 @@ stateful bugs or recurring repro gaps. PASS binds to the current runnable state.
 Fresh agents require explicit delegation.
 
 If a project-local `verify-*` skill exists, use its doctor, drive, evidence, and cleanup.
-T3 Code checkout UI only: load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
+T3 Code checkout UI only: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context), then load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
 [native mobile](../t3code-skills/test-t3-mobile/SKILL.md). Missing Browser/Device tools mean
 BLOCKED, not installing or switching harnesses.
 Verifier drift routes to `/maintain-verification-skill`; a recurring missing path routes to
@@ -82,7 +82,7 @@ Verifier drift routes to `/maintain-verification-skill`; a recurring missing pat
 
 ## Receipt
 
-`Verdict: PASS | FAIL | BLOCKED`; report entrypoint, actions and observations:
+`Verdict: PASS | FAIL | BLOCKED`; include:
 
 - **Entrypoint:** exact command, URL, event, or consumer.
 - **Actions:** intended journey and break attempts.

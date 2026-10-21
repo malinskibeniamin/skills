@@ -79,10 +79,8 @@ UI 内容/布局风险：使用 Skill 工具调用 "break-ui"。在重放和回�
 
 优先使用项目原生工具。新智能体需要明确授权委派。
 
-在 T3 检出中，以 `dogfood` 为入口并指定受影响的界面，解析[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；直接加载所选验证技能，无需用户再次调用。缺少原生工具仍是验证缺口，不能声称已覆盖浏览器或原生应用。
-
 如果存在项目本地的 `verify-*` 技能，请使用其中的 doctor、drive、evidence 和 cleanup。
-在 T3 Code 检出目录中验证 UI 时，根据受影响的界面加载 [Web/桌面验证](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
+在 T3 Code 检出目录中验证 UI 时，先解析[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)，再根据受影响的界面加载 [Web/桌面验证](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
 或[原生移动端验证](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。
 必须具备相应的 Browser 或 Device 工具；缺少工具意味着验证 BLOCKED，
 而不是安装或切换到另一套验证工具。其他仓库继续使用自身的入口。
