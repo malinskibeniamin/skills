@@ -3,11 +3,12 @@ import {
   mkdtempSync,
   mkdirSync,
   rmSync,
+  statSync,
   symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 const hooks = [
   new URL("../.claude/hooks/biome-autofix.sh", import.meta.url).pathname,
@@ -26,11 +27,11 @@ afterEach(() => {
 
 function fixture(scripts: Record<string, string>, files = ["src/index.ts"]) {
   const root = mkdtempSync(join(tmpdir(), "biome-stop-"));
-  const session = `biome-stop-${crypto.randomUUID()}`;
-  const state = `/tmp/hook-session-${session}`;
-  cleanup.push(root, state);
+  cleanup.push(root);
+  const state = mkdtempSync("/tmp/hook-session-biome-stop-");
+  cleanup.push(state);
+  const session = basename(state).slice("hook-session-".length);
   mkdirSync(join(root, "bin"));
-  mkdirSync(state);
   writeFileSync(join(root, "package.json"), JSON.stringify({ scripts }));
   writeFileSync(
     join(root, "bin/bun"),
@@ -93,6 +94,7 @@ for (const hook of hooks) {
   describe(hook, () => {
     test("runs the consumer's file checker and reports a failed invocation", async () => {
       const f = fixture({ "check:files": "consumer-check" });
+      expect(statSync(f.state).mode & 0o077).toBe(0);
       const result = run(hook, f, {
         CHECK_EXIT: "1",
         CHECK_OUTPUT: "Invalid checker configuration",
