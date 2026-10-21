@@ -101,7 +101,7 @@ fill "#name" "Ada Lovelace"
 click "#save"
 wait --text "Saved Ada"
 FLOW
-    pr_video_check 'PR_VIDEO_STEP_MS=300 "$PR_VIDEO" record "file://$work/app.html" "$work/flow.txt" "$work/flow.webm" >/dev/null 2>&1 && [ -s "$work/flow.webm" ]' \
+    pr_video_check 'PR_VIDEO_STEP_MS=1000 "$PR_VIDEO" record "file://$work/app.html" "$work/flow.txt" "$work/flow.webm" >/dev/null 2>&1 && [ -s "$work/flow.webm" ]' \
       'record replays a flow file into a video'
     pr_video_check '"$PR_VIDEO" compose "$work/flow.webm" "$work/after.webm" "$work/flow-out" >/dev/null 2>&1' \
       'a recorded flow passes the motion gate'
