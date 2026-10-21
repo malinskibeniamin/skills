@@ -21,7 +21,7 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
-Przeglądaj istniejącą pracę. Zachowaj jednego właściciela; delegowanie wymaga jawnej zgody. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj bez jawnej intencji. Żądane naprawy przechodzą do [dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) w nazwanym zakresie.
+Przeglądaj ustalony zakres. Zachowaj jednego właściciela; delegowanie wymaga jawnej zgody. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj bez jawnej intencji. Żądane naprawy przechodzą do [dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) w nazwanym zakresie.
 
 ## Kontrakt przeglądu [#review-contract]
 
@@ -32,9 +32,12 @@ Przeglądaj istniejącą pracę. Zachowaj jednego właściciela; delegowanie wym
   testy nie zastępują doświadczenia.
 - **Stop**: uwzględnij każdą powierzchnię; znaleziska wymagają dowodu, konsekwencji, priorytetu, poprawki i weryfikacji.
 
-Zapytaj tylko, jeśli brakuje ustalonego punktu. W przeciwnym razie ustaw
+Zapytaj tylko, jeśli brakuje ustalonego punktu. W przeciwnym razie wyznacz
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`,
-a następnie sprawdź pełny diff i log.
+przypnij SHA końca i wspólnego przodka, a następnie sprawdź pełny diff i log tych rewizji.
+Dla WIP uwzględnij zmiany w indeksie, poza indeksem i istotne pliki nieśledzone; nazwij wyłączenia.
+Przed testami mutacyjnymi lub równoległym odczytem użyj [migawek źródła](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests).
+Przed werdyktem sprawdź tożsamość migawki; zmiana wejścia unieważnia odpowiednie dowody.
 
 ## Pętla dowodowa [#evidence-loop]
 
@@ -70,7 +73,8 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Powierzchnia | Kontrola |
 |---|---|
 | UI/CLI/raport dla klienta | Render, stany, tekst, klawiatura/a11y, konsola, viewport |
-| Bezpieczeństwo/prywatność/utrata danych | Zaufanie, autoryzacja, sekrety, wstrzyknięcia, odzyskiwanie |
+| Bezpieczeństwo/prywatność/utrata danych | Atakujący/dostęp, granica zaufania, przepływ poświadczeń od źródła do ujścia, osiągalny wpływ, odzyskiwanie |
+| Dokumentacja/zachowanie publiczne | Wykrywalność, wartości domyślne, pominięcie, migracja/informacje o wydaniu; zmiany wyłącznie wewnętrzne nie wymagają wpisu o wydaniu |
 | API/schemat/SQL/PostgreSQL | Zgodność, migracje, wynik generowany, rzeczywisty dialekt |
 | Go/współbieżność/workflow | Własność, anulowanie, wyścigi, ponowienia, idempotencja |
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |

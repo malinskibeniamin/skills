@@ -68,8 +68,8 @@ Apply [references/review-evidence.md](references/review-evidence.md): missing re
 Output a single JSON block per [findings-schema.md](references/findings-schema.md).
 
 - Set `reviewer` to `"code-reviewer"`
-- Map findings: security/breakage -> P0, defects in normal usage -> P1, edge cases/maintainability -> P2, style nits -> P3
+- Rank by reachable impact, not category: exposure/data loss/outage -> P0, normal-user defects -> P1, bounded defects -> P2, optional polish -> P3 summary only
 - Spec compliance gaps are P1 minimum (P0 if requirement entirely missing)
-- Use `pre_existing: true` for issues in dirty baseline (from SubagentStart context)
+- Use `pre_existing: true` only when the defect itself exists in the supplied baseline, not merely in a dirty file
 - Include `testing_gaps` for missing test coverage
 - Include `simplification_opportunities` if you spot them, even though it's not your primary focus

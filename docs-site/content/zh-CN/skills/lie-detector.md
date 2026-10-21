@@ -21,8 +21,8 @@ type: skill
 将变更视为尚未得到证实。为“此变更不应合并”构建最有力的论证，再让差异中的证据
 反驳它。可独立运行，也可在 `/review` 中作为**测谎审查角色**，审查每一项
 差异；优先关注面向客户的部分（UI、文案、CLI 输出、公共 API、报告）。
-代码缺陷由 `/review` 负责；价值判断由 `/product` 负责。在已提交的工作树上操作；将 `BASE`
-设为合并基点。
+代码缺陷由 `/review` 负责；价值判断由 `/product` 负责。使用固定的审查范围，
+若请求包含 WIP，则纳入明确捕获的 WIP。
 
 ## 1. 缺乏证据的声明 [#1-claims-without-evidence]
 
@@ -54,11 +54,12 @@ type: skill
 
 对于每个新增或修改的测试：
 
-1. 破坏它声称保护的行为：执行 `git diff "$BASE" -- <src> | git apply -R`，
-   反转已修改的条件，移除渲染的元素，或更改用户看到的值
-   （文案、计数、状态）；仅破坏连接关系会漏掉恒真断言。运行测试，然后执行
-   `git checkout HEAD -- <src>`。代码已被破坏，测试却仍然通过：这个测试在说谎。测试失败必须
-   来自断言，而不是导入、编译或初始化错误。记录命令和测试失败信息。
+1. 按[审查隔离](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests)在一次性快照中
+   破坏测试声称保护的行为：反转变更条件、移除渲染元素或改变用户可见的值。
+   仅破坏连接关系会漏掉恒真断言。在快照中重新运行测试；保持原始文件、
+   索引和分支不变。仍然通过：测试在说谎。RED 必须来自断言失败，
+   而非环境设置失败。记录命令和失败；无法隔离时应明确报告证据缺口，
+   而不是修改当前检出目录。
 2. 按照 [test-audit 无效测试模式](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#junk-patterns)检查仍然通过的测试。
 3. 行为变更，如果既没有经历过失败的测试，也没有通过真实入口重放验证（`/dogfood`），
    就尚未得到证实。

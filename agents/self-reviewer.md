@@ -58,7 +58,7 @@ You receive session context via SubagentStart hook:
 - Unsanitized user input flowing into DOM or queries?
 
 ### 6. Pre-Existing Filter
-Compare each finding against the dirty baseline. If the issue existed before this session, mark `pre_existing: true`. Never block merge for pre-existing issues.
+Compare each finding's behavior against the supplied baseline. A dirty filename alone is not proof: newly introduced defects in that file remain in scope. Mark `pre_existing: true` only for a defect shown to predate the change. Never block merge for pre-existing issues.
 
 
 ## Resilience + Visual Review Evidence

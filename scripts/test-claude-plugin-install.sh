@@ -197,6 +197,8 @@ $hook_scripts
 EOF
 [ -f "$installed_path/shared/hook-lib.sh" ] ||
   fail "installed hooks are missing their shared library"
+[ -f "$installed_path/agents/references/findings-schema.jq" ] ||
+  fail "installed reviewer hooks are missing their validation contract"
 
 printf 'Claude plugin installation test passed: %s (%s skills)\n' \
   "$plugin_id version $expected_version" \
