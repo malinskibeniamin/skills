@@ -41,6 +41,39 @@ for (const appearance of ["desktop-light", "mobile-dark"]) {
         await expect(
           main.locator('a[href$="/shared/delivery-workflow.md"]'),
         ).toBeVisible();
+        const snapshotGuidance = main.locator(
+          'a[href$="/review/REFERENCE.md#source-snapshots-and-mutation-tests"]',
+        );
+        await expect(snapshotGuidance).toBeVisible();
+        await stabilizeScreenshotDate(page, false);
+        await snapshotGuidance.scrollIntoViewIfNeeded();
+        await expect(page).toHaveScreenshot(
+          `review-snapshot-${locale}-${appearance}.png`,
+        );
+        await main.getByRole("table").first().scrollIntoViewIfNeeded();
+        await main.getByRole("table").first().hover();
+        await page.mouse.wheel(900, 0);
+        await expect
+          .poll(() =>
+            page.evaluate(
+              () => document.documentElement.scrollWidth <= window.innerWidth,
+            ),
+          )
+          .toBe(true);
+        await expect(page).toHaveScreenshot(
+          `review-checks-${locale}-${appearance}.png`,
+        );
+
+        await page.goto(`${prefix}/skills/lie-detector`);
+        const mutationGuidance = main.locator(
+          'a[href$="/review/REFERENCE.md#source-snapshots-and-mutation-tests"]',
+        );
+        await expect(mutationGuidance).toBeVisible();
+        await stabilizeScreenshotDate(page, false);
+        await mutationGuidance.scrollIntoViewIfNeeded();
+        await expect(page).toHaveScreenshot(
+          `mutation-isolation-${locale}-${appearance}.png`,
+        );
 
         await page.goto(`${prefix}/skills/go`);
         const sharedDelivery = main.locator(

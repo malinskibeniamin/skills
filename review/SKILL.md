@@ -11,7 +11,7 @@ Scoped repairs: [author delivery](../shared/delivery-workflow.md). Posting comme
 ## Review contract
 
 - **Objective**: does the diff achieve its outcome without a credible defect?
-- **Guardrails**: diff-introduced only; keep standards separate from product/spec gaps;
+- **Guardrails**: diff-introduced only; standards separate from product/spec gaps;
   generated files are evidence.
 - **Verification**: Dogfood every runnable change yourself at its real entrypoint.
 - **Stop**: cover every surface and evidence gap.
@@ -37,7 +37,7 @@ Recheck identity before verdict; drift invalidates affected evidence.
 4. Check independent artifacts in relevant unchanged code, base, recent history,
    runtime evidence and fixtures; match fixtures to production shape.
 5. Build a behavioral counterexample. Map permissions/surfaces; skip formatter-owned style and pre-existing defects.
-6. What can fail despite green tests?
+6. What could still be wrong if tests pass?
 
 ### Verify
 
