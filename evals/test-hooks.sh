@@ -89,11 +89,12 @@ run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "subagent-stop passes through non-reviewer agents"
 
 # ── SubagentStop: valid findings JSON accepted (exit 0) ──────────
-VALID_FINDINGS='{"agent_type":"code-reviewer","session_id":"test-eval","last_assistant_message":"```json\n{\"schema_version\":1,\"reviewer\":\"code-reviewer\",\"status\":\"APPROVED\",\"findings\":[],\"testing_gaps\":[],\"simplification_opportunities\":[]}\n```"}'
+VALID_FINDINGS='{"agent_type":"code-reviewer","session_id":"test-eval","last_assistant_message":"```json\n{\"schema_version\":1,\"reviewer\":\"code-reviewer\",\"status\":\"APPROVED\",\"findings\":[],\"testing_gaps\":[],\"simplification_opportunities\":[],\"sufficiency\":\"Reviewed the complete change and affected callers; no actionable findings.\"}\n```"}'
 run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "$VALID_FINDINGS" \
   0 \
-  "subagent-stop accepts valid findings JSON"
+  "subagent-stop accepts valid findings JSON" \
+  "code-reviewer: APPROVED"
 
 # ── SubagentStop: missing JSON block rejected (exit 2) ───────────
 run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
