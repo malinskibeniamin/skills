@@ -3,26 +3,26 @@ name: writing-for-agents
 description: Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.
 ---
 
-Change agent behavior with minimum context in skills, `AGENTS.md`, `CLAUDE.md`, and references. For skills, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md).
+For skills, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md).
 
 ## Depth
 
-A **context pointer** names external material and when to read it; it spends context load. Progressive disclosure uses the shallowest depth:
+A **context pointer** names external material and its trigger: context load. Progressive disclosure uses the shallowest depth:
 
 1. Inline universal steps.
 2. Inline reference needed during them.
 3. Link branch-only detail with a precise trigger.
 4. Treat the environment as a source of truth; cache only expensive lookups.
 
-Front-load pointer triggers, name each branch once, and never hide mandatory steps in references.
+Front-load triggers; name branches once. Keep mandatory steps inline.
 
 ## Executable instructions
 
 - Use imperatives and repo terms.
-- Give each step an observable completion criterion.
-- Put deterministic rules in existing formatter/linter/type/test checks; point agent docs to the owning command/config before edits. Keep non-inferable intent and exceptions in prose, not a duplicate rule catalog. Instructions alone are not enforcement.
+- Give steps observable completion criteria.
+- Enforce deterministic rules in existing checks; link owning commands/configs before edits. Prose carries intent/exceptions, not duplicate rule catalogs. Instructions are not enforcement.
 - Define a leading term only when it replaces repetition.
-- Negation activates the named behavior. Prompt the **positive** target; keep prohibitions only for hard guardrails and pair with safe action.
+- Negation activates behavior. Prefer **positive** targets; reserve prohibitions for hard guardrails and pair with safe action.
 - Split sequences only when later visible steps cause premature completion.
 
 ## Behavioral evaluations
@@ -33,7 +33,7 @@ Run the prompt-blinding preflight before paid evals.
 
 ## Compress
 
-Hunt no-ops: delete every line whose removal changes no behavior.
+Delete no-ops: removal changes no behavior.
 
 - One meaning, one source of truth.
 - Remove identity already in filename/target/heading.
@@ -43,4 +43,4 @@ Hunt no-ops: delete every line whose removal changes no behavior.
 - Fix unclear code/config instead of documenting mechanics.
 - Move branch-only detail behind a pointer; co-locate rule, definition, caveats.
 
-Stop at the shortest version that selects the right branch, preserves guardrails, and makes completion testable.
+Stop when the shortest version selects correctly, preserves guardrails and proves completion.
