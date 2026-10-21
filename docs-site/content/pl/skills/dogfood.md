@@ -81,6 +81,10 @@ Uruchom ponownie rzeczywisty punkt wejścia; powtórz zamierzone użycie i każd
 Używaj narzędzi projektu. Świeży agent wymaga jawnej delegacji.
 
 Jeśli istnieje lokalna dla projektu umiejętność `verify-*`, użyj jej mechanizmów doctor, drive, evidence i cleanup.
+Podczas weryfikacji UI w checkoutcie T3 Code załaduj [weryfikację web/desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
+lub [weryfikację natywnej aplikacji mobilnej](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md), zależnie od obszaru.
+Wymagaj odpowiednich narzędzi Browser lub Device; ich brak oznacza weryfikację BLOCKED,
+a nie instalację ani przejście na inny harness. Inne repozytoria zachowują własne punkty wejścia.
 Rozbieżność weryfikatora kieruj do `/maintain-verification-skill`; powtarzający się brak ścieżki kieruj do
 `/create-verification-skill` po uzyskaniu dowodu.
 
