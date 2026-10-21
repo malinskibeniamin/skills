@@ -47,6 +47,12 @@ sidebar:
 - **只有一个适配器意味着接缝是假想的；两个适配器意味着接缝是真实的。**
 - 小型的局部代码优于仅仅转移代码的抽象。
 
+## 从调用方开始的草图 [#caller-first-sketch]
+
+对于新增或更改的接口，先写出有代表性的调用方代码，再定义类型或签名：一个成功场景，以及一个可信的失败或拒绝场景。明确状态的所有者、它保护的不变量，以及调用方在失败时观察到的结果。复用现有领域类型；从这些调用推导出最小接口，而不是暴露内部阶段。
+
+选择设计形态前，针对草图尝试[最短的错误修改](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit)。小改动的草图可直接写在当前说明中；机械式移动不需要设计练习。仅在仍有实质性分歧或用户要求时，比较整体形态的替代方案。这不会增加实现前的暂停环节。
+
 ## 可测试性
 
 1. 接受依赖项；不要在内部创建它们。
@@ -60,5 +66,3 @@ sidebar:
 不采用按代码行数衡量深度、将接口仅理解为 TypeScript 关键字，以及含义宽泛的“边界”表述。
 
 请阅读 [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md)，了解依赖项、接缝和测试规范；阅读 [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md)，了解并行设计。
-有关读者负担、结构化约束和第一性原理集成，请使用共享的
-[Poteto 工程规则](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md)，不要在此处重复这些规则。

@@ -10,13 +10,15 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 
 ## 1. Build evidence
 
-Read request, plan, repo, tests, docs, references, and decisions. Ask only for user-owned preferences, scope, risk appetite, or decisions evidence cannot settle. Name the biggest blind spot. Prototype when behavior beats prose.
+Ground request, plan and decisions in repo/tests/docs. Ask only for user-owned preferences, scope, risk appetite, or decisions evidence cannot settle. Name the blind spot. Prototype when behavior beats prose.
 
 `/brain-dump` is optional. Preserve every opportunity track and start from its **Answer ledger**: never re-ask **Settled** entries; challenge **Tentative** only when downside matters; ask **Unknown** only when it could invalidate or prioritize a track.
 
 ## 2. Explore mode
 
-With no direction, present 2-3 approaches with trade-offs, reversibility, evidence, and a recommendation. For competing plans, Call the Skill tool with "plan-arbiter". **Challenge variant:** with a direction, steelman the best alternative and say what would make it wrong.
+Interface/ownership fork: load "codebase-design" for a caller-first sketch.
+
+With no direction, give 2-3 approaches, trade-offs, reversibility, evidence and a recommendation. For competing plans, Call the Skill tool with "plan-arbiter". **Challenge variant:** with direction, steelman the best alternative and its disproof.
 
 For customer-facing UI, show an **ASCII wireframe** before questions: each materially different layout in fenced `text`, with real labels, controls, grouping, order, and fixed/scroll regions. Align borders; show structure, not pixels. Desktop/mobile only when composition differs; shared layouts use one sketch plus deltas.
 

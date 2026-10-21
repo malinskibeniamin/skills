@@ -31,8 +31,8 @@ Include both [SKILL.md](SKILL.md) vocabulary and GLOSSARY.md vocabulary in the b
 
 Each alternative includes:
 
-1. Interface (types, methods, params -- plus invariants, ordering, error modes)
-2. Usage example showing how callers use it
+1. Caller-first sketch from [SKILL.md](SKILL.md#caller-first-sketch): success and failure, state owner, invariant
+2. Interface derived from those calls (types, methods, params -- plus ordering and error modes)
 3. What the implementation hides behind the seam
 4. Dependency strategy and adapters (see [DEEPENING.md](DEEPENING.md))
 5. Trade-offs -- where leverage is high, where it's thin
