@@ -74,6 +74,24 @@ and [MDN reduced motion](https://developer.mozilla.org/en-US/docs/Web/CSS/Refere
 Sonner examples require the installed package's types; optional multi-toaster exports
 and callback/return semantics are deliberately not frozen here.
 
+## Native workflow handoffs
+
+Keep the existing front doors and load only the capability the task needs:
+
+- `/work` and `/review` use [change evidence](change-evidence.md) to reach motion,
+  mobile-web symptoms, data/layout stress and Sonner guidance conditionally.
+- [Visual review](../visual-review/REFERENCE.md#motion-decision-framework) uses
+  `animate` as the motion owner instead of maintaining a second recipe set;
+  naming-only questions use `animation-vocabulary`, not an implementation workflow.
+- [UI prototypes](../prototype/UI.md#2-generate-radically-different-variants) load
+  motion, data-stress or mobile guidance only when it helps answer the prototype question.
+- [UX profiling](../ux-performance/OPTIMIZATION.md#reduce-react-and-main-thread-work)
+  uses `animation-performance` for measured frame problems, retaining its journey metric.
+
+These handoffs do not install Emil's whole stack, replace existing components or grant
+editing/delivery permission. The adapted skills remain the source of craft guidance;
+the local workflow remains the source of scope, evidence and endpoint rules.
+
 ## Refresh and verify
 
 Compare the upstream sources and license at one new reviewed commit. Preserve the
@@ -87,6 +105,7 @@ regenerate rather than editing Codex proxies or router rows manually:
 ```sh
 bash scripts/generate-skill-catalog.sh
 bash evals/run.sh emil-vendored-skills
+bash evals/run.sh emil-workflow-routing
 bash evals/run.sh skill-writing-quality
 bash evals/run.sh skill-md-hygiene
 bash scripts/generate-skill-catalog.sh --check
