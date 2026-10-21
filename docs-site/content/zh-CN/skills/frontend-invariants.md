@@ -1,15 +1,25 @@
 ---
-title: /frontend-invariants
 description: 应用与技术栈无关的前端不变量。适用于跨路由、状态、数据和设计系统编写或审查 React、TypeScript 或 UI 代码。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - frontend invariants
 sidebar:
   label: /frontend-invariants
+title: /frontend-invariants
+type: skill
 ---
 ![技能 /frontend-invariants 的示意图](/diagrams/skills/frontend-invariants.svg)
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/frontend-invariants.excalidraw)
 
 这些原则经受住了每一次技术栈迁移（UI 工具包、路由器、数据层、表单库和状态库都被淘汰了，而这些原则始终保留）。当不变量与特定技术栈的规则冲突时，以不变量为准；技术栈的具体机制记录在 `/stack-registry` 中。
+
+遇到 TypeScript 断言或被放宽的契约时，使用 [anti-slop 检查](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md)保留类型证据；仅有安全性注释不足以证明断言合理。
 
 ## 放大效应原则
 每一个被容忍的反模式、逃生舱或抑制措施，都会成为下一次 LLM 会话模仿和传播的训练样本。应从源头修复；只有在同一行说明理由时才能抑制；绝不允许“仅此一次”。

@@ -96,6 +96,36 @@ The goal is not a percentage -- it's *which untested code is dangerous*.
 - Missing `CLAUDE.md`/`AGENTS.md` -- for repos where agents will execute the plans, this is high-leverage: recommend one and include its outline as a plan.
 - Error messages/logging: unstructured logs on services, missing request IDs/correlation, debugging requiring code changes.
 
+### Agent check loop
+
+Audit **fast, useful, hard-to-bypass** checks before recommending more agent instructions.
+Apply [Hayden Bleasel's loop principles](https://haydenbleasel.com/writing/ultracite), not a wholesale preset or tool migration.
+For concrete TypeScript/JavaScript checks or requested plugin setup, use the
+[anti-slop rule-selection guide](../../shared/anti-slop.md).
+
+- **Fast:** trace edit -> formatter/lint -> types/tests -> handoff/CI. Measure representative
+  changed-file and full-gate commands on the same revision/environment, separating startup
+  from repeated runs. Record elapsed time, duplicate work, and diagnostic volume. Prefer
+  existing per-file fixes, incremental checks, and affected tests; retain sound project-wide
+  types and final gates. Benchmark compatible replacements only when the current tool is
+  the measured bottleneck; preserve rules, coverage, and failure exits.
+- **Useful:** sample violations against real defects and valid counterexamples. Revisit
+  disabled rules when manual repair cost was the reason, but require useful signal before
+  enabling them. Arbitrary line/parameter limits, complexity thresholds, sorting, and blanket
+  TODO bans are not automatically improvements. Catch incomplete promised behavior, not
+  legitimate tracked follow-ups. Emit actionable failures without hiding unresolved ones.
+- **Hard to bypass:** inspect casts, ignore comments, exclusions, test skips, relaxed compiler
+  options, and shell/CI paths that turn failures into success. For check changes, require a
+  known-bad case to fail and a valid case to pass through the actual command. Review the
+  checker/config diff separately from the implementation it judges. Trusted authorization
+  proof constructors must remain narrow; assertions or explanatory comments are not proof.
+  Agent-editable local checks are feedback, not a security boundary: independently owned
+  CI policy and trusted modules still need review.
+- **Up front and at handoff:** scoped agent docs should point to the owning commands/configs
+  and non-inferable standards before edits, not duplicate the rule catalog. Prefer an
+  existing formatter/linter/type/test check for deterministic rules. Green checks leave
+  product intent, review quality, and user acceptance to real-entrypoint evidence and review.
+
 ## 8. Docs
 
 Lowest default priority -- only flag where absence has a concrete cost:

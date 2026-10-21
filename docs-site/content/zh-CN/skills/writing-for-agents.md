@@ -1,9 +1,17 @@
 ---
-title: /writing-for-agents
 description: 为智能体编写文档。适用于创建或编辑技能，或修改 AGENTS.md 或 CLAUDE.md。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - writing for agents
 sidebar:
   label: /writing-for-agents
+title: /writing-for-agents
+type: skill
 ---
 ![“/writing-for-agents”技能示意图](/diagrams/skills/writing-for-agents.svg)
 
@@ -13,7 +21,7 @@ sidebar:
 
 编写技能时，请阅读 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，了解前置元数据、调用方式选择和路由器。
 
-## 将信息放在正确层级
+## 将信息放在正确层级 [#depth]
 
 **上下文指针**会指明已加载文档之外的资料，并说明何时读取。指针增加上下文负载；省略指针则依赖人的记忆。
 
@@ -26,19 +34,20 @@ sidebar:
 
 每个指针都应以前置的有力触发词开头。不同分支只命名一次。不要把必需步骤藏在参考资料中。
 
-## 编写可执行的指令
+## 编写可执行的指令 [#executable-instructions]
 
 - 使用祈使语气和仓库中的术语。
 - 每个步骤都以可观察的完成标准结束。
+- 将确定性规则放入现有的格式化、lint、类型检查或测试中；编辑前，让智能体文档指向负责该规则的命令或配置。只在文字中保留无法推断的意图和例外，不要复制规则目录。指令本身不是强制执行机制。
 - 仅当引导词能替代重复说明并改善记忆时才定义它。
 - 否定表述会激活它所提及的行为。提示正向目标；只有硬性护栏才保留禁令，并同时说明安全做法。
 - 仅当后续步骤提前可见会导致过早结束时才拆分流程。
 
-## 行为评估
+## 行为评估 [#behavioral-evaluations]
 
 将每个面向候选者的提示写成自然请求：隐藏评分规则、预期答案、评估者/模型身份和基线。只提供结果与公开验证方式，不提供实现步骤。付费评估前运行提示盲测预检。
 
-## 发布前压缩
+## 发布前压缩 [#compress]
 
 寻找无效指令：逐行询问删除后会改变什么行为。答案为“不会”时，删除该行。
 

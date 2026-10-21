@@ -1,11 +1,19 @@
 ---
-title: /writing-for-agents
 description: >-
   Pisanie dokumentów dla agentów. Używaj podczas tworzenia lub edytowania
   umiejętności albo modyfikowania plików AGENTS.md lub CLAUDE.md.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - writing for agents
 sidebar:
   label: /writing-for-agents
+title: /writing-for-agents
+type: skill
 ---
 ![Diagram umiejętności /writing-for-agents](/diagrams/skills/writing-for-agents.svg)
 
@@ -16,7 +24,7 @@ Dotyczy to umiejętności, plików `AGENTS.md`, `CLAUDE.md` i wskazanych materia
 
 Podczas pisania umiejętności przeczytaj [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md), aby poznać zasady frontmatter, wyboru sposobu wywołania i routerów.
 
-## Umieszczaj informacje na właściwym poziomie
+## Umieszczaj informacje na właściwym poziomie [#depth]
 
 **Wskaźnik kontekstu** nazywa materiał poza wczytanym dokumentem i określa, kiedy go
 przeczytać. Wskaźnik zużywa obciążenie kontekstu; jego brak obciąża pamięć człowieka.
@@ -32,22 +40,23 @@ przeczytać. Wskaźnik zużywa obciążenie kontekstu; jego brak obciąża pami�
 Zacznij każdy wskaźnik od mocnego wyzwalacza. Nazwij każdą gałąź raz. Nie ukrywaj
 obowiązkowego kroku w materiale referencyjnym.
 
-## Pisz instrukcje wykonywalne
+## Pisz instrukcje wykonywalne [#executable-instructions]
 
 - Używaj trybu rozkazującego i terminów repozytorium.
 - Kończ każdy krok obserwowalnym kryterium ukończenia.
+- Umieszczaj reguły deterministyczne w istniejących kontrolach formatowania, lintowania, typów lub testów; przed edycją kieruj dokumentację agentów do właściwego polecenia lub konfiguracji. W tekście zachowaj intencje i wyjątki, których nie da się wywnioskować, zamiast powielać katalog reguł. Same instrukcje nie egzekwują zasad.
 - Definiuj słowo przewodnie tylko wtedy, gdy zastępuje powtarzane wyjaśnienie i ułatwia zapamiętanie.
 - Negacja aktywuje nazwane zachowanie. Wskazuj pozytywny cel; zakaz zachowuj tylko dla bezwzględnej zasady ochronnej i podaj bezpieczne działanie.
 - Dziel sekwencję tylko wtedy, gdy widoczne późniejsze kroki powodują przedwczesne ukończenie.
 
-## Ewaluacje behawioralne
+## Ewaluacje behawioralne [#behavioral-evaluations]
 
 Każde polecenie skierowane do kandydata formułuj jako naturalne żądanie: ukryj reguły
 oceniającego, oczekiwaną odpowiedź, tożsamość oceniającego/modelu i wyniki bazowe. Podawaj
 rezultaty i publiczną ścieżkę weryfikacji, nie instrukcję implementacji. Przed płatnymi
 ewaluacjami uruchom kontrolę zaślepienia poleceń.
 
-## Skróć przed publikacją
+## Skróć przed publikacją [#compress]
 
 Szukaj instrukcji bez efektu: przy każdym wierszu zapytaj, jakie zachowanie zmieni się po
 jego usunięciu. Jeśli żadne, usuń wiersz.

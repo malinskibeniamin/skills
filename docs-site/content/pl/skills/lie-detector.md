@@ -70,11 +70,10 @@ Dla każdego dodanego lub zmienionego testu:
 
 ## 4. Zmiany, o które nikt nie prosił [#4-changes-nobody-asked-for]
 
-Porównaj każdy fragment diffu z zadeklarowanym zakresem. Zgłoś każdy niewyjaśniony fragment, który zmienia obserwowalne
-zachowanie lub osłabia zabezpieczenie: usunięte, pominięte lub złagodzone testy; ponownie wygenerowane migawki;
-`@ts-ignore` lub wyciszenia lintera; zmienione wartości domyślne, treści, trasy, flagi, obsługę błędów,
-ponowienia lub limity czasu; zbędne zmiany w pliku blokady zależności lub konfiguracji; ręcznie edytowane pliki generowane; zmianę wizualną
-bez zrzutu ekranu.
+Porównaj każdy fragment diffu z zadeklarowanym zakresem. Zgłoś każdy niewyjaśniony fragment, który zmienia obserwowalne zachowanie lub osłabia zabezpieczenie: usunięte, pominięte lub złagodzone testy; ponownie wygenerowane migawki; `@ts-ignore` lub wyciszenia lintera; zmienione wartości domyślne, treści, trasy, flagi, obsługę błędów, ponowienia lub limity czasu; rozszerzone wykluczenia, złagodzone reguły kompilatora lub lintera albo zamianę błędów powłoki lub CI w sukces; zbędne zmiany w pliku blokady zależności lub konfiguracji; ręcznie edytowane pliki generowane; zmianę wizualną bez zrzutu ekranu. Sprawdzaj zmienione kontrole i konfiguracje oddzielnie od ocenianej implementacji; uzasadniona poprawka reguły wymaga znanych błędnych i prawidłowych przypadków uruchomionych jej rzeczywistym poleceniem.
+
+Dla typów dowodzących autoryzacji prześledź tworzenie dowodu do zaufanego modułu kontrolującego uprawnienia. Rzutowanie, wyeksportowany konstruktor bez kontroli lub komentarz deklarujący bezpieczeństwo nie zastępują kontroli autoryzacji; samo pomyślne sprawdzenie typów nie dowodzi poprawności zaufanego modułu.
+Przy łańcuchach asercji, utracie informacji o typach lub proponowanych regułach anti-slop korzystaj z [listy kontrolnej anti-slop](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md); sama preferencja projektu źródłowego nie jest ustaleniem.
 
 ## 5. Wzorce, które będą powielane [#5-patterns-that-will-spread]
 

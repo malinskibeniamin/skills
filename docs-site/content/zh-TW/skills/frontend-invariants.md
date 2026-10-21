@@ -1,15 +1,25 @@
 ---
-title: /frontend-invariants
 description: 套用不受技術堆疊限制的前端不變原則。適用於撰寫或審查橫跨路由、狀態、資料與設計系統的 React、TypeScript 或 UI 程式碼。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - frontend invariants
 sidebar:
   label: /frontend-invariants
+title: /frontend-invariants
+type: skill
 ---
 ![「/frontend-invariants」技能示意圖](/diagrams/skills/frontend-invariants.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/frontend-invariants.excalidraw)
 
 這些原則歷經每次技術堆疊遷移後依然適用（UI 套件、路由器、資料層、表單與狀態函式庫都曾遭淘汰，唯獨這些原則屹立不搖）。當不變原則與特定技術堆疊的規則衝突時，以不變原則為準；技術堆疊的運作細節則記載於 `/stack-registry`。
+
+遇到 TypeScript 斷言或被放寬的契約時，使用 [anti-slop 檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md)保留型別證據；只有安全性註解不足以證明斷言合理。
 
 ## 放大效應原則
 每個被容忍的反模式、逃生通道或抑制措施，都會成為下一個 LLM 工作階段模仿並散播的訓練範例。從源頭修正；只有在同一行註明理由時才能抑制；絕不容許「只此一次」。

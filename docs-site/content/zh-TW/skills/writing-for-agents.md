@@ -1,9 +1,17 @@
 ---
-title: /writing-for-agents
 description: 為代理程式撰寫文件。建立或編輯技能，或修改 AGENTS.md 或 CLAUDE.md 時使用。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - writing for agents
 sidebar:
   label: /writing-for-agents
+title: /writing-for-agents
+type: skill
 ---
 ![「/writing-for-agents」技能的圖解](/diagrams/skills/writing-for-agents.svg)
 
@@ -13,7 +21,7 @@ sidebar:
 
 撰寫技能時，請閱讀 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，以瞭解 frontmatter、叫用方式的選擇，以及路由器。
 
-## 將資訊放在正確層級
+## 將資訊放在正確層級 [#depth]
 
 **情境指標**會指出已載入文件之外的資料，並說明何時讀取。指標增加情境負載；省略指標則依賴人的記憶。
 
@@ -26,19 +34,20 @@ sidebar:
 
 每個指標都應以前置的有力觸發詞開頭。不同分支只命名一次。不要把必要步驟藏在參考資料中。
 
-## 撰寫可執行的指令
+## 撰寫可執行的指令 [#executable-instructions]
 
 - 使用祈使語氣及儲存庫中的術語。
 - 每個步驟都以可觀察的完成標準結束。
+- 將確定性規則放入既有的格式化、lint、型別檢查或測試中；編輯前，讓代理文件指向負責該規則的指令或設定。文字只保留無法推斷的意圖與例外，不要複製規則目錄。指令本身不是強制執行機制。
 - 只有在引導詞能取代重複說明並改善記憶時才定義它。
 - 否定表述會啟動它所提及的行為。提示正向目標；只有硬性護欄才保留禁令，並搭配安全做法。
 - 只有在後續步驟提前可見會導致過早結束時才拆分流程。
 
-## 行為評估
+## 行為評估 [#behavioral-evaluations]
 
 將每個面向候選者的提示寫成自然請求：隱藏評分規則、預期答案、評估者/模型身分與基準。提供成果與公開驗證方式，而非實作配方。付費評估前執行提示盲測預檢。
 
-## 發布前壓縮
+## 發布前壓縮 [#compress]
 
 找出無效指令：逐行詢問刪除後會改變什麼行為。答案為「不會」時，刪除該行。
 

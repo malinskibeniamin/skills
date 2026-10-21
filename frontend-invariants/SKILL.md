@@ -8,6 +8,9 @@ paths:
 
 These survive stack migrations and override conflicting stack mechanics in `/stack-registry`. Every tolerated escape hatch trains later sessions: fix at source; suppress only with a same-line reason.
 
+For TypeScript assertions or widened contracts, use [anti-slop checks](../shared/anti-slop.md)
+to preserve type evidence; a safety comment alone does not justify a cast.
+
 ## Rendering
 
 1. Never lie: no fake defaults, lossy display of undecodable data, or truthiness hiding numeric zero. Degraded states name possible causes, preserve the reported reason, and offer retry.

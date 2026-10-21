@@ -3,27 +3,23 @@ name: lie-detector
 description: "Catch what a change claims but does not do: hallucinated APIs or claims, code that fakes success, tests that cannot fail, unrequested changes, copyable anti-patterns. Use on every PR."
 ---
 
-Treat change as unproven; steelman "this should not merge", then demand evidence.
-Run standalone or as the **lie-detector hat** in `/review` on every diff; prioritize
-customer-facing UI, copy, CLI output, public APIs and reports. Code defects stay
-in `/review`; value in `/product`. Use pinned scope, including captured WIP.
+Treat changes as unproven; steelman "this should not merge". Standalone or inline
+**lie-detector hat** in `/review` on every diff; prioritize customer-facing surfaces.
+Defects: `/review`; value: `/product`. Pin scope, including captured WIP.
 
 ## 1. Claims without evidence
 
-List claims in the PR title, body, commits, comments, docs, and agent summary.
-Each needs a diff line, command output, or primary doc:
+Require diff lines, command output or primary docs for claims in PRs, commits, code, docs and summaries:
 
-- Phantom surface: an imported symbol, prop, hook, CLI flag, config key, env var, design
-  token, route, or option that does not exist at the installed version. Check lockfile,
-  `node_modules` types, or primary docs, not memory.
+- Phantom surface: symbol/prop/hook/flag/config/env/token/route/option absent at the installed version.
+  Check lockfile, `node_modules` types or primary docs, not memory.
 - "Tested", "verified", "fixes X", "no behavior change": needs the command and output or a
   red-then-green pair.
-- A cited file:line, issue, or doc that does not say what the claim says.
+- Citations that do not support their claims.
 
 ## 2. Code that pretends
 
-Trace each changed path to what the user or caller actually gets. Flag code that reports
-work it did not do:
+Trace changed paths to caller-visible output; flag unperformed work:
 
 - success before the work completes: a toast, redirect, or `200` before the mutation,
   write, or invalidation resolves;
@@ -49,20 +45,23 @@ For each added or changed test:
 
 ## 4. Changes nobody asked for
 
-Compare every hunk with the stated scope. Flag each unexplained hunk that changes observable
-behavior or weakens a guard: deleted, skipped, or loosened tests; regenerated snapshots;
+Flag unexplained out-of-scope behavior changes or weakened guards: deleted, skipped, or loosened tests; regenerated snapshots;
 `@ts-ignore` or lint suppressions; changed defaults, copy, routes, flags, error handling,
-retries, or timeouts; lockfile or config churn; hand-edited generated files; a visual change
-with no screenshot.
+retries, or timeouts; widened exclusions, relaxed compiler/lint rules, or shell/CI failure
+exits turned into success; lockfile or config churn; hand-edited generated files; a visual
+change with no screenshot. Review changed checks/configs separately from the implementation
+they judge; a justified rule correction needs known-bad and valid cases through its real command.
+
+Trace auth-proof creation: casts, unchecked constructors and comments cannot authorize.
+Green types do not prove a trusted module sound. For assertions/type evidence/rules, use
+[anti-slop](../shared/anti-slop.md); taste is not a defect.
 
 ## 5. Patterns that will spread
 
-People and agents copy the nearest example. For each idiom the diff introduces, find
-precedent with `rg` and compare with root and scoped `CLAUDE.md`/`AGENTS.md`, `exemplars/`,
-and the stack registry. Contradicting a documented rule or the dominant idiom is a finding;
-severity follows copy reach: a shared component, hook, fixture, test helper, template,
-generator, exemplar, or skill is P1; leaf code is P2. Fix at the source: use the sanctioned
-pattern, or update the rule in the same PR and say why. Two live styles is the defect.
+Compare introduced idioms with precedent (`rg`), root/scoped `CLAUDE.md`/`AGENTS.md`,
+`exemplars/` and stack registry. Contradicting policy/dominant idiom is a finding. Copy reach:
+shared components/hooks/fixtures/helpers/templates/generators/exemplars/skills = P1; leaf = P2.
+Fix the source pattern or update its rule in the PR with rationale; do not leave competing styles.
 
 ## 6. Steelman gate
 
@@ -75,8 +74,8 @@ above, and `/review` findings. **Merge-ready** only when all three hold:
   real-entrypoint replay;
 - implementation: `/review` reports no P0/P1.
 
-Anything else is **not proven**; name the one piece of evidence that would flip it. Drop any
-counterargument without file:line or command output. Never block on preference.
+Otherwise **not proven**; name the missing proof. Drop counterarguments without
+file:line or command output. Never block on preference.
 
 ## Severity
 
@@ -88,11 +87,9 @@ counterargument without file:line or command output. Never block on preference.
 - **P3**: summary only.
 
 Report at most five findings, merge-deciding first.
-
 ## Output
 
 Lead with one verdict line:
-
 `lie-detector: <truthful|suspect|lying> -- merge <ready|not proven> -- <evidence, at most 20 words>`
 
 `truthful`: no findings. `suspect`: P2 only. `lying`: any P1. Then
