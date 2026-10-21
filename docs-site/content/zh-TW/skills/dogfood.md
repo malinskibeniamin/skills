@@ -80,7 +80,7 @@ UI 內容／版面配置風險：使用 Skill 工具呼叫 "break-ui"。在重�
 優先使用專案原生工具。全新智慧體需要明確授權委派。
 
 如果存在專案本地的 `verify-*` 技能，使用其檢查、驅動、證據和清理功能。
-在 T3 Code 簽出目錄中驗證 UI 時，依受影響的介面載入 [Web／桌面驗證](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
+在 T3 Code 簽出目錄中驗證 UI 時，先解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)，再依受影響的介面載入 [Web／桌面驗證](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)
 或[原生行動端驗證](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。
 必須具備相應的 Browser 或 Device 工具；缺少工具表示驗證 BLOCKED，
 而非安裝或切換至另一套驗證工具。其他儲存庫繼續使用自身的進入點。

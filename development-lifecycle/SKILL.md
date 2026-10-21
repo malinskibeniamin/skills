@@ -28,6 +28,9 @@ State contract; build/fix/implementation: continue immediately.
 Fetch named tickets (body, labels, comments); state the title. Clarify ambiguous references.
 Resolve the blind spot/volatile unknown from source evidence. Classify lookup, prototype, reversible assumption, or pause trigger; match existing idiom and demonstrated scale.
 
+T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
+(`work`); use target guidance and scoped checks throughout.
+
 Before edits, load [change evidence routing](../shared/change-evidence.md) and applicable owners.
 Assess impact proportionally; capture base before visible edits, including tiny copy/shared-UI effects.
 

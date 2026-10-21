@@ -22,6 +22,9 @@ type: skill
 
 使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
 
+處理 T3 或 Effect 測試時，以 `tdd` 為入口解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；遵循目標專案的時鐘、工作器和渲染生命週期契約。
+
+
 TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、非同步副作用及整合契約，使用 RED -> GREEN -> REFACTOR。型別、串接、文案／樣式，以及不改變行為的刪除，可能只需要執行聚焦驗證。涵蓋率絕不是目標。
 
 針對每個建議的測試接縫，說明它能捕捉什麼，以及會漏掉什麼。

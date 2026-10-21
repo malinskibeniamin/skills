@@ -1,0 +1,72 @@
+name: Watch T3 harness
+
+on:
+  schedule:
+    - cron: "43 9 * * *"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Open a draft proposal (requires configured bot permissions)"
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: watch-t3code-harness
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out trusted default branch only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Fetch immutable upstream objects without checking out code
+        id: upstream
+        run: |
+          baseline=$(jq -er '.baseline_revision | select(test("^[0-9a-f]{40}$"))' config/t3code-harness-watch.json)
+          source="$RUNNER_TEMP/t3code-upstream.git"
+          git init --bare "$source"
+          git -C "$source" fetch --depth=1 https://github.com/pingdotgg/t3code.git "$baseline"
+          git -C "$source" fetch --depth=1 https://github.com/pingdotgg/t3code.git refs/heads/main
+          revision=$(git -C "$source" rev-parse --verify 'FETCH_HEAD^{commit}')
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+
+      - name: Detect changes and optionally open one draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DESTINATION: ${{ github.repository }}
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+          UPSTREAM_REVISION: ${{ steps.upstream.outputs.revision }}
+          PUBLISH: ${{ (github.event_name == 'schedule' && vars.T3_HARNESS_WATCH_ENABLED == 'true') || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
+        run: |
+          args=()
+          if [ "$PUBLISH" = true ]; then
+            args+=(--publish --repository "$DESTINATION" --base "$BASE_BRANCH")
+          fi
+          python3 scripts/watch-t3code-harness.py \
+            --source "$RUNNER_TEMP/t3code-upstream.git" \
+            --revision "$UPSTREAM_REVISION" "${args[@]}" > "$RUNNER_TEMP/t3-harness-result.json"
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os
+          from pathlib import Path
+          result = json.loads((Path(os.environ["RUNNER_TEMP"]) / "t3-harness-result.json").read_text())
+          print("Watcher status:", result["status"])
+          print("\nAutomatic publication:", os.environ["PUBLISH"])
+          if result.get("url"):
+              print("\nProposal:", result["url"])
+          if result["changes"]:
+              print("\n" + result["report"])
+          else:
+              print("\nNo changed watched inputs at", result["revision"])
+          PY

@@ -24,3 +24,5 @@ type: skill
 阅读并运行共享工作流，而非另一套 full-send 实现。代码未完成时加载 [development-lifecycle](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md)；现有 PR 从当前证据开始。仅为请求的检查点、通知、恢复或明确委派的审查读取 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/REFERENCE.md)。不自动切换模型或创建代理。
 
 灵感及研究限制：[SOURCES.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/SOURCES.md)。此本地工作流不是复制或获得 Theo 背书的技能。
+
+共享工作流为获准的监控选择[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；保持单一交付循环，不另建 T3 工作流。
