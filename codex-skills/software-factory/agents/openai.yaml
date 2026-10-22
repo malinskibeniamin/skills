@@ -1,0 +1,5 @@
+interface:
+  display_name: "Software Factory"
+  short_description: "Assess factory fit and plan safe automation infrastructure"
+policy:
+  allow_implicit_invocation: false

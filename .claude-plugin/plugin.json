@@ -99,6 +99,7 @@
     "./setup-routines/",
     "./show-me/",
     "./snyk-ux-security/",
+    "./software-factory/",
     "./stack-registry/",
     "./stacked-prs/",
     "./stay-within-limits/",
