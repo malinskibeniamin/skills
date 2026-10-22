@@ -5,6 +5,12 @@ performance work, or dogfood. Optional instrumentation, not a new verification g
 Keep the existing project verifier and host browser as the default. Missing React
 tools do not block unrelated work or justify a browser takeover.
 
+![The new opt-in React path permits page and known React tools; ordinary browser MCP calls remain blocked.](../docs/architecture/react-devtools-routing.png)
+
+[Editable routing diagram](../docs/architecture/react-devtools-routing.excalidraw).
+Sources: the config and hook below; verified by `evals/test-mcp-ban.sh` and a local
+Counter inspection/profile/reload smoke. This describes routing, not a sandbox.
+
 ## Opt-in setup
 
 The harness ships guidance and a [pinned MCP config](../config/react-devtools.mcp.json),
