@@ -2,6 +2,7 @@
 
 Use for product UI, not prose documentation or chat responses. Start with the whole view:
 what task is happening, what each element contributes, and what the product actually does.
+Choose each element's job: name, fact, instruction, result, or warning.
 Prefer precise facts over brevity that hides a consequence. Local product requirements and
 verified behavior outrank illustrative examples below.
 
@@ -9,15 +10,32 @@ verified behavior outrank illustrative examples below.
 
 Lead with the fact or action; put necessary conditions before their effects.
 Use direct verbs and the shortest natural wording.
+Prefer familiar words: "use", not "utilize". Keep technical terms when they add precision.
+Use active voice when the actor matters; passive voice can keep a result in focus.
 Cut preambles, filler, roundabout phrases, redundant clauses, and repeated conclusions.
 Delete sentences that add no distinct fact or needed action.
 
 Preserve conditions, uncertainty, safety facts, and natural grammar. Concise does not mean
-cryptic fragments or an arbitrary word cap.
+cryptic fragments or an arbitrary word cap. Let sentence length follow meaning: split
+unrelated points, not a fact from the condition that makes it true.
 
 Before: "It is important to note that audit logs are retained for a period of 30 days. This
 means audit logs are stored for 30 days."
 After: "Audit logs are retained for 30 days."
+
+## Remove ambiguous readings
+
+- Put modifiers beside their target. "Only operators can revoke tokens" restricts the
+  actor; "Operators can only revoke tokens" restricts the action. Verify which is true.
+- Name the object when "it", "this", or "they" could refer to multiple things. Expand
+  dense noun strings into relationships: "backup deletion permission" becomes
+  "permission to delete backups".
+- Make grouped requirements explicit. If every exporter needs a role and a permission,
+  say so; do not imply that one role bypasses the permission. Distinguish inclusive
+  alternatives from exactly one choice using the verified behavior.
+- Keep articles, prepositions, and repeated nouns when they prevent a second reading.
+  Compact labels may omit words that help text needs. Rephrase awkward copy instead of
+  enforcing a grammar rule that makes it harder to understand.
 
 ## Patterns to remove
 
@@ -26,7 +44,7 @@ verdict about authorship or quality. Fix the missing fact, not just the flagged 
 
 | Pattern | Direction | Before -> after |
 |---|---|---|
-| 1. Heading as phrase | Name the thing with a noun phrase. | What to watch -> Input; How readily it fires -> Sensitivity |
+| 1. Heading as phrase | Name sections with noun phrases; name task screens with verb phrases. | What to watch -> Input; Backup creation -> Create backup |
 | 2. Subtitle scaffolding | Remove section/card/step subtitles; move useful facts into body or field help. | Input / The signal this policy monitors, and the shape of trouble it looks for. -> Input |
 | 3. Advice instead of facts | Describe behavior in descriptions; keep instructions where the task needs them. | Start in Observe; promote once the backtest looks right. -> Describe each mode's verified effect. |
 | 4. Personality or reassurance | State the condition without jokes, encouragement, or sales language. | That's normal for a new agent. -> Remove, or state a verified prerequisite. |
@@ -43,6 +61,7 @@ verdict about authorship or quality. Fix the missing fact, not just the flagged 
 | 15. Empty disclaimer | Drop "Note that" and unnamed "in some cases"; preserve real conditions and uncertainty. | Note that limits may vary -> Name the plan-dependent limits, if known. |
 | 16. Chat language | Keep the interface out of conversation mode. | Here's how to get started -> Task-specific control or instruction |
 | 17. Template residue | Replace scaffolding before shipping. | [Feature name], TBD, Add description here -> Verified copy |
+| 18. Ambiguous scope | Make actors, modifiers, and grouped conditions explicit. | Operators can only revoke tokens -> Only operators can revoke tokens (if the restriction concerns roles) |
 
 Do not turn these into blind bans. A factual contrast can be essential to a safety warning.
 "API key" is a domain noun, not inflated "key features". A colon in a timestamp is not
@@ -67,7 +86,8 @@ room, improve placement or design. Keep safety and task-critical help visible.
 
 | Element | Job | Default budget |
 |---|---|---|
-| Heading, navigation item | Name the thing, noun phrase, no period | 1-3 words |
+| Section heading, navigation item | Name the thing, noun phrase, no period | 1-3 words |
+| Task-screen heading | Name the goal, verb phrase, no period | As short as the task permits |
 | Field/value label | Persistent accessible name, no inline explanation | 1-3 words |
 | Button | Specific action + object, no period | 1-2 words; usually at most 4 |
 | Toggle/checkbox label | Action enabled, verb first | As short as the object name permits |
@@ -116,7 +136,8 @@ security, billing, destructive actions, and recovery.
 
 Name the action, not the component event: "Save changes", "Create topic", "Export report".
 Use "Delete cluster", not "Yes"; "Cancel", not an ambiguous "No". Avoid generic
-"Submit", "OK", and "Done" when a specific action fits. Omit articles and trailing ellipses.
+"Submit", "OK", and "Done" when a specific action fits. Omit unnecessary articles and
+trailing ellipses.
 Toggle/checkbox labels are the noun-label exception: "Require TLS", "Enable audit logging".
 Do not rename controls without checking the action they actually trigger.
 
@@ -126,6 +147,10 @@ Keep contextual help next to its control. A label, helper, placeholder, tooltip,
 each do different work; essential instructions cannot live only in a disappearing
 placeholder or hover-only tooltip. Keep validation rules and their errors near the input.
 Tooltips contain no links, buttons, or other interactive elements and do not repeat labels.
+
+In UI instructions, give conditions and warnings before the action they guard. Use one
+action per sentence. Number steps when order matters; use bullets for independent choices.
+Describe settings as facts instead of turning them into a walkthrough.
 
 An input placeholder shows realistic format, without "Example" or "e.g.". For template
 identifiers in instructions, use meaningful angle-bracket tokens: `<topic-name>`,
@@ -238,3 +263,10 @@ separately. Do not promise an upstream review bot will read this skill merely be
 `// allow-ux-copy: [reason]` is also supported. Keep a specific reason and use only when
 needed (for example, an exact external message). File-wide exemption does not waive review
 of other strings. Markdown has `<!-- allow: prose-style [reason] -->` for the prose hook.
+
+## Writing source
+
+Adapted for UI from [Cursor's technical-writing skill](https://github.com/cursor/plugins/blob/main/pstack/skills/technical-writing/SKILL.md):
+plain wording, task/concept distinctions, instruction order, and unambiguous syntax.
+Its documentation modes, formatting conventions, and `unslop` dependency do not apply to
+this skill. Product copy keeps the scope, terminology, and safety rules above.
