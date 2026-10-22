@@ -1,9 +1,17 @@
 ---
-title: /dogfood
 description: 在每個重要行為切片之後以及交接或釋出之前使用，透過真實入口體驗可執行工作。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - dogfood
 sidebar:
   label: /dogfood
+title: /dogfood
+type: skill
 ---
 ![「/dogfood」技能示意圖](/diagrams/skills/dogfood.svg)
 
@@ -12,7 +20,7 @@ sidebar:
 重要的可執行切片會改變真實入口或公共接縫上的行為。
 每個切片和最終完整 PR 都要 dogfood。測試不是 dogfood。
 
-## 清點
+## 清點 [#inventory]
 
 1. 用
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`
@@ -24,11 +32,11 @@ sidebar:
 
 在本地覆蓋本輪工作。建立 PR 或釋出前，覆蓋分支中全部可執行行為。
 
-## 迴圈
+## 迴圈 [#loop]
 
 在當前實現上執行**使用 -> 濫用 -> 修復 -> 重放**。
 
-### 使用
+### 使用 [#use]
 
 透過實際實現完成每條預期路徑。直接檢查可見輸出、
 狀態轉換、副作用、控制臺、網路和日誌，不從程式碼推斷。
@@ -40,7 +48,7 @@ sidebar:
 對於缺陷，先在未修復行為上重放報告者的精確步驟。無法復現時，
 停止診斷，請求缺失環境或證據。
 
-### 濫用
+### 濫用 [#abuse]
 
 應用每個相關視角，並至少嘗試一種可信破壞方式：
 
@@ -56,16 +64,16 @@ sidebar:
 UI 內容／版面配置風險：使用 Skill 工具呼叫 "break-ui"。在重放與回執中重用符合結構描述的測試資料與證據；
 只測試尚未涵蓋的情況。無效輸入的驗證測試分開進行。
 
-### 修復
+### 修復 [#repair]
 
 觀察到的缺陷會使檢查點失敗。可自動化時，先新增 RED 公共契約測試，
 透過 `/tdd` 修復並重新執行聚焦檢查。任何行為編輯都會使先前證據失效。
 
-### 重放
+### 重放 [#replay]
 
 從真實入口重啟；重複預期使用和每項破壞嘗試。對於缺陷，重放完全相同的原始步驟並驗證相鄰行為。對於有狀態缺陷或反覆出現的重現缺口，使用[重放資料包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。PASS 繫結目前可執行狀態。
 
-## 入口
+## 入口 [#entrypoints]
 
 | 變更 | 操作 |
 |---|---|
@@ -87,7 +95,9 @@ UI 內容／版面配置風險：使用 Skill 工具呼叫 "break-ui"。在重�
 驗證器漂移交由 `/maintain-verification-skill` 處理；經證實反覆缺少的路徑則交由
 `/create-verification-skill` 處理。
 
-## 回執
+若問題涉及 React 狀態、元件歸屬或算繪成本，請閱讀選用的 [React 執行階段檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md)。先檢查可用能力；元件證據只能補充使用者可見行為斷言，不能取代它們。
+
+## 回執 [#receipt]
 
 報告目前進入點、操作和觀察：`Verdict: PASS | FAIL | BLOCKED`，然後包含：
 

@@ -7,7 +7,8 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 # browser->agent-browser, Blacksmith->gh, Buildkite->bk, Box->box,
 # M365->m365, LaunchDarkly->ldcli). Every other MCP server is ALLOWED (default case exits 0)
 # -- including the Builder.io Plan server used by /visual-plan and the local
-# TraceDecay graph used for code exploration.
+# TraceDecay graph used for code exploration. The opt-in react-devtools server
+# has a narrow exception for isolated local React inspection; see shared/react-devtools.md.
 #
 # Data: mcp__claude_ai_Atlassian__editJiraIssue averaged 23k chars/call,
 # mcp__claude_ai_Gmail__gmail_search_messages 15k chars/call. CLI output
@@ -17,6 +18,22 @@ _hook_input=$(cat)
 tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
 
 case "$tool_name" in
+  # Dedicated, opt-in server: page lifecycle plus React inspection, not arbitrary JS.
+  mcp__react[-_]devtools__list_pages|mcp__react[-_]devtools__new_page|mcp__react[-_]devtools__select_page|mcp__react[-_]devtools__close_page|mcp__react[-_]devtools__navigate_page|mcp__react[-_]devtools__take_snapshot|mcp__react[-_]devtools__take_screenshot|mcp__react[-_]devtools__click|mcp__react[-_]devtools__fill|mcp__react[-_]devtools__press_key|mcp__react[-_]devtools__wait_for|mcp__react[-_]devtools__list_console_messages|mcp__react[-_]devtools__list_3p_developer_tools)
+    exit 0
+    ;;
+  mcp__react[-_]devtools__execute_3p_developer_tool)
+    react_tool=$(echo "$_hook_input" | jq -r '.tool_input.toolName // empty' 2>/dev/null || true)
+    case "$react_tool" in
+      react_get_component_tree|react_find_components|react_get_component_by_uid|react_get_component_by_dom_element|react_get_parent_stack|react_get_owner_stack|react_get_owner_stack_trace|react_get_component_source|react_start_profiling|react_stop_profiling|react_get_trace_overview|react_get_commit_report)
+        exit 0
+        ;;
+      *)
+        msg='React DevTools accepts only the supported React inspection and profiling tools. Discover their schemas with list_3p_developer_tools. Other third-party tools and arbitrary scripts are outside this exception. Read shared/react-devtools.md.'
+        ;;
+    esac
+    ;;
+
   # LaunchDarkly flag management always uses the official CLI, reads included.
   mcp__*[Ll]aunch[Dd]arkly*__*|mcp__codex_apps__launchdarkly_*)
     msg='LaunchDarkly MCP blocked. Use ldcli flags get --project <project-key> --flag <flag-key> --env <environment-key> --output json. For changes: ldcli flags update --help; verify scope and read back afterward. Missing CLI: brew tap launchdarkly/homebrew-tap && brew install ldcli. Auth: ldcli login. No MCP, direct HTTP, or browser fallback. Read shared/ldcli.md.'
@@ -99,7 +116,7 @@ case "$tool_name" in
   mcp__claude-in-chrome__tabs_context_mcp|mcp__claude-in-chrome__tabs_create_mcp|mcp__claude-in-chrome__switch_browser|mcp__claude-in-chrome__resize_window)
     msg='Browser MCP banned. Use agent-browser directly: agent-browser open <url>. Persistent daemon keeps cookies across calls.'
     ;;
-  mcp__claude-in-chrome__*|mcp__chrome-devtools__*|mcp__playwright__*)
+  mcp__claude-in-chrome__*|mcp__chrome-devtools__*|mcp__playwright__*|mcp__react[-_]devtools__*)
     msg='Browser MCP banned. Use: agent-browser (brew install vercel/tap/agent-browser). Alt: bunx playwright codegen/open for interactive flows.'
     ;;
 

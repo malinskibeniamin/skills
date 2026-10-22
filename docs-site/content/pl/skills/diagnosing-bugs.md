@@ -116,6 +116,7 @@ jest niedostępny, kontynuuj zgodnie z kolejnością opartą na dowodach.
 Każda sonda musi odpowiadać konkretnej prognozie z fazy 3. **Zmieniaj jedną zmienną naraz.**
 
 1. **Inspekcja w debuggerze / REPL**, jeśli środowisko ją obsługuje. Jeden punkt przerwania może zastąpić dziesięć logów.
+   Przy hipotezach dotyczących stanu, właścicieli komponentów lub kosztu renderowania w React przeczytaj opcjonalną ścieżkę [inspekcji React w czasie działania](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md); przed użyciem sprawdź dostępne możliwości.
 2. **Ukierunkowane logi** na granicach pozwalających rozróżnić hipotezy.
 3. Nigdy nie „loguj wszystkiego i nie przeszukuj wyników”.
 

@@ -1,11 +1,19 @@
 ---
-title: /dogfood
 description: >-
   Używaj po każdym istotnym wycinku zachowania i przed przekazaniem lub wysyłką,
   aby sprawdzić uruchamialną pracę przez prawdziwy punkt wejścia.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - dogfood
 sidebar:
   label: /dogfood
+title: /dogfood
+type: skill
 ---
 ![Diagram umiejętności /dogfood](/diagrams/skills/dogfood.svg)
 
@@ -14,7 +22,7 @@ sidebar:
 Istotny uruchamialny wycinek zmienia zachowanie w prawdziwym punkcie wejścia lub publicznym punkcie styku.
 Wykonuj dogfood po każdym wycinku i dla całego PR-a. Testy nie są dogfoodem.
 
-## Inwentaryzacja
+## Inwentaryzacja [#inventory]
 
 1. Ustal bazę porównania przez
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
@@ -25,11 +33,11 @@ Wykonuj dogfood po każdym wycinku i dla całego PR-a. Testy nie są dogfoodem.
 
 Dla pracy lokalnej pokryj zachowanie zmienione w tej turze. Przed PR-em lub wysyłką pokryj każde uruchamialne zachowanie na gałęzi.
 
-## Pętla
+## Pętla [#loop]
 
 Uruchom **użyj -> nadużyj -> napraw -> odtwórz ponownie** na bieżącej implementacji.
 
-### Użyj
+### Użyj [#use]
 
 Wykonaj każdą zamierzoną ścieżkę przez rzeczywistą implementację. Obserwuj widoczny wynik,
 przejścia stanu, skutki uboczne, konsolę, sieć i logi zamiast wnioskować z kodu.
@@ -41,7 +49,7 @@ ujawnić akumulację.
 Dla błędu najpierw odtwórz dokładne kroki zgłaszającego na wersji bez poprawki. Jeśli nie możesz go odtworzyć,
 przerwij diagnozę i poproś o brakujące środowisko lub dowód.
 
-### Nadużyj
+### Nadużyj [#abuse]
 
 Zastosuj każdy właściwy punkt widzenia i co najmniej jedną wiarygodną próbę uszkodzenia:
 
@@ -57,16 +65,16 @@ Preferuj wiarygodne zachowanie użytkownika zamiast arbitralnych przypadków. Ob
 Ryzyka treści/układu UI: wywołaj narzędzie Skill z "break-ui". Wykorzystuj ponownie dane zgodne ze schematem
 i dowody przy odtwarzaniu oraz w potwierdzeniu; testuj tylko niepokryte przypadki. Walidację niepoprawnych danych sprawdzaj osobno.
 
-### Napraw
+### Napraw [#repair]
 
 Zaobserwowany defekt oblewa checkpoint. Gdy można go zautomatyzować, dodaj RED test publicznego kontraktu,
 popraw przez `/tdd` i uruchom ponownie powiązane kontrole. Każda zmiana zachowania unieważnia wcześniejszy dowód.
 
-### Odtwórz ponownie
+### Odtwórz ponownie [#replay]
 
 Uruchom ponownie rzeczywisty punkt wejścia; powtórz zamierzone użycie i każdą próbę uszkodzenia. Dla błędów odtwórz identyczne pierwotne kroki i sąsiednie zachowanie. Dla błędów zależnych od stanu lub powtarzających się luk reprodukcji użyj [pakietów odtwarzania](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md). PASS dotyczy bieżącego stanu uruchamialnego.
 
-## Punkty wejścia
+## Punkty wejścia [#entrypoints]
 
 | Zmiana | Sprawdzenie |
 |---|---|
@@ -88,7 +96,9 @@ a nie instalację ani przejście na inny harness. Inne repozytoria zachowują w�
 Rozbieżność weryfikatora kieruj do `/maintain-verification-skill`; powtarzający się brak ścieżki kieruj do
 `/create-verification-skill` po uzyskaniu dowodu.
 
-## Potwierdzenie
+W przypadku pytań o stan, właścicieli komponentów lub koszt renderowania w React przeczytaj opcjonalny opis [inspekcji React w czasie działania](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md). Najpierw sprawdź dostępne możliwości; dowody z komponentów uzupełniają asercje zachowania widocznego dla użytkownika, ale ich nie zastępują.
+
+## Potwierdzenie [#receipt]
 
 Podaj bieżący punkt wejścia, działania i obserwacje: `Verdict: PASS | FAIL | BLOCKED`, a następnie:
 

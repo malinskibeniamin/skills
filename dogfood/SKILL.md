@@ -80,15 +80,17 @@ BLOCKED, not installing or switching harnesses.
 Verifier drift routes to `/maintain-verification-skill`; a recurring missing path routes to
 `/create-verification-skill` after proof.
 
+React: [runtime probes](../shared/react-devtools.md).
+
 ## Receipt
 
-`Verdict: PASS | FAIL | BLOCKED`; entrypoint, actions, observations:
+`Verdict: PASS | FAIL | BLOCKED`; entrypoint/actions/observations:
 
-- **Entrypoint:** exact command, URL, event, or consumer.
-- **Actions:** intended journey and break attempts.
-- **Observations:** data, outputs, state, effects, console/network/logs, and timing.
-- **Repairs:** defects, RED tests, fixes, and replay result.
+- **Entrypoint:** exact command/URL/event/consumer.
+- **Actions:** journey and break attempts.
+- **Observations:** data, outputs, state, effects, console/network/logs, timing.
+- **Repairs:** defects, RED tests, fixes, replay result.
 - **Limits:** untried behavior and reason.
 
-PASS needs direct evidence for every changed behavior. FAIL records an observed defect.
-BLOCKED names missing access, environment, hardware or a safety condition.
+PASS: direct evidence per behavior; FAIL: observed defect; BLOCKED: missing access,
+environment, hardware or safety condition.

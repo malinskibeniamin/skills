@@ -97,3 +97,5 @@ wyłącznie na podstawie wyniku Lighthouse, ostrzeżenia statycznego, pozornie m
 lub zaktualizowanej zależności.
 
 Dla porównań paczek wynikowych lub nieoczekiwanych modułów wczytaj [analizę paczki wynikowej](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/bundle-analysis/SKILL.md). Oddzielaj dane do badań od stałych limitów i używaj rzeczywistej kompilacji produkcyjnej.
+
+Przy hipotezie dotyczącej kosztu renderowania w React przeczytaj [inspekcję React w czasie działania](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md). Opcjonalne ślady komponentów i commitów służą do lokalizacji pracy, nie jako dowód wydajności UX w produkcji.

@@ -69,8 +69,8 @@ Discard claims without a testable prediction.
 ## Phase 4 -- Instrument
 Map each probe to one prediction. Change one variable at a time.
 
-1. Prefer debugger or REPL inspection when available.
-2. Add targeted logs only at boundaries that distinguish hypotheses.
+1. Prefer debugger/REPL. React: [inspection](../shared/react-devtools.md).
+2. Log only boundaries that distinguish hypotheses.
 3. Never log everything and grep.
 
 Prefix temporary logs, for example `[DEBUG-a4f2]`, so cleanup can grep every match. For

@@ -81,3 +81,5 @@ Artifacts: <路徑或連結>
 看似更少的程式碼或相依套件升級，就宣稱速度提升。
 
 比較建置產物大小或調查意外引入的模組時，載入[建置產物分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/bundle-analysis/SKILL.md)。將探索性範例與穩定預算分開，並使用實際正式環境建置。
+
+對於 React 算繪成本假設，請閱讀 [React 執行階段檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md)。使用選用的元件與提交追蹤來定位工作，而非證明正式環境的 UX 效能。
