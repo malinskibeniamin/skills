@@ -194,7 +194,8 @@ rm -rf "$_remote_dir"
 
 _discussion_sid="intent-discussion-eval-$$"
 _discussion_dir="/tmp/hook-session-${_discussion_sid}"
-_discussion_prompt=$(cat <<'DISCUSSION_PROMPT'
+# Bash 3.2 misparses the apostrophe in a heredoc inside $(). read ends at EOF (status 1).
+IFS= read -r -d '' _discussion_prompt <<'DISCUSSION_PROMPT' || :
 <system_instruction>
 After you open a PR from a different branch, or a PR stack, check out that PR's branch so Conductor shows it.
 </system_instruction>
@@ -214,7 +215,7 @@ frontend change? design, UX performance, codebase architecture
 
 can we do this?
 DISCUSSION_PROMPT
-)
+_discussion_prompt=${_discussion_prompt%$'\n'}
 printf '%s' "$(jq -nc --arg sid "$_discussion_sid" --arg prompt "$_discussion_prompt" \
   '{hook_event_name:"UserPromptSubmit",session_id:$sid,prompt:$prompt}')" \
   | CLAUDE_SESSION_ID="$_discussion_sid" "$INTENT_SCRIPT" >/dev/null
