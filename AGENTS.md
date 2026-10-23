@@ -46,11 +46,12 @@ Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push aut
 Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-Delivery follow-ups replace prior local stops. Recover endpoint state; never request a
-session restart/reconfiguration. Keep follow-ups in the current PR. Drafts need no approval.
+Delivery follow-ups replace prior local stops; never request a session restart/reconfiguration.
+Keep follow-ups in the current PR: `pr/SKILL.md#existing-pr` at start/resume and handoff.
+Drafts need no approval.
 Push/PR/ship: verify origin HEAD/scope; auto-setup: `shared/review-enforcement.md`.
 Report genuine external blockers.
-Finished-agent reports or Git showing uncommitted/unpushed work mean incomplete delivery.
+Uncommitted/unpushed owned work means incomplete delivery.
 Recover verified scope via `shared/remote-completion.md`; preserve explicit local stops,
 unrelated work, and active owners.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless

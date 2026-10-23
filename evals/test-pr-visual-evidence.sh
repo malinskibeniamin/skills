@@ -6,6 +6,22 @@ for command in 'gh pr create --fill' 'gh pr edit 12 --body-file /tmp/body.md' 'g
     "PR evidence reminder: $command" '[pr-evidence]'
 done
 
+# Follow-up pushes must route existing session PRs through impact/body upkeep,
+# not just remind authors to attach screenshots at initial publication.
+input='{"tool_name":"Bash","tool_input":{"command":"git push origin feature"}}'
+output=$(printf '%s' "$input" | "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>/dev/null)
+if printf '%s' "$output" | jq -e '.hookSpecificOutput.additionalContext
+  | contains("existing session PR") and contains("/quantify-impact")
+    and contains("full PR diff") and contains("business value")
+    and contains("concise") and contains("pr/SKILL.md")' >/dev/null 2>&1; then
+  echo '  PASS  existing session PR push reassesses impact and concise description'
+  PASS=$((PASS + 1))
+else
+  echo '  FAIL  existing session PR push lacks impact/description upkeep'
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: existing session PR impact/description upkeep"
+fi
+
 # Successful hooks must return model-visible additionalContext; stderr alone is
 # debug output on some hosts. A later RTK rewrite must survive alongside it.
 fixture=$(mktemp -d)

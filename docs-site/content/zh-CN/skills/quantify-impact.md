@@ -18,7 +18,7 @@ type: skill
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/quantify-impact.excalidraw)
 
 
-让价值一目了然，同时避免为了基准测试而基准测试。每次创建或更新 PR 时，都会通过 `/commit-push-pr` 或 `/stacked-prs` 自动运行此评估；测量的严谨程度与变更相称。
+每次创建或更新 PR，以及[检查当前会话的现有 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 时，都执行此评估，即使没有发布命令。测量应与变更相称，避免为了基准测试而基准测试。只要场景、受影响代码和基分支仍有效，就复用证据；重跑已失效的比较。此评估本身不授予发布权限。
 
 ## 流程 [#flow]
 

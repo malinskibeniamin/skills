@@ -3,7 +3,10 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
-Every PR creation/update runs this assessment through `/commit-push-pr` or `/stacked-prs`; measure proportionally, without benchmark theater.
+Every PR creation/update and [existing session PR check](../pr/SKILL.md#existing-pr)
+runs this assessment, even without a publication command. Measure proportionally, without
+benchmark theater. Reuse evidence while the scenario, affected code, and base remain valid;
+rerun invalidated comparisons. This assessment alone grants no publication permission.
 
 ## Flow
 

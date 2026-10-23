@@ -1,5 +1,5 @@
 ---
-description: 在撰写 PR 描述时使用。
+description: 在撰写 PR 描述，或持续更新当前会话中已打开 PR 的范围、业务价值和证据时使用。
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -18,7 +18,21 @@ type: skill
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/pr.excalidraw)
 
 
-阅读[保护读者注意力的约定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)。使用以下模板编写 PR 描述：
+阅读[保护读者注意力的约定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)。
+
+## 现有 PR [#existing-pr]
+
+在会话开始或恢复时、范围、实现或证据发生实质变化后，以及交接前：
+
+1. 查找与此对话、会话或聊天明确关联的已打开 PR；否则通过 `gh pr view` 检查当前分支。核实打开状态、仓库、源分支、基分支和归属；绝不选择无关的近期 PR。没有已打开的 PR 就无需维护，也不意味着可以创建 PR。
+2. 将已发布的描述与**完整 PR 差异**、原始目标及当前验证结果对照，而非只看最近一轮对话或提交。对于堆叠 PR，逐一对照父分支评估受影响的层。
+3. 单独加载 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)。重新评估业务价值及产品或代码库影响；复用仍有效的证据，重跑已失效的比较，并删除缺乏依据的主张。价值未知时明确写出 `not established`。
+4. 对已获授权的修改或交付工作，就地更新过时描述。保持简洁：改了什么、谁受益、为何重要、决定性证据及实质风险。替换过时条目；链接到详情，而非追加会话日志。保留人工撰写的意图和必需证据；已经准确时不作修改。
+5. 编辑后重新读取托管平台上的正文，确认其描述的是已发布的源分支状态。只读请求仅报告偏差，不编辑。明确要求仅本地修改或禁止推送时，暂缓发布；绝不将未发布的工作描述为已交付。
+
+## 正文模板 [#body-template]
+
+使用以下模板编写 PR 描述：
 
 ```markdown
 ## Summary

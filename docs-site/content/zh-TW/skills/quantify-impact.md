@@ -18,7 +18,7 @@ type: skill
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/quantify-impact.excalidraw)
 
 
-無須上演基準測試的戲碼，就能讓價值一目了然。每次建立或更新 PR 時，都會透過 `/commit-push-pr` 或 `/stacked-prs` 自動執行這項評估；衡量方式會維持相稱。
+每次建立或更新 PR，以及[檢查目前工作階段的現有 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 時，都執行這項評估，即使沒有發布命令。採用相稱的衡量方式，避免為了基準測試而測試。只要情境、受影響的程式碼與基底仍有效，就重用證據；重跑已失效的比較。這項評估本身不授予發布權限。
 
 ## 流程 [#flow]
 

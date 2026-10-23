@@ -21,7 +21,7 @@ type: skill
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/quantify-impact.excalidraw)
 
 
-Natychmiast pokaż wartość, bez pozorowanych testów porównawczych. Każde utworzenie lub zaktualizowanie PR automatycznie uruchamia tę ocenę za pośrednictwem `/commit-push-pr` lub `/stacked-prs`; zakres pomiarów pozostaje proporcjonalny.
+Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie istniejącego PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) uruchamia tę ocenę, nawet bez polecenia publikacji. Zachowaj proporcjonalny zakres pomiarów, bez pozorowanych testów porównawczych. Wykorzystuj dowody ponownie, dopóki scenariusz, objęty zmianą kod i baza pozostają aktualne; powtarzaj unieważnione porównania. Sama ocena nie daje zgody na publikację.
 
 ## Przebieg [#flow]
 

@@ -30,7 +30,7 @@ With Changesets, load [changesets](../t3code-skills/changesets/SKILL.md) after c
 
 ## Pull request
 
-`--no-pr` never creates a PR; refresh existing PR evidence/body after push, otherwise stop at push and clean-tree check. Prepare visuals first.
+`--no-pr` never creates a PR. After push, apply [existing session PR upkeep](../pr/SKILL.md#existing-pr); without an open PR, stop at push and clean-tree check. Prepare visuals before push.
 
 1. Resolve base: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up in current PR; apply [repo metadata](references/metadata.md), including drafts. Template; draft PRs open without approval. Stacks use `/stacked-prs`.
 2. Every PR: load [quantify-impact](../quantify-impact/SKILL.md) and [pr](../pr/SKILL.md) separately; include value or proven metrics.
