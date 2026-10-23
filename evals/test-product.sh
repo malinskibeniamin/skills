@@ -46,9 +46,14 @@ for section in Justification Scope Evidence "Keep the lights on" "Quality of lif
   run_content_eval "$PRODUCT_RULES" "^## $section" "product catalog has the $section section"
 done
 for craft in numbered-series revert-test read-back-after-write types-carry-meaning \
-  errors-are-values necessity-first; do
+  errors-are-values necessity-first tests-grow-with-code test-refusal-and-no-op-paths \
+  phase-shape-then-semantics; do
   run_content_eval "$PRODUCT_CRAFT" "^\\| \`$craft\` \\|" "product craft covers $craft"
 done
+run_content_eval "$PRODUCT_SKILL" 'CRAFT.md for non-generated source or test changes' \
+  "product routes code changes to its craft playbook"
+run_content_eval "$PRODUCT_SKILL" 'Name what the review could not verify and who should make the final call' \
+  "product review output names verification gaps and their decision owner"
 
 # Rule ids are unique across the catalog.
 dup_rules=$(grep -oE '^\| [SABC] \| `[a-z-]+`' "$PRODUCT_RULES" | sort | uniq -d | wc -l | tr -d ' ')

@@ -5,9 +5,8 @@ description: "Keep work on track to business value: one lane, beneficiary, why n
 
 # Product
 
-One question for every plan, PR, and review: does this change earn the time it costs, and
-will it reach the person it is for? Value only: code defects stay in `/review`, claims
-versus evidence in `/lie-detector`. Runs standalone, as the **product hat** inline in
+Does it earn its cost and reach its beneficiary? Code defects stay in `/review`,
+claims versus evidence in `/lie-detector`. Runs standalone as the **product hat** inline in
 `/review` and `/grilling`, and in the auto-review routine. [RULES.md](RULES.md) grades
 each rule by how many independent evidence sets converge on it; [CRAFT.md](CRAFT.md) is
 the author playbook for choosing, shaping, testing, and shipping the work.
@@ -50,7 +49,8 @@ Every change serves one primary lane. Mixed purposes split into separate PRs.
    live consumers protected, one-way doors left to their owner.
 8. **Rules:** RULES.md Justification, Scope, and Evidence always; the lane's section; and
    Delivery, Trust, or Money when the diff touches rollout, customer-visible output, or
-   billing. Enforce S and A; apply B when the diff plainly matches; C only when asked.
+   billing. Load CRAFT.md for non-generated source or test changes. Enforce S and A;
+   apply B when the diff plainly matches; C only when asked.
 
 Track mode compares the branch with its stated outcome: work outside the lane is
 `drifting` (name the cut or the follow-up PR); value that cannot land yet is `park`
@@ -90,3 +90,4 @@ product: <ktlo|qol|feature|taste> (<declared|inferred>) -- <justified|thin|unjus
 
 Plan mode adds the acceptance scenarios and the cheapest disproof. Track mode puts
 `on track`, `drifting`, or `park` in the verdict slot.
+Name what the review could not verify and who should make the final call.

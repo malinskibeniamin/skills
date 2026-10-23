@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+2026-10-23 -- Preserve the pending craft additions in `/product`, the successor to the
+retired value skills: code reviews load the craft playbook, tests cover refusal and
+no-op paths, API changes separate shape from semantics, and review output names
+verification gaps and their decision owner. Reuse the current measurement and slicing
+guidance without restoring the retired skill or its old grading system.
+
 2026-10-21 -- Complete native T3 composition: check existing verification before generation,
 audit native verifiers without a naming requirement, route Effect work through shared
 evidence, and retain target-owned delivery commands. Preserve native-tool authorization,

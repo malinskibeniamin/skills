@@ -20,8 +20,7 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/product.excalidraw)
 
-Jedno pytanie do każdego planu, PR-a i przeglądu: czy ta zmiana jest warta poświęconego czasu
-i czy dotrze do osoby, dla której powstaje? Tylko wartość: defekty kodu pozostają w `/review`,
+Czy ta zmiana jest warta swojego kosztu i dotrze do odbiorcy? Defekty kodu pozostają w `/review`,
 a porównanie twierdzeń z dowodami w `/lie-detector`. Działa samodzielnie, jako **perspektywa produktowa** w
 `/review` i `/grilling` oraz w procedurze automatycznego przeglądu. [RULES.md](https://github.com/malinskibeniamin/skills/blob/main/product/RULES.md) ocenia
 każdą regułę według liczby niezależnych zestawów dowodów, które ją potwierdzają; [CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/product/CRAFT.md) to
@@ -65,7 +64,8 @@ Każda zmiana służy jednemu głównemu obszarowi. Różne cele rozdzielaj na o
    ochrona obecnych odbiorców, nieodwracalne decyzje pozostawione osobom za nie odpowiedzialnym.
 8. **Reguły:** zawsze sekcje Justification, Scope i Evidence z RULES.md; sekcja danego obszaru; oraz
    Delivery, Trust lub Money, gdy diff dotyczy wdrożenia, wyników widocznych dla klienta lub
-   rozliczeń. Egzekwuj S i A; stosuj B, gdy diff wyraźnie pasuje; C tylko na prośbę.
+   rozliczeń. Wczytaj CRAFT.md przy zmianach w niegenerowanym kodzie źródłowym lub testach.
+   Egzekwuj S i A; stosuj B, gdy diff wyraźnie pasuje; C tylko na prośbę.
 
 Tryb śledzenia porównuje gałąź z zadeklarowanym rezultatem: praca poza obszarem to
 `drifting` (wskaż zakres do usunięcia lub kolejny PR); wartość, której nie można jeszcze dostarczyć, to `park`
@@ -105,3 +105,4 @@ product: <ktlo|qol|feature|taste> (<declared|inferred>) -- <justified|thin|unjus
 
 Tryb planowania dodaje scenariusze akceptacji i najtańszy sposób obalenia hipotezy. Tryb śledzenia umieszcza
 `on track`, `drifting` lub `park` w miejscu werdyktu.
+Wskaż, czego przegląd nie mógł zweryfikować i kto powinien podjąć ostateczną decyzję.

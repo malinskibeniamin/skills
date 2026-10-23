@@ -17,8 +17,7 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/product.excalidraw)
 
-每個計畫、PR 和審查都要回答一個問題：這項變更是否值得投入時間，
-而且能否觸及它要服務的人？只評估價值：程式碼缺陷交由 `/review` 處理，主張
+這項變更是否值得投入成本，能否觸及受益者？程式碼缺陷交由 `/review` 處理，主張
 與證據的比對交由 `/lie-detector` 處理。可獨立執行，也可在
 `/review` 和 `/grilling` 中以**產品視角**介入，並用於自動審查流程。[RULES.md](https://github.com/malinskibeniamin/skills/blob/main/product/RULES.md) 依據
 有多少組獨立證據得出一致結論，為每條規則評級；[CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/product/CRAFT.md) 則是
@@ -62,7 +61,8 @@ type: skill
    保護現有使用方，將不可逆決策留給負責人。
 8. **規則：**一律套用 RULES.md 的正當理由、範圍與證據章節，以及
    所屬類別的章節；若差異涉及推出、客戶可見的輸出或
-   計費，則套用交付、信任或金錢章節。強制執行 S 與 A；差異明確符合時套用 B；只有在要求時才套用 C。
+   計費，則套用交付、信任或金錢章節。非產生的原始碼或測試有所變更時，載入 CRAFT.md。
+   強制執行 S 與 A；差異明確符合時套用 B；只有在要求時才套用 C。
 
 追蹤模式會將分支與其宣告的成果比較：超出類別範圍的工作屬於
 `drifting`（指出應刪減的內容或後續 PR）；尚無法交付的價值則標為 `park`
@@ -101,3 +101,4 @@ product: <ktlo|qol|feature|taste> (<declared|inferred>) -- <justified|thin|unjus
 
 規劃模式會加上驗收情境與成本最低的反證方式。追蹤模式則在判定欄位填入
 `on track`、`drifting` 或 `park`。
+說明這次審查未能驗證的內容，以及應由誰做出最終決定。
