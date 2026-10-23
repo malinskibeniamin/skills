@@ -158,6 +158,7 @@ type: skill
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
+| `/software-factory` | 评估工厂适用性并规划安全的自动化基础设施。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
 | `/stacked-prs` | 创建和管理相互依赖的 GitHub 拉取请求栈。 |
 | `/stay-within-limits` | 围绕用量限制规划长期运行的智能体工作。 |

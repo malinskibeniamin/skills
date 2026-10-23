@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "573f4e5dce613a2a",
-      "zh-CN": "573f4e5dce613a2a",
-      "zh-TW": "573f4e5dce613a2a"
+      "pl": "b9d012df71cad9dc",
+      "zh-CN": "b9d012df71cad9dc",
+      "zh-TW": "b9d012df71cad9dc"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "6a2bf9ebd5e22537",
-      "zh-CN": "6a2bf9ebd5e22537",
-      "zh-TW": "6a2bf9ebd5e22537"
+      "pl": "e578a894e1468bd2",
+      "zh-CN": "e578a894e1468bd2",
+      "zh-TW": "e578a894e1468bd2"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -399,6 +399,11 @@
       "pl": "54031f842082270e",
       "zh-CN": "54031f842082270e",
       "zh-TW": "54031f842082270e"
+    },
+    "content/skills/software-factory.md": {
+      "pl": "9d7019c613484ca2",
+      "zh-CN": "9d7019c613484ca2",
+      "zh-TW": "9d7019c613484ca2"
     },
     "content/skills/stack-registry.md": {
       "pl": "6acfe0c8a546022f",
