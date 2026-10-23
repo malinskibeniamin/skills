@@ -9,19 +9,25 @@ set -euo pipefail
 #     title; `## ` narration is required before each interaction, even without
 #     voiceover. Holds subtitles at least 2s, longer for more words, and writes
 #     <out.webm>.steps.json.
-#     Needs 2+ interaction steps (hover or wait alone is not a flow). Run the
+#     Needs a narrated interaction (including hover for tooltip changes). Run the
 #     same flow file against base and candidate. A failed step fails.
 #
 #   scripts/pr-video.sh compose <before-video> <after-video> <out-dir>
 #     Before left, after right; slow short takes to 5s, then freeze the shorter
-#     take on its last frame. Target 5-30s; split long flows instead of speeding up.
+#     take on its last frame. Keep complete beats; split long flows instead of speeding up.
 #     Set PR_VIDEO_BEFORE_LABEL / PR_VIDEO_AFTER_LABEL to concrete behavior
 #     descriptions (for example "Previous: save silently" / "New: saved notice").
 #     PR_VIDEO_FOCUS=x:y:width:height crops both takes to the changed region.
 #     Rejects static and duplicate takes. PR_VIDEO_RENDERER=auto
 #     (default) frames the takes in HyperFrames with labels and step captions,
-#     falling back to ffmpeg; `hyperframes` or `ffmpeg` forces one.
+#     failing closed; `ffmpeg` is an explicit uncaptioned diagnostic render only.
 #     Writes before-after.mp4 and before-after.gif.
+#
+#   scripts/pr-video.sh demo <recording> <out-dir>
+#     One real terminal or UI take, with required <recording>.steps.json subtitles
+#     and an optional timed execution model. Writes demo.mp4 and demo.gif.
+#     Both composition paths reject source footage idle for 5 seconds or longer,
+#     before adding captions/diagrams. Trim dead time and retime the sidecar.
 #
 #   scripts/pr-video.sh attach [--body-file <markdown>] <file.mp4>...
 #     Uploads native media with gh pr edit --attach, no browser. Appends to the
@@ -36,14 +42,14 @@ set -euo pipefail
 #     PR_VIDEO_REPO_URL overrides the https://github.com/<owner>/<repo> base.
 
 usage() {
-  sed -n '6,30p' "$0" | sed 's/^# \{0,1\}//' >&2
+  sed -n '6,/^usage()/p' "$0" | sed '$d;s/^# \{0,1\}//' >&2
   exit 2
 }
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-MIN_DISTINCT_FRAMES=8
-MIN_INTERACTIONS=2
-INTERACTION_RE='^[[:space:]]*(click|dblclick|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
+MIN_DISTINCT_FRAMES=2
+MIN_INTERACTIONS=1
+INTERACTION_RE='^[[:space:]]*(click|dblclick|hover|focus|type|fill|press|keyboard|select|check|uncheck|drag|scroll|upload|open|goto|navigate|find|mouse)[[:space:]]'
 
 GIF_LIMIT_BYTES=$((10 * 1024 * 1024))
 
@@ -77,15 +83,26 @@ duration_of() {
 }
 
 # A reviewer must watch the flow happen. UI takes are mostly unchanged frames
-# between discrete changes, so count distinct frames, not still time: a still
-# page or hover-only take has one or two, a typed-and-submitted flow has dozens.
+# between discrete changes. Permit a small real transition, then check idle
+# stretches separately; cursor/overlay animation is not proof of useful action.
 require_motion() {
   local distinct
-  distinct=$(ffmpeg -hide_banner -nostats -i "$1" -map 0:v:0 -vf mpdecimate -f null - 2>&1 |
+  distinct=$(ffmpeg -hide_banner -nostats -i "$1" -map 0:v:0 -vf "${FOCUS_FILTER}mpdecimate" -f null - 2>&1 |
     grep -oE 'frame= *[0-9]+' | tail -n 1 | tr -dc '0-9')
   if [ "${distinct:-0}" -lt "$MIN_DISTINCT_FRAMES" ]; then
     echo "pr-video: $1 is static (${distinct:-0} distinct frames, need $MIN_DISTINCT_FRAMES); record the flow (clicks, typing, navigation) with pr-video.sh record" >&2
     exit 1
+  fi
+  local freezes start
+  freezes=$(ffmpeg -hide_banner -nostats -i "$1" -map 0:v:0 -an \
+    -vf "${FOCUS_FILTER}freezedetect=n=0.001:d=5" -f null - 2>&1) || {
+    printf '%s\n' "$freezes" >&2
+    return 1
+  }
+  start=$(printf '%s\n' "$freezes" | sed -n 's/.*freeze_start: \([0-9.]*\).*/\1/p' | head -n 1)
+  if [ -n "$start" ]; then
+    echo "pr-video: $1 is idle from ${start}s for at least 5s; trim dead time, retime subtitles, and show the next action/result. Captions and cursor motion are not product activity." >&2
+    return 1
   fi
 }
 
@@ -101,12 +118,12 @@ record() {
   command -v agent-browser >/dev/null 2>&1 || { echo "pr-video: needs agent-browser" >&2; exit 127; }
   local url=$1 flow=$2 out=$3 session="pr-video-$$" step_ms=${PR_VIDEO_STEP_MS:-1500}
   if ! [[ "$step_ms" =~ ^[1-9][0-9]*$ ]] || [ "$step_ms" -lt 1000 ]; then
-    echo "pr-video: PR_VIDEO_STEP_MS must be an integer of at least 1000 milliseconds; target readable 5-30 second takes." >&2
+    echo "pr-video: PR_VIDEO_STEP_MS must be an integer of at least 1000 milliseconds; keep captions and results readable." >&2
     return 2
   fi
   [ -s "$flow" ] || { echo "pr-video: missing flow file: $flow" >&2; exit 1; }
   if [ "$(grep -cE "$INTERACTION_RE" "$flow" || true)" -lt "$MIN_INTERACTIONS" ]; then
-    echo "pr-video: $flow needs $MIN_INTERACTIONS+ interaction steps (click, type, press, scroll, open); hover and wait alone do not show a flow" >&2
+    echo "pr-video: $flow needs a narrated interaction (click, type, hover, press, scroll, open); wait alone does not show a flow" >&2
     exit 1
   fi
   if ! awk -v interaction="$INTERACTION_RE" '
@@ -129,7 +146,7 @@ record() {
   local started title="" caption="" steps='[]'
   started=$(now)
   agent-browser --session "$session" wait "$step_ms" >/dev/null
-  local line hold_ms
+  local line hold_ms last_hold_ms=0
   while IFS= read -r line || [ -n "$line" ]; do
     [[ "$line" =~ ^[[:space:]]*$ ]] && continue
     case "$line" in
@@ -142,8 +159,11 @@ record() {
       hold_ms=$(jq -rn --arg caption "$caption" --argjson minimum "$step_ms" \
         '[$minimum, 2000, (1000 + (($caption | [scan("\\S+")] | length) * 300))] | max')
       steps=$(jq -c --arg caption "$caption" --argjson at "$(awk -v a="$(now)" -v b="$started" 'BEGIN { printf "%.3f", a - b }')" \
-        '. + [{at: $at, caption: $caption}]' <<< "$steps")
+        '. + [{at: (if length == 0 then 0 else $at end), caption: $caption}]' <<< "$steps")
       caption=""
+    elif [[ "$line" =~ ^[[:space:]]*wait[[:space:]] ]]; then
+      # Readiness waits already wait for the result; do not add a setup pause.
+      hold_ms=0
     fi
     eval "set -- $line"
     if ! agent-browser --session "$session" "$@" >/dev/null; then
@@ -151,10 +171,16 @@ record() {
       echo "pr-video: flow step failed: $line" >&2
       exit 1
     fi
-    agent-browser --session "$session" wait "$hold_ms" >/dev/null
+    if [ "$hold_ms" -gt 0 ]; then
+      agent-browser --session "$session" wait "$hold_ms" >/dev/null
+    fi
+    last_hold_ms=$hold_ms
   done < "$flow"
-  # Hold the result for reading; motion is checked separately from still time.
-  agent-browser --session "$session" wait 2000 >/dev/null
+  # A narrated last step already got reading time. Only add a result hold after
+  # an uncaptioned readiness/setup step, rather than stacking a frozen tail.
+  if [ "$last_hold_ms" -lt 2000 ]; then
+    agent-browser --session "$session" wait 2000 >/dev/null
+  fi
   agent-browser --session "$session" record stop >/dev/null
   jq -n --arg title "$title" --argjson steps "$steps" '{title: $title, steps: $steps}' > "$out.steps.json"
   printf '%s\n' "$out"
@@ -219,8 +245,13 @@ frame_hyperframes() {
   local side input scale
   for side in before after; do
     if [ "$side" = before ]; then input=$before; scale=$5; else input=$after; scale=$6; fi
+    if ! jq -e '.steps | type == "array" and length > 0 and all(.[];
+      (.at | type == "number" and . >= 0) and (.caption | type == "string" and test("\\S")))' "$input.steps.json" >/dev/null; then
+      echo "pr-video: needs narrated $input.steps.json; record captions or author a timed sidecar before composing." >&2
+      return 2
+    fi
     ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "setpts=$scale*(PTS-STARTPTS),${FOCUS_FILTER}fps=30,tpad=stop_mode=clone:stop_duration=3600" \
-      -t "$duration" -an -c:v libx264 -pix_fmt yuv420p "$project/assets/$side.mp4" || return 1
+      -t "$duration" -an -c:v libx264 -r 30 -g 30 -keyint_min 30 -pix_fmt yuv420p -movflags +faststart "$project/assets/$side.mp4" || return 1
   done
   local title captions
   title=$(jq -r '.title // empty' "$after.steps.json" 2>/dev/null || true)
@@ -299,6 +330,11 @@ compose() {
   after_scale=$(awk -v d="$after_duration" 'BEGIN { print (d < 5 ? 5 / d : 1) }')
   longest=$(awk -v a="$before_duration" -v b="$after_duration" \
     'BEGIN { d = (a > b ? a : b); print (d < 5 ? 5 : d) }')
+  if ! awk -v a="$before_duration" -v b="$after_duration" -v end="$longest" \
+    'BEGIN { exit !((end - (a < 5 ? 5 : a)) < 5 && (end - (b < 5 ? 5 : b)) < 5) }'; then
+    echo "pr-video: comparison would freeze the shorter take for 5s or longer; split matched beats or use demo for one truthful journey." >&2
+    return 1
+  fi
   mkdir -p "$out"
 
   local renderer=${PR_VIDEO_RENDERER:-auto}
@@ -308,27 +344,73 @@ compose() {
   case "$renderer" in
     hyperframes) frame_hyperframes "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale" ;;
     ffmpeg) frame_ffmpeg "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale" ;;
-    auto)
-      if frame_hyperframes "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale"; then
-        :
-      else
-        echo "pr-video: HyperFrames unavailable or failed; composing with ffmpeg (no labels or captions)" >&2
-        frame_ffmpeg "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale"
-      fi
-      ;;
+    auto) frame_hyperframes "$before" "$after" "$out" "$longest" "$before_scale" "$after_scale" ;;
     *) echo "pr-video: PR_VIDEO_RENDERER must be auto, hyperframes, or ffmpeg" >&2; exit 2 ;;
   esac
-  ffmpeg -hide_banner -loglevel error -y -i "$out/before-after.mp4" -filter_complex \
+  make_gif "$out/before-after"
+  printf '%s\n' "$out/before-after.mp4" "$out/before-after.gif"
+}
+
+make_gif() {
+  ffmpeg -hide_banner -loglevel error -y -i "$1.mp4" -filter_complex \
     '[0:v]fps=10,scale=min(1200\,iw):-2:flags=lanczos,split[x][y];[x]palettegen=stats_mode=diff[p];[y][p]paletteuse=dither=bayer:bayer_scale=4' \
-    "$out/before-after.gif"
+    "$1.gif"
 
   local gif_bytes
-  gif_bytes=$(wc -c < "$out/before-after.gif" | tr -d ' ')
+  gif_bytes=$(wc -c < "$1.gif" | tr -d ' ')
   if [ "$gif_bytes" -gt "$GIF_LIMIT_BYTES" ]; then
-    echo "pr-video: before-after.gif is over GitHub's 10 MB image limit; trim the takes" >&2
+    echo "pr-video: $1.gif is over GitHub's 10 MB image limit; trim the takes" >&2
     exit 1
   fi
-  printf '%s\n' "$out/before-after.mp4" "$out/before-after.gif"
+}
+
+demo() {
+  [ $# -eq 2 ] || usage
+  local video=$1 out=$2 duration project="$2/hyperframes" sidecar="$1.steps.json"
+  [ -s "$video" ] || { echo "pr-video: missing recording: $video" >&2; return 1; }
+  FOCUS_FILTER=""
+  require_motion "$video" || return 1
+  duration=$(duration_of "$video") || return 1
+  # Validate the public sidecar before creating a project or launching a renderer.
+  if ! jq -e --argjson end "$duration" '
+    def text($max): type == "string" and length > 0 and length <= $max and test("\\S") and (test("[[:cntrl:]]") | not);
+    (.title | text(80)) and
+    ((.diagram // []) as $d |
+      ($d | type == "array" and (length == 0 or (length >= 2 and length <= 6)) and all(.[]; text(60))) and
+      (.steps | type == "array" and length > 0) and
+      (.steps[0].at == 0) and
+      (.steps as $s | all(range(0; $s | length); . as $i | $s[$i] as $step |
+        ($step.at | type == "number" and . >= 0 and . < $end) and
+        ($step.caption | text(80)) and
+        ((if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $step.at >=
+          ([2, (1 + ($step.caption | [scan("\\S+")] | length) * 0.3)] | max)) and
+        ($step.active == null or ($step.active | type == "number" and floor == . and . >= 0 and . < ($d | length))))))
+  ' "$sidecar" >/dev/null; then
+    echo "pr-video: needs valid $sidecar: title, ordered steps from at:0, readable captions (2s or 1s + 0.3s/word), optional diagram (2-6 nodes) and active node index." >&2
+    return 2
+  fi
+  hyperframes_command || return 1
+  mkdir -p "$project/assets"
+  # Preserve real timing; no slowing, looping, or end-frame padding for a demo.
+  ffmpeg -hide_banner -loglevel error -y -i "$video" -an -c:v libx264 -r 30 -g 30 -keyint_min 30 -pix_fmt yuv420p -movflags +faststart "$project/assets/recording.mp4" || return 1
+  printf '%s\n' '{"paths":{"assets":"assets"},"media":{"autoProxy":true}}' > "$project/hyperframes.json"
+  HF_DURATION=$duration \
+    HF_TITLE=$(jq -r '.title | @html' "$sidecar") \
+    HF_LAYOUT=$(jq -r 'if (.diagram // [] | length) > 0 then "with-diagram" else "full" end' "$sidecar") \
+    HF_STEPS=$(jq -r --argjson end "$duration" '
+      (.diagram // []) as $diagram | .steps as $s | range(0; $s | length) as $i | $s[$i] as $step |
+      (if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $step.at as $duration |
+      "<div id=\"step-\($i)\" class=\"step clip\" data-start=\"\($step.at)\" data-duration=\"\($duration)\">" +
+      "<div class=\"caption\">\($step.caption | @html)</div>" +
+      (if ($diagram | length) > 0 then "<aside><h2>Execution model</h2><p>Explanation, not a live trace</p>" +
+        ([range(0; $diagram | length) as $n | "<div class=\"node\(if $step.active == $n then " active" else "" end)\">\($diagram[$n] | @html)</div>"] | join("<div class=\"arrow\">↓</div>")) + "</aside>" else "" end) + "</div>"
+    ' "$sidecar") \
+    perl -pe 's/<!-- __(\w+)__ -->|__(\w+)__/$ENV{"HF_" . ($1 || $2)}/g' \
+    "$SCRIPT_DIR/pr-video-demo.html" > "$project/index.html"
+  (cd "$project" && "${HYPERFRAMES_CMD[@]}" check >&2 &&
+    "${HYPERFRAMES_CMD[@]}" render --quality delivery --video-frame-format png --output ../demo.mp4 >&2) || return 1
+  make_gif "$out/demo" || return 1
+  printf '%s\n' "$out/demo.mp4" "$out/demo.gif"
 }
 
 repo_url() {
@@ -382,6 +464,7 @@ publish() {
 case "${1:-}" in
   record) shift; record "$@" ;;
   compose) shift; compose "$@" ;;
+  demo) shift; demo "$@" ;;
   attach) shift; attach "$@" ;;
   publish) shift; publish "$@" ;;
   *) usage ;;

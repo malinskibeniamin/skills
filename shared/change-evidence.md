@@ -27,7 +27,11 @@ An author request owns implementation and publication only through its requested
 For authors, capture the actual base before editing visible behavior, or reconstruct it from
 that revision without disturbing the current worktree. Publication follows the existing PR
 media procedure: real UI recordings, then `scripts/pr-video.sh` composition and accessible
-hosting. Videos explain the old/new result at matched steps; stills and synthetic explainers
+hosting. Follow [review-video storytelling](../commit-push-pr/VIDEO.md): show a real
+action and consequence, use a captioned single take for a new capability, and add a
+source-grounded execution model only when it clarifies what happens. Inspect source
+idle spans and watch the whole rendered MP4; cursor/overlay motion is not activity.
+Videos explain the old/new result at matched steps; stills and synthetic explainers
 are not recordings of actual product behavior. A CLI/report uses its real terminal/output
 surface, not an invented browser UI. Follow the existing procedure's evidence gates and limits.
 

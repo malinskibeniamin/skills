@@ -5,6 +5,7 @@ import { strict as assert } from "node:assert";
 import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { chromium, expect, type Locator, type Page } from "@playwright/test";
+import { z } from "zod";
 
 const root = resolve(import.meta.dir, "..");
 const out = resolve(Bun.argv[2] ?? join(root, ".context/pr-video-canary"));
@@ -55,6 +56,7 @@ const browser = await chromium.launch().catch((cause: unknown) => {
   throw cause;
 });
 try {
+  await verifyIdleRejection();
   const shortTakePacing = await verifyShortTakePacing();
   for (const side of ["before", "after"]) {
     const context = await browser.newContext({
@@ -88,7 +90,7 @@ try {
         control: Locator = page.getByRole("button", { name: "Save task" }),
       ) => {
         // Assert readiness before holding readable evidence; not a test wait.
-        await Bun.sleep(4000);
+        await Bun.sleep(3000);
         const target = await control.boundingBox();
         assert(target, `${state}: action target missing`);
         states.push({
@@ -104,13 +106,13 @@ try {
         .pressSequentially("Review demo", { delay: 90 });
       await capture("typing", page.getByLabel("Task name"));
       if (side === "before") {
-        mark("We save the task and check its confirmation.");
+        mark("Save confirms the task.");
         await page.getByRole("button", { name: "Save task" }).click();
         await clickSample("success");
         await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
         await capture("success");
       } else {
-        mark("We submit the task; the error keeps our input intact.");
+        mark("Save fails; the draft stays intact.");
         await page.getByLabel("Simulate unavailable service").check();
         await page.getByRole("button", { name: "Save task" }).click();
         await clickSample("error");
@@ -119,7 +121,7 @@ try {
         );
         await expect(page.getByLabel("Task name")).toHaveValue("Review demo");
         await capture("error");
-        mark("We retry the save and confirm the task is saved.");
+        mark("Retry saves the task.");
         await page.getByLabel("Simulate unavailable service").uncheck();
         await page.getByRole("button", { name: "Save task" }).click();
         await clickSample("recovery");
@@ -195,6 +197,7 @@ try {
   );
 
   const page = await browser.newPage();
+  const demo = await verifyDemo(page);
   // Exercise the allowed 60-character labels against the real output layout.
   await page.setContent(
     readFileSync(join(out, "hyperframes/index.html"), "utf8").replace(
@@ -305,13 +308,14 @@ try {
         focus,
         metrics,
         shortTakePacing,
+        demo,
       },
       null,
       2,
     ),
   );
   console.log(
-    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions, cursor, action target); typing/success/error/recovery; short-take MP4/GIF timing and motion; ${out}`,
+    `PASS: ${metrics.length} decoded-frame checks (focused UI, title, labels, captions, cursor, action target); typing/success/error/recovery; short-take MP4/GIF timing and motion; idle/crop rejection; single-take subtitles and execution model; ${out}`,
   );
 } finally {
   try {
@@ -319,6 +323,260 @@ try {
   } finally {
     server.stop(true);
   }
+}
+
+async function verifyIdleRejection() {
+  const directory = join(out, "idle-rejection");
+  mkdirSync(directory, { recursive: true });
+  for (const scenario of [
+    {
+      name: "burst-then-idle",
+      duration: 1,
+      filter: "tpad=stop_mode=clone:stop_duration=9",
+      focus: "",
+      error: /idle from .* for at least 5s/,
+    },
+    {
+      name: "activity-outside-focus",
+      duration: 2,
+      filter: "drawbox=x=0:y=0:w=160:h=90:color=white:t=fill",
+      focus: "0:0:160:90",
+      error: /is static/,
+    },
+  ]) {
+    const video = join(directory, `${scenario.name}.mp4`);
+    await command([
+      "ffmpeg",
+      "-v",
+      "error",
+      "-y",
+      "-f",
+      "lavfi",
+      "-i",
+      `testsrc2=size=320x180:rate=30:duration=${scenario.duration}`,
+      "-vf",
+      scenario.filter,
+      "-c:v",
+      "libx264",
+      video,
+    ]);
+    const child = Bun.spawn(
+      [
+        "bash",
+        join(root, "scripts/pr-video.sh"),
+        "compose",
+        video,
+        video,
+        directory,
+      ],
+      {
+        env: {
+          ...Bun.env,
+          PR_VIDEO_BEFORE_LABEL: "Previous: source fixture",
+          PR_VIDEO_AFTER_LABEL: "New: source fixture",
+          PR_VIDEO_FOCUS: scenario.focus,
+        },
+        stdout: "pipe",
+        stderr: "pipe",
+      },
+    );
+    const [stderr, stdout, exit] = await Promise.all([
+      new Response(child.stderr).text(),
+      new Response(child.stdout).text(),
+      child.exited,
+    ]);
+    assert.notEqual(
+      exit,
+      0,
+      `${scenario.name}: source quality check must fail`,
+    );
+    assert.match(
+      stderr,
+      scenario.error,
+      "Reject the source, not just duplicate files",
+    );
+    assert.equal(stdout, "", "Failed quality checks must not publish paths");
+  }
+}
+
+async function verifyDemo(page: Page) {
+  const directory = join(out, "single-take");
+  const input = join(directory, "flow.webm");
+  mkdirSync(directory, { recursive: true });
+  await Bun.write(input, Bun.file(join(out, "after.webm")));
+  const sidecar = z
+    .object({
+      title: z.string(),
+      steps: z.array(z.object({ at: z.number(), caption: z.string() })),
+    })
+    .parse(
+      JSON.parse(readFileSync(join(out, "after.webm.steps.json"), "utf8")),
+    );
+  await Bun.write(
+    `${input}.steps.json`,
+    JSON.stringify({
+      ...sidecar,
+      diagram: [
+        "Browser form",
+        "POST /save",
+        "503: input retained",
+        "Retry → saved task",
+      ],
+      steps: sidecar.steps.map(
+        (step: { at: number; caption: string }, i: number) => ({
+          ...step,
+          active: [0, 2, 3][i],
+        }),
+      ),
+    }),
+  );
+  await command([
+    "bash",
+    join(root, "scripts/pr-video.sh"),
+    "demo",
+    input,
+    directory,
+  ]);
+  await page.setContent(
+    readFileSync(join(directory, "hyperframes/index.html"), "utf8"),
+  );
+  const checks = [];
+  for (const [i, step] of sidecar.steps.entries()) {
+    const frame = join(directory, `step-${i}.png`);
+    const source = join(directory, `source-${i}.png`);
+    await extract(join(directory, "demo.mp4"), step.at + 1, frame);
+    await extract(input, step.at + 1, source);
+    const activeIndex = [0, 2, 3][i];
+    assert(activeIndex !== undefined);
+    const active = await page
+      .locator(`#step-${i} .node`)
+      .nth(activeIndex)
+      .boundingBox();
+    assert(active, "Expected execution node missing");
+    const counts = await page.evaluate(
+      async ({ base64, source, active }) => {
+        const image = new Image();
+        image.src = `data:image/png;base64,${base64}`;
+        await image.decode();
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Canvas unavailable");
+        context.drawImage(image, 0, 0);
+        const count = (
+          x: number,
+          y: number,
+          width: number,
+          height: number,
+          blue = false,
+        ) => {
+          const data = context.getImageData(x, y, width, height).data;
+          let pixels = 0;
+          for (let j = 0; j < data.length; j += 4) {
+            const r = data[j] ?? 0,
+              g = data[j + 1] ?? 0,
+              b = data[j + 2] ?? 0;
+            if (blue ? b > 160 && b > r * 1.4 : r > 200 && g > 200 && b > 200)
+              pixels++;
+          }
+          return pixels;
+        };
+        const counts = {
+          footage: count(96, 220, 1160, 600),
+          subtitle: count(192, 900, 1536, 100),
+          diagram: count(1300, 160, 524, 720),
+          active: count(active.x, active.y, active.width, active.height, true),
+        };
+        // Compare the recorded pixels, not just a nonempty/white video rectangle.
+        const actual = context.getImageData(96, 194, 1160, 652).data;
+        const original = new Image();
+        original.src = `data:image/png;base64,${source}`;
+        await original.decode();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(original, 96, 193.75, 1160, 652.5);
+        const expected = context.getImageData(96, 194, 1160, 652).data;
+        let difference = 0;
+        for (let j = 0; j < actual.length; j += 4) {
+          for (let c = 0; c < 3; c++)
+            difference += Math.abs(
+              (actual[j + c] ?? 0) - (expected[j + c] ?? 0),
+            );
+        }
+        return { ...counts, panelError: difference / (1160 * 652 * 3) };
+      },
+      {
+        base64: readFileSync(frame).toString("base64"),
+        source: readFileSync(source).toString("base64"),
+        active,
+      },
+    );
+    assert(counts.footage > 10000, "Demo lost its real footage");
+    assert(
+      counts.panelError < 12,
+      `Demo changed its recording (${counts.panelError})`,
+    );
+    assert(counts.subtitle > 100, "Demo subtitle missing");
+    assert(
+      counts.diagram > 500 && counts.active > 100,
+      "Execution model or active step missing",
+    );
+    checks.push(counts);
+  }
+  // Stress the published limits without hiding or truncating user text.
+  await page.locator("h1").evaluate((element) => {
+    element.textContent = "W".repeat(80);
+  });
+  await page
+    .locator(".caption")
+    .first()
+    .evaluate((element) => {
+      element.textContent = "W".repeat(80);
+    });
+  const aside = page.locator("aside").first();
+  await aside.evaluate((element) => {
+    const node = element.querySelector(".node");
+    if (!node) throw new Error("Diagram node missing");
+    for (const old of element.querySelectorAll(".node, .arrow")) old.remove();
+    for (let i = 0; i < 6; i++) {
+      const next = node.cloneNode(true);
+      next.textContent = "W".repeat(60);
+      element.append(next);
+      if (i < 5) {
+        const arrow = document.createElement("div");
+        arrow.className = "arrow";
+        arrow.textContent = "↓";
+        element.append(arrow);
+      }
+    }
+  });
+  for (const element of [aside, page.locator(".caption").first()]) {
+    assert(
+      await element.evaluate(
+        (element) =>
+          element.scrollHeight <= element.clientHeight &&
+          element.scrollWidth <= element.clientWidth,
+      ),
+      "Max-length explanation overflows",
+    );
+  }
+  // Wider fallback metrics reproduce the Linux overflow on macOS too.
+  for (const family of [
+    "system-ui, sans-serif",
+    "Verdana, sans-serif",
+    "Georgia, serif",
+  ]) {
+    const title = await page.locator("h1").evaluate((element, family) => {
+      element.style.fontFamily = family;
+      const { width, height, bottom } = element.getBoundingClientRect();
+      return { width, height, bottom };
+    }, family);
+    assert(
+      title.height > 0 && title.bottom <= 160,
+      `Title overlaps footage (${family}, width=${title.width}, height=${title.height}, bottom=${title.bottom})`,
+    );
+  }
+  return checks;
 }
 
 async function verifyShortTakePacing() {
