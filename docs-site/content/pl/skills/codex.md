@@ -46,6 +46,9 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 - **Obsługa komputera:** określ adres URL lub aplikację, stany i dowody.
 - **Badanie/analiza:** użyj `-s read-only` i przygotuj zwięzły raport.
 
+W przypadku przeglądów PR korzystaj z sekcji [Raport PR i publikowanie](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#pr-report-and-posting).
+Domyślnie zapisuj raport lokalnie; publikacja wymaga wyraźnej prośby użytkownika, niezależnej od zgody na przegląd.
+
 ## Przepływ pracy
 
 1. Przejdź weryfikację hosta i uprawnień.

@@ -31,6 +31,12 @@ jobs:
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Install recording and rendering prerequisites
         run: |
+          # Slow Azure mirror downloads exhausted this job's timeout twice.
+          printf '%b\n' \
+            'https://archive.ubuntu.com/ubuntu/\tpriority:1' \
+            'https://security.ubuntu.com/ubuntu/\tpriority:2' \
+            'http://azure.archive.ubuntu.com/ubuntu/\tpriority:3' \
+            | sudo tee /etc/apt/apt-mirrors.txt
           sudo apt-get update
           sudo apt-get install -y ffmpeg jq
           bunx --no-install playwright install --with-deps chromium
