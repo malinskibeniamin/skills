@@ -42,7 +42,7 @@ type: skill
 
 ## 拉取请求 [#pull-request]
 
-`--no-pr` 绝不会创建 PR。推送后执行[现有会话 PR 维护](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr)；没有已打开的 PR 时，在推送并检查工作树是否干净后结束。推送前准备视觉证据。
+`--no-pr` 绝不会创建 PR。推送后执行[现有 PR 维护](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr)，然后检查工作树是否干净。先准备视觉证据。
 
 1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 确定目标分支。复用当前 PR；创建和更新时均应用[仓库元数据规则](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿。使用模板；创建草稿无需另行批准。堆栈使用 `/stacked-prs`。
 2. 每个 PR 都应分别加载 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) 和 [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；包含价值说明或经验证的指标。

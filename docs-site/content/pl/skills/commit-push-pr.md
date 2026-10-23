@@ -45,7 +45,7 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 
 ## Pull request
 
-`--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu zastosuj [utrzymanie istniejącego PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr); bez otwartego PR-a zakończ po wypchnięciu i sprawdzeniu czystości drzewa. Przygotuj dowody wizualne przed wypchnięciem.
+`--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu: [utrzymanie istniejącego PR-a](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr), następnie sprawdzenie czystości drzewa. Najpierw przygotuj dowody wizualne.
 
 1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kontynuuj pracę w bieżącym PR-ze; przy tworzeniu i aktualizacji, także wersji roboczych, stosuj [metadane repozytorium](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md). Korzystaj z szablonu; wersje robocze nie wymagają osobnej zgody. Dla stosów używaj `/stacked-prs`.
 2. Dla każdego PR-a załaduj osobno [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); uwzględnij wartość lub potwierdzone wskaźniki.

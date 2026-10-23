@@ -3,10 +3,7 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
-Every PR creation/update and [existing session PR check](../pr/SKILL.md#existing-pr)
-runs this assessment, even without a publication command. Measure proportionally, without
-benchmark theater. Reuse evidence while the scenario, affected code, and base remain valid;
-rerun invalidated comparisons. This assessment alone grants no publication permission.
+Every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr) assesses impact, even without publishing. Reuse valid evidence; rerun invalid comparisons. Assessment grants no publication permission.
 
 ## Flow
 
@@ -41,4 +38,4 @@ Provide an impact bullet: user/maintainer improvement and evidence. Tiny copy/st
 Method: `<command, fixture, runs, environment>`.
 ```
 
-Put this in the PR body through `/commit-push-pr` or `/stacked-prs`; no separate reviewability request is needed. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.
+Put this in the PR body through `/commit-push-pr` or `/stacked-prs`. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.

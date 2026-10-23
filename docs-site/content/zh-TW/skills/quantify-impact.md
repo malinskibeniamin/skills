@@ -18,7 +18,7 @@ type: skill
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/quantify-impact.excalidraw)
 
 
-每次建立或更新 PR，以及[檢查目前工作階段的現有 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 時，都執行這項評估，即使沒有發布命令。採用相稱的衡量方式，避免為了基準測試而測試。只要情境、受影響的程式碼與基底仍有效，就重用證據；重跑已失效的比較。這項評估本身不授予發布權限。
+每次建立或更新 PR，以及[檢查工作階段 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 時，都評估影響，即使不發布。重用有效證據；重跑已失效的比較。評估不授予發布權限。
 
 ## 流程 [#flow]
 
@@ -51,6 +51,6 @@ type: skill
 Method: `<command, fixture, runs, environment>`.
 ```
 
-透過 `/commit-push-pr` 或 `/stacked-prs` 直接將此內容加入 PR 本文；不需要另行要求提高可審查性。明確要求使用 `/make-pr-easy-to-review` 時，它會重複使用此內容。只有在重現需要時，才將省略的原始資料保留在本機證據中。絕不輸出空白表格；未證實的明確效能主張應註明 `Value not proven`，但不要公布微不足道的數字。
+透過 `/commit-push-pr` 或 `/stacked-prs` 直接將此內容加入 PR 本文。明確要求使用 `/make-pr-easy-to-review` 時，它會重複使用此內容。只有在重現需要時，才將省略的原始資料保留在本機證據中。絕不輸出空白表格；未證實的明確效能主張應註明 `Value not proven`，但不要公布微不足道的數字。
 
 測量函式庫的執行效能或 TypeScript 編譯器成本時，載入[效能分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/performance-analysis/SKILL.md)。它負責針對性的測量工具；此技能仍負責論點與價值判斷。

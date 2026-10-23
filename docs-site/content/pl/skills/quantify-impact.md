@@ -21,7 +21,7 @@ type: skill
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/quantify-impact.excalidraw)
 
 
-Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie istniejącego PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) uruchamia tę ocenę, nawet bez polecenia publikacji. Zachowaj proporcjonalny zakres pomiarów, bez pozorowanych testów porównawczych. Wykorzystuj dowody ponownie, dopóki scenariusz, objęty zmianą kod i baza pozostają aktualne; powtarzaj unieważnione porównania. Sama ocena nie daje zgody na publikację.
+Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) obejmuje ocenę wpływu, nawet bez publikacji. Wykorzystuj aktualne dowody; powtarzaj unieważnione porównania. Ocena nie daje zgody na publikację.
 
 ## Przebieg [#flow]
 
@@ -54,6 +54,6 @@ Zawsze podaj zwięzły punkt dotyczący wpływu: co poprawiło się dla użytkow
 Method: `<command, fixture, runs, environment>`.
 ```
 
-Przekaż ją bezpośrednio do treści PR za pośrednictwem `/commit-push-pr` lub `/stacked-prs`; osobna prośba o ułatwienie przeglądu nie jest potrzebna. `/make-pr-easy-to-review` wykorzystuje ją ponownie, gdy zostanie jawnie wywołana. Pominięte surowe dane zachowaj wyłącznie w lokalnym artefakcie dowodowym, jeśli są potrzebne do zapewnienia powtarzalności. Nigdy nie dodawaj pustej tabeli; w przypadku jawnych, niepotwierdzonych deklaracji poprawy wydajności podaj `Value not proven` bez pomijalnych liczb.
+Przekaż ją bezpośrednio do treści PR za pośrednictwem `/commit-push-pr` lub `/stacked-prs`. `/make-pr-easy-to-review` wykorzystuje ją ponownie, gdy zostanie jawnie wywołana. Pominięte surowe dane zachowaj wyłącznie w lokalnym artefakcie dowodowym, jeśli są potrzebne do zapewnienia powtarzalności. Nigdy nie dodawaj pustej tabeli; w przypadku jawnych, niepotwierdzonych deklaracji poprawy wydajności podaj `Value not proven` bez pomijalnych liczb.
 
 Dla pomiarów wykonania bibliotek lub kosztu kompilatora TypeScript wczytaj [analizę wydajności](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/performance-analysis/SKILL.md). Odpowiada ona za ukierunkowane narzędzia pomiarowe; ta umiejętność nadal odpowiada za tezę i ocenę wartości.

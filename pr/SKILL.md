@@ -15,22 +15,11 @@ Read [the reader-attention contract](../shared/communication.md).
 
 At start/resume, after material scope, implementation, or evidence changes, and before handoff:
 
-1. Discover open PRs explicitly linked to this conversation/session/chat; otherwise check
-   the current branch with `gh pr view`. Verify open state, repository, head, base, and ownership;
-   never select an unrelated recent PR. No open PR means no upkeep or implicit creation.
-2. Compare the published body with the **full PR diff**, original objective, and current
-   verification, not just the latest turn or commit. For stacks, assess each affected layer
-   against its parent.
-3. Load [quantify-impact](../quantify-impact/SKILL.md) separately. Reassess business value
-   and product/codebase impact; reuse valid evidence, rerun invalidated comparisons, and
-   remove unsupported claims. State `not established` when value is unknown.
-4. For authorized write/delivery work, refresh stale descriptions in place. Keep prose
-   concise: what changes, who benefits, why it matters, decisive evidence, material risks.
-   Replace obsolete bullets; link detail instead of appending session logs. Preserve
-   human-authored intent and required evidence; skip edits when already accurate.
-5. Re-read the hosted body after editing and verify it describes the published head.
-   Read-only requests report drift without editing. Explicit local/no-push stops defer
-   publication; never describe unpublished work as delivered.
+1. Find open PRs linked to this conversation/session/chat; otherwise use `gh pr view` for this branch. Verify open state, repository/head/base and ownership; no unrelated recent PRs or implicit creation.
+2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents.
+3. Load [quantify-impact](../quantify-impact/SKILL.md) separately; reassess business value and product/codebase impact. Reuse valid evidence, rerun invalid comparisons, remove unsupported claims; unknown value is `not established`.
+4. For authorized write/delivery work, replace stale bullets in place with concise change, beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
+5. Re-read edited hosted bodies against the published head. Read-only: report drift, no edit. Local/no-push: defer publication; unpublished work is not delivered.
 
 ## Body template
 
