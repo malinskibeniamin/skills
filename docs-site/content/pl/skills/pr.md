@@ -1,5 +1,7 @@
 ---
-description: Używaj podczas pisania opisu PR.
+description: >-
+  Używaj przy pisaniu opisu PR lub aktualizowaniu zakresu, wartości biznesowej i
+  dowodów w otwartym PR-ze tej sesji.
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -18,7 +20,21 @@ type: skill
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/pr.excalidraw)
 
 
-Przeczytaj [kontrakt ochrony uwagi czytelnika](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md). Użyj tego szablonu do napisania opisu PR:
+Przeczytaj [kontrakt ochrony uwagi czytelnika](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md).
+
+## Istniejący PR [#existing-pr]
+
+Na początku lub po wznowieniu sesji, po istotnych zmianach zakresu, implementacji lub dowodów i przed przekazaniem pracy:
+
+1. Znajdź otwarte PR-y jawnie powiązane z tą rozmową, sesją lub czatem; w przeciwnym razie sprawdź bieżącą gałąź przez `gh pr view`. Zweryfikuj stan otwarty, repozytorium, gałąź źródłową, bazę i własność. Nie wybieraj niepowiązanego ostatniego PR-a. Brak otwartego PR-a oznacza brak aktualizacji i nie daje zgody na jego utworzenie.
+2. Porównaj opublikowany opis z **pełną różnicą PR-a**, pierwotnym celem i aktualną weryfikacją, nie tylko ostatnią turą lub commitem. W stosach oceniaj każdą zmienioną warstwę względem jej rodzica.
+3. Osobno załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md). Ponownie oceń wartość biznesową i wpływ na produkt lub bazę kodu; wykorzystaj nadal aktualne dowody, powtórz unieważnione porównania i usuń niepoparte twierdzenia. Gdy wartość jest nieznana, napisz `not established`.
+4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie zaktualizuj nieaktualny opis w miejscu. Pisz zwięźle: co się zmienia, kto korzysta, dlaczego to ważne, rozstrzygające dowody i istotne ryzyka. Zastępuj nieaktualne punkty; zamiast dopisywać dziennik sesji, podawaj odnośniki do szczegółów. Zachowaj intencję autora i wymagane dowody; pomiń edycję, jeśli opis jest już poprawny.
+5. Po edycji ponownie odczytaj opis z serwera i sprawdź, czy opisuje opublikowany stan gałęzi źródłowej. Żądania tylko do odczytu zgłaszają rozbieżności bez edycji. Wyraźny zakaz wypychania lub zakres lokalny odracza publikację; nie opisuj nieopublikowanej pracy jako dostarczonej.
+
+## Szablon opisu [#body-template]
+
+Użyj tego szablonu do napisania opisu PR:
 
 ```markdown
 ## Summary

@@ -18,7 +18,7 @@ type: skill
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/quantify-impact.excalidraw)
 
 
-让价值一目了然，同时避免为了基准测试而基准测试。每次创建或更新 PR 时，都会通过 `/commit-push-pr` 或 `/stacked-prs` 自动运行此评估；测量的严谨程度与变更相称。
+每次创建或更新 PR，以及[检查会话 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 时，都评估影响，即使不发布。复用有效证据；重跑已失效的比较。评估不授予发布权限。
 
 ## 流程 [#flow]
 
@@ -51,6 +51,6 @@ type: skill
 Method: `<command, fixture, runs, environment>`.
 ```
 
-通过 `/commit-push-pr` 或 `/stacked-prs` 将其直接写入 PR 正文；无需单独发起可审查性请求。显式请求 `/make-pr-easy-to-review` 时，它会复用这些内容。仅在复现需要时，才将被隐藏的原始数据保留在本地证据中。绝不要输出空表格；对于未证实的明确性能主张，说明 `Value not proven`，但不要公布可忽略的数字。
+通过 `/commit-push-pr` 或 `/stacked-prs` 将其直接写入 PR 正文。显式请求 `/make-pr-easy-to-review` 时，它会复用这些内容。仅在复现需要时，才将被隐藏的原始数据保留在本地证据中。绝不要输出空表格；对于未证实的明确性能主张，说明 `Value not proven`，但不要公布可忽略的数字。
 
 测量库的运行性能或 TypeScript 编译器开销时，加载[性能分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/performance-analysis/SKILL.md)。它负责针对性的测量工具；此技能仍负责论点与价值判断。

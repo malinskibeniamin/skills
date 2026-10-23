@@ -1,6 +1,6 @@
 ---
 name: pr
-description: "Use when writing a PR body."
+description: "Use when writing a PR body or keeping an open session PR's scope, business value, and evidence current."
 metadata:
   credits:
     skill: show-me
@@ -9,7 +9,21 @@ metadata:
     url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
 ---
 
-Read [the reader-attention contract](../shared/communication.md). Use this template for the PR body:
+Read [the reader-attention contract](../shared/communication.md).
+
+## Existing PR
+
+At start/resume, after material scope, implementation, or evidence changes, and before handoff:
+
+1. Find open PRs linked to this conversation/session/chat; otherwise use `gh pr view` for this branch. Verify open state, repository/head/base and ownership; no unrelated recent PRs or implicit creation.
+2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents.
+3. Load [quantify-impact](../quantify-impact/SKILL.md) separately; reassess business value and product/codebase impact. Reuse valid evidence, rerun invalid comparisons, remove unsupported claims; unknown value is `not established`.
+4. For authorized write/delivery work, replace stale bullets in place with concise change, beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
+5. Re-read edited hosted bodies against the published head. Read-only: report drift, no edit. Local/no-push: defer publication; unpublished work is not delivered.
+
+## Body template
+
+Use this template for the PR body:
 
 ```markdown
 ## Summary

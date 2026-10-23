@@ -65,6 +65,8 @@ Use [commit-push-pr](../commit-push-pr/SKILL.md), including consumer safeguards,
 staging, remote scope verification, draft state, impact assessment and [pr](../pr/SKILL.md).
 That publication skill owns Git commands, evidence hosting and the PR body. Load dependencies
 through [skill mechanics](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+For an already-open session PR, apply [existing PR upkeep](../pr/SKILL.md#existing-pr)
+on follow-ups and before handoff, including push-only endpoints.
 
 Reviewer-friendly value, focus, risk, rollback and useful visuals are automatic.
 Extra recap artifacts and history reordering/folding require an explicit request; no automatic rewrite
