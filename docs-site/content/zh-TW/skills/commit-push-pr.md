@@ -44,7 +44,7 @@ type: skill
 
 `--no-pr` 絕不會建立 PR。推送後，請更新現有 PR 的證明／內文；否則，在推送並檢查工作目錄乾淨後結束。推送前先準備好本機視覺證明。
 
-1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 確認基底。後續工作繼續加入目前的 PR；只有尚無 PR 時，才建立 PR，並加入受指派者、標籤及範本。建立草稿 PR 無須另行取得核准。發布整個堆疊時使用 `/stacked-prs`。
+1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 確認基底。沿用目前的 PR；建立及更新時皆套用[儲存庫中繼資料規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿。使用範本；建立草稿無須另行核准。堆疊使用 `/stacked-prs`。
 2. 每個 PR 都應分別載入 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) 與 [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；納入價值說明或已證實的指標。
 3. 每項可見變更都需要參考文件中的清單、變更前／後的螢幕擷取畫面與影片、已審查的快照，以及通過的視覺測試。若缺少證明，除非使用者明確豁免，否則會阻擋發布。
 4. 公開儲存庫（`gh repo view --json visibility`）：推送前，請從提交、標題、內文及證明中移除內部組織、儲存庫、產品、人員名稱及私人連結。
