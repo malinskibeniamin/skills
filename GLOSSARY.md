@@ -20,6 +20,18 @@ The local discoverable entrypoint that loads a skill snapshot under host-specifi
 scope, tooling and permission rules. Keep adaptations separate from upstream bytes.
 _Avoid_: Upstream fork, permission grant
 
+**Software factory**:
+A system that repeatedly turns ready work into verified code changes through agents,
+execution infrastructure, and review gates. Its configured endpoint may be a draft PR;
+the term grants no unattended-execution or merge authority.
+_Avoid_: Skill collection, automatic merge
+
+**Factory run**:
+One execution of a factory task, from trigger to recorded result. It may contain several
+agent sessions. A production remote run ends rather than waiting for a human; later
+authorized input starts another run from durable tracker, git-host, and orchestrator state.
+_Avoid_: Agent session, interactive conversation
+
 **Settings hook**:
 An event-triggered command configured by the harness for deterministic checks or
 workflow signals. Separate from a mod's typed middleware hook.

@@ -734,6 +734,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Upgrade + release gate",
     ],
   },
+  "software-factory": {
+    kind: "pipeline",
+    nodes: [
+      "Assess fit + baseline",
+      "Reuse existing services",
+      "Bound 1 pilot task",
+      "Plan setup, not execution",
+    ],
+  },
   "stack-registry": {
     kind: "hierarchy",
     nodes: [
