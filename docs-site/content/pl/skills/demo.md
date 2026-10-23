@@ -1,42 +1,37 @@
 ---
-title: /demo
 description: Utwórz prezentację funkcji dla klientów i opublikuj ją w wersji roboczej PR.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - demo
 sidebar:
   label: /demo
+title: /demo
+type: skill
 ---
 ![Diagram umiejętności /demo](/diagrams/skills/demo.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/demo.excalidraw)
 
-Przekształć ukończoną pracę w prezentację wartości dla klienta, a nie raport o stanie prac deweloperskich. Przed utworzeniem artefaktu przeczytaj
-[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md).
+Przekształć ukończoną pracę w dowód wartości dla klienta. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md).
 
-## Kontrakt
+## Kontrakt [#contract]
 
-1. Ustal żądany zakres. Domyślnie uwzględnij całą bieżącą gałąź lub PR od punktu wspólnego przodka,
-   w tym zmiany zatwierdzone, dodane do indeksu, niedodane do indeksu oraz istotne nieśledzone pliki.
-2. Wybierz najważniejszą korzyść widoczną dla klienta, którą potwierdza zmiana. Zbuduj jedną krótką
-   historię wokół problemu klienta, jego działania i rezultatu.
-3. Utwórz zatwierdzone artefakty w `demos/<slug>/`. Przy aktualizacji
-   tej samej prezentacji używaj ponownie tego katalogu; nigdy nie rozmieszczaj wygenerowanych multimediów w różnych częściach repozytorium.
-4. Preferuj kompozycję Remotion i wyrenderuj `demos/<slug>/output/demo.mp4`. Wykorzystaj rzeczywiste
-   zrzuty produktu, jeśli zwiększają wiarygodność rezultatu.
-5. Użyj wyrenderowanej sekwencji, stanu, przepływu lub diagramu architektury tylko wtedy, gdy występuje
-   konkretny problem uniemożliwiający użycie Remotion albo animacja nie wnosi wartości dla klienta. Użyj Mermaid do
-   prostego grafu, a `/excalidraw-diagram` do dopracowanego wizualnie objaśnienia przestrzennego. Zapisz
-   powód.
-6. Sprawdź reprezentatywne klatki lub cały diagram, popraw widoczne usterki i
-   upewnij się, że nie zawierają żadnych sekretów, prywatnych danych ani danych osobowych klientów. Do każdego diagramu zastępczego
-   dodaj zwięzły opis dostępności.
-7. Nie edytuj żadnego pliku README. Zatwierdź prezentację, wypchnij bieżącą gałąź i utwórz wersję roboczą PR
-   z nagraniem lub materiałem zastępczym podlinkowanym w treści. Zaktualizuj istniejący PR bez
-   zmiany jego stanu przeglądu.
-8. W systemie macOS pokaż nagranie za pomocą `open -R`. W innych systemach wyświetl jego bezwzględną ścieżkę oraz
-   dokładne polecenie `cd` po wyświetleniu `pwd` dla katalogu wyjściowego.
+1. Ustal zakres; domyślnie obejmuje całą bieżącą gałąź lub PR od merge-base, w tym zmiany zatwierdzone, dodane do indeksu, niedodane do indeksu i istotne nieśledzone pliki.
+2. Wybierz najważniejszą widoczną korzyść; opowiedz jedną krótką historię: problem -> działanie -> rezultat.
+3. Przechowuj źródła i wyniki w `demos/<slug>/`; przy aktualizacji używaj ponownie tego katalogu, nie rozpraszaj multimediów.
+4. Zacznij od nagrywania: rzeczywiste nagrania przeglądarki i odtworzenia terminala z plików asciinema `.cast`. Korzystaj z [przepisów na nagrywanie i narrację](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md). Odtworzenie terminala nie jest plikiem MP4.
+5. Dostarcz `output/demo.mp4` dla filmu albo `output/index.html` wraz z zasobami dla prezentacji z rozdziałami. Do prezentacji łączących przeglądarkę i terminal użyj [szablonu](https://github.com/malinskibeniamin/skills/blob/main/demo/templates/walkthrough.html). Oznacz materiały objaśniające lub symulowane; nie są nagranym dowodem działania produktu.
+6. Do opcjonalnej kompozycji wokół rzeczywistych nagrań użyj ponownie HyperFrames; zachowaj istniejący projekt Remotion, jeśli to on odpowiada za źródło. Nie instaluj drugiego renderera tylko po to, by utworzyć nagranie.
+7. Prezentacja musi być zrozumiała bez dźwięku. Dodaj narrację głosową tylko na żądanie lub gdy wymaga jej materiał źródłowy; zsynchronizuj ją z nagranymi działaniami, zachowaj napisy/transkrypcje i sprawdź przez odsłuch. Mowa generowana w chmurze, klonowane głosy i przesyłanie plików wymagają odpowiednich upoważnień.
+8. Sprawdź początkowe, środkowe i końcowe klatki, pełne odtwarzanie oraz ścieżki błędów; popraw usterki i wyklucz sekrety, dane prywatne oraz dane osobowe klientów. Diagram architektury jest poprawnym rozwiązaniem, gdy ruch nie wnosi wartości; dodaj opis dostępności i uzasadnienie.
+9. Nigdy nie edytuj README. Przestrzegaj wyraźnego polecenia zakończenia lokalnie lub bez wypychania; w pozostałych przypadkach zatwierdź zmiany, wypchnij bieżącą gałąź i utwórz wersję roboczą PR z odnośnikiem do artefaktu. Aktualizuj istniejący PR bez zmiany stanu przeglądu.
+10. macOS: `open -R`; w pozostałych systemach pokaż `pwd`, ścieżkę bezwzględną i dokładne polecenie `cd`.
 
-## Ukończenie
+## Ukończenie [#done]
 
-Zwróć historię klienta, typ artefaktu, bezwzględną ścieżkę artefaktu, dowody renderowania lub walidacji,
-powód użycia materiału zastępczego, jeśli ma zastosowanie, oraz adres URL wersji roboczej PR. Lokalny artefakt bez
-żądanego PR oznacza zablokowane dostarczenie, a nie ukończenie.
+Zwróć historię klienta, typ i ścieżkę artefaktu, dowody nagrania/renderowania/odtwarzania, znane ograniczenia oraz adres URL wersji roboczej PR, gdy publikacja mieści się w zakresie. Wynik wyłącznie lokalny spełnia wyraźnie wskazany lokalny punkt zakończenia, ale nie żądanie publikacji.

@@ -1,10 +1,17 @@
 ---
-description: "构建、审查或规划有明确目的的网页 UI 动效。适用于过渡、缓动、弹簧、手势、动效审计及动画机会；不用于视频制作或原生应用。"
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["animate"]}
-sidebar: {"label":"/animate"}
-title: "/animate"
-type: "skill"
+description: 构建、审查或规划有明确目的的网页 UI 动效。适用于过渡、缓动、弹簧、手势、动效审计及动画机会；不用于视频制作或原生应用。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - animate
+sidebar:
+  label: /animate
+title: /animate
+type: skill
 ---
 ![“/animate”技能示意图](/diagrams/skills/animate.svg)
 
@@ -12,15 +19,17 @@ type: "skill"
 
 选择能解释状态变化、又不拖慢用户任务的动效。
 改编自 Emil Kowalski；参见[来源与选取说明](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
+录制产品演示时使用[演示录制工具栈](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md)，而不是 UI 动画。
+`/demo` 仍须由用户调用；此链接不授予发布权限。
 
-## 执行边界
+## 执行边界 [#endpoint]
 
 - 构建/修复：通过项目的 TDD 和交付检查实现所需动效。
 - 审查：报告有证据的缺陷；不改动源代码。
 - 审计/规划/机会探索：按优先级列出改进或有理由的新增动效；不改动源代码。
   仅在明确要求时保存计划。不要将审计变成一轮实现工作。
 
-## 决策顺序
+## 决策顺序 [#decision-sequence]
 
 1. 检查组件、现有动效令牌、已安装的库及版本、输入方式和产品背景。
    先使用项目现有的 UI 基础组件，不要另造组件。
@@ -41,7 +50,7 @@ type: "skill"
 7. 在真实入口测试进入/退出、快速反转、重复触发、键盘、减少动态效果和触摸路径。
    记录实际观察，以及仍需设备验证的部分。
 
-## 审查与规划
+## 审查与规划 [#review-and-planning]
 
 审查目的/频率、缓动/时长、起点、打断、每帧成本、无障碍和一致性。
 引用 `文件:行号` 以及可见证据或性能轨迹；区分品质建议与可复现缺陷。

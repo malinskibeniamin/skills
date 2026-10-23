@@ -1,10 +1,17 @@
 ---
-description: "建置、審查或規劃有明確目的的網頁 UI 動效。適用於過渡、緩動、彈簧、手勢、動效稽核及動畫機會；不用於影片製作或原生應用。"
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["animate"]}
-sidebar: {"label":"/animate"}
-title: "/animate"
-type: "skill"
+description: 建置、審查或規劃有明確目的的網頁 UI 動效。適用於過渡、緩動、彈簧、手勢、動效稽核及動畫機會；不用於影片製作或原生應用。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - animate
+sidebar:
+  label: /animate
+title: /animate
+type: skill
 ---
 ![「/animate」技能示意圖](/diagrams/skills/animate.svg)
 
@@ -12,15 +19,17 @@ type: "skill"
 
 選擇能解釋狀態變化、又不拖慢使用者任務的動效。
 改編自 Emil Kowalski；參見[來源與選取說明](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
+錄製產品示範時使用[示範錄製工具組](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md)，而不是 UI 動畫。
+`/demo` 仍須由使用者呼叫；此連結不授予發布權限。
 
-## 執行邊界
+## 執行邊界 [#endpoint]
 
 - 建置/修復：透過專案的 TDD 和交付檢查實現所需動效。
 - 審查：報告有證據的缺陷；不改動原始碼。
 - 稽核/規劃/機會探索：按優先順序列出改進或有理由的新增動效；不改動原始碼。
   僅在明確要求時儲存計劃。不要將稽核變成一輪實現工作。
 
-## 決策順序
+## 決策順序 [#decision-sequence]
 
 1. 檢查元件、現有動效token、已安裝的函式庫及版本、輸入方式和產品背景。
    先使用專案現有的 UI 基礎元件，不要另造元件。
@@ -41,7 +50,7 @@ type: "skill"
 7. 在真實入口測試進入/退出、快速反轉、重複觸發、鍵盤、減少動態效果和觸控路徑。
    記錄實際觀察，以及仍需裝置驗證的部分。
 
-## 審查與規劃
+## 審查與規劃 [#review-and-planning]
 
 審查目的/頻率、緩動/時長、起點、打斷、每影格成本、無障礙和一致性。
 引用 `檔案:行號` 以及可見證據或效能軌跡；區分品質建議與可復現缺陷。
