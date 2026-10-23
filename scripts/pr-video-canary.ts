@@ -561,15 +561,19 @@ async function verifyDemo(page: Page) {
     );
   }
   // Wider fallback metrics reproduce the Linux overflow on macOS too.
-  for (const family of ["system-ui, sans-serif", "serif"]) {
+  for (const family of [
+    "system-ui, sans-serif",
+    "Verdana, sans-serif",
+    "Georgia, serif",
+  ]) {
     const title = await page.locator("h1").evaluate((element, family) => {
       element.style.fontFamily = family;
-      const { height, bottom } = element.getBoundingClientRect();
-      return { height, bottom };
+      const { width, height, bottom } = element.getBoundingClientRect();
+      return { width, height, bottom };
     }, family);
     assert(
       title.height > 0 && title.bottom <= 160,
-      `Title overlaps footage (${family}, bottom=${title.bottom})`,
+      `Title overlaps footage (${family}, width=${title.width}, height=${title.height}, bottom=${title.bottom})`,
     );
   }
   return checks;
