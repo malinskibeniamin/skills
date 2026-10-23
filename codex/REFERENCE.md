@@ -56,7 +56,7 @@ Model: `<model>` · Effort: `<effort>` · HEAD: `<sha>` · Base: `<sha>`
 <summary and review limits>
 
 ### [P<n>] <title>
-`<file>:<line>` — <evidence, impact, correction, verification>
+`<file>:<line>`: <evidence, impact, correction, verification>
 
 AI-generated advisory review; test claims unverified unless reproduced. Not merge approval.
 ```
