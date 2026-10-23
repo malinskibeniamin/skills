@@ -1,41 +1,37 @@
 ---
-title: /demo
 description: 建立面向客戶的功能操作錄影，並將其發布至草稿 PR。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - demo
 sidebar:
   label: /demo
+title: /demo
+type: skill
 ---
 ![／demo 技能示意圖](/diagrams/skills/demo.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/demo.excalidraw)
 
-將已完成的工作轉化為向客戶證明價值的成果，而非開發者的進度更新。建立成果物前，請先閱讀
-[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
+將已完成的工作轉化為向客戶證明價值的成果。閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
 
-## 規範
+## 規範 [#contract]
 
-1. 確認要求的目標。預設範圍為目前分支或 PR 從其
-   merge-base 起的所有變更，包括已提交、已暫存、未暫存，以及相關的未追蹤工作。
-2. 選擇此變更所能呈現、最具說服力且客戶可見的效益。圍繞客戶的問題、操作與成果，編排一段簡短的
-   故事。
-3. 在 `demos/<slug>/` 下建立並提交成果物。更新同一個示範時，請重複使用該目錄；
-   絕不要將產生的媒體檔案散落於整個儲存庫。
-4. 優先使用 Remotion 合成內容，並算繪為 `demos/<slug>/output/demo.mp4`。若使用真實的
-   產品畫面能提高成果的可信度，請重複利用這些畫面。
-5. 僅在確認 Remotion 有具體阻礙，或動態效果不會為客戶帶來任何價值時，才改用已算繪的序列、狀態、
-   流程或架構圖。簡單的關係圖請使用 Mermaid；需要經過美術編排的空間說明則使用
-   `/excalidraw-diagram`。請記錄原因。
-6. 檢查具代表性的影格或完整圖表、修正可見的瑕疵，並
-   確認其中未出現任何密鑰、私人資料或客戶個人識別資訊。為每個圖表替代方案提供
-   簡潔且無障礙的說明。
-7. 不要編輯任何 README。提交示範、推送目前分支，並建立草稿 PR，
-   在其內文中連結錄影或替代成果物。更新既有 PR 時，
-   不要變更其審查狀態。
-8. 在 macOS 上，使用 `open -R` 在 Finder 中顯示錄影檔。否則，請在顯示輸出目錄的 `pwd` 結果後，
-   印出錄影檔的絕對路徑以及可直接使用的 `cd` 指令。
+1. 確認目標範圍；預設涵蓋目前整個分支或 PR 自 merge-base 起的內容，包括已提交、已暫存、未暫存及相關的未追蹤工作。
+2. 選擇最有說服力的可見效益，講述一段簡短的「問題 -> 操作 -> 成果」故事。
+3. 將原始檔和輸出保存在 `demos/<slug>/` 下；更新時重複使用此目錄，不要分散媒體檔案。
+4. 優先錄製：使用真實的瀏覽器錄影，以及 asciinema `.cast` 終端機重播。遵循[錄製與旁白步驟](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md)。終端機重播不是 MP4 檔案。
+5. 影片交付為 `output/demo.mp4`；分章節示範交付為 `output/index.html` 及其資源。混合瀏覽器與終端機的示範使用[示範範本](https://github.com/malinskibeniamin/skills/blob/main/demo/templates/walkthrough.html)。標明解說性或模擬素材；它們不是錄製的產品證據。
+6. 需要在真實錄影周圍加入合成內容時，重複使用 HyperFrames；若原始內容由現有 Remotion 專案管理，則保留該專案。不要只為錄影而安裝第二個算繪器。
+7. 確保示範在靜音時仍可理解。僅在使用者要求或原始素材需要時加入旁白；將旁白與錄製操作對齊，保留字幕/逐字稿，並透過試聽驗證。雲端語音、複製聲音及上傳操作均須取得相應授權。
+8. 檢查開頭、中間與結尾的影格、完整播放及錯誤路徑；修正缺陷，排除密鑰、私人資料與客戶個人識別資訊。若動態效果沒有額外價值，可使用架構圖，並提供無障礙描述和原因。
+9. 不要編輯 README。遵守明確的僅本機或不推送要求；否則提交、推送目前分支，並建立連結至成果物的草稿 PR。更新既有 PR 時不改變其審查狀態。
+10. macOS：`open -R`；其他系統：顯示 `pwd`、絕對路徑和準確的 `cd` 指令。
 
-## 完成條件
+## 完成條件 [#done]
 
-回傳客戶故事、成果物類型、成果物的絕對路徑、算繪或驗證
-證據、適用時的替代方案原因，以及草稿 PR 網址。只有本機成果物而未建立
-要求的 PR，代表交付受阻，而非已完成。
+回傳客戶故事、成果物類型/路徑、錄製/算繪/播放證據、已知限制，以及發布屬於範圍內時的草稿 PR 網址。僅本機輸出可以滿足明確的本機終點要求，但不能滿足發布請求。

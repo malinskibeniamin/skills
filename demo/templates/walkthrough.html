@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- Scaffold: replace example text and supply every asset listed in ../RECORDING.md. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product walkthrough</title>
+    <link rel="stylesheet" href="player/asciinema-player.css" />
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #0b0f14; color: #f8fafc; }
+      body { margin: 0; }
+      main { width: 100%; max-width: 72rem; margin: auto; box-sizing: border-box; padding: clamp(1rem, 4vw, 3rem); }
+      main > section { margin-block: 3rem; }
+      h1, h2 { line-height: 1.15; overflow-wrap: anywhere; }
+      h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+      h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+      p, summary { line-height: 1.6; }
+      p { max-width: 70ch; }
+      a { color: #93c5fd; }
+      a:focus-visible, summary:focus-visible, video:focus-visible { box-shadow: 0 0 0 3px #93c5fd; }
+      video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; border-radius: 0.75rem; }
+      .terminal { width: 100%; overflow-x: auto; }
+      pre { padding: 1rem; border: 1px solid #475569; border-radius: 0.75rem; overflow-x: auto; }
+      [role="alert"] { color: #fda4af; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Product walkthrough</h1>
+      <p>Replace this introduction with the customer's problem and the observed payoff.</p>
+      <section aria-labelledby="browser-heading">
+        <h2 id="browser-heading">1. Complete the task in the browser</h2>
+        <p>Describe the action and its verified result, not the implementation.</p>
+        <video id="browser" src="demo.mp4" controls playsinline preload="none" aria-label="Browser demonstration">
+          <track kind="captions" src="browser.vtt" srclang="en" label="English" default />
+          <p><a href="demo.mp4">Download the browser demonstration</a>.</p>
+        </video>
+        <p id="browser-error" role="alert" hidden>The browser recording or captions could not load. Check the media files and reload.</p>
+        <details>
+          <summary>Read the browser transcript</summary>
+          <p>Replace with the complete narration and important visual outcomes.</p>
+        </details>
+        <p><a href="demo.mp4" download>Download browser video</a> · <a href="browser.vtt">Read captions</a></p>
+      </section>
+      <section aria-labelledby="terminal-heading">
+        <h2 id="terminal-heading">2. Complete the task in the terminal</h2>
+        <p>This chapter replays terminal text, with synchronized narration.</p>
+        <p>On narrow screens, scroll within the terminal to read long lines.</p>
+        <p id="terminal-status" role="status">Loading the terminal chapter…</p>
+        <section id="terminal" class="terminal" aria-label="Terminal demonstration"></section>
+        <p id="terminal-error" role="alert" hidden>The terminal player could not load. Check the player and recording files, or download the recording.</p>
+        <details>
+          <summary>Read the terminal transcript</summary>
+          <p>Replace with the complete narration and meaningful command output.</p>
+        </details>
+        <h3>Commands to reproduce</h3>
+        <pre><code>Replace with the actual sanitized commands.</code></pre>
+        <p><a href="terminal.cast" download>Download terminal recording</a> · <a href="terminal-narration.mp3" download>Download narration</a></p>
+      </section>
+    </main>
+    <script src="player/asciinema-player.min.js"></script>
+    <script>
+      function showBrowserError() {
+        document.getElementById("browser-error").hidden = false;
+      }
+      document.getElementById("browser").addEventListener("error", showBrowserError);
+      document.querySelector("track").addEventListener("error", showBrowserError);
+      function showTerminalError() {
+        document.getElementById("terminal-error").hidden = false;
+      }
+      async function loadTerminal() {
+        try {
+          // The player can fall back to silent playback; make a missing voice visible.
+          const narration = await fetch("terminal-narration.mp3");
+          if (!narration.ok) throw new Error("Terminal narration is unavailable");
+          await narration.arrayBuffer();
+          const player = AsciinemaPlayer.create("terminal.cast", document.getElementById("terminal"), {
+            audioUrl: "terminal-narration.mp3",
+            speed: 1,
+            idleTimeLimit: Infinity,
+            fit: false,
+            terminalFontSize: 16,
+            poster: "npt:0:01",
+          });
+          player.addEventListener("error", showTerminalError);
+        } catch {
+          showTerminalError();
+        } finally {
+          document.getElementById("terminal-status").hidden = true;
+        }
+      }
+      loadTerminal();
+    </script>
+  </body>
+</html>

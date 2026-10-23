@@ -9,15 +9,17 @@ Turn finished work into customer proof. Read [REFERENCE.md](REFERENCE.md).
 
 ## Contract
 
-1. Resolve target; default whole current branch/PR from merge-base, including committed, staged, unstaged, relevant untracked work.
-2. Choose strongest visible payoff; tell one short problem -> action -> result story.
-3. Commit under `demos/<slug>/`; reuse for updates, never scatter media.
-4. Prefer Remotion and render `demos/<slug>/output/demo.mp4`; reuse real captures when more credible.
-5. Fall back only on concrete Remotion blocker or no motion value: rendered sequence/state/flow or architecture diagram; Mermaid for simple graph, `/excalidraw-diagram` for art-directed space. Record reason.
-6. Inspect frames/full diagram; repair defects; exclude secrets/private/customer PII. Diagram fallback needs concise accessible description.
-7. Never edit README. Commit, push current branch, create draft PR with linked artifact; update existing PR without changing review state.
-8. macOS: `open -R`; otherwise show `pwd`, absolute path, exact `cd`.
+1. Resolve target; default whole current branch/PR from merge-base: committed, staged, unstaged, relevant untracked.
+2. Tell one customer problem -> action -> payoff story.
+3. Keep sources/output in `demos/<slug>/`; reuse for updates.
+4. Use a capture-first stack: real browser footage; asciinema `.cast` terminal replays (not MP4). Follow [recipes](RECORDING.md).
+5. Deliver `output/demo.mp4` or `output/index.html` with assets; use the [walkthrough scaffold](templates/walkthrough.html). Label simulations/explanations, not recorded evidence.
+6. Compose optionally with existing HyperFrames; preserve existing Remotion sources. No second renderer for recordings.
+7. Keep muted playback understandable. Requested/source-required voiceover must align with actions, retain captions/transcripts, and pass listening checks. Cloud speech, cloned voices, and uploads require authorization.
+8. Inspect early/middle/late frames, full playback, and error paths; fix defects; redact secrets/private/customer PII. When motion adds no value, use an architecture diagram with accessible description and reason.
+9. Never edit README. Honor local/no-push stops; otherwise commit, push current branch, create draft PR with artifact link. Preserve existing PR review state.
+10. macOS: `open -R`; otherwise show `pwd`, absolute path, exact `cd`.
 
 ## Done
 
-Return customer story, artifact type/path, render/validation evidence, fallback reason, draft PR URL. Local-only artifact is blocked, not complete.
+Return story, artifact type/path, capture/render/playback evidence, limits, and PR URL when publication is in scope. Local output satisfies only an explicit local endpoint.

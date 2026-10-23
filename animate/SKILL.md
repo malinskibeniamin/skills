@@ -5,6 +5,8 @@ description: "Build, review, or plan purposeful web UI motion. Use for transitio
 
 Choose motion that explains a state change without delaying the user's task.
 Adapted from Emil Kowalski; [source and selection](../shared/EMIL-SKILLS-CREDITS.md).
+Recorded product walkthroughs use the [demo recording stack](../demo/RECORDING.md),
+not UI animation. `/demo` remains user-invoked; this pointer grants no publication scope.
 
 ## Endpoint
 

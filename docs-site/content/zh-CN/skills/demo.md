@@ -1,28 +1,37 @@
 ---
-title: /demo
 description: 创建面向客户的功能演示，并将其发布到草稿 PR 中。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - demo
 sidebar:
   label: /demo
+title: /demo
+type: skill
 ---
 ![描述 /demo 技能的示意图](/diagrams/skills/demo.svg)
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/demo.excalidraw)
 
-将已完成的工作转化为面向客户的成果证明，而不是开发者状态更新。创建制品前，请阅读
-[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
+将已完成的工作转化为面向客户的成果证明。阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
 
-## 约定
+## 约定 [#contract]
 
-1. 确定请求的目标范围。默认包含当前整个分支或 PR 自合并基点以来的所有内容，包括已提交、已暂存、未暂存以及相关的未跟踪工作。
-2. 选择此次变更所能体现的、最有力且客户可感知的价值。围绕客户的问题、操作和结果构建一个简短的故事。
-3. 在 `demos/<slug>/` 下创建并提交制品。更新同一演示时复用该目录；切勿将生成的媒体文件分散到整个仓库中。
-4. 优先使用 Remotion 合成，并渲染 `demos/<slug>/output/demo.mp4`。如果真实产品截图能让结果更可信，请复用这些截图。
-5. 仅当 Remotion 存在明确阻碍，或动态效果无法为客户带来任何价值时，才改用渲染后的序列图、状态图、流程图或架构图。简单图表使用 Mermaid；需要艺术化空间表达时使用 `/excalidraw-diagram`。记录采用替代方案的原因。
-6. 检查代表性帧或完整图表，修复可见缺陷，并确认其中没有密钥、私密数据或客户个人身份信息。为每个替代图表提供简洁且无障碍的描述。
-7. 不要编辑任何 README。提交演示，推送当前分支，并创建一个草稿 PR，在其正文中链接录制内容或替代制品。更新现有 PR 时，不要更改其评审状态。
-8. 在 macOS 上，使用 `open -R` 在访达中显示录制文件。在其他系统上，先对输出目录执行 `pwd`，然后输出其绝对路径以及准确的 `cd` 命令。
+1. 确定目标范围；默认覆盖当前整个分支或 PR 自 merge-base 以来的内容，包括已提交、已暂存、未暂存及相关的未跟踪工作。
+2. 选择最有力的可见收益，讲述一个简短的“问题 -> 操作 -> 结果”故事。
+3. 将源文件和输出保存在 `demos/<slug>/` 下；更新时复用此目录，不要分散媒体文件。
+4. 优先录制：使用真实的浏览器录屏，以及 asciinema `.cast` 终端回放。遵循[录制与旁白步骤](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md)。终端回放不是 MP4 文件。
+5. 影片交付为 `output/demo.mp4`；分章节演示交付为 `output/index.html` 及其资源。混合浏览器与终端的演示使用[演示模板](https://github.com/malinskibeniamin/skills/blob/main/demo/templates/walkthrough.html)。标明解释性或模拟材料；它们不是录制的产品证据。
+6. 需要在真实录屏周围添加合成内容时，复用 HyperFrames；若源内容由现有 Remotion 项目管理，则保留该项目。不要只为录屏而安装第二个渲染器。
+7. 确保演示在静音时仍可理解。仅在用户要求或源材料需要时添加旁白；将旁白与录制操作对齐，保留字幕/文字稿，并通过试听验证。云端语音、克隆声音和上传操作均须取得相应授权。
+8. 检查开头、中间和结尾的帧、完整播放及错误路径；修复缺陷，排除密钥、私密数据和客户个人身份信息。若动态效果没有额外价值，可使用架构图，并提供无障碍描述和原因。
+9. 不要编辑 README。遵守明确的仅本地或不推送要求；否则提交、推送当前分支，并创建链接到制品的草稿 PR。更新现有 PR 时不改变其评审状态。
+10. macOS：`open -R`；其他系统：显示 `pwd`、绝对路径和准确的 `cd` 命令。
 
-## 完成标准
+## 完成标准 [#done]
 
-返回客户故事、制品类型、制品绝对路径、渲染或验证证据、适用时采用替代方案的原因，以及草稿 PR 的 URL。只有本地制品而没有所要求的 PR，属于交付受阻，而非已完成。
+返回客户故事、制品类型/路径、录制/渲染/播放证据、已知限制，以及发布属于范围内时的草稿 PR URL。仅本地输出可以满足明确的本地终点要求，但不能满足发布请求。
