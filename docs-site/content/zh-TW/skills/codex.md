@@ -37,6 +37,9 @@ Codex 看不到這段對話的任何內容。每個提示詞都必須指明儲�
 - **電腦操作：**指明 URL／應用程式、狀態與證據。
 - **調查／分析：**使用 `-s read-only` 並產出精簡報告。
 
+審查 PR 時，請使用 [PR 報告與發布](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#pr-report-and-posting)。
+預設將報告儲存在本機；發布需要使用者明確提出要求，審查授權不等於發布授權。
+
 ## 工作流程
 
 1. 通過主機與授權閘門。

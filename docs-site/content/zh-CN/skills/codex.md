@@ -36,6 +36,9 @@ Codex 看不到本次对话的任何内容。每个提示词都应注明仓库�
 - **计算机操作：**注明 URL/应用、状态和证据。
 - **调查/分析：**使用 `-s read-only` 并提供精简报告。
 
+审查 PR 时，请使用 [PR 报告与发布](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#pr-report-and-posting)。
+默认将报告保存在本地；发布需要用户明确提出请求，审查授权不等于发布授权。
+
 ## 工作流
 
 1. 通过宿主环境和授权门控。
