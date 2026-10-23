@@ -188,7 +188,11 @@ function composeFixture(version: string) {
   const bin = join(root, "bin");
   mkdirSync(scripts);
   mkdirSync(bin);
-  for (const name of ["pr-video.sh", "pr-video-frame.html"]) {
+  for (const name of [
+    "pr-video.sh",
+    "pr-video-frame.html",
+    "pr-video-demo.html",
+  ]) {
     copyFileSync(new URL(name, import.meta.url), join(scripts, name));
   }
   writeFileSync(
@@ -218,6 +222,7 @@ const args = process.argv.slice(2);
 if (tool === "ffprobe") console.log(args.at(-1).endsWith("before.webm") ? process.env.BEFORE_DURATION : process.env.AFTER_DURATION);
 else if (tool === "ffmpeg") {
   if (args.includes("hash")) console.log("SHA256=" + createHash("sha256").update(readFileSync(args[args.indexOf("-i") + 1])).digest("hex"));
+  else if (args.some((arg) => arg.includes("freezedetect"))) console.error(process.env.FREEZE_LOG || "");
   else if (args.at(-1) === "-") console.error("frame= 12");
   else writeFileSync(args.at(-1), "video");
 } else {
@@ -231,13 +236,16 @@ else if (tool === "ffmpeg") {
     writeFileSync(join(bin, tool), fake, { mode: 0o755 });
   }
   const calls = join(root, "calls.jsonl");
-  const run = (failRender = false, overrides: Record<string, string> = {}) =>
+  const run = (
+    failRender = false,
+    overrides: Record<string, string> = {},
+    demo = false,
+  ) =>
     Bun.spawnSync(
       [
         "bash",
         join(scripts, "pr-video.sh"),
-        "compose",
-        join(root, "before.webm"),
+        ...(demo ? ["demo"] : ["compose", join(root, "before.webm")]),
         join(root, "after.webm"),
         join(root, "out"),
       ],
@@ -257,7 +265,13 @@ else if (tool === "ffmpeg") {
         },
       },
     );
-  return { root, run, calls };
+  return {
+    root,
+    run,
+    calls,
+    demo: (overrides: Record<string, string> = {}) =>
+      run(false, overrides, true),
+  };
 }
 
 function recordFixture(flowText: string) {
@@ -317,12 +331,7 @@ test.each([
         commands()
           .filter((args) => args[2] === "wait")
           .map((args) => Number(args[3])),
-      ).toEqual([
-        expected,
-        Math.max(expected, 2000),
-        Math.max(expected, 2000),
-        2000,
-      ]);
+      ).toEqual([expected, Math.max(expected, 2000), Math.max(expected, 2000)]);
     }
   },
 );
@@ -337,7 +346,11 @@ test("silent narration preserves authored text and gets enough reading time", ()
     commands()
       .filter((args) => args[2] === "wait")
       .map((args) => Number(args[3])),
-  ).toEqual([1500, 4000, 2200, 2000]);
+  ).toEqual([1500, 4000, 2200]);
+  expect(
+    JSON.parse(readFileSync(join(root, "take.webm.steps.json"), "utf8"))
+      .steps[0].at,
+  ).toBe(0);
   expect(
     JSON.parse(
       readFileSync(join(root, "take.webm.steps.json"), "utf8"),
@@ -385,10 +398,10 @@ test.each([
   },
   {
     before: "35",
-    after: "40",
-    duration: 40,
-    beforeCaption: [0.8, 39.2],
-    afterCaption: [0.8, 39.2],
+    after: "39",
+    duration: 39,
+    beforeCaption: [0.8, 38.2],
+    afterCaption: [0.8, 38.2],
   },
 ])(
   "compose keeps readable duration and synchronized captions: $before/$after seconds",
@@ -562,4 +575,157 @@ test("uses the matching installed renderer without fetching another CLI", () => 
       "../before-after.mp4",
     ],
   ]);
+});
+
+test("rejects long idle stretches even when a take has enough distinct frames", () => {
+  const { root, run, calls } = composeFixture("0.8.123");
+  const result = run(false, {
+    FREEZE_LOG: "[freezedetect] lavfi.freezedetect.freeze_start: 2.4",
+  });
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain("idle from 2.4s");
+  expect(existsSync(join(root, "out/before-after.mp4"))).toBe(false);
+  expect(existsSync(calls)).toBe(false);
+});
+
+function demoFixture() {
+  const fixture = composeFixture("0.8.123");
+  writeFileSync(
+    join(fixture.root, "after.webm.steps.json"),
+    JSON.stringify({
+      title: "Analyze a draft",
+      diagram: ["CLI <input>", "RPC & handler", "Result"],
+      steps: [
+        { at: 0, caption: "Run the command.", active: 0 },
+        { at: 3, caption: "Inspect the result.", active: 2 },
+      ],
+    }),
+  );
+  return {
+    ...fixture,
+    demo: (overrides: Record<string, string> = {}) =>
+      fixture.demo({ AFTER_DURATION: "6", ...overrides }),
+  };
+}
+
+test("renders one real CLI or UI take with timed subtitles and an escaped execution model", () => {
+  const { root, demo } = demoFixture();
+  const result = demo();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  expect(result.stdout.toString().trim().split("\n")).toEqual([
+    join(root, "out/demo.mp4"),
+    join(root, "out/demo.gif"),
+  ]);
+  const html = readFileSync(join(root, "out/hyperframes/index.html"), "utf8");
+  expect(html).toContain("CLI &lt;input&gt;");
+  expect(html).toContain("RPC &amp; handler");
+  expect(html).toContain("Execution model");
+  expect(html).toContain('data-start="3" data-duration="3"');
+  expect(html).toContain("Inspect the result.");
+  expect(html).toContain('class="node active">Result');
+});
+
+test.each([
+  null,
+  { title: "No steps", steps: [] },
+  { steps: [{ at: 1, caption: "Late start" }] },
+  { steps: [{ at: 0, caption: " " }] },
+  {
+    steps: [
+      { at: 0, caption: "Run" },
+      { at: 0, caption: "Repeat" },
+    ],
+  },
+  {
+    steps: [
+      { at: 0, caption: "Run" },
+      { at: 6, caption: "Too late" },
+    ],
+  },
+  {
+    steps: [
+      { at: 0, caption: "Too fast" },
+      { at: 0.2, caption: "Result" },
+    ],
+  },
+  { diagram: ["CLI", "RPC"], steps: [{ at: 0, caption: "Run", active: 2 }] },
+])(
+  "demo rejects missing or invalid narration before rendering: %j",
+  (sidecar) => {
+    const { root, demo, calls } = demoFixture();
+    const path = join(root, "after.webm.steps.json");
+    if (sidecar === null) rmSync(path);
+    else
+      writeFileSync(
+        path,
+        JSON.stringify({ title: "Analyze a draft", ...sidecar }),
+      );
+    const result = demo();
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr.toString()).toContain("steps.json");
+    expect(existsSync(calls)).toBe(false);
+  },
+);
+
+test("auto renderer fails closed instead of silently dropping subtitles", () => {
+  const { run } = composeFixture("0.8.123");
+  const result = run(true, { PR_VIDEO_RENDERER: "auto" });
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stdout.toString()).not.toContain("before-after.mp4");
+});
+
+test("comparison refuses to manufacture a long frozen tail on the shorter side", () => {
+  const { root, run, calls } = composeFixture("0.8.123");
+  const result = run(false, { BEFORE_DURATION: "6", AFTER_DURATION: "20" });
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain("freeze the shorter take");
+  expect(existsSync(join(root, "out/before-after.mp4"))).toBe(false);
+  expect(existsSync(calls)).toBe(false);
+});
+
+test("records a narrated hover when the actual change is a tooltip", () => {
+  const { run, commands } = recordFixture(
+    '# Disabled send reason\n## Hover reveals why Send is disabled.\nhover "#send"\n',
+  );
+  const result = run();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  expect(commands()).toContainEqual(expect.arrayContaining(["hover", "#send"]));
+});
+
+test("demo without a diagram keeps the recording full-width", () => {
+  const { root, demo } = demoFixture();
+  writeFileSync(
+    join(root, "after.webm.steps.json"),
+    JSON.stringify({
+      title: "Save a name",
+      steps: [{ at: 0, caption: "Type and save a name." }],
+    }),
+  );
+  const result = demo();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  const html = readFileSync(join(root, "out/hyperframes/index.html"), "utf8");
+  expect(html).toContain('class="full"');
+  expect(html).not.toContain("<aside>");
+});
+
+test("captioned comparison refuses a take without narration", () => {
+  const { root, run, calls } = composeFixture("0.8.123");
+  rmSync(join(root, "after.webm.steps.json"));
+  const result = run();
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain("steps.json");
+  expect(existsSync(calls)).toBe(false);
+});
+
+test("record gives a verified result one reading hold, without stacking idle pauses", () => {
+  const { run, commands } = recordFixture(
+    '# Save a name\n## Save the name.\nclick "#save"\nwait --text "Saved"\n',
+  );
+  const result = run();
+  expect(result.exitCode, result.stderr.toString()).toBe(0);
+  expect(
+    commands()
+      .filter((args) => args[2] === "wait")
+      .map((args) => args.slice(3)),
+  ).toEqual([["1500"], ["2000"], ["--text", "Saved"], ["2000"]]);
 });

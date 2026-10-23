@@ -218,6 +218,8 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    brief; show the changed result at matched steps. If the difference is small, crop both
    sides to the same region, retain a full-view context link, and name the exact control,
    state, or timestamp to inspect. Captions explain old/new behavior, not only clicks.
+   Follow [review-video storytelling](VIDEO.md) for CLI/UI capture, single-take new
+   capabilities, timed execution models, and whole-video pacing review.
    Also record one before/after video of the changed flow in real UI. The video shows the
    flow happening, never a still page: navigate, click, type, open/submit, and land on the
    changed result (success, error, or new state). Write one flow file (one agent-browser
@@ -231,7 +233,8 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    context link. Frame the control and its resulting feedback together; avoid cropping
    away the cursor, error, or success state. Red circles, arrows, or drawn callouts may
    clarify a real action, but must not cover important text or invent UI behavior.
-   A static-only change still gets a flow that reaches, scrolls to, and hovers/focuses it.
+   For a small change, show its real trigger and result; a tooltip can use a focused
+   hover/reveal/dismiss flow without unrelated actions.
    Start the flow file with a `# <flow title>` line. Add **on-screen narration subtitles,
    even without voiceover**: put a `## <narration>` line before every interaction.
    Explain what we do and what changes, not raw commands or selectors: "We enter a task
@@ -252,19 +255,22 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    `record` rejects missing narration before opening the browser. Captions hold for at
    least 2 seconds, or 1 second plus 300 ms per word, respecting longer configured pauses.
    HyperFrames burns them into the MP4 and GIF; no audio track is needed. Use the forced
-   HyperFrames renderer below for final evidence; the plain ffmpeg fallback has no subtitles.
-   Target **5-30 seconds** per take so humans can follow;
-   1-2 second demos are not acceptable. Hold each action long enough to read its caption
+   HyperFrames renderer below for final evidence; explicit ffmpeg diagnostics have no subtitles.
+   Keep a complete, readable journey; trim dead time rather than target a runtime.
+   Comparison takes shorter than 5 seconds are slowed for readability. Hold each action long enough to read its caption
    and result: `record` defaults to 1500 ms between uncaptioned setup steps (minimum
-   `PR_VIDEO_STEP_MS=1000`) and a 2 second final hold. Split longer flows at meaningful outcomes; never speed them
+   `PR_VIDEO_STEP_MS=1000`) and a 2 second result hold after an uncaptioned readiness wait;
+   it does not stack another final hold on an already-readable narrated step. Split long flows at meaningful outcomes; never speed them
    up to fit. `compose` slows each take shorter than 5 seconds, including its captions,
-   rather than merely appending a frozen result; it preserves longer footage. `record` refuses flows
-   with fewer than two interaction steps, and `scripts/pr-video.sh compose before.webm
-   after.webm <out-dir>` refuses static takes (under 8 distinct frames), duplicate files,
-   and identical decoded footage (including remuxed copies); re-record the
+   rather than merely appending a frozen result; it preserves longer footage. `record` requires a narrated
+   interaction, including hover for a tooltip. `scripts/pr-video.sh compose before.webm
+   after.webm <out-dir>` refuses static takes, source idle spans of 5 seconds or longer,
+   excessive end-frame padding, duplicate files, and identical decoded footage
+   (including remuxed copies); re-record or trim the
    flow, never pad or loop a still. `compose` frames the real takes with HyperFrames
    (exact pin from root `package.json`, locked local CLI or pinned `bunx` fallback): concrete behavior labels, the title, and step captions timed per
-   side. It falls back to plain ffmpeg side by side when HyperFrames is unavailable. It
+   side. The default fails closed if HyperFrames fails. Explicit ffmpeg is for
+   uncaptioned diagnostic output only. It
    never runs `hyperframes init`, which installs global agent skills. Do not substitute
    `/pr-to-video` or other HyperFrames creation workflows: they build synthetic explainers
    from the diff, not the real UI.
@@ -378,9 +384,10 @@ bun run test:pr-video
 ```
 
 Canary artifacts live under `.context/pr-video-canary/`. ffmpeg, ffprobe, and jq
-are required. `PR_VIDEO_RENDERER=hyperframes` fails closed; `auto` may fall back
-to plain ffmpeg without labels/captions. Use the forced renderer for quality
-checks and final demos where framing is required.
+are required. Both `PR_VIDEO_RENDERER=hyperframes` and the default `auto` fail
+closed. Explicit `ffmpeg` is uncaptioned diagnostic output, not final evidence.
+The canary also rejects burst-then-idle footage and renders a single take with
+timed subtitles and a highlighted explanatory execution model.
 
 MP4 is the primary review artifact; GIF is only a lightweight inline preview.
 Rendering uses `delivery` quality and lossless PNG source-frame extraction to

@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- Single real take with timed narration and optional execution context. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Real workflow demo</title>
+    <style>
+      body { margin: 0; background: #0b0f14; color: #f8fafc; font-family: system-ui, sans-serif; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+      h1 { position: absolute; left: 96px; top: 48px; margin: 0; width: 1728px; font-size: 44px; line-height: 1.2; overflow-wrap: anywhere; }
+      video { position: absolute; left: 96px; top: 160px; width: 1728px; height: 720px; object-fit: contain; }
+      .with-diagram video { width: 1160px; }
+      .step { position: absolute; inset: 0; }
+      .caption { position: absolute; left: 192px; top: 900px; width: 1536px; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 36px; line-height: 1.25; text-align: center; overflow-wrap: anywhere; }
+      aside { position: absolute; left: 1300px; top: 160px; width: 524px; height: 720px; box-sizing: border-box; padding: 24px; border-radius: 16px; background: #111827; }
+      h2 { margin: 0 0 8px; font-size: 30px; }
+      p { margin: 0 0 24px; color: #cbd5e1; font-size: 22px; }
+      .node { padding: 8px 12px; border: 2px solid #475569; border-radius: 10px; font-family: monospace; font-size: 22px; line-height: 1.2; overflow-wrap: anywhere; }
+      .active { border-color: #60a5fa; background: #1e3a5f; }
+      .arrow { height: 20px; line-height: 20px; text-align: center; color: #94a3b8; font-size: 24px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="__LAYOUT__" data-composition-id="main" data-no-timeline data-start="0" data-width="1920" data-height="1080" data-duration="__DURATION__">
+      <h1>__TITLE__</h1>
+      <video id="recording" class="clip" src="assets/recording.mp4" data-start="0" data-duration="__DURATION__" muted playsinline></video>
+      <!-- __STEPS__ -->
+    </div>
+  </body>
+</html>
