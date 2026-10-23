@@ -560,13 +560,18 @@ async function verifyDemo(page: Page) {
       "Max-length explanation overflows",
     );
   }
-  assert(
-    (await page.locator("h1").boundingBox())?.height &&
-      (await page
-        .locator("h1")
-        .evaluate((element) => element.getBoundingClientRect().bottom <= 160)),
-    "Title overlaps footage",
-  );
+  // Wider fallback metrics reproduce the Linux overflow on macOS too.
+  for (const family of ["system-ui, sans-serif", "serif"]) {
+    const title = await page.locator("h1").evaluate((element, family) => {
+      element.style.fontFamily = family;
+      const { height, bottom } = element.getBoundingClientRect();
+      return { height, bottom };
+    }, family);
+    assert(
+      title.height > 0 && title.bottom <= 160,
+      `Title overlaps footage (${family}, bottom=${title.bottom})`,
+    );
+  }
   return checks;
 }
 

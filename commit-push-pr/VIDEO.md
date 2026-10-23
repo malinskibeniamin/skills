@@ -6,7 +6,7 @@ animated caption, or architecture slide alone is not evidence of product behavio
 
 ## Choose the story before recording
 
-Write a few beats: starting state → meaningful action → visible result. Show an
+Write a few beats: starting state -> meaningful action -> visible result. Show an
 error and recovery when they explain the change. Start near the first action;
 remove setup, loading gaps, repeated output, and idle tails. Keep enough time to
 read each result. Prefer a short complete journey over a tour of every test case;
@@ -19,7 +19,7 @@ longer journeys are useful when each beat adds information, not to meet a runtim
   keeps its timing, and renders a single large take with subtitles. Explain why
   there is no prior equivalent; retain comparable baseline evidence when it exists.
 - **Small visual change:** show the actual trigger and changed result. A tooltip
-  may need only hover → reason appears → dismiss. Do not add unrelated typing or
+  may need only hover -> reason appears -> dismiss. Do not add unrelated typing or
   navigation to manufacture activity. A screenshot remains useful alongside it.
 
 Use the repository's native recording workflow or the host's recording tools;
@@ -51,8 +51,8 @@ word, whichever is longer. Shorten prose instead of covering the screen. Burned-
 subtitles work without audio; no music or voiceover is required for review evidence.
 
 Omit `diagram` and `active` for full-width footage. When explanation helps, use
-2–6 short diagram nodes (up to 60 characters each) and optional zero-based `active`
-indices to walk through command → RPC → handler → result, or form → request →
+2-6 short diagram nodes (up to 60 characters each) and optional zero-based `active`
+indices to walk through command -> RPC -> handler -> result, or form -> request ->
 state update. The execution model sits beside the real footage; it never replaces
 it. Base nodes and relationships on inspected source or traces and cite those
 sources in the PR. Its highlight is an explanation, **not a measured live trace**;
