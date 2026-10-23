@@ -6,6 +6,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { chromium, expect, type Locator, type Page } from "@playwright/test";
 import { z } from "zod";
+import { verifyDemoMedia } from "./demo-media-canary";
 
 const root = resolve(import.meta.dir, "..");
 const out = resolve(Bun.argv[2] ?? join(root, ".context/pr-video-canary"));
@@ -57,6 +58,7 @@ const browser = await chromium.launch().catch((cause: unknown) => {
 });
 try {
   await verifyIdleRejection();
+  await verifyDemoMedia(root, out, browser);
   const shortTakePacing = await verifyShortTakePacing();
   for (const side of ["before", "after"]) {
     const context = await browser.newContext({

@@ -11,7 +11,9 @@ run_content_eval "$SKILL" "^disable-model-invocation: true$" \
   "demo is explicit-only"
 run_content_eval "$SKILL" "customer" "demo optimizes for a customer audience"
 run_content_eval "$SKILL" "demos/<slug>" "demo stores committed artifacts predictably"
-run_content_eval "$SKILL" "Remotion" "demo prefers Remotion"
+run_content_eval "$SKILL" "capture-first" "demo chooses recordings before a renderer"
+run_content_eval "$SKILL" "asciinema" "demo includes terminal recordings"
+run_content_eval "$SKILL" "HyperFrames" "demo reuses the existing composition engine"
 run_content_eval "$SKILL" "architecture diagram" \
   "demo has an architecture-diagram fallback"
 run_content_eval "$SKILL" "README" "demo protects README from automatic edits"
@@ -24,15 +26,15 @@ run_content_eval "$REFERENCE" "merge-base|whole.*diff" \
   "demo grounds its story in the whole change"
 run_content_eval "$REFERENCE" "problem.*action.*payoff" \
   "demo uses a customer story arc"
-run_content_eval "$REFERENCE" "remotion-best-practices|remotion-create" \
-  "demo routes Remotion work through official skills"
+run_content_eval "$REFERENCE" "RECORDING.md" \
+  "demo routes recording and narration to concrete recipes"
 run_content_eval "$REFERENCE" "demo\.mp4" "demo renders a stable recording filename"
 run_content_eval "$REFERENCE" "early.*middle.*late|sample frames" \
   "demo visually verifies representative frames"
 run_content_eval "$REFERENCE" "secret|PII|private" \
   "demo redacts sensitive source material"
-run_content_eval "$REFERENCE" "one documented.*blocker|only.*block" \
-  "demo falls back only after a concrete Remotion blocker"
+run_content_eval "$REFERENCE" "existing Remotion|existing.*Remotion" \
+  "demo preserves existing Remotion projects without requiring a second renderer"
 run_content_eval "$REFERENCE" "state diagram|state.*lifecycle" \
   "demo can explain lifecycle changes with a state diagram"
 run_content_eval "$REFERENCE" "\/excalidraw-diagram" \
@@ -46,6 +48,8 @@ run_content_eval "$REFERENCE" "\/commit-push-pr|gh pr create" \
 run_content_eval "$REFERENCE" "--draft" "demo always requests draft PR mode"
 run_content_eval "$REFERENCE" "Do not edit.*README|Never edit.*README" \
   "demo never edits README automatically"
+run_file_eval "$REPO_ROOT/demo/RECORDING.md" "demo recording recipes exist"
+run_file_eval "$REPO_ROOT/demo/templates/walkthrough.html" "demo walkthrough scaffold exists"
 
 run_content_eval "$PLUGIN" '"\./demo/"' "Claude plugin registers demo"
 run_content_eval "$REPO_ROOT/scripts/generate-skill-catalog.sh" '"demo":' \

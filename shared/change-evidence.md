@@ -37,6 +37,9 @@ surface, not an invented browser UI. Follow the existing procedure's evidence ga
 
 A request to build product motion is different from a request to animate an explanation.
 Do not add UI animations, generated images or extra movies merely to decorate a PR.
+For an explicitly requested customer demo, `/demo` documents the capture-first browser,
+asciinema, narration, and walkthrough stack in [its recording recipes](../demo/RECORDING.md).
+It is user-invoked; the recipes do not grant publication permission or replace PR evidence.
 When explicitly requested creative media needs installed HyperFrames or image-generation
 capabilities, use those available owners; do not assume they ship with this harness. They
 cannot replace real captures, tests or measurements. Interactive planning remains with
