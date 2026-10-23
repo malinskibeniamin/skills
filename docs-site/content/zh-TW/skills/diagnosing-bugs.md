@@ -113,6 +113,7 @@ UI 內容／版面配置故障：使用 Skill 工具呼叫 "break-ui"，準備�
 每項探測都必須對應階段 3 的特定預測。**一次只改變一個變數。**
 
 1. 環境支援時使用**偵錯工具 / REPL 檢查**。一個中斷點即可取代十筆記錄。
+   對於 React 狀態、元件歸屬或算繪成本假設，請閱讀選用的 [React 執行階段檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md)流程；使用前檢查可用能力。
 2. 在能區分各項假設的邊界加入**針對性記錄**。
 3. 絕不「記錄所有內容再用 grep 搜尋」。
 

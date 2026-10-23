@@ -44,3 +44,5 @@ Artifacts: <paths or links>
 ```
 
 Separate measured facts, inferences, and untested opportunities. Lighthouse scores, static warnings, smaller-looking code, or an upgrade alone never prove speed.
+
+[React render probes](../shared/react-devtools.md) are not production UX proof.

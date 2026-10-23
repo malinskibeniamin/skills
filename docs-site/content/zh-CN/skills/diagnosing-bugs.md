@@ -112,6 +112,7 @@ UI 内容/布局故障：使用 Skill 工具调用 "break-ui"，准备符合数�
 每个探针都必须对应阶段 3 中的具体预测。**一次只改变一个变量。**
 
 1. 环境支持时进行**调试器/REPL 检查**。一个断点可以替代十条日志。
+   对于 React 状态、组件归属或渲染开销假设，请阅读可选的 [React 运行时检查](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md)流程；使用前检查可用能力。
 2. 在能够区分假设的边界处添加**针对性日志**。
 3. 绝不要“记录所有内容再用 grep 搜索”。
 

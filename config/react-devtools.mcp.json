@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "react-devtools": {
+      "command": "bunx",
+      "args": [
+        "chrome-devtools-mcp@1.12.0",
+        "--categoryExperimentalThirdParty=true",
+        "--isolated",
+        "--no-usage-statistics",
+        "--no-performance-crux",
+        "--no-javascript-evaluation",
+        "--allowedUrlPattern=http://localhost:*/*",
+        "--allowedUrlPattern=http://127.0.0.1:*/*"
+      ]
+    }
+  }
+}

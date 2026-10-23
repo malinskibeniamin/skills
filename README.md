@@ -89,6 +89,17 @@ codex plugin add frontend-skills@skills
 
 Track `main` instead of the pin with `--ref main`. Restart Codex after adding or upgrading so the Plugins UI reloads metadata.
 
+### React DevTools runtime inspection
+
+Optional [React runtime inspection](shared/react-devtools.md) connects component
+props/hooks, ownership, source and render timings to `/diagnosing-bugs`,
+`/ux-performance` and `/dogfood`. The harness ships a
+[pinned, isolated localhost MCP config](config/react-devtools.mcp.json) and a bounded
+`react-devtools` hook exception; it does not enable a server or instrument apps by default.
+Follow the guide to configure the MCP client and consumer app's dev-only bootstrap.
+Missing capabilities retain existing workflows; React observations do not replace tests
+or production-like UX measurements.
+
 ### TraceDecay code graph
 
 This harness uses [TraceDecay](https://github.com/ScriptedAlchemy/tracedecay) as a

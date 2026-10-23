@@ -81,3 +81,5 @@ Artifacts: <路径或链接>
 看似更少的代码或依赖升级就声称速度提升。
 
 比较构建产物体积或调查意外引入的模块时，加载[构建产物分析](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/bundle-analysis/SKILL.md)。将探索性样例与稳定预算分开，并使用实际生产构建。
+
+对于 React 渲染开销假设，请阅读 [React 运行时检查](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md)。使用可选的组件和提交跟踪来定位工作，而非证明生产环境的 UX 性能。

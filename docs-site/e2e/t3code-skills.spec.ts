@@ -47,6 +47,10 @@ const workflowRoutes = [
       path: `/t3code-skills/${name}/SKILL.md`,
     })),
   })),
+  ...["diagnosing-bugs", "dogfood", "ux-performance"].map((route) => ({
+    route,
+    links: [{ name: "react-devtools", path: "/shared/react-devtools.md" }],
+  })),
 ];
 
 for (const locale of ["en", "pl", "zh-CN", "zh-TW"]) {
