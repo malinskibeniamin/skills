@@ -60,6 +60,38 @@ which artifacts/configurations to roll out. None substitutes for the others.
   graph analysis, execution, filesystem watching and artifact downloads separately.
   See [Bazel iteration guidance](https://bazel.build/advanced/performance/iteration-speed).
 
+### Concurrent worktrees
+
+Budget the combined Bazel servers, persistent workers, local actions and any VM,
+not just one invocation's `--jobs`. Keep worktree output bases isolated; share
+supported disk/remote caches or a [local executor](local-execution.md), not mutable
+output trees. Cap aggregate CPU/RAM and queued work at the wrapper/orchestrator;
+many individually reasonable job limits can still overload one host. Record
+active servers, peak memory, disk use and queue time under representative load.
+Remote execution moves actions, not the client's loading/analysis heap.
+
+Use [state-discarding memory flags](https://bazel.build/advanced/performance/memory)
+only for a measured memory constraint: they trade away incremental analysis reuse.
+Checkpointed Bazel servers and persistent test runners demonstrated in forks need
+their own compatibility and state-isolation validation; ordinary compiler-worker
+support does not establish support for either.
+
+## Control configured-graph growth
+
+Before adding a build setting or transition, identify which dependencies actually
+need the variation. Prefer existing platforms/toolchains for platform selection.
+[Transitions can multiply configured targets exponentially](https://bazel.build/extending/config#memory-and-performance-considerations)
+without adding useful work. Compare `cquery` configuration multiplicity with
+`aquery` action inputs/arguments under the real build configs; label count and
+remote hit rate alone can hide analysis, memory and output-tree duplication.
+
+Remove irrelevant settings at the owning graph boundary. Evaluate reset
+transitions or flag scopes only after checking the pinned API and proving which
+values downstream rules still need. Validate every affected platform/configuration
+and output contract. Path mapping may improve execution reuse by normalizing
+configuration-specific paths; it does not remove analysis-time fan-out. Verify
+rule/mnemonic support and actual action behavior before enabling it broadly.
+
 ## CI: establish correctness before narrowing
 
 1. Start with a broad, cached build/test gate for the supported matrix. If analysis,
@@ -111,6 +143,26 @@ images and validate sandboxed behavior. Host-installed tools, network-dependent
 actions and undeclared credentials do not become hermetic by moving machines.
 Keep interactive watchers local. Preserve lazy output downloads, but materialize
 artifacts that local devservers, packagers and deployment tools actually consume.
+
+### Large artifacts and content-defined chunking
+
+When slightly changed binaries or archives dominate transferred bytes/CAS churn,
+evaluate content-defined chunking (CDC), not just more executors. It reuses chunks
+within changed blobs; it does not fix action misses or graph growth. Server-side
+storage deduplication and client upload/download chunking are separate capabilities.
+
+Before trying `--experimental_remote_cache_chunking`, verify the exact Bazel patch
+and backend's split/splice support. The [9.1.1 release](https://github.com/bazelbuild/bazel/releases/tag/9.1.1)
+includes whole-blob download verification; [NativeLink's compatibility guidance](https://docs.nativelink.com/how-to/stores/chunking-and-dedup)
+warns against 9.1.0 with a disk cache due to corrupt outputs. Do not treat the
+flag's existence or an earlier vendor announcement as a safe version floor.
+Check backports separately for other release lines and retest the actual backend.
+
+Compare chunking on/off for representative edits: transferred bytes, CAS/disk
+growth, CPU and wall time, plus reconstructed output digests. Include concurrent
+clients and non-chunking clients. Use the backend's supported local chunk storage
+and retention policy; chunking, wire compression and lazy output materialization
+solve different costs. Keep an opt-in config and rollback until parity is proven.
 
 ## Release only changed deliverables
 

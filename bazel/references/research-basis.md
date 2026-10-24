@@ -68,3 +68,30 @@ window or make a comparative speed claim.
 The final refresh rechecked rules_js v3.5.1 and rules_ts v3.10.1 as the latest
 published releases and confirmed the Vite 8 sandbox issue remained open. These
 observations do not establish compatibility of an untested compiler/bundler pair.
+
+## BazelCon 2026 follow-up
+
+Public-source refresh: 2026-10-24. The supplied [Julio Merino recap](https://jmmv.dev/2026/10/bazelcon-2026-recap.html)
+motivates the questions below; it is an attendee's account, not a release contract.
+Primary documentation/source supplies the operational guidance:
+
+- [actiond README](https://github.com/hermeticbuild/actiond/blob/5a0335c607a367f02f2dfcea380799e3bcbac767/README.md)
+  and [architecture](https://github.com/hermeticbuild/actiond/blob/5a0335c607a367f02f2dfcea380799e3bcbac767/ARCHITECTURE.md):
+  local Linux REAPI execution, lazy actiondfs inputs, client settings and platform
+  limits inform [local execution](local-execution.md). The snapshot already covers
+  more hosts than the recap's macOS example; recheck release support before use.
+- [Bazel configurations](https://bazel.build/extending/config#memory-and-performance-considerations)
+  and [memory trade-offs](https://bazel.build/advanced/performance/memory) inform
+  configured-graph and concurrent-worktree guidance in [scale](monorepo-scale.md).
+- [Bazel 9.1.1 release notes](https://github.com/bazelbuild/bazel/releases/tag/9.1.1)
+  and [NativeLink CDC requirements](https://docs.nativelink.com/how-to/stores/chunking-and-dedup)
+  qualify the recap's chunking recommendation with patch-level integrity checks.
+- [any2bazel source](https://github.com/EngFlow/any2bazel/blob/c1ca1b4e3583f5321934a25dae84af954c6a021c/README.md)
+  informs [action equivalence](migrations.md), including the inspected tool's
+  codegen/custom-command/packaging exclusions.
+
+Bazel 10/Rust rewrite plans, JVM checkpointing, persistent test-runner prototypes
+and competing Starlark typing systems are leads to revalidate, not defaults to
+enable. This refresh did not run actiond, migrate a build, benchmark Bazel or
+establish a security guarantee. Published performance numbers remain specific
+to their authors' workloads; the private-history window above is unchanged.

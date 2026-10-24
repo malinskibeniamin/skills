@@ -4,7 +4,7 @@ description: Build, test, and diagnose Bazel monorepos across Go, C++, TypeScrip
 ---
 
 Make the declared build graph reproduce the requested behavior. Repository-owned
-wrappers, macros, pins and CI policy outrank these historical patterns.
+wrappers, macros, pins and CI policy outrank this general guidance.
 
 ## Establish the build contract
 
@@ -12,6 +12,8 @@ wrappers, macros, pins and CI policy outrank these historical patterns.
   `.bazelrc` imports, component instructions and the actual CI entrypoint. Use the
   pinned Bazel through the repository's Bazelisk/wrapper, not a globally upgraded
   binary. Keep per-machine overrides in the existing ignored user rc file.
+  Verify newer flags, Starlark annotation syntax and rules against those pins;
+  conference demos and roadmap items are not released API contracts.
 - Distinguish **what has BUILD files** from **what Bazel owns today**. Generated
   targets do not prove CI adoption. Check merged source, not an intermediate
   commit, draft rollout or predecessor repository.
@@ -74,27 +76,25 @@ Treat partial/error output as incomplete evidence, never an empty impact set.
 
 ## Diagnose without destroying the evidence
 
-- Replay the exact label, configs, target and execution platforms. Use
-  `--announce_rc` and `--verbose_failures`; add `--sandbox_debug` only to the
-  failing reproduction. Inspect merged rc options and action inputs before
-  changing flags.
+- Replay exact labels/configs and target/execution platforms with `--announce_rc`
+  and `--verbose_failures`. Add `--sandbox_debug` only to the failing reproduction;
+  inspect merged rc options and action inputs before changing flags.
 - Separate analysis/label errors, repository fetch/auth failures, toolchain or
   platform mismatch, sandbox/runfiles failures, cache transport and test failures.
   Fix the responsible layer rather than globally disabling sandboxing, warnings,
   sanitizers or compatibility constraints.
+- For macOS symlink escapes, native-tool path resolution, sandbox setup cost or
+  local VM execution through REAPI, read [local execution](references/local-execution.md).
 - Keep repository-download caches, action caches and remote execution distinct.
   A remote cache is not a remote executor. Follow the checked-in cache/upload
   policy; do not copy private endpoints or credentials into tracked config.
 - Preserve warm caches initially. `clean`, `expunge`, deleting lockfiles or adding
   a fresh output base are not first-line fixes. If isolation becomes necessary,
   state the hypothesis and limit the reset to the owned reproduction.
-- When actual re-execution is required, use a scoped `--nocache_test_results`
-  run. Otherwise cached results are valid evidence for their declared inputs;
-  report cached versus executed honestly. An output consumer may need explicit
-  materialization under minimal-download caching
-  ([remote caching](https://bazel.build/remote/caching)).
+- To rerun tests, use scoped `--nocache_test_results`; cached results otherwise
+  remain valid for declared inputs. Report cached versus executed honestly. Output consumers
+  may need explicit materialization with [minimal-download caching](https://bazel.build/remote/caching).
 
-Return the changed graph contract, exact targets/configs and check outcomes,
-including skipped/blocked legs. Building an image does not authorize pushing it
-or deploying it. For provenance and refresh limits, read
-[research basis](references/research-basis.md).
+Report the changed graph contract, exact targets/configs, results and skipped/blocked
+legs. Building an image does not authorize pushing or deploying it. For provenance
+and refresh limits, read [research basis](references/research-basis.md).

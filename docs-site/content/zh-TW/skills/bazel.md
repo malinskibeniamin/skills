@@ -20,7 +20,7 @@ type: skill
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/bazel.excalidraw)
 
 讓宣告的建置圖重現所需行為。儲存庫維護的包裝腳本、巨集、固定版本與 CI 政策
-優先於這些歷史模式。
+優先於這些通用指引。
 
 ## 確定建置契約 [#establish-the-build-contract]
 
@@ -28,6 +28,8 @@ type: skill
   `.bazelrc` 匯入、元件說明和實際 CI 進入點。透過儲存庫的 Bazelisk 或包裝
   腳本使用固定的 Bazel 版本，不要使用全域升級的執行檔。個別電腦的覆寫設定
   放在現有且被 Git 忽略的使用者 rc 檔案中。
+  依這些固定版本驗證新旗標、Starlark 註記語法與規則；會議示範與路線圖項目
+  不是已發布的 API 契約。
 - 區分**哪些部分有 BUILD 檔案**與**哪些部分目前由 Bazel 管理**。產生的目標
   不能證明 CI 已採用它們。檢查已合併的原始碼，而不是中間提交、推行草案或
   前身儲存庫。
@@ -90,11 +92,13 @@ type: skill
 - 區分分析或標籤錯誤、儲存庫擷取或驗證失敗、工具鏈或平台不符、沙箱或 runfiles
   失敗、快取傳輸問題與測試失敗。修正負責的層，不要全域停用沙箱、警告、
   sanitizer 或相容性限制。
+- 遇到 macOS 符號連結逃逸、原生工具路徑解析、沙箱建立成本，或透過 REAPI 在本機
+  虛擬機中執行的問題時，閱讀[本機執行](https://github.com/malinskibeniamin/skills/blob/main/bazel/references/local-execution.md)。
 - 區分儲存庫下載快取、動作快取與遠端執行。遠端快取不是遠端執行器。遵循已提交
   的快取與上傳政策；不要將私人端點或憑證寫進受版本控制的設定。
 - 起初保留暖快取。`clean`、`expunge`、刪除鎖定檔或新增輸出基底目錄都不是
   第一線修正方式。如需隔離，說明假設，並只重設自己負責的重現情境。
-- 確實需要重新執行時，限定範圍並使用 `--nocache_test_results`。否則，快取結果
+- 確實需要重新執行測試時，限定範圍並使用 `--nocache_test_results`。否則，快取結果
   對已宣告的輸入仍是有效證據；如實區分快取和實際執行。採用最少下載策略時，
   輸出使用端可能需要明確取得實體檔案（[遠端快取](https://bazel.build/remote/caching)）。
 

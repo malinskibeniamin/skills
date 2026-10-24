@@ -27,6 +27,22 @@ during migration complicated configuration and deployable parity. Its retrospect
 recommends preserving the old behavior before optimizing. Adapt the lesson to the
 language and runtime; this is not a prescribed JVM recipe for every repository.
 
+## Compare actions without mistaking them for runtime parity
+
+For automated migrations, capture the reference build's compile/link actions once
+per source revision and configuration, then compare Bazel `aquery` output in a
+deterministic loop. Check tools, flags, inputs, link behavior and outputs;
+normalize only understood semantic differences and keep suppressions reviewable.
+Equivalent action descriptions are useful evidence, not proof of packaged runtime
+behavior, hermeticity or maintainable graph design.
+
+[any2bazel's pinned action-diff approach](https://github.com/EngFlow/any2bazel/blob/c1ca1b4e3583f5321934a25dae84af954c6a021c/README.md)
+illustrates this loop. Its inspected MVP excludes codegen, custom commands and
+packaging; verify frontend coverage instead of treating a zero diff as complete
+migration. Review generated configuration dimensions and oversized shell actions
+before adoption. Fix host dependencies in the reference build rather than copying
+them into Bazel. Keep runtime/release probes below as the cutover contract.
+
 ## Give parallel builds an owner and an exit
 
 If both builds must coexist, name the authoritative dependency metadata and the

@@ -22,7 +22,7 @@ type: skill
 
 Doprowadź do tego, by zadeklarowany graf kompilacji odtwarzał żądane zachowanie.
 Wrappery, makra, przypięte wersje i reguły CI z repozytorium mają pierwszeństwo
-przed tymi historycznymi wzorcami.
+przed tymi ogólnymi wskazówkami.
 
 ## Ustal kontrakt kompilacji [#establish-the-build-contract]
 
@@ -31,6 +31,8 @@ przed tymi historycznymi wzorcami.
   Korzystaj z przypiętej wersji Bazel przez Bazelisk lub wrapper repozytorium,
   a nie z globalnie zaktualizowanego programu. Ustawienia konkretnego komputera
   trzymaj w istniejącym, ignorowanym pliku rc użytkownika.
+  Sprawdzaj nowsze flagi, składnię adnotacji Starlark i reguły względem tych wersji;
+  demonstracje konferencyjne i plany rozwoju nie są kontraktami wydanego API.
 - Odróżniaj **elementy mające pliki BUILD** od **elementów obsługiwanych dziś przez
   Bazel**. Wygenerowane cele nie dowodzą użycia w CI. Sprawdzaj scalony kod, nie
   pośredni commit, plan wdrożenia ani poprzednie repozytorium.
@@ -108,6 +110,9 @@ lub błąd oznacza niepełne dowody, nigdy pusty zbiór dotkniętych celów.
   toolchainu i platformy, sandboxa i runfiles, transportu pamięci podręcznej
   oraz testów. Napraw właściwą warstwę zamiast globalnie wyłączać sandbox,
   ostrzeżenia, sanitizery lub ograniczenia zgodności.
+- Przy wyjściu poza sandbox przez dowiązania symboliczne w macOS, rozwiązywaniu
+  ścieżek przez narzędzia natywne, kosztach tworzenia sandboxa lub lokalnym wykonaniu
+  w VM przez REAPI przeczytaj [wykonanie lokalne](https://github.com/malinskibeniamin/skills/blob/main/bazel/references/local-execution.md).
 - Oddziel pamięć pobranych repozytoriów, pamięć akcji i zdalne wykonanie.
   Zdalna pamięć podręczna nie jest zdalnym wykonawcą. Przestrzegaj zapisanej
   w repozytorium polityki pamięci podręcznej i wysyłania wyników; nie zapisuj
@@ -115,7 +120,7 @@ lub błąd oznacza niepełne dowody, nigdy pusty zbiór dotkniętych celów.
 - Na początku zachowaj rozgrzane pamięci podręczne. `clean`, `expunge`, usuwanie
   lockfile lub nowy katalog wyjściowy nie są pierwszym sposobem naprawy.
   Jeśli potrzebna jest izolacja, określ hipotezę i ogranicz reset do własnej próby.
-- Gdy konieczne jest rzeczywiste ponowne wykonanie, użyj ograniczonego uruchomienia
+- Gdy test musi rzeczywiście uruchomić się ponownie, użyj ograniczonego uruchomienia
   z `--nocache_test_results`. W innych przypadkach wyniki z pamięci podręcznej są
   prawidłowymi dowodami dla zadeklarowanych wejść; uczciwie odróżniaj je od
   wykonanych testów. Konsument wyjścia może wymagać jawnej materializacji przy
