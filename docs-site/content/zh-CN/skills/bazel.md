@@ -20,7 +20,7 @@ type: skill
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/bazel.excalidraw)
 
 让声明的构建图重现所需行为。仓库维护的封装脚本、宏、固定版本和 CI 策略
-优先于这些历史模式。
+优先于这些通用指导。
 
 ## 确定构建契约 [#establish-the-build-contract]
 
@@ -28,6 +28,8 @@ type: skill
   `.bazelrc` 导入、组件说明和实际 CI 入口。通过仓库的 Bazelisk 或封装脚本
   使用固定的 Bazel 版本，而非全局升级的二进制文件。单机覆盖配置放在现有的、
   被 Git 忽略的用户 rc 文件中。
+  对照这些固定版本验证新标志、Starlark 注解语法和规则；会议演示与路线图条目
+  不是已发布的 API 契约。
 - 区分**哪些部分有 BUILD 文件**与**哪些部分目前由 Bazel 管理**。生成的目标
   不能证明 CI 已采用它们。检查已合并的源代码，而不是中间提交、草拟的推广计划
   或前身仓库。
@@ -90,11 +92,13 @@ type: skill
 - 区分分析或标签错误、仓库拉取或认证失败、工具链或平台不匹配、沙箱或 runfiles
   失败、缓存传输问题与测试失败。修复负责的层，不要全局禁用沙箱、警告、
   sanitizer 或兼容性约束。
+- 遇到 macOS 符号链接逃逸、原生工具路径解析、沙箱创建开销或通过 REAPI 在本地
+  虚拟机中执行的问题时，阅读[本地执行](https://github.com/malinskibeniamin/skills/blob/main/bazel/references/local-execution.md)。
 - 区分仓库下载缓存、动作缓存和远程执行。远程缓存不是远程执行器。遵循已提交的
   缓存和上传策略；不要把私有端点或凭据写入受版本控制的配置。
 - 最初保留热缓存。`clean`、`expunge`、删除锁文件或新建输出基目录都不是首选
   修复方法。如需隔离，说明假设，并只重置自己负责的重现场景。
-- 确实需要重新执行时，限定范围并使用 `--nocache_test_results`。否则，缓存结果
+- 确实需要重新运行测试时，限定范围并使用 `--nocache_test_results`。否则，缓存结果
   对其已声明输入仍是有效证据；如实区分缓存与实际执行。使用最小下载策略时，
   输出使用方可能需要显式获取实体文件（[远程缓存](https://bazel.build/remote/caching)）。
 
