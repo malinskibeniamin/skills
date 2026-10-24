@@ -1,0 +1,119 @@
+---
+description: >-
+  Wykrywaj rozbieżności między deklaracjami a działaniem zmiany: zmyślone API
+  lub twierdzenia, kod pozorujący sukces, testy, które nie mogą zawieść,
+  niezamówione zmiany i antywzorce, które łatwo powielić. Stosuj przy każdym PR.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - lie detector
+sidebar:
+  label: /lie-detector
+title: /lie-detector
+type: skill
+---
+![Diagram umiejętności /lie-detector](/diagrams/skills/lie-detector.svg)
+
+[Otwórz edytowalne źródło Excalidraw](/diagrams/skills/lie-detector.excalidraw)
+
+
+Traktuj zmianę jako nieudowodnioną. Przedstaw najmocniejsze argumenty za tym, że „tego nie należy scalać”, a następnie pozwól, by diff obalił je
+dowodami. Działa samodzielnie lub jako **rola wykrywacza kłamstw** w `/review` przy każdym
+diffie; największą wagę przypisuj elementom widocznym dla użytkowników (interfejs, treści, wyniki CLI, publiczne API, raport).
+Błędy kodu pozostają w `/review`; wartość — w `/product`. Użyj przypiętego zakresu
+przeglądu, w tym jawnie utrwalonego WIP, jeśli go zażądano.
+
+## 1. Twierdzenia bez dowodów [#1-claims-without-evidence]
+
+Wypisz każde twierdzenie z tytułu i opisu PR, commitów, komentarzy w kodzie, dokumentacji i podsumowania agenta.
+Każde wymaga wiersza diffu, wyniku polecenia lub dokumentacji źródłowej:
+
+- Nieistniejący element: importowany symbol, prop, hook, flaga CLI, klucz konfiguracji, zmienna środowiskowa, token
+  projektowy, trasa lub opcja, których nie ma w zainstalowanej wersji. Sprawdź plik blokady zależności,
+  typy w `node_modules` lub dokumentację źródłową, zamiast polegać na pamięci.
+- „Przetestowano”, „zweryfikowano”, „naprawia X”, „bez zmiany zachowania”: wymagają polecenia i jego wyniku albo
+  pary wyników testu: najpierw niepowodzenie, potem powodzenie.
+- Przywołany plik i wiersz, zgłoszenie lub dokumentacja, które nie potwierdzają twierdzenia.
+
+## 2. Kod, który udaje [#2-code-that-pretends]
+
+Prześledź każdą zmienioną ścieżkę kodu aż do tego, co faktycznie otrzymuje użytkownik lub kod wywołujący. Zgłoś kod, który deklaruje
+wykonanie pracy, której nie wykonał:
+
+- sukces przed zakończeniem pracy: powiadomienie, przekierowanie lub `200`, zanim zakończy się mutacja,
+  zapis lub unieważnienie;
+- obsługę błędów, która je tłumi, tylko loguje lub używa wartości domyślnych, zastępczych albo danych z pamięci podręcznej,
+  podczas gdy interfejs pokazuje sukces;
+- atrapy, TODO, dane wpisane na sztywno lub dane testowe albo wyłączone gałęzie kodu dostarczone jako gotowe;
+- flagę, opcję lub klucz konfiguracji, których nie odczytuje żadna ścieżka kodu;
+- nazwy, komentarze, typy lub rzutowania sprzeczne z kodem, który opisują;
+- stany ładowania, braku danych lub błędu, które są nieosiągalne albo nigdy się nie kończą.
+
+## 3. Testy, które nie mogą zawieść [#3-tests-that-cannot-fail]
+
+Dla każdego dodanego lub zmienionego testu:
+
+1. W jednorazowej migawce zgodnie z [izolacją przeglądu](https://github.com/malinskibeniamin/skills/blob/v4.40.0/review/REFERENCE.md#source-snapshots-and-mutation-tests)
+   zepsuj zachowanie, które test ma chronić: odwróć zmieniony warunek, usuń
+   renderowany element lub zmień wartość widoczną dla użytkownika. Samo przerwanie
+   połączeń nie wykrywa tautologii. Uruchom test ponownie tam; pozostaw oryginalne
+   pliki, indeks i gałąź bez zmian. Nadal zielono: test kłamie. RED licz tylko
+   przy błędzie asercji, nie konfiguracji. Zapisz polecenie i błąd; brak izolacji
+   to nazwana luka dowodowa, nie zgoda na zmianę aktywnego checkoutu.
+2. Sprawdź testy, które przeszły tę weryfikację, pod kątem [bezwartościowych wzorców z test-audit](https://github.com/malinskibeniamin/skills/blob/v4.40.0/test-audit/SKILL.md#junk-patterns).
+3. Zmiana zachowania bez testu, który zakończył się niepowodzeniem, i bez odtworzenia przez rzeczywisty punkt wejścia (`/dogfood`)
+   pozostaje nieudowodniona.
+
+## 4. Zmiany, o które nikt nie prosił [#4-changes-nobody-asked-for]
+
+Porównaj każdy fragment diffu z zadeklarowanym zakresem. Zgłoś każdy niewyjaśniony fragment, który zmienia obserwowalne zachowanie lub osłabia zabezpieczenie: usunięte, pominięte lub złagodzone testy; ponownie wygenerowane migawki; `@ts-ignore` lub wyciszenia lintera; zmienione wartości domyślne, treści, trasy, flagi, obsługę błędów, ponowienia lub limity czasu; rozszerzone wykluczenia, złagodzone reguły kompilatora lub lintera albo zamianę błędów powłoki lub CI w sukces; zbędne zmiany w pliku blokady zależności lub konfiguracji; ręcznie edytowane pliki generowane; zmianę wizualną bez zrzutu ekranu. Sprawdzaj zmienione kontrole i konfiguracje oddzielnie od ocenianej implementacji; uzasadniona poprawka reguły wymaga znanych błędnych i prawidłowych przypadków uruchomionych jej rzeczywistym poleceniem.
+
+Dla typów dowodzących autoryzacji prześledź tworzenie dowodu do zaufanego modułu kontrolującego uprawnienia. Rzutowanie, wyeksportowany konstruktor bez kontroli lub komentarz deklarujący bezpieczeństwo nie zastępują kontroli autoryzacji; samo pomyślne sprawdzenie typów nie dowodzi poprawności zaufanego modułu.
+Przy łańcuchach asercji, utracie informacji o typach lub proponowanych regułach anti-slop korzystaj z [listy kontrolnej anti-slop](https://github.com/malinskibeniamin/skills/blob/v4.40.0/shared/anti-slop.md); sama preferencja projektu źródłowego nie jest ustaleniem.
+
+## 5. Wzorce, które będą powielane [#5-patterns-that-will-spread]
+
+Ludzie i agenci kopiują najbliższy przykład. Dla każdego wzorca wprowadzanego przez diff znajdź
+wcześniejsze przykłady za pomocą `rg` i porównaj z głównymi i lokalnymi plikami `CLAUDE.md`/`AGENTS.md`, `exemplars/`
+oraz rejestrem stosu technologicznego. Sprzeczność z udokumentowaną regułą lub dominującym wzorcem w repozytorium to problem;
+waga zależy od zasięgu kopiowania: współdzielony komponent, hook, fixture, pomocnicza funkcja testowa, szablon,
+generator, wzorcowy przykład lub umiejętność to P1; kod końcowy to P2. Napraw u źródła: zastosuj zatwierdzony
+wzorzec lub zaktualizuj regułę w tym samym PR i wyjaśnij dlaczego. Współistnienie dwóch stylów jest błędem.
+
+## 6. Weryfikacja najmocniejszych kontrargumentów [#6-steelman-gate]
+
+Postępuj zgodnie z [steelman/SKILL.md](https://github.com/malinskibeniamin/skills/blob/v4.40.0/steelman/SKILL.md), przyjmując tezę „ten PR należy scalić”.
+Przedstaw najmocniejsze argumenty przeciw niej na podstawie werdyktu [product](https://github.com/malinskibeniamin/skills/blob/v4.40.0/product/SKILL.md), powyższych
+ustaleń i ustaleń `/review`. **Gotowy do scalenia** tylko wtedy, gdy spełnione są wszystkie trzy warunki:
+
+- wartość: werdykt `product:` to `justified`;
+- prawdziwość: brak P1 w tej analizie, a każde zmienione zachowanie ma test, który najpierw zawiódł, a potem przeszedł, lub
+  zostało odtworzone przez rzeczywisty punkt wejścia;
+- implementacja: `/review` nie zgłasza P0/P1.
+
+W każdym innym przypadku wynik to **nieudowodnione**; wskaż jeden dowód, który zmieniłby werdykt. Odrzuć każdy
+kontrargument bez wskazania pliku i wiersza lub wyniku polecenia. Nigdy nie blokuj scalenia z powodu preferencji.
+
+## Waga problemów [#severity]
+
+- **P1**: twierdzenie sprzeczne z kodem lub dokumentacją; nieistniejące API; kod zgłaszający sukces, którego
+  nie osiągnął; test przechodzący mimo zepsutego zachowania; niewyjaśniona zmiana zachowania lub
+  osłabione zabezpieczenie; antywzorzec w miejscu, z którego łatwo go skopiować.
+- **P2**: niezweryfikowane, ale wiarygodne twierdzenie; myląca nazwa lub komentarz; antywzorzec
+  w kodzie końcowym; tautologiczna asercja obok rzeczywistych.
+- **P3**: tylko w podsumowaniu.
+
+Zgłoś najwyżej pięć problemów, zaczynając od tych, które decydują o scaleniu.
+
+## Format wyniku [#output]
+
+Zawsze zaczynaj od jednego wiersza z werdyktem:
+
+`lie-detector: <truthful|suspect|lying> -- merge <ready|not proven> -- <evidence, at most 20 words>`
+
+`truthful`: brak problemów. `suspect`: tylko P2. `lying`: dowolny P1. Następnie
+`[P1|P2|P3] <file:line> <section> -- <lie and proof>; <smallest fix>`. Jeśli nie wykryto problemów, podaj tylko wiersz z werdyktem.

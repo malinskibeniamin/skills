@@ -149,7 +149,12 @@ export default defineConfig({
     "repository-url": "https://github.com/malinskibeniamin/skills",
   },
   versions: {
-    archived: [{ id: "v4.39.0" }, { id: "v4.38.0" }, { id: "v4.37.0" }],
+    archived: [
+      { id: "v4.40.0" },
+      { id: "v4.39.0" },
+      { id: "v4.38.0" },
+      { id: "v4.37.0" },
+    ],
     current: { badge: "Latest", label: "main" },
   },
 });
