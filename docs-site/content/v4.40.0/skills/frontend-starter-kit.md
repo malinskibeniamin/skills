@@ -1,0 +1,54 @@
+---
+description: "Bootstrap the frontend toolchain, lint, quality gates, React stack, data stack, and CI."
+related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
+search: {"boost":1,"keywords":["frontend starter kit"]}
+sidebar: {"label":"/frontend-starter-kit"}
+title: "/frontend-starter-kit"
+type: "skill"
+---
+![Diagram of the /frontend-starter-kit skill](/diagrams/skills/frontend-starter-kit.svg)
+
+[Open the editable Excalidraw source](/diagrams/skills/frontend-starter-kit.excalidraw)
+
+
+Bootstrap idempotently. Read only requested `references/<tool>/README.md` and linked guides. Hook copies are no-ops in plugins; bare repos need export-harness copies.
+
+## Profiles
+
+- **full** default: canonical stack in [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.40.0/frontend-starter-kit/REFERENCE.md), using the order below.
+- **minimal:** toolchain, biome, quality gate, env validation, conventional commits.
+- **redpanda:** full plus `references/redpanda/README.md`, taxonomy, `REDPANDA_KIT=1`.
+- **`<tool>`:** only that reference.
+
+## Full order
+
+| Tool | Purpose |
+|---|---|
+| `toolchain` | `references/toolchain/`: bun, TS 7 `tsc`/tsrs, destructive-command guards |
+| `tanstack-intent` | version-matched guidance/edit gates |
+| `biome` | Biome, Ultracite, auto-fix hook |
+| `quality-gate` | script, CI, Stop hook, bundle guard |
+| `agent-config` | `AI_AGENT=1`, output truncation |
+| `react-compiler` | Compiler, memoization check |
+| `zustand` | `create<T>()()`, `useShallow`, persist |
+| `react-rules` | raw HTML, TS escape, XSS, barrel bans |
+| `env-validation` | t3-env/zod, `noProcessEnv` |
+| `conventional-commits` | `type(scope): description` |
+| `react-doctor` | changed-diagnostic gate, Stop hook |
+| `ci-pipeline` | Actions, coverage, cache |
+| `redpanda` | registry workflow/taxonomy |
+
+Runtime skills, not setup: `/accessibility`, `/tanstack-router`, `/connect-query`, `/e2e-testing`, `/registry-workflow`, `/ux-copy`. Optional slash-only infra: `/setup-routines`, `/setup-atlassian-workflow`.
+
+## Steps
+
+1. Confirm profile; for full, process the table sequentially and lazily.
+2. Set `REACT_RULES_BAN_USEEFFECT=1` only for repos choosing strict effects.
+3. [Auto-setup safeguards](https://github.com/malinskibeniamin/skills/blob/v4.40.0/shared/review-enforcement.md) in every consumer; honor the endpoint.
+4. Workflow skills already ship in the plugin; install nothing extra.
+
+## Verify
+
+- `.claude/settings.json` has hooks, including TanStack Intent when packages exist; `biome.jsonc` and `src/env.ts` exist.
+- Scripts: lint, lint:fix, type:check, test, quality:gate.
+- `.github/workflows/quality-gate.yml` exists; hooks executable.

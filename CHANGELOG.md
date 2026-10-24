@@ -2,6 +2,38 @@
 
 ## Unreleased
 
+## 4.40.0
+
+2026-10-24 -- Publish the accumulated post-v4.39 changes as one versioned Claude Code
+and Codex bundle. All previously released skill entrypoints and agents remain
+registered; the release does not move or replace the v4.39.0 tag or docs archive.
+
+### Highlights
+
+- Add Bazel and Bend law-driven development guidance, software-factory assessment,
+  and the consolidated `/product` planning and review lane.
+- Compose native T3 Code, Effect, Poteto, Cursor, and UI guidance with existing
+  verification and delivery workflows while preserving target-owned commands.
+- Add candidate-bound review gates, repository safeguard checks, team-first review
+  routing, and evidence-bearing PR descriptions and session updates.
+- Refresh opt-in React DevTools inspection, capture-first narrated demos, video
+  subtitles, and UX copy guidance.
+- Tighten permission-scoped execution, read-only turn handling, opt-in delegation,
+  verifier reuse, current model routing, and TypeScript checker recognition.
+
+### Upgrade notes
+
+- Claude and Codex plugin manifests and both marketplaces advertise 4.40.0 together.
+  Reload or restart each host after installing the new version.
+- Local marketplace snapshots still require an explicit refresh; a release does not
+  automatically change a local installation's update policy.
+- The optional Claude-only `frontend-skills-mods` plugin keeps its independent 0.3.0
+  version and minimum Claude Code requirement; it is not required for this bundle.
+- Freeze a new v4.40.0 documentation snapshot with tag-pinned source links; retain
+  every prior released snapshot unchanged.
+
+### Included change notes
+
 2026-10-23 -- Preserve the pending craft additions in `/product`, the successor to the
 retired value skills: code reviews load the craft playbook, tests cover refusal and
 no-op paths, API changes separate shape from semantics, and review output names
