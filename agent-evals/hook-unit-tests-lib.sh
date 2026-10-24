@@ -174,6 +174,44 @@ else
   FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} .css filter (exit: $exit_code)"
 fi
 
+# Claude sessions started at a monorepo root inherit DISABLE_FRONTEND_HOOKS=1
+# from the root package.json; files in React packages below must stay checked.
+_mono=$(mktemp -d)
+(cd "$_mono" && git init -q .)
+mkdir -p "$_mono/apps/web/src" "$_mono/apps/api/src"
+echo '{"name":"root"}' > "$_mono/package.json"
+echo '{"dependencies":{"react":"^19.0.0"}}' > "$_mono/apps/web/package.json"
+echo '{"name":"api"}' > "$_mono/apps/api/package.json"
+echo "const x = 1;" > "$_mono/apps/web/src/a.tsx"
+echo "const x = 1;" > "$_mono/apps/api/src/b.ts"
+
+_filter_mono() {
+  echo "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$1\",\"old_string\":\"x\",\"new_string\":\"y\"}}" \
+    | (cd "$_mono" && DISABLE_FRONTEND_HOOKS=1 bash "$_filter_script" 2>&1) || true
+}
+
+echo "  DISABLE_FRONTEND_HOOKS=1, file in a React package:"
+if _filter_mono "$_mono/apps/web/src/a.tsx" | grep -q PASSED_FILTER; then
+  PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} React package file stays checked under a non-React root"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} React package file skipped by the root-level flag"
+fi
+
+echo "  DISABLE_FRONTEND_HOOKS=1, relative path in a React package:"
+if _filter_mono "apps/web/src/a.tsx" | grep -q PASSED_FILTER; then
+  PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} relative React package path stays checked"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} relative React package path skipped by the root-level flag"
+fi
+
+echo "  DISABLE_FRONTEND_HOOKS=1, file in a non-React package:"
+if _filter_mono "$_mono/apps/api/src/b.ts" | grep -q PASSED_FILTER; then
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} non-React package file ran frontend hooks"
+else
+  PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} non-React package file still skipped"
+fi
+
+rm -rf "$_mono"
 rm -f "$_test_file" "$_test_file2" "$_filter_script"
 _teardown_session
 

@@ -16,21 +16,20 @@ _input_session=$(printf '%s' "$_input" | jq -r '.session_id // empty' 2>/dev/nul
 # the end of this script.
 _ctx=""
 
-# Skip warning in the skills repo itself (hook authoring project, not a frontend app)
-_repo_name=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || true)
-if [ ! -f "package.json" ] && [ "$_repo_name" != "skills" ]; then
+# The skills repo itself (hook authoring, not a frontend app) is exempt. Match
+# its plugin manifest: worktrees and workspaces are rarely named "skills".
+_is_skills_repo=0
+if grep -qE '"name": *"frontend-skills"' "$(git rev-parse --show-toplevel 2>/dev/null)/.claude-plugin/plugin.json" 2>/dev/null; then
+  _is_skills_repo=1
+fi
+if [ ! -f "package.json" ] && [ "$_is_skills_repo" = "0" ]; then
   _ctx="WARNING: No package.json. Skills need React+TS frontend. Monorepo? Install in app dir (apps/web-ui/)."
 fi
 
 _is_frontend=1
-if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
+if [ -f "package.json" ] && [ "$_is_skills_repo" = "0" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
   _is_frontend=0
-  _ctx="${_ctx:+$_ctx }WARNING: No React in package.json. Frontend hooks disabled (DISABLE_FRONTEND_HOOKS=1). Skills repo auto-exempt."
-fi
-
-# Skip disable flag for skills repo itself (hook authoring, not a frontend app)
-if [ "$_repo_name" = "skills" ]; then
-  _is_frontend=1
+  _ctx="${_ctx:+$_ctx }No React in ./package.json (DISABLE_FRONTEND_HOOKS=1): frontend hooks check only files under a package.json that declares react."
 fi
 
 # Set environment variables for LLM-friendly defaults
