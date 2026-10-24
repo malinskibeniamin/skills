@@ -76,10 +76,9 @@ Treat partial/error output as incomplete evidence, never an empty impact set.
 
 ## Diagnose without destroying the evidence
 
-- Replay the exact label, configs, target and execution platforms. Use
-  `--announce_rc` and `--verbose_failures`; add `--sandbox_debug` only to the
-  failing reproduction. Inspect merged rc options and action inputs before
-  changing flags.
+- Replay exact labels/configs and target/execution platforms with `--announce_rc`
+  and `--verbose_failures`. Add `--sandbox_debug` only to the failing reproduction;
+  inspect merged rc options and action inputs before changing flags.
 - Separate analysis/label errors, repository fetch/auth failures, toolchain or
   platform mismatch, sandbox/runfiles failures, cache transport and test failures.
   Fix the responsible layer rather than globally disabling sandboxing, warnings,
@@ -92,13 +91,10 @@ Treat partial/error output as incomplete evidence, never an empty impact set.
 - Preserve warm caches initially. `clean`, `expunge`, deleting lockfiles or adding
   a fresh output base are not first-line fixes. If isolation becomes necessary,
   state the hypothesis and limit the reset to the owned reproduction.
-- When a test must actually rerun, use a scoped `--nocache_test_results`
-  run. Otherwise cached results are valid evidence for their declared inputs;
-  report cached versus executed honestly. An output consumer may need explicit
-  materialization under minimal-download caching
-  ([remote caching](https://bazel.build/remote/caching)).
+- To rerun tests, use scoped `--nocache_test_results`; cached results otherwise
+  remain valid for declared inputs. Report cached versus executed honestly. Output consumers
+  may need explicit materialization with [minimal-download caching](https://bazel.build/remote/caching).
 
-Return the changed graph contract, exact targets/configs and check outcomes,
-including skipped/blocked legs. Building an image does not authorize pushing it
-or deploying it. For provenance and refresh limits, read
-[research basis](references/research-basis.md).
+Report the changed graph contract, exact targets/configs, results and skipped/blocked
+legs. Building an image does not authorize pushing or deploying it. For provenance
+and refresh limits, read [research basis](references/research-basis.md).
