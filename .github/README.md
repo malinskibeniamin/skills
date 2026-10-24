@@ -7,7 +7,9 @@ the plugin does not copy this workflow/payload or mutate another repository's po
 
 The hosted `main` protection requires the existing Linux, macOS, and render checks
 from GitHub Actions, an up-to-date branch, and resolved conversations. Admins have
-the same gates. Force pushes and branch deletion are disabled.
+an explicit merge-gate override by owner policy. Force-push and branch-deletion
+settings remain disabled. Preserve this repository-specific admin override when
+reconciling protection; it does not change the defaults for installed consumers.
 
 The API payload lives in [branch-protection.json](branch-protection.json). It
 preserves the previous approval count of 0; it does not authorize automatic
