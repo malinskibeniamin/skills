@@ -27,7 +27,8 @@ if [ -n "$_root" ]; then
 fi
 
 if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
-  if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null; then
+  if [ -f "package.json" ] && ! grep -qE '"react"|"react-dom"' package.json 2>/dev/null \
+    && ! grep -qE '"name": *"frontend-skills"' "$_root/.claude-plugin/plugin.json" 2>/dev/null; then
     echo "export DISABLE_FRONTEND_HOOKS=1" >> "$CLAUDE_ENV_FILE"
   else
     echo "unset DISABLE_FRONTEND_HOOKS" >> "$CLAUDE_ENV_FILE"

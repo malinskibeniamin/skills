@@ -11,6 +11,9 @@ HOOKS_DIR="$(cd "$(dirname "$0")/../.claude/hooks" && pwd)"
 PASS=0
 FAIL=0
 SKIP=0
+# A Claude session started in a non-React directory exports this flag; tests
+# that need it set it per call.
+unset DISABLE_FRONTEND_HOOKS
 
 # Colors
 RED='\033[0;31m'
@@ -423,6 +426,57 @@ else
   PASS=$((PASS + 1))
   echo -e "  ${GREEN}✓${NC} skills repo — no false warning"
 fi
+
+# T3 worktrees (t3-*) and Conductor workspaces (city names) are not named
+# "skills"; the plugin manifest identifies the checkout instead.
+_setup_session
+_gate_root=$(mktemp -d)
+_skills_wt="$_gate_root/t3-0123abcd"
+_consumer="$_gate_root/t3-4567cdef"
+mkdir -p "$_skills_wt/.claude-plugin" "$_consumer"
+cp "$HOOKS_DIR/../../.claude-plugin/plugin.json" "$_skills_wt/.claude-plugin/plugin.json"
+echo '{"name":"skills-checkout"}' > "$_skills_wt/package.json"
+echo '{"name":"go-service-tools"}' > "$_consumer/package.json"
+(cd "$_skills_wt" && git init -q .)
+(cd "$_consumer" && git init -q .)
+
+_session_env_flag() {
+  local env_file
+  env_file=$(mktemp)
+  (cd "$1" && echo '{}' | HOOK_SESSION_SWEEP_DISABLED=1 CLAUDE_ENV_FILE="$env_file" bash "$HOOKS_DIR/session-env.sh" >/dev/null 2>&1) || true
+  grep -c "export DISABLE_FRONTEND_HOOKS=1" "$env_file" || true
+  rm -f "$env_file"
+}
+
+_cwd_changed_flag() {
+  local env_file
+  env_file=$(mktemp)
+  echo "{\"new_cwd\":\"$1\"}" | CLAUDE_ENV_FILE="$env_file" bash "$HOOKS_DIR/cwd-changed.sh" >/dev/null 2>&1 || true
+  grep -c "export DISABLE_FRONTEND_HOOKS=1" "$env_file" || true
+  rm -f "$env_file"
+}
+
+echo "  skills checkout named t3-*:"
+if [ "$(_session_env_flag "$_skills_wt")" = "0" ]; then
+  PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} session-env keeps frontend hooks on in a renamed skills checkout"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} session-env disabled frontend hooks in a renamed skills checkout"
+fi
+if [ "$(_cwd_changed_flag "$_skills_wt")" = "0" ]; then
+  PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} cwd-changed keeps frontend hooks on in a renamed skills checkout"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} cwd-changed disabled frontend hooks in a renamed skills checkout"
+fi
+
+echo "  non-React consumer named t3-*:"
+if [ "$(_session_env_flag "$_consumer")" = "1" ] && [ "$(_cwd_changed_flag "$_consumer")" = "1" ]; then
+  PASS=$((PASS + 1)); echo -e "  ${GREEN}✓${NC} non-React consumer root still sets DISABLE_FRONTEND_HOOKS=1"
+else
+  FAIL=$((FAIL + 1)); echo -e "  ${RED}✗${NC} non-React consumer root lost DISABLE_FRONTEND_HOOKS=1"
+fi
+
+rm -rf "$_gate_root"
+_teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
