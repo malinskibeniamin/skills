@@ -40,9 +40,10 @@ console.log(
   [
     "# Codex CLI 0.164.0+. Merge only into unused tui.presets slots.",
     "# Preview only: this command does not read or write your Codex config.",
+    // Quote numeric table keys for Bun 1.3.14's TOML parser.
     ...presets.map(
       (preset, index) =>
-        `\n[tui.presets.${slots[index]}]\nlabel = ${JSON.stringify(preset.label)}\ninput = ${JSON.stringify(preset.input)}`,
+        `\n[tui.presets."${slots[index]}"]\nlabel = ${JSON.stringify(preset.label)}\ninput = ${JSON.stringify(preset.input)}`,
     ),
   ].join("\n"),
 );
