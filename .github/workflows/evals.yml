@@ -115,7 +115,7 @@ jobs:
 
       - name: Install Codex CLI for plugin integration
         run: |
-          bun add --global @openai/codex@0.146.0
+          bun add --global @openai/codex@0.164.0
           codex --version
 
       - name: Install Claude Code for plugin integration
