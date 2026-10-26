@@ -85,6 +85,8 @@ Use only views that change understanding.
 Concrete evidence that the change works. Show a before and after. Name checks not run and
 remaining uncertainty; passing tests are not evidence of human review or consensus.
 
+For broad UI work, map user problem -> surface delta -> evidence -> acceptance using [UI change maps](SUMMARY-VIEWS.md#ui-change-maps).
+
 For backend architecture, data flow, API contract, or workflow changes, follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`. Include a focused before/after comparison and editable source link; refresh relevant maintained diagrams. Diagram failures warn and continue, never block the PR or replace test evidence.
 
 For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the summary so reviewers see the change before reading about it. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).

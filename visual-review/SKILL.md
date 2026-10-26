@@ -10,7 +10,7 @@ Review with product, design, engineering, and QA hats. Browser-based frontend re
 1. **Find:** resolve PR base (stack parent) and inspect merge-base...HEAD, staged, unstaged, and relevant untracked changes; `git diff --name-only HEAD` misses commits. Map routes/components to URLs, CLI/reports to commands. Include shadcn/ui or `@/components/ui`, shared consumers, copy, styles, assets, indirect data/config effects. Cover every visible change.
 2. **Context:** read tokens/theme and one surface; classify brand/product.
 3. **Collect:** use repo tools, `scripts/skills-browser.sh`, Playwright, fixtures, screenshots, and output. `/quantify-impact` for direct metrics only.
-4. **review lanes:** hierarchy/task flow; accessibility/performance; ship quality/system fit.
+4. **review lanes:** hierarchy/task flow; accessibility/performance; ship quality/system fit. For scored or repeated comparisons, use [review calibration](REFERENCE.md#review-calibration).
 5. **Hats:** Product: user value; Design: hierarchy/copy/states; Engineering: resilience/platform; QA: reproducible evidence/unhappy paths.
 6. **Trace UI lifecycle:** idle/unrequested -> pending/loading/submitting -> success/error -> settled/dismissed. Require side-effect success confirmed and failed side effects persistent.
 7. **Stress:** Chromium desktop and Chromium mobile; `Tab, Shift+Tab, Enter, Space, Escape`; loading, empty, error, dense-data; form submit path; notification/toast path; console/network. As risk warrants add Firefox desktop, WebKit, reduced motion, forced colors, text zoom, RTL/localized-long-text, slow network/media throttling, and themes.

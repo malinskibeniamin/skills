@@ -35,6 +35,26 @@ rule it supports. Numbers are targets, not gates.
 
 ## Write the PR body
 
+### Acceptance in the beneficiary's words
+
+Write Given/When/Then scenarios from a named role's task, not implementation details.
+Each states the starting data/default, a reachable action, visible result, and decisive
+proof. Include a credible failure/recovery path; for a rollout, include opt-out and shared
+changes that opt-out cannot undo. Mark reconstructed criteria as proposals, not evidence
+of prior agreement or completed verification.
+
+- Given my existing workspace, when I reopen without opting in, then my familiar sidebar
+  and composer remain; list any shared changes separately.
+- Given I recognize projects by color, when I keep colored icons and collapse the sidebar,
+  then inactive project icons keep their colors in both layouts.
+- Given source-control status fails, when I open a draft, then I see the failure and a
+  recovery path rather than an apparently empty workspace.
+
+Tie the outcome to reduced confusion or a preserved task. Claim time savings, conversion,
+or retention only with measured evidence; a design score is not business impact.
+
+### Body structure
+
 Answer the reviewer before they ask. When `/commit-push-pr` owns the template, map these
 answers into its sections.
 

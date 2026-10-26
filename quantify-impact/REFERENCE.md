@@ -99,6 +99,25 @@ There is no universal percentage cutoff. The scenario and decision determine wha
 
 Do not round a negligible delta into apparent significance, combine several immaterial metrics into a value claim, or publish a metric merely because the tooling produced it.
 
+## Existing CI regression budgets
+
+Inspect a standing benchmark's fixture, measurement boundary, assertions, and publisher,
+not just its green comment. Distinguish infrastructure already present from changes made
+by this PR, and a budget pass from an improvement. Bytes, decoded payload, message counts,
+latency, and UI responsiveness answer different questions; preserve functional assertions
+so dropping content cannot win. Mark timing-sensitive diagnostics separately from gates.
+
+Bind results to source run/head, baseline SHA, scenario/schema, units, and ceilings. Disclose
+a fallback baseline or changed fixture/budget; omit invalid comparisons. A missing artifact
+or stale result is missing evidence, not zero. Keep diagnostic detail in linked artifacts;
+the output filter above still excludes negligible movement from claimed impact.
+
+When changing a privileged publisher, load [CI maintenance](../t3code-skills/ci-maintenance/SKILL.md).
+Read bounded, validated result data from PR artifacts using trusted publisher code, never
+execute PR code with publishing credentials. Recheck head before publishing, update one
+identified report, and test stale/missing/malformed inputs. These checks do not certify
+artifact integrity or every workflow trust boundary by themselves.
+
 ## Reproducible PR evidence
 
 Put only decision-useful results first:

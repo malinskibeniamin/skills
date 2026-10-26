@@ -1,5 +1,17 @@
 # Resolve PR Feedback -- Reference
 
+## Coverage and evidence freshness
+
+Read outside-diff findings and expanded review bodies, not only inline threads or a bot's
+latest summary. Record the reviewed SHA and paused/skipped coverage: "no new findings" on an
+older build does not review the current head. Outdated lines do not prove a finding was fixed.
+Keep code disposition, hosted resolution, and reviewer freshness distinct; verify each
+against the current candidate before claiming completeness.
+
+Separate owner taste constraints from defects. Turn accepted preference feedback into a
+reachable user scenario, including alternate layouts and flag states; changing the default
+appearance must not silently remove a workflow. Recheck that scenario on the integrated head.
+
 ## GraphQL: Fetch Inline Review Threads
 
 ```bash

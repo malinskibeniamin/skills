@@ -46,8 +46,8 @@ Read GraphQL `reviewThreads`, top-level comments, and review bodies using
 | Actionable automated review finding | Process like human feedback |
 | Approval, CI-only, or non-actionable summary | Drop |
 
-Inspect bot-only threads too; author type does not prove applicability. Paginate
-threads, comments, and reviews. Reply to non-applicable findings with evidence.
+Inspect bot-only threads; paginate threads, comments, and expanded/outside-diff review bodies.
+Apply [coverage and freshness](REFERENCE.md#coverage-and-evidence-freshness); reply to non-applicable findings with evidence.
 
 If clean, finish rebase and report dispositions. Pending decisions are incomplete.
 
