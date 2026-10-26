@@ -23,6 +23,8 @@ type: skill
 
 審查固定範圍。保持唯一負責人；委派需要明確授權。沒有明確意圖時不編輯、提交、推送或發布。要求的修復僅在指定範圍內進入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
+依[審查運作模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)選擇審查深度與收斂規則；風險改變審查力度，不改變權限。
+
 ## 審查約定 [#review-contract]
 
 - **目標**：判斷差異是否實現預期結果且沒有可信缺陷。
@@ -99,7 +101,7 @@ type: skill
 ### 綜合 [#synthesize]
 
 閱讀[溝通規則](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)；保留輸出格式。
-先報告發現，按根因去重。省略讚美與過程敘述。重新審查時標明每條先前發現的狀態。
+先報告發現數量，包括明確的零。依根因去重；說明缺陷類別與受影響的實例。完成首次完整審查後，重新審查修復差異與先前發現；假設改變時擴大範圍。以證據標明每條發現的狀態。省略讚美與無關的缺陷搜尋；將價值與缺陷分開。
 將產品結論行與缺陷分開報告。
 
 ## 深度模式 [#deep-mode]

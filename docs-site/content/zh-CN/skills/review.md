@@ -23,6 +23,8 @@ type: skill
 
 审查固定范围。保持唯一负责人；委派需要明确授权。没有明确意图时不编辑、提交、推送或发布。请求的修复仅在指定范围内进入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
+按[审查运行模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)选择审查深度和收敛规则；风险改变审查力度，不改变权限。
+
 ## 审查约定 [#review-contract]
 
 - **目标**：判断差异是否实现预期结果且没有可信缺陷。
@@ -99,7 +101,7 @@ type: skill
 ### 综合 [#synthesize]
 
 阅读[沟通规则](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)；保留输出格式。
-先报告发现，按根因去重。省略赞美和过程叙述。重新审查时标明每条先前发现的状态。
+先报告发现数量，包括明确的零。按根因去重；说明缺陷类别及受影响的实例。完成首次完整审查后，重新审查修复差异和先前发现；假设变化时扩大范围。用证据标明每条发现的状态。省略赞美和无关的缺陷搜寻；将价值与缺陷分开。
 将产品结论行与缺陷分开报告。
 
 ## 深度模式 [#deep-mode]

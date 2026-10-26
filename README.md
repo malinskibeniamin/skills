@@ -183,6 +183,10 @@ Use inline review or explicitly authorized specialists. Planning never dispatche
 changes models or grants merge permission. Consumer-specific gates add to the shared
 catalogue without replacing its responsibilities.
 
+The shared [review operating model](review/OPERATING-MODEL.md) selects scrutiny by
+impact/recovery, focuses re-review on repairs, and feeds incidents and noise back into
+checks. It preserves human ownership and existing approval/delegation boundaries.
+
 Run `bun run review:gates --help` in this checkout, or the installed
 `scripts/review-gates.ts` from a consuming repository. No extra runtime dependencies.
 

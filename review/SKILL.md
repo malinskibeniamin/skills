@@ -8,6 +8,8 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 Review pinned scope. Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
 Scoped repairs: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
+Select depth/convergence from the [operating model](OPERATING-MODEL.md); risk changes scrutiny, not permissions.
+
 ## Review contract
 
 - **Objective**: does the diff achieve its outcome without a credible defect?
@@ -83,8 +85,9 @@ without credible risk.
 ### Synthesize
 
 Use [communication](../shared/communication.md); keep schema.
-Lead with findings. Deduplicate by root cause. Omit praise and narration. For a re-review, mark each prior finding's state.
-Separate value from defects.
+Lead with the finding count, including explicit zero. Deduplicate by root cause; name the bug class and affected instances.
+For a re-review, inspect repair delta and prior findings after full initial coverage; expand for changed assumptions.
+Mark each finding's state with proof. Omit praise and unrelated bug hunts; separate value from defects.
 
 ## Deep mode
 

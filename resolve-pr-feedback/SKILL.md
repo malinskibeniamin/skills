@@ -86,15 +86,15 @@ Post one bullet per root cause/disposition plus hosted thread and CI state.
 
 ## Iteration policy
 
-- AI self-review: stop when approved or empty; cap at two rounds.
+- AI self-review: stop when clean; after two unsuccessful passes, reassess approach/missing context. See
+  [convergence rules](../review/OPERATING-MODEL.md#make-review-converge).
 - Human feedback: NO iteration cap on dispositions; address every thread before handoff.
 - Automatic repair: pause after 3 feedback rounds; reassess before explicit `retry`.
   Base-only updates do not count. Paused is not complete.
-- After the first full review, check only changed diff and prior findings.
-  Deduplicate root causes; resolve existing threads instead of reposting.
+- After the first full review, focus on the changed diff and prior findings;
+  expand for changed assumptions. Deduplicate root causes; resolve existing threads instead of reposting.
 
 ## Automatic wake-up
 
-Unattended repair: [opt-in setup](AUTO-REVIEW.md) resumes the original feature
-session; hooks bind future PRs. Ordinary resolution never enables watching.
+Unattended repair: [opt-in setup](AUTO-REVIEW.md) resumes the original feature session and binds future PRs; ordinary resolution never enables watching.
 Keep drafts draft; never auto-merge.

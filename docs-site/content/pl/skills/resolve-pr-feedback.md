@@ -82,10 +82,10 @@ Opublikuj jeden punkt na przyczynę źródłową i jej rozstrzygnięcie oraz akt
 
 ## Polityka iteracji [#iteration-policy]
 
-- Samoprzegląd AI: zakończ, gdy oś przeglądu w kodzie jest zatwierdzona lub pusta; najwyżej dwie rundy.
+- Samoprzegląd AI: zakończ po czystym wyniku; po dwóch nieudanych przebiegach ponownie oceń podejście i brakujący kontekst. Zobacz [zasady zbieżności](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#make-review-converge).
 - Uwagi człowieka: obowiązek rozstrzygnięcia każdego wątku przed przekazaniem nie ma limitu iteracji.
 - Automatyczna naprawa zatrzymuje się po 3 rundach obsługi uwag. Przed jawnym `retry` ponownie oceń podejście; zatrzymanie nie oznacza zakończenia. Same aktualizacje gałęzi bazowej nie zużywają tego budżetu.
-- Po pierwszym pełnym przeglądzie sprawdzaj nowy diff i wcześniejsze ustalenia. Łącz uwagi według przyczyny źródłowej; rozwiązuj istniejący wątek zamiast publikować go ponownie.
+- Po pierwszym pełnym przeglądzie skup się na zmienionym diffie i wcześniejszych ustaleniach; rozszerz zakres, gdy zmieniają się założenia. Deduplikuj przyczyny źródłowe; rozwiązuj istniejące wątki zamiast publikować je ponownie.
   Hook kompletności blokuje nierozwiązane wątki i oczekujące żądania zmian.
 
 ## Automatyczne wznowienie [#automatic-wake-up]

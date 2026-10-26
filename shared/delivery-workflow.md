@@ -48,8 +48,11 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    a credible failure/recovery path. Static docs/config use the relevant consumer/validator instead.
 4. Load [review](../review/SKILL.md) and apply its diagnostic axes inline. Its read-only
    contract governs that assessment; this author request owns repairing concrete findings.
-   Stop when clean, not after a prescribed number of passes. Repeated unchanged failures
-   need a new hypothesis, not an endless retry or reviewer ping-pong loop.
+   Select [risk-based depth](../review/OPERATING-MODEL.md); retain runnable proof and
+   recovery limits before asking for human attention. Stop at the first clean pass.
+   After two unsuccessful self-review passes, reassess the approach/missing context;
+   review repairs and prior findings, not unrelated old code. Reassessment never clears
+   unresolved findings or grants delegation.
 5. Dependency version upgrades verify lockfile, clean install/build, and every
    affected call site against current primary documentation. When the change claims measurable impact,
    repeat the same baseline/candidate scenario under [quantify-impact](../quantify-impact/SKILL.md).

@@ -62,7 +62,10 @@ includes defect scenarios and a clean negative control. Its fixture assertions
 and deterministic CI checks do not measure model quality. Run model evaluations
 only with explicit authorization and configured credentials. Record the model,
 effort, prompt revision, case dispositions, and run evidence before claiming a
-reviewer improvement. Human-validated incident cases remain a separate need.
+reviewer improvement. Follow the shared
+[incident and noise feedback loop](../review/OPERATING-MODEL.md#learn-from-misses-and-noise)
+to curate human-validated incident cases, disposition findings and compare repair rounds.
+That guidance does not add a collector, scheduled agent, or measured quality result.
 
 ## Remaining adoption boundaries
 

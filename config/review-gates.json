@@ -6,7 +6,7 @@
       "title": "Correctness",
       "always": true,
       "globs": [],
-      "skills": ["review/SKILL.md"],
+      "skills": ["review/SKILL.md", "review/OPERATING-MODEL.md"],
       "lens": "Trace changed behavior to authoritative producers, callers and contracts. Report concrete regressions, not unrelated existing defects or formatter-owned style.",
       "rereview": "delta"
     },
@@ -46,6 +46,13 @@
         "**/*auth*",
         "**/*secret*",
         "**/*permission*",
+        "**/auth/**",
+        "**/billing/**",
+        "**/*updater*",
+        "**/install*.sh",
+        "**/install*.ps1",
+        ".github/workflows/**",
+        "**/release/**",
         "**/migrations/**",
         "**/*.proto"
       ],
