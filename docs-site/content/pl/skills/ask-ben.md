@@ -45,7 +45,6 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/create-verification-skill` | Tworzenie lokalnego dla projektu zestawu do weryfikacji rzeczywistej aplikacji. |
 | `/cli-for-agents` | Projektowanie nieinteraktywnych, komponowalnych interfejsów CLI dla agentów. |
 | `/demo` | Tworzenie nagrania funkcji przeznaczonego dla klientów. |
-| `/deslop` | Audytowanie nadmiernie rozbudowanego kodu i usuwanie nieuzasadnionych elementów. |
 | `/development-lifecycle` | Twórz pracę do żądanego punktu dostarczenia. |
 | `/diagnosing-bugs` | Diagnozowanie trudnych błędów w krótkiej pętli informacji zwrotnej. |
 | `/docs` | Pisanie i recenzowanie dokumentów technicznych opartych na faktach. |

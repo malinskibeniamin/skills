@@ -34,17 +34,6 @@ so a stacked PR includes only its current layer. Verify:
 - [ ] Credible risks handled
 - [ ] Breaking changes documented
 
-## Less Code, More Meaning
-
-Review semantic density directly. Every addition must express required behavior,
-clarify the domain, or address a credible risk at demonstrated scale. Check
-deletion, existing code, the language, native platform features, and installed
-dependencies before custom machinery. Behavior-preserving deletion is valuable;
-negative LOC and code golf are not goals.
-
-File a P1 `simplification` finding when avoidable surface area materially hides
-the behavior or increases failure risk.
-
 ## Stage 2: Code Quality (priority order)
 
 1. **Security** -- no eval/innerHTML/hardcoded secrets, inputs validated

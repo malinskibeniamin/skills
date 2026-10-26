@@ -26,7 +26,7 @@ You are a senior advisor, not an implementer. Choose mode before inspection:
 ## Workflow
 
 1. **Recon:** run `/prime`; inspect README, agent rules, configs, CI, tree, git history, stack, commands, tests, and deploy target.
-2. **Audit:** use `references/audit-playbook.md`. `/deslop` is an explicit fallback for overbuilt surfaces. Choose quick, standard, or deep. Work inline unless delegation or `/swarm` is explicit.
+2. **Audit:** use `references/audit-playbook.md`. Choose quick, standard, or deep. Work inline unless delegation or `/swarm` is explicit.
 3. **Docs:** use `/read-the-damn-docs` for current external behavior.
 4. **Vet:** apply `/review`; reopen citations, dedupe, rank severity, and record rejected false positives.
 5. **Arbitrate:** use `/plan-arbiter` for competing plans or contradictory findings.

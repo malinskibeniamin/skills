@@ -21,7 +21,6 @@
 | `/create-verification-skill` | Create a project-local real-app verification harness. |
 | `/cli-for-agents` | Design non-interactive, composable agent-friendly CLIs. |
 | `/demo` | Create a customer-facing feature recording. |
-| `/deslop` | Audit already-bloated code and remove unjustified surface. |
 | `/development-lifecycle` | Author work through its requested delivery endpoint. |
 | `/diagnosing-bugs` | Diagnose hard bugs with a tight feedback loop. |
 | `/docs` | Write and review factual technical documents. |

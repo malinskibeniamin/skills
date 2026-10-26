@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+2026-10-26 -- Retire Ponytail and its merged `/deslop` skill in Claude and Codex.
+Remove their discovery entries, audit routing, reuse-first/minimization review
+policy, and Stop-hook LOC pressure. Correctness review, TDD, security,
+accessibility, and violation reporting remain. Refresh the plugin and reload or
+restart the host after upgrading; already-loaded skill instructions are not
+removed from an existing conversation. Published docs snapshots remain historical.
+
 2026-10-24 -- Keep frontend hooks live for Claude sessions that start outside a
 React package. `DISABLE_FRONTEND_HOOKS=1` (set only through Claude's
 `CLAUDE_ENV_FILE`, so Codex never had it) came from the session root's

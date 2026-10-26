@@ -71,7 +71,7 @@ skipped lanes remain explicit; agreement between reviewers is not verification.
 
 ## Fowler smell baseline
 
-Use this as judgment support for semantic density, not a quota. A documented repository
+Use this as judgment support for maintainability, not a quota. A documented repository
 standard always wins; skip anything deterministic tooling already owns.
 
 - **Mysterious Name**: the name does not reveal the role.

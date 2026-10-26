@@ -6,7 +6,7 @@ description: Design deep modules with small interfaces. Use when choosing seams,
 Design **deep modules**: substantial behavior behind a small interface at a clean seam, testable through that interface. Optimize caller leverage, maintainer locality, and testability.
 Use `GLOSSARY.md` terms, via `GLOSSARY-MAP.md` when present; respect ADRs.
 
-Depth must improve semantic density now. No modules, seams, adapters, or interfaces for hypothetical reuse. A design wins only when it removes more caller knowledge/coordination than it adds.
+A module should reduce caller knowledge and coordination while preserving required behavior.
 
 ## Glossary
 

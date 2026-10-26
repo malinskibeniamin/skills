@@ -79,11 +79,6 @@ _Avoid_: Index, cache, memory, handoff
 Continuation brief produced at the end of a session for another agent or fresh session.
 _Avoid_: Prime, onboarding
 
-**Semantic density**:
-Code in which each construct carries required behavior or makes the domain
-clearer. The smallest obvious solution, not the fewest characters.
-_Avoid_: Terse code, code golf
-
 **Credible risk**:
 A failure supported by a trust boundary, irreversible effect, requirement,
 observed incident, demonstrated scale, or likely user path. A merely imaginable
@@ -95,11 +90,6 @@ The current measured or explicitly required workload used to justify
 performance machinery. Future scale matters when a concrete threshold or
 migration trigger exists.
 _Avoid_: Web scale, future-proof
-
-**Deletion as delivery**:
-Removing code, configuration, dependencies, or tests while preserving required
-behavior and making the system clearer.
-_Avoid_: Negative LOC as a goal
 
 **Author workflow**:
 One owner implements or repairs an outcome, selects applicable verification and evidence,

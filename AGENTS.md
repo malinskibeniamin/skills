@@ -16,7 +16,7 @@ Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
 
-Use local idiom/smallest obvious design. Preserve zoom, worktree isolation,
+Follow local idioms. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
 ## Human-facing text

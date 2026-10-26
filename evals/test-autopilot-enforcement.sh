@@ -118,5 +118,5 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "## Work" "CLAUDE.md keeps a compact wor
 run_content_eval "$REPO_ROOT/CLAUDE.md" "outcome contract" "CLAUDE.md defines the high-level work contract"
 run_content_eval "$REPO_ROOT/CLAUDE.md" 'Meaningful behavior starts with' "CLAUDE.md scopes TDD to meaningful behavior"
 run_content_eval "$REPO_ROOT/CLAUDE.md" 'failing public-contract test' "CLAUDE.md requires a failing public-contract test"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "CLAUDE.md starts with the smallest design"
+run_content_eval "$REPO_ROOT/CLAUDE.md" "Follow local idioms" "CLAUDE.md follows repository conventions"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "/commit-push" "CLAUDE.md mandates /commit-push in ship phase"

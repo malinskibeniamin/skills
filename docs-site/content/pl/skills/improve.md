@@ -44,14 +44,13 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
 ## Przepływ pracy
 
 1. **Rozpoznanie**: uruchom `/prime`, jeśli jest dostępne, a następnie przeczytaj README, AGENTS/CLAUDE, konfiguracje główne, CI, drzewo plików oraz historię i częstotliwość zmian w git. Określ stos technologiczny, polecenia, konwencje, testy i środowisko docelowe wdrożenia.
-2. **Audyt**: użyj `references/audit-playbook.md`; tryb audytu całego repozytorium `/deslop` jest
-   jawnym rozwiązaniem awaryjnym dla już nadmiernie rozbudowanych obszarów. Poziomy szczegółowości to szybki, standardowy i głęboki.
+2. **Audyt**: użyj `references/audit-playbook.md`. Poziomy szczegółowości to szybki, standardowy i głęboki.
    Domyślnie przeprowadzaj audyt samodzielnie. Jawne delegowanie lub `/swarm` może zezwolić na ograniczone ścieżki
    tylko do odczytu.
 3. **Dokumentacja**: użyj `/read-the-damn-docs`, gdy ustalenia zależą od interfejsów API innych firm, pakietów, działania chmury lub aktualnych oficjalnych wytycznych.
 4. **Weryfikacja**: zastosuj rygor w stylu `/review`: osobiście ponownie otwórz wskazane lokalizacje, usuń duplikaty, uszereguj według istotności i odnotuj odrzucone fałszywe alarmy w indeksie planów.
 5. **Rozstrzyganie**: użyj `/plan-arbiter` podczas przeglądania konkurencyjnych planów, propozycji agentów lub sprzecznych ustaleń doradczych.
-6. **Test odporności**: użyj `/steelman` dla ustaleń wysokiego ryzyka i pomysłów kierunkowych; użyj `/resilience-review` dla wiarygodnych niepomyślnych ścieżek, odtwarzania działania i warunków STOP. Traktuj ustalenia audytu `/deslop` jako dane wejściowe do planu doradczego, a nie automatyczne zmiany.
+6. **Test odporności**: użyj `/steelman` dla ustaleń wysokiego ryzyka i pomysłów kierunkowych; użyj `/resilience-review` dla wiarygodnych niepomyślnych ścieżek, odtwarzania działania i warunków STOP.
 7. **Priorytetyzacja**: przedstaw ustalenia w tabeli według wpływu wraz z dowodami. Ustalenia kierunkowe przedstaw osobno.
    Tryb raportu kończy się po dostarczeniu żądanego raportu.
 8. **Planowanie**: tylko w trybie planu przeczytaj `references/plan-template.md`; zapisz żądany

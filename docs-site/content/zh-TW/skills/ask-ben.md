@@ -45,7 +45,6 @@ type: skill
 | `/create-verification-skill` | 建立專案本機的真實應用程式驗證控制框架。 |
 | `/cli-for-agents` | 設計非互動、可組合且適合代理使用的命令列介面。 |
 | `/demo` | 建立面向客戶的功能錄製內容。 |
-| `/deslop` | 稽核已經過度膨脹的程式碼，並移除不合理的介面。 |
 | `/development-lifecycle` | 撰寫工作並達到要求的交付端點。 |
 | `/diagnosing-bugs` | 透過緊密的回饋迴圈診斷棘手的錯誤。 |
 | `/docs` | 撰寫與審查以事實為依據的技術文件。 |

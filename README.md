@@ -41,6 +41,11 @@ claude plugin update frontend-skills@skills
 
 Restart Claude Code session so hooks reload from new cache.
 
+The unreleased bundle retires Ponytail and `/deslop`, including their review
+policy and LOC nudges. Reload or restart the host after upgrading so previously
+loaded instructions do not remain active. Use `/review` for correctness review
+or `/improve` for a requested codebase audit.
+
 **Verify:**
 
 ```bash

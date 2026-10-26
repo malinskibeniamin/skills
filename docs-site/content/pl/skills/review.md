@@ -65,8 +65,6 @@ Przed werdyktem sprawdź tożsamość migawki; zmiana wejścia unieważnia odpow
 - Sprawdź integralność testów: zachowanie publiczne, RED, asercje, pokrycie i brak oczekiwania przez czas.
   Kontrole tekstu źródłowego nie zapewniają pokrycia, chyba że tekst jest publicznym wynikiem; usuń je lub zastąp testem przez
   publiczny punkt styku. Do składni używaj analizy statycznej.
-- Oceń dodatki względem wymaganego zachowania, gęstości semantycznej, jasności domeny, wiarygodnego
-  ryzyka i wykazanej skali. Nigdy nie optymalizuj liczby linii ani nie premiuj code golfu.
 
 Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 

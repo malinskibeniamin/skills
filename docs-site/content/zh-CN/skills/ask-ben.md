@@ -45,7 +45,6 @@ type: skill
 | `/create-verification-skill` | 创建项目本地的真实应用验证框架。 |
 | `/cli-for-agents` | 设计非交互、可组合且适合代理使用的命令行界面。 |
 | `/demo` | 创建面向客户的功能演示录像。 |
-| `/deslop` | 审计已经臃肿的代码，并移除缺乏合理依据的表层内容。 |
 | `/development-lifecycle` | 编写工作并达到请求的交付终点。 |
 | `/diagnosing-bugs` | 通过紧密的反馈循环诊断棘手缺陷。 |
 | `/docs` | 撰写和审查基于事实的技术文档。 |
