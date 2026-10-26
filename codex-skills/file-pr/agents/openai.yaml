@@ -1,0 +1,3 @@
+interface:
+  display_name: "File PR"
+  short_description: "File a problem-first PR at the requested endpoint"

@@ -251,6 +251,20 @@ remain explicit opt-ins.
 Delivery ownership: [diagram](docs/architecture/author-delivery.png) and
 [editable source](docs/architecture/author-delivery.excalidraw).
 
+### tstack skills
+
+All nine [tstack](https://github.com/t3dotgg/tstack) skills ship as a
+[pinned, MIT-licensed snapshot](vendor/tstack-NOTICE.md). Eight new entrypoints
+compose existing owners: `/full-stop`, `/file-pr`, `/babysit-pr`, `/takeover`,
+`/modernize`, `/council`, `/sol-loop` and `/leaving-pr-comments`. `/full-send`
+keeps its existing owner. Publication, monitoring, watchdog takeover and feedback
+load the matching guidance automatically, not a second workflow stack.
+
+[Host compatibility](shared/TSTACK.md) preserves requested drafts, narrower
+endpoints, ownership and protected review gates. Council and sol loop require
+explicit delegation; other workflows never start them automatically. Vendoring
+does not start watchers, install services or grant merge authority.
+
 ### Outcome contract
 
 Most work needs four fields, not a prescribed workflow:

@@ -116,6 +116,7 @@ installed_skill_count="$(
 # Check upstream bytes and every proxy dependency inside the actual plugin cache.
 python3 "$installed_path/scripts/vendor-poteto.py" --check
 python3 "$installed_path/scripts/vendor-t3code-skills.py" --check
+python3 "$installed_path/scripts/vendor-tstack.py" --check
 python3 "$installed_path/scripts/vendor-poteto.py" --model-rule >"$test_root/pstack-models.mdc"
 bash "$installed_path/scripts/generate-skill-catalog.sh" --check
 bash "$installed_path/evals/run.sh" security-audit-vendored-skill

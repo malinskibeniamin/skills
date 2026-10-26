@@ -190,6 +190,14 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/to-spec` | Przekształcanie rozmowy w specyfikację gotową do umieszczenia w systemie śledzenia. |
 | `/to-tickets` | Dzielenie planu na zadania typu tracer bullet z określonymi blokadami. |
 | `/triage` | Przygotowywanie zgłoszeń do niezawodnej realizacji przez agenta lub człowieka. |
+| `/babysit-pr` | Monitorowanie PR-a przez bieżące CI i uwagi z przeglądu. |
+| `/council` | Przegląd przez jawnie zamówione delegowane modele różnych dostawców. |
+| `/file-pr` | Tworzenie PR-a od opisu problemu do żądanego punktu końcowego. |
+| `/full-stop` | Doprowadzanie PR-a do zweryfikowanej gotowości bez scalania. |
+| `/leaving-pr-comments` | Publikowanie zwięzłych komentarzy GitHub ze zweryfikowanym wskazaniem autora. |
+| `/modernize` | Ponowna ocena i bezpieczne odświeżenie starszego PR-a. |
+| `/sol-loop` | Jawnie zamówiona, ograniczona pętla przeglądu przez Sol. |
+| `/takeover` | Kończenie odziedziczonej pracy z zachowaniem uznania dla współtwórców. |
 | `/upgrade-dependency` | Aktualizowanie zależności i dostosowywanie wszystkich miejsc jej użycia. |
 | `/ux-copy` | Pisanie i recenzja zwięzłych, rzeczowych tekstów interfejsu produktu. |
 | `/ux-performance` | Audytowanie i optymalizowanie rzeczywistej wydajności UX aplikacji internetowych. |

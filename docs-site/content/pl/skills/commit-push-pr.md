@@ -48,7 +48,7 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 `--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu: [utrzymanie istniejącego PR-a](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr), następnie sprawdzenie czystości drzewa. Najpierw przygotuj dowody wizualne.
 
 1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kontynuuj pracę w bieżącym PR-ze; przy tworzeniu i aktualizacji, także wersji roboczych, stosuj [metadane repozytorium](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md). Korzystaj z szablonu; wersje robocze nie wymagają osobnej zgody. Dla stosów używaj `/stacked-prs`.
-2. Dla każdego PR-a załaduj osobno [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); uwzględnij wartość lub potwierdzone wskaźniki.
+2. Dla każdego PR-a załaduj osobno [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md), [wpływ](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [opis](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); zachowaj stan szkicu i przedstaw wartość.
 3. Każda widoczna zmiana wymaga inwentaryzacji opisanej w dokumencie referencyjnym, zrzutów ekranu i nagrań wideo przed i po zmianie, sprawdzonych migawek oraz przechodzących testów wizualnych. Brak dowodów blokuje publikację bez zgody użytkownika na odstępstwo.
 4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów i produktów, imiona i nazwiska osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.
 5. Uwzględnij potwierdzenie dogfood. Przeczytaj ponownie opis, sprawdź dostęp recenzenta do obrazów i wyświetl adres URL. Aktualizacje i ponowne otwarcia podlegają tym samym wymaganiom; edycje unieważniają dowody, których dotyczą.
@@ -64,6 +64,6 @@ Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkow
 3. Zgłoś stan, pozostałe różnice, gałąź, commity, PR, CI i następne działanie.
 4. Stosuj kontrakt stanu oraz celu i wpływu z CLAUDE.md. Jeśli PR istnieje, umieść jego pełny adres URL w ostatnim wierszu stanu, także przy aktualizacjach.
 
-Nigdy nie dodawaj do poczekalni niezwiązanych zmian, nie wypychaj mieszanego zakresu ani nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i polecenie naprawcze.
+Nigdy nie dodawaj do poczekalni ani nie wypychaj niezwiązanych zmian i nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i sposób naprawy.
 
 Jeśli repozytorium docelowe używa Changesets, po ukierunkowanej weryfikacji, a przed commitem, wczytaj [finalizację changesetu](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/changesets/SKILL.md). Aktualizuj istniejącą notatkę bieżącego PR zamiast tworzyć nową przy każdym poleceniu.

@@ -206,7 +206,15 @@
     "./poteto-skills/poteto-technical-writing/",
     "./poteto-skills/poteto-typescript-best-practices/",
     "./poteto-skills/poteto-unslop/",
-    "./poteto-skills/poteto-why/"
+    "./poteto-skills/poteto-why/",
+    "./tstack-skills/babysit-pr/",
+    "./tstack-skills/council/",
+    "./tstack-skills/file-pr/",
+    "./tstack-skills/full-stop/",
+    "./tstack-skills/leaving-pr-comments/",
+    "./tstack-skills/modernize/",
+    "./tstack-skills/sol-loop/",
+    "./tstack-skills/takeover/"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",

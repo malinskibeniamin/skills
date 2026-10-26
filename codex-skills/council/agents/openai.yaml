@@ -1,0 +1,3 @@
+interface:
+  display_name: "Council"
+  short_description: "Review with explicitly requested cross-provider delegates"

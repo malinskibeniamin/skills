@@ -149,6 +149,14 @@ if t3code_lock.exists():
     })
 
 
+tstack_lock = repo / "vendor/tstack.lock.json"
+if tstack_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(tstack_lock.read_text())["skills"]
+    })
+
+
 def yaml_quote(value):
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
 

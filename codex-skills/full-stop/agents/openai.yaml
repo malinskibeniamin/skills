@@ -1,0 +1,3 @@
+interface:
+  display_name: "Full Stop"
+  short_description: "Deliver verified PR readiness without merging"

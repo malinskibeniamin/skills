@@ -166,6 +166,14 @@
 | `/to-spec` | Turn the conversation into a tracker-ready spec. |
 | `/to-tickets` | Split a plan into tracer-bullet tickets with blockers. |
 | `/triage` | Prepare issues for reliable agent or human execution. |
+| `/babysit-pr` | Monitor a PR through current CI and review feedback. |
+| `/council` | Review with explicitly requested cross-provider delegates. |
+| `/file-pr` | File a problem-first PR at the requested endpoint. |
+| `/full-stop` | Deliver verified PR readiness without merging. |
+| `/leaving-pr-comments` | Post concise GitHub comments with verified attribution. |
+| `/modernize` | Reassess and safely refresh an older PR. |
+| `/sol-loop` | Run an explicitly requested bounded Sol review loop. |
+| `/takeover` | Finish inherited work while preserving contributor credit. |
 | `/upgrade-dependency` | Upgrade a dependency and adapt every affected call site. |
 | `/ux-copy` | Write and review concise, factual product UI copy. |
 | `/ux-performance` | Audit and optimize real web UX performance. |

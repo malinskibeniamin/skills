@@ -1,0 +1,3 @@
+interface:
+  display_name: "Sol Loop"
+  short_description: "Run an explicitly requested bounded Sol review loop"

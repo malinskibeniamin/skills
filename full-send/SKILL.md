@@ -17,8 +17,11 @@ load [development-lifecycle](../development-lifecycle/SKILL.md); existing PRs st
 current evidence. Use [REFERENCE.md](REFERENCE.md) only for its requested checkpoint,
 notification, resume or explicitly delegated review branch. No automatic model switch or agents.
 
+Read [tstack composition](../shared/TSTACK.md#full-send) and its upstream proof guidance
+without changing this owner, adding implicit reviewers or broadening permissions.
+
 The shared workflow selects [native context](../shared/T3CODE-NATIVE.md#resolve-context)
 for authorized monitoring; keep one delivery loop, not a separate T3 workflow.
 
-Inspiration and research limits: [SOURCES.md](SOURCES.md). This local workflow is not a
-copied or endorsed Theo skill.
+Inspiration and research limits: [SOURCES.md](SOURCES.md). Local delivery composes a
+licensed tstack snapshot; it is not an upstream endorsement.
