@@ -166,6 +166,10 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 
 Want proof and examples? Demo scripts, featured skill moments, and starter prompts live in [docs/DEMOS.md](docs/DEMOS.md); comparisons, measurement methodology, and common questions live in [docs/FAQ.md](docs/FAQ.md).
 
+For multiple coding subscriptions, follow the [subscription-only setup guide](docs/subscription-only-usage.md).
+It separates T3 account selection and optional CLIProxyAPI routing from provider-side
+credit controls. The harness does not enforce billing limits or install a balancer.
+
 ## Review evidence
 
 Optional [review gates](review/GATES.md) connect existing specialist skills to a
