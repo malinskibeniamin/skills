@@ -1,0 +1,135 @@
+{
+  "repository": "https://github.com/t3dotgg/tstack",
+  "revision": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+  "skills": [
+    {
+      "name": "babysit-pr",
+      "source": "skills/babysit-pr/SKILL.md",
+      "registration": "./tstack-skills/babysit-pr/",
+      "short_description": "Monitor a PR through current CI and review feedback",
+      "description": "Monitor, watch, or babysit a PR through CI and review. Only when monitoring is requested."
+    },
+    {
+      "name": "council",
+      "source": "skills/council/SKILL.md",
+      "registration": "./tstack-skills/council/",
+      "short_description": "Review with explicitly requested cross-provider delegates",
+      "description": "Use for an explicit council request: three read-only reviewers from different providers. Never automatic delegation."
+    },
+    {
+      "name": "file-pr",
+      "source": "skills/file-pr/SKILL.md",
+      "registration": "./tstack-skills/file-pr/",
+      "short_description": "File a problem-first PR at the requested endpoint",
+      "description": "File or update a concise, problem-first PR through the existing publication workflow. Preserve requested draft state."
+    },
+    {
+      "name": "full-send",
+      "source": "skills/full-send/SKILL.md",
+      "registration": "./full-send/",
+      "short_description": "Author delivery preset through an authorized merge",
+      "description": "Use the existing full-send owner; retain its endpoint and permission rules."
+    },
+    {
+      "name": "full-stop",
+      "source": "skills/full-stop/SKILL.md",
+      "registration": "./tstack-skills/full-stop/",
+      "short_description": "Deliver verified PR readiness without merging",
+      "description": "Use when the user requests full stop: delivery through verified readiness, never merge. Earlier narrower stops win."
+    },
+    {
+      "name": "leaving-pr-comments",
+      "source": "skills/leaving-pr-comments/SKILL.md",
+      "registration": "./tstack-skills/leaving-pr-comments/",
+      "short_description": "Post concise GitHub comments with verified attribution",
+      "description": "Use before posting GitHub PR comments, reviews, or replies on the user's behalf. Loading grants no posting permission."
+    },
+    {
+      "name": "modernize",
+      "source": "skills/modernize/SKILL.md",
+      "registration": "./tstack-skills/modernize/",
+      "short_description": "Reassess and safely refresh an older PR",
+      "description": "Use when asked to modernize or rebase an older PR. Assess whether its goal remains useful before updating the owned branch."
+    },
+    {
+      "name": "sol-loop",
+      "source": "skills/sol-loop/SKILL.md",
+      "registration": "./tstack-skills/sol-loop/",
+      "short_description": "Run an explicitly requested bounded Sol review loop",
+      "description": "Use for an explicit sol loop request: bounded read-only GPT Sol review rounds. Never automatic delegation."
+    },
+    {
+      "name": "takeover",
+      "source": "skills/takeover/SKILL.md",
+      "registration": "./tstack-skills/takeover/",
+      "short_description": "Finish inherited work while preserving contributor credit",
+      "description": "Use when asked to take over a PR, branch, or agent thread. Preserve authorship and the requested delivery endpoint."
+    }
+  ],
+  "files": {
+    "LICENSE": {
+      "sha256": "8095f9a9f97d074131f6a2ce09b952d12c18b36f09f4e5df0517c4e64e82c851",
+      "mode": 420
+    },
+    "README.md": {
+      "sha256": "682afc278d4a40d530fc22d2551694bcafc818cf9e056f5aa2d9afdb548333cb",
+      "mode": 420
+    },
+    "skills/babysit-pr/SKILL.md": {
+      "sha256": "fbe43ba3ab76a466a88ef8b46dca1b41fb8101347d24a396903849865173a6ac",
+      "mode": 420
+    },
+    "skills/babysit-pr/scripts/pr-wait": {
+      "sha256": "90393f85b95b78bff1b039744bdfb09dc88ff2b430e1c3df687ee6f449c97214",
+      "mode": 493
+    },
+    "skills/council/SKILL.md": {
+      "sha256": "da8b4166f19defb2b6916e8f8fe30fa93b8bd2eabaf870ba87e9accaa038e2b8",
+      "mode": 420
+    },
+    "skills/file-pr/SKILL.md": {
+      "sha256": "174a7ae52e3b9d17f2bd0eaf0a11a89d744d1249164ecbdb0e642359eee75b1b",
+      "mode": 420
+    },
+    "skills/full-send/SKILL.md": {
+      "sha256": "ba585e47cd901506b0e2de13025b0e39bc02462c136cf27491ad3efbdfe66020",
+      "mode": 420
+    },
+    "skills/full-send/agents/openai.yaml": {
+      "sha256": "8a1e8ce04a774a8a2e469cecf5e45a9cec4d3438b4c587cf166c2f78206390d2",
+      "mode": 420
+    },
+    "skills/full-stop/SKILL.md": {
+      "sha256": "243ed08a040df888e35a5db8da704dced345270efdd0afa74252a766e05a4b09",
+      "mode": 420
+    },
+    "skills/full-stop/agents/openai.yaml": {
+      "sha256": "6029e872a883aa06aad3426ab58289df016e4b0d23485719c71152603fec7d35",
+      "mode": 420
+    },
+    "skills/leaving-pr-comments/SKILL.md": {
+      "sha256": "1d110343022d0514c101dd942286cce10d6b9f5bd5b899f5a0530620d34cd295",
+      "mode": 420
+    },
+    "skills/leaving-pr-comments/agents/openai.yaml": {
+      "sha256": "f89fa0d9ae1c3e973b3e9ecb50549faee62fd1a0e59973bade68802c74183fdb",
+      "mode": 420
+    },
+    "skills/modernize/SKILL.md": {
+      "sha256": "6172d774c46f535367086da90db1b0aaaaac969ed05ff040444f9afa9a6b1552",
+      "mode": 420
+    },
+    "skills/modernize/agents/openai.yaml": {
+      "sha256": "6675e91e10f2b264fe1a027072f6d9f46299f781011e248a5ba075fc1f764e09",
+      "mode": 420
+    },
+    "skills/sol-loop/SKILL.md": {
+      "sha256": "1db1eb4c4a156ee666070e9a12623d520cd1bd9b19c3fc21003fe5a440ba0b10",
+      "mode": 420
+    },
+    "skills/takeover/SKILL.md": {
+      "sha256": "9f00a7c67bf82603af2e80f56e9ce63f1516a1b4339365b79cf786d9d9055465",
+      "mode": 420
+    }
+  }
+}

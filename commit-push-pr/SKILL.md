@@ -33,7 +33,7 @@ With Changesets, load [changesets](../t3code-skills/changesets/SKILL.md) after c
 `--no-pr` never creates a PR. After push: [existing PR upkeep](../pr/SKILL.md#existing-pr), then clean-tree check. Prepare visuals first.
 
 1. Resolve base: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up in current PR; apply [repo metadata](references/metadata.md), including drafts. Template; draft PRs open without approval. Stacks use `/stacked-prs`.
-2. Every PR: load [quantify-impact](../quantify-impact/SKILL.md) and [pr](../pr/SKILL.md) separately; include value or proven metrics.
+2. Load [framing](../tstack-skills/file-pr/SKILL.md), [impact](../quantify-impact/SKILL.md) and [body](../pr/SKILL.md) separately; keep drafts and value.
 3. Visible changes: inventory, before/after screenshots/video, reviewed snapshots and passing visual tests per reference. Missing evidence needs user waiver before publication.
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Include dogfood receipt. Re-read body, check reviewer image access, and print URL. Updates/reopens use same gate; edits invalidate affected evidence.
@@ -49,4 +49,4 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 3. Report status, remaining diff, branch, commits, PR, CI, and next action.
 4. Follow CLAUDE.md's status/intent/impact contract; include full PR URL on final status line, including updates.
 
-Never stage unrelated work, push mixed scope, or hide failures. `gh pr create` failure: show error and recovery.
+Never stage/push unrelated work or hide failures. `gh pr create` failure: show error and recovery.

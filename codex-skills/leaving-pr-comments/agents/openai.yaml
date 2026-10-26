@@ -1,0 +1,3 @@
+interface:
+  display_name: "Leaving PR Comments"
+  short_description: "Post concise GitHub comments with verified attribution"
