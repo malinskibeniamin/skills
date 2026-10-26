@@ -190,6 +190,14 @@ type: skill
 | `/to-spec` | 将对话转换为可录入跟踪系统的规格。 |
 | `/to-tickets` | 将计划拆分为带阻塞关系的曳光弹式工单。 |
 | `/triage` | 整理问题，使智能体或人员能够可靠执行。 |
+| `/babysit-pr` | 跟进 PR 当前的 CI 和审查反馈。 |
+| `/council` | 使用明确请求的跨提供商委派模型进行审查。 |
+| `/file-pr` | 以问题为先，创建 PR 并推进到请求的终点。 |
+| `/full-stop` | 验证 PR 已就绪，但不合并。 |
+| `/leaving-pr-comments` | 发布简洁的 GitHub 评论，并注明经核实的作者身份。 |
+| `/modernize` | 重新评估并安全更新较旧的 PR。 |
+| `/sol-loop` | 执行明确请求且轮数受限的 Sol 审查循环。 |
+| `/takeover` | 完成接手的工作，同时保留原贡献者署名。 |
 | `/upgrade-dependency` | 升级依赖项并调整每个受影响的调用位置。 |
 | `/ux-copy` | 编写和审查简洁、客观的产品界面文案。 |
 | `/ux-performance` | 审计并优化真实 Web 用户体验性能。 |

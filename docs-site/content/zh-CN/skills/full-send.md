@@ -1,5 +1,5 @@
 ---
-description: "兼容预设：将作者交付推进到已授权的合并；full stop 或 --no-merge 保留合并决定。"
+description: 兼容预设：将作者交付推进到已授权的合并；full stop 或 --no-merge 保留合并决定。
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -23,6 +23,8 @@ type: skill
 
 阅读并运行共享工作流，而非另一套 full-send 实现。代码未完成时加载 [development-lifecycle](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md)；现有 PR 从当前证据开始。仅为请求的检查点、通知、恢复或明确委派的审查读取 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/REFERENCE.md)。不自动切换模型或创建代理。
 
-灵感及研究限制：[SOURCES.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/SOURCES.md)。此本地工作流不是复制或获得 Theo 背书的技能。
+阅读 [tstack 整合说明](https://github.com/malinskibeniamin/skills/blob/main/shared/TSTACK.md#full-send)及其上游验证指引，不改变此工作流的负责方，不隐式添加审查者，也不扩大权限。
 
 共享工作流为获准的监控选择[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；保持单一交付循环，不另建 T3 工作流。
+
+灵感及研究限制：[SOURCES.md](https://github.com/malinskibeniamin/skills/blob/main/full-send/SOURCES.md)。本地交付整合了获得许可的 tstack 快照；这不代表上游背书。
