@@ -18,7 +18,7 @@ Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.
 
 Projektuj **głębokie moduły**: dużo zachowań za małym interfejsem umieszczonym w dobrze dobranym szwie, możliwych do przetestowania przez ten interfejs. Optymalizuj użyteczność dla wywołujących, lokalność dla osób utrzymujących kod oraz testowalność.
 
-Głębokość musi już teraz zwiększać gęstość semantyczną. Nie twórz modułów, szwów, adapterów ani interfejsów z myślą o hipotetycznym ponownym użyciu. Projekt jest udany tylko wtedy, gdy usuwa z kodu wywołującego więcej wiedzy i potrzeby koordynacji, niż sam wprowadza.
+Moduł powinien ograniczać wiedzę i koordynację wymaganą od kodu wywołującego, zachowując wymagane zachowanie.
 
 ## Słownik
 

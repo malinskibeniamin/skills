@@ -156,7 +156,6 @@ development-lifecycle 3025
 release 2850
 to-spec 2850
 frontend-starter-kit 2800
-deslop 2775
 domain-modeling 2750
 teach 2700
 stack-registry 2525

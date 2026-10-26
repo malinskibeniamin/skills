@@ -47,6 +47,7 @@ const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 // Published archives still link these shared assets after a skill is retired.
 // Read their description from the immutable release, not a second prose copy.
 const ARCHIVED_SKILL_SOURCES: Record<string, string> = {
+  deslop: "docs-site/content/v4.40.0/skills/deslop.md",
   "resolving-merge-conflicts":
     "docs-site/content/v4.38.0/skills/resolving-merge-conflicts.md",
 };

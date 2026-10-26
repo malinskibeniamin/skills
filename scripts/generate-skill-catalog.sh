@@ -43,7 +43,6 @@ SHORT_DESCRIPTIONS = {
     "connect-query": "Build typed ConnectRPC data flows with Connect Query",
     "create-verification-skill": "Create a project-local real-app verification harness",
     "demo": "Create a customer-facing feature recording",
-    "deslop": "Audit already-bloated code and remove unjustified surface",
     "development-lifecycle": "Author work through its requested delivery endpoint",
     "diagnosing-bugs": "Diagnose hard bugs with a tight feedback loop",
     "dogfood": "Use and stress-test every runnable change",
