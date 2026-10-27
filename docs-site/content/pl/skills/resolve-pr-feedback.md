@@ -49,7 +49,7 @@ Przeczytaj GraphQL `reviewThreads`, komentarze główne i treści przeglądów w
 | Uwaga z automatycznego przeglądu wymagająca działania | Przetwórz jak uwagi człowieka |
 | Zatwierdzenie, tylko CI lub podsumowanie niewymagające działania | Odrzuć |
 
-Sprawdź również wątki botów; typ autora nie dowodzi zasadności uwagi. Pobierz wszystkie strony wątków, komentarzy i przeglądów. Na uwagi niedotyczące zmian odpowiedz dowodami.
+Sprawdź również wątki botów; pobierz wszystkie strony wątków, komentarzy i pełnych treści przeglądów, także uwagi spoza diffu. Zastosuj [kontrolę zakresu i aktualności dowodów](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/REFERENCE.md#coverage-and-evidence-freshness); na uwagi niedotyczące zmian odpowiedz dowodami.
 
 Gdy nie ma nowych elementów, dokończ rebase i podaj zaobserwowane rozstrzygnięcia; oczekujące decyzje nie oznaczają zakończenia.
 

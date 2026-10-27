@@ -47,7 +47,7 @@ type: skill
 | 可執行的自動審查發現 | 比照人工回饋處理 |
 | 核准、僅 CI 或不可執行的摘要 | 丟棄 |
 
-也檢查只有機器人評論的討論串；作者類型不能證明發現適用。取得討論串、評論和審查的所有分頁。以證據回覆不適用的發現。
+檢查只有機器人評論的討論串；取得討論串、評論及完整審查內文的所有分頁，包括差異範圍外的發現。執行[涵蓋範圍與證據時效檢查](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/REFERENCE.md#coverage-and-evidence-freshness)；以證據回覆不適用的發現。
 
 沒有新項目時，完成 rebase 並回報實際處理狀態；等待決策不等於完成。
 
