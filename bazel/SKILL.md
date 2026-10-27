@@ -14,6 +14,9 @@ wrappers, macros, pins and CI policy outrank this general guidance.
   binary. Keep per-machine overrides in the existing ignored user rc file.
   Verify newer flags, Starlark annotation syntax and rules against those pins;
   conference demos and roadmap items are not released API contracts.
+- For version upgrades, bundled-JDK trust failures or Bazel 10 compatibility,
+  read [release guidance](references/releases.md). Keep same-line patch updates
+  separate from opt-in release-candidate testing.
 - Distinguish **what has BUILD files** from **what Bazel owns today**. Generated
   targets do not prove CI adoption. Check merged source, not an intermediate
   commit, draft rollout or predecessor repository.

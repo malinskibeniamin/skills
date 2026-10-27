@@ -90,8 +90,19 @@ Primary documentation/source supplies the operational guidance:
   informs [action equivalence](migrations.md), including the inspected tool's
   codegen/custom-command/packaging exclusions.
 
-Bazel 10/Rust rewrite plans, JVM checkpointing, persistent test-runner prototypes
-and competing Starlark typing systems are leads to revalidate, not defaults to
-enable. This refresh did not run actiond, migrate a build, benchmark Bazel or
-establish a security guarantee. Published performance numbers remain specific
+Rust rewrite plans, JVM checkpointing, persistent test-runner prototypes and
+competing Starlark typing systems are leads to revalidate, not defaults to
+enable. Published Bazel 10 candidate APIs are covered by the later release refresh
+below, not inferred from conference plans. This refresh did not run actiond,
+migrate a build, benchmark Bazel or establish a security guarantee.
+Published performance numbers remain specific
 to their authors' workloads; the private-history window above is unchanged.
+
+## Release refresh
+
+Public-source refresh: 2026-10-28. The [release guidance](releases.md) uses the
+upstream 10.0.0rc2, 9.3.1, 8.8.2 and 7.7.2 release notes and GitHub prerelease
+metadata. It separates same-line bundled-JDK trust-store patches from opt-in
+Bazel 10 migration, including changed defaults, Bzlmod closure and execution
+platform checks. This does not expand the private-history audit window, establish
+consumer compatibility or claim measured performance or complete security coverage.
