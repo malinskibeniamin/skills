@@ -37,6 +37,10 @@ case "$file" in
     echo "${STUB_PROOF_SAYS:-ALL PROOFS CHECK}"
     ;;
   */oracle.bend)
+    if [ -n "${STUB_ORACLE_FAILS:-}" ]; then
+      printf 'process.stdout.write("partial output\\n"); console.error("oracle exploded"); process.exit(1);\n' > "$2"
+      exit 0
+    fi
     printf 'process.stdout.write(%s)\n' "$(printf '%s' "$STUB_TABLE" | node -e 'process.stdout.write(JSON.stringify(require("fs").readFileSync(0, "utf8")))')" > "$2"
     ;;
 esac
@@ -81,6 +85,10 @@ _bl_fixture missing
 rm "$_bl_laws/modes/LAWS.bend"
 _bl_expect "check.sh fails closed without human-owned laws" 1 'LAWS.bend is missing' --
 
+_bl_fixture empty-suite
+rm "$_bl_laws/modes/LAWS.bend" "$_bl_laws/modes/PROOF.bend"
+_bl_expect "check.sh rejects a suite with no laws or proofs" 1 'no law directories found' --
+
 _bl_fixture unproven
 rm "$_bl_laws/modes/PROOF.bend"
 _bl_expect "check.sh fails when laws have no proof yet" 1 'PROOF.bend is missing' --
@@ -115,6 +123,16 @@ _bl_fixture write
 printf 'stale\n' > "$_bl_laws/modes/decisions.txt"
 _bl_expect "check.sh --write regenerates decisions.txt" 0 'wrote decisions.txt' -- --write
 _bl_expect "check.sh passes after --write" 0 'decisions.txt fresh' --
+
+# An oracle that prints partial data before crashing must never publish that data.
+_bl_fixture oracle-crash
+cp "$_bl_laws/modes/decisions.txt" "$_bl_tmp/decisions.before"
+STUB_ORACLE_FAILS=1 _bl_expect "check.sh --write rejects an oracle runtime failure" 1 'oracle failed' -- --write
+if cmp -s "$_bl_laws/modes/decisions.txt" "$_bl_tmp/decisions.before"; then
+  _bl_pass "check.sh --write preserves decisions.txt when the oracle crashes"
+else
+  _bl_fail "check.sh --write preserves decisions.txt when the oracle crashes"
+fi
 
 _bl_fixture verdict
 : > "$STUB_LOG"
