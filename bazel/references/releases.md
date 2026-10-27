@@ -13,6 +13,8 @@ latest-version policy. Preserve the repository pin until its upgrade is in scope
 | [7.7.2](https://github.com/bazelbuild/bazel/releases/tag/7.7.2) | Patch LTS; compatible with 7.0 | Evaluate the same-line patch for a 7.x repository |
 | [10.0.0rc2](https://github.com/bazelbuild/bazel/releases/tag/10.0.0rc2) | Prerelease candidate for a major LTS release | Test separately; do not turn an RC into the stable default |
 
+## Bundled JDK trust store
+
 All four remove distrusted eMudhra and Sectigo AAA root certificates from the
 bundled JDK after reported private-key leakage. Prefer an applicable same-line
 patch over a major migration just to obtain this trust-store update. Inspect
@@ -22,61 +24,116 @@ every action's Java toolchain or the host trust store. Exercise authenticated
 repository downloads and cache/executor TLS after updating; repair certificate
 chains at their owner instead of disabling verification or restoring distrusted roots.
 
-For 9.3.1, also replay affected top-level alias chains with the repository's
-pre-execution cache-discard policy, failed lock acquisition and remote-output
-downloads. Its fixes cover lost alias packages, a leaked lock-file channel and
-outputs lost before download. A lock-channel fix is not permission to delete locks.
-Compare defaults on the exact pins: `help build --long` reports
-`--rewind_lost_inputs=true` in both 9.3.1 and 10.0.0rc2. Major-line notes can include
-changes already backported to a later patch of the previous line.
+The implementation runs `keytool` **after `jlink`** against the reduced runtime's
+`lib/security/cacerts`, matching six SHA-256 certificate fingerprints rather
+than trusting alias names. They identify AAA Certificate Services and the five
+emSign roots G1, G2, G3 ECC, C1 and C3 ECC. Upstream adds a bundled-keystore
+regression test. The backports are [9.3.1](https://github.com/bazelbuild/bazel/pull/31920),
+[8.8.2](https://github.com/bazelbuild/bazel/pull/31921),
+[7.7.2](https://github.com/bazelbuild/bazel/pull/31954) and
+[10.0.0rc2](https://github.com/bazelbuild/bazel/pull/31925).
+Custom packagers should inspect the final packaged keystore, not only the source
+JDK or a successful minimization step. Actual service certificate-chain acceptance
+still needs a TLS replay with the selected JVM.
+
+## 9.3.1: four fixes, not a new feature train
+
+The [9.3.0 to 9.3.1 comparison](https://github.com/bazelbuild/bazel/compare/9.3.0...9.3.1)
+contains four fix commits plus release metadata. Besides the trust-store change:
+
+- **Late output loss:** cached output blobs can disappear before
+  `finalizeAction` materializes them. Previously this could fail with
+  `unable to finalize action` even though rewinding was enabled. The prefetcher
+  now reports the missing output through lost-input handling; the failed producer
+  reruns without accepting the same stale disk/remote action-cache result and
+  uploads regenerated outputs. Symlink actions can require rewinding their
+  input producers too. This particularly affects partially retained disk caches
+  after 9.3.0's trust of AC entries when rewinding is on. Upstream tests cover
+  symlink-to-output and output-symlink-to-sibling cases with
+  `--remote_download_toplevel` / `--remote_download_regex`, plus remote eviction.
+  Replay those shapes instead of clearing every cache.
+  [Fix #31902](https://github.com/bazelbuild/bazel/pull/31902),
+  [disk-cache tests](https://github.com/bazelbuild/bazel/blob/9.3.1/src/test/java/com/google/devtools/build/lib/remote/DiskCacheIntegrationTest.java).
+- **Aliases plus cache discard:** Skymeld with `--notrack_incremental_state` or
+  `--discard_analysis_cache` could discard packages of top-level/intermediate
+  aliases, retaining only the final actual target's package. Execution could then
+  crash with `ALREADY_DECLARED_CHILD_MISSING`. The fix retains every alias-chain
+  package and the actual package. Test a multi-package alias chain alongside a
+  regular target under the repository's existing discard policy; do not globally
+  disable incremental state to exercise this on ordinary builds.
+  [Fix #31912](https://github.com/bazelbuild/bazel/pull/31912),
+  [upstream regression](https://github.com/bazelbuild/bazel/blob/9.3.1/src/test/shell/integration/discard_analysis_cache_test.sh).
+- **Lock acquisition:** failed acquisition now closes its opened file channel
+  immediately and preserves close failures as suppressed exceptions. On POSIX,
+  delayed garbage-collector closure of that descriptor could release a later lock
+  held by the same process on the same file. This is a correctness fix, not merely
+  a file-descriptor optimization. Replay contention/failure followed by later
+  acquisition; never delete another process's lock as the repair.
+  [Fix #31896](https://github.com/bazelbuild/bazel/pull/31896),
+  [source and POSIX rationale](https://github.com/bazelbuild/bazel/blob/9.3.1/src/main/java/com/google/devtools/build/lib/util/FileSystemLock.java).
+
+The [9.0.1 compatibility note](https://github.com/bazelbuild/bazel/releases/tag/9.0.1)
+explains the 9.0.0 caveat: fixed enforcement exposes removed native `CcInfo` use
+in older rulesets. Check compatible `rules_go` / `rules_nodejs` pins rather than
+assuming every 9.0.0 build survives a patch unchanged.
+
+`--rewind_lost_inputs` already defaults true in 9.3.1. The late-output fix does
+not establish inclusion of rc2's separate tree-template/symlink recovery or
+experimental changed-output consistency guard; check those backports explicitly.
+
+## 8.8.2: narrowly scoped trust-store maintenance
+
+The [8.8.1 to 8.8.2 comparison](https://github.com/bazelbuild/bazel/compare/8.8.1...8.8.2)
+has the certificate-removal implementation/test commit and the release commit.
+Changed files are `src/minimize_jdk.sh`, the bundled-JDK shell test and
+`CHANGELOG.md`. There is no separate feature, rules API, Bzlmod migration or
+9.3.1 rewind/alias/lock backport in this delta. Keep the 8.x rules/toolchain
+contract while testing the packaged JDK, authenticated fetches and cache TLS.
+This narrow delta is not proof that a custom JVM or every service chain is safe.
+
+## 7.7.2: inspect the source beyond the single release-note bullet
+
+The [tag comparison](https://github.com/bazelbuild/bazel/compare/7.7.1...7.7.2)
+contains three new commits. The certificate commit also contains changes not
+named by its title or the published summary:
+
+- Bazel's own self-extracting binary assembly replaces `zip -qA` with the Java
+  `adjust_sfx` tool. It recalculates central-directory/local-header offsets after
+  prepending a launcher. `ZipReader` gains explicit unadjusted-SFX handling;
+  ZIP64 central-directory size and end-record scanning across buffer/comment
+  boundaries are corrected. Added tests cover adjusted archives, ZIP64 with
+  non-overflowing ZIP32 fields, a near-buffer-boundary signature and comments.
+  Review the actual [implementation commit](https://github.com/bazelbuild/bazel/commit/820b9acafc6f687f32d7e14b52cf37bcfd652299),
+  not just its certificate title. For source-built/repackaged Bazel, replay
+  executable extraction and these archive shapes. This does not prescribe a
+  change to every consuming repository's packaging rules.
+- That commit also updates Bazel's own CI/bootstrap/module-lock metadata and
+  switches certain upstream shell tests to Python 3. These are not language-rule
+  upgrades or a new Python requirement for every consumer action.
+- A separate [release-pipeline backport #31974](https://github.com/bazelbuild/bazel/pull/31974)
+  adopts `gh`, `gcloud storage` and Secret Manager handling and avoids assigning
+  GitHub's Latest badge to a maintenance release. These affect upstream release
+  publishing, not application BUILD semantics; do not copy its credentials or
+  release infrastructure into a consumer.
+
+7.7.1's release commit is not an ancestor of 7.7.2; its sole file is `CHANGELOG.md`.
+The [reverse comparison](https://github.com/bazelbuild/bazel/compare/7.7.2...7.7.1)
+therefore shows release-metadata divergence, not evidence that a runtime fix was
+reverted. Check trees/commit contents before making ancestry-based rollback claims.
 
 ## Test Bazel 10 changes in an opt-in configuration
 
-Use the repository wrapper with an explicit candidate version in an isolated
-evaluation. Record effective rc options and rules/toolchain pins. The
-[RC notes](https://github.com/bazelbuild/bazel/releases/tag/10.0.0rc2)
-describe changes relative to the previous major line, not just changes since rc1.
-Use that version's help/source before copying options into a 7/8/9 configuration.
+For a major upgrade, read [Bazel 10 migration and capabilities](bazel-10-migration.md).
+For an existing candidate deployment, read the separate
+[rc1 to rc2 source-level changes](bazel-10-rc2.md). The cumulative major-release
+notes and the candidate-to-candidate diff answer different questions.
 
-- **Migration flags:** the RC lists `--incompatible_no_implicit_file_export`,
-  `--incompatible_exclude_starlark_flags_from_exec_config` and
-  `--incompatible_check_testonly_for_output_files` as flipped. Export intended
-  cross-package source files explicitly with appropriate visibility, preserve
-  settings genuinely needed by execution dependencies and repair test-only edges.
-  Use [Bazelisk migration controls](https://github.com/bazelbuild/bazelisk#useful-environment-variables-for---migrate-and---bisect)
-  to select supported flips for a 9.x rehearsal; that rehearsal does not cover
-  every removed API or changed default. Flags listed for a future major release,
-  such as symbolic-macro strict attributes, are not already flipped in 10.
-- **Bzlmod:** `bazel mod tidy` now evaluates dependency-only extensions too.
-  Review the full resulting lockfile and vendored closure; test offline use when
-  relevant. `bazel vendor --lockfile_deps` includes repositories needed for lock
-  updates. Remove rejected `bazel_dep` self-dependencies and root `use_repo`
-  self-imports of repositories overridden with the root module. Module
-  `compatibility_level` and `max_compatibility_level` are no-ops in 10; keep
-  explicit compatibility checks instead of treating those fields as enforcement.
-- **Platforms:** replace removed `remote_execution_properties` with
-  `exec_properties`; migrate removed `@bazel_tools//src/conditions:host_windows`
-  and `:remote` conditions to the appropriate toolchain/platform contract.
-  `--use_target_platform_for_tests` is a no-op: register an execution platform
-  satisfying the target constraints. Cross-compiling a test can pass analysis
-  without a compatible executor; require an actual test run for execution proof.
-- **Local tools:** strict action `PATH` no longer includes `/usr/local/bin`, and
-  default-shell actions receive `LC_CTYPE=C.UTF-8`. Declare tools and locale
-  requirements in the owning rule/toolchain; verify older macOS hosts rather than
-  adding a blanket host-PATH or sandbox exception. The bundled JDK is now 27;
-  distinguish the Bazel server runtime from application Java toolchains.
-- **Remote outputs and coverage:** `--rewind_lost_inputs` now defaults on for
-  recovery from evicted remote/disk outputs. Keep direct-consumer materialization
-  explicit and test eviction/recovery; this does not guarantee backend retention.
-  Remote coverage defaults also flip (`--experimental_split_coverage_postprocessing`
-  and `--experimental_fetch_all_coverage_outputs`); verify collected reports in
-  the real executor configuration. Keep [chunking integrity/backend checks](monorepo-scale.md#large-artifacts-and-content-defined-chunking)
-  separate from rewinding and lazy downloads.
-- **Diagnostics and selection:** `--target_query` / `--target_query_file` feed
-  unconfigured query results to build/test; they do not replace configured impact
-  analysis or a Git-aware selector. `--expand_param_files` exposes response-file
-  contents in failure/subcommand logs; scrub sensitive arguments before sharing.
-  `aquery` gains `config(expr, word)` for configuration-scoped action inspection.
+Prioritize explicit source exports/test-only edges, exec-setting propagation,
+strict lock/vendor closure, platform selection, host tool/locale assumptions and
+cache-output correctness. Then evaluate new rule/query/coverage APIs and backend
+capabilities. The major guide records exact 9.3.1 versus rc2 defaults; the rc2
+guide covers repository materialization, connection-pool recovery, ECDSA mTLS,
+the off-by-default rewind consistency guard and smaller correctness fixes.
 
 Before adopting either a patch or the RC, run the repository's generator/lock
 checks, affected tests, supported platform matrix and packaged-runtime probes.

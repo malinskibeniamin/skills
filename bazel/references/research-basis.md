@@ -100,9 +100,81 @@ to their authors' workloads; the private-history window above is unchanged.
 
 ## Release refresh
 
-Public-source refresh: 2026-10-28. The [release guidance](releases.md) uses the
-upstream 10.0.0rc2, 9.3.1, 8.8.2 and 7.7.2 release notes and GitHub prerelease
-metadata. It separates same-line bundled-JDK trust-store patches from opt-in
-Bazel 10 migration, including changed defaults, Bzlmod closure and execution
-platform checks. This does not expand the private-history audit window, establish
-consumer compatibility or claim measured performance or complete security coverage.
+Public-source refresh: 2026-10-28. The [release guidance](releases.md) now checks
+the four supplied release pages against exact tag comparisons and source/tests.
+The [major-line guide](bazel-10-migration.md) separates changed defaults, removed
+APIs, new capabilities, no-ops and future flips. The [candidate delta](bazel-10-rc2.md)
+covers all 27 commits from rc1 to rc2, including changes omitted from release prose.
+This supersedes the earlier release-summary-only treatment without expanding
+the private-history audit window.
+
+### Method and source boundaries
+
+Comparisons inspected: `10.0.0rc1...10.0.0rc2`, `9.3.0...9.3.1`,
+`8.8.1...8.8.2`, `7.7.1...7.7.2` and the reverse 7.x comparison. The GitHub API
+returned all listed commits in each comparison. Release metadata and fix commits
+were separated; 7.x ancestry divergence was checked against the predecessor-only
+commit's actual file list rather than interpreted as a runtime rollback.
+
+Reproduce the inventory with the relevant pair:
+
+```bash
+gh api 'repos/bazelbuild/bazel/compare/10.0.0rc1...10.0.0rc2?per_page=100' \
+  --jq '{status, total_commits, commits: [.commits[] | {sha, message: .commit.message}]}'
+```
+
+Tagged `CoreOptions`, `ModuleFileGlobals`, Starlark action/failure APIs, rewind
+comparison code and the patch-release source/tests resolve ambiguous prose.
+Notable corrections: the exec flag is undocumented but supported;
+`max_compatibility_level` belongs to `bazel_dep`, not `module`; `stdout` must not
+also appear in action `outputs`; and the 7.7.2 certificate commit changes SFX/ZIP
+handling too. The links beside each instruction identify the relevant source.
+
+### Executed version-boundary probes
+
+Local macOS arm64, exact Bazelisk pins, fresh temporary modules, `--batch`,
+`--ignore_all_rc_files` and owned output bases. Fixtures used declared file writes,
+a string build setting, a test-only producer, a small shell executable and a
+local repository rule; these are not representative monorepo benchmarks.
+
+| Contract | Before | Candidate / repair |
+|---|---|---|
+| Exec-setting propagation | 9.3.1 retains `custom` across `cfg="exec"` | rc2 sees `baseline`; selecting `--experimental_propagate_custom_flag=//:mode` restores `custom` |
+| Test-only output dependency | 9.3.1 allows a non-test filegroup to depend on a test-only producer's declared output label | rc2 rejects the edge; a genuinely test-only consumer passes |
+| `ctx.actions.run(stdout=out)` | 9.3.1 rejects the keyword | rc2 captures the expected bytes; also listing `out` in `outputs` is rejected |
+| Starlark rule exported as `genrule` | rc1 crashes with exit 37 and missing `output_to_bindir` | rc2 builds the declared file |
+| Native multi-file patch without `diff --git` separators | rc1 exits successfully but yields `one\nTWO\n` | rc2 yields the required `ONE\nTWO\n` |
+
+These five fixture groups exercised 13 commands with asserted outcomes. The native
+patch fixture creates `a.txt=one` and `b.txt=two` inside a repository rule, calls
+`repository_ctx.patch` on consecutive unified patches, then reads both files.
+The rule-name fixture exports `genrule=rule(implementation=...)`, writes one file
+and returns `DefaultInfo`; no native `genrule` attributes are declared. These
+minimal contracts distinguish actual rc1 failures from setup or assertion errors.
+
+The earlier exact-version probes also verified the implicit-export flip and
+`--target_query` availability, and checked documented defaults using:
+
+```bash
+USE_BAZEL_VERSION=10.0.0rc2 bazelisk --batch --ignore_all_rc_files help build --long
+```
+
+### Packaged trust-store checks
+
+The effective Java home was obtained with each exact pin's `info java-home`;
+the installed `lib/security/cacerts` was decoded and every certificate's DER
+SHA-256 compared with the six fingerprints in upstream `minimize_jdk.sh`.
+The downloaded stores were PKCS12, parsed with OpenSSL; checking only certificate
+aliases or grepping raw binary bytes would not establish fingerprint absence.
+
+All four requested versions had **zero matches**. The 9.3.0 negative control had
+**four matches**, demonstrating that the check detects pre-patch trust anchors;
+not every bundled JDK necessarily contained all six targeted roots. This verifies
+these packaged macOS artifacts, not custom JDKs, every OS installer or any service's
+actual TLS chain.
+
+No remote executor/repository-cache service, ECDSA mTLS endpoint, Windows/Linux
+matrix, concurrent lost-output workload or long-lived heap benchmark was run.
+The experimental rewind consistency guard was source/help-inspected, not exercised
+against nondeterministic remote regeneration. No consumer compatibility,
+performance improvement or complete security coverage is claimed.
