@@ -15,7 +15,7 @@ performed for this guide.
 ## Separate account selection from billing protection
 
 T3 Code's [Codex guide](https://github.com/pingdotgg/t3code/blob/main/docs/user/providers-codex.md)
-documents adding accounts in **Settings → Providers** and selecting them through
+documents adding accounts in **Settings > Providers** and selecting them through
 the model picker. Compatible Codex accounts can continue a thread. Shared Codex
 homes with separate shadow homes support separate CLI logins without copying the
 whole home directory.
@@ -46,9 +46,9 @@ The diagram defines the desired policy. It does not describe a shipped controlle
 
 For each account:
 
-1. In T3 Code, select the target environment and open **Settings → Providers**.
+1. In T3 Code, select the target environment and open **Settings > Providers**.
 2. Connect with ChatGPT and confirm the intended account during sign-in.
-3. Open **Manage usage** for that connection, or ChatGPT's **Settings → Usage**.
+3. Open **Manage usage** for that connection, or ChatGPT's **Settings > Usage**.
 4. Turn off **Allow other apps to use credits after reaching your usage limit**.
 5. Save and re-read the preference. If the control is unavailable, verify eligibility
    and the actual connection type before relying on it.
@@ -71,7 +71,7 @@ upstream paid API key as a fallback for this workflow.
 
 ## Configure Claude without paid usage credits
 
-Disable usage credits in **Claude → Settings → Usage** on every account. Re-read
+Disable usage credits in **Claude > Settings > Usage** on every account. Re-read
 the saved setting. Anthropic states that disabling them restricts access to the
 plan's included usage. See [Claude's usage-credit controls](https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans).
 
