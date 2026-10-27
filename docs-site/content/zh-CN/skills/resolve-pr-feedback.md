@@ -46,7 +46,7 @@ type: skill
 | 可执行的自动审查发现 | 像人工反馈一样处理 |
 | 批准、仅 CI 或不可执行的摘要 | 丢弃 |
 
-检查只有机器人评论的讨论串；获取讨论串、评论及完整审查正文的所有分页，包括差异范围之外的发现。执行[覆盖范围与证据时效检查](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/REFERENCE.md#coverage-and-evidence-freshness)；以证据回复不适用的发现。
+获取讨论串（包括机器人评论）、评论和完整审查正文的所有分页，涵盖差异范围之外的发现；检查[证据时效](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/REFERENCE.md#coverage-and-evidence-freshness)。回复时提供证据。
 
 没有新项时，完成 rebase 并报告实际处理状态；等待决策不等于完成。
 

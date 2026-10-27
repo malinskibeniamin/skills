@@ -18,7 +18,7 @@ type: skill
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/visual-review.excalidraw)
 
 
-从产品、设计、工程和 QA 的角度审查面向客户的界面。基于浏览器的前端审查最为常见；移动端界面、CLI/TUI、桌面应用和生成的报告也包括在内。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 负责定义**设计调整抓手**和详细规范。模式：`plan`、`implemented`、`regression`、`release`。可单独触发。
+基于浏览器的前端审查：采用产品、设计、工程和 QA 四种视角。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 负责定义**设计调整抓手**和详细规范。模式：`plan`、`implemented`、`regression`、`release`。可单独触发。
 
 ## 流程 [#flow]
 

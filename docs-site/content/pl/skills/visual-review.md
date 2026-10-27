@@ -22,7 +22,7 @@ type: skill
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/visual-review.excalidraw)
 
 
-Przeglądaj powierzchnie widoczne dla klientów z perspektywy produktu, projektowania, inżynierii i QA. Najczęściej przegląd dotyczy interfejsów przeglądarkowych, ale obejmuje też ekrany mobilne, CLI/TUI, aplikacje komputerowe i generowane raporty. Dokument [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) definiuje **uchwyty języka projektowego** i szczegóły. Tryby: `plan`, `implemented`, `regression`, `release`. Można uruchamiać samodzielnie.
+Przegląd frontendu w przeglądarce z perspektywy produktu, projektowania, inżynierii i QA. Dokument [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) definiuje **uchwyty języka projektowego** i szczegóły. Tryby: `plan`, `implemented`, `regression`, `release`. Można uruchamiać samodzielnie.
 
 ## Przebieg [#flow]
 

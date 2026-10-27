@@ -18,7 +18,7 @@ type: skill
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/visual-review.excalidraw)
 
 
-以產品、設計、工程與 QA 的角度審查面向客戶的介面。以瀏覽器為基礎的前端審查最常見；行動裝置畫面、CLI/TUI、桌面應用程式與產生的報表也包含在內。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 是 **設計語言調整點** 與詳細資訊的依據。模式：`plan`、`implemented`、`regression`、`release`。可單獨觸發。
+以瀏覽器為基礎的前端審查：採用產品、設計、工程與 QA 四種觀點。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 是 **設計語言調整點** 與詳細資訊的依據。模式：`plan`、`implemented`、`regression`、`release`。可單獨觸發。
 
 ## 流程 [#flow]
 
