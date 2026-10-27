@@ -969,7 +969,8 @@ test("unreviewed intermediate plans cannot erase a known finding or narrow its r
   writeFileSync(join(f.root, "README.md"), "Unreviewed intermediate repair\n");
   f.git("add", "README.md");
   f.git("commit", "-m", "test(review): intermediate repair");
-  f.plan();
+  const intermediate = f.plan();
+  expect(f.record("correctness").code).toBe(0);
   writeFileSync(join(f.root, "README.md"), "Another repair\n");
   const next = f.plan([
     {
@@ -980,6 +981,8 @@ test("unreviewed intermediate plans cannot erase a known finding or narrow its r
   ]);
   const gate = next.gates.find((gate) => gate.id === "performance");
   expect(gate?.applicable).toBe(true);
+  expect(next.delta?.previous).toBe(intermediate.id);
+  expect(gate?.scope).toBe("full");
   const prompt = readFileSync(gate?.prompt ?? "", "utf8");
   expect(prompt).toContain(finding.id);
   expect(prompt).not.toContain("repair.diff");
