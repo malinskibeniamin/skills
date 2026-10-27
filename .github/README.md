@@ -5,11 +5,10 @@ These settings belong to this repository. Installed consumers use the shared
 hook to verify their own hosted protections and security prerequisites. Installing
 the plugin does not copy this workflow/payload or mutate another repository's policy.
 
-The hosted `main` protection requires the existing Linux, macOS, and render checks
-from GitHub Actions, an up-to-date branch, and resolved conversations. Admins have
-an explicit merge-gate override by owner policy. Force-push and branch-deletion
-settings remain disabled. Preserve this repository-specific admin override when
-reconciling protection; it does not change the defaults for installed consumers.
+The hosted `main` protection requires Linux, macOS, render, CodeQL security, dependency
+security, and the CodeQL analysis result, plus an up-to-date branch and resolved
+conversations. The saved payload matches the observed administrator enforcement;
+force pushes and branch deletion remain disabled. Recheck hosted state before changes.
 
 The API payload lives in [branch-protection.json](branch-protection.json). It
 preserves the previous approval count of 0; it does not authorize automatic
@@ -32,10 +31,12 @@ Automation-created PR runs can require a maintainer to select **Approve workflow
 to run**. Keep required checks in place while authorizing those runs through
 [GitHub's supported flow](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow).
 
-[Security review](workflows/security-review.yml) adds CodeQL analysis and
-high/critical dependency review. These are static checks, not independent AI
-review. Require their exact observed check names only after the workflow lands
-on `main` and produces green runs. Requiring undeployed checks can strand PRs.
+[Security review](workflows/security-review.yml) supplies required CodeQL analysis and
+high/critical dependency review. The required contexts are `CodeQL security` and
+`Dependency security` from GitHub Actions (app 15368), and `CodeQL` from GitHub Advanced
+Security (app 57789). These exact identities passed on a deployed PR candidate before
+being required. They are static checks, not independent AI review. New check identities
+still need observed green runs before enforcement; undeployed checks can strand PRs.
 No reviewer credential is checked in or inferred from a local CLI session.
 
 ## Observe review effort without claiming safety
@@ -63,6 +64,22 @@ and deterministic CI checks do not measure model quality. Run model evaluations
 only with explicit authorization and configured credentials. Record the model,
 effort, prompt revision, case dispositions, and run evidence before claiming a
 reviewer improvement. Human-validated incident cases remain a separate need.
+
+## Remaining adoption boundaries
+
+The [Claude Code review process](https://claude.dev/blog/solving-code-review-at-anthropic/)
+informs this harness; its full operating model is not installed by these files.
+
+- Candidate-bound [review gates](../review/GATES.md) remain opt-in. Independent AI
+  review/verification needs explicit authorization and a configured reviewer; installing
+  the harness neither provisions a service nor grants delegation permission.
+- Risk-tier human counts, trusted authors and sensitive-path ownership need owner policy.
+  The existing zero-approval count is preserved, not evidence that less review is safe.
+- Reviewer-quality claims need human-validated incident/revert cases, executed model
+  evaluations and finding dispositions. Activity metrics do not supply these guardrails.
+- Strict-base checks are not a merge queue. Flags, internal-first rollout, release channels,
+  incident detection and operational rollback belong to each consuming product's owners.
+  PR rollback instructions do not implement those systems.
 
 Sources: [GitHub branch protection API](https://docs.github.com/en/rest/branches/branch-protection#update-branch-protection),
 [CodeQL advanced setup](https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/configuring-advanced-setup-for-code-scanning),

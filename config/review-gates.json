@@ -7,7 +7,8 @@
       "always": true,
       "globs": [],
       "skills": ["review/SKILL.md"],
-      "lens": "Trace changed behavior to authoritative producers, callers and contracts. Report concrete regressions, not unrelated existing defects or formatter-owned style."
+      "lens": "Trace changed behavior to authoritative producers, callers and contracts. Report concrete regressions, not unrelated existing defects or formatter-owned style.",
+      "rereview": "delta"
     },
     {
       "id": "value-and-claims",
@@ -15,7 +16,8 @@
       "always": true,
       "globs": [],
       "skills": ["product/SKILL.md", "lie-detector/SKILL.md"],
-      "lens": "Check the requested outcome, beneficiary, endpoint and claims against observed evidence. Keep value concerns separate from implementation defects; do not invent endorsement or measured impact."
+      "lens": "Check the requested outcome, beneficiary, endpoint and claims against observed evidence. Keep value concerns separate from implementation defects; do not invent endorsement or measured impact.",
+      "rereview": "delta"
     },
     {
       "id": "test-integrity",
@@ -33,7 +35,8 @@
         "**/SKILL.md"
       ],
       "skills": ["test-audit/SKILL.md", "tdd/SKILL.md"],
-      "lens": "Check that meaningful behavior has a failing public-contract test and credible failure coverage. Passing mocks or implementation-token checks do not prove behavior. Correctness owns production defects; this gate owns missing or ineffective verification."
+      "lens": "Check that meaningful behavior has a failing public-contract test and credible failure coverage. Passing mocks or implementation-token checks do not prove behavior. Correctness owns production defects; this gate owns missing or ineffective verification.",
+      "rereview": "delta"
     },
     {
       "id": "security-and-recovery",
@@ -47,7 +50,8 @@
         "**/*.proto"
       ],
       "skills": ["security-audit/SKILL.md", "resilience-review/SKILL.md"],
-      "lens": "Check evidenced trust boundaries, sensitive data, irreversible effects and recovery. Name a concrete abuse or failure path; do not demand defensive controls for theoretical risks."
+      "lens": "Check evidenced trust boundaries, sensitive data, irreversible effects and recovery. Name a concrete abuse or failure path; do not demand defensive controls for theoretical risks.",
+      "rereview": "full"
     },
     {
       "id": "contracts-and-architecture",
@@ -55,7 +59,8 @@
       "always": false,
       "globs": ["**/*.proto", "**/api/**", "**/schema/**", "**/migrations/**"],
       "skills": ["blast-radius/SKILL.md"],
-      "lens": "Trace non-local compatibility and hard-to-reverse decisions through real producers and consumers. Check generated output as evidence. Do not prescribe architectural changes for taste or hypothetical scale."
+      "lens": "Trace non-local compatibility and hard-to-reverse decisions through real producers and consumers. Check generated output as evidence. Do not prescribe architectural changes for taste or hypothetical scale.",
+      "rereview": "full"
     },
     {
       "id": "surface-review",
@@ -63,7 +68,8 @@
       "always": false,
       "globs": ["**/*.tsx", "**/*.css", "**/cli/**", "**/commands/**"],
       "skills": ["visual-review/SKILL.md", "accessibility/SKILL.md"],
-      "lens": "Inspect real surface evidence, states, copy, keyboard behavior and accessibility. Source inspection or unit tests cannot replace rendered evidence. Use terminal evidence for CLI surfaces; do not invent screenshots or launch a human-owned browser."
+      "lens": "Inspect real surface evidence, states, copy, keyboard behavior and accessibility. Source inspection or unit tests cannot replace rendered evidence. Use terminal evidence for CLI surfaces; do not invent screenshots or launch a human-owned browser.",
+      "rereview": "delta"
     },
     {
       "id": "dependencies-and-licenses",
@@ -80,7 +86,8 @@
         "**/third_party/**"
       ],
       "skills": ["upgrade-dependency/SKILL.md"],
-      "lens": "Check changed direct and transitive dependencies, pins, runtime compatibility, advisories and applicable licenses. Inspect lockfiles and vendored or generated evidence rather than discarding them. Respect the consumer's actual license policy."
+      "lens": "Check changed direct and transitive dependencies, pins, runtime compatibility, advisories and applicable licenses. Inspect lockfiles and vendored or generated evidence rather than discarding them. Respect the consumer's actual license policy.",
+      "rereview": "full"
     },
     {
       "id": "documentation",
@@ -88,7 +95,8 @@
       "always": false,
       "globs": ["**/*.md", "**/*.mdx"],
       "skills": ["docs/SKILL.md"],
-      "lens": "Check that user-visible behavior and technical claims match the implementation and evidence. Update existing documentation rather than demanding new files, sections or diagrams when they add no understanding."
+      "lens": "Check that user-visible behavior and technical claims match the implementation and evidence. Update existing documentation rather than demanding new files, sections or diagrams when they add no understanding.",
+      "rereview": "delta"
     },
     {
       "id": "performance",
@@ -96,7 +104,8 @@
       "always": false,
       "globs": ["**/benchmarks/**", "**/*bench*", "**/kernels/**"],
       "skills": ["t3code-skills/performance-analysis/SKILL.md"],
-      "lens": "Check claimed or structurally evidenced performance changes at demonstrated scale. Require appropriate measurements for speedup claims; do not invent benchmarks, resource savings or speculative hot paths."
+      "lens": "Check claimed or structurally evidenced performance changes at demonstrated scale. Require appropriate measurements for speedup claims; do not invent benchmarks, resource savings or speculative hot paths.",
+      "rereview": "delta"
     },
     {
       "id": "operations",
@@ -110,7 +119,8 @@
         "**/Dockerfile*"
       ],
       "skills": ["resilience-review/SKILL.md"],
-      "lens": "Check changed build, deployment, configuration, observability and recovery contracts against the consuming repository. Require actionable failure signals and rollback where credible risk exists, not generic runbooks or new services."
+      "lens": "Check changed build, deployment, configuration, observability and recovery contracts against the consuming repository. Require actionable failure signals and rollback where credible risk exists, not generic runbooks or new services.",
+      "rereview": "full"
     }
   ]
 }

@@ -4,10 +4,13 @@
     "checks": [
       { "context": "evals (ubuntu-latest)", "app_id": 15368 },
       { "context": "evals (macos-latest)", "app_id": 15368 },
-      { "context": "render", "app_id": 15368 }
+      { "context": "render", "app_id": 15368 },
+      { "context": "CodeQL security", "app_id": 15368 },
+      { "context": "Dependency security", "app_id": 15368 },
+      { "context": "CodeQL", "app_id": 57789 }
     ]
   },
-  "enforce_admins": false,
+  "enforce_admins": true,
   "required_pull_request_reviews": {
     "dismiss_stale_reviews": true,
     "require_code_owner_reviews": false,

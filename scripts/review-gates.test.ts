@@ -185,12 +185,14 @@ function checkout() {
     return JSON.parse(result.text) as {
       id: string;
       directory: string;
+      delta?: { previous: string; hash: string };
       snapshot: { head: string; paths: string[] };
       gates: {
         id: string;
         applicable: boolean;
         reason: string;
         prompt: string;
+        scope: "full" | "delta";
       }[];
     };
   };
@@ -235,6 +237,161 @@ test("gate plans retain lockfiles, generated changes and names with spaces", () 
   expect(diff).toContain("export const version = 2");
   expect(plan.gates.every((gate) => gate.applicable && gate.reason)).toBe(true);
   expect(f.run("check").code).toBe(1);
+});
+
+test("repair reviews focus on the captured delta without reusing approval or dropping prior findings", () => {
+  const f = checkout();
+  writeFileSync(
+    join(f.root, "context.ts"),
+    "export const unchanged = 'first review context';\n",
+  );
+  const first = f.plan();
+  expect(
+    f.record("correctness", { status: "NEEDS_CHANGES", findings: [finding] })
+      .code,
+  ).toBe(0);
+  expect(f.record("operations").code).toBe(0);
+  const status = f.git("status", "--porcelain");
+  writeFileSync(join(f.root, "README.md"), "Repaired candidate\n");
+  expect(f.run("check").code).toBe(3);
+  const repair = f.plan();
+  const correctness = repair.gates.find((gate) => gate.id === "correctness");
+  expect(correctness?.scope).toBe("delta");
+  expect(repair.gates.find((gate) => gate.id === "operations")?.scope).toBe(
+    "full",
+  );
+  expect(
+    repair.gates.find((gate) => gate.id === "value-and-claims")?.scope,
+  ).toBe("full");
+  expect(repair.delta?.previous).toBe(first.id);
+  const diff = readFileSync(join(repair.directory, "repair.diff"), "utf8");
+  expect(diff).toContain("-After");
+  expect(diff).toContain("+Repaired candidate");
+  expect(diff).not.toContain("first review context");
+  expect(readFileSync(join(repair.directory, "change.diff"), "utf8")).toContain(
+    "first review context",
+  );
+  expect(correctness).toBeDefined();
+  if (!correctness) throw new Error("Missing correctness gate");
+  expect(readFileSync(correctness.prompt, "utf8")).toContain(finding.id);
+  expect(f.run("check").code).toBe(1);
+  expect(f.plan().id).toBe(repair.id);
+  expect(f.git("status", "--porcelain")).toBe(status);
+  writeFileSync(join(repair.directory, "repair.diff"), "A different repair\n");
+  expect(f.record("correctness").code).toBe(2);
+  expect(f.run("check").code).toBe(2);
+});
+
+test("base, branch, history, rubric and unavailable-review changes require full review", () => {
+  for (const change of [
+    "base",
+    "branch",
+    "history",
+    "rubric",
+    "unavailable",
+  ] as const) {
+    const f = checkout();
+    f.git("add", "README.md");
+    f.git("commit", "-m", "test(review): first candidate");
+    f.plan();
+    expect(
+      f.record(
+        "correctness",
+        change === "unavailable"
+          ? {
+              status: "UNAVAILABLE",
+              reason: "Prior source could not be inspected",
+            }
+          : {},
+      ).code,
+    ).toBe(0);
+    writeFileSync(join(f.root, "README.md"), "Repair\n");
+    if (change === "base") {
+      const commit = f.git(
+        "commit-tree",
+        "main^{tree}",
+        "-p",
+        "main",
+        "-m",
+        "test(review): base movement",
+      );
+      f.git("update-ref", "refs/heads/main", commit);
+    } else if (change === "branch") {
+      f.git("branch", "-m", "ben-malinski/TEST-2/different-change");
+    } else if (change === "history") {
+      f.git("reset", "--soft", "main");
+    } else if (change === "rubric") {
+      writeFileSync(
+        join(f.root, ".review-gates.json"),
+        JSON.stringify({
+          version: 1,
+          gates: [
+            {
+              id: "consumer",
+              title: "Consumer",
+              always: true,
+              globs: [],
+              skills: [],
+              lens: "A new responsibility",
+            },
+          ],
+        }),
+      );
+    }
+    const next = f.plan();
+    expect(next.gates.find((gate) => gate.id === "correctness")?.scope).toBe(
+      "full",
+    );
+    expect(f.run("check").code).toBe(1);
+  }
+});
+
+test("consumer re-review scope defaults to full and rejects invalid policy", () => {
+  const f = checkout();
+  const file = join(f.root, ".review-gates.json");
+  const gate = {
+    id: "consumer",
+    title: "Consumer",
+    always: true,
+    globs: [],
+    skills: [],
+    lens: "Check consumer behavior",
+  };
+  writeFileSync(file, JSON.stringify({ version: 1, gates: [gate] }));
+  f.plan();
+  expect(f.record("consumer").code).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "Repair\n");
+  expect(f.plan().gates.find((item) => item.id === "consumer")?.scope).toBe(
+    "full",
+  );
+  writeFileSync(
+    file,
+    JSON.stringify({ version: 1, gates: [{ ...gate, rereview: "skip" }] }),
+  );
+  expect(f.run("plan", "--base", "main").error).toContain(
+    "Invalid re-review scope",
+  );
+});
+
+test("repair snapshots retain binary changes and deletions without modifying the index", () => {
+  const f = checkout();
+  writeFileSync(join(f.root, "asset.bin"), Buffer.from([0, 1, 2, 3]));
+  f.git("add", "asset.bin");
+  f.plan();
+  expect(f.record("correctness").code).toBe(0);
+  writeFileSync(join(f.root, "asset.bin"), Buffer.from([0, 3, 2, 1]));
+  rmSync(join(f.root, "README.md"));
+  writeFileSync(join(f.root, "new file.ts"), "export const repair = true;\n");
+  const index = f.git("diff", "--cached", "--binary");
+  const next = f.plan();
+  expect(next.gates.find((gate) => gate.id === "correctness")?.scope).toBe(
+    "delta",
+  );
+  const diff = readFileSync(join(next.directory, "repair.diff"), "utf8");
+  expect(diff).toContain("GIT binary patch");
+  expect(diff).toContain("deleted file mode");
+  expect(diff).toContain("+export const repair = true;");
+  expect(f.git("diff", "--cached", "--binary")).toBe(index);
 });
 
 test("one gate state drives readiness, resumability and a safe PR-body table", () => {
