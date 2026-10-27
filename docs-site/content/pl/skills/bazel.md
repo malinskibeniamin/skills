@@ -33,6 +33,9 @@ przed tymi ogólnymi wskazówkami.
   trzymaj w istniejącym, ignorowanym pliku rc użytkownika.
   Sprawdzaj nowsze flagi, składnię adnotacji Starlark i reguły względem tych wersji;
   demonstracje konferencyjne i plany rozwoju nie są kontraktami wydanego API.
+- Przy aktualizacji wersji, błędach zaufania w dołączonym JDK lub sprawdzaniu
+  zgodności z Bazel 10 przeczytaj [wskazówki dotyczące wydań](https://github.com/malinskibeniamin/skills/blob/main/bazel/references/releases.md).
+  Oddziel aktualizacje poprawek w tej samej linii od dobrowolnych testów kandydatów do wydania.
 - Odróżniaj **elementy mające pliki BUILD** od **elementów obsługiwanych dziś przez
   Bazel**. Wygenerowane cele nie dowodzą użycia w CI. Sprawdzaj scalony kod, nie
   pośredni commit, plan wdrożenia ani poprzednie repozytorium.
