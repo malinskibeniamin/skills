@@ -508,6 +508,13 @@ Six focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) 
 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
+`/webmcp <url-or-app> [request]` opens a web app in the built-in browser and uses
+its MCP or WebMCP tools for the requested operation. Without a request it only
+opens the page. The complete WebMCP source from BuilderIO is pinned and licensed locally;
+the adapter prefers T3 Code's browser tools and preserves human tab ownership.
+[Source, compatibility, and refresh](webmcp/CREDITS.md). No browser or connector
+is installed.
+
 `/software-factory` assesses whether repeated ticket-to-PR work justifies automation, then plans a bounded pilot and infrastructure. It adapts Matt Pocock's in-progress draft, adds an orchestrator survey alongside the upstream git-host, ticket-tracker, and runner research, and starts no automation. [Harness fit](software-factory/HARNESS-FIT.md) records the proposed pilot; [source pin, license, and refresh](vendor/software-factory-NOTICE.md) distinguish the draft snapshot from local policy.
 
 `/cli-for-agents` adds Cursor's guidance for non-interactive, composable CLIs through a host-safe adapter. [Pinned sources, licenses, selection, and refresh](shared/CURSOR-SKILLS-CREDITS.md) cover the Cursor recheck; provider-specific integrations and duplicate workflows remain unregistered.

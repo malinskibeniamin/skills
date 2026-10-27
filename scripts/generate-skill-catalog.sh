@@ -19,7 +19,7 @@ repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
 ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "TS", "UI", "URL", "UX"}
-BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "launchdarkly": "LaunchDarkly", "tanstack": "TanStack"}
+BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "launchdarkly": "LaunchDarkly", "tanstack": "TanStack", "webmcp": "WebMCP"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
     "accessibility": "Build accessible React interactions and components",
@@ -121,6 +121,7 @@ SHORT_DESCRIPTIONS = {
     "visual-recap": "Turn a code change into an interactive visual recap",
     "visual-review": "Review customer-facing surfaces from visual evidence",
     "wayfinder": "Map huge, foggy work through decision tickets",
+    "webmcp": "Open web apps and use their MCP or WebMCP tools first",
     "wait-what": "Re-pitch that with simpler language and missing context",
     "what-did-i-get-done": "Summarize authored commits into a concise status update",
     "wizard": "Generate an interactive Bash wizard for manual setup",

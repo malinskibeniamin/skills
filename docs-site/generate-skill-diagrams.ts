@@ -955,6 +955,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Tickets + questions",
     ],
   },
+  webmcp: {
+    kind: "user-flow",
+    nodes: [
+      "Open exact URL",
+      "Read page tools + state",
+      "Call requested tool",
+      "Read back result",
+    ],
+  },
   "what-did-i-get-done": {
     kind: "timeline",
     nodes: [

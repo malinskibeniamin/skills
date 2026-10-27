@@ -206,6 +206,7 @@ type: skill
 | `/visual-review` | 根据视觉证据审查面向客户的界面。 |
 | `/wait-what` | 使用更简单的语言和补充的上下文重新阐述。 |
 | `/wayfinder` | 通过决策工单梳理庞大且模糊的工作。 |
+| `/webmcp` | 打开 Web 应用并优先使用其 MCP 或 WebMCP 工具。 |
 | `/what-did-i-get-done` | 将自己创建的提交汇总为简明的状态更新。 |
 | `/wizard` | 生成用于手动设置的交互式 Bash 向导。 |
 | `/work-automation-kit` | 安装规划、工单和问题分类工作流。 |
