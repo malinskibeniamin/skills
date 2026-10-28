@@ -60,16 +60,11 @@ Before delivery:
 - never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently
   owned branch without explicit permission.
 
-For an explicit `/go`, monitor the PR checks in the foreground:
-
-```bash
-gh pr checks <number> --watch
-```
-
-Diagnose a failure from its logs, repair locally, rerun relevant checks, commit, push, and
-watch again. Resolve actionable human feedback when it already exists. Stop after checks
-and requested feedback are clean; do not poll for later approval or manufacture reviewer
-comments.
+For `/go`, take one CI snapshot and report its actual state, then stop. CI, reviews and
+approvals do not gate publication. An explicit CI-fix request authorizes repairing the
+observed failure and pushing the fix, not waiting for another run. Feedback resolution
+and monitoring need explicit scope; only requested monitoring uses the host's native
+watcher or the documented foreground fallback. No background polling or invented approval.
 
 ## Handoff
 

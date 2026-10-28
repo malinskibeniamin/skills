@@ -37,9 +37,9 @@ Endpoint owns scope:
 - Build, fix, implement: plan, continue, verify, commit, push the current user-owned
   feature branch unless explicitly told to stop earlier.
 - Commit: commit only. Push: commit, push. PR: verify, commit, push, open via `/commit-push-pr`.
-  This repo's CI/reviews are advisory: never wait, including ship or `/go`.
+  Delivery never waits for CI/reviews/approvals, including ship or `/go`.
 
-Earlier stop wins. Ask only for user-reserved or irreversible production,
+Earlier stop wins. Ask only for reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
 Commit/push/rebase owned features without another permission prompt.
 Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push automatically.
@@ -49,8 +49,7 @@ without explicit permission.
 Delivery follow-ups replace prior local stops; never request a session restart/reconfiguration.
 Keep follow-ups in the current PR: `pr/SKILL.md#existing-pr` at start/resume and handoff.
 Drafts need no approval.
-Push/PR/ship: verify origin HEAD/scope. Here: `.github/README.md#owner-merge-policy`.
-Consumer setup: `shared/review-enforcement.md`.
+Push/PR/ship: verify origin HEAD/scope; follow `shared/review-enforcement.md`.
 Report genuine external blockers.
 Uncommitted/unpushed owned work means incomplete delivery.
 Recover verified scope via `shared/remote-completion.md`; preserve explicit local stops,
@@ -118,7 +117,7 @@ Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generate
   request continues after its concise plan through commit and push; an explicit local,
   no-commit, or no-push instruction stops earlier. Stop for plan approval only when the user
   requested planning/grilling or a material reserved decision remains.
-- Here, PR/ship/`/go` delivery never waits for CI, reviews or approvals; follow
-  `.github/README.md#owner-merge-policy`. Consumer repositories retain their own gates.
-  Monitoring and feedback work require an explicit request; `/plow-ahead` grants no delegation.
+- A PR request ends after one CI status snapshot; ship and `/go` also never wait for
+  CI/reviews/approvals. Follow `shared/review-enforcement.md`; preserve hosted merge policy.
+  Monitoring and feedback need explicit scope; `/plow-ahead` is not delegation consent.
 - `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Keep the owner-selected Opus/Sol `xhigh` routes; unknown usage never invents a 50% effort gate. Authorized unknown-usage agent waves checkpoint after one explicitly requested wave.

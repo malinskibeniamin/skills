@@ -68,8 +68,7 @@ human endorsement, reviewer results or model identities.
 Handle current checks and findings first. Use one watcher per PR, owned by the
 parent thread; child reviewers never watch. When monitoring, watching or babysitting
 is requested and T3 exposes `watch_pull_request`, checkpoint, register and end the
-turn; no polling or second watcher. Readiness/ship intent alone retains the host's
-foreground path unless wake-ups are authorized. Call
+turn; no polling or second watcher. Readiness/ship intent alone does not authorize waiting or monitoring. Call
 `unwatch_pull_request` before a handoff or user question. A wake is new evidence,
 not approval. Read back uncertain tool outcomes before retrying.
 

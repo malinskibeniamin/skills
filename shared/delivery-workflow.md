@@ -6,10 +6,11 @@ Run applicable steps yourself; the user does not need to invoke each helper.
 Keep a single owner in the primary context. A different model requires explicit user authorization.
 Delegation, background wake-ups and broader scope need their existing explicit authorization. Reuse current receipts instead of repeating work.
 
-For [registered owner-advisory repositories](review-enforcement.md#explicit-owner-advisory-policy),
-publication completes delivery without waiting for CI, reviews or approvals, including
-ship and `/go`. This overrides the readiness rows below, not the need for explicit merge
-permission. Requested monitoring or feedback work remains separate.
+Delivery never waits for CI, reviews or approvals, including ship and `/go`, in any
+repository. Verify locally, publish the requested scope, report one status snapshot and
+stop. Monitoring, CI repair and feedback resolution need an explicit request; ship/merge
+intent alone does not authorize watching. [Hosted merge policy](review-enforcement.md)
+remains separate: no-wait delivery neither grants merge permission nor bypasses protections.
 
 ## Exit contract
 
@@ -19,8 +20,8 @@ permission. Requested monitoring or feedback work remains separate.
 | Commit | Verified scope committed, no push |
 | Push / ordinary implementation | Verified scope committed and remote HEAD matches |
 | PR / draft PR | PR created or updated in requested draft state, body read back, one CI snapshot |
-| Ship / `/go` / full stop / `--no-merge` | Current candidate verified, required checks/reviews and applicable feedback clean; no merge |
-| Explicit merge / full send | Protected hosted merge confirmed, plus repository-required post-merge checks |
+| Ship / `/go` / full stop / `--no-merge` | Locally verified candidate published, PR body read back, one CI snapshot; no wait or merge |
+| Explicit merge / full send | Policy-compliant hosted merge confirmed, or exact current blocker reported; no implicit waiting |
 
 Earlier narrower stops win. A request to discuss a command is not an invocation. Bare
 `/work` resumes the current task or owned diff, defaulting to push under repository policy;
@@ -79,43 +80,35 @@ just to make a PR look tidy. Public repositories need the publication skill's pr
 Commit/push/PR-only requests stop at their table row, even if CI is pending or failing; report
 it accurately. Push every local CI fix or rebase after verification, then refresh affected evidence before stopping.
 
-## Continue only for requested readiness or merge
+## Explicit CI repair, feedback or monitoring
 
-Continue past publication's single CI snapshot for ship, `/go`, babysitting or authorized merge:
+A request to fix CI authorizes inspecting the failed logs, reproducing, repairing,
+verifying, committing and pushing the fix. It does not authorize waiting for the next
+run. Missing CI is not green CI; report pending, failing or absent checks accurately.
 
-- Load [tstack monitoring](../tstack-skills/babysit-pr/SKILL.md): one watcher, native
-  T3 watch for requested monitoring, no duplicate polling, unwatch before handoff. Its helper
-  signals events only; the existing readiness checkpoint owns the verdict.
-- Resolve [native context](T3CODE-NATIVE.md#resolve-context) with entrypoint `full-send`
-  and authorized babysitting. Use its checkpoint/wake contract when selected;
-  an explicit watch/monitor/babysit request uses an exposed native watcher. Otherwise
-  retain supervised foreground checks; outside T3, use the tstack helper for requested monitoring.
-  Missing CI is not green CI. Inspect failed
-  logs, reproduce, repair, verify, commit, push and refresh the watched head. Retry transient
-  infrastructure failures only with evidence; never weaken gates to get green.
-- Human feedback has no cap; `pr-feedback-completeness-stop` enforces hosted completeness.
-  Load [resolve-pr-feedback](../resolve-pr-feedback/SKILL.md). Paginate threads, comments
-  and reviews; fix or rebut actionable human and bot feedback with evidence, reply and
-  verify hosted resolution. Stale approvals or bot silence are not fresh review evidence.
-- Rebase a behind-base owned branch when required, verify and lease-push. Refresh head/base,
-  draft state, full diff, checks, review decision, feedback and mergeability. Make one final verification
-  pass on that exact candidate: acceptance, affected entrypoint replay and risk.
-- Require completed native checks/reviews, no applicable unresolved feedback or outstanding
-  change requests. Do not wait for unsolicited future feedback. If an external review,
-  permission or service is required but unavailable, report the exact blocker and needed input.
-  Never substitute identity, approve your own PR, or claim pending work is done.
+For requested feedback resolution, load [resolve-pr-feedback](../resolve-pr-feedback/SKILL.md).
+Human feedback has no cap; `pr-feedback-completeness-stop` enforces that explicitly requested
+workflow, not ordinary publication. Read all relevant pages; fix or rebut findings with
+evidence, reply and verify resolution.
+Do not solicit another review or wait for future comments/approvals. Keep native approval
+requirements distinct from diagnostic evidence; never invent independent sign-off.
 
-For readiness checking, resume checkpoints, blocker notifications or explicitly delegated review,
-load the applicable [full-send reference](../full-send/REFERENCE.md). Keep foreground work
-supervised; unattended scheduling remains a separate opt-in.
+Only an explicit watch/monitor/babysit request selects
+[tstack monitoring](../tstack-skills/babysit-pr/SKILL.md) and
+[native context](T3CODE-NATIVE.md#resolve-context). Keep one watcher, no duplicate polling,
+and unwatch before handoff. For readiness diagnostics, resume checkpoints or explicitly
+delegated review, load the applicable [full-send reference](../full-send/REFERENCE.md).
+A diagnostic failure is not a delivery gate or authority to alter hosted settings.
 
 ## Authorized merge and receipt
 
+Before an authorized merge, make a final verification pass on the exact head/base. Honor
+required checks/reviews under native policy unless the owner explicitly permits an override.
 State the user's instruction authorizing this specific merge, then load the
 [protected merge contract](../commit-push-pr/references/merge.md). Use its expected-head guard
-and hosted strict-base protection or merge queue; never admin bypass or auto-merge as fallback.
-Neither queued nor accepted means merged. Watch an authorized queue entry to its terminal result; failures or moved
-head/base return to verification. Unknown mutation outcomes require readback before retrying.
+and the repository's native protections or explicit owner-approved override; never auto-merge as fallback.
+Neither queued nor accepted means merged. Report a pending queue entry without waiting unless monitoring was explicitly requested;
+failures or moved head/base invalidate affected verification. Unknown mutation outcomes require readback before retrying.
 Production promotion and ongoing monitoring are separate authorization, not merge side effects.
 
 Return outcome/PR URL, verified head (and merge commit when merged), checks, review/thread

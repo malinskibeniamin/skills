@@ -17,7 +17,7 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/full-send.excalidraw)
 
-明确的 `full send <task or PR>` 选择[作者交付工作流](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，授权对这一明确目标进行修复、提交、推送、创建 PR、跟进 CI/审查并合并。讨论此技能不等于调用。
+明确的 `full send <task or PR>` 选择[作者交付工作流](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，授权对这一明确目标进行修复、提交、推送、创建 PR 并按仓库策略合并。不授权等待 CI、审查或进行监控；报告当前阻碍。讨论此技能不等于调用。
 
 先前的停止条件优先：仅本地、不推送、仅草稿、PR 就绪、full stop 或 `--no-merge` 会收窄终点。仅要求跟进不授权合并。确认目标和所属工作树，复用现有 PR，并在 Conductor 中保持检出其分支。仅当目标不明确或所有者保留的决定阻塞工作时询问。
 
