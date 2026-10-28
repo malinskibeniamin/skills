@@ -53,3 +53,12 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: WebMCP distribution contract"
 fi
+
+if bun test "$REPO_ROOT/webmcp/browser-api.test.ts"; then
+  echo "  PASS  copyable Chrome page-tool example contract"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Chrome page-tool example contract"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Chrome page-tool example contract"
+fi

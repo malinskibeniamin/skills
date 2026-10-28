@@ -97,6 +97,7 @@
     "./setup-atlassian-workflow/",
     "./setup-routines/",
     "./show-me/",
+    "./skeleton-loaders/",
     "./snyk-ux-security/",
     "./software-factory/",
     "./stack-registry/",

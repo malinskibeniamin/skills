@@ -156,6 +156,7 @@ type: skill
 | `/setup-atlassian-workflow` | 設定可選用的 Jira 與 Atlassian 工作流程。 |
 | `/setup-routines` | 設定自動化的 Claude Code 維護例行作業。 |
 | `/show-me` | 使用精簡的視覺成品解釋目前的主題。 |
+| `/skeleton-loaders` | 建立符合版面且具無障礙支援的骨架載入狀態。 |
 | `/snyk-ux-security` | 使用 Snyk 與發布關卡稽核相依套件安全性。 |
 | `/software-factory` | 評估工廠適用性並規劃安全的自動化基礎設施。 |
 | `/stack-registry` | 控制框架規則中目前採用與禁止使用的技術堆疊治理。 |

@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "9af1fe901a5dc502",
-      "zh-CN": "9af1fe901a5dc502",
-      "zh-TW": "9af1fe901a5dc502"
+      "pl": "b095d4e5c6b90775",
+      "zh-CN": "b095d4e5c6b90775",
+      "zh-TW": "b095d4e5c6b90775"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "f0e0bea6a2197e47",
-      "zh-CN": "f0e0bea6a2197e47",
-      "zh-TW": "f0e0bea6a2197e47"
+      "pl": "7c9d1a68ffa24726",
+      "zh-CN": "7c9d1a68ffa24726",
+      "zh-TW": "7c9d1a68ffa24726"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -61,9 +61,9 @@
       "zh-TW": "c112e65dfef02e57"
     },
     "content/skills/bazel.md": {
-      "pl": "9c0b14104eb1bef1",
-      "zh-CN": "9c0b14104eb1bef1",
-      "zh-TW": "9c0b14104eb1bef1"
+      "pl": "70e8cc5e9da8e617",
+      "zh-CN": "70e8cc5e9da8e617",
+      "zh-TW": "70e8cc5e9da8e617"
     },
     "content/skills/bend-laws.md": {
       "pl": "2675471f3a644cfa",
@@ -390,6 +390,11 @@
       "zh-CN": "7395d02b9aca63b1",
       "zh-TW": "7395d02b9aca63b1"
     },
+    "content/skills/skeleton-loaders.md": {
+      "pl": "d446783455f9902a",
+      "zh-CN": "d446783455f9902a",
+      "zh-TW": "d446783455f9902a"
+    },
     "content/skills/snyk-ux-security.md": {
       "pl": "54031f842082270e",
       "zh-CN": "54031f842082270e",
@@ -526,9 +531,9 @@
       "zh-TW": "835e851826e1adf1"
     },
     "content/skills/webmcp.md": {
-      "pl": "890268f368d1e9f0",
-      "zh-CN": "890268f368d1e9f0",
-      "zh-TW": "890268f368d1e9f0"
+      "pl": "19f0535182ae80ce",
+      "zh-CN": "19f0535182ae80ce",
+      "zh-TW": "19f0535182ae80ce"
     },
     "content/skills/what-did-i-get-done.md": {
       "pl": "dd47f74421cc3154",
