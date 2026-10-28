@@ -1,0 +1,71 @@
+---
+description: "Split a plan into tracer-bullet tickets with explicit blocking edges."
+related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
+search: {"boost":1,"keywords":["to tickets"]}
+sidebar: {"label":"/to-tickets"}
+title: "/to-tickets"
+type: "skill"
+---
+![Diagram of the /to-tickets skill](/diagrams/skills/to-tickets.svg)
+
+[Open the editable Excalidraw source](/diagrams/skills/to-tickets.excalidraw)
+
+Turn an approved plan, spec, or conversation into independently verifiable vertical slices.
+If `CLAUDE.md` exists, read `CLAUDE.md` first; otherwise read `AGENTS.md`. Follow its Issue
+tracker pointer. If absent, recommend `/work-automation-kit` to the human or use the local fallback.
+Load skills per [dependency loading](https://github.com/malinskibeniamin/skills/blob/v4.41.0/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+
+## 1. Gather
+
+Use existing conversation context. Fetch a supplied spec, issue, or URL with its complete
+body and comments. Explore only when current code and domain vocabulary are still unclear;
+respect `GLOSSARY.md` (via `GLOSSARY-MAP.md` when present) and ADRs. Make the change easy before the easy change.
+
+## 2. Draft slices
+
+Each ticket:
+
+- Cuts a narrow end-to-end path through needed layers, rather than one horizontal layer.
+- Is demoable or verifiable alone and fits one fresh context window.
+- Declares only genuine blockers; no blockers means ready now.
+- Describes user-visible behavior and acceptance, not volatile file paths or snippets.
+
+**Wide refactors are the exception.** Use expand, migrate, contract: add the new form beside
+the old; move callers in independently green batches; then delete the old form. Each migrate batch is blocked by expand.
+The contract is blocked by every migrate batch. If batches cannot
+stay green alone, use an integration branch and final integrate-and-verify ticket.
+
+Call the Skill tool separately with "plan-arbiter" for competing graphs, "visual-plan" for large
+graphs whose frontier or blockers need inspection.
+
+## 3. Confirm
+
+Present a numbered list with **Title**, **Blocked by**, and **What it delivers**. Ask whether
+granularity and edges are right and whether to merge or split tickets. Iterate until approved.
+
+## 4. Publish
+
+Publish one item per ticket, blockers first. Never modify or close the parent.
+
+- **Local:** write `.scratch/<feature-slug>/tickets/<NN>-<slug>.md`, numbered from `01`.
+  Each file lists blocker numbers and titles.
+- **Tracker:** create one issue per ticket. Attach it with the native sub-issue relationship
+  and native blockers when available; otherwise write explicit blocker links. Apply the
+  configured `ready-for-agent` role.
+
+The frontier is every ticket whose blockers are complete.
+
+```markdown
+# <NN> -- <Ticket title>
+**What to build:** <end-to-end behavior from the user's perspective>
+**Blocked by:** <ticket numbers and titles, or None -- can start immediately>
+**Status:** ready-for-agent
+## Acceptance criteria
+- [ ] <observable criterion>
+```
+
+For tracker issues, add `## Parent` when a parent exists, followed by `## What to build`
+and `## Acceptance criteria`. Omit `## Blocked by` when native blocker edges are set;
+include it only for the fallback, so dependencies have one source of truth.
+
+Do not inline implementation detail. For `/prototype` code, add a context pointer to its durable location.

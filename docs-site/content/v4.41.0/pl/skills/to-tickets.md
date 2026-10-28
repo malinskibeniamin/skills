@@ -1,0 +1,69 @@
+---
+description: >-
+  Podziel plan na zgłoszenia typu tracer bullet z jawnymi krawędziami
+  blokującymi.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - to tickets
+sidebar:
+  label: /to-tickets
+title: /to-tickets
+type: skill
+---
+![Diagram umiejętności /to-tickets](/diagrams/skills/to-tickets.svg)
+
+[Otwórz edytowalne źródło Excalidraw](/diagrams/skills/to-tickets.excalidraw)
+
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/v4.41.0/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
+
+Przekształć zatwierdzony plan, specyfikację lub rozmowę w niezależnie weryfikowalne pionowe wycinki.
+Jeśli istnieje `CLAUDE.md`, przeczytaj go przed `AGENTS.md`; w przeciwnym razie przeczytaj `AGENTS.md`. Użyj wskaźnika Issue tracker. Gdy go brak, użyj `/work-automation-kit` lub lokalnego rozwiązania.
+
+## 1. Zbierz [#1-gather]
+
+Użyj kontekstu rozmowy. Pobierz przekazaną specyfikację, zgłoszenie lub URL z pełną treścią i komentarzami. Eksploruj tylko wtedy, gdy bieżący kod i słownictwo domeny są niejasne; respektuj słownik i ADR-y. Najpierw ułatw zmianę, potem wykonaj łatwą zmianę.
+
+## 2. Opracuj wycinki [#2-draft-slices]
+
+Każde zgłoszenie:
+
+- Przecina wąską ścieżkę end-to-end przez potrzebne warstwy zamiast jednej warstwy poziomej.
+- Jest samodzielnie demonstracyjne lub weryfikowalne i mieści się w świeżym oknie kontekstu.
+- Deklaruje tylko prawdziwe blokady; ich brak oznacza gotowość.
+- Opisuje zachowanie i kryteria, nie nietrwałe ścieżki plików ani fragmenty kodu.
+
+**Szerokie refaktoryzacje są wyjątkiem.** Użyj expand, migrate, contract: dodaj nową formę obok starej, przenoś wywołania w niezależnie zielonych partiach, potem usuń starą. Każda partia migrate jest blokowana przez expand. Contract jest blokowany przez wszystkie partie migrate. Jeśli partie nie mogą być zielone samodzielnie, użyj gałęzi integracyjnej i końcowego zgłoszenia integrate-and-verify.
+
+Użyj `/plan-arbiter`, gdy pozostaje kilka grafów. Użyj `/visual-plan` dla dużego grafu wymagającego kontroli granicy lub blokad.
+
+## 3. Potwierdź [#3-confirm]
+
+Pokaż numerowaną listę z **Tytułem**, **Blokowane przez** i **Co dostarcza**. Zapytaj o ziarnistość, krawędzie oraz łączenie lub dzielenie. Iteruj do zatwierdzenia.
+
+## 4. Opublikuj [#4-publish]
+
+Publikuj jeden element na zgłoszenie, najpierw blokery. Nie modyfikuj ani nie zamykaj rodzica.
+
+- **Lokalnie:** zapisz `.scratch/<feature-slug>/tickets/<NN>-<slug>.md`, numerując od `01`. Każdy plik podaje numery i tytuły blokerów.
+- **Tracker:** utwórz osobne zgłoszenia. Dołącz natywną relacją podzgłoszenia i natywnymi blokadami, jeśli są dostępne; w przeciwnym razie wpisz linki. Zastosuj skonfigurowaną rolę `ready-for-agent`.
+
+Granica obejmuje każde zgłoszenie, którego blokery są zakończone.
+
+```markdown
+# <NN> -- <Tytuł zgłoszenia>
+**Co zbudować:** <zachowanie end-to-end z perspektywy użytkownika>
+**Blokowane przez:** <numery i tytuły albo None -- można zacząć>
+**Status:** ready-for-agent
+## Kryteria akceptacji
+- [ ] <obserwowalne kryterium>
+```
+
+Dla zgłoszeń trackera dodaj `## Parent`, gdy istnieje rodzic, następnie `## What to build` i `## Acceptance criteria`. Pomiń `## Blocked by`, jeśli ustawiono natywne krawędzie blokujące; używaj tej sekcji tylko w wariancie zastępczym, aby zależności miały jedno źródło prawdy.
+Nie wklejaj szczegółów implementacji. Dla kodu `/prototype` dodaj wskaźnik kontekstu do trwałej lokalizacji.
