@@ -45,7 +45,6 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/create-verification-skill` | Tworzenie lokalnego dla projektu zestawu do weryfikacji rzeczywistej aplikacji. |
 | `/cli-for-agents` | Projektowanie nieinteraktywnych, komponowalnych interfejsów CLI dla agentów. |
 | `/demo` | Tworzenie nagrania funkcji przeznaczonego dla klientów. |
-| `/deslop` | Audytowanie nadmiernie rozbudowanego kodu i usuwanie nieuzasadnionych elementów. |
 | `/development-lifecycle` | Twórz pracę do żądanego punktu dostarczenia. |
 | `/diagnosing-bugs` | Diagnozowanie trudnych błędów w krótkiej pętli informacji zwrotnej. |
 | `/docs` | Pisanie i recenzowanie dokumentów technicznych opartych na faktach. |
@@ -157,6 +156,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |
 | `/setup-routines` | Konfigurowanie automatycznych procedur utrzymaniowych Claude Code. |
 | `/show-me` | Wyjaśnianie bieżącego tematu za pomocą zwięzłych artefaktów wizualnych. |
+| `/skeleton-loaders` | Twórz dostępne szkielety ładowania dopasowane do układu. |
 | `/snyk-ux-security` | Audytowanie bezpieczeństwa zależności za pomocą Snyk i bramek wydania. |
 | `/software-factory` | Ocenianie przydatności fabryki i planowanie bezpiecznej infrastruktury automatyzacji. |
 | `/stack-registry` | Zarządzanie bieżącym i zabronionym stosem technologicznym w regułach zestawu. |
@@ -190,6 +190,14 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/to-spec` | Przekształcanie rozmowy w specyfikację gotową do umieszczenia w systemie śledzenia. |
 | `/to-tickets` | Dzielenie planu na zadania typu tracer bullet z określonymi blokadami. |
 | `/triage` | Przygotowywanie zgłoszeń do niezawodnej realizacji przez agenta lub człowieka. |
+| `/babysit-pr` | Monitorowanie PR-a przez bieżące CI i uwagi z przeglądu. |
+| `/council` | Przegląd przez jawnie zamówione delegowane modele różnych dostawców. |
+| `/file-pr` | Tworzenie PR-a od opisu problemu do żądanego punktu końcowego. |
+| `/full-stop` | Doprowadzanie PR-a do zweryfikowanej gotowości bez scalania. |
+| `/leaving-pr-comments` | Publikowanie zwięzłych komentarzy GitHub ze zweryfikowanym wskazaniem autora. |
+| `/modernize` | Ponowna ocena i bezpieczne odświeżenie starszego PR-a. |
+| `/sol-loop` | Jawnie zamówiona, ograniczona pętla przeglądu przez Sol. |
+| `/takeover` | Kończenie odziedziczonej pracy z zachowaniem uznania dla współtwórców. |
 | `/upgrade-dependency` | Aktualizowanie zależności i dostosowywanie wszystkich miejsc jej użycia. |
 | `/ux-copy` | Pisanie i recenzja zwięzłych, rzeczowych tekstów interfejsu produktu. |
 | `/ux-performance` | Audytowanie i optymalizowanie rzeczywistej wydajności UX aplikacji internetowych. |
@@ -199,6 +207,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/visual-review` | Przeglądanie interfejsów przeznaczonych dla klientów na podstawie dowodów wizualnych. |
 | `/wait-what` | Ponowne przedstawianie pomysłu prostszym językiem i uzupełnianie brakującego kontekstu. |
 | `/wayfinder` | Mapowanie ogromnych, niejasnych zadań za pomocą zgłoszeń decyzyjnych. |
+| `/webmcp` | Otwieranie aplikacji internetowych z pierwszeństwem ich narzędzi MCP lub WebMCP. |
 | `/what-did-i-get-done` | Podsumowywanie własnych commitów w zwięzłej aktualizacji statusu. |
 | `/wizard` | Generowanie interaktywnego kreatora Bash do ręcznej konfiguracji. |
 | `/work-automation-kit` | Instalowanie przepływów pracy do planowania, tworzenia zadań i selekcji zgłoszeń. |

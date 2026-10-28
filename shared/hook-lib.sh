@@ -427,15 +427,27 @@ hook_parse_edit_write() {
 
 # ── Filter by file extensions (pipe-separated, e.g. "ts|tsx|js|jsx") ──
 
+# True when the nearest package.json above $1 (stopping at the git root)
+# declares react or react-dom.
+_hook_in_react_package() {
+  local dir
+  case "$1" in
+    /*) dir=$(dirname "$1") ;;
+    *) dir=$(dirname "$PWD/$1") ;;
+  esac
+  while :; do
+    if [ -f "$dir/package.json" ]; then
+      grep -qE '"react"|"react-dom"' "$dir/package.json" 2>/dev/null
+      return $?
+    fi
+    if [ -e "$dir/.git" ] || [ "$dir" = "/" ]; then
+      return 1
+    fi
+    dir=$(dirname "$dir")
+  done
+}
+
 hook_filter_extensions() {
-  # Non-frontend repo early exit. session-env.sh sets DISABLE_FRONTEND_HOOKS=1
-  # on SessionStart if package.json lacks react/react-dom. Saves ~50ms per
-  # hook on Go/Python/etc repos where frontend checks are dead weight.
-  if [ "${DISABLE_FRONTEND_HOOKS:-0}" = "1" ]; then
-    _hook_debug "skip: DISABLE_FRONTEND_HOOKS=1 (non-frontend repo)"
-    _hook_skip_or_exit 1
-    return $?
-  fi
   local exts="$1"
   local match=false
   local IFS='|'
@@ -464,6 +476,27 @@ hook_filter_extensions() {
     _hook_debug "skip: extension mismatch (wanted $exts, got ${file_path##*.})"
     _hook_skip_or_exit 1
     return $?
+  fi
+  # session-env.sh sets DISABLE_FRONTEND_HOOKS=1 when the session root's
+  # package.json lacks react/react-dom. Sessions often start at a monorepo
+  # root, so the verdict is per file: React packages below stay checked.
+  if [ "${DISABLE_FRONTEND_HOOKS:-0}" = "1" ]; then
+    local _react=false _apt
+    if _hook_in_react_package "$file_path"; then
+      _react=true
+    elif [ -n "${_hook_apply_patch_targets:-}" ]; then
+      while IFS= read -r _apt; do
+        if [ -n "$_apt" ] && _hook_in_react_package "$_apt"; then
+          _react=true
+          break
+        fi
+      done <<< "$_hook_apply_patch_targets"
+    fi
+    if [ "$_react" = false ]; then
+      _hook_debug "skip: DISABLE_FRONTEND_HOOKS=1 and no React package.json above $file_path"
+      _hook_skip_or_exit 1
+      return $?
+    fi
   fi
 }
 

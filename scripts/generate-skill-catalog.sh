@@ -19,7 +19,7 @@ repo = pathlib.Path(sys.argv[1])
 mode = sys.argv[2]
 
 ACRONYMS = {"ADP", "AI", "AIP", "API", "CI", "CLI", "E2E", "ELI5", "GPT", "MCP", "PDF", "PM", "PR", "TDD", "TS", "UI", "URL", "UX"}
-BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "launchdarkly": "LaunchDarkly", "tanstack": "TanStack"}
+BRANDS = {"codex": "Codex", "github": "GitHub", "openai": "OpenAI", "prs": "PRs", "redpanda": "Redpanda", "snyk": "Snyk", "launchdarkly": "LaunchDarkly", "tanstack": "TanStack", "webmcp": "WebMCP"}
 SMALL_WORDS = {"and", "or", "to", "with"}
 SHORT_DESCRIPTIONS = {
     "accessibility": "Build accessible React interactions and components",
@@ -43,7 +43,6 @@ SHORT_DESCRIPTIONS = {
     "connect-query": "Build typed ConnectRPC data flows with Connect Query",
     "create-verification-skill": "Create a project-local real-app verification harness",
     "demo": "Create a customer-facing feature recording",
-    "deslop": "Audit already-bloated code and remove unjustified surface",
     "development-lifecycle": "Author work through its requested delivery endpoint",
     "diagnosing-bugs": "Diagnose hard bugs with a tight feedback loop",
     "dogfood": "Use and stress-test every runnable change",
@@ -96,6 +95,7 @@ SHORT_DESCRIPTIONS = {
     "setup-atlassian-workflow": "Configure opt-in Jira and Atlassian workflows",
     "setup-routines": "Configure automated Claude Code maintenance routines",
     "show-me": "Explain the current topic with concise visual artifacts",
+    "skeleton-loaders": "Build layout-matched, accessible skeleton loading states",
     "snyk-ux-security": "Audit dependency security with Snyk and release gates",
     "software-factory": "Assess factory fit and plan safe automation infrastructure",
     "stack-registry": "Current and banned stack governance for harness rules",
@@ -122,6 +122,7 @@ SHORT_DESCRIPTIONS = {
     "visual-recap": "Turn a code change into an interactive visual recap",
     "visual-review": "Review customer-facing surfaces from visual evidence",
     "wayfinder": "Map huge, foggy work through decision tickets",
+    "webmcp": "Open web apps and use their MCP or WebMCP tools first",
     "wait-what": "Re-pitch that with simpler language and missing context",
     "what-did-i-get-done": "Summarize authored commits into a concise status update",
     "wizard": "Generate an interactive Bash wizard for manual setup",
@@ -146,6 +147,14 @@ if t3code_lock.exists():
     SHORT_DESCRIPTIONS.update({
         skill["name"]: skill["short_description"]
         for skill in json.loads(t3code_lock.read_text())["skills"]
+    })
+
+
+tstack_lock = repo / "vendor/tstack.lock.json"
+if tstack_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(tstack_lock.read_text())["skills"]
     })
 
 

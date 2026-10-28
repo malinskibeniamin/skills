@@ -22,12 +22,6 @@ You receive session context via SubagentStart hook:
 
 ## Review Checklist (in priority order)
 
-### 0. Less Code, More Meaning
-- Does every new branch, helper, file, dependency, hook, export, and test express required behavior, clarify the domain, or address a credible risk?
-- Could deletion, existing code, the language, a native platform feature, or an installed dependency make the result smaller and clearer?
-- Is complexity justified by demonstrated scale?
-- Prefer semantic density; never reward code golf.
-
 ### 1. Testing Gaps
 - Do bugs and meaningful new contracts have the smallest public-boundary tests?
 - Are additional cases tied to independent credible risks?
@@ -37,7 +31,7 @@ You receive session context via SubagentStart hook:
 
 ### 2. Simplification
 - Can any new code be simplified while keeping tests green?
-- Are there extracted helpers that are only used once? Inline them.
+- Do extracted helpers clarify a responsibility or improve testing?
 - Any over-engineered abstractions for simple operations?
 - Duplicated logic across new files that could be shared?
 

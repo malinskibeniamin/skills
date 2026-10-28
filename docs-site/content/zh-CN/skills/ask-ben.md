@@ -45,7 +45,6 @@ type: skill
 | `/create-verification-skill` | 创建项目本地的真实应用验证框架。 |
 | `/cli-for-agents` | 设计非交互、可组合且适合代理使用的命令行界面。 |
 | `/demo` | 创建面向客户的功能演示录像。 |
-| `/deslop` | 审计已经臃肿的代码，并移除缺乏合理依据的表层内容。 |
 | `/development-lifecycle` | 编写工作并达到请求的交付终点。 |
 | `/diagnosing-bugs` | 通过紧密的反馈循环诊断棘手缺陷。 |
 | `/docs` | 撰写和审查基于事实的技术文档。 |
@@ -157,6 +156,7 @@ type: skill
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |
+| `/skeleton-loaders` | 构建匹配布局且无障碍的骨架加载状态。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
 | `/software-factory` | 评估工厂适用性并规划安全的自动化基础设施。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
@@ -190,6 +190,14 @@ type: skill
 | `/to-spec` | 将对话转换为可录入跟踪系统的规格。 |
 | `/to-tickets` | 将计划拆分为带阻塞关系的曳光弹式工单。 |
 | `/triage` | 整理问题，使智能体或人员能够可靠执行。 |
+| `/babysit-pr` | 跟进 PR 当前的 CI 和审查反馈。 |
+| `/council` | 使用明确请求的跨提供商委派模型进行审查。 |
+| `/file-pr` | 以问题为先，创建 PR 并推进到请求的终点。 |
+| `/full-stop` | 验证 PR 已就绪，但不合并。 |
+| `/leaving-pr-comments` | 发布简洁的 GitHub 评论，并注明经核实的作者身份。 |
+| `/modernize` | 重新评估并安全更新较旧的 PR。 |
+| `/sol-loop` | 执行明确请求且轮数受限的 Sol 审查循环。 |
+| `/takeover` | 完成接手的工作，同时保留原贡献者署名。 |
 | `/upgrade-dependency` | 升级依赖项并调整每个受影响的调用位置。 |
 | `/ux-copy` | 编写和审查简洁、客观的产品界面文案。 |
 | `/ux-performance` | 审计并优化真实 Web 用户体验性能。 |
@@ -199,6 +207,7 @@ type: skill
 | `/visual-review` | 根据视觉证据审查面向客户的界面。 |
 | `/wait-what` | 使用更简单的语言和补充的上下文重新阐述。 |
 | `/wayfinder` | 通过决策工单梳理庞大且模糊的工作。 |
+| `/webmcp` | 打开 Web 应用并优先使用其 MCP 或 WebMCP 工具。 |
 | `/what-did-i-get-done` | 将自己创建的提交汇总为简明的状态更新。 |
 | `/wizard` | 生成用于手动设置的交互式 Bash 向导。 |
 | `/work-automation-kit` | 安装规划、工单和问题分类工作流。 |

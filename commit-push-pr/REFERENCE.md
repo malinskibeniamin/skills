@@ -44,7 +44,7 @@ profile as a publication side effect. An agent result never implies human sign-o
 
 Before the PR endpoint, run the applicable review axes inline:
 
-- `/review` -- correctness, value (`/product` hat), and semantic density
+- `/review` -- correctness, value (`/product` hat), and maintainability
 - `/improve-codebase-architecture` -- deep-module and invariant redesigns that remove error classes
 - `/prototype` -- redesign module or layout
 - `/visual-review` -- multi-hat review for frontend/visual/customer-facing surface diffs

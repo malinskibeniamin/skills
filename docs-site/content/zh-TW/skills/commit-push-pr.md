@@ -45,7 +45,7 @@ type: skill
 `--no-pr` 絕不會建立 PR。推送後執行[現有 PR 維護](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr)，再檢查工作目錄是否乾淨。先準備好視覺證明。
 
 1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 確認基底。沿用目前的 PR；建立及更新時皆套用[儲存庫中繼資料規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿。使用範本；建立草稿無須另行核准。堆疊使用 `/stacked-prs`。
-2. 每個 PR 都應分別載入 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) 與 [pr](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；納入價值說明或已證實的指標。
+2. 每個 PR 都應分別載入 [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md)、[影響評估](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)與[內文](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；保留草稿狀態並說明價值。
 3. 每項可見變更都需要參考文件中的清單、變更前／後的螢幕擷取畫面與影片、已審查的快照，以及通過的視覺測試。若缺少證明，除非使用者明確豁免，否則會阻擋發布。
 4. 公開儲存庫（`gh repo view --json visibility`）：推送前，請從提交、標題、內文及證明中移除內部組織、儲存庫、產品、人員名稱及私人連結。
 5. 附上 dogfood 執行證明。重新閱讀內文、確認審查者可存取圖片，並輸出網址。更新／重新開啟也適用相同關卡；編輯會使受影響的證明失效。
@@ -61,6 +61,6 @@ type: skill
 3. 回報狀態、剩餘差異、分支、提交、PR、CI 及下一步動作。
 4. 遵循 CLAUDE.md 的狀態與意圖／影響規範。只要 PR 已存在，無論是新建或更新，都要在最後的狀態行附上完整的 PR URL。
 
-絕不要暫存不相關的工作、推送混雜範圍，或隱瞞失敗。如果 `gh pr create` 失敗，請顯示錯誤及復原命令。
+絕不要暫存或推送不相關的工作，也不要隱瞞失敗。如果 `gh pr create` 失敗，請顯示錯誤及復原方式。
 
 如果目標儲存庫已使用 Changesets，在完成針對性驗證後、提交之前，載入 [changeset 收尾](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/changesets/SKILL.md)。更新目前 PR 的既有說明，不要每次提示都新增一份。

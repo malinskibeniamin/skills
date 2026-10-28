@@ -21,7 +21,6 @@
 | `/create-verification-skill` | Create a project-local real-app verification harness. |
 | `/cli-for-agents` | Design non-interactive, composable agent-friendly CLIs. |
 | `/demo` | Create a customer-facing feature recording. |
-| `/deslop` | Audit already-bloated code and remove unjustified surface. |
 | `/development-lifecycle` | Author work through its requested delivery endpoint. |
 | `/diagnosing-bugs` | Diagnose hard bugs with a tight feedback loop. |
 | `/docs` | Write and review factual technical documents. |
@@ -133,6 +132,7 @@
 | `/setup-atlassian-workflow` | Configure opt-in Jira and Atlassian workflows. |
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
+| `/skeleton-loaders` | Build layout-matched, accessible skeleton loading states. |
 | `/snyk-ux-security` | Audit dependency security with Snyk and release gates. |
 | `/software-factory` | Assess factory fit and plan safe automation infrastructure. |
 | `/stack-registry` | Current and banned stack governance for harness rules. |
@@ -166,6 +166,14 @@
 | `/to-spec` | Turn the conversation into a tracker-ready spec. |
 | `/to-tickets` | Split a plan into tracer-bullet tickets with blockers. |
 | `/triage` | Prepare issues for reliable agent or human execution. |
+| `/babysit-pr` | Monitor a PR through current CI and review feedback. |
+| `/council` | Review with explicitly requested cross-provider delegates. |
+| `/file-pr` | File a problem-first PR at the requested endpoint. |
+| `/full-stop` | Deliver verified PR readiness without merging. |
+| `/leaving-pr-comments` | Post concise GitHub comments with verified attribution. |
+| `/modernize` | Reassess and safely refresh an older PR. |
+| `/sol-loop` | Run an explicitly requested bounded Sol review loop. |
+| `/takeover` | Finish inherited work while preserving contributor credit. |
 | `/upgrade-dependency` | Upgrade a dependency and adapt every affected call site. |
 | `/ux-copy` | Write and review concise, factual product UI copy. |
 | `/ux-performance` | Audit and optimize real web UX performance. |
@@ -175,6 +183,7 @@
 | `/visual-review` | Review customer-facing surfaces from visual evidence. |
 | `/wait-what` | Re-pitch that with simpler language and missing context. |
 | `/wayfinder` | Map huge, foggy work through decision tickets. |
+| `/webmcp` | Open web apps and use their MCP or WebMCP tools first. |
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
 | `/work-automation-kit` | Install planning, ticketing, and triage workflows. |

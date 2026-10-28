@@ -1,0 +1,27 @@
+{
+  "repository": "https://github.com/BuilderIO/skills",
+  "revision": "49528d601d43094cdbf057973c21eb6b52b1ec05",
+  "license": "MIT",
+  "files": {
+    "LICENSE": {
+      "blob_sha": "dafdc4ad5ab52b93ffa5f677f33a45ad2944365e",
+      "sha256": "d50194829dc398b96028624dba48eb20c7a51e49d4a20aedf3f8dc24773f4d45",
+      "mode": "100644"
+    },
+    "skills/webmcp/README.md": {
+      "blob_sha": "3cbed0dcd25324f7239fd58b21463efce9b94816",
+      "sha256": "599b90eb25c56ab530df09cfa97f94fdf1adf54d29eb579482120633fc6a1a45",
+      "mode": "100644"
+    },
+    "skills/webmcp/SKILL.md": {
+      "blob_sha": "e9caec1cc62ba7ee22afed609f8301223cf461e3",
+      "sha256": "beede6e04a1165d9f66304f09d2d68a6fcd54279e9e3e1d0fbd0c8ffe4066576",
+      "mode": "100644"
+    },
+    "skills/webmcp/agents/openai.yaml": {
+      "blob_sha": "29181805877a64349bb0c22f92c199cae97b6a55",
+      "sha256": "606003633c76fc436407f0e97e717f700bcbf2e3c6f1d3d140941893435d3920",
+      "mode": "100644"
+    }
+  }
+}

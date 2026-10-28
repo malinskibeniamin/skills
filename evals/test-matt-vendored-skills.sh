@@ -132,7 +132,6 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "Deep mode" "review has a deep rel
 run_content_eval "$REPO_ROOT/review/SKILL.md" "complete applicability ledger" "deep review accounts for every surface"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "could still be wrong if tests pass" "review keeps an adversarial question"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "Deduplicate by root cause" "review deduplicates findings"
-run_content_eval "$REPO_ROOT/review/SKILL.md" "semantic density" "review evaluates change value directly"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No performance finding without measurement" "review rejects unsupported value claims"
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No edge-case finding" "review filters hypothetical defects"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "independent audit before reading PR discussion" "deep review preserves fresh eyes before feedback"

@@ -45,7 +45,6 @@ type: skill
 | `/create-verification-skill` | 建立專案本機的真實應用程式驗證控制框架。 |
 | `/cli-for-agents` | 設計非互動、可組合且適合代理使用的命令列介面。 |
 | `/demo` | 建立面向客戶的功能錄製內容。 |
-| `/deslop` | 稽核已經過度膨脹的程式碼，並移除不合理的介面。 |
 | `/development-lifecycle` | 撰寫工作並達到要求的交付端點。 |
 | `/diagnosing-bugs` | 透過緊密的回饋迴圈診斷棘手的錯誤。 |
 | `/docs` | 撰寫與審查以事實為依據的技術文件。 |
@@ -157,6 +156,7 @@ type: skill
 | `/setup-atlassian-workflow` | 設定可選用的 Jira 與 Atlassian 工作流程。 |
 | `/setup-routines` | 設定自動化的 Claude Code 維護例行作業。 |
 | `/show-me` | 使用精簡的視覺成品解釋目前的主題。 |
+| `/skeleton-loaders` | 建立符合版面且具無障礙支援的骨架載入狀態。 |
 | `/snyk-ux-security` | 使用 Snyk 與發布關卡稽核相依套件安全性。 |
 | `/software-factory` | 評估工廠適用性並規劃安全的自動化基礎設施。 |
 | `/stack-registry` | 控制框架規則中目前採用與禁止使用的技術堆疊治理。 |
@@ -190,6 +190,14 @@ type: skill
 | `/to-spec` | 將對話轉換為可放入追蹤系統的規格。 |
 | `/to-tickets` | 將計畫拆分為包含阻礙事項的曳光彈式工作單。 |
 | `/triage` | 整理問題，使代理程式或人員能可靠執行。 |
+| `/babysit-pr` | 跟進 PR 目前的 CI 與審查意見。 |
+| `/council` | 使用明確要求的跨供應商委派模型進行審查。 |
+| `/file-pr` | 以問題為先，建立 PR 並推進至要求的端點。 |
+| `/full-stop` | 驗證 PR 已就緒，但不合併。 |
+| `/leaving-pr-comments` | 發布精簡的 GitHub 留言，並標示已驗證的作者身分。 |
+| `/modernize` | 重新評估並安全更新較舊的 PR。 |
+| `/sol-loop` | 執行明確要求且輪數受限的 Sol 審查循環。 |
+| `/takeover` | 完成接手的工作，同時保留原貢獻者署名。 |
 | `/upgrade-dependency` | 升級相依套件，並調整所有受影響的呼叫端。 |
 | `/ux-copy` | 撰寫與審查簡潔、客觀的產品介面文案。 |
 | `/ux-performance` | 稽核並最佳化真實的 Web 使用者體驗效能。 |
@@ -199,6 +207,7 @@ type: skill
 | `/visual-review` | 根據視覺實證審查面向客戶的介面。 |
 | `/wait-what` | 使用更簡單的語言與補充缺少的脈絡，重新說明內容。 |
 | `/wayfinder` | 透過決策工作單梳理龐大且模糊的工作。 |
+| `/webmcp` | 開啟 Web 應用程式並優先使用其 MCP 或 WebMCP 工具。 |
 | `/what-did-i-get-done` | 將本人撰寫的提交彙整為精簡的狀態更新。 |
 | `/wizard` | 產生供手動設定使用的互動式 Bash 精靈。 |
 | `/work-automation-kit` | 安裝規劃、工作單管理與問題分類工作流程。 |

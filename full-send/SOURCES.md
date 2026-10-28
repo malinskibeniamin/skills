@@ -4,7 +4,8 @@ Checked 2026-10-14 against the [publisher RSS](https://anchor.fm/s/1112097e0/pod
 and original public YouTube captions for the latest five releases. About 11 hours of
 captions reach the recording ends; longer contextual passages were read, not every minute
 manually viewed. Names/speakers may be mistranscribed. These are paraphrases and our local
-adaptations, not quotations, copied skills or endorsements.
+adaptations, not quotations or endorsements. Those historical research passages
+are separate from the now-vendored tstack skills documented below.
 
 | Episode / primary passage | Actionable lesson | Local implementation |
 |---|---|---|
@@ -23,7 +24,10 @@ The earlier [Podcast Rex summary](https://podcastrex.com/shows/nerd-snipe-with-t
 was a secondary discovery lead, now superseded by these primary-caption passages.
 The bounded [T3 Code directory search](https://github.com/pingdotgg/t3code/tree/main/.agents/skills)
 found contribution-triage, test-t3-app and test-t3-mobile, not canonical full-send/Sol-loop
-files; absence elsewhere is unknown. [test-t3-app](https://github.com/pingdotgg/t3code/blob/main/.agents/skills/test-t3-app/SKILL.md)
+files at that time. Canonical sources are now available in the
+[pinned tstack snapshot](../vendor/tstack-NOTICE.md), composed through
+[host compatibility](../shared/TSTACK.md); the earlier absence is superseded.
+[test-t3-app](https://github.com/pingdotgg/t3code/blob/main/.agents/skills/test-t3-app/SKILL.md)
 and [test-t3-mobile](https://github.com/pingdotgg/t3code/blob/main/.agents/skills/test-t3-mobile/SKILL.md)
 reinforce operational, isolated verification with meaningful fixtures and actual pairing state.
 

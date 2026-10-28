@@ -9,6 +9,9 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PASS=0
 FAIL=0
 SKIP=0
+# A Claude session started in a non-React directory exports this flag; tests
+# that need it set it per call.
+unset DISABLE_FRONTEND_HOOKS
 
 # Colors
 RED='\033[0;31m'

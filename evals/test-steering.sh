@@ -25,9 +25,7 @@ run_content_eval "$REPO_ROOT/exemplars/form.tsx" "onCreated\\(request.name\\)" "
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "exemplars/" "tdd points at exemplars"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "exemplars/" "CLAUDE.md lifecycle points at exemplars"
 
-# 3. Less-is-more is core; deslop is fallback only.
-run_content_eval "$REPO_ROOT/CLAUDE.md" "smallest obvious" "lifecycle authors the smallest design directly"
-run_content_eval "$REPO_ROOT/deslop/SKILL.md" "Fallback, not lifecycle" "deslop documents fallback status"
+# 3. Structured test flows remain exemplary.
 run_content_eval "$REPO_ROOT/exemplars/e2e.spec.ts" "test\\.step" "test.step structure remains exemplary"
 
 # 4. React Doctor diagnostic gate.

@@ -3,6 +3,10 @@
 Own the outcome, not the previous implementation. A takeover request authorizes in-scope
 repair and redesign, not unrelated deletion, branch replacement, delegation, or merging.
 
+Load [tstack takeover](../../tstack-skills/takeover/SKILL.md) for contributor-credit
+and current-architecture checks. This procedure retains execution ownership and the
+requested endpoint; no automatic replacement PR or monitoring continuation.
+
 1. Reconstruct the original acceptance criteria from the issue, PR, history, and failed
    attempts. Separate requirements from accumulated speculative scope. Record current
    HEAD, dirty paths, ownership, known-working behavior, and the requested delivery endpoint.

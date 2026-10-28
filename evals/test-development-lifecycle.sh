@@ -17,7 +17,7 @@ run_content_eval "$SKILL_DIR/SKILL.md" "volatile unknown" "lifecycle orders disc
 run_content_eval "$SKILL_DIR/SKILL.md" "demonstrated scale" "lifecycle designs for demonstrated scale"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Ss]ingle owner" "lifecycle keeps one owner"
 run_content_eval "$SKILL_DIR/SKILL.md" "continue immediately" "ordinary implementation does not wait for approval"
-run_content_eval "$SKILL_DIR/SKILL.md" "smallest obvious change" "implementation starts with the smallest clear change"
+run_content_eval "$SKILL_DIR/SKILL.md" "requested behavior using local conventions" "implementation follows the contract and repo conventions"
 run_content_eval "$SKILL_DIR/SKILL.md" "RED -> smallest GREEN" "meaningful behavior uses TDD"
 run_content_eval "$SKILL_DIR/SKILL.md" "public contract" "tests prove the public seam"
 run_content_eval "$SKILL_DIR/SKILL.md" "Re-plan the affected slice" "evidence can revise the approach"

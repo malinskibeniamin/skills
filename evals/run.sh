@@ -17,6 +17,9 @@ export HOOK_STOP_BLOCK_CAP_GUARD=0
 # Fixture and dogfood calls must never enter the production telemetry corpus.
 # Telemetry-specific evals opt back in with an isolated HOOK_METRICS_DIR.
 export HOOK_METRICS_DISABLED=1
+# A Claude session started in a non-React directory exports this flag; evals
+# that need it set it per call.
+unset DISABLE_FRONTEND_HOOKS
 PASS=0
 FAIL=0
 SKIP=0

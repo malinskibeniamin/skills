@@ -78,9 +78,14 @@ it accurately. Push every local CI fix or rebase after verification, then refres
 
 Continue past publication's single CI snapshot for ship, `/go`, babysitting or authorized merge:
 
+- Load [tstack monitoring](../tstack-skills/babysit-pr/SKILL.md): one watcher, native
+  T3 watch for requested monitoring, no duplicate polling, unwatch before handoff. Its helper
+  signals events only; the existing readiness checkpoint owns the verdict.
 - Resolve [native context](T3CODE-NATIVE.md#resolve-context) with entrypoint `full-send`
-  and authorized babysitting. Use its host-watch checkpoint/wake contract when selected;
-  otherwise watch the current candidate's required checks in the foreground. Missing CI is not green CI. Inspect failed
+  and authorized babysitting. Use its checkpoint/wake contract when selected;
+  an explicit watch/monitor/babysit request uses an exposed native watcher. Otherwise
+  retain supervised foreground checks; outside T3, use the tstack helper for requested monitoring.
+  Missing CI is not green CI. Inspect failed
   logs, reproduce, repair, verify, commit, push and refresh the watched head. Retry transient
   infrastructure failures only with evidence; never weaken gates to get green.
 - Human feedback has no cap; `pr-feedback-completeness-stop` enforces hosted completeness.

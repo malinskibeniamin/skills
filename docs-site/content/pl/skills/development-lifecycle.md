@@ -51,7 +51,7 @@ Przed edycją załaduj [dobór dowodów zmiany](https://github.com/malinskibenia
 
 ### Działaj [#act]
 
-Jeden właściciel zadania; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowadź najmniejszą oczywistą zmianę; najpierw usuwaj lub wykorzystuj ponownie, zanim dodasz nowe mechanizmy. Dla istotnego zachowania załaduj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) i pracuj na poziomie publicznego kontraktu: RED -> najmniejsze GREEN -> REFACTOR; statyczne okablowanie lub usuwanie, które nie zmienia zachowania, może wymagać tylko ukierunkowanej weryfikacji. Gdy ustalenia się zmienią, ponownie zaplanuj odpowiedni fragment. Poboczne porządki zgłoś, chyba że blokują weryfikację.
+Jeden właściciel zadania; delegowanie i praca w tle wymagają wyraźnej zgody. Zaimplementuj wymagane zachowanie zgodnie z lokalnymi konwencjami. Dla istotnego zachowania załaduj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) i pracuj na poziomie publicznego kontraktu: RED -> najmniejsze GREEN -> REFACTOR; statyczne okablowanie lub usuwanie, które nie zmienia zachowania, może wymagać tylko ukierunkowanej weryfikacji. Gdy ustalenia się zmienią, ponownie zaplanuj odpowiedni fragment. Poboczne porządki zgłoś, chyba że blokują weryfikację.
 
 Po każdej spójnej partii zmian uruchom formatowanie lub automatyczne poprawki i lintowanie w odpowiednim zakresie, a następnie właściwe kontrole typów i testy. Wyniki zakończonych hooków wykorzystuj ponownie tylko przy identycznej zawartości plików i zakresie kontroli. Sprawdź diff automatycznych poprawek; napraw błędy i uruchom kontrole ponownie. Zachowaj sprawdzanie typów całego projektu, gdy ograniczenie do plików nie jest poprawne.
 

@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+2026-10-26 -- Retire Ponytail and its merged `/deslop` skill in Claude and Codex.
+Remove their discovery entries, audit routing, reuse-first/minimization review
+policy, and Stop-hook LOC pressure. Correctness review, TDD, security,
+accessibility, and violation reporting remain. Refresh the plugin and reload or
+restart the host after upgrading; already-loaded skill instructions are not
+removed from an existing conversation. Published docs snapshots remain historical.
+
+2026-10-24 -- Keep frontend hooks live for Claude sessions that start outside a
+React package. `DISABLE_FRONTEND_HOOKS=1` (set only through Claude's
+`CLAUDE_ENV_FILE`, so Codex never had it) came from the session root's
+package.json, which silently disabled every frontend check in monorepo apps such as
+`apps/web-ui/` whenever the session opened at the repository root. The flag now
+narrows per file: `hook_filter_extensions` still checks a file whose nearest
+package.json declares react or react-dom. The skills-repo exemption matches the
+`frontend-skills` plugin manifest instead of a checkout named `skills`, so T3 Code
+worktrees and Conductor workspaces keep their hooks, and eval runners unset the
+inherited flag so suites give the same result under Claude and Codex.
+
 ## 4.40.0
 
 2026-10-24 -- Publish the accumulated post-v4.39 changes as one versioned Claude Code

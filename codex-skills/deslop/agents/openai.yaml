@@ -1,3 +1,0 @@
-interface:
-  display_name: "Deslop"
-  short_description: "Audit already-bloated code and remove unjustified surface"

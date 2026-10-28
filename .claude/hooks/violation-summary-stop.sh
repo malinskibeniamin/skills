@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-# Stop hook: report aggregated violation summary + session LOC delta.
+# Stop hook: report aggregated violations.
 # Reads violations tracked by hook_block/hook_warn/hook_deny in hook-lib.sh.
 # Note: set -u removed — CLAUDE_SESSION_ID may be unset in some contexts.
 
@@ -15,25 +15,6 @@ fi
 [ -z "$_hook_sid" ] && exit 0
 session_dir="/tmp/hook-session-${_hook_sid}"
 violations_file="$session_dir/violations"
-session_files="$session_dir/files"
-
-# ── Session LOC delta (code-is-liability visibility) ─────────────
-# Net lines added to session-touched source files vs HEAD. Info only:
-# awareness pressure toward smaller diffs, enforcement stays with
-# /deslop and the review value gate.
-loc_note=""
-if [ -f "$session_files" ] && git rev-parse --git-dir >/dev/null 2>&1; then
-  touched=$(cut -d: -f2- "$session_files" 2>/dev/null | sort -u | head -100 || true)
-  if [ -n "$touched" ]; then
-    stat=$(echo "$touched" | tr '\n' '\0' | xargs -0 git diff HEAD --shortstat -- 2>/dev/null | head -1 || true)
-    added=$(echo "$stat" | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo 0)
-    removed=$(echo "$stat" | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo 0)
-    if [ "${added:-0}" -gt 0 ] || [ "${removed:-0}" -gt 0 ]; then
-      net=$((added - removed))
-      loc_note=" Session LOC delta: +${added}/-${removed} (net ${net})."
-    fi
-  fi
-fi
 
 summary=""
 total=0
@@ -45,13 +26,11 @@ if [ -f "$violations_file" ] && [ -s "$violations_file" ]; then
   total=$(wc -l < "$violations_file" | tr -d ' ')
 fi
 
-if [ -z "$summary" ] && [ -z "$loc_note" ]; then
+if [ -z "$summary" ]; then
   exit 0
 fi
 
-msg=""
-[ -n "$summary" ] && msg="Session violation summary ($total total): $summary."
-msg="${msg}${loc_note}"
+msg="Session violation summary ($total total): $summary."
 
 # Report as additional context (don't block — just inform)
 echo "{\"hookSpecificOutput\":{\"additionalContext\":\"$msg\"}}"

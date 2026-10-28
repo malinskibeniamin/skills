@@ -48,8 +48,6 @@ Recheck identity before verdict; drift invalidates affected evidence.
 - Inspect test integrity: public behavior, RED, assertions, coverage, no duration waits.
   Source-text checks are no coverage unless text is public output; delete or replace at a
   public seam. Use static analysis for syntax.
-- Require behavior, semantic density, domain clarity and credible risk at demonstrated scale.
-  Never optimize LOC or reward code golf.
 
 Add surface-specific scrutiny only when the diff supplies evidence:
 
