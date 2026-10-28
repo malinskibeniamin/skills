@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/prototype.excalidraw)
 
+用户明确要求界面工作台时，可推荐 `variant`（设计备选）、`state-machine`（可达状态）或 `break`（极端场景）。阅读[界面保留规则](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#workbench-retention)及相应分支；这些技能只能由用户调用，不是自动依赖。保留可运行的原型，不要将临时路由或切换器放入生产 PR。
+
 原型用于回答一个明确的问题。它是证据，而不是早期的生产分支。
 
 选择成本最低且能如实验证问题的形式：

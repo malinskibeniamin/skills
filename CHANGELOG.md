@@ -2,6 +2,33 @@
 
 ## Unreleased
 
+## 4.41.0
+
+2026-10-28 -- Publish the post-4.40 changes as one Claude Code and Codex bundle.
+This release makes `/skeleton-loaders` available through both installed harnesses.
+
+### Highlights
+
+- Add layout-matched skeleton guidance, reduced-motion shimmer, accessible loading
+  semantics, and pending-delay cleanup, with localized documentation.
+- Add `/webmcp` and align its page-tool examples with the Chrome API.
+- Focus repair review scope, require security coverage in opted-in review gates,
+  and refresh Bazel release research and Bend verification guidance.
+- Keep frontend hooks active in React packages when a session starts outside one.
+- Retire Ponytail and `/deslop`; existing published archives remain historical.
+
+### Upgrade notes
+
+- Claude and Codex manifests and both marketplaces advertise 4.41.0 together.
+  Refresh the marketplace and installed plugin, then reload the host's skill catalog.
+- Codex installs pinned to v4.40.0 must explicitly move to v4.41.0. Local marketplace
+  snapshots also require an explicit refresh; merging source alone does not update caches.
+- Preserve the separate `frontend-skills-mods` version (0.3.0) and all old release tags.
+- The skills repository's owner-controlled advisory CI/review policy does not weaken
+  safeguards in repositories consuming the harness.
+
+### Previously unreleased fixes
+
 2026-10-26 -- Retire Ponytail and its merged `/deslop` skill in Claude and Codex.
 Remove their discovery entries, audit routing, reuse-first/minimization review
 policy, and Stop-hook LOC pressure. Correctness review, TDD, security,

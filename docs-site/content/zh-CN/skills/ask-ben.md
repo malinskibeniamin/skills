@@ -37,6 +37,7 @@ type: skill
 | `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |
 | `/break-ui` | 使用真实可信的最坏情况数据压力测试 UI。 |
+| `/ci-fixes` | 在不削弱测试信号的前提下加快 CI 并提高可靠性。 |
 | `/codebase-design` | 设计具有清晰接口的深层模块。 |
 | `/codex-compat` | 生成与 Codex 钩子和指令的功能对等实现。 |
 | `/codex` | 通过 Codex CLI 委派范围明确的工作。 |
@@ -69,6 +70,20 @@ type: skill
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/better-accessibility` | 用 WCAG 扩展现有无障碍验证。 |
+| `/better-colors` | 构建并测量语义化界面颜色系统。 |
+| `/better-interface` | 通过现有视觉审查流程检查界面。 |
+| `/better-layout` | 审查分组与响应式界面结构。 |
+| `/better-typography` | 设置并审查易读的界面排版。 |
+| `/better-ui` | 优化界面表面、图标与交互细节。 |
+| `/better-writing` | 用界面模式扩展现有 UI 文案指导。 |
+| `/break` | 按明确要求构建组件压力测试页面。 |
+| `/build-design` | 使用现有组件实现提供的设计。 |
+| `/explain-interface` | 根据观察证据解释界面或效果。 |
+| `/interface-review` | 审查指定变更中的界面回归。 |
+| `/state-machine` | 按明确要求构建组件状态工作台。 |
+| `/teardown` | 创建有证据支撑的技术插图。 |
+| `/variant` | 按明确要求探索组件设计备选方案。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 审计标志受众和清理条件。 |
 | `/lie-detector` | 发现不会失败的测试和缺乏差异支持的声明。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
@@ -141,6 +156,7 @@ type: skill
 | `/prime` | 构建简明的仓库启动说明。 |
 | `/product` | 检查工作是否值得投入时间，并带来相应的业务价值。 |
 | `/prototype` | 构建一次性产物来回答设计问题。 |
+| `/protobuf` | 设计并审查 protobuf 模式及其使用方。 |
 | `/quantify-impact` | 证明有意义的产品和代码库改进。 |
 | `/read-the-damn-docs` | 根据主要文档研究当前行为。 |
 | `/redpanda-ai-gateway` | 通过 Redpanda AI Gateway 运行 AI CLI。 |
@@ -156,6 +172,7 @@ type: skill
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |
+| `/skeleton-loaders` | 构建匹配布局且无障碍的骨架加载状态。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
 | `/software-factory` | 评估工厂适用性并规划安全的自动化基础设施。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
@@ -206,7 +223,7 @@ type: skill
 | `/visual-review` | 根据视觉证据审查面向客户的界面。 |
 | `/wait-what` | 使用更简单的语言和补充的上下文重新阐述。 |
 | `/wayfinder` | 通过决策工单梳理庞大且模糊的工作。 |
-| `/webmcp` | 打开 Web 应用并优先使用其 MCP 或 WebMCP 工具。 |
+| `/webmcp` | 操作页面工具，或构建和审查 WebMCP 接口。 |
 | `/what-did-i-get-done` | 将自己创建的提交汇总为简明的状态更新。 |
 | `/wizard` | 生成用于手动设置的交互式 Bash 向导。 |
 | `/work-automation-kit` | 安装规划、工单和问题分类工作流。 |

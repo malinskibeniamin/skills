@@ -80,6 +80,7 @@ type Definition = {
   globs: string[];
   skills: string[];
   lens: string;
+  rereview: "full" | "delta";
   hash: string;
 };
 function definitions(root: string) {
@@ -109,6 +110,10 @@ function definitions(root: string) {
         globs: strings(item.globs, "gate globs"),
         skills,
         lens: nonempty(item.lens, "gate lens"),
+        rereview:
+          item.rereview === undefined
+            ? ("full" as const)
+            : member(item.rereview, ["full", "delta"], "re-review scope"),
       };
       if (definitions.some((prior) => prior.id === gate.id))
         throw new Error(
@@ -222,6 +227,41 @@ function snapshot(root: string, baseRef: string): Snapshot {
   return { root, branch, head, base, baseRef, fingerprint, paths, diff };
 }
 
+// Reconstruct captured working changes without touching the caller's index or files.
+function candidateTree(
+  root: string,
+  candidate: Omit<Snapshot, "diff">,
+  diff: string,
+) {
+  const index = join(root, stage, `index-${crypto.randomUUID()}`);
+  mkdirSync(dirname(index), { recursive: true });
+  const run = (args: string[], input?: string) => {
+    const result = Bun.spawnSync(["git", ...args], {
+      cwd: root,
+      env: { ...Bun.env, GIT_INDEX_FILE: index },
+      stdin: input === undefined ? undefined : Buffer.from(input),
+      timeout: 30_000,
+    });
+    if (result.exitCode !== 0)
+      throw new Error(
+        `Cannot reconstruct review candidate: ${result.stderr.toString().trim()}`,
+      );
+    return result.stdout.toString().trim();
+  };
+  try {
+    run([
+      "read-tree",
+      git(root, "merge-base", candidate.base, candidate.head).trim(),
+    ]);
+    if (diff)
+      run(["apply", "--cached", "--binary", "--whitespace=nowarn", "-"], diff);
+    return run(["write-tree"]);
+  } finally {
+    rmSync(index, { force: true });
+    rmSync(`${index}.lock`, { force: true });
+  }
+}
+
 type Classification = { gate: string; relevant: boolean; reason: string };
 function classifications(
   value: unknown,
@@ -255,6 +295,7 @@ type PlannedGate = {
   reason: string;
   prompt: string;
   promptHash: string;
+  scope?: "full" | "delta";
 };
 type Plan = {
   version: 1;
@@ -266,6 +307,7 @@ type Plan = {
   integrity: string;
   classifications: Classification[];
   gates: PlannedGate[];
+  delta?: { previous: string; hash: string };
 };
 function planAt(root: string) {
   return join(root, stage, "plan.json");
@@ -273,7 +315,7 @@ function planAt(root: string) {
 function manifest(
   plan: Pick<
     Plan,
-    "registry" | "snapshot" | "classifications" | "gates" | "diffHash"
+    "registry" | "snapshot" | "classifications" | "gates" | "diffHash" | "delta"
   >,
 ) {
   return digest(
@@ -283,6 +325,7 @@ function manifest(
       plan.classifications,
       plan.gates,
       plan.diffHash,
+      ...(plan.delta ? [plan.delta] : []),
     ]),
   );
 }
@@ -330,6 +373,11 @@ function readPlan(file: string, root: string): Plan {
       reason: nonempty(item.reason, "routing reason"),
       prompt,
       promptHash,
+      ...(item.scope === undefined
+        ? {}
+        : {
+            scope: member(item.scope, ["full", "delta"], "review scope"),
+          }),
     };
   });
   if (new Set(gates.map((gate) => gate.id)).size !== gates.length)
@@ -345,11 +393,23 @@ function readPlan(file: string, root: string): Plan {
     integrity: sha(input.integrity),
     classifications: classifications(input.classifications, known.gates),
     gates,
+    ...(input.delta === undefined
+      ? {}
+      : {
+          delta: {
+            previous: sha(object(input.delta).previous),
+            hash: sha(object(input.delta).hash),
+          },
+        }),
   };
   if (
     manifest(plan) !== plan.integrity ||
     digest(readFileSync(join(directory, "change.diff"), "utf8")) !==
-      plan.diffHash
+      plan.diffHash ||
+    (plan.delta &&
+      digest(readFileSync(join(directory, "repair.diff"), "utf8")) !==
+        plan.delta.hash) ||
+    (plan.gates.some((gate) => gate.scope === "delta") && !plan.delta)
   )
     throw new Error(
       "Staged review inputs changed; restore the immutable review input",
@@ -446,13 +506,52 @@ function createPlan(
       classificationFile ? json(classificationFile) : [],
       registry.gates,
     );
-    const id = digest(
-      JSON.stringify([captured.fingerprint, registry.hash, classified]),
-    );
     const previous = existsSync(planAt(root))
       ? readPlan(planAt(root), root)
       : undefined;
-    if (previous?.id === id) return previous;
+    if (
+      previous?.snapshot.fingerprint === captured.fingerprint &&
+      previous.registry === registry.hash &&
+      JSON.stringify(previous.classifications) === JSON.stringify(classified)
+    )
+      return previous;
+    let repair: string | undefined;
+    if (
+      previous &&
+      previous.registry === registry.hash &&
+      previous.snapshot.branch === captured.branch &&
+      previous.snapshot.base === captured.base &&
+      git(root, "merge-base", previous.snapshot.head, captured.head).trim() ===
+        previous.snapshot.head &&
+      previous.gates.some((gate) => existsSync(recordFile(previous, gate)))
+    ) {
+      repair = git(
+        root,
+        "diff",
+        "--binary",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--no-renames",
+        candidateTree(
+          root,
+          previous.snapshot,
+          readFileSync(join(previous.directory, "change.diff"), "utf8"),
+        ),
+        candidateTree(root, captured, captured.diff),
+      );
+    }
+    const delta =
+      repair === undefined || !previous
+        ? undefined
+        : { previous: previous.id, hash: digest(repair) };
+    const id = digest(
+      JSON.stringify([
+        captured.fingerprint,
+        registry.hash,
+        classified,
+        ...(delta ? [delta] : []),
+      ]),
+    );
     const directory = join(root, stage, "runs", id);
     const gates = registry.gates.map((definition) => {
       const classifiedGate = classified.find(
@@ -463,6 +562,7 @@ function createPlan(
       );
       let prior = "";
       let priorNeedsReview = false;
+      let reviewed = false;
       const previousGate = previous?.gates.find(
         (gate) => gate.id === definition.id && gate.applicable,
       );
@@ -476,12 +576,18 @@ function createPlan(
           if (existsSync(`${recordFile(previous, previousGate)}.error`))
             throw new Error("Prior review failed to produce a valid result");
           const record = readRecord(previous, previousGate);
+          reviewed = ["APPROVED", "CONCERNS", "NEEDS_CHANGES"].includes(
+            record.result.status,
+          );
           priorNeedsReview =
             record.result.findings.length > 0 ||
             ["NEEDS_CHANGES", "UNAVAILABLE", "FAILED"].includes(
               record.result.status,
             );
-          prior = JSON.stringify(record.result);
+          prior = JSON.stringify({
+            result: record.result,
+            verification: record.verification,
+          });
         } catch (error) {
           priorNeedsReview = true;
           prior = `Prior review unavailable: ${error instanceof Error ? error.message : "unknown error"}`;
@@ -502,7 +608,13 @@ function createPlan(
               ? `Semantic applicability: ${classifiedGate.reason}`
               : "No semantic verdict; review conservatively";
       const prompt = join(directory, "prompts", `${definition.id}.md`);
-      const promptText = `# ${definition.title}\n\n${definition.lens}\n\nRead ${join(directory, "change.diff")} (the full, lossless candidate diff). Inspect source, callers and independent evidence as needed.\n\nGuidance to load for this gate:\n${definition.skills.map((path) => `- ${path}`).join("\n")}\n\nApply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. A clean result needs sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
+      const scope: "full" | "delta" =
+        delta && reviewed && definition.rereview === "delta" ? "delta" : "full";
+      const input =
+        scope === "delta"
+          ? `Read ${join(directory, "repair.diff")} (changes since the prior captured review, including working changes). Focus on changed behavior and prior findings; expand into source, callers and ${join(directory, "change.diff")} (the full, lossless candidate diff) when needed to prove a claim. Do not hunt unrelated old defects or repost an existing finding.`
+          : `Read ${join(directory, "change.diff")} (the full, lossless candidate diff). Inspect source, callers and independent evidence as needed.`;
+      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${definition.skills.map((path) => `- ${path}`).join("\n")}\n\nApply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. A clean result needs sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
       atomic(prompt, promptText);
       return {
         id: definition.id,
@@ -513,6 +625,7 @@ function createPlan(
         reason,
         prompt,
         promptHash: digest(promptText),
+        scope,
       };
     });
     const { diff, ...candidate } = captured;
@@ -525,9 +638,11 @@ function createPlan(
       diffHash: digest(diff),
       classifications: classified,
       gates,
+      ...(delta ? { delta } : {}),
     };
     const plan: Plan = { ...contents, integrity: manifest(contents) };
     atomic(join(directory, "change.diff"), diff);
+    if (repair !== undefined) atomic(join(directory, "repair.diff"), repair);
     if (
       snapshot(root, baseRef).fingerprint !== captured.fingerprint ||
       definitions(root).hash !== registry.hash
@@ -605,6 +720,7 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
         current.fingerprint,
         registry.hash,
         plan.classifications,
+        ...(plan.delta ? [plan.delta] : []),
       ]),
     );
     if (

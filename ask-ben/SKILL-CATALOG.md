@@ -13,6 +13,7 @@
 | `/blast-radius` | Prove non-local change safety with executable evidence. |
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/break-ui` | Stress-test UI with realistic worst-case data. |
+| `/ci-fixes` | Make CI faster and reliable without weakening test signal. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |
 | `/codex-compat` | Generate Codex hook and instruction parity. |
 | `/codex` | Delegate bounded work through the Codex CLI. |
@@ -45,6 +46,20 @@
 | `/implement-spec` | Implement a whole spec on one integration branch. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
+| `/better-accessibility` | Extend existing accessibility verification with WCAG. |
+| `/better-colors` | Build and measure semantic interface color systems. |
+| `/better-interface` | Review interfaces through existing visual review. |
+| `/better-layout` | Review grouping and responsive interface structure. |
+| `/better-typography` | Set and review readable interface typography. |
+| `/better-ui` | Polish surfaces, icons and interaction details. |
+| `/better-writing` | Extend existing UI copy guidance with interface patterns. |
+| `/break` | Build an explicitly requested component stress page. |
+| `/build-design` | Implement a supplied design with existing components. |
+| `/explain-interface` | Explain an interface or effect from observed evidence. |
+| `/interface-review` | Review interface regressions in a named change. |
+| `/state-machine` | Build an explicitly requested component state workbench. |
+| `/teardown` | Create evidence-grounded technical illustrations. |
+| `/variant` | Explore explicitly requested component design variants. |
 | `/launchdarkly` | Audit flag audiences and retirement with LaunchDarkly CLI. |
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
@@ -116,6 +131,7 @@
 | `/pr` | Write a PR body that is fast to review. |
 | `/prime` | Build a concise repository startup brief. |
 | `/product` | Check that work earns its time and ships business value. |
+| `/protobuf` | Design and review protobuf schemas and their consumers. |
 | `/prototype` | Build a throwaway artifact to answer a design question. |
 | `/quantify-impact` | Prove meaningful product and codebase improvements. |
 | `/read-the-damn-docs` | Research current behavior from primary documentation. |
@@ -132,6 +148,7 @@
 | `/setup-atlassian-workflow` | Configure opt-in Jira and Atlassian workflows. |
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
+| `/skeleton-loaders` | Build layout-matched, accessible skeleton loading states. |
 | `/snyk-ux-security` | Audit dependency security with Snyk and release gates. |
 | `/software-factory` | Assess factory fit and plan safe automation infrastructure. |
 | `/stack-registry` | Current and banned stack governance for harness rules. |
@@ -182,7 +199,7 @@
 | `/visual-review` | Review customer-facing surfaces from visual evidence. |
 | `/wait-what` | Re-pitch that with simpler language and missing context. |
 | `/wayfinder` | Map huge, foggy work through decision tickets. |
-| `/webmcp` | Open web apps and use their MCP or WebMCP tools first. |
+| `/webmcp` | Operate page tools or build and audit WebMCP interfaces. |
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
 | `/work-automation-kit` | Install planning, ticketing, and triage workflows. |

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Skeleton Loaders"
+  short_description: "Build layout-matched, accessible skeleton loading states"

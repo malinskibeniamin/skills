@@ -35,6 +35,7 @@ SHORT_DESCRIPTIONS = {
     "blast-radius": "Prove non-local change safety with executable evidence",
     "brain-dump": "Turn raw thoughts into actionable opportunity maps",
     "break-ui": "Stress-test UI with realistic worst-case data",
+    "ci-fixes": "Make CI faster and reliable without weakening test signal",
     "cli-for-agents": "Design non-interactive, composable agent-friendly CLIs",
     "codebase-design": "Design deeper modules with clear interfaces",
     "codex-compat": "Generate Codex hook and instruction parity",
@@ -80,6 +81,7 @@ SHORT_DESCRIPTIONS = {
     "product": "Check that work earns its time and ships business value",
     "prime": "Build a concise repository startup brief",
     "prototype": "Build a throwaway artifact to answer a design question",
+    "protobuf": "Design and review protobuf schemas and their consumers",
     "quantify-impact": "Prove meaningful product and codebase improvements",
     "read-the-damn-docs": "Research current behavior from primary documentation",
     "redpanda-ai-gateway": "Run AI CLIs through the Redpanda AI Gateway",
@@ -95,6 +97,7 @@ SHORT_DESCRIPTIONS = {
     "setup-atlassian-workflow": "Configure opt-in Jira and Atlassian workflows",
     "setup-routines": "Configure automated Claude Code maintenance routines",
     "show-me": "Explain the current topic with concise visual artifacts",
+    "skeleton-loaders": "Build layout-matched, accessible skeleton loading states",
     "snyk-ux-security": "Audit dependency security with Snyk and release gates",
     "software-factory": "Assess factory fit and plan safe automation infrastructure",
     "stack-registry": "Current and banned stack governance for harness rules",
@@ -121,7 +124,7 @@ SHORT_DESCRIPTIONS = {
     "visual-recap": "Turn a code change into an interactive visual recap",
     "visual-review": "Review customer-facing surfaces from visual evidence",
     "wayfinder": "Map huge, foggy work through decision tickets",
-    "webmcp": "Open web apps and use their MCP or WebMCP tools first",
+    "webmcp": "Operate page tools or build and audit WebMCP interfaces",
     "wait-what": "Re-pitch that with simpler language and missing context",
     "what-did-i-get-done": "Summarize authored commits into a concise status update",
     "wizard": "Generate an interactive Bash wizard for manual setup",
@@ -154,6 +157,14 @@ if tstack_lock.exists():
     SHORT_DESCRIPTIONS.update({
         skill["name"]: skill["short_description"]
         for skill in json.loads(tstack_lock.read_text())["skills"]
+    })
+
+
+jakubkrehel_lock = repo / "vendor/jakubkrehel.lock.json"
+if jakubkrehel_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(jakubkrehel_lock.read_text())["skills"]
     })
 
 

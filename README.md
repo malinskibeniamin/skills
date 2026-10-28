@@ -87,12 +87,15 @@ See the [mod README](plugins/frontend-skills-mods/README.md) for verification an
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.40.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.41.0
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
 
 Track `main` instead of the pin with `--ref main`. Restart Codex after adding or upgrading so the Plugins UI reloads metadata.
+
+Optional: [review/fix presets](docs/CODEX-PRESETS.md) for Codex CLI 0.164.0.
+Export reusable prompts and a review-model shortcut from this checkout without changing personal configuration or permissions.
 
 ### React DevTools runtime inspection
 
@@ -273,6 +276,22 @@ load the matching guidance automatically, not a second workflow stack.
 endpoints, ownership and protected review gates. Council and sol loop require
 explicit delegation; other workflows never start them automatically. Vendoring
 does not start watchers, install services or grant merge authority.
+
+### Interface craft and workbenches
+
+All 14 [Jakub Krehel interface skills](https://github.com/jakubkrehel/skills)
+ship as a [pinned MIT snapshot](vendor/jakubkrehel-NOTICE.md), with all references
+and reproducibly security-patched teardown helpers. [Host composition](shared/INTERFACES.md)
+connects them to visual review, accessibility, UI copy, motion, mobile, stress
+checks, prototypes and design implementation. Existing owners keep their workflows;
+project tokens, safety requirements and requested delivery endpoints take precedence.
+
+`/better-interface`, `/better-ui`, `/better-typography`, `/better-colors`,
+`/better-accessibility`, `/better-layout`, `/better-writing`, `/build-design` and
+`/teardown` are discoverable specialists. `/interface-review`, `/explain-interface`,
+`/break`, `/state-machine` and `/variant` retain explicit-only invocation on both
+hosts. Workbench routes/fixtures stay out of production PRs. Vendoring installs
+no dependencies and starts no browser, process or agent.
 
 ### Outcome contract
 
@@ -513,11 +532,12 @@ Six focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
 `/webmcp <url-or-app> [request]` opens a web app in the built-in browser and uses
-its MCP or WebMCP tools for the requested operation. Without a request it only
-opens the page. The complete WebMCP source from BuilderIO is pinned and licensed locally;
-the adapter prefers T3 Code's browser tools and preserves human tab ownership.
-[Source, compatibility, and refresh](webmcp/CREDITS.md). No browser or connector
-is installed.
+its page tools; without a request it only opens the page. For building or auditing
+WebMCP tools, the same skill routes internally to pinned Chrome Labs guidance:
+state-scoped registration, actionable errors, React lifecycle/types and in-page
+computation. Builder.io's page-operation skill remains pinned too. Only the local
+host adapter is registered; no browser, runtime dependency or connector is installed.
+[Sources, licenses, compatibility and refresh](webmcp/CREDITS.md).
 
 `/software-factory` assesses whether repeated ticket-to-PR work justifies automation, then plans a bounded pilot and infrastructure. It adapts Matt Pocock's in-progress draft, adds an orchestrator survey alongside the upstream git-host, ticket-tracker, and runner research, and starts no automation. [Harness fit](software-factory/HARNESS-FIT.md) records the proposed pilot; [source pin, license, and refresh](vendor/software-factory-NOTICE.md) distinguish the draft snapshot from local policy.
 
@@ -540,6 +560,13 @@ bash scripts/generate-skill-catalog.sh
 The command discovers every skill recursively, copies the complete source tree unchanged, records file hashes and executable permissions, and generates namespaced adapters and Claude registrations. The catalog generator then derives Codex proxies and router entries from that inventory. Vendored Cursor runtime code is not reformatted or checked against this repository's toolchain.
 
 `/test-audit` is vendored from [openclaw/openclaw](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit) (MIT, notice in `test-audit/CREDITS.md`): an authoring gate `/tdd` routes new tests through, plus audit and subsystem-campaign modes for pruning low-value tests and their test-only production seams.
+
+[`/ci-fixes`](ci-fixes/SKILL.md) audits CI latency, test signal, and delivery integrity:
+nightly routing, caching, workers/shards, affected-only selection, runner sizing, upgrades,
+flake repair, and evidence-backed test pruning. The extensible audit also covers reproducible
+builds, artifact identity, execution trust, rollout compatibility, recovery, diagnostics,
+evidence privacy, and policy drift. PR browser tests mock backend traffic; optimizations
+must preserve unique regression detection and coverage.
 
 `/security-audit` vendors the complete
 [Cloudflare security-audit-skill](https://github.com/cloudflare/security-audit-skill)

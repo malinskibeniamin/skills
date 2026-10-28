@@ -1,0 +1,5 @@
+interface:
+  display_name: "Interface Review"
+  short_description: "Review interface regressions in a named change"
+policy:
+  allow_implicit_invocation: false

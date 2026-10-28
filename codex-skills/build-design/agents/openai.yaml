@@ -1,0 +1,3 @@
+interface:
+  display_name: "Build Design"
+  short_description: "Implement a supplied design with existing components"

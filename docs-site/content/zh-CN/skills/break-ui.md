@@ -10,6 +10,8 @@ type: "skill"
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/break-ui.excalidraw)
 
+选择组件特有的场景时，将固定版本的[场景轴](https://github.com/malinskibeniamin/skills/blob/main/vendor/jakubkrehel/skills/break/scenarios.md)与本地场景清单一起阅读。遵循[界面兼容规则](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#break)；单独的 `break` 页面仅在用户明确要求时创建，审计本身不授权创建页面。
+
 用苛刻但有效的数据测试真实组件。改编自 Emil Kowalski；
 参见[来源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。这是针对数据/布局的专项审计，
 不能代替生命周期 dogfood 或一般视觉评议。

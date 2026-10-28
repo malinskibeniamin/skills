@@ -37,6 +37,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
 | `/break-ui` | Testowanie UI na realistycznych danych najgorszego przypadku. |
+| `/ci-fixes` | Przyspieszanie CI i poprawa niezawodności bez osłabiania sygnału testów. |
 | `/codebase-design` | Projektowanie głębszych modułów z przejrzystymi interfejsami. |
 | `/codex-compat` | Generowanie zgodnych hooków i instrukcji dla Codex. |
 | `/codex` | Delegowanie ograniczonych zadań przez CLI Codex. |
@@ -69,6 +70,20 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
+| `/better-accessibility` | Rozszerzanie istniejącej weryfikacji dostępności o WCAG. |
+| `/better-colors` | Budowanie i pomiar semantycznych systemów kolorów interfejsu. |
+| `/better-interface` | Przegląd interfejsów przez istniejącą ocenę wizualną. |
+| `/better-layout` | Ocena grupowania i responsywnej struktury interfejsu. |
+| `/better-typography` | Ustawianie i ocena czytelnej typografii interfejsu. |
+| `/better-ui` | Dopracowanie powierzchni, ikon i szczegółów interakcji. |
+| `/better-writing` | Rozszerzanie reguł tekstu UI o wzorce interfejsu. |
+| `/break` | Budowanie wyraźnie zamówionej strony testowej komponentu. |
+| `/build-design` | Wdrażanie dostarczonego projektu z istniejącymi komponentami. |
+| `/explain-interface` | Objaśnianie interfejsu lub efektu na podstawie obserwacji. |
+| `/interface-review` | Przegląd regresji interfejsu w podanej zmianie. |
+| `/state-machine` | Budowanie wyraźnie zamówionego warsztatu stanów komponentu. |
+| `/teardown` | Tworzenie ilustracji technicznych opartych na dowodach. |
+| `/variant` | Eksplorowanie wyraźnie zamówionych wariantów projektu komponentu. |
 | `/launchdarkly` | Audyt odbiorców i gotowości do usunięcia flag przez LaunchDarkly CLI. |
 | `/lie-detector` | Wykrywanie testów, które nie mogą zakończyć się niepowodzeniem, i twierdzeń niepopartych zmianami w kodzie. |
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
@@ -141,6 +156,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/prime` | Tworzenie zwięzłego wprowadzenia do repozytorium. |
 | `/product` | Sprawdzanie, czy praca uzasadnia poświęcony jej czas i dostarcza wartość biznesową. |
 | `/prototype` | Tworzenie jednorazowego artefaktu w celu rozstrzygnięcia kwestii projektowej. |
+| `/protobuf` | Projektowanie i przegląd schematów protobuf oraz ich odbiorców. |
 | `/quantify-impact` | Wykazywanie istotnych ulepszeń produktu i bazy kodu. |
 | `/read-the-damn-docs` | Badanie bieżącego działania na podstawie dokumentacji źródłowej. |
 | `/redpanda-ai-gateway` | Uruchamianie narzędzi CLI AI przez Redpanda AI Gateway. |
@@ -156,6 +172,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |
 | `/setup-routines` | Konfigurowanie automatycznych procedur utrzymaniowych Claude Code. |
 | `/show-me` | Wyjaśnianie bieżącego tematu za pomocą zwięzłych artefaktów wizualnych. |
+| `/skeleton-loaders` | Twórz dostępne szkielety ładowania dopasowane do układu. |
 | `/snyk-ux-security` | Audytowanie bezpieczeństwa zależności za pomocą Snyk i bramek wydania. |
 | `/software-factory` | Ocenianie przydatności fabryki i planowanie bezpiecznej infrastruktury automatyzacji. |
 | `/stack-registry` | Zarządzanie bieżącym i zabronionym stosem technologicznym w regułach zestawu. |
@@ -206,7 +223,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/visual-review` | Przeglądanie interfejsów przeznaczonych dla klientów na podstawie dowodów wizualnych. |
 | `/wait-what` | Ponowne przedstawianie pomysłu prostszym językiem i uzupełnianie brakującego kontekstu. |
 | `/wayfinder` | Mapowanie ogromnych, niejasnych zadań za pomocą zgłoszeń decyzyjnych. |
-| `/webmcp` | Otwieranie aplikacji internetowych z pierwszeństwem ich narzędzi MCP lub WebMCP. |
+| `/webmcp` | Obsługa narzędzi strony oraz tworzenie i audyt interfejsów WebMCP. |
 | `/what-did-i-get-done` | Podsumowywanie własnych commitów w zwięzłej aktualizacji statusu. |
 | `/wizard` | Generowanie interaktywnego kreatora Bash do ręcznej konfiguracji. |
 | `/work-automation-kit` | Instalowanie przepływów pracy do planowania, tworzenia zadań i selekcji zgłoszeń. |

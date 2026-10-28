@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/prototype.excalidraw)
 
+使用者明確要求介面工作台時，可推薦 `variant`（設計方案）、`state-machine`（可到達狀態）或 `break`（極端情境）。閱讀[介面保留規則](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#workbench-retention)及對應分支；這些技能僅由使用者呼叫，不是自動相依項。保留可執行的原型，不要將臨時路由或切換器放入正式環境 PR。
+
 原型只回答一個具名問題。它是證據，而不是早期的正式環境分支。
 
 選擇成本最低且能如實反映問題的形式：

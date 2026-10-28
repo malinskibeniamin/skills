@@ -51,6 +51,8 @@ Recheck identity before verdict; drift invalidates affected evidence.
 
 Add surface-specific scrutiny only when the diff supplies evidence:
 
+Interface: [checks](../shared/INTERFACES.md#interface-review).
+
 | Surface | Check |
 |---|---|
 | Customer-facing UI/CLI/report | Render, states, copy, keyboard/a11y, console, viewport |
@@ -59,6 +61,8 @@ Add surface-specific scrutiny only when the diff supplies evidence:
 | API/schema/SQL/PostgreSQL | Compatibility, migrations, generated output, actual dialect |
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
+
+Proto/Buf/codegen/runtime: load [protobuf](../protobuf/SKILL.md) fully.
 
 Load per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 Call the Skill tool separately for "product" and "lie-detector"; apply their hats inline.

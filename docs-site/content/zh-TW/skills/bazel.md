@@ -30,6 +30,9 @@ type: skill
   放在現有且被 Git 忽略的使用者 rc 檔案中。
   依這些固定版本驗證新旗標、Starlark 註記語法與規則；會議示範與路線圖項目
   不是已發布的 API 契約。
+- 升級版本、排查隨附 JDK 的信任問題或檢查 Bazel 10 相容性時，閱讀
+  [版本指引](https://github.com/malinskibeniamin/skills/blob/main/bazel/references/releases.md)。
+  將同一版本線的修補更新與主動選用的候選版本測試分開。
 - 區分**哪些部分有 BUILD 檔案**與**哪些部分目前由 Bazel 管理**。產生的目標
   不能證明 CI 已採用它們。檢查已合併的原始碼，而不是中間提交、推行草案或
   前身儲存庫。

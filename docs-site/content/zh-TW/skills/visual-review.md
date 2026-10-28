@@ -1,23 +1,33 @@
 ---
-title: /visual-review
 description: 從視覺證據審查面向客戶的介面。適用於網頁、行動裝置、CLI、TUI、桌面應用程式、報表、初始設定、表單或其他可見行為有所變更時。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual review
 sidebar:
   label: /visual-review
+title: /visual-review
+type: skill
 ---
 ![「/visual-review」技能示意圖](/diagrams/skills/visual-review.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/visual-review.excalidraw)
 
+全面審查網頁介面時，載入 [better-interface](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-interface/SKILL.md)，涵蓋六個設計領域。其相容契約保留本技能的範圍、證據與報告職責；重用現有截圖並按根因去重。
 
-以產品、設計、工程與 QA 的角度審查面向客戶的介面。以瀏覽器為基礎的前端審查最常見；行動裝置畫面、CLI/TUI、桌面應用程式與產生的報表也包含在內。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 是 **設計語言調整點** 與詳細資訊的依據。模式：`plan`、`implemented`、`regression`、`release`。可單獨觸發。
 
-## 流程
+以瀏覽器為基礎的前端審查：採用產品、設計、工程與 QA 四種觀點。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 是 **設計語言調整點** 與詳細資訊的依據。模式：`plan`、`implemented`、`regression`、`release`。可單獨觸發。
+
+## 流程 [#flow]
 
 1. **找出介面：** 判定 PR 的基底（適用時使用堆疊中的父項），並檢查合併基底...HEAD，以及已暫存、未暫存和相關的未追蹤變更；僅使用 `git diff --name-only HEAD` 會遺漏已提交的工作。將路由／元件對應至 URL，並將 CLI／報表對應至命令。納入 shadcn/ui 或 `@/components/ui`、共用消費端、文案、樣式、資產，以及間接的資料／設定影響。任何可見變更都不會小到可以忽略。
 2. **建立情境脈絡：** 閱讀權杖／主題及一個介面；判定其屬於品牌或產品語域。
 3. **蒐集證據：** 使用存放庫工具、`scripts/skills-browser.sh`、Playwright、測試資料、螢幕截圖與輸出。僅針對直接指標使用 `/quantify-impact`。
-4. 執行**審查路線：** 評析層級／任務流程；稽核無障礙功能／效能；潤飾發布品質／系統一致性。
+4. 執行**審查路線：** 評析層級／任務流程；稽核無障礙功能／效能；潤飾發布品質／系統一致性。針對評分比較或重複比較，使用[審查校準](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md#review-calibration)。
 5. **各角色觀點：** 產品：使用者價值；設計：層級／文案／狀態；工程：韌性／平台；QA：可重現的證據／非預期路徑。
 6. **追蹤 UI 生命週期：** 閒置／未請求 -> 等待中／載入中／提交中 -> 成功／錯誤 -> 穩定／已關閉。要求副作用成功時獲得確認，而失敗的副作用會持續顯示。
 7. **壓力測試：** Chromium 桌面版與 Chromium 行動版；`Tab, Shift+Tab, Enter, Space, Escape`；載入、空白、錯誤、密集資料；表單提交路徑；通知／快顯通知路徑；主控台／網路。當風險需要時，加入 Firefox 桌面版、WebKit、減少動態效果、強制色彩、文字縮放、RTL／在地化長文字、慢速網路／媒體節流，以及各種主題。
@@ -32,7 +42,7 @@ HTML 優先。生命週期勝過螢幕截圖。狀態勝過順利路徑。動態
 
 如有需要，使用 `/excalidraw-diagram`；螢幕截圖仍是主要證據，Mermaid 則作為備用方案。
 
-## 輸出
+## 輸出 [#output]
 
 撰寫簡潔的 Markdown。若為發布或非小型審查，建立 `$TMPDIR/visual-review-<timestamp>.html`。
 

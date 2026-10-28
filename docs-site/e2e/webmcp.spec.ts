@@ -7,19 +7,29 @@ import {
 const locales = [
   {
     code: "en",
-    description: "communicate or edit through its MCP or WebMCP tools",
+    contract: "Chrome page API",
+    description: "designing, implementing, testing, or auditing WebMCP tools",
+    catalog: "Operate page tools or build and audit WebMCP interfaces",
   },
   {
     code: "pl",
-    description: "edytować dane przez jej narzędzia MCP lub WebMCP",
+    contract: "API strony w Chrome",
+    description:
+      "projektowania, implementowania, testowania lub audytowania narzędzi WebMCP",
+    catalog:
+      "Obsługa narzędzi strony oraz tworzenie i audyt interfejsów WebMCP.",
   },
   {
     code: "zh-CN",
-    description: "通过该页面的 MCP 或 WebMCP 工具进行交互或编辑",
+    contract: "Chrome 页面 API",
+    description: "设计、实现、测试和审查网站公开的 WebMCP 工具",
+    catalog: "操作页面工具，或构建和审查 WebMCP 接口。",
   },
   {
     code: "zh-TW",
-    description: "透過該頁面的 MCP 或 WebMCP 工具進行互動或編輯",
+    contract: "Chrome 頁面 API",
+    description: "設計、實作、測試與稽核網站公開的 WebMCP 工具",
+    catalog: "操作頁面工具，或建置與稽核 WebMCP 介面。",
   },
 ];
 
@@ -63,13 +73,26 @@ for (const locale of locales) {
         expect(
           (await page.request.get("/diagrams/skills/webmcp.excalidraw")).ok(),
         ).toBe(true);
-        await expect(
-          page.locator(
-            'main a[href$="vendor/builder-webmcp/skills/webmcp/SKILL.md"]',
-          ),
-        ).toHaveCount(1);
+        for (const path of [
+          "vendor/builder-webmcp/skills/webmcp/SKILL.md",
+          "vendor/chrome-webmcp/webmcp-skills/skills/build-webmcp-tools/SKILL.md",
+          "webmcp/references/tool-authoring.md",
+        ]) {
+          await expect(page.locator(`main a[href$="${path}"]`)).toHaveCount(1);
+        }
         await stabilizeScreenshotDate(page, false);
         await expect(page).toHaveScreenshot(`webmcp-page-${name}.png`);
+        const contract = page.getByRole("heading", {
+          name: locale.contract,
+        });
+        await expect(contract).toBeAttached();
+        await contract.evaluate((element) => {
+          window.scrollTo(
+            0,
+            window.scrollY + element.getBoundingClientRect().top - 96,
+          );
+        });
+        await expect(page).toHaveScreenshot(`webmcp-chrome-api-${name}.png`);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth),
         ).toBeLessThanOrEqual(viewport.width);
@@ -77,7 +100,7 @@ for (const locale of locales) {
         await page.goto(`${prefix}/skills/ask-ben`);
         const row = page.getByRole("row").filter({ hasText: "/webmcp" });
         await expect(row).toHaveCount(1);
-        await expect(row).toContainText(/MCP.*WebMCP/);
+        await expect(row).toContainText(locale.catalog);
         await expect(row).toHaveScreenshot(`webmcp-catalog-${name}.png`);
       });
     }

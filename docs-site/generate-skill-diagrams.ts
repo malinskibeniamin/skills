@@ -61,6 +61,15 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  "ci-fixes": {
+    kind: "feedback-loop",
+    nodes: [
+      "Measure critical path",
+      "Assess scoped checks",
+      "Fix 1 bottleneck",
+      "Prove speed + signal",
+    ],
+  },
   bazel: {
     kind: "dependency-graph",
     nodes: [
@@ -87,6 +96,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Compare request + diff",
       "Dogfood entrypoint",
       "Repair or verdict",
+    ],
+  },
+  protobuf: {
+    kind: "pipeline",
+    nodes: [
+      "Schema + codegen diff",
+      "Consumers + validation",
+      "Compatibility evidence",
+      "Defects + advisory ideas",
     ],
   },
   aip: {
@@ -724,6 +742,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Pseudocode + trees",
       "Mermaid + diffs",
       "Focused HTML",
+    ],
+  },
+  "skeleton-loaders": {
+    kind: "pipeline",
+    nodes: [
+      "Inspect loaded layout",
+      "Reserve geometry",
+      "Transparent placeholders",
+      "Accessible reveal",
     ],
   },
   "snyk-ux-security": {

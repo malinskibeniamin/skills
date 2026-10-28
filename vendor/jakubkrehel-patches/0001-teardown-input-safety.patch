@@ -1,0 +1,55 @@
+diff --git a/skills/teardown/assets/worker.js b/skills/teardown/assets/worker.js
+--- a/skills/teardown/assets/worker.js
++++ b/skills/teardown/assets/worker.js
+@@ -1,4 +1,6 @@
+-self.onmessage = ({data}) => {
++self.onmessage = ({data, origin}) => {
++  // Dedicated-worker messages have an empty origin; reject foreign window origins.
++  if (origin !== '' && origin !== self.location.origin) return;
+   const {request, id, parameters, explosion, fitExplosion, isolated, fill, annotate, labels} = data;
+   try {
+     const model = self.DrawingModels[id];
+diff --git a/skills/teardown/scripts/check-viewer.cjs b/skills/teardown/scripts/check-viewer.cjs
+--- a/skills/teardown/scripts/check-viewer.cjs
++++ b/skills/teardown/scripts/check-viewer.cjs
+@@ -11,7 +11,8 @@
+     if (Date.now() - start > TIMEOUT) throw Error('Chrome did not open a debugging port');
+     await sleep(100);
+   }
+-  const port = fs.readFileSync(portFile, 'utf8').split('\n')[0];
++  const port = Number(fs.readFileSync(portFile, 'utf8').split('\n')[0]);
++  if (!Number.isInteger(port) || port < 1 || port > 65535) throw Error('Invalid debugging port');
+   const page = (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(t => t.type === 'page');
+   const socket = new WebSocket(page.webSocketDebuggerUrl);
+   await new Promise((resolve, reject) => {
+@@ -74,7 +75,8 @@
+     const drawings = await evaluate(`JSON.parse(document.getElementById('drawing-data').textContent).map(d => ({id: d.id, parts: d.parts.length}))`);
+     const results = [];
+     for (const d of drawings) {
++      if (typeof d.id !== 'string' || !/^[a-z][a-z0-9-]*$/.test(d.id)) throw Error('Invalid drawing id');
+-      await evaluate(`(() => { const s = document.getElementById('subject'); if (s.value !== ${JSON.stringify(d.id)}) { s.value = ${JSON.stringify(d.id)}; s.dispatchEvent(new Event('change')); } })()`);
++      await evaluate(`(() => { const s = document.getElementById('subject'); if (s.value !== ${JSON.stringify(d.id).replace(/</g, '\\u003c')}) { s.value = ${JSON.stringify(d.id).replace(/</g, '\\u003c')}; s.dispatchEvent(new Event('change')); } })()`);
+       const state = await settle();
+       const ok = state.status === 'Drawing updated' && state.parts === d.parts;
+       if (!ok) problems.push(`${d.id}: status "${state.status || state.message}", ${state.parts} of ${d.parts} parts drawn`);
+diff --git a/skills/teardown/scripts/test-viewer-builder.cjs b/skills/teardown/scripts/test-viewer-builder.cjs
+--- a/skills/teardown/scripts/test-viewer-builder.cjs
++++ b/skills/teardown/scripts/test-viewer-builder.cjs
+@@ -23,7 +23,7 @@
+   const configPath = path.join(root, 'drawing.json'), output = path.join(root, 'dist/index.html');
+   fs.writeFileSync(configPath, JSON.stringify(config));
+   build(configPath, output);
+-  const html = fs.readFileSync(output, 'utf8'), scripts = [...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)];
++  const html = fs.readFileSync(output, 'utf8'), scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script[^>]*>/gi)];
+   const data = JSON.parse(scripts.find(s => s[1].includes('id="drawing-data"'))[2]);
+   assert.equal(data[0].title, title, 'Embedding must preserve text without creating script elements');
+   const executable = scripts.filter(s => !s[1].includes('type='));
+@@ -40,7 +40,7 @@
+   context.self = context;
+   context.postMessage = value => (context.result = value);
+   vm.runInNewContext(worker, context);
+-  context.onmessage({data: {request: 1, id: 'fixture', parameters: {}, explosion: 0, isolated: null}});
++  context.onmessage({origin: '', data: {request: 1, id: 'fixture', parameters: {}, explosion: 0, isolated: null}});
+   assert.equal(context.result.request, 1);
+   assert.ok(context.result.result.markup.includes('data-item="one"'));
+   config.drawings[0].initialView = 'assembled';

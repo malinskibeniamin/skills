@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/ux-copy.excalidraw)
 
+產品術語、完整訊息在地化、空白狀態與破壞性操作流程，載入 [better-writing](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-writing/SKILL.md)。保留本技能的詞彙表、結束邊界與文案事實要求。
+
 
 閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md)，了解問題模式、大小寫、元素長度預算與範例。
 每句話直接表達一個有用的重點。刪去贅詞和重複內容。

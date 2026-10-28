@@ -1,0 +1,438 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "before-title",
+      "type": "text",
+      "x": 30,
+      "y": 20,
+      "width": 300,
+      "height": 30.0,
+      "text": "Before \u00b7 f977340f",
+      "originalText": "Before \u00b7 f977340f",
+      "fontSize": 24,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937"
+    },
+    {
+      "id": "after-title",
+      "type": "text",
+      "x": 400,
+      "y": 20,
+      "width": 600,
+      "height": 30.0,
+      "text": "After \u00b7 repair-scoped review",
+      "originalText": "After \u00b7 repair-scoped review",
+      "fontSize": 24,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937"
+    },
+    {
+      "id": "before-change",
+      "type": "rectangle",
+      "x": 70,
+      "y": 90,
+      "width": 230,
+      "height": 66,
+      "backgroundColor": "#f1f5f9",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "before-change-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "before-change-label",
+      "type": "text",
+      "x": 80,
+      "y": 111.75,
+      "width": 210,
+      "height": 22.5,
+      "text": "Changed candidate",
+      "originalText": "Changed candidate",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "before-change"
+    },
+    {
+      "id": "before-input",
+      "type": "rectangle",
+      "x": 70,
+      "y": 230,
+      "width": 230,
+      "height": 80,
+      "backgroundColor": "#fee2e2",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "before-input-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "before-input-label",
+      "type": "text",
+      "x": 80,
+      "y": 247.5,
+      "width": 210,
+      "height": 45.0,
+      "text": "Every gate reads\nfull candidate diff",
+      "originalText": "Every gate reads\nfull candidate diff",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "before-input"
+    },
+    {
+      "id": "before-receipt",
+      "type": "rectangle",
+      "x": 70,
+      "y": 430,
+      "width": 230,
+      "height": 75,
+      "backgroundColor": "#e0e7ff",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "before-receipt-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "before-receipt-label",
+      "type": "text",
+      "x": 80,
+      "y": 456.25,
+      "width": 210,
+      "height": 22.5,
+      "text": "Fresh gate receipts",
+      "originalText": "Fresh gate receipts",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "before-receipt"
+    },
+    {
+      "id": "before-one",
+      "type": "arrow",
+      "x": 185,
+      "y": 162,
+      "width": 0,
+      "height": 61,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          61
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "before-two",
+      "type": "arrow",
+      "x": 185,
+      "y": 317,
+      "width": 0,
+      "height": 106,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          106
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "after-change",
+      "type": "rectangle",
+      "x": 560,
+      "y": 90,
+      "width": 270,
+      "height": 66,
+      "backgroundColor": "#f1f5f9",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "after-change-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "after-change-label",
+      "type": "text",
+      "x": 570,
+      "y": 111.75,
+      "width": 250,
+      "height": 22.5,
+      "text": "Changed candidate",
+      "originalText": "Changed candidate",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "after-change"
+    },
+    {
+      "id": "routine",
+      "type": "rectangle",
+      "x": 390,
+      "y": 230,
+      "width": 280,
+      "height": 100,
+      "backgroundColor": "#dcfce7",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "routine-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "routine-label",
+      "type": "text",
+      "x": 400,
+      "y": 246.25,
+      "width": 260,
+      "height": 67.5,
+      "text": "Completed routine gate\n+ compatible history\n\u2192 repair diff + findings",
+      "originalText": "Completed routine gate\n+ compatible history\n\u2192 repair diff + findings",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "routine"
+    },
+    {
+      "id": "sensitive",
+      "type": "rectangle",
+      "x": 720,
+      "y": 230,
+      "width": 280,
+      "height": 100,
+      "backgroundColor": "#dbeafe",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "sensitive-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "sensitive-label",
+      "type": "text",
+      "x": 730,
+      "y": 246.25,
+      "width": 260,
+      "height": 67.5,
+      "text": "Sensitive or unreviewed\ngate / changed context\n\u2192 full candidate diff",
+      "originalText": "Sensitive or unreviewed\ngate / changed context\n\u2192 full candidate diff",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "sensitive"
+    },
+    {
+      "id": "after-left",
+      "type": "arrow",
+      "x": 645,
+      "y": 163,
+      "width": 110,
+      "height": 59,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -110,
+          59
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "after-right",
+      "type": "arrow",
+      "x": 745,
+      "y": 163,
+      "width": 110,
+      "height": 59,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          110,
+          59
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "after-receipt",
+      "type": "rectangle",
+      "x": 560,
+      "y": 430,
+      "width": 270,
+      "height": 75,
+      "backgroundColor": "#e0e7ff",
+      "fillStyle": "solid",
+      "strokeColor": "#475569",
+      "roundness": {
+        "type": 3
+      },
+      "boundElements": [
+        {
+          "id": "after-receipt-label",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "after-receipt-label",
+      "type": "text",
+      "x": 570,
+      "y": 456.25,
+      "width": 250,
+      "height": 22.5,
+      "text": "Fresh gate receipts",
+      "originalText": "Fresh gate receipts",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937",
+      "containerId": "after-receipt"
+    },
+    {
+      "id": "receipt-left",
+      "type": "arrow",
+      "x": 530,
+      "y": 338,
+      "width": 102,
+      "height": 84,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          102,
+          84
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "receipt-right",
+      "type": "arrow",
+      "x": 860,
+      "y": 338,
+      "width": 102,
+      "height": 84,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -102,
+          84
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "strokeColor": "#475569"
+    },
+    {
+      "id": "safety-note",
+      "type": "text",
+      "x": 390,
+      "y": 535,
+      "width": 610,
+      "height": 21.25,
+      "text": "Unchanged: no reused approval or added agent permission",
+      "originalText": "Unchanged: no reused approval or added agent permission",
+      "fontSize": 17,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "lineHeight": 1.25,
+      "strokeColor": "#1f2937"
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}

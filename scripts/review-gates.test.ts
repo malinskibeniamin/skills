@@ -8,7 +8,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const directories: string[] = [];
 // These public-seam tests launch real Git and CLI processes, including under CI load.
@@ -138,7 +138,43 @@ test("the reviewer collector rejects malformed findings and false identity", () 
 });
 
 const entry = new URL("./review-gates.ts", import.meta.url).pathname;
-function checkout() {
+
+test.each([
+  { reviewer: "self-reviewer", specialist: true },
+  { reviewer: "code-reviewer", specialist: true },
+  { reviewer: "adversarial-reviewer", specialist: true },
+  { reviewer: "explorer", specialist: false },
+])(
+  "$reviewer startup scopes specialist routing outside the harness checkout",
+  ({ reviewer, specialist }) => {
+    const root = mkdtempSync(join(tmpdir(), "review-start-"));
+    directories.push(root);
+    const session = `review-start-${root.split("/").at(-1)}`;
+    directories.push(`/tmp/hook-session-${session}`);
+    const result = Bun.spawnSync(
+      [
+        "bash",
+        new URL("../.claude/hooks/subagent-start.sh", import.meta.url).pathname,
+      ],
+      {
+        cwd: root,
+        env: { ...Bun.env, CLAUDE_SESSION_ID: session },
+        stdin: Buffer.from(
+          JSON.stringify({ session_id: session, agent_type: reviewer }),
+        ),
+      },
+    );
+    expect(result.exitCode).toBe(0);
+    const context = JSON.parse(result.stdout.toString()).hookSpecificOutput
+      .additionalContext;
+    const guidance = new URL("../shared/change-evidence.md", import.meta.url)
+      .pathname;
+    expect(context.includes(guidance)).toBe(specialist);
+    expect(existsSync(guidance)).toBe(true);
+  },
+);
+
+function checkout(files: Record<string, string> = {}) {
   const root = mkdtempSync(join(tmpdir(), "review-gates-"));
   directories.push(root);
   const git = (...args: string[]) => {
@@ -151,6 +187,11 @@ function checkout() {
   git("config", "user.email", "review@example.invalid");
   writeFileSync(join(root, ".gitignore"), ".context/\n");
   writeFileSync(join(root, "README.md"), "Before\n");
+  for (const [path, content] of Object.entries(files)) {
+    const file = join(root, path);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
   git("add", ".");
   git("commit", "-m", "test(review): baseline");
   git("switch", "-c", "ben-malinski/TEST-1/review-gates");
@@ -185,12 +226,14 @@ function checkout() {
     return JSON.parse(result.text) as {
       id: string;
       directory: string;
+      delta?: { previous: string; hash: string };
       snapshot: { head: string; paths: string[] };
       gates: {
         id: string;
         applicable: boolean;
         reason: string;
         prompt: string;
+        scope: "full" | "delta";
       }[];
     };
   };
@@ -235,6 +278,173 @@ test("gate plans retain lockfiles, generated changes and names with spaces", () 
   expect(diff).toContain("export const version = 2");
   expect(plan.gates.every((gate) => gate.applicable && gate.reason)).toBe(true);
   expect(f.run("check").code).toBe(1);
+});
+
+test("repair reviews focus on the captured delta without reusing approval or dropping prior findings", () => {
+  const f = checkout();
+  writeFileSync(
+    join(f.root, "service.proto"),
+    'syntax = "proto3";\nmessage Request { string label = 1; }\n',
+  );
+  writeFileSync(
+    join(f.root, "context.ts"),
+    "export const unchanged = 'first review context';\n",
+  );
+  const first = f.plan();
+  expect(
+    f.record("correctness", { status: "NEEDS_CHANGES", findings: [finding] })
+      .code,
+  ).toBe(0);
+  expect(f.record("operations").code).toBe(0);
+  expect(f.record("protobuf").code).toBe(0);
+  const status = f.git("status", "--porcelain");
+  writeFileSync(join(f.root, "README.md"), "Repaired candidate\n");
+  writeFileSync(
+    join(f.root, "service.proto"),
+    'syntax = "proto3";\nmessage Request { optional string label = 1; }\n',
+  );
+  expect(f.run("check").code).toBe(3);
+  const repair = f.plan();
+  const correctness = repair.gates.find((gate) => gate.id === "correctness");
+  expect(correctness?.scope).toBe("delta");
+  expect(repair.gates.find((gate) => gate.id === "operations")?.scope).toBe(
+    "full",
+  );
+  expect(repair.gates.find((gate) => gate.id === "protobuf")?.scope).toBe(
+    "full",
+  );
+  expect(
+    repair.gates.find((gate) => gate.id === "value-and-claims")?.scope,
+  ).toBe("full");
+  expect(repair.delta?.previous).toBe(first.id);
+  const diff = readFileSync(join(repair.directory, "repair.diff"), "utf8");
+  expect(diff).toContain("-After");
+  expect(diff).toContain("+Repaired candidate");
+  expect(diff).not.toContain("first review context");
+  expect(readFileSync(join(repair.directory, "change.diff"), "utf8")).toContain(
+    "first review context",
+  );
+  expect(correctness).toBeDefined();
+  if (!correctness) throw new Error("Missing correctness gate");
+  expect(readFileSync(correctness.prompt, "utf8")).toContain(finding.id);
+  expect(f.run("check").code).toBe(1);
+  expect(f.plan().id).toBe(repair.id);
+  expect(f.git("status", "--porcelain")).toBe(status);
+  writeFileSync(join(repair.directory, "repair.diff"), "A different repair\n");
+  expect(f.record("correctness").code).toBe(2);
+  expect(f.run("check").code).toBe(2);
+});
+
+test("base, branch, history, rubric and unavailable-review changes require full review", () => {
+  for (const change of [
+    "base",
+    "branch",
+    "history",
+    "rubric",
+    "unavailable",
+  ] as const) {
+    const f = checkout();
+    f.git("add", "README.md");
+    f.git("commit", "-m", "test(review): first candidate");
+    f.plan();
+    expect(
+      f.record(
+        "correctness",
+        change === "unavailable"
+          ? {
+              status: "UNAVAILABLE",
+              reason: "Prior source could not be inspected",
+            }
+          : {},
+      ).code,
+    ).toBe(0);
+    writeFileSync(join(f.root, "README.md"), "Repair\n");
+    if (change === "base") {
+      const commit = f.git(
+        "commit-tree",
+        "main^{tree}",
+        "-p",
+        "main",
+        "-m",
+        "test(review): base movement",
+      );
+      f.git("update-ref", "refs/heads/main", commit);
+    } else if (change === "branch") {
+      f.git("branch", "-m", "ben-malinski/TEST-2/different-change");
+    } else if (change === "history") {
+      f.git("reset", "--soft", "main");
+    } else if (change === "rubric") {
+      writeFileSync(
+        join(f.root, ".review-gates.json"),
+        JSON.stringify({
+          version: 1,
+          gates: [
+            {
+              id: "consumer",
+              title: "Consumer",
+              always: true,
+              globs: [],
+              skills: [],
+              lens: "A new responsibility",
+            },
+          ],
+        }),
+      );
+    }
+    const next = f.plan();
+    expect(next.gates.find((gate) => gate.id === "correctness")?.scope).toBe(
+      "full",
+    );
+    expect(f.run("check").code).toBe(1);
+  }
+});
+
+test("consumer re-review scope defaults to full and rejects invalid policy", () => {
+  const f = checkout();
+  const file = join(f.root, ".review-gates.json");
+  const gate = {
+    id: "consumer",
+    title: "Consumer",
+    always: true,
+    globs: [],
+    skills: [],
+    lens: "Check consumer behavior",
+  };
+  writeFileSync(file, JSON.stringify({ version: 1, gates: [gate] }));
+  f.plan();
+  expect(f.record("consumer").code).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "Repair\n");
+  expect(f.plan().gates.find((item) => item.id === "consumer")?.scope).toBe(
+    "full",
+  );
+  writeFileSync(
+    file,
+    JSON.stringify({ version: 1, gates: [{ ...gate, rereview: "skip" }] }),
+  );
+  expect(f.run("plan", "--base", "main").error).toContain(
+    "Invalid re-review scope",
+  );
+});
+
+test("repair snapshots retain binary changes and deletions without modifying the index", () => {
+  const f = checkout();
+  writeFileSync(join(f.root, "asset.bin"), Buffer.from([0, 1, 2, 3]));
+  f.git("add", "asset.bin");
+  f.plan();
+  expect(f.record("correctness").code).toBe(0);
+  writeFileSync(join(f.root, "asset.bin"), Buffer.from([0, 3, 2, 1]));
+  rmSync(join(f.root, "README.md"));
+  writeFileSync(join(f.root, "new file.ts"), "export const repair = true;\n");
+  const index = f.git("diff", "--cached", "--binary");
+  const next = f.plan();
+  expect(next.gates.find((gate) => gate.id === "correctness")?.scope).toBe(
+    "delta",
+  );
+  const diff = readFileSync(join(next.directory, "repair.diff"), "utf8");
+  expect(diff).toContain("GIT binary patch");
+  expect(diff).toContain("deleted file mode");
+  expect(diff).toContain("+export const repair = true;");
+  expect(f.git("diff", "--cached", "--binary")).toBe(index);
 });
 
 test("one gate state drives readiness, resumability and a safe PR-body table", () => {
@@ -358,6 +568,100 @@ test("routing unions path and semantic signals and permits only justified skips"
   expect(f.run("plan", "--base", "main", "--classifications", bad).code).toBe(
     2,
   );
+});
+
+test.each([
+  "service.proto",
+  "api/example/v1/service.proto",
+  "buf.yaml",
+  "buf.gen.yaml",
+  "buf.gen.forms.yaml",
+  "buf.work.yaml",
+  "buf.lock",
+  "services/catalog/buf.gen.client.yaml",
+])("%s routes to protobuf guidance despite a semantic exclusion", (path) => {
+  const f = checkout();
+  const file = join(f.root, path);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, "changed contract input\n");
+  const plan = f.plan([
+    {
+      gate: "protobuf",
+      relevant: false,
+      reason: "Must not override changed protobuf inputs",
+    },
+  ]);
+  const gate = plan.gates.find((item) => item.id === "protobuf");
+  expect(gate?.applicable).toBe(true);
+  if (!gate) throw new Error("Missing protobuf review gate");
+  expect(gate.reason).toBe(`Path signal: ${path}`);
+  expect(readFileSync(gate.prompt, "utf8")).toContain("protobuf/SKILL.md");
+});
+
+test.each(["modify", "delete", "rename"] as const)(
+  "tracked proto %s keeps its review gate",
+  (change) => {
+    const f = checkout({
+      "service.proto":
+        'syntax = "proto3";\npackage example.v1;\nmessage Request {}\n',
+    });
+    switch (change) {
+      case "modify":
+        writeFileSync(join(f.root, "service.proto"), "changed schema\n");
+        break;
+      case "delete":
+        f.git("rm", "service.proto");
+        break;
+      case "rename":
+        f.git("mv", "service.proto", "archived-schema.txt");
+        break;
+      default:
+        change satisfies never;
+    }
+    const plan = f.plan([
+      {
+        gate: "protobuf",
+        relevant: false,
+        reason: "Must not override a changed or removed schema",
+      },
+    ]);
+    expect(plan.snapshot.paths).toContain("service.proto");
+    expect(plan.gates.find((gate) => gate.id === "protobuf")).toMatchObject({
+      applicable: true,
+      reason: "Path signal: service.proto",
+    });
+  },
+);
+
+test("protobuf routing distinguishes unrelated text from consumer-only contracts", () => {
+  const f = checkout();
+  const unrelated = f.plan([
+    {
+      gate: "protobuf",
+      relevant: false,
+      reason:
+        "Only editorial README changes; no protobuf contract or consumers",
+    },
+  ]);
+  expect(
+    unrelated.gates.find((gate) => gate.id === "protobuf")?.applicable,
+  ).toBe(false);
+  writeFileSync(
+    join(f.root, "client.ts"),
+    "export const useBinaryFormat = true;\n",
+  );
+  const consumer = f.plan([
+    {
+      gate: "protobuf",
+      relevant: true,
+      reason: "The client changes its protobuf serialization contract",
+    },
+  ]);
+  expect(consumer.gates.find((gate) => gate.id === "protobuf")).toMatchObject({
+    applicable: true,
+    reason:
+      "Semantic applicability: The client changes its protobuf serialization contract",
+  });
 });
 
 test("a preliminary plan can refine applicability without inventing a failed review", () => {

@@ -1,10 +1,13 @@
 ---
 name: aip
-description: "Design Google AIP resource APIs. Use for protobuf or REST resources, standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors, compatibility, or batch APIs."
+description: "Design Google AIP resource APIs: standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors and batch methods. General Protobuf contracts belong to protobuf."
 paths:
-  - "**/*.proto"
   - "**/*openapi*.{yaml,yml,json}"
 ---
+
+For protobuf wire/JSON compatibility, generation, validation or runtime consumers, load
+[protobuf](../protobuf/SKILL.md). Apply this skill when Google resource conventions are
+the API's chosen contract; a `.proto` file alone is not that choice.
 
 Approved General AIPs are normative. draft AIP-162 and reviewing AIP-182 are advisory; label them as such.
 

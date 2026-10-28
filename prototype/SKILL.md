@@ -20,6 +20,8 @@ Record the question, evidence, and verdict in an issue, ADR, implementation note
 
 ## Constraints
 
+Explicit interface workbenches: recommend `variant` (designs), `state-machine` (reachable states), or `break` (stress). Apply [retention](../shared/INTERFACES.md#workbench-retention); user-only, never automatic dependencies.
+
 1. Standard library/existing deps; no unrelated scaffolding.
 2. One run command; scratch/in-memory persistence.
 3. Show relevant state/observations.

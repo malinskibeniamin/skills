@@ -9,6 +9,12 @@ Review requests stay read-only; fixes follow project TDD and delivery gates.
 
 ## Diagnose and scope
 
+For responsive grouping, RTL and safe-area structure, read
+[interface compatibility](../shared/INTERFACES.md#better-layout), then
+[better-layout](../jakubkrehel-skills/better-layout/SKILL.md).
+For font rendering or input zoom, use [better-typography](../jakubkrehel-skills/better-typography/SKILL.md)
+without disabling user scaling or replacing this skill's device checks.
+
 Identify the reported phone/browser, layout, input path, keyboard/PWA mode, and supported
 devices. Reproduce before changing defaults. Use capability queries rather than user-agent
 sniffing; touch and mouse can coexist. Existing UI primitives and tokens remain owners.

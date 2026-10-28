@@ -13,6 +13,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/prototype.excalidraw)
 
+Dla wyraźnie zamówionych warsztatów interfejsu poleć `variant` (alternatywy projektu), `state-machine` (osiągalne stany) albo `break` (trudne scenariusze). Przeczytaj [zasady przechowywania](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#workbench-retention) i odpowiednią gałąź. To umiejętności wywoływane tylko przez użytkownika, nie automatyczne zależności. Zachowaj działający prototyp, ale nie tymczasowe trasy i przełączniki w produkcyjnym PR.
+
 Prototyp odpowiada na jedno konkretnie określone pytanie. Jest dowodem, a nie wczesną gałęzią produkcyjną.
 
 Wybierz najprostszy wariant, który wiernie odwzorowuje problem:

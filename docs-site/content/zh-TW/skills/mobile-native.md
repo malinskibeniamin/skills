@@ -10,6 +10,8 @@ type: "skill"
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/mobile-native.excalidraw)
 
+響應式分組、RTL 與安全區域結構先閱讀[介面相容規則](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#better-layout)，再載入 [better-layout](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-layout/SKILL.md)。字型繪製或輸入框縮放使用 [better-typography](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-typography/SKILL.md)，但不得關閉使用者縮放或取代裝置驗證。
+
 消除瀏覽器/平臺使用障礙，但不關閉無障礙功能。
 改編自 Emil Kowalski；參見[來源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
 審查請求保持只讀；修復遵循專案 TDD 和交付檢查。

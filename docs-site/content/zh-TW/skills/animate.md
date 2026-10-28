@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/animate.excalidraw)
 
+需要介面表面或圖示的動態效果方案時，先閱讀[介面相容規則](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#better-ui)，再載入 [better-ui](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-ui/SKILL.md)。上游固定數值不得覆寫專案設計 token或即時回饋。
+
 選擇能解釋狀態變化、又不拖慢使用者任務的動效。
 改編自 Emil Kowalski；參見[來源與選取說明](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
 錄製產品示範時使用[示範錄製工具組](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md)，而不是 UI 動畫。

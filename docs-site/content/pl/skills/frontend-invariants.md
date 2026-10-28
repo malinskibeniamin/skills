@@ -31,7 +31,7 @@ Każdy tolerowany antywzorzec, mechanizm obejścia lub wyciszenie to przykład, 
 1. **Nigdy nie przekłamuj renderowanego obrazu.** Bez fałszywych wartości domyślnych, stratnego upiększania danych, których nie można zdekodować, ani ukrywania prawidłowych zer (`value == null`, nigdy sprawdzanie prawdziwości, przy wyświetlaniu liczb). Stany ograniczonej funkcjonalności wskazują możliwe przyczyny, przytaczają zgłoszony powód dosłownie i umożliwiają ponowienie próby.
 2. **Dane maszynowe obok etykiet dla ludzi** -- pokazuj identyfikator lub surową wartość tam, gdzie potrzebują ich operatorzy; twórz teksty do wyświetlenia na podstawie danych, nigdy nie wyświetlaj kluczy maszynowych jako etykiet.
 3. **Nie pokazuj niczego, zanim nie będzie gotowe** -- niegotowe funkcje są ukryte, a nie zapowiadane; stan ładowania rezerwuje miejsce w układzie (bez CLS).
-4. **Każdy widok obsługuje pełną macierz stanów**: ładowanie / brak danych / błąd / brak uprawnień / wyłączony / zablokowany -- nie tylko pomyślną ścieżkę.
+4. **Każdy widok obsługuje pełną macierz stanów**: ładowanie / brak danych / błąd / brak uprawnień / wyłączony / zablokowany -- nie tylko pomyślną ścieżkę. Ukrywaj puste elementy interfejsu tylko na podstawie wiarygodnego, załadowanego stanu: zerowe statystyki zmian ani wyłączona akcja nie dowodzą braku pracy. Zachowaj widoczność błędów, nieśledzonych plików, postępu i sposobów odzyskania działania.
 
 ## Umiejscowienie stanu
 5. **URL = stan, który można udostępnić** (karty, filtry, sortowanie, strona); **pamięć lokalna lub sesyjna = osobiste preferencje** (gęstość, zwinięte panele); **pamięć podręczna serwera = dane serwera**; stan komponentu tylko dla danych, które znikają wraz z komponentem. Nigdy nie zamieniaj tych ról.
@@ -40,7 +40,7 @@ Każdy tolerowany antywzorzec, mechanizm obejścia lub wyciszenie to przykład, 
 
 ## Relacja z systemem projektowym
 8. **Tokeny zamiast doraźnych wartości** -- kolor, odstępy i typografia pochodzą ze skali; jednorazowe wartości projektanta zaokrąglaj do najbliższego stopnia; nigdy nie wpisuj na stałe wartości hex/px, jeśli istnieje token.
-9. **Naprawiaj współdzielone komponenty u źródła** -- nigdy nie twórz odgałęzień, nie zmieniaj stylów lokalnie ani nie używaj głębokich selektorów wobec współdzielonego komponentu; odgałęzienie jest dopuszczalne tylko dla nazwanego defektu i z zadaniem naprawy w źródle.
+9. **Naprawiaj współdzielone komponenty u źródła** -- nigdy nie twórz odgałęzień, nie zmieniaj stylów lokalnie ani nie używaj głębokich selektorów wobec współdzielonego komponentu. Wiersze właściwe jednej funkcji trzymaj przy niej, zamiast dodawać wariant prymitywu dla jednego odbiorcy. Sprawdzaj obliczone style między warstwami kaskady i dla połączeń flagi, motywu oraz stanu interakcji; sama niska specyficzność nie gwarantuje pierwszeństwa klas narzędziowych. Tymczasowe odgałęzienie wymaga nazwanego defektu i zadania naprawy w źródle.
 10. **Przeszukaj system przed rozpoczęciem budowy** -- potrzebny komponent prawdopodobnie już istnieje; gdy użytkownicy interfejsu API wielokrotnie używają go nieprawidłowo, napraw interfejs API, a nie jego użytkowników.
 
 ## Interakcja

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Explain Interface"
+  short_description: "Explain an interface or effect from observed evidence"
+policy:
+  allow_implicit_invocation: false

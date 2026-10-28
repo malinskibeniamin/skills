@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/animate.excalidraw)
 
+需要界面表面或图标的动效方案时，先阅读[界面兼容规则](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#better-ui)，再加载 [better-ui](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-ui/SKILL.md)。上游固定数值不得覆盖项目设计 token或即时反馈。
+
 选择能解释状态变化、又不拖慢用户任务的动效。
 改编自 Emil Kowalski；参见[来源与选取说明](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
 录制产品演示时使用[演示录制工具栈](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md)，而不是 UI 动画。

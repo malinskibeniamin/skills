@@ -1,0 +1,896 @@
+{
+  "repository": "https://github.com/jakubkrehel/skills",
+  "revision": "592aedc44d7d5b3e29740984252902f3e5402a1c",
+  "skills": [
+    {
+      "name": "better-accessibility",
+      "source": "skills/better-accessibility/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-accessibility/",
+      "explicit_only": false,
+      "short_description": "Extend existing accessibility verification with WCAG",
+      "description": "Use for WCAG-grounded keyboard, focus, names, forms, announcements, motion and zoom checks through the existing accessibility owner."
+    },
+    {
+      "name": "better-colors",
+      "source": "skills/better-colors/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-colors/",
+      "explicit_only": false,
+      "short_description": "Build and measure semantic interface color systems",
+      "description": "Use for palettes, semantic color tokens, theme pairs, gamut and measured contrast; preserve existing tokens and accessibility requirements."
+    },
+    {
+      "name": "better-interface",
+      "source": "skills/better-interface/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-interface/",
+      "explicit_only": false,
+      "short_description": "Review interfaces through existing visual review",
+      "description": "Review whole screens or flows across accessibility, layout, copy, typography, color and polish using the existing visual-review owner."
+    },
+    {
+      "name": "better-layout",
+      "source": "skills/better-layout/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-layout/",
+      "explicit_only": false,
+      "short_description": "Review grouping and responsive interface structure",
+      "description": "Use for grouping, reading order, responsive structure, localization and RTL; preserve project density and verify actual layout failures."
+    },
+    {
+      "name": "better-typography",
+      "source": "skills/better-typography/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-typography/",
+      "explicit_only": false,
+      "short_description": "Set and review readable interface typography",
+      "description": "Use for type scales, font loading, line height, wrapping, truncation and numeric alignment within the project's type system."
+    },
+    {
+      "name": "better-ui",
+      "source": "skills/better-ui/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-ui/",
+      "explicit_only": false,
+      "short_description": "Polish surfaces, icons and interaction details",
+      "description": "Use for surface geometry, optical alignment, shadows, icon states and UI polish; existing animate guidance owns motion."
+    },
+    {
+      "name": "better-writing",
+      "source": "skills/better-writing/SKILL.md",
+      "registration": "./jakubkrehel-skills/better-writing/",
+      "explicit_only": false,
+      "short_description": "Extend existing UI copy guidance with interface patterns",
+      "description": "Use for product vocabulary, translated strings, labels, errors, empty states and confirmations through the existing ux-copy owner."
+    },
+    {
+      "name": "break",
+      "source": "skills/break/SKILL.md",
+      "registration": "./jakubkrehel-skills/break/",
+      "explicit_only": true,
+      "short_description": "Build an explicitly requested component stress page",
+      "description": "Build a temporary component stress page on explicit request; compose break-ui and prototype."
+    },
+    {
+      "name": "build-design",
+      "source": "skills/build-design/SKILL.md",
+      "registration": "./jakubkrehel-skills/build-design/",
+      "explicit_only": false,
+      "short_description": "Implement a supplied design with existing components",
+      "description": "Use when implementing a Figma file or design image with the project's existing tokens and components through development-lifecycle."
+    },
+    {
+      "name": "explain-interface",
+      "source": "skills/explain-interface/SKILL.md",
+      "registration": "./jakubkrehel-skills/explain-interface/",
+      "explicit_only": true,
+      "short_description": "Explain an interface or effect from observed evidence",
+      "description": "Explain a named site or effect from a URL or image; label measured, derived and inferred claims."
+    },
+    {
+      "name": "interface-review",
+      "source": "skills/interface-review/SKILL.md",
+      "registration": "./jakubkrehel-skills/interface-review/",
+      "explicit_only": true,
+      "short_description": "Review interface regressions in a named change",
+      "description": "Review introduced or regressed interface issues in a branch, PR or uncommitted change."
+    },
+    {
+      "name": "state-machine",
+      "source": "skills/state-machine/SKILL.md",
+      "registration": "./jakubkrehel-skills/state-machine/",
+      "explicit_only": true,
+      "short_description": "Build an explicitly requested component state workbench",
+      "description": "Build a real-component state switcher with isolated fixtures; not state-machine architecture."
+    },
+    {
+      "name": "teardown",
+      "source": "skills/teardown/SKILL.md",
+      "registration": "./jakubkrehel-skills/teardown/",
+      "explicit_only": false,
+      "short_description": "Create evidence-grounded technical illustrations",
+      "description": "Use for technical object or layered-concept illustrations with editable geometry and SVG, PNG or PDF export; not manufacturing drawings."
+    },
+    {
+      "name": "variant",
+      "source": "skills/variant/SKILL.md",
+      "registration": "./jakubkrehel-skills/variant/",
+      "explicit_only": true,
+      "short_description": "Explore explicitly requested component design variants",
+      "description": "Explore component design directions on explicit request through the existing prototype owner."
+    }
+  ],
+  "patches": {
+    "0001-teardown-input-safety.patch": {
+      "sha256": "bdf54b0b8cf6f802e8ab87478cd0a807384369e8baf6f910b9926c2ea62ec55d",
+      "mode": 420
+    }
+  },
+  "upstream_files": {
+    "LICENSE": {
+      "sha256": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+      "mode": 420
+    },
+    "README.md": {
+      "sha256": "f5fa3916f407e49520efd2ce8e2a87f667a57c86a65fb123924952681b4ea61f",
+      "mode": 420
+    },
+    "skills/better-accessibility/SKILL.md": {
+      "sha256": "f3f9dc26c947dbdfc64be80d3c0d278d5d8bb070c7826b2dae6bf8c380e81586",
+      "mode": 420
+    },
+    "skills/better-accessibility/agents/openai.yaml": {
+      "sha256": "98699206d4fb00b72bcaf69bb446f541644cc0cc3d23967e266731e100a55563",
+      "mode": 420
+    },
+    "skills/better-accessibility/focus-and-keyboard.md": {
+      "sha256": "47857a860f25f3159ace5b3e06e4961e9c47bd0f9c30f35d1aab22e97e3f0b5c",
+      "mode": 420
+    },
+    "skills/better-accessibility/forms.md": {
+      "sha256": "66557dc714093f45f6cc0ab8e248092cb2e3bc994609c6e629135f0ddf09e0f4",
+      "mode": 420
+    },
+    "skills/better-accessibility/hit-areas.md": {
+      "sha256": "7ce9ee5c5420d046f1d87b466e5fe5978d90d17632a2ad084a803ad34d607d53",
+      "mode": 420
+    },
+    "skills/better-accessibility/motion-and-zoom.md": {
+      "sha256": "16c0c3daeab2f01ed04ee0189998b5711d3c4c9a4ff10604a757577af9bb5896",
+      "mode": 420
+    },
+    "skills/better-accessibility/screen-readers.md": {
+      "sha256": "0d0911a369bbf332a6237d2cf4c5209b13e7f02e5bb01a6d47bbca3f328df71a",
+      "mode": 420
+    },
+    "skills/better-accessibility/semantics-and-aria.md": {
+      "sha256": "818ad7d45a8b25a3291e52bdc51ec316c4e00e22ed58940f26321e35365b741e",
+      "mode": 420
+    },
+    "skills/better-colors/SKILL.md": {
+      "sha256": "2fc5964fe9adae02e8ba4d80d40ad85d23da227f3eab3b55e06c7df0ac7e7652",
+      "mode": 420
+    },
+    "skills/better-colors/agents/openai.yaml": {
+      "sha256": "9568572146c8d7d1dc2e12536c2b8ea63480f83f2f2ebfcf2f9a500a56830d4a",
+      "mode": 420
+    },
+    "skills/better-colors/color-formats.md": {
+      "sha256": "6c5d7f243dde1c2604c35f40a7668bc20ff8b79249fa52633ac4f1be02fa73ba",
+      "mode": 420
+    },
+    "skills/better-colors/color-usage.md": {
+      "sha256": "02ee247c8782d256a0841c154aee5decb456966f0f7db8701bef37ed4694e773",
+      "mode": 420
+    },
+    "skills/better-colors/contrast.md": {
+      "sha256": "a524a229232a522fc752be9503bba8caffd76894d04c941a1e7e982817d6fefc",
+      "mode": 420
+    },
+    "skills/better-colors/palette-generation.md": {
+      "sha256": "0b50caa5e77085d1d762bb3d362c552103ebbf5ca5ad297b364f8172441c72a5",
+      "mode": 420
+    },
+    "skills/better-colors/palette-structure.md": {
+      "sha256": "bba9cd296c1e4ee613420b32023b8ce1a1bb45d1340e99e906cee37413d3dd62",
+      "mode": 420
+    },
+    "skills/better-colors/token-naming.md": {
+      "sha256": "2cc8c435a37cff3d4320076953431572fa77a6f58aaf88ff62381d2cdcfd022a",
+      "mode": 420
+    },
+    "skills/better-interface/SKILL.md": {
+      "sha256": "915ed5dc1442d9b78782900ff8b62160133362a2fe23998917814bfb6422869e",
+      "mode": 420
+    },
+    "skills/better-interface/agents/openai.yaml": {
+      "sha256": "541c5d823f474543d4f3a314a9292215f8c90c152249e72411ff3e3632cf55bc",
+      "mode": 420
+    },
+    "skills/better-interface/review-format.md": {
+      "sha256": "4bb2715d6cd7c8afbd984cbe71148a214c9d43ffd535ba00789f7709ee743c01",
+      "mode": 420
+    },
+    "skills/better-layout/SKILL.md": {
+      "sha256": "4e7fd6880f41a87a21bb3be8e0b2bd7e7b8c561af5fb706ec0bb3e58877d60ec",
+      "mode": 420
+    },
+    "skills/better-layout/agents/openai.yaml": {
+      "sha256": "d51a2ca663c9331f8f23b7a550e5f848f83e81361e21f2280cc384e99cc0ae15",
+      "mode": 420
+    },
+    "skills/better-layout/grouping-and-alignment.md": {
+      "sha256": "30057c8e063a3cb0026140c82de0c16510080c7c306876caacba1206d7e2483a",
+      "mode": 420
+    },
+    "skills/better-layout/spacing-and-adaptivity.md": {
+      "sha256": "1b7e015f520b5e34cf9712fbb6586deb57a7c9f9902b54aa465719e9e5678958",
+      "mode": 420
+    },
+    "skills/better-typography/SKILL.md": {
+      "sha256": "8f00a576f6c8d2f8d72dfbffe765ce569982509d01533ea5881de6e1918d3a68",
+      "mode": 420
+    },
+    "skills/better-typography/agents/openai.yaml": {
+      "sha256": "01d8b8f835112e97ba0e4d97a07775e919407ebb5aab0cce9b4fa280e66b19b8",
+      "mode": 420
+    },
+    "skills/better-typography/choosing-fonts.md": {
+      "sha256": "abd2c084ce7f9c3908dbfa09636ab87a2db731204c1e804b081e4fbd7e4d612d",
+      "mode": 420
+    },
+    "skills/better-typography/css-cheat-sheet.md": {
+      "sha256": "9aac06b524a25a780b950ab046735aab6f45c551fcab2ebf90a8faf7f12db3c9",
+      "mode": 420
+    },
+    "skills/better-typography/details-and-accessibility.md": {
+      "sha256": "705176db1784beed8b85086dd92dcfad6658e61fa8f9d017e648005029b7ab23",
+      "mode": 420
+    },
+    "skills/better-typography/spacing-and-sizing.md": {
+      "sha256": "db91919a92c1b7de16761e8d8a5addffabcde3dce97ff579f7cbbb585f42cb0f",
+      "mode": 420
+    },
+    "skills/better-typography/variable-fonts-and-opentype.md": {
+      "sha256": "3b8bfa85c483d1bd08490203f232c2002b838f89059d341e6b69cde040bf6556",
+      "mode": 420
+    },
+    "skills/better-typography/wrapping-and-punctuation.md": {
+      "sha256": "44ef7be30b3342c0a81f7b07c2f7138c9743b8df8c8edab518907e8ec0abd68a",
+      "mode": 420
+    },
+    "skills/better-ui/SKILL.md": {
+      "sha256": "2d5f9fa4f3bbf045da914349b6e5fde559c947e5323968350b65bb2cdc6b3e4f",
+      "mode": 420
+    },
+    "skills/better-ui/agents/openai.yaml": {
+      "sha256": "799e0b58bded32edf5c217f97e08c364660ec24234978b2e3f7dee1868bea871",
+      "mode": 420
+    },
+    "skills/better-ui/animations.md": {
+      "sha256": "0e9ee790191d0761a6adf27fdf1e4279d79ecbe5d0d916fc331a28a8c86f39b3",
+      "mode": 420
+    },
+    "skills/better-ui/enter-exit.md": {
+      "sha256": "de087d3bc69461343409c275dea7d94bca6c1158558b887b7909ce505cdfa70a",
+      "mode": 420
+    },
+    "skills/better-ui/icon-transitions.md": {
+      "sha256": "676b344e7b22c37692a520c7ea2ab8fad3b3c8943a833f8133e51042297e9f06",
+      "mode": 420
+    },
+    "skills/better-ui/icons.md": {
+      "sha256": "eac6195bb5d5ba77efd6d9d7751295a7b0d4dadf6a68146639091b02f1e3dbbd",
+      "mode": 420
+    },
+    "skills/better-ui/performance.md": {
+      "sha256": "db59db84ab371903b7ebdb69f1e92bdc0f2e041331d9dd65d312e4d1b5d449d6",
+      "mode": 420
+    },
+    "skills/better-ui/surfaces.md": {
+      "sha256": "35a76b7c4e6da0fc933559e73ca8712fb7b804c383c6f69c25be3b9616ff2721",
+      "mode": 420
+    },
+    "skills/better-writing/SKILL.md": {
+      "sha256": "109e4337da3621410c225b137d4683d8c246ca06071990a22882376ad60ec6e3",
+      "mode": 420
+    },
+    "skills/better-writing/agents/openai.yaml": {
+      "sha256": "a5aec7e0cbc87930962f139eff4341dcf87e83fd19b9447e3f614db2bc71de67",
+      "mode": 420
+    },
+    "skills/better-writing/patterns.md": {
+      "sha256": "93ed5285d2009213b600e6f5af53ae3f7e3ff0114014146779aeda1c1ab42077",
+      "mode": 420
+    },
+    "skills/break/SKILL.md": {
+      "sha256": "4e3b9788966cd1ee91fc5bb6488ffb11a3de54d56a09191a3b59e399240d8390",
+      "mode": 420
+    },
+    "skills/break/agents/openai.yaml": {
+      "sha256": "e3e6b1a83f90763fa8cb166b4ec483ebc78fc84311fb0594d29f03d8ef76eddc",
+      "mode": 420
+    },
+    "skills/break/scenarios.md": {
+      "sha256": "1db84afedc194c5959dfcb8ecad3466fc929e197159216c9db72588ed88c1fc5",
+      "mode": 420
+    },
+    "skills/build-design/SKILL.md": {
+      "sha256": "d51cb44f594de7248340e9369c767f70a955483ba77f9976697cdbaf2f073a68",
+      "mode": 420
+    },
+    "skills/build-design/agents/openai.yaml": {
+      "sha256": "858842fc00a7d7f086201a02c33af730d41fb00fab1ace92b7109fd8ba23f518",
+      "mode": 420
+    },
+    "skills/build-design/figma.md": {
+      "sha256": "998359b07687762f0d4a7dc320b76fb6e985ff1e468f91ef1a14e4bcaac18942",
+      "mode": 420
+    },
+    "skills/explain-interface/SKILL.md": {
+      "sha256": "6795aff9a133b94c6398a95b5c8958a2eaccade5db18f58e752bc02460a356e0",
+      "mode": 420
+    },
+    "skills/explain-interface/agents/openai.yaml": {
+      "sha256": "3858853344ece1dd145523bd9d61c8905c4b2cb6c7307f023cc8666b8f4dc0bc",
+      "mode": 420
+    },
+    "skills/explain-interface/find-the-effect.md": {
+      "sha256": "baa6a8e168908ab9f9c95af106a10a10277375e796e3f206855d7bd04c4232df",
+      "mode": 420
+    },
+    "skills/explain-interface/from-an-image.md": {
+      "sha256": "11dda70e17116dd8b3967fcdaf8973043beda4e7a78a50cd7c6939e896957b77",
+      "mode": 420
+    },
+    "skills/explain-interface/no-browser.md": {
+      "sha256": "0b18239c712a877356610257a1a33e773062afab05646789075b2a643b0afe8f",
+      "mode": 420
+    },
+    "skills/explain-interface/read-the-system.md": {
+      "sha256": "cc0ea0470e72b17b2fab60b9c1a8fdd11298b58f96c3e4ad1d17e61605bd0482",
+      "mode": 420
+    },
+    "skills/interface-review/SKILL.md": {
+      "sha256": "976098555c7fe5dc0d082d70fd37b579f7513eb84a653d1abec8e347c80e32c1",
+      "mode": 420
+    },
+    "skills/interface-review/agents/openai.yaml": {
+      "sha256": "c8bb068bbd40629f03d7d4c0284924f8df1dfdf7f1a7b0fabb88b265202fa23f",
+      "mode": 420
+    },
+    "skills/interface-review/removed-signals.md": {
+      "sha256": "a7f14e158bcfc6020912604fa9c10290141eae8617ccc03a1f0e2d625438b2ac",
+      "mode": 420
+    },
+    "skills/interface-review/scope-resolution.md": {
+      "sha256": "93eb3900d9149d3f51cb2713212d23025d2549b284b859be1d38d09ad7a4fe4e",
+      "mode": 420
+    },
+    "skills/state-machine/SKILL.md": {
+      "sha256": "a94d55cf0a6b71bb8e374e66da9fd66fc8095141e7ff9859ab7c23e6f704f5cf",
+      "mode": 420
+    },
+    "skills/state-machine/agents/openai.yaml": {
+      "sha256": "46f496a379f86d7ecd91912505b7545abd462fcaaec6529d7fe39e88ae7535ff",
+      "mode": 420
+    },
+    "skills/state-machine/switcher.md": {
+      "sha256": "32f0f1c82362557bfc7f83554359883b0c3d931d578ec8a7a390529699973c6d",
+      "mode": 420
+    },
+    "skills/teardown/SKILL.md": {
+      "sha256": "9cf92fbee3ffbf28da72ef02ff2ba74bb6333f406cebf379a5c54a3554a72298",
+      "mode": 420
+    },
+    "skills/teardown/agents/openai.yaml": {
+      "sha256": "1950aef13a1fd28ff67c520b6120e303faaeb3f2e84790a3bf73c82195895b6e",
+      "mode": 420
+    },
+    "skills/teardown/assets/export.js": {
+      "sha256": "2f868e7cdb77ac2ca2da583c77d1b780d81267b73e3a0dbb655df4cd17feb38e",
+      "mode": 420
+    },
+    "skills/teardown/assets/flipbook.js": {
+      "sha256": "b98b159d30ece1e0e992fa9bef2304fc91de9d82d161a4c63eaf659a6f405043",
+      "mode": 420
+    },
+    "skills/teardown/assets/geometry.js": {
+      "sha256": "e9ea047144490ff141b498b96f5d5d6194ab90a9d6a6597ed7d1b01983dc8263",
+      "mode": 420
+    },
+    "skills/teardown/assets/projection.js": {
+      "sha256": "14cdf44cc47e0262700793d1d3677b4231351b243230c9112bbd6cd2b827aabb",
+      "mode": 420
+    },
+    "skills/teardown/assets/render-queue.js": {
+      "sha256": "8abced3d453f9f2384171b38b515797186f2eafe4b4fa2ef93f7405a8624d37e",
+      "mode": 420
+    },
+    "skills/teardown/assets/sheet.js": {
+      "sha256": "304218a3ab6dfae7abdc08d03c31060f69a6197d6948ed41396aea87e5e9b3e8",
+      "mode": 420
+    },
+    "skills/teardown/assets/theme.js": {
+      "sha256": "23e48045a4649ec18d07e7d1c8616b01414ebd5d74939b7d302a3f0ce1440522",
+      "mode": 420
+    },
+    "skills/teardown/assets/viewer.html": {
+      "sha256": "ba1d2f92c71727aff74ce2fab66b1195d7fcfbbc3a8948d7c2fa8c449469ef73",
+      "mode": 420
+    },
+    "skills/teardown/assets/viewer.js": {
+      "sha256": "9ad90667efc9bc8a90f64c18af6a9867aec9db481e52917b55e922d2e35ddd48",
+      "mode": 420
+    },
+    "skills/teardown/assets/worker.js": {
+      "sha256": "848fe2de18810e47a9a629fefda9e78864ccb0e6dacccb41d6f41836d9da3696",
+      "mode": 420
+    },
+    "skills/teardown/exploded-views.md": {
+      "sha256": "6a968a7a759745c07c06fa98365de76ab30a502a123780b9c7c8afb0f33a45ef",
+      "mode": 420
+    },
+    "skills/teardown/geometry-library.md": {
+      "sha256": "a47ed64bd040accfe072e8d47a3f23bbde395de751989939f14475d0079d2b60",
+      "mode": 420
+    },
+    "skills/teardown/geometry.md": {
+      "sha256": "a350075e0e9aefecf928068309bcf195a94bdabece3abc02677f8237e74d98fa",
+      "mode": 420
+    },
+    "skills/teardown/preview-page.md": {
+      "sha256": "34947a8fab61f37a8efb78479bad7d2dcd723fe1ccb000c0d649815ccefbf96f",
+      "mode": 420
+    },
+    "skills/teardown/scripts/build-viewer.cjs": {
+      "sha256": "fbe648107f114092d4f9ca58b7052a49d1aec1c7e6c3a1a1491469d3a523706c",
+      "mode": 420
+    },
+    "skills/teardown/scripts/check-viewer.cjs": {
+      "sha256": "60eea8994d52fafa1c28665bb91b07092bf463d294608adf77bb60d8f40d6652",
+      "mode": 420
+    },
+    "skills/teardown/scripts/commands.cjs": {
+      "sha256": "b7eb5bf51612e168bef5c43d4bce6b42825f87edb705c554bc32c575df59fac5",
+      "mode": 420
+    },
+    "skills/teardown/scripts/config.cjs": {
+      "sha256": "7a1699de8bd0adda56ca435c25c049f735528416ecffd7e49f06c1e1c6c4bf32",
+      "mode": 420
+    },
+    "skills/teardown/scripts/proof.cjs": {
+      "sha256": "e36db21dbf39ea9cbeb533871de8f343bcfe23e623d6d478083ce155f4225369",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-flipbook.cjs": {
+      "sha256": "99619c4bf802b4e97393711383c20902a720241ec7cea029d26372c4b4c35505",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-geometry.cjs": {
+      "sha256": "61b522abe7d23ade913ce29c602360892d604e96f1b8e8a4a748596b9e51a465",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-render-queue.cjs": {
+      "sha256": "bd690d8261834a960c20cfcaa55cf2bc08b7555fcb251f69ef9a1a0039b3ddf7",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-theme.cjs": {
+      "sha256": "3d0d0e6b6112b68529803b1209d105632326cfe6001e7816e1583dde4b07f79d",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-viewer-builder.cjs": {
+      "sha256": "27ccc23adada5f839d13060a905705908e4f0191170c00a0b8d366a04d689670",
+      "mode": 420
+    },
+    "skills/teardown/sheet-and-svg.md": {
+      "sha256": "e279c238b401d89eecd1e0c3851f11e193e788aa4b9b64f77c92c0ad85d57619",
+      "mode": 420
+    },
+    "skills/teardown/verification.md": {
+      "sha256": "8d620e68580fc2f5553a48b507711feec22e6623c21c177dc9cb3d938ceb245d",
+      "mode": 420
+    },
+    "skills/teardown/viewer-assets.md": {
+      "sha256": "e8e98457f7b7baf34b78707f671d889e2d0bcfe70ef769da2f5cb5c9a9524d7e",
+      "mode": 420
+    },
+    "skills/teardown/views-and-annotations.md": {
+      "sha256": "79d7816f553047aa9678f6ae6585e155304b61d5f02a41c1ebbd4e6eda372313",
+      "mode": 420
+    },
+    "skills/variant/SKILL.md": {
+      "sha256": "6dbe09453c4521c13bf3788d64f2fcc8bcd8b5f7eeebbce95024ec5799defc11",
+      "mode": 420
+    },
+    "skills/variant/agents/openai.yaml": {
+      "sha256": "24e006ea99aed264541692cfd778aa758ff111fa242ec81126fd51fdf1b29ff0",
+      "mode": 420
+    },
+    "skills/variant/picker.md": {
+      "sha256": "fe2e8564fd52df1699abc81d986b007df451791a32bfb0249c66f1904a6e0a34",
+      "mode": 420
+    }
+  },
+  "files": {
+    "LICENSE": {
+      "sha256": "ed1dfe988fc40511b4845ccd9050a143a2002fee3bedc8064c47fa342b5d8d4f",
+      "mode": 420
+    },
+    "README.md": {
+      "sha256": "f5fa3916f407e49520efd2ce8e2a87f667a57c86a65fb123924952681b4ea61f",
+      "mode": 420
+    },
+    "skills/better-accessibility/SKILL.md": {
+      "sha256": "f3f9dc26c947dbdfc64be80d3c0d278d5d8bb070c7826b2dae6bf8c380e81586",
+      "mode": 420
+    },
+    "skills/better-accessibility/agents/openai.yaml": {
+      "sha256": "98699206d4fb00b72bcaf69bb446f541644cc0cc3d23967e266731e100a55563",
+      "mode": 420
+    },
+    "skills/better-accessibility/focus-and-keyboard.md": {
+      "sha256": "47857a860f25f3159ace5b3e06e4961e9c47bd0f9c30f35d1aab22e97e3f0b5c",
+      "mode": 420
+    },
+    "skills/better-accessibility/forms.md": {
+      "sha256": "66557dc714093f45f6cc0ab8e248092cb2e3bc994609c6e629135f0ddf09e0f4",
+      "mode": 420
+    },
+    "skills/better-accessibility/hit-areas.md": {
+      "sha256": "7ce9ee5c5420d046f1d87b466e5fe5978d90d17632a2ad084a803ad34d607d53",
+      "mode": 420
+    },
+    "skills/better-accessibility/motion-and-zoom.md": {
+      "sha256": "16c0c3daeab2f01ed04ee0189998b5711d3c4c9a4ff10604a757577af9bb5896",
+      "mode": 420
+    },
+    "skills/better-accessibility/screen-readers.md": {
+      "sha256": "0d0911a369bbf332a6237d2cf4c5209b13e7f02e5bb01a6d47bbca3f328df71a",
+      "mode": 420
+    },
+    "skills/better-accessibility/semantics-and-aria.md": {
+      "sha256": "818ad7d45a8b25a3291e52bdc51ec316c4e00e22ed58940f26321e35365b741e",
+      "mode": 420
+    },
+    "skills/better-colors/SKILL.md": {
+      "sha256": "2fc5964fe9adae02e8ba4d80d40ad85d23da227f3eab3b55e06c7df0ac7e7652",
+      "mode": 420
+    },
+    "skills/better-colors/agents/openai.yaml": {
+      "sha256": "9568572146c8d7d1dc2e12536c2b8ea63480f83f2f2ebfcf2f9a500a56830d4a",
+      "mode": 420
+    },
+    "skills/better-colors/color-formats.md": {
+      "sha256": "6c5d7f243dde1c2604c35f40a7668bc20ff8b79249fa52633ac4f1be02fa73ba",
+      "mode": 420
+    },
+    "skills/better-colors/color-usage.md": {
+      "sha256": "02ee247c8782d256a0841c154aee5decb456966f0f7db8701bef37ed4694e773",
+      "mode": 420
+    },
+    "skills/better-colors/contrast.md": {
+      "sha256": "a524a229232a522fc752be9503bba8caffd76894d04c941a1e7e982817d6fefc",
+      "mode": 420
+    },
+    "skills/better-colors/palette-generation.md": {
+      "sha256": "0b50caa5e77085d1d762bb3d362c552103ebbf5ca5ad297b364f8172441c72a5",
+      "mode": 420
+    },
+    "skills/better-colors/palette-structure.md": {
+      "sha256": "bba9cd296c1e4ee613420b32023b8ce1a1bb45d1340e99e906cee37413d3dd62",
+      "mode": 420
+    },
+    "skills/better-colors/token-naming.md": {
+      "sha256": "2cc8c435a37cff3d4320076953431572fa77a6f58aaf88ff62381d2cdcfd022a",
+      "mode": 420
+    },
+    "skills/better-interface/SKILL.md": {
+      "sha256": "915ed5dc1442d9b78782900ff8b62160133362a2fe23998917814bfb6422869e",
+      "mode": 420
+    },
+    "skills/better-interface/agents/openai.yaml": {
+      "sha256": "541c5d823f474543d4f3a314a9292215f8c90c152249e72411ff3e3632cf55bc",
+      "mode": 420
+    },
+    "skills/better-interface/review-format.md": {
+      "sha256": "4bb2715d6cd7c8afbd984cbe71148a214c9d43ffd535ba00789f7709ee743c01",
+      "mode": 420
+    },
+    "skills/better-layout/SKILL.md": {
+      "sha256": "4e7fd6880f41a87a21bb3be8e0b2bd7e7b8c561af5fb706ec0bb3e58877d60ec",
+      "mode": 420
+    },
+    "skills/better-layout/agents/openai.yaml": {
+      "sha256": "d51a2ca663c9331f8f23b7a550e5f848f83e81361e21f2280cc384e99cc0ae15",
+      "mode": 420
+    },
+    "skills/better-layout/grouping-and-alignment.md": {
+      "sha256": "30057c8e063a3cb0026140c82de0c16510080c7c306876caacba1206d7e2483a",
+      "mode": 420
+    },
+    "skills/better-layout/spacing-and-adaptivity.md": {
+      "sha256": "1b7e015f520b5e34cf9712fbb6586deb57a7c9f9902b54aa465719e9e5678958",
+      "mode": 420
+    },
+    "skills/better-typography/SKILL.md": {
+      "sha256": "8f00a576f6c8d2f8d72dfbffe765ce569982509d01533ea5881de6e1918d3a68",
+      "mode": 420
+    },
+    "skills/better-typography/agents/openai.yaml": {
+      "sha256": "01d8b8f835112e97ba0e4d97a07775e919407ebb5aab0cce9b4fa280e66b19b8",
+      "mode": 420
+    },
+    "skills/better-typography/choosing-fonts.md": {
+      "sha256": "abd2c084ce7f9c3908dbfa09636ab87a2db731204c1e804b081e4fbd7e4d612d",
+      "mode": 420
+    },
+    "skills/better-typography/css-cheat-sheet.md": {
+      "sha256": "9aac06b524a25a780b950ab046735aab6f45c551fcab2ebf90a8faf7f12db3c9",
+      "mode": 420
+    },
+    "skills/better-typography/details-and-accessibility.md": {
+      "sha256": "705176db1784beed8b85086dd92dcfad6658e61fa8f9d017e648005029b7ab23",
+      "mode": 420
+    },
+    "skills/better-typography/spacing-and-sizing.md": {
+      "sha256": "db91919a92c1b7de16761e8d8a5addffabcde3dce97ff579f7cbbb585f42cb0f",
+      "mode": 420
+    },
+    "skills/better-typography/variable-fonts-and-opentype.md": {
+      "sha256": "3b8bfa85c483d1bd08490203f232c2002b838f89059d341e6b69cde040bf6556",
+      "mode": 420
+    },
+    "skills/better-typography/wrapping-and-punctuation.md": {
+      "sha256": "44ef7be30b3342c0a81f7b07c2f7138c9743b8df8c8edab518907e8ec0abd68a",
+      "mode": 420
+    },
+    "skills/better-ui/SKILL.md": {
+      "sha256": "2d5f9fa4f3bbf045da914349b6e5fde559c947e5323968350b65bb2cdc6b3e4f",
+      "mode": 420
+    },
+    "skills/better-ui/agents/openai.yaml": {
+      "sha256": "799e0b58bded32edf5c217f97e08c364660ec24234978b2e3f7dee1868bea871",
+      "mode": 420
+    },
+    "skills/better-ui/animations.md": {
+      "sha256": "0e9ee790191d0761a6adf27fdf1e4279d79ecbe5d0d916fc331a28a8c86f39b3",
+      "mode": 420
+    },
+    "skills/better-ui/enter-exit.md": {
+      "sha256": "de087d3bc69461343409c275dea7d94bca6c1158558b887b7909ce505cdfa70a",
+      "mode": 420
+    },
+    "skills/better-ui/icon-transitions.md": {
+      "sha256": "676b344e7b22c37692a520c7ea2ab8fad3b3c8943a833f8133e51042297e9f06",
+      "mode": 420
+    },
+    "skills/better-ui/icons.md": {
+      "sha256": "eac6195bb5d5ba77efd6d9d7751295a7b0d4dadf6a68146639091b02f1e3dbbd",
+      "mode": 420
+    },
+    "skills/better-ui/performance.md": {
+      "sha256": "db59db84ab371903b7ebdb69f1e92bdc0f2e041331d9dd65d312e4d1b5d449d6",
+      "mode": 420
+    },
+    "skills/better-ui/surfaces.md": {
+      "sha256": "35a76b7c4e6da0fc933559e73ca8712fb7b804c383c6f69c25be3b9616ff2721",
+      "mode": 420
+    },
+    "skills/better-writing/SKILL.md": {
+      "sha256": "109e4337da3621410c225b137d4683d8c246ca06071990a22882376ad60ec6e3",
+      "mode": 420
+    },
+    "skills/better-writing/agents/openai.yaml": {
+      "sha256": "a5aec7e0cbc87930962f139eff4341dcf87e83fd19b9447e3f614db2bc71de67",
+      "mode": 420
+    },
+    "skills/better-writing/patterns.md": {
+      "sha256": "93ed5285d2009213b600e6f5af53ae3f7e3ff0114014146779aeda1c1ab42077",
+      "mode": 420
+    },
+    "skills/break/SKILL.md": {
+      "sha256": "4e3b9788966cd1ee91fc5bb6488ffb11a3de54d56a09191a3b59e399240d8390",
+      "mode": 420
+    },
+    "skills/break/agents/openai.yaml": {
+      "sha256": "e3e6b1a83f90763fa8cb166b4ec483ebc78fc84311fb0594d29f03d8ef76eddc",
+      "mode": 420
+    },
+    "skills/break/scenarios.md": {
+      "sha256": "1db84afedc194c5959dfcb8ecad3466fc929e197159216c9db72588ed88c1fc5",
+      "mode": 420
+    },
+    "skills/build-design/SKILL.md": {
+      "sha256": "d51cb44f594de7248340e9369c767f70a955483ba77f9976697cdbaf2f073a68",
+      "mode": 420
+    },
+    "skills/build-design/agents/openai.yaml": {
+      "sha256": "858842fc00a7d7f086201a02c33af730d41fb00fab1ace92b7109fd8ba23f518",
+      "mode": 420
+    },
+    "skills/build-design/figma.md": {
+      "sha256": "998359b07687762f0d4a7dc320b76fb6e985ff1e468f91ef1a14e4bcaac18942",
+      "mode": 420
+    },
+    "skills/explain-interface/SKILL.md": {
+      "sha256": "6795aff9a133b94c6398a95b5c8958a2eaccade5db18f58e752bc02460a356e0",
+      "mode": 420
+    },
+    "skills/explain-interface/agents/openai.yaml": {
+      "sha256": "3858853344ece1dd145523bd9d61c8905c4b2cb6c7307f023cc8666b8f4dc0bc",
+      "mode": 420
+    },
+    "skills/explain-interface/find-the-effect.md": {
+      "sha256": "baa6a8e168908ab9f9c95af106a10a10277375e796e3f206855d7bd04c4232df",
+      "mode": 420
+    },
+    "skills/explain-interface/from-an-image.md": {
+      "sha256": "11dda70e17116dd8b3967fcdaf8973043beda4e7a78a50cd7c6939e896957b77",
+      "mode": 420
+    },
+    "skills/explain-interface/no-browser.md": {
+      "sha256": "0b18239c712a877356610257a1a33e773062afab05646789075b2a643b0afe8f",
+      "mode": 420
+    },
+    "skills/explain-interface/read-the-system.md": {
+      "sha256": "cc0ea0470e72b17b2fab60b9c1a8fdd11298b58f96c3e4ad1d17e61605bd0482",
+      "mode": 420
+    },
+    "skills/interface-review/SKILL.md": {
+      "sha256": "976098555c7fe5dc0d082d70fd37b579f7513eb84a653d1abec8e347c80e32c1",
+      "mode": 420
+    },
+    "skills/interface-review/agents/openai.yaml": {
+      "sha256": "c8bb068bbd40629f03d7d4c0284924f8df1dfdf7f1a7b0fabb88b265202fa23f",
+      "mode": 420
+    },
+    "skills/interface-review/removed-signals.md": {
+      "sha256": "a7f14e158bcfc6020912604fa9c10290141eae8617ccc03a1f0e2d625438b2ac",
+      "mode": 420
+    },
+    "skills/interface-review/scope-resolution.md": {
+      "sha256": "93eb3900d9149d3f51cb2713212d23025d2549b284b859be1d38d09ad7a4fe4e",
+      "mode": 420
+    },
+    "skills/state-machine/SKILL.md": {
+      "sha256": "a94d55cf0a6b71bb8e374e66da9fd66fc8095141e7ff9859ab7c23e6f704f5cf",
+      "mode": 420
+    },
+    "skills/state-machine/agents/openai.yaml": {
+      "sha256": "46f496a379f86d7ecd91912505b7545abd462fcaaec6529d7fe39e88ae7535ff",
+      "mode": 420
+    },
+    "skills/state-machine/switcher.md": {
+      "sha256": "32f0f1c82362557bfc7f83554359883b0c3d931d578ec8a7a390529699973c6d",
+      "mode": 420
+    },
+    "skills/teardown/SKILL.md": {
+      "sha256": "9cf92fbee3ffbf28da72ef02ff2ba74bb6333f406cebf379a5c54a3554a72298",
+      "mode": 420
+    },
+    "skills/teardown/agents/openai.yaml": {
+      "sha256": "1950aef13a1fd28ff67c520b6120e303faaeb3f2e84790a3bf73c82195895b6e",
+      "mode": 420
+    },
+    "skills/teardown/assets/export.js": {
+      "sha256": "2f868e7cdb77ac2ca2da583c77d1b780d81267b73e3a0dbb655df4cd17feb38e",
+      "mode": 420
+    },
+    "skills/teardown/assets/flipbook.js": {
+      "sha256": "b98b159d30ece1e0e992fa9bef2304fc91de9d82d161a4c63eaf659a6f405043",
+      "mode": 420
+    },
+    "skills/teardown/assets/geometry.js": {
+      "sha256": "e9ea047144490ff141b498b96f5d5d6194ab90a9d6a6597ed7d1b01983dc8263",
+      "mode": 420
+    },
+    "skills/teardown/assets/projection.js": {
+      "sha256": "14cdf44cc47e0262700793d1d3677b4231351b243230c9112bbd6cd2b827aabb",
+      "mode": 420
+    },
+    "skills/teardown/assets/render-queue.js": {
+      "sha256": "8abced3d453f9f2384171b38b515797186f2eafe4b4fa2ef93f7405a8624d37e",
+      "mode": 420
+    },
+    "skills/teardown/assets/sheet.js": {
+      "sha256": "304218a3ab6dfae7abdc08d03c31060f69a6197d6948ed41396aea87e5e9b3e8",
+      "mode": 420
+    },
+    "skills/teardown/assets/theme.js": {
+      "sha256": "23e48045a4649ec18d07e7d1c8616b01414ebd5d74939b7d302a3f0ce1440522",
+      "mode": 420
+    },
+    "skills/teardown/assets/viewer.html": {
+      "sha256": "ba1d2f92c71727aff74ce2fab66b1195d7fcfbbc3a8948d7c2fa8c449469ef73",
+      "mode": 420
+    },
+    "skills/teardown/assets/viewer.js": {
+      "sha256": "9ad90667efc9bc8a90f64c18af6a9867aec9db481e52917b55e922d2e35ddd48",
+      "mode": 420
+    },
+    "skills/teardown/assets/worker.js": {
+      "sha256": "befc3663c171a2b53a5c2ec15fc8d1f88e674169ec4daf76d0270f5121b31912",
+      "mode": 420
+    },
+    "skills/teardown/exploded-views.md": {
+      "sha256": "6a968a7a759745c07c06fa98365de76ab30a502a123780b9c7c8afb0f33a45ef",
+      "mode": 420
+    },
+    "skills/teardown/geometry-library.md": {
+      "sha256": "a47ed64bd040accfe072e8d47a3f23bbde395de751989939f14475d0079d2b60",
+      "mode": 420
+    },
+    "skills/teardown/geometry.md": {
+      "sha256": "a350075e0e9aefecf928068309bcf195a94bdabece3abc02677f8237e74d98fa",
+      "mode": 420
+    },
+    "skills/teardown/preview-page.md": {
+      "sha256": "34947a8fab61f37a8efb78479bad7d2dcd723fe1ccb000c0d649815ccefbf96f",
+      "mode": 420
+    },
+    "skills/teardown/scripts/build-viewer.cjs": {
+      "sha256": "fbe648107f114092d4f9ca58b7052a49d1aec1c7e6c3a1a1491469d3a523706c",
+      "mode": 420
+    },
+    "skills/teardown/scripts/check-viewer.cjs": {
+      "sha256": "82500b45ef8953e1e12bb28d26238b22957b2abbcedabb1d41c22ffa417c3646",
+      "mode": 420
+    },
+    "skills/teardown/scripts/commands.cjs": {
+      "sha256": "b7eb5bf51612e168bef5c43d4bce6b42825f87edb705c554bc32c575df59fac5",
+      "mode": 420
+    },
+    "skills/teardown/scripts/config.cjs": {
+      "sha256": "7a1699de8bd0adda56ca435c25c049f735528416ecffd7e49f06c1e1c6c4bf32",
+      "mode": 420
+    },
+    "skills/teardown/scripts/proof.cjs": {
+      "sha256": "e36db21dbf39ea9cbeb533871de8f343bcfe23e623d6d478083ce155f4225369",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-flipbook.cjs": {
+      "sha256": "99619c4bf802b4e97393711383c20902a720241ec7cea029d26372c4b4c35505",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-geometry.cjs": {
+      "sha256": "61b522abe7d23ade913ce29c602360892d604e96f1b8e8a4a748596b9e51a465",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-render-queue.cjs": {
+      "sha256": "bd690d8261834a960c20cfcaa55cf2bc08b7555fcb251f69ef9a1a0039b3ddf7",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-theme.cjs": {
+      "sha256": "3d0d0e6b6112b68529803b1209d105632326cfe6001e7816e1583dde4b07f79d",
+      "mode": 420
+    },
+    "skills/teardown/scripts/test-viewer-builder.cjs": {
+      "sha256": "d249559eae64cdd2b35e0aa3061cf16d04de399f5f9fa7b5a4763ee5a412c30b",
+      "mode": 420
+    },
+    "skills/teardown/sheet-and-svg.md": {
+      "sha256": "e279c238b401d89eecd1e0c3851f11e193e788aa4b9b64f77c92c0ad85d57619",
+      "mode": 420
+    },
+    "skills/teardown/verification.md": {
+      "sha256": "8d620e68580fc2f5553a48b507711feec22e6623c21c177dc9cb3d938ceb245d",
+      "mode": 420
+    },
+    "skills/teardown/viewer-assets.md": {
+      "sha256": "e8e98457f7b7baf34b78707f671d889e2d0bcfe70ef769da2f5cb5c9a9524d7e",
+      "mode": 420
+    },
+    "skills/teardown/views-and-annotations.md": {
+      "sha256": "79d7816f553047aa9678f6ae6585e155304b61d5f02a41c1ebbd4e6eda372313",
+      "mode": 420
+    },
+    "skills/variant/SKILL.md": {
+      "sha256": "6dbe09453c4521c13bf3788d64f2fcc8bcd8b5f7eeebbce95024ec5799defc11",
+      "mode": 420
+    },
+    "skills/variant/agents/openai.yaml": {
+      "sha256": "24e006ea99aed264541692cfd778aa758ff111fa242ec81126fd51fdf1b29ff0",
+      "mode": 420
+    },
+    "skills/variant/picker.md": {
+      "sha256": "fe2e8564fd52df1699abc81d986b007df451791a32bfb0249c66f1904a6e0a34",
+      "mode": 420
+    }
+  }
+}

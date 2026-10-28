@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/show-me.excalidraw)
 
+用户明确询问网站或视觉效果的实现方式时，使用[界面解释兼容规则](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#explain-interface)，并推荐仅由用户调用的 `explain-interface`。区分测量所得机制与截图重建。用户要求的对象或分层技术插图使用 [teardown](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/teardown/SKILL.md)，而不是架构图流程。
+
 帮助用户直观理解当前对话主题。省略开场白并保持文字简短。选择能清晰表达要点的最小视图。
 - 使用伪代码展示逻辑或算法：
 ```text

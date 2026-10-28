@@ -35,8 +35,8 @@ Endpoint owns scope:
 - Answer, explain, plan, review: return the artifact; do not edit.
 - Build, fix, implement: plan, continue, verify, commit, push the current user-owned
   feature branch unless explicitly told to stop earlier.
-- Commit: commit only. Push: commit if needed, then push. PR: verify, commit, push, open
-  via `/commit-push-pr`, take one CI snapshot. Ship or `/go`: run the full delivery loop.
+- Commit: commit only. Push: commit, push. PR: verify, commit, push, open via `/commit-push-pr`.
+  This repo's CI/reviews are advisory: never wait, including ship or `/go`.
 
 Earlier stop wins. Ask only for user-reserved or irreversible production,
 legal/privacy, destructive, or high-security decisions; otherwise assume reversibly.
@@ -45,12 +45,13 @@ Behind-base PRs: fetch/rebase, resolve routine conflicts, verify, lease-push aut
 Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-Delivery follow-ups replace prior local stops; never request a session restart/reconfiguration.
+Delivery follow-ups replace local stops; never request a session restart/reconfiguration.
 Keep follow-ups in the current PR: `pr/SKILL.md#existing-pr` at start/resume and handoff.
 Drafts need no approval.
-Push/PR/ship: verify origin HEAD/scope; auto-setup: `shared/review-enforcement.md`.
-Report genuine external blockers.
-Uncommitted/unpushed owned work means incomplete delivery.
+Push/PR/ship: verify origin HEAD/scope. Here: `.github/README.md#owner-merge-policy`.
+Consumer setup: `shared/review-enforcement.md`.
+Report external blockers.
+Uncommitted/unpushed owned work is incomplete delivery.
 Recover verified scope via `shared/remote-completion.md`; preserve explicit local stops,
 unrelated work, and active owners.
 Do not spawn agents, teams, recursive model calls, or persistent background work unless

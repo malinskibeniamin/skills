@@ -37,6 +37,7 @@ type: skill
 | `/blast-radius` | 以可執行的實證證明非區域性變更的安全性。 |
 | `/brain-dump` | 將原始想法轉化為可執行的機會地圖。 |
 | `/break-ui` | 使用真實可信的最壞情況資料壓力測試 UI。 |
+| `/ci-fixes` | 在不削弱測試訊號的前提下加快 CI 並提高可靠性。 |
 | `/codebase-design` | 設計具備清晰介面的深層模組。 |
 | `/codex-compat` | 產生 Codex 掛鉤與指令的對等實作。 |
 | `/codex` | 透過 Codex CLI 委派範圍明確的工作。 |
@@ -69,6 +70,20 @@ type: skill
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
+| `/better-accessibility` | 以 WCAG 擴充現有無障礙驗證。 |
+| `/better-colors` | 建立並量測語意化介面色彩系統。 |
+| `/better-interface` | 透過現有視覺審查流程檢查介面。 |
+| `/better-layout` | 審查分組與響應式介面結構。 |
+| `/better-typography` | 設定並審查易讀的介面排版。 |
+| `/better-ui` | 改善介面表面、圖示與互動細節。 |
+| `/better-writing` | 以介面模式擴充現有 UI 文案指引。 |
+| `/break` | 依明確要求建立元件壓力測試頁面。 |
+| `/build-design` | 使用現有元件實作提供的設計。 |
+| `/explain-interface` | 依觀察證據說明介面或效果。 |
+| `/interface-review` | 審查指定變更中的介面回歸。 |
+| `/state-machine` | 依明確要求建立元件狀態工作台。 |
+| `/teardown` | 建立以證據為依據的技術插圖。 |
+| `/variant` | 依明確要求探索元件設計方案。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 稽核旗標受眾與清理條件。 |
 | `/lie-detector` | 找出不可能失敗的測試，以及差異內容無法支持的主張。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
@@ -141,6 +156,7 @@ type: skill
 | `/prime` | 建立精簡的儲存庫啟動簡報。 |
 | `/product` | 確認工作值得投入時間，並能交付商業價值。 |
 | `/prototype` | 建立一次性成品，以回答設計問題。 |
+| `/protobuf` | 設計並審查 protobuf 結構描述及其使用端。 |
 | `/quantify-impact` | 證明對產品與程式碼庫具有實質意義的改善。 |
 | `/read-the-damn-docs` | 從第一手文件研究目前的行為。 |
 | `/redpanda-ai-gateway` | 透過 Redpanda AI Gateway 執行 AI CLI。 |
@@ -156,6 +172,7 @@ type: skill
 | `/setup-atlassian-workflow` | 設定可選用的 Jira 與 Atlassian 工作流程。 |
 | `/setup-routines` | 設定自動化的 Claude Code 維護例行作業。 |
 | `/show-me` | 使用精簡的視覺成品解釋目前的主題。 |
+| `/skeleton-loaders` | 建立符合版面且具無障礙支援的骨架載入狀態。 |
 | `/snyk-ux-security` | 使用 Snyk 與發布關卡稽核相依套件安全性。 |
 | `/software-factory` | 評估工廠適用性並規劃安全的自動化基礎設施。 |
 | `/stack-registry` | 控制框架規則中目前採用與禁止使用的技術堆疊治理。 |
@@ -206,7 +223,7 @@ type: skill
 | `/visual-review` | 根據視覺實證審查面向客戶的介面。 |
 | `/wait-what` | 使用更簡單的語言與補充缺少的脈絡，重新說明內容。 |
 | `/wayfinder` | 透過決策工作單梳理龐大且模糊的工作。 |
-| `/webmcp` | 開啟 Web 應用程式並優先使用其 MCP 或 WebMCP 工具。 |
+| `/webmcp` | 操作頁面工具，或建置與稽核 WebMCP 介面。 |
 | `/what-did-i-get-done` | 將本人撰寫的提交彙整為精簡的狀態更新。 |
 | `/wizard` | 產生供手動設定使用的互動式 Bash 精靈。 |
 | `/work-automation-kit` | 安裝規劃、工作單管理與問題分類工作流程。 |
