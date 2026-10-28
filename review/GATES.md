@@ -108,11 +108,30 @@ written under a candidate-specific run directory. Concurrent writers to the same
 fail rather than steal the lock. A failed recording remains an error until repaired.
 
 Replanning unchanged inputs reuses completed results. Changed input creates a new run;
-old findings are supplied as context, never recycled as current approval. Re-review
-affected behavior using the full staged diff and confirm prior findings. This first
-version deliberately invalidates changed candidates conservatively rather than infer
-that an unchanged path proves an unaffected domain. Different round counts are not, by
-themselves, evidence of stale review.
+old findings and verification exchanges supply context, never current approval.
+Every applicable gate needs a fresh result; an unchanged path does not prove an
+unaffected domain. Different round counts alone are not evidence of stale review.
+
+After a completed review, routine gates with `rereview: "delta"` focus on `repair.diff`
+and prior findings. The captured delta includes staged, unstaged, untracked, binary and
+deleted files since that review, even before either candidate was committed. The full
+`change.diff` remains available for callers, contracts and root-cause investigation.
+Both inputs are integrity-checked; planning leaves the caller's files and index alone.
+Report the class and affected instances, preserve finding ids, and expand context when
+a claim needs it instead of rediscovering unrelated old defects.
+
+Security/recovery, contracts/architecture, dependencies/licenses and operations gates
+keep full review. New consumer gates default to full; `rereview: "delta"` is an explicit
+local review-scope choice, not a human approval tier. Unreviewed, failed or unavailable
+gates stay full. Changed base, branch, rubric, or non-descendant HEAD also resets to full.
+Reconstructing an unavailable/corrupt candidate fails visibly rather than inventing a delta.
+The CLI does not run reviewers; automatic-repair round limits remain owned by
+[feedback resolution](../resolve-pr-feedback/SKILL.md#iteration-policy).
+
+[Review-scope routing](../docs/architecture/review-repair.png)
+([editable source](../docs/architecture/review-repair.excalidraw)) compares the previous
+full-diff path with captured repair input. Source: `createPlan` in
+`scripts/review-gates.ts`; public CLI coverage: `scripts/review-gates.test.ts`.
 
 Corrupt artifacts fail closed. Keep them for diagnosis; restore the latest pointer from
 the immutable run's `plan.json` if needed. Never remove findings or a configured gate to

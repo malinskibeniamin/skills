@@ -28,7 +28,7 @@
   request continues after its concise plan through commit and push; an explicit local,
   no-commit, or no-push instruction stops earlier. Stop for plan approval only when the user
   requested planning/grilling or a material reserved decision remains.
-- A PR request ends after opening the PR and taking one CI status snapshot. `/go`, ship, or
-  explicit babysitting owns any CI remediation loop. `/plow-ahead` is not delegation consent.
-  Do not poll for later human feedback unless the user asks.
+- Here, PR/ship/`/go` delivery never waits for CI, reviews or approvals; follow
+  `.github/README.md#owner-merge-policy`. Consumer repositories retain their own gates.
+  Monitoring and feedback work require an explicit request; `/plow-ahead` grants no delegation.
 - `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Keep the owner-selected Opus/Sol `xhigh` routes; unknown usage never invents a 50% effort gate. Authorized unknown-usage agent waves checkpoint after one explicitly requested wave.

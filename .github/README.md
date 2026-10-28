@@ -1,20 +1,26 @@
-# Review gates
+# Review and merge policy
 
-These settings belong to this repository. Installed consumers use the shared
-[review-enforcement contract](../shared/review-enforcement.md) and shipped lifecycle
-hook to verify their own hosted protections and security prerequisites. Installing
-the plugin does not copy this workflow/payload or mutate another repository's policy.
+## Owner merge policy
 
-The hosted `main` protection requires the existing Linux, macOS, and render checks
-from GitHub Actions, an up-to-date branch, and resolved conversations. Admins have
-an explicit merge-gate override by owner policy. Force-push and branch-deletion
-settings remain disabled. Preserve this repository-specific admin override when
-reconciling protection; it does not change the defaults for installed consumers.
+For **malinskibeniamin/skills only**, the repository owner chooses when to merge.
+CI, security scans, review findings and approvals are advisory, not merge gates.
+The hosted `main` policy and [saved payload](branch-protection.json) have no required
+status checks, required PR reviews or conversation-resolution requirement. Admin
+protection enforcement is off. Force pushes and branch deletion remain disabled.
 
-The API payload lives in [branch-protection.json](branch-protection.json). It
-preserves the previous approval count of 0; it does not authorize automatic
-merging or claim an independent human approved a change. Sensitive-path owners
-and approval tiers remain an owner policy decision.
+Do not wait for CI, approvals or review-thread closure during PR, ship or `/go`
+delivery here. An optional status snapshot must not start a wait/remediation loop.
+Do not automatically restore blocking safeguards through consumer bootstrap.
+Explicitly requested monitoring or feedback work remains separate. Agents still
+need explicit permission to merge; this policy does not grant it.
+
+This owner decision supersedes the earlier required-check policy. It accepts that
+changes can merge while checks fail or findings remain open; it is not evidence
+that a change passed verification. Run useful local verification and report limits.
+
+Installed consumers retain the shared [review-enforcement contract](../shared/review-enforcement.md)
+and their native policy. This exception neither changes their protections nor
+allows their agents to skip required checks.
 
 ## Inspect before changing protection
 
@@ -23,20 +29,14 @@ gh api repos/malinskibeniamin/skills/branches/main/protection
 gh api repos/malinskibeniamin/skills/rulesets
 ```
 
-Compare hosted policy before applying the JSON with `gh api --method PUT ...
---input .github/branch-protection.json`. The PUT replaces settings. Preserve
-stricter existing policy and additional required checks. Re-read hosted policy
-after a write or uncertain response before retrying.
+Re-read hosted policy after any write. Applying `branch-protection.json` replaces
+settings; preserve unrelated rules. Only another explicit owner decision should
+make checks, reviews or conversations blocking in this repository again.
 
-Automation-created PR runs can require a maintainer to select **Approve workflows
-to run**. Keep required checks in place while authorizing those runs through
-[GitHub's supported flow](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow).
-
-[Security review](workflows/security-review.yml) adds CodeQL analysis and
-high/critical dependency review. These are static checks, not independent AI
-review. Require their exact observed check names only after the workflow lands
-on `main` and produces green runs. Requiring undeployed checks can strand PRs.
-No reviewer credential is checked in or inferred from a local CLI session.
+[Security review](workflows/security-review.yml) still runs CodeQL and high/critical
+dependency scanning. These diagnostics and the Linux/macOS/render workflows continue
+without a merge requirement. Static scanning is not independent AI review; no
+reviewer credential is checked in or inferred from a local CLI session.
 
 ## Observe review effort without claiming safety
 
@@ -63,6 +63,22 @@ and deterministic CI checks do not measure model quality. Run model evaluations
 only with explicit authorization and configured credentials. Record the model,
 effort, prompt revision, case dispositions, and run evidence before claiming a
 reviewer improvement. Human-validated incident cases remain a separate need.
+
+## Remaining adoption boundaries
+
+The [Claude Code review process](https://claude.dev/blog/solving-code-review-at-anthropic/)
+informs this harness; its full operating model is not installed by these files.
+
+- Candidate-bound [review gates](../review/GATES.md) remain opt-in. Independent AI
+  review/verification needs explicit authorization and a configured reviewer; installing
+  the harness neither provisions a service nor grants delegation permission.
+- Risk-tier human counts, trusted authors and sensitive-path ownership need owner policy.
+  This repository explicitly opts out of required reviews; consumers keep their own policy.
+- Reviewer-quality claims need human-validated incident/revert cases, executed model
+  evaluations and finding dispositions. Activity metrics do not supply these guardrails.
+- This repository requires neither a fresh base nor a merge queue. Flags, internal-first rollout, release channels,
+  incident detection and operational rollback belong to each consuming product's owners.
+  PR rollback instructions do not implement those systems.
 
 Sources: [GitHub branch protection API](https://docs.github.com/en/rest/branches/branch-protection#update-branch-protection),
 [CodeQL advanced setup](https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/configuring-advanced-setup-for-code-scanning),
