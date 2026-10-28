@@ -1,0 +1,103 @@
+{
+  "repository": "https://github.com/GoogleChromeLabs/webmcp-tools",
+  "revision": "24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb",
+  "license": "Apache-2.0",
+  "paths": [
+    "webmcp-skills/LICENSE",
+    "webmcp-skills/NOTICE",
+    "webmcp-skills/skills/build-webmcp-tools/SKILL.md",
+    "webmcp-skills/skills/build-webmcp-tools/references"
+  ],
+  "files": {
+    "webmcp-skills/LICENSE": {
+      "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "mode": "100644"
+    },
+    "webmcp-skills/NOTICE": {
+      "blob_sha": "a8d8799c178681facc38cd260d94ac7d1ad5e99b",
+      "sha256": "e17f8550bd6f5dc8ffdee3e82ce61016689ff3cf3ba3bb0aaab5d738cf1624b8",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/SKILL.md": {
+      "blob_sha": "17613fb4eb8288c73eeaa0a7b9c96f2be09c9e63",
+      "sha256": "2ef4db0bd1b3b8b319f8e042d03fa2e957eacd98f8b2d004aabb65921a3b3784",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/agent-security.md": {
+      "blob_sha": "956d8bd4c48996f1bd770e3760f4e38b3ac6508e",
+      "sha256": "2f60e2d4b9f5d2c05670401dbfb55c133c899b37171c14d9ef754272bae7e2be",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/angular-patterns.md": {
+      "blob_sha": "089396c76be93162117182eb3293f17c4f79622c",
+      "sha256": "53cd0db12f6eecc18ce28a640b6da40f175e06f8fbfdafa2359575941385f156",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/annotations.md": {
+      "blob_sha": "5bcec003a04771b2d1ebec05485f3a821630e4c8",
+      "sha256": "f0e767d52892e61b59fc495d53920ed4e2873ec97a66e7f4c25a7f97f303322b",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/audit-checklist.md": {
+      "blob_sha": "364cb7a48c04fbd42ebd6ae189e734608c707bc6",
+      "sha256": "0ec81a4ed52036cd473c69a1b0c8dc5d259e472fafe3a392d32a44b2fe4db431",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/conversational-design.md": {
+      "blob_sha": "c64229e0574ae6ea4aea408522c4cacc815f50c5",
+      "sha256": "6a8da88b8835ff7830535750ca2e7724eaac9252e61ed05031454b9edbc99dbe",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/declarative-patterns.md": {
+      "blob_sha": "813ebacde4e43ac6d1cda0cfbf40803714552499",
+      "sha256": "35c3efa2063623049865967c83a207570e4a43c095b91ebfbd7cb4da4b13580b",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/error-handling.md": {
+      "blob_sha": "7ac35c328f5c54adb6dbfc369b69d3e118807488",
+      "sha256": "085f3afb4e0f6cbffec5048a5d9dc2142a45e043fb553d66815c973dd1070715",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/evals-format.md": {
+      "blob_sha": "bce240fb1c1b841d482200ab6231b2a69c6d1b8c",
+      "sha256": "b348f416ba82db604c868fcfb43181dce49ec3524880ee53db26941693c11ef0",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/live-site-discovery.md": {
+      "blob_sha": "69b4e898b5ea2a6518629f189bb079dbb96b902e",
+      "sha256": "2d4e0449ad4fcfc3bd1ccee9261e7bb54313611017185ba1a1cb19ad0d6bba77",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/react-patterns.md": {
+      "blob_sha": "4ffb28804e953b543f01224b88081d4a23c50eae",
+      "sha256": "69f2ef12f9b7205e80140b6ec60b59479502336c5acfad332c6fb2b1cbaf6c78",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/sources.md": {
+      "blob_sha": "01a6808d2647c970bcb0c0c3d65c89c387c24c6d",
+      "sha256": "627da651405edc82816830a4c59427d01391517955f29fd37b598928204e4c0e",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/testing-and-debugging.md": {
+      "blob_sha": "d2a05edaa4868ffd1edc1796f8a06a04be51851b",
+      "sha256": "3ae12ec57273e21d8b578ef344f98ac421394aa721ee49e47a711054024e8828",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/tool-design.md": {
+      "blob_sha": "a752fbdcca5f400a8c40f48785af139780b38bb2",
+      "sha256": "49830180731ccc625e6cf1093432cb47d0181f804d1ad34b50b10cd8407580f5",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/use-case-template.md": {
+      "blob_sha": "e460e0995c7bef46ddab19391563d548395409d8",
+      "sha256": "495a916dba89fecba9bfe15d91219affc09e362a1f0248248e773eaaa62793b0",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/build-webmcp-tools/references/vanilla-patterns.md": {
+      "blob_sha": "1f2ac0c7b4051b9ccd43c3f1bf1eef0ca59990fb",
+      "sha256": "a9f644fd6082d5faa66735b84e2a57b157b58c0dcbf2cf6f83507d3df4164601",
+      "mode": "100644"
+    }
+  }
+}

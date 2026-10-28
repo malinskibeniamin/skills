@@ -123,7 +123,7 @@ SHORT_DESCRIPTIONS = {
     "visual-recap": "Turn a code change into an interactive visual recap",
     "visual-review": "Review customer-facing surfaces from visual evidence",
     "wayfinder": "Map huge, foggy work through decision tickets",
-    "webmcp": "Open web apps and use their MCP or WebMCP tools first",
+    "webmcp": "Operate page tools or build and audit WebMCP interfaces",
     "wait-what": "Re-pitch that with simpler language and missing context",
     "what-did-i-get-done": "Summarize authored commits into a concise status update",
     "wizard": "Generate an interactive Bash wizard for manual setup",
