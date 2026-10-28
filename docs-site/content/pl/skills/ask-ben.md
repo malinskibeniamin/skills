@@ -156,6 +156,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |
 | `/setup-routines` | Konfigurowanie automatycznych procedur utrzymaniowych Claude Code. |
 | `/show-me` | Wyjaśnianie bieżącego tematu za pomocą zwięzłych artefaktów wizualnych. |
+| `/skeleton-loaders` | Twórz dostępne szkielety ładowania dopasowane do układu. |
 | `/snyk-ux-security` | Audytowanie bezpieczeństwa zależności za pomocą Snyk i bramek wydania. |
 | `/software-factory` | Ocenianie przydatności fabryki i planowanie bezpiecznej infrastruktury automatyzacji. |
 | `/stack-registry` | Zarządzanie bieżącym i zabronionym stosem technologicznym w regułach zestawu. |

@@ -726,6 +726,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Focused HTML",
     ],
   },
+  "skeleton-loaders": {
+    kind: "pipeline",
+    nodes: [
+      "Inspect loaded layout",
+      "Reserve geometry",
+      "Transparent placeholders",
+      "Accessible reveal",
+    ],
+  },
   "snyk-ux-security": {
     kind: "evidence-funnel",
     nodes: [
