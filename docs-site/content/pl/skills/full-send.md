@@ -19,7 +19,7 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/full-send.excalidraw)
 
-Jawne `full send <task or PR>` wybiera [przepływ dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) i upoważnia do napraw, commitów, pushu, PR, obsługi CI/przeglądu oraz scalenia tego jednego jednoznacznego rezultatu. Rozmowa o umiejętności nie jest jej wywołaniem.
+Jawne `full send <task or PR>` wybiera [przepływ dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) i upoważnia do napraw, commitów, pushu, PR oraz scalenia tego jednego jednoznacznego rezultatu zgodnie z polityką repozytorium. Nie upoważnia do czekania na CI, przeglądy ani do monitorowania; zgłoś bieżące blokady. Rozmowa o umiejętności nie jest jej wywołaniem.
 
 Wcześniejsze ograniczenia mają pierwszeństwo: lokalnie, bez pushu, tylko szkic, gotowy PR, full stop lub `--no-merge` zawężają punkt końcowy. Sama opieka nad PR nie upoważnia do scalenia. Ustal cel i należące do użytkownika drzewo robocze, wykorzystaj istniejący PR i pozostaw jego gałąź aktywną w Conductor. Pytaj tylko o niejednoznaczny cel lub blokującą decyzję zastrzeżoną dla właściciela.
 

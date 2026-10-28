@@ -4,8 +4,9 @@ description: Compatibility preset for author delivery through an authorized merg
 ---
 
 An explicit `full send <task or PR>` selects the [author delivery workflow](../shared/delivery-workflow.md)
-and authorizes fixes, commit, push, PR, CI/review follow-through and merge of that one
-unambiguous deliverable. Discussing this skill is not an invocation.
+and authorizes fixes, commit, push, PR and a policy-compliant merge of that one
+unambiguous deliverable. It does not authorize waiting for CI/reviews or watching; report
+current blockers. Discussing this skill is not an invocation.
 
 Earlier stops win: local, no push, draft only, PR-ready, full stop or `--no-merge` narrow the
 endpoint. Babysitting alone never grants merge permission. Resolve target/owned worktree,

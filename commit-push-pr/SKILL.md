@@ -45,7 +45,8 @@ Do not run `/visual-recap` or `/make-pr-easy-to-review` unless the user explicit
 ## Completion
 
 1. Take one CI status snapshot: `gh pr checks <number>`; note absent CI.
-2. Report failures; CI remediation needs `/go`, ship, babysitting, or follow-up.
+2. Report failures; CI repair needs an explicit request, not just `/go` or ship.
+   Monitoring and feedback resolution need explicit scope; never wait by default.
 3. Report status, remaining diff, branch, commits, PR, CI, and next action.
 4. Follow CLAUDE.md's status/intent/impact contract; include full PR URL on final status line, including updates.
 

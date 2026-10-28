@@ -7,13 +7,14 @@ preserve the requested endpoint and native GitHub approval policy.
 
 ## Full stop
 
-Use `/full-send --no-merge <task or PR>` to reach verified PR readiness while retaining
-the human merge decision. "Full stop" means this endpoint, not permission to merge.
+Use `/full-send --no-merge <task or PR>` to publish locally verified work without waiting
+for CI/reviews/approvals, retaining the human merge decision. "Full stop" means this endpoint, not permission to merge.
 Local-only, no-push and draft-only stops remain narrower. Loading a skill grants no action.
 
 ## Read-only hosted checkpoint
 
-With Bun, git and authenticated `gh`, run from the owned checkout:
+For an explicitly requested readiness diagnostic or a protected merge, use Bun, git
+and authenticated `gh` from the owned checkout. This is not a delivery gate:
 
 ```sh
 bun <plugin-root>/scripts/full-send-check.ts \

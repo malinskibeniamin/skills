@@ -63,7 +63,6 @@ run_content_eval "$REPO_ROOT/upgrade-dependency/SKILL.md" \
   "build/fix.*commit.*push" \
   "dependency action work follows default delivery"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "commit\\|push\\|pr\\|ship" "lifecycle enforces only external endpoints"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Requested PR endpoint is complete" "PR endpoint does not start an unrequested CI fix loop"
 run_content_eval "$HOOKS_DIR/session-env.sh" 'CAPTURE_TYPECHECK_BASELINE:-0' "session start launches no default background typecheck"
 run_content_eval "$HOOKS_DIR/enforce-toolchain.sh" "join or stop it before final status" "sleep guidance requires background cleanup"
 

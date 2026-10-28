@@ -396,14 +396,14 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "pipeline",
     nodes: [
       "Fix + verify",
-      "PR + CI + reviews",
+      "Publish + snapshot",
       "Final evidence pass",
       "Authorized merge",
     ],
   },
   go: {
     kind: "lifecycle",
-    nodes: ["Verify", "Review", "Deliver", "CI or done"],
+    nodes: ["Verify", "Review", "Publish", "Report + stop"],
   },
   golang: {
     kind: "architecture",
