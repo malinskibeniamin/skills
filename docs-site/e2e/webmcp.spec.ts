@@ -7,18 +7,22 @@ import {
 const locales = [
   {
     code: "en",
+    contract: "Chrome page API",
     description: "communicate or edit through its MCP or WebMCP tools",
   },
   {
     code: "pl",
+    contract: "API strony w Chrome",
     description: "edytować dane przez jej narzędzia MCP lub WebMCP",
   },
   {
     code: "zh-CN",
+    contract: "Chrome 页面 API",
     description: "通过该页面的 MCP 或 WebMCP 工具进行交互或编辑",
   },
   {
     code: "zh-TW",
+    contract: "Chrome 頁面 API",
     description: "透過該頁面的 MCP 或 WebMCP 工具進行互動或編輯",
   },
 ];
@@ -70,6 +74,17 @@ for (const locale of locales) {
         ).toHaveCount(1);
         await stabilizeScreenshotDate(page, false);
         await expect(page).toHaveScreenshot(`webmcp-page-${name}.png`);
+        const contract = page.getByRole("heading", {
+          name: locale.contract,
+        });
+        await expect(contract).toBeAttached();
+        await contract.evaluate((element) => {
+          window.scrollTo(
+            0,
+            window.scrollY + element.getBoundingClientRect().top - 96,
+          );
+        });
+        await expect(page).toHaveScreenshot(`webmcp-chrome-api-${name}.png`);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth),
         ).toBeLessThanOrEqual(viewport.width);
