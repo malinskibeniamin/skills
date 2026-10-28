@@ -13,6 +13,7 @@
 | `/blast-radius` | Prove non-local change safety with executable evidence. |
 | `/brain-dump` | Turn raw thoughts into actionable opportunity maps. |
 | `/break-ui` | Stress-test UI with realistic worst-case data. |
+| `/ci-fixes` | Make CI faster and reliable without weakening test signal. |
 | `/codebase-design` | Design deeper modules with clear interfaces. |
 | `/codex-compat` | Generate Codex hook and instruction parity. |
 | `/codex` | Delegate bounded work through the Codex CLI. |

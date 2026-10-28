@@ -1,0 +1,3 @@
+interface:
+  display_name: "CI Fixes"
+  short_description: "Make CI faster and reliable without weakening test signal"

@@ -37,6 +37,7 @@ type: skill
 | `/blast-radius` | 以可執行的實證證明非區域性變更的安全性。 |
 | `/brain-dump` | 將原始想法轉化為可執行的機會地圖。 |
 | `/break-ui` | 使用真實可信的最壞情況資料壓力測試 UI。 |
+| `/ci-fixes` | 在不削弱測試訊號的前提下加快 CI 並提高可靠性。 |
 | `/codebase-design` | 設計具備清晰介面的深層模組。 |
 | `/codex-compat` | 產生 Codex 掛鉤與指令的對等實作。 |
 | `/codex` | 透過 Codex CLI 委派範圍明確的工作。 |

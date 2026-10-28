@@ -537,6 +537,11 @@ The command discovers every skill recursively, copies the complete source tree u
 
 `/test-audit` is vendored from [openclaw/openclaw](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit) (MIT, notice in `test-audit/CREDITS.md`): an authoring gate `/tdd` routes new tests through, plus audit and subsystem-campaign modes for pruning low-value tests and their test-only production seams.
 
+[`/ci-fixes`](ci-fixes/SKILL.md) audits CI latency and test signal across 21 checks:
+nightly routing, caching, workers/shards, affected-only selection, runner sizing, upgrades,
+flake repair, and evidence-backed test pruning. PR browser tests mock backend traffic;
+optimizations must preserve unique regression detection and coverage.
+
 `/security-audit` vendors the complete
 [Cloudflare security-audit-skill](https://github.com/cloudflare/security-audit-skill)
 package: source-first guidance, domain companions, report schema, and findings and
