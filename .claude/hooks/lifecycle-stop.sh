@@ -127,23 +127,22 @@ if [ -z "$pr_number" ]; then
   hook_stop_block "No PR for '$branch'. Create one NOW: gh pr create --fill — then retry."
 fi
 
-# This repository's owner explicitly chose advisory CI/reviews. Keep publication
-# checks above, but do not turn ship into a CI/review wait or restore hosted gates.
-# Exact origin plus explicit saved policy limits this exception to this repository.
+# Explicit owner decisions live in the bundled registry, not copied consumer files.
+# Keep publication checks above; registered repos do not wait for CI or reviews.
 origin=$(git config --get remote.origin.url)
+repo=""
 case "$origin" in
-  https://github.com/malinskibeniamin/skills|https://github.com/malinskibeniamin/skills.git|\
-  git@github.com:malinskibeniamin/skills|git@github.com:malinskibeniamin/skills.git|\
-  ssh://git@github.com/malinskibeniamin/skills|ssh://git@github.com/malinskibeniamin/skills.git)
-    owner_policy="$(git rev-parse --show-toplevel)/.github/branch-protection.json"
-    if jq -e 'has("required_status_checks") and .required_status_checks == null
-      and has("required_pull_request_reviews") and .required_pull_request_reviews == null
-      and .enforce_admins == false and .required_conversation_resolution == false' \
-      "$owner_policy" >/dev/null 2>&1; then
-      exit 0
-    fi
-    ;;
+  https://github.com/*) repo=${origin#https://github.com/} ;;
+  git@github.com:*) repo=${origin#git@github.com:} ;;
+  ssh://git@github.com/*) repo=${origin#ssh://git@github.com/} ;;
 esac
+repo=${repo%.git}
+owner_policy="$(dirname "$0")/../../config/owner-advisory-repositories.json"
+if jq -e --arg repo "$repo" '.version == 1 and (.repositories | type == "array")
+  and all(.repositories[]; type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"))
+  and (.repositories | index($repo) != null)' "$owner_policy" >/dev/null 2>&1; then
+  exit 0
+fi
 
 # Ship owns readiness, not merely a CI snapshot. Resolve the consumer from origin;
 # the checker lives in the installed plugin, while git/gh stay in the consumer cwd.

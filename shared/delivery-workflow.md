@@ -6,6 +6,11 @@ Run applicable steps yourself; the user does not need to invoke each helper.
 Keep a single owner in the primary context. A different model requires explicit user authorization.
 Delegation, background wake-ups and broader scope need their existing explicit authorization. Reuse current receipts instead of repeating work.
 
+For [registered owner-advisory repositories](review-enforcement.md#explicit-owner-advisory-policy),
+publication completes delivery without waiting for CI, reviews or approvals, including
+ship and `/go`. This overrides the readiness rows below, not the need for explicit merge
+permission. Requested monitoring or feedback work remains separate.
+
 ## Exit contract
 
 | Endpoint | Stop only after |

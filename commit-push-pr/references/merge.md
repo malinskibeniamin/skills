@@ -4,6 +4,11 @@ Use only for explicit permission naming a PR or a bounded, unambiguous set. An e
 of model capability is not permission. Resolve repository, PR, target branch, and allowed
 merge method from the request and repository policy. Ask only for missing reserved choices.
 
+For [registered owner-advisory repositories](../../shared/review-enforcement.md#explicit-owner-advisory-policy),
+CI, reviews, approvals and thread resolution do not gate an explicitly authorized merge.
+Keep ownership, published-head, mergeability, deployment-scope and final readback checks.
+The registry is not itself merge permission. Other repositories retain all gates below.
+
 ## Verify the merge candidate
 
 - Inspect the current head and base, full diff, dependencies/stack order, acceptance
@@ -23,11 +28,14 @@ merge method from the request and repository policy. Ask only for missing reserv
 Re-read PR state immediately before the merge. Use the repository's protected hosted
 merge path and expected-head guard, such as `gh pr merge <number> --repo <owner/repo>
 --match-head-commit <verified-sha>` with the permitted method for a non-queue target.
-Never bypass protection with `--admin`, force-push the target, delete branches, or enable
-auto-merge as a fallback. Respect required merge queues; enqueue only if the authorized
+An explicit merge in a registered owner-advisory repository may use `--admin` for the
+owner-approved CI/review override, retaining the expected-head guard. Otherwise never
+bypass protection. Never force-push the target, delete branches, or enable auto-merge
+as a fallback. Respect required merge queues; enqueue only if the authorized
 endpoint permits it, otherwise report the queue decision needed.
 
-The expected-head guard does not pin the base. Require the hosted up-to-date check or
+The expected-head guard does not pin the base. Outside the owner-advisory exception,
+require the hosted up-to-date check or
 merge queue to protect against a base race; if neither can protect the verified result,
 report the missing gate rather than claim a preflight read makes the merge atomic.
 

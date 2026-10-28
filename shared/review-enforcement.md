@@ -4,9 +4,24 @@ Installing this harness ships guidance and hooks, not this repository's `.github
 workflows or hosted settings. Verify the consuming repository's `origin` and the PR's
 actual base branch. Never copy this harness's CI names or overwrite a stricter policy.
 
+## Explicit owner-advisory policy
+
+Before setup or readiness work, resolve the harness root and check the consumer's
+canonical GitHub `owner/repo` against [the bundled registry](../config/owner-advisory-repositories.json).
+Its entries record explicit owner decisions: CI, security scans, reviews and approvals
+are advisory, including ship and `/go`. Publish the requested scope and report local
+verification without waiting for CI/reviews or restoring blocking hosted requirements.
+Disabled classic requirements or rulesets in these repositories are intentional, not
+missing safeguards to repair. Change the registry when an owner reverses this policy.
+
+Only registered identities receive this exception; copying a local payload does not
+opt another repository out. Other consumers retain the contract below. Publication and
+ownership checks still apply; merging, monitoring and feedback work need their existing
+explicit authorization. Advisory status is not evidence that verification passed.
+
 ## Automatic setup
 
-On authorized build/fix or push/PR/ship work in **every consuming repository**, read
+On authorized build/fix or push/PR/ship work in **unregistered consuming repositories**, read
 this workflow and reconcile missing safeguards automatically. Do not wait for a setup
 command, ask whether to configure ordinary prerequisites, or only report repairable gaps.
 This applies to plugin and skills-only installs; bootstrap is not exclusive to this repo
@@ -61,6 +76,10 @@ setup. Repeated review failures should improve the owning harness rule/skill/hoo
 its regression test, not accumulate per-consumer exceptions.
 
 ## Readiness contract
+
+This checkpoint certifies protected-consumer readiness, not permission to merge.
+Owner-advisory delivery does not run it as a gate. An explicitly requested diagnostic
+may still report missing protections; that does not override the registered owner policy.
 
 Before claiming a GitHub PR is ready for merge, run the read-only checkpoint from the
 owned consuming checkout, using the installed plugin's script and observed full SHAs:
