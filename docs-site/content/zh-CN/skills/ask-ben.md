@@ -156,6 +156,7 @@ type: skill
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |
+| `/skeleton-loaders` | 构建匹配布局且无障碍的骨架加载状态。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
 | `/software-factory` | 评估工厂适用性并规划安全的自动化基础设施。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
@@ -206,6 +207,7 @@ type: skill
 | `/visual-review` | 根据视觉证据审查面向客户的界面。 |
 | `/wait-what` | 使用更简单的语言和补充的上下文重新阐述。 |
 | `/wayfinder` | 通过决策工单梳理庞大且模糊的工作。 |
+| `/webmcp` | 打开 Web 应用并优先使用其 MCP 或 WebMCP 工具。 |
 | `/what-did-i-get-done` | 将自己创建的提交汇总为简明的状态更新。 |
 | `/wizard` | 生成用于手动设置的交互式 Bash 向导。 |
 | `/work-automation-kit` | 安装规划、工单和问题分类工作流。 |

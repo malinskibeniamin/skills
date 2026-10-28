@@ -3,6 +3,22 @@
 Written against Bend 2.0.37. `bend guide` is the source of truth for syntax; this file
 holds the traps the guide does not warn about and the patterns that close proofs.
 
+## Trust and scope
+
+Treat Bend as experimental supporting evidence for a reviewed model, not a production
+correctness certificate. Keep independent tests of the shipped code. A proof establishes
+the stated law, not whether that law captures the intended requirement. An oracle
+comparison establishes agreement only for the inputs it covers.
+
+Record the pinned Bend version, exact command, exit status, and verdict with proof
+evidence. Distinguish the plain checker from the kernel-backed check below. Neither
+establishes runtime speed, Go-like simplicity, or production readiness.
+
+For a crash or suspected false acceptance, preserve the version, minimal input, output,
+and recovery steps. Distinguish playground availability, incorrect generated code, and
+acceptance of a false proposition. A crash alone does not establish a soundness bug.
+Keep reproductions local unless sharing source is explicitly authorized.
+
 ## Gate
 
 | Command | Passes when |
@@ -12,10 +28,18 @@ holds the traps the guide does not warn about and the patterns that close proofs
 
 Releases before 2.0.32 printed `All terms check.`; `check.sh` accepts only the current
 verdict. The plain checker has no proof, and the parser and the translation into the
-kernel are unproven. Run `--verdict` in CI when you can.
+kernel are unproven. The [upstream guide](https://github.com/bendlang/bend/blob/dd7d74db7b9e493c33eaf1d7c7f5add70636e3cb/guide/GUIDE.md#laws-and-proofs)
+explicitly documents the unproved translation. A kernel result alone does not prove
+agreement between the original source and the shipped executable.
 
 `--verdict` needs Lean v4.34.0 (`elan toolchain install leanprover/lean4:v4.34.0`), or
 `$BENDTT` pointing at a built kernel. The first run builds the kernel; cache it.
+Use `laws/check.sh --verdict` in CI for kernel-backed evidence. If the kernel cannot
+run, report that verification as blocked; a plain check is not a substitute for it.
+
+`laws/check.sh` fails when no law directories exist. An oracle runtime failure also
+fails the check and preserves that rule's committed `decisions.txt`, including with
+`--write`. Fix the failure and rerun the same command before updating the table.
 
 ## Syntax traps
 

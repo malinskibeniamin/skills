@@ -726,6 +726,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Focused HTML",
     ],
   },
+  "skeleton-loaders": {
+    kind: "pipeline",
+    nodes: [
+      "Inspect loaded layout",
+      "Reserve geometry",
+      "Transparent placeholders",
+      "Accessible reveal",
+    ],
+  },
   "snyk-ux-security": {
     kind: "evidence-funnel",
     nodes: [
@@ -953,6 +962,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Decisions so far",
       "Fog of war",
       "Tickets + questions",
+    ],
+  },
+  webmcp: {
+    kind: "user-flow",
+    nodes: [
+      "Open exact URL",
+      "Read page tools + state",
+      "Call requested tool",
+      "Read back result",
     ],
   },
   "what-did-i-get-done": {

@@ -33,7 +33,9 @@ bare='^[[:space:]]*case([[:space:]]+[^[:space:]]+)*[[:space:]]+[A-Z][A-Za-z0-9_]
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 status=0
+found=0
 for dir in $(for f in */LAWS.bend */PROOF.bend; do [ -e "$f" ] && dirname "$f"; done | sort -u); do
+  found=1
   proof="$dir/PROOF.bend"
   if [ ! -f "$dir/LAWS.bend" ]; then
     echo "$dir: LAWS.bend is missing; a human writes the laws the proofs meet" >&2
@@ -62,7 +64,12 @@ for dir in $(for f in */LAWS.bend */PROOF.bend; do [ -e "$f" ] && dirname "$f"; 
     continue
   fi
   "$bend" "$dir/oracle.bend" -o "$tmp/oracle.js" >/dev/null
-  node "$tmp/oracle.js" | sed '/^$/d' >"$tmp/decisions.txt"
+  if ! node "$tmp/oracle.js" >"$tmp/oracle.out"; then
+    echo "$dir: oracle failed; decisions.txt unchanged" >&2
+    status=1
+    continue
+  fi
+  sed '/^$/d' "$tmp/oracle.out" >"$tmp/decisions.txt"
   if [ "$write" = 1 ]; then
     cp "$tmp/decisions.txt" "$dir/decisions.txt"
     echo "$dir: laws proven, wrote decisions.txt"
@@ -73,4 +80,8 @@ for dir in $(for f in */LAWS.bend */PROOF.bend; do [ -e "$f" ] && dirname "$f"; 
     echo "$dir: laws proven, decisions.txt fresh"
   fi
 done
+if [ "$found" -eq 0 ]; then
+  echo "no law directories found: add a rule with LAWS.bend and PROOF.bend beside this script" >&2
+  status=1
+fi
 exit $status
