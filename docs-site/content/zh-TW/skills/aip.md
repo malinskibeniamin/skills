@@ -1,19 +1,29 @@
 ---
-title: /aip
 description: >-
-  設計 Google AIP 資源 API。適用於 protobuf 或 REST 資源、標準方法、HTTP
-  繫結、欄位、分頁、篩選、長時間執行作業、錯誤、相容性或批次 API。
-type: skill
+  設計並審查採用 Google AIP 資源慣例的 API：標準方法、HTTP 繫結、欄位、分頁、篩選、長時間執行的作業、錯誤與批次 API。一般
+  Protobuf 結構描述及執行階段審查由 protobuf 負責。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - aip
 sidebar:
   label: /aip
+title: /aip
+type: skill
 ---
 ![「/aip」技能圖解](/diagrams/skills/aip.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/aip.excalidraw)
 
+涉及 protobuf 二進位或 JSON 相容性、程式碼產生、驗證或執行階段使用端時，載入 [protobuf](https://github.com/malinskibeniamin/skills/blob/main/protobuf/SKILL.md)。僅當 API 選擇 Google 資源慣例作為契約時使用本技能；單憑 `.proto` 檔案不能作此判斷。
+
 以通用 AIP 作為事實依據。已核准的 AIP 具有規範效力。AIP-162（草案）與 AIP-182（審查中）僅供參考：應納入考量並加以標示，但絕不可將其表述為要求。
 
-## 工作流程
+## 工作流程 [#workflow]
 
 1. 閱讀完整的提議介面及鄰近的既有 API。判定其屬於管理平面或資料平面。
 2. 逐一檢視 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/aip/REFERENCE.md) 中全部 72 個 `Use when` 項目，以建立適用性清單；使用概念或 `AIP-N` 搜尋來取得詳細資訊，不要將其作為唯一的探索方式。記錄選用或排除每個 AIP 的原因。不要盲目套用所有 AIP。
@@ -24,7 +34,7 @@ sidebar:
 7. 若可行，使用存放區既有的命令與設定執行 `api-linter`。將其視為最低標準：仍須手動審查其無法編碼的適用規則。
 8. 每個適用的 AIP 各以一列 `AIP | state | applicability | result | evidence/exception` 回報；絕不可將多個 AIP 合併於同一列，也不可省略符合規範的通過項目。另行列出因不適用而排除的 AIP，接著驗證這兩組項目是否恰好各自涵蓋全部 72 個已發布的編號一次。將規範性失敗與參考性建議分開呈現。
 
-## 基準
+## 基準 [#baseline]
 
 - 將管理 API 建模為無環階層中的具名資源，並優先採用標準方法。
 - 為資源提供包含完整服務相對路徑的標準相對資源 `name`，並加上 `(google.api.resource)` 註解；顯示文字應保留給 `display_name`。
@@ -36,7 +46,7 @@ sidebar:
 - 審查每項變更的相容性，而不只是欄位編號的重複使用：名稱、類型、格式、語意、HTTP 繫結、資源模式、必填性及用戶端行為都很重要。
 - 記錄使用者可見的語意、驗證、預設值、排序、限制、副作用、錯誤、保留政策及例外。
 
-## 防護措施
+## 防護措施 [#guardrails]
 
 - 不要為尚未指派的編號捏造指引；此範圍包含 72 個已發布的通用 AIP，而非 236 份文件。
 - 不要將範例視為普遍要求。僅在符合觸發條件時套用條件式 AIP。

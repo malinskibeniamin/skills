@@ -156,6 +156,7 @@ type: skill
 | `/prime` | 建立精簡的儲存庫啟動簡報。 |
 | `/product` | 確認工作值得投入時間，並能交付商業價值。 |
 | `/prototype` | 建立一次性成品，以回答設計問題。 |
+| `/protobuf` | 設計並審查 protobuf 結構描述及其使用端。 |
 | `/quantify-impact` | 證明對產品與程式碼庫具有實質意義的改善。 |
 | `/read-the-damn-docs` | 從第一手文件研究目前的行為。 |
 | `/redpanda-ai-gateway` | 透過 Redpanda AI Gateway 執行 AI CLI。 |

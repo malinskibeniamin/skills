@@ -31,9 +31,9 @@
       "zh-TW": "15c156be112c84c6"
     },
     "content/skills/aip.md": {
-      "pl": "1120d133871b8399",
-      "zh-CN": "1120d133871b8399",
-      "zh-TW": "1120d133871b8399"
+      "pl": "eeed539b8ad28129",
+      "zh-CN": "eeed539b8ad28129",
+      "zh-TW": "eeed539b8ad28129"
     },
     "content/skills/animate.md": {
       "pl": "dfed232226748f62",
@@ -314,6 +314,11 @@
       "pl": "2fd9b895cebd24d2",
       "zh-CN": "2fd9b895cebd24d2",
       "zh-TW": "2fd9b895cebd24d2"
+    },
+    "content/skills/protobuf.md": {
+      "pl": "d82f4a7d927f9335",
+      "zh-CN": "d82f4a7d927f9335",
+      "zh-TW": "d82f4a7d927f9335"
     },
     "content/skills/prototype.md": {
       "pl": "357bbd943eb3079b",

@@ -77,6 +77,8 @@ type: skill
 | Go/并发/工作流 | 所有权、取消、竞态、重试、幂等 |
 | 依赖/外部 API | 第一手文档、版本、锁文件、安全通告 |
 
+差异涉及 `.proto` 文件（包括删除和重命名）、Buf 配置或 protobuf 代码生成/运行时契约时，完整加载 [protobuf](https://github.com/malinskibeniamin/skills/blob/main/protobuf/SKILL.md)。即使模式本身未变，也要追踪受影响的生成代码和使用方。能力改进建议应保持非阻塞，并与缺陷分开。在[门禁审查](https://github.com/malinskibeniamin/skills/blob/main/review/GATES.md)中，语义排除不能跳过命中路径的 protobuf 门禁；普通内联审查使用同一技能，无需启用门禁或委派。
+
 按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)加载技能。
 分别为“product”和“lie-detector”调用 Skill 工具；在当前流程中应用它们的视角。
 获授权的审查维度应一起在前台运行；汇总每份报告。
@@ -111,3 +113,4 @@ type: skill
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定点、模式、计数、
 `product:` 和 `lie-detector:` 结论行、结论和剩余限制。无发现时只返回这些结论行、结论和剩余限制。
+若 protobuf 审查范围包含具体能力改进机会，追加独立的非阻塞建议部分；没有内容就省略。结构化门禁审查保留发现格式，使用其中的建议机会字段。

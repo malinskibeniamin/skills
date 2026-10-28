@@ -156,6 +156,7 @@ type: skill
 | `/prime` | 构建简明的仓库启动说明。 |
 | `/product` | 检查工作是否值得投入时间，并带来相应的业务价值。 |
 | `/prototype` | 构建一次性产物来回答设计问题。 |
+| `/protobuf` | 设计并审查 protobuf 模式及其使用方。 |
 | `/quantify-impact` | 证明有意义的产品和代码库改进。 |
 | `/read-the-damn-docs` | 根据主要文档研究当前行为。 |
 | `/redpanda-ai-gateway` | 通过 Redpanda AI Gateway 运行 AI CLI。 |
