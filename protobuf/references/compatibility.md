@@ -23,6 +23,48 @@ Sources: [schema evolution best practices](https://protobuf.dev/best-practices/d
 [field presence](https://protobuf.dev/programming-guides/field_presence/),
 [ProtoJSON](https://protobuf.dev/programming-guides/json/).
 
+## Traps a wire check can miss
+
+- Treat integer widening as conditional: an old `int32` reader can truncate a new
+  `int64` value. Constrain new writers until old readers are retired; evaluate JSON
+  representation separately. Matching wire types do not make arbitrary swaps safe.
+- An old reader cannot distinguish an unset oneof from a newly added, unknown branch.
+  Exercise forwarding followed by editing, not just a new-reader round trip.
+- For maps, test duplicate-key/last-value behavior and unordered iteration. Converting
+  repeated entries into a map can discard duplicates and ordering that callers use.
+- Avoid new enum aliases or public/weak imports as portability shortcuts. Changing alias
+  order can change emitted JSON names and reflection; removing legacy imports/aliases
+  still needs a consumer-aware migration, not automatic cleanup.
+
+Sources: [conditional changes, oneofs and maps](https://protobuf.dev/programming-guides/proto3/),
+[enum aliases](https://buf.build/blog/totw-6-dangers-of-enum-aliases),
+[import portability](https://buf.build/blog/totw-5-avoid-import-public-weak).
+
+For editions, inspect effective feature settings, including scoped overrides, and every
+compiler/plugin/runtime's support. Explicit singular-field presence does not give maps
+or repeated fields presence. Preserve legacy proto2 `required`/`LEGACY_REQUIRED` carefully:
+they affect initialization/parsing/serialization, unlike a runtime validation rule.
+For new schemas, use explicit presence plus application validation instead of legacy
+requiredness; an editions migration is optional, not an automatic review fix.
+
+Sources: [edition features](https://protobuf.dev/editions/features/),
+[legacy requiredness](https://buf.build/blog/totw-8-never-use-required).
+
+Preserve unknowns through compatible intermediaries using the runtime's message-aware
+copy/clone APIs. At a security boundary, decide explicitly whether forwarding unvalidated
+unknown fields to a newer downstream consumer is permitted. Neither blanket discard nor
+blind preservation is a universal policy. Binary serialization, even deterministic mode,
+is not a cross-version canonical hash/signature. ProtoJSON defines a mapping, not a unique
+byte representation; use an explicit domain canonicalization contract when required.
+
+Sources: [unknown-field retention](https://protobuf.dev/programming-guides/proto3/#unknowns),
+[non-canonical serialization](https://protobuf.dev/programming-guides/serialization-not-canonical/),
+[ProtoJSON options](https://protobuf.dev/programming-guides/json/#json-options).
+
+For changed encodings, large numeric payloads or byte-level diagnosis, read
+[wire and performance](wire-and-performance.md). For the research coverage and rejected
+overgeneralizations behind this guidance, see the [dated source review](source-review-2026-10.md).
+
 ## Checks are scoped evidence
 
 Inspect `buf.yaml` and its exclusions before interpreting `buf breaking`. `FILE` checks
@@ -41,6 +83,11 @@ compare affected output and type-check consumers, including when only generation
 changed. Confirm descriptors/custom options needed at runtime survive the generation
 and bundling path. Treat missing generated updates as a defect only when this repository
 ships those artifacts or its build does not generate them automatically.
+
+Pin schema dependencies/SDK versions and plugin versions/revisions through the existing
+config/locks. Remote generation sends schema input to a service; a blog example is not
+permission to publish a module, disclose private schemas or add registry credentials.
+Keep editor/LSP import roots aligned with CI; editor success alone is not a build proof.
 
 Sources: [Buf generation](https://buf.build/docs/generate/usage/),
 [cross-version runtime guarantees](https://protobuf.dev/support/cross-version-runtime-guarantee/).

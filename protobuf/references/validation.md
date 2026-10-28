@@ -31,8 +31,25 @@ Sources: [field behavior semantics](https://google.aip.dev/203),
 - Tightening validation can reject previously accepted or persisted values without a
   wire break. Require a compatibility/rollout explanation for the actual affected users.
 
+Standard rules have shared semantics, but implementations may use native fast paths,
+CEL or both. Verify behavior in pinned runtimes rather than depending on an evaluation
+strategy. Reuse/cache supported validators instead of recompiling rules per request.
+For PGV migrations, compare old/new accepted inputs and error paths before removing the
+old annotations/runtime; mechanically translated rules are not a parity proof.
+
 Sources: [Protovalidate rules and presence](https://github.com/bufbuild/protovalidate/blob/main/proto/protovalidate/buf/validate/validate.proto),
-[custom CEL rules](https://protovalidate.com/schemas/custom-rules/).
+[custom CEL rules](https://protovalidate.com/schemas/custom-rules/),
+[native fast paths](https://buf.build/blog/faster-protovalidate),
+[PGV migration differences](https://protovalidate.com/migration-guides/migrate-from-protoc-gen-validate/).
+
+## Bound work before semantic validation
+
+Trace transport and decoder limits separately from field constraints: compressed and
+decompressed bytes, nesting, collection sizes and stream/message counts where relevant.
+Post-decode validation cannot prevent allocations already made during parsing. Place
+cheap authentication/rate limits before expensive work using the installed framework's
+actual interceptor order; Connect-Go v1 unary and v2 interceptors differ here. See
+[RPC boundaries](rpc.md) when the changed rule runs in an RPC handler.
 
 ## Evidence to seek
 
@@ -41,3 +58,4 @@ counterexample; and a credible validator failure. Verify server rejection and us
 error paths, including nested lists/maps/oneofs. Compile and run relevant rules in each
 supported runtime before claiming parity. For partial updates, verify validation respects
 the update contract rather than treating every omitted field as a full-create request.
+Include malformed/oversized input at the real transport boundary when limits change.
