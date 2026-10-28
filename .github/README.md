@@ -2,7 +2,8 @@
 
 ## Owner merge policy
 
-For **malinskibeniamin/skills only**, the repository owner chooses when to merge.
+For this repository, the owner chooses when to merge. Explicit exceptions, including
+Protoform, are recorded in [the bundled owner-advisory registry](../config/owner-advisory-repositories.json).
 CI, security scans, review findings and approvals are advisory, not merge gates.
 The hosted `main` policy and [saved payload](branch-protection.json) have no required
 status checks, required PR reviews or conversation-resolution requirement. Admin
@@ -18,9 +19,9 @@ This owner decision supersedes the earlier required-check policy. It accepts tha
 changes can merge while checks fail or findings remain open; it is not evidence
 that a change passed verification. Run useful local verification and report limits.
 
-Installed consumers retain the shared [review-enforcement contract](../shared/review-enforcement.md)
-and their native policy. This exception neither changes their protections nor
-allows their agents to skip required checks.
+Unregistered consumers retain the shared [review-enforcement contract](../shared/review-enforcement.md)
+and their native policy. The registry does not authorize changes in other repositories
+or let their agents skip required checks.
 
 ## Inspect before changing protection
 
