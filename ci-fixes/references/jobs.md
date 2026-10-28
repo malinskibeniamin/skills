@@ -1,4 +1,4 @@
-# Job execution: points 1–11
+# Job execution: points 1-11
 
 Use the [measurement protocol](measurement.md); record a decision for every point in
 the [audit index](../REFERENCE.md). Apply the target repository's package manager,

@@ -1,4 +1,4 @@
-# Test signal: points 12–18
+# Test signal: points 12-18
 
 Use the [measurement protocol](measurement.md) and
 [test-audit ownership/deletion evidence](../../test-audit/SKILL.md). Optimize the
@@ -61,7 +61,7 @@ or never meaningful. Compare full retained-suite line/branch coverage with ident
 denominators, thresholds, instrumentation, and exclusions; inspect lost branches, not just
 aggregate percentages. Mutation/negative controls must still detect the removed suite's
 credible failures. Keep security/storage/transport distinctions even when happy paths look
-similar. Large cuts are welcome when proven; no deletion quota or invented “quality unchanged”
+similar. Large cuts are welcome when proven; no deletion quota or invented "quality unchanged"
 guarantee. A static or slow test may remain the cheapest unique guard. Do not delete a baseline
 product failure as cleanup. Use small coherent batches and rerun CI selection after moves.
 
@@ -85,7 +85,7 @@ See how the framework [classifies retry-pass results](https://playwright.dev/doc
 **Accept only if:** zero-retry execution is the retained target and any detected retry-pass
 remains visible/failing where the installed framework supports it. Exercise the repaired
 failure conditions, not only many easy repetitions. Zero failures in a finite sample cannot
-prove “never flaky”: under independent identical Bernoulli trials, zero failures in `n`
+prove "never flaky": under independent identical Bernoulli trials, zero failures in `n`
 trials gives a one-sided 95% upper failure-probability bound `1 - 0.05^(1/n)`, about `3/n`.
 CI runs often violate those independence assumptions. Use that limitation to avoid false
 confidence, not to invent an acceptable flake budget. Cause, deterministic regression,

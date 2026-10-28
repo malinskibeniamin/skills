@@ -33,6 +33,6 @@ sections; a focused repair still marks the other checks with an evidenced decisi
 adopt/reject/defer/not applicable, proposed experiment, acceptance/failure signal,
 expected detection latency, owner, and rollback. Unknown is not not-applicable.
 
-Preserve the [entrypoint's safety and completion rules](SKILL.md). “Green” is not
+Preserve the [entrypoint's safety and completion rules](SKILL.md). "Green" is not
 an optimization when work was silently skipped, retry-passed, or made incapable of
 detecting the regression. Instructions here are audit policy, not an installed CI gate.

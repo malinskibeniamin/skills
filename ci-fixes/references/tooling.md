@@ -1,4 +1,4 @@
-# Testing evolution: points 19–21
+# Testing evolution: points 19-21
 
 Use the [measurement protocol](measurement.md). Investigate current capabilities
 without turning novelty, version assertions, or broad matrices into new CI overhead.
