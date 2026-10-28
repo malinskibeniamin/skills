@@ -523,6 +523,57 @@ test("the shipped Stop hook allows protected consumers and preserves the PR-only
   expect(f.runHook("pr").code).toBe(0);
 });
 
+test("the skills owner's advisory policy skips CI and review waiting only in this repository", () => {
+  const f = fixture();
+  const repo = "https://github.com/malinskibeniamin/skills.git";
+  f.git(
+    "config",
+    "--add",
+    `url.${join(f.worktree, "..", "remote.git")}.insteadOf`,
+    repo,
+  );
+  f.git("remote", "set-url", "origin", repo);
+  mkdirSync(join(f.worktree, ".github"));
+  writeFileSync(
+    join(f.worktree, ".github/branch-protection.json"),
+    JSON.stringify({
+      required_status_checks: null,
+      required_pull_request_reviews: null,
+      enforce_admins: false,
+      required_conversation_resolution: false,
+    }),
+  );
+  f.git("add", ".github/branch-protection.json");
+  f.git("commit", "-m", "chore(policy): advisory owner checks");
+  f.git("push", "origin", "HEAD");
+  f.snapshot.pr.headRefOid = f.git("rev-parse", "HEAD");
+  f.snapshot.pr.reviewDecision = "CHANGES_REQUESTED";
+  f.snapshot.checks = [{ name: "test", bucket: "pending", state: "PENDING" }];
+  f.snapshot.protection = null;
+  f.snapshot.pages = [
+    {
+      nodes: [{ id: "open-finding", isResolved: false, isOutdated: false }],
+      pageInfo: { hasNextPage: false, endCursor: "last" },
+    },
+  ];
+  f.save();
+  expect(f.runHook("ship").code).toBe(0);
+  const calls: string[][] = readFileSync(f.calls, "utf8")
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line));
+  expect(calls.every((args) => args[0] === "pr" && args[1] === "list")).toBe(
+    true,
+  );
+  f.git(
+    "remote",
+    "set-url",
+    "origin",
+    "https://github.com/example/project.git",
+  );
+  expect(f.runHook("ship").code).toBe(2);
+});
+
 test("zero required approvals does not invent an independent reviewer", () => {
   const f = fixture();
   if (!f.snapshot.protection) throw new Error("Missing fixture protection");
