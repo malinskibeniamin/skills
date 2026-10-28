@@ -32,6 +32,9 @@ This agent is expensive. Run only when at least one trigger fires.
 ## Required Reading
 
 Before producing any finding, review [karpathy-failure-modes.md](./karpathy-failure-modes.md) and include `karpathy_checks` in your output.
+After the trigger gate permits review, load applicable specialists from
+[change evidence](../shared/change-evidence.md). Use their contracts to construct
+failure scenarios; protobuf capability opportunities remain advisory, not defects.
 
 ## Mission
 

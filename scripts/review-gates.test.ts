@@ -138,6 +138,42 @@ test("the reviewer collector rejects malformed findings and false identity", () 
 });
 
 const entry = new URL("./review-gates.ts", import.meta.url).pathname;
+
+test.each([
+  { reviewer: "self-reviewer", specialist: true },
+  { reviewer: "code-reviewer", specialist: true },
+  { reviewer: "adversarial-reviewer", specialist: true },
+  { reviewer: "explorer", specialist: false },
+])(
+  "$reviewer startup scopes specialist routing outside the harness checkout",
+  ({ reviewer, specialist }) => {
+    const root = mkdtempSync(join(tmpdir(), "review-start-"));
+    directories.push(root);
+    const session = `review-start-${root.split("/").at(-1)}`;
+    directories.push(`/tmp/hook-session-${session}`);
+    const result = Bun.spawnSync(
+      [
+        "bash",
+        new URL("../.claude/hooks/subagent-start.sh", import.meta.url).pathname,
+      ],
+      {
+        cwd: root,
+        env: { ...Bun.env, CLAUDE_SESSION_ID: session },
+        stdin: Buffer.from(
+          JSON.stringify({ session_id: session, agent_type: reviewer }),
+        ),
+      },
+    );
+    expect(result.exitCode).toBe(0);
+    const context = JSON.parse(result.stdout.toString()).hookSpecificOutput
+      .additionalContext;
+    const guidance = new URL("../shared/change-evidence.md", import.meta.url)
+      .pathname;
+    expect(context.includes(guidance)).toBe(specialist);
+    expect(existsSync(guidance)).toBe(true);
+  },
+);
+
 function checkout(files: Record<string, string> = {}) {
   const root = mkdtempSync(join(tmpdir(), "review-gates-"));
   directories.push(root);
@@ -247,6 +283,10 @@ test("gate plans retain lockfiles, generated changes and names with spaces", () 
 test("repair reviews focus on the captured delta without reusing approval or dropping prior findings", () => {
   const f = checkout();
   writeFileSync(
+    join(f.root, "service.proto"),
+    'syntax = "proto3";\nmessage Request { string label = 1; }\n',
+  );
+  writeFileSync(
     join(f.root, "context.ts"),
     "export const unchanged = 'first review context';\n",
   );
@@ -256,13 +296,21 @@ test("repair reviews focus on the captured delta without reusing approval or dro
       .code,
   ).toBe(0);
   expect(f.record("operations").code).toBe(0);
+  expect(f.record("protobuf").code).toBe(0);
   const status = f.git("status", "--porcelain");
   writeFileSync(join(f.root, "README.md"), "Repaired candidate\n");
+  writeFileSync(
+    join(f.root, "service.proto"),
+    'syntax = "proto3";\nmessage Request { optional string label = 1; }\n',
+  );
   expect(f.run("check").code).toBe(3);
   const repair = f.plan();
   const correctness = repair.gates.find((gate) => gate.id === "correctness");
   expect(correctness?.scope).toBe("delta");
   expect(repair.gates.find((gate) => gate.id === "operations")?.scope).toBe(
+    "full",
+  );
+  expect(repair.gates.find((gate) => gate.id === "protobuf")?.scope).toBe(
     "full",
   );
   expect(

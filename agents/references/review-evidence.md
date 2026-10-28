@@ -2,6 +2,14 @@
 
 Shared by code-reviewer and self-reviewer.
 
+## Specialist routing
+
+Load applicable owners from [change evidence](../../shared/change-evidence.md) before
+forming findings. Its protobuf route covers schemas, generation and runtime/descriptor
+consumers even without an AIP-style API or review-gate opt-in. Keep capability
+opportunities in `simplification_opportunities`, separate from defects and testing gaps.
+Loading a specialist does not authorize delegation or start another review workflow.
+
 ## Resilience Review Evidence
 
 Require `/resilience-review` evidence only when credible failure could cause data
