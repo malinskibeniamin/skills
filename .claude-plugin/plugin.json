@@ -37,6 +37,7 @@
     "./blast-radius/",
     "./brain-dump/",
     "./break-ui/",
+    "./ci-fixes/",
     "./codebase-design/",
     "./codex-compat/",
     "./codex/",

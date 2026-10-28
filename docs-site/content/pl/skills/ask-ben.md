@@ -37,6 +37,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/blast-radius` | Wykazywanie bezpieczeństwa nielokalnych zmian za pomocą wykonywalnych dowodów. |
 | `/brain-dump` | Przekształcanie surowych myśli w praktyczne mapy możliwości. |
 | `/break-ui` | Testowanie UI na realistycznych danych najgorszego przypadku. |
+| `/ci-fixes` | Przyspieszanie CI i poprawa niezawodności bez osłabiania sygnału testów. |
 | `/codebase-design` | Projektowanie głębszych modułów z przejrzystymi interfejsami. |
 | `/codex-compat` | Generowanie zgodnych hooków i instrukcji dla Codex. |
 | `/codex` | Delegowanie ograniczonych zadań przez CLI Codex. |

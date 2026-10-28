@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "b095d4e5c6b90775",
-      "zh-CN": "b095d4e5c6b90775",
-      "zh-TW": "b095d4e5c6b90775"
+      "pl": "fa1cc5343d567320",
+      "zh-CN": "fa1cc5343d567320",
+      "zh-TW": "fa1cc5343d567320"
     },
     "content/skills/accessibility.md": {
       "pl": "cb10d2eb86ed7636",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "7c9d1a68ffa24726",
-      "zh-CN": "7c9d1a68ffa24726",
-      "zh-TW": "7c9d1a68ffa24726"
+      "pl": "3aa37dfd2812e7d5",
+      "zh-CN": "3aa37dfd2812e7d5",
+      "zh-TW": "3aa37dfd2812e7d5"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -84,6 +84,11 @@
       "pl": "fdb7b9b29bb7f074",
       "zh-CN": "fdb7b9b29bb7f074",
       "zh-TW": "fdb7b9b29bb7f074"
+    },
+    "content/skills/ci-fixes.md": {
+      "pl": "aaba4a6bb6edd1e0",
+      "zh-CN": "aaba4a6bb6edd1e0",
+      "zh-TW": "aaba4a6bb6edd1e0"
     },
     "content/skills/codebase-design.md": {
       "pl": "ed182416e6b9eba6",

@@ -37,6 +37,7 @@ type: skill
 | `/blast-radius` | 使用可执行证据证明非局部变更的安全性。 |
 | `/brain-dump` | 将原始想法转化为可执行的机会地图。 |
 | `/break-ui` | 使用真实可信的最坏情况数据压力测试 UI。 |
+| `/ci-fixes` | 在不削弱测试信号的前提下加快 CI 并提高可靠性。 |
 | `/codebase-design` | 设计具有清晰接口的深层模块。 |
 | `/codex-compat` | 生成与 Codex 钩子和指令的功能对等实现。 |
 | `/codex` | 通过 Codex CLI 委派范围明确的工作。 |
