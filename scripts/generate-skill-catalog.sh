@@ -95,6 +95,7 @@ SHORT_DESCRIPTIONS = {
     "setup-atlassian-workflow": "Configure opt-in Jira and Atlassian workflows",
     "setup-routines": "Configure automated Claude Code maintenance routines",
     "show-me": "Explain the current topic with concise visual artifacts",
+    "skeleton-loaders": "Build layout-matched, accessible skeleton loading states",
     "snyk-ux-security": "Audit dependency security with Snyk and release gates",
     "software-factory": "Assess factory fit and plan safe automation infrastructure",
     "stack-registry": "Current and banned stack governance for harness rules",

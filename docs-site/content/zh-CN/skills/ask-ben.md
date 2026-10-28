@@ -156,6 +156,7 @@ type: skill
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |
 | `/setup-routines` | 配置自动化 Claude Code 维护例程。 |
 | `/show-me` | 使用简洁的可视化产物解释当前主题。 |
+| `/skeleton-loaders` | 构建匹配布局且无障碍的骨架加载状态。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
 | `/software-factory` | 评估工厂适用性并规划安全的自动化基础设施。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
