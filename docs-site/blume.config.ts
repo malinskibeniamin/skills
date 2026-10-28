@@ -150,6 +150,7 @@ export default defineConfig({
   },
   versions: {
     archived: [
+      { id: "v4.41.0" },
       { id: "v4.40.0" },
       { id: "v4.39.0" },
       { id: "v4.38.0" },

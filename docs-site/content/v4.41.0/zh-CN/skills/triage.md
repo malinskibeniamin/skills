@@ -1,0 +1,76 @@
+---
+description: 让问题在分诊角色之间流转，并准备可由智能体执行的工作。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - triage
+sidebar:
+  label: /triage
+title: /triage
+type: skill
+---
+![/triage 技能示意图](/diagrams/skills/triage.svg)
+
+[打开可编辑的 Excalidraw 源文件](/diagrams/skills/triage.excalidraw)
+
+当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/v4.41.0/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
+
+使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
+
+通过小型角色状态机移动问题。对于已配置的外部 PR，PR 是附带代码的问题；通过跟踪器解析裸编号。
+使用领域词汇表和相关 ADR。通过 `/read-the-damn-docs` 阅读当前外部文档；用 `/plan-arbiter` 仲裁竞争方案，用 `/visual-plan` 展示大型史诗。
+
+## 评论不变量 [#comment-invariant]
+
+每条发布的分诊评论必须以下列内容开头：
+
+```markdown
+> *此内容由 AI 在分诊期间生成。*
+```
+
+## 跟踪器与角色 [#tracker-and-roles]
+
+从仓库说明和远程地址检测跟踪器：
+
+- GitHub：按 [tracker-github.md](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/tracker-github.md) 使用 `gh`。
+- Jira：按 [tracker-jira.md](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/tracker-jira.md) 使用 `acli`。
+- 两者都可能时，询问哪个拥有该事项。
+
+每个已分诊事项恰好有一个类别（`bug` 或 `enhancement`）和一个状态：`needs-triage`、`needs-info`、`ready-for-agent`、`ready-for-human` 或 `wontfix`。
+将标准角色映射到现有标签或状态。状态冲突必须先决策再修改。
+
+## 待关注队列 [#show-attention-queue]
+
+按最旧优先查询：
+
+1. 无标签或无状态事项。
+2. `needs-triage` 事项。
+3. 报告者有新活动的 `needs-info` 事项。
+
+读取已配置跟踪器的 `PRs/MRs as a request surface` 标志；缺失或为 `no` 时不进行外部发现。仅在为 `yes` 时包含外部事项，并将每行标记为 `[PR]` 或 `[issue]`；协作者的活跃 PR 不属于发现工作。明确指定的 PR 始终在范围内。显示数量，由维护者选择。
+
+## 分诊一个事项 [#triage-one-item]
+
+1. **收集。** 阅读正文、评论、标签或状态、报告者、日期、旧分诊记录，以及 PR 差异。不要重复已回答的问题。
+2. **探索。** 按领域概念搜索冗余或已有实现。检查 `.out-of-scope/` 中的旧拒绝记录。
+3. **建议。** 给出类别、状态、理由和代码证据；等待方向。
+4. **验证主张。** 复现缺陷，或检出并测试 PR。报告已确认、失败或证据不足。根因和 RED/GREEN 计划见 [TDD 修复计划模式](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/REFERENCE.md#tdd-fix-plan-mode)。
+5. **必要时追问。** 对未决判断或领域语言使用 `/grilling`。
+6. **应用。** 就绪状态使用 [AGENT-BRIEF.md](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/AGENT-BRIEF.md)，`needs-info` 使用 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/REFERENCE.md)。对于 `wontfix`：
+   - 已实现：链接实现并关闭，不写拒绝历史；
+   - 缺陷：解释后关闭；
+   - 增强：按 [OUT-OF-SCOPE.md](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/OUT-OF-SCOPE.md) 记录，链接并关闭。
+   除非要记录部分进展，应用 `needs-triage` 时不评论。
+
+## 覆盖与恢复 [#overrides-and-resume]
+
+对于明确状态覆盖，先说明变更再执行，跳过追问。仅在没有智能体简报却移动到 `ready-for-agent` 时询问是否编写。
+恢复时读取旧记录和新回复，再展示当前状态，不重复提问。
+
+完整模板和状态转换见 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.41.0/triage/REFERENCE.md)。
+
+评估贡献是否符合政策或执行已授权的 PR 管理时，加载[贡献分诊](https://github.com/malinskibeniamin/skills/blob/v4.41.0/t3code-skills/contribution-triage/SKILL.md)。工单就绪状态仍由此技能负责；是否符合资格由目标仓库的可信政策决定，而不是 T3 的政策。
