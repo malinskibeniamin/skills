@@ -1,6 +1,6 @@
 ---
 name: go
-description: Author delivery preset through verified PR readiness, without merging.
+description: Author delivery preset through locally verified PR publication, without waiting or merging.
 disable-model-invocation: true
 ---
 

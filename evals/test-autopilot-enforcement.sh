@@ -64,8 +64,6 @@ else
 fi
 rm -rf "$_diverged_repo" "$_diverged_remote" "$_diverged_session" "$_diverged_out" "$_diverged_err"
 run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Create one NOW" "lifecycle-stop prescribes PR creation"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "Requested PR endpoint is complete" "PR endpoint stops after CI snapshot"
-run_content_eval "$HOOKS_DIR/lifecycle-stop.sh" "explicit ship loop" "ship endpoint alone owns CI monitoring"
 if grep -q "consider: gh pr edit" "$HOOKS_DIR/lifecycle-stop.sh"; then
   echo "  FAIL  lifecycle-stop adds unrequested reviewer work"
   FAIL=$((FAIL + 1))

@@ -21,7 +21,7 @@ not proof that every interaction tool or device works. Read their actual schemas
 Pass `--babysit` only for an authorized `/full-send` monitoring endpoint, never a PR-only stop.
 Add `--allow-wake` only when host wake-ups are explicitly authorized for the current task;
 tool availability or merge/ship intent alone does not grant that permission. Otherwise
-keep foreground monitoring; do not add a permission prompt when that path works.
+stop after the current status snapshot; monitoring needs an explicit request.
 
 The JSON selects guidance; it does **not** execute checks, invoke tools, grant authority,
 or prove verification. Repository markers identify a layout, not a trusted identity.
