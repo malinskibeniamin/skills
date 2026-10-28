@@ -8,19 +8,20 @@ wrappers, macros, pins and CI policy outrank this general guidance.
 
 ## Establish the build contract
 
-- Resolve the Bazel workspace root, `.bazelversion`, root `MODULE.bazel`, applicable
-  `.bazelrc` imports, component instructions and the actual CI entrypoint. Use the
-  pinned Bazel through the repository's Bazelisk/wrapper, not a globally upgraded
-  binary. Keep per-machine overrides in the existing ignored user rc file.
-  Verify newer flags, Starlark annotation syntax and rules against those pins;
-  conference demos and roadmap items are not released API contracts.
+- Resolve the Bazel workspace root, `.bazelversion`, root `MODULE.bazel`, applicable `.bazelrc` imports,
+  component instructions and the actual CI entrypoint. Use the pinned Bazel through the repository's
+  Bazelisk/wrapper, not a globally upgraded binary. Keep per-machine overrides in the existing ignored user rc
+  file. Verify newer flags, Starlark annotation syntax and rules against those pins; conference demos and
+  roadmap items are not released API contracts.
+- For version upgrades, bundled-JDK trust failures or Bazel 10 compatibility,
+  read [release guidance](references/releases.md). Keep same-line patch updates
+  separate from opt-in release-candidate testing.
 - Distinguish **what has BUILD files** from **what Bazel owns today**. Generated
   targets do not prove CI adoption. Check merged source, not an intermediate
   commit, draft rollout or predecessor repository.
-- Preserve a monorepo's one-root-module boundary. Consolidate dependency/toolchain
-  declarations at that root; a new nested `MODULE.bazel` can hide a subtree from
-  wildcard discovery. Treat an intentionally separate workspace as a separate
-  build, not something to merge opportunistically.
+- Preserve a monorepo's one-root-module boundary. Consolidate dependency/toolchain declarations at that root;
+  a new nested `MODULE.bazel` can hide a subtree from wildcard discovery. Treat an intentionally separate
+  workspace as a separate build, not something to merge opportunistically.
 - For a Go/Task/Gazelle tree, read [Go monorepos](references/go-monorepo.md).
   For C++, cross-compilation, accelerators or graph-selected integration, read
   [C++ monorepos](references/cpp-monorepo.md). For frontend/Node integration, read
@@ -31,11 +32,10 @@ wrappers, macros, pins and CI policy outrank this general guidance.
 
 ## Choose the incremental loop
 
-Keep action reuse, Git-aware target selection, browser HMR and deployment separate.
-Bazel owns declared build/test/artifact dependencies; the frontend tool owns Fast
-Refresh, and orchestration owns service lifecycle and rollout. Start only the local
-app's needed closure, not every app. Preserve existing frameworks/package managers;
-prove one vertical slice before standardizing it. Measure cold/warm/no-op and
+Keep action reuse, Git-aware target selection, browser HMR and deployment separate. Bazel owns declared
+build/test/artifact dependencies; the frontend tool owns Fast Refresh, and orchestration owns service
+lifecycle and rollout. Start only the local app's needed closure, not every app. Preserve existing
+frameworks/package managers; prove one vertical slice before standardizing it. Measure cold/warm/no-op and
 representative edits before promising speed; adding Bazel does not prove a gain.
 
 ## Find the owner before editing

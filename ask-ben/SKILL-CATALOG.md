@@ -132,6 +132,7 @@
 | `/setup-atlassian-workflow` | Configure opt-in Jira and Atlassian workflows. |
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
+| `/skeleton-loaders` | Build layout-matched, accessible skeleton loading states. |
 | `/snyk-ux-security` | Audit dependency security with Snyk and release gates. |
 | `/software-factory` | Assess factory fit and plan safe automation infrastructure. |
 | `/stack-registry` | Current and banned stack governance for harness rules. |
@@ -182,6 +183,7 @@
 | `/visual-review` | Review customer-facing surfaces from visual evidence. |
 | `/wait-what` | Re-pitch that with simpler language and missing context. |
 | `/wayfinder` | Map huge, foggy work through decision tickets. |
+| `/webmcp` | Open web apps and use their MCP or WebMCP tools first. |
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
 | `/work-automation-kit` | Install planning, ticketing, and triage workflows. |

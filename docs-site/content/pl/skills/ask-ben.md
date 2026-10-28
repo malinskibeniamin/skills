@@ -156,6 +156,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |
 | `/setup-routines` | Konfigurowanie automatycznych procedur utrzymaniowych Claude Code. |
 | `/show-me` | Wyjaśnianie bieżącego tematu za pomocą zwięzłych artefaktów wizualnych. |
+| `/skeleton-loaders` | Twórz dostępne szkielety ładowania dopasowane do układu. |
 | `/snyk-ux-security` | Audytowanie bezpieczeństwa zależności za pomocą Snyk i bramek wydania. |
 | `/software-factory` | Ocenianie przydatności fabryki i planowanie bezpiecznej infrastruktury automatyzacji. |
 | `/stack-registry` | Zarządzanie bieżącym i zabronionym stosem technologicznym w regułach zestawu. |
@@ -206,6 +207,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/visual-review` | Przeglądanie interfejsów przeznaczonych dla klientów na podstawie dowodów wizualnych. |
 | `/wait-what` | Ponowne przedstawianie pomysłu prostszym językiem i uzupełnianie brakującego kontekstu. |
 | `/wayfinder` | Mapowanie ogromnych, niejasnych zadań za pomocą zgłoszeń decyzyjnych. |
+| `/webmcp` | Otwieranie aplikacji internetowych z pierwszeństwem ich narzędzi MCP lub WebMCP. |
 | `/what-did-i-get-done` | Podsumowywanie własnych commitów w zwięzłej aktualizacji statusu. |
 | `/wizard` | Generowanie interaktywnego kreatora Bash do ręcznej konfiguracji. |
 | `/work-automation-kit` | Instalowanie przepływów pracy do planowania, tworzenia zadań i selekcji zgłoszeń. |
