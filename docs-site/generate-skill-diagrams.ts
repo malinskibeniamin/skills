@@ -65,7 +65,7 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
     kind: "feedback-loop",
     nodes: [
       "Measure critical path",
-      "Assess 21 checks",
+      "Assess scoped checks",
       "Fix 1 bottleneck",
       "Prove speed + signal",
     ],

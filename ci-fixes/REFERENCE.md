@@ -1,6 +1,7 @@
-# The 21-check CI audit
+# CI audit
 
-Assess every original point; implement only evidence-backed improvements. Read
+Keep the original points 1-21 stable; the audit continues beyond them. Assess every
+indexed check; implement only evidence-backed improvements. Read
 [measurement and decision records](references/measurement.md) once, then the deep
 sections for the jobs/contracts under investigation. A whole-suite audit uses all
 sections; a focused repair still marks the other checks with an evidenced decision.
@@ -28,6 +29,24 @@ sections; a focused repair still marks the other checks with an evidenced decisi
 | 19. Latest frameworks | What blocks the latest stable, compatible toolchain? | [Version inventory, migration, ongoing updates](references/tooling.md#19-maintain-current-testing-frameworks) |
 | 20. New paradigms | Does a supported new capability improve the same contract? | [Bounded automated A/B experiments and rejection](references/tooling.md#20-benchmark-new-paradigms) |
 | 21. Nightly browsers | Which supported engine/platform differences deserve another lane? | [Risk-to-engine mapping and matrix pruning](references/tooling.md#21-risk-based-nightly-browsers) |
+| 22. Reproducible builds | Can clean builders recreate the declared outputs without hidden inputs? | [Independent rebuilds and input isolation](references/delivery-integrity.md#22-hermetic-and-reproducible-builds) |
+| 23. Artifact identity | Is the artifact consumed or shipped the one actually validated? | [Digest continuity and verified provenance](references/delivery-integrity.md#23-tested-artifact-promotion-and-provenance) |
+| 24. Execution trust | Can untrusted code reach credentials or privileged execution? | [Event, identity, and permission boundaries](references/delivery-integrity.md#24-execution-trust-and-credential-boundaries) |
+| 25. Security signal | Did the intended scan actually inspect the intended inputs? | [Scanner completeness and dependency admission](references/delivery-integrity.md#25-security-gate-effectiveness) |
+| 26. Rollout compatibility | Will mixed versions and real migrations preserve supported contracts and data? | [Version-skew and migration rehearsal](references/delivery-integrity.md#26-mixed-version-and-migration-compatibility) |
+| 27. Executable configuration | Do workflows, matrices, and generated outputs mean what their consumers expect? | [Native validation and regeneration](references/delivery-integrity.md#27-configuration-and-generated-code-validity) |
+| 28. Interruption recovery | What survives cancellation, timeout, eviction, or a killed runner? | [Owned-resource cleanup and idempotent recovery](references/operations.md#28-interruption-cleanup-and-safe-recovery) |
+| 29. Infrastructure outages | Can a transient setup failure be contained without concealing a product defect? | [Failure classification and bounded retry budgets](references/operations.md#29-infrastructure-outage-containment) |
+| 30. Reproduction parity | Can a maintainer replay the same failure outside the hosted runner? | [Sanitized, exact-input replay](references/operations.md#30-local-and-ci-reproduction-parity) |
+| 31. Diagnostic integrity | Are results complete, attributable, and useful enough to locate the failure? | [Report failure controls and diagnosis latency](references/operations.md#31-diagnostic-and-report-integrity) |
+| 32. Evidence privacy | Who can read retained CI evidence, and what sensitive data does it contain? | [Redaction, access, and retention](references/operations.md#32-evidence-privacy-and-retention) |
+| 33. Regression prevention | Will CI detect a meaningful future latency or resource regression? | [Noise-aware budgets with negative controls](references/governance.md#33-performance-and-resource-regression-prevention) |
+| 34. Policy drift | Do actual hosted behavior and ownership match the intended CI contract? | [Required/advisory policy and lifecycle reconciliation](references/governance.md#34-ownership-and-hosted-policy-drift) |
+
+For an uncovered failure, apply the [entrypoint's extension rule](SKILL.md#choose-the-smallest-useful-change).
+Keep new checks independent: caching correctness does not prove reproducibility;
+test coverage does not prove safe rollout; cancellation does not prove cleanup.
+The index is extensible, not a target count or a mandate to install every control.
 
 **Decision record per check:** job/contract, observed bottleneck or risk, evidence,
 adopt/reject/defer/not applicable, proposed experiment, acceptance/failure signal,

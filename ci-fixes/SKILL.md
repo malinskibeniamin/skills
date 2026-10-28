@@ -23,11 +23,17 @@ Do not create schedules, buy runners, change branch protection, or start agents 
 
 ## Choose the smallest useful change
 
-Read the complete [21-check audit](REFERENCE.md). Assess every check; record each applicable
+Read the complete [CI audit](REFERENCE.md). Assess every indexed check; record each applicable
 job's decision as **adopt**, **reject**, **defer**, or **not applicable**, with evidence.
 Do not change every lever just because it exists. Rank by measured critical-path savings,
 compute savings, confidence, and implementation/maintenance risk. Unknowns need a small
 experiment, not invented estimates. Never delay fast jobs merely to align finish times.
+
+The original checks are a foundation, not a ceiling. Follow the index into delivery
+integrity, operations, and governance when relevant. Extend it for an uncovered failure
+only with a distinct protected contract, falsifiable experiment, acceptance signal, and
+owner; cross-link overlapping checks instead of multiplying them. Broader diagnosis grants
+no permission to provision services, expose data, or change security/delivery policy.
 
 Load supporting guidance only for the work being performed:
 
@@ -66,7 +72,7 @@ that conceal flaky tests. Never move a broken test to nightly to claim a fix.
 
 ## Handoff
 
-Lead with the result and its limit. Include the critical bottleneck, decisions for all 21
+Lead with the result and its limit. Include the critical bottleneck, decisions for indexed
 checks, before/after evidence and sample/cache conditions, changed test ownership and
 deletion rationale, version/source verification dates, actual commands/run URLs, unresolved
 risks, and rollback. Distinguish measured gains from proposed experiments. Keep detailed

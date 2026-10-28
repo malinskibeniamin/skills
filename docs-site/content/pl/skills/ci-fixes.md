@@ -28,12 +28,19 @@ Nie twórz przy okazji harmonogramów, nie kupuj maszyn, nie zmieniaj ochrony ga
 
 ## Wybierz najmniejszą użyteczną zmianę
 
-Przeczytaj cały [audyt z 21 kontrolami](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/REFERENCE.md).
-Oceń każdą kontrolę; dla właściwych zadań zapisz decyzję **przyjmij**, **odrzuć**,
+Przeczytaj cały [audyt CI](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/REFERENCE.md).
+Oceń każdą kontrolę z indeksu; dla właściwych zadań zapisz decyzję **przyjmij**, **odrzuć**,
 **odrocz** albo **nie dotyczy**, wraz z dowodami. Nie stosuj każdej dostępnej optymalizacji.
 Ustal priorytety według zmierzonych oszczędności na ścieżce krytycznej i zasobach, pewności
 oraz ryzyka wdrożenia i utrzymania. Niewiadome wymagają małego eksperymentu, nie zmyślonych
 szacunków. Nigdy nie opóźniaj szybkich zadań tylko po to, by kończyły się równocześnie.
+
+Pierwotne kontrole są podstawą, nie limitem. Gdy to istotne, przejdź z indeksu do
+integralności dostarczania, operacji i zarządzania. Dodawaj kontrolę dla nieobjętej awarii
+wyłącznie z odrębnym chronionym kontraktem, falsyfikowalnym eksperymentem, kryterium
+akceptacji i właścicielem; nakładające się kontrole łącz odsyłaczami, zamiast je mnożyć.
+Szersza diagnoza nie uprawnia do tworzenia usług, ujawniania danych ani zmiany polityki
+bezpieczeństwa lub dostarczania.
 
 Wczytuj dodatkowe instrukcje tylko dla wykonywanej pracy:
 
@@ -72,7 +79,7 @@ pominięć lub kwarantanny ani ponowień maskujących niestabilność. Nigdy nie
 
 ## Przekazanie
 
-Zacznij od wyniku i jego ograniczeń. Podaj wąskie gardło, decyzje dla wszystkich 21 kontroli,
+Zacznij od wyniku i jego ograniczeń. Podaj wąskie gardło, decyzje dla kontroli z indeksu,
 dowody przed i po wraz z próbkami i stanem cache, zmienione przypisanie kontraktów do testów,
 powody usunięć, daty weryfikacji wersji i źródeł, rzeczywiste polecenia i adresy wykonań,
 nierozwiązane ryzyka oraz sposób wycofania. Oddziel zmierzone zyski od proponowanych eksperymentów.
