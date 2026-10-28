@@ -8,7 +8,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const directories: string[] = [];
 // These public-seam tests launch real Git and CLI processes, including under CI load.
@@ -138,7 +138,7 @@ test("the reviewer collector rejects malformed findings and false identity", () 
 });
 
 const entry = new URL("./review-gates.ts", import.meta.url).pathname;
-function checkout() {
+function checkout(files: Record<string, string> = {}) {
   const root = mkdtempSync(join(tmpdir(), "review-gates-"));
   directories.push(root);
   const git = (...args: string[]) => {
@@ -151,6 +151,11 @@ function checkout() {
   git("config", "user.email", "review@example.invalid");
   writeFileSync(join(root, ".gitignore"), ".context/\n");
   writeFileSync(join(root, "README.md"), "Before\n");
+  for (const [path, content] of Object.entries(files)) {
+    const file = join(root, path);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
   git("add", ".");
   git("commit", "-m", "test(review): baseline");
   git("switch", "-c", "ben-malinski/TEST-1/review-gates");
@@ -515,6 +520,100 @@ test("routing unions path and semantic signals and permits only justified skips"
   expect(f.run("plan", "--base", "main", "--classifications", bad).code).toBe(
     2,
   );
+});
+
+test.each([
+  "service.proto",
+  "api/example/v1/service.proto",
+  "buf.yaml",
+  "buf.gen.yaml",
+  "buf.gen.forms.yaml",
+  "buf.work.yaml",
+  "buf.lock",
+  "services/catalog/buf.gen.client.yaml",
+])("%s routes to protobuf guidance despite a semantic exclusion", (path) => {
+  const f = checkout();
+  const file = join(f.root, path);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, "changed contract input\n");
+  const plan = f.plan([
+    {
+      gate: "protobuf",
+      relevant: false,
+      reason: "Must not override changed protobuf inputs",
+    },
+  ]);
+  const gate = plan.gates.find((item) => item.id === "protobuf");
+  expect(gate?.applicable).toBe(true);
+  if (!gate) throw new Error("Missing protobuf review gate");
+  expect(gate.reason).toBe(`Path signal: ${path}`);
+  expect(readFileSync(gate.prompt, "utf8")).toContain("protobuf/SKILL.md");
+});
+
+test.each(["modify", "delete", "rename"] as const)(
+  "tracked proto %s keeps its review gate",
+  (change) => {
+    const f = checkout({
+      "service.proto":
+        'syntax = "proto3";\npackage example.v1;\nmessage Request {}\n',
+    });
+    switch (change) {
+      case "modify":
+        writeFileSync(join(f.root, "service.proto"), "changed schema\n");
+        break;
+      case "delete":
+        f.git("rm", "service.proto");
+        break;
+      case "rename":
+        f.git("mv", "service.proto", "archived-schema.txt");
+        break;
+      default:
+        change satisfies never;
+    }
+    const plan = f.plan([
+      {
+        gate: "protobuf",
+        relevant: false,
+        reason: "Must not override a changed or removed schema",
+      },
+    ]);
+    expect(plan.snapshot.paths).toContain("service.proto");
+    expect(plan.gates.find((gate) => gate.id === "protobuf")).toMatchObject({
+      applicable: true,
+      reason: "Path signal: service.proto",
+    });
+  },
+);
+
+test("protobuf routing distinguishes unrelated text from consumer-only contracts", () => {
+  const f = checkout();
+  const unrelated = f.plan([
+    {
+      gate: "protobuf",
+      relevant: false,
+      reason:
+        "Only editorial README changes; no protobuf contract or consumers",
+    },
+  ]);
+  expect(
+    unrelated.gates.find((gate) => gate.id === "protobuf")?.applicable,
+  ).toBe(false);
+  writeFileSync(
+    join(f.root, "client.ts"),
+    "export const useBinaryFormat = true;\n",
+  );
+  const consumer = f.plan([
+    {
+      gate: "protobuf",
+      relevant: true,
+      reason: "The client changes its protobuf serialization contract",
+    },
+  ]);
+  expect(consumer.gates.find((gate) => gate.id === "protobuf")).toMatchObject({
+    applicable: true,
+    reason:
+      "Semantic applicability: The client changes its protobuf serialization contract",
+  });
 });
 
 test("a preliminary plan can refine applicability without inventing a failed review", () => {

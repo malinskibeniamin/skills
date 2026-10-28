@@ -54,6 +54,20 @@
       "rereview": "full"
     },
     {
+      "id": "protobuf",
+      "title": "Protobuf contracts",
+      "always": false,
+      "globs": [
+        "**/*.proto",
+        "**/buf.yaml",
+        "**/buf.gen*.yaml",
+        "**/buf.work.yaml",
+        "**/buf.lock"
+      ],
+      "skills": ["protobuf/SKILL.md"],
+      "lens": "Review protobuf binary, JSON, generated-source and behavioral contracts through affected consumers. Check presence, schema evolution, codegen, validation enforcement and descriptor-driven behavior. Apply AIP only for APIs adopting its resource conventions. Keep concrete defects separate from advisory schema-driven opportunities; do not require runtime migrations or dispatch agents."
+    },
+    {
       "id": "contracts-and-architecture",
       "title": "Contracts and architecture",
       "always": false,

@@ -81,6 +81,7 @@ SHORT_DESCRIPTIONS = {
     "product": "Check that work earns its time and ships business value",
     "prime": "Build a concise repository startup brief",
     "prototype": "Build a throwaway artifact to answer a design question",
+    "protobuf": "Design and review protobuf schemas and their consumers",
     "quantify-impact": "Prove meaningful product and codebase improvements",
     "read-the-damn-docs": "Research current behavior from primary documentation",
     "redpanda-ai-gateway": "Run AI CLIs through the Redpanda AI Gateway",
