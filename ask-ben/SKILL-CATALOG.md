@@ -46,6 +46,20 @@
 | `/implement-spec` | Implement a whole spec on one integration branch. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
+| `/better-accessibility` | Extend existing accessibility verification with WCAG. |
+| `/better-colors` | Build and measure semantic interface color systems. |
+| `/better-interface` | Review interfaces through existing visual review. |
+| `/better-layout` | Review grouping and responsive interface structure. |
+| `/better-typography` | Set and review readable interface typography. |
+| `/better-ui` | Polish surfaces, icons and interaction details. |
+| `/better-writing` | Extend existing UI copy guidance with interface patterns. |
+| `/break` | Build an explicitly requested component stress page. |
+| `/build-design` | Implement a supplied design with existing components. |
+| `/explain-interface` | Explain an interface or effect from observed evidence. |
+| `/interface-review` | Review interface regressions in a named change. |
+| `/state-machine` | Build an explicitly requested component state workbench. |
+| `/teardown` | Create evidence-grounded technical illustrations. |
+| `/variant` | Explore explicitly requested component design variants. |
 | `/launchdarkly` | Audit flag audiences and retirement with LaunchDarkly CLI. |
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |

@@ -216,7 +216,21 @@
     "./tstack-skills/leaving-pr-comments/",
     "./tstack-skills/modernize/",
     "./tstack-skills/sol-loop/",
-    "./tstack-skills/takeover/"
+    "./tstack-skills/takeover/",
+    "./jakubkrehel-skills/better-accessibility/",
+    "./jakubkrehel-skills/better-colors/",
+    "./jakubkrehel-skills/better-interface/",
+    "./jakubkrehel-skills/better-layout/",
+    "./jakubkrehel-skills/better-typography/",
+    "./jakubkrehel-skills/better-ui/",
+    "./jakubkrehel-skills/better-writing/",
+    "./jakubkrehel-skills/break/",
+    "./jakubkrehel-skills/build-design/",
+    "./jakubkrehel-skills/explain-interface/",
+    "./jakubkrehel-skills/interface-review/",
+    "./jakubkrehel-skills/state-machine/",
+    "./jakubkrehel-skills/teardown/",
+    "./jakubkrehel-skills/variant/"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",

@@ -51,6 +51,11 @@ Recheck identity before verdict; drift invalidates affected evidence.
 
 Add surface-specific scrutiny only when the diff supplies evidence:
 
+For interface changes, use [interface compatibility](../shared/INTERFACES.md#interface-review)
+and the plain [removed-signal reference](../vendor/jakubkrehel/skills/interface-review/removed-signals.md)
+to check lost affordances on both sides. Load `visual-review` for rendered evidence;
+do not automatically invoke the separate user-only `interface-review` or start a second report.
+
 | Surface | Check |
 |---|---|
 | Customer-facing UI/CLI/report | Render, states, copy, keyboard/a11y, console, viewport |

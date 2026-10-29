@@ -34,6 +34,11 @@ T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-cont
 Before edits, load [change evidence](../shared/change-evidence.md) and owners.
 Assess impact; capture base before visible edits, even tiny copy/shared-UI.
 
+When the outcome implements a supplied Figma design or image, load
+[build-design](../jakubkrehel-skills/build-design/SKILL.md) for source evidence,
+token mapping and viewport comparison. Keep required safety/error states and this
+delivery loop; matching a picture does not waive them.
+
 ### Act
 
 A single owner; explicit consent for delegation/background work. Implement the requested behavior using local conventions. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; static wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence. Report adjacent cleanup unless verification needs it.

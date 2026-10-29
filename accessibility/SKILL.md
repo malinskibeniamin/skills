@@ -7,10 +7,11 @@ paths:
 
 # Accessibility
 
+Manual WCAG checks: load [better-accessibility](../jakubkrehel-skills/better-accessibility/SKILL.md).
+
 One owner per rule:
 
-- **Biome** owns element semantics: image `alt`, keyboard support for custom controls,
-  combobox ARIA, and label association.
+- **Biome** owns image `alt`, custom-control keyboard support, combobox ARIA and labels.
 - **React Doctor** owns structure and naming: dialogs, nested controls, accessible
   names, persistent labels, and described invalid fields.
 - **The local hook** only pairs `tablist` with child `tab` roles and `data-invalid` with
@@ -22,14 +23,14 @@ Do not duplicate checks. Escape hatch: `// allow: a11y-skip [reason]`.
 
 - Prefer native controls and visible text. Custom clickable elements need a role,
   `tabIndex`, and equivalent keyboard behavior.
-- Use either a clickable container without interactive descendants or a passive container
-  with interactive children. Never nest pressables.
+- Keep clickable containers free of interactive descendants; otherwise use a passive
+  container. Never nest pressables.
 - Comboboxes expose `aria-expanded` and `aria-controls`; tablists contain tabs.
 - Use `aria-label` only without a visible name; it or `aria-labelledby` can replace
   descendant text. Omit redundant words such as `icon` or `button`.
 - Form controls have persistent labels. Connect visible errors with `aria-invalid` and a
   current `aria-describedby`; remove stale error IDs when validation clears.
-- Inspect the accessibility tree when naming is unclear. Follow the
+- Unclear names: inspect the accessibility tree; follow
   [WAI-ARIA naming guidance](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
 
 ## Visual and focus checks
@@ -47,4 +48,4 @@ Do not duplicate checks. Escape hatch: `// allow: a11y-skip [reason]`.
 - Verify high-risk mobile overlays on a physical device or simulator, including
   `visualViewport`, safe areas, focus, and inertness.
 
-Initial setup (install, AXE fixture, hook config): see [SETUP.md](SETUP.md).
+Setup (install, AXE, hooks): [SETUP.md](SETUP.md).

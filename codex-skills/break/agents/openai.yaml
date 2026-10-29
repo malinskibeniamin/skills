@@ -1,0 +1,5 @@
+interface:
+  display_name: "Break"
+  short_description: "Build an explicitly requested component stress page"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "State Machine"
+  short_description: "Build an explicitly requested component state workbench"
+policy:
+  allow_implicit_invocation: false

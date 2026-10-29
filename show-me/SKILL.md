@@ -95,6 +95,12 @@ function expandSkill(command: string): string {
 ```
 Bash(open /absolute/path/to/show-me-{description}.html)
 ```
+For an explicit question about how a site or visual effect was built, use
+[interface explanation compatibility](../shared/INTERFACES.md#explain-interface)
+and recommend the user-only `explain-interface`; distinguish measured mechanisms
+from screenshot reconstruction. Requested object/layer technical illustrations use
+[teardown](../jakubkrehel-skills/teardown/SKILL.md), not architecture diagrams.
+
 ### guidance
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
 Use only needed views. Beginner explainer -> `/eli5`; interactive plan -> `/visual-plan`; PR recap -> `/visual-recap`.

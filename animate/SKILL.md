@@ -32,6 +32,8 @@ not UI animation. `/demo` remains user-invoked; this pointer grants no publicati
    Scale anchored surfaces from their trigger; keep centered dialogs centered.
 5. Reuse tokens. For new tokens and component-specific starting points, read
    [REFERENCE.md](REFERENCE.md); profile instead of assuming hardware acceleration.
+   For surface/icon motion recipes, read [interface compatibility](../shared/INTERFACES.md#better-ui),
+   then [better-ui](../jakubkrehel-skills/better-ui/SKILL.md); its fixed values never override project tokens or instant feedback.
 6. Respect reduced motion, hover capability, focus, and cancellation from the start.
    Remove non-essential movement; instant state changes are valid. Keep essential
    meaning available without animation. Gate hover with `(hover: hover) and (pointer: fine)`.

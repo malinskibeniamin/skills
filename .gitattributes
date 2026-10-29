@@ -5,3 +5,4 @@
 vendor/pstack/** -text -whitespace
 vendor/cloudflare-security-audit/** -text -whitespace
 vendor/tstack/** -text -whitespace
+vendor/jakubkrehel/** -text -whitespace

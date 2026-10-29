@@ -270,6 +270,22 @@ endpoints, ownership and protected review gates. Council and sol loop require
 explicit delegation; other workflows never start them automatically. Vendoring
 does not start watchers, install services or grant merge authority.
 
+### Interface craft and workbenches
+
+All 14 [Jakub Krehel interface skills](https://github.com/jakubkrehel/skills)
+ship as a [pinned MIT snapshot](vendor/jakubkrehel-NOTICE.md), with their references
+and teardown viewer helpers intact. [Host composition](shared/INTERFACES.md)
+connects them to visual review, accessibility, UI copy, motion, mobile, stress
+checks, prototypes and design implementation. Existing owners keep their workflows;
+project tokens, safety requirements and requested delivery endpoints take precedence.
+
+`/better-interface`, `/better-ui`, `/better-typography`, `/better-colors`,
+`/better-accessibility`, `/better-layout`, `/better-writing`, `/build-design` and
+`/teardown` are discoverable specialists. `/interface-review`, `/explain-interface`,
+`/break`, `/state-machine` and `/variant` retain explicit-only invocation on both
+hosts. Workbench routes/fixtures stay out of production PRs. Vendoring installs
+no dependencies and starts no browser, process or agent.
+
 ### Outcome contract
 
 Most work needs four fields, not a prescribed workflow:
