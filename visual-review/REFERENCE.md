@@ -76,6 +76,25 @@ Read existing tokens/theme and at least one representative component or page bef
 
 Critique lane = what the surface communicates: first read, hierarchy, scan path, copy, emotional fit. Audit lane = whether it holds under runtime constraints: accessibility, performance, responsive behavior, browser/platform risk. Polish lane = whether it is ready to ship: design-system alignment, states, microcopy, visual consistency, rough edges.
 
+## Review calibration
+
+For repeated visual comparisons, keep the same task, fixture, capture conditions, reference
+images, and rubric. Give each build an identity and each finding a surface/state, user
+consequence, and acceptance check. Inspect native-resolution crops before fixing apparent
+clipping or faint text in a scaled overview.
+
+Record the actual reviewer/model, reviewed build, covered categories, skips, concrete
+findings, owner constraints, and unresolved disagreements. A changed reference score with
+unchanged reference images is calibration drift, not product improvement. Check score
+tables against their narrative; mark unrun or unavailable reviews rather than filling gaps.
+
+Keep visual preference separate from code correctness. After gating, merging, or rebasing,
+recheck affected states, including flag off/on, dark/light, hover/focus, settings search and
+reset. Earlier design scores do not certify the integrated implementation. Subjective
+scores are not task-success, accessibility, or performance measurements; stop on verified
+acceptance and resolved defects, not a target score. Follow the owning review-round cap.
+Apply these checks inline by default; multiple reviewers still require explicit delegation.
+
 ## Surface register
 
 Classify the surface before judging design quality:

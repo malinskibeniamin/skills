@@ -16,7 +16,7 @@ to preserve type evidence; a safety comment alone does not justify a cast.
 1. Never lie: no fake defaults, lossy display of undecodable data, or truthiness hiding numeric zero. Degraded states name possible causes, preserve the reported reason, and offer retry.
 2. Put machine truth beside human labels where operators need it; derive labels, never present keys as labels.
 3. Hide unready features; reserve loading layout to prevent CLS.
-4. Handle loading, empty, error, no-permission, disabled, and stuck states.
+4. Handle loading, empty, error, no-permission, disabled, and stuck states. Hide empty chrome only from authoritative loaded state: zero diff totals or a disabled action do not prove no work; preserve errors, untracked work, progress, and recovery paths.
 
 ## State
 
@@ -27,7 +27,7 @@ to preserve type evidence; a safety comment alone does not justify a cast.
 ## Design system
 
 8. Use color/spacing/type tokens; round one-offs to the scale, never hardcode when a token exists.
-9. Fix shared components at source; no forks, inline restyles, or deep selectors. A temporary fork needs a named defect and upstream ticket.
+9. Fix shared components at source; no forks, inline restyles, or deep selectors. Keep feature-specific rows beside their feature, not as single-consumer primitive variants. Verify computed styles across cascade layers and combined flag/theme/interaction variants; low specificity alone does not guarantee utility precedence. A temporary fork needs a named defect and upstream ticket.
 10. Search before building. Repeated consumer misuse means fix the API.
 
 ## Interaction
