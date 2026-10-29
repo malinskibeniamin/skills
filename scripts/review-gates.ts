@@ -97,12 +97,18 @@ function definitions(root: string) {
       const item = object(raw);
       if (typeof item.always !== "boolean")
         throw new Error("Gate always must be a boolean");
-      const skills = strings(item.skills, "gate skills").map((path) => {
+      const references = strings(item.skills, "gate skills").map((path) => {
         const full = realpathSync(join(source, relativePath(path)));
         if (!full.startsWith(`${realpathSync(source)}${sep}`))
           throw new Error("Gate reference escapes its source repository");
         return full;
       });
+      const skills = [
+        ...new Set([
+          realpathSync(join(harness, "shared/review-contract.md")),
+          ...references,
+        ]),
+      ];
       const gate = {
         id: slug(item.id),
         title: nonempty(item.title, "gate title"),

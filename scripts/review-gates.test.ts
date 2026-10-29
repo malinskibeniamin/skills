@@ -1,9 +1,11 @@
 import { afterEach, expect, setDefaultTimeout, test } from "bun:test";
 import {
+  copyFileSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  realpathSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -174,7 +176,7 @@ test.each([
   },
 );
 
-function checkout(files: Record<string, string> = {}) {
+function checkout(files: Record<string, string> = {}, cli = entry) {
   const root = mkdtempSync(join(tmpdir(), "review-gates-"));
   directories.push(root);
   const git = (...args: string[]) => {
@@ -198,7 +200,7 @@ function checkout(files: Record<string, string> = {}) {
   writeFileSync(join(root, "README.md"), "After\n");
   const run = (...args: string[]) => {
     const result = Bun.spawnSync(
-      [process.execPath, "--no-install", entry, ...args],
+      [process.execPath, "--no-install", cli, ...args],
       { cwd: root },
     );
     return {
@@ -261,6 +263,57 @@ function checkout(files: Record<string, string> = {}) {
     );
   return { root, git, run, input, plan, record };
 }
+
+test("gate prompts include the shared review contract and policy edits invalidate receipts", () => {
+  const harness = realpathSync(mkdtempSync(join(tmpdir(), "review-contract-")));
+  directories.push(harness);
+  for (const file of [
+    "scripts/review-gates.ts",
+    "scripts/review-results.ts",
+    "scripts/github-evidence.ts",
+    "agents/references/findings-schema.md",
+    "agents/references/findings-schema.jq",
+  ]) {
+    const target = join(harness, file);
+    mkdirSync(join(target, ".."), { recursive: true });
+    copyFileSync(new URL(`../${file}`, import.meta.url), target);
+  }
+  mkdirSync(join(harness, "config"));
+  const gate = {
+    id: "correctness",
+    title: "Correctness",
+    always: true,
+    globs: [],
+    skills: [],
+    lens: "Find concrete defects",
+  };
+  writeFileSync(
+    join(harness, "config/review-gates.json"),
+    JSON.stringify({ version: 1, gates: [gate] }),
+  );
+  mkdirSync(join(harness, "shared"));
+  const contract = join(harness, "shared/review-contract.md");
+  writeFileSync(contract, "Review defects separately from owner judgment.\n");
+  const f = checkout({}, join(harness, "scripts/review-gates.ts"));
+  writeFileSync(
+    join(f.root, ".review-gates.json"),
+    JSON.stringify({ version: 1, gates: [{ ...gate, id: "consumer" }] }),
+  );
+  const plan = f.plan();
+  for (const item of plan.gates) {
+    expect(readFileSync(item.prompt, "utf8")).toContain(contract);
+    expect(f.record(item.id).code).toBe(0);
+  }
+  expect(f.run("check").code).toBe(0);
+  writeFileSync(
+    contract,
+    "New owner policy: preserve required human review.\n",
+  );
+  expect(f.run("check").code).toBe(3);
+  const next = f.plan();
+  expect(next.id).not.toBe(plan.id);
+  expect(f.run("check").code).toBe(1);
+});
 
 test("gate plans retain lockfiles, generated changes and names with spaces", () => {
   const f = checkout();

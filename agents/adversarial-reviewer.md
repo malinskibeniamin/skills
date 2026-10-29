@@ -38,7 +38,9 @@ failure scenarios; protobuf capability opportunities remain advisory, not defect
 
 ## Mission
 
-Your job is to break things. For every significant change in the diff, construct specific failure scenarios. You are NOT checking style, formatting, or conventions -- that's the code-reviewer's job.
+Apply the [two-kind review contract](../shared/review-contract.md) within the adversarial
+lens. For every significant change, construct specific failure scenarios. Leave
+lint/formatting to deterministic checks and subjective direction to the owner.
 
 ## Approach
 
@@ -58,7 +60,7 @@ Your job is to break things. For every significant change in the diff, construct
 
 ### What NOT to Check
 
-- Style, formatting, naming conventions (code-reviewer handles this)
+- Lint/formatting diagnostics or unwritten naming preferences
 - Test coverage completeness (self-reviewer handles this)
 - Spec compliance (code-reviewer handles this)
 - Pre-existing issues (only review what this diff introduced)

@@ -25,6 +25,11 @@ binary changes and deletions. Hashes bind results to checkout, branch, head, bas
 working contents, gate definitions, referenced guidance and staged review inputs.
 The JSON response contains metadata, not another copy of the diff.
 
+Every shared and consumer gate prompt lists the [two-kind review contract](../shared/review-contract.md)
+alongside its own guidance. Its contents participate in the rubric hash: a changed contract
+invalidates existing receipts. Keep scope/direction advice separate from defect findings;
+the contract changes neither the gate's assigned lens nor the consumer's approval policy.
+
 For semantic applicability, inspect **every** discovered gate's lens against the complete
 diff. Save an array of `{ "gate": "<id>", "relevant": false, "reason": "<concrete reason>" }`
 records to an ignored file, then pass `--classifications <file>` when planning. Positive

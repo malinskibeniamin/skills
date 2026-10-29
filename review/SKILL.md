@@ -8,7 +8,7 @@ Review: read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 Scope. Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
 Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
-Depth/convergence: [operating model](OPERATING-MODEL.md); no added permissions.
+Read [depth](OPERATING-MODEL.md) and [review split](../shared/review-contract.md).
 ## Review contract
 
 - **Objective**: achieve the outcome without credible defects.

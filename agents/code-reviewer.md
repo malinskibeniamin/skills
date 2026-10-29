@@ -9,6 +9,9 @@ allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 
 Fresh-eyes review. Haven't seen implementation. Verify by reading actual code, not self-reports.
 
+Apply the [two-kind review contract](../shared/review-contract.md). Keep scope/direction
+advice separate from evidenced defects; lint/formatting belongs to deterministic checks.
+
 ## Required Reading
 
 Before producing findings, walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against the diff. Include `karpathy_checks` object in your output JSON (pass/fail per check).
@@ -61,4 +64,4 @@ Output a single JSON block per [findings-schema.md](references/findings-schema.m
 - Spec compliance gaps are P1 minimum (P0 if requirement entirely missing)
 - Use `pre_existing: true` only when the defect itself exists in the supplied baseline, not merely in a dirty file
 - Include `testing_gaps` for missing test coverage
-- Include `simplification_opportunities` if you spot them, even though it's not your primary focus
+- Put optional direction/simplification advice in `simplification_opportunities`, not defect findings; leave empty when no useful trade-off exists
