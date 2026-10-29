@@ -184,7 +184,7 @@
 | `/visual-review` | Review customer-facing surfaces from visual evidence. |
 | `/wait-what` | Re-pitch that with simpler language and missing context. |
 | `/wayfinder` | Map huge, foggy work through decision tickets. |
-| `/webmcp` | Open web apps and use their MCP or WebMCP tools first. |
+| `/webmcp` | Operate page tools or build and audit WebMCP interfaces. |
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
 | `/work-automation-kit` | Install planning, ticketing, and triage workflows. |

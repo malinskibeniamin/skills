@@ -208,7 +208,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/visual-review` | Przeglądanie interfejsów przeznaczonych dla klientów na podstawie dowodów wizualnych. |
 | `/wait-what` | Ponowne przedstawianie pomysłu prostszym językiem i uzupełnianie brakującego kontekstu. |
 | `/wayfinder` | Mapowanie ogromnych, niejasnych zadań za pomocą zgłoszeń decyzyjnych. |
-| `/webmcp` | Otwieranie aplikacji internetowych z pierwszeństwem ich narzędzi MCP lub WebMCP. |
+| `/webmcp` | Obsługa narzędzi strony oraz tworzenie i audyt interfejsów WebMCP. |
 | `/what-did-i-get-done` | Podsumowywanie własnych commitów w zwięzłej aktualizacji statusu. |
 | `/wizard` | Generowanie interaktywnego kreatora Bash do ręcznej konfiguracji. |
 | `/work-automation-kit` | Instalowanie przepływów pracy do planowania, tworzenia zadań i selekcji zgłoszeń. |

@@ -509,11 +509,12 @@ Six focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) 
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
 
 `/webmcp <url-or-app> [request]` opens a web app in the built-in browser and uses
-its MCP or WebMCP tools for the requested operation. Without a request it only
-opens the page. The complete WebMCP source from BuilderIO is pinned and licensed locally;
-the adapter prefers T3 Code's browser tools and preserves human tab ownership.
-[Source, compatibility, and refresh](webmcp/CREDITS.md). No browser or connector
-is installed.
+its page tools; without a request it only opens the page. For building or auditing
+WebMCP tools, the same skill routes internally to pinned Chrome Labs guidance:
+state-scoped registration, actionable errors, React lifecycle/types and in-page
+computation. Builder.io's page-operation skill remains pinned too. Only the local
+host adapter is registered; no browser, runtime dependency or connector is installed.
+[Sources, licenses, compatibility and refresh](webmcp/CREDITS.md).
 
 `/software-factory` assesses whether repeated ticket-to-PR work justifies automation, then plans a bounded pilot and infrastructure. It adapts Matt Pocock's in-progress draft, adds an orchestrator survey alongside the upstream git-host, ticket-tracker, and runner research, and starts no automation. [Harness fit](software-factory/HARNESS-FIT.md) records the proposed pilot; [source pin, license, and refresh](vendor/software-factory-NOTICE.md) distinguish the draft snapshot from local policy.
 

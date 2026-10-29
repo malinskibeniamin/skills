@@ -28,7 +28,32 @@ on 2026-10-28. It uses object arguments, origin-scoped live descriptors, and
 explicit navigation/manual-submission readback. These local corrections do not
 change the pinned upstream snapshot. Recheck the evolving API during refresh.
 
-## Refresh
+## Chrome Labs development guidance
+
+All current skills under `webmcp-skills/skills` from
+[GoogleChromeLabs/webmcp-tools](https://github.com/GoogleChromeLabs/webmcp-tools)
+are vendored unchanged at
+[`24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb`](https://github.com/GoogleChromeLabs/webmcp-tools/tree/24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb/webmcp-skills).
+At this revision that is one skill,
+[build-webmcp-tools](../vendor/chrome-webmcp/webmcp-skills/skills/build-webmcp-tools/SKILL.md),
+with its complete reference documentation. Only the skill entrypoint, references
+and upstream notices are included. Example apps, eval suites/fixtures, benchmark
+runners, dependencies and app configuration stay upstream.
+
+The [lock](../vendor/chrome-webmcp.lock.json) records full revision, original paths,
+Git blob SHAs, SHA-256 digests and executable modes. Retain the
+[Apache-2.0 license](../vendor/chrome-webmcp/webmcp-skills/LICENSE) and
+[NOTICE](../vendor/chrome-webmcp/webmcp-skills/NOTICE) with the snapshot.
+
+The host adapter loads this skill only for design/build/test/audit requests.
+Framework/stage references load progressively; no separate Chrome Labs skill is
+registered with Claude, Codex or the router. Local
+[authoring guidance](references/tool-authoring.md) and
+[checked sources](references/sources.md) add lifecycle/error/computation patterns
+and override stale or host-specific instructions without patching source bytes.
+No browser flags, paid evals, dependencies or hooks are enabled by this import.
+
+## Refresh Builder.io
 
 Use a separate Git checkout of `BuilderIO/skills` containing the reviewed full
 commit. From this repository, replace only this snapshot using:
@@ -44,6 +69,34 @@ digests. Preserve executable modes. Review every source file, license, linked
 resource, URL, and host recipe before updating the revision here and the
 independently pinned inventory digest in `evals/test-webmcp-vendored-skill.sh`.
 Keep local adaptations outside the snapshot.
+
+## Refresh Chrome Labs
+
+Use a separate checkout containing the reviewed full revision. Replace only the
+managed `vendor/chrome-webmcp` snapshot, removing files deleted upstream. Archive
+only the skill entrypoint, references and notices, preserving paths and modes:
+
+```sh
+git -C /path/to/webmcp-tools archive <full-commit-sha> \
+  webmcp-skills/LICENSE webmcp-skills/NOTICE \
+  webmcp-skills/skills/build-webmcp-tools/SKILL.md \
+  webmcp-skills/skills/build-webmcp-tools/references \
+  | tar -x -C vendor/chrome-webmcp
+```
+
+Rebuild `vendor/chrome-webmcp.lock.json` with the same repository/revision/license/
+paths/files schema, using only the four paths in the archive command above.
+For each entry from `git ls-tree -r <full-commit-sha> -- <those-four-paths>`, retain
+the original path, blob SHA and mode; compute SHA-256 from `git show <sha>:<path>`
+bytes. Keep the guidance-only boundary; do not import upstream example apps or evals.
+The independently pinned inventory digest in
+[the distribution check](../evals/test-webmcp-vendored-skill.sh) is SHA-256 of that
+sorted `ls-tree` output, including its final newline. Review source instructions,
+URLs, local references and license changes before updating both pins; run the
+archive/lock procedure again and confirm no diff. Keep local overrides here,
+not in the snapshot. Recheck package versions and API differences in source notes.
+
+## Verify both snapshots and host discovery
 
 ```sh
 bash scripts/generate-skill-catalog.sh
