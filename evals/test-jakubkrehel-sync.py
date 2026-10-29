@@ -213,6 +213,46 @@ class JakubkrehelSyncTest(unittest.TestCase):
         self.assertNotEqual(self.install(revision).returncode, 0)
         self.assertEqual(self.snapshot(), before)
 
+    def test_reviewed_security_patch_is_reproducible_and_invalid_patch_preserves_output(self):
+        patch = self.write(self.repo, "vendor/jakubkrehel-patches/helper.patch",
+                           "diff --git a/skills/teardown/scripts/fixture-helper b/skills/teardown/scripts/fixture-helper\n"
+                           "--- a/skills/teardown/scripts/fixture-helper\n"
+                           "+++ b/skills/teardown/scripts/fixture-helper\n"
+                           "@@ -1,2 +1,2 @@\n #!/bin/sh\n-echo fixture-event\n+echo patched-event\n")
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        helper = self.repo / "vendor/jakubkrehel/skills/teardown/scripts/fixture-helper"
+        self.assertEqual(subprocess.check_output([str(helper)], text=True), "patched-event\n")
+        lock = json.loads((self.repo / "vendor/jakubkrehel.lock.json").read_text())
+        name = "skills/teardown/scripts/fixture-helper"
+        self.assertEqual(lock["upstream_files"][name]["sha256"],
+                         hashlib.sha256((self.source / name).read_bytes()).hexdigest())
+        self.assertNotEqual(lock["upstream_files"][name]["sha256"], lock["files"][name]["sha256"])
+        before = self.snapshot()
+        self.assertEqual(self.install().returncode, 0)
+        self.assertEqual(self.snapshot(), before)
+        patch.write_text(patch.read_text().replace("-echo fixture-event", "-echo nonexistent"))
+        self.assertNotEqual(self.cli("--check").returncode, 0)
+        before = self.snapshot()
+        self.assertNotEqual(self.install().returncode, 0)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_refresh_regenerates_reviewed_description_changes_without_ignoring_output_drift(self):
+        self.assertEqual(self.install().returncode, 0)
+        lock_path = self.repo / "vendor/jakubkrehel.lock.json"
+        lock = json.loads(lock_path.read_text())
+        skill = next(s for s in lock["skills"] if s["name"] == "variant")
+        previous_description = "Previously published description."
+        path = self.repo / "jakubkrehel-skills/variant/SKILL.md"
+        path.write_text(path.read_text().replace(json.dumps(skill["description"]), json.dumps(previous_description)))
+        skill["description"] = previous_description
+        lock_path.write_text(json.dumps(lock, indent=2) + "\n")
+        self.assertNotEqual(self.cli("--check").returncode, 0)
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn(previous_description, path.read_text())
+        self.assertEqual(self.cli("--check").returncode, 0)
+
     def test_destination_symlink_cannot_redirect_writes(self):
         outside = Path(self.temp.name) / "outside"
         outside.mkdir()

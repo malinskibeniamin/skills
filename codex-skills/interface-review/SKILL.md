@@ -1,6 +1,6 @@
 ---
 name: interface-review
-description: "Review introduced and regressed interface problems in a branch, PR or uncommitted change. Explicit request only; existing review owners apply."
+description: "Review introduced or regressed interface issues in a branch, PR or uncommitted change."
 disable-model-invocation: true
 ---
 

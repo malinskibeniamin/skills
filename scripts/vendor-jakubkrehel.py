@@ -23,13 +23,13 @@ METADATA = {
     "better-accessibility": ("Extend existing accessibility verification with WCAG", "Use for WCAG-grounded keyboard, focus, names, forms, announcements, motion and zoom checks through the existing accessibility owner."),
     "better-layout": ("Review grouping and responsive interface structure", "Use for grouping, reading order, responsive structure, localization and RTL; preserve project density and verify actual layout failures."),
     "better-writing": ("Extend existing UI copy guidance with interface patterns", "Use for product vocabulary, translated strings, labels, errors, empty states and confirmations through the existing ux-copy owner."),
-    "interface-review": ("Review interface regressions in a named change", "Review introduced and regressed interface problems in a branch, PR or uncommitted change. Explicit request only; existing review owners apply."),
-    "explain-interface": ("Explain an interface or effect from observed evidence", "Explain how a named site or visual effect works from a URL or image. Explicit request only; label measured, derived and inferred claims."),
-    "break": ("Build an explicitly requested component stress page", "Build a temporary real-component scenario page on explicit request. Existing break-ui owns stress coverage and prototype owns retention."),
+    "interface-review": ("Review interface regressions in a named change", "Review introduced or regressed interface issues in a branch, PR or uncommitted change."),
+    "explain-interface": ("Explain an interface or effect from observed evidence", "Explain a named site or effect from a URL or image; label measured, derived and inferred claims."),
+    "break": ("Build an explicitly requested component stress page", "Build a temporary component stress page on explicit request; compose break-ui and prototype."),
     "build-design": ("Implement a supplied design with existing components", "Use when implementing a Figma file or design image with the project's existing tokens and components through development-lifecycle."),
     "teardown": ("Create evidence-grounded technical illustrations", "Use for technical object or layered-concept illustrations with editable geometry and SVG, PNG or PDF export; not manufacturing drawings."),
-    "state-machine": ("Build an explicitly requested component state workbench", "Build a real-component state switcher with isolated fixtures on explicit request. This is a visual workbench, not state-machine architecture."),
-    "variant": ("Explore explicitly requested component design variants", "Build multiple component design directions on explicit request; existing prototype owns evidence, promotion and scratch retention."),
+    "state-machine": ("Build an explicitly requested component state workbench", "Build a real-component state switcher with isolated fixtures; not state-machine architecture."),
+    "variant": ("Explore explicitly requested component design variants", "Explore component design directions on explicit request through the existing prototype owner."),
 }
 
 
@@ -92,26 +92,39 @@ def adapter(skill):
 
 
 def managed_paths(repo):
-    for name in ("vendor", "vendor/jakubkrehel", "vendor/jakubkrehel.lock.json", "jakubkrehel-skills",
+    for name in ("vendor", "vendor/jakubkrehel", "vendor/jakubkrehel.lock.json", "vendor/jakubkrehel-patches", "jakubkrehel-skills",
                  ".claude-plugin", ".claude-plugin/plugin.json"):
         if (repo / name).is_symlink():
             raise ValueError(f"Managed path must not be a symlink: {name}")
 
 
-def check(repo):
+def patch_inventory(repo):
+    patches = inventory(repo / "vendor/jakubkrehel-patches")
+    if any(not name.endswith(".patch") for name in patches):
+        raise ValueError("Security patch directory accepts only reviewed .patch files")
+    return patches
+
+
+def check(repo, *, check_patch_inputs=True, refresh_descriptions=False):
     managed_paths(repo)
     lock = json.loads((repo / "vendor/jakubkrehel.lock.json").read_text())
     if lock["repository"] != REPOSITORY or not re.fullmatch(r"[0-9a-f]{40}", lock["revision"]):
         raise ValueError("Invalid upstream provenance")
+    if check_patch_inputs and patch_inventory(repo) != lock.get("patches", {}):
+        raise ValueError("Security patch inputs drifted; review and rerun the importer")
     source = repo / "vendor/jakubkrehel"
     files = inventory(source)
     if files != lock["files"]:
         raise ValueError("Snapshot bytes, executable modes or inventory drifted")
     skills = discover({p: ((source / p).read_bytes(), r["mode"]) for p, r in files.items()})
-    if skills != lock["skills"]:
+    comparable = lambda rows: [{k: v for k, v in row.items() if k not in ("description", "short_description")} for row in rows]
+    if (comparable(skills) != comparable(lock["skills"]) if refresh_descriptions else skills != lock["skills"]):
         raise ValueError("Skill metadata drifted")
+    # During refresh, validate published adapters against their published text,
+    # while still requiring current names, source paths and invocation policies.
+    published_skills = lock["skills"] if refresh_descriptions else skills
     expected = {f'{s["name"]}/SKILL.md': {"sha256": hashlib.sha256(adapter(s).encode()).hexdigest(), "mode": 0o644}
-                for s in skills}
+                for s in published_skills}
     if inventory(repo / "jakubkrehel-skills") != expected:
         raise ValueError("Adapter bytes, modes or inventory drifted")
     entries = json.loads((repo / ".claude-plugin/plugin.json").read_text())["skills"]
@@ -144,7 +157,7 @@ def install(repo, source, revision):
     destination = repo / "vendor/jakubkrehel"
     adapters = repo / "jakubkrehel-skills"
     lock_path = repo / "vendor/jakubkrehel.lock.json"
-    previous = check(repo) if lock_path.exists() else None
+    previous = check(repo, check_patch_inputs=False, refresh_descriptions=True) if lock_path.exists() else None
     if not previous and (destination.exists() or adapters.exists()):
         raise ValueError("Import would overwrite unmanaged files")
     manifest_path = repo / ".claude-plugin/plugin.json"
@@ -153,7 +166,7 @@ def install(repo, source, revision):
     if {Path(p).name for p in retained} & set(METADATA):
         raise ValueError("Import would collide with an existing skill")
     repo.joinpath("vendor").mkdir(exist_ok=True)
-    with tempfile.TemporaryDirectory(dir=repo / "vendor", prefix=".jakubkrehel-import-") as temp:
+    with tempfile.TemporaryDirectory(prefix="jakubkrehel-import-") as temp:
         stage = Path(temp) / "source"
         stage.mkdir()
         for path, (data, mode) in payload.items():
@@ -161,7 +174,21 @@ def install(repo, source, revision):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(data)
             target.chmod(mode)
-        lock = {"repository": REPOSITORY, "revision": revision, "skills": skills, "files": inventory(stage)}
+        upstream_files = inventory(stage)
+        patches = patch_inventory(repo)
+        for name in patches:
+            patch = (repo / "vendor/jakubkrehel-patches" / name).resolve()
+            # Stage outside any checkout: Git applies only to this disposable tree.
+            subprocess.run(["git", "apply", "--check", str(patch)], cwd=stage, check=True)
+            subprocess.run(["git", "apply", str(patch)], cwd=stage, check=True)
+        files = inventory(stage)
+        if files.keys() != upstream_files.keys():
+            raise ValueError("Security patches must preserve the complete upstream inventory")
+        for name, record in files.items():
+            if record != upstream_files[name] and not name.startswith(("skills/teardown/assets/", "skills/teardown/scripts/")):
+                raise ValueError(f"Security patch outside teardown helpers: {name}")
+        lock = {"repository": REPOSITORY, "revision": revision, "skills": skills,
+                "patches": patches, "upstream_files": upstream_files, "files": files}
         if destination.exists():
             shutil.rmtree(destination)
         shutil.move(str(stage), destination)

@@ -9,6 +9,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/accessibility.excalidraw)
 
+Ręczna weryfikacja WCAG: wczytaj [better-accessibility](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-accessibility/SKILL.md).
+
 Każda reguła ma jednego właściciela:
 
 - **Biome** odpowiada za semantykę elementów: `alt` obrazów, obsługę klawiatury dla kontrolek niestandardowych, ARIA pola kombi i powiązanie etykiet.

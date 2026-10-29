@@ -10,7 +10,7 @@ Use project glossary and canonical product names; [GLOSSARY.md](GLOSSARY.md) is 
 
 ## Write
 
-For product vocabulary, whole-message localization, empty states and destructive
+For vocabulary, whole-message localization, empty states and destructive
 flows, load [better-writing](../jakubkrehel-skills/better-writing/SKILL.md).
 Keep this skill's glossary, endpoint and factual-copy requirements.
 

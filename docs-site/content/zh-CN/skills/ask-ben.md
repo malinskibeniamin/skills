@@ -70,6 +70,20 @@ type: skill
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/better-accessibility` | 用 WCAG 扩展现有无障碍验证。 |
+| `/better-colors` | 构建并测量语义化界面颜色系统。 |
+| `/better-interface` | 通过现有视觉审查流程检查界面。 |
+| `/better-layout` | 审查分组与响应式界面结构。 |
+| `/better-typography` | 设置并审查易读的界面排版。 |
+| `/better-ui` | 优化界面表面、图标与交互细节。 |
+| `/better-writing` | 用界面模式扩展现有 UI 文案指导。 |
+| `/break` | 按明确要求构建组件压力测试页面。 |
+| `/build-design` | 使用现有组件实现提供的设计。 |
+| `/explain-interface` | 根据观察证据解释界面或效果。 |
+| `/interface-review` | 审查指定变更中的界面回归。 |
+| `/state-machine` | 按明确要求构建组件状态工作台。 |
+| `/teardown` | 创建有证据支撑的技术插图。 |
+| `/variant` | 按明确要求探索组件设计备选方案。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 审计标志受众和清理条件。 |
 | `/lie-detector` | 发现不会失败的测试和缺乏差异支持的声明。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |

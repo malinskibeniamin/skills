@@ -273,8 +273,8 @@ does not start watchers, install services or grant merge authority.
 ### Interface craft and workbenches
 
 All 14 [Jakub Krehel interface skills](https://github.com/jakubkrehel/skills)
-ship as a [pinned MIT snapshot](vendor/jakubkrehel-NOTICE.md), with their references
-and teardown viewer helpers intact. [Host composition](shared/INTERFACES.md)
+ship as a [pinned MIT snapshot](vendor/jakubkrehel-NOTICE.md), with all references
+and reproducibly security-patched teardown helpers. [Host composition](shared/INTERFACES.md)
 connects them to visual review, accessibility, UI copy, motion, mobile, stress
 checks, prototypes and design implementation. Existing owners keep their workflows;
 project tokens, safety requirements and requested delivery endpoints take precedence.

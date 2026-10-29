@@ -10,6 +10,15 @@ else
   ERRORS="$ERRORS\n  FAIL: interface vendoring/distribution contract"
 fi
 
+if node --test "$REPO_ROOT/evals/test-jakubkrehel-security.cjs"; then
+  echo "  PASS  teardown worker/checker security contracts"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  teardown worker/checker security contracts"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: teardown worker/checker security contracts"
+fi
+
 # Exercise the documented consumer module boundary without editing source bytes.
 # UMD .js helpers require CommonJS even when the consuming app is type: module.
 helper_root="$(mktemp -d "${TMPDIR:-/tmp}/interface-helpers.XXXXXX")"

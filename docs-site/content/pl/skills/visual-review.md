@@ -21,6 +21,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/visual-review.excalidraw)
 
+Dla całościowego przeglądu interfejsu WWW wczytaj [better-interface](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-interface/SKILL.md) z sześcioma dziedzinami oceny. Kontrakt zgodności zachowuje zakres, dowody i właściciela raportu tej umiejętności. Wykorzystuj aktualne materiały i łącz powtarzające się przyczyny.
+
 
 Przegląd frontendu w przeglądarce z perspektywy produktu, projektowania, inżynierii i QA. Dokument [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) definiuje **uchwyty języka projektowego** i szczegóły. Tryby: `plan`, `implemented`, `regression`, `release`. Można uruchamiać samodzielnie.
 

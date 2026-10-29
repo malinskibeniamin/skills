@@ -1,4 +1,6 @@
-self.onmessage = ({data}) => {
+self.onmessage = ({data, origin}) => {
+  // Dedicated-worker messages have an empty origin; reject foreign window origins.
+  if (origin !== '' && origin !== self.location.origin) return;
   const {request, id, parameters, explosion, fitExplosion, isolated, fill, annotate, labels} = data;
   try {
     const model = self.DrawingModels[id];

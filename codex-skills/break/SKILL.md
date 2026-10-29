@@ -1,6 +1,6 @@
 ---
 name: break
-description: "Build a temporary real-component scenario page on explicit request. Existing break-ui owns stress coverage and prototype owns retention."
+description: "Build a temporary component stress page on explicit request; compose break-ui and prototype."
 disable-model-invocation: true
 ---
 

@@ -20,11 +20,7 @@ Record the question, evidence, and verdict in an issue, ADR, implementation note
 
 ## Constraints
 
-For explicitly requested interface workbenches, recommend `variant` (design
-alternatives), `state-machine` (reachable states), or `break` (hostile scenarios).
-Read [interface retention](../shared/INTERFACES.md#workbench-retention) and the matching
-branch; these user-only skills are not automatic dependencies. Preserve the
-runnable prototype, not scratch routes/switchers in a production PR.
+Explicit interface workbenches: recommend `variant` (designs), `state-machine` (reachable states), or `break` (stress). Apply [retention](../shared/INTERFACES.md#workbench-retention); user-only, never automatic dependencies.
 
 1. Standard library/existing deps; no unrelated scaffolding.
 2. One run command; scratch/in-memory persistence.

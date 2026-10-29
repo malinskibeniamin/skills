@@ -19,6 +19,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/development-lifecycle.excalidraw)
 
+任务需要实现提供的 Figma 设计或图片时，加载 [build-design](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)，用于获取源证据、映射设计 token和比较视口。保留必要的安全与错误状态以及当前交付循环；匹配图片不能免除这些要求。
+
 作者入口：`/work`。负责一个结果；自动选择辅助技能。编辑前阅读[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，明确归属、隔离和终点。遵循[沟通约定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)及[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
 
 ## 结果契约 [#outcome-contract]

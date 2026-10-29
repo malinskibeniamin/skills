@@ -70,6 +70,20 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
+| `/better-accessibility` | Rozszerzanie istniejącej weryfikacji dostępności o WCAG. |
+| `/better-colors` | Budowanie i pomiar semantycznych systemów kolorów interfejsu. |
+| `/better-interface` | Przegląd interfejsów przez istniejącą ocenę wizualną. |
+| `/better-layout` | Ocena grupowania i responsywnej struktury interfejsu. |
+| `/better-typography` | Ustawianie i ocena czytelnej typografii interfejsu. |
+| `/better-ui` | Dopracowanie powierzchni, ikon i szczegółów interakcji. |
+| `/better-writing` | Rozszerzanie reguł tekstu UI o wzorce interfejsu. |
+| `/break` | Budowanie wyraźnie zamówionej strony testowej komponentu. |
+| `/build-design` | Wdrażanie dostarczonego projektu z istniejącymi komponentami. |
+| `/explain-interface` | Objaśnianie interfejsu lub efektu na podstawie obserwacji. |
+| `/interface-review` | Przegląd regresji interfejsu w podanej zmianie. |
+| `/state-machine` | Budowanie wyraźnie zamówionego warsztatu stanów komponentu. |
+| `/teardown` | Tworzenie ilustracji technicznych opartych na dowodach. |
+| `/variant` | Eksplorowanie wyraźnie zamówionych wariantów projektu komponentu. |
 | `/launchdarkly` | Audyt odbiorców i gotowości do usunięcia flag przez LaunchDarkly CLI. |
 | `/lie-detector` | Wykrywanie testów, które nie mogą zakończyć się niepowodzeniem, i twierdzeń niepopartych zmianami w kodzie. |
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |

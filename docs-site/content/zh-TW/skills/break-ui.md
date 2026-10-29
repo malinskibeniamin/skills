@@ -10,6 +10,8 @@ type: "skill"
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/break-ui.excalidraw)
 
+選擇元件特有的情境時，將固定版本的[情境軸](https://github.com/malinskibeniamin/skills/blob/main/vendor/jakubkrehel/skills/break/scenarios.md)與本地情境清單一起閱讀。遵循[介面相容規則](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#break)；獨立的 `break` 頁面僅在使用者明確要求時建立，稽核本身不授權建立頁面。
+
 用苛刻但有效的資料測試真實元件。改編自 Emil Kowalski；
 參見[來源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。這是針對資料/版面配置的專項稽核，
 不能代替生命週期 dogfood 或一般視覺評議。

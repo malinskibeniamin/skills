@@ -34,8 +34,10 @@ workflow. This contract overrides conflicting snapshot instructions.
   by demonstrated user impact, not mechanically to merge gates. A source
   `Approve` is scoped review language, not human approval or merge authority.
   Report missing domains and runtime checks; deduplicate root causes.
-- Keep source bytes unchanged; refresh with the importer and regenerate discovery.
-  Tests of these prompt bytes prove distribution and reachability, not model adherence.
+- Keep skill entrypoints/references unchanged. Teardown security patches live in
+  `vendor/jakubkrehel-patches/`; the importer records original and patched digests.
+  Regenerate rather than hand-editing source output. Prompt-byte tests prove
+  distribution and reachability, not model adherence.
 
 ## Owners and entrypoints
 
@@ -117,7 +119,8 @@ A template's password length or retry instruction is not evidence of product pol
 Explicit change-review request only. Load `review` and use `visual-review` for
 rendered evidence; retain one review report. Read both sides and classify introduced,
 regressed and pre-existing causes, including unchanged consumers of changed tokens.
-Read the source scope/removed-signal references; do not checkout/stash another
+Read the source [scope](../vendor/jakubkrehel/skills/interface-review/scope-resolution.md)
+and [removed-signal](../vendor/jakubkrehel/skills/interface-review/removed-signals.md) references; do not checkout/stash another
 owner's work or silently review HEAD~1. Host scope and coverage override the source's
 five-consumer cap and optional-render shortcut. A screenshot/code-only limitation
 must remain visible, not become approval.

@@ -23,7 +23,7 @@ try {
   const configPath = path.join(root, 'drawing.json'), output = path.join(root, 'dist/index.html');
   fs.writeFileSync(configPath, JSON.stringify(config));
   build(configPath, output);
-  const html = fs.readFileSync(output, 'utf8'), scripts = [...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)];
+  const html = fs.readFileSync(output, 'utf8'), scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script[^>]*>/gi)];
   const data = JSON.parse(scripts.find(s => s[1].includes('id="drawing-data"'))[2]);
   assert.equal(data[0].title, title, 'Embedding must preserve text without creating script elements');
   const executable = scripts.filter(s => !s[1].includes('type='));
@@ -40,7 +40,7 @@ try {
   context.self = context;
   context.postMessage = value => (context.result = value);
   vm.runInNewContext(worker, context);
-  context.onmessage({data: {request: 1, id: 'fixture', parameters: {}, explosion: 0, isolated: null}});
+  context.onmessage({origin: '', data: {request: 1, id: 'fixture', parameters: {}, explosion: 0, isolated: null}});
   assert.equal(context.result.request, 1);
   assert.ok(context.result.result.markup.includes('data-item="one"'));
   config.drawings[0].initialView = 'assembled';

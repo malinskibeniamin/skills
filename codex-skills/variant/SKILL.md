@@ -1,6 +1,6 @@
 ---
 name: variant
-description: "Build multiple component design directions on explicit request; existing prototype owns evidence, promotion and scratch retention."
+description: "Explore component design directions on explicit request through the existing prototype owner."
 disable-model-invocation: true
 ---
 

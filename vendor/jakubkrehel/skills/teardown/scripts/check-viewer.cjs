@@ -11,7 +11,8 @@ async function connect(profile) {
     if (Date.now() - start > TIMEOUT) throw Error('Chrome did not open a debugging port');
     await sleep(100);
   }
-  const port = fs.readFileSync(portFile, 'utf8').split('\n')[0];
+  const port = Number(fs.readFileSync(portFile, 'utf8').split('\n')[0]);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw Error('Invalid debugging port');
   const page = (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(t => t.type === 'page');
   const socket = new WebSocket(page.webSocketDebuggerUrl);
   await new Promise((resolve, reject) => {
@@ -74,7 +75,8 @@ async function check(htmlPath, outDir, {dark = false} = {}) {
     const drawings = await evaluate(`JSON.parse(document.getElementById('drawing-data').textContent).map(d => ({id: d.id, parts: d.parts.length}))`);
     const results = [];
     for (const d of drawings) {
-      await evaluate(`(() => { const s = document.getElementById('subject'); if (s.value !== ${JSON.stringify(d.id)}) { s.value = ${JSON.stringify(d.id)}; s.dispatchEvent(new Event('change')); } })()`);
+      if (typeof d.id !== 'string' || !/^[a-z][a-z0-9-]*$/.test(d.id)) throw Error('Invalid drawing id');
+      await evaluate(`(() => { const s = document.getElementById('subject'); if (s.value !== ${JSON.stringify(d.id).replace(/</g, '\\u003c')}) { s.value = ${JSON.stringify(d.id).replace(/</g, '\\u003c')}; s.dispatchEvent(new Event('change')); } })()`);
       const state = await settle();
       const ok = state.status === 'Drawing updated' && state.parts === d.parts;
       if (!ok) problems.push(`${d.id}: status "${state.status || state.message}", ${state.parts} of ${d.parts} parts drawn`);
