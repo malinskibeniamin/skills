@@ -1,8 +1,7 @@
 ---
 description: >-
-  設計並審查 Protobuf 結構描述及其使用端。適用於 .proto
-  變更、Buf/程式碼產生設定、結構描述演進、Protovalidate/CEL、描述元或 protobuf 執行階段契約。Google 資源 API 慣例由
-  aip 負責。
+  設計並審查 Protobuf 契約：.proto
+  結構描述、Buf/程式碼產生、演進、Protovalidate/CEL、描述元和執行階段使用端。Google 資源 API 慣例使用 aip。
 related:
   - /skills/development-lifecycle
   - /skills/tdd

@@ -1,4 +1,4 @@
-# Protobuf source review — 2026-10-28
+# Protobuf source review - 2026-10-28
 
 Decision record and coverage ledger for maintainers, not a required reading pass on every
 review. Window: **2025-04-28 through 2026-10-28**, inclusive. Read the full available
@@ -60,13 +60,13 @@ Connect-category entries are marked **Connect**; all others are Buf archive entr
 | 2026-05-08 | [CoreWeave Acquires Bufstream](https://buf.build/blog/coreweave-acquires-bufstream) | Corporate announcement; no schema-review requirement derived. |
 | 2026-01-14 | [Protobuf now has full LSP support](https://buf.build/blog/protobuf-lsp) | Editor/compiler/import parity; roadmap is not shipped capability. |
 | 2025-09-12 | [Protovalidate is now v1.0](https://buf.build/blog/protovalidate-v1) | Validation semantics and migrations; annotations need enforcement. |
-| 2025-07-16 | [Introducing hyperpb: 10x faster dynamic Protobuf parsing that’s even 3x faster than generated code](https://buf.build/blog/hyperpb) | Descriptor parser reuse; parse-only versus access/validation costs. |
+| 2025-07-16 | [Introducing hyperpb: 10x faster dynamic Protobuf parsing that's even 3x faster than generated code](https://buf.build/blog/hyperpb) | Descriptor parser reuse; parse-only versus access/validation costs. |
 | 2025-06-17 | [Protobuf Tip #9: Some numbers are more equal than others](https://buf.build/blog/totw-9-some-numbers-are-more-equal-than-others) | Low new-field tags; never renumber deployed contracts. |
 | 2025-06-03 | [Protobuf Tip #8: Never use required](https://buf.build/blog/totw-8-never-use-required) | Legacy requiredness versus semantic validation requiredness. |
 | 2025-06-02 | [Protobuf Tip #7: Scoping it out](https://buf.build/blog/totw-7-scoping-it-out) | Schema-aware byte diagnosis and heuristic limitations. |
 | 2025-05-19 | [Protobuf Tip #6: The subtle dangers of enum aliases](https://buf.build/blog/totw-6-dangers-of-enum-aliases) | Alias order affects JSON/reflection; preserve deployed contracts. |
 | 2025-05-13 | [Protobuf Tip #5: Avoid import public/weak](https://buf.build/blog/totw-5-avoid-import-public-weak) | Import portability; no automatic legacy import removal. |
-| 2025-04-29 | [Protobuf Tip #4: Accepting mistakes we can’t fix](https://buf.build/blog/totw-4-accepting-mistakes) | Rolling compatibility outranks cosmetic schema cleanup. |
+| 2025-04-29 | [Protobuf Tip #4: Accepting mistakes we can't fix](https://buf.build/blog/totw-4-accepting-mistakes) | Rolling compatibility outranks cosmetic schema cleanup. |
 
 ## Protobuf.com route ledger
 
@@ -136,7 +136,7 @@ community lists and playground shells supply orientation, not runtime requiremen
 
 ## Qualifications that changed the guidance
 
-- **Stable serialization:** explanatory “canonical JSON” language is not a byte-canonical
+- **Stable serialization:** explanatory "canonical JSON" language is not a byte-canonical
   hashing contract. [Official binary guidance](https://protobuf.dev/programming-guides/serialization-not-canonical/)
   rejects general canonical serialization; [ProtoJSON options](https://protobuf.dev/programming-guides/json/#json-options)
   vary representation. Keep signatures/cache identities domain-defined.
@@ -149,7 +149,7 @@ community lists and playground shells supply orientation, not runtime requiremen
   conversions can lose duplicates/order. [Conditional compatibility](https://protobuf.dev/programming-guides/proto3/#updating)
   outranks blanket claims that compatible wire types are safe.
 - **Examples are not syntax authority:** reserve names and numbers in separate statements;
-  16–2047 is the two-byte tag range. Compile examples and use the [language grammar](https://protobuf.dev/reference/protobuf/proto3-spec/#reserved)
+  16-2047 is the two-byte tag range. Compile examples and use the [language grammar](https://protobuf.dev/reference/protobuf/proto3-spec/#reserved)
   and [encoding reference](https://protobuf.dev/programming-guides/encoding/) instead of
   reproducing mixed `reserved` syntax or blog range/bit-unit typos.
 - **Versions drift:** the September article's `protovalidate2` launch name/backend is not

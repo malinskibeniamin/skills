@@ -1,9 +1,8 @@
 ---
 description: >-
-  Projektuj i przeglądaj API przyjmujące konwencje zasobów Google AIP:
-  standardowe metody, powiązania HTTP, pola, stronicowanie, filtrowanie,
-  operacje długotrwałe, błędy i operacje zbiorcze. Ogólny przegląd schematów i
-  środowisk Protobuf należy do protobuf.
+  Projektuj API zasobów Google AIP: standardowe metody, powiązania HTTP, pola,
+  stronicowanie, filtrowanie, LRO, błędy i metody zbiorcze. Ogólne kontrakty
+  Protobuf należą do protobuf.
 related:
   - /skills/development-lifecycle
   - /skills/tdd

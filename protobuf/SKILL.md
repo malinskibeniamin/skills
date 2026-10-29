@@ -1,6 +1,6 @@
 ---
 name: protobuf
-description: "Design and review Protobuf schemas and their consumers. Use for .proto changes, Buf/codegen configuration, schema evolution, Protovalidate/CEL, descriptors, or protobuf runtime contracts. Google resource API conventions belong to aip."
+description: "Design and review Protobuf contracts: .proto schemas, Buf/codegen, evolution, Protovalidate/CEL, descriptors and runtime consumers. Use aip for Google resource API conventions."
 paths:
   - "**/*.proto"
   - "**/buf.yaml"
@@ -12,7 +12,7 @@ paths:
 # Protobuf
 
 Treat the schema as a contract for serialization, generated code, validation and any
-descriptor-driven consumers—not just a transport DTO. Apply only the layers the
+descriptor-driven consumers, not just a transport DTO. Apply only the layers the
 repository uses. Skill loading grants neither delegation nor migration permission.
 
 ## Inspect the contract

@@ -1,7 +1,7 @@
 ---
 description: >-
-  设计并审查采用 Google AIP 资源约定的 API：标准方法、HTTP 绑定、字段、分页、过滤、长时间运行的操作、错误和批量 API。一般
-  Protobuf 模式及运行时审查由 protobuf 负责。
+  设计 Google AIP 资源 API：标准方法、HTTP 绑定、字段、分页、过滤、长时间运行的操作、错误和批量方法。一般 Protobuf 契约由
+  protobuf 负责。
 related:
   - /skills/development-lifecycle
   - /skills/tdd

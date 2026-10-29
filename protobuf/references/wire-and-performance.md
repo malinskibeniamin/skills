@@ -16,8 +16,8 @@ Sources: [Buf conversion](https://buf.build/docs/reference/cli/buf/convert/),
 
 ## Optimize without rewriting a deployed contract
 
-- Tag value is `(field_number << 3) | wire_type`. Fields 1–15 use one-byte tags;
-  16–2047 use two. Choose low tags for frequent NEW fields; never renumber deployed
+- Tag value is `(field_number << 3) | wire_type`. Fields 1-15 use one-byte tags;
+  16-2047 use two. Choose low tags for frequent NEW fields; never renumber deployed
   fields for size. Keep reserved/system tag ranges intact.
 - Pick new integer types for domain range, negative-value distribution and generated
   language representation. Negative `int32`/`int64` values use ten-byte varints;

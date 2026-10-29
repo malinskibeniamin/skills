@@ -1,7 +1,7 @@
 ---
 description: >-
-  设计并审查 Protobuf 模式及其使用方。适用于 .proto 变更、Buf/代码生成配置、模式演进、Protovalidate/CEL、描述符或
-  protobuf 运行时契约。Google 资源 API 约定由 aip 负责。
+  设计并审查 Protobuf 契约：.proto 模式、Buf/代码生成、演进、Protovalidate/CEL、描述符和运行时使用方。Google 资源
+  API 约定使用 aip。
 related:
   - /skills/development-lifecycle
   - /skills/tdd

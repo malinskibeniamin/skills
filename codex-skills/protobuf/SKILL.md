@@ -1,6 +1,6 @@
 ---
 name: protobuf
-description: "Design and review Protobuf schemas and their consumers. Use for .proto changes, Buf/codegen configuration, schema evolution, Protovalidate/CEL, descriptors, or protobuf runtime contracts. Google resource API conventions belong to aip."
+description: "Design and review Protobuf contracts: .proto schemas, Buf/codegen, evolution, Protovalidate/CEL, descriptors and runtime consumers. Use aip for Google resource API conventions."
 paths:
   - "**/*.proto"
   - "**/buf.yaml"

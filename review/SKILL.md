@@ -51,7 +51,7 @@ Recheck identity before verdict; drift invalidates affected evidence.
 
 Add surface-specific scrutiny only when the diff supplies evidence:
 
-Interface changes: [compatibility and removed-signal checks](../shared/INTERFACES.md#interface-review).
+Interface: [checks](../shared/INTERFACES.md#interface-review).
 
 | Surface | Check |
 |---|---|
@@ -62,12 +62,7 @@ Interface changes: [compatibility and removed-signal checks](../shared/INTERFACE
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
 | Dependency/external API | Primary docs, versions, lockfile, advisories |
 
-For a diff touching `.proto` files (including deletions/renames), Buf configuration or
-protobuf generation/runtime contracts, load [protobuf](../protobuf/SKILL.md) completely.
-Trace affected generated code and consumers even when the schema itself is unchanged.
-Keep its capability opportunities advisory and separate from defect findings. In
-[gate reviews](GATES.md), the protobuf path gate cannot be excluded by a semantic skip;
-ordinary inline reviews use this same skill without requiring gate opt-in or delegation.
+Proto/Buf/codegen/runtime: load [protobuf](../protobuf/SKILL.md) fully.
 
 Load per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 Call the Skill tool separately for "product" and "lie-detector"; apply their hats inline.
@@ -102,6 +97,3 @@ Schema: [REFERENCE.md](REFERENCE.md). Report
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
 the `product:` and `lie-detector:` lines, verdict, and residual limits. A clean review returns only those lines, verdict, and residual limits.
-When protobuf capability opportunities are requested or identified under its review
-scope, append a separate non-blocking advisory section; omit it when empty. Structured
-gate reviews retain their findings schema and use its advisory opportunity field.

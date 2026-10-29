@@ -1,9 +1,8 @@
 ---
 description: >-
-  Projektuj i przeglądaj schematy Protobuf oraz ich odbiorców. Używaj przy
-  zmianach .proto, konfiguracji Buf i generowania kodu, ewolucji schematów,
-  Protovalidate/CEL, deskryptorach lub kontraktach środowiska protobuf.
-  Konwencje API zasobów Google należą do aip.
+  Projektuj i przeglądaj kontrakty Protobuf: schematy .proto, Buf i generowanie
+  kodu, ewolucję, Protovalidate/CEL, deskryptory i odbiorców środowiska.
+  Konwencje zasobów Google należą do aip.
 related:
   - /skills/development-lifecycle
   - /skills/tdd

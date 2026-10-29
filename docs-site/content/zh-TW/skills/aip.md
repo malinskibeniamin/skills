@@ -1,7 +1,7 @@
 ---
 description: >-
-  設計並審查採用 Google AIP 資源慣例的 API：標準方法、HTTP 繫結、欄位、分頁、篩選、長時間執行的作業、錯誤與批次 API。一般
-  Protobuf 結構描述及執行階段審查由 protobuf 負責。
+  設計 Google AIP 資源 API：標準方法、HTTP 繫結、欄位、分頁、篩選、長時間執行的作業、錯誤和批次方法。一般 Protobuf 契約由
+  protobuf 負責。
 related:
   - /skills/development-lifecycle
   - /skills/tdd

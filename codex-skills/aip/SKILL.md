@@ -1,6 +1,6 @@
 ---
 name: aip
-description: "Design and review APIs adopting Google AIP resource conventions: standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors and batch APIs. General Protobuf schema/runtime review belongs to protobuf."
+description: "Design Google AIP resource APIs: standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors and batch methods. General Protobuf contracts belong to protobuf."
 paths:
   - "**/*openapi*.{yaml,yml,json}"
 ---
