@@ -70,6 +70,20 @@ type: skill
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
+| `/better-accessibility` | 以 WCAG 擴充現有無障礙驗證。 |
+| `/better-colors` | 建立並量測語意化介面色彩系統。 |
+| `/better-interface` | 透過現有視覺審查流程檢查介面。 |
+| `/better-layout` | 審查分組與響應式介面結構。 |
+| `/better-typography` | 設定並審查易讀的介面排版。 |
+| `/better-ui` | 改善介面表面、圖示與互動細節。 |
+| `/better-writing` | 以介面模式擴充現有 UI 文案指引。 |
+| `/break` | 依明確要求建立元件壓力測試頁面。 |
+| `/build-design` | 使用現有元件實作提供的設計。 |
+| `/explain-interface` | 依觀察證據說明介面或效果。 |
+| `/interface-review` | 審查指定變更中的介面回歸。 |
+| `/state-machine` | 依明確要求建立元件狀態工作台。 |
+| `/teardown` | 建立以證據為依據的技術插圖。 |
+| `/variant` | 依明確要求探索元件設計方案。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 稽核旗標受眾與清理條件。 |
 | `/lie-detector` | 找出不可能失敗的測試，以及差異內容無法支持的主張。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |

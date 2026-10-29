@@ -9,6 +9,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/ux-copy.excalidraw)
 
+Dla słownictwa produktu, lokalizacji całych komunikatów, pustych stanów i działań destrukcyjnych wczytaj [better-writing](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-writing/SKILL.md). Zachowaj słownik, punkt zakończenia i wymagania rzetelnego tekstu tej umiejętności.
+
 
 Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/ux-copy/REFERENCE.md), aby poznać wzorce, zapis wielkich liter, limity elementów i przykłady.
 Każde zdanie ma przekazywać jedną przydatną informację wprost. Usuń zbędne słowa i powtórzenia.

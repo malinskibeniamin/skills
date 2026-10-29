@@ -19,6 +19,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/review.excalidraw)
 
+界面变更应遵循[界面兼容规则](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#interface-review)，并阅读普通的[已移除信号参考](https://github.com/malinskibeniamin/skills/blob/main/vendor/jakubkrehel/skills/interface-review/removed-signals.md)，检查差异两侧丢失的操作线索。加载 `visual-review` 获取渲染证据；不要自动调用单独的用户专用 `interface-review`，也不要创建第二份报告。
+
 审查固定范围。保持唯一负责人；委派需要明确授权。没有明确意图时不编辑、提交、推送或发布。请求的修复仅在指定范围内进入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
 ## 审查约定 [#review-contract]

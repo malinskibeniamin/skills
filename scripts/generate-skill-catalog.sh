@@ -159,6 +159,14 @@ if tstack_lock.exists():
     })
 
 
+jakubkrehel_lock = repo / "vendor/jakubkrehel.lock.json"
+if jakubkrehel_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(jakubkrehel_lock.read_text())["skills"]
+    })
+
+
 def yaml_quote(value):
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
 

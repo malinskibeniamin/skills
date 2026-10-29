@@ -17,6 +17,11 @@ do not force another approval step for routine in-scope fixes.
 
 ## Loop
 
+For component-specific scenario selection, read the pinned
+[scenario axes](../vendor/jakubkrehel/skills/break/scenarios.md) alongside this catalogue.
+Use [interface compatibility](../shared/INTERFACES.md#break); the separate user-only
+`break` page is recommended only when requested, never created by an audit alone.
+
 1. Map rendered fields, their source/type, schema limit, optionality, and collection bounds.
    A missing bound means unknown, not permission to invent one or change the API.
 2. Read [CATALOG.md](CATALOG.md). Choose realistic values within the actual contract;

@@ -51,6 +51,8 @@ Recheck identity before verdict; drift invalidates affected evidence.
 
 Add surface-specific scrutiny only when the diff supplies evidence:
 
+Interface changes: [compatibility and removed-signal checks](../shared/INTERFACES.md#interface-review).
+
 | Surface | Check |
 |---|---|
 | Customer-facing UI/CLI/report | Render, states, copy, keyboard/a11y, console, viewport |

@@ -10,6 +10,8 @@ type: "skill"
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/break-ui.excalidraw)
 
+Dobierając scenariusze dla komponentu, przeczytaj przypięte [osie scenariuszy](https://github.com/malinskibeniamin/skills/blob/main/vendor/jakubkrehel/skills/break/scenarios.md) obok lokalnego katalogu. Stosuj [reguły zgodności](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#break): osobna strona `break` wymaga wyraźnego żądania użytkownika; sam audyt jej nie tworzy.
+
 Testuj rzeczywisty komponent na trudnych, lecz poprawnych danych. Adaptacja umiejętności Emila Kowalskiego;
 [pochodzenie](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md). To ukierunkowany audyt danych/układu,
 nie zastępstwo dogfood całego cyklu życia ani ogólnej krytyki wizualnej.

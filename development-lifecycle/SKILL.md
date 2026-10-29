@@ -3,7 +3,7 @@ name: development-lifecycle
 description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
-Author front door: `/work`. Own one outcome; select helpers automatically. Before edits,
+Author front door: `/work`; one outcome; auto-select helpers. Before edits,
 read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
 Use [communication](../shared/communication.md) and [load helpers](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
@@ -29,14 +29,16 @@ Read tickets/body/labels/comments; title, clarify refs. Resolve blind spot/volat
 Read rules/scripts/configs/CI; record baseline failures; retain tools.
 
 T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
-(`work`); use target guidance and scoped checks throughout.
+(`work`); use target guidance/scoped checks.
 
-Before edits, load [change evidence](../shared/change-evidence.md) and owners.
+Load [change evidence](../shared/change-evidence.md) and owners.
 Assess impact; capture base before visible edits, even tiny copy/shared-UI.
+
+[Figma/image](../jakubkrehel-skills/build-design/SKILL.md).
 
 ### Act
 
-A single owner; explicit consent for delegation/background work. Implement the requested behavior using local conventions. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; static wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence. Report adjacent cleanup unless verification needs it.
+A single owner; delegation/background work need explicit consent. Implement requested behavior using local conventions. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence; adjacent cleanup only for verification.
 
 Each edit batch: scoped format/fix + lint -> relevant types/tests. Inspect fixes; repair/rerun. Reuse hook results only for identical inputs/coverage; keep sound project-wide types.
 

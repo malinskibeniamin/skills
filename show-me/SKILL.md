@@ -97,4 +97,4 @@ Bash(open /absolute/path/to/show-me-{description}.html)
 ```
 ### guidance
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
-Use only needed views. Beginner explainer -> `/eli5`; interactive plan -> `/visual-plan`; PR recap -> `/visual-recap`.
+Use only needed views. Beginner explainer -> `/eli5`; interactive plan -> `/visual-plan`; PR recap -> `/visual-recap`. For explicit site/effect explanations, use [interface compatibility](../shared/INTERFACES.md#explain-interface); recommend user-only `explain-interface` and distinguish measured mechanisms from screenshot reconstruction. Object/layer illustrations use [teardown](../jakubkrehel-skills/teardown/SKILL.md), not architecture diagrams.

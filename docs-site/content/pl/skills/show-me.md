@@ -11,6 +11,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/show-me.excalidraw)
 
+Na wyraźne pytanie o budowę witryny lub efektu wizualnego zastosuj [reguły objaśniania interfejsów](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#explain-interface) i poleć wywoływane przez użytkownika `explain-interface`. Oddziel zmierzone mechanizmy od rekonstrukcji ze zrzutu. Zamówione ilustracje techniczne obiektów i warstw obsługuje [teardown](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/teardown/SKILL.md), nie diagramy architektury.
+
 Pomóż użytkownikowi zrozumieć wizualnie bieżący temat rozmowy. Pomiń wstęp i ogranicz opis do minimum. Wybierz najmniejszą wizualizację, która jasno przedstawia najważniejszą kwestię.
 - Przedstaw logikę lub algorytm jako pseudokod:
 ```text

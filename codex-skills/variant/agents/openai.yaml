@@ -1,0 +1,5 @@
+interface:
+  display_name: "Variant"
+  short_description: "Explore explicitly requested component design variants"
+policy:
+  allow_implicit_invocation: false

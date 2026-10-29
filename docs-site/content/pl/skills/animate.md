@@ -20,6 +20,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/animate.excalidraw)
 
+Przepisy na animację powierzchni i ikon: przeczytaj [zgodność interfejsów](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#better-ui), a potem [better-ui](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-ui/SKILL.md). Stałe wartości źródła nie zastępują tokenów projektu ani natychmiastowej informacji zwrotnej.
+
 Wybieraj ruch, który wyjaśnia zmianę stanu, nie opóźniając zadania użytkownika.
 Adaptacja umiejętności Emila Kowalskiego; [źródło i wybór](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md).
 Nagrywane prezentacje produktu korzystają ze [stosu nagrywania demo](https://github.com/malinskibeniamin/skills/blob/main/demo/RECORDING.md),

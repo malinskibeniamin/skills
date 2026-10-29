@@ -10,6 +10,10 @@ Use project glossary and canonical product names; [GLOSSARY.md](GLOSSARY.md) is 
 
 ## Write
 
+For vocabulary, whole-message localization, empty states and destructive
+flows, load [better-writing](../jakubkrehel-skills/better-writing/SKILL.md).
+Keep this skill's glossary, endpoint and factual-copy requirements.
+
 Draft the shortest accurate string per element. Check the whole view.
 Make only requested changes. Flag unverified facts; never invent behavior,
 permissions, causes, or recovery. Do not imply human approval.

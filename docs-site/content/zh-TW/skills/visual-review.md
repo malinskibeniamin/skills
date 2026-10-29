@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/visual-review.excalidraw)
 
+全面審查網頁介面時，載入 [better-interface](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-interface/SKILL.md)，涵蓋六個設計領域。其相容契約保留本技能的範圍、證據與報告職責；重用現有截圖並按根因去重。
+
 
 以瀏覽器為基礎的前端審查：採用產品、設計、工程與 QA 四種觀點。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 是 **設計語言調整點** 與詳細資訊的依據。模式：`plan`、`implemented`、`regression`、`release`。可單獨觸發。
 

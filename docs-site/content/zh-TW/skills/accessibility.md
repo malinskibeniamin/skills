@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/accessibility.excalidraw)
 
+手動檢查 WCAG 時，載入 [better-accessibility](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-accessibility/SKILL.md)。
+
 每條規則只設一個執行方：
 
 - **Biome** 負責元素語義：圖片 `alt`、自定義控制元件鍵盤操作、組合框 ARIA 和標籤關聯。

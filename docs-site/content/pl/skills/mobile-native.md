@@ -10,6 +10,8 @@ type: "skill"
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/mobile-native.excalidraw)
 
+Dla responsywnego grupowania, RTL i obszarów bezpiecznych przeczytaj [zgodność interfejsów](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#better-layout), a potem [better-layout](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-layout/SKILL.md). Dla renderowania fontów lub powiększania pól użyj [better-typography](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-typography/SKILL.md), bez wyłączania skalowania użytkownika ani zastępowania kontroli na urządzeniu.
+
 Usuwaj tarcie przeglądarki/platformy bez wyłączania dostępności. Adaptacja umiejętności
 Emila Kowalskiego; [pochodzenie](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md).
 Przegląd pozostaje tylko do odczytu; poprawki przechodzą przez TDD i bramki dostarczania projektu.
