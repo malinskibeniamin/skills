@@ -276,9 +276,14 @@
   "agents": [
     "./agents/adversarial-reviewer.md",
     "./agents/code-reviewer.md",
+    "./agents/contracts-data-reviewer.md",
+    "./agents/integration-reviewer.md",
+    "./agents/interface-reviewer.md",
+    "./agents/performance-reviewer.md",
     "./agents/plan-design-hat.md",
     "./agents/plan-engineering-hat.md",
     "./agents/plan-product-hat.md",
+    "./agents/runtime-reviewer.md",
     "./agents/self-reviewer.md",
     "./agents/verifier.md"
   ],

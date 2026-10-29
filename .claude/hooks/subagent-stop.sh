@@ -26,7 +26,7 @@ clear_active_agent() {
 
 # Only validate reviewer agents
 case "$agent_type" in
-  self-reviewer|code-reviewer|adversarial-reviewer) ;;
+  self-reviewer|code-reviewer|adversarial-reviewer|interface-reviewer|integration-reviewer|runtime-reviewer|contracts-data-reviewer|performance-reviewer) ;;
   *)
     clear_active_agent
     exit 0

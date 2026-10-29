@@ -14,12 +14,12 @@ run_content_eval "$AGENTS_DIR/references/findings-schema.md" "P0.*P1.*P2.*P3" "f
 run_content_eval "$AGENTS_DIR/references/findings-schema.md" "safe_auto.*gated_auto.*manual.*advisory" "findings-schema has all autofix classes"
 
 # ── All agent definitions exist ──────────────────────────────────
-for agent in self-reviewer adversarial-reviewer code-reviewer verifier; do
+for agent in self-reviewer adversarial-reviewer code-reviewer verifier interface-reviewer integration-reviewer runtime-reviewer contracts-data-reviewer performance-reviewer; do
   run_file_eval "$AGENTS_DIR/${agent}.md" "${agent}.md exists"
 done
 
 # ── All agents have required frontmatter ─────────────────────────
-for agent_file in "$AGENTS_DIR"/self-reviewer.md "$AGENTS_DIR"/adversarial-reviewer.md "$AGENTS_DIR"/code-reviewer.md "$AGENTS_DIR"/verifier.md; do
+for agent_file in "$AGENTS_DIR"/self-reviewer.md "$AGENTS_DIR"/adversarial-reviewer.md "$AGENTS_DIR"/code-reviewer.md "$AGENTS_DIR"/verifier.md "$AGENTS_DIR"/interface-reviewer.md "$AGENTS_DIR"/integration-reviewer.md "$AGENTS_DIR"/runtime-reviewer.md "$AGENTS_DIR"/contracts-data-reviewer.md "$AGENTS_DIR"/performance-reviewer.md; do
   agent_name=$(basename "$agent_file" .md)
   run_content_eval "$agent_file" "^name: ${agent_name}" "${agent_name} has correct name in frontmatter"
   run_content_eval "$agent_file" "^description:" "${agent_name} has description"
@@ -27,8 +27,8 @@ for agent_file in "$AGENTS_DIR"/self-reviewer.md "$AGENTS_DIR"/adversarial-revie
 done
 
 # ── Reviewer agents reference findings-schema ────────────────────
-for reviewer in self-reviewer adversarial-reviewer code-reviewer; do
-  run_content_eval "$AGENTS_DIR/${reviewer}.md" "findings-schema" "${reviewer} references findings-schema"
+for reviewer in self-reviewer adversarial-reviewer code-reviewer interface-reviewer integration-reviewer runtime-reviewer contracts-data-reviewer performance-reviewer; do
+  run_content_eval "$AGENTS_DIR/${reviewer}.md" "findings-schema|specialist-review" "${reviewer} loads the findings contract"
 done
 
 run_content_eval "$AGENTS_DIR/code-reviewer.md" "[Ss]ource-text" \
@@ -50,7 +50,7 @@ else
 fi
 
 # ── Reviewer models inherit the usage-routed per-invocation profile ──
-for reviewer in self-reviewer code-reviewer adversarial-reviewer; do
+for reviewer in self-reviewer code-reviewer adversarial-reviewer interface-reviewer integration-reviewer runtime-reviewer contracts-data-reviewer performance-reviewer; do
   run_content_eval "$AGENTS_DIR/${reviewer}.md" "^model: inherit" "${reviewer} inherits usage-routed model"
 done
 

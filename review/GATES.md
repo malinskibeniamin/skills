@@ -19,7 +19,9 @@ the actual PR base with `scripts/resolve-pr-base.sh`. Use the installed scripts 
 bun --no-install <harness-root>/scripts/review-gates.ts plan --base <actual-base-ref>
 ```
 
-The returned plan names its gates, lenses, routing reasons and prompt files. It stages the full
+The returned plan names its gates, lenses, routing reasons, optional reviewer
+suggestions and prompt files. [Role routing](REVIEWERS.md) distinguishes finding
+reviewers, the evidence-running verifier and planning hats. It stages the full
 diff once, including working changes, untracked files, lockfiles, generated output,
 binary changes and deletions. Hashes bind results to checkout, branch, head, base,
 working contents, gate definitions, referenced guidance and staged review inputs.
@@ -187,8 +189,12 @@ An explicit consumer opt-in with only shared defaults is:
 ```
 
 Add local gates to that array. Each has `id`, `title`, `always`, `globs`, `skills` and
-`lens`, following [the shared catalogue](../config/review-gates.json). Local `skills`
-paths point to existing guidance relative to the consuming Git root. Use repository-root
+`lens`, following [the shared catalogue](../config/review-gates.json). An optional
+`reviewer` object has `name` (dispatched identity) and `instructions`
+(a repository-relative definition path). It is a suggestion only; defaults remain
+inline. Its instruction bytes are fingerprinted, so changes invalidate receipts.
+Local `skills` and reviewer instruction paths point to existing guidance relative
+to the consuming Git root. Use repository-root
 globs, including component prefixes in monorepos. Unique ids make additions additive;
 collisions fail rather than silently replace a shared gate. Put domain knowledge in its
 existing skill/reference, not another duplicated rubric tree.

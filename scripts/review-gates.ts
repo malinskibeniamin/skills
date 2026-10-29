@@ -73,12 +73,31 @@ function lock<T>(file: string, work: () => T): T {
   }
 }
 
+type Reviewer = { name: string; instructions: string };
+function reviewer(
+  value: unknown,
+  reference: (path: unknown) => string,
+): Reviewer | undefined {
+  if (value === undefined) return undefined;
+  const input = object(value);
+  return {
+    name: slug(input.name),
+    instructions: reference(input.instructions),
+  };
+}
+function reference(source: string, path: unknown): string {
+  const full = realpathSync(join(source, relativePath(path)));
+  if (!full.startsWith(`${realpathSync(source)}${sep}`))
+    throw new Error("Gate reference escapes its source repository");
+  return full;
+}
 type Definition = {
   id: string;
   title: string;
   always: boolean;
   globs: string[];
   skills: string[];
+  reviewer?: Reviewer;
   lens: string;
   rereview: "full" | "delta";
   hash: string;
@@ -97,24 +116,25 @@ function definitions(root: string) {
       const item = object(raw);
       if (typeof item.always !== "boolean")
         throw new Error("Gate always must be a boolean");
-      const references = strings(item.skills, "gate skills").map((path) => {
-        const full = realpathSync(join(source, relativePath(path)));
-        if (!full.startsWith(`${realpathSync(source)}${sep}`))
-          throw new Error("Gate reference escapes its source repository");
-        return full;
-      });
+      const references = strings(item.skills, "gate skills").map((path) =>
+        reference(source, path),
+      );
       const skills = [
         ...new Set([
           realpathSync(join(harness, "shared/review-contract.md")),
           ...references,
         ]),
       ];
+      const suggested = reviewer(item.reviewer, (path) =>
+        reference(source, path),
+      );
       const gate = {
         id: slug(item.id),
         title: nonempty(item.title, "gate title"),
         always: item.always,
         globs: strings(item.globs, "gate globs"),
         skills,
+        ...(suggested ? { reviewer: suggested } : {}),
         lens: nonempty(item.lens, "gate lens"),
         rereview:
           item.rereview === undefined
@@ -132,6 +152,9 @@ function definitions(root: string) {
           JSON.stringify([
             gate,
             skills.map((path) => readFileSync(path, "utf8")),
+            ...(suggested
+              ? [readFileSync(suggested.instructions, "utf8")]
+              : []),
           ]),
         ),
       });
@@ -148,6 +171,10 @@ function definitions(root: string) {
           "utf8",
         ),
         readFileSync(join(harness, "scripts/review-results.ts"), "utf8"),
+        readFileSync(
+          join(harness, "agents/references/specialist-review.md"),
+          "utf8",
+        ),
         readFileSync(
           join(harness, "agents/references/findings-schema.jq"),
           "utf8",
@@ -302,6 +329,7 @@ type PlannedGate = {
   reason: string;
   prompt: string;
   promptHash: string;
+  reviewer?: Reviewer;
   scope?: "full" | "delta";
 };
 type Plan = {
@@ -375,6 +403,9 @@ function readPlan(file: string, root: string): Plan {
     if (item.prompt !== prompt)
       throw new Error("Gate prompt belongs to another candidate directory");
     const promptHash = sha(item.promptHash);
+    const suggested = reviewer(item.reviewer, (path) =>
+      nonempty(path, "reviewer instructions"),
+    );
     if (digest(readFileSync(prompt, "utf8")) !== promptHash)
       throw new Error(
         "Staged gate prompt changed; restore the immutable review input",
@@ -384,6 +415,7 @@ function readPlan(file: string, root: string): Plan {
       title: nonempty(item.title, "gate title"),
       lens: nonempty(item.lens, "gate lens"),
       hash: sha(item.hash),
+      ...(suggested ? { reviewer: suggested } : {}),
       applicable: item.applicable,
       reason: nonempty(item.reason, "routing reason"),
       prompt,
@@ -647,13 +679,21 @@ function createPlan(
         scope === "delta"
           ? `Read ${join(directory, "repair.diff")} (changes since the prior captured review, including working changes). Focus on changed behavior and prior findings; expand into source, callers and ${join(directory, "change.diff")} (the full, lossless candidate diff) when needed to prove a claim. Do not hunt unrelated old defects or repost an existing finding.`
           : `Read ${join(directory, "change.diff")} (the full, lossless candidate diff). Inspect source, callers and independent evidence as needed.`;
-      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${definition.skills.map((path) => `- ${path}`).join("\n")}\n\nApply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. A clean result needs sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
+      const specialist = definition.reviewer
+        ? `Suggested reviewer: ${definition.reviewer.name} (${definition.reviewer.instructions}). Use only after explicit delegation authorization; otherwise apply the specialist lens inline. This is a routing suggestion, not a dispatch or independent coverage.\n\n`
+        : "";
+      const guidance = [
+        ...definition.skills,
+        ...(definition.reviewer ? [definition.reviewer.instructions] : []),
+      ];
+      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${guidance.map((path) => `- ${path}`).join("\n")}\n\n${specialist}Apply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. A clean result needs sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
       atomic(prompt, promptText);
       return {
         id: definition.id,
         title: definition.title,
         lens: definition.lens,
         hash: definition.hash,
+        ...(definition.reviewer ? { reviewer: definition.reviewer } : {}),
         applicable,
         reason,
         prompt,

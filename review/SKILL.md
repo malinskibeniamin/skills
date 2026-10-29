@@ -3,9 +3,9 @@ name: review
 description: Use for evidence-backed review of diff-introduced defects in branches, PRs, WIP, or releases.
 ---
 
-Review: read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
+Read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 
-Scope. Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
+Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
 Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
 Read [depth](OPERATING-MODEL.md) and [split](../shared/review-contract.md).
@@ -65,6 +65,7 @@ Proto/Buf/codegen/runtime: load [protobuf](../protobuf/SKILL.md) fully.
 [Dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies):
 Call the Skill tool separately for "product" and "lie-detector"; apply their hats inline.
 Authorized axes: foreground, fresh contexts; aggregate. Else inline.
+[Roles](REVIEWERS.md).
 
 ### Classify
 
@@ -92,6 +93,6 @@ complete applicability ledger. Cover all surfaces; do not add automatic agents.
 
 ## Output
 
-Use [REFERENCE.md](REFERENCE.md) for schema and finding format.
+Use [REFERENCE.md](REFERENCE.md) for schema and format.
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
 `product:`/`lie-detector:` lines, verdict and residual limits. Clean: receipt/verdict only.

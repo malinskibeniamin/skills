@@ -52,7 +52,7 @@ def completed:
   and .schema_version == 1
   and .reviewer == $reviewer
   and (.reviewer | if gate_report then test("^[a-z][a-z0-9-]{0,63}$")
-    else member(["self-reviewer", "code-reviewer", "adversarial-reviewer"]) end)
+    else member(["self-reviewer", "code-reviewer", "adversarial-reviewer", "interface-reviewer", "integration-reviewer", "runtime-reviewer", "contracts-data-reviewer", "performance-reviewer"]) end)
   and (.findings | type == "array")
   and (if .status | member(["APPROVED", "CONCERNS", "NEEDS_CHANGES"]) then
     completed

@@ -179,7 +179,10 @@ remain necessary. Claude collection and automatic account rotation are not suppo
 Optional [review gates](review/GATES.md) connect existing specialist skills to a
 candidate-bound coverage plan, validated findings, safe reruns and a generated PR table.
 The same state feeds readiness checks; missing, stale and invalid results remain visible.
-Use inline review or explicitly authorized specialists. Planning never dispatches agents,
+Use inline review or explicitly authorized [specialist reviewers](review/REVIEWERS.md).
+Five conditional roles cover interfaces, integration/content, runtime lifecycles,
+contracts/data and performance; existing adversarial and verifier roles remain distinct.
+Planning never dispatches agents,
 changes models or grants merge permission. Consumer-specific gates add to the shared
 catalogue without replacing its responsibilities.
 

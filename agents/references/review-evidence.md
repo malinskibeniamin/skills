@@ -1,6 +1,9 @@
 # Review evidence requirements
 
-Shared by code-reviewer and self-reviewer.
+Shared by code-reviewer and self-reviewer. Apply the conditional axes in
+[the reviewer catalogue](../../review/REVIEWERS.md) inline unless delegation was
+explicitly authorized. The verifier supplies execution evidence; specialists judge
+their assigned lens. Do not infer independent coverage from a role definition.
 
 ## Specialist routing
 
