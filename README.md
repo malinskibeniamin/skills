@@ -94,6 +94,9 @@ codex plugin add frontend-skills@skills
 
 Track `main` instead of the pin with `--ref main`. Restart Codex after adding or upgrading so the Plugins UI reloads metadata.
 
+Optional: [review/fix presets](docs/CODEX-PRESETS.md) for Codex CLI 0.164.0.
+Export reusable prompts and a review-model shortcut from this checkout without changing personal configuration or permissions.
+
 ### React DevTools runtime inspection
 
 Optional [React runtime inspection](shared/react-devtools.md) connects component

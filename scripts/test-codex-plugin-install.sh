@@ -27,6 +27,7 @@ run_codex() {
 
 [ -n "$codex_bin" ] || fail "Codex CLI not found"
 command -v jq >/dev/null 2>&1 || fail "jq is required"
+command -v bun >/dev/null 2>&1 || fail "Bun is required"
 
 mkdir -p "$marketplace_root" "$test_home" "$codex_home"
 
@@ -175,6 +176,14 @@ jq -e \
    length == 1' \
   "$list_result" >/dev/null ||
   fail "Codex did not retain exactly one enabled frontend-skills installation"
+
+# Validate the installed helper's output with the native parser, not a mock.
+# This config belongs to the disposable test home, never the user's Codex home.
+bun "$installed_path/scripts/codex-presets.ts" >>"$codex_home/config.toml"
+run_codex app-server --strict-config --print-startup-config >"$test_root/startup-config.json"
+jq -e '.appServerVersion | type == "string" and length > 0' \
+  "$test_root/startup-config.json" >/dev/null ||
+  fail "Codex did not accept the exported presets"
 
 printf 'Codex plugin installation test passed: %s (%s skills)\n' \
   "$plugin_id version $expected_version" \
