@@ -25,6 +25,9 @@ type: skill
 多少组独立证据共同支持每条规则来划分等级；[CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/product/CRAFT.md) 则是
 作者用于选择、塑造、测试和交付工作的实践手册。
 
+按照[两类审查约定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)评估范围和方向。
+建议不代表人工认可；未成文的偏好仅供参考。
+
 ## 类别 [#lanes]
 
 每项变更只服务于一个主要类别。混合目的应拆分为独立 PR。

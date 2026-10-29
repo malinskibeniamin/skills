@@ -6,7 +6,7 @@ description: "Keep work on track to business value: one lane, beneficiary, why n
 For a material product or design fork, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#product-and-planning).
 
 Check value/reach. Correctness: `/review`; truth: `/lie-detector`. Apply the **product hat** inline in `/review`, `/grilling` and auto-review, or standalone. [RULES.md](RULES.md) grades independent evidence sets; [CRAFT.md](CRAFT.md) owns author practice.
-Read the [two-kind contract](../shared/review-contract.md) for scope/direction advice.
+Read [review split](../shared/review-contract.md).
 
 ## Lanes
 

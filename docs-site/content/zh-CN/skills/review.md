@@ -25,7 +25,7 @@ type: skill
 
 审查固定范围。保持唯一负责人；委派需要明确授权。没有明确意图时不编辑、提交、推送或发布。请求的修复仅在指定范围内进入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
-按[审查运行模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)选择审查深度和收敛规则；风险改变审查力度，不改变权限。
+按[审查运行模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)选择审查深度和收敛规则；风险改变审查力度，不改变权限。另请阅读[两类审查约定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)。
 
 ## 审查约定 [#review-contract]
 

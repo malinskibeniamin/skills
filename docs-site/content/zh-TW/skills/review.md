@@ -25,7 +25,7 @@ type: skill
 
 審查固定範圍。保持唯一負責人；委派需要明確授權。沒有明確意圖時不編輯、提交、推送或發布。要求的修復僅在指定範圍內進入[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)。
 
-依[審查運作模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)選擇審查深度與收斂規則；風險改變審查力度，不改變權限。
+依[審查運作模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)選擇審查深度與收斂規則；風險改變審查力度，不改變權限。另請閱讀[兩類審查約定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)。
 
 ## 審查約定 [#review-contract]
 

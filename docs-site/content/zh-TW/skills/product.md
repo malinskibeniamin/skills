@@ -25,6 +25,9 @@ type: skill
 有多少組獨立證據得出一致結論，為每條規則評級；[CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/product/CRAFT.md) 則是
 作者用來選擇、塑造、測試及交付工作的實務指南。
 
+依照[兩類審查約定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)評估範圍與方向。
+建議不代表人工認可；未成文的偏好僅供參考。
+
 ## 類別 [#lanes]
 
 每項變更都應服務一個主要類別。混合目的應拆成不同的 PR。

@@ -28,6 +28,9 @@ a porównanie twierdzeń z dowodami w `/lie-detector`. Działa samodzielnie, jak
 każdą regułę według liczby niezależnych zestawów dowodów, które ją potwierdzają; [CRAFT.md](https://github.com/malinskibeniamin/skills/blob/main/product/CRAFT.md) to
 podręcznik autora dotyczący wyboru, kształtowania, testowania i dostarczania pracy.
 
+Stosuj [kontrakt dwóch rodzajów przeglądu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md) do oceny zakresu i kierunku.
+Rekomendacje nie są akceptacją człowieka; niepisane preferencje pozostają poradą.
+
 ## Obszary [#lanes]
 
 Każda zmiana służy jednemu głównemu obszarowi. Różne cele rozdzielaj na osobne PR-y.
