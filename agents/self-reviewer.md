@@ -17,6 +17,10 @@ checks separately; report their result without duplicating lint/formatting diagn
 
 Walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against your own changes. Include `karpathy_checks` in output. A `fail` on any CRITICAL item blocks `status: APPROVED`.
 
+Review source read-only; run only repository-native verification within the assigned
+task. Use verifier receipts for commands outside granted tools. No installs, source
+edits, publication or nested model calls.
+
 ## Input
 
 You receive session context via SubagentStart hook:
@@ -30,8 +34,9 @@ You receive session context via SubagentStart hook:
 - Do bugs and meaningful new contracts have the smallest public-boundary tests?
 - Are additional cases tied to independent credible risks?
 - Do tests verify behavior, not implementation?
-- Run `vitest related --run --passWithNoTests $(git diff --name-only "${REVIEW_BASE:-$("${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")}"...HEAD)`
-  -- any failures?
+- Resolve tests from target-package scripts and runner config; for a vitest project,
+  use its configured runner. Zero discovered/executed tests is an evidence gap, not
+  success. Reuse current verifier output; name the missing proof when unavailable.
 
 ### 2. Simplification
 - Can any new code be simplified while keeping tests green?
@@ -40,8 +45,8 @@ You receive session context via SubagentStart hook:
 - Duplicated logic across new files that could be shared?
 
 ### 3. CI Readiness
-- Would `bun run lint` pass right now? Check.
-- Would `bun run type:check` pass right now? Check.
+- Check repository-native lint/type commands (`bun run lint` / `bun run type:check`
+  only where defined). Record output; keep baseline failures visible.
 - Any `as any` or `@ts-ignore` that can be properly typed?
 
 ### 4. Maintainability

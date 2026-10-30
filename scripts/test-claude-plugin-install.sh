@@ -202,6 +202,13 @@ $hook_scripts
 EOF
 [ -f "$installed_path/shared/hook-lib.sh" ] ||
   fail "installed hooks are missing their shared library"
+# Reviewer definitions are guidance in both bundles, not automatic native dispatch.
+while IFS= read -r agent_path; do
+  [ -f "$installed_path/$agent_path" ] || fail "installed reviewer definition is missing: $agent_path"
+done < <(jq -r '.agents[]' "$installed_path/.claude-plugin/plugin.json")
+[ -f "$installed_path/agents/references/specialist-review.md" ] ||
+  fail "installed reviewers are missing their shared contract"
+
 [ -f "$installed_path/agents/references/findings-schema.jq" ] ||
   fail "installed reviewer hooks are missing their validation contract"
 

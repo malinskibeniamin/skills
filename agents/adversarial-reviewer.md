@@ -1,6 +1,6 @@
 ---
 name: adversarial-reviewer
-description: 'Constructs concrete failure scenarios for authorized reviews. Runs for cross-model duty, diff_lines > 200, introduced P0/P1 findings, or changed trust boundaries. Outputs structured JSON findings per findings-schema.md.'
+description: 'Constructs concrete failure scenarios for authorized reviews. Runs for cross-model duty, diff_lines > 200, introduced P0/P1 findings, changed trust boundaries, or evidenced high-impact security/recovery risk. Outputs structured JSON findings per findings-schema.md.'
 model: inherit
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *)
 ---
@@ -21,12 +21,13 @@ This agent is expensive. Run only when at least one trigger fires.
    - If the orchestrator marked this dispatch `cross_model: true` (the diff was authored by a codex/GPT executor, so this Claude agent IS the cross-model reviewer) -- PROCEED. Authorized adversarial coverage for Claude-authored diffs is the `GPT-6.1 Sol xhigh: adversarial` codex lane, not this agent.
    - If `diff_lines > 200` -- PROCEED.
    - If any prior reviewer returned an introduced `P0` or `P1` finding -- PROCEED.
-   - If the diff changes a trust boundary -- PROCEED; construct a reachable attack/failure path.
+   - If the diff changes a trust boundary, or the owner assigns an evidenced high-impact
+     security/recovery risk -- PROCEED; construct a reachable attack/failure path.
    - Else -- EMIT the skip block below and STOP.
 
    Skip block:
    ```json
-   { "schema_version": 1, "reviewer": "adversarial-reviewer", "status": "SKIPPED", "reason": "No cross-model duty, large diff, introduced P0/P1 finding, or changed trust boundary", "findings": [] }
+   { "schema_version": 1, "reviewer": "adversarial-reviewer", "status": "SKIPPED", "reason": "No cross-model duty, large diff, introduced P0/P1 finding, changed trust boundary, or evidenced high-impact security/recovery risk", "findings": [] }
    ```
 
 ## Required Reading

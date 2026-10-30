@@ -23,6 +23,10 @@ Block or escalate when the PR:
 - Uses casts, `unknown`, unnecessary optionality, or silent fallbacks where a typed boundary would be clearer.
 - Serializes independent work or performs non-atomic updates when a simpler structure is obvious.
 
+Use [conditional specialist axes](REVIEWERS.md) for harness/content propagation,
+runtime lifecycles, data fidelity and performance; keep them inline unless delegation
+was explicitly authorized. Planning hats and verifier receipts do not replace review.
+
 ## Frontend harness axis
 
 Check the project rules before commenting:

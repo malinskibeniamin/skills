@@ -122,3 +122,10 @@ printf 'src/secrets.ts\n' > "$review_dir/dirty-files-baseline"
   printf '%s %s\n' "$PASS" "$FAIL" > "$review_tmp/counts"
 )
 read -r PASS FAIL < "$review_tmp/counts"
+
+# Every new reviewer receives the bundled contract through the public start event.
+for review_specialist in interface-reviewer integration-reviewer runtime-reviewer contracts-data-reviewer performance-reviewer; do
+  run_hook_eval "$REPO_ROOT/.claude/hooks/subagent-start.sh" \
+    "$(jq -cn --arg session "$review_session" --arg role "$review_specialist" '{agent_type:$role,session_id:$session}')" 0 \
+    "$review_specialist receives the findings contract" "${REPO_ROOT}/agents/references/findings-schema.md"
+done

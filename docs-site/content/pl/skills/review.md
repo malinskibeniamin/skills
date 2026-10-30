@@ -88,6 +88,7 @@ Jeśli różnice obejmują pliki `.proto` (również usunięcia i zmiany nazw), 
 Ładuj umiejętności zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 Wywołaj narzędzie Skill osobno dla „product” i „lie-detector”; zastosuj ich perspektywy bezpośrednio w ramach przeglądu.
 Autoryzowane osie przeglądu uruchamiaj na pierwszym planie, w świeżych kontekstach ze wskaźnikami do ustalonego zakresu; zbierz wszystkie raporty. Bez zgody na delegowanie pracuj w bieżącym kontekście.
+Specjaliści: [zasady doboru](https://github.com/malinskibeniamin/skills/blob/main/review/REVIEWERS.md).
 
 ### Sklasyfikuj [#classify]
 

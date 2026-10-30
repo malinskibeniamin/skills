@@ -7,6 +7,7 @@ import {
   readFileSync,
   realpathSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -236,6 +237,7 @@ function checkout(files: Record<string, string> = {}, cli = entry) {
         reason: string;
         prompt: string;
         scope: "full" | "delta";
+        reviewer?: { name: string; instructions: string };
       }[];
     };
   };
@@ -273,6 +275,7 @@ test("gate prompts include the shared review contract and policy edits invalidat
     "scripts/github-evidence.ts",
     "agents/references/findings-schema.md",
     "agents/references/findings-schema.jq",
+    "agents/references/specialist-review.md",
   ]) {
     const target = join(harness, file);
     mkdirSync(join(target, ".."), { recursive: true });
@@ -1180,4 +1183,181 @@ test("gate recording shares the installed versioned reviewer contract", () => {
       ])
       .gates.find((gate) => gate.id === "performance")?.applicable,
   ).toBe(true);
+});
+
+const specialists = [
+  "interface-reviewer",
+  "integration-reviewer",
+  "runtime-reviewer",
+  "contracts-data-reviewer",
+  "performance-reviewer",
+];
+for (const reviewer of specialists) {
+  test(`${reviewer} reports are collected without bypassing identity or verdict validation`, () => {
+    const valid = collect(
+      { reviewer, status: "NEEDS_CHANGES", findings: [finding] },
+      reviewer,
+    );
+    expect(valid.code).toBe(0);
+    expect(valid.output).toContain(`${reviewer}: NEEDS_CHANGES`);
+    expect(valid.stored().reviewer).toBe(reviewer);
+    expect(valid.stored().findings[0].evidence).toBe(finding.evidence);
+    for (const report of [
+      { reviewer, status: "APPROVED", findings: [finding] },
+      {
+        reviewer: "code-reviewer",
+        status: "NEEDS_CHANGES",
+        findings: [finding],
+      },
+      { reviewer, status: "UNAVAILABLE", findings: [], reason: " " },
+    ])
+      expect(collect(report, reviewer).code).toBe(2);
+    const unavailable = collect(
+      {
+        reviewer,
+        status: "UNAVAILABLE",
+        findings: [],
+        reason: "No current rendered or runtime evidence supplied.",
+      },
+      reviewer,
+    );
+    expect(unavailable.stored().status).toBe("UNAVAILABLE");
+  });
+}
+
+test("specialist routes are suggestions, keep inline receipts and do not dispatch", () => {
+  const f = checkout();
+  const plan = f.plan();
+  const expected: Record<string, string> = {
+    correctness: "code-reviewer",
+    "security-and-recovery": "adversarial-reviewer",
+    protobuf: "contracts-data-reviewer",
+    "contracts-and-architecture": "contracts-data-reviewer",
+    "surface-review": "interface-reviewer",
+    "dependencies-and-licenses": "integration-reviewer",
+    performance: "performance-reviewer",
+    operations: "integration-reviewer",
+    "harness-and-host-integrity": "integration-reviewer",
+    "content-propagation": "integration-reviewer",
+    "runtime-lifecycle": "runtime-reviewer",
+  };
+  const registered = JSON.parse(
+    readFileSync(
+      new URL("../.claude-plugin/plugin.json", import.meta.url),
+      "utf8",
+    ),
+  ).agents as string[];
+  for (const [gate, reviewer] of Object.entries(expected)) {
+    const planned = plan.gates.find((item) => item.id === gate);
+    expect(planned?.reviewer?.name).toBe(reviewer);
+    expect(existsSync(planned?.reviewer?.instructions ?? "")).toBe(true);
+    expect(registered).toContain(`./agents/${reviewer}.md`);
+    const prompt = readFileSync(planned?.prompt ?? "", "utf8");
+    expect(prompt).toContain("explicit delegation authorization");
+    expect(prompt).toContain(
+      `reviewer ${gate} for inline/generic gate workers`,
+    );
+  }
+  expect(f.run("check").code).toBe(1);
+  expect(f.record("surface-review").code).toBe(0);
+  const record = JSON.parse(
+    readFileSync(join(plan.directory, "results/surface-review.json"), "utf8"),
+  );
+  expect(record.result.reviewer).toBe("surface-review");
+  expect(record.executor.mode).toBe("inline");
+});
+
+test("specialist gate applicability combines path evidence with semantic classification", () => {
+  const f = checkout();
+  const excluded = f.plan().gates.map(({ id }) => ({
+    gate: id,
+    relevant: false,
+    reason: "No changed behavior in this domain.",
+  }));
+  const before = f.plan(excluded);
+  for (const id of [
+    "harness-and-host-integrity",
+    "content-propagation",
+    "runtime-lifecycle",
+  ]) {
+    expect(before.gates.find((gate) => gate.id === id)?.applicable).toBe(false);
+  }
+  for (const path of [
+    "agents/example.md",
+    "locales/pl.json",
+    "src/workers/example.ts",
+  ]) {
+    mkdirSync(join(f.root, path, ".."), { recursive: true });
+    writeFileSync(join(f.root, path), "changed public contract\n");
+  }
+  const after = f.plan(excluded);
+  for (const id of [
+    "harness-and-host-integrity",
+    "content-propagation",
+    "runtime-lifecycle",
+  ]) {
+    expect(after.gates.find((gate) => gate.id === id)?.reason).toContain(
+      "Path signal",
+    );
+    expect(after.gates.find((gate) => gate.id === id)?.applicable).toBe(true);
+  }
+});
+
+test("consumer reviewer instructions are candidate-bound and cannot escape their source", () => {
+  const f = checkout();
+  const instructions = f.input("reviewer.md", "placeholder");
+  writeFileSync(instructions, "Review this component's event ownership.\n");
+  const local = {
+    id: "component-events",
+    title: "Component events",
+    always: true,
+    globs: [],
+    skills: [],
+    lens: "Trace event ownership.",
+    rereview: "delta",
+    reviewer: {
+      name: "component-reviewer",
+      instructions: ".context/reviewer.md",
+    },
+  };
+  const configure = (reviewer: unknown) =>
+    writeFileSync(
+      join(f.root, ".review-gates.json"),
+      JSON.stringify({ version: 1, gates: [{ ...local, reviewer }] }),
+    );
+  configure(local.reviewer);
+  const first = f.plan();
+  expect(
+    first.gates.find((gate) => gate.id === local.id)?.reviewer?.instructions,
+  ).toBe(realpathSync(instructions));
+  expect(f.record(local.id).code).toBe(0);
+  const status = f.git("status", "--porcelain");
+  writeFileSync(instructions, "Also trace cancellation at teardown.\n");
+  expect(f.git("status", "--porcelain")).toBe(status);
+  expect(f.run("check").code).toBe(3);
+  const next = f.plan();
+  expect(next.id).not.toBe(first.id);
+  expect(next.gates.find((gate) => gate.id === local.id)?.scope).toBe("full");
+  for (const reviewer of [
+    null,
+    { name: "bad/name", instructions: ".context/reviewer.md" },
+    { name: "component-reviewer", instructions: "../outside.md" },
+  ]) {
+    configure(reviewer);
+    expect(f.run("plan", "--base", "main").code).toBe(2);
+  }
+  const outside = mkdtempSync(join(tmpdir(), "review-instructions-"));
+  directories.push(outside);
+  writeFileSync(join(outside, "external.md"), "Untrusted outside rubric\n");
+  symlinkSync(
+    join(outside, "external.md"),
+    join(f.root, ".context/escaped.md"),
+  );
+  configure({
+    name: "component-reviewer",
+    instructions: ".context/escaped.md",
+  });
+  expect(f.run("plan", "--base", "main").error).toContain(
+    "escapes its source repository",
+  );
 });

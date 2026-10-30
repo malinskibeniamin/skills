@@ -8,7 +8,11 @@
       "globs": [],
       "skills": ["review/SKILL.md", "review/OPERATING-MODEL.md"],
       "lens": "Trace changed behavior to authoritative producers, callers and contracts. Report concrete regressions, not unrelated existing defects or formatter-owned style.",
-      "rereview": "delta"
+      "rereview": "delta",
+      "reviewer": {
+        "name": "code-reviewer",
+        "instructions": "agents/code-reviewer.md"
+      }
     },
     {
       "id": "value-and-claims",
@@ -58,7 +62,11 @@
       ],
       "skills": ["security-audit/SKILL.md", "resilience-review/SKILL.md"],
       "lens": "Check evidenced trust boundaries, sensitive data, irreversible effects and recovery. Name a concrete abuse or failure path; do not demand defensive controls for theoretical risks.",
-      "rereview": "full"
+      "rereview": "full",
+      "reviewer": {
+        "name": "adversarial-reviewer",
+        "instructions": "agents/adversarial-reviewer.md"
+      }
     },
     {
       "id": "protobuf",
@@ -73,16 +81,32 @@
       ],
       "skills": ["protobuf/SKILL.md"],
       "lens": "Review protobuf binary, JSON, generated-source and behavioral contracts through affected consumers. Check presence, schema evolution, codegen, validation enforcement and descriptor-driven behavior. Apply AIP only for APIs adopting its resource conventions. Keep concrete defects separate from advisory schema-driven opportunities; do not require runtime migrations or dispatch agents.",
-      "rereview": "full"
+      "rereview": "full",
+      "reviewer": {
+        "name": "contracts-data-reviewer",
+        "instructions": "agents/contracts-data-reviewer.md"
+      }
     },
     {
       "id": "contracts-and-architecture",
       "title": "Contracts and architecture",
       "always": false,
-      "globs": ["**/*.proto", "**/api/**", "**/schema/**", "**/migrations/**"],
+      "globs": [
+        "**/*.proto",
+        "**/api/**",
+        "**/schema/**",
+        "**/migrations/**",
+        "**/*.sql",
+        "**/*serializ*",
+        "**/*codec*"
+      ],
       "skills": ["blast-radius/SKILL.md"],
-      "lens": "Trace non-local compatibility and hard-to-reverse decisions through real producers and consumers. Check generated output as evidence. Do not prescribe architectural changes for taste or hypothetical scale.",
-      "rereview": "full"
+      "lens": "Trace non-local compatibility and hard-to-reverse decisions through real producers and consumers. Check generated output as evidence. Do not prescribe architectural changes for taste or hypothetical scale. Trace data fidelity across encoding, numeric precision, null/missing values, unknown variants, units and timezones; inspect mixed-version migrations and rollback only for affected real consumers.",
+      "rereview": "full",
+      "reviewer": {
+        "name": "contracts-data-reviewer",
+        "instructions": "agents/contracts-data-reviewer.md"
+      }
     },
     {
       "id": "surface-review",
@@ -91,7 +115,11 @@
       "globs": ["**/*.tsx", "**/*.css", "**/cli/**", "**/commands/**"],
       "skills": ["visual-review/SKILL.md", "accessibility/SKILL.md"],
       "lens": "Inspect real surface evidence, states, copy, keyboard behavior and accessibility. Source inspection or unit tests cannot replace rendered evidence. Use terminal evidence for CLI surfaces; do not invent screenshots or launch a human-owned browser.",
-      "rereview": "delta"
+      "rereview": "delta",
+      "reviewer": {
+        "name": "interface-reviewer",
+        "instructions": "agents/interface-reviewer.md"
+      }
     },
     {
       "id": "dependencies-and-licenses",
@@ -105,11 +133,19 @@
         "**/MODULE.bazel",
         "**/*.bzl",
         "**/LICENSE*",
-        "**/third_party/**"
+        "**/third_party/**",
+        "**/vendor/**"
       ],
-      "skills": ["upgrade-dependency/SKILL.md"],
+      "skills": [
+        "upgrade-dependency/SKILL.md",
+        "t3code-skills/vendored-assets/SKILL.md"
+      ],
       "lens": "Check changed direct and transitive dependencies, pins, runtime compatibility, advisories and applicable licenses. Inspect lockfiles and vendored or generated evidence rather than discarding them. Respect the consumer's actual license policy.",
-      "rereview": "full"
+      "rereview": "full",
+      "reviewer": {
+        "name": "integration-reviewer",
+        "instructions": "agents/integration-reviewer.md"
+      }
     },
     {
       "id": "documentation",
@@ -118,7 +154,11 @@
       "globs": ["**/*.md", "**/*.mdx"],
       "skills": ["docs/SKILL.md"],
       "lens": "Check that user-visible behavior and technical claims match the implementation and evidence. Update existing documentation rather than demanding new files, sections or diagrams when they add no understanding.",
-      "rereview": "delta"
+      "rereview": "delta",
+      "reviewer": {
+        "name": "code-reviewer",
+        "instructions": "agents/code-reviewer.md"
+      }
     },
     {
       "id": "performance",
@@ -126,8 +166,12 @@
       "always": false,
       "globs": ["**/benchmarks/**", "**/*bench*", "**/kernels/**"],
       "skills": ["t3code-skills/performance-analysis/SKILL.md"],
-      "lens": "Check claimed or structurally evidenced performance changes at demonstrated scale. Require appropriate measurements for speedup claims; do not invent benchmarks, resource savings or speculative hot paths.",
-      "rereview": "delta"
+      "lens": "Check claimed or structurally evidenced performance changes at demonstrated scale. Require appropriate measurements for speedup claims; do not invent benchmarks, resource savings or speculative hot paths. Select UX, bundle, animation, backend or compiler evidence according to the changed workload; related owner skills are linked from the reviewer instructions.",
+      "rereview": "delta",
+      "reviewer": {
+        "name": "performance-reviewer",
+        "instructions": "agents/performance-reviewer.md"
+      }
     },
     {
       "id": "operations",
@@ -140,9 +184,82 @@
         "**/*.tf",
         "**/Dockerfile*"
       ],
-      "skills": ["resilience-review/SKILL.md"],
+      "skills": [
+        "resilience-review/SKILL.md",
+        "t3code-skills/ci-maintenance/SKILL.md"
+      ],
       "lens": "Check changed build, deployment, configuration, observability and recovery contracts against the consuming repository. Require actionable failure signals and rollback where credible risk exists, not generic runbooks or new services.",
-      "rereview": "full"
+      "rereview": "full",
+      "reviewer": {
+        "name": "integration-reviewer",
+        "instructions": "agents/integration-reviewer.md"
+      }
+    },
+    {
+      "id": "harness-and-host-integrity",
+      "title": "Harness and host integrity",
+      "always": false,
+      "globs": [
+        "**/AGENTS.md",
+        "**/CLAUDE.md",
+        "**/SKILL.md",
+        "**/agents/**",
+        ".agents/**",
+        ".claude/**",
+        ".codex/**",
+        ".claude-plugin/**",
+        ".codex-plugin/**",
+        "**/hooks/**",
+        "**/*manifest*.json",
+        "config/**",
+        "scripts/generate-*"
+      ],
+      "skills": ["writing-for-agents/SKILL.md"],
+      "lens": "Trace registration, installed discovery, invocation policy, permissions, host tools, generated configuration and prompt budgets. Check the actual affected host; static packaging cannot prove model adherence or cross-host runtime parity.",
+      "rereview": "full",
+      "reviewer": {
+        "name": "integration-reviewer",
+        "instructions": "agents/integration-reviewer.md"
+      }
+    },
+    {
+      "id": "content-propagation",
+      "title": "Content propagation",
+      "always": false,
+      "globs": [
+        "**/locales/**",
+        "**/translations/**",
+        "**/i18n/**",
+        "**/content/**",
+        "**/*.po",
+        "**/*.pot",
+        "**/blume.translations.json"
+      ],
+      "skills": ["docs/SKILL.md"],
+      "lens": "Trace canonical changes through generated catalogs, localized content, freshness ledgers and fallbacks. Use repository checks and inspect translation content before accepting freshness stamps. Surface review owns wording quality and rendered RTL/text expansion, not duplicated freshness findings.",
+      "rereview": "full",
+      "reviewer": {
+        "name": "integration-reviewer",
+        "instructions": "agents/integration-reviewer.md"
+      }
+    },
+    {
+      "id": "runtime-lifecycle",
+      "title": "Runtime lifecycle",
+      "always": false,
+      "globs": [
+        "**/workers/**",
+        "**/*subscription*",
+        "**/hooks/use*",
+        "**/*queue*"
+      ],
+      "skills": ["resilience-review/SKILL.md"],
+      "lens": "Trace ownership, cancellation, stale responses, races, retries, idempotency and cleanup through concrete interleavings and public failure-path evidence. Report credible resource or environment-isolation failures; avoid hypothetical stress and duplicate security/contract findings.",
+      "rereview": "full",
+      "reviewer": {
+        "name": "runtime-reviewer",
+        "instructions": "agents/runtime-reviewer.md"
+      }
     }
   ]
 }

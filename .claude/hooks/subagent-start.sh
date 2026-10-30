@@ -55,7 +55,7 @@ context_parts+=("$branch_context")
 # ── Reviewer-specific context ────────────────────────────────────
 harness_root=$(cd "$(dirname "$0")/../.." && pwd)
 case "$agent_type" in
-  self-reviewer|code-reviewer|adversarial-reviewer)
+  self-reviewer|code-reviewer|adversarial-reviewer|interface-reviewer|integration-reviewer|runtime-reviewer|contracts-data-reviewer|performance-reviewer)
     context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per \`${harness_root}/agents/references/findings-schema.md\`. Read that file for the exact format.")
     context_parts+=("## Specialist Review Routing\nWhen this review proceeds, read \`${harness_root}/shared/change-evidence.md\` and load applicable specialist guidance, including protobuf schema, generation and consumer contracts. Review inline unless delegation was explicitly authorized; loading guidance grants no additional execution or publication permission.")
     ;;

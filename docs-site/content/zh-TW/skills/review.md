@@ -86,6 +86,7 @@ type: skill
 依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)載入技能。
 分別為「product」和「lie-detector」呼叫 Skill 工具；在同一流程中套用其角色。
 經授權的審查面向應在前景執行，使用全新情境與固定範圍指標；彙整每份報告。未獲委派授權時，在目前情境中執行。
+專項審查角色：[路由規則](https://github.com/malinskibeniamin/skills/blob/main/review/REVIEWERS.md)。
 
 ### 分類 [#classify]
 

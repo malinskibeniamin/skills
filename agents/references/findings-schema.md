@@ -1,6 +1,6 @@
 # Structured Findings Schema
 
-All reviewer agents (`self-reviewer`, `code-reviewer`, `adversarial-reviewer`) MUST output findings as a single JSON block. This enables programmatic triage, autofix routing, and cross-reviewer deduplication.
+All eight finding-producing reviewer agents in [the role catalogue](../../review/REVIEWERS.md) MUST output findings as a single JSON block. The evidence-running `verifier` keeps its separate verification receipt; planning hats remain plan-time. This enables programmatic triage, autofix routing, and cross-reviewer deduplication.
 
 The executable contract is [findings-schema.jq](findings-schema.jq), version 1.
 The bundled SubagentStop hook validates it in either host when the host supplies
