@@ -23,6 +23,10 @@
     },
     "UserPromptSubmit": {
       "": [
+        {
+          "script": "quota-guard.sh",
+          "codex_script": "codex-quota-guard.sh"
+        },
         "user-prompt-context.sh",
         "intent-detect.sh",
         {
@@ -91,6 +95,12 @@
           "script": "pr-review-auto-hook.sh",
           "codex_script": "codex-pr-review-auto-hook.sh"
         }
+      ],
+      "^(Agent|Task|spawn_agent|mcp__.*delegate_task)$": [
+        {
+          "script": "quota-guard.sh",
+          "codex_script": "codex-quota-guard.sh"
+        }
       ]
     },
     "PostToolUse": {
@@ -100,6 +110,10 @@
         "test-warning-check.sh"
       ],
       "": [
+        {
+          "script": "quota-guard.sh",
+          "codex_script": "codex-quota-guard.sh"
+        },
         {
           "script": "pr-review-auto-hook.sh",
           "codex_script": "codex-pr-review-auto-hook.sh"

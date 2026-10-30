@@ -147,3 +147,8 @@ Domain expert: "Prime is for current-state orientation. Use Handoff only to tran
 One automatic feedback dispatch to the bound feature session. A persisted budget pauses
 repeated repair for explicit reassessment; dispatch is not finding resolution or a reviewer pass.
 _Avoid_: Review accuracy, reviews-to-pass
+
+**Quota guard**:
+An opt-in allowance checkpoint that can block prompts, task launches, or further work
+when reported quota reaches a configured threshold or cannot be verified.
+_Avoid_: Billing cap, automatic account router, token-cost estimate

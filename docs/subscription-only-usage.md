@@ -1,183 +1,124 @@
-# Subscription-only coding usage
+# Subscription quota guard
 
-Source review: 2026-10-26. Scope: personal ChatGPT/Codex and Claude subscriptions.
+Source review: 2026-10-30.
 
-Use provider-side credit controls before distributing work across accounts. Account
-rotation does not prevent paid usage. This guide documents setup and acceptance
-checks, not a billing guarantee or a feature implemented by this harness.
+The harness can block new prompts and task launches, and stop further work at
+post-tool checkpoints, when native Codex allowance reaches a configured threshold.
+It reads actual quota windows instead of estimating usage from token counts.
+The guard is opt-in and does not use CLIProxyAPI, rotate accounts, or select a
+paid fallback. It is a safety buffer, not a zero-overage billing guarantee.
 
-**Recommended:** use T3 Code's native account connections with paid credits disabled.
-Treat CLIProxyAPI as optional routing, not a spending cap. If the provider cannot
-reject credit use for the selected authentication path, do not enable unattended
-subscription-only routing. No live account-limit or billing-transition test was
-performed for this guide.
+![Before: no quota checkpoint. New: opt-in native reads allow verified headroom or block limited and unknown quota.](architecture/subscription-quota-guard.png)
 
-## Separate account selection from billing protection
+[Editable architecture](architecture/subscription-quota-guard.excalidraw). The before
+view reflects `skill-manifest.json` at `1a65db29`; the new path follows
+[`scripts/quota-guard.py`](../scripts/quota-guard.py) and its generated hook registration.
+Verified through the real shell hook, protocol fixtures, and read-only native metadata.
 
-T3 Code's [Codex guide](https://github.com/pingdotgg/t3code/blob/main/docs/user/providers-codex.md)
-documents adding accounts in **Settings > Providers** and selecting them through
-the model picker. Compatible Codex accounts can continue a thread. Shared Codex
-homes with separate shadow homes support separate CLI logins without copying the
-whole home directory.
+## Enable for native Codex
 
-The [Claude guide](https://github.com/pingdotgg/t3code/blob/main/docs/user/providers-claude.md)
-uses separate `CLAUDE_CONFIG_DIR` directories for accounts. Existing threads can
-switch only between instances with the same configuration directory. Do not assume
-Codex-style conversation continuity across isolated Claude accounts.
-
-The checked guides do not establish an automatic quota-aware account balancer.
-[Account-selection proposals](https://github.com/pingdotgg/t3code/discussions/6923)
-are not evidence that the feature ships in your installed build. T3's
-[Connections load balancing](https://github.com/pingdotgg/t3code/blob/main/docs/user/remote-access.md#balance-new-threads-across-machines)
-selects machines using resource availability, not remaining subscription allowance.
-
-The subscription-only requirement has two separate controls:
-
-```text
-Provider rejects paid credits ── constrains ──▶ Account routing
-                                                │
-                            allowance available ├──▶ Run on eligible account
-                            none or unverified  └──▶ Stop; no paid fallback
-```
-
-The diagram defines the desired policy. It does not describe a shipped controller.
-
-## Configure ChatGPT plan sharing in T3 Code
-
-For each account:
-
-1. In T3 Code, select the target environment and open **Settings > Providers**.
-2. Connect with ChatGPT and confirm the intended account during sign-in.
-3. Open **Manage usage** for that connection, or ChatGPT's **Settings > Usage**.
-4. Turn off **Allow other apps to use credits after reaching your usage limit**.
-5. Save and re-read the preference. If the control is unavailable, verify eligibility
-   and the actual connection type before relying on it.
-6. Optionally set T3's weekly app limit below 100% for another credit-use restriction.
-
-These controls apply to participating apps using ChatGPT plan sharing. OpenAI lists
-[T3 as an open-source integration](https://learn.chatgpt.com/docs/sign-in-with-chatgpt).
-A lower app limit caps shared allowance; it does not reserve or add capacity.
-An app limit below 100% prevents app credit use, even if app credit use is otherwise
-enabled. See [OpenAI's connection and credit controls](https://help.openai.com/en/articles/20001542-using-your-chatgpt-plan-in-other-apps-and-sites).
-
-Turn off automatic credit purchases separately. That prevents automatic top-ups,
-not consumption of an existing credit balance. Concurrent work can also make a
-positive credit balance negative. Do not treat the balance as a hard spending cap.
-See [OpenAI's credit behavior](https://help.openai.com/en/articles/12642688-using-credits-for-flexible-usage-in-chatgpt-personal-plans).
-
-**Do not assume app-sharing controls protect an existing Codex CLI login or a proxy's
-OAuth credentials.** Verify the authentication path independently. Do not add an
-upstream paid API key as a fallback for this workflow.
-
-## Configure Claude without paid usage credits
-
-Disable usage credits in **Claude > Settings > Usage** on every account. Re-read
-the saved setting. Anthropic states that disabling them restricts access to the
-plan's included usage. See [Claude's usage-credit controls](https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans).
-
-This does not make third-party subscription pooling supported. Anthropic reserves
-the right to charge certain third-party tools against usage credits instead of
-subscription allowance. It prohibits disguising third-party traffic to force it
-onto subscription limits. Do not use CLIProxyAPI to bypass that restriction.
-See [Anthropic's authentication policy](https://support.claude.com/en/articles/13189465-log-in-to-your-claude-account).
-
-Use a supported native authentication path. If it cannot run with credits disabled,
-stop rather than enabling credits to make the connection work. Avoid paid API-key
-fallbacks in the subscription-only provider instance.
-
-## Optional Codex routing through CLIProxyAPI
-
-Use this only after confirming that your provider permits the integration and
-enforces no-credit use for its authentication path. The example does not establish
-either condition. The ChatGPT app-sharing switch above is not proof for proxy OAuth.
-
-Keep the proxy local, use a dedicated configuration, and protect its credential
-directory. Do not copy token files into this repository or print them in logs.
-The following **v8 configuration example** is based on CLIProxyAPI's
-[configuration reference](https://help.router-for.me/configuration/options):
-
-```yaml
-config-version: 8
-server:
-  host: "127.0.0.1"
-  port: 8317
-access:
-  api-keys:
-    - "replace-with-a-random-local-client-key"
-oauth:
-  auth-dir: "~/.cli-proxy-api-subscriptions"
-routing:
-  strategy: round-robin
-  session-affinity: true
-  retry:
-    request-retry: 0
-    max-retry-credentials: 0
-    max-retry-interval: 0
-  cooldown:
-    disable-cooling: false
-    save-cooldown-status: true
-```
-
-Replace the client-key placeholder before starting the proxy. It authenticates
-local clients; it is not an upstream billable API key. Audit existing credentials
-separately: this example does not remove credentials already stored in `auth-dir`.
-Keep only the intended subscription accounts in the routing pool.
-
-For an installed binary in the current directory, authenticate each eligible Codex
-account using the [documented OAuth command](https://help.router-for.me/configuration/provider/codex):
+Requires Python 3 and the native `codex` CLI on `PATH` in the hook environment.
+Enable and trust the installed hooks in your host, then set these variables on the
+Codex process before starting a session:
 
 ```sh
-./cli-proxy-api --config /absolute/path/to/config.yaml --codex-login
+HARNESS_QUOTA_GUARD=1 \
+HARNESS_QUOTA_GUARD_ACCOUNT='your-account@example.com' \
+HARNESS_QUOTA_GUARD_THRESHOLD=90 \
+codex
 ```
 
-Repeat for each intended account and verify the reported account identity. Start
-the proxy in an owned foreground terminal with the same configuration:
+Use the email of the native ChatGPT login in that process's `CODEX_HOME`. The guard
+requires a matching account before and after reading quota. It rejects API-key
+authentication, custom providers, endpoint overrides, and missing account identity.
+It does not print your email, parse credential files, start a model turn, change
+models, or lower reasoning effort.
+
+The default threshold is 90 percent. You can select a value from 1 through 99.
+The collector has a five-second total deadline, configurable from 0.1 through 10
+seconds with `HARNESS_QUOTA_GUARD_TIMEOUT`. It terminates its own collector process
+when finished. It installs no daemon and changes no account or billing settings.
+
+To disable it for a subsequent session, omit `HARNESS_QUOTA_GUARD` or set it to `0`.
+Changing environment variables in a tool's child shell does not change the running
+host's environment. Restart the host with the intended settings.
+
+## What the hooks enforce
+
+| Checkpoint | Below threshold with valid readings | Limited or unavailable |
+| --- | --- | --- |
+| `UserPromptSubmit` | Allow the prompt | Block the prompt |
+| `PreToolUse` for `Agent`, `Task`, `spawn_agent`, and matching MCP delegation tools | Allow the requested launch | Deny that tool call |
+| `PostToolUse` | Allow further work | Return `continue: false` to stop the turn |
+
+A denied launch does not necessarily stop the parent model. The post-tool hook is
+an additional checkpoint, not an interrupt inside an already-running model request.
+The guard is deliberately not wired to `Stop`: blocking that event would make the
+agent continue instead of saving allowance.
+
+Every check starts an owned `codex app-server` process and uses read-only
+`config/read`, `account/read`, and `account/rateLimits/read` requests. It checks
+all reported primary, secondary, and model-bucket windows conservatively. An absent
+secondary window is not invented. A missing set of windows, malformed response,
+expired reset timestamp, account mismatch, collector error, or timeout blocks work.
+There is no cached percentage that can silently become fresh or reset to zero.
+See the [official app-server protocol](https://learn.chatgpt.com/docs/app-server).
+
+Both local and plugin hook configurations are generated from `skill-manifest.json`.
+The host must execute and honor those hooks. Supported output contracts are
+specified in the [Codex hooks reference](https://learn.chatgpt.com/docs/hooks).
+Disabled mode exits before starting Python or contacting a provider.
+
+## Current support boundaries
+
+**Claude is not supported by this first collector.** With the guard enabled, its
+hooks block with an explicit unsupported message. Claude's documented status-line
+quota data appears only after an API response; treating an absent reading as unused
+allowance would defeat fail-closed startup. No private OAuth endpoint or synthetic
+usage estimate is substituted. See [Claude's native quota data](https://code.claude.com/docs/en/statusline#rate-limit-usage).
+
+For T3 Code, this checks only the native CLI login inherited through `CODEX_HOME`.
+It cannot establish the billing identity of a separate partner-token connection,
+intercept T3's transport, or govern another machine/session. Do not treat a reading
+from a different native CLI login as evidence about a T3 account.
+
+The collector resolves configuration on disk, not the parent host's command-line
+overrides. Provider/authentication overrides through `--config` or `--profile` are
+not supported. Enable the guard only when the host and collector use the same
+native account and configuration. A quota check is not proof of billing identity
+for an arbitrary host connection.
+
+## Keep provider-side billing protection
+
+The threshold leaves headroom; it cannot predict the cost of the next request.
+Concurrent sessions can consume that headroom, a long request can cross it, and a
+provider's reported percentage can lag. A model request already in flight can
+finish before the next hook checkpoint. Cancellation cannot reverse existing usage.
+
+Keep extra usage and credit purchases disabled at the provider. ChatGPT app-sharing
+credit controls are separate from native CLI authentication and do not automatically
+apply to it. Disabling auto-reload alone does not prevent spending an existing
+credit balance. See [OpenAI's credit controls](https://help.openai.com/en/articles/20001542-using-your-chatgpt-plan-in-other-apps-and-sites)
+and [credit behavior](https://help.openai.com/en/articles/12642688-using-credits-for-flexible-usage-in-chatgpt-personal-plans).
+
+No live billing-transition test or promise of zero extra charges is part of this
+feature. The runtime contract is blocking supported checkpoints on observed quota
+or unavailable evidence, not provider-enforced spending authorization.
+
+## Verify the installed path
+
+Before relying on it, exercise the actual trusted hook command with a masked native
+account and confirm its identity binding. Test threshold, missing-data, timeout,
+wrong-account, and recovery paths without enabling paid usage. Recheck after host,
+authentication, or protocol changes. Never publish tokens or raw provider responses.
+
+Repository verification:
 
 ```sh
-./cli-proxy-api --config /absolute/path/to/config.yaml
+bun test scripts/quota-guard.test.ts
+bash scripts/generate-hook-configs.sh --check
 ```
 
-Use a dedicated `CODEX_HOME` and T3 provider instance for the proxy. Follow the
-[upstream Codex client guide](https://help.router-for.me/agent-client/codex) for the
-installed version, with the Responses endpoint at `http://127.0.0.1:8317/v1`.
-Do not overwrite the normal CLI account's configuration or credentials.
-
-Round-robin spreads eligible new sessions, not equal token consumption. Session
-affinity keeps a conversation on its selected credential while allowing failover.
-Zero additional retry rounds still allows same-round credential failover. Persisted
-cooldowns retain unavailable-account state across proxy restarts.
-
-These are routing controls. They do not reject an otherwise successful upstream
-request that consumes paid credits. A successful HTTP response is not proof of
-included-allowance billing. Legacy `quota-exceeded.switch-project` and
-`switch-preview-model` settings have no v8 counterpart; do not present them as
-spending controls. Check the [current routing reference](https://help.router-for.me/configuration/options).
-
-## Verify before unattended use
-
-Do not enable paid credits to test their rejection. Start with saved-setting
-readback and non-billable routing fixtures. Observe a real allowance boundary only
-with paid usage disabled. Keep the live billing boundary marked unverified until
-the provider's behavior is observed.
-
-| Scenario | Required evidence for subscription-only operation |
-| --- | --- |
-| Account or environment changes | Confirm the selected identity, connection type, and saved no-credit controls. |
-| One account reaches an applicable limit | Use another eligible account with the intended model, or surface the limit and stop. |
-| Every eligible account is limited | Reject new work without a paid API, credit, model, or cross-provider fallback. |
-| Quota or billing eligibility is missing or stale | Stop new dispatch rather than assuming capacity. Stock routing is not evidence of this policy. |
-| Concurrent work reaches a boundary | Provider-side no-credit enforcement still applies; a polling percentage is not a reservation. |
-| Paid usage is unexpectedly reported | Stop affected work and disable that route. Cancellation cannot undo charges already incurred. |
-
-Record only non-secret evidence: application versions, masked account labels,
-setting states, model, reset time, and observed rejection. Never include bearer
-tokens, credential files, or full request logs. Repeat the checks after changes to
-authentication, provider policy, routing plugins, or fallback configuration.
-
-## Roll back routing without weakening billing controls
-
-Stop only the proxy process you started. Disable its dedicated T3 provider instance
-or restore that instance's previous endpoint. Leave provider-side credit blocking
-in place. Do not delete shared account directories or re-enable paid usage as a
-recovery step. This guide installs no proxy, changes no account settings, and adds
-no automatic account balancer to the harness.
+To roll back, disable the opt-in for the relevant host and restore the previous
+harness version. Leave provider-side credit restrictions enabled. No proxy service,
+shared account directory, or billing setting needs removal.

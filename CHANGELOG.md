@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+2026-10-30 -- Add an opt-in native Codex subscription quota guard. It reads live
+allowance windows, blocks prompts and task launches at a configurable threshold,
+and stops further work at post-tool checkpoints. Missing or invalid readings block.
+Set `HARNESS_QUOTA_GUARD=1` and bind the native account with
+`HARNESS_QUOTA_GUARD_ACCOUNT`; default installations stay unchanged. Refresh the
+plugin, reload/restart the host, and trust the new hooks before relying on it.
+Claude collection, external-token connections, and automatic account rotation are
+not supported. This buffer does not replace provider-side credit restrictions.
+
 ## 4.41.0
 
 2026-10-28 -- Publish the post-4.40 changes as one Claude Code and Codex bundle.

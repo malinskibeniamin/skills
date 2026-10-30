@@ -54,6 +54,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/quota-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
+          {
+            "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/user-prompt-context.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           },
           {
@@ -283,6 +287,15 @@
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/pr-review-auto-hook.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "^(Agent|Task|spawn_agent|mcp__.*delegate_task)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/quota-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -305,6 +318,10 @@
       },
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/quota-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          },
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/pr-review-auto-hook.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"

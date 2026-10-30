@@ -169,9 +169,10 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 
 Want proof and examples? Demo scripts, featured skill moments, and starter prompts live in [docs/DEMOS.md](docs/DEMOS.md); comparisons, measurement methodology, and common questions live in [docs/FAQ.md](docs/FAQ.md).
 
-For multiple coding subscriptions, follow the [subscription-only setup guide](docs/subscription-only-usage.md).
-It separates T3 account selection and optional CLIProxyAPI routing from provider-side
-credit controls. The harness does not enforce billing limits or install a balancer.
+The opt-in [subscription quota guard](docs/subscription-only-usage.md) reads native
+Codex allowance and blocks prompts/task launches or stops at post-tool checkpoints
+near the configured threshold. Unknown readings block; provider-side credit controls
+remain necessary. Claude collection and automatic account rotation are not supported.
 
 ## Review evidence
 
