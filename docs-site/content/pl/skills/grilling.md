@@ -19,6 +19,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/grilling.excalidraw)
 
+Przy istotnym wyborze dotyczącym produktu lub projektu przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning).
+
 
 Wyjaśniaj niewiadome o istotnych konsekwencjach, a nie każdy szczegół: nie twórz kodu produkcyjnego ani nie rozpoczynaj implementacji, dopóki pozostaje otwarta istotna decyzja zastrzeżona dla użytkownika. Wywołanie nie upoważnia do delegowania.
 

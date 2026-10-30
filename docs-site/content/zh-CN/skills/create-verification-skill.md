@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/create-verification-skill.excalidraw)
 
+验证变更后的行为或维护验证流程时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 首先从目标项目的说明和技能中确定现有验证方式，不受名称限制。复用它来验证已覆盖的流程；漂移交由 `/maintain-verification-skill`。在 T3 Code 仓库中，为每个受影响的界面加载[Web/桌面端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)或[原生移动端](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)技能，并应用[原生验证约定](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-SKILLS.md#native-verification)。缺少工具不能成为创建替代验证器的理由。
 
 只有在已证实存在覆盖缺口时，才在仓库的规范技能根目录中编写一个可从零启动的验证器；若无此目录，则使用 `.agents/skills/verify-<app>/`。不要复制到各个宿主专用目录，也不要重复已被覆盖的原生流程。

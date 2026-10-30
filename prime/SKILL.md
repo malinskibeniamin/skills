@@ -3,7 +3,7 @@ name: prime
 description: Builds repo startup brief. Use when start/resume, post-compaction, new chat, or /prime.
 ---
 
-For context recovery, behavior or rationale explanations, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#orientation-and-explanation).
+For context/behavior/rationale, read [Poteto](../shared/POTETO-NATIVE.md#orientation-and-explanation).
 
 Build startup brief: repo state, goal, next reads. Use `/agent-watchdog` for another run's claims, `/plan-arbiter` for competing plans, `/read-the-damn-docs` for current external facts.
 

@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/maintain-verification-skill.excalidraw)
 
+Przy weryfikowaniu zmienionego zachowania lub utrzymaniu weryfikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification).
+
 Dbaj o rzetelność weryfikatora i jego mapy funkcji. Sprawdź każdą zmapowaną funkcję na podstawie kodu źródłowego i rzeczywistego działania. Zwróć jeden wynik: **bez zmian**, **zmieniono** lub **zablokowano**.
 
 ## Ograniczenia

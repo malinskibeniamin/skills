@@ -3,9 +3,9 @@ name: resilience-review
 description: Run a risk-ranked Murphy review when credible failure could cause data loss, security or privacy harm, irreversible action, broken contracts, or a likely user dead end.
 ---
 
-When changing interfaces, types or shared state, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#design).
+On interface/type/shared-state changes, read [Poteto](../shared/POTETO-NATIVE.md#design).
 
-Murphy pass for credible risk, not edge-case harvest.
+Murphy pass: credible risk, not edge-case harvest.
 
 ## Evidence first
 

@@ -19,6 +19,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/dogfood.excalidraw)
 
+Przy weryfikowaniu zmienionego zachowania lub utrzymaniu weryfikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification).
+
 Istotny uruchamialny wycinek zmienia zachowanie w prawdziwym punkcie wejścia lub publicznym punkcie styku.
 Wykonuj dogfood po każdym wycinku i dla całego PR-a. Testy nie są dogfoodem.
 

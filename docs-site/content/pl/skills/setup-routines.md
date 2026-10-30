@@ -11,6 +11,8 @@ sidebar:
 
 [Otwórz edytowalny plik źródłowy Excalidraw](/diagrams/skills/setup-routines.excalidraw)
 
+Przy wyraźnie zażądanej konfiguracji lub triage pstack, Benny albo webhooka przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#setup-and-automation).
+
 Skonfiguruj [procedury Claude Code](https://claude.ai/code/routines) — automatyczne sesje hostowane w chmurze, uruchamiane zgodnie z harmonogramem, przez zdarzenia GitHub lub API. Procedury klonują repozytorium i działają jako pełne sesje Claude Code. Hooki i reguły CLAUDE.md automatycznie egzekwują wymagania.
 
 ## Jak to działa

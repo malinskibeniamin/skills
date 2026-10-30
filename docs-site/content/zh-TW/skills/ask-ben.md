@@ -107,6 +107,7 @@ type: skill
 | `/poteto-in-your-own-words` | Poteto：用自己的話重述使用者的目標與問題。 |
 | `/poteto-interrogate` | Poteto：透過對抗式審查質疑程式碼差異。 |
 | `/poteto-ketchup` | Poteto：回顧目前對話和等待使用者決定的事項。 |
+| `/poteto-ketchup-video` | Poteto：用附字幕的短影片回顧目前對話。 |
 | `/poteto-maintain-formal-verification-skill` | Poteto：依據程式碼變更更新形式化驗證。 |
 | `/poteto-maintain-verification-skill` | Poteto：根據原始碼與實際行為更新驗證器。 |
 | `/poteto-make-bot-ui` | Poteto：建立透過 webhook 喚醒機器人的儀表板。 |
@@ -143,6 +144,7 @@ type: skill
 | `/poteto-setup-pstack` | Poteto：設定 pstack 模型角色與推理預算。 |
 | `/poteto-sharpen` | Poteto：深化任務並回傳改寫後的提示詞。 |
 | `/poteto-show-me-your-work` | Poteto：保留可審查的決策與實證紀錄。 |
+| `/poteto-statechart` | Poteto：檢查狀態轉換並繪製反例路徑。 |
 | `/poteto-swarm` | Poteto：協調使用者明確要求的平行工作。 |
 | `/poteto-tdd` | Poteto：實作修復之前，先以可執行測試重現錯誤。 |
 | `/poteto-teach` | Poteto：說明改了什麼、如何運作以及原因。 |

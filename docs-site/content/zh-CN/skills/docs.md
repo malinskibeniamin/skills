@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/docs.excalidraw)
 
+编写任务范围内的文字时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing)。
+
 撰写读者能够理解、验证和使用的文档。
 
 ## 加载指导 [#load-guidance]

@@ -2,9 +2,7 @@
 name: show-me
 description: Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts. Use when asked to show, visualize, or sketch code shape, flow, or a change.
 ---
-
 For context recovery, behavior or rationale explanations, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#orientation-and-explanation).
-
 Help the user understand the current topic of conversation visually. Skip the preamble and keep prose brief. Pick the smallest view that makes the key point clear.
 - Show logic or an algorithm as pseudocode:
 ```text
@@ -98,6 +96,5 @@ function expandSkill(command: string): string {
 ```
 Bash(open /absolute/path/to/show-me-{description}.html)
 ```
-### guidance
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
 Use only needed views. Beginner explainer -> `/eli5`; interactive plan -> `/visual-plan`; PR recap -> `/visual-recap`. For explicit site/effect explanations, use [interface compatibility](../shared/INTERFACES.md#explain-interface); recommend user-only `explain-interface` and distinguish measured mechanisms from screenshot reconstruction. Object/layer illustrations use [teardown](../jakubkrehel-skills/teardown/SKILL.md), not architecture diagrams.

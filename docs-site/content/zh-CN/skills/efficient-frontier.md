@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/efficient-frontier.excalidraw)
 
+仅在用户明确要求委派时，阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#delegation)。
+
 选择模型前，阅读[工具选择规则](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#protect-attention-while-working)。
 
 `config/model-routing.json` 决定路由；不要把主观评分复制到提示词中。

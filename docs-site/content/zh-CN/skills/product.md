@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/product.excalidraw)
 
+面临重要的产品或设计选择时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning)。
+
 这项变更是否值得投入成本，能否触达受益者？代码缺陷交给 `/review`，主张
 与证据的核对交给 `/lie-detector`。可独立运行，也可在
 `/review` 和 `/grilling` 中作为**产品视角**嵌入使用，还可用于自动审查流程。[RULES.md](https://github.com/malinskibeniamin/skills/blob/main/product/RULES.md) 根据

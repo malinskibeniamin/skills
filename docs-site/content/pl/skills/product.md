@@ -20,6 +20,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/product.excalidraw)
 
+Przy istotnym wyborze dotyczącym produktu lub projektu przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning).
+
 Czy ta zmiana jest warta swojego kosztu i dotrze do odbiorcy? Defekty kodu pozostają w `/review`,
 a porównanie twierdzeń z dowodami w `/lie-detector`. Działa samodzielnie, jako **perspektywa produktowa** w
 `/review` i `/grilling` oraz w procedurze automatycznego przeglądu. [RULES.md](https://github.com/malinskibeniamin/skills/blob/main/product/RULES.md) ocenia

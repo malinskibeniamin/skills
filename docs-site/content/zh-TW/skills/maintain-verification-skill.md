@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/maintain-verification-skill.excalidraw)
 
+驗證變更後的行為或維護驗證流程時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 確保驗證器及其功能對照表如實反映現況。依據原始碼與實際執行行為，涵蓋每項已對照的功能。回傳一種結果：**乾淨**、**已變更**或**受阻**。
 
 ## 範圍限制

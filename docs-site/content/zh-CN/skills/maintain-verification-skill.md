@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/maintain-verification-skill.excalidraw)
 
+验证变更后的行为或维护验证流程时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 确保验证器及其功能映射真实可靠。根据源代码和实际运行行为覆盖每个已映射的功能。返回一种结果：**无问题**、**已更改**或**受阻**。
 
 ## 边界

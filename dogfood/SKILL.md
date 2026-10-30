@@ -3,26 +3,21 @@ name: dogfood
 description: Use after each material behavior slice and before handoff or shipping to exercise runnable work at its real entrypoint.
 ---
 
-When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
 
-# Dogfood
-
-A material runnable slice changes a real entrypoint or public seam.
-Dogfood each slice and final PR. Tests are not dogfood.
+Dogfood each material runnable slice and final PR at public seams. Tests are not dogfood.
 
 ## Inventory
 
 1. Resolve the comparison base with
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
 2. Inspect the full PR: merge-base through committed, staged, unstaged, and untracked work.
-3. Map behavior to real entrypoints, including skill resources/scripts and hook events.
+3. Cover changed runnable branches at real entrypoints, including skill resources/scripts and hook events.
    Standalone docs, tests and evals need no experiential coverage.
-
-Cover changed runnable branches before PR/shipping.
 
 ## Loop
 
-Run **use -> abuse -> repair -> replay**.
+Run use -> abuse -> repair -> replay.
 
 ### Use
 

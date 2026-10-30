@@ -17,6 +17,10 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/writing-for-agents.excalidraw)
 
+相同修正反覆出現，或技能需要改善時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)。
+
+撰寫任務範圍內的文字時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing)。
+
 撰寫能以最少情境改變代理程式行為的指令。適用於技能、`AGENTS.md`、`CLAUDE.md` 及連結的參考資料。
 
 撰寫技能時，請閱讀 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，以瞭解 frontmatter、叫用方式的選擇，以及路由器。

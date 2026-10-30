@@ -107,6 +107,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/poteto-in-your-own-words` | Poteto: Opisz własnymi słowami cele i problem osoby korzystającej z narzędzia. |
 | `/poteto-interrogate` | Poteto: Sprawdź zmiany w kodzie poprzez krytyczną analizę. |
 | `/poteto-ketchup` | Poteto: Podsumuj ten czat i decyzje oczekujące na użytkownika. |
+| `/poteto-ketchup-video` | Poteto: Podsumuj ten czat w krótkim filmie z napisami. |
 | `/poteto-maintain-formal-verification-skill` | Poteto: Dostosuj weryfikację formalną do zmian w kodzie. |
 | `/poteto-maintain-verification-skill` | Poteto: Zaktualizuj weryfikator na podstawie kodu źródłowego i rzeczywistego działania. |
 | `/poteto-make-bot-ui` | Poteto: Zbuduj panel, który uruchamia bota przez webhook. |
@@ -143,6 +144,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/poteto-setup-pstack` | Poteto: Skonfiguruj role modeli i budżety rozumowania w pstack. |
 | `/poteto-sharpen` | Poteto: Pogłęb zadanie i zwróć jego przeformułowany prompt. |
 | `/poteto-show-me-your-work` | Poteto: Zachowuj możliwą do przejrzenia historię decyzji i dowodów. |
+| `/poteto-statechart` | Poteto: Sprawdź przejścia między stanami i narysuj ścieżki kontrprzykładów. |
 | `/poteto-swarm` | Poteto: Koordynuj równoległą pracę wyłącznie na wyraźne żądanie użytkownika. |
 | `/poteto-tdd` | Poteto: Przed naprawą zapisz błąd jako wykonywalny test. |
 | `/poteto-teach` | Poteto: Wyjaśnij, co się zmieniło, jak działa i dlaczego. |

@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/teach.excalidraw)
 
+還原脈絡、解釋行為或設計理由時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 具狀態的教學工作區。目前的目錄會儲存學習狀態。
 
 學習路徑以呼叫技能的工作區為基準；只有 `*-FORMAT.md` 連結以技能目錄為基準。測驗中應變換正確答案的位置，避免位置暗示答案。

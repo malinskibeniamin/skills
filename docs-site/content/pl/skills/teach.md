@@ -17,6 +17,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/teach.excalidraw)
 
+Przy odtwarzaniu kontekstu lub wyjaśnianiu zachowania albo uzasadnienia przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation).
+
 Obszar roboczy do nauki z zachowaniem stanu. Bieżący katalog przechowuje stan nauki.
 
 Ścieżki nauki rozwiązuj względem obszaru roboczego, z którego wywołano umiejętność; tylko linki `*-FORMAT.md` są względne wobec umiejętności. Zmieniaj pozycję poprawnej odpowiedzi w quizach, aby nie stanowiła podpowiedzi.

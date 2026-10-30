@@ -19,6 +19,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/swarm.excalidraw)
 
+Tylko przy wyraźnie zażądanej delegacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#delegation).
+
 Podziel niezależną pracę masową na tory, zweryfikuj każdy i zintegruj wyniki. Swarm wykonuje istniejący cel; nie zastępuje planowania ani nie jest właścicielem dostarczenia. Równoległość wymaga jawnej zgody przez `/swarm` albo bezpośrednie żądanie użytkownika; żadna inna umiejętność jej nie daje.
 
 `/work` jest właścicielem cyklu, `/grilling` rozstrzyga wybory, a `/go` dostarcza.

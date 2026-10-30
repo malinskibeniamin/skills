@@ -17,6 +17,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/triage.excalidraw)
 
+Przy wyraźnie zażądanej konfiguracji lub triage pstack, Benny albo webhooka przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#setup-and-automation).
+
 Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
 
 Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.

@@ -21,6 +21,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/create-verification-skill.excalidraw)
 
+Przy weryfikowaniu zmienionego zachowania lub utrzymaniu weryfikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification).
+
 Najpierw znajdź istniejącą weryfikację w instrukcjach i umiejętnościach projektu, niezależnie od nazwy. Użyj jej dla objętych nią przepływów; rozbieżności kieruj do `/maintain-verification-skill`. W repozytoriach T3 Code załaduj [web/desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md) lub [natywne aplikacje mobilne](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md) dla każdej zmienianej powierzchni i zastosuj [weryfikację natywną](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-SKILLS.md#native-verification). Brak narzędzi nie uzasadnia zastępczego weryfikatora.
 
 Tylko dla wykazanej luki pokrycia utwórz jeden weryfikator uruchamialny bez wcześniejszego kontekstu w kanonicznym katalogu umiejętności repozytorium, a jeśli go brak, w `.agents/skills/verify-<app>/`. Nie kopiuj go do katalogów poszczególnych hostów ani nie powielaj objętego weryfikacją przepływu natywnego.

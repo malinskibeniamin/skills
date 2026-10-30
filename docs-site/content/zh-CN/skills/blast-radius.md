@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/blast-radius.excalidraw)
 
+验证变更后的行为或维护验证流程时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 找出变更在差异范围之外可能破坏的内容。列出调用方只是侦察，并非结果。真正的结果是直接证明该变更安全所依赖的那一个事实，并尽可能以最直接的方式加以验证。
 
 ## 契约

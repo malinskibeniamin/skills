@@ -13,6 +13,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/test-audit.excalidraw)
 
+Przy weryfikowaniu zmienionego zachowania lub utrzymaniu weryfikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification).
+
 
 Trzy tryby, jeden próg wartości. Tryb tworzenia weryfikuje każdy nowy lub zmieniany test podczas jego pisania; `/tdd` kieruje tutaj. Tryb audytu obejmuje ukierunkowane przeglądy testów, które odtwarzają treść kodu źródłowego, powielają silniejsze dowody, wiążą zachowanie z implementacją lub podtrzymują punkty dostępu w kodzie produkcyjnym istniejące wyłącznie na potrzeby testów. Szerokie audyty kontynuuj w osobnych, spójnych PR-ach; priorytetem jest pewność działania, a nie liczba usunięć. Tryb kampanii ogranicza zestaw testów całego podsystemu (wszystkie pliki testowe należące do pakietu, aplikacji lub obszaru rdzenia); przed rozpoczęciem przeczytaj [CAMPAIGN.md](https://github.com/malinskibeniamin/skills/blob/main/test-audit/CAMPAIGN.md).
 

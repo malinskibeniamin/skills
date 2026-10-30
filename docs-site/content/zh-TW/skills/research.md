@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/research.excalidraw)
 
+還原脈絡、解釋行為或設計理由時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 
 預設直接在目前工作流程中進行研究。只有明確委派或使用 `/swarm` 時，才會啟用背景作業。
 

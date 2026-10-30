@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/prime.excalidraw)
 
+還原脈絡、解釋行為或設計理由時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 啟動摘要：儲存庫狀態、目標、接下來要讀取的內容。
 
 若種子資訊來自其他代理程式／工作階段／PR 宣告，請使用 `/agent-watchdog`；若有相互競爭的交接內容／計畫，請使用 `/plan-arbiter`；若需要最新的外部／API 資訊，請使用 `/read-the-damn-docs`。

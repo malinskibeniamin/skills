@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/domain-modeling.excalidraw)
 
+Przy zmianach interfejsów, typów lub współdzielonego stanu przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design).
+
 Podczas projektowania aktywnie buduj i precyzuj model domeny projektu. To *aktywna* praktyka — kwestionowanie terminów, tworzenie scenariuszy przypadków brzegowych oraz zapisywanie glosariusza i decyzji, gdy tylko nabiorą ostatecznego kształtu. (Samo *czytanie* `GLOSSARY.md`, aby poznać słownictwo, nie jest tą umiejętnością — to prosty nawyk, który można stosować przy każdej umiejętności. Ta umiejętność służy do zmieniania modelu, a nie tylko korzystania z niego).
 
 ## Struktura plików

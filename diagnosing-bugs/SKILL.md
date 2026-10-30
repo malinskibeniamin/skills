@@ -5,7 +5,6 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 When investigating a concrete defect or failed repair, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 
-# Diagnosing Bugs
 Skip a phase only with reason. Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and ADRs; for third-party, API, or version drift, Call the Skill tool with "read-the-damn-docs" before ranking hypotheses.
 Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
@@ -13,7 +12,8 @@ Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loadi
 Replace every secret with `<REDACTED>`. Keep credentials in environment variables; quote only signal-bearing lines. Artifacts may contain auth headers. If redaction hides evidence, ask for a safer source.
 
 ## Phase 1 -- Build a feedback loop
-**The feedback loop is the skill.** Build a deterministic, agent-runnable pass/fail loop for the exact bug. Read code to construct it, not invent theories.
+**The feedback loop is the skill.**
+Build a deterministic, agent-runnable pass/fail loop for the exact bug. Read code to construct it, not invent theories.
 
 ### Strategies, roughly in order
 1. **Failing test** at the highest seam that reaches the bug: unit, integration, or E2E.
@@ -31,14 +31,13 @@ UI content/layout failures: Call the Skill tool with "break-ui" for schema-valid
 Pin the failing fixture through the real component into this loop; retain original input for post-fix replay.
 
 ### Tighten the loop
-- Make it faster by caching setup and skipping unrelated initialization.
-- Make the signal sharper by asserting the exact symptom, not merely "did not crash."
-- Make it deterministic by pinning time, seeds, filesystem state, and network inputs.
+- Cache setup; skip unrelated initialization.
+- Assert the exact symptom, not just "did not crash."
+- Pin time, seeds, filesystem state and network inputs.
 
 For nondeterministic bugs, raise the reproduction rate: repeat under controlled stress, parallelize, and narrow timing windows until the rate distinguishes hypotheses.
 
 Without a loop, stop, list attempts, and request the missing environment, redacted artifact, or safe temporary instrumentation permission.
-Do not proceed to hypothesise without a loop.
 
 ### Completion criterion: a tight loop that goes red
 Phase 1 ends only when you can name one command already run at least once, with redacted invocation and output, that is:

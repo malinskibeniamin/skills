@@ -21,6 +21,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/docs.excalidraw)
 
+Pisząc tekst w zakresie zadania, przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing).
+
 Pisz dokumenty, które czytelnicy mogą zrozumieć, zweryfikować i wykorzystać.
 
 ## Wczytaj wskazówki [#load-guidance]

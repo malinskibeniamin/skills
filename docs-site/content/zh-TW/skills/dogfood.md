@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/dogfood.excalidraw)
 
+驗證變更後的行為或維護驗證流程時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 重要的可執行切片會改變真實入口或公共接縫上的行為。
 每個切片和最終完整 PR 都要 dogfood。測試不是 dogfood。
 

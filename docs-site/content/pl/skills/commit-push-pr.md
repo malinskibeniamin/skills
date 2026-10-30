@@ -20,6 +20,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/commit-push-pr.excalidraw)
 
+Przy wieloetapowej implementacji lub publikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution).
+
 
 Korzystaj z [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) i [zasad ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 

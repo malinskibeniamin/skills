@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/efficient-frontier.excalidraw)
 
+Tylko przy wyraźnie zażądanej delegacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#delegation).
+
 Przed wyborem modelu przeczytaj [zasady wyboru narzędzi](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#protect-attention-while-working).
 
 `config/model-routing.json` określa routing; nigdy nie kopiuj subiektywnych ocen do promptów.

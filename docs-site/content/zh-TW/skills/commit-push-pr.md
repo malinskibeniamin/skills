@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/commit-push-pr.excalidraw)
 
+進行多步驟實作或發佈時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution)。
+
 
 使用 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md)及[相依指引載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
 

@@ -5,13 +5,7 @@ description: "Keep work on track to business value: one lane, beneficiary, why n
 
 For a material product or design fork, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#product-and-planning).
 
-# Product
-
-Does it earn its cost and reach its beneficiary? Code defects stay in `/review`,
-claims versus evidence in `/lie-detector`. Runs standalone as the **product hat** inline in
-`/review` and `/grilling`, and in the auto-review routine. [RULES.md](RULES.md) grades
-each rule by how many independent evidence sets converge on it; [CRAFT.md](CRAFT.md) is
-the author playbook for choosing, shaping, testing, and shipping the work.
+Check value/reach. Correctness: `/review`; truth: `/lie-detector`. Apply the **product hat** inline in `/review`, `/grilling` and auto-review, or standalone. [RULES.md](RULES.md) grades independent evidence sets; [CRAFT.md](CRAFT.md) owns author practice.
 
 ## Lanes
 

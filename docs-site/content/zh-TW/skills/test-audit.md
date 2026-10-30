@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/test-audit.excalidraw)
 
+驗證變更後的行為或維護驗證流程時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 
 三種模式，同一套價值標準。撰寫模式在撰寫當下為每個新增或修改的測試把關；`/tdd` 會導向這裡。稽核模式會針對下列測試進行重點檢查：重複驗證原始碼、重複較強的驗證、將行為與實作耦合，或讓正式程式碼中僅供測試使用的介面繼續存在。大範圍稽核應拆成各自範圍一致的後續 PR 持續進行；以提高信心為目標，而非追求刪除數量。專案模式會刪減整個子系統的測試範圍（套件、應用程式或核心領域所屬的每個測試檔案）；開始前，請閱讀 [CAMPAIGN.md](https://github.com/malinskibeniamin/skills/blob/main/test-audit/CAMPAIGN.md)。
 

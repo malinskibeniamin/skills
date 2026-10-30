@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/hook-audit.excalidraw)
 
+Gdy poprawka się powtarza lub umiejętność wymaga ulepszenia, przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement).
+
 
 Audytuj `~/.claude/hook-metrics/`, korzystając z [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/hook-audit/REFERENCE.md) w zakresie metryk, kohort i braków danych.
 

@@ -20,6 +20,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/frontend-invariants.excalidraw)
 
+Przy zmianach interfejsów, typów lub współdzielonego stanu przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design).
+
 Te zasady przetrwały każdą migrację stosu (zestawy UI, routery, warstwy danych oraz biblioteki formularzy i zarządzania stanem odchodziły; one pozostały). Gdy niezmiennik jest sprzeczny z regułą właściwą dla stosu, pierwszeństwo ma niezmiennik; mechanizmy stosu znajdują się w `/stack-registry`.
 
 Przy asercjach TypeScript lub poszerzaniu kontraktów korzystaj z [kontroli anti-slop](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md), aby zachować informacje o typach; sam komentarz o bezpieczeństwie nie uzasadnia rzutowania.

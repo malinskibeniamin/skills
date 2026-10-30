@@ -3,7 +3,7 @@ name: codebase-design
 description: Design deep modules with small interfaces. Use when choosing seams, reducing file-hop friction, deepening modules, testing APIs, or applying shared design vocabulary.
 ---
 
-When changing interfaces, types or shared state, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#design).
+On interface/type/shared-state changes, read [Poteto](../shared/POTETO-NATIVE.md#design).
 
 Design **deep modules**: substantial behavior behind a small interface at a clean seam, testable through that interface. Optimize caller leverage, maintainer locality, and testability.
 Use `GLOSSARY.md` terms, via `GLOSSARY-MAP.md` when present; respect ADRs.

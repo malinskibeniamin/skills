@@ -3,10 +3,9 @@ name: development-lifecycle
 description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
-For multi-step implementation or publication, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#execution).
+For multi-step delivery, read [Poteto](../shared/POTETO-NATIVE.md#execution).
 
-Author front door: `/work`; one outcome; auto-select helpers. Before edits,
-read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
+`/work`: one outcome; select helpers. Before edits, read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
 Use [communication](../shared/communication.md) and [load helpers](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Outcome contract
@@ -28,7 +27,7 @@ Build/fix/implement: continue immediately; [auto-setup](../shared/review-enforce
 
 Read tickets/body/labels/comments; title, clarify refs. Resolve blind spot/volatile unknowns via lookup/probe/reversible assumption/pause; match repo idiom/demonstrated scale.
 
-Read rules/scripts/configs/CI; record baseline failures; retain tools.
+Read rules/scripts/configs/CI; note baseline failures; keep tools.
 
 T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context)
 (`work`); use target guidance/scoped checks.
@@ -46,7 +45,7 @@ Each edit batch: scoped format/fix + lint -> relevant types/tests. Inspect fixes
 
 ### Verify
 
-Handoff: repo final gates; scoped checks never replace them. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior: real entrypoint + credible failure/recovery. Review objective/guardrails/credible risk; green checks do not prove intent. A failure becomes the next action; repair/repeat. Unrelated baseline failures: report, never claim a pass.
+Handoff: repo gates; scoped checks never replace them. Load [dogfood](../dogfood/SKILL.md) for material runnable behavior: real entrypoint + credible failure/recovery. Review objective/guardrails/credible risk; green checks do not prove intent. A failure becomes the next action; repair/repeat. Unrelated baseline failures: report, never claim a pass.
 
 Fix causes, not gates: never weaken checks/tests/strictness to pass. Bad rules need a tooling rationale and known-bad/valid cases. Missing entrypoint: disposable harness; durable gap: `/create-verification-skill`.
 
@@ -56,6 +55,4 @@ Ask only for user-reserved decisions or irreversible production, legal/privacy, 
 
 ## Completion
 
-Read and run [author delivery](../shared/delivery-workflow.md): inline self-review, applicable
-evidence, publication, and requested CI/feedback follow-through. Reuse current verification;
-stop at the requested endpoint when every exit criterion passes. [REFERENCE.md](REFERENCE.md) has probes.
+Run [author delivery](../shared/delivery-workflow.md): inline self-review, evidence, publication and requested CI/feedback. Reuse verification; stop only at the requested endpoint when every exit criterion passes. [REFERENCE.md](REFERENCE.md) has probes.

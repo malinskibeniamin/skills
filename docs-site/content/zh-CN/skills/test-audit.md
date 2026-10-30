@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/test-audit.excalidraw)
 
+验证变更后的行为或维护验证流程时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 
 三种模式，同一套价值标准。编写模式在编写时对每个新增或修改的测试进行准入检查；`/tdd` 会转到此处。审计模式有针对性地排查以下测试：重复断言源码、重复更强的验证、将行为与实现耦合，或让专供测试使用的生产代码接口持续存在的测试。范围较广的审计应拆分为独立且逻辑完整的后续 PR；以提升可信度为目标，而非追求删除数量。专项模式精简整个子系统的测试范围（某个包、应用或核心领域所属的每个测试文件）；开始前，请阅读 [CAMPAIGN.md](https://github.com/malinskibeniamin/skills/blob/main/test-audit/CAMPAIGN.md)。
 

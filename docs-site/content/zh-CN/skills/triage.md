@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/triage.excalidraw)
 
+仅在用户明确要求配置 pstack、Benny 或 webhook，或处理相关问题分诊时，阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#setup-and-automation)。
+
 当下文工作流需要模型可调用的技能时，请为每个依赖分别调用 Skill 工具。没有该工具的宿主应按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整读取规范 `SKILL.md`。仅供用户调用的技能应推荐给用户，不要自动调用。
 
 使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。

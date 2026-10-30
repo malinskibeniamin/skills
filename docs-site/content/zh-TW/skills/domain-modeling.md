@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/domain-modeling.excalidraw)
 
+變更介面、型別或共用狀態時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design)。
+
 在設計過程中，主動建立並精煉專案的領域模型。這是一項*主動*的實踐——質疑術語、構思邊界情境，並在詞彙與決策明確成形的當下將其記錄下來。（僅僅為了了解詞彙而*閱讀* `GLOSSARY.md` 並不算運用此技能——那只是任何技能都能採用的一行式習慣。此技能適用於變更模型，而不只是使用模型。）
 
 ## 檔案結構

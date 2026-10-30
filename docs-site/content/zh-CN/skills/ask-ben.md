@@ -107,6 +107,7 @@ type: skill
 | `/poteto-in-your-own-words` | Poteto：用自己的话复述用户的目标和问题。 |
 | `/poteto-interrogate` | Poteto：通过对抗式审查质疑代码差异。 |
 | `/poteto-ketchup` | Poteto：回顾当前聊天和等待用户决定的事项。 |
+| `/poteto-ketchup-video` | Poteto：用带字幕的短视频回顾当前聊天。 |
 | `/poteto-maintain-formal-verification-skill` | Poteto：根据代码变更更新形式化验证。 |
 | `/poteto-maintain-verification-skill` | Poteto：根据源码和实际行为更新验证器。 |
 | `/poteto-make-bot-ui` | Poteto：构建通过 webhook 唤醒机器人的仪表板。 |
@@ -143,6 +144,7 @@ type: skill
 | `/poteto-setup-pstack` | Poteto：配置 pstack 模型角色和推理预算。 |
 | `/poteto-sharpen` | Poteto：深化任务并返回改写后的提示词。 |
 | `/poteto-show-me-your-work` | Poteto：保留可审查的决策和证据记录。 |
+| `/poteto-statechart` | Poteto：检查状态转换并绘制反例路径。 |
 | `/poteto-swarm` | Poteto：协调用户明确请求的并行工作。 |
 | `/poteto-tdd` | Poteto：实现修复之前，先用可执行测试重现错误。 |
 | `/poteto-teach` | Poteto：解释改了什么、如何运行以及原因。 |
