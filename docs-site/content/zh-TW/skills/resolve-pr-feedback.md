@@ -83,10 +83,10 @@ bash scripts/pr-unresolved-count.sh --verbose
 
 ## 迭代策略 [#iteration-policy]
 
-- AI 自審：行內審查軸獲批或為空時停止，最多兩輪。
+- AI 自審：結果無問題時停止；兩次未通過後，重新評估方案與缺少的脈絡。參見[收斂規則](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#make-review-converge)。
 - 人工回饋：交接前必須處理每個討論串，這項義務不設輪次上限。
 - 自動修正派送 3 輪回饋處理後暫停。明確執行 `retry` 前重新評估方案；暫停不代表完成。僅更新基準分支不消耗此預算。
-- 首次完整審查後，只複查新增差異與既有發現。依根因去重；解決既有討論串，不重複發布同一發現。
+- 首次完整審查後，重點複查變更差異與既有發現；假設改變時擴大範圍。依根因去重；解決既有討論串，而非重複發布。
   完整性鉤子阻止未解決的討論串或待處理變更請求。
 
 ## 自動喚醒 [#automatic-wake-up]

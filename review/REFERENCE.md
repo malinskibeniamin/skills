@@ -99,6 +99,7 @@ standard always wins; skip anything deterministic tooling already owns.
 
 ## Receipt
 Fixed point: <commit> | Mode: standard | deep
+Risk: <routine | standard | sensitive> -- <impact/reversibility and checks that could miss it>
 Verification: <commands and real-entrypoint replay>
 Counts: <P0/P1/P2>
 Value: product: <ktlo|qol|feature|taste> -- <justified|thin|unjustified> -- <beneficiary, trigger, evidence>

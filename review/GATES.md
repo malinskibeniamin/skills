@@ -98,6 +98,12 @@ not a false positive to erase with `verify`.
 
 ## Resume and check
 
+[Immediate-only context](../docs/architecture/review-delta-before.png) ->
+[findings retained through intermediate plans](../docs/architecture/review-delta-after.png).
+Editable scenes: [before](../docs/architecture/review-delta-before.excalidraw),
+[after](../docs/architecture/review-delta-after.excalidraw).
+The comparison describes input selection, not measured reviewer accuracy or speed.
+
 ```sh
 bun --no-install <harness-root>/scripts/review-gates.ts check
 ```
@@ -111,6 +117,11 @@ Replanning unchanged inputs reuses completed results. Changed input creates a ne
 old findings and verification exchanges supply context, never current approval.
 Every applicable gate needs a fresh result; an unchanged path does not prove an
 unaffected domain. Different round counts alone are not evidence of stale review.
+
+New runs include their predecessor identity, so returning to earlier file contents
+does not overwrite historical prompts or silently reuse an older approval.
+Unreviewed intermediate plans retain earlier findings; without completed coverage
+on the immediate predecessor, that gate receives full review rather than a shorter delta.
 
 After a completed review, routine gates with `rereview: "delta"` focus on `repair.diff`
 and prior findings. The captured delta includes staged, unstaged, untracked, binary and
@@ -132,6 +143,9 @@ The CLI does not run reviewers; automatic-repair round limits remain owned by
 ([editable source](../docs/architecture/review-repair.excalidraw)) compares the previous
 full-diff path with captured repair input. Source: `createPlan` in
 `scripts/review-gates.ts`; public CLI coverage: `scripts/review-gates.test.ts`.
+
+Apply the [convergence rules](OPERATING-MODEL.md#make-review-converge); the CLI
+neither runs review rounds nor certifies reviewer accuracy.
 
 Corrupt artifacts fail closed. Keep them for diagnosis; restore the latest pointer from
 the immutable run's `plan.json` if needed. Never remove findings or a configured gate to
@@ -173,3 +187,7 @@ paths point to existing guidance relative to the consuming Git root. Use reposit
 globs, including component prefixes in monorepos. Unique ids make additions additive;
 collisions fail rather than silently replace a shared gate. Put domain knowledge in its
 existing skill/reference, not another duplicated rubric tree.
+
+Shared security path signals include auth/billing directories, installers/updaters,
+CI workflows and release paths. They prevent a negative semantic verdict from skipping
+that gate; they neither find every sensitive flow nor impose human-approval tiers.

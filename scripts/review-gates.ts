@@ -146,6 +146,7 @@ function definitions(root: string) {
           join(harness, "agents/references/findings-schema.jq"),
           "utf8",
         ),
+        readFileSync(import.meta.path, "utf8"),
       ]),
     ),
   };
@@ -307,6 +308,7 @@ type Plan = {
   integrity: string;
   classifications: Classification[];
   gates: PlannedGate[];
+  parent?: string;
   delta?: { previous: string; hash: string };
 };
 function planAt(root: string) {
@@ -315,7 +317,13 @@ function planAt(root: string) {
 function manifest(
   plan: Pick<
     Plan,
-    "registry" | "snapshot" | "classifications" | "gates" | "diffHash" | "delta"
+    | "registry"
+    | "snapshot"
+    | "classifications"
+    | "gates"
+    | "diffHash"
+    | "parent"
+    | "delta"
   >,
 ) {
   return digest(
@@ -325,6 +333,7 @@ function manifest(
       plan.classifications,
       plan.gates,
       plan.diffHash,
+      ...(plan.parent ? [plan.parent] : []),
       ...(plan.delta ? [plan.delta] : []),
     ]),
   );
@@ -393,6 +402,7 @@ function readPlan(file: string, root: string): Plan {
     integrity: sha(input.integrity),
     classifications: classifications(input.classifications, known.gates),
     gates,
+    ...(input.parent === undefined ? {} : { parent: sha(input.parent) }),
     ...(input.delta === undefined
       ? {}
       : {
@@ -494,6 +504,28 @@ function readRecord(plan: Plan, gate: PlannedGate): GateRecord {
   return record;
 }
 
+function priorReview(root: string, plan: Plan | undefined, id: string) {
+  const visited = new Set<string>();
+  while (plan) {
+    if (visited.has(plan.id))
+      throw new Error(
+        `Cyclic review history at ${plan.id}; restore its immutable predecessor plan.json`,
+      );
+    visited.add(plan.id);
+    const gate = plan.gates.find((gate) => gate.id === id && gate.applicable);
+    if (
+      gate &&
+      (existsSync(recordFile(plan, gate)) ||
+        existsSync(`${recordFile(plan, gate)}.error`))
+    )
+      return { plan, gate };
+    plan = plan.parent
+      ? readPlan(join(root, stage, "runs", plan.parent, "plan.json"), root)
+      : undefined;
+  }
+  return undefined;
+}
+
 function createPlan(
   root: string,
   baseRef: string,
@@ -515,6 +547,7 @@ function createPlan(
       JSON.stringify(previous.classifications) === JSON.stringify(classified)
     )
       return previous;
+    const parent = previous?.id;
     let repair: string | undefined;
     if (
       previous &&
@@ -549,6 +582,7 @@ function createPlan(
         captured.fingerprint,
         registry.hash,
         classified,
+        ...(parent ? [parent] : []),
         ...(delta ? [delta] : []),
       ]),
     );
@@ -563,35 +597,28 @@ function createPlan(
       let prior = "";
       let priorNeedsReview = false;
       let reviewed = false;
-      const previousGate = previous?.gates.find(
-        (gate) => gate.id === definition.id && gate.applicable,
-      );
-      if (
-        previous &&
-        previousGate &&
-        (existsSync(recordFile(previous, previousGate)) ||
-          existsSync(`${recordFile(previous, previousGate)}.error`))
-      ) {
-        try {
-          if (existsSync(`${recordFile(previous, previousGate)}.error`))
+      try {
+        const priorInput = priorReview(root, previous, definition.id);
+        if (priorInput) {
+          const file = recordFile(priorInput.plan, priorInput.gate);
+          if (existsSync(`${file}.error`))
             throw new Error("Prior review failed to produce a valid result");
-          const record = readRecord(previous, previousGate);
-          reviewed = ["APPROVED", "CONCERNS", "NEEDS_CHANGES"].includes(
-            record.result.status,
-          );
+          const record = readRecord(priorInput.plan, priorInput.gate);
           priorNeedsReview =
             record.result.findings.length > 0 ||
             ["NEEDS_CHANGES", "UNAVAILABLE", "FAILED"].includes(
               record.result.status,
             );
-          prior = JSON.stringify({
-            result: record.result,
-            verification: record.verification,
-          });
-        } catch (error) {
-          priorNeedsReview = true;
-          prior = `Prior review unavailable: ${error instanceof Error ? error.message : "unknown error"}`;
+          reviewed =
+            priorInput.plan.id === previous?.id &&
+            ["APPROVED", "CONCERNS", "NEEDS_CHANGES"].includes(
+              record.result.status,
+            );
+          prior = JSON.stringify(record);
         }
+      } catch (error) {
+        priorNeedsReview = true;
+        prior = `Prior review unavailable: ${error instanceof Error ? error.message : "unknown error"}`;
       }
       const applicable =
         definition.always ||
@@ -638,6 +665,7 @@ function createPlan(
       diffHash: digest(diff),
       classifications: classified,
       gates,
+      ...(parent ? { parent } : {}),
       ...(delta ? { delta } : {}),
     };
     const plan: Plan = { ...contents, integrity: manifest(contents) };
@@ -720,6 +748,7 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
         current.fingerprint,
         registry.hash,
         plan.classifications,
+        ...(plan.parent ? [plan.parent] : []),
         ...(plan.delta ? [plan.delta] : []),
       ]),
     );

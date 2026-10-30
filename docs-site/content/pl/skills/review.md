@@ -25,6 +25,8 @@ Dla zmian interfejsu stosuj [reguły zgodności](https://github.com/malinskibeni
 
 Przeglądaj ustalony zakres. Zachowaj jednego właściciela; delegowanie wymaga jawnej zgody. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj bez jawnej intencji. Żądane naprawy przechodzą do [dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) w nazwanym zakresie.
 
+Dobierz głębokość i zasady zbieżności według [modelu przeglądu](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md); ryzyko zmienia zakres kontroli, nie uprawnienia.
+
 ## Kontrakt przeglądu [#review-contract]
 
 - **Cel**: ustal, czy diff osiąga oczekiwany wynik bez wiarygodnego defektu.
@@ -101,8 +103,7 @@ bez wiarygodnego ryzyka. Dowód może uzasadniać odrzucenie uwagi.
 ### Zsyntetyzuj [#synthesize]
 
 Przeczytaj [zasady komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md); zachowaj schemat wyniku.
-Zacznij od znalezisk. Deduplikuj według przyczyny źródłowej. Pomiń pochwały i narrację. Przy ponownym przeglądzie oznacz stan każdej wcześniejszej uwagi.
-Podaj wiersz product oddzielnie od defektów.
+Zacznij od liczby znalezisk, w tym jawnego zera. Deduplikuj według przyczyny źródłowej; nazwij klasę błędu i dotknięte przypadki. Przy ponownym przeglądzie, po pełnym przeglądzie początkowym, sprawdź diff napraw i wcześniejsze znaleziska; rozszerz zakres, gdy zmieniają się założenia. Oznacz stan każdej uwagi dowodem. Pomiń pochwały i szukanie niezwiązanych błędów; oddziel wartość od defektów.
 
 ## Tryb głęboki [#deep-mode]
 

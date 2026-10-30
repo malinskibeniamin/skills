@@ -679,6 +679,33 @@ test("a preliminary plan can refine applicability without inventing a failed rev
   ).toBe(false);
 });
 
+test("sensitive changes require security review despite a negative semantic verdict", () => {
+  for (const path of [
+    ".github/workflows/test.yml",
+    "src/auth/session.ts",
+    "src/billing/charge.ts",
+    "packages/cli/updater.ts",
+    "scripts/install.sh",
+    "release/publish.ts",
+  ]) {
+    const f = checkout();
+    const file = join(f.root, path);
+    mkdirSync(join(file, ".."), { recursive: true });
+    writeFileSync(file, "Sensitive change\n");
+    const plan = f.plan([
+      {
+        gate: "security-and-recovery",
+        relevant: false,
+        reason: "Semantic classifier found no risk",
+      },
+    ]);
+    const gate = plan.gates.find((gate) => gate.id === "security-and-recovery");
+    expect(gate?.applicable).toBe(true);
+    expect(gate?.reason).toBe(`Path signal: ${path}`);
+    expect(f.run("check").code).toBe(1);
+  }
+});
+
 test("consumer gates are additive and rubric changes invalidate otherwise identical candidates", () => {
   const f = checkout();
   const reference = f.input("local-review.md", "unused");
@@ -796,6 +823,169 @@ test("prior findings cannot disappear through a later applicability skip", () =>
   expect(readFileSync(gate?.prompt ?? "", "utf8")).toContain(
     finding.why_it_matters,
   );
+  expect(f.run("check").code).toBe(1);
+});
+
+test("completed gate re-reviews focus on a lossless delta and still need fresh receipts", () => {
+  const f = checkout();
+  writeFileSync(join(f.root, "stable.txt"), "Already reviewed context\n");
+  writeFileSync(join(f.root, "removed.txt"), "Remove after review\n");
+  f.git("add", ".");
+  f.git("commit", "-m", "test(review): first candidate");
+  const first = f.plan();
+  expect(
+    f.record("correctness", { status: "NEEDS_CHANGES", findings: [finding] })
+      .code,
+  ).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "Fixed after review\n");
+  rmSync(join(f.root, "removed.txt"));
+  writeFileSync(join(f.root, "new file.ts"), "export const fixed = true;\n");
+  writeFileSync(join(f.root, "image.bin"), Buffer.from([0, 255, 0, 17]));
+  const next = f.plan();
+  expect(existsSync(join(next.directory, "repair.diff"))).toBe(true);
+  const delta = readFileSync(join(next.directory, "repair.diff"), "utf8");
+  expect(delta).toContain("Fixed after review");
+  expect(delta).toContain("deleted file mode");
+  expect(delta).toContain("export const fixed = true");
+  expect(delta).toContain("GIT binary patch");
+  expect(delta).not.toContain("Already reviewed context");
+  expect(readFileSync(join(next.directory, "change.diff"), "utf8")).toContain(
+    "Already reviewed context",
+  );
+  const prompt = (id: string) =>
+    readFileSync(
+      next.gates.find((gate) => gate.id === id)?.prompt ?? "",
+      "utf8",
+    );
+  expect(prompt("correctness")).toContain("repair.diff");
+  expect(prompt("correctness")).toContain(first.id);
+  expect(prompt("correctness")).toContain(finding.id);
+  // An unreviewed lens cannot inherit another gate's initial coverage.
+  expect(prompt("value-and-claims")).not.toContain("repair.diff");
+  expect(f.run("check").code).toBe(1);
+  expect(f.plan().id).toBe(next.id);
+  writeFileSync(
+    join(next.directory, "repair.diff"),
+    "Truncated review input\n",
+  );
+  expect(f.run("check").code).toBe(2);
+  expect(f.record("correctness").code).toBe(2);
+});
+
+for (const fallback of [
+  "missing review",
+  "UNAVAILABLE",
+  "FAILED",
+  "recording error",
+  "moved base",
+  "changed rubric",
+  "changed branch",
+]) {
+  test(`re-review uses the complete candidate for ${fallback}`, () => {
+    const f = checkout();
+    const guidance = f.input("rubric.md", "Original guidance");
+    writeFileSync(
+      join(f.root, ".review-gates.json"),
+      JSON.stringify({
+        version: 1,
+        gates: [
+          {
+            id: "consumer",
+            title: "Consumer",
+            always: true,
+            globs: [],
+            skills: [".context/rubric.md"],
+            lens: "Check consumer behavior.",
+          },
+        ],
+      }),
+    );
+    f.git("add", ".");
+    f.git("commit", "-m", "test(review): first candidate");
+    f.plan();
+    if (fallback !== "missing review") {
+      const result = f.record("correctness", {
+        ...(fallback === "UNAVAILABLE" || fallback === "FAILED"
+          ? { status: fallback, reason: "The initial review did not complete" }
+          : {}),
+        ...(fallback === "recording error" ? { sufficiency: "" } : {}),
+      });
+      expect(result.code).toBe(fallback === "recording error" ? 2 : 0);
+    }
+    if (fallback === "moved base") f.git("branch", "-f", "main", "HEAD");
+    if (fallback === "changed rubric") writeFileSync(guidance, "New guidance");
+    if (fallback === "changed branch")
+      f.git("branch", "-m", "ben-malinski/TEST-1/other-feature");
+    writeFileSync(join(f.root, "README.md"), "Next candidate\n");
+    const next = f.plan();
+    const gate = next.gates.find((gate) => gate.id === "correctness");
+    const prompt = readFileSync(gate?.prompt ?? "", "utf8");
+    expect(gate?.scope).toBe("full");
+    expect(prompt).not.toContain("repair.diff");
+    expect(f.run("check").code).toBe(1);
+  });
+}
+
+test("returning to earlier contents preserves prior findings without rewriting old inputs", () => {
+  const f = checkout();
+  f.git("add", ".");
+  f.git("commit", "-m", "test(review): first candidate");
+  const first = f.plan();
+  const prompt = first.gates.find((gate) => gate.id === "correctness")?.prompt;
+  const original = readFileSync(prompt ?? "", "utf8");
+  expect(f.record("correctness").code).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "Temporary repair\n");
+  f.plan();
+  expect(
+    f.record("correctness", { status: "NEEDS_CHANGES", findings: [finding] })
+      .code,
+  ).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "After\n");
+  const next = f.plan();
+  expect(next.id).not.toBe(first.id);
+  expect(readFileSync(prompt ?? "", "utf8")).toBe(original);
+  expect(
+    readFileSync(
+      next.gates.find((gate) => gate.id === "correctness")?.prompt ?? "",
+      "utf8",
+    ),
+  ).toContain(finding.id);
+  const state = JSON.parse(f.run("check").text);
+  expect(
+    state.rows.find((row: { gate: string }) => row.gate === "correctness")
+      .status,
+  ).toBe("PENDING");
+});
+
+test("unreviewed intermediate plans cannot erase a known finding or narrow its review delta", () => {
+  const f = checkout();
+  f.git("add", ".");
+  f.git("commit", "-m", "test(review): first candidate");
+  f.plan();
+  expect(
+    f.record("performance", { status: "NEEDS_CHANGES", findings: [finding] })
+      .code,
+  ).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "Unreviewed intermediate repair\n");
+  f.git("add", "README.md");
+  f.git("commit", "-m", "test(review): intermediate repair");
+  const intermediate = f.plan();
+  expect(f.record("correctness").code).toBe(0);
+  writeFileSync(join(f.root, "README.md"), "Another repair\n");
+  const next = f.plan([
+    {
+      gate: "performance",
+      relevant: false,
+      reason: "No path trigger",
+    },
+  ]);
+  const gate = next.gates.find((gate) => gate.id === "performance");
+  expect(gate?.applicable).toBe(true);
+  expect(next.delta?.previous).toBe(intermediate.id);
+  expect(gate?.scope).toBe("full");
+  const prompt = readFileSync(gate?.prompt ?? "", "utf8");
+  expect(prompt).toContain(finding.id);
+  expect(prompt).not.toContain("repair.diff");
   expect(f.run("check").code).toBe(1);
 });
 

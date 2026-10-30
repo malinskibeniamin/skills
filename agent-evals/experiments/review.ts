@@ -13,6 +13,10 @@ const deepAudit = readFileSync(
   new URL("../../review/DEEP-AUDIT.md", import.meta.url),
   "utf8",
 );
+const operatingModel = readFileSync(
+  new URL("../../review/OPERATING-MODEL.md", import.meta.url),
+  "utf8",
+);
 
 export default {
   agent: "claude-code",
@@ -33,6 +37,7 @@ export default {
       ".claude/skills/review/SKILL.md": skill,
       ".claude/skills/review/REFERENCE.md": reference,
       ".claude/skills/review/DEEP-AUDIT.md": deepAudit,
+      ".claude/skills/review/OPERATING-MODEL.md": operatingModel,
     });
     await sandbox.runCommand("npm", ["install", "-g", "bun"]);
   },
