@@ -43,7 +43,7 @@ A confident, reversible **Recommended:** answer is an assumption, not a question
 
 Ask so yes accepts the recommendation.
 
-An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline; explicit delegation uses fresh contexts and self-contained briefs. Inspect environment/files/tools. User decisions stay theirs.
+An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline; explicit delegation uses fresh contexts and self-contained briefs. Use environment/filesystem/tools. User decisions stay theirs.
 
 ## 3. Exit
 
