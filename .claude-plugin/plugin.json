@@ -83,6 +83,7 @@
     "./prime/",
     "./product/",
     "./prototype/",
+    "./protobuf/",
     "./quantify-impact/",
     "./read-the-damn-docs/",
     "./redpanda-ai-gateway/",

@@ -131,6 +131,7 @@
 | `/pr` | Write a PR body that is fast to review. |
 | `/prime` | Build a concise repository startup brief. |
 | `/product` | Check that work earns its time and ships business value. |
+| `/protobuf` | Design and review protobuf schemas and their consumers. |
 | `/prototype` | Build a throwaway artifact to answer a design question. |
 | `/quantify-impact` | Prove meaningful product and codebase improvements. |
 | `/read-the-damn-docs` | Research current behavior from primary documentation. |

@@ -120,7 +120,7 @@ Both inputs are integrity-checked; planning leaves the caller's files and index 
 Report the class and affected instances, preserve finding ids, and expand context when
 a claim needs it instead of rediscovering unrelated old defects.
 
-Security/recovery, contracts/architecture, dependencies/licenses and operations gates
+Security/recovery, protobuf, contracts/architecture, dependencies/licenses and operations gates
 keep full review. New consumer gates default to full; `rereview: "delta"` is an explicit
 local review-scope choice, not a human approval tier. Unreviewed, failed or unavailable
 gates stay full. Changed base, branch, rubric, or non-descendant HEAD also resets to full.

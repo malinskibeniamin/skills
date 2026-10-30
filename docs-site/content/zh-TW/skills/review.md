@@ -77,6 +77,8 @@ type: skill
 | Go/並行/工作流程 | 所有權、取消、競態、重試、冪等 |
 | 相依套件/外部 API | 第一手文件、版本、鎖定檔、安全通告 |
 
+差異涉及 `.proto` 檔案（包含刪除與重新命名）、Buf 設定或 protobuf 程式碼產生/執行階段契約時，完整載入 [protobuf](https://github.com/malinskibeniamin/skills/blob/main/protobuf/SKILL.md)。即使結構描述本身未變，也要追蹤受影響的產生程式碼和使用端。能力改進建議應保持非阻擋，並與缺陷分開。在[門檻審查](https://github.com/malinskibeniamin/skills/blob/main/review/GATES.md)中，語意排除不能略過符合路徑的 protobuf 門檻；一般內嵌審查使用同一技能，不必啟用門檻或委派。
+
 依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)載入技能。
 分別為「product」和「lie-detector」呼叫 Skill 工具；在同一流程中套用其角色。
 經授權的審查面向應一起在前景執行；彙整每份報告。
@@ -111,3 +113,4 @@ type: skill
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`。
 附加 `entrypoint, data, actions, observations, timing, limits`、固定點、模式、計數、
 `product:` 和 `lie-detector:` 結論行、結論和剩餘限制。無發現時只傳回這些結論行、結論和剩餘限制。
+若 protobuf 審查範圍包含具體能力改進機會，附加獨立的非阻擋建議區段；沒有內容就省略。結構化門檻審查保留發現格式，使用其中的建議機會欄位。

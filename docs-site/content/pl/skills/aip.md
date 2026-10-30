@@ -1,21 +1,30 @@
 ---
-title: /aip
 description: >-
-  Projektowanie interfejsów API zasobów zgodnych z Google AIP. Używaj w
-  przypadku zasobów protobuf lub REST, standardowych metod, powiązań HTTP, pól,
-  stronicowania, filtrowania, operacji długotrwałych, błędów, zgodności lub
-  interfejsów API operacji zbiorczych.
-type: skill
+  Projektuj API zasobów Google AIP: standardowe metody, powiązania HTTP, pola,
+  stronicowanie, filtrowanie, LRO, błędy i metody zbiorcze. Ogólne kontrakty
+  Protobuf należą do protobuf.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - aip
 sidebar:
   label: /aip
+title: /aip
+type: skill
 ---
 ![Diagram umiejętności /aip](/diagrams/skills/aip.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/aip.excalidraw)
 
+Przy zgodności protobuf na poziomie danych binarnych i JSON, generowaniu kodu, walidacji lub odbiorcach środowiska wczytaj [protobuf](https://github.com/malinskibeniamin/skills/blob/main/protobuf/SKILL.md). Stosuj tę umiejętność, gdy konwencje zasobów Google stanowią wybrany kontrakt API; sam plik `.proto` nie oznacza takiego wyboru.
+
 Traktuj ogólne AIP jako źródło prawdy. Zatwierdzone AIP są normatywne. AIP-162 (wersja robocza) i AIP-182 (w trakcie przeglądu) mają charakter doradczy: uwzględniaj je i odpowiednio oznaczaj, ale nigdy nie przedstawiaj ich jako wymagań.
 
-## Przepływ pracy
+## Przepływ pracy [#workflow]
 
 1. Przeczytaj całą proponowaną powierzchnię API oraz powiązane, istniejące interfejsy API. Określ, czy należą do płaszczyzny zarządzania, czy płaszczyzny danych.
 2. Przejrzyj jednokrotnie wszystkie 72 wpisy `Use when` w pliku [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/aip/REFERENCE.md), aby utworzyć rejestr zastosowania. Wyszukiwania według pojęcia lub `AIP-N` używaj do poznawania szczegółów, a nie jako jedynej metody identyfikacji. Zapisz, dlaczego każde AIP zostało wybrane lub wykluczone. Nie stosuj automatycznie wszystkich AIP.
@@ -26,7 +35,7 @@ Traktuj ogólne AIP jako źródło prawdy. Zatwierdzone AIP są normatywne. AIP-
 7. Uruchom `api-linter`, używając istniejącego polecenia i konfiguracji repozytorium, jeśli są dostępne. Traktuj go jako minimum: ręcznie przejrzyj mające zastosowanie reguły, których nie można w nim zakodować.
 8. Przedstaw po jednym wierszu dla każdego mającego zastosowanie AIP w formacie `AIP | stan | zastosowanie | wynik | dowód/wyjątek`. Nigdy nie łącz kilku AIP w jednym wierszu ani nie pomijaj pozytywnych wyników zgodności. Osobno wymień wykluczone AIP jako niemające zastosowania, a następnie sprawdź, czy oba zbiory obejmują dokładnie po jednym razie wszystkie 72 opublikowane numery. Oddziel naruszenia wymagań normatywnych od sugestii doradczych.
 
-## Podstawa
+## Podstawa [#baseline]
 
 - Modeluj interfejsy API zarządzania jako nazwane zasoby w acyklicznej hierarchii, zaczynając od standardowych metod.
 - Nadaj zasobom kanoniczną względną nazwę zasobu `name`, zawierającą pełną ścieżkę względem usługi, oraz adnotację `(google.api.resource)`. Tekst wyświetlany przechowuj w polu `display_name`.
@@ -38,7 +47,7 @@ Traktuj ogólne AIP jako źródło prawdy. Zatwierdzone AIP są normatywne. AIP-
 - Każdą zmianę analizuj pod kątem zgodności, nie tylko ponownego użycia numerów pól. Znaczenie mają nazwy, typy, formaty, semantyka, powiązania HTTP, wzorce zasobów, wymagalność i zachowanie klienta.
 - Dokumentuj widoczną dla użytkownika semantykę, walidację, wartości domyślne, kolejność, limity, skutki uboczne, błędy, okres przechowywania i wyjątki.
 
-## Zabezpieczenia
+## Zabezpieczenia [#guardrails]
 
 - Nie twórz wytycznych dla nieprzypisanych numerów. Zakres obejmuje 72 opublikowane ogólne AIP, a nie 236 dokumentów.
 - Nie traktuj przykładów jako uniwersalnych wymagań. Warunkowe AIP stosuj tylko wtedy, gdy spełniony jest warunek ich zastosowania.

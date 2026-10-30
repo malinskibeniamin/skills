@@ -1,19 +1,29 @@
 ---
-title: /aip
 description: >-
-  设计 Google AIP 资源 API。适用于 protobuf 或 REST 资源、标准方法、HTTP
-  绑定、字段、分页、过滤、长时间运行的操作、错误、兼容性或批量 API。
-type: skill
+  设计 Google AIP 资源 API：标准方法、HTTP 绑定、字段、分页、过滤、长时间运行的操作、错误和批量方法。一般 Protobuf 契约由
+  protobuf 负责。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - aip
 sidebar:
   label: /aip
+title: /aip
+type: skill
 ---
 ![/aip 技能示意图](/diagrams/skills/aip.svg)
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/aip.excalidraw)
 
+涉及 protobuf 二进制或 JSON 兼容性、代码生成、校验或运行时使用方时，加载 [protobuf](https://github.com/malinskibeniamin/skills/blob/main/protobuf/SKILL.md)。仅当 API 选择 Google 资源约定作为契约时使用本技能；单凭 `.proto` 文件不能作此判断。
+
 以通用 AIP 作为事实依据。已批准的 AIP 具有规范约束力。AIP-162（草案）和 AIP-182（评审中）仅供参考：应予以考虑并明确标注，但绝不能将其表述为要求。
 
-## 工作流程
+## 工作流程 [#workflow]
 
 1. 阅读拟议接口的完整内容以及附近已建立的 API。将其归类为管理平面或数据平面。
 2. 完整检查 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/aip/REFERENCE.md) 中全部 72 个 `Use when` 条目一次，以建立适用性清单；使用概念或 `AIP-N` 搜索来查找详细信息，但不要将其作为唯一的发现方式。记录选择或排除每个 AIP 的原因。不要盲目应用所有 AIP。
@@ -24,7 +34,7 @@ sidebar:
 7. 如果仓库中已有相应命令和配置，请使用它们运行 `api-linter`。将其视为最低保障：对于它无法编码检查的适用规则，应进行人工评审。
 8. 对每个适用的 AIP 分别报告一行，格式为 `AIP | 状态 | 适用性 | 结果 | 证据/例外`；绝不能将多个 AIP 合并到同一行，也不能遗漏符合要求的通过项。另行将排除的 AIP 列为不适用，然后验证这两个集合是否恰好各统计全部 72 个已发布编号一次。将规范性问题与参考性建议分开。
 
-## 基准要求
+## 基准要求 [#baseline]
 
 - 首先将管理 API 建模为无环层次结构中的命名资源，并采用标准方法。
 - 为资源提供包含完整服务相对路径的规范相对资源 `name`，并添加 `(google.api.resource)` 注解；将显示文本保留在 `display_name` 中。
@@ -36,7 +46,7 @@ sidebar:
 - 评审每项变更的兼容性，而不仅仅检查字段编号复用：名称、类型、格式、语义、HTTP 绑定、资源模式、必填性和客户端行为都很重要。
 - 记录用户可见的语义、验证规则、默认值、顺序、限制、副作用、错误、保留策略和例外。
 
-## 约束条件
+## 约束条件 [#guardrails]
 
 - 不要为尚未分配的编号杜撰指南；该编号范围包含 72 个已发布的通用 AIP，而不是 236 份文档。
 - 不要将示例视为普遍要求。仅当触发条件成立时才应用条件性 AIP。

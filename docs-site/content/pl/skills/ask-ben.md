@@ -156,6 +156,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/prime` | Tworzenie zwięzłego wprowadzenia do repozytorium. |
 | `/product` | Sprawdzanie, czy praca uzasadnia poświęcony jej czas i dostarcza wartość biznesową. |
 | `/prototype` | Tworzenie jednorazowego artefaktu w celu rozstrzygnięcia kwestii projektowej. |
+| `/protobuf` | Projektowanie i przegląd schematów protobuf oraz ich odbiorców. |
 | `/quantify-impact` | Wykazywanie istotnych ulepszeń produktu i bazy kodu. |
 | `/read-the-damn-docs` | Badanie bieżącego działania na podstawie dokumentacji źródłowej. |
 | `/redpanda-ai-gateway` | Uruchamianie narzędzi CLI AI przez Redpanda AI Gateway. |

@@ -79,6 +79,8 @@ Dodaj kontrolę powierzchni tylko wtedy, gdy diff daje ku temu dowód:
 | Go/współbieżność/workflow | Własność, anulowanie, wyścigi, ponowienia, idempotencja |
 | Zależność/zewnętrzne API | Dokumentacja pierwotna, wersje, lockfile, ostrzeżenia |
 
+Jeśli różnice obejmują pliki `.proto` (również usunięcia i zmiany nazw), konfigurację Buf lub kontrakty generowania kodu i środowiska protobuf, wczytaj cały [protobuf](https://github.com/malinskibeniamin/skills/blob/main/protobuf/SKILL.md). Prześledź wygenerowany kod i odbiorców, nawet jeśli sam schemat się nie zmienił. Możliwości rozwoju pozostają doradcze i oddzielone od usterek. W [przeglądach z bramkami](https://github.com/malinskibeniamin/skills/blob/main/review/GATES.md) wykluczenie semantyczne nie może pominąć dopasowanej ścieżki protobuf. Zwykły przegląd bezpośredni używa tej samej umiejętności bez włączania bramek ani delegowania.
+
 Ładuj umiejętności zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 Wywołaj narzędzie Skill osobno dla „product” i „lie-detector”; zastosuj ich perspektywy bezpośrednio w ramach przeglądu.
 Autoryzowane osie przeglądu uruchamiaj razem na pierwszym planie; zbierz wszystkie raporty.
@@ -113,3 +115,4 @@ Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/r
 `[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
 Dodaj `entrypoint, data, actions, observations, timing, limits`, ustalony punkt, tryb, liczby,
 wiersze `product:` i `lie-detector:`, werdykt i pozostałe ograniczenia. Czysty przegląd zwraca tylko te wiersze, werdykt i pozostałe ograniczenia.
+Gdy zakres przeglądu protobuf obejmuje konkretne możliwości rozwoju, dodaj osobną, nieblokującą sekcję doradczą; pomiń pustą. Ustrukturyzowane przeglądy z bramkami zachowują schemat usterek i używają jego pola możliwości doradczych.

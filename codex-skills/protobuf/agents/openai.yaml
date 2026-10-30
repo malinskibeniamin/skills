@@ -1,0 +1,3 @@
+interface:
+  display_name: "Protobuf"
+  short_description: "Design and review protobuf schemas and their consumers"

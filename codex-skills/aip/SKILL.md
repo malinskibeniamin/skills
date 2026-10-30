@@ -1,8 +1,7 @@
 ---
 name: aip
-description: "Design Google AIP resource APIs. Use for protobuf or REST resources, standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors, compatibility, or batch APIs."
+description: "Design Google AIP resource APIs: standard methods, HTTP bindings, fields, pagination, filtering, LROs, errors and batch methods. General Protobuf contracts belong to protobuf."
 paths:
-  - "**/*.proto"
   - "**/*openapi*.{yaml,yml,json}"
 ---
 

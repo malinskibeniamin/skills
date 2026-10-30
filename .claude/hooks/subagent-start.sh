@@ -1,6 +1,6 @@
 #!/bin/bash
 # SubagentStart hook — injects session context into all subagents.
-# Provides: touched files, dirty baseline, branch/PR info, findings schema path.
+# Provides: touched files, dirty baseline, branch/PR info, review guidance paths.
 # Cannot block subagent creation (SubagentStart limitation) — context injection only.
 
 set -euo pipefail
@@ -57,6 +57,7 @@ harness_root=$(cd "$(dirname "$0")/../.." && pwd)
 case "$agent_type" in
   self-reviewer|code-reviewer|adversarial-reviewer)
     context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per \`${harness_root}/agents/references/findings-schema.md\`. Read that file for the exact format.")
+    context_parts+=("## Specialist Review Routing\nWhen this review proceeds, read \`${harness_root}/shared/change-evidence.md\` and load applicable specialist guidance, including protobuf schema, generation and consumer contracts. Review inline unless delegation was explicitly authorized; loading guidance grants no additional execution or publication permission.")
     ;;
 esac
 

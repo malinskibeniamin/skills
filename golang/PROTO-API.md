@@ -1,7 +1,9 @@
 # Proto & API implementation
 
-`/aip` owns resource design (name/parent/mask shape). This file is the Go and proto
-contract around it. Catalog: [rule catalog](../golang-review/RULES.md).
+Load [protobuf](../protobuf/SKILL.md) for schema, generation and protobuf-consumer
+contracts, including standalone Go reviews. [AIP](../aip/SKILL.md) owns resource design
+when those conventions apply; this file adds Go-specific implementation rules.
+Catalog: [rule catalog](../golang-review/RULES.md).
 
 ## Proto contracts
 

@@ -98,6 +98,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Repair or verdict",
     ],
   },
+  protobuf: {
+    kind: "pipeline",
+    nodes: [
+      "Schema + codegen diff",
+      "Consumers + validation",
+      "Compatibility evidence",
+      "Defects + advisory ideas",
+    ],
+  },
   aip: {
     fields: [
       ["name", "display_name"],
