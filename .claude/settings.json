@@ -81,6 +81,14 @@
             "command": "/bin/bash",
             "args": [
               "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'quota-guard.sh'; exit 0"
+            ]
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'user-prompt-context.sh'; exit 0"
             ]
           },
@@ -415,6 +423,19 @@
             ]
           }
         ]
+      },
+      {
+        "matcher": "^(Agent|Task|spawn_agent|mcp__.*delegate_task)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'quota-guard.sh'; exit 0"
+            ]
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -451,6 +472,14 @@
       {
         "continueOnBlock": true,
         "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'quota-guard.sh'; exit 0"
+            ]
+          },
           {
             "type": "command",
             "command": "/bin/bash",

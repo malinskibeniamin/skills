@@ -169,6 +169,11 @@ bunx skills@latest add malinskibeniamin/skills/work-automation-kit --agent claud
 
 Want proof and examples? Demo scripts, featured skill moments, and starter prompts live in [docs/DEMOS.md](docs/DEMOS.md); comparisons, measurement methodology, and common questions live in [docs/FAQ.md](docs/FAQ.md).
 
+The opt-in [subscription quota guard](docs/subscription-only-usage.md) reads native
+Codex allowance and blocks prompts/task launches or stops at post-tool checkpoints
+near the configured threshold. Unknown readings block; provider-side credit controls
+remain necessary. Claude collection and automatic account rotation are not supported.
+
 ## Review evidence
 
 Optional [review gates](review/GATES.md) connect existing specialist skills to a
