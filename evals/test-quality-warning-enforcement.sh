@@ -43,7 +43,7 @@ run_hook_eval "$SCRIPT" \
   2 "block: green bunx tsrs run with deprecation warning" "Warnings are errors"
 
 run_hook_eval "$HOOKS_DIR/post-tool-failure.sh" \
-  '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"},"error":"src/a.ts(1,7): error TS2322"}' \
+  '{"hook_event_name":"PostToolUseFailure","tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"},"error":"Exit code 2\nsrc/a.ts(1,7): error TS2322","is_interrupt":false}' \
   0 "post-tool-failure: tsrs failure gets the type-error hint" "Type errors"
 
 _tw_tmpdir=$(mktemp -d /tmp/test-warning-evals-XXXXXX)

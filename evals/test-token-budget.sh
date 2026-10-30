@@ -391,22 +391,6 @@ else
   ERRORS="$ERRORS\n  FAIL: llm-test-flags missing playwright nudge"
 fi
 
-# llm-truncate.sh must cap at bytes not lines
-if grep -q 'LLM_TRUNCATE_BYTES' "$BUDGET_DIR/.claude/hooks/llm-truncate.sh" 2>/dev/null; then
-  echo "  PASS  llm-truncate.sh uses byte cap (LLM_TRUNCATE_BYTES)"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  llm-truncate.sh not using byte cap"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: llm-truncate regressed to line cap"
-fi
-
-# llm-truncate.sh must write file pointer
-if grep -q 'claude-bash-logs' "$BUDGET_DIR/.claude/hooks/llm-truncate.sh" 2>/dev/null; then
-  echo "  PASS  llm-truncate.sh writes file pointer for re-read"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  llm-truncate.sh missing file pointer logic"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: llm-truncate missing pointer"
-fi
+# The byte cap and full-output pointer are verified by executing the hook in
+# scripts/post-tool-hooks.test.ts (bun run test). That suite checks UTF-8 byte
+# budgets and reads the actual backup; source-token/directory-name scans do not.

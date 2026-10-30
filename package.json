@@ -25,7 +25,7 @@
     "quality:gate": "bun run format:check && bun run lint && bun run type:check",
     "review:metrics": "bun scripts/review-metrics.ts",
     "review:gates": "bun scripts/review-gates.ts",
-    "test": "bun test ./scripts/quota-guard.test.ts ./launchdarkly/scripts/audit.test.ts ./wizard/template.test.ts ./scripts/pr-review-auto.test.ts ./scripts/review-metrics.test.ts ./scripts/codex-presets.test.ts ./scripts/full-send-check.test.ts ./scripts/review-gates.test.ts ./scripts/pr-video.test.ts ./scripts/demo-voiceover.test.ts ./scripts/biome-stop.test.ts ./scripts/codeowners-reviewers.test.ts && cd shared && bun test hook-protocol.test.ts && cd ../docs-site && bun test version-docs.test.ts",
+    "test": "bun test ./scripts/quota-guard.test.ts ./launchdarkly/scripts/audit.test.ts ./wizard/template.test.ts ./scripts/pr-review-auto.test.ts ./scripts/review-metrics.test.ts ./scripts/codex-presets.test.ts ./scripts/full-send-check.test.ts ./scripts/review-gates.test.ts ./scripts/pr-video.test.ts ./scripts/demo-voiceover.test.ts ./scripts/biome-stop.test.ts ./scripts/codeowners-reviewers.test.ts ./scripts/post-tool-hooks.test.ts && cd shared && bun test hook-protocol.test.ts && cd ../docs-site && bun test version-docs.test.ts",
     "test:pr-video": "bun run scripts/pr-video-canary.ts",
     "test:mods": "bash scripts/test-claude-plugin-install.sh frontend-skills-mods",
     "type:check": "tsc -p tsconfig.json"

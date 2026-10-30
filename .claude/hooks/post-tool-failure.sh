@@ -6,13 +6,30 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 # Replaces the "PostToolUse Bash + check exit code" pattern.
 
 input=$(cat 2>/dev/null || echo '{}')
-tool=$(echo "$input" | jq -r '.tool_name // empty' 2>/dev/null)
-command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null | tr '\n' ' ')
-stderr=$(echo "$input" | jq -r '.tool_response.stderr // empty' 2>/dev/null | head -c 500)
-exit_code=$(echo "$input" | jq -r '.tool_response.exit_code // 0' 2>/dev/null)
+tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
+command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null | tr '\n' ' ')
 
 [ "$tool" = "Bash" ] || exit 0
 [ -n "$command" ] || exit 0
+
+# Claude failure events carry a top-level error, not tool_response. Codex maps
+# this hook to PostToolUse for both outcomes, so require a nonzero result there.
+event=$(printf '%s' "$input" | jq -r '.hook_event_name // empty' 2>/dev/null)
+interrupted=$(printf '%s' "$input" | jq -r '.is_interrupt // false' 2>/dev/null)
+[ "$interrupted" != "true" ] || exit 0
+stderr=$(printf '%s' "$input" | jq -r '
+  (.error // .tool_response.stderr // .tool_result.stderr // "")
+  | select(type == "string") | .[:500]
+' 2>/dev/null)
+if [ "$event" = "PostToolUseFailure" ]; then
+  exit_code="unknown"
+  if [[ "$stderr" =~ ^Exit\ code\ ([0-9]+)($|[[:space:]]) ]]; then
+    exit_code="${BASH_REMATCH[1]}"
+  fi
+else
+  exit_code=$(printf '%s' "$input" | jq -r '.tool_response.exit_code // .tool_result.exit_code // empty' 2>/dev/null)
+  [[ "$exit_code" =~ ^[0-9]+$ ]] && [[ "$exit_code" =~ [1-9] ]] || exit 0
+fi
 
 _hint=""
 _rule="tool-failure"
@@ -56,7 +73,7 @@ case "$command" in
       _hint="Command not found. Check PATH or install missing tool."
     else
       _rule="generic-fail"
-      _hint="Command failed (exit $exit_code). Read stderr for root cause."
+      _hint="Command failed (exit $exit_code). Read the tool error for root cause."
     fi
     ;;
 esac
