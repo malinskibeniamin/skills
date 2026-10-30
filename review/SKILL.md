@@ -9,7 +9,6 @@ Scope. Keep one owner; explicit delegation. Do not edit, commit, push or post wi
 Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
 Depth/convergence: [operating model](OPERATING-MODEL.md); no added permissions.
-
 ## Review contract
 
 - **Objective**: achieve the outcome without credible defects.
