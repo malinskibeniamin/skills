@@ -3,7 +3,7 @@ name: grilling
 description: Explore and stress-test plans, decisions, ideas, brainstorming approaches, and UI layouts when a material choice remains open.
 ---
 
-For design forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-planning).
+For forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-planning).
 
 Resolve consequential unknowns; no production code or implementation while a material user-reserved decision is open. Invocation grants no delegation.
 
@@ -41,7 +41,7 @@ A confident, reversible **Recommended:** answer is an assumption, not a question
 
 **Stop signal:** "no more questions", "just do it", "don't ask", or a bare endpoint ("draft PR") ends asking for the rest of the session. Adopt every open recommendation, list them as assumptions, and continue to the endpoint; pause only for an irreversible or user-reserved decision.
 
-Word questions so yes accepts it.
+Ask so yes accepts the recommendation.
 
 An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline unless delegation is explicitly authorized; inspect environment/filesystem/tools. User decisions stay theirs.
 
