@@ -18,7 +18,7 @@ Show this to the user, then immediately proceed to Step 2.
 
 ### 2. Produce alternatives
 
-With explicit delegation consent, spawn 3+ sub-agents in parallel through the host's available mechanism. Without delegation consent, produce at least three **radically different** interface designs inline in the primary context.
+With explicit delegation consent, spawn 3+ sub-agents in parallel through the host's available mechanism, each with a fresh context window and a self-contained brief. Without delegation consent, produce at least three **radically different** interface designs inline in the primary context.
 
 Give each alternative a separate technical brief (file paths, coupling details, dependency category from [DEEPENING.md](DEEPENING.md), what sits behind the seam). The brief is independent of the user-facing problem-space explanation in Step 1. Give each design a different constraint:
 

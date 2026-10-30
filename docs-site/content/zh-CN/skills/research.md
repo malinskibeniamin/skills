@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/research.excalidraw)
 
+为获授权的研究智能体提供全新上下文及来源、任务指针，不要复制协调者的对话。
+
 恢复上下文、解释行为或设计理由时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
 
 

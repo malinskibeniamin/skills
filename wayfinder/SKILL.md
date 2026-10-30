@@ -28,6 +28,7 @@ Notes hold planning preferences and do not authorize implementation or delivery.
 - Resolve at most one ticket per session in the primary context; explicit delegation or an
   invoked `/swarm` may parallelize ready research. Otherwise do not resolve another ticket.
 - For authorized waves, `/efficient-frontier` budgets lanes and the coordinator synthesizes.
+  Start each authorized research lane with a fresh context window and ticket/source pointers.
 - Audit another session's claims or resolved ticket with `/agent-watchdog`.
 
 ## Map shape

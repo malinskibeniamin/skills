@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Grill Me"
+  short_description: "Matt Pocock source: grill me guidance"
+policy:
+  allow_implicit_invocation: false

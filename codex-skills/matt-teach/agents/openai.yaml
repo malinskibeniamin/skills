@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Teach"
+  short_description: "Matt Pocock source: teach guidance"
+policy:
+  allow_implicit_invocation: false

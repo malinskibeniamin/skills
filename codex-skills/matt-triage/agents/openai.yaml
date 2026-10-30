@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Triage"
+  short_description: "Matt Pocock source: triage guidance"
+policy:
+  allow_implicit_invocation: false

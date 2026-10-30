@@ -26,7 +26,7 @@ Read `GLOSSARY.md` and relevant ADRs for names and settled decisions.
 
 **Scope before scanning -- YAGNI.** Use the named module/error/pain point; otherwise `git log --name-only --format=` for hot spots. Widen only when history is scattered.
 
-Explore inline; delegation must be explicit. Prefer repo graph tools. Map interfaces, dependency/call graph, data ownership, writers, state transitions, failure paths, and interface tests.
+Explore inline; delegation requires explicit consent and fresh contexts. Prefer graph tools. Map interfaces, dependencies/calls, data ownership, writers, transitions, failure paths and interface tests.
 
 ## 2. Find opportunities
 

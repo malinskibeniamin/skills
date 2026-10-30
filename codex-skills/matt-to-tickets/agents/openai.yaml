@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt to Tickets"
+  short_description: "Matt Pocock source: to tickets guidance"
+policy:
+  allow_implicit_invocation: false

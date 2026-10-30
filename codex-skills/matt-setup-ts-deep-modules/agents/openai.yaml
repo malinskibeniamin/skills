@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Setup TS Deep Modules"
+  short_description: "Matt Pocock source: setup ts deep modules guidance"
+policy:
+  allow_implicit_invocation: false

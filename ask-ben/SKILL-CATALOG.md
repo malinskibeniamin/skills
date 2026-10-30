@@ -64,6 +64,44 @@
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
+| `/matt-ask-matt` | Matt Pocock source: ask matt guidance. |
+| `/matt-chief-of-staff` | Matt Pocock source: chief of staff guidance. |
+| `/matt-claude-handoff` | Matt Pocock source: claude handoff guidance. |
+| `/matt-code-review` | Matt Pocock source: code review guidance. |
+| `/matt-codebase-design` | Matt Pocock source: codebase design guidance. |
+| `/matt-diagnosing-bugs` | Matt Pocock source: diagnosing bugs guidance. |
+| `/matt-domain-modeling` | Matt Pocock source: domain modeling guidance. |
+| `/matt-git-guardrails-claude-code` | Matt Pocock source: git guardrails claude code guidance. |
+| `/matt-grill-me` | Matt Pocock source: grill me guidance. |
+| `/matt-grill-with-docs` | Matt Pocock source: grill with docs guidance. |
+| `/matt-grilling` | Matt Pocock source: grilling guidance. |
+| `/matt-handoff` | Matt Pocock source: handoff guidance. |
+| `/matt-implement-spec` | Matt Pocock source: implement spec guidance. |
+| `/matt-implement` | Matt Pocock source: implement guidance. |
+| `/matt-improve-codebase-architecture` | Matt Pocock source: improve codebase architecture guidance. |
+| `/matt-loop-me` | Matt Pocock source: loop me guidance. |
+| `/matt-migrate-to-shoehorn` | Matt Pocock source: migrate to shoehorn guidance. |
+| `/matt-pr` | Matt Pocock source: pr guidance. |
+| `/matt-prototype` | Matt Pocock source: prototype guidance. |
+| `/matt-research` | Matt Pocock source: research guidance. |
+| `/matt-retro` | Matt Pocock source: retro guidance. |
+| `/matt-scaffold-exercises` | Matt Pocock source: scaffold exercises guidance. |
+| `/matt-setup-matt-pocock-skills` | Matt Pocock source: setup matt pocock skills guidance. |
+| `/matt-setup-pre-commit` | Matt Pocock source: setup pre commit guidance. |
+| `/matt-setup-ts-deep-modules` | Matt Pocock source: setup ts deep modules guidance. |
+| `/matt-tdd` | Matt Pocock source: tdd guidance. |
+| `/matt-teach` | Matt Pocock source: teach guidance. |
+| `/matt-to-questionnaire` | Matt Pocock source: to questionnaire guidance. |
+| `/matt-to-spec` | Matt Pocock source: to spec guidance. |
+| `/matt-to-tickets` | Matt Pocock source: to tickets guidance. |
+| `/matt-triage` | Matt Pocock source: triage guidance. |
+| `/matt-wait-what` | Matt Pocock source: wait what guidance. |
+| `/matt-wayfinder` | Matt Pocock source: wayfinder guidance. |
+| `/matt-wizard` | Matt Pocock source: wizard guidance. |
+| `/matt-writing-beats` | Matt Pocock source: writing beats guidance. |
+| `/matt-writing-for-agents` | Matt Pocock source: writing for agents guidance. |
+| `/matt-writing-fragments` | Matt Pocock source: writing fragments guidance. |
+| `/matt-writing-shape` | Matt Pocock source: writing shape guidance. |
 | `/mobile-native` | Fix mobile web viewport, touch, and keyboard behavior. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |

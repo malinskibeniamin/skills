@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/research.excalidraw)
 
+為獲授權的研究代理程式提供全新情境及來源、任務指標，不要複製協調者的對話。
+
 還原脈絡、解釋行為或設計理由時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
 
 

@@ -168,6 +168,14 @@ if jakubkrehel_lock.exists():
     })
 
 
+matt_lock = repo / "vendor/mattpocock.lock.json"
+if matt_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(matt_lock.read_text())["skills"]
+    })
+
+
 def yaml_quote(value):
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
 

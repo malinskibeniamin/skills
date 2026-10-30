@@ -16,7 +16,8 @@ for file in domain-modeling/SKILL.md domain-modeling/GLOSSARY-FORMAT.md \
   prime/REFERENCE.md wait-what/SKILL.md work-automation-kit/REFERENCE.md \
   work-automation-kit/templates/domain.md; do
   run_content_eval "$REPO_ROOT/$file" 'GLOSSARY\.md' "consumer uses the glossary convention: $file"
-  if [ -f "$REPO_ROOT/$file" ] && grep -qE 'CONTEXT(-MAP|-FORMAT)?\.md' "$REPO_ROOT/$file"; then
+  # Setup must recognize legacy filenames to migrate them; they are not live pointers.
+  if [ -f "$REPO_ROOT/$file" ] && grep -E 'CONTEXT(-MAP|-FORMAT)?\.md' "$REPO_ROOT/$file" | grep -vE '^- Legacy .*git mv.*glossary name' >/dev/null; then
     echo "  FAIL  consumer has no stale glossary pointer: $file"
     FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: stale glossary pointer: $file"
   else

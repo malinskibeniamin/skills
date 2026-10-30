@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt PR"
+  short_description: "Matt Pocock source: pr guidance"
+policy:
+  allow_implicit_invocation: false

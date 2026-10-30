@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Git Guardrails Claude Code"
+  short_description: "Matt Pocock source: git guardrails claude code guidance"
+policy:
+  allow_implicit_invocation: false

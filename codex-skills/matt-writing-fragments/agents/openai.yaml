@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Writing Fragments"
+  short_description: "Matt Pocock source: writing fragments guidance"
+policy:
+  allow_implicit_invocation: false

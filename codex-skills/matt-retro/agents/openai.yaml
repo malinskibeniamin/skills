@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Retro"
+  short_description: "Matt Pocock source: retro guidance"
+policy:
+  allow_implicit_invocation: false

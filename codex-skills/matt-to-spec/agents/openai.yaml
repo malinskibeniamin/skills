@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt to Spec"
+  short_description: "Matt Pocock source: to spec guidance"
+policy:
+  allow_implicit_invocation: false

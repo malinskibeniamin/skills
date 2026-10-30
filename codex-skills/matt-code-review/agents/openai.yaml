@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Code Review"
+  short_description: "Matt Pocock source: code review guidance"
+policy:
+  allow_implicit_invocation: false

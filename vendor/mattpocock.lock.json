@@ -1,0 +1,790 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "revision": "a496f5513d4a4cf889bc48e189e579f4b0bdf6aa",
+  "skills": [
+    {
+      "name": "matt-ask-matt",
+      "upstream_name": "ask-matt",
+      "source": "skills/engineering/ask-matt/SKILL.md",
+      "owner": "ask-ben",
+      "registration": "./matt-skills/matt-ask-matt/",
+      "short_description": "Matt Pocock source: ask matt guidance",
+      "description": "Use the pinned Matt Pocock ask-matt skill with host compatibility rules."
+    },
+    {
+      "name": "matt-chief-of-staff",
+      "upstream_name": "chief-of-staff",
+      "source": "skills/in-progress/chief-of-staff/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-chief-of-staff/",
+      "short_description": "Matt Pocock source: chief of staff guidance",
+      "description": "Use the pinned Matt Pocock chief-of-staff skill with host compatibility rules."
+    },
+    {
+      "name": "matt-claude-handoff",
+      "upstream_name": "claude-handoff",
+      "source": "skills/in-progress/claude-handoff/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-claude-handoff/",
+      "short_description": "Matt Pocock source: claude handoff guidance",
+      "description": "Use the pinned Matt Pocock claude-handoff skill with host compatibility rules."
+    },
+    {
+      "name": "matt-code-review",
+      "upstream_name": "code-review",
+      "source": "skills/engineering/code-review/SKILL.md",
+      "owner": "review",
+      "registration": "./matt-skills/matt-code-review/",
+      "short_description": "Matt Pocock source: code review guidance",
+      "description": "Use the pinned Matt Pocock code-review skill with host compatibility rules."
+    },
+    {
+      "name": "matt-codebase-design",
+      "upstream_name": "codebase-design",
+      "source": "skills/engineering/codebase-design/SKILL.md",
+      "owner": "codebase-design",
+      "registration": "./matt-skills/matt-codebase-design/",
+      "short_description": "Matt Pocock source: codebase design guidance",
+      "description": "Use the pinned Matt Pocock codebase-design skill with host compatibility rules."
+    },
+    {
+      "name": "matt-diagnosing-bugs",
+      "upstream_name": "diagnosing-bugs",
+      "source": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "owner": "diagnosing-bugs",
+      "registration": "./matt-skills/matt-diagnosing-bugs/",
+      "short_description": "Matt Pocock source: diagnosing bugs guidance",
+      "description": "Use the pinned Matt Pocock diagnosing-bugs skill with host compatibility rules."
+    },
+    {
+      "name": "matt-domain-modeling",
+      "upstream_name": "domain-modeling",
+      "source": "skills/engineering/domain-modeling/SKILL.md",
+      "owner": "domain-modeling",
+      "registration": "./matt-skills/matt-domain-modeling/",
+      "short_description": "Matt Pocock source: domain modeling guidance",
+      "description": "Use the pinned Matt Pocock domain-modeling skill with host compatibility rules."
+    },
+    {
+      "name": "matt-git-guardrails-claude-code",
+      "upstream_name": "git-guardrails-claude-code",
+      "source": "skills/misc/git-guardrails-claude-code/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-git-guardrails-claude-code/",
+      "short_description": "Matt Pocock source: git guardrails claude code guidance",
+      "description": "Use the pinned Matt Pocock git-guardrails-claude-code skill with host compatibility rules."
+    },
+    {
+      "name": "matt-grill-me",
+      "upstream_name": "grill-me",
+      "source": "skills/productivity/grill-me/SKILL.md",
+      "owner": "grilling",
+      "registration": "./matt-skills/matt-grill-me/",
+      "short_description": "Matt Pocock source: grill me guidance",
+      "description": "Use the pinned Matt Pocock grill-me skill with host compatibility rules."
+    },
+    {
+      "name": "matt-grill-with-docs",
+      "upstream_name": "grill-with-docs",
+      "source": "skills/engineering/grill-with-docs/SKILL.md",
+      "owner": "grilling",
+      "registration": "./matt-skills/matt-grill-with-docs/",
+      "short_description": "Matt Pocock source: grill with docs guidance",
+      "description": "Use the pinned Matt Pocock grill-with-docs skill with host compatibility rules."
+    },
+    {
+      "name": "matt-grilling",
+      "upstream_name": "grilling",
+      "source": "skills/productivity/grilling/SKILL.md",
+      "owner": "grilling",
+      "registration": "./matt-skills/matt-grilling/",
+      "short_description": "Matt Pocock source: grilling guidance",
+      "description": "Use the pinned Matt Pocock grilling skill with host compatibility rules."
+    },
+    {
+      "name": "matt-handoff",
+      "upstream_name": "handoff",
+      "source": "skills/productivity/handoff/SKILL.md",
+      "owner": "handoff",
+      "registration": "./matt-skills/matt-handoff/",
+      "short_description": "Matt Pocock source: handoff guidance",
+      "description": "Use the pinned Matt Pocock handoff skill with host compatibility rules."
+    },
+    {
+      "name": "matt-implement",
+      "upstream_name": "implement",
+      "source": "skills/engineering/implement/SKILL.md",
+      "owner": "development-lifecycle",
+      "registration": "./matt-skills/matt-implement/",
+      "short_description": "Matt Pocock source: implement guidance",
+      "description": "Use the pinned Matt Pocock implement skill with host compatibility rules."
+    },
+    {
+      "name": "matt-implement-spec",
+      "upstream_name": "implement-spec",
+      "source": "skills/engineering/implement-spec/SKILL.md",
+      "owner": "implement-spec",
+      "registration": "./matt-skills/matt-implement-spec/",
+      "short_description": "Matt Pocock source: implement spec guidance",
+      "description": "Use the pinned Matt Pocock implement-spec skill with host compatibility rules."
+    },
+    {
+      "name": "matt-improve-codebase-architecture",
+      "upstream_name": "improve-codebase-architecture",
+      "source": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "owner": "improve-codebase-architecture",
+      "registration": "./matt-skills/matt-improve-codebase-architecture/",
+      "short_description": "Matt Pocock source: improve codebase architecture guidance",
+      "description": "Use the pinned Matt Pocock improve-codebase-architecture skill with host compatibility rules."
+    },
+    {
+      "name": "matt-loop-me",
+      "upstream_name": "loop-me",
+      "source": "skills/in-progress/loop-me/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-loop-me/",
+      "short_description": "Matt Pocock source: loop me guidance",
+      "description": "Use the pinned Matt Pocock loop-me skill with host compatibility rules."
+    },
+    {
+      "name": "matt-migrate-to-shoehorn",
+      "upstream_name": "migrate-to-shoehorn",
+      "source": "skills/misc/migrate-to-shoehorn/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-migrate-to-shoehorn/",
+      "short_description": "Matt Pocock source: migrate to shoehorn guidance",
+      "description": "Use the pinned Matt Pocock migrate-to-shoehorn skill with host compatibility rules."
+    },
+    {
+      "name": "matt-pr",
+      "upstream_name": "pr",
+      "source": "skills/engineering/pr/SKILL.md",
+      "owner": "pr",
+      "registration": "./matt-skills/matt-pr/",
+      "short_description": "Matt Pocock source: pr guidance",
+      "description": "Use the pinned Matt Pocock pr skill with host compatibility rules."
+    },
+    {
+      "name": "matt-prototype",
+      "upstream_name": "prototype",
+      "source": "skills/engineering/prototype/SKILL.md",
+      "owner": "prototype",
+      "registration": "./matt-skills/matt-prototype/",
+      "short_description": "Matt Pocock source: prototype guidance",
+      "description": "Use the pinned Matt Pocock prototype skill with host compatibility rules."
+    },
+    {
+      "name": "matt-research",
+      "upstream_name": "research",
+      "source": "skills/engineering/research/SKILL.md",
+      "owner": "research",
+      "registration": "./matt-skills/matt-research/",
+      "short_description": "Matt Pocock source: research guidance",
+      "description": "Use the pinned Matt Pocock research skill with host compatibility rules."
+    },
+    {
+      "name": "matt-retro",
+      "upstream_name": "retro",
+      "source": "skills/engineering/retro/SKILL.md",
+      "owner": "retro",
+      "registration": "./matt-skills/matt-retro/",
+      "short_description": "Matt Pocock source: retro guidance",
+      "description": "Use the pinned Matt Pocock retro skill with host compatibility rules."
+    },
+    {
+      "name": "matt-scaffold-exercises",
+      "upstream_name": "scaffold-exercises",
+      "source": "skills/misc/scaffold-exercises/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-scaffold-exercises/",
+      "short_description": "Matt Pocock source: scaffold exercises guidance",
+      "description": "Use the pinned Matt Pocock scaffold-exercises skill with host compatibility rules."
+    },
+    {
+      "name": "matt-setup-matt-pocock-skills",
+      "upstream_name": "setup-matt-pocock-skills",
+      "source": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "owner": "work-automation-kit",
+      "registration": "./matt-skills/matt-setup-matt-pocock-skills/",
+      "short_description": "Matt Pocock source: setup matt pocock skills guidance",
+      "description": "Use the pinned Matt Pocock setup-matt-pocock-skills skill with host compatibility rules."
+    },
+    {
+      "name": "matt-setup-pre-commit",
+      "upstream_name": "setup-pre-commit",
+      "source": "skills/misc/setup-pre-commit/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-setup-pre-commit/",
+      "short_description": "Matt Pocock source: setup pre commit guidance",
+      "description": "Use the pinned Matt Pocock setup-pre-commit skill with host compatibility rules."
+    },
+    {
+      "name": "matt-setup-ts-deep-modules",
+      "upstream_name": "setup-ts-deep-modules",
+      "source": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
+      "owner": null,
+      "registration": "./matt-skills/matt-setup-ts-deep-modules/",
+      "short_description": "Matt Pocock source: setup ts deep modules guidance",
+      "description": "Use the pinned Matt Pocock setup-ts-deep-modules skill with host compatibility rules."
+    },
+    {
+      "name": "matt-tdd",
+      "upstream_name": "tdd",
+      "source": "skills/engineering/tdd/SKILL.md",
+      "owner": "tdd",
+      "registration": "./matt-skills/matt-tdd/",
+      "short_description": "Matt Pocock source: tdd guidance",
+      "description": "Use the pinned Matt Pocock tdd skill with host compatibility rules."
+    },
+    {
+      "name": "matt-teach",
+      "upstream_name": "teach",
+      "source": "skills/productivity/teach/SKILL.md",
+      "owner": "teach",
+      "registration": "./matt-skills/matt-teach/",
+      "short_description": "Matt Pocock source: teach guidance",
+      "description": "Use the pinned Matt Pocock teach skill with host compatibility rules."
+    },
+    {
+      "name": "matt-to-questionnaire",
+      "upstream_name": "to-questionnaire",
+      "source": "skills/productivity/to-questionnaire/SKILL.md",
+      "owner": "to-questionnaire",
+      "registration": "./matt-skills/matt-to-questionnaire/",
+      "short_description": "Matt Pocock source: to questionnaire guidance",
+      "description": "Use the pinned Matt Pocock to-questionnaire skill with host compatibility rules."
+    },
+    {
+      "name": "matt-to-spec",
+      "upstream_name": "to-spec",
+      "source": "skills/engineering/to-spec/SKILL.md",
+      "owner": "to-spec",
+      "registration": "./matt-skills/matt-to-spec/",
+      "short_description": "Matt Pocock source: to spec guidance",
+      "description": "Use the pinned Matt Pocock to-spec skill with host compatibility rules."
+    },
+    {
+      "name": "matt-to-tickets",
+      "upstream_name": "to-tickets",
+      "source": "skills/engineering/to-tickets/SKILL.md",
+      "owner": "to-tickets",
+      "registration": "./matt-skills/matt-to-tickets/",
+      "short_description": "Matt Pocock source: to tickets guidance",
+      "description": "Use the pinned Matt Pocock to-tickets skill with host compatibility rules."
+    },
+    {
+      "name": "matt-triage",
+      "upstream_name": "triage",
+      "source": "skills/engineering/triage/SKILL.md",
+      "owner": "triage",
+      "registration": "./matt-skills/matt-triage/",
+      "short_description": "Matt Pocock source: triage guidance",
+      "description": "Use the pinned Matt Pocock triage skill with host compatibility rules."
+    },
+    {
+      "name": "matt-wait-what",
+      "upstream_name": "wait-what",
+      "source": "skills/productivity/wait-what/SKILL.md",
+      "owner": "wait-what",
+      "registration": "./matt-skills/matt-wait-what/",
+      "short_description": "Matt Pocock source: wait what guidance",
+      "description": "Use the pinned Matt Pocock wait-what skill with host compatibility rules."
+    },
+    {
+      "name": "matt-wayfinder",
+      "upstream_name": "wayfinder",
+      "source": "skills/engineering/wayfinder/SKILL.md",
+      "owner": "wayfinder",
+      "registration": "./matt-skills/matt-wayfinder/",
+      "short_description": "Matt Pocock source: wayfinder guidance",
+      "description": "Use the pinned Matt Pocock wayfinder skill with host compatibility rules."
+    },
+    {
+      "name": "matt-wizard",
+      "upstream_name": "wizard",
+      "source": "skills/engineering/wizard/SKILL.md",
+      "owner": "wizard",
+      "registration": "./matt-skills/matt-wizard/",
+      "short_description": "Matt Pocock source: wizard guidance",
+      "description": "Use the pinned Matt Pocock wizard skill with host compatibility rules."
+    },
+    {
+      "name": "matt-writing-beats",
+      "upstream_name": "writing-beats",
+      "source": "skills/in-progress/writing-beats/SKILL.md",
+      "owner": "writing-beats",
+      "registration": "./matt-skills/matt-writing-beats/",
+      "short_description": "Matt Pocock source: writing beats guidance",
+      "description": "Use the pinned Matt Pocock writing-beats skill with host compatibility rules."
+    },
+    {
+      "name": "matt-writing-for-agents",
+      "upstream_name": "writing-for-agents",
+      "source": "skills/productivity/writing-for-agents/SKILL.md",
+      "owner": "writing-for-agents",
+      "registration": "./matt-skills/matt-writing-for-agents/",
+      "short_description": "Matt Pocock source: writing for agents guidance",
+      "description": "Use the pinned Matt Pocock writing-for-agents skill with host compatibility rules."
+    },
+    {
+      "name": "matt-writing-fragments",
+      "upstream_name": "writing-fragments",
+      "source": "skills/in-progress/writing-fragments/SKILL.md",
+      "owner": "writing-fragments",
+      "registration": "./matt-skills/matt-writing-fragments/",
+      "short_description": "Matt Pocock source: writing fragments guidance",
+      "description": "Use the pinned Matt Pocock writing-fragments skill with host compatibility rules."
+    },
+    {
+      "name": "matt-writing-shape",
+      "upstream_name": "writing-shape",
+      "source": "skills/in-progress/writing-shape/SKILL.md",
+      "owner": "writing-shape",
+      "registration": "./matt-skills/matt-writing-shape/",
+      "short_description": "Matt Pocock source: writing shape guidance",
+      "description": "Use the pinned Matt Pocock writing-shape skill with host compatibility rules."
+    }
+  ],
+  "files": {
+    "LICENSE": {
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+      "mode": 420
+    },
+    "README.md": {
+      "sha256": "345041d56cf1411b6b3ca1cc54014d26c563890f817f4cb9e2cb193dcd771a3e",
+      "mode": 420
+    },
+    "skills/deprecated/README.md": {
+      "sha256": "8b2009e31b7353f318a4321901b1141377e4d395f092934bacde7e9c5b070e26",
+      "mode": 420
+    },
+    "skills/engineering/README.md": {
+      "sha256": "32d9469dda4e6103d952909cb83e657b7bec01bc582b6be4cec3b493f66920fd",
+      "mode": 420
+    },
+    "skills/engineering/ask-matt/PHASE-BOUNDARIES.md": {
+      "sha256": "a8aa20158609ef39e2b308b6ba0660c91066838d07a867202e63a7744a88a3ed",
+      "mode": 420
+    },
+    "skills/engineering/ask-matt/SKILL.md": {
+      "sha256": "1371f5ce005de0992a44b137748bfb960a56948aa9871b405fe9d90b24332e3c",
+      "mode": 420
+    },
+    "skills/engineering/ask-matt/agents/openai.yaml": {
+      "sha256": "bdffbc5a0a99ed1b6ef3253d251d755fd18162b9845972e380007f844b09b05c",
+      "mode": 420
+    },
+    "skills/engineering/code-review/SKILL.md": {
+      "sha256": "9c921a8d88138a41401d8897ca1bb852088ab1b7b605cdd04edc13e3e8aab6dd",
+      "mode": 420
+    },
+    "skills/engineering/code-review/agents/openai.yaml": {
+      "sha256": "8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352",
+      "mode": 420
+    },
+    "skills/engineering/codebase-design/DEEPENING.md": {
+      "sha256": "f3dd099ce99289bd213914d8ee3e2429b78309c3957ca4583f7659551b1d53c1",
+      "mode": 420
+    },
+    "skills/engineering/codebase-design/DESIGN-IT-TWICE.md": {
+      "sha256": "c222ab5a82e0405672eb9062d62496139a08828e45d07fc5f18e4952c10fac1a",
+      "mode": 420
+    },
+    "skills/engineering/codebase-design/SKILL.md": {
+      "sha256": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+      "mode": 420
+    },
+    "skills/engineering/codebase-design/agents/openai.yaml": {
+      "sha256": "edebc9e4fcfe102114012575eaa9600b9b5fd08c311664f389c36e7bc717740f",
+      "mode": 420
+    },
+    "skills/engineering/diagnosing-bugs/SKILL.md": {
+      "sha256": "849198df88cdb65fd0d97236604c1fca7ff2f22d2f705f9724a800d0266b118d",
+      "mode": 420
+    },
+    "skills/engineering/diagnosing-bugs/agents/openai.yaml": {
+      "sha256": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b",
+      "mode": 420
+    },
+    "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh": {
+      "sha256": "35103539fc36873eea36074769ad454f9379d6fc8b2dc0e26ce987fd3bfe5503",
+      "mode": 420
+    },
+    "skills/engineering/domain-modeling/ADR-FORMAT.md": {
+      "sha256": "944c92aa790e8fbdc9199640b170979abb8a34ba8d0fe18c2a01a63bce140ca0",
+      "mode": 420
+    },
+    "skills/engineering/domain-modeling/GLOSSARY-FORMAT.md": {
+      "sha256": "21dcc40cdec8e151a829b98ab1517c1867bc444e3665134a98c6983411996801",
+      "mode": 420
+    },
+    "skills/engineering/domain-modeling/SKILL.md": {
+      "sha256": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
+      "mode": 420
+    },
+    "skills/engineering/domain-modeling/agents/openai.yaml": {
+      "sha256": "f6bf2aa996c6e6f53fdd0708e18a0d16a56aed8322cca59fedbe3c0d2c75f06b",
+      "mode": 420
+    },
+    "skills/engineering/grill-with-docs/SKILL.md": {
+      "sha256": "7de372c13488f1ee96cc11cd8907b56b6809cc93eef776eeddd37de6b6cbe3fe",
+      "mode": 420
+    },
+    "skills/engineering/grill-with-docs/agents/openai.yaml": {
+      "sha256": "94cd0ab161fb468a836349f5ed482ba58ce8e709a05c57ce533d739dbd35cca9",
+      "mode": 420
+    },
+    "skills/engineering/implement/SKILL.md": {
+      "sha256": "483bdc4ccf4ac31d86ac7beeaa0d0db80313e71e120bb8c59b3196ae5decd53d",
+      "mode": 420
+    },
+    "skills/engineering/implement/agents/openai.yaml": {
+      "sha256": "8970a8596ade0c28ab427f41a4ea242d6bdf6186c59ebf55e1238dbecaab79dc",
+      "mode": 420
+    },
+    "skills/engineering/implement-spec/SKILL.md": {
+      "sha256": "1993a473cec40ac85d081c112cdffdc63ec3267c2e412055ad09e013a2f623d1",
+      "mode": 420
+    },
+    "skills/engineering/implement-spec/agents/openai.yaml": {
+      "sha256": "fd41efb42c60c96320d6531be7e4bf15cbf5518cd652d57dff27ccffa46988e9",
+      "mode": 420
+    },
+    "skills/engineering/improve-codebase-architecture/HTML-REPORT.md": {
+      "sha256": "581e8bb5a521e46bbda8ca7e19b15948bed882187108092ebb90c62513b77528",
+      "mode": 420
+    },
+    "skills/engineering/improve-codebase-architecture/SKILL.md": {
+      "sha256": "35b03a3db61e0f5aa333ea59b54963e45a3d2ace6649b2ef4f9576603e2582a6",
+      "mode": 420
+    },
+    "skills/engineering/improve-codebase-architecture/agents/openai.yaml": {
+      "sha256": "c8cb20f68ebf0edb4e497bc11ae5fcaa196004e661cd189015b04f4109ced7f1",
+      "mode": 420
+    },
+    "skills/engineering/pr/CREDITS.md": {
+      "sha256": "a7a087127665d7298a72280ef6e19c41ad8404523712a788c8dc3ab414bc2497",
+      "mode": 420
+    },
+    "skills/engineering/pr/SKILL.md": {
+      "sha256": "ab63f1cf78647389edcd386c9427c5dfca27ed2836930c24773ffee834c19bcd",
+      "mode": 420
+    },
+    "skills/engineering/pr/agents/openai.yaml": {
+      "sha256": "2295b586624db4ef546f3fd4695492f039d941a46d8a1593a702ce3ca511b8ad",
+      "mode": 420
+    },
+    "skills/engineering/prototype/LOGIC.md": {
+      "sha256": "f61c7d249e786a79ef289018901c348271e1798dd0b0bc5607b5c6f4d4a01ab9",
+      "mode": 420
+    },
+    "skills/engineering/prototype/SKILL.md": {
+      "sha256": "714de632d116bb73f65cdb5a882db15b9369a6713b9a47c0fad827848f0bfbe3",
+      "mode": 420
+    },
+    "skills/engineering/prototype/UI.md": {
+      "sha256": "723211e878acbc7b6ff09755263f3295cde724ba902ff0064da41eed51d45ad3",
+      "mode": 420
+    },
+    "skills/engineering/prototype/agents/openai.yaml": {
+      "sha256": "5af65e43ab41a350436697b81e27b7f848d36782043b73c322bb2c9fa9cc55dc",
+      "mode": 420
+    },
+    "skills/engineering/research/SKILL.md": {
+      "sha256": "1f629e18ab899412683bc6a1c4efb4339999e27c2fdac328f26ee10a8c031d33",
+      "mode": 420
+    },
+    "skills/engineering/research/agents/openai.yaml": {
+      "sha256": "9b4c470d63221c1f68f22df70b83e2f12401b317babe0d1b7b5f24a974474d0d",
+      "mode": 420
+    },
+    "skills/engineering/retro/SKILL.md": {
+      "sha256": "33fbc28568e3146f20fd908b12998bc0ab30aa4f4c87288199a40793efa94696",
+      "mode": 420
+    },
+    "skills/engineering/retro/agents/openai.yaml": {
+      "sha256": "cb6fb9d7e6b4be5975f41f6def1dd00a1255bad5d9b02696b124c924a8b8745c",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/SKILL.md": {
+      "sha256": "b01e05bfe8c323171275c6ceec78b12f1bd4c62dfd26c2cfe8be806d3883f1ed",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/agents/openai.yaml": {
+      "sha256": "9527de0110541c45712319025155aeab8dc7d77c6ed6e5e83271bab1851ab939",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/domain.md": {
+      "sha256": "593a7042218689f1d24df89df14eaf0a20e19e0d0a7d479a01947ac78f0784b9",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md": {
+      "sha256": "6fdb3e9b00b7b0b115ecac3b1c00e3790f637f190abf598815368722c0a94692",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md": {
+      "sha256": "947602d33a80f98f939fb990995b8f95a3459b114b919c4221d08bd75d7cffe0",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md": {
+      "sha256": "7dcda20a2eb4bdc89b95d1143423c0691309921cadae3132e6424f371030506e",
+      "mode": 420
+    },
+    "skills/engineering/setup-matt-pocock-skills/triage-labels.md": {
+      "sha256": "ae512af838c78b8750471c42cd2b20fa32319553e61d84c9a23d171b40ce14aa",
+      "mode": 420
+    },
+    "skills/engineering/tdd/SKILL.md": {
+      "sha256": "5505d25bbaa8fc14a79e4d20163936958992a2995b7f1dd1d6197edc9ed722e0",
+      "mode": 420
+    },
+    "skills/engineering/tdd/agents/openai.yaml": {
+      "sha256": "ea6f01cf1b8c06a4b0f5b649d74b1b8ce8685e72af1b38d70d877693e092af0b",
+      "mode": 420
+    },
+    "skills/engineering/tdd/mocking.md": {
+      "sha256": "3ceb807fdf4a47d6a93d4d9a891e5ba6d362a6247bd08adc451feebfc17361ef",
+      "mode": 420
+    },
+    "skills/engineering/tdd/tests.md": {
+      "sha256": "859f9e592c188fda4fc7277dd180e4ce9c7a2e13f6efe1f6f29eccc9d28c106a",
+      "mode": 420
+    },
+    "skills/engineering/to-spec/SKILL.md": {
+      "sha256": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088",
+      "mode": 420
+    },
+    "skills/engineering/to-spec/agents/openai.yaml": {
+      "sha256": "1c5b4d1e3d8e52287ef19cc2742fdbbfae1914ac75d33af3e4c8174f08cc55bb",
+      "mode": 420
+    },
+    "skills/engineering/to-tickets/SKILL.md": {
+      "sha256": "56ec23c5b2782785d4e65bff9e315b6d3aeb4ef977c174a219e99489fada1995",
+      "mode": 420
+    },
+    "skills/engineering/to-tickets/agents/openai.yaml": {
+      "sha256": "21bc6215fffcd7614e9f772bb1760e87cc5fc7dcc707e7d282bc9414267a6090",
+      "mode": 420
+    },
+    "skills/engineering/triage/AGENT-BRIEF.md": {
+      "sha256": "7f5f87fed3033df1b06e083c480f3e847b1fbb0647746b8a4c6a50f9f26ef44f",
+      "mode": 420
+    },
+    "skills/engineering/triage/OUT-OF-SCOPE.md": {
+      "sha256": "1fbf9b432130c6380aa65813b55553cfda150309b27c595e183f8e335b8a190d",
+      "mode": 420
+    },
+    "skills/engineering/triage/SKILL.md": {
+      "sha256": "917b0baf74be583e74f110857ed45df2766617f75c00baf61fd136d7af515edf",
+      "mode": 420
+    },
+    "skills/engineering/triage/agents/openai.yaml": {
+      "sha256": "2e683717720cf456d165d0bb1a68bb600d0b6a8ccb61841c172e50d26f95351c",
+      "mode": 420
+    },
+    "skills/engineering/wayfinder/SKILL.md": {
+      "sha256": "0c9fa96791aebf3b7d654cf35c6aadde97d81f57c17b07d13b27c14d9c46561f",
+      "mode": 420
+    },
+    "skills/engineering/wayfinder/agents/openai.yaml": {
+      "sha256": "88bc81a11a6d52ac67aeaa76b8b619e387020d47c5133a4dd4927fd15c4ad073",
+      "mode": 420
+    },
+    "skills/engineering/wizard/SKILL.md": {
+      "sha256": "bdf31d48211ea559878f95a4f344aeabf8d85897488ba564382bab0b000daac1",
+      "mode": 420
+    },
+    "skills/engineering/wizard/agents/openai.yaml": {
+      "sha256": "98f44d682d58e262f160dc59a8befc365e0aa65820dd0261864af26aa8e59d83",
+      "mode": 420
+    },
+    "skills/engineering/wizard/template.sh": {
+      "sha256": "6566f147299bc6f1d941e64591ed04385416d543e11f96f564c7228f5018d0ed",
+      "mode": 420
+    },
+    "skills/in-progress/README.md": {
+      "sha256": "740e1d097748d68ebc00cb98de7b2dadbbac0e714af37a0d6a251819c0073584",
+      "mode": 420
+    },
+    "skills/in-progress/chief-of-staff/SKILL.md": {
+      "sha256": "d13f3a542a4664f27bf14977811ee9dcd83fae03655b20720b3441850a2008a4",
+      "mode": 420
+    },
+    "skills/in-progress/chief-of-staff/agents/openai.yaml": {
+      "sha256": "c0f68ed9da6977adc97a791be3bb0830d301b2d27f9c635d92d6f325bffefb83",
+      "mode": 420
+    },
+    "skills/in-progress/claude-handoff/SKILL.md": {
+      "sha256": "79357a18425d66d4c24048bedf83dceb79d3bba356f38014950f764a7fab4026",
+      "mode": 420
+    },
+    "skills/in-progress/claude-handoff/agents/openai.yaml": {
+      "sha256": "2308a672978864633286fb9f0792b08657e501426b3f7883fc418d5d2eac5eb0",
+      "mode": 420
+    },
+    "skills/in-progress/loop-me/SKILL.md": {
+      "sha256": "e44d1cc3e760fb86ac42964c2a5f1fcac511715db50fb375f3f7be814de1eaa7",
+      "mode": 420
+    },
+    "skills/in-progress/loop-me/agents/openai.yaml": {
+      "sha256": "b66fa10079957051be6a812f45e55b67ac394b71d5ba88349962b4c9205802c3",
+      "mode": 420
+    },
+    "skills/in-progress/setup-ts-deep-modules/SKILL.md": {
+      "sha256": "29acca66ac99d4532e2a6f0370d8125d7cba1e87c9ac66573203c75189d3e6c7",
+      "mode": 420
+    },
+    "skills/in-progress/setup-ts-deep-modules/agents/openai.yaml": {
+      "sha256": "159f680217d50747702620c05fd65734a152185b3219a8ca5ee4630878a354fa",
+      "mode": 420
+    },
+    "skills/in-progress/setup-ts-deep-modules/dependency-cruiser.config.cjs": {
+      "sha256": "3c4973bec69f73b2117654abf9e666a7c28665b213be20e6d39869e29842428e",
+      "mode": 420
+    },
+    "skills/in-progress/writing-beats/SKILL.md": {
+      "sha256": "a96abafa2372eede8267d770138b322d6125da8adaa7ccf0a5e08e4ee13ee71e",
+      "mode": 420
+    },
+    "skills/in-progress/writing-beats/agents/openai.yaml": {
+      "sha256": "ddaef01da61d8e3c5f482c4403033c20cf5823f08a1dbf1d4c871670831d01e2",
+      "mode": 420
+    },
+    "skills/in-progress/writing-fragments/SKILL.md": {
+      "sha256": "298b0edd23df229183630de592ed8aa4289233560f2040691f6eb77caeaad4ea",
+      "mode": 420
+    },
+    "skills/in-progress/writing-fragments/agents/openai.yaml": {
+      "sha256": "81167f25ee8ea1bb4b4958f12b6702ea972ad31b05e03ec91e39fa4bae0c2641",
+      "mode": 420
+    },
+    "skills/in-progress/writing-shape/SKILL.md": {
+      "sha256": "f5e6c57bdd85178ace4a260c92f46da6b64ddee18215b461d875739c68976f72",
+      "mode": 420
+    },
+    "skills/in-progress/writing-shape/agents/openai.yaml": {
+      "sha256": "56de45430e23104ff178415f5ecf7821d51a9cfabd8814b1607ebf39da2ef5cd",
+      "mode": 420
+    },
+    "skills/misc/README.md": {
+      "sha256": "95f0b467b7f3a2bb27421c6536f35392b6846f5ad26b44ab7df00380ed02edf0",
+      "mode": 420
+    },
+    "skills/misc/git-guardrails-claude-code/SKILL.md": {
+      "sha256": "69b291d655626a01602b998a1836fcb93c058ede68dfafddfd71e87f17074764",
+      "mode": 420
+    },
+    "skills/misc/git-guardrails-claude-code/agents/openai.yaml": {
+      "sha256": "d53cd783fc0ac208dec9a4c267989284384785aab6422dccdaed42f9e40243ec",
+      "mode": 420
+    },
+    "skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.sh": {
+      "sha256": "234922b83c0a1737ee7300806c21ac0f389b07aaeb65c2d71ccedafbc5e1ea4b",
+      "mode": 493
+    },
+    "skills/misc/migrate-to-shoehorn/SKILL.md": {
+      "sha256": "de4da4c11d924fac79c924b2ee3d2db4a5cb98386eb490a599119463d036ae72",
+      "mode": 420
+    },
+    "skills/misc/migrate-to-shoehorn/agents/openai.yaml": {
+      "sha256": "395c2db852e66a199f1cd07f7ed92d66cb6f0787460c5475926f1a5e778b699d",
+      "mode": 420
+    },
+    "skills/misc/scaffold-exercises/SKILL.md": {
+      "sha256": "75f5c9d771606fb9762f16522efc954df11c324f87148d8ff069bce166257de9",
+      "mode": 420
+    },
+    "skills/misc/scaffold-exercises/agents/openai.yaml": {
+      "sha256": "525b33913340bea7947ad2de17f2a7c5fb94be543345fe80ae753b9a44ba601d",
+      "mode": 420
+    },
+    "skills/misc/setup-pre-commit/SKILL.md": {
+      "sha256": "c9819d7f1e3b198064edc1faa3154224ed67395e9f07f5d3cea4b67cf0a11a98",
+      "mode": 420
+    },
+    "skills/misc/setup-pre-commit/agents/openai.yaml": {
+      "sha256": "acf41db398c5c43afe504008bb7d615a97b6498b0f1f6c5b2395254c0bfb57d1",
+      "mode": 420
+    },
+    "skills/productivity/README.md": {
+      "sha256": "8e39d23dc60e4b3e433ea17f0ed79510c73873a2779e9852920c9791a217efc8",
+      "mode": 420
+    },
+    "skills/productivity/grill-me/SKILL.md": {
+      "sha256": "caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637",
+      "mode": 420
+    },
+    "skills/productivity/grill-me/agents/openai.yaml": {
+      "sha256": "c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b",
+      "mode": 420
+    },
+    "skills/productivity/grilling/SKILL.md": {
+      "sha256": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
+      "mode": 420
+    },
+    "skills/productivity/grilling/agents/openai.yaml": {
+      "sha256": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b",
+      "mode": 420
+    },
+    "skills/productivity/handoff/SKILL.md": {
+      "sha256": "4cbb043950dad2ffd3662ff1a5a0b51ae676004b5cae10e3787e8ee7a4ee69d3",
+      "mode": 420
+    },
+    "skills/productivity/handoff/agents/openai.yaml": {
+      "sha256": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28",
+      "mode": 420
+    },
+    "skills/productivity/teach/GLOSSARY-FORMAT.md": {
+      "sha256": "9b99859ec28437668130d8f2ce5a342938970f8a1ed4fd38c3eab4f4b5fff210",
+      "mode": 420
+    },
+    "skills/productivity/teach/LEARNING-RECORD-FORMAT.md": {
+      "sha256": "701fa34b6748aa89e6c960ffb815257f481a7d77fb2900f9028f7edf3fdd6052",
+      "mode": 420
+    },
+    "skills/productivity/teach/MISSION-FORMAT.md": {
+      "sha256": "8cacbb3c0644d3ae0ea4965564797099401a6930a23f7cf462918576587f2418",
+      "mode": 420
+    },
+    "skills/productivity/teach/RESOURCES-FORMAT.md": {
+      "sha256": "e9cacf34026e11a8d1c8f9de88abe5bcbf654f4ebdb25cae8c0de0d5f48f44ec",
+      "mode": 420
+    },
+    "skills/productivity/teach/SKILL.md": {
+      "sha256": "550482c2d674b085c9043b87bfdc14a8f2ec453c736119e7fcbb1e9332bffeba",
+      "mode": 420
+    },
+    "skills/productivity/teach/agents/openai.yaml": {
+      "sha256": "5856f3ae8aec742f1499c640aecdd5f1d6af5fa210a7c6ec794de8263a6f733f",
+      "mode": 420
+    },
+    "skills/productivity/to-questionnaire/SKILL.md": {
+      "sha256": "b5eb929842ee0e93d867c5e906d183d350f2f2d149eaeaa86967d94d8eda1d3b",
+      "mode": 420
+    },
+    "skills/productivity/to-questionnaire/agents/openai.yaml": {
+      "sha256": "9e8a06c38c8842eea8d4922cb9d1ead8e3ace647bab259b943c994a1b4742bc2",
+      "mode": 420
+    },
+    "skills/productivity/wait-what/SKILL.md": {
+      "sha256": "d961bb37defd975c539427edb8f450cdbccdcdd552e213c1ece46676a7970905",
+      "mode": 420
+    },
+    "skills/productivity/wait-what/agents/openai.yaml": {
+      "sha256": "b41faadf741d51e4ea184148b2d1854d93f947aaf754c7844f70a00f04194999",
+      "mode": 420
+    },
+    "skills/productivity/writing-for-agents/SKILL-MECHANICS.md": {
+      "sha256": "c768e6307c7c10728c401c213f2c4ba71c542127eeb7ad2956aabd15a0fa0059",
+      "mode": 420
+    },
+    "skills/productivity/writing-for-agents/SKILL.md": {
+      "sha256": "551adca942227b44192edba88acd4e8db911f0121ce58ad16944ccf6a896a74a",
+      "mode": 420
+    },
+    "skills/productivity/writing-for-agents/agents/openai.yaml": {
+      "sha256": "eacb24b2a618cfb81dacb0416f4fdd75ddf3a8060f8ddb99aae1b1e301907e4b",
+      "mode": 420
+    }
+  }
+}

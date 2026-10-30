@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/research.excalidraw)
 
+Autoryzowanych agentów badawczych uruchamiaj ze świeżym oknem kontekstu i wskaźnikami do źródeł oraz zadania, zamiast kopiować rozmowę koordynatora.
+
 Przy odtwarzaniu kontekstu lub wyjaśnianiu zachowania albo uzasadnienia przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation).
 
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Migrate to Shoehorn"
+  short_description: "Matt Pocock source: migrate to shoehorn guidance"
+policy:
+  allow_implicit_invocation: false

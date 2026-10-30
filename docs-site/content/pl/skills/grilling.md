@@ -19,6 +19,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/grilling.excalidraw)
 
+Przy jawnej zgodzie na delegowanie używaj świeżych kontekstów agentów i samodzielnych opisów dowodów; w przeciwnym razie zbieraj fakty w bieżącym kontekście.
+
 Przy istotnym wyborze dotyczącym produktu lub projektu przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning).
 
 

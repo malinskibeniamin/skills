@@ -88,6 +88,44 @@ type: skill
 | `/lie-detector` | 找出不可能失敗的測試，以及差異內容無法支持的主張。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |
+| `/matt-ask-matt` | Matt Pocock 原始技能指南：`ask-matt`。 |
+| `/matt-chief-of-staff` | Matt Pocock 原始技能指南：`chief-of-staff`。 |
+| `/matt-claude-handoff` | Matt Pocock 原始技能指南：`claude-handoff`。 |
+| `/matt-code-review` | Matt Pocock 原始技能指南：`code-review`。 |
+| `/matt-codebase-design` | Matt Pocock 原始技能指南：`codebase-design`。 |
+| `/matt-diagnosing-bugs` | Matt Pocock 原始技能指南：`diagnosing-bugs`。 |
+| `/matt-domain-modeling` | Matt Pocock 原始技能指南：`domain-modeling`。 |
+| `/matt-git-guardrails-claude-code` | Matt Pocock 原始技能指南：`git-guardrails-claude-code`。 |
+| `/matt-grill-me` | Matt Pocock 原始技能指南：`grill-me`。 |
+| `/matt-grill-with-docs` | Matt Pocock 原始技能指南：`grill-with-docs`。 |
+| `/matt-grilling` | Matt Pocock 原始技能指南：`grilling`。 |
+| `/matt-handoff` | Matt Pocock 原始技能指南：`handoff`。 |
+| `/matt-implement` | Matt Pocock 原始技能指南：`implement`。 |
+| `/matt-implement-spec` | Matt Pocock 原始技能指南：`implement-spec`。 |
+| `/matt-improve-codebase-architecture` | Matt Pocock 原始技能指南：`improve-codebase-architecture`。 |
+| `/matt-loop-me` | Matt Pocock 原始技能指南：`loop-me`。 |
+| `/matt-migrate-to-shoehorn` | Matt Pocock 原始技能指南：`migrate-to-shoehorn`。 |
+| `/matt-pr` | Matt Pocock 原始技能指南：`pr`。 |
+| `/matt-prototype` | Matt Pocock 原始技能指南：`prototype`。 |
+| `/matt-research` | Matt Pocock 原始技能指南：`research`。 |
+| `/matt-retro` | Matt Pocock 原始技能指南：`retro`。 |
+| `/matt-scaffold-exercises` | Matt Pocock 原始技能指南：`scaffold-exercises`。 |
+| `/matt-setup-matt-pocock-skills` | Matt Pocock 原始技能指南：`setup-matt-pocock-skills`。 |
+| `/matt-setup-pre-commit` | Matt Pocock 原始技能指南：`setup-pre-commit`。 |
+| `/matt-setup-ts-deep-modules` | Matt Pocock 原始技能指南：`setup-ts-deep-modules`。 |
+| `/matt-tdd` | Matt Pocock 原始技能指南：`tdd`。 |
+| `/matt-teach` | Matt Pocock 原始技能指南：`teach`。 |
+| `/matt-to-questionnaire` | Matt Pocock 原始技能指南：`to-questionnaire`。 |
+| `/matt-to-spec` | Matt Pocock 原始技能指南：`to-spec`。 |
+| `/matt-to-tickets` | Matt Pocock 原始技能指南：`to-tickets`。 |
+| `/matt-triage` | Matt Pocock 原始技能指南：`triage`。 |
+| `/matt-wait-what` | Matt Pocock 原始技能指南：`wait-what`。 |
+| `/matt-wayfinder` | Matt Pocock 原始技能指南：`wayfinder`。 |
+| `/matt-wizard` | Matt Pocock 原始技能指南：`wizard`。 |
+| `/matt-writing-beats` | Matt Pocock 原始技能指南：`writing-beats`。 |
+| `/matt-writing-for-agents` | Matt Pocock 原始技能指南：`writing-for-agents`。 |
+| `/matt-writing-fragments` | Matt Pocock 原始技能指南：`writing-fragments`。 |
+| `/matt-writing-shape` | Matt Pocock 原始技能指南：`writing-shape`。 |
 | `/mobile-native` | 修復手機網頁的檢視區、觸控和鍵盤行為。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |
 | `/plow-ahead` | 在例行的不確定情況下自主繼續推進。 |

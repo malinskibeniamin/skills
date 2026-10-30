@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Domain Modeling"
+  short_description: "Matt Pocock source: domain modeling guidance"
+policy:
+  allow_implicit_invocation: false
